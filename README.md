@@ -9,7 +9,7 @@ It supports organizers in every step: managing registrations, payments, characte
 
 ---
 
-## 🛡️ Licensing
+## Licensing
 
 LarpManager is available under a **dual license**:
 
