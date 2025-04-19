@@ -1,0 +1,13 @@
+<tr>
+    <th>
+        <h3>Larpmanager</h3>
+    </th>
+    <td>
+        <a href="https://discord.gg/C4KuyQbuft">Discord</a>
+        <a href="{% url 'tutorials' %}">Tutorials</a>
+        <a href="{% url 'howto' %}">Howto</a>
+        {% if admin %}
+            <a href="{% url 'exe_larpmanager' %}">Subscription</a>
+        {% endif %}
+    </td>
+</tr>

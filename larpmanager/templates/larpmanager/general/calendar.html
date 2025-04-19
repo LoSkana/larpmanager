@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block maintitle %}
+    {{ assoc.name }}
+    {% if assoc.id > 0 %}- LarpManager{% endif %}
+{% endblock %}
+{% block robots %}
+    {% include "elements/robots_show.html" %}
+{% endblock %}
+{% block meta %}
+    <meta property="og:title" content="{{ assoc.name }} - LarpManager" />
+    <meta name="description"
+          content="Discover the LARP events of {{ assoc.name }}">
+{% endblock %}
+{% block title %}{{ assoc.name }}{% endblock %}
+<!--
+{% block lnav2 %}
+
+{% if lang %}
+
+    {% trans "Event language" %}:
+
+    <a href="{% url 'home' %}" class="sss">
+        <img class="lang" src="https://unpkg.com/language-icons/icons/{{ lang }}.svg">
+    </a>
+{% endif %}
+
+{% if langs|length > 1%}
+
+    {% trans "Event language" %}:
+
+    {% for f in langs %}
+    <a href="{% url 'home' f %}">
+        <img class="lang" src="https://unpkg.com/language-icons/icons/{{ f }}.svg">
+    </a>
+    {% endfor %}
+
+{% endif %}
+
+{% endblock %}
+
+-->
+{% block content %}
+    <div style="clear:both;"></div>
+    {% if custom_text %}
+        {{ custom_text | safe }}
+        <hr />
+    {% endif %}
+    {% if open %}
+        {% if future %}
+            <h2>{% trans "upcoming events" %}</h2>
+        {% endif %}
+        {% include "elements/run_list.html" with list=open %}
+    {% endif %}
+    {% if future %}
+        <h2>{% trans "Next events" %}</h2>
+        {% include "elements/run_list.html" with list=future %}
+    {% endif %}
+    {% if 'past_events' in assoc.features %}
+        <div class="nav">
+            <a href="{% url 'calendar_past' %}">{% trans "Past events" %}</a>
+        </div>
+    {% endif %}
+{% endblock %}

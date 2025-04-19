@@ -1,0 +1,132 @@
+{% extends 'utils.html' %}
+{% load show_tags i18n static compress %}
+{% block title %}
+    {% trans "Casting" %} {{ gl_name }} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the casting preferences expressed by players, and allows them to be assigned through an optimization algorithm." %}
+{% endblock %}
+{% block content %}
+    <div id="main_casting">
+        {% if features.questbuilder %}
+            <p>
+                {% trans "Casting management for" %}:
+                <a href="{% url 'orga_casting' event.slug run.number 0 %}">{% trans "characters" %}</a>
+                {% for idx, qt in quest_types.items %}
+                    , <a href="{% url 'orga_casting' event.slug run.number qt.number %}">{{ qt.name }}</a>
+                {% endfor %}
+            </p>
+        {% endif %}
+        <form action="{{ request.path }}"
+              method="post"
+              enctype="multipart/form-data">
+            <div class='casting no_csv'>
+                <p>{{ result }}</p>
+                <p id='not_chosen' style='color: red'></p>
+                <p id='didnt_choose'></p>
+                {% csrf_token %}
+                <table class="mob tablesorter no_csv">
+                    <tr>
+                        <th>{% trans "Tier" %}</th>
+                        <th>{% trans "Payment" %}</th>
+                        {% if features.membership %}
+                            <th>{% trans "Membership" %}</th>
+                        {% endif %}
+                        {% if features.faction %}
+                            <th>{% trans "Factions" %}</th>
+                        {% endif %}
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td>{{ form.tickets }}</td>
+                        <td>{{ form.pays }}</td>
+                        {% if features.membership %}<td>{{ form.memberships }}</td>{% endif %}
+                        {% if features.faction %}<td>{{ form.factions }}</td>{% endif %}
+                        <td>
+                            <input type="submit"
+                                   name='update'
+                                   value="{% trans 'Update' %}"
+                                   style="max-width: 100% !important">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <p style="display: none">
+                {% trans "Players: " %}<span id="num_pl"></span>, {% trans "Characters: " %}<span id="num_ch"></span>
+            </p>
+            <hr />
+            <div style="text-align: center">
+                <button id='exec'>{% trans "Start algorithm" %}</button>
+            </div>
+            <hr />
+            <i>({% trans "The optimal allocation based on the set values is simulated; you can run it as many times as you like before final loading" %})</i>
+            <hr />
+            <p>
+                <i>{% trans "Legend: " %}
+                    <span class="YES">YES</span> - {% trans "Choice available, click to lock" %},
+                    <span class="NO">NO</span> - {% trans "Choice locked, click to make it available" %},
+                    <span class="MR">MR</span> - {% trans "Mirror type character, not selectable" %},
+                    <span class="CH">CH</span> - {% trans "Character already assigned, not selectable" %},
+                    <span class="EP">EP</span> - {% trans "Preference not valid" %}
+                </i>
+            </p>
+            <hr />
+            <table id='main_grid' class='tablesorter mob no_csv'>
+                <tbody>
+                </tbody>
+            </table>
+            <hr />
+            <div id='risultati'></div>
+            <div id='load' style="text-align: center">
+                <input id='res' name='res' type='hidden' />
+                <input type='submit'
+                       id='go'
+                       name='submit'
+                       onclick="return confirm('Confermi davvero? Non si torna indietro')"
+                       value='{% trans "Upload" %}' />
+                <p>
+                    {% trans "Assign selected characters to players." %}
+                    <br />
+                    <i>({% trans "Attention: the operation is final, please double-check the assignments before uploading!" %})</i>
+                </p>
+            </div>
+        </form>
+        <p id='assegnazioni'></p>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src='{% static "node_modules/javascript-lp-solver/prod/solver.js" %}'></script>
+    <script>
+window['num_pref'] = {{ num_choices }};
+window['choices'] = {{ choices | safe }};
+window['players'] = {{ players | safe }};
+window['chosen'] = {{ chosen }};
+window['not_chosen'] = {{ not_chosen }};
+window['preferences'] = {{ preferences | safe }};
+window['didnt_choose'] = {{ didnt_choose }};
+window['nopes'] = {{ nopes | safe }};
+window['taken'] = {{ taken | safe }};
+window['mirrors'] = {{ mirrors | safe }};
+window['casting_avoid'] = {{ casting_avoid | yesno:"true,false" }};
+window['avoids'] = {{ avoids | safe }};
+window['csrf_token'] = "{{ csrf_token }}";
+window['tick'] = "{{ tick }}";
+window['tipo'] = "{{ typ }}";
+window['toggle_url'] = "{% url 'orga_casting_toggle' event.slug run.number typ %}";
+window['orga_casting_url'] = "{% url 'orga_casting' event.slug run.number typ %}";
+
+window['trads'] = {
+    'g': '{% trans "Player" %}',
+    'a': '{% trans "Seniority" %}',
+    'p': '{% trans "Priority" %}',
+    'e': '{% trans "Avoid" %}',
+    'ne': '{% trans "Elements NOT chosen" %}',
+    'ge': '{% trans "Players that DID NOT send preferences" %}',
+    'le': '{% trans "Email list" %}'
+}
+
+    </script>
+    {% compress js %}
+        <script defer src="{% static 'larpmanager/casting.js' %}"></script>
+    {% endcompress %}
+{% endblock %}

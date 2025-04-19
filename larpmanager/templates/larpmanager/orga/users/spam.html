@@ -1,0 +1,20 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Spam" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the email addresses to which to send updates in order to get them to sign up." %}
+{% endblock %}
+{% block content %}
+    <p>{% trans "List of newsletter subscribers who have not yet played this event" %}:</p>
+    {% for key, value in lst.items %}
+        <h2>{{ key }}</h2>
+        <p>
+            {% for el in value %}
+                {% include "elements/comma.html" %}
+                {{ el }}
+            {% endfor %}
+        </p>
+    {% endfor %}
+{% endblock %}

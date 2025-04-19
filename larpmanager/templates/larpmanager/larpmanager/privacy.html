@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block title %}Privacy Policy{% endblock %}
+{% block content %}
+    {% if text %}
+        {{ text | safe }}
+    {% else %}
+        {% if LANGUAGE_CODE == 'es' %}
+            <h3>¿Qué información recolectamos?</h3>
+            <p>LarpManager puede recoger los siguientes datos:</p>
+            <ul style="list-style-type: none;">
+                <li>Correo electrónico</li>
+                <li>Nombre y apellidos</li>
+                <li>Teléfono de contacto</li>
+                <li>Contactos de redes sociales</li>
+                <li>Nacionalidad, fecha y lugar de nacimiento</li>
+                <li>Dirección de residencia</li>
+                <li>Número de DNI u otros documentos de identidad</li>
+                <li>Pronombres preferidos e identidad de género</li>
+                <li>Conocimiento de idiomas</li>
+                <li>Restricciones alimentarias y problemas de salud física y/o mental</li>
+                <li>Fotos personales</li>
+                <li>Registro histórico de inscripciones a eventos</li>
+                <li>Estado de pago de la entrada a eventos y servicios añadidos</li>
+                <li>Elecciones y preferencias solicitadas en el registro a eventos</li>
+            </ul>
+            <h3>¿CÓMO RECOPILAMOS TUS DATOS?</h3>
+            <p>
+                La información recopilada en LarpManager es proporcionada directamente por el usuario. Recopilamos y procesamos los datos cuando el usuario:
+            </p>
+            <ul style="list-style-type: none;">
+                <li>Se registra en la plataforma</li>
+                <li>Se apunta a un evento</li>
+            </ul>
+            <h3>¿CÓMO USAMOS TUS DATOS?</h3>
+            <p>
+                Cuando confirmas tu inscripción a un evento en nuestra plataforma, nos estas concediendo permiso para compartir la información recopilada por LarpManager. Tu información personal será compartida con la organización del evento.
+            </p>
+            <h3>¿COMO ALMACENAMOS TUS DATOS?</h3>
+            <p>
+                LarpManager almacena tu información de forma segura en servidores localizados en la Unión Europea (Alemania). Las contraseñas de usuario están encintadas y no son recuperables. La información de los usuarios no se transmite fuera de los servidores, y nunca es procesada.
+            </p>
+            <p>
+                Los datos de los usuarios se comparten con una organización de rol en vivo bajo condiciones estrictas: los administradores del evento pueden acceder solo a la información de los jugadores que han accedido a inscribirse a al menos uno de  sus eventos. En ningún caso el administrador de dicha organización puede acceder a los datos de jugadores que nunca se han inscrito a sus eventos.
+            </p>
+            <p>
+                Los servidores se mantienen actualizados con los últimos parches de seguridad. La base de datos que contiene la información de los usuarios no es accesible fuera de los mismos. Los administradores de sistemas son profesionales de TI con más de 10 años de experiencia. El acceso de administrador a los servidores está estrictamente regulado, y cada acción queda trazada y revisada.
+            </p>
+            <h3>Marketing</h3>
+            <p>
+                Cuando te registras en la plataforma, tienes la opción de aceptar recibir comunicaciones de marketing. Puedes revocar este permiso siempre que quieras actualizando la información<a href="{% url 'profile' %}">en tu perfil</a>.
+            </p>
+            <h3>¿CUALES SON TUS DERECHOS DE PROTECCIÓN DE DATOS?</h3>
+            <p>
+                LarpManager quiere asegurarse de que eres totalmente consciente de tus derechos en materia de protección de datos. Todo usuario tiene derecho a lo siguiente:
+            </p>
+            <p>
+                <strong>Derecho de acceso</strong> &ndash; Tienes derecho a solicitar a LarpManager copias de tu información personal almacenada.
+            </p>
+            <p>
+                <strong>Derecho de rectificación</strong>&ndash; Tienes derecho a solicitar a LarpManager la corrección de cualquier información que creas incorrecta. También tienes el derecho de solicitar que se complete cualquier información incompleta.
+            </p>
+            <p>
+                <strong>Derecho de borrado</strong>&ndash; Tienes derecho a pedir que LarpManager elimine tus datos personales, bajo ciertas condiciones.
+            </p>
+            <p>
+                <strong>Derecho a restringir el procesado</strong>&ndash; Tienes derecho a pedir que LarpManager restrinja el procesamiento de tus datos bajo ciertas condiciones.
+            </p>
+            <p>
+                <strong>Derecho a oponerte al procesado</strong>&ndash; Tienes derecho a oponerte a que LarpManager procese tus datos personales, bajo ciertas condiciones.
+            </p>
+            <p>
+                <strong>Derecho de la transferencia de datos</strong>&ndash; Tienes derecho a solicitar que LarpManager transfiera los datos que han sido recopilados a otra organización, o directamente a ti mismo, bajo ciertas condiciones.
+            </p>
+            <h3>¿COMO PUEDO EJECUTAR MIS DERECHOS DE PROTECCIÓN DE DATOS?</h3>
+            <p>
+                Puedes cambiar la configuración de compartir tus datos en cualquier momento usando la opción de compartir permisos en la página de <a href="{% url 'profile_privacy' %}">privacidad de tu perfil.</a>.
+            </p>
+            <p>
+                Para cualquier otra petición, no dudes en ponerte en <a href="https://larpmanager.com/contact/">contacto con nosotros.</a>.
+            </p>
+            <h3>Cookies</h3>
+            <p>
+                Las Cookies son ficheros de texto que se almacenan en tu ordenador para registrar información común de tu navegación de internet y el comportamiento de los visitantes a sitios web. Cuando accedes a nuestras páginas, es posible que recopilemos información sobre ti automáticamente usando cookies u otras tecnologías similares.
+            </p>
+            <p>Para más información, puedes visitar allaboutcookies.org.</p>
+            <h3>¿CÓMO USAMOS LAS COOKIES?</h3>
+            <p>LarpManager utiliza cookies con el único fin de mantener tu sesión iniciada en la web</p>
+            <h3>¿CÓMO GESTIONAR LAS COOKIES?</h3>
+            <p>
+                Puedes configurar tu navegador para no aceptar cookies, y la página web compartida antes te ayudará a saber cómo eliminar las cookies de tu ordenador.
+            </p>
+            <h3>POLÍTICAS DE PRIVACIDAD DE OTRAS PÁGINAS WEB</h3>
+            <p>
+                La página web de LarpManager contiene enlaces a otras páginas web. Nuestra política de privacidad solo se aplica en nuestra web, así que si accedes a otra página desde un enlace disponible aquí, te recomendamos que revises su política de privacidad.
+            </p>
+            <h3>CAMBIOS EN NUESTRA POLÍTICA DE PRIVACIDAD</h3>
+            <p>
+                LarpManager mantiene su política de privacidad actualizada y revisada frecuentemente y  añadirá esas actualizaciones en estos términos y condiciones. La última actualización de nuestra política de privacidad se hizo el 27 de mayo de 2022.
+            </p>
+            <h3>¿CÓMO CONTACTAR CON NOSOTROS?</h3>
+            <p>
+                Si tienes preguntas sobre nuestra política de privacidad, los datos que tenemos sobre ti, o quisieras ejercitar cualquiera de tus derechos de protección de datos, por favor no dudes en ponerte <a href="https://larpmanager.com/contact/">en contacto con nosotros</a>.
+            </p>
+            <h3>¿CÓMO CONTACTAR CON LAS AUTORIDADES PERTINENTES?</h3>
+            <p>
+                Si quieres reportar una queja o si crees que LarpManager no ha respondido a tus peticiones de forma satisfactoria, puedes ponerte en contacto con la <a href=" https://www.garanteprivacy.it/">Oficina de la Comisión de Información.</a>.
+            </p>
+        {% else %}
+            <h3>What data do we collect?</h3>
+            <p>LarpManager collects the following data:</p>
+            <ul style="list-style-type: none;">
+                <li>Email address</li>
+                <li>Name and surname</li>
+                <li>Phone contact number</li>
+                <li>Social contact information</li>
+                <li>Nationality, birth date and place</li>
+                <li>Residence address</li>
+                <li>ID numbers and documents</li>
+                <li>Preferred pronouns and gender identity</li>
+                <li>Languages spoken</li>
+                <li>Information on diet, physical or mental health</li>
+                <li>Personal photos</li>
+                <li>Historical information on event signups</li>
+                <li>Payment status on the event's tickets and additional services</li>
+                <li>Choices and preferences on event specific informations and questions</li>
+            </ul>
+            <h3>How do we collect your data?</h3>
+            <p>You directly provide LarpManager with the data we collect. We collect data and process data when you:</p>
+            <ul style="list-style-type: none;">
+                <li>Register to the platform</li>
+                <li>Sign up to a LARP event</li>
+            </ul>
+            <h3>How will we use your data?</h3>
+            <p>
+                When you confirm the registration to a LARP event on our platform, you are giving us your permission to share the data LarpManager collects. Your personal data will be shared with the LARP Organization responsible of that event.
+            </p>
+            <h3>How do we store your data?</h3>
+            <p>
+                LarpManager securely stores your data in servers located in EU jurisdictions (Germany). All users password are encrypted and non-recoverable. The users' data is never transmitted outside of the servers, and is never processed.
+            </p>
+            <p>
+                The users' data is shared with a LARP Organization under strict guidelines: the administrators of a LARP Organization can access the data of only the players that agreed to sign up to at least one of their events. In no case the administrator of a LARP Organization can access the data of players that never signed up to any of their events.
+            </p>
+            <p>
+                The servers are kept updated with the latest security patches. The database cointaining the users' data is not accessible from outside the servers. The system admins are IT professionals with 10+ years of experience. The admin access to servers is stricly regulated, and each admin action is logged and reviewed.
+            </p>
+            <h3>Marketing</h3>
+            <p>
+                When you register to the platform, you have the option to agree to receive marketing. You may always opt out at a later date, by updating the preference on <a href="{% url 'profile' %}">your profile</a>.
+            </p>
+            <h3>What are your data protection rights?</h3>
+            <p>
+                LarpManager would like to make sure you are fully aware of all of your data protection rights. Every user is entitled to the following:
+            </p>
+            <p>
+                <strong>The right to access</strong> &ndash; You have the right to request LarpManager for copies of your personal data.
+            </p>
+            <p>
+                <strong>The right to rectification</strong>&ndash; You have the right to request that LarpManager correct any information you believe is inaccurate. You also have the right to request LarpManager to complete the information you believe is incomplete.
+            </p>
+            <p>
+                <strong>The right to erasure</strong>&ndash; You have the right to request that LarpManager erase your personal data, under certain conditions.
+            </p>
+            <p>
+                <strong>The right to restrict processing</strong>&ndash; You have the right to request that LarpManager restrict the processing of your personal data, under certain conditions.
+            </p>
+            <p>
+                <strong>The right to object to processing</strong>&ndash; You have the right to object to LarpManager&rsquo;s processing of your personal data, under certain conditions.
+            </p>
+            <p>
+                <strong>The right to data portability</strong>&ndash; You have the right to request that LarpManager transfer the data that we have collected to another organization, or directly to you, under certain conditions.
+            </p>
+            <h3>How can I exercise my data protection rights?</h3>
+            <p>
+                You can manage at any moment the sharing permissions of your data on <a href="{% url 'profile_privacy' %}">your privacy profile page</a>.
+            </p>
+            <p>
+                For any other request, please do not hesitate to <a href="https://larpmanager.com/contact/">contact us</a>.
+            </p>
+            <h3>Cookies</h3>
+            <p>
+                Cookies are text files placed on your computer to collect standard Internet log information and visitor behavior information. When you visit our websites, we may collect information from you automatically through cookies or similar technology.
+            </p>
+            <p>For further information, visit allaboutcookies.org.</p>
+            <h3>How do we use cookies?</h3>
+            <p>LarpManager uses cookies for the sole purpose of keeping you signed in.</p>
+            <h3>How to manage cookies</h3>
+            <p>
+                You can set your browser not to accept cookies, and the above website tells you how to remove cookies from your browser.
+            </p>
+            <h3>Privacy policies of other websites</h3>
+            <p>
+                The LarpManager website contains links to other websites. Our privacy policy applies only to our website, so if you click on a link to another website, you should read their privacy policy.
+            </p>
+            <h3>Changes to our privacy policy</h3>
+            <p>
+                LarpManager keeps its privacy policy under regular review and places any updates on this web page. This privacy policy was last updated on 27 May 2022.
+            </p>
+            <h3>How to contact us</h3>
+            <p>
+                If you have any questions about LarpManager&rsquo;s privacy policy, the data we hold on you, or you would like to exercise one of your data protection rights, please do not hesitate to <a href="https://larpmanager.com/contact/">contact us</a>.
+            </p>
+            <h3>How to contact the appropriate authority</h3>
+            <p>
+                Should you wish to report a complaint or if you feel that LarpManager has not addressed your concern in a satisfactory manner, you may contact the <a href=" https://www.garanteprivacy.it/">Information Commissioner&rsquo;s Office</a>.
+            </p>
+        {% endif %}
+    {% endif %}
+{% endblock %}

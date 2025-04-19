@@ -1,0 +1,490 @@
+- model: larpmanager.eventpermission
+  pk: 1
+  fields:
+    name: Event
+    slug: orga_event
+    number: 11
+    feature: 165
+- model: larpmanager.eventpermission
+  pk: 2
+  fields:
+    name: Run
+    slug: orga_run
+    number: 21
+    feature: 165
+- model: larpmanager.eventpermission
+  pk: 3
+  fields:
+    name: Roles
+    slug: orga_roles
+    number: 31
+    feature: 165
+- model: larpmanager.eventpermission
+  pk: 4
+  fields:
+    name: Configuration
+    slug: orga_config
+    number: 41
+    feature: 165
+- model: larpmanager.eventpermission
+  pk: 5
+  fields:
+    name: Features
+    slug: orga_features
+    number: 51
+    feature: 165
+- model: larpmanager.eventpermission
+  pk: 6
+  fields:
+    name: Appearance
+    slug: orga_appearance
+    number: 11
+    feature: 168
+- model: larpmanager.eventpermission
+  pk: 8
+  fields:
+    name: Copy
+    slug: orga_copy
+    number: 11
+    feature: 10
+- model: larpmanager.eventpermission
+  pk: 9
+  fields:
+    name: Casting
+    slug: orga_casting
+    number: 11
+    feature: 27
+- model: larpmanager.eventpermission
+  pk: 10
+  fields:
+    name: Accounting
+    slug: orga_accounting
+    number: 11
+    feature: 163
+- model: larpmanager.eventpermission
+  pk: 11
+  fields:
+    name: Payments
+    slug: orga_payments
+    number: 21
+    feature: 111
+- model: larpmanager.eventpermission
+  pk: 12
+  fields:
+    name: Expenses
+    slug: orga_expenses
+    number: 31
+    feature: 106
+- model: larpmanager.eventpermission
+  pk: 13
+  fields:
+    name: Tokens
+    slug: orga_tokens
+    number: 41
+    feature: 107
+- model: larpmanager.eventpermission
+  pk: 14
+  fields:
+    name: Credits
+    slug: orga_credits
+    number: 51
+    feature: 107
+- model: larpmanager.eventpermission
+  pk: 15
+  fields:
+    name: Inflows
+    slug: orga_inflows
+    number: 61
+    feature: 144
+- model: larpmanager.eventpermission
+  pk: 16
+  fields:
+    name: Outflows
+    slug: orga_outflows
+    number: 71
+    feature: 108
+- model: larpmanager.eventpermission
+  pk: 17
+  fields:
+    name: Safety
+    slug: orga_safety
+    number: 11
+    feature: 26
+- model: larpmanager.eventpermission
+  pk: 18
+  fields:
+    name: Diet
+    slug: orga_diet
+    number: 21
+    feature: 93
+- model: larpmanager.eventpermission
+  pk: 19
+  fields:
+    name: Sensitive data
+    slug: orga_sensitive
+    number: 31
+    feature: 166
+- model: larpmanager.eventpermission
+  pk: 20
+  fields:
+    name: Questions
+    slug: orga_questions
+    number: 41
+    feature: 28
+- model: larpmanager.eventpermission
+  pk: 21
+  fields:
+    name: Spam
+    slug: orga_spam
+    number: 51
+    feature: 40
+- model: larpmanager.eventpermission
+  pk: 22
+  fields:
+    name: Preaching
+    slug: orga_persuade
+    number: 61
+    feature: 40
+- model: larpmanager.eventpermission
+  pk: 23
+  fields:
+    name: Characters
+    slug: orga_characters
+    number: 11
+    feature: 178
+- model: larpmanager.eventpermission
+  pk: 26
+  fields:
+    name: Plots
+    slug: orga_plots
+    number: 41
+    feature: 103
+- model: larpmanager.eventpermission
+  pk: 27
+  fields:
+    name: Factions
+    slug: orga_factions
+    number: 51
+    feature: 104
+- model: larpmanager.eventpermission
+  pk: 28
+  fields:
+    name: Quest type
+    slug: orga_quest_types
+    number: 21
+    feature: 7
+- model: larpmanager.eventpermission
+  pk: 29
+  fields:
+    name: Quest
+    slug: orga_quests
+    number: 31
+    feature: 7
+- model: larpmanager.eventpermission
+  pk: 30
+  fields:
+    name: Traits
+    slug: orga_traits
+    number: 41
+    feature: 7
+- model: larpmanager.eventpermission
+  pk: 31
+  fields:
+    name: Prologues type
+    slug: orga_prologue_types
+    number: 61
+    feature: 6
+- model: larpmanager.eventpermission
+  pk: 32
+  fields:
+    name: Prologues
+    slug: orga_prologues
+    number: 71
+    feature: 6
+- model: larpmanager.eventpermission
+  pk: 33
+  fields:
+    name: Speed larp
+    slug: orga_speedlarps
+    number: 21
+    feature: 25
+- model: larpmanager.eventpermission
+  pk: 34
+  fields:
+    name: Check
+    slug: orga_check
+    number: 81
+    feature: 178
+- model: larpmanager.eventpermission
+  pk: 35
+  fields:
+    name: Progress
+    slug: orga_progress_steps
+    number: 91
+    feature: 91
+- model: larpmanager.eventpermission
+  pk: 36
+  fields:
+    name: Registrations
+    slug: orga_registrations
+    number: 11
+    feature: 169
+- model: larpmanager.eventpermission
+  pk: 37
+  fields:
+    name: Tickets
+    slug: orga_registration_tickets
+    number: 21
+    feature: 169
+- model: larpmanager.eventpermission
+  pk: 38
+  fields:
+    name: Sections
+    slug: orga_registration_sections
+    number: 31
+    feature: 77
+- model: larpmanager.eventpermission
+  pk: 39
+  fields:
+    name: Form
+    slug: orga_registration_form
+    number: 41
+    feature: 169
+- model: larpmanager.eventpermission
+  pk: 41
+  fields:
+    name: Surcharges
+    slug: orga_registration_surcharges
+    number: 61
+    feature: 139
+- model: larpmanager.eventpermission
+  pk: 42
+  fields:
+    name: Dynamic rates
+    slug: orga_registration_quotas
+    number: 71
+    feature: 62
+- model: larpmanager.eventpermission
+  pk: 43
+  fields:
+    name: Fixed instalments
+    slug: orga_registration_installments
+    number: 81
+    feature: 74
+- model: larpmanager.eventpermission
+  pk: 44
+  fields:
+    name: Discounts
+    slug: orga_discounts
+    number: 91
+    feature: 12
+- model: larpmanager.eventpermission
+  pk: 45
+  fields:
+    name: Pre-Registrations
+    slug: orga_pre_registrations
+    number: 101
+    feature: 32
+- model: larpmanager.eventpermission
+  pk: 46
+  fields:
+    name: Cancellations
+    slug: orga_cancellations
+    number: 111
+    feature: 169
+- model: larpmanager.eventpermission
+  pk: 47
+  fields:
+    name: Newsletter
+    slug: orga_newsletter
+    number: 71
+    feature: 40
+- model: larpmanager.eventpermission
+  pk: 48
+  fields:
+    name: Roles
+    slug: orga_roles_w
+    number: 101
+    feature: 5
+- model: larpmanager.eventpermission
+  pk: 49
+  fields:
+    name: Assignments
+    slug: orga_assignments
+    number: 51
+    feature: 7
+- model: larpmanager.eventpermission
+  pk: 50
+  fields:
+    name: Payments (Confirmation)
+    slug: orga_invoices
+    number: 81
+    feature: 111
+- model: larpmanager.eventpermission
+  pk: 51
+  fields:
+    name: Expenses (Personal)
+    slug: orga_expenses_my
+    number: 91
+    feature: 106
+- model: larpmanager.eventpermission
+  pk: 52
+  fields:
+    name: Deadlines
+    slug: orga_deadlines
+    number: 31
+    feature: 94
+- model: larpmanager.eventpermission
+  pk: 53
+  fields:
+    name: PDF
+    slug: orga_characters_pdf
+    number: 111
+    feature: 21
+- model: larpmanager.eventpermission
+  pk: 54
+  fields:
+    name: Handout Models
+    slug: orga_handout_templates
+    number: 121
+    feature: 105
+- model: larpmanager.eventpermission
+  pk: 55
+  fields:
+    name: Handouts
+    slug: orga_handouts
+    number: 131
+    feature: 105
+- model: larpmanager.eventpermission
+  pk: 56
+  fields:
+    name: Props
+    slug: orga_props
+    number: 141
+    feature: 3
+- model: larpmanager.eventpermission
+  pk: 57
+  fields:
+    name: Ability type
+    slug: orga_px_ability_types
+    number: 41
+    feature: 118
+- model: larpmanager.eventpermission
+  pk: 58
+  fields:
+    name: Ability
+    slug: orga_px_abilities
+    number: 51
+    feature: 118
+- model: larpmanager.eventpermission
+  pk: 59
+  fields:
+    name: Delivery
+    slug: orga_px_deliveries
+    number: 61
+    feature: 118
+- model: larpmanager.eventpermission
+  pk: 60
+  fields:
+    name: Historical
+    slug: orga_casting_history
+    number: 61
+    feature: 27
+- model: larpmanager.eventpermission
+  pk: 61
+  fields:
+    name: Statistics
+    slug: orga_casting_preferences
+    number: 71
+    feature: 27
+- model: larpmanager.eventpermission
+  pk: 63
+  fields:
+    name: Utility
+    slug: orga_utils
+    number: 31
+    feature: 43
+- model: larpmanager.eventpermission
+  pk: 64
+  fields:
+    name: Problems
+    slug: orga_problems
+    number: 41
+    feature: 60
+- model: larpmanager.eventpermission
+  pk: 65
+  fields:
+    name: Lottery
+    slug: orga_lottery
+    number: 121
+    feature: 50
+- model: larpmanager.eventpermission
+  pk: 66
+  fields:
+    name: Workshops
+    slug: orga_workshops
+    number: 51
+    feature: 24
+- model: larpmanager.eventpermission
+  pk: 67
+  fields:
+    name: Modules
+    slug: orga_workshop_modules
+    number: 61
+    feature: 24
+- model: larpmanager.eventpermission
+  pk: 68
+  fields:
+    name: Questions
+    slug: orga_workshop_questions
+    number: 71
+    feature: 24
+- model: larpmanager.eventpermission
+  pk: 69
+  fields:
+    name: Answers
+    slug: orga_workshop_options
+    number: 81
+    feature: 24
+- model: larpmanager.eventpermission
+  pk: 70
+  fields:
+    name: Texts
+    slug: orga_texts
+    number: 20
+    feature: 168
+- model: larpmanager.eventpermission
+  pk: 71
+  fields:
+    name: Navigation
+    slug: orga_buttons
+    number: 30
+    feature: 168
+- model: larpmanager.eventpermission
+  pk: 72
+  fields:
+    name: Secret registration link
+    slug: orga_registration_secret
+    number: 100
+    feature: 69
+- model: larpmanager.eventpermission
+  pk: 73
+  fields:
+    name: Cache Reloading
+    slug: orga_reload_cache
+    number: 999
+    feature: 167
+- model: larpmanager.eventpermission
+  pk: 74
+  fields:
+    name: Send e-mail
+    slug: orga_send_mail
+    number: 99
+    feature: 166
+- model: larpmanager.eventpermission
+  pk: 75
+  fields:
+    name: Form
+    slug: orga_character_form
+    number: 12
+    feature: 176

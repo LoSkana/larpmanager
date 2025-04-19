@@ -1,0 +1,39 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Utils" %} - {{ event.name }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the uploaded resources available to the event." %}
+{% endblock %}
+{% block content %}
+    {% include "elements/header/orga.html" %}
+    <table id="utils" class="tablesorter mob writing">
+        <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Dimension" %}</th>
+                <th>{% trans "External link" %}</th>
+                <th>{% trans "Internal link" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'orga_utils_edit' run.event.slug run.number el.id %}">{{ el }}</a>
+                    </td>
+                    <td>
+                        {% if el.util %}{{ el.util.size }}{% endif %}
+                    </td>
+                    <td>
+                        {% if el.cod %}
+                            <a href="{{ request.scheme }}://{{ request.get_host }}{% url 'util' el.cod %}">{{ request.scheme }}://{{ request.get_host }}{% url 'util' el.cod %}</a>
+                        {% endif %}
+                    </td>
+                    <td>#{{ el.cod }}#</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

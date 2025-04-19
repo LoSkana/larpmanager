@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load tz show_tags static i18n %}
+{% block title %}{{ data.name }}{% endblock %}
+{% block robots %}
+    {% include "elements/robots_show.html" %}
+{% endblock %}
+{% block media %}
+    <meta name="description" content="{{ data.tagline }}" />
+    <meta property="og:title" content="{{ data.name }}" />
+    {% if data.tagline %}<meta property="og:description" content="{{ data.tagline }}" />{% endif %}
+    <meta property="og:image" content="{{ data.cover }}" />
+{% endblock %}
+{% block content %}
+    {% if data.cover %}
+        <div id="aspect-ratio">
+            <div id="event_cover"
+                 class="nav"
+                 style="background-image: url({{ data.cover }})"></div>
+        </div>
+    {% endif %}
+    <!--<h1 class="major">{{ name }}</h1> -->
+    {% if data.tagline %}
+        <p>
+            <b>{{ data.tagline }}</b>
+        </p>
+        <hr />
+    {% endif %}
+    {% if data.tagline %}
+        <p>
+            <i>{{ data.genre }}</i>
+        </p>
+        <hr />
+    {% endif %}
+    <p>{{ data.description_short | safe }}</p>
+    <hr />
+    {% if data.description %}
+        <p>{{ data.description | safe }}</p>
+        <hr />
+    {% endif %}
+    {% if data.where %}
+        <p>
+            <b>{% trans "Where" %}:</b> {{ data.where }}
+        </p>
+        <hr />
+    {% endif %}
+    {% if data.authors %}
+        <p>
+            <b>{% trans "Authors" %}:</b> {{ data.authors }}
+        </p>
+        <hr />
+    {% endif %}
+    {% if data.website %}
+        <p>
+            <a href="{{ data.website }}" class="button primary" target="_blank">{% trans "Discover the web site!" %}</a>
+        </p>
+        <hr />
+    {% endif %}
+    <h2>{% trans "Next runs" %}</h2>
+    {% if coming %}
+        <div class="no-more-tables">
+            <table class="mob">
+                <thead>
+                    <tr>
+                        <th>{% trans "Name" %}</th>
+                        <th>{% trans "Date" %}</th>
+                        <th>{% trans "Registrations" %}</th>
+                    </tr>
+                </thead>
+                {% for run in coming %}
+                    <tr>
+                        <td data-title='{% trans "Name" %}'>
+                            <h3>
+                                <a href="{% url 'gallery' event.slug run.number %}">{{ run.search }}</a>
+                            </h3>
+                        </td>
+                        <td data-title='{% trans "Date" %}'>
+                            <i>{{ run.pretty_dates }} </i>
+                        </td>
+                        <td data-title='{% trans "Registrations" %}'>{% include "elements/reg_status.html" with run=run %}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% else %}
+        <table class="mob">
+            <tr>
+                <th>
+                    {% trans "There are no new runs scheduled at this time." %}
+                    {% if features.pre_register %}
+                        <a href="{% url 'pre_register' event.slug %}">{% trans "Pre-register here!" %}</a>
+                        {% trans "You will be notified when a new run is organized, and you will have fast-track on registration!" %}
+                    </th>
+                </tr>
+            {% endif %}
+        </table>
+    {% endif %}
+    {% if past %}
+        <br />
+        <div class="no-more-tables">
+            <h2>
+                <a onClick="$('#past-runs').toggle(500);return false;">{% trans "Past runs" %}</a>
+            </h2>
+            <table id="past-runs" style="display: none">
+                <thead>
+                    <tr>
+                        <th>{% trans "Name" %}</th>
+                        <th>{% trans "Date" %}</th>
+                        <th>{% trans "Link" %}</th>
+                        <th>{% trans "Character" %}</th>
+                    </tr>
+                </thead>
+                {% for run in past %}
+                    <tr>
+                        <td data-title='{% trans "Name" %}'>
+                            <h3>{{ run.search }}</h3>
+                        </td>
+                        <td data-title='{% trans "Date" %}'>
+                            <i>{{ run.pretty_dates }} </i>
+                        </td>
+                        <td data-title='{% trans "Link" %}'>
+                            <a href="{% url 'gallery' event.slug run.number %}">{% trans "Gallery" %}</a>
+                        </td>
+                        <td data-title='{% trans "Character" %}'>
+                            {% if run.reg and run.reg.character %}
+                                <a href="{% url 'character' event.slug run.number run.reg.character.number %}">{{ run.reg.display_character }}</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

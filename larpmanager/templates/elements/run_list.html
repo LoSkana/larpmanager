@@ -1,0 +1,77 @@
+{% load i18n %}
+<div class="calendar">
+    <table class="mob">
+        <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Cover" %}</th>
+                {% if assoc.id == 0 %}
+                    <th>{% trans "Organization" %}</th>
+                {% endif %}
+                {% if 'genre' in assoc.features %}
+                    <th>{% trans "Genre" context "event" %}</th>
+                {% endif %}
+                {% if 'website' in assoc.features %}<th></th>{% endif %}
+                <th>{% trans "Date" %}</th>
+                {% if 'where' in assoc.features %}
+                    <th>{% trans "Location" %}</th>
+                {% endif %}
+                <!--{% if langs|length > 1%}
+            <th>{% trans "Language" %}</th>
+    {% endif %}      -->
+                <th>{% trans "Registrations" %}</th>
+                <th>{% trans "Details" %}</th>
+            </tr>
+        </thead>
+        {% for run in list %}
+            <tr class="gall">
+                <td data-title='{% trans "Name" %}'>
+                    <h3>
+                        <a href="{% url 'gallery' run.event.slug run.number %}">{{ run }}</a>
+                    </h3>
+                </td>
+                {% if run.event.cover %}
+                    <td data-title='{% trans "Cover" %}' class="cover-container">
+                        <img src="{{ run.event.cover_thumb.url }}" />
+                    </td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+                {% if assoc.id == 0 %}
+                    <td data-title='{% trans "Organization" %}'>
+                        <b>{{ run.event.assoc.name }} </b>
+                    </td>
+                {% endif %}
+                {% if 'genre' in assoc.features %}
+                    <td data-title='{% trans "Genre" context "event" %}'>
+                        <i>{{ run.event.genre }} </i>
+                    </td>
+                {% endif %}
+                {% if 'website' in assoc.features %}
+                    <td>
+                        {% if run.event.website %}
+                            <a href="{{ run.event.website }}"><i class="fa-solid fa-globe"></i> {% trans "Website" %}</a>
+                        {% endif %}
+                    </td>
+                {% endif %}
+                <td data-title='{% trans "Date" %}'>
+                    <i>{{ run.pretty_dates }} </i>
+                </td>
+                {% if 'where' in assoc.features %}
+                    <td data-title='{% trans "Location" %}'>
+                        {% if run.event.where %}<i>{{ run.event.where }} </i>{% endif %}
+                    </td>
+                {% endif %}
+                <!-- {% if langs|length > 1%}
+            <td data-title='{% trans "Language" %}'><img class="lang" alt="{{ run.event.get_lang_display }}" src="https://unpkg.com/language-icons/icons/{{ run.event.lang }}.svg"></td>
+    {% endif %}        -->
+                <td data-title='{% trans "Registrations" %}'>
+                    {% if run.status.text %}{{ run.status.text | safe }}{% endif %}
+                </td>
+                <td data-title='{% trans "Details" %}'>
+                    {% if run.status.details %}{{ run.status.details | safe }}{% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>

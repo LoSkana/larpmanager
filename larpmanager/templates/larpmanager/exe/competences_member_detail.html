@@ -1,0 +1,28 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Competences member" %} - {{ member }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows in detail the skills marked by a contributor." %}
+{% endblock %}
+{% block content %}
+    <table id="main_table" class="tablesorter mob">
+        <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Experience" %}</th>
+                <th>{% trans "Info" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <th>{{ el.competence }}</th>
+                    <td>{{ el.exp }}</td>
+                    <td>{{ el.info | safe }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

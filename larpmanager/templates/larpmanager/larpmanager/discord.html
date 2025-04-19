@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block title %}
+    Just a quick check
+{% endblock title %}
+{% block content %}
+    <p>Verify you're human before joining our Discord server!</p>
+    <form action="{{ request.path }}"
+          method="post"
+          enctype="multipart/form-data">
+        {% csrf_token %}
+        <table class="mob no_csv">
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="{% trans "Confirm" %}">
+    </form>
+{% endblock content %}

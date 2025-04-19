@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Your registrations" %}
+{% endblock %}
+{% block content %}
+    {% for reg in reg_list %}
+        <h2>{{ reg.run.search }}</h2>
+        <p>
+            {{ reg.run.status.text | safe }} -
+            {% if reg.run.status.details %}{{ reg.run.status.details | safe }}{% endif %}
+        </p>
+    {% endfor %}
+{% endblock %}

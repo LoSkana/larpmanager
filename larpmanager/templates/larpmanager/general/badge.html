@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load tz show_tags static i18n %}
+{% block title %}{{ badge.name }}{% endblock %}
+{% block content %}
+    {{ badge.descr }}
+    <hr />
+    <div class="gallery">
+        {% for el in list %}
+            <div class="el badge">
+                <div class="icon">
+                    <a href="{% url 'public' el.id %}">
+                        {% if el.profile_thumb %}
+                            <img src="{{ el.profile_thumb.url }}" />
+                        {% else %}
+                            <img src="{% static 'larpmanager/assets/blank-avatar.svg' %}" />
+                        {% endif %}
+                        <div class="icon-name">
+                            <p>{{ el.display_member }}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+window.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function() {
+      resize_to_fit();
+    });
+});
+function resize_to_fit() {
+    $(".icon-name p").each(function( index ) {
+        var that = $(this),
+            textLength = that.html().length
+        ;
+
+        console.log(textLength);
+
+        if (textLength > 60) {
+            that.css('font-size', '60%');
+        } else if(textLength > 45) {
+            that.css('font-size', '70%');
+        } else if(textLength > 30) {
+            that.css('font-size', '80%');
+        } else if(textLength > 15) {
+            that.css('font-size', '90%');
+        }
+    });
+
+}
+    </script>
+{% endblock %}

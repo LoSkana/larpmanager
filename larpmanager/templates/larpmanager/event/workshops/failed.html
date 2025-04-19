@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load i18n show_tags %}
+{% block title %}
+    {{ workshop.display }} - {% trans "Retry!" %}
+{% endblock %}
+{% block nav %}
+    {% include "larpmanager/manage/nav.html" %}
+    <div class='lm_tooltip'>
+        <a href="{% url 'workshops' slug run.number %}">Workshop</a>
+        <div class='lm_tooltiptext'>{% trans "Fill out the event prep questions!" %}</div>
+    </div>
+{% endblock %}
+{% block content %}
+    <br />
+    <div class="workshop">
+        <p>
+            {% trans "Oops! You gave one or more incorrect answers. Please check them below. " %}
+            <a href="{% url "workshop_answer" slug run.number workshop.id %}">{% trans "Retry!" %}</a>
+        </p>
+        <hr class="c" />
+        {% for el in list %}
+            <h2>{{ el.display }}</h2>
+            <div class="question num_{{ el.answer | length }}">
+                {% if el.failed %}
+                    <p class="fail">{% trans "You have made a mistake!" %}</p>
+                    <p>{% trans "Hint: The correct answers to this question are " %}{{ el.correct | length }}.</p>
+                {% else %}
+                    <p class="correct">{% trans "Correct!" %}</p>
+                {% endif %}
+                <p>Hai risposto:</p>
+                {% for op in el.opt %}
+                    {% if op.id in el.answer %}
+                        <div class="option">
+                            <p>{{ op.display }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <hr class="c" />
+        {% endfor %}
+    </div>
+{% endblock %}

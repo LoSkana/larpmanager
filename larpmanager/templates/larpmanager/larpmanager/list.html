@@ -1,0 +1,51 @@
+{% extends 'utils.html' %}
+{% load i18n static %}
+{% block title %}
+    {% trans 'List' %}
+{% endblock %}
+{% block content %}
+    <p>
+        <a href="#" class="my_toggle" tog='inactive'>{% trans "Show inactive" %}</a>
+    </p>
+    <table class="tablesorter mob">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Mail</th>
+                <th>Regs</th>
+                <th>Plan</th>
+                <th>GDPR</th>
+                <th>Promoter</th>
+                <th>Review</th>
+                <th>Photos</th>
+            </tr>
+        </thead>
+        {% for el in list %}
+            <tr {% if el.total_registrations < 10 %}class="hide inactive"{% endif %}>
+                <th>
+                    <a href="https://{{ el.slug }}.larpmanager.com">{{ el.name }}</a>
+                </th>
+                <td>{{ el.main_mail }}</td>
+                <td>{{ el.total_registrations }}</td>
+                <td>{{ el.get_plan_display }}</td>
+                <td>
+                    {% if el.gdpr_contract %}<a href="{{ el.gdpr_contract.url }}"><i class="fa-solid fa-check"></i></a>{% endif %}
+                </td>
+                <td>
+                    {% if el.promoter %}<i class="fa-solid fa-check"></i>{% endif %}
+                </td>
+                <td>
+                    {% if el.review_done %}<i class="fa-solid fa-check"></i>{% endif %}
+                </td>
+                <td>
+                    {% if el.images_shared %}<i class="fa-solid fa-check"></i>{% endif %}
+                </td>
+            {% endfor %}
+        </tr>
+    </table>
+    <p>
+        {% for el in list %}
+            {% for mb in el.executives.all %}{{ mb.email }},{% endfor %}
+        {% endfor %}
+    </p>
+{% endblock %}

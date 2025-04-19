@@ -1,0 +1,6 @@
+{% load i18n tz show_tags static %}
+{% if form.has_mandatory %}
+    <p>
+        <i>(*) : {% trans "These fields are mandatory" %}</i>
+    </p>
+{% endif %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load tz show_tags static i18n %}
+{% block title %}Leaderboard{% endblock %}
+{% block content %}
+    <h2>{% trans "May the best win!" %}</h2>
+    <p>
+        {% trans "You think you should have an achievement?" %} <a href="{% url 'help' %}">{% trans "Tell us here!" %}</a>
+    </p>
+    <hr />
+    <table class="my_pagination">
+        <tr>
+            <td>
+                {% if number != 1 %}
+                    <a href="{% url 'leaderboard' 1 %}">&laquo; {% trans "First" %}</a>
+                {% endif %}
+                {% if previous_page_number > 0 %}
+                    <a href="{% url 'leaderboard' previous_page_number %}">{% trans "Prev" %}</a>
+                {% endif %}
+            </td>
+            <td>{% trans "Page" %} {{ number }} {% trans "of" %} {{ num_pages }}</td>
+            <td>
+                {% if number != num_pages %}
+                    <a href="{% url 'leaderboard' next_page_number %}">{% trans "Next" %}</a>
+                    <a href="{% url 'leaderboard' num_pages %}">{% trans "Last" %} &raquo;</a>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+    <div class="gallery">
+        {% for mb in pages %}
+            <div class="el">
+                <div class="icon">
+                    <a href="{% url 'public' mb.id %}">
+                        {% if mb.profile %}
+                            <img src="{{ mb.profile }}" />
+                        {% else %}
+                            <img src="{% static 'larpmanager/assets/blank-avatar.svg' %}" />
+                        {% endif %}
+                        <div class="icon-name">
+                            <p>{{ mb.name }} - {{ mb.count }}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

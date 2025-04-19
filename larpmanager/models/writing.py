@@ -1,0 +1,689 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+import os
+
+from django.db import models
+from django.db.models import Q
+from django.db.models.constraints import UniqueConstraint
+from django.utils.translation import gettext_lazy as _
+from imagekit.models import ImageSpecField
+from pilkit.processors import ResizeToFit
+from tinymce.models import HTMLField
+
+from larpmanager.models.base import BaseModel
+from larpmanager.models.event import Event, ProgressStep, BaseConceptModel
+from larpmanager.models.member import Member
+from larpmanager.models.utils import UploadToPathAndRename, my_uuid, download, show_thumb
+
+
+class Writing(BaseConceptModel):
+    progress = models.ForeignKey(
+        ProgressStep,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        help_text=_("Progress status"),
+    )
+
+    assigned = models.ForeignKey(
+        Member,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        help_text=_("Assigned staff member"),
+    )
+
+    concept = models.TextField(
+        max_length=5000,
+        help_text=_("Concept for internal use only. Will not be published"),
+        blank=True,
+    )
+
+    teaser = HTMLField(
+        max_length=10000,
+        blank=True,
+        verbose_name=_("Presentation"),
+        help_text=_("Presentation visible to all players, when 'show presentation' is checked"),
+    )
+
+    text = HTMLField(
+        max_length=100000,
+        blank=True,
+        help_text=_("Text visible only by the assigned player, when 'show text' is checked"),
+    )
+
+    preview = HTMLField(
+        max_length=10000,
+        blank=True,
+        help_text=_("Preview visible only by the assigned player, when 'show preview' is checked"),
+    )
+
+    temp = models.BooleanField(default=False)
+
+    hide = models.BooleanField(default=False)
+
+    props = models.CharField(max_length=500, blank=True, help_text=_("Does it require special props?"))
+
+    class Meta:
+        abstract = True
+
+    def show_red(self):
+        js = {"id": self.id, "number": self.number}
+        for s in ["name"]:
+            self.upd_js_attr(js, s)
+        return js
+
+    def show(self):
+        js = self.show_red()
+        self.upd_js_attr(js, "teaser")
+        return js
+
+    def show_complete(self):
+        js = self.show()
+        self.upd_js_attr(js, "text")
+        self.upd_js_attr(js, "preview")
+        return js
+
+    @classmethod
+    def get_example_csv(cls, features):
+        rows = [
+            ["number", "name", "presentation", "text"],
+            [
+                "put a number, from 1 onward",
+                "the name",
+                "a public presentation",
+                "a private text (Please avoid quotes of any kind!)",
+            ],
+        ]
+
+        for s in [
+            # ('assigned', 'email of the staff members to which to assign this element'),
+            ("motto", "short text, the motto of the element"),
+            ("title", "short text, the title of the element"),
+            ("mirror", "number, the number of the element mirroring"),
+            ("props", "short text, the props of the element"),
+            ("role", "short text, the role of the element"),
+            ("gender", "single character, m (male), f (female), o (other)"),
+            ("special", "single character, n (NPC), f (filler)"),
+            ("cover", "url of the element cover"),
+            ("hide", "single character, t (true), f (false)"),
+            ("keywords", "short text, the keywords of the element"),
+            ("safety", "short text, the safety of the element"),
+        ]:
+            (f, d) = s
+            if f in features:
+                rows[0].extend([f])
+                rows[1].extend([d])
+
+        return rows
+
+
+class CharacterStatus(models.TextChoices):
+    CREATION = "c", _("Creation")
+    PROPOSED = "s", _("Proposed")
+    REVIEW = "r", _("Revision")
+    APPROVED = "a", _("Approved")
+
+
+class Character(Writing):
+    NO = ""
+    PNG = "n"
+    FILLER = "f"
+    SPECIAL_CHOICES = [
+        (NO, _("No")),
+        (PNG, _("NPC")),
+        (FILLER, _("Filler")),
+    ]
+
+    MALE = "m"
+    FEMALE = "f"
+    UNISEX = "u"
+    GENDER_CHOICES = [
+        (MALE, _("Male")),
+        (FEMALE, _("Female")),
+        (UNISEX, _("Unisex")),
+    ]
+
+    title = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text=_("Indicates the title of the character - it will be shown along with the name"),
+    )
+
+    motto = HTMLField(
+        max_length=500,
+        blank=True,
+        help_text=_("Indicates the character's motto - a short phrase"),
+    )
+
+    role = models.CharField(
+        max_length=100,
+        help_text=_("Indicates the functional role / archetype of the character"),
+        blank=True,
+        null=True,
+    )
+
+    safety = models.CharField(
+        max_length=500,
+        help_text=_("Indicates accurate safety information"),
+        blank=True,
+        null=True,
+    )
+
+    gender = models.CharField(
+        max_length=1,
+        choices=GENDER_CHOICES,
+        default=None,
+        verbose_name=_("Gender"),
+        help_text=_("Select the character's gender"),
+        null=True,
+    )
+
+    keywords = models.CharField(
+        max_length=500,
+        help_text=_("Select the character's key words"),
+        blank=True,
+        null=True,
+    )
+
+    mirror = models.OneToOneField(
+        "self",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="mirror_inv",
+        help_text=_(
+            "Indicate whether the character is a mirror (i.e., whether this pg shows the true "
+            "secret face of another character)"
+        ),
+    )
+
+    special = models.CharField(
+        max_length=1,
+        choices=SPECIAL_CHOICES,
+        default=NO,
+        blank=True,
+        help_text=_("Is the character a special type? If not leave blank"),
+    )
+
+    characters = models.ManyToManyField(
+        "self",
+        related_name="characters_inv",
+        through="Relationship",
+        symmetrical=False,
+        blank=True,
+    )
+
+    hide = models.BooleanField(default=False)
+
+    cover = models.ImageField(
+        max_length=500,
+        upload_to=UploadToPathAndRename("character/cover/"),
+        verbose_name=_("Character cover"),
+        help_text=_("Cover photo fo the character"),
+        null=True,
+        blank=True,
+    )
+
+    thumb = ImageSpecField(
+        source="cover",
+        processors=[ResizeToFit(500, 500)],
+        format="JPEG",
+        options={"quality": 90},
+    )
+
+    addit = models.TextField(blank=True, null=True)
+
+    player = models.ForeignKey(
+        Member,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        help_text=_("Player"),
+        related_name="characters_player",
+    )
+
+    status = models.CharField(
+        max_length=1, choices=CharacterStatus.choices, default=CharacterStatus.CREATION, verbose_name=_("Status")
+    )
+
+    def __str__(self):
+        return f"#{self.number} {self.name}"
+
+    def show(self):
+        js = super().show()
+
+        for s in ["title", "motto", "role", "special", "keywords", "safety", "gender"]:
+            self.upd_js_attr(js, s)
+
+        if self.player:
+            js["owner_id"] = self.player_id
+            js["owner"] = self.player.display_member()
+
+        js["show"] = js["name"]
+        if "title" in js and js["title"]:
+            js["show"] += " - " + js["title"]
+
+        js["factions"] = []
+        fac_event = self.event.get_class_parent("faction")
+        primary = False
+        for g in self.factions_list.filter(event=fac_event):
+            if g.typ == Faction.PRIM:
+                primary = True
+                if g.cover:
+                    js["thumb"] = g.thumb.url
+            js["factions"].append(g.number)
+        if not primary:
+            js["factions"].append(0)
+
+        if self.cover:
+            js["cover"] = self.cover.url
+            js["thumb"] = self.thumb.url
+
+        if self.mirror:
+            js["mirror"] = self.mirror.show_red()
+
+        js["hide"] = self.hide
+        if self.event.get_feature_conf("user_character_approval", False):
+            if self.status not in [CharacterStatus.APPROVED]:
+                js["hide"] = True
+
+        return js
+
+    def is_special(self):
+        if self.special == self.NO:
+            return ""
+        return self.get_special_display()
+
+    @staticmethod
+    def get_character_filepath(run):
+        fp = os.path.join(run.event.get_media_filepath(), "characters", f"{run.number}/")
+        os.makedirs(fp, exist_ok=True)
+        return fp
+
+    def get_sheet_filepath(self, run):
+        return os.path.join(self.get_character_filepath(run), f"#{self.number}.pdf")
+
+    def get_sheet_friendly_filepath(self, run=None):
+        return os.path.join(self.get_character_filepath(run), f"#{self.number}-light.pdf")
+
+    def get_relationships_filepath(self, run=None):
+        return os.path.join(self.get_character_filepath(run), f"#{self.number}-rels.pdf")
+
+    def show_thumb(self):
+        if self.thumb:
+            return show_thumb(200, self.thumb.url)
+
+    def relationships(self):
+        return Relationship.objects.filter(source_id=self.pk)
+
+    def get_plot_characters(self):
+        return PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot")
+
+    @classmethod
+    def get_example_csv(cls, features):
+        rows = Writing.get_example_csv(features)
+
+        rows[0].extend(["player"])
+        rows[1].extend(["optional - the email of the player to whom you want to assign this character"])
+
+        return rows
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["event", "number", "deleted"],
+                name="unique_character_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["event", "number"],
+                condition=Q(deleted=None),
+                name="unique_character_without_optional",
+            ),
+        ]
+        indexes = [models.Index(fields=["number", "event"])]
+
+
+class CharacterConfig(BaseModel):
+    name = models.CharField(max_length=150)
+    value = models.CharField(max_length=5000)
+    character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="configs")
+
+    def __str__(self):
+        return f"{self.character} {self.name}"
+
+    class Meta:
+        unique_together = ("character", "name")
+        indexes = [
+            models.Index(fields=["character", "name"]),
+        ]
+
+
+class Plot(Writing):
+    characters = models.ManyToManyField(Character, related_name="plots", through="PlotCharacterRel", blank=True)
+
+    class Meta:
+        indexes = [models.Index(fields=["number", "event"])]
+        constraints = [
+            UniqueConstraint(fields=["event", "number", "deleted"], name="unique_plot_with_optional"),
+            UniqueConstraint(
+                fields=["event", "number"],
+                condition=Q(deleted=None),
+                name="unique_plot_without_optional",
+            ),
+        ]
+
+    def __str__(self):
+        return f"T{self.number} {self.name}"
+
+    def get_plot_characters(self):
+        return PlotCharacterRel.objects.filter(plot_id=self.pk).select_related("character")
+
+
+class PlotCharacterRel(BaseModel):
+    plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
+    character = models.ForeignKey(Character, on_delete=models.CASCADE)
+    text = models.TextField(max_length=5000, null=True)
+
+    def __str__(self):
+        return f"{self.plot} - {self.character}"
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["plot", "character", "deleted"],
+                name="unique_plot_character_rel_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["plot", "character"],
+                condition=Q(deleted=None),
+                name="unique_plot_character_rel_without_optional",
+            ),
+        ]
+
+
+class Faction(Writing):
+    PRIM = "s"
+    TRASV = "t"
+    SECRET = "g"
+    FACTION_CHOICES = [
+        (PRIM, _("Primary")),
+        (TRASV, _("Transversal")),
+        (SECRET, _("Secret")),
+    ]
+
+    typ = models.CharField(max_length=1, choices=FACTION_CHOICES, default=PRIM)
+
+    order = models.IntegerField(default=0, help_text=_("Display order"))
+
+    cover = models.ImageField(
+        max_length=500,
+        upload_to=UploadToPathAndRename("faction/cover/"),
+        verbose_name=_("Faction cover"),
+        help_text=_("Faction logo"),
+        null=True,
+        blank=True,
+    )
+
+    thumb = ImageSpecField(
+        source="cover",
+        processors=[ResizeToFit(500, 500)],
+        format="JPEG",
+        options={"quality": 90},
+    )
+
+    characters = models.ManyToManyField(Character, related_name="factions_list", blank=True)
+
+    selectable = models.BooleanField(
+        default=False,
+        help_text=_("Indicates whether it can be selected by players"),
+    )
+
+    def show_red(self):
+        js = super().show_red()
+        for s in ["typ", "teaser"]:
+            self.upd_js_attr(js, s)
+        return js
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        indexes = [models.Index(fields=["number", "event", "order"])]
+
+
+class PrologueType(Writing):
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        indexes = [models.Index(fields=["number", "event"])]
+
+
+class Prologue(Writing):
+    typ = models.ForeignKey(PrologueType, on_delete=models.CASCADE, null=True, related_name="prologues")
+    characters = models.ManyToManyField(Character, related_name="prologues_list", blank=True)
+
+    class Meta:
+        indexes = [models.Index(fields=["number", "event"])]
+        ordering = ("event", "number", "typ")
+        constraints = [
+            UniqueConstraint(
+                fields=["event", "number", "typ", "deleted"],
+                name="unique_prologue_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["event", "number", "typ"],
+                condition=Q(deleted=None),
+                name="unique_prologue_without_optional",
+            ),
+        ]
+
+    def __str__(self):
+        return f"P{self.number} {self.name} ({self.typ})"
+
+
+class HandoutTemplate(BaseModel):
+    number = models.IntegerField()
+    name = models.CharField(max_length=150)
+
+    # ~ template = models.FileField(upload_to=UploadToPathAndRename('template/'), blank=True, null=True)
+    css = models.TextField(blank=True, null=True)
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="handout_templates")
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=["event", "number", "deleted"], name="unique_ht_with_optional"),
+            UniqueConstraint(
+                fields=["event", "number"],
+                condition=Q(deleted=None),
+                name="unique_ht_without_optional",
+            ),
+        ]
+
+    def __str__(self):
+        return f"HT{self.number} {self.name}"
+
+    def download_template(self):
+        return download(self.template.path)
+
+
+class Handout(Writing):
+    template = models.ForeignKey(HandoutTemplate, on_delete=models.CASCADE, related_name="handouts", null=True)
+    cod = models.SlugField(max_length=32, unique=True, default=my_uuid, db_index=True)
+
+    class Meta:
+        indexes = [models.Index(fields=["number", "event"])]
+        constraints = [
+            UniqueConstraint(
+                fields=["event", "number", "deleted"],
+                name="unique_handout_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["event", "number"],
+                condition=Q(deleted=None),
+                name="unique_handout_without_optional",
+            ),
+        ]
+
+    def __str__(self):
+        return f"H{self.number} {self.name}"
+
+    def get_filepath(self, run):
+        fp = os.path.join(run.event.get_media_filepath(), "handouts")
+        os.makedirs(fp, exist_ok=True)
+        return os.path.join(fp, f"H{self.number}.pdf")
+
+
+class TextVersion(BaseModel):
+    PLOT = "p"
+    CHARACTER = "c"
+    FACTION = "h"
+    QUEST = "q"
+    TRAIT = "t"
+    ARTICLE = "a"
+    HANDOUT = "o"
+    PROLOGUE = "g"
+    QUEST_TYPE = "e"
+    SPEEDLARP = "s"
+    RELATIONSHIP = "l"
+    PLOT_CHARACTER = "r"
+    TEXT_CHOICES = [
+        (PLOT, "Plot"),
+        (CHARACTER, "Character"),
+        (FACTION, "Faction"),
+        (QUEST, "Quest"),
+        (TRAIT, "Trait"),
+        (ARTICLE, "Article"),
+        (HANDOUT, "Handout"),
+        (PROLOGUE, "Prologue"),
+        (QUEST_TYPE, "QuestType"),
+        (SPEEDLARP, "SpeedLarp"),
+        (PLOT_CHARACTER, "PlotCharacter"),
+        (RELATIONSHIP, "Relationship"),
+    ]
+
+    tp = models.CharField(max_length=1, choices=TEXT_CHOICES)
+    eid = models.IntegerField()
+    version = models.IntegerField()
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="text_versions", null=True)
+
+    concept = HTMLField(blank=True)
+    teaser = HTMLField(blank=True)
+    text = HTMLField(blank=True)
+    preview = HTMLField(blank=True)
+
+    dl = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.tp} {self.eid} {self.version}"
+
+
+class SpeedLarp(Writing):
+    typ = models.IntegerField()
+    station = models.IntegerField()
+    characters = models.ManyToManyField(Character, related_name="speedlarps_list", blank=True)
+
+    def show_red(self):
+        js = super().show_red()
+        js["typ"] = self.typ
+        js["station"] = self.station
+        return js
+
+    def __str__(self):
+        return f"S{self.number} {self.name} ({self.typ} - {self.station})"
+
+    class Meta:
+        indexes = [models.Index(fields=["number", "event"])]
+
+
+def replace_char_names(v, chars):
+    if not v:
+        return ""
+    for name in chars:
+        if len(name) < 2:
+            continue
+        if name in v:
+            c = f"@{chars[name]}"
+            v = v.replace(name, c)
+    return v
+
+
+def replace_chars_el(el, chars):
+    if hasattr(el, "text"):
+        el.text = replace_char_names(el.text, chars)
+    if hasattr(el, "teaser"):
+        el.teaser = replace_char_names(el.teaser, chars)
+    if hasattr(el, "concept"):
+        el.concept = replace_char_names(el.concept, chars)
+
+
+def replace_chars_all(instance):
+    if not hasattr(instance, "event"):
+        return
+
+    if not instance.event.get_feature_conf("writing_substitute", False):
+        return
+
+    # get all characters name for replacement
+    chars = {}
+    for c in instance.event.get_elements(Character):
+        chars[c.name] = c.number
+
+    names = list(chars.keys())
+    names.sort(key=len, reverse=True)
+
+    replace_chars_el(instance, chars)
+
+    # if type is character, adds also plot pieces
+    if isinstance(instance, Character):
+        for el in PlotCharacterRel.objects.filter(character=instance):
+            replace_chars_el(el, chars)
+            el.save()
+
+    # if type is plot, adds also plot pieces
+    if isinstance(instance, Plot):
+        for el in PlotCharacterRel.objects.filter(plot=instance):
+            replace_chars_el(el, chars)
+            el.save()
+
+
+class Relationship(BaseModel):
+    source = models.ForeignKey(Character, related_name="source", on_delete=models.CASCADE)
+    target = models.ForeignKey(Character, related_name="target", on_delete=models.CASCADE)
+    text = HTMLField(max_length=5000)
+
+    def __str__(self):
+        return f"{self.source} {self.target}"
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["source", "target", "deleted"],
+                name="unique_relationship_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["source", "target"],
+                condition=Q(deleted=None),
+                name="unique_relationship_without_optional",
+            ),
+        ]

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load i18n static show_tags %}
+{% block title %}
+    Features
+{% endblock title %}
+{% block content %}
+    <p>
+        {% trans "The larpmanager has a over 100 different features. There is one for every single aspect of event organising: signups, accounting, writing, logistics." %}
+    </p>
+    <p>
+        <i>{% trans "Below you will find all the features available; you can write a search keyword to filter them. Then click on 'Video', and you will see the video directly." %}</i>
+    </p>
+    <hr />
+    <input type="text" name="search" id="search" placeholder="Search" />
+    <!--
+<div class="c nav">
+{% for mod in modules %}
+    <a href="#mod_{{ mod.id }}" class="mod_{{ mod.id }}">{{ mod.name|template_trans }}</a>
+{% endfor %}
+</div>
+-->
+    {% for mod in modules %}
+        <h3 id="mod_{{ mod.id }}">
+            <a href="#" class="my_toggle section-link" tog='feat_{{ mod.id }}'>
+                {{ mod.name|template_trans }} <i class="fa-solid fa-chevron-down"></i>
+            </a>
+        </h3>
+        <div class="hide feat_{{ mod.id }}">
+            <p>
+                <i>{{ mod.descr|template_trans }}</i>
+            </p>
+            <table mod="{{ mod.id }}" class="tablesorter mob show no_csv">
+                <thead>
+                    <tr>
+                        <th class="hide"></th>
+                        <th>{% trans "Name" %}</th>
+                        <th></th>
+                        <th></th>
+                        <th>{% trans "Description" %}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for el in mod.features.all %}
+                        <tr id="{{ el.id }}" class="fea">
+                            <td class="hide">{{ el.order }}</td>
+                            <th>{{ el.name|template_trans }}</th>
+                            <td>
+                                {% if el.tutorial %}
+                                    <a href="{{ el.tutorial }}" target="_blank">{% trans "Tutorial" %}</a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if el.link %}
+                                    <a href="{{ el.link }}" target="_blank">{% trans "Video" %}</a>
+                                {% endif %}
+                            </td>
+                            <td class="descr">{{ el.descr|template_trans }}</td>
+                            <td>
+                                {% if el.overall %}
+                                    {% trans "Organization" %}
+                                {% else %}
+                                    {% trans "Event" %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
+{% endblock content %}
+{% block js %}
+    {% include "elements/features/search.js" %}
+{% endblock js %}

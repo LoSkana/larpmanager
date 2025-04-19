@@ -1,0 +1,34 @@
+{% extends 'utils.html' %}
+{% load i18n show_tags %}
+{% block title %}
+    {% trans "Props" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the props marked in the characters." %}
+{% endblock %}
+{% block content %}
+    <table id="props" class="tablesorter mob writing">
+        <thead>
+            <tr>
+                <th>{% trans "Character" %}</th>
+                <th>{% trans "Player" %}</th>
+                <th>{% trans "Props" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    {% with chars|get:el.0 as ch %}
+                        <td>
+                            <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.number %}">#{{ ch.number }} - {{ ch.name }}</a>
+                        </td>
+                        <td>
+                            {% if ch.player_full %}{{ ch.player_full }}{% endif %}
+                        </td>
+                        <td>{{ el.1 }}</td>
+                    {% endwith %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% load show_tags i18n %}
+{% if membership.status == 'e' %}
+    <h3>{% trans 'Request' %}</h3>
+    <p>
+        {% trans "Application to be given to them to sign and then upload:" %} <a href="{% url 'exe_membership_request' num %}">{% trans "Download" %}</a>
+    </p>
+    <hr />
+    <br />
+{% endif %}

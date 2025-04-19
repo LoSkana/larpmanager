@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load i18n show_tags %}
+{% block title %}
+    {% trans "Workshops" %}
+{% endblock %}
+{% block content %}
+    <div class="workshop">
+        <p>{% trans "These are the workshops you must complete before you can play." %}</p>
+        <div class="no-more-tables">
+            <table class="mob">
+                <thead>
+                    <tr>
+                        <th>{% trans "Name" %}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                {% for el in list %}
+                    <tr>
+                        <td>{{ el.display }}</td>
+                        <td>
+                            {% if el.done %}
+                                <span class="correct">{% trans "Done!" %}</span>
+                            {% else %}
+                                <a href="{% url "workshop_answer" slug run.number el.number %}">{% trans "To be done" %}</a>
+                            {% endif %}
+                        </td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endblock %}

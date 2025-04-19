@@ -1,0 +1,29 @@
+{% load i18n show_tags %}
+{% if run.status.text %}
+    <p>
+        {{ run.status.text | safe }}
+        {% if features.payment and run.reg and run.reg.tot_iscr %}
+            (<a href="#" class="my_toggle" tog="reg_accounting">{% trans "Accounting" %}</a>)
+        {% endif %}
+    </p>
+{% endif %}
+{% if features.payment and run.reg and run.reg.tot_iscr %}
+    <span class="hide reg_accounting">
+        {% trans "Total registration" %}: {{ run.reg.tot_iscr|format_decimal }}
+        {% if run.reg.tot_payed %}
+            , {% trans "Total payments" %}: {{ run.reg.tot_payed|format_decimal }}
+        {% endif %}
+        .
+        {% if run.reg.quota %}
+            <a href="{% url 'acc_reg' run.reg.id %}">
+                {% trans "Next payment:" %} {{ run.reg.quota | format_decimal }}{{ currency_symbol }},
+                {% if run.reg.deadline > 0 %}
+                    {% trans "expected within" %} {{ run.reg.deadline }} {% trans "days" %}
+                {% else %}
+                    {% trans "overdue by" %} {{ run.reg.deadline | abs_value }} {% trans "days" %}
+                {% endif %}
+            </a>
+        {% endif %}
+    </span>
+{% endif %}
+{% if run.status.details %}<p>{{ run.status.details | safe }}</p>{% endif %}

@@ -1,0 +1,657 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+import html
+import os
+import random
+import re
+import string
+import unicodedata
+from datetime import datetime
+from decimal import Decimal
+from decimal import ROUND_DOWN
+from html.parser import HTMLParser
+from io import StringIO
+from pathlib import Path
+
+import magic
+import pytz
+from background_task.models import Task
+from diff_match_patch import diff_match_patch
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.http import Http404
+from django.shortcuts import get_object_or_404
+from django.template.defaulttags import register
+from django.utils.deconstruct import deconstructible
+from django.utils.translation import gettext_lazy as _
+
+from larpmanager.models.accounting import Collection, Discount
+from larpmanager.models.association import Association
+from larpmanager.models.base import FeatureModule, Feature
+from larpmanager.models.casting import QuestType, Quest, Trait
+from larpmanager.models.event import Event
+from larpmanager.models.member import Badge, Member
+from larpmanager.models.miscellanea import (
+    Contact,
+    Album,
+    WorkshopQuestion,
+    WorkshopModule,
+    WorkshopOption,
+    PlayerRelationship,
+)
+from larpmanager.models.registration import (
+    Registration,
+)
+from larpmanager.models.writing import (
+    PrologueType,
+    Plot,
+    Handout,
+    HandoutTemplate,
+    Prologue,
+    SpeedLarp,
+    Character,
+    Relationship,
+    CharacterConfig,
+)
+from larpmanager.utils.exceptions import (
+    NotFoundException,
+)
+
+format_date = "%d/%m/%y"
+
+format_datetime = "%d/%m/%y %H:%M"
+
+utc = pytz.UTC
+
+
+# ## PROFILING CHECK
+def check_already(nm, params):
+    q = Task.objects.filter(task_name=nm, task_params=params)
+    return q.count() > 0
+
+
+class MLStripper(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.reset()
+        self.strict = False
+        self.convert_charrefs = True
+        self.text = StringIO()
+
+    def handle_data(self, d):
+        self.text.write(d)
+
+    def get_data(self):
+        return self.text.getvalue()
+
+
+def get_channel(a, b):
+    a = int(a)
+    b = int(b)
+    if a > b:
+        return int(cantor(a, b))
+    else:
+        return int(cantor(b, a))
+
+
+def cantor(k1, k2):
+    return ((k1 + k2) * (k1 + k2 + 1) / 2) + k2
+
+
+def compute_diff(self, other):
+    tx = other.text
+    if other.preview:
+        tx = other.preview + "\n--------------------\n" + tx
+    if other.teaser:
+        tx = other.teaser + "\n--------------------\n" + tx
+    if other.concept:
+        tx = other.concept + "\n--------------------\n" + tx
+    tx1 = html_clean(tx)
+    tx = self.text
+    if self.preview:
+        tx = self.preview + "\n--------------------\n" + tx
+    if self.teaser:
+        tx = self.teaser + "\n--------------------\n" + tx
+    if self.concept:
+        tx = self.concept + "\n--------------------\n" + tx
+    tx2 = html_clean(tx)
+    check_diff(self, tx1, tx2)
+
+
+def check_diff(self, tx1, tx2):
+    if tx1 == tx2:
+        self.diff = None
+        return
+    dmp = diff_match_patch()
+    self.diff = dmp.diff_main(tx1, tx2)
+    dmp.diff_cleanupEfficiency(self.diff)
+    self.diff = dmp.diff_prettyHtml(self.diff)
+
+
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
+
+
+def get_assoc(request):
+    return get_object_or_404(Association, pk=request.assoc["id"])
+
+
+def get_member(n):
+    try:
+        return {"member": Member.objects.get(pk=n)}
+    except ObjectDoesNotExist as err:
+        raise Http404("Member does not exist") from err
+
+
+def get_contact(mid, yid):
+    try:
+        return Contact.objects.get(me_id=mid, you_id=yid)
+    except ObjectDoesNotExist:
+        return None
+
+
+def get_event_template(ctx, n):
+    try:
+        ctx["event"] = Event.objects.get(pk=n, template=True, assoc_id=ctx["a_id"])
+    except ObjectDoesNotExist as err:
+        raise NotFoundException() from err
+
+
+def get_char(ctx, n, by_number=False):
+    get_element(ctx, n, "character", Character, by_number)
+
+
+def get_registration(ctx, n):
+    try:
+        ctx["registration"] = Registration.objects.get(run=ctx["run"], pk=n)
+        ctx["name"] = str(ctx["registration"])
+    except ObjectDoesNotExist as err:
+        raise Http404("Registration does not exist") from err
+
+
+def get_discount(ctx, n):
+    try:
+        ctx["discount"] = Discount.objects.get(pk=n)
+        ctx["name"] = str(ctx["discount"])
+    except ObjectDoesNotExist as err:
+        raise Http404("Discount does not exist") from err
+
+
+def get_album(ctx, n):
+    try:
+        ctx["album"] = Album.objects.get(pk=n)
+    except ObjectDoesNotExist as err:
+        raise Http404("Album does not exist") from err
+
+
+def get_album_cod(ctx, s):
+    try:
+        ctx["album"] = Album.objects.get(cod=s)
+    except ObjectDoesNotExist as err:
+        raise Http404("Album does not exist") from err
+
+
+def get_feature(ctx, num):
+    try:
+        ctx["feature"] = Feature.objects.get(pk=num)
+    except ObjectDoesNotExist as err:
+        raise Http404("Feature does not exist") from err
+
+
+def get_feature_module(ctx, num):
+    try:
+        ctx["feature_module"] = FeatureModule.objects.get(pk=num)
+    except ObjectDoesNotExist as err:
+        raise Http404("FeatureModule does not exist") from err
+
+
+def get_plot(ctx, n):
+    try:
+        ctx["plot"] = Plot.objects.get(event=ctx["event"], number=n)
+        ctx["name"] = ctx["plot"].name
+    except ObjectDoesNotExist as err:
+        raise Http404("Plot does not exist") from err
+
+
+def get_quest_type(ctx, n):
+    try:
+        ctx["quest_type"] = QuestType.objects.get(event=ctx["event"], number=n)
+        ctx["name"] = ctx["quest_type"].name
+    except ObjectDoesNotExist as err:
+        raise Http404("QuestType does not exist") from err
+
+
+def get_quest(ctx, n):
+    try:
+        ctx["quest"] = Quest.objects.get(event=ctx["event"], number=n)
+        ctx["name"] = ctx["quest"].name
+    except ObjectDoesNotExist as err:
+        raise Http404("Quest does not exist") from err
+
+
+def get_trait(ctx, n):
+    try:
+        ctx["trait"] = Trait.objects.get(event=ctx["event"], number=n)
+        ctx["name"] = ctx["trait"].name
+    except ObjectDoesNotExist as err:
+        raise Http404("Trait does not exist") from err
+
+
+def get_handout(ctx, n):
+    try:
+        ctx["handout"] = Handout.objects.get(event=ctx["event"], number=n)
+        ctx["name"] = ctx["handout"].name
+        ctx["handout"].data = ctx["handout"].show()
+    except ObjectDoesNotExist as err:
+        raise Http404("handout does not exist") from err
+
+
+def get_handout_template(ctx, n):
+    try:
+        ctx["handout_template"] = HandoutTemplate.objects.get(event=ctx["event"], number=n)
+        ctx["name"] = ctx["handout_template"].name
+    except ObjectDoesNotExist as err:
+        raise Http404("handout_template does not exist") from err
+
+
+def get_prologue(ctx, n):
+    try:
+        ctx["prologue"] = Prologue.objects.get(event=ctx["event"], number=n)
+        ctx["name"] = str(ctx["prologue"])
+    except ObjectDoesNotExist as err:
+        raise Http404("prologue does not exist") from err
+
+
+def get_prologue_type(ctx, n):
+    try:
+        ctx["prologue_type"] = PrologueType.objects.get(event=ctx["event"], number=n)
+        ctx["name"] = str(ctx["prologue_type"])
+    except ObjectDoesNotExist as err:
+        raise Http404("prologue_type does not exist") from err
+
+
+def get_speedlarp(ctx, n):
+    try:
+        ctx["speedlarp"] = SpeedLarp.objects.get(event=ctx["event"], number=n)
+        ctx["name"] = str(ctx["speedlarp"])
+    except ObjectDoesNotExist as err:
+        raise Http404("speedlarp does not exist") from err
+
+    # ~ def get_ord_faction(char):
+    # ~ for g in char.factions_list.all():
+    # ~ if g.typ == Faction.PRIM:
+    # ~ return (g.get_name(), g)
+    # ~ return ("UNASSIGNED", None)
+
+
+def get_badge(n, request):
+    try:
+        return Badge.objects.get(pk=n, assoc_id=request.assoc["id"])
+    except ObjectDoesNotExist as err:
+        raise Http404("Badge does not exist") from err
+
+
+def get_collection_partecipate(request, cod):
+    try:
+        return Collection.objects.get(contribute_code=cod, assoc_id=request.assoc["id"])
+    except ObjectDoesNotExist as err:
+        raise Http404("Collection does not exist") from err
+
+
+def get_collection_redeem(request, cod):
+    try:
+        return Collection.objects.get(redeem_code=cod, assoc_id=request.assoc["id"])
+    except ObjectDoesNotExist as err:
+        raise Http404("Collection does not exist") from err
+
+
+def get_workshop(ctx, n):
+    try:
+        ctx["workshop"] = WorkshopModule.objects.get(event=ctx["event"], number=n)
+    except ObjectDoesNotExist as err:
+        raise Http404("WorkshopModule does not exist") from err
+
+
+def get_workshop_question(ctx, n, mod):
+    try:
+        ctx["workshop_question"] = WorkshopQuestion.objects.get(
+            module__event=ctx["event"], number=n, module__number=mod
+        )
+    except ObjectDoesNotExist as err:
+        raise Http404("WorkshopQuestion does not exist") from err
+
+
+def get_workshop_option(ctx, m):
+    try:
+        ctx["workshop_option"] = WorkshopOption.objects.get(pk=m)
+    except ObjectDoesNotExist as err:
+        raise Http404("WorkshopOption does not exist") from err
+
+    if ctx["workshop_option"].question.module.event != ctx["event"]:
+        raise Http404("wrong event")
+
+
+def get_element(ctx, n, name, typ, by_number=False):
+    try:
+        ev = ctx["event"].get_class_parent(typ)
+        if by_number:
+            ctx[name] = typ.objects.get(event=ev, number=n)
+        else:
+            ctx[name] = typ.objects.get(event=ev, pk=n)
+        ctx["class_name"] = name
+    except ObjectDoesNotExist as err:
+        raise Http404(name + " does not exist") from err
+
+
+def get_relationship(ctx, num):
+    try:
+        ctx["relationship"] = Relationship.objects.get(pk=num)
+    except ObjectDoesNotExist as err:
+        raise Http404("relationship does not exist") from err
+    if ctx["relationship"].source.event_id != ctx["event"].id:
+        raise Http404("wrong event")
+
+
+def get_player_relationship(ctx, oth):
+    try:
+        ctx["relationship"] = PlayerRelationship.objects.get(reg=ctx["run"].reg, target__number=oth)
+    except ObjectDoesNotExist as err:
+        raise Http404("relationship does not exist") from err
+
+
+def get_time_diff(dt1, dt2):
+    return (dt1 - dt2).days
+
+
+def get_time_diff_today(dt1):
+    if not dt1:
+        return -1
+    if isinstance(dt1, datetime):
+        dt1 = dt1.date()
+    return get_time_diff(dt1, datetime.today().date())
+
+
+def generate_number(length):
+    return "".join(random.choice(string.digits) for idx in range(length))
+
+
+def html_clean(tx):
+    tx = strip_tags(tx)
+    tx = html.unescape(tx)
+    return tx
+
+
+def dump(obj):
+    s = ""
+    for attr in dir(obj):
+        s += f"obj.{attr} = {repr(getattr(obj, attr))}\n"
+
+
+def rmdir(directory):
+    directory = Path(directory)
+    for item in directory.iterdir():
+        if item.is_dir():
+            rmdir(item)
+        else:
+            item.unlink()
+    directory.rmdir()
+
+
+# max bytes to read for file type detection
+READ_SIZE = 5 * (1024 * 1024)  # 5MB
+
+
+@deconstructible
+class FileTypeValidator:
+    """
+    File type validator for validating mimetypes and extensions
+
+    Args:
+        allowed_types (list): list of acceptable mimetypes e.g; ['image/jpeg', 'application/pdf']
+                    see https://www.iana.org/assignments/media-types/media-types.xhtml
+        allowed_extensions (list, optional): list of allowed file extensions e.g; ['.jpeg', '.pdf', '.docx']
+    """
+
+    type_message = _("File type '%(detected_type)s' is not allowed.Allowed types are: '%(allowed_types)s'.")
+
+    extension_message = _(
+        "File extension '%(extension)s' is not allowed.Allowed extensions are: '%(allowed_extensions)s'."
+    )
+
+    invalid_message = _(
+        "Allowed type '%(allowed_type)s' is not a valid type.See "
+        "https://www.iana.org/assignments/media-types/media-types.xhtml"
+    )
+
+    def __init__(self, allowed_types, allowed_extensions=()):
+        self.input_allowed_types = allowed_types
+        self.allowed_mimes = self._normalize(allowed_types)
+        self.allowed_exts = allowed_extensions
+
+    def __call__(self, fileobj):
+        detected_type = magic.from_buffer(fileobj.read(READ_SIZE), mime=True)
+        root, extension = os.path.splitext(fileobj.name.lower())
+
+        # seek back to start so a valid file could be read
+        # later without resetting the position
+        fileobj.seek(0)
+
+        # some versions of libmagic do not report proper mimes for Office subtypes
+        # use detection details to transform it to proper mime
+        if detected_type in ("application/octet-stream", "application/vnd.ms-office"):
+            detected_type = self._check_word_or_excel(fileobj, detected_type, extension)
+
+        if detected_type not in self.allowed_mimes and detected_type.split("/")[0] not in self.allowed_mimes:
+            raise ValidationError(
+                message=self.type_message,
+                params={
+                    "detected_type": detected_type,
+                    "allowed_types": ", ".join(self.input_allowed_types),
+                },
+                code="invalid_type",
+            )
+
+        if self.allowed_exts and (extension not in self.allowed_exts):
+            raise ValidationError(
+                message=self.extension_message,
+                params={
+                    "extension": extension,
+                    "allowed_extensions": ", ".join(self.allowed_exts),
+                },
+                code="invalid_extension",
+            )
+
+    def _normalize(self, allowed_types):
+        """
+        Validate and transforms given allowed types
+        e.g; wildcard character specification will be normalized as text/* -> text
+        """
+        allowed_mimes = []
+        for allowed_type in allowed_types:
+            allowed_type = allowed_type.decode() if type(allowed_type) is bytes else allowed_type
+            parts = allowed_type.split("/")
+            if len(parts) == 2:
+                if parts[1] == "*":
+                    allowed_mimes.append(parts[0])
+                else:
+                    allowed_mimes.append(allowed_type)
+            else:
+                raise ValidationError(
+                    message=self.invalid_message,
+                    params={"allowed_type": allowed_type},
+                    code="invalid_input",
+                )
+
+        return allowed_mimes
+
+    @staticmethod
+    def _check_word_or_excel(fileobj, detected_type, extension):
+        """
+        Returns proper mimetype in case of word or excel files
+        """
+        word_strings = [
+            "Microsoft Word",
+            "Microsoft Office Word",
+            "Microsoft Macintosh Word",
+        ]
+        excel_strings = [
+            "Microsoft Excel",
+            "Microsoft Office Excel",
+            "Microsoft Macintosh Excel",
+        ]
+        office_strings = ["Microsoft OOXML"]
+
+        file_type_details = magic.from_buffer(fileobj.read(READ_SIZE))
+
+        fileobj.seek(0)
+
+        if any(string in file_type_details for string in word_strings):
+            detected_type = "application/msword"
+        elif any(string in file_type_details for string in excel_strings):
+            detected_type = "application/vnd.ms-excel"
+        elif any(string in file_type_details for string in office_strings) or (
+            detected_type == "application/vnd.ms-office"
+        ):
+            if extension in (".doc", ".docx"):
+                detected_type = "application/msword"
+            if extension in (".xls", ".xlsx"):
+                detected_type = "application/vnd.ms-excel"
+
+        return detected_type
+
+
+def average(lst):
+    return sum(lst) / len(lst)
+
+
+def pretty_request(request):
+    headers = ""
+    for header, value in request.META.items():
+        if not header.startswith("HTTP"):
+            continue
+        header = "-".join([h.capitalize() for h in header[5:].lower().split("_")])
+        headers += f"{header}: {value}\n"
+
+    return f"{request.method} HTTP/1.1\nMeta: {request.META}\n{headers}\n\n{request.body}"
+
+
+def add_char_addit(el):
+    el.addit = {}
+    for config in CharacterConfig.objects.filter(character__id=el.id):
+        el.addit[config.name] = config.value
+
+
+def remove_choice(lst, trm):
+    new = []
+    for el in lst:
+        if el[0] == trm:
+            continue
+        new.append(el)
+    return new
+
+
+def check_field(cls, check):
+    for field in cls._meta.get_fields(include_hidden=True):
+        if field.name == check:
+            return True
+    return False
+
+
+def round_to_two_significant_digits(number):
+    d = Decimal(number)
+    # Scales the number so that the first significant figure is in the unit
+    shift = d.adjusted()
+    rounded = d.scaleb(-shift).quantize(Decimal("1.0"), rounding=ROUND_DOWN)
+    # Reply to the original position
+    rounded = rounded.scaleb(shift)
+    return float(rounded)
+
+
+def exchange_order(ctx, cls, num):
+    elements = ctx["event"].get_elements(cls)
+    # get elements
+    current = elements.get(pk=num)
+    order = current.order
+    prev = elements.filter(order__lt=order).order_by("-order")
+    if hasattr(current, "question"):
+        prev = prev.filter(question=current.question)
+    if hasattr(current, "section"):
+        prev = prev.filter(section=current.section)
+
+    if len(prev) == 0:
+        current.order -= 1
+        current.save()
+    else:
+        prev = prev.first()
+        # exchange ordering
+        current.order = prev.order
+        prev.order = order
+        if current.order == prev.order:
+            prev.order += 1
+        current.save()
+        prev.save()
+    ctx["current"] = current
+
+
+def normalize_string(value):
+    # Convert to lowercase
+    value = value.lower()
+    # Remove spaces
+    value = value.replace(" ", "")
+    # Remove accented characters
+    value = "".join(c for c in unicodedata.normalize("NFD", value) if unicodedata.category(c) != "Mn")
+    return value
+
+
+def copy_class(target_id, source_id, cls):
+    cls.objects.filter(event_id=target_id).delete()
+    for obj in cls.objects.filter(event_id=source_id):
+        obj.event_id = target_id
+        obj.pk = None
+        obj._state.adding = True
+        obj.save()
+
+
+def get_payment_methods_ids(ctx):
+    return set(Association.objects.get(pk=ctx["a_id"]).payment_methods.values_list("pk", flat=True))
+
+
+def strip_tags(html):
+    s = MLStripper()
+    s.feed(html)
+    return s.get_data()
+
+
+def detectDelimiter(content):
+    header = content.split("\n")[0]
+    for d in ["\t", ";", ","]:
+        if d in header:
+            return d
+    raise Exception("no delimiter")
+
+
+def clean(s):
+    s = s.lower()
+    s = re.sub(r"[^\w]", " ", s)  # remove symbols
+    s = re.sub(r"\s", " ", s)  # replace whitespaces with spaces
+    s = re.sub(r" +", "", s)  # remove spaces
+    s = s.replace("ò", "o").replace("ù", "u").replace("à", "a").replace("è", "e").replace("é", "e").replace("ì", "i")
+    return s

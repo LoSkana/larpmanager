@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load i18n show_tags %}
+{% block title %}
+    {% trans "Your accounting" %}
+{% endblock %}
+{% block content %}
+    {% if member.tokens > 0 %}
+        <p>
+            {% trans "Total" %}: <b>{{ member.tokens }}</b>. <i>{% trans "They will be used automatically when you sign up for a new event!" %}</i>
+        </p>
+    {% endif %}
+    <p>
+        {% trans "Go to the tokens history" %}:
+        <a href="#" class="my_toggle" tog='given'>{% trans "Delivered" %}</a>,
+        <a href="#" class="my_toggle" tog='used'>{% trans "Consumed" %}</a>
+    </p>
+    <div class="hide given">
+        <h2>{% trans "Delivered" %}</h2>
+        <div class="no-more-tables mob">
+            <table class="mob tablesorter">
+                <thead>
+                    <tr>
+                        <th>{% trans "Run" %}</th>
+                        <th>{% trans "Date" %}</th>
+                        <th>{% trans "Description" %}</th>
+                        <th>{% trans "Amount" %}</th>
+                    </tr>
+                </thead>
+                {% for el in given %}
+                    <tr>
+                        <td data-title='{% trans "Run" %}'>{{ el.run }}</td>
+                        <td data-title='{% trans "Date" %}'>{{ el.created |date:'Y-m-d' }}</td>
+                        <td data-title='{% trans "Description" %}'>{{ el.descr }}</td>
+                        <td data-title='{% trans "Amount" %}'>{{ el.value }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="hide used">
+        <h2>{% trans "Consumed" %}</h2>
+        <div class="no-more-tables mob">
+            <table class="mob tablesorter">
+                <thead>
+                    <tr>
+                        <th>{% trans "Run" %}</th>
+                        <th>{% trans "Date" %}</th>
+                        <th>{% trans "Amount" %}</th>
+                    </tr>
+                </thead>
+                {% for el in used %}
+                    <tr>
+                        <td data-title='{% trans "Run" %}'>{{ el.run }}</td>
+                        <td data-title='{% trans "Date" %}'>{{ el.created |date:'Y-m-d' }}</td>
+                        <td data-title='{% trans "Amount" %}'>{{ el.value }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

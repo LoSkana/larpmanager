@@ -1,0 +1,272 @@
+{% load i18n static show_tags compress %}
+{% get_current_language as LANGUAGE_CODE %}<!DOCTYPE HTML>
+<html lang="{{ LANGUAGE_CODE }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>
+            {% block maintitle %}
+                {% block title %}{% endblock %}
+                - {{ assoc.name }}
+            {% endblock %}
+        </title>
+        {% block meta %}{% endblock %}
+        <meta property="og:url" content="{{ request.path }}">
+        <meta property="og:type" content="website">
+        <meta property="og:logo" content="{% static 'lm_fav_new.png' %}">
+        {% if assoc.id == 0 %}
+            <link rel="icon" type="image/png" href="{% static 'lm_fav_new.png' %}">
+            <link rel="apple-touch-icon" href="{% static 'lm_fav_new.png' %}">
+            <meta property="og:site_name" content="LarpManager">
+            {% if og_title %}<meta property="og:title" content="{{ og_title }}">{% endif %}
+            {% if og_image %}
+                <meta property="og:image" content="{{ og_image }}">
+                <meta name="thumbnail" content="{{ og_image }}">
+            {% else %}
+                <meta property="og:image"
+                      content="https://larpmanager.com/static/thumbnail.png">
+                <meta name="thumbnail"
+                      content="https://larpmanager.com/static/thumbnail.png">
+            {% endif %}
+            {% if og_description %}<meta property="og:description" content="{{ og_description }}">{% endif %}
+            <!--
+             <PageMap>
+                <DataObject type="thumbnail">
+                  <Attribute name="src" value="https://larpmanager.com/static/thumbnail.png" />
+                  <Attribute name="width" value="523" />
+                  <Attribute name="height" value="455" />
+                </DataObject>
+              </PageMap>
+              -->
+        {% else %}
+            <link rel="icon" type="image/png" href="{{ assoc.favicon }}">
+            <link rel="apple-touch-icon" href="{{ assoc.favicon }}">
+            <meta name="thumbnail" content="{{ assoc.logo }}">
+            <meta property="og:site_name" content="{{ assoc.name }} - LarpManager">
+            <meta property="og:image" content="{{ assoc.favicon }}">
+            <!--
+             <PageMap>
+                <DataObject type="thumbnail">
+                  <Attribute name="src" value="{{ assoc.logo }}" />
+                  <Attribute name="width" value="200" />
+                  <Attribute name="height" value="200" />
+                </DataObject>
+              </PageMap>
+              -->
+        {% endif %}
+        {% block css-req %}{% endblock %}
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+                integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+                crossorigin="anonymous"
+                defer></script>
+        {% block robots %}{% endblock %}
+        {{ form.media }}
+        {% if assoc.id == 0 %}
+            {% compress css %}
+                <link rel="stylesheet" href="{% static 'alpha/assets/css/main.css' %}" />
+                <link rel="stylesheet"
+                      href="{% static 'larpmanager/assets/css/alpha.css' %}" />
+                <link rel="stylesheet" href="{% static 'larpmanager/assets/css/lm.css' %}" />
+            {% endcompress %}
+        {% else %}
+            {% compress css %}
+                <link rel="stylesheet"
+                      href="{% static 'solid_state/assets/css/main.css' %}" />
+                <link rel="stylesheet"
+                      href="{% static 'larpmanager/assets/css/solid_state.css' %}" />
+                <link rel="stylesheet" href="{% static 'larpmanager/assets/css/lm.css' %}" />
+            {% endcompress %}
+            {% if assoc.css_code %}
+                <link rel="stylesheet"
+                      href="{% get_media_prefix %}/css/{{ assoc.slug }}_{{ assoc.css_code }}.css" />
+            {% endif %}
+            {% if event and event.css_code %}
+                <link rel="stylesheet"
+                      href="{% get_media_prefix %}/css/{{ assoc.slug }}_{{ event.slug }}_{{ event.css_code }}.css" />
+            {% endif %}
+        {% endif %}
+        {% block css %}{% endblock %}
+        <noscript>
+            <link rel="stylesheet"
+                  href="{% static 'larpmanager/assets/css/noscript.css' %}" />
+        </noscript>
+    </head>
+    <body class="is-preload">
+        {% if staging %}<div id="staging">STAGING</div>{% endif %}
+        {% block sidebar %}
+            {% if manage %}
+                <div id="sidebar">
+                    {% if run %}
+                        <h1>
+                            <span>{{ run }}</span>
+                        </h1>
+                    {% else %}
+                        <h1>
+                            <span>{{ assoc.name }}</span>
+                        </h1>
+                    {% endif %}
+                    <hr />
+                    <h2>Larpmanager</h2>
+                    <p>
+                        <a href="{% url 'tutorials' %}">Tutorials</a>
+                        <a href="{% url 'howto' %}">Howto</a>
+                        {% if admin %}
+                            <a href="{% url 'exe_larpmanager' %}">Subscription</a>
+                        {% endif %}
+                    </p>
+                    {% if run %}
+                        {% for mod, list in event_pms.items %}
+                            <h2>{% trans mod %}</h2>
+                            <p>
+                                {% for ap in list %}
+                                    <a href="{% url ap.slug run.event.slug run.number %}"
+                                       {% if request.func_name == ap.slug %}class="select"{% endif %}>
+                                        {% trans ap.name %}
+                                    </a>
+                                {% endfor %}
+                            </p>
+                        {% endfor %}
+                    {% else %}
+                        {% for mod, list in assoc_pms.items %}
+                            <h2>{% trans mod %}</h2>
+                            <p>
+                                {% for ap in list %}
+                                    <a href="{% url ap.slug %}"
+                                       {% if request.func_name == ap.slug %}class="select"{% endif %}>
+                                        {% trans ap.name %}
+                                    </a>
+                                {% endfor %}
+                            </p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endblock %}
+        <!-- Page Wrapper -->
+        <div id="page-wrapper">
+            {% block main %}{% endblock %}
+        </div>
+        <script>
+    var set_language_url = "{% url 'set_language' %}";
+    var set_internaz = {{ set_internaz | default:"null" }};
+        </script>
+        <!-- Scripts -->
+        {% block js-req %}{% endblock %}
+        <!--- script pipeline -->
+        {% compress js %}
+            <script defer
+                    src="{% static 'solid_state/assets/js/jquery.scrollex.min.js' %}"></script>
+            <script defer src="{% static 'solid_state/assets/js/browser.min.js' %}"></script>
+            <script defer src="{% static 'solid_state/assets/js/breakpoints.min.js' %}"></script>
+            <script defer
+                    src="{% static 'solid_state/assets/js/jquery.tablesorter.min.js' %}"></script>
+            <script defer
+                    src="{% static 'larpmanager/assets/js/jquery.textfill.min.js' %}"></script>
+        {% endcompress %}
+        {% if assoc.id == 0 %}
+            {% compress js %}
+                <script defer src="{% static 'alpha/assets/js/jquery.dropotron.min.js' %}"></script>
+                <script defer src="{% static 'alpha/assets/js/util.js' %}"></script>
+                <script defer src="{% static 'alpha/assets/js/main.js' %}"></script>
+                <script defer src="{% static 'larpmanager/assets/js/lm.js' %}"></script>
+            {% endcompress %}
+        {% else %}
+            {% compress js %}
+                <script defer src="{% static 'solid_state/assets/js/util.js' %}"></script>
+                <script defer src="{% static 'solid_state/assets/js/main.js' %}"></script>
+                <script defer src="{% static 'larpmanager/assets/js/lm.js' %}"></script>
+            {% endcompress %}
+        {% endif %}
+        {% block js %}
+        {% endblock %}
+        {% block js2 %}{% endblock %}
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+        <script>
+        function setCookie(name,value,days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days*24*60*60*1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+        }
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0;i < ca.length;i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+        function eraseCookie(name) {
+            document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        }
+
+        var down_all = false;
+
+        function start_spinner() {
+            $('#overlay').fadeIn(200);
+            $('body').addClass('noscroll');
+        }
+
+        function stop_spinner() {
+            if (down_all) return;
+
+            $('#overlay').fadeOut(200);
+            $('body').removeClass('noscroll');
+        }
+
+    window.addEventListener('DOMContentLoaded', function() {
+
+        function toggle_sidebar() {
+            $('#sidebar').toggle();
+            $('#header').toggleClass('sidebar');
+            $('#page-wrapper').toggleClass('sidebar');
+            $('#footer').toggleClass('sidebar');
+        }
+
+        $(document).ready(function() {
+
+            const csrftoken = getCookie('csrftoken');
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!(/^GET|HEAD|OPTIONS|TRACE$/.test(settings.type)) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+
+            $('#sidebar-nav').click(function() {
+                toggle_sidebar();
+
+                $.ajax({
+                    url: '{% url "toggle_sidebar" %}',
+                });
+            });
+        });
+
+        {% if is_sidebar_open %}
+            toggle_sidebar();
+        {% endif %}
+
+    });
+        </script>
+        {% if staging %}
+            <script>
+            if (getCookie('staging') != 1) {
+                if (confirm("WARNING - This is a staging server. Let's just check if you're supposed to be here: if you don't know why this message appeared, please click OK.")) {
+                  url = window.location.href;
+                  url = url.replace('xyz', 'com');
+                  window.location.replace(url);
+                } else {
+                  setCookie('staging', 1);
+                }
+            }
+
+            </script>
+        {% endif %}
+    </body>
+</html>

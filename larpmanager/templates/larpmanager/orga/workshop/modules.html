@@ -1,0 +1,29 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Modules WS" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the modules for the workshop questions of the event." %}
+{% endblock %}
+{% block content %}
+    {% include "elements/header/orga.html" %}
+    <table id="workshop_modules" class="tablesorter mob writing">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Name" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'orga_workshop_modules_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.display }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

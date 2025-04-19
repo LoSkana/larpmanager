@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Donation" %}
+{% endblock %}
+{% block content %}
+    {% if invoice %}
+        {% include "elements/payment_go.html" %}
+    {% else %}
+        <p>{% trans "Indicate the amount of your donation" %}:</p>
+        {% include "elements/payment_form.html" %}
+    {% endif %}
+{% endblock %}

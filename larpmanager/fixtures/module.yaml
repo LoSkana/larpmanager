@@ -1,0 +1,63 @@
+- model: larpmanager.featuremodule
+  pk: 1
+  fields:
+    name: Writing
+    descr: Writing and storytelling tools
+    order: 5
+    default: false
+- model: larpmanager.featuremodule
+  pk: 2
+  fields:
+    name: Accounting
+    descr: Managing money flow and finances
+    order: 4
+    default: false
+- model: larpmanager.featuremodule
+  pk: 3
+  fields:
+    name: Miscellany
+    descr: Various additional features
+    order: 10
+    default: false
+- model: larpmanager.featuremodule
+  pk: 4
+  fields:
+    name: Registration
+    descr: Player registration process
+    order: 3
+    default: false
+- model: larpmanager.featuremodule
+  pk: 5
+  fields:
+    name: Casting
+    descr: Assigning characters to players
+    order: 6
+    default: false
+- model: larpmanager.featuremodule
+  pk: 6
+  fields:
+    name: Appearance
+    descr: Event display and visual customization
+    order: 2
+    default: false
+- model: larpmanager.featuremodule
+  pk: 7
+  fields:
+    name: Management
+    descr: General event management tools
+    order: 1
+    default: false
+- model: larpmanager.featuremodule
+  pk: 8
+  fields:
+    name: Users
+    descr: Manage players' data
+    order: 8
+    default: false
+- model: larpmanager.featuremodule
+  pk: 9
+  fields:
+    name: Main
+    descr: Standard features
+    order: 0
+    default: true

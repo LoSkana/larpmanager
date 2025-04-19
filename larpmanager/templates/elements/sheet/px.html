@@ -1,0 +1,32 @@
+{% load show_tags i18n %}
+<h2>{% trans 'Experience points' %}</h2>
+<table class="mob no_csv">
+    <tr>
+        <th>{% trans 'Total' %}</th>
+        <th>{% trans 'Used' %}</th>
+        <th>{% trans 'Available' %}</th>
+    </tr>
+    <tr>
+        <td>{{ character.addit | get:'px_tot' }}</td>
+        <td>{{ character.addit | get:'px_used' }}</td>
+        <td>{{ character.addit | get:'px_avail' }}</td>
+    </tr>
+</table>
+<h3>{% trans 'Ability list' %}</h3>
+{% for typ, ls in sheet_abilities.items %}
+    <p>
+        <b>{{ typ }}:</b>
+        {% for el in ls %}
+            {% include "elements/comma.html" %}
+            {{ el.name }} ({{ el.cost }})
+        {% endfor %}
+    </p>
+{% endfor %}
+<h3>{% trans 'Delivery list' %}</h3>
+<p>
+    {% for el in character.px_delivery_list.all %}
+        {% include "elements/comma.html" %}
+        {{ el.name }} ({{ el.amount }})
+    {% endfor %}
+</p>
+<hr class="clear" />

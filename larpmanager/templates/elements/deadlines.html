@@ -1,0 +1,165 @@
+{% load i18n %}
+<table class="mob">
+    <tr>
+        <th>{% trans "Problem" %}</th>
+        <th>{% trans "Action" %}</th>
+        <th>{% trans "Number" %}</th>
+        <th>{% trans "Names" %}</th>
+        <th>{% trans "Email" %}</th>
+    </tr>
+    {% if res.memb_del %}
+        <tr>
+            <td>
+                <b>{% trans "Cancellation for missing organization registration" %}</b>
+            </td>
+            <td>{% trans "Tolerance exceeded, proceed with the cancellation" %}</td>
+            <td>{{ res.memb_del|length }}</td>
+            <td>
+                {% for el in res.memb_del %}
+                    {% include 'elements/comma.html' %}
+                    {{ el.0 }}
+                {% endfor %}
+            </td>
+            <td>
+                {% for el in res.memb_del %}
+                    {% include 'elements/comma.html' %}
+                    {{ el.1 }}
+                {% endfor %}
+            </td>
+        </tr>
+    {% endif %}
+    {% if res.fee_del %}
+        <tr>
+            <td>
+                <b>{% trans "Cancellation for missing yearly membership fee" %}</b>
+            </td>
+            <td>{% trans "Tolerance exceeded, proceed with the cancellation" %}</td>
+            <td>{{ res.fee_del|length }}</td>
+            <td>
+                {% for el in res.fee_del %}
+                    {% include 'elements/comma.html' %}
+                    {{ el.0 }}
+                {% endfor %}
+            </td>
+            <td>
+                {% for el in res.fee_del %}
+                    {% include 'elements/comma.html' %}
+                    {{ el.1 }}
+                {% endfor %}
+            </td>
+        </tr>
+    {% endif %}
+    {% if res.pay_del %}
+        <tr>
+            <td>
+                <b>{% trans "Cancellation for missing payment" %}</b>
+            </td>
+            <td>{% trans "Tolerance exceeded, proceed with the cancellation" %}</td>
+            <td>{{ res.pay_del|length }}</td>
+            <td>
+                {% for el in res.pay_del %}
+                    {% include 'elements/comma.html' %}
+                    {{ el.0 }}
+                {% endfor %}
+            </td>
+            <td>
+                {% for el in res.pay_del %}
+                    {% include 'elements/comma.html' %}
+                    {{ el.1 }}
+                {% endfor %}
+            </td>
+        </tr>
+    {% endif %}
+    {% if res.memb %}
+        <tr>
+            <td>
+                <b>{% trans "Delay in organization registration" %}</b>
+            </td>
+            <td>
+                {% trans "They need to complete it immediately" %} - <a href="{% url 'membership' %}">{% trans "give them this address" %}</a>
+            </td>
+            <td>{{ res.memb|length }}</td>
+            <td>
+                {% for el in res.memb %}
+                    {% include 'elements/comma.html' %}
+                    {{ el.0 }}
+                {% endfor %}
+            </td>
+            <td>
+                {% for el in res.memb %}
+                    {% include 'elements/comma.html' %}
+                    {{ el.1 }}
+                {% endfor %}
+            </td>
+        </tr>
+    {% endif %}
+    {% if res.fee %}
+        <tr>
+            <td>
+                <b>{% trans "Delay in yearly membership fee" %}</b>
+            </td>
+            <td>
+                {% trans "They need to complete it immediately" %} - <a href="{% url 'accounting' %}">{% trans "give them this address" %}</a>
+            </td>
+            <td>{{ res.fee|length }}</td>
+            <td>
+                {% for el in res.fee %}
+                    {% include 'elements/comma.html' %}
+                    {{ el.0 }}
+                {% endfor %}
+            </td>
+            <td>
+                {% for el in res.fee %}
+                    {% include 'elements/comma.html' %}
+                    {{ el.1 }}
+                {% endfor %}
+            </td>
+        </tr>
+    {% endif %}
+    {% if res.pay %}
+        <tr>
+            <td>
+                <b>{% trans "Delay in payment" %}</b>
+            </td>
+            <td>
+                {% trans "They need to complete it immediately" %} - <a href="{% url 'accounting' %}">{% trans "give them this address" %}</a>
+            </td>
+            <td>{{ res.pay|length }}</td>
+            <td>
+                {% for el in res.pay %}
+                    {% include 'elements/comma.html' %}
+                    {{ el.0 }}
+                {% endfor %}
+            </td>
+            <td>
+                {% for el in res.pay %}
+                    {% include 'elements/comma.html' %}
+                    {{ el.1 }}
+                {% endfor %}
+            </td>
+        </tr>
+    {% endif %}
+    {% if res.cast %}
+        <tr>
+            <td>
+                <b>{% trans "Missing casting preferences" %}</b>
+            </td>
+            <td>
+                {% trans "They need to complete it immediately" %} - <a href="{% url 'casting' run.event.slug run.number %}">{% trans "give them this address" %}</a>
+            </td>
+            <td>{{ res.cast|length }}</td>
+            <td>
+                {% for el in res.cast %}
+                    {% include 'elements/comma.html' %}
+                    {{ el.0 }}
+                {% endfor %}
+            </td>
+            <td>
+                {% for el in res.cast %}
+                    {% include 'elements/comma.html' %}
+                    {{ el.1 }}
+                {% endfor %}
+            </td>
+        </tr>
+    {% endif %}
+</table>

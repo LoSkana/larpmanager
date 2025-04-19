@@ -1,0 +1,48 @@
+{% load show_tags static i18n %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+@font-face {
+    font-family: 'easyreading';
+    src: url('https://proxima.larpmanager.com/static/larpmanager/assets/fonts/EasyReadingPRO.ttf');
+}
+
+html { font-family: easyreading; height: 100%; line-height: 1.3; }
+p { margin: 0.3em; padding: 0; }
+body { background: white; height: 100%; }
+h1 { text-align:center; font-size:150%;}
+h2 { margin-left: 40px; margin-top: 1em; margin-bottom: 1em;}
+a { color: inherit; font-weight:bold; text-decoration: none;}
+.head { text-align:center; font-size:120%; font-weight:bold; }
+br {
+   display: block;
+   margin: 1px 0;
+}
+
+#char_title { text-align:center; margin: 0.5em; font-style: italic;  }
+
+#char_motto { text-align:center; margin: 0.5em; }
+
+table { width: 100%; }
+td, th { text-align: center; }
+.clear { clear: both; }
+
+        </style>
+        <style>{{ event.sheet_css | safe }}</style>
+    </head>
+    <body>
+        <div>
+            <div class="intro"></div>
+            <div class="head">{{ event.assoc }} - {{ event }}</div>
+            <br />
+            {% include "elements/sheet/main.html" %}
+            {% include "elements/sheet/plots.html" %}
+            {% include "elements/sheet/quests.html" %}
+            {% include "elements/sheet/speedlarp.html" %}
+            {% include "elements/sheet/prologue.html" %}
+            <div class="outro"></div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,9 @@
+{% load show_tags static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>{{ handout.template.css | safe }}</style>
+    </head>
+    <body>{{ handout.data.text | safe }}</body>
+</html>

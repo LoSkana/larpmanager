@@ -1,0 +1,56 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Installments" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the payment deadline settings for the event." %}
+{% endblock %}
+{% block content %}
+    {% include "elements/header/orga.html" %}
+    <table id="registration_installments" class="tablesorter mob writing">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Installment" %}</th>
+                <th>{% trans "Amount" %}</th>
+                <th>{% trans "Deadline (days)" %}</th>
+                <th>{% trans "Deadline (date)" %}</th>
+                <th>{% trans "Tickets" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'orga_registration_installments_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.order }}</td>
+                    <td>{{ el.amount }}</td>
+                    <td>
+                        {% if el.days_deadline %}{{ el.days_deadline }}{% endif %}
+                    </td>
+                    <td>
+                        {% if el.date_deadline %}{{ el.date_deadline }}{% endif %}
+                    </td>
+                    <td>
+                        {% for ticket in el.tickets.all %}
+                            {% include "elements/comma.html" %}
+                            {{ ticket.name }}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+{% block js2 %}
+    <script>window.addEventListener('DOMContentLoaded', function() {
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('*[data-column="2"]').click();
+            }, 500);
+        });
+    });
+    </script>
+{% endblock %}

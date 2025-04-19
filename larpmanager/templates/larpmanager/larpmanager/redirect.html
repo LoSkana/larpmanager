@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block title %}Please choose{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+    <p style="text-align: center">
+        <i>Please choose the {{ name }} you'd like to be redirected to </i>
+    </p>
+    <br />
+    <br />
+    <form action="{{ request.path }}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <br />
+        <br />
+        <input type="submit" value="Confirm">
+    </form>
+{% endblock %}

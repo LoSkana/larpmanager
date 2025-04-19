@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Ability" %} - {{ character }} - {{ run.search }}
+{% endblock %}
+{% block content %}
+    {% include "elements/sheet/px.html" %}
+    <h2>{% trans "Obtain ability" %}</h2>
+    <p>
+        <i>{% trans "Select the new ability to get" %}</i>
+    </p>
+    <form action="{{ request.path }}"
+          method="post"
+          enctype="multipart/form-data">
+        {% csrf_token %}
+        <table class="mob no_csv">
+            {{ form.sel }}
+        </table>
+        <input type="submit" value="{% trans 'Submit' %}">
+    </form>
+{% endblock %}
+{% block js2 %}
+    <script>
+window.addEventListener('DOMContentLoaded', function() {
+    $(function() {
+        $('form').on('submit', function() {
+            return confirm('{% trans "Are you sure?" %}');
+        });
+    });
+});
+    </script>
+{% endblock %}

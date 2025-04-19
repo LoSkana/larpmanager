@@ -1,0 +1,19 @@
+{% extends 'utils.html' %}
+{% load i18n static %}
+{% block title %}Join first!{% endblock %}
+{% block content %}
+    Heya! You requested an advanced function of the larpmanager, but we couldn't find an existing LARP Organization that you manage.
+    <br />
+    <br />
+    Maybe someone already created the organization? In this case ask them to add you to one of the roles in order to help them manage it!
+    <br />
+    <br />
+    If the organization does not yet exists, <a href="{% url 'join' %}">create it now,</a> it's super easy!
+    <br />
+    <br />
+Need help? <span class="contact-mail"></span> (we are happy to organize a demo of the tool for you!)</i>
+</p>
+{% endblock %}
+{% block js %}
+    {% include "elements/contact-mail.js" %}
+{% endblock %}

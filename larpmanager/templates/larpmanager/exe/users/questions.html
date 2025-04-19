@@ -1,0 +1,85 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Questions" %} - {% trans "Organization" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the questions submitted by users, divided by the events they refer to. You can answer the question or close it if requires no further action." %}
+{% endblock %}
+{% block content %}
+    <p>
+        <a href="#" class="my_toggle" tog='closed'>{% trans "Show questions already answered" %}</a>
+    </p>
+    <table id="questions" class="tablesorter mob">
+        <thead>
+            <tr>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Event" %}</th>
+                <th>{% trans "Member" %}</th>
+                <th>{% trans "Question" %}</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in open %}
+                <tr>
+                    <td>{{ el.created }}</td>
+                    <td>
+                        {% if el.run %}{{ el.run }}{% endif %}
+                    </td>
+                    <td>{{ el.member }}</td>
+                    <td>{{ el.text }}</td>
+                    <td>
+                        {% if el.attachment %}
+                            &nbsp;&nbsp;&nbsp;<a href="{% url 'help_attachment' el.id %}" target="_blank">{% trans "Attachment" %}</a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'exe_questions_answer' el.member_id %}">{% trans "Answer" %}</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'exe_questions_close' el.member_id %}">{% trans "Close" %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="hide closed">
+        <h2>Domande già risposte</h2>
+        <p>
+            <i>{% trans "For your convenience, this page only shows questions from the last 3 months. To view previous questions click here:" %}</i>
+            <form action="{{ request.path }}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="{% trans "Confirm" %}">
+            </form>
+        </p>
+        <table id="questions" class="tablesorter mob">
+            <thead>
+                <tr>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Event" %}</th>
+                    <th>{% trans "Member" %}</th>
+                    <th>{% trans "Question" %}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for el in closed %}
+                    <tr>
+                        <td>{{ el.created }}</td>
+                        <td>
+                            {% if el.run %}{{ el.run }}{% endif %}
+                        </td>
+                        <td>{{ el.member }}</td>
+                        <td>{{ el.text }}</td>
+                        <td>
+                            <a href="{% url 'exe_questions_answer' el.member.id %}">{% trans "Answer" %}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

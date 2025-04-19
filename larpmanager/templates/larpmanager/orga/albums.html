@@ -1,0 +1,46 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Album" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the uploaded photo albums." %}
+{% endblock %}
+{% block content %}
+    {% include "elements/header/orga.html" %}
+    <br />
+    <br />
+    <table id="elements" class="tablesorter mob writing">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Master" %}</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'orga_albums_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.name }}</td>
+                    <td>{{ el.parent }}</td>
+                    <td>
+                        <a href="{% url 'orga_albums_upload' run.event.slug run.number el.cod %}">{% trans "Upload" %}</a> (questo link può essere passato all'esterno per far eseguire il caricamento a collaboratori)
+                    </td>
+                    <td>
+                        {% if el.thumb %}<img src="{{ el.thumb.url }}" />{% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_albums_delete' run.event.slug run.number el.id %}"
+                           class="delete">{% trans "Delete" %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

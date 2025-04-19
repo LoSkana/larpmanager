@@ -1,0 +1,46 @@
+{% load show_tags i18n %}
+{% if char.role %}
+    <div class="go-inline">
+        <b>{% trans 'Role' %}:&nbsp;</b>{{ char.role }}
+    </div>
+{% endif %}
+{% if features.gender %}
+    <div class="go-inline">
+        <b>{% trans 'Gender' %}:</b>
+        {% if char.gender == 'm' %}
+            {% trans 'Male' %}
+        {% endif %}
+        {% if char.gender == 'f' %}
+            {% trans 'Female' %}
+        {% endif %}
+        {% if char.gender == 'u' %}
+            {% trans 'Unisex' %}
+        {% endif %}
+    </div>
+{% endif %}
+{% if char.motto %}
+    <div class="go-inline">
+        <b>Motto:&nbsp;</b>{{ char.motto | safe }}
+    </div>
+{% endif %}
+{% if char.safety %}
+    <div class="go-inline">
+        <b>Safety:&nbsp;</b>{{ char.safety | safe }}
+    </div>
+{% endif %}
+{% if char.keywords %}
+    <div class="go-inline">
+        <b>{% trans 'Keywords' %}:&nbsp;</b>{{ char.keywords | safe }}
+    </div>
+{% endif %}
+{% for idx, question in questions.items %}
+    {% with char.fields|get:idx as field %}
+        {% if field %}
+            {% if screen or field.printable %}
+                <div class="go-inline">
+                    <b>{{ question.display }}:&nbsp;</b>{% get_character_field field options %}
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endwith %}
+{% endfor %}

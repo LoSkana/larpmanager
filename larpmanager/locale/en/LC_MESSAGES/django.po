@@ -1,0 +1,7936 @@
+#
+msgid ""
+msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Registrations"
+msgstr ""
+
+msgid "Expenses"
+msgstr ""
+
+msgid "Outflows"
+msgstr ""
+
+msgid "Inflows"
+msgstr ""
+
+msgid "Income"
+msgstr ""
+
+msgid "Transactions"
+msgstr ""
+
+msgid "Refunds"
+msgstr ""
+
+msgid "Tokens"
+msgstr ""
+
+msgid "Credits"
+msgstr ""
+
+msgid "Discount"
+msgstr ""
+
+#, python-format
+msgid "Registration fee %(number)d of %(user)s per %(event)s"
+msgstr ""
+
+#, python-format
+msgid "Membership fee of %(user)s for %(year)s"
+msgstr ""
+
+#, python-format
+msgid "Donation of %(user)s, with reason: '%(reason)s'"
+msgstr ""
+
+#, python-format
+msgid "Collected contribution of %(user)s for %(recipient)s"
+msgstr ""
+
+msgid "This page allows you to add or edit an expense item of a contributor."
+msgstr ""
+
+msgid "Expenses collaborators"
+msgstr ""
+
+msgid "This page allows you to add or edit the expense of a contributor."
+msgstr ""
+
+msgid "This page allows you to add or edit a disbursement entry of"
+msgstr ""
+
+msgid "This page allows you to add or edit a disbursement credits item."
+msgstr ""
+
+msgid "Payments"
+msgstr ""
+
+msgid "This page allows you to add or edit a payment item."
+msgstr ""
+
+msgid "This page allows you to add or edit an expense item incurred."
+msgstr ""
+
+msgid ""
+"This page allows you to add or edit an registration revenue other than the "
+"players' registration fee."
+msgstr ""
+
+msgid "Donations"
+msgstr ""
+
+msgid "Invoices"
+msgstr ""
+
+msgid "This page allows you to add or edit an invoice."
+msgstr ""
+
+msgid "Disbursment"
+msgstr ""
+
+msgid "Disbursement"
+msgstr ""
+
+msgid "Collections"
+msgstr ""
+
+msgid "This page allows you to add or edit a discount."
+msgstr ""
+
+msgid "Indicates the runs for which the discount is available"
+msgstr ""
+
+msgid "Info"
+msgstr ""
+
+msgid "Enter any useful information for the organizers to verify the payment"
+msgstr ""
+
+msgid "Request refund"
+msgstr ""
+
+msgid "Payment details"
+msgstr ""
+
+msgid "This page allows you to set up your payment methods."
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Fee"
+msgstr ""
+
+msgid "Beneficiary"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "This page allows you to change the main settings of your Organization."
+msgstr ""
+
+msgid "Texts"
+msgstr ""
+
+msgid "This page allows you to edit organization-specific text."
+msgstr ""
+
+msgid "Roles"
+msgstr ""
+
+msgid "This page allows you to edit the roles of the association."
+msgstr ""
+
+msgid "Appearance"
+msgstr ""
+
+msgid ""
+"This page allows you to change the appearance settings and presentation of "
+"the management system for your Organization."
+msgstr ""
+
+msgid ""
+"Freely insert CSS commands, they will be reported in all pages  in the space "
+"of your Organization. In this way you can customize freely the appearance."
+msgstr ""
+
+msgid "Configuration"
+msgstr ""
+
+msgid ""
+"This page allows you to edit the configuration of the activated features."
+msgstr ""
+
+msgid "Calendar"
+msgstr ""
+
+msgid "Show event links"
+msgstr ""
+
+msgid "If checked: shows a link to the event in the navigation bar."
+msgstr ""
+
+msgid "Past events"
+msgstr ""
+
+msgid "If checked: shows a link in the calendar to past events."
+msgstr ""
+
+msgid "Website"
+msgstr ""
+
+msgid "If checked: shows the website for each event"
+msgstr ""
+
+msgid "If checked: shows the description for each event"
+msgstr ""
+
+msgid "Where"
+msgstr ""
+
+msgid "If checked: shows the position for each event"
+msgstr ""
+
+msgid "Authors"
+msgstr ""
+
+msgid "If checked: shows the list of authors for each event"
+msgstr ""
+
+msgctxt "event"
+msgid "Genre"
+msgstr ""
+
+msgctxt "event"
+msgid "If checked: shows the genre for each event"
+msgstr ""
+
+msgid "Tagline"
+msgstr ""
+
+msgid "If checked: shows the tagline for each event"
+msgstr ""
+
+msgid "Interface"
+msgstr ""
+
+msgid "Quick links organisation"
+msgstr ""
+
+msgid ""
+"If checked: In the event management panel, it also shows the association "
+"management links"
+msgstr ""
+
+msgid "Email notifications"
+msgstr ""
+
+msgid "Carbon copy"
+msgstr ""
+
+msgid "If checked: Sends the main mail a copy of all mails sent to players"
+msgstr ""
+
+msgid "New signup"
+msgstr ""
+
+msgid ""
+"If checked: Send an email notification to the organisers for new signups"
+msgstr ""
+
+msgid "Signup update"
+msgstr ""
+
+msgid ""
+"If checked: Send an email notification to the organisers for updated signups"
+msgstr ""
+
+msgid "Signup cancellation"
+msgstr ""
+
+msgid ""
+"If checked: Send a notification email to the organisers for cancellation of "
+"registration"
+msgstr ""
+
+msgid "Payments received"
+msgstr ""
+
+msgid "If checked: Send an email to the organisers for each payment received"
+msgstr ""
+
+msgid "Disable amount change"
+msgstr ""
+
+msgid ""
+"If checked: Hides the possibility for the player to change the payment "
+"amount for his entries"
+msgstr ""
+
+msgid "Unique code"
+msgstr ""
+
+msgid ""
+"If checked: Adds a unique code to each payment, which helps in being able to "
+"recognize it"
+msgstr ""
+
+msgid "Deadline"
+msgstr ""
+
+msgid "Tolerance"
+msgstr ""
+
+msgid ""
+"Number of days past the deadline beyond which registrations are marked to be "
+"cancelled (default 30 days)"
+msgstr ""
+
+msgid "Frequency"
+msgstr ""
+
+msgid "Sets how often reminder emails are sent, in days (default: 5)"
+msgstr ""
+
+msgid "VAT"
+msgstr ""
+
+msgid "Ticket"
+msgstr ""
+
+msgid "Percentage of VAT to be calculated on the ticket cost alone"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid ""
+"Percentage of VAT to be calculated on the sum of the costs of the "
+"registration options"
+msgstr ""
+
+msgid "Tokens / Credits"
+msgstr ""
+
+msgid "Token name"
+msgstr ""
+
+msgid "Name to be displayed for tokens"
+msgstr ""
+
+msgid "Name credits"
+msgstr ""
+
+msgid "Name to be displayed for credits"
+msgstr ""
+
+msgid "Members"
+msgstr ""
+
+msgid "Age"
+msgstr ""
+
+msgid "Minimum age of members"
+msgstr ""
+
+msgid "Annual fee"
+msgstr ""
+
+msgid ""
+"Annual fee required of members, starting from the beginning of the "
+"membership year"
+msgstr ""
+
+msgid "Start day"
+msgstr ""
+
+msgid "Day of the year from which the membership year begins, in DD-MM format"
+msgstr ""
+
+msgid "Months free quota"
+msgstr ""
+
+msgid ""
+"Number of months, starting from the beginning of the membership year, for "
+"which to make free membership fee payment"
+msgstr ""
+
+msgid "Tax code check"
+msgstr ""
+
+msgid "Apply a check on the tax code of players"
+msgstr ""
+
+msgid "Customised mail server"
+msgstr ""
+
+msgid "Use TLD"
+msgstr ""
+
+msgid "Host Address"
+msgstr ""
+
+msgid "Port"
+msgstr ""
+
+msgid "Username of account"
+msgstr ""
+
+msgid "Password of account"
+msgstr ""
+
+msgid "Voting"
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "If checked: members can vote."
+msgstr ""
+
+msgid "Candidates"
+msgstr ""
+
+msgid "Candidates at the polls"
+msgstr ""
+
+msgid "Minimum votes"
+msgstr ""
+
+msgid "Minimum number of votes"
+msgstr ""
+
+msgid "Maximum votes"
+msgstr ""
+
+msgid "Maximum number of votes"
+msgstr ""
+
+msgid "Treasury"
+msgstr ""
+
+msgid "Appointees"
+msgstr ""
+
+msgid "Treasury appointees"
+msgstr ""
+
+msgid "Reminder"
+msgstr ""
+
+msgid "Text"
+msgstr ""
+
+msgid "Enter the text with which to remind the payment deadline."
+msgstr ""
+
+msgid "Holidays"
+msgstr ""
+
+msgid ""
+"If checked: the system will send reminds the days on which holidays fall"
+msgstr ""
+
+msgid "Organisation fee"
+msgstr ""
+
+msgid "Percentage"
+msgstr ""
+
+msgid ""
+"Percentage of takings calculated as a fee for association infrastructure (in "
+"whole numbers from 0 to 100)"
+msgstr ""
+
+msgid "Centarui"
+msgstr ""
+
+msgid "Probability"
+msgstr ""
+
+msgid "Probability of showing the special page (out of thousands)"
+msgstr ""
+
+msgid "Badge"
+msgstr ""
+
+msgid "Name of badge to be awarded"
+msgstr ""
+
+msgid "Description to be shown on the special page"
+msgstr ""
+
+msgid "Page"
+msgstr ""
+
+msgid "Contents of the special page"
+msgstr ""
+
+msgid "Payment fees"
+msgstr ""
+
+msgid "Charging the player"
+msgstr ""
+
+msgid ""
+"If checked: the system will add payment fees to the ticket, making the "
+"player pay for them."
+msgstr ""
+
+msgid "Electronic invoice"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Fiscal code"
+msgstr ""
+
+msgid "VAT No."
+msgstr ""
+
+msgid "Tax regime"
+msgstr ""
+
+msgid "VAT rate"
+msgstr ""
+
+msgid "If absent, indicate 0"
+msgstr ""
+
+msgid "Nature"
+msgstr ""
+
+msgid "Indicate only if rate 0"
+msgstr ""
+
+msgid "Address"
+msgstr ""
+
+msgid "House number"
+msgstr ""
+
+msgid "Cap"
+msgstr ""
+
+msgid "Municipality"
+msgstr ""
+
+msgid "Province"
+msgstr ""
+
+msgid "Code two capital letters"
+msgstr ""
+
+msgid "Nation"
+msgstr ""
+
+msgid "Recipient Code"
+msgstr ""
+
+msgid "Intermediary channel code"
+msgstr ""
+
+msgid "You have exceeded the maximum number of selectable options"
+msgstr ""
+
+msgid "Available"
+msgstr ""
+
+msgid "Option no longer available"
+msgstr ""
+
+msgid "Not selected"
+msgstr ""
+
+msgid "Freely answer the co-creation questions"
+msgstr ""
+
+msgid "Character"
+msgstr ""
+
+msgid "Complete"
+msgstr ""
+
+msgid ""
+"Click here to confirm that you have completed the character and are ready to "
+"propose it to the staff. Be careful: some fields may no longer be editable. "
+"Leave the field blank to save your changes and to be able to continue them "
+"in the future."
+msgstr ""
+
+msgid "Presentation text, visible to other players"
+msgstr ""
+
+msgid ""
+"Private text, visible only to you and the organizers. You can use it for "
+"write background or a journal."
+msgstr ""
+
+msgid "Select one primary faction"
+msgstr ""
+
+msgid "This page allows you to add or edit a character."
+msgstr ""
+
+msgid "--- NOT ASSIGNED ---"
+msgstr ""
+
+#, python-format
+msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
+msgstr ""
+
+msgid "Abilities"
+msgstr ""
+
+msgid "Delivery"
+msgstr ""
+
+msgid "Co-creation questions"
+msgstr ""
+
+msgid "Questions for the co-creation section, editable only by authors"
+msgstr ""
+
+msgid "Co-creation answers"
+msgstr ""
+
+msgid ""
+"Answers for the co-creation section, editable by both players and authors"
+msgstr ""
+
+msgid "This page allows you to add or modify a character form question."
+msgstr ""
+
+msgid "Character Question"
+msgstr ""
+
+msgid ""
+"This page allows you to add or modify an option in a character form question."
+msgstr ""
+
+msgid "Character option"
+msgstr ""
+
+msgid "Insert the css code to customize the pdf printing"
+msgstr ""
+
+msgid "Header"
+msgstr ""
+
+msgid "Insert the html code for the header"
+msgstr ""
+
+msgid "Footer"
+msgstr ""
+
+msgid "Insert the html code for the footer"
+msgstr ""
+
+msgid "Event Settings"
+msgstr ""
+
+msgid "This page allows you to change general event settings."
+msgstr ""
+
+msgid "Event Configuration"
+msgstr ""
+
+msgid "Disable assignment"
+msgstr ""
+
+msgid ""
+"If checked: Does not send communication to the player when the character is "
+"assigned"
+msgstr ""
+
+msgid "Visualisation"
+msgstr ""
+
+msgid "Limitations"
+msgstr ""
+
+msgid "If checked: Show summary page with number of tickets/options used"
+msgstr ""
+
+msgid "Writing"
+msgstr ""
+
+msgid "Replacing names"
+msgstr ""
+
+msgid "If checked, PG names will be automatically replaced by a reference"
+msgstr ""
+
+msgid "Registration form"
+msgstr ""
+
+msgid "Hide not available"
+msgstr ""
+
+msgid ""
+"If checked, options no longer available in the registration form are hidden, "
+"instead of being displayed disabled"
+msgstr ""
+
+msgid "Gallery"
+msgstr ""
+
+msgid "Request login"
+msgstr ""
+
+msgid ""
+"If checked, the gallery will not be displayed to those not logged in to the "
+"system"
+msgstr ""
+
+msgid "Request registration"
+msgstr ""
+
+msgid ""
+"If checked, the subscribers' gallery will not be displayed to those who are "
+"not subscribed to the run"
+msgstr ""
+
+msgid "Hide unassigned characters"
+msgstr ""
+
+msgid ""
+"If checked, does not show characters in the gallery who have not been "
+"assigned a player"
+msgstr ""
+
+msgid "Hide players without a character"
+msgstr ""
+
+msgid ""
+"If checked, does not show players in the gallery who have not been assigned "
+"a character"
+msgstr ""
+
+msgid "Campaign"
+msgstr ""
+
+msgid "Independent factions"
+msgstr ""
+
+msgid "If checked, do not use the parent event's factions"
+msgstr ""
+
+msgid "Pre-registration"
+msgstr ""
+
+msgid "If checked, makes pre-registration for this event available"
+msgstr ""
+
+msgid "Alert"
+msgstr ""
+
+msgid ""
+"Given a payment deadline, indicates the number of days under which it "
+"notifies the player to proceed with the payment. Default 30."
+msgstr ""
+
+msgid "Causal"
+msgstr ""
+
+msgid ""
+"If present, it indicates the reason for the payment that the player must put "
+"on the payments he makes."
+msgstr ""
+
+msgid "You can use the following fields, they will be filled in automatically:"
+msgstr ""
+
+msgid "Player editor"
+msgstr ""
+
+msgid "Maximum number"
+msgstr ""
+
+msgid "Maximum number of characters the player can create"
+msgstr ""
+
+msgid "Approval"
+msgstr ""
+
+msgid "If checked, activates a staff-managed approval process for characters"
+msgstr ""
+
+msgid "Character customisation"
+msgstr ""
+
+msgid ""
+"If checked, it allows players to customise the names of their characters"
+msgstr ""
+
+msgid "Profile Photos"
+msgstr ""
+
+msgid ""
+"If checked, allows players to customise their characters' profile picture"
+msgstr ""
+
+msgid "Pronoun"
+msgstr ""
+
+msgid "If checked, it allows players to customise their characters' pronouns"
+msgstr ""
+
+msgid "Song"
+msgstr ""
+
+msgid "If checked, it allows players to indicate the song of their characters"
+msgstr ""
+
+msgid "Private"
+msgstr ""
+
+msgid ""
+"If checked, it allows players to enter private information on their "
+"characters, visible only to them and the staff."
+msgstr ""
+
+msgid "Public"
+msgstr ""
+
+msgid ""
+"If checked, it allows players to enter public information on their "
+"characters, visible to all"
+msgstr ""
+
+msgid "Character cover"
+msgstr ""
+
+msgid "Desalt thumbnail"
+msgstr ""
+
+msgid ""
+"If checked, shows the original image in the cover, not the thumbnail version"
+msgstr ""
+
+msgid "Disable Tokens"
+msgstr ""
+
+msgid "If checked, no tokens will be used in the entries of this event"
+msgstr ""
+
+msgid "Disable credits"
+msgstr ""
+
+msgid "If checked, no credits will be used in the entries for this event"
+msgstr ""
+
+msgid "Bring a friend"
+msgstr ""
+
+msgid "Forward discount"
+msgstr ""
+
+msgid ""
+"Value of the discount for the registered player who gives the code to a "
+"friend who signs up"
+msgstr ""
+
+msgid "Discount back"
+msgstr ""
+
+msgid ""
+"Value of the discount for the friend who signs up using the code of a "
+"registered player"
+msgstr ""
+
+msgid "Lottery"
+msgstr ""
+
+msgid "Number of extractions"
+msgstr ""
+
+msgid "Number of tickets to be drawn"
+msgstr ""
+
+msgid "Conversion ticket"
+msgstr ""
+
+msgid "Name of the ticket into which to convert"
+msgstr ""
+
+msgid "Casting"
+msgstr ""
+
+msgid "Assignments"
+msgstr ""
+
+msgid "Number of characters to be assigned (default 1)"
+msgstr ""
+
+msgid "Minimum preferences"
+msgstr ""
+
+msgid "Minimum number of preferences"
+msgstr ""
+
+msgid "Maximum preferences"
+msgstr ""
+
+msgid "Maximum number of preferences"
+msgstr ""
+
+msgid "Additional Preferences"
+msgstr ""
+
+msgid ""
+"Additional preferences, for random assignment when no solution is found "
+"(default 0)"
+msgstr ""
+
+msgid "Field for exclusions"
+msgstr ""
+
+msgid ""
+"If checked, it adds a field in which the player can indicate which elements "
+"they wish to avoid altogether"
+msgstr ""
+
+msgid "Show statistics"
+msgstr ""
+
+msgid ""
+"If checked, players will be able to view for each character the preference "
+"statistics"
+msgstr ""
+
+msgid "Show history"
+msgstr ""
+
+msgid "If checked, shows players the histories of preferences entered"
+msgstr ""
+
+msgid "Name of the free donation field"
+msgstr ""
+
+msgid "Description of free donation"
+msgstr ""
+
+msgid "Patron / Reduced"
+msgstr ""
+
+msgid ""
+"Indicates the ratio between reduced and patron tickets, multiplied by 10. "
+"Example: 10 -> 1 reduced ticket for 1 patron ticket. 20 -> 2 reduced tickets "
+"for 1 patron ticket. 5 -> 1 reduced ticket for 2 patron tickets"
+msgstr ""
+
+msgid "Ticket Filler"
+msgstr ""
+
+msgid "Free registration"
+msgstr ""
+
+msgid ""
+"If checked, players may sign up as fillers at any time; otherwise, they may "
+"only do so if the stipulated number of characters has been reached"
+msgstr ""
+
+msgid "Experience points"
+msgstr ""
+
+msgid "Player selection"
+msgstr ""
+
+msgid ""
+"If checked, players may add abilities themselves, by selecting from those "
+"that are visible, and whose pre-requisites they meet."
+msgstr ""
+
+msgid "Initial experience points"
+msgstr ""
+
+msgid "Initial value of experience points for all characters"
+msgstr ""
+
+msgid "Event Appearance"
+msgstr ""
+
+msgid ""
+"This page allows you to change the appearance and presentation of the event."
+msgstr ""
+
+msgid ""
+"These CSS commands will be carried over to all pages in your Association "
+"space."
+msgstr ""
+
+msgid "This page allows you to edit event-specific texts."
+msgstr ""
+
+msgid "This page allows you to change the access roles for the event."
+msgstr ""
+
+msgid "Navigation"
+msgstr ""
+
+msgid "This page allows you to edit the event navigation buttons."
+msgstr ""
+
+msgid "Run Settings"
+msgstr ""
+
+msgid "This page allows you to change the general settings of this run."
+msgstr ""
+
+msgid "Characters"
+msgstr ""
+
+msgid ""
+"If checked, makes characters visible with basic information such as name, "
+"title, motto to all players"
+msgstr ""
+
+msgid "Presentations"
+msgstr ""
+
+msgid ""
+"If checked, make the presentations (public information) visible to all "
+"players"
+msgstr ""
+
+msgid ""
+"If checked, makes texts (private information) visible only to the player to "
+"whom the item is assigned"
+msgstr ""
+
+msgid "Preview"
+msgstr ""
+
+msgid ""
+"If checked, makes visible the preview, reserved only to the player to whom "
+"the item is assigned"
+msgstr ""
+
+msgid "Factions"
+msgstr ""
+
+msgid ""
+"If checked, makes factions visible, as th character assignments to factions"
+msgstr ""
+
+msgid "Speedlarp"
+msgstr ""
+
+msgid ""
+"If checked, makes visible the speedlarp in which the character participates "
+"assigned"
+msgstr ""
+
+msgid "Prologues"
+msgstr ""
+
+msgid "If checked, makes prologues of the assigned character visible"
+msgstr ""
+
+msgid "Questbuilder"
+msgstr ""
+
+msgid "If checked, makes quests and traits visible"
+msgstr ""
+
+msgid "Workshop"
+msgstr ""
+
+msgid "If checked, makes workshops visible for players to fill in"
+msgstr ""
+
+msgid "PDF"
+msgstr ""
+
+msgid "If checked, makes visible the PDF version of the character sheets"
+msgstr ""
+
+msgid "Co-creation"
+msgstr ""
+
+msgid "If checked, makes co-creation questions and answers visible"
+msgstr ""
+
+msgid "Visibility"
+msgstr ""
+
+msgid "Progression"
+msgstr ""
+
+msgid "Template"
+msgstr ""
+
+msgid ""
+"You can indicate a template event from which functionality and "
+"configurations will be copied"
+msgstr ""
+
+msgid "Event Template"
+msgstr ""
+
+msgid "This page allows you to edit an event template."
+msgstr ""
+
+msgid "Ability"
+msgstr ""
+
+msgid "Ability type"
+msgstr ""
+
+msgid "Authorisation"
+msgstr ""
+
+msgid ""
+"In order to participate in the events of this association, you must "
+"authorise the sharing of your data."
+msgstr ""
+
+msgid "The postcode contains inadmissible characters"
+msgstr ""
+
+msgid "The road contains inadmissible characters"
+msgstr ""
+
+msgid "The house number contains inadmissible characters"
+msgstr ""
+
+msgid "Absent"
+msgstr ""
+
+msgid "Nothing"
+msgstr ""
+
+msgid "Submitted"
+msgstr ""
+
+msgid "Accepted"
+msgstr ""
+
+msgid "Quota"
+msgstr ""
+
+msgid "POSTAL CODE"
+msgstr ""
+
+msgid "Via"
+msgstr ""
+
+msgid "Character not allowed:"
+msgstr ""
+
+msgid "Residence address"
+msgstr ""
+
+#, python-format
+msgid "Minimum age: %(number)d"
+msgstr ""
+
+msgid "Please upload your profile photo!"
+msgstr ""
+
+msgid "Request signed"
+msgstr ""
+
+msgid "Upload the scan of your signed application (image or pdf document):"
+msgstr ""
+
+msgid "Photo of an ID"
+msgstr ""
+
+msgid ""
+"Upload a photo of the identity document that you listed in the request "
+"(image or pdf)."
+msgstr ""
+
+msgid "Volounteer data"
+msgstr ""
+
+msgid "This page allows you to add or edit a volunteer entry."
+msgstr ""
+
+msgid "This page allows you to edit a member's profile."
+msgstr ""
+
+msgid "This page allows you to change a member's membership status."
+msgstr ""
+
+msgid "This page allows you to add or edit a badge, or assign it  to users."
+msgstr ""
+
+msgid "Profile"
+msgstr ""
+
+msgid ""
+"This page allows you to set up the fields that players can fill in in their "
+"user profile."
+msgstr ""
+
+msgid "Over"
+msgstr ""
+
+msgid "Partial"
+msgstr ""
+
+msgid "Optional - email reply to"
+msgstr ""
+
+msgid "Optional - ram html code (substitute the text before)"
+msgstr ""
+
+msgid "This page allows you to answer a player's question."
+msgstr ""
+
+msgid "Player Questions"
+msgstr ""
+
+msgid "This page allows you to add or edit an album."
+msgstr ""
+
+msgid "Album"
+msgstr ""
+
+msgid "This page allows you to keep track of reported problems."
+msgstr ""
+
+msgid "Problems"
+msgstr ""
+
+msgid "This page allows you to add or edit a url shortner."
+msgstr ""
+
+msgid "Shorten URL"
+msgstr ""
+
+msgid "This page allows you to add or edit a new item of inventory."
+msgstr ""
+
+msgid "Inventory"
+msgstr ""
+
+msgid "This page allows you to add or edit a competency."
+msgstr ""
+
+msgid "Additional tickets"
+msgstr ""
+
+msgid "Set if you want to reserve tickets in addition to your"
+msgstr ""
+
+msgid "More information"
+msgstr ""
+
+msgid ""
+"Do you have something you'd like to tell us or report to us about your "
+"registration? Use this field!"
+msgstr ""
+
+#, python-format
+msgid ""
+"Enter here the 'bring a friend' code given to you by an already registered "
+"player, and you can receive a discount on your membership of %(amount)d!"
+msgstr ""
+
+msgid "Code 'Bring a friend'"
+msgstr ""
+
+msgid "Surcharge"
+msgstr ""
+
+msgid "Registration surcharge"
+msgstr ""
+
+msgid "Free donation"
+msgstr ""
+
+msgid "Freely indicate the amount of your donation"
+msgstr ""
+
+msgid "Single payment"
+msgstr ""
+
+msgid "Two quotas"
+msgstr ""
+
+msgid "Three quotas"
+msgstr ""
+
+msgid "Four quotas"
+msgstr ""
+
+msgid "Five quotas"
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "The number of payments to split the fee"
+msgstr ""
+
+msgid "The ticket will be divided equally in the number of quotas indicated."
+msgstr ""
+
+msgid ""
+"Payment deadlines will be similarly equally divided, based on the date of "
+"registration."
+msgstr ""
+
+msgid "Quotas"
+msgstr ""
+
+msgid "Your registration ticket"
+msgstr ""
+
+msgid "This page allows you to add or edit a signup to this run."
+msgstr ""
+
+msgid "Registration"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Main"
+msgstr ""
+
+msgid ""
+"This page allows you to add or change the types of ticket with which players "
+"can register."
+msgstr ""
+
+msgid "Tickets"
+msgstr ""
+
+msgid ""
+"This page allows you to add or edit sections in the signup form. You can "
+"indicate which questions to include in the section."
+msgstr ""
+
+msgid "Form section"
+msgstr ""
+
+msgid "This page allows you to add or edit a question from the sign up form."
+msgstr ""
+
+msgid "Form element"
+msgstr ""
+
+msgid "--- Empty"
+msgstr ""
+
+msgid ""
+"This page allows you to add or edit an option in a sign up form question."
+msgstr ""
+
+msgid "Form Options"
+msgstr ""
+
+msgid ""
+"This page allows you to add or modify the dynamic instalments with which the "
+"player can split the payment."
+msgstr ""
+
+msgid "Dynamic rates"
+msgstr ""
+
+msgid ""
+"This page allows you to add or change the fixed instalments in which a "
+"player must pay."
+msgstr ""
+
+msgid "Fixed instalments"
+msgstr ""
+
+msgid "This page allows you to add or edit the registration surcharges."
+msgstr ""
+
+msgid "Event"
+msgstr ""
+
+msgid "Select the event you wish to pre-register for"
+msgstr ""
+
+msgid "Preference"
+msgstr ""
+
+msgid ""
+"Enter the order of preference of your pre-registration (1 is the maximum)"
+msgstr ""
+
+msgid "Informations"
+msgstr ""
+
+msgid "Is there anything else you would like to tell us?"
+msgstr ""
+
+msgid "Run"
+msgstr ""
+
+msgid "Character Relationship"
+msgstr ""
+
+msgid "You cannot create a relationship towards yourself!"
+msgstr ""
+
+msgid "Already existing relationship!"
+msgstr ""
+
+msgid "This page allows you to add or edit a relationship between characters."
+msgstr ""
+
+msgid "You cannot add a relationship from character to self!"
+msgstr ""
+
+msgid "Plot"
+msgstr ""
+
+#, python-format
+msgid "This text will be added to the sheet of %(name)s"
+msgstr ""
+
+msgid "Faction"
+msgstr ""
+
+msgid "Quest type"
+msgstr ""
+
+msgid "Quest"
+msgstr ""
+
+msgid "NOT ASSIGNED"
+msgstr ""
+
+msgid "Traits"
+msgstr ""
+
+msgid "Trait"
+msgstr ""
+
+msgid "Handout"
+msgstr ""
+
+msgid "Prologue"
+msgstr ""
+
+msgid "Speed larp"
+msgstr ""
+
+#, python-format
+msgid "Reimbursement request for %(event)s"
+msgstr ""
+
+#, python-format
+msgid "Staff member %(user)s added a new reimbursement request for %(event)s"
+msgstr ""
+
+#, python-format
+msgid "The sum is %(amount).2f, with reason '%(reason)s'."
+msgstr ""
+
+msgid "download document"
+msgstr ""
+
+msgid "Did you check and is it correct?"
+msgstr ""
+
+msgid "Confirmation of expenditure"
+msgstr ""
+
+msgid "Reimbursement approved"
+msgstr ""
+
+msgid "for"
+msgstr ""
+
+#, python-format
+msgid ""
+"Your request for reimbursement of %(amount).2f, with reason '%(reason)s', "
+"has been approved!"
+msgstr ""
+
+#, python-format
+msgid "The sum was disbursed to you as %(credits)s."
+msgstr ""
+
+msgid "This is automatically deducted from the registration of a future event."
+msgstr ""
+
+#, python-format
+msgid ""
+"Alternatively, you can request to receive it with a formal request in the <a "
+"href='%(url)s'>your accounting.</a>."
+msgstr ""
+
+#, python-format
+msgid " for %(user)s"
+msgstr ""
+
+#, python-format
+msgid "Utilisation %(tokens)s per %(event)s"
+msgstr ""
+
+#, python-format
+msgid "%(amount)d %(tokens)s were used to participate in this event!"
+msgstr ""
+
+#, python-format
+msgid "Utilisation %(credits)s per %(event)s"
+msgstr ""
+
+#, python-format
+msgid "%(amount)d %(credits)s were used to participate in this event!"
+msgstr ""
+
+#, python-format
+msgid "Payment per %(event)s"
+msgstr ""
+
+#, python-format
+msgid "A payment of %(amount).2f %(currency)s was received for this event!"
+msgstr ""
+
+msgid "Reimbursement payout"
+msgstr ""
+
+#, python-format
+msgid ""
+"Reimbursement of %(amount).2f %(credits)s with reason '%(reason)s' was "
+"disbursed."
+msgstr ""
+
+msgid "They will be used automatically when you sign up for a new event!"
+msgstr ""
+
+#, python-format
+msgid ""
+"Alternatively, you can request a reimbursement in <a href='%(url)s'>your "
+"accounting</a>.</i>"
+msgstr ""
+
+#, python-format
+msgid "Disbursement %(credits)s"
+msgstr ""
+
+#, python-format
+msgid "%(amount).2f %(credits)s were disbursed with reason \"%(reason)s\"."
+msgstr ""
+
+#, python-format
+msgid "Delivery %(tokens)s"
+msgstr ""
+
+#, python-format
+msgid "%(amount)d %(tokens)s were disbursed with %(reason)s."
+msgstr ""
+
+msgid "Donation given"
+msgstr ""
+
+#, python-format
+msgid ""
+"We confirm we received the donation of %(amount)d %(currency)s. We thank you "
+"for your support, and for believing in us!"
+msgstr ""
+
+#, python-format
+msgid "Activate collection for: %(recipient)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"We confirm that the collection for '%(recipient)s' has been activated. <a "
+"href='%(url)s'>Manage it here!</a>"
+msgstr ""
+
+#, python-format
+msgid "Collection participation for: %(recipient)s"
+msgstr ""
+
+msgid ""
+"We thank you for participating in the collection: we are sure they will live "
+"a terrific experience!"
+msgstr ""
+
+#, python-format
+msgid "New participation in the collection for %(recipient)s by %(user)s"
+msgstr ""
+
+msgid ""
+"The collection grows: we have no doubt, the fortunate will live soon an "
+"unprecedented experience!"
+msgstr ""
+
+#, python-format
+msgid "Request refund from: %(user)s"
+msgstr ""
+
+#, python-format
+msgid "Details: %(details)s (<b>%(amount).2f</b>)"
+msgstr ""
+
+msgid "Verify that the data are correct:"
+msgstr ""
+
+msgid "Reason for payment"
+msgstr ""
+
+msgid "Amount"
+msgstr ""
+
+msgid "Download document"
+msgstr ""
+
+msgid "Payment confirmation"
+msgstr ""
+
+msgid "Payment to check"
+msgstr ""
+
+msgid "Welcome to LarpManager!"
+msgstr ""
+
+#, python-format
+msgid "Role approval %(role)s"
+msgstr ""
+
+#, python-format
+msgid "Access the management panel <a href= %(url)s'>from here!</a>."
+msgstr ""
+
+#, python-format
+msgid "Approval %(user)s as %(role)s"
+msgstr ""
+
+msgid "The user has been enabled for the indicated role."
+msgstr ""
+
+#, python-format
+msgid "Role approval %(role)s per %(event)s"
+msgstr ""
+
+#, python-format
+msgid "Approval %(user)s as %(role)s for %(event)s"
+msgstr ""
+
+msgid "The user was enabled in the role for the indicated event."
+msgstr ""
+
+#, python-format
+msgid "Bring a friend to %(event)s!"
+msgstr ""
+
+#, python-format
+msgid "Personal code: <b>%(cod)s</b>"
+msgstr ""
+
+#, python-format
+msgid ""
+"Copy this code and share it with friends! Every friend who signs up  and "
+"uses this code in the 'Discounts' field will receive %(amount_to)s "
+"%(currency)s discount on the ticket. For each of them you will receive "
+"%(amount_from)s %(currency)s off to use on event registration."
+msgstr ""
+
+#, python-format
+msgid ""
+"(check the available number of discounts <a href='%(url)s'>on this page</a>)"
+msgstr ""
+
+msgid "See you soon!"
+msgstr ""
+
+#, python-format
+msgid "Trait assigned for %(event)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"In the event <b>%(event)s</b> to which you are enrolled, you have been "
+"assigned the trait: <b>%(trait)s</b> of quest: <b>%(quest)s</b>."
+msgstr ""
+
+#, python-format
+msgid "Access your character <a href='%(url)s'>here</a>!"
+msgstr ""
+
+msgid ""
+"Please note that your character sheet may contain  personal secrets, not to "
+"be shared before the start of the event. To avoid accidentally spoiling your "
+"experience, do not discuss its content with other participants!"
+msgstr ""
+
+#, python-format
+msgid "Casting preferences saved on '%(type)s' for %(event)s"
+msgstr ""
+
+msgid "Your preferences have been saved in the system (in that order):"
+msgstr ""
+
+msgid "Elements you wish to avoid in the assignment:"
+msgstr ""
+
+msgid "Request of membership to the Organization"
+msgstr ""
+
+msgid ""
+"You have completed your application for association membership: therefore, "
+"your event registrations are temporarily confirmed."
+msgstr ""
+
+msgid ""
+"As per the statutes, we will review your request at the next board meeting "
+"and send you an update e-mail as soon as possible (you should receive a "
+"reply within a few weeks at the latest)."
+msgstr ""
+
+msgid ""
+"Once your admission is approved, you will be able to pay for the tickets for "
+"the events you have registered for."
+msgstr ""
+
+#, python-format
+msgid ""
+"Please also note that payment of the annual membership fee (%(amount)d "
+"%(currency)s) is required to participate in events."
+msgstr ""
+
+msgid "Thank you for choosing to be part of our community!"
+msgstr ""
+
+#, python-format
+msgid "Membership fee payment %(year)s"
+msgstr ""
+
+msgid "The payment of your membership fee for this year has been received!"
+msgstr ""
+
+#, python-format
+msgid "Achievement assignment: %(badge)s"
+msgstr ""
+
+msgid "You have been awarded an achievement!"
+msgstr ""
+
+#, python-format
+msgid "Display your achievements in your <a href= %(url)s'>public profile</a>."
+msgstr ""
+
+msgid "Membership of the Organization accepted!"
+msgstr ""
+
+msgid ""
+"We confirm that your membership has been accepted by the board. We welcome "
+"you to our community!"
+msgstr ""
+
+#, python-format
+msgid "Your card number is: <b>%(number)03d</b>."
+msgstr ""
+
+msgid "More details"
+msgstr ""
+
+msgid ""
+"To confirm your event registrations, please make your payment within one "
+"week. You can make it from here:"
+msgstr ""
+
+#, python-format
+msgid ""
+"In addition, you must be up to date with the payment of your membership fee "
+"in order to participate in events. Make your payment <a href='%(url)s'>on "
+"this page</a>."
+msgstr ""
+
+msgid "Membership of the Organization refused!"
+msgstr ""
+
+msgid ""
+"We inform you that your membership of the Association has not been accepted "
+"by the board."
+msgstr ""
+
+msgid "Motivation"
+msgstr ""
+
+msgid "For more information, write to us!"
+msgstr ""
+
+#, python-format
+msgid "for %(event)s"
+msgstr ""
+
+#, python-format
+msgid "(<a href='%(url)s'>answer here</a>)"
+msgstr ""
+
+msgid "New answer!"
+msgstr ""
+
+msgid "Your question has been answered:"
+msgstr ""
+
+#, python-format
+msgid "New question by %(user)s"
+msgstr ""
+
+#, python-format
+msgid "A question was asked by: %(user)s"
+msgstr ""
+
+#, python-format
+msgid "New message from %(user)s"
+msgstr ""
+
+msgid "reply here"
+msgstr ""
+
+#, python-format
+msgid "Password reset of user %(user)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"The user requested the password reset, but did not complete it. Give them "
+"this link: %(url)s"
+msgstr ""
+
+#, python-format
+msgid "Registration to %(event)s"
+msgstr ""
+
+#, python-format
+msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed!"
+msgstr ""
+
+#, python-format
+msgid "Registration updated for %(event)s"
+msgstr ""
+
+#, python-format
+msgid "Hi! Your registration to <b>%(event)s</b> has been updated!"
+msgstr ""
+
+#, python-format
+msgid "Registration to %(event)s by %(user)s"
+msgstr ""
+
+msgid "The user has confirmed its registration for this event!"
+msgstr ""
+
+#, python-format
+msgid "Registration updated to %(event)s by %(user)s"
+msgstr ""
+
+msgid "The user has updated their registration for this event!"
+msgstr ""
+
+#, python-format
+msgid "Ticket selected: <b>%(ticket)s</b>."
+msgstr ""
+
+msgid "Thanks for your support!"
+msgstr ""
+
+#, python-format
+msgid "Total of your signup fee: <b>%(amount).2f %(currency)s</b>."
+msgstr ""
+
+#, python-format
+msgid "Payments already received: <b>%(amount).2f %(currency)s</b>."
+msgstr ""
+
+msgid "Selected options:"
+msgstr ""
+
+msgid "Informations given:"
+msgstr ""
+
+#, python-format
+msgid ""
+"You must pay at least <b>%(amount).2f %(currency)s</b> by %(deadline)d days. "
+"Make your payment <a href='%(url)s'>on this page</a>. If we do not receive "
+"payment by the deadline, your registration may be cancelled."
+msgstr ""
+
+#, python-format
+msgid ""
+"<i>Payment due</i> - You must pay <b>%(amount).2f %(currency)s</b> as soon "
+"as possible. Make your payment <a href='%(url)s'>on this page</a>. If we do "
+"not receive payment, your registration may be cancelled."
+msgstr ""
+
+#, python-format
+msgid "Character assigned for %(event)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"In the event <b>%(event)s</b> you were assigned the character: "
+"<b>%(character)s</b>."
+msgstr ""
+
+#, python-format
+msgid "Registration cancellation for %(event)s"
+msgstr ""
+
+msgid ""
+"We confirm that your registration for this event has been cancelled. We are "
+"sorry to see you go!"
+msgstr ""
+
+#, python-format
+msgid "Registration cancelled for %(event)s by %(user)s"
+msgstr ""
+
+msgid "The registration for this event has been cancelled."
+msgstr ""
+
+#, python-format
+msgid "Registration cancelled for %(event)s"
+msgstr ""
+
+msgid "We confirm that your registration for this event has been cancelled."
+msgstr ""
+
+#, python-format
+msgid "Pre-registration at %(event)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"We confirm that you have successfully pre-registered for <b>%(event)s</b>!"
+msgstr ""
+
+#, python-format
+msgid "Confirmation of registration for %(event)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Hello! We would like to remind you that in order to confirm your provisional "
+"registration of %(event)s you need to apply for admission as a member of the "
+"association. You are very close, just <a href='%(url)s'>click here</a> and "
+"complete the form."
+msgstr ""
+
+msgid ""
+"(If you need a hand feel free to let us know, we'll try to help as best we "
+"can!)"
+msgstr ""
+
+msgid ""
+"If we don't hear from you, we'll understand that you're no longer interested "
+"at the event and we will cancel your registration, so that other players can "
+"signup to your place."
+msgstr ""
+
+#, python-format
+msgid "Confirm registration to %(event)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Hello! We are contacting you regarding your provisional registration at "
+"<b>%(event)s</b>."
+msgstr ""
+
+#, python-format
+msgid "Complete payment for %(event)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Hello! We are contacting you regarding your registration at <b>%(event)s</b>."
+msgstr ""
+
+#, python-format
+msgid ""
+"To confirm it, we ask you to pay this amount as soon as possible: %(amount)s."
+msgstr ""
+
+#, python-format
+msgid ""
+"To confirm it, we ask you to pay this amount: %(amount)s, within this number "
+"of days: %(days)s."
+msgstr ""
+
+msgid ""
+"(Please note that if you have with us a different agreement, you can safely "
+"ignore this email!)"
+msgstr ""
+
+#, python-format
+msgid ""
+"You can make the payment <a href= %(url)s'>on this page</a>. If you "
+"encounter any kind of problem, let us know, we will help you solve it!"
+msgstr ""
+
+#, python-format
+msgid "Profile compilation reminder for %(event)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Hello! You have signed up for %(event)s, but have not yet completed your "
+"profile. It takes 5 minutes, just <a href='%(url)s'>click here</a> and "
+"complete the form!"
+msgstr ""
+
+#, python-format
+msgid "Reminder payment of membership fees for %(event)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Hello! You have registered for %(event)s, but we have not yet received your "
+"annual membership fee payment."
+msgstr ""
+
+msgid ""
+"It is compulsory to take part in all our live events, as it also includes "
+"the insurance fee."
+msgstr ""
+
+msgid ""
+"Unfortunately, without the balance of the fee, it is NOT possible for us to "
+"let you participate at the event."
+msgstr ""
+
+#, python-format
+msgid ""
+"You can make the payment in just a few minutes <a href= %(url)s'>here</a>. "
+"Let us know if you encounter any problems, or if we can help in any way!"
+msgstr ""
+
+msgid "Deadlines"
+msgstr ""
+
+msgid "Review the users that are missing the event's deadlines"
+msgstr ""
+
+msgid "To access this feature, you must first register!"
+msgstr ""
+
+msgid "This feature is available for non-waiting tickets!"
+msgstr ""
+
+msgid "not visible at this time"
+msgstr ""
+
+msgid "Statement"
+msgstr ""
+
+msgid ""
+"Statement issued by the bank as proof of the issuance of the transfer (as "
+"pdf file)"
+msgstr ""
+
+msgid "Gross"
+msgstr ""
+
+msgid "Total payment sent"
+msgstr ""
+
+msgid "Withheld as transaction fee"
+msgstr ""
+
+msgid "Set design - staging, materials"
+msgstr ""
+
+msgid "Costumes - make up, cloth, armor"
+msgstr ""
+
+msgid "Prop - weapons, props"
+msgstr ""
+
+msgid "Electronics - computers, hitech, lights"
+msgstr ""
+
+msgid "Promotion - site, advertising"
+msgstr ""
+
+msgid "Transportation - gas, highway"
+msgstr ""
+
+msgid "Kitchen - food, tableware"
+msgstr ""
+
+msgid "Location - rent, gas, overnight stays"
+msgstr ""
+
+msgid "Secretarial - stationery, printing"
+msgstr ""
+
+msgid "Other"
+msgstr ""
+
+msgid "Raw materials, auxiliaries, consumables and goods"
+msgstr ""
+
+msgid "Services"
+msgstr ""
+
+msgid "Use of third party assets"
+msgstr ""
+
+msgid "Personal"
+msgstr ""
+
+msgid "Miscellaneous operating expenses"
+msgstr ""
+
+msgid "Refund"
+msgstr ""
+
+msgid "Credit disbursement"
+msgstr ""
+
+msgid "Dispensing tokens"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Indicate the outflow category"
+msgstr ""
+
+msgid "Balance"
+msgstr ""
+
+msgid "Indicate how spending is allocated at the budget level."
+msgstr ""
+
+msgid "Payment date"
+msgstr ""
+
+msgid "Indicate the exact date in which the payment has been performed"
+msgstr ""
+
+msgid "Standard"
+msgstr ""
+
+msgid "Play Again"
+msgstr ""
+
+msgid "Name of the discount - internal use"
+msgstr ""
+
+msgid "Indicate the runs for which the discount is active"
+msgstr ""
+
+msgid ""
+"Indicate the value of the discount, it will be deducted from the total "
+"amount calculated"
+msgstr ""
+
+msgid ""
+"Indicate the maximum number of such discounts that can be requested (0 for "
+"infinite uses)"
+msgstr ""
+
+msgid "Code"
+msgstr ""
+
+msgid ""
+"Indicate the special discount code, to be communicated to the players, which "
+"will need to be entered during registration."
+msgstr ""
+
+msgid ""
+"Indicate the type of discount: standard, play again (only available to those "
+"who have already played a run)"
+msgstr ""
+
+msgid "Indicates whether the discount is visible and usable by players"
+msgstr ""
+
+msgid ""
+"Indicate whether the discount can be used only on new enrollment, or whether "
+"it can be used by already registered players."
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Delivered"
+msgstr ""
+
+msgid "Request"
+msgstr ""
+
+msgid ""
+"Indicate all references of how you want your refund to be paid  (ex: IBAN "
+"and full bank details, paypal link, etc)"
+msgstr ""
+
+msgid "Indicates the amount of reimbursement desired"
+msgstr ""
+
+msgid "Global balance"
+msgstr ""
+
+msgid "Overall balance"
+msgstr ""
+
+msgid "Optional"
+msgstr ""
+
+msgid "Mandatory"
+msgstr ""
+
+msgid "Complete name of the LARP Organization"
+msgstr ""
+
+msgid "URL identifier"
+msgstr ""
+
+msgid "Only lowercase characters and numbers are allowed, no spaces or symbols"
+msgstr ""
+
+msgid "Logo"
+msgstr ""
+
+msgid ""
+"Logo image - you can upload a file of any size, it will be automatically "
+"resized"
+msgstr ""
+
+msgid "Please indicate an email for the organization"
+msgstr ""
+
+msgid "Payment Methods"
+msgstr ""
+
+msgid "Indicate the payment methods you wish to be available to players"
+msgstr ""
+
+msgid "Payment currency"
+msgstr ""
+
+msgid "Indicates the currency in which to receive payments"
+msgstr ""
+
+msgid "Image shown on homepage as promoter"
+msgstr ""
+
+msgid "Background image"
+msgstr ""
+
+msgid "Background of web pages"
+msgstr ""
+
+msgid "Title font"
+msgstr ""
+
+msgid "Font to be used in page titles"
+msgstr ""
+
+msgid "Color texts"
+msgstr ""
+
+msgid "Indicate the color that will be used for the texts"
+msgstr ""
+
+msgid "Color background"
+msgstr ""
+
+msgid "Indicate the color that will be used for the background of texts"
+msgstr ""
+
+msgid "Color links"
+msgstr ""
+
+msgid "Indicate the color that will be used for the links"
+msgstr ""
+
+msgid "Home"
+msgstr ""
+
+msgid "Registration mail"
+msgstr ""
+
+msgid "Membership"
+msgstr ""
+
+msgid "Legal notice"
+msgstr ""
+
+msgid "Terms and Conditions"
+msgstr ""
+
+msgid "Receipt"
+msgstr ""
+
+msgid "Mail signature"
+msgstr ""
+
+msgid "Statute"
+msgstr ""
+
+msgid "Privacy"
+msgstr ""
+
+msgid "Type of text"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Text language"
+msgstr ""
+
+msgid ""
+"Logo image (you can upload a file of any size, it will be resized "
+"automatically)"
+msgstr ""
+
+msgid "Show all the traits to those present?"
+msgstr ""
+
+msgid "Does the character have a public role/archetype? If not, leave blank"
+msgstr ""
+
+msgid "Indicates accurate safety information"
+msgstr ""
+
+msgid "Gender"
+msgstr ""
+
+msgid "Select the character's gender"
+msgstr ""
+
+msgid "Select the character's key words"
+msgstr ""
+
+msgid "Slogan - maximum 70 characters"
+msgstr ""
+
+msgid "Where it is held"
+msgstr ""
+
+msgid "Names of the collaborators who are organizing it"
+msgstr ""
+
+msgid "Short description - maximum 1000 characters"
+msgstr ""
+
+msgid "Extended description - maximum 5000 characters"
+msgstr ""
+
+msgid "Indicate the setting / genre of the event"
+msgstr ""
+
+msgid "Cover in rectangular format - aspect ratio 4:3"
+msgstr ""
+
+msgid "Carousel image"
+msgstr ""
+
+msgid "Carousel description"
+msgstr ""
+
+msgid "Number of primary spots"
+msgstr ""
+
+msgid "Maximum number of primary spots to be managed (0 for infinite)"
+msgstr ""
+
+msgid "Number of filler spots"
+msgstr ""
+
+msgid "Maximum number of fillers to manage (0 for infinite)"
+msgstr ""
+
+msgid "Number of waiting spots"
+msgstr ""
+
+msgid "Maximum number of waiting spots to manage (0 for infinite)"
+msgstr ""
+
+msgid "Terms and conditions"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Mail assignment"
+msgstr ""
+
+msgid "Proposed character"
+msgstr ""
+
+msgid "Approved character"
+msgstr ""
+
+msgid "Character review"
+msgstr ""
+
+msgid "Hidden"
+msgstr ""
+
+msgid "Visible"
+msgstr ""
+
+msgid "Cancelled"
+msgstr ""
+
+msgid "Concluded"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Number of event run"
+msgstr ""
+
+msgid "Start date"
+msgstr ""
+
+msgid "Indicates the date on which the run starts"
+msgstr ""
+
+msgid "End date"
+msgstr ""
+
+msgid "Indicates the date on which the run ends"
+msgstr ""
+
+msgid "Registration opening date"
+msgstr ""
+
+msgid ""
+"Indicate the date when registration opens. Leave blank to not open "
+"registrations"
+msgstr ""
+
+msgid "Registration code"
+msgstr ""
+
+msgid ""
+"This code will be used to generate the secret registration links. You can "
+"leave it as it is or customise it"
+msgstr ""
+
+msgid ""
+"Indicate whether the ability is visible to users, and can be freely purchased"
+msgstr ""
+
+msgid "Pre-requisites"
+msgstr ""
+
+msgid ""
+"Indicate the prerequisite abilities, which must be possessed before one can "
+"acquire this"
+msgstr ""
+
+msgid "Options required"
+msgstr ""
+
+msgid ""
+"Indicate the character options, which must be selected to make the skill "
+"available"
+msgstr ""
+
+msgid "Single choice"
+msgstr ""
+
+msgid "Multiple choice"
+msgstr ""
+
+msgid "Text (short)"
+msgstr ""
+
+msgid "Text (long)"
+msgstr ""
+
+msgid "Presentation"
+msgstr ""
+
+msgid "Sheet"
+msgstr ""
+
+msgid "Concept"
+msgstr ""
+
+msgid "Cover"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Mirror"
+msgstr ""
+
+msgid "Prop"
+msgstr ""
+
+msgid "Role"
+msgstr ""
+
+msgid "Special"
+msgstr ""
+
+msgid "Hide"
+msgstr ""
+
+msgid "Keywords"
+msgstr ""
+
+msgid "Safety"
+msgstr ""
+
+msgid "Progress"
+msgstr ""
+
+msgid "Assigned"
+msgstr ""
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Searchable"
+msgstr ""
+
+msgid "Question type"
+msgstr ""
+
+msgid "Question display text"
+msgstr ""
+
+msgid "Extended description (will be shown in gray, in small)"
+msgstr ""
+
+msgid "Display order with respect to all questions"
+msgstr ""
+
+msgid "Question status"
+msgstr ""
+
+msgid ""
+"Searchable: Characters can be filtered according to this question. Public: "
+"The answer to this question is publicly visible. Private: The answer to this "
+"question is only visible to the player and organisers."
+msgstr ""
+
+msgid "Maximum length"
+msgstr ""
+
+msgid ""
+"For text questions, maximum number of characters; For multiple options, "
+"maximum number of options (0 = no limit)"
+msgstr ""
+
+msgid "Indicate whether the field is printed in PDF generations"
+msgstr ""
+
+msgid ""
+"Optional - Indicates additional details on the option, will be shown below "
+"the question"
+msgstr ""
+
+msgid ""
+"Indicates the maximum number of times it can be requested (0 for infinite)"
+msgstr ""
+
+msgid "Order in which the option is shown with respect to the others"
+msgstr ""
+
+msgid ""
+"Indicates other options that must be selected for this option to be "
+"selectable"
+msgstr ""
+
+msgid ""
+"If you select one (or more) tickets, the option will only be available to "
+"players who have selected that ticket"
+msgstr ""
+
+msgid ""
+"If you select one (or more) factions, the question will only be shown to "
+"players with characters in all chosen factions"
+msgstr ""
+
+msgid "Explanatory image"
+msgstr ""
+
+msgid ""
+"If you select one (or more) tickets, the question will only be shown to "
+"players who have selected one of those tickets"
+msgstr ""
+
+msgid ""
+"Staff members who are allowed to be able to see the responses of players "
+"(leave blank to let everyone see)"
+msgstr ""
+
+msgid "Indicates whether the option can be included in the gifted signups"
+msgstr ""
+
+msgid "Free"
+msgstr ""
+
+msgid "Support"
+msgstr ""
+
+msgid "Photo"
+msgstr ""
+
+msgid "Male"
+msgstr ""
+
+msgid "Female"
+msgstr ""
+
+msgid "Yes, keep me posted!"
+msgstr ""
+
+msgid "Only really important communications."
+msgstr ""
+
+msgid "No, I don't want updates."
+msgstr ""
+
+msgid "ID Card"
+msgstr ""
+
+msgid "Driver's License"
+msgstr ""
+
+msgid "Passport"
+msgstr ""
+
+msgid "Navigation language"
+msgstr ""
+
+msgid "Preferred navigation language"
+msgstr ""
+
+msgid "Surname"
+msgstr ""
+
+msgid "Alias"
+msgstr ""
+
+msgid ""
+"If you prefer that your real name and surname not be publicly visible, "
+"please indicate an alias that will be displayed instead. Note: If you "
+"register for an event, your real first and last name will be shown to other "
+"players, and to the organisers."
+msgstr ""
+
+msgid "Legal name"
+msgstr ""
+
+msgid ""
+"If for whatever reason the first and last name shown on your documents is "
+"different from the one you prefer to use, then write it here. It will only "
+"be used for internal bureaucratic purposes, and will NEVER be displayed to "
+"other players."
+msgstr ""
+
+msgid "Pronouns"
+msgstr ""
+
+msgid "Indicate the pronouns you wish to be used to refer to you"
+msgstr ""
+
+msgid "Nationality"
+msgstr ""
+
+msgid "Indicate the country of which you are a citizen"
+msgstr ""
+
+msgid "Indicates what gender you identify yourself as"
+msgstr ""
+
+msgid "Phone contact"
+msgstr ""
+
+msgid "Remember to put the prefix at the beginning!"
+msgstr ""
+
+msgid "Contact"
+msgstr ""
+
+msgid ""
+"Indicates a way for other players to contact you. It can be an email, a "
+"social profile, whatever you want. It will be made public to others players"
+msgstr ""
+
+msgid "First aid"
+msgstr ""
+
+msgid ""
+"Are you a doctor, a nurse, or a licensed rescuer? We can ask you to "
+"intervene in case accidents occur during the event?"
+msgstr ""
+
+msgid "Birth date"
+msgstr ""
+
+msgid "Birth place"
+msgstr ""
+
+msgid ""
+"If you are an Italian citizen, indicate your tax code; otherwise leave blank"
+msgstr ""
+
+msgid "Document type"
+msgstr ""
+
+msgid ""
+"Indicates a type of identification document issued by the nation in which "
+"you reside"
+msgstr ""
+
+msgid "Document number"
+msgstr ""
+
+msgid "Enter the number or code of the identification document indicated above"
+msgstr ""
+
+msgid "Date of issue of the document"
+msgstr ""
+
+msgid "Accessibility"
+msgstr ""
+
+msgid "Fill in this field if you have accessibility needs."
+msgstr ""
+
+msgid "Diet"
+msgstr ""
+
+msgid ""
+"Fill in this field if you follow a personal diet for reasons of choice(e.g. "
+"vegetarian, vegan) or health (celiac disease, allergies). Leave empty if you "
+"do not have things to report!"
+msgstr ""
+
+msgid ""
+"Fill in this field if there is something you think is important that the "
+"organizers know about you. It's up to you to decide what to share with us. "
+"This information will be treated as strictly confidential: only a restricted "
+"part of the organizers will have access to the answers, and will not be "
+"transmitted in any form. This information may concern: physical health "
+"problems, epilepsy, mental health problems (e.g. neurosis, bipolar disorder, "
+"anxiety disorder, various phobias), trigger topics ('lines and veils', we "
+"can't promise that you won't run into them in the event, but we'll make sure "
+"they're not part of your main quests). Leave empty if you do not have things "
+"to report!"
+msgstr ""
+
+msgid "Newsletter"
+msgstr ""
+
+msgid "Do you wish to be always updated on our events?"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid ""
+"Upload your portrait photo. It will be shown to other players together with "
+"the your character, so as to help recognize you in the game. Choose a photo "
+"that you would put in an official document (in which you are alone, centered "
+"on your face)."
+msgstr ""
+
+msgid ""
+"If you are a candidate for the Board, please write an introduction here!"
+msgstr ""
+
+msgid "Shared"
+msgstr ""
+
+msgid "Uploaded"
+msgstr ""
+
+msgid "Kicked out"
+msgstr ""
+
+msgid "Short name"
+msgstr ""
+
+msgid "Name - international"
+msgstr ""
+
+msgid "Short name - international"
+msgstr ""
+
+msgid "Extended description"
+msgstr ""
+
+msgid "Description - international"
+msgstr ""
+
+msgid "Extended description - international"
+msgstr ""
+
+msgid ""
+"Unique code for internal use - not visible. Indicate a string without spaces "
+"or strange symbols."
+msgstr ""
+
+msgid ""
+"If your question is about a specific event, please select it! If  is a "
+"general question instead, please leave it blank."
+msgstr ""
+
+msgid ""
+"Write your question, request or concern here. We will be happy to answer you!"
+msgstr ""
+
+msgid "Attachment"
+msgstr ""
+
+msgid "If you need to attach a file, indicate it here, otherwise leave blank"
+msgstr ""
+
+msgid "The name of the competence"
+msgstr ""
+
+msgid "A description of the skills / abilities involved"
+msgstr ""
+
+msgid "Briefly describe what the box contains"
+msgstr ""
+
+msgid ""
+"Fully describe what the box contains, especially number of items, main "
+"features, state of preservation."
+msgstr ""
+
+msgid "List of content-related tags"
+msgstr ""
+
+msgid "Photo (clear and understandable) of the object"
+msgstr ""
+
+msgid "Waiting list"
+msgstr ""
+
+msgid "We're coming"
+msgstr ""
+
+msgid "Arrived safe and sound"
+msgstr ""
+
+msgid "Number of passengers"
+msgstr ""
+
+msgid "Indicates how many passengers require transportation"
+msgstr ""
+
+msgid "Indicate as precisely as possible where to pick you up."
+msgstr ""
+
+msgid ""
+"Indicates how you can be recognized, if you will be found near some point "
+"specific, if you have a lot of luggage: any information that might help us "
+"help you"
+msgstr ""
+
+msgid "Request date"
+msgstr ""
+
+msgid "For which day you will need transportation"
+msgstr ""
+
+msgid "Request time"
+msgstr ""
+
+msgid ""
+"For what time you will need transportation (time zone of the larp location)"
+msgstr ""
+
+msgid "Note"
+msgstr ""
+
+msgid ""
+"Indicates useful information to passengers, such as color of your car, time "
+"estimated time of your arrival"
+msgstr ""
+
+msgid "Severity"
+msgstr ""
+
+msgid ""
+"Indicate severity: RED (risks ruining the game for more than half of the "
+"players), ORANGE (risks ruining the game for more than ten players),  YELLOW "
+"(risks ruining the game for a few players), GREEN (more than  problems, "
+"finesses to be fixed)"
+msgstr ""
+
+msgid ""
+"When putting in WORKING, indicate in the comments the specific actions that  "
+"are being performed; when putting in CLOSED, indicate showd in the  comments."
+msgstr ""
+
+msgid "Describe exactly at which point it occurs."
+msgstr ""
+
+msgid "When"
+msgstr ""
+
+msgid "Describe exactly what condition it is in."
+msgstr ""
+
+msgid "What"
+msgstr ""
+
+msgid "Describe exactly what risks it poses to the game."
+msgstr ""
+
+msgid "Who"
+msgstr ""
+
+msgid "Describe exactly which players are involved."
+msgstr ""
+
+msgid "Who takes it upon themselves to solve it."
+msgstr ""
+
+msgid "Type of ticket"
+msgstr ""
+
+msgid ""
+"Optional - Indicate additional details on the ticket, they will be shown "
+"below the application"
+msgstr ""
+
+msgid "Maximum number of tickets available (0 for infinite)"
+msgstr ""
+
+msgid "Is it selectable by players?"
+msgstr ""
+
+msgid ""
+"What casting priority does it ensure? (Usually: 1 is the subsized, 5 for "
+"default, 25 for patron)"
+msgstr ""
+
+msgid "Indicates whether the ticket can be selected in the free entries"
+msgstr ""
+
+msgid "Description - will be displayed at the beginning of the section"
+msgstr ""
+
+msgid "Display order with respect to all sections"
+msgstr ""
+
+msgid "Quotas total number"
+msgstr ""
+
+msgid ""
+"Minimum number of days before the event for which it is made available (0  = "
+"always)"
+msgstr ""
+
+msgid "Payment order"
+msgstr ""
+
+msgid ""
+"Total amount of payment to be received by this date (0 = all outstanding)"
+msgstr ""
+
+msgid ""
+"Deadline in the measure of days from enrollment (fill in one between the "
+"fixed deadline and the deadline in days)"
+msgstr ""
+
+msgid "Deadline date"
+msgstr ""
+
+msgid "Indicate the tickets for which it is active"
+msgstr ""
+
+msgid "Surcharge applied to the ticket"
+msgstr ""
+
+msgid "Date from when the surcharge is applied"
+msgstr ""
+
+msgid "Write here additional information to your registration"
+msgstr ""
+
+msgid "Character name"
+msgstr ""
+
+msgid ""
+"Specify your custom character name (depending on the event you can choose "
+"the name, or adapt the name to your chosen gender)"
+msgstr ""
+
+msgid "If you wish, indicate a pronoun for your character"
+msgstr ""
+
+msgid "Indicate a song you want to dedicate to your character"
+msgstr ""
+
+msgid ""
+"Indicates public information about your character, which will be shown to "
+"all other players"
+msgstr ""
+
+msgid ""
+"Indicates public information about your character, which will be shown only "
+"to you and the organizers"
+msgstr ""
+
+msgid "Character portrait"
+msgstr ""
+
+msgid ""
+"Optional: upload a photo of yourself associated with your character "
+"specifically for this event!"
+msgstr ""
+
+msgid "Progress status"
+msgstr ""
+
+msgid "Assigned staff member"
+msgstr ""
+
+msgid "Concept for internal use only. Will not be published"
+msgstr ""
+
+msgid ""
+"Presentation visible to all players, when 'show presentation' is checked"
+msgstr ""
+
+msgid "Text visible only by the assigned player, when 'show text' is checked"
+msgstr ""
+
+msgid ""
+"Preview visible only by the assigned player, when 'show preview' is checked"
+msgstr ""
+
+msgid "Does it require special props?"
+msgstr ""
+
+msgid "Creation"
+msgstr ""
+
+msgid "Proposed"
+msgstr ""
+
+msgid "Revision"
+msgstr ""
+
+msgid "Approved"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "NPC"
+msgstr ""
+
+msgid "Filler"
+msgstr ""
+
+msgid "Unisex"
+msgstr ""
+
+msgid ""
+"Indicates the title of the character - it will be shown along with the name"
+msgstr ""
+
+msgid "Indicates the character's motto - a short phrase"
+msgstr ""
+
+msgid "Indicates the functional role / archetype of the character"
+msgstr ""
+
+msgid ""
+"Indicate whether the character is a mirror (i.e., whether this pg shows the "
+"true secret face of another character)"
+msgstr ""
+
+msgid "Is the character a special type? If not leave blank"
+msgstr ""
+
+msgid "Cover photo fo the character"
+msgstr ""
+
+msgid "Player"
+msgstr ""
+
+msgid "Primary"
+msgstr ""
+
+msgid "Transversal"
+msgstr ""
+
+msgid "Secret"
+msgstr ""
+
+msgid "Display order"
+msgstr ""
+
+msgid "Faction cover"
+msgstr ""
+
+msgid "Faction logo"
+msgstr ""
+
+msgid "Indicates whether it can be selected by players"
+msgstr ""
+
+msgid "By"
+msgstr ""
+
+msgid "Activation failed"
+msgstr ""
+
+msgid "Activation failed. Mail us the details."
+msgstr ""
+
+msgid "Activation complete"
+msgstr ""
+
+msgid "Your account is now activated."
+msgstr ""
+
+msgid "Log in"
+msgstr ""
+
+msgid "Activate account on"
+msgstr ""
+
+msgid "The link will be valid for the following number of days: "
+msgstr ""
+
+msgid ""
+"An user with this email address has been created on our website. If you wish "
+"to activate, click on: "
+msgstr ""
+
+msgid "Account activation"
+msgstr ""
+
+msgid "Something went wrong in the account activation. Tell us more details. "
+msgstr ""
+
+msgid "Registration closed."
+msgstr ""
+
+msgid "Registration complete"
+msgstr ""
+
+msgid ""
+"You are now registered, but your account is inactive. We have sent an "
+"activation email."
+msgstr ""
+
+msgid "Register"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Coming soon"
+msgstr ""
+
+msgid "Discover the coming soon events!"
+msgstr ""
+
+msgid "Repertoire"
+msgstr ""
+
+msgid "View the complete list of our events!"
+msgstr ""
+
+msgid "Problem"
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
+msgid "Number"
+msgstr ""
+
+msgid "Names"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Cancellation for missing organization registration"
+msgstr ""
+
+msgid "Tolerance exceeded, proceed with the cancellation"
+msgstr ""
+
+msgid "Cancellation for missing yearly membership fee"
+msgstr ""
+
+msgid "Cancellation for missing payment"
+msgstr ""
+
+msgid "Delay in organization registration"
+msgstr ""
+
+msgid "They need to complete it immediately"
+msgstr ""
+
+msgid "give them this address"
+msgstr ""
+
+msgid "Delay in yearly membership fee"
+msgstr ""
+
+msgid "Delay in payment"
+msgstr ""
+
+msgid "Missing casting preferences"
+msgstr ""
+
+msgid "Continue"
+msgstr ""
+
+msgid ""
+"Click here if after submitting the form, you want to move on to edit the "
+"next item"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid ""
+"If you are absolutely certain that you want to delete this item, click on "
+"this button."
+msgstr ""
+
+msgid "Confirmation delete"
+msgstr ""
+
+msgid "These fields are mandatory"
+msgstr ""
+
+msgid "Your updated registration total is"
+msgstr ""
+
+msgid "You have already paid"
+msgstr ""
+
+msgid "The following will be used"
+msgstr ""
+
+msgid ""
+"Your registration will now be saved in provisional status. It will be "
+"confirmed when your ticket payment is received."
+msgstr ""
+
+msgid "characters"
+msgstr ""
+
+msgid "options"
+msgstr ""
+
+msgid "(click on image to enlarge)"
+msgstr ""
+
+msgid "Attention! The form contains errors in the fields"
+msgstr ""
+
+msgid "Translate"
+msgstr ""
+
+msgid "Original"
+msgstr ""
+
+msgid "Show"
+msgstr ""
+
+msgid "Confirm"
+msgstr ""
+
+msgid ""
+"The form is saved every 30 seconds. When this is performed <span "
+"id='confirm'>this becomes green.</span>"
+msgstr ""
+
+msgid "Select year"
+msgstr ""
+
+msgid "Select"
+msgstr ""
+
+msgid "New"
+msgstr ""
+
+msgid "List"
+msgstr ""
+
+msgid "Upload"
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid "You can upload data directly from a csv file."
+msgstr ""
+
+msgid "The first line is the names of the fields:"
+msgstr ""
+
+msgid ""
+"If you already have the file ready, upload it here (pay attention to the "
+"'csv' format): "
+msgstr ""
+
+msgid "Upload cover"
+msgstr ""
+
+msgid ""
+"The first line are the field names, such as 'number', 'name', "
+"'presentation', 'text'. (Only 'number' is required)"
+msgstr ""
+
+msgid "If you want to download an example file, click here."
+msgstr ""
+
+msgid "Loading template"
+msgstr ""
+
+msgid "Select a file with extension 'zip'."
+msgstr ""
+
+msgid ""
+"Inside this file must be the photos, named by the number of the character."
+msgstr ""
+
+msgid "Instructions"
+msgstr ""
+
+msgid ""
+"In the 'Presentation' and 'Text' fields you can refer to other characters "
+"using their number directly, in the final text the number will automatically "
+"be replaced with their name, and a link to the character. Use:"
+msgstr ""
+
+msgid ""
+"for bidirectional relationships (love, colleagues, rivals), of which the "
+"other  character is aware of."
+msgstr ""
+
+msgid ""
+"for unidirectional relationships (secret hatred, loves but is unrequited), "
+"of that the other character is NOT aware of."
+msgstr ""
+
+msgid "to indicate only the proper name of the other character."
+msgstr ""
+
+msgid ""
+"Select from the drop-down list the characters to be added to the faction. "
+"The text private to the faction will be shown only to them."
+msgstr ""
+
+msgid "In the text refer to the other characters solely by their number:"
+msgstr ""
+
+msgid "if the character belongs to this element."
+msgstr ""
+
+msgid ""
+"if the character does NOT belong to this element, but is only referenced."
+msgstr ""
+
+msgid "Template instructions"
+msgstr ""
+
+msgid "Utils"
+msgstr ""
+
+msgid "Application to be given to them to sign and then upload:"
+msgstr ""
+
+msgid ""
+"Select the payment methods to be activated; then return to this page to "
+"enter the necessary information."
+msgstr ""
+
+msgid ""
+"Each payment method works differently, click on its name for a detailed "
+"guide on how to proceed."
+msgstr ""
+
+msgid ""
+"Indicate the description you wish to be displayed when this payment method "
+"is proposed to the user."
+msgstr ""
+
+msgid ""
+"Enter the percentage to be managed as retained by the payment system. Enter "
+"the value as a number, without entering the percentage symbol."
+msgstr ""
+
+msgid "Available payment methods:"
+msgstr ""
+
+msgid "Select from the dropdown the characters to be added to the plot."
+msgstr ""
+
+msgid ""
+"For each character added, a specific field will be available to add "
+"additional plot information."
+msgstr ""
+
+msgid "whether the character is aware of the identity of the other trait."
+msgstr ""
+
+msgid "whether the character is NOT aware of the identity of the other trait."
+msgstr ""
+
+msgid ""
+"(You can also refer to traits from other quests, but be careful that  are "
+"always of the same macrotype)."
+msgstr ""
+
+msgid "Tax code verification"
+msgstr ""
+
+msgid "Calculated"
+msgstr ""
+
+msgid "Supplied"
+msgstr ""
+
+msgid "Attention, the tax code does not match!"
+msgstr ""
+
+msgid "The tax code matches!"
+msgstr ""
+
+msgid "Warning. The form contains errors to the fields - "
+msgstr ""
+
+msgid "Please enter the occasion for which you wish to make the donation"
+msgstr ""
+
+msgid "Choose the payment method: "
+msgstr ""
+
+msgid "Fee: "
+msgstr ""
+
+msgid "You are about to make a payment of"
+msgstr ""
+
+msgid "Follow the link below to complete your payment on the Paypal platform."
+msgstr ""
+
+msgid "Experimental"
+msgstr ""
+
+msgid ""
+"Please indicate below the exact method of payment you made. Remember to "
+"submit the form, otherwise your payment will not be processed!"
+msgstr ""
+
+msgid "Follow the steps below:"
+msgstr ""
+
+msgid "Use the information below to request the transfer from your bank."
+msgstr ""
+
+msgid ""
+"Please check that you have copied the entire message for payment exactly (in "
+"coloured text), it is important!"
+msgstr ""
+
+msgid ""
+"Once the transfer is confirmed, request the slip (the receipt of "
+"confirmation) and upload it below. You can upload a file in pdf format, or "
+"an image."
+msgstr ""
+
+msgid ""
+"Please be careful to perform these steps - otherwise your  payment will not "
+"be processed!"
+msgstr ""
+
+msgid "Currency"
+msgstr ""
+
+msgid "IBAN"
+msgstr ""
+
+msgid "Swift"
+msgstr ""
+
+msgid "Bank address"
+msgstr ""
+
+msgid "Click on the image below (Paypal.me) to open the payment."
+msgstr ""
+
+msgid ""
+"Copy and paste exactly all the coloured text below into the field \"notes\" "
+"(this is important!)"
+msgstr ""
+
+msgid "Indicates that payment is sent \"to friends and family\"."
+msgstr ""
+
+msgid ""
+"Once you have made the payment, return to this page, and upload below the "
+"screenshot of the confirmation sent by Paypal."
+msgstr ""
+
+msgid "Accounting"
+msgstr ""
+
+msgid "Total registration"
+msgstr ""
+
+msgid "Total payments"
+msgstr ""
+
+msgid "Next payment:"
+msgstr ""
+
+msgid "expected within"
+msgstr ""
+
+msgid "days"
+msgstr ""
+
+msgid "overdue by"
+msgstr ""
+
+msgid "Organization"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid ""
+"This is the information with which your character will begin each act. We "
+"ask that you do NOT read this information before the act to which it "
+"referenced!"
+msgstr ""
+
+msgid "Total"
+msgstr ""
+
+msgid "Used"
+msgstr ""
+
+msgid "Ability list"
+msgstr ""
+
+msgid "Delivery list"
+msgstr ""
+
+msgid "Activate feature"
+msgstr ""
+
+msgid ""
+"To use the feature you requested, you need to activate the following "
+"feature: "
+msgstr ""
+
+msgid "Do you want to proceed?"
+msgstr ""
+
+msgid "Activate"
+msgstr ""
+
+msgid "Ask the organisers to activate it."
+msgstr ""
+
+msgid "Run hidden"
+msgstr ""
+
+msgid ""
+"The run you requested is only visible to players logged into the system."
+msgstr ""
+
+msgid "Wanna connect?"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Redirect"
+msgstr ""
+
+msgid ""
+"You have requested a specific page of an organisation, but it is not "
+"specified in the address given"
+msgstr ""
+
+msgid "Please check the address again, especially its beginning"
+msgstr ""
+
+msgid "Select the organisation to proceed to"
+msgstr ""
+
+msgid "Object does not exist"
+msgstr ""
+
+msgid "The searched object does not exist, perhaps it was recently deleted?"
+msgstr ""
+
+msgid "If you think this is an error, get in touch with us to resolve it"
+msgstr ""
+
+msgid "Access denied"
+msgstr ""
+
+msgid "Your user does not have the required permissions to access this page."
+msgstr ""
+
+msgid "Event not found"
+msgstr ""
+
+msgid ""
+"We could not find the event indicated in the url; perhaps it is one of these?"
+msgstr ""
+
+msgid "Go to the casting for"
+msgstr ""
+
+msgid "Show the"
+msgstr ""
+
+msgid "history of preferences."
+msgstr ""
+
+msgid "Item assigned for this band"
+msgstr ""
+
+msgid "Enter your preferences here!"
+msgstr ""
+
+msgid "global preferences."
+msgstr ""
+
+msgid "Filter factions"
+msgstr ""
+
+msgid "Select the faction on which you want to filter characters."
+msgstr ""
+
+msgid "Indicate here each element you wish to avoid in the assignment"
+msgstr ""
+
+msgid "Confirm your choices?"
+msgstr ""
+
+msgid "You have not reached the minimum number of preferences"
+msgstr ""
+
+msgid "You have chosen the same option in more than one preference"
+msgstr ""
+
+msgid "History preferences"
+msgstr ""
+
+msgid "Go to the history preferences for"
+msgstr ""
+
+msgid "Preferences"
+msgstr ""
+
+msgid "Go to the preferences for"
+msgstr ""
+
+msgid "Total preferences"
+msgstr ""
+
+msgid "Average preferences"
+msgstr ""
+
+msgid "Participate in the co-creation of the character!"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+msgid "Edit your character's data!"
+msgstr ""
+
+msgid "Buy skills for your character!"
+msgstr ""
+
+msgid "Customize"
+msgstr ""
+
+msgid "Modify some character elements to make it yours!"
+msgstr ""
+
+msgid "Relationships"
+msgstr ""
+
+msgid "Fill in your character's relationships!"
+msgstr ""
+
+msgid "Questions"
+msgstr ""
+
+msgid "Write here questions about your character directly to the authors!"
+msgstr ""
+
+msgid ""
+"Mirror (This character represents the true secret identity of oneof the "
+"other characters. Can be selected normally in casting, such as the other "
+"characters. In case is assigned to you, you will automatically assigned the "
+"true character of which it is a mirror)"
+msgstr ""
+
+msgid ""
+"NPC (This character is not selectable as a playable character, and the event "
+"will be interpreted by a staff member)"
+msgstr ""
+
+msgid ""
+"Filler (This is an character with lighter character sheet and "
+"relationships. )"
+msgstr ""
+
+msgid "Public informations"
+msgstr ""
+
+msgid "Preferences - Total"
+msgstr ""
+
+msgid "Average"
+msgstr ""
+
+msgid "Graph"
+msgstr ""
+
+msgid "Other characters"
+msgstr ""
+
+msgid "Download complete sheet"
+msgstr ""
+
+msgid "Download light sheet"
+msgstr ""
+
+msgid "Download relationships"
+msgstr ""
+
+msgid "Private area"
+msgstr ""
+
+msgid "Answers"
+msgstr ""
+
+msgid "Relationship"
+msgstr ""
+
+msgid "Obtain ability"
+msgstr ""
+
+msgid "Select the new ability to get"
+msgstr ""
+
+msgid "Are you sure?"
+msgstr ""
+
+msgid "Character Edit"
+msgstr ""
+
+msgid "New character"
+msgstr ""
+
+msgid "Character profile"
+msgstr ""
+
+msgid ""
+"Upload a photo of yourself associated with your character specifically for "
+"this event!"
+msgstr ""
+
+msgid "Change photo"
+msgstr ""
+
+msgid "Rotate left"
+msgstr ""
+
+msgid "Rotate right"
+msgstr ""
+
+msgid "Select the new photo to upload"
+msgstr ""
+
+msgid "Your characters"
+msgstr ""
+
+msgid "Create new character"
+msgstr ""
+
+msgid "Motto"
+msgstr ""
+
+msgid "XP tot"
+msgstr ""
+
+msgid "XP used"
+msgstr ""
+
+msgid "XP avail"
+msgstr ""
+
+msgid "Character relationships"
+msgstr ""
+
+msgid "Relationships of your character"
+msgstr ""
+
+msgid "Teaser"
+msgstr ""
+
+msgid "Select which of your characters you want to access"
+msgstr ""
+
+msgid "Discover the web site!"
+msgstr ""
+
+msgid "Next runs"
+msgstr ""
+
+msgid "There are no new runs scheduled at this time."
+msgstr ""
+
+msgid "Pre-register here!"
+msgstr ""
+
+msgid ""
+"You will be notified when a new run is organized, and you will have fast-"
+"track on registration!"
+msgstr ""
+
+msgid "Past runs"
+msgstr ""
+
+msgid "Link"
+msgstr ""
+
+msgid "Tell me more"
+msgstr ""
+
+msgid "Player:"
+msgstr ""
+
+msgid "Factions:"
+msgstr ""
+
+msgid "Characters are only visible to logged in users"
+msgstr ""
+
+msgid "Characters are only visible to registered players"
+msgstr ""
+
+msgid "Registered"
+msgstr ""
+
+msgid "Gift"
+msgstr ""
+
+msgid ""
+"On this page you can book tickets for the event; once paid, a special code "
+"will be generated."
+msgstr ""
+
+msgid ""
+"A friend of yours will be able to receive the registration as a gift by "
+"accessing this special link!"
+msgstr ""
+
+msgid "Add new"
+msgstr ""
+
+msgid "within"
+msgstr ""
+
+msgid "immediately"
+msgstr ""
+
+msgid "If no payment is received, registration may be cancelled"
+msgstr ""
+
+msgid "Payment currently in review by the staff."
+msgstr ""
+
+msgid "Redeem code"
+msgstr ""
+
+msgid ""
+"Note: The special code is re-generated each time you change the gift card"
+msgstr ""
+
+msgid "Change gift"
+msgstr ""
+
+msgid "New gift"
+msgstr ""
+
+msgid "View all event information, and any specifics tickets costs, in its"
+msgstr ""
+
+msgid "dedicated!"
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+msgid "Redeem registration"
+msgstr ""
+
+msgid "You have been gifted a registration to this event, by"
+msgstr ""
+
+msgid ""
+"By pressing confirm, this registration will be assigned to you, and you will "
+"then be duly registered"
+msgstr ""
+
+msgid "Here are the sign up options with limited number."
+msgstr ""
+
+msgid "Discounts"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Question"
+msgstr ""
+
+msgid "Registration not open"
+msgstr ""
+
+msgid "The registrations to the event"
+msgstr ""
+
+msgid "are not yet open!"
+msgstr ""
+
+msgid "Will open at:"
+msgstr ""
+
+msgid "Change registration"
+msgstr ""
+
+msgid ""
+"You can update your registration by simply changing the value of the fields "
+"and clicking on confirm."
+msgstr ""
+
+msgid "If you no longer wish to attend, you can"
+msgstr ""
+
+msgid "cancel your registrations."
+msgstr ""
+
+msgid "Bring a friend!"
+msgstr ""
+
+msgid "Personal code"
+msgstr ""
+
+msgid "Copy this code and share it with friends!"
+msgstr ""
+
+msgid ""
+"Every friend who registers and uses this code will receive the following "
+"discount directly on their ticket:"
+msgstr ""
+
+msgid ""
+"For each of them, you will receive the following discount on your membership "
+"event registration:"
+msgstr ""
+
+msgid ""
+"To register for the event, please fill in the following form and click on "
+"confirm."
+msgstr ""
+
+msgid "View all event information in the"
+msgstr ""
+
+msgid "website!"
+msgstr ""
+
+msgid "Terms and Conditions of registration"
+msgstr ""
+
+msgid "Foreign language"
+msgstr ""
+
+msgid ""
+"Warning. This event is in a different language than the one set in your "
+"profile."
+msgstr ""
+
+msgid "If you have a discount code, enter it here and press enter."
+msgstr ""
+
+msgid ""
+"You have already paid your dues for the current year, so you are already "
+"covered for this event!"
+msgstr ""
+
+msgid ""
+"To participate in this event, you will have to pay the annual membership fee "
+"of:"
+msgstr ""
+
+msgid ""
+"To participate in this event, you will have to pay in addition the annual "
+"membership fee of:"
+msgstr ""
+
+msgid ""
+"In order to confirm your registration, you must request to register as a "
+"member of the Association. The procedure will automatically take you through "
+"the required steps."
+msgstr ""
+
+msgid ""
+"By proceeding with your registration for this event, you are giving us your "
+"authorisation to share your data saved on our platform with the organisers "
+"of the event."
+msgstr ""
+
+msgid "Registration conditions"
+msgstr ""
+
+msgid "Conditions of"
+msgstr ""
+
+msgid "Go to the quests of type"
+msgstr ""
+
+msgid "Features"
+msgstr ""
+
+msgid "Characters link"
+msgstr ""
+
+msgid ""
+"On this page you can filter characters and directly view their information."
+msgstr ""
+
+msgid ""
+"In the text search, you can enter any text; the search will be done on the "
+"number, name, teaser, player, keywords, groups to which the character belong."
+msgstr ""
+
+msgid ""
+"Where you find a button like this, you can press it to perform filtering "
+"further."
+msgstr ""
+
+msgid "Example"
+msgstr ""
+
+msgid ""
+"If you press once, it will be *included* in the search. If a character "
+"belongs to at least one inclusion category, it will be shown in the search."
+msgstr ""
+
+msgid "Included"
+msgstr ""
+
+msgid ""
+"If you press a second time, it will be *excluded* in the search. If a "
+"character belongs to even one exclusion category, it will not be shown in "
+"the search."
+msgstr ""
+
+msgid "Excluded"
+msgstr ""
+
+msgid "Insert"
+msgstr ""
+
+msgid "Regular"
+msgstr ""
+
+msgid "Click on a name to go and view it directly."
+msgstr ""
+
+msgid "Characters list"
+msgstr ""
+
+msgid "You are including (at least one of these filters)"
+msgstr ""
+
+msgid "You are excluding (none of these filters)"
+msgstr ""
+
+msgid "Additional fields"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "This character is played by a staff member"
+msgstr ""
+
+msgid "This character has a light game"
+msgstr ""
+
+msgid "Cancel your registration"
+msgstr ""
+
+msgid "We're sorry to see you go!"
+msgstr ""
+
+msgid "Unfortunately these things happen."
+msgstr ""
+
+msgid "You can consult"
+msgstr ""
+
+msgid " here the conditions of disenrollment for this event."
+msgstr ""
+
+msgid "Click below to confirm the cancellation:"
+msgstr ""
+
+msgid "Fill out the event prep questions!"
+msgstr ""
+
+msgid ""
+"Answer the following questions. Select *all* of the answers that seem "
+"correct."
+msgstr ""
+
+msgid "Retry!"
+msgstr ""
+
+msgid "Oops! You gave one or more incorrect answers. Please check them below. "
+msgstr ""
+
+msgid "You have made a mistake!"
+msgstr ""
+
+msgid "Hint: The correct answers to this question are "
+msgstr ""
+
+msgid "Correct!"
+msgstr ""
+
+msgid "Workshops"
+msgstr ""
+
+msgid "These are the workshops you must complete before you can play."
+msgstr ""
+
+msgid "Done!"
+msgstr ""
+
+msgid "To be done"
+msgstr ""
+
+msgid ""
+"This page shows the total membership accounts, dues, donations, expenses, "
+"the overall cash and individual event/run budget."
+msgstr ""
+
+msgid ""
+"this figure is the associative positive, the operating margin. It takes into "
+"account the budgets of the completed runs"
+msgstr ""
+
+msgid "Membership fees"
+msgstr ""
+
+msgid "Organization inflows"
+msgstr ""
+
+msgid "Run balance"
+msgstr ""
+
+msgid "issued"
+msgstr ""
+
+msgid ""
+"this figure is the net that should result as the availability of financial "
+"instruments"
+msgstr ""
+
+msgid "Transaction totals"
+msgstr ""
+
+msgid "Inflows total"
+msgstr ""
+
+msgid "Outflows total"
+msgstr ""
+
+msgid "Refund given"
+msgstr ""
+
+msgid "Member"
+msgstr ""
+
+msgid "Accounting - History"
+msgstr ""
+
+msgid "This page shows the historical accounting of the organization."
+msgstr ""
+
+msgid ""
+"this figure is the main positive, the operating margin. It takes into "
+"account of budgets for events that have been over two months, which are "
+"considered to be closed, and treats all tokens and credits as reimbursed."
+msgstr ""
+
+msgid ""
+"this figure is the net that should result as availability of financial "
+"instruments - it does not take into account tokens and credits"
+msgstr ""
+
+msgid ""
+"This page prepares the cash balance already formatted for annual declaration."
+msgstr ""
+
+msgid ""
+"This page shows the collections opened by players. You can update them "
+"indicating the recipient and disburse the money contributed."
+msgstr ""
+
+msgid "Show collections"
+msgstr ""
+
+msgid "already delivered"
+msgstr ""
+
+msgid "Organizer"
+msgstr ""
+
+msgid "This page summarises the disbursements recorded in the system of"
+msgstr ""
+
+msgid "This page shows all donations recorded in the system."
+msgstr ""
+
+msgid "Descr"
+msgstr ""
+
+msgid ""
+"This page shows all expenses incurred by collaborators, recorded in the "
+"system."
+msgstr ""
+
+msgid "Approve"
+msgstr ""
+
+msgid "Movements"
+msgstr ""
+
+msgid "This page presents the complete list of financial movements."
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Organization fee"
+msgstr ""
+
+msgid "positive"
+msgstr ""
+
+msgid "negatives"
+msgstr ""
+
+msgid "This page summarizes all revenue items recorded in the system."
+msgstr ""
+
+msgid "This page shows all invoices registered in the system."
+msgstr ""
+
+msgid "Method"
+msgstr ""
+
+msgid "Net"
+msgstr ""
+
+msgid "This page shows all expense items recorded in the system."
+msgstr ""
+
+msgid "This page shows all payment items registered in the system."
+msgstr ""
+
+msgid ""
+"This page shows all reimbursement claims submitted by members. You can edit "
+"and approve them as disbursed."
+msgstr ""
+
+msgid "Total required"
+msgstr ""
+
+msgid "residues"
+msgstr ""
+
+msgid "Eroga"
+msgstr ""
+
+msgid "This page summarises the system entries of"
+msgstr ""
+
+msgid "Competences"
+msgstr ""
+
+msgid ""
+"This page shows in detail, for each expertise, the users who have indicated "
+"it."
+msgstr ""
+
+msgid "Experience"
+msgstr ""
+
+msgid "Number events"
+msgstr ""
+
+msgid "Events"
+msgstr ""
+
+msgid ""
+"This page shows global competencies, skill areas in which contributors can "
+"score themselves."
+msgstr ""
+
+msgid "Marked"
+msgstr ""
+
+msgid "Competences events"
+msgstr ""
+
+msgid ""
+"This page shows for each event, the collaborators marked with which "
+"expertise."
+msgstr ""
+
+msgid "Staff"
+msgstr ""
+
+msgid ""
+"This page shows in the detail of an event, the list of expertises covered by "
+"the contributors."
+msgstr ""
+
+msgid "Competences member"
+msgstr ""
+
+msgid ""
+"This page shows in detail a contributor's skills for to which they marked."
+msgstr ""
+
+msgid "This page shows in detail the skills marked by a contributor."
+msgstr ""
+
+msgid ""
+"This page shows the deadlines of upcoming organization events, the "
+"activities to be monitored, and the list of users to be solicited."
+msgstr ""
+
+msgid ""
+"This page shows all the events saved in the system. From here you can edit "
+"them, or create new ones."
+msgstr ""
+
+msgid "Event link"
+msgstr ""
+
+msgid "Cover link"
+msgstr ""
+
+msgid "Cover (thumb) link"
+msgstr ""
+
+msgid "Feature"
+msgstr ""
+
+msgid ""
+"This page shows the optional features available for the whole organization."
+msgstr ""
+
+msgid "Feature types"
+msgstr ""
+
+msgid ""
+"NOTE: When activating a feature, it is immediately available for all events."
+msgstr ""
+
+msgid "Module"
+msgstr ""
+
+msgid "Cost for player"
+msgstr ""
+
+msgid "Tutorial"
+msgstr ""
+
+msgid "Video"
+msgstr ""
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Custodies"
+msgstr ""
+
+msgid "This page shows inventory custody items."
+msgstr ""
+
+msgid "Show / hide"
+msgstr ""
+
+msgid "past"
+msgstr ""
+
+msgid "Object"
+msgstr ""
+
+msgid "Start"
+msgstr ""
+
+msgid "End"
+msgstr ""
+
+msgid "Inventory objects"
+msgstr ""
+
+msgid "This page shows organization inventory items."
+msgstr ""
+
+msgid "Setting"
+msgstr ""
+
+msgid "Price"
+msgstr ""
+
+msgid "This page shows the organization inventory."
+msgstr ""
+
+msgid "Filter for every field"
+msgstr ""
+
+msgid "History"
+msgstr ""
+
+msgid "This page shows for an element its history"
+msgstr ""
+
+msgid "LarpManager"
+msgstr ""
+
+msgid ""
+"This page shows larpmanager usage costs, total and divided by individual run."
+msgstr ""
+
+msgid "Subscription"
+msgstr ""
+
+msgid "Payed"
+msgstr ""
+
+msgid "Pre registrations"
+msgstr ""
+
+msgid "This page shows the total number of pre-registrations for each event."
+msgstr ""
+
+msgid ""
+"This page summarises the roles to be assigned in order to use the functions "
+"concerning the organisation."
+msgstr ""
+
+msgid "Can't find a user?"
+msgstr ""
+
+msgid "Links to be accessed:"
+msgstr ""
+
+msgid "Users"
+msgstr ""
+
+msgid ""
+"This page shows all the runs saved in the system. From here you can edit "
+"them, or create new ones."
+msgstr ""
+
+msgid "Show past runs"
+msgstr ""
+
+msgid "Registration link"
+msgstr ""
+
+msgid ""
+"This page summarises all template events in the system. From here you can "
+"edit them, or create new ones."
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "This page summarizes the association's custom texts."
+msgstr ""
+
+msgid "Url Shortner"
+msgstr ""
+
+msgid "This page shows the url shortners."
+msgstr ""
+
+msgid "External link"
+msgstr ""
+
+msgid "Short url"
+msgstr ""
+
+msgid ""
+"This page shows membership badges. You can edit them, assign them, create "
+"new ones."
+msgstr ""
+
+msgid ""
+"This page summarises the list of members, formatted ready to be sent to the "
+"insurance company. It only displays members who have renewed their "
+"membership in this calendar year, in order of renewal."
+msgstr ""
+
+msgid "Residence"
+msgstr ""
+
+msgid "Last membership date"
+msgstr ""
+
+msgid "Order"
+msgstr ""
+
+msgid ""
+"This page shows all information about the individual member available in the "
+"system."
+msgstr ""
+
+msgid "personal data"
+msgstr ""
+
+msgid "registrations"
+msgstr ""
+
+msgid "payments"
+msgstr ""
+
+msgid "other"
+msgstr ""
+
+msgid "discount"
+msgstr ""
+
+msgid "Personal data"
+msgstr ""
+
+msgid "Given"
+msgstr ""
+
+msgid "Detail"
+msgstr ""
+
+msgid "Members list"
+msgstr ""
+
+msgid ""
+"This page shows the list of members, divided by type: applicants, approved, "
+"renewed for the current year."
+msgstr ""
+
+msgid "Total members: "
+msgstr ""
+
+msgid "Paid current year"
+msgstr ""
+
+msgid "Member Data Checks"
+msgstr ""
+
+msgid "This page performs checks on members' data."
+msgstr ""
+
+msgid "Card"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Membership requests"
+msgstr ""
+
+msgid ""
+"This page displays the application for membership in the organization. You "
+"can accept or reject the application."
+msgstr ""
+
+msgid "Warning: there is already an approved member with the same name!"
+msgstr ""
+
+msgid "Request for"
+msgstr ""
+
+msgid "Refute"
+msgstr ""
+
+msgid ""
+"This page shows email lists of users, divided by their expressed preferences "
+"regarding newsletter communications."
+msgstr ""
+
+msgid "All comunications"
+msgstr ""
+
+msgid "No comunications"
+msgstr ""
+
+msgid ""
+"This page shows the questions submitted by users, divided by the events they "
+"refer to. You can answer the question or close it if requires no further "
+"action."
+msgstr ""
+
+msgid "Show questions already answered"
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid ""
+"For your convenience, this page only shows questions from the last 3 months. "
+"To view previous questions click here:"
+msgstr ""
+
+msgid ""
+"This page shows the conversation with a player concerning a need of them. "
+"You can add a new response."
+msgstr ""
+
+msgid "Give a new answer"
+msgstr ""
+
+msgid "Comunications"
+msgstr ""
+
+msgid "Registry"
+msgstr ""
+
+msgid "This page summarises the list of members as a registry"
+msgstr ""
+
+msgid "Card number"
+msgstr ""
+
+msgid "Date of association"
+msgstr ""
+
+msgid "Send emails"
+msgstr ""
+
+msgid "From this page you can send an email to any list of recipients."
+msgstr ""
+
+msgid "Remember to put recipients separated by commas"
+msgstr ""
+
+msgid "Are you really sure?"
+msgstr ""
+
+msgid "Volunteer Registry"
+msgstr ""
+
+msgid "This page summarises the organization's volunteers."
+msgstr ""
+
+msgid "Print registry"
+msgstr ""
+
+msgid "Vote"
+msgstr ""
+
+msgid "This page shows the settings available for the membership voting."
+msgstr ""
+
+msgid "Collected votes"
+msgstr ""
+
+msgid "List of voters"
+msgstr ""
+
+msgid ""
+"This page allows you to check the payment items in the system. The source of "
+"the data should be one of the verified payment systems,  from which to take "
+"the list of payments, showing the code of the payment."
+msgstr ""
+
+msgid "Upload verified payments"
+msgstr ""
+
+msgid "Select a file with extension csv"
+msgstr ""
+
+msgid "The first column the amount, the second the receipts."
+msgstr ""
+
+msgid ""
+"Get this data from the bank or equivalent, to verify the entries marked."
+msgstr ""
+
+msgid "List payments to verify"
+msgstr ""
+
+msgid "Payment"
+msgstr ""
+
+msgid "Verification"
+msgstr ""
+
+msgid "leaderboard"
+msgstr ""
+
+msgid "You think you should have an achievement?"
+msgstr ""
+
+msgid "Tell us here!"
+msgstr ""
+
+msgid "Event language"
+msgstr ""
+
+msgid "upcoming events"
+msgstr ""
+
+msgid "Next events"
+msgstr ""
+
+msgid "Contact us"
+msgstr ""
+
+msgid "Message sent, thanks for writing us!"
+msgstr ""
+
+msgid "Register to"
+msgstr ""
+
+msgid "May the best win!"
+msgstr ""
+
+msgid "First"
+msgstr ""
+
+msgid "Prev"
+msgstr ""
+
+msgid "of"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
+msgid "Last"
+msgstr ""
+
+msgid "Legal Notice"
+msgstr ""
+
+msgid "These are our past events"
+msgstr ""
+
+msgid "Pre-Register"
+msgstr ""
+
+msgid "Show explanation"
+msgstr ""
+
+msgid "New pre-registrations"
+msgstr ""
+
+msgid "Operation"
+msgstr ""
+
+msgid "If you like or are interested in an event, you can <b>pre-register</b>."
+msgstr ""
+
+msgid ""
+"This <b>is</b> not binding, and <b>does</b> not</b> automatically secure you "
+"a place at the event, but you will be offered a preferential registration "
+"before the public opening of registration."
+msgstr ""
+
+msgid ""
+"For our part, we will use pre-registrations as a measure of how much an "
+"event is desired. If you want a new run of an event, spread the voice and "
+"invites others to pre-register to it!"
+msgstr ""
+
+msgid ""
+"We only ask you to indicate a <b>order</b> of preference for the your pre-"
+"registrations (imagining you have to choose which one to play, indicates in "
+"what order you want to play them)."
+msgstr ""
+
+msgid "If you wish, you can delete past pre-registrations."
+msgstr ""
+
+msgid "Do you want to tell us something?"
+msgstr ""
+
+msgid "Shuttle service"
+msgstr ""
+
+msgid "Need a ride?"
+msgstr ""
+
+msgid "Add a new request!"
+msgstr ""
+
+msgid ""
+"Notes: Try to group as many passengers per request as possible; if you "
+"notice any delays, write us directly, do not enter new requests!"
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "Claimant"
+msgstr ""
+
+msgid "Passengers"
+msgstr ""
+
+msgid "Passages made"
+msgstr ""
+
+msgid ""
+"The larpmanager has a over 100 different features. There is one for every "
+"single aspect of event organising: signups, accounting, writing, logistics."
+msgstr ""
+
+msgid ""
+"Below you will find all the features available; you can write a search "
+"keyword to filter them. Then click on 'Video', and you will see the video "
+"directly."
+msgstr ""
+
+msgid "Show inactive"
+msgstr ""
+
+msgid "Profiling"
+msgstr ""
+
+msgid "With these tutorials, you can learn how to use the tool in no time!"
+msgstr ""
+
+msgid ""
+"You can read them in order, or scroll directly to the one that interests you "
+"most."
+msgstr ""
+
+msgid "Management"
+msgstr ""
+
+msgid "Discover what this event is about!"
+msgstr ""
+
+msgid "View the complete list of characters and their players!"
+msgstr ""
+
+msgid "Scroll through the characters, and can you filter/search them!"
+msgstr ""
+
+msgid "Browse the presentation website!"
+msgstr ""
+
+msgid "Access the list of your characters!"
+msgstr ""
+
+msgid "Find out what quests are available!"
+msgstr ""
+
+msgid "Discover the game factions!"
+msgstr ""
+
+msgid "View photos from the event!"
+msgstr ""
+
+msgid "View limited ticket options"
+msgstr ""
+
+msgid "Give a card to your friend"
+msgstr ""
+
+msgid "Select your preferences on the characters to play!"
+msgstr ""
+
+msgid "Portraits (PDF)"
+msgstr ""
+
+msgid ""
+"Download the list of characters with their interpreters' profile images!"
+msgstr ""
+
+msgid "Profiles (PDF)"
+msgstr ""
+
+msgid "Update here the registration options!"
+msgstr ""
+
+msgid "Your character"
+msgstr ""
+
+msgid "Access your character!"
+msgstr ""
+
+msgid "Register to the event"
+msgstr ""
+
+msgid "Donation"
+msgstr ""
+
+msgid "You are about to perform a donation of"
+msgstr ""
+
+msgid ""
+"Indicate the name of the member for whom you want to activate a new "
+"collection"
+msgstr ""
+
+msgid "Collection for"
+msgstr ""
+
+msgid "The collection was delivered to the user"
+msgstr ""
+
+msgid ""
+"The collection is ready to be delivered, give this link to the recipient"
+msgstr ""
+
+msgid "Collection links"
+msgstr ""
+
+msgid ""
+"The collection is active! To participate click on the following link, or "
+"copy it to whoever you want to get involved"
+msgstr ""
+
+msgid "Link to participate in"
+msgstr ""
+
+msgid ""
+"When you want to close the collection, follow the link below. A special "
+"redemption code will be generated!"
+msgstr ""
+
+msgid "Link to close the collection"
+msgstr ""
+
+msgid "Number of partecipants"
+msgstr ""
+
+msgid "Total collection"
+msgstr ""
+
+msgid "Participants included"
+msgstr ""
+
+msgid "Join the collection for"
+msgstr ""
+
+msgid "The amount of your contribution is"
+msgstr ""
+
+msgid "Redeem collection"
+msgstr ""
+
+msgid ""
+"Your friends wanted to give you a special gift: they gave you the chance to "
+"participate in one of our experiences!"
+msgstr ""
+
+msgid ""
+"By pressing confirm, the collection total will be credited to your account, "
+"and will be used automatically when you register for one of our events!"
+msgstr ""
+
+msgid "Your accounting"
+msgstr ""
+
+msgid "Do you wish to be reimbursed? Open a new one"
+msgstr ""
+
+msgid "refund request"
+msgstr ""
+
+msgid "Access the history"
+msgstr ""
+
+msgid "Refunded"
+msgstr ""
+
+msgid "Consumed"
+msgstr ""
+
+msgid "Returned"
+msgstr ""
+
+msgid "Indicate the amount of your donation"
+msgstr ""
+
+msgid "Payment membership fee"
+msgstr ""
+
+msgid "Indicates the details of the request"
+msgstr ""
+
+msgid "The total registration fee is"
+msgstr ""
+
+msgid "So far you have paid a total of"
+msgstr ""
+
+msgid "We ask you to pay the difference from the next instalment"
+msgstr ""
+
+msgid "We ask you to pay the difference"
+msgstr ""
+
+msgid "Would you like to pay a different amount?"
+msgstr ""
+
+msgid "Go to the tokens history"
+msgstr ""
+
+msgid "Payment processing"
+msgstr ""
+
+msgid "We are processing your payment. Please wait a moment... "
+msgstr ""
+
+msgid "here the conditions of registration."
+msgstr ""
+
+msgid "Payments in approval"
+msgstr ""
+
+msgid ""
+"These are the event signup for which you submitted a payment, and it's being "
+"reviewed by the staff. You don't have to do anything at this time!"
+msgstr ""
+
+msgid "Pending payments"
+msgstr ""
+
+msgid "These are the event registrations for which you have to make a payment."
+msgstr ""
+
+msgid "You must pay"
+msgstr ""
+
+msgid "by the deadline of"
+msgstr ""
+
+msgid "Payments pending delegated accounts"
+msgstr ""
+
+msgid ""
+"These are delegated account registrations for which you have to make a "
+"payment."
+msgstr ""
+
+msgid "by"
+msgstr ""
+
+msgid "Requests open"
+msgstr ""
+
+msgid "Executive Vote"
+msgstr ""
+
+msgid "Cast your vote for the new Executive!"
+msgstr ""
+
+msgid "Membership fees in approval"
+msgstr ""
+
+msgid ""
+"You have submitted your dues payment, and it is now being approved by the "
+"staff. You don't have to do anything for the time being!"
+msgstr ""
+
+msgid "Payment membership fee:"
+msgstr ""
+
+msgid ""
+"You are registered for an event to be held in this calendar year, but we are "
+"not aware of your dues payment. Be careful: if you don't complete it, <b>you "
+"won't be able to attend events</b>, nor vote at the Membership Meeting!"
+msgstr ""
+
+msgid "Pay the annual fee"
+msgstr ""
+
+msgid ""
+"The payment of your membership fee for this year has NOT been received: it "
+"is necessary in order to participate to the events, and the organization "
+"meetings."
+msgstr ""
+
+msgid "Membership request not submitted"
+msgstr ""
+
+msgid ""
+"You have not yet submitted your application for membership to the "
+"Organization. If you are not a Member, we cannot accept payment from you, "
+"and you cannot confirm your event registrations."
+msgstr ""
+
+msgid "Make the request now!"
+msgstr ""
+
+msgid "Membership request submitted"
+msgstr ""
+
+msgid ""
+"You have submitted your application for membership in the Organization. The "
+"request will be considered at the next meeting of the Board. When it is "
+"approved, you will be able to settle payments for the events you have signed "
+"up for!"
+msgstr ""
+
+msgid "Member revoked"
+msgstr ""
+
+msgid "What are you doing here?"
+msgstr ""
+
+msgid "Membership fee"
+msgstr ""
+
+msgid "They are regularly paid for the following years"
+msgstr ""
+
+msgid "Collection"
+msgstr ""
+
+msgid ""
+"Want to help one of your friends play with us? Organize a collection: you "
+"and anyone who wants to contribute will be able to donate part of their "
+"registration fees!"
+msgstr ""
+
+msgid "Create a new collection"
+msgstr ""
+
+msgid "Active collection"
+msgstr ""
+
+msgid "Closed collection"
+msgstr ""
+
+msgid "Collection total:"
+msgstr ""
+
+msgid "Collections delivered"
+msgstr ""
+
+msgid "Manage it here!"
+msgstr ""
+
+msgid "Collection participated"
+msgstr ""
+
+msgid "If you would like to make a donation to the Organization, "
+msgstr ""
+
+msgid "follow this link"
+msgstr ""
+
+msgid "You will have our eternal thanks for believing in us!"
+msgstr ""
+
+msgid "Donations done"
+msgstr ""
+
+msgid "Registration history"
+msgstr ""
+
+msgid "Cancellation"
+msgstr ""
+
+msgid ""
+"You have submitted a deposit, and it is being reviewed by the staff. You "
+"don't have to do anything for the time being, as soon as it is confirmed the "
+"accounting of the event will be updated."
+msgstr ""
+
+msgid "Ticket chosen"
+msgstr ""
+
+msgid "Selected options"
+msgstr ""
+
+msgid "To access the history"
+msgstr ""
+
+msgid "click here"
+msgstr ""
+
+msgid "User"
+msgstr ""
+
+msgid "Your messages"
+msgstr ""
+
+msgid "Unread"
+msgstr ""
+
+msgid "Your competences"
+msgstr ""
+
+msgid ""
+"On this page you can mark your specialties to collaborate on our  events."
+msgstr ""
+
+msgid ""
+"Click on the roles you'd like to collaborate on, then enter your degree of "
+"experience, and finally indicate precisely your field of experience."
+msgstr ""
+
+msgid "I am not interested"
+msgstr ""
+
+msgid "I'm interested, but I don't have much experience"
+msgstr ""
+
+msgid "I've done it a few times, I have a basic experience"
+msgstr ""
+
+msgid "I do it routinely, I have good experience"
+msgstr ""
+
+msgid "Indicate your level of experience"
+msgstr ""
+
+msgid "Indicate precisely your field of experience"
+msgstr ""
+
+msgid "Your delegated users"
+msgstr ""
+
+msgid "You are currently logged in with the"
+msgstr ""
+
+msgid "To log back in with the account"
+msgstr ""
+
+msgid "press here"
+msgstr ""
+
+msgid ""
+"You can create new delegate accounts, or log in with them by pressing the "
+"relevant button"
+msgstr ""
+
+msgid "Ask a new questions"
+msgstr ""
+
+msgid "You can contact us at this "
+msgstr ""
+
+msgid "address"
+msgstr ""
+
+msgid "We encountered a problem with the tax code you provided"
+msgstr ""
+
+msgid "Expected"
+msgstr ""
+
+msgid "Update your data in the"
+msgstr ""
+
+msgid "user profile"
+msgstr ""
+
+msgid "You are not yet a Member of the Organization!"
+msgstr ""
+
+msgid ""
+"In order to subscribe to the Organization's events you must apply to be "
+"admitted as a Member."
+msgstr ""
+
+msgid ""
+"We have pre-filled the application form based on the data you provided us"
+msgstr ""
+
+msgid "download it here"
+msgstr ""
+
+msgid "If there are wrong data you can update your"
+msgstr ""
+
+msgid "The registration request will be updated automatically."
+msgstr ""
+
+msgid ""
+"Once downloaded you must print it, sign it, take a digital scan, and  upload "
+"it to the form below. Your request will be considered at the  next meeting "
+"of the Board. You will receive confirmation of the outcome of its  "
+"evaluation. "
+msgstr ""
+
+msgid ""
+"Upload the scan of both your signed request, and your document (image or pdf "
+"document)"
+msgstr ""
+
+msgid "Confirmation of registration request"
+msgstr ""
+
+msgid ""
+"We only ask for a moment of your time to check the documents you have "
+"uploaded, it won't take long!"
+msgstr ""
+
+msgid ""
+"I confirm that I have uploaded a valid document issued by the state of my "
+"nationality"
+msgstr ""
+
+msgid "I confirm that my face and name are clearly visible in the document"
+msgstr ""
+
+msgid "If instead you wish to upload a new photo of your document"
+msgstr ""
+
+msgid ""
+"I confirm that all my required personal data have been filled in correctly"
+msgstr ""
+
+msgid "If you wish to update your personal data"
+msgstr ""
+
+msgid ""
+"I confirm that I have affixed the date and my signature wherever required"
+msgstr ""
+
+msgid "If you wish to upload a new scan of your application instead"
+msgstr ""
+
+msgid "Request sent for approval"
+msgstr ""
+
+msgid ""
+"Your request will be approved at the next Board meeting. You will receive "
+"confirmation of the outcome of its evaluation very soon."
+msgstr ""
+
+msgid "Request submitted"
+msgstr ""
+
+msgid "I am not good what to say. I never thought it would happen."
+msgstr ""
+
+msgid "Members of the Organization"
+msgstr ""
+
+msgid ""
+"You are a regular member of our Organization. You can subscribe to events "
+"organized for our members!"
+msgstr ""
+
+msgid "In the membership book the number of your membership card is"
+msgstr ""
+
+msgid ""
+"The payment of your membership fee for this year has been received. You have "
+"the right to participate to the organization events."
+msgstr ""
+
+msgid "Did you check the required data properly?"
+msgstr ""
+
+msgid ""
+"Your data will be saved in the LarpManager system, which is used  by several "
+"LARP Organizations. We value the privacy of your data, and we  we will treat "
+"it with the utmost care. In particular, it will be made visible  only to the "
+"organizers of the events you decide to sign up. Under no any other "
+"circumstances they will be disclosed, shared, or processed."
+msgstr ""
+
+msgid ""
+"Here is the complete list of all organizations registered with LarpManager "
+"that have access to your data."
+msgstr ""
+
+msgid ""
+"Access has been granted by you in the past by signing up for one of their  "
+"events, or by agreeing to participate as a staff member / organizer."
+msgstr ""
+
+msgid ""
+"You can remove your consent to data sharing by clicking on the appropriate "
+"link."
+msgstr ""
+
+msgid "Remove consent"
+msgstr ""
+
+msgid "Your user"
+msgstr ""
+
+msgid "You are logged in with an email address"
+msgstr ""
+
+msgid "Would you like to change it?"
+msgstr ""
+
+msgid "Voting for the Executive is open, "
+msgstr ""
+
+msgid "submit your vote here!"
+msgstr ""
+
+msgid ""
+"Your data will be saved in the LarpManager system, which is used by several "
+"associations."
+msgstr ""
+
+msgid ""
+"We value the privacy of your data and will treat it with the utmost care."
+msgstr ""
+
+msgid ""
+"In particular, they will only be made visible to the organisers of the "
+"events you decide to register for."
+msgstr ""
+
+msgid "They will not be communicated, shared or processed in any other way."
+msgstr ""
+
+msgid ""
+"You can check and edit the list of organizations that can access your data "
+"on your "
+msgstr ""
+
+msgid "Current profile image"
+msgstr ""
+
+msgid ""
+"Upload your portrait photo. It will be shown to other players together with "
+"the your character, so as to help recognize you in the game. Choose a photo "
+"that you would put in an official document (in which you are alone, centered "
+"on your face). "
+msgstr ""
+
+msgid "Your personal data"
+msgstr ""
+
+msgid "Step 3 / 4"
+msgstr ""
+
+msgid ""
+"There are only two steps left to complete the procedure, enter the last "
+"necessary data. With this information, your membership application will be "
+"pre-filled; all you have to do is print it out and sign it."
+msgstr ""
+
+msgid "Need help?"
+msgstr ""
+
+msgid "Write here!"
+msgstr ""
+
+msgid ""
+"Fill in the form and click on confirm, it will take you to the next passage!"
+msgstr ""
+
+msgid "New member"
+msgstr ""
+
+msgid ""
+"We are almost there, you just need to enter the last necessary data here. "
+"With this data your membership application will be pre-filled;  you will "
+"just have to print it out and sign it."
+msgstr ""
+
+msgid "Private message"
+msgstr ""
+
+msgid "Events played"
+msgstr ""
+
+msgid "Show all"
+msgstr ""
+
+msgid "Your registrations"
+msgstr ""
+
+msgid "Sharing"
+msgstr ""
+
+msgid ""
+"If you wish to confirm that you share your data in the LarpManager system "
+"with this organisation, click on the button below:"
+msgstr ""
+
+msgid "Technical Support"
+msgstr ""
+
+msgid ""
+"To request a change of your e-mail address, please indicate both your old "
+"and your new address."
+msgstr ""
+
+msgid "We will send you a confirmation e-mail when the change has been made."
+msgstr ""
+
+msgid ""
+"Did you encounter an error, or did you find a text with an incorrect "
+"translation in your language?"
+msgstr ""
+
+msgid "Describe it in the field below and we will fix it as soon as possible!"
+msgstr ""
+
+msgid ""
+"We confirm that your votes are correctly registered in the system! Thank you "
+"for participating in the democratic life of the Organization!"
+msgstr ""
+
+msgid "Minimum number of votes:"
+msgstr ""
+
+msgid "Maximum number of votes:"
+msgstr ""
+
+msgid "Vote not yet open!"
+msgstr ""
+
+msgid "Event accounting"
+msgstr ""
+
+msgid ""
+"This page shows the accounting status of the event, divided into the various "
+"expense types."
+msgstr ""
+
+msgid "Net revenue"
+msgstr ""
+
+msgid "Organization tax"
+msgstr ""
+
+msgid ""
+"(this balance takes into account payments currently received, and "
+"expenditures currently put into system)"
+msgstr ""
+
+msgid "Item"
+msgstr ""
+
+msgid "Refund for"
+msgstr ""
+
+msgid ""
+"This page allows you to return part of the quota to a player who has "
+"cancelled"
+msgstr ""
+
+msgid "Registration fee"
+msgstr ""
+
+msgid "Actual paid"
+msgstr ""
+
+msgid "Money"
+msgstr ""
+
+msgid "Returning"
+msgstr ""
+
+msgid "Retention"
+msgstr ""
+
+msgid "Full returning"
+msgstr ""
+
+msgid "Returning type"
+msgstr ""
+
+msgid "Only"
+msgstr ""
+
+msgid "e"
+msgstr ""
+
+msgid "Returning percentage"
+msgstr ""
+
+msgid "Approve reimbursement"
+msgstr ""
+
+msgid "Cancellations"
+msgstr ""
+
+msgid "This page shows cancelled enrollments."
+msgstr ""
+
+msgid "Show cancellations"
+msgstr ""
+
+msgid "no payment"
+msgstr ""
+
+msgid "money"
+msgstr ""
+
+msgid "Days"
+msgstr ""
+
+msgid "Cancellation date"
+msgstr ""
+
+msgid ""
+"This page summarises the disbursements recorded in the system for this run of"
+msgstr ""
+
+msgid "Collaborator"
+msgstr ""
+
+msgid "This page shows the discounts activated for this event."
+msgstr ""
+
+msgid "Max uses"
+msgstr ""
+
+msgid "Run active"
+msgstr ""
+
+msgid ""
+"This page summarises all expenses incurred by employees and uploaded to the "
+"system. Once approved, they are disbursed to co-workers as"
+msgstr ""
+
+msgid "This page shows your personal spending items."
+msgstr ""
+
+msgid "New refund request"
+msgstr ""
+
+msgid "This page allows you to upload a new personal expense item."
+msgstr ""
+
+msgid "This page shows all inflows received for this run."
+msgstr ""
+
+msgid "This page allows you to manually approve payments received."
+msgstr ""
+
+msgid ""
+"This page shows all expenses incurred directly by the organization "
+"concerning this run."
+msgstr ""
+
+msgid "This page shows all payments received for this run."
+msgstr ""
+
+msgid "Invoice"
+msgstr ""
+
+msgid "This page shows the uploaded photo albums."
+msgstr ""
+
+msgid "Master"
+msgstr ""
+
+msgid "This page allows you to upload a new photo album."
+msgstr ""
+
+msgid "Upload of photo and video"
+msgstr ""
+
+msgid ""
+"Select a zip file for upload. Directories will become albums, photos and the "
+"videos inside will be placed in the corresponding albums."
+msgstr ""
+
+msgid "Event navigation"
+msgstr ""
+
+msgid "This page summarises the customised navigation buttons of the event."
+msgstr ""
+
+msgid "Tooltip"
+msgstr ""
+
+msgid ""
+"This page shows the casting preferences expressed by players, and allows "
+"them to be assigned through an optimization algorithm."
+msgstr ""
+
+msgid "Casting management for"
+msgstr ""
+
+msgid "Tier"
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
+msgid "Players: "
+msgstr ""
+
+msgid "Characters: "
+msgstr ""
+
+msgid "Start algorithm"
+msgstr ""
+
+msgid ""
+"The optimal allocation based on the set values is simulated; you can run it "
+"as many times as you like before final loading"
+msgstr ""
+
+msgid "Legend: "
+msgstr ""
+
+msgid "Choice available, click to lock"
+msgstr ""
+
+msgid "Choice locked, click to make it available"
+msgstr ""
+
+msgid "Mirror type character, not selectable"
+msgstr ""
+
+msgid "Character already assigned, not selectable"
+msgstr ""
+
+msgid "Preference not valid"
+msgstr ""
+
+msgid "Assign selected characters to players."
+msgstr ""
+
+msgid ""
+"Attention: the operation is final, please double-check the assignments "
+"before uploading!"
+msgstr ""
+
+msgid "Seniority"
+msgstr ""
+
+msgid "Priority"
+msgstr ""
+
+msgid "Avoid"
+msgstr ""
+
+msgid "Elements NOT chosen"
+msgstr ""
+
+msgid "Players that DID NOT send preferences"
+msgstr ""
+
+msgid "Email list"
+msgstr ""
+
+msgid "Character questions"
+msgstr ""
+
+msgid "This page summarises the available questions of the character form."
+msgstr ""
+
+msgid "Modifiable"
+msgstr ""
+
+msgid "Prerequisites"
+msgstr ""
+
+msgid "Pdf"
+msgstr ""
+
+msgid "This page shows the settings for PDF printing."
+msgstr ""
+
+msgid "Gallery Pdf"
+msgstr ""
+
+msgid "Test gallery"
+msgstr ""
+
+msgid "PDF Profiles"
+msgstr ""
+
+msgid "Try the sheet generation"
+msgstr ""
+
+msgid "Complete sheet (Pdf)"
+msgstr ""
+
+msgid "Complete sheet (Test)"
+msgstr ""
+
+msgid "Lightweight card (Pdf)"
+msgstr ""
+
+msgid "Lightweight board (Test)"
+msgstr ""
+
+msgid "Ties (Pdf)"
+msgstr ""
+
+msgid "Ties (Test)"
+msgstr ""
+
+msgid "Current template"
+msgstr ""
+
+msgid "download"
+msgstr ""
+
+msgid "Regenerate (recreates all pdf: slow)"
+msgstr ""
+
+msgid "This page shows the relationships of the indicated character."
+msgstr ""
+
+msgid "List inverse relationships of "
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "This page allows you to copy the event settings from another one."
+msgstr ""
+
+msgid "Select which elements to copy, from which other event."
+msgstr ""
+
+msgid "ATTENTION: This action overwrites changes made to this event"
+msgstr ""
+
+msgid "This page shows the deadlines to be met for this run."
+msgstr ""
+
+msgid ""
+"This page shows the features activated for the event, and allows you to "
+"enable or disable them."
+msgstr ""
+
+msgid ""
+"NOTE: By activating a feature, it is immediately available for all runs."
+msgstr ""
+
+msgid ""
+"This page shows problems reported by contributors, for direct management "
+"during the event."
+msgstr ""
+
+msgid "Show closed"
+msgstr ""
+
+msgid "Rensponsable"
+msgstr ""
+
+msgid "This page summarizes the abilities that players can purchase with px."
+msgstr ""
+
+msgid "Cost"
+msgstr ""
+
+msgid "Players"
+msgstr ""
+
+msgid "Subordinates"
+msgstr ""
+
+msgid "Ability types"
+msgstr ""
+
+msgid "This page summarizes the types of abilities that players can purchase."
+msgstr ""
+
+msgid "This page summarizes px delivery to characters."
+msgstr ""
+
+msgid ""
+"This page shows active discounts on the player, allows you to activate or "
+"deactivate them."
+msgstr ""
+
+msgid "Discounts active"
+msgstr ""
+
+msgid "Discounts available"
+msgstr ""
+
+msgid "Registration questions"
+msgstr ""
+
+msgid ""
+"This page shows the available questions of the registration form of the "
+"event."
+msgstr ""
+
+msgid "Installments"
+msgstr ""
+
+msgid "This page shows the payment deadline settings for the event."
+msgstr ""
+
+msgid "Installment"
+msgstr ""
+
+msgid "Deadline (days)"
+msgstr ""
+
+msgid "Deadline (date)"
+msgstr ""
+
+msgid "This page shows the information to perform the drawing of the lottery."
+msgstr ""
+
+msgid "The following registrations were drawn"
+msgstr ""
+
+msgid "The total number of tickets to be drawn was indicated"
+msgstr ""
+
+msgid "Lottery tickets currently present"
+msgstr ""
+
+msgid "Tickets that have already been drawn"
+msgstr ""
+
+msgid ""
+"Go ahead and click on this button to perform the extraction. Warning: it is "
+"final!"
+msgstr ""
+
+msgid "Perform extraction"
+msgstr ""
+
+msgid "This page shows the pre-signups for the run."
+msgstr ""
+
+msgid "Pre-registration link"
+msgstr ""
+
+msgid "Unconverted pre-registrations"
+msgstr ""
+
+msgid "Pre registrations total"
+msgstr ""
+
+msgid "Mail"
+msgstr ""
+
+msgid "Joined"
+msgstr ""
+
+msgid "This page shows the quota options available for payment of the event."
+msgstr ""
+
+msgid ""
+"Beyond the minimum number of days indicated, the quota will no longer be "
+"available during registration."
+msgstr ""
+
+msgid "Available days"
+msgstr ""
+
+msgid "This page shows the run signups."
+msgstr ""
+
+msgid "accounting"
+msgstr ""
+
+msgid "email"
+msgstr ""
+
+msgid "cell"
+msgstr ""
+
+msgid "age"
+msgstr ""
+
+msgid "info"
+msgstr ""
+
+msgid "chronology"
+msgstr ""
+
+msgid "unique code"
+msgstr ""
+
+msgid "additional"
+msgstr ""
+
+msgid "gift"
+msgstr ""
+
+msgid "member"
+msgstr ""
+
+msgid "factions"
+msgstr ""
+
+msgid "customisations"
+msgstr ""
+
+msgid "surcharge"
+msgstr ""
+
+msgid "Age (during the event)"
+msgstr ""
+
+msgid "Cell"
+msgstr ""
+
+msgid "Additions"
+msgstr ""
+
+msgid "Last change"
+msgstr ""
+
+msgid "PWYW"
+msgstr ""
+
+msgid "Next quota"
+msgstr ""
+
+msgid "Owing"
+msgstr ""
+
+msgid "Manage"
+msgstr ""
+
+msgid "Additional free payment fee"
+msgstr ""
+
+msgid "Amount of the next payment instalment required"
+msgstr ""
+
+msgid "Number of days within which the player must pay his next installment"
+msgstr ""
+
+msgid "Total remaining to be paid"
+msgstr ""
+
+msgid "Total of what has already been paid at the current date"
+msgstr ""
+
+msgid "Sum of the signup fee, total to be paid"
+msgstr ""
+
+msgid "Part of the registration fee derived only from the ticket chosen"
+msgstr ""
+
+msgid ""
+"Part of the registration fee derived only from the additional options chosen"
+msgstr ""
+
+msgid "Sum of payments received with means of payment"
+msgstr ""
+
+msgid "Sum of payments received through"
+msgstr ""
+
+msgid "Unique registration code, used for payment checks"
+msgstr ""
+
+msgid "Recalculate"
+msgstr ""
+
+msgid "Waiting"
+msgstr ""
+
+msgid "Registration sections"
+msgstr ""
+
+msgid "This page shows the sections of the event registration form."
+msgstr ""
+
+msgid "Surcharges"
+msgstr ""
+
+msgid "This page shows the registration surcharges."
+msgstr ""
+
+msgid ""
+"This page shows the different tickets with which players can register for "
+"the event."
+msgstr ""
+
+msgid "Casting priority"
+msgstr ""
+
+msgid "Direct link"
+msgstr ""
+
+msgid ""
+"This page summarises the roles to be assigned in order to use the functions "
+"concerning the event."
+msgstr ""
+
+msgid ""
+"According to LarpManager's privacy rules, you can only view users who have "
+"granted LarpManager permission to share their data with your organisation."
+msgstr ""
+
+msgid ""
+"Ask your co-workers to access this link; after their confirmation, their "
+"data will be shared with your organisation, and you will be able to add them "
+"to roles."
+msgstr ""
+
+msgid "Secret registration link"
+msgstr ""
+
+msgid ""
+"Here is the secret registration code: only users accessing from this address "
+"will be able to register."
+msgstr ""
+
+msgid "Event texts"
+msgstr ""
+
+msgid "This page summarises the customised texts of the event."
+msgstr ""
+
+msgid "This page allows you to translate the event."
+msgstr ""
+
+msgid "Loading performed, see logs"
+msgstr ""
+
+msgid "Proceed"
+msgstr ""
+
+msgid ""
+"This page shows the sensitive information of registered players regarding "
+"diet."
+msgstr ""
+
+msgid "This page shows the email lists of subscribers."
+msgstr ""
+
+msgid "Simple list"
+msgstr ""
+
+msgid "Table list"
+msgstr ""
+
+msgid "Preaching"
+msgstr ""
+
+msgid "This page shows users who can be persuaded to sign up."
+msgstr ""
+
+msgid "List of users who have not registered for a future run of the event"
+msgstr ""
+
+msgid "Nickname"
+msgstr ""
+
+msgid "Pre-registered"
+msgstr ""
+
+msgid "Event already played"
+msgstr ""
+
+msgid "This page shows the questions submitted by players."
+msgstr ""
+
+msgid ""
+"This page shows the sensitive information of registered players regarding "
+"safety."
+msgstr ""
+
+msgid "Sensitive data"
+msgstr ""
+
+msgid "This page shows the general information of registered players."
+msgstr ""
+
+msgid ""
+"Please remember that the information on this page was given with the "
+"implicit trust that it will be treated with the utmost care."
+msgstr ""
+
+msgid "Spam"
+msgstr ""
+
+msgid ""
+"This page shows the email addresses to which to send updates in order to get "
+"them to sign up."
+msgstr ""
+
+msgid "List of newsletter subscribers who have not yet played this event"
+msgstr ""
+
+msgid "This page shows the uploaded resources available to the event."
+msgstr ""
+
+msgid "Dimension"
+msgstr ""
+
+msgid "Internal link"
+msgstr ""
+
+msgid "Modules WS"
+msgstr ""
+
+msgid "This page shows the modules for the workshop questions of the event."
+msgstr ""
+
+msgid "Answers WS"
+msgstr ""
+
+msgid ""
+"This page shows the response options for questions about the workshops of "
+"the event."
+msgstr ""
+
+msgid "Correct"
+msgstr ""
+
+msgid "Questions WS"
+msgstr ""
+
+msgid "This page shows the workshop questions for the event."
+msgstr ""
+
+msgid "This page shows for each player their completion status of workshops."
+msgstr ""
+
+msgid "Done"
+msgstr ""
+
+msgid "Not completed"
+msgstr ""
+
+msgid "This page shows character assignments to players."
+msgstr ""
+
+msgid "This page shows the characters of the event."
+msgstr ""
+
+msgid "title"
+msgstr ""
+
+msgid "motto"
+msgstr ""
+
+msgid "preview"
+msgstr ""
+
+msgid "key words"
+msgstr ""
+
+msgid "role"
+msgstr ""
+
+msgid "gender"
+msgstr ""
+
+msgid "speciale"
+msgstr ""
+
+msgid "hide"
+msgstr ""
+
+msgid "mirror"
+msgstr ""
+
+msgid "cover"
+msgstr ""
+
+msgid "speedlarp"
+msgstr ""
+
+msgid "safety"
+msgstr ""
+
+msgid "assigned"
+msgstr ""
+
+msgid "player"
+msgstr ""
+
+msgid "status"
+msgstr ""
+
+msgid "XP"
+msgstr ""
+
+msgid "Private informations"
+msgstr ""
+
+msgid "Sex"
+msgstr ""
+
+msgid "Informations private"
+msgstr ""
+
+msgid "Questions CC"
+msgstr ""
+
+msgid "Answers CC"
+msgstr ""
+
+msgid "Plots"
+msgstr ""
+
+msgid "Versions"
+msgstr ""
+
+msgid "This page shows the factions and plots of the indicated character."
+msgstr ""
+
+msgid "Check"
+msgstr ""
+
+msgid "This page performs several correctness checks of the character sheets."
+msgstr ""
+
+msgid "Check inverse relationship"
+msgstr ""
+
+msgid ""
+"The character on the left has in relationships the one on the right, but the "
+"reverse is not true. Check whether to remove the relationship to the one on "
+"the left, or add it on the one on the right."
+msgstr ""
+
+msgid "Absent (in the relationships of this character the other one is absent)"
+msgstr ""
+
+msgid "Present (in the relationships of this character is present the other)"
+msgstr ""
+
+msgid "check nonexistent relationships"
+msgstr ""
+
+msgid ""
+"In the text of the element on the left, it is referenced a character with "
+"the number indicated on the right, but the latter does not appear to exist."
+msgstr ""
+
+msgid "Number not found"
+msgstr ""
+
+msgid "Empty relationship check (no text)"
+msgstr ""
+
+msgid ""
+"The relationship between these characters turns out to be empty. Check "
+"whether it should be written something."
+msgstr ""
+
+msgid "check lack relationships"
+msgstr ""
+
+msgid ""
+"In the text of the element on the left, it appears a character with the "
+"number indicated on the right, but in the relationships instead that "
+"character was not related. Check whether it is necessary to create a "
+"relationship to the character, or remove the reference from the text."
+msgstr ""
+
+msgid "check excessive relationships"
+msgstr ""
+
+msgid ""
+"In the text of the element on the left, a character is NOT indicated with "
+"the number shown on the right, but in the relationships instead it is "
+"related. Check whether it is necessary to remove the relationship to the "
+"character, or indicate in the text a reference to the character."
+msgstr ""
+
+msgid ""
+"In the text of the element on the left, it appears a character with the "
+"number indicated on the right, but instead in the relationships the "
+"character was not related. Check whether it is necessary to create a "
+"relationship, or remove the reference from the text."
+msgstr ""
+
+msgid ""
+"In the text of the element on the left, a character is NOT indicated with "
+"the number shown on the right, but instead in the relationships the "
+"character is related. Check whether it is necessary to remove the "
+"relationship, or indicate in the text a reference to the character."
+msgstr ""
+
+msgid "Check double speed larps"
+msgstr ""
+
+msgid "Check missing speed larp"
+msgstr ""
+
+msgid "This page shows the factions (character groups) of the event."
+msgstr ""
+
+msgid "Selectable"
+msgstr ""
+
+msgid "Handout template"
+msgstr ""
+
+msgid "This page shows the templates for event handouts."
+msgstr ""
+
+msgid "CSS"
+msgstr ""
+
+msgid "Handouts"
+msgstr ""
+
+msgid ""
+"This page shows the handouts (information dissemination tools) of the event."
+msgstr ""
+
+msgid "Print"
+msgstr ""
+
+msgid "External"
+msgstr ""
+
+msgid "This page shows the event plots."
+msgstr ""
+
+msgid "Reading"
+msgstr ""
+
+msgid "Progress step"
+msgstr ""
+
+msgid ""
+"This page shows the progress steps that can be assigned to writing elements."
+msgstr ""
+
+msgid "Type prologues"
+msgstr ""
+
+msgid "This page shows the types of event prologue."
+msgstr ""
+
+msgid "This page shows the prologues of the event."
+msgstr ""
+
+msgid "Props"
+msgstr ""
+
+msgid "This page shows the props marked in the characters."
+msgstr ""
+
+msgid "Quest Type"
+msgstr ""
+
+msgid "This page shows the types of quests in the event."
+msgstr ""
+
+msgid "This page shows the event quests."
+msgstr ""
+
+msgid "This page shows the relationships between characters."
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "To"
+msgstr ""
+
+msgid "This page shows the roles of the characters."
+msgstr ""
+
+msgid "SpeedLarp"
+msgstr ""
+
+msgid "This page shows the speedlarps of the event."
+msgstr ""
+
+msgid "Band"
+msgstr ""
+
+msgid "Station"
+msgstr ""
+
+msgid "This page shows the traits assigned to the characters in the run."
+msgstr ""
+
+msgid ""
+"This page shows the different versions available of the character, and the "
+"differences between them."
+msgstr ""
+
+msgid "This page allows you to fully view a character."
+msgstr ""
+
+msgid "Hi"
+msgstr ""
+
+msgid "Thank you for joining LarpManager! We are thrilled to have you with us."
+msgstr ""
+
+msgid "We advise you to keep this email for future reference."
+msgstr ""
+
+msgid ""
+"First of all, here is the address of the LarpManager for your association:"
+msgstr ""
+
+msgid "This is instead the address of your association's management panel:"
+msgstr ""
+
+msgid "Here are some useful links to help you get started:"
+msgstr ""
+
+msgid "Follow the tutorials to start setting up your first event right away"
+msgstr ""
+
+msgid ""
+"Join the Discord to receive assistance, suggest improvements or notify bug "
+"reports"
+msgstr ""
+
+msgid ""
+"If you have any questions, please do not hesitate to contact us: just reply "
+"to this email."
+msgstr ""
+
+msgid "Welcome on board!"
+msgstr ""
+
+msgid "The LarpManager team"
+msgstr ""
+
+msgid "Your membership"
+msgstr ""
+
+msgid "Your achievements"
+msgstr ""
+
+msgid "Carousel"
+msgstr ""
+
+msgid "Achievements"
+msgstr ""
+
+msgid "Leaderboard"
+msgstr ""
+
+msgid "Change password"
+msgstr ""
+
+msgid "Privacy Policy"
+msgstr ""
+
+msgid "Password reset"
+msgstr ""
+
+msgid "Password changed"
+msgstr ""
+
+msgid "Confirm password reset"
+msgstr ""
+
+msgid "Failed password reset"
+msgstr ""
+
+msgid "Email sent with instructions for password reset"
+msgstr ""
+
+msgid ""
+"Enter your email below: you will be sent instructions on how  to be able to "
+"change it. "
+msgstr ""
+
+msgid "Sign In"
+msgstr ""
+
+msgid "Writing and storytelling tools"
+msgstr ""
+
+msgid "Managing money flow and finances"
+msgstr ""
+
+msgid "Miscellany"
+msgstr ""
+
+msgid "Various additional features"
+msgstr ""
+
+msgid "Player registration process"
+msgstr ""
+
+msgid "Assigning characters to players"
+msgstr ""
+
+msgid "Event display and visual customization"
+msgstr ""
+
+msgid "General event management tools"
+msgstr ""
+
+msgid "Manage players' data"
+msgstr ""
+
+msgid "Standard features"
+msgstr ""
+
+msgid "Adds a 'motto' field to characters, a short phrase they frequently use."
+msgstr ""
+
+msgid "Adds a short (2-3 words) 'title' field to characters."
+msgstr ""
+
+msgid ""
+"Adds a 'props' field to main writing elements, allowing staff to note needed "
+"or prepared items."
+msgstr ""
+
+msgid "Allows players to select hidden roles without spoiling them for others."
+msgstr ""
+
+msgid "Adds a 'role' field to characters (e.g., warrior/mage/rogue)."
+msgstr ""
+
+msgid ""
+"Enables \"Prologues\", short introductory paragraphs for each act of the "
+"game, which players receive to guide them."
+msgstr ""
+
+msgid "Quests and Traits"
+msgstr ""
+
+msgid ""
+"Introduces 'Quests' as building blocks of the character sheet, each with "
+"multiple 'traits'."
+msgstr ""
+
+msgid "Allows you to copy any element directly from another event."
+msgstr ""
+
+msgid "Pay what you want"
+msgstr ""
+
+msgid ""
+"Allows players to add an optional extra amount to their registration fee (e."
+"g. for donations or to help cover others' fees)."
+msgstr ""
+
+msgid ""
+"Allows you to generate discount codes that players can use to reduce their "
+"ticket price."
+msgstr ""
+
+msgid "Genre"
+msgstr ""
+
+msgid ""
+"Adds a 'gender' field to characters, which may be relevant in historical or "
+"thematic contexts."
+msgstr ""
+
+msgid "LAOG"
+msgstr ""
+
+msgid ""
+"Treats this event as a digital/online occurrence that does not require in-"
+"person registration."
+msgstr ""
+
+msgid "Adds a 'special' field to denote unique character types."
+msgstr ""
+
+msgid ""
+"Performs daily checks for upcoming payments deadlines and sends reminder "
+"emails automatically."
+msgstr ""
+
+msgid ""
+"Adds a 'cover' field to a character, to shown a specific image in the "
+"gallery - until assigned to a player."
+msgstr ""
+
+msgid ""
+"Enables 'bring a friend' discount. A registered player provides their unique "
+"code to a new registrant, granting both a discounted price."
+msgstr ""
+
+msgid "PDF generation"
+msgstr ""
+
+msgid ""
+"Automatically generates and updates PDFs of character sheets, gallery and "
+"player profiles."
+msgstr ""
+
+msgid ""
+"Adds a 'hide' field to main writing elements, to prevent players viewing "
+"them."
+msgstr ""
+
+msgid ""
+"Adds a 'keyword' field to main writing elements, to highlight special traits "
+"or conditions."
+msgstr ""
+
+msgid ""
+"Adds a quiz-style system for workshop questions. Organizers can define "
+"forms, questions, and correct answers for players to complete."
+msgstr ""
+
+msgid "Speed Larp"
+msgstr ""
+
+msgid ""
+"Manages pre-larp 'mini-scenes.' You can create any number of scenes and "
+"assign players to them, with checks to avoid scheduling conflicts."
+msgstr ""
+
+msgid ""
+"Lets players safely submit lines, veils, and other safety-related "
+"information."
+msgstr ""
+
+msgid "Casting algorithm"
+msgstr ""
+
+msgid ""
+"Lets players submit character preferences, then finds the optimal overall "
+"match."
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid ""
+"Allows players to submit questions, and organizers to review and organize "
+"them."
+msgstr ""
+
+msgid ""
+"Allows players to create and contribute to collections aimed at assisting "
+"another player with event fees."
+msgstr ""
+
+msgid "Enables free pre-registration to events."
+msgstr ""
+
+msgid "Multi-language"
+msgstr ""
+
+msgid "Allows you to define a different language for each event."
+msgstr ""
+
+msgid ""
+"Adds a link on personal accounts pages, allowing users to donate money to "
+"the association freely."
+msgstr ""
+
+msgid ""
+"Adds a page displaying member mailing lists, sorted by members' newsletter "
+"preferences."
+msgstr ""
+
+msgid "Utility"
+msgstr ""
+
+msgid ""
+"Lets you upload and host files directly on larpmanager, making them "
+"available either to staff or to players via secret external links."
+msgstr ""
+
+msgid "Character customization"
+msgstr ""
+
+msgid ""
+"Enables players to customize specific attributes (name, pronoun, public "
+"info, etc.) of the characters they're assigned."
+msgstr ""
+
+msgid ""
+"Requires Executive Committee approval of membership before participating in "
+"an event."
+msgstr ""
+
+msgid "Shuttle"
+msgstr ""
+
+msgid ""
+"Allows players to submit shuttle requests (e.g., pickup logistics), and "
+"staff can manage the status of those requests."
+msgstr ""
+
+msgid "External mail server"
+msgstr ""
+
+msgid ""
+"Allows you to configure a custom external mail server that will be used "
+"instead of the standard one."
+msgstr ""
+
+msgid "Faction-based questions"
+msgstr ""
+
+msgid ""
+"Allows a registration form question to be visible only if the player is "
+"assigned to certain factions."
+msgstr ""
+
+msgid ""
+"Enables 'lottery' tickets with unlimited availability and no cost, from "
+"which a random subset is converted into normal tickets."
+msgstr ""
+
+msgid ""
+"Enables 'Filler' characters: simpler character sheets, assigned to players "
+"who are ready to replacing last-minute dropout of main characters."
+msgstr ""
+
+msgid "Chat"
+msgstr ""
+
+msgid ""
+"Enables players to send private messages to each other, without revealing "
+"personal email addresses."
+msgstr ""
+
+msgid ""
+"Activates 'waiting list' style tickets, available only when all main tickets "
+"are sold out."
+msgstr ""
+
+msgid "Event T&C"
+msgstr ""
+
+msgid ""
+"Allows custom Terms and Conditions for a specific event, displayed during "
+"registration."
+msgstr ""
+
+msgid "Player cancellation"
+msgstr ""
+
+msgid "Allows players to cancel their own registrations at any time."
+msgstr ""
+
+msgid "External registration"
+msgstr ""
+
+msgid ""
+"Instead of using an internal registration form, redirects the player to an "
+"external registration link."
+msgstr ""
+
+msgid ""
+"Enables a ticket-like system for in-game 'problems,' where staff can log "
+"issues, assign severity/urgency, and track them."
+msgstr ""
+
+msgid "Ticket-based questions"
+msgstr ""
+
+msgid ""
+"Allows a registration form question to be visible based on the selected "
+"registration ticket."
+msgstr ""
+
+msgid ""
+"Enables dynamic installment management: the total fee is evenly split into "
+"multiple installments, each due on a date determined by dividing the "
+"remaining days until the event."
+msgstr ""
+
+msgid ""
+"Lets members cast votes for the election of the organisation's Executive "
+"Committee."
+msgstr ""
+
+msgid ""
+"Allows the organisation to award badges and enables a public leaderboard."
+msgstr ""
+
+msgid ""
+"Enables basic inventory management. Users can add items to a warehouse "
+"table, track quantities, and note item locations."
+msgstr ""
+
+msgid ""
+"Generates a special, hidden link that lets certain players register even if "
+"general registration is closed (e.g., early access for a specific group)."
+msgstr ""
+
+msgid ""
+"Enables fixed installment deadlines for registration fees, allowing you to "
+"define multiple due dates and amounts."
+msgstr ""
+
+msgid "Character relationships (staff)"
+msgstr ""
+
+msgid "Allows authors to prepare a list of inter-character relationships."
+msgstr ""
+
+msgid "Character relationships (player)"
+msgstr ""
+
+msgid ""
+"Enables players to write their own list of character relationships, helping "
+"them familiarize themselves ahead of the event."
+msgstr ""
+
+msgid "Sections"
+msgstr ""
+
+msgid ""
+"Lets you define sections in the registration form, grouping questions to "
+"make lengthy forms clearer."
+msgstr ""
+
+msgid ""
+"Enables a 'campaign' style setup where multiple events share the same set of "
+"characters and factions."
+msgstr ""
+
+msgid "Patron and Reduced"
+msgstr ""
+
+msgid ""
+"Adds 'Patron' and 'Reduced' ticket types. Each Patron ticket purchased makes "
+"one Reduced ticket available."
+msgstr ""
+
+msgid "Accounting tracking"
+msgstr ""
+
+msgid ""
+"Keeps a daily record of the organisation's and events' financial status, "
+"displaying trend graphs over time."
+msgstr ""
+
+msgid "Player Larp History"
+msgstr ""
+
+msgid ""
+"Shows a complete list of all events the player has attended on their public "
+"player page."
+msgstr ""
+
+msgid ""
+"Adds a 'progress' status field (e.g. draft, ready, approved) to key writing "
+"elements."
+msgstr ""
+
+msgid ""
+"Adds an 'assigned' field for main writing elements, letting you track which "
+"staff member is responsible for each."
+msgstr ""
+
+msgid ""
+"Allows players to securely input dietary restrictions/allergies in their "
+"profiles."
+msgstr ""
+
+msgid ""
+"Activates a page summarizing overdue players and their deadlines (payments, "
+"memberships, forms, casting, etc.)."
+msgstr ""
+
+msgid "Organization T&C"
+msgstr ""
+
+msgid ""
+"Displays the organisation-wide Terms and Conditions during registration for "
+"all events."
+msgstr ""
+
+msgid ""
+"Enables Plots, story arcs involving selected characters, adding extra "
+"content to their character sheets."
+msgstr ""
+
+msgid ""
+"Enables 'Factions' to organize characters into groups, either visible, "
+"transversal or secret."
+msgstr ""
+
+msgid ""
+"Enables 'Handouts,' pre-written texts that provide information about a plot "
+"or lore."
+msgstr ""
+
+msgid ""
+"Lets staff upload receipts for event expenses, tracking both the event "
+"expenses, and the amount to refund the staff."
+msgstr ""
+
+msgid ""
+"Allows managing Tokens and Credits, which players can use instead of money "
+"for registration fees. Credits can also be redeemed for cash."
+msgstr ""
+
+msgid ""
+"Enables management of expenses paid using the organization's financial "
+"instruments."
+msgstr ""
+
+msgid "Verification payments"
+msgstr ""
+
+msgid ""
+"Allows you to upload financial system statements (e.g., bank statements) to "
+"match and approve corresponding wire payments."
+msgstr ""
+
+msgid "Fiscal Budget (ITA)"
+msgstr ""
+
+msgid ""
+"Generates an annual summary of fiscal activity for the Italian budget report."
+msgstr ""
+
+msgid "Enables payment processing, specifying which payment methods to accept."
+msgstr ""
+
+msgid ""
+"Enables members to request a refund (a money transfer from the organization)"
+msgstr ""
+
+msgid "Transaction fee"
+msgstr ""
+
+msgid ""
+"Lets you define a processing-fee percentage per payment method, optionally "
+"adding it to the final ticket price."
+msgstr ""
+
+msgid ""
+"Lets you specify a date (and time) on which registration will open, keeping "
+"it closed until then."
+msgstr ""
+
+msgid ""
+"Adds a link to legal notices on every page, and provides a management panel "
+"link to edit the content of that notice."
+msgstr ""
+
+msgid ""
+"Adds a free-text field to the registration form so players can share any "
+"extra information or comments."
+msgstr ""
+
+msgid ""
+"Adds support for assigning XP (experience points) to characters, which can "
+"then be used to purchase skills."
+msgstr ""
+
+msgid "Allows players to create and modify their own characters freely."
+msgstr ""
+
+msgid "Organisation tax"
+msgstr ""
+
+msgid ""
+"Allows you to set a 'tax' percentage on event income that must be set aside "
+"for the organisation."
+msgstr ""
+
+msgid ""
+"Adds a 'preview' field to writing elements, shareable with the player before "
+"the full sheet is published."
+msgstr ""
+
+msgid "Centaurs"
+msgstr ""
+
+msgid ""
+"Occasionally shows a special page to users, based on a defined probability, "
+"and optionally assigns a result."
+msgstr ""
+
+msgid "Create Organization"
+msgstr ""
+
+msgid ""
+"Enables creating a new organisation in larpmanager, defining how many events "
+"and runs it will have."
+msgstr ""
+
+msgid "Player information"
+msgstr ""
+
+msgid ""
+"Allows you to specify precisely which user data is collected and stored in "
+"the system."
+msgstr ""
+
+msgid "Organization Appearance"
+msgstr ""
+
+msgid ""
+"Lets you customize the appearance (style/theme) for the entire organisation "
+"across all larpmanager pages in the subdomain."
+msgstr ""
+
+msgid "Manage Events"
+msgstr ""
+
+msgid ""
+"Enables the creation, editing, and complete customization of any number of "
+"events."
+msgstr ""
+
+msgid "Manage Runs"
+msgstr ""
+
+msgid "Allows you to create and manage multiple runs of an event."
+msgstr ""
+
+msgid "Manage Ticket"
+msgstr ""
+
+msgid ""
+"Lets you create, edit, and manage any number of registration ticket types "
+"that players can choose."
+msgstr ""
+
+msgid "Enables customization of all event-related pages' appearance."
+msgstr ""
+
+msgid ""
+"Enables managing the registration form questions (short text, long text, "
+"single choice, multiple choice, etc.)."
+msgstr ""
+
+msgid "Organization Roles"
+msgstr ""
+
+msgid ""
+"Defines which users have permission to manage the organisation's settings "
+"and features."
+msgstr ""
+
+msgid "Event Roles"
+msgstr ""
+
+msgid ""
+"Allows you to define which users can access the event organizer "
+"functionalities."
+msgstr ""
+
+msgid "Privacy management"
+msgstr ""
+
+msgid ""
+"Provides users with comprehensive privacy controls to manage how their data "
+"is shared or displayed."
+msgstr ""
+
+msgid "Paste as text"
+msgstr ""
+
+msgid ""
+"Automatically removes formatting when pasting text into the WYSIWYG editor."
+msgstr ""
+
+msgid "URL shortener"
+msgstr ""
+
+msgid "Adds a page where you can define shorter URLs for long links."
+msgstr ""
+
+msgid ""
+"Enables the definition of surcharges that are added to every registration "
+"made after a specified date."
+msgstr ""
+
+msgid "Advanced features"
+msgstr ""
+
+msgid ""
+"Lets you freely choose which features to activate for the entire "
+"organisation or for a specific event."
+msgstr ""
+
+msgid ""
+"Enables managing of entry of revenue for an event that do not originate from "
+"player registrations."
+msgstr ""
+
+msgid "Staff price"
+msgstr ""
+
+msgid ""
+"- DEPRECATED, WILL BE REMOVED - Enables a separate price for staff tickets, "
+"overriding the normal registration fee."
+msgstr ""
+
+msgid ""
+"Introduces a new way to display past and upcoming events, inspired by "
+"popular streaming-service layouts."
+msgstr ""
+
+msgid "Write lock"
+msgstr ""
+
+msgid ""
+"Checks if another user is editing the same item, warning concurrent users to "
+"prevent overwriting each other's work."
+msgstr ""
+
+msgid "Lets you upload items from a CSV file."
+msgstr ""
+
+msgid "Allows you to download data in CSV files."
+msgstr ""
+
+msgid "Enables searching across all elements."
+msgstr ""
+
+msgid "Automatic saving"
+msgstr ""
+
+msgid "Automatically saves writing elements to prevent data loss."
+msgstr ""
+
+msgid "Treasurer"
+msgstr ""
+
+msgid ""
+"Lets you specify a set of users who receive payment confirmation emails for "
+"all events, instead of each event's organizers."
+msgstr ""
+
+msgid ""
+"Allows organizers to pose questions about a character, which the player can "
+"answer. "
+msgstr ""
+
+msgid "Restrict Staff Access"
+msgstr ""
+
+msgid ""
+"Allows more fine-grained control over which staff members can view players' "
+"answers to registration questions."
+msgstr ""
+
+msgid ""
+"Automatically generates a customizable PDF receipt for each payment and "
+"emails it to the user."
+msgstr ""
+
+msgid "Register of volunteers"
+msgstr ""
+
+msgid "Enables a volunteer register, as required by Italian RUNTS regulations."
+msgstr ""
+
+msgid "Age-based options"
+msgstr ""
+
+msgid ""
+"Makes certain registration options visible only to players who meet a "
+"specified minimum age."
+msgstr ""
+
+msgid "Default miscellany"
+msgstr ""
+
+msgid "Default accounting"
+msgstr ""
+
+msgid "Default casting"
+msgstr ""
+
+msgid "Default users"
+msgstr ""
+
+msgid "Predefined structure"
+msgstr ""
+
+msgid "Default appearance"
+msgstr ""
+
+msgid "Default registration"
+msgstr ""
+
+msgid "Default writing"
+msgstr ""
+
+msgid "Gives organizers complete control over player registrations."
+msgstr ""
+
+msgid "Taxes"
+msgstr ""
+
+msgid "Shows the calculated tax amount on each payment."
+msgstr ""
+
+msgid "Delegated accounts"
+msgstr ""
+
+msgid ""
+"Allows a user to create 'delegated' accounts they fully manage (e.g., "
+"children), avoiding the need for separate login credentials."
+msgstr ""
+
+msgid ""
+"Allows players to purchase tickets as gifts. A special code is generated and "
+"provided to the gift recipient for registration."
+msgstr ""
+
+msgid "Character form"
+msgstr ""
+
+msgid ""
+"Lets you define custom fields in the character form, which display in the "
+"character sheet, gallery, and search filters."
+msgstr ""
+
+msgid "Allows a user to reserve extra tickets in addition to their own."
+msgstr ""
+
+msgid ""
+"Enables the creation, editing, and assignment of characters to registered "
+"players."
+msgstr ""
+
+msgid ""
+"Lets you create 'template' events whose configurations and settings can be "
+"used as a starting point for other events."
+msgstr ""
+
+msgid "Adds to all registrations an unique code."
+msgstr ""
+
+msgid "Adds a 'concept' field to characters, reserved for staff informations."
+msgstr ""
+
+msgid "Expenses2"
+msgstr ""
+
+msgid "Audits"
+msgstr ""
+
+msgid "Historical accounting"
+msgstr ""
+
+msgid "Runs"
+msgstr ""
+
+msgid "Pre-Registrations"
+msgstr ""
+
+msgid "Send e-mail"
+msgstr ""
+
+msgid "Badges"
+msgstr ""
+
+msgid "Enrolment"
+msgstr ""
+
+msgid "Payment Settings"
+msgstr ""
+
+msgid "Membership check"
+msgstr ""
+
+msgid "Prologues type"
+msgstr ""
+
+msgid "Form"
+msgstr ""
+
+msgid "Payments (Confirmation)"
+msgstr ""
+
+msgid "Expenses (Personal)"
+msgstr ""
+
+msgid "Handout Models"
+msgstr ""
+
+msgid "Historical"
+msgstr ""
+
+msgid "Statistics"
+msgstr ""
+
+msgid "Modules"
+msgstr ""
+
+msgid "Cache Reloading"
+msgstr ""
+
+#, python-format
+msgid ""
+"File type '%(detected_type)s' is not allowed.Allowed types are: "
+"'%(allowed_types)s'."
+msgstr ""
+
+#, python-format
+msgid ""
+"File extension '%(extension)s' is not allowed.Allowed extensions are: "
+"'%(allowed_extensions)s'."
+msgstr ""
+
+#, python-format
+msgid ""
+"Allowed type '%(allowed_type)s' is not a valid type.See https://www.iana.org/"
+"assignments/media-types/media-types.xhtml"
+msgstr ""
+
+msgid "Operation completed!"
+msgstr ""
+
+msgid "Warning! Other users are editing this item."
+msgstr ""
+
+msgid ""
+"You cannot work on it at the same time: the work of one of you would be lost."
+msgstr ""
+
+msgid "List of other users:"
+msgstr ""
+
+msgid "Show available characters"
+msgstr ""
+
+msgid "Place of birth not included in the ISTAT list"
+msgstr ""
+
+msgid "One character more or less than expected"
+msgstr ""
+
+msgid "Wrong number of characters"
+msgstr ""
+
+msgid "Differing by only one character from the expected one"
+msgstr ""
+
+msgid ""
+"First and last name characters do not match (remember to enter the correct "
+"first and last names in legal_name)"
+msgstr ""
+
+msgid ""
+"Characters relating to place of birth do not match (check exact municipality)"
+msgstr ""
+
+msgid "Date of birth characters do not match (check exact date)"
+msgstr ""
+
+#, python-format
+msgid "Membership registration of %(user)s"
+msgstr ""
+
+msgid "Lightweight"
+msgstr ""
+
+msgid "Portraits"
+msgstr ""
+
+msgid "Profiles"
+msgstr ""
+
+#, python-format
+msgid " Hurry: only %(num)d tickets available."
+msgstr ""
+
+msgid "Registration confirmed"
+msgstr ""
+
+msgid "Provisional registration"
+msgstr ""
+
+msgid "to confirm it, send your membership application."
+msgstr ""
+
+msgid "awaiting member approval to proceed with payment"
+msgstr ""
+
+msgid "payment pending confirmation"
+msgstr ""
+
+msgid "to confirm it proceed with payment."
+msgstr ""
+
+msgid ""
+"If you have made a transfer, please upload the receipt for it to be "
+"processed!"
+msgstr ""
+
+msgid "please fill in your profile."
+msgstr ""
+
+msgid "You are signed up in the waiting list!"
+msgstr ""
+
+msgid "You are signed up as Filler!"
+msgstr ""
+
+msgid "You are regularly signed up!"
+msgstr ""
+
+msgid "Pre-register to the event!"
+msgstr ""
+
+msgid "Registration not yet open!"
+msgstr ""
+
+msgid "Registrations not open!"
+msgstr ""
+
+#, python-format
+msgid "Open the: %(date)s"
+msgstr ""
+
+msgid "Registration is open!"
+msgstr ""
+
+msgid "Sign up as a filler!"
+msgstr ""
+
+msgid "Join the waiting list!"
+msgstr ""
+
+msgid "Your character is"
+msgstr ""
+
+msgid "Your characters are"
+msgstr ""
+
+msgid "Access character creation!"
+msgstr ""
+
+msgid "Select your character!"
+msgstr ""
+
+#, python-format
+msgid ""
+"Do you want to unsubscribe from our communication lists? <a "
+"href='%(url)s'>Unsubscribe</a>"
+msgstr ""
+
+msgid "Elements uploaded!"
+msgstr ""
+
+msgid "Unknow error on upload"
+msgstr ""
+
+msgid "invalid form"
+msgstr ""
+
+msgid "Registration completed successfully!"
+msgstr ""
+
+msgid "Request approved"
+msgstr ""
+
+msgid "Element approved!"
+msgstr ""
+
+msgid "Verified payments!"
+msgstr ""
+
+msgid "Payment already confirmed"
+msgstr ""
+
+msgid "Payment confirmed"
+msgstr ""
+
+msgid "Feature activated"
+msgstr ""
+
+msgid "Feature already activated"
+msgstr ""
+
+msgid "Feature already deactivated"
+msgstr ""
+
+msgid "Feature deactivated"
+msgstr ""
+
+msgid "Member approved!"
+msgstr ""
+
+msgid "Member refused!"
+msgstr ""
+
+msgid "Profile updated"
+msgstr ""
+
+msgid "Mail sent!"
+msgstr ""
+
+msgid "Answer submitted!"
+msgstr ""
+
+msgid "Feature activated:"
+msgstr ""
+
+msgid "Your request has been sent, we will reply as soon as possible!"
+msgstr ""
+
+msgid "New organization created"
+msgstr ""
+
+#, python-format
+msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
+msgstr ""
+
+msgid "Reimbursement request item added"
+msgstr ""
+
+msgid "Receipt already confirmed."
+msgstr ""
+
+msgid "Results not present"
+msgstr ""
+
+msgid ""
+"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
+"text, 'p' for long text)"
+msgstr ""
+
+msgid "display (question text)"
+msgstr ""
+
+msgid "description (application description)"
+msgstr ""
+
+msgid ""
+"status of application: 'o' for optional, 'm' mandatory, 'c' creation, 'd' "
+"disabled, 'h' hidden"
+msgstr ""
+
+msgid ""
+"visibility (demand visibility: 's' for Searchable, 'c' for Public, 'e' for "
+"Private"
+msgstr ""
+
+msgid "options (number of options)"
+msgstr ""
+
+msgid ""
+"for each option five columns: name, description, available seats (0 for "
+"infinite), prerequisite options, ticket required"
+msgstr ""
+
+msgid "Parent empty"
+msgstr ""
+
+msgid "He cannot copy himself"
+msgstr ""
+
+msgid "Copy done"
+msgstr ""
+
+msgid ""
+"for each option four columns: name, description, price, available places (0 "
+"for infinite)"
+msgstr ""
+
+msgid "Photos and videos successfully uploaded!"
+msgstr ""
+
+msgid "Updated!"
+msgstr ""
+
+msgid "Regeneration pdf started!"
+msgstr ""
+
+msgid "Provisional"
+msgstr ""
+
+msgid ""
+"'player' (player's email), 'ticket' (ticket name or number), 'character' "
+"(character name or number to be assigned), 'pwyw' (donation)."
+msgstr ""
+
+msgid "Registration cancelled"
+msgstr ""
+
+msgid "Player customisation updated!"
+msgstr ""
+
+msgid "Cache reset!"
+msgstr ""
+
+msgid ""
+"Request for reimbursement entered! You will receive notice when it is "
+"disbursed."
+msgstr ""
+
+msgid ""
+"We cannot find your registration for this event. Are you logged in as the "
+"correct user?"
+msgstr ""
+
+msgid "Your tax code has a problem that we ask you to correct"
+msgstr ""
+
+msgid "Everything is in order about the payment of this event!"
+msgstr ""
+
+msgid "You have already sent a payment pending verification"
+msgstr ""
+
+msgid "To be able to pay, your membership application must be approved."
+msgstr ""
+
+msgid "It is not possible for you to pay dues at this time."
+msgstr ""
+
+msgid "You have already paid this year's membership fee"
+msgstr ""
+
+msgid "The collection has been activated!"
+msgstr ""
+
+msgid "Collection closed"
+msgstr ""
+
+msgid "The collection has been delivered!"
+msgstr ""
+
+msgid "The payment has not been completed"
+msgstr ""
+
+msgid "The payment was not completed. Please contact us to find out why."
+msgstr ""
+
+msgid "As a final step, we ask you to complete your profile."
+msgstr ""
+
+msgid "You have completed the payment!"
+msgstr ""
+
+msgid "You can't access this way!"
+msgstr ""
+
+msgid "Error loading. Invalid file format (we accept only pdf or images)."
+msgstr ""
+
+msgid "Error processing payment, contact us"
+msgstr ""
+
+msgid ""
+"Payment received! As soon as it is approved, your accounts will be updated."
+msgstr ""
+
+msgid "Invoice not found"
+msgstr ""
+
+msgid "Invoice already confirmed"
+msgstr ""
+
+msgid "You must signed up in order to select your preferences!"
+msgstr ""
+
+msgid ""
+"You are on the waiting list, you must be registered with a regular ticket to "
+"be able to select your preferences!"
+msgstr ""
+
+msgid "You have indicated several preferences towards the same element!"
+msgstr ""
+
+msgid "Preferences saved!"
+msgstr ""
+
+msgid "Characters are not visible at the moment"
+msgstr ""
+
+msgid "You don't have a character assigned for this run!"
+msgstr ""
+
+msgid "Informations saved!"
+msgstr ""
+
+msgid "New character created!"
+msgstr ""
+
+msgid ""
+"The character has been proposed to the staff, who will examine it and "
+"approve it or request changes if necessary."
+msgstr ""
+
+msgid "Co-creation answers saved!"
+msgstr ""
+
+msgid "You have reached the maximum number of characters that can be created"
+msgstr ""
+
+msgid "You already have an assigned character"
+msgstr ""
+
+msgid "Assigned character!"
+msgstr ""
+
+msgid "Ability acquired!"
+msgstr ""
+
+msgid "You have already granted data sharing with this organisation!"
+msgstr ""
+
+msgid "You have granted data sharing with this organisation!"
+msgstr ""
+
+msgid "Personal data updated!"
+msgstr ""
+
+msgid "Last step, please upload your membership application."
+msgstr ""
+
+msgid "Data share removed successfully!"
+msgstr ""
+
+msgid "Your membership application was successfully submitted!"
+msgstr ""
+
+msgid "Message sent!"
+msgstr ""
+
+msgid "The request of removal from further communication has been successfull!"
+msgstr ""
+
+msgid "You must complete payment of membership dues in order to vote!"
+msgstr ""
+
+msgid "You are now logged in with your main account:"
+msgstr ""
+
+msgid "You are now logged in with the delegate account:"
+msgstr ""
+
+msgid "New delegate user added!"
+msgstr ""
+
+msgid "Question saved!"
+msgstr ""
+
+msgid "Workshop already done!"
+msgstr ""
+
+#, python-format
+msgid "Completed module. Remaining: %(number)d"
+msgstr ""
+
+msgid "Well done, you've completed all modules!"
+msgstr ""
+
+msgid "New shuttle request"
+msgstr ""
+
+msgid "Modify shuttle request"
+msgstr ""
+
+msgid "Pre-registrations saved!"
+msgstr ""
+
+msgid "Pre-registration cancelled!"
+msgstr ""
+
+msgid "To confirm your registration, please fill in your personal profile."
+msgstr ""
+
+msgid ""
+"To confirm your registration, apply to become a member of the Association."
+msgstr ""
+
+msgid "To confirm your registration, please pay the amount indicated."
+msgstr ""
+
+#, python-format
+msgid "Registration confirmed at %(event)s!"
+msgstr ""
+
+#, python-format
+msgid "Registration updated to %(event)s!"
+msgstr ""
+
+msgid "You have use a friend code"
+msgstr ""
+
+msgid "Your friend code has been used"
+msgstr ""
+
+msgid "Discount code not valid"
+msgstr ""
+
+msgid "Discounts only applicable with new registrations"
+msgstr ""
+
+msgid "Code already used"
+msgstr ""
+
+msgid "Non-cumulative code"
+msgstr ""
+
+msgid ""
+"Sorry, this faciliation code has already been used the maximum number allowed"
+msgstr ""
+
+msgid "Discount not combinable with other benefits."
+msgstr ""
+
+msgid ""
+"Discount only applicable if you are signed up for another run of the same "
+"event."
+msgstr ""
+
+msgid ""
+"The discount has been added! It has been reserved for you for 15 minutes, "
+"after which it will be removed"
+msgstr ""
+
+#, python-format
+msgid "You have correctly cancelled the registration to the %(event)s event"
+msgstr ""
+
+msgid "Gift card cancelled!"
+msgstr ""
+
+msgid "You cannot redeem a membership, you are already a member!"
+msgstr ""
+
+msgid "Your gifted registration has been redeemed!"
+msgstr ""

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block title %}
+    {% trans "Technical Support" %}
+{% endblock %}
+{% block content %}
+    <br />
+    {% if reason == 'email' %}
+        {% trans "To request a change of your e-mail address, please indicate both your old and your new address." %}
+        <br />
+        {% trans "We will send you a confirmation e-mail when the change has been made." %}
+    {% else %}
+        {% trans "Did you encounter an error, or did you find a text with an incorrect translation in your language?" %}
+        <br />
+        {% trans "Describe it in the field below and we will fix it as soon as possible!" %}
+    {% endif %}
+    <br />
+    <br />
+    <form action="{{ request.path }}"
+          method="post"
+          enctype="multipart/form-data"
+          id="main_form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input id="cnt" type="submit" value="{% trans 'Confirm' %}" class="fit" />
+    </form>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'utils.html' %}
+{% load i18n show_tags %}
+{% block title %}
+    {% trans "Payment confirmation" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page allows you to manually approve payments received." %}
+{% endblock %}
+{% block content %}
+    <table id="invoices" class="tablesorter mob">
+        <thead>
+            <tr>
+                <th>{% trans "Member" %}</th>
+                <th>{% trans "Method" %}</th>
+                <th>{% trans "Type" %}</th>
+                <th>{% trans "Status" %}</th>
+                <th>{% trans "Gross" %}</th>
+                <th>{% trans "Net" %}</th>
+                <th>{% trans "Causal" %}</th>
+                <th>{% trans "Details" %}</th>
+                <th>{% trans "Date" %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>{{ el.member }}</td>
+                    <td>
+                        {% if el.method %}{{ el.method }}{% endif %}
+                    </td>
+                    <td>{{ el.get_typ_display }}</td>
+                    <td>{{ el.get_status_display }}</td>
+                    <td>{{ el.mc_gross|format_decimal }}</td>
+                    <td>
+                        {% if el.mc_fee %}{{ el.mc_fee | floatformat:"-2" }}{% endif %}
+                    </td>
+                    <td>{{ el.causal }}</td>
+                    <td>{{ el.get_details | safe }}</td>
+                    <td>{{ el.created | date:"d/m/Y h:m" }}</td>
+                    <td>
+                        {% if el.status == 'r' or el.status == 's' %}
+                            <a href="{% url 'orga_invoices_confirm' run.event.slug run.number el.id %}">{% trans "Confirm" %}</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

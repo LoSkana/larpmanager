@@ -1,0 +1,15 @@
+{% load i18n static %}
+<h4>
+    <a href="#" class="my_toggle" tog='instr'>{% trans 'Instructions' %}</a>
+</h4>
+<div class="hide instr">
+    <p>
+        {% trans "In the 'Presentation' and 'Text' fields you can refer to other characters using their number directly, in the final text the number will automatically be replaced with their name, and a link to the character. Use:" %}
+        <br />
+        <b>#XX</b>: {% trans "for bidirectional relationships (love, colleagues, rivals), of which the other  character is aware of." %}
+        <br />
+        <b>@XX</b>: {% trans "for unidirectional relationships (secret hatred, loves but is unrequited), of that the other character is NOT aware of." %}
+        <br />
+        <b>^XX</b>: {% trans "to indicate only the proper name of the other character." %}
+    </p>
+</div>

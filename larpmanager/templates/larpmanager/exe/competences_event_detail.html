@@ -1,0 +1,22 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Competences events" %} - {{ event.name }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows in the detail of an event, the list of expertises covered by the contributors." %}
+{% endblock %}
+{% block content %}
+    {% for el in list %}
+        <h2>{{ el.name }}</h2>
+        <table class="mob">
+            {% for ec in el.staff %}
+                <tr>
+                    <td>{{ ec.member }}</td>
+                    <td>{{ ec.exp }}</td>
+                    <td>{{ ec.info | safe }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
+{% endblock %}

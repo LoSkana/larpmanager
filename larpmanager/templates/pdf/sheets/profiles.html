@@ -1,0 +1,64 @@
+{% load show_tags static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+body { background: white; text-align: center; font-size: 8pt}
+table { margin: 0 auto; }
+body { background: white; }
+a { color: #6495ED; font-weight:bold; text-decoration: none;}
+td { padding: 0.5em; border: 1px solid black; text-align: center; vertical-align:middle; }
+td img { margin: 0 auto; vertical-align:middle; }
+p { margin: 0.5em; }
+
+        </style>
+    </head>
+    <body>
+        {% if show_char %}
+            <table>
+                {% for num, el in chars.items %}
+                    <tr style="height:130px">
+                        <td style="width:130px">
+                            {% if el.player_id > 0 and el.player_prof %}
+                                <img src="{{ el.player_prof }}" />
+                            {% else %}
+                                <img src="{% static 'larpmanager/assets/blank-avatar-bk.png' %}" />
+                            {% endif %}
+                        </td>
+                        <td>
+                            <p class='name'>
+                                <a href="{% url 'character' event.slug run.number el.number %}">{{ el.name }}</a>
+                                {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
+                                {% if el.pronoun %}({{ el.pronoun }}){% endif %}
+                                {% if el.motto %}- <i>{{ el.motto | safe | clean_tags }}</i>{% endif %}
+                                {% if el.player_id > 0 %}
+                                    <p>
+                                        <a href="{% url 'public' el.player_id %}"><b>{{ el.player }}</b></a>
+                                    </p>
+                                {% endif %}
+                            </p>
+                            {% if el.factions %}
+                                <p>
+                                    {% for fnum in el.factions %}
+                                        {% with factions|get:fnum as g %}
+                                            {% if not g.typ == 'g' %}
+                                                {% include "elements/comma.html" %}
+                                                {{ g.name }}
+                                            {% endif %}
+                                        {% endwith %}
+                                    {% endfor %}
+                                </p>
+                            {% endif %}
+                            <p class="teaser">
+                                {% if show_teaser and el.teaser %}
+                                    <b>Teaser:</b> <span style="font-size:80%">{% replace_chars el.teaser 500 %}</span>
+                                </p>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </body>
+    {% endif %}
+</html>

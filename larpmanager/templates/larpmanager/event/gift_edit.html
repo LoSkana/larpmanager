@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load tz show_tags static i18n %}
+{% block title %}
+    {% if registration %}
+        {% trans 'Change gift' %}
+    {% else %}
+        {% trans 'New gift' %}
+    {% endif %}
+    - {{ run.search }}
+{% endblock %}
+{% block content %}
+    {% if run.reg or not run.status.closed %}
+        {% if event.website %}
+            <p>
+                {% trans "View all event information, and any specifics tickets costs, in its" %}
+                <a target=”_blank” href="{{ event.website }}">website</a> {% trans "dedicated!" %}
+            </p>
+            <hr />
+        {% endif %}
+        {% if custom_text %}
+            {{ custom_text | safe }}
+            <hr />
+        {% endif %}
+        <div style="text-align: center">
+            <form id="main_form" action="{{ request.path }}" method="post">
+                {% csrf_token %}
+                <div>
+                    <table class="mob">
+                        {% include "elements/form/register.html" %}
+                    </table>
+                </div>
+                <input type="button" id="confirm" value="{% trans 'Continue' %}" />
+                {% include "elements/form/delete.html" %}
+                <div id='riepilogo' style='display: none'>
+                    <br />
+                    <table class="mob">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    <h3>{% trans 'Summary' %}</h3>
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <input type="submit" value="{% trans 'Confirm' %}" id="register_go">
+                </div>
+            </form>
+        </div>
+    {% endif %}
+    {% include "elements/form/register-texts.html" %}
+{% endblock %}
+{% block js %}
+    {% include "elements/form/register.js" %}
+    {% include "elements/form/max_length.js" %}
+{% endblock %}

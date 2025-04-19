@@ -1,0 +1,21 @@
+{% load show_tags i18n %}
+{% if show_questbuilder %}
+    {% for f in sheet_traits %}
+        <h2 class="c">{{ f.quest.name }} - {{ f.name }}</h2>
+        {% if f.quest.preview and show_preview %}
+            <div class="plot">{% show_trait f.quest.preview run 1 %}</div>
+            <br />
+        {% endif %}
+        {% if f.quest.text and show_text %}
+            <div class="plot">{% show_trait f.quest.text run 1 %}</div>
+            <br />
+        {% endif %}
+        {% if f.preview and show_preview %}
+            <div class="plot">{% show_trait f.preview run 1 %}</div>
+        {% endif %}
+        {% if f.text and show_text %}
+            <div class="plot">{% show_trait f.text run 1 %}</div>
+        {% endif %}
+        <hr class="clear" />
+    {% endfor %}
+{% endif %}

@@ -1,0 +1,36 @@
+{% extends 'utils.html' %}
+{% load i18n show_tags %}
+{% block title %}
+    {% trans "Sensitive data" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the general information of registered players." %}
+{% endblock %}
+{% block content %}
+    <p>
+        <i>{% trans "Please remember that the information on this page was given with the implicit trust that it will be treated with the utmost care." %}</i>
+    </p>
+    <table class="mob">
+        <tr>
+            <th>{% trans "Player" %}</th>
+            <th>{% trans "Characters" %}</th>
+            {% for f in fields %}<th>{{ f }}</th>{% endfor %}
+        </tr>
+        {% for el in list %}
+            <tr>
+                <td>{{ el }}</td>
+                <td>
+                    {% if el.chars %}
+                        {% for ch in el.chars %}
+                            {% include "elements/comma.html" %}
+                            {{ ch }}
+                        {% endfor %}
+                    {% endif %}
+                </td>
+                {% for f in fields %}
+                    <th>{% lookup el f %}</th>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

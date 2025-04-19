@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load tz static i18n %}
+{% block title %}
+    {% trans "Shuttle service" %}
+{% endblock %}
+{% block content %}
+    <p>
+        {% trans "Need a ride?" %}
+        <a href="{% url 'shuttle_new' %}">{% trans "Add a new request!" %}</a>
+        <br />
+        (<i>{% trans "Notes: Try to group as many passengers per request as possible; if you notice any delays, write us directly, do not enter new requests!" %})</i>
+    </p>
+    <br />
+    <div class="no-more-tables">
+        <table class="mob">
+            <thead>
+                <tr>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Time" %}</th>
+                    <th>{% trans "Claimant" %}</th>
+                    <th>{% trans "Passengers" %}</th>
+                    <th>{% trans "Address" %}</th>
+                    <th>{% trans "Informations" %}</th>
+                    <th>{% trans "Assigned" %}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            {% for el in list %}
+                <tr>
+                    <td data-title='{% trans "Status" %}'>{{ el.get_status_display }}</td>
+                    <td data-title='{% trans "Date" %}'>{{ el.date }}</td>
+                    <td data-title='{% trans "Time" %}'>{{ el.time }}</td>
+                    <td data-title='{% trans "Claimant" %}'>{{ el.member.display_member }}</td>
+                    <td data-title='{% trans "Passengers" %}'>{{ el.passengers }}</td>
+                    <td data-title='{% trans "Address" %}'>{{ el.address | truncatechars:80 }}</td>
+                    <td data-title='{% trans "Informations" %}'>{{ el.info | truncatechars:80 }}</td>
+                    <td data-title='{% trans "Assigned" %}'>
+                        {% if el.working %}{{ el.working.display_member }}{% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'shuttle_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <br />
+    <div class="no-more-tables">
+        <h2>
+            <a onClick="$('#past').toggle(500);return false;">{% trans "Passages made" %}</a>
+        </h2>
+        <table id="past" style="display: none">
+            <thead>
+                <tr>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Time" %}</th>
+                    <th>{% trans "Claimant" %}</th>
+                    <th>{% trans "Passengers" %}</th>
+                    <th>{% trans "Address" %}</th>
+                    <th>{% trans "Informations" %}</th>
+                    <th>{% trans "Assigned" %}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            {% for el in past %}
+                <tr>
+                    <td data-title='{% trans "Status" %}'>{{ el.get_status_display }}</td>
+                    <td data-title='{% trans "Date" %}'>{{ el.date }}</td>
+                    <td data-title='{% trans "Time" %}'>{{ el.time }}</td>
+                    <td data-title='{% trans "Claimant" %}'>{{ el.member.display_member }}</td>
+                    <td data-title='{% trans "Passengers" %}'>{{ el.passengers }}</td>
+                    <td data-title='{% trans "Address" %}'>{{ el.address | truncatechars:80 }}</td>
+                    <td data-title='{% trans "Informations" %}'>{{ el.info | truncatechars:80 }}</td>
+                    <td data-title='{% trans "Assigned" %}'>
+                        {% if el.working %}{{ el.working.display_member }}{% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'shuttle_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+setInterval(function() {
+    window.location.reload();
+}, 30000);
+    </script>
+{% endblock %}

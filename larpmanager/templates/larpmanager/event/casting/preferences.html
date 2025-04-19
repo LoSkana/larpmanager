@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Preferences" %} - {{ run.search }}
+{% endblock %}
+{% block content %}
+    {% if features.questbuilder %}
+        {% if staff %}
+            <p>
+                {% trans "Go to the preferences for" %}:
+                <a href="{% url 'orga_casting_preferences' event.slug run.number 0 %}">{% trans "Characters" %}</a>
+                {% for num, qt in quest_types.items %}
+                    , <a href="{% url 'orga_casting_preferences' event.slug run.number num %}">{{ qt.name }}</a>
+                {% endfor %}
+            </p>
+            <h3>Preferenze {{ gl_name }}</h3>
+        {% else %}
+            <p>
+                {% trans "Go to the preferences for" %}:
+                <a href="{% url 'casting_preferences' event.slug run.number 0 %}">{% trans "characters" %}</a>,
+                {% for qt in quest_types %}
+                    {% include "elements/comma.html" %}
+                    <a href="{% url 'casting_preferences' event.slug run.number qt.number %}">{{ qt.name }}</a>
+                {% endfor %}
+            </p>
+            <h3>Preferenze {{ gl_name }}</h3>
+        {% endif %}
+    {% endif %}
+    <table id="preferences" class="tablesorter mob">
+        <thead>
+            <tr>
+                <th>{{ cl_name }}</th>
+                <th>{{ el_name }}</th>
+                <th>{% trans "Total preferences" %}</th>
+                <th>{% trans "Average preferences" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr>
+                    <td>{{ el.group_dis }}</td>
+                    <td>{{ el.name_dis }}</td>
+                    <td>{{ el.pref.0 }}</td>
+                    <td>{{ el.pref.1 }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

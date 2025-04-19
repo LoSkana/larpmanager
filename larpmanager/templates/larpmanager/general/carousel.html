@@ -1,0 +1,184 @@
+{% extends 'main.html' %}
+{% load i18n static %}
+{% block maintitle %}
+    {{ assoc.name }}
+    {% if assoc.id > 0 %}- LarpManager{% endif %}
+{% endblock %}
+{% block robots %}
+    {% include "elements/robots_show.html" %}
+{% endblock %}
+{% block media %}
+    <link rel="stylesheet"
+          href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+{% endblock %}
+{% block wrapper %}
+    <div id="bgk"></div>
+    <div class="carousel">
+        <div class="slider">
+            {% for el in list %}
+                <div class="card">
+                    <div class="card-bg {{ el.slug }}"
+                         style="background-image: url({{ el.cover }})"></div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div id="fullscreen">
+        <div>
+            <h1 class="tit"></h1>
+        </div>
+        <div class="tagline"></div>
+        <div class="description_short"></div>
+        <div class="description"></div>
+        <div class="buttons">
+            <a id="website" href="" class="button primary">{% trans "Tell me more" %}</a>
+            <a id="register" href="" class="button primary">{% trans "Register" %}</a>
+        </div>
+        <div class="authors"></div>
+    </div>
+{% endblock %}
+{% block js2 %}
+    <!-- JavaScript -->
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js" defer></script>
+    <script>
+const base_url = "{% url 'event_register' '0' %}";
+
+var dict = {{ json | safe }};
+
+window.addEventListener('DOMContentLoaded', function() {
+(function ($) {
+  $(function () {
+    var slider = $(".slider").flickity({
+      imagesLoaded: true,
+      percentPosition: false,
+      prevNextButtons: false, //true = enable on-screen arrows
+      initialIndex: 0,
+      pageDots: false, //true = enable on-screen dots
+      groupCells: 1,
+      selectedAttraction: 0.2,
+      friction: 0.8,
+      draggable: true,
+      autoPlay: 5000 //false = disable dragging
+    });
+
+    //this enables clicking on cards
+    slider.on(
+      "staticClick.flickity",
+      function (event, pointer, cellElement, cellIndex) {
+        if (typeof cellIndex == "number") {
+          slider.flickity("selectCell", cellIndex);
+        }
+      }
+    );
+
+    //this resizes the cards and centers the carousel; the latter tends to move a few pixels to the right if .resize() and .reposition() aren't used
+    var flkty = slider.data("flickity");
+    flkty.selectedElement.classList.add("is-custom-selected");
+    flkty.resize();
+    flkty.reposition();
+    let time = 0;
+    function reposition() {
+      flkty.reposition();
+      if (time++ < 10) {
+        requestAnimationFrame(reposition);
+      } else {
+        $(".flickity-prev-next-button").css("pointer-events", "auto");
+      }
+    }
+    requestAnimationFrame(reposition);
+
+    //this expands the cards when in focus
+    flkty.on("settle", () => {
+      $(".card").removeClass("is-custom-selected");
+      $(".flickity-prev-next-button").css("pointer-events", "none");
+      flkty.selectedElement.classList.add("is-custom-selected");
+
+      let time = 0;
+      function reposition() {
+        flkty.reposition();
+        if (time++ < 10) {
+          requestAnimationFrame(reposition);
+        } else {
+          $(".flickity-prev-next-button").css("pointer-events", "auto");
+        }
+      }
+      requestAnimationFrame(reposition);
+    });
+
+    //this reveals the carousel when the user loads / reloads the page
+    $(".carousel").addClass("animation-reveal");
+    $(".carousel").css("opacity", "0");
+    flkty.resize();
+    flkty.reposition();
+    setTimeout(() => {
+      $(".carousel").removeClass("animation-reveal");
+      $(".carousel").css("opacity", "1");
+      flkty.resize();
+      flkty.reposition();
+      let time = 0;
+      function reposition() {
+        flkty.reposition();
+        if (time++ < 10) {
+          requestAnimationFrame(reposition);
+        }
+      }
+      requestAnimationFrame(reposition);
+    }, 1000);
+  });
+
+    $(".carousel").on( 'change.flickity', function( event, index ) {
+      show(index);
+    });
+
+    show(0);
+
+})(jQuery);
+
+});
+
+function show(index) {
+    // console.log(index);
+    console.log(dict[index]);
+
+    var el = dict[index];
+
+    bgk = el['carousel_thumb'];
+    if (bgk == null) bgk = el['background'];
+    if (bgk == null) bgk = el['cover_thumb'];
+    $('#bgk').css('background-image', 'url(' + bgk + ')');
+
+    $('.tit').text(el['name']);
+
+    if ('font' in el && el['font'].length > 0) {
+        $("head").prepend("<style>@font-face {font-family: '" + el['slug'] + "';src: url('" + el['font'] + "');}</style>");
+        $(".tit").css("font-family", el['slug']);
+    }   else {
+        $(".tit").css("font-family", 'inherit');
+    }
+
+    $('.tagline').text(el['tagline']);
+
+    descr = el['carousel_text'];
+    if (descr == null) descr = el['description_short'];
+    $('.description').html(el['carousel_text']);
+
+    if ('website' in el && el['website'].length > 0) {
+        $('#website').attr("href", el['website']);
+        $('#website').show();
+    } else {
+        $('#website').hide();
+    }
+
+    if (el['coming']) {
+        $('#register').attr("href", base_url.replace("0", el['slug']));
+         $('#register').show();
+    } else {
+        $('#register').hide();
+    }
+
+    // $('.authors').text(el['authors']);
+
+}
+
+    </script>
+{% endblock %}

@@ -1,0 +1,33 @@
+var timeout = 30 * 1000; // todo fix
+var post_url = '{{ request.path }}';
+$(function() {
+setTimeout(submitForm, timeout);
+});
+function submitForm() {
+tinyMCE.triggerSave();
+var formData = $('form').serialize() + "&ajax=" + 1;
+if (eid > 0) formData += "&eid=" + eid + "&type=" + type;
+console.log(formData);
+// console.log(post_url);
+$.ajax({
+type: "POST",
+url: post_url,
+data: formData,
+success: function(msg){
+// console.log("Data Saved: " +  JSON.stringify(msg) );
+setTimeout(confirmSubmit, 100);
+if (msg.warn) { alert(msg.warn); }
+},
+error: function(XMLHttpRequest, textStatus, errorThrown) {
+alert("some error");
+}
+});
+setTimeout(submitForm, timeout);
+}
+function confirmSubmit() {
+$('#confirm').css('color', 'green');
+setTimeout(endConfirmSubmit, 1000);
+}
+function endConfirmSubmit() {
+$('#confirm').css('color', '');
+}

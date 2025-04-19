@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load tz show_tags static i18n %}
+{% block title %}{{ name }}{% endblock %}
+{% block robots %}
+    {% include "elements/robots_show.html" %}
+{% endblock %}
+{% block media %}
+    <meta name="description" content="{{ event.tagline }}" />
+    <meta property="og:title" content="{{ name }}" />
+    {% if event.tagline %}<meta property="og:description" content="{{ event.tagline }}" />{% endif %}
+    <meta property="og:image" content="{{ cover }}" />
+{% endblock %}
+{% block wrapper %}
+    <div id="fullscreen">
+        <div class="tit">
+            <h1>{{ name }}</h1>
+        </div>
+        {% if data.tagline %}<div class="tagline">{{ data.tagline | safe }}</div>{% endif %}
+        {% if data.description_short %}<div class="description_short">{{ data.description_short | safe }}</div>{% endif %}
+        {% if data.description %}<div class="description">{{ data.description | safe }}</div>{% endif %}
+        <div class="buttons">
+            {% if data.website %}
+                <a href="{{ data.website }}" class="button primary">{% trans "Tell me more" %}</a>
+            {% endif %}
+            <a href="{% url 'event_register' event.slug %}" class="button primary">{% trans "Register" %}</a>
+        </div>
+        {% if data.authors %}<div class="authors">{{ data.authors | safe }}</div>{% endif %}
+    </div>
+{% endblock %}

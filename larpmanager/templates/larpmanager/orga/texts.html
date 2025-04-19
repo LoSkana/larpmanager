@@ -1,0 +1,37 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Event texts" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page summarises the customised texts of the event." %}
+{% endblock %}
+{% block content %}
+    {% include "elements/header/orga.html" %}
+    <table id="payments" class="tablesorter mob">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Type" %}</th>
+                <th>{% trans "Language" %}</th>
+                <th>{% trans "Default" %}</th>
+                <th>{% trans "Text" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'orga_texts_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.get_typ_display }}</td>
+                    <td>{{ el.language }}</td>
+                    <td>
+                        {% if el.default %}<i class="fa-solid fa-check"></i>{% endif %}
+                    </td>
+                    <td>{{ el.text | safe | striptags | truncatechars:300 }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

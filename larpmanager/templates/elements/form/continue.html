@@ -1,0 +1,22 @@
+{% load i18n static %}
+{% if form.instance.pk %}
+    <br />
+    <hr />
+    <h4>
+        <a href="#" class="my_toggle" tog='continue'>{% trans "Continue" %}</a>
+    </h4>
+    <div class="{% if not continue %}hide{% endif %} continue">
+        {% trans "Click here if after submitting the form, you want to move on to edit the next item" %}
+        <table class="mob no_csv">
+            <tr>
+                <td>{% trans "Continue" %}</td>
+                <td>
+                    <input type="checkbox"
+                           name="continue"
+                           id="id_continue"
+                           {% if continue %}checked="checked"{% endif %}>
+                </td>
+            </tr>
+        </table>
+    </div>
+{% endif %}

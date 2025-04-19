@@ -1,0 +1,29 @@
+{% load i18n %}
+<p>{% trans "Hi" %} {{ member.name }},</p>
+<p>{% trans "Thank you for joining LarpManager! We are thrilled to have you with us." %}</p>
+<p>{% trans "We advise you to keep this email for future reference." %}</p>
+<p>
+    {% trans "First of all, here is the address of the LarpManager for your association:" %}
+    <a href="https://{{ assoc.slug }}.larpmanager.com">{{ assoc.name }}</a>.
+</p>
+<p>
+    {% trans "This is instead the address of your association's management panel:" %}
+    <a href="https://{{ assoc.slug }}.larpmanager.com/manage">{% trans "Management" %} {{ assoc.name }}</a>.
+</p>
+<p>{% trans "Here are some useful links to help you get started:" %}</p>
+<ul>
+    <li>
+        <a href="https://{{ assoc.slug }}.larpmanager.com/tutorials">Tutorials</a>:
+        {% trans "Follow the tutorials to start setting up your first event right away" %}
+    </li>
+    <li>
+        <a href="https://discord.gg/C4KuyQbuft">Discord</a>:
+        {% trans "Join the Discord to receive assistance, suggest improvements or notify bug reports" %}
+    </li>
+</ul>
+<p>{% trans "If you have any questions, please do not hesitate to contact us: just reply to this email." %}</p>
+<p>{% trans "Welcome on board!" %}</p>
+<br />
+<p>
+    <i>{% trans "The LarpManager team" %}</i>
+</p>

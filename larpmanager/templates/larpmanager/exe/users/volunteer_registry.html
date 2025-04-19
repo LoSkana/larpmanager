@@ -1,0 +1,39 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Volunteer Registry" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page summarises the organization's volunteers." %}
+{% endblock %}
+{% block content %}
+    <p>
+        Clicca qui per ottenere una stampa del registro a norma di legge:
+        <a href="{% url 'exe_volunteer_registry_print' %}" class="link" download>{% trans "Print registry" %}</a>
+        Ricorda di applicare firma digitale, e salvarlo in un sistema di storage adeguato.
+    </p>
+    <hr />
+    {% include "elements/header/exe.html" %}
+    <table id="expenses" class="tablesorter mob">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Member" %}</th>
+                <th>{% trans "Start date" %}</th>
+                <th>{% trans "End date" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'exe_volunteer_registry_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.member }}</td>
+                    <td>{{ el.start }}</td>
+                    <td>{{ el.end }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

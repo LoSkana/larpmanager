@@ -1,0 +1,44 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Template" %} - {% trans "Organization" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page summarises all template events in the system. From here you can edit them, or create new ones." %}
+{% endblock %}
+{% block content %}
+    {% include "elements/header/exe.html" %}
+    <table id="events" class="tablesorter mob writing gall no_csv">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Role" %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'exe_templates_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el }}</td>
+                    <td>
+                        <a href="{% url 'exe_templates_roles' el.id 0 %}">{% trans "Add" %}</a>
+                        {% if el.roles %}
+                            -
+                            {% for rl in el.roles %}
+                                {% include "elements/comma.html" %}
+                                <a href="{% url 'exe_templates_roles' el.id rl.id %}">{{ rl.name }}</a>
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'exe_templates_config' el.id %}">{% trans "Configuration" %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

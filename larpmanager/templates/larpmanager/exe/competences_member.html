@@ -1,0 +1,45 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Competences member" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows in detail a contributor's skills for to which they marked." %}
+{% endblock %}
+{% block content %}
+    <table id="main_table" class="tablesorter mob">
+        <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Staff" %} (N)</th>
+                <th>{% trans "Staff" %} ({% trans "List" %})</th>
+                <th>{% trans "Competences" %} (N)</th>
+                <th>{% trans "Competences" %} ({% trans "List" %})</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, el in list.items %}
+                <tr>
+                    <td>
+                        <a href="{% url 'exe_competences_member_detail' el.id %}">{{ el.name }}</a>
+                    </td>
+                    <td>{{ el.working | length }}</td>
+                    <td>
+                        {% for ec in el.working %}
+                            {% include "elements/comma.html" %}
+                            {{ ec }}
+                        {% endfor %}
+                    </td>
+                    <td>{{ el.competences | length }}</td>
+                    <td>
+                        {% for ec in el.competences %}
+                            {% include "elements/comma.html" %}
+                            {{ ec }}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {{ list | length }}
+{% endblock %}

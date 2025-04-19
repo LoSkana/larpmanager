@@ -1,0 +1,51 @@
+/* background */
+
+body {
+    background-color: #252525;
+    color: rgba(255, 255, 255, 0.85);
+
+    background-image: url("images/overlay.png"), -moz-linear-gradient(.25turn, #252525 15%, #3B3B3B 85%);
+    background-image: url("images/overlay.png"), -webkit-linear-gradient(.25turn, #252525 15%, #3B3B3B 85%);
+    background-image: url("images/overlay.png"), -ms-linear-gradient(.25turn, #252525 15%, #3B3B3B 85%);
+    background-image: url("images/overlay.png"), linear-gradient(.25turn, #252525 15%, #3B3B3B 85%);
+}
+
+/* logo */
+
+#header.alt {
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+
+#header.alt .logo {
+    -moz-transition: opacity 1.25s ease, -moz-transform 5s ease;
+    -webkit-transition: opacity 1.25s ease, -webkit-transform 5s ease;
+    -ms-transition: opacity 1.25s ease, -ms-transform 5s ease;
+    transition: opacity 1.25s ease, transform 5s ease;
+}
+
+body.is-preload #header.alt .logo {
+    -moz-transform: scale(0.8) rotate(-330deg);
+    -webkit-transform: scale(0.8) rotate(-330deg);
+    -ms-transform: scale(0.8) rotate(-330deg);
+    transform: scale(0.8) rotate(-330deg);
+}
+
+/* h2 after */
+
+#main header.major h2:after {
+    background-color: #dddddd;
+    background-image: -moz-linear-gradient(90deg, #3B3B3B, #A5DEE5);
+    background-image: -webkit-linear-gradient(90deg, #3B3B3B, #A5DEE5);
+    background-image: -ms-linear-gradient(90deg, #3B3B3B, #A5DEE5);
+    background-image: linear-gradient(90deg, #3B3B3B, #A5DEE5);
+}
+
+#nav.alt {
+    background-color: rgba(165, 222, 229, 0.95);
+}
+
+#nav ul li a:hover {
+    background-color: rgba(59, 59, 59, 0.75);
+    color: white;
+}

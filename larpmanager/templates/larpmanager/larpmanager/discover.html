@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block title %}Discover{% endblock %}
+{% block content %}
+    <div id="discover">
+        <p>Explore the full range of features on our platform, giving you complete control of your event!</p>
+        <div class="c nav">
+            {% for el in discover %}<a href="#mod_{{ el.id }}" class="sh_{{ el.id }}">{{ el.name }}</a>{% endfor %}
+        </div>
+        {% for el in discover %}
+            <hr id="mod_{{ el.id }}" />
+            <div class="sh_{{ el.id }}">
+                {% if el.profile %}
+                    <img src="{{ el.profile_thumb.url }}"
+                         class="{% if el.order|divisibleby:"2" %}left{% else %}right{% endif %}" />
+                {% endif %}
+                <h2>{{ el.name }}</h2>
+                {{ el.text | safe }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

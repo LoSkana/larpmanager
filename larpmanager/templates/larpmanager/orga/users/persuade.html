@@ -1,0 +1,35 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Preaching" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows users who can be persuaded to sign up." %}
+{% endblock %}
+{% block content %}
+    <p>{% trans "List of users who have not registered for a future run of the event" %}:</p>
+    <table class="mob tablesorter">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Surname" %}</th>
+                <th>{% trans "Nickname" %}</th>
+                <th>{% trans "Pre-registered" %}</th>
+                <th>{% trans "Event already played" %}</th>
+            </tr>
+        </thead>
+        {% for el in lst %}
+            <tr>
+                <td>{{ el.0 }}</td>
+                <td>{{ el.1 }}</td>
+                <td>{{ el.2 }}</td>
+                <td>{{ el.3 }}</td>
+                <td>
+                    {% if el.4 %}Y{% endif %}
+                </td>
+                <td>{{ el.5 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -1,0 +1,610 @@
+{% extends 'utils.html' %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Registrations" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the run signups." %}
+{% endblock %}
+{% block content %}
+    <table class="download_table hide">
+        <thead>
+            <tr>
+                <th>Empty</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Empty</td>
+            </tr>
+        </tbody>
+    </table>
+    {% include "elements/header/orga.html" %}
+    <div id="overlay">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div class="staff-list">
+        <b>{% trans "Show / hide" %}</b>
+        <div class="nav">
+            <a href="#" id="load_accounting">{% trans "accounting" %}</a>
+            <a href="#" class="my_toggle hide" tog='acc'>hidden</a>
+            <a href="#" class="my_toggle" tog='email'>{% trans "email" %}</a>
+            {% if 'phone_contact' in request.assoc.members_fields %}
+                <a href="#" class="my_toggle" tog='cell'>{% trans "cell" %}</a>
+            {% endif %}
+            {% if 'birth_date' in request.assoc.members_fields %}
+                <a href="#" class="my_toggle" tog='age'>{% trans "age" %}</a>
+            {% endif %}
+            {% if features.info %}
+                <a href="#" class="my_toggle" tog='info'>{% trans "info" %}</a>
+            {% endif %}
+            <a href="#" class="my_toggle" tog='date'>{% trans "chronology" %}</a>
+            {% if features.unique_code %}
+                <a href="#" class="my_toggle" tog='special_cod'>{% trans "unique code" %}</a>
+            {% endif %}
+            {% if features.additional_tickets %}
+                <a href="#" class="my_toggle" tog='additionals'>{% trans "additional" %}</a>
+            {% endif %}
+            {% if features.gift %}
+                <a href="#" class="my_toggle" tog='gift'>{% trans "gift" %}</a>
+            {% endif %}
+            {% if features.membership %}
+                <a href="#" class="my_toggle" tog='membership'>{% trans "member" %}</a>
+            {% endif %}
+            {% if features.faction %}
+                <a href="#" class="my_toggle" tog='factions'>{% trans "factions" %}</a>
+            {% endif %}
+            {% if features.custom_character %}
+                <a href="#" class="my_toggle" tog='custom'>{% trans "customisations" %}</a>
+            {% endif %}
+            {% if features.reg_surcharges %}
+                <a href="#" class="my_toggle" tog='sur'>{% trans "surcharge" %}</a>
+            {% endif %}
+            {% if features.discount %}
+                <a href="#" class="my_toggle" tog='disc'>{% trans "Discounts" %}</a>
+            {% endif %}
+            {% if features.role %}
+                <a href="#" class="my_toggle" tog='role'>{% trans "Roles" %}</a>
+            {% endif %}
+        </div>
+    </div>
+    {% if reg_questions %}
+        <div class="staff-list">
+            {% trans "Registration questions" %}:
+            <div class="nav">
+                {% for key, que in reg_questions.items %}
+                    <a href="#" class="load_que lq_{{ key }}"  key="{{ key }}">{{ que.display | truncatechars:50 }}</a>
+                    <a href="#" class="my_toggle hide" tog='q_{{ key }}'>hidden</a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    {% if features.questbuilder %}
+        <div class="staff-list">
+            Questbuilder:
+            {% for key, qt in quest_types.items %}
+                {% include "elements/comma.html" %}
+                <a href="#" class="my_toggle" tog='qt_{{ qt.number }}'>{{ qt.name }}</a>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% for key, dc in reg_all %}
+        <h2>{{ dc.type }} ({{ dc.count }})</h2>
+        <table id="regs" class="tablesorter mob writing no_csv regs">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{% trans "Member" %}</th>
+                    {% if 'birth_date' in request.assoc.members_fields %}
+                        <th class="hide age">{% trans "Age (during the event)" %}</th>
+                    {% endif %}
+                    <th class="hide email">{% trans "Email" %}</th>
+                    {% if 'phone_contact' in request.assoc.members_fields %}
+                        <th class="hide cell">{% trans "Cell" %}</th>
+                    {% endif %}
+                    {% if features.gift %}
+                        <th class="hide gift">{% trans "Gift" %}</th>
+                    {% endif %}
+                    {% if features.membership %}
+                        <th class="hide membership">{% trans "Language" %}</th>
+                        <th class="hide membership">{% trans "Member" %}</th>
+                    {% endif %}
+                    <th>{% trans "Ticket" %}</th>
+                    {% if features.additional_tickets %}
+                        <th class="additionals">{% trans "Additions" %}</th>
+                    {% endif %}
+                    {% if features.characters %}
+                        <th>{% trans "Character" %}</th>
+                    {% endif %}
+                    {% if features.faction %}
+                        <th class="hide factions">{% trans "Factions" %}</th>
+                    {% endif %}
+                    {% if features.questbuilder %}
+                        {% for key, qt in quest_types.items %}<th class="hide qt_{{ qt.number }}">{{ qt.name }}</th>{% endfor %}
+                    {% endif %}
+                    {% if features.custom_character %}
+                        {% for nm in custom_info %}<th class="hide custom">{{ nm | capfirst }}</th>{% endfor %}
+                    {% endif %}
+                    {% for key, que in reg_questions.items %}<th class="hide q_{{ key }}">{{ que.display }}</th>{% endfor %}
+                    {% if features.discount %}
+                        <th class="hide disc">{% trans "Discounts" %}</th>
+                    {% endif %}
+                    {% if features.role %}
+                        <th class="hide role">{% trans "Roles" %}</th>
+                    {% endif %}
+                    <th class="hide date">{% trans "Creation" %} (y/m/d)</th>
+                    <th class="hide date">{% trans "Last change" %} (y/m/d)</th>
+                    {% if features.pay_what_you_want %}
+                        <th class="hide acc">{% trans "PWYW" %}</th>
+                    {% endif %}
+                    {% if features.reg_surcharges %}
+                        <th class="hide sur">{% trans "Surcharge" %}</th>
+                    {% endif %}
+                    {% if features.reg_quotas or features.reg_installments %}
+                        <th class="hide acc">{% trans "Next quota" %}</th>
+                    {% endif %}
+                    <th class="hide acc">{% trans "Deadline" %}</th>
+                    <th class="hide acc">{% trans "Owing" %}</th>
+                    <th class="hide acc">{% trans "Payed" %}</th>
+                    <th class="hide acc">{% trans "Total" %}</th>
+                    <th class="hide acc">{% trans "Ticket" %}</th>
+                    <th class="hide acc">{% trans "Options" %}</th>
+                    {% if 'token_credit' in assoc.features %}
+                        <th class="hide acc">{% trans "Money" %}</th>
+                        <th class="hide acc">{{ credit_name }}</th>
+                        <th class="hide acc">{{ token_name }}</th>
+                    {% endif %}
+                    {% if features.unique_code %}
+                        <th class="hide special_cod">{% trans "Code" %}</th>
+                    {% endif %}
+                    {% if features.info %}
+                        <th class="hide info">{% trans "Info" %}</th>
+                    {% endif %}
+                    <!-- <th></th>         -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for reg in dc.list %}
+                    <tr id="{{ reg.id }}">
+                        <td>
+                            <a href="{% url 'orga_registrations_edit' run.event.slug run.number reg.id %}"><i class="fas fa-edit"></i></a>
+                        </td>
+                        <td>
+                            <a href="{% url 'public' reg.member.id %}">{{ reg.member | title }}</a>
+                        </td>
+                        {% if 'birth_date' in request.assoc.members_fields %}<td class="hide age">{{ reg.age }}</td>{% endif %}
+                        <td class="hide email">{{ reg.member.email }}</td>
+                        {% if 'phone_contact' in request.assoc.members_fields %}
+                            <td class="hide cell">
+                                {% if reg.member.phone_contact %}{{ reg.member.phone_contact }}{% endif %}
+                            </td>
+                        {% endif %}
+                        {% if features.gift %}
+                            <td class="hide gift">
+                                {% if reg.redeem_code %}<i class="fa-solid fa-gift"></i>{% endif %}
+                            </td>
+                        {% endif %}
+                        {% if features.membership %}
+                            <td class="hide membership">{{ reg.member.language }}</td>
+                            <td class="hide membership">{{ reg.membership }}</td>
+                        {% endif %}
+                        <td>{{ reg.ticket_show }}</td>
+                        {% if features.additional_tickets %}
+                            <td class="additionals">
+                                {% if reg.additionals %}{{ reg.additionals }}{% endif %}
+                            </td>
+                        {% endif %}
+                        {% if features.characters %}
+                            <td>
+                                {% for el in reg.chars %}
+                                    {% include "elements/comma.html" %}
+                                    <a href="{% url 'orga_characters_edit' run.event.slug run.number el.id %}">#{{ el.number }} {{ el.name }}</a>
+                                    {% if features.custom_character %}
+                                        <a href="{% url 'orga_registrations_customization' run.event.slug run.number el.id %}"><i class="fas fa-user-pen"></i></a>
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        {% endif %}
+                        {% if features.faction %}
+                            <th class="hide factions">
+                                {% for fnum in reg.factions %}
+                                    {% with factions|get:fnum as ft %}
+                                        {% if ft.number %}
+                                            {% include "elements/comma.html" %}
+                                            <a href="{% url 'orga_factions_edit' run.event.slug run.number ft.number %}">{{ ft.name }}</a>
+                                        {% endif %}
+                                    {% endwith %}
+                                {% endfor %}
+                            </th>
+                        {% endif %}
+                        {% if features.questbuilder %}
+                            {% for key, qt in quest_types.items %}
+                                <th class="hide qt_{{ qt.number }}">{{ reg.traits | get:qt.number }}</th>
+                            {% endfor %}
+                        {% endif %}
+                        {% if features.custom_character %}
+                            {% for nm in custom_info %}
+                                <th class="hide custom }}">
+                                    {% if reg.custom|get:nm %}
+                                        {% if nm != "profile" %}
+                                            {{ reg.custom | get:nm | safe | clean_tags | truncatechars:50 }}
+                                        {% else %}
+                                            {{ reg.custom | get:nm | safe }}
+                                        {% endif %}
+                                        {% if reg.custom|get:nm|length > 50 %}
+                                            <a href="#" class="show_popup" pop="{{ reg.id }}" fie="{{ nm }}"><i class="fas fa-eye"></i></a>
+                                            <span class="popup_text {{ nm }}">
+                                                <h2>{{ reg.member }} - {{ nm | capfirst }}</h2>
+                                            {{ reg.custom | get:nm | safe }}</span>
+                                        {% endif %}
+                                    {% endif %}
+                                </th>
+                            {% endfor %}
+                        {% endif %}
+                        {% for key, que in reg_questions.items %}
+                            <td class="hide question q_{{ key }}">
+                                <span class='has_show_tooltip res_{{ key }}'></span>
+                                <span class='hide show_tooltip'>{{ que.display }}</span></span>
+                            </td>
+                        {% endfor %}
+                        {% if features.discount %}
+                            <td class="hide disc">
+                                {% for d in reg.discounts %}
+                                    {% include "elements/comma.html" %}
+                                    {{ d }}
+                                {% endfor %}
+                                <a href="{% url 'orga_registration_discounts' run.event.slug run.number reg.id %}">{% trans "Manage" %}</a>
+                            </td>
+                        {% endif %}
+                        {% if features.role %}<th class="hide role">{{ reg.roles }}</th>{% endif %}
+                        <td class="hide date">{{ reg.created | date:"y/m/d H:i" }}</td>
+                        <td class="hide date">{{ reg.updated | date:"y/m/d H:i" }}</td>
+                        {% if features.pay_what_you_want %}
+                            <td class="hide acc">
+                                <span class='has_show_tooltip pay_what'></span><span class='hide show_tooltip'>{% trans "Additional free payment fee" %}</span></span>
+                            </td>
+                        {% endif %}
+                        {% if features.surcharge %}
+                            <td class="hide sur">
+                                <span class='has_show_tooltip surcharge'></span><span class='hide show_tooltip'>{% trans "Surcharge applied to the ticket" %}</span></span>
+                            </td>
+                        {% endif %}
+                        {% if features.reg_quotas or features.reg_installments %}
+                            <td class="hide acc">
+                                <span class='has_show_tooltip quota'></span><span class='hide show_tooltip'>{% trans "Amount of the next payment instalment required" %}</span></span>
+                            </td>
+                        {% endif %}
+                        <td class="hide acc">
+                            <span class='has_show_tooltip deadline'></span><span class='hide show_tooltip'>{% trans "Number of days within which the player must pay his next installment" %}</span></span>
+                        </td>
+                        <td class="hide acc">
+                            <span class='has_show_tooltip remaining'></span><span class='hide show_tooltip'>{% trans "Total remaining to be paid" %}</span></span>
+                        </td>
+                        <td class="hide acc">
+                            <span class='has_show_tooltip tot_payed'></span><span class='hide show_tooltip'>{% trans "Total of what has already been paid at the current date" %}</span></span>
+                        </td>
+                        <td class="hide acc">
+                            <span class='has_show_tooltip tot_iscr'></span><span class='hide show_tooltip'>{% trans "Sum of the signup fee, total to be paid" %}</span></span>
+                        </td>
+                        <td class="hide acc">
+                            <span class='has_show_tooltip ticket_price'></span><span class='hide show_tooltip'>{% trans "Part of the registration fee derived only from the ticket chosen" %}</span></span>
+                        </td>
+                        <td class="hide acc">
+                            <span class='has_show_tooltip options_price'></span><span class='hide show_tooltip'>{% trans "Part of the registration fee derived only from the additional options chosen" %}</span></span>
+                        </td>
+                        {% if 'token_credit' in assoc.features %}
+                            <td class="hide acc">
+                                <span class='has_show_tooltip pay_a'></span><span class='hide show_tooltip'>{% trans "Sum of payments received with means of payment" %}</span></span>
+                            </td>
+                            <td class="hide acc">
+                                <span class='has_show_tooltip pay_b'></span><span class='hide show_tooltip'>{% trans "Sum of payments received through" %} {{ credit_name }}</span></span>
+                            </td>
+                            <td class="hide acc">
+                                <span class='has_show_tooltip pay_c'></span><span class='hide show_tooltip'>{% trans "Sum of payments received through" %} {{ token_name }}</span></span>
+                            </td>
+                        {% endif %}
+                        {% if features.unique_code %}
+                            <td class="hide special_cod">
+                                {% if reg.special_cod %}
+                                    <span class='has_show_tooltip special_code'>{{ reg.special_cod }}</span><span class='hide show_tooltip'>{% trans "Unique registration code, used for payment checks" %}</span></span>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                        {% if features.info %}
+                            <td class="hide info">
+                                {% if reg.info %}
+                                    {{ reg.info | safe | clean_tags | truncatechars:80 }}
+                                    {% if reg.info_ln > 80 %}
+                                        <a href="#" class="show_popup" pop="{{ reg.id }}" fie="infor"><i class="fas fa-eye"></i></a>
+                                        <span class="popup_text infor">
+                                            <h2>{% trans "Info" %}</h2>
+                                        {{ reg.info | safe }} </span>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+    <a href="{% url 'orga_registrations_reload' run.event.slug run.number %}">{% trans "Recalculate" %}</a>
+    <h2>{% trans "Email list" %}</h2>
+    <p>
+        <a href="#" class="my_toggle" tog='email_players'>{% trans "Players" %}</a>,
+        <a href="#" class="my_toggle" tog='email_tickets'>{% trans "Tickets" %}</a>,
+        {% if features.membership %}
+            <a href="#" class="my_toggle" tog='email_memb'>{% trans "Membership" %}</a>,
+        {% endif %}
+        {% if features.discount %}
+            <a href="#" class="my_toggle" tog='email_disc'>{% trans "Discounts" %}</a>,
+        {% endif %}
+        <div class="hide email_players">
+            <br />
+            <h4>{% trans "Players" %}</h4>
+            <table class="mob">
+                <tr>
+                    <th>{% trans "Players" %}</th>
+                    <td>{{ list_all.all.emails | length }}</td>
+                    <td>
+                        {% for el in list_all.all.emails %}
+                            {% include "elements/comma.html" %}
+                            {{ el }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for el in list_all.all.players %}
+                            {% include "elements/comma.html" %}
+                            {{ el }}
+                        {% endfor %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="hide email_tickets">
+            <br />
+            <h4>{% trans "Tickets" %}</h4>
+            <table class="mob">
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Emails</th>
+                    <th>Names</th>
+                </tr>
+                {% for key, t in list_tickets.items %}
+                    <tr>
+                        <th>{{ t.name }}</th>
+                        <td>{{ t.emails | length }}</td>
+                        <td>
+                            {% for el in t.emails %}
+                                {% include "elements/comma.html" %}
+                                {{ el }}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for el in t.players %}
+                                {% include "elements/comma.html" %}
+                                {{ el }}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="hide email_type">
+            <br />
+            <h4>Email - {% trans "Registration" %}</h4>
+            <table class="mob">
+                <tr>
+                    <th>{% trans "Staff" %}</th>
+                    <td>{{ ticket_staff }}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>{{ ticket_e }}</td>
+                </tr>
+                <tr>
+                    <th>{% trans "Player" %}</th>
+                    <td>{{ ticket.b }}</td>
+                </tr>
+                {% if features.filler %}
+                    <tr>
+                        <th>{% trans "Filler" %}</th>
+                        <td>{{ ticket.f }}</td>
+                    </tr>
+                {% endif %}
+                {% if features.waiting %}
+                    <tr>
+                        <th>{% trans "Waiting" %}</th>
+                        <td>{{ ticket.w }}</td>
+                    </tr>
+                {% endif %}
+            </table>
+        </div>
+        {% if features.membership %}
+            <div class="hide email_memb">
+                <br />
+                <h4>Email - {% trans "Membership" %}</h4>
+                <table class="mob">
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>Emails</th>
+                        <th>Names</th>
+                    </tr>
+                    {% for key, t in list_membership.items %}
+                        <tr>
+                            <th>{{ t.name }}</th>
+                            <td>{{ t.emails | length }}</td>
+                            <td>
+                                {% for el in t.emails %}
+                                    {% include "elements/comma.html" %}
+                                    {{ el }}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for el in t.players %}
+                                    {% include "elements/comma.html" %}
+                                    {{ el }}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+        {% if features.discount %}
+            <div class="hide email_disc">
+                <br />
+                <h4>Email - {% trans "Discounts" %}</h4>
+                <table class="mob">
+                    {% for key, t in list_discount.items %}
+                        <tr>
+                            <th>{{ t.name }}</th>
+                            <td>{{ t.emails | length }}</td>
+                            <td>
+                                {% for el in t.emails %}
+                                    {% include "elements/comma.html" %}
+                                    {{ el }}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for el in t.players %}
+                                    {% include "elements/comma.html" %}
+                                    {{ el }}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+        {% if list_factions %}
+            <br />
+            {% for k, fc in list_factions.items %}
+                <a href="#" class="my_toggle" tog='email_fc_{{ k }}'>{{ fc.name }}</a>,
+            {% endfor %}
+            {% for k, fc in list_factions.items %}
+                <div class="hide email_fc_{{ k }}">
+                    <h4>{{ fc.name }}</h4>
+                    <table class="mob">
+                        <tr>
+                            <td>{{ fc.emails | length }}</td>
+                            <td>
+                                {% for el in fc.emails %}
+                                    {% include "elements/comma.html" %}
+                                    {{ el }}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for el in fc.players %}
+                                    {% include "elements/comma.html" %}
+                                    {{ el }}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% if reg_questions %}
+            <br />
+            {% for key, que in reg_questions.items %}
+                {% if que.typ == 's' or que.typ == 'm' %}
+                    <a href="#" class="load_email_que" key="{{ key }}">{{ que.display }}</a>,
+                    <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
+                {% endif %}
+            {% endfor %}
+            {% for key, que in reg_questions.items %}
+                {% if que.typ == 's' or que.typ == 'm' %}
+                    <div class="hide email_que_{{ key }}">
+                        <br />
+                        <h4>{{ que.display }}</h4>
+                        <table class="mob">
+                            <thead>
+                                <tr>
+                                    <th>Option</th>
+                                    <th>Count</th>
+                                    <th>Emails</th>
+                                    <th>Names</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endblock %}
+    {% block js %}
+        <script>
+var url_load_questions = "{% url 'orga_registration_form_list' run.event.slug run.number %}";
+var url_load_questions_email = "{% url 'orga_registration_form_email' run.event.slug run.number %}";
+
+var download_text = '{% trans "Download" %}';
+
+var accounting = true;
+
+{% include "elements/questions/load.js" %}
+
+window.addEventListener('DOMContentLoaded', function() {
+
+    function load_accounting(el) {
+
+        if ($('#load_accounting').hasClass('select')) {
+            el.next().trigger('click');
+            $('#load_accounting').removeClass('select');
+            return;
+        }
+
+        request = $.ajax({
+            url: "{% url 'orga_registrations_accounting' run.event.slug run.number %}",
+            method: "POST",
+            datatype: "json",
+        });
+
+        start_spinner();
+
+        request.done(function(data) {
+            for (let key in data) {
+                for (let nm in data[key]) {
+                    let vl = data[key][nm];
+                    if (parseInt(vl) != 0)
+                        $('#{0} .{1}'.format(key, nm)).text(vl);
+                }
+            }
+
+            done['acc'] = 1;
+
+            $('#load_accounting').addClass('select');
+
+            el.next().trigger('click');
+
+            stop_spinner();
+
+            setTimeout(reload_table, 1000);
+        });
+
+    }
+
+    $(function() {
+
+        $('#load_accounting').on('click', function () {
+            load_accounting($(this));
+            return false;
+        });
+
+    });
+});
+        </script>
+    {% endblock %}

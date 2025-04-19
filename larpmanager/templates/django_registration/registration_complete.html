@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Registration complete" %}
+{% endblock %}
+{% block content %}
+    <p>{% trans "You are now registered, but your account is inactive. We have sent an activation email." %}</p>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load tz show_tags static i18n %}
+{% block title %}
+    {% trans "Register to" %} {{ name }}
+{% endblock %}
+{% block content %}
+    <div class="no-more-tables">
+        <table class="mob">
+            <thead>
+                <tr>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Registrations" %}</th>
+                </tr>
+            </thead>
+            {% for run in list %}
+                <tr>
+                    <td>
+                        <h3>
+                            <a href="{% url 'gallery' event.slug run.number %}">{{ run.search }}</a>
+                        </h3>
+                    </td>
+                    <td>
+                        <i>{{ run.pretty_dates }} </i>
+                    </td>
+                    <td>{% include "elements/reg_status.html" with run=run %}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

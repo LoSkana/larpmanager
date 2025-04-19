@@ -1,0 +1,73 @@
+{% load tz show_tags static i18n %}
+{% include "elements/form/informations.html" %}
+{% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+{% define "" as old_section %}
+{% for field in form.visible_fields %}
+    {% if field.auto_id in form.sections %}
+        {% get_field form.sections field.auto_id as section %}
+        {% if section != old_section %}
+        </table>
+    </div>
+    <h1 class="head_{{ section | slugify }}">
+        <a href="#"
+           class="my_toggle section-link"
+           tog='sec_{{ section | slugify }}'>
+            {{ section }} <i class="fa-solid fa-chevron-down"></i>
+        </a>
+    </h1>
+    <div class="hide sec_{{ section | slugify }}">
+        {% if section in form.section_descriptions %}
+            {% get_field form.section_descriptions section as description %}
+            {{ description | safe }}
+            <br />
+        {% endif %}
+        <table class="mob section no_csv" section="{{ section | slugify }}">
+            {% define section as old_section %}
+        {% endif %}
+    {% else %}
+        {% if old_section != "" %}
+        </table>
+        <table class="mob no_csv">
+            {% define "" as old_section %}
+        {% endif %}
+    {% endif %}
+    <tr>
+        <th>
+            <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+        </th>
+        <td>
+            {% if field.errors %}{{ field.errors }}{% endif %}
+            {{ field }}
+            {% if field.help_text %}
+                <br>
+                <div class="helptext">{{ field.help_text | safe }}</div>
+            {% endif %}
+            {% if field.auto_id in form.max_lengths %}
+                {% get_field form.max_lengths field.auto_id as args %}
+                {% if args.1 == "t" or args.1 == "p" %}
+                    <div class="helptext">
+                        {% trans "characters" %}: <span class="count"></span> / {{ args.0 }}
+                    </div>
+                {% elif args.1 == "m" %}
+                    <div class="helptext">
+                        {% trans "options" %}: <span class="count"></span> / {{ args.0 }}
+                    </div>
+                {% endif %}
+            {% endif %}
+            {% if field.auto_id in form.profiles %}
+                {% get_field form.profiles field.auto_id as profile %}
+                <br />
+                <br />
+                <a href="{{ profile }}" target="_blank">
+                    <img src="{{ profile }}" />
+                </a>
+                <br>
+                <span class="helptext">{% trans "(click on image to enlarge)" %}</span>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}
+{% if section != "" %}
+</table>
+</div>
+{% endif %}

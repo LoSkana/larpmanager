@@ -1,0 +1,229 @@
+{% load i18n static show_tags %}
+<p>
+    {% trans "You are about to make a payment of" %}: <b>{{ invoice.mc_gross | format_decimal }} {{ currency_symbol }}</b>.
+</p>
+{% if method == 'redsys' %}
+    <form name="from" action="{{ redsys_form.Ds_Redsys_Url }}" method="POST">
+        <!-- LIVE
+        <form name="from" action="https://sis-t.redsys.es:25443/sis/realizarPago" method="POST">
+        -->
+        <input type="hidden"
+               name="Ds_SignatureVersion"
+               value="{{ redsys_form.Ds_SignatureVersion }}" />
+        <input type="hidden"
+               name="Ds_MerchantParameters"
+               value="{{ redsys_form.Ds_MerchantParameters }}" />
+        <input type="hidden"
+               name="Ds_Signature"
+               value="{{ redsys_form.Ds_Signature }}" />
+        <input type="submit" value="{% trans 'Submit' %}">
+    </form>
+{% endif %}
+{% if method == 'sumup' %}
+    <div id="sumup-card"></div>
+    <script type="text/javascript"
+            src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js"></script>
+    <script type="text/javascript">
+      SumUpCard.mount({
+        checkoutId: '{{ sumup_checkout_id }}',
+        showAmount: true,
+        onResponse: function (type, body) {
+          // console.log('Type', type);
+          // console.log('Body', body);
+        },
+      });
+    </script>
+{% endif %}
+{% if method == 'stripe' %}<script>window.location.replace("{{ stripe_ck.url }}");</script>{% endif %}
+{% if method == 'satispay' %}
+    <br />
+    <br />
+    <a href="https://online.satispay.com/pay/{{ pay_id }}?redirect_url={{ redirect }}">
+        <img src="https://online.satispay.com/images/en-pay-red.svg"
+             alt="Pay with Satispay"
+             id="pay-with-satispay"
+             style="height: 50px;
+                    cursor: pointer" />
+    </a>
+{% endif %}
+{% if method == 'paypal' %}
+    <div class="paypal">
+        <p>{% trans 'Follow the link below to complete your payment on the Paypal platform.' %}</p>
+        {{ paypal_form.render }}
+    </div>
+{% endif %}
+{% if method == 'paypal-old' %}
+    <script src="https://unpkg.com/@paypal/paypal-js@5.0.6/dist/iife/paypal-js.min.js"></script>
+    <div id="smart-button-container"
+         style="margin-top:2em;
+                text-align: center">
+        <div id="paypal-buttons" style="max-width: 300px; margin: auto"></div>
+    </div>
+    <script>
+    window.paypalLoadScript({
+        "client-id": "{{ paypal_business }}",
+        currency: "{{ payment_currency }}"
+    }).then((paypal) => {
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                // Set up the transaction
+                return actions.order.create({
+                    purchase_units: [{
+                        "amount": {
+                            "value": '{{ invoice.mc_gross | format_decimal }}'
+                        },
+                        "description": '{{ invoice.causal }}',
+                        "custom_id": '{{ invoice.cod }}'
+                    }]
+                });
+            },
+            onApprove: async function (data, actions) {
+                // console.log(data);
+                // console.log(data.orderID);
+                return actions.order.capture().then(function (details) {
+                    const responsePromise = fetch('{% url "acc_webhook_paypal" %}/{{ invoice.cod }}');
+                    responsePromise.then(function (responseFromServer) {
+                        // console.log(responseFromServer)
+                        if(responseFromServer.status === 200) {
+                            location.href = '{% url "acc_wait" %}';
+                        } else {
+                             location.href = '{% url "acc_cancelled" %}';
+                            }
+                        })
+
+                    });
+                }
+            }).render("#paypal-buttons");
+    });
+    </script>
+    <br />
+    <h3>
+        <a href="#" class="my_toggle" tog='paypal2'>{% trans 'Experimental' %}</a>
+    </h3>
+    <div class="paypal2 hide"></div>
+{% endif %}
+{% if method == 'any' %}
+    <p>
+        {% trans 'Please indicate below the exact method of payment you made. Remember to submit the form, otherwise your payment will not be processed!' %}
+    </p>
+    <form action="{% url 'acc_submit' 'any' request.path %}"
+          method="post"
+          class="acc_submit">
+        {% csrf_token %}
+        <table class="mob no_csv">
+            {{ any_form.as_table }}
+        </table>
+        <input type="submit" value="{% trans 'Submit' %}">
+    </form>
+{% endif %}
+{% if method == 'wire' %}
+    <p>{% trans 'Follow the steps below:' %}</p>
+    <p>
+        <b>(1)</b> {% trans 'Use the information below to request the transfer from your bank.' %}
+    </p>
+    <p>
+        <b>(2)</b> {% trans 'Please check that you have copied the entire message for payment exactly (in coloured text), it is important!' %}
+    </p>
+    <p>
+        <b>(3)</b> {% trans 'Once the transfer is confirmed, request the slip (the receipt of confirmation) and upload it below. You can upload a file in pdf format, or an image.' %}
+    </p>
+    <hr />
+    <form action="{% url 'acc_submit' 'wire' request.path %}"
+          enctype="multipart/form-data"
+          method="post"
+          class="acc_submit">
+        {% csrf_token %}
+        {{ wire_form.as_p }}
+        <input type="submit" value="{% trans 'Submit' %}">
+    </form>
+    <hr />
+    <p>
+        <b><i>{% trans 'Please be careful to perform these steps - otherwise your  payment will not be processed!' %}</i></b>
+    </p>
+    <hr />
+    <table class="mob no_csv">
+        <tr>
+            <th>{% trans 'Causal' %}</th>
+            <td class="causal">{{ invoice.causal }}</td>
+        </tr>
+        <tr>
+            <th>{% trans 'Amount' %}</th>
+            <td>{{ invoice.mc_gross|format_decimal }}</td>
+        </tr>
+        <tr>
+            <th>{% trans 'Currency' %}</th>
+            <td>{{ payment_currency }}</td>
+        </tr>
+        <tr>
+            <th>{% trans 'Beneficiary' %}</th>
+            <td>{{ wire_payee }}</td>
+        </tr>
+        <tr>
+            <th>{% trans 'IBAN' %}</th>
+            <td>{{ wire_iban }}</td>
+        </tr>
+        {% if wire_swift %}
+            <tr>
+                <th>{% trans 'Swift' %}</th>
+                <td>{{ wire_swift }}</td>
+            </tr>
+        {% endif %}
+        {% if wire_bank_address %}
+            <tr>
+                <th>{% trans 'Bank address' %}</th>
+                <td>{{ wire_bank_address }}</td>
+            </tr>
+        {% endif %}
+    </table>
+{% endif %}
+{% if method == 'paypal_nf' %}
+    <p>{% trans 'Follow the steps below:' %}</p>
+    <p>
+        <b>(1)</b> {% trans 'Click on the image below (Paypal.me) to open the payment.' %}
+    </p>
+    <p>
+        <b>(2)</b> {% trans 'Copy and paste exactly all the coloured text below into the field "notes" (this is important!)' %}
+    </p>
+    <p class="causal">{{ invoice.causal }}</p>
+    <p>
+        <b>(3)</b> {% trans 'Indicates that payment is sent "to friends and family".' %}
+    </p>
+    <p>
+        <b>(4)</b> {% trans 'Once you have made the payment, return to this page, and upload below the screenshot of the confirmation sent by Paypal.' %}
+    </p>
+    <hr />
+    <form action="{% url 'acc_submit' 'paypal_nf' request.path %}"
+          enctype="multipart/form-data"
+          method="post">
+        {% csrf_token %}
+        {{ wire_form.as_p }}
+        <input type="submit" value="{% trans 'Submit' %}">
+    </form>
+    <hr />
+    <p>
+        <b><i>{% trans 'Please be careful to perform these steps - otherwise your  payment will not be processed!' %}</i></b>
+    </p>
+    <hr />
+    <a href="https://PayPal.Me/{{ paypal_nf_handle }}/{{ invoice.mc_gross | floatformat:2 }}"
+       target="_blank">
+        <img src="{% static 'larpmanager/assets/img/paypal_me.png' %}"
+             style="width:50%;
+                    max-width: 600px" />
+    </a>
+{% endif %}
+<script>
+
+    window.addEventListener('DOMContentLoaded', function() {
+        $(function() {
+
+            $('form').each(function() {
+                var actionUrl = $(this).attr('action');
+                var newActionUrl = actionUrl.replace(/([^:]\/)\/+/g, '$1');
+                $(this).attr('action', newActionUrl);
+            });
+
+        });
+
+    });
+
+</script>

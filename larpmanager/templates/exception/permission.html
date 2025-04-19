@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block title %}
+    {% trans "Access denied" %}
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+    {% trans "Your user does not have the required permissions to access this page." %}
+    <br />
+    <br />
+    <i>({% trans "If you think this is an error, get in touch with us to resolve it" %})</i>
+{% endblock %}

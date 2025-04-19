@@ -1,0 +1,14 @@
+{% load show_tags i18n %}
+{% if speedlarps and show_speedlarp %}
+    <h1 class="c">Speed Larp</h1>
+    <p>
+        {% trans "We will use this information at the workshops. You'll have the chance
+        to play scenes from your character's past or you'll have some
+        time to calibrate before the game with players." %}
+    </p>
+    {% for f in sheet_speedlarps %}
+        <h2 class="c">{{ f.typ }}: {{ f.data.name }} ({{ f.station }})</h2>
+        <div class="plot">{% show_char f.data run 0 %}</div>
+    {% endfor %}
+    <hr class="clear" />
+{% endif %}

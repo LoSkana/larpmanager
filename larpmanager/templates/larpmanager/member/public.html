@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load tz show_tags static i18n %}
+{% block title %}{{ member.display_member }}{% endblock %}
+{% block content %}
+    <div class="gallery single">
+        <div class="el">
+            <div class="icon">
+                {% if member.profile_thumb %}
+                    <img src="{{ member.profile_thumb.url }}" />
+                {% else %}
+                    <img src="{% static 'larpmanager/assets/blank-avatar.svg' %}" />
+                {% endif %}
+            </div>
+        </div>
+        <div class="text">
+            {% if member.nick %}
+                <p>
+                    <b>Nick: </b> {{ member.nick }}
+                </p>
+            {% endif %}
+            {% if 'chat' in assoc.features %}
+                <p>
+                    <b>{% trans "Private message" %}: </b> <a href="{% url 'chat' member.id %}">Chat</a>
+                </p>
+            {% endif %}
+            {% if member.pronoun %}
+                <p>
+                    <b>{% trans "Pronouns" %}: </b>
+                    {{ member.pronoun }}
+                </p>
+            {% endif %}
+            {% if member.social_contact %}
+                <p>
+                    <b>{% trans "Contact" %}: </b>
+                    {% if member.contact_url %}
+                        <a href="{{ member.social_contact }}">{{ member.social_contact }}</a>
+                    {% else %}
+                        {{ member.social_contact }}
+                    {% endif %}
+                </p>
+            {% endif %}
+            {% if 'player_larp_history' in assoc.features %}
+                <hr />
+                <h2>{% trans "Events played" %}</h2>
+                <table class="mob">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Run" %}</th>
+                            <th>{% trans "Character" %}</th>
+                        </tr>
+                    </thead>
+                    {% for el in regs %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'gallery' el.run.event.slug el.run.number %}">{{ el.run }}</a>
+                            </td>
+                            <td>
+                                {% for num, name in el.chars.items %}
+                                    {% include "elements/comma.html" %}
+                                    <a href="{% url 'character' el.run.event.slug el.run.number num %}">{{ name }}</a>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+            {% if 'badge' in assoc.features %}
+                <hr />
+                <h2>Achievements</h2>
+                <p class="c">
+                    <a href="{% url 'badges' %}">{% trans "Show all" %}</a>
+                </p>
+                {% include "elements/badges.html" %}
+            {% endif %}
+            <hr />
+        </div>
+    {% endblock %}
+    {% block js %}
+        <script>
+window.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function() {
+      resize_to_fit();
+    });
+});
+
+function resize_to_fit() {
+    $(".icon-name p").each(function( index ) {
+        var that = $(this),
+            textLength = that.html().length
+        ;
+
+        console.log(textLength);
+
+        if (textLength > 60) {
+            that.css('font-size', '60%');
+        } else if(textLength > 45) {
+            that.css('font-size', '70%');
+        } else if(textLength > 30) {
+            that.css('font-size', '80%');
+        } else if(textLength > 15) {
+            that.css('font-size', '90%');
+        }
+    });
+
+}
+        </script>
+    {% endblock %}

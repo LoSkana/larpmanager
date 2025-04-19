@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Register" %}
+{% endblock %}
+{% block content %}
+    <br />
+    <form id="register_form"
+          method="post"
+          action="{% url 'registration_register' %}">
+        {% csrf_token %}
+        <table class="mob no_csv">
+            {{ form.as_table }}
+        </table>
+        <br />
+        <input type="submit" value="{% trans 'Submit' %}" />
+    </form>
+{% endblock %}
+{% block js %}
+    <script>
+window.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function(){
+
+        $("#register_form").submit( function(eventObj) {
+            var val = $('#id_email').val();
+          $("<input />").attr("type", "hidden")
+              .attr("name", "username")
+              .attr("value", val)
+              .appendTo("#register_form");
+
+          return true;
+      });
+
+    });
+});
+
+    </script>
+{% endblock %}

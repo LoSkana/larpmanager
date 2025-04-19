@@ -1,0 +1,171 @@
+{% extends 'utils.html' %}
+{% load i18n show_tags %}
+{% block title %}
+    {{ member }} - {% trans "Member" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows all information about the individual member available in the system." %}
+{% endblock %}
+{% block content %}
+    <p>Email: {{ member.email }}</p>
+    <p>
+        {% trans "Show" %}:
+        <a href="#" class="my_toggle" tog='data'>{% trans "personal data" %}</a>,
+        <a href="#" class="my_toggle" tog='reg'>{% trans "registrations" %}</a>,
+        <a href="#" class="my_toggle" tog='pay'>{% trans "payments" %}</a>,
+        <a href="#" class="my_toggle" tog='oth'>{% trans "other" %}</a>,
+        <a href="#" class="my_toggle" tog='dis'>{% trans "discount" %}</a>,
+    </p>
+    {% include "elements/membership_cf.html" %}
+    <div class="hide data">
+        <h2>{% trans "Personal data" %}</h2>
+        <form action="{{ request.path }}"
+              method="post"
+              enctype="multipart/form-data">
+            {% csrf_token %}
+            <table class="mob no_csv">
+                {{ form.as_table }}
+            </table>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+    <div class="hide reg">
+        <h2>{% trans "Registrations" %}</h2>
+        <table class="writing no_csv">
+            <thead>
+                <tr>
+                    <th>{% trans "Run" %}</th>
+                    <th>{% trans "Total" %}</th>
+                    <th>{% trans "Given" %}</th>
+                </tr>
+            </thead>
+            {% for el in regs %}
+                <tr>
+                    <td>{{ el.run.search }}</td>
+                    <td>{{ el.tot_iscr|format_decimal }}</td>
+                    <td>{{ el.tot_payed|format_decimal }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="hide pay">
+        <h2>{% trans "Payments" %}</h2>
+        <table class="writing tablesorter">
+            <thead>
+                <tr>
+                    <th>{% trans "Registration" %}</th>
+                    <th>{% trans "Value" %}</th>
+                    <th>{% trans "Type" %}</th>
+                </tr>
+            </thead>
+            {% for el in pays %}
+                <tr>
+                    <td>{{ el.reg.run }}</td>
+                    <td>{{ el.value }}</td>
+                    <td>{{ el.typ }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="hide oth">
+        <h2>{% trans "Other" %}</h2>
+        <table class="writing tablesorter">
+            <thead>
+                <tr>
+                    <th>{% trans "Run" %}</th>
+                    <th>{% trans "Description" %}</th>
+                    <th>{% trans "Value" %}</th>
+                    <th>{% trans "Type" %}</th>
+                </tr>
+            </thead>
+            {% for el in others %}
+                <tr>
+                    <td>{{ el.run.search }}</td>
+                    <td>{{ el.descr }}</td>
+                    <td>{{ el.value }}</td>
+                    <td>{{ el.typ }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="hide dis">
+        <h2>{% trans "Discount" %}</h2>
+        <table class="writing tablesorter">
+            <thead>
+                <tr>
+                    <th>{% trans "Registration" %}</th>
+                    <th>{% trans "Run" %}</th>
+                    <th>{% trans "Discount" %}</th>
+                    <th>{% trans "Detail" %}</th>
+                </tr>
+            </thead>
+            {% for el in discounts %}
+                <tr>
+                    <td>{{ el.reg.search }}</td>
+                    <td>{{ el.run.search }}</td>
+                    <td>{{ el.disc }}</td>
+                    <td>{{ el.detail }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <hr class="c" />
+    {% if '.pdf' in doc_path %}
+        <embed src="{{ member.membership.get_document_filepath }}"
+               type="application/pdf"
+               width="100%"
+               height="500px">
+    {% else %}
+        <img class="membership_request"
+             src="{{ member.membership.get_document_filepath }}" />
+    {% endif %}
+    <hr class="c" />
+    {% if '.pdf' in req_path %}
+        <embed src="{{ member.membership.get_request_filepath }}"
+               type="application/pdf"
+               width="100%"
+               height="500px">
+    {% else %}
+        <img class="membership_request"
+             src="{{ member.membership.get_request_filepath }}" />
+    {% endif %}
+{% endblock %}
+{% block js %}
+    <script>
+{% if form.country_subdivisions_map %}
+    var countrySubdivisions = {{ form.country_subdivisions_map | safe }};
+
+    function province_update() {
+        let countryCode = $('#id_residence_address_0').val();
+        let $provinceSelect = $('#id_residence_address_1');
+
+        $provinceSelect.empty().append('<option value="" disabled selected>----</option>');
+        if (countrySubdivisions[countryCode]) {
+            $.each(countrySubdivisions[countryCode], function(index, subdivision) {
+                $provinceSelect.append(new Option(subdivision[1], subdivision[0]));
+            });
+        }
+
+        {% if form.initial_province %}$provinceSelect.val('{{ form.initial_province }}');{% endif %}
+    }
+{% endif %}
+
+    window.addEventListener('DOMContentLoaded', function() {
+
+        $(function () {
+
+            {% if form.country_subdivisions_map %}
+
+                {% if form.initial_nation %}
+                    province_update();
+                {% else %}
+                    $('#id_residence_address_0').prepend('<option value="----" disabled selected>----</option>');
+                {% endif %}
+
+                $('#id_residence_address_0').on('change', province_update);
+            {% endif %}
+        });
+    });
+
+    </script>
+{% endblock %}

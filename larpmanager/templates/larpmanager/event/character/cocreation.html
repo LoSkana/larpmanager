@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load tz show_tags static i18n %}
+{% block title %}{{ character }} - Co-Creation - {{ run.search }}{% endblock %}
+{% block meta %}{{ form.media }}{% endblock %}
+{% block content %}
+    {% if show_co_creation %}
+        <h2 class="c">{% trans 'Co-creation' %}</h2>
+        <p class="c">
+            <b>{% trans "Questions" %}</b>
+        </p>
+        <div class="plot">{% show_char co_creation.first run 1 %}</div>
+        <br />
+        <p class="c">
+            <b>{% trans "Answers" %}</b>
+        </p>
+        <form action="{{ request.path }}"
+              method="post"
+              enctype="multipart/form-data">
+            {% csrf_token %}
+            <table class="mob">
+                {{ form.co_creation_answer }}
+            </table>
+            <input type="submit" value="{% trans 'Submit' %}">
+        </form>
+    {% endif %}
+{% endblock %}

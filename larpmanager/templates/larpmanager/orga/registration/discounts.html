@@ -1,0 +1,48 @@
+{% extends 'utils.html' %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Discounts" %} - {{ registration.member }} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows active discounts on the player, allows you to activate or deactivate them." %}
+{% endblock %}
+{% block content %}
+    {% if active %}
+        <h2>{% trans "Discounts active" %}</h2>
+        <table class="mob tablesorter">
+            <tr>
+                <th>{% trans "Discount" %}</th>
+                <th>{% trans "Value" %}</th>
+                <th></th>
+            </tr>
+            {% for el in active %}
+                <tr>
+                    <td>{{ el.disc }}</td>
+                    <td>{{ el.value }}</td>
+                    <td>
+                        <a href="{% url 'orga_registration_discount_del' event.slug run.number registration.id el.id %}">{% trans "Delete" %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if available %}
+        <h2>{% trans "Discounts available" %}</h2>
+        <table class="mob tablesorter">
+            <tr>
+                <th>{% trans "Discount" %}</th>
+                <th>{% trans "Value" %}</th>
+                <th></th>
+            </tr>
+            {% for el in available %}
+                <tr>
+                    <td>{{ el }}</td>
+                    <td>{{ el.value }}</td>
+                    <td>
+                        <a href="{% url 'orga_registration_discount_add' event.slug run.number registration.id el.id %}">{% trans "Add" %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}

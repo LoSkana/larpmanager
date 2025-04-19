@@ -1,0 +1,32 @@
+{% extends 'utils.html' %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Email list" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the email lists of subscribers." %}
+{% endblock %}
+{% block content %}
+    <h2>{% trans "Simple list" %}</h2>
+    <p>
+        {% for el in list %}
+            {% include "elements/comma.html" %}
+            {{ el.1 }}
+        {% endfor %}
+    </p>
+    <h2>{% trans "Table list" %}</h2>
+    <table class="mob">
+        <tr>
+            <td>Email address</td>
+            <td>First name</td>
+            <td>Last name</td>
+        </tr>
+        {% for el in list %}
+            <tr id="{{ el.0 }}">
+                <td>{{ el.1 }}</td>
+                <td>{{ el.2 | title }}</td>
+                <td>{{ el.3 | title }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

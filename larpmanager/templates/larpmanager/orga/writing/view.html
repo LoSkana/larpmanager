@@ -1,0 +1,26 @@
+{% extends 'utils.html' %}
+{% load show_tags i18n %}
+{% block title %}
+    {{ name }} - {% trans "Show" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page allows you to fully view a character." %}
+{% endblock %}
+{% block content %}
+    <h2 class="c">{{ name }}</h2>
+    {% if nm == 'character' or nm == 'plot' or nm == 'faction' %}
+        <div class="plot">
+            {{ el.teaser | safe }}
+            <hr />
+            {% show_char el.data run 1 %}
+        </div>
+    {% elif nm == 'trait' %}
+        <div class="plot">
+            {{ el.teaser | safe }}
+            <hr />
+            {% show_trait el.text run 1 %}
+        </div>
+    {% elif nm == 'plot' or nm == 'prologue' %}
+        <div class="plot">{% show_char el.data run 1 %}</div>
+    {% endif %}
+{% endblock %}

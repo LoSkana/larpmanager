@@ -1,0 +1,37 @@
+{% extends 'utils.html' %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Url Shortner" %} - {% trans "Organization" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the url shortners." %}
+{% endblock %}
+{% block content %}
+    {% include "elements/header/exe.html" %}
+    <table id="tb" class="tablesorter mob">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Code" %}</th>
+                <th>{% trans "External link" %}</th>
+                <th>{% trans "Short url" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'exe_urlshortner_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.name }}</td>
+                    <td>{{ el.cod }}</td>
+                    <td>{{ el.url }}</td>
+                    <td>
+                        <a href="https://larpmanager.com/at/{{ el.cod }}">https://larpmanager.com/at/{{ el.cod }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

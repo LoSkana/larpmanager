@@ -1,0 +1,62 @@
+{% extends 'utils.html' %}
+{% load i18n static %}
+{% block title %}
+    {% trans 'Payments' %}
+{% endblock %}
+{% block content %}
+    <h3>{% trans "Total" %}: {{ total }}</h3>
+    <table class="tablesorter mob">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Association</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Features</th>
+                <th>Plan</th>
+                <th>Registration</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        {% for el in list %}
+            <tr>
+                <th>{{ el }}</th>
+                <td>{{ el.event.assoc }}</td>
+                <td>{{ el.start | date:"d/m/Y" }}</td>
+                <td>
+                    {% if el.end %}{{ el.end | date:"d/m/Y" }}{% endif %}
+                </td>
+                <td>{{ el.features }}</td>
+                <td>{{ el.get_plan_display }}</td>
+                <td>{{ el.active_registrations }}</td>
+                <td>{{ el.total }}</td>
+                <td>
+                    <a href='{% url "lm_payments_confirm" el.id %}' class="confirm-link">Confirm</a>
+                </td>
+            {% endfor %}
+        </tr>
+    </table>
+    <table>
+        {% for year, total in totals.items %}
+            <tr>
+                <th>{{ year }}</th>
+                <td>{{ total }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+{% block js %}
+    <script>
+ window.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function() {
+        $('.confirm-link').on('click', function(e) {
+            const confirmAction = confirm('Sei sicuro di voler procedere?');
+            if (!confirmAction) {
+                e.preventDefault();
+            }
+        });
+    });
+});
+    </script>
+{% endblock %}

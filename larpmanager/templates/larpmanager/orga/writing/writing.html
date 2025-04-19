@@ -1,0 +1,102 @@
+{% extends 'utils.html' %}
+{% load i18n static show_tags %}
+{% block title %}
+    {% if eid %}
+        {{ name }}
+    {% else %}
+        {% trans "New" %} {{ form.page_title }}
+    {% endif %}
+    - {{ run }}
+{% endblock %}
+{% block info %}{{ form.page_info }}{% endblock %}
+{% block content %}
+    {% include "elements/form/sections.html" %}
+    <!--
+<br />
+
+<h3><a href="#" class="my_toggle" tog='del'>{% trans "Cancellation" %}</a></h3>
+
+<div class="hide del">
+
+    Conferma che vuoi rimuovere questo elemento: <input type="checkbox" name="delete" style="float:none; display: inline-block;" />. Dopodichè invia il form con "Conferma".
+
+</div>
+-->
+{% endblock %}
+{% block js %}
+    <script>
+function translate(id, text) {
+
+    // get text
+    var tx = $('#' + id + '_tr .orig .plot').first().html();
+
+    // get translation
+    // console.log(tx);
+
+    $.post("{% url 'orga_translate' event.slug run.number %}", {
+        tx: tx,
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+    }, function(data, status){
+        console.log(data.res);
+
+        try {
+            $('#' + id).val(data.res);
+
+            tinymce.get(id).setContent(data.res);
+        } catch (e) {
+            console.log(e);
+        }
+
+        // show orig
+        $('#' + id + '_tr .orig').show();
+    });
+
+    return false;
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+    $(function() {
+        $('form').on('submit', function() {
+            return confirm('{% trans "Are you really sure?" %}');
+        });
+
+        $('option:selected').each(function(){
+            $(this).prop('selected',true);
+        });
+
+        //~ $('input[type=text]').each(function() {
+            //~ console.log($(this));
+        //~ });
+
+        $('.link_show_char').each(function(){
+            v = $(this).text();
+            v = v.replace('&$£', '#');
+            $(this).text(v);
+        });
+
+        setTimeout(function() {
+            $('.hide_later').each(function(){
+                $(this).hide();
+            })
+        },
+        500);
+
+    });
+
+{% if eid %}
+var eid = {{ eid }};
+var type = '{{ type }}';
+    {% include "elements/auto-save.html" %}
+{% else %}
+var eid = -1;
+{% endif %}
+
+});
+
+    </script>
+    {% if form.load_js %}
+        {% with template_name=form.load_js|stringformat:"s"|add:".js" %}
+            {% include "elements/"|add:template_name %}
+        {% endwith %}
+    {% endif %}
+{% endblock %}

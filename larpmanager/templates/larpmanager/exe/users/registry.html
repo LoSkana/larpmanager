@@ -1,0 +1,48 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Registry" %} - {% trans "Organization" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page summarises the list of members as a registry" %}
+{% endblock %}
+{% block content %}
+    <table class="tablesorter mob">
+        <thead>
+            <tr>
+                <th>{% trans "Card number" %}</th>
+                <th>{% trans "Surname" %}</th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Birth place" %}</th>
+                <th>{% trans "Birth date" %}</th>
+                <th>{% trans "Residence" %}</th>
+                <th>{% trans "Date of association" %}</th>
+                <th>{% trans "Fiscal code" %}</th>
+                <th>{% trans "Phone contact" %}</th>
+                <th>{% trans "Email" %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        {% for el in list %}
+            <tr>
+                <td>{{ el.membership.card_number }}</td>
+                <td>{{ el.surname }}</td>
+                <td>{{ el.name }}</td>
+                <td>{{ el.birth_place }}</td>
+                <td>{{ el.birth_date | date:"d/m/Y" }}</td>
+                <td>{{ el.get_residence }}</td>
+                <td>{{ el.membership.date | date:"d/m/Y" }}</td>
+                <td>
+                    {% if el.fiscal_code %}
+                        {{ el.fiscal_code }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td>{{ el.phone_contact }}</td>
+                <td>{{ el.email }}</td>
+                <td>{{ el.language }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

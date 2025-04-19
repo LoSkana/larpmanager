@@ -1,0 +1,17 @@
+{% extends 'utils.html' %}
+{% load i18n show_tags %}
+{% block title %}
+    {{ form.page_title }}
+    {% if nonum is None %}
+        {% if num %}
+            - {% trans "Change" %}
+        {% else %}
+            - {% trans "New" %}
+        {% endif %}
+    {% endif %}
+    - {{ run }}
+{% endblock %}
+{% block info %}{{ form.page_info }}{% endblock %}
+{% block content %}
+    {% include "elements/form/sections.html" %}
+{% endblock %}

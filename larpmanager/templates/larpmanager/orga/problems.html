@@ -1,0 +1,45 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Problems" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows problems reported by contributors, for direct management during the event." %}
+{% endblock %}
+{% block content %}
+    {% include "elements/header/orga.html" %}
+    <p>
+        <a href="#" class="my_toggle" tog='closed'>{% trans "Show closed" %}</a>
+    </p>
+    <table id="problems" class="tablesorter mob writing">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Severity" %}</th>
+                <th>{% trans "Status" %}</th>
+                <th>{% trans "Where" %}</th>
+                <th>{% trans "When" %}</th>
+                <th>{% trans "What" %}</th>
+                <th>{% trans "Who" %}</th>
+                <th>{% trans "Rensponsable" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}"
+                    {% if el.status == 'c' %}class="closed hide"{% endif %}>
+                    <td>
+                        <a href="{% url 'orga_problems_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.get_severity_display }}</td>
+                    <td>{{ el.get_status_display }}</td>
+                    <td>{{ el.where_l }}</td>
+                    <td>{{ el.when_l }}</td>
+                    <td>{{ el.what_l }}</td>
+                    <td>{{ el.who_l }}</td>
+                    <td>{{ el.assigned }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

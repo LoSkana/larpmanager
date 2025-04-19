@@ -1,0 +1,50 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Pre registrations" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the pre-signups for the run." %}
+{% endblock %}
+{% block content %}
+    <a href="{% url 'pre_register' run.event.slug %}">{% trans "Pre-registration link" %}</a>
+    <br />
+    <br />
+    <h2>
+        {% trans "Unconverted pre-registrations" %}: <b>{{ dc.pred | length }}</b>
+    </h2>
+    <p>
+        {% for el in dc.pred %}
+            {% include "elements/comma.html" %}
+            {{ el.member.email }}
+        {% endfor %}
+    </p>
+    <hr class="c" />
+    <h2>
+        {% trans "Pre registrations total" %}: <b>{{ dc.list | length }}</b>
+    </h2>
+    <table class="mob tablesorter">
+        <thead>
+            <tr>
+                <th>{% trans "Member" %}</th>
+                <th>{% trans "Mail" %}</th>
+                <th>{% trans "Preference" %}</th>
+                <th>{% trans "Joined" %}</th>
+                <th>{% trans "Info" %}</th>
+                <th>{% trans "Date" %}</th>
+            </tr>
+        </thead>
+        {% for el in dc.list %}
+            <tr>
+                <td>{{ el.member }}</td>
+                <td>{{ el.member.email }}</td>
+                <td>{{ el.pref }}</td>
+                <td>
+                    {% if el.signed %}<i class="fa-solid fa-check"></i>{% endif %}
+                </td>
+                <td>{{ el.info }}</td>
+                <td>{{ el.created }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

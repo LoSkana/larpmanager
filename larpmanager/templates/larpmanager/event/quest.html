@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load tz show_tags static i18n %}
+{% block title %}{{ data.name }} - {{ run.search }}{% endblock %}
+{% block content %}
+    {% if show_teaser %}
+        <h2>Teaser</h2>
+        <p>{{ data.teaser | safe }}</p>
+    {% endif %}
+    <h2>{% trans 'Traits' %}</h2>
+    {% for el in data.traits %}
+        <div class="go-inline">
+            <b>{{ el.name }} </b>
+            {% if show_teaser and el.teaser %}- {{ el.teaser | safe }}{% endif %}
+            {% if el.safety %}(<b>Safety:</b> {{ el.safety | safe }} ){% endif %}
+            {% if el.keywords %}
+                (<b>{% trans 'Keywords' %}:</b> {{ el.keywords | safe }} )
+            {% endif %}
+        </div>
+        <hr class="clear" />
+    {% endfor %}
+{% endblock %}

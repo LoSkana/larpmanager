@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load tz show_tags static i18n %}
+{% block title %}
+    {% trans 'Character relationships' %}
+{% endblock %}
+{% block content %}
+    <div class="staff-list">
+        <div class="orga-buttons">
+            <a class='new button'
+               href="{% url 'character_relationships_edit' run.event.slug run.number char.number 0 %}">{% trans "New" %}</a>
+        </div>
+    </div>
+    <h3>{% trans "Relationships of your character" %}</h3>
+    <table id="player_relationships">
+        <tr>
+            <th></th>
+            <th></th>
+            <th style="width:33%">{% trans "Details" %}</th>
+            <th>{% trans "Relationship" %}</th>
+        </tr>
+        {% for el in rel %}
+            <tr>
+                <td>
+                    <a href="{% url 'character_relationships_edit' run.event.slug run.number char.number el.number %}"><i class="fas fa-edit"></i></a>
+                </td>
+                <td style="width:15%">
+                    {% if el.player_id > 0 %}
+                        <img style="width:100%" src="{{ el.player_prof }}" />
+                    {% else %}
+                        <img style="width:100%"
+                             src="{% static 'larpmanager/assets/blank-avatar.svg' %}" />
+                    {% endif %}
+                </td>
+                <td style="font-size:80%; width:30%">
+                    <a href="{% url 'character' event.slug run.number el.number %}">{{ el.name }}</a>
+                    {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
+                    {% if el.pronoun %}({{ el.pronoun }}){% endif %}
+                    {% if el.motto %}- <i>{{ el.motto | safe | clean_tags }}</i>{% endif %}
+                    -
+                    {% if el.player_id > 0 %}
+                        <b>{% trans 'Player' %}:</b>&nbsp;<a href="{% url 'public' el.player_id %}">
+                            {% if run.id in all_runs or run.reg %}
+                                {{ el.player_full }}
+                            {% else %}
+                                {{ el.player }}
+                            {% endif %}
+                        </a>
+                    {% endif %}
+                    -
+                    <b>{% trans 'Factions' %}:</b>
+                    {% for g in el.factions %}
+                        {% if not g.typ == 'g' %}
+                            {% include "elements/comma.html" %}
+                            {{ g.name }}
+                        {% endif %}
+                    {% endfor %}
+                    <br />
+                    <div class="go-inline">
+                        <b>{% trans 'Teaser' %}:</b> <span class="teas">{{ el.teaser | safe | clean_tags | truncatechars:1000 }} (...)</span>
+                    </div>
+                </td>
+                <td style="width:50%">{{ el.text | safe | clean_tags | truncatechars:500 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block special %}table_csv{% endblock %}
+{% block meta %}<meta name="csrf-token" content="{{ csrf_token }}">{% endblock %}
+{% block js %}
+    {{ form.media }}
+    {% if form.load_js %}
+        {% with template_name=form.load_js|stringformat:"s"|add:".js" %}
+            {% include "elements/"|add:template_name %}
+        {% endwith %}
+    {% endif %}
+    <script src="{% static 'node_modules/table2csv/dist/table2csv.js' %}" defer></script>
+{% endblock %}

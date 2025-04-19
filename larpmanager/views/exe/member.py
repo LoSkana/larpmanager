@@ -1,0 +1,568 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+import csv
+from collections import defaultdict
+from datetime import timedelta, datetime
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect, render
+from django.utils.translation import gettext_lazy as _
+
+from larpmanager.forms.member import (
+    ExeBadgeForm,
+    MembershipResponseForm,
+    ExeMemberForm,
+    ExeMembershipForm,
+    ExeVolunteerRegistryForm,
+)
+from larpmanager.forms.miscellanea import (
+    OrgaHelpQuestionForm,
+    SendMailForm,
+)
+from larpmanager.models.accounting import (
+    AccountingItemDiscount,
+    AccountingItemPayment,
+    AccountingItemMembership,
+    AccountingItemOther,
+)
+from larpmanager.models.association import Association
+from larpmanager.models.event import (
+    Run,
+)
+from larpmanager.models.member import Membership, Badge, VolunteerRegistry, Member, Vote, get_user_membership
+from larpmanager.models.miscellanea import (
+    HelpQuestion,
+)
+from larpmanager.models.registration import (
+    Registration,
+)
+from larpmanager.accounting.registration import update_member_registrations
+from larpmanager.cache.role import check_assoc_permission
+from larpmanager.utils.common import (
+    get_member,
+    normalize_string,
+)
+from larpmanager.utils.member import calculate_fiscal_code
+from larpmanager.utils.edit import exe_edit
+from larpmanager.mail.member import notify_membership_approved, notify_membership_reject
+from larpmanager.utils.pdf import (
+    return_pdf,
+    get_membership_request,
+    print_volunteer_registry,
+)
+from larpmanager.views.orga.member import send_mail_batch
+
+
+@login_required
+def exe_membership(request):
+    ctx = check_assoc_permission(request, "exe_membership")
+
+    fees = set(
+        AccountingItemMembership.objects.filter(assoc_id=ctx["a_id"], year=datetime.now().year).values_list(
+            "member_id", flat=True
+        )
+    )
+
+    next_runs = dict(
+        Run.objects.filter(event__assoc_id=ctx["a_id"], end__gt=datetime.today()).values_list("pk", "search")
+    )
+
+    next_regs_qs = Registration.objects.filter(run__id__in=next_runs.keys()).values_list("run_id", "member_id")
+
+    next_regs = defaultdict(list)
+    for run_id, member_id in next_regs_qs:
+        next_regs[member_id].append(run_id)
+
+    for m in (
+        Membership.objects.filter(assoc_id=ctx["a_id"])
+        .select_related("member")
+        .exclude(status__in=[Membership.EMPTY, Membership.JOINED])
+        .order_by("member__surname")
+        .values_list("member__id", "member__surname", "member__name", "member__email", "card_number", "status")
+    ):
+        v = m[5]
+        if v == "a" and m[0] in fees:
+            v = "p"
+        if v not in ctx:
+            ctx[v] = []
+        run_names = ""
+        if m[0] in next_regs:
+            run_names = ", ".join([next_runs[run_id] for run_id in next_regs[m[0]] if run_id in next_runs])
+        m = m + (run_names,)
+        ctx[v].append(m)
+
+    ctx["sum"] = 0
+    if "a" in ctx:
+        ctx["sum"] += len(ctx["a"])
+    if "p" in ctx:
+        ctx["sum"] += len(ctx["p"])
+
+    return render(request, "larpmanager/exe/users/membership.html", ctx)
+
+
+@login_required
+def exe_membership_evaluation(request, num):
+    ctx = check_assoc_permission(request, "exe_membership")
+
+    member = Member.objects.get(pk=num)
+    get_user_membership(member, ctx["a_id"])
+
+    if request.method == "POST":
+        form = MembershipResponseForm(request.POST)
+        if form.is_valid():
+            resp = request.POST["response"]
+            if request.POST["approved"] == "1":
+                member.membership.status = Membership.ACCEPTED
+                member.membership.save()
+                notify_membership_approved(member, resp)
+                update_member_registrations(member)
+                messages.success(request, _("Member approved!"))
+            else:
+                member.membership.status = Membership.EMPTY
+                member.membership.save()
+                notify_membership_reject(member, resp)
+                messages.success(request, _("Member refused!"))
+            return redirect("exe_membership")
+    else:
+        form = MembershipResponseForm()
+
+    ctx["member"] = member
+    ctx["form"] = form
+
+    if member.membership.document:
+        ctx["doc_path"] = member.membership.get_document_filepath().lower()
+
+    if member.membership.request:
+        ctx["req_path"] = member.membership.get_request_filepath().lower()
+
+    normalized_name = normalize_string(member.name)
+    normalized_surname = normalize_string(member.surname)
+
+    ctx["member_exists"] = False
+    que = Membership.objects.select_related("member").filter(assoc_id=ctx["a_id"])
+    que = que.exclude(status__in=[Membership.EMPTY, Membership.JOINED]).exclude(member_id=member.id)
+    for other in que.values_list("member__surname", "member__name"):
+        if normalize_string(other[1]) == normalized_name:
+            if normalize_string(other[0]) == normalized_surname:
+                ctx["member_exists"] = True
+
+    assoc = Association.objects.get(pk=ctx["a_id"])
+    if assoc.get_feature_conf("membership_cf", False):
+        ctx.update(calculate_fiscal_code(member))
+
+    return render(request, "larpmanager/exe/users/membership_evaluation.html", ctx)
+
+
+@login_required
+def exe_membership_request(request, num):
+    ctx = check_assoc_permission(request, "exe_membership")
+    ctx.update(get_member(num))
+    return get_membership_request(ctx)
+
+
+@login_required
+def exe_membership_check(request):
+    ctx = check_assoc_permission(request, "exe_membership")
+
+    member_ids = set(
+        Membership.objects.filter(assoc_id=ctx["a_id"])
+        .select_related("member")
+        .exclude(status__in=[Membership.EMPTY, Membership.JOINED])
+        .values_list("member_id", flat=True)
+    )
+
+    assoc = Association.objects.get(pk=ctx["a_id"])
+    if assoc.get_feature_conf("membership_cf", False):
+        ctx["cf"] = []
+        for mb in Member.objects.filter(pk__in=member_ids):
+            check = calculate_fiscal_code(mb)
+            if not check:
+                continue
+
+            if not check["correct_cf"]:
+                check["member"] = str(mb)
+                check["member_id"] = mb.id
+                check["email"] = mb.email
+                check["membership"] = get_user_membership(mb, ctx["a_id"])
+                ctx["cf"].append(check)
+
+    return render(request, "larpmanager/exe/users/membership_check.html", ctx)
+
+
+@login_required
+def exe_member(request, num):
+    ctx = check_assoc_permission(request, "exe_membership")
+    ctx.update(get_member(num))
+
+    if request.method == "POST":
+        form = ExeMemberForm(request.POST, request.FILES, instance=ctx["member"], request=request)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _("Profile updated"))
+            return redirect(request.path)
+    else:
+        form = ExeMemberForm(instance=ctx["member"], request=request)
+    ctx["form"] = form
+
+    ctx["regs"] = Registration.objects.filter(
+        member=ctx["member"], run__event__assoc=request.assoc["id"]
+    ).select_related("run")
+
+    ctx["pays"] = AccountingItemPayment.objects.filter(
+        member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
+    ).select_related("reg")
+    for el in ctx["pays"]:
+        if el.pay == AccountingItemPayment.TOKEN:
+            el.typ = ctx["token_name"]
+        elif el.pay == AccountingItemPayment.CREDIT:
+            el.typ = ctx["credit_name"]
+        else:
+            el.typ = el.get_pay_display()
+
+    ctx["others"] = AccountingItemOther.objects.filter(
+        member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
+    ).select_related("run")
+    for el in ctx["others"]:
+        if el.oth == AccountingItemOther.TOKEN:
+            el.typ = ctx["token_name"]
+        elif el.oth == AccountingItemOther.CREDIT:
+            el.typ = ctx["credit_name"]
+        else:
+            el.typ = el.get_oth_display()
+
+    ctx["discounts"] = AccountingItemDiscount.objects.filter(
+        member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
+    ).select_related("reg")
+
+    member = ctx["member"]
+    get_user_membership(member, ctx["a_id"])
+
+    if member.membership.document:
+        ctx["doc_path"] = member.membership.get_document_filepath().lower()
+
+    if member.membership.request:
+        ctx["req_path"] = member.membership.get_request_filepath().lower()
+
+    assoc = Association.objects.get(pk=ctx["a_id"])
+    if assoc.get_feature_conf("membership_cf", False):
+        ctx.update(calculate_fiscal_code(ctx["member"]))
+
+    return render(request, "larpmanager/exe/users/member.html", ctx)
+
+
+@login_required
+def exe_membership_status(request, num):
+    ctx = check_assoc_permission(request, "exe_membership")
+    ctx.update(get_member(num))
+    ctx["membership"] = get_object_or_404(Membership, member_id=ctx["member"].id, assoc_id=request.assoc["id"])
+
+    if request.method == "POST":
+        form = ExeMembershipForm(request.POST, request.FILES, instance=ctx["membership"], request=request)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _("Profile updated"))
+            return redirect(request.path)
+    else:
+        form = ExeMembershipForm(instance=ctx["membership"], request=request)
+    ctx["form"] = form
+
+    ctx["num"] = num
+
+    ctx["form"].page_title = str(ctx["member"]) + " - " + _("Membership")
+
+    return render(request, "larpmanager/exe/edit.html", ctx)
+
+
+@login_required
+def exe_membership_registry(request):
+    ctx = check_assoc_permission(request, "exe_membership_registry")
+
+    ctx["list"] = []
+    que = Membership.objects.filter(assoc_id=ctx["a_id"], card_number__isnull=False)
+    for mb in que.select_related("member").order_by("card_number"):
+        member = mb.member
+        member.membership = mb
+
+        if member.legal_name:
+            splitted = member.legal_name.rsplit(" ", 1)
+            if len(splitted) == 2:
+                member.name, member.surname = splitted
+            else:
+                member.name = splitted[0]
+
+        member.name = member.name.capitalize()
+        member.surname = member.surname.capitalize()
+
+        ctx["list"].append(member)
+
+    return render(request, "larpmanager/exe/users/registry.html", ctx)
+
+
+@login_required
+def exe_enrolment(request):
+    ctx = check_assoc_permission(request, "exe_enrolment")
+
+    ctx["year"] = datetime.today().year
+    start = datetime(ctx["year"], 1, 1)
+    cache = {}
+    for el in AccountingItemMembership.objects.filter(assoc_id=ctx["a_id"], year=ctx["year"]).values_list(
+        "member_id", "created"
+    ):
+        cache[el[0]] = el[1]
+
+    ctx["list"] = []
+    for mb in (
+        Membership.objects.filter(member_id__in=cache.keys(), assoc_id=ctx["a_id"], card_number__isnull=False)
+        .select_related("member")
+        .order_by("card_number")
+    ):
+        member = mb.member
+        member.membership = mb
+        member.last_enrolment = cache[member.id]
+        member.order = (member.last_enrolment - start).days
+
+        if member.legal_name:
+            splitted = member.legal_name.rsplit(" ", 1)
+            if len(splitted) == 2:
+                member.name, member.surname = splitted
+            else:
+                member.name = splitted[0]
+
+        member.name = member.name.capitalize()
+        member.surname = member.surname.capitalize()
+
+        ctx["list"].append(member)
+
+    return render(request, "larpmanager/exe/users/enrolment.html", ctx)
+
+
+@login_required
+def exe_volunteer_registry(request):
+    ctx = check_assoc_permission(request, "exe_volunteer_registry")
+    ctx["list"] = (
+        VolunteerRegistry.objects.filter(assoc_id=ctx["a_id"])
+        .select_related("member")
+        .order_by("start", "member__surname")
+    )
+    return render(request, "larpmanager/exe/users/volunteer_registry.html", ctx)
+
+
+@login_required
+def exe_volunteer_registry_edit(request, num):
+    return exe_edit(request, ExeVolunteerRegistryForm, num, "exe_volunteer_registry")
+
+
+@login_required
+def exe_volunteer_registry_print(request):
+    ctx = check_assoc_permission(request, "exe_volunteer_registry")
+    ctx["assoc"] = Association.objects.get(pk=ctx["a_id"])
+    ctx["list"] = (
+        VolunteerRegistry.objects.filter(assoc=ctx["assoc"])
+        .select_related("member")
+        .order_by("start", "member__surname")
+    )
+    ctx["date"] = datetime.today().strftime("%Y-%m-%d")
+    fp = print_volunteer_registry(ctx)
+    return return_pdf(fp, f"Registro_Volontari_{ctx['assoc'].name}_{ctx['date']}")
+
+
+@login_required
+def exe_vote(request):
+    ctx = check_assoc_permission(request, "exe_vote")
+    ctx["year"] = datetime.today().year
+    assoc = Association.objects.get(pk=ctx["a_id"])
+
+    idxs = []
+    for el in assoc.get_feature_conf("vote_candidates", "").split(","):
+        if el.strip():
+            idxs.append(el.strip())
+
+    ctx["candidates"] = {}
+    for mb in Member.objects.filter(pk__in=idxs):
+        ctx["candidates"][mb.id] = mb
+
+    votes = (
+        Vote.objects.filter(year=ctx["year"], assoc_id=ctx["a_id"])
+        .values("candidate_id")
+        .annotate(total=Count("candidate_id"))
+    )
+    for el in votes:
+        if el["candidate_id"] not in ctx["candidates"]:
+            continue
+        ctx["candidates"][el["candidate_id"]].votes = el["total"]
+
+    ctx["voters"] = Member.objects.filter(votes_given__year=ctx["year"], votes_given__assoc_id=ctx["a_id"]).distinct()
+
+    return render(request, "larpmanager/exe/users/vote.html", ctx)
+
+
+@login_required
+def exe_badges(request):
+    ctx = check_assoc_permission(request, "exe_badges")
+    ctx["list"] = Badge.objects.filter(assoc_id=request.assoc["id"]).prefetch_related("members")
+    return render(request, "larpmanager/exe/users/badges.html", ctx)
+
+
+@login_required
+def exe_badges_edit(request, num):
+    return exe_edit(request, ExeBadgeForm, num, "exe_badges")
+
+
+@login_required
+def exe_send_mail(request):
+    ctx = check_assoc_permission(request, "exe_send_mail")
+    if request.method == "POST":
+        form = SendMailForm(request.POST)
+        if form.is_valid():
+            send_mail_batch(request, request.assoc["id"])
+            messages.success(request, _("Mail sent!"))
+            return redirect(request.path_info)
+    else:
+        form = SendMailForm()
+    ctx["form"] = form
+    return render(request, "larpmanager/exe/users/send_mail.html", ctx)
+
+
+@login_required
+def exe_questions(request):
+    ctx = check_assoc_permission(request, "exe_questions")
+
+    que = HelpQuestion.objects.filter(assoc_id=ctx["a_id"])
+    que = que.select_related("member", "run", "run__event")
+
+    if not request.method == "POST":
+        limit = datetime.now() - timedelta(days=3 * 30)
+        que = que.filter(created__gte=limit)
+
+    last_q = {}
+    for cq in que.order_by("created"):
+        last_q[cq.member_id] = (cq, cq.is_user, cq.closed)
+
+    ctx["open"] = []
+    ctx["closed"] = []
+    for cid in last_q:
+        (cq, is_user, closed) = last_q[cid]
+        if is_user and not closed:
+            ctx["open"].append(cq)
+        else:
+            ctx["closed"].append(cq)
+
+    if request.method == "POST":
+        ctx["open"].extend(ctx["closed"])
+        ctx["closed"] = []
+
+    ctx["open"].sort(key=lambda x: x.created)
+    ctx["closed"].sort(key=lambda x: x.created, reverse=True)
+    return render(request, "larpmanager/exe/users/questions.html", ctx)
+
+
+@login_required
+def exe_questions_answer(request, r):
+    ctx = check_assoc_permission(request, "exe_questions")
+
+    # Get last question by that user
+    member = Member.objects.get(pk=r)
+    ctx["member"] = member
+    ctx["list"] = HelpQuestion.objects.filter(member=member, assoc_id=ctx["a_id"]).order_by("-created")
+
+    last = ctx["list"].first()
+
+    if request.method == "POST":
+        form = OrgaHelpQuestionForm(request.POST, request.FILES)
+        if form.is_valid():
+            hp = form.save(commit=False)
+            if last.run:
+                hp.run = last.run
+            hp.member = member
+            hp.is_user = False
+            hp.assoc_id = ctx["a_id"]
+            hp.save()
+            messages.success(request, _("Answer submitted!"))
+            return redirect("exe_questions")
+    else:
+        form = OrgaHelpQuestionForm()
+
+    ctx["form"] = form
+
+    return render(request, "larpmanager/exe/users/questions_answer.html", ctx)
+
+
+@login_required
+def exe_questions_close(request, r):
+    ctx = check_assoc_permission(request, "exe_questions")
+
+    member = Member.objects.get(pk=r)
+    h = HelpQuestion.objects.filter(member=member, assoc_id=ctx["a_id"]).order_by("-created").first()
+    h.closed = True
+    h.save()
+    return redirect("exe_questions")
+
+
+@login_required
+def exe_newsletter(request):
+    ctx = check_assoc_permission(request, "exe_newsletter")
+
+    ctx["lst"] = {}
+    for el in (
+        Membership.objects.filter(assoc_id=ctx["a_id"])
+        .select_related("member")
+        .values_list("member__email", "member__language", "newsletter")
+    ):
+        m = el[0]
+        language = el[1]
+        if language not in ctx["lst"]:
+            ctx["lst"][language] = {}
+        newsletter = el[2]
+        if newsletter not in ctx["lst"][language]:
+            ctx["lst"][language][newsletter] = []
+        ctx["lst"][language][newsletter].append(m)
+    return render(request, "larpmanager/exe/users/newsletter.html", ctx)
+
+
+@login_required
+def exe_newsletter_csv(request, lang):
+    ctx = check_assoc_permission(request, "exe_newsletter")
+    response = HttpResponse(
+        content_type="text/csv", headers={"Content-Disposition": f'attachment; filename="Newsletter-{lang}.csv"'}
+    )
+    writer = csv.writer(response)
+    for el in Membership.objects.filter(assoc_id=ctx["a_id"]):
+        m = el.member
+        if m.language != lang:
+            continue
+
+        lis = [m.email]
+
+        if el.number:
+            lis.append(el.number)
+        else:
+            lis.append("")
+
+        lis.append(m.name)
+        lis.append(m.surname)
+
+        writer.writerow(lis)
+
+    return response

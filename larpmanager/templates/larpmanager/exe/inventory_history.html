@@ -1,0 +1,14 @@
+{% extends 'utils.html' %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "History" %} - {{ el }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows for an element its history" %}
+{% endblock %}
+{% block content %}
+    {% for v in list reversed %}
+        <h3>Modifica del {{ v.created }} di {{ v.member }}</h3>
+        <div class='diff-version plot'>{{ v.diff | safe }}</div>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Donation" %}
+{% endblock %}
+{% block content %}
+    {% if invoice %}
+        <p>
+            {% trans "You are about to perform a donation of" %}: <b>{{ am }} {{ currency_symbol }}</b>.
+        </p>
+        {{ paypal_form.render }}
+    {% else %}
+        <p>{% trans "Indicate the name of the member for whom you want to activate a new collection" %}:</p>
+        <form action="{{ request.path }}"  method="post">
+            {% csrf_token %}
+            <table class="mob no_csv">
+                {{ form.as_table }}
+            </table>
+            <input type="submit" value="{% trans 'Submit' %}">
+        </form>
+    {% endif %}
+{% endblock %}

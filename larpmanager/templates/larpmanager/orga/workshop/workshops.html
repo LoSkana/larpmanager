@@ -1,0 +1,39 @@
+{% extends 'utils.html' %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Workshop" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows for each player their completion status of workshops." %}
+{% endblock %}
+{% block content %}
+    <h2>{{ reg_count }} iscrizioni</h2>
+    <table class="tablesorter mob writing">
+        <thead>
+            <tr>
+                <th>{% trans "Player" %}</th>
+                <th>{% trans "Done" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'public' el.member.id %}">{{ el.member }}</a>
+                    </td>
+                    <td>{{ el.num }}</td>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h2>{% trans "Not completed" %}</h2>
+        <table class="mob">
+            <tr>
+                <td>
+                    {% for mb in pinocchio %}
+                        {% include "elements/comma.html" %}
+                        {{ mb.email }}
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
+    {% endblock %}

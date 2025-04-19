@@ -1,0 +1,336 @@
+{% extends 'utils.html' %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Characters" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the characters of the event." %}
+{% endblock %}
+{% block content %}
+    {% include "elements/header/writing.html" %}
+    <p id="show">
+        <b>{% trans "Show / hide" %}</b>
+    </p>
+    <div class="nav fields">
+        {% if features.concept %}
+            <a href="#" class="my_toggle" tog='concept'>{% trans "Concept" %}</a>
+        {% endif %}
+        {% if features.title %}
+            <a href="#" class="my_toggle" tog='titlee'>{% trans "title" %}</a>
+        {% endif %}
+        {% if features.motto %}
+            <a href="#" class="my_toggle" tog='motto'>{% trans "motto" %}</a>
+        {% endif %}
+        {% if features.preview %}
+            <a href="#" class="my_toggle" tog='preview'>{% trans "preview" %}</a>
+        {% endif %}
+        {% if features.keywords %}
+            <a href="#" class="my_toggle" tog='keywords'>{% trans "key words" %}</a>
+        {% endif %}
+        {% if features.role %}
+            <a href="#" class="my_toggle" tog='role'>{% trans "role" %}</a>
+        {% endif %}
+        {% if features.gender %}
+            <a href="#" class="my_toggle" tog='gend'>{% trans "gender" %}</a>
+        {% endif %}
+        {% if features.special %}
+            <a href="#" class="my_toggle" tog='spec'>{% trans "speciale" %}</a>
+        {% endif %}
+        {% if features.hide %}
+            <a href="#" class="my_toggle" tog='nasc'>{% trans "hide" %}</a>
+        {% endif %}
+        {% if features.mirror %}
+            <a href="#" class="my_toggle" tog='mirr'>{% trans "mirror" %}</a>
+        {% endif %}
+        {% if features.cover %}
+            <a href="#" class="my_toggle" tog='cover'>{% trans "cover" %}</a>
+        {% endif %}
+        {% if features.speedlarp %}
+            <a href="#" class="my_toggle" tog='speedlarp'>{% trans "speedlarp" %}</a>
+        {% endif %}
+        {% if features.safety %}
+            <a href="#" class="my_toggle" tog='safety'>{% trans "safety" %}</a>
+        {% endif %}
+        {% if features.assigned %}
+            <a href="#" class="my_toggle" tog='assign'>{% trans "assigned" %}</a>
+        {% endif %}
+        {% if user_character_max %}
+            <a href="#" class="my_toggle" tog='player'>{% trans "player" %}</a>
+        {% endif %}
+        {% if user_character_approval %}
+            <a href="#" class="my_toggle" tog='status'>{% trans "status" %}</a>
+        {% endif %}
+        {% if features.px %}
+            <a href="#" class="my_toggle" tog='px'>{% trans "XP" %}</a>
+        {% endif %}
+        {% if features.private_info %}
+            <a href="#" class="my_toggle" tog='pinfo'>{% trans "Private informations" %}</a>
+        {% endif %}
+        {% if features.co_creation %}
+            <a href="#" class="my_toggle" tog='co_creat'>{% trans "Co-creation" %}</a>
+        {% endif %}
+        {% if char_questions %}
+            {% for key, que in char_questions.items %}
+                <a href="#" class="load_que lq_{{ key }}"  key="{{ key }}">{{ que.display }}</a>
+                <a href="#" class="my_toggle hide" tog='q_{{ key }}'>hidden</a>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <table id="characters" class="tablesorter mob writing regs">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{{ fields_name.name }}</th>
+                <th></th>
+                {% if features.progress %}
+                    <th>{% trans "Progress" %}</th>
+                {% endif %}
+                {% if features.concept %}
+                    <th class="hide concept">{% trans "Concept" %}</th>
+                {% endif %}
+                {% if features.title %}
+                    <th class="hide titlee">{% trans "Title" %}</th>
+                {% endif %}
+                {% if features.keywords %}
+                    <th class="hide keywords">{% trans "Keywords" %}</th>
+                {% endif %}
+                {% if features.role %}
+                    <th class="hide role">{% trans "Role" %}</th>
+                {% endif %}
+                {% if features.assigned %}
+                    <th class="hide assign">{% trans "Assigned" %}</th>
+                {% endif %}
+                {% if user_character_max %}
+                    <th class="hide player">{% trans "Player" %}</th>
+                {% endif %}
+                {% if user_character_approval %}
+                    <th class="hide status">{% trans "Status" %}</th>
+                {% endif %}
+                {% if features.faction %}
+                    <th>{% trans "Factions" %}</th>
+                {% endif %}
+                {% if features.motto %}
+                    <th class="hide motto">{% trans "Motto" %}</th>
+                {% endif %}
+                {% if features.gender %}
+                    <th class="hide gend">{% trans "Sex" %}</th>
+                {% endif %}
+                {% if features.special %}
+                    <th class="hide spec">{% trans "Special" %}</th>
+                {% endif %}
+                {% if features.mirror %}
+                    <th class="hide mirr">{% trans "Mirror" %}</th>
+                {% endif %}
+                {% if features.hide %}
+                    <th class="hide nasc">{% trans "Hide" %}</th>
+                {% endif %}
+                {% if features.cover %}
+                    <th class="hide cover">{% trans "Cover" %}</th>
+                {% endif %}
+                {% if features.safety %}
+                    <th class="hide safety">{% trans "Safety" %}</th>
+                {% endif %}
+                {% if features.private_info %}
+                    <th class="hide pinfo">{% trans "Informations private" %}</th>
+                {% endif %}
+                {% if features.px %}
+                    <th class="hide px">{% trans "XP tot" %}</th>
+                    <th class="hide px">{% trans "XP used" %}</th>
+                    <th class="hide px">{% trans "XP avail" %}</th>
+                {% endif %}
+                {% if char_questions %}
+                    {% for key, que in char_questions.items %}<th class="hide q_{{ key }}">{{ que.display }}</th>{% endfor %}
+                {% endif %}
+                <th>{{ fields_name.teaser }}</th>
+                <th style="width: 5%">(L)</th>
+                {% if features.preview %}
+                    <th class="hide preview">{% trans "Preview" %}</th>
+                    <th class="hide preview" style="width: 5%">(L)</th>
+                {% endif %}
+                {% if features.co_creation %}
+                    <th class="hide co_creat">{% trans "Questions CC" %}</th>
+                    <th class="hide co_creat">{% trans "Answers CC" %}</th>
+                {% endif %}
+                <th>{{ fields_name.text }}</th>
+                <th style="width: 5%">(L)</th>
+                {% if features.plot %}
+                    <th>{% trans "Plots" %}</th>
+                    <th style="width: 5%">(N)</th>
+                {% endif %}
+                {% if features.relationships %}
+                    <th style="width: 5%">{% trans "Relationships" %} (N)</th>
+                {% endif %}
+                {% if features.speedlarp %}
+                    <th class="hide speedlarp">{% trans "Speedlarp" %}</th>
+                    <th class="hide speedlarp">(N)</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'orga_characters_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el }}</td>
+                    <td>
+                        <a href="{% url 'orga_characters_versions' run.event.slug run.number el.id %}">{% trans "Versions" %}</a> &nbsp;
+                        <a href="{% url 'character' run.event.slug run.number el.number %}">{% trans "Gallery" %}</a> &nbsp;
+                        {% if features.relationships %}
+                            <br />
+                            <a href="{% url 'orga_characters_relationships' run.event.slug run.number el.id %}">{% trans "Relationships" %}</a>   &nbsp;
+                        {% endif %}
+                    </td>
+                    {% if features.progress %}
+                        <td>{% include "elements/show_progress.html" with el=el %}</td>
+                    {% endif %}
+                    {% if features.concept %}<td class="hide concept">{{ el.concept_red | safe }}</td>{% endif %}
+                    {% if features.title %}<td class="hide titlee">{{ el.title | safe | striptags }}</td>{% endif %}
+                    {% if features.keywords %}<td class="hide keywords">{{ el.keywords }}</td>{% endif %}
+                    {% if features.role %}<td class="hide role">{{ el.role }}</td>{% endif %}
+                    {% if features.assigned %}
+                        <td class="hide assign">
+                            {% if el.assigned_id %}{{ assigned|get:el.assigned_id }}{% endif %}
+                        </td>
+                    {% endif %}
+                    {% if features.user_character %}<td class="hide player">{{ el.player.show_nick }}</td>{% endif %}
+                    {% if user_character_approval %}<td class="hide status">{{ el.get_status_display }}</td>{% endif %}
+                    {% if features.faction %}
+                        <td>
+                            {% for g in el.factions %}
+                                <a href="{% url 'orga_factions_edit' run.event.slug run.number g.id %}">{{ g.name }}</a>
+                                <br />
+                            {% endfor %}
+                        </td>
+                    {% endif %}
+                    {% if features.motto %}
+                        <td class="hide motto">
+                            <p>{{ el.motto | safe | striptags }}</p>
+                        </td>
+                    {% endif %}
+                    {% if features.gender %}
+                        <td class="hide gend">
+                            <p>{{ el.get_gender_display | safe | striptags |slice:":3" }}</p>
+                        </td>
+                    {% endif %}
+                    {% if features.special %}<td class="hide spec">{{ el.is_special }}</td>{% endif %}
+                    {% if features.mirror %}
+                        <td class="hide mirr">
+                            {% if el.mirror %}<i>{{ el.mirror }}</i>{% endif %}
+                        </td>
+                    {% endif %}
+                    {% if features.hide %}
+                        <td class="hide nasc">
+                            {% if el.hide %}Si{% endif %}
+                        </td>
+                    {% endif %}
+                    {% if features.cover %}
+                        <td class="hide cover">
+                            {% if el.cover %}
+                                <a href="{{ el.thumb.url }}">
+                                    <img src="{{ el.thumb.url }}" style="width:5em" />
+                                </a>
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                    {% if features.safety %}
+                        <td class="hide safety">
+                            {% if el.safety %}{{ el.safety }}{% endif %}
+                        </td>
+                    {% endif %}
+                    {% if features.private_info %}<td class="hide pinfo">{{ el.private_info }}</td>{% endif %}
+                    {% if features.px %}
+                        <td class="hide px">{{ el.addit | get:'px_tot' }}</td>
+                        <td class="hide px">{{ el.addit | get:'px_used' }}</td>
+                        <td class="hide px">{{ el.addit | get:'px_avail' }}</td>
+                    {% endif %}
+                    {% for key, que in char_questions.items %}
+                        <td class="hide question q_{{ key }}">
+                            <span class='has_show_tooltip res_{{ key }}'></span>
+                            <span class='hide show_tooltip'>{{ que.display }}</span></span>
+                        </td>
+                    {% endfor %}
+                    <td>{{ el.teaser_red | safe }}</td>
+                    <td>{{ el.teaser_ln }}</td>
+                    {% if features.preview %}
+                        <td class="hide preview">{{ el.preview_red | safe }}</td>
+                        <td class="hide preview">{{ el.preview_ln }}</td>
+                    {% endif %}
+                    {% if features.co_creation %}
+                        <td class="hide co_creat">{{ el.co_creation_question_red | safe }}</td>
+                        <td class="hide co_creat">{{ el.co_creation_answer_red | safe }}</td>
+                    {% endif %}
+                    <td>{{ el.text_red | safe }}</td>
+                    <td>{{ el.text_ln }}</td>
+                    {% if features.plot %}
+                        <td>
+                            {% for p in el.plts %}
+                                <a href="{% url 'orga_plots_edit' run.event.slug run.number p.1 %}">{{ p.0 }}</a>
+                            {% endfor %}
+                        </td>
+                        <td>{{ el.plts | length }}</td>
+                    {% endif %}
+                    {% if features.relationships %}<td>{{ el.cache_relationship_count }}</td>{% endif %}
+                    {% if features.speedlarp %}
+                        <td class="hide speedlarp">
+                            {% for p in el.speedlarps_list.all %}
+                                <a href="{% url 'orga_speedlarps_edit' run.event.slug run.number p.number %}">{{ p }}</a>
+                            {% endfor %}
+                        </td>
+                        <td class="hide speedlarp">{{ el.speedlarps_list.count }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if char_questions %}
+        <br />
+        {% for key, que in char_questions.items %}
+            {% if que.typ == 's' or que.typ == 'm' %}
+                <a href="#" class="load_email_que" key="{{ key }}">{{ que.display }}</a>,
+                <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
+            {% endif %}
+        {% endfor %}
+        {% for key, que in char_questions.items %}
+            {% if que.typ == 's' or que.typ == 'm' %}
+                <div class="hide email_que_{{ key }}">
+                    <br />
+                    <h4>{{ que.display }}</h4>
+                    <table class="mob">
+                        <thead>
+                            <tr>
+                                <th>Option</th>
+                                <th>Count</th>
+                                <th>Emails</th>
+                                <th>Names</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+{% block js %}
+    <script>
+var url_load_questions = "{% url 'orga_character_form_list' run.event.slug run.number %}";
+var url_load_questions_email = "{% url 'orga_character_form_email' run.event.slug run.number %}";
+
+var download_text = '{% trans "Download" %}';
+
+var accounting = false;
+
+{% include "elements/questions/load.js" %}
+
+window.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function() {
+        el = $('#show');
+        if ($('.fields').find('a').length == 0) el.hide();
+        // console.log($('.fields').find('a').length);
+    });
+});
+
+    </script>
+{% endblock %}

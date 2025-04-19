@@ -1,0 +1,38 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {{ token_name }} - {% trans "Organization" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page summarises the system entries of" %} {{ token_name }}.
+{% endblock %}
+{% block content %}
+    {% include "elements/header/exe.html" %}
+    {% include "elements/paginate.html" %}
+    <table id="tokens" class="tablesorter mob">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Member" %}</th>
+                <th>{% trans "Run" %}</th>
+                <th>{% trans "Description" %}</th>
+                <th>{% trans "Value" %}</th>
+                <th>{% trans "Date" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'exe_tokens_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.member }}</td>
+                    <td>{{ el.run }}</td>
+                    <td>{{ el.descr }}</td>
+                    <td>{{ el.value }}</td>
+                    <td>{{ el.created | date:"d/m/Y" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

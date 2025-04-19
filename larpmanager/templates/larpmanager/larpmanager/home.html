@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block maintitle %}LarpManager - All-in-one LARP software, free & open source!{% endblock %}
+{% block meta %}
+    <meta name="description"
+          content="Everything you need to run your LARP - registrations, payments, characters, and more. All in one platform. Free and open source!">
+    <meta property="og:title" content="LarpManager">
+{% endblock %}
+{% block alpha %}
+    <!-- Banner -->
+    <section id="banner">
+        <!-- <span class="logo"><img src="{% static 'lm_logo.png' %}" alt="Logo"  width="150" height="150" /></span> -->
+        <h2 class="home">LarpManager</h2>
+        <h1 class="home">Everything you need to run a LARP, free & open source!</h1>
+    </section>
+    <!-- Main -->
+    <section id="main" class="container">
+        <section class="box special first">
+            <header class="major">
+                <div class="key-numbers-container">
+                    <div class="key-number">
+                        <div class="key-number-value" data-target="{{ cnt_event }}">0</div>
+                        <div class="key-number-label">Events</div>
+                    </div>
+                    <div class="key-number">
+                        <div class="key-number-value" data-target="{{ cnt_character }}">0</div>
+                        <div class="key-number-label">Characters</div>
+                    </div>
+                    <div class="key-number">
+                        <div class="key-number-value" data-target="{{ cnt_registration }}">0</div>
+                        <div class="key-number-label">Signups</div>
+                    </div>
+                    <div class="key-number">
+                        <div class="key-number-value" data-target="{{ cnt_paymentinvoice }}">0</div>
+                        <div class="key-number-label">Payments</div>
+                    </div>
+                </div>
+                <hr />
+                <h3>
+                    Stop juggling spreadsheets. Start managing your LARP the easy way. Simplify your event management - so you can focus on the fun!
+                </h3>
+                <!--
+                            <br />
+
+								<ul class="actions special">
+									<li><a id="quickstart" href="https://larpmanager.com/qke" title="Quickstart" class="button alt" target=”_blank”>Quick Start</a></li>
+								</ul>
+
+-->
+                <hr />
+                <h3>Trusted by organizers around the world, completely free and open source!</h3>
+                <br />
+                <section id="promoter-carousel">
+                    <div class="owl-carousel owl-theme">
+                        {% for el in promoters %}
+                            <div class="item">
+                                <a href="https://{{ el.0 }}.larpmanager.com" title="{{ el.1 }}">
+                                    <img src="{{ el.2 }}" alt="preview image {{ el.1 }}" />
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+            </header>
+        </section>
+        <p class="starter">What can LarpManager do for you?</p>
+        <section class="box special showcase">
+            {% for el in showcase %}
+                <div class="section">
+                    <div class="text">
+                        <h4>{{ el.title }}</h4>
+                        <p>{{ el.text | safe }}</p>
+                    </div>
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                            <img src="{% if el.reduced %}{{ el.reduced.url }}{% endif %}"
+                                 alt="Image for {{ el.title }}">
+                        </div>
+                        <div class="image-caption">{{ el.info }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </section>
+        <!-- CTA -->
+        <section id="cta">
+            <h5>Ready to get started?</h5>
+            <p>
+                Try LarpManager now!
+                <br />
+                Set up your LARP organization and explore the software in real time. It's 100% free!
+            </p>
+            <ul class="actions special">
+                <li>
+                    <a href="{% url 'join' %}" title="Free trial" class="button alt">Get Started</a>
+                </li>
+            </ul>
+        </section>
+        <div class="row final">
+            <div class="col-6 col-12-narrower">
+                <section class="box special">
+                    <!--
+								<span class="image featured"><img src="images/pic02.jpg" alt="" /></span>
+-->
+                    <h6>Discover</h6>
+                    <p>Explore the full range of features and possibilities.</p>
+                    <ul class="actions special">
+                        <li>
+                            <a href="{% url 'discover' %}" title="Discover list" class="button alt">Learn More</a>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+            <div class="col-6 col-12-narrower">
+                <section class="box special">
+                    <!--
+								<span class="image featured"><img src="images/pic03.jpg" alt="" /></span>
+-->
+                    <h6>Tutorial</h6>
+                    <p>Master the platform with our step-by-step guides.</p>
+                    <ul class="actions special">
+                        <li>
+                            <a href="{% url 'tutorials' %}"
+                               title="Video tutorials"
+                               class="button alt">Learn More</a>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+            <div class="col-6 col-12-narrower">
+                <section class="box special">
+                    <!--
+								<span class="image featured"><img src="images/pic03.jpg" alt="" /></span>
+-->
+                    <h6>Usage</h6>
+                    <p>LarpManager is free and open source. Learn how you can use it or self-host it.</p>
+                    <ul class="actions special">
+                        <li>
+                            <a href="{% url 'usage' %}" title="Affordable usage" class="button alt">Learn More</a>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+            <div class="col-6 col-12-narrower">
+                <section class="box special">
+                    <!--
+								<span class="image featured"><img src="images/pic02.jpg" alt="" /></span>
+-->
+                    <h6>About us</h6>
+                    <p>Discover the story behind LarpManager and how it helps the LARP community.</p>
+                    <ul class="actions special">
+                        <li>
+                            <a href="{% url 'about_us' %}"
+                               title="Organizers reviews"
+                               class="button alt">Learn More</a>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block js2 %}
+    <script>
+window.addEventListener('DOMContentLoaded', function() {
+
+      const counters = document.querySelectorAll('.key-number-value');
+      const speed = 60; // Velocità dell'animazione
+
+      counters.forEach(counter => {
+        const updateCount = () => {
+          const target = +counter.getAttribute('data-target');
+          const count = +counter.innerText.replace('+', '');
+
+          const increment = target / speed;
+
+          if (count < target) {
+            counter.innerText = Math.ceil(count + increment);
+            setTimeout(updateCount, 10);
+          } else {
+            counter.innerText = target;
+          }
+
+          counter.innerText += '+';
+        };
+
+        updateCount();
+      });
+
+    var owl;
+
+	(function($){
+		$.fn.shuffle = function() {
+
+			var allElems = this.get(),
+				getRandom = function(max) {
+					return Math.floor(Math.random() * max);
+				},
+				shuffled = $.map(allElems, function(){
+					var random = getRandom(allElems.length),
+						randEl = $(allElems[random]).clone(true)[0];
+					allElems.splice(random, 1);
+					return randEl;
+			   });
+
+			this.each(function(i){
+				$(this).replaceWith($(shuffled[i]));
+			});
+			return $(shuffled);
+		};
+	})(jQuery);
+
+    $(function() {
+        $('body').addClass('landing');
+
+        $('#header').addClass('alt');
+
+        $(".owl-carousel .item").shuffle();
+
+        promot = $('#promoter-carousel .owl-carousel').owlCarousel({
+          responsive : {
+              // breakpoint from 0 up
+              0 : {
+                items: 3,
+                loop: true,
+                margin: 30,
+                autoplay: true,
+                autoplayTimeout: 2000,
+                stagePadding: 0,
+                responsiveClass: true,
+                dots: false,
+                nav: true,
+                autoHeight: true,
+              },
+              // breakpoint from 768 up
+              768 : {
+                items: 5,
+                loop: true,
+                margin: 30,
+                autoplay: true,
+                autoplayTimeout: 2000,
+                stagePadding: 0,
+                responsiveClass: true,
+                dots: false,
+                nav: true,
+                autoHeight: true,
+              }
+            }
+		});
+    });
+
+});
+
+    </script>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% load show_tags i18n %}
+<div class="staff-list">
+    <div class="orga-buttons">
+        <a class='new button' href="#">{% trans "New" %}</a>
+        <script>
+        document.querySelector('a.new').addEventListener('click', function(event) {
+            event.preventDefault();
+            let currentUrl = window.location.href;
+            let cleanedUrl = currentUrl.split('#')[0];
+            let newUrl = cleanedUrl + 'edit/0';
+            window.location.href = newUrl;
+        });
+        </script>
+        <button class="my_toggle" tog='search'>
+            <a href="#">{% trans "Search" %}</a>
+        </button>
+        {% if list %}
+            <button class="my_toggle" tog='show_list'>
+                <a href="#">{% trans "List" %}</a>
+            </button>
+        {% endif %}
+        {% if upload %}
+            <button class="my_toggle" tog='load-form'>
+                <a href="#">{% trans "Upload" %}</a>
+            </button>
+        {% endif %}
+        {% if download %}
+            <form action="{{ request.path }}" method="post" style="display: inline; ">
+                {% csrf_token %}
+                <input type="hidden" name="download" value="1">
+                <button type="submit" name="submit" value="1">{% trans "Download" %}</button>
+            </form>
+        {% endif %}
+    </div>
+    <div class="hide search">
+        <input type="text" placeholder="Search..." id="search_tbl" />
+        <hr />
+    </div>
+    {% if list %}
+        <div class="hide show_list">
+            {% for el in list %}
+                <a href="#{{ el.id }}">
+                    {% if el.search %}
+                        {{ el.search }}
+                    {% else %}
+                        {{ el }}
+                    {% endif %}
+                </a>
+            {% endfor %}
+            <hr />
+        </div>
+    {% endif %}
+    {% if upload %}
+        <div class="hide load-form">
+            {% trans "You can upload data directly from a csv file." %}
+            <br />
+            <br />
+            {% trans "The first line is the names of the fields:" %} {{ upload }}
+            <br />
+            <br />
+            {% trans "If you already have the file ready, upload it here (pay attention to the 'csv' format): " %}
+            <br />
+            <br />
+            <form action="{{ request.path }}"
+                  enctype="multipart/form-data"
+                  method="post">
+                {% csrf_token %}
+                {{ form.elem }}
+                <br />
+                <br />
+                <input type="hidden" name="upload" value="signup">
+                <input type="submit" value="Submit">
+            </form>
+            <hr />
+        </div>
+    {% endif %}
+</div>

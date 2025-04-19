@@ -1,0 +1,93 @@
+{% extends 'utils.html' %}
+{% load i18n show_tags %}
+{% block title %}
+    {% trans "Feature" %} - {% trans "Organization" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the optional features available for the whole organization." %}
+{% endblock %}
+{% block content %}
+    <input type="text" name="search" id="search" placeholder="Search" />
+    <!--
+<h3>{% trans "Feature types" %}</h3>
+<div class="c nav">
+{% for mod in modules %}
+    {% if mod.list %}
+        <a href="#mod_{{ mod.id }}">{{ mod.name|template_trans }}</a>
+    {% endif %}
+{% endfor %}
+</div>
+-->
+    <p>
+        <i>
+            {% trans "NOTE: When activating a feature, it is immediately available for all events." %}
+        </i>
+    </p>
+    {% for mod in modules %}
+        {% if mod.list %}
+            <h3 id="mod_{{ mod.id }}">
+                <a href="#" class="my_toggle section-link" tog='feat_{{ mod.id }}'>
+                    {{ mod.name|template_trans }} <i class="fa-solid fa-chevron-down"></i>
+                </a>
+            </h3>
+            <div class="hide feat_{{ mod.id }}">
+                <p>
+                    <i>{{ mod.descr|template_trans }}</i>
+                </p>
+                <table mod="{{ mod.id }}" class="tablesorter mob show no_csv">
+                    <thead>
+                        <tr>
+                            <th class="hide"></th>
+                            <th></th>
+                            <th>{% trans "Name" %}</th>
+                            <th></th>
+                            <th></th>
+                            <!--  <th>{% trans "Module" %}</th> -->
+                            <th>{% trans "Description" %}</th>
+                            <!-- <th>{% trans "Cost for player" %}</th> -->
+                            <th>{% trans "Active" %}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for el in mod.list %}
+                            <tr id="{{ el.id }}" class="fea">
+                                <td class="hide">{{ el.order }}</td>
+                                <td style="width: 10%;">
+                                    {% if not el.module.default and not el.activated %}
+                                        <a href="{% url 'exe_features_on' el.id %}" class="delete">{% trans "Activate" %}</a>
+                                    {% endif %}
+                                </td>
+                                <th style="font-size:120%; width: 20%;">{{ el.name|template_trans }}</th>
+                                <td>
+                                    {% if el.tutorial %}
+                                        <a href="{{ el.tutorial }}" target="_blank">{% trans "Tutorial" %}</a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if el.link %}
+                                        <a href="{{ el.link }}" target="_blank">{% trans "Video" %}</a>
+                                    {% endif %}
+                                </td>
+                                <!-- <td>{{ el.module.name }}</td> -->
+                                <td style="width: 60%;">{{ el.descr|template_trans }}</td>
+                                <!-- <td>{{ el.price_display }}{{ currency_symbol }}</td> -->
+                                <td>
+                                    {% if el.activated or el.module.default %}<i class="fa-solid fa-circle-check"></i>{% endif %}
+                                </td>
+                                <td style="width: 10%;">
+                                    {% if not el.module.default and el.activated %}
+                                        <a href="{% url 'exe_features_off' el.id %}" class="delete">{% trans "Deactivate" %}</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+{% block js2 %}
+    {% include "elements/features/search.js" %}
+{% endblock %}

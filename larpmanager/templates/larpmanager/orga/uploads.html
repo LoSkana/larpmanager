@@ -1,0 +1,11 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Upload" %} - {{ run }}
+{% endblock %}
+{% block content %}
+    <p>{% trans "Loading performed, see logs" %}</p>
+    <a class='button' href="{{ redr }}">{% trans "Proceed" %}</a>
+    <h3>Logs</h3>
+    {% for el in logs %}<p>{{ el }}</p>{% endfor %}
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends 'utils.html' %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Refund for" %} - {{ registration.stration }}
+{% endblock %}
+{% block info %}
+    {% trans "This page allows you to return part of the quota to a player who has cancelled" %}.
+{% endblock %}
+{% block content %}
+    <h3>{% trans "Payment" %}</h3>
+    <table class="mob tablesorter">
+        <tr>
+            <th>{% trans "Registration fee" %}</th>
+            <th>{% trans "Actual paid" %}</th>
+            <th>{% trans "Money" %}</th>
+            <th>{{ token_name }}</th>
+            <th>{{ credit_name }}</th>
+        </tr>
+        <tr>
+            <td id="tot_iscr">
+                {% if registration.tot_iscr %}
+                    {{ registration.tot_iscr | floatformat:"0" }}
+                {% else %}
+                    0
+                {% endif %}
+            </td>
+            <td id="tot_payed"></td>
+            <td id="pay_money">
+                {% if registration.payments.a %}
+                    {{ registration.payments.a | floatformat:"0" }}
+                {% else %}
+                    0
+                {% endif %}
+            </td>
+            <td id="pay_token">
+                {% if registration.payments.c %}
+                    {{ registration.payments.c | floatformat:"0" }}
+                {% else %}
+                    0
+                {% endif %}
+            </td>
+            <td id="pay_credit">
+                {% if registration.payments.b %}
+                    {{ registration.payments.b | floatformat:"0" }}
+                {% else %}
+                    0
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+    <h3>{% trans "Returning" %}</h3>
+    <table class="mob tablesorter">
+        <tr>
+            <th>{% trans "Retention" %}</th>
+            <th>{% trans "Full returning" %}</th>
+            <th>{{ token_name }}</th>
+            <th>{{ credit_name }}</th>
+        </tr>
+        <tr>
+            <td id="ref_tot"></td>
+            <td id="ref"></td>
+            <td id="ref_token">0</td>
+            <td id="ref_credit">0</td>
+        </tr>
+    </table>
+    <h3>{% trans "Returning type" %}</h3>
+    <div class="nav typ">
+        <a id="typ_t" href="#" onclick="return select_typ('t');">{% trans 'Only' %} {{ token_name }}</a>
+        <a id="typ_c" href="#" onclick="return select_typ('c');">{{ token_name }} {% trans 'e' %} {{ credit_name }}</a>
+    </div>
+    <br />
+    <h3>{% trans "Returning percentage" %}</h3>
+    <div class="nav p">
+        {% for i in '0123456789'|make_list %}
+            <a id="p_{{ forloop.counter }}"
+               href="#"
+               onclick="return select_p('{{ forloop.counter }}');">{{ forloop.counter }}0 %</a>
+        {% endfor %}
+    </div>
+    <br />
+    <h3>{% trans "Approve reimbursement" %}</h3>
+    <form id="ref" action="{{ request.path }}" method="post">
+        {% csrf_token %}
+        <input type="hidden" id="inp_token" name="inp_token" value="0" />
+        <input type="hidden" id="inp_credit" name="inp_credit" value="0" />
+        <input type="submit" value="{% trans 'Confirm' %}">
+    </form>
+{% endblock %}
+{% block js %}
+    <script>
+var typ = null;
+var perc = null;
+
+function compute() {
+    if ((typ == null) || (perc == null)) return;
+
+    var pay_money = parseInt($('#pay_money').html());
+    var pay_token = parseInt($('#pay_token').html());
+    var pay_credit = parseInt($('#pay_credit').html());
+    var tot_pay = pay_money + pay_token + pay_credit;
+    $('#tot_payed').html(tot_pay);
+
+    var rest_tot = Math.ceil(tot_pay / 100.0 * perc);
+    $('#ref_tot').html(tot_pay - rest_tot);
+
+    var rest = Math.max(0, rest_tot - (tot_pay - tot_pay));
+    $('#ref').html(rest);
+
+    if (typ == 't') {
+        $('#ref_token').html(rest);
+        $('#inp_token').val(rest);
+
+        $('#ref_credit').html('0');
+        $('#inp_credit').val('0');
+        return;
+    }
+
+    var ref_token = Math.min(rest, pay_token);
+    rest -= pay_token;
+    $('#ref_token').html(ref_token);
+    $('#inp_token').val(ref_token);
+
+    $('#ref_credit').html(rest);
+    $('#inp_credit').val(rest);
+
+}
+
+function select_typ(id) {
+    $('.typ a').removeClass('sel');
+    $('#typ_' + id).addClass('sel');
+
+    typ = id;
+
+    compute();
+
+    return false;
+}
+
+function select_p(id) {
+    $('.p a').removeClass('sel');
+    $('#p_' + id).addClass('sel');
+
+    perc = parseInt(id) * 10;
+
+    compute();
+
+    return false;
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function(){
+        select_typ('t');
+        select_p('7');
+
+        $('form').on('submit', function() {
+            return confirm('{% trans "Are you really sure?" %}');
+        });
+    });
+});
+    </script>
+{% endblock %}

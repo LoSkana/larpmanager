@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block title %}
+    {% trans "Activate feature" %}
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+    {% trans "To use the feature you requested, you need to activate the following feature: " %} {{ feature.name }}
+    <br />
+    <br />
+    {% if permission %}
+        {% trans "Do you want to proceed?" %}
+        {% if run %}
+            <a href="{% url 'activate_feature_event' run.event.slug run.number exe.feature exe.path %}">
+            {% else %}
+                <a href="{% url 'activate_feature_assoc' exe.feature exe.path %}">
+                {% endif %}
+            {% trans "Activate" %}</a>
+        {% else %}
+            {% trans "Ask the organisers to activate it." %}
+        {% endif %}
+    {% endblock %}

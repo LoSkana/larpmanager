@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load tz show_tags static i18n %}
+{% block title %}Badges{% endblock %}
+{% block content %}
+    <h2>Gonna catch 'em all!</h2>
+    <p>
+        {% trans "Show the" %} <a href="{% url 'leaderboard' %}">{% trans "leaderboard" %}</a>
+    </p>
+    <p>
+        {% trans "You think you should have an achievement?" %} <a href="{% url 'help' %}">{% trans "Tell us here!" %}</a>
+    </p>
+    <hr />
+    {% include "elements/badges.html" %}
+    <hr />
+{% endblock %}
+{% block js %}
+    <script>
+window.addEventListener('DOMContentLoaded', function() {
+$(document).ready(function() {
+  resize_to_fit();
+});
+});
+
+function resize_to_fit() {
+    $(".icon-name p").each(function( index ) {
+        var that = $(this),
+            textLength = that.html().length
+        ;
+
+        console.log(textLength);
+
+        if (textLength > 60) {
+            that.css('font-size', '60%');
+        } else if(textLength > 45) {
+            that.css('font-size', '70%');
+        } else if(textLength > 30) {
+            that.css('font-size', '80%');
+        } else if(textLength > 15) {
+            that.css('font-size', '90%');
+        }
+    });
+
+}
+    </script>
+{% endblock %}

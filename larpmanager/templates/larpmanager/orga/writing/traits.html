@@ -1,0 +1,111 @@
+{% extends 'utils.html' %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Traits" %} - {{ event.name }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the traits assigned to the characters in the run." %}
+{% endblock %}
+{% block content %}
+    {% include "elements/header/writing.html" %}
+    <p>
+        <b>{% trans "Show / hide" %}</b>
+        <br />
+        Informazioni su
+        <a href="#" class="my_toggle" tog='assign'>{% trans "assigned" %}</a>
+        {% if features.title %}
+            , <a href="#" class="my_toggle" tog='title'>{% trans "title" %}</a>
+        {% endif %}
+        {% if features.motto %}
+            , <a href="#" class="my_toggle" tog='motto'>{% trans "motto" %}</a>
+        {% endif %}
+        {% if features.hide %}
+            , <a href="#" class="my_toggle" tog='nasc'>{% trans "hide" %}</a>
+        {% endif %}
+    </p>
+    <table id="quests" class="tablesorter mob writing">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Name" %}</th>
+                <th></th>
+                {% if features.progress %}
+                    <th>{% trans "Progress" %}</th>
+                {% endif %}
+                <th>{% trans "Quest" %}</th>
+                <th>{% trans "Concept" %}</th>
+                {% if features.hide %}
+                    <th class="hide nasc">Nascondi" %}</th>
+                {% endif %}
+                {% if features.keywords %}
+                    <th class="hide keywords">Parole chiave" %}</th>
+                {% endif %}
+                {% if features.role %}
+                    <th class="hide role">Ruolo" %}</th>
+                {% endif %}
+                {% if features.assigned %}
+                    <th class="hide assign">{% trans "Assigned" %}</th>
+                {% endif %}
+                <th>{% trans "Presentation" %}</th>
+                <th style="width: 5%">(L)</th>
+                {% if features.preview %}
+                    <th>{% trans "Preview" %}</th>
+                    <th style="width: 5%">(L)</th>
+                {% endif %}
+                <th>{% trans "Text" %}</th>
+                <th style="width: 5%">(L)</th>
+                <th>{% trans "Traits" %}</th>
+                <th>(N)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'orga_traits_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i> </a>
+                    </td>
+                    <td>{{ el }}</td>
+                    <td>
+                        <a href="{% url 'orga_traits_view' run.event.slug run.number el.id %}">{% trans "Reading" %}</a>
+                        <a href="{% url 'orga_traits_versions' run.event.slug run.number el.id %}">{% trans "Versions" %}</a>
+                    </td>
+                    {% if features.progress %}
+                        <td>{% include "elements/show_progress.html" with el=el %}</td>
+                    {% endif %}
+                    <td>
+                        {% if el.quest %}
+                            <a href="{% url 'orga_quests_edit' run.event.slug run.number el.quest.number %}">{{ el.quest }}</a>
+                        {% endif %}
+                    </td>
+                    <td>{{ el.concept_red | safe }}</td>
+                    {% if features.hide %}
+                        <td class="hide nasc">
+                            {% if el.hide %}Si{% endif %}
+                        </td>
+                    {% endif %}
+                    {% if features.keywords %}<td class="hide keywords">Parole chiave</td>{% endif %}
+                    {% if features.role %}<td class="hide role">Ruolo</td>{% endif %}
+                    {% if features.assigned %}
+                        <td class="hide assign">
+                            {% if el.assigned_id %}{{ assigned|get:el.assigned_id }}{% endif %}
+                        </td>
+                    {% endif %}
+                    <td>{{ el.teaser_red | safe }}</td>
+                    <td>{{ el.teaser_ln }}</td>
+                    {% if features.preview %}
+                        <td>{{ el.preview_red | safe }}</td>
+                        <td>{{ el.preview_ln }}</td>
+                    {% endif %}
+                    <td>{{ el.text_red | safe }}</td>
+                    <td>{{ el.text_ln }}</td>
+                    <td>
+                        {% for p in el.traits.all %}
+                            <a href="{% url 'orga_traits_edit' run.event.slug run.number p.number %}">{{ p }}</a>
+                        {% endfor %}
+                    </td>
+                    <td>{{ el.traits.all | length }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

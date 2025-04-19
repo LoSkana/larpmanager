@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load tz show_tags static i18n %}
+{% block title %}{{ run }}{% endblock %}
+{% block content %}
+    {% if hide_login %}
+        <p>
+            <i>{% trans "Characters are only visible to logged in users" %}: <a href="{% url 'login' %}">{% trans "Login" %}</a></i>
+        </p>
+    {% elif hide_signup %}
+        <p>
+            <i>{% trans "Characters are only visible to registered players" %}: <a href="{% url 'register' run.event.slug run.number %}">{% trans "Register" %}</a></i>
+        </p>
+    {% else %}
+        {% if factions %}
+            {% for fnum in factions_typ.s %}
+                {% with factions|get:fnum as f %}
+                    {% if f.characters %}
+                        {% if f.name %}
+                            <h1 class="title">
+                                {% if show_faction %}
+                                    <a href="{% url 'faction' event.slug run.number fnum %}">{{ f.name }}</a>
+                                {% else %}
+                                    {{ f.name }}
+                                {% endif %}
+                            </h1>
+                        {% endif %}
+                        <div class="gallery">
+                            {% for chnum in f.characters %}
+                                {% with chars|get:chnum as ch %}
+                                    {% if not ch.hide %}
+                                        <div class="el">
+                                            <div class="icon">
+                                                <a href="{% url 'character' run.event.slug run.number ch.number %}">
+                                                    <div class='img_cover'
+                                                         style="background-image:url('{% get_char_profile ch %}')" />
+                                                </div>
+                                                <div class="icon-name">
+                                                    <p>
+                                                        {{ ch.name }}
+                                                        {% if ch.title %}- {{ ch.title }}{% endif %}
+                                                    </p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        {% endfor %}
+    {% endif %}
+    {% if reg_list %}
+        <h1 class="title">{% trans "Registered" %}</h1>
+        {% include "elements/gallery.html" with list=reg_list %}
+    {% endif %}
+{% endif %}
+{% endblock %}
+{% block js %}
+    <script>
+window.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function() {
+      resize_to_fit();
+    });
+});
+
+function resize_to_fit() {
+    $(".icon-name p").each(function( index ) {
+        var that = $(this),
+            textLength = that.html().length
+        ;
+
+        // console.log(textLength);
+
+        if (textLength > 60) {
+            that.css('font-size', '60%');
+        } else if(textLength > 45) {
+            that.css('font-size', '70%');
+        } else if(textLength > 30) {
+            that.css('font-size', '80%');
+        } else if(textLength > 15) {
+            that.css('font-size', '90%');
+        }
+    });
+
+}
+    </script>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Ability types" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page summarizes the types of abilities that players can purchase." %}
+{% endblock %}
+{% block content %}
+    {% include "elements/header/orga.html" %}
+    <table id="ability_tipes" class="tablesorter mob writing">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Ability" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'orga_px_ability_types_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.name }}</td>
+                    <td>
+                        {% for ab in el.abilities.all %}
+                            {% include "elements/comma.html" %}
+                            <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number ab.number %}">{{ ab.name }}</a>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Privacy" %}
+{% endblock %}
+{% block content %}
+    <i>{% trans "Your data will be saved in the LarpManager system, which is used  by several LARP Organizations. We value the privacy of your data, and we  we will treat it with the utmost care. In particular, it will be made visible  only to the organizers of the events you decide to sign up. Under no any other circumstances they will be disclosed, shared, or processed." %}</i>
+    <hr />
+    <p>
+        {% trans "Here is the complete list of all organizations registered with LarpManager that have access to your data." %}
+    </p>
+    <p>
+        {% trans "Access has been granted by you in the past by signing up for one of their  events, or by agreeing to participate as a staff member / organizer." %}
+    </p>
+    <p>{% trans "You can remove your consent to data sharing by clicking on the appropriate link." %}</p>
+    <hr />
+    <table class="mob">
+        <tr>
+            <th>{% trans "Organization" %}</th>
+            <th>{% trans "Newsletter" %}</th>
+        </tr>
+        {% for el in joined %}
+            <tr>
+                <th>{{ el.assoc }}</th>
+                <td>{{ el.get_newsletter_display }}</td>
+                <td>
+                    <a href="{% url 'profile_privacy_rewoke' el.assoc.slug %}"
+                       class="delete">{% trans "Remove consent" %}</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

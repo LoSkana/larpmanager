@@ -1,0 +1,243 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Members list" %} - {% trans "Organization" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the list of members, divided by type: applicants, approved, renewed for the current year." %}
+{% endblock %}
+{% block content %}
+    <p>{% trans "Total members: " %}{{ sum }}</p>
+    <hr />
+    <input type="text" name="search" id="search" placeholder="Search" />
+    <hr />
+    {% if s %}
+        <h2>{% trans "Request" %} ({{ s | length }})</h2>
+        <table class="mob">
+            <tr>
+                <th></th>
+                <th>{% trans "Surname" %}</th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Email" %}</th>
+                <th>{% trans "Registrations" %}</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            {% for el in s %}
+                <tr class="member">
+                    <td>
+                        <a href="{% url 'exe_member' el.0 %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.1 | title }}</td>
+                    <td>{{ el.2 | title }}</td>
+                    <td>{{ el.3 }}</td>
+                    <td>{{ el.6 }}</td>
+                    <td>
+                        <a href="{% url 'exe_member' el.0 %}">{% trans "Details" %}</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'exe_membership_status' el.0 %}">{% trans "Member" %}</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'exe_membership_evaluation' el.0 %}">{% trans "Request" %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if a %}
+        <h2>{% trans "Accepted" %} ({{ a | length }})</h2>
+        <table class="mob tablesorter">
+            <thead>
+                <tr>
+                    <th>{% trans "Surname" %}</th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Email" %}</th>
+                    <th>{% trans "Number" %}</th>
+                    <th>{% trans "Registrations" %}</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            {% for el in a %}
+                <tr class="member">
+                    <td>{{ el.1 | title }}</td>
+                    <td>{{ el.2 | title }}</td>
+                    <td>{{ el.3 }}</td>
+                    <td>{{ el.4 }}</td>
+                    <td>{{ el.6 }}</td>
+                    <td>
+                        <a href="{% url 'exe_member' el.0 %}">{% trans "Details" %}</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'exe_membership_status' el.0 %}">{% trans "Member" %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if p %}
+        <h2>{% trans "Paid current year" %} ({{ p | length }})</h2>
+        <table class="mob tablesorter">
+            <thead>
+                <tr>
+                    <th>{% trans "Surname" %}</th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Email" %}</th>
+                    <th>{% trans "Number" %}</th>
+                    <th>{% trans "Registrations" %}</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            {% for el in p %}
+                <tr class="member">
+                    <td>{{ el.1 | title }}</td>
+                    <td>{{ el.2 | title }}</td>
+                    <td>{{ el.3 }}</td>
+                    <td>{{ el.4 }}</td>
+                    <td>{{ el.6 }}</td>
+                    <td>
+                        <a href="{% url 'exe_member' el.0 %}">{% trans "Details" %}</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'exe_membership_status' el.0 %}">{% trans "Member" %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if r %}
+        <h2>{% trans "Kicked out" %} ({{ r | length }})</h2>
+        <table class="mob tablesorter">
+            <thead>
+                <tr>
+                    <th>{% trans "Surname" %}</th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Email" %}</th>
+                    <th>{% trans "Number" %}</th>
+                    <th>{% trans "Registrations" %}</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            {% for el in r %}
+                <tr class="member">
+                    <td>{{ el.1 | title }}</td>
+                    <td>{{ el.2 | title }}</td>
+                    <td>{{ el.3 }}</td>
+                    <td>{{ el.4 }}</td>
+                    <td>{{ el.6 }}</td>
+                    <td>
+                        <a href="{% url 'exe_member' el.0 %}">{% trans "Details" %}</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'exe_membership_status' el.0 %}">{% trans "Member" %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if e %}
+        <h2>{% trans "Absent" %} ({{ e | length }})</h2>
+        <table class="mob tablesorter">
+            <tr>
+                <th>{% trans "Surname" %}</th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Email" %}</th>
+                <th>{% trans "Registrations" %}</th>
+                <th></th>
+                <th></th>
+            </tr>
+            {% for el in e %}
+                <tr class="member">
+                    <td>{{ el.1 | title }}</td>
+                    <td>{{ el.2 | title }}</td>
+                    <td>{{ el.3 }}</td>
+                    <td>{{ el.6 }}</td>
+                    <td>
+                        <a href="{% url 'exe_member' el.0 %}">{% trans "Details" %}</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'exe_membership_status' el.0 %}">{% trans "Member" %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    <hr />
+    <h2>{% trans "Email" %}</h2>
+    <table class="mob">
+        <tr>
+            <th>{% trans "Request" %}</th>
+            <td>
+                {% for el in s %}
+                    {% include "elements/comma.html" %}
+                    {{ el.3 }}
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <th>{% trans "Accepted" %}</th>
+            <td>
+                {% for el in a %}
+                    {% include "elements/comma.html" %}
+                    {{ el.3 }}
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <th>{% trans "Paid current year" %}</th>
+            <td>
+                {% for el in p %}
+                    {% include "elements/comma.html" %}
+                    {{ el.3 }}
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <th>{% trans "Kicked out" %}</th>
+            <td>
+                {% for el in r %}
+                    {% include "elements/comma.html" %}
+                    {{ el.3 }}
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <th>{% trans "Absent" %}</th>
+            <td>
+                {% for el in e %}
+                    {% include "elements/comma.html" %}
+                    {{ el.3 }}
+                {% endfor %}
+            </td>
+        </tr>
+    </table>
+{% endblock %}
+{% block js %}
+    <script>
+window.addEventListener('DOMContentLoaded', function() {
+    $(function() {
+        $('#search').on('input', function() { search($(this).val()); });
+
+    });
+});
+
+function search(key) {
+    $('.member').each(function( index ) {
+        chi = $(this).children();
+        var tx = chi.eq(0).html() + chi.eq(1).html();
+
+        if (tx.toLowerCase().includes(key.toLowerCase())) {
+            $(this).show(300);
+        } else {
+            $(this).hide(300);
+        }
+    });
+
+}
+
+    </script>
+{% endblock %}

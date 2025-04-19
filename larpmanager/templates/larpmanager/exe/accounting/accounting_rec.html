@@ -1,0 +1,99 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Accounting - History" %} - {% trans "Organization" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the historical accounting of the organization." %}
+{% endblock %}
+{% block content %}
+    <h2>{% trans "Global balance" %}</h2>
+    <br />
+    <i>({% trans "this figure is the main positive, the operating margin. It takes into account of budgets for events that have been over two months, which are considered to be closed, and treats all tokens and credits as reimbursed." %})</i>
+    <br />
+    <br />
+    <div id="globalSumContainer" style="height: 400px; width: 100%;"></div>
+    <h2>{% trans "Overall balance" %}</h2>
+    <br />
+    <i>({% trans "this figure is the net that should result as availability of financial instruments - it does not take into account tokens and credits" %})</i>
+    <br />
+    <br />
+    <div id="bankSumContainer" style="height: 400px; width: 100%;"></div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript"
+            src="https://cdn.canvasjs.com/jquery.canvasjs.stock.min.js"
+            defer></script>
+    <script type="text/javascript">
+function stockChartOptions(dataPoints) {
+    return {
+    //~ title:{
+      //~ text:"StockChart with Spline Area Chart"
+    //~ },
+    //~ subtitles: [{
+      //~ text: "Litecoin Price (in Eur)"
+    //~ }],
+    theme: "dark2",
+    exportEnabled: true,
+    charts: [{
+      axisX: {
+        crosshair: {
+          enabled: true,
+          snapToDataPoint: true,
+          valueFormatString: "DD MMM YYYY",
+        }
+      },
+      axisY: {
+        //~ title: "Litecoin Price",
+        prefix: "{{ currency_symbol }}",
+        crosshair: {
+          enabled: true,
+          valueFormatString: "{{ currency_symbol }}#,###",
+        }
+      },
+      toolTip: {
+        shared: true
+      },
+      data: [{
+        type: "splineArea",
+        yValueFormatString: "{{ currency_symbol }}#,###.##",
+        dataPoints : dataPoints
+      }]
+    }],
+    navigator: {
+      axisX: {
+        labelFontColor: "#F5F5F5",
+        labelFontFamily: "Trebuchet MS"
+      },
+      slider: {
+        minimum: new Date({{ start | date:"U" }} * 1000),
+        maximum: new Date({{ end | date:"U" }} * 1000),
+      }
+    }
+  }
+}
+
+
+  var globalDataPoints = [
+  {% for el in list %}
+    {% include "elements/comma.html" %}
+    {x: new Date({{ el.created | date:"U" }} * 1000), y: parseFloat('{{ el.global_sum }}') }
+  {% endfor %}
+  ];
+
+  var bankDataPoints = [
+  {% for el in list %}
+    {% include "elements/comma.html" %}
+    {x: new Date({{ el.created | date:"U" }} * 1000), y: parseFloat('{{ el.bank_sum }}') }
+  {% endfor %}
+  ];
+
+window.addEventListener('DOMContentLoaded', function() {
+$(function () {
+    $("#globalSumContainer").CanvasJSStockChart(stockChartOptions(globalDataPoints));
+
+    $("#bankSumContainer").CanvasJSStockChart(stockChartOptions(bankDataPoints));
+});
+});
+    </script>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Redeem collection" %}
+{% endblock %}
+{% block content %}
+    <p>
+        {% trans "Your friends wanted to give you a special gift: they gave you the chance to participate in one of our experiences!" %}
+    </p>
+    <p>
+        {% trans "By pressing confirm, the collection total will be credited to your account, and will be used automatically when you register for one of our events!" %}
+    </p>
+    <form action="{{ request.path }}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="{% trans "Confirm" %}" />
+    </form>
+    <p>
+        <b>{% trans "Total collection" %}: <b>{{ coll.total }}.</b>
+    </p>
+    {% if list %}
+        <p>
+            {% trans "Participants included" %}:
+            {% for el in list %}
+                {% include "elements/comma.html" %}
+                {{ el.member.display_member }}
+            {% endfor %}
+        </p>
+    {% endif %}
+{% endblock %}

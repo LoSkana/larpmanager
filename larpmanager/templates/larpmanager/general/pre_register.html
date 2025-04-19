@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans 'Pre-Register' %}
+{% endblock %}
+{% block content %}
+    <h4>
+        <a href="#" class="my_toggle" tog='detail'><b>{% trans "Show explanation" %}</b></a>
+    </h4>
+    {% if event %}
+        <form action="{{ request.path }}"  method="post">
+            {% csrf_token %}
+            <h2>{% trans 'New pre-registrations' %}</h2>
+            <table class="mob no_csv">
+                {{ form.as_table }}
+            </table>
+            <input id="submit" type="submit" value="{% trans 'Confirm' %}">
+        </p>
+        <p>
+        </form>
+        <hr />
+    {% endif %}
+    <div class="hide detail">
+        <hr />
+        <h2>{% trans 'Operation' %}</h2>
+        <p>
+            {% trans "If you like or are interested in an event, you can <b>pre-register</b>." %}
+        </p>
+        <p>
+            {% trans "This <b>is</b> not binding, and <b>does</b> not</b> automatically secure you a place at the event, but you will be offered a preferential registration before the public opening of registration." %}
+        </p>
+        <p>
+            {% trans "For our part, we will use pre-registrations as a measure of how much an event is desired. If you want a new run of an event, spread the voice and invites others to pre-register to it!" %}
+        </p>
+        <p>
+            {% trans 'We only ask you to indicate a <b>order</b> of preference for the your pre-registrations (imagining you have to choose which one to play, indicates in what order you want to play them).' %}
+        </p>
+        <p>{% trans 'If you wish, you can delete past pre-registrations.' %}</p>
+    </div>
+    <h2>{% trans 'Pre-registration' %}</h2>
+    <table class="mob">
+        <tr>
+            <th style="width:50%;">{% trans 'Event' %}</th>
+            <th>{% trans 'Order' %}</th>
+            <th style="width:35%;">{% trans 'Do you want to tell us something?' %}</th>
+            <th></th>
+        </tr>
+        {% for al in already %}
+            <tr>
+                <td>{{ al.event }}</td>
+                <td>{{ al.pref }}</td>
+                <td>{{ al.info }}</td>
+                <td>
+                    <a href="{% url 'pre_register_remove' al.event.slug %}">{% trans "Delete" %}</a>
+                </td>
+            {% endfor %}
+        </table>
+        {% if not event %}
+            <form action="{{ request.path }}"  method="post">
+                {% csrf_token %}
+                <h2>{% trans 'New pre-registrations' %}</h2>
+                <table class="mob no_csv">
+                    {{ form.as_table }}
+                </table>
+                <input id="submit" type="submit" value="{% trans 'Confirm' %}">
+            </p>
+            <p>
+            </form>
+            <hr />
+        {% endif %}
+    {% endblock %}
+    {% block js %}
+        <script>window.addEventListener('DOMContentLoaded', function() {
+$(function(){
+
+$('select[name$="_pref"]').change(function() {
+
+    var $current = $(this);
+    $(':input[type="submit"]').prop('disabled', false);
+
+    $('select[name$="_pref"]').each(function() {
+        if ($(this).val() == $current.val() && $(this).attr('id') != $current.attr('id')) {
+           $(':input[type="submit"]').prop('disabled', true);
+        }
+
+    });
+  });
+
+{% if sel %}
+    var sel = '{{ sel }}';
+    var k = '#id_new_event option[value="' + sel + '"]';
+    $(k).prop('selected', true)
+
+{% endif %}
+
+});
+});
+        </script>
+    {% endblock %}

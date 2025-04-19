@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Your user" %}
+{% endblock %}
+{% block content %}
+    <p>
+        {% trans "You are logged in with an email address" %}: <i>{{ member.email }}</i>. <a href="{% url 'ticket' 'email' %}">{% trans "Would you like to change it?" %}</a>
+    </p>
+    <hr />
+    {% if vote_open %}
+        <p>
+            {% trans "Voting for the Executive is open, " %} <a href="{% url 'vote' %}">{% trans "submit your vote here!" %}</a>.
+        </p>
+        <hr />
+    {% endif %}
+    <p>
+        <i>{% trans "Your data will be saved in the LarpManager system, which is used by several associations." %}
+            {% trans "We value the privacy of your data and will treat it with the utmost care." %}
+            {% trans "In particular, they will only be made visible to the organisers of the events you decide to register for." %}
+            {% trans "They will not be communicated, shared or processed in any other way." %}
+        {% trans "You can check and edit the list of organizations that can access your data on your " %}<a href="{% url 'profile_privacy' %}">privacy</a>.</i>
+    </p>
+    <hr />
+    {% if custom_text %}
+        {{ custom_text | safe }}
+        <hr />
+    {% endif %}
+    <p>(*) : {% trans "These fields are mandatory" %}</p>
+    <hr />
+    {% if avatar_form %}
+        <form action="{{ request.path }}"
+              enctype="multipart/form-data"
+              method="post"
+              id="avatar_form">
+            {% csrf_token %}
+            <div style="text-align: center">
+                <h4>{% trans "Current profile image" %}:</h4>
+                <div class="helptext" style="max-width:700px; margin: auto">
+                    {% trans "Upload your portrait photo. It will be shown to other players together with the your character, so as to help recognize you in the game. Choose a photo that you would put in an official document (in which you are alone, centered on your face). " %}
+                </div>
+                <br />
+                <br />
+                <input type='button'
+                       id='change_photo'
+                       value='{% trans "Change photo" %}'
+                       class="my_toggle"
+                       tog="change-field">
+                <input type='button' id='rotate_l_btn' value='{% trans "Rotate left" %}' \>
+                <input type='button' id='rotate_r_btn' value='{% trans "Rotate right" %}' \>
+                <br />
+                <br />
+                <div class="hide change-field">
+                    {% trans "Select the new photo to upload" %}: {{ avatar_form.image }}
+                    <br />
+                    <br />
+                </div>
+                <img id="profile" {% if profile %}src={{ profile }}{% endif %} />
+            </div>
+        </form>
+        <hr />
+    {% endif %}
+    <form action="{{ request.path }}"
+          enctype="multipart/form-data"
+          method="post">
+        {% csrf_token %}
+        <table class="mob no_csv">
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}
+{% block js %}
+    <script>
+{% if form.country_subdivisions_map %}
+    var countrySubdivisions = {{ form.country_subdivisions_map | safe }};
+
+    function province_update() {
+        let countryCode = $('#id_residence_address_0').val();
+        let $provinceSelect = $('#id_residence_address_1');
+
+        $provinceSelect.empty().append('<option value="" disabled selected>----</option>');
+        if (countrySubdivisions[countryCode]) {
+            $.each(countrySubdivisions[countryCode], function(index, subdivision) {
+                $provinceSelect.append(new Option(subdivision[1], subdivision[0]));
+            });
+        }
+
+        {% if form.initial_province %}
+        $provinceSelect.val('{{ form.initial_province }}');
+        {% endif %}
+    }
+{% endif %}
+
+ {% if avatar_form %}
+
+    var upload = '{% url 'profile_upload' %}';
+    var rotate_l = '{% url 'profile_rotate' 1 %}';
+    var rotate_r = '{% url 'profile_rotate' 0 %}';
+
+    function profile_update(src) {
+        timestamp = (new Date()).getTime();
+        newUrl = src + '?_=' + timestamp;
+        $('#profile').attr("src", newUrl);
+    }
+
+{% endif %}
+
+    window.addEventListener('DOMContentLoaded', function() {
+
+        $(function () {
+
+            {% if form.country_subdivisions_map %}
+
+                {% if form.initial_nation %}
+                    province_update();
+                {% else %}
+                    $('#id_residence_address_0').prepend('<option value="----" disabled selected>----</option>');
+                {% endif %}
+
+                $('#id_residence_address_0').on('change', province_update);
+            {% endif %}
+
+            {% if avatar_form %}
+                {% if not profile %}
+                $('#change_photo').trigger('click');
+                {% endif %}
+
+                $('#id_image').change(function() {
+
+                    var formData = new FormData();
+                    var fileInput = document.getElementById('id_image');
+                    var file = fileInput.files[0];
+                    formData.append('image', file);
+
+                    $('#profile').attr("src", "");
+                    $.ajax({
+                        url: upload,
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(d){
+                            profile_update(d.src);
+                            $('#change_photo').trigger('click');
+                        }
+                    });
+
+                });
+
+                $('#rotate_l_btn').on('click', function () {
+                    $('#profile').attr("src", "");
+                    $.ajax({
+                        url: rotate_l,
+                        context: document.body,
+                        success: function(d){
+                            profile_update(d.src);
+                        }
+                    });
+
+                });
+
+
+                $('#rotate_r_btn').on('click', function () {
+                    $('#profile').attr("src", "");
+                    $.ajax({
+                        url: rotate_r,
+                        context: document.body,
+                        success: function(d){
+                            profile_update(d.src);
+                        }
+                    });
+
+                });
+            {% endif %}
+        });
+    });
+
+    </script>
+{% endblock %}

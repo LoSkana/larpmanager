@@ -1,0 +1,49 @@
+{% extends 'utils.html' %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Roles" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the roles of the characters." %}
+{% endblock %}
+{% block content %}
+    <table class="tablesorter mob writing">
+        <thead>
+            <tr>
+                <th>{% trans "Character" %}</th>
+                <th>{% trans "Player" %}</th>
+                {% for rl in all_roles %}<th>{{ rl }}</th>{% endfor %}
+            </thead>
+            <tbody>
+                {% for num, char in chars.items %}
+                    <tr>
+                        <td>{{ char.name }}</td>
+                        <td>{{ char.player_full }}</td>
+                        {% for rl in all_roles %}
+                            <td>
+                                {% get_field char.roles rl %}
+                            </th>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% for el in roles_list %}
+            <h3>{{ el.0 }}</h3>
+            <table class="mob tablesorter">
+                {% for c in el.1 %}
+                    <tr>
+                        <td>{{ c.0.name }}</td>
+                        <td>{{ c.1 }}</td>
+                        <td>{{ c.0.player_full }}</td>
+                        <td>
+                            <img src="{% if c.0.player_prof %}{{ c.0.player_prof }}{% else %}{{ c.0.thumb }}{% endif %}"
+                                 height="100"
+                                 width="100" />
+                        </td>
+                        <td>{{ c.0.pronoun | default_if_none:"" }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+    {% endblock %}

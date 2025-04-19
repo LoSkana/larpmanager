@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    {% load show_tags i18n %}
+    <head>
+        <meta charset="utf-8">
+        <style>
+@page {
+    size: {{ pagesize|default:"A4" }};
+
+    @frame content_frame {
+        margin: 2cm;
+    }
+}
+
+table { width: 100%; }
+td, th { text-align: center; }
+.clear { clear: both; }
+
+        </style>
+        <style>{{ page_css | safe }}</style>
+    </head>
+    <body>
+        <!-- Content for Static Frame 'footer_frame' -->
+        <div id="header_content">{{ header_content | safe }}</div>
+        <!-- Content for Static Frame 'footer_frame' -->
+        <div id="footer_content">{{ footer_content | safe }}</div>
+        <!-- HTML Content -->
+        <div>
+            {% include "elements/sheet/main.html" %}
+            {% include "elements/sheet/plots.html" %}
+            {% include "elements/sheet/quests.html" %}
+            {% include "elements/sheet/speedlarp.html" %}
+            {% include "elements/sheet/prologue.html" %}
+        </div>
+    </body>
+</html>

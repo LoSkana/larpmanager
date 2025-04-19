@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg88"
+   width="77.333336"
+   height="49.333332"
+   viewBox="0 0 77.333336 49.333332"
+   sodipodi:docname="chevron.svg"
+   inkscape:version="1.0.2 (1.0.2+r75+1)">
+  <metadata
+     id="metadata94">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs92" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1015"
+     id="namedview90"
+     showgrid="false"
+     inkscape:zoom="12.033006"
+     inkscape:cx="53.670694"
+     inkscape:cy="26.72976"
+     inkscape:window-x="0"
+     inkscape:window-y="40"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g96" />
+  <g
+     inkscape:groupmode="layer"
+     inkscape:label="Image"
+     id="g96">
+    <path
+       style="fill:#000000;stroke-width:1.33333"
+       d="M 18.551946,28.791759 C 1.2403466,11.441649 1.2403466,11.441649 3.2824068,7.7917593 7.2112137,0.76958255 10.418824,2.045103 24.759927,16.332394 c 13.142094,13.09278 13.142094,13.09278 26.284188,0 C 65.385218,2.045103 68.592827,0.76958255 72.521634,7.7917593 74.563694,11.441649 74.563694,11.441649 57.252096,28.791759 47.730716,38.33432 39.023182,46.14187 37.902021,46.14187 c -1.121161,0 -9.828695,-7.80755 -19.350075,-17.350111 z"
+       id="path102" />
+  </g>
+</svg>

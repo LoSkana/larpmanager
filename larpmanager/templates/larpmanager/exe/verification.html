@@ -1,0 +1,64 @@
+{% extends 'utils.html' %}
+{% load i18n show_tags %}
+{% block title %}
+    {% trans "Balance" %} - {% trans "Organization" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page allows you to check the payment items in the system. The source of the data should be one of the verified payment systems,  from which to take the list of payments, showing the code of the payment." %}
+{% endblock %}
+{% block content %}
+    <h2>{% trans "Upload verified payments" %}</h2>
+    <form action="{{ request.path }}"
+          enctype="multipart/form-data"
+          method="post">
+        {% csrf_token %}
+        {% trans "Select a file with extension csv" %}
+        {% trans "The first column the amount, the second the receipts." %}
+        {% trans "Get this data from the bank or equivalent, to verify the entries marked." %}
+        <br />
+        <br />
+        <table class="no_csv">
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="Submit">
+    </form>
+    <h2>{% trans "List payments to verify" %} ({{ todo | length }})</h2>
+    <table id="todo" class="tablesorter mob">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Causal" %}</th>
+                <th>{% trans "Code" %}</th>
+                <th>{% trans "Size" %}</th>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Type" %}</th>
+                <th>{% trans "Payment" %}</th>
+                <th></th>
+                <th>{% trans "Code" %}</th>
+            </tr>
+        </thead>
+        {% for el in todo %}
+            <tr>
+                <td>
+                    <a href="{% url 'exe_verification_manual' el.id %}">{% trans "Verification" %}</a>
+                </td>
+                <td>{{ el.causal }}</td>
+                <td>{{ el.cod }}</td>
+                <td>{{ el.mc_gross|format_decimal }}</td>
+                <td>{{ el.created | date:"d/m/Y h:m" }}</td>
+                <td>{{ el.get_typ_display }}</td>
+                <td>
+                    {% if el.method %}{{ el.method.name }}{% endif %}
+                </td>
+                <td>
+                    {% if el.invoice %}
+                        <a href="{{ el.download }}">{% trans "Statement" %}</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if el.reg_cod %}{{ el.reg_cod }}{% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

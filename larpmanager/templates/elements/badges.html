@@ -1,0 +1,20 @@
+{% load static %}
+<div class="gallery">
+    {% for bd in badges %}
+        <div class="el badge lm_tooltip">
+            <div class="icon">
+                <a href="{% url 'badge' bd.id %}">
+                    {% if bd.img_url %}
+                        <img src="{{ bd.img_url }}" />
+                    {% else %}
+                        <img src="{% static 'larpmanager/assets/blank-avatar.svg' %}" />
+                    {% endif %}
+                    <div class="icon-name">
+                        <p>{{ bd.name }}</p>
+                    </div>
+                    <span class='lm_tooltiptext'>{{ bd.descr }}</span>
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+</div>

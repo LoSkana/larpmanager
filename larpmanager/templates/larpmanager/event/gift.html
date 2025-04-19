@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load tz show_tags static i18n %}
+{% block title %}
+    {% trans 'Gift' %} - {{ run.search }}
+{% endblock %}
+{% block content %}
+    <p>
+        {% trans "On this page you can book tickets for the event; once paid, a special code will be generated." %}
+        {% trans "A friend of yours will be able to receive the registration as a gift by accessing this special link!" %}
+    </p>
+    <div class="c nav">
+        <a href="{% url 'gift_edit' run.event.slug run.number 0 %}">{% trans "Add new" %}</a>
+    </div>
+    <br />
+    <table class="mob no_csv">
+        <tr>
+            <th></th>
+            <th>{% trans "Ticket" %}</th>
+            <th>{% trans "Accounting" %}</th>
+        </tr>
+        {% for reg in list %}
+            <tr>
+                <td>
+                    <a href="{% url 'gift_edit' run.event.slug run.number reg.id %}"><i class="fas fa-edit"></i></a>
+                </td>
+                <td>
+                    {% if reg.ticket %}
+                        (
+                        {{ reg.ticket.name }}
+                        {% if reg.ticket.price %}<i><u> {{ reg.ticket.price }}{{ currency_symbol }}</u></i>{% endif %}
+                        )
+                    {% endif %}
+                    {% if reg.info.opts %}
+                        {% for k, el in reg.info.opts.items %}
+                            {% include "elements/comma.html" %}
+                            <b>{{ el.q.display }}</b> -
+                            {% for opt in el.l %}
+                                {{ opt.display }}
+                                {% if opt.price %}<i><u>({{ opt.price }}{{ currency_symbol }})</u></i>{% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if reg.payment %}
+                        <a href="{% url 'acc_reg' reg.id %}">
+                            {{ reg.payment.quota | format_decimal }}{{ currency_symbol }}
+                            {% if reg.deadline > 0 %}
+                            {% trans "within" %} {{ reg.payment.deadline }} {% trans "days" %}</a>
+                        {% else %}
+                            {% trans "immediately" %}</a> <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
+                        {% endif %}
+                    {% elif reg.pending %}
+                        {% trans "Payment currently in review by the staff." %}
+                    {% else %}
+                        <a href="{% url 'gift_redeem' event.slug run.number reg.redeem_code %}">{% trans "Redeem code" %}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <p>
+        <i>{% trans "Note: The special code is re-generated each time you change the gift card" %}</i>
+    </p>
+{% endblock %}

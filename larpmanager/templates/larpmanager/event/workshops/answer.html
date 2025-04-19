@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load i18n show_tags %}
+{% block title %}{{ workshop.display }}{% endblock %}
+{% block nav %}
+    {% include "larpmanager/manage/nav.html" %}
+    <div class='lm_tooltip'>
+        <a href="{% url 'workshops' slug run.number %}">Workshop</a>
+        <div class='lm_tooltiptext'>{% trans "Fill out the event prep questions!" %}</div>
+    </div>
+{% endblock %}
+{% block content %}
+    <br />
+    <div class="workshop">
+        <p>{% trans "Answer the following questions. Select *all* of the answers that seem correct." %}</p>
+        <hr class="c" />
+        <form action="{{ request.path }}"  method="post">
+            {% csrf_token %}
+            {% for el in list %}
+                <h2>{{ el.display }}</h2>
+                <div class="question num_{{ el.opt | length }}">
+                    {% for op in el.opt %}
+                        <div class="option">
+                            <p>
+                                <input type="checkbox"
+                                       id="{{ el.id }}_{{ op.id }}"
+                                       name="{{ el.id }}_{{ op.id }}">
+                                {{ op.display }}
+                            </p>
+                        </div>
+                    {% endfor %}
+                </div>
+                <hr class="c" />
+            {% endfor %}
+            <input type="submit" value="{% trans 'Submit' %}">
+        </form>
+    </div>
+{% endblock %}

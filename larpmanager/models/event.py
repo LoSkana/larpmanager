@@ -1,0 +1,584 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+import inspect
+import os
+
+from colorfield.fields import ColorField
+from django.conf import settings as conf_settings
+from django.db import models
+from django.db.models import Q
+from django.db.models.constraints import UniqueConstraint
+from django.utils import formats
+from django.utils.translation import gettext_lazy as _
+from django.utils.translation import pgettext_lazy
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFit
+from tinymce.models import HTMLField
+
+from larpmanager.models.association import Association
+from larpmanager.models.base import BaseModel, AlphanumericValidator, Feature
+from larpmanager.models.larpmanager import LarpManagerPlan
+from larpmanager.models.member import Member
+from larpmanager.models.utils import (
+    UploadToPathAndRename,
+    get_attr,
+    show_thumb,
+    download,
+    my_uuid_short,
+    get_element_config,
+)
+from larpmanager.utils.codes import languages
+
+
+class Event(BaseModel):
+    slug = models.CharField(
+        max_length=30,
+        verbose_name=_("URL identifier"),
+        help_text=_("Only lowercase characters and numbers are allowed, no spaces or symbols"),
+        validators=[AlphanumericValidator],
+        db_index=True,
+        blank=True,
+        null=True,
+    )
+
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="events")
+
+    lang = models.CharField(max_length=2, choices=languages, blank=True, null=True)
+
+    name = models.CharField(max_length=100)
+
+    tagline = models.CharField(
+        max_length=500,
+        blank=True,
+        null=True,
+        help_text=_("Slogan - maximum 70 characters"),
+    )
+
+    where = models.CharField(max_length=500, blank=True, null=True, help_text=_("Where it is held"))
+
+    authors = models.CharField(
+        max_length=500,
+        blank=True,
+        null=True,
+        help_text=_("Names of the collaborators who are organizing it"),
+    )
+
+    description_short = HTMLField(
+        max_length=1000,
+        blank=True,
+        null=True,
+        help_text=_("Short description - maximum 1000 characters"),
+    )
+
+    description = HTMLField(
+        max_length=6000,
+        blank=True,
+        help_text=_("Extended description - maximum 5000 characters"),
+    )
+
+    genre = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name=pgettext_lazy("event", "Genre"),
+        help_text=_("Indicate the setting / genre of the event"),
+    )
+
+    visible = models.BooleanField(default=True)
+
+    # cover = models.ImageField(upload_to=UploadToPathAndRename( 'cover/'))
+    cover = models.ImageField(
+        max_length=500,
+        upload_to="cover/",
+        blank=True,
+        help_text=_("Cover in rectangular format - aspect ratio 4:3"),
+    )
+    cover_thumb = ImageSpecField(
+        source="cover",
+        processors=[ResizeToFit(width=600)],
+        format="JPEG",
+        options={"quality": 70},
+    )
+
+    # ~ cover_red = models.ImageField(upload_to= 'cover_red/', blank=True, help_text=_("Cover in formato striscia - aspect ratio 9:3"))
+    # ~ cover_thumb_red = ImageSpecField(source='cover_red', processors=[ResizeToFill(500, 300)], format='JPEG', options={'quality': 70})
+
+    carousel_img = models.ImageField(max_length=500, upload_to="carousel/", blank=True, help_text=_("Carousel image"))
+    carousel_thumb = ImageSpecField(source="carousel_img", format="JPEG", options={"quality": 70})
+
+    carousel_text = HTMLField(max_length=2000, blank=True, help_text=_("Carousel description"))
+
+    website = models.URLField(max_length=100, blank=True)
+
+    register_link = models.URLField(max_length=150, blank=True)
+
+    max_pg = models.IntegerField(
+        default=0,
+        verbose_name=_("Number of primary spots"),
+        help_text=_("Maximum number of primary spots to be managed (0 for infinite)"),
+    )
+
+    max_filler = models.IntegerField(
+        default=0,
+        verbose_name=_("Number of filler spots"),
+        help_text=_("Maximum number of fillers to manage (0 for infinite)"),
+    )
+
+    max_waiting = models.IntegerField(
+        default=0,
+        verbose_name=_("Number of waiting spots"),
+        help_text=_("Maximum number of waiting spots to manage (0 for infinite)"),
+    )
+
+    pdf_instructions = models.TextField(blank=True, null=True)
+
+    features = models.ManyToManyField(Feature, related_name="events", blank=True)
+
+    parent = models.ForeignKey("event", on_delete=models.CASCADE, null=True, blank=True)
+
+    background = models.ImageField(
+        max_length=500,
+        upload_to="event_background/",
+        verbose_name=_("Background image"),
+        blank=True,
+        help_text=_("Background of web pages"),
+    )
+
+    background_red = ImageSpecField(
+        source="background",
+        processors=[ResizeToFit(width=1000)],
+        format="JPEG",
+        options={"quality": 80},
+    )
+
+    font = models.FileField(
+        upload_to=UploadToPathAndRename("event_font/"),
+        verbose_name=_("Title font"),
+        help_text=_("Font to be used in page titles"),
+        blank=True,
+        null=True,
+    )
+
+    css_code = models.CharField(max_length=32, editable=False, default="")
+
+    pri_rgb = ColorField(
+        verbose_name=_("Color texts"),
+        help_text=_("Indicate the color that will be used for the texts"),
+        blank=True,
+        null=True,
+    )
+    sec_rgb = ColorField(
+        verbose_name=_("Color background"),
+        help_text=_("Indicate the color that will be used for the background of texts"),
+        blank=True,
+        null=True,
+    )
+    ter_rgb = ColorField(
+        verbose_name=_("Color links"),
+        help_text=_("Indicate the color that will be used for the links"),
+        blank=True,
+        null=True,
+    )
+
+    feature_conf = models.TextField(blank=True, null=True)
+
+    template = models.BooleanField(default=False)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=["slug", "deleted"], name="unique_event_with_optional"),
+            UniqueConstraint(
+                fields=["slug"],
+                condition=Q(deleted=None),
+                name="unique_event_without_optional",
+            ),
+        ]
+
+    def __str__(self):
+        return self.name
+
+    def get_elements(self, typ):
+        queryset = typ.objects.filter(event=self.get_class_parent(typ))
+        if hasattr(typ, "number"):
+            queryset = queryset.order_by("number")
+        return queryset
+
+    def get_class_parent(self, nm):
+        if inspect.isclass(nm) and issubclass(nm, BaseModel):
+            nm = nm.__name__.lower()
+
+        elements = [
+            "character",
+            "faction",
+            "abilitypx",
+            "deliverypx",
+            "abilitytypepx",
+            "characterquestion",
+            "characteroption",
+        ]
+
+        if self.parent and nm in elements:
+            # check if we don't want to actually use that event's elements
+            if not self.get_feature_conf(f"campaign_{nm}_indep", False):
+                return self.parent
+
+        return self
+
+    def get_cover_thumb_url(self):
+        try:
+            return self.cover_thumb.url
+        except Exception as e:
+            print(e)
+            return None
+
+    def get_name(self):
+        return self.name
+
+    def show(self):
+        dc = {}
+
+        for s in [
+            "slug",
+            "name",
+            "tagline",
+            "description_short",
+            "description",
+            "website",
+            "genre",
+            "where",
+            "authors",
+        ]:
+            dc[s] = get_attr(self, s)
+        if self.cover:
+            dc["cover"] = self.cover.url
+            dc["cover_thumb"] = self.cover_thumb.url
+
+        if self.carousel_img:
+            dc["carousel_img"] = self.carousel_img.url
+            dc["carousel_thumb"] = self.carousel_thumb.url
+
+        if self.font:
+            dc["font"] = self.font.url
+
+        if self.background:
+            dc["background"] = self.background.url
+            dc["background_red"] = self.background_red.url
+
+        return dc
+
+    def thumb(self):
+        return show_thumb(100, self.cover_thumb.url)
+
+    def download_sheet_template(self):
+        return download(self.sheet_template.path)
+
+    def get_media_filepath(self):
+        fp = os.path.join(conf_settings.MEDIA_ROOT, f"pdf/{self.slug}/")
+        os.makedirs(fp, exist_ok=True)
+        return fp
+
+    def get_feature_conf(self, name, def_v=None):
+        return get_element_config(self, name, def_v)
+
+
+class EventConfig(BaseModel):
+    name = models.CharField(max_length=150)
+    value = models.CharField(max_length=1000)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="configs")
+
+    def __str__(self):
+        return f"{self.event} {self.name}"
+
+    class Meta:
+        unique_together = ("event", "name")
+        indexes = [
+            models.Index(fields=["event", "name"]),
+        ]
+
+
+class BaseConceptModel(BaseModel):
+    number = models.IntegerField()
+    name = models.CharField(max_length=150, blank=False)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+
+    class Meta:
+        abstract = True
+        ordering = ["event", "number"]
+
+    def get_name(self):
+        return get_attr(self, "name")
+
+    def __str__(self):
+        return self.name
+
+
+class EventButton(BaseConceptModel):
+    tooltip = models.CharField(max_length=200)
+    link = models.URLField(max_length=150)
+
+    class Meta:
+        indexes = [models.Index(fields=["number", "event"])]
+        constraints = [
+            UniqueConstraint(
+                fields=["event", "number", "deleted"],
+                name="unique_event_button_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["event", "number"],
+                condition=Q(deleted=None),
+                name="unique_event_button_without_optional",
+            ),
+        ]
+
+
+class EventText(BaseModel):
+    TOC = "t"
+    REGISTER = "r"
+    SEARCH = "s"
+    SIGNUP = "g"
+    ASSIGNMENT = "a"
+    CHARACTER_PROPOSED = "cs"
+    CHARACTER_APPROVED = "ca"
+    CHARACTER_REVIEW = "cr"
+
+    TYPE_CHOICES = [
+        (REGISTER, _("Registration form")),
+        (TOC, _("Terms and conditions")),
+        (SEARCH, _("Search")),
+        (SIGNUP, _("Registration mail")),
+        (ASSIGNMENT, _("Mail assignment")),
+        (CHARACTER_PROPOSED, _("Proposed character")),
+        (CHARACTER_APPROVED, _("Approved character")),
+        (CHARACTER_REVIEW, _("Character review")),
+    ]
+
+    number = models.IntegerField(null=True, blank=True)
+
+    text = HTMLField(blank=True, null=True)
+
+    typ = models.CharField(max_length=2, choices=TYPE_CHOICES, verbose_name=_("Type"))
+
+    language = models.CharField(
+        max_length=3,
+        choices=conf_settings.LANGUAGES,
+        default="en",
+        null=True,
+        verbose_name=_("Language"),
+        help_text=_("Text language"),
+    )
+
+    default = models.BooleanField(default=True)
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="texts")
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["event", "typ", "language", "deleted"],
+                name="unique_event_text_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["event", "typ", "language"],
+                condition=Q(deleted=None),
+                name="nique_event_text_without_optional",
+            ),
+        ]
+
+
+class ProgressStep(BaseConceptModel):
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        indexes = [models.Index(fields=["number", "event"])]
+        constraints = [
+            UniqueConstraint(
+                fields=["event", "number", "deleted"],
+                name="unique_ProgressStep_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["event", "number"],
+                condition=Q(deleted=None),
+                name="unique_ProgressStep_without_optional",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.order} - {self.name}"
+
+
+class Run(BaseModel):
+    START = "0"
+    SHOW = "1"
+    CANC = "8"
+    DONE = "9"
+    DEVELOP_CHOICES = [
+        (START, _("Hidden")),
+        (SHOW, _("Visible")),
+        (CANC, _("Cancelled")),
+        (DONE, _("Concluded")),
+    ]
+
+    search = models.CharField(max_length=150, editable=False)
+
+    development = models.CharField(
+        max_length=1,
+        choices=DEVELOP_CHOICES,
+        default=START,
+        verbose_name=_("Status"),
+    )
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="runs")
+    number = models.IntegerField(help_text=_("Number of event run"))
+
+    start = models.DateField(
+        blank=True, null=True, verbose_name=_("Start date"), help_text=_("Indicates the date on which the run starts")
+    )
+    end = models.DateField(
+        blank=True, null=True, verbose_name=_("End date"), help_text=_("Indicates the date on which the run ends")
+    )
+
+    registration_open = models.DateTimeField(
+        blank=True,
+        null=True,
+        verbose_name=_("Registration opening date"),
+        help_text=_("Indicate the date when registration opens. Leave blank to not open registrations"),
+    )
+    registration_secret = models.CharField(
+        default=my_uuid_short,
+        max_length=12,
+        unique=True,
+        verbose_name=_("Registration code"),
+        help_text=_(
+            "This code will be used to generate the secret registration links. You can leave "
+            "it as it is or customise it"
+        ),
+        db_index=True,
+    )
+
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    feature_conf = models.TextField(blank=True, null=True)
+
+    paid = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+
+    plan = models.CharField(max_length=1, choices=LarpManagerPlan.choices, blank=True, null=True)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=["event", "number", "deleted"], name="unique_run_with_optional"),
+            UniqueConstraint(
+                fields=["event", "number"],
+                condition=Q(deleted=None),
+                name="unique_run_without_optional",
+            ),
+        ]
+
+    def __str__(self):
+        s = self.event.name
+        if self.number and self.number != 1:
+            s = f"{s} #{self.number}"
+        return s
+
+    def get_where(self):
+        # ~ if self.where:
+        # ~ return self.where
+        return self.event.where
+
+    def get_cover_url(self):
+        # ~ if self.cover:
+        # ~ return self.cover_thumb.url
+        return self.event.cover_thumb.url
+
+    def pretty_dates(self):
+        if not self.start or not self.end:
+            return "TBA"
+        if self.start == self.end:
+            return formats.date_format(self.start, "j E Y")
+        if self.start.year != self.end.year:
+            return f"{formats.date_format(self.start, 'j E Y')} - {formats.date_format(self.end, 'j E Y')}"
+        if self.start.month != self.end.month:
+            return f"{formats.date_format(self.start, 'j E')} - {formats.date_format(self.end, 'j E Y')}"
+        return f"{self.start.day} - {formats.date_format(self.end, 'j E Y')}"
+
+    def get_media_filepath(self):
+        fp = os.path.join(self.event.get_media_filepath(), f"{self.number}/")
+        os.makedirs(fp, exist_ok=True)
+        return fp
+
+    def get_gallery_filepath(self):
+        return self.get_media_filepath() + "gallery.pdf"
+
+    def get_profiles_filepath(self):
+        return self.get_media_filepath() + "profiles.pdf"
+
+    def get_feature_conf(self, name, def_v=None):
+        return get_element_config(self, name, def_v)
+
+
+class RunConfig(BaseModel):
+    name = models.CharField(max_length=150)
+    value = models.CharField(max_length=1000)
+    run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="configs")
+
+    def __str__(self):
+        return f"{self.run} {self.name}"
+
+    class Meta:
+        unique_together = ("run", "name")
+        indexes = [
+            models.Index(fields=["run", "name"]),
+        ]
+
+
+class RunText(BaseModel):
+    COCREATION = "c"
+    TYPE_CHOICES = [
+        (COCREATION, "Co-creation"),
+    ]
+
+    first = HTMLField(blank=True, null=True)
+    second = HTMLField(blank=True, null=True)
+
+    run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="texts")
+    eid = models.IntegerField()
+    typ = models.CharField(max_length=1, choices=TYPE_CHOICES)
+
+
+class PreRegistration(BaseModel):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="pre_registrations")
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="pre_registrations")
+    pref = models.IntegerField()
+    info = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.event} {self.member}"
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["event", "member", "deleted"],
+                name="unique_prereg_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["event", "member"],
+                condition=Q(deleted=None),
+                name="unique_prereg_without_optional",
+            ),
+        ]

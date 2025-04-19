@@ -1,0 +1,13 @@
+{% spaceless %}
+    <div class="residence-container">
+        <div class="row-md-6">
+            {% for widget in widget.subwidgets %}
+                {% if forloop.counter0|divisibleby:2 and forloop.counter0 != 0 %}
+                </div>
+                <div class="row-md-6">
+                {% endif %}
+                <div class="col-md-6">{% include widget.template_name %}</div>
+            {% endfor %}
+        </div>
+    </div>
+{% endspaceless %}

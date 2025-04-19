@@ -1,0 +1,43 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Event accounting" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the accounting status of the event, divided into the various expense types." %}
+{% endblock %}
+{% block content %}
+    <h2>{% trans "Net revenue" %}: {{ run.revenue }}</h2>
+    <h2>{% trans "Balance" %}: {{ run.balance }}</h2>
+    {% if 'organization_tax' in features %}
+        <h2>{% trans "Organization tax" %}: {{ run.tax }}</h2>
+    {% endif %}
+    <i>{% trans "(this balance takes into account payments currently received, and expenditures currently put into system)" %}</i>
+    <br />
+    <table class="mob tablesorter">
+        <tr>
+            <th>{% trans "Item" %}</th>
+            <th>{% trans "Total" %}</th>
+            <th>{% trans "Number" %}</th>
+        </tr>
+        {% for k, v in dc.items %}
+            <tr>
+                <td>{{ v.name }}</td>
+                <td>{{ v.tot }}</td>
+                <td>{{ v.num }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% for k, v in dc.items %}
+        <h2>{{ v.name }}: {{ v.tot }}</h2>
+        <table class="mob tablesorter">
+            {% for y, w in v.detail.items %}
+                <tr>
+                    <td>{{ w.name }}</td>
+                    <td>{{ w.tot }}</td>
+                    <td>{{ w.num }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
+{% endblock %}

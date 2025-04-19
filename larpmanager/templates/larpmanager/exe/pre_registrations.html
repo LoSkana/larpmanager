@@ -1,0 +1,30 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Pre registrations" %} - {% trans "Organization" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the total number of pre-registrations for each event." %}
+{% endblock %}
+{% block content %}
+    <table class='tablesorter mob'>
+        <thead>
+            <tr>
+                <td>{% trans "Name" %}</td>
+                <td>Prima scelta</td>
+                <td>Seconda scelta</td>
+                <td>Terza scelta</td>
+                <td>Quarta scelta</td>
+                <td>Quinta scelta</td>
+            </tr>
+        </thead>
+        {% for el in list %}
+            <tr>
+                <td>
+                    <a href="{% url 'orga_pre_registrations' el.slug '1' %}">{{ el }}</a>
+                </td>
+                {% for k, v in el.count.items %}<td>{{ v }}</td>{% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

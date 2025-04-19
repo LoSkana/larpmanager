@@ -1,0 +1,100 @@
+{% extends 'utils.html' %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Cancellations" %} - {{ event.name }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows cancelled enrollments." %}
+{% endblock %}
+{% block content %}
+    <p>
+        {% trans "Show cancellations" %} <a href="#" class="my_toggle" tog='not_payed'>{% trans "no payment" %}</a>
+    </p>
+    <table class="tablesorter mob writing">
+        <thead>
+            <tr>
+                <th>{% trans "Registration fee" %}</th>
+                {% if features.token_credit %}
+                    <th>{% trans "Payment" %} ({% trans "money" %})</th>
+                    <th>{% trans "Payment" %} ({{ token_name }})</th>
+                    <th>{% trans "Payment" %} ({{ credit_name }})</th>
+                {% else %}
+                    <th>{% trans "Payment" %}</th>
+                {% endif %}
+                <th>{% trans "Player" %}</th>
+                <th></th>
+                {% if features.info %}
+                    <th>{% trans "Info" %}</th>
+                {% endif %}
+                <th>{% trans "Days" %}</th>
+                <th>{% trans "Cancellation date" %}</th>
+                {% if features.token_credit %}
+                    <th>{% trans "Refund" %} ({{ token_name }})</th>
+                    <th>{% trans "Refund" %} ({{ credit_name }})</th>
+                    <th>{% trans "Refunded" %}</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}"
+                    {% if not el.tot_payed %}class="hide not_payed"{% endif %}>
+                    <td>
+                        {% if el.tot_iscr %}{{ el.tot_iscr | floatformat:"0" }}{% endif %}
+                    </td>
+                    <td>
+                        {% if el.payments.a %}
+                            {{ el.payments.a | floatformat:"0" }}
+                        {% else %}
+                            0
+                        {% endif %}
+                    </td>
+                    {% if features.token_credit %}
+                        <td>
+                            {% if el.payments.c %}
+                                {{ el.payments.c | floatformat:"0" }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if el.payments.b %}
+                                {{ el.payments.b | floatformat:"0" }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                    <td>
+                        <a href="{% url 'public' el.member.id %}">{{ el.member }}</a>
+                    </td>
+                    <td>{{ el.member.email }}</td>
+                    {% if features.info %}<td>{{ el.info }}</td>{% endif %}
+                    <td>{{ el.days }}</td>
+                    <td>{{ el.cancellation_date }}</td>
+                    {% if features.token_credit %}
+                        <td>
+                            {% if el.refunds.t %}
+                                {{ el.refunds.t | floatformat:"0" }}
+                            {% else %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if el.refunds.c %}
+                                {{ el.refunds.c | floatformat:"0" }}
+                            {% else %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if el.refunded %}
+                                {% trans "Refunded" %}
+                            {% else %}
+                                <a href="{% url 'orga_cancellation_refund' event.slug run.number el.id %}">{% trans "Approve reimbursement" %}</a>
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% load i18n %}
+<div style="text-align:center">
+    {% if form.errors %}
+        <p style="color: red; margin: 2em; font-style: italic;">
+            {% trans "Warning. The form contains errors to the fields - " %}
+            {% for field in form.visible_fields %}
+                {% if field.errors %}{{ field.label }} -{% endif %}
+            {% endfor %}
+        </p>
+    {% endif %}
+    <form action="{{ request.path }}" method="post">
+        {% csrf_token %}
+        {% if amount %}
+            <input type="hidden" name="amount" id="id_amount" value="{{ amount }}" />
+        {% else %}
+            <div class="form_amount">
+                {{ form.amount }}
+                <br />
+            </div>
+        {% endif %}
+        {% if donate %}
+            <p>{% trans "Please enter the occasion for which you wish to make the donation" %}</p>
+            {{ form.descr }}
+            <br />
+        {% endif %}
+        <p>{% trans "Choose the payment method: " %}</p>
+        <table id="payment_form" class="no_csv">
+            {% for key, el in form.methods.items %}
+                <tr id="row_{{ el.slug }}"
+                    onclick="toggle_radio('{{ el.slug }}')"
+                    class="selable">
+                    <th style="display: none">
+                        <input type="radio" id="{{ el.slug }}" name="method" value="{{ el.slug }}">
+                    </th>
+                    <th>
+                        <img src="{{ el.profile }}" style="width:2em" />
+                    </th>
+                    <th>{{ el.name }}</th>
+                    {% if 'payment_fees' in assoc.features and user_fees %}
+                        <th>
+                            {% if el.fee %}
+                                {% trans "Fee: " %} +{{ el.fee }}%
+                            {% endif %}
+                        </th>
+                    {% endif %}
+                    <th>{{ el.descr }}</th>
+                </tr>
+            {% endfor %}
+        </table>
+        <br />
+        <input type="submit" id="submit" value="{% trans 'Submit' %}">
+    </form>
+</div>
+<script>
+
+        function toggle_radio(x) {
+            const elem = document.getElementById(x);
+            elem.click();
+
+            const collection = document.getElementsByClassName("selable");
+            for (let i = 0; i < collection.length; i++) {
+                collection[i].classList.remove("sel");
+            }
+
+            const row = document.getElementById("row_" + x);
+            row.classList.add("sel");
+
+            $("#submit").prop("disabled", false);
+        }
+
+    window.addEventListener('DOMContentLoaded', function() {
+        $(function() {
+
+            $("#submit").prop("disabled", true);
+
+            console.log($('.selable').length);
+
+            if ($('.selable').length == 1) {
+                $('.selable').first().trigger('click');
+            }
+
+        });
+});
+</script>

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block title %}FAQs{% endblock %}
+{% block content %}
+    <p>Find detailed instructions to the most common questions!</p>
+    <p>
+        <i>(you can write a search keyword to filter them, then click on the question to see the answer)</i>
+    </p>
+    <hr />
+    <input type="text" name="search" id="search" placeholder="Search" />
+    <hr />
+    <div class="c nav">
+        {% for mod in types %}
+            {% if mod.faqs.all %}<a href="#mod_{{ mod.id }}" class="sh_{{ mod.id }}">{{ mod.name }}</a>{% endif %}
+        {% endfor %}
+    </div>
+    {% for mod in types %}
+        {% if mod.faqs.all %}
+            <div class="sh_{{ mod.id }}">
+                <hr />
+                <h2 id="mod_{{ mod.id }}">{{ mod.name }}</h2>
+                {% for el in mod.faqs.all %}
+                    <div class="faq">
+                        <p class="que">
+                            <a href="#" class="my_toggle" tog='q_{{ el.id }}'>{{ el.question }}</a>
+                        </p>
+                        <div class="hide q_{{ el.id }}">
+                            {{ el.answer | safe }}
+                            <hr />
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+{% block js %}
+    <script>
+window.addEventListener('DOMContentLoaded', function() {
+    $(function() {
+        $('#search').on('input', function() { search($(this).val()); });
+    });
+});
+
+function search(key) {
+    $('.faq').each(function( index ) {
+        chi = $(this).children();
+        var tx = chi.eq(0).html() + chi.eq(2).html();
+
+        if (tx.toLowerCase().includes(key.toLowerCase())) {
+            $(this).show(300);
+            $(this).addClass('visib');
+        } else {
+            $(this).hide(300);
+            $(this).removeClass('visib');
+        }
+    });
+
+    setTimeout(show_mod, 500);
+}
+
+function show_mod(key) {
+    $('.show').each(function( index ) {
+        mod = $(this).attr("mod");
+        console.log(mod);
+        if($(this).find('.visib').length == 0)
+            $('.sh_' + mod).hide(300);
+        else
+            $('.sh_' + mod).show(300);
+
+    });
+}
+
+    </script>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Collections" %} - {% trans "Organization" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the collections opened by players. You can update them indicating the recipient and disburse the money contributed." %}
+{% endblock %}
+{% block content %}
+    <p>
+        {% trans "Show collections" %} <a href="#" class="my_toggle" tog='done'>{% trans "already delivered" %}</a>
+    </p>
+    <table id="tb" class="tablesorter mob">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Request" %}</th>
+                <th>{% trans "Member" %}</th>
+                <th>{% trans "Organizer" %}</th>
+                <th>{% trans "Status" %}</th>
+                <th>{% trans "Total" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}"
+                    {% if el.status == 'p' %}class="hide done"{% endif %}>
+                    <td>
+                        <a href="{% url 'exe_collections_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.request }}</td>
+                    <td>{{ el.member }}</td>
+                    <td>{{ el.organizer }}</td>
+                    <td>{{ el.get_status_display }}</td>
+                    <td>{{ el.total }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

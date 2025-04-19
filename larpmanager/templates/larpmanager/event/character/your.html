@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}
+    {{ run.reg }} - {% trans "Your characters" %}
+{% endblock %}
+{% block content %}
+    <p>{% trans "Select which of your characters you want to access" %}:</p>
+    {% for el in urls %}
+        <p>
+            <a href="{{ el.1 }}">{{ el.0 }}</a>
+        </p>
+    {% endfor %}
+{% endblock %}

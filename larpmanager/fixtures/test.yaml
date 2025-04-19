@@ -1,0 +1,411 @@
+- model: auth.user
+  pk: 1
+  fields:
+    password: banana
+    last_login: 2025-03-19 10:21:22.175383
+    is_superuser: true
+    username: admin
+    first_name: ''
+    last_name: ''
+    email: ''
+    is_staff: true
+    is_active: true
+    date_joined: 2025-03-19 10:21:13.209658
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 2
+  fields:
+    password: banana
+    last_login: 2025-03-19 09:04:50.693272
+    is_superuser: false
+    username: orga@test.it
+    first_name: ''
+    last_name: ''
+    email: orga@test.it
+    is_staff: false
+    is_active: true
+    date_joined: 2025-03-19 09:04:50.146940
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 3
+  fields:
+    password: banana
+    last_login: null
+    is_superuser: false
+    username: user@test.it
+    first_name: ''
+    last_name: ''
+    email: user@test.it
+    is_staff: false
+    is_active: true
+    date_joined: 2025-03-19 10:30:10.513951
+    groups: []
+    user_permissions: []
+- model: auth.user
+  pk: 4
+  fields:
+    password: banana
+    last_login: null
+    is_superuser: false
+    username: player@test.it
+    first_name: ''
+    last_name: ''
+    email: player@test.it
+    is_staff: false
+    is_active: true
+    date_joined: 2025-03-19 10:30:10.513951
+    groups: []
+    user_permissions: []
+- model: larpmanager.member
+  pk: 1
+  fields:
+    deleted: null
+    deleted_by_cascade: false
+    created: 2025-03-19 10:21:13.467310
+    updated: 2025-03-19 10:30:48.381657
+    user: 1
+    email: ''
+    search: Admin Test
+    language: en
+    name: Admin
+    surname: Test
+    nickname: ''
+    legal_name: null
+    pronoun: null
+    nationality: null
+    gender: o
+    phone_contact: null
+    social_contact: null
+    first_aid: n
+    birth_date: null
+    birth_place: null
+    fiscal_code: null
+    document_type: i
+    document: null
+    document_issued: null
+    residence_address: null
+    accessibility: null
+    diet: null
+    safety: null
+    newsletter: a
+    profile: ''
+    presentation: null
+    parent: null
+- model: larpmanager.member
+  pk: 2
+  fields:
+    deleted: null
+    deleted_by_cascade: false
+    created: 2025-03-19 09:04:50.395017
+    updated: 2025-03-19 09:04:50.708236
+    user: 2
+    email: admin@test.it
+    search: Admin Test
+    language: en
+    name: Admin
+    surname: Test
+    nickname: ''
+    legal_name: null
+    pronoun: null
+    nationality: null
+    gender: o
+    phone_contact: null
+    social_contact: null
+    first_aid: n
+    birth_date: null
+    birth_place: null
+    fiscal_code: null
+    document_type: i
+    document: null
+    document_issued: null
+    residence_address: null
+    accessibility: null
+    diet: null
+    safety: null
+    newsletter: a
+    profile: ''
+    presentation: null
+    parent: null
+- model: larpmanager.member
+  pk: 3
+  fields:
+    deleted: null
+    deleted_by_cascade: false
+    created: 2025-03-19 10:30:10.717729
+    updated: 2025-03-19 10:30:35.229815
+    user: 3
+    email: ''
+    search: User Test
+    language: en
+    name: User
+    surname: Test
+    nickname: ''
+    legal_name: null
+    pronoun: null
+    nationality: null
+    gender: o
+    phone_contact: null
+    social_contact: null
+    first_aid: n
+    birth_date: null
+    birth_place: null
+    fiscal_code: null
+    document_type: i
+    document: null
+    document_issued: null
+    residence_address: null
+    accessibility: null
+    diet: null
+    safety: null
+    newsletter: a
+    profile: ''
+    presentation: null
+    parent: null
+- model: larpmanager.member
+  pk: 4
+  fields:
+    deleted: null
+    deleted_by_cascade: false
+    created: 2025-03-19 10:30:10.717729
+    updated: 2025-03-19 10:30:35.229815
+    user: 4
+    email: ''
+    search: Orga Test
+    language: en
+    name: Orga
+    surname: Test
+    nickname: ''
+    legal_name: null
+    pronoun: null
+    nationality: null
+    gender: o
+    phone_contact: null
+    social_contact: null
+    first_aid: n
+    birth_date: null
+    birth_place: null
+    fiscal_code: null
+    document_type: i
+    document: null
+    document_issued: null
+    residence_address: null
+    accessibility: null
+    diet: null
+    safety: null
+    newsletter: a
+    profile: ''
+    presentation: null
+    parent: null
+- model: larpmanager.association
+  pk: 1
+  fields:
+    deleted: null
+    deleted_by_cascade: false
+    created: 2025-03-19 09:06:22.735509
+    updated: 2025-03-19 09:06:22.887608
+    name: Test Larp
+    slug: test
+    activated: 2025-03-19 09:06:22.887646
+    profile: association/d3f86006e94d41849dfd79d1172b9074.jpg
+    mandatory_fields: ''
+    optional_fields: ''
+    main_mail: test@test.it
+    payment_currency: e
+    feature_conf: null
+    promoter: ''
+    background: ''
+    font: ''
+    css_code: ''
+    pri_rgb: null
+    sec_rgb: null
+    ter_rgb: null
+    plan: f
+    gdpr_contract: ''
+    review_done: false
+    images_shared: false
+    key: bldCZ3JCa0lCOEZIQkc3SnRGX3owMFpqYTZyWko1ZzRZbXMxalRNNWE0Yz0=
+    payment_methods: []
+    features: []
+- model: larpmanager.assocrole
+  pk: 1
+  fields:
+    deleted: null
+    deleted_by_cascade: false
+    created: 2025-03-19 09:06:22.925963
+    updated: 2025-03-19 09:06:22.963000
+    name: Admin
+    assoc: 1
+    number: 1
+    members:
+    - 2
+    permissions: []
+- model: larpmanager.membership
+  pk: 1
+  fields:
+    deleted: null
+    deleted_by_cascade: false
+    created: 2025-03-19 09:06:22.978214
+    updated: 2025-03-19 09:06:22.986056
+    member: 4
+    assoc: 1
+    compiled: false
+    credit: '0.00'
+    tokens: '0.00'
+    status: j
+    request: ''
+    document: ''
+    card_number: null
+    date: null
+    password_reset: null
+    newsletter: a
+- model: larpmanager.membership
+  pk: 2
+  fields:
+    deleted: null
+    deleted_by_cascade: false
+    created: 2025-03-19 10:31:08.853446
+    updated: 2025-03-19 10:31:08.854170
+    member: 2
+    assoc: 1
+    compiled: false
+    credit: '0.00'
+    tokens: '0.00'
+    status: j
+    request: ''
+    document: ''
+    card_number: null
+    date: null
+    password_reset: null
+    newsletter: a
+- model: larpmanager.membership
+  pk: 3
+  fields:
+    deleted: null
+    deleted_by_cascade: false
+    created: 2025-03-19 09:06:22.978214
+    updated: 2025-03-19 09:06:22.986056
+    member: 3
+    assoc: 1
+    compiled: false
+    credit: '0.00'
+    tokens: '0.00'
+    status: j
+    request: ''
+    document: ''
+    card_number: null
+    date: null
+    password_reset: null
+    newsletter: a
+- model: larpmanager.event
+  pk: 1
+  fields:
+    deleted: null
+    deleted_by_cascade: false
+    created: 2025-03-19 10:31:27.508716
+    updated: 2025-03-19 10:31:27.523681
+    slug: test
+    assoc: 1
+    lang: null
+    name: Test Larp
+    tagline: null
+    where: null
+    authors: null
+    description_short: <p>testone</p>
+    description: ''
+    genre: ''
+    visible: true
+    cover: ''
+    carousel_img: ''
+    carousel_text: ''
+    website: ''
+    register_link: ''
+    max_pg: 10
+    max_filler: 0
+    max_waiting: 0
+    pdf_instructions: null
+    parent: null
+    background: ''
+    font: ''
+    css_code: ''
+    pri_rgb: null
+    sec_rgb: null
+    ter_rgb: null
+    feature_conf: null
+    template: false
+    features: []
+- model: larpmanager.eventrole
+  pk: 1
+  fields:
+    deleted: null
+    deleted_by_cascade: false
+    created: 2025-03-19 10:31:27.746899
+    updated: 2025-03-19 10:31:27.769401
+    number: 1
+    name: Organizer
+    event: 1
+    members:
+    - 2
+    permissions: []
+- model: larpmanager.run
+  pk: 1
+  fields:
+    deleted: null
+    deleted_by_cascade: false
+    created: 2025-03-19 10:31:27.614789
+    updated: 2025-03-19 10:31:49.183930
+    search: Test Larp
+    development: '1'
+    event: 1
+    number: 1
+    start: 2050-03-19
+    end: 2050-03-19
+    registration_open: null
+    registration_secret: 1d71c0a4a727
+    balance: '0.00'
+    feature_conf: '{}'
+    paid: null
+    plan: f
+- model: larpmanager.registrationticket
+  pk: 1
+  fields:
+    deleted: null
+    deleted_by_cascade: false
+    created: 2025-03-19 10:31:27.682295
+    updated: 2025-03-19 10:31:27.689209
+    search: Test Larp (Standard) Standard (0€)
+    number: 1
+    event: 1
+    tier: b
+    name: Standard
+    details: null
+    price: '0.00'
+    max_available: 0
+    visible: true
+    casting_priority: 1
+    giftable: false
+    order: 1
+- model: larpmanager.character
+  pk: 1
+  fields:
+    deleted: null
+    deleted_by_cascade: false
+    created: 2025-03-21 10:42:36.831317
+    updated: 2025-03-21 10:42:36.841097
+    number: 1
+    name: Test Character
+    event: 1
+    teaser: <p>Test Teaser</p>
+    text: <p>Test Text</p>
+- model: larpmanager.paymentmethod
+  pk: 1
+  fields:
+    deleted: null
+    deleted_by_cascade: false
+    created: 2025-03-21 10:42:36.831317
+    updated: 2025-03-21 10:42:36.841097
+    name: Wire
+    slug: wire
+    instructions: <p>Wire instructions</p>
+    fields: payee, iban

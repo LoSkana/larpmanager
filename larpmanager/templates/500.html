@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block meta %}
+    <meta http-equiv="refresh" content="5" />
+    <style>
+     .container { width: 30em; margin: 0 auto; text-align: center; }
+    .container img { width: 100%; margin: 0 auto; }
+    </style>
+{% endblock %}
+{% block title %}Oops!{% endblock %}
+{% block content %}
+    Something went wrong with your request. Please stay on this page, we'll fix ASAP!
+    <br />
+    <br />
+    Please enjoy some cute cat image while you wait:
+    <br />
+    <br />
+    <div class="container"></div>
+    {% if exception %}<p>Additional info: {{ exception }}</p>{% endif %}
+{% endblock %}
+{% block js %}
+    <script language="JavaScript" type="text/javascript">
+function redirect(){
+   location.reload(true);
+}
+setTimeout( redirect, 5000 );
+
+let container = document.querySelector(".container");
+async function apiFunction() {
+    await fetch("https://api.thecatapi.com/v1/images/search")
+        .then(res => res.json())
+        .then((result) => {
+            //items = result;
+            let img = document.createElement("img");
+            img.src = result[0].url;
+            container.appendChild(img);
+        }),
+        (error) => {
+            console.log(error);
+        }
+}
+// Call the function
+apiFunction();
+    </script>
+{% endblock %}

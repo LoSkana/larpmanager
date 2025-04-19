@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load i18n show_tags %}
+{% block title %}
+    {% trans "Your delegated users" %}
+{% endblock %}
+{% block content %}
+    {% if request.user.member.parent %}
+        <form action="{{ request.path }}" method="post" id="login_0">
+            {% csrf_token %}
+        </form>
+        <p>
+            {% trans "You are currently logged in with the" %}: <b>{{ request.user.member }}</b>.
+        </p>
+        <p>
+            {% trans "To log back in with the account" %} {{ request.user.member.parent }}, {% trans "press here" %}:
+            <a href="#" onclick="submitForm('login_0'); return false;">{% trans "Login" %}</a>
+        </p>
+    {% else %}
+        <p>{% trans "You are currently logged in with the" %}: {{ request.user.member }}.</p>
+        <p>{% trans "You can create new delegate accounts, or log in with them by pressing the relevant button" %}</p>
+        <br />
+        <table class="mob no_csv">
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Registrations" %}</th>
+                <th>{% trans "Accounting" %}</th>
+                <th></th>
+            </tr>
+            {% for el in list %}
+                <tr>
+                    <td>{{ el }}</td>
+                    <td>
+                        {% for reg in el.ctx.reg_list %}
+                            {{ reg.run }}
+                            {% if reg.ticket %}
+                                (
+                                {{ reg.ticket.name }}
+                                {% if reg.ticket.price %}<i><u> {{ reg.ticket.price }}{{ currency_symbol }}</u></i>{% endif %}
+                                )
+                            {% endif %}
+                            {% if reg.opts %}
+                                {% for k, el in reg.opts.items %}
+                                    {% include "elements/comma.html" %}
+                                    <b>{{ el.q.display }}</b> -
+                                    {% for opt in el.l %}
+                                        {{ opt.display }}
+                                        {% if opt.price %}<i><u>({{ opt.price }}{{ currency_symbol }})</u></i>{% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for reg in el.ctx.payments_todo %}
+                            {% include "elements/comma.html" %}
+                            <b>{{ reg.run }} </b> -
+                            {{ reg.quota|format_decimal }}{{ currency_symbol }} {% trans "by" %} {{ reg.deadline }} {% trans "days" %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <form action="{{ request.path }}" method="post" id="login_{{ el.id }}">
+                            {% csrf_token %}
+                            <input type="hidden" name="account" value="{{ el.id }}" />
+                        </form>
+                        <a href="#" onclick="submitForm('login_{{ el.id }}'); return false;">{% trans "Login" %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="c nav">
+            <a href="#" class="select my_toggle" tog='add_new'>{% trans "Add new" %}</a>
+        </div>
+        <br />
+        <div class="add_new {% if not form.errors %}hide{% endif %}">
+            <form action="{{ request.path }}" method="post">
+                {% csrf_token %}
+                <table class="no_csv">
+                    {{ form.as_table }}
+                </table>
+                <input type="submit" value="{% trans "Confirm" %}" />
+            </form>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block js %}
+    <script>
+        function submitForm(formId) {
+            document.getElementById(formId).submit();
+        }
+    </script>
+{% endblock %}

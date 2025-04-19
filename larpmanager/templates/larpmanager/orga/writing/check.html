@@ -1,0 +1,514 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Check" %} - {{ event.name }}
+{% endblock %}
+{% block info %}
+    {% trans "This page performs several correctness checks of the character sheets." %}
+{% endblock %}
+{% block content %}
+    <b>{% trans "Characters" %} - {% trans "Check inverse relationship" %}:
+        {% if checks.relat_missing %}
+            <span style="color:red">KO - {{ checks.relat_missing | length }}</span> </b>
+        <p>
+            <i>{% trans "The character on the left has in relationships the one on the right, but the reverse is not true. Check whether to remove the relationship to the one on the left, or add it on the one on the right." %}</i>
+        </p>
+        <table class="mob">
+            <tr>
+                <th>{% trans "Absent (in the relationships of this character the other one is absent)" %}</th>
+                <th>{% trans "Present (in the relationships of this character is present the other)" %}</th>
+            </tr>
+            {% for el in checks.relat_missing %}
+                <tr>
+                    <td>
+                        {% if el.s_id %}
+                            <a href="{% url 'orga_characters_edit' run.event.slug run.number el.s_id %}">{{ el.s_name }}</a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if el.f_id %}
+                            <a href="{% url 'orga_characters_edit' run.event.slug run.number el.f_id %}">{{ el.f_name }}</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <span style="color:green">OK</span>, </b>
+{% endif %}
+<b>{% trans "Characters" %} - {% trans "check nonexistent relationships" %}:
+    {% if checks.relat_extinct %}
+        <span style="color:red">KO {{ checks.relat_extinct | length }}</span> </b>
+    <p>
+        <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist." %}</i>
+    </p>
+    <table class="mob">
+        <tr>
+            <th>{% trans "Character" %}</th>
+            <th>{% trans "Number not found" %}</th>
+        </tr>
+        {% for el in checks.relat_extinct %}
+            <tr>
+                <td>
+                    {% if el.0.number %}
+                        <a href="{% url 'orga_characters_edit' run.event.slug run.number el.0.number %}">{{ el.0 }}</a>
+                    {% endif %}
+                </td>
+                <td>#{{ el.1 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <span style="color:green">OK</span>, </b>
+{% endif %}
+<!--
+<b>{% trans "Empty relationship check (no text)" %}:
+
+    {% if checks.relat_empty %}
+
+    {{ checks.relat_empty | length }} </b>
+
+
+    <p><i>{% trans "The relationship between these characters turns out to be empty. Check whether it should be written something." %}</i></p>
+
+    <table class="mob">
+        <tr>
+            <th>Source</th>
+            <th>Dest</th>
+        </tr>
+    {% for el in checks.relat_empty %}
+    <tr>
+        <td>
+            <a href="{% url 'orga_characters_edit' run.event.slug run.number el.source.number %}">{{ el.source }}</a>
+            <a href="{% url 'orga_characters_relationships' run.event.slug run.number el.source.number %}">({% trans "Relationships" %})</a>
+        </td>
+        <td>
+            <a href="{% url 'orga_characters_edit' run.event.slug run.number el.target.number %}">{{ el.target }}</a>
+            <a href="{% url 'orga_characters_relationships' run.event.slug run.number el.target.number %}">({% trans "Relationships" %})</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+
+    {% else %}
+
+<span style="color:green">OK</span>, </b>
+
+{% endif %}
+-->
+<!--
+<b>{% trans "Characters" %} - {% trans "check nonexistent relationships" %}:
+
+    {% if checks.character_extinct %}
+
+    <span style="color:red">KO {{ checks.character_extinct | length }}</span> </b>
+
+    <p><i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist." %}</i></p>
+
+    <table class="mob">
+        <tr>
+            <th>{% trans "Character" %}</th>
+            <th>{% trans "Number not found" %}</th>
+        </tr>
+    {% for el in checks.character_extinct %}
+    <tr>
+        <td>
+            <a href="{% url 'orga_characters_edit' run.event.slug run.number el.0.number %}">{{ el.0 }}</a>
+        </td>
+        <td>
+            #{{ el.1 }}
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+
+    {% else %}
+
+<span style="color:green">OK</span>, </b>
+
+{% endif %}
+
+<b>{% trans "Characters" %} - {% trans "check lack relationships" %}:
+
+    {% if checks.character_missing %}
+
+    <span style="color:red">KO {{ checks.character_missing | length }}</span> </b>
+
+    <p><i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but in the relationships instead that character was not related. Check whether it is necessary to create a relationship to the character, or remove the reference from the text." %}</i></p>
+
+    <table class="mob">
+        <tr>
+            <th>{% trans "Character" %}</th>
+            <th>{% trans "Relationship" %}</th>
+        </tr>
+    {% for el in checks.character_missing %}
+    <tr>
+        <td>
+            <a href="{% url 'orga_characters_edit' run.event.slug run.number el.0.number %}">{{ el.0 }}</a>
+        </td>
+        <td>
+            #{{ el.1 }}
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+
+    {% else %}
+
+<span style="color:green">OK</span>, </b>
+
+{% endif %}
+
+<b>{% trans "Characters" %} - {% trans "check excessive relationships" %}:
+
+    {% if checks.character_interloper %}
+
+    <span style="color:red">KO {{ checks.character_interloper | length }}</span> </b>
+
+    <p><i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but in the relationships instead it is related. Check whether it is necessary to remove the relationship to the character, or indicate in the text a reference to the character." %}</i></p>
+
+    <table class="mob">
+        <tr>
+            <th>{% trans "Character" %}</th>
+            <th>{% trans "Relationship" %}</th>
+        </tr>
+    {% for el in checks.character_interloper %}
+    <tr>
+        <td>
+            <a href="{% url 'orga_characters_edit' run.event.slug run.number el.0.number %}">{{ el.0 }}</a>
+        </td>
+        <td>
+            #{{ el.1 }}
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+
+    {% else %}
+
+<span style="color:green">OK</span>, </b>
+
+{% endif %}
+
+-->
+{% if features.faction %}
+    <b>{% trans "Faction" %} - {% trans "check nonexistent relationships" %}:
+        {% if checks.faction_extinct %}
+            <span style="color:red">KO {{ checks.faction_extinct | length }}</span> </b>
+        <p>
+            <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist." %}</i>
+        </p>
+        <table class="mob">
+            <tr>
+                <th>{% trans "Faction" %}</th>
+                <th>{% trans "Number not found" %}</th>
+            </tr>
+            {% for el in checks.faction_extinct %}
+                <tr>
+                    <td>
+                        <a href="{% url 'orga_factions_edit' run.event.slug run.number el.0.number %}">{{ el.0 }}</a>
+                    </td>
+                    <td>#{{ el.1 }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <span style="color:green">OK</span>, </b>
+{% endif %}
+<b>{% trans "Factions" %} - {% trans "check lack relationships" %}:
+    {% if checks.faction_missing %}
+        <span style="color:red">KO {{ checks.faction_missing | length }}</span> </b>
+    <p>
+        <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text." %}</i>
+    </p>
+    <table class="mob">
+        <tr>
+            <th>{% trans "Faction" %}</th>
+            <th>{% trans "Relationship" %}</th>
+        </tr>
+        {% for el in checks.faction_missing %}
+            <tr>
+                <td>
+                    <a href="{% url 'orga_factions_edit' run.event.slug run.number el.0.number %}">{{ el.0 }}</a>
+                </td>
+                <td>#{{ el.1 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <span style="color:green">OK</span>, </b>
+{% endif %}
+<b>{% trans "Factions" %} - {% trans "check excessive relationships" %}:
+    {% if checks.faction_interloper %}
+        <span style="color:red">KO {{ checks.faction_interloper | length }}</span> </b>
+    <p>
+        <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character." %}</i>
+    </p>
+    <table class="mob">
+        <tr>
+            <th>{% trans "Faction" %}</th>
+            <th>{% trans "Relationship" %}</th>
+        </tr>
+        {% for el in checks.faction_interloper %}
+            <tr>
+                <td>
+                    <a href="{% url 'orga_factions_edit' run.event.slug run.number el.0.number %}">{{ el.0 }}</a>
+                </td>
+                <td>#{{ el.1 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <span style="color:green">OK</span>, </b>
+{% endif %}
+{% endif %}
+{% if features.prologue %}
+    <b>{% trans "Prologue" %} - {% trans "check nonexistent relationships" %}:
+        {% if checks.prologue_extinct %}
+            <span style="color:red">KO {{ checks.prologue_extinct | length }}</span> </b>
+        <p>
+            <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist." %}</i>
+        </p>
+        <table class="mob">
+            <tr>
+                <th>{% trans "Prologue" %}</th>
+                <th>{% trans "Number not found" %}</th>
+            </tr>
+            {% for el in checks.prologue_extinct %}
+                <tr>
+                    <td>
+                        <a href="{% url 'orga_prologues_edit' run.event.slug run.number el.0.number %}">{{ el.0 }}</a>
+                    </td>
+                    <td>#{{ el.1 }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <span style="color:green">OK</span>, </b>
+{% endif %}
+<b>{% trans "Prologues" %} - {% trans "check lack relationships" %}:
+    {% if checks.prologue_missing %}
+        <span style="color:red">KO {{ checks.prologue_missing | length }}</span>  </b>
+    <p>
+        <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text." %}</i>
+    </p>
+    <table class="mob">
+        <tr>
+            <th>{% trans "Prologue" %}</th>
+            <th>{% trans "Relationship" %}</th>
+        </tr>
+        {% for el in checks.prologue_missing %}
+            <tr>
+                <td>
+                    <a href="{% url 'orga_prologues_edit' run.event.slug run.number el.0.number %}">{{ el.0 }}</a>
+                </td>
+                <td>#{{ el.1 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <span style="color:green">OK</span>, </b>
+{% endif %}
+<b>{% trans "Prologues" %} - {% trans "check excessive relationships" %}:
+    {% if checks.prologue_interloper %}
+        <span style="color:red">KO {{ checks.prologue_interloper | length }}</span>  </b>
+    <p>
+        <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character." %}</i>
+    </p>
+    <table class="mob">
+        <tr>
+            <th>{% trans "Prologue" %}</th>
+            <th>{% trans "Relationship" %}</th>
+        </tr>
+        {% for el in checks.prologue_interloper %}
+            <tr>
+                <td>
+                    <a href="{% url 'orga_prologues_edit' run.event.slug run.number el.0.number %}">{{ el.0 }}</a>
+                </td>
+                <td>#{{ el.1 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <span style="color:green">OK</span>, </b>
+{% endif %}
+{% endif %}
+{% if features.plot %}
+    <b>{% trans "Plot" %} - {% trans "check nonexistent relationships" %}:
+        {% if checks.plot_extinct %}
+            <span style="color:red">KO {{ checks.plot_extinct | length }}</span> </b>
+        <p>
+            <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist." %}</i>
+        </p>
+        <table class="mob">
+            <tr>
+                <th>{% trans "Plot" %}</th>
+                <th>{% trans "Number not found" %}</th>
+            </tr>
+            {% for el in checks.plot_extinct %}
+                <tr>
+                    <td>
+                        <a href="{% url 'orga_plots_edit' run.event.slug run.number el.0.number %}">{{ el.0 }}</a>
+                    </td>
+                    <td>#{{ el.1 }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <span style="color:green">OK</span>, </b>
+{% endif %}
+<b>{% trans "Plots" %} - {% trans "check lack relationships" %}:
+    {% if checks.plot_missing %}
+        <span style="color:red">KO {{ checks.plot_missing | length }}</span> </b>
+    <p>
+        <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text." %}</i>
+    </p>
+    <table class="mob">
+        <tr>
+            <th>{% trans "Plot" %}</th>
+            <th>{% trans "Relationship" %}</th>
+        </tr>
+        {% for el in checks.plot_missing %}
+            <tr>
+                <td>
+                    <a href="{% url 'orga_plots_edit' run.event.slug run.number el.0.number %}">{{ el.0 }}</a>
+                </td>
+                <td>#{{ el.1 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <span style="color:green">OK</span>, </b>
+{% endif %}
+<b>{% trans "Plots" %} - {% trans "check excessive relationships" %}:
+    {% if checks.plot_interloper %}
+        <span style="color:red">KO {{ checks.plot_interloper | length }}</span> </b>
+    <p>
+        <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character." %}</i>
+    </p>
+    <table class="mob">
+        <tr>
+            <th>{% trans "Plot" %}</th>
+            <th>{% trans "Relationship" %}</th>
+        </tr>
+        {% for el in checks.plot_interloper %}
+            <tr>
+                <td>
+                    <a href="{% url 'orga_plots_edit' run.event.slug run.number el.0.number %}">{{ el.0 }}</a>
+                </td>
+                <td>#{{ el.1 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <span style="color:green">OK</span>, </b>
+{% endif %}
+{% endif %}
+{% if features.speedlarp %}
+    <b>{% trans "Speedlarp" %} - {% trans "check nonexistent relationships" %}:
+        {% if checks.speedlarp_extinct %}
+            <span style="color:red">KO {{ checks.speedlarp_extinct | length }}</span> </b>
+        <p>
+            <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist." %}</i>
+        </p>
+        <table class="mob">
+            <tr>
+                <th>{% trans "Speedlarp" %}</th>
+                <th>{% trans "Number not found" %}</th>
+            </tr>
+            {% for el in checks.speedlarp_extinct %}
+                <tr>
+                    <td>
+                        <a href="{% url 'orga_speedlarps_edit' run.event.slug run.number el.0.number %}">{{ el.0 }}</a>
+                    </td>
+                    <td>#{{ el.1 }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <span style="color:green">OK</span>, </b>
+{% endif %}
+<b>{% trans "Speedlarp" %} - {% trans "check lack relationships" %}:
+    {% if checks.speedlarp_missing %}
+        <span style="color:red">KO {{ checks.speedlarp_missing | length }}</span> </b>
+    <p>
+        <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text." %}</i>
+    </p>
+    <table class="mob">
+        <tr>
+            <th>{% trans "Speedlarp" %}</th>
+            <th>{% trans "Relationship" %}</th>
+        </tr>
+        {% for el in checks.speedlarp_missing %}
+            <tr>
+                <td>
+                    <a href="{% url 'orga_speedlarps_edit' run.event.slug run.number el.0.number %}">{{ el.0 }}</a>
+                </td>
+                <td>#{{ el.1 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <span style="color:green">OK</span>, </b>
+<b>{% trans "Speedlarp" %} - {% trans "check excessive relationships" %}:
+    {% if checks.speedlarp_interloper %}
+        <span style="color:red">KO {{ checks.speedlarp_interloper | length }}</span> </b>
+    <p>
+        <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character." %}</i>
+    </p>
+    <table class="mob">
+        <tr>
+            <th>{% trans "Speedlarp" %}</th>
+            <th>{% trans "Relationship" %}</th>
+        </tr>
+        {% for el in checks.speedlarp_interloper %}
+            <tr>
+                <td>
+                    <a href="{% url 'orga_speedlarps_edit' run.event.slug run.number el.0.number %}">{{ el.0 }}</a>
+                </td>
+                <td>#{{ el.1 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <span style="color:green">OK</span>, </b>
+{% endif %}
+{% endif %}
+<b>{% trans "Check double speed larps" %}:
+    {% if speed_larps_double %}
+        <span style="color:red">KO {{ speed_larps_double | length }}</span> </b>
+    <table class="mob">
+        <tr>
+            <th>{% trans "Type" %}</th>
+            <th>{% trans "Character" %}</th>
+        </tr>
+        {% for el in speed_larps_double %}
+            <tr>
+                <td>{{ el.0 }}</td>
+                <td>{{ el.1 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <span style="color:green">OK</span>, </b>
+{% endif %}
+<b>{% trans "Check missing speed larp" %}:
+    {% if speed_larps_missing %}
+        <span style="color:red">KO {{ speed_larps_missing | length }}</span> </b>
+    <table class="mob">
+        <tr>
+            <th>{% trans "Type" %}</th>
+            <th>{% trans "Character" %}</th>
+        </tr>
+        {% for el in speed_larps_missing %}
+            <tr>
+                <td>{{ el.0 }}</td>
+                <td>{{ el.1 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <span style="color:green">OK</span>, </b>
+{% endif %}
+{% endif %}
+{% endblock %}

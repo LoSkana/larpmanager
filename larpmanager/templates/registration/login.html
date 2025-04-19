@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static i18n show_tags socialaccount %}
+{% block title %}Login{% endblock %}
+{% block old %}
+    /* for dynamic selection of social account providers */
+    {% get_providers as socialaccount_providers %}
+    {% for el in socialaccount_providers %}
+        {% with prov=el.name|lower %}
+            <a href="{% provider_login_url prov %}">
+                <img src="{% static 'larpmanager/assets/' %}{{ prov }}_signin.png" />
+            </a>
+        {% endwith %}
+    {% endfor %}
+{% endblock %}
+{% block content %}
+    <div class='login'>
+        <br />
+        {% if not request.staging and not request.development %}
+            <div class="allauth_signin">
+                <a href="{% get_login_url 'google' %}">
+                    <img src="{% static 'larpmanager/assets/' %}google_signin.png" />
+                </a>
+            </div>
+        {% endif %}
+        <!--
+<i>The login using the Google account has been temporarily disable due to technical problems, we hope to get it working in few days.</i><br /><br />
+<i>In the meantime, you can login with this procedure: (1) perform a password reset, using your google email; (2) login with the new password</i>
+
+-->
+        <form method="post">
+            {% csrf_token %}
+            <table class="mob no_csv">
+                {{ form.as_table }}
+            </table>
+            <input type="submit" class="login_go" value="{% trans "Submit" %}" />
+            <br />
+            <br />
+            <p class="registration_register">
+                <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>
+            </p>
+            <p class="password_reset">
+                <a href="{% url 'password_reset' %}">{% trans "Password reset" %}</a>
+            </p>
+        </form>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+function isMobileNonChrome() {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    // Check if the device is mobile
+    const isMobile = /android|iphone|ipad|ipod|opera mini|iemobile|mobile|windows phone/i.test(userAgent);
+
+    // Check if the browser is Chrome
+    const isChrome = /chrome|crios|crmo/i.test(userAgent);
+
+    // Return true if the device is mobile and the browser is not Chrome
+    return isMobile && !isChrome;
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+    $(function(){
+
+    {% if  assoc.id != 0 %}
+
+       $('.allauth_signin a').each(function(index) {
+            var href = $(this).attr('href');
+            console.log(href);
+
+            var domain = 'https://{{ assoc.slug }}.larpmanager.com';
+
+            next = /next=/g
+            if (!href.match(next)) {
+                href += 'next=' + domain;
+            } else {
+                aux = href.split(next);
+                href = aux[0] + 'next=' + domain + aux[1];
+            }
+
+            href = 'https://larpmanager.com' + href;
+            $(this).attr('href', href);
+        });
+
+    {% endif %}
+
+        if (isMobileNonChrome()) {
+            $('.allauth_signin a').hide();
+            $('.allauth_signin').append('<p>To use Google Single Sign On, please use a Chrome browser</p>');
+
+        }
+
+    });
+
+    function isMobileNonChrome() {
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+        // Check if the device is mobile
+        const isMobile = /android|iphone|ipad|ipod|opera mini|iemobile|mobile|windows phone/i.test(userAgent);
+
+        // Check if the browser is Chrome
+        const isChrome = /chrome|crios|crmo/i.test(userAgent);
+
+        // Return true if the device is mobile and the browser is not Chrome
+        return isMobile && !isChrome;
+    }
+
+});
+
+    </script>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% load show_tags i18n %}
+<div id="membership_cf">
+    {% if membership_cf %}
+        <h2>{% trans "Tax code verification" %}</h2>
+        {% if error_cf %}
+            <p class="warning">
+                <i>{{ error_cf }}</i>
+            </p>
+        {% endif %}
+        <p>{% trans "Calculated" %}: {{ calculated_cf }}</p>
+        <p>{% trans "Supplied" %}: {{ supplied_cf }}</p>
+        {% if calculated_cf != supplied_cf %}
+            <p class="warning">
+                <i>{% trans "Attention, the tax code does not match!" %}</i>
+            </p>
+        {% else %}
+            <p class="success">
+                <i>{% trans "The tax code matches!" %}</i>
+            </p>
+        {% endif %}
+    {% else %}
+        <h2>
+            {% trans "Nationality" %}: {{ member.get_nationality_display }}
+            {% if el.fiscal_code %}, {{ el.fiscal_code }}{% endif %}
+        </h2>
+    {% endif %}
+</div>

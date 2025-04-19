@@ -1,0 +1,433 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+import os
+from uuid import uuid4
+
+from PIL import Image
+from django.conf import settings as conf_settings
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+from django.http import HttpResponseRedirect, JsonResponse, Http404
+from django.shortcuts import redirect, render
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
+
+from larpmanager.forms.character import (
+    CharacterCocreationForm,
+    CharacterForm,
+)
+from larpmanager.forms.experience import SelectNewAbility
+from larpmanager.forms.member import (
+    AvatarForm,
+)
+from larpmanager.forms.registration import (
+    RegistrationCharacterRelForm,
+)
+from larpmanager.forms.writing import (
+    PlayerRelationshipForm,
+)
+from larpmanager.models.event import (
+    RunText,
+)
+from larpmanager.models.form import (
+    CharacterQuestion,
+    CharacterOption,
+)
+from larpmanager.models.miscellanea import (
+    PlayerRelationship,
+)
+from larpmanager.models.registration import (
+    RegistrationCharacterRel,
+)
+from larpmanager.models.writing import (
+    CharacterStatus,
+    Character,
+)
+from larpmanager.cache.character import get_character_fields, get_character_cache_fields, get_event_cache_all
+from larpmanager.utils.common import (
+    get_player_relationship,
+)
+from larpmanager.utils.character import get_character_relationships, get_character_sheet, get_char_check
+from larpmanager.utils.event import get_event_run
+from larpmanager.utils.registration import (
+    registration_find,
+    check_character_maximum,
+    get_player_characters,
+    check_assign_character,
+)
+from larpmanager.utils.edit import user_edit
+from larpmanager.utils.experience import get_available_ability_px
+from larpmanager.utils.writing import char_add_addit
+from larpmanager.views.user.casting import casting_details, get_casting_preferences
+from larpmanager.views.user.registration import init_form_submitted
+
+
+def character(request, s, n, num):
+    ctx = get_event_run(request, s, n, status=True)
+
+    ctx["screen"] = True
+    get_char_check(request, ctx, num)
+
+    if "check" not in ctx and not ctx["show_char"]:
+        messages.warning(request, _("Characters are not visible at the moment"))
+        return redirect("gallery", s=ctx["event"].slug, n=ctx["run"].number)
+
+    show_private = "check" in ctx
+    if show_private:
+        get_character_sheet(ctx)
+        get_character_relationships(ctx)
+    else:
+        get_character_fields(ctx, only_visible=True)
+
+    casting_details(ctx, 0)
+    if ctx["casting_show_pref"] and not ctx["char"]["player_id"] and ctx["char"]["special"] != Character.PNG:
+        ctx["pref"] = get_casting_preferences(ctx["char"]["id"], ctx, 0)
+
+    ctx["approval"] = ctx["event"].get_feature_conf("user_character_approval", False)
+
+    return render(request, "larpmanager/event/character.html", ctx)
+
+
+def character_your_link(ctx, char, p=None):
+    url = reverse(
+        "character",
+        kwargs={
+            "s": ctx["event"].slug,
+            "n": ctx["run"].number,
+            "num": char.number,
+        },
+    )
+    if p:
+        url += p
+    return url
+
+
+@login_required
+def character_your(request, s, n, p=None):
+    ctx = get_event_run(request, s, n, signup=True, status=True)
+
+    rcrs = ctx["run"].reg.rcrs.all()
+
+    if rcrs.count() == 0:
+        messages.error(request, _("You don't have a character assigned for this run!"))
+        return redirect("home")
+
+    if rcrs.count() == 1:
+        char = rcrs.first().character
+        url = character_your_link(ctx, char, p)
+        return HttpResponseRedirect(url)
+
+    ctx["urls"] = []
+    for el in rcrs:
+        url = character_your_link(ctx, el.character, p)
+        char = el.character.name
+        if el.custom_name:
+            char = el.custom_name
+        ctx["urls"].append((char, url))
+    return render(request, "larpmanager/event/character/your.html", ctx)
+
+
+def character_form(request, ctx, s, n, instance, form_class):
+    get_options_dependencies(ctx)
+    ctx["elementTyp"] = Character
+
+    if request.method == "POST":
+        form = form_class(request.POST, request.FILES, instance=instance, ctx=ctx)
+        if form.is_valid():
+            if instance:
+                mes = _("Informations saved!")
+            else:
+                mes = _("New character created!")
+
+            element = form.save(commit=False)
+            if isinstance(element, Character):
+                if not element.player:
+                    element.player = request.user.member
+                if ctx["event"].get_feature_conf("user_character_approval", False):
+                    if element.status == CharacterStatus.CREATION and form.cleaned_data["propose"]:
+                        element.status = CharacterStatus.PROPOSED
+                        mes = _(
+                            "The character has been proposed to the staff, who will examine it and approve it "
+                            "or request changes if necessary."
+                        )
+
+            element.save()
+
+            messages.success(request, mes)
+
+            check_assign_character(request, ctx)
+
+            number = None
+            if isinstance(element, Character):
+                number = element.number
+            elif isinstance(element, RegistrationCharacterRel):
+                number = element.character.number
+            return redirect("character", s=s, n=n, num=number)
+    else:
+        form = form_class(instance=instance, ctx=ctx)
+
+    ctx["form"] = form
+    init_form_submitted(ctx, form, request)
+
+    return render(request, "larpmanager/event/character/edit.html", ctx)
+
+
+@login_required
+def character_customize(request, s, n, num):
+    ctx = get_event_run(request, s, n, signup=True, status=True)
+
+    get_char_check(request, ctx, num, True)
+
+    try:
+        rgr = RegistrationCharacterRel.objects.get(reg=ctx["run"].reg, character__number=num)
+        if rgr.custom_profile:
+            ctx["custom_profile"] = rgr.profile_thumb.url
+
+        if ctx["event"].get_feature_conf("custom_character_profile", False):
+            ctx["avatar_form"] = AvatarForm()
+
+        return character_form(request, ctx, s, n, rgr, RegistrationCharacterRelForm)
+    except ObjectDoesNotExist as err:
+        raise Http404("not your char!") from err
+
+
+@login_required
+def character_profile_upload(request, s, n, num):
+    if not request.method == "POST":
+        return JsonResponse({"res": "ko"})
+
+    form = AvatarForm(request.POST, request.FILES)
+    if not form.is_valid():
+        return JsonResponse({"res": "ko"})
+
+    ctx = get_event_run(request, s, n, signup=True)
+    registration_find(ctx["run"], request.user)
+    get_char_check(request, ctx, num, True)
+
+    try:
+        rgr = RegistrationCharacterRel.objects.get(reg=ctx["run"].reg, character__number=num)
+    except ObjectDoesNotExist:
+        return JsonResponse({"res": "ko"})
+
+    img = form.cleaned_data["image"]
+    ext = img.name.split(".")[-1]
+
+    n_path = f"registration/{rgr.pk}_{uuid4().hex}.{ext}"
+    path = default_storage.save(n_path, ContentFile(img.read()))
+
+    rgr.custom_profile = path
+    rgr.save()
+
+    return JsonResponse({"res": "ok", "src": rgr.profile_thumb.url})
+
+
+@login_required
+def character_profile_rotate(request, s, n, num, r):
+    ctx = get_event_run(request, s, n, signup=True, status=True)
+    get_char_check(request, ctx, num, True)
+
+    try:
+        rgr = RegistrationCharacterRel.objects.get(reg=ctx["run"].reg, character__number=num)
+    except ObjectDoesNotExist:
+        return JsonResponse({"res": "ko"})
+
+    path = str(rgr.custom_profile)
+    if not path:
+        return JsonResponse({"res": "ko"})
+
+    path = os.path.join(conf_settings.MEDIA_ROOT, path)
+    im = Image.open(path)
+    if r == 1:
+        out = im.rotate(90)
+    else:
+        out = im.rotate(-90)
+
+    ext = path.split(".")[-1]
+    n_path = f"{os.path.dirname(path)}/{rgr.pk}_{uuid4().hex}.{ext}"
+    out.save(n_path)
+
+    rgr.custom_profile = n_path
+    rgr.save()
+
+    return JsonResponse({"res": "ok", "src": rgr.profile_thumb.url})
+
+
+@login_required
+def character_co_creation(request, s, n, num):
+    ctx = get_event_run(request, s, n, status=True, signup=True)
+    get_char_check(request, ctx, num, True)
+
+    (ctx["co_creation"], creat) = RunText.objects.get_or_create(
+        run=ctx["run"], eid=ctx["character"].number, typ=RunText.COCREATION
+    )
+
+    if request.method == "POST":
+        form = CharacterCocreationForm(request.POST, request.FILES, text=ctx["co_creation"].second)
+        if form.is_valid():
+            ctx["co_creation"].second = form.cleaned_data["co_creation_answer"]
+            ctx["co_creation"].save()
+            messages.success(request, _("Co-creation answers saved!"))
+            return redirect("character_your", s=ctx["event"].slug, n=ctx["run"].number)
+    else:
+        form = CharacterCocreationForm(text=ctx["co_creation"].second)
+
+    ctx["form"] = form
+    return render(request, "larpmanager/event/character/cocreation.html", ctx)
+
+
+@login_required
+def character_list(request, s, n):
+    ctx = get_event_run(request, s, n, status=True, signup=True, slug="user_character")
+
+    ctx["list"] = get_player_characters(request.user.member, ctx["event"])
+    # add character configs
+    char_add_addit(ctx)
+    for el in ctx["list"]:
+        if "character_form" in ctx["features"]:
+            el.fields = get_character_cache_fields(ctx, el.id, only_visible=True)
+
+    ctx["char_maximum"] = check_character_maximum(ctx["event"], request.user.member)
+    ctx["approval"] = ctx["event"].get_feature_conf("user_character_approval", False)
+    ctx["assigned"] = RegistrationCharacterRel.objects.filter(reg_id=ctx["run"].reg.id).count()
+    return render(request, "larpmanager/event/character/list.html", ctx)
+
+
+@login_required
+def character_create(request, s, n):
+    ctx = get_event_run(request, s, n, status=True, signup=True, slug="user_character")
+
+    if check_character_maximum(ctx["event"], request.user.member):
+        messages.success(request, _("You have reached the maximum number of characters that can be created"))
+        return redirect("character_list", s=s, n=n)
+
+    ctx["class_name"] = "character"
+    return character_form(request, ctx, s, n, None, CharacterForm)
+
+
+@login_required
+def character_edit(request, s, n, num):
+    ctx = get_event_run(request, s, n, status=True, signup=True)
+    get_char_check(request, ctx, num, True)
+    return character_form(request, ctx, s, n, ctx["character"], CharacterForm)
+
+
+def get_options_dependencies(ctx):
+    ctx["dependencies"] = {}
+    if "character_form" not in ctx["features"]:
+        return
+
+    que = ctx["event"].get_elements(CharacterQuestion).order_by("order")
+    question_idxs = que.values_list("id", flat=True)
+
+    que = ctx["event"].get_elements(CharacterOption).filter(question_id__in=question_idxs)
+    for el in que.filter(dependents__isnull=False).distinct():
+        ctx["dependencies"][el.id] = list(el.dependents.values_list("id", flat=True))
+
+
+@login_required
+def character_assign(request, s, n, num):
+    ctx = get_event_run(request, s, n, signup=True, status=True)
+    get_char_check(request, ctx, num, True)
+    if RegistrationCharacterRel.objects.filter(reg_id=ctx["run"].reg.id).count():
+        messages.warning(request, _("You already have an assigned character"))
+    else:
+        RegistrationCharacterRel.objects.create(reg_id=ctx["run"].reg.id, character=ctx["character"])
+        messages.success(request, _("Assigned character!"))
+
+    return redirect("character_list", s=s, n=n)
+
+
+@login_required
+def character_abilities(request, s, n, num):
+    ctx = get_event_run(request, s, n, signup=True, status=True)
+    event = ctx["event"]
+    if event.parent:
+        event = event.parent
+
+    # check the user can select abilities
+    if not event.get_feature_conf("px_user", False):
+        raise Http404("ehm.")
+
+    get_char_check(request, ctx, num, True)
+
+    ctx["list"] = get_available_ability_px(ctx["character"])
+
+    ctx["sheet_abilities"] = {}
+    for el in ctx["character"].px_ability_list.all():
+        if el.typ.name not in ctx["sheet_abilities"]:
+            ctx["sheet_abilities"][el.typ.name] = []
+        ctx["sheet_abilities"][el.typ.name].append(el)
+
+    if request.method == "POST":
+        form = SelectNewAbility(request.POST, request.FILES, ctx=ctx)
+        if form.is_valid():
+            sel = form.cleaned_data["sel"]
+            ctx["character"].px_ability_list.add(sel)
+            ctx["character"].save()
+            messages.success(request, _("Ability acquired!"))
+            return redirect(request.path_info)
+    else:
+        form = SelectNewAbility(ctx=ctx)
+    ctx["form"] = form
+
+    return render(request, "larpmanager/event/character/abilities.html", ctx)
+
+
+@login_required
+def character_relationships(request, s, n, num):
+    ctx = get_event_run(request, s, n, status=True, signup=True)
+    get_char_check(request, ctx, num, True)
+    get_event_cache_all(ctx)
+
+    ctx["rel"] = []
+    que = PlayerRelationship.objects.filter(reg__member_id=ctx["char"]["player_id"], reg__run=ctx["run"])
+    for tg_num, text in que.values_list("target__number", "text"):
+        if "chars" in ctx and tg_num in ctx["chars"]:
+            show = ctx["chars"][tg_num]
+        else:
+            try:
+                ch = Character.objects.get(event=ctx["event"], number=tg_num)
+                show = ch.show()
+            except ObjectDoesNotExist:
+                continue
+
+        show["text"] = text
+        show["font_size"] = int(100 - ((len(text) / 50) * 4))
+        ctx["rel"].append(show)
+
+    return render(request, "larpmanager/event/character/relationships.html", ctx)
+
+
+@login_required
+def character_relationships_edit(request, s, n, num, oth):
+    ctx = get_event_run(request, s, n, status=True, signup=True)
+    get_char_check(request, ctx, num, True)
+
+    ctx["relationship"] = None
+    if oth != 0:
+        get_player_relationship(ctx, oth)
+
+    if user_edit(request, ctx, PlayerRelationshipForm, "relationship", oth):
+        return redirect("character_relationships", s=ctx["event"].slug, n=ctx["run"].number, num=ctx["char"]["number"])
+    return render(request, "larpmanager/orga/edit.html", ctx)

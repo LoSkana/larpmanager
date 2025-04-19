@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load tz show_tags static i18n %}
+{% block title %}
+    {% trans 'Limitations' %} - {{ run.search }}
+{% endblock %}
+{% block content %}
+    {% trans "Here are the sign up options with limited number." %}
+    {% if disc %}
+        <h2>{% trans 'Discounts' %}</h2>
+        <table class="mob">
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Value" %}</th>
+                <th>{% trans "Maximum" %}</th>
+                <th>{% trans "Used" %}</th>
+            </tr>
+            {% for el in disc %}
+                <tr>
+                    <th>{{ el.name }}</th>
+                    <th>{{ el.value |stringformat:"d" }}</th>
+                    <th>{{ el.max_redeem }}</th>
+                    <th>{{ el.used }}</th>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if tickets %}
+        <h2>{% trans 'Tickets' %}</h2>
+        <table class="mob">
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Value" %}</th>
+                <th>{% trans "Maximum" %}</th>
+                <th>{% trans "Used" %}</th>
+            </tr>
+            {% for el in tickets %}
+                <tr>
+                    <th>
+                        {{ el.name }}
+                        {% if el.details %}( {{ el.details }} ){% endif %}
+                    </th>
+                    <th>{{ el.price | stringformat:"d" }}</th>
+                    <th>{{ el.max_available }}</th>
+                    <th>{{ el.used }}</th>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if opts %}
+        <h2>{% trans 'Options' %}</h2>
+        <table class="mob">
+            <tr>
+                <th>{% trans "Question" %}</th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Value" %}</th>
+                <th>{% trans "Maximum" %}</th>
+                <th>{% trans "Used" %}</th>
+            </tr>
+            {% for el in opts %}
+                <tr>
+                    <th>{{ el.question }}</th>
+                    <th>{{ el.display }}</th>
+                    <th>{{ el.price |stringformat:"d" }}</th>
+                    <th>{{ el.max_available }}</th>
+                    <th>{{ el.used }}</th>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}

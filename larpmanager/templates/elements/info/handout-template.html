@@ -1,0 +1,75 @@
+{% load i18n static %}
+<h2>
+    <a href="#" class="my_toggle" tog='info'>{% trans "Template instructions" %}</a>
+</h2>
+<div class="hide info">
+    <table class="mob no_csv">
+        <tr>
+            <th>Default settings</th>
+            <td>
+                Place inside the field "CSS" the following code:
+                <br />
+                <hr />
+                <span class="code">@page { size: "A4"; @frame content_frame { margin: 2cm; } }</span>
+                <hr />
+                This code will command the generated PDF to be of size A4, with a page margin of 2cm (if you wish you can change this settings, of course).
+            </td>
+        </tr>
+        <tr>
+            <th>Page background</th>
+            <td>
+                Make sure your image has size compatible with the chosen page size (for example ratio 1:√2 for A4). Then upload the image on the <a href="{% url 'orga_utils' run.event.slug run.number %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
+                <br />
+                <hr />
+                <span class="code">@page { [... other stuff ...] background: url('#internal_link#'); }</span>
+                <hr />
+                (Please note that this command needs to be inside the @page part!)
+            </td>
+        </tr>
+        <tr>
+            <th>Fonts</th>
+            <td>
+                <b><i>Make sure the font has format TTF (Truetype), otherwise find some online tool to convert it!</i></b>
+                <br />
+                <br />
+                Then upload the font on the <a href="{% url 'orga_utils' run.event.slug run.number %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
+                <br />
+                <hr />
+                <span class="code">@font-face { font-family: '#name#'; src: url('#internal_link#'); }
+                    <br />
+                #char_name { font-family: '#name#'; }</span>
+                <hr />
+                (Change #name# with something appropriate! Commong tags: #char_name for the character name, #char_title for the character title, #char_motto for the character motto, h2 for the paragraph titles)
+            </td>
+        </tr>
+        <tr>
+            <th>Special codes</th>
+            <td>
+                These codes are available to be put in the header / footer:
+                <br />
+                "&lt;pdf:pagenumber&gt;" -> page number
+                <br />
+                "&lt;pdf:pagecount&gt;" -> page count
+                <br />
+                "&lt;pdf:organization&gt;" -> organization name
+                <br />
+                "&lt;pdf:event&gt;" -> event name
+            </td>
+        </tr>
+        <tr>
+            <th>Links</th>
+            <td>
+                Format them in the "PAGE CSS":
+                <br />
+                <hr />
+                <span class="code">a { color: #desiredcolor; }</span>
+            </td>
+        </tr>
+        <tr>
+            <th>I WANT MORE!</th>
+            <td>
+                Preem, choom! <a href="https://xhtml2pdf.readthedocs.io/en/latest/format_html.html">Have fun.</a>
+            </td>
+        </tr>
+    </table>
+</div>

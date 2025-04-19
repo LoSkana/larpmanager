@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Questions" %}
+    {% if run %}- {{ run }}{% endif %}
+{% endblock %}
+{% block content %}
+    <h2>{% trans "Ask a new questions" %}</h2>
+    <br />
+    <form action="{{ request.path }}"
+          method="post"
+          enctype="multipart/form-data">
+        {% csrf_token %}
+        <table class="mob no_csv">
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="{% trans 'Confirm' %}">
+    </form>
+    <hr />
+    <h2>{% trans "Comunications" %}</h2>
+    {% for el in list %}
+        <div class="plot question{% if el.is_user %} user{% endif %}">
+            {% if el.run %}[{{ el.run }}] -{% endif %}
+            {{ el.text }}
+            {% if el.attachment %}
+                &nbsp;&nbsp;&nbsp;(<a href="{% url 'help_attachment' el.id %}" target="_blank">{% trans "Attachment" %}</a>)
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endblock %}

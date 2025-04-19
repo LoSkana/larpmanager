@@ -1,0 +1,47 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Questions" %} - {{ member }}
+{% endblock %}
+{% block content %}
+    <h2>{{ member }}</h2>
+    {% if reg_characters %}
+        <p>
+            <b>{% trans "Characters" %}: </b>
+            {% for el in reg_characters %}
+                {% include "elements/comma.html" %}
+                {{ el.name }}
+            {% endfor %}
+        </p>
+    {% endif %}
+    {% if reg_factions %}
+        <p>
+            <b>{% trans "Factions" %}: </b>
+            {% for el in reg_factions %}
+                {% include "elements/comma.html" %}
+                {{ el.name }}
+            {% endfor %}
+        </p>
+    {% endif %}
+    <h2>{% trans "Give a new answer" %}</h2>
+    <br />
+    <form action="{{ request.path }}"
+          method="post"
+          enctype="multipart/form-data">
+        {% csrf_token %}
+        <table class="mob no_csv">
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="{% trans 'Confirm' %}">
+    </form>
+    <hr />
+    <h2>{% trans "Comunications" %}</h2>
+    {% for el in list %}
+        <div class="plot question{% if not el.is_user %} user{% endif %}">
+            {{ el.text }}
+            {% if el.attachment %}
+                &nbsp;&nbsp;&nbsp;(<a href="{% url 'help_attachment' el.id %}" target="_blank">{% trans "Attachment" %}</a>)
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endblock %}

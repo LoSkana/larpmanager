@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block title %}About us{% endblock %}
+{% block content %}
+    <div id="aboutus">
+        <div class="img">
+            <img src="{% static 'aboutus.jpg' %}" alt="About us, photo of the team" />
+            <p>One is glad to be of service!</p>
+        </div>
+        <div class="text">
+            <p>
+                Hello there! My name is Mauro Scanagatta. I have been programming for more than half of my age, I have a Ph.D. in Artificial Intelligence, and I love organizing LARPs.
+            </p>
+            <p>
+                You can already imagine what happened: since I hated spending time in the tedious and time-consuming tasks (like managing accounting, signups, character sheets), I started developing a software.
+            </p>
+            <p>
+                It was supposed to be a simple and easy project... but over the years, I continued adding more and more features.
+            </p>
+            <p>
+                In the end, I thought that maybe the tools that I've created for myself, could be useful also for others. So that's the story of Larp Manager!
+            </p>
+        </div>
+    </div>
+    <hr style="clear: both;" />
+    <p>
+        Larp Manager have been used so far for more than 100 events, by more than 20 organizers. Here are their kind words about this tool!
+    </p>
+    <!--
+<div class="owl-carousel">
+    {% for el in list %}
+    <div class="item"><i class="fa-solid fa-quote-left"></i>
+        {{ el.text }}
+    <i class="fa-solid fa-quote-right"> </i> &nbsp;
+    <b>({{ el.author }})</b></div>
+    {% endfor %}
+
+</div>
+-->
+    <div id="container">
+        {% for el in list %}
+            <div class="item {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+                <i class="fa-solid fa-quote-left"></i>
+                {{ el.text }}
+                <i class="fa-solid fa-quote-right"> </i> &nbsp;
+                <b>({{ el.author }})</b>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+window.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function(){
+        setTimeout(slide, 10000);
+
+        var parent = $("#container");
+        var divs = parent.children();
+        while (divs.length) {
+            parent.append(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
+        }
+
+        $.fn.moveItems = function() {
+        $(this).children(':first-child').animate(
+            {width: "100%"},
+            500,
+            function (){
+                $(this).appendTo($(this).parent());
+            }
+        );
+        }
+    })
+});
+
+function slide() {
+    console.log("ciao");
+
+     $("#container").moveItems();
+
+    setTimeout(slide, 10000);
+}
+
+//~ <script>window.addEventListener('DOMContentLoaded', function() {
+
+//~ $(document).ready(function(){
+    //~ $('.owl-carousel').owlCarousel({
+        //~ loop:true,
+        //~ margin:30,
+        //~ nav:true,
+        //~ autoplay:true,
+        //~ autoplayTimeout:2000,
+        //~ autoplayHoverPause:true
+    //~ })
+//~ });
+
+//~ });
+
+
+
+</script>
+{% endblock %}

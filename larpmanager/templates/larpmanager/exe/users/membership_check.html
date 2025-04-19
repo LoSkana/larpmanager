@@ -1,0 +1,37 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Member Data Checks" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page performs checks on members' data." %}
+{% endblock %}
+{% block content %}
+    {% if cf %}
+        <h2>{% trans "Tax code check" %}</h2>
+        <table class="tablesorter">
+            <thead>
+                <tr>
+                    <th>{% trans "Member" %}</th>
+                    <th>{% trans "Card" %}</th>
+                    <th>{% trans "Email" %}</th>
+                    <th>{% trans "Calculated" %}</th>
+                    <th>{% trans "Supplied" %}</th>
+                    <th>{% trans "Error" %}</th>
+                </tr>
+            </thead>
+            {% for el in cf %}
+                <tr>
+                    <td>
+                        <a href="{% url 'exe_member' el.member_id %}">{{ el.member }}</a>
+                    </td>
+                    <td>{{ el.membership.card_number }}</td>
+                    <td>{{ el.email }}</td>
+                    <td>{{ el.calculated_cf }}</td>
+                    <td>{{ el.supplied_cf }}</td>
+                    <td>{{ el.error_cf }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}

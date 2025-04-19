@@ -1,0 +1,393 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+import math
+from datetime import datetime
+
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
+
+from larpmanager.models.accounting import PaymentInvoice
+from larpmanager.models.form import RegistrationQuestion, RegistrationAnswer, RegistrationChoice
+from larpmanager.models.member import get_user_membership, Membership
+from larpmanager.models.registration import RegistrationTicket, Registration, RegistrationCharacterRel
+from larpmanager.models.writing import Character, CharacterStatus
+from larpmanager.cache.feature import get_event_features
+from larpmanager.cache.registration import get_reg_counts
+from larpmanager.utils.common import get_time_diff_today, format_datetime
+from larpmanager.utils.exceptions import SignupException, WaitingException
+
+
+def registration_available(r, features=None, reg_counts=None):
+    # check advanced registration rules only if there is a max number of tickets
+    if r.event.max_pg == 0:
+        r.status["primary"] = True
+        return
+
+    if not reg_counts:
+        reg_counts = get_reg_counts(r)
+
+    remaining_pri = r.event.max_pg - (reg_counts["count_reg"] - reg_counts["count_staff"])
+
+    if not features:
+        features = get_event_features(r.event_id)
+
+    # print(remaining_pri)
+
+    # check primary tickets available
+    if remaining_pri > 0:
+        r.status["primary"] = True
+        if remaining_pri < 10 or remaining_pri * 1.0 / r.event.max_pg < 0.3:
+            r.status["additional"] = _(" Hurry: only %(num)d tickets available.") % {"num": remaining_pri}
+        return
+
+        # check if we manage filler
+    if "filler" in features:
+        # infinite fillers
+        if r.event.max_filler == 0:
+            r.status["filler"] = True
+            return
+
+            # if we manage filler and there are available, say so
+        if r.event.max_filler > 0:
+            remaining_filler = r.event.max_filler - reg_counts["count_fill"]
+            if remaining_filler > 0:
+                r.status["additional"] = _(" Hurry: only %(num)d tickets available.") % {"num": remaining_filler}
+                r.status["filler"] = True
+                return
+
+    # check if we manage waiting
+    if "waiting" in features:
+        # infinite waitings
+        if r.event.max_waiting == 0:
+            r.status["waiting"] = True
+            return
+
+        # if we manage waiting and there are available, say so
+        if r.event.max_waiting > 0:
+            remaining_waiting = r.event.max_waiting - reg_counts["count_wait"]
+            if remaining_waiting > 0:
+                r.status["additional"] = _(" Hurry: only %(num)d tickets available.") % {"num": remaining_waiting}
+                r.status["waiting"] = True
+                return
+
+    r.status["closed"] = True
+    return
+
+
+def get_match_reg(r, my_regs):
+    for m in my_regs:
+        if m and m.run_id == r.id:
+            return m
+    return None
+
+
+def registration_status_signed(run, features, register_url):
+    registration_status_characters(run, features)
+    member = run.reg.member
+    mb = get_user_membership(member, run.event.assoc_id)
+
+    register_msg = _("Registration confirmed")
+    provisional = is_reg_provisional(run.reg)
+    if provisional:
+        register_msg = _("Provisional registration")
+    register_text = f"<a href='{register_url}'>{register_msg}</a>"
+
+    if "membership" in features:
+        if mb.status in [Membership.EMPTY, Membership.JOINED, Membership.UPLOADED]:
+            membership_url = reverse("membership")
+            mes = _("to confirm it, send your membership application.")
+            text_url = f", <a href='{membership_url}'>{mes}</a>"
+            run.status["text"] = register_text + text_url
+            return
+
+        if mb.status in [Membership.SUBMITTED]:
+            run.status["text"] = register_text + ", " + _("awaiting member approval to proceed with payment")
+            return
+
+    if "payment" in features:
+        pending = PaymentInvoice.objects.filter(
+            idx=run.reg.id,
+            member_id=run.reg.member_id,
+            status=PaymentInvoice.SUBMITTED,
+            typ=PaymentInvoice.REGISTRATION,
+        )
+        if pending.count() > 0:
+            run.status["text"] = register_text + ", " + _("payment pending confirmation")
+            return
+
+        if run.reg.alert:
+            wire_created = PaymentInvoice.objects.filter(
+                idx=run.reg.id,
+                member_id=run.reg.member_id,
+                status=PaymentInvoice.CREATED,
+                typ=PaymentInvoice.REGISTRATION,
+                method__slug="wire",
+            )
+            if wire_created.count() > 0:
+                pay_url = reverse("acc_reg", args=[run.reg.id])
+                mes = _("to confirm it proceed with payment.")
+                text_url = f", <a href='{pay_url}'>{mes}</a>"
+                note = _("If you have made a transfer, please upload the receipt for it to be processed!")
+                run.status["text"] = f"{register_text}{text_url} ({note})"
+                return
+
+            pay_url = reverse("acc_reg", args=[run.reg.id])
+            mes = _("to confirm it proceed with payment.")
+            text_url = f", <a href='{pay_url}'>{mes}</a>"
+            if run.reg.deadline < 0:
+                text_url += "<i> (" + _("If no payment is received, registration may be cancelled") + ")</i>"
+            run.status["text"] = register_text + text_url
+            return
+
+    if not mb.compiled:
+        profile_url = reverse("profile")
+        mes = _("please fill in your profile.")
+        text_url = f", <a href='{profile_url}'>{mes}</a>"
+        run.status["text"] = register_text + text_url
+        return
+
+    if provisional:
+        run.status["text"] = register_text
+        return
+
+    if run.reg.ticket and run.reg.ticket.tier == RegistrationTicket.WAITING:
+        mes = _("You are signed up in the waiting list!")
+    elif run.reg.ticket and run.reg.ticket.tier == RegistrationTicket.FILLER:
+        mes = _("You are signed up as Filler!")
+    else:
+        mes = _("You are regularly signed up!")
+
+    run.status["text"] = f"<a href='{register_url}'>{mes}</a>"
+
+    if run.reg.ticket and run.reg.ticket.tier == RegistrationTicket.PATRON:
+        run.status["text"] += " " + _("Thanks for your support!")
+
+
+def registration_status(run, user, my_regs=None, features_map=None, reg_count=None):
+    run.status = {"open": True, "details": "", "text": "", "additional": ""}
+
+    registration_find(run, user, my_regs)
+
+    if not run.end:
+        return
+
+    if features_map is None:
+        features_map = {}
+    if run.event.slug not in features_map:
+        features_map[run.event.slug] = get_event_features(run.event.id)
+    features = features_map[run.event.slug]
+
+    registration_available(run, features, reg_count)
+    register_url = reverse("register", args=[run.event.slug, run.number])
+
+    if run.reg:
+        registration_status_signed(run, features, register_url)
+        return
+
+    if get_time_diff_today(run.end) < 0:
+        return
+
+    # check pre-register
+    if not run.registration_open and run.event.get_feature_conf("pre_register_active", False):
+        run.status["open"] = False
+        mes = _("Pre-register to the event!")
+        preregister_url = reverse("pre_register", args=[run.event.slug])
+        run.status["text"] = f"<a href='{preregister_url}'>{mes}</a>"
+        run.status["details"] = _("Registration not yet open!")
+        return
+
+    dt = datetime.today()
+    # check registration open
+    if "registration_open" in features:
+        if not run.registration_open:
+            run.status["open"] = False
+            run.status["text"] = _("Registrations not open!")
+            return
+        elif run.registration_open > dt:
+            run.status["open"] = False
+            run.status["text"] = _("Registrations not open!")
+            run.status["details"] = _("Open the: %(date)s") % {"date": run.registration_open.strftime(format_datetime)}
+            return
+
+    # signup open, not already signed in
+    if "primary" in run.status:
+        run.status["details"] = run.status["additional"]
+        mes = _("Registration is open!")
+    elif "filler" in run.status:
+        run.status["details"] = run.status["additional"]
+        mes = _("Sign up as a filler!")
+    elif "waiting" in run.status:
+        mes = _("Join the waiting list!")
+    else:
+        run.status["text"] = _("Registration closed.")
+        return
+
+    run.status["text"] = f"<a href='{register_url}'>{mes}</a>"
+
+
+def registration_find(r, u, my_regs=None):
+    if my_regs is not None:
+        r.reg = get_match_reg(r, my_regs)
+    else:
+        try:
+            que = Registration.objects.select_related("ticket")
+            r.reg = que.get(run=r, member=u.member, redeem_code__isnull=True, cancellation_date__isnull=True)
+        except Exception:
+            r.reg = None
+
+
+def check_character_maximum(event, member):
+    # check the amount of characters of the character
+    current_chars = event.get_elements(Character).filter(player=member).count()
+    max_chars = int(event.get_feature_conf("user_character_max", 1))
+    return current_chars >= max_chars
+
+
+def registration_status_characters(run, features):
+    que = RegistrationCharacterRel.objects.filter(reg_id=run.reg.id)
+    approval = run.event.get_feature_conf("user_character_approval", False)
+    rcrs = que.order_by("character__number").select_related("character")
+
+    aux = []
+    for el in rcrs:
+        url = reverse("character", args=[run.event.slug, run.number, el.character.number])
+        name = el.character.name
+        if el.custom_name:
+            name = el.custom_name
+        if approval and el.character.status != CharacterStatus.APPROVED:
+            name += f" ({_(el.character.get_status_display())})"
+        url = f"<a href='{url}'>{name}</a>"
+        aux.append(url)
+
+    if len(aux) == 1:
+        run.status["details"] += _("Your character is") + " " + aux[0]
+    elif len(aux) > 1:
+        run.status["details"] += _("Your characters are") + ": " + ", ".join(aux)
+
+    reg_waiting = run.reg.ticket and run.reg.ticket.tier == RegistrationTicket.WAITING
+
+    if "user_character" in features and not reg_waiting:
+        if not check_character_maximum(run.event, run.reg.member):
+            url = reverse("character_create", args=[run.event.slug, run.number])
+            if run.status["details"]:
+                run.status["details"] += " - "
+            mes = _("Access character creation!")
+            run.status["details"] += f"<a href='{url}'>{mes}</a>"
+        elif len(aux) == 0:
+            url = reverse("character_list", args=[run.event.slug, run.number])
+            if run.status["details"]:
+                run.status["details"] += " - "
+            mes = _("Select your character!")
+            run.status["details"] += f"<a href='{url}'>{mes}</a>"
+
+
+def is_reg_provisional(instance, features=None):
+    if not features:
+        features = get_event_features(instance.run.event_id)
+
+    if "payment" in features:
+        if instance.tot_iscr > 0 >= instance.tot_payed:
+            return True
+
+    return False
+
+
+def get_registration_options(instance):
+    res = []
+    rqs = []
+    cache = []
+    features = get_event_features(instance.run.event_id)
+    for q in RegistrationQuestion.get_instance_questions(instance.run.event, features):
+        if q.skip(instance, features):
+            continue
+        rqs.append(q)
+        cache.append(q.id)
+
+    answers = {}
+    for el in RegistrationAnswer.objects.filter(question_id__in=cache, reg=instance):
+        answers[el.question_id] = el.text
+
+    choices = {}
+    for c in RegistrationChoice.objects.filter(question_id__in=cache, reg=instance).select_related("option"):
+        if c.question_id not in choices:
+            choices[c.question_id] = []
+        choices[c.question_id].append(c.option)
+
+    if len(rqs) > 0:
+        for q in rqs:
+            if q.id in choices:
+                txt = ",".join([opt.display for opt in choices[q.id]])
+                res.append((q.display, txt))
+
+            if q.id in answers:
+                res.append((q.display, answers[q.id]))
+
+    return res
+
+
+def get_player_characters(member, event):
+    return event.get_elements(Character).filter(player=member).order_by("-updated")
+
+
+def get_player_signup(request, ctx):
+    regs = Registration.objects.filter(run=ctx["run"], member=request.user.member, cancellation_date__isnull=True)
+
+    if regs:
+        return regs[0]
+
+    return None
+
+
+def check_signup(request, ctx):
+    reg = get_player_signup(request, ctx)
+    if not reg:
+        raise SignupException(ctx["event"].slug, ctx["run"].number)
+
+    if reg.ticket and reg.ticket.tier == RegistrationTicket.WAITING:
+        raise WaitingException(ctx["event"].slug, ctx["run"].number)
+
+
+def check_assign_character(request, ctx):
+    # if the player has a single character, then assign it to their signup
+    reg = get_player_signup(request, ctx)
+    if not reg:
+        return
+
+    if reg.rcrs.count() > 0:
+        return
+
+    chars = get_player_characters(request.user.member, ctx["event"])
+    if not chars:
+        return
+
+    RegistrationCharacterRel.objects.create(character_id=chars[0].id, reg=reg)
+
+
+def get_reduced_available_count(run):
+    ratio = int(run.event.get_feature_conf("reduced_ratio", 10))
+    red = Registration.objects.filter(
+        run=run, ticket__tier=RegistrationTicket.REDUCED, cancellation_date__isnull=True
+    ).count()
+    pat = Registration.objects.filter(
+        run=run, ticket__tier=RegistrationTicket.PATRON, cancellation_date__isnull=True
+    ).count()
+    # silv = Registration.objects.filter(run=run, ticket__tier=RegistrationTicket.SILVER).count()
+    return math.floor(pat * ratio / 10.0) - red

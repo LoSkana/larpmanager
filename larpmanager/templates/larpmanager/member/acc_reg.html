@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load i18n show_tags %}
+{% block title %}
+    {% trans "Payment" %} - {{ reg.run }}
+{% endblock %}
+{% block content %}
+    {% if invoice %}
+        {% include "elements/payment_go.html" %}
+    {% else %}
+        <p>
+            {% trans "The total registration fee is" %}: <b>{{ reg.tot_iscr|format_decimal }}{{ currency_symbol }}</b>
+        </p>
+        {% if reg.tot_payed %}
+            <p>
+                {% trans "So far you have paid a total of" %}: <b>{{ reg.tot_payed|format_decimal }}{{ currency_symbol }}</b>
+            </p>
+        {% endif %}
+        {% if features.reg_installments or features.reg_quotas %}
+            <p>
+                {% trans "We ask you to pay the difference from the next instalment" %}: <b>{{ reg.quota|format_decimal }}{{ currency_symbol }}</b>
+            </p>
+        {% else %}
+            {% if reg.tot_payed %}
+                <p>
+                    {% trans "We ask you to pay the difference" %}: <b>{{ reg.quota|format_decimal }}{{ currency_symbol }}</b>
+                </p>
+            {% endif %}
+        {% endif %}
+        {% if not hide_amount %}
+            <p>
+                <a href="#" class="my_toggle" tog="form_amount">{% trans "Would you like to pay a different amount?" %}</a>
+            </p>
+        {% endif %}
+        {% include "elements/payment_form.html" %}
+    {% endif %}
+{% endblock %}
+{% block js %}
+    <script>
+window.addEventListener('DOMContentLoaded', function() {
+
+    $(function() {
+        $('.form_amount').hide();
+    });
+});
+    </script>
+{% endblock %}

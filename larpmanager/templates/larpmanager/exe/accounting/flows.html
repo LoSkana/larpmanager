@@ -1,0 +1,150 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Movements" %} - {% trans "Organization" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page presents the complete list of financial movements." %}
+{% endblock %}
+{% block content %}
+    {% include "elements/form/years.html" %}
+    <h3>{% trans "Movements" %} - {{ year }}</h3>
+    <h4>{% trans "Inflows" %}</h4>
+    <table class="tablesorter mob">
+        <thead>
+            <tr>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Size" %}</th>
+                <th>{% trans "Description" %}</th>
+                <th>{% trans "Type" %}</th>
+                <th>{% trans "Event" %}</th>
+            </tr>
+        </thead>
+        {% for el in memberships %}
+            <tr>
+                <td>{{ el.created | date:"d/m/Y" }}</td>
+                <td>{{ el.value }}</td>
+                <td>{% trans "Organization fee" %} - {{ el.member }} - {{ el.year }}</td>
+                <td>membership</td>
+                <td></td>
+                <td>
+                    {% if el.inv.invoice %}
+                        <a href="{{ el.inv.download }}">{% trans "Download" %}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        {% for el in donations %}
+            <tr>
+                <td>{{ el.created | date:"d/m/Y" }}</td>
+                <td>{{ el.value }}</td>
+                <td>
+                    {% if el.descr %}{{ el.descr }} -{% endif %}
+                    {{ el.member }}
+                </td>
+                <td>donation</td>
+                <td></td>
+                <td>
+                    {% if el.inv.invoice %}
+                        <a href="{{ el.inv.download }}">{% trans "Download" %}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        {% for el in inflows %}
+            <tr>
+                <td>{{ el.created | date:"d/m/Y" }}</td>
+                <td>{{ el.value }}</td>
+                <td>{{ el.descr }}</td>
+                <td>inflow</td>
+                <td>
+                    {% if el.run %}{{ el.run }}{% endif %}
+                </td>
+                <td>
+                    {% if el.invoice %}
+                        <a href="{{ el.download }}">{% trans "Download" %}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        {% for el in tickets %}
+            <tr>
+                <td>{{ el.created | date:"d/m/Y" }}</td>
+                <td>{{ el.value }}</td>
+                <td>{{ el.member }}</td>
+                <td>event</td>
+                <td>
+                    {% if el.reg %}{{ el.reg.run }}{% endif %}
+                </td>
+                <td>
+                    {% if el.inv.invoice %}
+                        <a href="{{ el.inv.download }}">{% trans "Download" %}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h4>{% trans "Outflows" %}</h4>
+    <table class="tablesorter mob">
+        <thead>
+            <tr>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Size" %}</th>
+                <th>{% trans "Description" %}</th>
+                <th>{% trans "Type" %}</th>
+                <th>{% trans "Event" %}</th>
+            </tr>
+        </thead>
+        {% for el in outflows %}
+            <tr>
+                <td>{{ el.created | date:"d/m/Y" }}</td>
+                <td>{{ el.value }}</td>
+                <td>{{ el.descr }}</td>
+                <td>inflow</td>
+                <td>
+                    {% if el.run %}{{ el.run }}{% endif %}
+                </td>
+                <td>
+                    {% if el.invoice %}
+                        <a href="{{ el.download }}">{% trans "Download" %}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        {% for el in expenses %}
+            <tr>
+                <td>{{ el.created | date:"d/m/Y" }}</td>
+                <td>{{ el.value }}</td>
+                <td>{{ el.descr }} - {{ el.member }}</td>
+                <td>expense</td>
+                <td>
+                    {% if el.run %}{{ el.run }}{% endif %}
+                </td>
+                <td>
+                    {% if el.invoice %}
+                        <a href="{{ el.download }}">{% trans "Download" %}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h4>{% trans "Transactions" %} - {{ trans }}</h4>
+    <h4>{{ credit_name }} {% trans "positive" %} (soci con cui l'associazione ha un debito)</h4>
+    <table class="mob tablesorter">
+        {% for el in pos %}
+            <tr>
+                <td>{{ el.member }}</td>
+                <td>{{ el.credit }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h4>{{ credit_name }} {% trans "negatives" %} (soci che sono in debito con l'associazione )</h4>
+    <table class="mob tablesorter">
+        {% for el in neg %}
+            <tr>
+                <td>{{ el.member }}</td>
+                <td>{{ el.credit }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

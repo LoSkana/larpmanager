@@ -1,0 +1,28 @@
+{% extends 'utils.html' %}
+{% load i18n static show_tags %}
+{% block title %}
+    {% trans 'Profiling' %}
+{% endblock %}
+{% block content %}
+    <p>General: {{ tot | format_decimal }}</p>
+    <table class="tablesorter mob">
+        <tr>
+            <th>Domain</th>
+            <th>View</th>
+            <th>Mean duration</th>
+            <th>Num calls</th>
+            <th></th>
+        </tr>
+        {% for el in res %}
+            <tr>
+                <td>{{ el.domain }}</td>
+                <td>{{ el.view_func_name }}</td>
+                <td>{{ el.mean_duration | floatformat:2 }}</td>
+                <td>{{ el.num_calls }}</td>
+                <td>
+                    <a href="{% url 'lm_profile_rm' el.view_func_name %}">Remove</a>
+                </td>
+            {% endfor %}
+        </tr>
+    </table>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'utils.html' %}
+{% load static i18n %}
+{% block title %}
+    {% trans "Upload" %} - {{ album }} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page allows you to upload a new photo album." %}
+{% endblock %}
+{% block content %}
+    <h2>{% trans "Upload of photo and video" %}</h2>
+    <p>
+        {% trans "Select a zip file for upload. Directories will become albums, photos and the videos inside will be placed in the corresponding albums." %}
+    </p>
+    <br />
+    <br />
+    <form action="{{ request.path }}"
+          enctype="multipart/form-data"
+          method="post">
+        {% csrf_token %}
+        <table class="no_csv">
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="{% trans 'Confirm' %}">
+    </form>
+{% endblock %}
+{% block js %}
+    <script>window.addEventListener('DOMContentLoaded', function() {
+$(function() {
+    $('form').on('submit', function() {
+        return confirm('Sei davvero sicuro?');
+    });
+});
+});
+    </script>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Your characters" %} - {{ run.search }}
+{% endblock %}
+{% block content %}
+    {% if not char_maximum %}
+        <a href="{% url 'character_create' run.event.slug run.number %}"
+           class="add-new">{% trans "Create new character" %}</a>
+        <br />
+    {% endif %}
+    <table id="characters" class="tablesorter mob">
+        <thead>
+            <tr>
+                <th class="hide">number</th>
+                {% if features.user_character %}<th></th>{% endif %}
+                <th>{% trans "Name" %}</th>
+                {% if features.title %}
+                    <th>{% trans "Title" %}</th>
+                {% endif %}
+                {% if features.motto %}
+                    <th>{% trans "Motto" %}</th>
+                {% endif %}
+                <th>{% trans "Presentation" %}</th>
+                {% if features.character_form %}
+                    {% for idx, _ in searchable.items %}
+                        {% with questions|get:idx as que %}<th>{{ que.display }}</th>{% endwith %}
+                    {% endfor %}
+                {% endif %}
+                {% if approval %}
+                    <th>{% trans "Status" %}</th>
+                {% endif %}
+                {% if features.px %}
+                    <th>{% trans "XP tot" %}</th>
+                    <th>{% trans "XP used" %}</th>
+                    <th>{% trans "XP avail" %}</th>
+                {% endif %}
+                {% if px_user %}<th></th>{% endif %}
+                {% if not assigned %}<th></th>{% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td class="hide">{{ el.number }}</td>
+                    {% if features.user_character %}
+                        <td>
+                            <a href="{% url 'character_change' run.event.slug run.number el.number %}"><i class="fas fa-edit"></i></a>
+                        </td>
+                    {% endif %}
+                    <td>{{ el.name }}</td>
+                    {% if features.motto %}
+                        <td>
+                            <p>{{ el.motto | safe | striptags }}</p>
+                        </td>
+                    {% endif %}
+                    <td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>
+                    {% if features.character_form %}
+                        {% for idx, _ in searchable.items %}
+                            {% with el.fields|get:idx as field %}
+                                {% if field %}
+                                    <td>{% get_character_field field options %}</td>
+                                {% else %}
+                                    <td></td>
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if approval %}<td>{{ el.get_status_display }}</td>{% endif %}
+                    {% if features.px %}
+                        <td>{{ el.addit | get:'px_tot' }}</td>
+                        <td>{{ el.addit | get:'px_used' }}</td>
+                        <td>{{ el.addit | get:'px_avail' }}</td>
+                    {% endif %}
+                    {% if px_user %}
+                        <td>
+                            <a href="{% url 'character_abilities' run.event.slug run.number el.number %}">{% trans "Ability" %}</a>
+                        </td>
+                    {% endif %}
+                    {% if not assigned %}
+                        <td>
+                            <a href="{% url 'character_assign' run.event.slug run.number el.number %}">{% trans "Select" %}</a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

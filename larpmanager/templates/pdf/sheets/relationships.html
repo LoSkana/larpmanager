@@ -1,0 +1,94 @@
+{% load show_tags static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+@media print {
+  .new-page {
+    page-break-before: always;
+  }
+}
+body { background: white; text-align: center; padding: 2em; font-size: 10pt; }
+table { margin: 0 auto; width: 100% }
+td { width: 50%; }
+body { background: white; }
+a { color: #6495ED; font-weight:bold; text-decoration: none;}
+td { padding: 0.5em; border: 1px solid black; text-align: center; vertical-align:middle; }
+td img { margin: 0.5em; height: 10em; float: left; }
+p { display: inline; line-height: 100%; display: block; margin: 0.3em; }
+.motto { font-size: 90%; line-height: 90%; }
+.name { font-size: 110%; }
+table, tr, td, th, tbody, thead, tfoot {
+    page-break-inside: avoid !important;
+}
+        </style>
+    </head>
+    <body>
+        <table>
+            <tr>
+                {% for el in rel %}
+                    {% if forloop.counter|divisibleby:2 %}
+                    {% else %}
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                    {% endif %}
+                    <td>
+                        {% if el.player_id > 0 %}
+                            <img src="https://larpmanager.com/{{ el.player_prof }}" />
+                        {% else %}
+                            <img src="https://larpmanager.com/{% static 'larpmanager/assets/blank-avatar.png' %}" />
+                        {% endif %}
+                        <p>
+                            <span class='name'><a href="{% url 'character' event.slug run.number el.number %}">{{ el.name }}</a> </span>
+                            {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
+                            {% if el.pronoun %}({{ el.pronoun }}){% endif %}
+                            {% if el.motto %}- <i>{{ el.motto | safe | clean_tags }}</i>{% endif %}
+                        </p>
+                        {% if el.player_id > 0 %}
+                            <p>
+                                <b>Player:</b> <a href="{% url 'public' el.player_id %}">{{ el.player }}</a>
+                            </p>
+                        {% endif %}
+                        <b>Factions:</b>
+                        {% for g in el.factions %}
+                            {% if not g.typ == 'g' %}
+                                {% include "elements/comma.html" %}
+                                {{ g.name }}
+                            {% endif %}
+                        {% endfor %}
+                        <p class="relationship">
+                            <b>Relationship:</b>  {{ el.text }}
+                        </p>
+                    </td>
+                {% endfor %}
+            </tr>
+        </table>
+    </body>
+    <script src="https://proxima.larpmanager.com/{% static "larpmanager/assets/js/jquery.min.js" %}"></script>
+    <script>
+$(function() {
+  resize_texts();
+});
+
+function resize_texts() {
+    $(".relationship").each(function( index ) {
+        var textLength = stripHTML($(this).text()).length;
+        fontSize = Math.round(100 - textLength / 80);
+        $(this).css('font-size', fontSize + '%');
+    });
+
+}
+
+function stripHTML(dirtyString) {
+  var container = document.createElement('div');
+  var text = document.createTextNode(dirtyString);
+  container.appendChild(text);
+  return container.innerHTML; // innerHTML will be a xss safe string
+}
+
+
+    </script>
+</html>

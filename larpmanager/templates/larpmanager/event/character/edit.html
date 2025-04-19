@@ -1,0 +1,323 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}
+    {% if character %}
+        {% trans "Character Edit" %} -
+    {% else %}
+        {% trans "New character" %} -
+    {% endif %}
+    {{ run.search }}
+{% endblock %}
+{% block content %}
+    {% if avatar_form %}
+        <form action="{{ request.path }}"
+              enctype="multipart/form-data"
+              method="post"
+              id="avatar_form">
+            {% csrf_token %}
+            <div style="text-align: center">
+                <h4>{% trans "Character profile" %}:</h4>
+                <div class="helptext" style="max-width:700px; margin: auto">
+                    {% trans "Upload a photo of yourself associated with your character specifically for this event!" %}
+                </div>
+                <br />
+                <br />
+                <input type='button'
+                       id='change_photo'
+                       value='{% trans "Change photo" %}'
+                       class="my_toggle"
+                       tog="change-field">
+                <input type='button' id='rotate_l_btn' value='{% trans "Rotate left" %}' \>
+                <input type='button' id='rotate_r_btn' value='{% trans "Rotate right" %}' \>
+                <br />
+                <br />
+                <div class="hide change-field">
+                    {% trans "Select the new photo to upload" %}: {{ avatar_form.image }}
+                    <br />
+                    <br />
+                </div>
+                <img id="profile"
+                     {% if custom_profile %}src={{ custom_profile }}{% endif %} />
+            </div>
+        </form>
+        <hr />
+    {% endif %}
+    {% include "elements/form/sections.html" %}
+{% endblock %}
+{% block js %}
+    {% include "elements/form/max_length.js" %}
+    <script>
+    var dependencies = {{ dependencies | safe }};
+
+    var unavail = {{ form.unavail }};
+
+    var diss = '-------';
+    var submitted = {{ submitted | safe }};
+    var mandatory = {{ form.mandatory | safe }};
+
+    window.addEventListener('DOMContentLoaded', function() {
+
+        $(function () {
+
+            for (const el of ['id_name']) {
+                if ( $( "#" + el ).length ) mandatory.unshift(el);
+            }
+
+            unavail.forEach(value => {
+                $('option[value="' + value + '"]').prop("disabled", true);
+                $('input[type="checkbox"][value="' + value + '"]').prop("disabled", true);
+            });
+
+            $('select').each(function(index, value) {
+                var nm = $(this).attr('id').replace("id_", "");
+
+                if (nm == 'factions_list') return;
+
+                // skip in only one option
+                if ($(this).find('option').length == 1) return;
+
+                // skip if the value was submitted in a previous POST
+                if ((nm in submitted) && submitted[nm]) return;
+
+                $(this).prepend('<option selected="true" disabled="disabled">' + diss + '</option>');
+            });
+
+            $('#confirm').on('click', function() {
+                if (!check_mandatory()) return false;
+            });
+
+            disable_dependencies();
+
+            $('select, input[type="checkbox"]').on('change', function() {
+                disable_dependencies();
+            });
+
+            {% if avatar_form  %}
+                {% if not custom_profile %}
+                $('#change_photo').trigger('click');
+                {% endif %}
+
+                $('#id_image').change(function() {
+
+                    var formData = new FormData();
+                    var fileInput = document.getElementById('id_image');
+                    var file = fileInput.files[0];
+                    formData.append('image', file);
+
+                    $('#profile').attr("src", "");
+                    $.ajax({
+                        url: upload,
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(d){
+                            profile_update(d.src);
+                            $('#change_photo').trigger('click');
+                        }
+                    });
+                });
+            {% endif %};
+        });
+
+    function check_dependencies(dependencies) {
+        let selects = [];
+        let checkboxes = [];
+        let remainingDependencies = [...dependencies]; // Create a copy of the dependencies array to manipulate it
+
+        // Collect the selects that contain dependency values
+        $('select').each(function () {
+            const name = $(this).attr('name');
+            const val = parseInt($(this).val());
+
+            if (remainingDependencies.includes(val)) {
+                // Remove the found value from dependencies
+                remainingDependencies = remainingDependencies.filter(v => v !== val);
+                selects.push(name);
+            }
+        });
+
+        // Collect checkbox groups that contain dependency values
+        $('input[type="checkbox"]:checked').each(function () {
+            const name = $(this).attr('name');
+            const value = parseInt($(this).val());
+
+            if (!isNaN(value) && remainingDependencies.includes(value)) {
+                // Remove the found value from dependencies
+                remainingDependencies = remainingDependencies.filter(v => v !== value);
+                if (!checkboxes.includes(name)) {
+                    checkboxes.push(name);
+                }
+            }
+        });
+
+        // Check the remaining values in dependencies
+        for (let val of remainingDependencies) {
+            // If the remaining value is in a select not yet selected, return false
+            let selectFound = $('select').not(function() {
+                return selects.includes($(this).attr('name'));
+            }).is(function () {
+                return $(this).find('option').toArray().some(option => parseInt($(option).val()) === val);
+            });
+
+            if (selectFound) {
+                return false; // If the remaining value is in a select, return false
+            }
+
+            // If the remaining value is in a checkbox that was not considered before, return false
+            let checkboxFound = $('input[type="checkbox"]').is(function () {
+                return $(this).val() == val && !checkboxes.includes($(this).attr('name'));
+            });
+
+            if (checkboxFound) {
+                return false; // If the remaining value is in a checkbox that was not included, return false
+            }
+        }
+
+        return true; // If all dependencies are satisfied, return true
+    }
+
+
+    function disable_dependencies() {
+
+        console.log("dependencies");
+
+        reset_select = [];
+
+        for (const [key, options] of Object.entries(dependencies)) {
+            available = check_dependencies(options);
+
+            // disable selects with that value
+            if (available) {
+              $('select option[value="' + key + '"]').show();
+              $('#hp_' + key).show();
+            } else {
+              $('select option[value="' + key + '"]').hide();
+              $('#hp_' + key).hide();
+            }
+            if (!available) {
+                // check if there are select with disabled selected value
+                $('select').each(function() {
+                    var selectedOption = $(this).find('option:selected');
+                    if (selectedOption.val() === key) {
+                        reset_select.push($(this));
+                    }
+                });
+            }
+
+            // disable checkboxes with that value
+            $('input[type="checkbox"][value="' + key + '"]').each(function() {
+                if (available) {
+                  $(this).show();
+                  $('#hp_' + key).show();
+                } else {
+                  $(this).hide();
+                  $('#hp_' + key).hide();
+                }
+                if (!available && $(this).is(':checked')) {
+                    $(this).prop('checked', false);
+                }
+            });
+        }
+
+        $(reset_select).each(function() {
+          var $select = $(this);
+
+          // look for first option without value
+          var $option = $select.find('option').filter(function() {
+            var value = $(this).attr('value');
+            return typeof value === 'undefined' || value === '';
+          }).first();
+
+          // if does not exist, create it
+          if ($option.length === 0) {
+            $option = $('<option disabled="disabled" value="">-------</option>');
+            $select.prepend($option);
+          }
+
+          // select it
+          $option.prop('selected', true);
+        });
+
+    }
+
+    function jump_to(el) {
+        const yOffset = -160;
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({top: y, behavior: 'smooth'});
+    }
+
+    function check_mandatory() {
+
+        for (var ix = 0; ix < mandatory.length; ix++) {
+            var k = mandatory[ix];
+            var el = $('#' + k);
+
+            if (el.attr('type') === 'hidden') continue;
+
+            if (el.parent().parent().hasClass('not-required')) continue;
+
+            empty = true;
+            if (el.is('input:text')) {
+                empty = (!$.trim(el.val()).length);
+            } else if (el.is('select')) {
+                empty = (!el.val());
+            } else if (el.is('textarea')) {
+                empty = (!$.trim(el.val()));
+            } else if (el.is('div')) {
+                empty = (!el.find('input:checked').length)
+            }
+
+            el.next('p').remove();
+            if (empty) {
+                el.after( "<p><b class='form-error' style='color: var(--ter-clr);'>Please select a value</b></p>" );
+                jump_to(document.getElementById(k));
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    {% if avatar_form %}
+
+        var upload = '{% url 'character_profile_upload' event.slug run.number character.number %}';
+        var rotate_l = '{% url 'character_profile_rotate' event.slug run.number character.number 1 %}';
+        var rotate_r = '{% url 'character_profile_rotate' event.slug run.number character.number 0 %}';
+
+        function profile_update(src) {
+            timestamp = (new Date()).getTime();
+            newUrl = src + '?_=' + timestamp;
+            $('#profile').attr("src", newUrl);
+        }
+
+        $('#rotate_l_btn').on('click', function () {
+            $('#profile').attr("src", "");
+            $.ajax({
+                url: rotate_l,
+                context: document.body,
+                success: function(d){
+                    profile_update(d.src);
+
+                }
+            });
+        });
+
+
+        $('#rotate_r_btn').on('click', function () {
+            $('#profile').attr("src", "");
+            $.ajax({
+                url: rotate_r,
+                context: document.body,
+                success: function(d){
+                    profile_update(d.src);
+                }
+            });
+        });
+
+    {% endif %}
+
+    });
+
+    </script>
+{% endblock %}

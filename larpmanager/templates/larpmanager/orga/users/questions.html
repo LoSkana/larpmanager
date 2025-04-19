@@ -1,0 +1,70 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Questions" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the questions submitted by players." %}
+{% endblock %}
+{% block content %}
+    <p>
+        <a href="#" class="my_toggle" tog='closed'>{% trans "Show questions already answered" %}</a>
+    </p>
+    <table id="questions" class="tablesorter mob">
+        <thead>
+            <tr>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Member" %}</th>
+                <th>{% trans "Question" %}</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in open %}
+                <tr>
+                    <td>{{ el.created }}</td>
+                    <td>{{ el.member }}</td>
+                    <td>{{ el.text }}</td>
+                    <td>
+                        {% if el.attachment %}
+                            &nbsp;&nbsp;&nbsp;<a href="{% url 'help_attachment' el.id %}" target="_blank">{% trans "Attachment" %}</a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_questions_answer' run.event.slug run.number el.member_id %}">{% trans "Answer" %}</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_questions_close' run.event.slug run.number el.member_id %}">{% trans "Close" %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="hide closed">
+        <h2>Domande già risposte</h2>
+        <table id="questions" class="tablesorter mob">
+            <thead>
+                <tr>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Member" %}</th>
+                    <th>{% trans "Question" %}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for el in closed %}
+                    <tr>
+                        <td>{{ el.created }}</td>
+                        <td>{{ el.member }}</td>
+                        <td>{{ el.text }}</td>
+                        <td>
+                            <a href="{% url 'orga_questions_answer' run.event.slug run.number el.member.id %}">{% trans "Answer" %}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

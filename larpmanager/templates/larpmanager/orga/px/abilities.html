@@ -1,0 +1,72 @@
+{% extends 'utils.html' %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Ability" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page summarizes the abilities that players can purchase with px." %}
+{% endblock %}
+{% block content %}
+    {% include "elements/header/orga.html" %}
+    <table id="abilities" class="tablesorter mob writing">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Cost" %}</th>
+                <th>{% trans "Description" %}</th>
+                <th>{% trans "Players" %}</th>
+                {% if px_user %}
+                    <th>{% trans "Visible" %}</th>
+                    <th>{% trans "Prerequisites" %}</th>
+                    {% if features.character_form %}
+                        <th>{% trans "Subordinates" %}</th>
+                    {% endif %}
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.name }}</td>
+                    <td>{{ el.cost }}</td>
+                    <td>
+                        {{ el.descr | safe | clean_tags | truncatechars:80 }}
+                        {% if el.descr_ln > 80 %}
+                            <a href="#" class="show_popup" pop="{{ el.id }}" fie="descr"><i class="fas fa-eye"></i></a>
+                            <span class="popup_text descr">
+                                <h2>{{ el.name }}</h2>
+                            {% show_char el.descr run 1 %} </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% for ab in el.characters.all %}
+                            {% include "elements/comma.html" %}
+                            <a href="{% url 'orga_characters_edit' run.event.slug run.number ab.number %}">{{ ab.name }}</a>
+                        {% endfor %}
+                    </td>
+                    {% if px_user %}
+                        <td>{{ el.visible }}</td>
+                        <td>
+                            {% for ab in el.prerequisites.all %}
+                                {% include "elements/comma.html" %}
+                                <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number ab.number %}">{{ ab.name }}</a>
+                            {% endfor %}
+                        </td>
+                        {% if features.character_form %}
+                            <td>
+                                {% for opt in el.dependents.all %}
+                                    {% include "elements/comma.html" %}
+                                    {{ opt.display }}
+                                {% endfor %}
+                            </td>
+                        {% endif %}
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Vote" %} - {% trans "Organization" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the settings available for the membership voting." %}
+{% endblock %}
+{% block content %}
+    <h3>{% trans "Collected votes" %}</h3>
+    <table class='tablesorter mob'>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Voti</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for idx, el in candidates.items %}
+                <tr>
+                    <td>{{ el }}</td>
+                    <td>{{ el.votes }}</td>
+                </tr>
+            {% endfor %}
+            <tbody>
+            </table>
+            <h3>{% trans "List of voters" %}</h3>
+            <p>
+                {% for el in voters %}
+                    {% include "elements/comma.html" %}
+                    {{ el }}
+                {% endfor %}
+            </p>
+        {% endblock %}
+        {% block js %}
+            <script>window.addEventListener('DOMContentLoaded', function() {
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('*[data-column="1"]').click();
+                $('*[data-column="1"]').click();
+            }, 500);
+        });
+    });
+            </script>
+        {% endblock %}

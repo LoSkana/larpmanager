@@ -1,0 +1,43 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Competences" %} - {{ comp.name }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows in detail, for each expertise, the users who have indicated it." %}
+{% endblock %}
+{% block content %}
+    <table id="main_table" class="tablesorter mob">
+        <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Experience" %}</th>
+                <th>{% trans "Info" %}</th>
+                <th>{% trans "Number events" %}</th>
+                <th>{% trans "Events" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>{{ el.member }}</td>
+                    <td>{{ el.exp }}</td>
+                    <td>{{ el.info | safe }}</td>
+                    <td>{{ el.working | length }}</td>
+                    <td>
+                        {% for ec in el.working %}
+                            {% include "elements/comma.html" %}
+                            {{ ec }}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p>
+        {% for el in list %}
+            {% include "elements/comma.html" %}
+            {{ el.member.email }}
+        {% endfor %}
+    </p>
+{% endblock %}

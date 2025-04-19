@@ -1,0 +1,228 @@
+{% extends 'utils.html' %}
+{% load i18n static %}
+{% block title %}
+    {% trans "Pdf" %} - {{ run }}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows the settings for PDF printing." %}
+{% endblock %}
+{% block content %}
+    <div id="sheet_pdf">
+        <table class="mob no_csv">
+            <tr>
+                <td>
+                    <a href="{% url 'orga_gallery_pdf' run.event.slug run.number %}"
+                       download>{% trans "Gallery Pdf" %}</a>
+                </td>
+                <td>
+                    <a href="{% url 'orga_gallery_test' run.event.slug run.number %}"
+                       target="_blank">{% trans "Test gallery" %}</a>
+                </td>
+                <td>
+                    <a href="{% url 'orga_profiles_pdf' run.event.slug run.number %}"
+                       download>{% trans "PDF Profiles" %}</a>
+                </td>
+            </tr>
+        </table>
+        <h2>{% trans "Try the sheet generation" %}</h2>
+        <table class="mob no_csv">
+            <tr>
+                <td>
+                    <select id="char">
+                        <option selected disabled>------</option>
+                        {% for ch in list %}<option value="{{ ch.number }}">{{ ch }}</option>{% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <a orig="{% url 'orga_characters_sheet_pdf' run.event.slug run.number 0 %}"
+                       class="link"
+                       download>{% trans "Complete sheet (Pdf)" %}</a>
+                </td>
+                <td>
+                    <a orig="{% url 'orga_characters_sheet_test' run.event.slug run.number 0 %}"
+                       class="link"
+                       target="_blank">{% trans "Complete sheet (Test)" %}</a>
+                </td>
+                <td>
+                    <a orig="{% url 'orga_characters_friendly_pdf' run.event.slug run.number 0 %}"
+                       class="link"
+                       download>{% trans "Lightweight card (Pdf)" %}</a>
+                </td>
+                <td>
+                    <a orig="{% url 'orga_characters_friendly_test' run.event.slug run.number 0 %}"
+                       class="link"
+                       target="_blank">{% trans "Lightweight board (Test)" %}</a>
+                </td>
+                <td>
+                    <a orig="{% url 'orga_characters_relationships_pdf' run.event.slug run.number 0 %}"
+                       class="link"
+                       download>{% trans "Ties (Pdf)" %}</a>
+                </td>
+                <td>
+                    <a orig="{% url 'orga_characters_relationships_test' run.event.slug run.number 0 %}"
+                       class="link"
+                       target="_blank">{% trans "Ties (Test)" %}</a>
+                </td>
+            </tr>
+        </table>
+        {% if event.sheet_template %}
+            <p>
+                {% trans "Current template" %}: <a href="{{ event.download_sheet_template }}">{% trans "download" %}</a>
+            </p>
+        {% endif %}
+        <h2>
+            <a href="#" class="my_toggle" tog='info'>{% trans "Template instructions" %}</a>
+        </h2>
+        <div class="hide info">
+            <table class="mob no_csv">
+                <tr>
+                    <th>Default settings</th>
+                    <td>
+                        Place inside the field "PAGE CSS" the following code:
+                        <br />
+                        <hr />
+                        <span class="code">@page { size: "A4"; @frame content_frame { margin: 2cm; } }</span>
+                        <hr />
+                        This code will command the generated PDF to be of size A4, with a page margin of 2cm (if you wish you can change this settings, of course).
+                    </td>
+                </tr>
+                <tr>
+                    <th>Page background</th>
+                    <td>
+                        Make sure your image has size compatible with the chosen page size (for example ratio 1:√2 for A4). Then upload the image on the <a href="{% url 'orga_utils' run.event.slug run.number %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
+                        <br />
+                        <hr />
+                        <span class="code">@page { [... other stuff ...] background: url('#internal_link#'); }</span>
+                        <hr />
+                        (Please note that this command needs to be inside the @page part!)
+                    </td>
+                </tr>
+                <tr>
+                    <th>Fonts</th>
+                    <td>
+                        <b><i>Make sure the font has format TTF (Truetype), otherwise find some online tool to convert it!</i></b>
+                        <br />
+                        <br />
+                        Then upload the font on the <a href="{% url 'orga_utils' run.event.slug run.number %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
+                        <br />
+                        <hr />
+                        <span class="code">@font-face { font-family: '#name#'; src: url('#internal_link#'); }
+                            <br />
+                        #char_name { font-family: '#name#'; }</span>
+                        <hr />
+                        (Change #name# with something appropriate! Commong tags: #char_name for the character name, #char_title for the character title, #char_motto for the character motto, h2 for the paragraph titles)
+                    </td>
+                </tr>
+                <tr>
+                    <th>Header</th>
+                    <td>
+                        Upload the HTML code that will go in the header in the field "HEADER CONTENT" (if you wish to use images, remmber to upload them on the <a href="{% url 'orga_utils' run.event.slug run.number %}">{% trans "Utils" %}</a>, and to refer to them with the internal link). Then place the following in the "PAGE CSS":
+                        <br />
+                        <hr />
+                        <span class="code">@page { [... other stuff ...] @frame header_frame { -pdf-frame-content: header_content; top: 1cm; } }</span>
+                        <hr />
+                        (Please note that this command needs to be inside the @page part!)
+                        <br />
+                        This code will generate a header directly on top of the page, with a margin of 0.5cm (if you wish you can change this settings, of course)
+                    </td>
+                </tr>
+                <tr>
+                    <th>Footer</th>
+                    <td>
+                        Upload the HTML code that will go in the header in the field "HEADER CONTENT". Note that you can use "&lt;pdf:pagenumber&gt;" and "&lt;pdf:pagecount&gt;" for the page numbers. Then place the following in the "PAGE CSS":
+                        <br />
+                        <hr />
+                        <span class="code">@page { [... other stuff ...] @frame footer_frame { -pdf-frame-content: footer_content; top: 28.5cm;  } }</span>
+                        <hr />
+                        (Please note that this command needs to be inside the @page part!)
+                        <br />
+                        This code will generate a header directly on bottom of the page, with a margin of 0.5cm (if you wish you can change this settings, of course)
+                    </td>
+                </tr>
+                <tr>
+                    <th>Special codes</th>
+                    <td>
+                        These codes are available to be put in the header / footer:
+                        <br />
+                        "&lt;pdf:pagenumber&gt;" -> page number
+                        <br />
+                        "&lt;pdf:pagecount&gt;" -> page count
+                        <br />
+                        "&lt;pdf:number&gt;" -> character number
+                        <br />
+                        "&lt;pdf:name&gt;" -> character name
+                        <br />
+                        "&lt;pdf:title&gt;" -> character title
+                        <br />
+                        "&lt;pdf:motto&gt;" -> char motto
+                        <br />
+                        "&lt;pdf:organization&gt;" -> organization name
+                        <br />
+                        "&lt;pdf:event&gt;" -> event name
+                    </td>
+                </tr>
+                <tr>
+                    <th>Header / Footer content</th>
+                    <td>
+                        Example of text to put in either the header or the footer:
+                        <br />
+                        <hr />
+                        <span class="code">
+                            &lt;table&gt;
+                            &lt;tr&gt;
+                            &lt;td&gt;&lt;pdf:organization&gt;&lt;/td&gt;
+                            &lt;td&gt;&lt;pdf:name&gt;&lt;/td&gt;
+                            &lt;td&gt;&lt;pdf:event&gt;&lt;/td&gt;
+                            &lt;/tr&gt;
+                        &lt;/table&gt;</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Links</th>
+                    <td>
+                        Format them in the "PAGE CSS":
+                        <br />
+                        <hr />
+                        <span class="code">a { color: #desiredcolor; }</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>I WANT MORE!</th>
+                    <td>
+                        Preem, choom! <a href="https://xhtml2pdf.readthedocs.io/en/latest/format_html.html">Have fun.</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <form action="{{ request.path }}"
+              method="post"
+              enctype="multipart/form-data">
+            {% csrf_token %}
+            <table class="mob no_csv">
+                {{ form.as_table }}
+                <br />
+                <br />
+                <input type="submit" value="{% trans 'Confirm' %}">
+            </table>
+            <br />
+            <br />
+            <a href="{% url 'orga_pdf_regenerate' run.event.slug run.number %}">{% trans "Regenerate (recreates all pdf: slow)" %}</a>
+        </form>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>window.addEventListener('DOMContentLoaded', function() {
+    var old = '0'
+$(function(){
+$('#char').change(function() {
+    var id = $(this).val();
+    $('.link').each(function() {
+        var href = $(this).attr('orig');
+        $(this).attr('href', href.replace('0/pdf', id + '/pdf' ));
+    });
+    old = id;
+  });
+});
+});
+    </script>
+{% endblock %}

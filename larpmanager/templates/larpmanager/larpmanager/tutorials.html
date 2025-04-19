@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load i18n static show_tags %}
+{% block title %}
+    Tutorials
+    {% if not intro %}- {{ tutorial.name }}{% endif %}
+{% endblock %}
+{% block content %}
+    <div id="tutorials">
+        <div class="column">
+            {% for el in list %}
+                <a href="{% url 'tutorials' el.2 %}"
+                   {% if el.1 == seq %}class="select"{% endif %}>{{ el.0 | template_trans }}</a>
+            {% endfor %}
+        </div>
+        <div class="feature">
+            {% if intro %}
+                <p>
+                    <i>
+                        {% trans "With these tutorials, you can learn how to use the tool in no time!" %}
+                        {% trans "You can read them in order, or scroll directly to the one that interests you most." %}
+                    </i>
+                </p>
+            {% endif %}
+            <table class="navig">
+                <tr>
+                    <td>
+                        {% if prev %}
+                            {% trans "Prev" %}: <a href="{% url 'tutorials' prev.2 %}">{{ prev.0 | template_trans }}</a>
+                        {% endif %}
+                    </td>
+                    <td></td>
+                    <td>
+                        {% if next %}
+                            {% trans "Next" %}: <a href="{% url 'tutorials' next.2 %}">{{ next.0 | template_trans }}</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+            <div id="tutorial-nav" class="nav"></div>
+            <div id="tutorial-descr">{{ tutorial.descr | safe }}</div>
+            <table class="navig">
+                <tr>
+                    <td>
+                        {% if prev %}
+                            {% trans "Prev" %}: <a href="{% url 'tutorials' prev.2 %}">{{ prev.0 | template_trans }}</a>
+                        {% endif %}
+                    </td>
+                    <td></td>
+                    <td>
+                        {% if next %}
+                            {% trans "Next" %}: <a href="{% url 'tutorials' next.2 %}">{{ next.0 | template_trans }}</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+window.addEventListener('DOMContentLoaded', function() {
+
+    function slugify(text) {
+        return text
+            .toString()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w\-]+/g, '')
+            .replace(/\-\-+/g, '-')
+            .replace(/^-+/, '')
+            .replace(/-+$/, '');
+    }
+
+    $(function() {
+
+        $( "p" ).each(function( index ) {
+            // console.log( index + ": " + $( this ).text() );
+            val = $.trim($( this ).html());
+            if (val == "" || val == "&nbsp;")
+                $( this ).hide();
+        });
+
+       $('h2').each(function() {
+            var h2Text = $(this).text();
+            var slug = slugify(h2Text);
+
+            $(this).attr('id', slug);
+
+            var link = $('<a></a>')
+                .attr('href', '#' + slug)
+                .text(h2Text);
+
+            $('#tutorial-nav').append(link);
+        });
+
+        if ($('#tutorial-nav').children().length > 0) {
+            $('#tutorial-nav').after('<hr>');
+        }
+
+        // custom scroll with offset
+        $('a[href^="#"]').on('click', function(event) {
+            event.preventDefault();
+
+            var target = $($(this).attr('href'));
+            var headerHeight = $('header').outerHeight();
+            var offset = 20;
+
+            $('html, body').animate({
+                scrollTop: target.offset().top - headerHeight - offset
+            }, 500);
+        });
+
+        // all link open in new page
+        $('#tutorial-descr a').attr('target', '_blank');
+
+        // check if this page was opened by requesting an anchor
+        const anchor = window.location.hash.substring(1);
+        if (anchor) {
+            const targetLink = $('#tutorial-nav a[href="#' + anchor + '"]');
+            if (targetLink.length) targetLink.trigger('click');
+        }
+
+    });
+});
+
+    </script>
+{% endblock %}

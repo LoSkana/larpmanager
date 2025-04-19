@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}Chats{% endblock %}
+{% block content %}
+    <table class="mob">
+        <thead>
+            <tr>
+                <th>{% trans 'User' %}</th>
+                <th>{% trans 'Your messages' %}</th>
+                <th>{% trans 'Unread' %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr>
+                    <td>
+                        <a href="{% url 'public' el.you.id %}">{{ el.you.display_member }}</a>
+                    </td>
+                    <td>{{ el.last_message }}</td>
+                    <td>
+                        {% if el.num_unread > 0 %}{{ el.num_unread }}{% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'chat' el.you.id %}">Chat</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

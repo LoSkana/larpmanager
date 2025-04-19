@@ -1,0 +1,22 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Send emails" %} - {% trans "Organization" %}
+{% endblock %}
+{% block info %}
+    {% trans "From this page you can send an email to any list of recipients." %}
+{% endblock %}
+{% block content %}
+    <p>{% trans "Remember to put recipients separated by commas" %}</p>
+    {% include "elements/form/sections.html" %}
+{% endblock %}
+{% block js %}
+    <script>window.addEventListener('DOMContentLoaded', function() {
+$(function() {
+    $('form').on('submit', function() {
+        return confirm('{% trans "Are you really sure?" %}');
+    });
+});
+});
+    </script>
+{% endblock %}

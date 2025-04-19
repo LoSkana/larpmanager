@@ -1,0 +1,42 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Outflows" %} - {% trans "Organization" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows all expense items recorded in the system." %}
+{% endblock %}
+{% block content %}
+    {% include "elements/header/exe.html" %}
+    {% include "elements/paginate.html" %}
+    <table id="outflows" class="tablesorter mob">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Run" %}</th>
+                <th>{% trans "Type" %}</th>
+                <th>{% trans "Description" %}</th>
+                <th>{% trans "Value" %}</th>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Statement" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'exe_outflows_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.run }}</td>
+                    <td>{{ el.get_exp_display }}</td>
+                    <td>{{ el.descr }}</td>
+                    <td>{{ el.value }}</td>
+                    <td>{{ el.payment_date | date:"d/m/Y" }}</td>
+                    <td>
+                        <a href="{{ el.download }}">{% trans "Download" %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

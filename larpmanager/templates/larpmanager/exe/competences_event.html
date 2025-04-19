@@ -1,0 +1,35 @@
+{% extends 'utils.html' %}
+{% load i18n %}
+{% block title %}
+    {% trans "Competences events" %}
+{% endblock %}
+{% block info %}
+    {% trans "This page shows for each event, the collaborators marked with which expertise." %}
+{% endblock %}
+{% block content %}
+    <table id="main_table" class="tablesorter mob">
+        <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Staff" %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'exe_competences_event_detail' el.slug %}">{{ el.name }}</a>
+                    </td>
+                    <td>{{ el.staff | length }}</td>
+                    <td>
+                        {% for ec in el.staff %}
+                            {% include "elements/comma.html" %}
+                            {{ ec }}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
