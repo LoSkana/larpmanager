@@ -1,0 +1,16 @@
+COMMERCIAL LICENSE AGREEMENT
+
+This license allows the Licensee to use LarpManager in proprietary or closed-source environments without complying with the AGPLv3.
+
+Rights granted:
+- Use in a closed-source environment
+- Modify and deploy privately
+- Receive commercial support (optional)
+- Customize branding and features
+
+Restrictions:
+- You may not resell or sublicense the software
+- You may not claim ownership of LarpManager
+
+Valid only with proof of purchase or signed agreement.
+Contact commercial@larpmanager.com for licensing and pricing.
