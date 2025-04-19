@@ -67,12 +67,6 @@ In order to deploy:
 4. Load the fixtures with `python manage.py reset`. It will create a test organization with three users, `admin` (superuser), `orga@test.it` (organizer with role access to organization and test event), `user@test.it` (simple user). The password for all of them is `banana`.
 5. In `SLUG_ASSOC`, put the slug of the organization that will be loaded (by default `test`)
 
-In the future, when you want to update with the latest updates of the master branch, run
-   ```bash
-   ./scripts/deploy.sh
-   ```
-This will update the code, the virtual env requirements, the npm modules, the static files, the language translations, the features and permissions.
-
 ---
 
 ## Develop
@@ -128,7 +122,7 @@ Thanks in advance for contributing! Here's the steps:
    ```bash
    ./scripts/upgrade.sh
    ```
-   This will execute some helpful activities like making sure you're updated with master branch, deleting old local branches, and other small things like that.
+   This will execute some helpful activities like making sure you're updated with main branch, deleting old local branches, and other small things like that.
 8. Go and open [a new pull request](https://github.com/loskana/larpmanager/pulls). Make sure to explain clearly in the description what's happening.
 
 ### New features

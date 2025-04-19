@@ -2,9 +2,9 @@ name: Pipeline
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
 
 jobs:
   test:
@@ -71,10 +71,10 @@ jobs:
     - name: Debug contenuto cartelle test
       run: |
         echo "Contenuto test_videos:"
-        ls -l test_videos || echo "Cartella vuota o non trovata"
+        ls -l test_videos || echo "Empty folder or not found"
 
         echo "Contenuto test_screenshots:"
-        ls -l test_screenshots || echo "Cartella vuota o non trovata"
+        ls -l test_screenshots || echo "Empty folder or not found"
 
     - name: Upload test videos
       if: always()
@@ -105,4 +105,4 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_KEY }}
-        script: /var/www/larpmanager/prod/scripts/deploy.sh
+        script: deploy-larpmanager
