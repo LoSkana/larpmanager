@@ -1,0 +1,108 @@
+name: Pipeline
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test:
+    name: CI
+    runs-on: self-hosted
+
+    container:
+      image: ghcr.io/loskana/playwright-django:latest
+
+      credentials:
+        username: loskana
+        password: ${{ secrets.REPO_TOKEN }}
+
+    env:
+      CI: true
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: test_db
+          POSTGRES_OPTS: "-c fsync=off -c full_page_writes=off -c synchronous_commit=off"
+        options: >-
+          --health-cmd "pg_isready -U test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt -q
+        cd larpmanager/static
+        npm install
+        cd ../../
+
+    - name: Copy media fixtures
+      run: |
+        mkdir -p ../media/
+        cp -r larpmanager/tests/media/* ../media/
+        ls -al ../media/
+
+    - name: Migrate database
+      run: |
+        python manage.py makemigrations larpmanager
+        python manage.py migrate
+        python manage.py compilemessages
+        python manage.py collectstatic --noinput
+        python manage.py compress
+
+    - name: Run Django tests
+      run: |
+        export PYTEST_CURRENT_TEST="true"
+        # multiple parallel workers with -n
+        pytest -rs -n 4 -vvv
+
+    - name: Debug contenuto cartelle test
+      run: |
+        echo "Contenuto test_videos:"
+        ls -l test_videos || echo "Cartella vuota o non trovata"
+
+        echo "Contenuto test_screenshots:"
+        ls -l test_screenshots || echo "Cartella vuota o non trovata"
+
+    - name: Upload test videos
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-videos
+        path: test_videos/
+
+    - name: Upload test screenshots
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-screenshots
+        path: test_screenshots/
+
+  deploy:
+    name: CD
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.base_ref == ''
+    steps:
+
+    - uses: actions/checkout@v3
+
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@v0.1.4
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_KEY }}
+        script: /var/www/larpmanager/prod/scripts/deploy.sh
