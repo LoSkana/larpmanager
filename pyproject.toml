@@ -1,0 +1,21 @@
+[project]
+name = "larpmanager"
+version = "1.0.0"
+license = "AGPL-3.0-or-later"
+classifiers = [
+  "License :: OSI Approved :: GNU Affero General Public License v3",
+  "Programming Language :: Python :: 3"
+]
+
+[tool.djlint]
+ignore="H006"
+extend_exclude="static/,larpmanager/static/"
+
+[tool.ruff]
+line-length = 120
+lint.select = ["F", "E", "B", "UP"] # F, E, B, UP, I, N, PL, D
+lint.ignore = ["ISC001", "E501"]
+extend-exclude = ["main"]
+
+[tool.ruff.format]
+quote-style = "double"
