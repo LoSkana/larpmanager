@@ -4,7 +4,7 @@ on:
     types: [opened, reopened, synchronize]
 
 permissions:
-  pull-requests: write
+  contents: read
 
 jobs:
   auto-approve:
