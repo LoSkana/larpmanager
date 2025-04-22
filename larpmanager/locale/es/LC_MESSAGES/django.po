@@ -185,6 +185,12 @@ msgstr "Tamaño"
 msgid "past"
 msgstr "pasado"
 
+msgid "Body"
+msgstr "Cuerpo"
+
+msgid "Sent"
+msgstr "Enviado"
+
 msgid "Card"
 msgstr "Tarjeta"
 
@@ -807,6 +813,9 @@ msgstr "Configuración"
 msgid "History"
 msgstr "Histórico"
 
+msgid "Subject"
+msgstr "Asunto"
+
 msgid "Payment"
 msgstr "Pago"
 
@@ -851,6 +860,9 @@ msgstr "Utilidad"
 
 msgid "Shuttle"
 msgstr "Lanzadera"
+
+msgid "Archive"
+msgstr "Archivo"
 
 msgid "Modules"
 msgstr "Módulos"
@@ -1227,6 +1239,9 @@ msgstr "Custodios"
 msgid "Short url"
 msgstr "URL corta"
 
+msgid "Recipient"
+msgstr "Destinatario"
+
 msgid "Residence"
 msgstr "Residencia"
 
@@ -1505,9 +1520,6 @@ msgstr "Histórico"
 
 msgid "Statistics"
 msgstr "Estadísticas"
-
-msgid "Mail sent!"
-msgstr "¡Correo enviado!"
 
 msgid "Disbursment"
 msgstr "Desembolso"
@@ -1823,6 +1835,9 @@ msgstr "Suscripción"
 
 msgid "Url Shortner"
 msgstr "Acortador de Url"
+
+msgid "Archive mail"
+msgstr "Archivo de correo"
 
 msgid "Members list"
 msgstr "Lista de miembros"
@@ -3069,6 +3084,9 @@ msgstr "Lista de otros usuarios:"
 
 msgid "Sign up as a filler!"
 msgstr "¡Apúntate como relleno!"
+
+msgid "Mail added to queue!"
+msgstr "¡Correo añadido a la cola!"
 
 msgid "Gift card cancelled!"
 msgstr "¡Tarjeta regalo cancelada!"
@@ -4685,6 +4703,11 @@ msgstr "Estas son las opciones de inscripción con disponibilidad  limitada."
 
 msgid "You are including (at least one of these filters)"
 msgstr "Estas incluyendo (al menos uno de) estos filtros"
+
+msgid "This page shows all emails, both queued and sent."
+msgstr ""
+"Esta página muestra todos los correos electrónicos, tanto en cola como "
+"enviados."
 
 msgid "This page allows you to upload a new photo album."
 msgstr "Esta página te permite cargar un nuevo álbum de fotos."

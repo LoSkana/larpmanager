@@ -69,7 +69,7 @@ from larpmanager.accounting.invoice import invoice_verify
 from larpmanager.accounting.balance import get_run_accounting, check_accounting, assoc_accounting_data, assoc_accounting
 from larpmanager.cache.role import check_assoc_permission
 from larpmanager.utils.edit import backend_get, exe_edit
-from larpmanager.views.exe.assoc import exe_paginate
+from larpmanager.utils.paginate import exe_paginate
 from larpmanager.views.orga.accounting import assign_payment_fee
 
 

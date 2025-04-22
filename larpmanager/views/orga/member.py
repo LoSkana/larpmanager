@@ -34,11 +34,12 @@ from larpmanager.forms.miscellanea import OrgaHelpQuestionForm, SendMailForm
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.event import PreRegistration
 from larpmanager.models.member import Membership, Member
-from larpmanager.models.miscellanea import HelpQuestion
+from larpmanager.models.miscellanea import HelpQuestion, Email
 from larpmanager.models.registration import (
     RegistrationTicket,
 )
 from larpmanager.cache.character import get_event_cache_all
+from larpmanager.utils.paginate import orga_paginate
 from larpmanager.utils.tasks import send_mail_exec
 
 
@@ -265,6 +266,13 @@ def orga_send_mail(request, s, n):
         form = SendMailForm()
     ctx["form"] = form
     return render(request, "larpmanager/exe/users/send_mail.html", ctx)
+
+
+@login_required
+def orga_archive_email(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_archive_email")
+    orga_paginate(request, ctx, Email)
+    return render(request, "larpmanager/exe/users/archive_mail.html", ctx)
 
 
 @login_required

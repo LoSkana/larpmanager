@@ -185,6 +185,12 @@ msgstr "Enheter"
 msgid "past"
 msgstr "fortid"
 
+msgid "Body"
+msgstr "Kropp"
+
+msgid "Sent"
+msgstr "Sendt"
+
 msgid "Card"
 msgstr "Kort"
 
@@ -807,6 +813,9 @@ msgstr "Innstilling"
 msgid "History"
 msgstr "Historisk"
 
+msgid "Subject"
+msgstr "Emne"
+
 msgid "Payment"
 msgstr "Betaling"
 
@@ -851,6 +860,9 @@ msgstr "Verktøy"
 
 msgid "Shuttle"
 msgstr "Skyttelbuss"
+
+msgid "Archive"
+msgstr "Arkiv"
 
 msgid "Modules"
 msgstr "Moduler"
@@ -1227,6 +1239,9 @@ msgstr "Tilfeller"
 msgid "Short url"
 msgstr "Kort nettadresse"
 
+msgid "Recipient"
+msgstr "Mottaker"
+
 msgid "Residence"
 msgstr "Bolig"
 
@@ -1505,9 +1520,6 @@ msgstr "Historisk"
 
 msgid "Statistics"
 msgstr "Statistikk"
-
-msgid "Mail sent!"
-msgstr "Mail sendt!"
 
 msgid "Disbursment"
 msgstr "Utbetaling"
@@ -1823,6 +1835,9 @@ msgstr "Abonnement"
 
 msgid "Url Shortner"
 msgstr "URL-forkortelse"
+
+msgid "Archive mail"
+msgstr "Arkivpost"
 
 msgid "Members list"
 msgstr "Medlemsliste"
@@ -3069,6 +3084,9 @@ msgstr "Liste over andre brukere:"
 
 msgid "Sign up as a filler!"
 msgstr "Registrer deg som utfyller!"
+
+msgid "Mail added to queue!"
+msgstr "Mail lagt til i køen!"
 
 msgid "Gift card cancelled!"
 msgstr "Gavekortet er kansellert!"
@@ -4687,6 +4705,9 @@ msgstr "Her er det begrensede antallet påmeldingsalternativer."
 
 msgid "You are including (at least one of these filters)"
 msgstr "Du inkluderer (minst ett av) disse filtrene"
+
+msgid "This page shows all emails, both queued and sent."
+msgstr "Denne siden viser alle e-poster, både i kø og sendt."
 
 msgid "This page allows you to upload a new photo album."
 msgstr "På denne siden kan du laste opp et nytt fotoalbum."

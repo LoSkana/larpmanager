@@ -114,8 +114,7 @@ def my_send_mail_bkg(email_pk):
         print("email already sent!")
         return
 
-    my_send_simple_mail(email.subj, email.body, email.recipient,
-        email.assoc_id, email.run_id, email.reply_to)
+    my_send_simple_mail(email.subj, email.body, email.recipient, email.assoc_id, email.run_id, email.reply_to)
 
     email.sent = timezone.now()
     email.save()
@@ -233,18 +232,18 @@ def my_send_mail(subj, body, recipient, obj=None, reply_to=None, schedule=0):
     if obj:
         if isinstance(obj, Run):
             run_id = obj.id
-            assoc_id = obj.event.assoc_id # type: ignore[attr-defined]
+            assoc_id = obj.event.assoc_id  # type: ignore[attr-defined]
         if isinstance(obj, Event):
-            assoc_id = obj.assoc_id # type: ignore[attr-defined]
+            assoc_id = obj.assoc_id  # type: ignore[attr-defined]
         elif isinstance(obj, Association):
             assoc_id = obj.id  # type: ignore[attr-defined]
-        elif hasattr(obj, 'run_id') and obj.run_id:
+        elif hasattr(obj, "run_id") and obj.run_id:
             run_id = obj.run_id
             assoc_id = obj.run.event.assoc_id
-        elif hasattr(obj, 'assoc_id') and obj.assoc_id:
+        elif hasattr(obj, "assoc_id") and obj.assoc_id:
             assoc_id = obj.assoc_id
-        elif hasattr(obj, 'event_id') and obj.event_id:
-            assoc_id = obj.event.assoc_id 
+        elif hasattr(obj, "event_id") and obj.event_id:
+            assoc_id = obj.event.assoc_id
 
         if assoc_id:
             sign = get_assoc_text(assoc_id, AssocText.SIGNATURE)
@@ -262,12 +261,7 @@ def my_send_mail(subj, body, recipient, obj=None, reply_to=None, schedule=0):
     body_str = str(body)
 
     email = Email.objects.create(
-        assoc_id=assoc_id,
-        run_id=run_id,
-        recipient=recipient,
-        subj=subj_str,
-        body=body_str,
-        reply_to=reply_to
+        assoc_id=assoc_id, run_id=run_id, recipient=recipient, subj=subj_str, body=body_str, reply_to=reply_to
     )
 
     my_send_mail_bkg(email.pk, schedule=schedule)

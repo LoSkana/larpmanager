@@ -1,18 +1,25 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Archive mail" %} - {% trans "Organization" %}
-{% endblock %}
+    {% trans "Archive mail" %} -
+    {% if exe %}
+        {% trans "Organization" %}
+    {% else %}
+        {{ run }}
+    {% endif %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows all emails, both queued and sent." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
     {% include "elements/paginate.html" %}
     <table id="inflows" class="tablesorter mob">
         <thead>
             <tr>
-                <th>{% trans "Run" %}</th>
+                {% if exe %}
+                    <th>{% trans "Run" %}</th>
+                {% endif %}
                 <th>{% trans "Recipient" %}</th>
                 <th>{% trans "Subject" %}</th>
                 <th>{% trans "Body" %}</th>
@@ -22,13 +29,19 @@
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.id }}">
-                    <td>{% if el.run %}{{ el.run }}{% endif %}</td>
+                    {% if exe %}
+                        <td>
+                            {% if el.run %}{{ el.run }}{% endif %}
+                        </td>
+                    {% endif %}
                     <td>{{ el.recipient }}</td>
                     <td>{{ el.subj }}</td>
                     <td>{{ el.body | striptags | truncatechars:100 }}</td>
-                    <td>{% if el.sent %}{{ el.sent | date:"d/m/Y" }}{% endif %}</td>
+                    <td>
+                        {% if el.sent %}{{ el.sent | date:"d/m/Y" }}{% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

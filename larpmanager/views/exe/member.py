@@ -53,7 +53,8 @@ from larpmanager.models.event import (
 )
 from larpmanager.models.member import Membership, Badge, VolunteerRegistry, Member, Vote, get_user_membership
 from larpmanager.models.miscellanea import (
-    HelpQuestion, Email,
+    HelpQuestion,
+    Email,
 )
 from larpmanager.models.registration import (
     Registration,
@@ -72,7 +73,7 @@ from larpmanager.utils.pdf import (
     get_membership_request,
     print_volunteer_registry,
 )
-from larpmanager.views.exe.assoc import exe_paginate
+from larpmanager.utils.paginate import exe_paginate
 from larpmanager.views.orga.member import send_mail_batch
 
 
@@ -445,15 +446,13 @@ def exe_send_mail(request):
     ctx["form"] = form
     return render(request, "larpmanager/exe/users/send_mail.html", ctx)
 
+
 @login_required
 def exe_archive_email(request):
     ctx = check_assoc_permission(request, "exe_archive_email")
-    exe_paginate(
-        request,
-        ctx,
-        Email,
-    )
+    exe_paginate(request, ctx, Email)
     return render(request, "larpmanager/exe/users/archive_mail.html", ctx)
+
 
 @login_required
 def exe_questions(request):

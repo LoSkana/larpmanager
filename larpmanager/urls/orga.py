@@ -894,6 +894,11 @@ urlpatterns = [
         name="orga_send_mail",
     ),
     path(
+        "<slug:s>/<int:n>/manage/mail/archive",
+        views_om.orga_archive_email,
+        name="orga_archive_email",
+    ),
+    path(
         "<slug:s>/<int:n>/manage/spam/",
         views_om.orga_spam,
         name="orga_spam",
