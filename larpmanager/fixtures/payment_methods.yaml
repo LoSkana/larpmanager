@@ -1,0 +1,103 @@
+- model: larpmanager.paymentmethod
+  pk: 1
+  fields:
+    name: Wire
+    slug: wire
+    instructions: <p>Input the name of the bank account of the payee (wire payee)
+      and the International Bank Account Number (wire iban)</p>
+    fields: payee, iban
+    profile: payment_methods/ac81a0b8942e41a8bbcefa197ccfb3d8.png
+- model: larpmanager.paymentmethod
+  pk: 2
+  fields:
+    name: Freeform
+    slug: any
+    instructions: <p>No need for data; the member will upload a text of any kind.&nbsp;</p>
+    fields: ''
+    profile: payment_methods/873326d033b74568bb9e79d1e96762cf.png
+- model: larpmanager.paymentmethod
+  pk: 3
+  fields:
+    name: Paypal
+    slug: paypal
+    instructions: "<ol>\r\n<li>You need to have a <strong>Business account&nbsp;</strong>(request\
+      \ it if you don't already have it)</li>\r\n<li>In <strong>PAYPAL_ID,&nbsp;</strong>put\
+      \ the email of your account (that you use to login).&nbsp;</li>\r\n<li>Open\
+      \ the following page: https://developer.paypal.com</li>\r\n<li>Log in with your\
+      \ PayPal credentials</li>\r\n<li>Click on My Apps &amp; Credentials, and then\
+      \ on the Create App button</li>\r\n<li>Enter the name of the App in App Name\
+      \ and confirm with Create App (any name will do)</li>\r\n<li>Click on the \"\
+      LIVE\" selector, at this point you need to copy the Client ID and then by clicking\
+      \ on Show copy the secret key.</li>\r\n<li>Input this secret key in the field\
+      \ <strong>PAYPAL_BUSINESS</strong></li>\r\n</ol>"
+    fields: id, business
+    profile: payment_methods/aba0f22f1f3b4cc8bfb7ca092ad0ba6e.png
+- model: larpmanager.paymentmethod
+  pk: 4
+  fields:
+    name: Stripe
+    slug: stripe
+    instructions: "<ol>\r\n<li>Login to your Stripe account: https://dashboard.stripe.com/</li>\r\
+      \n<li>Go to the API keys section: https://dashboard.stripe.com/test/apikeys</li>\r\
+      \n<li>Copy the \"Publishable key\" in <strong>STRIPE PK API</strong></li>\r\n\
+      <li>Click on \"Secret key\", reveal it, and copy it on <strong>STRIPE SK API</strong></li>\r\
+      \n<li>Go to the Webhooks section: https://dashboard.stripe.com/webhooks</li>\r\
+      \n<li>Make sure you are in the live environment (look at top right, deselect\
+      \ \"test mode\")</li>\r\n<li>Click on \"Add endpoint\"</li>\r\n<li>&nbsp;As\
+      \ link put \"https://&lt;slug&gt;.larpmanager.com/accounting/webhook/stripe\"\
+      \ (&lt;slug&gt; is the subdomain of your organization)</li>\r\n<li>Click on\
+      \ \"Select events\", then on \"Checkout\", then on \"Select all checkout events\"\
+      , then \"Add events\"</li>\r\n<li>Click on \"Add endpoint\"</li>\r\n<li>Open\
+      \ the endpoint</li>\r\n<li>Click on \"Signing secret\"</li>\r\n<li>Copy that\
+      \ value on <strong>STRIPE WEBHOOK SECRET</strong></li>\r\n</ol>"
+    fields: pk_api, sk_api, webhook_secret
+    profile: payment_methods/86a08e7ab3bd41f9be8dff0bd5302d78.png
+- model: larpmanager.paymentmethod
+  pk: 5
+  fields:
+    name: SumUp
+    slug: sumup
+    instructions: "<ol>\r\n<li>Login to your Sumup account: https://me.sumup.com/</li>\r\
+      \n<li>Copy the merchant code (top right, under the account name) in <strong>SUMUP\
+      \ MERCHANT ID</strong></li>\r\n<li>Go to the developer page: https://developer.sumup.com/protected/oauth-apps/</li>\r\
+      \n<li>Click \"Create application\"</li>\r\n<li>Insert as name \"LarpManager\"\
+      , as url https://&lt;slug&gt;.larpmanager.com (&lt;slug&gt; is your organization\
+      \ subdomain)</li>\r\n<li>Click on it&nbsp;</li>\r\n<li>Select scope \"products\"\
+      </li>\r\n<li>Make sure that the scopes \"payments\" is enabled. If not, contact\
+      \ sumup: https://developer.sumup.com/contact</li>\r\n<li>Click \"create client\
+      \ secret\"</li>\r\n<li>Copy \"Client ID\" in <strong>SUMUP CLIENT ID</strong></li>\r\
+      \n<li>Copy \"Client secret\" (download it) in <strong>SUMUP CLIENT SECRET</strong></li>\r\
+      \n</ol>"
+    fields: merchant_id, client_id, client_secret
+    profile: payment_methods/6e4c4daef26f43c0a8bac55274cca6f0.png
+- model: larpmanager.paymentmethod
+  pk: 6
+  fields:
+    name: Redsys
+    slug: redsys
+    instructions: ''
+    fields: merchant_code, merchant_terminal, merchant_currency, secret_key, sandbox,
+      merchant_paymethods
+    profile: payment_methods/d313edf6dff84bd0834b3ed32dbc1475.png
+- model: larpmanager.paymentmethod
+  pk: 7
+  fields:
+    name: Paypal (manual)
+    slug: paypal_nf
+    instructions: "<p>Input the handle of your paypal account (that will be used to\
+      \ compose the PayPal.Me link):</p>\r\n<ol class=\"X5LH0c\">\r\n<li class=\"\
+      TrT0Xe\">Log into your Paypal account.</li>\r\n<li class=\"TrT0Xe\">Click on\
+      \ the gear icon on the top right hand of the page or click here.</li>\r\n<li\
+      \ class=\"TrT0Xe\">Your PayPal name will show up under the Profile section (as\
+      \ shown in the image below)</li>\r\n</ol>"
+    fields: handle
+    profile: payment_methods/7_3b97971f5d8747b1bd225266243b5179.png
+- model: larpmanager.paymentmethod
+  pk: 8
+  fields:
+    name: Satispay
+    slug: satispay
+    instructions: '<p>Follow the instructions at: https://developers.satispay.com/reference/keyid,
+      using the authentication token provided by your Dashboard</p>'
+    fields: key_id
+    profile: payment_methods/24037547097e4bd3b530de38eaaf4ce3.png

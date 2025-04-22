@@ -22,7 +22,7 @@ import yaml
 from django.core.management.base import BaseCommand
 
 from larpmanager.models.access import AssocPermission, EventPermission
-from larpmanager.models.base import FeatureModule, Feature
+from larpmanager.models.base import FeatureModule, Feature, PaymentMethod
 
 
 class Command(BaseCommand):
@@ -34,6 +34,7 @@ class Command(BaseCommand):
             "feature": (Feature, ("id", "name", "descr", "slug", "overall", "module", "placeholder", "order")),
             "assoc_permission": (AssocPermission, ("id", "name", "slug", "number", "feature")),
             "event_permission": (EventPermission, ("id", "name", "slug", "number", "feature")),
+            "payment_methods": (PaymentMethod, ("id", "name", "slug", "instructions", "fields", "profile")),
         }
 
         for model in models:
