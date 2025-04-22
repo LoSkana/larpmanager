@@ -534,3 +534,13 @@ class PlayerRelationship(BaseModel):
                 name="unique_player_relationship_without_optional",
             ),
         ]
+
+
+class Email(BaseModel):
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, null=True)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    recipient = models.CharField(max_length=170)
+    subj = models.CharField(max_length=500)
+    body = models.TextField()
+    reply_to = models.CharField(max_length=170)
+    sent = models.DateTimeField(blank=True, null=True)

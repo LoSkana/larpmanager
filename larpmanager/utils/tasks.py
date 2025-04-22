@@ -27,11 +27,13 @@ from background_task import background
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.mail import EmailMultiAlternatives, get_connection
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.association import Association, AssocText, get_url
 from larpmanager.models.event import Event
 from larpmanager.models.member import Member
+from larpmanager.models.miscellanea import Email
 from larpmanager.utils.text import get_assoc_text
 
 INTERNAL_KWARGS = {"schedule", "repeat", "repeat_until", "remove_existing_tasks"}
@@ -102,8 +104,17 @@ def remove_html_tags(text):
 
 
 @background_auto(queue="mail")
-def my_send_mail_bkg(subj, body, m_email, assoc_id=None, event_id=None, reply_to=None):
-    my_send_simple_mail(subj, body, m_email, assoc_id, event_id, reply_to)
+def my_send_mail_bkg(email_pk):
+    email = Email.objects.get(pk=email_pk)
+    if email.sent:
+        print("email already sent!")
+        return
+
+    my_send_simple_mail(email.subj, email.body, email.recipient,
+        email.assoc_id, email.event_id, email.reply_to)
+
+    email.sent = timezone.now()
+    email.save()
 
 
 def send_email_lock(sender_email):
@@ -237,4 +248,13 @@ def my_send_mail(subj, body, recipient, obj=None, reply_to=None, schedule=0):
     subj_str = str(subj)
     body_str = str(body)
 
-    my_send_mail_bkg(subj_str, body_str, recipient, assoc_id, event_id, reply_to, schedule=schedule)
+    email = Email.objects.create(
+        assoc_id=assoc_id,
+        event_id=event_id,
+        recipient=recipient,
+        subj=subj_str,
+        body_str=body_str,
+        reply_to=reply_to
+    )
+
+    my_send_mail_bkg(email.pk, schedule=schedule)
