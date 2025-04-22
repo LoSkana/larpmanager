@@ -191,7 +191,7 @@ class ExeConfigForm(MyForm):
         model = Association
         fields = ()
 
-    def get_feature_configurations(self):
+    def get_config_fields(self):
         ls = []
 
         # ## CALENDAR
@@ -487,21 +487,14 @@ class ExeConfigForm(MyForm):
 
         self.prevent_canc = True
 
-        res = get_all_element_configs(self.instance)
-
-        for el in self.get_feature_configurations():
-            add_custom_field(el, res, self)
+        self.prepare_configs()
 
         # print(self.initial)
 
     def save(self, commit=True):
         instance = super().save(commit=commit)
 
-        # PDF INSTRUCTIONS
-        feature_conf = {}
-        for el in self.get_feature_configurations():
-            get_custom_field(el, feature_conf, self)
-        save_all_element_configs(self.instance, feature_conf)
+        self.save_configs(instance)
 
         return instance
 

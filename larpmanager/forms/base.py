@@ -27,7 +27,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
-from larpmanager.forms.utils import css_delimeter
+from larpmanager.forms.utils import css_delimeter, get_custom_field, add_custom_field
 from larpmanager.models.association import Association
 from larpmanager.models.event import Run, Event
 from larpmanager.models.form import (
@@ -38,7 +38,7 @@ from larpmanager.models.form import (
     QuestionType,
     QuestionStatus,
 )
-from larpmanager.models.utils import get_attr
+from larpmanager.models.utils import get_attr, save_all_element_configs, get_all_element_configs
 from larpmanager.templatetags.show_tags import hex_to_rgb
 from larpmanager.models.utils import generate_id
 
@@ -143,6 +143,19 @@ class MyForm(forms.ModelForm):
     def delete_field(self, key):
         if key in self.fields:
             del self.fields[key]
+
+
+    def save_configs(self, instance):
+        config_values = {}
+        for el in self.get_config_fields():
+            get_custom_field(el, config_values, self)
+        save_all_element_configs(instance, config_values)
+
+
+    def prepare_configs(self):
+        res = get_all_element_configs(self.instance)
+        for el in self.get_config_fields():
+            add_custom_field(el, res, self)
 
 
 class MyFormRun(MyForm):
