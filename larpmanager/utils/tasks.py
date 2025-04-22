@@ -253,7 +253,7 @@ def my_send_mail(subj, body, recipient, obj=None, reply_to=None, schedule=0):
         event_id=event_id,
         recipient=recipient,
         subj=subj_str,
-        body_str=body_str,
+        body=body_str,
         reply_to=reply_to
     )
 
