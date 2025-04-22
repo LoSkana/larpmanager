@@ -145,7 +145,6 @@ def get_run(ctx, s, n):
             "event__cover",
             "event__carousel_img",
             "event__carousel_text",
-            "event__pdf_instructions",
             "event__features",
             "event__background",
             "event__font",
