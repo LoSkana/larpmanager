@@ -76,12 +76,7 @@ from larpmanager.views.orga.accounting import assign_payment_fee
 @login_required
 def exe_outflows(request):
     ctx = check_assoc_permission(request, "exe_outflows")
-    exe_paginate(
-        request,
-        ctx,
-        AccountingItemOutflow,
-        selrel=("run", "run__event"),
-    )
+    exe_paginate(request, ctx, AccountingItemOutflow, selrel=("run", "run__event"))
     return render(request, "larpmanager/exe/accounting/outflows.html", ctx)
 
 
@@ -93,12 +88,7 @@ def exe_outflows_edit(request, num):
 @login_required
 def exe_inflows(request):
     ctx = check_assoc_permission(request, "exe_inflows")
-    exe_paginate(
-        request,
-        ctx,
-        AccountingItemInflow,
-        selrel=("run", "run__event"),
-    )
+    exe_paginate(request, ctx, AccountingItemInflow, selrel=("run", "run__event"))
     return render(request, "larpmanager/exe/accounting/inflows.html", ctx)
 
 
@@ -146,12 +136,7 @@ def exe_tokens_edit(request, num):
 @login_required
 def exe_expenses(request):
     ctx = check_assoc_permission(request, "exe_expenses")
-    exe_paginate(
-        request,
-        ctx,
-        AccountingItemExpense,
-        selrel=("run", "run__event"),
-    )
+    exe_paginate(request, ctx, AccountingItemExpense, selrel=("run", "run__event"))
     return render(request, "larpmanager/exe/accounting/expenses.html", ctx)
 
 
@@ -180,12 +165,8 @@ def exe_expenses_approve(request, num):
 @login_required
 def exe_payments(request):
     ctx = check_assoc_permission(request, "exe_payments")
-    exe_paginate(
-        request,
-        ctx,
-        AccountingItemPayment,
-        selrel=("reg__member", "reg__run", "inv", "inv__method"),
-    )
+    sr = ("reg__member", "reg__run", "inv", "inv__method")
+    exe_paginate(request, ctx, AccountingItemPayment, selrel=sr)
     assign_payment_fee(ctx)
     return render(request, "larpmanager/exe/accounting/payments.html", ctx)
 
@@ -198,13 +179,8 @@ def exe_payments_edit(request, num):
 @login_required
 def exe_invoices(request):
     ctx = check_assoc_permission(request, "exe_invoices")
-    exe_paginate(
-        request,
-        ctx,
-        PaymentInvoice,
-        show_runs=False,
-        selrel=("method", "member"),
-    )
+    sr = ("method", "member")
+    exe_paginate(request, ctx, PaymentInvoice, show_runs=False, selrel=sr)
     return render(request, "larpmanager/exe/accounting/invoices.html", ctx)
 
 

@@ -1293,9 +1293,6 @@ msgstr "T&C dell'evento"
 msgid "Treasurer"
 msgstr "Tesoriere"
 
-msgid "Expenses2"
-msgstr "Spese2"
-
 msgid "Enrolment"
 msgstr "Tesseramento"
 

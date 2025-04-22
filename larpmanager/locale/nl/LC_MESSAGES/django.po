@@ -1293,9 +1293,6 @@ msgstr "Evenement AV"
 msgid "Treasurer"
 msgstr "Penningmeester"
 
-msgid "Expenses2"
-msgstr "Uitgaven2"
-
 msgid "Enrolment"
 msgstr "Inschrijving"
 

@@ -1293,9 +1293,6 @@ msgstr "Regulamin wydarzenia"
 msgid "Treasurer"
 msgstr "Skarbnik"
 
-msgid "Expenses2"
-msgstr "Wydatki2"
-
 msgid "Enrolment"
 msgstr "Zapisy"
 

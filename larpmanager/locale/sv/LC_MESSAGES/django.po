@@ -1293,9 +1293,6 @@ msgstr "Villkor för evenemang"
 msgid "Treasurer"
 msgstr "Kassör"
 
-msgid "Expenses2"
-msgstr "Kostnader2"
-
 msgid "Enrolment"
 msgstr "Anmälan"
 

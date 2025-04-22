@@ -1293,9 +1293,6 @@ msgstr "Conditions générales d'utilisation"
 msgid "Treasurer"
 msgstr "Trésorier"
 
-msgid "Expenses2"
-msgstr "Dépenses2"
-
 msgid "Enrolment"
 msgstr "Inscription"
 

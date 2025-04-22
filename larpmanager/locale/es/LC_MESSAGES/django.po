@@ -1293,9 +1293,6 @@ msgstr "C&C del evento"
 msgid "Treasurer"
 msgstr "Tesorero"
 
-msgid "Expenses2"
-msgstr "Gastos2"
-
 msgid "Enrolment"
 msgstr "Inscripción"
 

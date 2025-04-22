@@ -1293,9 +1293,6 @@ msgstr "Veranstaltung T&C"
 msgid "Treasurer"
 msgstr "Schatzmeister"
 
-msgid "Expenses2"
-msgstr "Ausgaben2"
-
 msgid "Enrolment"
 msgstr "Immatrikulation"
 
