@@ -61,9 +61,9 @@ def info_accounting(request, ctx):
             ctx["year_membership_pending"] = True
         ctx["year"] = year
         assoc = Association.objects.get(pk=ctx["a_id"])
-        m_day = assoc.get_feature_conf("membership_day", "01-01")
+        m_day = assoc.get_config("membership_day", "01-01")
         if m_day:
-            m_grazing = int(assoc.get_feature_conf("membership_grazing", "0"))
+            m_grazing = int(assoc.get_config("membership_grazing", "0"))
             m_day += f"-{year}"
             dt = datetime.strptime(m_day, "%d-%m-%Y")
             dt += relativedelta(months=m_grazing)

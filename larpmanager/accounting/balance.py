@@ -177,7 +177,7 @@ def get_run_accounting(run, ctx):
     run.balance = run.revenue - (s_outflows + s_expenses + s_tokens + s_credits)
 
     if "organization_tax" in features:
-        tax = int(run.event.assoc.get_feature_conf("organization_tax_perc", "10"))
+        tax = int(run.event.assoc.get_config("organization_tax_perc", "10"))
         run.tax = run.revenue * tax / 100
 
     run.save()

@@ -206,7 +206,7 @@ class OrgaConfigForm(MyForm):
         model = Event
         fields = ()
 
-    def get_feature_configurations(self):
+    def get_config_fields(self):
         ls = []
 
         section = _("Email notifications")
@@ -460,24 +460,12 @@ class OrgaConfigForm(MyForm):
         super().__init__(*args, **kwargs)
 
         self.prevent_canc = True
-
-        ev = self.instance
-
-        res = get_all_element_configs(ev)
-
-        for el in self.get_feature_configurations():
-            add_custom_field(el, res, self)
+        self.prepare_configs()
 
     def save(self, commit=True):
         instance = super().save(commit=commit)
 
-        ev = self.instance
-
-        feature_conf = {}
-        for el in self.get_feature_configurations():
-            get_custom_field(el, feature_conf, self)
-
-        save_all_element_configs(ev, feature_conf)
+        self.save_configs(instance)
 
         return instance
 
@@ -554,7 +542,7 @@ class OrgaEventTextForm(MyForm):
         delete_choice = []
         if "event_tac" not in self.params["features"]:
             delete_choice.append(EventText.TOC)
-        if not self.params["event"].get_feature_conf("user_character_approval", False):
+        if not self.params["event"].get_config("user_character_approval", False):
             delete_choice.extend(
                 [EventText.CHARACTER_PROPOSED, EventText.CHARACTER_APPROVED, EventText.CHARACTER_REVIEW]
             )
@@ -622,7 +610,7 @@ class OrgaRunForm(MyForm):
 
     class Meta:
         model = Run
-        exclude = ("balance", "number", "feature_conf", "plan", "paid")
+        exclude = ("balance", "number", "plan", "paid")
 
         widgets = {
             "start": DatePickerInput,
@@ -655,13 +643,11 @@ class OrgaRunForm(MyForm):
             del self.fields[s]
 
         # add visibility options
-        res = get_all_element_configs(self.instance)
-        for el in self.get_feature_configurations():
-            add_custom_field(el, res, self)
+        self.prepare_configs()
 
         self.show_sections = True
 
-    def get_feature_configurations(self):
+    def get_config_fields(self):
         ls = []
 
         if "characters" not in self.params["features"]:
@@ -742,11 +728,7 @@ class OrgaRunForm(MyForm):
     def save(self, commit=True):
         instance = super().save(commit=commit)
 
-        feature_conf = {}
-        for el in self.get_feature_configurations():
-            get_custom_field(el, feature_conf, self)
-        # print(feature_conf)
-        save_all_element_configs(instance, feature_conf)
+        self.save_configs(instance)
 
         return instance
 

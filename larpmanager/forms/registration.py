@@ -215,8 +215,8 @@ class RegistrationForm(BaseRegistrationForm):
         if "waiting" in run.status:
             return
 
-        lbl = run.event.get_feature_conf("pay_what_you_want_label", _("Free donation"))
-        help_text = run.event.get_feature_conf(
+        lbl = run.event.get_config("pay_what_you_want_label", _("Free donation"))
+        help_text = run.event.get_config(
             "pay_what_you_want_descr", _("Freely indicate the amount of your donation")
         )
         self.fields["pay_what"] = forms.IntegerField(
@@ -328,7 +328,7 @@ class RegistrationForm(BaseRegistrationForm):
                     continue
 
             elif ticket.tier == RegistrationTicket.FILLER:
-                filler_alway = event.get_feature_conf("filler_alway", False)
+                filler_alway = event.get_config("filler_alway", False)
                 if filler_alway:
                     # Show Filler Tickets only if you have been filler or primary, or if the player is signed up for Filler
                     if (
@@ -492,10 +492,10 @@ class OrgaRegistrationForm(BaseRegistrationForm):
     def init_pay_what(self, reg_section):
         if "pay_what_you_want" in self.params["features"]:
             self.sections["id_pay_what"] = reg_section
-            self.fields["pay_what"].label = self.params["run"].event.get_feature_conf(
+            self.fields["pay_what"].label = self.params["run"].event.get_config(
                 "pay_what_you_want_label", _("Free donation")
             )
-            self.fields["pay_what"].help_text = self.params["run"].event.get_feature_conf(
+            self.fields["pay_what"].help_text = self.params["run"].event.get_config(
                 "pay_what_you_want_descr", _("Freely indicate the amount of your donation")
             )
         else:
@@ -644,7 +644,7 @@ class RegistrationCharacterRelForm(MyForm):
         dl = ["profile"]
 
         for s in ["name", "pronoun", "song", "public", "private"]:
-            if not self.params["event"].get_feature_conf("custom_character_" + s, False):
+            if not self.params["event"].get_config("custom_character_" + s, False):
                 dl.append(s)
 
         if "custom_name" not in self.initial or not self.initial["custom_name"]:

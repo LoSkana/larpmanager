@@ -54,11 +54,11 @@ def remove_non_ascii(string):
 
 
 def get_element_config(element, name, def_value):
-    if not hasattr(element, "aux_feature_conf"):
-        element.aux_feature_conf = {}
+    if not hasattr(element, "aux_configs"):
+        element.aux_configs = {}
 
-    if name in element.aux_feature_conf:
-        return element.aux_feature_conf[name]
+    if name in element.aux_configs:
+        return element.aux_configs[name]
 
     try:
         config = element.configs.get(name=name)
@@ -67,7 +67,7 @@ def get_element_config(element, name, def_value):
             return value == "True"
         if not value or value == "None":
             return def_value
-        element.aux_feature_conf[name] = value
+        element.aux_configs[name] = value
         return value
     except ObjectDoesNotExist:
         return def_value

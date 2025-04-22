@@ -126,7 +126,7 @@ class CharacterForm(WritingForm, BaseCharacterForm):
         self.init_character()
 
     def check_editable(self, question):
-        if not self.params["event"].get_feature_conf("user_character_approval", False):
+        if not self.params["event"].get_config("user_character_approval", False):
             return True
 
         statuses = question.get_editable()
@@ -160,7 +160,7 @@ class CharacterForm(WritingForm, BaseCharacterForm):
         for lbl in all_fields - fields_custom:
             del self.fields[lbl]
 
-        if not self.orga and event.get_feature_conf("user_character_approval", False):
+        if not self.orga and event.get_config("user_character_approval", False):
             if not self.instance.pk or self.instance.status == CharacterStatus.CREATION:
                 self.fields["propose"] = forms.BooleanField(
                     required=False,
@@ -338,7 +338,7 @@ class OrgaCharacterForm(CharacterForm):
         else:
             self.delete_field("player")
 
-        if not self.params["event"].get_feature_conf("user_character_approval", False):
+        if not self.params["event"].get_config("user_character_approval", False):
             self.delete_field("status")
 
         if "mirror" in self.fields:
@@ -585,7 +585,7 @@ class OrgaCharacterQuestionForm(MyForm):
             self.delete_field("max_length")
             self.delete_field("status")
 
-        if not self.params["event"].get_feature_conf("user_character_approval", False):
+        if not self.params["event"].get_config("user_character_approval", False):
             self.delete_field("editable")
         else:
             self.fields["editable"] = forms.MultipleChoiceField(

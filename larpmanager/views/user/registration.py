@@ -92,7 +92,7 @@ def pre_register(request, s=""):
         ctx["already"].append(el)
 
     for r in Event.objects.filter(assoc_id=request.assoc["id"], template=False):
-        if not r.get_feature_conf("pre_register_active", False):
+        if not r.get_config("pre_register_active", False):
             continue
 
         if r.id in ch:
@@ -285,7 +285,7 @@ def register_info(request, ctx, form, reg, dis):
     ctx["custom_text"] = get_event_text(ctx["event"].id, EventText.REGISTER)
     ctx["event_terms_conditions"] = get_event_text(ctx["event"].id, EventText.TOC)
     ctx["assoc_terms_conditions"] = get_assoc_text(ctx["a_id"], AssocText.TOC)
-    ctx["hide_unavailable"] = ctx["event"].get_feature_conf("registration_hide_unavailable", False)
+    ctx["hide_unavailable"] = ctx["event"].get_config("registration_hide_unavailable", False)
 
     init_form_submitted(ctx, form, request, reg)
 
@@ -301,7 +301,7 @@ def register_info(request, ctx, form, reg, dis):
         else:
             ctx["membership_fee"] = "todo"
 
-        ctx["membership_amount"] = get_assoc(request).get_feature_conf("membership_fee")
+        ctx["membership_amount"] = get_assoc(request).get_config("membership_fee")
 
 
 def init_form_submitted(ctx, form, request, reg=None):
@@ -358,14 +358,14 @@ def register(request, s, n, sc="", dis="", tk=0):
         # check if we have to close registration, or send to pre-register
         elif "registration_open" in ctx["features"]:
             if not run.registration_open or run.registration_open > datetime.now():
-                if "pre_register" in ctx["features"] and event.get_feature_conf("pre_register_active", False):
+                if "pre_register" in ctx["features"] and event.get_config("pre_register_active", False):
                     return redirect("pre_register", s=ctx["event"].slug)
                 else:
                     return render(request, "larpmanager/event/not_open.html", ctx)
 
     if "bring_friend" in ctx["features"]:
         for s in ["bring_friend_discount_to", "bring_friend_discount_from"]:
-            ctx[s] = ctx["event"].get_feature_conf(s, 0)
+            ctx[s] = ctx["event"].get_config(s, 0)
 
     get_user_membership(request.user.member, request.assoc["id"])
     ctx["member"] = request.user.member

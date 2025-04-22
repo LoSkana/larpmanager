@@ -81,7 +81,7 @@ def get_event_cache_characters(ctx, res):
     for el in reg_que.select_related("character", "reg", "reg__member"):
         ctx["assignments"][el.character.number] = el
 
-    hide_uncasted_characters = ctx["event"].get_feature_conf("gallery_hide_uncasted_characters", False)
+    hide_uncasted_characters = ctx["event"].get_config("gallery_hide_uncasted_characters", False)
 
     assigned_chars = RegistrationCharacterRel.objects.filter(reg__run=ctx["run"]).values_list("character_id", flat=True)
 

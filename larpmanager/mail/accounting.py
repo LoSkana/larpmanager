@@ -106,8 +106,8 @@ def update_AccountingItemExpense_pre(sender, instance, **kwargs):
 
 
 def get_token_credit_name(assoc):
-    token_name = assoc.get_feature_conf("token_credit_token_name", None)
-    credit_name = assoc.get_feature_conf("token_credit_credit_name", None)
+    token_name = assoc.get_config("token_credit_token_name", None)
+    credit_name = assoc.get_config("token_credit_credit_name", None)
     if not token_name:
         token_name = _("Tokens")
     if not credit_name:
@@ -123,7 +123,7 @@ def update_AccountingItemPayment(sender, instance, **kwargs):
     run = instance.reg.run
     member = instance.reg.member
 
-    if not run.event.assoc.get_feature_conf("mail_payment", False):
+    if not run.event.assoc.get_config("mail_payment", False):
         return
 
     token_name, credit_name = get_token_credit_name(instance.assoc)
@@ -363,13 +363,13 @@ def save_collection_gift(sender, instance, **kwargs):
 
 
 def notify_invoice_check(inv):
-    if not inv.assoc.get_feature_conf("mail_payment", False):
+    if not inv.assoc.get_config("mail_payment", False):
         return
 
     # if there is treasurer features, send to them
     features = get_assoc_features(inv.assoc_id)
     if "treasurer" in features:
-        for mb in inv.assoc.get_feature_conf("treasurer_appointees", "").split(", "):
+        for mb in inv.assoc.get_config("treasurer_appointees", "").split(", "):
             idx = int(mb)
             orga = Member.objects.get(pk=idx)
             activate(orga.language)

@@ -349,7 +349,7 @@ class ProfileForm(BaseProfileForm):
 
         if "presentation" in self.fields:
             assoc = Association.objects.get(pk=self.params["request"].assoc["id"])
-            vote_cands = assoc.get_feature_conf("vote_candidates", "").split(",")
+            vote_cands = assoc.get_config("vote_candidates", "").split(",")
             if not self.instance.pk or str(self.instance.pk) not in vote_cands:
                 self.delete_field("presentation")
 
@@ -382,7 +382,7 @@ class ProfileForm(BaseProfileForm):
 
         assoc = Association.objects.get(pk=self.params["request"].assoc["id"])
         if "membership" in get_assoc_features(assoc.id):
-            min_age = assoc.get_feature_conf("membership_age", "")
+            min_age = assoc.get_config("membership_age", "")
             if min_age:
                 min_age = int(min_age)
                 # ~ d = date.fromisoformat(data)

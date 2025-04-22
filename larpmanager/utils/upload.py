@@ -163,7 +163,7 @@ def elements_load(request, ctx, csv_upload, typ, nm):
     # get all characters name for replacement
     chars = {}
     event = ctx["run"].event.get_class_parent(typ)
-    if ctx["run"].event.get_feature_conf("writing_substitute", True):
+    if ctx["run"].event.get_config("writing_substitute", True):
         for c in event.get_elements(Character):
             chars[c.name] = c.number
 

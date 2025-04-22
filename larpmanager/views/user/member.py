@@ -119,7 +119,7 @@ def profile(request):
     # ~ ctx["membership"] = True
 
     if "vote" in request.assoc["features"]:
-        ctx["vote_open"] = ctx["membership"].assoc.get_feature_conf("vote_open", False)
+        ctx["vote_open"] = ctx["membership"].assoc.get_config("vote_open", False)
 
     ctx["disable_join"] = True
 
@@ -253,7 +253,7 @@ def membership(request):
     ctx.update({"member": request.user.member, "membership": el, "form": form})
 
     assoc = Association.objects.get(pk=ctx["a_id"])
-    if assoc.get_feature_conf("membership_cf", False):
+    if assoc.get_config("membership_cf", False):
         ctx.update(calculate_fiscal_code(ctx["member"]))
 
     ctx["fee_payed"] = AccountingItemMembership.objects.filter(
@@ -472,10 +472,10 @@ def vote(request):
 
     assoc = Association.objects.get(pk=ctx["a_id"])
 
-    ctx["vote_open"] = assoc.get_feature_conf("vote_open", False)
-    ctx["vote_cands"] = assoc.get_feature_conf("vote_candidates", "").split(",")
-    ctx["vote_min"] = assoc.get_feature_conf("vote_min", "1")
-    ctx["vote_max"] = assoc.get_feature_conf("vote_max", "1")
+    ctx["vote_open"] = assoc.get_config("vote_open", False)
+    ctx["vote_cands"] = assoc.get_config("vote_candidates", "").split(",")
+    ctx["vote_min"] = assoc.get_config("vote_min", "1")
+    ctx["vote_max"] = assoc.get_config("vote_max", "1")
 
     if request.method == "POST":
         cnt = 0

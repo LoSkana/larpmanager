@@ -154,9 +154,9 @@ def check_centauri(request):
     assoc = Association.objects.get(pk=request.assoc["id"])
     ctx = {}
     for s in ["centauri_descr", "centauri_content"]:
-        ctx[s] = assoc.get_feature_conf(s, None)
+        ctx[s] = assoc.get_config(s, None)
 
-    badge = assoc.get_feature_conf("centauri_badge", None)
+    badge = assoc.get_config("centauri_badge", None)
     if badge:
         bdg = Badge.objects.get(cod=badge)
         bdg.members.add(request.user.member)

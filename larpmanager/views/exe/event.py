@@ -131,7 +131,7 @@ def exe_pre_registrations(request):
     ctx["seen"] = []
 
     for r in Event.objects.filter(assoc_id=request.assoc["id"], template=False):
-        if not r.get_feature_conf("pre_register_active", False):
+        if not r.get_config("pre_register_active", False):
             continue
 
         pr = get_pre_registration(r)

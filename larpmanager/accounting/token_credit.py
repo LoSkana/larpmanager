@@ -35,7 +35,7 @@ def registration_tokens_credits(reg, remaining, features, assoc_id):
     if "token_credit" not in features:
         return
 
-    if reg.run.event.get_feature_conf("token_credit_disable_t", False):
+    if reg.run.event.get_config("token_credit_disable_t", False):
         return
 
     # check token credits

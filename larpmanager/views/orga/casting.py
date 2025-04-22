@@ -155,7 +155,7 @@ def get_casting_choices_quests(ctx, typ):
 
 def check_player_skip_characters(reg, choices, ctx):
     # check it has a number of characters assigned less the allowed amount
-    casting_chars = int(ctx["event"].get_feature_conf("casting_characters", 1))
+    casting_chars = int(ctx["event"].get_config("casting_characters", 1))
     return RegistrationCharacterRel.objects.filter(reg=reg).count() >= casting_chars
 
 

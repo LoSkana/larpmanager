@@ -169,7 +169,7 @@ def exe_membership_evaluation(request, num):
                 ctx["member_exists"] = True
 
     assoc = Association.objects.get(pk=ctx["a_id"])
-    if assoc.get_feature_conf("membership_cf", False):
+    if assoc.get_config("membership_cf", False):
         ctx.update(calculate_fiscal_code(member))
 
     return render(request, "larpmanager/exe/users/membership_evaluation.html", ctx)
@@ -194,7 +194,7 @@ def exe_membership_check(request):
     )
 
     assoc = Association.objects.get(pk=ctx["a_id"])
-    if assoc.get_feature_conf("membership_cf", False):
+    if assoc.get_config("membership_cf", False):
         ctx["cf"] = []
         for mb in Member.objects.filter(pk__in=member_ids):
             check = calculate_fiscal_code(mb)
@@ -266,7 +266,7 @@ def exe_member(request, num):
         ctx["req_path"] = member.membership.get_request_filepath().lower()
 
     assoc = Association.objects.get(pk=ctx["a_id"])
-    if assoc.get_feature_conf("membership_cf", False):
+    if assoc.get_config("membership_cf", False):
         ctx.update(calculate_fiscal_code(ctx["member"]))
 
     return render(request, "larpmanager/exe/users/member.html", ctx)
@@ -395,7 +395,7 @@ def exe_vote(request):
     assoc = Association.objects.get(pk=ctx["a_id"])
 
     idxs = []
-    for el in assoc.get_feature_conf("vote_candidates", "").split(","):
+    for el in assoc.get_config("vote_candidates", "").split(","):
         if el.strip():
             idxs.append(el.strip())
 

@@ -122,7 +122,7 @@ class DeliveryPx(BaseConceptModel):
 def update_px(char):
     addit = {}
 
-    start = char.event.get_feature_conf("px_start", 0)
+    start = char.event.get_config("px_start", 0)
 
     addit["px_tot"] = int(start) + sum(char.px_delivery_list.values_list("amount", flat=True))
     addit["px_used"] = sum(char.px_ability_list.values_list("cost", flat=True))

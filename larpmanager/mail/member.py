@@ -55,7 +55,7 @@ def send_membership_confirm(request, membership):
         "Once your admission is approved, you will be able to pay for the tickets for the "
         "events you have registered for."
     )
-    amount = int(membership.assoc.get_feature_conf("membership_fee", "0"))
+    amount = int(membership.assoc.get_config("membership_fee", "0"))
     if amount:
         body += " " + _(
             "Please also note that payment of the annual membership fee (%(amount)d "

@@ -64,7 +64,7 @@ def check_run_deadlines(runs):
         members_id.append(reg.member_id)
         all_regs[reg.run_id].append(reg)
 
-    tolerance = int(runs[0].event.assoc.get_feature_conf("deadlines_tolerance", "30"))
+    tolerance = int(runs[0].event.assoc.get_config("deadlines_tolerance", "30"))
 
     assoc_id = runs[0].event.assoc_id
     now = datetime.now()
@@ -140,7 +140,7 @@ def deadlines_casting(collect, features, player_ids, run):
     if "casting" not in features:
         return
 
-    casting_chars = run.event.get_feature_conf("casting_characters", 1)
+    casting_chars = run.event.get_config("casting_characters", 1)
     # members that already have a character
     casted = (
         Registration.objects.filter(run=run)
