@@ -77,7 +77,7 @@ def set_data_invoice(request, ctx, invoice, form, assoc):
     if invoice.typ == PaymentInvoice.REGISTRATION:
         invoice.idx = ctx["reg"].id
         invoice.reg = ctx["reg"]
-        custom_reason = ctx["reg"].run.event.get_feature_conf("payment_custom_reason")
+        custom_reason = ctx["reg"].run.event.get_config("payment_custom_reason")
         if not custom_reason:
             invoice.causal = _("Registration fee %(number)d of %(user)s per %(event)s") % {
                 "user": real,
@@ -105,7 +105,7 @@ def set_data_invoice(request, ctx, invoice, form, assoc):
             "recipient": ctx["coll"].display_member(),
         }
 
-    if assoc.get_feature_conf("payment_special_code", False):
+    if assoc.get_config("payment_special_code", False):
         invoice.causal = "%s - %s" % (invoice.cod, invoice.causal)
 
 
@@ -119,7 +119,7 @@ def update_invoice_gross_fee(request, invoice, amount, assoc, pay_method):
     fee = get_payment_fee(assoc, pay_method.slug)
 
     if fee is not None:
-        if assoc.get_feature_conf("payment_fees_user", False):
+        if assoc.get_config("payment_fees_user", False):
             amount = (amount * 100) / (100 - fee)
             amount = round_up_to_two_decimals(amount)
 
@@ -203,7 +203,7 @@ def payment_received(invoice):
         # trans.value = invoice.mc_fee
         trans.value = (float(invoice.mc_gross) * fee) / 100
         trans.assoc = invoice.assoc
-        if "payment_fees" in features and invoice.assoc.get_feature_conf("payment_fees_user", False):
+        if "payment_fees" in features and invoice.assoc.get_config("payment_fees_user", False):
             trans.user_burden = True
         trans.save()
         if invoice.typ == PaymentInvoice.REGISTRATION:

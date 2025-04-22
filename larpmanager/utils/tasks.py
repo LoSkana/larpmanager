@@ -127,39 +127,39 @@ def my_send_simple_mail(subj, body, m_email, assoc_id=None, event_id=None, reply
         # Event confs: to apply only if email params are set up
         if event_id:
             event = Event.objects.get(pk=event_id)
-            email_host_user = event.get_feature_conf("mail_server_host_user", "")
+            email_host_user = event.get_config("mail_server_host_user", "")
             if email_host_user:
                 sender_email = email_host_user
                 sender = f"{event.name.replace(':', ' ')} <{sender_email}>"
                 send_email_lock(sender_email)
                 connection = get_connection(
-                    host=event.get_feature_conf("mail_server_host", ""),
-                    port=event.get_feature_conf("mail_server_port", ""),
-                    username=event.get_feature_conf("mail_server_host_user", ""),
-                    password=event.get_feature_conf("mail_server_host_password", ""),
-                    use_tls=event.get_feature_conf("mail_server_use_tls", False),
+                    host=event.get_config("mail_server_host", ""),
+                    port=event.get_config("mail_server_port", ""),
+                    username=event.get_config("mail_server_host_user", ""),
+                    password=event.get_config("mail_server_host_password", ""),
+                    use_tls=event.get_config("mail_server_use_tls", False),
                 )
                 event_settings = True
 
         # Assoc confs: to apply
         if assoc_id:
             assoc = Association.objects.get(pk=assoc_id)
-            if assoc.get_feature_conf("mail_cc", False):
+            if assoc.get_config("mail_cc", False):
                 bcc.append(assoc.main_mail)
 
             # See if we have to apply custom mail settings
-            email_host_user = assoc.get_feature_conf("mail_server_host_user", "")
+            email_host_user = assoc.get_config("mail_server_host_user", "")
             if email_host_user:
                 if not event_settings:
                     sender_email = email_host_user
                     sender = f"{assoc.name} <{sender_email}>"
                     send_email_lock(sender_email)
                     connection = get_connection(
-                        host=assoc.get_feature_conf("mail_server_host", ""),
-                        port=assoc.get_feature_conf("mail_server_port", ""),
-                        username=assoc.get_feature_conf("mail_server_host_user", ""),
-                        password=assoc.get_feature_conf("mail_server_host_password", ""),
-                        use_tls=assoc.get_feature_conf("mail_server_use_tls", False),
+                        host=assoc.get_config("mail_server_host", ""),
+                        port=assoc.get_config("mail_server_port", ""),
+                        username=assoc.get_config("mail_server_host_user", ""),
+                        password=assoc.get_config("mail_server_host_password", ""),
+                        use_tls=assoc.get_config("mail_server_use_tls", False),
                     )
             # See if we apply standard mail settings (if no event custom settings)
             else:

@@ -257,7 +257,7 @@ def orga_registrations(request, s, n):
     if "custom_character" in ctx["features"]:
         ctx["custom_info"] = []
         for s in ["pronoun", "song", "public", "private", "profile"]:
-            if not ctx["event"].get_feature_conf("custom_character_" + s, False):
+            if not ctx["event"].get_config("custom_character_" + s, False):
                 continue
             ctx["custom_info"].append(s)
 
@@ -708,8 +708,8 @@ def orga_reload_cache(request, s, n):
 
 
 def lottery_info(request, ctx):
-    ctx["num_draws"] = int(ctx["event"].get_feature_conf("lottery_num_draws", 0))
-    ctx["ticket"] = ctx["event"].get_feature_conf("lottery_ticket", "")
+    ctx["num_draws"] = int(ctx["event"].get_config("lottery_num_draws", 0))
+    ctx["ticket"] = ctx["event"].get_config("lottery_ticket", "")
     ctx["num_lottery"] = Registration.objects.filter(
         run=ctx["run"],
         ticket__tier=RegistrationTicket.LOTTERY,

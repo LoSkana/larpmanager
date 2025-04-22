@@ -75,14 +75,14 @@ def update_registration_status(instance):
     my_send_mail(subj, body, instance.member, instance.run.event)
 
     # to orga
-    if instance.modified == 1 and instance.run.event.assoc.get_feature_conf("mail_signup_new", False):
+    if instance.modified == 1 and instance.run.event.assoc.get_config("mail_signup_new", False):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration to %(event)s by %(user)s") % context
             body = _("The user has confirmed its registration for this event!")
             body += registration_options(instance)
             my_send_mail(subj, body, orga, instance.run.event)
-    elif instance.run.event.assoc.get_feature_conf("mail_signup_update", False):
+    elif instance.run.event.assoc.get_config("mail_signup_update", False):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration updated to %(event)s by %(user)s") % context
@@ -173,7 +173,7 @@ def update_registration_character_rel_post(sender, instance, created, **kwargs):
     if not instance.character:
         return
 
-    if instance.reg.run.event.get_feature_conf("mail_character", False):
+    if instance.reg.run.event.get_config("mail_character", False):
         return
 
     context = {
@@ -192,7 +192,7 @@ def update_registration_character_rel_post(sender, instance, created, **kwargs):
 
     body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>!") % {"url": char_url}
 
-    if instance.reg.run.get_feature_conf("show_text", False):
+    if instance.reg.run.get_config("show_text", False):
         body += "<br/><br />" + _(
             "Please note that your character sheet may contain  personal secrets, not to be "
             "shared before the start of the event. To avoid accidentally spoiling your "
@@ -220,7 +220,7 @@ def update_registration_cancellation(instance):
     my_send_mail(subj, body, instance.member, instance.run.event)
 
     # to orga
-    if instance.run.event.assoc.get_feature_conf("mail_signup_del", False):
+    if instance.run.event.assoc.get_config("mail_signup_del", False):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration cancelled for %(event)s by %(user)s") % context
@@ -261,7 +261,7 @@ def delete_Registration(sender, instance, *args, **kwargs):
     body = _("We confirm that your registration for this event has been cancelled.")
     my_send_mail(subj, body, instance.member, instance.run.event)
 
-    if instance.run.event.assoc.get_feature_conf("mail_signup_del", False):
+    if instance.run.event.assoc.get_config("mail_signup_del", False):
         # to orga
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)

@@ -104,7 +104,7 @@ def character(request, s, n, num):
     if ctx["casting_show_pref"] and not ctx["char"]["player_id"] and ctx["char"]["special"] != Character.PNG:
         ctx["pref"] = get_casting_preferences(ctx["char"]["id"], ctx, 0)
 
-    ctx["approval"] = ctx["event"].get_feature_conf("user_character_approval", False)
+    ctx["approval"] = ctx["event"].get_config("user_character_approval", False)
 
     return render(request, "larpmanager/event/character.html", ctx)
 
@@ -164,7 +164,7 @@ def character_form(request, ctx, s, n, instance, form_class):
             if isinstance(element, Character):
                 if not element.player:
                     element.player = request.user.member
-                if ctx["event"].get_feature_conf("user_character_approval", False):
+                if ctx["event"].get_config("user_character_approval", False):
                     if element.status == CharacterStatus.CREATION and form.cleaned_data["propose"]:
                         element.status = CharacterStatus.PROPOSED
                         mes = _(
@@ -204,7 +204,7 @@ def character_customize(request, s, n, num):
         if rgr.custom_profile:
             ctx["custom_profile"] = rgr.profile_thumb.url
 
-        if ctx["event"].get_feature_conf("custom_character_profile", False):
+        if ctx["event"].get_config("custom_character_profile", False):
             ctx["avatar_form"] = AvatarForm()
 
         return character_form(request, ctx, s, n, rgr, RegistrationCharacterRelForm)
@@ -308,7 +308,7 @@ def character_list(request, s, n):
             el.fields = get_character_cache_fields(ctx, el.id, only_visible=True)
 
     ctx["char_maximum"] = check_character_maximum(ctx["event"], request.user.member)
-    ctx["approval"] = ctx["event"].get_feature_conf("user_character_approval", False)
+    ctx["approval"] = ctx["event"].get_config("user_character_approval", False)
     ctx["assigned"] = RegistrationCharacterRel.objects.filter(reg_id=ctx["run"].reg.id).count()
     return render(request, "larpmanager/event/character/list.html", ctx)
 
@@ -366,7 +366,7 @@ def character_abilities(request, s, n, num):
         event = event.parent
 
     # check the user can select abilities
-    if not event.get_feature_conf("px_user", False):
+    if not event.get_config("px_user", False):
         raise Http404("ehm.")
 
     get_char_check(request, ctx, num, True)

@@ -61,7 +61,7 @@ def update_assoc_features(assoc_id):
             "visible",
             "tagline",
         ]:
-            if assoc.get_feature_conf("calendar_" + sl, False):
+            if assoc.get_config("calendar_" + sl, False):
                 res[sl] = 1
     except ObjectDoesNotExist:
         pass

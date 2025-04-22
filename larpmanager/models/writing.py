@@ -250,8 +250,6 @@ class Character(Writing):
         options={"quality": 90},
     )
 
-    addit = models.TextField(blank=True, null=True)
-
     player = models.ForeignKey(
         Member,
         on_delete=models.CASCADE,
@@ -302,7 +300,7 @@ class Character(Writing):
             js["mirror"] = self.mirror.show_red()
 
         js["hide"] = self.hide
-        if self.event.get_feature_conf("user_character_approval", False):
+        if self.event.get_config("user_character_approval", False):
             if self.status not in [CharacterStatus.APPROVED]:
                 js["hide"] = True
 
@@ -641,7 +639,7 @@ def replace_chars_all(instance):
     if not hasattr(instance, "event"):
         return
 
-    if not instance.event.get_feature_conf("writing_substitute", False):
+    if not instance.event.get_config("writing_substitute", False):
         return
 
     # get all characters name for replacement

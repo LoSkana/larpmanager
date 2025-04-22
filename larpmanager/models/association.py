@@ -107,8 +107,6 @@ class Association(BaseModel):
         help_text=_("Indicates the currency in which to receive payments"),
     )
 
-    feature_conf = models.TextField(blank=True, null=True)
-
     promoter = models.ImageField(
         max_length=500,
         upload_to=UploadToPathAndRename("promot/"),
@@ -206,7 +204,7 @@ class Association(BaseModel):
             res[el[0]] = ls
         return res
 
-    def get_feature_conf(self, name, def_v=None):
+    def get_config(self, name, def_v=None):
         return get_element_config(self, name, def_v)
 
 

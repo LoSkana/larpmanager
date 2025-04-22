@@ -147,8 +147,6 @@ class Event(BaseModel):
         help_text=_("Maximum number of waiting spots to manage (0 for infinite)"),
     )
 
-    pdf_instructions = models.TextField(blank=True, null=True)
-
     features = models.ManyToManyField(Feature, related_name="events", blank=True)
 
     parent = models.ForeignKey("event", on_delete=models.CASCADE, null=True, blank=True)
@@ -197,8 +195,6 @@ class Event(BaseModel):
         null=True,
     )
 
-    feature_conf = models.TextField(blank=True, null=True)
-
     template = models.BooleanField(default=False)
 
     class Meta:
@@ -236,7 +232,7 @@ class Event(BaseModel):
 
         if self.parent and nm in elements:
             # check if we don't want to actually use that event's elements
-            if not self.get_feature_conf(f"campaign_{nm}_indep", False):
+            if not self.get_config(f"campaign_{nm}_indep", False):
                 return self.parent
 
         return self
@@ -294,7 +290,7 @@ class Event(BaseModel):
         os.makedirs(fp, exist_ok=True)
         return fp
 
-    def get_feature_conf(self, name, def_v=None):
+    def get_config(self, name, def_v=None):
         return get_element_config(self, name, def_v)
 
 
@@ -474,8 +470,6 @@ class Run(BaseModel):
 
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
-    feature_conf = models.TextField(blank=True, null=True)
-
     paid = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
     plan = models.CharField(max_length=1, choices=LarpManagerPlan.choices, blank=True, null=True)
@@ -528,7 +522,7 @@ class Run(BaseModel):
     def get_profiles_filepath(self):
         return self.get_media_filepath() + "profiles.pdf"
 
-    def get_feature_conf(self, name, def_v=None):
+    def get_config(self, name, def_v=None):
         return get_element_config(self, name, def_v)
 
 

@@ -182,7 +182,7 @@ def notify_trait_assigned(sender, instance, created, **kwargs):
         c.save()
 
     activate(instance.member.language)
-    if instance.run.event.get_feature_conf("mail_character", False):
+    if instance.run.event.get_config("mail_character", False):
         return
     t = instance.trait.show(instance.run)
     q = instance.trait.quest.show(instance.run)
@@ -196,7 +196,7 @@ def notify_trait_assigned(sender, instance, created, **kwargs):
         instance.run.event,
     )
     body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>!") % {"url": url}
-    if instance.run.get_feature_conf("show_text", False):
+    if instance.run.get_config("show_text", False):
         body += "<br/><br />" + _(
             "Please note that your character sheet may contain  personal secrets, not to be "
             "shared before the start of the event. To avoid accidentally spoiling your "
@@ -225,7 +225,7 @@ def mail_confirm_casting(member, run, gl_name, lst, avoid):
 
 @receiver(pre_save, sender=Character)
 def character_update_status(sender, instance, **kwargs):
-    if not instance.event.get_feature_conf("user_character_approval", False):
+    if not instance.event.get_config("user_character_approval", False):
         return
 
     if instance.pk and instance.player:
