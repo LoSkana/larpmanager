@@ -238,17 +238,18 @@ def my_send_mail(subj, body, recipient, obj=None, reply_to=None, schedule=0):
             assoc_id = obj.assoc_id # type: ignore[attr-defined]
         elif isinstance(obj, Association):
             assoc_id = obj.id  # type: ignore[attr-defined]
-        elif hasattr(obj, 'run_id'):
+        elif hasattr(obj, 'run_id') and obj.run_id:
             run_id = obj.run_id
             assoc_id = obj.run.event.assoc_id
-        elif hasattr(obj, 'assoc_id'):
+        elif hasattr(obj, 'assoc_id') and obj.assoc_id:
             assoc_id = obj.assoc_id
-        elif hasattr(obj, 'event_id'):
+        elif hasattr(obj, 'event_id') and obj.event_id:
             assoc_id = obj.event.assoc_id
 
-        sign = get_assoc_text(assoc_id, AssocText.SIGNATURE)
-        if sign:
-            body += sign
+        if assoc_id:
+            sign = get_assoc_text(assoc_id, AssocText.SIGNATURE)
+            if sign:
+                body += sign
 
     body += add_unsubscribe_body(obj)
 
