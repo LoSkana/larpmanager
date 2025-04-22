@@ -37,8 +37,8 @@ def post_save_AccountingItemPayment_vat(sender, instance, created, **kwargs):
     previous_paid = previous_pays - previous_trans
 
     # Get VAT configuration (e.g. 22 becomes 0.22)
-    vat_ticket = int(instance.assoc.get_feature_conf("vat_ticket", 0)) / 100.0
-    vat_options = int(instance.assoc.get_feature_conf("vat_options", 0)) / 100.0
+    vat_ticket = int(instance.assoc.get_config("vat_ticket", 0)) / 100.0
+    vat_options = int(instance.assoc.get_config("vat_options", 0)) / 100.0
 
     # Determine the full ticket amount (either from pay_what or ticket price)
     ticket_total = 0

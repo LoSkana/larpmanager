@@ -49,7 +49,7 @@ def manage(request, s=None, n=None):
     else:
         ctx = get_event_run(request, s, n, status=True)
         get_index_event_permissions(ctx, request, s)
-        if assoc.get_feature_conf("interface_admin_links", False):
+        if assoc.get_config("interface_admin_links", False):
             get_index_assoc_permissions(ctx, request, request.assoc["id"], check=False)
 
     ctx["manage"] = 1

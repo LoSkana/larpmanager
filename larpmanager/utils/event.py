@@ -88,7 +88,7 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
 
     ctx["buttons"] = get_event_button_cache(ctx["event"].id)
 
-    ctx["show_limitations"] = ctx["event"].get_feature_conf("show_limitations", False)
+    ctx["show_limitations"] = ctx["event"].get_config("show_limitations", False)
 
     # check if the user has any role
     if has_event_permission(ctx, request, slug):
@@ -101,13 +101,13 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
         ctx["skip"] = "1"
 
     for s in ["char", "teaser", "preview", "text"]:
-        ctx["show_" + s] = "staff" in ctx or ctx["run"].get_feature_conf("show_" + s, False)
+        ctx["show_" + s] = "staff" in ctx or ctx["run"].get_config("show_" + s, False)
 
-    ctx["px_user"] = ctx["event"].get_feature_conf("px_user", False)
+    ctx["px_user"] = ctx["event"].get_config("px_user", False)
     if ctx["event"].parent:
-        ctx["px_user"] = ctx["event"].parent.get_feature_conf("px_user", False)
+        ctx["px_user"] = ctx["event"].parent.get_config("px_user", False)
 
-    ctx["user_character_max"] = ctx["event"].get_feature_conf("user_character_max", 0)
+    ctx["user_character_max"] = ctx["event"].get_config("user_character_max", 0)
 
     for s in [
         "faction",
@@ -122,9 +122,9 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
         if s not in ctx["features"]:
             continue
 
-        ctx["show_" + s] = "staff" in ctx or ctx["run"].get_feature_conf("show_" + s, False)
+        ctx["show_" + s] = "staff" in ctx or ctx["run"].get_config("show_" + s, False)
 
-    ctx["cover_orig"] = ctx["event"].get_feature_conf("cover_orig", False)
+    ctx["cover_orig"] = ctx["event"].get_config("cover_orig", False)
 
     return ctx
 

@@ -458,7 +458,7 @@ def update_registration_accounting(reg):
 
     registration_tokens_credits(reg, remaining, features, assoc_id)
 
-    alert = int(reg.run.event.get_feature_conf("payment_alert", 30))
+    alert = int(reg.run.event.get_config("payment_alert", 30))
 
     if "reg_installments" in features:
         installment_check(reg, alert, assoc_id)

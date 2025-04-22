@@ -53,10 +53,10 @@ def prepare_xml(inv, einvoice):
     dati_trasmissione = ET.SubElement(header, "DatiTrasmissione")
     id_trasmittente = ET.SubElement(dati_trasmissione, "IdTrasmittente")
     ET.SubElement(id_trasmittente, "IdPaese").text = "IT"
-    ET.SubElement(id_trasmittente, "IdCodice").text = inv.assoc.get_feature_conf("einvoice_idcodice")
+    ET.SubElement(id_trasmittente, "IdCodice").text = inv.assoc.get_config("einvoice_idcodice")
     ET.SubElement(dati_trasmissione, "ProgressivoInvio").text = str(einvoice.progressive).zfill(10)
     ET.SubElement(dati_trasmissione, "FormatoTrasmissione").text = "FPR12"
-    ET.SubElement(dati_trasmissione, "CodiceDestinatario").text = inv.assoc.get_feature_conf(
+    ET.SubElement(dati_trasmissione, "CodiceDestinatario").text = inv.assoc.get_config(
         "einvoice_codicedestinatario"
     )
 
@@ -65,19 +65,19 @@ def prepare_xml(inv, einvoice):
     dati_anagrafici = ET.SubElement(cedente_prestatore, "DatiAnagrafici")
     id_fiscale_iva = ET.SubElement(dati_anagrafici, "IdFiscaleIVA")
     ET.SubElement(id_fiscale_iva, "IdPaese").text = "IT"
-    ET.SubElement(id_fiscale_iva, "IdCodice").text = inv.assoc.get_feature_conf("einvoice_partitaiva")
+    ET.SubElement(id_fiscale_iva, "IdCodice").text = inv.assoc.get_config("einvoice_partitaiva")
 
     anagrafica = ET.SubElement(dati_anagrafici, "Anagrafica")
-    ET.SubElement(anagrafica, "Denominazione").text = inv.assoc.get_feature_conf("einvoice_denominazione")
-    ET.SubElement(dati_anagrafici, "RegimeFiscale").text = inv.assoc.get_feature_conf("einvoice_regimefiscale")
+    ET.SubElement(anagrafica, "Denominazione").text = inv.assoc.get_config("einvoice_denominazione")
+    ET.SubElement(dati_anagrafici, "RegimeFiscale").text = inv.assoc.get_config("einvoice_regimefiscale")
 
     sede = ET.SubElement(cedente_prestatore, "Sede")
-    ET.SubElement(sede, "Indirizzo").text = inv.assoc.get_feature_conf("einvoice_indirizzo")
-    ET.SubElement(sede, "NumeroCivico").text = inv.assoc.get_feature_conf("einvoice_numerocivico")
-    ET.SubElement(sede, "Cap").text = inv.assoc.get_feature_conf("einvoice_cap")
-    ET.SubElement(sede, "Comune").text = inv.assoc.get_feature_conf("einvoice_comune")
-    ET.SubElement(sede, "Provincia").text = inv.assoc.get_feature_conf("einvoice_provincia")
-    ET.SubElement(sede, "Nazione").text = inv.assoc.get_feature_conf("einvoice_nazione")
+    ET.SubElement(sede, "Indirizzo").text = inv.assoc.get_config("einvoice_indirizzo")
+    ET.SubElement(sede, "NumeroCivico").text = inv.assoc.get_config("einvoice_numerocivico")
+    ET.SubElement(sede, "Cap").text = inv.assoc.get_config("einvoice_cap")
+    ET.SubElement(sede, "Comune").text = inv.assoc.get_config("einvoice_comune")
+    ET.SubElement(sede, "Provincia").text = inv.assoc.get_config("einvoice_provincia")
+    ET.SubElement(sede, "Nazione").text = inv.assoc.get_config("einvoice_nazione")
 
     # Referred
     cessionario_committente = ET.SubElement(header, "CessionarioCommittente")
@@ -125,9 +125,9 @@ def prepare_xml(inv, einvoice):
     ET.SubElement(dettaglio_linee, "Quantita").text = "1"
     ET.SubElement(dettaglio_linee, "PrezzoUnitario").text = f"{inv.mc_gross:.2f}"
     ET.SubElement(dettaglio_linee, "PrezzoTotale").text = f"{inv.mc_gross:.2f}"
-    aliquotaiva = inv.assoc.get_feature_conf("einvoice_aliquotaiva", "")
+    aliquotaiva = inv.assoc.get_config("einvoice_aliquotaiva", "")
     ET.SubElement(dettaglio_linee, "AliquotaIVA").text = aliquotaiva
-    natura = inv.assoc.get_feature_conf("einvoice_natura", "")
+    natura = inv.assoc.get_config("einvoice_natura", "")
     if natura:
         ET.SubElement(dettaglio_linee, "Natura").text = natura
 

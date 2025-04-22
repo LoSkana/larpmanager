@@ -74,7 +74,7 @@ class OrgaAbilityPxForm(PxBaseForm):
         for s in ["prerequisites", "dependents"]:
             self.fields[s].widget.set_event(self.params["event"])
 
-        px_user = not self.params["event"].get_feature_conf("px_user", False)
+        px_user = not self.params["event"].get_config("px_user", False)
 
         if "character_form" not in self.params["features"] or not px_user:
             self.delete_field("dependents")

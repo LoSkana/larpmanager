@@ -190,7 +190,7 @@ def acc_pay(request, s, n):
         reg = ctx["run"].reg
 
     assoc = Association.objects.get(pk=ctx["a_id"])
-    if assoc.get_feature_conf("membership_cf", False):
+    if assoc.get_config("membership_cf", False):
         result = calculate_fiscal_code(ctx["member"])
         if "error_cf" in result:
             messages.warning(
@@ -248,7 +248,7 @@ def acc_reg(request, r):
     key = f"{reg.id}_{reg.num_payments}"
 
     ctx["association"] = Association.objects.get(pk=ctx["a_id"])
-    ctx["hide_amount"] = ctx["association"].get_feature_conf("payment_hide_amount", False)
+    ctx["hide_amount"] = ctx["association"].get_config("payment_hide_amount", False)
 
     if request.method == "POST":
         form = PaymentForm(request.POST, reg=reg, ctx=ctx)
@@ -290,7 +290,7 @@ def acc_membership(request):
     else:
         form = MembershipForm(ctx=ctx)
     ctx["form"] = form
-    ctx["membership_fee"] = get_assoc(request).get_feature_conf("membership_fee")
+    ctx["membership_fee"] = get_assoc(request).get_config("membership_fee")
 
     return render(request, "larpmanager/member/acc_membership.html", ctx)
 
@@ -545,7 +545,7 @@ def acc_confirm(request, c):
     found = False
     assoc = Association.objects.get(pk=request.assoc["id"])
     if "treasurer" in get_assoc_features(assoc.id):
-        for mb in assoc.get_feature_conf("treasurer_appointees", "").split(", "):
+        for mb in assoc.get_config("treasurer_appointees", "").split(", "):
             if not mb:
                 continue
             if request.user.member.id == int(mb):

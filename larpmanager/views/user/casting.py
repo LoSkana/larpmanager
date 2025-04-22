@@ -101,11 +101,11 @@ def casting_details(ctx, typ):
         ctx["el_name"] = _("Character")
 
     ctx["typ"] = typ
-    ctx["casting_add"] = int(ctx["event"].get_feature_conf("casting_add", 0))
-    ctx["casting_min"] = int(ctx["event"].get_feature_conf("casting_min", 5))
-    ctx["casting_max"] = int(ctx["event"].get_feature_conf("casting_max", 5))
+    ctx["casting_add"] = int(ctx["event"].get_config("casting_add", 0))
+    ctx["casting_min"] = int(ctx["event"].get_config("casting_min", 5))
+    ctx["casting_max"] = int(ctx["event"].get_config("casting_max", 5))
     for s in ["show_pref", "history", "avoid"]:
-        ctx["casting_" + s] = ctx["event"].get_feature_conf("casting_" + s, False)
+        ctx["casting_" + s] = ctx["event"].get_config("casting_" + s, False)
     return ctx
 
 
@@ -135,7 +135,7 @@ def casting(request, s, n, typ=0):
 
     # check already done
     if typ != 0:
-        casting_chars = int(ctx["run"].event.get_feature_conf("casting_characters", 1))
+        casting_chars = int(ctx["run"].event.get_config("casting_characters", 1))
         if ctx["run"].reg.rcrs.count() >= casting_chars:
             chars = []
             for el in ctx["run"].reg.rcrs.values_list("character__number", flat=True):

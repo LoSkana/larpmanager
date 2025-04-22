@@ -53,7 +53,6 @@ class ExeAssociationForm(MyForm):
             "sec_rgb",
             "ter_rgb",
             "payment_methods",
-            "feature_conf",
             "promoter",
             "gdpr_contract",
             "optional_fields",

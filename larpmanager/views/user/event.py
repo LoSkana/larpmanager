@@ -236,8 +236,8 @@ def check_gallery_visibility(request, ctx):
     if "manage" in ctx:
         return True
 
-    hide_signup = ctx["event"].get_feature_conf("gallery_hide_signup", False)
-    hide_login = ctx["event"].get_feature_conf("gallery_hide_login", False)
+    hide_signup = ctx["event"].get_config("gallery_hide_signup", False)
+    hide_login = ctx["event"].get_config("gallery_hide_login", False)
 
     if hide_login and not request.user.is_authenticated:
         ctx["hide_login"] = True
@@ -261,10 +261,10 @@ def gallery(request, s, n):
         if ctx["show_char"]:
             get_event_cache_all(ctx)
 
-        hide_uncasted_players = ctx["event"].get_feature_conf("gallery_hide_uncasted_players", False)
+        hide_uncasted_players = ctx["event"].get_config("gallery_hide_uncasted_players", False)
         if not hide_uncasted_players:
             que = RegistrationCharacterRel.objects.filter(reg__run_id=ctx["run"].id)
-            if ctx["event"].get_feature_conf("user_character_approval", False):
+            if ctx["event"].get_config("user_character_approval", False):
                 que = que.filter(character__status__in=[CharacterStatus.APPROVED])
             assigned = que.values_list("reg_id", flat=True)
 

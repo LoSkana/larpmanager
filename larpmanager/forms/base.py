@@ -521,4 +521,4 @@ class BaseAccForm(forms.Form):
             self.assoc = ctx["association"]
         else:
             self.assoc = get_object_or_404(Association, pk=ctx["a_id"])
-        ctx["user_fees"] = self.assoc.get_feature_conf("payment_fees_user", False)
+        ctx["user_fees"] = self.assoc.get_config("payment_fees_user", False)

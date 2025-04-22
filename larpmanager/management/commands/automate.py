@@ -252,12 +252,12 @@ class Command(BaseCommand):
             self.add_member_badge(k, m, cache)
 
     def check_remind(self, assoc):
-        holidays = assoc.get_feature_conf("remind_holidays", True)
+        holidays = assoc.get_config("remind_holidays", True)
 
         if not holidays and check_holiday():
             return
 
-        remind_days = int(assoc.get_feature_conf("remind_days", 5))
+        remind_days = int(assoc.get_config("remind_days", 5))
 
         reg_que = get_runs_paying_incomplete().filter(alert=True, run__event__assoc=assoc)
         for reg in reg_que.select_related("run", "ticket"):
@@ -331,7 +331,7 @@ class Command(BaseCommand):
         if check_holiday():
             return
 
-        deadline_days = int(run.event.assoc.get_feature_conf("deadline_days", 5))
+        deadline_days = int(run.event.assoc.get_config("deadline_days", 5))
         if get_time_diff_today(run.start) % deadline_days != 1:
             return
 

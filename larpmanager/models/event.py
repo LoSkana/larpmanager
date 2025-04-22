@@ -232,7 +232,7 @@ class Event(BaseModel):
 
         if self.parent and nm in elements:
             # check if we don't want to actually use that event's elements
-            if not self.get_feature_conf(f"campaign_{nm}_indep", False):
+            if not self.get_config(f"campaign_{nm}_indep", False):
                 return self.parent
 
         return self
@@ -290,7 +290,7 @@ class Event(BaseModel):
         os.makedirs(fp, exist_ok=True)
         return fp
 
-    def get_feature_conf(self, name, def_v=None):
+    def get_config(self, name, def_v=None):
         return get_element_config(self, name, def_v)
 
 
@@ -522,7 +522,7 @@ class Run(BaseModel):
     def get_profiles_filepath(self):
         return self.get_media_filepath() + "profiles.pdf"
 
-    def get_feature_conf(self, name, def_v=None):
+    def get_config(self, name, def_v=None):
         return get_element_config(self, name, def_v)
 
 

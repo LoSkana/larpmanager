@@ -206,7 +206,7 @@ def registration_status(run, user, my_regs=None, features_map=None, reg_count=No
         return
 
     # check pre-register
-    if not run.registration_open and run.event.get_feature_conf("pre_register_active", False):
+    if not run.registration_open and run.event.get_config("pre_register_active", False):
         run.status["open"] = False
         mes = _("Pre-register to the event!")
         preregister_url = reverse("pre_register", args=[run.event.slug])
@@ -257,13 +257,13 @@ def registration_find(r, u, my_regs=None):
 def check_character_maximum(event, member):
     # check the amount of characters of the character
     current_chars = event.get_elements(Character).filter(player=member).count()
-    max_chars = int(event.get_feature_conf("user_character_max", 1))
+    max_chars = int(event.get_config("user_character_max", 1))
     return current_chars >= max_chars
 
 
 def registration_status_characters(run, features):
     que = RegistrationCharacterRel.objects.filter(reg_id=run.reg.id)
-    approval = run.event.get_feature_conf("user_character_approval", False)
+    approval = run.event.get_config("user_character_approval", False)
     rcrs = que.order_by("character__number").select_related("character")
 
     aux = []
@@ -382,7 +382,7 @@ def check_assign_character(request, ctx):
 
 
 def get_reduced_available_count(run):
-    ratio = int(run.event.get_feature_conf("reduced_ratio", 10))
+    ratio = int(run.event.get_config("reduced_ratio", 10))
     red = Registration.objects.filter(
         run=run, ticket__tier=RegistrationTicket.REDUCED, cancellation_date__isnull=True
     ).count()

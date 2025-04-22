@@ -101,7 +101,6 @@ def init_cache_assoc(a_slug):
         "voting_candidates",
         "profile",
         "activated",
-        "feature_conf",
         "key",
     ]:
         if m in el:
@@ -111,17 +110,17 @@ def init_cache_assoc(a_slug):
 
     if "custom_mail" in el["features"]:
         k = "mail_server_use_tls"
-        el[k] = assoc.get_feature_conf(k, False)
+        el[k] = assoc.get_config(k, False)
         for s in ["host", "port", "host_user", "host_password"]:
             k = "mail_server_" + s
-            el[k] = assoc.get_feature_conf(k)
+            el[k] = assoc.get_config(k)
 
     if "token_credit" in el["features"]:
         for s in ["token_name", "credit_name"]:
-            el[s] = assoc.get_feature_conf("token_credit_" + s, None)
+            el[s] = assoc.get_config("token_credit_" + s, None)
 
     if "centauri" in el["features"]:
-        prob = assoc.get_feature_conf("centauri_prob")
+        prob = assoc.get_config("centauri_prob")
         if prob:
             el["centauri_prob"] = prob
 

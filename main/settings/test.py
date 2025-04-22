@@ -10,6 +10,8 @@ DATABASES = {
         'NAME': 'larpmanager',
         'USER': 'larpmanager',
         'PASSWORD': 'larpmanager',
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 

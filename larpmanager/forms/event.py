@@ -554,7 +554,7 @@ class OrgaEventTextForm(MyForm):
         delete_choice = []
         if "event_tac" not in self.params["features"]:
             delete_choice.append(EventText.TOC)
-        if not self.params["event"].get_feature_conf("user_character_approval", False):
+        if not self.params["event"].get_config("user_character_approval", False):
             delete_choice.extend(
                 [EventText.CHARACTER_PROPOSED, EventText.CHARACTER_APPROVED, EventText.CHARACTER_REVIEW]
             )
@@ -622,7 +622,7 @@ class OrgaRunForm(MyForm):
 
     class Meta:
         model = Run
-        exclude = ("balance", "number", "feature_conf", "plan", "paid")
+        exclude = ("balance", "number", "plan", "paid")
 
         widgets = {
             "start": DatePickerInput,

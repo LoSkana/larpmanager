@@ -71,7 +71,7 @@ from larpmanager.utils.writing import writing_list, writing_view, writing_versio
 def orga_characters(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_characters")
     get_event_cache_all(ctx)
-    ctx["user_character_approval"] = ctx["event"].get_feature_conf("user_character_approval", False)
+    ctx["user_character_approval"] = ctx["event"].get_config("user_character_approval", False)
 
     # default name for fields
     ctx["fields_name"] = {
@@ -267,7 +267,7 @@ def orga_character_form(request, s, n):
     for el in ctx["list"]:
         el.options_list = el.options.order_by("order")
 
-    ctx["approval"] = ctx["event"].get_feature_conf("user_character_approval", False)
+    ctx["approval"] = ctx["event"].get_config("user_character_approval", False)
 
     return render(request, "larpmanager/orga/characters/form.html", ctx)
 

@@ -43,7 +43,7 @@ def orga_px_deliveries_edit(request, s, n, num):
 @login_required
 def orga_px_abilities(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_px_abilities")
-    ctx["px_user"] = ctx["event"].get_feature_conf("px_user", False)
+    ctx["px_user"] = ctx["event"].get_config("px_user", False)
     ctx["list"] = ctx["event"].get_elements(AbilityPx).order_by("number")
     return render(request, "larpmanager/orga/px/abilities.html", ctx)
 
