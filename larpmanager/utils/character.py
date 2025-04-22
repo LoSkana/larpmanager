@@ -27,7 +27,8 @@ from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.writing import Relationship, Character, PlotCharacterRel
 from larpmanager.utils.event import has_access_character
 from larpmanager.cache.character import get_character_cache_fields, get_event_cache_all
-from larpmanager.utils.common import add_char_addit, get_char, strip_tags
+from larpmanager.utils.common import add_char_addit, get_char
+from larpmanager.models.utils import strip_tags
 from larpmanager.utils.exceptions import NotFoundException
 
 

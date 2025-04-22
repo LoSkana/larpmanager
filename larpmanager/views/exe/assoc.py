@@ -174,14 +174,16 @@ def exe_features_off(request, num):
     return redirect("exe_features")
 
 
-def exe_paginate(request, ctx, typ, url, selrel=None, show_runs=True, afield=None, subtype=None):
+def exe_paginate(request, ctx, typ, selrel=None, show_runs=True, afield=None, subtype=None):
     cls = typ
     if hasattr(typ, "objects"):
         cls = typ.objects
     else:
         typ = typ.model
 
-    elements = cls.filter(assoc_id=ctx["a_id"], hide=False).order_by("-created")
+    elements = cls.filter(assoc_id=ctx["a_id"]).order_by("-created")
+    if 'hide' in [f.name for f in typ._meta.get_fields()]:
+        elements = elements.filter(hide=False)
 
     run = -1
     page = 1

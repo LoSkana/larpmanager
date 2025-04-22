@@ -438,7 +438,7 @@ def exe_send_mail(request):
         form = SendMailForm(request.POST)
         if form.is_valid():
             send_mail_batch(request, assoc_id=request.assoc["id"])
-            messages.success(request, _("Mail sent!"))
+            messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:
         form = SendMailForm()
@@ -452,10 +452,8 @@ def exe_archive_email(request):
         request,
         ctx,
         Email,
-        "exe_archive_email",
-        selrel=("run", "run__event"),
     )
-    return render(request, "larpmanager/exe/accounting/archive_email.html", ctx)
+    return render(request, "larpmanager/exe/users/archive_mail.html", ctx)
 
 @login_required
 def exe_questions(request):

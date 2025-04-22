@@ -80,7 +80,6 @@ def exe_outflows(request):
         request,
         ctx,
         AccountingItemOutflow,
-        "exe_outflows",
         selrel=("run", "run__event"),
     )
     return render(request, "larpmanager/exe/accounting/outflows.html", ctx)
@@ -98,7 +97,6 @@ def exe_inflows(request):
         request,
         ctx,
         AccountingItemInflow,
-        "exe_inflows",
         selrel=("run", "run__event"),
     )
     return render(request, "larpmanager/exe/accounting/inflows.html", ctx)
@@ -112,7 +110,7 @@ def exe_inflows_edit(request, num):
 @login_required
 def exe_donations(request):
     ctx = check_assoc_permission(request, "exe_donations")
-    exe_paginate(request, ctx, AccountingItemDonation, "exe_donations", show_runs=False)
+    exe_paginate(request, ctx, AccountingItemDonation, show_runs=False)
     return render(request, "larpmanager/exe/accounting/donations.html", ctx)
 
 
@@ -124,7 +122,7 @@ def exe_donations_edit(request, num):
 @login_required
 def exe_credits(request):
     ctx = check_assoc_permission(request, "exe_credits")
-    exe_paginate(request, ctx, AccountingItemOther, "exe_credits", selrel=("run", "run__event"), subtype="credits")
+    exe_paginate(request, ctx, AccountingItemOther, selrel=("run", "run__event"), subtype="credits")
     return render(request, "larpmanager/exe/accounting/credits.html", ctx)
 
 
@@ -136,7 +134,7 @@ def exe_credits_edit(request, num):
 @login_required
 def exe_tokens(request):
     ctx = check_assoc_permission(request, "exe_tokens")
-    exe_paginate(request, ctx, AccountingItemOther, "exe_tokens", selrel=("run", "run__event"), subtype="tokens")
+    exe_paginate(request, ctx, AccountingItemOther, selrel=("run", "run__event"), subtype="tokens")
     return render(request, "larpmanager/exe/accounting/tokens.html", ctx)
 
 
@@ -152,7 +150,6 @@ def exe_expenses(request):
         request,
         ctx,
         AccountingItemExpense,
-        "exe_expenses",
         selrel=("run", "run__event"),
     )
     return render(request, "larpmanager/exe/accounting/expenses.html", ctx)
@@ -187,7 +184,6 @@ def exe_payments(request):
         request,
         ctx,
         AccountingItemPayment,
-        "exe_payments",
         selrel=("reg__member", "reg__run", "inv", "inv__method"),
     )
     assign_payment_fee(ctx)
@@ -206,7 +202,6 @@ def exe_invoices(request):
         request,
         ctx,
         PaymentInvoice,
-        "exe_invoices",
         show_runs=False,
         selrel=("method", "member"),
     )
@@ -254,7 +249,6 @@ def exe_refunds(request):
         request,
         ctx,
         RefundRequest,
-        "exe_refunds",
         show_runs=False,
     )
     return render(request, "larpmanager/exe/accounting/refunds.html", ctx)

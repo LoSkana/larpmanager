@@ -259,7 +259,7 @@ def orga_send_mail(request, s, n):
         form = SendMailForm(request.POST)
         if form.is_valid():
             send_mail_batch(request, run_id=ctx["run"].id)
-            messages.success(request, _("Mail sent!"))
+            messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:
         form = SendMailForm()

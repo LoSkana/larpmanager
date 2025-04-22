@@ -545,7 +545,7 @@ def lm_send(request):
             subj = request.POST["subject"]
             body = request.POST["body"]
             send_mail_exec(players, subj, body)
-            messages.success(request, _("Mail sent!"))
+            messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:
         form = SendMailForm()
