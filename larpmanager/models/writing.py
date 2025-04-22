@@ -250,8 +250,6 @@ class Character(Writing):
         options={"quality": 90},
     )
 
-    addit = models.TextField(blank=True, null=True)
-
     player = models.ForeignKey(
         Member,
         on_delete=models.CASCADE,

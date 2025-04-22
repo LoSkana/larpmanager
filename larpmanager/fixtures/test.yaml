@@ -213,7 +213,6 @@
     optional_fields: ''
     main_mail: test@test.it
     payment_currency: e
-    feature_conf: null
     promoter: ''
     background: ''
     font: ''
@@ -324,7 +323,6 @@
     max_pg: 10
     max_filler: 0
     max_waiting: 0
-    pdf_instructions: null
     parent: null
     background: ''
     font: ''
@@ -332,7 +330,6 @@
     pri_rgb: null
     sec_rgb: null
     ter_rgb: null
-    feature_conf: null
     template: false
     features: []
 - model: larpmanager.eventrole
@@ -364,7 +361,6 @@
     registration_open: null
     registration_secret: 1d71c0a4a727
     balance: '0.00'
-    feature_conf: '{}'
     paid: null
     plan: f
 - model: larpmanager.registrationticket

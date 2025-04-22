@@ -147,8 +147,6 @@ class Event(BaseModel):
         help_text=_("Maximum number of waiting spots to manage (0 for infinite)"),
     )
 
-    pdf_instructions = models.TextField(blank=True, null=True)
-
     features = models.ManyToManyField(Feature, related_name="events", blank=True)
 
     parent = models.ForeignKey("event", on_delete=models.CASCADE, null=True, blank=True)
@@ -196,8 +194,6 @@ class Event(BaseModel):
         blank=True,
         null=True,
     )
-
-    feature_conf = models.TextField(blank=True, null=True)
 
     template = models.BooleanField(default=False)
 
@@ -473,8 +469,6 @@ class Run(BaseModel):
     )
 
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-
-    feature_conf = models.TextField(blank=True, null=True)
 
     paid = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 

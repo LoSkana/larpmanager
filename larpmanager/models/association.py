@@ -107,8 +107,6 @@ class Association(BaseModel):
         help_text=_("Indicates the currency in which to receive payments"),
     )
 
-    feature_conf = models.TextField(blank=True, null=True)
-
     promoter = models.ImageField(
         max_length=500,
         upload_to=UploadToPathAndRename("promot/"),
