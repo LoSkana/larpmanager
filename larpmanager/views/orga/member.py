@@ -240,7 +240,7 @@ def orga_questions_close(request, s, n, r):
     return redirect("orga_questions", s=s, n=n)
 
 
-def send_mail_batch(request, obj_id):
+def send_mail_batch(request, assoc_id=None, run_id=None):
     players = request.POST["players"]
     subj = request.POST["subject"]
     body = request.POST["body"]
@@ -249,7 +249,7 @@ def send_mail_batch(request, obj_id):
     if raw:
         body = raw
 
-    send_mail_exec(players, subj, body, obj_id, reply_to)
+    send_mail_exec(players, subj, body, assoc_id, run_id, reply_to)
 
 
 @login_required
@@ -258,7 +258,7 @@ def orga_send_mail(request, s, n):
     if request.method == "POST":
         form = SendMailForm(request.POST)
         if form.is_valid():
-            send_mail_batch(request, ctx["event"].id)
+            send_mail_batch(request, run_id=ctx["run"].id)
             messages.success(request, _("Mail sent!"))
             return redirect(request.path_info)
     else:

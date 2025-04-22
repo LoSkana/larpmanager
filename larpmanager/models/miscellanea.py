@@ -537,8 +537,8 @@ class PlayerRelationship(BaseModel):
 
 
 class Email(BaseModel):
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, null=True)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    run = models.ForeignKey(Run, on_delete=models.CASCADE, null=True)
     recipient = models.CharField(max_length=170)
     subj = models.CharField(max_length=500)
     body = models.TextField()

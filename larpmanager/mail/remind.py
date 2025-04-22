@@ -47,7 +47,7 @@ def remember_membership(reg):
         "to your place."
     )
 
-    my_send_mail(subj, body, reg.member, reg.run.event)
+    my_send_mail(subj, body, reg.member, reg.run)
 
 
 def remember_pay(reg):
@@ -97,7 +97,7 @@ def remember_pay(reg):
         "to your place."
     )
 
-    my_send_mail(subj, body, reg.member, reg.run.event)
+    my_send_mail(subj, body, reg.member, reg.run)
 
 
 def remember_profile(reg):
@@ -115,7 +115,7 @@ def remember_profile(reg):
         % context
     )
 
-    my_send_mail(subj, body, reg.member, reg.run.event)
+    my_send_mail(subj, body, reg.member, reg.run)
 
 
 def remember_membership_fee(reg):
@@ -142,7 +142,7 @@ def remember_membership_fee(reg):
         "us know if you encounter any problems, or if we can help in any way!"
     ) % {"url": get_url("accounting", reg.run.event)}
 
-    my_send_mail(subj, body, reg.member, reg.run.event)
+    my_send_mail(subj, body, reg.member, reg.run)
 
 
 def notify_deadlines(run):
@@ -175,4 +175,4 @@ def notify_deadlines(run):
             # Add emails
             body += f"<p>{', '.join([el[1] for el in res[key]])}</p>"
 
-        my_send_mail(subj, body, orga, run.event)
+        my_send_mail(subj, body, orga, run)

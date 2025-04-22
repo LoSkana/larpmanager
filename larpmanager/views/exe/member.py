@@ -53,7 +53,7 @@ from larpmanager.models.event import (
 )
 from larpmanager.models.member import Membership, Badge, VolunteerRegistry, Member, Vote, get_user_membership
 from larpmanager.models.miscellanea import (
-    HelpQuestion,
+    HelpQuestion, Email,
 )
 from larpmanager.models.registration import (
     Registration,
@@ -72,6 +72,7 @@ from larpmanager.utils.pdf import (
     get_membership_request,
     print_volunteer_registry,
 )
+from larpmanager.views.exe.assoc import exe_paginate
 from larpmanager.views.orga.member import send_mail_batch
 
 
@@ -436,7 +437,7 @@ def exe_send_mail(request):
     if request.method == "POST":
         form = SendMailForm(request.POST)
         if form.is_valid():
-            send_mail_batch(request, request.assoc["id"])
+            send_mail_batch(request, assoc_id=request.assoc["id"])
             messages.success(request, _("Mail sent!"))
             return redirect(request.path_info)
     else:
@@ -444,6 +445,17 @@ def exe_send_mail(request):
     ctx["form"] = form
     return render(request, "larpmanager/exe/users/send_mail.html", ctx)
 
+@login_required
+def exe_archive_email(request):
+    ctx = check_assoc_permission(request, "exe_archive_email")
+    exe_paginate(
+        request,
+        ctx,
+        Email,
+        "exe_archive_email",
+        selrel=("run", "run__event"),
+    )
+    return render(request, "larpmanager/exe/accounting/archive_email.html", ctx)
 
 @login_required
 def exe_questions(request):
