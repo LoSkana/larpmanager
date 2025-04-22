@@ -244,7 +244,7 @@ def my_send_mail(subj, body, recipient, obj=None, reply_to=None, schedule=0):
         elif hasattr(obj, 'assoc_id') and obj.assoc_id:
             assoc_id = obj.assoc_id
         elif hasattr(obj, 'event_id') and obj.event_id:
-            assoc_id = obj.event.assoc_id
+            assoc_id = obj.event.assoc_id 
 
         if assoc_id:
             sign = get_assoc_text(assoc_id, AssocText.SIGNATURE)
