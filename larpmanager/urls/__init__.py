@@ -71,4 +71,4 @@ def walk_patterns(patterns):
 
 
 STATIC_PREFIXES = walk_patterns(urlpatterns)
-setattr(conf_settings, "STATIC_PREFIXES", STATIC_PREFIXES)
+conf_settings.STATIC_PREFIXES = STATIC_PREFIXES

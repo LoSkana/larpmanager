@@ -21,7 +21,7 @@
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
-from larpmanager.admin.base import DefModelAdmin, reduced, EventFilter, AssocFilter, RunFilter
+from larpmanager.admin.base import DefModelAdmin, reduced, AssocFilter, RunFilter
 from larpmanager.admin.character import TargetFilter
 from larpmanager.models.miscellanea import (
     Contact,
@@ -38,7 +38,8 @@ from larpmanager.models.miscellanea import (
     InventoryBoxHistory,
     ShuttleService,
     Util,
-    PlayerRelationship, Email,
+    PlayerRelationship,
+    Email,
 )
 
 

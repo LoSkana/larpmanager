@@ -124,7 +124,7 @@ def calculate_fiscal_code(member):
         slug = slugify(birth_place)
         # look for nations
         file_path = os.path.join(conf_settings.BASE_DIR, "../data/istat-nations.csv")
-        with open(file_path, "r") as file:
+        with open(file_path) as file:
             reader = csv.reader(file)
             # second pass, search something *equal*
             for row in reader:
@@ -132,7 +132,7 @@ def calculate_fiscal_code(member):
                     return row[1]
 
         file_path = os.path.join(conf_settings.BASE_DIR, "../data/istat-codes.csv")
-        with open(file_path, "r") as file:
+        with open(file_path) as file:
             reader = csv.reader(file)
             # second pass, search something *equal*
             for row in reader:

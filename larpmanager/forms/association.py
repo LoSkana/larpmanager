@@ -29,13 +29,10 @@ from larpmanager.forms.utils import (
     AssocMemberS2WidgetMulti,
     prepare_permissions_role,
     save_permissions_role,
-    add_custom_field,
-    get_custom_field,
     SlugInput,
 )
 from larpmanager.models.access import AssocRole, AssocPermission
 from larpmanager.models.association import Association, AssocText
-from larpmanager.models.utils import get_all_element_configs, save_all_element_configs
 
 
 class ExeAssociationForm(MyForm):
