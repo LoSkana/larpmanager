@@ -225,7 +225,7 @@ def update_registration_cancellation(instance):
 
 
 @receiver(pre_save, sender=Registration)
-def update_Registration(sender, instance, **kwargs):
+def update_registration(sender, instance, **kwargs):
     if instance.run and instance.run.development == Run.DONE:
         return
 
@@ -242,7 +242,7 @@ def update_Registration(sender, instance, **kwargs):
 
 
 @receiver(pre_delete, sender=Registration)
-def delete_Registration(sender, instance, *args, **kwargs):
+def delete_registration(sender, instance, *args, **kwargs):
     if instance.cancellation_date:
         return
 
@@ -267,7 +267,7 @@ def delete_Registration(sender, instance, *args, **kwargs):
 
 
 @receiver(pre_save, sender=PreRegistration)
-def update_PreRegistration(sender, instance, **kwargs):
+def update_pre_registration(sender, instance, **kwargs):
     # Send email when the profile is created the first time
     context = {"event": instance.event}
     if not instance.pk:

@@ -27,7 +27,7 @@ from larpmanager.models.accounting import AccountingItemPayment, AccountingItemT
 
 
 @receiver(post_save, sender=AccountingItemPayment)
-def post_save_AccountingItemPayment_vat(sender, instance, created, **kwargs):
+def post_save_accounting_item_payment_vat(sender, instance, created, **kwargs):
     if "vat" not in get_assoc_features(instance.assoc_id):
         return
 

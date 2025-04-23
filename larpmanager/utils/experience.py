@@ -29,13 +29,13 @@ from larpmanager.utils.common import add_char_addit
 
 
 @receiver(post_save, sender=AbilityPx)
-def post_save_AbilityPx(sender, instance, *args, **kwargs):
+def post_save_ability_px(sender, instance, *args, **kwargs):
     for char in instance.characters.all():
         update_px(char)
 
 
 @receiver(post_save, sender=DeliveryPx)
-def post_save_DeliveryPx(sender, instance, *args, **kwargs):
+def post_save_delivery_px(sender, instance, *args, **kwargs):
     for char in instance.characters.all():
         char.save()
 

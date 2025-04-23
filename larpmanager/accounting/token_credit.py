@@ -76,19 +76,19 @@ def get_runs_paying_incomplete():
 
 
 @receiver(post_save, sender=AccountingItemPayment)
-def post_save_AccountingItemPayment(sender, instance, created, **kwargs):
+def post_save_accounting_item_payment(sender, instance, created, **kwargs):
     if not created and instance.reg:
         update_token_credit(instance, instance.pay == AccountingItemPayment.TOKEN)
 
 
 @receiver(post_delete, sender=AccountingItemPayment)
-def post_delete_AccountingItemPayment(sender, instance, **kwargs):
+def post_delete_accounting_item_payment(sender, instance, **kwargs):
     if instance.reg:
         update_token_credit(instance, instance.pay == AccountingItemPayment.TOKEN)
 
 
 @receiver(post_save, sender=AccountingItemOther)
-def post_save_AccountingItemOther_accounting(sender, instance, **kwargs):
+def post_save_accounting_item_other_accounting(sender, instance, **kwargs):
     if not instance.member:
         return
 
@@ -96,7 +96,7 @@ def post_save_AccountingItemOther_accounting(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=AccountingItemExpense)
-def post_save_AccountingItemExpense_accounting(sender, instance, **kwargs):
+def post_save_accounting_item_expense_accounting(sender, instance, **kwargs):
     if not instance.member or not instance.is_approved:
         return
 

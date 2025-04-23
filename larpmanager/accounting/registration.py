@@ -375,19 +375,19 @@ def post_save_registration_accounting(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=AccountingItemDiscount)
-def post_save_AccountingItemDiscount_accounting(sender, instance, **kwargs):
+def post_save_accounting_item_discount_accounting(sender, instance, **kwargs):
     if instance.reg:
         instance.reg.save()
 
 
 @receiver(post_save, sender=RegistrationTicket)
-def post_save_RegistrationTicket(sender, instance, created, **kwargs):
-    # print(f"@@@@ post_save_RegistrationTicket {instance} {datetime.now()}")
+def post_save_registration_ticket(sender, instance, created, **kwargs):
+    # print(f"@@@@ post_save_registration_ticket {instance} {datetime.now()}")
     check_reg_events(instance.event)
 
 
 @receiver(post_save, sender=RegistrationOption)
-def post_save_RegistrationOption(sender, instance, created, **kwargs):
+def post_save_registration_option(sender, instance, created, **kwargs):
     # print(f"@@@@ post_RegistrationOption {instance} {datetime.now()}")
     check_reg_events(instance.question.event)
 

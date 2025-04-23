@@ -28,15 +28,15 @@ from larpmanager.cache.role import has_assoc_permission, has_event_permission
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
 from larpmanager.utils.exceptions import (
-    FeatureException,
-    HiddenException,
-    MembershipException,
-    NotFoundException,
-    PermissionException,
-    RedirectException,
-    SignupException,
-    UnknowRunException,
-    WaitingException,
+    FeatureError,
+    HiddenError,
+    MembershipError,
+    NotFoundError,
+    PermissionError,
+    RedirectError,
+    SignupError,
+    UnknowRunError,
+    WaitingError,
 )
 
 
@@ -51,17 +51,17 @@ class ExceptionHandlingMiddleware:
 
     @staticmethod
     def process_exception(request, exception):
-        if isinstance(exception, PermissionException):
+        if isinstance(exception, PermissionError):
             return render(request, "exception/permission.html")
 
-        if isinstance(exception, NotFoundException):
+        if isinstance(exception, NotFoundError):
             return render(request, "exception/notfound.html")
 
-        if isinstance(exception, MembershipException):
+        if isinstance(exception, MembershipError):
             ctx = {"assocs": exception.assocs}
             return render(request, "exception/membership.html", ctx)
 
-        if isinstance(exception, UnknowRunException):
+        if isinstance(exception, UnknowRunError):
             runs = (
                 Run.objects.filter(development=Run.SHOW)
                 .exclude(event__visible=False)
@@ -71,7 +71,7 @@ class ExceptionHandlingMiddleware:
             )
             return render(request, "exception/runs.html", {"runs": runs})
 
-        if isinstance(exception, FeatureException):
+        if isinstance(exception, FeatureError):
             feature = Feature.objects.get(slug=exception.feature)
             ctx = {"exe": exception, "feature": feature}
 
@@ -84,24 +84,24 @@ class ExceptionHandlingMiddleware:
 
             return render(request, "exception/feature.html", ctx)
 
-        if isinstance(exception, SignupException):
+        if isinstance(exception, SignupError):
             mes = _("To access this feature, you must first register!")
             messages.success(request, mes)
             args = [exception.slug, exception.number]
             return HttpResponseRedirect(reverse("register", args=args))
 
-        if isinstance(exception, WaitingException):
+        if isinstance(exception, WaitingError):
             mes = _("This feature is available for non-waiting tickets!")
             messages.success(request, mes)
             args = [exception.slug, exception.number]
             return HttpResponseRedirect(reverse("register", args=args))
 
-        if isinstance(exception, HiddenException):
+        if isinstance(exception, HiddenError):
             messages.warning(request, exception.name + " " + _("not visible at this time"))
             args = [exception.slug, exception.number]
             return HttpResponseRedirect(reverse("gallery", args=args))
 
-        if isinstance(exception, RedirectException):
+        if isinstance(exception, RedirectError):
             return redirect(exception.view)
 
         return None  # Middlewares should return None when not applied

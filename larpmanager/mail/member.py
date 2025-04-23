@@ -67,7 +67,7 @@ def send_membership_confirm(request, membership):
 
 
 @receiver(pre_save, sender=AccountingItemMembership)
-def save_AccountingItemMembership(sender, instance, *args, **kwargs):
+def save_accounting_item_membership(sender, instance, *args, **kwargs):
     if instance.hide:
         return
     if instance.pk:

@@ -58,7 +58,7 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.event import get_event, get_event_run
 from larpmanager.utils.exceptions import (
-    HiddenException,
+    HiddenError,
 )
 from larpmanager.utils.registration import is_reg_provisional, registration_status
 from larpmanager.utils.text import get_assoc_text, get_event_text
@@ -365,7 +365,7 @@ def check_visibility(ctx, typ, name):
         raise Http404(typ + " not active")
 
     if "staff" not in ctx and not ctx["show_" + typ]:
-        raise HiddenException(ctx["event"].slug, ctx["run"].number, name)
+        raise HiddenError(ctx["event"].slug, ctx["run"].number, name)
 
 
 def factions(request, s, n):

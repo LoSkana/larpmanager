@@ -289,13 +289,13 @@ def copy(request, ctx, parent, event, element):
 
 
 def copy_css(ctx, event, parent):
-    appForm = OrgaAppearanceForm(ctx=ctx)
-    path = appForm.get_css_path(parent)
+    app_form = OrgaAppearanceForm(ctx=ctx)
+    path = app_form.get_css_path(parent)
     if not os.path.exists(path):
         return
     value = default_storage.open(path).read().decode("utf-8")
     event.css_code = generate_id(32)
-    npath = appForm.get_css_path(event)
+    npath = app_form.get_css_path(event)
     default_storage.save(npath, ContentFile(value))
 
 

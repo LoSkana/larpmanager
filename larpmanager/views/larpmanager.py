@@ -80,7 +80,7 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.event import get_event_run
 from larpmanager.utils.exceptions import (
-    PermissionException,
+    PermissionError,
 )
 from larpmanager.utils.tasks import my_send_mail, my_send_simple_mail, send_mail_exec
 from larpmanager.utils.text import get_assoc_text
@@ -213,7 +213,7 @@ def activate_feature_assoc(request, cod, p=None):
 
     # check the user has the permission to add features
     if not has_assoc_permission(request, "exe_features"):
-        raise PermissionException()
+        raise PermissionError()
 
     # add feature
     assoc = get_object_or_404(Association, pk=request.assoc["id"])
@@ -237,7 +237,7 @@ def activate_feature_event(request, s, n, cod, p=None):
     # check the user has the permission to add features
     ctx = get_event_run(request, s, n)
     if not has_event_permission({}, request, ctx["event"].slug, "orga_features"):
-        raise PermissionException()
+        raise PermissionError()
 
     # add feature
     ctx["event"].features.add(feature)

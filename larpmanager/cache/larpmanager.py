@@ -52,5 +52,5 @@ def update_cache_promoters():
 
 
 @receiver(post_save, sender=Association)
-def update_Association_reset_promoters(sender, instance, **kwargs):
+def update_association_reset_promoters(sender, instance, **kwargs):
     reset_cache_promoters()

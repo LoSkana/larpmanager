@@ -26,12 +26,12 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.mail.base import notify_admins
 from larpmanager.models.accounting import PaymentInvoice
-from larpmanager.utils.common import clean, detectDelimiter
+from larpmanager.utils.common import clean, detect_delimiter
 
 
 def invoice_verify(request, ctx, csv_upload):
     content = csv_upload.read().decode("utf-8")
-    delim = detectDelimiter(content)
+    delim = detect_delimiter(content)
     csv_data = csv.reader(StringIO(content), delimiter=delim)
 
     counter = 0

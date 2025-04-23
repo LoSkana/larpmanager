@@ -24,7 +24,7 @@ from larpmanager.cache.links import cache_event_links
 from larpmanager.models.association import Association
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.utils import get_payment_details
-from larpmanager.utils.exceptions import MembershipException
+from larpmanager.utils.exceptions import MembershipError
 
 
 def def_user_ctx(request):
@@ -32,8 +32,8 @@ def def_user_ctx(request):
     if request.assoc["id"] == 0:
         if hasattr(request, "user") and hasattr(request.user, "member"):
             assocs = [el.assoc for el in request.user.member.memberships.all()]
-            raise MembershipException(assocs)
-        raise MembershipException()
+            raise MembershipError(assocs)
+        raise MembershipError()
 
     res = {"a_id": request.assoc["id"]}
     for s in request.assoc:

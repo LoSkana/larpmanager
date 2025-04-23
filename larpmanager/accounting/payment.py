@@ -271,7 +271,7 @@ def payment_received(invoice):
 
 
 @receiver(pre_save, sender=PaymentInvoice)
-def update_PaymentInvoice(sender, instance, **kwargs):
+def update_payment_invoice(sender, instance, **kwargs):
     if not instance.pk:
         return
 
@@ -290,7 +290,7 @@ def update_PaymentInvoice(sender, instance, **kwargs):
 
 
 @receiver(pre_save, sender=RefundRequest)
-def update_RefundRequest(sender, instance, **kwargs):
+def update_refund_request(sender, instance, **kwargs):
     if not instance.pk:
         return
 
@@ -315,7 +315,7 @@ def update_RefundRequest(sender, instance, **kwargs):
 
 
 @receiver(pre_save, sender=Collection)
-def update_Collection(sender, instance, **kwargs):
+def update_collection(sender, instance, **kwargs):
     if not instance.pk:
         return
 

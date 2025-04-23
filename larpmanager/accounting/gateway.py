@@ -524,7 +524,7 @@ class RedSysClient:
         assert isinstance(merchant_parameters, str)
         return json.loads(base64.b64decode(merchant_parameters).decode())
 
-    def encrypt_order_with_3DES(self, order):
+    def encrypt_order(self, order):
         """
         This method creates a unique key for every request, based on the
         Ds_Merchant_Order and in the shared secret (SERMEPA_SECRET_KEY).
@@ -575,7 +575,7 @@ class RedSysClient:
         # Encode merchant_parameters in json + base64
         b64_params = base64.b64encode(json.dumps(merchant_parameters).encode())
         # Encrypt order
-        encrypted_order = self.encrypt_order_with_3DES(merchant_parameters["DS_MERCHANT_ORDER"])
+        encrypted_order = self.encrypt_order(merchant_parameters["DS_MERCHANT_ORDER"])
         # Sign parameters
         signature = self.sign_hmac256(encrypted_order, b64_params).decode()
         return {
@@ -623,7 +623,7 @@ class RedSysClient:
 
         order = merchant_parameters["Ds_Order"]
 
-        encrypted_order = self.encrypt_order_with_3DES(order)
+        encrypted_order = self.encrypt_order(order)
 
         # print(encrypted_order)
 

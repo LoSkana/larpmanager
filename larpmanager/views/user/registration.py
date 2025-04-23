@@ -63,7 +63,7 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.event import get_event, get_event_run
 from larpmanager.utils.exceptions import (
-    RedirectException,
+    RedirectError,
     check_event_feature,
 )
 from larpmanager.utils.registration import check_assign_character, get_reduced_available_count, is_reg_provisional
@@ -643,7 +643,7 @@ def gift(request, s, n):
 def check_registration_open(ctx, request):
     if not ctx["run"].status["open"]:
         messages.warning(request, _("Registrations not open!"))
-        raise RedirectException("home")
+        raise RedirectError("home")
 
 
 @login_required

@@ -54,7 +54,7 @@ from larpmanager.utils.common import (
     get_handout,
 )
 from larpmanager.utils.event import get_event_run
-from larpmanager.utils.exceptions import NotFoundException
+from larpmanager.utils.exceptions import NotFoundError
 from larpmanager.utils.tasks import background_auto
 from larpmanager.utils.text import get_assoc_text
 
@@ -276,26 +276,26 @@ def print_volunteer_registry(ctx):
 
 
 @receiver(pre_delete, sender=Handout)
-def pre_delete_pdf_Handout(sender, instance, **kwargs):
+def pre_delete_pdf_handout(sender, instance, **kwargs):
     for run in instance.event.runs.all():
         os.remove(instance.get_filepath(run))
 
 
 @receiver(post_save, sender=Handout)
-def post_save_pdf_Handout(sender, instance, **kwargs):
+def post_save_pdf_handout(sender, instance, **kwargs):
     for run in instance.event.runs.all():
         os.remove(instance.get_filepath(run))
 
 
 @receiver(pre_delete, sender=HandoutTemplate)
-def pre_delete_pdf_HandoutTemplate(sender, instance, **kwargs):
+def pre_delete_pdf_handout_template(sender, instance, **kwargs):
     for run in instance.event.runs.all():
         for el in instance.handouts.all():
             os.remove(el.get_filepath(run))
 
 
 @receiver(post_save, sender=HandoutTemplate)
-def post_save_pdf_HandoutTemplate(sender, instance, **kwargs):
+def post_save_pdf_handout_template(sender, instance, **kwargs):
     for run in instance.event.runs.all():
         for el in instance.handouts.all():
             os.remove(el.get_filepath(run))
@@ -325,7 +325,7 @@ def remove_char_pdf(instance, single=None, runs=None):
 
 
 @receiver(pre_delete, sender=Character)
-def pre_delete_pdf_Character(sender, instance, **kwargs):
+def pre_delete_pdf_character(sender, instance, **kwargs):
     remove_run_pdf(instance.event)
     remove_char_pdf(instance)
 
@@ -337,29 +337,29 @@ def post_save_pdf_character(sender, instance, **kwargs):
 
 
 @receiver(pre_delete, sender=PlayerRelationship)
-def pre_delete_pdf_PlayerRelationship(sender, instance, **kwargs):
+def pre_delete_pdf_player_relationship(sender, instance, **kwargs):
     for el in instance.reg.rcrs.all():
         remove_char_pdf(el.character, instance.reg.run)
 
 
 @receiver(post_save, sender=PlayerRelationship)
-def post_save_pdf_PlayerRelationship(sender, instance, **kwargs):
+def post_save_pdf_player_relationship(sender, instance, **kwargs):
     for el in instance.reg.rcrs.all():
         remove_char_pdf(el.character, instance.reg.run)
 
 
 @receiver(pre_delete, sender=Relationship)
-def pre_delete_pdf_Relationship(sender, instance, **kwargs):
+def pre_delete_pdf_relationship(sender, instance, **kwargs):
     remove_char_pdf(instance.source)
 
 
 @receiver(post_save, sender=Relationship)
-def post_save_pdf_Relationship(sender, instance, **kwargs):
+def post_save_pdf_relationship(sender, instance, **kwargs):
     remove_char_pdf(instance.source)
 
 
 @receiver(pre_delete, sender=Faction)
-def pre_delete_pdf_Faction(sender, instance, **kwargs):
+def pre_delete_pdf_faction(sender, instance, **kwargs):
     for char in instance.event.characters.all():
         remove_char_pdf(char)
 
@@ -383,12 +383,12 @@ def remove_pdf_at(instance):
 
 
 @receiver(pre_delete, sender=AssignmentTrait)
-def pre_delete_pdf_AssignmentTrait(sender, instance, **kwargs):
+def pre_delete_pdf_assignment_trait(sender, instance, **kwargs):
     remove_pdf_at(instance)
 
 
 @receiver(post_save, sender=AssignmentTrait)
-def post_saveAssignmentTrait(sender, instance, created, **kwargs):
+def post_save_assignment_trait(sender, instance, created, **kwargs):
     if not instance.member or not created:
         return
 
@@ -417,7 +417,7 @@ def print_character_go(ctx, c):
         print_character_rel(ctx, True)
     except Http404:
         pass
-    except NotFoundException:
+    except NotFoundError:
         pass
 
 

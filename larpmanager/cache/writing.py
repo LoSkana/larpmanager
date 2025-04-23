@@ -125,7 +125,7 @@ def get_cache_cocreation(run, el=None):
 
 
 @receiver(post_save, sender=RunText)
-def update_cache_text_field_RunText(sender, instance, **kwargs):
+def update_cache_text_field_run_text(sender, instance, **kwargs):
     if instance.typ == RunText.COCREATION:
         get_cache_cocreation(instance.run, instance)
 

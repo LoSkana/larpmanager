@@ -52,8 +52,8 @@ class Command(BaseCommand):
         call_command("loaddata", "test.yaml", verbosity=0)
 
         # Re-hash user passwords
-        User = get_user_model()
-        for user in User.objects.all():
+        user_model = get_user_model()
+        for user in user_model.objects.all():
             user.set_password("banana")
             user.is_active = True
             user.save()

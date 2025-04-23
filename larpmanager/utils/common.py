@@ -69,7 +69,7 @@ from larpmanager.models.writing import (
     SpeedLarp,
 )
 from larpmanager.utils.exceptions import (
-    NotFoundException,
+    NotFoundError,
 )
 
 format_date = "%d/%m/%y"
@@ -155,7 +155,7 @@ def get_event_template(ctx, n):
     try:
         ctx["event"] = Event.objects.get(pk=n, template=True, assoc_id=ctx["a_id"])
     except ObjectDoesNotExist as err:
-        raise NotFoundException() from err
+        raise NotFoundError() from err
 
 
 def get_char(ctx, n, by_number=False):
@@ -617,7 +617,7 @@ def get_payment_methods_ids(ctx):
     return set(Association.objects.get(pk=ctx["a_id"]).payment_methods.values_list("pk", flat=True))
 
 
-def detectDelimiter(content):
+def detect_delimiter(content):
     header = content.split("\n")[0]
     for d in ["\t", ";", ","]:
         if d in header:

@@ -114,7 +114,7 @@ def reset_run_event_links(event):
 
 
 @receiver(post_save, sender=Registration)
-def post_save_Registration_event_links(sender, instance, **kwargs):
+def post_save_registration_event_links(sender, instance, **kwargs):
     if not instance.member:
         return
 

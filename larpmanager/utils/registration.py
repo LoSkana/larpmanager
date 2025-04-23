@@ -32,7 +32,7 @@ from larpmanager.models.member import Membership, get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.common import format_datetime, get_time_diff_today
-from larpmanager.utils.exceptions import SignupException, WaitingException
+from larpmanager.utils.exceptions import SignupError, WaitingError
 
 
 def registration_available(r, features=None, reg_counts=None):
@@ -359,10 +359,10 @@ def get_player_signup(request, ctx):
 def check_signup(request, ctx):
     reg = get_player_signup(request, ctx)
     if not reg:
-        raise SignupException(ctx["event"].slug, ctx["run"].number)
+        raise SignupError(ctx["event"].slug, ctx["run"].number)
 
     if reg.ticket and reg.ticket.tier == RegistrationTicket.WAITING:
-        raise WaitingException(ctx["event"].slug, ctx["run"].number)
+        raise WaitingError(ctx["event"].slug, ctx["run"].number)
 
 
 def check_assign_character(request, ctx):

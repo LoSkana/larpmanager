@@ -53,13 +53,13 @@ def init_cache_run(s, n):
 
 
 @receiver(pre_save, sender=Run)
-def pre_save_Run(sender, instance, **kwargs):
+def pre_save_run(sender, instance, **kwargs):
     if instance.pk:
         reset_cache_run(instance.event.slug, instance.number)
 
 
 @receiver(pre_save, sender=Event)
-def pre_save_Event(sender, instance, **kwargs):
+def pre_save_event(sender, instance, **kwargs):
     if instance.pk:
         for run in instance.runs.all():
             reset_cache_run(instance.slug, run.number)

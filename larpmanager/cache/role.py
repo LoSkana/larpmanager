@@ -28,7 +28,7 @@ from larpmanager.cache.links import cache_event_links
 from larpmanager.cache.permission import get_assoc_permission_feature
 from larpmanager.models.access import AssocPermission, AssocRole, EventRole
 from larpmanager.utils.base import def_user_ctx
-from larpmanager.utils.exceptions import FeatureException, PermissionException
+from larpmanager.utils.exceptions import FeatureError, PermissionError
 
 
 def cache_assoc_role_key(ar_id):
@@ -52,7 +52,7 @@ def get_cache_assoc_role(ar_id):
         try:
             ar = AssocRole.objects.get(pk=ar_id)
         except Exception as err:
-            raise PermissionException() from err
+            raise PermissionError() from err
         res = get_assoc_role(ar)
         cache.set(key, res)
     return res
@@ -122,7 +122,7 @@ def get_cache_event_role(ev_id):
         try:
             ar = EventRole.objects.get(pk=ev_id)
         except Exception as err:
-            raise PermissionException() from err
+            raise PermissionError() from err
         res = get_event_role(ar)
         cache.set(key, res)
     return res
@@ -180,10 +180,10 @@ def has_event_permission(ctx, request, slug, perm=None):
 def check_assoc_permission(request, slug):
     ctx = def_user_ctx(request)
     if not has_assoc_permission(request, slug):
-        raise PermissionException()
+        raise PermissionError()
     feature = get_assoc_permission_feature(slug)
     if feature != "def" and feature not in request.assoc["features"]:
-        raise FeatureException(path=request.path, feature=feature, run=0)
+        raise FeatureError(path=request.path, feature=feature, run=0)
     ctx["manage"] = 1
     get_index_assoc_permissions(ctx, request, request.assoc["id"])
     ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", False)
@@ -193,7 +193,7 @@ def check_assoc_permission(request, slug):
 def get_index_assoc_permissions(ctx, request, assoc_id, check=True):
     (is_admin, user_assoc_permissions, names) = get_assoc_roles(request)
     if check and not names and not is_admin:
-        raise PermissionException()
+        raise PermissionError()
     ctx["role_names"] = names
     features = get_assoc_features(assoc_id)
     ctx["assoc_pms"] = get_index_permissions(features, is_admin, user_assoc_permissions, AssocPermission)

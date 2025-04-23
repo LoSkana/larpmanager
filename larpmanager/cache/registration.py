@@ -88,12 +88,12 @@ def update_reg_counts(r):
 
 
 @receiver(post_save, sender=Registration)
-def post_save_Registration_cache(sender, instance, created, **kwargs):
+def post_save_registration_cache(sender, instance, created, **kwargs):
     reset_cache_reg_counts(instance.run)
 
 
 @receiver(post_save, sender=Character)
-def post_save_RegistrationCharacterRel_cache(sender, instance, created, **kwargs):
+def post_save_registration_character_rel_cache(sender, instance, created, **kwargs):
     for run in instance.event.runs.all():
         reset_cache_reg_counts(run)
 
@@ -103,12 +103,12 @@ def post_save_RegistrationCharacterRel_cache(sender, instance, created, **kwargs
 
 
 @receiver(post_save, sender=Run)
-def post_save_Run_cache(sender, instance, created, **kwargs):
+def post_save_run_cache(sender, instance, created, **kwargs):
     reset_cache_reg_counts(instance)
 
 
 @receiver(post_save, sender=Event)
-def post_save_Event_cache(sender, instance, created, **kwargs):
+def post_save_event_cache(sender, instance, created, **kwargs):
     for r in instance.runs.all():
         reset_cache_reg_counts(r)
 

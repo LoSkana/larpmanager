@@ -40,7 +40,7 @@ from larpmanager.utils.tasks import my_send_mail
 
 
 @receiver(post_save, sender=AccountingItemExpense)
-def update_AccountingItemExpense_post(sender, instance, created, **kwargs):
+def update_accounting_item_expense_post(sender, instance, created, **kwargs):
     if instance.hide:
         return
     # Send email when the expenditure item is created the first time
@@ -70,7 +70,7 @@ def get_expense_mail(instance):
 
 
 @receiver(pre_save, sender=AccountingItemExpense)
-def update_AccountingItemExpense_pre(sender, instance, **kwargs):
+def update_accounting_item_expense_pre(sender, instance, **kwargs):
     if instance.hide:
         return
     if not instance.pk:
@@ -117,7 +117,7 @@ def get_token_credit_name(assoc):
 
 
 @receiver(pre_save, sender=AccountingItemPayment)
-def update_AccountingItemPayment(sender, instance, **kwargs):
+def update_accounting_item_payment(sender, instance, **kwargs):
     if instance.hide:
         return
 
@@ -212,7 +212,7 @@ def get_pay_money_email(curr_sym, instance, run):
 
 
 @receiver(pre_save, sender=AccountingItemOther)
-def update_AccountingItemOther(sender, instance, **kwargs):
+def update_accounting_item_other(sender, instance, **kwargs):
     if instance.hide:
         return
 
@@ -305,7 +305,7 @@ def get_token_email(instance, token_name):
 
 
 @receiver(pre_save, sender=AccountingItemDonation)
-def save_AccountingItemDonation(sender, instance, *args, **kwargs):
+def save_accounting_item_donation(sender, instance, *args, **kwargs):
     if instance.hide:
         return
     if instance.pk:

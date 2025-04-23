@@ -29,7 +29,7 @@ from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, PlotCharacterRel, Relationship
 from larpmanager.utils.common import add_char_addit, get_char
 from larpmanager.utils.event import has_access_character
-from larpmanager.utils.exceptions import NotFoundException
+from larpmanager.utils.exceptions import NotFoundError
 
 
 def get_character_relationships(ctx, restrict=True):
@@ -187,7 +187,7 @@ def get_character_sheet_fields(ctx):
 def get_char_check(request, ctx, num, restrict=False, bypass=False):
     get_event_cache_all(ctx)
     if num not in ctx["chars"]:
-        raise NotFoundException()
+        raise NotFoundError()
 
     ctx["char"] = ctx["chars"][num]
 

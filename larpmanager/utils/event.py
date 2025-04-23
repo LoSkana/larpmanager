@@ -34,7 +34,7 @@ from larpmanager.models.event import Event, Run
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, Faction
 from larpmanager.utils.base import def_user_ctx
-from larpmanager.utils.exceptions import FeatureException, PermissionException, UnknowRunException, check_event_feature
+from larpmanager.utils.exceptions import FeatureError, PermissionError, UnknowRunError, check_event_feature
 from larpmanager.utils.registration import check_signup, registration_status
 
 
@@ -156,7 +156,7 @@ def get_run(ctx, s, n):
         ctx["run"] = que.get(pk=res)
         ctx["event"] = ctx["run"].event
     except Exception as err:
-        raise UnknowRunException() from err
+        raise UnknowRunError() from err
 
 
 def get_character_filter(ctx, ch, regs, filters):
@@ -241,11 +241,11 @@ def has_access_character(request, ctx):
 def check_event_permission(request, s, n, perm=None):
     ctx = get_event_run(request, s, n)
     if not has_event_permission(ctx, request, s, perm):
-        raise PermissionException()
+        raise PermissionError()
     if perm:
         feature = get_event_permission_feature(perm)
         if feature != "def" and feature not in ctx["features"]:
-            raise FeatureException(path=request.path, feature=feature, run=ctx["run"].id)
+            raise FeatureError(path=request.path, feature=feature, run=ctx["run"].id)
     get_index_event_permissions(ctx, request, s)
     return ctx
 
@@ -255,7 +255,7 @@ def get_index_event_permissions(ctx, request, slug, check=True):
     if "assoc_role" in ctx and 1 in ctx["assoc_role"]:
         is_organizer = True
     if check and not names and not is_organizer:
-        raise PermissionException()
+        raise PermissionError()
     ctx["role_names"] = names
     features = get_event_features(ctx["event"].id)
     ctx["event_pms"] = get_index_permissions(features, is_organizer, user_event_permissions, EventPermission)
