@@ -3478,7 +3478,7 @@ msgstr ""
 msgid "Copy and paste exactly all the coloured text below into the field "
 msgstr ""
 
-msgid "Indicates that payment is sent "
+msgid "Indicates that payment is sent 'to friends and family'."
 msgstr ""
 
 msgid ""

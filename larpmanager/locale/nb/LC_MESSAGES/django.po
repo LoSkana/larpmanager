@@ -3833,9 +3833,6 @@ msgstr "Scenografi - innredning, materialer"
 msgid "Surcharge applied to the ticket"
 msgstr "Tillegg på billetten"
 
-msgid "Indicates that payment is sent "
-msgstr "Indikerer at betalingen er sendt"
-
 msgid "Relationships of your character"
 msgstr "Lenker til karakteren din"
 
@@ -4990,6 +4987,9 @@ msgstr "Angi hvordan utgiftene er konfigurert på budsjettnivå."
 
 msgid "Indicate as precisely as possible where to pick you up."
 msgstr "Angi så nøyaktig som mulig hvor du skal hentes."
+
+msgid "Indicates that payment is sent 'to friends and family'."
+msgstr "Angir at betalingen er sendt \"til venner og familie\"."
 
 msgid "View the complete list of characters and their players!"
 msgstr "Se den komplette listen over rollefigurer og deres spillere!"

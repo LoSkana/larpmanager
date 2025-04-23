@@ -3833,9 +3833,6 @@ msgstr "Scenografia - allestimenti, materiali"
 msgid "Surcharge applied to the ticket"
 msgstr "Sovraprezzo applicato al biglietto"
 
-msgid "Indicates that payment is sent "
-msgstr "Indica che il pagamento è stato inviato"
-
 msgid "Relationships of your character"
 msgstr "Legami del tuo personaggio"
 
@@ -4984,6 +4981,9 @@ msgstr "Indicare come viene configurata la spesa a livello di bilancio"
 msgid "Indicate as precisely as possible where to pick you up."
 msgstr ""
 "Indica nel modo più preciso possibile il punto in cui venirvi a prendere"
+
+msgid "Indicates that payment is sent 'to friends and family'."
+msgstr "Indica che il pagamento viene inviato \"ad amici e parenti\"."
 
 msgid "View the complete list of characters and their players!"
 msgstr "Visualizza la lista completa dei personaggi e dei loro giocatori!"

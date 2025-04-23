@@ -3833,9 +3833,6 @@ msgstr "Conception des décors - équipements, matériaux"
 msgid "Surcharge applied to the ticket"
 msgstr "Supplément appliqué au billet"
 
-msgid "Indicates that payment is sent "
-msgstr "Indique que le paiement est envoyé"
-
 msgid "Relationships of your character"
 msgstr "Liens de votre personnage"
 
@@ -5006,6 +5003,9 @@ msgstr "Indiquer comment les dépenses sont configurées au niveau du budget"
 msgid "Indicate as precisely as possible where to pick you up."
 msgstr ""
 "Indiquer le plus précisément possible l'endroit où l'on vient vous chercher"
+
+msgid "Indicates that payment is sent 'to friends and family'."
+msgstr "Indique que le paiement est envoyé \"aux amis et à la famille\"."
 
 msgid "View the complete list of characters and their players!"
 msgstr "Consultez la liste complète des personnages et de leurs joueurs !"

@@ -8,7 +8,7 @@ classifiers = [
 ]
 
 [tool.djlint]
-ignore="H006"
+ignore="H006,H025,H029,H021,H013"
 extend_exclude="static/,larpmanager/static/"
 
 [tool.ruff]

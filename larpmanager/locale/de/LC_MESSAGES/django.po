@@ -3833,9 +3833,6 @@ msgstr "Bühnenbild - Ausstattung, Materialien"
 msgid "Surcharge applied to the ticket"
 msgstr "Aufpreis zum Fahrschein"
 
-msgid "Indicates that payment is sent "
-msgstr "Zeigt an, dass die Zahlung gesendet wurde"
-
 msgid "Relationships of your character"
 msgstr "Links deines Charakters"
 
@@ -5052,6 +5049,9 @@ msgstr "Geben Sie an, wie die Ausgaben auf Haushaltsebene gestaltet sind"
 
 msgid "Indicate as precisely as possible where to pick you up."
 msgstr "Geben Sie so genau wie möglich an, wo Sie abgeholt werden sollen"
+
+msgid "Indicates that payment is sent 'to friends and family'."
+msgstr "Zeigt an, dass die Zahlung \"an Freunde und Familie\" gesendet wird."
 
 msgid "View the complete list of characters and their players!"
 msgstr ""

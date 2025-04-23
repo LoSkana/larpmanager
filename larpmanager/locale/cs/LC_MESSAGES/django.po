@@ -3833,9 +3833,6 @@ msgstr "Scénografie - kování, materiály"
 msgid "Surcharge applied to the ticket"
 msgstr "Příplatek k jízdence"
 
-msgid "Indicates that payment is sent "
-msgstr "Označuje, že platba je odeslána"
-
 msgid "Relationships of your character"
 msgstr "Odkazy vaší postavy"
 
@@ -4977,6 +4974,9 @@ msgstr "Uveďte, jak jsou výdaje nastaveny na úrovni rozpočtu."
 
 msgid "Indicate as precisely as possible where to pick you up."
 msgstr "Co nejpřesněji uveďte, kde vás vyzvednout."
+
+msgid "Indicates that payment is sent 'to friends and family'."
+msgstr "Označuje, že platba je zasílána \"přátelům a rodině\"."
 
 msgid "View the complete list of characters and their players!"
 msgstr "Prohlédněte si kompletní seznam postav a jejich hráčů!"

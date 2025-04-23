@@ -3833,9 +3833,6 @@ msgstr "Decorontwerp - inrichting, materialen"
 msgid "Surcharge applied to the ticket"
 msgstr "Toeslag op ticket"
 
-msgid "Indicates that payment is sent "
-msgstr "Geeft aan dat de betaling is verzonden"
-
 msgid "Relationships of your character"
 msgstr "Links van je personage"
 
@@ -5009,6 +5006,9 @@ msgstr "Geef aan hoe de uitgaven zijn geconfigureerd op budgetniveau"
 
 msgid "Indicate as precisely as possible where to pick you up."
 msgstr "Geef zo nauwkeurig mogelijk aan waar je opgehaald kunt worden"
+
+msgid "Indicates that payment is sent 'to friends and family'."
+msgstr "Geeft aan dat de betaling wordt verzonden 'naar vrienden en familie'."
 
 msgid "View the complete list of characters and their players!"
 msgstr "Bekijk de volledige lijst met personages en hun spelers!"
