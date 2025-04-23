@@ -173,7 +173,7 @@ def notify_help_question(sender, instance, **kwargs):
                     instance,
                 )
                 body += "<br /><br />" + _("(<a href='%(url)s'>answer here</a>)") % {"url": url}
-                my_send_mail(subj, body, organizer, instance.run.event)
+                my_send_mail(subj, body, organizer, instance.run)
 
         elif instance.assoc:
             body, subj = get_help_email(instance, mb)

@@ -278,3 +278,10 @@
     slug: exe_templates
     number: 51
     feature: 179
+- model: larpmanager.assocpermission
+  pk: 44
+  fields:
+    name: Archive
+    slug: exe_archive_email
+    number: 91
+    feature: 166

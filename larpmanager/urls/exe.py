@@ -72,9 +72,14 @@ urlpatterns = [
         name="exe_badges_edit",
     ),
     path(
-        "manage/send_mail/",
+        "manage/mail/send",
         views_em.exe_send_mail,
         name="exe_send_mail",
+    ),
+    path(
+        "manage/mail/archive",
+        views_em.exe_archive_email,
+        name="exe_archive_email",
     ),
     path(
         "manage/questions/",

@@ -47,7 +47,7 @@ def update_AccountingItemExpense_post(sender, instance, created, **kwargs):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             body, subj = get_expense_mail(instance)
-            my_send_mail(subj, body, orga, instance)
+            my_send_mail(subj, body, orga, instance.run)
 
 
 def get_expense_mail(instance):
@@ -102,7 +102,7 @@ def update_AccountingItemExpense_pre(sender, instance, **kwargs):
             % {"url": get_url("accounting", instance)}
             + "</i>"
         )
-    my_send_mail(subj, body, instance.member, instance)
+    my_send_mail(subj, body, instance.member, instance.run)
 
 
 def get_token_credit_name(assoc):
@@ -142,13 +142,13 @@ def notify_pay_token(instance, member, run, token_name):
     # to user
     activate(member.language)
     body, subj = get_pay_token_email(instance, run, token_name)
-    my_send_mail(subj, body, member, instance)
+    my_send_mail(subj, body, member, run)
     # to orga
     for orga in get_event_organizers(run.event):
         activate(orga.language)
         body, subj = get_pay_token_email(instance, run, token_name)
         subj += _(" for %(user)s") % {"user": member}
-        my_send_mail(subj, body, orga, instance)
+        my_send_mail(subj, body, orga, run)
 
 
 def get_pay_token_email(instance, run, token_name):
@@ -167,13 +167,13 @@ def notify_pay_credit(credit_name, instance, member, run):
     # to user
     activate(member.language)
     body, subj = get_pay_credit_email(credit_name, instance, run)
-    my_send_mail(subj, body, member, instance)
+    my_send_mail(subj, body, member, run)
     # to orga
     for orga in get_event_organizers(run.event):
         activate(orga.language)
         body, subj = get_pay_credit_email(credit_name, instance, run)
         subj += _(" for %(user)s") % {"user": member}
-        my_send_mail(subj, body, orga, instance)
+        my_send_mail(subj, body, orga, run)
 
 
 def get_pay_credit_email(credit_name, instance, run):
@@ -192,13 +192,13 @@ def notify_pay_money(curr_sym, instance, member, run):
     # to user
     activate(member.language)
     body, subj = get_pay_money_email(curr_sym, instance, run)
-    my_send_mail(subj, body, member, instance)
+    my_send_mail(subj, body, member, run)
     # to orga
     for orga in get_event_organizers(run.event):
         activate(orga.language)
         body, subj = get_pay_money_email(curr_sym, instance, run)
         subj += _(" for %(user)s") % {"user": member}
-        my_send_mail(subj, body, orga, instance)
+        my_send_mail(subj, body, orga, run)
 
 
 def get_pay_money_email(curr_sym, instance, run):

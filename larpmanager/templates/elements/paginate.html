@@ -7,17 +7,17 @@
     <table class="no_csv paginate">
         <tr>
             {% if show_runs %}
-                <td>
-                    Run:
+                <th>
+                    Run: <br />
                     <select id="run" name="run">
                         {% for el in runs %}
                             <option value="{{ el.0 }}" {% if el.0 == run_sel %}selected{% endif %}>{{ el.1 }}</option>
                         {% endfor %}
                     </select>
-                </td>
+                </th>
             {% endif %}
-            <td>
-                Page:
+            <th>
+                Page: <br />
                 <select id="page" name="page">
                     {% with ''|center:pagin.num_pages as range %}
                         {% for _ in range %}
@@ -25,24 +25,26 @@
                                     {% if forloop.counter == page %}selected{% endif %}>{{ forloop.counter }}</option>
                         {% endfor %}
                     {% endwith %}
-                </td>
-                <td>
-                    Size:
+                </select>
+                </th>
+                <th>
+                    Size: <br />
                     <select id="size" name="size">
                         {% for num in size_range %}
                             <option value="{{ num }}" {% if size == num %}selected{% endif %}>{{ num }}</option>
                         {% endfor %}
-                    </td>
-                    <td>
+                    </select>
+                    </th>
+                    <th>
                         <input type="text"
                                id="search"
                                name="search"
                                placeholder="Search... "
                                value="{{ search }}" />
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         <input type="submit" value="Go">
-                    </td>
+                    </th>
                 </tr>
             </table>
         </form>

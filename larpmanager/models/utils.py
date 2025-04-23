@@ -23,6 +23,8 @@ import os
 import random
 import string
 from datetime import datetime
+from html.parser import HTMLParser
+from io import StringIO
 from uuid import uuid4
 
 from cryptography.fernet import Fernet
@@ -256,3 +258,24 @@ def save_payment_details(assoc, payment_details):
     encrypted_file_path = get_payment_details_path(assoc)
     with open(encrypted_file_path, "wb") as f:
         f.write(encrypted_data)
+
+
+def strip_tags(html):
+    s = MLStripper()
+    s.feed(html)
+    return s.get_data()
+
+
+class MLStripper(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.reset()
+        self.strict = False
+        self.convert_charrefs = True
+        self.text = StringIO()
+
+    def handle_data(self, d):
+        self.text.write(d)
+
+    def get_data(self):
+        return self.text.getvalue()

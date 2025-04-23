@@ -21,7 +21,7 @@
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
-from larpmanager.admin.base import DefModelAdmin, reduced
+from larpmanager.admin.base import DefModelAdmin, reduced, EventFilter, AssocFilter, RunFilter
 from larpmanager.admin.character import TargetFilter
 from larpmanager.models.miscellanea import (
     Contact,
@@ -38,7 +38,7 @@ from larpmanager.models.miscellanea import (
     InventoryBoxHistory,
     ShuttleService,
     Util,
-    PlayerRelationship,
+    PlayerRelationship, Email,
 )
 
 
@@ -170,3 +170,14 @@ class PlayerRelationshipAdmin(DefModelAdmin):
     @staticmethod
     def reg_red(instance):
         return f"{instance.reg} ({instance.reg.run.number})"
+
+
+@admin.register(Email)
+class EmailAdmin(DefModelAdmin):
+    list_display = ("assoc", "run", "recipient", "subj", "body_red")
+    list_filter = (AssocFilter, RunFilter)
+    autocomplete_fields = ["assoc", "run"]
+
+    @staticmethod
+    def body_red(instance):
+        return reduced(instance.body)

@@ -488,3 +488,10 @@
     slug: orga_character_form
     number: 12
     feature: 176
+- model: larpmanager.eventpermission
+  pk: 76
+  fields:
+    name: Archive
+    slug: orga_archive_email
+    number: 100
+    feature: 166

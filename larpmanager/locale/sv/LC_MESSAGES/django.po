@@ -185,6 +185,12 @@ msgstr "Enheter"
 msgid "past"
 msgstr "förflutet"
 
+msgid "Body"
+msgstr "Kropp"
+
+msgid "Sent"
+msgstr "Skickad"
+
 msgid "Card"
 msgstr "Kort"
 
@@ -807,6 +813,9 @@ msgstr "Inställning"
 msgid "History"
 msgstr "Historisk"
 
+msgid "Subject"
+msgstr "Ämne"
+
 msgid "Payment"
 msgstr "Betalning"
 
@@ -851,6 +860,9 @@ msgstr "Verktyg"
 
 msgid "Shuttle"
 msgstr "Skyttel"
+
+msgid "Archive"
+msgstr "Arkiv"
 
 msgid "Modules"
 msgstr "Moduler"
@@ -1227,6 +1239,9 @@ msgstr "Fall"
 msgid "Short url"
 msgstr "Kort url"
 
+msgid "Recipient"
+msgstr "Mottagare"
+
 msgid "Residence"
 msgstr "Bostad"
 
@@ -1505,9 +1520,6 @@ msgstr "Historisk"
 
 msgid "Statistics"
 msgstr "Statistik"
-
-msgid "Mail sent!"
-msgstr "Mail skickat!"
 
 msgid "Disbursment"
 msgstr "Utbetalning"
@@ -1823,6 +1835,9 @@ msgstr "Prenumeration"
 
 msgid "Url Shortner"
 msgstr "Kortare URL"
+
+msgid "Archive mail"
+msgstr "Arkivpost"
 
 msgid "Members list"
 msgstr "Lista över medlemmar"
@@ -3069,6 +3084,9 @@ msgstr "Lista över andra användare:"
 
 msgid "Sign up as a filler!"
 msgstr "Registrera dig som utfyllare!"
+
+msgid "Mail added to queue!"
+msgstr "Mail läggs till i kön!"
 
 msgid "Gift card cancelled!"
 msgstr "Presentkortet är annullerat!"
@@ -4689,6 +4707,10 @@ msgstr "Här är det begränsade antalet inmatningsalternativ."
 
 msgid "You are including (at least one of these filters)"
 msgstr "Du inkluderar (minst ett av) dessa filter"
+
+msgid "This page shows all emails, both queued and sent."
+msgstr ""
+"På den här sidan visas alla e-postmeddelanden, både köade och skickade."
 
 msgid "This page allows you to upload a new photo album."
 msgstr "På den här sidan kan du ladda upp ett nytt fotoalbum."

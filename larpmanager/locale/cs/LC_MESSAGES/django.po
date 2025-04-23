@@ -185,6 +185,12 @@ msgstr "Subjekty"
 msgid "past"
 msgstr "minulost"
 
+msgid "Body"
+msgstr "Tělo"
+
+msgid "Sent"
+msgstr "Odesláno"
+
 msgid "Card"
 msgstr "Karta"
 
@@ -807,6 +813,9 @@ msgstr "Nastavení"
 msgid "History"
 msgstr "Historické stránky"
 
+msgid "Subject"
+msgstr "Předmět"
+
 msgid "Payment"
 msgstr "Platba"
 
@@ -851,6 +860,9 @@ msgstr "Utility"
 
 msgid "Shuttle"
 msgstr "Kyvadlová doprava"
+
+msgid "Archive"
+msgstr "Archiv"
 
 msgid "Modules"
 msgstr "Moduly"
@@ -1227,6 +1239,9 @@ msgstr "Případy"
 msgid "Short url"
 msgstr "Krátká url adresa"
 
+msgid "Recipient"
+msgstr "Příjemce"
+
 msgid "Residence"
 msgstr "Rezidence"
 
@@ -1505,9 +1520,6 @@ msgstr "Historické stránky"
 
 msgid "Statistics"
 msgstr "Statistiky"
-
-msgid "Mail sent!"
-msgstr "Pošta odeslána!"
 
 msgid "Disbursment"
 msgstr "Výplata"
@@ -1823,6 +1835,9 @@ msgstr "Předplatné"
 
 msgid "Url Shortner"
 msgstr "Zkracovač URL"
+
+msgid "Archive mail"
+msgstr "Archivovat poštu"
 
 msgid "Members list"
 msgstr "Seznam členů"
@@ -3069,6 +3084,9 @@ msgstr "Seznam dalších uživatelů:"
 
 msgid "Sign up as a filler!"
 msgstr "Zaregistrujte se jako výplň!"
+
+msgid "Mail added to queue!"
+msgstr "Mail přidán do fronty!"
 
 msgid "Gift card cancelled!"
 msgstr "Dárková karta zrušena!"
@@ -4683,6 +4701,11 @@ msgstr "Zde je omezený počet možností vstupu."
 
 msgid "You are including (at least one of these filters)"
 msgstr "Zahrnujete (alespoň jeden z) těchto filtrů"
+
+msgid "This page shows all emails, both queued and sent."
+msgstr ""
+"Na této stránce se zobrazují všechny e-maily, a to jak ty, které jsou ve "
+"frontě, tak ty, které byly odeslány."
 
 msgid "This page allows you to upload a new photo album."
 msgstr "Na této stránce můžete nahrát nové fotoalbum."

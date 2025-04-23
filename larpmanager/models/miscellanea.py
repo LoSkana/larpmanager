@@ -33,7 +33,7 @@ from larpmanager.models.base import BaseModel
 from larpmanager.models.event import Run, Event
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
-from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid_miny, my_uuid, show_thumb
+from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid_miny, my_uuid, show_thumb, strip_tags
 from larpmanager.models.writing import Character
 
 
@@ -534,3 +534,17 @@ class PlayerRelationship(BaseModel):
                 name="unique_player_relationship_without_optional",
             ),
         ]
+
+
+class Email(BaseModel):
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    run = models.ForeignKey(Run, on_delete=models.CASCADE, blank=True, null=True)
+    recipient = models.CharField(max_length=170)
+    subj = models.CharField(max_length=500)
+    body = models.TextField()
+    reply_to = models.CharField(max_length=170, blank=True, null=True)
+    sent = models.DateTimeField(blank=True, null=True)
+    search = models.CharField(max_length=500, blank=True)
+
+    def __str__(self):
+        return f"{self.recipient} - {self.subj} - {strip_tags(self.body)[:500]}"[:500]

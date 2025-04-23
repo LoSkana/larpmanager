@@ -34,11 +34,12 @@ from larpmanager.forms.miscellanea import OrgaHelpQuestionForm, SendMailForm
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.event import PreRegistration
 from larpmanager.models.member import Membership, Member
-from larpmanager.models.miscellanea import HelpQuestion
+from larpmanager.models.miscellanea import HelpQuestion, Email
 from larpmanager.models.registration import (
     RegistrationTicket,
 )
 from larpmanager.cache.character import get_event_cache_all
+from larpmanager.utils.paginate import orga_paginate
 from larpmanager.utils.tasks import send_mail_exec
 
 
@@ -240,7 +241,7 @@ def orga_questions_close(request, s, n, r):
     return redirect("orga_questions", s=s, n=n)
 
 
-def send_mail_batch(request, obj_id):
+def send_mail_batch(request, assoc_id=None, run_id=None):
     players = request.POST["players"]
     subj = request.POST["subject"]
     body = request.POST["body"]
@@ -249,7 +250,7 @@ def send_mail_batch(request, obj_id):
     if raw:
         body = raw
 
-    send_mail_exec(players, subj, body, obj_id, reply_to)
+    send_mail_exec(players, subj, body, assoc_id, run_id, reply_to)
 
 
 @login_required
@@ -258,13 +259,20 @@ def orga_send_mail(request, s, n):
     if request.method == "POST":
         form = SendMailForm(request.POST)
         if form.is_valid():
-            send_mail_batch(request, ctx["event"].id)
-            messages.success(request, _("Mail sent!"))
+            send_mail_batch(request, run_id=ctx["run"].id)
+            messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:
         form = SendMailForm()
     ctx["form"] = form
     return render(request, "larpmanager/exe/users/send_mail.html", ctx)
+
+
+@login_required
+def orga_archive_email(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_archive_email")
+    orga_paginate(request, ctx, Email)
+    return render(request, "larpmanager/exe/users/archive_mail.html", ctx)
 
 
 @login_required

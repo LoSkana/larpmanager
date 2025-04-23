@@ -185,6 +185,12 @@ msgstr "Entiteiten"
 msgid "past"
 msgstr "verleden"
 
+msgid "Body"
+msgstr "Lichaam"
+
+msgid "Sent"
+msgstr "Verzonden"
+
 msgid "Card"
 msgstr "Kaart"
 
@@ -807,6 +813,9 @@ msgstr "Instelling"
 msgid "History"
 msgstr "Historisch"
 
+msgid "Subject"
+msgstr "Onderwerp"
+
 msgid "Payment"
 msgstr "Betaling"
 
@@ -851,6 +860,9 @@ msgstr "Utility"
 
 msgid "Shuttle"
 msgstr "Shuttle"
+
+msgid "Archive"
+msgstr "Archief"
 
 msgid "Modules"
 msgstr "Modules"
@@ -1227,6 +1239,9 @@ msgstr "Gevallen"
 msgid "Short url"
 msgstr "Korte url"
 
+msgid "Recipient"
+msgstr "Ontvanger"
+
 msgid "Residence"
 msgstr "Residentie"
 
@@ -1505,9 +1520,6 @@ msgstr "Historisch"
 
 msgid "Statistics"
 msgstr "Statistieken"
-
-msgid "Mail sent!"
-msgstr "Mail verzonden!"
 
 msgid "Disbursment"
 msgstr "Uitbetaling"
@@ -1823,6 +1835,9 @@ msgstr "Abonnement"
 
 msgid "Url Shortner"
 msgstr "Url Verkorter"
+
+msgid "Archive mail"
+msgstr "Archief mail"
 
 msgid "Members list"
 msgstr "Ledenlijst"
@@ -3069,6 +3084,9 @@ msgstr "Lijst van andere gebruikers:"
 
 msgid "Sign up as a filler!"
 msgstr "Meld je aan als vuller!"
+
+msgid "Mail added to queue!"
+msgstr "Mail toegevoegd aan wachtrij!"
 
 msgid "Gift card cancelled!"
 msgstr "Cadeaubon geannuleerd!"
@@ -4696,6 +4714,9 @@ msgstr "Dit zijn de beperkte toegangsmogelijkheden."
 
 msgid "You are including (at least one of these filters)"
 msgstr "U bevat (ten minste een van) deze filters"
+
+msgid "This page shows all emails, both queued and sent."
+msgstr "Deze pagina toont alle e-mails, zowel in de wachtrij als verzonden."
 
 msgid "This page allows you to upload a new photo album."
 msgstr "Op deze pagina kunt u een nieuw fotoalbum uploaden."

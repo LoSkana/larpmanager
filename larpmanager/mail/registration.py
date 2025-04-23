@@ -72,7 +72,7 @@ def update_registration_status(instance):
         if custom_mesg:
             body += "<br />" + custom_mesg
 
-    my_send_mail(subj, body, instance.member, instance.run.event)
+    my_send_mail(subj, body, instance.member, instance.run)
 
     # to orga
     if instance.modified == 1 and instance.run.event.assoc.get_config("mail_signup_new", False):
@@ -81,14 +81,14 @@ def update_registration_status(instance):
             subj = hdr(instance.run.event) + _("Registration to %(event)s by %(user)s") % context
             body = _("The user has confirmed its registration for this event!")
             body += registration_options(instance)
-            my_send_mail(subj, body, orga, instance.run.event)
+            my_send_mail(subj, body, orga, instance.run)
     elif instance.run.event.assoc.get_config("mail_signup_update", False):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration updated to %(event)s by %(user)s") % context
             body = _("The user has updated their registration for this event!")
             body += registration_options(instance)
-            my_send_mail(subj, body, orga, instance.run.event)
+            my_send_mail(subj, body, orga, instance.run)
 
 
 def registration_options(instance):
@@ -203,7 +203,7 @@ def update_registration_character_rel_post(sender, instance, created, **kwargs):
     if custom_message_ass:
         body += "<br />" + custom_message_ass
 
-    my_send_mail(subj, body, instance.reg.member, instance.reg.run.event)
+    my_send_mail(subj, body, instance.reg.member, instance.reg.run)
 
 
 def update_registration_cancellation(instance):
@@ -217,7 +217,7 @@ def update_registration_cancellation(instance):
     activate(instance.member.language)
     subj = hdr(instance.run.event) + _("Registration cancellation for %(event)s") % context
     body = _("We confirm that your registration for this event has been cancelled. We are sorry to see you go!")
-    my_send_mail(subj, body, instance.member, instance.run.event)
+    my_send_mail(subj, body, instance.member, instance.run)
 
     # to orga
     if instance.run.event.assoc.get_config("mail_signup_del", False):
@@ -225,7 +225,7 @@ def update_registration_cancellation(instance):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration cancelled for %(event)s by %(user)s") % context
             body = _("The registration for this event has been cancelled.")
-            my_send_mail(subj, body, orga, instance.run.event)
+            my_send_mail(subj, body, orga, instance.run)
 
 
 @receiver(pre_save, sender=Registration)
@@ -259,7 +259,7 @@ def delete_Registration(sender, instance, *args, **kwargs):
     activate(instance.member.language)
     subj = hdr(instance.run.event) + _("Registration cancelled for %(event)s") % context
     body = _("We confirm that your registration for this event has been cancelled.")
-    my_send_mail(subj, body, instance.member, instance.run.event)
+    my_send_mail(subj, body, instance.member, instance.run)
 
     if instance.run.event.assoc.get_config("mail_signup_del", False):
         # to orga
@@ -267,7 +267,7 @@ def delete_Registration(sender, instance, *args, **kwargs):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration cancelled for %(event)s by %(user)s") % context
             body = _("The registration for this event has been cancelled.")
-            my_send_mail(subj, body, orga, instance.run.event)
+            my_send_mail(subj, body, orga, instance.run)
 
 
 @receiver(pre_save, sender=PreRegistration)

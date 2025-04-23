@@ -27,11 +27,13 @@ from background_task import background
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.mail import EmailMultiAlternatives, get_connection
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.association import Association, AssocText, get_url
-from larpmanager.models.event import Event
+from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
+from larpmanager.models.miscellanea import Email
 from larpmanager.utils.text import get_assoc_text
 
 INTERNAL_KWARGS = {"schedule", "repeat", "repeat_until", "remove_existing_tasks"}
@@ -74,14 +76,18 @@ def mail_error(subj, body, e=None):
 
 
 @background_auto()
-def send_mail_exec(players, subj, body, obj_id=None, reply_to=None):
+def send_mail_exec(players, subj, body, assoc_id=None, run_id=None, reply_to=None):
     aux = {}
 
-    if obj_id:
-        obj = Association.objects.filter(pk=obj_id).first() or Event.objects.filter(pk=obj_id).first()
-        if not obj:
-            return
-        subj = f"[{obj.name}] {subj}"
+    if assoc_id:
+        obj = Association.objects.filter(pk=assoc_id).first()
+    elif run_id:
+        obj = Run.objects.filter(pk=run_id).first()
+    else:
+        print(f"obj not found! {assoc_id} {run_id}")
+        return
+
+    subj = f"[{obj}] {subj}"
 
     cnt = 0
     for email in players.split(","):
@@ -102,8 +108,16 @@ def remove_html_tags(text):
 
 
 @background_auto(queue="mail")
-def my_send_mail_bkg(subj, body, m_email, assoc_id=None, event_id=None, reply_to=None):
-    my_send_simple_mail(subj, body, m_email, assoc_id, event_id, reply_to)
+def my_send_mail_bkg(email_pk):
+    email = Email.objects.get(pk=email_pk)
+    if email.sent:
+        print("email already sent!")
+        return
+
+    my_send_simple_mail(email.subj, email.body, email.recipient, email.assoc_id, email.run_id, email.reply_to)
+
+    email.sent = timezone.now()
+    email.save()
 
 
 def send_email_lock(sender_email):
@@ -114,7 +128,7 @@ def send_email_lock(sender_email):
         sleep(1)
 
 
-def my_send_simple_mail(subj, body, m_email, assoc_id=None, event_id=None, reply_to=None):
+def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_to=None):
     hdr = {}
     bcc = []
 
@@ -125,8 +139,9 @@ def my_send_simple_mail(subj, body, m_email, assoc_id=None, event_id=None, reply
 
     try:
         # Event confs: to apply only if email params are set up
-        if event_id:
-            event = Event.objects.get(pk=event_id)
+        if run_id:
+            run = Run.objects.get(pk=run_id)
+            event = run.event
             email_host_user = event.get_config("mail_server_host_user", "")
             if email_host_user:
                 sender_email = email_host_user
@@ -212,20 +227,28 @@ def add_unsubscribe_body(assoc):
 def my_send_mail(subj, body, recipient, obj=None, reply_to=None, schedule=0):
     subj = subj.replace("  ", " ")
 
-    event_id = None
-    if isinstance(obj, Event):
-        event_id = obj.id  # type: ignore[attr-defined]
-
+    run_id = None
     assoc_id = None
-    if isinstance(obj, Association):
-        assoc_id = obj.id  # type: ignore[attr-defined]
-    elif obj is not None:
-        assoc_id = obj.assoc_id  # type: ignore[attr-defined]
+    if obj:
+        if isinstance(obj, Run):
+            run_id = obj.id
+            assoc_id = obj.event.assoc_id  # type: ignore[attr-defined]
+        if isinstance(obj, Event):
+            assoc_id = obj.assoc_id  # type: ignore[attr-defined]
+        elif isinstance(obj, Association):
+            assoc_id = obj.id  # type: ignore[attr-defined]
+        elif hasattr(obj, "run_id") and obj.run_id:
+            run_id = obj.run_id
+            assoc_id = obj.run.event.assoc_id
+        elif hasattr(obj, "assoc_id") and obj.assoc_id:
+            assoc_id = obj.assoc_id
+        elif hasattr(obj, "event_id") and obj.event_id:
+            assoc_id = obj.event.assoc_id
 
-    if assoc_id:
-        sign = get_assoc_text(assoc_id, AssocText.SIGNATURE)
-        if sign:
-            body += sign
+        if assoc_id:
+            sign = get_assoc_text(assoc_id, AssocText.SIGNATURE)
+            if sign:
+                body += sign
 
     body += add_unsubscribe_body(obj)
 
@@ -237,4 +260,8 @@ def my_send_mail(subj, body, recipient, obj=None, reply_to=None, schedule=0):
     subj_str = str(subj)
     body_str = str(body)
 
-    my_send_mail_bkg(subj_str, body_str, recipient, assoc_id, event_id, reply_to, schedule=schedule)
+    email = Email.objects.create(
+        assoc_id=assoc_id, run_id=run_id, recipient=recipient, subj=subj_str, body=body_str, reply_to=reply_to
+    )
+
+    my_send_mail_bkg(email.pk, schedule=schedule)

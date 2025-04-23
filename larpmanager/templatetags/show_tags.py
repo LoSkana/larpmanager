@@ -35,7 +35,8 @@ from larpmanager.models.association import get_url
 from larpmanager.models.writing import Faction, Character
 from larpmanager.models.casting import Trait, AssignmentTrait
 from larpmanager.accounting.registration import round_to_nearest_cent
-from larpmanager.utils.common import strip_tags, html_clean
+from larpmanager.utils.common import html_clean
+from larpmanager.models.utils import strip_tags
 
 register = template.Library()
 

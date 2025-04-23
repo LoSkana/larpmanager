@@ -168,7 +168,7 @@ def bring_friend_instructions(reg, ctx):
         "url": f"{reg.run.event.slug}/{reg.run.number}/limitations/"
     }
     body += "<br /><br />" + _("See you soon!")
-    my_send_mail(subj, body, reg.member, reg.run.event)
+    my_send_mail(subj, body, reg.member, reg.run)
 
 
 @receiver(post_save, sender=AssignmentTrait)
@@ -205,7 +205,7 @@ def notify_trait_assigned(sender, instance, created, **kwargs):
     custom_message_ass = get_event_text(instance.run.event_id, EventText.ASSIGNMENT)
     if custom_message_ass:
         body += "<br />" + custom_message_ass
-    my_send_mail(subj, body, instance.member, instance.run.event)
+    my_send_mail(subj, body, instance.member, instance.run)
 
 
 def mail_confirm_casting(member, run, gl_name, lst, avoid):
@@ -220,7 +220,7 @@ def mail_confirm_casting(member, run, gl_name, lst, avoid):
         body += "<br/><br />"
         body += _("Elements you wish to avoid in the assignment:")
         body += f" {avoid}"
-    my_send_mail(subj, body, member, run.event)
+    my_send_mail(subj, body, member, run)
 
 
 @receiver(pre_save, sender=Character)

@@ -1,0 +1,47 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Archive mail" %} -
+    {% if exe %}
+        {% trans "Organization" %}
+    {% else %}
+        {{ run }}
+    {% endif %}
+{% endblock title %}
+{% block info %}
+    {% trans "This page shows all emails, both queued and sent." %}
+{% endblock info %}
+{% block content %}
+    {% include "elements/header/exe.html" %}
+    {% include "elements/paginate.html" %}
+    <table id="inflows" class="tablesorter mob">
+        <thead>
+            <tr>
+                {% if exe %}
+                    <th>{% trans "Run" %}</th>
+                {% endif %}
+                <th>{% trans "Recipient" %}</th>
+                <th>{% trans "Subject" %}</th>
+                <th>{% trans "Body" %}</th>
+                <th>{% trans "Sent" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    {% if exe %}
+                        <td>
+                            {% if el.run %}{{ el.run }}{% endif %}
+                        </td>
+                    {% endif %}
+                    <td>{{ el.recipient }}</td>
+                    <td>{{ el.subj }}</td>
+                    <td>{{ el.body | striptags | truncatechars:100 }}</td>
+                    <td>
+                        {% if el.sent %}{{ el.sent | date:"d/m/Y" }}{% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

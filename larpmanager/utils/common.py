@@ -27,8 +27,6 @@ import unicodedata
 from datetime import datetime
 from decimal import Decimal
 from decimal import ROUND_DOWN
-from html.parser import HTMLParser
-from io import StringIO
 from pathlib import Path
 
 import magic
@@ -59,6 +57,7 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import (
     Registration,
 )
+from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
     PrologueType,
     Plot,
@@ -85,21 +84,6 @@ utc = pytz.UTC
 def check_already(nm, params):
     q = Task.objects.filter(task_name=nm, task_params=params)
     return q.count() > 0
-
-
-class MLStripper(HTMLParser):
-    def __init__(self):
-        super().__init__()
-        self.reset()
-        self.strict = False
-        self.convert_charrefs = True
-        self.text = StringIO()
-
-    def handle_data(self, d):
-        self.text.write(d)
-
-    def get_data(self):
-        return self.text.getvalue()
 
 
 def get_channel(a, b):
@@ -632,12 +616,6 @@ def copy_class(target_id, source_id, cls):
 
 def get_payment_methods_ids(ctx):
     return set(Association.objects.get(pk=ctx["a_id"]).payment_methods.values_list("pk", flat=True))
-
-
-def strip_tags(html):
-    s = MLStripper()
-    s.feed(html)
-    return s.get_data()
 
 
 def detectDelimiter(content):
