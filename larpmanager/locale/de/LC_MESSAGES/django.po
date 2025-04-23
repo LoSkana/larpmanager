@@ -4245,9 +4245,9 @@ msgstr "Teilnahmegebühr, zu zahlender Gesamtbetrag"
 msgid " Hurry: only %(num)d tickets available."
 msgstr " Beeilen Sie sich: Es sind nur noch %(num)d Tickets verfügbar."
 
-#, python-format
-msgid "Completed module. Remaining: %(number)d"
-msgstr "Abgeschlossenes Modul. Verbleibend: %(number)d"
+#, python-brace-format
+msgid "Completed module. Remaining: {number:d}"
+msgstr "Abgeschlossenes Modul. Verbleibend: {Anzahl:d}"
 
 msgid "Apply a check on the tax code of players"
 msgstr "Kontrolle der Steuernummern der Spieler"
@@ -4541,6 +4541,10 @@ msgstr "Geburtsort nicht in der ISTAT-Liste enthalten"
 msgid "You are now logged in with your main account:"
 msgstr "Sie sind jetzt mit Ihrem Hauptkonto eingeloggt:"
 
+#, python-brace-format
+msgid "This text will be added to the sheet of {name}"
+msgstr "Dieser Text wird dem Blatt von {name} hinzugefügt."
+
 msgid "Extended description - maximum 5000 characters"
 msgstr "Erweiterte Beschreibung - maximal 5000 Zeichen"
 
@@ -4627,10 +4631,6 @@ msgstr ""
 
 msgid "This page allows you to edit a member's profile."
 msgstr "Auf dieser Seite können Sie das Profil eines Mitglieds bearbeiten."
-
-#, python-format
-msgid "This text will be added to the sheet of %(name)s"
-msgstr "Dieser Text wird dem Blatt %(name)s hinzugefügt"
 
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
@@ -5606,6 +5606,10 @@ msgstr ""
 "Die Zahlung wurde nicht abgeschlossen. Bitte kontaktieren Sie uns, um den "
 "Grund herauszufinden."
 
+#, python-brace-format
+msgid "This text will be added to the sheet, in the plot paragraph {name}"
+msgstr "Dieser Text wird dem Blatt hinzugefügt, und zwar im Plotabsatz {name}"
+
 msgid "If checked, PG names will be automatically replaced by a reference"
 msgstr ""
 "Wenn diese Option aktiviert ist, werden PG-Namen automatisch durch eine "
@@ -5688,11 +5692,6 @@ msgid "To confirm your registration, please fill in your personal profile."
 msgstr ""
 "Um Ihre Anmeldung zu bestätigen, füllen Sie bitte Ihr persönliches Profil "
 "aus."
-
-#, python-format
-msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
-msgstr ""
-"Dieser Text wird dem Blatt hinzugefügt, und zwar in dem Absatz %(name)s"
 
 msgid "This page allows you to add or edit a badge, or assign it  to users."
 msgstr ""

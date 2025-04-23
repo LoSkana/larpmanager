@@ -115,7 +115,7 @@ def writing_download(request, ctx, typ, nm):
 def get_writer(ctx, nm):
     response = HttpResponse(
         content_type="text/csv",
-        headers={"Content-Disposition": 'attachment; filename="%s-%s.csv"' % (ctx["event"], nm)},
+        headers={"Content-Disposition": 'attachment; filename="{}-{}.csv"'.format(ctx["event"], nm)},
     )
     writer = csv.writer(response, delimiter="\t")
     return response, writer

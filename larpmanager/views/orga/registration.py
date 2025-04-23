@@ -215,7 +215,7 @@ def orga_registrations(request, s, n):
     get_event_cache_all(ctx)
 
     ctx["reg_chars"] = {}
-    for chnum, char in ctx["chars"].items():
+    for _chnum, char in ctx["chars"].items():
         if "player_id" not in char:
             continue
         if char["player_id"] not in ctx["reg_chars"]:
@@ -331,7 +331,7 @@ def orga_registrations_accounting(request, s, n):
     que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
     for r in que:
         dt = orga_registrations_money(r, ctx, cache_aip)
-        res[r.id] = {key: "%g" % value for key, value in dt.items()}
+        res[r.id] = {key: f"{value:g}" for key, value in dt.items()}
 
     return JsonResponse(res)
 

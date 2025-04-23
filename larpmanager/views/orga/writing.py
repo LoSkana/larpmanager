@@ -389,7 +389,7 @@ def orga_roles_w(request, s, n):
     aux = {}
     for k in ctx["all_roles"]:
         aux[k] = []
-    for num, char in ctx["chars"].items():
+    for _num, char in ctx["chars"].items():
         if "roles" not in char:
             continue
         for k in char["roles"]:

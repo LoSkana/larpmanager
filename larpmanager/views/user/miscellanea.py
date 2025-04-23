@@ -234,7 +234,7 @@ def workshop_answer(request, s, n, m):
             .order_by("number")
         )
         if len(remaining) > 0:
-            messages.success(request, _("Completed module. Remaining: %(number)d" % {"number": len(remaining)}))
+            messages.success(request, _("Completed module. Remaining: {number:d}").format(number=len(remaining)))
             return redirect(
                 "workshop_answer",
                 s=ctx["event"].slug,

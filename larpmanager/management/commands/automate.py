@@ -193,7 +193,7 @@ class Command(BaseCommand):
         for i in range(0, len(tp)):
             if count < lm[i]:
                 continue
-            k = "friends-%s" % (tp[i])
+            k = f"friends-{tp[i]}"
             self.add_member_badge(k, reg.member, cache)
 
     def check_ach_player(self, reg, cache):
@@ -204,7 +204,7 @@ class Command(BaseCommand):
         for i in range(0, len(tp)):
             if count < lm[i]:
                 continue
-            k = "player-%s" % (tp[i])
+            k = f"player-{tp[i]}"
             self.add_member_badge(k, reg.member, cache)
 
     def check_badge_help(self, m, cache):
@@ -215,7 +215,7 @@ class Command(BaseCommand):
         for i in range(0, len(tp)):
             if count < lm[i]:
                 continue
-            k = "help-%s" % (tp[i])
+            k = f"help-{tp[i]}"
             self.add_member_badge(k, m, cache)
 
     def check_badge_trad(self, m, cache):
@@ -226,7 +226,7 @@ class Command(BaseCommand):
         for i in range(0, len(tp)):
             if count < lm[i]:
                 continue
-            k = "trad-%s" % (tp[i])
+            k = f"trad-{tp[i]}"
             self.add_member_badge(k, m, cache)
 
     def check_badge_staff(self, m, cache):
@@ -237,7 +237,7 @@ class Command(BaseCommand):
         for i in range(0, len(tp)):
             if count < lm[i]:
                 continue
-            k = "staff-%s" % (tp[i])
+            k = f"staff-{tp[i]}"
             self.add_member_badge(k, m, cache)
 
     def check_badge_orga(self, m, cache):
@@ -248,7 +248,7 @@ class Command(BaseCommand):
         for i in range(0, len(tp)):
             if count < lm[i]:
                 continue
-            k = "organizzatore-%s" % (tp[i])
+            k = f"organizzatore-{tp[i]}"
             self.add_member_badge(k, m, cache)
 
     def check_remind(self, assoc):

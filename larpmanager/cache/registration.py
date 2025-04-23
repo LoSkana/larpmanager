@@ -35,7 +35,7 @@ def reset_cache_reg_counts(r):
 
 
 def cache_reg_counts_key(r):
-    return "reg_counts_%d" % r.id
+    return f"reg_counts{r.id}"
 
 
 def get_reg_counts(r, reset=False):

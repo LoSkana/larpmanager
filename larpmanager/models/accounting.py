@@ -558,7 +558,7 @@ class Collection(BaseModel):
         return self.name
 
     def unique_contribute_code(self):
-        for idx in range(5):
+        for _idx in range(5):
             cod = generate_id(16)
             if not Collection.objects.filter(contribute_code=cod).exists():
                 self.contribute_code = cod
@@ -566,7 +566,7 @@ class Collection(BaseModel):
         raise ValueError("Too many attempts to generate the code")
 
     def unique_redeem_code(self):
-        for idx in range(5):
+        for _idx in range(5):
             cod = generate_id(16)
             if not Collection.objects.filter(redeem_code=cod).exists():
                 self.redeem_code = cod

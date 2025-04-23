@@ -59,11 +59,8 @@ def remember_pay(reg):
     symbol = reg.run.event.assoc.get_currency_symbol()
     amount = f"{reg.quota:.2f}{symbol}"
     deadline = reg.deadline
-    payment_url = "%s/%s/%d" % (
-        get_url("accounting/pay", reg.run.event),
-        reg.run.event.slug,
-        reg.run.number,
-    )
+    url = get_url("accounting/pay", reg.run.event)
+    payment_url = f"{url}/{reg.run.event.slug}/{reg.id}"
 
     if provisional:
         subj = hdr(reg.run.event) + _("Confirm registration to %(event)s") % context

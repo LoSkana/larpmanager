@@ -134,11 +134,8 @@ def registration_options(instance):
 
 
 def registration_payments(instance, currency):
-    url = "%s/%s/%d" % (
-        get_url("accounting/pay", instance.run.event),
-        instance.run.event.slug,
-        instance.run.number,
-    )
+    f_url = get_url("accounting/pay", instance.run.event)
+    url = f"{f_url}/{instance.run.event.slug}/{instance.run.number}"
     data = {"url": url, "amount": instance.quota, "currency": currency, "deadline": instance.deadline}
 
     if instance.deadline > 0:

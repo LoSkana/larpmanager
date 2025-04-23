@@ -144,13 +144,11 @@ class MyForm(forms.ModelForm):
         if key in self.fields:
             del self.fields[key]
 
-
     def save_configs(self, instance):
         config_values = {}
         for el in self.get_config_fields():
             get_custom_field(el, config_values, self)
         save_all_element_configs(instance, config_values)
-
 
     def prepare_configs(self):
         res = get_all_element_configs(self.instance)
@@ -161,7 +159,7 @@ class MyForm(forms.ModelForm):
 class MyFormRun(MyForm):
     def __init__(self, *args, **kwargs):
         self.auto_run = True
-        super(MyFormRun, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 def max_selections_validator(max_choices):
@@ -476,7 +474,7 @@ class BaseRegistrationForm(MyFormRun):
 
 class MyCssForm(MyForm):
     def __init__(self, *args, **kwargs):
-        super(MyCssForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         if not self.instance.pk:
             return
@@ -523,7 +521,7 @@ class MyCssForm(MyForm):
 class BaseAccForm(forms.Form):
     def __init__(self, *args, **kwargs):
         ctx = kwargs.pop("ctx")
-        super(BaseAccForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.methods = ctx["methods"]
         cho = []
         for s in self.methods:

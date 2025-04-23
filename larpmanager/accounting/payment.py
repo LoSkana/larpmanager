@@ -65,7 +65,7 @@ def get_payment_fee(assoc, slug):
 
 
 def unique_invoice_cod(length=16):
-    for idx in range(5):
+    for _idx in range(5):
         cod = generate_id(length)
         if not PaymentInvoice.objects.filter(cod=cod).exists():
             return cod
@@ -106,7 +106,7 @@ def set_data_invoice(request, ctx, invoice, form, assoc):
         }
 
     if assoc.get_config("payment_special_code", False):
-        invoice.causal = "%s - %s" % (invoice.cod, invoice.causal)
+        invoice.causal = f"{invoice.cod} - {invoice.causal}"
 
 
 def round_up_to_two_decimals(number):
@@ -310,7 +310,7 @@ def update_RefundRequest(sender, instance, **kwargs):
     acc.member = instance.member
     acc.value = instance.value
     acc.oth = AccountingItemOther.REFUND
-    acc.descr = "Rimborso erogato di %.2f" % instance.value
+    acc.descr = f"Rimborso erogato di {instance.value:.2f}"
     acc.assoc = instance.assoc
     acc.save()
 
@@ -337,5 +337,5 @@ def update_Collection(sender, instance, **kwargs):
     acc.run = instance.run
     acc.value = instance.total
     acc.oth = AccountingItemOther.CREDIT
-    acc.descr = "Colletta di %s" % instance.organizer
+    acc.descr = f"Colletta di {instance.organizer}"
     acc.save()

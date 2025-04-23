@@ -513,7 +513,7 @@ def remove_choice(ch, typ):
 class RedirectForm(forms.Form):
     def __init__(self, *args, **kwargs):
         slugs = self.params = kwargs.pop("slugs")
-        super(RedirectForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         cho = []
         counter = 0
         for el in slugs:

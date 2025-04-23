@@ -49,7 +49,7 @@ from larpmanager.utils.common import FileTypeValidator
 
 class WritingForm(MyForm):
     def __init__(self, *args, **kwargs):
-        super(WritingForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         for s in ["props", "cover", "concept"]:
             if s in self.fields and s not in self.params["features"]:
@@ -97,11 +97,11 @@ class PlayerRelationshipForm(MyForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(PlayerRelationshipForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["target"].widget.set_event(self.params["run"].event)
 
     def clean(self):
-        cleaned_data = super(PlayerRelationshipForm, self).clean()
+        cleaned_data = super().clean()
 
         if self.cleaned_data["target"].id == self.params["char"]["id"]:
             self.add_error("target", _("You cannot create a relationship towards yourself!"))
@@ -116,7 +116,7 @@ class PlayerRelationshipForm(MyForm):
         return cleaned_data
 
     def save(self, commit=True):
-        instance = super(PlayerRelationshipForm, self).save(commit=False)
+        instance = super().save(commit=False)
 
         if not instance.pk:
             instance.reg = self.params["run"].reg
@@ -137,12 +137,12 @@ class OrgaRelationshipForm(MyForm):
         widgets = {"source": EventCharacterS2Widget, "target": EventCharacterS2Widget}
 
     def __init__(self, *args, **kwargs):
-        super(OrgaRelationshipForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["source"].widget.set_event(self.params["event"])
         self.fields["target"].widget.set_event(self.params["event"])
 
     def clean(self):
-        cleaned_data = super(OrgaRelationshipForm, self).clean()
+        cleaned_data = super().clean()
 
         if self.cleaned_data["source"] == self.cleaned_data["target"]:
             self.add_error("source", _("You cannot add a relationship from character to self!"))
@@ -191,7 +191,7 @@ class PlotForm(WritingForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(PlotForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # PLOT CHARACTERS REL
         if self.instance.pk:
@@ -205,7 +205,7 @@ class PlotForm(WritingForm):
                 self.fields[field] = forms.CharField(
                     widget=TinyMCE(attrs={"cols": 80, "rows": 10}),
                     label=char,
-                    help_text=_("This text will be added to the sheet of %(name)s" % {"name": char}),
+                    help_text=_("This text will be added to the sheet of {name}".format(name=char)),
                     required=False,
                 )
 
@@ -227,7 +227,7 @@ class PlotForm(WritingForm):
             PlotCharacterRel.objects.create(character_id=ch, plot_id=instance.pk)
 
     def save(self, commit=True):
-        instance = super(PlotForm, self).save()
+        instance = super().save()
 
         if instance.pk:
             for pr in self.instance.get_plot_characters():
@@ -261,7 +261,7 @@ class FactionForm(WritingForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(FactionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if "user_character" not in self.params["features"]:
             self.delete_field("selectable")
 
@@ -306,7 +306,7 @@ class QuestForm(WritingForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(QuestForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         que = self.params["run"].event.get_elements(QuestType)
         self.fields["typ"].choices = [(m.id, m.name) for m in que]
@@ -375,7 +375,7 @@ class TraitForm(WritingForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(TraitForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         que = self.params["run"].event.get_elements(Quest)
         self.fields["quest"].choices = [(m.id, m.name) for m in que]
@@ -393,7 +393,7 @@ class HandoutForm(WritingForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(HandoutForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         que = self.params["run"].event.get_elements(HandoutTemplate)
         self.fields["template"].choices = [(m.id, m.name) for m in que]
 
@@ -431,7 +431,7 @@ class PrologueForm(WritingForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(PrologueForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         que = self.params["run"].event.get_elements(PrologueType)
         self.fields["typ"].choices = [(m.id, m.name) for m in que]
 
@@ -452,4 +452,4 @@ class SpeedLarpForm(WritingForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(SpeedLarpForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)

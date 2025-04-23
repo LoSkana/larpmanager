@@ -4240,9 +4240,9 @@ msgstr "Účastnický poplatek, celková částka k úhradě"
 msgid " Hurry: only %(num)d tickets available."
 msgstr " Pospěšte si: k dispozici jsou už jen %(num)d vstupenek."
 
-#, python-format
-msgid "Completed module. Remaining: %(number)d"
-msgstr "Dokončený modul. Zbývá: %(number)d"
+#, python-brace-format
+msgid "Completed module. Remaining: {number:d}"
+msgstr "Dokončený modul. Zbývá: {číslo:d}"
 
 msgid "Apply a check on the tax code of players"
 msgstr "Použít kontrolu daňového kódu hráčů"
@@ -4526,6 +4526,10 @@ msgstr "Místo narození neuvedené v seznamu ISTAT"
 msgid "You are now logged in with your main account:"
 msgstr "Nyní jste přihlášeni pomocí svého hlavního účtu:"
 
+#, python-brace-format
+msgid "This text will be added to the sheet of {name}"
+msgstr "Tento text bude přidán do listu {name}"
+
 msgid "Extended description - maximum 5000 characters"
 msgstr "Rozšířený popis - maximálně 5000 znaků"
 
@@ -4607,10 +4611,6 @@ msgstr "Na této stránce můžete přidat nebo upravit postavu."
 
 msgid "This page allows you to edit a member's profile."
 msgstr "Na této stránce můžete upravit profil člena."
-
-#, python-format
-msgid "This text will be added to the sheet of %(name)s"
-msgstr "Tento text bude přidán na list %(name)s"
 
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
@@ -5409,6 +5409,10 @@ msgstr "Tato stránka shrnuje vlastnosti přiřazené postavám v běhu."
 msgid "The payment was not completed. Please contact us to find out why."
 msgstr "Platba nebyla dokončena. Kontaktujte nás a zjistěte, proč."
 
+#, python-brace-format
+msgid "This text will be added to the sheet, in the plot paragraph {name}"
+msgstr "Tento text bude přidán do listu v odstavci {name} pozemku."
+
 msgid "If checked, PG names will be automatically replaced by a reference"
 msgstr "Pokud je zaškrtnuto, názvy PG budou automaticky nahrazeny odkazem."
 
@@ -5470,10 +5474,6 @@ msgstr "Místo toho je to adresa panelu správy vašeho sdružení:"
 
 msgid "To confirm your registration, please fill in your personal profile."
 msgstr "Pro potvrzení registrace vyplňte svůj osobní profil."
-
-#, python-format
-msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
-msgstr "Tento text bude přidán do listu do odstavce grafu %(name)s"
 
 msgid "This page allows you to add or edit a badge, or assign it  to users."
 msgstr ""

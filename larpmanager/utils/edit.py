@@ -119,8 +119,8 @@ def user_edit(request, ctx, formType, nm, eid):
 def backend_get(ctx, typ, eid, afield=None):
     try:
         el = typ.objects.get(pk=eid)
-    except Exception:
-        raise NotFoundException()
+    except Exception as err:
+        raise NotFoundException() from err
     ctx["el"] = el
     check_run(el, ctx, afield)
     check_assoc(el, ctx, afield)
@@ -242,7 +242,7 @@ def writing_edit(request, ctx, formType, nm, tp, redr=None):
 
 
 def writing_edit_cache_key(eid, typ):
-    return "orga_edit_%s_%s" % (eid, typ)
+    return f"orga_edit_{eid}_{typ}"
 
 
 def writing_edit_save_ajax(form, request, ctx):

@@ -51,8 +51,8 @@ def get_cache_assoc_role(ar_id):
     if not res:
         try:
             ar = AssocRole.objects.get(pk=ar_id)
-        except Exception:
-            raise PermissionException()
+        except Exception as err:
+            raise PermissionException() from err
         res = get_assoc_role(ar)
         cache.set(key, res)
     return res
@@ -121,8 +121,8 @@ def get_cache_event_role(ev_id):
     if not res:
         try:
             ar = EventRole.objects.get(pk=ev_id)
-        except Exception:
-            raise PermissionException()
+        except Exception as err:
+            raise PermissionException() from err
         res = get_event_role(ar)
         cache.set(key, res)
     return res

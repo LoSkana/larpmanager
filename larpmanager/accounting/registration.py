@@ -139,7 +139,7 @@ def quota_check(reg, start, alert, assoc_id):
     cnt = 0
     qsr = 0
     first_deadline = True
-    for i in range(0, reg.quotas):
+    for _i in range(0, reg.quotas):
         qsr += qs
         cnt += 1
 
@@ -272,7 +272,7 @@ def cancel_run(instance):
             AccountingItemOther.objects.create(
                 member=r.member,
                 oth=AccountingItemOther.CREDIT,
-                descr="Rimborso per %s" % instance,
+                descr=f"Rimborso per {instance}",
                 run=instance,
                 value=money,
             )
@@ -417,7 +417,7 @@ def check_reg_bkg_go(reg_id):
         instance = Registration.objects.get(pk=reg_id)
         instance.save()
     except Exception:
-        print("not found registration %s" % (str(reg_id),))
+        print(f"not found registration {str(reg_id)}")
         return
 
 

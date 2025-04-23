@@ -35,7 +35,7 @@ class PxBaseForm(MyForm):
         abstract = True
 
     def __init__(self, *args, **kwargs):
-        super(PxBaseForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class OrgaDeliveryPxForm(PxBaseForm):
@@ -50,7 +50,7 @@ class OrgaDeliveryPxForm(PxBaseForm):
         widgets = {"characters": EventCharacterS2WidgetMulti}
 
     def __init__(self, *args, **kwargs):
-        super(OrgaDeliveryPxForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class OrgaAbilityPxForm(PxBaseForm):
@@ -69,7 +69,7 @@ class OrgaAbilityPxForm(PxBaseForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(OrgaAbilityPxForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         for s in ["prerequisites", "dependents"]:
             self.fields[s].widget.set_event(self.params["event"])
@@ -103,5 +103,5 @@ class OrgaAbilityTypePxForm(MyForm):
 class SelectNewAbility(forms.Form):
     def __init__(self, *args, **kwargs):
         ctx = self.params = kwargs.pop("ctx")
-        super(SelectNewAbility, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["sel"] = forms.ChoiceField(choices=ctx["list"])

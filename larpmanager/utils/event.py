@@ -155,8 +155,8 @@ def get_run(ctx, s, n):
         que = que.defer(*fields)
         ctx["run"] = que.get(pk=res)
         ctx["event"] = ctx["run"].event
-    except Exception:
-        raise UnknowRunException()
+    except Exception as err:
+        raise UnknowRunException() from err
 
 
 def get_character_filter(ctx, ch, regs, filters):
