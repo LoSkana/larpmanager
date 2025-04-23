@@ -23,7 +23,7 @@ from typing import Callable
 
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import transaction, IntegrityError
+from django.db import IntegrityError, transaction
 from django.http import HttpRequest
 
 from larpmanager.models.larpmanager import LarpManagerProfiler

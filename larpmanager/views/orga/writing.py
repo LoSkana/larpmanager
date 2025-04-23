@@ -22,54 +22,54 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 
+from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.event import OrgaProgressStepForm
 from larpmanager.forms.writing import (
-    PlotForm,
-    QuestTypeForm,
     FactionForm,
-    QuestForm,
-    TraitForm,
     HandoutForm,
     HandoutTemplateForm,
-    PrologueTypeForm,
+    PlotForm,
     PrologueForm,
+    PrologueTypeForm,
+    QuestForm,
+    QuestTypeForm,
     SpeedLarpForm,
+    TraitForm,
 )
-from larpmanager.models.casting import QuestType, Quest, Trait
+from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
-    PrologueType,
-    TextVersion,
-    Plot,
+    Character,
     Faction,
     Handout,
     HandoutTemplate,
+    Plot,
     Prologue,
+    PrologueType,
     SpeedLarp,
-    Character,
+    TextVersion,
 )
-from larpmanager.cache.character import get_event_cache_all
 from larpmanager.utils.common import (
-    get_quest_type,
-    get_quest,
     exchange_order,
     get_element,
-    get_plot,
-    get_trait,
     get_handout,
     get_handout_template,
-    get_prologue_type,
+    get_plot,
     get_prologue,
+    get_prologue_type,
+    get_quest,
+    get_quest_type,
     get_speedlarp,
+    get_trait,
 )
+from larpmanager.utils.edit import orga_edit, writing_edit
 from larpmanager.utils.event import check_event_permission
-from larpmanager.utils.edit import writing_edit, orga_edit
 from larpmanager.utils.pdf import (
     print_handout,
     return_pdf,
 )
-from larpmanager.utils.writing import writing_list, writing_view, writing_versions
+from larpmanager.utils.writing import writing_list, writing_versions, writing_view
 
 
 @login_required

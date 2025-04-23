@@ -37,30 +37,30 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.character import get_event_cache_fields
 from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.form import (
-    CharacterQuestion,
-    CharacterOption,
-    CharacterChoice,
     CharacterAnswer,
-    RegistrationQuestion,
-    RegistrationOption,
+    CharacterChoice,
+    CharacterOption,
+    CharacterQuestion,
     QuestionType,
+    RegistrationOption,
+    RegistrationQuestion,
     get_ordered_registration_questions,
 )
 from larpmanager.models.member import Member
 from larpmanager.models.registration import (
     Registration,
-    RegistrationTicket,
     RegistrationCharacterRel,
+    RegistrationTicket,
 )
 from larpmanager.models.utils import UploadToPathAndRename
 from larpmanager.models.writing import (
+    Character,
     Faction,
     replace_char_names,
-    Character,
 )
-from larpmanager.cache.character import get_event_cache_fields
 from larpmanager.utils.edit import save_log
 
 

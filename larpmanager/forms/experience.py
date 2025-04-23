@@ -23,11 +23,11 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import (
-    EventCharacterS2WidgetMulti,
     AbilityS2WidgetMulti,
     EventCharacterOptionS2WidgetMulti,
+    EventCharacterS2WidgetMulti,
 )
-from larpmanager.models.experience import DeliveryPx, AbilityPx, AbilityTypePx
+from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx
 
 
 class PxBaseForm(MyForm):

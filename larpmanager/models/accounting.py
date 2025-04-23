@@ -28,8 +28,7 @@ from larpmanager.models.base import BaseModel, PaymentMethod
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
-from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid_short
-from larpmanager.models.utils import generate_id
+from larpmanager.models.utils import UploadToPathAndRename, download, generate_id, my_uuid_short
 
 
 class PaymentInvoice(BaseModel):
@@ -611,7 +610,7 @@ class RefundRequest(BaseModel):
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Richiesta rimborso {self.member}"
+        return f"Refund request of {self.member}"
 
     # ## Workshops
 

@@ -20,9 +20,9 @@
 
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.links import cache_event_links
 from larpmanager.models.association import Association
 from larpmanager.models.member import get_user_membership
-from larpmanager.cache.links import cache_event_links
 from larpmanager.models.utils import get_payment_details
 from larpmanager.utils.exceptions import MembershipException
 

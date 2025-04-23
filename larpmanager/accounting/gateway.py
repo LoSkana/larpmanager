@@ -24,7 +24,7 @@ import hmac
 import json
 import math
 import re
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 from pprint import pformat
 
 import requests
@@ -37,19 +37,19 @@ from django.dispatch import receiver
 from django.http import Http404
 from django.urls import reverse
 from paypal.standard.forms import PayPalPaymentsForm
-from paypal.standard.ipn.signals import valid_ipn_received, invalid_ipn_received
+from paypal.standard.ipn.signals import invalid_ipn_received, valid_ipn_received
 from paypal.standard.models import ST_PP_COMPLETED
 from satispaython.utils import format_datetime, load_key
 
+from larpmanager.accounting.invoice import invoice_received_money
+from larpmanager.mail.base import notify_admins
 from larpmanager.models.access import get_assoc_executives
 from larpmanager.models.accounting import PaymentInvoice
 from larpmanager.models.association import Association
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.base import def_user_ctx, update_payment_details
 from larpmanager.utils.common import generate_number
-from larpmanager.mail.base import notify_admins
-from larpmanager.accounting.invoice import invoice_received_money
-from larpmanager.utils.tasks import my_send_simple_mail, my_send_mail
+from larpmanager.utils.tasks import my_send_mail, my_send_simple_mail
 
 
 def get_satispay_form(request, ctx, invoice, amount):
@@ -130,7 +130,6 @@ def satispay_verify(request, cod):
     mc_gross = int(aux["amount_unit"]) / 100.0
     if aux["status"] == "ACCEPTED":
         invoice_received_money(invoice.cod, mc_gross)
-
 
 
 def satispay_webhook(request):

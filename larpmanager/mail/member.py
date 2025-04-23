@@ -24,16 +24,17 @@ from typing import Optional
 from django.conf import settings as conf_settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
-from django.db.models.signals import pre_save, m2m_changed
+from django.db.models.signals import m2m_changed, pre_save
 from django.dispatch import receiver
-from django.utils.translation import activate, gettext_lazy as _
+from django.utils.translation import activate
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.accounting import AccountingItemMembership
-from larpmanager.models.association import hdr, get_url
-from larpmanager.models.member import Member, Badge
-from larpmanager.models.miscellanea import HelpQuestion, ChatMessage
+from larpmanager.models.association import get_url, hdr
+from larpmanager.models.member import Badge, Member
+from larpmanager.models.miscellanea import ChatMessage, HelpQuestion
 from larpmanager.utils.tasks import my_send_mail
 
 

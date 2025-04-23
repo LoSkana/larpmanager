@@ -30,13 +30,13 @@ from django.utils.http import urlencode
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.models.registration import Registration
-from larpmanager.models.association import get_url
-from larpmanager.models.writing import Faction, Character
-from larpmanager.models.casting import Trait, AssignmentTrait
 from larpmanager.accounting.registration import round_to_nearest_cent
-from larpmanager.utils.common import html_clean
+from larpmanager.models.association import get_url
+from larpmanager.models.casting import AssignmentTrait, Trait
+from larpmanager.models.registration import Registration
 from larpmanager.models.utils import strip_tags
+from larpmanager.models.writing import Character, Faction
+from larpmanager.utils.common import html_clean
 
 register = template.Library()
 

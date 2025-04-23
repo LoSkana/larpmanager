@@ -19,28 +19,33 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import random
-from datetime import datetime, date, timedelta
+from datetime import date, datetime, timedelta
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Min, Count, Sum
-from django.http import JsonResponse, Http404, HttpResponseForbidden
-from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect, render
+from django.db.models import Count, Min, Sum
+from django.http import Http404, HttpResponseForbidden, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _, activate, override
+from django.utils.translation import activate, override
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django_ratelimit.decorators import ratelimit
 
+from larpmanager.cache.feature import get_assoc_features, get_event_features
+from larpmanager.cache.larpmanager import get_cache_promoters
+from larpmanager.cache.role import has_assoc_permission, has_event_permission
 from larpmanager.forms.association import (
     FirstAssociationForm,
 )
-from larpmanager.forms.larpmanager import LarpManagerContact, LarpManagerTicket, LarpManagerCheck
+from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, LarpManagerTicket
 from larpmanager.forms.miscellanea import SendMailForm
 from larpmanager.forms.utils import RedirectForm
+from larpmanager.mail.base import join_email
+from larpmanager.mail.remind import remember_membership, remember_membership_fee, remember_pay, remember_profile
 from larpmanager.models.access import AssocRole, EventRole
 from larpmanager.models.accounting import (
     PaymentInvoice,
@@ -48,20 +53,20 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association, AssocText
 from larpmanager.models.base import Feature
 from larpmanager.models.event import (
-    Run,
     Event,
+    Run,
 )
 from larpmanager.models.larpmanager import (
-    LarpManagerReview,
-    LarpManagerHowto,
-    LarpManagerTutorial,
     LarpManagerBlog,
-    LarpManagerShowcase,
     LarpManagerDiscover,
+    LarpManagerHowto,
     LarpManagerPlan,
     LarpManagerProfiler,
+    LarpManagerReview,
+    LarpManagerShowcase,
+    LarpManagerTutorial,
 )
-from larpmanager.models.member import Membership, Member, get_user_membership
+from larpmanager.models.member import Member, Membership, get_user_membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
@@ -70,9 +75,6 @@ from larpmanager.models.writing import (
     Character,
 )
 from larpmanager.utils.auth import check_lm_admin
-from larpmanager.cache.role import has_assoc_permission, has_event_permission
-from larpmanager.cache.feature import get_assoc_features, get_event_features
-from larpmanager.cache.larpmanager import get_cache_promoters
 from larpmanager.utils.common import (
     round_to_two_significant_digits,
 )
@@ -80,9 +82,7 @@ from larpmanager.utils.event import get_event_run
 from larpmanager.utils.exceptions import (
     PermissionException,
 )
-from larpmanager.mail.base import join_email
-from larpmanager.mail.remind import remember_membership, remember_pay, remember_profile, remember_membership_fee
-from larpmanager.utils.tasks import my_send_simple_mail, my_send_mail, send_mail_exec
+from larpmanager.utils.tasks import my_send_mail, my_send_simple_mail, send_mail_exec
 from larpmanager.utils.text import get_assoc_text
 
 

@@ -23,7 +23,7 @@ from datetime import datetime
 from decimal import Decimal
 
 from django.contrib.postgres.aggregates import ArrayAgg
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from larpmanager.accounting.token_credit import registration_tokens_credits
@@ -32,23 +32,23 @@ from larpmanager.cache.links import reset_event_links
 from larpmanager.mail.registration import update_registration_status_bkg
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
+    AccountingItemOther,
     AccountingItemPayment,
     AccountingItemTransaction,
-    AccountingItemOther,
 )
 from larpmanager.models.casting import AssignmentTrait
 from larpmanager.models.event import Run
 from larpmanager.models.form import RegistrationChoice, RegistrationOption
-from larpmanager.models.member import get_user_membership, Membership
+from larpmanager.models.member import Membership, get_user_membership
 from larpmanager.models.registration import (
-    RegistrationTicket,
-    RegistrationInstallment,
     Registration,
     RegistrationCharacterRel,
+    RegistrationInstallment,
     RegistrationSurcharge,
+    RegistrationTicket,
 )
 from larpmanager.models.utils import get_sum
-from larpmanager.utils.common import get_time_diff_today, get_time_diff
+from larpmanager.utils.common import get_time_diff, get_time_diff_today
 from larpmanager.utils.registration import is_reg_provisional
 from larpmanager.utils.tasks import background_auto
 
@@ -272,7 +272,7 @@ def cancel_run(instance):
             AccountingItemOther.objects.create(
                 member=r.member,
                 oth=AccountingItemOther.CREDIT,
-                descr=f"Rimborso per {instance}",
+                descr=f"Refund per {instance}",
                 run=instance,
                 value=money,
             )

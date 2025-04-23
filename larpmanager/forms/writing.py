@@ -29,19 +29,19 @@ from tinymce.widgets import TinyMCE
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import EventCharacterS2Widget, EventCharacterS2WidgetMulti
 from larpmanager.models.access import get_event_staffers
-from larpmanager.models.casting import QuestType, Quest, AssignmentTrait, Trait
+from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep, Run
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import (
-    Relationship,
-    Plot,
-    PlotCharacterRel,
     Faction,
     Handout,
     HandoutTemplate,
-    PrologueType,
+    Plot,
+    PlotCharacterRel,
     Prologue,
+    PrologueType,
+    Relationship,
     SpeedLarp,
 )
 from larpmanager.utils.common import FileTypeValidator

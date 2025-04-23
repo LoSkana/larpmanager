@@ -25,28 +25,28 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
-from larpmanager.forms.base import BaseRegistrationForm, MyForm
-from larpmanager.forms.utils import (
-    AssocMemberS2Widget,
-    FactionS2WidgetMulti,
-    TicketS2WidgetMulti,
-    AllowedS2WidgetMulti,
-    DatePickerInput,
-)
-from larpmanager.models.casting import Trait
-from larpmanager.models.form import RegistrationQuestion, QuestionType, RegistrationOption
-from larpmanager.models.registration import (
-    Registration,
-    RegistrationTicket,
-    RegistrationQuota,
-    RegistrationCharacterRel,
-    RegistrationSection,
-    RegistrationInstallment,
-    RegistrationSurcharge,
-)
-from larpmanager.models.writing import Character, Faction
 from larpmanager.accounting.registration import get_date_surcharge
 from larpmanager.cache.registration import get_reg_counts
+from larpmanager.forms.base import BaseRegistrationForm, MyForm
+from larpmanager.forms.utils import (
+    AllowedS2WidgetMulti,
+    AssocMemberS2Widget,
+    DatePickerInput,
+    FactionS2WidgetMulti,
+    TicketS2WidgetMulti,
+)
+from larpmanager.models.casting import Trait
+from larpmanager.models.form import QuestionType, RegistrationOption, RegistrationQuestion
+from larpmanager.models.registration import (
+    Registration,
+    RegistrationCharacterRel,
+    RegistrationInstallment,
+    RegistrationQuota,
+    RegistrationSection,
+    RegistrationSurcharge,
+    RegistrationTicket,
+)
+from larpmanager.models.writing import Character, Faction
 from larpmanager.utils.common import get_time_diff_today
 from larpmanager.utils.registration import get_reduced_available_count
 

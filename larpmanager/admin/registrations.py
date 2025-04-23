@@ -22,19 +22,19 @@ from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
 from larpmanager.admin.base import (
-    DefModelAdmin,
-    RunFilter,
-    MemberFilter,
-    EventFilter,
-    RegistrationFilter,
     CharacterFilter,
+    DefModelAdmin,
+    EventFilter,
+    MemberFilter,
+    RegistrationFilter,
+    RunFilter,
 )
-from larpmanager.models.form import RegistrationQuestion, RegistrationOption, RegistrationChoice, RegistrationAnswer
+from larpmanager.models.form import RegistrationAnswer, RegistrationChoice, RegistrationOption, RegistrationQuestion
 from larpmanager.models.registration import (
     Registration,
-    RegistrationTicket,
-    RegistrationSection,
     RegistrationCharacterRel,
+    RegistrationSection,
+    RegistrationTicket,
 )
 
 

@@ -28,30 +28,30 @@ from tinymce.widgets import TinyMCE
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.member import MEMBERSHIP_CHOICES
 from larpmanager.forms.utils import (
-    DatePickerInput,
-    TimePickerInput,
     AssocMemberS2Widget,
-    get_run_choices,
+    DatePickerInput,
     EventS2Widget,
+    TimePickerInput,
+    get_run_choices,
 )
 from larpmanager.models.event import Event
 from larpmanager.models.miscellanea import (
-    Util,
-    HelpQuestion,
-    WorkshopModule,
-    WorkshopQuestion,
-    WorkshopOption,
     Album,
-    Problem,
-    UrlShortner,
-    InventoryBox,
     Competence,
+    HelpQuestion,
+    InventoryBox,
+    Problem,
     ShuttleService,
+    UrlShortner,
+    Util,
+    WorkshopModule,
+    WorkshopOption,
+    WorkshopQuestion,
 )
 from larpmanager.models.registration import RegistrationTicket
+from larpmanager.models.utils import generate_id
 from larpmanager.models.writing import Faction
 from larpmanager.utils.common import FileTypeValidator
-from larpmanager.models.utils import generate_id
 
 PAY_CHOICES = (
     ("t", _("Over")),

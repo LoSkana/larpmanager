@@ -18,21 +18,20 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.miscellanea import (
     HelpQuestionForm,
-    ShuttleServiceForm,
     ShuttleServiceEditForm,
+    ShuttleServiceForm,
 )
 from larpmanager.models.event import (
     Run,
@@ -40,12 +39,12 @@ from larpmanager.models.event import (
 from larpmanager.models.miscellanea import (
     Album,
     AlbumUpload,
-    WorkshopModule,
-    WorkshopMemberRel,
     HelpQuestion,
-    Util,
-    UrlShortner,
     ShuttleService,
+    UrlShortner,
+    Util,
+    WorkshopMemberRel,
+    WorkshopModule,
 )
 from larpmanager.models.writing import (
     Handout,

@@ -19,32 +19,37 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import traceback
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import JsonResponse, Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.member import info_accounting
+from larpmanager.accounting.registration import cancel_reg
+from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.registration import (
-    RegistrationGiftForm,
-    RegistrationForm,
     PreRegistrationForm,
+    RegistrationForm,
+    RegistrationGiftForm,
 )
+from larpmanager.mail.base import bring_friend_instructions
+from larpmanager.mail.registration import update_registration_status_bkg
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemMembership,
     AccountingItemOther,
-    PaymentInvoice,
     Discount,
+    PaymentInvoice,
 )
 from larpmanager.models.association import AssocText
 from larpmanager.models.event import (
     Event,
-    PreRegistration,
     EventText,
+    PreRegistration,
 )
 from larpmanager.models.member import Membership, get_user_membership
 from larpmanager.models.registration import (
@@ -52,21 +57,16 @@ from larpmanager.models.registration import (
     RegistrationTicket,
 )
 from larpmanager.models.utils import my_uuid
-from larpmanager.accounting.member import info_accounting
-from larpmanager.accounting.registration import cancel_reg
 from larpmanager.utils.base import def_user_ctx
-from larpmanager.cache.feature import get_assoc_features
 from larpmanager.utils.common import (
     get_assoc,
 )
 from larpmanager.utils.event import get_event, get_event_run
-from larpmanager.utils.registration import is_reg_provisional, check_assign_character, get_reduced_available_count
 from larpmanager.utils.exceptions import (
     RedirectException,
     check_event_feature,
 )
-from larpmanager.mail.base import bring_friend_instructions
-from larpmanager.mail.registration import update_registration_status_bkg
+from larpmanager.utils.registration import check_assign_character, get_reduced_available_count, is_reg_provisional
 from larpmanager.utils.text import get_assoc_text, get_event_text
 
 

@@ -21,25 +21,25 @@
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
-from larpmanager.admin.base import DefModelAdmin, reduced, AssocFilter, RunFilter
+from larpmanager.admin.base import AssocFilter, DefModelAdmin, RunFilter, reduced
 from larpmanager.admin.character import TargetFilter
 from larpmanager.models.miscellanea import (
-    Contact,
-    ChatMessage,
     Album,
     AlbumImage,
     AlbumUpload,
-    WorkshopQuestion,
-    WorkshopModule,
-    WorkshopOption,
-    WorkshopMemberRel,
+    ChatMessage,
+    Contact,
+    Email,
     HelpQuestion,
     InventoryBox,
     InventoryBoxHistory,
+    PlayerRelationship,
     ShuttleService,
     Util,
-    PlayerRelationship,
-    Email,
+    WorkshopMemberRel,
+    WorkshopModule,
+    WorkshopOption,
+    WorkshopQuestion,
 )
 
 

@@ -29,13 +29,13 @@ from larpmanager.models.base import BaseModel
 from larpmanager.models.event import Event
 from larpmanager.models.member import Member
 from larpmanager.models.registration import (
-    RegistrationTicket,
-    RegistrationSection,
-    RegistrationCharacterRel,
     Registration,
+    RegistrationCharacterRel,
+    RegistrationSection,
+    RegistrationTicket,
 )
 from larpmanager.models.utils import UploadToPathAndRename, decimal_to_str
-from larpmanager.models.writing import Faction, CharacterStatus, Character
+from larpmanager.models.writing import Character, CharacterStatus, Faction
 
 
 class QuestionType(models.TextChoices):

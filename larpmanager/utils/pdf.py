@@ -22,34 +22,34 @@ import os.path
 import re
 import shutil
 import time
-from datetime import timedelta, datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import lxml.etree
 import pdfkit
 from django.conf import settings as conf_settings
-from django.db.models.signals import pre_delete, post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
-from django.http import HttpResponse, Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template import Context, Template
 from django.template.loader import get_template
 from django.utils.translation import gettext_lazy as _
 from xhtml2pdf import pisa
 
+from larpmanager.cache.character import get_event_cache_all
 from larpmanager.models.association import AssocText
 from larpmanager.models.casting import AssignmentTrait, Casting
-from larpmanager.models.miscellanea import Util, PlayerRelationship
+from larpmanager.models.miscellanea import PlayerRelationship, Util
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_all_element_configs
 from larpmanager.models.writing import (
+    Character,
     Faction,
     Handout,
     HandoutTemplate,
-    Character,
     Relationship,
 )
-from larpmanager.cache.character import get_event_cache_all
-from larpmanager.utils.character import get_character_relationships, get_character_sheet, get_char_check
+from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
 from larpmanager.utils.common import (
     get_handout,
 )

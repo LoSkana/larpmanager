@@ -23,21 +23,20 @@ import shutil
 from typing import Optional
 
 from django.core.cache import cache
-from django.db.models.signals import post_save, pre_save, pre_delete, post_delete
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import m2m_changed, post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import search_player
-from larpmanager.models.casting import QuestType, Quest, Trait, AssignmentTrait
+from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
-    CharacterChoice,
     CharacterAnswer,
+    CharacterChoice,
+    CharacterOption,
     CharacterQuestion,
     QuestionStatus,
     QuestionVisibility,
-    CharacterOption,
 )
 from larpmanager.models.member import Member
 from larpmanager.models.registration import RegistrationCharacterRel

@@ -20,7 +20,7 @@
 
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -28,15 +28,15 @@ from larpmanager.cache.role import has_assoc_permission, has_event_permission
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
 from larpmanager.utils.exceptions import (
-    PermissionException,
-    NotFoundException,
-    MembershipException,
-    UnknowRunException,
     FeatureException,
-    SignupException,
-    WaitingException,
     HiddenException,
+    MembershipException,
+    NotFoundException,
+    PermissionException,
     RedirectException,
+    SignupException,
+    UnknowRunException,
+    WaitingException,
 )
 
 

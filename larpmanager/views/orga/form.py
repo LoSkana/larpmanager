@@ -23,35 +23,35 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.registration import (
-    OrgaRegistrationTicketForm,
-    OrgaRegistrationSectionForm,
+    OrgaRegistrationInstallmentForm,
     OrgaRegistrationOptionForm,
     OrgaRegistrationQuestionForm,
     OrgaRegistrationQuotaForm,
-    OrgaRegistrationInstallmentForm,
+    OrgaRegistrationSectionForm,
     OrgaRegistrationSurchargeForm,
+    OrgaRegistrationTicketForm,
 )
 from larpmanager.forms.writing import (
     UploadElementsForm,
 )
 from larpmanager.models.form import (
-    RegistrationQuestion,
     RegistrationOption,
+    RegistrationQuestion,
     get_ordered_registration_questions,
 )
 from larpmanager.models.registration import (
-    RegistrationTicket,
-    RegistrationSection,
-    RegistrationQuota,
-    RegistrationSurcharge,
     RegistrationInstallment,
+    RegistrationQuota,
+    RegistrationSection,
+    RegistrationSurcharge,
+    RegistrationTicket,
 )
 from larpmanager.utils.common import (
     exchange_order,
 )
-from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.download import orga_registration_form_download
-from larpmanager.utils.edit import orga_edit, backend_edit
+from larpmanager.utils.edit import backend_edit, orga_edit
+from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.upload import upload_elements
 
 

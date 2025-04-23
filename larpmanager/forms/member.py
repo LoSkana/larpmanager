@@ -28,7 +28,7 @@ from dateutil.relativedelta import relativedelta
 from django import forms
 from django.conf import settings as conf_settings
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm, PasswordResetForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
@@ -39,11 +39,11 @@ from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
 from django_registration.forms import RegistrationFormUniqueEmail
 
-from larpmanager.forms.base import MyForm, BaseAccForm
-from larpmanager.forms.utils import DatePickerInput, AssocMemberS2Widget, AssocMemberS2WidgetMulti
-from larpmanager.models.association import Association, MemberFieldType
-from larpmanager.models.member import Member, get_user_membership, Membership, VolunteerRegistry, Badge
 from larpmanager.cache.feature import get_assoc_features
+from larpmanager.forms.base import BaseAccForm, MyForm
+from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput
+from larpmanager.models.association import Association, MemberFieldType
+from larpmanager.models.member import Badge, Member, Membership, VolunteerRegistry, get_user_membership
 from larpmanager.utils.common import FileTypeValidator
 from larpmanager.utils.tasks import my_send_mail
 

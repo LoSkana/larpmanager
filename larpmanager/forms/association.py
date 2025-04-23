@@ -21,17 +21,18 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import Textarea
-from django.utils.translation import gettext_lazy as _, pgettext
+from django.utils.translation import gettext_lazy as _
+from django.utils.translation import pgettext
 
-from larpmanager.forms.base import MyForm, MyCssForm
+from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.utils import (
-    remove_choice,
     AssocMemberS2WidgetMulti,
-    prepare_permissions_role,
-    save_permissions_role,
     SlugInput,
+    prepare_permissions_role,
+    remove_choice,
+    save_permissions_role,
 )
-from larpmanager.models.access import AssocRole, AssocPermission
+from larpmanager.models.access import AssocPermission, AssocRole
 from larpmanager.models.association import Association, AssocText
 
 

@@ -24,26 +24,26 @@ from django.db.models import Prefetch
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.role import check_assoc_permission
 from larpmanager.forms.accounting import (
     ExePaymentSettingsForm,
 )
 from larpmanager.forms.association import (
+    ExeAppearanceForm,
     ExeAssociationForm,
     ExeAssocRoleForm,
-    ExeConfigForm,
     ExeAssocTextForm,
-    ExeAppearanceForm,
+    ExeConfigForm,
 )
 from larpmanager.forms.member import (
     ExeProfileForm,
 )
 from larpmanager.models.access import AssocRole
 from larpmanager.models.association import Association, AssocText
-from larpmanager.models.base import FeatureModule, Feature
+from larpmanager.models.base import Feature, FeatureModule
 from larpmanager.models.event import (
     Run,
 )
-from larpmanager.cache.role import check_assoc_permission
 from larpmanager.utils.common import (
     get_feature,
     get_payment_methods_ids,

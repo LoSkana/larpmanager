@@ -27,7 +27,7 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.models.member import Membership, Badge
+from larpmanager.models.member import Badge, Membership
 
 
 def count_differences(s1, s2):

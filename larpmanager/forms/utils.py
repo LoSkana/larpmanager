@@ -31,21 +31,21 @@ from tinymce.widgets import TinyMCE
 from larpmanager.models.access import EventRole
 from larpmanager.models.base import FeatureModule, PaymentMethod
 from larpmanager.models.event import (
-    Run,
     Event,
+    Run,
 )
-from larpmanager.models.member import Membership, Member
+from larpmanager.models.experience import AbilityPx
+from larpmanager.models.form import (
+    CharacterOption,
+)
+from larpmanager.models.member import Member, Membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
 )
 from larpmanager.models.writing import (
-    Faction,
     Character,
-)
-from larpmanager.models.experience import AbilityPx
-from larpmanager.models.form import (
-    CharacterOption,
+    Faction,
 )
 
 # defer script loaded by form

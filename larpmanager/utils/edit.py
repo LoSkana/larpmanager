@@ -27,10 +27,10 @@ from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.role import check_assoc_permission
 from larpmanager.models.member import Log
 from larpmanager.models.writing import TextVersion
 from larpmanager.utils.event import check_event_permission
-from larpmanager.cache.role import check_assoc_permission
 from larpmanager.utils.exceptions import NotFoundException
 
 

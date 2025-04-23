@@ -23,11 +23,11 @@ from django.db.models import Count
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from larpmanager.models.event import Run, Event
-from larpmanager.models.form import RegistrationChoice, CharacterChoice
-from larpmanager.models.registration import Registration, RegistrationTicket, RegistrationCharacterRel
-from larpmanager.models.writing import Character
 from larpmanager.cache.feature import get_event_features
+from larpmanager.models.event import Event, Run
+from larpmanager.models.form import CharacterChoice, RegistrationChoice
+from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
+from larpmanager.models.writing import Character
 
 
 def reset_cache_reg_counts(r):

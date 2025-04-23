@@ -22,7 +22,7 @@ from django.core.cache import cache
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
-from larpmanager.models.event import Run, Event
+from larpmanager.models.event import Event, Run
 
 
 def reset_cache_run(s, n):

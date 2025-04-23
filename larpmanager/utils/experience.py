@@ -20,7 +20,7 @@
 
 from typing import Optional
 
-from django.db.models.signals import post_save, m2m_changed
+from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 
 from larpmanager.models.experience import AbilityPx, DeliveryPx, update_px

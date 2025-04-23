@@ -29,7 +29,7 @@ from tinymce.models import HTMLField
 from larpmanager.models.base import BaseModel
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
-from larpmanager.models.utils import decimal_to_str, UploadToPathAndRename, my_uuid_short
+from larpmanager.models.utils import UploadToPathAndRename, decimal_to_str, my_uuid_short
 from larpmanager.models.writing import Character
 
 

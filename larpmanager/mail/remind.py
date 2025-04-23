@@ -18,10 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.utils.translation import activate, gettext_lazy as _
+from django.utils.translation import activate
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.access import get_event_organizers
-from larpmanager.models.association import hdr, get_url
+from larpmanager.models.association import get_url, hdr
 from larpmanager.utils.deadlines import check_run_deadlines
 from larpmanager.utils.registration import is_reg_provisional
 from larpmanager.utils.tasks import my_send_mail

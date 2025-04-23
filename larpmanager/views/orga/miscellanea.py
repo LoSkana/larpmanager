@@ -30,30 +30,30 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.miscellanea import (
     OrgaAlbumForm,
+    OrgaProblemForm,
     UploadAlbumsForm,
     UtilForm,
     WorkshopModuleForm,
-    WorkshopQuestionForm,
     WorkshopOptionForm,
-    OrgaProblemForm,
+    WorkshopQuestionForm,
 )
 from larpmanager.models.miscellanea import (
     Album,
-    WorkshopMemberRel,
-    Util,
-    WorkshopModule,
-    WorkshopQuestion,
-    WorkshopOption,
     Problem,
+    Util,
+    WorkshopMemberRel,
+    WorkshopModule,
+    WorkshopOption,
+    WorkshopQuestion,
 )
 from larpmanager.models.registration import Registration
 from larpmanager.utils.common import (
     get_album_cod,
     html_clean,
 )
-from larpmanager.utils.miscellanea import upload_albums
-from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.edit import orga_edit
+from larpmanager.utils.event import check_event_permission
+from larpmanager.utils.miscellanea import upload_albums
 from larpmanager.utils.writing import writing_post
 
 

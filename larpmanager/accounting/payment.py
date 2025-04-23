@@ -27,29 +27,28 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.gateway import (
     get_paypal_form,
-    get_stripe_form,
-    get_sumup_form,
     get_redsys_form,
     get_satispay_form,
+    get_stripe_form,
+    get_sumup_form,
 )
 from larpmanager.cache.feature import get_assoc_features
-from larpmanager.forms.accounting import WireInvoiceSubmitForm, AnyInvoiceSubmitForm
-
+from larpmanager.forms.accounting import AnyInvoiceSubmitForm, WireInvoiceSubmitForm
 from larpmanager.models.accounting import (
-    PaymentInvoice,
-    AccountingItemTransaction,
-    AccountingItemPayment,
-    AccountingItemMembership,
-    AccountingItemDonation,
     AccountingItemCollection,
-    RefundRequest,
+    AccountingItemDonation,
+    AccountingItemMembership,
     AccountingItemOther,
+    AccountingItemPayment,
+    AccountingItemTransaction,
     Collection,
+    PaymentInvoice,
+    RefundRequest,
 )
 from larpmanager.models.association import Association
 from larpmanager.models.base import PaymentMethod
 from larpmanager.models.registration import Registration
-from larpmanager.models.utils import get_payment_details, generate_id
+from larpmanager.models.utils import generate_id, get_payment_details
 from larpmanager.utils.base import update_payment_details
 from larpmanager.utils.einvoice import process_payment
 from larpmanager.utils.member import assign_badge
@@ -310,7 +309,7 @@ def update_RefundRequest(sender, instance, **kwargs):
     acc.member = instance.member
     acc.value = instance.value
     acc.oth = AccountingItemOther.REFUND
-    acc.descr = f"Rimborso erogato di {instance.value:.2f}"
+    acc.descr = f"Delivered refund of {instance.value:.2f}"
     acc.assoc = instance.assoc
     acc.save()
 
@@ -337,5 +336,5 @@ def update_Collection(sender, instance, **kwargs):
     acc.run = instance.run
     acc.value = instance.total
     acc.oth = AccountingItemOther.CREDIT
-    acc.descr = f"Colletta di {instance.organizer}"
+    acc.descr = f"Collection of {instance.organizer}"
     acc.save()

@@ -27,20 +27,19 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
-from larpmanager.forms.utils import css_delimeter, get_custom_field, add_custom_field
+from larpmanager.forms.utils import add_custom_field, css_delimeter, get_custom_field
 from larpmanager.models.association import Association
-from larpmanager.models.event import Run, Event
+from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
+    QuestionStatus,
+    QuestionType,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
     RegistrationQuestion,
-    QuestionType,
-    QuestionStatus,
 )
-from larpmanager.models.utils import get_attr, save_all_element_configs, get_all_element_configs
+from larpmanager.models.utils import generate_id, get_all_element_configs, get_attr, save_all_element_configs
 from larpmanager.templatetags.show_tags import hex_to_rgb
-from larpmanager.models.utils import generate_id
 
 
 class MyForm(forms.ModelForm):

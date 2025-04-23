@@ -24,61 +24,61 @@ from random import shuffle
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
-from django.http import JsonResponse, Http404
-from django.shortcuts import redirect, render, get_object_or_404
+from django.http import Http404, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 from slugify import slugify
 
+from larpmanager.accounting.registration import (
+    cancel_reg,
+    check_reg_bkg,
+    get_accounting_refund,
+    get_reg_payments,
+    round_to_nearest_cent,
+)
+from larpmanager.cache.character import get_event_cache_all, reset_run
+from larpmanager.cache.feature import reset_event_features
+from larpmanager.cache.links import reset_run_event_links
+from larpmanager.cache.registration import reset_cache_reg_counts
+from larpmanager.cache.role import has_event_permission
 from larpmanager.cache.run import reset_cache_run
 from larpmanager.forms.registration import (
-    RegistrationCharacterRelForm,
     OrgaRegistrationForm,
+    RegistrationCharacterRelForm,
 )
 from larpmanager.forms.writing import (
     UploadElementsForm,
 )
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
-    AccountingItemPayment,
     AccountingItemOther,
+    AccountingItemPayment,
 )
-from larpmanager.models.casting import QuestType, AssignmentTrait
+from larpmanager.models.casting import AssignmentTrait, QuestType
 from larpmanager.models.event import (
     PreRegistration,
 )
 from larpmanager.models.form import (
-    RegistrationQuestion,
-    RegistrationOption,
-    RegistrationChoice,
-    RegistrationAnswer,
     QuestionType,
+    RegistrationAnswer,
+    RegistrationChoice,
+    RegistrationOption,
+    RegistrationQuestion,
 )
 from larpmanager.models.member import Membership, get_user_membership
 from larpmanager.models.registration import (
     Registration,
-    RegistrationTicket,
     RegistrationCharacterRel,
+    RegistrationTicket,
 )
-from larpmanager.accounting.registration import (
-    get_reg_payments,
-    get_accounting_refund,
-    cancel_reg,
-    round_to_nearest_cent,
-    check_reg_bkg,
-)
-from larpmanager.cache.character import get_event_cache_all, reset_run
-from larpmanager.cache.links import reset_run_event_links
-from larpmanager.cache.role import has_event_permission
-from larpmanager.cache.feature import reset_event_features
-from larpmanager.cache.registration import reset_cache_reg_counts
 from larpmanager.utils.common import (
-    get_time_diff,
-    get_registration,
     get_char,
     get_discount,
+    get_registration,
+    get_time_diff,
 )
-from larpmanager.utils.registration import is_reg_provisional
 from larpmanager.utils.event import check_event_permission
+from larpmanager.utils.registration import is_reg_provisional
 from larpmanager.utils.upload import upload_elements
 
 

@@ -25,28 +25,29 @@ from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Q
-from django.db.models.signals import pre_save, post_save, pre_delete
+from django.db.models.signals import post_save, pre_delete, pre_save
 from django.dispatch import receiver
-from django.utils.translation import activate, gettext_lazy as _
+from django.utils.translation import activate
+from django.utils.translation import gettext_lazy as _
 from slugify import slugify
 
+from larpmanager.cache.button import event_button_key
 from larpmanager.cache.feature import get_event_features, reset_event_features
+from larpmanager.models.access import AssocPermission, EventPermission, EventRole, get_event_organizers
 from larpmanager.models.accounting import (
-    AccountingItemTransaction,
-    AccountingItemPayment,
-    Collection,
     AccountingItemCollection,
+    AccountingItemPayment,
+    AccountingItemTransaction,
+    Collection,
 )
 from larpmanager.models.association import Association
-from larpmanager.models.access import AssocPermission, EventPermission, get_event_organizers, EventRole
-from larpmanager.models.event import Run, EventButton, Event, EventText, EventConfig
-from larpmanager.models.form import CharacterQuestion, QuestionType, QuestionStatus, QuestionVisibility
-from larpmanager.models.larpmanager import LarpManagerTutorial, LarpManagerFaq
-from larpmanager.models.member import Member, Membership
-from larpmanager.models.registration import RegistrationTicket, Registration, RegistrationCharacterRel
-from larpmanager.models.writing import Plot, Faction, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.models.casting import Trait, update_traits_all
-from larpmanager.cache.button import event_button_key
+from larpmanager.models.event import Event, EventButton, EventConfig, EventText, Run
+from larpmanager.models.form import CharacterQuestion, QuestionStatus, QuestionType, QuestionVisibility
+from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTutorial
+from larpmanager.models.member import Member, Membership
+from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
+from larpmanager.models.writing import Faction, Plot, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.utils.common import copy_class
 
 
