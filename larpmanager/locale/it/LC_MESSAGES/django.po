@@ -880,7 +880,7 @@ msgid "Payments"
 msgstr "Pagamenti"
 
 msgid "Invoices"
-msgstr "Fatture"
+msgstr "Versamenti"
 
 msgid "Settings"
 msgstr "Impostazioni"
@@ -4562,8 +4562,7 @@ msgid "Donation of %(user)s, with reason: '%(reason)s'"
 msgstr "Donazione di %(user)s, con motivazione: '%(reason)s' "
 
 msgid "This page allows you to add or edit an invoice."
-msgstr ""
-"Questa pagina ti permette di aggiungere o modificare fatture di pagamento."
+msgstr "Questa pagina ti permette di aggiungere o modificare versamenti."
 
 msgid "This page allows you to add or edit a discount."
 msgstr "Questa pagina ti permette di aggiungere o modificare un discount."
