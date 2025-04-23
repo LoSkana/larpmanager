@@ -4244,7 +4244,7 @@ msgstr " Haast je: er zijn nog maar %(num)d tickets beschikbaar."
 
 #, python-brace-format
 msgid "Completed module. Remaining: {number:d}"
-msgstr "Voltooide module. Resterend: {nummer:d}"
+msgstr "Voltooide module. Resterend: {number:d}"
 
 msgid "Apply a check on the tax code of players"
 msgstr "Controleer de belastingcode van spelers"

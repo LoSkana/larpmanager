@@ -4242,7 +4242,7 @@ msgstr " Pospěšte si: k dispozici jsou už jen %(num)d vstupenek."
 
 #, python-brace-format
 msgid "Completed module. Remaining: {number:d}"
-msgstr "Dokončený modul. Zbývá: {číslo:d}"
+msgstr "Dokončený modul. Zbývá: {number:d}"
 
 msgid "Apply a check on the tax code of players"
 msgstr "Použít kontrolu daňového kódu hráčů"

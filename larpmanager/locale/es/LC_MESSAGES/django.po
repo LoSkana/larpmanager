@@ -4243,7 +4243,7 @@ msgstr " Date prisa: sólo quedan %(num)d entradas disponibles."
 
 #, python-brace-format
 msgid "Completed module. Remaining: {number:d}"
-msgstr "Módulo completado. Restante: {número:d}"
+msgstr "Módulo completado. Restante: {number:d}"
 
 msgid "Apply a check on the tax code of players"
 msgstr "Verificar el identificador fiscal de los jugadores"

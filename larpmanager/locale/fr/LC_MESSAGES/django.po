@@ -4244,7 +4244,7 @@ msgstr " Dépêchez-vous : il ne reste que %(num)d billets disponibles."
 
 #, python-brace-format
 msgid "Completed module. Remaining: {number:d}"
-msgstr "Module terminé. Reste à faire : {nombre:d}"
+msgstr "Module terminé. Reste à faire : {number:d}"
 
 msgid "Apply a check on the tax code of players"
 msgstr "Contrôler le code fiscal des joueurs"

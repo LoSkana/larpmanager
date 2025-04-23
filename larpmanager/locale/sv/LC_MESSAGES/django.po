@@ -4244,7 +4244,7 @@ msgstr " Skynda dig: endast %(num)d biljetter finns kvar."
 
 #, python-brace-format
 msgid "Completed module. Remaining: {number:d}"
-msgstr "Genomförd modul. Återstår: {antal:d}"
+msgstr "Genomförd modul. Återstår: {number:d}"
 
 msgid "Apply a check on the tax code of players"
 msgstr "Tillämpa en kontroll av spelarnas skattekod"

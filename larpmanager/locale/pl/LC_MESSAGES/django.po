@@ -4242,7 +4242,7 @@ msgstr " Pospiesz się: dostępne są tylko %(num)d bilety."
 
 #, python-brace-format
 msgid "Completed module. Remaining: {number:d}"
-msgstr "Ukończony moduł. Pozostało: {numer:d}"
+msgstr "Ukończony moduł. Pozostało: {number:d}"
 
 msgid "Apply a check on the tax code of players"
 msgstr "Zastosuj kontrolę kodu podatkowego graczy"
