@@ -64,7 +64,7 @@
 - model: larpmanager.assocpermission
   pk: 10
   fields:
-    name: Expenses2
+    name: Expenses
     slug: exe_expenses
     number: 7
     feature: 106

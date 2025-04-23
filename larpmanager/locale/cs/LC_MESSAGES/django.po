@@ -1293,9 +1293,6 @@ msgstr "Podmínky a pravidla akce"
 msgid "Treasurer"
 msgstr "Pokladník"
 
-msgid "Expenses2"
-msgstr "Výdaje2"
-
 msgid "Enrolment"
 msgstr "Zápis na"
 

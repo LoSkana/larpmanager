@@ -47,6 +47,7 @@ from larpmanager.models.accounting import (
 from larpmanager.utils.event import check_event_permission
 from larpmanager.accounting.balance import get_run_accounting
 from larpmanager.utils.edit import orga_edit, backend_get
+from larpmanager.utils.paginate import orga_paginate
 
 
 @login_required
@@ -91,9 +92,8 @@ def orga_expenses_my_new(request, s, n):
 @login_required
 def orga_invoices(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_invoices")
-    ctx["list"] = PaymentInvoice.objects.filter(reg__run=ctx["run"], status=PaymentInvoice.SUBMITTED).select_related(
-        "member", "method"
-    )
+    que = PaymentInvoice.objects.filter(reg__run=ctx["run"], status=PaymentInvoice.SUBMITTED)
+    ctx["list"] = que.select_related("member", "method")
     return render(request, "larpmanager/orga/accounting/invoices.html", ctx)
 
 
@@ -126,9 +126,7 @@ def orga_accounting(request, s, n):
 @login_required
 def orga_tokens(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_tokens")
-    ctx["list"] = AccountingItemOther.objects.filter(
-        run=ctx["run"], oth=AccountingItemOther.TOKEN, hide=False
-    ).order_by("-created")
+    orga_paginate(request, ctx, AccountingItemOther, selrel=("run", "run__event"), subtype="tokens")
     return render(request, "larpmanager/orga/accounting/tokens.html", ctx)
 
 
@@ -140,9 +138,7 @@ def orga_tokens_edit(request, s, n, num):
 @login_required
 def orga_credits(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_credits")
-    ctx["list"] = AccountingItemOther.objects.filter(
-        run=ctx["run"], oth=AccountingItemOther.CREDIT, hide=False
-    ).order_by("-created")
+    orga_paginate(request, ctx, AccountingItemOther, selrel=("run", "run__event"), subtype="credits")
     return render(request, "larpmanager/orga/accounting/credits.html", ctx)
 
 
@@ -154,15 +150,9 @@ def orga_credits_edit(request, s, n, num):
 @login_required
 def orga_payments(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_payments")
-    ctx["list"] = (
-        AccountingItemPayment.objects.filter(reg__run=ctx["run"], hide=False)
-        .select_related("member")
-        .prefetch_related("inv", "inv__method")
-        .order_by("-created")
-    )
-
+    sr = ("reg__member", "reg__run", "inv", "inv__method")
+    orga_paginate(request, ctx, AccountingItemPayment, selrel=sr, afield="reg")
     assign_payment_fee(ctx)
-
     return render(request, "larpmanager/orga/accounting/payments.html", ctx)
 
 
@@ -195,7 +185,7 @@ def orga_payments_edit(request, s, n, num):
 @login_required
 def orga_outflows(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_outflows")
-    ctx["list"] = AccountingItemOutflow.objects.filter(run=ctx["run"], hide=False).order_by("-created")
+    orga_paginate(request, ctx, AccountingItemOutflow, selrel=("run", "run__event"))
     return render(request, "larpmanager/orga/accounting/outflows.html", ctx)
 
 
@@ -207,7 +197,7 @@ def orga_outflows_edit(request, s, n, num):
 @login_required
 def orga_inflows(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_inflows")
-    ctx["list"] = AccountingItemInflow.objects.filter(run=ctx["run"], hide=False).order_by("-created")
+    orga_paginate(request, ctx, AccountingItemInflow, selrel=("run", "run__event"))
     return render(request, "larpmanager/orga/accounting/inflows.html", ctx)
 
 
@@ -219,11 +209,7 @@ def orga_inflows_edit(request, s, n, num):
 @login_required
 def orga_expenses(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_expenses")
-    ctx["list"] = (
-        AccountingItemExpense.objects.filter(run=ctx["run"], hide=False)
-        .select_related("member")
-        .order_by("is_approved", "-created")
-    )
+    orga_paginate(request, ctx, AccountingItemExpense, selrel=("run", "run__event"))
     return render(request, "larpmanager/orga/accounting/expenses.html", ctx)
 
 

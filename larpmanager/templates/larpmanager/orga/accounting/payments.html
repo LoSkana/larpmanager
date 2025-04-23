@@ -1,13 +1,14 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n show_tags %}
 {% block title %}
     {% trans "Invoices" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows all payments received for this run." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
+    {% include "elements/paginate.html" %}
     <table id="payments" class="tablesorter mob">
         <thead>
             <tr>
@@ -46,4 +47,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

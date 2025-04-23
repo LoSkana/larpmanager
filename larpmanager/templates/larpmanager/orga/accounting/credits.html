@@ -1,11 +1,14 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
-{% block title %}{{ credit_name }} - {{ run }}{% endblock %}
+{% block title %}
+    {{ credit_name }} - {{ run }}
+{% endblock title %}
 {% block info %}
     {% trans "This page summarises the disbursements recorded in the system for this run of" %} {{ credit_name }}.
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
+    {% include "elements/paginate.html" %}
     <table id="credits" class="tablesorter mob">
         <thead>
             <tr>
@@ -28,4 +31,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

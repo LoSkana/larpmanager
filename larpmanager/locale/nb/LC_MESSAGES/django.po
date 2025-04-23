@@ -1293,9 +1293,6 @@ msgstr "Vilkår og betingelser for arrangementer"
 msgid "Treasurer"
 msgstr "Kasserer"
 
-msgid "Expenses2"
-msgstr "Utgifter2"
-
 msgid "Enrolment"
 msgstr "Innmelding"
 

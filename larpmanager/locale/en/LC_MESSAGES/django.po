@@ -7360,9 +7360,6 @@ msgstr ""
 msgid "Adds a 'concept' field to characters, reserved for staff informations."
 msgstr ""
 
-msgid "Expenses2"
-msgstr ""
-
 msgid "Audits"
 msgstr ""
 

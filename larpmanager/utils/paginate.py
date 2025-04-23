@@ -2,7 +2,13 @@ from django.core.paginator import Paginator
 from django.db.models import Case, When, Value, IntegerField, OuterRef, Subquery
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.models.accounting import AccountingItem, PaymentInvoice, RefundRequest, AccountingItemOther
+from larpmanager.models.accounting import (
+    AccountingItem,
+    PaymentInvoice,
+    RefundRequest,
+    AccountingItemOther,
+    AccountingItemExpense,
+)
 from larpmanager.models.event import Run
 from larpmanager.models.member import Membership
 
@@ -49,6 +55,9 @@ def paginate(request, ctx, typ, exe, selrel, show_runs, afield, subtype):
     if issubclass(typ, AccountingItem):
         elements = elements.select_related("member")
 
+    if issubclass(typ, AccountingItemExpense):
+        elements = elements.select_related("member").order_by("is_approved", "-created")
+
     if issubclass(typ, PaymentInvoice):
         elements = elements.annotate(
             is_submitted=Case(
@@ -70,6 +79,7 @@ def paginate(request, ctx, typ, exe, selrel, show_runs, afield, subtype):
 
     if subtype == "credits":
         elements = elements.filter(oth=AccountingItemOther.CREDIT)
+
     elif subtype == "tokens":
         elements = elements.filter(oth=AccountingItemOther.TOKEN)
 
