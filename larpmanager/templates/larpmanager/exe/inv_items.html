@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Inventory objects" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows organization inventory items." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
     <table id="tb" class="tablesorter mob">
@@ -38,4 +38,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

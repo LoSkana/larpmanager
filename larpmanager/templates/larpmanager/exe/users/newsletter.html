@@ -1,11 +1,11 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Newsletter" %} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows email lists of users, divided by their expressed preferences regarding newsletter communications." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% for key, value in lst.items %}
         <hr />
@@ -32,4 +32,4 @@
             {% endfor %}
         </p>
     {% endfor %}
-{% endblock %}
+{% endblock content %}

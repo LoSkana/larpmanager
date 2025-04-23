@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Join the collection for" %} {{ coll.display_member }}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     {% if invoice %}
         {% include "elements/payment_go.html" %}
@@ -10,4 +10,4 @@
         <p>{% trans "The amount of your contribution is" %}:</p>
         {% include "elements/payment_form.html" %}
     {% endif %}
-{% endblock %}
+{% endblock content %}

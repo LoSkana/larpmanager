@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
     {% trans "Inventory" %} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the organization inventory." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
     <hr />
@@ -65,7 +65,7 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
 var fields = {{ inv_fields | safe }};
@@ -100,4 +100,4 @@ function filter() {
 
 }
     </script>
-{% endblock %}
+{% endblock js %}

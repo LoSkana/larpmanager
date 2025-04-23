@@ -1,15 +1,16 @@
-{% extends 'alpha.html' %}
+{% extends "alpha.html" %}
 {% load i18n static %}
 {% block banner %}
     <div class="inner">
         <h1>
             {% if assoc.logo and request.path == '/' %}<img src="{{ assoc.logo }}" class="main_logo" alt="logo" />{% endif %}
             <span>
-                {% block title %}{% endblock %}
+                {% block title %}
+                {% endblock title %}
             </span>
         </h1>
     </div>
-{% endblock %}
+{% endblock title %}
 {% block robots %}
     {% if assoc.id > 0 or staging or not index %}<meta name="robots" content="noindex, nofollow" />{% endif %}
-{% endblock %}
+{% endblock robots %}

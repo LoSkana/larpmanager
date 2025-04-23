@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Texts" %} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page summarizes the association's custom texts." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
     <table id="payments" class="tablesorter mob">
@@ -34,4 +34,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

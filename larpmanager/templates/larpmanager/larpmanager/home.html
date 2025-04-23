@@ -1,11 +1,13 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n static %}
-{% block maintitle %}LarpManager - All-in-one LARP software, free & open source!{% endblock %}
+{% block maintitle %}
+    LarpManager - All-in-one LARP software, free & open source!
+{% endblock maintitle %}
 {% block meta %}
     <meta name="description"
           content="Everything you need to run your LARP - registrations, payments, characters, and more. All in one platform. Free and open source!">
     <meta property="og:title" content="LarpManager">
-{% endblock %}
+{% endblock meta %}
 {% block alpha %}
     <!-- Banner -->
     <section id="banner">
@@ -158,7 +160,7 @@
             </div>
         </div>
     </section>
-{% endblock %}
+{% endblock alpha %}
 {% block js2 %}
     <script>
 window.addEventListener('DOMContentLoaded', function() {
@@ -251,4 +253,4 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
     </script>
-{% endblock %}
+{% endblock js2 %}

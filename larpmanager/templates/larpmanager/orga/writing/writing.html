@@ -1,4 +1,4 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n static show_tags %}
 {% block title %}
     {% if eid %}
@@ -7,8 +7,10 @@
         {% trans "New" %} {{ form.page_title }}
     {% endif %}
     - {{ run }}
-{% endblock %}
-{% block info %}{{ form.page_info }}{% endblock %}
+{% endblock title %}
+{% block info %}
+    {{ form.page_info }}
+{% endblock info %}
 {% block content %}
     {% include "elements/form/sections.html" %}
     <!--
@@ -22,7 +24,7 @@
 
 </div>
 -->
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
 function translate(id, text) {
@@ -99,4 +101,4 @@ var eid = -1;
             {% include "elements/"|add:template_name %}
         {% endwith %}
     {% endif %}
-{% endblock %}
+{% endblock js %}

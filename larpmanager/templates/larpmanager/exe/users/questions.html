@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Questions" %} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the questions submitted by users, divided by the events they refer to. You can answer the question or close it if requires no further action." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <p>
         <a href="#" class="my_toggle" tog='closed'>{% trans "Show questions already answered" %}</a>
@@ -82,4 +82,4 @@
             </tbody>
         </table>
     </div>
-{% endblock %}
+{% endblock content %}

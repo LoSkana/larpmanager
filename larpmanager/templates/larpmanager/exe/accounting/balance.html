@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Balance" %} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page prepares the cash balance already formatted for annual declaration." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/form/years.html" %}
     <h3>A - Attività di interesse generale - {{ year }}</h3>
@@ -56,4 +56,4 @@
             <td>{{ bal | floatformat:2 }}</td>
         </tr>
     </table>
-{% endblock %}
+{% endblock content %}

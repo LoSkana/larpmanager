@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
     {% trans "Email list" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the email lists of subscribers." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <h2>{% trans "Simple list" %}</h2>
     <p>
@@ -29,4 +29,4 @@
             </tr>
         {% endfor %}
     </table>
-{% endblock %}
+{% endblock content %}

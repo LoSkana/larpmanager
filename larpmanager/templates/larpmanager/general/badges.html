@@ -1,6 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load tz show_tags static i18n %}
-{% block title %}Badges{% endblock %}
+{% block title %}
+    Badges
+{% endblock title %}
 {% block content %}
     <h2>Gonna catch 'em all!</h2>
     <p>
@@ -12,7 +14,7 @@
     <hr />
     {% include "elements/badges.html" %}
     <hr />
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
 window.addEventListener('DOMContentLoaded', function() {
@@ -42,4 +44,4 @@ function resize_to_fit() {
 
 }
     </script>
-{% endblock %}
+{% endblock js %}

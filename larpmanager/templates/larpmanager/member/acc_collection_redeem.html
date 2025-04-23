@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Redeem collection" %}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     <p>
         {% trans "Your friends wanted to give you a special gift: they gave you the chance to participate in one of our experiences!" %}
@@ -15,7 +15,7 @@
         <input type="submit" value="{% trans "Confirm" %}" />
     </form>
     <p>
-        <b>{% trans "Total collection" %}: <b>{{ coll.total }}.</b>
+        {% trans "Total collection" %}: <b>{{ coll.total }}.</b>
     </p>
     {% if list %}
         <p>
@@ -26,4 +26,4 @@
             {% endfor %}
         </p>
     {% endif %}
-{% endblock %}
+{% endblock content %}

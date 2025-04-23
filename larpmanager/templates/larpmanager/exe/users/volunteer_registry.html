@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Volunteer Registry" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page summarises the organization's volunteers." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <p>
         Clicca qui per ottenere una stampa del registro a norma di legge:
@@ -36,4 +36,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

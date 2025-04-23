@@ -1,8 +1,10 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static i18n %}
-{% block title %}Honeypot{% endblock %}
+{% block title %}
+    Honeypot
+{% endblock title %}
 {% block content %}
     Ciao, {{ ip }}!
     <br />
     Nel caso te lo stia chiedendo: sì, sei stato sgamato :P
-{% endblock %}
+{% endblock content %}

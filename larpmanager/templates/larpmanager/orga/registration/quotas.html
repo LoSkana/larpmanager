@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Quotas" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the quota options available for payment of the event." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
     <p>
@@ -41,4 +41,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

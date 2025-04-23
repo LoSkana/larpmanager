@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {{ credit_name }} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page summarises the disbursements recorded in the system of" %} {{ credit_name }}.
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
     {% include "elements/paginate.html" %}
@@ -35,4 +35,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

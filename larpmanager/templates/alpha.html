@@ -1,14 +1,16 @@
-{% extends 'main.html' %}
+{% extends "main.html" %}
 {% load i18n static %}
 {% block alpha %}
     <section id="main" class="container">
         <header class="sec">
             <h1>
-                {% block title %}{% endblock %}
+                {% block title %}
+                {% endblock title %}
             </h1>
         </header>
         <div class="box">
-            {% block content %}{% endblock %}
+            {% block content %}
+            {% endblock content %}
         </div>
     </section>
-{% endblock %}
+{% endblock content %}

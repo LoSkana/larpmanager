@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Competences" %} - {{ comp.name }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows in detail, for each expertise, the users who have indicated it." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <table id="main_table" class="tablesorter mob">
         <thead>
@@ -40,4 +40,4 @@
             {{ el.member.email }}
         {% endfor %}
     </p>
-{% endblock %}
+{% endblock content %}

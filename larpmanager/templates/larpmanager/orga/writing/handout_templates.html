@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Handout template" %} - {{ event.name }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the templates for event handouts." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/writing.html" %}
     <table id="handout_templates" class="tablesorter mob writing">
@@ -35,4 +35,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

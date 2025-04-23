@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block title %}
     {% trans "Register" %}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     <br />
     <form id="register_form"
@@ -13,9 +13,9 @@
             {{ form.as_table }}
         </table>
         <br />
-        <input type="submit" value="{% trans 'Submit' %}" />
+        <input type="submit" value="{% trans "Submit" %}" />
     </form>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
 window.addEventListener('DOMContentLoaded', function() {
@@ -35,4 +35,4 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
     </script>
-{% endblock %}
+{% endblock js %}

@@ -1,6 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n static %}
-{% block title %}Privacy Policy{% endblock %}
+{% block title %}
+    Privacy Policy
+{% endblock title %}
 {% block content %}
     {% if text %}
         {{ text | safe }}
@@ -207,4 +209,4 @@
             </p>
         {% endif %}
     {% endif %}
-{% endblock %}
+{% endblock content %}

@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n show_tags %}
 {% block title %}
     {% trans "Workshops" %}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     <div class="workshop">
         <p>{% trans "These are the workshops you must complete before you can play." %}</p>
@@ -29,4 +29,4 @@
                 {% endfor %}
             </table>
         </div>
-    {% endblock %}
+    {% endblock content %}

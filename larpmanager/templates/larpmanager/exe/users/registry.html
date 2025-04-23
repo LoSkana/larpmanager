@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Registry" %} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page summarises the list of members as a registry" %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <table class="tablesorter mob">
         <thead>
@@ -45,4 +45,4 @@
             </tr>
         {% endfor %}
     </table>
-{% endblock %}
+{% endblock content %}

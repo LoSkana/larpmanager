@@ -1,8 +1,8 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Questions" %} - {{ member }}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     <h2>{{ member }}</h2>
     {% if reg_characters %}
@@ -32,7 +32,7 @@
         <table class="mob no_csv">
             {{ form.as_table }}
         </table>
-        <input type="submit" value="{% trans 'Confirm' %}">
+        <input type="submit" value="{% trans "Confirm" %}">
     </form>
     <hr />
     <h2>{% trans "Comunications" %}</h2>
@@ -44,4 +44,4 @@
             {% endif %}
         </div>
     {% endfor %}
-{% endblock %}
+{% endblock content %}

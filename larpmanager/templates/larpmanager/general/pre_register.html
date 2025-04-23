@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load show_tags i18n %}
 {% block title %}
-    {% trans 'Pre-Register' %}
-{% endblock %}
+    {% trans "Pre-Register" %}
+{% endblock title %}
 {% block content %}
     <h4>
         <a href="#" class="my_toggle" tog='detail'><b>{% trans "Show explanation" %}</b></a>
@@ -10,11 +10,11 @@
     {% if event %}
         <form action="{{ request.path }}"  method="post">
             {% csrf_token %}
-            <h2>{% trans 'New pre-registrations' %}</h2>
+            <h2>{% trans "New pre-registrations" %}</h2>
             <table class="mob no_csv">
                 {{ form.as_table }}
             </table>
-            <input id="submit" type="submit" value="{% trans 'Confirm' %}">
+            <input id="submit" type="submit" value="{% trans "Confirm" %}">
         </p>
         <p>
         </form>
@@ -22,7 +22,7 @@
     {% endif %}
     <div class="hide detail">
         <hr />
-        <h2>{% trans 'Operation' %}</h2>
+        <h2>{% trans "Operation" %}</h2>
         <p>
             {% trans "If you like or are interested in an event, you can <b>pre-register</b>." %}
         </p>
@@ -33,16 +33,16 @@
             {% trans "For our part, we will use pre-registrations as a measure of how much an event is desired. If you want a new run of an event, spread the voice and invites others to pre-register to it!" %}
         </p>
         <p>
-            {% trans 'We only ask you to indicate a <b>order</b> of preference for the your pre-registrations (imagining you have to choose which one to play, indicates in what order you want to play them).' %}
+            {% trans "We only ask you to indicate a <b>order</b> of preference for the your pre-registrations (imagining you have to choose which one to play, indicates in what order you want to play them)." %}
         </p>
-        <p>{% trans 'If you wish, you can delete past pre-registrations.' %}</p>
+        <p>{% trans "If you wish, you can delete past pre-registrations." %}</p>
     </div>
-    <h2>{% trans 'Pre-registration' %}</h2>
+    <h2>{% trans "Pre-registration" %}</h2>
     <table class="mob">
         <tr>
-            <th style="width:50%;">{% trans 'Event' %}</th>
-            <th>{% trans 'Order' %}</th>
-            <th style="width:35%;">{% trans 'Do you want to tell us something?' %}</th>
+            <th style="width:50%;">{% trans "Event" %}</th>
+            <th>{% trans "Order" %}</th>
+            <th style="width:35%;">{% trans "Do you want to tell us something?" %}</th>
             <th></th>
         </tr>
         {% for al in already %}
@@ -58,17 +58,17 @@
         {% if not event %}
             <form action="{{ request.path }}"  method="post">
                 {% csrf_token %}
-                <h2>{% trans 'New pre-registrations' %}</h2>
+                <h2>{% trans "New pre-registrations" %}</h2>
                 <table class="mob no_csv">
                     {{ form.as_table }}
                 </table>
-                <input id="submit" type="submit" value="{% trans 'Confirm' %}">
+                <input id="submit" type="submit" value="{% trans "Confirm" %}">
             </p>
             <p>
             </form>
             <hr />
         {% endif %}
-    {% endblock %}
+    {% endblock content %}
     {% block js %}
         <script>window.addEventListener('DOMContentLoaded', function() {
 $(function(){
@@ -96,4 +96,4 @@ $('select[name$="_pref"]').change(function() {
 });
 });
         </script>
-    {% endblock %}
+    {% endblock js %}

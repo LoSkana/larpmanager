@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
     {{ name }} - {% trans "Show" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page allows you to fully view a character." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <h2 class="c">{{ name }}</h2>
     {% if nm == 'character' or nm == 'plot' or nm == 'faction' %}
@@ -23,4 +23,4 @@
     {% elif nm == 'plot' or nm == 'prologue' %}
         <div class="plot">{% show_char el.data run 1 %}</div>
     {% endif %}
-{% endblock %}
+{% endblock content %}

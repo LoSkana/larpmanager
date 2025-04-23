@@ -3833,6 +3833,9 @@ msgstr "Decorontwerp - inrichting, materialen"
 msgid "Surcharge applied to the ticket"
 msgstr "Toeslag op ticket"
 
+msgid "Indicates that payment is sent "
+msgstr "Geeft aan dat de betaling is verzonden"
+
 msgid "Relationships of your character"
 msgstr "Links van je personage"
 
@@ -4042,6 +4045,9 @@ msgstr "Naam van korting - voor intern gebruik"
 
 msgid "Image shown on homepage as promoter"
 msgstr "Afbeelding getoond op homepage als promoter"
+
+msgid "The form is saved every 30 seconds."
+msgstr "Het formulier wordt elke 30 seconden opgeslagen."
 
 msgid "Select a file with extension 'zip'."
 msgstr "Selecteer een bestand met de extensie 'zip'."
@@ -5004,10 +5010,6 @@ msgstr "Geef aan hoe de uitgaven zijn geconfigureerd op budgetniveau"
 msgid "Indicate as precisely as possible where to pick you up."
 msgstr "Geef zo nauwkeurig mogelijk aan waar je opgehaald kunt worden"
 
-msgid "Indicates that payment is sent \"to friends and family\"."
-msgstr ""
-"Het geeft aan dat de betaling wordt verzonden \"naar vrienden en familie\"."
-
 msgid "View the complete list of characters and their players!"
 msgstr "Bekijk de volledige lijst met personages en hun spelers!"
 
@@ -5526,6 +5528,9 @@ msgstr "Geeft aan of de optie kan worden opgenomen in de vrije vermeldingen"
 msgid "whether the character is aware of the identity of the other trait."
 msgstr ""
 "of het personage zich bewust is van de identiteit van de andere eigenschap."
+
+msgid "Copy and paste exactly all the coloured text below into the field "
+msgstr "Kopieer en plak precies alle gekleurde tekst hieronder in het veld"
 
 msgid "Write here questions about your character directly to the authors!"
 msgstr "Schrijf hier vragen over je personage rechtstreeks aan de auteurs!"
@@ -7135,13 +7140,6 @@ msgstr ""
 "aanvraag weergegeven"
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field \"notes\" "
-"(this is important!)"
-msgstr ""
-"Kopieer en plak precies alle gekleurde tekst hieronder in het veld "
-"'notities' (dit is belangrijk!)."
-
-msgid ""
 "This page shows in the detail of an event, the list of expertises covered by"
 " the contributors."
 msgstr ""
@@ -7631,13 +7629,6 @@ msgid ""
 msgstr ""
 "Aantal dagen na de deadline waarna registraties worden gemarkeerd als "
 "geannuleerd (standaard 30 dagen)"
-
-msgid ""
-"The form is saved every 30 seconds. When this is performed <span "
-"id='confirm'>this becomes green.</span>"
-msgstr ""
-"Het formulier wordt elke 30 seconden opgeslagen. Als dat gebeurt, wordt "
-"<span id='confirm'>dit groen.</span>."
 
 msgid ""
 "Select the payment methods to be activated; then return to this page to "
@@ -9019,8 +9010,8 @@ msgstr ""
 "of stemmen op de AVA!"
 
 msgid ""
-"Once downloaded you must print it, sign it, take a digital scan, and  upload"
-" it to the form below. Your request will be considered at the  next meeting "
+"Once downloaded you must print it, sign it, take a digital scan, and upload "
+"it to the form below. Your request will be considered at the  next meeting "
 "of the Board. You will receive confirmation of the outcome of its  "
 "evaluation. "
 msgstr ""

@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Check" %} - {{ event.name }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page performs several correctness checks of the character sheets." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <b>{% trans "Characters" %} - {% trans "Check inverse relationship" %}:
         {% if checks.relat_missing %}
@@ -511,4 +511,4 @@
     <span style="color:green">OK</span>, </b>
 {% endif %}
 {% endif %}
-{% endblock %}
+{% endblock content %}

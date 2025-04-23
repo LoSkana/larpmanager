@@ -3833,6 +3833,9 @@ msgstr "Escenografía - accesorios, materiales"
 msgid "Surcharge applied to the ticket"
 msgstr "Recargo aplicado al billete"
 
+msgid "Indicates that payment is sent "
+msgstr "Indica que se ha enviado el pago"
+
 msgid "Relationships of your character"
 msgstr "Enlaces de su personaje"
 
@@ -4042,6 +4045,9 @@ msgstr "Nombre del descuento - para uso interno"
 
 msgid "Image shown on homepage as promoter"
 msgstr "Imagen mostrada en la página de inicio como promoción"
+
+msgid "The form is saved every 30 seconds."
+msgstr "El formulario se guarda cada 30 segundos."
 
 msgid "Select a file with extension 'zip'."
 msgstr "Selecciona un archivo con la extensión \"zip\"."
@@ -4972,9 +4978,6 @@ msgstr "Indica cómo está distribuido el gasto a nivel presupuestario"
 msgid "Indicate as precisely as possible where to pick you up."
 msgstr "Indica con la mayor precisión posible dónde recogerte."
 
-msgid "Indicates that payment is sent \"to friends and family\"."
-msgstr "Indica que el pago se envía \"a amigos y familiares\"."
-
 msgid "View the complete list of characters and their players!"
 msgstr "Consulta la lista completa de personajes y sus protagonistas."
 
@@ -5459,6 +5462,11 @@ msgstr "Indica si la opción puede incluirse en las entradas libres"
 
 msgid "whether the character is aware of the identity of the other trait."
 msgstr "si el personaje conoce la identidad del otro agente."
+
+msgid "Copy and paste exactly all the coloured text below into the field "
+msgstr ""
+"Copie y pegue exactamente todo el texto coloreado que aparece a continuación"
+" en el campo"
 
 msgid "Write here questions about your character directly to the authors!"
 msgstr ""
@@ -7051,13 +7059,6 @@ msgstr ""
 " la solicitud"
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field \"notes\" "
-"(this is important!)"
-msgstr ""
-"Copia y pega exactamente todo el texto coloreado que aparece a continuación "
-"en el campo \"notas\" (¡esto es importante!)."
-
-msgid ""
 "This page shows in the detail of an event, the list of expertises covered by"
 " the contributors."
 msgstr ""
@@ -7548,13 +7549,6 @@ msgid ""
 msgstr ""
 "Número de días transcurridos desde la fecha límite a partir de los cuales "
 "las inscripciones se marcan como canceladas (por defecto, 30 días)"
-
-msgid ""
-"The form is saved every 30 seconds. When this is performed <span "
-"id='confirm'>this becomes green.</span>"
-msgstr ""
-"El formulario se guarda cada 30 segundos. Cuando lo hace <span "
-"id='confirm'>esto se vuelve verde.</span>."
 
 msgid ""
 "Select the payment methods to be activated; then return to this page to "
@@ -8912,8 +8906,8 @@ msgstr ""
 "de socios."
 
 msgid ""
-"Once downloaded you must print it, sign it, take a digital scan, and  upload"
-" it to the form below. Your request will be considered at the  next meeting "
+"Once downloaded you must print it, sign it, take a digital scan, and upload "
+"it to the form below. Your request will be considered at the  next meeting "
 "of the Board. You will receive confirmation of the outcome of its  "
 "evaluation. "
 msgstr ""

@@ -1,12 +1,12 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
     {% trans "Past events" %}
-{% endblock %}
+{% endblock title %}
 {% block robots %}
     {% include "elements/robots_show.html" %}
-{% endblock %}
+{% endblock robots %}
 {% block content %}
     <p style="text-align: center;">{% trans "These are our past events" %}</p>
     {% include "elements/run_list.html" %}
-{% endblock %}
+{% endblock content %}

@@ -1,9 +1,10 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
     {% trans "Event not found" %}
-{% endblock %}
-{% block nav %}{% endblock %}
+{% endblock title %}
+{% block nav %}
+{% endblock nav %}
 {% block content %}
     {% trans "We could not find the event indicated in the url; perhaps it is one of these?" %}
     <br />
@@ -13,4 +14,4 @@
             <a href="{% url 'gallery' run.event.slug run.number %}">{{ run.search }}</a>
         </h3>
     {% endfor %}
-{% endblock %}
+{% endblock content %}

@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
     {% trans "Cancellations" %} - {{ event.name }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows cancelled enrollments." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <p>
         {% trans "Show cancellations" %} <a href="#" class="my_toggle" tog='not_payed'>{% trans "no payment" %}</a>
@@ -97,4 +97,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

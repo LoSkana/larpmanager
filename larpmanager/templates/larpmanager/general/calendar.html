@@ -1,18 +1,20 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n static %}
 {% block maintitle %}
     {{ assoc.name }}
     {% if assoc.id > 0 %}- LarpManager{% endif %}
-{% endblock %}
+{% endblock maintitle %}
 {% block robots %}
     {% include "elements/robots_show.html" %}
-{% endblock %}
+{% endblock robots %}
 {% block meta %}
     <meta property="og:title" content="{{ assoc.name }} - LarpManager" />
     <meta name="description"
           content="Discover the LARP events of {{ assoc.name }}">
-{% endblock %}
-{% block title %}{{ assoc.name }}{% endblock %}
+{% endblock meta %}
+{% block title %}
+    {{ assoc.name }}
+{% endblock title %}
 <!--
 {% block lnav2 %}
 
@@ -37,7 +39,7 @@
 
 {% endif %}
 
-{% endblock %}
+{% endblock lnav2 %}
 
 -->
 {% block content %}
@@ -61,4 +63,4 @@
             <a href="{% url 'calendar_past' %}">{% trans "Past events" %}</a>
         </div>
     {% endif %}
-{% endblock %}
+{% endblock content %}

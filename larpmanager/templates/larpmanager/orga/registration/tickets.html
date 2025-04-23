@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Tickets" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the different tickets with which players can register for the event." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
     <table id="registration_tickets" class="tablesorter mob writing">
@@ -67,4 +67,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

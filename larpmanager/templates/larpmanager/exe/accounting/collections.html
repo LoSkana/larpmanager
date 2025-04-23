@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Collections" %} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the collections opened by players. You can update them indicating the recipient and disburse the money contributed." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <p>
         {% trans "Show collections" %} <a href="#" class="my_toggle" tog='done'>{% trans "already delivered" %}</a>
@@ -37,4 +37,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

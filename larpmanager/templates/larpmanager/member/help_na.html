@@ -1,13 +1,13 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Questions" %}
     {% if run %}- {{ run }}{% endif %}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     {% trans "You can contact us at this " %} <a class="mail"
     href="mailto:{{ mail.0 }}@badmail-{{ mail.1 }}{% if run %}?subject=[{{ run }}]{% endif %}">{% trans "address" %}</a>!
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>window.addEventListener('DOMContentLoaded', function() {
 $( document ).ready(function() {
@@ -17,4 +17,4 @@ $( document ).ready(function() {
 });
 });
     </script>
-{% endblock %}
+{% endblock js %}

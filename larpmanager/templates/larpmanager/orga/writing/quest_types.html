@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
     {% trans "Quest Type" %} - {{ event.name }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the types of quests in the event." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/writing.html" %}
     <table id="quest_types" class="tablesorter mob writing">
@@ -62,4 +62,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

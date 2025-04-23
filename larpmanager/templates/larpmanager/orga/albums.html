@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Album" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the uploaded photo albums." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
     <br />
@@ -43,4 +43,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

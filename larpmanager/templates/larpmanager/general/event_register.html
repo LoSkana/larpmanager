@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load tz show_tags static i18n %}
 {% block title %}
     {% trans "Register to" %} {{ name }}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     <div class="no-more-tables">
         <table class="mob">
@@ -28,4 +28,4 @@
             {% endfor %}
         </table>
     </div>
-{% endblock %}
+{% endblock content %}

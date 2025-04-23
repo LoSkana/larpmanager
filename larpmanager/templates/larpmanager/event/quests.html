@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load tz show_tags static i18n %}
 {% block title %}
     {% trans "Quest" %} {{ name }} - {{ run.search }}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     <div>
         <table class="mob">
@@ -31,4 +31,4 @@
             {% endfor %}
         </table>
     </div>
-{% endblock %}
+{% endblock content %}

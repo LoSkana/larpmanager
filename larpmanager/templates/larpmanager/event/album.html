@@ -1,12 +1,14 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load tz show_tags static i18n %}
-{% block title %}{{ name }}{% endblock %}
+{% block title %}
+    {{ name }}
+{% endblock title %}
 {% block css %}
     <link rel="stylesheet"
           href="{% static 'larpmanager/pswipe/photoswipe.css' %}">
     <link rel="stylesheet"
           href="{% static 'larpmanager/pswipe/default-skin/default-skin.css' %}">
-{% endblock %}
+{% endblock css %}
 {% block content %}
     {% if subs %}
         <div class="gallery">
@@ -97,7 +99,7 @@
         </div>
         <hr />
     {% endif %}
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script src="{% static 'larpmanager/pswipe/photoswipe.min.js' %}">});</script>
     <script src="{% static 'larpmanager/pswipe/photoswipe-ui-default.min.js' %}">});</script>
@@ -398,4 +400,4 @@
 
     });
     </script>
-{% endblock %}
+{% endblock js %}

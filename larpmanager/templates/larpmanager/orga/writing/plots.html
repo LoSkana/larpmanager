@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
     {% trans "Plots" %} - {{ event.name }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the event plots." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/writing.html" %}
     <table id="plots" class="tablesorter mob writing">
@@ -70,4 +70,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

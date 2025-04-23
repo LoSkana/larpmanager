@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Pre registrations" %} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the total number of pre-registrations for each event." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <table class='tablesorter mob'>
         <thead>
@@ -27,4 +27,4 @@
             </tr>
         {% endfor %}
     </table>
-{% endblock %}
+{% endblock content %}

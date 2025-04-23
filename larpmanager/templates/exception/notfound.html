@@ -1,12 +1,13 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
     {% trans "Object does not exist" %}
-{% endblock %}
-{% block nav %}{% endblock %}
+{% endblock title %}
+{% block nav %}
+{% endblock nav %}
 {% block content %}
     {% trans "The searched object does not exist, perhaps it was recently deleted?" %}
     <br />
     <br />
     <i>({% trans "If you think this is an error, get in touch with us to resolve it" %})</i>
-{% endblock %}
+{% endblock content %}

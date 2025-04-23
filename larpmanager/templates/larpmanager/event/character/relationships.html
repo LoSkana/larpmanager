@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load tz show_tags static i18n %}
 {% block title %}
-    {% trans 'Character relationships' %}
-{% endblock %}
+    {% trans "Character relationships" %}
+{% endblock title %}
 {% block content %}
     <div class="staff-list">
         <div class="orga-buttons">
@@ -38,7 +38,7 @@
                     {% if el.motto %}- <i>{{ el.motto | safe | clean_tags }}</i>{% endif %}
                     -
                     {% if el.player_id > 0 %}
-                        <b>{% trans 'Player' %}:</b>&nbsp;<a href="{% url 'public' el.player_id %}">
+                        <b>{% trans "Player" %}:</b>&nbsp;<a href="{% url 'public' el.player_id %}">
                             {% if run.id in all_runs or run.reg %}
                                 {{ el.player_full }}
                             {% else %}
@@ -47,7 +47,7 @@
                         </a>
                     {% endif %}
                     -
-                    <b>{% trans 'Factions' %}:</b>
+                    <b>{% trans "Factions" %}:</b>
                     {% for g in el.factions %}
                         {% if not g.typ == 'g' %}
                             {% include "elements/comma.html" %}
@@ -56,11 +56,11 @@
                     {% endfor %}
                     <br />
                     <div class="go-inline">
-                        <b>{% trans 'Teaser' %}:</b> <span class="teas">{{ el.teaser | safe | clean_tags | truncatechars:1000 }} (...)</span>
+                        <b>{% trans "Teaser" %}:</b> <span class="teas">{{ el.teaser | safe | clean_tags | truncatechars:1000 }} (...)</span>
                     </div>
                 </td>
                 <td style="width:50%">{{ el.text | safe | clean_tags | truncatechars:500 }}</td>
             </tr>
         {% endfor %}
     </table>
-{% endblock %}
+{% endblock content %}

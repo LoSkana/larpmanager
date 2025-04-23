@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Delivery" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page summarizes px delivery to characters." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
     <table id="deliveries" class="tablesorter mob writing">
@@ -35,4 +35,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

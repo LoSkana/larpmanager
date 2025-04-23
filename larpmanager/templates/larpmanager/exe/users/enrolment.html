@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Membership" %} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page summarises the list of members, formatted ready to be sent to the insurance company. It only displays members who have renewed their membership in this calendar year, in order of renewal." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <table class="tablesorter mob">
         <thead>
@@ -58,7 +58,7 @@
             </tr>
         {% endfor %}
     </table>
-{% endblock %}
+{% endblock content %}
 {% block js2 %}
     <script>window.addEventListener('DOMContentLoaded', function() {
         $(document).ready(function() {
@@ -68,4 +68,4 @@
         });
     });
     </script>
-{% endblock %}
+{% endblock js2 %}

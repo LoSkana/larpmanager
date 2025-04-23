@@ -1,6 +1,6 @@
 {% load show_tags i18n %}
 <div class="nav">
-    <a href="#" class="my_toggle" tog='instr'>{% trans 'Instructions' %}</a>
+    <a href="#" class="my_toggle" tog='instr'>{% trans "Instructions" %}</a>
     {% for m in form.methods %}<a href="#" class="my_toggle" tog='instr_{{ m.slug }}'>{{ m.name }}</a>{% endfor %}
 </div>
 <br />

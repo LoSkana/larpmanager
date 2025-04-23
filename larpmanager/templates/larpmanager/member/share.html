@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Sharing" %}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     <i>{% trans "Your data will be saved in the LarpManager system, which is used  by several LARP Organizations. We value the privacy of your data, and we  we will treat it with the utmost care. In particular, it will be made visible  only to the organizers of the events you decide to sign up. Under no any other circumstances they will be disclosed, shared, or processed." %}</i>
     <p>
@@ -12,6 +12,6 @@
           method="post"
           enctype="multipart/form-data">
         {% csrf_token %}
-        <input type="submit" value="{% trans 'Confirm' %}">
+        <input type="submit" value="{% trans "Confirm" %}">
     </form>
-{% endblock %}
+{% endblock content %}

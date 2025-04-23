@@ -1,15 +1,17 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load tz show_tags static i18n %}
-{% block title %}{{ data.name }}{% endblock %}
+{% block title %}
+    {{ data.name }}
+{% endblock title %}
 {% block robots %}
     {% include "elements/robots_show.html" %}
-{% endblock %}
+{% endblock robots %}
 {% block media %}
     <meta name="description" content="{{ data.tagline }}" />
     <meta property="og:title" content="{{ data.name }}" />
     {% if data.tagline %}<meta property="og:description" content="{{ data.tagline }}" />{% endif %}
     <meta property="og:image" content="{{ data.cover }}" />
-{% endblock %}
+{% endblock media %}
 {% block content %}
     {% if data.cover %}
         <div id="aspect-ratio">
@@ -130,4 +132,4 @@
             </table>
         </div>
     {% endif %}
-{% endblock %}
+{% endblock content %}

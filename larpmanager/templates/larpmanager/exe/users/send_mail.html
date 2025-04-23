@@ -1,15 +1,15 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Send emails" %} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "From this page you can send an email to any list of recipients." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <p>{% trans "Remember to put recipients separated by commas" %}</p>
     {% include "elements/form/sections.html" %}
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(function() {
@@ -19,4 +19,4 @@ $(function() {
 });
 });
     </script>
-{% endblock %}
+{% endblock js %}

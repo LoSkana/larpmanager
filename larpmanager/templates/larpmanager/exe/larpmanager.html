@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n show_tags %}
 {% block title %}
     {% trans "LarpManager" %} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows larpmanager usage costs, total and divided by individual run." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <h2>{% trans "Balance" %}: {{ remaining | format_decimal }}€</h2>
     <table class="mob tablesorter">
@@ -40,4 +40,4 @@
     </table>
     <h2>{% trans "Total" %}: {{ tot | format_decimal }}€</h2>
     <h2>{% trans "Payments" %}: {{ payments | format_decimal }}€</h2>
-{% endblock %}
+{% endblock content %}

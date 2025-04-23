@@ -3833,6 +3833,9 @@ msgstr "Scénografie - kování, materiály"
 msgid "Surcharge applied to the ticket"
 msgstr "Příplatek k jízdence"
 
+msgid "Indicates that payment is sent "
+msgstr "Označuje, že platba je odeslána"
+
 msgid "Relationships of your character"
 msgstr "Odkazy vaší postavy"
 
@@ -4042,6 +4045,9 @@ msgstr "Název slevy - pro interní použití"
 
 msgid "Image shown on homepage as promoter"
 msgstr "Obrázek zobrazený na domovské stránce jako promotér"
+
+msgid "The form is saved every 30 seconds."
+msgstr "Formulář se ukládá každých 30 sekund."
 
 msgid "Select a file with extension 'zip'."
 msgstr "Vyberte soubor s příponou \"zip\"."
@@ -4972,9 +4978,6 @@ msgstr "Uveďte, jak jsou výdaje nastaveny na úrovni rozpočtu."
 msgid "Indicate as precisely as possible where to pick you up."
 msgstr "Co nejpřesněji uveďte, kde vás vyzvednout."
 
-msgid "Indicates that payment is sent \"to friends and family\"."
-msgstr "Uvádí, že platba je zasílána \"přátelům a rodině\"."
-
 msgid "View the complete list of characters and their players!"
 msgstr "Prohlédněte si kompletní seznam postav a jejich hráčů!"
 
@@ -5421,6 +5424,9 @@ msgstr "Označuje, zda lze možnost zahrnout do volných položek"
 
 msgid "whether the character is aware of the identity of the other trait."
 msgstr "zda si je postava vědoma identity druhého rysu."
+
+msgid "Copy and paste exactly all the coloured text below into the field "
+msgstr "Zkopírujte a vložte do pole přesně celý níže uvedený barevný text."
 
 msgid "Write here questions about your character directly to the authors!"
 msgstr "Napište sem otázky týkající se vaší postavy přímo autorům!"
@@ -6898,13 +6904,6 @@ msgid ""
 msgstr "Nepovinné - Uvádí další podrobnosti o tipu, zobrazí se pod žádostí."
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field \"notes\" "
-"(this is important!)"
-msgstr ""
-"Zkopírujte a vložte přesně celý níže uvedený barevný text do pole "
-"\"poznámky\" (je to důležité!)."
-
-msgid ""
 "This page shows in the detail of an event, the list of expertises covered by"
 " the contributors."
 msgstr ""
@@ -7391,13 +7390,6 @@ msgid ""
 msgstr ""
 "Počet dní po uplynutí lhůty, po které jsou registrace označeny jako zrušené "
 "(výchozí 30 dní)."
-
-msgid ""
-"The form is saved every 30 seconds. When this is performed <span "
-"id='confirm'>this becomes green.</span>"
-msgstr ""
-"Formulář se ukládá každých 30 sekund. Když se tak stane, <span "
-"id='confirm'>to se změní na zelenou.</span>."
 
 msgid ""
 "Select the payment methods to be activated; then return to this page to "
@@ -8719,8 +8711,8 @@ msgstr ""
 "hromadě!"
 
 msgid ""
-"Once downloaded you must print it, sign it, take a digital scan, and  upload"
-" it to the form below. Your request will be considered at the  next meeting "
+"Once downloaded you must print it, sign it, take a digital scan, and upload "
+"it to the form below. Your request will be considered at the  next meeting "
 "of the Board. You will receive confirmation of the outcome of its  "
 "evaluation. "
 msgstr ""

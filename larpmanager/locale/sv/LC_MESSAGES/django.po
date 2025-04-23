@@ -3833,6 +3833,9 @@ msgstr "Scenografi - inredning, material"
 msgid "Surcharge applied to the ticket"
 msgstr "Tilläggsavgift till biljett"
 
+msgid "Indicates that payment is sent "
+msgstr "Indikerar att betalningen är skickad"
+
 msgid "Relationships of your character"
 msgstr "Länkar till din karaktär"
 
@@ -4042,6 +4045,9 @@ msgstr "Namn på rabatt - för internt bruk"
 
 msgid "Image shown on homepage as promoter"
 msgstr "Bild visas på hemsidan som promotor"
+
+msgid "The form is saved every 30 seconds."
+msgstr "Formuläret sparas var 30:e sekund."
 
 msgid "Select a file with extension 'zip'."
 msgstr "Välj en fil med filnamnstillägget \"zip\"."
@@ -4982,9 +4988,6 @@ msgstr "Ange hur utgifterna är utformade på budgetnivå"
 msgid "Indicate as precisely as possible where to pick you up."
 msgstr "Ange så exakt som möjligt var du ska hämtas"
 
-msgid "Indicates that payment is sent \"to friends and family\"."
-msgstr "Det framgår att betalningen är skickad \"till vänner och familj\"."
-
 msgid "View the complete list of characters and their players!"
 msgstr "Se den fullständiga listan över karaktärer och deras spelare!"
 
@@ -5465,6 +5468,9 @@ msgstr "Anger om optionen kan inkluderas i de fria posterna"
 
 msgid "whether the character is aware of the identity of the other trait."
 msgstr "om rollpersonen är medveten om den andra egenskapens identitet."
+
+msgid "Copy and paste exactly all the coloured text below into the field "
+msgstr "Kopiera och klistra in exakt all färgad text nedan i fältet"
 
 msgid "Write here questions about your character directly to the authors!"
 msgstr "Skriv här frågor om din karaktär direkt till författarna!"
@@ -7030,13 +7036,6 @@ msgstr ""
 " ansökan"
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field \"notes\" "
-"(this is important!)"
-msgstr ""
-"Kopiera och klistra in exakt all färgad text nedan i fältet \"anteckningar\""
-" (detta är viktigt!)."
-
-msgid ""
 "This page shows in the detail of an event, the list of expertises covered by"
 " the contributors."
 msgstr ""
@@ -7527,13 +7526,6 @@ msgid ""
 msgstr ""
 "Antal dagar efter deadline då registreringar markeras som annullerade "
 "(standard 30 dagar)"
-
-msgid ""
-"The form is saved every 30 seconds. When this is performed <span "
-"id='confirm'>this becomes green.</span>"
-msgstr ""
-"Formuläret sparas var 30:e sekund. När det görs blir <span id='bekräfta'>det"
-" här grönt.</span>."
 
 msgid ""
 "Select the payment methods to be activated; then return to this page to "
@@ -8880,8 +8872,8 @@ msgstr ""
 "på årsstämman!"
 
 msgid ""
-"Once downloaded you must print it, sign it, take a digital scan, and  upload"
-" it to the form below. Your request will be considered at the  next meeting "
+"Once downloaded you must print it, sign it, take a digital scan, and upload "
+"it to the form below. Your request will be considered at the  next meeting "
 "of the Board. You will receive confirmation of the outcome of its  "
 "evaluation. "
 msgstr ""

@@ -1,16 +1,16 @@
-{% extends 'main.html' %}
+{% extends "main.html" %}
 {% load i18n static %}
 {% block maintitle %}
     {{ assoc.name }}
     {% if assoc.id > 0 %}- LarpManager{% endif %}
-{% endblock %}
+{% endblock maintitle %}
 {% block robots %}
     {% include "elements/robots_show.html" %}
-{% endblock %}
+{% endblock robots %}
 {% block media %}
     <link rel="stylesheet"
           href="https://unpkg.com/flickity@2/dist/flickity.min.css">
-{% endblock %}
+{% endblock media %}
 {% block wrapper %}
     <div id="bgk"></div>
     <div class="carousel">
@@ -36,7 +36,7 @@
         </div>
         <div class="authors"></div>
     </div>
-{% endblock %}
+{% endblock wrapper %}
 {% block js2 %}
     <!-- JavaScript -->
     <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js" defer></script>
@@ -181,4 +181,4 @@ function show(index) {
 }
 
     </script>
-{% endblock %}
+{% endblock js2 %}

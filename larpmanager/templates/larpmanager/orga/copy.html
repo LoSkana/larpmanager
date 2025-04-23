@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Copy" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page allows you to copy the event settings from another one." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <p>{% trans "Select which elements to copy, from which other event." %}</p>
     <p>
@@ -20,4 +20,4 @@
         </table>
         <input type="submit" value="Submit">
     </form>
-{% endblock %}
+{% endblock content %}
