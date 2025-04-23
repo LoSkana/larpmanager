@@ -151,7 +151,7 @@ def orga_credits_edit(request, s, n, num):
 def orga_payments(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_payments")
     sr = ("reg__member", "reg__run", "inv", "inv__method")
-    orga_paginate(request, ctx, AccountingItemPayment, selrel=sr)
+    orga_paginate(request, ctx, AccountingItemPayment, selrel=sr, afield="reg")
     assign_payment_fee(ctx)
     return render(request, "larpmanager/orga/accounting/payments.html", ctx)
 

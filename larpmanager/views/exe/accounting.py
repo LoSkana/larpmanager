@@ -166,7 +166,7 @@ def exe_expenses_approve(request, num):
 def exe_payments(request):
     ctx = check_assoc_permission(request, "exe_payments")
     sr = ("reg__member", "reg__run", "inv", "inv__method")
-    exe_paginate(request, ctx, AccountingItemPayment, selrel=sr)
+    exe_paginate(request, ctx, AccountingItemPayment, selrel=sr, afield="reg")
     assign_payment_fee(ctx)
     return render(request, "larpmanager/exe/accounting/payments.html", ctx)
 
