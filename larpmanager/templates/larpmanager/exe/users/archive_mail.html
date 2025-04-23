@@ -38,7 +38,7 @@
                     <td>{{ el.subj }}</td>
                     <td>{{ el.body | striptags | truncatechars:100 }}</td>
                     <td>
-                        {% if el.sent %}{{ el.sent | date:"d/m/Y" }}{% endif %}
+                        {% if el.sent %}{{ el.sent | date:"d/m/Y H:i" }}{% endif %}
                     </td>
                 </tr>
             {% endfor %}
