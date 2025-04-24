@@ -330,15 +330,10 @@ def search(request, s, n):
         get_character_fields(ctx, only_visible=True)
         get_searcheable_character_fields(ctx)
 
-    for s in ["all", "facs"]:
-        if s in ctx:
+    for field in ["all", "facs", "questions", "options", "searchable"]:
+        if field in ctx:
             continue
-        ctx[s] = {}
-
-    for s in ["questions", "options", "searchable"]:
-        if s in ctx:
-            continue
-        ctx[s] = []
+        ctx[field] = {}
 
     return render(request, "larpmanager/event/search.html", ctx)
 
