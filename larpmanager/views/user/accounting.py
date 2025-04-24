@@ -276,7 +276,7 @@ def acc_membership(request):
         AccountingItemMembership.objects.get(year=year, member=request.user.member, assoc_id=request.assoc["id"])
         messages.success(request, _("You have already paid this year's membership fee"))
         return redirect("accounting")
-    except Exception:
+    except ObjectDoesNotExist:
         pass
 
     ctx["year"] = year
@@ -400,7 +400,7 @@ def acc_collection_redeem(request, s):
     return render(request, "larpmanager/member/acc_collection_redeem.html", ctx)
 
 
-def acc_webhook_paypal(request, s):
+def acc_webhook_paypal(s):
     # temp fix until we understand better the paypal fees
     if invoice_received_money(s):
         return JsonResponse({"res": "ok"})
@@ -494,7 +494,7 @@ def acc_submit(request, s, p):
         messages.error(request, _("You can't access this way!"))
         return redirect("accounting")
 
-    if s == "wire" or s == "paypal_nf":
+    if s in ["wire", "paypal_nf"]:
         form = WireInvoiceSubmitForm(request.POST, request.FILES)
     elif s == "any":
         form = AnyInvoiceSubmitForm(request.POST, request.FILES)
@@ -513,7 +513,7 @@ def acc_submit(request, s, p):
         messages.error(request, _("Error processing payment, contact us"))
         return redirect("/" + p)
 
-    if s == "wire" or s == "paypal_nf":
+    if s in ["wire", "paypal_nf"]:
         inv.invoice = form.cleaned_data["invoice"]
     elif s == "any":
         inv.text = form.cleaned_data["text"]

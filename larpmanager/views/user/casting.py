@@ -181,33 +181,35 @@ def casting(request, s, n, typ=0):
                 return redirect("casting", s=ctx["event"].slug, n=ctx["run"].number, typ=typ)
             prefs[i] = pref
 
-        # delete all castings
-        Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).delete()
-        for i, pref in prefs.items():
-            Casting.objects.create(run=ctx["run"], member=request.user.member, typ=typ, element=pref, pref=i)
-
-        avoid = None
-        if "casting_avoid" in ctx and ctx["casting_avoid"]:
-            CastingAvoid.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).delete()
-            avoid = ""
-            if "avoid" in request.POST:
-                avoid = request.POST["avoid"]
-            if avoid and len(avoid) > 0:
-                CastingAvoid.objects.create(run=ctx["run"], member=request.user.member, typ=typ, text=avoid)
-
-        messages.success(request, _("Preferences saved!"))
-        lst = []
-        for c in Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).order_by("pref"):
-            if typ == 0:
-                lst.append(Character.objects.get(pk=c.element).show()["name"])
-            else:
-                t = Trait.objects.get(pk=c.element)
-                lst.append(f"{t.quest.show()['name']} - {t.show()['name']}")
-                # mail_confirm_casting_bkg(request.user.member.id, ctx['run'].id, ctx['gl_name'], lst)
-        mail_confirm_casting(request.user.member, ctx["run"], ctx["gl_name"], lst, avoid)
-        return redirect(request.path_info)
+        return casting_save(ctx, prefs, request, typ)
 
     return render(request, red, ctx)
+
+
+def casting_save(ctx, prefs, request, typ):
+    # delete all castings
+    Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).delete()
+    for i, pref in prefs.items():
+        Casting.objects.create(run=ctx["run"], member=request.user.member, typ=typ, element=pref, pref=i)
+    avoid = None
+    if "casting_avoid" in ctx and ctx["casting_avoid"]:
+        CastingAvoid.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).delete()
+        avoid = ""
+        if "avoid" in request.POST:
+            avoid = request.POST["avoid"]
+        if avoid and len(avoid) > 0:
+            CastingAvoid.objects.create(run=ctx["run"], member=request.user.member, typ=typ, text=avoid)
+    messages.success(request, _("Preferences saved!"))
+    lst = []
+    for c in Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).order_by("pref"):
+        if typ == 0:
+            lst.append(Character.objects.get(pk=c.element).show()["name"])
+        else:
+            t = Trait.objects.get(pk=c.element)
+            lst.append(f"{t.quest.show()['name']} - {t.show()['name']}")
+            # mail_confirm_casting_bkg(request.user.member.id, ctx['run'].id, ctx['gl_name'], lst)
+    mail_confirm_casting(request.user.member, ctx["run"], ctx["gl_name"], lst, avoid)
+    return redirect(request.path_info)
 
 
 def get_casting_preferences(number, ctx, typ=0, casts=None):

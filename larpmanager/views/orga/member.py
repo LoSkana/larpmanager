@@ -64,12 +64,11 @@ def orga_safety(request, s, n):
         member_chars[el["player_id"]].append(f"#{el['number']} {el['name']}")
 
     ctx["list"] = []
-    for el in (
-        Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-        .exclude(member__safety__isnull=True)
-        .select_related("member")
-    ):
-        if len(el.member.safety) > 3:
+    min_field_length = 3
+    que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
+    que = que.exclude(member__safety__isnull=True)
+    for el in que.select_related("member"):
+        if len(el.member.safety) > min_field_length:
             if el.member_id in member_chars:
                 el.member.chars = member_chars[el.member_id]
             ctx["list"].append(el.member)
@@ -90,12 +89,11 @@ def orga_diet(request, s, n):
         member_chars[el["player_id"]].append(f"#{el['number']} {el['name']}")
 
     ctx["list"] = []
-    for el in (
-        Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-        .exclude(member__diet__isnull=True)
-        .select_related("member")
-    ):
-        if len(el.member.diet) > 3:
+    que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
+    que = que.exclude(member__diet__isnull=True)
+    min_field_length = 3
+    for el in que.select_related("member"):
+        if len(el.member.diet) > min_field_length:
             if el.member_id in member_chars:
                 el.member.chars = member_chars[el.member_id]
             ctx["list"].append(el.member)
@@ -179,8 +177,8 @@ def orga_questions(request, s, n):
         last_q[cq.member.id] = (cq, cq.is_user, cq.closed)
     ctx["open"] = []
     ctx["closed"] = []
-    for cid in last_q:
-        (cq, is_user, closed) = last_q[cid]
+    for _cid, value in last_q.items():
+        (cq, is_user, closed) = value
         if is_user and not closed:
             ctx["open"].append(cq)
         else:
