@@ -144,7 +144,10 @@ def remember_membership_fee(reg):
 
 
 def notify_deadlines(run):
-    res = check_run_deadlines([run])[0]
+    result = check_run_deadlines([run])
+    if not result:
+        return
+    res = result[0]
     if not any(res.values()):
         return
 
