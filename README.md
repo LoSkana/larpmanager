@@ -103,7 +103,7 @@ Thanks in advance for contributing! Here's the steps:
    - *refactor* for code changes not related to functions
    - *locale* for changes in translation codes.
 
-4. When you'are ready with the code changes, make sure that all entries have been translated (default language is English.) Run
+4. When you'are ready with the code changes, to make sure that all entries have been translated (default language is English), run
    ```bash
    ./scripts/translate.sh
    ```
@@ -133,6 +133,9 @@ If you want to develop a new feature, usually you follow this steps:
 - Create the corresponding `AssocPermission` and/or `EventPermission`. Put the name of the views as `slug`, and the feature object as `feature`.
 
 Before pushing your changes, run `python manage.py export_features` to update the fixtures with your new elements.
+
+Please note that adding new fields to the existing models can be added only if they are fields used by *every* instance on that model.
+If some instance of that model would not use the new field, it's best to think of an alternative solution (like using `EventConfig`, `RunConfig` or `AssocConfig`).
 
 *Note that the corresponding `python manage.py import_features`, that reloads features and permissions from the fixtures, is run during the deploy script*
 
