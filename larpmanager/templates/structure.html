@@ -9,9 +9,11 @@
                 {% block title %}
                 {% endblock title %}
                 - {{ assoc.name }}
-            {% endblock title %}
+            {% endblock maintitle %}
         </title>
         {% block meta %}
+            <meta name="keywords" content="larpmanager">
+            <meta name="description" content="larpmanager">
         {% endblock meta %}
         <meta property="og:url" content="{{ request.path }}">
         <meta property="og:type" content="website">
@@ -57,7 +59,7 @@
               -->
         {% endif %}
         {% block css-req %}
-        {% endblock meta %}
+        {% endblock css-req %}
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"
                 integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
                 crossorigin="anonymous"
@@ -158,7 +160,7 @@
         </script>
         <!-- Scripts -->
         {% block js-req %}
-        {% endblock main %}
+        {% endblock js-req %}
         <!--- script pipeline -->
         {% compress js %}
             <script defer
