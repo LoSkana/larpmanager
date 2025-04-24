@@ -5453,9 +5453,6 @@ msgstr "Wskazuje, czy opcja może być włączona do subskrypcji prezentów."
 msgid "whether the character is aware of the identity of the other trait."
 msgstr "czy postać jest świadoma tożsamości drugiej cechy."
 
-msgid "Copy and paste exactly all the coloured text below into the field "
-msgstr "Skopiuj i wklej dokładnie cały kolorowy tekst poniżej do pola"
-
 msgid "Write here questions about your character directly to the authors!"
 msgstr ""
 "Napisz tutaj pytania dotyczące Twojej postaci bezpośrednio do autorów!"
@@ -7015,6 +7012,13 @@ msgid ""
 msgstr ""
 "Opcjonalnie - wskaż dodatkowe szczegóły na bilecie, zostaną one wyświetlone "
 "poniżej aplikacji."
+
+msgid ""
+"Copy and paste exactly all the coloured text below into the field 'notes' "
+"(this is important!)"
+msgstr ""
+"Skopiuj i wklej dokładnie cały kolorowy tekst poniżej do pola \"notatki\" "
+"(to ważne!)."
 
 msgid ""
 "This page shows in the detail of an event, the list of expertises covered by"

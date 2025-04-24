@@ -5529,9 +5529,6 @@ msgid "whether the character is aware of the identity of the other trait."
 msgstr ""
 "of het personage zich bewust is van de identiteit van de andere eigenschap."
 
-msgid "Copy and paste exactly all the coloured text below into the field "
-msgstr "Kopieer en plak precies alle gekleurde tekst hieronder in het veld"
-
 msgid "Write here questions about your character directly to the authors!"
 msgstr "Schrijf hier vragen over je personage rechtstreeks aan de auteurs!"
 
@@ -7138,6 +7135,13 @@ msgid ""
 msgstr ""
 "Optioneel - Vermeld extra details op het ticket, deze worden onder de "
 "aanvraag weergegeven"
+
+msgid ""
+"Copy and paste exactly all the coloured text below into the field 'notes' "
+"(this is important!)"
+msgstr ""
+"Kopieer en plak precies alle gekleurde tekst hieronder in het veld "
+"'notities' (dit is belangrijk!)"
 
 msgid ""
 "This page shows in the detail of an event, the list of expertises covered by"

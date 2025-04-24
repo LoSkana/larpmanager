@@ -5425,9 +5425,6 @@ msgstr "Označuje, zda lze možnost zahrnout do volných položek"
 msgid "whether the character is aware of the identity of the other trait."
 msgstr "zda si je postava vědoma identity druhého rysu."
 
-msgid "Copy and paste exactly all the coloured text below into the field "
-msgstr "Zkopírujte a vložte do pole přesně celý níže uvedený barevný text."
-
 msgid "Write here questions about your character directly to the authors!"
 msgstr "Napište sem otázky týkající se vaší postavy přímo autorům!"
 
@@ -6902,6 +6899,13 @@ msgid ""
 "Optional - Indicate additional details on the ticket, they will be shown "
 "below the application"
 msgstr "Nepovinné - Uvádí další podrobnosti o tipu, zobrazí se pod žádostí."
+
+msgid ""
+"Copy and paste exactly all the coloured text below into the field 'notes' "
+"(this is important!)"
+msgstr ""
+"Zkopírujte a vložte přesně celý barevný text níže do pole \"poznámky\" (je "
+"to důležité!)."
 
 msgid ""
 "This page shows in the detail of an event, the list of expertises covered by"

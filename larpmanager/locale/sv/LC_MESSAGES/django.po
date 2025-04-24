@@ -5469,9 +5469,6 @@ msgstr "Anger om optionen kan inkluderas i de fria posterna"
 msgid "whether the character is aware of the identity of the other trait."
 msgstr "om rollpersonen är medveten om den andra egenskapens identitet."
 
-msgid "Copy and paste exactly all the coloured text below into the field "
-msgstr "Kopiera och klistra in exakt all färgad text nedan i fältet"
-
 msgid "Write here questions about your character directly to the authors!"
 msgstr "Skriv här frågor om din karaktär direkt till författarna!"
 
@@ -7034,6 +7031,13 @@ msgid ""
 msgstr ""
 "Valfritt - Ange ytterligare detaljer på biljetten, de kommer att visas under"
 " ansökan"
+
+msgid ""
+"Copy and paste exactly all the coloured text below into the field 'notes' "
+"(this is important!)"
+msgstr ""
+"Kopiera och klistra in exakt all färgad text nedan i fältet \"anteckningar\""
+" (detta är viktigt!)"
 
 msgid ""
 "This page shows in the detail of an event, the list of expertises covered by"

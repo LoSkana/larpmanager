@@ -5475,9 +5475,6 @@ msgstr "Angir om alternativet kan inkluderes i de frie oppføringene"
 msgid "whether the character is aware of the identity of the other trait."
 msgstr "om karakteren er klar over identiteten til den andre egenskapen."
 
-msgid "Copy and paste exactly all the coloured text below into the field "
-msgstr "Kopier og lim inn nøyaktig all den fargede teksten nedenfor i feltet"
-
 msgid "Write here questions about your character directly to the authors!"
 msgstr "Skriv her spørsmål om karakteren din direkte til forfatterne!"
 
@@ -7008,6 +7005,13 @@ msgid ""
 msgstr ""
 "Valgfritt - Angi ytterligere detaljer på billetten, de vil vises under "
 "søknaden"
+
+msgid ""
+"Copy and paste exactly all the coloured text below into the field 'notes' "
+"(this is important!)"
+msgstr ""
+"Kopier og lim inn nøyaktig all den fargede teksten nedenfor i feltet "
+"\"notater\" (dette er viktig!)"
 
 msgid ""
 "This page shows in the detail of an event, the list of expertises covered by"

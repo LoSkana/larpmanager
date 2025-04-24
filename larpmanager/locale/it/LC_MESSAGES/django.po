@@ -5502,10 +5502,6 @@ msgstr "Indica se l'opzione può venire incluso nelle iscrizioni regalate"
 msgid "whether the character is aware of the identity of the other trait."
 msgstr "se il personaggio è consapevole dell'identità dell'altro tratto."
 
-msgid "Copy and paste exactly all the coloured text below into the field "
-msgstr ""
-"Copiate e incollate nel campo esattamente tutto il testo colorato qui sotto"
-
 msgid "Write here questions about your character directly to the authors!"
 msgstr "Scrivi qui domande sul tuo personaggio direttamente agli autori!"
 
@@ -7115,6 +7111,13 @@ msgid ""
 msgstr ""
 "Opzionale - Indica dettagli aggiuntivi sul biglietto, verranno mostrati "
 "sotto alla domanda"
+
+msgid ""
+"Copy and paste exactly all the coloured text below into the field 'notes' "
+"(this is important!)"
+msgstr ""
+"Copiate e incollate esattamente tutto il testo colorato qui sotto nel campo "
+"\"note\" (è importante!)."
 
 msgid ""
 "This page shows in the detail of an event, the list of expertises covered by"

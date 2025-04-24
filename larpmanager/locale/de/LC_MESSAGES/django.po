@@ -5624,11 +5624,6 @@ msgstr "Gibt an, ob die Option in die freien Einträge aufgenommen werden kann"
 msgid "whether the character is aware of the identity of the other trait."
 msgstr "ob der Charakter die Identität des anderen Merkmals kennt."
 
-msgid "Copy and paste exactly all the coloured text below into the field "
-msgstr ""
-"Kopieren Sie den unten stehenden farbigen Text und fügen Sie ihn in das Feld"
-" ein"
-
 msgid "Write here questions about your character directly to the authors!"
 msgstr "Schreiben Sie hier Fragen zu Ihrer Figur direkt an die Autoren!"
 
@@ -7281,6 +7276,13 @@ msgid ""
 msgstr ""
 "Optional - Geben Sie zusätzliche Details auf dem Ticket an, sie werden "
 "unterhalb des Antrags angezeigt"
+
+msgid ""
+"Copy and paste exactly all the coloured text below into the field 'notes' "
+"(this is important!)"
+msgstr ""
+"Kopieren Sie den unten stehenden farbigen Text und fügen Sie ihn in das Feld"
+" \"Notizen\" ein (dies ist wichtig!)"
 
 msgid ""
 "This page shows in the detail of an event, the list of expertises covered by"

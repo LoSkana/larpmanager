@@ -3,10 +3,7 @@
     {% trans "You are about to make a payment of" %}: <b>{{ invoice.mc_gross | format_decimal }} {{ currency_symbol }}</b>.
 </p>
 {% if method == 'redsys' %}
-    <form name="from" action="{{ redsys_form.Ds_Redsys_Url }}" method="POST">
-        <!-- LIVE
-        <form name="from" action="https://sis-t.redsys.es:25443/sis/realizarPago" method="POST">
-        -->
+    <form name="from" action="{{ redsys_form.Ds_Redsys_Url }}" method="post">
         <input type="hidden"
                name="Ds_SignatureVersion"
                value="{{ redsys_form.Ds_SignatureVersion }}" />
@@ -42,8 +39,7 @@
         <img src="https://online.satispay.com/images/en-pay-red.svg"
              alt="Pay with Satispay"
              id="pay-with-satispay"
-             style="height: 50px;
-                    cursor: pointer" />
+             class="satispay-button" />
     </a>
 {% endif %}
 {% if method == 'paypal' %}
@@ -54,10 +50,8 @@
 {% endif %}
 {% if method == 'paypal-old' %}
     <script src="https://unpkg.com/@paypal/paypal-js@5.0.6/dist/iife/paypal-js.min.js"></script>
-    <div id="smart-button-container"
-         style="margin-top:2em;
-                text-align: center">
-        <div id="paypal-buttons" style="max-width: 300px; margin: auto"></div>
+    <div id="smart-button-container">
+        <div id="paypal-buttons"></div>
     </div>
     <script>
     window.paypalLoadScript({
@@ -182,7 +176,7 @@
         <b>(1)</b> {% trans "Click on the image below (Paypal.me) to open the payment." %}
     </p>
     <p>
-        <b>(2)</b> {% trans "Copy and paste exactly all the coloured text below into the field "notes" (this is important!)" %}
+        <b>(2)</b> {% trans "Copy and paste exactly all the coloured text below into the field 'notes' (this is important!)" %}
     </p>
     <p class="causal">{{ invoice.causal }}</p>
     <p>
@@ -206,9 +200,9 @@
     <hr />
     <a href="https://PayPal.Me/{{ paypal_nf_handle }}/{{ invoice.mc_gross | floatformat:2 }}"
        target="_blank">
-        <img src="{% static 'larpmanager/assets/img/paypal_me.png' %}"
-             style="width:50%;
-                    max-width: 600px" />
+        <img id="paypal-me-img"
+             src="{% static 'larpmanager/assets/img/paypal_me.png' %}"
+             alt="paypal me button" />
     </a>
 {% endif %}
 <script>
