@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Member" %}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     {% if membership_cf and error_cf %}
         <div id="membership_cf">
@@ -28,7 +28,7 @@
         </p>
         <hr />
         <p>
-            {% trans "Once downloaded you must print it, sign it, take a digital scan, and  upload it to the form below. Your request will be considered at the  next meeting of the Board. You will receive confirmation of the outcome of its  evaluation. " %}
+            {% trans "Once downloaded you must print it, sign it, take a digital scan, and upload it to the form below. Your request will be considered at the  next meeting of the Board. You will receive confirmation of the outcome of its  evaluation. " %}
         </p>
         <hr />
         <p>{% trans "Upload the scan of both your signed request, and your document (image or pdf document)" %}:</p>
@@ -39,7 +39,7 @@
             <table class="mob no_csv">
                 {{ form.as_table }}
             </table>
-            <input type="submit" value="{% trans 'Submit' %}">
+            <input type="submit" value="{% trans "Submit" %}">
         </form>
     {% elif member.membership.status == 'u' %}
         <h3>{% trans "Confirmation of registration request" %}</h3>
@@ -87,7 +87,7 @@
             <hr />
             {% trans "If you wish to upload a new scan of your application instead" %}, <a href="{% url 'membership' %}">{% trans "click here" %}</a>.
             <hr />
-            <input type="submit" value="{% trans 'Submit' %}">
+            <input type="submit" value="{% trans "Submit" %}">
         </form>
     {% elif member.membership.status == 's' %}
         <h3>{% trans "Request sent for approval" %}</h3>
@@ -123,7 +123,7 @@
         <hr />
         {{ statute | safe }}
     {% endif %}
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(function() {
@@ -133,4 +133,4 @@ $(function() {
 });
 });
     </script>
-{% endblock %}
+{% endblock js %}

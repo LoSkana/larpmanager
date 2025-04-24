@@ -1,6 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
-{% block title %}Casting {{ gl_name }} - {{ run.search }}{% endblock %}
+{% block title %}
+    Casting {{ gl_name }} - {{ run.search }}
+{% endblock title %}
 {% block content %}
     <div style='text-align: center'>
         {% if features.questbuilder %}
@@ -32,9 +34,9 @@
             {% if faction_filter %}
                 <br />
                 <h3>
-                    <a href="#" class="my_toggle" tog='factions'>{% trans 'Filter factions' %}</a>
+                    <a href="#" class="my_toggle" tog='factions'>{% trans "Filter factions" %}</a>
                 </h3>
-                <span class="helptext">{% trans 'Select the faction on which you want to filter characters.' %}</span>
+                <span class="helptext">{% trans "Select the faction on which you want to filter characters." %}</span>
                 <div id="factions" class="nav hide factions">
                     {% for f in faction_filter %}
                         <a id="f{{ f.id }}" href="#" onclick="return select_f({{ f.id }});">{{ f.name }}</a>
@@ -70,7 +72,7 @@
             </form>
         </div>
     {% endif %}
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
     var casting_max = {{ casting_max }};
@@ -244,4 +246,4 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
     </script>
-{% endblock %}
+{% endblock js %}

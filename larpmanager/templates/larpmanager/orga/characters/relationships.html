@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load static i18n show_tags %}
 {% block title %}
     {{ character.number }} {{ character.name }} - {% trans "Relationships" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the relationships of the indicated character." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <div class="staff-list">
         <div class="orga-buttons">
@@ -50,4 +50,4 @@
             </tr>
         {% endfor %}
     </table>
-{% endblock %}
+{% endblock content %}

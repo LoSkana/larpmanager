@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
     {% trans "Assignments" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows character assignments to players." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <h2>Personaggi</h2>
     <table class="tablesorter mob writing">
@@ -108,4 +108,4 @@
                         </tbody>
                     </table>
                 {% endfor %}
-            {% endblock %}
+            {% endblock content %}

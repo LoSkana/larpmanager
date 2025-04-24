@@ -95,13 +95,11 @@
             {% endfor %}
         </table>
     </div>
-    <input type="submit" value="{% trans 'Confirm' %}">
+    <input type="submit" value="{% trans "Confirm" %}">
     <br />
     <br />
     {% if eid %}
-        <p>
-            {% trans "The form is saved every 30 seconds. When this is performed <span id='confirm'>this becomes green.</span>" %}
-        </p>
+        <p>{% trans "The form is saved every 30 seconds." %}</p>
     {% endif %}
     {% include "elements/form/delete.html" %}
 </form>

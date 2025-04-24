@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
 {% block title %}
     {% if character %}
@@ -7,7 +7,7 @@
         {% trans "New character" %} -
     {% endif %}
     {{ run.search }}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     {% if avatar_form %}
         <form action="{{ request.path }}"
@@ -22,13 +22,13 @@
                 </div>
                 <br />
                 <br />
-                <input type='button'
+                <input type="button"
                        id='change_photo'
                        value='{% trans "Change photo" %}'
                        class="my_toggle"
                        tog="change-field">
-                <input type='button' id='rotate_l_btn' value='{% trans "Rotate left" %}' \>
-                <input type='button' id='rotate_r_btn' value='{% trans "Rotate right" %}' \>
+                <input type="button" id='rotate_l_btn' value='{% trans "Rotate left" %}' \>
+                <input type="button" id='rotate_r_btn' value='{% trans "Rotate right" %}' \>
                 <br />
                 <br />
                 <div class="hide change-field">
@@ -43,7 +43,7 @@
         <hr />
     {% endif %}
     {% include "elements/form/sections.html" %}
-{% endblock %}
+{% endblock content %}
 {% block js %}
     {% include "elements/form/max_length.js" %}
     <script>
@@ -320,4 +320,4 @@
     });
 
     </script>
-{% endblock %}
+{% endblock js %}

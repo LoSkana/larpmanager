@@ -1,22 +1,22 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load tz show_tags static i18n %}
 {% block title %}
     {% if run.reg and not run.reg.provisional %}
-        {% trans 'Change registration' %}
+        {% trans "Change registration" %}
     {% else %}
-        {% trans 'Register' %}
+        {% trans "Register" %}
     {% endif %}
     - {{ run.search }}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     {% if run.reg and not run.reg.provisional %}
         <p>
-            {% trans 'You can update your registration by simply changing the value of the fields and clicking on confirm.' %}
+            {% trans "You can update your registration by simply changing the value of the fields and clicking on confirm." %}
         </p>
         {% if features.player_cancellation %}
             <hr />
             <p>
-                {% trans 'If you no longer wish to attend, you can' %} <a href="{% url 'unregister' event.slug run.number %}">{% trans 'cancel your registrations.' %}</a>
+                {% trans "If you no longer wish to attend, you can" %} <a href="{% url 'unregister' event.slug run.number %}">{% trans "cancel your registrations." %}</a>
             </p>
         {% endif %}
         {% if features.bring_friend %}
@@ -75,7 +75,7 @@
                     {% if features.discount and 'waiting' not in run.status %}
                         <h1 class="head_discount">
                             <a href="#" class="my_toggle section-link" tog='sec_discount'>
-                                {% trans 'Discounts' %} <i class="fa-solid fa-chevron-down"></i>
+                                {% trans "Discounts" %} <i class="fa-solid fa-chevron-down"></i>
                             </a>
                         </h1>
                         <div class="hide sec_discount">
@@ -87,30 +87,30 @@
                                              {% if not discounts %}style="display: none"{% endif %}>
                                             <table id="discount_tbl" style="margin-bottom:2em">
                                                 <tr>
-                                                    <th>{% trans 'Name' %}</th>
-                                                    <th>{% trans 'Value' %}</th>
-                                                    <th>{% trans 'Deadline' %}</th>
+                                                    <th>{% trans "Name" %}</th>
+                                                    <th>{% trans "Value" %}</th>
+                                                    <th>{% trans "Deadline" %}</th>
                                                 </tr>
                                             </table>
                                         </div>
                                         <input type="text" name="discount" id="id_discount">
-                                        <input type="button" value="{% trans 'Confirm' %}" id="discount_go">
+                                        <input type="button" value="{% trans "Confirm" %}" id="discount_go">
                                         <br>
-                                        <span class="helptext">{% trans 'If you have a discount code, enter it here and press enter.' %}</span>
+                                        <span class="helptext">{% trans "If you have a discount code, enter it here and press enter." %}</span>
                                     </td>
                                 </tr>
                             </table>
                         </div>
                     {% endif %}
                 </div>
-                <input type="button" id="confirm" value="{% trans 'Continue' %}" />
+                <input type="button" id="confirm" value="{% trans "Continue" %}" />
                 <div id='riepilogo' style='display: none'>
                     <br />
                     <table class="mob">
                         <tbody>
                             <tr>
                                 <th>
-                                    <h3>{% trans 'Summary' %}</h3>
+                                    <h3>{% trans "Summary" %}</h3>
                                 </th>
                             </tr>
                             {% if 'membership' in assoc.features %}
@@ -144,14 +144,14 @@
                             {% endif %}
                         </tbody>
                     </table>
-                    <input type="submit" value="{% trans 'Confirm' %}" id="register_go">
+                    <input type="submit" value="{% trans "Confirm" %}" id="register_go">
                 </div>
             </form>
         </div>
         {% include "elements/form/register-texts.html" %}
     {% endif %}
-{% endblock %}
+{% endblock content %}
 {% block js %}
     {% include "elements/form/register.js" %}
     {% include "elements/form/max_length.js" %}
-{% endblock %}
+{% endblock js %}

@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {{ member }} - {% trans "Membership requests" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page displays the application for membership in the organization. You can accept or reject the application." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/membership_cf.html" %}
     {% if member_exists %}
@@ -54,4 +54,4 @@
         <input type="hidden" id="approved" name="approved" value="0">
         <input type="submit" value="{% trans "Refute" %}">
     </form>
-{% endblock %}
+{% endblock content %}

@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
     {% trans "Factions" %} - {{ event.name }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the factions (character groups) of the event." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/writing.html" %}
     <table id="factions" class="tablesorter mob writing">
@@ -100,4 +100,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

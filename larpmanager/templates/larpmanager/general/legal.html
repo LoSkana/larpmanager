@@ -1,6 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load tz i18n %}
 {% block title %}
     {% trans "Legal Notice" %}
-{% endblock %}
-{% block content %}{{ text | safe }}{% endblock %}
+{% endblock title %}
+{% block content %}
+    {{ text | safe }}
+{% endblock content %}

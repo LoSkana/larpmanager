@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
     {% trans "Discounts" %} - {{ registration.member }} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows active discounts on the player, allows you to activate or deactivate them." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% if active %}
         <h2>{% trans "Discounts active" %}</h2>
@@ -45,4 +45,4 @@
             {% endfor %}
         </table>
     {% endif %}
-{% endblock %}
+{% endblock content %}

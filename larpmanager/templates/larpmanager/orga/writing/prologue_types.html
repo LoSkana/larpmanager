@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
     {% trans "Type prologues" %} - {{ event.name }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the types of event prologue." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/writing.html" %}
     <table id="prologue_types" class="tablesorter mob writing">
@@ -35,4 +35,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

@@ -1,7 +1,11 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load tz show_tags static i18n %}
-{% block title %}{{ centauri_descr }}{% endblock %}
+{% block title %}
+    {{ centauri_descr }}
+{% endblock title %}
 {% block robots %}
     {% include "elements/robots_show.html" %}
-{% endblock %}
-{% block content %}{{ centauri_content | safe }}{% endblock %}
+{% endblock robots %}
+{% block content %}
+    {{ centauri_content | safe }}
+{% endblock content %}

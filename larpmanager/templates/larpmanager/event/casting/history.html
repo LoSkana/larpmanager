@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n show_tags %}
 {% block title %}
     {% trans "History preferences" %} - {{ run.search }}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     {% if features.questbuilder %}
         {% if staff %}
@@ -30,7 +30,7 @@
         <thead>
             <tr>
                 <th>Giocatore</th>
-                {% with ''|center:casting_max as range %}
+                {% with ""|center:casting_max as range %}
                     {% for _ in range %}<th>Preferenza {{ forloop.counter }}</th>{% endfor %}
                 {% endwith %}
             </tr>
@@ -45,7 +45,7 @@
                             {{ el.member.display_member }}
                         {% endif %}
                     </td>
-                    {% with ''|center:casting_max as range %}
+                    {% with ""|center:casting_max as range %}
                         {% for _ in range %}
                             <td>{% key el.prefs forloop.counter %}</td>
                         {% endfor %}
@@ -54,4 +54,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

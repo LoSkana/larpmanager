@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Competences member" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows in detail a contributor's skills for to which they marked." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <table id="main_table" class="tablesorter mob">
         <thead>
@@ -42,4 +42,4 @@
         </tbody>
     </table>
     {{ list | length }}
-{% endblock %}
+{% endblock content %}

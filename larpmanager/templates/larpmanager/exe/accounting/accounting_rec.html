@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Accounting - History" %} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the historical accounting of the organization." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <h2>{% trans "Global balance" %}</h2>
     <br />
@@ -19,7 +19,7 @@
     <br />
     <br />
     <div id="bankSumContainer" style="height: 400px; width: 100%;"></div>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script type="text/javascript"
             src="https://cdn.canvasjs.com/jquery.canvasjs.stock.min.js"
@@ -96,4 +96,4 @@ $(function () {
 });
 });
     </script>
-{% endblock %}
+{% endblock js %}

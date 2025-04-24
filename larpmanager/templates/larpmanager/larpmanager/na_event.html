@@ -1,13 +1,15 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n static %}
-{% block title %}Join first!{% endblock %}
+{% block title %}
+    Join first!
+{% endblock title %}
 {% block content %}
     Hi there! You requested an advanced function of the larpmanager, but we couldn't find an existing event that you organize. Wanna join? <a href="{% url 'join' %}">It's super easy!</a>
     <br />
     <p>
         <i>Need help? Would you like to get in touch with us? <span class="contact-mail"></span> (we are happy to organize a demo of the tool for you!)</i>
     </p>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     {% include "elements/contact-mail.js" %}
-{% endblock %}
+{% endblock js %}

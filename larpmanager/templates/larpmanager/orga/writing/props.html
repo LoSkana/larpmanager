@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n show_tags %}
 {% block title %}
     {% trans "Props" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the props marked in the characters." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <table id="props" class="tablesorter mob writing">
         <thead>
@@ -31,4 +31,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

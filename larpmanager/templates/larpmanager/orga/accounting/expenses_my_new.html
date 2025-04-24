@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "New refund request" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page allows you to upload a new personal expense item." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <form action="{{ request.path }}"
           enctype="multipart/form-data"
@@ -16,7 +16,7 @@
         </table>
         <input type="submit" value="Submit">
     </form>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(function() {
@@ -26,4 +26,4 @@ $(function() {
 });
 });
     </script>
-{% endblock %}
+{% endblock js %}

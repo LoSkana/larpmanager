@@ -1,6 +1,8 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n static %}
-{% block title %}Join first!{% endblock %}
+{% block title %}
+    Join first!
+{% endblock title %}
 {% block content %}
     Heya! You requested an advanced function of the larpmanager, but we couldn't find an existing LARP Organization that you manage.
     <br />
@@ -13,7 +15,7 @@
     <br />
 Need help? <span class="contact-mail"></span> (we are happy to organize a demo of the tool for you!)</i>
 </p>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     {% include "elements/contact-mail.js" %}
-{% endblock %}
+{% endblock js %}

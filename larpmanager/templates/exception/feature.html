@@ -1,9 +1,10 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
     {% trans "Activate feature" %}
-{% endblock %}
-{% block nav %}{% endblock %}
+{% endblock title %}
+{% block nav %}
+{% endblock nav %}
 {% block content %}
     {% trans "To use the feature you requested, you need to activate the following feature: " %} {{ feature.name }}
     <br />
@@ -19,4 +20,4 @@
         {% else %}
             {% trans "Ask the organisers to activate it." %}
         {% endif %}
-    {% endblock %}
+    {% endblock content %}

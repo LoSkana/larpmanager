@@ -1,7 +1,10 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n static %}
-{% block title %}Please choose{% endblock %}
-{% block nav %}{% endblock %}
+{% block title %}
+    Please choose
+{% endblock title %}
+{% block nav %}
+{% endblock nav %}
 {% block content %}
     <p style="text-align: center">
         <i>Please choose the {{ name }} you'd like to be redirected to </i>
@@ -15,4 +18,4 @@
         <br />
         <input type="submit" value="Confirm">
     </form>
-{% endblock %}
+{% endblock content %}

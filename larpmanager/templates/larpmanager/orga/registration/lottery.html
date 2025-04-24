@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
     {% trans "Lottery" %} {{ gl_name }} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the information to perform the drawing of the lottery." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% if chosen %}
         <i>{% trans "The following registrations were drawn" %}:
@@ -24,4 +24,4 @@
         {% csrf_token %}
         <button type="submit" name="submit" value="1">{% trans "Perform extraction" %}</button>
     </form>
-{% endblock %}
+{% endblock content %}

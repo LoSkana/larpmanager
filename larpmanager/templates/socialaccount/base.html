@@ -1,10 +1,13 @@
 {% load i18n %}
 <html lang="{{ LANGUAGE_CODE }}">
     <head>
-        {% block css %}{% endblock %}
+        {% block css %}
+        {% endblock css %}
     </head>
     <body>
-        {% block content %}{% endblock %}
-        {% block js %}{% endblock %}
+        {% block content %}
+        {% endblock content %}
+        {% block js %}
+        {% endblock js %}
     </body>
 </html>

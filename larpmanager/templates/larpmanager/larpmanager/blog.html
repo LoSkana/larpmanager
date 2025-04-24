@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
     {% if article %}
@@ -6,11 +6,11 @@
     {% else %}
         Blog
     {% endif %}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     {% if article %}
         <div id="article">{{ article.text | safe }}</div>
     {% else %}
         <img src="https://media.makeameme.org/created/work-in-progress-b473051399.jpg" />
     {% endif %}
-{% endblock %}
+{% endblock content %}

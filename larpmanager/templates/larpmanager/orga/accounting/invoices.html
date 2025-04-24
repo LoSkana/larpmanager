@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n show_tags %}
 {% block title %}
     {% trans "Payment confirmation" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page allows you to manually approve payments received." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <table id="invoices" class="tablesorter mob">
         <thead>
@@ -47,4 +47,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

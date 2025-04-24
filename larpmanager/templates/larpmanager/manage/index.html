@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
 {% block title %}
     {% if run %}
@@ -6,7 +6,7 @@
     {% else %}
         {% trans "Management" %} - {{ assoc.name }}
     {% endif %}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     <div class="links staff">
         <table class="mob">
@@ -55,4 +55,4 @@
             </i>
         {% endif %}
     </div>
-{% endblock %}
+{% endblock content %}

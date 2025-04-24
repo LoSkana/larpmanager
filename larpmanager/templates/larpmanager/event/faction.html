@@ -1,12 +1,14 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load tz show_tags static i18n %}
-{% block title %}{{ faction.name }} - {{ run.search }}{% endblock %}
+{% block title %}
+    {{ faction.name }} - {{ run.search }}
+{% endblock title %}
 {% block content %}
     {% if show_teaser %}
         <h2>Teaser</h2>
         <p>{% show_char faction.teaser run 1 %}</p>
     {% endif %}
-    <h2>{% trans 'Characters' %}</h2>
+    <h2>{% trans "Characters" %}</h2>
     {% for chnum in faction.characters %}
         {% with chars|get:chnum as el %}
             {% if not el.hide %}
@@ -23,7 +25,7 @@
                         {% if el.player_id > 0 %}
                             <div class="go-inline">
                                 <p>
-                                    <b>{% trans 'Player:' %} </b> <a href="{% url 'public' el.player_id %}">
+                                    <b>{% trans "Player:" %} </b> <a href="{% url 'public' el.player_id %}">
                                         {% if run.id in all_runs or run.reg %}
                                             {{ el.player_full }}
                                         {% else %}
@@ -45,7 +47,7 @@
                         {% endif %}
                         {% if el.keywords %}
                             <div class="go-inline">
-                                <b>{% trans 'Keywords' %}:</b> {{ el.keywords | safe }}
+                                <b>{% trans "Keywords" %}:</b> {{ el.keywords | safe }}
                             </div>
                         {% endif %}
                         {% if el.teaser and show_teaser %}
@@ -55,7 +57,7 @@
                         {% endif %}
                         {% if el.factions %}
                             <div class="go-inline">
-                                <b>{% trans 'Factions:' %}</b>
+                                <b>{% trans "Factions:" %}</b>
                                 {% for fnum in el.factions %}
                                     {% with factions|get:fnum as g %}
                                         {% if not g.typ == 'g' %}
@@ -72,4 +74,4 @@
             {% endif %}
         {% endwith %}
     {% endfor %}
-{% endblock %}
+{% endblock content %}

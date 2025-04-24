@@ -1,6 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static i18n show_tags socialaccount %}
-{% block title %}Login{% endblock %}
+{% block title %}
+    Login
+{% endblock title %}
 {% block old %}
     /* for dynamic selection of social account providers */
     {% get_providers as socialaccount_providers %}
@@ -11,7 +13,7 @@
             </a>
         {% endwith %}
     {% endfor %}
-{% endblock %}
+{% endblock old %}
 {% block content %}
     <div class='login'>
         <br />
@@ -43,7 +45,7 @@
             </p>
         </form>
     </div>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
 function isMobileNonChrome() {
@@ -108,4 +110,4 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
     </script>
-{% endblock %}
+{% endblock js %}

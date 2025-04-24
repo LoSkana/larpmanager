@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Preferences" %} - {{ run.search }}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     {% if features.questbuilder %}
         {% if staff %}
@@ -46,4 +46,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

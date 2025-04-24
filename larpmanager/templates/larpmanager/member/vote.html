@@ -1,8 +1,8 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n show_tags %}
 {% block title %}
     {% trans "Executive Vote" %} {{ year }}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     {% if done %}
         <p>
@@ -39,7 +39,7 @@
                             </tr>
                         {% endfor %}
                     </table>
-                    <input id="submit" type="submit" value="{% trans 'Confirm' %}" disabled>
+                    <input id="submit" type="submit" value="{% trans "Confirm" %}" disabled>
                     <br />
                     <br />
                 </form>
@@ -50,7 +50,7 @@
             </p>
         {% endif %}
     {% endif %}
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(document).ready(function () {
@@ -63,4 +63,4 @@ $(document).ready(function () {
 });
 });
     </script>
-{% endblock %}
+{% endblock js %}

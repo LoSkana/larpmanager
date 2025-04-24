@@ -1,6 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load tz show_tags static i18n %}
-{% block title %}{{ badge.name }}{% endblock %}
+{% block title %}
+    {{ badge.name }}
+{% endblock title %}
 {% block content %}
     {{ badge.descr }}
     <hr />
@@ -22,7 +24,7 @@
             </div>
         {% endfor %}
     </div>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
 window.addEventListener('DOMContentLoaded', function() {
@@ -51,4 +53,4 @@ function resize_to_fit() {
 
 }
     </script>
-{% endblock %}
+{% endblock js %}

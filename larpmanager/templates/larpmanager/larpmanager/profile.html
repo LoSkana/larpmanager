@@ -1,8 +1,8 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n static show_tags %}
 {% block title %}
-    {% trans 'Profiling' %}
-{% endblock %}
+    {% trans "Profiling" %}
+{% endblock title %}
 {% block content %}
     <p>General: {{ tot | format_decimal }}</p>
     <table class="tablesorter mob">
@@ -25,4 +25,4 @@
             {% endfor %}
         </tr>
     </table>
-{% endblock %}
+{% endblock content %}

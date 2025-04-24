@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load show_tags i18n %}
 {% block title %}
     {% trans "Your characters" %} - {{ run.search }}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     {% if not char_maximum %}
         <a href="{% url 'character_create' run.event.slug run.number %}"
@@ -86,4 +86,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

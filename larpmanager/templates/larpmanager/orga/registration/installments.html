@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Installments" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the payment deadline settings for the event." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
     <table id="registration_installments" class="tablesorter mob writing">
@@ -43,7 +43,7 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}
 {% block js2 %}
     <script>window.addEventListener('DOMContentLoaded', function() {
         $(document).ready(function() {
@@ -53,4 +53,4 @@
         });
     });
     </script>
-{% endblock %}
+{% endblock js2 %}

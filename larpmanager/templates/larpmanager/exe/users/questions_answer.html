@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Questions" %} - {{ member }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the conversation with a player concerning a need of them. You can add a new response." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <h2>{{ member }}</h2>
     <h2>{% trans "Give a new answer" %}</h2>
@@ -17,7 +17,7 @@
         <table class="mob no_csv">
             {{ form.as_table }}
         </table>
-        <input type="submit" value="{% trans 'Confirm' %}">
+        <input type="submit" value="{% trans "Confirm" %}">
     </form>
     <hr />
     <h2>{% trans "Comunications" %}</h2>
@@ -30,4 +30,4 @@
             {% endif %}
         </div>
     {% endfor %}
-{% endblock %}
+{% endblock content %}

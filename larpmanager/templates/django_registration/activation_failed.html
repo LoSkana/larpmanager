@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans 'Activation failed' %}
-{% endblock %}
+    {% trans "Activation failed" %}
+{% endblock title %}
 {% block content %}
     <p>{% trans "Something went wrong in the account activation. Tell us more details. " %}</p>
     {{ activation_error }}
-{% endblock %}
+{% endblock content %}

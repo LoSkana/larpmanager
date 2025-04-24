@@ -1,8 +1,8 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n static %}
 {% block title %}
-    {% trans 'Payments' %}
-{% endblock %}
+    {% trans "Payments" %}
+{% endblock title %}
 {% block content %}
     <h3>{% trans "Total" %}: {{ total }}</h3>
     <table class="tablesorter mob">
@@ -45,7 +45,7 @@
             </tr>
         {% endfor %}
     </table>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
  window.addEventListener('DOMContentLoaded', function() {
@@ -59,4 +59,4 @@
     });
 });
     </script>
-{% endblock %}
+{% endblock js %}

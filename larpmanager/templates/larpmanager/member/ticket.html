@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
     {% trans "Technical Support" %}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     <br />
     {% if reason == 'email' %}
@@ -22,6 +22,6 @@
           id="main_form">
         {% csrf_token %}
         {{ form.as_p }}
-        <input id="cnt" type="submit" value="{% trans 'Confirm' %}" class="fit" />
+        <input id="cnt" type="submit" value="{% trans "Confirm" %}" class="fit" />
     </form>
-{% endblock %}
+{% endblock content %}

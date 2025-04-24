@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n static %}
 {% block meta %}
     <meta http-equiv="refresh" content="5" />
@@ -6,8 +6,10 @@
      .container { width: 30em; margin: 0 auto; text-align: center; }
     .container img { width: 100%; margin: 0 auto; }
     </style>
-{% endblock %}
-{% block title %}Oops!{% endblock %}
+{% endblock meta %}
+{% block title %}
+    Oops!
+{% endblock title %}
 {% block content %}
     Something went wrong with your request. Please stay on this page, we'll fix ASAP!
     <br />
@@ -17,7 +19,7 @@
     <br />
     <div class="container"></div>
     {% if exception %}<p>Additional info: {{ exception }}</p>{% endif %}
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script language="JavaScript" type="text/javascript">
 function redirect(){
@@ -42,4 +44,4 @@ async function apiFunction() {
 // Call the function
 apiFunction();
     </script>
-{% endblock %}
+{% endblock js %}
