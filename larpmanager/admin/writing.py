@@ -20,19 +20,19 @@
 
 from django.contrib import admin
 
-from larpmanager.admin.base import DefModelAdmin, EventFilter, CharacterFilter, RunFilter, MemberFilter
+from larpmanager.admin.base import CharacterFilter, DefModelAdmin, EventFilter, MemberFilter, RunFilter
 from larpmanager.admin.character import PlotFilter
-from larpmanager.models.casting import Trait, AssignmentTrait
+from larpmanager.models.casting import AssignmentTrait, Trait
 from larpmanager.models.writing import (
-    TextVersion,
-    Plot,
-    PlotCharacterRel,
     Faction,
     Handout,
     HandoutTemplate,
+    Plot,
+    PlotCharacterRel,
     Prologue,
     PrologueType,
     SpeedLarp,
+    TextVersion,
 )
 
 

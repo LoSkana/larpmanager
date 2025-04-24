@@ -24,13 +24,13 @@ import shutil
 import zipfile
 from uuid import uuid4
 
-from PIL import Image
 from django.conf import settings as conf_settings
 from django.shortcuts import render
+from PIL import Image
 
 from larpmanager.models.association import Association
 from larpmanager.models.member import Badge
-from larpmanager.models.miscellanea import Album, AlbumUpload, AlbumImage
+from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload
 
 
 def upload_albums_dir(main, cache_subs, name):

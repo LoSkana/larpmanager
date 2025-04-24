@@ -23,23 +23,23 @@ import random
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.registration import registration_payments_status
 from larpmanager.forms.miscellanea import OrganizerCastingOptionsForm
-from larpmanager.models.casting import Quest, Trait, AssignmentTrait, Casting, CastingAvoid
-from larpmanager.models.member import Membership, Member
+from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, Trait
+from larpmanager.models.member import Member, Membership
 from larpmanager.models.registration import (
     Registration,
-    RegistrationTicket,
     RegistrationCharacterRel,
+    RegistrationTicket,
 )
 from larpmanager.models.writing import (
-    Faction,
     Character,
+    Faction,
 )
-from larpmanager.accounting.registration import registration_payments_status
 from larpmanager.utils.common import (
     get_quest_type,
     get_time_diff_today,
@@ -48,10 +48,10 @@ from larpmanager.utils.deadlines import get_membership_fee_year
 from larpmanager.utils.event import check_event_permission
 from larpmanager.views.user.casting import (
     casting_details,
-    casting_preferences_characters,
-    casting_preferences_traits,
     casting_history_characters,
     casting_history_traits,
+    casting_preferences_characters,
+    casting_preferences_traits,
 )
 
 

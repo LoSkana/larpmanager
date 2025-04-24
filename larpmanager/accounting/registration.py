@@ -23,7 +23,7 @@ from datetime import datetime
 from decimal import Decimal
 
 from django.contrib.postgres.aggregates import ArrayAgg
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from larpmanager.accounting.token_credit import registration_tokens_credits
@@ -32,23 +32,23 @@ from larpmanager.cache.links import reset_event_links
 from larpmanager.mail.registration import update_registration_status_bkg
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
+    AccountingItemOther,
     AccountingItemPayment,
     AccountingItemTransaction,
-    AccountingItemOther,
 )
 from larpmanager.models.casting import AssignmentTrait
 from larpmanager.models.event import Run
 from larpmanager.models.form import RegistrationChoice, RegistrationOption
-from larpmanager.models.member import get_user_membership, Membership
+from larpmanager.models.member import Membership, get_user_membership
 from larpmanager.models.registration import (
-    RegistrationTicket,
-    RegistrationInstallment,
     Registration,
     RegistrationCharacterRel,
+    RegistrationInstallment,
     RegistrationSurcharge,
+    RegistrationTicket,
 )
 from larpmanager.models.utils import get_sum
-from larpmanager.utils.common import get_time_diff_today, get_time_diff
+from larpmanager.utils.common import get_time_diff, get_time_diff_today
 from larpmanager.utils.registration import is_reg_provisional
 from larpmanager.utils.tasks import background_auto
 
@@ -139,7 +139,7 @@ def quota_check(reg, start, alert, assoc_id):
     cnt = 0
     qsr = 0
     first_deadline = True
-    for i in range(0, reg.quotas):
+    for _i in range(0, reg.quotas):
         qsr += qs
         cnt += 1
 
@@ -272,7 +272,7 @@ def cancel_run(instance):
             AccountingItemOther.objects.create(
                 member=r.member,
                 oth=AccountingItemOther.CREDIT,
-                descr="Rimborso per %s" % instance,
+                descr=f"Refund per {instance}",
                 run=instance,
                 value=money,
             )
@@ -375,19 +375,19 @@ def post_save_registration_accounting(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=AccountingItemDiscount)
-def post_save_AccountingItemDiscount_accounting(sender, instance, **kwargs):
+def post_save_accounting_item_discount_accounting(sender, instance, **kwargs):
     if instance.reg:
         instance.reg.save()
 
 
 @receiver(post_save, sender=RegistrationTicket)
-def post_save_RegistrationTicket(sender, instance, created, **kwargs):
-    # print(f"@@@@ post_save_RegistrationTicket {instance} {datetime.now()}")
+def post_save_registration_ticket(sender, instance, created, **kwargs):
+    # print(f"@@@@ post_save_registration_ticket {instance} {datetime.now()}")
     check_reg_events(instance.event)
 
 
 @receiver(post_save, sender=RegistrationOption)
-def post_save_RegistrationOption(sender, instance, created, **kwargs):
+def post_save_registration_option(sender, instance, created, **kwargs):
     # print(f"@@@@ post_RegistrationOption {instance} {datetime.now()}")
     check_reg_events(instance.question.event)
 
@@ -417,7 +417,7 @@ def check_reg_bkg_go(reg_id):
         instance = Registration.objects.get(pk=reg_id)
         instance.save()
     except Exception:
-        print("not found registration %s" % (str(reg_id),))
+        print(f"not found registration {str(reg_id)}")
         return
 
 

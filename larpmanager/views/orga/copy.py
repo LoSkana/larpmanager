@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import os
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
@@ -26,35 +27,34 @@ from django.core.files.storage import default_storage
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.forms.event import OrgaAppearanceForm, OrgaEventForm
 from larpmanager.forms.miscellanea import OrganizerCopyForm
 from larpmanager.models.access import EventRole
 from larpmanager.models.accounting import Discount
-from larpmanager.models.casting import QuestType, Quest, Trait
-from larpmanager.models.event import EventText, Event, EventConfig
-from larpmanager.models.form import RegistrationQuestion, RegistrationOption, CharacterQuestion, CharacterOption
-from larpmanager.models.miscellanea import WorkshopModule, WorkshopQuestion, WorkshopOption
+from larpmanager.models.casting import Quest, QuestType, Trait
+from larpmanager.models.event import Event, EventConfig, EventText
+from larpmanager.models.form import CharacterOption, CharacterQuestion, RegistrationOption, RegistrationQuestion
+from larpmanager.models.miscellanea import WorkshopModule, WorkshopOption, WorkshopQuestion
 from larpmanager.models.registration import (
-    RegistrationTicket,
-    RegistrationQuota,
     RegistrationInstallment,
+    RegistrationQuota,
     RegistrationSurcharge,
+    RegistrationTicket,
 )
 from larpmanager.models.utils import generate_id
 from larpmanager.models.writing import (
-    Faction,
     Character,
-    Relationship,
+    CharacterConfig,
+    Faction,
+    Handout,
+    HandoutTemplate,
     Plot,
     PlotCharacterRel,
     Prologue,
+    Relationship,
     SpeedLarp,
-    Handout,
-    HandoutTemplate,
-    CharacterConfig,
 )
 from larpmanager.utils.common import copy_class
-
-from larpmanager.forms.event import OrgaEventForm, OrgaAppearanceForm
 from larpmanager.utils.event import check_event_permission
 
 
@@ -289,13 +289,13 @@ def copy(request, ctx, parent, event, element):
 
 
 def copy_css(ctx, event, parent):
-    appForm = OrgaAppearanceForm(ctx=ctx)
-    path = appForm.get_css_path(parent)
+    app_form = OrgaAppearanceForm(ctx=ctx)
+    path = app_form.get_css_path(parent)
     if not os.path.exists(path):
         return
     value = default_storage.open(path).read().decode("utf-8")
     event.css_code = generate_id(32)
-    npath = appForm.get_css_path(event)
+    npath = app_form.get_css_path(event)
     default_storage.save(npath, ContentFile(value))
 
 

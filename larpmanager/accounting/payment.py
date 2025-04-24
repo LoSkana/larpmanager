@@ -27,29 +27,28 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.gateway import (
     get_paypal_form,
-    get_stripe_form,
-    get_sumup_form,
     get_redsys_form,
     get_satispay_form,
+    get_stripe_form,
+    get_sumup_form,
 )
 from larpmanager.cache.feature import get_assoc_features
-from larpmanager.forms.accounting import WireInvoiceSubmitForm, AnyInvoiceSubmitForm
-
+from larpmanager.forms.accounting import AnyInvoiceSubmitForm, WireInvoiceSubmitForm
 from larpmanager.models.accounting import (
-    PaymentInvoice,
-    AccountingItemTransaction,
-    AccountingItemPayment,
-    AccountingItemMembership,
-    AccountingItemDonation,
     AccountingItemCollection,
-    RefundRequest,
+    AccountingItemDonation,
+    AccountingItemMembership,
     AccountingItemOther,
+    AccountingItemPayment,
+    AccountingItemTransaction,
     Collection,
+    PaymentInvoice,
+    RefundRequest,
 )
 from larpmanager.models.association import Association
 from larpmanager.models.base import PaymentMethod
 from larpmanager.models.registration import Registration
-from larpmanager.models.utils import get_payment_details, generate_id
+from larpmanager.models.utils import generate_id, get_payment_details
 from larpmanager.utils.base import update_payment_details
 from larpmanager.utils.einvoice import process_payment
 from larpmanager.utils.member import assign_badge
@@ -65,7 +64,7 @@ def get_payment_fee(assoc, slug):
 
 
 def unique_invoice_cod(length=16):
-    for idx in range(5):
+    for _idx in range(5):
         cod = generate_id(length)
         if not PaymentInvoice.objects.filter(cod=cod).exists():
             return cod
@@ -106,7 +105,7 @@ def set_data_invoice(request, ctx, invoice, form, assoc):
         }
 
     if assoc.get_config("payment_special_code", False):
-        invoice.causal = "%s - %s" % (invoice.cod, invoice.causal)
+        invoice.causal = f"{invoice.cod} - {invoice.causal}"
 
 
 def round_up_to_two_decimals(number):
@@ -272,7 +271,7 @@ def payment_received(invoice):
 
 
 @receiver(pre_save, sender=PaymentInvoice)
-def update_PaymentInvoice(sender, instance, **kwargs):
+def update_payment_invoice(sender, instance, **kwargs):
     if not instance.pk:
         return
 
@@ -291,7 +290,7 @@ def update_PaymentInvoice(sender, instance, **kwargs):
 
 
 @receiver(pre_save, sender=RefundRequest)
-def update_RefundRequest(sender, instance, **kwargs):
+def update_refund_request(sender, instance, **kwargs):
     if not instance.pk:
         return
 
@@ -310,13 +309,13 @@ def update_RefundRequest(sender, instance, **kwargs):
     acc.member = instance.member
     acc.value = instance.value
     acc.oth = AccountingItemOther.REFUND
-    acc.descr = "Rimborso erogato di %.2f" % instance.value
+    acc.descr = f"Delivered refund of {instance.value:.2f}"
     acc.assoc = instance.assoc
     acc.save()
 
 
 @receiver(pre_save, sender=Collection)
-def update_Collection(sender, instance, **kwargs):
+def update_collection(sender, instance, **kwargs):
     if not instance.pk:
         return
 
@@ -337,5 +336,5 @@ def update_Collection(sender, instance, **kwargs):
     acc.run = instance.run
     acc.value = instance.total
     acc.oth = AccountingItemOther.CREDIT
-    acc.descr = "Colletta di %s" % instance.organizer
+    acc.descr = f"Collection of {instance.organizer}"
     acc.save()

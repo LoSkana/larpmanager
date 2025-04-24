@@ -25,15 +25,14 @@ import re
 import string
 import unicodedata
 from datetime import datetime
-from decimal import Decimal
-from decimal import ROUND_DOWN
+from decimal import ROUND_DOWN, Decimal
 from pathlib import Path
 
 import magic
 import pytz
 from background_task.models import Task
 from diff_match_patch import diff_match_patch
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.template.defaulttags import register
@@ -42,35 +41,35 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.accounting import Collection, Discount
 from larpmanager.models.association import Association
-from larpmanager.models.base import FeatureModule, Feature
-from larpmanager.models.casting import QuestType, Quest, Trait
+from larpmanager.models.base import Feature, FeatureModule
+from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event
 from larpmanager.models.member import Badge, Member
 from larpmanager.models.miscellanea import (
-    Contact,
     Album,
-    WorkshopQuestion,
+    Contact,
+    PlayerRelationship,
     WorkshopModule,
     WorkshopOption,
-    PlayerRelationship,
+    WorkshopQuestion,
 )
 from larpmanager.models.registration import (
     Registration,
 )
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
-    PrologueType,
-    Plot,
+    Character,
+    CharacterConfig,
     Handout,
     HandoutTemplate,
+    Plot,
     Prologue,
-    SpeedLarp,
-    Character,
+    PrologueType,
     Relationship,
-    CharacterConfig,
+    SpeedLarp,
 )
 from larpmanager.utils.exceptions import (
-    NotFoundException,
+    NotFoundError,
 )
 
 format_date = "%d/%m/%y"
@@ -156,7 +155,7 @@ def get_event_template(ctx, n):
     try:
         ctx["event"] = Event.objects.get(pk=n, template=True, assoc_id=ctx["a_id"])
     except ObjectDoesNotExist as err:
-        raise NotFoundException() from err
+        raise NotFoundError() from err
 
 
 def get_char(ctx, n, by_number=False):
@@ -618,7 +617,7 @@ def get_payment_methods_ids(ctx):
     return set(Association.objects.get(pk=ctx["a_id"]).payment_methods.values_list("pk", flat=True))
 
 
-def detectDelimiter(content):
+def detect_delimiter(content):
     header = content.split("\n")[0]
     for d in ["\t", ";", ","]:
         if d in header:

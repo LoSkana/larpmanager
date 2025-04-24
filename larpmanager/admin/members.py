@@ -24,8 +24,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-from larpmanager.admin.base import DefModelAdmin, reduced, AssocFilter, MemberFilter
-from larpmanager.models.member import Member, Membership, VolunteerRegistry, Vote, Badge
+from larpmanager.admin.base import AssocFilter, DefModelAdmin, MemberFilter, reduced
+from larpmanager.models.member import Badge, Member, Membership, VolunteerRegistry, Vote
 
 
 class MyUserAdmin(UserAdmin):

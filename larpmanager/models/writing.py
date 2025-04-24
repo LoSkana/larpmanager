@@ -29,9 +29,9 @@ from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.models.base import BaseModel
-from larpmanager.models.event import Event, ProgressStep, BaseConceptModel
+from larpmanager.models.event import BaseConceptModel, Event, ProgressStep
 from larpmanager.models.member import Member
-from larpmanager.models.utils import UploadToPathAndRename, my_uuid, download, show_thumb
+from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, show_thumb
 
 
 class Writing(BaseConceptModel):

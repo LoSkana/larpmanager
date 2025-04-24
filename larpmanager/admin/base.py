@@ -20,12 +20,12 @@
 
 import background_task.admin
 from admin_auto_filters.filters import AutocompleteFilter
-from background_task.models import Task, CompletedTask
+from background_task.models import CompletedTask, Task
 from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
-from larpmanager.models.base import FeatureModule, Feature, PaymentMethod
+from larpmanager.models.base import Feature, FeatureModule, PaymentMethod
 from larpmanager.models.member import Log
 
 

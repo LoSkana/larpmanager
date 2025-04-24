@@ -20,27 +20,27 @@
 
 from django import forms
 from django.contrib.postgres.aggregates import ArrayAgg
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 from tinymce.widgets import TinyMCE
 
-from larpmanager.forms.base import MyForm, BaseRegistrationForm
+from larpmanager.cache.registration import get_reg_counts
+from larpmanager.forms.base import BaseRegistrationForm, MyForm
 from larpmanager.forms.utils import (
     AssocMemberS2Widget,
-    EventCharacterS2WidgetMulti,
     EventCharacterOptionS2WidgetMulti,
+    EventCharacterS2WidgetMulti,
     TicketS2WidgetMulti,
 )
 from larpmanager.forms.writing import WritingForm
 from larpmanager.models.casting import AssignmentTrait
 from larpmanager.models.event import Run, RunText
 from larpmanager.models.experience import AbilityPx, DeliveryPx
-from larpmanager.models.form import CharacterQuestion, QuestionType, CharacterOption, CharacterAnswer, CharacterChoice
+from larpmanager.models.form import CharacterAnswer, CharacterChoice, CharacterOption, CharacterQuestion, QuestionType
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, CharacterStatus, Faction, PlotCharacterRel
-from larpmanager.cache.registration import get_reg_counts
 
 
 class CharacterCocreationForm(forms.Form):
@@ -119,7 +119,7 @@ class CharacterForm(WritingForm, BaseCharacterForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(CharacterForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.details = {}
 
@@ -267,7 +267,7 @@ class CharacterForm(WritingForm, BaseCharacterForm):
         return cleaned_data
 
     def save(self, commit=True):
-        instance = super(CharacterForm, self).save()
+        instance = super().save()
         if hasattr(self, "questions"):
             self.save_reg_questions(instance, orga=self.orga)
         return instance
@@ -285,7 +285,7 @@ class OrgaCharacterForm(CharacterForm):
     orga = True
 
     def __init__(self, *args, **kwargs):
-        super(OrgaCharacterForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         if not self.instance.pk:
             return
@@ -398,7 +398,7 @@ class OrgaCharacterForm(CharacterForm):
             self.fields[field] = forms.CharField(
                 widget=TinyMCE(attrs={"cols": 80, "rows": 10}),
                 label=plot,
-                help_text=_("This text will be added to the sheet, in the plot paragraph %(name)s" % {"name": plot}),
+                help_text=_("This text will be added to the sheet, in the plot paragraph {name}".format(name=plot)),
                 required=False,
             )
             if pl[0] in pcr:
@@ -529,7 +529,7 @@ class OrgaCharacterForm(CharacterForm):
         el.save()
 
     def save(self, commit=True):
-        instance = super(OrgaCharacterForm, self).save()
+        instance = super().save()
 
         if instance.pk:
             self.save_plot()
@@ -549,7 +549,7 @@ class OrgaCharacterQuestionForm(MyForm):
         exclude = ["order"]
 
     def __init__(self, *args, **kwargs):
-        super(OrgaCharacterQuestionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # Add type of character question to the available types
         already = list(
@@ -615,7 +615,7 @@ class OrgaCharacterOptionForm(MyForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(OrgaCharacterOptionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields["tickets"].widget.set_event(self.params["event"])
 

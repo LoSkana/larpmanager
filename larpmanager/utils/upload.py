@@ -37,30 +37,30 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.character import get_event_cache_fields
 from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.form import (
-    CharacterQuestion,
-    CharacterOption,
-    CharacterChoice,
     CharacterAnswer,
-    RegistrationQuestion,
-    RegistrationOption,
+    CharacterChoice,
+    CharacterOption,
+    CharacterQuestion,
     QuestionType,
+    RegistrationOption,
+    RegistrationQuestion,
     get_ordered_registration_questions,
 )
 from larpmanager.models.member import Member
 from larpmanager.models.registration import (
     Registration,
-    RegistrationTicket,
     RegistrationCharacterRel,
+    RegistrationTicket,
 )
 from larpmanager.models.utils import UploadToPathAndRename
 from larpmanager.models.writing import (
+    Character,
     Faction,
     replace_char_names,
-    Character,
 )
-from larpmanager.cache.character import get_event_cache_fields
 from larpmanager.utils.edit import save_log
 
 
@@ -122,7 +122,7 @@ def cover_load(request, ctx, z_obj, typ):
     z_obj.extractall(path=fpath)
     covers = {}
     # get images
-    for root, dirnames, filenames in os.walk(fpath):
+    for root, _dirnames, filenames in os.walk(fpath):
         for el in filenames:
             num = os.path.splitext(el)[0]
             covers[num] = os.path.join(root, el)
@@ -175,7 +175,7 @@ def elements_load(request, ctx, csv_upload, typ, nm):
         rels[el.name] = el.related_model
 
     tmp_file = get_csv_upload_tmp(csv_upload, ctx["run"])
-    with open(tmp_file, "r", newline="") as csvfile:
+    with open(tmp_file, newline="") as csvfile:
         dialect = csv.Sniffer().sniff(csvfile.readline(), delimiters=";,\t")
         csvfile.seek(0)
         csv_data = csv.reader(csvfile, dialect)
@@ -193,7 +193,7 @@ def elements_load(request, ctx, csv_upload, typ, nm):
         logs = []
         cnt = 0
         for row in csv_data:
-            rpr = ", ".join(["%s: %s" % (aux[i], row[i]) for i in range(0, min(len(aux), len(row)))])
+            rpr = ", ".join([f"{aux[i]}: {row[i]}" for i in range(0, min(len(aux), len(row)))])
             log = f"# ROW{cnt} [ {rpr} ] "
             try:
                 if nm == "registration":
@@ -273,7 +273,7 @@ def registration_question_loads(request, ctx, csv_upload):
     questions = get_ordered_registration_questions(ctx)
 
     tmp_file = get_csv_upload_tmp(csv_upload, ctx["run"])
-    with open(tmp_file, "r", newline="") as csvfile:
+    with open(tmp_file, newline="") as csvfile:
         dialect = csv.Sniffer().sniff(csvfile.readline(), delimiters=";,\t")
         csvfile.seek(0)
         csv_data = csv.reader(csvfile, dialect)
@@ -343,7 +343,7 @@ def character_question_loads(request, ctx, csv_upload):
     questions = ctx["event"].get_elements(CharacterQuestion).order_by("order").prefetch_related("options")
 
     tmp_file = get_csv_upload_tmp(csv_upload, ctx["run"])
-    with open(tmp_file, "r", newline="") as csvfile:
+    with open(tmp_file, newline="") as csvfile:
         dialect = csv.Sniffer().sniff(csvfile.readline(), delimiters=";,\t")
         csvfile.seek(0)
         csv_data = csv.reader(csvfile, dialect)

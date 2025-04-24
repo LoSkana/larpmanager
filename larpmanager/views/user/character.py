@@ -21,18 +21,19 @@
 import os
 from uuid import uuid4
 
-from PIL import Image
 from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from django.http import HttpResponseRedirect, JsonResponse, Http404
+from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from PIL import Image
 
+from larpmanager.cache.character import get_character_cache_fields, get_character_fields, get_event_cache_all
 from larpmanager.forms.character import (
     CharacterCocreationForm,
     CharacterForm,
@@ -51,8 +52,8 @@ from larpmanager.models.event import (
     RunText,
 )
 from larpmanager.models.form import (
-    CharacterQuestion,
     CharacterOption,
+    CharacterQuestion,
 )
 from larpmanager.models.miscellanea import (
     PlayerRelationship,
@@ -61,23 +62,22 @@ from larpmanager.models.registration import (
     RegistrationCharacterRel,
 )
 from larpmanager.models.writing import (
-    CharacterStatus,
     Character,
+    CharacterStatus,
 )
-from larpmanager.cache.character import get_character_fields, get_character_cache_fields, get_event_cache_all
+from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
 from larpmanager.utils.common import (
     get_player_relationship,
 )
-from larpmanager.utils.character import get_character_relationships, get_character_sheet, get_char_check
+from larpmanager.utils.edit import user_edit
 from larpmanager.utils.event import get_event_run
+from larpmanager.utils.experience import get_available_ability_px
 from larpmanager.utils.registration import (
-    registration_find,
+    check_assign_character,
     check_character_maximum,
     get_player_characters,
-    check_assign_character,
+    registration_find,
 )
-from larpmanager.utils.edit import user_edit
-from larpmanager.utils.experience import get_available_ability_px
 from larpmanager.utils.writing import char_add_addit
 from larpmanager.views.user.casting import casting_details, get_casting_preferences
 from larpmanager.views.user.registration import init_form_submitted

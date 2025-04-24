@@ -580,8 +580,8 @@ msgstr ""
 msgid "--- NOT ASSIGNED ---"
 msgstr ""
 
-#, python-format
-msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
+#, python-brace-format
+msgid "This text will be added to the sheet, in the plot paragraph {name}"
 msgstr ""
 
 msgid "Abilities"
@@ -1389,8 +1389,8 @@ msgstr ""
 msgid "Plot"
 msgstr ""
 
-#, python-format
-msgid "This text will be added to the sheet of %(name)s"
+#, python-brace-format
+msgid "This text will be added to the sheet of {name}"
 msgstr ""
 
 msgid "Faction"
@@ -7868,8 +7868,8 @@ msgstr ""
 msgid "Workshop already done!"
 msgstr ""
 
-#, python-format
-msgid "Completed module. Remaining: %(number)d"
+#, python-brace-format
+msgid "Completed module. Remaining: {number:d}"
 msgstr ""
 
 msgid "Well done, you've completed all modules!"

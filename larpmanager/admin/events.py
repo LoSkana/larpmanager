@@ -20,16 +20,16 @@
 
 from django.contrib import admin
 
-from larpmanager.admin.base import DefModelAdmin, AssocFilter, EventFilter, RunFilter
+from larpmanager.admin.base import AssocFilter, DefModelAdmin, EventFilter, RunFilter
 from larpmanager.models.event import (
-    Run,
     Event,
-    PreRegistration,
-    EventText,
-    RunText,
-    ProgressStep,
     EventConfig,
+    EventText,
+    PreRegistration,
+    ProgressStep,
+    Run,
     RunConfig,
+    RunText,
 )
 
 

@@ -22,13 +22,13 @@ from babel.numbers import get_currency_symbol
 from colorfield.fields import ColorField
 from django.conf import settings as conf_settings
 from django.db import models
-from django.db.models import UniqueConstraint, Q
+from django.db.models import Q, UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFill, ResizeToFit
 from tinymce.models import HTMLField
 
-from larpmanager.models.base import BaseModel, AlphanumericValidator, Feature, PaymentMethod
+from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, PaymentMethod
 from larpmanager.models.larpmanager import LarpManagerPlan
 from larpmanager.models.utils import UploadToPathAndRename, get_element_config
 

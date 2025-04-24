@@ -22,7 +22,7 @@ import re
 
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from larpmanager.models.event import RunText
@@ -125,7 +125,7 @@ def get_cache_cocreation(run, el=None):
 
 
 @receiver(post_save, sender=RunText)
-def update_cache_text_field_RunText(sender, instance, **kwargs):
+def update_cache_text_field_run_text(sender, instance, **kwargs):
     if instance.typ == RunText.COCREATION:
         get_cache_cocreation(instance.run, instance)
 

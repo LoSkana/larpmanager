@@ -24,26 +24,26 @@ import io
 from django.db.models import Count
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
+from larpmanager.cache.character import get_event_cache_all
+from larpmanager.cache.writing import get_cache_cocreation, get_cache_text_field
 from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Trait
-from larpmanager.models.event import RunText, ProgressStep
+from larpmanager.models.event import ProgressStep, RunText
 from larpmanager.models.experience import AbilityPx
 from larpmanager.models.writing import (
-    TextVersion,
-    Plot,
-    PlotCharacterRel,
-    Writing,
     Character,
     CharacterConfig,
+    Plot,
+    PlotCharacterRel,
+    TextVersion,
+    Writing,
     replace_chars_all,
 )
-from larpmanager.templatetags.show_tags import show_trait, show_char
-from larpmanager.cache.character import get_event_cache_all
-from larpmanager.cache.writing import get_cache_text_field, get_cache_cocreation
+from larpmanager.templatetags.show_tags import show_char, show_trait
 from larpmanager.utils.common import check_field, compute_diff
 from larpmanager.utils.download import writing_download
 from larpmanager.utils.upload import upload_elements

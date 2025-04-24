@@ -4242,9 +4242,9 @@ msgstr "Frais d'inscription, total à payer"
 msgid " Hurry: only %(num)d tickets available."
 msgstr " Dépêchez-vous : il ne reste que %(num)d billets disponibles."
 
-#, python-format
-msgid "Completed module. Remaining: %(number)d"
-msgstr "Module terminé. Reste à faire : %(number)d"
+#, python-brace-format
+msgid "Completed module. Remaining: {number:d}"
+msgstr "Module terminé. Reste à faire : {number:d}"
 
 msgid "Apply a check on the tax code of players"
 msgstr "Contrôler le code fiscal des joueurs"
@@ -4530,6 +4530,10 @@ msgstr "Lieu de naissance ne figurant pas dans la liste ISTAT"
 msgid "You are now logged in with your main account:"
 msgstr "Vous êtes maintenant connecté avec votre compte principal :"
 
+#, python-brace-format
+msgid "This text will be added to the sheet of {name}"
+msgstr "Ce texte sera ajouté à la feuille de {name}"
+
 msgid "Extended description - maximum 5000 characters"
 msgstr "Description détaillée - maximum 5000 caractères"
 
@@ -4614,10 +4618,6 @@ msgstr "Cette page vous permet d'ajouter ou de modifier un personnage."
 
 msgid "This page allows you to edit a member's profile."
 msgstr "Cette page vous permet de modifier le profil d'un membre."
-
-#, python-format
-msgid "This text will be added to the sheet of %(name)s"
-msgstr "Ce texte sera ajouté à la feuille de %(name)s"
 
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
@@ -5519,6 +5519,10 @@ msgstr ""
 "Le paiement n'a pas été effectué. Veuillez nous contacter pour en connaître "
 "la raison."
 
+#, python-brace-format
+msgid "This text will be added to the sheet, in the plot paragraph {name}"
+msgstr "Ce texte sera ajouté à la feuille, dans le paragraphe de tracé {name}"
+
 msgid "If checked, PG names will be automatically replaced by a reference"
 msgstr ""
 "Si cette case est cochée, les noms des PG seront automatiquement remplacés "
@@ -5598,11 +5602,6 @@ msgstr ""
 msgid "To confirm your registration, please fill in your personal profile."
 msgstr ""
 "Pour confirmer votre inscription, veuillez remplir votre profil personnel."
-
-#, python-format
-msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
-msgstr ""
-"Ce texte sera ajouté à la feuille, dans le paragraphe de tracé %(name)s"
 
 msgid "This page allows you to add or edit a badge, or assign it  to users."
 msgstr ""

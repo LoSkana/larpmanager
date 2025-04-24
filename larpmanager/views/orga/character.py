@@ -20,51 +20,51 @@
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
-from django.db.models import Q, Max
+from django.db.models import Max, Q
 from django.db.models.functions import Length
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.character import (
     OrgaCharacterForm,
     OrgaCharacterOptionForm,
     OrgaCharacterQuestionForm,
 )
 from larpmanager.forms.writing import (
-    UploadElementsForm,
     OrgaRelationshipForm,
+    UploadElementsForm,
 )
 from larpmanager.models.form import (
-    CharacterQuestion,
-    CharacterOption,
-    CharacterChoice,
     CharacterAnswer,
+    CharacterChoice,
+    CharacterOption,
+    CharacterQuestion,
     QuestionType,
 )
 from larpmanager.models.writing import (
-    TextVersion,
+    Character,
+    Faction,
     Plot,
     PlotCharacterRel,
-    Faction,
     Prologue,
-    SpeedLarp,
-    Character,
     Relationship,
+    SpeedLarp,
+    TextVersion,
 )
-from larpmanager.cache.character import get_event_cache_all
+from larpmanager.utils.character import get_chars_relations
 from larpmanager.utils.common import (
-    get_char,
     exchange_order,
+    get_char,
     get_element,
     get_relationship,
 )
-from larpmanager.utils.character import get_chars_relations
-from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.download import orga_character_form_download
 from larpmanager.utils.edit import backend_edit, writing_edit
+from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.upload import upload_elements
-from larpmanager.utils.writing import writing_list, writing_view, writing_versions
+from larpmanager.utils.writing import writing_list, writing_versions, writing_view
 
 
 @login_required

@@ -99,7 +99,7 @@ def update_event_features(ev_id):
 
 
 @receiver(post_save, sender=Association)
-def update_Association_reset_features(sender, instance, **kwargs):
+def update_association_reset_features(sender, instance, **kwargs):
     reset_assoc_features(instance.id)
     for ev_id in instance.events.values_list("pk", flat=True):
         reset_event_features(ev_id)

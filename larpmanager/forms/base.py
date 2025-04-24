@@ -27,20 +27,19 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
-from larpmanager.forms.utils import css_delimeter, get_custom_field, add_custom_field
+from larpmanager.forms.utils import add_custom_field, css_delimeter, get_custom_field
 from larpmanager.models.association import Association
-from larpmanager.models.event import Run, Event
+from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
+    QuestionStatus,
+    QuestionType,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
     RegistrationQuestion,
-    QuestionType,
-    QuestionStatus,
 )
-from larpmanager.models.utils import get_attr, save_all_element_configs, get_all_element_configs
+from larpmanager.models.utils import generate_id, get_all_element_configs, get_attr, save_all_element_configs
 from larpmanager.templatetags.show_tags import hex_to_rgb
-from larpmanager.models.utils import generate_id
 
 
 class MyForm(forms.ModelForm):
@@ -144,13 +143,11 @@ class MyForm(forms.ModelForm):
         if key in self.fields:
             del self.fields[key]
 
-
     def save_configs(self, instance):
         config_values = {}
         for el in self.get_config_fields():
             get_custom_field(el, config_values, self)
         save_all_element_configs(instance, config_values)
-
 
     def prepare_configs(self):
         res = get_all_element_configs(self.instance)
@@ -161,7 +158,7 @@ class MyForm(forms.ModelForm):
 class MyFormRun(MyForm):
     def __init__(self, *args, **kwargs):
         self.auto_run = True
-        super(MyFormRun, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 def max_selections_validator(max_choices):
@@ -476,7 +473,7 @@ class BaseRegistrationForm(MyFormRun):
 
 class MyCssForm(MyForm):
     def __init__(self, *args, **kwargs):
-        super(MyCssForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         if not self.instance.pk:
             return
@@ -523,7 +520,7 @@ class MyCssForm(MyForm):
 class BaseAccForm(forms.Form):
     def __init__(self, *args, **kwargs):
         ctx = kwargs.pop("ctx")
-        super(BaseAccForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.methods = ctx["methods"]
         cho = []
         for s in self.methods:

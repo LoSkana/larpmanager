@@ -41,8 +41,8 @@ from larpmanager.models.event import (
     Run,
 )
 from larpmanager.models.larpmanager import (
-    LarpManagerTutorial,
     LarpManagerBlog,
+    LarpManagerTutorial,
 )
 
 translation.activate("en")

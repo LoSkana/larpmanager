@@ -33,7 +33,7 @@ from pilkit.processors import ResizeToFill
 
 from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel
-from larpmanager.models.utils import download_d, show_thumb, UploadToPathAndRename
+from larpmanager.models.utils import UploadToPathAndRename, download_d, show_thumb
 from larpmanager.utils.codes import countries
 
 

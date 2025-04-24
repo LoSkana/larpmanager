@@ -19,10 +19,10 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.db import models
-from django.db.models import UniqueConstraint, Q
+from django.db.models import Q, UniqueConstraint
 
 from larpmanager.models.association import Association
-from larpmanager.models.base import BaseModel, AlphanumericValidator, Feature
+from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature
 from larpmanager.models.event import BaseConceptModel
 from larpmanager.models.member import Member
 

@@ -28,7 +28,7 @@ from dateutil.relativedelta import relativedelta
 from django import forms
 from django.conf import settings as conf_settings
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm, PasswordResetForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
@@ -39,11 +39,11 @@ from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
 from django_registration.forms import RegistrationFormUniqueEmail
 
-from larpmanager.forms.base import MyForm, BaseAccForm
-from larpmanager.forms.utils import DatePickerInput, AssocMemberS2Widget, AssocMemberS2WidgetMulti
-from larpmanager.models.association import Association, MemberFieldType
-from larpmanager.models.member import Member, get_user_membership, Membership, VolunteerRegistry, Badge
 from larpmanager.cache.feature import get_assoc_features
+from larpmanager.forms.base import BaseAccForm, MyForm
+from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput
+from larpmanager.models.association import Association, MemberFieldType
+from larpmanager.models.member import Badge, Member, Membership, VolunteerRegistry, get_user_membership
 from larpmanager.utils.common import FileTypeValidator
 from larpmanager.utils.tasks import my_send_mail
 
@@ -54,7 +54,7 @@ class MyAuthForm(AuthenticationForm):
         fields = ["username", "password"]
 
     def __init__(self, *args, **kwargs):
-        super(MyAuthForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["username"].widget = forms.TextInput(
             attrs={"class": "form-control", "placeholder": "email", "maxlength": 70},
         )
@@ -137,13 +137,13 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 
 class MyPasswordResetConfirmForm(SetPasswordForm):
     def __init__(self, *args, **kwargs):
-        super(MyPasswordResetConfirmForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["new_password1"].widget.attrs["maxlength"] = 70
 
 
 class MyPasswordResetForm(PasswordResetForm):
     def __init__(self, *args, **kwargs):
-        super(MyPasswordResetForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["email"].widget.attrs["maxlength"] = 70
 
     def get_users(self, email):
@@ -265,7 +265,8 @@ class ResidenceField(forms.MultiValueField):
             forms.CharField(validators=[address_validator]),
             forms.CharField(validators=[house_number_validator]),
         ]
-        super().__init__(fields, widget=ResidenceWidget(attrs=None), *args, **kwargs)
+        widget = ResidenceWidget(attrs=None)
+        super().__init__(*args, fields=fields, widget=widget, **kwargs)
 
     def compress(self, values):
         return "|".join(values) if values else ""
@@ -273,7 +274,7 @@ class ResidenceField(forms.MultiValueField):
 
 class BaseProfileForm(MyForm):
     def __init__(self, *args, **kwargs):
-        super(BaseProfileForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.allowed = self.params["request"].assoc["members_fields"]
         assoc = Association.objects.get(pk=self.params["request"].assoc["id"])
@@ -336,7 +337,7 @@ class ProfileForm(BaseProfileForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(ProfileForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         for f in self.fields:
             if f in self.mandatory:
@@ -456,7 +457,7 @@ class ExeVolunteerRegistryForm(MyForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(ExeVolunteerRegistryForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
 
     def clean_member(self):
@@ -485,7 +486,7 @@ class ExeMemberForm(BaseProfileForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(ExeMemberForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if "profile" in self.fields:
             self.fields["profile"].required = False
 
@@ -524,7 +525,7 @@ class ExeBadgeForm(MyForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(ExeBadgeForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["members"].widget.set_assoc(self.params["a_id"])
 
 
@@ -538,7 +539,7 @@ class ExeProfileForm(MyForm):
         fields = ()
 
     def __init__(self, *args, **kwargs):
-        super(ExeProfileForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
         mandatory = set(self.instance.mandatory_fields.split(","))
@@ -592,13 +593,13 @@ class ExeProfileForm(MyForm):
         return choices
 
     def save(self, commit=True):
-        instance = super(ExeProfileForm, self).save(commit=commit)
+        instance = super().save(commit=commit)
 
         mandatory = []
         optional = []
 
         fields = self.get_members_fields()
-        for slug, verbose_name, help_text in fields:
+        for slug, _verbose_name, _help_text in fields:
             if slug not in self.cleaned_data:
                 continue
             value = self.cleaned_data[slug]

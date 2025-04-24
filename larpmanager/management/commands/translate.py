@@ -66,7 +66,7 @@ class Command(BaseCommand):
 
             po_path = join(loc_path, loc, "LC_MESSAGES", "django.po")
 
-            with open(po_path, "r") as fin:
+            with open(po_path) as fin:
                 data = fin.read().splitlines(True)
             lm = data.index("\n")
             data = data[lm:]

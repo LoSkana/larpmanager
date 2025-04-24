@@ -20,21 +20,20 @@
 
 import time
 
-from django.db.models.signals import post_save, pre_save, pre_delete
+from django.db.models.signals import post_save, pre_delete, pre_save
 from django.dispatch import receiver
-
-from django.utils.translation import activate, gettext_lazy as _
+from django.utils.translation import activate
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.access import get_event_organizers
-from larpmanager.models.association import hdr, AssocText, get_url
-from larpmanager.models.event import EventText, Run, PreRegistration
+from larpmanager.models.association import AssocText, get_url, hdr
+from larpmanager.models.event import EventText, PreRegistration, Run
 from larpmanager.models.member import get_user_membership
-
-from larpmanager.models.registration import Registration, RegistrationTicket, RegistrationCharacterRel
-from larpmanager.utils.registration import is_reg_provisional, get_registration_options
+from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
+from larpmanager.utils.registration import get_registration_options, is_reg_provisional
 from larpmanager.utils.tasks import background_auto, my_send_mail
-from larpmanager.utils.text import get_event_text, get_assoc_text
+from larpmanager.utils.text import get_assoc_text, get_event_text
 
 
 @background_auto(queue="acc")
@@ -134,11 +133,8 @@ def registration_options(instance):
 
 
 def registration_payments(instance, currency):
-    url = "%s/%s/%d" % (
-        get_url("accounting/pay", instance.run.event),
-        instance.run.event.slug,
-        instance.run.number,
-    )
+    f_url = get_url("accounting/pay", instance.run.event)
+    url = f"{f_url}/{instance.run.event.slug}/{instance.run.number}"
     data = {"url": url, "amount": instance.quota, "currency": currency, "deadline": instance.deadline}
 
     if instance.deadline > 0:
@@ -229,7 +225,7 @@ def update_registration_cancellation(instance):
 
 
 @receiver(pre_save, sender=Registration)
-def update_Registration(sender, instance, **kwargs):
+def update_registration(sender, instance, **kwargs):
     if instance.run and instance.run.development == Run.DONE:
         return
 
@@ -246,7 +242,7 @@ def update_Registration(sender, instance, **kwargs):
 
 
 @receiver(pre_delete, sender=Registration)
-def delete_Registration(sender, instance, *args, **kwargs):
+def delete_registration(sender, instance, *args, **kwargs):
     if instance.cancellation_date:
         return
 
@@ -271,7 +267,7 @@ def delete_Registration(sender, instance, *args, **kwargs):
 
 
 @receiver(pre_save, sender=PreRegistration)
-def update_PreRegistration(sender, instance, **kwargs):
+def update_pre_registration(sender, instance, **kwargs):
     # Send email when the profile is created the first time
     context = {"event": instance.event}
     if not instance.pk:

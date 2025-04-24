@@ -20,7 +20,7 @@
 
 from typing import Optional
 
-from django.db.models.signals import post_save, m2m_changed
+from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 
 from larpmanager.models.experience import AbilityPx, DeliveryPx, update_px
@@ -29,13 +29,13 @@ from larpmanager.utils.common import add_char_addit
 
 
 @receiver(post_save, sender=AbilityPx)
-def post_save_AbilityPx(sender, instance, *args, **kwargs):
+def post_save_ability_px(sender, instance, *args, **kwargs):
     for char in instance.characters.all():
         update_px(char)
 
 
 @receiver(post_save, sender=DeliveryPx)
-def post_save_DeliveryPx(sender, instance, *args, **kwargs):
+def post_save_delivery_px(sender, instance, *args, **kwargs):
     for char in instance.characters.all():
         char.save()
 

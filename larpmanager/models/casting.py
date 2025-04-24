@@ -21,13 +21,13 @@
 import re
 
 from django.db import models
-from django.db.models import UniqueConstraint, Q
+from django.db.models import Q, UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.base import BaseModel
 from larpmanager.models.event import Run
 from larpmanager.models.member import Member
-from larpmanager.models.writing import Writing, Character
+from larpmanager.models.writing import Character, Writing
 
 
 class QuestType(Writing):

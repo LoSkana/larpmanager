@@ -23,7 +23,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from typing import IO
 
-from larpmanager.models.accounting import PaymentInvoice, ElectronicInvoice
+from larpmanager.models.accounting import ElectronicInvoice, PaymentInvoice
 from larpmanager.utils.tasks import background_auto
 
 
@@ -56,9 +56,7 @@ def prepare_xml(inv, einvoice):
     ET.SubElement(id_trasmittente, "IdCodice").text = inv.assoc.get_config("einvoice_idcodice")
     ET.SubElement(dati_trasmissione, "ProgressivoInvio").text = str(einvoice.progressive).zfill(10)
     ET.SubElement(dati_trasmissione, "FormatoTrasmissione").text = "FPR12"
-    ET.SubElement(dati_trasmissione, "CodiceDestinatario").text = inv.assoc.get_config(
-        "einvoice_codicedestinatario"
-    )
+    ET.SubElement(dati_trasmissione, "CodiceDestinatario").text = inv.assoc.get_config("einvoice_codicedestinatario")
 
     # Transferor (data of the association)
     cedente_prestatore = ET.SubElement(header, "CedentePrestatore")

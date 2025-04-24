@@ -23,10 +23,18 @@ from django.urls import (
 )
 
 from larpmanager.views.exe import (
-    assoc as views_eas,
-    event as views_ee,
     accounting as views_ea,
+)
+from larpmanager.views.exe import (
+    assoc as views_eas,
+)
+from larpmanager.views.exe import (
+    event as views_ee,
+)
+from larpmanager.views.exe import (
     member as views_em,
+)
+from larpmanager.views.exe import (
     miscellanea as views_ems,
 )
 

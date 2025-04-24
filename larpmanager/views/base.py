@@ -21,11 +21,11 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from larpmanager.models.association import Association
 from larpmanager.cache.role import get_index_assoc_permissions
+from larpmanager.models.association import Association
 from larpmanager.utils.base import def_user_ctx
-from larpmanager.utils.miscellanea import check_centauri
 from larpmanager.utils.event import get_event_run, get_index_event_permissions
+from larpmanager.utils.miscellanea import check_centauri
 from larpmanager.views.larpmanager import lm_home
 from larpmanager.views.user.event import calendar
 

@@ -22,11 +22,11 @@ from datetime import datetime, timedelta
 
 from django.db.models import Count
 
+from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.casting import Casting
 from larpmanager.models.member import Member, Membership
 from larpmanager.models.registration import Registration, RegistrationTicket
-from larpmanager.cache.feature import get_assoc_features, get_event_features
 
 
 def get_users_data(ids):

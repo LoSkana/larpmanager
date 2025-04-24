@@ -21,7 +21,7 @@
 import pytest
 from playwright.sync_api import expect, sync_playwright
 
-from larpmanager.tests.utils import handle_error, login_orga, login_user, page_start, go_to, logout
+from larpmanager.tests.utils import go_to, handle_error, login_orga, login_user, logout, page_start
 
 
 @pytest.mark.django_db

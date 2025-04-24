@@ -25,26 +25,25 @@ from django.forms import Textarea
 from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.forms.base import MyForm, MyCssForm
+from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.utils import (
-    add_custom_field,
-    get_custom_field,
-    SlugInput,
-    remove_choice,
     AssocMemberS2WidgetMulti,
-    prepare_permissions_role,
-    save_permissions_role,
     DatePickerInput,
     DateTimePickerInput,
     EventS2Widget,
+    SlugInput,
     TemplateS2Widget,
+    add_custom_field,
+    get_custom_field,
+    prepare_permissions_role,
+    remove_choice,
+    save_permissions_role,
 )
-from larpmanager.models.access import EventRole, EventPermission
+from larpmanager.models.access import EventPermission, EventRole
 from larpmanager.models.base import FeatureModule
-from larpmanager.models.event import Event, EventText, EventButton, Run, ProgressStep, EventConfig
-from larpmanager.models.utils import get_all_element_configs, save_all_element_configs
+from larpmanager.models.event import Event, EventButton, EventConfig, EventText, ProgressStep, Run
+from larpmanager.models.utils import generate_id, get_all_element_configs, save_all_element_configs
 from larpmanager.utils.common import copy_class
-from larpmanager.models.utils import generate_id
 
 
 class EventCharactersPdfForm(forms.ModelForm):

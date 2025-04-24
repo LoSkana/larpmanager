@@ -4242,9 +4242,9 @@ msgstr "Startavgift, summa att betala"
 msgid " Hurry: only %(num)d tickets available."
 msgstr " Skynda dig: endast %(num)d biljetter finns kvar."
 
-#, python-format
-msgid "Completed module. Remaining: %(number)d"
-msgstr "Avslutad modul. Återstående: %(number)d"
+#, python-brace-format
+msgid "Completed module. Remaining: {number:d}"
+msgstr "Genomförd modul. Återstår: {number:d}"
 
 msgid "Apply a check on the tax code of players"
 msgstr "Tillämpa en kontroll av spelarnas skattekod"
@@ -4530,6 +4530,10 @@ msgstr "Födelseort som inte finns med i ISTAT:s förteckning"
 msgid "You are now logged in with your main account:"
 msgstr "Du är nu inloggad med ditt huvudkonto:"
 
+#, python-brace-format
+msgid "This text will be added to the sheet of {name}"
+msgstr "Denna text kommer att läggas till i arket för {name}"
+
 msgid "Extended description - maximum 5000 characters"
 msgstr "Utökad beskrivning - max 5000 tecken"
 
@@ -4612,10 +4616,6 @@ msgstr "På den här sidan kan du lägga till eller redigera en karaktär."
 
 msgid "This page allows you to edit a member's profile."
 msgstr "På den här sidan kan du redigera en medlems profil."
-
-#, python-format
-msgid "This text will be added to the sheet of %(name)s"
-msgstr "Denna text kommer att läggas till på arket för %(name)s"
 
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
@@ -5453,6 +5453,10 @@ msgstr ""
 msgid "The payment was not completed. Please contact us to find out why."
 msgstr "Betalningen slutfördes inte. Kontakta oss för att ta reda på varför."
 
+#, python-brace-format
+msgid "This text will be added to the sheet, in the plot paragraph {name}"
+msgstr "Denna text kommer att läggas till i arket, i plotparagrafen {name}"
+
 msgid "If checked, PG names will be automatically replaced by a reference"
 msgstr "Om markerat kommer PG-namn automatiskt att ersättas med en referens"
 
@@ -5525,10 +5529,6 @@ msgstr "Detta är istället adressen till din förenings administrationspanel:"
 msgid "To confirm your registration, please fill in your personal profile."
 msgstr ""
 "För att bekräfta din registrering, vänligen fyll i din personliga profil."
-
-#, python-format
-msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
-msgstr "Denna text kommer att läggas till på arket, i plotparagrafen %(name)s"
 
 msgid "This page allows you to add or edit a badge, or assign it  to users."
 msgstr ""

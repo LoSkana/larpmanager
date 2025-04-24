@@ -26,8 +26,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
-from larpmanager.models.access import EventRole, AssocRole
-from larpmanager.models.event import Run, Event
+from larpmanager.models.access import AssocRole, EventRole
+from larpmanager.models.event import Event, Run
 from larpmanager.models.registration import Registration
 from larpmanager.utils.auth import is_lm_admin
 
@@ -114,7 +114,7 @@ def reset_run_event_links(event):
 
 
 @receiver(post_save, sender=Registration)
-def post_save_Registration_event_links(sender, instance, **kwargs):
+def post_save_registration_event_links(sender, instance, **kwargs):
     if not instance.member:
         return
 

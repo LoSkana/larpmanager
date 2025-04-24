@@ -24,15 +24,15 @@ from datetime import datetime
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.models.accounting import PaymentInvoice
-from larpmanager.models.form import RegistrationQuestion, RegistrationAnswer, RegistrationChoice
-from larpmanager.models.member import get_user_membership, Membership
-from larpmanager.models.registration import RegistrationTicket, Registration, RegistrationCharacterRel
-from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
-from larpmanager.utils.common import get_time_diff_today, format_datetime
-from larpmanager.utils.exceptions import SignupException, WaitingException
+from larpmanager.models.accounting import PaymentInvoice
+from larpmanager.models.form import RegistrationAnswer, RegistrationChoice, RegistrationQuestion
+from larpmanager.models.member import Membership, get_user_membership
+from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
+from larpmanager.models.writing import Character, CharacterStatus
+from larpmanager.utils.common import format_datetime, get_time_diff_today
+from larpmanager.utils.exceptions import SignupError, WaitingError
 
 
 def registration_available(r, features=None, reg_counts=None):
@@ -359,10 +359,10 @@ def get_player_signup(request, ctx):
 def check_signup(request, ctx):
     reg = get_player_signup(request, ctx)
     if not reg:
-        raise SignupException(ctx["event"].slug, ctx["run"].number)
+        raise SignupError(ctx["event"].slug, ctx["run"].number)
 
     if reg.ticket and reg.ticket.tier == RegistrationTicket.WAITING:
-        raise WaitingException(ctx["event"].slug, ctx["run"].number)
+        raise WaitingError(ctx["event"].slug, ctx["run"].number)
 
 
 def check_assign_character(request, ctx):

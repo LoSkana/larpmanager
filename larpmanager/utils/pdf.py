@@ -22,39 +22,39 @@ import os.path
 import re
 import shutil
 import time
-from datetime import timedelta, datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import lxml.etree
 import pdfkit
 from django.conf import settings as conf_settings
-from django.db.models.signals import pre_delete, post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
-from django.http import HttpResponse, Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template import Context, Template
 from django.template.loader import get_template
 from django.utils.translation import gettext_lazy as _
 from xhtml2pdf import pisa
 
+from larpmanager.cache.character import get_event_cache_all
 from larpmanager.models.association import AssocText
 from larpmanager.models.casting import AssignmentTrait, Casting
-from larpmanager.models.miscellanea import Util, PlayerRelationship
+from larpmanager.models.miscellanea import PlayerRelationship, Util
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_all_element_configs
 from larpmanager.models.writing import (
+    Character,
     Faction,
     Handout,
     HandoutTemplate,
-    Character,
     Relationship,
 )
-from larpmanager.cache.character import get_event_cache_all
-from larpmanager.utils.character import get_character_relationships, get_character_sheet, get_char_check
+from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
 from larpmanager.utils.common import (
     get_handout,
 )
 from larpmanager.utils.event import get_event_run
-from larpmanager.utils.exceptions import NotFoundException
+from larpmanager.utils.exceptions import NotFoundError
 from larpmanager.utils.tasks import background_auto
 from larpmanager.utils.text import get_assoc_text
 
@@ -276,26 +276,26 @@ def print_volunteer_registry(ctx):
 
 
 @receiver(pre_delete, sender=Handout)
-def pre_delete_pdf_Handout(sender, instance, **kwargs):
+def pre_delete_pdf_handout(sender, instance, **kwargs):
     for run in instance.event.runs.all():
         os.remove(instance.get_filepath(run))
 
 
 @receiver(post_save, sender=Handout)
-def post_save_pdf_Handout(sender, instance, **kwargs):
+def post_save_pdf_handout(sender, instance, **kwargs):
     for run in instance.event.runs.all():
         os.remove(instance.get_filepath(run))
 
 
 @receiver(pre_delete, sender=HandoutTemplate)
-def pre_delete_pdf_HandoutTemplate(sender, instance, **kwargs):
+def pre_delete_pdf_handout_template(sender, instance, **kwargs):
     for run in instance.event.runs.all():
         for el in instance.handouts.all():
             os.remove(el.get_filepath(run))
 
 
 @receiver(post_save, sender=HandoutTemplate)
-def post_save_pdf_HandoutTemplate(sender, instance, **kwargs):
+def post_save_pdf_handout_template(sender, instance, **kwargs):
     for run in instance.event.runs.all():
         for el in instance.handouts.all():
             os.remove(el.get_filepath(run))
@@ -325,7 +325,7 @@ def remove_char_pdf(instance, single=None, runs=None):
 
 
 @receiver(pre_delete, sender=Character)
-def pre_delete_pdf_Character(sender, instance, **kwargs):
+def pre_delete_pdf_character(sender, instance, **kwargs):
     remove_run_pdf(instance.event)
     remove_char_pdf(instance)
 
@@ -337,29 +337,29 @@ def post_save_pdf_character(sender, instance, **kwargs):
 
 
 @receiver(pre_delete, sender=PlayerRelationship)
-def pre_delete_pdf_PlayerRelationship(sender, instance, **kwargs):
+def pre_delete_pdf_player_relationship(sender, instance, **kwargs):
     for el in instance.reg.rcrs.all():
         remove_char_pdf(el.character, instance.reg.run)
 
 
 @receiver(post_save, sender=PlayerRelationship)
-def post_save_pdf_PlayerRelationship(sender, instance, **kwargs):
+def post_save_pdf_player_relationship(sender, instance, **kwargs):
     for el in instance.reg.rcrs.all():
         remove_char_pdf(el.character, instance.reg.run)
 
 
 @receiver(pre_delete, sender=Relationship)
-def pre_delete_pdf_Relationship(sender, instance, **kwargs):
+def pre_delete_pdf_relationship(sender, instance, **kwargs):
     remove_char_pdf(instance.source)
 
 
 @receiver(post_save, sender=Relationship)
-def post_save_pdf_Relationship(sender, instance, **kwargs):
+def post_save_pdf_relationship(sender, instance, **kwargs):
     remove_char_pdf(instance.source)
 
 
 @receiver(pre_delete, sender=Faction)
-def pre_delete_pdf_Faction(sender, instance, **kwargs):
+def pre_delete_pdf_faction(sender, instance, **kwargs):
     for char in instance.event.characters.all():
         remove_char_pdf(char)
 
@@ -383,12 +383,12 @@ def remove_pdf_at(instance):
 
 
 @receiver(pre_delete, sender=AssignmentTrait)
-def pre_delete_pdf_AssignmentTrait(sender, instance, **kwargs):
+def pre_delete_pdf_assignment_trait(sender, instance, **kwargs):
     remove_pdf_at(instance)
 
 
 @receiver(post_save, sender=AssignmentTrait)
-def post_saveAssignmentTrait(sender, instance, created, **kwargs):
+def post_save_assignment_trait(sender, instance, created, **kwargs):
     if not instance.member or not created:
         return
 
@@ -417,7 +417,7 @@ def print_character_go(ctx, c):
         print_character_rel(ctx, True)
     except Http404:
         pass
-    except NotFoundException:
+    except NotFoundError:
         pass
 
 
