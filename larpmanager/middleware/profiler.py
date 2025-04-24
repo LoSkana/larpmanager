@@ -99,4 +99,6 @@ class ProfilerMiddleware:
 
     @staticmethod
     def is_ignorable_profiler(request):
+        if request.enviro not in ["prod", "staging"]:
+            return True
         return any(pattern.search(request.get_full_path()) for pattern in conf_settings.IGNORABLE_PROFILER_URLS)
