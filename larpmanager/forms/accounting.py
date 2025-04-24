@@ -148,7 +148,8 @@ class ExeOutflowForm(MyForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["run"].widget.set_assoc(self.params["a_id"])
+        if not self.auto_run:
+            self.fields["run"].widget.set_assoc(self.params["a_id"])
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
             self.initial["payment_date"] = datetime.now().date().isoformat()
             # ~ else:
@@ -163,7 +164,7 @@ class ExeOutflowForm(MyForm):
 class OrgaOutflowForm(ExeOutflowForm):
     def __init__(self, *args, **kwargs):
         self.auto_run = True
-        super(ExeOutflowForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class ExeInflowForm(MyForm):
@@ -181,7 +182,8 @@ class ExeInflowForm(MyForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["run"].widget.set_assoc(self.params["a_id"])
+        if not self.auto_run:
+            self.fields["run"].widget.set_assoc(self.params["a_id"])
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
             self.initial["payment_date"] = datetime.now().date().isoformat()
 
@@ -191,7 +193,7 @@ class ExeInflowForm(MyForm):
 class OrgaInflowForm(ExeInflowForm):
     def __init__(self, *args, **kwargs):
         self.auto_run = True
-        super(ExeInflowForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class ExeDonationForm(MyForm):
@@ -497,10 +499,11 @@ class ExePaymentSettingsForm(MyForm):
 
     @staticmethod
     def mask_string(data_string):
-        if len(data_string) > 6:
+        max_length_visible = 6
+        if len(data_string) > max_length_visible:
             first_three = data_string[:3]
             last_three = data_string[-3:]
-            middle_length = len(data_string) - 6
+            middle_length = len(data_string) - max_length_visible
             masked_middle = "*" * middle_length
             return first_three + masked_middle + last_three
         else:

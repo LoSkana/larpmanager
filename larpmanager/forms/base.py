@@ -54,7 +54,8 @@ class MyForm(forms.ModelForm):
             if k in kwargs:
                 self.params[k] = kwargs.pop(k)
 
-        self.auto_run = False
+        if not hasattr(self, "auto_run"):
+            self.auto_run = False
 
         super(forms.ModelForm, self).__init__(*args, **kwargs)
         # fix_help_text(self)
@@ -78,7 +79,7 @@ class MyForm(forms.ModelForm):
 
     def get_automatic_field(self):
         s = ["event", "assoc"]
-        if hasattr(self, "auto_run"):
+        if self.auto_run:
             s.extend(["run"])
         return s
 
@@ -93,10 +94,10 @@ class MyForm(forms.ModelForm):
                 self.fields["run"].widget = forms.HiddenInput()
         else:
             self.fields["run"].choices = [(r.id, str(r)) for r in runs]
-            del self.auto_run
+            self.auto_run = False
 
     def clean_run(self):
-        if hasattr(self, "auto_run"):
+        if self.auto_run:
             return self.params["run"]
         return self.cleaned_data["run"]
 
@@ -349,7 +350,7 @@ class BaseRegistrationForm(MyFormRun):
             self.init_paragraph(key, question, required)
 
         else:
-            key = self.init_custom(key, question, required)
+            key = self.init_custom(question, required)
 
         self.init_checks(active, key, orga, question)
 
@@ -365,7 +366,7 @@ class BaseRegistrationForm(MyFormRun):
             self.has_mandatory = True
             self.mandatory.append("id_" + key)
 
-    def init_custom(self, key, question, required):
+    def init_custom(self, question, required):
         key = question.typ
         mapping = {"faction": "factions_list"}
         if key in mapping:
