@@ -17,5 +17,8 @@ lint.select = ["F", "E", "B", "UP", "I", "N", "PL"] # F, E, B, UP, I, N, PL, D
 lint.ignore = ["ISC001", "E501"]
 extend-exclude = ["main"]
 
+[tool.ruff.lint.pylint]
+max-args = 8
+
 [tool.ruff.format]
 quote-style = "double"

@@ -186,7 +186,7 @@ class BaseRegistrationForm(MyFormRun):
         abstract = True
 
     def __init__(self, *args, **kwargs):
-        super().__init__(args, kwargs)
+        super().__init__(*args, **kwargs)
         self.choices = {}
         self.max_lengths = {}
         self.unavail = []
@@ -231,35 +231,39 @@ class BaseRegistrationForm(MyFormRun):
         options = all_options[question.id]
 
         for option in options:
-            name = option.get_form_text(run, cs=self.params["currency_symbol"])
-            if reg_count and option.max_available > 0:
-                found = False
-                if chosen:
-                    for choice in chosen:
-                        if choice.option_id == option.id:
-                            found = True
-
-                if not found:
-                    key = self.get_option_key_count(option)
-                    avail = option.max_available
-                    if key in reg_count:
-                        avail -= reg_count[key]
-                    if avail <= 0:
-                        self.unavail.append(option.id)
-                    else:
-                        name += " - (" + _("Available") + f" {avail})"
-
-                if hasattr(option, "tickets_map"):
-                    tickets_id = [i for i in option.tickets_map if i is not None]
-                    if tickets_id and run.reg.ticket_id not in tickets_id:
-                        continue
-
-            # no problem, go ahead
-            choices.append((option.id, name))
-            if option.details:
-                help_text += f'<p id="hp_{option.id}"><b>{option.display}</b> {option.details}</p>'
+            help_text = self.add_choice_option(choices, chosen, help_text, option, reg_count, run)
 
         return choices, help_text
+
+    def add_choice_option(self, choices, chosen, help_text, option, reg_count, run):
+        name = option.get_form_text(run, cs=self.params["currency_symbol"])
+        if reg_count and option.max_available > 0:
+            found = False
+            if chosen:
+                for choice in chosen:
+                    if choice.option_id == option.id:
+                        found = True
+
+            if not found:
+                key = self.get_option_key_count(option)
+                avail = option.max_available
+                if key in reg_count:
+                    avail -= reg_count[key]
+                if avail <= 0:
+                    self.unavail.append(option.id)
+                else:
+                    name += " - (" + _("Available") + f" {avail})"
+
+            if hasattr(option, "tickets_map"):
+                tickets_id = [i for i in option.tickets_map if i is not None]
+                if tickets_id and run.reg.ticket_id not in tickets_id:
+                    return
+
+        # no problem, go ahead
+        choices.append((option.id, name))
+        if option.details:
+            help_text += f'<p id="hp_{option.id}"><b>{option.display}</b> {option.details}</p>'
+        return help_text
 
     def clean(self):
         form_data = super().clean()
@@ -347,17 +351,19 @@ class BaseRegistrationForm(MyFormRun):
         else:
             key = self.init_custom(key, question, required)
 
+        self.init_checks(active, key, orga, question)
+
+        return key
+
+    def init_checks(self, active, key, orga, question):
         if not orga:
             self.fields[key].disabled = not active
             if question.max_length:
                 self.max_lengths[f"id_{key}"] = (question.max_length, question.typ)
-
         if question.status == QuestionStatus.MANDATORY:
             self.fields[key].label += " (*)"
             self.has_mandatory = True
             self.mandatory.append("id_" + key)
-
-        return key
 
     def init_custom(self, key, question, required):
         key = question.typ
@@ -447,46 +453,50 @@ class BaseRegistrationForm(MyFormRun):
             oid = self.cleaned_data[k]
 
             if q.typ == QuestionType.MULTIPLE:
-                if not oid:
-                    continue
-                oid = set([int(o) for o in oid])
-                if q.id in self.multiples:
-                    old = set([el.option_id for el in self.multiples[q.id]])
-                    for add in oid - old:
-                        self.choice_class.objects.create(
-                            **{"question": q, self.instance_key: instance, "option_id": add}
-                        )
-                    rem = old - oid
-                    self.choice_class.objects.filter(
-                        **{"question": q, self.instance_key: instance, "option_id__in": rem}
-                    ).delete()
-                else:
-                    for pkoid in oid:
-                        self.choice_class.objects.create(
-                            **{"question": q, self.instance_key: instance, "option_id": pkoid}
-                        )
-
+                self.save_multiple(instance, oid, q)
             elif q.typ == QuestionType.SINGLE:
-                if not oid:
-                    continue
-                oid = int(oid)
-                if q.id in self.singles:
-                    if oid == 0:
-                        self.singles[q.id].delete()
-                    elif oid != self.singles[q.id].option_id:
-                        self.singles[q.id].option_id = oid
-                        self.singles[q.id].save()
-                elif oid != 0:
-                    self.choice_class.objects.create(**{"question": q, self.instance_key: instance, "option_id": oid})
+                self.save_single(instance, oid, q)
             elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
-                if q.id in self.answers:
-                    if not oid:
-                        self.answers[q.id].delete()
-                    elif oid != self.answers[q.id].text:
-                        self.answers[q.id].text = oid
-                        self.answers[q.id].save()
-                else:
-                    self.answer_class.objects.create(**{"question": q, self.instance_key: instance, "text": oid})
+                self.save_reg_text(instance, oid, q)
+
+    def save_multiple(self, instance, oid, q):
+        if not oid:
+            return
+        oid = set([int(o) for o in oid])
+        if q.id in self.multiples:
+            old = set([el.option_id for el in self.multiples[q.id]])
+            for add in oid - old:
+                self.choice_class.objects.create(**{"question": q, self.instance_key: instance, "option_id": add})
+            rem = old - oid
+            self.choice_class.objects.filter(
+                **{"question": q, self.instance_key: instance, "option_id__in": rem}
+            ).delete()
+        else:
+            for pkoid in oid:
+                self.choice_class.objects.create(**{"question": q, self.instance_key: instance, "option_id": pkoid})
+
+    def save_single(self, instance, oid, q):
+        if not oid:
+            return
+        oid = int(oid)
+        if q.id in self.singles:
+            if oid == 0:
+                self.singles[q.id].delete()
+            elif oid != self.singles[q.id].option_id:
+                self.singles[q.id].option_id = oid
+                self.singles[q.id].save()
+        elif oid != 0:
+            self.choice_class.objects.create(**{"question": q, self.instance_key: instance, "option_id": oid})
+
+    def save_reg_text(self, instance, oid, q):
+        if q.id in self.answers:
+            if not oid:
+                self.answers[q.id].delete()
+            elif oid != self.answers[q.id].text:
+                self.answers[q.id].text = oid
+                self.answers[q.id].save()
+        else:
+            self.answer_class.objects.create(**{"question": q, self.instance_key: instance, "text": oid})
 
 
 class MyCssForm(MyForm):
