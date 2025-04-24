@@ -54,6 +54,8 @@ class MyForm(forms.ModelForm):
             if k in kwargs:
                 self.params[k] = kwargs.pop(k)
 
+        self.auto_run = False
+
         super(forms.ModelForm, self).__init__(*args, **kwargs)
         # fix_help_text(self)
 
@@ -154,6 +156,9 @@ class MyForm(forms.ModelForm):
         for el in self.get_config_fields():
             add_custom_field(el, res, self)
 
+    def get_config_fields(self):
+        return []
+
 
 class MyFormRun(MyForm):
     def __init__(self, *args, **kwargs):
@@ -180,14 +185,19 @@ class BaseRegistrationForm(MyFormRun):
     class Meta:
         abstract = True
 
-    def init_reg_question(self, instance, event):
-        self.answers = {}
-        self.singles = {}
-        self.multiples = {}
-        self.unavail = []
-
+    def __init__(self, *args, **kwargs):
+        super().__init__(args, kwargs)
+        self.choices = {}
         self.max_lengths = {}
+        self.unavail = []
+        self.multiples = {}
+        self.singles = {}
+        self.answers = {}
+        self.questions = []
+        self.has_mandatory = False
+        self.sections = {}
 
+    def init_reg_question(self, instance, event):
         if instance and instance.pk:
             for el in self.answer_class.objects.filter(**{self.instance_key: instance}):
                 self.answers[el.question_id] = el
@@ -199,8 +209,6 @@ class BaseRegistrationForm(MyFormRun):
                     if el.question_id not in self.multiples:
                         self.multiples[el.question_id] = set()
                     self.multiples[el.question_id].add(el)
-
-        self.choices = {}
 
         for r in self.get_options_query(event):
             if r.question_id not in self.choices:
@@ -325,78 +333,19 @@ class BaseRegistrationForm(MyFormRun):
                 required = question.status == QuestionStatus.MANDATORY
 
         if question.typ == QuestionType.MULTIPLE:
-            if orga:
-                (choices, help_text) = self.get_choice_options(self.choices, question)
-            else:
-                chosen = []
-                if question.id in self.multiples:
-                    chosen = self.multiples[question.id]
-                (choices, help_text) = self.get_choice_options(self.choices, question, chosen, reg_counts)
-
-            validators = [max_selections_validator(question.max_length)] if question.max_length else []
-
-            self.fields[key] = forms.MultipleChoiceField(
-                required=required,
-                choices=choices,
-                widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
-                label=question.display,
-                help_text=help_text,
-                validators=validators,
-            )
-            if question.id in self.multiples:
-                init = list([el.option_id for el in self.multiples[question.id]])
-                self.initial[key] = init
+            self.init_multiple(key, orga, question, reg_counts, required)
 
         elif question.typ == QuestionType.SINGLE:
-            if orga:
-                (choices, help_text) = self.get_choice_options(self.choices, question)
-                if question.id not in self.singles:
-                    choices.insert(0, (0, "--- " + _("Not selected")))
-            else:
-                chosen = []
-                if question.id in self.singles:
-                    chosen.append(self.singles[question.id])
-                (choices, help_text) = self.get_choice_options(self.choices, question, chosen, reg_counts)
-
-            self.fields[key] = forms.ChoiceField(
-                required=required,
-                choices=choices,
-                label=question.display,
-                help_text=help_text,
-            )
-            if question.id in self.singles:
-                self.initial[key] = self.singles[question.id].option_id
+            self.init_single(key, orga, question, reg_counts, required)
 
         elif question.typ == QuestionType.TEXT:
-            self.fields[key] = forms.CharField(
-                required=required,
-                max_length=question.max_length if question.max_length else 1000,
-                label=question.display,
-                help_text=question.description,
-            )
-            if question.id in self.answers:
-                self.initial[key] = self.answers[question.id].text
+            self.init_text(key, question, required)
 
         elif question.typ == QuestionType.PARAGRAPH:
-            self.fields[key] = forms.CharField(
-                required=required,
-                max_length=question.max_length if question.max_length else 5000,
-                widget=forms.Textarea,
-                label=question.display,
-                help_text=question.description,
-            )
-            if question.id in self.answers:
-                self.initial[key] = self.answers[question.id].text
+            self.init_paragraph(key, question, required)
 
         else:
-            key = question.typ
-            mapping = {"faction": "factions_list"}
-            if key in mapping:
-                key = mapping[key]
-            self.fields[key].label = question.display
-            self.fields[key].help_text = question.description
-            self.reorder_field(key)
-            self.fields[key].required = required
+            key = self.init_custom(key, question, required)
 
         if not orga:
             self.fields[key].disabled = not active
@@ -409,6 +358,78 @@ class BaseRegistrationForm(MyFormRun):
             self.mandatory.append("id_" + key)
 
         return key
+
+    def init_custom(self, key, question, required):
+        key = question.typ
+        mapping = {"faction": "factions_list"}
+        if key in mapping:
+            key = mapping[key]
+        self.fields[key].label = question.display
+        self.fields[key].help_text = question.description
+        self.reorder_field(key)
+        self.fields[key].required = required
+        return key
+
+    def init_paragraph(self, key, question, required):
+        self.fields[key] = forms.CharField(
+            required=required,
+            max_length=question.max_length if question.max_length else 5000,
+            widget=forms.Textarea,
+            label=question.display,
+            help_text=question.description,
+        )
+        if question.id in self.answers:
+            self.initial[key] = self.answers[question.id].text
+
+    def init_text(self, key, question, required):
+        self.fields[key] = forms.CharField(
+            required=required,
+            max_length=question.max_length if question.max_length else 1000,
+            label=question.display,
+            help_text=question.description,
+        )
+        if question.id in self.answers:
+            self.initial[key] = self.answers[question.id].text
+
+    def init_single(self, key, orga, question, reg_counts, required):
+        if orga:
+            (choices, help_text) = self.get_choice_options(self.choices, question)
+            if question.id not in self.singles:
+                choices.insert(0, (0, "--- " + _("Not selected")))
+        else:
+            chosen = []
+            if question.id in self.singles:
+                chosen.append(self.singles[question.id])
+            (choices, help_text) = self.get_choice_options(self.choices, question, chosen, reg_counts)
+        self.fields[key] = forms.ChoiceField(
+            required=required,
+            choices=choices,
+            label=question.display,
+            help_text=help_text,
+        )
+        if question.id in self.singles:
+            self.initial[key] = self.singles[question.id].option_id
+
+    def init_multiple(self, key, orga, question, reg_counts, required):
+        if orga:
+            (choices, help_text) = self.get_choice_options(self.choices, question)
+        else:
+            chosen = []
+            if question.id in self.multiples:
+                chosen = self.multiples[question.id]
+            (choices, help_text) = self.get_choice_options(self.choices, question, chosen, reg_counts)
+        validators = [max_selections_validator(question.max_length)] if question.max_length else []
+        self.fields[key] = forms.MultipleChoiceField(
+            required=required,
+            choices=choices,
+            widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
+            label=question.display,
+            help_text=help_text,
+            validators=validators,
+        )
+        if question.id in self.multiples:
+            init = list([el.option_id for el in self.multiples[question.id]])
+            self.initial[key] = init
 
     def reorder_field(self, key):
         # reorder the field, adding it now in the ordering
@@ -455,12 +476,9 @@ class BaseRegistrationForm(MyFormRun):
                     elif oid != self.singles[q.id].option_id:
                         self.singles[q.id].option_id = oid
                         self.singles[q.id].save()
-                else:
-                    if oid != 0:
-                        self.choice_class.objects.create(
-                            **{"question": q, self.instance_key: instance, "option_id": oid}
-                        )
-            elif q.typ == QuestionType.TEXT or q.typ == QuestionType.PARAGRAPH:
+                elif oid != 0:
+                    self.choice_class.objects.create(**{"question": q, self.instance_key: instance, "option_id": oid})
+            elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
                 if q.id in self.answers:
                     if not oid:
                         self.answers[q.id].delete()
@@ -484,6 +502,14 @@ class MyCssForm(MyForm):
             if css_delimeter in css:
                 css = css.split(css_delimeter)[0]
             self.initial[self.get_input_css()] = css
+
+    @staticmethod
+    def get_css_path(element):
+        return ""
+
+    @staticmethod
+    def get_input_css():
+        return ""
 
     def save(self, commit=True):
         self.instance.css_code = generate_id(32)

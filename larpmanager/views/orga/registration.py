@@ -214,28 +214,7 @@ def orga_registrations(request, s, n):
 
     get_event_cache_all(ctx)
 
-    ctx["reg_chars"] = {}
-    for _chnum, char in ctx["chars"].items():
-        if "player_id" not in char:
-            continue
-        if char["player_id"] not in ctx["reg_chars"]:
-            ctx["reg_chars"][char["player_id"]] = []
-        ctx["reg_chars"][char["player_id"]].append(char)
-
-    ctx["reg_tickets"] = {}
-    for t in RegistrationTicket.objects.filter(event=ctx["event"]).order_by("-price"):
-        t.emails = []
-        ctx["reg_tickets"][t.id] = t
-
-    ctx["reg_questions"] = {}
-    que = RegistrationQuestion.get_instance_questions(ctx["event"], ctx["features"])
-    for q in que:
-        if "reg_que_allowed" in ctx["features"] and q.allowed_map[0]:
-            run_id = ctx["run"].id
-            organizer = run_id in ctx["all_runs"] and 1 in ctx["all_runs"][run_id]
-            if not organizer and request.user.member.id not in q.allowed_map:
-                continue
-        ctx["reg_questions"][q.id] = q
+    orga_registrations_prepare(ctx, request)
 
     # if 'questbuilder' in ctx['features']:
     # ctx['reg_quests'] = {}
@@ -245,21 +224,9 @@ def orga_registrations(request, s, n):
     # if q.typ_id and q.typ_id not in ctx['reg_quest_types']:
     # ctx['reg_quest_types'][q.typ_id] = q.typ
 
-    if "discount" in ctx["features"]:
-        ctx["reg_discounts"] = {}
-        que = AccountingItemDiscount.objects.filter(reg__run=ctx["run"])
-        for aid in que.select_related("member", "disc").exclude(hide=True):
-            regs_list_add(ctx, "list_discount", aid.disc.name, aid.member)
-            if aid.member_id not in ctx["reg_discounts"]:
-                ctx["reg_discounts"][aid.member_id] = []
-            ctx["reg_discounts"][aid.member_id].append(aid.disc.name)
+    orga_registrations_discount(ctx)
 
-    if "custom_character" in ctx["features"]:
-        ctx["custom_info"] = []
-        for s in ["pronoun", "song", "public", "private", "profile"]:
-            if not ctx["event"].get_config("custom_character_" + s, False):
-                continue
-            ctx["custom_info"].append(s)
+    orga_registrations_custom_character(ctx)
 
     ctx["reg_all"] = {}
     times = {}
@@ -303,6 +270,51 @@ def orga_registrations(request, s, n):
     )
 
     return render(request, "larpmanager/orga/registration/registrations.html", ctx)
+
+
+def orga_registrations_custom_character(ctx):
+    if "custom_character" not in ctx["features"]:
+        return
+    ctx["custom_info"] = []
+    for field in ["pronoun", "song", "public", "private", "profile"]:
+        if not ctx["event"].get_config("custom_character_" + field, False):
+            continue
+        ctx["custom_info"].append(field)
+
+
+def orga_registrations_prepare(ctx, request):
+    ctx["reg_chars"] = {}
+    for _chnum, char in ctx["chars"].items():
+        if "player_id" not in char:
+            continue
+        if char["player_id"] not in ctx["reg_chars"]:
+            ctx["reg_chars"][char["player_id"]] = []
+        ctx["reg_chars"][char["player_id"]].append(char)
+    ctx["reg_tickets"] = {}
+    for t in RegistrationTicket.objects.filter(event=ctx["event"]).order_by("-price"):
+        t.emails = []
+        ctx["reg_tickets"][t.id] = t
+    ctx["reg_questions"] = {}
+    que = RegistrationQuestion.get_instance_questions(ctx["event"], ctx["features"])
+    for q in que:
+        if "reg_que_allowed" in ctx["features"] and q.allowed_map[0]:
+            run_id = ctx["run"].id
+            organizer = run_id in ctx["all_runs"] and 1 in ctx["all_runs"][run_id]
+            if not organizer and request.user.member.id not in q.allowed_map:
+                continue
+        ctx["reg_questions"][q.id] = q
+
+
+def orga_registrations_discount(ctx):
+    if "discount" not in ctx["features"]:
+        return
+    ctx["reg_discounts"] = {}
+    que = AccountingItemDiscount.objects.filter(reg__run=ctx["run"])
+    for aid in que.select_related("member", "disc").exclude(hide=True):
+        regs_list_add(ctx, "list_discount", aid.disc.name, aid.member)
+        if aid.member_id not in ctx["reg_discounts"]:
+            ctx["reg_discounts"][aid.member_id] = []
+        ctx["reg_discounts"][aid.member_id].append(aid.disc.name)
 
 
 @login_required
@@ -353,8 +365,9 @@ def orga_registrations_money(reg, ctx, cache_aip):
         else:
             dt["pay_a"] = dt["tot_payed"]
 
+    max_rounding = 0.05
     dt["remaining"] = dt["tot_iscr"] - dt["tot_payed"]
-    if abs(dt["remaining"]) < 0.05:
+    if abs(dt["remaining"]) < max_rounding:
         dt["remaining"] = 0
 
     if reg.ticket_id in ctx["reg_tickets"]:
@@ -436,8 +449,8 @@ def orga_registration_form_email(request, s, n):
         res[el.option_id]["names"].append(el.reg.member.display_member())
 
     n_res = {}
-    for opt_id in res:
-        n_res[cho[opt_id]] = res[opt_id]
+    for opt_id, value in res.items():
+        n_res[cho[opt_id]] = value
 
     return JsonResponse(n_res)
 
@@ -493,11 +506,10 @@ def orga_registrations_edit(request, s, n, num):
                 AssignmentTrait.objects.filter(run=ctx["run"], member=reg.member).exclude(typ__in=done).delete()
 
             return redirect("orga_registrations", s=ctx["event"].slug, n=ctx["run"].number)
+    elif num != 0:
+        form = OrgaRegistrationForm(instance=ctx["registration"], ctx=ctx)
     else:
-        if num != 0:
-            form = OrgaRegistrationForm(instance=ctx["registration"], ctx=ctx)
-        else:
-            form = OrgaRegistrationForm(ctx=ctx)
+        form = OrgaRegistrationForm(ctx=ctx)
 
     ctx["form"] = form
 

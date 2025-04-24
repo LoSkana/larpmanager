@@ -371,9 +371,8 @@ def get_login_url(context, provider, **params):
             query[REDIRECT_FIELD_NAME] = next
         elif process == "redirect":
             query[REDIRECT_FIELD_NAME] = request.get_full_path()
-    else:
-        if not query[REDIRECT_FIELD_NAME]:
-            del query[REDIRECT_FIELD_NAME]
+    elif not query[REDIRECT_FIELD_NAME]:
+        del query[REDIRECT_FIELD_NAME]
 
     url = reverse(provider + "_login")
     url = url + "?" + urlencode(query)

@@ -137,10 +137,9 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
         if eid is None:
             eid = request.assoc["id"]
             ctx["nonum"] = True
-    else:
-        if eid is None:
-            eid = ctx["event"].id
-            ctx["nonum"] = True
+    elif eid is None:
+        eid = ctx["event"].id
+        ctx["nonum"] = True
 
     if eid != 0:
         backend_get(ctx, typ, eid, afield)
@@ -289,9 +288,10 @@ def writing_edit_working_ticket(eid, request, res):
     if not ticket:
         ticket = {}
     others = []
+    ticket_life = 60
     for idx, el in ticket.items():
         (name, tm) = el
-        if idx != mid and now - tm < 60:
+        if idx != mid and now - tm < ticket_life:
             others.append(name)
         if len(others) > 0:
             warn = _("Warning! Other users are editing this item.")
@@ -299,4 +299,4 @@ def writing_edit_working_ticket(eid, request, res):
             warn += " " + _("List of other users:") + ", ".join(others)
             res["warn"] = warn
     ticket[mid] = (str(request.user.member), now)
-    cache.set(key, ticket, 60)
+    cache.set(key, ticket, ticket_life)

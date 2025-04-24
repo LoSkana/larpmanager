@@ -64,7 +64,6 @@ class RegistrationForm(BaseRegistrationForm):
         self.event = event
 
         self.profiles = {}
-        self.sections = {}
         self.section_descriptions = {}
 
         self.ticket = None
@@ -335,15 +334,13 @@ class RegistrationForm(BaseRegistrationForm):
                         and not self.has_ticket(RegistrationTicket.FILLER)
                     ):
                         continue
-                else:
-                    # Show Filler Tickets only if you have been fillers, or if the player is subscribed Filler
-                    if "filler" not in run.status and not self.has_ticket(RegistrationTicket.FILLER):
-                        continue
-
-            else:
-                # Show Primary Tickets only if he was primary, or if the player is registered
-                if "primary" not in run.status and not self.has_ticket_primary():
+                # Show Filler Tickets only if you have been fillers, or if the player is subscribed Filler
+                elif "filler" not in run.status and not self.has_ticket(RegistrationTicket.FILLER):
                     continue
+
+            # Show Primary Tickets only if he was primary, or if the player is registered
+            elif "primary" not in run.status and not self.has_ticket_primary():
+                continue
 
             # If the option has a maximum roof, check has not been reached
             if ticket.max_available > 0:
@@ -438,8 +435,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.fields["member"].widget.set_assoc(self.params["a_id"])
 
         self.allow_run_choice()
-
-        self.sections = {}
 
         reg_section = _("Registration")
         char_section = _("Character")

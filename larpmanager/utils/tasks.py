@@ -177,10 +177,9 @@ def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_t
                         use_tls=assoc.get_config("mail_server_use_tls", False),
                     )
             # See if we apply standard mail settings (if no event custom settings)
-            else:
-                if not event_settings:
-                    sender_email = f"{assoc.slug}@larpmanager.com"
-                    sender = f"{assoc.name} <{sender_email}>"
+            elif not event_settings:
+                sender_email = f"{assoc.slug}@larpmanager.com"
+                sender = f"{assoc.name} <{sender_email}>"
 
         if not connection:
             send_email_lock(sender_email)

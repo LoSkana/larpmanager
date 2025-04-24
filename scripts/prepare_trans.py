@@ -27,8 +27,8 @@ with open(trans_path, "w") as f:
     f.writelines("{% load i18n %}\n")
 
     for fixture in ["module", "feature", "assoc_permission", "event_permission"]:
-        with open(f"larpmanager/fixtures/{fixture}.yaml", "r", encoding="utf-8") as fixture:
-            data = yaml.safe_load(fixture)
+        with open(f"larpmanager/fixtures/{fixture}.yaml", encoding="utf-8") as fixture_file:
+            data = yaml.safe_load(fixture_file)
 
             for el in data:
                 for s in ["name", "descr"]:

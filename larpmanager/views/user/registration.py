@@ -364,8 +364,8 @@ def register(request, s, n, sc="", dis="", tk=0):
                     return render(request, "larpmanager/event/not_open.html", ctx)
 
     if "bring_friend" in ctx["features"]:
-        for s in ["bring_friend_discount_to", "bring_friend_discount_from"]:
-            ctx[s] = ctx["event"].get_config(s, 0)
+        for config_name in ["bring_friend_discount_to", "bring_friend_discount_from"]:
+            ctx[config_name] = ctx["event"].get_config(config_name, 0)
 
     get_user_membership(request.user.member, request.assoc["id"])
     ctx["member"] = request.user.member
@@ -540,14 +540,13 @@ def discount(request, s, n):
                     "msg": _("Discount only applicable if you are signed up for another run of the same event."),
                 }
             )
-    else:
-        if (
-            AccountingItemDiscount.objects.filter(
-                member=request.user.member, reg__run=ctx["run"], disc__typ=Discount.PLAYAGAIN
-            ).count()
-            > 0
-        ):
-            return JsonResponse({"res": "ko", "msg": _("Discount not combinable with other benefits.")})
+    elif (
+        AccountingItemDiscount.objects.filter(
+            member=request.user.member, reg__run=ctx["run"], disc__typ=Discount.PLAYAGAIN
+        ).count()
+        > 0
+    ):
+        return JsonResponse({"res": "ko", "msg": _("Discount not combinable with other benefits.")})
     # ~ # for pre-register, check some things
     # ~ if disc.typ == Discount.STANDARD:
     # ~ # check there are no discount stores a friend

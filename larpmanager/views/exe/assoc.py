@@ -141,12 +141,11 @@ def exe_features_go(request, ctx, num, on=True):
             messages.success(request, _("Feature activated"))
         else:
             messages.success(request, _("Feature already activated"))
+    elif ctx["feature"].slug not in request.assoc["features"]:
+        messages.success(request, _("Feature already deactivated"))
     else:
-        if ctx["feature"].slug not in request.assoc["features"]:
-            messages.success(request, _("Feature already deactivated"))
-        else:
-            assoc.features.remove(f_id)
-            messages.success(request, _("Feature deactivated"))
+        assoc.features.remove(f_id)
+        messages.success(request, _("Feature deactivated"))
 
     assoc.save()
 

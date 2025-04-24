@@ -423,8 +423,7 @@ def leaderboard(request, p=1):
     num_pages = math.ceil(len(member_list) / num_el)
     if p < 0:
         p = 1
-    if p > num_pages:
-        p = num_pages
+    p = min(p, num_pages)
     ctx = def_user_ctx(request)
     ctx.update(
         {
