@@ -19,3 +19,6 @@ extend-exclude = ["main"]
 
 [tool.ruff.format]
 quote-style = "double"
+
+[tool.ruff.lint.pylint]
+max-args = 8

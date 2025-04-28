@@ -29,11 +29,11 @@ msgstr "Ciao"
 msgid "Fee"
 msgstr "Fee"
 
-msgid "VAT"
-msgstr "IVA"
-
 msgid "Age"
 msgstr "Età"
+
+msgid "VAT"
+msgstr "IVA"
 
 msgid "Cap"
 msgstr "Cap"
@@ -89,11 +89,11 @@ msgstr "Info"
 msgid "Port"
 msgstr "Porta di connessione"
 
-msgid "Text"
-msgstr "Testo"
-
 msgid "Page"
 msgstr "Pagina"
+
+msgid "Text"
+msgstr "Testo"
 
 msgid "Name"
 msgstr "Nome"
@@ -459,14 +459,14 @@ msgstr "Introiti"
 msgid "Tokens"
 msgstr "Gettoni"
 
-msgid "Ticket"
-msgstr "Biglietto"
-
 msgid "Voting"
 msgstr "Votazioni"
 
 msgid "Active"
 msgstr "Attivo"
+
+msgid "Ticket"
+msgstr "Biglietto"
 
 msgid "Nature"
 msgstr "Natura"
@@ -663,14 +663,14 @@ msgstr "Autori"
 msgid "Tagline"
 msgstr "Tagline"
 
-msgid "Options"
-msgstr "Opzioni"
+msgid "Use TLD"
+msgstr "Utilizza TLD"
 
 msgid "Members"
 msgstr "Soci"
 
-msgid "Use TLD"
-msgstr "Utilizza TLD"
+msgid "Options"
+msgstr "Opzioni"
 
 msgid "VAT No."
 msgstr "Partita IVA"
@@ -888,11 +888,11 @@ msgstr "Impostazioni"
 msgid "Calendar"
 msgstr "Calendario"
 
+msgid "Centarui"
+msgstr "Centarui"
+
 msgid "Deadline"
 msgstr "Scadenza"
-
-msgid "Treasury"
-msgstr "Tesoreria"
 
 msgid "Reminder"
 msgstr "Promemoria"
@@ -900,8 +900,8 @@ msgstr "Promemoria"
 msgid "Holidays"
 msgstr "Festività"
 
-msgid "Centarui"
-msgstr "Centarui"
+msgid "Treasury"
+msgstr "Tesoreria"
 
 msgid "VAT rate"
 msgstr "Aliquota IVA"
@@ -1308,14 +1308,14 @@ msgstr "Aspetto"
 msgid "New signup"
 msgstr "Nuove iscrizioni"
 
-msgid "Token name"
-msgstr "Nome gettoni"
-
 msgid "Annual fee"
 msgstr "Quota annuale"
 
 msgid "Candidates"
 msgstr "Candidati"
+
+msgid "Token name"
+msgstr "Nome gettoni"
 
 msgid "Appointees"
 msgstr "Incaricati"
@@ -1536,11 +1536,11 @@ msgstr "Eventi passati"
 msgid "Carbon copy"
 msgstr "Copia carbone"
 
-msgid "Unique code"
-msgstr "Codice univoco"
-
 msgid "Probability"
 msgstr "Probabilità"
+
+msgid "Unique code"
+msgstr "Codice univoco"
 
 msgid "Fiscal code"
 msgstr "Codice fiscale"
@@ -1707,11 +1707,11 @@ msgstr "Transazioni"
 msgid "Disbursement"
 msgstr "Erogazione"
 
-msgid "Name credits"
-msgstr "Nome crediti"
-
 msgid "Host Address"
 msgstr "Indirizzo Host"
+
+msgid "Name credits"
+msgstr "Nome crediti"
 
 msgid "Payment fees"
 msgstr "Commissioni pagamento"
@@ -3200,11 +3200,11 @@ msgstr "Le iscrizioni sono aperte!"
 msgid "Expenses collaborators"
 msgstr "Spese collaboratori"
 
-msgid "Minimum age of members"
-msgstr "Età minima dei soci"
-
 msgid "Customised mail server"
 msgstr "Server mail personalizzato"
+
+msgid "Minimum age of members"
+msgstr "Età minima dei soci"
 
 msgid "Additional Preferences"
 msgstr "Preferenze addizionali"
@@ -6385,6 +6385,13 @@ msgid ""
 "event."
 msgstr ""
 "Sconto applicabile solo se sei iscritto ad un'altra run dello stesso evento"
+
+msgid ""
+"Sets how often reminder emails are sent, in days (if not set, no emails are "
+"sent)"
+msgstr ""
+"Imposta la frequenza di invio delle e-mail di promemoria, in giorni (se non "
+"è impostata, non vengono inviate e-mail)."
 
 #, python-format
 msgid ""

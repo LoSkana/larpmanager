@@ -331,7 +331,9 @@ class Command(BaseCommand):
         if check_holiday():
             return
 
-        deadline_days = int(run.event.assoc.get_config("deadline_days", 5))
+        deadline_days = int(run.event.assoc.get_config("deadline_days", 0))
+        if not deadline_days:
+            return
         if get_time_diff_today(run.start) % deadline_days != 1:
             return
 
