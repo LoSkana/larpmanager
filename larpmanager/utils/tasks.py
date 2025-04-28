@@ -184,7 +184,7 @@ def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_t
             # See if we apply standard mail settings (if no event custom settings)
             elif not event_settings:
                 sender_email = f"{assoc.slug}@larpmanager.com"
-                sender = f"{assoc.name} <{sender_email}>"
+                sender = f"{clean_sender(assoc.name)} <{sender_email}>"
 
         if not connection:
             send_email_lock(sender_email)
