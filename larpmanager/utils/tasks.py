@@ -130,7 +130,10 @@ def send_email_lock(sender_email):
 
 def clean_sender(name):
     name = name.replace(":", " ")
-    return name.split(",")[0]
+    name = name.split(",")[0]
+    name = re.sub(r"[^a-zA-Z0-9\s\-\']", "", name)
+    name = re.sub(r"\s+", " ", name).strip()
+    return name
 
 
 def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_to=None):
