@@ -29,11 +29,11 @@ msgstr "Ahoj"
 msgid "Fee"
 msgstr "Poplatek"
 
-msgid "VAT"
-msgstr "DPH"
-
 msgid "Age"
 msgstr "Věk"
+
+msgid "VAT"
+msgstr "DPH"
 
 msgid "Cap"
 msgstr "Čepice"
@@ -89,11 +89,11 @@ msgstr "Informace"
 msgid "Port"
 msgstr "Připojovací port"
 
-msgid "Text"
-msgstr "Text"
-
 msgid "Page"
 msgstr "Stránka"
+
+msgid "Text"
+msgstr "Text"
 
 msgid "Name"
 msgstr "Název"
@@ -459,14 +459,14 @@ msgstr "Představení"
 msgid "Tokens"
 msgstr "Žetony"
 
-msgid "Ticket"
-msgstr "Vstupenka"
-
 msgid "Voting"
 msgstr "Hlasování"
 
 msgid "Active"
 msgstr "Aktivní"
+
+msgid "Ticket"
+msgstr "Vstupenka"
 
 msgid "Nature"
 msgstr "Příroda"
@@ -663,14 +663,14 @@ msgstr "Autoři"
 msgid "Tagline"
 msgstr "Tagline"
 
-msgid "Options"
-msgstr "Možnosti"
+msgid "Use TLD"
+msgstr "Použití TLD"
 
 msgid "Members"
 msgstr "Členové"
 
-msgid "Use TLD"
-msgstr "Použití TLD"
+msgid "Options"
+msgstr "Možnosti"
 
 msgid "VAT No."
 msgstr "DIČ: CZ."
@@ -888,11 +888,11 @@ msgstr "Nastavení"
 msgid "Calendar"
 msgstr "Kalendář"
 
+msgid "Centarui"
+msgstr "Centarui"
+
 msgid "Deadline"
 msgstr "Termín"
-
-msgid "Treasury"
-msgstr "Pokladna"
 
 msgid "Reminder"
 msgstr "Připomínka"
@@ -900,8 +900,8 @@ msgstr "Připomínka"
 msgid "Holidays"
 msgstr "Dovolená"
 
-msgid "Centarui"
-msgstr "Centarui"
+msgid "Treasury"
+msgstr "Pokladna"
 
 msgid "VAT rate"
 msgstr "Sazba DPH"
@@ -1308,14 +1308,14 @@ msgstr "Vzhled"
 msgid "New signup"
 msgstr "Nové položky"
 
-msgid "Token name"
-msgstr "Název tokenu"
-
 msgid "Annual fee"
 msgstr "Roční poplatek"
 
 msgid "Candidates"
 msgstr "Kandidáti"
+
+msgid "Token name"
+msgstr "Název tokenu"
 
 msgid "Appointees"
 msgstr "Jmenovaní"
@@ -1536,11 +1536,11 @@ msgstr "Minulé události"
 msgid "Carbon copy"
 msgstr "Uhlíkové kopie"
 
-msgid "Unique code"
-msgstr "Jedinečný kód"
-
 msgid "Probability"
 msgstr "Pravděpodobnost"
+
+msgid "Unique code"
+msgstr "Jedinečný kód"
 
 msgid "Fiscal code"
 msgstr "Daňový zákoník"
@@ -1707,11 +1707,11 @@ msgstr "Transakce"
 msgid "Disbursement"
 msgstr "Výplata"
 
-msgid "Name credits"
-msgstr "Jmenné kredity"
-
 msgid "Host Address"
 msgstr "Adresa hostitele"
+
+msgid "Name credits"
+msgstr "Jmenné kredity"
 
 msgid "Payment fees"
 msgstr "Platební provize"
@@ -3200,11 +3200,11 @@ msgstr "Registrace jsou otevřeny!"
 msgid "Expenses collaborators"
 msgstr "Výdaje na zaměstnance"
 
-msgid "Minimum age of members"
-msgstr "Minimální věk členů"
-
 msgid "Customised mail server"
 msgstr "Přizpůsobený poštovní server"
+
+msgid "Minimum age of members"
+msgstr "Minimální věk členů"
 
 msgid "Additional Preferences"
 msgstr "Další předvolby"
@@ -6208,6 +6208,13 @@ msgid ""
 "event."
 msgstr ""
 "Sleva platí pouze v případě, že jste přihlášeni na jiný běh stejné akce."
+
+msgid ""
+"Sets how often reminder emails are sent, in days (if not set, no emails are "
+"sent)"
+msgstr ""
+"Nastavuje četnost zasílání e-mailů s připomenutím v dnech (pokud není "
+"nastaveno, nejsou zasílány žádné e-maily)."
 
 #, python-format
 msgid ""

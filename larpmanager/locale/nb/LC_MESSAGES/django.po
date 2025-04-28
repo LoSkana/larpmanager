@@ -29,11 +29,11 @@ msgstr "Hei"
 msgid "Fee"
 msgstr "Avgift"
 
-msgid "VAT"
-msgstr "MVA"
-
 msgid "Age"
 msgstr "Alder"
+
+msgid "VAT"
+msgstr "MVA"
 
 msgid "Cap"
 msgstr "Cap"
@@ -89,11 +89,11 @@ msgstr "Informasjon"
 msgid "Port"
 msgstr "Tilkoblingsport"
 
-msgid "Text"
-msgstr "Tekst"
-
 msgid "Page"
 msgstr "Side"
+
+msgid "Text"
+msgstr "Tekst"
 
 msgid "Name"
 msgstr "Navn"
@@ -459,14 +459,14 @@ msgstr "Introduksjoner"
 msgid "Tokens"
 msgstr "Poletter"
 
-msgid "Ticket"
-msgstr "Billett"
-
 msgid "Voting"
 msgstr "Stemmegivning"
 
 msgid "Active"
 msgstr "Aktiv"
+
+msgid "Ticket"
+msgstr "Billett"
 
 msgid "Nature"
 msgstr "Natur"
@@ -663,14 +663,14 @@ msgstr "Forfattere"
 msgid "Tagline"
 msgstr "Tagline"
 
-msgid "Options"
-msgstr "Alternativer"
+msgid "Use TLD"
+msgstr "Bruk TLD"
 
 msgid "Members"
 msgstr "Medlemmer"
 
-msgid "Use TLD"
-msgstr "Bruk TLD"
+msgid "Options"
+msgstr "Alternativer"
 
 msgid "VAT No."
 msgstr "MVA-nr."
@@ -888,11 +888,11 @@ msgstr "Innstillinger"
 msgid "Calendar"
 msgstr "Kalender"
 
+msgid "Centarui"
+msgstr "Centarui"
+
 msgid "Deadline"
 msgstr "Frist"
-
-msgid "Treasury"
-msgstr "Finansdepartementet"
 
 msgid "Reminder"
 msgstr "Påminnelse"
@@ -900,8 +900,8 @@ msgstr "Påminnelse"
 msgid "Holidays"
 msgstr "Ferier"
 
-msgid "Centarui"
-msgstr "Centarui"
+msgid "Treasury"
+msgstr "Finansdepartementet"
 
 msgid "VAT rate"
 msgstr "MVA-sats"
@@ -1308,14 +1308,14 @@ msgstr "Utseende"
 msgid "New signup"
 msgstr "Nye oppføringer"
 
-msgid "Token name"
-msgstr "Token-navn"
-
 msgid "Annual fee"
 msgstr "Årlig avgift"
 
 msgid "Candidates"
 msgstr "Kandidater"
+
+msgid "Token name"
+msgstr "Token-navn"
 
 msgid "Appointees"
 msgstr "Utnevnte"
@@ -1536,11 +1536,11 @@ msgstr "Tidligere arrangementer"
 msgid "Carbon copy"
 msgstr "Karbonkopi"
 
-msgid "Unique code"
-msgstr "Unik kode"
-
 msgid "Probability"
 msgstr "Sannsynlighet"
+
+msgid "Unique code"
+msgstr "Unik kode"
 
 msgid "Fiscal code"
 msgstr "Skatteregler"
@@ -1707,11 +1707,11 @@ msgstr "Transaksjoner"
 msgid "Disbursement"
 msgstr "Utbetaling"
 
-msgid "Name credits"
-msgstr "Navn studiepoeng"
-
 msgid "Host Address"
 msgstr "Vertsadresse"
+
+msgid "Name credits"
+msgstr "Navn studiepoeng"
 
 msgid "Payment fees"
 msgstr "Betalingskommisjoner"
@@ -3200,11 +3200,11 @@ msgstr "Registreringen er åpen!"
 msgid "Expenses collaborators"
 msgstr "Utgifter til ansatte"
 
-msgid "Minimum age of members"
-msgstr "Minimumsalder for medlemmer"
-
 msgid "Customised mail server"
 msgstr "Skreddersydd e-postserver"
+
+msgid "Minimum age of members"
+msgstr "Minimumsalder for medlemmer"
 
 msgid "Additional Preferences"
 msgstr "Ytterligere preferanser"
@@ -6294,6 +6294,13 @@ msgid ""
 msgstr ""
 "Rabatten gjelder kun hvis du er påmeldt til et annet løp i samme "
 "arrangement."
+
+msgid ""
+"Sets how often reminder emails are sent, in days (if not set, no emails are "
+"sent)"
+msgstr ""
+"Angir hvor ofte påminnelses-e-poster skal sendes, i dager (hvis ikke angitt,"
+" sendes ingen e-poster)"
 
 #, python-format
 msgid ""

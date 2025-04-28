@@ -128,6 +128,11 @@ def send_email_lock(sender_email):
         sleep(1)
 
 
+def clean_sender(name):
+    name = name.replace(":", " ")
+    return name.split(",")[0]
+
+
 def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_to=None):
     hdr = {}
     bcc = []
@@ -145,7 +150,7 @@ def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_t
             email_host_user = event.get_config("mail_server_host_user", "")
             if email_host_user:
                 sender_email = email_host_user
-                sender = f"{event.name.replace(':', ' ')} <{sender_email}>"
+                sender = f"{clean_sender(event.name)} <{sender_email}>"
                 send_email_lock(sender_email)
                 connection = get_connection(
                     host=event.get_config("mail_server_host", ""),
@@ -167,7 +172,7 @@ def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_t
             if email_host_user:
                 if not event_settings:
                     sender_email = email_host_user
-                    sender = f"{assoc.name} <{sender_email}>"
+                    sender = f"{clean_sender(assoc.name)} <{sender_email}>"
                     send_email_lock(sender_email)
                     connection = get_connection(
                         host=assoc.get_config("mail_server_host", ""),
@@ -177,10 +182,9 @@ def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_t
                         use_tls=assoc.get_config("mail_server_use_tls", False),
                     )
             # See if we apply standard mail settings (if no event custom settings)
-            else:
-                if not event_settings:
-                    sender_email = f"{assoc.slug}@larpmanager.com"
-                    sender = f"{assoc.name} <{sender_email}>"
+            elif not event_settings:
+                sender_email = f"{assoc.slug}@larpmanager.com"
+                sender = f"{assoc.name} <{sender_email}>"
 
         if not connection:
             send_email_lock(sender_email)

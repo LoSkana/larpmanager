@@ -29,11 +29,11 @@ msgstr "Hoi"
 msgid "Fee"
 msgstr "Vergoeding"
 
-msgid "VAT"
-msgstr "BTW"
-
 msgid "Age"
 msgstr "Leeftijd"
+
+msgid "VAT"
+msgstr "BTW"
 
 msgid "Cap"
 msgstr "Cap"
@@ -89,11 +89,11 @@ msgstr "Info"
 msgid "Port"
 msgstr "Aansluitpoort"
 
-msgid "Text"
-msgstr "Tekst"
-
 msgid "Page"
 msgstr "Pagina"
+
+msgid "Text"
+msgstr "Tekst"
 
 msgid "Name"
 msgstr "Naam"
@@ -459,14 +459,14 @@ msgstr "Inleidingen"
 msgid "Tokens"
 msgstr "Tokens"
 
-msgid "Ticket"
-msgstr "Ticket"
-
 msgid "Voting"
 msgstr "Stemmen"
 
 msgid "Active"
 msgstr "Actief"
+
+msgid "Ticket"
+msgstr "Ticket"
 
 msgid "Nature"
 msgstr "Natuur"
@@ -663,14 +663,14 @@ msgstr "Auteurs"
 msgid "Tagline"
 msgstr "Tagline"
 
-msgid "Options"
-msgstr "Opties"
+msgid "Use TLD"
+msgstr "TLD gebruiken"
 
 msgid "Members"
 msgstr "Leden"
 
-msgid "Use TLD"
-msgstr "TLD gebruiken"
+msgid "Options"
+msgstr "Opties"
 
 msgid "VAT No."
 msgstr "BTW-nr."
@@ -888,11 +888,11 @@ msgstr "Instellingen"
 msgid "Calendar"
 msgstr "Kalender"
 
+msgid "Centarui"
+msgstr "Centarui"
+
 msgid "Deadline"
 msgstr "Deadline"
-
-msgid "Treasury"
-msgstr "Schatkist"
 
 msgid "Reminder"
 msgstr "Herinnering"
@@ -900,8 +900,8 @@ msgstr "Herinnering"
 msgid "Holidays"
 msgstr "Vakantie"
 
-msgid "Centarui"
-msgstr "Centarui"
+msgid "Treasury"
+msgstr "Schatkist"
 
 msgid "VAT rate"
 msgstr "BTW-tarief"
@@ -1308,14 +1308,14 @@ msgstr "Uiterlijk"
 msgid "New signup"
 msgstr "Nieuwe inzendingen"
 
-msgid "Token name"
-msgstr "Token naam"
-
 msgid "Annual fee"
 msgstr "Jaarlijkse vergoeding"
 
 msgid "Candidates"
 msgstr "Kandidaten"
+
+msgid "Token name"
+msgstr "Token naam"
 
 msgid "Appointees"
 msgstr "Benoemingen"
@@ -1536,11 +1536,11 @@ msgstr "Gebeurtenissen in het verleden"
 msgid "Carbon copy"
 msgstr "Kopie"
 
-msgid "Unique code"
-msgstr "Unieke code"
-
 msgid "Probability"
 msgstr "Waarschijnlijkheid"
+
+msgid "Unique code"
+msgstr "Unieke code"
 
 msgid "Fiscal code"
 msgstr "Belastingcode"
@@ -1707,11 +1707,11 @@ msgstr "Transacties"
 msgid "Disbursement"
 msgstr "Uitbetaling"
 
-msgid "Name credits"
-msgstr "Naam kredieten"
-
 msgid "Host Address"
 msgstr "Adres"
+
+msgid "Name credits"
+msgstr "Naam kredieten"
 
 msgid "Payment fees"
 msgstr "Betaling Commissies"
@@ -3200,11 +3200,11 @@ msgstr "Inschrijvingen zijn geopend!"
 msgid "Expenses collaborators"
 msgstr "Personeelskosten"
 
-msgid "Minimum age of members"
-msgstr "Minimumleeftijd van leden"
-
 msgid "Customised mail server"
 msgstr "Aangepaste mailserver"
+
+msgid "Minimum age of members"
+msgstr "Minimumleeftijd van leden"
 
 msgid "Additional Preferences"
 msgstr "Extra voorkeuren"
@@ -6411,6 +6411,13 @@ msgid ""
 msgstr ""
 "Korting alleen van toepassing als je je hebt ingeschreven voor een andere "
 "run van hetzelfde evenement"
+
+msgid ""
+"Sets how often reminder emails are sent, in days (if not set, no emails are "
+"sent)"
+msgstr ""
+"Stelt in hoe vaak herinneringsmails worden verzonden, in dagen (als dit niet"
+" is ingesteld, worden er geen e-mails verzonden)"
 
 #, python-format
 msgid ""
