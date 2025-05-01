@@ -5609,10 +5609,6 @@ msgstr ""
 "Die Zahlung wurde nicht abgeschlossen. Bitte kontaktieren Sie uns, um den "
 "Grund herauszufinden."
 
-#, python-brace-format
-msgid "This text will be added to the sheet, in the plot paragraph {name}"
-msgstr "Dieser Text wird dem Blatt hinzugefügt, und zwar im Plotabsatz {name}"
-
 msgid "If checked, PG names will be automatically replaced by a reference"
 msgstr ""
 "Wenn diese Option aktiviert ist, werden PG-Namen automatisch durch eine "
@@ -5695,6 +5691,11 @@ msgid "To confirm your registration, please fill in your personal profile."
 msgstr ""
 "Um Ihre Anmeldung zu bestätigen, füllen Sie bitte Ihr persönliches Profil "
 "aus."
+
+#, python-format
+msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
+msgstr ""
+"Dieser Text wird dem Blatt hinzugefügt, und zwar in dem Absatz %(name)s"
 
 msgid "This page allows you to add or edit a badge, or assign it  to users."
 msgstr ""

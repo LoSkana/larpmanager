@@ -5412,10 +5412,6 @@ msgstr "Tato stránka shrnuje vlastnosti přiřazené postavám v běhu."
 msgid "The payment was not completed. Please contact us to find out why."
 msgstr "Platba nebyla dokončena. Kontaktujte nás a zjistěte, proč."
 
-#, python-brace-format
-msgid "This text will be added to the sheet, in the plot paragraph {name}"
-msgstr "Tento text bude přidán do listu v odstavci {name} pozemku."
-
 msgid "If checked, PG names will be automatically replaced by a reference"
 msgstr "Pokud je zaškrtnuto, názvy PG budou automaticky nahrazeny odkazem."
 
@@ -5477,6 +5473,10 @@ msgstr "Místo toho je to adresa panelu správy vašeho sdružení:"
 
 msgid "To confirm your registration, please fill in your personal profile."
 msgstr "Pro potvrzení registrace vyplňte svůj osobní profil."
+
+#, python-format
+msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
+msgstr "Tento text bude přidán do listu do odstavce grafu %(name)s"
 
 msgid "This page allows you to add or edit a badge, or assign it  to users."
 msgstr ""

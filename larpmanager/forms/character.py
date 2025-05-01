@@ -47,7 +47,7 @@ class CharacterCocreationForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__()
         text = kwargs.pop("text")
-        super(forms.Form, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         k = "co_creation_answer"
         self.fields[k] = forms.CharField(
             widget=TinyMCE(attrs={"cols": 80, "rows": 10}),
@@ -398,7 +398,7 @@ class OrgaCharacterForm(CharacterForm):
             self.fields[field] = forms.CharField(
                 widget=TinyMCE(attrs={"cols": 80, "rows": 10}),
                 label=plot,
-                help_text=_("This text will be added to the sheet, in the plot paragraph {name}".format(name=plot)),
+                help_text=_("This text will be added to the sheet, in the plot paragraph %(name)s") % {"name": plot},
                 required=False,
             )
             if pl[0] in pcr:
@@ -547,6 +547,9 @@ class OrgaCharacterQuestionForm(MyForm):
     class Meta:
         model = CharacterQuestion
         exclude = ["order"]
+        widgets = {
+            "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

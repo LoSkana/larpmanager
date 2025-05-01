@@ -91,7 +91,7 @@ class CharacterQuestion(BaseModel):
     display = models.CharField(max_length=100, help_text=_("Question display text"))
 
     description = models.CharField(
-        max_length=500, help_text=_("Extended description (will be shown in gray, in small)"), blank=True
+        max_length=1000, help_text=_("Extended description (will be shown in gray, in small)"), blank=True
     )
 
     order = models.IntegerField(default=0, help_text=_("Display order with respect to all questions"))
@@ -253,7 +253,7 @@ class RegistrationQuestion(BaseModel):
     display = models.CharField(max_length=100, help_text=_("Question display text"))
 
     description = models.CharField(
-        max_length=500, help_text=_("Extended description (will be shown in gray, in small)"), blank=True
+        max_length=1000, help_text=_("Extended description (will be shown in gray, in small)"), blank=True
     )
 
     order = models.IntegerField(default=0, help_text=_("Display order with respect to all questions"))
