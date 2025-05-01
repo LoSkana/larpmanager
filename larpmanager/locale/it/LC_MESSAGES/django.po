@@ -333,6 +333,12 @@ msgstr "Cover"
 msgid "Title"
 msgstr "Titolo"
 
+msgid "Order"
+msgstr "Ordine"
+
+msgid "Image"
+msgstr "Immagine"
+
 msgid "Photo"
 msgstr "Foto"
 
@@ -395,9 +401,6 @@ msgstr "Pagato"
 
 msgid "Users"
 msgstr "Utenti"
-
-msgid "Order"
-msgstr "Ordine"
 
 msgid "other"
 msgstr "altro"
@@ -750,6 +753,15 @@ msgstr "Concept"
 msgid "Special"
 msgstr "Special"
 
+msgid "Display"
+msgstr "Display"
+
+msgid "Section"
+msgstr "Sezione"
+
+msgid "Allowed"
+msgstr "Consentito"
+
 msgid "Support"
 msgstr "Support"
 
@@ -968,6 +980,12 @@ msgstr "Assegnamento"
 
 msgid "Disabled"
 msgstr "Disabilitata"
+
+msgid "Editable"
+msgstr "Modificabile"
+
+msgid "Giftable"
+msgstr "Regalabile"
 
 msgid "Passport"
 msgstr "Passaporto"
@@ -1196,6 +1214,9 @@ msgstr "Annullato"
 
 msgid "Concluded"
 msgstr "Concluso"
+
+msgid "Printable"
+msgstr "Stampabile"
 
 msgid "First aid"
 msgstr "Primo soccorso"
@@ -1581,6 +1602,9 @@ msgstr "Colore link"
 msgid "Text (long)"
 msgstr "Testo (lungo)"
 
+msgid "Ticket list"
+msgstr "Elenco dei biglietti"
+
 msgid "Nationality"
 msgstr "Nazionalità"
 
@@ -1775,6 +1799,9 @@ msgstr "Testo (corto)"
 
 msgid "Presentation"
 msgstr "Presentazione"
+
+msgid "Faction list"
+msgstr "Elenco delle fazioni"
 
 msgid "Waiting list"
 msgstr "In attesa"
@@ -2581,9 +2608,6 @@ msgstr "Mail iscrizione"
 
 msgid "Registration code"
 msgstr "Codice di iscrizione"
-
-msgid "Explanatory image"
-msgstr "Immagine esplicativa"
 
 msgid "Activation failed"
 msgstr "Attivazione fallita"
@@ -5105,6 +5129,10 @@ msgstr ""
 msgid "Maximum number of waiting spots to manage (0 for infinite)"
 msgstr "Numero massimo di waiting da gestire (0 per infiniti)"
 
+msgid "(Optional) an image that will be shown inside the question"
+msgstr ""
+"(Facoltativo) un'immagine che verrà visualizzata all'interno della domanda"
+
 msgid "Indicates the functional role / archetype of the character"
 msgstr "Indica il ruolo / archetipo funzionale del personaggio"
 
@@ -7298,6 +7326,13 @@ msgstr ""
 "prestissimo un'esperienza senza precedenti!"
 
 msgid ""
+"This field can be edited by the player only when the character is in one of "
+"the selected statuses"
+msgstr ""
+"Questo campo può essere modificato dal giocatore solo quando il personaggio "
+"si trova in uno degli stati selezionati."
+
+msgid ""
 "This page summarises the roles to be assigned in order to use the functions "
 "concerning the event."
 msgstr ""
@@ -7688,6 +7723,13 @@ msgid ""
 msgstr ""
 "Per confermare le tue iscrizioni agli eventi, effettua il pagamento entro "
 "una settimana. Puoi effettuarlo da qui:"
+
+msgid ""
+"The question will be shown in the selected section (if left empty it will "
+"shown at the start of the form)"
+msgstr ""
+"La domanda verrà visualizzata nella sezione selezionata (se lasciata vuota, "
+"verrà visualizzata all'inizio del modulo)."
 
 msgid ""
 "This page shows the list of members, divided by type: applicants, approved, "

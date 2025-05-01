@@ -333,6 +333,12 @@ msgstr "Omslag"
 msgid "Title"
 msgstr "Titel"
 
+msgid "Order"
+msgstr "Bestel"
+
+msgid "Image"
+msgstr "Afbeelding"
+
 msgid "Photo"
 msgstr "Foto's"
 
@@ -395,9 +401,6 @@ msgstr "Betaald"
 
 msgid "Users"
 msgstr "Gebruikers"
-
-msgid "Order"
-msgstr "Bestel"
 
 msgid "other"
 msgstr "meer"
@@ -750,6 +753,15 @@ msgstr "Concept"
 msgid "Special"
 msgstr "Speciaal"
 
+msgid "Display"
+msgstr "Weergave"
+
+msgid "Section"
+msgstr "Sectie"
+
+msgid "Allowed"
+msgstr "Toegestaan"
+
 msgid "Support"
 msgstr "Ondersteuning"
 
@@ -968,6 +980,12 @@ msgstr "Toewijzen."
 
 msgid "Disabled"
 msgstr "Uitgeschakeld"
+
+msgid "Editable"
+msgstr "Bewerkbaar"
+
+msgid "Giftable"
+msgstr "Cadeaubaar"
 
 msgid "Passport"
 msgstr "Paspoort"
@@ -1196,6 +1214,9 @@ msgstr "Geannuleerd"
 
 msgid "Concluded"
 msgstr "Afgesloten"
+
+msgid "Printable"
+msgstr "Afdrukbaar"
 
 msgid "First aid"
 msgstr "Eerste hulp"
@@ -1581,6 +1602,9 @@ msgstr "Kleuren"
 msgid "Text (long)"
 msgstr "Tekst (lang)"
 
+msgid "Ticket list"
+msgstr "Ticketlijst"
+
 msgid "Nationality"
 msgstr "Nationaliteit"
 
@@ -1775,6 +1799,9 @@ msgstr "Tekst (kort)"
 
 msgid "Presentation"
 msgstr "Presentatie"
+
+msgid "Faction list"
+msgstr "Factielijst"
 
 msgid "Waiting list"
 msgstr "Wachten"
@@ -2581,9 +2608,6 @@ msgstr "Registratie e-mail"
 
 msgid "Registration code"
 msgstr "Toegangscode"
-
-msgid "Explanatory image"
-msgstr "Verklarende afbeelding"
 
 msgid "Activation failed"
 msgstr "Activering mislukt"
@@ -5135,6 +5159,9 @@ msgstr ""
 msgid "Maximum number of waiting spots to manage (0 for infinite)"
 msgstr "Maximum aantal wachttijden dat moet worden beheerd (0 voor oneindig)"
 
+msgid "(Optional) an image that will be shown inside the question"
+msgstr "(Optioneel) een afbeelding die in de vraag wordt getoond"
+
 msgid "Indicates the functional role / archetype of the character"
 msgstr "Geeft de functionele rol/het archetype van het personage aan"
 
@@ -7322,6 +7349,13 @@ msgstr ""
 "iets ongekends zal beleven!"
 
 msgid ""
+"This field can be edited by the player only when the character is in one of "
+"the selected statuses"
+msgstr ""
+"Dit veld kan alleen door de speler worden bewerkt als het personage zich in "
+"een van de geselecteerde statussen bevindt."
+
+msgid ""
 "This page summarises the roles to be assigned in order to use the functions "
 "concerning the event."
 msgstr ""
@@ -7711,6 +7745,13 @@ msgid ""
 msgstr ""
 "Om de registratie voor je evenement te bevestigen, moet je binnen een week "
 "betalen. U kunt het hier doen:"
+
+msgid ""
+"The question will be shown in the selected section (if left empty it will "
+"shown at the start of the form)"
+msgstr ""
+"De vraag wordt getoond in de geselecteerde sectie (als deze leeg blijft, "
+"wordt deze aan het begin van het formulier getoond)."
 
 msgid ""
 "This page shows the list of members, divided by type: applicants, approved, "

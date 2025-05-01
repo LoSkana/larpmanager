@@ -333,6 +333,12 @@ msgstr "Skydd"
 msgid "Title"
 msgstr "Titel"
 
+msgid "Order"
+msgstr "Order"
+
+msgid "Image"
+msgstr "Bild"
+
 msgid "Photo"
 msgstr "Foton"
 
@@ -395,9 +401,6 @@ msgstr "Betald"
 
 msgid "Users"
 msgstr "Användare"
-
-msgid "Order"
-msgstr "Order"
 
 msgid "other"
 msgstr "mer"
@@ -750,6 +753,15 @@ msgstr "Koncept"
 msgid "Special"
 msgstr "Särskild"
 
+msgid "Display"
+msgstr "Display"
+
+msgid "Section"
+msgstr "Sektion"
+
+msgid "Allowed"
+msgstr "Tillåtet"
+
 msgid "Support"
 msgstr "Stöd"
 
@@ -968,6 +980,12 @@ msgstr "Tilldela."
 
 msgid "Disabled"
 msgstr "Inaktiverad"
+
+msgid "Editable"
+msgstr "Redigerbar"
+
+msgid "Giftable"
+msgstr "Gåva"
 
 msgid "Passport"
 msgstr "Pass"
@@ -1196,6 +1214,9 @@ msgstr "Avbokad"
 
 msgid "Concluded"
 msgstr "Avslutning"
+
+msgid "Printable"
+msgstr "Utskriftsbar"
 
 msgid "First aid"
 msgstr "Första hjälpen"
@@ -1581,6 +1602,9 @@ msgstr "Färglänkar"
 msgid "Text (long)"
 msgstr "Text (lång)"
 
+msgid "Ticket list"
+msgstr "Biljettlista"
+
 msgid "Nationality"
 msgstr "Nationalitet"
 
@@ -1775,6 +1799,9 @@ msgstr "Text (kort)"
 
 msgid "Presentation"
 msgstr "Presentation"
+
+msgid "Faction list"
+msgstr "Lista över fraktioner"
 
 msgid "Waiting list"
 msgstr "Väntar"
@@ -2581,9 +2608,6 @@ msgstr "Registreringsbrev"
 
 msgid "Registration code"
 msgstr "Ingångskod"
-
-msgid "Explanatory image"
-msgstr "Förklarande bild"
 
 msgid "Activation failed"
 msgstr "Aktivering misslyckades"
@@ -5102,6 +5126,9 @@ msgstr "Om markerat, synliggörs de workshops som spelarna kan fylla i"
 msgid "Maximum number of waiting spots to manage (0 for infinite)"
 msgstr "Maximalt antal väntetider som ska hanteras (0 för oändligt)"
 
+msgid "(Optional) an image that will be shown inside the question"
+msgstr "(Valfritt) en bild som kommer att visas i frågan"
+
 msgid "Indicates the functional role / archetype of the character"
 msgstr "Anger rollpersonens funktionella roll/arketyp"
 
@@ -7217,6 +7244,13 @@ msgstr ""
 " uppleva något utan motstycke!"
 
 msgid ""
+"This field can be edited by the player only when the character is in one of "
+"the selected statuses"
+msgstr ""
+"Detta fält kan endast redigeras av spelaren när rollfiguren befinner sig i "
+"någon av de valda statusarna"
+
+msgid ""
 "This page summarises the roles to be assigned in order to use the functions "
 "concerning the event."
 msgstr ""
@@ -7607,6 +7641,13 @@ msgid ""
 msgstr ""
 "För att bekräfta dina eventregistreringar, vänligen gör din betalning inom "
 "en vecka. Du kan göra det härifrån:"
+
+msgid ""
+"The question will be shown in the selected section (if left empty it will "
+"shown at the start of the form)"
+msgstr ""
+"Frågan kommer att visas i det valda avsnittet (om den lämnas tom visas den i"
+" början av formuläret)"
 
 msgid ""
 "This page shows the list of members, divided by type: applicants, approved, "

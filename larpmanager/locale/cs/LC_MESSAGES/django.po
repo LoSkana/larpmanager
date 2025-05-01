@@ -333,6 +333,12 @@ msgstr "Obálka"
 msgid "Title"
 msgstr "Název"
 
+msgid "Order"
+msgstr "Objednávka"
+
+msgid "Image"
+msgstr "Obrázek"
+
 msgid "Photo"
 msgstr "Fotografie"
 
@@ -395,9 +401,6 @@ msgstr "Placené"
 
 msgid "Users"
 msgstr "Uživatelé"
-
-msgid "Order"
-msgstr "Objednávka"
 
 msgid "other"
 msgstr "více"
@@ -750,6 +753,15 @@ msgstr "Koncept"
 msgid "Special"
 msgstr "Speciální"
 
+msgid "Display"
+msgstr "Zobrazit"
+
+msgid "Section"
+msgstr "Sekce"
+
+msgid "Allowed"
+msgstr "Povolené"
+
 msgid "Support"
 msgstr "Podpora"
 
@@ -968,6 +980,12 @@ msgstr "Přiřaďte."
 
 msgid "Disabled"
 msgstr "Bezbariérový"
+
+msgid "Editable"
+msgstr "Upravitelné"
+
+msgid "Giftable"
+msgstr "Dárkové"
 
 msgid "Passport"
 msgstr "Pas"
@@ -1196,6 +1214,9 @@ msgstr "Zrušeno"
 
 msgid "Concluded"
 msgstr "Uzavřeno"
+
+msgid "Printable"
+msgstr "Tisknutelné"
 
 msgid "First aid"
 msgstr "První pomoc"
@@ -1581,6 +1602,9 @@ msgstr "Barevné odkazy"
 msgid "Text (long)"
 msgstr "Text (dlouhý)"
 
+msgid "Ticket list"
+msgstr "Seznam vstupenek"
+
 msgid "Nationality"
 msgstr "Státní příslušnost"
 
@@ -1775,6 +1799,9 @@ msgstr "Text (krátký)"
 
 msgid "Presentation"
 msgstr "Prezentace"
+
+msgid "Faction list"
+msgstr "Seznam frakcí"
 
 msgid "Waiting list"
 msgstr "Čekání"
@@ -2581,9 +2608,6 @@ msgstr "Registrační pošta"
 
 msgid "Registration code"
 msgstr "Vstupní kód"
-
-msgid "Explanatory image"
-msgstr "Vysvětlující obrázek"
 
 msgid "Activation failed"
 msgstr "Aktivace se nezdařila"
@@ -5086,6 +5110,9 @@ msgstr "Pokud je zaškrtnuto, zviditelní se dílny, které mohou hráči vyplni
 msgid "Maximum number of waiting spots to manage (0 for infinite)"
 msgstr "Maximální počet čekání, která mají být spravována (0 pro nekonečno)"
 
+msgid "(Optional) an image that will be shown inside the question"
+msgstr "(nepovinné) obrázek, který se zobrazí uvnitř otázky"
+
 msgid "Indicates the functional role / archetype of the character"
 msgstr "Označuje funkční roli/archetyp postavy."
 
@@ -7084,6 +7111,13 @@ msgstr ""
 "nevídaného!"
 
 msgid ""
+"This field can be edited by the player only when the character is in one of "
+"the selected statuses"
+msgstr ""
+"Toto pole může hráč upravovat, pouze pokud je postava v jednom z vybraných "
+"stavů."
+
+msgid ""
 "This page summarises the roles to be assigned in order to use the functions "
 "concerning the event."
 msgstr ""
@@ -7471,6 +7505,13 @@ msgid ""
 msgstr ""
 "Pro potvrzení registrace na akci proveďte platbu do jednoho týdne. Můžete ji"
 " provést zde:"
+
+msgid ""
+"The question will be shown in the selected section (if left empty it will "
+"shown at the start of the form)"
+msgstr ""
+"Otázka se zobrazí ve vybrané části (pokud zůstane prázdná, zobrazí se na "
+"začátku formuláře)."
 
 msgid ""
 "This page shows the list of members, divided by type: applicants, approved, "

@@ -333,6 +333,12 @@ msgstr "Omslag"
 msgid "Title"
 msgstr "Tittel"
 
+msgid "Order"
+msgstr "Bestilling"
+
+msgid "Image"
+msgstr "Bilde"
+
 msgid "Photo"
 msgstr "Bilder"
 
@@ -395,9 +401,6 @@ msgstr "Betalt"
 
 msgid "Users"
 msgstr "Brukere"
-
-msgid "Order"
-msgstr "Bestilling"
 
 msgid "other"
 msgstr "mer"
@@ -750,6 +753,15 @@ msgstr "Konsept"
 msgid "Special"
 msgstr "Spesielle"
 
+msgid "Display"
+msgstr "Visning"
+
+msgid "Section"
+msgstr "Seksjon"
+
+msgid "Allowed"
+msgstr "Tillatt"
+
 msgid "Support"
 msgstr "Støtte"
 
@@ -968,6 +980,12 @@ msgstr "Tilordne."
 
 msgid "Disabled"
 msgstr "Deaktivert"
+
+msgid "Editable"
+msgstr "Redigerbar"
+
+msgid "Giftable"
+msgstr "Kan gis i gave"
 
 msgid "Passport"
 msgstr "Pass"
@@ -1196,6 +1214,9 @@ msgstr "Avlyst"
 
 msgid "Concluded"
 msgstr "Avsluttet"
+
+msgid "Printable"
+msgstr "Kan skrives ut"
 
 msgid "First aid"
 msgstr "Førstehjelp"
@@ -1581,6 +1602,9 @@ msgstr "Fargelinjer"
 msgid "Text (long)"
 msgstr "Tekst (lang)"
 
+msgid "Ticket list"
+msgstr "Billettliste"
+
 msgid "Nationality"
 msgstr "Nasjonalitet"
 
@@ -1775,6 +1799,9 @@ msgstr "Tekst (kort)"
 
 msgid "Presentation"
 msgstr "Presentasjon"
+
+msgid "Faction list"
+msgstr "Liste over fraksjoner"
 
 msgid "Waiting list"
 msgstr "Venter"
@@ -2581,9 +2608,6 @@ msgstr "Registreringspost"
 
 msgid "Registration code"
 msgstr "Inngangskode"
-
-msgid "Explanatory image"
-msgstr "Forklarende bilde"
 
 msgid "Activation failed"
 msgstr "Aktivering mislyktes"
@@ -5102,6 +5126,9 @@ msgstr "Hvis avkrysset, synliggjøres verkstedene som spillerne kan fylle ut."
 msgid "Maximum number of waiting spots to manage (0 for infinite)"
 msgstr "Maksimalt antall ventetider som skal håndteres (0 for uendelig)."
 
+msgid "(Optional) an image that will be shown inside the question"
+msgstr "(valgfritt) et bilde som skal vises inne i spørsmålet"
+
 msgid "Indicates the functional role / archetype of the character"
 msgstr "Angir karakterens funksjonelle rolle/arketype."
 
@@ -7191,6 +7218,13 @@ msgstr ""
 "oppleve noe helt nytt!"
 
 msgid ""
+"This field can be edited by the player only when the character is in one of "
+"the selected statuses"
+msgstr ""
+"Dette feltet kan bare redigeres av spilleren når karakteren befinner seg i "
+"en av de valgte statusene"
+
+msgid ""
 "This page summarises the roles to be assigned in order to use the functions "
 "concerning the event."
 msgstr ""
@@ -7581,6 +7615,13 @@ msgid ""
 msgstr ""
 "For å bekrefte påmeldingen til arrangementet må du betale innen en uke. Du "
 "kan gjøre det herfra:"
+
+msgid ""
+"The question will be shown in the selected section (if left empty it will "
+"shown at the start of the form)"
+msgstr ""
+"Spørsmålet vises i den valgte seksjonen (hvis den står tom, vises den i "
+"begynnelsen av skjemaet)"
 
 msgid ""
 "This page shows the list of members, divided by type: applicants, approved, "
