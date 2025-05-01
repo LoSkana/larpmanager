@@ -24,6 +24,8 @@ from random import shuffle
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models.functions import Substr
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -91,6 +93,9 @@ def check_time(times, step, start=None):
 
 
 def orga_registrations_traits(r, ctx):
+    if "questbuilder" in ctx["features"]:
+        return
+
     r.traits = {}
     if not hasattr(r, "chars"):
         return
@@ -134,7 +139,7 @@ def orga_registrations_tickets(r, ctx):
     ctx["reg_all"][typ[0]]["count"] += 1
 
 
-def orga_registrations_membership(r, ctx, cache):
+def orga_registrations_membership(r, ctx):
     member = r.member
     if member.id in ctx["memberships"]:
         member.membership = ctx["memberships"][member.id]
@@ -180,7 +185,7 @@ def orga_registrations_standard(r, ctx, cache):
 
     # membership status
     if "membership" in ctx["features"]:
-        orga_registrations_membership(r, ctx, cache)
+        orga_registrations_membership(r, ctx)
 
     # age at run
     if r.member.birth_date and ctx["run"].start:
@@ -203,17 +208,31 @@ def orga_registrations_custom(r, ctx, char):
             r.custom[s].append(v)
 
 
-@login_required
-def orga_registrations(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_registrations")
+def registrations_popup(request, ctx):
+    idx = int(request.POST.get("idx", ""))
+    tp = request.POST.get("tp", "")
 
-    if request.method == "POST":
-        return upload_elements(request, ctx, Registration, "registration", "orga_registrations")
+    try:
+        reg = Registration.objects.get(pk=idx, run=ctx["run"])
+        question = RegistrationQuestion.objects.get(pk=tp, event=ctx["event"].get_class_parent(RegistrationQuestion))
+        el = RegistrationAnswer.objects.get(reg=reg, question=question)
+        tx = f"<h2>{reg} - {question.display}</h2>" + el.text
+        return JsonResponse({"k": 1, "v": tx})
+    except ObjectDoesNotExist:
+        return JsonResponse({"k": 0})
 
-    cache = {}
 
-    get_event_cache_all(ctx)
+def orga_registrations_custom_character(ctx):
+    if "custom_character" not in ctx["features"]:
+        return
+    ctx["custom_info"] = []
+    for field in ["pronoun", "song", "public", "private", "profile"]:
+        if not ctx["event"].get_config("custom_character_" + field, False):
+            continue
+        ctx["custom_info"].append(field)
 
+
+def orga_registrations_prepare(ctx, request):
     ctx["reg_chars"] = {}
     for _chnum, char in ctx["chars"].items():
         if "player_id" not in char:
@@ -221,12 +240,10 @@ def orga_registrations(request, s, n):
         if char["player_id"] not in ctx["reg_chars"]:
             ctx["reg_chars"][char["player_id"]] = []
         ctx["reg_chars"][char["player_id"]].append(char)
-
     ctx["reg_tickets"] = {}
     for t in RegistrationTicket.objects.filter(event=ctx["event"]).order_by("-price"):
         t.emails = []
         ctx["reg_tickets"][t.id] = t
-
     ctx["reg_questions"] = {}
     que = RegistrationQuestion.get_instance_questions(ctx["event"], ctx["features"])
     for q in que:
@@ -237,32 +254,40 @@ def orga_registrations(request, s, n):
                 continue
         ctx["reg_questions"][q.id] = q
 
-    # if 'questbuilder' in ctx['features']:
-    # ctx['reg_quests'] = {}
-    # ctx['reg_quest_types'] = {}
-    # for q in Quest.objects.filter(event=ctx['event']).order_by('number').select_related('typ'):
-    # ctx['reg_quests'][q.id] = q
-    # if q.typ_id and q.typ_id not in ctx['reg_quest_types']:
-    # ctx['reg_quest_types'][q.typ_id] = q.typ
 
-    if "discount" in ctx["features"]:
-        ctx["reg_discounts"] = {}
-        que = AccountingItemDiscount.objects.filter(reg__run=ctx["run"])
-        for aid in que.select_related("member", "disc").exclude(hide=True):
-            regs_list_add(ctx, "list_discount", aid.disc.name, aid.member)
-            if aid.member_id not in ctx["reg_discounts"]:
-                ctx["reg_discounts"][aid.member_id] = []
-            ctx["reg_discounts"][aid.member_id].append(aid.disc.name)
+def orga_registrations_discount(ctx):
+    if "discount" not in ctx["features"]:
+        return
+    ctx["reg_discounts"] = {}
+    que = AccountingItemDiscount.objects.filter(reg__run=ctx["run"])
+    for aid in que.select_related("member", "disc").exclude(hide=True):
+        regs_list_add(ctx, "list_discount", aid.disc.name, aid.member)
+        if aid.member_id not in ctx["reg_discounts"]:
+            ctx["reg_discounts"][aid.member_id] = []
+        ctx["reg_discounts"][aid.member_id].append(aid.disc.name)
 
-    if "custom_character" in ctx["features"]:
-        ctx["custom_info"] = []
-        for s in ["pronoun", "song", "public", "private", "profile"]:
-            if not ctx["event"].get_config("custom_character_" + s, False):
-                continue
-            ctx["custom_info"].append(s)
+
+@login_required
+def orga_registrations(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_registrations")
+
+    if request.method == "POST":
+        if request.POST.get("popup") == "1":
+            return registrations_popup(request, ctx)
+
+        return upload_elements(request, ctx, Registration, "registration", "orga_registrations")
+
+    cache = {}
+
+    get_event_cache_all(ctx)
+
+    orga_registrations_prepare(ctx, request)
+
+    orga_registrations_discount(ctx)
+
+    orga_registrations_custom_character(ctx)
 
     ctx["reg_all"] = {}
-    times = {}
 
     que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True).order_by("-updated")
     ctx["reg_list"] = que.select_related("member")
@@ -276,21 +301,18 @@ def orga_registrations(request, s, n):
             ctx["memberships"][el.member_id] = el
 
     for r in ctx["reg_list"]:
-        start = time.time()
         # standard stuff
         orga_registrations_standard(r, ctx, cache)
-        start = check_time(times, "1", start)
+
         if "discount" in ctx["features"]:
             if r.member_id in ctx["reg_discounts"]:
                 r.discounts = ctx["reg_discounts"][r.member_id]
-        start = check_time(times, "4", start)
+
         # features
-        if "questbuilder" in ctx["features"]:
-            orga_registrations_traits(r, ctx)
-            start = check_time(times, "5", start)
-            # ticket status
+        orga_registrations_traits(r, ctx)
+
+        # ticket status
         orga_registrations_tickets(r, ctx)
-        start = check_time(times, "6", start)
 
     ctx["reg_all"] = sorted(ctx["reg_all"].items())
 
@@ -339,6 +361,8 @@ def orga_registrations_accounting(request, s, n):
 def orga_registrations_money(reg, ctx, cache_aip):
     dt = {}
 
+    max_rounding = 0.05
+
     for k in ["tot_payed", "tot_iscr", "quota", "deadline", "pay_what", "surcharge"]:
         dt[k] = round_to_nearest_cent(getattr(reg, k, 0))
 
@@ -354,7 +378,7 @@ def orga_registrations_money(reg, ctx, cache_aip):
             dt["pay_a"] = dt["tot_payed"]
 
     dt["remaining"] = dt["tot_iscr"] - dt["tot_payed"]
-    if abs(dt["remaining"]) < 0.05:
+    if abs(dt["remaining"]) < max_rounding:
         dt["remaining"] = 0
 
     if reg.ticket_id in ctx["reg_tickets"]:
@@ -385,6 +409,9 @@ def orga_registration_form_list(request, s, n):
             return
 
     res = {}
+    popup = []
+
+    max_length = 100
 
     if q.typ in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
         cho = {}
@@ -397,10 +424,16 @@ def orga_registration_form_list(request, s, n):
             res[el.reg_id].append(cho[el.option_id])
 
     elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
-        for el in RegistrationAnswer.objects.filter(question=q, reg__run=ctx["run"]):
-            res[el.reg_id] = el.text
+        que = RegistrationAnswer.objects.filter(question=q, reg__run=ctx["run"])
+        que = que.annotate(short_text=Substr("text", 1, max_length))
+        que = que.values("reg_id", "short_text")
+        for el in que:
+            answer = el["short_text"]
+            if len(answer) == max_length:
+                popup.append(el["reg_id"])
+            res[el["reg_id"]] = answer
 
-    return JsonResponse({q.id: res})
+    return JsonResponse({"res": res, "popup": popup, "num": q.id})
 
 
 @login_required
@@ -436,8 +469,8 @@ def orga_registration_form_email(request, s, n):
         res[el.option_id]["names"].append(el.reg.member.display_member())
 
     n_res = {}
-    for opt_id in res:
-        n_res[cho[opt_id]] = res[opt_id]
+    for opt_id, value in res.items():
+        n_res[cho[opt_id]] = value
 
     return JsonResponse(n_res)
 
@@ -493,11 +526,10 @@ def orga_registrations_edit(request, s, n, num):
                 AssignmentTrait.objects.filter(run=ctx["run"], member=reg.member).exclude(typ__in=done).delete()
 
             return redirect("orga_registrations", s=ctx["event"].slug, n=ctx["run"].number)
+    elif num != 0:
+        form = OrgaRegistrationForm(instance=ctx["registration"], ctx=ctx)
     else:
-        if num != 0:
-            form = OrgaRegistrationForm(instance=ctx["registration"], ctx=ctx)
-        else:
-            form = OrgaRegistrationForm(ctx=ctx)
+        form = OrgaRegistrationForm(ctx=ctx)
 
     ctx["form"] = form
 
