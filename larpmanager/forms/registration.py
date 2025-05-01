@@ -58,7 +58,7 @@ class RegistrationForm(BaseRegistrationForm):
         widgets = {"modified": forms.HiddenInput()}
 
     def __init__(self, *args, **kwargs):
-        super(RegistrationForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         run = self.params["run"]
         event = run.event
         self.event = event
@@ -216,9 +216,7 @@ class RegistrationForm(BaseRegistrationForm):
             return
 
         lbl = run.event.get_config("pay_what_you_want_label", _("Free donation"))
-        help_text = run.event.get_config(
-            "pay_what_you_want_descr", _("Freely indicate the amount of your donation")
-        )
+        help_text = run.event.get_config("pay_what_you_want_descr", _("Freely indicate the amount of your donation"))
         self.fields["pay_what"] = forms.IntegerField(
             min_value=0, max_value=1000, label=lbl, help_text=help_text, required=False
         )
@@ -387,7 +385,7 @@ class RegistrationGiftForm(RegistrationForm):
     gift = True
 
     def __init__(self, *args, **kwargs):
-        super(RegistrationGiftForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         keep = ["run", "ticket"]
         for q in self.questions:
             if q.giftable:
@@ -432,7 +430,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         return s
 
     def __init__(self, *args, **kwargs):
-        super(OrgaRegistrationForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.run = self.params["run"]
         self.event = self.params["run"].event
@@ -566,7 +564,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
                 qt_id = f"qt_{qt['number']}"
                 self.sections["id_" + qt_id] = char_section
                 choices = [("0", _("--- NOT ASSIGNED ---"))]
-                for qnum, q in self.params["quests"].items():
+                for _qnum, q in self.params["quests"].items():
                     if q["typ"] != qtnum:
                         continue
                     for t in available:
@@ -639,7 +637,7 @@ class RegistrationCharacterRelForm(MyForm):
         exclude = ("reg", "character")
 
     def __init__(self, *args, **kwargs):
-        super(RegistrationCharacterRelForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         dl = ["profile"]
 
@@ -665,7 +663,7 @@ class OrgaRegistrationTicketForm(MyForm):
         exclude = ("number", "order")
 
     def __init__(self, *args, **kwargs):
-        super(OrgaRegistrationTicketForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         # ev = self.params["run"].event
         aux = []
         for tp in self.fields["tier"].choices:
@@ -715,10 +713,11 @@ class OrgaRegistrationQuestionForm(MyForm):
             "factions": FactionS2WidgetMulti,
             "tickets": TicketS2WidgetMulti,
             "allowed": AllowedS2WidgetMulti,
+            "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
         }
 
     def __init__(self, *args, **kwargs):
-        super(OrgaRegistrationQuestionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields["factions"].widget.set_event(self.params["event"])
 
@@ -763,7 +762,7 @@ class OrgaRegistrationOptionForm(MyForm):
         widgets = {"question": forms.HiddenInput()}
 
     def __init__(self, *args, **kwargs):
-        super(OrgaRegistrationOptionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         if "question_id" in self.params:
             self.initial["question"] = self.params["question_id"]
@@ -799,11 +798,11 @@ class OrgaRegistrationInstallmentForm(MyForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(OrgaRegistrationInstallmentForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["tickets"].widget.set_event(self.params["event"])
 
     def clean(self):
-        cleaned_data = super(OrgaRegistrationInstallmentForm, self).clean()
+        cleaned_data = super().clean()
 
         date_deadline = cleaned_data.get("date_deadline")
         days_deadline = cleaned_data.get("days_deadline")
@@ -832,7 +831,7 @@ class PreRegistrationForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__()
         self.ctx = kwargs.pop("ctx")
-        super(forms.Form, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.pre_reg = 1 + len(self.ctx["already"])
 

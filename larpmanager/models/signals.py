@@ -283,7 +283,10 @@ def save_event_update(sender, instance, **kwargs):
                 langs[lang] = 1
             else:
                 langs[lang] += 1
-        max_lang = max(langs, key=langs.get)
+        if langs:
+            max_lang = max(langs, key=langs.get)
+        else:
+            max_lang = "en"
         activate(max_lang)
 
         # evaluate each question type field

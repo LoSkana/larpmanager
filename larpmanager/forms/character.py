@@ -47,7 +47,7 @@ class CharacterCocreationForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__()
         text = kwargs.pop("text")
-        super(forms.Form, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         k = "co_creation_answer"
         self.fields[k] = forms.CharField(
             widget=TinyMCE(attrs={"cols": 80, "rows": 10}),
@@ -119,7 +119,7 @@ class CharacterForm(WritingForm, BaseCharacterForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(CharacterForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.details = {}
 
@@ -267,7 +267,7 @@ class CharacterForm(WritingForm, BaseCharacterForm):
         return cleaned_data
 
     def save(self, commit=True):
-        instance = super(CharacterForm, self).save()
+        instance = super().save()
         if hasattr(self, "questions"):
             self.save_reg_questions(instance, orga=self.orga)
         return instance
@@ -285,7 +285,7 @@ class OrgaCharacterForm(CharacterForm):
     orga = True
 
     def __init__(self, *args, **kwargs):
-        super(OrgaCharacterForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         if not self.instance.pk:
             return
@@ -398,7 +398,7 @@ class OrgaCharacterForm(CharacterForm):
             self.fields[field] = forms.CharField(
                 widget=TinyMCE(attrs={"cols": 80, "rows": 10}),
                 label=plot,
-                help_text=_("This text will be added to the sheet, in the plot paragraph %(name)s" % {"name": plot}),
+                help_text=_("This text will be added to the sheet, in the plot paragraph %(name)s") % {"name": plot},
                 required=False,
             )
             if pl[0] in pcr:
@@ -529,7 +529,7 @@ class OrgaCharacterForm(CharacterForm):
         el.save()
 
     def save(self, commit=True):
-        instance = super(OrgaCharacterForm, self).save()
+        instance = super().save()
 
         if instance.pk:
             self.save_plot()
@@ -547,9 +547,12 @@ class OrgaCharacterQuestionForm(MyForm):
     class Meta:
         model = CharacterQuestion
         exclude = ["order"]
+        widgets = {
+            "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
+        }
 
     def __init__(self, *args, **kwargs):
-        super(OrgaCharacterQuestionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # Add type of character question to the available types
         already = list(
@@ -615,7 +618,7 @@ class OrgaCharacterOptionForm(MyForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(OrgaCharacterOptionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields["tickets"].widget.set_event(self.params["event"])
 
