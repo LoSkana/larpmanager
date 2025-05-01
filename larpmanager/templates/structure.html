@@ -6,11 +6,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>
             {% block maintitle %}
-                {% block title %}{% endblock %}
+                {% block title %}
+                {% endblock title %}
                 - {{ assoc.name }}
-            {% endblock %}
+            {% endblock maintitle %}
         </title>
-        {% block meta %}{% endblock %}
+        {% block meta %}
+            <meta name="keywords" content="larpmanager">
+            <meta name="description" content="larpmanager">
+        {% endblock meta %}
         <meta property="og:url" content="{{ request.path }}">
         <meta property="og:type" content="website">
         <meta property="og:logo" content="{% static 'lm_fav_new.png' %}">
@@ -54,12 +58,14 @@
               </PageMap>
               -->
         {% endif %}
-        {% block css-req %}{% endblock %}
+        {% block css-req %}
+        {% endblock css-req %}
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"
                 integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
                 crossorigin="anonymous"
                 defer></script>
-        {% block robots %}{% endblock %}
+        {% block robots %}
+        {% endblock robots %}
         {{ form.media }}
         {% if assoc.id == 0 %}
             {% compress css %}
@@ -85,7 +91,8 @@
                       href="{% get_media_prefix %}/css/{{ assoc.slug }}_{{ event.slug }}_{{ event.css_code }}.css" />
             {% endif %}
         {% endif %}
-        {% block css %}{% endblock %}
+        {% block css %}
+        {% endblock css %}
         <noscript>
             <link rel="stylesheet"
                   href="{% static 'larpmanager/assets/css/noscript.css' %}" />
@@ -141,17 +148,19 @@
                     {% endif %}
                 </div>
             {% endif %}
-        {% endblock %}
+        {% endblock sidebar %}
         <!-- Page Wrapper -->
         <div id="page-wrapper">
-            {% block main %}{% endblock %}
+            {% block main %}
+            {% endblock main %}
         </div>
         <script>
     var set_language_url = "{% url 'set_language' %}";
     var set_internaz = {{ set_internaz | default:"null" }};
         </script>
         <!-- Scripts -->
-        {% block js-req %}{% endblock %}
+        {% block js-req %}
+        {% endblock js-req %}
         <!--- script pipeline -->
         {% compress js %}
             <script defer
@@ -178,8 +187,9 @@
             {% endcompress %}
         {% endif %}
         {% block js %}
-        {% endblock %}
-        {% block js2 %}{% endblock %}
+        {% endblock js %}
+        {% block js2 %}
+        {% endblock js2 %}
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
         <script>
         function setCookie(name,value,days) {

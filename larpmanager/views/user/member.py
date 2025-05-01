@@ -21,54 +21,54 @@
 import math
 import os
 import random
-from datetime import datetime, date
+from datetime import date, datetime
 from uuid import uuid4
 
-from PIL import Image
 from django.conf import settings as conf_settings
 from django.contrib import messages
-from django.contrib.auth import login
-from django.contrib.auth import user_logged_in
+from django.contrib.auth import login, user_logged_in
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import update_last_login, User
+from django.contrib.auth.models import User, update_last_login
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.validators import URLValidator
-from django.http import HttpResponseRedirect, JsonResponse, Http404
+from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
-from django.utils.translation import gettext_lazy as _, activate
+from django.utils.translation import activate
+from django.utils.translation import gettext_lazy as _
+from PIL import Image
 
+from larpmanager.accounting.member import info_accounting
 from larpmanager.forms.member import (
     AvatarForm,
-    ProfileForm,
     MembershipConfirmForm,
     MembershipRequestForm,
+    ProfileForm,
 )
+from larpmanager.mail.member import send_membership_confirm
 from larpmanager.models.accounting import (
     AccountingItemMembership,
 )
 from larpmanager.models.association import Association, AssocText
-from larpmanager.models.member import Membership, Badge, Member, Vote, get_user_membership
+from larpmanager.models.member import Badge, Member, Membership, Vote, get_user_membership
 from larpmanager.models.miscellanea import (
-    Contact,
     ChatMessage,
+    Contact,
 )
 from larpmanager.models.registration import (
     Registration,
 )
 from larpmanager.models.utils import generate_id
-from larpmanager.accounting.member import info_accounting
 from larpmanager.utils.base import def_user_ctx
-from larpmanager.utils.common import get_member, get_channel, get_contact, get_badge
-from larpmanager.utils.member import calculate_fiscal_code, get_leaderboard
-from larpmanager.utils.registration import registration_status
+from larpmanager.utils.common import get_badge, get_channel, get_contact, get_member
 from larpmanager.utils.exceptions import (
     check_assoc_feature,
 )
-from larpmanager.mail.member import send_membership_confirm
+from larpmanager.utils.member import calculate_fiscal_code, get_leaderboard
 from larpmanager.utils.pdf import (
     get_membership_request,
 )
+from larpmanager.utils.registration import registration_status
 from larpmanager.utils.text import get_assoc_text
 
 

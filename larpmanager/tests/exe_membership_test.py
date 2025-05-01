@@ -21,9 +21,9 @@
 from pathlib import Path
 
 import pytest
-from playwright.sync_api import sync_playwright, expect
+from playwright.sync_api import expect, sync_playwright
 
-from larpmanager.tests.utils import handle_error, login_orga, page_start, go_to, submit
+from larpmanager.tests.utils import go_to, handle_error, login_orga, page_start, submit
 
 
 @pytest.mark.django_db

@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load show_tags i18n static compress %}
 {% block title %}
     {% trans "Casting" %} {{ gl_name }} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the casting preferences expressed by players, and allows them to be assigned through an optimization algorithm." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <div id="main_casting">
         {% if features.questbuilder %}
@@ -45,7 +45,7 @@
                         <td>
                             <input type="submit"
                                    name='update'
-                                   value="{% trans 'Update' %}"
+                                   value="{% trans "Update" %}"
                                    style="max-width: 100% !important">
                         </td>
                     </tr>
@@ -93,7 +93,7 @@
         </form>
         <p id='assegnazioni'></p>
     </div>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script src='{% static "node_modules/javascript-lp-solver/prod/solver.js" %}'></script>
     <script>
@@ -129,4 +129,4 @@ window['trads'] = {
     {% compress js %}
         <script defer src="{% static 'larpmanager/casting.js' %}"></script>
     {% endcompress %}
-{% endblock %}
+{% endblock js %}

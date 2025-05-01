@@ -23,11 +23,11 @@ from django.db.models import Count
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from larpmanager.models.event import Run, Event
-from larpmanager.models.form import RegistrationChoice, CharacterChoice
-from larpmanager.models.registration import Registration, RegistrationTicket, RegistrationCharacterRel
-from larpmanager.models.writing import Character
 from larpmanager.cache.feature import get_event_features
+from larpmanager.models.event import Event, Run
+from larpmanager.models.form import CharacterChoice, RegistrationChoice
+from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
+from larpmanager.models.writing import Character
 
 
 def reset_cache_reg_counts(r):
@@ -35,7 +35,7 @@ def reset_cache_reg_counts(r):
 
 
 def cache_reg_counts_key(r):
-    return "reg_counts_%d" % r.id
+    return f"reg_counts{r.id}"
 
 
 def get_reg_counts(r, reset=False):
@@ -88,12 +88,12 @@ def update_reg_counts(r):
 
 
 @receiver(post_save, sender=Registration)
-def post_save_Registration_cache(sender, instance, created, **kwargs):
+def post_save_registration_cache(sender, instance, created, **kwargs):
     reset_cache_reg_counts(instance.run)
 
 
 @receiver(post_save, sender=Character)
-def post_save_RegistrationCharacterRel_cache(sender, instance, created, **kwargs):
+def post_save_registration_character_rel_cache(sender, instance, created, **kwargs):
     for run in instance.event.runs.all():
         reset_cache_reg_counts(run)
 
@@ -103,12 +103,12 @@ def post_save_RegistrationCharacterRel_cache(sender, instance, created, **kwargs
 
 
 @receiver(post_save, sender=Run)
-def post_save_Run_cache(sender, instance, created, **kwargs):
+def post_save_run_cache(sender, instance, created, **kwargs):
     reset_cache_reg_counts(instance)
 
 
 @receiver(post_save, sender=Event)
-def post_save_Event_cache(sender, instance, created, **kwargs):
+def post_save_event_cache(sender, instance, created, **kwargs):
     for r in instance.runs.all():
         reset_cache_reg_counts(r)
 

@@ -1,13 +1,15 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
-{% block title %}Chats{% endblock %}
+{% block title %}
+    Chats
+{% endblock title %}
 {% block content %}
     <table class="mob">
         <thead>
             <tr>
-                <th>{% trans 'User' %}</th>
-                <th>{% trans 'Your messages' %}</th>
-                <th>{% trans 'Unread' %}</th>
+                <th>{% trans "User" %}</th>
+                <th>{% trans "Your messages" %}</th>
+                <th>{% trans "Unread" %}</th>
                 <th></th>
             </tr>
         </thead>
@@ -28,4 +30,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

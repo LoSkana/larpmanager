@@ -21,18 +21,18 @@
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
-from larpmanager.admin.base import DefModelAdmin, EventFilter, reduced, CharacterFilter
-from larpmanager.models.experience import AbilityTypePx, AbilityPx, DeliveryPx
+from larpmanager.admin.base import CharacterFilter, DefModelAdmin, EventFilter, reduced
+from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx
 from larpmanager.models.form import (
-    CharacterQuestion,
-    CharacterOption,
-    CharacterChoice,
     CharacterAnswer,
+    CharacterChoice,
+    CharacterOption,
+    CharacterQuestion,
 )
 from larpmanager.models.writing import (
     Character,
-    Relationship,
     CharacterConfig,
+    Relationship,
 )
 
 

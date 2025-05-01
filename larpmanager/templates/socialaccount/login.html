@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block head_title %}
     {% trans "Sign In" %}
-{% endblock %}
+{% endblock head_title %}
 {% block css %}
     <style type="text/css">
 @keyframes ldio-rxowou16nwe {
@@ -105,7 +105,7 @@
   padding: 10px;
 }
     </style>
-{% endblock %}
+{% endblock css %}
 {% block content %}
     <div class="spinner center">
         <div class="ldio-rxowou16nwe">
@@ -123,5 +123,7 @@
         {% csrf_token %}
         <button id="login" type="submit">{% trans "Continue" %}</button>
     </form>
-{% endblock %}
-{% block js %}<script>document.querySelector('#login').click();</script>{% endblock %}
+{% endblock content %}
+{% block js %}
+    <script>document.querySelector('#login').click();</script>
+{% endblock js %}

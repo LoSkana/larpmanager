@@ -22,7 +22,7 @@ import yaml
 from django.core.management.base import BaseCommand
 
 from larpmanager.models.access import AssocPermission, EventPermission
-from larpmanager.models.base import FeatureModule, Feature, PaymentMethod
+from larpmanager.models.base import Feature, FeatureModule, PaymentMethod
 
 
 class Command(BaseCommand):

@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Spam" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the email addresses to which to send updates in order to get them to sign up." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <p>{% trans "List of newsletter subscribers who have not yet played this event" %}:</p>
     {% for key, value in lst.items %}
@@ -17,4 +17,4 @@
             {% endfor %}
         </p>
     {% endfor %}
-{% endblock %}
+{% endblock content %}

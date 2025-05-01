@@ -23,21 +23,20 @@ import shutil
 from typing import Optional
 
 from django.core.cache import cache
-from django.db.models.signals import post_save, pre_save, pre_delete, post_delete
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import m2m_changed, post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import search_player
-from larpmanager.models.casting import QuestType, Quest, Trait, AssignmentTrait
+from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
-    CharacterChoice,
     CharacterAnswer,
+    CharacterChoice,
+    CharacterOption,
     CharacterQuestion,
     QuestionStatus,
     QuestionVisibility,
-    CharacterOption,
 )
 from larpmanager.models.member import Member
 from larpmanager.models.registration import RegistrationCharacterRel
@@ -382,12 +381,12 @@ m2m_changed.connect(character_factions_changed, sender=Faction.characters.throug
 
 
 @receiver(pre_delete, sender=Character)
-def del_Character_reset(sender, instance, **kwargs):
+def del_character_reset(sender, instance, **kwargs):
     reset_event_cache_all_runs(instance.event)
 
 
 @receiver(pre_save, sender=Faction)
-def update_Faction_reset(sender, instance, **kwargs):
+def update_faction_reset(sender, instance, **kwargs):
     if not instance.pk:
         reset_event_cache_all_runs(instance.event)
         return
@@ -396,7 +395,7 @@ def update_Faction_reset(sender, instance, **kwargs):
 
     lst = ["typ"]
     if has_different_cache_values(instance, prev, lst):
-        # print(f"@@@@ update_Faction_reset {instance} {datetime.now()}")
+        # print(f"@@@@ update_faction_reset {instance} {datetime.now()}")
         reset_event_cache_all_runs(instance.event)
 
     lst = ["name", "teaser"]
@@ -405,12 +404,12 @@ def update_Faction_reset(sender, instance, **kwargs):
 
 
 @receiver(pre_delete, sender=Faction)
-def del_Faction_reset(sender, instance, **kwargs):
+def del_faction_reset(sender, instance, **kwargs):
     reset_event_cache_all_runs(instance.event)
 
 
 @receiver(pre_save, sender=QuestType)
-def update_Questtype_reset(sender, instance, **kwargs):
+def update_questtype_reset(sender, instance, **kwargs):
     if not instance.pk:
         reset_event_cache_all_runs(instance.event)
         return
@@ -418,17 +417,17 @@ def update_Questtype_reset(sender, instance, **kwargs):
     lst = ["name"]
     prev = QuestType.objects.get(pk=instance.pk)
     if has_different_cache_values(instance, prev, lst):
-        # print(f"@@@@ update_Questtype_reset {instance} {datetime.now()}")
+        # print(f"@@@@ update_questtype_reset {instance} {datetime.now()}")
         reset_event_cache_all_runs(instance.event)
 
 
 @receiver(pre_delete, sender=QuestType)
-def del_QuestType_reset(sender, instance, **kwargs):
+def del_quest_type_reset(sender, instance, **kwargs):
     reset_event_cache_all_runs(instance.event)
 
 
 @receiver(pre_save, sender=Quest)
-def update_Quest_reset(sender, instance, **kwargs):
+def update_quest_reset(sender, instance, **kwargs):
     if not instance.pk:
         reset_event_cache_all_runs(instance.event)
         return
@@ -436,17 +435,17 @@ def update_Quest_reset(sender, instance, **kwargs):
     lst = ["name", "teaser", "typ_id"]
     prev = Quest.objects.get(pk=instance.pk)
     if has_different_cache_values(instance, prev, lst):
-        # print(f"@@@@ update_Quest_reset {instance} {datetime.now()}")
+        # print(f"@@@@ update_quest_reset {instance} {datetime.now()}")
         reset_event_cache_all_runs(instance.event)
 
 
 @receiver(pre_delete, sender=Quest)
-def del_Quest_reset(sender, instance, **kwargs):
+def del_quest_reset(sender, instance, **kwargs):
     reset_event_cache_all_runs(instance.event)
 
 
 @receiver(pre_save, sender=Trait)
-def update_Trait_reset(sender, instance, **kwargs):
+def update_trait_reset(sender, instance, **kwargs):
     if not instance.pk:
         reset_event_cache_all_runs(instance.event)
         return
@@ -458,40 +457,40 @@ def update_Trait_reset(sender, instance, **kwargs):
 
 
 @receiver(pre_delete, sender=Trait)
-def del_Trait_reset(sender, instance, **kwargs):
+def del_trait_reset(sender, instance, **kwargs):
     reset_event_cache_all_runs(instance.event)
 
 
 @receiver(post_save, sender=Event)
-def update_Event_reset(sender, instance, **kwargs):
-    # print(f"@@@@ update_Event_reset {instance} {datetime.now()}")
+def update_event_reset(sender, instance, **kwargs):
+    # print(f"@@@@ update_event_reset {instance} {datetime.now()}")
     reset_event_cache_all_runs(instance)
 
 
 @receiver(post_save, sender=Run)
-def save_Run_reset(sender, instance, **kwargs):
-    # print(f"@@@@ save_Run_reset {instance} {datetime.now()}")
+def save_run_reset(sender, instance, **kwargs):
+    # print(f"@@@@ save_run_reset {instance} {datetime.now()}")
     reset_run(instance)
 
 
 @receiver(pre_delete, sender=CharacterQuestion)
-def del_CharacterQuestion_reset(sender, instance, **kwargs):
+def del_character_question_reset(sender, instance, **kwargs):
     reset_event_cache_all_runs(instance.event)
 
 
 @receiver(post_save, sender=CharacterQuestion)
-def save_characterQuestion_reset(sender, instance, **kwargs):
-    # print(f"@@@@ save_characterQuestion_reset {instance} {datetime.now()}")
+def save_character_question_reset(sender, instance, **kwargs):
+    # print(f"@@@@ save_character_question_reset {instance} {datetime.now()}")
     reset_event_cache_all_runs(instance.event)
 
 
 @receiver(pre_delete, sender=CharacterOption)
-def del_CharacterOption_reset(sender, instance, **kwargs):
+def del_character_option_reset(sender, instance, **kwargs):
     reset_event_cache_all_runs(instance.question.event)
 
 
 @receiver(post_save, sender=CharacterOption)
-def save_characterOption_reset(sender, instance, **kwargs):
+def save_character_option_reset(sender, instance, **kwargs):
     # print(f"@@@@ save_CharacterOption_reset {instance} {datetime.now()}")
     reset_event_cache_all_runs(instance.question.event)
 
@@ -502,7 +501,7 @@ def update_event_cache_all_runs(event, instance):
 
 
 @receiver(post_save, sender=RegistrationCharacterRel)
-def post_save_RegistrationCharacterRel_savereg(sender, instance, created, **kwargs):
+def post_save_registration_character_rel_savereg(sender, instance, created, **kwargs):
     if instance.reg:
         instance.reg.save()
 
@@ -510,7 +509,7 @@ def post_save_RegistrationCharacterRel_savereg(sender, instance, created, **kwar
 
 
 @receiver(post_delete, sender=RegistrationCharacterRel)
-def post_delete_RegistrationCharacterRel_savereg(sender, instance, **kwargs):
+def post_delete_registration_character_rel_savereg(sender, instance, **kwargs):
     if instance.reg:
         instance.reg.save()
 
@@ -518,8 +517,8 @@ def post_delete_RegistrationCharacterRel_savereg(sender, instance, **kwargs):
 
 
 @receiver(pre_delete, sender=Run)
-def del_Run_reset(sender, instance, **kwargs):
-    # print(f"@@@@ del_Run_reset {instance} {datetime.now()}")
+def del_run_reset(sender, instance, **kwargs):
+    # print(f"@@@@ del_run_reset {instance} {datetime.now()}")
     reset_run(instance)
 
 

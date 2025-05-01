@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Safety" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the sensitive information of registered players regarding safety." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <p>
         <i>{% trans "Please remember that the information on this page was given with
@@ -34,4 +34,4 @@
             </tr>
         {% endfor %}
     </table>
-{% endblock %}
+{% endblock content %}

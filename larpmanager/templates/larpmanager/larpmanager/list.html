@@ -1,8 +1,8 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n static %}
 {% block title %}
-    {% trans 'List' %}
-{% endblock %}
+    {% trans "List" %}
+{% endblock title %}
 {% block content %}
     <p>
         <a href="#" class="my_toggle" tog='inactive'>{% trans "Show inactive" %}</a>
@@ -48,4 +48,4 @@
             {% for mb in el.executives.all %}{{ mb.email }},{% endfor %}
         {% endfor %}
     </p>
-{% endblock %}
+{% endblock content %}

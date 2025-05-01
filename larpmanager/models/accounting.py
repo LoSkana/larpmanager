@@ -28,8 +28,7 @@ from larpmanager.models.base import BaseModel, PaymentMethod
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
-from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid_short
-from larpmanager.models.utils import generate_id
+from larpmanager.models.utils import UploadToPathAndRename, download, generate_id, my_uuid_short
 
 
 class PaymentInvoice(BaseModel):
@@ -558,7 +557,7 @@ class Collection(BaseModel):
         return self.name
 
     def unique_contribute_code(self):
-        for idx in range(5):
+        for _idx in range(5):
             cod = generate_id(16)
             if not Collection.objects.filter(contribute_code=cod).exists():
                 self.contribute_code = cod
@@ -566,7 +565,7 @@ class Collection(BaseModel):
         raise ValueError("Too many attempts to generate the code")
 
     def unique_redeem_code(self):
-        for idx in range(5):
+        for _idx in range(5):
             cod = generate_id(16)
             if not Collection.objects.filter(redeem_code=cod).exists():
                 self.redeem_code = cod
@@ -611,7 +610,7 @@ class RefundRequest(BaseModel):
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Richiesta rimborso {self.member}"
+        return f"Refund request of {self.member}"
 
     # ## Workshops
 

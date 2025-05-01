@@ -1,13 +1,15 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n show_tags %}
-{% block title %}{{ workshop.display }}{% endblock %}
+{% block title %}
+    {{ workshop.display }}
+{% endblock title %}
 {% block nav %}
     {% include "larpmanager/manage/nav.html" %}
-    <div class='lm_tooltip'>
+    <div class="lm_tooltip">
         <a href="{% url 'workshops' slug run.number %}">Workshop</a>
-        <div class='lm_tooltiptext'>{% trans "Fill out the event prep questions!" %}</div>
+        <div class="lm_tooltiptext">{% trans "Fill out the event prep questions!" %}</div>
     </div>
-{% endblock %}
+{% endblock nav %}
 {% block content %}
     <br />
     <div class="workshop">
@@ -31,7 +33,7 @@
                 </div>
                 <hr class="c" />
             {% endfor %}
-            <input type="submit" value="{% trans 'Submit' %}">
+            <input type="submit" value="{% trans "Submit" %}">
         </form>
     </div>
-{% endblock %}
+{% endblock content %}

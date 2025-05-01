@@ -23,7 +23,7 @@ import time
 import pytest
 from playwright.sync_api import expect, sync_playwright
 
-from larpmanager.tests.utils import handle_error, login_orga, page_start, go_to, fill_tinymce
+from larpmanager.tests.utils import fill_tinymce, go_to, handle_error, login_orga, page_start
 
 
 @pytest.mark.django_db

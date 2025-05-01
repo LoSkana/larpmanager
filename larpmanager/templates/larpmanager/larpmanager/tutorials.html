@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n static show_tags %}
 {% block title %}
     Tutorials
     {% if not intro %}- {{ tutorial.name }}{% endif %}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     <div id="tutorials">
         <div class="column">
@@ -55,7 +55,7 @@
             </table>
         </div>
     </div>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
 window.addEventListener('DOMContentLoaded', function() {
@@ -127,4 +127,4 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
     </script>
-{% endblock %}
+{% endblock js %}

@@ -29,11 +29,11 @@ msgstr "Hoi"
 msgid "Fee"
 msgstr "Vergoeding"
 
-msgid "VAT"
-msgstr "BTW"
-
 msgid "Age"
 msgstr "Leeftijd"
+
+msgid "VAT"
+msgstr "BTW"
 
 msgid "Cap"
 msgstr "Cap"
@@ -89,11 +89,11 @@ msgstr "Info"
 msgid "Port"
 msgstr "Aansluitpoort"
 
-msgid "Text"
-msgstr "Tekst"
-
 msgid "Page"
 msgstr "Pagina"
+
+msgid "Text"
+msgstr "Tekst"
 
 msgid "Name"
 msgstr "Naam"
@@ -459,14 +459,14 @@ msgstr "Inleidingen"
 msgid "Tokens"
 msgstr "Tokens"
 
-msgid "Ticket"
-msgstr "Ticket"
-
 msgid "Voting"
 msgstr "Stemmen"
 
 msgid "Active"
 msgstr "Actief"
+
+msgid "Ticket"
+msgstr "Ticket"
 
 msgid "Nature"
 msgstr "Natuur"
@@ -663,14 +663,14 @@ msgstr "Auteurs"
 msgid "Tagline"
 msgstr "Tagline"
 
-msgid "Options"
-msgstr "Opties"
+msgid "Use TLD"
+msgstr "TLD gebruiken"
 
 msgid "Members"
 msgstr "Leden"
 
-msgid "Use TLD"
-msgstr "TLD gebruiken"
+msgid "Options"
+msgstr "Opties"
 
 msgid "VAT No."
 msgstr "BTW-nr."
@@ -888,11 +888,11 @@ msgstr "Instellingen"
 msgid "Calendar"
 msgstr "Kalender"
 
+msgid "Centarui"
+msgstr "Centarui"
+
 msgid "Deadline"
 msgstr "Deadline"
-
-msgid "Treasury"
-msgstr "Schatkist"
 
 msgid "Reminder"
 msgstr "Herinnering"
@@ -900,8 +900,8 @@ msgstr "Herinnering"
 msgid "Holidays"
 msgstr "Vakantie"
 
-msgid "Centarui"
-msgstr "Centarui"
+msgid "Treasury"
+msgstr "Schatkist"
 
 msgid "VAT rate"
 msgstr "BTW-tarief"
@@ -1308,14 +1308,14 @@ msgstr "Uiterlijk"
 msgid "New signup"
 msgstr "Nieuwe inzendingen"
 
-msgid "Token name"
-msgstr "Token naam"
-
 msgid "Annual fee"
 msgstr "Jaarlijkse vergoeding"
 
 msgid "Candidates"
 msgstr "Kandidaten"
+
+msgid "Token name"
+msgstr "Token naam"
 
 msgid "Appointees"
 msgstr "Benoemingen"
@@ -1536,11 +1536,11 @@ msgstr "Gebeurtenissen in het verleden"
 msgid "Carbon copy"
 msgstr "Kopie"
 
-msgid "Unique code"
-msgstr "Unieke code"
-
 msgid "Probability"
 msgstr "Waarschijnlijkheid"
+
+msgid "Unique code"
+msgstr "Unieke code"
 
 msgid "Fiscal code"
 msgstr "Belastingcode"
@@ -1707,11 +1707,11 @@ msgstr "Transacties"
 msgid "Disbursement"
 msgstr "Uitbetaling"
 
-msgid "Name credits"
-msgstr "Naam kredieten"
-
 msgid "Host Address"
 msgstr "Adres"
+
+msgid "Name credits"
+msgstr "Naam kredieten"
 
 msgid "Payment fees"
 msgstr "Betaling Commissies"
@@ -3200,11 +3200,11 @@ msgstr "Inschrijvingen zijn geopend!"
 msgid "Expenses collaborators"
 msgstr "Personeelskosten"
 
-msgid "Minimum age of members"
-msgstr "Minimumleeftijd van leden"
-
 msgid "Customised mail server"
 msgstr "Aangepaste mailserver"
+
+msgid "Minimum age of members"
+msgstr "Minimumleeftijd van leden"
 
 msgid "Additional Preferences"
 msgstr "Extra voorkeuren"
@@ -4043,6 +4043,9 @@ msgstr "Naam van korting - voor intern gebruik"
 msgid "Image shown on homepage as promoter"
 msgstr "Afbeelding getoond op homepage als promoter"
 
+msgid "The form is saved every 30 seconds."
+msgstr "Het formulier wordt elke 30 seconden opgeslagen."
+
 msgid "Select a file with extension 'zip'."
 msgstr "Selecteer een bestand met de extensie 'zip'."
 
@@ -4242,9 +4245,9 @@ msgstr "Inschrijfgeld, totaal te betalen"
 msgid " Hurry: only %(num)d tickets available."
 msgstr " Haast je: er zijn nog maar %(num)d tickets beschikbaar."
 
-#, python-format
-msgid "Completed module. Remaining: %(number)d"
-msgstr "Voltooide module. Resterend: %(number)d"
+#, python-brace-format
+msgid "Completed module. Remaining: {number:d}"
+msgstr "Voltooide module. Resterend: {number:d}"
 
 msgid "Apply a check on the tax code of players"
 msgstr "Controleer de belastingcode van spelers"
@@ -4534,6 +4537,10 @@ msgstr "Geboorteplaats niet opgenomen in de ISTAT-lijst"
 msgid "You are now logged in with your main account:"
 msgstr "Je bent nu ingelogd met je hoofdaccount:"
 
+#, python-brace-format
+msgid "This text will be added to the sheet of {name}"
+msgstr "Deze tekst wordt toegevoegd aan het blad van {name}"
+
 msgid "Extended description - maximum 5000 characters"
 msgstr "Uitgebreide beschrijving - maximaal 5000 tekens"
 
@@ -4619,10 +4626,6 @@ msgstr "Op deze pagina kun je een personage toevoegen of bewerken."
 
 msgid "This page allows you to edit a member's profile."
 msgstr "Op deze pagina kun je het profiel van een lid bewerken."
-
-#, python-format
-msgid "This text will be added to the sheet of %(name)s"
-msgstr "Deze tekst wordt toegevoegd aan het blad met %(name)s"
 
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
@@ -5004,9 +5007,8 @@ msgstr "Geef aan hoe de uitgaven zijn geconfigureerd op budgetniveau"
 msgid "Indicate as precisely as possible where to pick you up."
 msgstr "Geef zo nauwkeurig mogelijk aan waar je opgehaald kunt worden"
 
-msgid "Indicates that payment is sent \"to friends and family\"."
-msgstr ""
-"Het geeft aan dat de betaling wordt verzonden \"naar vrienden en familie\"."
+msgid "Indicates that payment is sent 'to friends and family'."
+msgstr "Geeft aan dat de betaling wordt verzonden 'naar vrienden en familie'."
 
 msgid "View the complete list of characters and their players!"
 msgstr "Bekijk de volledige lijst met personages en hun spelers!"
@@ -6411,6 +6413,13 @@ msgstr ""
 "Korting alleen van toepassing als je je hebt ingeschreven voor een andere "
 "run van hetzelfde evenement"
 
+msgid ""
+"Sets how often reminder emails are sent, in days (if not set, no emails are "
+"sent)"
+msgstr ""
+"Stelt in hoe vaak herinneringsmails worden verzonden, in dagen (als dit niet"
+" is ingesteld, worden er geen e-mails verzonden)"
+
 #, python-format
 msgid ""
 "Reimbursement of %(amount).2f %(credits)s with reason '%(reason)s' was "
@@ -7136,11 +7145,11 @@ msgstr ""
 "aanvraag weergegeven"
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field \"notes\" "
+"Copy and paste exactly all the coloured text below into the field 'notes' "
 "(this is important!)"
 msgstr ""
 "Kopieer en plak precies alle gekleurde tekst hieronder in het veld "
-"'notities' (dit is belangrijk!)."
+"'notities' (dit is belangrijk!)"
 
 msgid ""
 "This page shows in the detail of an event, the list of expertises covered by"
@@ -7632,13 +7641,6 @@ msgid ""
 msgstr ""
 "Aantal dagen na de deadline waarna registraties worden gemarkeerd als "
 "geannuleerd (standaard 30 dagen)"
-
-msgid ""
-"The form is saved every 30 seconds. When this is performed <span "
-"id='confirm'>this becomes green.</span>"
-msgstr ""
-"Het formulier wordt elke 30 seconden opgeslagen. Als dat gebeurt, wordt "
-"<span id='confirm'>dit groen.</span>."
 
 msgid ""
 "Select the payment methods to be activated; then return to this page to "
@@ -9020,8 +9022,8 @@ msgstr ""
 "of stemmen op de AVA!"
 
 msgid ""
-"Once downloaded you must print it, sign it, take a digital scan, and  upload"
-" it to the form below. Your request will be considered at the  next meeting "
+"Once downloaded you must print it, sign it, take a digital scan, and upload "
+"it to the form below. Your request will be considered at the  next meeting "
 "of the Board. You will receive confirmation of the outcome of its  "
 "evaluation. "
 msgstr ""

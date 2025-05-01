@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load static i18n %}
 {% block title %}
     {% trans "Upload" %} - {{ album }} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page allows you to upload a new photo album." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <h2>{% trans "Upload of photo and video" %}</h2>
     <p>
@@ -20,9 +20,9 @@
         <table class="no_csv">
             {{ form.as_table }}
         </table>
-        <input type="submit" value="{% trans 'Confirm' %}">
+        <input type="submit" value="{% trans "Confirm" %}">
     </form>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(function() {
@@ -32,4 +32,4 @@ $(function() {
 });
 });
     </script>
-{% endblock %}
+{% endblock js %}

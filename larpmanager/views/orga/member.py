@@ -18,27 +18,25 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from datetime import date
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.models.registration import Registration
-from larpmanager.utils.event import check_event_permission
-
-from datetime import date
-
-from django.db.models import Count
-
+from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.miscellanea import OrgaHelpQuestionForm, SendMailForm
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.event import PreRegistration
-from larpmanager.models.member import Membership, Member
-from larpmanager.models.miscellanea import HelpQuestion, Email
+from larpmanager.models.member import Member, Membership
+from larpmanager.models.miscellanea import Email, HelpQuestion
 from larpmanager.models.registration import (
+    Registration,
     RegistrationTicket,
 )
-from larpmanager.cache.character import get_event_cache_all
+from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.paginate import orga_paginate
 from larpmanager.utils.tasks import send_mail_exec
 

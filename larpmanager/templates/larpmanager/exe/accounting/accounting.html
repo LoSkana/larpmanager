@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load tz show_tags static i18n %}
 {% block title %}
     {% trans "Accounting" %} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the total membership accounts, dues, donations, expenses, the overall cash and individual event/run budget." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <p>
         {% trans "Global balance" %}: <b>{{ global_sum }}</b>
@@ -252,7 +252,7 @@
             {% endfor %}
         </table>
     </div>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
     window.addEventListener('DOMContentLoaded', function() {
@@ -283,4 +283,4 @@
         });
     });
     </script>
-{% endblock %}
+{% endblock js %}

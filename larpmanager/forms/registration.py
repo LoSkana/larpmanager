@@ -25,28 +25,28 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
-from larpmanager.forms.base import BaseRegistrationForm, MyForm
-from larpmanager.forms.utils import (
-    AssocMemberS2Widget,
-    FactionS2WidgetMulti,
-    TicketS2WidgetMulti,
-    AllowedS2WidgetMulti,
-    DatePickerInput,
-)
-from larpmanager.models.casting import Trait
-from larpmanager.models.form import RegistrationQuestion, QuestionType, RegistrationOption
-from larpmanager.models.registration import (
-    Registration,
-    RegistrationTicket,
-    RegistrationQuota,
-    RegistrationCharacterRel,
-    RegistrationSection,
-    RegistrationInstallment,
-    RegistrationSurcharge,
-)
-from larpmanager.models.writing import Character, Faction
 from larpmanager.accounting.registration import get_date_surcharge
 from larpmanager.cache.registration import get_reg_counts
+from larpmanager.forms.base import BaseRegistrationForm, MyForm
+from larpmanager.forms.utils import (
+    AllowedS2WidgetMulti,
+    AssocMemberS2Widget,
+    DatePickerInput,
+    FactionS2WidgetMulti,
+    TicketS2WidgetMulti,
+)
+from larpmanager.models.casting import Trait
+from larpmanager.models.form import QuestionType, RegistrationOption, RegistrationQuestion
+from larpmanager.models.registration import (
+    Registration,
+    RegistrationCharacterRel,
+    RegistrationInstallment,
+    RegistrationQuota,
+    RegistrationSection,
+    RegistrationSurcharge,
+    RegistrationTicket,
+)
+from larpmanager.models.writing import Character, Faction
 from larpmanager.utils.common import get_time_diff_today
 from larpmanager.utils.registration import get_reduced_available_count
 
@@ -316,55 +316,70 @@ class RegistrationForm(BaseRegistrationForm):
         que_tickets = RegistrationTicket.objects.filter(event=event).order_by("order")
         if self.gift:
             que_tickets = que_tickets.filter(giftable=True)
+
         for ticket in que_tickets:
             if not self.check_ticket_visibility(ticket):
                 continue
 
-            # Show Waiting tickets only if you are Waiting, or if the player is enrolled in Waiting
-            if ticket.tier == RegistrationTicket.WAITING:
-                if "waiting" not in run.status and not self.has_ticket(RegistrationTicket.WAITING):
-                    continue
+            if self.skip_ticket_type(event, run, ticket):
+                continue
 
-            elif ticket.tier == RegistrationTicket.FILLER:
-                filler_alway = event.get_config("filler_alway", False)
-                if filler_alway:
-                    # Show Filler Tickets only if you have been filler or primary, or if the player is signed up for Filler
-                    if (
-                        "filler" not in run.status
-                        and "primary" not in run.status
-                        and not self.has_ticket(RegistrationTicket.FILLER)
-                    ):
-                        continue
-                else:
-                    # Show Filler Tickets only if you have been fillers, or if the player is subscribed Filler
-                    if "filler" not in run.status and not self.has_ticket(RegistrationTicket.FILLER):
-                        continue
+            if self.skip_ticket_max(reg_counts, ticket):
+                continue
 
-            else:
-                # Show Primary Tickets only if he was primary, or if the player is registered
-                if "primary" not in run.status and not self.has_ticket_primary():
-                    continue
-
-            # If the option has a maximum roof, check has not been reached
-            if ticket.max_available > 0:
-                if not self.instance or ticket != self.instance.ticket:
-                    ticket.available = ticket.max_available
-                    key = f"tk_{ticket.id}"
-                    if key in reg_counts:
-                        ticket.available -= reg_counts[key]
-                    if ticket.available <= 0:
-                        continue
-
-            # if this reduced, check count
-            if ticket.tier == RegistrationTicket.REDUCED:
-                if not self.instance or ticket != self.instance.ticket:
-                    ticket.available = get_reduced_available_count(run)
-                    if ticket.available <= 0:
-                        continue
+            if self.skip_ticket_reduced(run, ticket):
+                continue
 
             tickets.append(ticket)
 
         return tickets
+
+    def skip_ticket_reduced(self, run, ticket):
+        # if this reduced, check count
+        if ticket.tier == RegistrationTicket.REDUCED:
+            if not self.instance or ticket != self.instance.ticket:
+                ticket.available = get_reduced_available_count(run)
+                if ticket.available <= 0:
+                    return True
+        return False
+
+    def skip_ticket_max(self, reg_counts, ticket):
+        # If the option has a maximum roof, check has not been reached
+        if ticket.max_available > 0:
+            if not self.instance or ticket != self.instance.ticket:
+                ticket.available = ticket.max_available
+                key = f"tk_{ticket.id}"
+                if key in reg_counts:
+                    ticket.available -= reg_counts[key]
+                if ticket.available <= 0:
+                    return True
+        return False
+
+    def skip_ticket_type(self, event, run, ticket):
+        # Show Waiting tickets only if you are Waiting, or if the player is enrolled in Waiting
+        if ticket.tier == RegistrationTicket.WAITING:
+            if "waiting" not in run.status and not self.has_ticket(RegistrationTicket.WAITING):
+                return True
+
+        elif ticket.tier == RegistrationTicket.FILLER:
+            filler_alway = event.get_config("filler_alway", False)
+            if filler_alway:
+                # Show Filler Tickets only if you have been filler or primary, or if the player is signed up for Filler
+                if (
+                    "filler" not in run.status
+                    and "primary" not in run.status
+                    and not self.has_ticket(RegistrationTicket.FILLER)
+                ):
+                    return True
+            # Show Filler Tickets only if you have been fillers, or if the player is subscribed Filler
+            elif "filler" not in run.status and not self.has_ticket(RegistrationTicket.FILLER):
+                return True
+
+        # Show Primary Tickets only if he was primary, or if the player is registered
+        elif "primary" not in run.status and not self.has_ticket_primary():
+            return True
+
+        return False
 
     def clean(self):
         form_data = super().clean()

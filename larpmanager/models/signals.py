@@ -25,28 +25,29 @@ from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Q
-from django.db.models.signals import pre_save, post_save, pre_delete
+from django.db.models.signals import post_save, pre_delete, pre_save
 from django.dispatch import receiver
-from django.utils.translation import activate, gettext_lazy as _
+from django.utils.translation import activate
+from django.utils.translation import gettext_lazy as _
 from slugify import slugify
 
+from larpmanager.cache.button import event_button_key
 from larpmanager.cache.feature import get_event_features, reset_event_features
+from larpmanager.models.access import AssocPermission, EventPermission, EventRole, get_event_organizers
 from larpmanager.models.accounting import (
-    AccountingItemTransaction,
-    AccountingItemPayment,
-    Collection,
     AccountingItemCollection,
+    AccountingItemPayment,
+    AccountingItemTransaction,
+    Collection,
 )
 from larpmanager.models.association import Association
-from larpmanager.models.access import AssocPermission, EventPermission, get_event_organizers, EventRole
-from larpmanager.models.event import Run, EventButton, Event, EventText, EventConfig
-from larpmanager.models.form import CharacterQuestion, QuestionType, QuestionStatus, QuestionVisibility
-from larpmanager.models.larpmanager import LarpManagerTutorial, LarpManagerFaq
-from larpmanager.models.member import Member, Membership
-from larpmanager.models.registration import RegistrationTicket, Registration, RegistrationCharacterRel
-from larpmanager.models.writing import Plot, Faction, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.models.casting import Trait, update_traits_all
-from larpmanager.cache.button import event_button_key
+from larpmanager.models.event import Event, EventButton, EventConfig, EventText, Run
+from larpmanager.models.form import CharacterQuestion, QuestionStatus, QuestionType, QuestionVisibility
+from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTutorial
+from larpmanager.models.member import Member, Membership
+from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
+from larpmanager.models.writing import Faction, Plot, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.utils.common import copy_class
 
 
@@ -72,13 +73,13 @@ def pre_save_callback(sender, instance, *args, **kwargs):
 
 
 @receiver(pre_save, sender=Association)
-def pre_save_Association(sender, instance, **kwargs):
+def pre_save_association(sender, instance, **kwargs):
     if not instance.key:
         instance.key = Fernet.generate_key()
 
 
 @receiver(pre_save, sender=AssocPermission)
-def pre_save_AssocPermission(sender, instance, **kwargs):
+def pre_save_assoc_permission(sender, instance, **kwargs):
     if not instance.number:
         n = AssocPermission.objects.filter(feature__module=instance.feature.module).aggregate(Max("number"))[
             "number__max"
@@ -89,7 +90,7 @@ def pre_save_AssocPermission(sender, instance, **kwargs):
 
 
 @receiver(pre_save, sender=EventPermission)
-def pre_save_EventPermission(sender, instance, **kwargs):
+def pre_save_event_permission(sender, instance, **kwargs):
     if not instance.number:
         n = EventPermission.objects.filter(feature__module=instance.feature.module).aggregate(Max("number"))[
             "number__max"
@@ -100,22 +101,22 @@ def pre_save_EventPermission(sender, instance, **kwargs):
 
 
 @receiver(pre_save, sender=Plot)
-def pre_save_Plot(sender, instance, *args, **kwargs):
+def pre_save_plot(sender, instance, *args, **kwargs):
     replace_chars_all(instance)
 
 
 @receiver(pre_save, sender=Faction)
-def pre_save_Faction(sender, instance, *args, **kwargs):
+def pre_save_faction(sender, instance, *args, **kwargs):
     replace_chars_all(instance)
 
 
 @receiver(pre_save, sender=Prologue)
-def pre_save_Prologue(sender, instance, *args, **kwargs):
+def pre_save_prologue(sender, instance, *args, **kwargs):
     replace_chars_all(instance)
 
 
 @receiver(post_save, sender=Run)
-def save_Run_plan(sender, instance, **kwargs):
+def save_run_plan(sender, instance, **kwargs):
     if not instance.plan and instance.event:
         updates = {"plan": instance.event.assoc.plan}
         Run.objects.filter(pk=instance.pk).update(**updates)
@@ -127,12 +128,12 @@ def update_trait(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=AccountingItemPayment)
-def post_save_AccountingItemPayment_updatereg(sender, instance, created, **kwargs):
+def post_save_accounting_item_payment_updatereg(sender, instance, created, **kwargs):
     instance.reg.save()
 
 
 @receiver(pre_save, sender=AccountingItemPayment)
-def update_AccountingItemPayment_member(sender, instance, **kwargs):
+def update_accounting_item_payment_member(sender, instance, **kwargs):
     if not instance.member:
         instance.member = instance.reg.member
 
@@ -160,24 +161,24 @@ def pre_save_collection(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=AccountingItemCollection)
-def post_save_AccountingItemCollection(sender, instance, created, **kwargs):
+def post_save_accounting_item_collection(sender, instance, created, **kwargs):
     if instance.collection:
         instance.collection.save()
 
 
 @receiver(pre_save, sender=SpeedLarp)
-def pre_save_SpeedLarp(sender, instance, *args, **kwargs):
+def pre_save_speed_larp(sender, instance, *args, **kwargs):
     replace_chars_all(instance)
 
 
 @receiver(pre_save, sender=LarpManagerTutorial)
-def pre_save_LarpManagerTutorial(sender, instance, *args, **kwargs):
+def pre_save_larp_manager_tutorial(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = slugify(instance.name)
 
 
 @receiver(pre_save, sender=LarpManagerFaq)
-def pre_save_LarpManagerFaq(sender, instance, *args, **kwargs):
+def pre_save_larp_manager_faq(sender, instance, *args, **kwargs):
     if instance.number:
         return
     n = LarpManagerFaq.objects.filter(typ=instance.typ).aggregate(Max("number"))["number__max"]
@@ -197,7 +198,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 
 @receiver(pre_save, sender=Membership)
-def pre_save_Membership(sender, instance, **kwargs):
+def pre_save_membership(sender, instance, **kwargs):
     if instance.status == Membership.ACCEPTED:
         if not instance.card_number:
             n = Membership.objects.filter(assoc=instance.assoc).aggregate(Max("card_number"))["card_number__max"]
@@ -215,12 +216,12 @@ def pre_save_Membership(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=EventButton)
-def save_EventButton(sender, instance, created, **kwargs):
+def save_event_button(sender, instance, created, **kwargs):
     cache.delete(event_button_key(instance.event_id))
 
 
 @receiver(pre_delete, sender=EventButton)
-def delete_EventButton(sender, instance, **kwargs):
+def delete_event_button(sender, instance, **kwargs):
     cache.delete(event_button_key(instance.event_id))
 
 
@@ -259,6 +260,14 @@ def save_event_update(sender, instance, **kwargs):
 
     features = get_event_features(instance.id)
 
+    save_event_tickets(features, instance)
+
+    save_event_character_form(features, instance)
+
+    reset_event_features(instance.id)
+
+
+def save_event_tickets(features, instance):
     # create tickets if not exists
     tickets = [
         ("", RegistrationTicket.STANDARD, "Standard"),
@@ -271,61 +280,58 @@ def save_event_update(sender, instance, **kwargs):
         if RegistrationTicket.objects.filter(event=instance, tier=ticket[1]).count() == 0:
             RegistrationTicket.objects.create(event=instance, tier=ticket[1], name=ticket[2])
 
+
+def save_event_character_form(features, instance):
     # create fields if not exists / delete if feature not active
-    if "character_form" in features:
-        types = set(CharacterQuestion.objects.filter(event=instance).values_list("typ", flat=True).distinct())
+    if "character_form" not in features:
+        return
 
-        # get most common language between organizers
-        langs = {}
-        for orga in get_event_organizers(instance):
-            lang = orga.language
-            if lang not in langs:
-                langs[lang] = 1
-            else:
-                langs[lang] += 1
-        if langs:
-            max_lang = max(langs, key=langs.get)
+    types = set(CharacterQuestion.objects.filter(event=instance).values_list("typ", flat=True).distinct())
+    # get most common language between organizers
+    langs = {}
+    for orga in get_event_organizers(instance):
+        lang = orga.language
+        if lang not in langs:
+            langs[lang] = 1
         else:
-            max_lang = "en"
-        activate(max_lang)
-
-        # evaluate each question type field
-        choices = dict(QuestionType.choices)
-        all_types = choices.keys()
-
-        custom_tps = {QuestionType.SINGLE, QuestionType.MULTIPLE, QuestionType.TEXT, QuestionType.PARAGRAPH}
-        all_types -= custom_tps
-
-        def_tps = {
-            QuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 100),
-            QuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000),
-            QuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 5000),
-        }
-        if not types:
-            for el, add in def_tps.items():
-                CharacterQuestion.objects.create(
-                    event=instance, typ=el, display=_(add[0]), status=add[1], visibility=add[2], max_length=add[3]
-                )
-        all_types -= set(def_tps.keys())
-
-        for el in all_types:
-            if el in features and el not in types:
-                CharacterQuestion.objects.create(
-                    event=instance,
-                    typ=el,
-                    display=_(el.capitalize()),
-                    status=QuestionStatus.HIDDEN,
-                    visibility=QuestionVisibility.PRIVATE,
-                    max_length=1000,
-                )
-            if el not in features and el in types:
-                CharacterQuestion.objects.filter(event=instance, typ=el).delete()
-
-    reset_event_features(instance.id)
+            langs[lang] += 1
+    if langs:
+        max_lang = max(langs, key=langs.get)
+    else:
+        max_lang = "en"
+    activate(max_lang)
+    # evaluate each question type field
+    choices = dict(QuestionType.choices)
+    all_types = choices.keys()
+    custom_tps = {QuestionType.SINGLE, QuestionType.MULTIPLE, QuestionType.TEXT, QuestionType.PARAGRAPH}
+    all_types -= custom_tps
+    def_tps = {
+        QuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 100),
+        QuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000),
+        QuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 5000),
+    }
+    if not types:
+        for el, add in def_tps.items():
+            CharacterQuestion.objects.create(
+                event=instance, typ=el, display=_(add[0]), status=add[1], visibility=add[2], max_length=add[3]
+            )
+    all_types -= set(def_tps.keys())
+    for el in all_types:
+        if el in features and el not in types:
+            CharacterQuestion.objects.create(
+                event=instance,
+                typ=el,
+                display=_(el.capitalize()),
+                status=QuestionStatus.HIDDEN,
+                visibility=QuestionVisibility.PRIVATE,
+                max_length=1000,
+            )
+        if el not in features and el in types:
+            CharacterQuestion.objects.filter(event=instance, typ=el).delete()
 
 
 @receiver(post_save, sender=Registration)
-def post_save_Registration_campaign(sender, instance, **kwargs):
+def post_save_registration_campaign(sender, instance, **kwargs):
     if not instance.member:
         return
 

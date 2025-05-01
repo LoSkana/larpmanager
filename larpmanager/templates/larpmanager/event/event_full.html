@@ -1,15 +1,17 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load tz show_tags static i18n %}
-{% block title %}{{ name }}{% endblock %}
+{% block title %}
+    {{ name }}
+{% endblock title %}
 {% block robots %}
     {% include "elements/robots_show.html" %}
-{% endblock %}
+{% endblock robots %}
 {% block media %}
     <meta name="description" content="{{ event.tagline }}" />
     <meta property="og:title" content="{{ name }}" />
     {% if event.tagline %}<meta property="og:description" content="{{ event.tagline }}" />{% endif %}
     <meta property="og:image" content="{{ cover }}" />
-{% endblock %}
+{% endblock media %}
 {% block wrapper %}
     <div id="fullscreen">
         <div class="tit">
@@ -26,4 +28,4 @@
         </div>
         {% if data.authors %}<div class="authors">{{ data.authors | safe }}</div>{% endif %}
     </div>
-{% endblock %}
+{% endblock wrapper %}

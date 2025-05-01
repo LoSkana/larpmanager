@@ -263,20 +263,46 @@ msgstr ""
 msgid "If checked: Send an email to the organisers for each payment received"
 msgstr ""
 
-msgid "Disable amount change"
+msgid "Customised mail server"
 msgstr ""
 
-msgid ""
-"If checked: Hides the possibility for the player to change the payment "
-"amount for his entries"
+msgid "Use TLD"
 msgstr ""
 
-msgid "Unique code"
+msgid "Host Address"
 msgstr ""
 
-msgid ""
-"If checked: Adds a unique code to each payment, which helps in being able to "
-"recognize it"
+msgid "Port"
+msgstr ""
+
+msgid "Username of account"
+msgstr ""
+
+msgid "Password of account"
+msgstr ""
+
+msgid "Centarui"
+msgstr ""
+
+msgid "Probability"
+msgstr ""
+
+msgid "Probability of showing the special page (out of thousands)"
+msgstr ""
+
+msgid "Badge"
+msgstr ""
+
+msgid "Name of badge to be awarded"
+msgstr ""
+
+msgid "Description to be shown on the special page"
+msgstr ""
+
+msgid "Page"
+msgstr ""
+
+msgid "Contents of the special page"
 msgstr ""
 
 msgid "Deadline"
@@ -293,39 +319,9 @@ msgstr ""
 msgid "Frequency"
 msgstr ""
 
-msgid "Sets how often reminder emails are sent, in days (default: 5)"
-msgstr ""
-
-msgid "VAT"
-msgstr ""
-
-msgid "Ticket"
-msgstr ""
-
-msgid "Percentage of VAT to be calculated on the ticket cost alone"
-msgstr ""
-
-msgid "Options"
-msgstr ""
-
 msgid ""
-"Percentage of VAT to be calculated on the sum of the costs of the "
-"registration options"
-msgstr ""
-
-msgid "Tokens / Credits"
-msgstr ""
-
-msgid "Token name"
-msgstr ""
-
-msgid "Name to be displayed for tokens"
-msgstr ""
-
-msgid "Name credits"
-msgstr ""
-
-msgid "Name to be displayed for credits"
+"Sets how often reminder emails are sent, in days (if not set, no emails are "
+"sent)"
 msgstr ""
 
 msgid "Members"
@@ -365,24 +361,6 @@ msgstr ""
 msgid "Apply a check on the tax code of players"
 msgstr ""
 
-msgid "Customised mail server"
-msgstr ""
-
-msgid "Use TLD"
-msgstr ""
-
-msgid "Host Address"
-msgstr ""
-
-msgid "Port"
-msgstr ""
-
-msgid "Username of account"
-msgstr ""
-
-msgid "Password of account"
-msgstr ""
-
 msgid "Voting"
 msgstr ""
 
@@ -410,16 +388,10 @@ msgstr ""
 msgid "Maximum number of votes"
 msgstr ""
 
-msgid "Treasury"
-msgstr ""
-
-msgid "Appointees"
-msgstr ""
-
-msgid "Treasury appointees"
-msgstr ""
-
 msgid "Reminder"
+msgstr ""
+
+msgid "Sets how often reminder emails are sent, in days (default: 5)"
 msgstr ""
 
 msgid "Text"
@@ -435,6 +407,63 @@ msgid ""
 "If checked: the system will send reminds the days on which holidays fall"
 msgstr ""
 
+msgid "Disable amount change"
+msgstr ""
+
+msgid ""
+"If checked: Hides the possibility for the player to change the payment "
+"amount for his entries"
+msgstr ""
+
+msgid "Unique code"
+msgstr ""
+
+msgid ""
+"If checked: Adds a unique code to each payment, which helps in being able to "
+"recognize it"
+msgstr ""
+
+msgid "VAT"
+msgstr ""
+
+msgid "Ticket"
+msgstr ""
+
+msgid "Percentage of VAT to be calculated on the ticket cost alone"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid ""
+"Percentage of VAT to be calculated on the sum of the costs of the "
+"registration options"
+msgstr ""
+
+msgid "Tokens / Credits"
+msgstr ""
+
+msgid "Token name"
+msgstr ""
+
+msgid "Name to be displayed for tokens"
+msgstr ""
+
+msgid "Name credits"
+msgstr ""
+
+msgid "Name to be displayed for credits"
+msgstr ""
+
+msgid "Treasury"
+msgstr ""
+
+msgid "Appointees"
+msgstr ""
+
+msgid "Treasury appointees"
+msgstr ""
+
 msgid "Organisation fee"
 msgstr ""
 
@@ -444,30 +473,6 @@ msgstr ""
 msgid ""
 "Percentage of takings calculated as a fee for association infrastructure (in "
 "whole numbers from 0 to 100)"
-msgstr ""
-
-msgid "Centarui"
-msgstr ""
-
-msgid "Probability"
-msgstr ""
-
-msgid "Probability of showing the special page (out of thousands)"
-msgstr ""
-
-msgid "Badge"
-msgstr ""
-
-msgid "Name of badge to be awarded"
-msgstr ""
-
-msgid "Description to be shown on the special page"
-msgstr ""
-
-msgid "Page"
-msgstr ""
-
-msgid "Contents of the special page"
 msgstr ""
 
 msgid "Payment fees"
@@ -1389,8 +1394,8 @@ msgstr ""
 msgid "Plot"
 msgstr ""
 
-#, python-format
-msgid "This text will be added to the sheet of %(name)s"
+#, python-brace-format
+msgid "This text will be added to the sheet of {name}"
 msgstr ""
 
 msgid "Faction"
@@ -3256,9 +3261,7 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
-msgid ""
-"The form is saved every 30 seconds. When this is performed <span "
-"id='confirm'>this becomes green.</span>"
+msgid "The form is saved every 30 seconds."
 msgstr ""
 
 msgid "Select year"
@@ -3479,10 +3482,10 @@ msgstr ""
 
 msgid ""
 "Copy and paste exactly all the coloured text below into the field "
-"\"notes\" (this is important!)"
+"'notes' (this is important!)"
 msgstr ""
 
-msgid "Indicates that payment is sent \"to friends and family\"."
+msgid "Indicates that payment is sent 'to friends and family'."
 msgstr ""
 
 msgid ""
@@ -5321,7 +5324,7 @@ msgid "The registration request will be updated automatically."
 msgstr ""
 
 msgid ""
-"Once downloaded you must print it, sign it, take a digital scan, and  upload "
+"Once downloaded you must print it, sign it, take a digital scan, and upload "
 "it to the form below. Your request will be considered at the  next meeting "
 "of the Board. You will receive confirmation of the outcome of its  "
 "evaluation. "
@@ -7868,8 +7871,8 @@ msgstr ""
 msgid "Workshop already done!"
 msgstr ""
 
-#, python-format
-msgid "Completed module. Remaining: %(number)d"
+#, python-brace-format
+msgid "Completed module. Remaining: {number:d}"
 msgstr ""
 
 msgid "Well done, you've completed all modules!"

@@ -31,7 +31,7 @@ from pilkit.processors import ResizeToFill
 from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 from tinymce.models import HTMLField
 
-from larpmanager.models.utils import get_attr, UploadToPathAndRename
+from larpmanager.models.utils import UploadToPathAndRename, get_attr
 
 AlphanumericValidator = RegexValidator(r"^[0-9a-z_-]*$", "Only characters allowed are: 0-9, a-z, _, -.")
 

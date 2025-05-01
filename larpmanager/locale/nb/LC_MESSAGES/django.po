@@ -29,11 +29,11 @@ msgstr "Hei"
 msgid "Fee"
 msgstr "Avgift"
 
-msgid "VAT"
-msgstr "MVA"
-
 msgid "Age"
 msgstr "Alder"
+
+msgid "VAT"
+msgstr "MVA"
 
 msgid "Cap"
 msgstr "Cap"
@@ -89,11 +89,11 @@ msgstr "Informasjon"
 msgid "Port"
 msgstr "Tilkoblingsport"
 
-msgid "Text"
-msgstr "Tekst"
-
 msgid "Page"
 msgstr "Side"
+
+msgid "Text"
+msgstr "Tekst"
 
 msgid "Name"
 msgstr "Navn"
@@ -459,14 +459,14 @@ msgstr "Introduksjoner"
 msgid "Tokens"
 msgstr "Poletter"
 
-msgid "Ticket"
-msgstr "Billett"
-
 msgid "Voting"
 msgstr "Stemmegivning"
 
 msgid "Active"
 msgstr "Aktiv"
+
+msgid "Ticket"
+msgstr "Billett"
 
 msgid "Nature"
 msgstr "Natur"
@@ -663,14 +663,14 @@ msgstr "Forfattere"
 msgid "Tagline"
 msgstr "Tagline"
 
-msgid "Options"
-msgstr "Alternativer"
+msgid "Use TLD"
+msgstr "Bruk TLD"
 
 msgid "Members"
 msgstr "Medlemmer"
 
-msgid "Use TLD"
-msgstr "Bruk TLD"
+msgid "Options"
+msgstr "Alternativer"
 
 msgid "VAT No."
 msgstr "MVA-nr."
@@ -888,11 +888,11 @@ msgstr "Innstillinger"
 msgid "Calendar"
 msgstr "Kalender"
 
+msgid "Centarui"
+msgstr "Centarui"
+
 msgid "Deadline"
 msgstr "Frist"
-
-msgid "Treasury"
-msgstr "Finansdepartementet"
 
 msgid "Reminder"
 msgstr "Påminnelse"
@@ -900,8 +900,8 @@ msgstr "Påminnelse"
 msgid "Holidays"
 msgstr "Ferier"
 
-msgid "Centarui"
-msgstr "Centarui"
+msgid "Treasury"
+msgstr "Finansdepartementet"
 
 msgid "VAT rate"
 msgstr "MVA-sats"
@@ -1308,14 +1308,14 @@ msgstr "Utseende"
 msgid "New signup"
 msgstr "Nye oppføringer"
 
-msgid "Token name"
-msgstr "Token-navn"
-
 msgid "Annual fee"
 msgstr "Årlig avgift"
 
 msgid "Candidates"
 msgstr "Kandidater"
+
+msgid "Token name"
+msgstr "Token-navn"
 
 msgid "Appointees"
 msgstr "Utnevnte"
@@ -1536,11 +1536,11 @@ msgstr "Tidligere arrangementer"
 msgid "Carbon copy"
 msgstr "Karbonkopi"
 
-msgid "Unique code"
-msgstr "Unik kode"
-
 msgid "Probability"
 msgstr "Sannsynlighet"
+
+msgid "Unique code"
+msgstr "Unik kode"
 
 msgid "Fiscal code"
 msgstr "Skatteregler"
@@ -1707,11 +1707,11 @@ msgstr "Transaksjoner"
 msgid "Disbursement"
 msgstr "Utbetaling"
 
-msgid "Name credits"
-msgstr "Navn studiepoeng"
-
 msgid "Host Address"
 msgstr "Vertsadresse"
+
+msgid "Name credits"
+msgstr "Navn studiepoeng"
 
 msgid "Payment fees"
 msgstr "Betalingskommisjoner"
@@ -3200,11 +3200,11 @@ msgstr "Registreringen er åpen!"
 msgid "Expenses collaborators"
 msgstr "Utgifter til ansatte"
 
-msgid "Minimum age of members"
-msgstr "Minimumsalder for medlemmer"
-
 msgid "Customised mail server"
 msgstr "Skreddersydd e-postserver"
+
+msgid "Minimum age of members"
+msgstr "Minimumsalder for medlemmer"
 
 msgid "Additional Preferences"
 msgstr "Ytterligere preferanser"
@@ -4043,6 +4043,9 @@ msgstr "Navn på rabatt - til internt bruk"
 msgid "Image shown on homepage as promoter"
 msgstr "Bilde vises på hjemmesiden som promoter"
 
+msgid "The form is saved every 30 seconds."
+msgstr "Skjemaet lagres hvert 30. sekund."
+
 msgid "Select a file with extension 'zip'."
 msgstr "Velg en fil med filtypen \"zip\"."
 
@@ -4242,9 +4245,9 @@ msgstr "Påmeldingsavgift, sum som skal betales"
 msgid " Hurry: only %(num)d tickets available."
 msgstr " Skynd deg: det er bare %(num)d billetter igjen."
 
-#, python-format
-msgid "Completed module. Remaining: %(number)d"
-msgstr "Fullført modul. Gjenstående: %(number)d"
+#, python-brace-format
+msgid "Completed module. Remaining: {number:d}"
+msgstr "Fullført modul. Gjenstår: {number:d}"
 
 msgid "Apply a check on the tax code of players"
 msgstr "Bruk en sjekk på skattekoden til spillerne"
@@ -4530,6 +4533,10 @@ msgstr "Fødested ikke inkludert i ISTAT-listen"
 msgid "You are now logged in with your main account:"
 msgstr "Du er nå logget inn med hovedkontoen din:"
 
+#, python-brace-format
+msgid "This text will be added to the sheet of {name}"
+msgstr "Denne teksten vil bli lagt til i arket til {name}."
+
 msgid "Extended description - maximum 5000 characters"
 msgstr "Utvidet beskrivelse - maksimalt 5000 tegn"
 
@@ -4611,10 +4618,6 @@ msgstr "På denne siden kan du legge til eller redigere et tegn."
 
 msgid "This page allows you to edit a member's profile."
 msgstr "På denne siden kan du redigere et medlems profil."
-
-#, python-format
-msgid "This text will be added to the sheet of %(name)s"
-msgstr "Denne teksten vil bli lagt til i arket med %(name)s"
 
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
@@ -4985,8 +4988,8 @@ msgstr "Angi hvordan utgiftene er konfigurert på budsjettnivå."
 msgid "Indicate as precisely as possible where to pick you up."
 msgstr "Angi så nøyaktig som mulig hvor du skal hentes."
 
-msgid "Indicates that payment is sent \"to friends and family\"."
-msgstr "Det står at betalingen er sendt \"til venner og familie\"."
+msgid "Indicates that payment is sent 'to friends and family'."
+msgstr "Angir at betalingen er sendt \"til venner og familie\"."
 
 msgid "View the complete list of characters and their players!"
 msgstr "Se den komplette listen over rollefigurer og deres spillere!"
@@ -6292,6 +6295,13 @@ msgstr ""
 "Rabatten gjelder kun hvis du er påmeldt til et annet løp i samme "
 "arrangement."
 
+msgid ""
+"Sets how often reminder emails are sent, in days (if not set, no emails are "
+"sent)"
+msgstr ""
+"Angir hvor ofte påminnelses-e-poster skal sendes, i dager (hvis ikke angitt,"
+" sendes ingen e-poster)"
+
 #, python-format
 msgid ""
 "Reimbursement of %(amount).2f %(credits)s with reason '%(reason)s' was "
@@ -7004,11 +7014,11 @@ msgstr ""
 "søknaden"
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field \"notes\" "
+"Copy and paste exactly all the coloured text below into the field 'notes' "
 "(this is important!)"
 msgstr ""
 "Kopier og lim inn nøyaktig all den fargede teksten nedenfor i feltet "
-"\"notater\" (dette er viktig!)."
+"\"notater\" (dette er viktig!)"
 
 msgid ""
 "This page shows in the detail of an event, the list of expertises covered by"
@@ -7501,13 +7511,6 @@ msgid ""
 msgstr ""
 "Antall dager etter at fristen er utløpt som registreringer markeres som "
 "kansellerte (standard 30 dager)"
-
-msgid ""
-"The form is saved every 30 seconds. When this is performed <span "
-"id='confirm'>this becomes green.</span>"
-msgstr ""
-"Skjemaet lagres hvert 30. sekund. Når det skjer, blir <span "
-"id='confirm'>denne fargen grønn.</span>."
 
 msgid ""
 "Select the payment methods to be activated; then return to this page to "
@@ -8856,8 +8859,8 @@ msgstr ""
 "stemme på generalforsamlingen!"
 
 msgid ""
-"Once downloaded you must print it, sign it, take a digital scan, and  upload"
-" it to the form below. Your request will be considered at the  next meeting "
+"Once downloaded you must print it, sign it, take a digital scan, and upload "
+"it to the form below. Your request will be considered at the  next meeting "
 "of the Board. You will receive confirmation of the outcome of its  "
 "evaluation. "
 msgstr ""

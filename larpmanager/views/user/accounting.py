@@ -18,65 +18,65 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from datetime import datetime, date
+from datetime import date, datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import JsonResponse, Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
+from larpmanager.accounting.gateway import (
+    redsys_webhook,
+    satispay_check,
+    satispay_webhook,
+    stripe_webhook,
+    sumup_webhook,
+)
+from larpmanager.accounting.invoice import invoice_received_money
+from larpmanager.accounting.member import info_accounting
+from larpmanager.accounting.payment import get_payment_form
+from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.accounting import (
-    RefundRequestForm,
-    PaymentForm,
-    DonateForm,
-    CollectionNewForm,
-    CollectionForm,
-    WireInvoiceSubmitForm,
     AnyInvoiceSubmitForm,
+    CollectionForm,
+    CollectionNewForm,
+    DonateForm,
+    PaymentForm,
+    RefundRequestForm,
+    WireInvoiceSubmitForm,
 )
 from larpmanager.forms.member import (
     MembershipForm,
 )
+from larpmanager.mail.accounting import notify_invoice_check, notify_refund_request
 from larpmanager.models.accounting import (
     AccountingItemCollection,
     AccountingItemExpense,
-    AccountingItemPayment,
     AccountingItemMembership,
     AccountingItemOther,
-    PaymentInvoice,
+    AccountingItemPayment,
     Collection,
+    PaymentInvoice,
 )
 from larpmanager.models.association import Association
-from larpmanager.models.member import Membership, Member, get_user_membership
+from larpmanager.models.member import Member, Membership, get_user_membership
 from larpmanager.models.registration import (
     Registration,
 )
-from larpmanager.accounting.member import info_accounting
 from larpmanager.utils.base import def_user_ctx
-from larpmanager.cache.feature import get_assoc_features
 from larpmanager.utils.common import (
     get_assoc,
     get_collection_partecipate,
     get_collection_redeem,
 )
-from larpmanager.utils.member import calculate_fiscal_code
-from larpmanager.utils.event import get_event_run, check_event_permission
+from larpmanager.utils.event import check_event_permission, get_event_run
 from larpmanager.utils.exceptions import (
     check_assoc_feature,
 )
-from larpmanager.mail.accounting import notify_invoice_check, notify_refund_request
-from larpmanager.accounting.payment import get_payment_form
-from larpmanager.accounting.invoice import invoice_received_money
-from larpmanager.accounting.gateway import (
-    satispay_check,
-    satispay_webhook,
-    stripe_webhook,
-    sumup_webhook,
-    redsys_webhook,
-)
+from larpmanager.utils.member import calculate_fiscal_code
 
 
 @login_required

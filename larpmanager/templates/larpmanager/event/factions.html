@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load tz show_tags static i18n %}
 {% block title %}
     {% trans "Factions" %} - {{ run.search }}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     <h2>{% trans "Primary" %}</h2>
     <div>
@@ -74,4 +74,4 @@
             </table>
         </div>
     {% endif %}
-{% endblock %}
+{% endblock content %}

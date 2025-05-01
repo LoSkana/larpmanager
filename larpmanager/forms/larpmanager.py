@@ -39,4 +39,4 @@ class LarpManagerContact(LarpManagerCheck):
 
 class LarpManagerTicket(LarpManagerContact):
     def __init__(self, *args, **kwargs):
-        super(LarpManagerTicket, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)

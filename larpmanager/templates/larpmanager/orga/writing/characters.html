@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
     {% trans "Characters" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the characters of the event." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/writing.html" %}
     <p id="show">
@@ -246,8 +246,8 @@
                     {% endif %}
                     {% for key, que in char_questions.items %}
                         <td class="hide question q_{{ key }}">
-                            <span class='has_show_tooltip res_{{ key }}'></span>
-                            <span class='hide show_tooltip'>{{ que.display }}</span></span>
+                            <span class="has_show_tooltip res_{{ key }}"></span>
+                            <span class="hide show_tooltip">{{ que.display }}</span></span>
                         </td>
                     {% endfor %}
                     <td>{{ el.teaser_red | safe }}</td>
@@ -312,7 +312,7 @@
             {% endif %}
         {% endfor %}
     {% endif %}
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
 var url_load_questions = "{% url 'orga_character_form_list' run.event.slug run.number %}";
@@ -333,4 +333,4 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
     </script>
-{% endblock %}
+{% endblock js %}

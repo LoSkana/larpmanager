@@ -22,15 +22,15 @@ from django.contrib import admin
 
 from larpmanager.admin.base import DefModelAdmin
 from larpmanager.models.larpmanager import (
+    LarpManagerBlog,
+    LarpManagerDiscover,
     LarpManagerFaq,
     LarpManagerFaqType,
-    LarpManagerTutorial,
-    LarpManagerBlog,
-    LarpManagerShowcase,
-    LarpManagerProfiler,
-    LarpManagerDiscover,
-    LarpManagerReview,
     LarpManagerHowto,
+    LarpManagerProfiler,
+    LarpManagerReview,
+    LarpManagerShowcase,
+    LarpManagerTutorial,
 )
 
 

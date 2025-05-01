@@ -1,49 +1,51 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load tz show_tags static i18n %}
-{% block title %}{{ char.name }} - {{ run.search }}{% endblock %}
+{% block title %}
+    {{ char.name }} - {{ run.search }}
+{% endblock title %}
 {% block nav %}
     {% include "larpmanager/manage/nav.html" %}
     {% if char.player_id == request.user.member.id %}
         <div class="nav">
             {% if features.co_creation %}
-                <div class='lm_tooltip'>
-                    <a href="{% url 'character_co_creation' event.slug run.number char.number %}">{% trans 'Co-creation' %}</a>
-                    <div class='lm_tooltiptext'>{% trans 'Participate in the co-creation of the character!' %}</div>
+                <div class="lm_tooltip">
+                    <a href="{% url 'character_co_creation' event.slug run.number char.number %}">{% trans "Co-creation" %}</a>
+                    <div class="lm_tooltiptext">{% trans "Participate in the co-creation of the character!" %}</div>
                 </div>
             {% endif %}
             {% if features.user_character %}
-                <div class='lm_tooltip'>
-                    <a href="{% url 'character_change' event.slug run.number char.number %}">{% trans 'Change' %}</a>
-                    <div class='lm_tooltiptext'>{% trans "Edit your character's data!" %}</div>
+                <div class="lm_tooltip">
+                    <a href="{% url 'character_change' event.slug run.number char.number %}">{% trans "Change" %}</a>
+                    <div class="lm_tooltiptext">{% trans "Edit your character's data!" %}</div>
                 </div>
             {% endif %}
             {% if features.px and px_user %}
-                <div class='lm_tooltip'>
-                    <a href="{% url 'character_abilities' event.slug run.number char.number %}">{% trans 'Ability' %}</a>
-                    <div class='lm_tooltiptext'>{% trans 'Buy skills for your character!' %}</div>
+                <div class="lm_tooltip">
+                    <a href="{% url 'character_abilities' event.slug run.number char.number %}">{% trans "Ability" %}</a>
+                    <div class="lm_tooltiptext">{% trans "Buy skills for your character!" %}</div>
                 </div>
             {% endif %}
             {% if features.custom_character %}
-                <div class='lm_tooltip'>
-                    <a href="{% url 'character_customize' event.slug run.number char.number %}">{% trans 'Customize' %}</a>
-                    <div class='lm_tooltiptext'>{% trans 'Modify some character elements to make it yours!' %}</div>
+                <div class="lm_tooltip">
+                    <a href="{% url 'character_customize' event.slug run.number char.number %}">{% trans "Customize" %}</a>
+                    <div class="lm_tooltiptext">{% trans "Modify some character elements to make it yours!" %}</div>
                 </div>
             {% endif %}
             {% if features.player_relationships %}
-                <div class='lm_tooltip'>
-                    <a href="{% url 'character_relationships' event.slug run.number char.number %}">{% trans 'Relationships' %}</a>
-                    <div class='lm_tooltiptext'>{% trans "Fill in your character's relationships!" %}</div>
+                <div class="lm_tooltip">
+                    <a href="{% url 'character_relationships' event.slug run.number char.number %}">{% trans "Relationships" %}</a>
+                    <div class="lm_tooltiptext">{% trans "Fill in your character's relationships!" %}</div>
                 </div>
             {% endif %}
             {% if features.help %}
-                <div class='lm_tooltip'>
-                    <a href="{% url 'help' event.slug run.number %}">{% trans 'Questions' %}</a>
-                    <div class='lm_tooltiptext'>{% trans 'Write here questions about your character directly to the authors!' %}</div>
+                <div class="lm_tooltip">
+                    <a href="{% url 'help' event.slug run.number %}">{% trans "Questions" %}</a>
+                    <div class="lm_tooltiptext">{% trans "Write here questions about your character directly to the authors!" %}</div>
                 </div>
             {% endif %}
         </div>
     {% endif %}
-{% endblock %}
+{% endblock nav %}
 {% block content %}
     <div class="character">
         <div class="gallery single">
@@ -57,25 +59,25 @@
                     <div class="first">
                         {% if char.title %}
                             <div class="go-inline">
-                                <b>{% trans 'Title' %}:&nbsp;</b>{{ char.title }}
+                                <b>{% trans "Title" %}:&nbsp;</b>{{ char.title }}
                             </div>
                         {% endif %}
                         {% if character.mirror %}
                             <div class="go-inline">
-                                <b>{% trans 'Special' %}:&nbsp;</b>{% trans 'Mirror (This character represents the true secret identity of oneof the other characters. Can be selected normally in casting, such as the other characters. In case is assigned to you, you will automatically assigned the true character of which it is a mirror)' %}
+                                <b>{% trans "Special" %}:&nbsp;</b>{% trans "Mirror (This character represents the true secret identity of oneof the other characters. Can be selected normally in casting, such as the other characters. In case is assigned to you, you will automatically assigned the true character of which it is a mirror)" %}
                             </div>
                         {% elif character.special == 'n' %}
                             <div class="go-inline">
-                                <b>{% trans 'Special' %}:&nbsp;</b>{% trans "NPC (This character is not selectable as a playable character, and the event will be interpreted by a staff member)" %}
+                                <b>{% trans "Special" %}:&nbsp;</b>{% trans "NPC (This character is not selectable as a playable character, and the event will be interpreted by a staff member)" %}
                             </div>
                         {% elif character.special == 'f' %}
                             <div class="go-inline">
-                                <b>{% trans 'Special' %}:&nbsp;</b>{% trans 'Filler (This is an character with lighter character sheet and relationships. )' %}
+                                <b>{% trans "Special" %}:&nbsp;</b>{% trans "Filler (This is an character with lighter character sheet and relationships. )" %}
                             </div>
                         {% endif %}
                         {% if char.player %}
                             <div class="go-inline">
-                                <b>{% trans 'Player' %}:&nbsp;</b><a href="{% url 'public' char.player_id %}">
+                                <b>{% trans "Player" %}:&nbsp;</b><a href="{% url 'public' char.player_id %}">
                                     {% if run.id in all_runs or run.reg %}
                                         {{ char.player_full }}
                                     {% else %}
@@ -85,35 +87,35 @@
                             </div>
                             {% if char.pronoun %}
                                 <div class="go-inline">
-                                    <b>{% trans 'Pronoun' %}:&nbsp;</b>{{ char.pronoun }}
+                                    <b>{% trans "Pronoun" %}:&nbsp;</b>{{ char.pronoun }}
                                 </div>
                             {% endif %}
                             {% if char.song %}
                                 <div class="go-inline">
-                                    <b>{% trans 'Song' %}:&nbsp;</b><a href="{{ char.song }}">{{ char.song }}</a>
+                                    <b>{% trans "Song" %}:&nbsp;</b><a href="{{ char.song }}">{{ char.song }}</a>
                                 </div>
                             {% endif %}
                             {% if char.public %}
                                 <div class="go-inline">
-                                    <b>{% trans 'Public informations' %}:&nbsp;</b>{{ char.public }}
+                                    <b>{% trans "Public informations" %}:&nbsp;</b>{{ char.public }}
                                 </div>
                             {% endif %}
                             {% if char.private and check %}
                                 <div class="go-inline">
-                                    <b>{% trans 'Private' %}:&nbsp;</b>{{ char.private }}
+                                    <b>{% trans "Private" %}:&nbsp;</b>{{ char.private }}
                                 </div>
                             {% endif %}
                             {% if approval and check %}
                                 <div class="go-inline">
-                                    <b>{% trans 'Status' %}:&nbsp;</b><span class="status_{{ character.status }}">{{ character.get_status_display | template_trans }}</span>
+                                    <b>{% trans "Status" %}:&nbsp;</b><span class="status_{{ character.status }}">{{ character.get_status_display | template_trans }}</span>
                                 </div>
                             {% endif %}
                         {% else %}
                             {% if pref %}
                                 <div class="go-inline">
-                                    <b>{% trans 'Casting' %}:&nbsp;</b>{% trans 'Preferences - Total' %}  {{ pref.0 }} ({% trans 'Average' %} {{ pref.1 }})
+                                    <b>{% trans "Casting" %}:&nbsp;</b>{% trans "Preferences - Total" %}  {{ pref.0 }} ({% trans "Average" %} {{ pref.1 }})
                                     {% if pref.0 > 0 %}
-                                        <a href="#" class="my_toggle" tog="chart">{% trans 'Graph' %}</a>
+                                        <a href="#" class="my_toggle" tog="chart">{% trans "Graph" %}</a>
                                         <div class="hide chart">
                                             <br />
                                             <canvas id="myChart" width="400" height="200"></canvas>
@@ -158,7 +160,7 @@
                                         {% if quest.open or check %}
                                             {% with quest_types|get:f.typ as qt %}<h2>{{ qt.name }}</h2>{% endwith %}
                                             <div class="go-inline">
-                                                <b>{% trans 'Quest' %}: </b>{{ quest.name }}, <b>{% trans 'Trait' %}: </b>{{ f.name }}
+                                                <b>{% trans "Quest" %}: </b>{{ quest.name }}, <b>{% trans "Trait" %}: </b>{{ f.name }}
                                             </div>
                                             {% if quest.teaser and show_teaser %}
                                                 {% show_char quest.teaser run 1 %}
@@ -168,7 +170,7 @@
                                             {% endif %}
                                             {% if f.open %}
                                                 <div class="go-inline">
-                                                    <b>{% trans 'Other characters' %}: </b>
+                                                    <b>{% trans "Other characters" %}: </b>
                                                 </div>
                                                 {% for el in f.traits %}
                                                     {% if el.char and el.char.number != char.number %}
@@ -190,25 +192,25 @@
                 {% if show_print_pdf %}
                     <hr class="clear" />
                     <p>
-                        <a href="{% url 'character_pdf_sheet' event.slug run.number char.number %}">{% trans 'Download complete sheet' %}</a>
+                        <a href="{% url 'character_pdf_sheet' event.slug run.number char.number %}">{% trans "Download complete sheet" %}</a>
                     </p>
                     <p>
                         <a href="{% url 'character_pdf_sheet_friendly' event.slug run.number char.number %}">
-                            {% trans 'Download light sheet' %}
+                            {% trans "Download light sheet" %}
                         </a>
                     </p>
                     {% if features.relationships or features.player_relationships %}
                         <p>
                             <a href="{% url 'character_pdf_relationships' event.slug run.number char.number %}">
-                                {% trans 'Download relationships' %}
+                                {% trans "Download relationships" %}
                             </a>
                         </p>
                     {% endif %}
                 {% endif %}
                 <hr class="clear" />
-                <h1 class="c" style="font-size:250%">{% trans 'Private area' %}</h1>
+                <h1 class="c" style="font-size:250%">{% trans "Private area" %}</h1>
                 {% if sheet_char.preview and show_preview %}
-                    <h2 class="c">{% trans 'Preview' %}</h2>
+                    <h2 class="c">{% trans "Preview" %}</h2>
                     <div class="plot">{% show_char sheet_char.preview run 1 %}</div>
                 {% endif %}
                 {% if features.px %}
@@ -216,7 +218,7 @@
                 {% endif %}
                 {% if character.mirror_inv and False %}
                     <div class="go-inline">
-                        <b>{% trans 'Mirror' %}:&nbsp;</b>{{ character.mirror_inv }}
+                        <b>{% trans "Mirror" %}:&nbsp;</b>{{ character.mirror_inv }}
                     </div>
                 {% endif %}
                 {% for g in sheet_factions %}
@@ -229,13 +231,13 @@
                     {% endif %}
                 {% endfor %}
                 {% if sheet_char.text and show_text %}
-                    <h2 class="c">{% trans 'Sheet' %}</h2>
+                    <h2 class="c">{% trans "Sheet" %}</h2>
                     <div class="plot">{% show_char sheet_char run 1 %}</div>
                 {% endif %}
                 {% include "elements/sheet/plots.html" %}
                 {% include "elements/sheet/quests.html" %}
                 {% if show_co_creation %}
-                    <h2 class="c">{% trans 'Co-creation' %}</h2>
+                    <h2 class="c">{% trans "Co-creation" %}</h2>
                     <p class="c">
                         <b>{% trans "Questions" %}</b>
                     </p>
@@ -248,13 +250,13 @@
                     {% if not staff %}
                         <p class="c">
                             <button>
-                                <a href="{% url 'character_co_creation' event.slug run.number char.number %}">{% trans 'Change' %}</a>
+                                <a href="{% url 'character_co_creation' event.slug run.number char.number %}">{% trans "Change" %}</a>
                             </button>
                         </p>
                     {% endif %}
                 {% endif %}
                 {% if rel and show_text %}
-                    <h2 class="c">{% trans 'Relationships' %}</h2>
+                    <h2 class="c">{% trans "Relationships" %}</h2>
                     {% for el in rel %}
                         <div class="gallery single relationships">
                             <div class="el">
@@ -272,11 +274,11 @@
                             </div>
                             {% if el.player_id > 0 %}
                                 <div class="go-inline">
-                                    <b>{% trans 'Player' %}:&nbsp;</b><a href="{% url 'public' el.player_id %}">{{ el.player }}</a>
+                                    <b>{% trans "Player" %}:&nbsp;</b><a href="{% url 'public' el.player_id %}">{{ el.player }}</a>
                                 </div>
                             {% endif %}
                             <div class="go-inline">
-                                <b>{% trans 'Factions' %}:&nbsp;</b>
+                                <b>{% trans "Factions" %}:&nbsp;</b>
                                 {% for fnum in el.factions %}
                                     {% with factions|get:fnum as g %}
                                         {% if not g.typ == 'g' %}
@@ -287,7 +289,7 @@
                                 {% endfor %}
                             </div>
                             <div class="go-inline">
-                                <b>{% trans 'Relationship' %}:&nbsp;</b>{{ el.text }}
+                                <b>{% trans "Relationship" %}:&nbsp;</b>{{ el.text }}
                             </div>
                         </div>
                     </div>
@@ -316,11 +318,11 @@
                                     </div>
                                     {% if el.player_id > 0 %}
                                         <div class="go-inline">
-                                            <b>{% trans 'Player' %}:&nbsp;</b><a href="{% url 'public' el.player_id %}">{{ el.player }}</a>
+                                            <b>{% trans "Player" %}:&nbsp;</b><a href="{% url 'public' el.player_id %}">{{ el.player }}</a>
                                         </div>
                                     {% endif %}
                                     <div class="go-inline">
-                                        <b>{% trans 'Factions' %}:&nbsp;</b>
+                                        <b>{% trans "Factions" %}:&nbsp;</b>
                                         {% for fnum in el.factions %}
                                             {% with factions|get:fnum as g %}
                                                 {% if not g.typ == 'g' %}
@@ -343,7 +345,7 @@
     {% endif %}
 </div>
 </div>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js">});</script>
     {% if pref %}
@@ -357,11 +359,11 @@ function go_chart() {
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: [{% with ''|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" %} "{{ forloop.counter }}"{% endfor %}{% endwith %}],
+            labels: [{% with ""|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" %} "{{ forloop.counter }}"{% endfor %}{% endwith %}],
             datasets: [{
                 label: '',
-                data:[{% with ''|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" %}{% get_field pref.2 forloop.counter %}{% endfor %}{% endwith %}],
-                backgroundColor: [{% with ''|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" %}'rgba(54, 162, 235, 0.8)'{% endfor %}{% endwith %}],
+                data:[{% with ""|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" %}{% get_field pref.2 forloop.counter %}{% endfor %}{% endwith %}],
+                backgroundColor: [{% with ""|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" %}'rgba(54, 162, 235, 0.8)'{% endfor %}{% endwith %}],
                 borderWidth: 0
             }]
         },
@@ -412,4 +414,4 @@ window.addEventListener('DOMContentLoaded', function() {
 });
         </script>
     {% endif %}
-{% endblock %}
+{% endblock js %}

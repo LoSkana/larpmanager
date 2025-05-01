@@ -19,19 +19,22 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import json
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.character import get_character_fields, get_event_cache_all, get_searcheable_character_fields
+from larpmanager.cache.feature import get_event_features
+from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.association import AssocText
-from larpmanager.models.casting import QuestType, Quest, Trait
+from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import (
-    Run,
     EventText,
+    Run,
 )
 from larpmanager.models.form import (
     RegistrationOption,
@@ -39,28 +42,25 @@ from larpmanager.models.form import (
 from larpmanager.models.member import Membership, get_user_membership
 from larpmanager.models.registration import (
     Registration,
-    RegistrationTicket,
     RegistrationCharacterRel,
+    RegistrationTicket,
 )
 from larpmanager.models.writing import (
-    Faction,
-    CharacterStatus,
     Character,
+    CharacterStatus,
+    Faction,
 )
-from larpmanager.cache.character import get_character_fields, get_searcheable_character_fields, get_event_cache_all
 from larpmanager.utils.auth import is_lm_admin
 from larpmanager.utils.base import def_user_ctx
-from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.registration import get_reg_counts
 from larpmanager.utils.common import (
-    get_quest_type,
     get_quest,
+    get_quest_type,
 )
 from larpmanager.utils.event import get_event, get_event_run
-from larpmanager.utils.registration import registration_status, is_reg_provisional
 from larpmanager.utils.exceptions import (
-    HiddenException,
+    HiddenError,
 )
+from larpmanager.utils.registration import is_reg_provisional, registration_status
 from larpmanager.utils.text import get_assoc_text, get_event_text
 
 
@@ -365,7 +365,7 @@ def check_visibility(ctx, typ, name):
         raise Http404(typ + " not active")
 
     if "staff" not in ctx and not ctx["show_" + typ]:
-        raise HiddenException(ctx["event"].slug, ctx["run"].number, name)
+        raise HiddenError(ctx["event"].slug, ctx["run"].number, name)
 
 
 def factions(request, s, n):

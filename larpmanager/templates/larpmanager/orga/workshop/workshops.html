@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
     {% trans "Workshop" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows for each player their completion status of workshops." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <h2>{{ reg_count }} iscrizioni</h2>
     <table class="tablesorter mob writing">
@@ -36,4 +36,4 @@
                 </td>
             </tr>
         </table>
-    {% endblock %}
+    {% endblock content %}

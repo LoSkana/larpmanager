@@ -18,7 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-class FeatureException(Exception):
+
+class FeatureError(Exception):
     def __init__(self, feature, run, path):
         super().__init__()
         self.feature = feature
@@ -26,27 +27,27 @@ class FeatureException(Exception):
         self.path = path
 
 
-class RedirectException(Exception):
+class RedirectError(Exception):
     def __init__(self, view):
         super().__init__()
         self.view = view
 
 
-class SignupException(Exception):
+class SignupError(Exception):
     def __init__(self, slug, number):
         super().__init__()
         self.slug = slug
         self.number = number
 
 
-class WaitingException(Exception):
+class WaitingError(Exception):
     def __init__(self, slug, number):
         super().__init__()
         self.slug = slug
         self.number = number
 
 
-class HiddenException(Exception):
+class HiddenError(Exception):
     def __init__(self, slug, number, name):
         super().__init__()
         self.slug = slug
@@ -54,19 +55,19 @@ class HiddenException(Exception):
         self.name = name
 
 
-class NotFoundException(Exception):
+class NotFoundError(Exception):
     pass
 
 
-class PermissionException(Exception):
+class PermissionError(Exception):
     pass
 
 
-class UnknowRunException(Exception):
+class UnknowRunError(Exception):
     pass
 
 
-class MembershipException(Exception):
+class MembershipError(Exception):
     def __init__(self, assocs=None):
         super().__init__()
         self.assocs = assocs
@@ -74,9 +75,9 @@ class MembershipException(Exception):
 
 def check_assoc_feature(request, s):
     if s not in request.assoc["features"]:
-        raise FeatureException(s, 0, request.path)
+        raise FeatureError(s, 0, request.path)
 
 
 def check_event_feature(request, ctx, s):
     if s not in ctx["features"]:
-        raise FeatureException(s, ctx["run"].id, request.path)
+        raise FeatureError(s, ctx["run"].id, request.path)

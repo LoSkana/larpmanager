@@ -22,27 +22,27 @@ import json
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
-from django.core.exceptions import ObjectDoesNotExist
 
-from larpmanager.models.casting import QuestType, Quest, Trait, AssignmentTrait, Casting, CastingAvoid
+from larpmanager.cache.character import get_event_cache_all
+from larpmanager.mail.base import mail_confirm_casting
+from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType, Trait
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
 )
 from larpmanager.models.writing import (
-    Faction,
     Character,
+    Faction,
 )
-from larpmanager.cache.character import get_event_cache_all
-from larpmanager.utils.event import get_event_run, get_event_filter_characters
-from larpmanager.utils.registration import registration_status
+from larpmanager.utils.event import get_event_filter_characters, get_event_run
 from larpmanager.utils.exceptions import (
     check_event_feature,
 )
-from larpmanager.mail.base import mail_confirm_casting
+from larpmanager.utils.registration import registration_status
 
 
 def casting_characters(ctx, memb, reg):

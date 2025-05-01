@@ -23,28 +23,28 @@ from datetime import datetime
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.forms.base import MyFormRun, MyForm, BaseAccForm
+from larpmanager.forms.base import BaseAccForm, MyForm, MyFormRun
+from larpmanager.forms.member import MembershipForm
 from larpmanager.forms.utils import (
-    RunMemberS2Widget,
-    EventRegS2Widget,
-    DatePickerInput,
-    RunS2Widget,
     AssocMemberS2Widget,
     AssocRegS2Widget,
-    get_run_choices,
+    DatePickerInput,
+    EventRegS2Widget,
     PaymentsS2WidgetMulti,
+    RunMemberS2Widget,
+    RunS2Widget,
+    get_run_choices,
 )
-from larpmanager.forms.member import MembershipForm
 from larpmanager.models.accounting import (
-    AccountingItemExpense,
-    AccountingItemOther,
-    AccountingItemPayment,
-    AccountingItemOutflow,
-    AccountingItemInflow,
     AccountingItemDonation,
-    PaymentInvoice,
+    AccountingItemExpense,
+    AccountingItemInflow,
+    AccountingItemOther,
+    AccountingItemOutflow,
+    AccountingItemPayment,
     Collection,
     Discount,
+    PaymentInvoice,
     RefundRequest,
 )
 from larpmanager.models.association import Association
@@ -64,7 +64,7 @@ class OrgaPersonalExpenseForm(MyFormRun):
         exclude = ("member", "is_approved", "inv", "hide")
 
     def __init__(self, *args, **kwargs):
-        super(OrgaPersonalExpenseForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if "ita_balance" not in self.params["features"]:
             self.delete_field("balance")
 
@@ -80,7 +80,7 @@ class OrgaExpenseForm(MyFormRun):
         widgets = {"member": RunMemberS2Widget, "run": forms.HiddenInput()}
 
     def __init__(self, *args, **kwargs):
-        super(OrgaExpenseForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["member"].widget.set_run(self.params["run"])
 
         if "ita_balance" not in self.params["features"]:
@@ -94,7 +94,7 @@ class OrgaTokenForm(MyFormRun):
         widgets = {"member": RunMemberS2Widget, "oth": forms.HiddenInput()}
 
     def __init__(self, *args, **kwargs):
-        super(OrgaTokenForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.page_info = (
             _("This page allows you to add or edit a disbursement entry of") + f" {self.params['token_name']}"
         )
@@ -112,7 +112,7 @@ class OrgaCreditForm(MyFormRun):
         widgets = {"member": RunMemberS2Widget, "oth": forms.HiddenInput()}
 
     def __init__(self, *args, **kwargs):
-        super(OrgaCreditForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.page_title = self.params["credit_name"]
         self.initial["oth"] = AccountingItemOther.CREDIT
         self.fields["member"].widget.set_run(self.params["run"])
@@ -129,7 +129,7 @@ class OrgaPaymentForm(MyFormRun):
         widgets = {"reg": EventRegS2Widget}
 
     def __init__(self, *args, **kwargs):
-        super(OrgaPaymentForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["reg"].widget.set_event(self.params["event"])
         if "vat" not in self.params["features"]:
             del self.fields["vat"]
@@ -147,7 +147,7 @@ class ExeOutflowForm(MyForm):
         widgets = {"payment_date": DatePickerInput, "run": RunS2Widget}
 
     def __init__(self, *args, **kwargs):
-        super(ExeOutflowForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["run"].widget.set_assoc(self.params["a_id"])
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
             self.initial["payment_date"] = datetime.now().date().isoformat()
@@ -180,7 +180,7 @@ class ExeInflowForm(MyForm):
         widgets = {"payment_date": DatePickerInput, "run": RunS2Widget}
 
     def __init__(self, *args, **kwargs):
-        super(ExeInflowForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["run"].widget.set_assoc(self.params["a_id"])
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
             self.initial["payment_date"] = datetime.now().date().isoformat()
@@ -203,7 +203,7 @@ class ExeDonationForm(MyForm):
         widgets = {"member": AssocMemberS2Widget}
 
     def __init__(self, *args, **kwargs):
-        super(ExeDonationForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
 
 
@@ -218,7 +218,7 @@ class ExePaymentForm(MyForm):
         widgets = {"reg": AssocRegS2Widget}
 
     def __init__(self, *args, **kwargs):
-        super(ExePaymentForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["reg"].widget.set_assoc(self.params["a_id"])
         if "vat" not in self.params["features"]:
             del self.fields["vat"]
@@ -235,7 +235,7 @@ class ExeInvoiceForm(MyForm):
         widgets = {"member": AssocMemberS2Widget}
 
     def __init__(self, *args, **kwargs):
-        super(ExeInvoiceForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
 
 
@@ -248,7 +248,7 @@ class ExeCreditForm(MyForm):
         widgets = {"member": AssocMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args, **kwargs):
-        super(ExeCreditForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.page_title = _("Disbursment") + f" {self.params['credit_name']}"
         get_run_choices(self)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
@@ -264,7 +264,7 @@ class ExeTokenForm(MyForm):
         widgets = {"member": AssocMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args, **kwargs):
-        super(ExeTokenForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.page_title = _("Disbursement") + f" {self.params['token_name']}"
         self.page_info = (
             _("This page allows you to add or edit a disbursement entry of") + f" {self.params['token_name']}"
@@ -287,7 +287,7 @@ class ExeExpenseForm(MyForm):
         widgets = {"member": AssocMemberS2Widget}
 
     def __init__(self, *args, **kwargs):
-        super(ExeExpenseForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         get_run_choices(self)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
 
@@ -309,7 +309,7 @@ class PaymentForm(BaseAccForm):
 
     def __init__(self, *args, **kwargs):
         self.reg = kwargs.pop("reg")
-        super(PaymentForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["amount"] = forms.DecimalField(
             min_value=0.01,
             max_value=self.reg.tot_iscr - self.reg.tot_payed,
@@ -325,7 +325,7 @@ class CollectionNewForm(MyForm):
         widgets = {"cod": forms.HiddenInput()}
 
     def __init__(self, *args, **kwargs):
-        super(CollectionNewForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class ExeCollectionForm(CollectionNewForm):
@@ -337,7 +337,7 @@ class ExeCollectionForm(CollectionNewForm):
         widgets = {"member": AssocMemberS2Widget}
 
     def __init__(self, *args, **kwargs):
-        super(ExeCollectionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
 
 
@@ -352,7 +352,7 @@ class OrgaDiscountForm(MyForm):
         exclude = ("number",)
 
     def __init__(self, *args, **kwargs):
-        super(OrgaDiscountForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         choices = [(m.id, str(m)) for m in Run.objects.filter(event=self.params["run"].event)]
 
         widget = forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"})
@@ -399,7 +399,7 @@ class RefundRequestForm(MyForm):
 
     def __init__(self, *args, **kwargs):
         self.member = kwargs.pop("member")
-        super(RefundRequestForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["value"] = forms.DecimalField(max_value=self.member.membership.credit, decimal_places=2)
 
 
@@ -412,7 +412,7 @@ class ExeRefundRequestForm(MyForm):
         widgets = {"member": AssocMemberS2Widget}
 
     def __init__(self, *args, **kwargs):
-        super(ExeRefundRequestForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
 
 
@@ -432,7 +432,7 @@ class ExePaymentSettingsForm(MyForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(ExePaymentSettingsForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.prevent_canc = True
 
@@ -467,10 +467,10 @@ class ExePaymentSettingsForm(MyForm):
             self.initial[el] = data_string
 
     def save(self, commit=True):
-        instance = super(ExePaymentSettingsForm, self).save(commit=commit)
+        instance = super().save(commit=commit)
 
         res = get_payment_details(self.instance)
-        for slug, lst in self.instance.get_payment_details_fields(self.params["features"]).items():
+        for _slug, lst in self.instance.get_payment_details_fields(self.params["features"]).items():
             for el in lst:
                 if el in self.cleaned_data:
                     input_value = self.cleaned_data[el]

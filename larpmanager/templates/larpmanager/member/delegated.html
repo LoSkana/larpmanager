@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n show_tags %}
 {% block title %}
     {% trans "Your delegated users" %}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     {% if request.user.member.parent %}
         <form action="{{ request.path }}" method="post" id="login_0">
@@ -81,11 +81,11 @@
             </form>
         </div>
     {% endif %}
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
         function submitForm(formId) {
             document.getElementById(formId).submit();
         }
     </script>
-{% endblock %}
+{% endblock js %}

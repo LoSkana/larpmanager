@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Preaching" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows users who can be persuaded to sign up." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <p>{% trans "List of users who have not registered for a future run of the event" %}:</p>
     <table class="mob tablesorter">
@@ -32,4 +32,4 @@
             </tr>
         {% endfor %}
     </table>
-{% endblock %}
+{% endblock content %}

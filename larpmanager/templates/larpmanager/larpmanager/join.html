@@ -1,6 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n static %}
-{% block title %}Join{% endblock %}
+{% block title %}
+    Join
+{% endblock title %}
 {% block content %}
     <p>Compile the info below, and you can start to use your own LarpManager immediately!</p>
     <form action="{{ request.path }}"
@@ -10,9 +12,9 @@
         <table class="mob no_csv">
             {{ form.as_table }}
         </table>
-        <input type="submit" value="{% trans 'Submit' %}">
+        <input type="submit" value="{% trans "Submit" %}">
     </form>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
 window.addEventListener('DOMContentLoaded', function() {
@@ -26,4 +28,4 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 });
     </script>
-{% endblock %}
+{% endblock js %}

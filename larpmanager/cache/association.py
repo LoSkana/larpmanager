@@ -128,5 +128,5 @@ def init_cache_assoc(a_slug):
 
 
 @receiver(post_save, sender=Association)
-def update_Association_reset_cache(sender, instance, **kwargs):
+def update_association_reset_cache(sender, instance, **kwargs):
     reset_cache_assoc(instance.slug)

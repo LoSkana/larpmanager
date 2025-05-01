@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
     {% trans "Registrations" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the run signups." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <table class="download_table hide">
         <thead>
@@ -545,7 +545,7 @@
                 {% endif %}
             {% endfor %}
         {% endif %}
-    {% endblock %}
+    {% endblock content %}
     {% block js %}
         <script>
 var url_load_questions = "{% url 'orga_registration_form_list' run.event.slug run.number %}";
@@ -607,4 +607,4 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 });
         </script>
-    {% endblock %}
+    {% endblock js %}

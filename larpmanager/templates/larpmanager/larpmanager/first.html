@@ -1,14 +1,16 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n static %}
-{% block title %}Activation: {{ assoc.name }}{% endblock %}
+{% block title %}
+    Activation: {{ assoc.name }}
+{% endblock title %}
 {% block content %}
     <p>We need just a few seconds to properly activate your larpmanager.</p>
     <p>Please wait a bit...</p>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
 setInterval(function() {
     window.location.reload();
 }, 5000);
     </script>
-{% endblock %}
+{% endblock js %}

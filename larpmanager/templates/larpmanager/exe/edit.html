@@ -1,4 +1,4 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n tz show_tags static %}
 {% block title %}
     {{ form.page_title }}
@@ -10,9 +10,11 @@
         {% endif %}
     {% endif %}
     - {% trans "Organization" %}
-{% endblock %}
-{% block info %}{{ form.page_info }}{% endblock %}
+{% endblock title %}
+{% block info %}
+    {{ form.page_info }}
+{% endblock info %}
 {% block content %}
     {% include "elements/form/sections.html" %}
     {% if additional %}{{ additional | safe }}{% endif %}
-{% endblock %}
+{% endblock content %}

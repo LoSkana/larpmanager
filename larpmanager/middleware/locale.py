@@ -45,7 +45,7 @@ class LocaleAdvMiddleware:
             else:
                 language = translation.get_language_from_request(request)
                 found = False
-                for code, lang in conf_settings.LANGUAGES:
+                for code, _lang in conf_settings.LANGUAGES:
                     if language == code:
                         found = True
                 if not found:

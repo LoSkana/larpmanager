@@ -18,10 +18,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from larpmanager.admin.base import DefModelAdmin, EventFilter, RunFilter, MemberFilter
 from django.contrib import admin
 
-from larpmanager.models.casting import QuestType, Quest, Trait, Casting, CastingAvoid
+from larpmanager.admin.base import DefModelAdmin, EventFilter, MemberFilter, RunFilter
+from larpmanager.models.casting import Casting, CastingAvoid, Quest, QuestType, Trait
 
 
 class TraitInline(admin.TabularInline):

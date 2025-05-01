@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Vote" %} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the settings available for the membership voting." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <h3>{% trans "Collected votes" %}</h3>
     <table class='tablesorter mob'>
@@ -31,7 +31,7 @@
                     {{ el }}
                 {% endfor %}
             </p>
-        {% endblock %}
+        {% endblock content %}
         {% block js %}
             <script>window.addEventListener('DOMContentLoaded', function() {
         $(document).ready(function() {
@@ -42,4 +42,4 @@
         });
     });
             </script>
-        {% endblock %}
+        {% endblock js %}

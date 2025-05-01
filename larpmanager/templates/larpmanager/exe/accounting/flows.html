@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Movements" %} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page presents the complete list of financial movements." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% include "elements/form/years.html" %}
     <h3>{% trans "Movements" %} - {{ year }}</h3>
@@ -147,4 +147,4 @@
             </tr>
         {% endfor %}
     </table>
-{% endblock %}
+{% endblock content %}

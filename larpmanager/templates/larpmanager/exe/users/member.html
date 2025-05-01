@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n show_tags %}
 {% block title %}
     {{ member }} - {% trans "Member" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows all information about the individual member available in the system." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <p>Email: {{ member.email }}</p>
     <p>
@@ -129,7 +129,7 @@
         <img class="membership_request"
              src="{{ member.membership.get_request_filepath }}" />
     {% endif %}
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
 {% if form.country_subdivisions_map %}
@@ -168,4 +168,4 @@
     });
 
     </script>
-{% endblock %}
+{% endblock js %}

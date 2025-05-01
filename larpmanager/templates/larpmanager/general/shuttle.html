@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load tz static i18n %}
 {% block title %}
     {% trans "Shuttle service" %}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     <p>
         {% trans "Need a ride?" %}
@@ -83,11 +83,11 @@
             {% endfor %}
         </table>
     </div>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
 setInterval(function() {
     window.location.reload();
 }, 30000);
     </script>
-{% endblock %}
+{% endblock js %}

@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans 'Registration conditions' %}
-{% endblock %}
+    {% trans "Registration conditions" %}
+{% endblock title %}
 {% block content %}
     {% if event_text %}
         <h2>{% trans "Conditions of" %} {{ event }}</h2>
@@ -10,4 +10,4 @@
         <br />
     {% endif %}
     {{ assoc_text | safe }}
-{% endblock %}
+{% endblock content %}

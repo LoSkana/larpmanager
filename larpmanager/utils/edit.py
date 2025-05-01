@@ -27,11 +27,11 @@ from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.role import check_assoc_permission
 from larpmanager.models.member import Log
 from larpmanager.models.writing import TextVersion
 from larpmanager.utils.event import check_event_permission
-from larpmanager.cache.role import check_assoc_permission
-from larpmanager.utils.exceptions import NotFoundException
+from larpmanager.utils.exceptions import NotFoundError
 
 
 def save_log(member, cls, el, dl=False):
@@ -89,16 +89,16 @@ def check_assoc(el, ctx, afield=None):
         raise Http404("not your association")
 
 
-def user_edit(request, ctx, formType, nm, eid):
+def user_edit(request, ctx, form_type, nm, eid):
     if request.method == "POST":
-        form = formType(request.POST, request.FILES, instance=ctx[nm], ctx=ctx)
+        form = form_type(request.POST, request.FILES, instance=ctx[nm], ctx=ctx)
 
         if form.is_valid():
             p = form.save()
             messages.success(request, _("Operation completed!"))
 
             dl = "delete" in request.POST and request.POST["delete"] == "1"
-            save_log(request.user.member, formType, p, dl)
+            save_log(request.user.member, form_type, p, dl)
             if dl:
                 p.delete()
 
@@ -106,7 +106,7 @@ def user_edit(request, ctx, formType, nm, eid):
 
             return True
     else:
-        form = formType(instance=ctx[nm], ctx=ctx)
+        form = form_type(instance=ctx[nm], ctx=ctx)
 
     ctx["form"] = form
     ctx["num"] = eid
@@ -119,16 +119,16 @@ def user_edit(request, ctx, formType, nm, eid):
 def backend_get(ctx, typ, eid, afield=None):
     try:
         el = typ.objects.get(pk=eid)
-    except Exception:
-        raise NotFoundException()
+    except Exception as err:
+        raise NotFoundError() from err
     ctx["el"] = el
     check_run(el, ctx, afield)
     check_assoc(el, ctx, afield)
     ctx["name"] = str(el)
 
 
-def backend_edit(request, ctx, formType, eid, afield=None, assoc=False):
-    typ = formType.Meta.model
+def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
+    typ = form_type.Meta.model
     ctx["elementTyp"] = typ
     ctx["request"] = request
 
@@ -148,14 +148,14 @@ def backend_edit(request, ctx, formType, eid, afield=None, assoc=False):
         ctx["el"] = None
 
     if request.method == "POST":
-        form = formType(request.POST, request.FILES, instance=ctx["el"], ctx=ctx)
+        form = form_type(request.POST, request.FILES, instance=ctx["el"], ctx=ctx)
 
         if form.is_valid():
             p = form.save()
             messages.success(request, _("Operation completed!"))
 
             dl = "delete" in request.POST and request.POST["delete"] == "1"
-            save_log(request.user.member, formType, p, dl)
+            save_log(request.user.member, form_type, p, dl)
             if dl:
                 p.delete()
 
@@ -163,7 +163,7 @@ def backend_edit(request, ctx, formType, eid, afield=None, assoc=False):
 
             return True
     else:
-        form = formType(instance=ctx["el"], ctx=ctx)
+        form = form_type(instance=ctx["el"], ctx=ctx)
 
     ctx["form"] = form
     ctx["num"] = eid
@@ -173,28 +173,28 @@ def backend_edit(request, ctx, formType, eid, afield=None, assoc=False):
     return False
 
 
-def orga_edit(request, s, n, perm, formType, eid, red=None, afield=None):
+def orga_edit(request, s, n, perm, form_type, eid, red=None, afield=None):
     ctx = check_event_permission(request, s, n, perm)
-    if backend_edit(request, ctx, formType, eid, afield=afield, assoc=False):
+    if backend_edit(request, ctx, form_type, eid, afield=afield, assoc=False):
         if not red:
             red = perm
         return redirect(red, s=ctx["event"].slug, n=ctx["run"].number)
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
-def exe_edit(request, formType, eid, perm, red=None, afield=None, add_ctx=None):
+def exe_edit(request, form_type, eid, perm, red=None, afield=None, add_ctx=None):
     ctx = check_assoc_permission(request, perm)
     if add_ctx:
         ctx.update(add_ctx)
-    if backend_edit(request, ctx, formType, eid, afield=afield, assoc=True):
+    if backend_edit(request, ctx, form_type, eid, afield=afield, assoc=True):
         if not red:
             red = perm
         return redirect(red)
     return render(request, "larpmanager/exe/edit.html", ctx)
 
 
-def writing_edit(request, ctx, formType, nm, tp, redr=None):
-    ctx["elementTyp"] = formType.Meta.model
+def writing_edit(request, ctx, form_type, nm, tp, redr=None):
+    ctx["elementTyp"] = form_type.Meta.model
     if nm in ctx:
         ctx["type"] = tp
         ctx["eid"] = ctx[nm].id
@@ -203,7 +203,7 @@ def writing_edit(request, ctx, formType, nm, tp, redr=None):
         ctx[nm] = None
 
     if request.method == "POST":
-        form = formType(request.POST, request.FILES, instance=ctx[nm], ctx=ctx)
+        form = form_type(request.POST, request.FILES, instance=ctx[nm], ctx=ctx)
 
         if form.is_valid():
             # Auto save ajax
@@ -221,7 +221,7 @@ def writing_edit(request, ctx, formType, nm, tp, redr=None):
             if tp:
                 save_version(p, tp, request.user.member, dl)
             else:
-                save_log(request.user.member, formType, p)
+                save_log(request.user.member, form_type, p)
 
             if dl:
                 p.delete()
@@ -233,7 +233,7 @@ def writing_edit(request, ctx, formType, nm, tp, redr=None):
                 return redr(ctx)
             return redirect("orga_" + nm + "s", s=ctx["event"].slug, n=ctx["run"].number)
     else:
-        form = formType(instance=ctx[nm], ctx=ctx)
+        form = form_type(instance=ctx[nm], ctx=ctx)
 
     ctx["nm"] = nm
     ctx["form"] = form
@@ -242,7 +242,7 @@ def writing_edit(request, ctx, formType, nm, tp, redr=None):
 
 
 def writing_edit_cache_key(eid, typ):
-    return "orga_edit_%s_%s" % (eid, typ)
+    return f"orga_edit_{eid}_{typ}"
 
 
 def writing_edit_save_ajax(form, request, ctx):

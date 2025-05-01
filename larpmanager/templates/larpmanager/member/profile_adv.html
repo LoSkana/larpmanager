@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Your personal data" %}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     {% if 'membership' in assoc.features %}
         {% if redirect %}
@@ -38,4 +38,4 @@
         </table>
         <input type="submit" value="Submit">
     </form>
-{% endblock %}
+{% endblock content %}

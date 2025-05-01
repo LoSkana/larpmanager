@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n show_tags %}
 {% block title %}
     {% trans "Feature" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the features activated for the event, and allows you to enable or disable them." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <input type="text" name="search" id="search" placeholder="Search" />
     <!--
@@ -89,7 +89,7 @@
             </div>
         {% endif %}
     {% endfor %}
-{% endblock %}
+{% endblock content %}
 {% block js %}
     {% include "elements/features/search.js" %}
-{% endblock %}
+{% endblock js %}

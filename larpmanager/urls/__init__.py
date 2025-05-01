@@ -29,6 +29,7 @@ from django.urls import (
 )
 
 from larpmanager.views.user import event as views_ue
+
 from .exe import urlpatterns as exe_urls
 from .lm import urlpatterns as lm_urls
 from .orga import urlpatterns as orga_urls
@@ -71,4 +72,4 @@ def walk_patterns(patterns):
 
 
 STATIC_PREFIXES = walk_patterns(urlpatterns)
-setattr(conf_settings, "STATIC_PREFIXES", STATIC_PREFIXES)
+conf_settings.STATIC_PREFIXES = STATIC_PREFIXES

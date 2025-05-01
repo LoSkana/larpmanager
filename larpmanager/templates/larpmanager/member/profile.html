@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Your user" %}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     <p>
         {% trans "You are logged in with an email address" %}: <i>{{ member.email }}</i>. <a href="{% url 'ticket' 'email' %}">{% trans "Would you like to change it?" %}</a>
@@ -41,13 +41,13 @@
                 </div>
                 <br />
                 <br />
-                <input type='button'
+                <input type="button"
                        id='change_photo'
                        value='{% trans "Change photo" %}'
                        class="my_toggle"
                        tog="change-field">
-                <input type='button' id='rotate_l_btn' value='{% trans "Rotate left" %}' \>
-                <input type='button' id='rotate_r_btn' value='{% trans "Rotate right" %}' \>
+                <input type="button" id='rotate_l_btn' value='{% trans "Rotate left" %}' \>
+                <input type="button" id='rotate_r_btn' value='{% trans "Rotate right" %}' \>
                 <br />
                 <br />
                 <div class="hide change-field">
@@ -69,7 +69,7 @@
         </table>
         <input type="submit" value="Submit">
     </form>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
 {% if form.country_subdivisions_map %}
@@ -177,4 +177,4 @@
     });
 
     </script>
-{% endblock %}
+{% endblock js %}

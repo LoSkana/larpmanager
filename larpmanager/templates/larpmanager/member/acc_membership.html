@@ -1,12 +1,12 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Payment membership fee" %} {{ year }}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     {% if invoice %}
         {% include "elements/payment_go.html" %}
     {% else %}
         {% include "elements/payment_form.html" with amount=membership_fee %}
     {% endif %}
-{% endblock %}
+{% endblock content %}

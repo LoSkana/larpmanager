@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Members list" %} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the list of members, divided by type: applicants, approved, renewed for the current year." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <p>{% trans "Total members: " %}{{ sum }}</p>
     <hr />
@@ -215,7 +215,7 @@
             </td>
         </tr>
     </table>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
 window.addEventListener('DOMContentLoaded', function() {
@@ -240,4 +240,4 @@ function search(key) {
 }
 
     </script>
-{% endblock %}
+{% endblock js %}

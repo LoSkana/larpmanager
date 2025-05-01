@@ -20,11 +20,11 @@
 
 from django.db.models import F
 from django.db.models.functions import Abs
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_assoc_features
-from larpmanager.models.accounting import AccountingItemPayment, AccountingItemOther, AccountingItemExpense
+from larpmanager.models.accounting import AccountingItemExpense, AccountingItemOther, AccountingItemPayment
 from larpmanager.models.event import Run
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration
@@ -76,19 +76,19 @@ def get_runs_paying_incomplete():
 
 
 @receiver(post_save, sender=AccountingItemPayment)
-def post_save_AccountingItemPayment(sender, instance, created, **kwargs):
+def post_save_accounting_item_payment(sender, instance, created, **kwargs):
     if not created and instance.reg:
         update_token_credit(instance, instance.pay == AccountingItemPayment.TOKEN)
 
 
 @receiver(post_delete, sender=AccountingItemPayment)
-def post_delete_AccountingItemPayment(sender, instance, **kwargs):
+def post_delete_accounting_item_payment(sender, instance, **kwargs):
     if instance.reg:
         update_token_credit(instance, instance.pay == AccountingItemPayment.TOKEN)
 
 
 @receiver(post_save, sender=AccountingItemOther)
-def post_save_AccountingItemOther_accounting(sender, instance, **kwargs):
+def post_save_accounting_item_other_accounting(sender, instance, **kwargs):
     if not instance.member:
         return
 
@@ -96,7 +96,7 @@ def post_save_AccountingItemOther_accounting(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=AccountingItemExpense)
-def post_save_AccountingItemExpense_accounting(sender, instance, **kwargs):
+def post_save_accounting_item_expense_accounting(sender, instance, **kwargs):
     if not instance.member or not instance.is_approved:
         return
 

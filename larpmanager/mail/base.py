@@ -23,14 +23,15 @@ from typing import Optional
 
 import holidays
 from django.conf import settings as conf_settings
-from django.db.models.signals import post_save, pre_save, m2m_changed
+from django.db.models.signals import m2m_changed, post_save, pre_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
-from django.utils.translation import activate, gettext_lazy as _
+from django.utils.translation import activate
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.links import reset_event_links
-from larpmanager.models.access import get_assoc_executives, get_event_organizers, EventRole, AssocRole
-from larpmanager.models.association import hdr, get_url
+from larpmanager.models.access import AssocRole, EventRole, get_assoc_executives, get_event_organizers
+from larpmanager.models.association import get_url, hdr
 from larpmanager.models.casting import AssignmentTrait, Casting
 from larpmanager.models.event import EventText
 from larpmanager.models.member import Member

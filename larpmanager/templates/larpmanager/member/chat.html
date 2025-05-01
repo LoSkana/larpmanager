@@ -1,6 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
-{% block title %}Chat - {{ member.display_member }}{% endblock %}
+{% block title %}
+    Chat - {{ member.display_member }}
+{% endblock title %}
 {% block content %}
     <form action="{{ request.path }}"  method="post">
         {% csrf_token %}
@@ -8,14 +10,15 @@
             <tr>
                 <td>
                     <textarea name="text" maxlength="1000" cols="80" rows="3"></textarea>
-                    <td>
-                        <input type="submit" value="{% trans 'Submit' %}">
-                    </td>
-                </tr>
-            </table>
-        </form>
-        <hr />
-        {% for el in list %}
-            <div class="plot question{% if el.receiver == member %} user{% endif %}">{{ el.message }}</div>
-        {% endfor %}
-    {% endblock %}
+                </td>
+                <td>
+                    <input type="submit" value="{% trans "Submit" %}">
+                </td>
+            </tr>
+        </table>
+    </form>
+    <hr />
+    {% for el in list %}
+        <div class="plot question{% if el.receiver == member %} user{% endif %}">{{ el.message }}</div>
+    {% endfor %}
+{% endblock content %}

@@ -29,11 +29,11 @@ msgstr "Ciao"
 msgid "Fee"
 msgstr "Fee"
 
-msgid "VAT"
-msgstr "IVA"
-
 msgid "Age"
 msgstr "Età"
+
+msgid "VAT"
+msgstr "IVA"
 
 msgid "Cap"
 msgstr "Cap"
@@ -89,11 +89,11 @@ msgstr "Info"
 msgid "Port"
 msgstr "Porta di connessione"
 
-msgid "Text"
-msgstr "Testo"
-
 msgid "Page"
 msgstr "Pagina"
+
+msgid "Text"
+msgstr "Testo"
 
 msgid "Name"
 msgstr "Nome"
@@ -459,14 +459,14 @@ msgstr "Introiti"
 msgid "Tokens"
 msgstr "Gettoni"
 
-msgid "Ticket"
-msgstr "Biglietto"
-
 msgid "Voting"
 msgstr "Votazioni"
 
 msgid "Active"
 msgstr "Attivo"
+
+msgid "Ticket"
+msgstr "Biglietto"
 
 msgid "Nature"
 msgstr "Natura"
@@ -663,14 +663,14 @@ msgstr "Autori"
 msgid "Tagline"
 msgstr "Tagline"
 
-msgid "Options"
-msgstr "Opzioni"
+msgid "Use TLD"
+msgstr "Utilizza TLD"
 
 msgid "Members"
 msgstr "Soci"
 
-msgid "Use TLD"
-msgstr "Utilizza TLD"
+msgid "Options"
+msgstr "Opzioni"
 
 msgid "VAT No."
 msgstr "Partita IVA"
@@ -880,7 +880,7 @@ msgid "Payments"
 msgstr "Pagamenti"
 
 msgid "Invoices"
-msgstr "Fatture"
+msgstr "Versamenti"
 
 msgid "Settings"
 msgstr "Impostazioni"
@@ -888,11 +888,11 @@ msgstr "Impostazioni"
 msgid "Calendar"
 msgstr "Calendario"
 
+msgid "Centarui"
+msgstr "Centarui"
+
 msgid "Deadline"
 msgstr "Scadenza"
-
-msgid "Treasury"
-msgstr "Tesoreria"
 
 msgid "Reminder"
 msgstr "Promemoria"
@@ -900,8 +900,8 @@ msgstr "Promemoria"
 msgid "Holidays"
 msgstr "Festività"
 
-msgid "Centarui"
-msgstr "Centarui"
+msgid "Treasury"
+msgstr "Tesoreria"
 
 msgid "VAT rate"
 msgstr "Aliquota IVA"
@@ -1308,14 +1308,14 @@ msgstr "Aspetto"
 msgid "New signup"
 msgstr "Nuove iscrizioni"
 
-msgid "Token name"
-msgstr "Nome gettoni"
-
 msgid "Annual fee"
 msgstr "Quota annuale"
 
 msgid "Candidates"
 msgstr "Candidati"
+
+msgid "Token name"
+msgstr "Nome gettoni"
 
 msgid "Appointees"
 msgstr "Incaricati"
@@ -1536,11 +1536,11 @@ msgstr "Eventi passati"
 msgid "Carbon copy"
 msgstr "Copia carbone"
 
-msgid "Unique code"
-msgstr "Codice univoco"
-
 msgid "Probability"
 msgstr "Probabilità"
+
+msgid "Unique code"
+msgstr "Codice univoco"
 
 msgid "Fiscal code"
 msgstr "Codice fiscale"
@@ -1707,11 +1707,11 @@ msgstr "Transazioni"
 msgid "Disbursement"
 msgstr "Erogazione"
 
-msgid "Name credits"
-msgstr "Nome crediti"
-
 msgid "Host Address"
 msgstr "Indirizzo Host"
+
+msgid "Name credits"
+msgstr "Nome crediti"
 
 msgid "Payment fees"
 msgstr "Commissioni pagamento"
@@ -3200,11 +3200,11 @@ msgstr "Le iscrizioni sono aperte!"
 msgid "Expenses collaborators"
 msgstr "Spese collaboratori"
 
-msgid "Minimum age of members"
-msgstr "Età minima dei soci"
-
 msgid "Customised mail server"
 msgstr "Server mail personalizzato"
+
+msgid "Minimum age of members"
+msgstr "Età minima dei soci"
 
 msgid "Additional Preferences"
 msgstr "Preferenze addizionali"
@@ -4043,6 +4043,9 @@ msgstr "Nome dello sconto - ad uso interno"
 msgid "Image shown on homepage as promoter"
 msgstr "Immagine mostrata in homepage, come promoter"
 
+msgid "The form is saved every 30 seconds."
+msgstr "Il modulo viene salvato ogni 30 secondi."
+
 msgid "Select a file with extension 'zip'."
 msgstr "Seleziona un file con estensione 'zip'."
 
@@ -4240,9 +4243,9 @@ msgstr "Somma della quota di iscrizione, il totale dal saldare"
 msgid " Hurry: only %(num)d tickets available."
 msgstr " Affrettati: restano solo %(num)d biglietti disponibili."
 
-#, python-format
-msgid "Completed module. Remaining: %(number)d"
-msgstr "Modulo completato. Rimane: %(number)d"
+#, python-brace-format
+msgid "Completed module. Remaining: {number:d}"
+msgstr "Modulo completato. Rimane: {number:d}"
 
 msgid "Apply a check on the tax code of players"
 msgstr "Applica un controllo sul codice fiscale dei giocatori"
@@ -4527,6 +4530,10 @@ msgstr "Luogo di nascita non presente nell'elenco ISTAT"
 msgid "You are now logged in with your main account:"
 msgstr "Ora sei loggato con l'account principale: "
 
+#, python-brace-format
+msgid "This text will be added to the sheet of {name}"
+msgstr "Questo testo verrà aggiunto al foglio di {name}"
+
 msgid "Extended description - maximum 5000 characters"
 msgstr "Descrizione estesa - massimo 5000 caratteri"
 
@@ -4562,8 +4569,7 @@ msgid "Donation of %(user)s, with reason: '%(reason)s'"
 msgstr "Donazione di %(user)s, con motivazione: '%(reason)s' "
 
 msgid "This page allows you to add or edit an invoice."
-msgstr ""
-"Questa pagina ti permette di aggiungere o modificare fatture di pagamento."
+msgstr "Questa pagina ti permette di aggiungere o modificare versamenti."
 
 msgid "This page allows you to add or edit a discount."
 msgstr "Questa pagina ti permette di aggiungere o modificare un discount."
@@ -4609,10 +4615,6 @@ msgstr "Questa pagina ti permette di aggiungere o modificare un personaggio."
 
 msgid "This page allows you to edit a member's profile."
 msgstr "Questa pagina ti permette di modificare il profilo di un socio."
-
-#, python-format
-msgid "This text will be added to the sheet of %(name)s"
-msgstr "Questo testo verrà aggiunto al foglio di %(name)s"
 
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
@@ -4980,8 +4982,8 @@ msgid "Indicate as precisely as possible where to pick you up."
 msgstr ""
 "Indica nel modo più preciso possibile il punto in cui venirvi a prendere"
 
-msgid "Indicates that payment is sent \"to friends and family\"."
-msgstr "Indica che il pagamento viene inviato \"ad amici e familiari\"."
+msgid "Indicates that payment is sent 'to friends and family'."
+msgstr "Indica che il pagamento viene inviato \"ad amici e parenti\"."
 
 msgid "View the complete list of characters and their players!"
 msgstr "Visualizza la lista completa dei personaggi e dei loro giocatori!"
@@ -6384,6 +6386,13 @@ msgid ""
 msgstr ""
 "Sconto applicabile solo se sei iscritto ad un'altra run dello stesso evento"
 
+msgid ""
+"Sets how often reminder emails are sent, in days (if not set, no emails are "
+"sent)"
+msgstr ""
+"Imposta la frequenza di invio delle e-mail di promemoria, in giorni (se non "
+"è impostata, non vengono inviate e-mail)."
+
 #, python-format
 msgid ""
 "Reimbursement of %(amount).2f %(credits)s with reason '%(reason)s' was "
@@ -7111,11 +7120,11 @@ msgstr ""
 "sotto alla domanda"
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field \"notes\" "
+"Copy and paste exactly all the coloured text below into the field 'notes' "
 "(this is important!)"
 msgstr ""
-"Copia ed incolla esattamente tutto il testo colorato di seguito nel campo "
-"\"note\" (è importante!)"
+"Copiate e incollate esattamente tutto il testo colorato qui sotto nel campo "
+"\"note\" (è importante!)."
 
 msgid ""
 "This page shows in the detail of an event, the list of expertises covered by"
@@ -7609,13 +7618,6 @@ msgid ""
 msgstr ""
 "Numero di giorni oltre la scadenza oltre i quali le iscrizioni sono indicate"
 " da cancellare (default 30 giorni)"
-
-msgid ""
-"The form is saved every 30 seconds. When this is performed <span "
-"id='confirm'>this becomes green.</span>"
-msgstr ""
-"Il form viene salvato ogni 30 secondi. Quando avviene <span "
-"id='confirm'>questo diventa verde.</span>"
 
 msgid ""
 "Select the payment methods to be activated; then return to this page to "
@@ -8982,8 +8984,8 @@ msgstr ""
 "Assemblea associativa!"
 
 msgid ""
-"Once downloaded you must print it, sign it, take a digital scan, and  upload"
-" it to the form below. Your request will be considered at the  next meeting "
+"Once downloaded you must print it, sign it, take a digital scan, and upload "
+"it to the form below. Your request will be considered at the  next meeting "
 "of the Board. You will receive confirmation of the outcome of its  "
 "evaluation. "
 msgstr ""

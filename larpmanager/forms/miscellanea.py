@@ -28,30 +28,30 @@ from tinymce.widgets import TinyMCE
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.member import MEMBERSHIP_CHOICES
 from larpmanager.forms.utils import (
-    DatePickerInput,
-    TimePickerInput,
     AssocMemberS2Widget,
-    get_run_choices,
+    DatePickerInput,
     EventS2Widget,
+    TimePickerInput,
+    get_run_choices,
 )
 from larpmanager.models.event import Event
 from larpmanager.models.miscellanea import (
-    Util,
-    HelpQuestion,
-    WorkshopModule,
-    WorkshopQuestion,
-    WorkshopOption,
     Album,
-    Problem,
-    UrlShortner,
-    InventoryBox,
     Competence,
+    HelpQuestion,
+    InventoryBox,
+    Problem,
     ShuttleService,
+    UrlShortner,
+    Util,
+    WorkshopModule,
+    WorkshopOption,
+    WorkshopQuestion,
 )
 from larpmanager.models.registration import RegistrationTicket
+from larpmanager.models.utils import generate_id
 from larpmanager.models.writing import Faction
 from larpmanager.utils.common import FileTypeValidator
-from larpmanager.models.utils import generate_id
 
 PAY_CHOICES = (
     ("t", _("Over")),
@@ -73,7 +73,7 @@ class SendMailForm(forms.Form):
     )
 
     def __init__(self, *args: object, **kwargs: object):
-        super(SendMailForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.show_link = ["id_reply_to", "id_raw"]
 
 
@@ -83,7 +83,7 @@ class UtilForm(MyForm):
         fields = ("name", "util", "cod", "event")
 
     def __init__(self, *args, **kwargs):
-        super(UtilForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if "cod" not in self.initial or not self.initial["cod"]:
             self.initial["cod"] = unique_util_cod()
 
@@ -98,7 +98,7 @@ class HelpQuestionForm(MyForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(HelpQuestionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         get_run_choices(self, True)
 
         if "run" in self.params:
@@ -131,7 +131,7 @@ class WorkshopQuestionForm(MyForm):
         exclude = ("number",)
 
     def __init__(self, *args, **kwargs):
-        super(WorkshopQuestionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["module"].choices = [
             (m.id, m.display) for m in WorkshopModule.objects.filter(event=self.params["event"])
         ]
@@ -143,7 +143,7 @@ class WorkshopOptionForm(MyForm):
         exclude = ("number",)
 
     def __init__(self, *args, **kwargs):
-        super(WorkshopOptionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["question"].choices = [
             (m.id, m.display) for m in WorkshopQuestion.objects.filter(module__event=self.params["event"])
         ]
@@ -160,7 +160,7 @@ class OrgaAlbumForm(MyForm):
         exclude = ()
 
     def __init__(self, *args, **kwargs):
-        super(OrgaAlbumForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["parent"].choices = [("", _("--- NOT ASSIGNED ---"))] + [
             (m.id, m.name) for m in Album.objects.filter(run=self.params["run"]).exclude(pk=self.instance.id)
         ]
@@ -191,7 +191,7 @@ class UploadAlbumsForm(forms.Form):
 class CompetencesForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.list = kwargs.pop("list")
-        super(CompetencesForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         for el in self.list:
             self.fields[f"{el.id}_exp"] = forms.IntegerField(required=False)
             self.fields[f"{el.id}_info"] = forms.CharField(required=False)
@@ -250,7 +250,7 @@ class OrganizerCastingOptionsForm(forms.Form):
     def __init__(self, *args, **kwargs):
         if "ctx" in kwargs:
             self.params = kwargs.pop("ctx")
-        super(OrganizerCastingOptionsForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["pays"].initial = ("t", "c", "p")
 
         if "membership" in self.params["features"]:
@@ -306,7 +306,7 @@ class ShuttleServiceForm(MyForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(ShuttleServiceForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         # ~ if 'date' not in self.initial or not self.initial['date']:
         # ~ self.initial['date'] = datetime.now().date().isoformat()
         # ~ else:
@@ -328,7 +328,7 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(ShuttleServiceEditForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if "working" not in self.initial or not self.initial["working"]:
             self.initial["working"] = self.params["request"].user.member
 
@@ -385,7 +385,7 @@ class OrganizerCopyForm(forms.Form):
 
 
 def unique_util_cod():
-    for idx in range(5):
+    for _idx in range(5):
         cod = generate_id(16)
         if not Util.objects.filter(cod=cod).exists():
             return cod

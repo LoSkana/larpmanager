@@ -22,7 +22,7 @@ import os
 import random
 
 from django.db import models
-from django.db.models import UniqueConstraint, Q
+from django.db.models import Q, UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
@@ -30,10 +30,10 @@ from tinymce.models import HTMLField
 
 from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel
-from larpmanager.models.event import Run, Event
+from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
-from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid_miny, my_uuid, show_thumb, strip_tags
+from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_miny, show_thumb, strip_tags
 from larpmanager.models.writing import Character
 
 
@@ -537,7 +537,7 @@ class PlayerRelationship(BaseModel):
 
 
 class Email(BaseModel):
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, blank=True, null=True)
     run = models.ForeignKey(Run, on_delete=models.CASCADE, blank=True, null=True)
     recipient = models.CharField(max_length=170)
     subj = models.CharField(max_length=500)

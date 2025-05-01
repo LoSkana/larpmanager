@@ -1,9 +1,10 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
     {% trans "Redirect" %}
-{% endblock %}
-{% block nav %}{% endblock %}
+{% endblock title %}
+{% block nav %}
+{% endblock nav %}
 {% block content %}
     {% trans "You have requested a specific page of an organisation, but it is not specified in the address given" %}
     <br />
@@ -19,4 +20,4 @@
             <br />
         {% endfor %}
     {% endif %}
-{% endblock %}
+{% endblock content %}

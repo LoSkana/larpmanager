@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n static %}
 {% block title %}
     {% trans "Pdf" %} - {{ run }}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the settings for PDF printing." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <div id="sheet_pdf">
         <table class="mob no_csv">
@@ -202,14 +202,14 @@
                 {{ form.as_table }}
                 <br />
                 <br />
-                <input type="submit" value="{% trans 'Confirm' %}">
+                <input type="submit" value="{% trans "Confirm" %}">
             </table>
             <br />
             <br />
             <a href="{% url 'orga_pdf_regenerate' run.event.slug run.number %}">{% trans "Regenerate (recreates all pdf: slow)" %}</a>
         </form>
     </div>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>window.addEventListener('DOMContentLoaded', function() {
     var old = '0'
@@ -225,4 +225,4 @@ $('#char').change(function() {
 });
 });
     </script>
-{% endblock %}
+{% endblock js %}

@@ -1,4 +1,4 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% load i18n show_tags %}
 {% block title %}
@@ -11,8 +11,10 @@
         {% endif %}
     {% endif %}
     - {{ run }}
-{% endblock %}
-{% block info %}{{ form.page_info }}{% endblock %}
+{% endblock title %}
+{% block info %}
+    {{ form.page_info }}
+{% endblock info %}
 {% block content %}
     {% include "elements/form/sections.html" %}
     <div id="options" class="hide">
@@ -54,7 +56,7 @@
             </tbody>
         </table>
     </div>
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
     var newUrl = '{% url 'orga_registration_options_new' run.event.slug run.number num %}';
@@ -62,4 +64,4 @@
     {% include "elements/question_edit.js" %}
 
     </script>
-{% endblock %}
+{% endblock js %}

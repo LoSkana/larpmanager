@@ -29,7 +29,7 @@ from uuid import uuid4
 
 from cryptography.fernet import Fernet
 from django.conf import settings as conf_settings
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Sum
 from django.utils.deconstruct import deconstructible
 from django.utils.safestring import mark_safe

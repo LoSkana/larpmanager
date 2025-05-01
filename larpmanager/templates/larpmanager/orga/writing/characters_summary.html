@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
     #{{ character.number }} {{ character.name }} - {% trans "Summary" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the factions and plots of the indicated character." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% for g in factions %}
         <h2>{{ g.name }}</h2>
@@ -15,4 +15,4 @@
         <h2>T{{ p.number }} {{ p.name }}</h2>
         <div class="plot">{% show_char p run 1 %}</div>
     {% endfor %}
-{% endblock %}
+{% endblock content %}

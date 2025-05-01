@@ -25,25 +25,25 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
 from django.db import connection
 
-from larpmanager.models.accounting import AccountingItemDiscount, AccountingItemMembership, PaymentInvoice, Discount
-from larpmanager.models.association import Association
-from larpmanager.models.event import Run
-from larpmanager.models.member import Membership, Badge, get_user_membership
-from larpmanager.models.registration import Registration, RegistrationTicket
-from larpmanager.accounting.token_credit import get_runs_paying_incomplete
 from larpmanager.accounting.balance import check_accounting, check_run_accounting
+from larpmanager.accounting.token_credit import get_runs_paying_incomplete
 from larpmanager.cache.feature import get_assoc_features, get_event_features
-from larpmanager.utils.common import get_time_diff_today
+from larpmanager.mail.accounting import notify_invoice_check
 from larpmanager.mail.base import check_holiday
+from larpmanager.mail.member import send_password_reset_remainder
 from larpmanager.mail.remind import (
+    notify_deadlines,
     remember_membership,
+    remember_membership_fee,
     remember_pay,
     remember_profile,
-    remember_membership_fee,
-    notify_deadlines,
 )
-from larpmanager.mail.accounting import notify_invoice_check
-from larpmanager.mail.member import send_password_reset_remainder
+from larpmanager.models.accounting import AccountingItemDiscount, AccountingItemMembership, Discount, PaymentInvoice
+from larpmanager.models.association import Association
+from larpmanager.models.event import Run
+from larpmanager.models.member import Badge, Membership, get_user_membership
+from larpmanager.models.registration import Registration, RegistrationTicket
+from larpmanager.utils.common import get_time_diff_today
 from larpmanager.utils.pdf import print_run_bkg
 from larpmanager.utils.tasks import mail_error
 
@@ -193,7 +193,7 @@ class Command(BaseCommand):
         for i in range(0, len(tp)):
             if count < lm[i]:
                 continue
-            k = "friends-%s" % (tp[i])
+            k = f"friends-{tp[i]}"
             self.add_member_badge(k, reg.member, cache)
 
     def check_ach_player(self, reg, cache):
@@ -204,7 +204,7 @@ class Command(BaseCommand):
         for i in range(0, len(tp)):
             if count < lm[i]:
                 continue
-            k = "player-%s" % (tp[i])
+            k = f"player-{tp[i]}"
             self.add_member_badge(k, reg.member, cache)
 
     def check_badge_help(self, m, cache):
@@ -215,7 +215,7 @@ class Command(BaseCommand):
         for i in range(0, len(tp)):
             if count < lm[i]:
                 continue
-            k = "help-%s" % (tp[i])
+            k = f"help-{tp[i]}"
             self.add_member_badge(k, m, cache)
 
     def check_badge_trad(self, m, cache):
@@ -226,7 +226,7 @@ class Command(BaseCommand):
         for i in range(0, len(tp)):
             if count < lm[i]:
                 continue
-            k = "trad-%s" % (tp[i])
+            k = f"trad-{tp[i]}"
             self.add_member_badge(k, m, cache)
 
     def check_badge_staff(self, m, cache):
@@ -237,7 +237,7 @@ class Command(BaseCommand):
         for i in range(0, len(tp)):
             if count < lm[i]:
                 continue
-            k = "staff-%s" % (tp[i])
+            k = f"staff-{tp[i]}"
             self.add_member_badge(k, m, cache)
 
     def check_badge_orga(self, m, cache):
@@ -248,7 +248,7 @@ class Command(BaseCommand):
         for i in range(0, len(tp)):
             if count < lm[i]:
                 continue
-            k = "organizzatore-%s" % (tp[i])
+            k = f"organizzatore-{tp[i]}"
             self.add_member_badge(k, m, cache)
 
     def check_remind(self, assoc):
@@ -331,7 +331,9 @@ class Command(BaseCommand):
         if check_holiday():
             return
 
-        deadline_days = int(run.event.assoc.get_config("deadline_days", 5))
+        deadline_days = int(run.event.assoc.get_config("deadline_days", 0))
+        if not deadline_days:
+            return
         if get_time_diff_today(run.start) % deadline_days != 1:
             return
 

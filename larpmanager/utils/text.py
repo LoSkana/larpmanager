@@ -85,14 +85,14 @@ def get_event_text(event_id, typ, lang=None):
 
 
 @receiver(post_save, sender=AssocText)
-def save_AssocText(sender, instance, created, **kwargs):
+def save_assoc_text(sender, instance, created, **kwargs):
     update_assoc_text(instance.assoc_id, instance.typ, instance.language)
     if instance.default:
         update_assoc_text_def(instance.assoc_id, instance.typ)
 
 
 @receiver(pre_delete, sender=AssocText)
-def delete_AssocText(sender, instance, **kwargs):
+def delete_assoc_text(sender, instance, **kwargs):
     cache.delete(assoc_text_key(instance.assoc_id, instance.typ, instance.language))
     if instance.default:
         cache.delete(assoc_text_key_def(instance.assoc_id, instance.typ))
@@ -102,14 +102,14 @@ def delete_AssocText(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=EventText)
-def save_EventText(sender, instance, created, **kwargs):
+def save_event_text(sender, instance, created, **kwargs):
     update_event_text(instance.event_id, instance.typ, instance.language)
     if instance.default:
         update_event_text_def(instance.event_id, instance.typ)
 
 
 @receiver(pre_delete, sender=EventText)
-def delete_EventText(sender, instance, **kwargs):
+def delete_event_text(sender, instance, **kwargs):
     cache.delete(event_text_key(instance.event_id, instance.typ, instance.language))
     if instance.default:
         cache.delete(event_text_key_def(instance.event_id, instance.typ))

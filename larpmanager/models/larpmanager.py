@@ -24,7 +24,7 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill, ResizeToFit
 from tinymce.models import HTMLField
 
-from larpmanager.models.base import BaseModel, AlphanumericValidator
+from larpmanager.models.base import AlphanumericValidator, BaseModel
 from larpmanager.models.utils import UploadToPathAndRename, show_thumb
 
 

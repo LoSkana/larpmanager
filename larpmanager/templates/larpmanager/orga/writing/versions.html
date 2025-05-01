@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {{ name }} - {% trans "Versions" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the different versions available of the character, and the differences between them." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% for v in versions reversed %}
         {% if v.diff %}
@@ -13,4 +13,4 @@
             <div class='diff-version plot'>{{ v.diff | safe }}</div>
         {% endif %}
     {% endfor %}
-{% endblock %}
+{% endblock content %}

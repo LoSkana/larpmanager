@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n show_tags %}
 {% block title %}
     {% trans "Payment" %} - {{ reg.run }}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     {% if invoice %}
         {% include "elements/payment_go.html" %}
@@ -33,7 +33,7 @@
         {% endif %}
         {% include "elements/payment_form.html" %}
     {% endif %}
-{% endblock %}
+{% endblock content %}
 {% block js %}
     <script>
 window.addEventListener('DOMContentLoaded', function() {
@@ -43,4 +43,4 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 });
     </script>
-{% endblock %}
+{% endblock js %}

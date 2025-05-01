@@ -1134,7 +1134,7 @@ table.fixed {
     flex: 1;
 }
 
-.residence-container input, select {
+.residence-container input, .residence-container select {
     width: 100%;
     padding: 0.2em;
 }
@@ -1161,4 +1161,30 @@ table.fixed {
 
 .fea .descr {
     width: 70%;
+}
+
+th select {
+    max-width: 100% !important;
+    width: 100%;
+    padding-right: 1.5em;
+}
+
+.satispay-button {
+    height: 50px;
+    cursor: pointer;
+}
+
+#smart-button-container {
+    margin-top:2em;
+    text-align: center;
+}
+
+#paypal-buttons {
+    max-width: 300px;
+    margin: auto
+}
+
+#paypal-me-img {
+    width:50%;
+    max-width: 600px;
 }

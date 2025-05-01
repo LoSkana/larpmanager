@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Competences events" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows for each event, the collaborators marked with which expertise." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <table id="main_table" class="tablesorter mob">
         <thead>
@@ -32,4 +32,4 @@
             {% endfor %}
         </tbody>
     </table>
-{% endblock %}
+{% endblock content %}

@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load tz i18n %}
 {% block title %}
     {% trans "Contact us" %}
-{% endblock %}
+{% endblock title %}
 {% block content %}
     {% if sent %}
         <h2>{% trans "Message sent, thanks for writing us!" %}</h2>
@@ -18,7 +18,7 @@
             <table class="mob no_csv">
                 {{ form.as_table }}
             </table>
-            <input type="submit" value="{% trans 'Confirm' %}">
+            <input type="submit" value="{% trans "Confirm" %}">
         </form>
     {% endif %}
-{% endblock %}
+{% endblock content %}

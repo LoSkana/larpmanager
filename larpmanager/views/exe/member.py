@@ -20,60 +20,59 @@
 
 import csv
 from collections import defaultdict
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.registration import update_member_registrations
+from larpmanager.cache.role import check_assoc_permission
 from larpmanager.forms.member import (
     ExeBadgeForm,
-    MembershipResponseForm,
     ExeMemberForm,
     ExeMembershipForm,
     ExeVolunteerRegistryForm,
+    MembershipResponseForm,
 )
 from larpmanager.forms.miscellanea import (
     OrgaHelpQuestionForm,
     SendMailForm,
 )
+from larpmanager.mail.member import notify_membership_approved, notify_membership_reject
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
-    AccountingItemPayment,
     AccountingItemMembership,
     AccountingItemOther,
+    AccountingItemPayment,
 )
 from larpmanager.models.association import Association
 from larpmanager.models.event import (
     Run,
 )
-from larpmanager.models.member import Membership, Badge, VolunteerRegistry, Member, Vote, get_user_membership
+from larpmanager.models.member import Badge, Member, Membership, VolunteerRegistry, Vote, get_user_membership
 from larpmanager.models.miscellanea import (
-    HelpQuestion,
     Email,
+    HelpQuestion,
 )
 from larpmanager.models.registration import (
     Registration,
 )
-from larpmanager.accounting.registration import update_member_registrations
-from larpmanager.cache.role import check_assoc_permission
 from larpmanager.utils.common import (
     get_member,
     normalize_string,
 )
-from larpmanager.utils.member import calculate_fiscal_code
 from larpmanager.utils.edit import exe_edit
-from larpmanager.mail.member import notify_membership_approved, notify_membership_reject
+from larpmanager.utils.member import calculate_fiscal_code
+from larpmanager.utils.paginate import exe_paginate
 from larpmanager.utils.pdf import (
-    return_pdf,
     get_membership_request,
     print_volunteer_registry,
+    return_pdf,
 )
-from larpmanager.utils.paginate import exe_paginate
 from larpmanager.views.orga.member import send_mail_batch
 
 

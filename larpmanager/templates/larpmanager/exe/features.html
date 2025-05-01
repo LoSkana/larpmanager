@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n show_tags %}
 {% block title %}
     {% trans "Feature" %} - {% trans "Organization" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page shows the optional features available for the whole organization." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     <input type="text" name="search" id="search" placeholder="Search" />
     <!--
@@ -87,7 +87,7 @@
             </div>
         {% endif %}
     {% endfor %}
-{% endblock %}
+{% endblock content %}
 {% block js2 %}
     {% include "elements/features/search.js" %}
-{% endblock %}
+{% endblock js2 %}

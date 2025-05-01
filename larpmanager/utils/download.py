@@ -23,8 +23,8 @@ import csv
 from bs4 import BeautifulSoup
 from django.http import HttpResponse
 
+from larpmanager.cache.character import get_event_cache_all, get_event_cache_fields
 from larpmanager.models.form import CharacterQuestion, get_ordered_registration_questions
-from larpmanager.cache.character import get_event_cache_fields, get_event_cache_all
 from larpmanager.utils.common import check_field
 
 
@@ -115,7 +115,7 @@ def writing_download(request, ctx, typ, nm):
 def get_writer(ctx, nm):
     response = HttpResponse(
         content_type="text/csv",
-        headers={"Content-Disposition": 'attachment; filename="%s-%s.csv"' % (ctx["event"], nm)},
+        headers={"Content-Disposition": 'attachment; filename="{}-{}.csv"'.format(ctx["event"], nm)},
     )
     writer = csv.writer(response, delimiter="\t")
     return response, writer

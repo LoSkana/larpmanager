@@ -1,12 +1,12 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load tz show_tags static i18n %}
 {% block title %}
-    {% trans 'Limitations' %} - {{ run.search }}
-{% endblock %}
+    {% trans "Limitations" %} - {{ run.search }}
+{% endblock title %}
 {% block content %}
     {% trans "Here are the sign up options with limited number." %}
     {% if disc %}
-        <h2>{% trans 'Discounts' %}</h2>
+        <h2>{% trans "Discounts" %}</h2>
         <table class="mob">
             <tr>
                 <th>{% trans "Name" %}</th>
@@ -25,7 +25,7 @@
         </table>
     {% endif %}
     {% if tickets %}
-        <h2>{% trans 'Tickets' %}</h2>
+        <h2>{% trans "Tickets" %}</h2>
         <table class="mob">
             <tr>
                 <th>{% trans "Name" %}</th>
@@ -47,7 +47,7 @@
         </table>
     {% endif %}
     {% if opts %}
-        <h2>{% trans 'Options' %}</h2>
+        <h2>{% trans "Options" %}</h2>
         <table class="mob">
             <tr>
                 <th>{% trans "Question" %}</th>
@@ -67,4 +67,4 @@
             {% endfor %}
         </table>
     {% endif %}
-{% endblock %}
+{% endblock content %}

@@ -20,8 +20,8 @@
 
 from django.contrib import admin
 
-from larpmanager.admin.base import DefModelAdmin, AssocFilter
-from larpmanager.models.association import Association, AssocText, AssociationConfig
+from larpmanager.admin.base import AssocFilter, DefModelAdmin
+from larpmanager.models.association import Association, AssociationConfig, AssocText
 
 
 @admin.register(Association)

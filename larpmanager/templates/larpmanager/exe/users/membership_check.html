@@ -1,11 +1,11 @@
-{% extends 'utils.html' %}
+{% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
     {% trans "Member Data Checks" %}
-{% endblock %}
+{% endblock title %}
 {% block info %}
     {% trans "This page performs checks on members' data." %}
-{% endblock %}
+{% endblock info %}
 {% block content %}
     {% if cf %}
         <h2>{% trans "Tax code check" %}</h2>
@@ -34,4 +34,4 @@
             {% endfor %}
         </table>
     {% endif %}
-{% endblock %}
+{% endblock content %}
