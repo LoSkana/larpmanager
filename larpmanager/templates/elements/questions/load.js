@@ -41,15 +41,19 @@ function load_question(el) {
 
     start_spinner();
 
-    request.done(function(res) {
+    request.done(function(result) {
 
-        num = Object.keys(res)[0];
-        data = res[num];
+        num = result['num'];
+        data = result['res'];
+        const popup = new Set(result['popup']);
 
         for (let r in data) {
             let vl = data[r];
             if (vl.constructor === Array) vl = vl.join(", ");
-            $('#{0} .res_{1}'.format(r, num)).text(vl);
+            var vel = $('#{0} .res_{1}'.format(r, num));
+            vel.text(vl);
+            if (popup.has(parseInt(r)))
+                vel.append("... <a href='#' class='post_popup' pop='{0}' fie='{1}'><i class='fas fa-eye'></i></a>".format(r, num));
         }
 
         el.next().trigger('click');

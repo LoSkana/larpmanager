@@ -49,7 +49,7 @@ def get_single_cache_text_field(el, f, v):
         limit = 200
     if ln > limit:
         red = red[:limit]
-        red += f"... <a href='#' class='post_popup' pop='{el.number}' fie='{f}'><i class='fas fa-eye'></i></a>"
+        red += f"... <a href='#' class='post_popup' pop='{el.id}' fie='{f}'><i class='fas fa-eye'></i></a>"
     res = (red, ln)
     return res
 

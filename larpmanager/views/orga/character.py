@@ -21,7 +21,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import Max, Q
-from django.db.models.functions import Length
+from django.db.models.functions import Length, Substr
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -132,12 +132,12 @@ def orga_relationship_edit(request, s, n, num):
     if num != 0:
         get_relationship(ctx, num)
 
-    def redr(ctx):
+    def redr(ctx_curr):
         return redirect(
             "orga_characters_relationships",
-            s=ctx["event"].slug,
-            n=ctx["run"].number,
-            num=ctx["element"].source_id,
+            s=ctx_curr["event"].slug,
+            n=ctx_curr["run"].number,
+            num=ctx_curr["element"].source_id,
         )
 
     return writing_edit(request, ctx, OrgaRelationshipForm, "relationship", TextVersion.RELATIONSHIP, redr=redr)
@@ -182,6 +182,10 @@ def orga_character_form_list(request, s, n):
 
     res = {}
 
+    popup = []
+
+    max_length = 100
+
     if q.typ in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
         cho = {}
         for opt in event.get_elements(CharacterOption).filter(question=q):
@@ -193,10 +197,16 @@ def orga_character_form_list(request, s, n):
             res[el.character_id].append(cho[el.option_id])
 
     elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
-        for el in CharacterAnswer.objects.filter(question=q, character__event=event):
-            res[el.character_id] = el.text
+        que = CharacterAnswer.objects.filter(question=q, character__event=event)
+        que = que.annotate(short_text=Substr("text", 1, max_length))
+        que = que.values("character_id", "short_text")
+        for el in que:
+            answer = el["short_text"]
+            if len(answer) == max_length:
+                popup.append(el["character_id"])
+            res[el["character_id"]] = answer
 
-    return JsonResponse({q.id: res})
+    return JsonResponse({"res": res, "popup": popup, "num": q.id})
 
 
 @login_required
@@ -227,8 +237,8 @@ def orga_character_form_email(request, s, n):
             res[el.option_id]["names"].append(el.character.player.email)
 
     n_res = {}
-    for opt_id in res:
-        n_res[cho[opt_id]] = res[opt_id]
+    for opt_id, value in res.items():
+        n_res[cho[opt_id]] = value
 
     return JsonResponse(n_res)
 
@@ -357,6 +367,20 @@ def orga_check(request, s, n):
         for el in que.values_list("character__number", "text"):
             ctx["chars"][el[0]]["text"] += el[1]
 
+    check_relations(cache, checks, chs_numbers, ctx)
+
+    # check extinct, missing, interloper
+    check_writings(cache, checks, chs_numbers, ctx, id_number_map)
+
+    # check speedlarp, no player has double
+    check_speedlarp(checks, ctx, id_number_map)
+
+    ctx["checks"] = checks
+    # print(checks)
+    return render(request, "larpmanager/orga/writing/check.html", ctx)
+
+
+def check_relations(cache, checks, chs_numbers, ctx):
     checks["relat_missing"] = []
     checks["relat_extinct"] = []
     for c in ctx["chars"]:
@@ -366,15 +390,15 @@ def orga_check(request, s, n):
         for e in extinct:
             checks["relat_extinct"].append((name, e))
         cache[c] = (name, from_text)
-
-    for c in cache:
-        (first, first_rel) = cache[c]
+    for c, content in cache.items():
+        (first, first_rel) = content
         for oth in first_rel:
             (second, second_rel) = cache[oth]
             if c not in second_rel:
                 checks["relat_missing"].append({"f_id": c, "f_name": first, "s_id": oth, "s_name": second})
 
-    # check extinct, missing, interloper
+
+def check_writings(cache, checks, chs_numbers, ctx, id_number_map):
     for el in [Faction, Plot, Prologue, SpeedLarp]:
         nm = str(el.__name__).lower()
         if nm not in ctx["features"]:
@@ -401,37 +425,41 @@ def orga_check(request, s, n):
                 checks[nm + "_interloper"].append((f, e))
                 # cache[nm][f.number] = (str(f), from_text)
 
-    # check speedlarp, no player has double
-    if "speedlarp" in ctx["features"]:
-        checks["speed_larps_double"] = []
-        checks["speed_larps_missing"] = []
-        max_typ = ctx["event"].get_elements(SpeedLarp).aggregate(Max("typ"))["typ__max"]
-        if max_typ and max_typ > 0:
-            speeds = {}
-            for el in ctx["event"].get_elements(SpeedLarp).annotate(characters_map=ArrayAgg("characters")):
-                from_rels = set()
-                for ch_id in el.characters_map:
-                    if ch_id not in id_number_map:
-                        continue
-                    from_rels.add(id_number_map[ch_id])
 
-                for ch in from_rels:
-                    if ch not in speeds:
-                        speeds[ch] = {}
-                    if el.typ not in speeds[ch]:
-                        speeds[ch][el.typ] = []
-                    speeds[ch][el.typ].append(str(el))
-            for chnum, c in ctx["chars"].items():
-                if c["special"] in [Character.PNG, Character.FILLER]:
-                    continue
-                if chnum not in speeds:
-                    continue
-                for typ in range(1, max_typ + 1):
-                    if typ not in speeds[chnum]:
-                        checks["speed_larps_missing"].append((typ, c))
-                    if len(speeds[chnum][typ]) > 1:
-                        checks["speed_larps_double"].append((typ, c))
+def check_speedlarp(checks, ctx, id_number_map):
+    if "speedlarp" not in ctx["features"]:
+        return
 
-    ctx["checks"] = checks
-    # print(checks)
-    return render(request, "larpmanager/orga/writing/check.html", ctx)
+    checks["speed_larps_double"] = []
+    checks["speed_larps_missing"] = []
+    max_typ = ctx["event"].get_elements(SpeedLarp).aggregate(Max("typ"))["typ__max"]
+    if not max_typ or max_typ == 0:
+        return
+
+    speeds = {}
+    for el in ctx["event"].get_elements(SpeedLarp).annotate(characters_map=ArrayAgg("characters")):
+        check_speedlarp_prepare(el, id_number_map, speeds)
+    for chnum, c in ctx["chars"].items():
+        if c["special"] in [Character.PNG, Character.FILLER]:
+            continue
+        if chnum not in speeds:
+            continue
+        for typ in range(1, max_typ + 1):
+            if typ not in speeds[chnum]:
+                checks["speed_larps_missing"].append((typ, c))
+            if len(speeds[chnum][typ]) > 1:
+                checks["speed_larps_double"].append((typ, c))
+
+
+def check_speedlarp_prepare(el, id_number_map, speeds):
+    from_rels = set()
+    for ch_id in el.characters_map:
+        if ch_id not in id_number_map:
+            continue
+        from_rels.add(id_number_map[ch_id])
+    for ch in from_rels:
+        if ch not in speeds:
+            speeds[ch] = {}
+        if el.typ not in speeds[ch]:
+            speeds[ch][el.typ] = []
+        speeds[ch][el.typ].append(str(el))

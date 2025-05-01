@@ -198,14 +198,14 @@ $(document).ready(function() {
         $('.info').hide();
     }
 
-    $('.post_popup').on( "click", function() {
+    $(document).on('click', '.post_popup', function (e) {
 
         start_spinner();
 
         request = $.ajax({
             url: window.location,
             method: "POST",
-            data: { popup: 1, num: $(this).attr("pop"), tp: $(this).attr("fie") },
+            data: { popup: 1, idx: $(this).attr("pop"), tp: $(this).attr("fie") },
             datatype: "json",
         });
 
@@ -216,7 +216,6 @@ $(document).ready(function() {
             uglipop({class:'popup', source:'html', content: res.v});
 
 			reload_has_char();
-
 
             $('.popup').scrollTop( 0 );
             $(".popup .hide").hide();

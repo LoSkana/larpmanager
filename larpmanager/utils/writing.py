@@ -21,7 +21,8 @@
 import csv
 import io
 
-from django.db.models import Count
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Count, Model
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.http import HttpResponse, JsonResponse
@@ -34,13 +35,13 @@ from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Trait
 from larpmanager.models.event import ProgressStep, RunText
 from larpmanager.models.experience import AbilityPx
+from larpmanager.models.form import CharacterAnswer, CharacterQuestion
 from larpmanager.models.writing import (
     Character,
     CharacterConfig,
     Plot,
     PlotCharacterRel,
     TextVersion,
-    Writing,
     replace_chars_all,
 )
 from larpmanager.templatetags.show_tags import show_char, show_trait
@@ -49,7 +50,7 @@ from larpmanager.utils.download import writing_download
 from larpmanager.utils.upload import upload_elements
 
 
-def orga_list_progress_assign(ctx, typ):
+def orga_list_progress_assign(ctx, typ: type[Model]):
     if "progress" in ctx["features"]:
         ctx["progress_steps"] = {}
         ctx["progress_steps_map"] = {}
@@ -81,21 +82,45 @@ def orga_list_progress_assign(ctx, typ):
         if "progress" in ctx["features"] and "assigned" in ctx["features"] and el.progress_id and el.assigned_id:
             ctx["progress_assigned_map"][f"{el.progress_id}_{el.assigned_id}"] += 1
 
-    ctx["typ"] = str(typ._meta).replace("larpmanager.", "")
+    # noinspection PyProtectedMember
+    ctx["typ"] = str(typ._meta).replace("larpmanager.", "")  # type: ignore[attr-defined]
 
 
-def writing_popup(request, ctx, typ, nm):
+def writing_popup_question(ctx, idx, question_idx):
+    try:
+        char = Character.objects.get(pk=idx, event=ctx["event"].get_class_parent(Character))
+        question = CharacterQuestion.objects.get(
+            pk=question_idx, event=ctx["event"].get_class_parent(CharacterQuestion)
+        )
+        el = CharacterAnswer.objects.get(character=char, question=question)
+        tx = f"<h2>{char} - {question.display}</h2>" + el.text
+        return JsonResponse({"k": 1, "v": tx})
+    except ObjectDoesNotExist:
+        return JsonResponse({"k": 0})
+
+
+def writing_popup(request, ctx, typ):
     get_event_cache_all(ctx)
 
-    num = int(request.POST.get("num", ""))
+    idx = int(request.POST.get("idx", ""))
     tp = request.POST.get("tp", "")
 
-    el = typ.objects.get(number=num, event=ctx["event"].get_class_parent(typ))
+    # check if it is a character question
+    try:
+        question_idx = int(tp)
+        return writing_popup_question(ctx, idx, question_idx)
+    except ValueError:
+        pass
+
+    try:
+        el = typ.objects.get(pk=idx, event=ctx["event"].get_class_parent(typ))
+    except ObjectDoesNotExist:
+        return JsonResponse({"k": 0})
 
     if "co_creation" in ctx["features"]:
         cc = {"co_creation_question": "first", "co_creation_answer": "second"}
         if tp in cc:
-            (el, creat) = RunText.objects.get_or_create(run=ctx["run"], eid=num, typ=RunText.COCREATION)
+            (el, creat) = RunText.objects.get_or_create(run=ctx["run"], eid=idx, typ=RunText.COCREATION)
             v = getattr(el, cc[tp])
             setattr(el, tp, v)
 
@@ -111,7 +136,7 @@ def writing_popup(request, ctx, typ, nm):
     return JsonResponse({"k": 1, "v": tx})
 
 
-def writing_example(request, ctx, typ, nm):
+def writing_example(ctx, typ):
     file_rows = typ.get_example_csv(ctx["features"])
 
     buffer = io.StringIO()
@@ -130,10 +155,10 @@ def writing_post(request, ctx, typ, nm):
         return writing_download(request, ctx, typ, nm)
 
     if request.POST.get("example") == "1":
-        return writing_example(request, ctx, typ, nm)
+        return writing_example(ctx, typ)
 
     if request.POST.get("popup") == "1":
-        return writing_popup(request, ctx, typ, nm)
+        return writing_popup(request, ctx, typ)
 
     return upload_elements(request, ctx, typ, nm, "orga_" + nm + "s")
 
@@ -147,15 +172,12 @@ def writing_list(request, ctx, typ, nm):
 
     ctx["nm"] = nm
 
-    writing = issubclass(typ, Writing)
-
     text_fields = ["concept", "teaser", "text", "preview"]
-
     ctx["list"] = typ.objects.filter(event=ev.get_class_parent(typ))
-    if writing:
-        for f in text_fields:
-            ctx["list"] = ctx["list"].defer(f)
+    for f in text_fields:
+        ctx["list"] = ctx["list"].defer(f)
 
+    # noinspection PyProtectedMember
     typ_fields = [f.name for f in typ._meta.get_fields()]
     for el in [
         ("faction", "factions_list"),
@@ -179,83 +201,92 @@ def writing_list(request, ctx, typ, nm):
         ctx["list"] = ctx["list"].order_by("-updated")
 
     if issubclass(typ, Character):
-        if "co_creation" in ctx["features"]:
-            text_fields.extend(["co_creation_question", "co_creation_answer"])
-
-        if "user_character" in ctx["features"]:
-            ctx["list"] = ctx["list"].select_related("player")
-
-        if "relationships" in ctx["features"]:
-            cache = {}
-            res = Character.objects.filter(event=ev.get_class_parent("relationships")).annotate(dc=Count("characters"))
-            for el in res:
-                cache[el.number] = el.dc
-
-            for el in ctx["list"]:
-                el.cache_relationship_count = cache[el.number]
-
-        if "plot" in ctx["features"]:
-            ctx["plots"] = {}
-            for el in PlotCharacterRel.objects.filter(character__event=ctx["event"]).select_related(
-                "plot", "character"
-            ):
-                if el.character.number not in ctx["plots"]:
-                    ctx["plots"][el.character.number] = []
-                ctx["plots"][el.character.number].append((f"[T{el.plot.number}] {el.plot.name}", el.plot.number))
-
-            for el in ctx["list"]:
-                if el.number in ctx["plots"]:
-                    el.plts = ctx["plots"][el.number]
-
-        if "faction" in ctx["features"]:
-            fac_event = ctx["event"].get_class_parent("faction")
-            for el in ctx["list"]:
-                el.factions = el.factions_list.filter(event=fac_event)
-
-        # add character configs
-        char_add_addit(ctx)
+        writing_list_char(ctx, ev, text_fields)
 
     if issubclass(typ, Plot):
-        ctx["chars"] = {}
-        for el in PlotCharacterRel.objects.filter(character__event=ctx["event"]).select_related("plot", "character"):
-            if el.plot.number not in ctx["chars"]:
-                ctx["chars"][el.plot.number] = []
-            ctx["chars"][el.plot.number].append((f"#{el.character.number} {el.character.name}", el.character.number))
-
-        for el in ctx["list"]:
-            if el.number in ctx["chars"]:
-                el.chars = ctx["chars"][el.number]
+        writing_list_plot(ctx)
 
     if issubclass(typ, AbilityPx):
         ctx["list"] = ctx["list"].prefetch_related("prerequisites")
 
-    if writing:
-        orga_list_progress_assign(ctx, typ)
+    orga_list_progress_assign(ctx, typ)  # pyright: ignore[reportArgumentType]
 
-        gctf = get_cache_text_field(typ, ctx["event"])
-        for el in ctx["list"]:
-            if el.number not in gctf:
-                continue
-            for f in text_fields:
-                if f not in gctf[el.number]:
-                    continue
-                (red, ln) = gctf[el.number][f]
-                setattr(el, f + "_red", red)
-                setattr(el, f + "_ln", ln)
+    writing_list_text_fields(ctx, text_fields, typ)
 
-        if "co_creation" in ctx["features"] and issubclass(typ, Character):
-            gcc = get_cache_cocreation(ctx["run"])
-            for el in ctx["list"]:
-                if el.number not in gcc:
-                    continue
-                for f in ["co_creation_question", "co_creation_answer"]:
-                    if f not in gcc[el.number]:
-                        continue
-                    (red, ln) = gcc[el.number][f]
-                    setattr(el, f + "_red", red)
-                    setattr(el, f + "_ln", ln)
+    writing_list_cocreation(ctx, typ)
 
     return render(request, "larpmanager/orga/writing/" + nm + "s.html", ctx)
+
+
+def writing_list_text_fields(ctx, text_fields, typ):
+    gctf = get_cache_text_field(typ, ctx["event"])
+    for el in ctx["list"]:
+        if el.number not in gctf:
+            continue
+        for f in text_fields:
+            if f not in gctf[el.number]:
+                continue
+            (red, ln) = gctf[el.number][f]
+            setattr(el, f + "_red", red)
+            setattr(el, f + "_ln", ln)
+
+
+def writing_list_cocreation(ctx, typ):
+    if "co_creation" not in ctx["features"] or not issubclass(typ, Character):
+        return
+
+    gcc = get_cache_cocreation(ctx["run"])
+    for el in ctx["list"]:
+        if el.number not in gcc:
+            continue
+        for f in ["co_creation_question", "co_creation_answer"]:
+            if f not in gcc[el.number]:
+                continue
+            (red, ln) = gcc[el.number][f]
+            setattr(el, f + "_red", red)
+            setattr(el, f + "_ln", ln)
+
+
+def writing_list_plot(ctx):
+    ctx["chars"] = {}
+    for el in PlotCharacterRel.objects.filter(character__event=ctx["event"]).select_related("plot", "character"):
+        if el.plot.number not in ctx["chars"]:
+            ctx["chars"][el.plot.number] = []
+        ctx["chars"][el.plot.number].append((f"#{el.character.number} {el.character.name}", el.character.number))
+    for el in ctx["list"]:
+        if el.number in ctx["chars"]:
+            el.chars = ctx["chars"][el.number]
+
+
+def writing_list_char(ctx, ev, text_fields):
+    if "co_creation" in ctx["features"]:
+        text_fields.extend(["co_creation_question", "co_creation_answer"])
+    if "user_character" in ctx["features"]:
+        ctx["list"] = ctx["list"].select_related("player")
+    if "relationships" in ctx["features"]:
+        cache = {}
+        res = Character.objects.filter(event=ev.get_class_parent("relationships")).annotate(dc=Count("characters"))
+        for el in res:
+            cache[el.number] = el.dc
+
+        for el in ctx["list"]:
+            el.cache_relationship_count = cache[el.number]
+    if "plot" in ctx["features"]:
+        ctx["plots"] = {}
+        for el in PlotCharacterRel.objects.filter(character__event=ctx["event"]).select_related("plot", "character"):
+            if el.character.number not in ctx["plots"]:
+                ctx["plots"][el.character.number] = []
+            ctx["plots"][el.character.number].append((f"[T{el.plot.number}] {el.plot.name}", el.plot.number))
+
+        for el in ctx["list"]:
+            if el.number in ctx["plots"]:
+                el.plts = ctx["plots"][el.number]
+    if "faction" in ctx["features"]:
+        fac_event = ctx["event"].get_class_parent("faction")
+        for el in ctx["list"]:
+            el.factions = el.factions_list.filter(event=fac_event)
+    # add character configs
+    char_add_addit(ctx)
 
 
 def char_add_addit(ctx):
@@ -291,7 +322,7 @@ def writing_versions(request, ctx, nm, tp):
 
 
 @receiver(pre_save, sender=Character)
-def pre_save_character(sender, instance, *args, **kwargs):
+def pre_save_character(_sender, instance, *_args, **_kwargs):
     if not instance.pk:
         return
 
