@@ -272,6 +272,9 @@ def orga_registrations(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_registrations")
 
     if request.method == "POST":
+        if request.POST.get("popup") == "1":
+            return registrations_popup(request, ctx)
+
         return upload_elements(request, ctx, Registration, "registration", "orga_registrations")
 
     cache = {}
