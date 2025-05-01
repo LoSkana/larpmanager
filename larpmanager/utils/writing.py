@@ -322,7 +322,7 @@ def writing_versions(request, ctx, nm, tp):
 
 
 @receiver(pre_save, sender=Character)
-def pre_save_character(_sender, instance, *_args, **_kwargs):
+def pre_save_character(sender, instance, *args, **kwargs):
     if not instance.pk:
         return
 
