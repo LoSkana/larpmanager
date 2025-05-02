@@ -165,7 +165,6 @@ def px(live_server, page):
 
     # check px computation
     go_to(page, live_server, "/test/1/manage/characters/")
-    page.get_by_role("link", name="Characters").click()
     page.get_by_role("link", name="XP").click()
     expect(page.locator('[id="\\31 "]')).to_contain_text("12")
     expect(page.locator('[id="\\31 "]')).to_contain_text("12")
