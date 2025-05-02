@@ -2444,6 +2444,9 @@ msgstr "Licentie"
 msgid "Delay in payment"
 msgstr "Vertraging in betaling"
 
+msgid "Delay in profile"
+msgstr "Vertraging in profiel"
+
 msgid "Loading template"
 msgstr "Sjabloon laden"
 
@@ -3893,6 +3896,9 @@ msgstr "Ontdek de evenementen die op stapel staan!"
 
 msgid "Cancellation for missing payment"
 msgstr "Annulering wegens te late betaling"
+
+msgid "Cancellation for missing profile"
+msgstr "Annulering wegens ontbrekend profiel"
 
 msgid "Select a file with extension csv"
 msgstr "Selecteer een bestand met de extensie 'csv'."

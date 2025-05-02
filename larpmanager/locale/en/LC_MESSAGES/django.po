@@ -3183,6 +3183,9 @@ msgstr ""
 msgid "Cancellation for missing payment"
 msgstr ""
 
+msgid "Cancellation for missing profile"
+msgstr ""
+
 msgid "Delay in organization registration"
 msgstr ""
 
@@ -3196,6 +3199,9 @@ msgid "Delay in yearly membership fee"
 msgstr ""
 
 msgid "Delay in payment"
+msgstr ""
+
+msgid "Delay in profile"
 msgstr ""
 
 msgid "Missing casting preferences"

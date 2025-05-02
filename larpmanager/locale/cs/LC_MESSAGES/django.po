@@ -2444,6 +2444,9 @@ msgstr "Licence"
 msgid "Delay in payment"
 msgstr "Zpoždění platby"
 
+msgid "Delay in profile"
+msgstr "Zpoždění v profilu"
+
 msgid "Loading template"
 msgstr "Načítání šablony"
 
@@ -3893,6 +3896,9 @@ msgstr "Objevte připravované akce!"
 
 msgid "Cancellation for missing payment"
 msgstr "Zrušení z důvodu chybějící platby"
+
+msgid "Cancellation for missing profile"
+msgstr "Zrušení pro chybějící profil"
 
 msgid "Select a file with extension csv"
 msgstr "Vyberte soubor s příponou \"csv\"."
