@@ -193,18 +193,25 @@ def copy(live_server, page):
     page.locator("#id_name").fill("copy")
     page.locator("#id_name").press("Tab")
     page.locator("#slug").fill("copy")
+    page.get_by_role("button", name="Confirm").click()
+
+    go_to(page, live_server, "/copy/1/manage/features/10/on")
+    go_to(page, live_server, "/copy/1/manage/copy/")
     page.locator("#select2-id_parent-container").click()
     page.get_by_role("searchbox").fill("tes")
     page.get_by_role("option", name="Test Larp").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Submit").click()
+
     go_to(page, live_server, "/copy/1/manage/roles/")
     expect(page.locator('[id="\\35 "]')).to_contain_text("User Test")
     expect(page.locator('[id="\\35 "]')).to_contain_text("Navigation , Factions")
     go_to(page, live_server, "/copy/1/manage/config/")
+
     page.get_by_role("link", name="Gallery ").click()
     expect(page.locator("#id_gallery_hide_login")).to_be_checked()
     page.get_by_role("link", name=re.compile(r"^Experience points")).click()
     expect(page.locator("#id_px_start")).to_have_value("10")
+
     go_to(page, live_server, "/copy/1/manage/characters/")
     page.get_by_role("link", name="XP").click()
     expect(page.locator('[id="\\33 "]')).to_contain_text("12")
