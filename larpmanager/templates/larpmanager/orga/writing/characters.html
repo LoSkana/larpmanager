@@ -106,9 +106,7 @@
                 {% if user_character_approval %}
                     <th class="hide status">{% trans "Status" %}</th>
                 {% endif %}
-                {% if features.faction %}
-                    <th>{% trans "Factions" %}</th>
-                {% endif %}
+                {% if features.faction %}<th>{{ fields_name.faction }}</th>{% endif %}
                 {% if features.motto %}
                     <th class="hide motto">{% trans "Motto" %}</th>
                 {% endif %}
@@ -142,23 +140,23 @@
                     {% for key, que in char_questions.items %}<th class="hide q_{{ key }}">{{ que.display }}</th>{% endfor %}
                 {% endif %}
                 <th>{{ fields_name.teaser }}</th>
-                <th style="width: 5%">(L)</th>
+                <th>(L)</th>
                 {% if features.preview %}
                     <th class="hide preview">{% trans "Preview" %}</th>
-                    <th class="hide preview" style="width: 5%">(L)</th>
+                    <th class="hide preview">(L)</th>
                 {% endif %}
                 {% if features.co_creation %}
                     <th class="hide co_creat">{% trans "Questions CC" %}</th>
                     <th class="hide co_creat">{% trans "Answers CC" %}</th>
                 {% endif %}
                 <th>{{ fields_name.text }}</th>
-                <th style="width: 5%">(L)</th>
+                <th>(L)</th>
                 {% if features.plot %}
                     <th>{% trans "Plots" %}</th>
-                    <th style="width: 5%">(N)</th>
+                    <th>(N)</th>
                 {% endif %}
                 {% if features.relationships %}
-                    <th style="width: 5%">{% trans "Relationships" %} (N)</th>
+                    <th>{% trans "Relationships" %} (N)</th>
                 {% endif %}
                 {% if features.speedlarp %}
                     <th class="hide speedlarp">{% trans "Speedlarp" %}</th>
@@ -228,7 +226,9 @@
                         <td class="hide cover">
                             {% if el.cover %}
                                 <a href="{{ el.thumb.url }}">
-                                    <img src="{{ el.thumb.url }}" style="width:5em" />
+                                    <img src="{{ el.thumb.url }}"
+                                         class="character-cover"
+                                         alt="character cover" />
                                 </a>
                             {% endif %}
                         </td>
@@ -247,7 +247,7 @@
                     {% for key, que in char_questions.items %}
                         <td class="hide question q_{{ key }}">
                             <span class="has_show_tooltip res_{{ key }}"></span>
-                            <span class="hide show_tooltip">{{ que.display }}</span></span>
+                            <span class="hide show_tooltip">{{ que.display }}</span>
                         </td>
                     {% endfor %}
                     <td>{{ el.teaser_red | safe }}</td>
@@ -306,6 +306,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <!-- Filled dynamically by jQuery -->
                         </tbody>
                     </table>
                 </div>

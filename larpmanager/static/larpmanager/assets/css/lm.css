@@ -1188,3 +1188,7 @@ th select {
     width:50%;
     max-width: 600px;
 }
+
+.character-cover {
+    width:5em;
+}
