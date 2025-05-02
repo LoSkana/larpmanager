@@ -214,13 +214,14 @@ def copy(live_server, page):
 
 def campaign(live_server, page):
     # create campaign
-    go_to(page, live_server, "manage/features/79/on")
+    go_to(page, live_server, "/manage/features/79/on")
     go_to(page, live_server, "/manage/events")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("campaign")
     page.locator("#id_name").press("Tab")
     page.locator("#slug").fill("campaign")
+    time.sleep(2)
     page.locator("#select2-id_parent-container").click()
     page.get_by_role("searchbox").fill("tes")
     page.get_by_role("option", name="Test Larp").click()
