@@ -2444,6 +2444,9 @@ msgstr "Patente"
 msgid "Delay in payment"
 msgstr "Ritardo nei pagamenti"
 
+msgid "Delay in profile"
+msgstr "Ritardo nel profilo"
+
 msgid "Loading template"
 msgstr "Template caricamento"
 
@@ -3893,6 +3896,9 @@ msgstr "Scopri gli eventi in lavorazione!"
 
 msgid "Cancellation for missing payment"
 msgstr "Cancellazione per mancato pagamento"
+
+msgid "Cancellation for missing profile"
+msgstr "Cancellazione per profilo mancante"
 
 msgid "Select a file with extension csv"
 msgstr "Seleziona un file con estensione 'csv'."

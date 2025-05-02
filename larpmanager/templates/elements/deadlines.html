@@ -16,13 +16,13 @@
             <td>{{ res.memb_del|length }}</td>
             <td>
                 {% for el in res.memb_del %}
-                    {% include 'elements/comma.html' %}
+                    {% include "elements/comma.html" %}
                     {{ el.0 }}
                 {% endfor %}
             </td>
             <td>
                 {% for el in res.memb_del %}
-                    {% include 'elements/comma.html' %}
+                    {% include "elements/comma.html" %}
                     {{ el.1 }}
                 {% endfor %}
             </td>
@@ -37,13 +37,13 @@
             <td>{{ res.fee_del|length }}</td>
             <td>
                 {% for el in res.fee_del %}
-                    {% include 'elements/comma.html' %}
+                    {% include "elements/comma.html" %}
                     {{ el.0 }}
                 {% endfor %}
             </td>
             <td>
                 {% for el in res.fee_del %}
-                    {% include 'elements/comma.html' %}
+                    {% include "elements/comma.html" %}
                     {{ el.1 }}
                 {% endfor %}
             </td>
@@ -58,13 +58,34 @@
             <td>{{ res.pay_del|length }}</td>
             <td>
                 {% for el in res.pay_del %}
-                    {% include 'elements/comma.html' %}
+                    {% include "elements/comma.html" %}
                     {{ el.0 }}
                 {% endfor %}
             </td>
             <td>
                 {% for el in res.pay_del %}
-                    {% include 'elements/comma.html' %}
+                    {% include "elements/comma.html" %}
+                    {{ el.1 }}
+                {% endfor %}
+            </td>
+        </tr>
+    {% endif %}
+    {% if res.profile_del %}
+        <tr>
+            <td>
+                <b>{% trans "Cancellation for missing profile" %}</b>
+            </td>
+            <td>{% trans "Tolerance exceeded, proceed with the cancellation" %}</td>
+            <td>{{ res.profile_del|length }}</td>
+            <td>
+                {% for el in res.profile_del %}
+                    {% include "elements/comma.html" %}
+                    {{ el.0 }}
+                {% endfor %}
+            </td>
+            <td>
+                {% for el in res.profile_del %}
+                    {% include "elements/comma.html" %}
                     {{ el.1 }}
                 {% endfor %}
             </td>
@@ -81,13 +102,13 @@
             <td>{{ res.memb|length }}</td>
             <td>
                 {% for el in res.memb %}
-                    {% include 'elements/comma.html' %}
+                    {% include "elements/comma.html" %}
                     {{ el.0 }}
                 {% endfor %}
             </td>
             <td>
                 {% for el in res.memb %}
-                    {% include 'elements/comma.html' %}
+                    {% include "elements/comma.html" %}
                     {{ el.1 }}
                 {% endfor %}
             </td>
@@ -104,13 +125,13 @@
             <td>{{ res.fee|length }}</td>
             <td>
                 {% for el in res.fee %}
-                    {% include 'elements/comma.html' %}
+                    {% include "elements/comma.html" %}
                     {{ el.0 }}
                 {% endfor %}
             </td>
             <td>
                 {% for el in res.fee %}
-                    {% include 'elements/comma.html' %}
+                    {% include "elements/comma.html" %}
                     {{ el.1 }}
                 {% endfor %}
             </td>
@@ -127,13 +148,36 @@
             <td>{{ res.pay|length }}</td>
             <td>
                 {% for el in res.pay %}
-                    {% include 'elements/comma.html' %}
+                    {% include "elements/comma.html" %}
                     {{ el.0 }}
                 {% endfor %}
             </td>
             <td>
                 {% for el in res.pay %}
-                    {% include 'elements/comma.html' %}
+                    {% include "elements/comma.html" %}
+                    {{ el.1 }}
+                {% endfor %}
+            </td>
+        </tr>
+    {% endif %}
+    {% if res.profile %}
+        <tr>
+            <td>
+                <b>{% trans "Delay in profile" %}</b>
+            </td>
+            <td>
+                {% trans "They need to complete it immediately" %} - <a href="{% url 'profile' %}">{% trans "give them this address" %}</a>
+            </td>
+            <td>{{ res.profile|length }}</td>
+            <td>
+                {% for el in res.profile %}
+                    {% include "elements/comma.html" %}
+                    {{ el.0 }}
+                {% endfor %}
+            </td>
+            <td>
+                {% for el in res.profile %}
+                    {% include "elements/comma.html" %}
                     {{ el.1 }}
                 {% endfor %}
             </td>
@@ -150,13 +194,13 @@
             <td>{{ res.cast|length }}</td>
             <td>
                 {% for el in res.cast %}
-                    {% include 'elements/comma.html' %}
+                    {% include "elements/comma.html" %}
                     {{ el.0 }}
                 {% endfor %}
             </td>
             <td>
                 {% for el in res.cast %}
-                    {% include 'elements/comma.html' %}
+                    {% include "elements/comma.html" %}
                     {{ el.1 }}
                 {% endfor %}
             </td>

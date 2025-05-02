@@ -2444,6 +2444,9 @@ msgstr "Licence"
 msgid "Delay in payment"
 msgstr "Retard de paiement"
 
+msgid "Delay in profile"
+msgstr "Retard dans le profil"
+
 msgid "Loading template"
 msgstr "Chargement du modèle"
 
@@ -3893,6 +3896,9 @@ msgstr "Découvrez les événements en cours de préparation !"
 
 msgid "Cancellation for missing payment"
 msgstr "Annulation pour défaut de paiement"
+
+msgid "Cancellation for missing profile"
+msgstr "Annulation pour profil manquant"
 
 msgid "Select a file with extension csv"
 msgstr "Sélectionnez un fichier avec l'extension \"csv\"."
