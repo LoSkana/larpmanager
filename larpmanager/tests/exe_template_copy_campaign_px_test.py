@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import re
+import time
 
 import pytest
 from playwright.sync_api import expect, sync_playwright
@@ -113,6 +114,7 @@ def setup_test(live_server, page):
     page.get_by_role("link", name="Gallery ").click()
     page.locator("#id_gallery_hide_login").check()
     page.get_by_role("button", name="Confirm").click()
+
     go_to(page, live_server, "/test/1/manage/roles/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -170,7 +172,9 @@ def px(live_server, page):
     expect(page.locator('[id="\\31 "]')).to_contain_text("12")
     expect(page.locator('[id="\\31 "]')).to_contain_text("0")
     page.get_by_role("link", name="").click()
-    page.get_by_role("row", name="Abilities Show").get_by_role("link").click()
+    row = page.get_by_role("row").filter(has_text="Abilities")
+    time.sleep(2)
+    row.get_by_role("link", name="Show").click()
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("swo")
     page.get_by_role("option", name="sword1").click()
