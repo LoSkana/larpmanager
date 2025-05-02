@@ -483,11 +483,11 @@ msgstr "Overskrift"
 msgid "Footer"
 msgstr "Bunntekst"
 
-msgid "Causal"
-msgstr "Årsak"
-
 msgid "Public"
 msgstr "Offentlig"
+
+msgid "Causal"
+msgstr "Årsak"
 
 msgid "Absent"
 msgstr "Fraværende"
@@ -681,11 +681,11 @@ msgstr "MVA-nr."
 msgid "Address"
 msgstr "Adresse"
 
-msgid "Writing"
-msgstr "Skriving"
-
 msgid "Gallery"
 msgstr "Galleri"
+
+msgid "Writing"
+msgstr "Skriving"
 
 msgid "Pronoun"
 msgstr "Pronomen"
@@ -693,11 +693,11 @@ msgstr "Pronomen"
 msgid "Private"
 msgstr "Privat"
 
-msgid "Lottery"
-msgstr "Lotteri"
-
 msgid "Casting"
 msgstr "Støping"
+
+msgid "Lottery"
+msgstr "Lotteri"
 
 msgid "Preview"
 msgstr "Forhåndsvisning"
@@ -2282,17 +2282,17 @@ msgstr "Modeller for utdeling"
 msgid "Payment details"
 msgstr "Betalingsinformasjon"
 
-msgid "Replacing names"
-msgstr "Erstatning av navn"
-
 msgid "Character cover"
 msgstr "Omslag med tegn"
 
-msgid "Disable credits"
-msgstr "Deaktiver kreditter"
+msgid "Replacing names"
+msgstr "Erstatning av navn"
 
 msgid "Show statistics"
 msgstr "Vis statistikk"
+
+msgid "Disable credits"
+msgstr "Deaktiver kreditter"
 
 msgid "Volounteer data"
 msgstr "Frivillige opplysninger"
@@ -2426,14 +2426,14 @@ msgstr "Forhåndsregistrering"
 msgid "Desalt thumbnail"
 msgstr "Desalt miniatyrbilde"
 
+msgid "Player selection"
+msgstr "Valg av spiller"
+
 msgid "Forward discount"
 msgstr "Terminrabatt"
 
 msgid "Patron / Reduced"
 msgstr "Maecenas / Redusert"
-
-msgid "Player selection"
-msgstr "Valg av spiller"
 
 msgid "Event Appearance"
 msgstr "Arrangementets opptreden"
@@ -2458,6 +2458,9 @@ msgstr "Tekstbakgrunn"
 
 msgid "Where it is held"
 msgstr "Hvor den avholdes"
+
+msgid "Long description"
+msgstr "Lang beskrivelse"
 
 msgid "Character review"
 msgstr "Karaktergjennomgang"
@@ -2576,14 +2579,14 @@ msgstr "Måneder fri kvote"
 msgid "Registration form"
 msgstr "Registreringsskjema"
 
-msgid "Conversion ticket"
-msgstr "Konverteringsbillett"
+msgid "Experience points"
+msgstr "Erfaringspoeng"
 
 msgid "Free registration"
 msgstr "Gratis inngang"
 
-msgid "Experience points"
-msgstr "Erfaringspoeng"
+msgid "Conversion ticket"
+msgstr "Konverteringsbillett"
 
 msgid "Residence address"
 msgstr "Bostedsadresse"
@@ -2605,6 +2608,9 @@ msgstr "Utlevering av poletter"
 
 msgid "Registration mail"
 msgstr "Registreringspost"
+
+msgid "Short description"
+msgstr "Kort beskrivelse"
 
 msgid "Registration code"
 msgstr "Inngangskode"
@@ -3249,6 +3255,9 @@ msgstr "Godkjent refusjon"
 msgid "Role approval %(role)s"
 msgstr "Godkjenning av rolle %(role)s"
 
+msgid "External register link"
+msgstr "Ekstern registerlenke"
+
 msgid "Number of filler spots"
 msgstr "Antall fyllplasser"
 
@@ -3357,6 +3366,9 @@ msgstr "Velkommen til LarpManager!"
 
 msgid "Background of web pages"
 msgstr "Bakgrunn på nettsiden"
+
+msgid "A short tagline, slogan"
+msgstr "En kort tagline, et slagord"
 
 msgid "Number of primary spots"
 msgstr "Antall primærplasser"
@@ -3736,14 +3748,14 @@ msgstr "Deltakelse bekreftet!"
 msgid "If checked: members can vote."
 msgstr "Hvis avkrysset: medlemmene kan stemme"
 
-msgid "Number of tickets to be drawn"
-msgstr "Antall billetter som skal trekkes"
-
 msgid "Minimum number of preferences"
 msgstr "Minimum antall preferanser"
 
 msgid "Maximum number of preferences"
 msgstr "Maksimalt antall preferanser"
+
+msgid "Number of tickets to be drawn"
+msgstr "Antall billetter som skal trekkes"
 
 #, python-format
 msgid "Request refund from: %(user)s"
@@ -3804,9 +3816,6 @@ msgstr "Fullfør betaling for %(event)s"
 msgid "Font to be used in page titles"
 msgstr "skrifttype som skal brukes i titler"
 
-msgid "Slogan - maximum 70 characters"
-msgstr "Slagord - maksimalt 70 tegn"
-
 msgid "Does it require special props?"
 msgstr "Krever det spesielle rekvisitter?"
 
@@ -3853,6 +3862,9 @@ msgstr "Tilbakestilling av passord for bruker %(user)s"
 
 msgid "Set design - staging, materials"
 msgstr "Scenografi - innredning, materialer"
+
+msgid "Will be shown in the event page"
+msgstr "Vil bli vist på arrangementssiden"
 
 msgid "Surcharge applied to the ticket"
 msgstr "Tillegg på billetten"
@@ -3911,6 +3923,9 @@ msgstr "Diverse driftsutgifter"
 
 msgid "Select the character's key words"
 msgstr "Angir tegnets nøkkelord"
+
+msgid "The setting / genre of the event"
+msgstr "Arrangementets omgivelser/sjanger"
 
 msgid "Discover the coming soon events!"
 msgstr "Se hvilke arrangementer som er på trappene!"
@@ -4325,9 +4340,6 @@ msgstr "Søknad om medlemskap i foreningen"
 msgid "Your card number is: <b>%(number)03d</b>."
 msgstr "Kortnummeret ditt er: <b>%(number)03d</b>."
 
-msgid "Indicate the setting / genre of the event"
-msgstr "Angi kjønn / generelle omgivelser"
-
 msgid "Describe exactly what condition it is in."
 msgstr "Beskriv nøyaktig under hvilke forhold det skjer"
 
@@ -4432,9 +4444,6 @@ msgstr "Deltakelse i innsamling for: %(recipient)s"
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
 msgstr "Godkjenning av %(user)s som %(role)s for %(event)s"
-
-msgid "Short description - maximum 1000 characters"
-msgstr "Kort beskrivelse - maksimalt 1000 tegn"
 
 msgid "Display order with respect to all questions"
 msgstr "Vis rekkefølge med hensyn til alle spørsmål"
@@ -4560,9 +4569,6 @@ msgstr "Du er nå logget inn med hovedkontoen din:"
 #, python-brace-format
 msgid "This text will be added to the sheet of {name}"
 msgstr "Denne teksten vil bli lagt til i arket til {name}."
-
-msgid "Extended description - maximum 5000 characters"
-msgstr "Utvidet beskrivelse - maksimalt 5000 tegn"
 
 msgid "Cover in rectangular format - aspect ratio 4:3"
 msgstr "Omslag i rektangulært format - størrelsesforhold 4:3"
@@ -6962,6 +6968,13 @@ msgid ""
 msgstr ""
 "Det er obligatorisk å delta på alle våre live-arrangementer, ettersom det "
 "også inkluderer forsikringsavgiften."
+
+msgid ""
+"If the event is part of a campaign, specify the parent event whose "
+"characters will be shared"
+msgstr ""
+"Hvis hendelsen er en del av en kampanje, angir du den overordnede hendelsen "
+"hvis tegn skal deles"
 
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "

@@ -51,12 +51,12 @@ from larpmanager.utils.codes import languages
 class Event(BaseModel):
     slug = models.CharField(
         max_length=30,
-        verbose_name=_("URL identifier"),
-        help_text=_("Only lowercase characters and numbers are allowed, no spaces or symbols"),
         validators=[AlphanumericValidator],
         db_index=True,
         blank=True,
         null=True,
+        verbose_name=_("URL identifier"),
+        help_text=_("Only lowercase characters and numbers are allowed, no spaces or symbols"),
     )
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="events")
@@ -69,7 +69,8 @@ class Event(BaseModel):
         max_length=500,
         blank=True,
         null=True,
-        help_text=_("Slogan - maximum 70 characters"),
+        verbose_name=_("Tagline"),
+        help_text=_("A short tagline, slogan"),
     )
 
     where = models.CharField(max_length=500, blank=True, null=True, help_text=_("Where it is held"))
@@ -78,6 +79,7 @@ class Event(BaseModel):
         max_length=500,
         blank=True,
         null=True,
+        verbose_name=_("Authors"),
         help_text=_("Names of the collaborators who are organizing it"),
     )
 
@@ -85,20 +87,21 @@ class Event(BaseModel):
         max_length=1000,
         blank=True,
         null=True,
-        help_text=_("Short description - maximum 1000 characters"),
+        verbose_name=_("Short description"),
     )
 
     description = HTMLField(
         max_length=6000,
         blank=True,
-        help_text=_("Extended description - maximum 5000 characters"),
+        verbose_name=_("Long description"),
+        help_text=_("Will be shown in the event page"),
     )
 
     genre = models.CharField(
         max_length=100,
         blank=True,
         verbose_name=pgettext_lazy("event", "Genre"),
-        help_text=_("Indicate the setting / genre of the event"),
+        help_text=_("The setting / genre of the event"),
     )
 
     visible = models.BooleanField(default=True)
@@ -123,11 +126,23 @@ class Event(BaseModel):
     carousel_img = models.ImageField(max_length=500, upload_to="carousel/", blank=True, help_text=_("Carousel image"))
     carousel_thumb = ImageSpecField(source="carousel_img", format="JPEG", options={"quality": 70})
 
-    carousel_text = HTMLField(max_length=2000, blank=True, help_text=_("Carousel description"))
+    carousel_text = HTMLField(
+        max_length=2000,
+        blank=True,
+        verbose_name=_("Carousel description"),
+    )
 
-    website = models.URLField(max_length=100, blank=True)
+    website = models.URLField(
+        max_length=100,
+        blank=True,
+        verbose_name=_("Website"),
+    )
 
-    register_link = models.URLField(max_length=150, blank=True)
+    register_link = models.URLField(
+        max_length=150,
+        blank=True,
+        verbose_name=_("External register link"),
+    )
 
     max_pg = models.IntegerField(
         default=0,
@@ -149,7 +164,14 @@ class Event(BaseModel):
 
     features = models.ManyToManyField(Feature, related_name="events", blank=True)
 
-    parent = models.ForeignKey("event", on_delete=models.CASCADE, null=True, blank=True)
+    parent = models.ForeignKey(
+        "event",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        verbose_name=_("Campaign"),
+        help_text=_("If the event is part of a campaign, specify the parent event whose characters will be shared"),
+    )
 
     background = models.ImageField(
         max_length=500,
@@ -303,9 +325,19 @@ class EventConfig(BaseModel):
         return f"{self.event} {self.name}"
 
     class Meta:
-        unique_together = ("event", "name")
         indexes = [
             models.Index(fields=["event", "name"]),
+        ]
+        constraints = [
+            UniqueConstraint(
+                fields=["event", "name", "deleted"],
+                name="unique_event_config_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["event", "name"],
+                condition=Q(deleted=None),
+                name="unique_event_config_without_optional",
+            ),
         ]
 
 

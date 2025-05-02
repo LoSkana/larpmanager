@@ -483,11 +483,11 @@ msgstr "Intestazione"
 msgid "Footer"
 msgstr "Footer"
 
-msgid "Causal"
-msgstr "Causale"
-
 msgid "Public"
 msgstr "Pubblico"
+
+msgid "Causal"
+msgstr "Causale"
 
 msgid "Absent"
 msgstr "Assente"
@@ -681,11 +681,11 @@ msgstr "Partita IVA"
 msgid "Address"
 msgstr "Indirizzo"
 
-msgid "Writing"
-msgstr "Scrittura"
-
 msgid "Gallery"
 msgstr "Galleria"
+
+msgid "Writing"
+msgstr "Scrittura"
 
 msgid "Pronoun"
 msgstr "Pronome"
@@ -693,11 +693,11 @@ msgstr "Pronome"
 msgid "Private"
 msgstr "Privato"
 
-msgid "Lottery"
-msgstr "Lotteria"
-
 msgid "Casting"
 msgstr "Casting"
+
+msgid "Lottery"
+msgstr "Lotteria"
 
 msgid "Preview"
 msgstr "Preview"
@@ -2282,17 +2282,17 @@ msgstr "Modelli di dispensa"
 msgid "Payment details"
 msgstr "Dettagli pagamento"
 
-msgid "Replacing names"
-msgstr "Sostituzione nomi"
-
 msgid "Character cover"
 msgstr "Copertina personaggio"
 
-msgid "Disable credits"
-msgstr "Disabilita crediti"
+msgid "Replacing names"
+msgstr "Sostituzione nomi"
 
 msgid "Show statistics"
 msgstr "Mostra statistiche"
+
+msgid "Disable credits"
+msgstr "Disabilita crediti"
 
 msgid "Volounteer data"
 msgstr "Dati volontario"
@@ -2426,14 +2426,14 @@ msgstr "Pre-iscrizione"
 msgid "Desalt thumbnail"
 msgstr "Disalita thumbnail"
 
+msgid "Player selection"
+msgstr "Scelta giocatore"
+
 msgid "Forward discount"
 msgstr "Sconto avanti"
 
 msgid "Patron / Reduced"
 msgstr "Mecenate / Ridotto"
-
-msgid "Player selection"
-msgstr "Scelta giocatore"
 
 msgid "Event Appearance"
 msgstr "Aspetto Evento"
@@ -2458,6 +2458,9 @@ msgstr "Sfondo testo"
 
 msgid "Where it is held"
 msgstr "Dove si tiene"
+
+msgid "Long description"
+msgstr "Descrizione lunga"
 
 msgid "Character review"
 msgstr "Personaggio revisione"
@@ -2576,14 +2579,14 @@ msgstr "Mesi quota libera"
 msgid "Registration form"
 msgstr "Form iscrizione"
 
-msgid "Conversion ticket"
-msgstr "Biglietto conversione"
+msgid "Experience points"
+msgstr "Punti esperienza"
 
 msgid "Free registration"
 msgstr "Iscrizione libera"
 
-msgid "Experience points"
-msgstr "Punti esperienza"
+msgid "Conversion ticket"
+msgstr "Biglietto conversione"
 
 msgid "Residence address"
 msgstr "Indirizzo di residenza"
@@ -2605,6 +2608,9 @@ msgstr "Erogazione tokens"
 
 msgid "Registration mail"
 msgstr "Mail iscrizione"
+
+msgid "Short description"
+msgstr "Breve descrizione"
 
 msgid "Registration code"
 msgstr "Codice di iscrizione"
@@ -3249,6 +3255,9 @@ msgstr "Rimborso approvato"
 msgid "Role approval %(role)s"
 msgstr "Approvazione ruolo %(role)s"
 
+msgid "External register link"
+msgstr "Link di registrazione esterno"
+
 msgid "Number of filler spots"
 msgstr "Numero posti filler"
 
@@ -3357,6 +3366,9 @@ msgstr "Benvenuto su LarpManager!"
 
 msgid "Background of web pages"
 msgstr "Sfondo delle pagine web"
+
+msgid "A short tagline, slogan"
+msgstr "Una breve tagline, uno slogan"
 
 msgid "Number of primary spots"
 msgstr "Numero posti primari"
@@ -3736,14 +3748,14 @@ msgstr "Iscrizione confermata!"
 msgid "If checked: members can vote."
 msgstr "Se checkato: i soci possono votare"
 
-msgid "Number of tickets to be drawn"
-msgstr "Numero di biglietti da estrarre"
-
 msgid "Minimum number of preferences"
 msgstr "Numero minimo di preferenze"
 
 msgid "Maximum number of preferences"
 msgstr "Numero massimo di preferenze"
+
+msgid "Number of tickets to be drawn"
+msgstr "Numero di biglietti da estrarre"
 
 #, python-format
 msgid "Request refund from: %(user)s"
@@ -3804,9 +3816,6 @@ msgstr "Completa il pagamento per %(event)s"
 msgid "Font to be used in page titles"
 msgstr "font da utilizzare nei titoli"
 
-msgid "Slogan - maximum 70 characters"
-msgstr "Slogan - massimo 70 caratteri"
-
 msgid "Does it require special props?"
 msgstr "Richiede prop particolari?"
 
@@ -3853,6 +3862,9 @@ msgstr "Ripristino della password dell'utente %(user)s"
 
 msgid "Set design - staging, materials"
 msgstr "Scenografia - allestimenti, materiali"
+
+msgid "Will be shown in the event page"
+msgstr "Verrà visualizzato nella pagina dell'evento"
 
 msgid "Surcharge applied to the ticket"
 msgstr "Sovraprezzo applicato al biglietto"
@@ -3911,6 +3923,9 @@ msgstr "Uscite diverse di gestione"
 
 msgid "Select the character's key words"
 msgstr "Indica le parole chiave del personaggio"
+
+msgid "The setting / genre of the event"
+msgstr "L'ambientazione/il genere dell'evento"
 
 msgid "Discover the coming soon events!"
 msgstr "Scopri gli eventi in lavorazione!"
@@ -4323,9 +4338,6 @@ msgstr "Richiesta iscrizione all'Associazione"
 msgid "Your card number is: <b>%(number)03d</b>."
 msgstr "Il numero della tua tessera è: <b>%(number)03d</b>."
 
-msgid "Indicate the setting / genre of the event"
-msgstr "Indicare il genere / setting generale"
-
 msgid "Describe exactly what condition it is in."
 msgstr "Descrivere esattamente in quali condizioni si presenta"
 
@@ -4431,9 +4443,6 @@ msgstr "Partecipazione colletta per: %(recipient)s"
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
 msgstr "Approvazione %(user)s come %(role)s per %(event)s"
-
-msgid "Short description - maximum 1000 characters"
-msgstr "Descrizione in breve - massimo 1000 caratteri"
 
 msgid "Display order with respect to all questions"
 msgstr "Ordine di visualizzazione rispetto tutte le domande"
@@ -4557,9 +4566,6 @@ msgstr "Ora sei loggato con l'account principale: "
 #, python-brace-format
 msgid "This text will be added to the sheet of {name}"
 msgstr "Questo testo verrà aggiunto al foglio di {name}"
-
-msgid "Extended description - maximum 5000 characters"
-msgstr "Descrizione estesa - massimo 5000 caratteri"
 
 msgid "Cover in rectangular format - aspect ratio 4:3"
 msgstr "Cover in formato rettangolare - aspect ratio 4:3"
@@ -7069,6 +7075,13 @@ msgid ""
 msgstr ""
 "È obbligatoria per prendere parte a tutti i nostri eventi dal vivo, perché "
 "comprende anche la quota assicurativa."
+
+msgid ""
+"If the event is part of a campaign, specify the parent event whose "
+"characters will be shared"
+msgstr ""
+"Se l'evento fa parte di una campagna, specificare l'evento genitore i cui "
+"personaggi saranno condivisi"
 
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "

@@ -221,6 +221,17 @@ class AssociationConfig(BaseModel):
         indexes = [
             models.Index(fields=["assoc", "name"]),
         ]
+        constraints = [
+            UniqueConstraint(
+                fields=["assoc", "name", "deleted"],
+                name="unique_assoc_config_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["assoc", "name"],
+                condition=Q(deleted=None),
+                name="unique_assoc_config_without_optional",
+            ),
+        ]
 
 
 class AssocText(BaseModel):

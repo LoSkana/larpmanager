@@ -662,15 +662,6 @@ msgstr ""
 msgid "If checked: Show summary page with number of tickets/options used"
 msgstr ""
 
-msgid "Writing"
-msgstr ""
-
-msgid "Replacing names"
-msgstr ""
-
-msgid "If checked, PG names will be automatically replaced by a reference"
-msgstr ""
-
 msgid "Registration form"
 msgstr ""
 
@@ -717,6 +708,31 @@ msgid ""
 "a character"
 msgstr ""
 
+msgid "Pre-registration"
+msgstr ""
+
+msgid "If checked, makes pre-registration for this event available"
+msgstr ""
+
+msgid "Character cover"
+msgstr ""
+
+msgid "Desalt thumbnail"
+msgstr ""
+
+msgid ""
+"If checked, shows the original image in the cover, not the thumbnail version"
+msgstr ""
+
+msgid "Writing"
+msgstr ""
+
+msgid "Replacing names"
+msgstr ""
+
+msgid "If checked, PG names will be automatically replaced by a reference"
+msgstr ""
+
 msgid "Campaign"
 msgstr ""
 
@@ -726,29 +742,21 @@ msgstr ""
 msgid "If checked, do not use the parent event's factions"
 msgstr ""
 
-msgid "Pre-registration"
+msgid "Experience points"
 msgstr ""
 
-msgid "If checked, makes pre-registration for this event available"
-msgstr ""
-
-msgid "Alert"
+msgid "Player selection"
 msgstr ""
 
 msgid ""
-"Given a payment deadline, indicates the number of days under which it "
-"notifies the player to proceed with the payment. Default 30."
+"If checked, players may add abilities themselves, by selecting from those "
+"that are visible, and whose pre-requisites they meet."
 msgstr ""
 
-msgid "Causal"
+msgid "Initial experience points"
 msgstr ""
 
-msgid ""
-"If present, it indicates the reason for the payment that the player must put "
-"on the payments he makes."
-msgstr ""
-
-msgid "You can use the following fields, they will be filled in automatically:"
+msgid "Initial value of experience points for all characters"
 msgstr ""
 
 msgid "Player editor"
@@ -808,62 +816,6 @@ msgid ""
 "characters, visible to all"
 msgstr ""
 
-msgid "Character cover"
-msgstr ""
-
-msgid "Desalt thumbnail"
-msgstr ""
-
-msgid ""
-"If checked, shows the original image in the cover, not the thumbnail version"
-msgstr ""
-
-msgid "Disable Tokens"
-msgstr ""
-
-msgid "If checked, no tokens will be used in the entries of this event"
-msgstr ""
-
-msgid "Disable credits"
-msgstr ""
-
-msgid "If checked, no credits will be used in the entries for this event"
-msgstr ""
-
-msgid "Bring a friend"
-msgstr ""
-
-msgid "Forward discount"
-msgstr ""
-
-msgid ""
-"Value of the discount for the registered player who gives the code to a "
-"friend who signs up"
-msgstr ""
-
-msgid "Discount back"
-msgstr ""
-
-msgid ""
-"Value of the discount for the friend who signs up using the code of a "
-"registered player"
-msgstr ""
-
-msgid "Lottery"
-msgstr ""
-
-msgid "Number of extractions"
-msgstr ""
-
-msgid "Number of tickets to be drawn"
-msgstr ""
-
-msgid "Conversion ticket"
-msgstr ""
-
-msgid "Name of the ticket into which to convert"
-msgstr ""
-
 msgid "Casting"
 msgstr ""
 
@@ -915,6 +867,56 @@ msgstr ""
 msgid "If checked, shows players the histories of preferences entered"
 msgstr ""
 
+msgid "Alert"
+msgstr ""
+
+msgid ""
+"Given a payment deadline, indicates the number of days under which it "
+"notifies the player to proceed with the payment. Default 30."
+msgstr ""
+
+msgid "Causal"
+msgstr ""
+
+msgid ""
+"If present, it indicates the reason for the payment that the player must put "
+"on the payments he makes."
+msgstr ""
+
+msgid "You can use the following fields, they will be filled in automatically:"
+msgstr ""
+
+msgid "Disable Tokens"
+msgstr ""
+
+msgid "If checked, no tokens will be used in the entries of this event"
+msgstr ""
+
+msgid "Disable credits"
+msgstr ""
+
+msgid "If checked, no credits will be used in the entries for this event"
+msgstr ""
+
+msgid "Bring a friend"
+msgstr ""
+
+msgid "Forward discount"
+msgstr ""
+
+msgid ""
+"Value of the discount for the registered player who gives the code to a "
+"friend who signs up"
+msgstr ""
+
+msgid "Discount back"
+msgstr ""
+
+msgid ""
+"Value of the discount for the friend who signs up using the code of a "
+"registered player"
+msgstr ""
+
 msgid "Name of the free donation field"
 msgstr ""
 
@@ -941,21 +943,19 @@ msgid ""
 "only do so if the stipulated number of characters has been reached"
 msgstr ""
 
-msgid "Experience points"
+msgid "Lottery"
 msgstr ""
 
-msgid "Player selection"
+msgid "Number of extractions"
 msgstr ""
 
-msgid ""
-"If checked, players may add abilities themselves, by selecting from those "
-"that are visible, and whose pre-requisites they meet."
+msgid "Number of tickets to be drawn"
 msgstr ""
 
-msgid "Initial experience points"
+msgid "Conversion ticket"
 msgstr ""
 
-msgid "Initial value of experience points for all characters"
+msgid "Name of the ticket into which to convert"
 msgstr ""
 
 msgid "Event Appearance"
@@ -2316,7 +2316,7 @@ msgstr ""
 msgid "Select the character's key words"
 msgstr ""
 
-msgid "Slogan - maximum 70 characters"
+msgid "A short tagline, slogan"
 msgstr ""
 
 msgid "Where it is held"
@@ -2325,13 +2325,16 @@ msgstr ""
 msgid "Names of the collaborators who are organizing it"
 msgstr ""
 
-msgid "Short description - maximum 1000 characters"
+msgid "Short description"
 msgstr ""
 
-msgid "Extended description - maximum 5000 characters"
+msgid "Long description"
 msgstr ""
 
-msgid "Indicate the setting / genre of the event"
+msgid "Will be shown in the event page"
+msgstr ""
+
+msgid "The setting / genre of the event"
 msgstr ""
 
 msgid "Cover in rectangular format - aspect ratio 4:3"
@@ -2341,6 +2344,9 @@ msgid "Carousel image"
 msgstr ""
 
 msgid "Carousel description"
+msgstr ""
+
+msgid "External register link"
 msgstr ""
 
 msgid "Number of primary spots"
@@ -2359,6 +2365,11 @@ msgid "Number of waiting spots"
 msgstr ""
 
 msgid "Maximum number of waiting spots to manage (0 for infinite)"
+msgstr ""
+
+msgid ""
+"If the event is part of a campaign, specify the parent event whose "
+"characters will be shared"
 msgstr ""
 
 msgid "Terms and conditions"
@@ -3521,8 +3532,8 @@ msgid "Click on the image below (Paypal.me) to open the payment."
 msgstr ""
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field "
-"'notes' (this is important!)"
+"Copy and paste exactly all the coloured text below into the field 'notes' "
+"(this is important!)"
 msgstr ""
 
 msgid "Indicates that payment is sent 'to friends and family'."
@@ -7739,8 +7750,8 @@ msgid "Provisional"
 msgstr ""
 
 msgid ""
-"'player' (player's email), 'ticket' (ticket name or number), "
-"'character' (character name or number to be assigned), 'pwyw' (donation)."
+"'player' (player's email), 'ticket' (ticket name or number), 'character' "
+"(character name or number to be assigned), 'pwyw' (donation)."
 msgstr ""
 
 msgid "Registration cancelled"

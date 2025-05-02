@@ -468,10 +468,11 @@ class FileTypeValidator:
         e.g; wildcard character specification will be normalized as text/* -> text
         """
         allowed_mimes = []
-        for allowed_type in allowed_types:
-            allowed_type = allowed_type.decode() if type(allowed_type) is bytes else allowed_type
+        for allowed_type_orig in allowed_types:
+            allowed_type = allowed_type_orig.decode() if type(allowed_type_orig) is bytes else allowed_type_orig
             parts = allowed_type.split("/")
-            if len(parts) == 2:
+            max_parts = 2
+            if len(parts) == max_parts:
                 if parts[1] == "*":
                     allowed_mimes.append(parts[0])
                 else:
@@ -530,8 +531,8 @@ def pretty_request(request):
     for header, value in request.META.items():
         if not header.startswith("HTTP"):
             continue
-        header = "-".join([h.capitalize() for h in header[5:].lower().split("_")])
-        headers += f"{header}: {value}\n"
+        header_value = "-".join([h.capitalize() for h in header[5:].lower().split("_")])
+        headers += f"{header_value}: {value}\n"
 
     return f"{request.method} HTTP/1.1\nMeta: {request.META}\n{headers}\n\n{request.body}"
 
@@ -606,11 +607,21 @@ def normalize_string(value):
 
 def copy_class(target_id, source_id, cls):
     cls.objects.filter(event_id=target_id).delete()
+
     for obj in cls.objects.filter(event_id=source_id):
-        obj.event_id = target_id
+        # save a copy of m2m relations
+        m2m_data = {}
+        for field in obj._meta.many_to_many:
+            m2m_data[field.name] = list(getattr(obj, field.name).all())
+
         obj.pk = None
+        obj.event_id = target_id
         obj._state.adding = True
         obj.save()
+
+        # copy m2m relations
+        for field_name, values in m2m_data.items():
+            getattr(obj, field_name).set(values)
 
 
 def get_payment_methods_ids(ctx):

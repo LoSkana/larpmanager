@@ -483,11 +483,11 @@ msgstr "Kop"
 msgid "Footer"
 msgstr "Voettekst"
 
-msgid "Causal"
-msgstr "Oorzaak"
-
 msgid "Public"
 msgstr "Openbaar"
+
+msgid "Causal"
+msgstr "Oorzaak"
 
 msgid "Absent"
 msgstr "Afwezig"
@@ -681,11 +681,11 @@ msgstr "BTW-nr."
 msgid "Address"
 msgstr "Adres"
 
-msgid "Writing"
-msgstr "Schrijven"
-
 msgid "Gallery"
 msgstr "Galerij"
+
+msgid "Writing"
+msgstr "Schrijven"
 
 msgid "Pronoun"
 msgstr "Voornaamwoord"
@@ -693,11 +693,11 @@ msgstr "Voornaamwoord"
 msgid "Private"
 msgstr "Privé"
 
-msgid "Lottery"
-msgstr "Loterij"
-
 msgid "Casting"
 msgstr "Gieten"
+
+msgid "Lottery"
+msgstr "Loterij"
 
 msgid "Preview"
 msgstr "Voorbeeld"
@@ -2282,17 +2282,17 @@ msgstr "Handout Modellen"
 msgid "Payment details"
 msgstr "Betalingsgegevens"
 
-msgid "Replacing names"
-msgstr "Namen vervangen"
-
 msgid "Character cover"
 msgstr "Karakter cover"
 
-msgid "Disable credits"
-msgstr "Credits uitschakelen"
+msgid "Replacing names"
+msgstr "Namen vervangen"
 
 msgid "Show statistics"
 msgstr "Statistieken tonen"
+
+msgid "Disable credits"
+msgstr "Credits uitschakelen"
 
 msgid "Volounteer data"
 msgstr "Vrijwillige gegevens"
@@ -2426,14 +2426,14 @@ msgstr "Voorinschrijving"
 msgid "Desalt thumbnail"
 msgstr "Miniatuurafbeelding verwijderen"
 
+msgid "Player selection"
+msgstr "Speler selectie"
+
 msgid "Forward discount"
 msgstr "Termijnkorting"
 
 msgid "Patron / Reduced"
 msgstr "Maecenas / Gereduceerd"
-
-msgid "Player selection"
-msgstr "Speler selectie"
 
 msgid "Event Appearance"
 msgstr "Evenement Verschijning"
@@ -2458,6 +2458,9 @@ msgstr "Tekst achtergrond"
 
 msgid "Where it is held"
 msgstr "Waar het wordt gehouden"
+
+msgid "Long description"
+msgstr "Lange beschrijving"
 
 msgid "Character review"
 msgstr "Karakter recensie"
@@ -2576,14 +2579,14 @@ msgstr "Maanden vrij quotum"
 msgid "Registration form"
 msgstr "Registratieformulier"
 
-msgid "Conversion ticket"
-msgstr "Conversie ticket"
+msgid "Experience points"
+msgstr "Ervaringspunten"
 
 msgid "Free registration"
 msgstr "Gratis toegang"
 
-msgid "Experience points"
-msgstr "Ervaringspunten"
+msgid "Conversion ticket"
+msgstr "Conversie ticket"
 
 msgid "Residence address"
 msgstr "Woonadres"
@@ -2605,6 +2608,9 @@ msgstr "Muntjes uitdelen"
 
 msgid "Registration mail"
 msgstr "Registratie e-mail"
+
+msgid "Short description"
+msgstr "Korte beschrijving"
 
 msgid "Registration code"
 msgstr "Toegangscode"
@@ -3249,6 +3255,9 @@ msgstr "Vergoeding goedgekeurd"
 msgid "Role approval %(role)s"
 msgstr "Rolgoedkeuring %(role)s"
 
+msgid "External register link"
+msgstr "Link naar extern register"
+
 msgid "Number of filler spots"
 msgstr "Aantal vulplaatsen"
 
@@ -3357,6 +3366,9 @@ msgstr "Welkom bij LarpManager!"
 
 msgid "Background of web pages"
 msgstr "Achtergrond webpagina"
+
+msgid "A short tagline, slogan"
+msgstr "Een korte tagline, slogan"
 
 msgid "Number of primary spots"
 msgstr "Aantal primaire plaatsen"
@@ -3736,14 +3748,14 @@ msgstr "Inschrijving bevestigd!"
 msgid "If checked: members can vote."
 msgstr "Indien aangevinkt: leden kunnen stemmen"
 
-msgid "Number of tickets to be drawn"
-msgstr "Aantal te trekken tickets"
-
 msgid "Minimum number of preferences"
 msgstr "Minimum aantal voorkeuren"
 
 msgid "Maximum number of preferences"
 msgstr "Maximum aantal voorkeuren"
+
+msgid "Number of tickets to be drawn"
+msgstr "Aantal te trekken tickets"
 
 #, python-format
 msgid "Request refund from: %(user)s"
@@ -3804,9 +3816,6 @@ msgstr "Volledige betaling voor %(event)s"
 msgid "Font to be used in page titles"
 msgstr "Lettertype voor titels"
 
-msgid "Slogan - maximum 70 characters"
-msgstr "Slogan - maximaal 70 tekens"
-
 msgid "Does it require special props?"
 msgstr "Zijn er speciale rekwisieten voor nodig?"
 
@@ -3853,6 +3862,9 @@ msgstr "Wachtwoord reset van gebruiker %(user)s"
 
 msgid "Set design - staging, materials"
 msgstr "Decorontwerp - inrichting, materialen"
+
+msgid "Will be shown in the event page"
+msgstr "Wordt getoond op de evenementpagina"
 
 msgid "Surcharge applied to the ticket"
 msgstr "Toeslag op ticket"
@@ -3911,6 +3923,9 @@ msgstr "Diverse huishoudelijke uitgaven"
 
 msgid "Select the character's key words"
 msgstr "Geeft de trefwoorden van het personage aan"
+
+msgid "The setting / genre of the event"
+msgstr "De setting / het genre van het evenement"
 
 msgid "Discover the coming soon events!"
 msgstr "Ontdek de evenementen die op stapel staan!"
@@ -4327,9 +4342,6 @@ msgstr "Aanvraag lidmaatschap vereniging"
 msgid "Your card number is: <b>%(number)03d</b>."
 msgstr "Je kaartnummer is: <b>%(number)03d</b>."
 
-msgid "Indicate the setting / genre of the event"
-msgstr "Vermeld geslacht / algemene instelling"
-
 msgid "Describe exactly what condition it is in."
 msgstr "Beschrijf precies onder welke omstandigheden het optreedt"
 
@@ -4434,9 +4446,6 @@ msgstr "Inzamelingsdeelname voor: %(recipient)s"
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
 msgstr "Goedkeuring %(user)s als %(role)s voor %(event)s"
-
-msgid "Short description - maximum 1000 characters"
-msgstr "Korte beschrijving - maximaal 1000 tekens"
 
 msgid "Display order with respect to all questions"
 msgstr "Weergavevolgorde met betrekking tot alle vragen"
@@ -4564,9 +4573,6 @@ msgstr "Je bent nu ingelogd met je hoofdaccount:"
 #, python-brace-format
 msgid "This text will be added to the sheet of {name}"
 msgstr "Deze tekst wordt toegevoegd aan het blad van {name}"
-
-msgid "Extended description - maximum 5000 characters"
-msgstr "Uitgebreide beschrijving - maximaal 5000 tekens"
 
 msgid "Cover in rectangular format - aspect ratio 4:3"
 msgstr "Omslag in rechthoekig formaat - beeldverhouding 4:3"
@@ -7093,6 +7099,13 @@ msgid ""
 msgstr ""
 "Het is verplicht om deel te nemen aan al onze live-evenementen, omdat het "
 "ook de verzekeringskosten omvat."
+
+msgid ""
+"If the event is part of a campaign, specify the parent event whose "
+"characters will be shared"
+msgstr ""
+"Als het evenement deel uitmaakt van een campagne, geef dan het bovenliggende"
+" evenement op waarvan de tekens worden gedeeld"
 
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "

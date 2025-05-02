@@ -175,7 +175,7 @@ class PlayerRelationshipAdmin(DefModelAdmin):
 
 @admin.register(Email)
 class EmailAdmin(DefModelAdmin):
-    list_display = ("assoc", "run", "recipient", "subj", "body_red")
+    list_display = ("assoc", "run", "recipient", "sent", "subj", "body_red")
     list_filter = (AssocFilter, RunFilter)
     autocomplete_fields = ["assoc", "run"]
 

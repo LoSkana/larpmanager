@@ -28,6 +28,8 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.utils import (
     AssocMemberS2WidgetMulti,
+    CampaignS2Widget,
+    ConfigType,
     DatePickerInput,
     DateTimePickerInput,
     EventS2Widget,
@@ -51,7 +53,7 @@ class EventCharactersPdfForm(forms.ModelForm):
         (
             "page",
             "css",
-            5,
+            ConfigType.TEXTAREA,
             "CSS",
             "CSS",
             _("Insert the css code to customize the pdf printing"),
@@ -59,7 +61,7 @@ class EventCharactersPdfForm(forms.ModelForm):
         (
             "header",
             "content",
-            5,
+            ConfigType.TEXTAREA,
             _("Header"),
             _("Header"),
             _("Insert the html code for the header"),
@@ -67,7 +69,7 @@ class EventCharactersPdfForm(forms.ModelForm):
         (
             "footer",
             "content",
-            5,
+            ConfigType.TEXTAREA,
             _("Footer"),
             _("Footer"),
             _("Insert the html code for the footer"),
@@ -129,7 +131,7 @@ class OrgaEventForm(MyForm):
             "assoc",
         )
 
-        widgets = {"slug": SlugInput}
+        widgets = {"slug": SlugInput, "parent": CampaignS2Widget}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -156,15 +158,7 @@ class OrgaEventForm(MyForm):
             if s not in self.params["features"]:
                 dl.append(s)
 
-        if "campaign" not in self.params["features"]:
-            dl.append("parent")
-        else:
-            ch = [("", "--- EMPTY ---")]
-            query = Event.objects.filter(parent_id__isnull=True, assoc_id=self.params["a_id"], template=False)
-            if self.instance and self.instance.pk:
-                query = query.exclude(pk=self.instance.pk)
-            ch.extend([(e.id, e.name) for e in query])
-            self.fields["parent"].choices = ch
+        self.init_campaign(dl)
 
         if "waiting" not in self.params["features"]:
             dl.append("max_waiting")
@@ -174,6 +168,14 @@ class OrgaEventForm(MyForm):
 
         for m in dl:
             self.delete_field(m)
+
+    def init_campaign(self, dl):
+        if "campaign" not in self.params["features"]:
+            dl.append("parent")
+        else:
+            self.fields["parent"].widget.set_assoc(self.params["a_id"])
+            if self.instance and self.instance.pk:
+                self.fields["parent"].widget.set_exclude(self.instance.pk)
 
     def clean_slug(self):
         data = self.cleaned_data["slug"]
@@ -210,250 +212,265 @@ class OrgaConfigForm(MyForm):
 
         section = _("Email notifications")
         label = _("Disable assignment")
-        help = _("If checked: Does not send communication to the player when the character is assigned")
-        ls.append(("mail", "character", 2, section, label, help))
+        help_text = _("If checked: Does not send communication to the player when the character is assigned")
+        ls.append(("mail", "character", ConfigType.BOOL, section, label, help_text))
 
         section = _("Visualisation")
         label = _("Limitations")
-        help = _("If checked: Show summary page with number of tickets/options used")
-        ls.append(("show", "limitations", 2, section, label, help))
-
-        if "characters" in self.params["features"]:
-            section = _("Writing")
-            label = _("Replacing names")
-            help = _("If checked, PG names will be automatically replaced by a reference")
-            ls.append(("writing", "substitute", 2, section, label, help))
+        help_text = _("If checked: Show summary page with number of tickets/options used")
+        ls.append(("show", "limitations", ConfigType.BOOL, section, label, help_text))
 
         section = _("Registration form")
         label = _("Hide not available")
-        help = _(
+        help_text = _(
             "If checked, options no longer available in the registration form are hidden, "
             "instead of being displayed disabled"
         )
-        ls.append(("registration", "hide_unavailable", 2, section, label, help))
+        ls.append(("registration", "hide_unavailable", ConfigType.BOOL, section, label, help_text))
 
         section = _("Gallery")
         label = _("Request login")
-        help = _("If checked, the gallery will not be displayed to those not logged in to the system")
-        ls.append(("gallery", "hide_login", 2, section, label, help))
+        help_text = _("If checked, the gallery will not be displayed to those not logged in to the system")
+        ls.append(("gallery", "hide_login", ConfigType.BOOL, section, label, help_text))
         label = _("Request registration")
-        help = _(
+        help_text = _(
             "If checked, the subscribers' gallery will not be displayed to those who are not subscribed to the run"
         )
-        ls.append(("gallery", "hide_signup", 2, section, label, help))
+        ls.append(("gallery", "hide_signup", ConfigType.BOOL, section, label, help_text))
 
         if "characters" in self.params["features"]:
             label = _("Hide unassigned characters")
-            help = _("If checked, does not show characters in the gallery who have not been assigned a player")
-            ls.append(("gallery", "hide_uncasted_characters", 2, section, label, help))
+            help_text = _("If checked, does not show characters in the gallery who have not been assigned a player")
+            ls.append(("gallery", "hide_uncasted_characters", ConfigType.BOOL, section, label, help_text))
 
             label = _("Hide players without a character")
-            help = _("If checked, does not show players in the gallery who have not been assigned a character")
-            ls.append(("gallery", "hide_uncasted_players", 2, section, label, help))
+            help_text = _("If checked, does not show players in the gallery who have not been assigned a character")
+            ls.append(("gallery", "hide_uncasted_players", ConfigType.BOOL, section, label, help_text))
 
-        if "campaign" in self.params["features"]:
-            section = _("Campaign")
-            label = _("Independent factions")
-            help = _("If checked, do not use the parent event's factions")
-            ls.append(("campaign", "faction_indep", 2, section, label, help))
+        self.get_config_structure(ls)
 
+        self.get_config_character(ls)
+
+        self.get_config_accounting(ls)
+
+        self.get_config_casting(ls)
+
+        self.get_config_registration(ls)
+
+        return ls
+
+    def get_config_structure(self, ls):
         if "pre_register" in self.params["features"]:
             section = _("Pre-registration")
             label = _("Active")
-            help = _("If checked, makes pre-registration for this event available")
-            ls.append(("pre_register", "active", 2, section, label, help))
-
-        if "payment" in self.params["features"]:
-            section = _("Payments")
-
-            label = _("Alert")
-            help = _(
-                "Given a payment deadline, indicates the number of days under which it notifies "
-                "the player to proceed with the payment. Default 30."
-            )
-            ls.append(("payment", "alert", 4, section, label, help))
-
-            label = _("Causal")
-            help = _(
-                "If present, it indicates the reason for the payment that the player must put on the payments he makes."
-            )
-            help += " " + _("You can use the following fields, they will be filled in automatically:") + "{player_name}"
-            ls.append(("payment", "custom_reason", 1, section, label, help))
+            help_text = _("If checked, makes pre-registration for this event available")
+            ls.append(("pre_register", "active", ConfigType.BOOL, section, label, help_text))
 
         if "custom_mail" in self.params["features"]:
             section = _("Customised mail server")
-            help = ""
+            help_text = ""
 
             label = _("Use TLD")
-            ls.append(("mail_server", "use_tls", 2, section, label, help))
+            ls.append(("mail_server", "use_tls", ConfigType.BOOL, section, label, help_text))
 
             label = _("Host Address")
-            ls.append(("mail_server", "host", 1, section, label, help))
+            ls.append(("mail_server", "host", ConfigType.CHAR, section, label, help_text))
 
             label = _("Port")
-            ls.append(("mail_server", "port", 4, section, label, help))
+            ls.append(("mail_server", "port", ConfigType.INT, section, label, help_text))
 
             label = _("Username of account")
-            ls.append(("mail_server", "host_user", 1, section, label, help))
+            ls.append(("mail_server", "host_user", ConfigType.CHAR, section, label, help_text))
 
             label = _("Password of account")
-            ls.append(("mail_server", "host_password", 1, section, label, help))
-
-        if "user_character" in self.params["features"]:
-            section = _("Player editor")
-
-            label = _("Maximum number")
-            help = _("Maximum number of characters the player can create")
-            ls.append(("user_character", "max", 4, section, label, help))
-
-            label = _("Approval")
-            help = _("If checked, activates a staff-managed approval process for characters")
-            ls.append(("user_character", "approval", 2, section, label, help))
-
-        if "custom_character" in self.params["features"]:
-            section = _("Character customisation")
-
-            label = _("Name")
-            help = _("If checked, it allows players to customise the names of their characters")
-            ls.append(("custom_character", "name", 2, section, label, help))
-
-            label = _("Profile Photos")
-            help = _("If checked, allows players to customise their characters' profile picture")
-            ls.append(("custom_character", "profile", 2, section, label, help))
-
-            label = _("Pronoun")
-            help = _("If checked, it allows players to customise their characters' pronouns")
-            ls.append(("custom_character", "pronoun", 2, section, label, help))
-
-            label = _("Song")
-            help = _("If checked, it allows players to indicate the song of their characters")
-            ls.append(("custom_character", "song", 2, section, label, help))
-
-            label = _("Private")
-            help = _(
-                "If checked, it allows players to enter private information on their characters, "
-                "visible only to them and the staff."
-            )
-            ls.append(("custom_character", "private", 2, section, label, help))
-
-            label = _("Public")
-            help = _("If checked, it allows players to enter public information on their characters, visible to all")
-            ls.append(("custom_character", "public", 2, section, label, help))
+            ls.append(("mail_server", "host_password", ConfigType.CHAR, section, label, help_text))
 
         if "cover" in self.params["features"]:
             section = _("Character cover")
             label = _("Desalt thumbnail")
-            help = _("If checked, shows the original image in the cover, not the thumbnail version")
-            ls.append(("cover", "orig", 2, section, label, help))
+            help_text = _("If checked, shows the original image in the cover, not the thumbnail version")
+            ls.append(("cover", "orig", ConfigType.BOOL, section, label, help_text))
 
-        if "token_credit" in self.params["features"]:
-            section = _("Tokens / Credits")
-            label = _("Disable Tokens")
-            help = _("If checked, no tokens will be used in the entries of this event")
-            ls.append(("token_credit", "disable_t", 2, section, label, help))
+    def get_config_character(self, ls):
+        if "characters" in self.params["features"]:
+            section = _("Writing")
+            label = _("Replacing names")
+            help_text = _("If checked, PG names will be automatically replaced by a reference")
+            ls.append(("writing", "substitute", ConfigType.BOOL, section, label, help_text))
+        if "campaign" in self.params["features"]:
+            section = _("Campaign")
+            label = _("Independent factions")
+            help_text = _("If checked, do not use the parent event's factions")
+            ls.append(("campaign", "faction_indep", ConfigType.BOOL, section, label, help_text))
+        if "px" in self.params["features"]:
+            section = _("Experience points")
+            label = _("Player selection")
+            help_text = _(
+                "If checked, players may add abilities themselves, by selecting from those that "
+                "are visible, and whose pre-requisites they meet."
+            )
+            ls.append(("px", "user", ConfigType.BOOL, section, label, help_text))
 
-            label = _("Disable credits")
-            help = _("If checked, no credits will be used in the entries for this event")
-            ls.append(("token_credit", "disable_c", 2, section, label, help))
+            label = _("Initial experience points")
+            help_text = _("Initial value of experience points for all characters")
+            ls.append(("px", "start", ConfigType.INT, section, label, help_text))
+        if "user_character" in self.params["features"]:
+            section = _("Player editor")
 
-        if "bring_friend" in self.params["features"]:
-            section = _("Bring a friend")
-            label = _("Forward discount")
-            help = _("Value of the discount for the registered player who gives the code to a friend who signs up")
-            ls.append(("bring_friend", "discount_to", 4, section, label, help))
+            label = _("Maximum number")
+            help_text = _("Maximum number of characters the player can create")
+            ls.append(("user_character", "max", ConfigType.INT, section, label, help_text))
 
-            label = _("Discount back")
-            help = _("Value of the discount for the friend who signs up using the code of a registered player")
-            ls.append(("bring_friend", "discount_from", 4, section, label, help))
+            label = _("Approval")
+            help_text = _("If checked, activates a staff-managed approval process for characters")
+            ls.append(("user_character", "approval", ConfigType.BOOL, section, label, help_text))
+        if "custom_character" in self.params["features"]:
+            section = _("Character customisation")
 
-        if "lottery" in self.params["features"]:
-            section = _("Lottery")
-            label = _("Number of extractions")
-            help = _("Number of tickets to be drawn")
-            ls.append(("lottery", "num_draws", 4, section, label, help))
+            label = _("Name")
+            help_text = _("If checked, it allows players to customise the names of their characters")
+            ls.append(("custom_character", "name", ConfigType.BOOL, section, label, help_text))
 
-            label = _("Conversion ticket")
-            help = _("Name of the ticket into which to convert")
-            ls.append(("lottery", "ticket", 1, section, label, help))
+            label = _("Profile Photos")
+            help_text = _("If checked, allows players to customise their characters' profile picture")
+            ls.append(("custom_character", "profile", ConfigType.BOOL, section, label, help_text))
 
+            label = _("Pronoun")
+            help_text = _("If checked, it allows players to customise their characters' pronouns")
+            ls.append(("custom_character", "pronoun", ConfigType.BOOL, section, label, help_text))
+
+            label = _("Song")
+            help_text = _("If checked, it allows players to indicate the song of their characters")
+            ls.append(("custom_character", "song", ConfigType.BOOL, section, label, help_text))
+
+            label = _("Private")
+            help_text = _(
+                "If checked, it allows players to enter private information on their characters, "
+                "visible only to them and the staff."
+            )
+            ls.append(("custom_character", "private", ConfigType.BOOL, section, label, help_text))
+
+            label = _("Public")
+            help_text = _(
+                "If checked, it allows players to enter public information on their characters, visible to all"
+            )
+            ls.append(("custom_character", "public", ConfigType.BOOL, section, label, help_text))
+
+    def get_config_casting(self, ls):
         if "casting" in self.params["features"]:
             section = _("Casting")
 
             label = _("Assignments")
-            help = _("Number of characters to be assigned (default 1)")
-            ls.append(("casting", "characters", 4, section, label, help))
+            help_text = _("Number of characters to be assigned (default 1)")
+            ls.append(("casting", "characters", ConfigType.INT, section, label, help_text))
 
             label = _("Minimum preferences")
-            help = _("Minimum number of preferences")
-            ls.append(("casting", "min", 4, section, label, help))
+            help_text = _("Minimum number of preferences")
+            ls.append(("casting", "min", ConfigType.INT, section, label, help_text))
 
             label = _("Maximum preferences")
-            help = _("Maximum number of preferences")
-            ls.append(("casting", "max", 4, section, label, help))
+            help_text = _("Maximum number of preferences")
+            ls.append(("casting", "max", ConfigType.INT, section, label, help_text))
 
             label = _("Additional Preferences")
-            help = _("Additional preferences, for random assignment when no solution is found (default 0)")
-            ls.append(("casting", "add", 4, section, label, help))
+            help_text = _("Additional preferences, for random assignment when no solution is found (default 0)")
+            ls.append(("casting", "add", ConfigType.INT, section, label, help_text))
 
             label = _("Field for exclusions")
-            help = _(
+            help_text = _(
                 "If checked, it adds a field in which the player can indicate which elements they "
                 "wish to avoid altogether"
             )
-            ls.append(("casting", "avoid", 2, section, label, help))
+            ls.append(("casting", "avoid", ConfigType.BOOL, section, label, help_text))
 
             label = _("Show statistics")
-            help = _("If checked, players will be able to view for each character the preference statistics")
-            ls.append(("casting", "show_pref", 2, section, label, help))
+            help_text = _("If checked, players will be able to view for each character the preference statistics")
+            ls.append(("casting", "show_pref", ConfigType.BOOL, section, label, help_text))
 
             label = _("Show history")
-            help = _("If checked, shows players the histories of preferences entered")
-            ls.append(("casting", "history", 2, section, label, help))
+            help_text = _("If checked, shows players the histories of preferences entered")
+            ls.append(("casting", "history", ConfigType.BOOL, section, label, help_text))
 
+    def get_config_accounting(self, ls):
+        if "payment" in self.params["features"]:
+            section = _("Payments")
+
+            label = _("Alert")
+            help_text = _(
+                "Given a payment deadline, indicates the number of days under which it notifies "
+                "the player to proceed with the payment. Default 30."
+            )
+            ls.append(("payment", "alert", ConfigType.INT, section, label, help_text))
+
+            label = _("Causal")
+            help_text = _(
+                "If present, it indicates the reason for the payment that the player must put on the payments he makes."
+            )
+            help_text += (
+                " " + _("You can use the following fields, they will be filled in automatically:") + "{player_name}"
+            )
+            ls.append(("payment", "custom_reason", ConfigType.CHAR, section, label, help_text))
+
+        if "token_credit" in self.params["features"]:
+            section = _("Tokens / Credits")
+            label = _("Disable Tokens")
+            help_text = _("If checked, no tokens will be used in the entries of this event")
+            ls.append(("token_credit", "disable_t", ConfigType.BOOL, section, label, help_text))
+
+            label = _("Disable credits")
+            help_text = _("If checked, no credits will be used in the entries for this event")
+            ls.append(("token_credit", "disable_c", ConfigType.BOOL, section, label, help_text))
+
+        if "bring_friend" in self.params["features"]:
+            section = _("Bring a friend")
+            label = _("Forward discount")
+            help_text = _("Value of the discount for the registered player who gives the code to a friend who signs up")
+            ls.append(("bring_friend", "discount_to", ConfigType.INT, section, label, help_text))
+
+            label = _("Discount back")
+            help_text = _("Value of the discount for the friend who signs up using the code of a registered player")
+            ls.append(("bring_friend", "discount_from", ConfigType.INT, section, label, help_text))
+
+    def get_config_registration(self, ls):
         if "pay_what_you_want" in self.params["features"]:
             section = "Pay what you want"
 
             label = _("Name")
-            help = _("Name of the free donation field")
-            ls.append(("pay_what_you_want", "label", 1, section, label, help))
+            help_text = _("Name of the free donation field")
+            ls.append(("pay_what_you_want", "label", ConfigType.CHAR, section, label, help_text))
 
             label = _("Description")
-            help = _("Description of free donation")
-            ls.append(("pay_what_you_want", "descr", 1, section, label, help))
+            help_text = _("Description of free donation")
+            ls.append(("pay_what_you_want", "descr", ConfigType.CHAR, section, label, help_text))
 
         if "reduced" in self.params["features"]:
             section = _("Patron / Reduced")
             label = "Ratio"
-            help = _(
+            help_text = _(
                 "Indicates the ratio between reduced and patron tickets, multiplied by 10. "
                 "Example: 10 -> 1 reduced ticket for 1 patron ticket. 20 -> 2 reduced tickets for "
                 "1 patron ticket. 5 -> 1 reduced ticket for 2 patron tickets"
             )
-            ls.append(("reduced", "ratio", 4, section, label, help))
+            ls.append(("reduced", "ratio", ConfigType.INT, section, label, help_text))
 
         if "filler" in self.params["features"]:
             section = _("Ticket Filler")
             label = _("Free registration")
-            help = _(
+            help_text = _(
                 "If checked, players may sign up as fillers at any time; otherwise, they may only "
                 "do so if the stipulated number of characters has been reached"
             )
-            ls.append(("filler", "always", 2, section, label, help))
+            ls.append(("filler", "always", ConfigType.BOOL, section, label, help_text))
 
-        if "px" in self.params["features"]:
-            section = _("Experience points")
-            label = _("Player selection")
-            help = _(
-                "If checked, players may add abilities themselves, by selecting from those that "
-                "are visible, and whose pre-requisites they meet."
-            )
-            ls.append(("px", "user", 2, section, label, help))
+        if "lottery" in self.params["features"]:
+            section = _("Lottery")
+            label = _("Number of extractions")
+            help_text = _("Number of tickets to be drawn")
+            ls.append(("lottery", "num_draws", ConfigType.INT, section, label, help_text))
 
-            label = _("Initial experience points")
-            help = _("Initial value of experience points for all characters")
-            ls.append(("px", "start", 4, section, label, help))
-
-        return ls
+            label = _("Conversion ticket")
+            help_text = _("Name of the ticket into which to convert")
+            ls.append(("lottery", "ticket", ConfigType.CHAR, section, label, help_text))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -720,7 +737,7 @@ class OrgaRunForm(MyForm):
                 shows.append(f)
 
         for s in shows:
-            ls.append(("show", s[0], 2, _("Visibility"), s[1], s[2]))
+            ls.append(("show", s[0], ConfigType.BOOL, _("Visibility"), s[1], s[2]))
 
         return ls
 
