@@ -2444,6 +2444,9 @@ msgstr "Prawo jazdy"
 msgid "Delay in payment"
 msgstr "Opóźnienie w płatności"
 
+msgid "Delay in profile"
+msgstr "Opóźnienie w profilu"
+
 msgid "Loading template"
 msgstr "Ładowanie szablonu"
 
@@ -3893,6 +3896,9 @@ msgstr "Odkryj nadchodzące wydarzenia!"
 
 msgid "Cancellation for missing payment"
 msgstr "Anulowanie z powodu braku płatności"
+
+msgid "Cancellation for missing profile"
+msgstr "Anulowanie z powodu braku profilu"
 
 msgid "Select a file with extension csv"
 msgstr "Wybierz plik z rozszerzeniem csv"

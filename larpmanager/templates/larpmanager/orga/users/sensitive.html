@@ -14,7 +14,7 @@
         <tr>
             <th>{% trans "Player" %}</th>
             <th>{% trans "Characters" %}</th>
-            {% for f in fields %}<th>{{ f }}</th>{% endfor %}
+            {% for field_name, field_verbose in fields.items %}<th>{{ field_verbose }}</th>{% endfor %}
         </tr>
         {% for el in list %}
             <tr>
@@ -27,8 +27,8 @@
                         {% endfor %}
                     {% endif %}
                 </td>
-                {% for f in fields %}
-                    <th>{% lookup el f %}</th>
+                {% for field_name in fields.keys %}
+                    <th>{% lookup el field_name %}</th>
                 {% endfor %}
             </tr>
         {% endfor %}

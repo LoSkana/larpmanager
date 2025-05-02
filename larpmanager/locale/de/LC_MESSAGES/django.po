@@ -2444,6 +2444,9 @@ msgstr "Lizenz"
 msgid "Delay in payment"
 msgstr "Verzögerung der Zahlung"
 
+msgid "Delay in profile"
+msgstr "Verzögerung im Profil"
+
 msgid "Loading template"
 msgstr "Vorlage laden"
 
@@ -3893,6 +3896,9 @@ msgstr "Entdecken Sie die bevorstehenden Veranstaltungen!"
 
 msgid "Cancellation for missing payment"
 msgstr "Stornierung wegen fehlender Zahlung"
+
+msgid "Cancellation for missing profile"
+msgstr "Löschung wegen fehlendem Profil"
 
 msgid "Select a file with extension csv"
 msgstr "Wählen Sie eine Datei mit der Erweiterung \"csv\"."

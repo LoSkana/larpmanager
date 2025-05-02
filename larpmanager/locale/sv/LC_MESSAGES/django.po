@@ -2444,6 +2444,9 @@ msgstr "Licens"
 msgid "Delay in payment"
 msgstr "Försenad betalning"
 
+msgid "Delay in profile"
+msgstr "Fördröjning i profil"
+
 msgid "Loading template"
 msgstr "Ladda mall"
 
@@ -3893,6 +3896,9 @@ msgstr "Upptäck vilka evenemang som är på gång!"
 
 msgid "Cancellation for missing payment"
 msgstr "Avbokning på grund av utebliven betalning"
+
+msgid "Cancellation for missing profile"
+msgstr "Avbokning för saknad profil"
 
 msgid "Select a file with extension csv"
 msgstr "Välj en fil med filnamnstillägget 'csv'."

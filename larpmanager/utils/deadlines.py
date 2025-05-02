@@ -70,12 +70,9 @@ def check_run_deadlines(runs):
     now = datetime.now()
     uses_membership = "membership" in get_assoc_features(assoc_id)
 
-    memberships = {}
+    memberships = {el.member_id: el for el in Membership.objects.filter(assoc_id=assoc_id, member_id__in=members_id)}
     fees = {}
     if uses_membership:
-        memberships = {
-            el.member_id: el for el in Membership.objects.filter(assoc_id=assoc_id, member_id__in=members_id)
-        }
         fees = get_membership_fee_year(assoc_id)
 
     all_res = []
@@ -84,7 +81,9 @@ def check_run_deadlines(runs):
         if not run.start:
             continue
 
-        collect = {k: [] for k in ["pay", "pay_del", "casting", "memb", "memb_del", "fee", "fee_del"]}
+        collect = {
+            k: [] for k in ["pay", "pay_del", "casting", "memb", "memb_del", "fee", "fee_del", "profile", "profile_del"]
+        }
         features = get_event_features(run.event.id)
         player_ids = []
 
@@ -93,26 +92,9 @@ def check_run_deadlines(runs):
                 player_ids.append(reg.member_id)
 
             if uses_membership:
-                membership = memberships.get(reg.member_id)
-                if not membership:
-                    continue
-
-                if membership.status in [Membership.EMPTY, Membership.JOINED, Membership.UPLOADED]:
-                    elapsed = now.date() - reg.created.date()
-                    key = "memb_del" if elapsed.days > tolerance else "memb"
-                    collect[key].append(reg.member_id)
-                    continue
-
-                if membership.status in [Membership.SUBMITTED]:
-                    continue
-
-                check_fee = "laog" not in features and run.start.year == now.year
-                if check_fee and reg.member_id not in fees:
-                    # if we are now *tolerance* days away from the larp start
-                    if now.date() + timedelta(days=tolerance) > run.start:
-                        collect["fee_del"].append(reg.member_id)
-                    else:
-                        collect["fee"].append(reg.member_id)
+                deadlines_membership(collect, features, fees, memberships, now, reg, run, tolerance)
+            else:
+                deadlines_profile(collect, features, memberships, now, reg, run, tolerance)
 
             deadlines_payment(collect, features, reg, tolerance)
 
@@ -122,6 +104,43 @@ def check_run_deadlines(runs):
         all_res.append(result)
 
     return all_res
+
+
+def deadlines_profile(collect, features, memberships, now, reg, run, tolerance):
+    membership = memberships.get(reg.member_id)
+    if not membership:
+        return
+
+    if membership.compiled:
+        return
+
+    if now.date() + timedelta(days=tolerance) > run.start:
+        collect["profile_del"].append(reg.member_id)
+    else:
+        collect["profile"].append(reg.member_id)
+
+
+def deadlines_membership(collect, features, fees, memberships, now, reg, run, tolerance):
+    membership = memberships.get(reg.member_id)
+    if not membership:
+        return
+
+    if membership.status in [Membership.EMPTY, Membership.JOINED, Membership.UPLOADED]:
+        elapsed = now.date() - reg.created.date()
+        key = "memb_del" if elapsed.days > tolerance else "memb"
+        collect[key].append(reg.member_id)
+        return
+
+    if membership.status in [Membership.SUBMITTED]:
+        return
+
+    check_fee = "laog" not in features and run.start.year == now.year
+    if check_fee and reg.member_id not in fees:
+        # if we are now *tolerance* days away from the larp start
+        if now.date() + timedelta(days=tolerance) > run.start:
+            collect["fee_del"].append(reg.member_id)
+        else:
+            collect["fee"].append(reg.member_id)
 
 
 def deadlines_payment(collect, features, reg, tolerance):
