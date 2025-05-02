@@ -113,7 +113,7 @@ def setup_test(live_server, page):
     page.get_by_role("link", name="Gallery ").click()
     page.locator("#id_gallery_hide_login").check()
     page.get_by_role("button", name="Confirm").click()
-    go_to(page, live_server, "/test/1/manage/role/")
+    go_to(page, live_server, "/test/1/manage/roles/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("blabla")
@@ -121,7 +121,7 @@ def setup_test(live_server, page):
     page.get_by_role("searchbox").fill("user")
     page.get_by_role("option", name="User Test - user@test.it").click()
     page.locator("#id_Appearance").get_by_text("Navigation").click()
-    page.get_by_role("cell", name="Factions").locator("label").click()
+    page.locator("#id_Writing").get_by_text("Factions").click()
     page.get_by_role("button", name="Confirm").click()
 
 
@@ -132,12 +132,13 @@ def px(live_server, page):
     page.locator("#id_px_start").click()
     page.locator("#id_px_start").fill("10")
     page.get_by_role("button", name="Confirm").click()
+
     go_to(page, live_server, "/test/1/manage/px/ability_types/")
-    page.get_by_role("link", name="Ability type").click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("base ability")
     page.get_by_role("button", name="Confirm").click()
+
     go_to(page, live_server, "/test/1/manage/px/abilities/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -150,6 +151,7 @@ def px(live_server, page):
     frame = page.locator('iframe[title="Rich Text Area"]')
     fill_tinymce(frame, "sdsfdsfds")
     page.get_by_role("button", name="Confirm").click()
+
     go_to(page, live_server, "/test/1/manage/px/deliveries/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -160,6 +162,7 @@ def px(live_server, page):
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
     page.get_by_role("button", name="Confirm").click()
+
     # check px computation
     go_to(page, live_server, "/test/1/manage/characters/")
     page.get_by_role("link", name="Characters").click()
