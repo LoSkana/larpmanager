@@ -231,7 +231,7 @@ def campaign(live_server, page):
     time.sleep(2)
     page.locator("#select2-id_parent-container").click()
     page.get_by_role("searchbox").fill("tes")
-    page.get_by_role("option", name="Test Larp").click()
+    page.get_by_role("option", name="Test Larp", exact=True).click()
     page.get_by_role("button", name="Confirm").click()
     go_to(page, live_server, "/campaign/1/manage/characters/")
     page.get_by_role("link", name="XP").click()
