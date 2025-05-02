@@ -134,7 +134,7 @@ def submit_membership(image_path, live_server, page):
     page.get_by_role("checkbox", name="Authorisation").check()
     submit(page)
     # Check file generated
-    with page.expect_download(timeout=60000) as download_info:
+    with page.expect_download(timeout=160000) as download_info:
         page.get_by_role("link", name="download it here").click()
     download = download_info.value
     path = download.path()

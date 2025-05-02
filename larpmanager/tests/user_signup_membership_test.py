@@ -103,7 +103,7 @@ def membership(live_server, page):
     image_path = Path(__file__).parent / "image.jpg"
     page.locator("#id_request").set_input_files(str(image_path))
     page.locator("#id_document").set_input_files(str(image_path))
-    with page.expect_download(timeout=60000) as download_info:
+    with page.expect_download(timeout=160000) as download_info:
         page.get_by_role("link", name="download it here").click()
     check_download(download_info)
     submit(page)

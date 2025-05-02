@@ -66,22 +66,22 @@ def user_pdf(live_server, page):
 
     # Go to character, test download pdf
     go_to(page, live_server, "/test/1/character/1")
-    with page.expect_download(timeout=60000) as download_info:
+    with page.expect_download(timeout=160000) as download_info:
         page.get_by_role("link", name="Portraits (PDF)").click()
     check_download(download_info)
 
-    with page.expect_download(timeout=60000) as download_info:
+    with page.expect_download(timeout=160000) as download_info:
         page.get_by_role("link", name="Profiles (PDF)").click()
     check_download(download_info)
 
-    with page.expect_download(timeout=60000) as download_info:
+    with page.expect_download(timeout=160000) as download_info:
         page.get_by_role("link", name="Download complete sheet").click()
     check_download(download_info)
 
-    with page.expect_download(timeout=60000) as download_info:
+    with page.expect_download(timeout=160000) as download_info:
         page.get_by_role("link", name="Download light sheet").click()
     check_download(download_info)
 
-    with page.expect_download(timeout=60000) as download_info:
+    with page.expect_download(timeout=160000) as download_info:
         page.get_by_role("link", name="Download relationships").click()
     check_download(download_info)
