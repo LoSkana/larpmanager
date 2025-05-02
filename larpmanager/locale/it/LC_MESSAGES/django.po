@@ -2438,6 +2438,9 @@ msgstr "Template attuale"
 msgid "Delay in payment"
 msgstr "Ritardo nei pagamenti"
 
+msgid "Delay in profile"
+msgstr "Ritardo nel profilo"
+
 msgid "Desalt thumbnail"
 msgstr "Disalita thumbnail"
 
@@ -3904,6 +3907,9 @@ msgstr "Naviga il sito di presentazione!"
 
 msgid "Cancellation for missing payment"
 msgstr "Cancellazione per mancato pagamento"
+
+msgid "Cancellation for missing profile"
+msgstr "Cancellazione per profilo mancante"
 
 #, python-format
 msgid "Character assigned for %(event)s"

@@ -2438,6 +2438,9 @@ msgstr "Huidige sjabloon"
 msgid "Delay in payment"
 msgstr "Vertraging in betaling"
 
+msgid "Delay in profile"
+msgstr "Vertraging in profiel"
+
 msgid "Desalt thumbnail"
 msgstr "Miniatuurafbeelding verwijderen"
 
@@ -3904,6 +3907,9 @@ msgstr "Blader door de presentatiesite!"
 
 msgid "Cancellation for missing payment"
 msgstr "Annulering wegens te late betaling"
+
+msgid "Cancellation for missing profile"
+msgstr "Annulering wegens ontbrekend profiel"
 
 #, python-format
 msgid "Character assigned for %(event)s"

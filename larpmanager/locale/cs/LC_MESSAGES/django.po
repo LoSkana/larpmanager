@@ -2438,6 +2438,9 @@ msgstr "Aktuální šablona"
 msgid "Delay in payment"
 msgstr "Zpoždění platby"
 
+msgid "Delay in profile"
+msgstr "Zpoždění v profilu"
+
 msgid "Desalt thumbnail"
 msgstr "Miniatura Desalt"
 
@@ -3904,6 +3907,9 @@ msgstr "Prohlédněte si prezentační stránky!"
 
 msgid "Cancellation for missing payment"
 msgstr "Zrušení z důvodu chybějící platby"
+
+msgid "Cancellation for missing profile"
+msgstr "Zrušení pro chybějící profil"
 
 #, python-format
 msgid "Character assigned for %(event)s"

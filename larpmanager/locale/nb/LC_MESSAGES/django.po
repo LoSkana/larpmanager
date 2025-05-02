@@ -2438,6 +2438,9 @@ msgstr "Gjeldende mal"
 msgid "Delay in payment"
 msgstr "Forsinket betaling"
 
+msgid "Delay in profile"
+msgstr "Forsinkelse i profil"
+
 msgid "Desalt thumbnail"
 msgstr "Desalt miniatyrbilde"
 
@@ -3904,6 +3907,9 @@ msgstr "Bla gjennom presentasjonssiden!"
 
 msgid "Cancellation for missing payment"
 msgstr "Avbestilling på grunn av manglende betaling"
+
+msgid "Cancellation for missing profile"
+msgstr "Avbestilling på grunn av manglende profil"
 
 #, python-format
 msgid "Character assigned for %(event)s"

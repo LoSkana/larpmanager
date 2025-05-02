@@ -23,6 +23,7 @@ import re
 from allauth.utils import get_request_param
 from django import template
 from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.templatetags.static import static
 from django.urls import reverse
@@ -65,14 +66,30 @@ def get_tooltip(context, ch):
         avat = ch["player_prof"]
     tooltip = f"<img src='{avat}'>"
 
+    tooltip = tooltip_fields(ch, tooltip)
+
+    tooltip = tooltip_factions(ch, context, tooltip)
+
+    if ch["teaser"]:
+        tooltip += "<span class='teaser'><i>Teaser</i>: " + replace_chars(context, ch["teaser"]) + " (...)</span>"
+
+    return tooltip
+
+
+def tooltip_fields(ch, tooltip):
     tooltip += f"<span><b class='name'>{ch['name']}</b>"
+
     if ch["title"]:
         tooltip += " - <b class='title'>" + ch["title"] + "</b>"
+
     if "pronoun" in ch and ch["pronoun"]:
         tooltip += " (" + ch["pronoun"] + ")"
+
     tooltip += "</span>"
+
     if ch["special"] == "n":
         tooltip += "<span><i>" + _("Special") + ": </i> PNG</span>"
+
     elif ch["special"] == "f":
         tooltip += "<span><i>" + _("Special") + ": </i> Filler</span>"
 
@@ -81,19 +98,22 @@ def get_tooltip(context, ch):
 
     if "player_id" in ch and ch["player_id"] > 0:
         tooltip += "<span>" + _("Player") + ": <b>" + ch["player_full"] + "</b></span>"
-    facs = ""
+
+    return tooltip
+
+
+def tooltip_factions(ch, context, tooltip):
+    factions = ""
     for fnum in context["factions"]:
         el = context["factions"][fnum]
         if el["typ"] == Faction.SECRET:
             continue
         if fnum in ch["factions"]:
-            if facs:
-                facs += ", "
-            facs += el["name"]
-    if facs:
-        tooltip += "<span>" + _("Factions") + ": " + facs + "</span>"
-    if ch["teaser"]:
-        tooltip += "<span class='teaser'><i>Teaser</i>: " + replace_chars(context, ch["teaser"]) + " (...)</span>"
+            if factions:
+                factions += ", "
+            factions += el["name"]
+    if factions:
+        tooltip += "<span>" + _("Factions") + ": " + factions + "</span>"
     return tooltip
 
 
@@ -147,7 +167,7 @@ def show_char(context, el, run, tooltip):
     if isinstance(el, dict) and "text" in el:
         tx = el["text"] + " "
     elif el is not None:
-        tx = el + " "
+        tx = str(el) + " "
     else:
         tx = ""
 
@@ -180,7 +200,7 @@ def go_trait(context, search, number, tx, run, go_tooltip, simple=False):
             tr = Trait.objects.get(event=run.event, number=number)
             mb = AssignmentTrait.objects.get(run=run, trait=tr).member
             ch_number = Registration.objects.get(run=run, member=mb).character.number
-        except Exception:
+        except ObjectDoesNotExist:
             return tx
 
     if ch_number not in context["chars"]:
@@ -237,16 +257,16 @@ def key(d, key_name, s_key_name=None):
 
 
 @register.simple_tag
-def get_field(form, key):
-    if key in form:
-        return form[key]
+def get_field(form, name):
+    if name in form:
+        return form[name]
     return ""
 
 
 @register.simple_tag(takes_context=True)
-def get_field_show_char(context, form, key, run, tooltip):
-    if key in form:
-        v = form[key]
+def get_field_show_char(context, form, name, run, tooltip):
+    if name in form:
+        v = form[name]
         return show_char(context, v, run, tooltip)
     return ""
 
@@ -260,16 +280,18 @@ def get_deep_field(form, key1, key2):
 
 
 @register.simple_tag
-def get_form_field(form, key):
-    if key in form.fields:
-        return form[key]
+def get_form_field(form, name):
+    if name in form.fields:
+        return form[name]
     return ""
 
 
 @register.simple_tag
-def lookup(object, property):
-    if hasattr(object, property):
-        return getattr(object, property)
+def lookup(obj, prop):
+    if hasattr(obj, prop):
+        value = getattr(obj, prop)
+        if value:
+            return value
     return ""
 
 
@@ -366,14 +388,13 @@ def get_login_url(context, provider, **params):
     if auth_params == "":
         del query["auth_params"]
     if REDIRECT_FIELD_NAME not in query:
-        next = get_request_param(request, REDIRECT_FIELD_NAME)
-        if next:
-            query[REDIRECT_FIELD_NAME] = next
+        redirect = get_request_param(request, REDIRECT_FIELD_NAME)
+        if redirect:
+            query[REDIRECT_FIELD_NAME] = redirect
         elif process == "redirect":
             query[REDIRECT_FIELD_NAME] = request.get_full_path()
-    else:
-        if not query[REDIRECT_FIELD_NAME]:
-            del query[REDIRECT_FIELD_NAME]
+    elif not query[REDIRECT_FIELD_NAME]:
+        del query[REDIRECT_FIELD_NAME]
 
     url = reverse(provider + "_login")
     url = url + "?" + urlencode(query)
@@ -396,7 +417,7 @@ def remove(value, args):
 def get_character_field(value, options):
     if isinstance(value, str):
         return value
-    return ", ".join([options[id]["display"] for id in value])
+    return ", ".join([options[idx]["display"] for idx in value])
 
 
 @register.filter
