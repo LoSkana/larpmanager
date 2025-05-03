@@ -299,14 +299,7 @@ def orga_sensitive(request, s, n):
         if el.id in member_chars:
             el.chars = member_chars[el.id]
 
-        if "residence_address" in member_fields:
-            el.residence_address = el.get_residence()
-        if "first_aid" in member_fields:
-            el.first_aid = mark_safe('<i class="fa-solid fa-check"></i>') if el.first_aid else ""
-        if "document_type" in member_fields:
-            el.document_type = el.get_document_type_display()
-        if "gender" in member_fields:
-            el.gender = el.get_gender_display()
+        member_field_correct(el, member_fields)
 
     ctx["fields"] = {}
     for field_name in member_fields:
@@ -318,3 +311,17 @@ def orga_sensitive(request, s, n):
         ctx["fields"][field_name] = member_cls._meta.get_field(field_name).verbose_name
 
     return render(request, "larpmanager/orga/users/sensitive.html", ctx)
+
+
+def member_field_correct(el, member_fields):
+    if "residence_address" in member_fields:
+        el.residence_address = el.get_residence()
+    if "first_aid" in member_fields:
+        if el.first_aid == Member.YES:
+            el.first_aid = mark_safe('<i class="fa-solid fa-check"></i>')
+        else:
+            el.first_aid = ""
+    if "document_type" in member_fields:
+        el.document_type = el.get_document_type_display()
+    if "gender" in member_fields:
+        el.gender = el.get_gender_display()
