@@ -51,7 +51,7 @@ class Member(BaseModel):
     NO = "n"
     FIRSTAID_CHOICES = [
         (NO, "No"),
-        (YES, "Si"),
+        (YES, "Yes"),
     ]
 
     ALL = "a"

@@ -96,23 +96,20 @@ def exe_membership(request):
     for run_id, member_id in next_regs_qs:
         next_regs[member_id].append(run_id)
 
-    for m in (
-        Membership.objects.filter(assoc_id=ctx["a_id"])
-        .select_related("member")
-        .exclude(status__in=[Membership.EMPTY, Membership.JOINED])
-        .order_by("member__surname")
-        .values_list("member__id", "member__surname", "member__name", "member__email", "card_number", "status")
-    ):
-        v = m[5]
-        if v == "a" and m[0] in fees:
+    que = Membership.objects.filter(assoc_id=ctx["a_id"]).select_related("member")
+    que = que.exclude(status__in=[Membership.EMPTY, Membership.JOINED]).order_by("member__surname")
+    values = ["member__id", "member__surname", "member__name", "member__email", "card_number", "status"]
+    for member in que.values_list(values):
+        v = member[5]
+        if v == "a" and member[0] in fees:
             v = "p"
         if v not in ctx:
             ctx[v] = []
         run_names = ""
-        if m[0] in next_regs:
-            run_names = ", ".join([next_runs[run_id] for run_id in next_regs[m[0]] if run_id in next_runs])
-        m = m + (run_names,)
-        ctx[v].append(m)
+        if member[0] in next_regs:
+            run_names = ", ".join([next_runs[run_id] for run_id in next_regs[member[0]] if run_id in next_runs])
+        member_val = member + (run_names,)
+        ctx[v].append(member_val)
 
     ctx["sum"] = 0
     if "a" in ctx:
@@ -231,27 +228,9 @@ def exe_member(request, num):
         member=ctx["member"], run__event__assoc=request.assoc["id"]
     ).select_related("run")
 
-    ctx["pays"] = AccountingItemPayment.objects.filter(
-        member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
-    ).select_related("reg")
-    for el in ctx["pays"]:
-        if el.pay == AccountingItemPayment.TOKEN:
-            el.typ = ctx["token_name"]
-        elif el.pay == AccountingItemPayment.CREDIT:
-            el.typ = ctx["credit_name"]
-        else:
-            el.typ = el.get_pay_display()
+    member_add_accountingitempayment(ctx, request)
 
-    ctx["others"] = AccountingItemOther.objects.filter(
-        member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
-    ).select_related("run")
-    for el in ctx["others"]:
-        if el.oth == AccountingItemOther.TOKEN:
-            el.typ = ctx["token_name"]
-        elif el.oth == AccountingItemOther.CREDIT:
-            el.typ = ctx["credit_name"]
-        else:
-            el.typ = el.get_oth_display()
+    member_add_accountingitemother(ctx, request)
 
     ctx["discounts"] = AccountingItemDiscount.objects.filter(
         member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
@@ -271,6 +250,32 @@ def exe_member(request, num):
         ctx.update(calculate_fiscal_code(ctx["member"]))
 
     return render(request, "larpmanager/exe/users/member.html", ctx)
+
+
+def member_add_accountingitempayment(ctx, request):
+    ctx["pays"] = AccountingItemPayment.objects.filter(
+        member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
+    ).select_related("reg")
+    for el in ctx["pays"]:
+        if el.pay == AccountingItemPayment.TOKEN:
+            el.typ = ctx["token_name"]
+        elif el.pay == AccountingItemPayment.CREDIT:
+            el.typ = ctx["credit_name"]
+        else:
+            el.typ = el.get_pay_display()
+
+
+def member_add_accountingitemother(ctx, request):
+    ctx["others"] = AccountingItemOther.objects.filter(
+        member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
+    ).select_related("run")
+    for el in ctx["others"]:
+        if el.oth == AccountingItemOther.TOKEN:
+            el.typ = ctx["token_name"]
+        elif el.oth == AccountingItemOther.CREDIT:
+            el.typ = ctx["credit_name"]
+        else:
+            el.typ = el.get_oth_display()
 
 
 @login_required
@@ -299,6 +304,7 @@ def exe_membership_status(request, num):
 @login_required
 def exe_membership_registry(request):
     ctx = check_assoc_permission(request, "exe_membership_registry")
+    split_two_names = 2
 
     ctx["list"] = []
     que = Membership.objects.filter(assoc_id=ctx["a_id"], card_number__isnull=False)
@@ -308,7 +314,7 @@ def exe_membership_registry(request):
 
         if member.legal_name:
             splitted = member.legal_name.rsplit(" ", 1)
-            if len(splitted) == 2:
+            if len(splitted) == split_two_names:
                 member.name, member.surname = splitted
             else:
                 member.name = splitted[0]
@@ -324,6 +330,7 @@ def exe_membership_registry(request):
 @login_required
 def exe_enrolment(request):
     ctx = check_assoc_permission(request, "exe_enrolment")
+    split_two_names = 2
 
     ctx["year"] = datetime.today().year
     start = datetime(ctx["year"], 1, 1)
@@ -334,11 +341,9 @@ def exe_enrolment(request):
         cache[el[0]] = el[1]
 
     ctx["list"] = []
-    for mb in (
-        Membership.objects.filter(member_id__in=cache.keys(), assoc_id=ctx["a_id"], card_number__isnull=False)
-        .select_related("member")
-        .order_by("card_number")
-    ):
+    que = Membership.objects.filter(member_id__in=cache.keys(), assoc_id=ctx["a_id"], card_number__isnull=False)
+    que = que.select_related("member").order_by("card_number")
+    for mb in que:
         member = mb.member
         member.membership = mb
         member.last_enrolment = cache[member.id]
@@ -346,7 +351,7 @@ def exe_enrolment(request):
 
         if member.legal_name:
             splitted = member.legal_name.rsplit(" ", 1)
-            if len(splitted) == 2:
+            if len(splitted) == split_two_names:
                 member.name, member.surname = splitted
             else:
                 member.name = splitted[0]
@@ -470,8 +475,8 @@ def exe_questions(request):
 
     ctx["open"] = []
     ctx["closed"] = []
-    for cid in last_q:
-        (cq, is_user, closed) = last_q[cid]
+    for _cid, value in last_q.items():
+        (cq, is_user, closed) = value
         if is_user and not closed:
             ctx["open"].append(cq)
         else:
