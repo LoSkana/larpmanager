@@ -2471,6 +2471,9 @@ msgstr "Carnet de conducir"
 msgid "Delay in payment"
 msgstr "Retraso en el pago"
 
+msgid "Delay in profile"
+msgstr "Retraso en el perfil"
+
 msgid "Loading template"
 msgstr "Cargando plantilla"
 
@@ -3917,6 +3920,9 @@ msgstr "¡Descubre los próximos eventos!"
 
 msgid "Cancellation for missing payment"
 msgstr "Anulación por impago"
+
+msgid "Cancellation for missing profile"
+msgstr "Anulación por falta de perfil"
 
 msgid "Select a file with extension csv"
 msgstr "Selecciona un archivo con la extensión \"csv\"."

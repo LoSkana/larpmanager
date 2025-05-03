@@ -42,6 +42,7 @@ from larpmanager.models.writing import (
     Plot,
     PlotCharacterRel,
     TextVersion,
+    Writing,
     replace_chars_all,
 )
 from larpmanager.templatetags.show_tags import show_char, show_trait
@@ -172,11 +173,32 @@ def writing_list(request, ctx, typ, nm):
 
     ctx["nm"] = nm
 
+    text_fields, writing = writing_list_query(ctx, ev, typ)
+
+    if issubclass(typ, Character):
+        writing_list_char(ctx, ev, text_fields)
+        writing_list_cocreation(ctx, typ)
+
+    if issubclass(typ, Plot):
+        writing_list_plot(ctx)
+
+    if issubclass(typ, AbilityPx):
+        ctx["list"] = ctx["list"].prefetch_related("prerequisites")
+
+    if writing:
+        orga_list_progress_assign(ctx, typ)  # pyright: ignore[reportArgumentType]
+        writing_list_text_fields(ctx, text_fields, typ)
+
+    return render(request, "larpmanager/orga/writing/" + nm + "s.html", ctx)
+
+
+def writing_list_query(ctx, ev, typ):
+    writing = issubclass(typ, Writing)
     text_fields = ["concept", "teaser", "text", "preview"]
     ctx["list"] = typ.objects.filter(event=ev.get_class_parent(typ))
-    for f in text_fields:
-        ctx["list"] = ctx["list"].defer(f)
-
+    if writing:
+        for f in text_fields:
+            ctx["list"] = ctx["list"].defer(f)
     # noinspection PyProtectedMember
     typ_fields = [f.name for f in typ._meta.get_fields()]
     for el in [
@@ -192,30 +214,13 @@ def writing_list(request, ctx, typ, nm):
             continue
 
         ctx["list"] = ctx["list"].prefetch_related(el[1])
-
     if check_field(typ, "order"):
         ctx["list"] = ctx["list"].order_by("order")
     elif check_field(typ, "number"):
         ctx["list"] = ctx["list"].order_by("number")
     else:
         ctx["list"] = ctx["list"].order_by("-updated")
-
-    if issubclass(typ, Character):
-        writing_list_char(ctx, ev, text_fields)
-
-    if issubclass(typ, Plot):
-        writing_list_plot(ctx)
-
-    if issubclass(typ, AbilityPx):
-        ctx["list"] = ctx["list"].prefetch_related("prerequisites")
-
-    orga_list_progress_assign(ctx, typ)  # pyright: ignore[reportArgumentType]
-
-    writing_list_text_fields(ctx, text_fields, typ)
-
-    writing_list_cocreation(ctx, typ)
-
-    return render(request, "larpmanager/orga/writing/" + nm + "s.html", ctx)
+    return text_fields, writing
 
 
 def writing_list_text_fields(ctx, text_fields, typ):

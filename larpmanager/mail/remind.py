@@ -155,9 +155,11 @@ def notify_deadlines(run):
         "memb_del": "Cancellation for missing organization registration",
         "fee_del": "Cancellation for missing yearly membership fee",
         "pay_del": "Cancellation for missing payment",
+        "profile_del": "Cancellation for missing profile",
         "memb": "Delay in organization registration",
         "fee": "Delay in yearly membership fee",
         "pay": "Delay in payment",
+        "profile": "Delay in profile",
         "cast": "Missing casting preferences",
     }
 

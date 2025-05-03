@@ -24,6 +24,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.shortcuts import redirect, render
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all
@@ -54,6 +55,7 @@ def orga_newsletter(request, s, n):
 def orga_safety(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_safety")
     get_event_cache_all(ctx)
+    min_length = 3
 
     member_chars = {}
     for _num, el in ctx["chars"].items():
@@ -64,12 +66,10 @@ def orga_safety(request, s, n):
         member_chars[el["player_id"]].append(f"#{el['number']} {el['name']}")
 
     ctx["list"] = []
-    for el in (
-        Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-        .exclude(member__safety__isnull=True)
-        .select_related("member")
-    ):
-        if len(el.member.safety) > 3:
+    que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
+    que = que.exclude(member__safety__isnull=True).select_related("member")
+    for el in que:
+        if len(el.member.safety) > min_length:
             if el.member_id in member_chars:
                 el.member.chars = member_chars[el.member_id]
             ctx["list"].append(el.member)
@@ -80,6 +80,7 @@ def orga_safety(request, s, n):
 def orga_diet(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_diet")
     get_event_cache_all(ctx)
+    min_length = 3
 
     member_chars = {}
     for _num, el in ctx["chars"].items():
@@ -90,12 +91,10 @@ def orga_diet(request, s, n):
         member_chars[el["player_id"]].append(f"#{el['number']} {el['name']}")
 
     ctx["list"] = []
-    for el in (
-        Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-        .exclude(member__diet__isnull=True)
-        .select_related("member")
-    ):
-        if len(el.member.diet) > 3:
+    que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
+    que = que.exclude(member__diet__isnull=True).select_related("member")
+    for el in que:
+        if len(el.member.diet) > min_length:
             if el.member_id in member_chars:
                 el.member.chars = member_chars[el.member_id]
             ctx["list"].append(el.member)
@@ -179,8 +178,8 @@ def orga_questions(request, s, n):
         last_q[cq.member.id] = (cq, cq.is_user, cq.closed)
     ctx["open"] = []
     ctx["closed"] = []
-    for cid in last_q:
-        (cq, is_user, closed) = last_q[cid]
+    for question in last_q.values():
+        (cq, is_user, closed) = question
         if is_user and not closed:
             ctx["open"].append(cq)
         else:
@@ -292,15 +291,30 @@ def orga_sensitive(request, s, n):
     )
     member_list.extend([mb.id for mb in get_event_staffers(ctx["run"].event)])
 
+    member_cls: type[Member] = Member
+    member_fields = ["name", "surname"] + sorted(request.assoc["members_fields"])
+
     ctx["list"] = Member.objects.filter(id__in=member_list).order_by("created")
     for el in ctx["list"]:
         if el.id in member_chars:
             el.chars = member_chars[el.id]
 
-    ctx["fields"] = []
-    for f in request.assoc["members_fields"]:
-        if f in ["diet", "safety", "profile", "newsletter", "language"]:
+        if "residence_address" in member_fields:
+            el.residence_address = el.get_residence()
+        if "first_aid" in member_fields:
+            el.first_aid = mark_safe('<i class="fa-solid fa-check"></i>') if el.first_aid else ""
+        if "document_type" in member_fields:
+            el.document_type = el.get_document_type_display()
+        if "gender" in member_fields:
+            el.gender = el.get_gender_display()
+
+    ctx["fields"] = {}
+    for field_name in member_fields:
+        if not field_name:
             continue
-        ctx["fields"].append(f)
+        if field_name in ["diet", "safety", "profile", "newsletter", "language"]:
+            continue
+        # noinspection PyUnresolvedReferences, PyProtectedMember
+        ctx["fields"][field_name] = member_cls._meta.get_field(field_name).verbose_name
 
     return render(request, "larpmanager/orga/users/sensitive.html", ctx)

@@ -78,6 +78,7 @@ def orga_characters(request, s, n):
         QuestionType.NAME.value: _("Name"),
         QuestionType.TEASER.value: _("Presentation"),
         QuestionType.SHEET.value: _("Text"),
+        QuestionType.FACTIONS.value: _("Factions"),
     }
 
     if "character_form" in ctx["features"]:
