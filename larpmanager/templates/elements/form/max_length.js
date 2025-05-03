@@ -27,7 +27,7 @@ function update_count(key, limit, typ) {
         var name = key.replace(/^id_/, '');
         var group = $('input[name="' + name + '"]');
         var checkedCount = group.filter(':checked').length;
-        group.not(':checked').prop('disabled', checkedCount >= limit);
+        group.not(':checked').not('.unavail').prop('disabled', checkedCount >= limit);
         el.parent().find(".count").html(checkedCount);
     } else if (tinymce_count.includes(typ)) {
         const editor = tinymce.get(key);
