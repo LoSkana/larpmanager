@@ -24,6 +24,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.shortcuts import redirect, render
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all
@@ -290,14 +291,24 @@ def orga_sensitive(request, s, n):
     )
     member_list.extend([mb.id for mb in get_event_staffers(ctx["run"].event)])
 
+    member_cls: type[Member] = Member
+    member_fields = ["name", "surname"] + sorted(request.assoc["members_fields"])
+
     ctx["list"] = Member.objects.filter(id__in=member_list).order_by("created")
     for el in ctx["list"]:
         if el.id in member_chars:
             el.chars = member_chars[el.id]
 
+        if "residence_address" in member_fields:
+            el.residence_address = el.get_residence()
+        if "first_aid" in member_fields:
+            el.first_aid = mark_safe('<i class="fa-solid fa-check"></i>') if el.first_aid else ""
+        if "document_type" in member_fields:
+            el.document_type = el.get_document_type_display()
+        if "gender" in member_fields:
+            el.gender = el.get_gender_display()
+
     ctx["fields"] = {}
-    member_cls: type[Member] = Member
-    member_fields = ["name", "surname"] + sorted(request.assoc["members_fields"])
     for field_name in member_fields:
         if not field_name:
             continue
