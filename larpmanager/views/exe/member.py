@@ -99,7 +99,7 @@ def exe_membership(request):
     que = Membership.objects.filter(assoc_id=ctx["a_id"]).select_related("member")
     que = que.exclude(status__in=[Membership.EMPTY, Membership.JOINED]).order_by("member__surname")
     values = ("member__id", "member__surname", "member__name", "member__email", "card_number", "status")
-    for member in que.values_list(values):
+    for member in que.values_list(*values):
         v = member[5]
         if v == "a" and member[0] in fees:
             v = "p"
