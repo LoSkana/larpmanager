@@ -4011,6 +4011,9 @@ msgstr "Zobrazení všech informací o události v"
 msgid "Ask the organisers to activate it."
 msgstr "Požádejte organizátory o aktivaci."
 
+msgid "Date of expiration of the document"
+msgstr "Datum ukončení platnosti dokladu"
+
 msgid "Delay in organization registration"
 msgstr "Zpoždění při registraci organizace"
 
@@ -8230,6 +8233,13 @@ msgid ""
 msgstr ""
 "Přidává systém kvízů pro otázky z workshopů. Organizátoři mohou definovat "
 "formuláře, otázky a správné odpovědi, které mají hráči vyplnit."
+
+msgid ""
+"Leave blank if the document has no expiration date - Please check that it "
+"does not expire before the event you want to signup up for."
+msgstr ""
+"Ponechte prázdné, pokud dokument nemá datum platnosti - zkontrolujte, zda "
+"jeho platnost nevyprší před událostí, na kterou se chcete přihlásit."
 
 msgid ""
 "Select from the drop-down list the characters to be added to the faction. "
