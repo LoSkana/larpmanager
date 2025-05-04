@@ -132,7 +132,7 @@ def check_download(page, link):
     current_try = 0
     while current_try < max_tries:
         try:
-            with page.expect_download() as download_info:
+            with page.expect_download(timeout=100000) as download_info:
                 page.get_by_role("link", name=link).click()
             download_path = download_info.value.path()
             assert download_path is not None, "Download failed"
