@@ -405,7 +405,7 @@ def add_field_available(page):
     page.locator("#id_details").press("Tab")
     page.locator("#id_max_available").fill("2")
     page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_text("New Search List Upload").click()
 
 

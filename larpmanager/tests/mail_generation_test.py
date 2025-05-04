@@ -46,13 +46,114 @@ def test_mail_generation(live_server):
 def mail_generation(live_server, page):
     login_orga(page, live_server)
 
-    # Test chat
-    go_to(page, live_server, "/manage/features/52/on")
-    go_to(page, live_server, "/public/3/")
-    page.get_by_role("link", name="Chat").click()
-    page.get_by_role("textbox").fill("ciao!")
+    chat(live_server, page)
+
+    image_path = badge(live_server, page)
+
+    submit_membership(image_path, live_server, page)
+
+    resubmit_membership(live_server, page)
+
+    expense(image_path, live_server, page)
+
+
+def expense(image_path, live_server, page):
+    # approve it
+    go_to(page, live_server, "/manage/membership/")
+    page.get_by_role("link", name="Request").click()
+    page.get_by_role("textbox", name="Response Response").click()
+    page.get_by_role("textbox", name="Response Response").fill("yeaaaa")
+    page.get_by_role("button", name="Approve").click()
+
+    # expenses
+    go_to(page, live_server, "/manage/features/106/on")
+    go_to(page, live_server, "/test/1/manage/expenses/my")
+    page.get_by_role("link", name="New").click()
+    page.get_by_role("spinbutton", name="Value").click()
+    page.get_by_role("spinbutton", name="Value").fill("10")
+    page.locator("#id_invoice").set_input_files(str(image_path))
+    page.get_by_label("Type").select_option("g")
+    page.get_by_role("textbox", name="Descr").click()
+    page.get_by_role("textbox", name="Descr").fill("dsadas")
+    submit(page)
+    go_to(page, live_server, "/test/1/manage/expenses")
+    page.get_by_role("link", name="Approve").click()
+
+
+def resubmit_membership(live_server, page):
+    # refute it
+    go_to(page, live_server, "/manage/membership/")
+    page.get_by_role("link", name="Request").click()
+    page.locator("form").filter(has_text="Response Refute").locator("#id_response").click()
+    page.locator("form").filter(has_text="Response Refute").locator("#id_response").fill("nope")
+    page.get_by_role("button", name="Refute").click()
+    # signup
+    go_to(page, live_server, "/test/1/manage/registrations/tickets/")
+    page.locator("a:has(i.fas.fa-edit)").click()
+    page.locator("#id_price").click()
+    page.locator("#id_price").fill("100")
+    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("link", name="Register").click()
+    page.get_by_role("button", name="Continue").click()
+    page.get_by_role("button", name="Confirm").click()
+    # Set membership fee
+    go_to(page, live_server, "/manage/config/")
+    page.get_by_role("link", name=re.compile(r"^Members")).click()
+    page.locator("#id_membership_fee").click()
+    page.locator("#id_membership_fee").fill("10")
+    page.locator("#id_membership_day").click()
+    page.locator("#id_membership_day").fill("01-01")
+    page.get_by_role("button", name="Confirm").click()
+    # update signup, go to membership
+    go_to(page, live_server, "/test/1/register/")
+    page.get_by_role("button", name="Continue").click()
+    page.get_by_role("button", name="Confirm").click()
+    submit(page)
+    page.locator("#id_confirm_1").check()
+    page.locator("#id_confirm_2").check()
+    page.locator("#id_confirm_3").check()
+    page.locator("#id_confirm_4").check()
     submit(page)
 
+
+def submit_membership(image_path, live_server, page):
+    # Test membership
+    go_to(page, live_server, "/manage/features/45/on")
+    go_to(page, live_server, "/manage/texts")
+    page.wait_for_timeout(2000)
+    page.get_by_role("link", name="New").click()
+    page.wait_for_selector(".tox-edit-area")
+    page.locator('iframe[title="Rich Text Area"]').content_frame.locator("html").click()
+    page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill(
+        "Ciao {{ member.name }}!"
+    )
+    page.locator("#main_form").click()
+    page.locator("#id_typ").select_option("m")
+    page.get_by_role("button", name="Confirm").click()
+    go_to(page, live_server, "/membership")
+    page.get_by_role("checkbox", name="Authorisation").check()
+    submit(page)
+    # Check file generated
+    with page.expect_download(timeout=160000) as download_info:
+        page.get_by_role("link", name="download it here").click()
+    download = download_info.value
+    path = download.path()
+    assert path is not None
+    file_size = os.path.getsize(path)
+    assert file_size > 0
+    page.locator("#id_request").set_input_files(str(image_path))
+    page.locator("#id_document").set_input_files(str(image_path))
+    submit(page)
+    page.locator("#id_confirm_1").check()
+    page.get_by_text("I confirm that I have").click()
+    page.locator("#id_confirm_2").check()
+    page.get_by_text("I confirm that I have").click()
+    page.locator("#id_confirm_3").check()
+    page.locator("#id_confirm_4").check()
+    submit(page)
+
+
+def badge(live_server, page):
     # Test badge
     go_to(page, live_server, "/manage/features/65/on")
     go_to(page, live_server, "/manage/badges")
@@ -75,101 +176,13 @@ def mail_generation(live_server, page):
     page.get_by_role("searchbox").fill("user")
     page.get_by_role("option", name="User Test - user@test.it").click()
     page.get_by_role("button", name="Confirm").click()
+    return image_path
 
-    # Test membership
-    go_to(page, live_server, "/manage/features/45/on")
 
-    go_to(page, live_server, "/manage/texts")
-    page.wait_for_timeout(2000)
-    page.get_by_role("link", name="New").click()
-    page.wait_for_selector(".tox-edit-area")
-    page.locator('iframe[title="Rich Text Area"]').content_frame.locator("html").click()
-    page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill(
-        "Ciao {{ member.name }}!"
-    )
-    page.locator("#main_form").click()
-    page.locator("#id_typ").select_option("m")
-    page.get_by_role("button", name="Confirm").click()
-
-    go_to(page, live_server, "/membership")
-    page.get_by_role("checkbox", name="Authorisation").check()
+def chat(live_server, page):
+    # Test chat
+    go_to(page, live_server, "/manage/features/52/on")
+    go_to(page, live_server, "/public/3/")
+    page.get_by_role("link", name="Chat").click()
+    page.get_by_role("textbox").fill("ciao!")
     submit(page)
-
-    # Check file generated
-    with page.expect_download() as download_info:
-        page.get_by_role("link", name="download it here").click()
-    download = download_info.value
-    path = download.path()
-    assert path is not None
-    file_size = os.path.getsize(path)
-    assert file_size > 0
-
-    page.locator("#id_request").set_input_files(str(image_path))
-    page.locator("#id_document").set_input_files(str(image_path))
-    submit(page)
-    page.locator("#id_confirm_1").check()
-    page.get_by_text("I confirm that I have").click()
-    page.locator("#id_confirm_2").check()
-    page.get_by_text("I confirm that I have").click()
-    page.locator("#id_confirm_3").check()
-    page.locator("#id_confirm_4").check()
-    submit(page)
-
-    # refute it
-    go_to(page, live_server, "/manage/membership/")
-    page.get_by_role("link", name="Request").click()
-    page.locator("form").filter(has_text="Response Refute").locator("#id_response").click()
-    page.locator("form").filter(has_text="Response Refute").locator("#id_response").fill("nope")
-    page.get_by_role("button", name="Refute").click()
-
-    # signup
-    go_to(page, live_server, "/test/1/manage/registrations/tickets/")
-    page.locator("a:has(i.fas.fa-edit)").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").fill("100")
-    page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("link", name="Register").click()
-    page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
-
-    # Set membership fee
-    go_to(page, live_server, "/manage/config/")
-    page.get_by_role("link", name=re.compile(r"^Members")).click()
-    page.locator("#id_membership_fee").click()
-    page.locator("#id_membership_fee").fill("10")
-    page.locator("#id_membership_day").click()
-    page.locator("#id_membership_day").fill("01-01")
-    page.get_by_role("button", name="Confirm").click()
-
-    # update signup, go to membership
-    go_to(page, live_server, "/test/1/register/")
-    page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
-    submit(page)
-    page.locator("#id_confirm_1").check()
-    page.locator("#id_confirm_2").check()
-    page.locator("#id_confirm_3").check()
-    page.locator("#id_confirm_4").check()
-    submit(page)
-
-    # approve it
-    go_to(page, live_server, "/manage/membership/")
-    page.get_by_role("link", name="Request").click()
-    page.get_by_role("textbox", name="Response Response").click()
-    page.get_by_role("textbox", name="Response Response").fill("yeaaaa")
-    page.get_by_role("button", name="Approve").click()
-
-    # expenses
-    go_to(page, live_server, "/manage/features/106/on")
-    go_to(page, live_server, "/test/1/manage/expenses/my")
-    page.get_by_role("link", name="New").click()
-    page.get_by_role("spinbutton", name="Value").click()
-    page.get_by_role("spinbutton", name="Value").fill("10")
-    page.locator("#id_invoice").set_input_files(str(image_path))
-    page.get_by_label("Type").select_option("g")
-    page.get_by_role("textbox", name="Descr").click()
-    page.get_by_role("textbox", name="Descr").fill("dsadas")
-    submit(page)
-
-    go_to(page, live_server, "/test/1/manage/expenses")
-    page.get_by_role("link", name="Approve").click()
