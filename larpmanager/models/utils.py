@@ -51,8 +51,9 @@ def slug_url_validator(val):
         raise ValidationError(_("Only lowercase characters and numbers are allowed, no spaces or symbols"))
 
 
-def remove_non_ascii(string):
-    return "".join(char for char in string if ord(char) < 128)
+def remove_non_ascii(text):
+    max_ascii = 128
+    return "".join(char for char in text if ord(char) < max_ascii)
 
 
 def get_element_config(element, name, def_value):
@@ -80,21 +81,6 @@ def get_all_element_configs(obj):
     for config in obj.configs.all():
         res[config.name] = config.value
     return res
-
-    # OLD STUFF
-    # if not hasattr(obj, attr):
-    #     return {}
-    # aux = getattr(obj, attr)
-    # if not aux:
-    #     return {}
-    # aux = json.loads(aux)
-    # res = {}
-    # for el in aux:
-    #     # print (to [el])
-    #     base64_bytes = aux[el].encode("ascii")
-    #     message_bytes = base64.b64decode(base64_bytes)
-    #     res[el] = message_bytes.decode("ascii")
-    # return res
 
 
 def save_all_element_configs(obj, dct):
@@ -124,21 +110,6 @@ def save_all_element_configs(obj, dct):
     # add new configs
     for name in incoming_names - set(existing_configs.keys()):
         obj.configs.model.objects.create(**{fk_field: obj, "name": name, "value": dct[name]})
-
-    # TODO remove
-    # aux = {}
-    # for el in dct:
-    #     ll = remove_non_ascii(str(dct[el]))
-    #     base64_bytes = ll.encode("ascii")
-    #     base64_bytes = base64.b64encode(base64_bytes)
-    #     aux[el] = base64_bytes.decode("ascii")
-    # value = json.dumps(aux)
-    # diff = value != getattr(obj, attr)
-    # setattr(obj, attr, value)
-    # if diff and save:
-    #     obj.save()
-    #
-    # # TODO new save to config
 
 
 def my_uuid_miny():

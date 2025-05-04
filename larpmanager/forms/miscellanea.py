@@ -337,21 +337,17 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
 
 class OrganizerCopyForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        super().__init__()
         self.params = kwargs.pop("ctx")
-        super(forms.Form, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+
         self.fields["parent"] = forms.ChoiceField(
             required=True,
-            choices=[
-                (el.id, el.name)
-                for el in Event.objects.filter(assoc_id=self.params["a_id"], template=False).exclude(
-                    pk=self.params["event"].id
-                )
-            ],
+            choices=[(el.id, el.name) for el in Event.objects.filter(assoc_id=self.params["a_id"], template=False)],
             help_text="The event from which you will copy the elements",
         )
         self.fields["parent"].widget = EventS2Widget()
         self.fields["parent"].widget.set_assoc(self.params["a_id"])
+        self.fields["parent"].widget.set_exclude(self.params["event"].id)
 
         cho = [
             ("all", "All"),

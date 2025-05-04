@@ -577,7 +577,7 @@
     descr: Enables a 'campaign' style setup where multiple events share the same set
       of characters and factions.
     slug: campaign
-    overall: false
+    overall: true
     module: 7
     placeholder: false
     order: 9999

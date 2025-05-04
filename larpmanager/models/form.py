@@ -88,13 +88,18 @@ class CharacterQuestion(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="char_questions")
 
-    display = models.CharField(max_length=100, help_text=_("Question display text"))
+    display = models.CharField(max_length=100, verbose_name=_("Display"), help_text=_("Question display text"))
 
     description = models.CharField(
-        max_length=1000, help_text=_("Extended description (will be shown in gray, in small)"), blank=True
+        max_length=1000,
+        blank=True,
+        verbose_name=_("Description"),
+        help_text=_("Extended description (will be shown in gray, in small)"),
     )
 
-    order = models.IntegerField(default=0, help_text=_("Display order with respect to all questions"))
+    order = models.IntegerField(
+        default=0, verbose_name=_("Order"), help_text=_("Display order with respect to all questions")
+    )
 
     status = models.CharField(
         max_length=1,
@@ -116,7 +121,15 @@ class CharacterQuestion(BaseModel):
         ),
     )
 
-    editable = models.CharField(max_length=20, default="", null=True)
+    editable = models.CharField(
+        default="",
+        max_length=20,
+        null=True,
+        verbose_name=_("Editable"),
+        help_text=_(
+            "This field can be edited by the player only when the character is in one of the selected statuses"
+        ),
+    )
 
     max_length = models.IntegerField(
         default=0,
@@ -129,6 +142,7 @@ class CharacterQuestion(BaseModel):
 
     printable = models.BooleanField(
         default=True,
+        verbose_name=_("Printable"),
         help_text=_("Indicate whether the field is printed in PDF generations"),
     )
 
@@ -250,10 +264,13 @@ class RegistrationQuestion(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="questions")
 
-    display = models.CharField(max_length=100, help_text=_("Question display text"))
+    display = models.CharField(max_length=100, verbose_name=_("Display"), help_text=_("Question display text"))
 
     description = models.CharField(
-        max_length=1000, help_text=_("Extended description (will be shown in gray, in small)"), blank=True
+        max_length=1000,
+        blank=True,
+        verbose_name=_("Description"),
+        help_text=_("Extended description (will be shown in gray, in small)"),
     )
 
     order = models.IntegerField(default=0, help_text=_("Display order with respect to all questions"))
@@ -279,6 +296,7 @@ class RegistrationQuestion(BaseModel):
         Faction,
         related_name="registration_questions",
         blank=True,
+        verbose_name=_("Faction list"),
         help_text=_(
             "If you select one (or more) factions, the question will only be shown to players "
             "with characters in all chosen factions"
@@ -288,9 +306,10 @@ class RegistrationQuestion(BaseModel):
     profile = models.ImageField(
         max_length=500,
         upload_to=UploadToPathAndRename("reg_questions/"),
-        verbose_name=_("Explanatory image"),
         blank=True,
         null=True,
+        verbose_name=_("Image"),
+        help_text=_("(Optional) an image that will be shown inside the question"),
     )
     profile_thumb = ImageSpecField(
         source="profile",
@@ -303,6 +322,7 @@ class RegistrationQuestion(BaseModel):
         RegistrationTicket,
         related_name="registration_tickets",
         blank=True,
+        verbose_name=_("Ticket list"),
         help_text=_(
             "If you select one (or more) tickets, the question will only be shown to players "
             "who have selected one of those tickets"
@@ -315,19 +335,26 @@ class RegistrationQuestion(BaseModel):
         related_name="questions",
         null=True,
         blank=True,
+        verbose_name=_("Section"),
+        help_text=_(
+            "The question will be shown in the selected section (if left empty it will shown at the start of the form)"
+        ),
     )
 
     allowed = models.ManyToManyField(
         Member,
         related_name="questions_allowed",
         blank=True,
+        verbose_name=_("Allowed"),
         help_text=_(
             "Staff members who are allowed to be able to see the responses of players (leave blank to let everyone see)"
         ),
     )
 
     giftable = models.BooleanField(
-        default=False, help_text=_("Indicates whether the option can be included in the gifted signups")
+        default=False,
+        verbose_name=_("Giftable"),
+        help_text=_("Indicates whether the option can be included in the gifted signups"),
     )
 
     def __str__(self):
@@ -380,6 +407,7 @@ class RegistrationQuestion(BaseModel):
             return True
 
         if "reg_que_tickets" in features and reg and reg.pk:
+            # noinspection PyUnresolvedReferences
             tickets_id = [i for i in self.tickets_map if i is not None]
             if len(tickets_id) > 0:
                 if not reg or not reg.ticket:
@@ -389,6 +417,7 @@ class RegistrationQuestion(BaseModel):
                     return True
 
         if "reg_que_faction" in features and reg and reg.pk:
+            # noinspection PyUnresolvedReferences
             factions_id = [i for i in self.factions_map if i is not None]
             if len(factions_id) > 0:
                 reg_factions = []
@@ -402,7 +431,9 @@ class RegistrationQuestion(BaseModel):
         if "reg_que_allowed" in features and reg and reg.pk and orga and params:
             run_id = params["run"].id
             organizer = run_id in params["all_runs"] and 1 in params["all_runs"][run_id]
+            # noinspection PyUnresolvedReferences
             if not organizer and self.allowed_map[0]:
+                # noinspection PyUnresolvedReferences
                 if params["member"].id not in self.allowed_map:
                     return True
 

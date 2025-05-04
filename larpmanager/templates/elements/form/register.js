@@ -74,10 +74,12 @@ $(document).ready(function(){
     unavail.forEach(value => {
         if (hide_unavailable) {
             $('option[value="' + value + '"]').remove();
-            $('input[type="checkbox"][value="' + value + '"]').remove();
+            $('input[type="checkbox"][value="' + value + '"]').closest('label').remove();
         } else {
             $('option[value="' + value + '"]').prop("disabled", true);
-            $('input[type="checkbox"][value="' + value + '"]').prop("disabled", true);
+            $('input[type="checkbox"][value="' + value + '"]')
+                .prop("disabled", true)
+                .addClass("unavail");
         }
     });
 

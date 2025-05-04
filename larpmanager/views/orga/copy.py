@@ -177,6 +177,18 @@ def correct_plot_character(e_id, p_id):
         el.save()
 
 
+def copy_character_config(e_id, p_id):
+    CharacterConfig.objects.filter(character__event_id=e_id).delete()
+    cache = {}
+    for obj in Character.objects.filter(event_id=e_id):
+        cache[obj.number] = obj.id
+
+    for obj in Character.objects.filter(event_id=p_id):
+        new_id = cache[obj.number]
+        for el in CharacterConfig.objects.filter(character=obj):
+            CharacterConfig.objects.create(character_id=new_id, name=el.name, value=el.value)
+
+
 def copy(request, ctx, parent, event, element):
     if not parent:
         return messages.error(request, _("Parent empty"))
@@ -191,6 +203,18 @@ def copy(request, ctx, parent, event, element):
 
     all = element == "all"
 
+    copy_event(all, ctx, e_id, element, event, p_id, parent)
+
+    copy_registration(all, e_id, element, p_id)
+
+    copy_writing(all, e_id, element, p_id)
+
+    event.save()
+
+    messages.success(request, _("Copy done"))
+
+
+def copy_event(all, ctx, e_id, element, event, p_id, parent):
     if all or element == "event":
         for s in get_all_fields_from_form(OrgaEventForm, ctx):
             if s == "slug":
@@ -199,10 +223,8 @@ def copy(request, ctx, parent, event, element):
             setattr(event, s, v)
 
         event.name = "copy - " + event.name
-
     if all or element == "config":
         copy_class(e_id, p_id, EventConfig)
-
     if all or element == "appearance":
         for s in get_all_fields_from_form(OrgaAppearanceForm, ctx):
             if s == "event_css":
@@ -210,39 +232,35 @@ def copy(request, ctx, parent, event, element):
             else:
                 v = getattr(parent, s)
                 setattr(event, s, v)
-
     if all or element == "text":
         copy_class(e_id, p_id, EventText)
-
     if all or element == "role":
         copy_class(e_id, p_id, EventRole)
-
     if all or element == "features":
         # copy features
         for fn in parent.features.all():
             event.features.add(fn)
         event.save()
 
+
+def copy_registration(all, e_id, element, p_id):
     if all or element == "ticket":
         copy_class(e_id, p_id, RegistrationTicket)
-
     if all or element == "question":
         copy_class(e_id, p_id, RegistrationQuestion)
         copy_class(e_id, p_id, RegistrationOption)
         correct_rels(e_id, p_id, RegistrationQuestion, RegistrationOption, "question", "display")
-
     if all or element == "discount":
         copy_class(e_id, p_id, Discount)
-
     if all or element == "quota":
         copy_class(e_id, p_id, RegistrationQuota)
-
     if all or element == "installment":
         copy_class(e_id, p_id, RegistrationInstallment)
-
     if all or element == "surcharge":
         copy_class(e_id, p_id, RegistrationSurcharge)
 
+
+def copy_writing(all, e_id, element, p_id):
     if all or element == "character":
         copy_class(e_id, p_id, Character)
         # correct relationship
@@ -250,42 +268,31 @@ def copy(request, ctx, parent, event, element):
         # character fields
         copy_class(e_id, p_id, CharacterQuestion)
         copy_class(e_id, p_id, CharacterOption)
-        copy_class(e_id, p_id, CharacterConfig)
+        copy_character_config(e_id, p_id)
         correct_rels(e_id, p_id, CharacterQuestion, CharacterOption, "question", "display")
-
     if all or element == "faction":
         copy_class(e_id, p_id, Faction)
-
     if all or element == "quest":
         copy_class(e_id, p_id, QuestType)
         copy_class(e_id, p_id, Quest)
         copy_class(e_id, p_id, Trait)
         correct_rels(e_id, p_id, QuestType, Quest, "typ")
         correct_rels(e_id, p_id, Quest, Trait, "quest")
-
     if all or element == "prologue":
         copy_class(e_id, p_id, Prologue)
-
     if all or element == "speedlarp":
         copy_class(e_id, p_id, SpeedLarp)
-
     if all or element == "plot":
         copy_class(e_id, p_id, Plot)
         # correct plotcharacterrels
         correct_plot_character(e_id, p_id)
-
     if all or element == "handout":
         copy_class(e_id, p_id, Handout)
         copy_class(e_id, p_id, HandoutTemplate)
-
     if all or element == "workshop":
         copy_class(e_id, p_id, WorkshopModule)
         # correct workshop
         correct_workshop(e_id, p_id)
-
-    event.save()
-
-    messages.success(request, _("Copy done"))
 
 
 def copy_css(ctx, event, parent):

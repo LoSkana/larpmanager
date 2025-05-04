@@ -85,7 +85,7 @@ class Command(BaseCommand):
                 entry.flags.remove("fuzzy")
                 self.translate_entry(entry, loc)
 
-            sorted_entries = sorted(po, key=lambda entry: len(entry.msgid))
+            sorted_entries = sorted(po, key=lambda element: (len(element.msgid), element.msgid))
 
             # Crate new ordered po
             sorted_po = polib.POFile()
