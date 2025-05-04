@@ -293,7 +293,11 @@ class ConfigType(IntEnum):
 def get_form_field(field_type: ConfigType, label, help_text, init=None, extra=None):
     field_map = {
         ConfigType.CHAR: lambda: forms.CharField(label=label, help_text=help_text, required=False),
-        ConfigType.BOOL: lambda: forms.BooleanField(label=label, help_text=help_text, required=False),
+        ConfigType.BOOL: lambda: forms.BooleanField(
+            label=label,
+            help_text=help_text,
+            required=False,
+        ),
         ConfigType.HTML: lambda: forms.CharField(label=label, widget=TinyMCE(), help_text=help_text, required=False),
         ConfigType.INT: lambda: forms.IntegerField(label=label, help_text=help_text, required=False),
         ConfigType.TEXTAREA: lambda: forms.CharField(
@@ -341,6 +345,8 @@ def add_custom_field(el, res, form):
     form.sections["id_" + k] = field_sect
 
     if init:
+        if field_type == ConfigType.BOOL:
+            init = init == "True"
         form.initial[k] = init
 
 
