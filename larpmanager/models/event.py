@@ -120,9 +120,6 @@ class Event(BaseModel):
         options={"quality": 70},
     )
 
-    # ~ cover_red = models.ImageField(upload_to= 'cover_red/', blank=True, help_text=_("Cover in formato striscia - aspect ratio 9:3"))
-    # ~ cover_thumb_red = ImageSpecField(source='cover_red', processors=[ResizeToFill(500, 300)], format='JPEG', options={'quality': 70})
-
     carousel_img = models.ImageField(max_length=500, upload_to="carousel/", blank=True, help_text=_("Carousel image"))
     carousel_thumb = ImageSpecField(source="carousel_img", format="JPEG", options={"quality": 70})
 
@@ -261,6 +258,7 @@ class Event(BaseModel):
 
     def get_cover_thumb_url(self):
         try:
+            # noinspection PyUnresolvedReferences
             return self.cover_thumb.url
         except Exception as e:
             print(e)
@@ -285,26 +283,35 @@ class Event(BaseModel):
         ]:
             dc[s] = get_attr(self, s)
         if self.cover:
+            # noinspection PyUnresolvedReferences
             dc["cover"] = self.cover.url
+            # noinspection PyUnresolvedReferences
             dc["cover_thumb"] = self.cover_thumb.url
 
         if self.carousel_img:
+            # noinspection PyUnresolvedReferences
             dc["carousel_img"] = self.carousel_img.url
+            # noinspection PyUnresolvedReferences
             dc["carousel_thumb"] = self.carousel_thumb.url
 
         if self.font:
+            # noinspection PyUnresolvedReferences
             dc["font"] = self.font.url
 
         if self.background:
+            # noinspection PyUnresolvedReferences
             dc["background"] = self.background.url
+            # noinspection PyUnresolvedReferences
             dc["background_red"] = self.background_red.url
 
         return dc
 
     def thumb(self):
+        # noinspection PyUnresolvedReferences
         return show_thumb(100, self.cover_thumb.url)
 
     def download_sheet_template(self):
+        # noinspection PyUnresolvedReferences
         return download(self.sheet_template.path)
 
     def get_media_filepath(self):
@@ -376,32 +383,24 @@ class EventButton(BaseConceptModel):
         ]
 
 
+class EventTextType(models.TextChoices):
+    TOC = "t", _("Terms and conditions")
+    REGISTER = "r", _("Registration form")
+    SEARCH = "s", _("Search")
+    SIGNUP = "g", _("Registration mail")
+    ASSIGNMENT = "a", _("Mail assignment")
+
+    CHARACTER_PROPOSED = "cs", _("Proposed character")
+    CHARACTER_APPROVED = "ca", _("Approved character")
+    CHARACTER_REVIEW = "cr", _("Character review")
+
+
 class EventText(BaseModel):
-    TOC = "t"
-    REGISTER = "r"
-    SEARCH = "s"
-    SIGNUP = "g"
-    ASSIGNMENT = "a"
-    CHARACTER_PROPOSED = "cs"
-    CHARACTER_APPROVED = "ca"
-    CHARACTER_REVIEW = "cr"
-
-    TYPE_CHOICES = [
-        (REGISTER, _("Registration form")),
-        (TOC, _("Terms and conditions")),
-        (SEARCH, _("Search")),
-        (SIGNUP, _("Registration mail")),
-        (ASSIGNMENT, _("Mail assignment")),
-        (CHARACTER_PROPOSED, _("Proposed character")),
-        (CHARACTER_APPROVED, _("Approved character")),
-        (CHARACTER_REVIEW, _("Character review")),
-    ]
-
     number = models.IntegerField(null=True, blank=True)
 
     text = HTMLField(blank=True, null=True)
 
-    typ = models.CharField(max_length=2, choices=TYPE_CHOICES, verbose_name=_("Type"))
+    typ = models.CharField(max_length=2, choices=EventTextType.choices, verbose_name=_("Type"))
 
     language = models.CharField(
         max_length=3,
@@ -537,10 +536,13 @@ class Run(BaseModel):
             return "TBA"
         if self.start == self.end:
             return formats.date_format(self.start, "j E Y")
+        # noinspection PyUnresolvedReferences
         if self.start.year != self.end.year:
             return f"{formats.date_format(self.start, 'j E Y')} - {formats.date_format(self.end, 'j E Y')}"
+        # noinspection PyUnresolvedReferences
         if self.start.month != self.end.month:
             return f"{formats.date_format(self.start, 'j E')} - {formats.date_format(self.end, 'j E Y')}"
+        # noinspection PyUnresolvedReferences
         return f"{self.start.day} - {formats.date_format(self.end, 'j E Y')}"
 
     def get_media_filepath(self):

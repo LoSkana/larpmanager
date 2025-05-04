@@ -43,7 +43,7 @@ from larpmanager.forms.utils import (
 )
 from larpmanager.models.access import EventPermission, EventRole
 from larpmanager.models.base import FeatureModule
-from larpmanager.models.event import Event, EventButton, EventConfig, EventText, ProgressStep, Run
+from larpmanager.models.event import Event, EventButton, EventConfig, EventText, EventTextType, ProgressStep, Run
 from larpmanager.models.utils import generate_id, get_all_element_configs, save_all_element_configs
 from larpmanager.utils.common import copy_class
 
@@ -554,13 +554,15 @@ class OrgaEventTextForm(MyForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        ch = EventText.TYPE_CHOICES
+        ch = EventTextType.choices
         delete_choice = []
+
         if "event_tac" not in self.params["features"]:
-            delete_choice.append(EventText.TOC)
+            delete_choice.append(EventTextType.TOC)
+
         if not self.params["event"].get_config("user_character_approval", False):
             delete_choice.extend(
-                [EventText.CHARACTER_PROPOSED, EventText.CHARACTER_APPROVED, EventText.CHARACTER_REVIEW]
+                [EventTextType.CHARACTER_PROPOSED, EventTextType.CHARACTER_APPROVED, EventTextType.CHARACTER_REVIEW]
             )
 
         for tp in delete_choice:

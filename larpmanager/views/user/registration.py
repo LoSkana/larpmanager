@@ -26,7 +26,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
+from django.utils.timezone import now as timezone_now
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.http import require_POST
 
 from larpmanager.accounting.member import info_accounting
 from larpmanager.accounting.registration import cancel_reg
@@ -45,10 +47,10 @@ from larpmanager.models.accounting import (
     Discount,
     PaymentInvoice,
 )
-from larpmanager.models.association import AssocText
+from larpmanager.models.association import AssocTextType
 from larpmanager.models.event import (
     Event,
-    EventText,
+    EventTextType,
     PreRegistration,
 )
 from larpmanager.models.member import Membership, get_user_membership
@@ -135,48 +137,20 @@ def register_exclusive(request, s, n, sc="", dis=""):
     return register(request, s, n, sc, dis)
 
 
-def save_registration(request, ctx, form, run, event, reg, gift=False):
+def save_registration(request, ctx, form, run, event, reg, gifted=False):
     # pprint(form.cleaned_data)
     # Create / modification registration
     if not reg:
         reg = Registration()
         reg.run = run
         reg.member = request.user.member
-        if gift:
+        if gifted:
             reg.redeem_code = my_uuid(16)
         reg.save()
 
     provisional = is_reg_provisional(reg)
 
-    if not gift and not provisional:
-        reg.modified = reg.modified + 1
-
-    if "info" in form.cleaned_data:
-        reg.info = form.cleaned_data["info"]
-
-    if "additionals" in form.cleaned_data:
-        reg.additionals = int(form.cleaned_data["additionals"])
-
-    if "quotas" in form.cleaned_data and form.cleaned_data["quotas"]:
-        reg.quotas = int(form.cleaned_data["quotas"])
-    # if reg.quotas == 2:
-    # acc.value += 5
-    # elif reg.quotas == 3:
-    # acc.value += 10
-
-    if "ticket" in form.cleaned_data:
-        try:
-            sel = RegistrationTicket.objects.filter(pk=form.cleaned_data["ticket"]).select_related("event").first()
-        except Exception as err:
-            raise Http404("RegistrationTicket does not exists") from err
-        if sel and sel.event != event:
-            raise Http404("RegistrationTicket wrong event")
-        if ctx["tot_payed"] and reg.ticket and reg.ticket.price > 0 and sel.price < reg.ticket.price:
-            raise Http404("lower price")
-        reg.ticket = sel
-
-    if "pay_what" in form.cleaned_data and form.cleaned_data["pay_what"]:
-        reg.pay_what = int(form.cleaned_data["pay_what"])
+    save_registration_standard(ctx, event, form, gifted, provisional, reg)
 
     # Registration question
     form.save_reg_questions(reg, False)
@@ -202,6 +176,29 @@ def save_registration(request, ctx, form, run, event, reg, gift=False):
     update_registration_status_bkg(reg.id)
 
     return reg
+
+
+def save_registration_standard(ctx, event, form, gifted, provisional, reg):
+    if not gifted and not provisional:
+        reg.modified = reg.modified + 1
+    if "info" in form.cleaned_data:
+        reg.info = form.cleaned_data["info"]
+    if "additionals" in form.cleaned_data:
+        reg.additionals = int(form.cleaned_data["additionals"])
+    if "quotas" in form.cleaned_data and form.cleaned_data["quotas"]:
+        reg.quotas = int(form.cleaned_data["quotas"])
+    if "ticket" in form.cleaned_data:
+        try:
+            sel = RegistrationTicket.objects.filter(pk=form.cleaned_data["ticket"]).select_related("event").first()
+        except Exception as err:
+            raise Http404("RegistrationTicket does not exists") from err
+        if sel and sel.event != event:
+            raise Http404("RegistrationTicket wrong event")
+        if ctx["tot_payed"] and reg.ticket and reg.ticket.price > 0 and sel.price < reg.ticket.price:
+            raise Http404("lower price")
+        reg.ticket = sel
+    if "pay_what" in form.cleaned_data and form.cleaned_data["pay_what"]:
+        reg.pay_what = int(form.cleaned_data["pay_what"])
 
 
 def registration_redirect(request, reg, new_reg, run):
@@ -282,9 +279,9 @@ def register_info(request, ctx, form, reg, dis):
     ctx["form"] = form
     ctx["lang"] = request.user.member.language
     ctx["discount_apply"] = dis
-    ctx["custom_text"] = get_event_text(ctx["event"].id, EventText.REGISTER)
-    ctx["event_terms_conditions"] = get_event_text(ctx["event"].id, EventText.TOC)
-    ctx["assoc_terms_conditions"] = get_assoc_text(ctx["a_id"], AssocText.TOC)
+    ctx["custom_text"] = get_event_text(ctx["event"].id, EventTextType.REGISTER)
+    ctx["event_terms_conditions"] = get_event_text(ctx["event"].id, EventTextType.TOC)
+    ctx["assoc_terms_conditions"] = get_assoc_text(ctx["a_id"], AssocTextType.TOC)
     ctx["hide_unavailable"] = ctx["event"].get_config("registration_hide_unavailable", False)
 
     init_form_submitted(ctx, form, request, reg)
@@ -326,65 +323,87 @@ def register(request, s, n, sc="", dis="", tk=0):
     run = ctx["run"]
     event = ctx["event"]
 
-    my_regs = []
     if hasattr(run, "reg"):
-        my_regs.append(run.reg)
-
-    new_reg = register_prepare(ctx, run.reg)
+        ctx["run_reg"] = run.reg
+    else:
+        ctx["run_reg"] = None
 
     ctx["ticket"] = tk
 
-    if ctx["ticket"]:
-        tick = RegistrationTicket.objects.get(pk=ctx["ticket"])
-        ctx["tier"] = tick.tier
-        if tick.tier == RegistrationTicket.STAFF and "closed" in run.status:
-            del run.status["closed"]
+    _apply_ticket(ctx)
 
     ctx["payment_feature"] = "payment" in get_assoc_features(ctx["a_id"])
 
+    new_reg = _register_prepare(ctx, ctx["run_reg"])
+
     if new_reg:
-        # check if there is a secret code
-        if sc:
-            if run.registration_secret != sc:
-                raise Http404("wrong registration code")
-            else:
-                ctx["advance"] = True
+        if not _check_secret_code(ctx, sc):
+            raise Http404("wrong registration code")
 
-        # check if we have to redirect it to another url to register
-        elif "register_link" in ctx["features"] and event.register_link:
-            if "tier" not in ctx or ctx["tier"] != RegistrationTicket.STAFF:
-                return redirect(event.register_link)
+        redirect_url = _check_redirect_registration(ctx, event)
+        if redirect_url:
+            return redirect(redirect_url)
 
-        # check if we have to close registration, or send to pre-register
-        elif "registration_open" in ctx["features"]:
-            if not run.registration_open or run.registration_open > datetime.now():
-                if "pre_register" in ctx["features"] and event.get_config("pre_register_active", False):
-                    return redirect("pre_register", s=ctx["event"].slug)
-                else:
-                    return render(request, "larpmanager/event/not_open.html", ctx)
-
-    if "bring_friend" in ctx["features"]:
-        for s in ["bring_friend_discount_to", "bring_friend_discount_from"]:
-            ctx[s] = ctx["event"].get_config(s, 0)
+    _add_bring_friend_discounts(ctx)
 
     get_user_membership(request.user.member, request.assoc["id"])
     ctx["member"] = request.user.member
 
     if request.method == "POST":
-        form = RegistrationForm(request.POST, ctx=ctx, instance=ctx["run"].reg)
+        form = RegistrationForm(request.POST, ctx=ctx, instance=ctx["run_reg"])
         form.sel_ticket_map(request.POST.get("ticket", ""))
         if form.is_valid():
-            reg = save_registration(request, ctx, form, run, event, ctx["run"].reg)
+            reg = save_registration(request, ctx, form, run, event, ctx["run_reg"])
             return registration_redirect(request, reg, new_reg, run)
     else:
-        form = RegistrationForm(ctx=ctx, instance=ctx["run"].reg)
+        form = RegistrationForm(ctx=ctx, instance=ctx["run_reg"])
 
-    register_info(request, ctx, form, run.reg, dis)
-
+    register_info(request, ctx, form, ctx["run_reg"], dis)
     return render(request, "larpmanager/event/register.html", ctx)
 
 
-def register_prepare(ctx, reg):
+def _apply_ticket(ctx):
+    if not ctx["ticket"]:
+        return
+    try:
+        tick = RegistrationTicket.objects.get(pk=ctx["ticket"])
+        ctx["tier"] = tick.tier
+        if tick.tier == RegistrationTicket.STAFF and "closed" in ctx["run"].status:
+            del ctx["run"].status["closed"]
+    except ObjectDoesNotExist:
+        pass
+
+
+def _check_secret_code(ctx, secret_code):
+    if secret_code:
+        if ctx["run"].registration_secret != secret_code:
+            return False
+        ctx["advance"] = True
+    return True
+
+
+def _check_redirect_registration(ctx, event):
+    if "register_link" in ctx["features"] and event.register_link:
+        if "tier" not in ctx or ctx["tier"] != RegistrationTicket.STAFF:
+            return event.register_link
+
+    if "registration_open" in ctx["features"]:
+        if not ctx["run"].registration_open or ctx["run"].registration_open > timezone_now():
+            if "pre_register" in ctx["features"] and event.get_config("pre_register_active", False):
+                return "pre_register"  # This assumes the URL name, use `reverse()` if needed
+            else:
+                return None  # handled by render later
+    return None
+
+
+def _add_bring_friend_discounts(ctx):
+    if "bring_friend" not in ctx["features"]:
+        return
+    for config_name in ["bring_friend_discount_to", "bring_friend_discount_from"]:
+        ctx[config_name] = ctx["event"].get_config(config_name, 0)
+
+
+def _register_prepare(ctx, reg):
     new_reg = True
     ctx["tot_payed"] = 0
     if reg:
@@ -418,9 +437,9 @@ def register_conditions(request, s=None):
     ctx = def_user_ctx(request)
     if s:
         ctx["event"] = get_event(request, s)["event"]
-        ctx["event_text"] = get_event_text(ctx["event"].id, EventText.TOC)
+        ctx["event_text"] = get_event_text(ctx["event"].id, EventTextType.TOC)
 
-    ctx["assoc_text"] = get_assoc_text(request.assoc["id"], AssocText.TOC)
+    ctx["assoc_text"] = get_assoc_text(request.assoc["id"], AssocTextType.TOC)
 
     return render(request, "larpmanager/event/register_conditions.html", ctx)
 
@@ -469,108 +488,102 @@ def register_conditions(request, s=None):
 
 
 @login_required
+@require_POST
 def discount(request, s, n):
-    if not request.method == "POST":
-        return JsonResponse({"res": "ko", "msg": "Not a post"})
+    def error(msg):
+        return JsonResponse({"res": "ko", "msg": msg})
+
     ctx = get_event_run(request, s, n)
+
     if "discount" not in ctx["features"]:
-        return JsonResponse({"res": "ko", "msg": "Not available, kiddo"})
-    cod = request.POST["cod"]
-    # check if discount exists
+        return error(_("Not available, kiddo"))
+
+    cod = request.POST.get("cod")
     try:
         disc = Discount.objects.get(runs__in=[ctx["run"]], cod=cod)
-    except Exception:
-        # ~ try:
-        # ~ return discount_bring_friend(request, ctx, cod)
-        # ~ except Exception as e:
+    except ObjectDoesNotExist:
         print(traceback.format_exc())
-        return JsonResponse({"res": "ko", "msg": _("Discount code not valid")})
-        # delete expired accounting item
-    now = datetime.now()
-    AccountingItemDiscount.objects.filter(expires__lte=now).delete()
-    # check if not already registered
-    try:
-        Registration.objects.get(member=request.user.member, run=ctx["run"], cancellation_date__isnull=True)
-        if disc.only_reg:
-            return JsonResponse(
-                {
-                    "res": "ko",
-                    "msg": _("Discounts only applicable with new registrations"),
-                }
-            )
+        return error(_("Discount code not valid"))
 
-    except Exception:
-        pass
-        # check if not already used
-    try:
-        ac = AccountingItemDiscount.objects.get(disc=disc, member=request.user.member, reg__run=ctx["run"])
-        return JsonResponse({"res": "ko", "msg": _("Code already used")})
-    except Exception:
-        pass
-        # check if type not already used
-    try:
-        ac = AccountingItemDiscount.objects.get(disc__typ=disc.typ, member=request.user.member, reg__run=ctx["run"])
-        return JsonResponse({"res": "ko", "msg": _("Non-cumulative code")})
-    except Exception:
-        pass
-        # Count already used
-    if disc.max_redeem > 0:
-        if AccountingItemDiscount.objects.filter(disc=disc, reg__run=ctx["run"]).count() > disc.max_redeem:
-            return JsonResponse(
-                {
-                    "res": "ko",
-                    "msg": _("Sorry, this faciliation code has already been used the maximum number allowed"),
-                }
-            )
-            # for play again, check some things
-    if disc.typ == Discount.PLAYAGAIN:
-        # Check there are no other applied discount stores
-        if AccountingItemDiscount.objects.filter(member=request.user.member, reg__run=ctx["run"]).count() > 0:
-            return JsonResponse({"res": "ko", "msg": _("Discount not combinable with other benefits.")})
-        # Check that the player is enrolled in another run in the future
-        if (
-            Registration.objects.filter(member=request.user.member, run__event=ctx["event"])
-            .exclude(run=ctx["run"])
-            .count()
-            == 0
-        ):
-            return JsonResponse(
-                {
-                    "res": "ko",
-                    "msg": _("Discount only applicable if you are signed up for another run of the same event."),
-                }
-            )
-    else:
-        if (
-            AccountingItemDiscount.objects.filter(
-                member=request.user.member, reg__run=ctx["run"], disc__typ=Discount.PLAYAGAIN
-            ).count()
-            > 0
-        ):
-            return JsonResponse({"res": "ko", "msg": _("Discount not combinable with other benefits.")})
-    # ~ # for pre-register, check some things
-    # ~ if disc.typ == Discount.STANDARD:
-    # ~ # check there are no discount stores a friend
-    # ~ if AccountingItemDiscount.objects.filter(member=request.user.member, run=ctx['run'], disc__typ=Discount.FRIEND).count() > 0:
-    # ~ Return Jsonresonse ({'res':' ko ',' msg ': _ (' discount not comulable with a friend 'door')})
-    # crea accounting item
-    ac = AccountingItemDiscount()
-    ac.value = disc.value
-    ac.member = request.user.member
-    ac.expires = now + timedelta(minutes=15)
-    ac.disc = disc
-    ac.run = ctx["run"]
-    ac.assoc_id = ctx["a_id"]
-    ac.save()
+    now = timezone_now()
+    AccountingItemDiscount.objects.filter(expires__lte=now).delete()
+
+    member = request.user.member
+    run = ctx["run"]
+    event = ctx["event"]
+
+    check = _check_discount(disc, member, run, event)
+    if check:
+        return error(check)
+
+    AccountingItemDiscount.objects.create(
+        value=disc.value,
+        member=member,
+        expires=now + timedelta(minutes=15),
+        disc=disc,
+        run=run,
+        assoc_id=ctx["a_id"],
+    )
+
     return JsonResponse(
         {
             "res": "ok",
             "msg": _(
-                "The discount has been added! It has been reserved for you for 15 minutes, after "
-                "which it will be removed"
+                "The discount has been added! It has been reserved for you for 15 minutes, after which it will be removed"
             ),
         }
     )
+
+
+def _check_discount(disc, member, run, event):
+    if _is_discount_invalid_for_registration(disc, member, run):
+        return _("Discounts only applicable with new registrations")
+
+    if _is_discount_already_used(disc, member, run):
+        return _("Code already used")
+
+    if _is_type_already_used(disc.typ, member, run):
+        return _("Non-cumulative code")
+
+    if disc.max_redeem > 0 and _is_discount_maxed(disc, run):
+        return _("Sorry, this facilitation code has already been used the maximum number allowed")
+
+    if not _validate_exclusive_logic(disc, member, run, event):
+        return _("Discount not combinable with other benefits.")
+
+    return None
+
+
+def _is_discount_invalid_for_registration(disc, member, run):
+    if not disc.only_reg:
+        return False
+    return Registration.objects.filter(member=member, run=run, cancellation_date__isnull=True).exists()
+
+
+def _is_discount_already_used(disc, member, run):
+    return AccountingItemDiscount.objects.filter(disc=disc, member=member, reg__run=run).exists()
+
+
+def _is_type_already_used(disc_type, member, run):
+    return AccountingItemDiscount.objects.filter(disc__typ=disc_type, member=member, reg__run=run).exists()
+
+
+def _is_discount_maxed(disc, run):
+    count = AccountingItemDiscount.objects.filter(disc=disc, reg__run=run).count()
+    return count > disc.max_redeem
+
+
+def _validate_exclusive_logic(disc, member, run, event):
+    # For PLAYAGAIN discount: no other discounts and has another registration
+    if disc.typ == Discount.PLAYAGAIN:
+        if AccountingItemDiscount.objects.filter(member=member, reg__run=run).exists():
+            return False
+        if not Registration.objects.filter(member=member, run__event=event).exclude(run=run).exists():
+            return False
+    # If PLAYAGAIN discount was already applied, no other allowed
+    elif AccountingItemDiscount.objects.filter(member=member, reg__run=run, disc__typ=Discount.PLAYAGAIN).exists():
+        return False
+    return True
 
 
 @login_required
@@ -608,8 +621,8 @@ def unregister(request, s, n):
         return redirect("accounting")
 
     ctx["reg"] = reg
-    ctx["event_terms_conditions"] = get_event_text(ctx["event"].id, EventText.TOC)
-    ctx["assoc_terms_conditions"] = get_assoc_text(ctx["a_id"], AssocText.TOC)
+    ctx["event_terms_conditions"] = get_event_text(ctx["event"].id, EventTextType.TOC)
+    ctx["assoc_terms_conditions"] = get_assoc_text(ctx["a_id"], AssocTextType.TOC)
     return render(request, "larpmanager/event/unregister.html", ctx)
 
 
@@ -652,7 +665,7 @@ def gift_edit(request, s, n, r):
     check_registration_open(ctx, request)
 
     reg = get_registration_gift(ctx, r, request)
-    register_prepare(ctx, reg)
+    _register_prepare(ctx, reg)
 
     if request.method == "POST":
         form = RegistrationGiftForm(request.POST, ctx=ctx, instance=reg)
@@ -661,7 +674,7 @@ def gift_edit(request, s, n, r):
                 cancel_reg(reg)
                 messages.success(request, _("Gift card cancelled!"))
             else:
-                save_registration(request, ctx, form, ctx["run"], ctx["event"], reg, gift=True)
+                save_registration(request, ctx, form, ctx["run"], ctx["event"], reg, gifted=True)
                 messages.success(request, _("Operation completed!"))
             return redirect("gift", s=s, n=n)
     else:

@@ -27,6 +27,7 @@ from datetime import datetime, timedelta, timezone
 import lxml.etree
 import pdfkit
 from django.conf import settings as conf_settings
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from django.http import Http404, HttpResponse
@@ -37,7 +38,7 @@ from django.utils.translation import gettext_lazy as _
 from xhtml2pdf import pisa
 
 from larpmanager.cache.character import get_event_cache_all
-from larpmanager.models.association import AssocText
+from larpmanager.models.association import AssocTextType
 from larpmanager.models.casting import AssignmentTrait, Casting
 from larpmanager.models.miscellanea import PlayerRelationship, Util
 from larpmanager.models.registration import Registration
@@ -124,10 +125,10 @@ def add_pdf_instructions(ctx):
     for s in ["header_content", "footer_content"]:
         if s not in ctx:
             continue
-        for el in codes:
+        for el, value in codes.items():
             if el not in ctx[s]:
                 continue
-            ctx[s] = ctx[s].replace(el, codes[el])
+            ctx[s] = ctx[s].replace(el, value)
 
     # replace utils by code
     for s in ["header_content", "footer_content", "page_css"]:
@@ -202,7 +203,7 @@ def pdf_template(ctx, tmp, out, small=False, html=False):
 def get_membership_request(ctx):
     fp = ctx["member"].get_request_filepath()
     temp_ctx = {"member": ctx["member"]}
-    template = get_assoc_text(ctx["a_id"], AssocText.MEMBERSHIP)
+    template = get_assoc_text(ctx["a_id"], AssocTextType.MEMBERSHIP)
     pdf_template(temp_ctx, template, fp, html=True)
     return return_pdf(fp, _("Membership registration of %(user)s") % {"user": ctx["member"]})
 
@@ -378,7 +379,7 @@ def remove_pdf_at(instance):
     try:
         ch = Registration.objects.get(run=instance.run, member=instance.member)
         remove_char_pdf(ch, instance.run)
-    except Exception:
+    except ObjectDoesNotExist:
         pass
 
 
@@ -447,7 +448,8 @@ def print_run_bkg(s, n):
 def odt_template(ctx, char, fp, template, aux_template):
     attempt = 0
     excepts = []
-    while attempt < 5:
+    max_attempts = 5
+    while attempt < max_attempts:
         try:
             exec_odt_template(ctx, char, fp, template, aux_template)
             return
@@ -498,7 +500,7 @@ def exec_odt_template(ctx, char, fp, template, aux_template):
 
 
 # translate html markup to odt
-def get_odt_content(ctx, orig, working_dir, aux_template):
+def get_odt_content(ctx, working_dir, aux_template):
     html = aux_template.render(ctx)
     # get odt teaser
     o_html = os.path.join(working_dir, "auxiliary.html")
@@ -555,7 +557,7 @@ def update_content(ctx, working_dir, zip_dir, char, aux_template):
     content = os.path.join(zip_dir, "content.xml")
     replace_data(content, char)
     doc = lxml.etree.parse(content)
-    elements = get_odt_content(ctx, char["teaser"], working_dir, aux_template)
+    elements = get_odt_content(ctx, working_dir, aux_template)
 
     styles = doc.xpath('//*[local-name()="automatic-styles"]')[0]
     for ch in styles.getchildren():

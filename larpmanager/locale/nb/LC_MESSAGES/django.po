@@ -2540,6 +2540,12 @@ msgstr "Forhåndsregistrering"
 msgid "Registration fee"
 msgstr "Deltakeravgift"
 
+msgid "Reminder payment"
+msgstr "Påminnelse om betaling"
+
+msgid "Reminder profile"
+msgstr "Påminnelsesprofil"
+
 msgid "Request approved"
 msgstr "Anmodning godkjent"
 
@@ -3064,6 +3070,9 @@ msgstr "Administrer spillernes data"
 msgid "Name - international"
 msgstr "Engelsk navn"
 
+msgid "Not available, kiddo"
+msgstr "Ikke tilgjengelig, gutt"
+
 msgid "Number of passengers"
 msgstr "Antall passasjerer"
 
@@ -3427,6 +3436,9 @@ msgstr "Opptaksvilkår"
 msgid "Registrations not open!"
 msgstr "Registreringen er ennå ikke åpnet!"
 
+msgid "Reminder membership fee"
+msgstr "Påminnelse om medlemsavgift"
+
 msgid "Update your data in the"
 msgstr "Oppdater dataene dine i"
 
@@ -3682,6 +3694,9 @@ msgstr "Prosess for spillerregistrering"
 
 msgid "Pre-registration cancelled!"
 msgstr "Forhåndsregistrering avlyst!"
+
+msgid "Reminder membership request"
+msgstr "Påminnelse om medlemskap"
 
 msgid "Various additional features"
 msgstr "Ulike tilleggsfunksjoner"
@@ -6085,11 +6100,6 @@ msgid ""
 msgstr "Angi om ferdigheten er synlig for brukerne og kan kjøpes fritt."
 
 msgid ""
-"Sorry, this faciliation code has already been used the maximum number "
-"allowed"
-msgstr "Beklager, maksimalt antall innrømmelser for denne koden er nådd."
-
-msgid ""
 "This page allows you to add or modify an option in a character form "
 "question."
 msgstr ""
@@ -6196,6 +6206,13 @@ msgstr ""
 "sikkerhetsrelatert informasjon på en trygg måte."
 
 msgid ""
+"Sorry, this facilitation code has already been used the maximum number "
+"allowed"
+msgstr ""
+"Beklager, denne tilretteleggingskoden har allerede blitt brukt det maksimalt"
+" tillatte antallet"
+
+msgid ""
 "This page allows you to return part of the quota to a player who has "
 "cancelled"
 msgstr ""
@@ -6273,13 +6290,6 @@ msgid ""
 msgstr ""
 "Gjør det mulig å definere hvilke brukere som skal ha tilgang til "
 "arrangørfunksjonalitetene."
-
-msgid ""
-"Discount only applicable if you are signed up for another run of the same "
-"event."
-msgstr ""
-"Rabatten gjelder kun hvis du er påmeldt til et annet løp i samme "
-"arrangement."
 
 msgid ""
 "Indicate the date when registration opens. Leave blank to not open "

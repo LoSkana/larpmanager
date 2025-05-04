@@ -22,10 +22,11 @@ from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.access import get_event_organizers
-from larpmanager.models.association import get_url, hdr
+from larpmanager.models.association import AssocTextType, get_url, hdr
 from larpmanager.utils.deadlines import check_run_deadlines
 from larpmanager.utils.registration import is_reg_provisional
 from larpmanager.utils.tasks import my_send_mail
+from larpmanager.utils.text import get_assoc_text
 
 
 def remember_membership(reg):
@@ -33,6 +34,14 @@ def remember_membership(reg):
 
     subj = hdr(reg.run.event) + _("Confirmation of registration for %(event)s") % {"event": reg.run}
 
+    body = get_assoc_text(reg.run.event.assoc_id, AssocTextType.REMINDER_MEMBERSHIP) or get_remember_membership_body(
+        reg
+    )
+
+    my_send_mail(subj, body, reg.member, reg.run)
+
+
+def get_remember_membership_body(reg):
     body = _(
         "Hello! We would like to remind you that in order to confirm your provisional "
         "registration of %(event)s you need to apply for admission as a member of the "
@@ -47,16 +56,28 @@ def remember_membership(reg):
         "the event and we will cancel your registration, so that other players can signup "
         "to your place."
     )
-
-    my_send_mail(subj, body, reg.member, reg.run)
+    return body
 
 
 def remember_pay(reg):
     activate(reg.member.language)
 
     provisional = is_reg_provisional(reg)
-
     context = {"event": reg.run}
+
+    if provisional:
+        subj = hdr(reg.run.event) + _("Confirm registration to %(event)s") % context
+    else:
+        subj = hdr(reg.run.event) + _("Complete payment for %(event)s") % context
+
+    body = get_assoc_text(reg.run.event.assoc_id, AssocTextType.REMINDER_PAY) or get_remember_pay_body(
+        context, provisional, reg
+    )
+
+    my_send_mail(subj, body, reg.member, reg.run)
+
+
+def get_remember_pay_body(context, provisional, reg):
     symbol = reg.run.event.assoc.get_currency_symbol()
     amount = f"{reg.quota:.2f}{symbol}"
     deadline = reg.deadline
@@ -64,10 +85,8 @@ def remember_pay(reg):
     payment_url = f"{url}/{reg.run.event.slug}/{reg.id}"
 
     if provisional:
-        subj = hdr(reg.run.event) + _("Confirm registration to %(event)s") % context
         body = _("Hello! We are contacting you regarding your provisional registration at <b>%(event)s</b>.") % context
     else:
-        subj = hdr(reg.run.event) + _("Complete payment for %(event)s") % context
         body = _("Hello! We are contacting you regarding your registration at <b>%(event)s</b>.") % context
 
     if deadline <= 0:
@@ -95,7 +114,7 @@ def remember_pay(reg):
         "to your place."
     )
 
-    my_send_mail(subj, body, reg.member, reg.run)
+    return body
 
 
 def remember_profile(reg):
@@ -104,7 +123,13 @@ def remember_profile(reg):
 
     subj = hdr(reg.run.event) + _("Profile compilation reminder for %(event)s") % context
 
-    body = (
+    body = get_assoc_text(reg.run.event.assoc_id, AssocTextType.REMINDER_PROFILE) or get_remember_profile_body(context)
+
+    my_send_mail(subj, body, reg.member, reg.run)
+
+
+def get_remember_profile_body(context):
+    return (
         _(
             "Hello! You have signed up for %(event)s, but have not yet completed your "
             "profile. It takes 5 minutes, just <a href='%(url)s'>click here</a> and complete "
@@ -113,8 +138,6 @@ def remember_profile(reg):
         % context
     )
 
-    my_send_mail(subj, body, reg.member, reg.run)
-
 
 def remember_membership_fee(reg):
     activate(reg.member.language)
@@ -122,25 +145,29 @@ def remember_membership_fee(reg):
 
     subj = hdr(reg.run.event) + _("Reminder payment of membership fees for %(event)s") % context
 
+    body = get_assoc_text(
+        reg.run.event.assoc_id, AssocTextType.REMINDER_MEMBERSHIP_FEE
+    ) or get_remember_membership_fee_body(context, reg)
+
+    my_send_mail(subj, body, reg.member, reg.run)
+
+
+def get_remember_membership_fee_body(context, reg):
     body = (
         _("Hello! You have registered for %(event)s, but we have not yet received your annual membership fee payment.")
         % context
     )
-
     body += "<br /><br />" + _(
         "It is compulsory to take part in all our live events, as it also includes the insurance fee."
     )
-
     body += "<br /><br />" + _(
         "Unfortunately, without the balance of the fee, it is NOT possible for us to let you participate at the event."
     )
-
     body += "<br /><br />" + _(
         "You can make the payment in just a few minutes <a href= %(url)s'>here</a>. Let "
         "us know if you encounter any problems, or if we can help in any way!"
     ) % {"url": get_url("accounting", reg.run.event)}
-
-    my_send_mail(subj, body, reg.member, reg.run)
+    return body
 
 
 def notify_deadlines(run):

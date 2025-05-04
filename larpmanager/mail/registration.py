@@ -27,8 +27,8 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.access import get_event_organizers
-from larpmanager.models.association import AssocText, get_url, hdr
-from larpmanager.models.event import EventText, PreRegistration, Run
+from larpmanager.models.association import AssocTextType, get_url, hdr
+from larpmanager.models.event import EventTextType, PreRegistration, Run
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
 from larpmanager.utils.registration import get_registration_options, is_reg_provisional
@@ -65,8 +65,8 @@ def update_registration_status(instance):
     body += registration_options(instance)
 
     for custom_mesg in [
-        get_event_text(instance.run.event_id, EventText.SIGNUP),
-        get_assoc_text(instance.run.event.assoc_id, AssocText.SIGNUP),
+        get_event_text(instance.run.event_id, EventTextType.SIGNUP),
+        get_assoc_text(instance.run.event.assoc_id, AssocTextType.SIGNUP),
     ]:
         if custom_mesg:
             body += "<br />" + custom_mesg
@@ -195,7 +195,7 @@ def update_registration_character_rel_post(sender, instance, created, **kwargs):
             "experience, do not discuss its content with other participants!"
         )
 
-    custom_message_ass = get_event_text(instance.reg.run.event_id, EventText.ASSIGNMENT)
+    custom_message_ass = get_event_text(instance.reg.run.event_id, EventTextType.ASSIGNMENT)
     if custom_message_ass:
         body += "<br />" + custom_message_ass
 

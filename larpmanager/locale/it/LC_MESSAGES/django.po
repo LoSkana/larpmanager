@@ -2540,6 +2540,12 @@ msgstr "Pre-iscrizione"
 msgid "Registration fee"
 msgstr "Quota iscrizione"
 
+msgid "Reminder payment"
+msgstr "Promemoria di pagamento"
+
+msgid "Reminder profile"
+msgstr "Profilo di promemoria"
+
 msgid "Request approved"
 msgstr "Richiesta approvata"
 
@@ -3064,6 +3070,9 @@ msgstr "Gestire i dati dei giocatori"
 msgid "Name - international"
 msgstr "Nome inglese"
 
+msgid "Not available, kiddo"
+msgstr "Non disponibile, ragazzo"
+
 msgid "Number of passengers"
 msgstr "Numero di passeggeri"
 
@@ -3427,6 +3436,9 @@ msgstr "Condizioni iscrizione"
 msgid "Registrations not open!"
 msgstr "Le iscrizioni non sono ancora aperte!"
 
+msgid "Reminder membership fee"
+msgstr "Promemoria quota associativa"
+
 msgid "Update your data in the"
 msgstr "Aggiorna i tuoi dati nel"
 
@@ -3682,6 +3694,9 @@ msgstr "Procedura di registrazione dei giocatori"
 
 msgid "Pre-registration cancelled!"
 msgstr "Pre-iscrizione cancellata!"
+
+msgid "Reminder membership request"
+msgstr "Promemoria richiesta di adesione"
 
 msgid "Various additional features"
 msgstr "Varie funzioni aggiuntive"
@@ -6171,13 +6186,6 @@ msgstr ""
 "acquistata"
 
 msgid ""
-"Sorry, this faciliation code has already been used the maximum number "
-"allowed"
-msgstr ""
-"Siamo spiacenti, è stato raggiunto il numero massimo di agevolazioni per "
-"questo codice"
-
-msgid ""
 "This page allows you to add or modify an option in a character form "
 "question."
 msgstr ""
@@ -6286,6 +6294,13 @@ msgstr ""
 "informazioni relative alla sicurezza."
 
 msgid ""
+"Sorry, this facilitation code has already been used the maximum number "
+"allowed"
+msgstr ""
+"Siamo spiacenti, questo codice di agevolazione è già stato utilizzato nel "
+"numero massimo consentito."
+
+msgid ""
 "This page allows you to return part of the quota to a player who has "
 "cancelled"
 msgstr ""
@@ -6368,12 +6383,6 @@ msgid ""
 msgstr ""
 "Permette di definire quali utenti possono accedere alle funzionalità "
 "dell'organizzatore di eventi."
-
-msgid ""
-"Discount only applicable if you are signed up for another run of the same "
-"event."
-msgstr ""
-"Sconto applicabile solo se sei iscritto ad un'altra run dello stesso evento"
 
 msgid ""
 "Indicate the date when registration opens. Leave blank to not open "
