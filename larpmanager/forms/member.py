@@ -324,6 +324,7 @@ class ProfileForm(BaseProfileForm):
             "document_type",
             "document",
             "document_issued",
+            "document_expiration",
             "fiscal_code",
             "phone_contact",
         )
@@ -334,6 +335,7 @@ class ProfileForm(BaseProfileForm):
             "presentation": Textarea(attrs={"cols": 80, "rows": 5}),
             "birth_date": DatePickerInput,
             "document_issued": DatePickerInput,
+            "document_expiration": DatePickerInput,
         }
 
     def __init__(self, *args, **kwargs):

@@ -4011,6 +4011,9 @@ msgstr "Visualizza tutte le informazioni sull'evento nel"
 msgid "Ask the organisers to activate it."
 msgstr "Richiedi agli organizzatori di attivarla."
 
+msgid "Date of expiration of the document"
+msgstr "Data di scadenza del documento"
+
 msgid "Delay in organization registration"
 msgstr "Ritardo nella registrazione dell'organizzazione"
 
@@ -8459,6 +8462,13 @@ msgstr ""
 "Aggiunge un sistema a quiz per le domande del workshop. Gli organizzatori "
 "possono definire moduli, domande e risposte corrette che i giocatori devono "
 "completare."
+
+msgid ""
+"Leave blank if the document has no expiration date - Please check that it "
+"does not expire before the event you want to signup up for."
+msgstr ""
+"Lasciare in bianco se il documento non ha una data di scadenza - Verificare "
+"che non scada prima dell'evento a cui ci si vuole iscrivere."
 
 msgid ""
 "Select from the drop-down list the characters to be added to the faction. "
