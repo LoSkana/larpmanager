@@ -903,9 +903,6 @@ msgstr "Kampaň"
 msgid "Carousel"
 msgstr "Kolotoč"
 
-msgid "Centarui"
-msgstr "Centarui"
-
 msgid "Centaurs"
 msgstr "Kentauři"
 
@@ -1367,6 +1364,9 @@ msgstr "Obal odkazu"
 
 msgid "Deactivate"
 msgstr "Deaktivace"
+
+msgid "Easter egg"
+msgstr "Velikonoční vajíčko"
 
 msgid "Email list"
 msgstr "e-mailový seznam"

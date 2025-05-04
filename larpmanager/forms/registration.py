@@ -676,6 +676,9 @@ class OrgaRegistrationTicketForm(MyForm):
         model = RegistrationTicket
         fields = "__all__"
         exclude = ("number", "order")
+        widgets = {
+            "details": forms.Textarea(attrs={"rows": 3, "cols": 40}),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
