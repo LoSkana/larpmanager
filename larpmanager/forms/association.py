@@ -289,7 +289,7 @@ class ExeConfigForm(MyForm):
             ls.append(("mail_server", "host_password", ConfigType.CHAR, section, label, help_text))
 
         if "centauri" in self.params["features"]:
-            section = _("Centarui")
+            section = _("Easter egg")
 
             label = _("Probability")
             help_text = _("Probability of showing the special page (out of thousands)")

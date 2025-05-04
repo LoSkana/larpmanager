@@ -281,7 +281,7 @@ msgstr ""
 msgid "Password of account"
 msgstr ""
 
-msgid "Centarui"
+msgid "Easter egg"
 msgstr ""
 
 msgid "Probability"

@@ -903,9 +903,6 @@ msgstr "Kampanjen"
 msgid "Carousel"
 msgstr "Karusell"
 
-msgid "Centarui"
-msgstr "Centarui"
-
 msgid "Centaurs"
 msgstr "Kentaurer"
 
@@ -1367,6 +1364,9 @@ msgstr "Lenke til omslag"
 
 msgid "Deactivate"
 msgstr "Deaktiver"
+
+msgid "Easter egg"
+msgstr "Påskeegg"
 
 msgid "Email list"
 msgstr "e-postliste"
