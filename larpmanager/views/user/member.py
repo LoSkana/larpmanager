@@ -49,7 +49,7 @@ from larpmanager.mail.member import send_membership_confirm
 from larpmanager.models.accounting import (
     AccountingItemMembership,
 )
-from larpmanager.models.association import Association, AssocText
+from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.member import Badge, Member, Membership, Vote, get_user_membership
 from larpmanager.models.miscellanea import (
     ChatMessage,
@@ -104,7 +104,7 @@ def profile(request):
 
     ctx["form"] = form
     ctx["member"] = request.user.member
-    ctx["custom_text"] = get_assoc_text(request.assoc["id"], AssocText.PROFILE)
+    ctx["custom_text"] = get_assoc_text(request.assoc["id"], AssocTextType.PROFILE)
 
     if "profile" in request.assoc["members_fields"]:
         ctx["avatar_form"] = AvatarForm()
@@ -263,7 +263,7 @@ def membership(request):
     ).exists()
 
     if el.status == Membership.ACCEPTED:
-        ctx["statute"] = get_assoc_text(request.assoc["id"], AssocText.STATUTE)
+        ctx["statute"] = get_assoc_text(request.assoc["id"], AssocTextType.STATUTE)
 
     ctx["disable_join"] = True
 
@@ -423,8 +423,7 @@ def leaderboard(request, p=1):
     num_pages = math.ceil(len(member_list) / num_el)
     if p < 0:
         p = 1
-    if p > num_pages:
-        p = num_pages
+    p = min(p, num_pages)
     ctx = def_user_ctx(request)
     ctx.update(
         {

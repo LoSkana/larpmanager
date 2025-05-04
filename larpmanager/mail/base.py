@@ -33,7 +33,7 @@ from larpmanager.cache.links import reset_event_links
 from larpmanager.models.access import AssocRole, EventRole, get_assoc_executives, get_event_organizers
 from larpmanager.models.association import get_url, hdr
 from larpmanager.models.casting import AssignmentTrait, Casting
-from larpmanager.models.event import EventText
+from larpmanager.models.event import EventTextType
 from larpmanager.models.member import Member
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.tasks import my_send_mail, my_send_simple_mail
@@ -203,7 +203,7 @@ def notify_trait_assigned(sender, instance, created, **kwargs):
             "shared before the start of the event. To avoid accidentally spoiling your "
             "experience, do not discuss its content with other participants!"
         )
-    custom_message_ass = get_event_text(instance.run.event_id, EventText.ASSIGNMENT)
+    custom_message_ass = get_event_text(instance.run.event_id, EventTextType.ASSIGNMENT)
     if custom_message_ass:
         body += "<br />" + custom_message_ass
     my_send_mail(subj, body, instance.member, instance.run)
@@ -235,11 +235,11 @@ def character_update_status(sender, instance, **kwargs):
         if prev.status != instance.status:
             body = None
             if instance.status == CharacterStatus.PROPOSED:
-                body = get_event_text(instance.event_id, EventText.CHARACTER_PROPOSED)
+                body = get_event_text(instance.event_id, EventTextType.CHARACTER_PROPOSED)
             if instance.status == CharacterStatus.REVIEW:
-                body = get_event_text(instance.event_id, EventText.CHARACTER_REVIEW)
+                body = get_event_text(instance.event_id, EventTextType.CHARACTER_REVIEW)
             if instance.status == CharacterStatus.APPROVED:
-                body = get_event_text(instance.event_id, EventText.CHARACTER_APPROVED)
+                body = get_event_text(instance.event_id, EventTextType.CHARACTER_APPROVED)
 
             if not body:
                 return

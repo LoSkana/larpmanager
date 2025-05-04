@@ -34,7 +34,7 @@ from larpmanager.forms.utils import (
     save_permissions_role,
 )
 from larpmanager.models.access import AssocPermission, AssocRole
-from larpmanager.models.association import Association, AssocText
+from larpmanager.models.association import Association, AssocText, AssocTextType
 
 
 class ExeAssociationForm(MyForm):
@@ -82,17 +82,38 @@ class ExeAssocTextForm(MyForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        ch = AssocText.TYPE_CHOICES
-        ch = remove_choice(ch, AssocText.PRIVACY)
+        ch = AssocTextType.choices
+        delete_choice = [AssocTextType.PRIVACY]
+
         if "assoc_tac" not in self.params["features"]:
-            ch = remove_choice(ch, AssocText.TOC)
+            delete_choice.append(AssocTextType.TOC)
+
         if "legal_notice" not in self.params["features"]:
-            ch = remove_choice(ch, AssocText.LEGAL)
+            delete_choice.append(AssocTextType.LEGAL)
+
         if "membership" not in self.params["features"]:
-            ch = remove_choice(ch, AssocText.MEMBERSHIP)
-            ch = remove_choice(ch, AssocText.STATUTE)
+            delete_choice.extend([AssocTextType.MEMBERSHIP, AssocTextType.STATUTE])
+
         if "receipts" not in self.params["features"]:
-            ch = remove_choice(ch, AssocText.RECEIPT)
+            delete_choice.append(AssocTextType.RECEIPT)
+
+        if "remind" not in self.params["features"]:
+            delete_choice.extend(
+                [
+                    AssocTextType.REMINDER_MEMBERSHIP,
+                    AssocTextType.REMINDER_MEMBERSHIP_FEE,
+                    AssocTextType.REMINDER_PAY,
+                    AssocTextType.REMINDER_PROFILE,
+                ]
+            )
+        elif "membership" not in self.params["features"]:
+            delete_choice.extend([AssocTextType.REMINDER_MEMBERSHIP, AssocTextType.REMINDER_MEMBERSHIP_FEE])
+        else:
+            delete_choice.extend([AssocTextType.REMINDER_PROFILE])
+
+        for tp in delete_choice:
+            ch = remove_choice(ch, tp)
+
         self.fields["typ"].choices = ch
 
     def clean(self):

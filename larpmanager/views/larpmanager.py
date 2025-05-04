@@ -50,7 +50,7 @@ from larpmanager.models.access import AssocRole, EventRole
 from larpmanager.models.accounting import (
     PaymentInvoice,
 )
-from larpmanager.models.association import Association, AssocText
+from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.base import Feature
 from larpmanager.models.event import (
     Event,
@@ -444,7 +444,7 @@ def blog(request, slug=""):
 @cache_page(60 * 15)
 def privacy(request):
     ctx = get_lm_assocs()
-    ctx.update({"text": get_assoc_text(request.assoc["id"], AssocText.PRIVACY)})
+    ctx.update({"text": get_assoc_text(request.assoc["id"], AssocTextType.PRIVACY)})
     return render(request, "larpmanager/larpmanager/privacy.html", ctx)
 
 
@@ -484,7 +484,7 @@ def lm_list(request):
 @login_required
 def lm_payments(request):
     ctx = check_lm_admin(request)
-
+    min_registrations = 5
     que = Run.objects.filter(paid__isnull=True).order_by("start")
 
     ctx["list"] = []
@@ -495,7 +495,7 @@ def lm_payments(request):
 
         get_run_lm_payment(el)
 
-        if el.active_registrations < 5:
+        if el.active_registrations < min_registrations:
             continue
 
         ctx["list"].append(el)

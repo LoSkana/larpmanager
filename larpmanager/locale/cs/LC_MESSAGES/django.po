@@ -2540,6 +2540,12 @@ msgstr "Předběžná registrace"
 msgid "Registration fee"
 msgstr "Vstupní poplatek"
 
+msgid "Reminder payment"
+msgstr "Připomínková platba"
+
+msgid "Reminder profile"
+msgstr "Připomínkový profil"
+
 msgid "Request approved"
 msgstr "Žádost schválena"
 
@@ -3064,6 +3070,9 @@ msgstr "Správa dat hráčů"
 msgid "Name - international"
 msgstr "Anglický název"
 
+msgid "Not available, kiddo"
+msgstr "Není k dispozici, chlapče"
+
 msgid "Number of passengers"
 msgstr "Počet cestujících"
 
@@ -3427,6 +3436,9 @@ msgstr "Vstupní podmínky"
 msgid "Registrations not open!"
 msgstr "Registrace ještě není otevřena!"
 
+msgid "Reminder membership fee"
+msgstr "Připomenutí členského poplatku"
+
 msgid "Update your data in the"
 msgstr "Aktualizujte data v"
 
@@ -3682,6 +3694,9 @@ msgstr "Proces registrace hráče"
 
 msgid "Pre-registration cancelled!"
 msgstr "Předběžná registrace zrušena!"
+
+msgid "Reminder membership request"
+msgstr "Připomínka žádosti o členství"
 
 msgid "Various additional features"
 msgstr "Různé doplňkové funkce"
@@ -6006,11 +6021,6 @@ msgstr ""
 "zakoupit."
 
 msgid ""
-"Sorry, this faciliation code has already been used the maximum number "
-"allowed"
-msgstr "Omlouváme se, maximální počet úlev pro tento kód byl vyčerpán."
-
-msgid ""
 "This page allows you to add or modify an option in a character form "
 "question."
 msgstr ""
@@ -6115,6 +6125,13 @@ msgstr ""
 " bezpečnosti."
 
 msgid ""
+"Sorry, this facilitation code has already been used the maximum number "
+"allowed"
+msgstr ""
+"Omlouváme se, tento kód usnadnění již byl použit v maximálním povoleném "
+"počtu."
+
+msgid ""
 "This page allows you to return part of the quota to a player who has "
 "cancelled"
 msgstr "Tato stránka umožňuje vrátit část kvóty hráči, který ji zrušil."
@@ -6189,12 +6206,6 @@ msgid ""
 msgstr ""
 "Umožňuje definovat, kteří uživatelé mají přístup k funkcím organizátora "
 "událostí."
-
-msgid ""
-"Discount only applicable if you are signed up for another run of the same "
-"event."
-msgstr ""
-"Sleva platí pouze v případě, že jste přihlášeni na jiný běh stejné akce."
 
 msgid ""
 "Indicate the date when registration opens. Leave blank to not open "

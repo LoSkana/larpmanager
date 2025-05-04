@@ -188,10 +188,12 @@ class Association(BaseModel):
         ]
 
     def get_currency_symbol(self):
+        # noinspection PyUnresolvedReferences
         return get_currency_symbol(self.get_payment_currency_display())
 
     def get_payment_details_fields(self, features):
         res = {}
+        # noinspection PyUnresolvedReferences
         for el in self.payment_methods.values_list("slug", "fields"):
             ls = [el[0] + "_descr"]
             if "payment_fees" in features:
@@ -234,37 +236,33 @@ class AssociationConfig(BaseModel):
         ]
 
 
-class AssocText(BaseModel):
-    PROFILE = "p"
-    HOME = "h"
-    SIGNUP = "u"
-    MEMBERSHIP = "m"
-    STATUTE = "s"
-    LEGAL = "l"
-    FOOTER = "f"
-    TOC = "t"
-    RECEIPT = "r"
-    SIGNATURE = "g"
-    PRIVACY = "y"
-    TYPE_CHOICES = [
-        (HOME, _("Home")),
-        (PROFILE, _("Profile")),
-        (SIGNUP, _("Registration mail")),
-        (MEMBERSHIP, _("Membership")),
-        (LEGAL, _("Legal notice")),
-        (FOOTER, _("Footer")),
-        (TOC, _("Terms and Conditions")),
-        (RECEIPT, _("Receipt")),
-        (SIGNATURE, _("Mail signature")),
-        (STATUTE, _("Statute")),
-        (PRIVACY, _("Privacy")),
-    ]
+class AssocTextType(models.TextChoices):
+    PROFILE = "p", _("Profile")
+    HOME = "h", _("Home")
+    SIGNUP = "u", _("Registration mail")
+    MEMBERSHIP = "m", _("Membership")
+    STATUTE = "s", _("Statute")
+    LEGAL = "l", _("Legal notice")
+    FOOTER = "f", _("Footer")
+    TOC = "t", _("Terms and Conditions")
+    RECEIPT = "r", _("Receipt")
+    SIGNATURE = "g", _("Mail signature")
+    PRIVACY = "y", _("Privacy")
 
+    REMINDER_MEMBERSHIP = "rm", _("Reminder membership request")
+    REMINDER_MEMBERSHIP_FEE = "rf", _("Reminder membership fee")
+    REMINDER_PAY = "rp", _("Reminder payment")
+    REMINDER_PROFILE = "rr", _("Reminder profile")
+
+
+class AssocText(BaseModel):
     number = models.IntegerField(null=True, blank=True)
 
     text = HTMLField(blank=True, null=True)
 
-    typ = models.CharField(max_length=1, choices=TYPE_CHOICES, verbose_name=_("Type"), help_text=_("Type of text"))
+    typ = models.CharField(
+        max_length=2, choices=AssocTextType.choices, verbose_name=_("Type"), help_text=_("Type of text")
+    )
 
     language = models.CharField(
         max_length=3,
@@ -280,6 +278,7 @@ class AssocText(BaseModel):
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="texts")
 
     def __str__(self):
+        # noinspection PyUnresolvedReferences
         return f"{self.get_typ_display()} {self.get_language_display()}"
 
     class Meta:

@@ -1940,13 +1940,13 @@ msgid "Confirm registration to %(event)s"
 msgstr ""
 
 #, python-format
-msgid ""
-"Hello! We are contacting you regarding your provisional registration at "
-"<b>%(event)s</b>."
+msgid "Complete payment for %(event)s"
 msgstr ""
 
 #, python-format
-msgid "Complete payment for %(event)s"
+msgid ""
+"Hello! We are contacting you regarding your provisional registration at "
+"<b>%(event)s</b>."
 msgstr ""
 
 #, python-format
@@ -2266,6 +2266,9 @@ msgstr ""
 msgid "Membership"
 msgstr ""
 
+msgid "Statute"
+msgstr ""
+
 msgid "Legal notice"
 msgstr ""
 
@@ -2278,10 +2281,19 @@ msgstr ""
 msgid "Mail signature"
 msgstr ""
 
-msgid "Statute"
+msgid "Privacy"
 msgstr ""
 
-msgid "Privacy"
+msgid "Reminder membership request"
+msgstr ""
+
+msgid "Reminder membership fee"
+msgstr ""
+
+msgid "Reminder payment"
+msgstr ""
+
+msgid "Reminder profile"
 msgstr ""
 
 msgid "Type of text"
@@ -7968,7 +7980,15 @@ msgstr ""
 msgid "Your friend code has been used"
 msgstr ""
 
+msgid "Not available, kiddo"
+msgstr ""
+
 msgid "Discount code not valid"
+msgstr ""
+
+msgid ""
+"The discount has been added! It has been reserved for you for 15 minutes, "
+"after which it will be removed"
 msgstr ""
 
 msgid "Discounts only applicable with new registrations"
@@ -7981,20 +8001,11 @@ msgid "Non-cumulative code"
 msgstr ""
 
 msgid ""
-"Sorry, this faciliation code has already been used the maximum number allowed"
+"Sorry, this facilitation code has already been used the maximum number "
+"allowed"
 msgstr ""
 
 msgid "Discount not combinable with other benefits."
-msgstr ""
-
-msgid ""
-"Discount only applicable if you are signed up for another run of the same "
-"event."
-msgstr ""
-
-msgid ""
-"The discount has been added! It has been reserved for you for 15 minutes, "
-"after which it will be removed"
 msgstr ""
 
 #, python-format

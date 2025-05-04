@@ -2540,6 +2540,12 @@ msgstr "Voorinschrijving"
 msgid "Registration fee"
 msgstr "Inschrijfgeld"
 
+msgid "Reminder payment"
+msgstr "Herinnering betaling"
+
+msgid "Reminder profile"
+msgstr "Herinnering profiel"
+
 msgid "Request approved"
 msgstr "Verzoek goedgekeurd"
 
@@ -3064,6 +3070,9 @@ msgstr "Gegevens van spelers beheren"
 msgid "Name - international"
 msgstr "Engelse naam"
 
+msgid "Not available, kiddo"
+msgstr "Niet beschikbaar, kiddo"
+
 msgid "Number of passengers"
 msgstr "Aantal passagiers"
 
@@ -3427,6 +3436,9 @@ msgstr "Voorwaarden"
 msgid "Registrations not open!"
 msgstr "De inschrijving is nog niet geopend!"
 
+msgid "Reminder membership fee"
+msgstr "Herinnering lidmaatschapsgeld"
+
 msgid "Update your data in the"
 msgstr "Werk uw gegevens bij in de"
 
@@ -3682,6 +3694,9 @@ msgstr "Registratieprocedure voor spelers"
 
 msgid "Pre-registration cancelled!"
 msgstr "Voorinschrijving geannuleerd!"
+
+msgid "Reminder membership request"
+msgstr "Herinnering lidmaatschapsverzoek"
 
 msgid "Various additional features"
 msgstr "Diverse extra functies"
@@ -6195,11 +6210,6 @@ msgstr ""
 "gekocht"
 
 msgid ""
-"Sorry, this faciliation code has already been used the maximum number "
-"allowed"
-msgstr "Sorry, het maximum aantal concessies voor deze code is bereikt"
-
-msgid ""
 "This page allows you to add or modify an option in a character form "
 "question."
 msgstr ""
@@ -6309,6 +6319,13 @@ msgstr ""
 "informatie versturen."
 
 msgid ""
+"Sorry, this facilitation code has already been used the maximum number "
+"allowed"
+msgstr ""
+"Sorry, deze facilitatiecode is al gebruikt voor het maximaal toegestane "
+"aantal"
+
+msgid ""
 "This page allows you to return part of the quota to a player who has "
 "cancelled"
 msgstr ""
@@ -6389,13 +6406,6 @@ msgid ""
 msgstr ""
 "Hiermee kun je bepalen welke gebruikers toegang hebben tot de functies van "
 "de organisator van het evenement."
-
-msgid ""
-"Discount only applicable if you are signed up for another run of the same "
-"event."
-msgstr ""
-"Korting alleen van toepassing als je je hebt ingeschreven voor een andere "
-"run van hetzelfde evenement"
 
 msgid ""
 "Indicate the date when registration opens. Leave blank to not open "

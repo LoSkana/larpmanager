@@ -31,7 +31,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.writing import remove_html_tags
-from larpmanager.models.association import Association, AssocText, get_url
+from larpmanager.models.association import Association, AssocTextType, get_url
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Email
@@ -248,7 +248,7 @@ def my_send_mail(subj, body, recipient, obj=None, reply_to=None, schedule=0):
             assoc_id = obj.event.assoc_id
 
         if assoc_id:
-            sign = get_assoc_text(assoc_id, AssocText.SIGNATURE)
+            sign = get_assoc_text(assoc_id, AssocTextType.SIGNATURE)
             if sign:
                 body += sign
 

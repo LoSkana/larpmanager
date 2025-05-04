@@ -30,10 +30,10 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.character import get_character_fields, get_event_cache_all, get_searcheable_character_fields
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
-from larpmanager.models.association import AssocText
+from larpmanager.models.association import AssocTextType
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import (
-    EventText,
+    EventTextType,
     Run,
 )
 from larpmanager.models.form import (
@@ -91,7 +91,7 @@ def calendar(request, lang):
         if run.event.lang not in ctx["langs"]:
             ctx["langs"].append(run.event.lang)
 
-    ctx["custom_text"] = get_assoc_text(request.assoc["id"], AssocText.HOME)
+    ctx["custom_text"] = get_assoc_text(request.assoc["id"], AssocTextType.HOME)
 
     return render(request, "larpmanager/general/calendar.html", ctx)
 
@@ -182,7 +182,7 @@ def share(request):
 @login_required
 def legal_notice(request):
     ctx = def_user_ctx(request)
-    ctx.update({"text": get_assoc_text(request.assoc["id"], AssocText.LEGAL)})
+    ctx.update({"text": get_assoc_text(request.assoc["id"], AssocTextType.LEGAL)})
     return render(request, "larpmanager/general/legal.html", ctx)
 
 
@@ -326,24 +326,24 @@ def search(request, s, n):
         get_event_cache_all(ctx)
         ctx["all"] = json.dumps(ctx["chars"])
         ctx["facs"] = json.dumps(ctx["factions"])
-        ctx["search_text"] = get_event_text(ctx["event"].id, EventText.SEARCH)
+        ctx["search_text"] = get_event_text(ctx["event"].id, EventTextType.SEARCH)
         get_character_fields(ctx, only_visible=True)
         get_searcheable_character_fields(ctx)
 
-    for s in ["all", "facs"]:
-        if s in ctx:
+    for slug in ["all", "facs"]:
+        if slug in ctx:
             continue
-        ctx[s] = {}
+        ctx[slug] = {}
 
-    for s in ["questions", "options", "searchable"]:
-        if s in ctx:
+    for slug in ["questions", "options", "searchable"]:
+        if slug in ctx:
             continue
-        ctx[s] = []
+        ctx[slug] = []
 
     return render(request, "larpmanager/event/search.html", ctx)
 
 
-def get_fact(qs, ctx):
+def get_fact(qs):
     ls = []
     for f in qs:
         fac = f.show_complete()
@@ -356,8 +356,8 @@ def get_fact(qs, ctx):
 
 def get_factions(ctx):
     fcs = ctx["event"].get_elements(Faction)
-    ctx["sec"] = get_fact(fcs.filter(typ=Faction.PRIM).order_by("number"), ctx)
-    ctx["trasv"] = get_fact(fcs.filter(typ=Faction.TRASV).order_by("number"), ctx)
+    ctx["sec"] = get_fact(fcs.filter(typ=Faction.PRIM).order_by("number"))
+    ctx["trasv"] = get_fact(fcs.filter(typ=Faction.TRASV).order_by("number"))
 
 
 def check_visibility(ctx, typ, name):

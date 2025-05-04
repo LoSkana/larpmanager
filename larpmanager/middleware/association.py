@@ -25,7 +25,7 @@ from django.shortcuts import redirect
 from django.utils.translation import get_language
 
 from larpmanager.cache.association import get_cache_assoc
-from larpmanager.models.association import AssocText
+from larpmanager.models.association import AssocTextType
 from larpmanager.utils.text import get_assoc_text
 
 
@@ -39,7 +39,7 @@ class AssociationIdentifyMiddleware:
             return redirect("https://larpmanager.com")
 
         lang = get_language()
-        request.assoc["footer"] = get_assoc_text(request.assoc["id"], AssocText.FOOTER, lang)
+        request.assoc["footer"] = get_assoc_text(request.assoc["id"], AssocTextType.FOOTER, lang)
 
         response = self.get_response(request)
 
