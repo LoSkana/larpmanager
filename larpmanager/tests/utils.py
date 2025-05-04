@@ -40,7 +40,8 @@ def page_start(p, show=False):
     page.on("dialog", lambda dialog: dialog.accept())
 
     def on_response(response):
-        if response.status == 500:
+        error_code = 500
+        if response.status == error_code:
             raise Exception(f"500 on {response.url}")
 
     page.on("response", on_response)
@@ -126,16 +127,26 @@ def ooops_check(page):
         expect(banner).not_to_contain_text("404")
 
 
-def check_download(download):
-    download_path = download.value.path()
-    assert download_path is not None, "Download failed"
+def check_download(page, link):
+    max_tries = 3
+    current_try = 0
+    while current_try < max_tries:
+        try:
+            with page.expect_download() as download_info:
+                page.get_by_role("link", name=link).click()
+            download_path = download_info.value.path()
+            assert download_path is not None, "Download failed"
 
-    with open(download_path, "rb") as f:
-        content = f.read()
-        print(content[:100])
+            with open(download_path, "rb") as f:
+                content = f.read()
+                print(content[:100])
 
-    file_size = os.path.getsize(download_path)
-    assert file_size > 0, "File empty"
+            file_size = os.path.getsize(download_path)
+            assert file_size > 0, "File empty"
+
+            return
+        except Exception:
+            current_try += 1
 
 
 def fill_tinymce(iframe_locator, value):

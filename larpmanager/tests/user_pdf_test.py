@@ -66,22 +66,13 @@ def user_pdf(live_server, page):
 
     # Go to character, test download pdf
     go_to(page, live_server, "/test/1/character/1")
-    with page.expect_download() as download_info:
-        page.get_by_role("link", name="Portraits (PDF)").click()
-    check_download(download_info)
 
-    with page.expect_download() as download_info:
-        page.get_by_role("link", name="Profiles (PDF)").click()
-    check_download(download_info)
+    check_download(page, "Portraits (PDF)")
 
-    with page.expect_download() as download_info:
-        page.get_by_role("link", name="Download complete sheet").click()
-    check_download(download_info)
+    check_download(page, "Profiles (PDF)")
 
-    with page.expect_download() as download_info:
-        page.get_by_role("link", name="Download light sheet").click()
-    check_download(download_info)
+    check_download(page, "Download complete sheet")
 
-    with page.expect_download() as download_info:
-        page.get_by_role("link", name="Download relationships").click()
-    check_download(download_info)
+    check_download(page, "Download light sheet")
+
+    check_download(page, "Download relationships")
