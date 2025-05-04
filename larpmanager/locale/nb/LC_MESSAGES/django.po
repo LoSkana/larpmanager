@@ -4026,6 +4026,9 @@ msgstr "Se all informasjon om arrangementet i"
 msgid "Ask the organisers to activate it."
 msgstr "Be arrangørene om å aktivere den."
 
+msgid "Date of expiration of the document"
+msgstr "Dokumentets utløpsdato"
+
 msgid "Delay in organization registration"
 msgstr "Forsinkelse i organisasjonsregistrering"
 
@@ -8357,6 +8360,13 @@ msgid ""
 msgstr ""
 "Legger til et quiz-lignende system for verkstedspørsmål. Arrangører kan "
 "definere skjemaer, spørsmål og riktige svar som spillerne skal fylle ut."
+
+msgid ""
+"Leave blank if the document has no expiration date - Please check that it "
+"does not expire before the event you want to signup up for."
+msgstr ""
+"La det stå tomt hvis dokumentet ikke har noen utløpsdato - Kontroller at det"
+" ikke utløper før arrangementet du ønsker å melde deg på."
 
 msgid ""
 "Select from the drop-down list the characters to be added to the faction. "

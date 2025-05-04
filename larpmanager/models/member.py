@@ -73,7 +73,9 @@ class Member(BaseModel):
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="member")
+
     email = models.CharField(max_length=200, editable=False)
+
     search = models.CharField(max_length=200, editable=False)
 
     language = models.CharField(
@@ -86,7 +88,9 @@ class Member(BaseModel):
     )
 
     name = models.CharField(max_length=100, verbose_name=_("Name"))
+
     surname = models.CharField(max_length=100, verbose_name=_("Surname"))
+
     nickname = models.CharField(
         max_length=100,
         verbose_name=_("Alias"),
@@ -170,7 +174,9 @@ class Member(BaseModel):
     )
 
     birth_date = models.DateField(verbose_name=_("Birth date"), blank=True, null=True)
+
     birth_place = models.CharField(max_length=150, verbose_name=_("Birth place"), blank=True, null=True)
+
     fiscal_code = models.CharField(
         max_length=16,
         verbose_name=_("Fiscal code"),
@@ -178,6 +184,7 @@ class Member(BaseModel):
         null=True,
         help_text=_("If you are an Italian citizen, indicate your tax code; otherwise leave blank"),
     )
+
     document_type = models.CharField(
         max_length=1,
         choices=DOCUMENT_CHOICES,
@@ -186,6 +193,7 @@ class Member(BaseModel):
         null=True,
         help_text=_("Indicates a type of identification document issued by the nation in which you reside"),
     )
+
     document = models.CharField(
         max_length=16,
         verbose_name=_("Document number"),
@@ -193,7 +201,17 @@ class Member(BaseModel):
         null=True,
         help_text=_("Enter the number or code of the identification document indicated above"),
     )
+
     document_issued = models.DateField(verbose_name=_("Date of issue of the document"), blank=True, null=True)
+
+    document_expiration = models.DateField(
+        blank=True,
+        null=True,
+        verbose_name=_("Date of expiration of the document"),
+        help_text=_(
+            "Leave blank if the document has no expiration date - Please check that it does not expire before the event you want to signup up for."
+        ),
+    )
 
     residence_address = models.CharField(
         max_length=500,

@@ -2769,6 +2769,14 @@ msgstr ""
 msgid "Date of issue of the document"
 msgstr ""
 
+msgid "Date of expiration of the document"
+msgstr ""
+
+msgid ""
+"Leave blank if the document has no expiration date - Please check that it "
+"does not expire before the event you want to signup up for."
+msgstr ""
+
 msgid "Accessibility"
 msgstr ""
 
