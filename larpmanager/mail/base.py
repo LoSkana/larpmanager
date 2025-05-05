@@ -132,7 +132,7 @@ def event_roles_changed(sender, **kwargs):
             }
             url = get_url(f"{instance.event.slug}/1/manage/", instance.event.assoc)
             body = _("Access the management panel <a href= %(url)s'>from here!</a>.") % {"url": url}
-            my_send_mail(subj, body, mb, instance.event.assoc)
+            my_send_mail(subj, body, mb, instance.event)
 
             # notify organizers
             for m in orgas:
@@ -145,7 +145,7 @@ def event_roles_changed(sender, **kwargs):
                     "event": instance.event,
                 }
                 body = _("The user was enabled in the role for the indicated event.")
-                my_send_mail(subj, body, m, instance.event.assoc)
+                my_send_mail(subj, body, m, instance.event)
 
 
 m2m_changed.connect(event_roles_changed, sender=EventRole.members.through)
