@@ -21,6 +21,9 @@
                 <th>{% trans "Fee" %}</th>
                 <th>{% trans "Date" %}</th>
                 <th>{% trans "Info" %}</th>
+                {% if 'vat' in assoc.features %}
+                    <th>{% trans "VAT" %}</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -43,6 +46,7 @@
                     <td>
                         {% if el.info %}{{ el.info }}{% endif %}
                     </td>
+                    {% if 'vat' in assoc.features %}<td>{{ el.vat | floatformat:"-2" }}</td>{% endif %}
                 </tr>
             {% endfor %}
         </tbody>

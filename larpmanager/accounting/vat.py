@@ -19,47 +19,34 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.db.models import Sum
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
-from larpmanager.cache.feature import get_assoc_features
 from larpmanager.models.accounting import AccountingItemPayment, AccountingItemTransaction
 
 
-@receiver(post_save, sender=AccountingItemPayment)
-def post_save_accounting_item_payment_vat(sender, instance, created, **kwargs):
-    if "vat" not in get_assoc_features(instance.assoc_id):
-        return
-
+def compute_vat(instance):
     # Get total previous payments and transactions for the same member and run
     previous_pays = get_previous_sum(instance, AccountingItemPayment)
     previous_trans = get_previous_sum(instance, AccountingItemTransaction)
     previous_paid = previous_pays - previous_trans
-
     # Get VAT configuration (e.g. 22 becomes 0.22)
     vat_ticket = int(instance.assoc.get_config("vat_ticket", 0)) / 100.0
     vat_options = int(instance.assoc.get_config("vat_options", 0)) / 100.0
-
     # Determine the full ticket amount (either from pay_what or ticket price)
     ticket_total = 0
     if instance.reg.pay_what is not None:
         ticket_total += instance.reg.pay_what
     if instance.reg.ticket:
         ticket_total += instance.reg.ticket.price
-
     # Check transaction for this payment
     paid = instance.value
     que = AccountingItemTransaction.objects.filter(inv=instance.inv)
     for trans in que:
         paid -= trans.value
-
     # Compute how much of the ticket is still unpaid
     remaining_ticket = max(0, ticket_total - previous_paid)
-
     # Split the current payment value between ticket and options
     quota_ticket = float(min(paid, remaining_ticket))
     quota_options = float(paid) - float(quota_ticket)
-
     # Compute VAT based on the split and respective rates
     vat = max(0.0, quota_ticket * vat_ticket + quota_options * vat_options)
     updates = {"vat": vat}
