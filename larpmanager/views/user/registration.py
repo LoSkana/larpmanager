@@ -316,6 +316,9 @@ def init_form_submitted(ctx, form, request, reg=None):
         if reg.additionals:
             ctx["submitted"]["additionals"] = reg.additionals
 
+    if "ticket" in ctx:
+        ctx["submitted"]["ticket"] = ctx["ticket"]
+
 
 @login_required
 def register(request, s, n, sc="", dis="", tk=0):
@@ -328,9 +331,7 @@ def register(request, s, n, sc="", dis="", tk=0):
     else:
         ctx["run_reg"] = None
 
-    ctx["ticket"] = tk
-
-    _apply_ticket(ctx)
+    _apply_ticket(ctx, tk)
 
     ctx["payment_feature"] = "payment" in get_assoc_features(ctx["a_id"])
 
@@ -362,14 +363,17 @@ def register(request, s, n, sc="", dis="", tk=0):
     return render(request, "larpmanager/event/register.html", ctx)
 
 
-def _apply_ticket(ctx):
-    if not ctx["ticket"]:
+def _apply_ticket(ctx, tk):
+    if not tk:
         return
+
     try:
-        tick = RegistrationTicket.objects.get(pk=ctx["ticket"])
+        tick = RegistrationTicket.objects.get(pk=tk)
         ctx["tier"] = tick.tier
         if tick.tier == RegistrationTicket.STAFF and "closed" in ctx["run"].status:
             del ctx["run"].status["closed"]
+
+        ctx["ticket"] = tk
     except ObjectDoesNotExist:
         pass
 
