@@ -91,17 +91,17 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
     ctx["show_limitations"] = ctx["event"].get_config("show_limitations", False)
 
     # check if the user has any role
-    if has_event_permission(ctx, request, slug):
+    if has_event_permission(ctx, request, s):
         ctx["manage"] = 1
-        get_index_event_permissions(ctx, request, slug)
+        get_index_event_permissions(ctx, request, s)
         ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", False)
 
     if has_event_permission(ctx, request, s, "orga_characters"):
         ctx["staff"] = "1"
         ctx["skip"] = "1"
 
-    for s in ["char", "teaser", "preview", "text"]:
-        ctx["show_" + s] = "staff" in ctx or ctx["run"].get_config("show_" + s, False)
+    for config_name in ["char", "teaser", "preview", "text"]:
+        ctx["show_" + config_name] = "staff" in ctx or ctx["run"].get_config("show_" + config_name, False)
 
     ctx["px_user"] = ctx["event"].get_config("px_user", False)
     if ctx["event"].parent:
@@ -109,7 +109,7 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
 
     ctx["user_character_max"] = ctx["event"].get_config("user_character_max", 0)
 
-    for s in [
+    for config_name in [
         "faction",
         "speedlarp",
         "prologue",
@@ -119,10 +119,10 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
         "co_creation",
         "preview",
     ]:
-        if s not in ctx["features"]:
+        if config_name not in ctx["features"]:
             continue
 
-        ctx["show_" + s] = "staff" in ctx or ctx["run"].get_config("show_" + s, False)
+        ctx["show_" + config_name] = "staff" in ctx or ctx["run"].get_config("show_" + config_name, False)
 
     ctx["cover_orig"] = ctx["event"].get_config("cover_orig", False)
 
@@ -214,8 +214,7 @@ def get_event_filter_characters(ctx, filters):
         f.name = "all"
         f.data = f.show_red()
         f.chars = []
-        for ch_id in chars:
-            ch = chars[ch_id]
+        for _ch_id, ch in chars.items():
             if not get_character_filter(ctx, ch, regs, filters):
                 continue
             ch.data = ch.show_red()
