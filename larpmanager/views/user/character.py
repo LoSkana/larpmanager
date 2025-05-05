@@ -79,7 +79,7 @@ from larpmanager.utils.registration import (
     registration_find,
 )
 from larpmanager.utils.writing import char_add_addit
-from larpmanager.views.user.casting import casting_details, get_casting_preferences
+from larpmanager.views.user.casting import _casting_details, get_casting_preferences
 from larpmanager.views.user.registration import init_form_submitted
 
 
@@ -100,7 +100,7 @@ def character(request, s, n, num):
     else:
         get_character_fields(ctx, only_visible=True)
 
-    casting_details(ctx, 0)
+    _casting_details(ctx, 0)
     if ctx["casting_show_pref"] and not ctx["char"]["player_id"] and ctx["char"]["special"] != Character.PNG:
         ctx["pref"] = get_casting_preferences(ctx["char"]["id"], ctx, 0)
 
