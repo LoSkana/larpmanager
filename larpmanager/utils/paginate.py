@@ -35,53 +35,9 @@ def paginate(request, ctx, typ, exe, selrel, show_runs, afield, subtype):
         search = request.POST.get("search", "")
         size = int(request.POST.get("size", 20))
 
-    if not exe:
-        run = ctx["run"].id
+    elements, run = _apply_run_queries(afield, ctx, elements, exe, run)
 
-    if run >= 0:
-        if run == 0:
-            if afield:
-                kwargs = {f"{afield}__run__isnull": True}
-                elements = elements.filter(**kwargs)
-            else:
-                elements = elements.filter(run__isnull=True)
-        else:
-            if afield:
-                kwargs = {f"{afield}__run": run}
-                elements = elements.filter(**kwargs)
-            else:
-                elements = elements.filter(run=run)
-
-    if issubclass(typ, AccountingItem):
-        elements = elements.select_related("member")
-
-    if issubclass(typ, AccountingItemExpense):
-        elements = elements.select_related("member").order_by("is_approved", "-created")
-
-    if issubclass(typ, PaymentInvoice):
-        elements = elements.annotate(
-            is_submitted=Case(
-                When(status=PaymentInvoice.SUBMITTED, then=Value(0)),
-                default=Value(1),
-                output_field=IntegerField(),
-            )
-        )
-        elements = elements.order_by("is_submitted", "-created")
-
-    if issubclass(typ, RefundRequest):
-        elements = elements.prefetch_related("member__memberships")
-        elements = elements.order_by("-status", "-updated")
-
-        memberships = Membership.objects.filter(member_id=OuterRef("member_id"), assoc_id=ctx["a_id"]).order_by("id")[
-            :1
-        ]
-        elements = elements.annotate(credits=Subquery(memberships.values("credit")))
-
-    if subtype == "credits":
-        elements = elements.filter(oth=AccountingItemOther.CREDIT)
-
-    elif subtype == "tokens":
-        elements = elements.filter(oth=AccountingItemOther.TOKEN)
+    elements = _apply_custom_queries(ctx, elements, subtype, typ)
 
     if selrel:
         for e in selrel:
@@ -115,6 +71,54 @@ def paginate(request, ctx, typ, exe, selrel, show_runs, afield, subtype):
             .order_by("-end")
         ]
         ctx["run_sel"] = run
+
+
+def _apply_run_queries(afield, ctx, elements, exe, run):
+    if not exe:
+        run = ctx["run"].id
+    if run >= 0:
+        if run == 0:
+            if afield:
+                kwargs = {f"{afield}__run__isnull": True}
+                elements = elements.filter(**kwargs)
+            else:
+                elements = elements.filter(run__isnull=True)
+        elif afield:
+            kwargs = {f"{afield}__run": run}
+            elements = elements.filter(**kwargs)
+        else:
+            elements = elements.filter(run=run)
+    return elements, run
+
+
+def _apply_custom_queries(ctx, elements, subtype, typ):
+    if issubclass(typ, AccountingItem):
+        elements = elements.select_related("member")
+    if issubclass(typ, AccountingItemExpense):
+        elements = elements.select_related("member").order_by("is_approved", "-created")
+    if issubclass(typ, PaymentInvoice):
+        elements = elements.annotate(
+            is_submitted=Case(
+                When(status=PaymentInvoice.SUBMITTED, then=Value(0)),
+                default=Value(1),
+                output_field=IntegerField(),
+            )
+        )
+        elements = elements.order_by("is_submitted", "-created")
+    if issubclass(typ, RefundRequest):
+        elements = elements.prefetch_related("member__memberships")
+        elements = elements.order_by("-status", "-updated")
+
+        memberships = Membership.objects.filter(member_id=OuterRef("member_id"), assoc_id=ctx["a_id"]).order_by("id")[
+            :1
+        ]
+        elements = elements.annotate(credits=Subquery(memberships.values("credit")))
+    if subtype == "credits":
+        elements = elements.filter(oth=AccountingItemOther.CREDIT)
+
+    elif subtype == "tokens":
+        elements = elements.filter(oth=AccountingItemOther.TOKEN)
+    return elements
 
 
 def exe_paginate(request, ctx, typ, selrel=None, show_runs=True, afield=None, subtype=None):
