@@ -339,7 +339,7 @@ def add_field_restricted(page):
     page.locator("#id_details").press("Home")
     page.locator("#id_details").fill("only descr")
     page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True)
 
 
 def add_field_multiple(page):

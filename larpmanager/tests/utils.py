@@ -117,6 +117,7 @@ def go_to_check(page, path):
 
 def submit(page):
     page.get_by_role("button", name="Submit").click()
+    page.wait_for_load_state("networkidle")
     ooops_check(page)
 
 
