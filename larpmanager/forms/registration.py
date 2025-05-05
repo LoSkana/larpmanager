@@ -83,10 +83,6 @@ class RegistrationForm(BaseRegistrationForm):
             and "waiting" in run.status
         )
 
-        self.staff_check = (
-            self.instance and self.instance.ticket and self.instance.ticket.tier == RegistrationTicket.STAFF
-        )
-
         self.init_additionals()
 
         self.init_pay_what(run)
@@ -356,6 +352,9 @@ class RegistrationForm(BaseRegistrationForm):
         return False
 
     def skip_ticket_type(self, event, run, ticket):
+        if "ticket" in self.params:
+            return False
+
         # Show Waiting tickets only if you are Waiting, or if the player is enrolled in Waiting
         if ticket.tier == RegistrationTicket.WAITING:
             if "waiting" not in run.status and not self.has_ticket(RegistrationTicket.WAITING):

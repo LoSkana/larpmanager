@@ -20,12 +20,13 @@
 
 import os
 import re
+import time
 from pathlib import Path
 
 import pytest
 from playwright.sync_api import sync_playwright
 
-from larpmanager.tests.utils import go_to, handle_error, login_orga, page_start, submit
+from larpmanager.tests.utils import fill_tinymce, go_to, handle_error, login_orga, page_start, submit
 
 
 @pytest.mark.django_db
@@ -122,11 +123,12 @@ def submit_membership(image_path, live_server, page):
     go_to(page, live_server, "/manage/texts")
     page.wait_for_timeout(2000)
     page.get_by_role("link", name="New").click()
-    page.wait_for_selector(".tox-edit-area")
+
     page.locator('iframe[title="Rich Text Area"]').content_frame.locator("html").click()
-    page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill(
-        "Ciao {{ member.name }}!"
-    )
+    time.sleep(2)
+    frame = page.locator('iframe[title="Rich Text Area"]')
+    fill_tinymce(frame, "Ciao {{ member.name }}!")
+
     page.locator("#main_form").click()
     page.locator("#id_typ").select_option("m")
     page.get_by_role("button", name="Confirm").click()
