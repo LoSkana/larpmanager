@@ -17,12 +17,12 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+from pathlib import Path
 
 import pytest
 from playwright.sync_api import expect, sync_playwright
 
-from larpmanager.tests.utils import handle_error, login_orga, page_start
+from larpmanager.tests.utils import go_to, handle_error, login_orga, page_start
 
 
 @pytest.mark.django_db
@@ -43,19 +43,19 @@ def test_exe_accounting(live_server):
 def exe_accounting(live_server, page):
     login_orga(page, live_server)
 
-    config(page)
+    config(page, live_server)
 
-    add_outflows(page)
+    add_exe(page, live_server)
 
-    add_inflows(page)
+    add_orga(page, live_server)
 
-    sign_up_pay(page)
+    sign_up_pay(page, live_server)
 
-    verify(page)
+    verify(page, live_server)
 
 
-def verify(page):
-    page.get_by_role("link", name="Accounting").click()
+def verify(page, live_server):
+    go_to(page, live_server, "/test/1/manage/accounting/")
     expect(page.locator("#one")).to_contain_text("Net revenue: 133.00")
     expect(page.locator("#one")).to_contain_text("Balance: 71.00")
     expect(page.locator("#one")).to_contain_text("Organization tax: 17.29")
@@ -63,21 +63,12 @@ def verify(page):
     expect(page.locator("#one")).to_contain_text("Outflows: 62.00")
     expect(page.locator("#one")).to_contain_text("Inflows: 63.00")
     expect(page.locator("#one")).to_contain_text("Income: 70.00")
-    page.get_by_role("link", name="Payments", exact=True).click()
-    page.goto("http://127.0.0.1:8000/test/1/manage/invoices/")
-    page.get_by_role("link", name="Payments", exact=True).click()
-    page.goto("http://127.0.0.1:8000/test/1/manage/payments/")
-    page.get_by_role("link", name="").click()
-    page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("link", name="").click()
-    page.get_by_role("button", name="Confirm").click()
-    expect(page.locator('[id="\\31 "]')).to_contain_text("5.70")
-    page.get_by_role("link", name="Organization").click()
-    page.get_by_role("link", name="Payments").click()
+
+    go_to(page, live_server, "/test/1/manage/payments/")
     expect(page.locator('[id="\\31 "]')).to_contain_text("70")
-    expect(page.locator('[id="\\31 "]')).to_contain_text("Test Larp")
     expect(page.locator('[id="\\31 "]')).to_contain_text("5.70")
-    page.get_by_role("link", name="Accounting").click()
+
+    go_to(page, live_server, "/manage/accounting/")
     expect(page.locator("#one")).to_contain_text("20.00")
     expect(page.locator("#one")).to_contain_text("91.00")
     expect(page.locator("#one")).to_contain_text("70.00")
@@ -85,18 +76,17 @@ def verify(page):
     expect(page.locator("#one")).to_contain_text("72.00")
     expect(page.locator("#one")).to_contain_text("10.00")
     expect(page.locator("#one")).to_contain_text("30.00")
-    page.get_by_role("link", name="Invoices").click()
-    page.get_by_role("link", name="Audits").click()
 
 
-def sign_up_pay(page):
-    page.get_by_role("link", name="Tickets").click()
+def sign_up_pay(page, live_server):
+    go_to(page, live_server, "/test/1/manage/registrations/tickets/")
     page.get_by_role("link", name="").click()
     page.locator("#id_price").click()
     page.locator("#id_price").press("Home")
     page.locator("#id_price").fill("50.00")
     page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("link", name="Form").click()
+
+    go_to(page, live_server, "test/1/manage/registrations/form/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_display").click()
     page.locator("#id_display").fill("pay")
@@ -109,10 +99,12 @@ def sign_up_pay(page):
     page.locator("#id_price").click()
     page.locator("#id_price").fill("20")
     page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("link", name="Register").click()
+
+    go_to(page, live_server, "/test/1/register/")
     page.get_by_role("button", name="Continue").click()
     page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("link", name="Payments", exact=True).click()
+
+    go_to(page, live_server, "/test/1/manage/payments/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_value").click()
     page.locator("#id_value").press("Home")
@@ -123,20 +115,18 @@ def sign_up_pay(page):
     page.get_by_role("row", name="Info").locator("td").click()
     page.locator("#id_info").fill("sss")
     page.get_by_role("button", name="Confirm").click()
-    page.get_by_text("Accounting Payments Inflows").click()
 
 
-def add_outflows(page):
-    page.get_by_role("link", name="Organization").click()
-    page.get_by_role("link", name="Outflows").click()
+def add_exe(page, live_server):
+    go_to(page, live_server, "/manage/outflows")
     page.get_by_role("link", name="New").click()
     page.locator("#id_value").click()
     page.locator("#id_value").press("ArrowLeft")
     page.locator("#id_value").fill("10")
     page.locator("#id_descr").click()
     page.locator("#id_descr").fill("babe")
-    page.get_by_role("button", name="Choose File").click()
-    page.get_by_role("button", name="Choose File").set_input_files("WhatsApp Image 2025-05-02 at 19.18.25.jpeg")
+    image_path = Path(__file__).parent / "image.jpg"
+    page.locator("#id_invoice").set_input_files(str(image_path))
     page.get_by_role("cell", name="--------- Indicate the").click()
     page.locator("#id_exp").select_option("a")
     page.get_by_role("button", name="Confirm").click()
@@ -148,12 +138,12 @@ def add_outflows(page):
     page.get_by_role("option", name="Test Larp").click()
     page.locator("#id_descr").click()
     page.locator("#id_descr").fill("bibi")
-    page.get_by_role("button", name="Choose File").click()
-    page.get_by_role("button", name="Choose File").set_input_files("WhatsApp Image 2025-05-02 at 19.18.25.jpeg")
+    page.locator("#id_invoice").set_input_files(str(image_path))
     page.locator("#id_exp").select_option("c")
     page.get_by_role("button", name="Confirm").click()
     page.get_by_role("link", name="Organization").click()
-    page.get_by_role("link", name="Inflows").click()
+
+    go_to(page, live_server, "/manage/inflows")
     page.get_by_role("link", name="New").click()
     page.locator("#id_value").click()
     page.locator("#id_value").press("ArrowLeft")
@@ -163,8 +153,7 @@ def add_outflows(page):
     page.get_by_role("option", name="Test Larp").click()
     page.get_by_role("combobox", name="×Test Larp").press("Tab")
     page.locator("#id_descr").fill("ggg")
-    page.get_by_role("button", name="Choose File").click()
-    page.get_by_role("button", name="Choose File").set_input_files("WhatsApp Image 2025-05-02 at 19.18.25.jpeg")
+    page.locator("#id_invoice").set_input_files(str(image_path))
     page.get_by_role("button", name="Confirm").click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_value").click()
@@ -172,75 +161,49 @@ def add_outflows(page):
     page.locator("#id_value").press("Tab")
     page.locator("#id_descr").click()
     page.locator("#id_descr").fill("sdfs")
-    page.get_by_role("button", name="Choose File").click()
-    page.get_by_role("button", name="Choose File").set_input_files("WhatsApp Image 2025-05-02 at 19.18.25.jpeg")
+    page.locator("#id_invoice").set_input_files(str(image_path))
     page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("link", name="Test Larp").click()
 
 
-def add_inflows(page):
-    page.get_by_role("link", name="Inflows").click()
+def add_orga(page, live_server):
+    go_to(page, live_server, "/test/1/manage/inflows")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_value").click()
-    page.locator("#id_value").press("ArrowLeft")
-    page.locator("#id_value").fill("13")
-    page.locator("#id_value").press("Tab")
-    page.locator("#id_descr").fill("ttt")
-    page.get_by_role("button", name="Choose File").click()
-    page.get_by_role("button", name="Choose File").set_input_files("WhatsApp Image 2025-05-02 at 19.18.25.jpeg")
-    page.locator("#id_payment_date").click()
-    page.locator("#id_payment_date").press("F5")
-    page.get_by_text("Calendar Gallery View the").click()
-    page.locator("body").press("F5")
-    page.goto("http://127.0.0.1:8000/test/1/manage/inflows/edit/0/")
     page.locator("#id_value").click()
     page.locator("#id_value").fill("13")
     page.locator("#id_value").press("Tab")
     page.locator("#id_descr").fill("asdsada")
-    page.get_by_role("button", name="Choose File").click()
-    page.get_by_role("button", name="Choose File").set_input_files("WhatsApp Image 2025-05-02 at 19.18.25.jpeg")
+    image_path = Path(__file__).parent / "image.jpg"
+    page.locator("#id_invoice").set_input_files(str(image_path))
     page.get_by_role("button", name="Confirm").click()
     expect(page.locator('[id="\\33 "]')).to_contain_text("13.00")
     expect(page.locator('[id="\\31 "]')).to_contain_text("50.00")
     expect(page.locator('[id="\\33 "]')).to_contain_text("asdsada")
     expect(page.locator('[id="\\31 "]')).to_contain_text("ggg")
-    page.get_by_role("link", name="menu Sidebar").click()
-    page.get_by_role("link", name="Outflows").click()
+
+    go_to(page, live_server, "/test/1/manage/outflows")
     page.get_by_role("link", name="New").click()
     page.locator("#id_value").click()
     page.locator("#id_value").fill("47")
     page.locator("#id_descr").click()
     page.locator("#id_descr").fill("asdsad")
-    page.get_by_role("button", name="Choose File").click()
-    page.get_by_role("button", name="Choose File").set_input_files("WhatsApp Image 2025-05-02 at 19.18.25.jpeg")
+    page.locator("#id_invoice").set_input_files(str(image_path))
     page.locator("#id_exp").select_option("e")
     page.get_by_role("button", name="Confirm").click()
 
 
-def config(page):
-    page.get_by_role("link", name="Organization").click()
-    page.get_by_role("link", name="Features").click()
-    page.get_by_role("link", name="Accounting ").click()
-    page.once("dialog", lambda dialog: dialog.dismiss())
-    page.get_by_role("row", name="Activate Payments Enables").get_by_role("link").click()
-    page.goto("http://127.0.0.1:8000/manage/features/")
-    page.get_by_role("link", name="Accounting ").click()
-    page.once("dialog", lambda dialog: dialog.dismiss())
-    page.get_by_role("row", name="Activate Taxes Shows the").get_by_role("link").click()
-    page.get_by_role("textbox", name="Search").click()
-    page.get_by_role("link", name="Accounting ").click()
-    page.once("dialog", lambda dialog: dialog.dismiss())
-    page.get_by_role("row", name="Activate Inflows Enables").get_by_role("link").click()
-    page.get_by_role("link", name="Accounting ").click()
-    page.once("dialog", lambda dialog: dialog.dismiss())
-    page.get_by_role("row", name="Activate Organisation tax").get_by_role("link").click()
-    page.get_by_role("link", name="Accounting ").click()
-    page.once("dialog", lambda dialog: dialog.dismiss())
-    page.get_by_role("row", name="Activate Outflows Enables").get_by_role("link").click()
-    page.get_by_role("link", name="Accounting ").click()
-    page.get_by_role("link", name="Accounting ").click()
-    page.get_by_role("link", name="Organization").click()
-    page.get_by_role("link", name="Configuration").click()
+def config(page, live_server):
+    # activate payments
+    go_to(page, live_server, "/manage/features/111/on")
+    # activate taxes
+    go_to(page, live_server, "/manage/features/173/on")
+    # activate inflows
+    go_to(page, live_server, "/manage/features/144/on")
+    # activate organization tax
+    go_to(page, live_server, "/manage/features/121/on")
+    # activate outflows
+    go_to(page, live_server, "/manage/features/108/on")
+
+    go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name="Payments ").click()
     page.locator("#id_payment_special_code").check()
     page.get_by_role("link", name="VAT ").click()
