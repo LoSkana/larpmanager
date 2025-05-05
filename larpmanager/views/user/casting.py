@@ -45,7 +45,7 @@ from larpmanager.utils.exceptions import (
 from larpmanager.utils.registration import registration_status
 
 
-def casting_characters(ctx, memb, reg):
+def casting_characters(ctx, reg):
     filter_filler = hasattr(reg, "ticket") and reg.ticket and reg.ticket.tier != RegistrationTicket.FILLER
     filters = {"png": True, "free": True, "mirror": True, "filler": filter_filler, "nonfiller": not filter_filler}
     get_event_filter_characters(ctx, filters)
@@ -66,7 +66,7 @@ def casting_characters(ctx, memb, reg):
     ctx["faction_filter"] = ctx["event"].get_elements(Faction).filter(typ=Faction.TRASV)
 
 
-def casting_quest_traits(ctx, member, typ):
+def casting_quest_traits(ctx, typ):
     choices = {}
     factions = []
     num = 0
@@ -133,41 +133,12 @@ def casting(request, s, n, typ=0):
 
     red = "larpmanager/event/casting/casting.html"
 
-    # check already done
-    if typ != 0:
-        casting_chars = int(ctx["run"].event.get_config("casting_characters", 1))
-        if ctx["run"].reg.rcrs.count() >= casting_chars:
-            chars = []
-            for el in ctx["run"].reg.rcrs.values_list("character__number", flat=True):
-                chars.append(ctx["chars"][el]["name"])
-            ctx["assigned"] = ", ".join(chars)
-    else:
-        try:
-            at = AssignmentTrait.objects.get(run=ctx["run"], member=request.user.member, typ=typ)
-            ctx["assigned"] = f"{at.trait.quest.show()['name']} - {at.trait.show()['name']}"
-        except Exception:
-            pass
+    _check_already_done(ctx, request, typ)
 
     if "assigned" in ctx:
         return render(request, red, ctx)
 
-        # compila already
-    already = [
-        c.element for c in Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).order_by("pref")
-    ]
-    ctx["already"] = json.dumps(already)
-
-    if typ == 0:
-        casting_characters(ctx, request.user.member, ctx["run"].reg)
-    else:
-        check_event_feature(request, ctx, "questbuilder")
-        casting_quest_traits(ctx, request.user.member, ctx["quest_type"])
-
-    try:
-        ca = CastingAvoid.objects.get(run=ctx["run"], member=request.user.member, typ=typ)
-        ctx["avoid"] = ca.text
-    except Exception:
-        pass
+    _get_previous(ctx, request, typ)
 
     if request.method == "POST":
         prefs = {}
@@ -181,33 +152,70 @@ def casting(request, s, n, typ=0):
                 return redirect("casting", s=ctx["event"].slug, n=ctx["run"].number, typ=typ)
             prefs[i] = pref
 
-        # delete all castings
-        Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).delete()
-        for i, pref in prefs.items():
-            Casting.objects.create(run=ctx["run"], member=request.user.member, typ=typ, element=pref, pref=i)
-
-        avoid = None
-        if "casting_avoid" in ctx and ctx["casting_avoid"]:
-            CastingAvoid.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).delete()
-            avoid = ""
-            if "avoid" in request.POST:
-                avoid = request.POST["avoid"]
-            if avoid and len(avoid) > 0:
-                CastingAvoid.objects.create(run=ctx["run"], member=request.user.member, typ=typ, text=avoid)
-
-        messages.success(request, _("Preferences saved!"))
-        lst = []
-        for c in Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).order_by("pref"):
-            if typ == 0:
-                lst.append(Character.objects.get(pk=c.element).show()["name"])
-            else:
-                t = Trait.objects.get(pk=c.element)
-                lst.append(f"{t.quest.show()['name']} - {t.show()['name']}")
-                # mail_confirm_casting_bkg(request.user.member.id, ctx['run'].id, ctx['gl_name'], lst)
-        mail_confirm_casting(request.user.member, ctx["run"], ctx["gl_name"], lst, avoid)
+        _casting_update(ctx, prefs, request, typ)
         return redirect(request.path_info)
 
     return render(request, red, ctx)
+
+
+def _get_previous(ctx, request, typ):
+    # compila already
+    already = [
+        c.element for c in Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).order_by("pref")
+    ]
+    ctx["already"] = json.dumps(already)
+    if typ == 0:
+        casting_characters(ctx, ctx["run"].reg)
+    else:
+        check_event_feature(request, ctx, "questbuilder")
+        casting_quest_traits(ctx, ctx["quest_type"])
+    try:
+        ca = CastingAvoid.objects.get(run=ctx["run"], member=request.user.member, typ=typ)
+        ctx["avoid"] = ca.text
+    except ObjectDoesNotExist:
+        pass
+
+
+def _check_already_done(ctx, request, typ):
+    # check already done
+    if typ != 0:
+        casting_chars = int(ctx["run"].event.get_config("casting_characters", 1))
+        if ctx["run"].reg.rcrs.count() >= casting_chars:
+            chars = []
+            for el in ctx["run"].reg.rcrs.values_list("character__number", flat=True):
+                chars.append(ctx["chars"][el]["name"])
+            ctx["assigned"] = ", ".join(chars)
+    else:
+        try:
+            at = AssignmentTrait.objects.get(run=ctx["run"], member=request.user.member, typ=typ)
+            ctx["assigned"] = f"{at.trait.quest.show()['name']} - {at.trait.show()['name']}"
+        except ObjectDoesNotExist:
+            pass
+
+
+def _casting_update(ctx, prefs, request, typ):
+    # delete all castings
+    Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).delete()
+    for i, pref in prefs.items():
+        Casting.objects.create(run=ctx["run"], member=request.user.member, typ=typ, element=pref, pref=i)
+    avoid = None
+    if "casting_avoid" in ctx and ctx["casting_avoid"]:
+        CastingAvoid.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).delete()
+        avoid = ""
+        if "avoid" in request.POST:
+            avoid = request.POST["avoid"]
+        if avoid and len(avoid) > 0:
+            CastingAvoid.objects.create(run=ctx["run"], member=request.user.member, typ=typ, text=avoid)
+    messages.success(request, _("Preferences saved!"))
+    lst = []
+    for c in Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).order_by("pref"):
+        if typ == 0:
+            lst.append(Character.objects.get(pk=c.element).show()["name"])
+        else:
+            t = Trait.objects.get(pk=c.element)
+            lst.append(f"{t.quest.show()['name']} - {t.show()['name']}")
+            # mail_confirm_casting_bkg(request.user.member.id, ctx['run'].id, ctx['gl_name'], lst)
+    mail_confirm_casting(request.user.member, ctx["run"], ctx["gl_name"], lst, avoid)
 
 
 def get_casting_preferences(number, ctx, typ=0, casts=None):
@@ -328,7 +336,6 @@ def casting_history_characters(ctx):
         if reg.member_id not in casts:
             continue
         for c in casts[reg.member_id]:
-            v = None
             if c.element not in ctx["cache"]:
                 continue
             ch = ctx["cache"][c.element]
