@@ -233,7 +233,7 @@ def my_send_mail(subj, body, recipient, obj=None, reply_to=None, schedule=0):
     assoc_id = None
     if obj:
         if isinstance(obj, Run):
-            run_id = obj.id
+            run_id = obj.id  # type: ignore[attr-defined]
             assoc_id = obj.event.assoc_id  # type: ignore[attr-defined]
         if isinstance(obj, Event):
             assoc_id = obj.assoc_id  # type: ignore[attr-defined]

@@ -31,8 +31,9 @@ from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 from slugify import slugify
 
+from larpmanager.accounting.vat import compute_vat
 from larpmanager.cache.button import event_button_key
-from larpmanager.cache.feature import get_event_features, reset_event_features
+from larpmanager.cache.feature import get_assoc_features, get_event_features, reset_event_features
 from larpmanager.models.access import AssocPermission, EventPermission, EventRole, get_event_organizers
 from larpmanager.models.accounting import (
     AccountingItemCollection,
@@ -365,3 +366,11 @@ def post_save_registration_campaign(sender, instance, **kwargs):
         rcr.save()
     except ObjectDoesNotExist:
         pass
+
+
+@receiver(post_save, sender=AccountingItemPayment)
+def post_save_accounting_item_payment_vat(sender, instance, created, **kwargs):
+    if "vat" not in get_assoc_features(instance.assoc_id):
+        return
+
+    compute_vat(instance)
