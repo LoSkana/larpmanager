@@ -23,6 +23,7 @@ import random
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -47,7 +48,7 @@ from larpmanager.utils.common import (
 from larpmanager.utils.deadlines import get_membership_fee_year
 from larpmanager.utils.event import check_event_permission
 from larpmanager.views.user.casting import (
-    casting_details,
+    _casting_details,
     casting_history_characters,
     casting_history_traits,
     casting_preferences_characters,
@@ -58,7 +59,7 @@ from larpmanager.views.user.casting import (
 @login_required
 def orga_casting_preferences(request, s, n, typ=0):
     ctx = check_event_permission(request, s, n, "orga_casting_preferences")
-    casting_details(ctx, typ)
+    _casting_details(ctx, typ)
     if typ == 0:
         casting_preferences_characters(ctx)
     else:
@@ -70,7 +71,7 @@ def orga_casting_preferences(request, s, n, typ=0):
 @login_required
 def orga_casting_history(request, s, n, typ=0):
     ctx = check_event_permission(request, s, n, "orga_casting_history")
-    casting_details(ctx, typ)
+    _casting_details(ctx, typ)
     if typ == 0:
         casting_history_characters(ctx)
     else:
@@ -141,7 +142,7 @@ def get_casting_choices_characters(ctx, options):
     return choices, taken, mirrors, allowed
 
 
-def get_casting_choices_quests(ctx, typ):
+def get_casting_choices_quests(ctx):
     choices = {}
     taken = []
     for q in Quest.objects.filter(event=ctx["event"], typ=ctx["quest_type"]).order_by("number"):
@@ -153,17 +154,17 @@ def get_casting_choices_quests(ctx, typ):
     return choices, taken, {}
 
 
-def check_player_skip_characters(reg, choices, ctx):
+def check_player_skip_characters(reg, ctx):
     # check it has a number of characters assigned less the allowed amount
     casting_chars = int(ctx["event"].get_config("casting_characters", 1))
     return RegistrationCharacterRel.objects.filter(reg=reg).count() >= casting_chars
 
 
-def check_player_skip_quests(reg, choices, typ):
+def check_player_skip_quests(reg, typ):
     return AssignmentTrait.objects.filter(run=reg.run, member=reg.member, typ=typ).count() > 0
 
 
-def check_casting_player(ctx, reg, options, choices, typ, cache_membs, cache_aim):
+def check_casting_player(ctx, reg, options, typ, cache_membs, cache_aim):
     # check if select the player given the ticket
     if "tickets" in options and str(reg.ticket_id) not in options["tickets"]:
         return True
@@ -188,9 +189,9 @@ def check_casting_player(ctx, reg, options, choices, typ, cache_membs, cache_aim
 
     # check if we have to skip the player (already assigned)
     if typ == 0:
-        check = check_player_skip_characters(reg, choices, ctx)
+        check = check_player_skip_characters(reg, ctx)
     else:
-        check = check_player_skip_quests(reg, choices, typ)
+        check = check_player_skip_quests(reg, typ)
 
     if check:
         return True
@@ -198,11 +199,17 @@ def check_casting_player(ctx, reg, options, choices, typ, cache_membs, cache_aim
     return False
 
 
-def get_casting_data(request, ctx, typ, tick, form):
+def get_casting_data(request, ctx, typ, form):
     options = form.get_data()
     # print(options)
 
-    casting_details(ctx, typ)
+    _casting_details(ctx, typ)
+
+    players = {}
+    didnt_choose = []
+    preferences = {}
+    nopes = {}
+    chosen = {}
 
     # get casting choices
     if typ == 0:
@@ -210,79 +217,28 @@ def get_casting_data(request, ctx, typ, tick, form):
     else:
         get_quest_type(ctx, typ)
         allowed = None
-        (choices, taken, mirrors) = get_casting_choices_quests(ctx, typ)
+        (choices, taken, mirrors) = get_casting_choices_quests(ctx)
 
-    players = {}
-    didnt_choose = []
-    preferences = {}
-    nopes = {}
-
-    cache_aim = get_membership_fee_year(request.assoc["id"])
-
-    cache_membs = {}
-    memb_que = Membership.objects.filter(assoc_id=request.assoc["id"])
-    for el in memb_que.values("member_id", "status"):
-        cache_membs[el["member_id"]] = el["status"]
-
-    chosen = {}
-
-    castings = {}
-    for el in Casting.objects.filter(run=ctx["run"], typ=typ).order_by("pref"):
-        if el.member_id not in castings:
-            castings[el.member_id] = []
-        castings[el.member_id].append(el)
+    cache_aim, cache_membs, castings = _casting_prepare(ctx, request, typ)
 
     # loop over registered players
     que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
     que = que.exclude(ticket__tier__in=[RegistrationTicket.WAITING, RegistrationTicket.STAFF])
     que = que.order_by("created").select_related("ticket", "member")
     for reg in que:
-        if check_casting_player(ctx, reg, options, choices, typ, cache_membs, cache_aim):
+        if check_casting_player(ctx, reg, options, typ, cache_membs, cache_aim):
             continue
 
-        # player info
-        players[reg.member.id] = {
-            "name": str(reg.member),
-            "prior": 1,
-            "email": reg.member.email,
-        }
-        if reg.ticket:
-            players[reg.member.id]["prior"] = reg.ticket.casting_priority
+        _get_player_info(players, reg)
 
-        # set registration days
-        players[reg.member.id]["reg_days"] = -get_time_diff_today(reg.created.date())
-
-        # get player preferences
-        pref = []
-        if reg.member_id in castings:
-            for c in castings[reg.member_id]:
-                if allowed and c.element not in allowed:
-                    continue
-                p = c.element
-                pref.append(p)
-                chosen[p] = 1
-                if c.nope:
-                    if reg.member.id not in nopes:
-                        nopes[reg.member.id] = []
-                    nopes[reg.member.id].append(p)
+        pref = _get_player_preferences(allowed, castings, chosen, nopes, reg)
 
         if len(pref) == 0:
             didnt_choose.append(reg.member.id)
         else:
             preferences[reg.member.id] = pref
-            # adds 3 non taken characters to each player preferences to resolve unlucky ties
-    not_chosen = []
-    for cid in choices.keys():
-        if cid not in chosen and cid not in taken:
-            not_chosen.append(cid)
-    not_chosen.sort()
 
-    not_chosen_add = min(ctx["casting_add"], len(not_chosen))
-    for mid in preferences.keys():
-        pref = preferences[mid]
-        random.shuffle(not_chosen)
-        for i in range(0, not_chosen_add):
-            pref.append(not_chosen[i])
+    not_chosen, not_chosen_add = _fill_not_chosen(choices, chosen, ctx, preferences, taken)
 
     avoids = {}
     for el in CastingAvoid.objects.filter(run=ctx["run"], typ=typ):
@@ -301,6 +257,65 @@ def get_casting_data(request, ctx, typ, tick, form):
     ctx["avoids"] = json.dumps(avoids)
 
 
+def _casting_prepare(ctx, request, typ):
+    cache_aim = get_membership_fee_year(request.assoc["id"])
+    cache_membs = {}
+    memb_que = Membership.objects.filter(assoc_id=request.assoc["id"])
+    for el in memb_que.values("member_id", "status"):
+        cache_membs[el["member_id"]] = el["status"]
+    castings = {}
+    for el in Casting.objects.filter(run=ctx["run"], typ=typ).order_by("pref"):
+        if el.member_id not in castings:
+            castings[el.member_id] = []
+        castings[el.member_id].append(el)
+    return cache_aim, cache_membs, castings
+
+
+def _get_player_info(players, reg):
+    # player info
+    players[reg.member.id] = {
+        "name": str(reg.member),
+        "prior": 1,
+        "email": reg.member.email,
+    }
+    if reg.ticket:
+        players[reg.member.id]["prior"] = reg.ticket.casting_priority
+    # set registration days
+    players[reg.member.id]["reg_days"] = -get_time_diff_today(reg.created.date())
+
+
+def _get_player_preferences(allowed, castings, chosen, nopes, reg):
+    # get player preferences
+    pref = []
+    if reg.member_id in castings:
+        for c in castings[reg.member_id]:
+            if allowed and c.element not in allowed:
+                continue
+            p = c.element
+            pref.append(p)
+            chosen[p] = 1
+            if c.nope:
+                if reg.member.id not in nopes:
+                    nopes[reg.member.id] = []
+                nopes[reg.member.id].append(p)
+    return pref
+
+
+def _fill_not_chosen(choices, chosen, ctx, preferences, taken):
+    # adds 3 non taken characters to each player preferences to resolve unlucky ties
+    not_chosen = []
+    for cid in choices.keys():
+        if cid not in chosen and cid not in taken:
+            not_chosen.append(cid)
+    not_chosen.sort()
+    not_chosen_add = min(ctx["casting_add"], len(not_chosen))
+    for _mid, pref in preferences.items():
+        random.shuffle(not_chosen)
+        for i in range(0, not_chosen_add):
+            pref.append(not_chosen[i])
+    return not_chosen, not_chosen_add
+
+
 @login_required
 def orga_casting(request, s, n, typ=None, tick=""):
     ctx = check_event_permission(request, s, n, "orga_casting")
@@ -317,8 +332,8 @@ def orga_casting(request, s, n, typ=None, tick=""):
             return redirect(request.path_info)
     else:
         form = OrganizerCastingOptionsForm(ctx=ctx)
-    casting_details(ctx, typ)
-    get_casting_data(request, ctx, typ, tick, form)
+    _casting_details(ctx, typ)
+    get_casting_data(request, ctx, typ, form)
     ctx["form"] = form
     return render(request, "larpmanager/orga/casting.html", ctx)
 
@@ -333,5 +348,5 @@ def orga_casting_toggle(request, s, n, typ):
         c.nope = not c.nope
         c.save()
         return JsonResponse({"res": "ok"})
-    except Exception:
+    except ObjectDoesNotExist:
         return JsonResponse({"res": "ko"})

@@ -494,7 +494,7 @@ def acc_submit(request, s, p):
         messages.error(request, _("You can't access this way!"))
         return redirect("accounting")
 
-    if s == "wire" or s == "paypal_nf":
+    if s in {"wire", "paypal_nf"}:
         form = WireInvoiceSubmitForm(request.POST, request.FILES)
     elif s == "any":
         form = AnyInvoiceSubmitForm(request.POST, request.FILES)
@@ -513,7 +513,7 @@ def acc_submit(request, s, p):
         messages.error(request, _("Error processing payment, contact us"))
         return redirect("/" + p)
 
-    if s == "wire" or s == "paypal_nf":
+    if s in {"wire", "paypal_nf"}:
         inv.invoice = form.cleaned_data["invoice"]
     elif s == "any":
         inv.text = form.cleaned_data["text"]
