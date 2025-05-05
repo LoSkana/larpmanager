@@ -309,7 +309,8 @@ def get_display_choice(choices, k):
 
 def round_to_nearest_cent(number):
     rounded = round(number * 10) / 10
-    if abs(float(number) - rounded) <= 0.03:
+    max_rounding = 0.03
+    if abs(float(number) - rounded) <= max_rounding:
         return rounded
     return float(number)
 
@@ -323,7 +324,7 @@ def pre_save_registration(sender, instance, *args, **kwargs):
 def get_date_surcharge(reg, event):
     if reg and reg.ticket:
         t = reg.ticket.tier
-        if t == RegistrationTicket.WAITING or t == RegistrationTicket.STAFF:
+        if t in (RegistrationTicket.WAITING, RegistrationTicket.STAFF):
             return 0
 
     dt = datetime.now().date()
@@ -444,7 +445,8 @@ def update_registration_accounting(reg):
     reg.alert = False
 
     remaining = reg.tot_iscr - reg.tot_payed
-    if remaining <= 0.05:
+    max_rounding = 0.05
+    if remaining <= max_rounding:
         return
 
     if reg.cancellation_date:
@@ -465,7 +467,7 @@ def update_registration_accounting(reg):
     else:
         quota_check(reg, start, alert, assoc_id)
 
-    if reg.quota <= 0.05:
+    if reg.quota <= max_rounding:
         return
 
     reg.alert = reg.deadline < alert

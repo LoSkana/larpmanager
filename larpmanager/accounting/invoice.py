@@ -54,7 +54,9 @@ def invoice_verify(request, ctx, csv_upload):
             found = clean(el.causal) in clean(causal)
             code = el.causal.split()[0]
 
-            if not found and len(code) == 16:
+            random_causal_length = 16
+
+            if not found and len(code) == random_causal_length:
                 found = code in clean(causal)
 
             if not found and el.reg_cod:
@@ -94,7 +96,7 @@ def invoice_received_money(cod, gross=None, fee=None, txn_id=None):
     if txn_id:
         invoice.txn_id = txn_id
 
-    if invoice.status == PaymentInvoice.CHECKED or invoice.status == PaymentInvoice.CONFIRMED:
+    if invoice.status in (PaymentInvoice.CHECKED, PaymentInvoice.CONFIRMED):
         return True
 
     # ~ invoice.mc_gross = ipn_obj.mc_gross
