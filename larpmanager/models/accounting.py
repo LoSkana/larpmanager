@@ -499,14 +499,6 @@ class Discount(BaseModel):
 
 
 class AccountingItemDiscount(AccountingItem):
-    # TODO remove
-    reg = models.ForeignKey(
-        Registration,
-        on_delete=models.CASCADE,
-        related_name="accounting_items_d",
-        null=True,
-    )
-
     run = models.ForeignKey(
         Run,
         on_delete=models.CASCADE,
