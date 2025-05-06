@@ -407,6 +407,11 @@ class RegistrationGiftForm(RegistrationForm):
         list_del = [s for s in self.fields if s not in keep]
         for field in list_del:
             del self.fields[field]
+            key = f'id_{field}'
+            if key in self.mandatory:
+                self.mandatory.remove(key)
+                
+        self.has_mandatory = len(self.mandatory) > 0
 
 
 class OrgaRegistrationForm(BaseRegistrationForm):

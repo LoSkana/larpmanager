@@ -88,9 +88,9 @@ def element_load(request, ctx, fil, typ, nm):
         # check extension
         if zipfile.is_zipfile(fil):
             with zipfile.ZipFile(fil) as z_obj:
-                res = cover_load(request, ctx, z_obj, typ)
+                cover_load(ctx, z_obj)
             z_obj.close()
-            return res
+            return ""
 
     if nm == "registration_question":
         return registration_question_loads(request, ctx, fil)
@@ -112,7 +112,7 @@ def get_csv_upload_tmp(csv_upload, run):
     return tmp_file
 
 
-def cover_load(request, ctx, z_obj, typ):
+def cover_load(ctx, z_obj):
     # extract images
     fpath = os.path.join(conf_settings.MEDIA_ROOT, "cover_load")
     fpath = os.path.join(fpath, ctx["run"].event.slug)
@@ -169,6 +169,7 @@ def elements_load(request, ctx, csv_upload, typ, nm):
 
     # Get relations models
     rels = {}
+    # noinspection PyProtectedMember
     for el in typ._meta.get_fields():
         if not isinstance(el, ForeignKey):
             continue
@@ -227,46 +228,51 @@ def registration_load(request, ctx, row, fields, event):
 
     (el, cr) = Registration.objects.get_or_create(run=ctx["run"], member=member, cancellation_date__isnull=True)
 
+    log = ""
+
     for k in fields:
-        if k == "player":
-            continue
-
-        v = row[fields[k]]
-
-        if not v:
-            continue
-
-        if k == "ticket":
-            assign_elem(el, v, k, RegistrationTicket, event)
-        elif k == "character":
-            char = Character.objects.get(event=event, number=v)
-
-            # check if we have a registration with the same character
-            if (
-                RegistrationCharacterRel.objects.filter(
-                    reg__run=ctx["run"],
-                    reg__cancellation_date__isnull=True,
-                    character=char,
-                )
-                .exclude(reg_id=el.id)
-                .count()
-                > 0
-            ):
-                return "ERR - character already assigned"
-            (rcr, cr) = RegistrationCharacterRel.objects.get_or_create(reg=el, character=char)
-
-        elif k == "pwyw":
-            el.pay_what = Decimal(v)
-        else:
-            el.__setattr__(k, v)
+        log += _registration_load_field(ctx, el, event, fields, k, row)
 
     el.save()
     save_log(request.user.member, Registration, el)
 
     if cr:
-        return "OK - Created"
+        return "OK - Created" + log
     else:
-        return "OK - Updated"
+        return "OK - Updated" + log
+
+
+def _registration_load_field(ctx, el, event, fields, k, row):
+    if k == "player":
+        return
+
+    v = row[fields[k]]
+    if not v:
+        return
+
+    log = ""
+
+    if k == "ticket":
+        assign_elem(el, v, k, RegistrationTicket, event)
+    elif k == "character":
+        char = Character.objects.get(event=event, number=v)
+
+        # check if we have a registration with the same character
+        que = RegistrationCharacterRel.objects.filter(
+            reg__run=ctx["run"],
+            reg__cancellation_date__isnull=True,
+            character=char,
+        )
+        if que.exclude(reg_id=el.id).count() > 0:
+            log = "ERR - character already assigned"
+        RegistrationCharacterRel.objects.get_or_create(reg=el, character=char)
+
+    elif k == "pwyw":
+        el.pay_what = Decimal(v)
+    else:
+        el.__setattr__(k, v)
+
+    return log
 
 
 def registration_question_loads(request, ctx, csv_upload):
@@ -440,8 +446,8 @@ def assign_choice_answer(ctx, character, value, key):
     # check if choice
     else:
         CharacterChoice.objects.filter(character=character, question_id=question_id).delete()
-        for input_opt in value.split(","):
-            input_opt = input_opt.lower().strip()
+        for input_opt_orig in value.split(","):
+            input_opt = input_opt_orig.lower().strip()
             option_id = None
             for ido, opt in ctx["options"].items():
                 if opt["display"].lower().strip() == input_opt and opt["question_id"] == question_id:
@@ -468,7 +474,7 @@ def writing_load(request, ctx, row, fields, typ, rels, event, chars):
     try:
         ch = typ.objects.get(event=event, number=num)
         created = False
-    except Exception:
+    except ObjectDoesNotExist:
         ch = typ()
         ch.event = event
         ch.number = num
@@ -478,36 +484,7 @@ def writing_load(request, ctx, row, fields, typ, rels, event, chars):
     log = ""
 
     for k in fields:
-        if k == "number":
-            continue
-
-        # meta_field_type = typ._meta.get_field(k).get_internal_type()
-        # print(meta_field_type)
-        if len(row) < fields[k]:
-            continue
-
-        v = row[fields[k]]
-        v = "<br />".join(v.strip().split("\n"))
-        if not v:
-            continue
-
-        if chars and k in ["presentation", "text"]:
-            v = replace_char_names(v, chars)
-
-        if k == "mirror":
-            v = get_mirror_instance(v, event)
-        elif k == "player":
-            log += assign_player(ctx, ch, v)
-        elif k in rels:
-            assign_elem(ch, v, k, rels[k], event)
-        elif "questions_inverted" in ctx and k in ctx["questions_inverted"]:
-            log += assign_choice_answer(ctx, ch, v, k)
-        elif k == "factions":
-            log += assign_faction(ch, v, ctx["run"])
-        elif k == "presentation":
-            ch.teaser = v
-        else:
-            ch.__setattr__(k, v)
+        log += _writing_load_field(ch, chars, ctx, event, fields, k, rels, row)
 
     # update_chars_all(ch)
     # print(row)
@@ -521,6 +498,41 @@ def writing_load(request, ctx, row, fields, typ, rels, event, chars):
         return "OK - Updated" + log
 
 
+def _writing_load_field(ch, chars, ctx, event, fields, k, rels, row):
+    if k == "number":
+        return
+
+    # meta_field_type = typ._meta.get_field(k).get_internal_type()
+    # print(meta_field_type)
+    if len(row) < fields[k]:
+        return
+
+    v = row[fields[k]]
+    v = "<br />".join(v.strip().split("\n"))
+    if not v:
+        return
+
+    log = ""
+
+    if chars and k in ["presentation", "text"]:
+        v = replace_char_names(v, chars)
+    if k == "mirror":
+        get_mirror_instance(v, event)
+    elif k == "player":
+        log = assign_player(ctx, ch, v)
+    elif k in rels:
+        assign_elem(ch, v, k, rels[k], event)
+    elif "questions_inverted" in ctx and k in ctx["questions_inverted"]:
+        log = assign_choice_answer(ctx, ch, v, k)
+    elif k == "factions":
+        log = assign_faction(ch, v, ctx["run"])
+    elif k == "presentation":
+        ch.teaser = v
+    else:
+        ch.__setattr__(k, v)
+    return log
+
+
 def assign_player(ctx, ch, v):
     if "@" in v:
         try:
@@ -532,7 +544,7 @@ def assign_player(ctx, ch, v):
         aux = v.rsplit(" ", 1)
         try:
             member = Member.objects.get(name__iexact=aux[0], surname__iexact=aux[1])
-        except Exception:
+        except ObjectDoesNotExist:
             return f" - Problem with player '{v}': couldn't find"
 
     ch.player = member
@@ -556,5 +568,5 @@ def assign_elem(ch, v, k, rel, e):
 def get_mirror_instance(v, e):
     try:
         return e.get_elements(Character).get(number=v)
-    except Exception as e:
+    except ObjectDoesNotExist:
         return None

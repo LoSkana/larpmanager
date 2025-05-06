@@ -167,7 +167,7 @@ def get_payment_form(request, form, typ, ctx, key=None):
 
     ctx["invoice"] = invoice
 
-    if method == "wire" or method == "paypal_nf":
+    if method in {"wire", "paypal_nf"}:
         ctx["wire_form"] = WireInvoiceSubmitForm()
         ctx["wire_form"].set_initial("cod", invoice.cod)
 
@@ -195,79 +195,100 @@ def payment_received(invoice):
     assoc = Association.objects.get(pk=invoice.assoc_id)
     features = get_assoc_features(invoice.assoc_id)
     fee = get_payment_fee(assoc, invoice.method.slug)
+
     if fee > 0 and AccountingItemTransaction.objects.filter(inv=invoice).count() == 0:
-        trans = AccountingItemTransaction()
-        trans.member = invoice.member
-        trans.inv = invoice
-        # trans.value = invoice.mc_fee
-        trans.value = (float(invoice.mc_gross) * fee) / 100
-        trans.assoc = invoice.assoc
-        if "payment_fees" in features and invoice.assoc.get_config("payment_fees_user", False):
-            trans.user_burden = True
-        trans.save()
-        if invoice.typ == PaymentInvoice.REGISTRATION:
-            reg = Registration.objects.get(pk=invoice.idx)
-            trans.reg = reg
-            trans.save()
+        _process_fee(features, fee, invoice)
 
     if invoice.typ == PaymentInvoice.REGISTRATION:
-        if AccountingItemPayment.objects.filter(inv=invoice).count() == 0:
-            reg = Registration.objects.get(pk=invoice.idx)
-
-            acc = AccountingItemPayment()
-            acc.pay = AccountingItemPayment.MONEY
-            acc.member = invoice.member
-            acc.reg = reg
-            acc.inv = invoice
-            acc.value = invoice.mc_gross
-            acc.assoc = invoice.assoc
-            acc.save()
-
-            reg.num_payments += 1
-            reg.save()
-
-            # e-invoice emission
-            if "e-invoice" in get_assoc_features(invoice.assoc_id):
-                process_payment(invoice.id)
+        _process_payment(invoice)
 
     elif invoice.typ == PaymentInvoice.MEMBERSHIP:
-        if AccountingItemMembership.objects.filter(inv=invoice).count() == 0:
-            acc = AccountingItemMembership()
-            acc.year = datetime.now().year
-            acc.member = invoice.member
-            acc.inv = invoice
-            acc.value = invoice.mc_gross
-            acc.assoc = invoice.assoc
-            acc.save()
+        _process_membership(invoice)
 
     elif invoice.typ == PaymentInvoice.DONATE:
-        if AccountingItemDonation.objects.filter(inv=invoice).count() == 0:
-            acc = AccountingItemDonation()
-            acc.member = invoice.member
-            acc.inv = invoice
-            acc.value = invoice.mc_gross
-            acc.assoc = invoice.assoc
-            acc.inv = invoice
-            acc.descr = invoice.causal
-            acc.save()
-
-            if "badge" in features:
-                assign_badge(invoice.member, "donor")
+        _process_donate(features, invoice)
 
     elif invoice.typ == PaymentInvoice.COLLECTION:
-        if AccountingItemCollection.objects.filter(inv=invoice).count() == 0:
-            acc = AccountingItemCollection()
-            acc.member = invoice.member
-            acc.inv = invoice
-            acc.value = invoice.mc_gross
-            acc.assoc = invoice.assoc
-            acc.collection_id = invoice.idx
-            acc.save()
-
-            if "badge" in features:
-                assign_badge(invoice.member, "gifter")
+        _process_collection(features, invoice)
 
     return True
+
+
+def _process_collection(features, invoice):
+    if AccountingItemCollection.objects.filter(inv=invoice).count() == 0:
+        acc = AccountingItemCollection()
+        acc.member = invoice.member
+        acc.inv = invoice
+        acc.value = invoice.mc_gross
+        acc.assoc = invoice.assoc
+        acc.collection_id = invoice.idx
+        acc.save()
+
+        if "badge" in features:
+            assign_badge(invoice.member, "gifter")
+
+
+def _process_donate(features, invoice):
+    if AccountingItemDonation.objects.filter(inv=invoice).count() == 0:
+        acc = AccountingItemDonation()
+        acc.member = invoice.member
+        acc.inv = invoice
+        acc.value = invoice.mc_gross
+        acc.assoc = invoice.assoc
+        acc.inv = invoice
+        acc.descr = invoice.causal
+        acc.save()
+
+        if "badge" in features:
+            assign_badge(invoice.member, "donor")
+
+
+def _process_membership(invoice):
+    if AccountingItemMembership.objects.filter(inv=invoice).count() == 0:
+        acc = AccountingItemMembership()
+        acc.year = datetime.now().year
+        acc.member = invoice.member
+        acc.inv = invoice
+        acc.value = invoice.mc_gross
+        acc.assoc = invoice.assoc
+        acc.save()
+
+
+def _process_payment(invoice):
+    if AccountingItemPayment.objects.filter(inv=invoice).count() == 0:
+        reg = Registration.objects.get(pk=invoice.idx)
+
+        acc = AccountingItemPayment()
+        acc.pay = AccountingItemPayment.MONEY
+        acc.member = invoice.member
+        acc.reg = reg
+        acc.inv = invoice
+        acc.value = invoice.mc_gross
+        acc.assoc = invoice.assoc
+        acc.save()
+
+        reg.num_payments += 1
+        reg.save()
+
+        # e-invoice emission
+        if "e-invoice" in get_assoc_features(invoice.assoc_id):
+            process_payment(invoice.id)
+
+
+def _process_fee(features, fee, invoice):
+    trans = AccountingItemTransaction()
+    trans.member = invoice.member
+    trans.inv = invoice
+    # trans.value = invoice.mc_fee
+    trans.value = (float(invoice.mc_gross) * fee) / 100
+    trans.assoc = invoice.assoc
+    if "payment_fees" in features and invoice.assoc.get_config("payment_fees_user", False):
+        trans.user_burden = True
+    trans.save()
+    if invoice.typ == PaymentInvoice.REGISTRATION:
+        reg = Registration.objects.get(pk=invoice.idx)
+        trans.reg = reg
+        trans.save()
 
 
 @receiver(pre_save, sender=PaymentInvoice)
@@ -280,10 +301,10 @@ def update_payment_invoice(sender, instance, **kwargs):
     except Exception:
         return
 
-    if prev.status == PaymentInvoice.CHECKED or prev.status == PaymentInvoice.CONFIRMED:
+    if prev.status in (PaymentInvoice.CHECKED, PaymentInvoice.CONFIRMED):
         return
 
-    if instance.status != PaymentInvoice.CHECKED and instance.status != PaymentInvoice.CONFIRMED:
+    if instance.status not in (PaymentInvoice.CHECKED, PaymentInvoice.CONFIRMED):
         return
 
     payment_received(instance)

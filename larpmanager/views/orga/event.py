@@ -136,12 +136,11 @@ def orga_features_go(request, ctx, num, on=True):
             messages.success(request, _("Feature activated"))
         else:
             messages.success(request, _("Feature already activated"))
+    elif f_id not in feat_id:
+        messages.success(request, _("Feature already deactivated"))
     else:
-        if f_id not in feat_id:
-            messages.success(request, _("Feature already deactivated"))
-        else:
-            ctx["event"].features.remove(f_id)
-            messages.success(request, _("Feature deactivated"))
+        ctx["event"].features.remove(f_id)
+        messages.success(request, _("Feature deactivated"))
 
     ctx["event"].save()
     # update cached event features, for itself, and the events for which they are parent
