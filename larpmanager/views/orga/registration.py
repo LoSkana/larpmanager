@@ -116,7 +116,7 @@ def orga_registrations_traits(r, ctx):
 
 
 def orga_registrations_tickets(r, ctx):
-    typ = ("0", "Confermate")
+    typ = ("1", "Confermate")
     if not r.ticket_id or r.ticket_id not in ctx["reg_tickets"]:
         regs_list_add(ctx, "list_tickets", "e", r.member)
     else:
@@ -125,13 +125,13 @@ def orga_registrations_tickets(r, ctx):
         r.ticket_show = t.name
 
         if t.tier == RegistrationTicket.STAFF:
-            typ = ("3", "Staff")
+            typ = ("4", "Staff")
         elif t.tier == RegistrationTicket.WAITING:
-            typ = ("2", "Waiting")
+            typ = ("3", "Waiting")
         elif t.tier == RegistrationTicket.FILLER:
-            typ = ("1", "Filler")
+            typ = ("2", "Filler")
         elif is_reg_provisional(r, ctx["features"]):
-            typ = ("5", _("Provisional"))
+            typ = ("0", _("Provisional"))
 
     if typ[0] not in ctx["reg_all"]:
         ctx["reg_all"][typ[0]] = {"count": 0, "type": typ[1], "list": []}
