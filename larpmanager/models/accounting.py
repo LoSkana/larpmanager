@@ -121,6 +121,7 @@ class PaymentInvoice(BaseModel):
             return ""
         if not self.invoice.name:
             return ""
+        # noinspection PyUnresolvedReferences
         return download(self.invoice.url)
 
     def get_details(self):
@@ -234,7 +235,9 @@ class AccountingItem(BaseModel):
 
     def __str__(self):
         s = "Voce contabile"
+        # noinspection PyUnresolvedReferences
         if self.id:
+            # noinspection PyUnresolvedReferences
             s += f" &{self.id}"
         s += f" - {self.__class__.__name__}"
         if self.member:
@@ -247,6 +250,7 @@ class AccountingItem(BaseModel):
     def short_descr(self):
         if not hasattr(self, "descr"):
             return ""
+        # noinspection PyUnresolvedReferences
         return self.descr[:100]
 
 
@@ -345,6 +349,7 @@ class AccountingItemExpense(AccountingItem):
     is_approved = models.BooleanField(default=False)
 
     def download(self):
+        # noinspection PyUnresolvedReferences
         return download(self.invoice.url)
 
 
@@ -367,6 +372,7 @@ class AccountingItemFlow(AccountingItem):
     def download(self):
         if not self.invoice:
             return ""
+        # noinspection PyUnresolvedReferences
         return download(self.invoice.url)
 
 
@@ -474,8 +480,10 @@ class Discount(BaseModel):
         ]
 
     def __str__(self):
+        # noinspection PyUnresolvedReferences
         s = f"{self.name} ({self.get_typ_display()}) {self.value}"
         if self.event:
+            # noinspection PyUnresolvedReferences
             s += self.event.assoc.get_currency_symbol()
         return s
 
@@ -486,14 +494,22 @@ class Discount(BaseModel):
         return js
 
     def show_event(self):
+        # noinspection PyUnresolvedReferences
         return ", ".join([str(c) for c in self.runs.all()])
 
 
 class AccountingItemDiscount(AccountingItem):
+    # TODO remove
     reg = models.ForeignKey(
         Registration,
         on_delete=models.CASCADE,
         related_name="accounting_items_d",
+        null=True,
+    )
+
+    run = models.ForeignKey(
+        Run,
+        on_delete=models.CASCADE,
         null=True,
     )
 
@@ -506,6 +522,7 @@ class AccountingItemDiscount(AccountingItem):
     def show(self):
         j = {"name": self.disc.name, "value": self.value}
         if self.expires:
+            # noinspection PyUnresolvedReferences
             j["expires"] = self.expires.strftime("%H:%M")
         else:
             j["expires"] = ""
@@ -553,6 +570,7 @@ class Collection(BaseModel):
 
     def display_member(self):
         if self.member:
+            # noinspection PyUnresolvedReferences
             return self.member.display_member()
         return self.name
 

@@ -156,10 +156,9 @@ def save_registration(request, ctx, form, run, event, reg, gifted=False):
     form.save_reg_questions(reg, False)
 
     # Confirm saved discounts, signs
-    que = AccountingItemDiscount.objects.filter(member=request.user.member, reg=reg)
+    que = AccountingItemDiscount.objects.filter(member=request.user.member, run=reg.run)
     for el in que:
         if el.expires is not None:
-            el.reg = reg
             el.expires = None
             el.save()
 
@@ -565,27 +564,27 @@ def _is_discount_invalid_for_registration(disc, member, run):
 
 
 def _is_discount_already_used(disc, member, run):
-    return AccountingItemDiscount.objects.filter(disc=disc, member=member, reg__run=run).exists()
+    return AccountingItemDiscount.objects.filter(disc=disc, member=member, run=run).exists()
 
 
 def _is_type_already_used(disc_type, member, run):
-    return AccountingItemDiscount.objects.filter(disc__typ=disc_type, member=member, reg__run=run).exists()
+    return AccountingItemDiscount.objects.filter(disc__typ=disc_type, member=member, run=run).exists()
 
 
 def _is_discount_maxed(disc, run):
-    count = AccountingItemDiscount.objects.filter(disc=disc, reg__run=run).count()
+    count = AccountingItemDiscount.objects.filter(disc=disc, run=run).count()
     return count > disc.max_redeem
 
 
 def _validate_exclusive_logic(disc, member, run, event):
     # For PLAYAGAIN discount: no other discounts and has another registration
     if disc.typ == Discount.PLAYAGAIN:
-        if AccountingItemDiscount.objects.filter(member=member, reg__run=run).exists():
+        if AccountingItemDiscount.objects.filter(member=member, run=run).exists():
             return False
         if not Registration.objects.filter(member=member, run__event=event).exclude(run=run).exists():
             return False
     # If PLAYAGAIN discount was already applied, no other allowed
-    elif AccountingItemDiscount.objects.filter(member=member, reg__run=run, disc__typ=Discount.PLAYAGAIN).exists():
+    elif AccountingItemDiscount.objects.filter(member=member, run=run, disc__typ=Discount.PLAYAGAIN).exists():
         return False
     return True
 
@@ -597,9 +596,7 @@ def discount_list(request, s, n):
     now = datetime.now()
     # AccountingItemDiscount.objects.filter(expires__lte=now).delete()
     lst = []
-    for el in AccountingItemDiscount.objects.filter(member=request.user.member, reg__run=ctx["run"]).select_related(
-        "disc"
-    ):
+    for el in AccountingItemDiscount.objects.filter(member=request.user.member, run=ctx["run"]).select_related("disc"):
         if el.expires and el.expires < now:
             el.delete()
         else:

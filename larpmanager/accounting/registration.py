@@ -74,8 +74,11 @@ def get_reg_iscr(instance):
         else:
             tot_iscr += c.option.price
 
-    for el in AccountingItemDiscount.objects.filter(member=instance.member, reg=instance).select_related("disc"):
-        tot_iscr -= el.disc.value
+    # no discount for gifted
+    if not instance.redeem_code:
+        que = AccountingItemDiscount.objects.filter(member=instance.member, run=instance.run)
+        for el in que.select_related("disc"):
+            tot_iscr -= el.disc.value
 
     tot_iscr += instance.surcharge
 
@@ -291,7 +294,7 @@ def cancel_reg(reg):
     AssignmentTrait.objects.filter(run=reg.run, member=reg.member).delete()
 
     # delete discounts
-    AccountingItemDiscount.objects.filter(reg=reg).delete()
+    AccountingItemDiscount.objects.filter(run=reg.run).delete()
 
     # delete bonus credits / tokens
     AccountingItemOther.objects.filter(ref_addit=reg.id).delete()
@@ -309,7 +312,8 @@ def get_display_choice(choices, k):
 
 def round_to_nearest_cent(number):
     rounded = round(number * 10) / 10
-    if abs(float(number) - rounded) <= 0.03:
+    max_residual = 0.03
+    if abs(float(number) - rounded) <= max_residual:
         return rounded
     return float(number)
 
@@ -323,7 +327,7 @@ def pre_save_registration(sender, instance, *args, **kwargs):
 def get_date_surcharge(reg, event):
     if reg and reg.ticket:
         t = reg.ticket.tier
-        if t == RegistrationTicket.WAITING or t == RegistrationTicket.STAFF:
+        if t in {RegistrationTicket.WAITING, RegistrationTicket.STAFF}:
             return 0
 
     dt = datetime.now().date()
@@ -376,8 +380,9 @@ def post_save_registration_accounting(sender, instance, **kwargs):
 
 @receiver(post_save, sender=AccountingItemDiscount)
 def post_save_accounting_item_discount_accounting(sender, instance, **kwargs):
-    if instance.reg:
-        instance.reg.save()
+    if instance.run and not instance.expires:
+        for reg in Registration.objects.filter(member=instance.member, run=instance.run):
+            reg.save()
 
 
 @receiver(post_save, sender=RegistrationTicket)
@@ -426,6 +431,8 @@ def update_registration_accounting(reg):
         if reg.run.development == s:
             return
 
+    max_residual = 0.05
+
     start = reg.run.start
     features = get_event_features(reg.run.event_id)
     assoc_id = reg.run.event.assoc_id
@@ -444,7 +451,8 @@ def update_registration_accounting(reg):
     reg.alert = False
 
     remaining = reg.tot_iscr - reg.tot_payed
-    if remaining <= 0.05:
+
+    if remaining <= max_residual:
         return
 
     if reg.cancellation_date:
@@ -465,7 +473,7 @@ def update_registration_accounting(reg):
     else:
         quota_check(reg, start, alert, assoc_id)
 
-    if reg.quota <= 0.05:
+    if reg.quota <= max_residual:
         return
 
     reg.alert = reg.deadline < alert

@@ -171,7 +171,7 @@ def get_run_accounting(run, ctx):
         s_credits = dc["cre"]["tot"]
 
     if "discount" in features:
-        dc["dis"] = get_acc_detail(_("Discount"), run, AccountingItemDiscount, None, None, reg=True)
+        dc["dis"] = get_acc_detail(_("Discount"), run, AccountingItemDiscount, None, None)
 
     run.revenue = s_payments + s_inflows - (s_fees + s_refund)
     run.balance = run.revenue - (s_outflows + s_expenses + s_tokens + s_credits)

@@ -259,7 +259,7 @@ def orga_registrations_discount(ctx):
     if "discount" not in ctx["features"]:
         return
     ctx["reg_discounts"] = {}
-    que = AccountingItemDiscount.objects.filter(reg__run=ctx["run"])
+    que = AccountingItemDiscount.objects.filter(run=ctx["run"])
     for aid in que.select_related("member", "disc").exclude(hide=True):
         regs_list_add(ctx, "list_discount", aid.disc.name, aid.member)
         if aid.member_id not in ctx["reg_discounts"]:
@@ -572,7 +572,7 @@ def orga_registration_discounts(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_registrations")
     get_registration(ctx, num)
     # get active discounts
-    ctx["active"] = AccountingItemDiscount.objects.filter(reg__run=ctx["run"], member=ctx["registration"].member)
+    ctx["active"] = AccountingItemDiscount.objects.filter(run=ctx["run"], member=ctx["registration"].member)
     # get available discounts
     ctx["available"] = ctx["run"].discounts.all()
     return render(request, "larpmanager/orga/registration/discounts.html", ctx)
@@ -587,7 +587,7 @@ def orga_registration_discount_add(request, s, n, num, dis):
         value=ctx["discount"].value,
         member=ctx["registration"].member,
         disc=ctx["discount"],
-        reg=ctx["registration"],
+        run=ctx["run"],
         assoc_id=ctx["a_id"],
     )
     ctx["registration"].save()
