@@ -67,7 +67,7 @@ class AccountingItemTransactionAdmin(AccountingItemAdmin):
 
 @admin.register(AccountingItemDiscount)
 class AccountingItemDiscountAdmin(AccountingItemAdmin):
-    list_display = ("id", "disc", "member", "value", "created", "updated")
+    list_display = ("id", "disc", "run", "member", "value", "created", "updated")
     autocomplete_fields = ["member", "inv", "assoc", "run", "disc"]
     list_filter = (MemberFilter, AssocFilter, RunFilter)
 
