@@ -340,9 +340,9 @@ def register(request, s, n, sc="", dis="", tk=0):
         if not _check_secret_code(ctx, sc):
             raise Http404("wrong registration code")
 
-        redirect_url = _check_redirect_registration(ctx, event)
-        if redirect_url:
-            return redirect(redirect_url)
+        res = _check_redirect_registration(request, ctx, event)
+        if res:
+            return res
 
     _add_bring_friend_discounts(ctx)
 
@@ -385,17 +385,18 @@ def _check_secret_code(ctx, secret_code):
     return True
 
 
-def _check_redirect_registration(ctx, event):
+def _check_redirect_registration(request, ctx, event):
     if "register_link" in ctx["features"] and event.register_link:
         if "tier" not in ctx or ctx["tier"] != RegistrationTicket.STAFF:
-            return event.register_link
+            return redirect(event.register_link)
 
     if "registration_open" in ctx["features"]:
         if not ctx["run"].registration_open or ctx["run"].registration_open > timezone_now():
             if "pre_register" in ctx["features"] and event.get_config("pre_register_active", False):
-                return "pre_register"  # This assumes the URL name, use `reverse()` if needed
+                return redirect("pre_register", s=ctx["event"].slug)
             else:
-                return None  # handled by render later
+                return render(request, "larpmanager/event/not_open.html", ctx)
+
     return None
 
 
