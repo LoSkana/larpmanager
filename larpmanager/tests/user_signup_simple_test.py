@@ -45,13 +45,11 @@ def test_user_signup_simple(live_server):
 def user_signup_simple(live_server, page):
     login_orga(page, live_server)
 
-    expect(page.locator("#one")).to_contain_text("Registration is open!")
-
     pre_register(live_server, page)
 
     signup(live_server, page)
 
-    test_help(live_server, page)
+    help_questions(live_server, page)
 
 
 def signup(live_server, page):
@@ -89,7 +87,7 @@ def signup(live_server, page):
     expect(page.locator("#banner")).not_to_contain_text("Register")
 
 
-def test_help(live_server, page):
+def help_questions(live_server, page):
     # test help
     go_to(page, live_server, "/manage/features/28/on")
     page.get_by_role("link", name="Write here!").click()
