@@ -47,6 +47,80 @@ def user_signup_simple(live_server, page):
 
     expect(page.locator("#one")).to_contain_text("Registration is open!")
 
+    pre_register(live_server, page)
+
+    signup(live_server, page)
+
+    test_help(live_server, page)
+
+
+def signup(live_server, page):
+    # sign up
+    page.get_by_role("link", name="Calendar").click()
+    expect(page.locator("#one")).to_contain_text("Registration is open!")
+    page.get_by_role("link", name="Registration is open!").click()
+    page.get_by_role("button", name="Continue").click()
+    page.get_by_role("button", name="Confirm").click()
+
+    # test mails
+    go_to(page, live_server, "/debug/mail")
+
+    # delete sign up
+    go_to(page, live_server, "/test/1/manage/registrations")
+    page.locator("a:has(i.fas.fa-edit)").click()
+    page.get_by_role("link", name="Delete").click()
+    page.get_by_role("button", name="Confirmation delete").click()
+
+    # sign up, confirm profile
+    go_to(page, live_server, "/test/1/register")
+    page.get_by_role("button", name="Continue").click()
+    page.get_by_role("button", name="Confirm").click()
+    expect(page.locator("#one")).to_contain_text("Registration confirmed")
+    expect(page.locator("#one")).to_contain_text("please fill in your profile.")
+
+    page.get_by_role("link", name="please fill in your profile.").click()
+    page.get_by_role("checkbox", name="Authorisation").check()
+    page.get_by_role("button", name="Submit").click()
+    expect(page.locator("#one")).to_contain_text("You are regularly signed up!")
+
+    # test update of signup with no payments
+    go_to(page, live_server, "/test/1/register")
+    page.get_by_role("button", name="Continue").click()
+    expect(page.locator("#banner")).not_to_contain_text("Register")
+
+
+def test_help(live_server, page):
+    # test help
+    go_to(page, live_server, "/manage/features/28/on")
+    page.get_by_role("link", name="Write here!").click()
+    page.get_by_role("textbox", name="Text").click()
+    page.get_by_role("textbox", name="Text").fill("please help me")
+    image_path = Path(__file__).parent / "image.jpg"
+    page.locator("#id_attachment").set_input_files(str(image_path))
+    page.get_by_label("Event").select_option("1")
+    page.get_by_role("button", name="Confirm").click()
+
+    # check questions
+    expect(page.locator("#one")).to_contain_text("[Test Larp] - please help me (Attachment)")
+    go_to(page, live_server, "/manage/questions")
+    expect(page.get_by_role("grid")).to_contain_text("please help me")
+
+    page.get_by_role("link", name="Answer", exact=True).click()
+    page.get_by_role("textbox", name="Text").click()
+    page.get_by_role("textbox", name="Text").fill("aasadsada")
+    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("link", name="Write here!").click()
+    page.get_by_role("textbox", name="Text").click()
+    page.get_by_role("textbox", name="Text").fill("e adessoooo")
+    page.get_by_role("button", name="Confirm").click()
+
+    go_to(page, live_server, "/manage/questions")
+    page.get_by_role("link", name="Close").click()
+    page.get_by_role("link", name="Show questions already").click()
+    page.get_by_role("button", name="Confirm").click()
+
+
+def pre_register(live_server, page):
     # Set email send
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications")).click()
@@ -81,66 +155,4 @@ def user_signup_simple(live_server, page):
     go_to(page, live_server, "/test/1/manage/config")
     page.get_by_role("link", name=re.compile(r"^Pre-registration")).click()
     page.locator("#id_pre_register_active").uncheck()
-    page.get_by_role("button", name="Confirm").click()
-
-    # sign up
-    page.get_by_role("link", name="Calendar").click()
-    expect(page.locator("#one")).to_contain_text("Registration is open!")
-    page.get_by_role("link", name="Registration is open!").click()
-    page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
-
-    # test mails
-    go_to(page, live_server, "/debug/mail")
-
-    # delete sign up
-    go_to(page, live_server, "/test/1/manage/registrations")
-    page.locator("a:has(i.fas.fa-edit)").click()
-    page.get_by_role("link", name="Delete").click()
-    page.get_by_role("button", name="Confirmation delete").click()
-
-    # sign up, confirm profile
-    go_to(page, live_server, "/test/1/register")
-    page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
-    expect(page.locator("#one")).to_contain_text("Registration confirmed")
-    expect(page.locator("#one")).to_contain_text("please fill in your profile.")
-
-    page.get_by_role("link", name="please fill in your profile.").click()
-    page.get_by_role("checkbox", name="Authorisation").check()
-    page.get_by_role("button", name="Submit").click()
-    expect(page.locator("#one")).to_contain_text("You are regularly signed up!")
-
-    # test update of signup with no payments
-    go_to(page, live_server, "/test/1/register")
-    page.get_by_role("button", name="Continue").click()
-    expect(page.locator("#banner")).not_to_contain_text("Register")
-
-    # test help
-    go_to(page, live_server, "/manage/features/28/on")
-    page.get_by_role("link", name="Write here!").click()
-    page.get_by_role("textbox", name="Text").click()
-    page.get_by_role("textbox", name="Text").fill("please help me")
-    image_path = Path(__file__).parent / "image.jpg"
-    page.locator("#id_attachment").set_input_files(str(image_path))
-    page.get_by_label("Event").select_option("1")
-    page.get_by_role("button", name="Confirm").click()
-
-    # check questions
-    expect(page.locator("#one")).to_contain_text("[Test Larp] - please help me (Attachment)")
-    go_to(page, live_server, "/manage/questions")
-    expect(page.get_by_role("grid")).to_contain_text("please help me")
-
-    page.get_by_role("link", name="Answer", exact=True).click()
-    page.get_by_role("textbox", name="Text").click()
-    page.get_by_role("textbox", name="Text").fill("aasadsada")
-    page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("link", name="Write here!").click()
-    page.get_by_role("textbox", name="Text").click()
-    page.get_by_role("textbox", name="Text").fill("e adessoooo")
-    page.get_by_role("button", name="Confirm").click()
-
-    go_to(page, live_server, "/manage/questions")
-    page.get_by_role("link", name="Close").click()
-    page.get_by_role("link", name="Show questions already").click()
     page.get_by_role("button", name="Confirm").click()
