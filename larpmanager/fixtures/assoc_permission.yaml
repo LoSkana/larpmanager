@@ -197,7 +197,7 @@
 - model: larpmanager.assocpermission
   pk: 29
   fields:
-    name: Quest
+    name: Questions
     slug: exe_questions
     number: 41
     feature: 28
