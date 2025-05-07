@@ -132,23 +132,10 @@ def zipdir(path, ziph):
 
 
 def check_centauri(request):
-    if not request.user.is_authenticated:
-        return
-
-    if request.user.member.language == "en":
-        return
-
     if "centauri" not in request.assoc["features"]:
         return
 
-    if "centauri_prob" not in request.assoc:
-        return
-
-    prob = int(request.assoc["centauri_prob"])
-    if not prob:
-        return
-
-    if random.randint(0, 1000) > prob:
+    if not _go_centauri(request):
         return
 
     assoc = Association.objects.get(pk=request.assoc["id"])
@@ -163,3 +150,23 @@ def check_centauri(request):
         bdg.save()
 
     return render(request, "larpmanager/general/centauri.html", ctx)
+
+
+def _go_centauri(request):
+    if not request.user.is_authenticated:
+        return False
+
+    if request.user.member.language == "en":
+        return False
+
+    if "centauri_prob" not in request.assoc:
+        return False
+
+    prob = int(request.assoc["centauri_prob"])
+    if not prob:
+        return False
+
+    if random.randint(0, 1000) > prob:
+        return False
+
+    return True
