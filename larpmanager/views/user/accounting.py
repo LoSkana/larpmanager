@@ -76,7 +76,7 @@ from larpmanager.utils.event import check_event_permission, get_event_run
 from larpmanager.utils.exceptions import (
     check_assoc_feature,
 )
-from larpmanager.utils.member import calculate_fiscal_code
+from larpmanager.utils.fiscal_code import calculate_fiscal_code
 
 
 @login_required
