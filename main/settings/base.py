@@ -218,13 +218,22 @@ CLEAN_DB = [
     "delete from background_task_completedtask where run_at < CURRENT_DATE - INTERVAL '7 day';",
     "delete from larpmanager_paymentinvoice where deleted < CURRENT_DATE - INTERVAL '7 day';",
     "delete from larpmanager_shuttleservice where deleted < CURRENT_DATE - INTERVAL '7 day';",
+
+    "delete from larpmanager_registrationchoice where deleted < CURRENT_DATE - INTERVAL '6 months';",
+    "delete from larpmanager_registrationanswer where deleted < CURRENT_DATE - INTERVAL '6 months';",
+    "delete from larpmanager_characterchoice where deleted < CURRENT_DATE - INTERVAL '6 months';",
+    "delete from larpmanager_characteranswer where deleted < CURRENT_DATE - INTERVAL '6 months';",
+    "delete from larpmanager_accountingitempayment where deleted < CURRENT_DATE - INTERVAL '6 months';",
+    "delete from larpmanager_accountingitemtransaction where deleted < CURRENT_DATE - INTERVAL '6 months';",
+    "delete from larpmanager_accountingitemdiscount where deleted < CURRENT_DATE - INTERVAL '6 months';",
+
     "delete from larpmanager_registrationchoice where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
     "delete from larpmanager_registrationanswer where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
     "delete from larpmanager_accountingitempayment where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
     "delete from larpmanager_accountingitemtransaction where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
-    "delete from larpmanager_accountingitemdiscount where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
     "delete from larpmanager_playerrelationship where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
     "delete from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months';",
+
     "delete from larpmanager_casting where deleted < CURRENT_DATE - INTERVAL '6 months';",
     "delete from larpmanager_relationship where deleted < CURRENT_DATE - INTERVAL '6 months';",
     "delete from larpmanager_larpmanagerprofiler where created < CURRENT_DATE - INTERVAL '3 day';",
