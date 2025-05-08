@@ -6,9 +6,11 @@
 {% endblock title %}
 {% block css %}
     {% if iframe %}
-        #header, header, #tutorials .column, #tutorials .navig { display: none }
-        #main { padding: 0; width: 100%; max-width: 100%; }
-        #page-wrapper { padding: 0; }
+        <style>
+            #header, header, #tutorials .column, #tutorials .navig { display: none }
+            #main { padding: 0; width: 100%; max-width: 100%; }
+            #page-wrapper { padding: 0; }
+        </style>
     {% endif %}
 {% endblock css %}
 {% block content %}
