@@ -54,27 +54,11 @@ def init_cache_assoc(a_slug):
     except ObjectDoesNotExist:
         return None
 
-    # print("dict - " + self.name)
     el = assoc.as_dict()
 
-    # PRINT (THE)
-    el["payment_currency"] = assoc.get_payment_currency_display()
-    el["currency_symbol"] = assoc.get_currency_symbol()
+    _init_payments(assoc, el)
 
-    el["methods"] = {}
-    payment_details = get_payment_details(assoc)
-    # print(assoc.payment_methods.all())
-    for m in assoc.payment_methods.all():
-        mel = m.as_dict()
-        for s in ["fee", "descr"]:
-            mel[s] = payment_details.get(f"{m.slug}_{s}")
-        el["methods"][m.slug] = mel
-
-    el["members_fields"] = set()
-    for fl in assoc.mandatory_fields.split(","):
-        el["members_fields"].add(fl)
-    for fl in assoc.optional_fields.split(","):
-        el["members_fields"].add(fl)
+    _init_member_fields(assoc, el)
 
     if assoc.profile:
         try:
@@ -83,15 +67,6 @@ def init_cache_assoc(a_slug):
             el["image"] = assoc.profile.url
         except FileNotFoundError:
             pass
-
-    # if assoc.background:
-    # el["background"] = assoc.background_red.url
-    #
-    # if assoc.font:
-    # El ["Font"] = assoc.font.url
-    #
-    # for s in ["pri_rgb", "sec_rgb", "ter_rgb"]:
-    # el[s] = get_attr(assoc, s)
 
     for m in [
         "created",
@@ -106,6 +81,12 @@ def init_cache_assoc(a_slug):
         if m in el:
             del el[m]
 
+    _init_features(assoc, el)
+
+    return el
+
+
+def _init_features(assoc, el):
     el["features"] = get_assoc_features(assoc.id)
 
     if "custom_mail" in el["features"]:
@@ -124,7 +105,25 @@ def init_cache_assoc(a_slug):
         if prob:
             el["centauri_prob"] = prob
 
-    return el
+
+def _init_member_fields(assoc, el):
+    el["members_fields"] = set()
+    for fl in assoc.mandatory_fields.split(","):
+        el["members_fields"].add(fl)
+    for fl in assoc.optional_fields.split(","):
+        el["members_fields"].add(fl)
+
+
+def _init_payments(assoc, el):
+    el["payment_currency"] = assoc.get_payment_currency_display()
+    el["currency_symbol"] = assoc.get_currency_symbol()
+    el["methods"] = {}
+    payment_details = get_payment_details(assoc)
+    for m in assoc.payment_methods.all():
+        mel = m.as_dict()
+        for s in ["fee", "descr"]:
+            mel[s] = payment_details.get(f"{m.slug}_{s}")
+        el["methods"][m.slug] = mel
 
 
 @receiver(post_save, sender=Association)

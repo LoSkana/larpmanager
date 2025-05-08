@@ -37,8 +37,8 @@ class Command(BaseCommand):
             "payment_methods": (PaymentMethod, ("id", "name", "slug", "instructions", "fields", "profile")),
         }
 
-        for model in models:
-            (typ, fields) = models[model]
+        for model, value in models.items():
+            (typ, fields) = value
             data = []
             for el in typ.objects.values(*fields).order_by("pk"):
                 entry = {

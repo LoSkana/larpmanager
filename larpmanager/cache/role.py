@@ -157,8 +157,8 @@ def get_event_roles(request, slug):
             is_organizer = True
         (name, slugs) = get_cache_event_role(el)
         names.append(name)
-        for slug in slugs:
-            pms[slug] = 1
+        for pm_slug in slugs:
+            pms[pm_slug] = 1
     return is_organizer, pms, names
 
 

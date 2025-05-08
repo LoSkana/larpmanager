@@ -73,7 +73,8 @@ def get_satispay_form(request, ctx, invoice, amount):
         key_id, rsa_key, math.ceil(amount * 100), ctx["payment_currency"], ctx["callback"]
     )
 
-    if response.status_code != 200:
+    correct_response_code = 200
+    if response.status_code != correct_response_code:
         # print(response)
         # print(response.content)
         raise Http404("something went wrong :( ")
@@ -124,7 +125,8 @@ def satispay_verify(request, cod):
 
     response = satispaython.get_payment_details(key_id, rsa_key, invoice.cod)
     # print(response)
-    if response.status_code != 200:
+    correct_response_code = 200
+    if response.status_code != correct_response_code:
         return
     aux = json.loads(response.content)
     mc_gross = int(aux["amount_unit"]) / 100.0
@@ -608,7 +610,8 @@ class RedSysClient:
 
         resp = int(merchant_parameters["Ds_Response"])
 
-        if resp < 0 or resp > 99:
+        redsys_failed = 99
+        if resp < 0 or resp > redsys_failed:
             subj = "Failed redsys payment"
             body = str(merchant_parameters)
             for member in get_assoc_executives(assoc):

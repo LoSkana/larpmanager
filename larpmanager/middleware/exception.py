@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.contrib import messages
-from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -49,59 +48,72 @@ class ExceptionHandlingMiddleware:
     def __call__(self, request):
         return self.get_response(request)
 
+    def process_exception(self, request, exception):
+        handlers = [
+            (PermissionError, lambda ex: render(request, "exception/permission.html")),
+            (NotFoundError, lambda ex: render(request, "exception/notfound.html")),
+            (MembershipError, lambda ex: render(request, "exception/membership.html", {"assocs": ex.assocs})),
+            (
+                UnknowRunError,
+                lambda ex: render(
+                    request,
+                    "exception/runs.html",
+                    {
+                        "runs": Run.objects.filter(development=Run.SHOW)
+                        .exclude(event__visible=False)
+                        .select_related("event")
+                        .filter(event__assoc_id=request.assoc["id"])
+                        .order_by("-end")
+                    },
+                ),
+            ),
+            (FeatureError, lambda ex: self._handle_feature_error(request, ex)),
+            (
+                SignupError,
+                lambda ex: self._redirect_with_message(
+                    request, _("To access this feature, you must first register!"), "register", [ex.slug, ex.number]
+                ),
+            ),
+            (
+                WaitingError,
+                lambda ex: self._redirect_with_message(
+                    request, _("This feature is available for non-waiting tickets!"), "register", [ex.slug, ex.number]
+                ),
+            ),
+            (
+                HiddenError,
+                lambda ex: self._redirect_with_message(
+                    request,
+                    ex.name + " " + _("not visible at this time"),
+                    "gallery",
+                    [ex.slug, ex.number],
+                    level="warning",
+                ),
+            ),
+            (RedirectError, lambda ex: redirect(ex.view)),
+        ]
+
+        for exc_type, handler in handlers:
+            if isinstance(exception, exc_type):
+                return handler(exception)
+
+        return None
+
     @staticmethod
-    def process_exception(request, exception):
-        if isinstance(exception, PermissionError):
-            return render(request, "exception/permission.html")
+    def _redirect_with_message(request, message, viewname, args, level="success"):
+        getattr(messages, level)(request, message)
+        return redirect(reverse(viewname, args=args))
 
-        if isinstance(exception, NotFoundError):
-            return render(request, "exception/notfound.html")
+    @staticmethod
+    def _handle_feature_error(request, ex):
+        feature = Feature.objects.get(slug=ex.feature)
+        ctx = {"exe": ex, "feature": feature}
 
-        if isinstance(exception, MembershipError):
-            ctx = {"assocs": exception.assocs}
-            return render(request, "exception/membership.html", ctx)
+        if feature.overall:
+            ctx["permission"] = has_assoc_permission(request, "exe_features")
+        else:
+            run = Run.objects.get(pk=ex.run)
+            ctx["run"] = run
+            ctx["permission"] = has_event_permission({}, request, run.event.slug, "orga_features")
 
-        if isinstance(exception, UnknowRunError):
-            runs = (
-                Run.objects.filter(development=Run.SHOW)
-                .exclude(event__visible=False)
-                .select_related("event")
-                .filter(event__assoc_id=request.assoc["id"])
-                .order_by("-end")
-            )
-            return render(request, "exception/runs.html", {"runs": runs})
-
-        if isinstance(exception, FeatureError):
-            feature = Feature.objects.get(slug=exception.feature)
-            ctx = {"exe": exception, "feature": feature}
-
-            # check if the user has the permission to add features
-            if feature.overall:
-                ctx["permission"] = has_assoc_permission(request, "exe_features")
-            else:
-                ctx["run"] = Run.objects.get(pk=exception.run)
-                ctx["permission"] = has_event_permission({}, request, ctx["run"].event.slug, "orga_features")
-
-            return render(request, "exception/feature.html", ctx)
-
-        if isinstance(exception, SignupError):
-            mes = _("To access this feature, you must first register!")
-            messages.success(request, mes)
-            args = [exception.slug, exception.number]
-            return HttpResponseRedirect(reverse("register", args=args))
-
-        if isinstance(exception, WaitingError):
-            mes = _("This feature is available for non-waiting tickets!")
-            messages.success(request, mes)
-            args = [exception.slug, exception.number]
-            return HttpResponseRedirect(reverse("register", args=args))
-
-        if isinstance(exception, HiddenError):
-            messages.warning(request, exception.name + " " + _("not visible at this time"))
-            args = [exception.slug, exception.number]
-            return HttpResponseRedirect(reverse("gallery", args=args))
-
-        if isinstance(exception, RedirectError):
-            return redirect(exception.view)
-
-        return None  # Middlewares should return None when not applied
+        return render(request, "exception/feature.html", ctx)
