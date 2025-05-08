@@ -123,7 +123,7 @@ class CharacterForm(WritingForm, BaseCharacterForm):
 
         self.details = {}
 
-        self.init_character()
+        self._init_character()
 
     def check_editable(self, question):
         if not self.params["event"].get_config("user_character_approval", False):
@@ -136,16 +136,16 @@ class CharacterForm(WritingForm, BaseCharacterForm):
 
         return self.instance.status in question.get_editable()
 
-    def init_custom_fields(self):
+    def _init_custom_fields(self):
         event = self.params["event"]
         if event.parent:
             event = event.parent
         fields_default = {"event"}
         fields_custom = set()
-        self.init_reg_question(self.instance, event)
+        self._init_reg_question(self.instance, event)
         reg_counts = get_reg_counts(self.params["run"])
         for question in self.questions:
-            key = self.init_field(question, reg_counts=reg_counts, orga=self.orga)
+            key = self._init_field(question, reg_counts=reg_counts, orga=self.orga)
             if len(question.typ) == 1:
                 fields_custom.add(key)
             else:
@@ -161,7 +161,7 @@ class CharacterForm(WritingForm, BaseCharacterForm):
             del self.fields[lbl]
 
         if not self.orga and event.get_config("user_character_approval", False):
-            if not self.instance.pk or self.instance.status == CharacterStatus.CREATION:
+            if not self.instance.pk or self.instance.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
                 self.fields["propose"] = forms.BooleanField(
                     required=False,
                     label=_("Complete"),
@@ -173,12 +173,12 @@ class CharacterForm(WritingForm, BaseCharacterForm):
                     ),
                 )
 
-    def init_character(self):
-        self.init_factions()
+    def _init_character(self):
+        self._init_factions()
 
         # custom fields
         if "character_form" in self.params["features"]:
-            self.init_custom_fields()
+            self._init_custom_fields()
             return
 
         self.delete_field("concept")
@@ -217,7 +217,7 @@ class CharacterForm(WritingForm, BaseCharacterForm):
                 if s in self.fields:
                     del self.fields[s]
 
-    def init_factions(self):
+    def _init_factions(self):
         if "faction" not in self.params["features"]:
             return
 
@@ -239,9 +239,9 @@ class CharacterForm(WritingForm, BaseCharacterForm):
         for fc in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text", "concept"):
             self.initial["factions_list"].append(fc[0])
 
-    def save_multi(self, s, instance):
+    def _save_multi(self, s, instance):
         if s != "factions_list":
-            return super().save_multi(s, instance)
+            return super()._save_multi(s, instance)
 
         new = set(self.cleaned_data["factions_list"].values_list("pk", flat=True))
         old = set(instance.factions_list.order_by("number").values_list("id", flat=True))
@@ -290,20 +290,20 @@ class OrgaCharacterForm(CharacterForm):
         if not self.instance.pk:
             return
 
-        self.init_cocreation()
+        self._init_cocreation()
 
-        self.init_px()
+        self._init_px()
 
-        self.init_plots()
+        self._init_plots()
 
-        self.init_questbuilder()
+        self._init_questbuilder()
 
-    def init_character(self):
-        self.init_factions()
+    def _init_character(self):
+        self._init_factions()
 
         # custom fields
         if "character_form" in self.params["features"]:
-            self.init_custom_fields()
+            self._init_custom_fields()
         else:
             # STANDARD FIELDS
             st_fields = [
@@ -346,7 +346,7 @@ class OrgaCharacterForm(CharacterForm):
             choices = [(m.id, m.name) for m in que]
             self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---"))] + choices
 
-    def init_questbuilder(self):
+    def _init_questbuilder(self):
         if "questbuilder" not in self.params["features"]:
             return
 
@@ -383,7 +383,7 @@ class OrgaCharacterForm(CharacterForm):
             if at.trait.text:
                 self.details["id_concept"] += "<hr />" + at.trait.text
 
-    def init_plots(self):
+    def _init_plots(self):
         if "plot" not in self.params["features"]:
             return
 
@@ -407,7 +407,7 @@ class OrgaCharacterForm(CharacterForm):
             self.details[f"id_{field}"] = pl[3]
             self.show_link.append(f"id_{field}")
 
-    def save_plot(self):
+    def _save_plot(self):
         if "plot" not in self.params["features"]:
             return
 
@@ -420,7 +420,7 @@ class OrgaCharacterForm(CharacterForm):
             pr.text = self.cleaned_data[field]
             pr.save()
 
-    def init_px(self):
+    def _init_px(self):
         if "px" not in self.params["features"]:
             return
 
@@ -444,7 +444,7 @@ class OrgaCharacterForm(CharacterForm):
         self.initial["px_delivery_list"] = [str(s) for s in self.instance.px_delivery_list.values_list("pk", flat=True)]
         self.show_link.append("id_px_delivery_list")
 
-    def save_px(self, instance):
+    def _save_px(self, instance):
         if "px" not in self.params["features"]:
             return
 
@@ -453,7 +453,7 @@ class OrgaCharacterForm(CharacterForm):
         if "deliveries" in self.cleaned_data:
             instance.px_delivery_list.set(self.cleaned_data["deliveries"])
 
-    def init_factions(self):
+    def _init_factions(self):
         if "faction" not in self.params["features"]:
             return
 
@@ -483,7 +483,7 @@ class OrgaCharacterForm(CharacterForm):
         self.details["id_concept"] = fact_tx
         self.show_link.append("id_factions_list")
 
-    def init_cocreation(self):
+    def _init_cocreation(self):
         if "co_creation" not in self.params["features"]:
             return
 
@@ -513,7 +513,7 @@ class OrgaCharacterForm(CharacterForm):
             self.initial[k] = el.second
         self.show_link.append(f"id_{k}")
 
-    def save_cocreation(self):
+    def _save_cocreation(self):
         if "co_creation" not in self.params["features"]:
             return
 
@@ -532,9 +532,9 @@ class OrgaCharacterForm(CharacterForm):
         instance = super().save()
 
         if instance.pk:
-            self.save_plot()
-            self.save_px(instance)
-            self.save_cocreation()
+            self._save_plot()
+            self._save_px(instance)
+            self._save_cocreation()
 
         return instance
 

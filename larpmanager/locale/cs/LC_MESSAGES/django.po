@@ -3136,6 +3136,9 @@ msgstr "Schválit vrácení peněz"
 msgid "Assigned staff member"
 msgstr "Přidělený zaměstnanec"
 
+msgid "Character not visible"
+msgstr "Znak není viditelný"
+
 msgid "Co-creation questions"
 msgstr "Otázky týkající se spoluvytváření"
 

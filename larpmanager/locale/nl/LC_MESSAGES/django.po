@@ -3136,6 +3136,9 @@ msgstr "Terugbetaling goedkeuren"
 msgid "Assigned staff member"
 msgstr "Toegewezen medewerker"
 
+msgid "Character not visible"
+msgstr "Karakter niet zichtbaar"
+
 msgid "Co-creation questions"
 msgstr "Co-creatie vragen"
 

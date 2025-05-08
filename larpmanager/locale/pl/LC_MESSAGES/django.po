@@ -3136,6 +3136,9 @@ msgstr "Zatwierdzenie zwrotu kosztów"
 msgid "Assigned staff member"
 msgstr "Przydzielony pracownik"
 
+msgid "Character not visible"
+msgstr "Postać niewidoczna"
+
 msgid "Co-creation questions"
 msgstr "Pytania dotyczące współtworzenia"
 
