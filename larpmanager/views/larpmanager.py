@@ -420,6 +420,8 @@ def tutorials(request, slug=None):
             if el[1] > order and not ctx["next"]:
                 ctx["next"] = el
 
+    ctx["iframe"] = request.GET.get("in_iframe") == "1"
+
     return render(request, "larpmanager/larpmanager/tutorials.html", ctx)
 
 
