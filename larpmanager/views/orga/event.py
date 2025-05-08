@@ -20,7 +20,6 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -33,10 +32,10 @@ from larpmanager.forms.event import (
     OrgaEventForm,
     OrgaEventRoleForm,
     OrgaEventTextForm,
+    OrgaFeatureForm,
     OrgaRunForm,
 )
 from larpmanager.models.access import EventRole
-from larpmanager.models.base import Feature, FeatureModule
 from larpmanager.models.event import Event, EventButton, EventText
 from larpmanager.utils.common import get_feature
 from larpmanager.utils.deadlines import check_run_deadlines
@@ -104,25 +103,7 @@ def orga_config(request, s, n):
 
 @login_required
 def orga_features(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_features")
-    # mod_id = list(ctx['event'].feature_modules.values_list('id', flat=True))
-    prefetch = Prefetch(
-        "features",
-        queryset=Feature.objects.filter(overall=False, placeholder=False).order_by("order"),
-    )
-    ctx["modules"] = FeatureModule.objects.filter(default=False)
-    ctx["modules"] = ctx["modules"].order_by("order").prefetch_related(prefetch)
-
-    feat_id = list(ctx["event"].features.values_list("id", flat=True))
-
-    for mod in ctx["modules"]:
-        for el in mod.features.all():
-            # if el.module and el.module.id not in mod_id:
-            # continue
-            el.activated = el.id in feat_id
-
-    # slarpmanager_run(ctx['run'])
-    return render(request, "larpmanager/orga/features.html", ctx)
+    return orga_edit(request, s, n, "orga_features", OrgaFeatureForm, None, "manage")
 
 
 def orga_features_go(request, ctx, num, on=True):
@@ -152,14 +133,14 @@ def orga_features_go(request, ctx, num, on=True):
 def orga_features_on(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_features")
     orga_features_go(request, ctx, num, on=True)
-    return redirect("orga_features", s=s, n=n)
+    return redirect("manage", s=s, n=n)
 
 
 @login_required
 def orga_features_off(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_features")
     orga_features_go(request, ctx, num, on=False)
-    return redirect("orga_features", s=s, n=n)
+    return redirect("manage", s=s, n=n)
 
 
 @login_required

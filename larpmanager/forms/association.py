@@ -25,6 +25,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext
 
 from larpmanager.forms.base import MyCssForm, MyForm
+from larpmanager.forms.feature import FeatureForm
 from larpmanager.forms.utils import (
     AssocMemberS2WidgetMulti,
     ConfigType,
@@ -194,6 +195,29 @@ class ExeAppearanceForm(MyCssForm):
     @staticmethod
     def get_input_css():
         return "assoc_css"
+
+
+class ExeFeatureForm(FeatureForm):
+    page_title = _("Features")
+
+    page_info = _(
+        "This page allows you to select the features activated for the organization, and all its events. Click on a feature to show its description."
+    )
+
+    load_js = "feature_checkbox"
+
+    class Meta:
+        model = Association
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_features(True)
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        self._save_features(instance)
+        return instance
 
 
 class ExeConfigForm(MyForm):

@@ -20,9 +20,11 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.http import require_POST
 
 from larpmanager.cache.role import check_assoc_permission
 from larpmanager.forms.accounting import (
@@ -34,13 +36,14 @@ from larpmanager.forms.association import (
     ExeAssocRoleForm,
     ExeAssocTextForm,
     ExeConfigForm,
+    ExeFeatureForm,
 )
 from larpmanager.forms.member import (
     ExeProfileForm,
 )
 from larpmanager.models.access import AssocRole
 from larpmanager.models.association import Association, AssocText
-from larpmanager.models.base import Feature, FeatureModule
+from larpmanager.models.base import Feature
 from larpmanager.models.event import (
     Run,
 )
@@ -116,18 +119,7 @@ def f_k_exe(f_id, r_id):
 
 @login_required
 def exe_features(request):
-    ctx = check_assoc_permission(request, "exe_features")
-    prefetch = Prefetch("features", queryset=Feature.objects.filter(overall=True, placeholder=False).order_by("order"))
-
-    ctx["modules"] = FeatureModule.objects.filter(default=False)
-    ctx["modules"] = ctx["modules"].order_by("order").prefetch_related(prefetch)
-    for mod in ctx["modules"]:
-        mod.list = mod.features.all()
-        for el in mod.list:
-            el.activated = el.slug in request.assoc["features"]
-            # ~ if el.activated:
-            # ~ el.not_late = cache.get(f_k_exe(el.id, request.assoc['id']), False)
-    return render(request, "larpmanager/exe/features.html", ctx)
+    return exe_edit(request, ExeFeatureForm, None, "exe_features", "manage")
 
 
 def exe_features_go(request, ctx, num, on=True):
@@ -154,14 +146,14 @@ def exe_features_go(request, ctx, num, on=True):
 def exe_features_on(request, num):
     ctx = check_assoc_permission(request, "exe_features")
     exe_features_go(request, ctx, num, on=True)
-    return redirect("exe_features")
+    return redirect("manage")
 
 
 @login_required
 def exe_features_off(request, num):
     ctx = check_assoc_permission(request, "exe_features")
     exe_features_go(request, ctx, num, on=False)
-    return redirect("exe_features")
+    return redirect("manage")
 
 
 @login_required
@@ -172,3 +164,27 @@ def exe_larpmanager(request):
     for run in ctx["list"]:
         get_run_lm_payment(run)
     return render(request, "larpmanager/exe/larpmanager.html", ctx)
+
+
+@require_POST
+def feature_description(request):
+    fid = request.POST.get("fid")
+    try:
+        feature = Feature.objects.get(pk=fid)
+    except ObjectDoesNotExist:
+        return JsonResponse({"res": "ko"})
+
+    txt = f"<h2>{feature.name}</h2> {feature.descr}<br /><br />"
+
+    if feature.tutorial:
+        txt += f"""
+            <iframe src="{feature.tutorial}" width="100%" height="300"></iframe><br /><br />
+        """
+
+    if feature.link:
+        txt += f"""
+            <iframe width='100%' height='400' frameborder='0' allow='encrypted-media' "
+            allowfullscreen src='https://www.youtube.com/embed/{feature.link}?rel=0&cc_load_policy=1'></iframe>"
+        """
+
+    return JsonResponse({"res": "ok", "txt": txt})

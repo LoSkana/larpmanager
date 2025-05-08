@@ -711,9 +711,6 @@ msgstr "Příklad"
 msgid "Faction"
 msgstr "Skupina"
 
-msgid "Feature"
-msgstr "Funkce"
-
 msgid "Gallery"
 msgstr "Galerie"
 
@@ -1362,9 +1359,6 @@ msgstr "Kontaktujte nás"
 msgid "Cover link"
 msgstr "Obal odkazu"
 
-msgid "Deactivate"
-msgstr "Deaktivace"
-
 msgid "Easter egg"
 msgstr "Velikonoční vajíčko"
 
@@ -1674,6 +1668,9 @@ msgstr "Levé kolo"
 msgid "Run balance"
 msgstr "Rozpočet na provoz"
 
+msgid "Secret link"
+msgstr "Tajný odkaz"
+
 msgid "Select year"
 msgstr "Zvolte rok"
 
@@ -1817,6 +1814,9 @@ msgstr "Potřebujete odvézt?"
 
 msgid "Not selected"
 msgstr "Nevybráno"
+
+msgid "Opening date"
+msgstr "Datum otevření"
 
 msgid "Organization"
 msgstr "Sdružení"
@@ -1987,9 +1987,6 @@ msgstr "Externí url"
 msgid "Faction cover"
 msgstr "Skupinové krytí"
 
-msgid "Feature types"
-msgstr "Typy funkcí"
-
 msgid "Free donation"
 msgstr "Bezplatný příspěvek"
 
@@ -2153,6 +2150,9 @@ msgstr "Nastavení události"
 msgid "Event Template"
 msgstr "Šablona události"
 
+msgid "Event features"
+msgstr "Funkce události"
+
 msgid "Event language"
 msgstr "Jazykové akce"
 
@@ -2299,9 +2299,6 @@ msgstr "Seznam postav"
 
 msgid "Collected votes"
 msgstr "Obdržené hlasy"
-
-msgid "Cost for player"
-msgstr "Náklady na hráče"
 
 msgid "Deadline (date)"
 msgstr "Termín (datum)"
@@ -4651,9 +4648,6 @@ msgstr "Na této stránce můžete přidat nebo upravit slevu."
 msgid "This page allows you to add or edit an invoice."
 msgstr "Na této stránce můžete přidávat nebo upravovat faktury za platby."
 
-msgid "This page allows you to edit an event template."
-msgstr "Tato stránka umožňuje upravit šablonu události."
-
 msgid "This page allows you to fully view a character."
 msgstr "Tato stránka umožňuje úplné zobrazení postavy."
 
@@ -5784,12 +5778,6 @@ msgstr ""
 "představení!"
 
 msgid ""
-"NOTE: By activating a feature, it is immediately available for all runs."
-msgstr ""
-"POZNÁMKA: Po aktivaci funkce je tato funkce okamžitě k dispozici pro všechny"
-" běhy."
-
-msgid ""
 "Presentation visible to all players, when 'show presentation' is checked"
 msgstr ""
 "Prezentace viditelná pro všechny hráče, pokud je zaškrtnuto políčko "
@@ -5936,10 +5924,6 @@ msgstr ""
 "Náhled viditelný pouze přiřazeným přehrávačem, pokud je zaškrtnuto "
 "\"zobrazit náhled\"."
 
-msgid ""
-"This page shows the optional features available for the whole organization."
-msgstr "Tato stránka shrnuje volitelné funkce dostupné na úrovni sdružení."
-
 #, python-format
 msgid ""
 "(check the available number of discounts <a href='%(url)s'>on this page</a>)"
@@ -5973,12 +5957,6 @@ msgid ""
 msgstr ""
 "Jste-li italský občan, uveďte své daňové identifikační číslo, jinak "
 "nevyplňujte."
-
-msgid ""
-"NOTE: When activating a feature, it is immediately available for all events."
-msgstr ""
-"POZNÁMKA: Po aktivaci funkce je tato funkce okamžitě k dispozici pro všechny"
-" události."
 
 msgid ""
 "Part of the registration fee derived only from the additional options chosen"
@@ -6377,6 +6355,13 @@ msgstr ""
 "(výchozí 0)"
 
 msgid ""
+"Allows organizers to pose questions about a character, which the player can "
+"answer."
+msgstr ""
+"Umožňuje organizátorům klást otázky týkající se postavy, na které může hráč "
+"odpovídat."
+
+msgid ""
 "Enables management of expenses paid using the organization's financial "
 "instruments."
 msgstr ""
@@ -6405,13 +6390,6 @@ msgid ""
 msgstr ""
 "Seznam asociací, které mohou přistupovat k vašim datům, můžete zkontrolovat "
 "a upravit ve svém."
-
-msgid ""
-"Allows organizers to pose questions about a character, which the player can "
-"answer. "
-msgstr ""
-"Umožňuje organizátorům klást otázky týkající se postavy, na které může hráč "
-"odpovídat."
 
 msgid ""
 "Enables 'Handouts,' pre-written texts that provide information about a plot "
@@ -7048,13 +7026,6 @@ msgstr ""
 "Pokud je zaškrtnuto, náhledy jsou viditelné a vyhrazené pouze pro hráče, "
 "kterému je položka přiřazena."
 
-msgid ""
-"This page shows the features activated for the event, and allows you to "
-"enable or disable them."
-msgstr ""
-"Tato stránka shrnuje funkce aktivované pro danou událost a umožňuje je "
-"aktivovat nebo deaktivovat."
-
 #, python-format
 msgid ""
 "To confirm it, we ask you to pay this amount: %(amount)s, within this number"
@@ -7422,6 +7393,13 @@ msgid ""
 msgstr ""
 "Můžete si libovolně vybrat, které funkce se aktivují pro celou organizaci "
 "nebo pro konkrétní událost."
+
+msgid ""
+"This page allows you to select the features of a template. Click on a "
+"feature to show its description."
+msgstr ""
+"Na této stránce můžete vybrat funkce šablony. Kliknutím na funkci zobrazíte "
+"její popis."
 
 msgid ""
 "for bidirectional relationships (love, colleagues, rivals), of which the "
@@ -8235,6 +8213,13 @@ msgstr ""
 " posouzení vám bude brzy potvrzen."
 
 msgid ""
+"This page allows you to select the features activated for this event, and "
+"all its runs. Click on a feature to show its description."
+msgstr ""
+"Na této stránce můžete vybrat funkce aktivované pro tuto událost a všechny "
+"její běhy. Kliknutím na funkci zobrazíte její popis."
+
+msgid ""
 "This page shows the collections opened by players. You can update them "
 "indicating the recipient and disburse the money contributed."
 msgstr ""
@@ -8370,6 +8355,13 @@ msgid ""
 msgstr ""
 "Platbu můžete provést <a href= %(url)s'>na této stránce</a>. Pokud narazíte "
 "na jakýkoli problém, dejte nám vědět, pomůžeme vám ho vyřešit!"
+
+msgid ""
+"This page allows you to select the features activated for the organization, "
+"and all its events. Click on a feature to show its description."
+msgstr ""
+"Tato stránka umožňuje vybrat funkce aktivované pro organizaci a všechny její"
+" události. Kliknutím na funkci zobrazíte její popis."
 
 msgid ""
 "Enables 'Filler' characters: simpler character sheets, assigned to players "

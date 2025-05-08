@@ -434,4 +434,9 @@ urlpatterns = [
         views_eas.exe_larpmanager,
         name="exe_larpmanager",
     ),
+    path(
+        "feature/description/",
+        views_eas.feature_description,
+        name="feature_description",
+    ),
 ]
