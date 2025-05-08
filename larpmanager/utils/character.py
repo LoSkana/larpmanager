@@ -148,8 +148,8 @@ def get_character_sheet_questbuilder(ctx):
         data["quest"] = t.quest.show_complete()
 
         data["rels"] = []
-        for tnum in el["traits"]:
-            num = ctx["traits"][tnum]["char"]
+        for snum in el["traits"]:
+            num = ctx["traits"][snum]["char"]
             data["rels"].append(ctx["chars"][num])
 
         ctx["sheet_traits"].append(data)

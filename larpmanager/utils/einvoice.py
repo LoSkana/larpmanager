@@ -44,8 +44,24 @@ def process_payment(invoice_id):
 
 def prepare_xml(inv, einvoice):
     member = inv.member
+    name_number = 2
+
     root = ET.Element("FatturaElettronica", xmlns="http://www.fatturapa.gov.it/sdi/fatturapa/v1.2.2")
 
+    _einvoice_header(einvoice, inv, member, name_number, root)
+
+    _einvoice_body(einvoice, inv, root)
+
+    # Convert to XML string
+    tree = ET.ElementTree(root)
+    xml_bytes: IO[bytes] = io.BytesIO()
+    tree.write(xml_bytes, encoding="utf-8", xml_declaration=True)
+
+    xml_str = xml_bytes.getvalue().decode("utf-8")
+    return xml_str
+
+
+def _einvoice_header(einvoice, inv, member, name_number, root):
     # Invoicelettronicaheader
     header = ET.SubElement(root, "FatturaElettronicaHeader")
 
@@ -64,11 +80,9 @@ def prepare_xml(inv, einvoice):
     id_fiscale_iva = ET.SubElement(dati_anagrafici, "IdFiscaleIVA")
     ET.SubElement(id_fiscale_iva, "IdPaese").text = "IT"
     ET.SubElement(id_fiscale_iva, "IdCodice").text = inv.assoc.get_config("einvoice_partitaiva")
-
     anagrafica = ET.SubElement(dati_anagrafici, "Anagrafica")
     ET.SubElement(anagrafica, "Denominazione").text = inv.assoc.get_config("einvoice_denominazione")
     ET.SubElement(dati_anagrafici, "RegimeFiscale").text = inv.assoc.get_config("einvoice_regimefiscale")
-
     sede = ET.SubElement(cedente_prestatore, "Sede")
     ET.SubElement(sede, "Indirizzo").text = inv.assoc.get_config("einvoice_indirizzo")
     ET.SubElement(sede, "NumeroCivico").text = inv.assoc.get_config("einvoice_numerocivico")
@@ -81,23 +95,20 @@ def prepare_xml(inv, einvoice):
     cessionario_committente = ET.SubElement(header, "CessionarioCommittente")
     dati_anagrafici = ET.SubElement(cessionario_committente, "DatiAnagrafici")
     ET.SubElement(dati_anagrafici, "CodiceFiscale").text = member.fiscal_code
-
     anagrafica = ET.SubElement(dati_anagrafici, "Anagrafica")
     if member.legal_name:
         splitted = member.legal_name.rsplit(" ", 1)
-        if len(splitted) == 2:
+        if len(splitted) == name_number:
             member.name, member.surname = splitted
         else:
             member.name = splitted[0]
     ET.SubElement(anagrafica, "Nome").text = member.name
     ET.SubElement(anagrafica, "Cognome").text = member.surname
-
     aux = member.residence_address.split("|")
     if aux[0] == "IT":
         aux[1] = aux[1].replace("IT-", "")
     else:
         aux[1] = "ESTERO"
-
     sede = ET.SubElement(cessionario_committente, "Sede")
     ET.SubElement(sede, "Indirizzo").text = aux[4]
     ET.SubElement(sede, "NumeroCivico").text = aux[5]
@@ -106,6 +117,8 @@ def prepare_xml(inv, einvoice):
     ET.SubElement(sede, "Provincia").text = aux[1]
     ET.SubElement(sede, "Nazione").text = aux[0]
 
+
+def _einvoice_body(einvoice, inv, root):
     # Invoicelettronicabody
     body = ET.SubElement(root, "FatturaElettronicaBody")
     dati_generali = ET.SubElement(body, "DatiGenerali")
@@ -136,11 +149,3 @@ def prepare_xml(inv, einvoice):
     ET.SubElement(dati_riepilogo, "Imposta").text = f"{int(aliquotaiva) * float(inv.mc_gross) / 100.0:.2f}"
     if natura:
         ET.SubElement(dati_riepilogo, "Natura").text = natura
-
-    # Convert to XML string
-    tree = ET.ElementTree(root)
-    xml_bytes: IO[bytes] = io.BytesIO()
-    tree.write(xml_bytes, encoding="utf-8", xml_declaration=True)
-
-    xml_str = xml_bytes.getvalue().decode("utf-8")
-    return xml_str

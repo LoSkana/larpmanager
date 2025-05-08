@@ -66,7 +66,7 @@ from larpmanager.utils.common import (
     normalize_string,
 )
 from larpmanager.utils.edit import exe_edit
-from larpmanager.utils.member import calculate_fiscal_code
+from larpmanager.utils.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.paginate import exe_paginate
 from larpmanager.utils.pdf import (
     get_membership_request,

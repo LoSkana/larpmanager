@@ -49,47 +49,59 @@ def registration_available(r, features=None, reg_counts=None):
     if not features:
         features = get_event_features(r.event_id)
 
-    # print(remaining_pri)
-
     # check primary tickets available
     if remaining_pri > 0:
         r.status["primary"] = True
-        if remaining_pri < 10 or remaining_pri * 1.0 / r.event.max_pg < 0.3:
+        perc_signed = 0.3
+        max_signed = 10
+        if remaining_pri < max_signed or remaining_pri * 1.0 / r.event.max_pg < perc_signed:
             r.status["additional"] = _(" Hurry: only %(num)d tickets available.") % {"num": remaining_pri}
         return
 
-        # check if we manage filler
-    if "filler" in features:
-        # infinite fillers
-        if r.event.max_filler == 0:
-            r.status["filler"] = True
-            return
-
-            # if we manage filler and there are available, say so
-        if r.event.max_filler > 0:
-            remaining_filler = r.event.max_filler - reg_counts["count_fill"]
-            if remaining_filler > 0:
-                r.status["additional"] = _(" Hurry: only %(num)d tickets available.") % {"num": remaining_filler}
-                r.status["filler"] = True
-                return
+    # check if we manage filler
+    if "filler" in features and _available_filler(r, reg_counts):
+        return
 
     # check if we manage waiting
-    if "waiting" in features:
-        # infinite waitings
-        if r.event.max_waiting == 0:
-            r.status["waiting"] = True
-            return
-
-        # if we manage waiting and there are available, say so
-        if r.event.max_waiting > 0:
-            remaining_waiting = r.event.max_waiting - reg_counts["count_wait"]
-            if remaining_waiting > 0:
-                r.status["additional"] = _(" Hurry: only %(num)d tickets available.") % {"num": remaining_waiting}
-                r.status["waiting"] = True
-                return
+    if "waiting" in features and _available_waiting(r, reg_counts):
+        return
 
     r.status["closed"] = True
     return
+
+
+def _available_waiting(r, reg_counts):
+    # infinite waitings
+    if r.event.max_waiting == 0:
+        r.status["waiting"] = True
+        return True
+
+    # if we manage waiting and there are available, say so
+    if r.event.max_waiting > 0:
+        remaining_waiting = r.event.max_waiting - reg_counts["count_wait"]
+        if remaining_waiting > 0:
+            r.status["additional"] = _(" Hurry: only %(num)d tickets available.") % {"num": remaining_waiting}
+            r.status["waiting"] = True
+            return True
+
+    return False
+
+
+def _available_filler(r, reg_counts):
+    # infinite fillers
+    if r.event.max_filler == 0:
+        r.status["filler"] = True
+        return True
+
+        # if we manage filler and there are available, say so
+    if r.event.max_filler > 0:
+        remaining_filler = r.event.max_filler - reg_counts["count_fill"]
+        if remaining_filler > 0:
+            r.status["additional"] = _(" Hurry: only %(num)d tickets available.") % {"num": remaining_filler}
+            r.status["filler"] = True
+            return True
+
+    return False
 
 
 def get_match_reg(r, my_regs):
@@ -123,38 +135,7 @@ def registration_status_signed(run, features, register_url):
             return
 
     if "payment" in features:
-        pending = PaymentInvoice.objects.filter(
-            idx=run.reg.id,
-            member_id=run.reg.member_id,
-            status=PaymentInvoice.SUBMITTED,
-            typ=PaymentInvoice.REGISTRATION,
-        )
-        if pending.count() > 0:
-            run.status["text"] = register_text + ", " + _("payment pending confirmation")
-            return
-
-        if run.reg.alert:
-            wire_created = PaymentInvoice.objects.filter(
-                idx=run.reg.id,
-                member_id=run.reg.member_id,
-                status=PaymentInvoice.CREATED,
-                typ=PaymentInvoice.REGISTRATION,
-                method__slug="wire",
-            )
-            if wire_created.count() > 0:
-                pay_url = reverse("acc_reg", args=[run.reg.id])
-                mes = _("to confirm it proceed with payment.")
-                text_url = f", <a href='{pay_url}'>{mes}</a>"
-                note = _("If you have made a transfer, please upload the receipt for it to be processed!")
-                run.status["text"] = f"{register_text}{text_url} ({note})"
-                return
-
-            pay_url = reverse("acc_reg", args=[run.reg.id])
-            mes = _("to confirm it proceed with payment.")
-            text_url = f", <a href='{pay_url}'>{mes}</a>"
-            if run.reg.deadline < 0:
-                text_url += "<i> (" + _("If no payment is received, registration may be cancelled") + ")</i>"
-            run.status["text"] = register_text + text_url
+        if _status_payment(register_text, run):
             return
 
     if not mb.compiled:
@@ -181,6 +162,44 @@ def registration_status_signed(run, features, register_url):
         run.status["text"] += " " + _("Thanks for your support!")
 
 
+def _status_payment(register_text, run):
+    pending = PaymentInvoice.objects.filter(
+        idx=run.reg.id,
+        member_id=run.reg.member_id,
+        status=PaymentInvoice.SUBMITTED,
+        typ=PaymentInvoice.REGISTRATION,
+    )
+    if pending.count() > 0:
+        run.status["text"] = register_text + ", " + _("payment pending confirmation")
+        return True
+
+    if run.reg.alert:
+        wire_created = PaymentInvoice.objects.filter(
+            idx=run.reg.id,
+            member_id=run.reg.member_id,
+            status=PaymentInvoice.CREATED,
+            typ=PaymentInvoice.REGISTRATION,
+            method__slug="wire",
+        )
+        if wire_created.count() > 0:
+            pay_url = reverse("acc_reg", args=[run.reg.id])
+            mes = _("to confirm it proceed with payment.")
+            text_url = f", <a href='{pay_url}'>{mes}</a>"
+            note = _("If you have made a transfer, please upload the receipt for it to be processed!")
+            run.status["text"] = f"{register_text}{text_url} ({note})"
+            return True
+
+        pay_url = reverse("acc_reg", args=[run.reg.id])
+        mes = _("to confirm it proceed with payment.")
+        text_url = f", <a href='{pay_url}'>{mes}</a>"
+        if run.reg.deadline < 0:
+            text_url += "<i> (" + _("If no payment is received, registration may be cancelled") + ")</i>"
+        run.status["text"] = register_text + text_url
+        return True
+
+    return False
+
+
 def registration_status(run, user, my_regs=None, features_map=None, reg_count=None):
     run.status = {"open": True, "details": "", "text": "", "additional": ""}
 
@@ -189,11 +208,7 @@ def registration_status(run, user, my_regs=None, features_map=None, reg_count=No
     if not run.end:
         return
 
-    if features_map is None:
-        features_map = {}
-    if run.event.slug not in features_map:
-        features_map[run.event.slug] = get_event_features(run.event.id)
-    features = features_map[run.event.slug]
+    features = _get_features_map(features_map, run)
 
     registration_available(run, features, reg_count)
     register_url = reverse("register", args=[run.event.slug, run.number])
@@ -220,12 +235,11 @@ def registration_status(run, user, my_regs=None, features_map=None, reg_count=No
         if not run.registration_open:
             run.status["open"] = False
             run.status["text"] = _("Registrations not open!")
-            return
         elif run.registration_open > dt:
             run.status["open"] = False
             run.status["text"] = _("Registrations not open!")
             run.status["details"] = _("Open the: %(date)s") % {"date": run.registration_open.strftime(format_datetime)}
-            return
+        return
 
     # signup open, not already signed in
     if "primary" in run.status:
@@ -241,6 +255,15 @@ def registration_status(run, user, my_regs=None, features_map=None, reg_count=No
         return
 
     run.status["text"] = f"<a href='{register_url}'>{mes}</a>"
+
+
+def _get_features_map(features_map, run):
+    if features_map is None:
+        features_map = {}
+    if run.event.slug not in features_map:
+        features_map[run.event.slug] = get_event_features(run.event.id)
+    features = features_map[run.event.slug]
+    return features
 
 
 def registration_find(r, u, my_regs=None):

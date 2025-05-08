@@ -7581,17 +7581,6 @@ msgstr ""
 msgid "awaiting member approval to proceed with payment"
 msgstr ""
 
-msgid "payment pending confirmation"
-msgstr ""
-
-msgid "to confirm it proceed with payment."
-msgstr ""
-
-msgid ""
-"If you have made a transfer, please upload the receipt for it to be "
-"processed!"
-msgstr ""
-
 msgid "please fill in your profile."
 msgstr ""
 
@@ -7602,6 +7591,17 @@ msgid "You are signed up as Filler!"
 msgstr ""
 
 msgid "You are regularly signed up!"
+msgstr ""
+
+msgid "payment pending confirmation"
+msgstr ""
+
+msgid "to confirm it proceed with payment."
+msgstr ""
+
+msgid ""
+"If you have made a transfer, please upload the receipt for it to be "
+"processed!"
 msgstr ""
 
 msgid "Pre-register to the event!"
