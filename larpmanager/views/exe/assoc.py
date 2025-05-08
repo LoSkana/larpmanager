@@ -178,7 +178,7 @@ def feature_description(request):
 
     if feature.tutorial:
         txt += f"""
-            <iframe src="{feature.tutorial}" width="100%" height="300"></iframe><br /><br />
+            <iframe class='tutorial' src="{feature.tutorial}" width="100%" height="300"></iframe><br /><br />
         """
 
     if feature.link:
