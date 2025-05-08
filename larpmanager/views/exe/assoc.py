@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
@@ -166,6 +168,27 @@ def exe_larpmanager(request):
     return render(request, "larpmanager/exe/larpmanager.html", ctx)
 
 
+def _add_in_iframe_param(url):
+    parsed = urlparse(url)
+
+    query_params = parse_qs(parsed.query)
+    query_params["in_iframe"] = ["1"]
+    new_query = urlencode(query_params, doseq=True)
+
+    new_url = urlunparse(
+        (
+            parsed.scheme,
+            parsed.netloc,
+            parsed.path,
+            parsed.params,
+            new_query,
+            parsed.fragment,
+        )
+    )
+
+    return new_url
+
+
 @require_POST
 def feature_description(request):
     fid = request.POST.get("fid")
@@ -178,7 +201,7 @@ def feature_description(request):
 
     if feature.tutorial:
         txt += f"""
-            <iframe src="{feature.tutorial}?in_iframe=1" width="100%" height="300"></iframe><br /><br />
+            <iframe src="{_add_in_iframe_param(feature.tutorial)}" width="100%" height="300"></iframe><br /><br />
         """
 
     if feature.link:
