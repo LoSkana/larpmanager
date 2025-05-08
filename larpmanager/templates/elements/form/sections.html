@@ -6,7 +6,7 @@
 {% endif %}
 {% include "elements/form/informations.html" %}
 {% if form.errors %}
-    <p style="color: red; margin: 2em; font-style: italic;">
+    <p class="form_error">
         {% trans "Attention! The form contains errors in the fields" %}:&nbsp;
         {% for field in form.visible_fields %}
             {% if field.errors %}{{ field.label }}&nbsp;{% endif %}
@@ -31,7 +31,10 @@
                 <h1>
                     <a href="#"
                        class="my_toggle section-link"
-                       tog='sec_{{ section | slugify }}'>{{ section | template_trans }} <i class="fa-solid fa-chevron-down"></i></a>
+                       tog='sec_{{ section | slugify }}'>
+                        {{ section | template_trans }}
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </a>
                 </h1>
                 <div class="{% if not form.show_sections %}hide{% endif %} sec_{{ section | slugify }}">
                     {% if section in form.section_descriptions %}
@@ -66,9 +69,10 @@
                         {% endif %}
                         {% if form.show_link and field.id_for_label in form.show_link %}
                             <p>
-                                <a href="#" class="my_toggle" tog='f_{{ field.id_for_label }}'>{% trans "Show" %}</a>
+                                <a href="#" class="my_toggle" tog="f_{{ field.id_for_label }}">{% trans "Show" %}</a>
                             </p>
-                            <div style='display: none' class='hide_later f_{{ field.id_for_label }}'>{{ field }}</div>
+                            <div style="display: none"
+                                 class="hide hide_later f_{{ field.id_for_label }}">{{ field }}</div>
                         {% else %}
                             {{ field }}
                         {% endif %}

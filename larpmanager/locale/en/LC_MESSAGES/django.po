@@ -158,6 +158,14 @@ msgid ""
 "of your Organization. In this way you can customize freely the appearance."
 msgstr ""
 
+msgid "Features"
+msgstr ""
+
+msgid ""
+"This page allows you to select the features activated for the organization, "
+"and all its events. Click on a feature to show its description."
+msgstr ""
+
 msgid "Configuration"
 msgstr ""
 
@@ -642,6 +650,14 @@ msgstr ""
 msgid "This page allows you to change general event settings."
 msgstr ""
 
+msgid "Event features"
+msgstr ""
+
+msgid ""
+"This page allows you to select the features activated for this event, and "
+"all its runs. Click on a feature to show its description."
+msgstr ""
+
 msgid "Event Configuration"
 msgstr ""
 
@@ -1079,7 +1095,9 @@ msgstr ""
 msgid "Event Template"
 msgstr ""
 
-msgid "This page allows you to edit an event template."
+msgid ""
+"This page allows you to select the features of a template. Click on a "
+"feature to show its description."
 msgstr ""
 
 msgid "Ability"
@@ -4106,9 +4124,6 @@ msgstr ""
 msgid "Go to the quests of type"
 msgstr ""
 
-msgid "Features"
-msgstr ""
-
 msgid "Characters link"
 msgstr ""
 
@@ -4447,35 +4462,6 @@ msgid "Cover link"
 msgstr ""
 
 msgid "Cover (thumb) link"
-msgstr ""
-
-msgid "Feature"
-msgstr ""
-
-msgid ""
-"This page shows the optional features available for the whole organization."
-msgstr ""
-
-msgid "Feature types"
-msgstr ""
-
-msgid ""
-"NOTE: When activating a feature, it is immediately available for all events."
-msgstr ""
-
-msgid "Module"
-msgstr ""
-
-msgid "Cost for player"
-msgstr ""
-
-msgid "Tutorial"
-msgstr ""
-
-msgid "Video"
-msgstr ""
-
-msgid "Deactivate"
 msgstr ""
 
 msgid "Custodies"
@@ -4934,6 +4920,12 @@ msgid ""
 "Below you will find all the features available; you can write a search "
 "keyword to filter them. Then click on 'Video', and you will see the video "
 "directly."
+msgstr ""
+
+msgid "Tutorial"
+msgstr ""
+
+msgid "Video"
 msgstr ""
 
 msgid "Show inactive"
@@ -5940,15 +5932,6 @@ msgid "This page shows the deadlines to be met for this run."
 msgstr ""
 
 msgid ""
-"This page shows the features activated for the event, and allows you to "
-"enable or disable them."
-msgstr ""
-
-msgid ""
-"NOTE: By activating a feature, it is immediately available for all runs."
-msgstr ""
-
-msgid ""
 "This page shows problems reported by contributors, for direct management "
 "during the event."
 msgstr ""
@@ -6317,6 +6300,9 @@ msgstr ""
 msgid ""
 "This page shows the response options for questions about the workshops of "
 "the event."
+msgstr ""
+
+msgid "Module"
 msgstr ""
 
 msgid "Correct"
@@ -6986,6 +6972,9 @@ msgid ""
 "table, track quantities, and note item locations."
 msgstr ""
 
+msgid "Secret link"
+msgstr ""
+
 msgid ""
 "Generates a special, hidden link that lets certain players register even if "
 "general registration is closed (e.g., early access for a specific group)."
@@ -7133,6 +7122,9 @@ msgstr ""
 msgid ""
 "Lets you define a processing-fee percentage per payment method, optionally "
 "adding it to the final ticket price."
+msgstr ""
+
+msgid "Opening date"
 msgstr ""
 
 msgid ""
@@ -7334,7 +7326,7 @@ msgstr ""
 
 msgid ""
 "Allows organizers to pose questions about a character, which the player can "
-"answer. "
+"answer."
 msgstr ""
 
 msgid "Restrict Staff Access"

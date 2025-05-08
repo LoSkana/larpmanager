@@ -7,7 +7,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 40
 - model: larpmanager.feature
   pk: 2
   fields:
@@ -17,7 +17,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 30
 - model: larpmanager.feature
   pk: 3
   fields:
@@ -28,7 +28,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 150
 - model: larpmanager.feature
   pk: 4
   fields:
@@ -38,7 +38,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 230
 - model: larpmanager.feature
   pk: 5
   fields:
@@ -48,7 +48,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 220
 - model: larpmanager.feature
   pk: 6
   fields:
@@ -59,7 +59,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 240
 - model: larpmanager.feature
   pk: 7
   fields:
@@ -70,7 +70,7 @@
     overall: false
     module: 5
     placeholder: false
-    order: 9999
+    order: 20
 - model: larpmanager.feature
   pk: 10
   fields:
@@ -80,7 +80,7 @@
     overall: false
     module: 3
     placeholder: false
-    order: 9999
+    order: 10
 - model: larpmanager.feature
   pk: 11
   fields:
@@ -89,9 +89,9 @@
       (e.g. for donations or to help cover others' fees).
     slug: pay_what_you_want
     overall: false
-    module: 4
+    module: 2
     placeholder: false
-    order: 9999
+    order: 50
 - model: larpmanager.feature
   pk: 12
   fields:
@@ -100,9 +100,9 @@
       ticket price.
     slug: discount
     overall: false
-    module: 4
+    module: 2
     placeholder: false
-    order: 9999
+    order: 30
 - model: larpmanager.feature
   pk: 14
   fields:
@@ -113,7 +113,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 60
 - model: larpmanager.feature
   pk: 15
   fields:
@@ -124,7 +124,7 @@
     overall: false
     module: 7
     placeholder: false
-    order: 9999
+    order: 70
 - model: larpmanager.feature
   pk: 17
   fields:
@@ -134,7 +134,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 70
 - model: larpmanager.feature
   pk: 18
   fields:
@@ -145,7 +145,7 @@
     overall: true
     module: 2
     placeholder: false
-    order: 9999
+    order: 70
 - model: larpmanager.feature
   pk: 19
   fields:
@@ -156,7 +156,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 50
 - model: larpmanager.feature
   pk: 20
   fields:
@@ -165,7 +165,7 @@
       code to a new registrant, granting both a discounted price.
     slug: bring_friend
     overall: false
-    module: 4
+    module: 2
     placeholder: false
     order: 9999
 - model: larpmanager.feature
@@ -178,7 +178,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 25
 - model: larpmanager.feature
   pk: 22
   fields:
@@ -189,7 +189,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 210
 - model: larpmanager.feature
   pk: 23
   fields:
@@ -200,7 +200,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 80
 - model: larpmanager.feature
   pk: 24
   fields:
@@ -211,7 +211,7 @@
     overall: false
     module: 3
     placeholder: false
-    order: 9999
+    order: 20
 - model: larpmanager.feature
   pk: 25
   fields:
@@ -222,7 +222,7 @@
     overall: false
     module: 7
     placeholder: false
-    order: 9999
+    order: 60
 - model: larpmanager.feature
   pk: 26
   fields:
@@ -232,7 +232,7 @@
     overall: true
     module: 8
     placeholder: false
-    order: 9999
+    order: 20
 - model: larpmanager.feature
   pk: 27
   fields:
@@ -243,7 +243,7 @@
     overall: false
     module: 5
     placeholder: false
-    order: 9999
+    order: 10
 - model: larpmanager.feature
   pk: 28
   fields:
@@ -254,7 +254,7 @@
     overall: true
     module: 8
     placeholder: false
-    order: 9999
+    order: 10
 - model: larpmanager.feature
   pk: 31
   fields:
@@ -265,7 +265,7 @@
     overall: true
     module: 2
     placeholder: false
-    order: 9999
+    order: 40
 - model: larpmanager.feature
   pk: 32
   fields:
@@ -296,7 +296,7 @@
     overall: true
     module: 2
     placeholder: false
-    order: 9999
+    order: 20
 - model: larpmanager.feature
   pk: 40
   fields:
@@ -307,7 +307,7 @@
     overall: true
     module: 8
     placeholder: false
-    order: 9999
+    order: 60
 - model: larpmanager.feature
   pk: 43
   fields:
@@ -318,7 +318,7 @@
     overall: false
     module: 3
     placeholder: false
-    order: 9999
+    order: 30
 - model: larpmanager.feature
   pk: 44
   fields:
@@ -329,7 +329,7 @@
     overall: false
     module: 7
     placeholder: false
-    order: 9999
+    order: 40
 - model: larpmanager.feature
   pk: 45
   fields:
@@ -340,7 +340,7 @@
     overall: true
     module: 8
     placeholder: false
-    order: 9999
+    order: 40
 - model: larpmanager.feature
   pk: 46
   fields:
@@ -351,7 +351,7 @@
     overall: true
     module: 3
     placeholder: false
-    order: 9999
+    order: 30
 - model: larpmanager.feature
   pk: 47
   fields:
@@ -362,7 +362,7 @@
     overall: true
     module: 7
     placeholder: false
-    order: 160
+    order: 40
 - model: larpmanager.feature
   pk: 49
   fields:
@@ -373,7 +373,7 @@
     overall: false
     module: 4
     placeholder: false
-    order: 9999
+    order: 100
 - model: larpmanager.feature
   pk: 50
   fields:
@@ -384,7 +384,7 @@
     overall: false
     module: 4
     placeholder: false
-    order: 9999
+    order: 90
 - model: larpmanager.feature
   pk: 51
   fields:
@@ -395,7 +395,7 @@
     overall: false
     module: 4
     placeholder: false
-    order: 9999
+    order: 70
 - model: larpmanager.feature
   pk: 52
   fields:
@@ -406,7 +406,7 @@
     overall: true
     module: 8
     placeholder: false
-    order: 9999
+    order: 50
 - model: larpmanager.feature
   pk: 53
   fields:
@@ -417,7 +417,7 @@
     overall: false
     module: 4
     placeholder: false
-    order: 9999
+    order: 60
 - model: larpmanager.feature
   pk: 56
   fields:
@@ -428,7 +428,7 @@
     overall: false
     module: 7
     placeholder: false
-    order: 9999
+    order: 10
 - model: larpmanager.feature
   pk: 57
   fields:
@@ -438,7 +438,7 @@
     overall: false
     module: 7
     placeholder: false
-    order: 9999
+    order: 20
 - model: larpmanager.feature
   pk: 58
   fields:
@@ -449,7 +449,7 @@
     overall: false
     module: 4
     placeholder: false
-    order: 9999
+    order: 30
 - model: larpmanager.feature
   pk: 60
   fields:
@@ -460,7 +460,7 @@
     overall: false
     module: 3
     placeholder: false
-    order: 9999
+    order: 40
 - model: larpmanager.feature
   pk: 61
   fields:
@@ -471,7 +471,7 @@
     overall: false
     module: 4
     placeholder: false
-    order: 9999
+    order: 110
 - model: larpmanager.feature
   pk: 62
   fields:
@@ -481,9 +481,9 @@
       days until the event.'
     slug: reg_quotas
     overall: false
-    module: 4
+    module: 2
     placeholder: false
-    order: 9999
+    order: 20
 - model: larpmanager.feature
   pk: 63
   fields:
@@ -494,7 +494,7 @@
     overall: true
     module: 8
     placeholder: false
-    order: 9999
+    order: 90
 - model: larpmanager.feature
   pk: 65
   fields:
@@ -504,7 +504,7 @@
     overall: true
     module: 8
     placeholder: false
-    order: 9999
+    order: 80
 - model: larpmanager.feature
   pk: 66
   fields:
@@ -515,18 +515,18 @@
     overall: true
     module: 3
     placeholder: false
-    order: 9999
+    order: 20
 - model: larpmanager.feature
   pk: 69
   fields:
-    name: Secret registration link
+    name: Secret link
     descr: Generates a special, hidden link that lets certain players register even
       if general registration is closed (e.g., early access for a specific group).
     slug: registration_secret
     overall: false
     module: 4
     placeholder: false
-    order: 9999
+    order: 20
 - model: larpmanager.feature
   pk: 74
   fields:
@@ -535,9 +535,9 @@
       to define multiple due dates and amounts.
     slug: reg_installments
     overall: false
-    module: 4
+    module: 2
     placeholder: false
-    order: 9999
+    order: 10
 - model: larpmanager.feature
   pk: 75
   fields:
@@ -547,7 +547,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 200
 - model: larpmanager.feature
   pk: 76
   fields:
@@ -558,7 +558,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 190
 - model: larpmanager.feature
   pk: 77
   fields:
@@ -569,7 +569,7 @@
     overall: false
     module: 4
     placeholder: false
-    order: 9999
+    order: 40
 - model: larpmanager.feature
   pk: 79
   fields:
@@ -580,7 +580,7 @@
     overall: true
     module: 7
     placeholder: false
-    order: 9999
+    order: 30
 - model: larpmanager.feature
   pk: 81
   fields:
@@ -591,7 +591,7 @@
     overall: false
     module: 4
     placeholder: false
-    order: 9999
+    order: 80
 - model: larpmanager.feature
   pk: 86
   fields:
@@ -602,7 +602,7 @@
     overall: true
     module: 2
     placeholder: false
-    order: 9999
+    order: 140
 - model: larpmanager.feature
   pk: 88
   fields:
@@ -613,7 +613,7 @@
     overall: true
     module: 8
     placeholder: false
-    order: 9999
+    order: 100
 - model: larpmanager.feature
   pk: 91
   fields:
@@ -624,7 +624,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 110
 - model: larpmanager.feature
   pk: 92
   fields:
@@ -635,7 +635,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 100
 - model: larpmanager.feature
   pk: 93
   fields:
@@ -646,7 +646,7 @@
     overall: true
     module: 8
     placeholder: false
-    order: 9999
+    order: 30
 - model: larpmanager.feature
   pk: 94
   fields:
@@ -657,7 +657,7 @@
     overall: true
     module: 7
     placeholder: false
-    order: 9999
+    order: 20
 - model: larpmanager.feature
   pk: 95
   fields:
@@ -668,7 +668,7 @@
     overall: true
     module: 7
     placeholder: false
-    order: 9999
+    order: 10
 - model: larpmanager.feature
   pk: 103
   fields:
@@ -679,7 +679,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 130
 - model: larpmanager.feature
   pk: 104
   fields:
@@ -690,7 +690,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 120
 - model: larpmanager.feature
   pk: 105
   fields:
@@ -701,7 +701,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 140
 - model: larpmanager.feature
   pk: 106
   fields:
@@ -712,7 +712,7 @@
     overall: true
     module: 2
     placeholder: false
-    order: 9999
+    order: 30
 - model: larpmanager.feature
   pk: 107
   fields:
@@ -723,7 +723,7 @@
     overall: true
     module: 2
     placeholder: false
-    order: 9999
+    order: 50
 - model: larpmanager.feature
   pk: 108
   fields:
@@ -734,7 +734,7 @@
     overall: true
     module: 2
     placeholder: false
-    order: 9999
+    order: 90
 - model: larpmanager.feature
   pk: 109
   fields:
@@ -745,7 +745,7 @@
     overall: true
     module: 2
     placeholder: false
-    order: 9999
+    order: 130
 - model: larpmanager.feature
   pk: 110
   fields:
@@ -755,7 +755,7 @@
     overall: true
     module: 2
     placeholder: false
-    order: 9999
+    order: 150
 - model: larpmanager.feature
   pk: 111
   fields:
@@ -765,7 +765,7 @@
     overall: true
     module: 2
     placeholder: false
-    order: 150
+    order: 10
 - model: larpmanager.feature
   pk: 112
   fields:
@@ -775,7 +775,7 @@
     overall: true
     module: 2
     placeholder: false
-    order: 9999
+    order: 60
 - model: larpmanager.feature
   pk: 113
   fields:
@@ -786,18 +786,18 @@
     overall: true
     module: 2
     placeholder: false
-    order: 9999
+    order: 15
 - model: larpmanager.feature
   pk: 114
   fields:
-    name: Registration opening date
+    name: Opening date
     descr: Lets you specify a date (and time) on which registration will open, keeping
       it closed until then.
     slug: registration_open
     overall: false
     module: 4
     placeholder: false
-    order: 9999
+    order: 10
 - model: larpmanager.feature
   pk: 115
   fields:
@@ -808,7 +808,7 @@
     overall: true
     module: 6
     placeholder: false
-    order: 9999
+    order: 10
 - model: larpmanager.feature
   pk: 117
   fields:
@@ -819,7 +819,7 @@
     overall: false
     module: 4
     placeholder: false
-    order: 9999
+    order: 150
 - model: larpmanager.feature
   pk: 118
   fields:
@@ -830,7 +830,7 @@
     overall: false
     module: 7
     placeholder: false
-    order: 9999
+    order: 50
 - model: larpmanager.feature
   pk: 120
   fields:
@@ -840,7 +840,7 @@
     overall: false
     module: 7
     placeholder: false
-    order: 9999
+    order: 30
 - model: larpmanager.feature
   pk: 121
   fields:
@@ -851,7 +851,7 @@
     overall: true
     module: 2
     placeholder: false
-    order: 9999
+    order: 110
 - model: larpmanager.feature
   pk: 122
   fields:
@@ -862,7 +862,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 90
 - model: larpmanager.feature
   pk: 124
   fields:
@@ -873,7 +873,7 @@
     overall: true
     module: 3
     placeholder: false
-    order: 9999
+    order: 40
 - model: larpmanager.feature
   pk: 125
   fields:
@@ -1001,7 +1001,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 180
 - model: larpmanager.feature
   pk: 138
   fields:
@@ -1011,7 +1011,7 @@
     overall: true
     module: 3
     placeholder: false
-    order: 9999
+    order: 10
 - model: larpmanager.feature
   pk: 139
   fields:
@@ -1020,9 +1020,9 @@
       made after a specified date.
     slug: reg_surcharges
     overall: false
-    module: 4
+    module: 2
     placeholder: false
-    order: 9999
+    order: 40
 - model: larpmanager.feature
   pk: 140
   fields:
@@ -1044,7 +1044,7 @@
     overall: true
     module: 2
     placeholder: false
-    order: 9999
+    order: 80
 - model: larpmanager.feature
   pk: 145
   fields:
@@ -1066,7 +1066,7 @@
     overall: true
     module: 6
     placeholder: false
-    order: 9999
+    order: 20
 - model: larpmanager.feature
   pk: 147
   fields:
@@ -1077,7 +1077,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 10
 - model: larpmanager.feature
   pk: 148
   fields:
@@ -1128,18 +1128,18 @@
     overall: true
     module: 2
     placeholder: false
-    order: 9999
+    order: 120
 - model: larpmanager.feature
   pk: 153
   fields:
     name: Co-creation
-    descr: 'Allows organizers to pose questions about a character, which the player
-      can answer. '
+    descr: Allows organizers to pose questions about a character, which the player
+      can answer.
     slug: co_creation
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 170
 - model: larpmanager.feature
   pk: 155
   fields:
@@ -1150,7 +1150,7 @@
     overall: false
     module: 4
     placeholder: false
-    order: 9999
+    order: 140
 - model: larpmanager.feature
   pk: 156
   fields:
@@ -1182,7 +1182,7 @@
     overall: false
     module: 4
     placeholder: false
-    order: 9999
+    order: 120
 - model: larpmanager.feature
   pk: 162
   fields:
@@ -1292,7 +1292,7 @@
     overall: true
     module: 2
     placeholder: false
-    order: 9999
+    order: 100
 - model: larpmanager.feature
   pk: 174
   fields:
@@ -1303,7 +1303,7 @@
     overall: true
     module: 8
     placeholder: false
-    order: 9999
+    order: 70
 - model: larpmanager.feature
   pk: 175
   fields:
@@ -1314,7 +1314,7 @@
     overall: false
     module: 2
     placeholder: false
-    order: 9999
+    order: 60
 - model: larpmanager.feature
   pk: 176
   fields:
@@ -1325,7 +1325,7 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 20
 - model: larpmanager.feature
   pk: 177
   fields:
@@ -1335,7 +1335,7 @@
     overall: false
     module: 4
     placeholder: false
-    order: 9999
+    order: 50
 - model: larpmanager.feature
   pk: 178
   fields:
@@ -1367,7 +1367,7 @@
     overall: false
     module: 4
     placeholder: false
-    order: 9999
+    order: 130
 - model: larpmanager.feature
   pk: 181
   fields:
@@ -1377,4 +1377,4 @@
     overall: false
     module: 1
     placeholder: false
-    order: 9999
+    order: 160

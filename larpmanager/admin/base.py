@@ -18,9 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import background_task.admin
 from admin_auto_filters.filters import AutocompleteFilter
-from background_task.models import CompletedTask, Task
 from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
@@ -38,9 +36,10 @@ class DefModelAdmin(ImportExportModelAdmin):
 
 
 def reduced(v):
-    if not v or len(v) < 50:
+    max_length = 50
+    if not v or len(v) < max_length:
         return v
-    return v[:50] + "[...]"
+    return v[:max_length] + "[...]"
 
 
 class AssocFilter(AutocompleteFilter):
@@ -96,6 +95,7 @@ class FeatureAdmin(DefModelAdmin):
     list_display = (
         "name",
         "overall",
+        "order",
         "module",
         "slug",
         "link",
@@ -113,38 +113,3 @@ class FeatureAdmin(DefModelAdmin):
 class PaymentMethodAdmin(DefModelAdmin):
     list_display = ("name", "slug")
     search_fields = ["name"]
-
-
-# TASKS
-
-
-def is_model_registered_with(model, admin_class):
-    return model in admin.site._registry and isinstance(admin.site._registry[model], admin_class)
-
-
-if is_model_registered_with(Task, background_task.admin.TaskAdmin):
-    admin.site.unregister(Task)
-
-
-@admin.register(Task)
-class TaskAdmin(admin.ModelAdmin):
-    list_display = ("task_name", "short_params", "run_at", "attempts", "locked_by")
-
-    def short_params(self, obj):
-        return (obj.task_params[:400] + "...") if len(obj.task_params) > 400 else obj.task_params
-
-    short_params.short_description = "Task Parameters"
-
-
-if is_model_registered_with(CompletedTask, background_task.admin.CompletedTaskAdmin):
-    admin.site.unregister(CompletedTask)
-
-
-@admin.register(CompletedTask)
-class CompletedTaskAdmin(admin.ModelAdmin):
-    list_display = ("task_name", "short_params", "run_at", "attempts")
-
-    def short_params(self, obj):
-        return (obj.task_params[:400] + "...") if len(obj.task_params) > 400 else obj.task_params
-
-    short_params.short_description = "Task Parameters"

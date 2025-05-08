@@ -711,9 +711,6 @@ msgstr "Exempel"
 msgid "Faction"
 msgstr "Grupp"
 
-msgid "Feature"
-msgstr "Funktion"
-
 msgid "Gallery"
 msgstr "Galleri"
 
@@ -1362,9 +1359,6 @@ msgstr "Kontakta oss"
 msgid "Cover link"
 msgstr "Länkskydd"
 
-msgid "Deactivate"
-msgstr "Avaktivera"
-
 msgid "Easter egg"
 msgstr "Påskägg"
 
@@ -1674,6 +1668,9 @@ msgstr "Vänster hjul"
 msgid "Run balance"
 msgstr "Kör budget"
 
+msgid "Secret link"
+msgstr "Hemlig länk"
+
 msgid "Select year"
 msgstr "Välj år"
 
@@ -1817,6 +1814,9 @@ msgstr "Behöver du ett lyft?"
 
 msgid "Not selected"
 msgstr "Ej vald"
+
+msgid "Opening date"
+msgstr "Öppningsdatum"
 
 msgid "Organization"
 msgstr "Förening"
@@ -1987,9 +1987,6 @@ msgstr "Extern webbadress"
 msgid "Faction cover"
 msgstr "Gruppens täckning"
 
-msgid "Feature types"
-msgstr "Typer av funktioner"
-
 msgid "Free donation"
 msgstr "Gratis donation"
 
@@ -2153,6 +2150,9 @@ msgstr "Inställningar för evenemang"
 msgid "Event Template"
 msgstr "Mall för evenemang"
 
+msgid "Event features"
+msgstr "Funktioner för evenemang"
+
 msgid "Event language"
 msgstr "Språkevenemang"
 
@@ -2299,9 +2299,6 @@ msgstr "Lista över karaktärer"
 
 msgid "Collected votes"
 msgstr "Erhållna röster"
-
-msgid "Cost for player"
-msgstr "Kostnad per spelare"
 
 msgid "Deadline (date)"
 msgstr "Tidsfrist (datum)"
@@ -4652,9 +4649,6 @@ msgstr "På den här sidan kan du lägga till eller redigera en rabatt."
 msgid "This page allows you to add or edit an invoice."
 msgstr "På den här sidan kan du lägga till eller redigera betalningsfakturor."
 
-msgid "This page allows you to edit an event template."
-msgstr "På den här sidan kan du redigera en evenemangsmall."
-
 msgid "This page allows you to fully view a character."
 msgstr "På den här sidan kan du se en karaktär i sin helhet."
 
@@ -5859,12 +5853,6 @@ msgid ""
 msgstr "Om du är kandidat till styrelsen, vänligen skriv en presentation här!"
 
 msgid ""
-"NOTE: By activating a feature, it is immediately available for all runs."
-msgstr ""
-"OBS: När en funktion aktiveras är den omedelbart tillgänglig för alla "
-"körningar."
-
-msgid ""
 "Presentation visible to all players, when 'show presentation' is checked"
 msgstr ""
 "Presentation synlig för alla spelare, när \"visa presentation\" är markerat"
@@ -6018,12 +6006,6 @@ msgstr ""
 "Förhandsgranskningen är endast synlig för den tilldelade spelaren när \"visa"
 " förhandsgranskning\" är markerad"
 
-msgid ""
-"This page shows the optional features available for the whole organization."
-msgstr ""
-"Denna sida sammanfattar de tillvalsfunktioner som finns tillgängliga på "
-"föreningsnivå."
-
 #, python-format
 msgid ""
 "(check the available number of discounts <a href='%(url)s'>on this page</a>)"
@@ -6057,12 +6039,6 @@ msgid ""
 msgstr ""
 "Om du är italiensk medborgare, ange ditt skatteregistreringsnummer; lämna "
 "annars tomt"
-
-msgid ""
-"NOTE: When activating a feature, it is immediately available for all events."
-msgstr ""
-"OBS: När du aktiverar en funktion är den omedelbart tillgänglig för alla "
-"händelser."
 
 msgid ""
 "Part of the registration fee derived only from the additional options chosen"
@@ -6485,6 +6461,13 @@ msgstr ""
 "hittas (standard 0)"
 
 msgid ""
+"Allows organizers to pose questions about a character, which the player can "
+"answer."
+msgstr ""
+"Tillåter arrangörer att ställa frågor om en karaktär, som spelaren kan "
+"besvara."
+
+msgid ""
 "Enables management of expenses paid using the organization's financial "
 "instruments."
 msgstr ""
@@ -6516,13 +6499,6 @@ msgid ""
 msgstr ""
 "Du kan kontrollera och redigera listan över föreningar som har åtkomst till "
 "dina data i din"
-
-msgid ""
-"Allows organizers to pose questions about a character, which the player can "
-"answer. "
-msgstr ""
-"Tillåter arrangörer att ställa frågor om en karaktär, som spelaren kan "
-"besvara."
 
 msgid ""
 "Enables 'Handouts,' pre-written texts that provide information about a plot "
@@ -7176,13 +7152,6 @@ msgstr ""
 "Om markerad, gör förhandsvisningarna synliga, reserverade endast för den "
 "spelare som objektet är tilldelat"
 
-msgid ""
-"This page shows the features activated for the event, and allows you to "
-"enable or disable them."
-msgstr ""
-"På denna sida sammanfattas de funktioner som aktiverats för evenemanget, och"
-" du kan aktivera eller inaktivera dem."
-
 #, python-format
 msgid ""
 "To confirm it, we ask you to pay this amount: %(amount)s, within this number"
@@ -7554,6 +7523,13 @@ msgid ""
 msgstr ""
 "Låter dig fritt välja vilka funktioner som ska aktiveras för hela "
 "organisationen eller för ett specifikt evenemang."
+
+msgid ""
+"This page allows you to select the features of a template. Click on a "
+"feature to show its description."
+msgstr ""
+"På den här sidan kan du välja funktioner för en mall. Klicka på en funktion "
+"för att visa dess beskrivning."
 
 msgid ""
 "for bidirectional relationships (love, colleagues, rivals), of which the "
@@ -8373,6 +8349,14 @@ msgstr ""
 "en bekräftelse på resultatet av utvärderingen inom kort."
 
 msgid ""
+"This page allows you to select the features activated for this event, and "
+"all its runs. Click on a feature to show its description."
+msgstr ""
+"På den här sidan kan du välja de funktioner som är aktiverade för den här "
+"tävlingen och alla dess körningar. Klicka på en funktion för att visa dess "
+"beskrivning."
+
+msgid ""
 "This page shows the collections opened by players. You can update them "
 "indicating the recipient and disburse the money contributed."
 msgstr ""
@@ -8513,6 +8497,14 @@ msgid ""
 msgstr ""
 "Du kan göra betalningen <a href= %(url)s'>på den här sidan</a>. Om du stöter"
 " på någon form av problem, låt oss veta, vi hjälper dig att lösa det!"
+
+msgid ""
+"This page allows you to select the features activated for the organization, "
+"and all its events. Click on a feature to show its description."
+msgstr ""
+"På den här sidan kan du välja vilka funktioner som ska aktiveras för "
+"organisationen och alla dess evenemang. Klicka på en funktion för att visa "
+"dess beskrivning."
 
 msgid ""
 "Enables 'Filler' characters: simpler character sheets, assigned to players "

@@ -1192,3 +1192,14 @@ th select {
 .character-cover {
     width:5em;
 }
+
+.feature_checkbox {
+    display: inline-block;
+    padding: 0.5em;
+}
+
+.form_error {
+    color: red;
+    margin: 2em;
+    font-style: italic;
+}

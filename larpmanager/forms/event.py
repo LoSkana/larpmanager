@@ -26,6 +26,7 @@ from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.base import MyCssForm, MyForm
+from larpmanager.forms.feature import FeatureForm
 from larpmanager.forms.utils import (
     AssocMemberS2WidgetMulti,
     CampaignS2Widget,
@@ -42,7 +43,6 @@ from larpmanager.forms.utils import (
     save_permissions_role,
 )
 from larpmanager.models.access import EventPermission, EventRole
-from larpmanager.models.base import FeatureModule
 from larpmanager.models.event import Event, EventButton, EventConfig, EventText, EventTextType, ProgressStep, Run
 from larpmanager.models.utils import generate_id, get_all_element_configs, save_all_element_configs
 from larpmanager.utils.common import copy_class
@@ -192,6 +192,29 @@ class OrgaEventForm(MyForm):
                 raise ValidationError("Reserved word, please choose another!")
 
         return data
+
+
+class OrgaFeatureForm(FeatureForm):
+    page_title = _("Event features")
+
+    page_info = _(
+        "This page allows you to select the features activated for this event, and all its runs. Click on a feature to show its description."
+    )
+
+    load_js = "feature_checkbox"
+
+    class Meta:
+        model = Event
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_features(False)
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        self._save_features(instance)
+        return instance
 
 
 class OrgaConfigForm(MyForm):
@@ -792,10 +815,14 @@ class ExeEventForm(OrgaEventForm):
         return instance
 
 
-class ExeTemplateForm(MyForm):
+class ExeTemplateForm(FeatureForm):
     page_title = _("Event Template")
 
-    page_info = _("This page allows you to edit an event template.")
+    page_info = _(
+        "This page allows you to select the features of a template. Click on a feature to show its description."
+    )
+
+    load_js = "feature_checkbox"
 
     class Meta:
         model = Event
@@ -803,26 +830,7 @@ class ExeTemplateForm(MyForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        init_features = None
-        if self.instance.pk:
-            init_features = [str(v) for v in self.instance.features.values_list("pk", flat=True)]
-
-        for module in FeatureModule.objects.exclude(order=0).order_by("order"):
-            choices = [
-                (str(feat.id), _(feat.name))
-                for feat in module.features.filter(overall=False, placeholder=False).order_by("order")
-            ]
-            if not choices:
-                continue
-            self.fields[f"mod_{module.id}"] = forms.MultipleChoiceField(
-                choices=choices,
-                widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
-                label=_(module.name),
-                required=False,
-            )
-            if init_features:
-                self.initial[f"mod_{module.id}"] = init_features
+        self._init_features(False)
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -836,16 +844,7 @@ class ExeTemplateForm(MyForm):
         if not instance.pk:
             instance.save()
 
-        instance.features.clear()
-        features_id = []
-        for module_id in FeatureModule.objects.values_list("pk", flat=True):
-            key = f"mod_{module_id}"
-            if key not in self.cleaned_data:
-                continue
-            features_id.extend([int(v) for v in self.cleaned_data[key]])
-        instance.features.set(features_id)
-
-        instance.save()
+        self._save_features(instance)
 
         return instance
 

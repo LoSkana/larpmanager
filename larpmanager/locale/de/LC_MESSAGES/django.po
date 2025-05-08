@@ -711,9 +711,6 @@ msgstr "Beispiel"
 msgid "Faction"
 msgstr "Gruppe"
 
-msgid "Feature"
-msgstr "Merkmal"
-
 msgid "Gallery"
 msgstr "Galerie"
 
@@ -1362,9 +1359,6 @@ msgstr "Kontakt"
 msgid "Cover link"
 msgstr "Link Abdeckung"
 
-msgid "Deactivate"
-msgstr "Deaktivieren Sie"
-
 msgid "Easter egg"
 msgstr "Osterei"
 
@@ -1674,6 +1668,9 @@ msgstr "Linkes Rad"
 msgid "Run balance"
 msgstr "Haushalt ausführen"
 
+msgid "Secret link"
+msgstr "Geheime Verbindung"
+
 msgid "Select year"
 msgstr "Jahr auswählen"
 
@@ -1817,6 +1814,9 @@ msgstr "Sie brauchen eine Mitfahrgelegenheit?"
 
 msgid "Not selected"
 msgstr "Nicht ausgewählt"
+
+msgid "Opening date"
+msgstr "Datum der Eröffnung"
 
 msgid "Organization"
 msgstr "Verein"
@@ -1987,9 +1987,6 @@ msgstr "Externe Url"
 msgid "Faction cover"
 msgstr "Gruppendeckung"
 
-msgid "Feature types"
-msgstr "Merkmalstypen"
-
 msgid "Free donation"
 msgstr "Kostenlose Spende"
 
@@ -2153,6 +2150,9 @@ msgstr "Ereignis-Einstellungen"
 msgid "Event Template"
 msgstr "Ereignis-Vorlage"
 
+msgid "Event features"
+msgstr "Merkmale der Veranstaltung"
+
 msgid "Event language"
 msgstr "Sprachliche Veranstaltungen"
 
@@ -2299,9 +2299,6 @@ msgstr "Liste der Zeichen"
 
 msgid "Collected votes"
 msgstr "Erhaltene Stimmen"
-
-msgid "Cost for player"
-msgstr "Kosten pro Spieler"
 
 msgid "Deadline (date)"
 msgstr "Stichtag (Datum)"
@@ -4665,9 +4662,6 @@ msgid "This page allows you to add or edit an invoice."
 msgstr ""
 "Auf dieser Seite können Sie Zahlungsrechnungen hinzufügen oder bearbeiten."
 
-msgid "This page allows you to edit an event template."
-msgstr "Auf dieser Seite können Sie eine Veranstaltungsvorlage bearbeiten."
-
 msgid "This page allows you to fully view a character."
 msgstr "Auf dieser Seite können Sie einen Charakter vollständig betrachten."
 
@@ -6063,12 +6057,6 @@ msgstr ""
 "vor!"
 
 msgid ""
-"NOTE: By activating a feature, it is immediately available for all runs."
-msgstr ""
-"HINWEIS: Wenn eine Funktion aktiviert wird, ist sie sofort für alle Läufe "
-"verfügbar."
-
-msgid ""
 "Presentation visible to all players, when 'show presentation' is checked"
 msgstr ""
 "Präsentation für alle Spieler sichtbar, wenn \"Präsentation anzeigen\" "
@@ -6241,12 +6229,6 @@ msgstr ""
 "Vorschau nur für den zugewiesenen Spieler sichtbar, wenn \"Vorschau "
 "anzeigen\" aktiviert ist"
 
-msgid ""
-"This page shows the optional features available for the whole organization."
-msgstr ""
-"Auf dieser Seite finden Sie eine Zusammenfassung der optionalen Funktionen, "
-"die auf Verbandsebene verfügbar sind."
-
 #, python-format
 msgid ""
 "(check the available number of discounts <a href='%(url)s'>on this page</a>)"
@@ -6283,12 +6265,6 @@ msgid ""
 msgstr ""
 "Wenn Sie italienischer Staatsbürger sind, geben Sie bitte Ihre Steuernummer "
 "an; andernfalls lassen Sie das Feld frei."
-
-msgid ""
-"NOTE: When activating a feature, it is immediately available for all events."
-msgstr ""
-"HINWEIS: Wenn eine Funktion aktiviert wird, ist sie sofort für alle "
-"Ereignisse verfügbar."
 
 msgid ""
 "Part of the registration fee derived only from the additional options chosen"
@@ -6720,6 +6696,13 @@ msgstr ""
 " wird (Standardwert 0)"
 
 msgid ""
+"Allows organizers to pose questions about a character, which the player can "
+"answer."
+msgstr ""
+"Ermöglicht Organisatoren, Fragen zu einer Figur zu stellen, die der Spieler "
+"beantworten kann."
+
+msgid ""
 "Enables management of expenses paid using the organization's financial "
 "instruments."
 msgstr ""
@@ -6753,13 +6736,6 @@ msgid ""
 msgstr ""
 "Sie können die Liste der Verbände, die auf Ihre Daten zugreifen können, in "
 "Ihrem System überprüfen und bearbeiten."
-
-msgid ""
-"Allows organizers to pose questions about a character, which the player can "
-"answer. "
-msgstr ""
-"Ermöglicht Organisatoren, Fragen zu einer Figur zu stellen, die der Spieler "
-"beantworten kann."
 
 msgid ""
 "Enables 'Handouts,' pre-written texts that provide information about a plot "
@@ -7420,13 +7396,6 @@ msgstr ""
 "Wenn diese Option aktiviert ist, ist die Vorschau nur für den Spieler "
 "sichtbar, dem das Objekt zugewiesen ist."
 
-msgid ""
-"This page shows the features activated for the event, and allows you to "
-"enable or disable them."
-msgstr ""
-"Auf dieser Seite werden die für das Ereignis aktivierten Funktionen "
-"zusammengefasst, und Sie können sie aktivieren oder deaktivieren."
-
 #, python-format
 msgid ""
 "To confirm it, we ask you to pay this amount: %(amount)s, within this number"
@@ -7799,6 +7768,13 @@ msgid ""
 msgstr ""
 "Sie können frei wählen, welche Funktionen Sie für die gesamte Organisation "
 "oder für eine bestimmte Veranstaltung aktivieren möchten."
+
+msgid ""
+"This page allows you to select the features of a template. Click on a "
+"feature to show its description."
+msgstr ""
+"Auf dieser Seite können Sie die Funktionen einer Vorlage auswählen. Klicken "
+"Sie auf ein Merkmal, um seine Beschreibung anzuzeigen."
 
 msgid ""
 "for bidirectional relationships (love, colleagues, rivals), of which the "
@@ -8644,6 +8620,14 @@ msgstr ""
 "erhalten in Kürze eine Bestätigung über das Ergebnis der Prüfung."
 
 msgid ""
+"This page allows you to select the features activated for this event, and "
+"all its runs. Click on a feature to show its description."
+msgstr ""
+"Auf dieser Seite können Sie die Funktionen auswählen, die für dieses "
+"Ereignis und alle seine Läufe aktiviert sind. Klicken Sie auf eine Funktion,"
+" um ihre Beschreibung anzuzeigen."
+
+msgid ""
 "This page shows the collections opened by players. You can update them "
 "indicating the recipient and disburse the money contributed."
 msgstr ""
@@ -8794,6 +8778,14 @@ msgstr ""
 "Sie können die Zahlung <a href= %(url)s'>auf dieser Seite vornehmen</a>. "
 "Wenn Sie auf irgendein Problem stoßen, lassen Sie es uns wissen, wir werden "
 "Ihnen helfen, es zu lösen!"
+
+msgid ""
+"This page allows you to select the features activated for the organization, "
+"and all its events. Click on a feature to show its description."
+msgstr ""
+"Auf dieser Seite können Sie die für die Organisation aktivierten Funktionen "
+"und alle ihre Ereignisse auswählen. Klicken Sie auf eine Funktion, um ihre "
+"Beschreibung anzuzeigen."
 
 msgid ""
 "Enables 'Filler' characters: simpler character sheets, assigned to players "
