@@ -3133,6 +3133,9 @@ msgstr "Godkänna återbetalning"
 msgid "Assigned staff member"
 msgstr "Utsedd tjänsteman"
 
+msgid "Character not visible"
+msgstr "Karaktär inte synlig"
+
 msgid "Co-creation questions"
 msgstr "Frågor om medskapande"
 

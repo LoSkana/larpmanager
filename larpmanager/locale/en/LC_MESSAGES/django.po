@@ -7866,6 +7866,9 @@ msgstr ""
 msgid "Characters are not visible at the moment"
 msgstr ""
 
+msgid "Character not visible"
+msgstr ""
+
 msgid "You don't have a character assigned for this run!"
 msgstr ""
 

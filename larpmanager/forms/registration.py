@@ -166,7 +166,7 @@ class RegistrationForm(BaseRegistrationForm):
     def init_questions(self, event, reg_counts, run):
         if self.waiting_check:
             return
-        self.init_reg_question(self.instance, event)
+        self._init_reg_question(self.instance, event)
         self.tickets_map = {}
         for q in self.questions:
             self.init_question(q, reg_counts)
@@ -176,7 +176,7 @@ class RegistrationForm(BaseRegistrationForm):
         if q.skip(self.instance, self.params["features"]):
             return
 
-        k = self.init_field(q, reg_counts, orga=False)
+        k = self._init_field(q, reg_counts, orga=False)
 
         if q.profile:
             self.profiles["id_" + k] = q.profile_thumb.url
@@ -407,10 +407,10 @@ class RegistrationGiftForm(RegistrationForm):
         list_del = [s for s in self.fields if s not in keep]
         for field in list_del:
             del self.fields[field]
-            key = f'id_{field}'
+            key = f"id_{field}"
             if key in self.mandatory:
                 self.mandatory.remove(key)
-                
+
         self.has_mandatory = len(self.mandatory) > 0
 
 
@@ -618,9 +618,9 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         que = RegistrationCharacterRel.objects.filter(reg__id=self.instance.pk)
         return que.values_list("character_id", flat=True)
 
-    def save_multi(self, s, instance):
+    def _save_multi(self, s, instance):
         if s != "characters_new":
-            return super().save_multi(s, instance)
+            return super()._save_multi(s, instance)
 
         old = set(self.get_init_multi_character())
         new = set(self.cleaned_data["characters_new"].values_list("pk", flat=True))

@@ -73,7 +73,7 @@ from larpmanager.utils.edit import user_edit
 from larpmanager.utils.event import get_event_run
 from larpmanager.utils.experience import get_available_ability_px
 from larpmanager.utils.registration import (
-    check_assign_character,
+    _check_assign_character,
     check_character_maximum,
     get_player_characters,
     registration_find,
@@ -91,6 +91,10 @@ def character(request, s, n, num):
 
     if "check" not in ctx and not ctx["show_char"]:
         messages.warning(request, _("Characters are not visible at the moment"))
+        return redirect("gallery", s=ctx["event"].slug, n=ctx["run"].number)
+
+    if "check" not in ctx and ctx["char"]["hide"]:
+        messages.warning(request, _("Character not visible"))
         return redirect("gallery", s=ctx["event"].slug, n=ctx["run"].number)
 
     show_private = "check" in ctx
@@ -161,22 +165,13 @@ def character_form(request, ctx, s, n, instance, form_class):
                 mes = _("New character created!")
 
             element = form.save(commit=False)
-            if isinstance(element, Character):
-                if not element.player:
-                    element.player = request.user.member
-                if ctx["event"].get_config("user_character_approval", False):
-                    if element.status == CharacterStatus.CREATION and form.cleaned_data["propose"]:
-                        element.status = CharacterStatus.PROPOSED
-                        mes = _(
-                            "The character has been proposed to the staff, who will examine it and approve it "
-                            "or request changes if necessary."
-                        )
-
+            mes = _update_character(ctx, element, form, mes, request)
             element.save()
 
-            messages.success(request, mes)
+            if mes:
+                messages.success(request, mes)
 
-            check_assign_character(request, ctx)
+            _check_assign_character(request, ctx)
 
             number = None
             if isinstance(element, Character):
@@ -191,6 +186,23 @@ def character_form(request, ctx, s, n, instance, form_class):
     init_form_submitted(ctx, form, request)
 
     return render(request, "larpmanager/event/character/edit.html", ctx)
+
+
+def _update_character(ctx, element, form, mes, request):
+    if not isinstance(element, Character):
+        return
+
+    if not element.player:
+        element.player = request.user.member
+
+    if ctx["event"].get_config("user_character_approval", False):
+        if element.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW] and form.cleaned_data["propose"]:
+            element.status = CharacterStatus.PROPOSED
+            mes = _(
+                "The character has been proposed to the staff, who will examine it and approve it "
+                "or request changes if necessary."
+            )
+    return mes
 
 
 @login_required

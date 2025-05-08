@@ -68,7 +68,7 @@ from larpmanager.utils.exceptions import (
     RedirectError,
     check_event_feature,
 )
-from larpmanager.utils.registration import check_assign_character, get_reduced_available_count, is_reg_provisional
+from larpmanager.utils.registration import _check_assign_character, get_reduced_available_count, is_reg_provisional
 from larpmanager.utils.text import get_assoc_text, get_event_text
 
 
@@ -167,7 +167,7 @@ def save_registration(request, ctx, form, run, event, reg, gifted=False):
 
     # special features
     if "user_character" in ctx["features"]:
-        check_assign_character(request, ctx)
+        _check_assign_character(request, ctx)
     if "bring_friend" in ctx["features"]:
         save_registration_bring_friend(ctx, form, reg, request)
 

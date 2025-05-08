@@ -3133,6 +3133,9 @@ msgstr "Approva rimborso"
 msgid "Assigned staff member"
 msgstr "Membro dello staff assegnato"
 
+msgid "Character not visible"
+msgstr "Carattere non visibile"
+
 msgid "Co-creation questions"
 msgstr "Domande co-creazione"
 

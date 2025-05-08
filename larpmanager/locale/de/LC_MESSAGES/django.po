@@ -3133,6 +3133,9 @@ msgstr "Erstattung genehmigen"
 msgid "Assigned staff member"
 msgstr "Zugewiesener Mitarbeiter"
 
+msgid "Character not visible"
+msgstr "Zeichen nicht sichtbar"
+
 msgid "Co-creation questions"
 msgstr "Fragen zur Ko-Kreation"
 

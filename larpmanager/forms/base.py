@@ -118,11 +118,11 @@ class MyForm(forms.ModelForm):
                 if s in self.custom_field:
                     continue
             if isinstance(self.fields[s].widget, s2forms.ModelSelect2MultipleWidget):
-                self.save_multi(s, instance)
+                self._save_multi(s, instance)
 
         return instance
 
-    def save_multi(self, s, instance):
+    def _save_multi(self, s, instance):
         if s in self.initial:
             old = set()
             for el in self.initial[s]:
@@ -183,7 +183,7 @@ class BaseRegistrationForm(MyFormRun):
     class Meta:
         abstract = True
 
-    def init_reg_question(self, instance, event):
+    def _init_reg_question(self, instance, event):
         self.answers = {}
         self.singles = {}
         self.multiples = {}
@@ -291,7 +291,7 @@ class BaseRegistrationForm(MyFormRun):
         return key
 
     def init_orga_fields(self, event, reg_section):
-        self.init_reg_question(self.instance, event)
+        self._init_reg_question(self.instance, event)
         # start loop on questions
         keys = []
 
@@ -299,7 +299,7 @@ class BaseRegistrationForm(MyFormRun):
             if question.skip(self.instance, self.params["features"], self.params, True):
                 continue
 
-            k = self.init_field(question, reg_counts=None, orga=True)
+            k = self._init_field(question, reg_counts=None, orga=True)
             keys.append(k)
 
             sec_name = reg_section
@@ -313,7 +313,7 @@ class BaseRegistrationForm(MyFormRun):
     def check_editable(self, question):
         return True
 
-    def init_field(self, question, reg_counts=None, orga=True):
+    def _init_field(self, question, reg_counts=None, orga=True):
         key = "q" + str(question.id)
 
         active = True
