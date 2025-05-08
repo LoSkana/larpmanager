@@ -73,6 +73,11 @@ class MyForm(forms.ModelForm):
                     self.fields[s].required = False
 
         self.mandatory = []
+        self.answers = {}
+        self.singles = {}
+        self.multiples = {}
+        self.unavail = []
+        self.max_lengths = {}
 
     def get_automatic_field(self):
         s = ["event", "assoc"]
@@ -184,13 +189,6 @@ class BaseRegistrationForm(MyFormRun):
         abstract = True
 
     def _init_reg_question(self, instance, event):
-        self.answers = {}
-        self.singles = {}
-        self.multiples = {}
-        self.unavail = []
-
-        self.max_lengths = {}
-
         if instance and instance.pk:
             for el in self.answer_class.objects.filter(**{self.instance_key: instance}):
                 self.answers[el.question_id] = el
