@@ -184,7 +184,7 @@ def feature_description(request):
     if feature.link:
         txt += f"""
             <iframe width='100%' height='400' frameborder='0' allow='encrypted-media' "
-            allowfullscreen src='{feature.link}?rel=0&cc_load_policy=1'></iframe>"
+            allowfullscreen src='https://www.youtube.com/embed/{feature.link}'></iframe>"
         """
 
     return JsonResponse({"res": "ok", "txt": txt})
