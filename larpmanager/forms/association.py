@@ -415,10 +415,6 @@ class ExeConfigForm(ConfigForm):
             help_text = _("Sets how often reminder emails are sent, in days (default: 5)")
             self.add_configs("remind_days", ConfigType.INT, section, label, help_text)
 
-            label = _("Text")
-            help_text = _("Enter the text with which to remind the payment deadline.")
-            self.add_configs("remind_text", ConfigType.HTML, section, label, help_text)
-
             label = _("Holidays")
             help_text = _("If checked: the system will send reminds the days on which holidays fall")
             self.add_configs("remind_holidays", ConfigType.BOOL, section, label, help_text)

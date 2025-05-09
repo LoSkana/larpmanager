@@ -143,9 +143,9 @@
       emails automatically.
     slug: remind
     overall: true
-    module: 2
+    module: 7
     placeholder: false
-    order: 70
+    order: 25
 - model: larpmanager.feature
   pk: 19
   fields:
