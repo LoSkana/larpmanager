@@ -18,13 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import re
 from urllib.parse import urlparse
 
 import pytest
-from playwright.sync_api import expect, sync_playwright
+from playwright.sync_api import sync_playwright
 
-from larpmanager.tests.utils import go_to, go_to_check, handle_error, login_orga, page_start
+from larpmanager.tests.utils import _checkboxes, go_to, go_to_check, handle_error, login_orga, page_start
 
 
 @pytest.mark.django_db
@@ -45,22 +44,16 @@ def test_exe_features_all(live_server):
 def exe_features_all(live_server, page):
     login_orga(page, live_server)
 
-    pattern_on = re.compile(r"manage/features/\d+/on")
-    pattern_off = re.compile(r"manage/features/\d+/off")
+    go_to(page, live_server, "/manage/features")
+    _checkboxes(page, True)
+
+    visit_all(page, live_server)
 
     go_to(page, live_server, "/manage/features")
+    _checkboxes(page, False)
 
-    # Activates all features
-    links = page.eval_on_selector_all("a", "elements => elements.map(e => e.href)")
-    filtered_links = [link for link in links if pattern_on.search(link)]
-    if not filtered_links:
-        raise Exception("No feature to activate, links found: " + ",".join(links))
 
-    for link in filtered_links:
-        go_to_check(page, link)
-        # print(link)
-        expect(page.locator("#banner")).to_contain_text("Feature")
-
+def visit_all(page, live_server):
     # Visit every link
     visited_links = set()
     links_to_visit = {live_server.url + "/manage/"}
@@ -76,8 +69,6 @@ def exe_features_all(live_server, page):
         for link in new_links:
             if "logout" in link:
                 continue
-            if pattern_off.search(link):
-                continue
             if link.endswith(("#", "#menu", "#sidebar", "print")):
                 continue
             if any(s in link for s in ["features", "pdf"]):
@@ -87,12 +78,3 @@ def exe_features_all(live_server, page):
                 continue
             if link not in visited_links:
                 links_to_visit.add(link)
-
-    # Deactivates all features
-    go_to(page, live_server, "/manage/features")
-    links = page.eval_on_selector_all("a", "elements => elements.map(e => e.href)")
-    for link in links:
-        if pattern_off.search(link):
-            go_to_check(page, link)
-            # print(link)
-            expect(page.locator("#banner")).to_contain_text("Feature")

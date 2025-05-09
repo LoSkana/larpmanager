@@ -86,6 +86,7 @@ class Writing(BaseConceptModel):
         abstract = True
 
     def show_red(self):
+        # noinspection PyUnresolvedReferences
         js = {"id": self.id, "number": self.number}
         for s in ["name"]:
             self.upd_js_attr(js, s)
@@ -273,7 +274,9 @@ class Character(Writing):
             self.upd_js_attr(js, s)
 
         if self.player:
+            # noinspection PyUnresolvedReferences
             js["owner_id"] = self.player_id
+            # noinspection PyUnresolvedReferences
             js["owner"] = self.player.display_member()
 
         js["show"] = js["name"]
@@ -283,6 +286,7 @@ class Character(Writing):
         js["factions"] = []
         fac_event = self.event.get_class_parent("faction")
         primary = False
+        # noinspection PyUnresolvedReferences
         for g in self.factions_list.filter(event=fac_event):
             if g.typ == Faction.PRIM:
                 primary = True
@@ -293,10 +297,13 @@ class Character(Writing):
             js["factions"].append(0)
 
         if self.cover:
+            # noinspection PyUnresolvedReferences
             js["cover"] = self.cover.url
+            # noinspection PyUnresolvedReferences
             js["thumb"] = self.thumb.url
 
         if self.mirror:
+            # noinspection PyUnresolvedReferences
             js["mirror"] = self.mirror.show_red()
 
         js["hide"] = self.hide
@@ -309,6 +316,7 @@ class Character(Writing):
     def is_special(self):
         if self.special == self.NO:
             return ""
+        # noinspection PyUnresolvedReferences
         return self.get_special_display()
 
     @staticmethod
@@ -328,6 +336,7 @@ class Character(Writing):
 
     def show_thumb(self):
         if self.thumb:
+            # noinspection PyUnresolvedReferences
             return show_thumb(200, self.thumb.url)
 
     def relationships(self):
@@ -522,6 +531,7 @@ class HandoutTemplate(BaseModel):
         return f"HT{self.number} {self.name}"
 
     def download_template(self):
+        # noinspection PyUnresolvedReferences
         return download(self.template.path)
 
 
@@ -618,7 +628,8 @@ def replace_char_names(v, chars):
     if not v:
         return ""
     for name in chars:
-        if len(name) < 2:
+        name_number = 2
+        if len(name) < name_number:
             continue
         if name in v:
             c = f"@{chars[name]}"

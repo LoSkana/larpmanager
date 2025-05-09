@@ -196,3 +196,16 @@ def fill_tinymce(iframe_locator, value):
     rich_text = frame.locator('[aria-label="Rich Text Area"]')
     rich_text.wait_for(state="visible")
     rich_text.fill(value)
+
+
+def _checkboxes(page, check=True):
+    checkboxes = page.locator('input[type="checkbox"]')
+    count = checkboxes.count()
+    for i in range(count):
+        checkbox = checkboxes.nth(i)
+        if check:
+            if not checkbox.is_checked():
+                checkbox.check()
+        elif checkbox.is_checked():
+            checkbox.uncheck()
+    page.get_by_role("button", name="Confirm").click()

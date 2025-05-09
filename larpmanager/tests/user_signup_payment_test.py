@@ -45,6 +45,14 @@ def test_user_signup_payment(live_server):
 def user_signup_payment(live_server, page):
     login_orga(page, live_server)
 
+    prepare(page, live_server)
+
+    signup(page, live_server)
+
+    characters(page, live_server)
+
+
+def prepare(page, live_server):
     # Activate payments
     go_to(page, live_server, "/manage/features/111/on")
 
@@ -79,6 +87,8 @@ def user_signup_payment(live_server, page):
     page.locator("#id_price").fill("100.00")
     page.get_by_role("button", name="Confirm").click()
 
+
+def signup(page, live_server):
     # Signup
     go_to(page, live_server, "/test/1/register")
     page.get_by_role("button", name="Continue").click()
@@ -120,6 +130,8 @@ def user_signup_payment(live_server, page):
     page.get_by_role("button", name="Submit").click()
     expect(page.locator("#one")).to_contain_text("You are regularly signed up")
 
+
+def characters(page, live_server):
     # Activate characters
     go_to(page, live_server, "/manage/features/178/on")
 

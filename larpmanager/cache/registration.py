@@ -136,31 +136,34 @@ def search_player(char, js, ctx):
             char.member = None
 
     if char.reg:
-        js["name"] = char.name
-        if char.rcr and char.rcr.custom_name:
-            js["name"] = char.rcr.custom_name
-
-        js["player"] = char.reg.display_member()
-        js["player_full"] = str(char.reg.member)
-        js["player_id"] = char.reg.member.id
-        js["first_aid"] = char.reg.member.first_aid
-
-        if char.rcr.profile_thumb:
-            js["player_prof"] = char.rcr.profile_thumb.url
-            js["profile"] = char.rcr.profile_thumb.url
-        elif char.reg.member.profile_thumb:
-            js["player_prof"] = char.reg.member.profile_thumb.url
-        else:
-            js["player_prof"] = None
-
-        for s in ["pronoun", "song", "public", "private"]:
-            if hasattr(char.rcr, "custom_" + s):
-                js[s] = getattr(char.rcr, "custom_" + s)
-
-        # if the event has both cover and character created by user, use that as player profile
-        if {"cover", "user_character"}.issubset(get_event_features(ctx["run"].event_id)):
-            if char.cover:
-                js["player_prof"] = char.thumb.url
-
+        _search_char_reg(ctx, char, js)
     else:
         js["player_id"] = 0
+
+
+def _search_char_reg(ctx, char, js):
+    js["name"] = char.name
+    if char.rcr and char.rcr.custom_name:
+        js["name"] = char.rcr.custom_name
+
+    js["player"] = char.reg.display_member()
+    js["player_full"] = str(char.reg.member)
+    js["player_id"] = char.reg.member.id
+    js["first_aid"] = char.reg.member.first_aid
+
+    if char.rcr.profile_thumb:
+        js["player_prof"] = char.rcr.profile_thumb.url
+        js["profile"] = char.rcr.profile_thumb.url
+    elif char.reg.member.profile_thumb:
+        js["player_prof"] = char.reg.member.profile_thumb.url
+    else:
+        js["player_prof"] = None
+
+    for s in ["pronoun", "song", "public", "private"]:
+        if hasattr(char.rcr, "custom_" + s):
+            js[s] = getattr(char.rcr, "custom_" + s)
+
+    # if the event has both cover and character created by user, use that as player profile
+    if {"cover", "user_character"}.issubset(get_event_features(ctx["run"].event_id)):
+        if char.cover:
+            js["player_prof"] = char.thumb.url

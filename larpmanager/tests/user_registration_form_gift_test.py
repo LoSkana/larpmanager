@@ -45,6 +45,18 @@ def test_user_registration_form_gift(live_server):
 def user_registration_form_gift(live_server, page):
     login_orga(page, live_server)
 
+    prepare(page, live_server)
+
+    field_choice(page, live_server)
+
+    field_multiple(page, live_server)
+
+    field_text(page, live_server)
+
+    gift(page, live_server)
+
+
+def prepare(page, live_server):
     # Activate payments
     go_to(page, live_server, "/manage/features/111/on")
 
@@ -77,6 +89,8 @@ def user_registration_form_gift(live_server, page):
 
     go_to(page, live_server, "/test/1/manage/registrations/form/")
 
+
+def field_choice(page, live_server):
     # create single choice
     page.get_by_role("link", name="New").click()
     page.locator("#id_display").click()
@@ -107,6 +121,8 @@ def user_registration_form_gift(live_server, page):
     page.get_by_role("button", name="Confirm").click()
     page.get_by_role("button", name="Confirm").click()
 
+
+def field_multiple(page, live_server):
     # create multiple choice
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("m")
@@ -149,6 +165,8 @@ def user_registration_form_gift(live_server, page):
     page.get_by_role("link", name="").click()
     page.get_by_role("link", name="New").click()
 
+
+def field_text(page, live_server):
     # create text
     page.locator("#id_typ").select_option("t")
     page.locator("#id_description").click()
@@ -189,6 +207,8 @@ def user_registration_form_gift(live_server, page):
     expect(page.get_by_label("when")).to_contain_text("sadsadsadsad")
     expect(page.get_by_label("choice")).to_contain_text("secondas")
 
+
+def gift(page, live_server):
     # make ticket giftable
     go_to(page, live_server, "/test/1/manage/registrations/tickets/")
     page.get_by_role("link", name="").click()
