@@ -326,7 +326,7 @@ class OrgaConfigForm(ConfigForm):
             help_text = _("If checked, it allows players to customise the names of their characters")
             self.add_configs("custom_character_name", ConfigType.BOOL, section, label, help_text)
 
-            label = _("Profile Photos")
+            label = _("Profile")
             help_text = _("If checked, allows players to customise their characters' profile picture")
             self.add_configs("custom_character_profile", ConfigType.BOOL, section, label, help_text)
 

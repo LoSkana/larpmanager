@@ -2216,9 +2216,6 @@ msgstr "Skriv ut register"
 msgid "Privacy Policy"
 msgstr "Retningslinjer for personvern"
 
-msgid "Profile Photos"
-msgstr "Profilbilder"
-
 msgid "Profiles (PDF)"
 msgstr "Profiler (PDF)"
 

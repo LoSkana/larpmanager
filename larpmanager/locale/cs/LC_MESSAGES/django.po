@@ -2216,9 +2216,6 @@ msgstr "Tisk registru"
 msgid "Privacy Policy"
 msgstr "Zásady ochrany osobních údajů"
 
-msgid "Profile Photos"
-msgstr "Profilové fotografie"
-
 msgid "Profiles (PDF)"
 msgstr "Profily (PDF)"
 
