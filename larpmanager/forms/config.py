@@ -21,7 +21,7 @@ class ConfigType(IntEnum):
 
 class ConfigForm(MyForm):
     def __init__(self, *args, **kwargs):
-        super().__init__()
+        super().__init__(*args, **kwargs)
         self.config_fields = []
 
         self.set_configs()
@@ -61,7 +61,7 @@ class ConfigForm(MyForm):
 
         val = self.cleaned_data[k]
 
-        if el["config_type"] == ConfigType.MEMBERS:
+        if el["type"] == ConfigType.MEMBERS:
             val = ",".join([str(el.id) for el in val])
         else:
             val = str(val)
@@ -84,7 +84,7 @@ class ConfigForm(MyForm):
             ConfigType.INT: lambda: forms.IntegerField(label=label, help_text=help_text, required=False),
             ConfigType.TEXTAREA: lambda: forms.CharField(
                 label=label,
-                widget=Textarea(attrs={"cols": 80, "rows": 15}),
+                widget=Textarea(attrs={"cols": 80, "rows": 5}),
                 help_text=help_text,
                 required=False,
             ),
@@ -111,7 +111,7 @@ class ConfigForm(MyForm):
         field_type = config["type"]
 
         extra = config["element_id"] if field_type == ConfigType.MEMBERS else None
-        self.fields[key] = self._get_form_field(field_type, config["label"], config["label_text"], extra)
+        self.fields[key] = self._get_form_field(field_type, config["label"], config["help_text"], extra)
 
         if field_type == ConfigType.MEMBERS:
             self.fields[key].widget.set_assoc(config["element_id"])
