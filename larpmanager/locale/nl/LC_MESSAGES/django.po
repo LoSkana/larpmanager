@@ -5133,9 +5133,6 @@ msgstr ""
 "Klik op de onderstaande afbeelding (Paypal.me) om het betaalscherm te "
 "openen."
 
-msgid "Enter the text with which to remind the payment deadline."
-msgstr "Voer tekst in om je te herinneren aan de betalingstermijn"
-
 msgid "Indicate the pronouns you wish to be used to refer to you"
 msgstr "Geef aan met welke voornaamwoorden je wilt worden aangeduid"
 

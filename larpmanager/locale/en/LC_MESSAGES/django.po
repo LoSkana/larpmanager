@@ -402,12 +402,6 @@ msgstr ""
 msgid "Sets how often reminder emails are sent, in days (default: 5)"
 msgstr ""
 
-msgid "Text"
-msgstr ""
-
-msgid "Enter the text with which to remind the payment deadline."
-msgstr ""
-
 msgid "Holidays"
 msgstr ""
 
@@ -2875,6 +2869,9 @@ msgstr ""
 msgid ""
 "If your question is about a specific event, please select it! If  is a "
 "general question instead, please leave it blank."
+msgstr ""
+
+msgid "Text"
 msgstr ""
 
 msgid ""
