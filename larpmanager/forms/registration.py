@@ -64,7 +64,6 @@ class RegistrationForm(BaseRegistrationForm):
         self.event = event
 
         self.profiles = {}
-        self.sections = {}
         self.section_descriptions = {}
 
         self.ticket = None
@@ -94,8 +93,6 @@ class RegistrationForm(BaseRegistrationForm):
         self.init_bring_friend()
 
         self.init_info(run)
-
-        # fix_help_text(self)
 
     def sel_ticket_map(self, ticket):
         """
@@ -457,8 +454,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.fields["member"].widget.set_assoc(self.params["a_id"])
 
         self.allow_run_choice()
-
-        self.sections = {}
 
         reg_section = _("Registration")
         char_section = _("Character")

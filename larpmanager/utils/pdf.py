@@ -42,7 +42,6 @@ from larpmanager.models.association import AssocTextType
 from larpmanager.models.casting import AssignmentTrait, Casting
 from larpmanager.models.miscellanea import PlayerRelationship, Util
 from larpmanager.models.registration import Registration
-from larpmanager.models.utils import get_all_element_configs
 from larpmanager.models.writing import (
     Character,
     Faction,
@@ -112,7 +111,8 @@ def link_callback(uri, rel):
 
 
 def add_pdf_instructions(ctx):
-    ctx.update(get_all_element_configs(ctx["event"]))
+    for instr in ["page_css", "header_content", "footer_content"]:
+        ctx[instr] = ctx["event"].get_config(instr, "")
 
     codes = {
         "<pdf:organization>": ctx["event"].assoc.name,

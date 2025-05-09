@@ -27,7 +27,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
-from larpmanager.forms.utils import add_custom_field, css_delimeter, get_custom_field
+from larpmanager.forms.utils import css_delimeter
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
@@ -38,7 +38,7 @@ from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
 )
-from larpmanager.models.utils import generate_id, get_all_element_configs, get_attr, save_all_element_configs
+from larpmanager.models.utils import generate_id, get_attr
 from larpmanager.templatetags.show_tags import hex_to_rgb
 
 
@@ -55,7 +55,6 @@ class MyForm(forms.ModelForm):
                 self.params[k] = kwargs.pop(k)
 
         super(forms.ModelForm, self).__init__(*args, **kwargs)
-        # fix_help_text(self)
 
         for m in ["deleted", "temp"]:
             if m in self.fields:
@@ -96,6 +95,7 @@ class MyForm(forms.ModelForm):
                 self.fields["run"].widget = forms.HiddenInput()
         else:
             self.fields["run"].choices = [(r.id, str(r)) for r in runs]
+            # noinspection PyUnresolvedReferences
             del self.auto_run
 
     def clean_run(self):
@@ -148,20 +148,6 @@ class MyForm(forms.ModelForm):
         if key in self.fields:
             del self.fields[key]
 
-    def save_configs(self, instance):
-        config_values = {}
-        for el in self.get_config_fields():
-            get_custom_field(el, config_values, self)
-        save_all_element_configs(instance, config_values)
-
-    def prepare_configs(self):
-        res = get_all_element_configs(self.instance)
-        for el in self.get_config_fields():
-            add_custom_field(el, res, self)
-
-    def get_config_fields(self):
-        return []
-
 
 class MyFormRun(MyForm):
     def __init__(self, *args, **kwargs):
@@ -187,6 +173,10 @@ class BaseRegistrationForm(MyFormRun):
 
     class Meta:
         abstract = True
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.sections = {}
 
     def _init_reg_question(self, instance, event):
         if instance and instance.pk:
@@ -538,6 +528,14 @@ class MyCssForm(MyForm):
         if instance.ter_rgb:
             css += f":root {{--ter-rgb: {hex_to_rgb(instance.ter_rgb)}; }}"
         default_storage.save(path, ContentFile(css))
+
+    @staticmethod
+    def get_css_path(instance):
+        return ""
+
+    @staticmethod
+    def get_input_css():
+        return ""
 
 
 class BaseAccForm(forms.Form):

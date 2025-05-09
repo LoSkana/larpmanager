@@ -56,62 +56,6 @@ def remove_non_ascii(text):
     return "".join(char for char in text if ord(char) < max_ascii)
 
 
-def get_element_config(element, name, def_value):
-    if not hasattr(element, "aux_configs"):
-        element.aux_configs = {}
-
-    if name in element.aux_configs:
-        return element.aux_configs[name]
-
-    try:
-        config = element.configs.get(name=name)
-        value = config.value
-        if isinstance(def_value, bool):
-            return value == "True"
-        if not value or value == "None":
-            return def_value
-        element.aux_configs[name] = value
-        return value
-    except ObjectDoesNotExist:
-        return def_value
-
-
-def get_all_element_configs(obj):
-    res = {}
-    for config in obj.configs.all():
-        res[config.name] = config.value
-    return res
-
-
-def save_all_element_configs(obj, dct):
-    fk_field_map = {
-        "Event": "event",
-        "Run": "run",
-        "Association": "assoc",
-        "Character": "character",
-    }
-
-    model_name = obj.__class__.__name__
-    fk_field = fk_field_map.get(model_name)
-
-    existing_configs = {config.name: config for config in obj.configs.all()}
-    incoming_names = set(dct.keys())
-
-    # update or delete existing configs
-    for name, config in existing_configs.items():
-        if name in dct:
-            new_value = dct[name]
-            if config.value != new_value:
-                config.value = new_value
-                config.save()
-        # else:
-        #     config.delete()
-
-    # add new configs
-    for name in incoming_names - set(existing_configs.keys()):
-        obj.configs.model.objects.create(**{fk_field: obj, "name": name, "value": dct[name]})
-
-
 def my_uuid_miny():
     return random.choice(string.ascii_letters) + my_uuid(4)
 
@@ -250,3 +194,52 @@ class MLStripper(HTMLParser):
 
     def get_data(self):
         return self.text.getvalue()
+
+
+def save_all_element_configs(obj, dct):
+    fk_field_map = {
+        "Event": "event",
+        "Run": "run",
+        "Association": "assoc",
+        "Character": "character",
+    }
+
+    model_name = obj.__class__.__name__
+    fk_field = fk_field_map.get(model_name)
+
+    existing_configs = {config.name: config for config in obj.configs.all()}
+    incoming_names = set(dct.keys())
+
+    # update or delete existing configs
+    for name, config in existing_configs.items():
+        if name in dct:
+            new_value = dct[name]
+            if config.value != new_value:
+                config.value = new_value
+                config.save()
+        # else:
+        #     config.delete()
+
+    # add new configs
+    for name in incoming_names - set(existing_configs.keys()):
+        obj.configs.model.objects.create(**{fk_field: obj, "name": name, "value": dct[name]})
+
+
+def get_element_config(element, name, def_value):
+    if not hasattr(element, "aux_configs"):
+        element.aux_configs = {}
+
+    if name in element.aux_configs:
+        return element.aux_configs[name]
+
+    try:
+        config = element.configs.get(name=name)
+        value = config.value
+        if isinstance(def_value, bool):
+            return value == "True"
+        if not value or value == "None":
+            return def_value
+        element.aux_configs[name] = value
+        return value
+    except ObjectDoesNotExist:
+        return def_value

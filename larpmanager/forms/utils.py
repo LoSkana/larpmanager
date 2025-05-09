@@ -19,15 +19,12 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from datetime import datetime, timedelta
-from enum import IntEnum
 
 from django import forms
-from django.forms import Textarea
 from django.forms.widgets import Widget
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
-from tinymce.widgets import TinyMCE
 
 from larpmanager.models.access import EventRole
 from larpmanager.models.base import FeatureModule, PaymentMethod
@@ -84,13 +81,6 @@ class TimePickerInput(forms.TextInput):
 class SlugInput(forms.TextInput):
     input_type = "slug"
     template_name = "forms/widgets/slug.html"
-
-
-def get_members_queryset(aid):
-    allwd = [Membership.ACCEPTED, Membership.SUBMITTED, Membership.JOINED]
-    qs = Member.objects.prefetch_related("memberships")
-    qs = qs.filter(memberships__assoc_id=aid, memberships__status__in=allwd)
-    return qs
 
 
 def prepare_permissions_role(form, typ):
@@ -243,11 +233,15 @@ class RegisteredMS2Widget:
         "user__email__icontains",
     ]
 
+    def __init__(self):
+        self.allowed = None
+
     def set_run(self, run):
         que = Registration.objects.filter(run=run, cancellation_date__isnull=True)
         self.allowed = set(que.values_list("member_id", flat=True))
         que = EventRole.objects.filter(event_id=run.event_id).prefetch_related("members")
         self.allowed.update(que.values_list("members__id", flat=True))
+        # noinspection PyUnresolvedReferences
         self.attrs["required"] = "required"
 
     def get_queryset(self):
@@ -264,98 +258,6 @@ class RunMemberS2WidgetMulti(RegisteredMS2Widget, s2forms.ModelSelect2MultipleWi
 
 class RunMemberS2Widget(RegisteredMS2Widget, s2forms.ModelSelect2Widget):
     pass
-
-
-def get_custom_field(el, res, form):
-    k = f"{el[0]}_{el[1]}"
-
-    val = form.cleaned_data[k]
-
-    if el[2] == ConfigType.MEMBERS:
-        val = ",".join([str(el.id) for el in val])
-        # print(val)
-    else:
-        val = str(val)
-        val = val.replace(r"//", r"/")
-
-    res[k] = val
-
-
-class ConfigType(IntEnum):
-    CHAR = 1
-    BOOL = 2
-    HTML = 3
-    INT = 4
-    TEXTAREA = 5
-    MEMBERS = 6
-
-
-def get_form_field(field_type: ConfigType, label, help_text, init=None, extra=None):
-    field_map = {
-        ConfigType.CHAR: lambda: forms.CharField(label=label, help_text=help_text, required=False),
-        ConfigType.BOOL: lambda: forms.BooleanField(
-            label=label,
-            help_text=help_text,
-            required=False,
-        ),
-        ConfigType.HTML: lambda: forms.CharField(label=label, widget=TinyMCE(), help_text=help_text, required=False),
-        ConfigType.INT: lambda: forms.IntegerField(label=label, help_text=help_text, required=False),
-        ConfigType.TEXTAREA: lambda: forms.CharField(
-            label=label,
-            widget=Textarea(attrs={"cols": 80, "rows": 15}),
-            help_text=help_text,
-            required=False,
-        ),
-        ConfigType.MEMBERS: lambda: forms.ModelMultipleChoiceField(
-            label=label,
-            queryset=get_members_queryset(extra),
-            widget=AssocMemberS2WidgetMulti,
-            required=False,
-            help_text=help_text,
-        ),
-    }
-
-    factory = field_map.get(ConfigType(field_type))
-    return factory() if factory else None
-
-
-def add_custom_field(el, res, form):
-    k = f"{el[0]}_{el[1]}"
-    init = str(res[k]) if k in res else None
-
-    if not hasattr(form, "custom_field"):
-        form.custom_field = []
-    form.custom_field.append(k)
-
-    field_type = el[2]
-    field_sect = el[3]
-    field_name = el[4]
-    field_help = el[5]
-
-    extra = el[6] if field_type == ConfigType.MEMBERS else None
-    form.fields[k] = get_form_field(field_type, field_name, field_help, init, extra)
-
-    if field_type == ConfigType.MEMBERS:
-        form.fields[k].widget.set_assoc(el[6])
-        if init:
-            init = [s.strip() for s in init.split(",")]
-
-    if not hasattr(form, "sections"):
-        form.sections = {}
-    form.sections["id_" + k] = field_sect
-
-    if init:
-        if field_type == ConfigType.BOOL:
-            init = init == "True"
-        form.initial[k] = init
-
-
-def fix_help_text(self):
-    for field in self.fields:
-        help_text = self.fields[field].help_text
-        self.fields[field].help_text = None
-        if help_text != "":
-            self.fields[field].widget.attrs.update({"tooltip": help_text, "class": "has_tooltip"})
 
 
 def get_assoc_people(assoc_id):
@@ -397,6 +299,7 @@ class EventRegS2Widget(s2forms.ModelSelect2Widget):
 
     def label_from_instance(self, obj):
         s = str(obj)
+        # noinspection PyUnresolvedReferences
         if obj.cancellation_date:
             s += " - CANC"
         return s
@@ -415,6 +318,7 @@ class AssocRegS2Widget(s2forms.ModelSelect2Widget):
 
     def label_from_instance(self, obj):
         s = str(obj)
+        # noinspection PyUnresolvedReferences
         if obj.cancellation_date:
             s += " - CANC"
         return s
@@ -566,3 +470,10 @@ class RedirectForm(forms.Form):
             cho.append((counter, el))
             counter += 1
         self.fields["slug"] = forms.ChoiceField(choices=cho, label="Element")
+
+
+def get_members_queryset(aid):
+    allwd = [Membership.ACCEPTED, Membership.SUBMITTED, Membership.JOINED]
+    qs = Member.objects.prefetch_related("memberships")
+    qs = qs.filter(memberships__assoc_id=aid, memberships__status__in=allwd)
+    return qs
