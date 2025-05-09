@@ -371,7 +371,9 @@ class Character(Writing):
 
 class CharacterConfig(BaseModel):
     name = models.CharField(max_length=150)
+
     value = models.CharField(max_length=5000)
+
     character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="configs")
 
     def __str__(self):
@@ -407,7 +409,9 @@ class Plot(Writing):
 
 class PlotCharacterRel(BaseModel):
     plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
+
     character = models.ForeignKey(Character, on_delete=models.CASCADE)
+
     text = models.TextField(max_length=5000, null=True)
 
     def __str__(self):
@@ -487,6 +491,7 @@ class PrologueType(Writing):
 
 class Prologue(Writing):
     typ = models.ForeignKey(PrologueType, on_delete=models.CASCADE, null=True, related_name="prologues")
+
     characters = models.ManyToManyField(Character, related_name="prologues_list", blank=True)
 
     class Meta:
@@ -510,9 +515,9 @@ class Prologue(Writing):
 
 class HandoutTemplate(BaseModel):
     number = models.IntegerField()
+
     name = models.CharField(max_length=150)
 
-    # ~ template = models.FileField(upload_to=UploadToPathAndRename('template/'), blank=True, null=True)
     css = models.TextField(blank=True, null=True)
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="handout_templates")
@@ -537,6 +542,7 @@ class HandoutTemplate(BaseModel):
 
 class Handout(Writing):
     template = models.ForeignKey(HandoutTemplate, on_delete=models.CASCADE, related_name="handouts", null=True)
+
     cod = models.SlugField(max_length=32, unique=True, default=my_uuid, db_index=True)
 
     class Meta:
@@ -591,13 +597,19 @@ class TextVersion(BaseModel):
     ]
 
     tp = models.CharField(max_length=1, choices=TEXT_CHOICES)
+
     eid = models.IntegerField()
+
     version = models.IntegerField()
+
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="text_versions", null=True)
 
     concept = HTMLField(blank=True)
+
     teaser = HTMLField(blank=True)
+
     text = HTMLField(blank=True)
+
     preview = HTMLField(blank=True)
 
     dl = models.BooleanField(default=False)
@@ -608,7 +620,9 @@ class TextVersion(BaseModel):
 
 class SpeedLarp(Writing):
     typ = models.IntegerField()
+
     station = models.IntegerField()
+
     characters = models.ManyToManyField(Character, related_name="speedlarps_list", blank=True)
 
     def show_red(self):
@@ -678,7 +692,9 @@ def replace_chars_all(instance):
 
 class Relationship(BaseModel):
     source = models.ForeignKey(Character, related_name="source", on_delete=models.CASCADE)
+
     target = models.ForeignKey(Character, related_name="target", on_delete=models.CASCADE)
+
     text = HTMLField(max_length=5000)
 
     def __str__(self):

@@ -39,6 +39,7 @@ from larpmanager.models.writing import Character
 
 class HelpQuestion(BaseModel):
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="questions")
+
     run = models.ForeignKey(
         Run,
         on_delete=models.CASCADE,
@@ -50,13 +51,17 @@ class HelpQuestion(BaseModel):
             "question instead, please leave it blank."
         ),
     )
+
     is_user = models.BooleanField(default=True)
+
     text = models.TextField(
         max_length=5000,
         verbose_name=_("Text"),
         help_text=_("Write your question, request or concern here. We will be happy to answer you!"),
     )
+
     closed = models.BooleanField(default=False)
+
     attachment = models.FileField(
         upload_to=UploadToPathAndRename("attachment/"),
         blank=True,
@@ -73,9 +78,13 @@ class HelpQuestion(BaseModel):
 
 class Contact(BaseModel):
     channel = models.IntegerField(default=0)
+
     me = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="FIRST_CONTACT")
+
     you = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="SECOND_CONTACT")
+
     last_message = models.DateTimeField(auto_now_add=True)
+
     num_unread = models.IntegerField(default=0)
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
@@ -97,8 +106,11 @@ class Contact(BaseModel):
 
 class ChatMessage(BaseModel):
     message = models.TextField(max_length=1000)
+
     channel = models.IntegerField(db_index=True)
+
     sender = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="SENDER_MSG")
+
     receiver = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="RECEIVER_MSG")
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
@@ -109,15 +121,20 @@ class ChatMessage(BaseModel):
 
 class Util(BaseModel):
     number = models.IntegerField()
+
     name = models.CharField(max_length=150)
+
     cod = models.CharField(max_length=16, null=True)
+
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
+
     util = models.FileField(upload_to=UploadToPathAndRename("../utils/"))
 
     def __str__(self):
         return f"U{self.number} {self.name}"
 
     def download(self):
+        # noinspection PyUnresolvedReferences
         s = self.util.url
         # s = s.replace("media/", "", 1)
         return download(s)
@@ -125,13 +142,17 @@ class Util(BaseModel):
     def file_name(self):
         if not self.util:
             return ""
+        # noinspection PyUnresolvedReferences
         return os.path.basename(self.util.url)
 
 
 class UrlShortner(BaseModel):
     number = models.IntegerField()
+
     name = models.CharField(max_length=150)
+
     cod = models.CharField(max_length=5, unique=True, default=my_uuid_miny, db_index=True)
+
     url = models.URLField(max_length=300)
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
@@ -142,14 +163,18 @@ class UrlShortner(BaseModel):
 
 class Album(BaseModel):
     name = models.CharField(max_length=70)
+
     cover = models.ImageField(max_length=500, upload_to=UploadToPathAndRename("albums/cover/"), blank=True)
+
     thumb = ImageSpecField(
         source="cover",
         processors=[ResizeToFit(300)],
         format="JPEG",
         options={"quality": 80},
     )
+
     is_visible = models.BooleanField(default=True)
+
     cod = models.SlugField(max_length=32, unique=True, default=my_uuid, db_index=True)
 
     parent = models.ForeignKey(
@@ -159,24 +184,26 @@ class Album(BaseModel):
         null=True,
         related_name="sub_albums",
     )
+
     run = models.ForeignKey(Run, on_delete=models.PROTECT, blank=True, null=True, related_name="albums")
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    # def get_absolute_url(self):
-    # return reverse('album', kwargs={'slug':self.slug})
-
     def __unicode__(self):
+        # noinspection PyUnresolvedReferences
         return self.title
 
     def show_thumb(self):
         if self.thumb:
+            # noinspection PyUnresolvedReferences
             return show_thumb(100, self.thumb.url)
 
 
 class AlbumUpload(BaseModel):
     name = models.CharField(max_length=70)
+
     album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name="uploads")
+
     PHOTO = "p"
     TYPE_CHOICES = [
         (PHOTO, _("Photo")),
@@ -186,20 +213,25 @@ class AlbumUpload(BaseModel):
 
 class AlbumImage(BaseModel):
     upload = models.OneToOneField(AlbumUpload, on_delete=models.CASCADE, related_name="image")
+
     original = models.ImageField(upload_to=UploadToPathAndRename("albums/"))
+
     thumb = ImageSpecField(
         source="original",
         processors=[ResizeToFit(300)],
         format="JPEG",
         options={"quality": 80},
     )
+
     show = ImageSpecField(
         source="original",
         processors=[ResizeToFit(1280)],
         format="JPEG",
         options={"quality": 70},
     )
+
     width = models.IntegerField(default=0)
+
     height = models.IntegerField(default=0)
 
     def __str__(self):
@@ -207,24 +239,32 @@ class AlbumImage(BaseModel):
 
     def show_thumb(self):
         if self.thumb:
+            # noinspection PyUnresolvedReferences
             return show_thumb(100, self.thumb.url)
 
     def original_url(self):
+        # noinspection PyUnresolvedReferences
         s = self.original.url
         return "/media/" + s.split("/media/")[2]
 
 
 class Competence(BaseModel):
     name = models.CharField(max_length=100, help_text=_("The name of the competence"))
+
     descr = models.CharField(max_length=5000, help_text=_("A description of the skills / abilities involved"))
+
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+
     members = models.ManyToManyField(Member, related_name="competences", through="CompetenceMemberRel")
 
 
 class CompetenceMemberRel(BaseModel):
     competence = models.ForeignKey(Competence, on_delete=models.CASCADE)
+
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
+
     exp = models.IntegerField(default=0)
+
     info = models.TextField(max_length=5000)
 
     def __str__(self):
@@ -236,9 +276,13 @@ class CompetenceMemberRel(BaseModel):
 
 class WorkshopModule(BaseModel):
     search = models.CharField(max_length=150, editable=False)
+
     is_generic = models.BooleanField(default=False)
+
     display = models.CharField(max_length=50)
+
     number = models.IntegerField(blank=True)
+
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="workshops")
 
     members = models.ManyToManyField(Member, related_name="workshops", through="WorkshopMemberRel")
@@ -247,6 +291,7 @@ class WorkshopModule(BaseModel):
         return self.display
 
     def show(self):
+        # noinspection PyUnresolvedReferences
         js = {"id": self.id, "number": self.number}
         self.upd_js_attr(js, "display")
         return js
@@ -254,6 +299,7 @@ class WorkshopModule(BaseModel):
 
 class WorkshopMemberRel(BaseModel):
     workshop = models.ForeignKey(WorkshopModule, on_delete=models.CASCADE)
+
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -262,17 +308,23 @@ class WorkshopMemberRel(BaseModel):
 
 class WorkshopQuestion(BaseModel):
     search = models.CharField(max_length=200, editable=False)
+
     display = models.CharField(max_length=200)
+
     module = models.ForeignKey(WorkshopModule, on_delete=models.CASCADE, related_name="questions")
+
     number = models.IntegerField(blank=True)
+
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="workshop_questions")
 
     def __str__(self):
         return self.display
 
     def show(self):
+        # noinspection PyUnresolvedReferences
         js = {"id": self.id, "opt": [], "number": self.number}
         self.upd_js_attr(js, "display")
+        # noinspection PyUnresolvedReferences
         for op in self.options.all():
             js["opt"].append(op.show())
         random.shuffle(js["opt"])
@@ -286,16 +338,20 @@ class WorkshopOption(BaseModel):
     search = models.CharField(max_length=500, editable=False)
 
     question = models.ForeignKey(WorkshopQuestion, on_delete=models.CASCADE, related_name="options")
+
     display = models.CharField(max_length=500)
+
     is_correct = models.BooleanField(default=False)
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="workshop_options")
+
     number = models.IntegerField(blank=True)
 
     def __str__(self):
         return f"{self.question} {self.display} ({self.is_correct})"
 
     def show(self):
+        # noinspection PyUnresolvedReferences
         js = {"id": self.id, "is_correct": self.is_correct}
         self.upd_js_attr(js, "display")
         return js
@@ -315,6 +371,7 @@ class Inventory(BaseModel):
             "Fully describe what the box contains, especially number of items, main features, state of preservation."
         )
     )
+
     tag = models.CharField(max_length=100, help_text=_("List of content-related tags"))
 
     photo = models.ImageField(
@@ -343,17 +400,20 @@ class InventoryBox(Inventory):
 
 class InventoryBoxHistory(Inventory):
     box = models.ForeignKey(InventoryBox, on_delete=models.CASCADE, related_name="histories")
+
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="box_histories")
 
 
 class InventoryBoxPhoto(BaseModel):
     box = models.ForeignKey(InventoryBox, on_delete=models.CASCADE, related_name="photos")
+
     photo = models.ImageField(
         max_length=500,
         upload_to=UploadToPathAndRename("albums/"),
         verbose_name=_("Photo"),
         help_text=_("Photo (clear and understandable) of the object"),
     )
+
     thumb = ImageSpecField(
         source="photo",
         processors=[ResizeToFit(300)],
@@ -378,10 +438,12 @@ class ShuttleService(BaseModel):
         verbose_name=_("Number of passengers"),
         help_text=_("Indicates how many passengers require transportation"),
     )
+
     address = models.TextField(
         verbose_name=_("Address"),
         help_text=_("Indicate as precisely as possible where to pick you up."),
     )
+
     info = models.TextField(
         verbose_name=_("Informations"),
         help_text=_(
@@ -395,6 +457,7 @@ class ShuttleService(BaseModel):
         verbose_name=_("Request date"),
         help_text=_("For which day you will need transportation"),
     )
+
     time = models.TimeField(
         verbose_name=_("Request time"),
         help_text=_("For what time you will need transportation (time zone of the larp location)"),
@@ -407,6 +470,7 @@ class ShuttleService(BaseModel):
         blank=True,
         null=True,
     )
+
     notes = models.TextField(
         verbose_name=_("Note"),
         help_text=_(
@@ -476,14 +540,17 @@ class Problem(BaseModel):
         verbose_name=_("Where"),
         help_text=_("Describe exactly at which point it occurs."),
     )
+
     when = models.TextField(
         verbose_name=_("When"),
         help_text=_("Describe exactly what condition it is in."),
     )
+
     what = models.TextField(
         verbose_name=_("What"),
         help_text=_("Describe exactly what risks it poses to the game."),
     )
+
     who = models.TextField(
         verbose_name=_("Who"),
         help_text=_("Describe exactly which players are involved."),
@@ -516,10 +583,13 @@ class Problem(BaseModel):
 
 class PlayerRelationship(BaseModel):
     reg = models.ForeignKey(Registration, on_delete=models.CASCADE)
+
     target = models.ForeignKey(Character, related_name="target_players", on_delete=models.CASCADE)
+
     text = HTMLField(max_length=5000)
 
     def __str__(self):
+        # noinspection PyUnresolvedReferences
         return f"{self.reg} - {self.target} ({self.reg.run.number})"
 
     class Meta:
@@ -538,12 +608,19 @@ class PlayerRelationship(BaseModel):
 
 class Email(BaseModel):
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, blank=True, null=True)
+
     run = models.ForeignKey(Run, on_delete=models.CASCADE, blank=True, null=True)
+
     recipient = models.CharField(max_length=170)
+
     subj = models.CharField(max_length=500)
+
     body = models.TextField()
+
     reply_to = models.CharField(max_length=170, blank=True, null=True)
+
     sent = models.DateTimeField(blank=True, null=True)
+
     search = models.CharField(max_length=500, blank=True)
 
     def __str__(self):

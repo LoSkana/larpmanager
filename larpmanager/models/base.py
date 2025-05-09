@@ -37,8 +37,8 @@ AlphanumericValidator = RegexValidator(r"^[0-9a-z_-]*$", "Only characters allowe
 
 
 class BaseModel(CloneMixin, SafeDeleteModel):
-    # created = models.DateTimeField(auto_now_add=True)
     created = models.DateTimeField(default=datetime.now, editable=False)
+
     updated = models.DateTimeField(auto_now=True)
 
     _safedelete_policy = SOFT_DELETE_CASCADE
@@ -59,6 +59,7 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         return super().__str__()
 
     def get_absolute_url(self):
+        # noinspection PyUnresolvedReferences
         return reverse("event", kwargs={"s": self.slug})
 
     def small_text(self):
@@ -67,6 +68,7 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         return ""
 
     def as_dict(self, many_to_many=True):
+        # noinspection PyUnresolvedReferences
         opts = self._meta
         data = {}
         for f in chain(opts.concrete_fields, opts.private_fields):
@@ -83,16 +85,23 @@ class BaseModel(CloneMixin, SafeDeleteModel):
 
 class FeatureModule(BaseModel):
     name = models.CharField(max_length=100)
+
     descr = models.TextField(max_length=500)
+
     order = models.IntegerField()
+
     default = models.BooleanField(default=False)
 
 
 class Feature(BaseModel):
     name = models.CharField(max_length=100)
+
     descr = models.TextField(max_length=500, blank=True)
+
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True)
+
     order = models.IntegerField()
+
     overall = models.BooleanField(default=False)
 
     link = models.CharField(max_length=500, blank=True)
@@ -119,10 +128,11 @@ class Feature(BaseModel):
 
 class PaymentMethod(BaseModel):
     name = models.CharField(max_length=100)
-    # descr = models.TextField(max_length=500)
+
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True)
-    # fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
     instructions = HTMLField(blank=True, null=True)
+
     fields = models.CharField(max_length=500)
 
     profile = models.ImageField(
@@ -132,6 +142,7 @@ class PaymentMethod(BaseModel):
         null=True,
         help_text=_("Logo image (you can upload a file of any size, it will be resized automatically)"),
     )
+
     profile_thumb = ImageSpecField(
         source="profile",
         processors=[ResizeToFill(100, 100)],
@@ -140,4 +151,5 @@ class PaymentMethod(BaseModel):
     )
 
     def as_dict(self, **kwargs):
+        # noinspection PyUnresolvedReferences
         return {"slug": self.slug, "name": self.name, **({"profile": self.profile_thumb.url} if self.profile else {})}

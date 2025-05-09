@@ -57,18 +57,21 @@ class PaymentInvoice(BaseModel):
     ]
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
+
     typ = models.CharField(max_length=1, choices=TYPE_CHOICES)
 
     invoice = models.FileField(
         upload_to=UploadToPathAndRename("wire/"),
-        verbose_name=_("Statement"),
-        help_text=_("Statement issued by the bank as proof of the issuance of the transfer (as pdf file)"),
         null=True,
         blank=True,
+        verbose_name=_("Statement"),
+        help_text=_("Statement issued by the bank as proof of the issuance of the transfer (as pdf file)"),
     )
+
     text = models.TextField(null=True, blank=True)
 
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=CREATED, db_index=True)
+
     method = models.ForeignKey(PaymentMethod, on_delete=models.CASCADE)
 
     mc_gross = models.DecimalField(
@@ -78,6 +81,7 @@ class PaymentInvoice(BaseModel):
         verbose_name=_("Gross"),
         help_text=_("Total payment sent"),
     )
+
     mc_fee = models.DecimalField(
         max_digits=10,
         decimal_places=2,
@@ -88,8 +92,11 @@ class PaymentInvoice(BaseModel):
     )
 
     idx = models.IntegerField(default=0)
+
     txn_id = models.CharField(max_length=50, null=True, blank=True)
+
     causal = models.CharField(max_length=200)
+
     cod = models.CharField(max_length=50, unique=True, db_index=True)
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
@@ -142,11 +149,17 @@ class ElectronicInvoice(BaseModel):
     inv = models.OneToOneField(
         PaymentInvoice, on_delete=models.SET_NULL, null=True, blank=True, related_name="electronicinvoice"
     )
+
     progressive = models.IntegerField()
+
     number = models.IntegerField()
+
     year = models.IntegerField()
+
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+
     xml = models.TextField(blank=True, null=True)
+
     response = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -532,9 +545,13 @@ class Collection(BaseModel):
     ]
 
     name = models.CharField(max_length=100, null=True)
+
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=OPEN)
+
     contribute_code = models.CharField(max_length=16, null=True, db_index=True)
+
     redeem_code = models.CharField(max_length=16, null=True, db_index=True)
+
     member = models.ForeignKey(
         Member,
         on_delete=models.CASCADE,
@@ -542,6 +559,7 @@ class Collection(BaseModel):
         null=True,
         blank=True,
     )
+
     run = models.ForeignKey(
         Run,
         on_delete=models.CASCADE,
@@ -549,7 +567,9 @@ class Collection(BaseModel):
         null=True,
         blank=True,
     )
+
     organizer = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="collections_created")
+
     total = models.IntegerField(default=0)
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
@@ -598,7 +618,9 @@ class RefundRequest(BaseModel):
     search = models.CharField(max_length=200, editable=False)
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="refund_requests")
+
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=REQUEST, db_index=True)
+
     details = models.TextField(
         max_length=2000,
         verbose_name=_("Details"),
@@ -607,6 +629,7 @@ class RefundRequest(BaseModel):
             "full bank details, paypal link, etc)"
         ),
     )
+
     value = models.DecimalField(
         max_digits=10,
         decimal_places=2,
@@ -627,6 +650,9 @@ class RefundRequest(BaseModel):
 
 class RecordAccounting(BaseModel):
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="rec_accs", null=True, blank=True)
+
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="rec_accs")
+
     global_sum = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name=_("Global balance"))
+
     bank_sum = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name=_("Overall balance"))

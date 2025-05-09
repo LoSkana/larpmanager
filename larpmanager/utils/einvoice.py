@@ -56,7 +56,7 @@ def prepare_xml(inv, einvoice):
     tree = ET.ElementTree(root)
     xml_bytes: IO[bytes] = io.BytesIO()
     tree.write(xml_bytes, encoding="utf-8", xml_declaration=True)
-
+    # noinspection PyUnresolvedReferences
     xml_str = xml_bytes.getvalue().decode("utf-8")
     return xml_str
 

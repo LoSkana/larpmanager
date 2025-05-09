@@ -85,8 +85,6 @@ class Association(BaseModel):
 
     optional_fields = models.CharField(max_length=1000, blank=True)
 
-    # ~ main_language = models.CharField(max_length=2, choices=languages, default='en', help_text=_("Lingua principale degli eventi offerti"))
-
     main_mail = models.EmailField(help_text=_("Please indicate an email for the organization"))
 
     payment_methods = models.ManyToManyField(
@@ -114,6 +112,7 @@ class Association(BaseModel):
         blank=True,
         help_text=_("Image shown on homepage as promoter"),
     )
+
     promoter_thumb = ImageSpecField(
         source="promoter",
         processors=[ResizeToFit(height=200)],
@@ -130,6 +129,7 @@ class Association(BaseModel):
         blank=True,
         help_text=_("Background of web pages"),
     )
+
     background_red = ImageSpecField(
         source="background",
         processors=[ResizeToFit(width=1000)],
@@ -153,12 +153,14 @@ class Association(BaseModel):
         blank=True,
         null=True,
     )
+
     sec_rgb = ColorField(
         verbose_name=_("Color background"),
         help_text=_("Indicate the color that will be used for the background of texts"),
         blank=True,
         null=True,
     )
+
     ter_rgb = ColorField(
         verbose_name=_("Color links"),
         help_text=_("Indicate the color that will be used for the links"),
@@ -212,7 +214,9 @@ class Association(BaseModel):
 
 class AssociationConfig(BaseModel):
     name = models.CharField(max_length=150)
+
     value = models.CharField(max_length=1000)
+
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="configs")
 
     def __str__(self):
