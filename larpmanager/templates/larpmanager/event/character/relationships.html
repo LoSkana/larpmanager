@@ -6,7 +6,7 @@
 {% block content %}
     <div class="staff-list">
         <div class="orga-buttons">
-            <a class='new button'
+            <a class="new button"
                href="{% url 'character_relationships_edit' run.event.slug run.number char.number 0 %}">{% trans "New" %}</a>
         </div>
     </div>
@@ -15,7 +15,7 @@
         <tr>
             <th></th>
             <th></th>
-            <th style="width:33%">{% trans "Details" %}</th>
+            <th>{% trans "Details" %}</th>
             <th>{% trans "Relationship" %}</th>
         </tr>
         {% for el in rel %}
@@ -23,15 +23,16 @@
                 <td>
                     <a href="{% url 'character_relationships_edit' run.event.slug run.number char.number el.number %}"><i class="fas fa-edit"></i></a>
                 </td>
-                <td style="width:15%">
+                <td>
                     {% if el.player_id > 0 %}
-                        <img style="width:100%" src="{{ el.player_prof }}" />
+                        <img class="rel-img" src="{{ el.player_prof }}" alt="character profile" />
                     {% else %}
-                        <img style="width:100%"
-                             src="{% static 'larpmanager/assets/blank-avatar.svg' %}" />
+                        <img class="rel-img"
+                             src="{% static 'larpmanager/assets/blank-avatar.svg' %}"
+                             alt="character profile" />
                     {% endif %}
                 </td>
-                <td style="font-size:80%; width:30%">
+                <td class="rel-description">
                     <a href="{% url 'character' event.slug run.number el.number %}">{{ el.name }}</a>
                     {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
                     {% if el.pronoun %}({{ el.pronoun }}){% endif %}
@@ -56,10 +57,10 @@
                     {% endfor %}
                     <br />
                     <div class="go-inline">
-                        <b>{% trans "Teaser" %}:</b> <span class="teas">{{ el.teaser | safe | clean_tags | truncatechars:1000 }} (...)</span>
+                        <span class="teas">{{ el.teaser | safe | clean_tags | truncatechars:1000 }} (...)</span>
                     </div>
                 </td>
-                <td style="width:50%">{{ el.text | safe | clean_tags | truncatechars:500 }}</td>
+                <td>{{ el.text | safe | clean_tags | truncatechars:500 }}</td>
             </tr>
         {% endfor %}
     </table>

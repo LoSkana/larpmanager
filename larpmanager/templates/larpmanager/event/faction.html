@@ -5,7 +5,6 @@
 {% endblock title %}
 {% block content %}
     {% if show_teaser %}
-        <h2>Teaser</h2>
         <p>{% show_char faction.teaser run 1 %}</p>
     {% endif %}
     <h2>{% trans "Characters" %}</h2>
@@ -15,7 +14,7 @@
                 <div class="gallery single relationships">
                     <div class="el">
                         <div class="icon">
-                            <img src="{% get_char_profile el %}" />
+                            <img src="{% get_char_profile el %}" alt="character profile" />
                         </div>
                     </div>
                     <div class="text">

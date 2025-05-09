@@ -323,7 +323,7 @@ function search(key) {
 
             if (show_teaser && el['teaser'].length > 0) {
                 teaser = $('#teasers .' + el['id']).html();
-                characters += '<div class="go-inline"><b>Teaser:</b> {0}</div>'.format(teaser);
+                characters += '<div class="go-inline">{0}</div>'.format(teaser);
             }
 
             characters += '</div></div>';

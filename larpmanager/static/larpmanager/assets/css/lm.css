@@ -1203,3 +1203,23 @@ th select {
     margin: 2em;
     font-style: italic;
 }
+
+.no-clear {
+    clear: none;
+}
+
+.private-header {
+font-size:250%
+}
+
+.character-name {
+font-size:130%
+}
+
+.rel-description {
+    font-size: 80%;
+}
+
+.rel-img {
+width:100%
+}

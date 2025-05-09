@@ -51,7 +51,7 @@
         <div class="gallery single">
             <div class="el">
                 <div class="icon">
-                    <img src="{% get_char_profile char %}" />
+                    <img src="{% get_char_profile char %}" alt="character profile" />
                 </div>
             </div>
             <div class="text">
@@ -133,7 +133,7 @@
                         {% endif %}
                     </div>
                     {% if char.teaser and show_teaser %}
-                        <h2>Teaser</h2>
+                        <hr class="no-clear" />
                         <div class="teaser">
                             {% show_char char.teaser run 1 %}
                         {% endif %}
@@ -208,7 +208,7 @@
                     {% endif %}
                 {% endif %}
                 <hr class="clear" />
-                <h1 class="c" style="font-size:250%">{% trans "Private area" %}</h1>
+                <h1 class="c private-header">{% trans "Private area" %}</h1>
                 {% if sheet_char.preview and show_preview %}
                     <h2 class="c">{% trans "Preview" %}</h2>
                     <div class="plot">{% show_char sheet_char.preview run 1 %}</div>
@@ -261,13 +261,13 @@
                         <div class="gallery single relationships">
                             <div class="el">
                                 <div class="icon">
-                                    <div class='img_cover'
+                                    <div class="img_cover"
                                          style="background-image:url('{% get_char_profile el %}')" /></div>
                             </div>
                         </div>
                         <div class="text">
                             <div class="go-inline">
-                                <span style="font-size:130%"><a href="{% url 'character' event.slug run.number el.number %}">{{ el.name }}</a> </span>
+                                <span class="character-name"><a href="{% url 'character' event.slug run.number el.number %}">{{ el.name }}</a> </span>
                                 {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
                                 {% if el.pronoun %}({{ el.pronoun }}){% endif %}
                                 {% if el.motto %}- <i>{{ el.motto | safe | clean_tags }}</i>{% endif %}
@@ -304,14 +304,14 @@
                             <div class="gallery single relationships">
                                 <div class="el">
                                     <div class="icon">
-                                        <div class='img_cover'
+                                        <div class="img_cover"
                                              style="background-image:url('{% if el.player_id > 0 %}{{ el.player_prof }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')" />
                                         </div>
                                     </div>
                                 </div>
                                 <div class="text">
                                     <div class="go-inline">
-                                        <span style="font-size:130%"><a href="{% url 'character' event.slug run.number el.number %}">{{ el.name }}</a> </span>
+                                        <span class="character-name"><a href="{% url 'character' event.slug run.number el.number %}">{{ el.name }}</a> </span>
                                         {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
                                         {% if el.pronoun %}({{ el.pronoun }}){% endif %}
                                         {% if el.motto %}- <i>{{ el.motto | safe | clean_tags }}</i>{% endif %}
@@ -343,8 +343,6 @@
             {% include "elements/sheet/prologue.html" %}
         </div>
     {% endif %}
-</div>
-</div>
 {% endblock content %}
 {% block js %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js">});</script>

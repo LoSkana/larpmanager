@@ -3889,9 +3889,6 @@ msgstr ""
 msgid "Relationships of your character"
 msgstr ""
 
-msgid "Teaser"
-msgstr ""
-
 msgid "Select which of your characters you want to access"
 msgstr ""
 
