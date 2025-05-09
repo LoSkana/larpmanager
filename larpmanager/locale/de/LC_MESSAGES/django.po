@@ -2216,9 +2216,6 @@ msgstr "Register drucken"
 msgid "Privacy Policy"
 msgstr "Datenschutzbestimmungen"
 
-msgid "Profile Photos"
-msgstr "Profil-Fotos"
-
 msgid "Profiles (PDF)"
 msgstr "Steckbriefe (PDF)"
 
