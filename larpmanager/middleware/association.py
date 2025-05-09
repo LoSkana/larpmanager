@@ -36,7 +36,7 @@ class AssociationIdentifyMiddleware:
     def __call__(self, request):
         request.assoc = self.get_assoc_info(request)
         if not request.assoc:
-            return redirect("https://larpmanager.com")
+            return redirect(f"https://larpmanager.com{request.get_full_path()}")
 
         lang = get_language()
         request.assoc["footer"] = get_assoc_text(request.assoc["id"], AssocTextType.FOOTER, lang)
@@ -50,30 +50,18 @@ class AssociationIdentifyMiddleware:
         # get assoc slug from host
         hst = request.get_host()
 
-        def_assocs = {
-            "id": 0,
-            "name": "LarpManager",
-            "shuttle": [],
-            "features": ["assoc_css"],
-            "css_code": "main",
-            "slug": "lm",
-            "logo": "https://larpmanager.com/static/lm_logo.png",
-            "main_mail": "info@larpmanager.com",
-            "favicon": "https://larpmanager.com/static/lm_fav.png",
-        }
-
         host_part = hst.split(":")[0]
+        local = False
         if host_part in ["127.0.0.1", "localhost"]:  # dev environment
+            local = True
             if not os.getenv("PYTEST_CURRENT_TEST"):
                 request.enviro = "dev"
             else:
                 request.enviro = "test"
+        elif "xyz" in hst:
+            request.enviro = "staging"
         else:
-            assoc_slug = request.get_host().split(".")[0]
-            if "xyz" in hst:
-                request.enviro = "staging"
-            else:
-                request.enviro = "prod"
+            request.enviro = "prod"
 
         assoc_slug = (
             request.session.get("debug_slug", None)
@@ -85,4 +73,17 @@ class AssociationIdentifyMiddleware:
         if assoc:
             return assoc
 
-        return def_assocs
+        if not local:
+            return None
+
+        return {
+            "id": 0,
+            "name": "LarpManager",
+            "shuttle": [],
+            "features": ["assoc_css"],
+            "css_code": "main",
+            "slug": "lm",
+            "logo": "https://larpmanager.com/static/lm_logo.png",
+            "main_mail": "info@larpmanager.com",
+            "favicon": "https://larpmanager.com/static/lm_fav.png",
+        }
