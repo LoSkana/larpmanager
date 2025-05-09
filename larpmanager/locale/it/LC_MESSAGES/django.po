@@ -594,9 +594,6 @@ msgstr "Stato"
 msgid "Submit"
 msgstr "Invia"
 
-msgid "Teaser"
-msgstr "Teaser"
-
 msgid "Ticket"
 msgstr "Biglietto"
 

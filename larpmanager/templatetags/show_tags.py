@@ -71,7 +71,7 @@ def get_tooltip(context, ch):
     tooltip = tooltip_factions(ch, context, tooltip)
 
     if ch["teaser"]:
-        tooltip += "<span class='teaser'><i>Teaser</i>: " + replace_chars(context, ch["teaser"]) + " (...)</span>"
+        tooltip += "<span class='teaser'>" + replace_chars(context, ch["teaser"]) + " (...)</span>"
 
     return tooltip
 
