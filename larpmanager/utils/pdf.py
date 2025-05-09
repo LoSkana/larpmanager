@@ -112,7 +112,7 @@ def link_callback(uri, rel):
 
 def add_pdf_instructions(ctx):
     for instr in ["page_css", "header_content", "footer_content"]:
-        ctx[instr] = ctx["event"].get_config(instr)
+        ctx[instr] = ctx["event"].get_config(instr, "")
 
     codes = {
         "<pdf:organization>": ctx["event"].assoc.name,
