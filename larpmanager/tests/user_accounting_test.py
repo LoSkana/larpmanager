@@ -45,6 +45,16 @@ def test_user_accounting(live_server):
 def user_accounting(live_server, page):
     login_orga(page, live_server)
 
+    prepare(page, live_server)
+
+    donation(page, live_server)
+
+    membership_fees(page, live_server)
+
+    collections(page, live_server)
+
+
+def prepare(page, live_server):
     # Activate payments
     go_to(page, live_server, "/manage/features/111/on")
 
@@ -76,6 +86,8 @@ def user_accounting(live_server, page):
     page.locator("#id_wire_iban").fill("test iban")
     page.get_by_role("button", name="Confirm").click()
 
+
+def donation(page, live_server):
     # test donation
     go_to(page, live_server, "/manage/features/36/on")
 
@@ -102,6 +114,8 @@ def user_accounting(live_server, page):
     expect(page.locator("#one")).to_contain_text("Donations done")
     expect(page.locator("#one")).to_contain_text("(10.00€)")
 
+
+def membership_fees(page, live_server):
     # test membership fees
     go_to(page, live_server, "/manage/features/45/on")
 
@@ -158,6 +172,8 @@ def user_accounting(live_server, page):
     page.get_by_role("link", name="Organization").click()
     page.get_by_role("link", name="Invoices").click()
 
+
+def collections(page, live_server):
     # test collections
     go_to(page, live_server, "/manage/features/31/on")
 
@@ -173,6 +189,7 @@ def user_accounting(live_server, page):
     submit(page)
 
     expect(page.locator("#one")).to_contain_text("20")
+    image_path = Path(__file__).parent / "image.jpg"
     page.locator("#id_invoice").set_input_files(str(image_path))
     expect(page.locator("#one")).to_contain_text("test beneficiary")
     expect(page.locator("#one")).to_contain_text("test iban")

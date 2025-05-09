@@ -34,7 +34,8 @@ class BrokenLinkEmailsMiddleware:
         Send broken link emails for relevant 404 NOT FOUND responses.
         """
         response = self.get_response(request)
-        if response.status_code == 404 and not conf_settings.DEBUG:
+        broken_link_status = 404
+        if response.status_code == broken_link_status and not conf_settings.DEBUG:
             res = self.check(request, response)
             if res:
                 return res

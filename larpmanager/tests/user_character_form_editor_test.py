@@ -44,6 +44,18 @@ def test_user_character_form_editor(live_server):
 def user_character_form_editor(live_server, page):
     login_orga(page, live_server)
 
+    prepare(page, live_server)
+
+    field_single(page, live_server)
+
+    field_multiple(page, live_server)
+
+    field_text(page, live_server)
+
+    character(page, live_server)
+
+
+def prepare(page, live_server):
     # Activate characters
     go_to(page, live_server, "/manage/features/178/on")
 
@@ -65,6 +77,8 @@ def user_character_form_editor(live_server, page):
     expect(page.locator('[id="\\32 "]')).to_contain_text("Presentation")
     expect(page.locator('[id="\\33 "]')).to_contain_text("Sheet")
 
+
+def field_single(page, live_server):
     # add single
     page.get_by_role("link", name="New").click()
     page.locator("#id_display").click()
@@ -91,6 +105,8 @@ def user_character_form_editor(live_server, page):
 
     page.get_by_role("button", name="Confirm").click()
 
+
+def field_multiple(page, live_server):
     # Add multiple
     page.get_by_role("link", name="New").click()
     page.get_by_text("Question type").click()
@@ -126,6 +142,8 @@ def user_character_form_editor(live_server, page):
 
     page.get_by_role("button", name="Confirm").click()
 
+
+def field_text(page, live_server):
     # Add text
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
@@ -169,6 +187,8 @@ def user_character_form_editor(live_server, page):
     page.locator("#id_q7").fill("sadsadas")
     page.get_by_role("button", name="Confirm").click()
 
+
+def character(page, live_server):
     # signup, create char
     go_to(page, live_server, "/test/1/register")
     page.get_by_role("button", name="Continue").click()
