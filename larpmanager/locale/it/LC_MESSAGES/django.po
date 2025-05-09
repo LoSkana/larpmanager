@@ -5133,7 +5133,7 @@ msgid "We ask you to pay the difference from the next instalment"
 msgstr "Ti chiediamo di versare la differenza rispetto la prossima rata"
 
 msgid "You cannot redeem a membership, you are already a member!"
-msgstr "Non puoi riscattare una iscrizione, risult già iscritto!"
+msgstr "Non puoi riscattare una iscrizione, risulti già iscritto!"
 
 msgid "(Optional) an image that will be shown inside the question"
 msgstr ""
