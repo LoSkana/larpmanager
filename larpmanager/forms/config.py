@@ -7,6 +7,7 @@ from tinymce.widgets import TinyMCE
 
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import AssocMemberS2WidgetMulti, get_members_queryset
+from larpmanager.models.utils import save_all_element_configs
 
 
 class ConfigType(IntEnum):
@@ -51,7 +52,7 @@ class ConfigForm(MyForm):
         config_values = {}
         for el in self.config_fields:
             self._get_custom_field(el, config_values)
-        self._save_all_element_configs(instance, config_values)
+        save_all_element_configs(instance, config_values)
 
         return instance
 
@@ -125,35 +126,6 @@ class ConfigForm(MyForm):
             if field_type == ConfigType.BOOL:
                 init = init == "True"
             self.initial[key] = init
-
-    @staticmethod
-    def _save_all_element_configs(obj, dct):
-        fk_field_map = {
-            "Event": "event",
-            "Run": "run",
-            "Association": "assoc",
-            "Character": "character",
-        }
-
-        model_name = obj.__class__.__name__
-        fk_field = fk_field_map.get(model_name)
-
-        existing_configs = {config.name: config for config in obj.configs.all()}
-        incoming_names = set(dct.keys())
-
-        # update or delete existing configs
-        for name, config in existing_configs.items():
-            if name in dct:
-                new_value = dct[name]
-                if config.value != new_value:
-                    config.value = new_value
-                    config.save()
-            # else:
-            #     config.delete()
-
-        # add new configs
-        for name in incoming_names - set(existing_configs.keys()):
-            obj.configs.model.objects.create(**{fk_field: obj, "name": name, "value": dct[name]})
 
     def _get_all_element_configs(self):
         res = {}

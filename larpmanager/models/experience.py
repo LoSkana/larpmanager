@@ -23,9 +23,9 @@ from django.db.models import Q, UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 
-from larpmanager.forms.config import _save_all_element_configs
 from larpmanager.models.event import BaseConceptModel
 from larpmanager.models.form import CharacterOption
+from larpmanager.models.utils import save_all_element_configs
 from larpmanager.models.writing import Character
 
 
@@ -128,4 +128,4 @@ def update_px(char):
     addit["px_used"] = sum(char.px_ability_list.values_list("cost", flat=True))
     addit["px_avail"] = addit["px_tot"] - addit["px_used"]
 
-    _save_all_element_configs(char, addit)
+    save_all_element_configs(char, addit)

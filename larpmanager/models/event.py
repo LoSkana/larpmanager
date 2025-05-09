@@ -33,7 +33,6 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
-from larpmanager.forms.config import get_element_config
 from larpmanager.models.association import Association
 from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature
 from larpmanager.models.larpmanager import LarpManagerPlan
@@ -42,6 +41,7 @@ from larpmanager.models.utils import (
     UploadToPathAndRename,
     download,
     get_attr,
+    get_element_config,
     my_uuid_short,
     show_thumb,
 )
