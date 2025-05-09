@@ -66,6 +66,7 @@ class MyAuthForm(AuthenticationForm):
 
 
 class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
+    # noinspection PyUnresolvedReferences
     def __init__(self, *args, **kwargs):
         super(RegistrationFormUniqueEmail, self).__init__(*args, **kwargs)
         self.fields["username"].widget = forms.HiddenInput()
@@ -86,6 +87,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             label=Member._meta.get_field("name").verbose_name,
             help_text=Member._meta.get_field("name").help_text,
         )
+
         self.fields["surname"] = forms.CharField(
             required=True,
             label=Member._meta.get_field("surname").verbose_name,
@@ -192,10 +194,14 @@ class AvatarForm(forms.Form):
     image = forms.ImageField(label="Select an image")
 
 
+# noinspection PyUnresolvedReferences
 COUNTRY_CHOICES = sorted([(country.alpha_2, country.name) for country in pycountry.countries], key=lambda x: x[1])
+
+# noinspection PyUnresolvedReferences
 FULL_PROVINCE_CHOICES = sorted(
     [(province.code, province.name, province.country_code) for province in pycountry.subdivisions], key=lambda x: x[1]
 )
+
 PROVINCE_CHOICES = [(province[0], province[1]) for province in FULL_PROVINCE_CHOICES]
 
 country_subdivisions_map = {}
@@ -585,6 +591,7 @@ class ExeProfileForm(MyForm):
             "legal_gender",
         ]
         choices = []
+        # noinspection PyUnresolvedReferences
         for f in Member._meta.get_fields():
             if not str(f).startswith("larpmanager.Member."):
                 continue

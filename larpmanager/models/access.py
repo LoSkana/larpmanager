@@ -29,11 +29,15 @@ from larpmanager.models.member import Member
 
 class AssocPermission(BaseModel):
     name = models.CharField(max_length=100)
+
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], blank=True)
+
     number = models.IntegerField(blank=True)
+
     feature = models.ForeignKey(Feature, on_delete=models.CASCADE, related_name="assoc_permissions")
 
     def module(self):
+        # noinspection PyUnresolvedReferences
         return self.feature.module
 
     def __str__(self):
@@ -42,9 +46,13 @@ class AssocPermission(BaseModel):
 
 class AssocRole(BaseModel):
     name = models.CharField(max_length=100)
+
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="roles", null=True)
+
     number = models.IntegerField()
+
     members = models.ManyToManyField(Member, related_name="assoc_roles")
+
     permissions = models.ManyToManyField(AssocPermission, related_name="assoc_roles", blank=True)
 
     class Meta:
@@ -80,11 +88,15 @@ def get_assoc_inners(assoc):
 
 class EventPermission(BaseModel):
     name = models.CharField(max_length=100)
+
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], blank=True)
+
     number = models.IntegerField(blank=True)
+
     feature = models.ForeignKey(Feature, on_delete=models.CASCADE, related_name="event_permissions")
 
     def module(self):
+        # noinspection PyUnresolvedReferences
         return self.feature.module
 
     def __str__(self):
@@ -96,6 +108,7 @@ class EventPermission(BaseModel):
 
 class EventRole(BaseConceptModel):
     members = models.ManyToManyField(Member, related_name="event_roles")
+
     permissions = models.ManyToManyField(EventPermission, related_name="roles", blank=True)
 
     _clone_m2m_fields = ["permissions"]

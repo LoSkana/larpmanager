@@ -237,6 +237,7 @@ class CharacterChoice(BaseModel):
     character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="choices")
 
     def __str__(self):
+        # noinspection PyUnresolvedReferences
         return f"{self.character} ({self.question.display}) {self.option.display}"
 
 
@@ -248,6 +249,7 @@ class CharacterAnswer(BaseModel):
     character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="answers")
 
     def __str__(self):
+        # noinspection PyUnresolvedReferences
         return f"{self.character} ({self.question.display}) {self.text[:100]}"
 
 
@@ -311,6 +313,7 @@ class RegistrationQuestion(BaseModel):
         verbose_name=_("Image"),
         help_text=_("(Optional) an image that will be shown inside the question"),
     )
+
     profile_thumb = ImageSpecField(
         source="profile",
         processors=[ResizeToFit(width=600)],
@@ -365,29 +368,6 @@ class RegistrationQuestion(BaseModel):
         for s in ["description", "display"]:
             self.upd_js_attr(js, s)
         return js
-
-    # def get_tickets_id(self):
-    # if not hasattr(self, "tickets_id"):
-    # self.tickets_id = list(self.tickets.values_list("id", flat=True))
-    # return self.tickets_id
-    #
-    # def get_factions_id(self):
-    # if not hasattr(self, "factions_id"):
-    # self.factions_id = list(self.factions.values_list("id", flat=True))
-    # return self.factions_id
-
-    # ~ def has_character(self, char):
-    # ~ for f in self.factions.all():
-    # ~ if f.characters.filter(pk=char.id).exists():
-    # ~ return True
-
-    # ~ return False
-
-    # ~ def has_ticket(self, ticket):
-    # ~ if self.tickets.filter(pk=ticket.id).exists():
-    # ~ return True
-
-    # ~ return False
 
     @staticmethod
     def get_instance_questions(event, features):
@@ -480,6 +460,7 @@ class RegistrationOption(BaseModel):
         tx = s["display"]
         if s["price"] and int(s["price"]) > 0:
             if not cs:
+                # noinspection PyUnresolvedReferences
                 cs = self.event.assoc.get_currency_symbol()
             tx += f" ({decimal_to_str(s['price'])}{cs})"
 
@@ -489,16 +470,20 @@ class RegistrationOption(BaseModel):
         js = {"max_available": self.max_available}
         for s in ["display", "price", "details"]:
             self.upd_js_attr(js, s)
+        # noinspection PyUnresolvedReferences
         js["question"] = self.question.display
         return js
 
 
 class RegistrationChoice(BaseModel):
     question = models.ForeignKey(RegistrationQuestion, on_delete=models.CASCADE, related_name="choices")
+
     option = models.ForeignKey(RegistrationOption, on_delete=models.CASCADE, related_name="choices")
+
     reg = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="choices")
 
     def __str__(self):
+        # noinspection PyUnresolvedReferences
         return f"{self.reg} ({self.question.display}) {self.option.display}"
 
 
@@ -510,6 +495,7 @@ class RegistrationAnswer(BaseModel):
     reg = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="answers")
 
     def __str__(self):
+        # noinspection PyUnresolvedReferences
         return f"{self.reg} ({self.question.display}) {self.text[:100]}"
 
 

@@ -45,6 +45,7 @@ class QuestType(Writing):
 
 class Quest(Writing):
     typ = models.ForeignKey(QuestType, on_delete=models.CASCADE, null=True, related_name="quests")
+
     open_show = models.BooleanField(default=False, help_text=_("Show all the traits to those present?"))
 
     class Meta:
@@ -64,6 +65,7 @@ class Quest(Writing):
     def show(self):
         js = super().show()
         if self.typ:
+            # noinspection PyUnresolvedReferences
             js["typ"] = self.typ.number
         # js['traits'] = [t.show() for t in self.traits.filter(hide=False)]
         js["open"] = self.open_show
@@ -79,13 +81,16 @@ class Trait(Writing):
         blank=True,
         null=True,
     )
+
     safety = models.CharField(
         max_length=500,
         help_text=_("Indicates accurate safety information"),
         blank=True,
         null=True,
     )
+
     traits = models.ManyToManyField("self", symmetrical=False)
+
     gender = models.CharField(
         max_length=1,
         choices=Character.GENDER_CHOICES,
@@ -94,12 +99,14 @@ class Trait(Writing):
         help_text=_("Select the character's gender"),
         null=True,
     )
+
     keywords = models.CharField(
         max_length=500,
         help_text=_("Select the character's key words"),
         blank=True,
         null=True,
     )
+
     hide = models.BooleanField(default=False)
 
     class Meta:
@@ -116,30 +123,25 @@ class Trait(Writing):
     def __str__(self):
         return f"T{self.number} {self.name}"
 
-    # def show_red(self):
-    # js = super().show_red()
-    # try:
-    # at = AssignmentTrait.objects.get(run=run, trait=self)
-    # js['char'] = Registration.objects.get(run=run, member=at.member).character
-    # except Exception as e:
-    # pass
-    # return js
-
     def show(self):
         js = super().show()
         for s in ["role", "gender", "keywords", "safety"]:
             self.upd_js_attr(js, s)
         if self.quest:
+            # noinspection PyUnresolvedReferences
             js["quest"] = self.quest.id
 
+            # noinspection PyUnresolvedReferences
             if self.quest.open_show:
                 js["open"] = True
+                # noinspection PyUnresolvedReferences
                 js["traits"] = [t.show_red() for t in self.quest.traits.filter(hide=False)]
         return js
 
 
 class AssignmentTrait(BaseModel):
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="assignments", blank=True, null=True)
+
     member = models.ForeignKey(
         Member,
         on_delete=models.CASCADE,
@@ -147,6 +149,7 @@ class AssignmentTrait(BaseModel):
         blank=True,
         null=True,
     )
+
     trait = models.ForeignKey(
         Trait,
         on_delete=models.CASCADE,
@@ -154,6 +157,7 @@ class AssignmentTrait(BaseModel):
         blank=True,
         null=True,
     )
+
     typ = models.IntegerField()
 
     def __str__(self):
@@ -162,11 +166,17 @@ class AssignmentTrait(BaseModel):
 
 class Casting(BaseModel):
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="castings", blank=True, null=True)
+
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="castings", blank=True, null=True)
+
     element = models.IntegerField()
+
     pref = models.IntegerField()
+
     typ = models.IntegerField(default=0)
+
     nope = models.BooleanField(default=False)
+
     active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -181,6 +191,7 @@ class CastingAvoid(BaseModel):
         blank=True,
         null=True,
     )
+
     member = models.ForeignKey(
         Member,
         on_delete=models.CASCADE,
@@ -188,7 +199,9 @@ class CastingAvoid(BaseModel):
         blank=True,
         null=True,
     )
+
     typ = models.IntegerField(default=0)
+
     text = models.TextField(max_length=5000)
 
 

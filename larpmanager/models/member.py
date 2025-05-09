@@ -280,6 +280,7 @@ class Member(BaseModel):
         blank=True,
         null=True,
     )
+
     profile_thumb = ImageSpecField(
         source="profile",
         processors=[ResizeToFill(500, 500)],
@@ -325,9 +326,11 @@ class Member(BaseModel):
         return f"{self.name} {self.surname}"
 
     def display_profile(self):
+        # noinspection PyUnresolvedReferences
         return self.profile_thumb.url
 
     def get_card_number(self):
+        # noinspection PyUnresolvedReferences
         return self.id
 
     def show_nick(self):
@@ -337,6 +340,7 @@ class Member(BaseModel):
 
     def get_member_filepath(self):
         fp = os.path.join(conf_settings.MEDIA_ROOT, "pdf/members")
+        # noinspection PyUnresolvedReferences
         fp = os.path.join(fp, str(self.id))
         os.makedirs(fp, exist_ok=True)
         return fp
@@ -345,7 +349,7 @@ class Member(BaseModel):
         return os.path.join(self.get_member_filepath(), "request.pdf")
 
     def join(self, assoc):
-        mmb = get_user_membership(self, assoc.id)
+        mmb = get_user_membership(self, assoc.id)  # type: ignore
         if mmb.status == Membership.EMPTY:
             mmb.status = Membership.JOINED
             mmb.save()
@@ -353,6 +357,7 @@ class Member(BaseModel):
     def get_residence(self):
         if not self.residence_address:
             return ""
+        # noinspection PyUnresolvedReferences
         aux = self.residence_address.split("|")
         return f"{aux[4]} {aux[5]}, {aux[2]} ({aux[3]}), {aux[1].replace('IT-', '')} ({aux[0]})"
 
@@ -388,13 +393,18 @@ class Membership(BaseModel):
 
     compiled = models.BooleanField(default=False)
 
-    credit = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # crediti da riscuotere
-    tokens = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # buoni larp da riscuotere
+    credit = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    tokens = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     status = models.CharField(max_length=1, choices=MEMBERSHIP_STATUS, default=EMPTY, db_index=True)
+
     request = models.FileField(upload_to=UploadToPathAndRename("request/"), null=True, blank=True)
+
     document = models.FileField(upload_to=UploadToPathAndRename("document/"), null=True, blank=True)
+
     card_number = models.IntegerField(null=True, blank=True)
+
     date = models.DateField(blank=True, null=True)
 
     password_reset = models.CharField(max_length=100, blank=True, null=True)
@@ -425,6 +435,7 @@ class Membership(BaseModel):
 
     def get_request_filepath(self):
         try:
+            # noinspection PyUnresolvedReferences
             return download_d(self.request.url)
         except Exception as e:
             print(e)
@@ -432,6 +443,7 @@ class Membership(BaseModel):
 
     def get_document_filepath(self):
         try:
+            # noinspection PyUnresolvedReferences
             return download_d(self.document.url)
         except Exception as e:
             print(e)
@@ -440,8 +452,11 @@ class Membership(BaseModel):
 
 class VolunteerRegistry(BaseModel):
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="volunteer")
+
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="volunteers")
+
     start = models.DateField(null=True)
+
     end = models.DateField(blank=True, null=True)
 
     class Meta:
@@ -460,24 +475,31 @@ class VolunteerRegistry(BaseModel):
 
 class Badge(BaseModel):
     name = models.CharField(max_length=100, verbose_name=_("Name"), help_text=_("Short name"))
+
     name_eng = models.CharField(
         max_length=100,
         verbose_name=_("Name - international"),
         help_text=_("Short name - international"),
     )
+
     descr = models.CharField(max_length=500, verbose_name=_("Description"), help_text=_("Extended description"))
+
     descr_eng = models.CharField(
         max_length=500,
         verbose_name=_("Description - international"),
         help_text=_("Extended description - international"),
     )
+
     number = models.IntegerField(default=1)
+
     cod = models.CharField(
         max_length=30,
         verbose_name=_("Code"),
         help_text=_("Unique code for internal use - not visible. Indicate a string without spaces or strange symbols."),
     )
+
     img = models.ImageField(upload_to=UploadToPathAndRename("badge/"), blank=False)
+
     img_thumb = ImageSpecField(
         source="img",
         processors=[ResizeToFill(200, 200)],
@@ -491,23 +513,30 @@ class Badge(BaseModel):
 
     def thumb(self):
         if self.img_thumb:
+            # noinspection PyUnresolvedReferences
             return show_thumb(100, self.img_thumb.url)
         return ""
 
     def show(self, lang):
+        # noinspection PyUnresolvedReferences
         js = {"id": self.id, "number": self.number}
         for s in ["name", "descr"]:
             self.upd_js_attr(js, s)
         if self.img:
+            # noinspection PyUnresolvedReferences
             js["img_url"] = self.img_thumb.url
         return js
 
 
 class Log(BaseModel):
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
+
     eid = models.IntegerField()
+
     cls = models.CharField(max_length=100)
+
     dct = models.TextField()
+
     dl = models.BooleanField(default=False)
 
     def __str__(self):
@@ -516,9 +545,13 @@ class Log(BaseModel):
 
 class Vote(BaseModel):
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="votes_given")
+
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="votes")
+
     year = models.IntegerField()
+
     number = models.IntegerField()
+
     candidate = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="votes_received")
 
     class Meta:
@@ -539,6 +572,7 @@ class Vote(BaseModel):
 
 
 def get_user_membership(user, assoc):
+    # noinspection PyUnresolvedReferences
     assoc_id = assoc.id if isinstance(assoc, Association) else assoc
 
     if not assoc_id:

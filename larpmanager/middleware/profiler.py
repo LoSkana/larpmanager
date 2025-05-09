@@ -47,6 +47,7 @@ class ProfilerMiddleware:
         # the View.as_view() method sets this
         if hasattr(view_func, "view_class"):
             return view_func.view_class.__name__
+        # noinspection PyUnresolvedReferences
         return view_func.__name__ if hasattr(view_func, "__name__") else view_func.__class__.__name__
 
     def __call__(self, request):

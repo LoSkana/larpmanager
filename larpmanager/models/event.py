@@ -106,13 +106,13 @@ class Event(BaseModel):
 
     visible = models.BooleanField(default=True)
 
-    # cover = models.ImageField(upload_to=UploadToPathAndRename( 'cover/'))
     cover = models.ImageField(
         max_length=500,
         upload_to="cover/",
         blank=True,
         help_text=_("Cover in rectangular format - aspect ratio 4:3"),
     )
+
     cover_thumb = ImageSpecField(
         source="cover",
         processors=[ResizeToFit(width=600)],
@@ -121,6 +121,7 @@ class Event(BaseModel):
     )
 
     carousel_img = models.ImageField(max_length=500, upload_to="carousel/", blank=True, help_text=_("Carousel image"))
+
     carousel_thumb = ImageSpecField(source="carousel_img", format="JPEG", options={"quality": 70})
 
     carousel_text = HTMLField(
@@ -201,12 +202,14 @@ class Event(BaseModel):
         blank=True,
         null=True,
     )
+
     sec_rgb = ColorField(
         verbose_name=_("Color background"),
         help_text=_("Indicate the color that will be used for the background of texts"),
         blank=True,
         null=True,
     )
+
     ter_rgb = ColorField(
         verbose_name=_("Color links"),
         help_text=_("Indicate the color that will be used for the links"),
@@ -325,7 +328,9 @@ class Event(BaseModel):
 
 class EventConfig(BaseModel):
     name = models.CharField(max_length=150)
+
     value = models.CharField(max_length=1000)
+
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="configs")
 
     def __str__(self):
@@ -350,7 +355,9 @@ class EventConfig(BaseModel):
 
 class BaseConceptModel(BaseModel):
     number = models.IntegerField()
+
     name = models.CharField(max_length=150, blank=False)
+
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
     class Meta:
@@ -366,6 +373,7 @@ class BaseConceptModel(BaseModel):
 
 class EventButton(BaseConceptModel):
     tooltip = models.CharField(max_length=200)
+
     link = models.URLField(max_length=150)
 
     class Meta:
@@ -472,11 +480,13 @@ class Run(BaseModel):
     )
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="runs")
+
     number = models.IntegerField(help_text=_("Number of event run"))
 
     start = models.DateField(
         blank=True, null=True, verbose_name=_("Start date"), help_text=_("Indicates the date on which the run starts")
     )
+
     end = models.DateField(
         blank=True, null=True, verbose_name=_("End date"), help_text=_("Indicates the date on which the run ends")
     )
@@ -487,6 +497,7 @@ class Run(BaseModel):
         verbose_name=_("Registration opening date"),
         help_text=_("Indicate the date when registration opens. Leave blank to not open registrations"),
     )
+
     registration_secret = models.CharField(
         default=my_uuid_short,
         max_length=12,
@@ -522,13 +533,11 @@ class Run(BaseModel):
         return s
 
     def get_where(self):
-        # ~ if self.where:
-        # ~ return self.where
+        # noinspection PyUnresolvedReferences
         return self.event.where
 
     def get_cover_url(self):
-        # ~ if self.cover:
-        # ~ return self.cover_thumb.url
+        # noinspection PyUnresolvedReferences
         return self.event.cover_thumb.url
 
     def pretty_dates(self):
@@ -546,6 +555,7 @@ class Run(BaseModel):
         return f"{self.start.day} - {formats.date_format(self.end, 'j E Y')}"
 
     def get_media_filepath(self):
+        # noinspection PyUnresolvedReferences
         fp = os.path.join(self.event.get_media_filepath(), f"{self.number}/")
         os.makedirs(fp, exist_ok=True)
         return fp
@@ -562,7 +572,9 @@ class Run(BaseModel):
 
 class RunConfig(BaseModel):
     name = models.CharField(max_length=150)
+
     value = models.CharField(max_length=1000)
+
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="configs")
 
     def __str__(self):
@@ -585,14 +597,19 @@ class RunText(BaseModel):
     second = HTMLField(blank=True, null=True)
 
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="texts")
+
     eid = models.IntegerField()
+
     typ = models.CharField(max_length=1, choices=TYPE_CHOICES)
 
 
 class PreRegistration(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="pre_registrations")
+
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="pre_registrations")
+
     pref = models.IntegerField()
+
     info = models.CharField(max_length=255)
 
     def __str__(self):

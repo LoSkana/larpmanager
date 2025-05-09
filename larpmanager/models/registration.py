@@ -73,6 +73,7 @@ class RegistrationTicket(BaseModel):
         verbose_name=_("Description"),
         help_text=_("Optional - Indicate additional details on the ticket, they will be shown below the application"),
     )
+
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     max_available = models.IntegerField(
@@ -94,6 +95,7 @@ class RegistrationTicket(BaseModel):
     order = models.IntegerField(default=0, help_text=_("Display order with respect to all questions"))
 
     def __str__(self):
+        # noinspection PyUnresolvedReferences
         return (
             f"{self.event.name} ({self.get_tier_display()}) {self.name} "
             f"({self.price}{self.event.assoc.get_currency_symbol()})"
@@ -113,6 +115,7 @@ class RegistrationTicket(BaseModel):
         tx = s["name"]
         if s["price"]:
             if not cs:
+                # noinspection PyUnresolvedReferences
                 cs = self.event.assoc.get_currency_symbol()
             tx += f" - {decimal_to_str(s['price'])}{cs}"
         if hasattr(self, "available"):
@@ -139,11 +142,15 @@ class RegistrationSection(BaseModel):
 
 class RegistrationQuota(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="quotas")
+
     number = models.IntegerField()
+
     quotas = models.IntegerField(help_text=_("Quotas total number"))
+
     days_available = models.IntegerField(
         help_text=_("Minimum number of days before the event for which it is made available (0  = always)")
     )
+
     surcharge = models.IntegerField(default=0)
 
     class Meta:
@@ -166,11 +173,15 @@ class RegistrationQuota(BaseModel):
 
 class RegistrationInstallment(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="installments")
+
     number = models.IntegerField()
+
     order = models.IntegerField(help_text=_("Payment order"))
+
     amount = models.IntegerField(
         help_text=_("Total amount of payment to be received by this date (0 = all outstanding)")
     )
+
     days_deadline = models.IntegerField(
         null=True,
         blank=True,
@@ -179,6 +190,7 @@ class RegistrationInstallment(BaseModel):
             "deadline and the deadline in days)"
         ),
     )
+
     date_deadline = models.DateField(null=True, blank=True, help_text=_("Deadline date"))
 
     tickets = models.ManyToManyField(
@@ -208,8 +220,11 @@ class RegistrationInstallment(BaseModel):
 
 class RegistrationSurcharge(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="surcharges")
+
     number = models.IntegerField()
+
     amount = models.IntegerField(help_text=_("Surcharge applied to the ticket"))
+
     date = models.DateField(help_text=_("Date from when the surcharge is applied"))
 
     class Meta:
@@ -298,9 +313,11 @@ class Registration(BaseModel):
         return str(self.run)
 
     def display_member(self):
+        # noinspection PyUnresolvedReferences
         return self.member.display_member()
 
     def display_profile(self):
+        # noinspection PyUnresolvedReferences
         return self.member.display_profile()
 
     class Meta:
@@ -323,6 +340,7 @@ class Registration(BaseModel):
 
 class RegistrationCharacterRel(BaseModel):
     reg = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="rcrs")
+
     character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="rcrs")
 
     custom_name = models.CharField(
@@ -335,6 +353,7 @@ class RegistrationCharacterRel(BaseModel):
             "name, or adapt the name to your chosen gender)"
         ),
     )
+
     custom_pronoun = models.CharField(
         max_length=15,
         blank=True,
@@ -342,6 +361,7 @@ class RegistrationCharacterRel(BaseModel):
         verbose_name=_("Pronoun"),
         help_text=_("If you wish, indicate a pronoun for your character"),
     )
+
     custom_song = models.URLField(
         max_length=100,
         blank=True,
@@ -349,6 +369,7 @@ class RegistrationCharacterRel(BaseModel):
         verbose_name=_("Song"),
         help_text=_("Indicate a song you want to dedicate to your character"),
     )
+
     custom_public = models.TextField(
         max_length=5000,
         blank=True,
@@ -356,6 +377,7 @@ class RegistrationCharacterRel(BaseModel):
         verbose_name=_("Public"),
         help_text=_("Indicates public information about your character, which will be shown to all other players"),
     )
+
     custom_private = models.TextField(
         max_length=5000,
         blank=True,
@@ -365,6 +387,7 @@ class RegistrationCharacterRel(BaseModel):
             "Indicates public information about your character, which will be shown only to you and the organizers"
         ),
     )
+
     custom_profile = models.ImageField(
         max_length=500,
         upload_to=UploadToPathAndRename("registration/"),
@@ -373,6 +396,7 @@ class RegistrationCharacterRel(BaseModel):
         null=True,
         blank=True,
     )
+
     profile_thumb = ImageSpecField(
         source="custom_profile",
         processors=[ResizeToFill(500, 500)],
