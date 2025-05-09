@@ -5094,9 +5094,6 @@ msgstr "Umożliwia zdefiniowanie innego języka dla każdego zdarzenia."
 msgid "Click on the image below (Paypal.me) to open the payment."
 msgstr "Kliknij poniższy obrazek (Paypal.me), aby otworzyć płatność."
 
-msgid "Enter the text with which to remind the payment deadline."
-msgstr "Wprowadź tekst przypominający o terminie płatności."
-
 msgid "Indicate the pronouns you wish to be used to refer to you"
 msgstr "Wskaż zaimki, które mają być używane w odniesieniu do Ciebie"
 

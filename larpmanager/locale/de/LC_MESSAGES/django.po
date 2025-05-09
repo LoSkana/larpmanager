@@ -5181,9 +5181,6 @@ msgid "Click on the image below (Paypal.me) to open the payment."
 msgstr ""
 "Klicken Sie auf das Bild unten (Paypal.me), um die Zahlungsseite zu öffnen."
 
-msgid "Enter the text with which to remind the payment deadline."
-msgstr "Geben Sie einen Text ein, der Sie an die Zahlungsfrist erinnert"
-
 msgid "Indicate the pronouns you wish to be used to refer to you"
 msgstr "Geben Sie die Pronomen an, mit denen Sie bezeichnet werden möchten"
 

@@ -5107,9 +5107,6 @@ msgstr "Gjør det mulig å definere et annet språk for hver hendelse."
 msgid "Click on the image below (Paypal.me) to open the payment."
 msgstr "Klikk på bildet nedenfor (Paypal.me) for å åpne betalingsskjermen."
 
-msgid "Enter the text with which to remind the payment deadline."
-msgstr "Skriv inn tekst for å minne deg på betalingsfristen"
-
 msgid "Indicate the pronouns you wish to be used to refer to you"
 msgstr "Angi pronomenene du ønsker skal brukes for å referere til deg."
 

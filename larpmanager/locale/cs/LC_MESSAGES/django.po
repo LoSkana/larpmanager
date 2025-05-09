@@ -5092,9 +5092,6 @@ msgstr "Umožňuje definovat pro každou událost jiný jazyk."
 msgid "Click on the image below (Paypal.me) to open the payment."
 msgstr "Kliknutím na obrázek níže (Paypal.me) otevřete obrazovku pro platbu."
 
-msgid "Enter the text with which to remind the payment deadline."
-msgstr "Zadejte text, který vám připomene termín platby."
-
 msgid "Indicate the pronouns you wish to be used to refer to you"
 msgstr "Uveďte zájmena, která si přejete používat pro označení vaší osoby."
 
