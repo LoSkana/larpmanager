@@ -797,7 +797,7 @@ msgid ""
 "If checked, it allows players to customise the names of their characters"
 msgstr ""
 
-msgid "Profile Photos"
+msgid "Profile"
 msgstr ""
 
 msgid ""
@@ -1184,9 +1184,6 @@ msgid "This page allows you to change a member's membership status."
 msgstr ""
 
 msgid "This page allows you to add or edit a badge, or assign it  to users."
-msgstr ""
-
-msgid "Profile"
 msgstr ""
 
 msgid ""

@@ -2216,9 +2216,6 @@ msgstr "Register för utskrift"
 msgid "Privacy Policy"
 msgstr "Integritetspolicy"
 
-msgid "Profile Photos"
-msgstr "Profilbilder"
-
 msgid "Profiles (PDF)"
 msgstr "Profiler (PDF)"
 
