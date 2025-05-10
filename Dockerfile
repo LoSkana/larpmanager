@@ -1,9 +1,15 @@
-FROM python:3.11-slim
+FROM node:18
+
+RUN apt-get update && \
+    apt-get install -y python3.11 python3.11-venv python3-pip
+
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1 && \
+    update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+
+RUN python --version && pip --version && node -v && npm -v
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-
-RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash -
 
 WORKDIR /code
 
@@ -19,17 +25,19 @@ RUN apt-get update && apt-get install -y build-essential \
     nginx \
     libpq-dev \
     wkhtmltopdf \
-    nodejs \
     libxmlsec1-openssl \
     libxml2-dev \
     libxmlsec1-dev \
     pkg-config \
     netcat-openbsd \
+    gettext \
  && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN python -m venv /venv
+ENV PATH="/venv/bin:$PATH"
+RUN pip install --no-cache-dir  -r requirements.txt
 
 COPY . .
 

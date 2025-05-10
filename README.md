@@ -53,6 +53,26 @@ Now you're ready for liftoff!
 
 ---
 
+If you want some more extra juicy stuff, you can set an automatic execution of
+
+```
+docker exec -it larpmanager python manage.py automate
+```
+
+This command performs a bunch of stuff related to advanced features; it should be run each day (cron?), when low traffic is expected (night?). You _should_ combine it with the daily backup of `pgdata` and `media_data` volumes.
+
+---
+
+In the future, if you want to pull the latest changes of the repo, go with:
+
+```
+git pull origin main
+docker-compose build
+docker-compose up -d
+```
+
+---
+
 ## Install
 
 If you're old school, a typical installation requires:
