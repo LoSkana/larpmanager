@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y build-essential \
     libxml2-dev \
     libxmlsec1-dev \
     pkg-config \
+    netcat-openbsd \
  && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
@@ -35,10 +36,4 @@ COPY . .
 # Copy prod example to prod settings
 RUN cp main/settings/prod_example.py main/settings/prod.py
 
-# Set environment settings, to compress can generate the correct keys
-ENV DJANGO_SETTINGS_MODULE=main.settings
-
-# Collect statics and compress them
-RUN python manage.py collectstatic --noinput && python manage.py compress --force
-
-EXPOSE 8000
+EXPOSE 8264

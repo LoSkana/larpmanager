@@ -13,29 +13,28 @@ services:
 
   main:
     build: .
-    command: gunicorn main.wsgi:application --bind 0.0.0.0:8000
-    volumes: []
-    ports:
-      - "8000:8000"
+    command: ./scripts/entrypoint.sh gunicorn main.wsgi:application --bind 0.0.0.0:8000
     depends_on:
       - db
       - redis
-    environment:
-      SECRET_KEY: changeme
-      ADMIN_NAME: yourname
-      ADMIN_EMAIL: youremail
-      DB_NAME: larpmanager
-      DB_USER: larpuser
-      DB_PASS: changeme
-      DB_HOST: db
-      REDIS: redis://redis:6379
-      GOOGLE_CLIENTID: changeme
-      GOOGLE_SECRET: changeme
-      RECAPTCHA_PUBLIC: changeme
-      RECAPTCHA_PRIVATE: changeme
-      env: prod
-      TZ: Europe/Rome
-      DJANGO_SETTINGS_MODULE: main.settings
+    volumes:
+      - media_data:/code/media
+      - static_data:/code/static
+    env_file:
+      - .env
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8264:80"
+    volumes:
+      - ./scripts/default.conf:/etc/nginx/conf.d/default.conf
+      - media_data:/code/media
+      - static_data:/code/static
+    depends_on:
+      - main
 
 volumes:
   pgdata:
+  media_data:
+  static_data:

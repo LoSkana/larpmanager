@@ -20,9 +20,29 @@ See the LICENSE file for details.
 
 ---
 
+## Docker
+
+If you want an easy and fast deploy, set the environment variables:
+
+```
+cp .env.example .env
+```
+
+Give them proper values. Then let's do the docker magic:
+
+```
+docker compose up --build
+```
+
+Expose the port 8264 (we wanted a fancy one) to your reverse proxy of choice for public access.
+
+Now go to `/admin`, log in as user `admin` and password `banana`. Choose a better password, and you're green for launch.
+
+---
+
 ## Install
 
-A typical installation requires:
+If you're old school, a typical installation requires:
 - **Database**: PostgreSQL
 - **Frontend**: Npm
 - **Caching**: Redis

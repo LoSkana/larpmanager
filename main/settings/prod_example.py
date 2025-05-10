@@ -1,4 +1,7 @@
 import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = False
 
@@ -22,6 +25,17 @@ DATABASES = {
         'PORT': '5432',
    }
 }
+
+# Static & Media
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "../media")
+
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "../static")
+
+COMPRESS_ROOT = STATIC_ROOT
+COMPRESS_URL = STATIC_URL
 
 
 # Social Account
@@ -58,7 +72,7 @@ SOCIALACCOUNT_PROVIDERS = {
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': os.environ.get('REDIS') + '/1',
+        'LOCATION': 'redis://redis:6379/1',
         'OPTIONS': {
             "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
             'SOCKET_TIMEOUT': 5,
@@ -68,7 +82,7 @@ CACHES = {
     },
     'select2': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': os.environ.get('REDIS') + '/2',
+        'LOCATION': 'redis://redis:6379/2',
         'OPTIONS': {
             "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
             'SOCKET_TIMEOUT': 5,
