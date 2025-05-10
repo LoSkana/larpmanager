@@ -40,16 +40,6 @@
     placeholder: false
     order: 230
 - model: larpmanager.feature
-  pk: 5
-  fields:
-    name: Roles
-    descr: Adds a 'role' field to characters (e.g., warrior/mage/rogue).
-    slug: role
-    overall: false
-    module: 1
-    placeholder: false
-    order: 220
-- model: larpmanager.feature
   pk: 6
   fields:
     name: Prologues
@@ -190,17 +180,6 @@
     module: 1
     placeholder: false
     order: 210
-- model: larpmanager.feature
-  pk: 23
-  fields:
-    name: Keywords
-    descr: Adds a 'keyword' field to main writing elements, to highlight special traits
-      or conditions.
-    slug: keywords
-    overall: false
-    module: 1
-    placeholder: false
-    order: 80
 - model: larpmanager.feature
   pk: 24
   fields:

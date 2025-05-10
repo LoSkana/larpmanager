@@ -18,9 +18,6 @@
                 {% if features.title %}
                     <th>{% trans "Title" %}</th>
                 {% endif %}
-                {% if features.motto %}
-                    <th>{% trans "Motto" %}</th>
-                {% endif %}
                 <th>{% trans "Presentation" %}</th>
                 {% if features.character_form %}
                     {% for idx, _ in searchable.items %}
@@ -49,11 +46,6 @@
                         </td>
                     {% endif %}
                     <td>{{ el.name }}</td>
-                    {% if features.motto %}
-                        <td>
-                            <p>{{ el.motto | safe | striptags }}</p>
-                        </td>
-                    {% endif %}
                     <td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>
                     {% if features.character_form %}
                         {% for idx, _ in searchable.items %}

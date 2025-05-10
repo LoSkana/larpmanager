@@ -16,9 +16,6 @@
         {% if features.title %}
             , <a href="#" class="my_toggle" tog='title'>{% trans "title" %}</a>
         {% endif %}
-        {% if features.motto %}
-            , <a href="#" class="my_toggle" tog='motto'>{% trans "motto" %}</a>
-        {% endif %}
         {% if features.hide %}
             , <a href="#" class="my_toggle" tog='nasc'>{% trans "hide" %}</a>
         {% endif %}
@@ -47,13 +44,13 @@
                     <th class="hide assign">{% trans "Assigned" %}</th>
                 {% endif %}
                 <th>{% trans "Presentation" %}</th>
-                <th style="width: 5%">(L)</th>
+                <th>(L)</th>
                 {% if features.preview %}
                     <th>{% trans "Preview" %}</th>
-                    <th style="width: 5%">(L)</th>
+                    <th>(L)</th>
                 {% endif %}
                 <th>{% trans "Text" %}</th>
-                <th style="width: 5%">(L)</th>
+                <th>(L)</th>
                 <th>{% trans "Traits" %}</th>
                 <th>(N)</th>
             </tr>

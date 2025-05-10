@@ -31,15 +31,6 @@
             {% if factions %}
                 <a href="#" class="my_toggle" tog='factions'>{% trans "Factions" %}</a>
             {% endif %}
-            {% if features.role %}
-                <a href="#" class="my_toggle" tog='roles'>{% trans "Roles" %}</a>
-            {% endif %}
-            {% if features.safety %}
-                <a href="#" class="my_toggle" tog='safety'>{% trans "Safety" %}</a>
-            {% endif %}
-            {% if features.keywords %}
-                <a href="#" class="my_toggle" tog='keywords'>{% trans "Keywords" %}</a>
-            {% endif %}
             {% if features.character_form %}
                 {% for idq in searchable %}
                     {% with questions|get:idq as question %}
@@ -53,21 +44,21 @@
             <hr />
             <p>{% trans "On this page you can filter characters and directly view their information." %}</p>
             <p>
-                {% trans "In the text search, you can enter any text; the search will be done on the number, name, teaser, player, keywords, groups to which the character belong." %}
+                {% trans "In the text search, you can enter any text; the search will be done on the number, name, teaser, player, groups to which the character belong." %}
             </p>
             <p>
                 {% trans "Where you find a button like this, you can press it to perform filtering further." %}<a href="#" onclick="false;">{% trans "Example" %}</a>
             </p>
             <p>
-                {% trans "If you press once, it will be *included* in the search. If a character belongs to at least one inclusion category, it will be shown in the search." %}<a href="#" class='sel' onclick="false;">{% trans "Included" %}</a>
+                {% trans "If you press once, it will be *included* in the search. If a character belongs to at least one inclusion category, it will be shown in the search." %}<a href="#" class="sel" onclick="false;">{% trans "Included" %}</a>
             </p>
             <p>
-                {% trans "If you press a second time, it will be *excluded* in the search. If a character belongs to even one exclusion category, it will not be shown in the search." %}<a href="#" class='nsel' onclick="false;">{% trans "Excluded" %}</a>
+                {% trans "If you press a second time, it will be *excluded* in the search. If a character belongs to even one exclusion category, it will not be shown in the search." %}<a href="#" class="nsel" onclick="false;">{% trans "Excluded" %}</a>
             </p>
         </div>
         <div class="hide text_search">
             <hr />
-            <input type='text' id='search' placeholder="{% trans "Insert" %}" />
+            <input type="text" id="search" placeholder="{% trans "Insert" %}" />
         </div>
         {% if factions %}
             <div id="factions" class="c nav hide factions">
@@ -100,24 +91,6 @@
                 </div>
             {% endfor %}
         {% endif %}
-        {% if features.role %}
-            <div id="roles" class="c nav hide roles">
-                <hr />
-                <br />
-            </div>
-        {% endif %}
-        {% if features.safety %}
-            <div id="safety" class="c nav hide safety">
-                <hr />
-                <br />
-            </div>
-        {% endif %}
-        {% if features.keywords %}
-            <div id="keywords" class="c nav hide keywords">
-                <hr />
-                <br />
-            </div>
-        {% endif %}
         <div id="spec" class="c nav hide spec">
             <hr />
             {% trans "Player" %}:
@@ -139,12 +112,12 @@
         </div>
         <div class="hide link_list">
             <hr />
-            <div id='top'></div>
+            <div id="top"></div>
             <span class="helptext">{% trans "Click on a name to go and view it directly." %}</span>
         </div>
         <br />
         <h3>
-            {% trans "Characters list" %} (<span class='num'></span>)
+            {% trans "Characters list" %} (<span class="num"></span>)
         </h3>
         <table>
             <tr>
@@ -153,18 +126,18 @@
             </tr>
             <tr>
                 <td>
-                    <span class='incl'></span>
+                    <span class="incl"></span>
                 </td>
                 <td>
-                    <span class='escl'></span>
+                    <span class="escl"></span>
                 </td>
             </tr>
         </table>
-        <div id='characters'></div>
-        <div id='teasers' style='display: none'>
+        <div id="characters"></div>
+        <div id="teasers" class="hide">
             {% for chnum, el in chars.items %}
                 {% if not el.hide %}
-                    <div class='{{ el.id }}'>{% show_char el.teaser run 1 %}</div>
+                    <div class="{{ el.id }}">{% show_char el.teaser run 1 %}</div>
                 {% endif %}
             {% endfor %}
         </div>
@@ -195,16 +168,12 @@ window['show_teaser'] = {% if show_teaser %} true {% else %} false {% endif %};
 window['texts'] = {
     'abs': '{% trans "Absent" %}',
     'pl': '{% trans "Player" %}',
-    'motto': '{% trans "Motto" %}',
     'png': '{% trans "NPC" %}',
     'filler': '{% trans "Filler" %}',
     'gender': '{% trans "Gender" %}',
     'man': '{% trans "Male" %}',
     'fem': '{% trans "Female" %}',
     'uni': '{% trans "Unisex" %}',
-    'role': '{% trans "Role" %}',
-    'keywords': '{% trans "Keywords" %}',
-    'safety': '{% trans "Safety" %}',
     'cfields': '{% trans "Additional fields" %}',
     'factions': '{% trans "Factions" %}',
     'specs': '{% trans "Features" %}',
@@ -215,18 +184,6 @@ window['texts'] = {
 }
 
 window['fields'] = {}
-
-{% if features.role %}
-    window['fields']['role'] = 'Role';
-{% endif %}
-
-{% if features.safety %}
-    window['fields']['safety'] = 'Safety';
-{% endif %}
-
-{% if features.keywords %}
-    window['fields']['keywords'] = 'Keywords';
-{% endif %}
 
 window['questions'] = {{ questions | safe }};
 window['options'] = {{ options | safe }};

@@ -3134,12 +3134,6 @@ msgid ""
 "Indicates the title of the character - it will be shown along with the name"
 msgstr ""
 
-msgid "Indicates the character's motto - a short phrase"
-msgstr ""
-
-msgid "Indicates the functional role / archetype of the character"
-msgstr ""
-
 msgid ""
 "Indicate whether the character is a mirror (i.e., whether this pg shows the "
 "true secret face of another character)"
@@ -3871,9 +3865,6 @@ msgstr ""
 msgid "Create new character"
 msgstr ""
 
-msgid "Motto"
-msgstr ""
-
 msgid "XP tot"
 msgstr ""
 
@@ -3919,6 +3910,9 @@ msgid "Tell me more"
 msgstr ""
 
 msgid "Player:"
+msgstr ""
+
+msgid "Titolo"
 msgstr ""
 
 msgid "Factions:"
@@ -4124,7 +4118,7 @@ msgstr ""
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "
-"number, name, teaser, player, keywords, groups to which the character belong."
+"number, name, teaser, player, groups to which the character belong."
 msgstr ""
 
 msgid ""
@@ -6323,16 +6317,7 @@ msgstr ""
 msgid "title"
 msgstr ""
 
-msgid "motto"
-msgstr ""
-
 msgid "preview"
-msgstr ""
-
-msgid "key words"
-msgstr ""
-
-msgid "role"
 msgstr ""
 
 msgid "gender"
@@ -6351,9 +6336,6 @@ msgid "cover"
 msgstr ""
 
 msgid "speedlarp"
-msgstr ""
-
-msgid "safety"
 msgstr ""
 
 msgid "assigned"
@@ -6684,6 +6666,9 @@ msgstr ""
 msgid "Standard features"
 msgstr ""
 
+msgid "Motto"
+msgstr ""
+
 msgid "Adds a 'motto' field to characters, a short phrase they frequently use."
 msgstr ""
 
@@ -6696,9 +6681,6 @@ msgid ""
 msgstr ""
 
 msgid "Allows players to select hidden roles without spoiling them for others."
-msgstr ""
-
-msgid "Adds a 'role' field to characters (e.g., warrior/mage/rogue)."
 msgstr ""
 
 msgid ""
@@ -6775,11 +6757,6 @@ msgstr ""
 msgid ""
 "Adds a 'hide' field to main writing elements, to prevent players viewing "
 "them."
-msgstr ""
-
-msgid ""
-"Adds a 'keyword' field to main writing elements, to highlight special traits "
-"or conditions."
 msgstr ""
 
 msgid ""

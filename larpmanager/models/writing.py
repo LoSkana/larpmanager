@@ -169,39 +169,12 @@ class Character(Writing):
         help_text=_("Indicates the title of the character - it will be shown along with the name"),
     )
 
-    motto = HTMLField(
-        max_length=500,
-        blank=True,
-        help_text=_("Indicates the character's motto - a short phrase"),
-    )
-
-    role = models.CharField(
-        max_length=100,
-        help_text=_("Indicates the functional role / archetype of the character"),
-        blank=True,
-        null=True,
-    )
-
-    safety = models.CharField(
-        max_length=500,
-        help_text=_("Indicates accurate safety information"),
-        blank=True,
-        null=True,
-    )
-
     gender = models.CharField(
         max_length=1,
         choices=GENDER_CHOICES,
         default=None,
         verbose_name=_("Gender"),
         help_text=_("Select the character's gender"),
-        null=True,
-    )
-
-    keywords = models.CharField(
-        max_length=500,
-        help_text=_("Select the character's key words"),
-        blank=True,
         null=True,
     )
 
