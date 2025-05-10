@@ -452,11 +452,8 @@ class OrgaCharacterForm(CharacterForm):
             if fact_tx:
                 fact_tx += '</div><div class="plot">'
             fact_tx += f"<h4>{fc[2]}</h4>"
-            if fc[4]:
-                fact_tx += "<hr />" + fc[4]
             if fc[3]:
                 fact_tx += "<hr />" + fc[3]
-        self.details["id_concept"] = fact_tx
         self.show_link.append("id_factions_list")
 
     def _init_cocreation(self):
