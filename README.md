@@ -36,7 +36,20 @@ docker compose up --build
 
 Expose the port 8264 (we wanted a fancy one) to your reverse proxy of choice for public access.
 
-Now go to `/admin`, log in as user `admin` and password `banana`. Choose a better password, and you're green for launch.
+Now create a super user:
+
+```
+docker exec -it larpmanager python manage.py createsuperuser
+```
+
+Go to `http://127.0.0.1:8264/admin/larpmanager/association/`, and create your Association. Put as values only:
+- Name: you should get it;
+- URL identifier: put `def`;
+- Logo: an image;
+- Main mail: the main mail of the organization (duh)
+
+Leave the other fields empty. Go to `http://127.0.0.1:8264/`.
+Now you're ready for liftoff!
 
 ---
 

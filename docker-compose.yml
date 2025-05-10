@@ -12,6 +12,7 @@ services:
     image: redis:latest
 
   main:
+    container_name: larpmanager
     build: .
     command: ./scripts/entrypoint.sh gunicorn main.wsgi:application --bind 0.0.0.0:8000
     depends_on:

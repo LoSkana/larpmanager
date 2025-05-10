@@ -81,11 +81,11 @@ class Association(BaseModel):
         options={"quality": 90},
     )
 
+    main_mail = models.EmailField(help_text=_("Please indicate an email for the organization"))
+
     mandatory_fields = models.CharField(max_length=1000, blank=True)
 
     optional_fields = models.CharField(max_length=1000, blank=True)
-
-    main_mail = models.EmailField(help_text=_("Please indicate an email for the organization"))
 
     payment_methods = models.ManyToManyField(
         PaymentMethod,

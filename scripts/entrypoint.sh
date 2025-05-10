@@ -17,6 +17,5 @@ python manage.py compress
 echo "Initial data..."
 cp -R larpmanager/tests/media/* media/
 python manage.py import_features
-python manage.py loaddata test.yaml
 
 exec "$@"

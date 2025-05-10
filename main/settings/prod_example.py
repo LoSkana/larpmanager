@@ -5,6 +5,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = False
 
+SLUG_ASSOC = 'def'
+
 PAYPAL_TEST = False
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -36,7 +38,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "../static")
 
 COMPRESS_ROOT = STATIC_ROOT
 COMPRESS_URL = STATIC_URL
-
 
 # Social Account
 
@@ -140,6 +141,7 @@ LOGGING = {
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8264', 'http://127.0.0.1:8264']
 RATELIMIT_IP_META_KEY = 'HTTP_X_FORWARDED_FOR'
 
 # captcha

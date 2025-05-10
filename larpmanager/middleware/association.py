@@ -50,18 +50,18 @@ class AssociationIdentifyMiddleware:
         # get assoc slug from host
         hst = request.get_host()
 
-        host_part = hst.split(":")[0]
         local = False
-        if host_part in ["127.0.0.1", "localhost"]:  # dev environment
+        if os.getenv("env") == "prod":
+            request.enviro = "prod"
+        elif "xyz" in hst:
+            request.enviro = "staging"
+        else:
+            # dev environment
             local = True
             if not os.getenv("PYTEST_CURRENT_TEST"):
                 request.enviro = "dev"
             else:
                 request.enviro = "test"
-        elif "xyz" in hst:
-            request.enviro = "staging"
-        else:
-            request.enviro = "prod"
 
         domain = request.get_host().split(".")[0]
 

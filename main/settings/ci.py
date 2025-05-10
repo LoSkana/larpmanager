@@ -2,7 +2,7 @@ import os
 
 from main.settings import BASE_DIR
 
-SLUG_ASSOC = 'test'
+SLUG_ASSOC = 'def'
 
 DATABASES = {
     'default': {
