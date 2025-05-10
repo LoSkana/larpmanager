@@ -1,43 +1,37 @@
-FROM mcr.microsoft.com/playwright/python:v1.42.0
+FROM python:3.11-slim
 
-WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-ENV DEBIAN_FRONTEND=noninteractive
-
-ENV TZ=Europe/Rome
-
-# update node
 RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash -
 
-RUN apt-get update && apt-get install -y \
+WORKDIR /code
+
+RUN apt-get update && apt-get install -y build-essential \
     libpq-dev \
-    libxml2-dev \
-    libxslt1-dev \
-    libxmlsec1-dev \
-    libxmlsec1-openssl \
-    pkg-config \
-    python3-dev \
-    gcc \
+    python3-pip \
+    git \
+    postfix \
     libmagic1 \
-    libgtk-4-1 \
-    libavif13 \
-    gstreamer1.0-plugins-bad \
-    gettext \
-    curl gnupg \
-    nodejs \
+    libmagic-dev \
+    postgresql \
+    postgresql-contrib \
+    nginx \
+    libpq-dev \
     wkhtmltopdf \
-    && rm -rf /var/lib/apt/lists/*
+    nodejs \
+    libxmlsec1-openssl \
+    libxml2-dev \
+    libxmlsec1-dev \
+    pkg-config \
+ && rm -rf /var/lib/apt/lists/*
 
-
-# install pip requirements
-COPY requirements.txt ./
+COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN playwright install --with-deps
-
 COPY . .
 
-ENV PYTEST_CURRENT_TEST="true"
+RUN pwd && ls -l main/settings
 
-CMD pytest
+RUN cp main/settings/prod_example.py main/settings/prod.py

@@ -1,15 +1,13 @@
+import os
+
 DEBUG = False
 
 PAYPAL_TEST = False
 
-SECRET_KEY = '???'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 ADMINS = [
-  ('???', '???'),
-]
-
-MANAGERS = [
-  ('???', '???'),
+  (os.environ.get('ADMIN_NAME'), os.environ.get('ADMIN_EMAIL')),
 ]
 
 CONN_MAX_AGE = 60
@@ -17,10 +15,11 @@ CONN_MAX_AGE = 60
 DATABASES = {
     'default': {
         'ENGINE': 'dj_db_conn_pool.backends.postgresql',
-        'NAME': '???',
-        'USER': '???',
-        'PASSWORD': '???',
-        'HOST': '/var/run/postgresql/',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASS'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': '5432',
    }
 }
 
@@ -43,8 +42,8 @@ SITE_ID = 1
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
-            'client_id': '???',
-            'secret': '???'
+            'client_id': os.environ.get('GOOGLE_CLIENTID', ''),
+            'secret': os.environ.get('GOOGLE_SECRET', '')
         }, 'SCOPE': [
             'profile',
             'email',
@@ -59,7 +58,7 @@ SOCIALACCOUNT_PROVIDERS = {
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'unix:///var/run/redis/redis-server.sock?db=1',
+        'LOCATION': os.environ.get('REDIS') + '/1',
         'OPTIONS': {
             "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
             'SOCKET_TIMEOUT': 5,
@@ -69,7 +68,7 @@ CACHES = {
     },
     'select2': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'unix:///var/run/redis/redis-server.sock?db=2',
+        'LOCATION': os.environ.get('REDIS') + '/2',
         'OPTIONS': {
             "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
             'SOCKET_TIMEOUT': 5,
@@ -130,5 +129,5 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 RATELIMIT_IP_META_KEY = 'HTTP_X_FORWARDED_FOR'
 
 # captcha
-RECAPTCHA_PUBLIC_KEY = '???'
-RECAPTCHA_PRIVATE_KEY = '???'
+RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC', '')
+RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE', '')
