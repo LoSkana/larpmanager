@@ -167,8 +167,6 @@ def orga_registrations_standard(r, ctx, cache):
         r.factions = []
         r.chars = ctx["reg_chars"][r.member_id]
         for char in r.chars:
-            # if "role" in ctx["features"]:
-            # add_role(r, char["role"])
             r.factions.extend(char["factions"])
             for fnum in char["factions"]:
                 if fnum in ctx["factions"]:

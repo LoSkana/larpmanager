@@ -118,7 +118,7 @@ def add_pdf_instructions(ctx):
         "<pdf:organization>": ctx["event"].assoc.name,
         "<pdf:event>": ctx["event"].name,
     }
-    for m in ["number", "name", "title", "motto"]:
+    for m in ["number", "name", "title"]:
         codes[f"<pdf:{m}>"] = str(ctx["sheet_char"][m])
 
     # replace char infos

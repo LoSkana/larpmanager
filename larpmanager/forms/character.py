@@ -183,7 +183,7 @@ class CharacterForm(WritingForm, BaseCharacterForm):
         )
 
         # STANDARD FIELDS
-        st_fields = ["motto", "title", "mirror", "role", "gender", "special", "hide", "keywords", "safety"]
+        st_fields = ["title", "mirror", "gender", "special", "hide"]
         for s in st_fields:
             if s in self.fields and s not in self.params["features"]:
                 del self.fields[s]
@@ -193,15 +193,11 @@ class CharacterForm(WritingForm, BaseCharacterForm):
             for s in [
                 "progress",
                 "assigned",
-                "concept",
-                "role",
                 "props",
                 "mirror",
                 "special",
                 "hide",
                 "cover",
-                "keywords",
-                "safety",
                 "characters",
                 "status",
                 "player",
@@ -228,7 +224,7 @@ class CharacterForm(WritingForm, BaseCharacterForm):
         if not self.instance.pk:
             return
 
-        for fc in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text", "concept"):
+        for fc in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
             self.initial["factions_list"].append(fc[0])
 
     def _save_multi(self, s, instance):
@@ -299,27 +295,15 @@ class OrgaCharacterForm(CharacterForm):
         else:
             # STANDARD FIELDS
             st_fields = [
-                "concept",
-                "motto",
                 "title",
                 "mirror",
-                "role",
                 "gender",
                 "special",
                 "hide",
-                "keywords",
-                "safety",
                 "progress",
                 "assigned",
-                "concept",
-                "role",
                 "props",
-                "mirror",
-                "special",
-                "hide",
                 "cover",
-                "keywords",
-                "safety",
             ]
             for s in st_fields:
                 if s in self.fields and s not in self.params["features"]:
@@ -463,7 +447,7 @@ class OrgaCharacterForm(CharacterForm):
         # FACTIONS SHOW TEXT
         fact_tx = ""
         self.initial["factions_list"] = []
-        for fc in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text", "concept"):
+        for fc in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
             self.initial["factions_list"].append(fc[0])
             if fact_tx:
                 fact_tx += '</div><div class="plot">'
