@@ -14,8 +14,7 @@ services:
   main:
     build: .
     command: gunicorn main.wsgi:application --bind 0.0.0.0:8000
-    volumes:
-      - .:/code
+    volumes: []
     ports:
       - "8000:8000"
     depends_on:
@@ -29,7 +28,7 @@ services:
       DB_USER: larpuser
       DB_PASS: changeme
       DB_HOST: db
-      REDIS_URL: redis://redis:6379
+      REDIS: redis://redis:6379
       GOOGLE_CLIENTID: changeme
       GOOGLE_SECRET: changeme
       RECAPTCHA_PUBLIC: changeme

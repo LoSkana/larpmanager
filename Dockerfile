@@ -32,6 +32,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN pwd && ls -l main/settings
-
+# Copy prod example to prod settings
 RUN cp main/settings/prod_example.py main/settings/prod.py
+
+# Set environment settings, to compress can generate the correct keys
+ENV DJANGO_SETTINGS_MODULE=main.settings
+
+# Collect statics and compress them
+RUN python manage.py collectstatic --noinput && python manage.py compress --force
+
+EXPOSE 8000
