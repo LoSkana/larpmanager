@@ -92,7 +92,7 @@ class Writing(BaseConceptModel):
             self.upd_js_attr(js, s)
         return js
 
-    def show(self):
+    def show(self, event=None):
         js = self.show_red()
         self.upd_js_attr(js, "teaser")
         return js
@@ -267,8 +267,8 @@ class Character(Writing):
     def __str__(self):
         return f"#{self.number} {self.name}"
 
-    def show(self):
-        js = super().show()
+    def show(self, event=None):
+        js = super().show(event)
 
         for s in ["title", "motto", "role", "special", "keywords", "safety", "gender"]:
             self.upd_js_attr(js, s)
@@ -283,18 +283,7 @@ class Character(Writing):
         if "title" in js and js["title"]:
             js["show"] += " - " + js["title"]
 
-        js["factions"] = []
-        fac_event = self.event.get_class_parent("faction")
-        primary = False
-        # noinspection PyUnresolvedReferences
-        for g in self.factions_list.filter(event=fac_event):
-            if g.typ == Faction.PRIM:
-                primary = True
-                if g.cover:
-                    js["thumb"] = g.thumb.url
-            js["factions"].append(g.number)
-        if not primary:
-            js["factions"].append(0)
+        self.show_factions(event, js)
 
         if self.cover:
             # noinspection PyUnresolvedReferences
@@ -312,6 +301,23 @@ class Character(Writing):
                 js["hide"] = True
 
         return js
+
+    def show_factions(self, event, js):
+        js["factions"] = []
+        if event:
+            fac_event = event.get_class_parent("faction")
+        else:
+            fac_event = self.event.get_class_parent("faction")
+        primary = False
+        # noinspection PyUnresolvedReferences
+        for g in self.factions_list.filter(event=fac_event):
+            if g.typ == Faction.PRIM:
+                primary = True
+                if g.cover:
+                    js["thumb"] = g.thumb.url
+            js["factions"].append(g.number)
+        if not primary:
+            js["factions"].append(0)
 
     def is_special(self):
         if self.special == self.NO:

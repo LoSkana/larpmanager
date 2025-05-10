@@ -420,7 +420,7 @@ def character_relationships(request, s, n, num):
         else:
             try:
                 ch = Character.objects.get(event=ctx["event"], number=tg_num)
-                show = ch.show()
+                show = ch.show(ctx["event"])
             except ObjectDoesNotExist:
                 continue
 

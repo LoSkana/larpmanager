@@ -425,22 +425,22 @@ def limitations(request, s, n):
     counts = get_reg_counts(ctx["run"])
 
     ctx["disc"] = []
-    for d in ctx["run"].discounts.exclude(visible=False):
-        ctx["disc"].append(d.show(ctx["run"]))
+    for discount in ctx["run"].discounts.exclude(visible=False):
+        ctx["disc"].append(discount.show(ctx["run"]))
 
     ctx["tickets"] = []
-    for t in RegistrationTicket.objects.filter(event=ctx["event"], max_available__gt=0, visible=True):
-        dt = t.show(ctx["run"])
-        key = f"tk_{t.id}"
+    for ticket in RegistrationTicket.objects.filter(event=ctx["event"], max_available__gt=0, visible=True):
+        dt = ticket.show(ctx["run"])
+        key = f"tk_{ticket.id}"
         if key in counts:
             dt["used"] = counts[key]
         ctx["tickets"].append(dt)
 
     ctx["opts"] = []
     que = RegistrationOption.objects.filter(question__event=ctx["event"], max_available__gt=0)
-    for o in que:
-        dt = o.show(ctx["run"])
-        key = f"option_{o.id}"
+    for option in que:
+        dt = option.show(ctx["run"])
+        key = f"option_{option.id}"
         if key in counts:
             dt["used"] = counts[key]
         ctx["opts"].append(dt)
@@ -463,5 +463,5 @@ def export(request, s, t):
     # r = Run(event=ctx["event"])
     aux = {}
     for el in lst:
-        aux[el.number] = el.show()
+        aux[el.number] = el.show(ctx["event"])
     return JsonResponse(aux)

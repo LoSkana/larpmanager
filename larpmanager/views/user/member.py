@@ -295,8 +295,8 @@ def public(request, n):
 
     if "badge" in request.assoc["features"]:
         ctx["badges"] = []
-        for b in ctx["member"].badges.filter(assoc_id=request.assoc["id"]).order_by("number"):
-            ctx["badges"].append(b.show(request.LANGUAGE_CODE))
+        for badge in ctx["member"].badges.filter(assoc_id=request.assoc["id"]).order_by("number"):
+            ctx["badges"].append(badge.show(request.LANGUAGE_CODE))
 
     if "player_larp_history" in request.assoc["features"]:
         ctx["regs"] = (
@@ -397,8 +397,8 @@ def badges(request):
     ctx = def_user_ctx(request)
     ctx.update({"badges": []})
     check_assoc_feature(request, "badge")
-    for b in Badge.objects.filter(assoc_id=request.assoc["id"]).order_by("number"):
-        ctx["badges"].append(b.show(request.LANGUAGE_CODE))
+    for badge in Badge.objects.filter(assoc_id=request.assoc["id"]).order_by("number"):
+        ctx["badges"].append(badge.show(request.LANGUAGE_CODE))
     ctx["page"] = "badges"
     return render(request, "larpmanager/general/badges.html", ctx)
 
@@ -406,10 +406,10 @@ def badges(request):
 @login_required
 def badge(request, n, p=1):
     check_assoc_feature(request, "badge")
-    b = get_badge(n, request)
+    badge = get_badge(n, request)
     ctx = def_user_ctx(request)
-    ctx.update({"badge": b.show(request.LANGUAGE_CODE), "list": []})
-    for el in b.members.all():
+    ctx.update({"badge": badge.show(request.LANGUAGE_CODE), "list": []})
+    for el in badge.members.all():
         ctx["list"].append(el)
     v = datetime.today().date() - date(1970, 1, 1)
     random.Random(v.days).shuffle(ctx["list"])

@@ -597,11 +597,11 @@ def discount_list(request, s, n):
     now = datetime.now()
     # AccountingItemDiscount.objects.filter(expires__lte=now).delete()
     lst = []
-    for el in AccountingItemDiscount.objects.filter(member=request.user.member, run=ctx["run"]).select_related("disc"):
-        if el.expires and el.expires < now:
-            el.delete()
+    for aid in AccountingItemDiscount.objects.filter(member=request.user.member, run=ctx["run"]).select_related("disc"):
+        if aid.expires and aid.expires < now:
+            aid.delete()
         else:
-            lst.append(el.show())
+            lst.append(aid.show())
 
     return JsonResponse({"lst": lst})
 

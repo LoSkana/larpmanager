@@ -180,12 +180,13 @@ def workshops(request, s, n):
     ctx = get_event_run(request, s, n, signup=True, status=True)
     # get modules assigned to this event
     ctx["list"] = []
-    for m in ctx["event"].workshops.all().order_by("number"):
-        dt = m.show()
+    for workshop in ctx["event"].workshops.all().order_by("number"):
+        dt = workshop.show()
         limit = datetime.now() - timedelta(days=365)
         # print(limit)
         dt["done"] = (
-            WorkshopMemberRel.objects.filter(member=request.user.member, workshop=m, created__gte=limit).count() >= 1
+            WorkshopMemberRel.objects.filter(member=request.user.member, workshop=workshop, created__gte=limit).count()
+            >= 1
         )
         ctx["list"].append(dt)
     return render(request, "larpmanager/event/workshops/index.html", ctx)
@@ -219,8 +220,8 @@ def workshop_answer(request, s, n, m):
         messages.success(request, _("Workshop already done!"))
         return redirect("workshops", s=ctx["event"].slug, n=ctx["run"].number)
     ctx["list"] = []
-    for el in ctx["workshop"].questions.all().order_by("number"):
-        ctx["list"].append(el.show())
+    for question in ctx["workshop"].questions.all().order_by("number"):
+        ctx["list"].append(question.show())
     # if only preseting result
     if request.method != "POST":
         return render(request, "larpmanager/event/workshops/answer.html", ctx)

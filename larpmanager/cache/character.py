@@ -90,7 +90,7 @@ def get_event_cache_characters(ctx, res):
         if mirror and ch.mirror_id in assigned_chars:
             continue
 
-        data = ch.show()
+        data = ch.show(ctx["event"])
         data["fields"] = {}
         search_player(ch, data, ctx)
         if hide_uncasted_characters and data["player_id"] == 0:
@@ -181,38 +181,46 @@ def get_character_cache_fields(ctx, character_id, only_visible=True):
 
 def get_event_cache_factions(ctx, res):
     res["factions"] = {}
-    res["factions_typ"] = {Faction.PRIM: []}
-    
-    allowed_chars = set(res["chars"].keys())
+    res["factions_typ"] = {}
 
-    chars_in_faction = set()
-    # add factions, keep track of characters in a faction
-    for f in ctx["event"].get_elements(Faction).filter(typ=Faction.PRIM).order_by("number"):
+    if "faction" not in get_event_features(ctx["event"].id):
+        res["factions"][0] = {
+            "name": "",
+            "number": 0,
+            "typ": Faction.PRIM,
+            "teaser": "",
+            "characters": list(res["chars"].keys()),
+        }
+        res["factions_typ"][Faction.PRIM] = [0]
+        return
+
+    # add characters without a primary to a fake one
+    void_primary = []
+    for number, ch in res["chars"].items():
+        if "factions" in ch and 0 in ch["factions"]:
+            void_primary.append(number)
+    if void_primary:
+        res["factions"][0] = {
+            "name": "",
+            "number": 0,
+            "typ": Faction.PRIM,
+            "teaser": "",
+            "characters": void_primary,
+        }
+        res["factions_typ"][Faction.PRIM] = [0]
+    # add real factions
+    for f in ctx["event"].get_elements(Faction).order_by("number"):
         el = f.show_red()
-        # get characters
-        el["characters"] = list(f.characters.values_list('number', flat=True))
-        # filter only awailable ones
-        el["characters"] = list(set(el["characters"]) & allowed_chars)
-        # add characters to set of ones with a primary faction assigned
-        chars_in_faction.update(el["characters"])
+        el["characters"] = []
+        for number, ch in res["chars"].items():
+            if el["number"] in ch["factions"]:
+                el["characters"].append(number)
         if not el["characters"]:
             continue
         res["factions"][f.number] = el
         if f.typ not in res["factions_typ"]:
             res["factions_typ"][f.typ] = []
         res["factions_typ"][f.typ].append(f.number)
-        
-    # add characters without a primary to a fake one
-    char_out_faction = allowed_chars - chars_in_faction
-    if char_out_faction:
-        res["factions"][0] = {
-            "name": "",
-            "number": 0,
-            "typ": Faction.PRIM,
-            "teaser": "",
-            "characters": char_out_faction,
-        }
-        res["factions_typ"][Faction.PRIM].append(0)
 
 
 def get_event_cache_traits(ctx, res):
@@ -311,7 +319,7 @@ def update_event_cache_all_character_reg(instance, res, run):
 
 
 def update_event_cache_all_character(instance, res, run):
-    data = instance.show()
+    data = instance.show(run.event)
     update_character_fields(instance, data)
     search_player(instance, data, {"run": run})
     if instance.number not in res["chars"]:
