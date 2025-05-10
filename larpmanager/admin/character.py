@@ -43,8 +43,8 @@ class CharacterQuestionFilter(AutocompleteFilter):
 
 @admin.register(Character)
 class CharacterAdmin(DefModelAdmin):
-    list_display = ("number", "name", "motto", "teaser", "event")
-    search_fields = ("name", "motto", "teaser")
+    list_display = ("number", "name", "teaser", "event")
+    search_fields = ("name", "teaser")
     list_filter = (EventFilter,)
     autocomplete_fields = ["event", "characters", "progress", "assigned"]
 

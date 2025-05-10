@@ -1347,13 +1347,3 @@
     module: 4
     placeholder: false
     order: 130
-- model: larpmanager.feature
-  pk: 181
-  fields:
-    name: Concept
-    descr: Adds a 'concept' field to characters, reserved for staff informations.
-    slug: concept
-    overall: false
-    module: 1
-    placeholder: false
-    order: 160

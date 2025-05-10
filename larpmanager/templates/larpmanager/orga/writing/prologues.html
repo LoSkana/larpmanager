@@ -18,14 +18,13 @@
                     <th>{% trans "Progress" %}</th>
                 {% endif %}
                 <th>{% trans "Type" %}</th>
-                <th>{% trans "Concept" %}</th>
                 {% if features.assigned %}
                     <th class="hide assign">{% trans "Assigned" %}</th>
                 {% endif %}
                 <th>{% trans "Sheet" %}</th>
-                <th style="width: 5%">(L)</th>
+                <th>(L)</th>
                 <th>{% trans "Characters" %}</th>
-                <th style="width: 5%">(N)</th>
+                <th>(N)</th>
             </tr>
         </thead>
         <tbody>
@@ -50,7 +49,6 @@
                         <td>{% include "elements/show_progress.html" with el=el %}</td>
                     {% endif %}
                     <td>{{ el.typ }}</td>
-                    <td>{{ el.concept_red | safe }}</td>
                     {% if features.assigned %}
                         <td class="hide assign">
                             {% if el.assigned_id %}{{ assigned|get:el.assigned_id }}{% endif %}
@@ -64,7 +62,8 @@
                         {% endfor %}
                     </td>
                     <td>{{ el.characters.all | length }}</td>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% endblock content %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

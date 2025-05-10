@@ -47,8 +47,6 @@ def save_version(el, tp, mb, dl=False):
     tv = TextVersion()
     tv.eid = el.id
     tv.tp = tp
-    if hasattr(el, "concept"):
-        tv.concept = el.concept
     tv.text = el.text
     if hasattr(el, "preview"):
         tv.preview = el.preview

@@ -18,7 +18,6 @@
                     <th>{% trans "Progress" %}</th>
                 {% endif %}
                 <th>{% trans "Type" %}</th>
-                <th>{% trans "Concept" %}</th>
                 {% if features.assigned %}
                     <th>{% trans "Assigned" %}</th>
                 {% endif %}
@@ -29,15 +28,15 @@
                     <th>{% trans "Selectable" %}</th>
                 {% endif %}
                 <th>{% trans "Presentation" %}</th>
-                <th style="width: 5%">(L)</th>
+                <th>(L)</th>
                 {% if features.preview %}
                     <th>{% trans "Preview" %}</th>
-                    <th style="width: 5%">(L)</th>
+                    <th>(L)</th>
                 {% endif %}
                 <th>{% trans "Text" %}</th>
-                <th style="width: 5%">(L)</th>
+                <th>(L)</th>
                 <th>{% trans "Characters" %}</th>
-                <th style="width: 5%">(N)</th>
+                <th>(N)</th>
                 <th></th>
             </tr>
         </thead>
@@ -55,7 +54,6 @@
                         <td>{% include "elements/show_progress.html" with el=el %}</td>
                     {% endif %}
                     <td>{{ el.get_typ_display }}</td>
-                    <td>{{ el.concept_red | safe }}</td>
                     {% if features.assigned %}
                         <td class="assign">
                             {% if el.assigned_id %}{{ assigned|get:el.assigned_id }}{% endif %}
@@ -65,7 +63,7 @@
                         <td>
                             {% if el.cover %}
                                 <a href="{{ el.thumb.url }}">
-                                    <img src="{{ el.thumb.url }}" style="width:5em" />
+                                    <img src="{{ el.thumb.url }}" class="character-cover" alt="faction thumb" />
                                 </a>
                             {% endif %}
                         </td>

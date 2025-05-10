@@ -35,7 +35,7 @@
                     <td>{{ el.description | truncatechars:50 }}</td>
                     <td>{{ el.get_status_display }}</td>
                     <td>
-                        {% if el.typ|not_in:"name,teaser,text,concept,factions_list" %}{{ el.get_visibility_display }}{% endif %}
+                        {% if el.typ|not_in:"name,teaser,text,factions_list" %}{{ el.get_visibility_display }}{% endif %}
                     </td>
                     {% if approval %}<td>{{ el.get_editable_display }}</td>{% endif %}
                     <td>

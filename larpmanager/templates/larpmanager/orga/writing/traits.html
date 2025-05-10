@@ -30,7 +30,6 @@
                     <th>{% trans "Progress" %}</th>
                 {% endif %}
                 <th>{% trans "Quest" %}</th>
-                <th>{% trans "Concept" %}</th>
                 {% if features.hide %}
                     <th class="hide nasc">Nascondi" %}</th>
                 {% endif %}
@@ -74,7 +73,6 @@
                             <a href="{% url 'orga_quests_edit' run.event.slug run.number el.quest.number %}">{{ el.quest }}</a>
                         {% endif %}
                     </td>
-                    <td>{{ el.concept_red | safe }}</td>
                     {% if features.hide %}
                         <td class="hide nasc">
                             {% if el.hide %}Si{% endif %}

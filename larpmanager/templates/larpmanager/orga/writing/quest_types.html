@@ -17,12 +17,11 @@
                 {% if features.progress %}
                     <th>{% trans "Progress" %}</th>
                 {% endif %}
-                <th>{% trans "Concept" %}</th>
                 {% if features.assigned %}
                     <th class="hide assign">{% trans "Assigned" %}</th>
                 {% endif %}
                 <th>{% trans "Presentation" %}</th>
-                <th style="width: 5%">(L)</th>
+                <th>(L)</th>
                 <th>{% trans "Quest" %}</th>
                 <th>(N)</th>
             </tr>
@@ -43,7 +42,6 @@
                     {% if features.progress %}
                         <td>{% include "elements/show_progress.html" with el=el %}</td>
                     {% endif %}
-                    <td>{{ el.concept_red | safe }}</td>
                     {% if features.assigned %}
                         <td class="hide assign">
                             {% if el.assigned_id %}{{ assigned|get:el.assigned_id }}{% endif %}

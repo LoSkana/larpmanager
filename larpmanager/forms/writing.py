@@ -51,7 +51,7 @@ class WritingForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        for s in ["props", "cover", "concept"]:
+        for s in ["props", "cover"]:
             if s in self.fields and s not in self.params["features"]:
                 del self.fields[s]
 
@@ -78,7 +78,7 @@ class WritingForm(MyForm):
                     continue
                 self.translate[f"id_{k}"] = self.initial[k]
 
-        self.show_link = ["id_concept", "id_teaser", "id_text"]
+        self.show_link = ["id_teaser", "id_text"]
 
         if "preview" in self.params["features"]:
             self.show_link.append("id_preview")
@@ -186,7 +186,6 @@ class PlotForm(WritingForm):
 
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
-            "concept": TinyMCE(attrs={"cols": 80, "rows": 10}),
             "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
         }
 
@@ -255,7 +254,6 @@ class FactionForm(WritingForm):
 
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
-            "concept": TinyMCE(attrs={"cols": 80, "rows": 10}),
             "teaser": TinyMCE(attrs={"cols": 80, "rows": 1}),
             "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
         }
@@ -271,7 +269,7 @@ class QuestTypeForm(WritingForm):
 
     class Meta:
         model = QuestType
-        fields = ["progress", "name", "assigned", "concept", "teaser", "preview", "props", "event"]
+        fields = ["progress", "name", "assigned", "teaser", "preview", "props", "event"]
 
         widgets = {
             "teaser": TinyMCE(attrs={"cols": 80, "rows": 1}),
@@ -289,7 +287,6 @@ class QuestForm(WritingForm):
             "typ",
             "name",
             "assigned",
-            "concept",
             "teaser",
             "preview",
             "text",
@@ -300,7 +297,6 @@ class QuestForm(WritingForm):
         ]
 
         widgets = {
-            "concept": TinyMCE(attrs={"cols": 80, "rows": 10}),
             "teaser": TinyMCE(attrs={"cols": 80, "rows": 1}),
             "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
         }
@@ -340,7 +336,6 @@ class QuestForm(WritingForm):
                 pass
 
             txts.append(f"{trait.name} - {char_name}")
-        self.details["id_concept"] = "<h4>" + _("Traits") + "</h4><hr />" + ", ".join(txts)
 
 
 class TraitForm(WritingForm):
@@ -355,7 +350,6 @@ class TraitForm(WritingForm):
             "quest",
             "name",
             "assigned",
-            "concept",
             "teaser",
             "preview",
             "text",
@@ -369,7 +363,6 @@ class TraitForm(WritingForm):
         ]
 
         widgets = {
-            "concept": TinyMCE(attrs={"cols": 80, "rows": 10}),
             "teaser": TinyMCE(attrs={"cols": 80, "rows": 1}),
             "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
         }
@@ -386,7 +379,7 @@ class HandoutForm(WritingForm):
 
     class Meta:
         model = Handout
-        fields = ["progress", "template", "name", "assigned", "concept", "text", "event"]
+        fields = ["progress", "template", "name", "assigned", "text", "event"]
 
         widgets = {
             "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
@@ -426,7 +419,6 @@ class PrologueForm(WritingForm):
 
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
-            "concept": TinyMCE(attrs={"cols": 80, "rows": 10}),
             "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
         }
 
@@ -447,7 +439,6 @@ class SpeedLarpForm(WritingForm):
 
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
-            "concept": TinyMCE(attrs={"cols": 80, "rows": 10}),
             "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
         }
 

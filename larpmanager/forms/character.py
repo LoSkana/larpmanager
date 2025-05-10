@@ -91,27 +91,20 @@ class CharacterForm(WritingForm, BaseCharacterForm):
             "assigned",
             "gender",
             "title",
-            "motto",
-            "concept",
             "teaser",
             "preview",
             "text",
-            "role",
             "props",
             "mirror",
             "special",
             "hide",
             "cover",
-            "keywords",
-            "safety",
             "player",
             "event",
             "status",
         ]
 
         widgets = {
-            "concept": TinyMCE(attrs={"autoresize_min_height": 2000}),
-            "motto": TinyMCE(attrs={"cols": 80, "rows": 2}),
             "teaser": TinyMCE(attrs={"cols": 80, "rows": 10}),
             "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
             "player": AssocMemberS2Widget,
@@ -181,7 +174,6 @@ class CharacterForm(WritingForm, BaseCharacterForm):
             self._init_custom_fields()
             return
 
-        self.delete_field("concept")
         self.delete_field("characters")
 
         self.fields["teaser"].help_text = _("Presentation text, visible to other players")

@@ -27,7 +27,6 @@
                     <th>{% trans "Progress" %}</th>
                 {% endif %}
                 <th>{% trans "Type" %}</th>
-                <th>{% trans "Concept" %}</th>
                 {% if features.hide %}
                     <th class="hide nasc">Nascondi" %}</th>
                 {% endif %}
@@ -35,13 +34,13 @@
                     <th class="hide assign">{% trans "Assigned" %}</th>
                 {% endif %}
                 <th>{% trans "Presentation" %}</th>
-                <th style="width: 5%">(L)</th>
+                <th>(L)</th>
                 {% if features.preview %}
                     <th>{% trans "Preview" %}</th>
-                    <th style="width: 5%">(L)</th>
+                    <th>(L)</th>
                 {% endif %}
                 <th>{% trans "Sheet" %}</th>
-                <th style="width: 5%">(L)</th>
+                <th>(L)</th>
                 <th>{% trans "Traits" %}</th>
                 <th>(N)</th>
             </tr>
@@ -63,12 +62,9 @@
                         <td>{% include "elements/show_progress.html" with el=el %}</td>
                     {% endif %}
                     <td>{{ el.typ }}</td>
-                    <td>{{ el.concept_red | safe }}</td>
                     {% if features.hide %}
                         <td class="hide nasc">
-                            {% if el.hide %}
-                                Si
-                            {% endif %}
+                            {% if el.hide %}Si{% endif %}
                         </td>
                     {% endif %}
                     {% if features.assigned %}

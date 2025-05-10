@@ -51,12 +51,6 @@ class Writing(BaseConceptModel):
         help_text=_("Assigned staff member"),
     )
 
-    concept = models.TextField(
-        max_length=5000,
-        help_text=_("Concept for internal use only. Will not be published"),
-        blank=True,
-    )
-
     teaser = HTMLField(
         max_length=10000,
         blank=True,
@@ -583,8 +577,6 @@ class TextVersion(BaseModel):
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="text_versions", null=True)
 
-    concept = HTMLField(blank=True)
-
     teaser = HTMLField(blank=True)
 
     text = HTMLField(blank=True)
@@ -635,8 +627,6 @@ def replace_chars_el(el, chars):
         el.text = replace_char_names(el.text, chars)
     if hasattr(el, "teaser"):
         el.teaser = replace_char_names(el.teaser, chars)
-    if hasattr(el, "concept"):
-        el.concept = replace_char_names(el.concept, chars)
 
 
 def replace_chars_all(instance):

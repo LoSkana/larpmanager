@@ -65,7 +65,7 @@ def update_element_cache_text_field(el, res):
     if el.number not in res:
         res[el.number] = {}
 
-    for f in ["concept", "teaser", "text", "preview"]:
+    for f in ["teaser", "text", "preview"]:
         v = getattr(el, f)
         res[el.number][f] = get_single_cache_text_field(el, f, v)
 

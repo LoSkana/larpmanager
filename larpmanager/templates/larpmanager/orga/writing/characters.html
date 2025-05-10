@@ -12,9 +12,6 @@
         <b>{% trans "Show / hide" %}</b>
     </p>
     <div class="nav fields">
-        {% if features.concept %}
-            <a href="#" class="my_toggle" tog='concept'>{% trans "Concept" %}</a>
-        {% endif %}
         {% if features.title %}
             <a href="#" class="my_toggle" tog='titlee'>{% trans "title" %}</a>
         {% endif %}
@@ -72,9 +69,6 @@
                 <th></th>
                 {% if features.progress %}
                     <th>{% trans "Progress" %}</th>
-                {% endif %}
-                {% if features.concept %}
-                    <th class="hide concept">{% trans "Concept" %}</th>
                 {% endif %}
                 {% if features.title %}
                     <th class="hide titlee">{% trans "Title" %}</th>
@@ -158,7 +152,6 @@
                     {% if features.progress %}
                         <td>{% include "elements/show_progress.html" with el=el %}</td>
                     {% endif %}
-                    {% if features.concept %}<td class="hide concept">{{ el.concept_red | safe }}</td>{% endif %}
                     {% if features.title %}<td class="hide titlee">{{ el.title | safe | striptags }}</td>{% endif %}
                     {% if features.assigned %}
                         <td class="hide assign">
