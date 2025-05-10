@@ -237,7 +237,7 @@ class Character(Writing):
     def show(self, event=None):
         js = super().show(event)
 
-        for s in ["title", "motto", "role", "special", "keywords", "safety", "gender"]:
+        for s in ["title", "special", "gender"]:
             self.upd_js_attr(js, s)
 
         if self.player:
