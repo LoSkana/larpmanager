@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: larpmanager
+      POSTGRES_USER: larpuser
+      POSTGRES_PASSWORD: changeme
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+
+  main:
+    container_name: larpmanager
+    build: .
+    command: ./scripts/entrypoint.sh gunicorn main.wsgi:application --bind 0.0.0.0:8000
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - media_data:/code/media
+      - static_data:/code/static
+    env_file:
+      - .env
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8264:80"
+    volumes:
+      - ./scripts/default.conf:/etc/nginx/conf.d/default.conf
+      - media_data:/code/media
+      - static_data:/code/static
+    depends_on:
+      - main
+
+volumes:
+  pgdata:
+  media_data:
+  static_data:

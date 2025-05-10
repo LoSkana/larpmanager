@@ -20,9 +20,62 @@ See the LICENSE file for details.
 
 ---
 
+## Docker
+
+If you want an easy and fast deploy, set the environment variables:
+
+```
+cp .env.example .env
+```
+
+Give them proper values. Then let's do the docker magic:
+
+```
+docker compose up --build
+```
+
+Expose the port 8264 (we wanted a fancy one) to your reverse proxy of choice for public access.
+
+Now create a super user:
+
+```
+docker exec -it larpmanager python manage.py createsuperuser
+```
+
+Go to `http://127.0.0.1:8264/admin/larpmanager/association/`, and create your Association. Put as values only:
+- Name: you should get it;
+- URL identifier: put `def`;
+- Logo: an image;
+- Main mail: the main mail of the organization (duh)
+
+Leave the other fields empty. Go to `http://127.0.0.1:8264/`.
+Now you're ready for liftoff!
+
+---
+
+If you want some more extra juicy stuff, you can set an automatic execution of
+
+```
+docker exec -it larpmanager python manage.py automate
+```
+
+This command performs a bunch of stuff related to advanced features; it should be run each day (cron?), when low traffic is expected (night?). You _should_ combine it with the daily backup of `pgdata` and `media_data` volumes.
+
+---
+
+In the future, if you want to pull the latest changes of the repo, go with:
+
+```
+git pull origin main
+docker-compose build
+docker-compose up -d
+```
+
+---
+
 ## Install
 
-A typical installation requires:
+If you're old school, a typical installation requires:
 - **Database**: PostgreSQL
 - **Frontend**: Npm
 - **Caching**: Redis

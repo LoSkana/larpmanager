@@ -1,0 +1,20 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Virtualenvs
+venv/
+.env
+.Pipfile.lock
+
+# Git
+.git/
+
+# IDEs / Editors
+.vscode/
+.idea/
+
+# Other junk
+*.log
+uploads/

@@ -1,4 +1,4 @@
-SLUG_ASSOC = 'test'
+SLUG_ASSOC = 'def'
 
 DATABASES = {
     'default': {

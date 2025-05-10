@@ -1,43 +1,47 @@
-FROM mcr.microsoft.com/playwright/python:v1.42.0
+FROM node:18
 
-WORKDIR /app
+RUN apt-get update && \
+    apt-get install -y python3.11 python3.11-venv python3-pip
 
-ENV DEBIAN_FRONTEND=noninteractive
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1 && \
+    update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
 
-ENV TZ=Europe/Rome
+RUN python --version && pip --version && node -v && npm -v
 
-# update node
-RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash -
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-RUN apt-get update && apt-get install -y \
+WORKDIR /code
+
+RUN apt-get update && apt-get install -y build-essential \
     libpq-dev \
-    libxml2-dev \
-    libxslt1-dev \
-    libxmlsec1-dev \
-    libxmlsec1-openssl \
-    pkg-config \
-    python3-dev \
-    gcc \
+    python3-pip \
+    git \
+    postfix \
     libmagic1 \
-    libgtk-4-1 \
-    libavif13 \
-    gstreamer1.0-plugins-bad \
-    gettext \
-    curl gnupg \
-    nodejs \
+    libmagic-dev \
+    postgresql \
+    postgresql-contrib \
+    nginx \
+    libpq-dev \
     wkhtmltopdf \
-    && rm -rf /var/lib/apt/lists/*
+    libxmlsec1-openssl \
+    libxml2-dev \
+    libxmlsec1-dev \
+    pkg-config \
+    netcat-openbsd \
+    gettext \
+ && rm -rf /var/lib/apt/lists/*
 
+COPY requirements.txt .
 
-# install pip requirements
-COPY requirements.txt ./
-
-RUN pip install --no-cache-dir -r requirements.txt
-
-RUN playwright install --with-deps
+RUN python -m venv /venv
+ENV PATH="/venv/bin:$PATH"
+RUN pip install --no-cache-dir  -r requirements.txt
 
 COPY . .
 
-ENV PYTEST_CURRENT_TEST="true"
+# Copy prod example to prod settings
+RUN cp main/settings/prod_example.py main/settings/prod.py
 
-CMD pytest
+EXPOSE 8264
