@@ -56,8 +56,8 @@ def casting_characters(ctx, reg):
         k = fac.data["name"]
         choices[k] = {}
         facts.append(k)
-        for ch in fac.chars:
-            choices[k][ch.id] = ch.show()
+        for char in fac.chars:
+            choices[k][char.id] = char.show(ctx["event"])
             num += 1
 
     ctx["factions"] = json.dumps(facts)
@@ -70,13 +70,13 @@ def casting_quest_traits(ctx, typ):
     choices = {}
     factions = []
     num = 0
-    for q in Quest.objects.filter(event=ctx["event"], typ=typ, hide=False).order_by("number"):
-        gr = q.show()["name"]
+    for quest in Quest.objects.filter(event=ctx["event"], typ=typ, hide=False).order_by("number"):
+        gr = quest.show()["name"]
         dc = {}
-        for t in Trait.objects.filter(quest=q, hide=False).order_by("number"):
-            if AssignmentTrait.objects.filter(trait=t, run=ctx["run"]).count() > 0:
+        for trait in Trait.objects.filter(quest=quest, hide=False).order_by("number"):
+            if AssignmentTrait.objects.filter(trait=trait, run=ctx["run"]).count() > 0:
                 continue
-            dc[t.id] = t.show()
+            dc[trait.id] = trait.show()
             num += 1
         if len(dc.keys()) == 0:
             continue
@@ -210,10 +210,10 @@ def _casting_update(ctx, prefs, request, typ):
     lst = []
     for c in Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).order_by("pref"):
         if typ == 0:
-            lst.append(Character.objects.get(pk=c.element).show()["name"])
+            lst.append(Character.objects.get(pk=c.element).show(ctx["event"])["name"])
         else:
-            t = Trait.objects.get(pk=c.element)
-            lst.append(f"{t.quest.show()['name']} - {t.show()['name']}")
+            trait = Trait.objects.get(pk=c.element)
+            lst.append(f"{trait.quest.show()['name']} - {trait.show()['name']}")
             # mail_confirm_casting_bkg(request.user.member.id, ctx['run'].id, ctx['gl_name'], lst)
     mail_confirm_casting(request.user.member, ctx["run"], ctx["gl_name"], lst, avoid)
 
@@ -277,15 +277,15 @@ def casting_preferences_traits(ctx, typ):
         raise Http404() from err
 
     ctx["list"] = []
-    for q in Quest.objects.filter(event=ctx["event"], typ=qtyp, hide=False).order_by("number"):
-        gr = q.show()["name"]
-        for t in Trait.objects.filter(quest=q, hide=False).order_by("number"):
-            if "staff" not in ctx and AssignmentTrait.objects.filter(trait=t, run=ctx["run"]).count() > 0:
+    for quest in Quest.objects.filter(event=ctx["event"], typ=qtyp, hide=False).order_by("number"):
+        gr = quest.show()["name"]
+        for trait in Trait.objects.filter(quest=quest, hide=False).order_by("number"):
+            if "staff" not in ctx and AssignmentTrait.objects.filter(trait=trait, run=ctx["run"]).count() > 0:
                 continue
             el = {
                 "group_dis": gr,
-                "name_dis": t.show()["name"],
-                "pref": get_casting_preferences(t.id, ctx, qtyp.number),
+                "name_dis": trait.show()["name"],
+                "pref": get_casting_preferences(trait.id, ctx, qtyp.number),
             }
             ctx["list"].append(el)
 
