@@ -159,7 +159,7 @@ def get_run(ctx, s, n):
         raise UnknowRunError() from err
 
 
-def get_character_filter(ctx, ch, regs, filters):
+def get_character_filter(ch, regs, filters):
     if "free" in filters:
         if ch.id in regs:
             return False
@@ -201,7 +201,7 @@ def get_event_filter_characters(ctx, filters):
             for ch in f.characters.all():
                 if ch.hide:
                     continue
-                if not get_character_filter(ctx, ch, regs, filters):
+                if not get_character_filter(ch, regs, filters):
                     continue
                 ch.data = ch.show_red()
                 f.chars.append(ch)
@@ -215,7 +215,7 @@ def get_event_filter_characters(ctx, filters):
         f.data = f.show_red()
         f.chars = []
         for _ch_id, ch in chars.items():
-            if not get_character_filter(ctx, ch, regs, filters):
+            if not get_character_filter(ch, regs, filters):
                 continue
             ch.data = ch.show_red()
             f.chars.append(ch)

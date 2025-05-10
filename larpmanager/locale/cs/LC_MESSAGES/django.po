@@ -278,9 +278,6 @@ msgstr "informace"
 msgid "past"
 msgstr "minulost"
 
-msgid "role"
-msgstr "role"
-
 msgid "Album"
 msgstr "Alba"
 
@@ -447,9 +444,6 @@ msgstr "e-mail"
 msgid "money"
 msgstr "peníze"
 
-msgid "motto"
-msgstr "motto"
-
 msgid "other"
 msgstr "více"
 
@@ -597,6 +591,9 @@ msgstr "Odeslat"
 msgid "Ticket"
 msgstr "Vstupenka"
 
+msgid "Titolo"
+msgstr "Titolo"
+
 msgid "Tokens"
 msgstr "Žetony"
 
@@ -636,9 +633,6 @@ msgstr "zrcadlo"
 msgid "player"
 msgstr "hráč"
 
-msgid "safety"
-msgstr "bezpečnost"
-
 msgid "status"
 msgstr "stav"
 
@@ -677,9 +671,6 @@ msgstr "Pájka"
 
 msgid "Casting"
 msgstr "Casting"
-
-msgid "Concept"
-msgstr "Koncept"
 
 msgid "Confirm"
 msgstr "Použít"
@@ -1301,9 +1292,6 @@ msgstr "Workshopy"
 
 msgid "Your user"
 msgstr "Váš uživatel"
-
-msgid "key words"
-msgstr "klíčová slova"
 
 msgid "negatives"
 msgstr "negativy"
@@ -4663,9 +4651,6 @@ msgstr "Mám zájem, ale nemám mnoho zkušeností."
 msgid "If checked: shows the description for each event"
 msgstr "Pokud je zaškrtnuto: zobrazí popis každé události"
 
-msgid "Indicates the character's motto - a short phrase"
-msgstr "Uveďte motto postavy - krátká věta"
-
 msgid "Modify some character elements to make it yours!"
 msgstr "Upravte si některé vlastnosti postavy podle sebe!"
 
@@ -4865,9 +4850,6 @@ msgstr "Tato stránka shrnuje dobrovolníky sdružení."
 #, python-format
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr "Vybraný příspěvek %(user)s pro %(recipient)s"
-
-msgid "Concept for internal use only. Will not be published"
-msgstr "Koncept pro interní použití. Nebude zveřejněn"
 
 msgid "If checked: shows the list of authors for each event"
 msgstr "Pokud je zaškrtnuto: zobrazí seznam autorů pro každou událost."
@@ -5128,9 +5110,6 @@ msgstr "Pokud si místo toho přejete nahrát novou fotografii dokumentu."
 msgid "If you would like to make a donation to the Organization, "
 msgstr "Pokud chcete sdružení bezplatně přispět,"
 
-msgid "Indicates the functional role / archetype of the character"
-msgstr "Označuje funkční roli/archetyp postavy."
-
 msgid "Maximum number of waiting spots to manage (0 for infinite)"
 msgstr "Maximální počet čekání, která mají být spravována (0 pro nekonečno)"
 
@@ -5240,9 +5219,6 @@ msgstr "K účasti na této akci bylo použito %(amount)d %(tokens)s!"
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here!</a>."
 msgstr "Přístup k panelu správy <a href= %(url)s'>zde!</a>."
-
-msgid "Adds a 'role' field to characters (e.g., warrior/mage/rogue)."
-msgstr "Přidá k postavám pole \"role\" (např. válečník/mage/rogue)."
 
 msgid "Adds a page where you can define shorter URLs for long links."
 msgstr ""
@@ -5629,9 +5605,6 @@ msgstr "Dosáhli jste maximálního počtu znaků, které lze vytvořit."
 
 msgid "Your user does not have the required permissions to access this page."
 msgstr "Váš uživatel nemá požadovaná oprávnění pro přístup na tuto stránku."
-
-msgid "Adds a 'concept' field to characters, reserved for staff informations."
-msgstr "Přidá ke znakům pole \"concept\" vyhrazené pro informace o zaměstnancích."
 
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr "Den roku, od kterého začíná rok sdružení, ve formátu DD-MM."
@@ -6779,13 +6752,6 @@ msgid ""
 msgstr ""
 "Na této stránce jsou shrnuty problémy nahlášené přispěvateli k přímému "
 "řešení během akce."
-
-msgid ""
-"Adds a 'keyword' field to main writing elements, to highlight special traits"
-" or conditions."
-msgstr ""
-"Přidá pole \"klíčové slovo\" k hlavním prvkům zápisu, aby se zvýraznily "
-"zvláštní vlastnosti nebo podmínky."
 
 msgid ""
 "If checked: the system will add payment fees to the ticket, making the "
@@ -8370,6 +8336,13 @@ msgstr ""
 "stanoveného počtu postav."
 
 msgid ""
+"In the text search, you can enter any text; the search will be done on the "
+"number, name, teaser, player, groups to which the character belong."
+msgstr ""
+"V textovém vyhledávání můžete zadat libovolný text; vyhledávání se provede "
+"podle čísla, jména, upoutávky, hráče, skupiny, do které postava patří."
+
+msgid ""
 "Access has been granted by you in the past by signing up for one of their  "
 "events, or by agreeing to participate as a staff member / organizer."
 msgstr ""
@@ -8473,14 +8446,6 @@ msgid ""
 msgstr ""
 "Volně vkládejte příkazy CSS, které se zobrazí na všech stránkách v prostoru "
 "asociace. Tímto způsobem si můžete libovolně přizpůsobit vzhled."
-
-msgid ""
-"In the text search, you can enter any text; the search will be done on the "
-"number, name, teaser, player, keywords, groups to which the character "
-"belong."
-msgstr ""
-"V textovém vyhledávání můžete zadat libovolný text; vyhledávání se provede "
-"podle čísla, jména, upoutávky, hráče, skupiny, do které postava patří."
 
 msgid ""
 "Below you will find all the features available; you can write a search "

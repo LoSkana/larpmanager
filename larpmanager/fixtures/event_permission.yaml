@@ -300,13 +300,6 @@
     number: 71
     feature: 40
 - model: larpmanager.eventpermission
-  pk: 48
-  fields:
-    name: Roles
-    slug: orga_roles_w
-    number: 101
-    feature: 5
-- model: larpmanager.eventpermission
   pk: 49
   fields:
     name: Assignments

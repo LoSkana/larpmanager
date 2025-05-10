@@ -36,17 +36,7 @@
                         {% endif %}
                         {% if el.title %}
                             <div class="go-inline">
-                                <b>Titolo: </b> {{ el.title | safe }}
-                            </div>
-                        {% endif %}
-                        {% if el.motto %}
-                            <div class="go-inline">
-                                <b>Motto: </b> {{ el.motto | safe }}
-                            </div>
-                        {% endif %}
-                        {% if el.keywords %}
-                            <div class="go-inline">
-                                <b>{% trans "Keywords" %}:</b> {{ el.keywords | safe }}
+                                <b>{% trans "Titolo" %}: </b> {{ el.title | safe }}
                             </div>
                         {% endif %}
                         {% if el.teaser and show_teaser %}

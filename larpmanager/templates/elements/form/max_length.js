@@ -2,7 +2,7 @@
 
 <script>
 
-var simple_count = ["t", "p", "name", "concept", "title",  "keywords", "safety"];
+var simple_count = ["t", "p", "name", "title",  "keywords", "safety"];
 var multiple_count = ["m"];
 var tinymce_count = ["teaser", "text"];
 

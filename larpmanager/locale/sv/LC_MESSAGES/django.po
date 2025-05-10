@@ -278,9 +278,6 @@ msgstr "info"
 msgid "past"
 msgstr "förflutet"
 
-msgid "role"
-msgstr "roll"
-
 msgid "Album"
 msgstr "Album"
 
@@ -447,9 +444,6 @@ msgstr "e-post"
 msgid "money"
 msgstr "pengar"
 
-msgid "motto"
-msgstr "Motto"
-
 msgid "other"
 msgstr "mer"
 
@@ -597,6 +591,9 @@ msgstr "Skicka"
 msgid "Ticket"
 msgstr "Biljett"
 
+msgid "Titolo"
+msgstr "Titolo"
+
 msgid "Tokens"
 msgstr "Tokens"
 
@@ -636,9 +633,6 @@ msgstr "spegel"
 msgid "player"
 msgstr "spelare"
 
-msgid "safety"
-msgstr "säkerhet"
-
 msgid "status"
 msgstr "status"
 
@@ -677,9 +671,6 @@ msgstr "Lödning"
 
 msgid "Casting"
 msgstr "Gjutning"
-
-msgid "Concept"
-msgstr "Koncept"
 
 msgid "Confirm"
 msgstr "Tillämpa"
@@ -1301,9 +1292,6 @@ msgstr "Verkstäder"
 
 msgid "Your user"
 msgstr "Din användare"
-
-msgid "key words"
-msgstr "nyckelord"
 
 msgid "negatives"
 msgstr "negativ"
@@ -4668,9 +4656,6 @@ msgstr "Jag är intresserad, men har inte så mycket erfarenhet"
 msgid "If checked: shows the description for each event"
 msgstr "Om markerat: visar beskrivningen för varje händelse"
 
-msgid "Indicates the character's motto - a short phrase"
-msgstr "Ange karaktärens motto - en kort mening"
-
 msgid "Modify some character elements to make it yours!"
 msgstr "Ändra några karaktärsdrag för att göra den till din egen!"
 
@@ -4872,9 +4857,6 @@ msgstr "Denna sida innehåller en sammanfattning av föreningens volontärer."
 #, python-format
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr "Insamlat bidrag från %(user)s för %(recipient)s"
-
-msgid "Concept for internal use only. Will not be published"
-msgstr "Koncept för internt bruk. Kommer inte att publiceras"
 
 msgid "If checked: shows the list of authors for each event"
 msgstr "Om markerad: visar listan över författare för varje evenemang"
@@ -5144,9 +5126,6 @@ msgstr "Om du istället vill ladda upp ett nytt foto av ditt dokument"
 msgid "If you would like to make a donation to the Organization, "
 msgstr "Om du vill göra en kostnadsfri donation till föreningen,"
 
-msgid "Indicates the functional role / archetype of the character"
-msgstr "Anger rollpersonens funktionella roll/arketyp"
-
 msgid "Maximum number of waiting spots to manage (0 for infinite)"
 msgstr "Maximalt antal väntetider som ska hanteras (0 för oändligt)"
 
@@ -5263,9 +5242,6 @@ msgstr "%(amount)d %(tokens)s användes för att delta i detta evenemang!"
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here!</a>."
 msgstr "Öppna hanteringspanelen <a href= %(url)s'>från här!</a>."
-
-msgid "Adds a 'role' field to characters (e.g., warrior/mage/rogue)."
-msgstr "Lägger till ett \"roll\"-fält för karaktärer (t.ex. krigare/mage/rogue)."
 
 msgid "Adds a page where you can define shorter URLs for long links."
 msgstr ""
@@ -5693,11 +5669,6 @@ msgid "Your user does not have the required permissions to access this page."
 msgstr ""
 "Din användare har inte de behörigheter som krävs för att komma åt den här "
 "sidan."
-
-msgid "Adds a 'concept' field to characters, reserved for staff informations."
-msgstr ""
-"Lägger till ett \"concept\"-fält för tecken, reserverat för "
-"personalinformation."
 
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr "Dag på det år från vilket föreningsåret börjar, i formatet DD-MM"
@@ -6903,13 +6874,6 @@ msgid ""
 msgstr ""
 "På denna sida sammanfattas de problem som rapporterats av bidragsgivare, för"
 " direkt hantering under evenemanget."
-
-msgid ""
-"Adds a 'keyword' field to main writing elements, to highlight special traits"
-" or conditions."
-msgstr ""
-"Lägger till ett \"nyckelord\"-fält i de viktigaste skrivelementen för att "
-"lyfta fram särskilda egenskaper eller förhållanden."
 
 msgid ""
 "If checked: the system will add payment fees to the ticket, making the "
@@ -8516,6 +8480,13 @@ msgstr ""
 " karaktärer har uppnåtts"
 
 msgid ""
+"In the text search, you can enter any text; the search will be done on the "
+"number, name, teaser, player, groups to which the character belong."
+msgstr ""
+"I textsökningen kan du skriva in valfri text; sökningen kommer att göras på "
+"det nummer, namn, teaser, spelare, grupper som karaktären tillhör."
+
+msgid ""
 "Access has been granted by you in the past by signing up for one of their  "
 "events, or by agreeing to participate as a staff member / organizer."
 msgstr ""
@@ -8619,14 +8590,6 @@ msgid ""
 msgstr ""
 "Infoga CSS-kommandon fritt, de kommer att visas på alla sidor i ditt "
 "föreningsutrymme. På så sätt kan du fritt anpassa utseendet."
-
-msgid ""
-"In the text search, you can enter any text; the search will be done on the "
-"number, name, teaser, player, keywords, groups to which the character "
-"belong."
-msgstr ""
-"I textsökningen kan du ange vilken text som helst; sökningen kommer att "
-"göras på det nummer, namn, teaser, spelare, grupp som karaktären tillhör."
 
 msgid ""
 "Below you will find all the features available; you can write a search "

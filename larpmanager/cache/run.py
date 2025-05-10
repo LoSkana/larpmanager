@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
@@ -48,7 +49,7 @@ def init_cache_run(s, n):
         run = Run.objects.select_related("event").get(event__slug=s, number=n)
         # res = {'run': run.as_dict(), 'event': run.event.as_dict() }
         return run.id
-    except Exception:
+    except ObjectDoesNotExist:
         return None
 
 

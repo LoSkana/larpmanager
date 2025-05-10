@@ -19,14 +19,13 @@
                 {% endif %}
                 <th>{% trans "Band" %}</th>
                 <th>{% trans "Station" %}</th>
-                <th>{% trans "Concept" %}</th>
                 {% if features.assigned %}
                     <th class="hide assign">{% trans "Assigned" %}</th>
                 {% endif %}
                 <th>{% trans "Sheet" %}</th>
-                <th style="width: 5%">(L)</th>
+                <th>(L)</th>
                 <th>{% trans "Characters" %}</th>
-                <th style="width: 5%">(N)</th>
+                <th>(N)</th>
             </tr>
         </thead>
         <tbody>
@@ -52,7 +51,6 @@
                     {% endif %}
                     <td>{{ el.typ }}</td>
                     <td>{{ el.station }}</td>
-                    <td>{{ el.concept_red | safe }}</td>
                     {% if features.assigned %}
                         <td class="hide assign">
                             {% if el.assigned_id %}{{ assigned|get:el.assigned_id }}{% endif %}

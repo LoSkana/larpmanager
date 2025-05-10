@@ -144,16 +144,6 @@ function check_selection(typ, st) {
     return included && !excluded;
 }
 
-function in_role(el) {
-    return true;
-    //~ if (sel_roles.length == 0) return true;
-
-    //~ var role = el['role'];
-    //~ slug = slugify(role);
-
-    //~ return sel_roles.indexOf(slug) >= 0;
-}
-
 function in_faction(el) {
     factions = new Set();
     for (var ix = 0; ix < el.factions.length; ix++) {
@@ -279,7 +269,6 @@ function search(key) {
             characters += '<div class="el"><div class="icon"><img src="{0}" /></div></div>'.format(pf);
             characters += '<div class="text"><h3><a href="{0}">{1}</a></h3>'.format(char_url.replace("/0", "/"+el['number']), name);
             characters += '<div class="go-inline"><b>{1}:</b> {0}</div>'.format(player, window['texts']['pl']);
-            if (el['motto'].length > 0) characters += '<div class="go-inline"><b>{1}:</b> {0}</div>'.format(el['motto'], window['texts']['motto']);
 
             if (el['special'] == 'n') characters += '<div class="go-inline"><b>{0}:</b> {1}.</div>'.format(window['texts']['png'], window['texts']['descr_png']);
             if (el['special'] == 'f') characters += '<div class="go-inline"><b>{0}:</b> {1}.</div>'.format(window['texts']['filler'], window['texts']['descr_filler']);
@@ -291,10 +280,6 @@ function search(key) {
                 if (el['gender'] == 'u') characters += window['texts']['uni'];
                 characters += '</div>';
             }
-
-            if (el['role'].length > 0) characters += '<div class="go-inline"><b>{1}:</b> {0}</div>'.format(el['role'], window['texts']['role']);
-            if (el['keywords'].length > 0) characters += '<div class="go-inline"><b>{1}:</b> {0}</div>'.format(el['keywords'], window['texts']['keywords']);
-            if (el['safety'].length > 0) characters += '<div class="go-inline"><b>{1}:</b> {0}</div>'.format(el['safety'], window['texts']['safety']);
 
             for (const [k, value] of Object.entries(questions)) {
                 if (el['fields'][k]) {

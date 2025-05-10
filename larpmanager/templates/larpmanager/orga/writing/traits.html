@@ -16,9 +16,6 @@
         {% if features.title %}
             , <a href="#" class="my_toggle" tog='title'>{% trans "title" %}</a>
         {% endif %}
-        {% if features.motto %}
-            , <a href="#" class="my_toggle" tog='motto'>{% trans "motto" %}</a>
-        {% endif %}
         {% if features.hide %}
             , <a href="#" class="my_toggle" tog='nasc'>{% trans "hide" %}</a>
         {% endif %}
@@ -33,7 +30,6 @@
                     <th>{% trans "Progress" %}</th>
                 {% endif %}
                 <th>{% trans "Quest" %}</th>
-                <th>{% trans "Concept" %}</th>
                 {% if features.hide %}
                     <th class="hide nasc">Nascondi" %}</th>
                 {% endif %}
@@ -47,13 +43,13 @@
                     <th class="hide assign">{% trans "Assigned" %}</th>
                 {% endif %}
                 <th>{% trans "Presentation" %}</th>
-                <th style="width: 5%">(L)</th>
+                <th>(L)</th>
                 {% if features.preview %}
                     <th>{% trans "Preview" %}</th>
-                    <th style="width: 5%">(L)</th>
+                    <th>(L)</th>
                 {% endif %}
                 <th>{% trans "Text" %}</th>
-                <th style="width: 5%">(L)</th>
+                <th>(L)</th>
                 <th>{% trans "Traits" %}</th>
                 <th>(N)</th>
             </tr>
@@ -77,7 +73,6 @@
                             <a href="{% url 'orga_quests_edit' run.event.slug run.number el.quest.number %}">{{ el.quest }}</a>
                         {% endif %}
                     </td>
-                    <td>{{ el.concept_red | safe }}</td>
                     {% if features.hide %}
                         <td class="hide nasc">
                             {% if el.hide %}Si{% endif %}

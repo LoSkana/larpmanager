@@ -12,23 +12,11 @@
         <b>{% trans "Show / hide" %}</b>
     </p>
     <div class="nav fields">
-        {% if features.concept %}
-            <a href="#" class="my_toggle" tog='concept'>{% trans "Concept" %}</a>
-        {% endif %}
         {% if features.title %}
             <a href="#" class="my_toggle" tog='titlee'>{% trans "title" %}</a>
         {% endif %}
-        {% if features.motto %}
-            <a href="#" class="my_toggle" tog='motto'>{% trans "motto" %}</a>
-        {% endif %}
         {% if features.preview %}
             <a href="#" class="my_toggle" tog='preview'>{% trans "preview" %}</a>
-        {% endif %}
-        {% if features.keywords %}
-            <a href="#" class="my_toggle" tog='keywords'>{% trans "key words" %}</a>
-        {% endif %}
-        {% if features.role %}
-            <a href="#" class="my_toggle" tog='role'>{% trans "role" %}</a>
         {% endif %}
         {% if features.gender %}
             <a href="#" class="my_toggle" tog='gend'>{% trans "gender" %}</a>
@@ -47,9 +35,6 @@
         {% endif %}
         {% if features.speedlarp %}
             <a href="#" class="my_toggle" tog='speedlarp'>{% trans "speedlarp" %}</a>
-        {% endif %}
-        {% if features.safety %}
-            <a href="#" class="my_toggle" tog='safety'>{% trans "safety" %}</a>
         {% endif %}
         {% if features.assigned %}
             <a href="#" class="my_toggle" tog='assign'>{% trans "assigned" %}</a>
@@ -85,17 +70,8 @@
                 {% if features.progress %}
                     <th>{% trans "Progress" %}</th>
                 {% endif %}
-                {% if features.concept %}
-                    <th class="hide concept">{% trans "Concept" %}</th>
-                {% endif %}
                 {% if features.title %}
                     <th class="hide titlee">{% trans "Title" %}</th>
-                {% endif %}
-                {% if features.keywords %}
-                    <th class="hide keywords">{% trans "Keywords" %}</th>
-                {% endif %}
-                {% if features.role %}
-                    <th class="hide role">{% trans "Role" %}</th>
                 {% endif %}
                 {% if features.assigned %}
                     <th class="hide assign">{% trans "Assigned" %}</th>
@@ -107,9 +83,6 @@
                     <th class="hide status">{% trans "Status" %}</th>
                 {% endif %}
                 {% if features.faction %}<th>{{ fields_name.faction }}</th>{% endif %}
-                {% if features.motto %}
-                    <th class="hide motto">{% trans "Motto" %}</th>
-                {% endif %}
                 {% if features.gender %}
                     <th class="hide gend">{% trans "Sex" %}</th>
                 {% endif %}
@@ -124,9 +97,6 @@
                 {% endif %}
                 {% if features.cover %}
                     <th class="hide cover">{% trans "Cover" %}</th>
-                {% endif %}
-                {% if features.safety %}
-                    <th class="hide safety">{% trans "Safety" %}</th>
                 {% endif %}
                 {% if features.private_info %}
                     <th class="hide pinfo">{% trans "Informations private" %}</th>
@@ -182,10 +152,7 @@
                     {% if features.progress %}
                         <td>{% include "elements/show_progress.html" with el=el %}</td>
                     {% endif %}
-                    {% if features.concept %}<td class="hide concept">{{ el.concept_red | safe }}</td>{% endif %}
                     {% if features.title %}<td class="hide titlee">{{ el.title | safe | striptags }}</td>{% endif %}
-                    {% if features.keywords %}<td class="hide keywords">{{ el.keywords }}</td>{% endif %}
-                    {% if features.role %}<td class="hide role">{{ el.role }}</td>{% endif %}
                     {% if features.assigned %}
                         <td class="hide assign">
                             {% if el.assigned_id %}{{ assigned|get:el.assigned_id }}{% endif %}
@@ -199,11 +166,6 @@
                                 <a href="{% url 'orga_factions_edit' run.event.slug run.number g.id %}">{{ g.name }}</a>
                                 <br />
                             {% endfor %}
-                        </td>
-                    {% endif %}
-                    {% if features.motto %}
-                        <td class="hide motto">
-                            <p>{{ el.motto | safe | striptags }}</p>
                         </td>
                     {% endif %}
                     {% if features.gender %}
@@ -231,11 +193,6 @@
                                          alt="character cover" />
                                 </a>
                             {% endif %}
-                        </td>
-                    {% endif %}
-                    {% if features.safety %}
-                        <td class="hide safety">
-                            {% if el.safety %}{{ el.safety }}{% endif %}
                         </td>
                     {% endif %}
                     {% if features.private_info %}<td class="hide pinfo">{{ el.private_info }}</td>{% endif %}

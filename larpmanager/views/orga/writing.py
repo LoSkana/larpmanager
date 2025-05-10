@@ -353,56 +353,6 @@ def orga_assignments(request, s, n):
     return render(request, "larpmanager/orga/writing/assignments.html", ctx)
 
 
-def add_role(r, new, all_roles):
-    if not new:
-        return
-    all_roles.add(new)
-    if "roles" not in r:
-        r["roles"] = {}
-    if new not in r["roles"]:
-        r["roles"][new] = 1
-        return
-    r["roles"][new] += 1
-
-
-@login_required
-def orga_roles_w(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_roles_w")
-    get_event_cache_all(ctx)
-    ctx["all_roles"] = set()
-    que = ctx["event"].get_elements(Character).exclude(role__isnull=True)
-    for number, role in que.exclude(role__exact="").values_list("number", "role"):
-        if number not in ctx["chars"]:
-            continue
-        add_role(ctx["chars"][number], role, ctx["all_roles"])
-
-    que = ctx["event"].get_elements(Trait).exclude(role__isnull=True)
-    for number, role in que.exclude(role__exact="").values_list("number", "role"):
-        trait = ctx["traits"][number]
-        char_number = trait["char"]
-        if char_number not in ctx["chars"]:
-            continue
-        add_role(ctx["chars"][char_number], role, ctx["all_roles"])
-
-    ctx["all_roles"] = list(ctx["all_roles"])
-    ctx["all_roles"].sort()
-    aux = {}
-    for k in ctx["all_roles"]:
-        aux[k] = []
-    for _num, char in ctx["chars"].items():
-        if "roles" not in char:
-            continue
-        for k in char["roles"]:
-            aux[k].append((char, char["roles"][k]))
-    for k in ctx["all_roles"]:
-        aux[k].sort(key=lambda x: x[1], reverse=True)
-    ctx["roles_list"] = []
-    for k in ctx["all_roles"]:
-        ctx["roles_list"].append((k, aux[k]))
-
-    return render(request, "larpmanager/orga/writing/roles.html", ctx)
-
-
 @login_required
 def orga_props(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_props")

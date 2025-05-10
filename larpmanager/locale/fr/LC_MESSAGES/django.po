@@ -278,9 +278,6 @@ msgstr "info"
 msgid "past"
 msgstr "passé"
 
-msgid "role"
-msgstr "rôle"
-
 msgid "Album"
 msgstr "Albums"
 
@@ -447,9 +444,6 @@ msgstr "courriel"
 msgid "money"
 msgstr "argent"
 
-msgid "motto"
-msgstr "devise"
-
 msgid "other"
 msgstr "plus"
 
@@ -597,6 +591,9 @@ msgstr "Envoyer"
 msgid "Ticket"
 msgstr "Billet"
 
+msgid "Titolo"
+msgstr "Titolo"
+
 msgid "Tokens"
 msgstr "Jetons"
 
@@ -636,9 +633,6 @@ msgstr "miroir"
 msgid "player"
 msgstr "joueur"
 
-msgid "safety"
-msgstr "la sécurité"
-
 msgid "status"
 msgstr "statut"
 
@@ -677,9 +671,6 @@ msgstr "Soudure"
 
 msgid "Casting"
 msgstr "Casting"
-
-msgid "Concept"
-msgstr "Concept"
 
 msgid "Confirm"
 msgstr "Appliquer"
@@ -1301,9 +1292,6 @@ msgstr "Ateliers"
 
 msgid "Your user"
 msgstr "Votre utilisateur"
-
-msgid "key words"
-msgstr "mots-clés"
 
 msgid "negatives"
 msgstr "négatifs"
@@ -4670,9 +4658,6 @@ msgstr "Je suis intéressé, mais je n'ai pas beaucoup d'expérience."
 msgid "If checked: shows the description for each event"
 msgstr "Si coché : affiche la description de chaque événement"
 
-msgid "Indicates the character's motto - a short phrase"
-msgstr "Indiquez la devise du personnage - une courte phrase"
-
 msgid "Modify some character elements to make it yours!"
 msgstr ""
 "Modifiez certaines caractéristiques du personnage pour vous l'approprier !"
@@ -4883,9 +4868,6 @@ msgstr "Cette page présente les bénévoles de l'association."
 #, python-format
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr "Contribution collectée par %(user)s pour %(recipient)s"
-
-msgid "Concept for internal use only. Will not be published"
-msgstr "Concept à usage interne. Ne sera pas publié"
 
 msgid "If checked: shows the list of authors for each event"
 msgstr "Si coché : affiche la liste des auteurs pour chaque événement"
@@ -5172,9 +5154,6 @@ msgstr ""
 msgid "If you would like to make a donation to the Organization, "
 msgstr "Si vous souhaitez faire un don gratuit à l'association,"
 
-msgid "Indicates the functional role / archetype of the character"
-msgstr "Indique le rôle fonctionnel/type d'archétype du personnage"
-
 msgid "Maximum number of waiting spots to manage (0 for infinite)"
 msgstr "Nombre maximal d'attentes à gérer (0 pour infini)"
 
@@ -5304,10 +5283,6 @@ msgstr ""
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here!</a>."
 msgstr "Accédez au panneau de gestion <a href= %(url)s'>à partir d'ici!</a>."
-
-msgid "Adds a 'role' field to characters (e.g., warrior/mage/rogue)."
-msgstr ""
-"Ajoute un champ \"rôle\" aux personnages (par exemple, guerrier/mage/rogue)."
 
 msgid "Adds a page where you can define shorter URLs for long links."
 msgstr ""
@@ -5772,11 +5747,6 @@ msgid "Your user does not have the required permissions to access this page."
 msgstr ""
 "Votre utilisateur ne dispose pas des autorisations nécessaires pour accéder "
 "à cette page."
-
-msgid "Adds a 'concept' field to characters, reserved for staff informations."
-msgstr ""
-"Ajoute un champ 'concept' aux caractères, réservé aux informations sur le "
-"personnel."
 
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr ""
@@ -7035,13 +7005,6 @@ msgid ""
 msgstr ""
 "Cette page résume les problèmes signalés par les contributeurs, en vue d'une"
 " prise en charge directe pendant l'événement."
-
-msgid ""
-"Adds a 'keyword' field to main writing elements, to highlight special traits"
-" or conditions."
-msgstr ""
-"Ajoute un champ \"mot-clé\" aux principaux éléments d'écriture, afin de "
-"mettre en évidence des caractéristiques ou des conditions particulières."
 
 msgid ""
 "If checked: the system will add payment fees to the ticket, making the "
@@ -8678,6 +8641,14 @@ msgstr ""
 "personnages a été atteint."
 
 msgid ""
+"In the text search, you can enter any text; the search will be done on the "
+"number, name, teaser, player, groups to which the character belong."
+msgstr ""
+"Dans la recherche de texte, vous pouvez saisir n'importe quel texte ; la "
+"recherche sera effectuée sur le numéro, le nom, l'accroche, le joueur, les "
+"groupes auxquels le personnage appartient."
+
+msgid ""
 "Access has been granted by you in the past by signing up for one of their  "
 "events, or by agreeing to participate as a staff member / organizer."
 msgstr ""
@@ -8789,15 +8760,6 @@ msgstr ""
 "Insérez librement des commandes CSS, elles seront affichées sur toutes les "
 "pages de votre espace associatif. Vous pouvez ainsi personnaliser librement "
 "l'apparence."
-
-msgid ""
-"In the text search, you can enter any text; the search will be done on the "
-"number, name, teaser, player, keywords, groups to which the character "
-"belong."
-msgstr ""
-"Dans la recherche de texte, vous pouvez saisir n'importe quel texte ; la "
-"recherche s'effectuera sur le numéro, le nom, l'accroche, le joueur, le "
-"groupe auquel appartient le personnage."
 
 msgid ""
 "Below you will find all the features available; you can write a search "

@@ -51,12 +51,6 @@ class Writing(BaseConceptModel):
         help_text=_("Assigned staff member"),
     )
 
-    concept = models.TextField(
-        max_length=5000,
-        help_text=_("Concept for internal use only. Will not be published"),
-        blank=True,
-    )
-
     teaser = HTMLField(
         max_length=10000,
         blank=True,
@@ -169,39 +163,12 @@ class Character(Writing):
         help_text=_("Indicates the title of the character - it will be shown along with the name"),
     )
 
-    motto = HTMLField(
-        max_length=500,
-        blank=True,
-        help_text=_("Indicates the character's motto - a short phrase"),
-    )
-
-    role = models.CharField(
-        max_length=100,
-        help_text=_("Indicates the functional role / archetype of the character"),
-        blank=True,
-        null=True,
-    )
-
-    safety = models.CharField(
-        max_length=500,
-        help_text=_("Indicates accurate safety information"),
-        blank=True,
-        null=True,
-    )
-
     gender = models.CharField(
         max_length=1,
         choices=GENDER_CHOICES,
         default=None,
         verbose_name=_("Gender"),
         help_text=_("Select the character's gender"),
-        null=True,
-    )
-
-    keywords = models.CharField(
-        max_length=500,
-        help_text=_("Select the character's key words"),
-        blank=True,
         null=True,
     )
 
@@ -610,8 +577,6 @@ class TextVersion(BaseModel):
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="text_versions", null=True)
 
-    concept = HTMLField(blank=True)
-
     teaser = HTMLField(blank=True)
 
     text = HTMLField(blank=True)
@@ -662,8 +627,6 @@ def replace_chars_el(el, chars):
         el.text = replace_char_names(el.text, chars)
     if hasattr(el, "teaser"):
         el.teaser = replace_char_names(el.teaser, chars)
-    if hasattr(el, "concept"):
-        el.concept = replace_char_names(el.concept, chars)
 
 
 def replace_chars_all(instance):

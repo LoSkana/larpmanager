@@ -1,8 +1,11 @@
 {% load show_tags static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
+        <title>Profiles</title>
         <meta charset="utf-8">
+        <meta name="keywords" content="none">
+        <meta name="description" content="none">
         <style>
 @media print {
   .new-page {
@@ -17,7 +20,6 @@ a { color: #6495ED; font-weight:bold; text-decoration: none;}
 td { padding: 0.5em; border: 1px solid black; text-align: center; vertical-align:middle; }
 td img { margin: 0.5em; height: 10em; float: left; }
 p { display: inline; line-height: 100%; display: block; margin: 0.3em; }
-.motto { font-size: 90%; line-height: 90%; }
 .name { font-size: 110%; }
 table, tr, td, th, tbody, thead, tfoot {
     page-break-inside: avoid !important;
@@ -37,15 +39,16 @@ table, tr, td, th, tbody, thead, tfoot {
                     {% endif %}
                     <td>
                         {% if el.player_id > 0 %}
-                            <img src="https://larpmanager.com/{{ el.player_prof }}" />
+                            <img src="https://larpmanager.com/{{ el.player_prof }}"
+                                 alt="player profile" />
                         {% else %}
-                            <img src="https://larpmanager.com/{% static 'larpmanager/assets/blank-avatar.png' %}" />
+                            <img src="https://larpmanager.com/{% static 'larpmanager/assets/blank-avatar.png' %}"
+                                 alt="player profile" />
                         {% endif %}
                         <p>
-                            <span class='name'><a href="{% url 'character' event.slug run.number el.number %}">{{ el.name }}</a> </span>
+                            <span class="name"><a href="{% url 'character' event.slug run.number el.number %}">{{ el.name }}</a> </span>
                             {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
                             {% if el.pronoun %}({{ el.pronoun }}){% endif %}
-                            {% if el.motto %}- <i>{{ el.motto | safe | clean_tags }}</i>{% endif %}
                         </p>
                         {% if el.player_id > 0 %}
                             <p>

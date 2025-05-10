@@ -1419,9 +1419,6 @@ msgstr ""
 msgid "NOT ASSIGNED"
 msgstr ""
 
-msgid "Traits"
-msgstr ""
-
 msgid "Trait"
 msgstr ""
 
@@ -2495,9 +2492,6 @@ msgstr ""
 msgid "Sheet"
 msgstr ""
 
-msgid "Concept"
-msgstr ""
-
 msgid "Cover"
 msgstr ""
 
@@ -2510,19 +2504,10 @@ msgstr ""
 msgid "Prop"
 msgstr ""
 
-msgid "Role"
-msgstr ""
-
 msgid "Special"
 msgstr ""
 
 msgid "Hide"
-msgstr ""
-
-msgid "Keywords"
-msgstr ""
-
-msgid "Safety"
 msgstr ""
 
 msgid "Progress"
@@ -2799,6 +2784,9 @@ msgid ""
 "Fill in this field if you follow a personal diet for reasons of choice(e.g. "
 "vegetarian, vegan) or health (celiac disease, allergies). Leave empty if you "
 "do not have things to report!"
+msgstr ""
+
+msgid "Safety"
 msgstr ""
 
 msgid ""
@@ -3089,9 +3077,6 @@ msgstr ""
 msgid "Assigned staff member"
 msgstr ""
 
-msgid "Concept for internal use only. Will not be published"
-msgstr ""
-
 msgid ""
 "Presentation visible to all players, when 'show presentation' is checked"
 msgstr ""
@@ -3132,12 +3117,6 @@ msgstr ""
 
 msgid ""
 "Indicates the title of the character - it will be shown along with the name"
-msgstr ""
-
-msgid "Indicates the character's motto - a short phrase"
-msgstr ""
-
-msgid "Indicates the functional role / archetype of the character"
 msgstr ""
 
 msgid ""
@@ -3871,9 +3850,6 @@ msgstr ""
 msgid "Create new character"
 msgstr ""
 
-msgid "Motto"
-msgstr ""
-
 msgid "XP tot"
 msgstr ""
 
@@ -3919,6 +3895,9 @@ msgid "Tell me more"
 msgstr ""
 
 msgid "Player:"
+msgstr ""
+
+msgid "Titolo"
 msgstr ""
 
 msgid "Factions:"
@@ -4019,6 +3998,12 @@ msgid "are not yet open!"
 msgstr ""
 
 msgid "Will open at:"
+msgstr ""
+
+msgid "Traits"
+msgstr ""
+
+msgid "Keywords"
 msgstr ""
 
 msgid "Change registration"
@@ -4124,7 +4109,7 @@ msgstr ""
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "
-"number, name, teaser, player, keywords, groups to which the character belong."
+"number, name, teaser, player, groups to which the character belong."
 msgstr ""
 
 msgid ""
@@ -4531,6 +4516,9 @@ msgid "Links to be accessed:"
 msgstr ""
 
 msgid "Users"
+msgstr ""
+
+msgid "Role"
 msgstr ""
 
 msgid ""
@@ -6323,16 +6311,7 @@ msgstr ""
 msgid "title"
 msgstr ""
 
-msgid "motto"
-msgstr ""
-
 msgid "preview"
-msgstr ""
-
-msgid "key words"
-msgstr ""
-
-msgid "role"
 msgstr ""
 
 msgid "gender"
@@ -6351,9 +6330,6 @@ msgid "cover"
 msgstr ""
 
 msgid "speedlarp"
-msgstr ""
-
-msgid "safety"
 msgstr ""
 
 msgid "assigned"
@@ -6684,6 +6660,9 @@ msgstr ""
 msgid "Standard features"
 msgstr ""
 
+msgid "Motto"
+msgstr ""
+
 msgid "Adds a 'motto' field to characters, a short phrase they frequently use."
 msgstr ""
 
@@ -6696,9 +6675,6 @@ msgid ""
 msgstr ""
 
 msgid "Allows players to select hidden roles without spoiling them for others."
-msgstr ""
-
-msgid "Adds a 'role' field to characters (e.g., warrior/mage/rogue)."
 msgstr ""
 
 msgid ""
@@ -6775,11 +6751,6 @@ msgstr ""
 msgid ""
 "Adds a 'hide' field to main writing elements, to prevent players viewing "
 "them."
-msgstr ""
-
-msgid ""
-"Adds a 'keyword' field to main writing elements, to highlight special traits "
-"or conditions."
 msgstr ""
 
 msgid ""
@@ -7415,9 +7386,6 @@ msgid ""
 msgstr ""
 
 msgid "Adds to all registrations an unique code."
-msgstr ""
-
-msgid "Adds a 'concept' field to characters, reserved for staff informations."
 msgstr ""
 
 msgid "Audits"

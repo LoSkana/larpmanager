@@ -8,7 +8,7 @@
                 $('#options').fadeOut();
             }
 
-            max_lengtheable = ["m", "t", "p", "name", "teaser", "text", "concept", "title",  "keywords", "safety"]
+            max_lengtheable = ["m", "t", "p", "name", "teaser", "text", "title"]
             if (max_lengtheable.includes(selectedValue)) {
                 $('#id_max_length_tr').fadeIn();
             } else {
