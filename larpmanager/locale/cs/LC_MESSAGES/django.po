@@ -3788,9 +3788,6 @@ msgstr "Propagace - stránky, reklama"
 msgid "Request refund from: %(user)s"
 msgstr "Žádost o vrácení peněz od: %(user)s"
 
-msgid "Select the character's gender"
-msgstr "Označuje pohlaví postavy"
-
 msgid "Select the new ability to get"
 msgstr "Vyberte novou dovednost, kterou chcete získat"
 

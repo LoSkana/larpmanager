@@ -355,7 +355,6 @@ class TraitForm(WritingForm):
             "text",
             "role",
             "props",
-            "gender",
             "keywords",
             "safety",
             "hide",
