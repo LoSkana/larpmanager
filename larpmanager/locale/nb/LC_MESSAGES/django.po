@@ -1833,6 +1833,9 @@ msgstr "Høyre hjul"
 msgid "Run Settings"
 msgstr "Kjør innstillinger"
 
+msgid "Safe editing"
+msgstr "Sikker redigering"
+
 msgid "Show history"
 msgstr "Historisk utstilling"
 
@@ -6507,6 +6510,13 @@ msgstr ""
 "og lagres i systemet."
 
 msgid ""
+"If checked, automatically removes formatting when pasting text into the "
+"WYSIWYG editor"
+msgstr ""
+"Hvis avkrysset, fjernes formateringen automatisk når du limer inn tekst i "
+"WYSIWYG-redigeringsprogrammet"
+
+msgid ""
 "If you are absolutely certain that you want to delete this item, click on "
 "this button."
 msgstr ""
@@ -7194,6 +7204,13 @@ msgid ""
 msgstr ""
 "Gjør det mulig å administrere inntekter for et arrangement som ikke stammer "
 "fra spillerregistreringer."
+
+msgid ""
+"If checked, prevents multiple users from editing the same item at the same "
+"time to avoid conflicts"
+msgstr ""
+"Hvis avkrysset, forhindrer det at flere brukere redigerer det samme "
+"elementet samtidig for å unngå konflikter"
 
 msgid ""
 "Lets you create, edit, and manage any number of registration ticket types "

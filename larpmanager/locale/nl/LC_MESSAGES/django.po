@@ -1833,6 +1833,9 @@ msgstr "Rechter wiel"
 msgid "Run Settings"
 msgstr "Instellingen uitvoeren"
 
+msgid "Safe editing"
+msgstr "Veilig bewerken"
+
 msgid "Show history"
 msgstr "Historische tentoonstelling"
 
@@ -6637,6 +6640,13 @@ msgstr ""
 " opgeslagen in het systeem."
 
 msgid ""
+"If checked, automatically removes formatting when pasting text into the "
+"WYSIWYG editor"
+msgstr ""
+"Als deze optie is aangevinkt, wordt opmaak automatisch verwijderd wanneer "
+"tekst in de WYSIWYG-editor wordt geplakt."
+
+msgid ""
 "If you are absolutely certain that you want to delete this item, click on "
 "this button."
 msgstr ""
@@ -7326,6 +7336,13 @@ msgid ""
 msgstr ""
 "Maakt het mogelijk om inkomsten voor een evenement te beheren die niet "
 "afkomstig zijn van spelersregistraties."
+
+msgid ""
+"If checked, prevents multiple users from editing the same item at the same "
+"time to avoid conflicts"
+msgstr ""
+"Als deze optie is aangevinkt, wordt voorkomen dat meerdere gebruikers "
+"hetzelfde item tegelijkertijd bewerken om conflicten te voorkomen."
 
 msgid ""
 "Lets you create, edit, and manage any number of registration ticket types "

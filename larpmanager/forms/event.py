@@ -244,6 +244,8 @@ class OrgaConfigForm(ConfigForm):
 
         self.set_config_character()
 
+        self.set_config_custom()
+
         self.set_config_accounting()
 
         self.set_config_casting()
@@ -285,9 +287,20 @@ class OrgaConfigForm(ConfigForm):
     def set_config_character(self):
         if "characters" in self.params["features"]:
             section = _("Writing")
+
             label = _("Replacing names")
             help_text = _("If checked, PG names will be automatically replaced by a reference")
             self.add_configs("writing_substitute", ConfigType.BOOL, section, label, help_text)
+
+            label = _("Paste as text")
+            help_text = _("If checked, automatically removes formatting when pasting text into the WYSIWYG editor")
+            self.add_configs("writing_paste_text", ConfigType.BOOL, section, label, help_text)
+
+            label = _("Safe editing")
+            help_text = _(
+                "If checked, prevents multiple users from editing the same item at the same time to avoid conflicts"
+            )
+            self.add_configs("writing_working_ticket", ConfigType.BOOL, section, label, help_text)
 
         if "campaign" in self.params["features"]:
             section = _("Campaign")
@@ -319,6 +332,7 @@ class OrgaConfigForm(ConfigForm):
             help_text = _("If checked, activates a staff-managed approval process for characters")
             self.add_configs("user_character_approval", ConfigType.BOOL, section, label, help_text)
 
+    def set_config_custom(self):
         if "custom_character" in self.params["features"]:
             section = _("Character customisation")
 
