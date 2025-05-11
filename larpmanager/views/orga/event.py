@@ -69,7 +69,8 @@ def orga_appearance(request, s, n):
 
 @login_required
 def orga_run(request, s, n):
-    return orga_edit(request, s, n, "orga_run", OrgaRunForm, get_cache_run(s, n), "manage")
+    run = get_cache_run(request.assoc["id"], s, n)
+    return orga_edit(request, s, n, "orga_run", OrgaRunForm, run, "manage")
 
 
 @login_required

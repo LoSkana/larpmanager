@@ -26,27 +26,27 @@ from django.dispatch import receiver
 from larpmanager.models.event import Event, Run
 
 
-def reset_cache_run(s, n):
-    key = cache_run_key(s, n)
+def reset_cache_run(a, s, n):
+    key = cache_run_key(a, s, n)
     cache.delete(key)
 
 
-def cache_run_key(s, n):
-    return f"run_{s}_{n}"
+def cache_run_key(a, s, n):
+    return f"run_{a}_{s}_{n}"
 
 
-def get_cache_run(s, n):
-    key = cache_run_key(s, n)
+def get_cache_run(a, s, n):
+    key = cache_run_key(a, s, n)
     res = cache.get(key)
     if not res:
-        res = init_cache_run(s, n)
+        res = init_cache_run(a, s, n)
         cache.set(key, res)
     return res
 
 
-def init_cache_run(s, n):
+def init_cache_run(a, s, n):
     try:
-        run = Run.objects.select_related("event").get(event__slug=s, number=n)
+        run = Run.objects.select_related("event").get(event__assoc_id=a, event__slug=s, number=n)
         # res = {'run': run.as_dict(), 'event': run.event.as_dict() }
         return run.id
     except ObjectDoesNotExist:
@@ -56,11 +56,11 @@ def init_cache_run(s, n):
 @receiver(pre_save, sender=Run)
 def pre_save_run(sender, instance, **kwargs):
     if instance.pk:
-        reset_cache_run(instance.event.slug, instance.number)
+        reset_cache_run(instance.event.assoc_id, instance.event.slug, instance.number)
 
 
 @receiver(pre_save, sender=Event)
 def pre_save_event(sender, instance, **kwargs):
     if instance.pk:
         for run in instance.runs.all():
-            reset_cache_run(instance.slug, run.number)
+            reset_cache_run(instance.assoc_id, instance.slug, run.number)
