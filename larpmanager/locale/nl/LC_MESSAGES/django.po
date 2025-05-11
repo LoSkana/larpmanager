@@ -1653,9 +1653,6 @@ msgstr "Toon gesloten"
 msgid "Simple list"
 msgstr "Eenvoudige lijst"
 
-msgid "Staff price"
-msgstr "Prijs personeel"
-
 msgid "Text (long)"
 msgstr "Tekst (lang)"
 
@@ -8013,13 +8010,6 @@ msgid ""
 msgstr ""
 "Je vrienden wilden je een speciaal cadeau geven: ze gaven je de kans om deel"
 " te nemen aan een van onze ervaringen!"
-
-msgid ""
-"- DEPRECATED, WILL BE REMOVED - Enables a separate price for staff tickets, "
-"overriding the normal registration fee."
-msgstr ""
-"- GEDEPRECEERD, WORDT VERWIJDERD - Maakt een aparte prijs mogelijk voor "
-"personeelskaartjes, die het normale inschrijfgeld overschrijft."
 
 msgid ""
 "Checks if another user is editing the same item, warning concurrent users to"

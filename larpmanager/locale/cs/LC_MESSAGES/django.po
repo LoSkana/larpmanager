@@ -1653,9 +1653,6 @@ msgstr "Zobrazit uzavřeno"
 msgid "Simple list"
 msgstr "Jednoduchý seznam"
 
-msgid "Staff price"
-msgstr "Cena pro zaměstnance"
-
 msgid "Text (long)"
 msgstr "Text (dlouhý)"
 
@@ -7770,13 +7767,6 @@ msgid ""
 msgstr ""
 "Vaši přátelé vám chtěli dát zvláštní dárek: dali vám možnost zúčastnit se "
 "jednoho z našich zážitků!"
-
-msgid ""
-"- DEPRECATED, WILL BE REMOVED - Enables a separate price for staff tickets, "
-"overriding the normal registration fee."
-msgstr ""
-"- ZRUŠENO, BUDE ODSTRANĚNO - Umožňuje stanovit samostatnou cenu za vstupenky"
-" pro zaměstnance, která je vyšší než běžný registrační poplatek."
 
 msgid ""
 "Checks if another user is editing the same item, warning concurrent users to"

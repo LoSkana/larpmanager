@@ -112,9 +112,9 @@
       emails automatically.
     slug: remind
     overall: true
-    module: 7
+    module: 4
     placeholder: false
-    order: 25
+    order: 20
 - model: larpmanager.feature
   pk: 19
   fields:
@@ -233,7 +233,7 @@
     overall: true
     module: 4
     placeholder: false
-    order: 9999
+    order: 30
 - model: larpmanager.feature
   pk: 34
   fields:
@@ -613,9 +613,9 @@
       memberships, forms, casting, etc.).
     slug: deadlines
     overall: true
-    module: 7
+    module: 4
     placeholder: false
-    order: 20
+    order: 10
 - model: larpmanager.feature
   pk: 95
   fields:
@@ -1003,17 +1003,6 @@
     module: 2
     placeholder: false
     order: 80
-- model: larpmanager.feature
-  pk: 145
-  fields:
-    name: Staff price
-    descr: '- DEPRECATED, WILL BE REMOVED - Enables a separate price for staff tickets,
-      overriding the normal registration fee.'
-    slug: reg_opt_staff_price
-    overall: false
-    module: 4
-    placeholder: false
-    order: 9999
 - model: larpmanager.feature
   pk: 146
   fields:

@@ -1653,9 +1653,6 @@ msgstr "Visa stängd"
 msgid "Simple list"
 msgstr "Enkel lista"
 
-msgid "Staff price"
-msgstr "Personalens pris"
-
 msgid "Text (long)"
 msgstr "Text (lång)"
 
@@ -7902,13 +7899,6 @@ msgid ""
 msgstr ""
 "Dina vänner ville ge dig en speciell gåva: de gav dig chansen att delta i en"
 " av våra upplevelser!"
-
-msgid ""
-"- DEPRECATED, WILL BE REMOVED - Enables a separate price for staff tickets, "
-"overriding the normal registration fee."
-msgstr ""
-"- DEPRECATED, WILL BE REMOVED - Möjliggör ett separat pris för "
-"personalbiljetter, som åsidosätter den normala registreringsavgiften."
 
 msgid ""
 "Checks if another user is editing the same item, warning concurrent users to"

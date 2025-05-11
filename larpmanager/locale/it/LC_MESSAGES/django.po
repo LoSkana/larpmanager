@@ -1653,9 +1653,6 @@ msgstr "Mostra chiusi"
 msgid "Simple list"
 msgstr "Lista semplice"
 
-msgid "Staff price"
-msgstr "Prezzo del personale"
-
 msgid "Text (long)"
 msgstr "Testo (lungo)"
 
@@ -7988,13 +7985,6 @@ msgid ""
 msgstr ""
 "I tuoi amici ti hanno voluto fare un regalo speciale: ti hanno regalato la "
 "possibilità di partecipare ad una delle nostre esperienze!"
-
-msgid ""
-"- DEPRECATED, WILL BE REMOVED - Enables a separate price for staff tickets, "
-"overriding the normal registration fee."
-msgstr ""
-"- DEPRECATO, VERRA' RIMOSSO - Consente di stabilire un prezzo separato per i"
-" biglietti del personale, che sostituisce la normale quota di iscrizione."
 
 msgid ""
 "Checks if another user is editing the same item, warning concurrent users to"
