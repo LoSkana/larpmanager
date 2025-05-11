@@ -92,7 +92,6 @@ libxmlsec1-dev libxmlsec1-openssl libavif16
 
 Remember to init the database:
 ```
-python manage.py makemigrations larpmanager
 python manage.py migrate
 ```
 
