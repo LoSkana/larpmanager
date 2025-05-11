@@ -87,12 +87,6 @@ def tooltip_fields(ch, tooltip):
 
     tooltip += "</span>"
 
-    if ch["special"] == "n":
-        tooltip += "<span><i>" + _("Special") + ": </i> PNG</span>"
-
-    elif ch["special"] == "f":
-        tooltip += "<span><i>" + _("Special") + ": </i> Filler</span>"
-
     if "player_id" in ch and ch["player_id"] > 0:
         tooltip += "<span>" + _("Player") + ": <b>" + ch["player_full"] + "</b></span>"
 

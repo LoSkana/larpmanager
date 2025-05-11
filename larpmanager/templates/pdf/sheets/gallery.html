@@ -1,8 +1,11 @@
 {% load show_tags static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
+        <title>Profiles</title>
         <meta charset="utf-8">
+        <meta name="keywords" content="none">
+        <meta name="description" content="none">
         <style>
 @media print {
   .new-page {
@@ -38,25 +41,13 @@ div { margin: 0.2em; padding: 0.2em; }
         {% if first_aid %}
             <h2 class="new-page">
                 FIRST AID
-                <img src="{% static 'larpmanager/assets/first-aid.png' %}" heigth="50px" />
+                <img src="{% static 'larpmanager/assets/first-aid.png' %}"
+                     heigth="50px"
+                     alt="first aid" />
             </h2>
             <table>
                 <tr>
                     {% for el in first_aid %}
-                        {% include "pdf/sheets/gallery_el.html" %}
-                        {% if not forloop.last and forloop.counter|divisibleby:4 %}
-                        </tr>
-                        <tr>
-                        {% endif %}
-                    {% endfor %}
-                </tr>
-            </table>
-        {% endif %}
-        {% if png %}
-            <h2 class="new-page">PNG</h2>
-            <table>
-                <tr>
-                    {% for el in png %}
                         {% include "pdf/sheets/gallery_el.html" %}
                         {% if not forloop.last and forloop.counter|divisibleby:4 %}
                         </tr>

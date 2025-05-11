@@ -202,14 +202,6 @@ function in_spec(el) {
 
     if (el['player_id'] > 0) specs.add('pl');
 
-    if (el['special'] == '') specs.add('sp_r');
-    if (el['special'] == 'f') specs.add('sp_f');
-    if (el['special'] == 'n') specs.add('sp_n');
-
-    if (el['gender'] == 'm') specs.add('g_m');
-    if (el['gender'] == 'f') specs.add('g_f');
-    if (el['gender'] == 'u') specs.add('g_u');
-
     return check_selection('spec', specs)
 }
 
@@ -269,17 +261,6 @@ function search(key) {
             characters += '<div class="el"><div class="icon"><img src="{0}" /></div></div>'.format(pf);
             characters += '<div class="text"><h3><a href="{0}">{1}</a></h3>'.format(char_url.replace("/0", "/"+el['number']), name);
             characters += '<div class="go-inline"><b>{1}:</b> {0}</div>'.format(player, window['texts']['pl']);
-
-            if (el['special'] == 'n') characters += '<div class="go-inline"><b>{0}:</b> {1}.</div>'.format(window['texts']['png'], window['texts']['descr_png']);
-            if (el['special'] == 'f') characters += '<div class="go-inline"><b>{0}:</b> {1}.</div>'.format(window['texts']['filler'], window['texts']['descr_filler']);
-
-            if (el['gender']) {
-                characters += '<div class="go-inline"><b>{0}:</b> '.format(window['texts']['gender']);
-                if (el['gender'] == 'm') characters += window['texts']['man'];
-                if (el['gender'] == 'f') characters += window['texts']['fem'];
-                if (el['gender'] == 'u') characters += window['texts']['uni'];
-                characters += '</div>';
-            }
 
             for (const [k, value] of Object.entries(questions)) {
                 if (el['fields'][k]) {

@@ -51,7 +51,6 @@ class QuestionType(models.TextChoices):
     TITLE = "title", _("Title")
     MIRROR = "mirror", _("Mirror")
     PROPS = "props", _("Prop")
-    SPECIAL = "special", _("Special")
     HIDE = "hide", _("Hide")
     PROGRESS = "progress", _("Progress")
     ASSIGNED = "assigned", _("Assigned")

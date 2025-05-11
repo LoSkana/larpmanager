@@ -64,15 +64,10 @@
                         {% endif %}
                         {% if character.mirror %}
                             <div class="go-inline">
-                                <b>{% trans "Special" %}:&nbsp;</b>{% trans "Mirror (This character represents the true secret identity of oneof the other characters. Can be selected normally in casting, such as the other characters. In case is assigned to you, you will automatically assigned the true character of which it is a mirror)" %}
-                            </div>
-                        {% elif character.special == 'n' %}
-                            <div class="go-inline">
-                                <b>{% trans "Special" %}:&nbsp;</b>{% trans "NPC (This character is not selectable as a playable character, and the event will be interpreted by a staff member)" %}
-                            </div>
-                        {% elif character.special == 'f' %}
-                            <div class="go-inline">
-                                <b>{% trans "Special" %}:&nbsp;</b>{% trans "Filler (This is an character with lighter character sheet and relationships. )" %}
+                                <b>{% trans "Mirror" %}:&nbsp;</b>
+                                {% trans "This character represents the true secret identity of another character." %}
+                                {% trans "You can give a preference to play it, as with other characters." %}
+                                {% trans "If it is assigned to you, you will automatically be assigned the original character it mirrors." %}
                             </div>
                         {% endif %}
                         {% if char.player %}

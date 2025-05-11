@@ -441,8 +441,6 @@ def check_speedlarp(checks, ctx, id_number_map):
     for el in ctx["event"].get_elements(SpeedLarp).annotate(characters_map=ArrayAgg("characters")):
         check_speedlarp_prepare(el, id_number_map, speeds)
     for chnum, c in ctx["chars"].items():
-        if c["special"] in [Character.PNG, Character.FILLER]:
-            continue
         if chnum not in speeds:
             continue
         for typ in range(1, max_typ + 1):

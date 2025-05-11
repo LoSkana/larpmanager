@@ -2498,9 +2498,6 @@ msgstr ""
 msgid "Prop"
 msgstr ""
 
-msgid "Special"
-msgstr ""
-
 msgid "Hide"
 msgstr ""
 
@@ -3100,15 +3097,6 @@ msgstr ""
 msgid "Approved"
 msgstr ""
 
-msgid "No"
-msgstr ""
-
-msgid "NPC"
-msgstr ""
-
-msgid "Filler"
-msgstr ""
-
 msgid ""
 "Indicates the title of the character - it will be shown along with the name"
 msgstr ""
@@ -3116,9 +3104,6 @@ msgstr ""
 msgid ""
 "Indicate whether the character is a mirror (i.e., whether this pg shows the "
 "true secret face of another character)"
-msgstr ""
-
-msgid "Is the character a special type? If not leave blank"
 msgstr ""
 
 msgid "Cover photo fo the character"
@@ -3757,20 +3742,15 @@ msgid "Write here questions about your character directly to the authors!"
 msgstr ""
 
 msgid ""
-"Mirror (This character represents the true secret identity of oneof the "
-"other characters. Can be selected normally in casting, such as the other "
-"characters. In case is assigned to you, you will automatically assigned the "
-"true character of which it is a mirror)"
+"This character represents the true secret identity of another character."
+msgstr ""
+
+msgid "You can give a preference to play it, as with other characters."
 msgstr ""
 
 msgid ""
-"NPC (This character is not selectable as a playable character, and the event "
-"will be interpreted by a staff member)"
-msgstr ""
-
-msgid ""
-"Filler (This is an character with lighter character sheet and "
-"relationships. )"
+"If it is assigned to you, you will automatically be assigned the original "
+"character it mirrors."
 msgstr ""
 
 msgid "Public informations"
@@ -4137,9 +4117,6 @@ msgstr ""
 msgid "Insert"
 msgstr ""
 
-msgid "Regular"
-msgstr ""
-
 msgid "Click on a name to go and view it directly."
 msgstr ""
 
@@ -4159,12 +4136,6 @@ msgid "None"
 msgstr ""
 
 msgid "All"
-msgstr ""
-
-msgid "This character is played by a staff member"
-msgstr ""
-
-msgid "This character has a light game"
 msgstr ""
 
 msgid "Cancel your registration"
@@ -6128,6 +6099,9 @@ msgstr ""
 msgid "Recalculate"
 msgstr ""
 
+msgid "Filler"
+msgstr ""
+
 msgid "Waiting"
 msgstr ""
 
@@ -6311,12 +6285,6 @@ msgstr ""
 msgid "preview"
 msgstr ""
 
-msgid "gender"
-msgstr ""
-
-msgid "speciale"
-msgstr ""
-
 msgid "hide"
 msgstr ""
 
@@ -6342,9 +6310,6 @@ msgid "XP"
 msgstr ""
 
 msgid "Private informations"
-msgstr ""
-
-msgid "Sex"
 msgstr ""
 
 msgid "Informations private"
@@ -6703,23 +6668,12 @@ msgid ""
 "ticket price."
 msgstr ""
 
-msgid "Genre"
-msgstr ""
-
-msgid ""
-"Adds a 'gender' field to characters, which may be relevant in historical or "
-"thematic contexts."
-msgstr ""
-
 msgid "LAOG"
 msgstr ""
 
 msgid ""
 "Treats this event as a digital/online occurrence that does not require in-"
 "person registration."
-msgstr ""
-
-msgid "Adds a 'special' field to denote unique character types."
 msgstr ""
 
 msgid ""
@@ -7237,14 +7191,6 @@ msgstr ""
 msgid ""
 "Enables managing of entry of revenue for an event that do not originate from "
 "player registrations."
-msgstr ""
-
-msgid "Staff price"
-msgstr ""
-
-msgid ""
-"- DEPRECATED, WILL BE REMOVED - Enables a separate price for staff tickets, "
-"overriding the normal registration fee."
 msgstr ""
 
 msgid ""

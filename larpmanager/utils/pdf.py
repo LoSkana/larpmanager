@@ -241,10 +241,6 @@ def print_gallery(ctx, force=False):
         for _num, el in ctx["chars"].items():
             if "first_aid" in el and el["first_aid"] == "y":
                 ctx["first_aid"].append(el)
-        ctx["png"] = []
-        for _num, el in ctx["chars"].items():
-            if "special" in el and el["special"] == "n":
-                ctx["png"].append(el)
         fp = ctx["run"].get_gallery_filepath()
         xhtml_pdf(ctx, "pdf/sheets/gallery.html", fp)
 

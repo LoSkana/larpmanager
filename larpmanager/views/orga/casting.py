@@ -126,7 +126,7 @@ def get_casting_choices_characters(ctx, options):
     chars = RegistrationCharacterRel.objects.filter(reg__run=ctx["run"]).values_list("character_id", flat=True)
 
     # remove characters that are mirrors
-    que = ctx["event"].get_elements(Character).exclude(special=Character.PNG)
+    que = ctx["event"].get_elements(Character)
     for c in que.exclude(hide=True):
         if allowed and c.id not in allowed:
             continue
