@@ -11,9 +11,6 @@ msgstr "Podle"
 msgid "Hi"
 msgstr "Ahoj"
 
-msgid "No"
-msgstr "Ne"
-
 msgid "To"
 msgstr "A"
 
@@ -47,9 +44,6 @@ msgstr "Konec"
 msgid "Fee"
 msgstr "Poplatek"
 
-msgid "NPC"
-msgstr "PNG"
-
 msgid "Net"
 msgstr "Net"
 
@@ -64,9 +58,6 @@ msgstr "Pdf"
 
 msgid "Run"
 msgstr "Run"
-
-msgid "Sex"
-msgstr "Sex"
 
 msgid "VAT"
 msgstr "DPH"
@@ -327,9 +318,6 @@ msgid "First"
 msgstr "První"
 
 msgctxt "event"
-msgid "Genre"
-msgstr "Žánr"
-
 msgid "Genre"
 msgstr "Žánr"
 
@@ -618,9 +606,6 @@ msgstr "Hlasování"
 msgid "XP tot"
 msgstr "Px Tot"
 
-msgid "gender"
-msgstr "žánr"
-
 msgid "issued"
 msgstr "vydáno"
 
@@ -780,9 +765,6 @@ msgstr "Příjem"
 msgid "Refunds"
 msgstr "Náhrady"
 
-msgid "Regular"
-msgstr "Pravidelné"
-
 msgid "Request"
 msgstr "Žádost"
 
@@ -800,9 +782,6 @@ msgstr "Kyvadlová doprava"
 
 msgid "Sign In"
 msgstr "Přihlásit se"
-
-msgid "Special"
-msgstr "Speciální"
 
 msgid "Station"
 msgstr "Pracovní stanice"
@@ -1130,9 +1109,6 @@ msgstr "pozitivní"
 
 msgid "residues"
 msgstr "rezidua"
-
-msgid "speciale"
-msgstr "speciální"
 
 msgid "website!"
 msgstr "webové stránky!"
@@ -1676,9 +1652,6 @@ msgstr "Zobrazit uzavřeno"
 
 msgid "Simple list"
 msgstr "Jednoduchý seznam"
-
-msgid "Staff price"
-msgstr "Cena pro zaměstnance"
 
 msgid "Text (long)"
 msgstr "Text (dlouhý)"
@@ -3881,9 +3854,6 @@ msgstr "Dosud jste zaplatili celkem"
 msgid "Surcharge applied to the ticket"
 msgstr "Příplatek k jízdence"
 
-msgid "This character has a light game"
-msgstr "Tato postava má lehkou hru"
-
 msgid "To log back in with the account"
 msgstr "Opětovné přihlášení pomocí účtu"
 
@@ -4414,9 +4384,6 @@ msgstr "Připomenutí sestavení profilu pro %(event)s"
 msgid "The first line is the names of the fields:"
 msgstr "Na prvním řádku jsou názvy polí:"
 
-msgid "This character is played by a staff member"
-msgstr "Tuto postavu hraje člen personálu"
-
 msgid "This page shows for an element its history"
 msgstr "Tato stránka zobrazuje pro prvek historické"
 
@@ -4814,9 +4781,6 @@ msgstr "Pokud chcete, můžete předchozí předběžné registrace smazat."
 msgid "Indicates the currency in which to receive payments"
 msgstr "Uvádí měnu, ve které se mají přijímat platby"
 
-msgid "Is the character a special type? If not leave blank"
-msgstr "Jedná se o speciální typ postavy? Pokud ne, nechte prázdné."
-
 msgid "Thank you for choosing to be part of our community!"
 msgstr "Děkujeme, že jste se rozhodli být součástí naší komunity!"
 
@@ -5028,9 +4992,6 @@ msgstr "Abyste mohli vybrat své preference, musíte být zaregistrováni!"
 
 msgid "Your membership application was successfully submitted!"
 msgstr "Vaše žádost o členství byla úspěšně odeslána!"
-
-msgid "Adds a 'special' field to denote unique character types."
-msgstr "Přidá pole \"special\" pro označení jedinečných typů znaků."
 
 msgid "Application to be given to them to sign and then upload:"
 msgstr "Žádost je třeba podepsat a poté nahrát:"
@@ -5320,6 +5281,9 @@ msgstr "Označuje, zda je sleva viditelná a použitelná pro hráče."
 
 msgid "Questions for the co-creation section, editable only by authors"
 msgstr "Otázky pro sekci spoluvytváření, editovatelné pouze autory"
+
+msgid "You can give a preference to play it, as with other characters."
+msgstr "Stejně jako u ostatních postav můžete dát přednost jeho hraní."
 
 msgid "Your preferences have been saved in the system (in that order):"
 msgstr "Vaše předvolby byly uloženy do systému (v tomto pořadí):"
@@ -5754,6 +5718,10 @@ msgstr ""
 "Vámi požadovaný běh je viditelný pouze pro hráče přihlášené do systému."
 
 msgid ""
+"This character represents the true secret identity of another character."
+msgstr "Tato postava představuje skutečnou tajnou identitu jiné postavy."
+
+msgid ""
 "Allows the organisation to award badges and enables a public leaderboard."
 msgstr "Umožňuje organizaci udělovat odznaky a umožňuje veřejný žebříček."
 
@@ -6030,11 +5998,6 @@ msgid ""
 msgstr ""
 "Odpovězte na následující otázky. Vyberte *všechny* odpovědi, které se vám "
 "zdají správné."
-
-msgid ""
-"Filler (This is an character with lighter character sheet and relationships."
-" )"
-msgstr "Výplň (Jedná se o vedlejší postavu s kartou a lehkými vazbami. )"
 
 msgid ""
 "If checked, make the presentations (public information) visible to all "
@@ -6898,13 +6861,6 @@ msgstr ""
 "aktualizace k odběru."
 
 msgid ""
-"Adds a 'gender' field to characters, which may be relevant in historical or "
-"thematic contexts."
-msgstr ""
-"Přidává k postavám pole \"pohlaví\", které může být důležité v historickém "
-"nebo tematickém kontextu."
-
-msgid ""
 "Automatically generates a customizable PDF receipt for each payment and "
 "emails it to the user."
 msgstr ""
@@ -6979,6 +6935,13 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, náhledy jsou viditelné a vyhrazené pouze pro hráče, "
 "kterému je položka přiřazena."
+
+msgid ""
+"If it is assigned to you, you will automatically be assigned the original "
+"character it mirrors."
+msgstr ""
+"Pokud je vám přiřazena, bude vám automaticky přiřazena původní postava, "
+"kterou zrcadlí."
 
 #, python-format
 msgid ""
@@ -7806,13 +7769,6 @@ msgstr ""
 "jednoho z našich zážitků!"
 
 msgid ""
-"- DEPRECATED, WILL BE REMOVED - Enables a separate price for staff tickets, "
-"overriding the normal registration fee."
-msgstr ""
-"- ZRUŠENO, BUDE ODSTRANĚNO - Umožňuje stanovit samostatnou cenu za vstupenky"
-" pro zaměstnance, která je vyšší než běžný registrační poplatek."
-
-msgid ""
 "Checks if another user is editing the same item, warning concurrent users to"
 " prevent overwriting each other's work."
 msgstr ""
@@ -7832,13 +7788,6 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, umožňuje hráčům zadávat soukromé informace o svých "
 "postavách, které jsou viditelné pouze pro ně a pro personál."
-
-msgid ""
-"NPC (This character is not selectable as a playable character, and the event"
-" will be interpreted by a staff member)"
-msgstr ""
-"NPC (Tuto postavu nelze vybrat jako hratelnou postavu a bude ji hrát člen "
-"personálu na akci)"
 
 msgid ""
 "Number of months, starting from the beginning of the membership year, for "
@@ -8844,17 +8793,6 @@ msgstr ""
 "viditelné, uveďte prosím přezdívku, která se bude zobrazovat místo nich. "
 "Poznámka: Pokud se zaregistrujete do události, bude vaše skutečné jméno a "
 "příjmení zobrazeno ostatním hráčům a organizátorům."
-
-msgid ""
-"Mirror (This character represents the true secret identity of oneof the "
-"other characters. Can be selected normally in casting, such as the other "
-"characters. In case is assigned to you, you will automatically assigned the "
-"true character of which it is a mirror)"
-msgstr ""
-"Zrcadlo (Tato postava představuje skutečnou tajnou identitu jedné z "
-"ostatních postav. Lze ji vybrat normálně při obsazování, stejně jako ostatní"
-" postavy. Pokud ji získáte, bude vám automaticky přidělena skutečná postava,"
-" jejíž je zrcadlem)."
 
 msgid ""
 "In the text of the element on the left, it appears a character with the "

@@ -105,7 +105,7 @@ def character(request, s, n, num):
         get_character_fields(ctx, only_visible=True)
 
     _casting_details(ctx, 0)
-    if ctx["casting_show_pref"] and not ctx["char"]["player_id"] and ctx["char"]["special"] != Character.PNG:
+    if ctx["casting_show_pref"] and not ctx["char"]["player_id"]:
         ctx["pref"] = get_casting_preferences(ctx["char"]["id"], ctx, 0)
 
     ctx["approval"] = ctx["event"].get_config("user_character_approval", False)
