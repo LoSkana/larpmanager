@@ -56,7 +56,6 @@ jobs:
 
     - name: Migrate database
       run: |
-        python manage.py makemigrations larpmanager
         python manage.py migrate
         python manage.py compilemessages
         python manage.py collectstatic --noinput

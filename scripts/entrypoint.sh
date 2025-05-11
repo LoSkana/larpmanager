@@ -12,7 +12,6 @@ pip install -r requirements.txt -q
 
 echo "Migrations..."
 python manage.py compilemessages
-python manage.py makemigrations larpmanager
 python manage.py migrate --noinput
 
 echo "Static files..."
