@@ -95,7 +95,6 @@ class CharacterForm(WritingForm, BaseCharacterForm):
             "text",
             "props",
             "mirror",
-            "special",
             "hide",
             "cover",
             "player",
@@ -182,7 +181,7 @@ class CharacterForm(WritingForm, BaseCharacterForm):
         )
 
         # STANDARD FIELDS
-        st_fields = ["title", "mirror", "special", "hide"]
+        st_fields = ["title", "mirror", "hide"]
         for s in st_fields:
             if s in self.fields and s not in self.params["features"]:
                 del self.fields[s]
@@ -194,7 +193,6 @@ class CharacterForm(WritingForm, BaseCharacterForm):
                 "assigned",
                 "props",
                 "mirror",
-                "special",
                 "hide",
                 "cover",
                 "characters",
@@ -296,7 +294,6 @@ class OrgaCharacterForm(CharacterForm):
             st_fields = [
                 "title",
                 "mirror",
-                "special",
                 "hide",
                 "progress",
                 "assigned",

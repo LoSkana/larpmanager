@@ -18,12 +18,6 @@
         {% if features.preview %}
             <a href="#" class="my_toggle" tog='preview'>{% trans "preview" %}</a>
         {% endif %}
-        {% if features.gender %}
-            <a href="#" class="my_toggle" tog='gend'>{% trans "gender" %}</a>
-        {% endif %}
-        {% if features.special %}
-            <a href="#" class="my_toggle" tog='spec'>{% trans "speciale" %}</a>
-        {% endif %}
         {% if features.hide %}
             <a href="#" class="my_toggle" tog='nasc'>{% trans "hide" %}</a>
         {% endif %}
@@ -83,12 +77,6 @@
                     <th class="hide status">{% trans "Status" %}</th>
                 {% endif %}
                 {% if features.faction %}<th>{{ fields_name.faction }}</th>{% endif %}
-                {% if features.gender %}
-                    <th class="hide gend">{% trans "Sex" %}</th>
-                {% endif %}
-                {% if features.special %}
-                    <th class="hide spec">{% trans "Special" %}</th>
-                {% endif %}
                 {% if features.mirror %}
                     <th class="hide mirr">{% trans "Mirror" %}</th>
                 {% endif %}
@@ -168,12 +156,6 @@
                             {% endfor %}
                         </td>
                     {% endif %}
-                    {% if features.gender %}
-                        <td class="hide gend">
-                            <p>{{ el.get_gender_display | safe | striptags |slice:":3" }}</p>
-                        </td>
-                    {% endif %}
-                    {% if features.special %}<td class="hide spec">{{ el.is_special }}</td>{% endif %}
                     {% if features.mirror %}
                         <td class="hide mirr">
                             {% if el.mirror %}<i>{{ el.mirror }}</i>{% endif %}

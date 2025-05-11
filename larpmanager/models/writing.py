@@ -114,7 +114,6 @@ class Writing(BaseConceptModel):
             ("title", "short text, the title of the element"),
             ("mirror", "number, the number of the element mirroring"),
             ("props", "short text, the props of the element"),
-            ("special", "single character, n (NPC), f (filler)"),
             ("cover", "url of the element cover"),
             ("hide", "single character, t (true), f (false)"),
         ]:
@@ -134,15 +133,6 @@ class CharacterStatus(models.TextChoices):
 
 
 class Character(Writing):
-    NO = ""
-    PNG = "n"
-    FILLER = "f"
-    SPECIAL_CHOICES = [
-        (NO, _("No")),
-        (PNG, _("NPC")),
-        (FILLER, _("Filler")),
-    ]
-
     title = models.CharField(
         max_length=100,
         blank=True,
@@ -159,14 +149,6 @@ class Character(Writing):
             "Indicate whether the character is a mirror (i.e., whether this pg shows the true "
             "secret face of another character)"
         ),
-    )
-
-    special = models.CharField(
-        max_length=1,
-        choices=SPECIAL_CHOICES,
-        default=NO,
-        blank=True,
-        help_text=_("Is the character a special type? If not leave blank"),
     )
 
     characters = models.ManyToManyField(
@@ -214,7 +196,7 @@ class Character(Writing):
     def show(self, event=None):
         js = super().show(event)
 
-        for s in ["title", "special", "gender"]:
+        for s in ["title"]:
             self.upd_js_attr(js, s)
 
         if self.player:
@@ -262,12 +244,6 @@ class Character(Writing):
             js["factions"].append(g.number)
         if not primary:
             js["factions"].append(0)
-
-    def is_special(self):
-        if self.special == self.NO:
-            return ""
-        # noinspection PyUnresolvedReferences
-        return self.get_special_display()
 
     @staticmethod
     def get_character_filepath(run):

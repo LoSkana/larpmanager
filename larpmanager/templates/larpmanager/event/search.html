@@ -95,20 +95,6 @@
             <hr />
             {% trans "Player" %}:
             <a typ="spec" href="#" tog="pl">{% trans "Assigned" %}</a>
-            {% if features.special %}
-                - {% trans "Type" %}:
-                <a typ="spec" href="#" tog="sp_r">{% trans "Regular" %}</a>
-                {% if features.filler %}
-                    <a typ="spec" href="#" tog="sp_f">{% trans "Filler" %}</a>
-                {% endif %}
-                <a typ="spec" href="#" tog="sp_n">{% trans "NPC" %}</a>
-            {% endif %}
-            {% if features.gender %}
-                - {% trans "Gender" %}:
-                <a typ="spec" href="#" tog="g_m">{% trans "Male" %}</a>
-                <a typ="spec" href="#" tog="g_f">{% trans "Female" %}</a>
-                <a typ="spec" href="#" tog="g_u">{% trans "Unisex" %}</a>
-            {% endif %}
         </div>
         <div class="hide link_list">
             <hr />
@@ -168,19 +154,11 @@ window['show_teaser'] = {% if show_teaser %} true {% else %} false {% endif %};
 window['texts'] = {
     'abs': '{% trans "Absent" %}',
     'pl': '{% trans "Player" %}',
-    'png': '{% trans "NPC" %}',
-    'filler': '{% trans "Filler" %}',
-    'gender': '{% trans "Gender" %}',
-    'man': '{% trans "Male" %}',
-    'fem': '{% trans "Female" %}',
-    'uni': '{% trans "Unisex" %}',
     'cfields': '{% trans "Additional fields" %}',
     'factions': '{% trans "Factions" %}',
     'specs': '{% trans "Features" %}',
     'none': '{% trans "None" %}',
     'all': '{% trans "All" %}',
-    'descr_png': '{% trans "This character is played by a staff member" %}',
-    'descr_filler': '{% trans "This character has a light game" %}'
 }
 
 window['fields'] = {}

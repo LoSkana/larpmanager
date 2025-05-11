@@ -11,9 +11,6 @@ msgstr "Por"
 msgid "Hi"
 msgstr "Hola"
 
-msgid "No"
-msgstr "No"
-
 msgid "To"
 msgstr "A"
 
@@ -47,9 +44,6 @@ msgstr "Fin"
 msgid "Fee"
 msgstr "Tasa"
 
-msgid "NPC"
-msgstr "PNJ"
-
 msgid "Net"
 msgstr "Neto"
 
@@ -64,9 +58,6 @@ msgstr "Pdf"
 
 msgid "Run"
 msgstr "Pase"
-
-msgid "Sex"
-msgstr "Género"
 
 msgid "VAT"
 msgstr "IVA"
@@ -327,9 +318,6 @@ msgid "First"
 msgstr "Primero"
 
 msgctxt "event"
-msgid "Genre"
-msgstr "Género"
-
 msgid "Genre"
 msgstr "Género"
 
@@ -618,9 +606,6 @@ msgstr "Votar"
 msgid "XP tot"
 msgstr "Px Tot"
 
-msgid "gender"
-msgstr "género"
-
 msgid "issued"
 msgstr "publicado"
 
@@ -780,9 +765,6 @@ msgstr "Recibo"
 msgid "Refunds"
 msgstr "Reembolsos"
 
-msgid "Regular"
-msgstr "Normal"
-
 msgid "Request"
 msgstr "Solicitar"
 
@@ -800,9 +782,6 @@ msgstr "Lanzadera"
 
 msgid "Sign In"
 msgstr "Registrarse"
-
-msgid "Special"
-msgstr "Especial"
 
 msgid "Station"
 msgstr "Estación"
@@ -1130,9 +1109,6 @@ msgstr "positivo"
 
 msgid "residues"
 msgstr "residuos"
-
-msgid "speciale"
-msgstr "especial"
 
 msgid "website!"
 msgstr "sitio web"
@@ -3881,9 +3857,6 @@ msgstr "Hasta ahora ha pagado un total de"
 msgid "Surcharge applied to the ticket"
 msgstr "Recargo aplicado al billete"
 
-msgid "This character has a light game"
-msgstr "Este personaje tiene un juego ligero"
-
 msgid "To log back in with the account"
 msgstr "Para volver a conectarse con la cuenta"
 
@@ -4415,9 +4388,6 @@ msgstr "Recordatorio de compilación de perfiles para %(event)s"
 msgid "The first line is the names of the fields:"
 msgstr "La primera línea son los nombres de los campos:"
 
-msgid "This character is played by a staff member"
-msgstr "Este personaje es interpretado por un miembro del personal"
-
 msgid "This page shows for an element its history"
 msgstr "Esta página muestra el historial de un elemento"
 
@@ -4816,9 +4786,6 @@ msgstr "Si lo deseas, puedes cancelar las preinscripciones anteriores."
 msgid "Indicates the currency in which to receive payments"
 msgstr "Indica la divisa en la que se recibirán los pagos"
 
-msgid "Is the character a special type? If not leave blank"
-msgstr "¿Es el personaje de un tipo especial? Si no lo es, déjelo en blanco"
-
 msgid "Thank you for choosing to be part of our community!"
 msgstr "Gracias por elegir formar parte de nuestra comunidad."
 
@@ -5029,9 +4996,6 @@ msgstr "Debes estar registrado para poder seleccionar tus preferencias."
 
 msgid "Your membership application was successfully submitted!"
 msgstr "Su solicitud de afiliación se ha enviado correctamente."
-
-msgid "Adds a 'special' field to denote unique character types."
-msgstr "Añade un campo \"especial\" para indicar tipos de caracteres únicos."
 
 msgid "Application to be given to them to sign and then upload:"
 msgstr "Solicitud que debe firmarse y subirse a continuación:"
@@ -5340,6 +5304,9 @@ msgstr "Indica si el descuento es visible y utilizable por los jugadores"
 msgid "Questions for the co-creation section, editable only by authors"
 msgstr ""
 "Preguntas para la sección de co-creación, editables sólo por los masters"
+
+msgid "You can give a preference to play it, as with other characters."
+msgstr "Puedes dar una preferencia para jugarlo, como con otros personajes."
 
 msgid "Your preferences have been saved in the system (in that order):"
 msgstr "Sus preferencias se han guardado en el sistema (en este orden):"
@@ -5835,6 +5802,11 @@ msgstr ""
 "sistema."
 
 msgid ""
+"This character represents the true secret identity of another character."
+msgstr ""
+"Este personaje representa la verdadera identidad secreta de otro personaje."
+
+msgid ""
 "Allows the organisation to award badges and enables a public leaderboard."
 msgstr ""
 "Permite a la organización conceder insignias y habilita una clasificación "
@@ -6136,12 +6108,6 @@ msgid ""
 msgstr ""
 "Responde a las siguientes preguntas. Seleccione *todas* las respuestas que "
 "parezcan correctas."
-
-msgid ""
-"Filler (This is an character with lighter character sheet and relationships."
-" )"
-msgstr ""
-"Relleno (Se trata de un personaje secundario, con ficha y contactos breves.)"
 
 msgid ""
 "If checked, make the presentations (public information) visible to all "
@@ -7043,13 +7009,6 @@ msgstr ""
 " para que se inscriban."
 
 msgid ""
-"Adds a 'gender' field to characters, which may be relevant in historical or "
-"thematic contexts."
-msgstr ""
-"Añade un campo \"género\" a los personajes, que puede ser relevante en "
-"contextos históricos o temáticos."
-
-msgid ""
 "Automatically generates a customizable PDF receipt for each payment and "
 "emails it to the user."
 msgstr ""
@@ -7126,6 +7085,13 @@ msgid ""
 msgstr ""
 "Si está marcada, hace visible la vista previa solo para el jugador al que "
 "está asignado el elemento"
+
+msgid ""
+"If it is assigned to you, you will automatically be assigned the original "
+"character it mirrors."
+msgstr ""
+"Si se te asigna, se te asignará automáticamente el personaje original que "
+"refleja."
 
 #, python-format
 msgid ""
@@ -7985,13 +7951,6 @@ msgid ""
 msgstr ""
 "Si está marcada, permite a los jugadores introducir información privada "
 "sobre sus personajes, visible sólo para ellos y el personal."
-
-msgid ""
-"NPC (This character is not selectable as a playable character, and the event"
-" will be interpreted by a staff member)"
-msgstr ""
-"PNJ (Este personaje no es seleccionable como personaje jugable, y será "
-"interpretado por un miembro del personal en el evento)"
 
 msgid ""
 "Number of months, starting from the beginning of the membership year, for "
@@ -9036,17 +8995,6 @@ msgstr ""
 " indica un alias que se mostrará en su lugar. Nota: Si te inscribes en un "
 "evento, tu nombre y apellidos reales se mostrarán a los demás jugadores y a "
 "los organizadores."
-
-msgid ""
-"Mirror (This character represents the true secret identity of oneof the "
-"other characters. Can be selected normally in casting, such as the other "
-"characters. In case is assigned to you, you will automatically assigned the "
-"true character of which it is a mirror)"
-msgstr ""
-"Reflejo (Este personaje representa la verdadera identidad secreta de uno de "
-"los otros personajes. Puede seleccionarse normalmente en la asignación, como"
-" los demás personajes. Si se concede, se asignará automáticamente el "
-"personaje real)."
 
 msgid ""
 "In the text of the element on the left, it appears a character with the "

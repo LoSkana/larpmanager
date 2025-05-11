@@ -11,9 +11,6 @@ msgstr "Przez"
 msgid "Hi"
 msgstr "Cześć"
 
-msgid "No"
-msgstr "Nie"
-
 msgid "To"
 msgstr "Do"
 
@@ -47,9 +44,6 @@ msgstr "Koniec"
 msgid "Fee"
 msgstr "Opłata"
 
-msgid "NPC"
-msgstr "NPC"
-
 msgid "Net"
 msgstr "Netto"
 
@@ -64,9 +58,6 @@ msgstr "Pdf"
 
 msgid "Run"
 msgstr "Run"
-
-msgid "Sex"
-msgstr "Seks"
 
 msgid "VAT"
 msgstr "VAT"
@@ -327,9 +318,6 @@ msgid "First"
 msgstr "Pierwszy"
 
 msgctxt "event"
-msgid "Genre"
-msgstr "Gatunek"
-
 msgid "Genre"
 msgstr "Gatunek"
 
@@ -618,9 +606,6 @@ msgstr "Głosowanie"
 msgid "XP tot"
 msgstr "XP tot"
 
-msgid "gender"
-msgstr "płeć"
-
 msgid "issued"
 msgstr "wydany"
 
@@ -780,9 +765,6 @@ msgstr "Pokwitowanie"
 msgid "Refunds"
 msgstr "Zwroty kosztów"
 
-msgid "Regular"
-msgstr "Regularny"
-
 msgid "Request"
 msgstr "Żądanie"
 
@@ -800,9 +782,6 @@ msgstr "Shuttle"
 
 msgid "Sign In"
 msgstr "Zaloguj się"
-
-msgid "Special"
-msgstr "Specjalne"
 
 msgid "Station"
 msgstr "Stacja"
@@ -1130,9 +1109,6 @@ msgstr "pozytywny"
 
 msgid "residues"
 msgstr "pozostałości"
-
-msgid "speciale"
-msgstr "speciale"
 
 msgid "website!"
 msgstr "strona internetowa!"
@@ -3881,9 +3857,6 @@ msgstr "Do tej pory zapłaciłeś łącznie"
 msgid "Surcharge applied to the ticket"
 msgstr "Dopłata zastosowana do biletu"
 
-msgid "This character has a light game"
-msgstr "Ta postać ma lekką grę"
-
 msgid "To log back in with the account"
 msgstr "Aby zalogować się ponownie przy użyciu konta"
 
@@ -4414,9 +4387,6 @@ msgstr "Przypomnienie o kompilacji profilu dla %(event)s"
 msgid "The first line is the names of the fields:"
 msgstr "Pierwszy wiersz to nazwy pól:"
 
-msgid "This character is played by a staff member"
-msgstr "Ta postać jest odgrywana przez członka personelu"
-
 msgid "This page shows for an element its history"
 msgstr "Ta strona pokazuje historię elementu"
 
@@ -4813,9 +4783,6 @@ msgstr "Jeśli chcesz, możesz usunąć wcześniejsze rejestracje wstępne."
 msgid "Indicates the currency in which to receive payments"
 msgstr "Wskazuje walutę, w której mają być odbierane płatności"
 
-msgid "Is the character a special type? If not leave blank"
-msgstr "Czy znak jest typu specjalnego? Jeśli nie, pozostaw puste pole"
-
 msgid "Thank you for choosing to be part of our community!"
 msgstr "Dziękujemy, że zdecydowałeś się być częścią naszej społeczności!"
 
@@ -5029,9 +4996,6 @@ msgstr "Musisz się zarejestrować, aby wybrać swoje preferencje!"
 
 msgid "Your membership application was successfully submitted!"
 msgstr "Twój wniosek o członkostwo został pomyślnie przesłany!"
-
-msgid "Adds a 'special' field to denote unique character types."
-msgstr "Dodaje pole \"specjalne\" do oznaczania unikalnych typów znaków."
 
 msgid "Application to be given to them to sign and then upload:"
 msgstr "Wniosek zostanie im przekazany do podpisania, a następnie przesłany:"
@@ -5334,6 +5298,10 @@ msgstr ""
 
 msgid "Questions for the co-creation section, editable only by authors"
 msgstr "Pytania do sekcji współtworzenia, edytowalne tylko przez autorów"
+
+msgid "You can give a preference to play it, as with other characters."
+msgstr ""
+"Podobnie jak w przypadku innych postaci, można wybrać preferencje gry."
 
 msgid "Your preferences have been saved in the system (in that order):"
 msgstr "Twoje preferencje zostały zapisane w systemie (w tej kolejności):"
@@ -5807,6 +5775,10 @@ msgstr ""
 "systemu."
 
 msgid ""
+"This character represents the true secret identity of another character."
+msgstr "Ta postać reprezentuje prawdziwą sekretną tożsamość innej postaci."
+
+msgid ""
 "Allows the organisation to award badges and enables a public leaderboard."
 msgstr ""
 "Umożliwia organizacji przyznawanie odznak i włącza publiczną tabelę wyników."
@@ -6103,11 +6075,6 @@ msgid ""
 msgstr ""
 "Odpowiedz na poniższe pytania. Wybierz *wszystkie* odpowiedzi, które wydają "
 "się poprawne."
-
-msgid ""
-"Filler (This is an character with lighter character sheet and relationships."
-" )"
-msgstr "Wypełniacz (jest to postać z lżejszą kartą postaci i relacjami)."
 
 msgid ""
 "If checked, make the presentations (public information) visible to all "
@@ -7003,13 +6970,6 @@ msgstr ""
 "celu zachęcenia ich do rejestracji."
 
 msgid ""
-"Adds a 'gender' field to characters, which may be relevant in historical or "
-"thematic contexts."
-msgstr ""
-"Dodaje pole \"płeć\" do postaci, co może być istotne w kontekście "
-"historycznym lub tematycznym."
-
-msgid ""
 "Automatically generates a customizable PDF receipt for each payment and "
 "emails it to the user."
 msgstr ""
@@ -7086,6 +7046,13 @@ msgid ""
 msgstr ""
 "Jeśli zaznaczone, uwidacznia podgląd, zarezerwowany tylko dla gracza, do "
 "którego przedmiot jest przypisany."
+
+msgid ""
+"If it is assigned to you, you will automatically be assigned the original "
+"character it mirrors."
+msgstr ""
+"Jeśli zostanie ona przypisana do ciebie, automatycznie zostanie ci "
+"przypisana oryginalna postać, którą odzwierciedla."
 
 #, python-format
 msgid ""
@@ -7944,13 +7911,6 @@ msgid ""
 msgstr ""
 "Jeśli opcja ta jest zaznaczona, pozwala graczom na wprowadzanie prywatnych "
 "informacji o swoich postaciach, widocznych tylko dla nich i personelu."
-
-msgid ""
-"NPC (This character is not selectable as a playable character, and the event"
-" will be interpreted by a staff member)"
-msgstr ""
-"NPC (tej postaci nie można wybrać jako postaci grywalnej, a wydarzenie "
-"zostanie zinterpretowane przez członka personelu)"
 
 msgid ""
 "Number of months, starting from the beginning of the membership year, for "
@@ -8996,17 +8956,6 @@ msgstr ""
 "publicznie, podaj pseudonim, który będzie wyświetlany zamiast nich. Uwaga: "
 "Jeśli zarejestrujesz się w wydarzeniu, Twoje prawdziwe imię i nazwisko będą "
 "widoczne dla innych graczy i organizatorów."
-
-msgid ""
-"Mirror (This character represents the true secret identity of oneof the "
-"other characters. Can be selected normally in casting, such as the other "
-"characters. In case is assigned to you, you will automatically assigned the "
-"true character of which it is a mirror)"
-msgstr ""
-"Lustro (ta postać reprezentuje prawdziwą sekretną tożsamość jednej z "
-"pozostałych postaci. Może być wybrana normalnie w castingu, tak jak inne "
-"postacie. W przypadku przypisania do ciebie, automatycznie zostanie ci "
-"przypisana prawdziwa postać, której jest lustrzanym odbiciem)."
 
 msgid ""
 "In the text of the element on the left, it appears a character with the "

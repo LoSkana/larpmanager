@@ -94,17 +94,6 @@
     placeholder: false
     order: 30
 - model: larpmanager.feature
-  pk: 14
-  fields:
-    name: Genre
-    descr: Adds a 'gender' field to characters, which may be relevant in historical
-      or thematic contexts.
-    slug: gender
-    overall: false
-    module: 1
-    placeholder: false
-    order: 60
-- model: larpmanager.feature
   pk: 15
   fields:
     name: LAOG
@@ -113,16 +102,6 @@
     slug: laog
     overall: false
     module: 7
-    placeholder: false
-    order: 70
-- model: larpmanager.feature
-  pk: 17
-  fields:
-    name: Special
-    descr: Adds a 'special' field to denote unique character types.
-    slug: special
-    overall: false
-    module: 1
     placeholder: false
     order: 70
 - model: larpmanager.feature

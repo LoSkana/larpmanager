@@ -11,9 +11,6 @@ msgstr "Av"
 msgid "Hi"
 msgstr "Hej"
 
-msgid "No"
-msgstr "Nej"
-
 msgid "To"
 msgstr "A"
 
@@ -47,9 +44,6 @@ msgstr "Slut"
 msgid "Fee"
 msgstr "Avgift"
 
-msgid "NPC"
-msgstr "PNG"
-
 msgid "Net"
 msgstr "Netto"
 
@@ -64,9 +58,6 @@ msgstr "Pdf"
 
 msgid "Run"
 msgstr "Run"
-
-msgid "Sex"
-msgstr "Kön"
 
 msgid "VAT"
 msgstr "MOMS"
@@ -327,9 +318,6 @@ msgid "First"
 msgstr "Första"
 
 msgctxt "event"
-msgid "Genre"
-msgstr "Genre"
-
 msgid "Genre"
 msgstr "Genre"
 
@@ -618,9 +606,6 @@ msgstr "Omröstning"
 msgid "XP tot"
 msgstr "Px Tot"
 
-msgid "gender"
-msgstr "genre"
-
 msgid "issued"
 msgstr "utfärdade"
 
@@ -780,9 +765,6 @@ msgstr "Kvitto"
 msgid "Refunds"
 msgstr "Återbetalningar"
 
-msgid "Regular"
-msgstr "Ordinarie"
-
 msgid "Request"
 msgstr "Begäran"
 
@@ -800,9 +782,6 @@ msgstr "Skyttel"
 
 msgid "Sign In"
 msgstr "Logga in"
-
-msgid "Special"
-msgstr "Särskild"
 
 msgid "Station"
 msgstr "Arbetsstation"
@@ -1130,9 +1109,6 @@ msgstr "positiv"
 
 msgid "residues"
 msgstr "restprodukter"
-
-msgid "speciale"
-msgstr "särskild"
 
 msgid "website!"
 msgstr "webbplats!"
@@ -3881,9 +3857,6 @@ msgstr "Hittills har du betalat totalt"
 msgid "Surcharge applied to the ticket"
 msgstr "Tilläggsavgift till biljett"
 
-msgid "This character has a light game"
-msgstr "Denna karaktär har ett lätt spel"
-
 msgid "To log back in with the account"
 msgstr "För att logga in igen med kontot"
 
@@ -4416,9 +4389,6 @@ msgstr "Påminnelse om sammanställning av profiler för %(event)s"
 msgid "The first line is the names of the fields:"
 msgstr "Den första raden är namnen på fälten:"
 
-msgid "This character is played by a staff member"
-msgstr "Den här karaktären spelas av en anställd"
-
 msgid "This page shows for an element its history"
 msgstr "Denna sida visar för ett element den historiska"
 
@@ -4818,9 +4788,6 @@ msgstr "Om du vill kan du radera tidigare förhandsregistreringar."
 msgid "Indicates the currency in which to receive payments"
 msgstr "Anger den valuta i vilken betalningar ska tas emot"
 
-msgid "Is the character a special type? If not leave blank"
-msgstr "Är karaktären en speciell typ? Om inte, lämna tomt"
-
 msgid "Thank you for choosing to be part of our community!"
 msgstr "Tack för att du väljer att vara en del av vår gemenskap!"
 
@@ -5040,9 +5007,6 @@ msgstr "Du måste vara registrerad för att kunna välja dina preferenser!"
 
 msgid "Your membership application was successfully submitted!"
 msgstr "Din medlemsansökan har skickats in framgångsrikt!"
-
-msgid "Adds a 'special' field to denote unique character types."
-msgstr "Lägger till ett \"special\"-fält för att ange unika teckentyper."
 
 msgid "Application to be given to them to sign and then upload:"
 msgstr "Ansökan ska undertecknas och sedan laddas upp:"
@@ -5351,6 +5315,10 @@ msgstr "Anger om rabatten är synlig och kan användas av spelare"
 msgid "Questions for the co-creation section, editable only by authors"
 msgstr ""
 "Frågor till avsnittet om medskapande, endast redigerbara av författare"
+
+msgid "You can give a preference to play it, as with other characters."
+msgstr ""
+"Du kan ange en preferens för att spela den, precis som med andra karaktärer."
 
 msgid "Your preferences have been saved in the system (in that order):"
 msgstr "Dina preferenser har sparats i systemet (i den ordningen):"
@@ -5830,6 +5798,11 @@ msgstr ""
 "systemet."
 
 msgid ""
+"This character represents the true secret identity of another character."
+msgstr ""
+"Denna karaktär representerar en annan karaktärs sanna hemliga identitet."
+
+msgid ""
 "Allows the organisation to award badges and enables a public leaderboard."
 msgstr ""
 "Gör det möjligt för organisationen att dela ut utmärkelser och aktivera en "
@@ -6117,11 +6090,6 @@ msgid ""
 "correct."
 msgstr ""
 "Svara på följande frågor. Markera *alla* svar som du tycker verkar korrekta."
-
-msgid ""
-"Filler (This is an character with lighter character sheet and relationships."
-" )"
-msgstr "Filler (Detta är en sidokaraktär, med kort- och ljusbindningar. )"
 
 msgid ""
 "If checked, make the presentations (public information) visible to all "
@@ -7023,13 +6991,6 @@ msgstr ""
 "skickas för prenumeration."
 
 msgid ""
-"Adds a 'gender' field to characters, which may be relevant in historical or "
-"thematic contexts."
-msgstr ""
-"Lägger till ett \"gender\"-fält för karaktärer, vilket kan vara relevant i "
-"historiska eller tematiska sammanhang."
-
-msgid ""
 "Automatically generates a customizable PDF receipt for each payment and "
 "emails it to the user."
 msgstr ""
@@ -7106,6 +7067,13 @@ msgid ""
 msgstr ""
 "Om markerad, gör förhandsvisningarna synliga, reserverade endast för den "
 "spelare som objektet är tilldelat"
+
+msgid ""
+"If it is assigned to you, you will automatically be assigned the original "
+"character it mirrors."
+msgstr ""
+"Om du tilldelas den kommer du automatiskt att tilldelas den ursprungliga "
+"karaktär som den speglar."
 
 #, python-format
 msgid ""
@@ -7962,13 +7930,6 @@ msgid ""
 msgstr ""
 "Om den är markerad kan spelarna ange privat information om sina karaktärer, "
 "som bara är synlig för dem själva och personalen."
-
-msgid ""
-"NPC (This character is not selectable as a playable character, and the event"
-" will be interpreted by a staff member)"
-msgstr ""
-"NPC (Denna karaktär är inte valbar som en spelbar karaktär och kommer att "
-"spelas av en anställd vid evenemanget)"
 
 msgid ""
 "Number of months, starting from the beginning of the membership year, for "
@@ -9006,17 +8967,6 @@ msgstr ""
 " allmänheten, ange ett alias som visas istället. Obs: Om du registrerar dig "
 "för ett evenemang visas ditt riktiga för- och efternamn för andra spelare "
 "och för arrangörerna."
-
-msgid ""
-"Mirror (This character represents the true secret identity of oneof the "
-"other characters. Can be selected normally in casting, such as the other "
-"characters. In case is assigned to you, you will automatically assigned the "
-"true character of which it is a mirror)"
-msgstr ""
-"Spegel (Denna rollperson representerar den sanna hemliga identiteten hos en "
-"av de andra rollpersonerna. Den kan väljas normalt i rollbesättningen, "
-"precis som de andra rollpersonerna. Om du tilldelas den kommer du "
-"automatiskt att tilldelas den verkliga rollperson vars spegel det är)."
 
 msgid ""
 "In the text of the element on the left, it appears a character with the "

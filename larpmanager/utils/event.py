@@ -163,10 +163,6 @@ def get_character_filter(ch, regs, filters):
     if "free" in filters:
         if ch.id in regs:
             return False
-    if "png" in filters and ch.special == Character.PNG:
-        return False
-    if "filler" in filters and ch.special == Character.FILLER:
-        return False
     if "mirror" in filters and ch.mirror_id:
         if ch.mirror_id in regs:
             return False

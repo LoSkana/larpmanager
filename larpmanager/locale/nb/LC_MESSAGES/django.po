@@ -11,9 +11,6 @@ msgstr "Av"
 msgid "Hi"
 msgstr "Hei"
 
-msgid "No"
-msgstr "Nei"
-
 msgid "To"
 msgstr "A"
 
@@ -47,9 +44,6 @@ msgstr "Slutt"
 msgid "Fee"
 msgstr "Avgift"
 
-msgid "NPC"
-msgstr "PNG"
-
 msgid "Net"
 msgstr "Netto"
 
@@ -64,9 +58,6 @@ msgstr "Pdf"
 
 msgid "Run"
 msgstr "Run"
-
-msgid "Sex"
-msgstr "Kjønn"
 
 msgid "VAT"
 msgstr "MVA"
@@ -327,9 +318,6 @@ msgid "First"
 msgstr "Første"
 
 msgctxt "event"
-msgid "Genre"
-msgstr "Sjanger"
-
 msgid "Genre"
 msgstr "Sjanger"
 
@@ -618,9 +606,6 @@ msgstr "Stemmegivning"
 msgid "XP tot"
 msgstr "Px Tot"
 
-msgid "gender"
-msgstr "sjanger"
-
 msgid "issued"
 msgstr "utstedt"
 
@@ -780,9 +765,6 @@ msgstr "Kvittering"
 msgid "Refunds"
 msgstr "Refusjon"
 
-msgid "Regular"
-msgstr "Vanlig"
-
 msgid "Request"
 msgstr "Forespørsel"
 
@@ -800,9 +782,6 @@ msgstr "Skyttelbuss"
 
 msgid "Sign In"
 msgstr "Logg inn"
-
-msgid "Special"
-msgstr "Spesielle"
 
 msgid "Station"
 msgstr "Arbeidsstasjon"
@@ -1130,9 +1109,6 @@ msgstr "positiv"
 
 msgid "residues"
 msgstr "rester"
-
-msgid "speciale"
-msgstr "spesiell"
 
 msgid "website!"
 msgstr "nettside!"
@@ -3881,9 +3857,6 @@ msgstr "Så langt har du betalt til sammen"
 msgid "Surcharge applied to the ticket"
 msgstr "Tillegg på billetten"
 
-msgid "This character has a light game"
-msgstr "Denne karakteren har et lett spill"
-
 msgid "To log back in with the account"
 msgstr "Slik logger du inn igjen med kontoen"
 
@@ -4416,9 +4389,6 @@ msgstr "Påminnelse om profilkompilering for %(event)s"
 msgid "The first line is the names of the fields:"
 msgstr "Den første linjen inneholder navnene på feltene:"
 
-msgid "This character is played by a staff member"
-msgstr "Denne karakteren spilles av en av våre ansatte"
-
 msgid "This page shows for an element its history"
 msgstr "Denne siden viser for et element den historiske"
 
@@ -4816,9 +4786,6 @@ msgstr "Hvis du ønsker det, kan du slette tidligere forhåndsregistreringer."
 msgid "Indicates the currency in which to receive payments"
 msgstr "Angir hvilken valuta du vil motta betalinger i"
 
-msgid "Is the character a special type? If not leave blank"
-msgstr "Er tegnet en spesiell type? Hvis ikke, la det stå tomt"
-
 msgid "Thank you for choosing to be part of our community!"
 msgstr "Takk for at du velger å være en del av vårt fellesskap!"
 
@@ -5042,9 +5009,6 @@ msgstr "Du må være registrert for å kunne velge dine preferanser!"
 
 msgid "Your membership application was successfully submitted!"
 msgstr "Medlemskapssøknaden din ble sendt inn!"
-
-msgid "Adds a 'special' field to denote unique character types."
-msgstr "Legger til et \"spesialfelt\" for å angi unike tegntyper."
 
 msgid "Application to be given to them to sign and then upload:"
 msgstr "Søknaden skal signeres og deretter lastes opp:"
@@ -5355,6 +5319,9 @@ msgstr "Angir om rabatten er synlig og kan brukes av spillerne."
 
 msgid "Questions for the co-creation section, editable only by authors"
 msgstr "Spørsmål til samskapingsdelen, kan kun redigeres av forfatterne."
+
+msgid "You can give a preference to play it, as with other characters."
+msgstr "Du kan velge å spille den, akkurat som med andre tegn."
 
 msgid "Your preferences have been saved in the system (in that order):"
 msgstr "Innstillingene dine er lagret i systemet (i den rekkefølgen):"
@@ -5828,6 +5795,12 @@ msgstr ""
 "systemet."
 
 msgid ""
+"This character represents the true secret identity of another character."
+msgstr ""
+"Denne karakteren representerer en annen karakters sanne, hemmelige "
+"identitet."
+
+msgid ""
 "Allows the organisation to award badges and enables a public leaderboard."
 msgstr ""
 "Gjør det mulig for organisasjonen å tildele merker og aktivere en offentlig "
@@ -6105,11 +6078,6 @@ msgid ""
 "Answer the following questions. Select *all* of the answers that seem "
 "correct."
 msgstr "Svar på følgende spørsmål. Velg *alle* svar som du synes er riktige."
-
-msgid ""
-"Filler (This is an character with lighter character sheet and relationships."
-" )"
-msgstr "Filler (Dette er en sidekarakter, med kort og lette bånd)."
 
 msgid ""
 "If checked, make the presentations (public information) visible to all "
@@ -6998,13 +6966,6 @@ msgstr ""
 "for abonnement."
 
 msgid ""
-"Adds a 'gender' field to characters, which may be relevant in historical or "
-"thematic contexts."
-msgstr ""
-"Legger til et \"kjønn\"-felt for karakterer, noe som kan være relevant i "
-"historiske eller tematiske sammenhenger."
-
-msgid ""
 "Automatically generates a customizable PDF receipt for each payment and "
 "emails it to the user."
 msgstr ""
@@ -7081,6 +7042,13 @@ msgid ""
 msgstr ""
 "Hvis avkrysset, blir forhåndsvisningene synlige, men forbeholdt spilleren "
 "som har fått tildelt elementet."
+
+msgid ""
+"If it is assigned to you, you will automatically be assigned the original "
+"character it mirrors."
+msgstr ""
+"Hvis du får den tildelt, vil du automatisk få tildelt den opprinnelige "
+"karakteren den speiler."
 
 #, python-format
 msgid ""
@@ -7937,13 +7905,6 @@ msgid ""
 msgstr ""
 "Hvis det er krysset av, kan spillerne legge inn privat informasjon om "
 "karakterene sine, som bare er synlig for dem selv og personalet."
-
-msgid ""
-"NPC (This character is not selectable as a playable character, and the event"
-" will be interpreted by a staff member)"
-msgstr ""
-"NPC (Denne karakteren kan ikke velges som en spillbar karakter, og vil bli "
-"spilt av en ansatt på arrangementet)."
 
 msgid ""
 "Number of months, starting from the beginning of the membership year, for "
@@ -8982,17 +8943,6 @@ msgstr ""
 "synlig for offentligheten, kan du angi et alias som vises i stedet. Merk: "
 "Hvis du melder deg på et arrangement, vil ditt virkelige for- og etternavn "
 "vises til andre spillere og til arrangørene."
-
-msgid ""
-"Mirror (This character represents the true secret identity of oneof the "
-"other characters. Can be selected normally in casting, such as the other "
-"characters. In case is assigned to you, you will automatically assigned the "
-"true character of which it is a mirror)"
-msgstr ""
-"Speil (Denne figuren representerer den sanne, hemmelige identiteten til en "
-"av de andre figurene. Den kan velges på vanlig måte ved casting, på samme "
-"måte som de andre figurene. Hvis du blir tildelt den, blir du automatisk "
-"tildelt den virkelige karakteren som den speiler seg i)."
 
 msgid ""
 "In the text of the element on the left, it appears a character with the "

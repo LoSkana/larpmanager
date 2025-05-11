@@ -11,9 +11,6 @@ msgstr "Door"
 msgid "Hi"
 msgstr "Hoi"
 
-msgid "No"
-msgstr "Geen"
-
 msgid "To"
 msgstr "A"
 
@@ -47,9 +44,6 @@ msgstr "Einde"
 msgid "Fee"
 msgstr "Vergoeding"
 
-msgid "NPC"
-msgstr "PNG"
-
 msgid "Net"
 msgstr "Netto"
 
@@ -64,9 +58,6 @@ msgstr "Pdf"
 
 msgid "Run"
 msgstr "Run"
-
-msgid "Sex"
-msgstr "Seks"
 
 msgid "VAT"
 msgstr "BTW"
@@ -327,9 +318,6 @@ msgid "First"
 msgstr "Eerste"
 
 msgctxt "event"
-msgid "Genre"
-msgstr "Genre"
-
 msgid "Genre"
 msgstr "Genre"
 
@@ -618,9 +606,6 @@ msgstr "Stemmen"
 msgid "XP tot"
 msgstr "Px Tot"
 
-msgid "gender"
-msgstr "genre"
-
 msgid "issued"
 msgstr "uitgegeven"
 
@@ -780,9 +765,6 @@ msgstr "Ontvangstbewijs"
 msgid "Refunds"
 msgstr "Terugbetalingen"
 
-msgid "Regular"
-msgstr "Regelmatig"
-
 msgid "Request"
 msgstr "Verzoek"
 
@@ -800,9 +782,6 @@ msgstr "Shuttle"
 
 msgid "Sign In"
 msgstr "Aanmelden"
-
-msgid "Special"
-msgstr "Speciaal"
 
 msgid "Station"
 msgstr "Werkstation"
@@ -1130,9 +1109,6 @@ msgstr "positief"
 
 msgid "residues"
 msgstr "residuen"
-
-msgid "speciale"
-msgstr "speciaal"
 
 msgid "website!"
 msgstr "website!"
@@ -3881,9 +3857,6 @@ msgstr "Tot nu toe heb je in totaal"
 msgid "Surcharge applied to the ticket"
 msgstr "Toeslag op ticket"
 
-msgid "This character has a light game"
-msgstr "Dit personage heeft een licht spel"
-
 msgid "To log back in with the account"
 msgstr "Om weer in te loggen met het account"
 
@@ -4418,9 +4391,6 @@ msgstr "Herinnering profielcompilatie voor %(event)s"
 msgid "The first line is the names of the fields:"
 msgstr "De eerste regel is de naam van de velden:"
 
-msgid "This character is played by a staff member"
-msgstr "Dit personage wordt gespeeld door een personeelslid"
-
 msgid "This page shows for an element its history"
 msgstr "Deze pagina toont voor een element de historische"
 
@@ -4827,9 +4797,6 @@ msgstr "Als je wilt, kun je eerdere voorregistraties verwijderen."
 msgid "Indicates the currency in which to receive payments"
 msgstr "Geeft de valuta aan waarin betalingen moeten worden ontvangen"
 
-msgid "Is the character a special type? If not leave blank"
-msgstr "Is het teken een speciaal type? Zo niet, laat leeg"
-
 msgid "Thank you for choosing to be part of our community!"
 msgstr "Bedankt dat je deel wilt uitmaken van onze gemeenschap!"
 
@@ -5063,9 +5030,6 @@ msgstr "Je moet geregistreerd zijn om je voorkeuren te kunnen selecteren!"
 
 msgid "Your membership application was successfully submitted!"
 msgstr "Je lidmaatschapsaanvraag is succesvol ingediend!"
-
-msgid "Adds a 'special' field to denote unique character types."
-msgstr "Voegt een 'speciaal' veld toe om unieke karaktertypes aan te duiden."
 
 msgid "Application to be given to them to sign and then upload:"
 msgstr "Aanvraag moet worden ondertekend en vervolgens geüpload:"
@@ -5398,6 +5362,11 @@ msgstr "Geeft aan of de korting zichtbaar en bruikbaar is voor spelers"
 
 msgid "Questions for the co-creation section, editable only by authors"
 msgstr "Vragen voor de sectie co-creatie, alleen te bewerken door auteurs"
+
+msgid "You can give a preference to play it, as with other characters."
+msgstr ""
+"Je kunt een voorkeur opgeven om ermee te spelen, net als met andere "
+"personages."
 
 msgid "Your preferences have been saved in the system (in that order):"
 msgstr "Je voorkeuren zijn opgeslagen in het systeem (in die volgorde):"
@@ -5911,6 +5880,12 @@ msgstr ""
 "aangemeld bij het systeem."
 
 msgid ""
+"This character represents the true secret identity of another character."
+msgstr ""
+"Dit personage vertegenwoordigt de ware geheime identiteit van een ander "
+"personage."
+
+msgid ""
 "Allows the organisation to award badges and enables a public leaderboard."
 msgstr ""
 "Hiermee kan de organisatie badges toekennen en een openbaar leaderboard "
@@ -6219,11 +6194,6 @@ msgid ""
 msgstr ""
 "Beantwoord de volgende vragen. Selecteer *alle* antwoorden die je juist "
 "lijken."
-
-msgid ""
-"Filler (This is an character with lighter character sheet and relationships."
-" )"
-msgstr "Filler (Dit is een nevenpersonage, met kaart en lichte banden. )"
 
 msgid ""
 "If checked, make the presentations (public information) visible to all "
@@ -7128,13 +7098,6 @@ msgstr ""
 "inschrijving worden verzonden."
 
 msgid ""
-"Adds a 'gender' field to characters, which may be relevant in historical or "
-"thematic contexts."
-msgstr ""
-"Voegt een 'geslacht'-veld toe aan personages, wat relevant kan zijn in "
-"historische of thematische contexten."
-
-msgid ""
 "Automatically generates a customizable PDF receipt for each payment and "
 "emails it to the user."
 msgstr ""
@@ -7211,6 +7174,13 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, worden de voorvertoningen zichtbaar, maar "
 "alleen voor de speler aan wie het item is toegewezen."
+
+msgid ""
+"If it is assigned to you, you will automatically be assigned the original "
+"character it mirrors."
+msgstr ""
+"Als het aan jou wordt toegewezen, krijg je automatisch het originele "
+"personage toegewezen dat het spiegelt."
 
 #, python-format
 msgid ""
@@ -8071,13 +8041,6 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, kunnen spelers privé-informatie over hun "
 "personages invoeren die alleen zichtbaar is voor henzelf en de staf."
-
-msgid ""
-"NPC (This character is not selectable as a playable character, and the event"
-" will be interpreted by a staff member)"
-msgstr ""
-"NPC (Dit personage kan niet worden geselecteerd als speelbaar personage en "
-"wordt gespeeld door een personeelslid tijdens het evenement)"
 
 msgid ""
 "Number of months, starting from the beginning of the membership year, for "
@@ -9145,17 +9108,6 @@ msgstr ""
 "zichtbaar zijn, geef dan een alias op die in plaats daarvan wordt "
 "weergegeven. Opmerking: Als je je registreert voor een evenement, worden je "
 "echte voor- en achternaam getoond aan andere spelers en de organisatoren."
-
-msgid ""
-"Mirror (This character represents the true secret identity of oneof the "
-"other characters. Can be selected normally in casting, such as the other "
-"characters. In case is assigned to you, you will automatically assigned the "
-"true character of which it is a mirror)"
-msgstr ""
-"Spiegel (Dit personage vertegenwoordigt de ware geheime identiteit van een "
-"van de andere personages. Het kan normaal worden gekozen bij het casten, net"
-" als de andere personages. Als je het krijgt, krijg je automatisch het echte"
-" personage toegewezen van wie de spiegel is)."
 
 msgid ""
 "In the text of the element on the left, it appears a character with the "

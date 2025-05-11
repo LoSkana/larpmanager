@@ -11,9 +11,6 @@ msgstr "Da"
 msgid "Hi"
 msgstr "Ciao"
 
-msgid "No"
-msgstr "No"
-
 msgid "To"
 msgstr "A"
 
@@ -47,9 +44,6 @@ msgstr "Fine"
 msgid "Fee"
 msgstr "Fee"
 
-msgid "NPC"
-msgstr "PNG"
-
 msgid "Net"
 msgstr "Netto"
 
@@ -64,9 +58,6 @@ msgstr "Pdf"
 
 msgid "Run"
 msgstr "Run"
-
-msgid "Sex"
-msgstr "Sex"
 
 msgid "VAT"
 msgstr "IVA"
@@ -327,9 +318,6 @@ msgid "First"
 msgstr "Primo"
 
 msgctxt "event"
-msgid "Genre"
-msgstr "Genere"
-
 msgid "Genre"
 msgstr "Genere"
 
@@ -618,9 +606,6 @@ msgstr "Votazioni"
 msgid "XP tot"
 msgstr "Px Tot"
 
-msgid "gender"
-msgstr "genere"
-
 msgid "issued"
 msgstr "emessi"
 
@@ -780,9 +765,6 @@ msgstr "Receipt"
 msgid "Refunds"
 msgstr "Rimborsi"
 
-msgid "Regular"
-msgstr "Regular"
-
 msgid "Request"
 msgstr "Richiesta"
 
@@ -800,9 +782,6 @@ msgstr "Navetta"
 
 msgid "Sign In"
 msgstr "Sign In"
-
-msgid "Special"
-msgstr "Special"
 
 msgid "Station"
 msgstr "Postazione"
@@ -1130,9 +1109,6 @@ msgstr "positivi"
 
 msgid "residues"
 msgstr "residui"
-
-msgid "speciale"
-msgstr "special"
 
 msgid "website!"
 msgstr "sito web!"
@@ -3881,9 +3857,6 @@ msgstr "Finora hai versato un totale di"
 msgid "Surcharge applied to the ticket"
 msgstr "Sovraprezzo applicato al biglietto"
 
-msgid "This character has a light game"
-msgstr "Questo personaggio ha un gioco leggero"
-
 msgid "To log back in with the account"
 msgstr "Per tornare ad essere collegato con l'account"
 
@@ -4415,9 +4388,6 @@ msgstr "Reminder compilazione profilo per %(event)s"
 msgid "The first line is the names of the fields:"
 msgstr "La prima riga sono i nomi dei campi: "
 
-msgid "This character is played by a staff member"
-msgstr "Questo personaggio è interpretato da un membro dello staff"
-
 msgid "This page shows for an element its history"
 msgstr "Questa pagina mostra per un elemento lo storico"
 
@@ -4815,9 +4785,6 @@ msgstr "Se lo desideri, puoi cancellare le pre-iscrizioni passate."
 msgid "Indicates the currency in which to receive payments"
 msgstr "Indica la valuta in cui ricevere i pagamenti"
 
-msgid "Is the character a special type? If not leave blank"
-msgstr "Il personaggio è di tipo speciale? Se no lascia vuoto"
-
 msgid "Thank you for choosing to be part of our community!"
 msgstr "Ti ringraziamo per aver scelto di far parte della nostra community!"
 
@@ -5035,9 +5002,6 @@ msgstr "Devi essere iscritto per poter selezionare le tue preferenze!"
 
 msgid "Your membership application was successfully submitted!"
 msgstr "La tua richiesta di socio è stata inviata con successo!"
-
-msgid "Adds a 'special' field to denote unique character types."
-msgstr "Aggiunge un campo \"speciale\" per indicare tipi di caratteri unici."
 
 msgid "Application to be given to them to sign and then upload:"
 msgstr "Richiesta di iscrizione da dargli da firmare e poi caricare:"
@@ -5368,6 +5332,10 @@ msgstr "Indica se lo sconto è visibile ed utilizzabile dai giocatori"
 msgid "Questions for the co-creation section, editable only by authors"
 msgstr ""
 "Domande per la sezione di co-creazione, modificabili solo dagli autori"
+
+msgid "You can give a preference to play it, as with other characters."
+msgstr ""
+"È possibile dare una preferenza per giocarlo, come per gli altri personaggi."
 
 msgid "Your preferences have been saved in the system (in that order):"
 msgstr "A sistema sono state salvate le tue preferenze (nell'ordine):"
@@ -5882,6 +5850,12 @@ msgstr ""
 "La run che hai richiesto è visibile solo ai giocatori loggati al sistema."
 
 msgid ""
+"This character represents the true secret identity of another character."
+msgstr ""
+"Questo personaggio rappresenta la vera identità segreta di un altro "
+"personaggio."
+
+msgid ""
 "Allows the organisation to award badges and enables a public leaderboard."
 msgstr ""
 "Permette all'organizzazione di assegnare badge e di attivare una classifica "
@@ -6192,12 +6166,6 @@ msgid ""
 msgstr ""
 "Rispondi alle seguenti domande. Seleziona *tutte* le risposte che ti "
 "sembrano corrette."
-
-msgid ""
-"Filler (This is an character with lighter character sheet and relationships."
-" )"
-msgstr ""
-"Filler (Questo è un personaggio di contorno, con scheda e legami leggeri. )"
 
 msgid ""
 "If checked, make the presentations (public information) visible to all "
@@ -7104,13 +7072,6 @@ msgstr ""
 "farli iscrivere."
 
 msgid ""
-"Adds a 'gender' field to characters, which may be relevant in historical or "
-"thematic contexts."
-msgstr ""
-"Aggiunge un campo \"genere\" ai personaggi, che può essere rilevante in "
-"contesti storici o tematici."
-
-msgid ""
 "Automatically generates a customizable PDF receipt for each payment and "
 "emails it to the user."
 msgstr ""
@@ -7188,6 +7149,13 @@ msgid ""
 msgstr ""
 "Se checkato, rende visibile le anteprime, riservate solo al giocatore a cui "
 "è assegnato l'elemento"
+
+msgid ""
+"If it is assigned to you, you will automatically be assigned the original "
+"character it mirrors."
+msgstr ""
+"Se ti viene assegnato, vi verrà automaticamente assegnato il personaggio "
+"originale che rispecchia."
 
 #, python-format
 msgid ""
@@ -8048,13 +8016,6 @@ msgid ""
 msgstr ""
 "Se checkato, permette ai giocatori di inserire delle informazioni private "
 "sui loro personaggi, visibili solo a loro ed allo staff"
-
-msgid ""
-"NPC (This character is not selectable as a playable character, and the event"
-" will be interpreted by a staff member)"
-msgstr ""
-"PNG (Questo personaggio non è selezionabile come personaggio giocabile, e "
-"all'evento sarà interpretato da un membro dello staff)"
 
 msgid ""
 "Number of months, starting from the beginning of the membership year, for "
@@ -9107,17 +9068,6 @@ msgstr ""
 "pubblicamente, indica un alias che verrà mostrato al loro posto. Nota: se ti"
 " iscrivi ad un evento, il tuo nome e cognome reale verranno mostrati agli "
 "altri giocatori, ed agli organizzatori"
-
-msgid ""
-"Mirror (This character represents the true secret identity of oneof the "
-"other characters. Can be selected normally in casting, such as the other "
-"characters. In case is assigned to you, you will automatically assigned the "
-"true character of which it is a mirror)"
-msgstr ""
-"Specchio (Questo personaggio rappresenta la vera identità segreta di uno "
-"degli altri personaggi. Può venire selezionato normalmente nel casting, come"
-" gli altri personaggi. Nel caso ti venga aggiudicato, ti verrà "
-"automaticamente assegnato il vero personaggio di cui è specchio.)"
 
 msgid ""
 "In the text of the element on the left, it appears a character with the "
