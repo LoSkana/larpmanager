@@ -40,9 +40,6 @@ main/payment_settings/*
 *.pyc
 local_settings.py
 
-*/migrations/*
-!*/migrations/__init__.py
-
 venv/
 db.sqlite3
 
