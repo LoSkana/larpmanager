@@ -131,7 +131,7 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
 
 def get_run(ctx, s, n):
     try:
-        res = get_cache_run(s, n)
+        res = get_cache_run(ctx["a_id"], s, n)
         que = Run.objects.select_related("event")
         fields = [
             "search",

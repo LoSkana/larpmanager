@@ -729,7 +729,7 @@ def orga_pre_registrations(request, s, n):
 def orga_reload_cache(request, s, n):
     ctx = check_event_permission(request, s, n)
     reset_run(ctx["run"])
-    reset_cache_run(ctx["event"].slug, ctx["run"].number)
+    reset_cache_run(ctx["event"].assoc_id, ctx["event"].slug, ctx["run"].number)
     reset_event_features(ctx["event"].id)
     reset_run_event_links(ctx["event"])
     reset_cache_reg_counts(ctx["run"])
