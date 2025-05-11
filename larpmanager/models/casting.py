@@ -27,7 +27,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.models.base import BaseModel
 from larpmanager.models.event import Run
 from larpmanager.models.member import Member
-from larpmanager.models.writing import Character, Writing
+from larpmanager.models.writing import Writing
 
 
 class QuestType(Writing):
@@ -91,15 +91,6 @@ class Trait(Writing):
 
     traits = models.ManyToManyField("self", symmetrical=False)
 
-    gender = models.CharField(
-        max_length=1,
-        choices=Character.GENDER_CHOICES,
-        default=None,
-        verbose_name=_("Gender"),
-        help_text=_("Select the character's gender"),
-        null=True,
-    )
-
     keywords = models.CharField(
         max_length=500,
         help_text=_("Select the character's key words"),
@@ -125,7 +116,7 @@ class Trait(Writing):
 
     def show(self):
         js = super().show()
-        for s in ["role", "gender", "keywords", "safety"]:
+        for s in ["role", "keywords", "safety"]:
             self.upd_js_attr(js, s)
         if self.quest:
             # noinspection PyUnresolvedReferences

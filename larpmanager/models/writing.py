@@ -111,17 +111,12 @@ class Writing(BaseConceptModel):
 
         for s in [
             # ('assigned', 'email of the staff members to which to assign this element'),
-            ("motto", "short text, the motto of the element"),
             ("title", "short text, the title of the element"),
             ("mirror", "number, the number of the element mirroring"),
             ("props", "short text, the props of the element"),
-            ("role", "short text, the role of the element"),
-            ("gender", "single character, m (male), f (female), o (other)"),
             ("special", "single character, n (NPC), f (filler)"),
             ("cover", "url of the element cover"),
             ("hide", "single character, t (true), f (false)"),
-            ("keywords", "short text, the keywords of the element"),
-            ("safety", "short text, the safety of the element"),
         ]:
             (f, d) = s
             if f in features:
@@ -148,28 +143,10 @@ class Character(Writing):
         (FILLER, _("Filler")),
     ]
 
-    MALE = "m"
-    FEMALE = "f"
-    UNISEX = "u"
-    GENDER_CHOICES = [
-        (MALE, _("Male")),
-        (FEMALE, _("Female")),
-        (UNISEX, _("Unisex")),
-    ]
-
     title = models.CharField(
         max_length=100,
         blank=True,
         help_text=_("Indicates the title of the character - it will be shown along with the name"),
-    )
-
-    gender = models.CharField(
-        max_length=1,
-        choices=GENDER_CHOICES,
-        default=None,
-        verbose_name=_("Gender"),
-        help_text=_("Select the character's gender"),
-        null=True,
     )
 
     mirror = models.OneToOneField(

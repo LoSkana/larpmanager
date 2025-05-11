@@ -2325,12 +2325,6 @@ msgstr ""
 msgid "Indicates accurate safety information"
 msgstr ""
 
-msgid "Gender"
-msgstr ""
-
-msgid "Select the character's gender"
-msgstr ""
-
 msgid "Select the character's key words"
 msgstr ""
 
@@ -2709,6 +2703,9 @@ msgid "Nationality"
 msgstr ""
 
 msgid "Indicate the country of which you are a citizen"
+msgstr ""
+
+msgid "Gender"
 msgstr ""
 
 msgid "Indicates what gender you identify yourself as"
@@ -3110,9 +3107,6 @@ msgid "NPC"
 msgstr ""
 
 msgid "Filler"
-msgstr ""
-
-msgid "Unisex"
 msgstr ""
 
 msgid ""
@@ -3589,6 +3583,9 @@ msgid "Date"
 msgstr ""
 
 msgid "Location"
+msgstr ""
+
+msgid "Unisex"
 msgstr ""
 
 msgid ""

@@ -3788,9 +3788,6 @@ msgstr "Marknadsföring - webbplats, reklam"
 msgid "Request refund from: %(user)s"
 msgstr "Begär återbetalning från: %(user)s"
 
-msgid "Select the character's gender"
-msgstr "Anger karaktärens kön"
-
 msgid "Select the new ability to get"
 msgstr "Välj den nya färdighet som ska förvärvas"
 

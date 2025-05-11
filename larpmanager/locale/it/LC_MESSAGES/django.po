@@ -3788,9 +3788,6 @@ msgstr "Promozione - sito, pubblicità"
 msgid "Request refund from: %(user)s"
 msgstr "Richiesta di rimborso da: %(user)s"
 
-msgid "Select the character's gender"
-msgstr "Indica il genere del personaggio"
-
 msgid "Select the new ability to get"
 msgstr "Seleziona la nuova abilità da acquisire"
 
