@@ -743,6 +743,22 @@ msgstr ""
 msgid "If checked, PG names will be automatically replaced by a reference"
 msgstr ""
 
+msgid "Paste as text"
+msgstr ""
+
+msgid ""
+"If checked, automatically removes formatting when pasting text into the "
+"WYSIWYG editor"
+msgstr ""
+
+msgid "Safe editing"
+msgstr ""
+
+msgid ""
+"If checked, prevents multiple users from editing the same item at the same "
+"time to avoid conflicts"
+msgstr ""
+
 msgid "Campaign"
 msgstr ""
 
@@ -7160,9 +7176,6 @@ msgstr ""
 msgid ""
 "Provides users with comprehensive privacy controls to manage how their data "
 "is shared or displayed."
-msgstr ""
-
-msgid "Paste as text"
 msgstr ""
 
 msgid ""

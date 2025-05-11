@@ -1833,6 +1833,9 @@ msgstr "Rotar a la derecha"
 msgid "Run Settings"
 msgstr "Ajustes del pase"
 
+msgid "Safe editing"
+msgstr "Edición segura"
+
 msgid "Show history"
 msgstr "Exposición histórica"
 
@@ -6551,6 +6554,13 @@ msgstr ""
 "almacenan en el sistema."
 
 msgid ""
+"If checked, automatically removes formatting when pasting text into the "
+"WYSIWYG editor"
+msgstr ""
+"Si está marcada, elimina automáticamente el formato al pegar texto en el "
+"editor WYSIWYG."
+
+msgid ""
 "If you are absolutely certain that you want to delete this item, click on "
 "this button."
 msgstr ""
@@ -7237,6 +7247,13 @@ msgid ""
 msgstr ""
 "Permite gestionar la entrada de ingresos de un evento que no procedan de "
 "inscripciones de jugadores."
+
+msgid ""
+"If checked, prevents multiple users from editing the same item at the same "
+"time to avoid conflicts"
+msgstr ""
+"Si está marcada, impide que varios usuarios editen el mismo elemento al "
+"mismo tiempo para evitar conflictos."
 
 msgid ""
 "Lets you create, edit, and manage any number of registration ticket types "

@@ -89,8 +89,11 @@ def update_event_features(ev_id):
     try:
         ev = Event.objects.get(pk=ev_id)
         res = get_assoc_features(ev.assoc_id)
-        for s in ev.features.values_list("slug", flat=True):
-            res[s] = 1
+        for slug in ev.features.values_list("slug", flat=True):
+            res[slug] = 1
+        for slug in ["paste_text", "working_ticket"]:
+            if ev.get_config(f"writing_{slug}", False):
+                res[slug] = 1
         if ev.parent:
             res.update(get_event_features(ev.parent_id))
         return res

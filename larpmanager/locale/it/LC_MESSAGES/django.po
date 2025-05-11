@@ -1833,6 +1833,9 @@ msgstr "Ruota destra"
 msgid "Run Settings"
 msgstr "Impostazioni Run"
 
+msgid "Safe editing"
+msgstr "Editing sicuro"
+
 msgid "Show history"
 msgstr "Mostra storico"
 
@@ -6611,6 +6614,13 @@ msgstr ""
 "memorizzati nel sistema."
 
 msgid ""
+"If checked, automatically removes formatting when pasting text into the "
+"WYSIWYG editor"
+msgstr ""
+"Se selezionata, rimuove automaticamente la formattazione quando si incolla "
+"il testo nell'editor WYSIWYG."
+
+msgid ""
 "If you are absolutely certain that you want to delete this item, click on "
 "this button."
 msgstr ""
@@ -7301,6 +7311,13 @@ msgid ""
 msgstr ""
 "Consente di gestire le entrate di un evento che non provengono dalle "
 "iscrizioni dei giocatori."
+
+msgid ""
+"If checked, prevents multiple users from editing the same item at the same "
+"time to avoid conflicts"
+msgstr ""
+"Se selezionata, impedisce a più utenti di modificare lo stesso elemento "
+"contemporaneamente, per evitare conflitti."
 
 msgid ""
 "Lets you create, edit, and manage any number of registration ticket types "
