@@ -7178,10 +7178,6 @@ msgid ""
 "is shared or displayed."
 msgstr ""
 
-msgid ""
-"Automatically removes formatting when pasting text into the WYSIWYG editor."
-msgstr ""
-
 msgid "URL shortener"
 msgstr ""
 
@@ -7209,14 +7205,6 @@ msgstr ""
 msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "
 "popular streaming-service layouts."
-msgstr ""
-
-msgid "Write lock"
-msgstr ""
-
-msgid ""
-"Checks if another user is editing the same item, warning concurrent users to "
-"prevent overwriting each other's work."
 msgstr ""
 
 msgid "Lets you upload items from a CSV file."

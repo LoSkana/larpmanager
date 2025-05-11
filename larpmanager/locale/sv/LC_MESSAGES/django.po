@@ -1461,9 +1461,6 @@ msgstr "Två kvoter"
 msgid "Visibility"
 msgstr "Synlighet"
 
-msgid "Write lock"
-msgstr "Skrivlås"
-
 msgid "accounting"
 msgstr "redovisning"
 
@@ -5901,12 +5898,6 @@ msgid ""
 msgstr "Vi bekräftar att du har föranmält dig till <b>%(event)s</b>!"
 
 msgid ""
-"Automatically removes formatting when pasting text into the WYSIWYG editor."
-msgstr ""
-"Tar automatiskt bort formatering när du klistrar in text i WYSIWYG-"
-"redigeraren."
-
-msgid ""
 "For what time you will need transportation (time zone of the larp location)"
 msgstr ""
 "För vilken tid du kommer att behöva transport (tidszon för "
@@ -7916,13 +7907,6 @@ msgid ""
 msgstr ""
 "Dina vänner ville ge dig en speciell gåva: de gav dig chansen att delta i en"
 " av våra upplevelser!"
-
-msgid ""
-"Checks if another user is editing the same item, warning concurrent users to"
-" prevent overwriting each other's work."
-msgstr ""
-"Kontrollerar om en annan användare redigerar samma objekt, varnar samtidiga "
-"användare för att förhindra att de skriver över varandras arbete."
 
 msgid ""
 "For your convenience, this page only shows questions from the last 3 months."

@@ -1461,9 +1461,6 @@ msgstr "Dos plazos"
 msgid "Visibility"
 msgstr "Visibilidad"
 
-msgid "Write lock"
-msgstr "Bloqueo de escritura"
-
 msgid "accounting"
 msgstr "contabilidad"
 
@@ -5916,11 +5913,6 @@ msgstr ""
 "¡Le confirmamos que se ha preinscrito correctamente en <b>%(event)s</b>!"
 
 msgid ""
-"Automatically removes formatting when pasting text into the WYSIWYG editor."
-msgstr ""
-"Elimina automáticamente el formato al pegar texto en el editor WYSIWYG."
-
-msgid ""
 "For what time you will need transportation (time zone of the larp location)"
 msgstr "A qué hora necesitarás transporte (zona horaria del lugar del evento)"
 
@@ -7937,13 +7929,6 @@ msgid ""
 msgstr ""
 "Tus amigos han querido hacerte un regalo especial: ¡te han dado la "
 "oportunidad de participar en una de nuestras experiencias!"
-
-msgid ""
-"Checks if another user is editing the same item, warning concurrent users to"
-" prevent overwriting each other's work."
-msgstr ""
-"Comprueba si otro usuario está editando el mismo elemento, advirtiendo a los"
-" usuarios concurrentes para evitar sobrescribir el trabajo de los demás."
 
 msgid ""
 "For your convenience, this page only shows questions from the last 3 months."
