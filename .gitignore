@@ -2,7 +2,6 @@
 
 media/
 static-prod/
-migrations/
 .idea/
 deploy
 
