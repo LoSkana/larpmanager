@@ -1461,9 +1461,6 @@ msgstr "Zwei Quoten"
 msgid "Visibility"
 msgstr "Sichtbarkeit"
 
-msgid "Write lock"
-msgstr "Schreibsperre"
-
 msgid "accounting"
 msgstr "Buchhaltung"
 
@@ -6124,12 +6121,6 @@ msgstr ""
 "vorregistriert haben!"
 
 msgid ""
-"Automatically removes formatting when pasting text into the WYSIWYG editor."
-msgstr ""
-"Entfernt automatisch Formatierungen beim Einfügen von Text in den WYSIWYG-"
-"Editor."
-
-msgid ""
 "For what time you will need transportation (time zone of the larp location)"
 msgstr ""
 "Für welche Zeit Sie den Transport benötigen (Zeitzone des "
@@ -8169,14 +8160,6 @@ msgid ""
 msgstr ""
 "Deine Freunde wollten dir ein besonderes Geschenk machen: Sie haben dir die "
 "Chance gegeben, an einem unserer Erlebnisse teilzunehmen!"
-
-msgid ""
-"Checks if another user is editing the same item, warning concurrent users to"
-" prevent overwriting each other's work."
-msgstr ""
-"Prüft, ob ein anderer Benutzer denselben Artikel bearbeitet, und warnt "
-"gleichzeitige Benutzer, um zu verhindern, dass sie sich gegenseitig ihre "
-"Arbeit überschreiben."
 
 msgid ""
 "For your convenience, this page only shows questions from the last 3 months."

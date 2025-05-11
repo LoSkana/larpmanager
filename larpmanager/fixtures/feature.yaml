@@ -951,16 +951,6 @@
     placeholder: false
     order: 9999
 - model: larpmanager.feature
-  pk: 137
-  fields:
-    name: Paste as text
-    descr: Automatically removes formatting when pasting text into the WYSIWYG editor.
-    slug: paste_text
-    overall: false
-    module: 1
-    placeholder: false
-    order: 180
-- model: larpmanager.feature
   pk: 138
   fields:
     name: URL shortener
@@ -1014,17 +1004,6 @@
     module: 6
     placeholder: false
     order: 20
-- model: larpmanager.feature
-  pk: 147
-  fields:
-    name: Write lock
-    descr: Checks if another user is editing the same item, warning concurrent users
-      to prevent overwriting each other's work.
-    slug: working_ticket
-    overall: false
-    module: 1
-    placeholder: false
-    order: 10
 - model: larpmanager.feature
   pk: 148
   fields:

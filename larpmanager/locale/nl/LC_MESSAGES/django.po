@@ -1461,9 +1461,6 @@ msgstr "Twee quota"
 msgid "Visibility"
 msgstr "Zichtbaarheid"
 
-msgid "Write lock"
-msgstr "Schrijfslot"
-
 msgid "accounting"
 msgstr "boekhouding"
 
@@ -5996,12 +5993,6 @@ msgstr ""
 "<b>%(event)s</b>!"
 
 msgid ""
-"Automatically removes formatting when pasting text into the WYSIWYG editor."
-msgstr ""
-"Verwijdert automatisch opmaak bij het plakken van tekst in de WYSIWYG-"
-"editor."
-
-msgid ""
 "For what time you will need transportation (time zone of the larp location)"
 msgstr ""
 "Voor hoe laat je vervoer nodig hebt (tijdzone van de evenementenlocatie)"
@@ -8027,13 +8018,6 @@ msgid ""
 msgstr ""
 "Je vrienden wilden je een speciaal cadeau geven: ze gaven je de kans om deel"
 " te nemen aan een van onze ervaringen!"
-
-msgid ""
-"Checks if another user is editing the same item, warning concurrent users to"
-" prevent overwriting each other's work."
-msgstr ""
-"Controleert of een andere gebruiker hetzelfde item bewerkt, waarschuwt "
-"gelijktijdige gebruikers om te voorkomen dat ze elkaars werk overschrijven."
 
 msgid ""
 "For your convenience, this page only shows questions from the last 3 months."

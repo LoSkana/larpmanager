@@ -1461,9 +1461,6 @@ msgstr "Dvě kvóty"
 msgid "Visibility"
 msgstr "Viditelnost"
 
-msgid "Write lock"
-msgstr "Zámek pro zápis"
-
 msgid "accounting"
 msgstr "účetnictví"
 
@@ -5823,11 +5820,6 @@ msgid ""
 msgstr "Potvrzujeme, že jste se úspěšně předregistrovali na <b>%(event)s</b>!"
 
 msgid ""
-"Automatically removes formatting when pasting text into the WYSIWYG editor."
-msgstr ""
-"Automatické odstranění formátování při vkládání textu do editoru WYSIWYG."
-
-msgid ""
 "For what time you will need transportation (time zone of the larp location)"
 msgstr ""
 "Na jakou dobu budete potřebovat dopravu (časové pásmo místa konání akce)"
@@ -7784,13 +7776,6 @@ msgid ""
 msgstr ""
 "Vaši přátelé vám chtěli dát zvláštní dárek: dali vám možnost zúčastnit se "
 "jednoho z našich zážitků!"
-
-msgid ""
-"Checks if another user is editing the same item, warning concurrent users to"
-" prevent overwriting each other's work."
-msgstr ""
-"Kontroluje, zda stejnou položku neupravuje jiný uživatel, a upozorňuje "
-"souběžné uživatele, aby si navzájem nepřepisovali práci."
 
 msgid ""
 "For your convenience, this page only shows questions from the last 3 months."
