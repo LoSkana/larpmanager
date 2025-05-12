@@ -199,9 +199,6 @@ def copy(request, ctx, parent, event, element):
     if p_id == e_id:
         return messages.error(request, _("Can't copy from same event"))
 
-    if event.parent:
-        e_id = event.parent_id
-
     all = element == "all"
 
     copy_event(all, ctx, e_id, element, event, p_id, parent)
