@@ -178,7 +178,7 @@ def _get_previous(ctx, request, typ):
 
 def _check_already_done(ctx, request, typ):
     # check already done
-    if typ != 0:
+    if typ == 0:
         casting_chars = int(ctx["run"].event.get_config("casting_characters", 1))
         if ctx["run"].reg.rcrs.count() >= casting_chars:
             chars = []

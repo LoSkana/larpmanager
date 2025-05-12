@@ -3632,9 +3632,6 @@ msgstr "Bewerk de gegevens van je personage!"
 msgid "Feature already deactivated"
 msgstr "Functie al gedeactiveerd"
 
-msgid "Item assigned for this band"
-msgstr "Element toegewezen aan deze band"
-
 msgid "Loading performed, see logs"
 msgstr "Laden uitgevoerd, zie logboeken"
 
