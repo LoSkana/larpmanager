@@ -37,7 +37,6 @@ from django_ratelimit.decorators import ratelimit
 
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.cache.larpmanager import get_cache_promoters
-from larpmanager.cache.login import get_login_subdomain
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
 from larpmanager.forms.association import (
     FirstAssociationForm,
@@ -88,10 +87,6 @@ from larpmanager.utils.text import get_assoc_text
 
 
 def lm_home(request):
-    subdomain = get_login_subdomain(request)
-    if subdomain:
-        return redirect(f"https://{subdomain}.larpmanager.com")
-
     ctx = get_lm_assocs()
     ctx["index"] = True
     ctx["promoters"] = get_cache_promoters()
