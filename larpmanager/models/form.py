@@ -230,6 +230,8 @@ class WritingChoice(BaseModel):
 
     character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="choices")
 
+    element_id = models.IntegerField(blank=True, null=True)
+
     def __str__(self):
         # noinspection PyUnresolvedReferences
         return f"{self.character} ({self.question.display}) {self.option.display}"
@@ -241,6 +243,8 @@ class WritingAnswer(BaseModel):
     text = models.TextField(max_length=5000)
 
     character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="answers")
+
+    element_id = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         # noinspection PyUnresolvedReferences
