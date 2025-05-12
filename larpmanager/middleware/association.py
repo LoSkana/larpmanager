@@ -67,9 +67,8 @@ class AssociationIdentifyMiddleware:
 
         assoc_slug = request.session.get("debug_slug", None) or getattr(conf_settings, "SLUG_ASSOC", None) or domain
 
-        assoc = get_cache_assoc(assoc_slug)
-        if assoc:
-            request.assoc = redirect(f"https://larpmanager.com{request.get_full_path()}")
+        request.assoc = get_cache_assoc(assoc_slug)
+        if request.assoc:
             return
 
         if local or domain == "larpmanager":
