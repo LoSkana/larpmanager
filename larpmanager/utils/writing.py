@@ -91,7 +91,7 @@ def writing_popup_question(ctx, idx, question_idx):
     try:
         char = Character.objects.get(pk=idx, event=ctx["event"].get_class_parent(Character))
         question = WritingQuestion.objects.get(pk=question_idx, event=ctx["event"].get_class_parent(WritingQuestion))
-        el = WritingAnswer.objects.get(character=char, question=question)
+        el = WritingAnswer.objects.get(element_id=char.id, question=question)
         tx = f"<h2>{char} - {question.display}</h2>" + el.text
         return JsonResponse({"k": 1, "v": tx})
     except ObjectDoesNotExist:

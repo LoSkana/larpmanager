@@ -187,18 +187,20 @@ def orga_character_form_list(request, s, n):
 
     max_length = 100
 
+    character_ids = Character.objects.filter(event=event).values_list("id", flat=True)
+
     if q.typ in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
         cho = {}
         for opt in event.get_elements(WritingOption).filter(question=q):
             cho[opt.id] = opt.display
 
-        for el in WritingChoice.objects.filter(question=q, character__event=event):
+        for el in WritingChoice.objects.filter(question=q, element_id__in=character_ids):
             if el.character_id not in res:
                 res[el.character_id] = []
             res[el.character_id].append(cho[el.option_id])
 
     elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
-        que = WritingAnswer.objects.filter(question=q, character__event=event)
+        que = WritingAnswer.objects.filter(question=q, element_id__in=character_ids)
         que = que.annotate(short_text=Substr("text", 1, max_length))
         que = que.values("character_id", "short_text")
         for el in que:
@@ -228,7 +230,9 @@ def orga_character_form_email(request, s, n):
     for opt in event.get_elements(WritingOption).filter(question=q):
         cho[opt.id] = opt.display
 
-    for el in WritingChoice.objects.filter(question=q, character__event=event).select_related(
+    character_ids = Character.objects.filter(event=event).values_list("id", flat=True)
+
+    for el in WritingChoice.objects.filter(question=q, element_id__in=character_ids).select_related(
         "character", "character__player"
     ):
         if el.option_id not in res:

@@ -35,7 +35,7 @@ from larpmanager.models.registration import (
     RegistrationTicket,
 )
 from larpmanager.models.utils import UploadToPathAndRename, decimal_to_str
-from larpmanager.models.writing import Character, CharacterStatus, Faction
+from larpmanager.models.writing import CharacterStatus, Faction
 
 
 class QuestionType(models.TextChoices):
@@ -228,8 +228,6 @@ class WritingChoice(BaseModel):
 
     option = models.ForeignKey(WritingOption, on_delete=models.CASCADE, related_name="choices")
 
-    character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="choices")
-
     element_id = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
@@ -241,8 +239,6 @@ class WritingAnswer(BaseModel):
     question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="answers")
 
     text = models.TextField(max_length=5000)
-
-    character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="answers")
 
     element_id = models.IntegerField(blank=True, null=True)
 
