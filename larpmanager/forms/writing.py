@@ -95,6 +95,7 @@ class PlayerRelationshipForm(MyForm):
         widgets = {
             "target": EventCharacterS2Widget,
         }
+        labels = {"target": _("Character")}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

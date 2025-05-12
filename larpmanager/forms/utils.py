@@ -341,7 +341,6 @@ class EventCharacterS2:
         "number__icontains",
         "name__icontains",
         "teaser__icontains",
-        "motto__icontains",
         "title__icontains",
     ]
 
