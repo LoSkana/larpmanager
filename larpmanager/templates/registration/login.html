@@ -75,14 +75,13 @@ window.addEventListener('DOMContentLoaded', function() {
             var domain = 'https://{{ assoc.slug }}.larpmanager.com';
 
             next = /next=/g
-            if (!href.match(next)) {
-                href += 'next=' + domain;
-            } else {
+            path = ""
+            if (href.match(next))
                 aux = href.split(next);
-                href = aux[0] + 'next=' + domain + aux[1];
+                path = aux[1];
             }
 
-            href = 'https://larpmanager.com' + href;
+            href += 'next=https://larpmanager.com/after_login/' + domain + '/' + path;
             $(this).attr('href', href);
         });
 
