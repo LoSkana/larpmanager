@@ -714,4 +714,9 @@ urlpatterns = [
         views_auth.MyPasswordResetConfirmView.as_view(form_class=MyPasswordResetConfirmForm),
         name="password_reset_confirm",
     ),
+    path(
+        "login/prepare/",
+        views_base.prepare_login,
+        name="prepare_login",
+    ),
 ]

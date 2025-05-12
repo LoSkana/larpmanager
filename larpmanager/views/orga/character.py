@@ -243,9 +243,9 @@ def orga_character_form_email(request, s, n):
         char = ctx["chars"][ch_num]
         if el.option_id not in res:
             res[el.option_id] = {"emails": [], "names": []}
-        res[el.option_id]["emails"].append(char["name"])
+        res[el.option_id]["names"].append(char["name"])
         if char["player_id"]:
-            res[el.option_id]["names"].append(char["player"])
+            res[el.option_id]["emails"].append(char["player"])
 
     n_res = {}
     for opt_id, value in res.items():

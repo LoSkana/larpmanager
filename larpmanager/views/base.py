@@ -21,6 +21,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
+from larpmanager.cache.login import set_login_subdomain
 from larpmanager.cache.role import get_index_assoc_permissions
 from larpmanager.models.association import Association
 from larpmanager.utils.base import def_user_ctx
@@ -65,3 +66,8 @@ def error_404(request, exception):
 
 def error_500(request):
     return render(request, "500.html")
+
+
+# Save the domain before the login
+def prepare_login(request):
+    set_login_subdomain(request)
