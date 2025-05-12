@@ -232,7 +232,7 @@ class WritingChoice(BaseModel):
 
     def __str__(self):
         # noinspection PyUnresolvedReferences
-        return f"{self.character} ({self.question.display}) {self.option.display}"
+        return f"{self.element_id} ({self.question.display}) {self.option.display}"
 
 
 class WritingAnswer(BaseModel):
@@ -244,7 +244,7 @@ class WritingAnswer(BaseModel):
 
     def __str__(self):
         # noinspection PyUnresolvedReferences
-        return f"{self.character} ({self.question.display}) {self.text[:100]}"
+        return f"{self.element_id} ({self.question.display}) {self.text[:100]}"
 
 
 class RegistrationQuestion(BaseModel):
