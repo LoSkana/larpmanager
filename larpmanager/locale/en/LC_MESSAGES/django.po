@@ -610,17 +610,19 @@ msgid ""
 "Answers for the co-creation section, editable by both players and authors"
 msgstr ""
 
-msgid "This page allows you to add or modify a character form question."
+msgid ""
+"This page allows you to add or modify a form question for a writing element."
 msgstr ""
 
-msgid "Character Question"
+msgid "Writing Question"
 msgstr ""
 
 msgid ""
-"This page allows you to add or modify an option in a character form question."
+"This page allows you to add or modify an option in a form question for a "
+"writing element."
 msgstr ""
 
-msgid "Character option"
+msgid "Writing option"
 msgstr ""
 
 msgid "Insert the css code to customize the pdf printing"

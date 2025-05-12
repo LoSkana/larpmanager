@@ -248,8 +248,8 @@ class Event(BaseModel):
             "abilitypx",
             "deliverypx",
             "abilitytypepx",
-            "characterquestion",
-            "characteroption",
+            "writingquestion",
+            "writingoption",
         ]
 
         if self.parent and nm in elements:

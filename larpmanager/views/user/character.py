@@ -52,8 +52,8 @@ from larpmanager.models.event import (
     RunText,
 )
 from larpmanager.models.form import (
-    CharacterOption,
-    CharacterQuestion,
+    WritingOption,
+    WritingQuestion,
 )
 from larpmanager.models.miscellanea import (
     PlayerRelationship,
@@ -349,10 +349,10 @@ def get_options_dependencies(ctx):
     if "character_form" not in ctx["features"]:
         return
 
-    que = ctx["event"].get_elements(CharacterQuestion).order_by("order")
+    que = ctx["event"].get_elements(WritingQuestion).order_by("order")
     question_idxs = que.values_list("id", flat=True)
 
-    que = ctx["event"].get_elements(CharacterOption).filter(question_id__in=question_idxs)
+    que = ctx["event"].get_elements(WritingOption).filter(question_id__in=question_idxs)
     for el in que.filter(dependents__isnull=False).distinct():
         ctx["dependencies"][el.id] = list(el.dependents.values_list("id", flat=True))
 

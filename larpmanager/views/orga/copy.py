@@ -33,7 +33,7 @@ from larpmanager.models.access import EventRole
 from larpmanager.models.accounting import Discount
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, EventConfig, EventText
-from larpmanager.models.form import CharacterOption, CharacterQuestion, RegistrationOption, RegistrationQuestion
+from larpmanager.models.form import RegistrationOption, RegistrationQuestion, WritingOption, WritingQuestion
 from larpmanager.models.miscellanea import WorkshopModule, WorkshopOption, WorkshopQuestion
 from larpmanager.models.registration import (
     RegistrationInstallment,
@@ -264,10 +264,10 @@ def copy_writing(all, e_id, element, p_id):
         # correct relationship
         correct_relationship(e_id, p_id)
         # character fields
-        copy_class(e_id, p_id, CharacterQuestion)
-        copy_class(e_id, p_id, CharacterOption)
+        copy_class(e_id, p_id, WritingQuestion)
+        copy_class(e_id, p_id, WritingOption)
         copy_character_config(e_id, p_id)
-        correct_rels(e_id, p_id, CharacterQuestion, CharacterOption, "question", "display")
+        correct_rels(e_id, p_id, WritingQuestion, WritingOption, "question", "display")
     if all or element == "faction":
         copy_class(e_id, p_id, Faction)
     if all or element == "quest":

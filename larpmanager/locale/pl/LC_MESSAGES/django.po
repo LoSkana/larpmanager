@@ -2225,6 +2225,9 @@ msgstr "Identyfikator URL"
 msgid "Wanna connect?"
 msgstr "Chcesz się połączyć?"
 
+msgid "Writing option"
+msgstr "Opcja pisania"
+
 msgid "Your character"
 msgstr "Twoja postać"
 
@@ -2372,9 +2375,6 @@ msgstr "Obraz tła"
 msgid "Casting priority"
 msgstr "Priorytet odlewania"
 
-msgid "Character option"
-msgstr "Opcja znaków"
-
 msgid "Character review"
 msgstr "Przegląd postaci"
 
@@ -2521,6 +2521,9 @@ msgstr "Całkowita kolekcja"
 
 msgid "Where it is held"
 msgstr "Gdzie się odbywa"
+
+msgid "Writing Question"
+msgstr "Pytanie dotyczące pisania"
 
 msgid "Your competences"
 msgstr "Twoje kompetencje"
@@ -2707,9 +2710,6 @@ msgstr "Zatwierdzony charakter"
 
 msgid "Can't find a user?"
 msgstr "Nie możesz znaleźć użytkownika?"
-
-msgid "Character Question"
-msgstr "Pytanie dotyczące postaci"
 
 msgid "Character portrait"
 msgstr "Portret postaci"
@@ -5336,10 +5336,6 @@ msgstr "Ta strona umożliwia dodanie lub edycję pozycji środków do wypłaty."
 msgid "This page allows you to add or edit the registration surcharges."
 msgstr "Ta strona umożliwia dodawanie lub edytowanie dopłat rejestracyjnych."
 
-msgid "This page allows you to add or modify a character form question."
-msgstr ""
-"Ta strona umożliwia dodanie lub zmodyfikowanie pytania formularza postaci."
-
 msgid "This page allows you to change the general settings of this run."
 msgstr "Ta strona umożliwia zmianę ogólnych ustawień tego przebiegu."
 
@@ -5957,6 +5953,12 @@ msgstr ""
 "Część opłaty rejestracyjnej wynika tylko z wybranych opcji dodatkowych"
 
 msgid ""
+"This page allows you to add or modify a form question for a writing element."
+msgstr ""
+"Ta strona umożliwia dodanie lub zmodyfikowanie pytania formularza dla "
+"elementu zapisu."
+
+msgid ""
 "This page allows you to change the appearance and presentation of the event."
 msgstr "Ta strona umożliwia zmianę wyglądu i prezentacji wydarzenia."
 
@@ -5996,13 +5998,6 @@ msgid ""
 msgstr ""
 "Wskazanie, czy zdolność jest widoczna dla użytkowników i czy można ją "
 "swobodnie nabyć."
-
-msgid ""
-"This page allows you to add or modify an option in a character form "
-"question."
-msgstr ""
-"Ta strona umożliwia dodanie lub zmodyfikowanie opcji w pytaniu formularza "
-"znaków."
 
 msgid ""
 "This page prepares the cash balance already formatted for annual "
@@ -6731,6 +6726,13 @@ msgid ""
 msgstr ""
 "Prosimy o uważne wykonanie tych kroków - w przeciwnym razie płatność nie "
 "zostanie przetworzona!"
+
+msgid ""
+"This page allows you to add or modify an option in a form question for a "
+"writing element."
+msgstr ""
+"Ta strona umożliwia dodanie lub zmodyfikowanie opcji w pytaniu formularza "
+"dla elementu zapisu."
 
 msgid ""
 "This page allows you to set up the fields that players can fill in in their "

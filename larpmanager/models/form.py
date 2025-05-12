@@ -69,7 +69,7 @@ class QuestionVisibility(models.TextChoices):
     PRIVATE = "e", _("Private")
 
 
-class CharacterQuestion(BaseModel):
+class WritingQuestion(BaseModel):
     typ = models.CharField(
         max_length=10,
         choices=QuestionType.choices,
@@ -151,7 +151,7 @@ class CharacterQuestion(BaseModel):
 
     @staticmethod
     def get_instance_questions(event, features):
-        return CharacterQuestion.objects.filter(event=event).order_by("order")
+        return WritingQuestion.objects.filter(event=event).order_by("order")
 
     @staticmethod
     def skip(instance, features, params, orga):
@@ -167,12 +167,12 @@ class CharacterQuestion(BaseModel):
         return ", ".join([str(label) for value, label in CharacterStatus.choices if value in self.get_editable()])
 
 
-class CharacterOption(BaseModel):
+class WritingOption(BaseModel):
     search = models.CharField(max_length=1000, editable=False)
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="char_options")
 
-    question = models.ForeignKey(CharacterQuestion, on_delete=models.CASCADE, related_name="options")
+    question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="options")
 
     display = models.CharField(max_length=50)
 
@@ -223,10 +223,10 @@ class CharacterOption(BaseModel):
         return js
 
 
-class CharacterChoice(BaseModel):
-    question = models.ForeignKey(CharacterQuestion, on_delete=models.CASCADE, related_name="choices")
+class WritingChoice(BaseModel):
+    question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="choices")
 
-    option = models.ForeignKey(CharacterOption, on_delete=models.CASCADE, related_name="choices")
+    option = models.ForeignKey(WritingOption, on_delete=models.CASCADE, related_name="choices")
 
     character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="choices")
 
@@ -235,8 +235,8 @@ class CharacterChoice(BaseModel):
         return f"{self.character} ({self.question.display}) {self.option.display}"
 
 
-class CharacterAnswer(BaseModel):
-    question = models.ForeignKey(CharacterQuestion, on_delete=models.CASCADE, related_name="answers")
+class WritingAnswer(BaseModel):
+    question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="answers")
 
     text = models.TextField(max_length=5000)
 

@@ -40,13 +40,13 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.character import get_event_cache_fields
 from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.form import (
-    CharacterAnswer,
-    CharacterChoice,
-    CharacterOption,
-    CharacterQuestion,
     QuestionType,
     RegistrationOption,
     RegistrationQuestion,
+    WritingAnswer,
+    WritingChoice,
+    WritingOption,
+    WritingQuestion,
     get_ordered_registration_questions,
 )
 from larpmanager.models.member import Member
@@ -337,7 +337,7 @@ def registration_question_load(request, ctx, row, question):
         for cnt in range(num_options + 1, len(options)):
             option = options[cnt]
             option.delete()
-            save_log(request.user.member, CharacterOption, option, dl=True)
+            save_log(request.user.member, WritingOption, option, dl=True)
 
     if cr:
         return "OK - Created"
@@ -346,7 +346,7 @@ def registration_question_load(request, ctx, row, question):
 
 
 def character_question_loads(request, ctx, csv_upload):
-    questions = ctx["event"].get_elements(CharacterQuestion).order_by("order").prefetch_related("options")
+    questions = ctx["event"].get_elements(WritingQuestion).order_by("order").prefetch_related("options")
 
     tmp_file = get_csv_upload_tmp(csv_upload, ctx["run"])
     with open(tmp_file, newline="") as csvfile:
@@ -377,7 +377,7 @@ def character_question_loads(request, ctx, csv_upload):
 def character_question_load(request, ctx, row, question):
     cr = False
     if not question:
-        question = CharacterQuestion(event=ctx["event"])
+        question = WritingQuestion(event=ctx["event"])
         cr = True
 
     question.typ = row[0]
@@ -386,7 +386,7 @@ def character_question_load(request, ctx, row, question):
     question.status = row[3]
     question.visibility = row[4]
     question.save()
-    save_log(request.user.member, CharacterQuestion, question)
+    save_log(request.user.member, WritingQuestion, question)
 
     num_options = int(row[5])
     options = question.options.order_by("order")
@@ -394,7 +394,7 @@ def character_question_load(request, ctx, row, question):
         if cnt < len(options):
             option = options[cnt]
         else:
-            option = CharacterOption(event=ctx["event"], question=question)
+            option = WritingOption(event=ctx["event"], question=question)
 
         ff = 6 + cnt * 5
         option.display = row[ff]
@@ -407,7 +407,7 @@ def character_question_load(request, ctx, row, question):
         if dependent_text:
             display_list = [d.strip().lower() for d in dependent_text.split(",")]
             option.save()
-            dependent_options = CharacterOption.objects.annotate(lower_display=Lower("display")).filter(
+            dependent_options = WritingOption.objects.annotate(lower_display=Lower("display")).filter(
                 lower_display__in=display_list, event=ctx["event"]
             )
             option.dependents.set(dependent_options)
@@ -420,13 +420,13 @@ def character_question_load(request, ctx, row, question):
             )
             option.dependents.set(tickets_options)
         option.save()
-        save_log(request.user.member, CharacterOption, option)
+        save_log(request.user.member, WritingOption, option)
 
     if num_options > len(options):
         for cnt in range(num_options + 1, len(options)):
             option = options[cnt]
             option.delete()
-            save_log(request.user.member, CharacterOption, option, dl=True)
+            save_log(request.user.member, WritingOption, option, dl=True)
 
     if cr:
         return "OK - Created"
@@ -439,13 +439,13 @@ def assign_choice_answer(ctx, character, value, key):
 
     # check if answer
     if ctx["questions"][question_id]["typ"] in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
-        (car, cr) = CharacterAnswer.objects.get_or_create(character=character, question_id=question_id)
+        (car, cr) = WritingAnswer.objects.get_or_create(character=character, question_id=question_id)
         car.text = value
         car.save()
 
     # check if choice
     else:
-        CharacterChoice.objects.filter(character=character, question_id=question_id).delete()
+        WritingChoice.objects.filter(character=character, question_id=question_id).delete()
         for input_opt_orig in value.split(","):
             input_opt = input_opt_orig.lower().strip()
             option_id = None
@@ -454,7 +454,7 @@ def assign_choice_answer(ctx, character, value, key):
                     option_id = ido
             if not option_id:
                 return f" - Problem with question {key}: couldn't find option {input_opt}"
-            CharacterChoice.objects.create(character=character, question_id=question_id, option_id=option_id)
+            WritingChoice.objects.create(character=character, question_id=question_id, option_id=option_id)
 
     return ""
 

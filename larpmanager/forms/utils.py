@@ -34,7 +34,7 @@ from larpmanager.models.event import (
 )
 from larpmanager.models.experience import AbilityPx
 from larpmanager.models.form import (
-    CharacterOption,
+    WritingOption,
 )
 from larpmanager.models.member import Member, Membership
 from larpmanager.models.registration import (
@@ -360,7 +360,7 @@ class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
     pass
 
 
-class EventCharacterOptionS2Widget:
+class EventWritingOptionS2:
     search_fields = [
         "display__icontains",
         "details__icontains",
@@ -370,14 +370,14 @@ class EventCharacterOptionS2Widget:
         self.event = event
 
     def get_queryset(self):
-        return self.event.get_elements(CharacterOption)
+        return self.event.get_elements(WritingOption)
 
 
-class EventCharacterOptionS2WidgetMulti(EventCharacterOptionS2Widget, s2forms.ModelSelect2MultipleWidget):
+class EventWritingOptionS2WidgetMulti(EventWritingOptionS2, s2forms.ModelSelect2MultipleWidget):
     pass
 
 
-class EventCharacterOptionS2Widget(EventCharacterOptionS2Widget, s2forms.ModelSelect2Widget):
+class EventWritingOptionS2Widget(EventWritingOptionS2, s2forms.ModelSelect2Widget):
     pass
 
 

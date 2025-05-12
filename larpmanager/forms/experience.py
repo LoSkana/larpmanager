@@ -24,8 +24,8 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import (
     AbilityS2WidgetMulti,
-    EventCharacterOptionS2WidgetMulti,
     EventCharacterS2WidgetMulti,
+    EventWritingOptionS2WidgetMulti,
 )
 from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx
 
@@ -65,7 +65,7 @@ class OrgaAbilityPxForm(PxBaseForm):
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
             "prerequisites": AbilityS2WidgetMulti,
-            "dependents": EventCharacterOptionS2WidgetMulti,
+            "dependents": EventWritingOptionS2WidgetMulti,
         }
 
     def __init__(self, *args, **kwargs):

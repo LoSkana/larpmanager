@@ -30,15 +30,15 @@ from larpmanager.cache.registration import get_reg_counts
 from larpmanager.forms.base import BaseRegistrationForm, MyForm
 from larpmanager.forms.utils import (
     AssocMemberS2Widget,
-    EventCharacterOptionS2WidgetMulti,
     EventCharacterS2WidgetMulti,
+    EventWritingOptionS2WidgetMulti,
     TicketS2WidgetMulti,
 )
 from larpmanager.forms.writing import WritingForm
 from larpmanager.models.casting import AssignmentTrait
 from larpmanager.models.event import Run, RunText
 from larpmanager.models.experience import AbilityPx, DeliveryPx
-from larpmanager.models.form import CharacterAnswer, CharacterChoice, CharacterOption, CharacterQuestion, QuestionType
+from larpmanager.models.form import QuestionType, WritingAnswer, WritingChoice, WritingOption, WritingQuestion
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, CharacterStatus, Faction, PlotCharacterRel
 
@@ -60,10 +60,10 @@ class CharacterCocreationForm(forms.Form):
 
 class BaseCharacterForm(BaseRegistrationForm):
     gift = False
-    answer_class = CharacterAnswer
-    choice_class = CharacterChoice
-    option_class = CharacterOption
-    question_class = CharacterQuestion
+    answer_class = WritingAnswer
+    choice_class = WritingChoice
+    option_class = WritingOption
+    question_class = WritingQuestion
     instance_key = "character"
 
     def get_options_query(self, event):
@@ -507,13 +507,13 @@ class OrgaCharacterForm(CharacterForm):
         return instance
 
 
-class OrgaCharacterQuestionForm(MyForm):
-    page_info = _("This page allows you to add or modify a character form question.")
+class OrgaWritingQuestionForm(MyForm):
+    page_info = _("This page allows you to add or modify a form question for a writing element.")
 
-    page_title = _("Character Question")
+    page_title = _("Writing Question")
 
     class Meta:
-        model = CharacterQuestion
+        model = WritingQuestion
         exclude = ["order"]
         widgets = {
             "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
@@ -524,7 +524,7 @@ class OrgaCharacterQuestionForm(MyForm):
 
         # Add type of character question to the available types
         already = list(
-            CharacterQuestion.objects.filter(event=self.params["event"]).values_list("typ", flat=True).distinct()
+            WritingQuestion.objects.filter(event=self.params["event"]).values_list("typ", flat=True).distinct()
         )
         if self.instance.pk and self.instance.typ:
             already.remove(self.instance.typ)
@@ -571,16 +571,16 @@ class OrgaCharacterQuestionForm(MyForm):
         return ",".join(self.cleaned_data["editable"])
 
 
-class OrgaCharacterOptionForm(MyForm):
-    page_info = _("This page allows you to add or modify an option in a character form question.")
+class OrgaWritingOptionForm(MyForm):
+    page_info = _("This page allows you to add or modify an option in a form question for a writing element.")
 
-    page_title = _("Character option")
+    page_title = _("Writing option")
 
     class Meta:
-        model = CharacterOption
+        model = WritingOption
         exclude = ["order"]
         widgets = {
-            "dependents": EventCharacterOptionS2WidgetMulti,
+            "dependents": EventWritingOptionS2WidgetMulti,
             "question": forms.HiddenInput(),
             "tickets": TicketS2WidgetMulti,
         }

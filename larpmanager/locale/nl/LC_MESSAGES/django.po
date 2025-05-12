@@ -2225,6 +2225,9 @@ msgstr "Idenominatieve URL"
 msgid "Wanna connect?"
 msgstr "Wil je verbinding maken?"
 
+msgid "Writing option"
+msgstr "Schrijfoptie"
+
 msgid "Your character"
 msgstr "Je personage"
 
@@ -2372,9 +2375,6 @@ msgstr "Achtergrondafbeelding"
 msgid "Casting priority"
 msgstr "Voorrang bij het gieten"
 
-msgid "Character option"
-msgstr "Karakter optie"
-
 msgid "Character review"
 msgstr "Karakter recensie"
 
@@ -2521,6 +2521,9 @@ msgstr "Totale collectie"
 
 msgid "Where it is held"
 msgstr "Waar het wordt gehouden"
+
+msgid "Writing Question"
+msgstr "Schrijfvraag"
 
 msgid "Your competences"
 msgstr "Jouw vaardigheden"
@@ -2707,9 +2710,6 @@ msgstr "Goedgekeurd karakter"
 
 msgid "Can't find a user?"
 msgstr "Kun je geen gebruiker vinden?"
-
-msgid "Character Question"
-msgstr "Karakter Vraag"
 
 msgid "Character portrait"
 msgstr "Karakterportret"
@@ -5405,10 +5405,6 @@ msgid "This page allows you to add or edit the registration surcharges."
 msgstr ""
 "Op deze pagina kun je de toeslagen op abonnementen toevoegen of wijzigen."
 
-msgid "This page allows you to add or modify a character form question."
-msgstr ""
-"Op deze pagina kun je een karakterformuliervraag toevoegen of wijzigen."
-
 msgid "This page allows you to change the general settings of this run."
 msgstr "Op deze pagina kun je de algemene instellingen van deze run wijzigen."
 
@@ -6070,6 +6066,12 @@ msgstr ""
 "opties"
 
 msgid ""
+"This page allows you to add or modify a form question for a writing element."
+msgstr ""
+"Op deze pagina kun je een formuliervraag voor een schrijfelement toevoegen "
+"of wijzigen."
+
+msgid ""
 "This page allows you to change the appearance and presentation of the event."
 msgstr ""
 "Op deze pagina kun je het uiterlijk en de presentatie van het evenement "
@@ -6115,13 +6117,6 @@ msgid ""
 msgstr ""
 "Geef aan of de vaardigheid zichtbaar is voor gebruikers en vrij kan worden "
 "gekocht"
-
-msgid ""
-"This page allows you to add or modify an option in a character form "
-"question."
-msgstr ""
-"Op deze pagina kun je een optie in een karakterformuliervraag toevoegen of "
-"wijzigen."
 
 msgid ""
 "This page prepares the cash balance already formatted for annual "
@@ -6859,6 +6854,13 @@ msgid ""
 msgstr ""
 "Wees voorzichtig bij het uitvoeren van deze stappen - anders wordt je "
 "betaling niet verwerkt!"
+
+msgid ""
+"This page allows you to add or modify an option in a form question for a "
+"writing element."
+msgstr ""
+"Op deze pagina kun je een optie toevoegen of wijzigen in een formuliervraag "
+"voor een schrijfelement."
 
 msgid ""
 "This page allows you to set up the fields that players can fill in in their "

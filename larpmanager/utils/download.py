@@ -24,7 +24,7 @@ from bs4 import BeautifulSoup
 from django.http import HttpResponse
 
 from larpmanager.cache.character import get_event_cache_all, get_event_cache_fields
-from larpmanager.models.form import CharacterQuestion, get_ordered_registration_questions
+from larpmanager.models.form import WritingQuestion, get_ordered_registration_questions
 from larpmanager.utils.common import check_field
 
 
@@ -155,7 +155,7 @@ def orga_character_form_download(request, ctx):
     response, writer = get_writer(ctx, "Registration form")
     writer.writerow(["typ", "display", "description", "status", "visibility", "options"])
 
-    que = ctx["event"].get_elements(CharacterQuestion).order_by("order").prefetch_related("options")
+    que = ctx["event"].get_elements(WritingQuestion).order_by("order").prefetch_related("options")
     for el in que:
         options = el.options.order_by("order")
         row = [el.typ, el.display, el.description, el.status, el.visibility, len(options)]
