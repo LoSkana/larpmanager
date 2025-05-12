@@ -715,8 +715,13 @@ urlpatterns = [
         name="password_reset_confirm",
     ),
     path(
-        "login/prepare/",
-        views_base.prepare_login,
-        name="prepare_login",
+        "after_login/<slug:subdomain>/",
+        views_base.after_login,
+        name="after_login",
+    ),
+    path(
+        "after_login/<slug:subdomain>/<path:path>",
+        views_base.after_login,
+        name="after_login",
     ),
 ]

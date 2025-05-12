@@ -10,7 +10,7 @@
         {% with prov=el.name|lower %}
             <a href="{% provider_login_url prov %}">
                 <img src="{% static 'larpmanager/assets/' %}{{ prov }}_signin.png"
-                     alt="login image" />
+                     alt="social login" />
             </a>
         {% endwith %}
     {% endfor %}
@@ -22,7 +22,7 @@
             <div class="allauth_signin">
                 <a href="{% get_login_url 'google' %}">
                     <img src="{% static 'larpmanager/assets/' %}google_signin.png"
-                         alt="login image" />
+                         alt="social login" />
                 </a>
             </div>
         {% endif %}
@@ -68,18 +68,22 @@ window.addEventListener('DOMContentLoaded', function() {
 
     {% if  assoc.id != 0 %}
 
-        // Before sign up, save the domain where we are making the login, to perform redirect
-       $('.allauth_signin a').on('click', function(event) {
-            const link = this;
-            event.preventDefault();
+       $('.allauth_signin a').each(function(index) {
+            var href = $(this).attr('href');
+            console.log(href);
 
-            $.ajax({
-                url: '{% url 'prepare_login' %}',
-                method: 'GET',
-                complete: function() {
-                    window.location = link.href;
-                }
-            });
+            var domain = '{{ assoc.slug }}';
+
+            next = /next=/g
+            if (!href.match(next)) {
+                href += 'next=https://larpmanager.com/after_login/' + domain;
+            } else {
+                aux = href.split(next);
+                href = aux[0] + 'next=https://larpmanager.com/after_login/' + domain + '/' + aux[1];
+            }
+
+            href = 'https://larpmanager.com' + href;
+            $(this).attr('href', href);
         });
 
     {% endif %}
