@@ -235,26 +235,32 @@ def registration_status(run, user, my_regs=None, features_map=None, reg_count=No
         if not run.registration_open:
             run.status["open"] = False
             run.status["text"] = _("Registrations not open!")
+            return
         elif run.registration_open > dt:
             run.status["open"] = False
             run.status["text"] = _("Registrations not open!")
-            run.status["details"] = _("Open the: %(date)s") % {"date": run.registration_open.strftime(format_datetime)}
-        return
+            run.status["details"] = _("Opening at: %(date)s") % {
+                "date": run.registration_open.strftime(format_datetime)
+            }
+            return
 
     # signup open, not already signed in
-    if "primary" in run.status:
-        run.status["details"] = run.status["additional"]
-        mes = _("Registration is open!")
-    elif "filler" in run.status:
-        run.status["details"] = run.status["additional"]
-        mes = _("Sign up as a filler!")
-    elif "waiting" in run.status:
-        mes = _("Join the waiting list!")
-    else:
-        run.status["text"] = _("Registration closed.")
-        return
+    status = run.status
+    messages = {
+        "primary": _("Registration is open!"),
+        "filler": _("Sign up as a filler!"),
+        "waiting": _("Join the waiting list!"),
+    }
 
-    run.status["text"] = f"<a href='{register_url}'>{mes}</a>"
+    # pick the first matching message (or None)
+    mes = next((msg for key, msg in messages.items() if key in status), None)
+
+    # if it's a primary/filler, copy over the additional details
+    if mes and any(key in status for key in ("primary", "filler")):
+        status["details"] = status["additional"]
+
+    # wrap in a link if we have a message, otherwise show closed
+    status["text"] = f"<a href='{register_url}'>{mes}</a>" if mes else _("Registration closed.")
 
 
 def _get_features_map(features_map, run):

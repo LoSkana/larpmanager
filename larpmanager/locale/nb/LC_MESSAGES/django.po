@@ -2756,10 +2756,6 @@ msgstr "Kontroll av medlemsdata"
 msgid "New refund request"
 msgstr "Ny forespørsel om refusjon"
 
-#, python-format
-msgid "Open the: %(date)s"
-msgstr "Åpne: %(date)s"
-
 msgid "Organization Roles"
 msgstr "Organisasjonsroller"
 
@@ -3027,6 +3023,10 @@ msgstr "Ikke tilgjengelig, gutt"
 
 msgid "Number of passengers"
 msgstr "Antall passasjerer"
+
+#, python-format
+msgid "Opening at: %(date)s"
+msgstr "Åpning kl: %(date)s"
 
 msgid "Operation completed!"
 msgstr "Operasjon fullført!"
