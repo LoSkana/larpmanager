@@ -692,7 +692,12 @@ urlpatterns = [
         name="registration_register",
     ),
     path(
-        "login/", views_base.MyLoginView.as_view(), name="login",
+        "login/",
+        auth_views.LoginView.as_view(
+            template_name="registration/login.html",
+            authentication_form=MyAuthForm,
+        ),
+        name="login",
     ),
     path(
         "logout/",
@@ -708,10 +713,5 @@ urlpatterns = [
         "reset/<uidb64>/<token>/",
         views_auth.MyPasswordResetConfirmView.as_view(form_class=MyPasswordResetConfirmForm),
         name="password_reset_confirm",
-    ),
-    path(
-        "login/prepare/",
-        views_base.prepare_login,
-        name="prepare_login",
     ),
 ]
