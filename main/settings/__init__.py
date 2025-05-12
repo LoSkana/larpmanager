@@ -15,4 +15,3 @@ else:
             from .staging import *
     else:
         from .dev import *
-        print("### SETTINGS dev")
