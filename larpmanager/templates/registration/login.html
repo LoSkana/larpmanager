@@ -72,16 +72,17 @@ window.addEventListener('DOMContentLoaded', function() {
             var href = $(this).attr('href');
             console.log(href);
 
-            var domain = 'https://{{ assoc.slug }}.larpmanager.com';
+            var domain = '{{ assoc.slug }}';
 
             next = /next=/g
-            path = ""
-            if (href.match(next))
+            if (!href.match(next)) {
+                href += 'next=https://larpmanager.com/after_login/' + domain;
+            } else {
                 aux = href.split(next);
-                path = aux[1];
+                href = aux[0] + 'next=https://larpmanager.com/after_login/' + domain + '/' + aux[1];
             }
 
-            href += 'next=https://larpmanager.com/after_login/' + domain + '/' + path;
+            href = 'https://larpmanager.com' + href;
             $(this).attr('href', href);
         });
 

@@ -67,7 +67,5 @@ def error_500(request):
     return render(request, "500.html")
 
 
-def after_login(request, subdomain, path):
-    if not path:
-        path = ""
+def after_login(request, subdomain, path=""):
     return redirect(f"https://{subdomain}.larpmanager.com/{path}")
