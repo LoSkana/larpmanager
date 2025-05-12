@@ -72,18 +72,18 @@ window.addEventListener('DOMContentLoaded', function() {
             var href = $(this).attr('href');
             console.log(href);
 
-            var domain = '{{ assoc.slug }}';
+            const domain = '{{ assoc.slug }}';
+            let url = new URL(href || window.location.pathname, 'https://larpmanager.com');
 
-            next = /next=/g
-            if (!href.match(next)) {
-                href += 'next=https://larpmanager.com/after_login/' + domain;
-            } else {
-                aux = href.split(next);
-                href = aux[0] + 'next=https://larpmanager.com/after_login/' + domain + '/' + aux[1];
-            }
+            // build the “next” target, appending any existing next-path if present
+            const existingNext = url.searchParams.get('next');
+            const nextTarget = `https://larpmanager.com/after_login/${domain}`
+                             + (existingNext ? `/${existingNext}` : '');
 
-            href = 'https://larpmanager.com' + href;
-            $(this).attr('href', href);
+            url.searchParams.set('next', nextTarget);
+
+            // update the link
+            $(this).attr('href', url.toString());
         });
 
     {% endif %}
