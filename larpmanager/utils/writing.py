@@ -35,7 +35,7 @@ from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Trait
 from larpmanager.models.event import ProgressStep, RunText
 from larpmanager.models.experience import AbilityPx
-from larpmanager.models.form import CharacterAnswer, CharacterQuestion
+from larpmanager.models.form import WritingAnswer, WritingQuestion
 from larpmanager.models.writing import (
     Character,
     CharacterConfig,
@@ -90,10 +90,8 @@ def orga_list_progress_assign(ctx, typ: type[Model]):
 def writing_popup_question(ctx, idx, question_idx):
     try:
         char = Character.objects.get(pk=idx, event=ctx["event"].get_class_parent(Character))
-        question = CharacterQuestion.objects.get(
-            pk=question_idx, event=ctx["event"].get_class_parent(CharacterQuestion)
-        )
-        el = CharacterAnswer.objects.get(character=char, question=question)
+        question = WritingQuestion.objects.get(pk=question_idx, event=ctx["event"].get_class_parent(WritingQuestion))
+        el = WritingAnswer.objects.get(character=char, question=question)
         tx = f"<h2>{char} - {question.display}</h2>" + el.text
         return JsonResponse({"k": 1, "v": tx})
     except ObjectDoesNotExist:

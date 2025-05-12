@@ -2225,6 +2225,9 @@ msgstr "Idenficativo URL"
 msgid "Wanna connect?"
 msgstr "Vuoi collegarti?"
 
+msgid "Writing option"
+msgstr "Opzione scrittura"
+
 msgid "Your character"
 msgstr "Il tuo personaggio"
 
@@ -2372,9 +2375,6 @@ msgstr "Immagine sfondo"
 msgid "Casting priority"
 msgstr "Priorità casting"
 
-msgid "Character option"
-msgstr "Opzione personaggio"
-
 msgid "Character review"
 msgstr "Personaggio revisione"
 
@@ -2521,6 +2521,9 @@ msgstr "Totale raccolta"
 
 msgid "Where it is held"
 msgstr "Dove si tiene"
+
+msgid "Writing Question"
+msgstr "Domanda di scrittura"
 
 msgid "Your competences"
 msgstr "Le tue competenze"
@@ -2707,9 +2710,6 @@ msgstr "Personaggio approvato"
 
 msgid "Can't find a user?"
 msgstr "Non riesci a trovare un utente?"
-
-msgid "Character Question"
-msgstr "Domanda personaggio"
 
 msgid "Character portrait"
 msgstr "Ritratto personaggio"
@@ -5376,11 +5376,6 @@ msgstr ""
 "Questa pagina ti permette di aggiungere o modificare i sovrapprezzi sulle "
 "iscrizioni."
 
-msgid "This page allows you to add or modify a character form question."
-msgstr ""
-"Questa pagina ti permette di aggiungere o modificare una domanda del form di"
-" personaggio."
-
 msgid "This page allows you to change the general settings of this run."
 msgstr ""
 "Questa pagina ti permette di modificare le impostazioni generali di questa "
@@ -6045,6 +6040,12 @@ msgstr ""
 "scelte"
 
 msgid ""
+"This page allows you to add or modify a form question for a writing element."
+msgstr ""
+"Questa pagina consente di aggiungere o modificare una domanda del modulo per"
+" un elemento di scrittura."
+
+msgid ""
 "This page allows you to change the appearance and presentation of the event."
 msgstr ""
 "Questa pagina ti permette di modificare l'aspetto e la presentazione "
@@ -6088,13 +6089,6 @@ msgid ""
 msgstr ""
 "Indicare se l'abilità è visibile agli utenti, e può essere liberamente "
 "acquistata"
-
-msgid ""
-"This page allows you to add or modify an option in a character form "
-"question."
-msgstr ""
-"Questa pagina ti permette di aggiungere o modificare una opzione in una "
-"domanda del form di personaggio."
 
 msgid ""
 "This page prepares the cash balance already formatted for annual "
@@ -6833,6 +6827,13 @@ msgid ""
 msgstr ""
 "Per favore, fai attenzione ad eseguire questi passaggi - altrimenti il tuo "
 "pagamento non sarà processato!"
+
+msgid ""
+"This page allows you to add or modify an option in a form question for a "
+"writing element."
+msgstr ""
+"Questa pagina consente di aggiungere o modificare un'opzione in una domanda "
+"del modulo per un elemento di scrittura."
 
 msgid ""
 "This page allows you to set up the fields that players can fill in in their "

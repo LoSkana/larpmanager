@@ -2225,6 +2225,9 @@ msgstr "Idenominativ URL"
 msgid "Wanna connect?"
 msgstr "Vill du ansluta dig?"
 
+msgid "Writing option"
+msgstr "Alternativ för skrivning"
+
 msgid "Your character"
 msgstr "Din karaktär"
 
@@ -2372,9 +2375,6 @@ msgstr "Bakgrundsbild"
 msgid "Casting priority"
 msgstr "Prioritet för gjutning"
 
-msgid "Character option"
-msgstr "Alternativ för tecken"
-
 msgid "Character review"
 msgstr "Karaktärsbedömning"
 
@@ -2521,6 +2521,9 @@ msgstr "Total samling"
 
 msgid "Where it is held"
 msgstr "Var den hålls"
+
+msgid "Writing Question"
+msgstr "Skriva fråga"
 
 msgid "Your competences"
 msgstr "Dina färdigheter"
@@ -2707,9 +2710,6 @@ msgstr "Godkänd karaktär"
 
 msgid "Can't find a user?"
 msgstr "Hittar du inte en användare?"
-
-msgid "Character Question"
-msgstr "Karaktärsfråga"
 
 msgid "Character portrait"
 msgstr "Porträtt av karaktären"
@@ -5358,11 +5358,6 @@ msgstr ""
 "På den här sidan kan du lägga till eller ändra tilläggsavgifter för "
 "prenumerationer."
 
-msgid "This page allows you to add or modify a character form question."
-msgstr ""
-"På den här sidan kan du lägga till eller ändra en fråga i ett formulär för "
-"tecken."
-
 msgid "This page allows you to change the general settings of this run."
 msgstr ""
 "På den här sidan kan du ändra de allmänna inställningarna för körningen."
@@ -5973,6 +5968,12 @@ msgstr ""
 " valts"
 
 msgid ""
+"This page allows you to add or modify a form question for a writing element."
+msgstr ""
+"På den här sidan kan du lägga till eller ändra en formulärfråga för ett "
+"skrivelement."
+
+msgid ""
 "This page allows you to change the appearance and presentation of the event."
 msgstr ""
 "På den här sidan kan du ändra utseendet och presentationen av evenemanget."
@@ -6013,13 +6014,6 @@ msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr "Ange om färdigheten är synlig för användare och kan köpas fritt"
-
-msgid ""
-"This page allows you to add or modify an option in a character form "
-"question."
-msgstr ""
-"På den här sidan kan du lägga till eller ändra ett alternativ i en fråga i "
-"ett teckenformulär."
 
 msgid ""
 "This page prepares the cash balance already formatted for annual "
@@ -6752,6 +6746,13 @@ msgid ""
 msgstr ""
 "Var försiktig när du utför dessa steg - annars kommer din betalning inte att"
 " behandlas!"
+
+msgid ""
+"This page allows you to add or modify an option in a form question for a "
+"writing element."
+msgstr ""
+"På den här sidan kan du lägga till eller ändra ett alternativ i en "
+"formulärfråga för ett skrivelement."
 
 msgid ""
 "This page allows you to set up the fields that players can fill in in their "

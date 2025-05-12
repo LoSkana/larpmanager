@@ -24,10 +24,10 @@ from django.contrib import admin
 from larpmanager.admin.base import CharacterFilter, DefModelAdmin, EventFilter, reduced
 from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx
 from larpmanager.models.form import (
-    CharacterAnswer,
-    CharacterChoice,
-    CharacterOption,
-    CharacterQuestion,
+    WritingAnswer,
+    WritingChoice,
+    WritingOption,
+    WritingQuestion,
 )
 from larpmanager.models.writing import (
     Character,
@@ -36,8 +36,8 @@ from larpmanager.models.writing import (
 )
 
 
-class CharacterQuestionFilter(AutocompleteFilter):
-    title = "CharacterQuestion"
+class WritingQuestionFilter(AutocompleteFilter):
+    title = "WritingQuestion"
     field_name = "question"
 
 
@@ -57,8 +57,8 @@ class CharacterConfigAdmin(DefModelAdmin):
     autocomplete_fields = ["character"]
 
 
-@admin.register(CharacterQuestion)
-class CharacterQuestionAdmin(DefModelAdmin):
+@admin.register(WritingQuestion)
+class WritingQuestionAdmin(DefModelAdmin):
     list_display = ("event", "typ", "display", "description_red", "order", "status", "visibility")
     exclude = ("search",)
     search_fields = ("search",)
@@ -70,34 +70,34 @@ class CharacterQuestionAdmin(DefModelAdmin):
         return reduced(instance.description)
 
 
-@admin.register(CharacterOption)
-class CharacterOptionAdmin(DefModelAdmin):
+@admin.register(WritingOption)
+class WritingOptionAdmin(DefModelAdmin):
     list_display = ("question", "display", "event", "details_red", "max_available", "order")
     exclude = ("search",)
     search_fields = ("search",)
     autocomplete_fields = ["question", "event"]
-    list_filter = (CharacterQuestionFilter, EventFilter)
+    list_filter = (WritingQuestionFilter, EventFilter)
 
     @staticmethod
     def details_red(instance):
         return reduced(instance.details)
 
 
-@admin.register(CharacterChoice)
-class CharacterChoiceAdmin(DefModelAdmin):
+@admin.register(WritingChoice)
+class WritingChoiceAdmin(DefModelAdmin):
     autocomplete_fields = ["question", "option", "character"]
     list_filter = (
         CharacterFilter,
-        CharacterQuestionFilter,
+        WritingQuestionFilter,
     )
 
 
-@admin.register(CharacterAnswer)
-class CharacterAnswerAdmin(DefModelAdmin):
+@admin.register(WritingAnswer)
+class WritingAnswerAdmin(DefModelAdmin):
     autocomplete_fields = ["question", "character"]
     list_filter = (
         CharacterFilter,
-        CharacterQuestionFilter,
+        WritingQuestionFilter,
     )
 
 
