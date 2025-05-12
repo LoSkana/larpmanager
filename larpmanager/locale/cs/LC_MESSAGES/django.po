@@ -3236,9 +3236,6 @@ msgstr "Odkaz na externí registr"
 msgid "Filter for every field"
 msgstr "Filtrování podle pole"
 
-msgid "He cannot copy himself"
-msgstr "Nemůže kopírovat sám sebe"
-
 msgid "Join the waiting list!"
 msgstr "Připojte se k čekací listině!"
 
@@ -3544,6 +3541,9 @@ msgstr "Přístup k tvorbě postavy!"
 
 msgid "Available payment methods:"
 msgstr "Dostupné platební metody:"
+
+msgid "Can't copy from same event"
+msgstr "Nelze kopírovat ze stejné události"
 
 msgid "Check inverse relationship"
 msgstr "kontrola inverzního vztahu"

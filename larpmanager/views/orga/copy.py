@@ -195,11 +195,9 @@ def copy(request, ctx, parent, event, element):
 
     p_id = parent.id
     e_id = event.id
-    if event.parent:
-        e_id = event.parent_id
 
     if p_id == e_id:
-        return messages.error(request, _("He cannot copy himself"))
+        return messages.error(request, _("Can't copy from same event"))
 
     all = element == "all"
 
