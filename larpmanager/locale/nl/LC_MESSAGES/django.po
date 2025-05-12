@@ -3236,9 +3236,6 @@ msgstr "Link naar extern register"
 msgid "Filter for every field"
 msgstr "Filter op veld"
 
-msgid "He cannot copy himself"
-msgstr "Hij kan zichzelf niet kopiëren"
-
 msgid "Join the waiting list!"
 msgstr "Meld je aan voor de wachtlijst!"
 
@@ -3544,6 +3541,9 @@ msgstr "Toegang tot het maken van personages!"
 
 msgid "Available payment methods:"
 msgstr "Beschikbare betalingsmethoden:"
+
+msgid "Can't copy from same event"
+msgstr "Kan niet kopiëren van dezelfde gebeurtenis"
 
 msgid "Check inverse relationship"
 msgstr "controleer omgekeerde relatie"

@@ -3236,9 +3236,6 @@ msgstr "Link do rejestru zewnętrznego"
 msgid "Filter for every field"
 msgstr "Filtr dla każdego pola"
 
-msgid "He cannot copy himself"
-msgstr "Nie może skopiować samego siebie"
-
 msgid "Join the waiting list!"
 msgstr "Dołącz do listy oczekujących!"
 
@@ -3544,6 +3541,9 @@ msgstr "Dostęp do tworzenia postaci!"
 
 msgid "Available payment methods:"
 msgstr "Dostępne metody płatności:"
+
+msgid "Can't copy from same event"
+msgstr "Nie można kopiować z tego samego zdarzenia"
 
 msgid "Check inverse relationship"
 msgstr "Sprawdź odwrotną zależność"
