@@ -692,12 +692,7 @@ urlpatterns = [
         name="registration_register",
     ),
     path(
-        "login/",
-        auth_views.LoginView.as_view(
-            template_name="registration/login.html",
-            authentication_form=MyAuthForm,
-        ),
-        name="login",
+        "login/", views_base.MyLoginView.as_view(), name="login",
     ),
     path(
         "logout/",

@@ -71,13 +71,14 @@ window.addEventListener('DOMContentLoaded', function() {
         // Before sign up, save the domain where we are making the login, to perform redirect
        $('.allauth_signin a').on('click', function(event) {
             const link = this;
+            var href = $(this).attr('href');
             event.preventDefault();
 
             $.ajax({
                 url: '{% url 'prepare_login' %}',
                 method: 'GET',
                 complete: function() {
-                    window.location = link.href;
+                    window.location = 'https://larpmanager.com' + href;
                 }
             });
         });

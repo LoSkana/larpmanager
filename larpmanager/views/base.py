@@ -20,8 +20,8 @@
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.contrib.auth.views import LoginView
 
-from larpmanager.cache.login import set_login_subdomain
 from larpmanager.cache.role import get_index_assoc_permissions
 from larpmanager.models.association import Association
 from larpmanager.utils.base import def_user_ctx
@@ -32,9 +32,15 @@ from larpmanager.views.user.event import calendar
 
 
 def home(request, lang=None):
+   subdomain = request.session.get('subdomain')
+   if subdomain:
+        del request.session['subdomain']
+        new_url = f"{request.scheme}://{subdomain}.larpmanager.com/{request.get_full_path()}"
+        return redirect(new_url)  
+    
     if request.assoc["id"] == 0:
         return lm_home(request)
-
+    
     return check_centauri(request) or calendar(request, lang)
 
 
@@ -66,8 +72,35 @@ def error_404(request, exception):
 
 def error_500(request):
     return render(request, "500.html")
+    
+# Maintain subdomain after login
+class MyLoginView(LoginView):
+    template_name = "registration/login.html"
+    authentication_form = MyAuthForm
 
+    def form_valid(self, form):
+        subdomain = self.request.session.get('subdomain')
+        response = super().form_valid(form)
+        if subdomain:
+            self.request.session['subdomain'] = subdomain
+
+        return response    
 
 # Save the domain before the login
 def prepare_login(request):
-    set_login_subdomain(request)
+    request.session['subdomain'] = get_subdomain(request)
+    
+# Obtain subdomain    
+def get_subdomain(request):
+    host = request.get_host()
+    host = host.split(":")[0]
+
+    parts = host.split(".")
+
+    domain_part_number = 2
+    if len(parts) > domain_part_number:
+        subdomain = parts[0]
+    else:
+        subdomain = None
+
+    return subdomain    
