@@ -58,13 +58,13 @@ class CharacterCocreationForm(forms.Form):
         self.initial[k] = text
 
 
-class BaseCharacterForm(BaseRegistrationForm):
+class BaseWritingForm(BaseRegistrationForm):
     gift = False
     answer_class = WritingAnswer
     choice_class = WritingChoice
     option_class = WritingOption
     question_class = WritingQuestion
-    instance_key = "character"
+    instance_key = "element_id"
 
     def get_options_query(self, event):
         query = super().get_options_query(event)
@@ -78,7 +78,7 @@ class BaseCharacterForm(BaseRegistrationForm):
         abstract = True
 
 
-class CharacterForm(WritingForm, BaseCharacterForm):
+class CharacterForm(WritingForm, BaseWritingForm):
     orga = False
 
     page_title = _("Character")

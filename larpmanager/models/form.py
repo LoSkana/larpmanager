@@ -35,7 +35,7 @@ from larpmanager.models.registration import (
     RegistrationTicket,
 )
 from larpmanager.models.utils import UploadToPathAndRename, decimal_to_str
-from larpmanager.models.writing import Character, CharacterStatus, Faction
+from larpmanager.models.writing import CharacterStatus, Faction
 
 
 class QuestionType(models.TextChoices):
@@ -228,13 +228,13 @@ class WritingChoice(BaseModel):
 
     option = models.ForeignKey(WritingOption, on_delete=models.CASCADE, related_name="choices")
 
-    character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="choices")
+    element_id = models.IntegerField(blank=True, null=True)
 
     element_id = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         # noinspection PyUnresolvedReferences
-        return f"{self.character} ({self.question.display}) {self.option.display}"
+        return f"{self.element_id} ({self.question.display}) {self.option.display}"
 
 
 class WritingAnswer(BaseModel):
@@ -242,13 +242,13 @@ class WritingAnswer(BaseModel):
 
     text = models.TextField(max_length=5000)
 
-    character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="answers")
+    element_id = models.IntegerField(blank=True, null=True)
 
     element_id = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         # noinspection PyUnresolvedReferences
-        return f"{self.character} ({self.question.display}) {self.text[:100]}"
+        return f"{self.element_id} ({self.question.display}) {self.text[:100]}"
 
 
 class RegistrationQuestion(BaseModel):

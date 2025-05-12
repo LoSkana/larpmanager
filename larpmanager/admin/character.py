@@ -85,20 +85,14 @@ class WritingOptionAdmin(DefModelAdmin):
 
 @admin.register(WritingChoice)
 class WritingChoiceAdmin(DefModelAdmin):
-    autocomplete_fields = ["question", "option", "character"]
-    list_filter = (
-        CharacterFilter,
-        WritingQuestionFilter,
-    )
+    autocomplete_fields = ["question", "option"]
+    list_filter = (WritingQuestionFilter,)
 
 
 @admin.register(WritingAnswer)
 class WritingAnswerAdmin(DefModelAdmin):
-    autocomplete_fields = ["question", "character"]
-    list_filter = (
-        CharacterFilter,
-        WritingQuestionFilter,
-    )
+    autocomplete_fields = ["question"]
+    list_filter = (WritingQuestionFilter,)
 
 
 class SourceFilter(AutocompleteFilter):

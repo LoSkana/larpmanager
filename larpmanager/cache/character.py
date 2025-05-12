@@ -117,22 +117,33 @@ def get_event_cache_fields(ctx, res, only_visible=True):
     get_searcheable_character_fields(ctx)
     question_idxs = ctx["questions"].keys()
 
+    # ids to number
+    mapping = {}
+    for ch_num, ch in res["chars"].items():
+        mapping[ch["id"]] = ch_num
+
     # get choices for characters of the event
     ans_que = WritingChoice.objects.filter(question_id__in=question_idxs)
-    for el in ans_que.select_related("character").values_list("character__number", "question_id", "option_id"):
-        if el[0] not in res["chars"]:
+    for el in ans_que.values_list("element_id", "question_id", "option_id"):
+        if el[0] not in mapping:
             continue
-        fields = res["chars"][el[0]]["fields"]
-        if el[1] not in fields:
-            fields[el[1]] = []
-        fields[el[1]].append(el[2])
+        ch_num = mapping[el[0]]
+        question = el[1]
+        value = el[2]
+        fields = res["chars"][ch_num]["fields"]
+        if question not in fields:
+            fields[question] = []
+        fields[question].append(value)
 
     # get answers for characters of the event
     ans_que = WritingAnswer.objects.filter(question_id__in=question_idxs)
-    for el in ans_que.select_related("character").values_list("character__number", "question_id", "text"):
-        if el[0] not in res["chars"]:
+    for el in ans_que.values_list("element_id", "question_id", "text"):
+        if el[0] not in mapping:
             continue
-        res["chars"][el[0]]["fields"][el[1]] = el[2]
+        ch_num = mapping[el[0]]
+        question = el[1]
+        value = el[2]
+        res["chars"][ch_num]["fields"][question] = value
 
 
 def get_character_fields(ctx, only_visible=True):
@@ -168,10 +179,10 @@ def get_character_cache_fields(ctx, character_id, only_visible=True):
     get_character_fields(ctx, only_visible=only_visible)
     get_searcheable_character_fields(ctx)
     fields = {}
-    que = WritingAnswer.objects.filter(character_id=character_id, question_id__in=ctx["questions"].keys())
+    que = WritingAnswer.objects.filter(element_id=character_id, question_id__in=ctx["questions"].keys())
     for el in que.values_list("question_id", "text"):
         fields[el[0]] = el[1]
-    que = WritingChoice.objects.filter(character_id=character_id, question_id__in=ctx["questions"].keys())
+    que = WritingChoice.objects.filter(element_id=character_id, question_id__in=ctx["questions"].keys())
     for el in que.values_list("question_id", "option_id"):
         if el[0] not in fields:
             fields[el[0]] = []

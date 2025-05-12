@@ -439,13 +439,13 @@ def assign_choice_answer(ctx, character, value, key):
 
     # check if answer
     if ctx["questions"][question_id]["typ"] in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
-        (car, cr) = WritingAnswer.objects.get_or_create(character=character, question_id=question_id)
+        (car, cr) = WritingAnswer.objects.get_or_create(element_id=character.id, question_id=question_id)
         car.text = value
         car.save()
 
     # check if choice
     else:
-        WritingChoice.objects.filter(character=character, question_id=question_id).delete()
+        WritingChoice.objects.filter(element_id=character.id, question_id=question_id).delete()
         for input_opt_orig in value.split(","):
             input_opt = input_opt_orig.lower().strip()
             option_id = None
@@ -454,7 +454,7 @@ def assign_choice_answer(ctx, character, value, key):
                     option_id = ido
             if not option_id:
                 return f" - Problem with question {key}: couldn't find option {input_opt}"
-            WritingChoice.objects.create(character=character, question_id=question_id, option_id=option_id)
+            WritingChoice.objects.create(element_id=character.id, question_id=question_id, option_id=option_id)
 
     return ""
 

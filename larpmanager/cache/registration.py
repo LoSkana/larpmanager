@@ -80,7 +80,9 @@ def update_reg_counts(r):
     for el in que.values("option_id").annotate(total=Count("option_id")):
         s[f"option_{el['option_id']}"] = el["total"]
 
-    que = WritingChoice.objects.filter(character__event=r.event)
+    character_ids = Character.objects.filter(event=r.event).values_list("id", flat=True)
+
+    que = WritingChoice.objects.filter(element_id__in=character_ids)
     for el in que.values("option_id").annotate(total=Count("option_id")):
         s[f"option_char_{el['option_id']}"] = el["total"]
 
