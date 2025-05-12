@@ -34,19 +34,15 @@ class AssociationIdentifyMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        res = self.get_assoc_info(request)
-        if res:
-            return res
-
-        lang = get_language()
-        request.assoc["footer"] = get_assoc_text(request.assoc["id"], AssocTextType.FOOTER, lang)
-
-        response = self.get_response(request)
-
-        return response
+        return self.get_assoc_info(request) or self.get_response(request)
 
     @staticmethod
     def get_assoc_info(request):
+        def load_assoc(request, assoc):
+            request.assoc = assoc
+            lang = get_language()
+            request.assoc["footer"] = get_assoc_text(request.assoc["id"], AssocTextType.FOOTER, lang)
+
         # get assoc slug from host
         hst = request.get_host()
 
@@ -69,11 +65,10 @@ class AssociationIdentifyMiddleware:
 
         assoc = get_cache_assoc(assoc_slug)
         if assoc:
-            request.assoc = redirect(f"https://larpmanager.com{request.get_full_path()}")
-            return
+            return load_assoc(request, assoc)
 
         if local or domain == "larpmanager":
-            request.assoc = {
+            assoc = {
                 "id": 0,
                 "name": "LarpManager",
                 "shuttle": [],
@@ -84,9 +79,12 @@ class AssociationIdentifyMiddleware:
                 "main_mail": "info@larpmanager.com",
                 "favicon": "https://larpmanager.com/static/lm_fav.png",
             }
-            return
+            return load_assoc(request, assoc)
 
         if domain.endswith("larpmanager.com"):
             return redirect(f"https://larpmanager.com{request.get_full_path()}")
+
+        if request.path.startswith("/admin"):
+            return
 
         return render(request, "exception/assoc.html", {})
