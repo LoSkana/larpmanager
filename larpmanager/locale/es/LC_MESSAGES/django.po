@@ -2225,6 +2225,9 @@ msgstr "Identificador de URL"
 msgid "Wanna connect?"
 msgstr "¿Quieres conectar?"
 
+msgid "Writing option"
+msgstr "Opción de escritura"
+
 msgid "Your character"
 msgstr "Tu personaje"
 
@@ -2372,9 +2375,6 @@ msgstr "Imagen de fondo"
 msgid "Casting priority"
 msgstr "Prioridad de asignación"
 
-msgid "Character option"
-msgstr "Opción de carácter"
-
 msgid "Character review"
 msgstr "Revisión de personajes"
 
@@ -2521,6 +2521,9 @@ msgstr "Total de la colecta"
 
 msgid "Where it is held"
 msgstr "Dónde se celebra"
+
+msgid "Writing Question"
+msgstr "Pregunta escrita"
 
 msgid "Your competences"
 msgstr "Tus competencias"
@@ -2708,9 +2711,6 @@ msgstr "Carácter aprobado"
 msgid "Can't find a user?"
 msgstr "¿No encuentras un usuario?"
 
-msgid "Character Question"
-msgstr "Cuestión de carácter"
-
 msgid "Character portrait"
 msgstr "Retrato del personaje"
 
@@ -2755,10 +2755,6 @@ msgstr "Comprobación de los datos de los miembros"
 
 msgid "New refund request"
 msgstr "Nueva solicitud de devolución"
-
-#, python-format
-msgid "Open the: %(date)s"
-msgstr "Abrirá el: %(date)s"
 
 msgid "Organization Roles"
 msgstr "Funciones de la organización"
@@ -3028,6 +3024,10 @@ msgstr "No disponible, chaval"
 msgid "Number of passengers"
 msgstr "Número de pasajeros"
 
+#, python-format
+msgid "Opening at: %(date)s"
+msgstr "Apertura en: %(date)s"
+
 msgid "Operation completed!"
 msgstr "Operación completada."
 
@@ -3235,9 +3235,6 @@ msgstr "Enlace de registro externo"
 
 msgid "Filter for every field"
 msgstr "Filtrar por cada campo"
-
-msgid "He cannot copy himself"
-msgstr "Él no puede copiarse a sí mismo"
 
 msgid "Join the waiting list!"
 msgstr "¡Únete a la lista de espera!"
@@ -3544,6 +3541,9 @@ msgstr "Acceso a la creación de personajes"
 
 msgid "Available payment methods:"
 msgstr "Formas de pago disponibles:"
+
+msgid "Can't copy from same event"
+msgstr "No se puede copiar desde el mismo evento"
 
 msgid "Check inverse relationship"
 msgstr "Comprobar relaciones inversas"
@@ -5345,11 +5345,6 @@ msgid "This page allows you to add or edit the registration surcharges."
 msgstr ""
 "Esta página te permite añadir o modificar los recargos sobre las entradas."
 
-msgid "This page allows you to add or modify a character form question."
-msgstr ""
-"Esta página le permite añadir o modificar una pregunta de formulario de "
-"carácter."
-
 msgid "This page allows you to change the general settings of this run."
 msgstr "Esta página te permite cambiar los ajustes generales de este pase."
 
@@ -5985,6 +5980,12 @@ msgstr ""
 "adicionales elegidas"
 
 msgid ""
+"This page allows you to add or modify a form question for a writing element."
+msgstr ""
+"Esta página le permite añadir o modificar una pregunta de formulario para un"
+" elemento de escritura."
+
+msgid ""
 "This page allows you to change the appearance and presentation of the event."
 msgstr ""
 "Esta página te permite cambiar el aspecto y la presentación del evento."
@@ -6029,13 +6030,6 @@ msgid ""
 msgstr ""
 "Indica si la habilidad es visible para los usuarios y puede adquirirse "
 "libremente"
-
-msgid ""
-"This page allows you to add or modify an option in a character form "
-"question."
-msgstr ""
-"Esta página le permite añadir o modificar una opción en una pregunta de "
-"formulario de carácter."
 
 msgid ""
 "This page prepares the cash balance already formatted for annual "
@@ -6771,6 +6765,13 @@ msgid ""
 msgstr ""
 "Asegúrate de seguir las instrucciones al realizar estos pasos, de lo "
 "contrario no podremos procesar tu pago."
+
+msgid ""
+"This page allows you to add or modify an option in a form question for a "
+"writing element."
+msgstr ""
+"Esta página le permite añadir o modificar una opción en una pregunta de "
+"formulario para un elemento de escritura."
 
 msgid ""
 "This page allows you to set up the fields that players can fill in in their "

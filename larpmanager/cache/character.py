@@ -31,12 +31,12 @@ from larpmanager.cache.registration import search_player
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
-    CharacterAnswer,
-    CharacterChoice,
-    CharacterOption,
-    CharacterQuestion,
     QuestionStatus,
     QuestionVisibility,
+    WritingAnswer,
+    WritingChoice,
+    WritingOption,
+    WritingQuestion,
 )
 from larpmanager.models.member import Member
 from larpmanager.models.registration import RegistrationCharacterRel
@@ -117,22 +117,33 @@ def get_event_cache_fields(ctx, res, only_visible=True):
     get_searcheable_character_fields(ctx)
     question_idxs = ctx["questions"].keys()
 
+    # ids to number
+    mapping = {}
+    for ch_num, ch in res["chars"].items():
+        mapping[ch["id"]] = ch_num
+
     # get choices for characters of the event
-    ans_que = CharacterChoice.objects.filter(question_id__in=question_idxs)
-    for el in ans_que.select_related("character").values_list("character__number", "question_id", "option_id"):
-        if el[0] not in res["chars"]:
+    ans_que = WritingChoice.objects.filter(question_id__in=question_idxs)
+    for el in ans_que.values_list("element_id", "question_id", "option_id"):
+        if el[0] not in mapping:
             continue
-        fields = res["chars"][el[0]]["fields"]
-        if el[1] not in fields:
-            fields[el[1]] = []
-        fields[el[1]].append(el[2])
+        ch_num = mapping[el[0]]
+        question = el[1]
+        value = el[2]
+        fields = res["chars"][ch_num]["fields"]
+        if question not in fields:
+            fields[question] = []
+        fields[question].append(value)
 
     # get answers for characters of the event
-    ans_que = CharacterAnswer.objects.filter(question_id__in=question_idxs)
-    for el in ans_que.select_related("character").values_list("character__number", "question_id", "text"):
-        if el[0] not in res["chars"]:
+    ans_que = WritingAnswer.objects.filter(question_id__in=question_idxs)
+    for el in ans_que.values_list("element_id", "question_id", "text"):
+        if el[0] not in mapping:
             continue
-        res["chars"][el[0]]["fields"][el[1]] = el[2]
+        ch_num = mapping[el[0]]
+        question = el[1]
+        value = el[2]
+        res["chars"][ch_num]["fields"][question] = value
 
 
 def get_character_fields(ctx, only_visible=True):
@@ -143,12 +154,12 @@ def get_character_fields(ctx, only_visible=True):
         return
 
     # get visible question fields
-    que = ctx["event"].get_elements(CharacterQuestion).exclude(status=QuestionStatus.HIDDEN).order_by("order")
+    que = ctx["event"].get_elements(WritingQuestion).exclude(status=QuestionStatus.HIDDEN).order_by("order")
     if only_visible:
         que = que.filter(visibility__in=[QuestionVisibility.SEARCHABLE, QuestionVisibility.PUBLIC])
     ctx["questions"] = {el[0]: {"display": el[1], "typ": el[2]} for el in que.values_list("id", "display", "typ")}
 
-    que = ctx["event"].get_elements(CharacterOption).filter(question_id__in=ctx["questions"].keys())
+    que = ctx["event"].get_elements(WritingOption).filter(question_id__in=ctx["questions"].keys())
     ctx["options"] = {
         el[0]: {"display": el[1], "question_id": el[2]}
         for el in que.order_by("order").values_list("id", "display", "question_id")
@@ -159,7 +170,7 @@ def get_searcheable_character_fields(ctx):
     if "character_form" not in ctx["features"]:
         return
 
-    que = ctx["event"].get_elements(CharacterQuestion).order_by("order")
+    que = ctx["event"].get_elements(WritingQuestion).order_by("order")
     que = que.filter(visibility=QuestionVisibility.SEARCHABLE).prefetch_related("options")
     ctx["searchable"] = {el.id: list(el.options.order_by("order").values_list("id", flat=True)) for el in que}
 
@@ -168,10 +179,10 @@ def get_character_cache_fields(ctx, character_id, only_visible=True):
     get_character_fields(ctx, only_visible=only_visible)
     get_searcheable_character_fields(ctx)
     fields = {}
-    que = CharacterAnswer.objects.filter(character_id=character_id, question_id__in=ctx["questions"].keys())
+    que = WritingAnswer.objects.filter(element_id=character_id, question_id__in=ctx["questions"].keys())
     for el in que.values_list("question_id", "text"):
         fields[el[0]] = el[1]
-    que = CharacterChoice.objects.filter(character_id=character_id, question_id__in=ctx["questions"].keys())
+    que = WritingChoice.objects.filter(element_id=character_id, question_id__in=ctx["questions"].keys())
     for el in que.values_list("question_id", "option_id"):
         if el[0] not in fields:
             fields[el[0]] = []
@@ -360,7 +371,6 @@ def pre_save_character_reset(sender, instance, **kwargs):
 
         lst = ["player_id", "mirror_id"]
         if has_different_cache_values(instance, prev, lst):
-            # print(f"@@@@ pre_save_character_reset {instance} {datetime.now()}")
             reset_event_cache_all_runs(instance.event)
         else:
             update_event_cache_all_runs(instance.event, instance)
@@ -395,7 +405,6 @@ def update_faction_reset(sender, instance, **kwargs):
 
     lst = ["typ"]
     if has_different_cache_values(instance, prev, lst):
-        # print(f"@@@@ update_faction_reset {instance} {datetime.now()}")
         reset_event_cache_all_runs(instance.event)
 
     lst = ["name", "teaser"]
@@ -417,7 +426,6 @@ def update_questtype_reset(sender, instance, **kwargs):
     lst = ["name"]
     prev = QuestType.objects.get(pk=instance.pk)
     if has_different_cache_values(instance, prev, lst):
-        # print(f"@@@@ update_questtype_reset {instance} {datetime.now()}")
         reset_event_cache_all_runs(instance.event)
 
 
@@ -435,7 +443,6 @@ def update_quest_reset(sender, instance, **kwargs):
     lst = ["name", "teaser", "typ_id"]
     prev = Quest.objects.get(pk=instance.pk)
     if has_different_cache_values(instance, prev, lst):
-        # print(f"@@@@ update_quest_reset {instance} {datetime.now()}")
         reset_event_cache_all_runs(instance.event)
 
 
@@ -463,35 +470,31 @@ def del_trait_reset(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Event)
 def update_event_reset(sender, instance, **kwargs):
-    # print(f"@@@@ update_event_reset {instance} {datetime.now()}")
     reset_event_cache_all_runs(instance)
 
 
 @receiver(post_save, sender=Run)
 def save_run_reset(sender, instance, **kwargs):
-    # print(f"@@@@ save_run_reset {instance} {datetime.now()}")
     reset_run(instance)
 
 
-@receiver(pre_delete, sender=CharacterQuestion)
+@receiver(pre_delete, sender=WritingQuestion)
 def del_character_question_reset(sender, instance, **kwargs):
     reset_event_cache_all_runs(instance.event)
 
 
-@receiver(post_save, sender=CharacterQuestion)
+@receiver(post_save, sender=WritingQuestion)
 def save_character_question_reset(sender, instance, **kwargs):
-    # print(f"@@@@ save_character_question_reset {instance} {datetime.now()}")
     reset_event_cache_all_runs(instance.event)
 
 
-@receiver(pre_delete, sender=CharacterOption)
+@receiver(pre_delete, sender=WritingOption)
 def del_character_option_reset(sender, instance, **kwargs):
     reset_event_cache_all_runs(instance.question.event)
 
 
-@receiver(post_save, sender=CharacterOption)
+@receiver(post_save, sender=WritingOption)
 def save_character_option_reset(sender, instance, **kwargs):
-    # print(f"@@@@ save_CharacterOption_reset {instance} {datetime.now()}")
     reset_event_cache_all_runs(instance.question.event)
 
 
@@ -518,7 +521,6 @@ def post_delete_registration_character_rel_savereg(sender, instance, **kwargs):
 
 @receiver(pre_delete, sender=Run)
 def del_run_reset(sender, instance, **kwargs):
-    # print(f"@@@@ del_run_reset {instance} {datetime.now()}")
     reset_run(instance)
 
 

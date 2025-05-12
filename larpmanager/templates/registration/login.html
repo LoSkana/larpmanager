@@ -9,18 +9,20 @@
     {% for el in socialaccount_providers %}
         {% with prov=el.name|lower %}
             <a href="{% provider_login_url prov %}">
-                <img src="{% static 'larpmanager/assets/' %}{{ prov }}_signin.png" />
+                <img src="{% static 'larpmanager/assets/' %}{{ prov }}_signin.png"
+                     alt="social login" />
             </a>
         {% endwith %}
     {% endfor %}
 {% endblock old %}
 {% block content %}
-    <div class='login'>
+    <div class="login">
         <br />
         {% if not request.staging and not request.development %}
             <div class="allauth_signin">
                 <a href="{% get_login_url 'google' %}">
-                    <img src="{% static 'larpmanager/assets/' %}google_signin.png" />
+                    <img src="{% static 'larpmanager/assets/' %}google_signin.png"
+                         alt="social login" />
                 </a>
             </div>
         {% endif %}
@@ -70,18 +72,18 @@ window.addEventListener('DOMContentLoaded', function() {
             var href = $(this).attr('href');
             console.log(href);
 
-            var domain = 'https://{{ assoc.slug }}.larpmanager.com';
+            const domain = '{{ assoc.slug }}';
+            let url = new URL(href || window.location.pathname, 'https://larpmanager.com');
 
-            next = /next=/g
-            if (!href.match(next)) {
-                href += 'next=' + domain;
-            } else {
-                aux = href.split(next);
-                href = aux[0] + 'next=' + domain + aux[1];
-            }
+            // build the “next” target, appending any existing next-path if present
+            const existingNext = url.searchParams.get('next');
+            const nextTarget = `https://larpmanager.com/after_login/${domain}`
+                             + (existingNext ? `/${existingNext}` : '');
 
-            href = 'https://larpmanager.com' + href;
-            $(this).attr('href', href);
+            url.searchParams.set('next', nextTarget);
+
+            // update the link
+            $(this).attr('href', url.toString());
         });
 
     {% endif %}

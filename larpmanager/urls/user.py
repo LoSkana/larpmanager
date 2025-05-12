@@ -714,4 +714,14 @@ urlpatterns = [
         views_auth.MyPasswordResetConfirmView.as_view(form_class=MyPasswordResetConfirmForm),
         name="password_reset_confirm",
     ),
+    path(
+        "after_login/<slug:subdomain>/",
+        views_base.after_login,
+        name="after_login",
+    ),
+    path(
+        "after_login/<slug:subdomain>/<path:path>",
+        views_base.after_login,
+        name="after_login",
+    ),
 ]

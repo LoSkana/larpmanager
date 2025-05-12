@@ -2225,6 +2225,9 @@ msgstr "Idenominativní adresa URL"
 msgid "Wanna connect?"
 msgstr "Chcete se připojit?"
 
+msgid "Writing option"
+msgstr "Možnost psaní"
+
 msgid "Your character"
 msgstr "Vaše postava"
 
@@ -2372,9 +2375,6 @@ msgstr "Obrázek na pozadí"
 msgid "Casting priority"
 msgstr "Priorita obsazování"
 
-msgid "Character option"
-msgstr "Možnost znaků"
-
 msgid "Character review"
 msgstr "Recenze postavy"
 
@@ -2521,6 +2521,9 @@ msgstr "Celková sbírka"
 
 msgid "Where it is held"
 msgstr "Kde se koná"
+
+msgid "Writing Question"
+msgstr "Psaní otázky"
 
 msgid "Your competences"
 msgstr "Vaše dovednosti"
@@ -2708,9 +2711,6 @@ msgstr "Schválená postava"
 msgid "Can't find a user?"
 msgstr "Nemůžete najít uživatele?"
 
-msgid "Character Question"
-msgstr "Otázka na postavu"
-
 msgid "Character portrait"
 msgstr "Portrét postavy"
 
@@ -2755,10 +2755,6 @@ msgstr "Kontroly členských údajů"
 
 msgid "New refund request"
 msgstr "Nová žádost o vrácení peněz"
-
-#, python-format
-msgid "Open the: %(date)s"
-msgstr "Otevřete: %(date)s"
 
 msgid "Organization Roles"
 msgstr "Role organizace"
@@ -3028,6 +3024,10 @@ msgstr "Není k dispozici, chlapče"
 msgid "Number of passengers"
 msgstr "Počet cestujících"
 
+#, python-format
+msgid "Opening at: %(date)s"
+msgstr "Otevření v: %(date)s"
+
 msgid "Operation completed!"
 msgstr "Operace dokončena!"
 
@@ -3235,9 +3235,6 @@ msgstr "Odkaz na externí registr"
 
 msgid "Filter for every field"
 msgstr "Filtrování podle pole"
-
-msgid "He cannot copy himself"
-msgstr "Nemůže kopírovat sám sebe"
 
 msgid "Join the waiting list!"
 msgstr "Připojte se k čekací listině!"
@@ -3544,6 +3541,9 @@ msgstr "Přístup k tvorbě postavy!"
 
 msgid "Available payment methods:"
 msgstr "Dostupné platební metody:"
+
+msgid "Can't copy from same event"
+msgstr "Nelze kopírovat ze stejné události"
 
 msgid "Check inverse relationship"
 msgstr "kontrola inverzního vztahu"
@@ -5320,9 +5320,6 @@ msgstr "Na této stránce můžete přidat nebo upravit záznam o kreditu."
 msgid "This page allows you to add or edit the registration surcharges."
 msgstr "Na této stránce můžete přidat nebo změnit příplatky za předplatné."
 
-msgid "This page allows you to add or modify a character form question."
-msgstr "Na této stránce můžete přidat nebo upravit otázku formuláře znaku."
-
 msgid "This page allows you to change the general settings of this run."
 msgstr "Tato stránka umožňuje změnit obecná nastavení tohoto běhu."
 
@@ -5888,6 +5885,11 @@ msgstr ""
 "Část registračního poplatku odvozená pouze od zvolených doplňkových možností"
 
 msgid ""
+"This page allows you to add or modify a form question for a writing element."
+msgstr ""
+"Tato stránka umožňuje přidat nebo upravit otázku formuláře pro prvek zápisu."
+
+msgid ""
 "This page allows you to change the appearance and presentation of the event."
 msgstr "Na této stránce můžete změnit vzhled a prezentaci události."
 
@@ -5927,12 +5929,6 @@ msgid ""
 msgstr ""
 "Uveďte, zda je dovednost viditelná pro uživatele a zda ji lze volně "
 "zakoupit."
-
-msgid ""
-"This page allows you to add or modify an option in a character form "
-"question."
-msgstr ""
-"Tato stránka umožňuje přidat nebo upravit možnost v otázce formuláře znaku."
 
 msgid ""
 "This page prepares the cash balance already formatted for annual "
@@ -6630,6 +6626,13 @@ msgid ""
 msgstr ""
 "Při provádění těchto kroků buďte opatrní - jinak nebude vaše platba "
 "zpracována!"
+
+msgid ""
+"This page allows you to add or modify an option in a form question for a "
+"writing element."
+msgstr ""
+"Tato stránka umožňuje přidat nebo upravit možnost v otázce formuláře pro "
+"prvek zápisu."
 
 msgid ""
 "This page allows you to set up the fields that players can fill in in their "

@@ -169,7 +169,7 @@ class BaseRegistrationForm(MyFormRun):
     choice_class = RegistrationChoice
     option_class = RegistrationOption
     question_class = RegistrationQuestion
-    instance_key = "reg"
+    instance_key = "reg_id"
 
     class Meta:
         abstract = True
@@ -180,10 +180,10 @@ class BaseRegistrationForm(MyFormRun):
 
     def _init_reg_question(self, instance, event):
         if instance and instance.pk:
-            for el in self.answer_class.objects.filter(**{self.instance_key: instance}):
+            for el in self.answer_class.objects.filter(**{self.instance_key: instance.id}):
                 self.answers[el.question_id] = el
 
-            for el in self.choice_class.objects.filter(**{self.instance_key: instance}).select_related("question"):
+            for el in self.choice_class.objects.filter(**{self.instance_key: instance.id}).select_related("question"):
                 if el.question.typ == QuestionType.SINGLE:
                     self.singles[el.question_id] = el
                 elif el.question.typ == QuestionType.MULTIPLE:
@@ -452,7 +452,7 @@ class BaseRegistrationForm(MyFormRun):
                 self.answers[q.id].text = oid
                 self.answers[q.id].save()
         else:
-            self.answer_class.objects.create(**{"question": q, self.instance_key: instance, "text": oid})
+            self.answer_class.objects.create(**{"question": q, self.instance_key: instance.id, "text": oid})
 
     def save_reg_single(self, instance, oid, q):
         if not oid:
@@ -465,7 +465,7 @@ class BaseRegistrationForm(MyFormRun):
                 self.singles[q.id].option_id = oid
                 self.singles[q.id].save()
         elif oid != 0:
-            self.choice_class.objects.create(**{"question": q, self.instance_key: instance, "option_id": oid})
+            self.choice_class.objects.create(**{"question": q, self.instance_key: instance.id, "option_id": oid})
 
     def save_reg_multiple(self, instance, oid, q):
         if not oid:
@@ -474,14 +474,14 @@ class BaseRegistrationForm(MyFormRun):
         if q.id in self.multiples:
             old = set([el.option_id for el in self.multiples[q.id]])
             for add in oid - old:
-                self.choice_class.objects.create(**{"question": q, self.instance_key: instance, "option_id": add})
+                self.choice_class.objects.create(**{"question": q, self.instance_key: instance.id, "option_id": add})
             rem = old - oid
             self.choice_class.objects.filter(
-                **{"question": q, self.instance_key: instance, "option_id__in": rem}
+                **{"question": q, self.instance_key: instance.id, "option_id__in": rem}
             ).delete()
         else:
             for pkoid in oid:
-                self.choice_class.objects.create(**{"question": q, self.instance_key: instance, "option_id": pkoid})
+                self.choice_class.objects.create(**{"question": q, self.instance_key: instance.id, "option_id": pkoid})
 
 
 class MyCssForm(MyForm):

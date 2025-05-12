@@ -2225,6 +2225,9 @@ msgstr "Idenficativo URL"
 msgid "Wanna connect?"
 msgstr "Vuoi collegarti?"
 
+msgid "Writing option"
+msgstr "Opzione scrittura"
+
 msgid "Your character"
 msgstr "Il tuo personaggio"
 
@@ -2372,9 +2375,6 @@ msgstr "Immagine sfondo"
 msgid "Casting priority"
 msgstr "Priorità casting"
 
-msgid "Character option"
-msgstr "Opzione personaggio"
-
 msgid "Character review"
 msgstr "Personaggio revisione"
 
@@ -2521,6 +2521,9 @@ msgstr "Totale raccolta"
 
 msgid "Where it is held"
 msgstr "Dove si tiene"
+
+msgid "Writing Question"
+msgstr "Domanda di scrittura"
 
 msgid "Your competences"
 msgstr "Le tue competenze"
@@ -2708,9 +2711,6 @@ msgstr "Personaggio approvato"
 msgid "Can't find a user?"
 msgstr "Non riesci a trovare un utente?"
 
-msgid "Character Question"
-msgstr "Domanda personaggio"
-
 msgid "Character portrait"
 msgstr "Ritratto personaggio"
 
@@ -2755,10 +2755,6 @@ msgstr "Controlli dati soci"
 
 msgid "New refund request"
 msgstr "Nuova richiesta rimborso"
-
-#, python-format
-msgid "Open the: %(date)s"
-msgstr "Apriranno il: %(date)s"
 
 msgid "Organization Roles"
 msgstr "Ruoli dell'organizzazione"
@@ -3028,6 +3024,10 @@ msgstr "Non disponibile, ragazzo"
 msgid "Number of passengers"
 msgstr "Numero di passeggeri"
 
+#, python-format
+msgid "Opening at: %(date)s"
+msgstr "Aprono il: %(date)s"
+
 msgid "Operation completed!"
 msgstr "Operazione completata!"
 
@@ -3235,9 +3235,6 @@ msgstr "Link di registrazione esterno"
 
 msgid "Filter for every field"
 msgstr "Filtra per ogni campo"
-
-msgid "He cannot copy himself"
-msgstr "Non può copiare sè stesso"
 
 msgid "Join the waiting list!"
 msgstr "Iscriviti in lista d'attesa!"
@@ -3544,6 +3541,9 @@ msgstr "Accedi alla creazione personaggio!"
 
 msgid "Available payment methods:"
 msgstr "Metodi di pagamento disponibili: "
+
+msgid "Can't copy from same event"
+msgstr "Non è possibile copiare dallo stesso evento"
 
 msgid "Check inverse relationship"
 msgstr "check relazione inversa"
@@ -5376,11 +5376,6 @@ msgstr ""
 "Questa pagina ti permette di aggiungere o modificare i sovrapprezzi sulle "
 "iscrizioni."
 
-msgid "This page allows you to add or modify a character form question."
-msgstr ""
-"Questa pagina ti permette di aggiungere o modificare una domanda del form di"
-" personaggio."
-
 msgid "This page allows you to change the general settings of this run."
 msgstr ""
 "Questa pagina ti permette di modificare le impostazioni generali di questa "
@@ -6045,6 +6040,12 @@ msgstr ""
 "scelte"
 
 msgid ""
+"This page allows you to add or modify a form question for a writing element."
+msgstr ""
+"Questa pagina consente di aggiungere o modificare una domanda del modulo per"
+" un elemento di scrittura."
+
+msgid ""
 "This page allows you to change the appearance and presentation of the event."
 msgstr ""
 "Questa pagina ti permette di modificare l'aspetto e la presentazione "
@@ -6088,13 +6089,6 @@ msgid ""
 msgstr ""
 "Indicare se l'abilità è visibile agli utenti, e può essere liberamente "
 "acquistata"
-
-msgid ""
-"This page allows you to add or modify an option in a character form "
-"question."
-msgstr ""
-"Questa pagina ti permette di aggiungere o modificare una opzione in una "
-"domanda del form di personaggio."
 
 msgid ""
 "This page prepares the cash balance already formatted for annual "
@@ -6833,6 +6827,13 @@ msgid ""
 msgstr ""
 "Per favore, fai attenzione ad eseguire questi passaggi - altrimenti il tuo "
 "pagamento non sarà processato!"
+
+msgid ""
+"This page allows you to add or modify an option in a form question for a "
+"writing element."
+msgstr ""
+"Questa pagina consente di aggiungere o modificare un'opzione in una domanda "
+"del modulo per un elemento di scrittura."
 
 msgid ""
 "This page allows you to set up the fields that players can fill in in their "

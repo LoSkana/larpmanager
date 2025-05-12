@@ -44,7 +44,7 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association
 from larpmanager.models.casting import Trait, update_traits_all
 from larpmanager.models.event import Event, EventButton, EventConfig, EventText, Run
-from larpmanager.models.form import CharacterQuestion, QuestionStatus, QuestionType, QuestionVisibility
+from larpmanager.models.form import QuestionStatus, QuestionType, QuestionVisibility, WritingQuestion
 from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTutorial
 from larpmanager.models.member import Member, Membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
@@ -287,7 +287,7 @@ def save_event_character_form(features, instance):
     if "character_form" not in features:
         return
 
-    types = set(CharacterQuestion.objects.filter(event=instance).values_list("typ", flat=True).distinct())
+    types = set(WritingQuestion.objects.filter(event=instance).values_list("typ", flat=True).distinct())
     # get most common language between organizers
     langs = {}
     for orga in get_event_organizers(instance):
@@ -313,13 +313,13 @@ def save_event_character_form(features, instance):
     }
     if not types:
         for el, add in def_tps.items():
-            CharacterQuestion.objects.create(
+            WritingQuestion.objects.create(
                 event=instance, typ=el, display=_(add[0]), status=add[1], visibility=add[2], max_length=add[3]
             )
     all_types -= set(def_tps.keys())
     for el in all_types:
         if el in features and el not in types:
-            CharacterQuestion.objects.create(
+            WritingQuestion.objects.create(
                 event=instance,
                 typ=el,
                 display=_(el.capitalize()),
@@ -328,7 +328,7 @@ def save_event_character_form(features, instance):
                 max_length=1000,
             )
         if el not in features and el in types:
-            CharacterQuestion.objects.filter(event=instance, typ=el).delete()
+            WritingQuestion.objects.filter(event=instance, typ=el).delete()
 
 
 @receiver(post_save, sender=Registration)

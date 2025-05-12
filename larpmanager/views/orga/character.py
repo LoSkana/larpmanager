@@ -29,19 +29,19 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.character import (
     OrgaCharacterForm,
-    OrgaCharacterOptionForm,
-    OrgaCharacterQuestionForm,
+    OrgaWritingOptionForm,
+    OrgaWritingQuestionForm,
 )
 from larpmanager.forms.writing import (
     OrgaRelationshipForm,
     UploadElementsForm,
 )
 from larpmanager.models.form import (
-    CharacterAnswer,
-    CharacterChoice,
-    CharacterOption,
-    CharacterQuestion,
     QuestionType,
+    WritingAnswer,
+    WritingChoice,
+    WritingOption,
+    WritingQuestion,
 )
 from larpmanager.models.writing import (
     Character,
@@ -82,7 +82,7 @@ def orga_characters(request, s, n):
     }
 
     if "character_form" in ctx["features"]:
-        que = ctx["event"].get_elements(CharacterQuestion).order_by("order")
+        que = ctx["event"].get_elements(WritingQuestion).order_by("order")
         ctx["char_questions"] = {}
         for q in que:
             if q.typ in ctx["fields_name"].keys():
@@ -179,7 +179,7 @@ def orga_character_form_list(request, s, n):
     if event.parent:
         event = event.parent
     eid = request.POST.get("num")
-    q = event.get_elements(CharacterQuestion).get(pk=eid)
+    q = event.get_elements(WritingQuestion).get(pk=eid)
 
     res = {}
 
@@ -187,25 +187,27 @@ def orga_character_form_list(request, s, n):
 
     max_length = 100
 
+    character_ids = Character.objects.filter(event=event).values_list("id", flat=True)
+
     if q.typ in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
         cho = {}
-        for opt in event.get_elements(CharacterOption).filter(question=q):
+        for opt in event.get_elements(WritingOption).filter(question=q):
             cho[opt.id] = opt.display
 
-        for el in CharacterChoice.objects.filter(question=q, character__event=event):
-            if el.character_id not in res:
-                res[el.character_id] = []
-            res[el.character_id].append(cho[el.option_id])
+        for el in WritingChoice.objects.filter(question=q, element_id__in=character_ids):
+            if el.element_id not in res:
+                res[el.element_id] = []
+            res[el.element_id].append(cho[el.option_id])
 
     elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
-        que = CharacterAnswer.objects.filter(question=q, character__event=event)
+        que = WritingAnswer.objects.filter(question=q, element_id__in=character_ids)
         que = que.annotate(short_text=Substr("text", 1, max_length))
-        que = que.values("character_id", "short_text")
+        que = que.values("element_id", "short_text")
         for el in que:
             answer = el["short_text"]
             if len(answer) == max_length:
-                popup.append(el["character_id"])
-            res[el["character_id"]] = answer
+                popup.append(el["element_id"])
+            res[el["element_id"]] = answer
 
     return JsonResponse({"res": res, "popup": popup, "num": q.id})
 
@@ -217,25 +219,33 @@ def orga_character_form_email(request, s, n):
     if event.parent:
         event = event.parent
     eid = request.POST.get("num")
-    q = event.get_elements(CharacterQuestion).get(pk=eid)
-
-    res = {}
+    q = event.get_elements(WritingQuestion).get(pk=eid)
 
     if q.typ not in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
         return
 
     cho = {}
-    for opt in event.get_elements(CharacterOption).filter(question=q):
+    for opt in event.get_elements(WritingOption).filter(question=q):
         cho[opt.id] = opt.display
 
-    for el in CharacterChoice.objects.filter(question=q, character__event=event).select_related(
-        "character", "character__player"
-    ):
+    get_event_cache_all(ctx)
+    mapping = {}
+    for ch_num, ch in ctx["chars"].items():
+        mapping[ch["id"]] = ch_num
+
+    res = {}
+
+    character_ids = Character.objects.filter(event=event).values_list("id", flat=True)
+    for el in WritingChoice.objects.filter(question=q, element_id__in=character_ids):
+        if el.element_id not in mapping:
+            continue
+        ch_num = mapping[el.element_id]
+        char = ctx["chars"][ch_num]
         if el.option_id not in res:
             res[el.option_id] = {"emails": [], "names": []}
-        res[el.option_id]["emails"].append(str(el.character))
-        if el.character.player:
-            res[el.option_id]["names"].append(el.character.player.email)
+        res[el.option_id]["emails"].append(char["name"])
+        if char["player_id"]:
+            res[el.option_id]["names"].append(char["player"])
 
     n_res = {}
     for opt_id, value in res.items():
@@ -252,7 +262,7 @@ def orga_character_form(request, s, n):
         if request.POST.get("download") == "1":
             return orga_character_form_download(request, ctx)
 
-        return upload_elements(request, ctx, CharacterQuestion, "character_question", "orga_character_form")
+        return upload_elements(request, ctx, WritingQuestion, "character_question", "orga_character_form")
 
     ctx["form"] = UploadElementsForm()
     ctx["upload"] = (
@@ -274,7 +284,7 @@ def orga_character_form(request, s, n):
 
     ctx["download"] = 1
 
-    ctx["list"] = ctx["event"].get_elements(CharacterQuestion).order_by("order").prefetch_related("options")
+    ctx["list"] = ctx["event"].get_elements(WritingQuestion).order_by("order").prefetch_related("options")
     for el in ctx["list"]:
         el.options_list = el.options.order_by("order")
 
@@ -287,12 +297,12 @@ def orga_character_form(request, s, n):
 def orga_character_form_edit(request, s, n, num):
     perm = "orga_character_form"
     ctx = check_event_permission(request, s, n, perm)
-    if backend_edit(request, ctx, OrgaCharacterQuestionForm, num, assoc=False):
+    if backend_edit(request, ctx, OrgaWritingQuestionForm, num, assoc=False):
         if str(request.POST.get("new_option", "")) == "1":
             return redirect(orga_character_options_new, s=ctx["event"].slug, n=ctx["run"].number, num=ctx["saved"].id)
         return redirect(perm, s=ctx["event"].slug, n=ctx["run"].number)
 
-    ctx["list"] = CharacterOption.objects.filter(question=ctx["el"]).order_by("order")
+    ctx["list"] = WritingOption.objects.filter(question=ctx["el"]).order_by("order")
 
     return render(request, "larpmanager/orga/characters/form_edit.html", ctx)
 
@@ -300,7 +310,7 @@ def orga_character_form_edit(request, s, n, num):
 @login_required
 def orga_character_form_order(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_character_form")
-    exchange_order(ctx, CharacterQuestion, num)
+    exchange_order(ctx, WritingQuestion, num)
     return redirect("orga_character_form", s=ctx["event"].slug, n=ctx["run"].number)
 
 
@@ -318,7 +328,7 @@ def orga_character_options_new(request, s, n, num):
 
 
 def character_option_edit(ctx, num, request):
-    if backend_edit(request, ctx, OrgaCharacterOptionForm, num, assoc=False):
+    if backend_edit(request, ctx, OrgaWritingOptionForm, num, assoc=False):
         return redirect(
             "orga_character_form_edit", s=ctx["event"].slug, n=ctx["run"].number, num=ctx["saved"].question_id
         )
@@ -328,7 +338,7 @@ def character_option_edit(ctx, num, request):
 @login_required
 def orga_character_options_order(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_character_form")
-    exchange_order(ctx, CharacterOption, num)
+    exchange_order(ctx, WritingOption, num)
     return redirect(
         "orga_character_form_edit", s=ctx["event"].slug, n=ctx["run"].number, num=ctx["current"].question_id
     )

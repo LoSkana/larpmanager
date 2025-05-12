@@ -24,7 +24,7 @@ from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 
 from larpmanager.models.event import BaseConceptModel
-from larpmanager.models.form import CharacterOption
+from larpmanager.models.form import WritingOption
 from larpmanager.models.utils import save_all_element_configs
 from larpmanager.models.writing import Character
 
@@ -69,7 +69,7 @@ class AbilityPx(BaseConceptModel):
     )
 
     dependents = models.ManyToManyField(
-        CharacterOption,
+        WritingOption,
         related_name="abilities",
         blank=True,
         verbose_name=_("Options required"),

@@ -610,17 +610,19 @@ msgid ""
 "Answers for the co-creation section, editable by both players and authors"
 msgstr ""
 
-msgid "This page allows you to add or modify a character form question."
+msgid ""
+"This page allows you to add or modify a form question for a writing element."
 msgstr ""
 
-msgid "Character Question"
+msgid "Writing Question"
 msgstr ""
 
 msgid ""
-"This page allows you to add or modify an option in a character form question."
+"This page allows you to add or modify an option in a form question for a "
+"writing element."
 msgstr ""
 
-msgid "Character option"
+msgid "Writing option"
 msgstr ""
 
 msgid "Insert the css code to customize the pdf printing"
@@ -3544,8 +3546,8 @@ msgid "Click on the image below (Paypal.me) to open the payment."
 msgstr ""
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field "
-"'notes' (this is important!)"
+"Copy and paste exactly all the coloured text below into the field 'notes' "
+"(this is important!)"
 msgstr ""
 
 msgid "Indicates that payment is sent 'to friends and family'."
@@ -7509,7 +7511,7 @@ msgid "Registrations not open!"
 msgstr ""
 
 #, python-format
-msgid "Open the: %(date)s"
+msgid "Opening at: %(date)s"
 msgstr ""
 
 msgid "Registration is open!"
@@ -7647,7 +7649,7 @@ msgstr ""
 msgid "Parent empty"
 msgstr ""
 
-msgid "He cannot copy himself"
+msgid "Can't copy from same event"
 msgstr ""
 
 msgid "Copy done"
@@ -7671,8 +7673,8 @@ msgid "Provisional"
 msgstr ""
 
 msgid ""
-"'player' (player's email), 'ticket' (ticket name or number), "
-"'character' (character name or number to be assigned), 'pwyw' (donation)."
+"'player' (player's email), 'ticket' (ticket name or number), 'character' "
+"(character name or number to be assigned), 'pwyw' (donation)."
 msgstr ""
 
 msgid "Registration cancelled"
