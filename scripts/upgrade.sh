@@ -23,6 +23,11 @@ if [ -z "$VIRTUAL_ENV" ]; then
     source venv/bin/activate
 fi
 
+python manage.py makemigrations
+
+git add -A
+git commit -m "migrations"
+
 ./scripts/translate.sh
 
 git add -A
