@@ -3026,7 +3026,7 @@ msgstr "Liczba pasażerów"
 
 #, python-format
 msgid "Opening at: %(date)s"
-msgstr "Otwarcie o godz: %(date)"
+msgstr "Otwarcie o godz: %(date)s"
 
 msgid "Operation completed!"
 msgstr "Operacja zakończona!"
