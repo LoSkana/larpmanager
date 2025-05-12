@@ -7649,7 +7649,7 @@ msgstr ""
 msgid "Parent empty"
 msgstr ""
 
-msgid "He cannot copy himself"
+msgid "Can't copy from same event"
 msgstr ""
 
 msgid "Copy done"

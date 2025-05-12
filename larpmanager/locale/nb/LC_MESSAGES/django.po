@@ -3236,9 +3236,6 @@ msgstr "Ekstern registerlenke"
 msgid "Filter for every field"
 msgstr "Filtrer etter felt"
 
-msgid "He cannot copy himself"
-msgstr "Han kan ikke kopiere seg selv"
-
 msgid "Join the waiting list!"
 msgstr "Sett deg på venteliste!"
 
@@ -3544,6 +3541,9 @@ msgstr "Få tilgang til karakteroppretting!"
 
 msgid "Available payment methods:"
 msgstr "Tilgjengelige betalingsmetoder:"
+
+msgid "Can't copy from same event"
+msgstr "Kan ikke kopiere fra samme hendelse"
 
 msgid "Check inverse relationship"
 msgstr "sjekk det omvendte forholdet"
