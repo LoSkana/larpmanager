@@ -209,6 +209,9 @@ msgstr "Cargo"
 msgid "Runs"
 msgstr "Ejecuta"
 
+msgid "Save"
+msgstr "Guardar"
+
 msgid "Sent"
 msgstr "Enviado"
 
@@ -3135,6 +3138,9 @@ msgstr "¡Haz la solicitud ahora!"
 
 msgid "New pre-registrations"
 msgstr "Nuevas preinscripciones"
+
+msgid "No organization found"
+msgstr "No se ha encontrado ninguna organización"
 
 msgid "Number of extractions"
 msgstr "Número de extracciones"

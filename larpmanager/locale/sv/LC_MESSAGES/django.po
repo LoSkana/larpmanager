@@ -209,6 +209,9 @@ msgstr "Roll"
 msgid "Runs"
 msgstr "Runs"
 
+msgid "Save"
+msgstr "Spara"
+
 msgid "Sent"
 msgstr "Skickad"
 
@@ -3135,6 +3138,9 @@ msgstr "Ansök nu!"
 
 msgid "New pre-registrations"
 msgstr "Ny förhandsregistrering"
+
+msgid "No organization found"
+msgstr "Ingen organisation hittades"
 
 msgid "Number of extractions"
 msgstr "Antal extraktioner"

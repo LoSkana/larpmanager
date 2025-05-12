@@ -21,7 +21,7 @@
 import os
 
 from django.conf import settings as conf_settings
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.utils.translation import get_language
 
 from larpmanager.cache.association import get_cache_assoc
@@ -34,9 +34,9 @@ class AssociationIdentifyMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        request.assoc = self.get_assoc_info(request)
-        if not request.assoc:
-            return redirect(f"https://larpmanager.com{request.get_full_path()}")
+        res = self.get_assoc_info(request)
+        if res:
+            return res
 
         lang = get_language()
         request.assoc["footer"] = get_assoc_text(request.assoc["id"], AssocTextType.FOOTER, lang)
@@ -69,10 +69,11 @@ class AssociationIdentifyMiddleware:
 
         assoc = get_cache_assoc(assoc_slug)
         if assoc:
-            return assoc
+            request.assoc = redirect(f"https://larpmanager.com{request.get_full_path()}")
+            return
 
         if local or domain == "larpmanager":
-            return {
+            request.assoc = {
                 "id": 0,
                 "name": "LarpManager",
                 "shuttle": [],
@@ -83,5 +84,9 @@ class AssociationIdentifyMiddleware:
                 "main_mail": "info@larpmanager.com",
                 "favicon": "https://larpmanager.com/static/lm_fav.png",
             }
+            return
 
-        return None
+        if domain.endswith("larpmanager.com"):
+            return redirect(f"https://larpmanager.com{request.get_full_path()}")
+
+        return render(request, "exception/assoc.html", {})

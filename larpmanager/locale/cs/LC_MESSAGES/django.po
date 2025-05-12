@@ -209,6 +209,9 @@ msgstr "Role"
 msgid "Runs"
 msgstr "Běží na"
 
+msgid "Save"
+msgstr "Uložit"
+
 msgid "Sent"
 msgstr "Odesláno"
 
@@ -3135,6 +3138,9 @@ msgstr "Přihlaste se nyní!"
 
 msgid "New pre-registrations"
 msgstr "Nová předběžná registrace"
+
+msgid "No organization found"
+msgstr "Nebyla nalezena žádná organizace"
 
 msgid "Number of extractions"
 msgstr "Počet extrakcí"

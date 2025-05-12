@@ -3323,7 +3323,7 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-msgid "Confirm"
+msgid "Save"
 msgstr ""
 
 msgid "The form is saved every 30 seconds."
@@ -3607,6 +3607,9 @@ msgid "Ability list"
 msgstr ""
 
 msgid "Delivery list"
+msgstr ""
+
+msgid "No organization found"
 msgstr ""
 
 msgid "Activate feature"
@@ -3955,6 +3958,9 @@ msgid "dedicated!"
 msgstr ""
 
 msgid "Summary"
+msgstr ""
+
+msgid "Confirm"
 msgstr ""
 
 msgid "Redeem registration"

@@ -6,6 +6,9 @@ until nc -z db 5432; do
   sleep 1
 done
 
+echo "Update code"
+git pull
+
 echo "Update pips"
 export PATH="/venv/bin:$PATH"
 pip install -r requirements.txt -q

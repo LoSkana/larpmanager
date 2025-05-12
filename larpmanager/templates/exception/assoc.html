@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block title %}
+    {% trans "No organization found" %}
+{% endblock title %}
+{% block nav %}
+{% endblock nav %}
+{% block content %}
+    Did you create one? Go to <code>http://127.0.0.1:8264/admin/larpmanager/association/</code>
+    <br />
+    <br />
+    Did you make a superuser account? If not do <code>docker exec -it larpmanager python manage.py createsuperuser</code>
+{% endblock content %}
