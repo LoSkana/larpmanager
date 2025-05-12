@@ -3632,9 +3632,6 @@ msgstr "Modifiez les données de votre personnage !"
 msgid "Feature already deactivated"
 msgstr "Fonctionnalité déjà désactivée"
 
-msgid "Item assigned for this band"
-msgstr "Élément attribué à cette bande"
-
 msgid "Loading performed, see logs"
 msgstr "Chargement effectué, voir les journaux"
 

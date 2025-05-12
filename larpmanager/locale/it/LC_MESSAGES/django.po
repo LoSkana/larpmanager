@@ -3632,9 +3632,6 @@ msgstr "Modificate i dati del vostro personaggio!"
 msgid "Feature already deactivated"
 msgstr "Feature già disattivata"
 
-msgid "Item assigned for this band"
-msgstr "Elemento assegnato per questa fascia"
-
 msgid "Loading performed, see logs"
 msgstr "Caricamento eseguito, consulta i log"
 

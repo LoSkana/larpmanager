@@ -3632,9 +3632,6 @@ msgstr "Rediger karakterdataene dine!"
 msgid "Feature already deactivated"
 msgstr "Funksjonen er allerede deaktivert"
 
-msgid "Item assigned for this band"
-msgstr "Element allokert til dette båndet"
-
 msgid "Loading performed, see logs"
 msgstr "Lasting utført, se logger"
 

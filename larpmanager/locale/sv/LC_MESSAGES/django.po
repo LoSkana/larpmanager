@@ -3632,9 +3632,6 @@ msgstr "Redigera din karaktärs data!"
 msgid "Feature already deactivated"
 msgstr "Funktionen är redan avaktiverad"
 
-msgid "Item assigned for this band"
-msgstr "Element som tilldelats för detta band"
-
 msgid "Loading performed, see logs"
 msgstr "Lastning utförd, se loggar"
 

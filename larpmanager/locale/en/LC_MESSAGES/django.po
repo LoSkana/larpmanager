@@ -3687,9 +3687,6 @@ msgstr ""
 msgid "history of preferences."
 msgstr ""
 
-msgid "Item assigned for this band"
-msgstr ""
-
 msgid "Enter your preferences here!"
 msgstr ""
 
