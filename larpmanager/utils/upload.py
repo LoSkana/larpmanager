@@ -500,17 +500,17 @@ def writing_load(request, ctx, row, fields, typ, rels, event, chars):
 
 def _writing_load_field(ch, chars, ctx, event, fields, k, rels, row):
     if k == "number":
-        return
+        return ""
 
     # meta_field_type = typ._meta.get_field(k).get_internal_type()
     # print(meta_field_type)
     if len(row) < fields[k]:
-        return
+        return ""
 
     v = row[fields[k]]
     v = "<br />".join(v.strip().split("\n"))
     if not v:
-        return
+        return ""
 
     log = ""
 
