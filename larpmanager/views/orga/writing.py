@@ -199,7 +199,7 @@ def orga_traits(request, s, n):
 
 @login_required
 def orga_traits_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "questbuilder")
+    ctx = check_event_permission(request, s, n, "orga_traits")
     get_trait(ctx, num)
     return writing_view(request, ctx, "trait")
 
