@@ -9,18 +9,20 @@
     {% for el in socialaccount_providers %}
         {% with prov=el.name|lower %}
             <a href="{% provider_login_url prov %}">
-                <img src="{% static 'larpmanager/assets/' %}{{ prov }}_signin.png" />
+                <img src="{% static 'larpmanager/assets/' %}{{ prov }}_signin.png"
+                     alt="login image" />
             </a>
         {% endwith %}
     {% endfor %}
 {% endblock old %}
 {% block content %}
-    <div class='login'>
+    <div class="login">
         <br />
         {% if not request.staging and not request.development %}
             <div class="allauth_signin">
                 <a href="{% get_login_url 'google' %}">
-                    <img src="{% static 'larpmanager/assets/' %}google_signin.png" />
+                    <img src="{% static 'larpmanager/assets/' %}google_signin.png"
+                         alt="login image" />
                 </a>
             </div>
         {% endif %}
@@ -66,22 +68,18 @@ window.addEventListener('DOMContentLoaded', function() {
 
     {% if  assoc.id != 0 %}
 
-       $('.allauth_signin a').each(function(index) {
-            var href = $(this).attr('href');
-            console.log(href);
+        // Before sign up, save the domain where we are making the login, to perform redirect
+       $('.allauth_signin a').on('click', function(event) {
+            const link = this;
+            event.preventDefault();
 
-            var domain = 'https://{{ assoc.slug }}.larpmanager.com';
-
-            next = /next=/g
-            if (!href.match(next)) {
-                href += 'next=' + domain;
-            } else {
-                aux = href.split(next);
-                href = aux[0] + 'next=' + domain + aux[1];
-            }
-
-            href = 'https://larpmanager.com' + href;
-            $(this).attr('href', href);
+            $.ajax({
+                url: '{% url 'prepare_login' %}',
+                method: 'GET',
+                complete: function() {
+                    window.location = link.href;
+                }
+            });
         });
 
     {% endif %}
