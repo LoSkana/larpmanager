@@ -2756,10 +2756,6 @@ msgstr "Gegevens van leden controleren"
 msgid "New refund request"
 msgstr "Nieuw verzoek om terugbetaling"
 
-#, python-format
-msgid "Open the: %(date)s"
-msgstr "Open de: %(date)s"
-
 msgid "Organization Roles"
 msgstr "Organisatie Rollen"
 
@@ -3027,6 +3023,10 @@ msgstr "Niet beschikbaar, kiddo"
 
 msgid "Number of passengers"
 msgstr "Aantal passagiers"
+
+#, python-format
+msgid "Opening at: %(date)s"
+msgstr "Opening op: %(date)s"
 
 msgid "Operation completed!"
 msgstr "Operatie voltooid!"

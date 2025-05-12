@@ -2756,10 +2756,6 @@ msgstr "Comprobación de los datos de los miembros"
 msgid "New refund request"
 msgstr "Nueva solicitud de devolución"
 
-#, python-format
-msgid "Open the: %(date)s"
-msgstr "Abrirá el: %(date)s"
-
 msgid "Organization Roles"
 msgstr "Funciones de la organización"
 
@@ -3027,6 +3023,10 @@ msgstr "No disponible, chaval"
 
 msgid "Number of passengers"
 msgstr "Número de pasajeros"
+
+#, python-format
+msgid "Opening at: %(date)s"
+msgstr "Apertura en: %(date)s"
 
 msgid "Operation completed!"
 msgstr "Operación completada."

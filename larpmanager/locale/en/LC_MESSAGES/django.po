@@ -7511,7 +7511,7 @@ msgid "Registrations not open!"
 msgstr ""
 
 #, python-format
-msgid "Open the: %(date)s"
+msgid "Opening at: %(date)s"
 msgstr ""
 
 msgid "Registration is open!"
