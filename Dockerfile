@@ -33,15 +33,11 @@ RUN apt-get update && apt-get install -y build-essential \
     gettext \
  && rm -rf /var/lib/apt/lists/*
 
+RUN rm -f /usr/lib/python*/EXTERNALLY-MANAGED || true
+
 COPY requirements.txt .
 
-RUN python -m venv /venv
-ENV PATH="/venv/bin:$PATH"
-RUN pip install --no-cache-dir  -r requirements.txt
-
-COPY . .
-
-# Copy prod example to prod settings
-RUN cp main/settings/prod_example.py main/settings/prod.py
+RUN pip install --upgrade pip \
+ && pip install -r requirements.txt
 
 EXPOSE 8264

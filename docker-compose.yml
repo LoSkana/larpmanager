@@ -19,6 +19,7 @@ services:
       - db
       - redis
     volumes:
+      - .:/code
       - media_data:/code/media
       - static_data:/code/static
     env_file:
