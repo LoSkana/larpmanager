@@ -3323,7 +3323,7 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-msgid "Confirm"
+msgid "Save"
 msgstr ""
 
 msgid "The form is saved every 30 seconds."
@@ -3546,8 +3546,8 @@ msgid "Click on the image below (Paypal.me) to open the payment."
 msgstr ""
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field 'notes' "
-"(this is important!)"
+"Copy and paste exactly all the coloured text below into the field "
+"'notes' (this is important!)"
 msgstr ""
 
 msgid "Indicates that payment is sent 'to friends and family'."
@@ -3607,6 +3607,9 @@ msgid "Ability list"
 msgstr ""
 
 msgid "Delivery list"
+msgstr ""
+
+msgid "No organization found"
 msgstr ""
 
 msgid "Activate feature"
@@ -3955,6 +3958,9 @@ msgid "dedicated!"
 msgstr ""
 
 msgid "Summary"
+msgstr ""
+
+msgid "Confirm"
 msgstr ""
 
 msgid "Redeem registration"
@@ -7673,8 +7679,8 @@ msgid "Provisional"
 msgstr ""
 
 msgid ""
-"'player' (player's email), 'ticket' (ticket name or number), 'character' "
-"(character name or number to be assigned), 'pwyw' (donation)."
+"'player' (player's email), 'ticket' (ticket name or number), "
+"'character' (character name or number to be assigned), 'pwyw' (donation)."
 msgstr ""
 
 msgid "Registration cancelled"

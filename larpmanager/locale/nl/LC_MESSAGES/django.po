@@ -209,6 +209,9 @@ msgstr "Rol"
 msgid "Runs"
 msgstr "Loopt"
 
+msgid "Save"
+msgstr "Sla"
+
 msgid "Sent"
 msgstr "Verzonden"
 
@@ -3135,6 +3138,9 @@ msgstr "Solliciteer nu!"
 
 msgid "New pre-registrations"
 msgstr "Nieuwe voorinschrijving"
+
+msgid "No organization found"
+msgstr "Geen organisatie gevonden"
 
 msgid "Number of extractions"
 msgstr "Aantal extracties"

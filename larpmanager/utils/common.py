@@ -204,7 +204,7 @@ def get_feature_module(ctx, num):
 
 def get_plot(ctx, n):
     try:
-        ctx["plot"] = Plot.objects.get(event=ctx["event"], number=n)
+        ctx["plot"] = Plot.objects.get(event=ctx["event"], pk=n)
         ctx["name"] = ctx["plot"].name
     except ObjectDoesNotExist as err:
         raise Http404("Plot does not exist") from err
@@ -212,7 +212,7 @@ def get_plot(ctx, n):
 
 def get_quest_type(ctx, n):
     try:
-        ctx["quest_type"] = QuestType.objects.get(event=ctx["event"], number=n)
+        ctx["quest_type"] = QuestType.objects.get(event=ctx["event"], pk=n)
         ctx["name"] = ctx["quest_type"].name
     except ObjectDoesNotExist as err:
         raise Http404("QuestType does not exist") from err
@@ -220,7 +220,7 @@ def get_quest_type(ctx, n):
 
 def get_quest(ctx, n):
     try:
-        ctx["quest"] = Quest.objects.get(event=ctx["event"], number=n)
+        ctx["quest"] = Quest.objects.get(event=ctx["event"], pk=n)
         ctx["name"] = ctx["quest"].name
     except ObjectDoesNotExist as err:
         raise Http404("Quest does not exist") from err
@@ -228,7 +228,7 @@ def get_quest(ctx, n):
 
 def get_trait(ctx, n):
     try:
-        ctx["trait"] = Trait.objects.get(event=ctx["event"], number=n)
+        ctx["trait"] = Trait.objects.get(event=ctx["event"], pk=n)
         ctx["name"] = ctx["trait"].name
     except ObjectDoesNotExist as err:
         raise Http404("Trait does not exist") from err
@@ -236,7 +236,7 @@ def get_trait(ctx, n):
 
 def get_handout(ctx, n):
     try:
-        ctx["handout"] = Handout.objects.get(event=ctx["event"], number=n)
+        ctx["handout"] = Handout.objects.get(event=ctx["event"], pk=n)
         ctx["name"] = ctx["handout"].name
         ctx["handout"].data = ctx["handout"].show()
     except ObjectDoesNotExist as err:
@@ -245,7 +245,7 @@ def get_handout(ctx, n):
 
 def get_handout_template(ctx, n):
     try:
-        ctx["handout_template"] = HandoutTemplate.objects.get(event=ctx["event"], number=n)
+        ctx["handout_template"] = HandoutTemplate.objects.get(event=ctx["event"], pk=n)
         ctx["name"] = ctx["handout_template"].name
     except ObjectDoesNotExist as err:
         raise Http404("handout_template does not exist") from err
@@ -253,7 +253,7 @@ def get_handout_template(ctx, n):
 
 def get_prologue(ctx, n):
     try:
-        ctx["prologue"] = Prologue.objects.get(event=ctx["event"], number=n)
+        ctx["prologue"] = Prologue.objects.get(event=ctx["event"], pk=n)
         ctx["name"] = str(ctx["prologue"])
     except ObjectDoesNotExist as err:
         raise Http404("prologue does not exist") from err
@@ -261,7 +261,7 @@ def get_prologue(ctx, n):
 
 def get_prologue_type(ctx, n):
     try:
-        ctx["prologue_type"] = PrologueType.objects.get(event=ctx["event"], number=n)
+        ctx["prologue_type"] = PrologueType.objects.get(event=ctx["event"], pk=n)
         ctx["name"] = str(ctx["prologue_type"])
     except ObjectDoesNotExist as err:
         raise Http404("prologue_type does not exist") from err
@@ -269,7 +269,7 @@ def get_prologue_type(ctx, n):
 
 def get_speedlarp(ctx, n):
     try:
-        ctx["speedlarp"] = SpeedLarp.objects.get(event=ctx["event"], number=n)
+        ctx["speedlarp"] = SpeedLarp.objects.get(event=ctx["event"], pk=n)
         ctx["name"] = str(ctx["speedlarp"])
     except ObjectDoesNotExist as err:
         raise Http404("speedlarp does not exist") from err
@@ -304,16 +304,14 @@ def get_collection_redeem(request, cod):
 
 def get_workshop(ctx, n):
     try:
-        ctx["workshop"] = WorkshopModule.objects.get(event=ctx["event"], number=n)
+        ctx["workshop"] = WorkshopModule.objects.get(event=ctx["event"], pk=n)
     except ObjectDoesNotExist as err:
         raise Http404("WorkshopModule does not exist") from err
 
 
 def get_workshop_question(ctx, n, mod):
     try:
-        ctx["workshop_question"] = WorkshopQuestion.objects.get(
-            module__event=ctx["event"], number=n, module__number=mod
-        )
+        ctx["workshop_question"] = WorkshopQuestion.objects.get(module__event=ctx["event"], pk=n, module__pk=mod)
     except ObjectDoesNotExist as err:
         raise Http404("WorkshopQuestion does not exist") from err
 

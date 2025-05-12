@@ -209,6 +209,9 @@ msgstr "Rôle"
 msgid "Runs"
 msgstr "Courses"
 
+msgid "Save"
+msgstr "Économiser"
+
 msgid "Sent"
 msgstr "Envoyé"
 
@@ -3135,6 +3138,9 @@ msgstr "Postulez maintenant !"
 
 msgid "New pre-registrations"
 msgstr "Nouvelle préinscription"
+
+msgid "No organization found"
+msgstr "Aucune organisation trouvée"
 
 msgid "Number of extractions"
 msgstr "Nombre d'extractions"

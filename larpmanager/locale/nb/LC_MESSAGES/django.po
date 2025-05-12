@@ -209,6 +209,9 @@ msgstr "Rolle"
 msgid "Runs"
 msgstr "Løper"
 
+msgid "Save"
+msgstr "Spar"
+
 msgid "Sent"
 msgstr "Sendt"
 
@@ -3135,6 +3138,9 @@ msgstr "Søk nå!"
 
 msgid "New pre-registrations"
 msgstr "Ny forhåndsregistrering"
+
+msgid "No organization found"
+msgstr "Ingen organisasjon funnet"
 
 msgid "Number of extractions"
 msgstr "Antall ekstraksjoner"

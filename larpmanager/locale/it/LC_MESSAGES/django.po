@@ -209,6 +209,9 @@ msgstr "Ruolo"
 msgid "Runs"
 msgstr "Runs"
 
+msgid "Save"
+msgstr "Risparmiare"
+
 msgid "Sent"
 msgstr "Inviato"
 
@@ -3135,6 +3138,9 @@ msgstr "Fai subito la richiesta!"
 
 msgid "New pre-registrations"
 msgstr "Nuova pre-iscrizione"
+
+msgid "No organization found"
+msgstr "Nessuna organizzazione trovata"
 
 msgid "Number of extractions"
 msgstr "Numero estrazioni"

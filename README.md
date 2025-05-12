@@ -34,8 +34,6 @@ Give them proper values. Then let's do the docker magic:
 docker compose up --build
 ```
 
-Expose the port 8264 (we wanted a fancy one) to your reverse proxy of choice for public access.
-
 Now create a super user:
 
 ```
@@ -48,7 +46,10 @@ Go to `http://127.0.0.1:8264/admin/larpmanager/association/`, and create your As
 - Logo: an image;
 - Main mail: the main mail of the organization (duh)
 
-Leave the other fields empty. Go to `http://127.0.0.1:8264/`.
+Leave the other fields empty, and save.
+
+Now expose the port 8264 (we wanted a fancy one) to your reverse proxy of choice for public access.
+
 Now you're ready for liftoff!
 
 ---

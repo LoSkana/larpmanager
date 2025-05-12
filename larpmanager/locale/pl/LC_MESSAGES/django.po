@@ -209,6 +209,9 @@ msgstr "Rola"
 msgid "Runs"
 msgstr "Biegi"
 
+msgid "Save"
+msgstr "Zapisz"
+
 msgid "Sent"
 msgstr "Wysłany"
 
@@ -3135,6 +3138,9 @@ msgstr "Złóż wniosek teraz!"
 
 msgid "New pre-registrations"
 msgstr "Nowe rejestracje wstępne"
+
+msgid "No organization found"
+msgstr "Nie znaleziono organizacji"
 
 msgid "Number of extractions"
 msgstr "Liczba ekstrakcji"
