@@ -2756,10 +2756,6 @@ msgstr "Kontroly členských údajů"
 msgid "New refund request"
 msgstr "Nová žádost o vrácení peněz"
 
-#, python-format
-msgid "Open the: %(date)s"
-msgstr "Otevřete: %(date)s"
-
 msgid "Organization Roles"
 msgstr "Role organizace"
 
@@ -3027,6 +3023,10 @@ msgstr "Není k dispozici, chlapče"
 
 msgid "Number of passengers"
 msgstr "Počet cestujících"
+
+#, python-format
+msgid "Opening at: %(date)s"
+msgstr "Otevření v: %(date)s"
 
 msgid "Operation completed!"
 msgstr "Operace dokončena!"
