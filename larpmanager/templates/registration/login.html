@@ -66,7 +66,7 @@ function isMobileNonChrome() {
 window.addEventListener('DOMContentLoaded', function() {
     $(function(){
 
-    {% if  assoc.id != 0 %}
+    {% if assoc.id != 0 %}
 
        $('.allauth_signin a').each(function(index) {
             var href = $(this).attr('href');

@@ -6,9 +6,9 @@ until nc -z db 5432; do
   sleep 1
 done
 
-ls main/settings
-
 [ -f main/settings/prod.py ] || cp main/settings/prod_example.py main/settings/prod.py
+
+mkdir -p logs
 
 echo "Update pips"
 pip install -r requirements.txt -q
@@ -27,5 +27,8 @@ python manage.py compress
 echo "Initial data..."
 cp -R larpmanager/tests/media/* media/
 python manage.py import_features
+
+echo "Start tasks..."
+nohup python manage.py process_tasks > logs/background-tasks.log 2>&1 &
 
 exec "$@"
