@@ -209,9 +209,6 @@ msgstr "Roll"
 msgid "Runs"
 msgstr "Runs"
 
-msgid "Save"
-msgstr "Spara"
-
 msgid "Sent"
 msgstr "Skickad"
 

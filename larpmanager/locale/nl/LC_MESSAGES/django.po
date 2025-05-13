@@ -209,9 +209,6 @@ msgstr "Rol"
 msgid "Runs"
 msgstr "Loopt"
 
-msgid "Save"
-msgstr "Sla"
-
 msgid "Sent"
 msgstr "Verzonden"
 

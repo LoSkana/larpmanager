@@ -209,9 +209,6 @@ msgstr "Cargo"
 msgid "Runs"
 msgstr "Ejecuta"
 
-msgid "Save"
-msgstr "Guardar"
-
 msgid "Sent"
 msgstr "Enviado"
 

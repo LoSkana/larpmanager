@@ -209,9 +209,6 @@ msgstr "Ruolo"
 msgid "Runs"
 msgstr "Runs"
 
-msgid "Save"
-msgstr "Risparmiare"
-
 msgid "Sent"
 msgstr "Inviato"
 

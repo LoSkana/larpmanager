@@ -209,9 +209,6 @@ msgstr "Rolle"
 msgid "Runs"
 msgstr "Løper"
 
-msgid "Save"
-msgstr "Spar"
-
 msgid "Sent"
 msgstr "Sendt"
 
