@@ -76,7 +76,7 @@ class AssociationIdentifyMiddleware:
             }
             return cls.load_assoc(request, assoc)
 
-        if domain.endswith("larpmanager.com"):
+        if request.get_host().endswith("larpmanager.com"):
             return redirect(f"https://larpmanager.com{request.get_full_path()}")
 
         if request.path.startswith("/admin"):

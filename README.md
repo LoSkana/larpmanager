@@ -68,9 +68,10 @@ In the future, if you want to pull the latest changes of the repo, go with:
 
 ```
 git pull origin main
-docker-compose build
-docker-compose up -d
+docker exec -it larpmanager scripts/deploy.sh
 ```
+
+It will perform a graceful restart.
 
 ---
 

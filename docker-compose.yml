@@ -14,7 +14,7 @@ services:
   main:
     container_name: larpmanager
     build: .
-    command: ./scripts/entrypoint.sh gunicorn main.wsgi:application --bind 0.0.0.0:8264
+    command: ./scripts/entrypoint.sh gunicorn main.wsgi:application --bind 0.0.0.0:8264 --pid gunicorn.pid --workers ${GUNICORN_WORKERS}
     depends_on:
       - db
       - redis
