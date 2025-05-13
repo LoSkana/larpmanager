@@ -38,6 +38,7 @@ from larpmanager.models.writing import (
     Character,
     Faction,
 )
+from larpmanager.utils.common import get_element
 from larpmanager.utils.event import get_event_filter_characters, get_event_run
 from larpmanager.utils.exceptions import (
     check_event_feature,
@@ -168,6 +169,7 @@ def _get_previous(ctx, request, typ):
         casting_characters(ctx, ctx["run"].reg)
     else:
         check_event_feature(request, ctx, "questbuilder")
+        get_element(ctx, typ, "quest_type", QuestType, by_number=True)
         casting_quest_traits(ctx, ctx["quest_type"])
     try:
         ca = CastingAvoid.objects.get(run=ctx["run"], member=request.user.member, typ=typ)
