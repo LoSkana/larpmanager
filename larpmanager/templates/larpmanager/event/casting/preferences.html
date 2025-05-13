@@ -18,9 +18,8 @@
             <p>
                 {% trans "Go to the preferences for" %}:
                 <a href="{% url 'casting_preferences' event.slug run.number 0 %}">{% trans "characters" %}</a>,
-                {% for qt in quest_types %}
-                    {% include "elements/comma.html" %}
-                    <a href="{% url 'casting_preferences' event.slug run.number qt.number %}">{{ qt.name }}</a>
+                {% for num, qt in quest_types.items %}
+                    , <a href="{% url 'casting_preferences' event.slug run.number qt.number %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
             <h3>{% trans "Preferences" %} {{ gl_name }}</h3>
