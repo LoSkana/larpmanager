@@ -311,7 +311,7 @@ def writing_view(request, ctx, nm):
     ctx["el"] = ctx[nm]
     ctx["el"].data = ctx["el"].show_complete()
     ctx["nm"] = nm
-    return render(request, "larpmanager/orga/view.html", ctx)
+    return render(request, "larpmanager/orga/writing/view.html", ctx)
 
 
 def writing_versions(request, ctx, nm, tp):
