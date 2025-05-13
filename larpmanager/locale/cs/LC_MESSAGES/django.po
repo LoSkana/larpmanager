@@ -1293,6 +1293,9 @@ msgstr "Odpovědi WS"
 msgid "Appearance"
 msgstr "Vzhled"
 
+msgid "Applicable"
+msgstr "Použitelné"
+
 msgid "Appointees"
 msgstr "Jmenovaní"
 
@@ -5419,6 +5422,9 @@ msgstr ""
 
 msgid "List of users who have not registered for a future run of the event"
 msgstr "Seznam uživatelů, kteří se nezaregistrovali do budoucího běhu akce"
+
+msgid "Select the types of writing elements that this question applies to."
+msgstr "Vyberte typy prvků psaní, kterých se tato otázka týká."
 
 msgid "The payment of your membership fee for this year has been received!"
 msgstr "Potvrzujeme zaplacení členského příspěvku na aktuální rok!"

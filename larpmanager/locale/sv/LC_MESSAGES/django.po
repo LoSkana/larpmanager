@@ -1293,6 +1293,9 @@ msgstr "Svar från WS"
 msgid "Appearance"
 msgstr "Utseende"
 
+msgid "Applicable"
+msgstr "Tillämplig"
+
 msgid "Appointees"
 msgstr "Utnämningar"
 
@@ -5468,6 +5471,9 @@ msgid "List of users who have not registered for a future run of the event"
 msgstr ""
 "Lista över användare som inte registrerade sig för en framtida körning av "
 "evenemanget"
+
+msgid "Select the types of writing elements that this question applies to."
+msgstr "Välj de typer av skrivelement som den här frågan gäller."
 
 msgid "The payment of your membership fee for this year has been received!"
 msgstr "Vi bekräftar betalningen av din medlemsavgift för innevarande år!"

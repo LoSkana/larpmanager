@@ -90,7 +90,7 @@ def get_event_cache_characters(ctx, res):
         if mirror and ch.mirror_id in assigned_chars:
             continue
 
-        data = ch.show(ctx["event"])
+        data = ch.show(ctx["run"])
         data["fields"] = {}
         search_player(ch, data, ctx)
         if hide_uncasted_characters and data["player_id"] == 0:

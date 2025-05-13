@@ -1293,6 +1293,9 @@ msgstr "WS Antwoorden"
 msgid "Appearance"
 msgstr "Uiterlijk"
 
+msgid "Applicable"
+msgstr "Toepasselijk"
+
 msgid "Appointees"
 msgstr "Benoemingen"
 
@@ -5533,6 +5536,10 @@ msgid "List of users who have not registered for a future run of the event"
 msgstr ""
 "Lijst van gebruikers die zich niet hebben geregistreerd voor een toekomstige"
 " uitvoering van het evenement"
+
+msgid "Select the types of writing elements that this question applies to."
+msgstr ""
+"Selecteer de soorten schrijfelementen waarop deze vraag van toepassing is."
 
 msgid "The payment of your membership fee for this year has been received!"
 msgstr ""
