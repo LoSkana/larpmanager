@@ -3714,6 +3714,9 @@ msgstr ""
 msgid "Go to the history preferences for"
 msgstr ""
 
+msgid "Historical"
+msgstr ""
+
 msgid "Preferences"
 msgstr ""
 
@@ -7374,9 +7377,6 @@ msgid "Expenses (Personal)"
 msgstr ""
 
 msgid "Handout Models"
-msgstr ""
-
-msgid "Historical"
 msgstr ""
 
 msgid "Statistics"
