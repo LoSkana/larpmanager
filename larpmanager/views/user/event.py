@@ -52,10 +52,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.auth import is_lm_admin
 from larpmanager.utils.base import def_user_ctx
-from larpmanager.utils.common import (
-    get_quest,
-    get_quest_type,
-)
+from larpmanager.utils.common import get_element
 from larpmanager.utils.event import get_event, get_event_run
 from larpmanager.utils.exceptions import (
     HiddenError,
@@ -403,7 +400,7 @@ def quests(request, s, n, g=None):
             ctx["list"].append(el.show_complete())
         return render(request, "larpmanager/event/quest_types.html", ctx)
 
-    get_quest_type(ctx, g)
+    get_element(ctx, g, "quest_type", QuestType, by_number=True)
     ctx["list"] = []
     for el in Quest.objects.filter(event=ctx["event"], hide=False, typ=ctx["quest_type"]).order_by("number"):
         ctx["list"].append(el.show_complete())
@@ -414,7 +411,7 @@ def quest(request, s, n, g):
     ctx = get_event_run(request, s, n, status=True)
     check_visibility(ctx, "questbuilder", _("Quest"))
 
-    get_quest(ctx, g)
+    get_element(ctx, g, "quest", Quest, by_number=True)
     ctx["data"] = ctx["quest"].show()
     return render(request, "larpmanager/event/quest.html", ctx)
 

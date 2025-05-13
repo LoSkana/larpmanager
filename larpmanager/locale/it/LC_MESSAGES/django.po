@@ -62,9 +62,6 @@ msgstr "Run"
 msgid "VAT"
 msgstr "IVA"
 
-msgid "Via"
-msgstr "Via"
-
 msgid "Who"
 msgstr "Chi"
 
@@ -572,6 +569,9 @@ msgstr "Condiviso"
 
 msgid "Status"
 msgstr "Stato"
+
+msgid "Street"
+msgstr "Via"
 
 msgid "Submit"
 msgstr "Invia"
@@ -1590,11 +1590,11 @@ msgstr "Nuova risposta!"
 msgid "Next events"
 msgstr "Prossimi eventi"
 
-msgid "POSTAL CODE"
-msgstr "CAP"
-
 msgid "Past events"
 msgstr "Eventi passati"
+
+msgid "Postal code"
+msgstr "Codice postale"
 
 msgid "Preferences"
 msgstr "Preferenze"
@@ -4329,9 +4329,6 @@ msgstr ""
 msgid "Request of membership to the Organization"
 msgstr "Richiesta iscrizione all'Associazione"
 
-msgid "The road contains inadmissible characters"
-msgstr "La strada contiene caratteri non ammessi"
-
 msgid "Who takes it upon themselves to solve it."
 msgstr "Chi si prende in carico di risolverlo"
 
@@ -4509,9 +4506,6 @@ msgstr "Iscrizione aggiornata a %(event)s di %(user)s"
 msgid "Select the event you wish to pre-register for"
 msgstr "Seleziona l'evento per cui ti vuoi pre-iscrivere"
 
-msgid "The postcode contains inadmissible characters"
-msgstr "Il CAP contiene caratteri non ammessi"
-
 msgid "There are no new runs scheduled at this time."
 msgstr "Al momento non ci sono nuove run in programma."
 
@@ -4681,9 +4675,6 @@ msgstr "Materie prime, sussidiarie, di consumo e di merci"
 #, python-format
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Reminder versamento quota sociale per %(event)s"
-
-msgid "The house number contains inadmissible characters"
-msgstr "Il numero civico contiene caratteri non ammessi"
 
 msgid "The user has been enabled for the indicated role."
 msgstr "L'utente è stato abilitato al ruolo indicato."

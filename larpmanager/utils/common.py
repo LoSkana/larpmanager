@@ -211,27 +211,15 @@ def get_plot(ctx, n):
 
 
 def get_quest_type(ctx, n):
-    try:
-        ctx["quest_type"] = QuestType.objects.get(event=ctx["event"], pk=n)
-        ctx["name"] = ctx["quest_type"].name
-    except ObjectDoesNotExist as err:
-        raise Http404("QuestType does not exist") from err
+    get_element(ctx, n, "quest_type", QuestType)
 
 
 def get_quest(ctx, n):
-    try:
-        ctx["quest"] = Quest.objects.get(event=ctx["event"], pk=n)
-        ctx["name"] = ctx["quest"].name
-    except ObjectDoesNotExist as err:
-        raise Http404("Quest does not exist") from err
+    get_element(ctx, n, "quest", Quest)
 
 
 def get_trait(ctx, n):
-    try:
-        ctx["trait"] = Trait.objects.get(event=ctx["event"], pk=n)
-        ctx["name"] = ctx["trait"].name
-    except ObjectDoesNotExist as err:
-        raise Http404("Trait does not exist") from err
+    get_element(ctx, n, "trait", Trait)
 
 
 def get_handout(ctx, n):
@@ -252,11 +240,7 @@ def get_handout_template(ctx, n):
 
 
 def get_prologue(ctx, n):
-    try:
-        ctx["prologue"] = Prologue.objects.get(event=ctx["event"], pk=n)
-        ctx["name"] = str(ctx["prologue"])
-    except ObjectDoesNotExist as err:
-        raise Http404("prologue does not exist") from err
+    get_element(ctx, n, "prologue", Prologue)
 
 
 def get_prologue_type(ctx, n):

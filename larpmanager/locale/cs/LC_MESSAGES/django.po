@@ -62,9 +62,6 @@ msgstr "Run"
 msgid "VAT"
 msgstr "DPH"
 
-msgid "Via"
-msgstr "Prostřednictvím"
-
 msgid "Who"
 msgstr "Kdo"
 
@@ -572,6 +569,9 @@ msgstr "Sdílené stránky"
 
 msgid "Status"
 msgstr "Stav"
+
+msgid "Street"
+msgstr "Ulice"
 
 msgid "Submit"
 msgstr "Odeslat"
@@ -1590,11 +1590,11 @@ msgstr "Nová odpověď!"
 msgid "Next events"
 msgstr "Nadcházející události"
 
-msgid "POSTAL CODE"
-msgstr "POŠTOVNÍ KÓD"
-
 msgid "Past events"
 msgstr "Minulé události"
+
+msgid "Postal code"
+msgstr "Poštovní směrovací číslo"
 
 msgid "Preferences"
 msgstr "Předvolby"
@@ -4328,9 +4328,6 @@ msgstr "Zaměstnanci v současné době přezkoumávají platbu."
 msgid "Request of membership to the Organization"
 msgstr "Žádost o členství ve sdružení"
 
-msgid "The road contains inadmissible characters"
-msgstr "Silnice obsahuje nepřípustné znaky"
-
 msgid "Who takes it upon themselves to solve it."
 msgstr "Kdo je zodpovědný za jeho řešení"
 
@@ -4508,9 +4505,6 @@ msgstr "Aktualizované zadání %(event)s podle %(user)s"
 msgid "Select the event you wish to pre-register for"
 msgstr "Vyberte událost, na kterou se chcete předběžně zaregistrovat."
 
-msgid "The postcode contains inadmissible characters"
-msgstr "Poštovní směrovací číslo obsahuje nepřípustné znaky"
-
 msgid "There are no new runs scheduled at this time."
 msgstr "V současné době nejsou naplánovány žádné nové jízdy."
 
@@ -4680,9 +4674,6 @@ msgstr "Suroviny, spotřební materiál a zboží"
 #, python-format
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Připomenutí platby členských příspěvků za %(event)s"
-
-msgid "The house number contains inadmissible characters"
-msgstr "Číslo domu obsahuje nepřípustné znaky"
 
 msgid "The user has been enabled for the indicated role."
 msgstr "Uživateli byla povolena uvedená role."

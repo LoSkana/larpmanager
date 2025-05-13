@@ -62,9 +62,6 @@ msgstr "Run"
 msgid "VAT"
 msgstr "TVA"
 
-msgid "Via"
-msgstr "Via"
-
 msgid "Who"
 msgstr "Qui"
 
@@ -572,6 +569,9 @@ msgstr "Partagé"
 
 msgid "Status"
 msgstr "Statut"
+
+msgid "Street"
+msgstr "Rue"
 
 msgid "Submit"
 msgstr "Envoyer"
@@ -1590,11 +1590,11 @@ msgstr "Nouvelle réponse !"
 msgid "Next events"
 msgstr "Événements à venir"
 
-msgid "POSTAL CODE"
-msgstr "CODE POSTAL"
-
 msgid "Past events"
 msgstr "Événements passés"
+
+msgid "Postal code"
+msgstr "Code postal"
 
 msgid "Preferences"
 msgstr "Préférences"
@@ -4330,9 +4330,6 @@ msgstr "Paiement en cours d'examen par les services de la Commission."
 msgid "Request of membership to the Organization"
 msgstr "Demande d'adhésion à l'association"
 
-msgid "The road contains inadmissible characters"
-msgstr "La route contient des caractères inadmissibles"
-
 msgid "Who takes it upon themselves to solve it."
 msgstr "Qui se charge de le résoudre"
 
@@ -4511,9 +4508,6 @@ msgstr "Entrée mise à jour en %(event)s par %(user)s"
 msgid "Select the event you wish to pre-register for"
 msgstr "Sélectionnez l'événement pour lequel vous souhaitez vous pré-inscrire"
 
-msgid "The postcode contains inadmissible characters"
-msgstr "Le code postal contient des caractères inadmissibles"
-
 msgid "There are no new runs scheduled at this time."
 msgstr "Il n'y a actuellement aucune nouvelle course programmée."
 
@@ -4688,9 +4682,6 @@ msgstr "Matières premières, consommables et marchandises"
 #, python-format
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Rappel du paiement des cotisations pour les %(event)s"
-
-msgid "The house number contains inadmissible characters"
-msgstr "Le numéro de maison contient des caractères inadmissibles"
 
 msgid "The user has been enabled for the indicated role."
 msgstr "L'utilisateur a été autorisé à jouer le rôle indiqué."
