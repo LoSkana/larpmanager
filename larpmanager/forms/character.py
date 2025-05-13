@@ -535,6 +535,9 @@ class OrgaWritingQuestionForm(MyForm):
             self.delete_field("max_length")
             self.delete_field("status")
 
+        if "print_pdf" not in self.params["features"]:
+            self.delete_field("printable")
+
         self._init_editable()
 
         self._init_applicable()
@@ -587,11 +590,22 @@ class OrgaWritingQuestionForm(MyForm):
         if self.instance.pk and self.instance.typ in typ_def:
             del self.fields["applicable"]
         else:
-            self.fields["applicable"] = forms.MultipleChoiceField(
-                choices=QuestionApplicable.choices,
-                widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
-                required=False,
-            )
+            all_choices = {"characters": QuestionApplicable.CHARACTER, "plot": QuestionApplicable.PLOT}
+            choices = []
+            for feature, choice in all_choices.items():
+                if feature not in self.params["features"]:
+                    continue
+                choices.append((choice.value, choice.label))
+
+            if len(choices) > 1:
+                self.fields["applicable"] = forms.MultipleChoiceField(
+                    choices=choices,
+                    widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
+                    required=False,
+                )
+            else:
+                self.fields["applicable"] = forms.CharField(widget=forms.HiddenInput())
+
             if self.instance and self.instance.pk:
                 self.initial["applicable"] = self.instance.get_applicable()
             else:
