@@ -330,7 +330,7 @@ def update_event_cache_all_character_reg(instance, res, run):
 
 
 def update_event_cache_all_character(instance, res, run):
-    data = instance.show(run.event)
+    data = instance.show(run)
     update_character_fields(instance, data)
     search_player(instance, data, {"run": run})
     if instance.number not in res["chars"]:

@@ -86,7 +86,7 @@ class Writing(BaseConceptModel):
             self.upd_js_attr(js, s)
         return js
 
-    def show(self, event=None):
+    def show(self, run=None):
         js = self.show_red()
         self.upd_js_attr(js, "teaser")
         return js
@@ -193,8 +193,8 @@ class Character(Writing):
     def __str__(self):
         return f"#{self.number} {self.name}"
 
-    def show(self, event=None):
-        js = super().show(event)
+    def show(self, run=None):
+        js = super().show(run)
 
         for s in ["title"]:
             self.upd_js_attr(js, s)
@@ -209,7 +209,7 @@ class Character(Writing):
         if "title" in js and js["title"]:
             js["show"] += " - " + js["title"]
 
-        self.show_factions(event, js)
+        self.show_factions(run.event, js)
 
         if self.cover:
             # noinspection PyUnresolvedReferences

@@ -34,8 +34,8 @@ class QuestType(Writing):
     def __str__(self):
         return self.name
 
-    def show(self):
-        js = super().show()
+    def show(self, run=None):
+        js = super().show(run)
         # ~ js['quests'] = [t.show_red() for t in self.quests.filter(hide=False)]
         return js
 
@@ -62,12 +62,13 @@ class Quest(Writing):
     def __str__(self):
         return f"Q{self.number} {self.name}"
 
-    def show(self):
-        js = super().show()
+    def show(self, run=None):
+        js = super().show(run)
         if self.typ:
             # noinspection PyUnresolvedReferences
             js["typ"] = self.typ.number
-        # js['traits'] = [t.show() for t in self.traits.filter(hide=False)]
+        # noinspection PyUnresolvedReferences
+        js["traits"] = [t.show() for t in self.traits.filter(hide=False)]
         js["open"] = self.open_show
         return js
 
@@ -114,8 +115,8 @@ class Trait(Writing):
     def __str__(self):
         return f"T{self.number} {self.name}"
 
-    def show(self):
-        js = super().show()
+    def show(self, run=None):
+        js = super().show(run)
         for s in ["role", "keywords", "safety"]:
             self.upd_js_attr(js, s)
         if self.quest:
