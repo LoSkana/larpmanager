@@ -300,10 +300,10 @@ def ticket(request, s=""):
                 subj = "LarpManager ticket"
                 if s:
                     subj += f" [{s}]"
-                body = f"""
-                    User: {request.user.member} ({request.user.member.email})
-                    <br /><br />{form.cleaned_data["content"]}
-                """
+                body = f"Email: {form.cleaned_data['email']} <br /><br />"
+                if request.user.is_authenticated:
+                    body += f"User: {request.user.member} ({request.user.member.email}) <br /><br />"
+                body += form.cleaned_data["content"]
                 my_send_simple_mail(subj, body, email)
             messages.success(request, _("Your request has been sent, we will reply as soon as possible!"))
             return redirect("home")
