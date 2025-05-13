@@ -67,7 +67,8 @@ class Quest(Writing):
         if self.typ:
             # noinspection PyUnresolvedReferences
             js["typ"] = self.typ.number
-        # js['traits'] = [t.show() for t in self.traits.filter(hide=False)]
+        # noinspection PyUnresolvedReferences
+        js["traits"] = [t.show() for t in self.traits.filter(hide=False)]
         js["open"] = self.open_show
         return js
 
