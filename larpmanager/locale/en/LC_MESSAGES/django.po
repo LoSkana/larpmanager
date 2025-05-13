@@ -3323,7 +3323,7 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-msgid "Save"
+msgid "Confirm"
 msgstr ""
 
 msgid "The form is saved every 30 seconds."
@@ -3955,9 +3955,6 @@ msgid "dedicated!"
 msgstr ""
 
 msgid "Summary"
-msgstr ""
-
-msgid "Confirm"
 msgstr ""
 
 msgid "Redeem registration"

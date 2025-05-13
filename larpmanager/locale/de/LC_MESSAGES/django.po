@@ -209,9 +209,6 @@ msgstr "Rolle"
 msgid "Runs"
 msgstr "Läuft"
 
-msgid "Save"
-msgstr "Speichern Sie"
-
 msgid "Sent"
 msgstr "Gesendet"
 

@@ -209,9 +209,6 @@ msgstr "Role"
 msgid "Runs"
 msgstr "Běží na"
 
-msgid "Save"
-msgstr "Uložit"
-
 msgid "Sent"
 msgstr "Odesláno"
 

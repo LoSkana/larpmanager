@@ -209,9 +209,6 @@ msgstr "Rôle"
 msgid "Runs"
 msgstr "Courses"
 
-msgid "Save"
-msgstr "Économiser"
-
 msgid "Sent"
 msgstr "Envoyé"
 

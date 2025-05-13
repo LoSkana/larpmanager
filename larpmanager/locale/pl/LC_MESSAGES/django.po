@@ -209,9 +209,6 @@ msgstr "Rola"
 msgid "Runs"
 msgstr "Biegi"
 
-msgid "Save"
-msgstr "Zapisz"
-
 msgid "Sent"
 msgstr "Wysłany"
 
