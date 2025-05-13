@@ -1857,6 +1857,9 @@ msgstr "Tekst (kort)"
 msgid "Three quotas"
 msgstr "Drie quota"
 
+msgid "Total number"
+msgstr "Totaal aantal"
+
 msgid "Transactions"
 msgstr "Transacties"
 
@@ -1905,6 +1908,9 @@ msgstr "Weet je het zeker?"
 
 msgid "Authorisation"
 msgstr "Autorisatie"
+
+msgid "Average value"
+msgstr "Gemiddelde waarde"
 
 msgid "Cancellations"
 msgstr "Annuleringen"
@@ -2675,9 +2681,6 @@ msgstr "Standaard functies"
 msgid "Technical Support"
 msgstr "Technische ondersteuning"
 
-msgid "Total preferences"
-msgstr "Aantal voorkeuren"
-
 msgid "Welcome on board!"
 msgstr "Welkom aan boord!"
 
@@ -2836,9 +2839,6 @@ msgstr "Stel een nieuwe vraag"
 
 msgid "Assigned character!"
 msgstr "Karakter toegewezen!"
-
-msgid "Average preferences"
-msgstr "Gemiddelde voorkeuren"
 
 msgid "Change registration"
 msgstr "Bericht bewerken"

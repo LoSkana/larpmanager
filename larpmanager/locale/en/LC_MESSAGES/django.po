@@ -3720,10 +3720,10 @@ msgstr ""
 msgid "Go to the preferences for"
 msgstr ""
 
-msgid "Total preferences"
+msgid "Total number"
 msgstr ""
 
-msgid "Average preferences"
+msgid "Average value"
 msgstr ""
 
 msgid "Participate in the co-creation of the character!"
