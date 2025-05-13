@@ -31,7 +31,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
 from django.forms import Textarea
 from django.template import loader
 from django.utils import translation
@@ -213,19 +212,7 @@ for province in FULL_PROVINCE_CHOICES:
         country_subdivisions_map[province[2]] = []
     country_subdivisions_map[province[2]].append([province[0], province[1]])
 
-cap_validator = RegexValidator(
-    regex=r"^(\d{4}|\d{5}(-\d{4})?|[A-Z]{1,2}\d[A-Z\d]? \d[A-Z]{2}|[A-Z]\d{4,5}|[A-Z]{1,2}\d{2,3}|[A-Z]\d{3}[A-Z]?)$",
-    message=_("The postcode contains inadmissible characters"),
-    code="invalid_postal_code",
-)
-address_validator = RegexValidator(
-    regex=r"^[A-Za-zÀ-ÿ' -]{3,50}$", message=_("The road contains inadmissible characters"), code="invalid_street_name"
-)
-house_number_validator = RegexValidator(
-    regex=r"^\d{1,5}([A-Za-z]{0,1}|/[A-Za-z0-9]{1,4}|[-\s]?(bis|ter|quater))?$",
-    message=_("The house number contains inadmissible characters"),
-    code="invalid_house_number",
-)
+
 MEMBERSHIP_CHOICES = (
     ("e", _("Absent")),
     ("j", _("Nothing")),
@@ -244,8 +231,8 @@ class ResidenceWidget(forms.MultiWidget):
             forms.Select(choices=COUNTRY_CHOICES),
             forms.Select(),
             forms.TextInput(attrs={**attr_common, "placeholder": _("Municipality")}),
-            forms.TextInput(attrs={**attr_common, "placeholder": _("POSTAL CODE")}),
-            forms.TextInput(attrs={**attr_common, "placeholder": _("Via")}),
+            forms.TextInput(attrs={**attr_common, "placeholder": _("Postal code")}),
+            forms.TextInput(attrs={**attr_common, "placeholder": _("Street")}),
             forms.TextInput(attrs={**attr_common, "placeholder": _("House number")}),
         ]
         super().__init__(widgets, attrs)
@@ -267,9 +254,9 @@ class ResidenceField(forms.MultiValueField):
             forms.ChoiceField(choices=COUNTRY_CHOICES),
             forms.ChoiceField(choices=PROVINCE_CHOICES),
             forms.CharField(validators=[validate_no_pipe]),
-            forms.CharField(validators=[cap_validator]),
-            forms.CharField(validators=[address_validator]),
-            forms.CharField(validators=[house_number_validator]),
+            forms.CharField(max_length=6),
+            forms.CharField(max_length=30),
+            forms.CharField(max_length=10),
         ]
         widget = ResidenceWidget(attrs=None)
         super().__init__(*args, fields=fields, widget=widget, **kwargs)

@@ -1126,15 +1126,6 @@ msgid ""
 "authorise the sharing of your data."
 msgstr ""
 
-msgid "The postcode contains inadmissible characters"
-msgstr ""
-
-msgid "The road contains inadmissible characters"
-msgstr ""
-
-msgid "The house number contains inadmissible characters"
-msgstr ""
-
 msgid "Absent"
 msgstr ""
 
@@ -1150,10 +1141,10 @@ msgstr ""
 msgid "Quota"
 msgstr ""
 
-msgid "POSTAL CODE"
+msgid "Postal code"
 msgstr ""
 
-msgid "Via"
+msgid "Street"
 msgstr ""
 
 msgid "Character not allowed:"

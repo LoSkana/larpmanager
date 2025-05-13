@@ -62,9 +62,6 @@ msgstr "Run"
 msgid "VAT"
 msgstr "BTW"
 
-msgid "Via"
-msgstr "Via"
-
 msgid "Who"
 msgstr "Wie"
 
@@ -572,6 +569,9 @@ msgstr "Gedeelde"
 
 msgid "Status"
 msgstr "Status"
+
+msgid "Street"
+msgstr "Straat"
 
 msgid "Submit"
 msgstr "Stuur"
@@ -1590,11 +1590,11 @@ msgstr "Nieuw antwoord!"
 msgid "Next events"
 msgstr "Komende evenementen"
 
-msgid "POSTAL CODE"
-msgstr "POSTCODE"
-
 msgid "Past events"
 msgstr "Gebeurtenissen in het verleden"
+
+msgid "Postal code"
+msgstr "Postcode"
 
 msgid "Preferences"
 msgstr "Voorkeuren"
@@ -4332,9 +4332,6 @@ msgstr "De betaling wordt momenteel beoordeeld door het personeel."
 msgid "Request of membership to the Organization"
 msgstr "Aanvraag lidmaatschap vereniging"
 
-msgid "The road contains inadmissible characters"
-msgstr "De weg bevat ontoelaatbare tekens"
-
 msgid "Who takes it upon themselves to solve it."
 msgstr "Wie neemt de leiding om het op te lossen"
 
@@ -4515,9 +4512,6 @@ msgstr "Bijgewerkte invoer van %(event)s door %(user)s"
 msgid "Select the event you wish to pre-register for"
 msgstr "Selecteer het evenement waarvoor je je wilt voorregistreren"
 
-msgid "The postcode contains inadmissible characters"
-msgstr "De postcode bevat ontoelaatbare tekens"
-
 msgid "There are no new runs scheduled at this time."
 msgstr "Er zijn momenteel geen nieuwe runs gepland."
 
@@ -4693,9 +4687,6 @@ msgstr "Grondstoffen, verbruiksgoederen en goederen"
 #, python-format
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Herinnering betaling lidmaatschapsgeld voor %(event)s"
-
-msgid "The house number contains inadmissible characters"
-msgstr "Het huisnummer bevat ontoelaatbare tekens"
 
 msgid "The user has been enabled for the indicated role."
 msgstr "De gebruiker is ingeschakeld voor de aangegeven rol."

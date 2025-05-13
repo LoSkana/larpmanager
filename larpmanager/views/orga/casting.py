@@ -30,7 +30,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.registration import registration_payments_status
 from larpmanager.forms.miscellanea import OrganizerCastingOptionsForm
-from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, Trait
+from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType, Trait
 from larpmanager.models.member import Member, Membership
 from larpmanager.models.registration import (
     Registration,
@@ -42,7 +42,7 @@ from larpmanager.models.writing import (
     Faction,
 )
 from larpmanager.utils.common import (
-    get_quest_type,
+    get_element,
     get_time_diff_today,
 )
 from larpmanager.utils.deadlines import get_membership_fee_year
@@ -215,7 +215,7 @@ def get_casting_data(request, ctx, typ, form):
     if typ == 0:
         (choices, taken, mirrors, allowed) = get_casting_choices_characters(ctx, options)
     else:
-        get_quest_type(ctx, typ)
+        get_element(ctx, typ, "quest_type", QuestType, by_number=True)
         allowed = None
         (choices, taken, mirrors) = get_casting_choices_quests(ctx)
 

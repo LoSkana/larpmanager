@@ -62,9 +62,6 @@ msgstr "Run"
 msgid "VAT"
 msgstr "MOMS"
 
-msgid "Via"
-msgstr "Via"
-
 msgid "Who"
 msgstr "Vem"
 
@@ -572,6 +569,9 @@ msgstr "Delad"
 
 msgid "Status"
 msgstr "Status"
+
+msgid "Street"
+msgstr "Gata"
 
 msgid "Submit"
 msgstr "Skicka"
@@ -1590,11 +1590,11 @@ msgstr "Nytt svar!"
 msgid "Next events"
 msgstr "Kommande evenemang"
 
-msgid "POSTAL CODE"
-msgstr "POSTKOD"
-
 msgid "Past events"
 msgstr "Tidigare händelser"
+
+msgid "Postal code"
+msgstr "Postnummer"
 
 msgid "Preferences"
 msgstr "Inställningar"
@@ -4330,9 +4330,6 @@ msgstr "Betalningen granskas för närvarande av personalen."
 msgid "Request of membership to the Organization"
 msgstr "Ansökan om medlemskap i en förening"
 
-msgid "The road contains inadmissible characters"
-msgstr "Vägen innehåller otillåtna tecken"
-
 msgid "Who takes it upon themselves to solve it."
 msgstr "Vem tar ansvar för att lösa problemet?"
 
@@ -4512,9 +4509,6 @@ msgstr "Uppdaterad registrering av %(event)s av %(user)s"
 msgid "Select the event you wish to pre-register for"
 msgstr "Välj det evenemang du vill föranmäla dig till"
 
-msgid "The postcode contains inadmissible characters"
-msgstr "Postnumret innehåller otillåtna tecken"
-
 msgid "There are no new runs scheduled at this time."
 msgstr "För närvarande finns inga nya körningar planerade."
 
@@ -4686,9 +4680,6 @@ msgstr "Råvaror, förbrukningsmaterial och varor"
 #, python-format
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Påminnelse om betalning av medlemsavgift för %(event)s"
-
-msgid "The house number contains inadmissible characters"
-msgstr "Husnumret innehåller otillåtna tecken"
 
 msgid "The user has been enabled for the indicated role."
 msgstr "Användaren har aktiverats för den angivna rollen."
