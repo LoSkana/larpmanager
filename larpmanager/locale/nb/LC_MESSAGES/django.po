@@ -62,9 +62,6 @@ msgstr "Run"
 msgid "VAT"
 msgstr "MVA"
 
-msgid "Via"
-msgstr "Via"
-
 msgid "Who"
 msgstr "Hvem"
 
@@ -572,6 +569,9 @@ msgstr "Delte"
 
 msgid "Status"
 msgstr "Status"
+
+msgid "Street"
+msgstr "Gate"
 
 msgid "Submit"
 msgstr "Send"
@@ -1590,11 +1590,11 @@ msgstr "Nytt svar!"
 msgid "Next events"
 msgstr "Kommende arrangementer"
 
-msgid "POSTAL CODE"
-msgstr "POSTKODE"
-
 msgid "Past events"
 msgstr "Tidligere arrangementer"
+
+msgid "Postal code"
+msgstr "Postnummer"
 
 msgid "Preferences"
 msgstr "Innstillinger"
@@ -4330,9 +4330,6 @@ msgstr "Betalingen er for tiden til vurdering hos de ansatte."
 msgid "Request of membership to the Organization"
 msgstr "Søknad om medlemskap i foreningen"
 
-msgid "The road contains inadmissible characters"
-msgstr "Veien inneholder utillatelige tegn"
-
 msgid "Who takes it upon themselves to solve it."
 msgstr "Hvem tar ansvar for å løse det"
 
@@ -4512,9 +4509,6 @@ msgstr "Oppdatert oppføring av %(event)s etter %(user)s"
 msgid "Select the event you wish to pre-register for"
 msgstr "Velg arrangementet du ønsker å forhåndsregistrere deg til"
 
-msgid "The postcode contains inadmissible characters"
-msgstr "Postnummeret inneholder tegn som ikke er tillatt"
-
 msgid "There are no new runs scheduled at this time."
 msgstr "Det er for øyeblikket ikke planlagt noen nye kjøringer."
 
@@ -4684,9 +4678,6 @@ msgstr "Råvarer, forbruksvarer og varer"
 #, python-format
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Påminnelse om betaling av medlemskontingent for %(event)s"
-
-msgid "The house number contains inadmissible characters"
-msgstr "Husnummeret inneholder utillatelige tegn"
 
 msgid "The user has been enabled for the indicated role."
 msgstr "Brukeren har blitt aktivert for den angitte rollen."
