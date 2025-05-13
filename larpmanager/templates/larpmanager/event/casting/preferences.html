@@ -23,7 +23,7 @@
                     <a href="{% url 'casting_preferences' event.slug run.number qt.number %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
-            <h3>Preferenze {{ gl_name }}</h3>
+            <h3>{% trans "Preferences" %} {{ gl_name }}</h3>
         {% endif %}
     {% endif %}
     <table id="preferences" class="tablesorter mob">
@@ -31,8 +31,8 @@
             <tr>
                 <th>{{ cl_name }}</th>
                 <th>{{ el_name }}</th>
-                <th>{% trans "Total preferences" %}</th>
-                <th>{% trans "Average preferences" %}</th>
+                <th>{% trans "Total number" %}</th>
+                <th>{% trans "Average value" %}</th>
             </tr>
         </thead>
         <tbody>

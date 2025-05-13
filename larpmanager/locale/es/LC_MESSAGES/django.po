@@ -1857,6 +1857,9 @@ msgstr "Texto (corto)"
 msgid "Three quotas"
 msgstr "Tres plazos"
 
+msgid "Total number"
+msgstr "Número total"
+
 msgid "Transactions"
 msgstr "Transacciones"
 
@@ -1905,6 +1908,9 @@ msgstr "¿Seguro?"
 
 msgid "Authorisation"
 msgstr "Autorización"
+
+msgid "Average value"
+msgstr "Valor medio"
 
 msgid "Cancellations"
 msgstr "Cancelaciones"
@@ -2675,9 +2681,6 @@ msgstr "Características de serie"
 msgid "Technical Support"
 msgstr "Asistencia técnica"
 
-msgid "Total preferences"
-msgstr "Preferencias totales"
-
 msgid "Welcome on board!"
 msgstr "¡Bienvenido a bordo!"
 
@@ -2836,9 +2839,6 @@ msgstr "Hacer una nueva pregunta"
 
 msgid "Assigned character!"
 msgstr "¡Personaje asignado!"
-
-msgid "Average preferences"
-msgstr "Preferencias promedio"
 
 msgid "Change registration"
 msgstr "Editar inscripción"

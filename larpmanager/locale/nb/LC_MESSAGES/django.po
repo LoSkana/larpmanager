@@ -1857,6 +1857,9 @@ msgstr "Tekst (kort)"
 msgid "Three quotas"
 msgstr "Tre kvoter"
 
+msgid "Total number"
+msgstr "Totalt antall"
+
 msgid "Transactions"
 msgstr "Transaksjoner"
 
@@ -1905,6 +1908,9 @@ msgstr "Er du sikker?"
 
 msgid "Authorisation"
 msgstr "Autorisasjon"
+
+msgid "Average value"
+msgstr "Gjennomsnittlig verdi"
 
 msgid "Cancellations"
 msgstr "Avbestillinger"
@@ -2675,9 +2681,6 @@ msgstr "Standardfunksjoner"
 msgid "Technical Support"
 msgstr "Teknisk støtte"
 
-msgid "Total preferences"
-msgstr "Antall preferanser"
-
 msgid "Welcome on board!"
 msgstr "Velkommen om bord!"
 
@@ -2836,9 +2839,6 @@ msgstr "Still et nytt spørsmål"
 
 msgid "Assigned character!"
 msgstr "Tildelt karakter!"
-
-msgid "Average preferences"
-msgstr "Gjennomsnittlige preferanser"
 
 msgid "Change registration"
 msgstr "Rediger oppføring"
