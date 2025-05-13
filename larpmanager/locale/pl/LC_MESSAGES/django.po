@@ -1293,6 +1293,9 @@ msgstr "Odpowiedzi WS"
 msgid "Appearance"
 msgstr "Wygląd"
 
+msgid "Applicable"
+msgstr "Dotyczy"
+
 msgid "Appointees"
 msgstr "Mianowani"
 
@@ -5451,6 +5454,9 @@ msgstr ""
 msgid "List of users who have not registered for a future run of the event"
 msgstr ""
 "Lista użytkowników, którzy nie zarejestrowali się na przyszłe wydarzenie."
+
+msgid "Select the types of writing elements that this question applies to."
+msgstr "Wybierz typy elementów tekstu, których dotyczy to pytanie."
 
 msgid "The payment of your membership fee for this year has been received!"
 msgstr "Wpłata składki członkowskiej za ten rok została otrzymana!"

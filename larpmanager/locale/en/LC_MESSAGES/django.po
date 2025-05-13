@@ -2571,6 +2571,12 @@ msgstr ""
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr ""
 
+msgid "Applicable"
+msgstr ""
+
+msgid "Select the types of writing elements that this question applies to."
+msgstr ""
+
 msgid ""
 "Optional - Indicates additional details on the option, will be shown below "
 "the question"

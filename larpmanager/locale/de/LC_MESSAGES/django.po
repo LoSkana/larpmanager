@@ -1293,6 +1293,9 @@ msgstr "WS-Antworten"
 msgid "Appearance"
 msgstr "Erscheinungsbild"
 
+msgid "Applicable"
+msgstr "Anwendbar"
+
 msgid "Appointees"
 msgstr "Beauftragte"
 
@@ -5626,6 +5629,10 @@ msgid "List of users who have not registered for a future run of the event"
 msgstr ""
 "Liste der Nutzer, die sich nicht für einen zukünftigen Lauf der "
 "Veranstaltung angemeldet haben"
+
+msgid "Select the types of writing elements that this question applies to."
+msgstr ""
+"Wählen Sie die Arten von Schriftelementen aus, auf die diese Frage zutrifft."
 
 msgid "The payment of your membership fee for this year has been received!"
 msgstr ""

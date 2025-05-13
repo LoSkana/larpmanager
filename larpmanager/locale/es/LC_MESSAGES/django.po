@@ -1293,6 +1293,9 @@ msgstr "Respuestas talleres"
 msgid "Appearance"
 msgstr "Apariencia"
 
+msgid "Applicable"
+msgstr "Aplicable"
+
 msgid "Appointees"
 msgstr "Designados"
 
@@ -5458,6 +5461,11 @@ msgstr ""
 msgid "List of users who have not registered for a future run of the event"
 msgstr ""
 "Lista de usuarios que no se han inscrito para un futuro pase del evento"
+
+msgid "Select the types of writing elements that this question applies to."
+msgstr ""
+"Seleccione los tipos de elementos de escritura a los que se aplica esta "
+"pregunta."
 
 msgid "The payment of your membership fee for this year has been received!"
 msgstr ""

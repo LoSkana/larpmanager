@@ -69,6 +69,11 @@ class QuestionVisibility(models.TextChoices):
     PRIVATE = "e", _("Private")
 
 
+class QuestionApplicable(models.TextChoices):
+    CHARACTER = "c", _("Character")
+    PLOT = "p", _("Plot")
+
+
 class WritingQuestion(BaseModel):
     typ = models.CharField(
         max_length=10,
@@ -140,6 +145,14 @@ class WritingQuestion(BaseModel):
         help_text=_("Indicate whether the field is printed in PDF generations"),
     )
 
+    applicable = models.CharField(
+        default="",
+        max_length=20,
+        null=True,
+        verbose_name=_("Applicable"),
+        help_text=_("Select the types of writing elements that this question applies to."),
+    )
+
     def __str__(self):
         return f"{self.event} - {self.display[:30]}"
 
@@ -165,6 +178,15 @@ class WritingQuestion(BaseModel):
 
     def get_editable_display(self):
         return ", ".join([str(label) for value, label in CharacterStatus.choices if value in self.get_editable()])
+
+    def get_applicable(self):
+        return self.applicable.split(",") if self.applicable else []
+
+    def set_applicable(self, applicable_list):
+        self.applicable = ",".join(applicable_list)
+
+    def get_applicable_display(self):
+        return ", ".join([str(label) for value, label in QuestionApplicable.choices if value in self.get_applicable()])
 
 
 class WritingOption(BaseModel):
