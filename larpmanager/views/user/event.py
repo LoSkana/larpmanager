@@ -460,5 +460,5 @@ def export(request, s, t):
     # r = Run(event=ctx["event"])
     aux = {}
     for el in lst:
-        aux[el.number] = el.show(ctx["event"])
+        aux[el.number] = el.show(ctx["run"])
     return JsonResponse(aux)

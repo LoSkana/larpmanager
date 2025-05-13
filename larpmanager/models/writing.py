@@ -209,7 +209,8 @@ class Character(Writing):
         if "title" in js and js["title"]:
             js["show"] += " - " + js["title"]
 
-        self.show_factions(run.event, js)
+        if run:
+            self.show_factions(run.event, js)
 
         if self.cover:
             # noinspection PyUnresolvedReferences

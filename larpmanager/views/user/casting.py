@@ -58,7 +58,7 @@ def casting_characters(ctx, reg):
         choices[k] = {}
         facts.append(k)
         for char in fac.chars:
-            choices[k][char.id] = char.show(ctx["event"])
+            choices[k][char.id] = char.show(ctx["run"])
             num += 1
 
     ctx["factions"] = json.dumps(facts)
@@ -212,7 +212,7 @@ def _casting_update(ctx, prefs, request, typ):
     lst = []
     for c in Casting.objects.filter(run=ctx["run"], member=request.user.member, typ=typ).order_by("pref"):
         if typ == 0:
-            lst.append(Character.objects.get(pk=c.element).show(ctx["event"])["name"])
+            lst.append(Character.objects.get(pk=c.element).show(ctx["run"])["name"])
         else:
             trait = Trait.objects.get(pk=c.element)
             lst.append(f"{trait.quest.show()['name']} - {trait.show()['name']}")

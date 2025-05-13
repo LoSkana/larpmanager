@@ -600,6 +600,9 @@ class OrgaWritingQuestionForm(MyForm):
     def clean_editable(self):
         return ",".join(self.cleaned_data["editable"])
 
+    def clean_applicable(self):
+        return ",".join(self.cleaned_data["applicable"])
+
 
 class OrgaWritingOptionForm(MyForm):
     page_info = _("This page allows you to add or modify an option in a form question for a writing element.")
