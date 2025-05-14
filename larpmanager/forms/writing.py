@@ -19,18 +19,21 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import traceback
+from abc import abstractmethod
 
 from django import forms
-from django.db.models import Max
+from django.contrib.postgres.aggregates import ArrayAgg
+from django.db.models import Max, Q
 from django.forms import CharField
 from django.utils.translation import gettext_lazy as _
 from tinymce.widgets import TinyMCE
 
-from larpmanager.forms.base import MyForm
+from larpmanager.forms.base import BaseRegistrationForm, MyForm
 from larpmanager.forms.utils import EventCharacterS2Widget, EventCharacterS2WidgetMulti
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep, Run
+from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingOption, WritingQuestion
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import (
@@ -174,8 +177,39 @@ class UploadElementsForm(forms.Form):
     )
 
 
-class PlotForm(WritingForm):
+class BaseWritingForm(BaseRegistrationForm):
+    gift = False
+    answer_class = WritingAnswer
+    choice_class = WritingChoice
+    option_class = WritingOption
+    question_class = WritingQuestion
+    instance_key = "element_id"
+
+    def _init_questions(self, event):
+        super()._init_questions(event)
+        self.questions = self.questions.filter(
+            Q(applicable__icontains=self.get_applicable()) | Q(applicable__isnull=True) | Q(applicable="")
+        )
+
+    @abstractmethod
+    def get_applicable(self):
+        pass
+
+    def get_options_query(self, event):
+        query = super().get_options_query(event)
+        return query.annotate(tickets_map=ArrayAgg("tickets"))
+
+    def get_option_key_count(self, option):
+        key = f"option_char_{option.id}"
+        return key
+
+    class Meta:
+        abstract = True
+
+
+class PlotForm(WritingForm, BaseWritingForm):
     load_templates = "plot"
+
     load_js = "characters-choices"
 
     page_title = _("Plot")
@@ -183,15 +217,18 @@ class PlotForm(WritingForm):
     class Meta:
         model = Plot
 
-        exclude = ("number", "teaser", "temp", "hide")
+        exclude = ("number", "temp", "hide")
 
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
-            "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.init_orga_fields()
+        del self.fields["teaser"]
+        self.reorder_field("characters")
 
         # PLOT CHARACTERS REL
         if self.instance.pk:
@@ -215,6 +252,9 @@ class PlotForm(WritingForm):
 
         # print(self.show_link)
 
+    def get_applicable(self):
+        return QuestionApplicable.PLOT
+
     def get_init_multi_character(self):
         que = PlotCharacterRel.objects.filter(plot__id=self.instance.pk)
         return que.values_list("character_id", flat=True)
@@ -228,6 +268,9 @@ class PlotForm(WritingForm):
 
     def save(self, commit=True):
         instance = super().save()
+
+        if hasattr(self, "questions"):
+            self.save_reg_questions(instance)
 
         if instance.pk:
             for pr in self.instance.get_plot_characters():

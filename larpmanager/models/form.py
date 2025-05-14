@@ -85,7 +85,7 @@ class WritingQuestion(BaseModel):
 
     search = models.CharField(max_length=1000, editable=False)
 
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="char_questions")
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="form_questions")
 
     display = models.CharField(max_length=100, verbose_name=_("Display"), help_text=_("Question display text"))
 
@@ -146,7 +146,7 @@ class WritingQuestion(BaseModel):
     )
 
     applicable = models.CharField(
-        default="",
+        default=QuestionApplicable.CHARACTER,
         max_length=20,
         null=True,
         verbose_name=_("Applicable"),

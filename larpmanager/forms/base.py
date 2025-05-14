@@ -198,6 +198,9 @@ class BaseRegistrationForm(MyFormRun):
                 self.choices[r.question_id] = []
             self.choices[r.question_id].append(r)
 
+        self._init_questions(event)
+
+    def _init_questions(self, event):
         self.questions = self.question_class.get_instance_questions(event, self.params["features"])
 
     def get_options_query(self, event):
@@ -278,11 +281,12 @@ class BaseRegistrationForm(MyFormRun):
         key = f"option_{option.id}"
         return key
 
-    def init_orga_fields(self, event, reg_section):
+    def init_orga_fields(self, reg_section=None):
+        event = self.params["run"].event
         self._init_reg_question(self.instance, event)
+
         # start loop on questions
         keys = []
-
         for question in self.questions:
             if question.skip(self.instance, self.params["features"], self.params, True):
                 continue
@@ -291,10 +295,11 @@ class BaseRegistrationForm(MyFormRun):
             keys.append(k)
 
             sec_name = reg_section
-            if question.section:
+            if hasattr(question, "section") and question.section:
                 sec_name = question.section.name
 
-            self.sections["id_" + k] = sec_name
+            if sec_name:
+                self.sections["id_" + k] = sec_name
 
         return keys
 
