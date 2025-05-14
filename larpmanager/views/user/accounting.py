@@ -177,7 +177,7 @@ def acc_refund(request):
 
 
 @login_required
-def acc_pay(request, s, n):
+def acc_pay(request, s, n, method=None):
     check_assoc_feature(request, "payment")
     ctx = get_event_run(request, s, n, signup=True, status=True)
 
@@ -198,11 +198,11 @@ def acc_pay(request, s, n):
             )
             return redirect("profile")
 
-    return redirect("acc_reg", r=reg.id)
+    return redirect("acc_reg", r=reg.id, method=method)
 
 
 @login_required
-def acc_reg(request, r):
+def acc_reg(request, r, method=None):
     check_assoc_feature(request, "payment")
 
     try:
@@ -249,6 +249,9 @@ def acc_reg(request, r):
 
     ctx["association"] = Association.objects.get(pk=ctx["a_id"])
     ctx["hide_amount"] = ctx["association"].get_config("payment_hide_amount", False)
+
+    if method:
+        ctx["def_method"] = method
 
     if request.method == "POST":
         form = PaymentForm(request.POST, reg=reg, ctx=ctx)

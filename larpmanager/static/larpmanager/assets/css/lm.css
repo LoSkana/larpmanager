@@ -1231,3 +1231,18 @@ th select {
 #err {
     color: red;
 }
+
+.payment-logo {
+    width:2em;
+}
+
+.payment-form-error {
+    color: red;
+    margin: 2em;
+    font-style: italic;
+}
+
+.vote-profile {
+    width:7em;
+    height: 7em;
+}

@@ -1,7 +1,7 @@
 {% load i18n %}
-<div style="text-align:center">
+<div class="centerized">
     {% if form.errors %}
-        <p style="color: red; margin: 2em; font-style: italic;">
+        <p class="payment-form-error">
             {% trans "Warning. The form contains errors to the fields - " %}
             {% for field in form.visible_fields %}
                 {% if field.errors %}{{ field.label }} -{% endif %}
@@ -29,11 +29,13 @@
                 <tr id="row_{{ el.slug }}"
                     onclick="toggle_radio('{{ el.slug }}')"
                     class="selable">
-                    <th style="display: none">
+                    <th class="hide">
                         <input type="radio" id="{{ el.slug }}" name="method" value="{{ el.slug }}">
                     </th>
                     <th>
-                        <img src="{{ el.profile }}" style="width:2em" />
+                        <img src="{{ el.profile }}"
+                             class="payment-logo"
+                             alt="payment logo {{ el.name }}" />
                     </th>
                     <th>{{ el.name }}</th>
                     {% if 'payment_fees' in assoc.features and user_fees %}
@@ -75,9 +77,16 @@
 
             console.log($('.selable').length);
 
+            {% if def_method %}
+                $('#row_{{ def_method }}').click();
+                $("#submit").click();
+            {% else %}
+
             if ($('.selable').length == 1) {
                 $('.selable').first().trigger('click');
             }
+
+            {% endif %}
 
         });
 });

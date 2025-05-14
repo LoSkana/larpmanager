@@ -240,7 +240,17 @@ urlpatterns = [
         name="acc_pay",
     ),
     path(
+        "accounting/pay/<slug:s>/<int:n>/<slug:method>/",
+        views_ua.acc_pay,
+        name="acc_pay",
+    ),
+    path(
         "accounting/registration/<int:r>/",
+        views_ua.acc_reg,
+        name="acc_reg",
+    ),
+    path(
+        "accounting/registration/<int:r>/<slug:method>/",
         views_ua.acc_reg,
         name="acc_reg",
     ),
