@@ -2312,6 +2312,9 @@ msgstr "Verbandsbeiträge"
 msgid "Multiple choice"
 msgstr "Mehrfachauswahl"
 
+msgid "Organization222"
+msgstr "Organisation222"
+
 msgid "Overall balance"
 msgstr "Kassenmittel"
 

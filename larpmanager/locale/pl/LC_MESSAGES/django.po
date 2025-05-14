@@ -2312,6 +2312,9 @@ msgstr "Opłaty członkowskie"
 msgid "Multiple choice"
 msgstr "Wielokrotny wybór"
 
+msgid "Organization222"
+msgstr "Organizacja222"
+
 msgid "Overall balance"
 msgstr "Ogólny bilans"
 

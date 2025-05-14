@@ -2312,6 +2312,9 @@ msgstr "Cuotas de afiliación"
 msgid "Multiple choice"
 msgstr "Opción múltiple"
 
+msgid "Organization222"
+msgstr "Organización222"
+
 msgid "Overall balance"
 msgstr "Balance total"
 

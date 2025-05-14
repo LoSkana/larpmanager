@@ -2312,6 +2312,9 @@ msgstr "Foreningsavgifter"
 msgid "Multiple choice"
 msgstr "Flere valgmuligheter"
 
+msgid "Organization222"
+msgstr "Organisasjon222"
+
 msgid "Overall balance"
 msgstr "Kontantbudsjett"
 

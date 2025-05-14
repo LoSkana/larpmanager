@@ -2312,6 +2312,9 @@ msgstr "Quote associazione"
 msgid "Multiple choice"
 msgstr "Scelta multipla"
 
+msgid "Organization222"
+msgstr "Organizzazione222"
+
 msgid "Overall balance"
 msgstr "Bilancio cassa"
 

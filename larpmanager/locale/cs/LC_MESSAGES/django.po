@@ -2312,6 +2312,9 @@ msgstr "Poplatky sdružení"
 msgid "Multiple choice"
 msgstr "Vícenásobná volba"
 
+msgid "Organization222"
+msgstr "Organizace222"
+
 msgid "Overall balance"
 msgstr "Peněžní rozpočet"
 

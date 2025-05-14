@@ -2312,6 +2312,9 @@ msgstr "Verenigingskosten"
 msgid "Multiple choice"
 msgstr "Meerkeuze"
 
+msgid "Organization222"
+msgstr "Organisatie222"
+
 msgid "Overall balance"
 msgstr "Kasbudget"
 

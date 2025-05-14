@@ -2312,6 +2312,9 @@ msgstr "Frais d'association"
 msgid "Multiple choice"
 msgstr "Choix multiple"
 
+msgid "Organization222"
+msgstr "Organisation222"
+
 msgid "Overall balance"
 msgstr "Budget de trésorerie"
 

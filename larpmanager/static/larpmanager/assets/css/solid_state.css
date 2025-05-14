@@ -7,7 +7,7 @@ html, body {
 }
 
 body {
-    background: #3B3B3B;
+    background: red;
 
     background-attachment: fixed;
     background-size: cover;
