@@ -404,7 +404,7 @@ urlpatterns = [
         name="manage",
     ),
     path(
-        "<slug:s>/<int:n>/",
+        "<slug:s2>/<int:n>/",
         views_ue.gallery,
         name="gallery",
     ),
