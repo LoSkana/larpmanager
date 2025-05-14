@@ -199,9 +199,9 @@ def acc_pay(request, s, n, method=None):
             return redirect("profile")
 
     if method:
-        return redirect("acc_reg", r=reg.id, method=method)
+        return redirect("acc_reg", reg_id=reg.id, method=method)
     else:
-        return redirect("acc_reg", r=reg.id)
+        return redirect("acc_reg", reg_id=reg.id)
 
 
 @login_required
