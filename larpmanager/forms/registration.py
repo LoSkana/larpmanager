@@ -478,7 +478,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             self.init_character(char_section)
 
         # ## REGISTRATION OPTIONS
-        self.init_orga_fields(self.event, main_section)
+        self.init_orga_fields(main_section)
 
         if "unique_code" in self.params["features"]:
             self.sections["id_special_cod"] = add_section

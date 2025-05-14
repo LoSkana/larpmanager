@@ -73,23 +73,6 @@ def orga_characters(request, s, n):
     get_event_cache_all(ctx)
     ctx["user_character_approval"] = ctx["event"].get_config("user_character_approval", False)
 
-    # default name for fields
-    ctx["fields_name"] = {
-        QuestionType.NAME.value: _("Name"),
-        QuestionType.TEASER.value: _("Presentation"),
-        QuestionType.SHEET.value: _("Text"),
-        QuestionType.FACTIONS.value: _("Factions"),
-    }
-
-    if "character_form" in ctx["features"]:
-        que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-        ctx["char_questions"] = {}
-        for q in que:
-            if q.typ in ctx["fields_name"].keys():
-                ctx["fields_name"][q.typ] = q.display
-            else:
-                ctx["char_questions"][q.id] = q
-
     return writing_list(request, ctx, Character, "character")
 
 
