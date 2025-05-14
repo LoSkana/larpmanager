@@ -227,7 +227,12 @@ class PlotForm(WritingForm, BaseWritingForm):
         super().__init__(*args, **kwargs)
 
         self.init_orga_fields()
-        del self.fields["teaser"]
+
+        self.fields["teaser"].label = _("Concept")
+        self.fields["teaser"].help_text = _("""
+            Describe the core idea or premise of the plot. This text will NOT be shown to players.
+        """)
+
         self.reorder_field("characters")
 
         # PLOT CHARACTERS REL

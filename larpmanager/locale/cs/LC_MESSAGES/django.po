@@ -657,6 +657,9 @@ msgstr "Pájka"
 msgid "Casting"
 msgstr "Casting"
 
+msgid "Concept"
+msgstr "Koncept"
+
 msgid "Confirm"
 msgstr "Použít"
 
@@ -7585,6 +7588,15 @@ msgid ""
 msgstr ""
 "Tento kód se použije k vygenerování tajných registračních odkazů. Můžete jej"
 " ponechat tak, jak je, nebo si jej přizpůsobit."
+
+msgid ""
+"\n"
+"            Describe the core idea or premise of the plot. This text will NOT be shown to players.\n"
+"        "
+msgstr ""
+"\n"
+"            Popište hlavní myšlenku nebo předpoklad zápletky. Tento text NEBUDE hráčům zobrazen.\n"
+"        "
 
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "

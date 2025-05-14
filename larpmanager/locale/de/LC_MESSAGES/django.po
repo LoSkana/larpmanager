@@ -657,6 +657,9 @@ msgstr "Lötmittel"
 msgid "Casting"
 msgstr "Gießen"
 
+msgid "Concept"
+msgstr "Konzept"
+
 msgid "Confirm"
 msgstr "Bewerbung"
 
@@ -7964,6 +7967,15 @@ msgid ""
 msgstr ""
 "Dieser Code wird verwendet, um die geheimen Registrierungslinks zu "
 "generieren. Sie können ihn unverändert lassen oder anpassen"
+
+msgid ""
+"\n"
+"            Describe the core idea or premise of the plot. This text will NOT be shown to players.\n"
+"        "
+msgstr ""
+"\n"
+"            Beschreiben Sie die Kernidee oder Prämisse der Handlung. Dieser Text wird den Spielern NICHT gezeigt.\n"
+"        "
 
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "

@@ -657,6 +657,9 @@ msgstr "Lödning"
 msgid "Casting"
 msgstr "Gjutning"
 
+msgid "Concept"
+msgstr "Koncept"
+
 msgid "Confirm"
 msgstr "Tillämpa"
 
@@ -7714,6 +7717,15 @@ msgid ""
 msgstr ""
 "Denna kod kommer att användas för att generera de hemliga "
 "registreringslänkarna. Du kan låta den vara som den är eller anpassa den"
+
+msgid ""
+"\n"
+"            Describe the core idea or premise of the plot. This text will NOT be shown to players.\n"
+"        "
+msgstr ""
+"\n"
+"            Beskriv den centrala idén eller förutsättningen för handlingen. Denna text kommer INTE att visas för spelarna.\n"
+"        "
 
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "

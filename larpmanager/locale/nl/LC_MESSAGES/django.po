@@ -657,6 +657,9 @@ msgstr "Soldeer"
 msgid "Casting"
 msgstr "Gieten"
 
+msgid "Concept"
+msgstr "Concept"
+
 msgid "Confirm"
 msgstr "Toepassen"
 
@@ -7824,6 +7827,15 @@ msgid ""
 msgstr ""
 "Deze code wordt gebruikt om de geheime registratielinks te genereren. Je "
 "kunt het laten zoals het is of het aanpassen"
+
+msgid ""
+"\n"
+"            Describe the core idea or premise of the plot. This text will NOT be shown to players.\n"
+"        "
+msgstr ""
+"\n"
+"            Beschrijf de kerngedachte of het uitgangspunt van de plot. Deze tekst wordt NIET aan de spelers getoond.\n"
+"        "
 
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "

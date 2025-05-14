@@ -657,6 +657,9 @@ msgstr "Lodding"
 msgid "Casting"
 msgstr "Støping"
 
+msgid "Concept"
+msgstr "Konsept"
+
 msgid "Confirm"
 msgstr "Søke"
 
@@ -7692,6 +7695,15 @@ msgid ""
 msgstr ""
 "Denne koden brukes til å generere de hemmelige registreringslenkene. Du kan "
 "la den være som den er, eller tilpasse den"
+
+msgid ""
+"\n"
+"            Describe the core idea or premise of the plot. This text will NOT be shown to players.\n"
+"        "
+msgstr ""
+"\n"
+"            Beskriv kjerneideen eller premisset for handlingen. Denne teksten vil IKKE bli vist til spillerne.\n"
+"        "
 
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "

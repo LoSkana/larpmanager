@@ -657,6 +657,9 @@ msgstr "Soudure"
 msgid "Casting"
 msgstr "Casting"
 
+msgid "Concept"
+msgstr "Concept"
+
 msgid "Confirm"
 msgstr "Appliquer"
 
@@ -7850,6 +7853,15 @@ msgid ""
 msgstr ""
 "Ce code sera utilisé pour générer les liens d'enregistrement secrets. Vous "
 "pouvez le laisser tel quel ou le personnaliser."
+
+msgid ""
+"\n"
+"            Describe the core idea or premise of the plot. This text will NOT be shown to players.\n"
+"        "
+msgstr ""
+"\n"
+"            Décrivez l'idée centrale ou la prémisse de l'intrigue. Ce texte ne sera PAS montré aux joueurs.\n"
+"        "
 
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "

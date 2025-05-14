@@ -657,6 +657,9 @@ msgstr "Soldadura"
 msgid "Casting"
 msgstr "Asignación"
 
+msgid "Concept"
+msgstr "Concepto"
+
 msgid "Confirm"
 msgstr "Confirmar"
 
@@ -7738,6 +7741,15 @@ msgid ""
 msgstr ""
 "Este código se utilizará para generar los enlaces secretos de registro. "
 "Puede dejarlo como está o personalizarlo"
+
+msgid ""
+"\n"
+"            Describe the core idea or premise of the plot. This text will NOT be shown to players.\n"
+"        "
+msgstr ""
+"\n"
+"            Describa la idea central o premisa de la trama. Este texto NO se mostrará a los jugadores.\n"
+"        "
 
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "
