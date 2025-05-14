@@ -203,6 +203,8 @@ def _get_custom_form(ctx, nm):
     }
 
     mapping = {"character": QuestionApplicable.CHARACTER, "plot": QuestionApplicable.PLOT}
+    if nm not in mapping:
+        return
 
     if "character_form" in ctx["features"]:
         que = ctx["event"].get_elements(WritingQuestion).order_by("order")

@@ -6502,6 +6502,13 @@ msgstr ""
 "przechowywane w systemie."
 
 msgid ""
+"Describe the core idea or premise of the plot. This text will NOT be shown "
+"to players."
+msgstr ""
+"Opisz główną ideę lub założenie fabuły. Ten tekst NIE będzie pokazywany "
+"graczom."
+
+msgid ""
 "If checked, automatically removes formatting when pasting text into the "
 "WYSIWYG editor"
 msgstr ""
