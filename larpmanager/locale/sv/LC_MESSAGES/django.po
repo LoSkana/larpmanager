@@ -657,6 +657,9 @@ msgstr "Lödning"
 msgid "Casting"
 msgstr "Gjutning"
 
+msgid "Concept"
+msgstr "Koncept"
+
 msgid "Confirm"
 msgstr "Tillämpa"
 
@@ -6517,6 +6520,13 @@ msgid ""
 msgstr ""
 "Ger dig möjlighet att ange exakt vilka användardata som samlas in och lagras"
 " i systemet."
+
+msgid ""
+"Describe the core idea or premise of the plot. This text will NOT be shown "
+"to players."
+msgstr ""
+"Beskriv den centrala idén eller förutsättningen för handlingen. Denna text "
+"kommer INTE att visas för spelarna."
 
 msgid ""
 "If checked, automatically removes formatting when pasting text into the "

@@ -657,6 +657,9 @@ msgstr "Soldeer"
 msgid "Casting"
 msgstr "Gieten"
 
+msgid "Concept"
+msgstr "Concept"
+
 msgid "Confirm"
 msgstr "Toepassen"
 
@@ -6622,6 +6625,13 @@ msgid ""
 msgstr ""
 "Hiermee kun je precies aangeven welke gebruikersgegevens worden verzameld en"
 " opgeslagen in het systeem."
+
+msgid ""
+"Describe the core idea or premise of the plot. This text will NOT be shown "
+"to players."
+msgstr ""
+"Beschrijf de kerngedachte of het uitgangspunt van de plot. Deze tekst wordt "
+"NIET aan de spelers getoond."
 
 msgid ""
 "If checked, automatically removes formatting when pasting text into the "

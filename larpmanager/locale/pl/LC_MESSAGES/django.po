@@ -657,6 +657,9 @@ msgstr "Równowaga"
 msgid "Casting"
 msgstr "Casting"
 
+msgid "Concept"
+msgstr "Koncepcja"
+
 msgid "Confirm"
 msgstr "Potwierdzenie"
 
@@ -6497,6 +6500,13 @@ msgid ""
 msgstr ""
 "Umożliwia precyzyjne określenie, które dane użytkownika są gromadzone i "
 "przechowywane w systemie."
+
+msgid ""
+"Describe the core idea or premise of the plot. This text will NOT be shown "
+"to players."
+msgstr ""
+"Opisz główną ideę lub założenie fabuły. Ten tekst NIE będzie pokazywany "
+"graczom."
 
 msgid ""
 "If checked, automatically removes formatting when pasting text into the "

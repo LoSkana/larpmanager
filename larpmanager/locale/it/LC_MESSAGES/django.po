@@ -657,6 +657,9 @@ msgstr "Saldare"
 msgid "Casting"
 msgstr "Casting"
 
+msgid "Concept"
+msgstr "Concetto"
+
 msgid "Confirm"
 msgstr "Conferma"
 
@@ -6595,6 +6598,13 @@ msgid ""
 msgstr ""
 "Consente di specificare con precisione quali dati utente vengono raccolti e "
 "memorizzati nel sistema."
+
+msgid ""
+"Describe the core idea or premise of the plot. This text will NOT be shown "
+"to players."
+msgstr ""
+"Descrivete l'idea centrale o la premessa della trama. Questo testo NON verrà"
+" mostrato ai giocatori."
 
 msgid ""
 "If checked, automatically removes formatting when pasting text into the "

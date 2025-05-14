@@ -657,6 +657,9 @@ msgstr "Soldadura"
 msgid "Casting"
 msgstr "Asignación"
 
+msgid "Concept"
+msgstr "Concepto"
+
 msgid "Confirm"
 msgstr "Confirmar"
 
@@ -6537,6 +6540,13 @@ msgid ""
 msgstr ""
 "Permite especificar con precisión qué datos del usuario se recopilan y "
 "almacenan en el sistema."
+
+msgid ""
+"Describe the core idea or premise of the plot. This text will NOT be shown "
+"to players."
+msgstr ""
+"Describa la idea central o premisa de la trama. Este texto NO se mostrará a "
+"los jugadores."
 
 msgid ""
 "If checked, automatically removes formatting when pasting text into the "

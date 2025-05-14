@@ -657,6 +657,9 @@ msgstr "Soudure"
 msgid "Casting"
 msgstr "Casting"
 
+msgid "Concept"
+msgstr "Concept"
+
 msgid "Confirm"
 msgstr "Appliquer"
 
@@ -6645,6 +6648,13 @@ msgid ""
 msgstr ""
 "Permet de spécifier précisément quelles données utilisateur sont collectées "
 "et stockées dans le système."
+
+msgid ""
+"Describe the core idea or premise of the plot. This text will NOT be shown "
+"to players."
+msgstr ""
+"Décrivez l'idée centrale ou la prémisse de l'intrigue. Ce texte ne sera PAS "
+"montré aux joueurs."
 
 msgid ""
 "If checked, automatically removes formatting when pasting text into the "

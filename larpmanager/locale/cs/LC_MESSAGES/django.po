@@ -657,6 +657,9 @@ msgstr "Pájka"
 msgid "Casting"
 msgstr "Casting"
 
+msgid "Concept"
+msgstr "Koncept"
+
 msgid "Confirm"
 msgstr "Použít"
 
@@ -6403,6 +6406,13 @@ msgid ""
 msgstr ""
 "Umožňuje přesně určit, která uživatelská data se shromažďují a ukládají v "
 "systému."
+
+msgid ""
+"Describe the core idea or premise of the plot. This text will NOT be shown "
+"to players."
+msgstr ""
+"Popište hlavní myšlenku nebo předpoklad zápletky. Tento text NEBUDE hráčům "
+"zobrazen."
 
 msgid ""
 "If checked, automatically removes formatting when pasting text into the "
