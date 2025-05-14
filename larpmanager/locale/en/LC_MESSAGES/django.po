@@ -6467,9 +6467,6 @@ msgstr ""
 msgid "This page shows the event plots."
 msgstr ""
 
-msgid "Concept"
-msgstr ""
-
 msgid "Progress step"
 msgstr ""
 
