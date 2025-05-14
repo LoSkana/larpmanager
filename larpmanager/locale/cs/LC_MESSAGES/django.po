@@ -1906,6 +1906,9 @@ msgstr "Přístup odepřen"
 msgid "Accessibility"
 msgstr "Přístupnost"
 
+msgid "Age selection"
+msgstr "Výběr věku"
+
 msgid "Are you sure?"
 msgstr "Jste si jistý?"
 
@@ -2525,6 +2528,9 @@ msgstr "Zobrazit odkazy na události"
 msgid "Show explanation"
 msgstr "Zobrazit vysvětlení"
 
+msgid "Ticket selection"
+msgstr "Výběr vstupenek"
+
 msgid "Tokens / Credits"
 msgstr "Žetony / kredity"
 
@@ -2560,9 +2566,6 @@ msgstr "Další pole"
 
 msgid "Advanced features"
 msgstr "Pokročilé funkce"
-
-msgid "Age-based options"
-msgstr "Možnosti podle věku"
 
 msgid "All comunications"
 msgstr "Veškerá komunikace"
@@ -2605,6 +2608,9 @@ msgstr "Schválený prvek!"
 
 msgid "Experience points"
 msgstr "Zkušenostní body"
+
+msgid "Faction selection"
+msgstr "Výběr frakce"
 
 msgid "Feature activated"
 msgstr "Aktivovaná funkce"
@@ -3300,9 +3306,6 @@ msgstr "Schválení role %(role)s"
 msgid "Select your character!"
 msgstr "Vyberte si svou postavu!"
 
-msgid "Ticket-based questions"
-msgstr "Otázky na základě vstupenek"
-
 msgid "Unknow error on upload"
 msgstr "Neznámá chyba při nahrávání"
 
@@ -3347,9 +3350,6 @@ msgstr "Chcete pokračovat?"
 
 msgid "Download complete sheet"
 msgstr "Stáhněte si kompletní list"
-
-msgid "Faction-based questions"
-msgstr "Otázky týkající se frakcí"
 
 msgid "Follow the steps below:"
 msgstr "Postupujte podle následujících kroků:"
@@ -6566,6 +6566,13 @@ msgid ""
 msgstr "Upozornění: operace je konečná, před odesláním zadání překontrolujte!"
 
 msgid ""
+"If checked, allows a registration form question to be visible based on the "
+"player's age."
+msgstr ""
+"Pokud je zaškrtnuto, umožňuje zobrazit otázku registračního formuláře na "
+"základě věku hráče."
+
+msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "
 "registration"
 msgstr ""
@@ -6760,13 +6767,6 @@ msgstr ""
 "Hodnota slevy pro registrovaného hráče, který předá kód příteli, který se "
 "zaregistruje."
 
-msgid ""
-"Allows a registration form question to be visible based on the selected "
-"registration ticket."
-msgstr ""
-"Umožňuje zobrazit otázku registračního formuláře na základě vybraného tipu "
-"registrace."
-
 #, python-format
 msgid ""
 "Alternatively, you can request a reimbursement in <a href='%(url)s'>your "
@@ -6787,13 +6787,6 @@ msgid ""
 msgstr ""
 "Účast na všech našich živých akcích je povinná, protože zahrnuje i poplatek "
 "za pojištění."
-
-msgid ""
-"Makes certain registration options visible only to players who meet a "
-"specified minimum age."
-msgstr ""
-"Některé možnosti registrace jsou viditelné pouze pro hráče, kteří splňují "
-"určitý minimální věk."
 
 #, python-format
 msgid ""
@@ -7240,13 +7233,6 @@ msgstr ""
 "kliknutím na tlačítko potvrdit."
 
 msgid ""
-"Allows a registration form question to be visible only if the player is "
-"assigned to certain factions."
-msgstr ""
-"Umožňuje zobrazit otázku registračního formuláře pouze v případě, že je hráč"
-" přiřazen k určité frakci."
-
-msgid ""
 "Enables a 'campaign' style setup where multiple events share the same set of"
 " characters and factions."
 msgstr ""
@@ -7392,6 +7378,13 @@ msgid ""
 msgstr ""
 "Povoluje zápletky, příběhové oblouky zahrnující vybrané postavy, přidávající"
 " další obsah do jejich charakterových listů."
+
+msgid ""
+"If checked, allows a registration form question to be visible based on the "
+"selected registration ticket."
+msgstr ""
+"Pokud je tato možnost zaškrtnuta, umožňuje zobrazit otázku registračního "
+"formuláře na základě vybraného tipu registrace."
 
 msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "
@@ -7744,6 +7737,13 @@ msgid ""
 msgstr ""
 "Povoluje pevné termíny splátek registračních poplatků a umožňuje definovat "
 "více termínů a částek splatnosti."
+
+msgid ""
+"If checked, allows a registration form question to be visible only if the "
+"player is assigned to certain factions."
+msgstr ""
+"Pokud je zaškrtnuto, umožňuje, aby se otázka registračního formuláře "
+"zobrazila pouze v případě, že je hráč přiřazen k určité frakci."
 
 msgid ""
 "The character has been proposed to the staff, who will examine it and "

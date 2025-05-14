@@ -1906,6 +1906,9 @@ msgstr "Toegang geweigerd"
 msgid "Accessibility"
 msgstr "Toegankelijkheid"
 
+msgid "Age selection"
+msgstr "Leeftijdselectie"
+
 msgid "Are you sure?"
 msgstr "Weet je het zeker?"
 
@@ -2525,6 +2528,9 @@ msgstr "Links naar evenementen weergeven"
 msgid "Show explanation"
 msgstr "Uitleg tonen"
 
+msgid "Ticket selection"
+msgstr "Selectie van tickets"
+
 msgid "Tokens / Credits"
 msgstr "Tokens / Credits"
 
@@ -2560,9 +2566,6 @@ msgstr "Extra velden"
 
 msgid "Advanced features"
 msgstr "Geavanceerde functies"
-
-msgid "Age-based options"
-msgstr "Op leeftijd gebaseerde opties"
 
 msgid "All comunications"
 msgstr "Alle communicatie"
@@ -2605,6 +2608,9 @@ msgstr "Goedgekeurd element!"
 
 msgid "Experience points"
 msgstr "Ervaringspunten"
+
+msgid "Faction selection"
+msgstr "Factieselectie"
 
 msgid "Feature activated"
 msgstr "Functie geactiveerd"
@@ -3300,9 +3306,6 @@ msgstr "Rolgoedkeuring %(role)s"
 msgid "Select your character!"
 msgstr "Selecteer je personage!"
 
-msgid "Ticket-based questions"
-msgstr "Ticket-gebaseerde vragen"
-
 msgid "Unknow error on upload"
 msgstr "Onbekende fout bij uploaden"
 
@@ -3347,9 +3350,6 @@ msgstr "Wil je doorgaan?"
 
 msgid "Download complete sheet"
 msgstr "Volledig blad downloaden"
-
-msgid "Faction-based questions"
-msgstr "Factie-gebaseerde vragen"
 
 msgid "Follow the steps below:"
 msgstr "Volg de onderstaande stappen:"
@@ -6793,6 +6793,13 @@ msgstr ""
 "uploadt!"
 
 msgid ""
+"If checked, allows a registration form question to be visible based on the "
+"player's age."
+msgstr ""
+"Als deze optie is aangevinkt, wordt er een vraag op het registratieformulier"
+" weergegeven op basis van de leeftijd van de speler."
+
+msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "
 "registration"
 msgstr ""
@@ -6990,13 +6997,6 @@ msgstr ""
 "Waarde van de korting voor de geregistreerde speler die de code geeft aan "
 "een vriend die zich inschrijft"
 
-msgid ""
-"Allows a registration form question to be visible based on the selected "
-"registration ticket."
-msgstr ""
-"Hiermee kan een registratieformuliervraag zichtbaar worden gemaakt op basis "
-"van het geselecteerde registratieticket."
-
 #, python-format
 msgid ""
 "Alternatively, you can request a reimbursement in <a href='%(url)s'>your "
@@ -7018,13 +7018,6 @@ msgid ""
 msgstr ""
 "Het is verplicht om deel te nemen aan al onze live-evenementen, omdat het "
 "ook de verzekeringskosten omvat."
-
-msgid ""
-"Makes certain registration options visible only to players who meet a "
-"specified minimum age."
-msgstr ""
-"Maakt bepaalde registratieopties alleen zichtbaar voor spelers die voldoen "
-"aan een bepaalde minimumleeftijd."
 
 #, python-format
 msgid ""
@@ -7478,13 +7471,6 @@ msgstr ""
 "wijzigen en op bevestigen te klikken."
 
 msgid ""
-"Allows a registration form question to be visible only if the player is "
-"assigned to certain factions."
-msgstr ""
-"Laat een vraag op het registratieformulier alleen zichtbaar zijn als de "
-"speler bij bepaalde facties is ingedeeld."
-
-msgid ""
 "Enables a 'campaign' style setup where multiple events share the same set of"
 " characters and factions."
 msgstr ""
@@ -7630,6 +7616,13 @@ msgid ""
 msgstr ""
 "Maakt Plots mogelijk, verhaallijnen over geselecteerde personages, waardoor "
 "extra inhoud wordt toegevoegd aan hun personagefiches."
+
+msgid ""
+"If checked, allows a registration form question to be visible based on the "
+"selected registration ticket."
+msgstr ""
+"Als deze optie is aangevinkt, wordt er een vraag op het registratieformulier"
+" zichtbaar op basis van het geselecteerde registratieticket."
 
 msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "
@@ -7985,6 +7978,13 @@ msgid ""
 msgstr ""
 "Maakt vaste termijnen voor registratiekosten mogelijk, zodat je meerdere "
 "vervaldatums en bedragen kunt definiëren."
+
+msgid ""
+"If checked, allows a registration form question to be visible only if the "
+"player is assigned to certain factions."
+msgstr ""
+"Als deze optie is aangevinkt, kan een vraag op het registratieformulier "
+"alleen zichtbaar zijn als de speler is toegewezen aan bepaalde facties."
 
 msgid ""
 "The character has been proposed to the staff, who will examine it and "

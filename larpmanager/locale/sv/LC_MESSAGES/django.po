@@ -1906,6 +1906,9 @@ msgstr "Åtkomst nekad"
 msgid "Accessibility"
 msgstr "Tillgänglighet"
 
+msgid "Age selection"
+msgstr "Val av ålder"
+
 msgid "Are you sure?"
 msgstr "Är du säker på det?"
 
@@ -2525,6 +2528,9 @@ msgstr "Visa länkar till evenemang"
 msgid "Show explanation"
 msgstr "Visa förklaring"
 
+msgid "Ticket selection"
+msgstr "Val av biljett"
+
 msgid "Tokens / Credits"
 msgstr "Tokens / Krediter"
 
@@ -2560,9 +2566,6 @@ msgstr "Ytterligare fält"
 
 msgid "Advanced features"
 msgstr "Avancerade funktioner"
-
-msgid "Age-based options"
-msgstr "Åldersbaserade alternativ"
 
 msgid "All comunications"
 msgstr "Alla meddelanden"
@@ -2605,6 +2608,9 @@ msgstr "Godkänt element!"
 
 msgid "Experience points"
 msgstr "Erfarenhetspoäng"
+
+msgid "Faction selection"
+msgstr "Val av fraktion"
 
 msgid "Feature activated"
 msgstr "Funktion aktiverad"
@@ -3300,9 +3306,6 @@ msgstr "Godkännande av roll %(role)s"
 msgid "Select your character!"
 msgstr "Välj din karaktär!"
 
-msgid "Ticket-based questions"
-msgstr "Biljettbaserade frågor"
-
 msgid "Unknow error on upload"
 msgstr "Okänt fel vid uppladdning"
 
@@ -3347,9 +3350,6 @@ msgstr "Vill du fortsätta?"
 
 msgid "Download complete sheet"
 msgstr "Ladda ner fullständigt blad"
-
-msgid "Faction-based questions"
-msgstr "Fraktionsbaserade frågor"
 
 msgid "Follow the steps below:"
 msgstr "Följ stegen nedan:"
@@ -6686,6 +6686,13 @@ msgstr ""
 "du laddar upp!"
 
 msgid ""
+"If checked, allows a registration form question to be visible based on the "
+"player's age."
+msgstr ""
+"Om kryssrutan är markerad kan en fråga i registreringsformuläret visas "
+"baserat på spelarens ålder."
+
+msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "
 "registration"
 msgstr ""
@@ -6881,13 +6888,6 @@ msgstr ""
 "Värdet av rabatten för den registrerade spelaren som ger koden till en vän "
 "som registrerar sig"
 
-msgid ""
-"Allows a registration form question to be visible based on the selected "
-"registration ticket."
-msgstr ""
-"Gör det möjligt att visa en fråga i registreringsformuläret baserat på den "
-"valda registreringsbiljetten."
-
 #, python-format
 msgid ""
 "Alternatively, you can request a reimbursement in <a href='%(url)s'>your "
@@ -6909,13 +6909,6 @@ msgid ""
 msgstr ""
 "Det är obligatoriskt att delta i alla våra live-evenemang, eftersom det "
 "också inkluderar försäkringsavgiften."
-
-msgid ""
-"Makes certain registration options visible only to players who meet a "
-"specified minimum age."
-msgstr ""
-"Gör vissa registreringsalternativ synliga endast för spelare som uppfyller "
-"en angiven minimiålder."
 
 #, python-format
 msgid ""
@@ -7370,13 +7363,6 @@ msgstr ""
 "fälten och klicka på bekräfta."
 
 msgid ""
-"Allows a registration form question to be visible only if the player is "
-"assigned to certain factions."
-msgstr ""
-"Tillåter att en fråga i registreringsformuläret endast är synlig om spelaren"
-" tillhör vissa fraktioner."
-
-msgid ""
 "Enables a 'campaign' style setup where multiple events share the same set of"
 " characters and factions."
 msgstr ""
@@ -7522,6 +7508,13 @@ msgid ""
 msgstr ""
 "Aktiverar Plots, berättelsebågar som involverar utvalda karaktärer och "
 "lägger till extra innehåll i deras karaktärsblad."
+
+msgid ""
+"If checked, allows a registration form question to be visible based on the "
+"selected registration ticket."
+msgstr ""
+"Om den är markerad kan en fråga i registreringsformuläret visas baserat på "
+"den valda registreringsbiljetten."
 
 msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "
@@ -7873,6 +7866,13 @@ msgid ""
 msgstr ""
 "Möjliggör fasta avbetalningsfrister för registreringsavgifter, så att du kan"
 " definiera flera förfallodagar och belopp."
+
+msgid ""
+"If checked, allows a registration form question to be visible only if the "
+"player is assigned to certain factions."
+msgstr ""
+"Om den är markerad kan en fråga i registreringsformuläret endast vara synlig"
+" om spelaren tillhör vissa fraktioner."
 
 msgid ""
 "The character has been proposed to the staff, who will examine it and "
