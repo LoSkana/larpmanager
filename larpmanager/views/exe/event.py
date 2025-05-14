@@ -21,6 +21,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
+from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.cache.role import check_assoc_permission
 from larpmanager.forms.event import (
@@ -112,7 +113,10 @@ def exe_templates_edit(request, num):
 
 @login_required
 def exe_templates_config(request, num):
-    return exe_edit(request, OrgaConfigForm, num, "exe_templates")
+    add_ctx = def_user_ctx(request)
+    get_event_template(add_ctx, num)
+    add_ctx["features"].update(get_event_features(add_ctx["event"].id))
+    return exe_edit(request, OrgaConfigForm, num, "exe_templates", add_ctx=add_ctx)
 
 
 @login_required
