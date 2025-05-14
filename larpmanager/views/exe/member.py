@@ -234,7 +234,7 @@ def exe_member(request, num):
 
     ctx["discounts"] = AccountingItemDiscount.objects.filter(
         member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
-    ).select_related("reg")
+    )
 
     member = ctx["member"]
     get_user_membership(member, ctx["a_id"])
