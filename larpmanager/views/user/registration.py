@@ -219,7 +219,7 @@ def registration_redirect(request, reg, new_reg, run):
         if reg.alert:
             mes = _("To confirm your registration, please pay the amount indicated.")
             messages.success(request, mes)
-            return redirect("acc_reg", r=reg.id)
+            return redirect("acc_reg", reg_id=reg.id)
 
     # all ok
     context = {"event": run}

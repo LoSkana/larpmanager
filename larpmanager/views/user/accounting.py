@@ -198,7 +198,7 @@ def acc_pay(request, s, n, method=None):
             )
             return redirect("profile")
 
-    return redirect("acc_reg", r=reg.id, method=method)
+    return redirect("acc_reg", reg_id=reg.id, method=method)
 
 
 @login_required
