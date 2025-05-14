@@ -142,11 +142,11 @@ class EventMS2:
 
 
 class EventS2WidgetMulti(s2forms.ModelSelect2MultipleWidget, EventMS2):
-    pass
+    search_fields = EventMS2.search_fields
 
 
 class EventS2Widget(s2forms.ModelSelect2Widget, EventMS2):
-    pass
+    search_fields = EventMS2.search_fields
 
 
 class CampaignMS2:
@@ -171,11 +171,11 @@ class CampaignMS2:
 
 
 class CampaignS2WidgetMulti(s2forms.ModelSelect2MultipleWidget, CampaignMS2):
-    pass
+    search_fields = CampaignMS2.search_fields
 
 
 class CampaignS2Widget(s2forms.ModelSelect2Widget, CampaignMS2):
-    pass
+    search_fields = CampaignMS2.search_fields
 
 
 class TemplateMS2:
@@ -191,11 +191,11 @@ class TemplateMS2:
 
 
 class TemplateS2WidgetMulti(s2forms.ModelSelect2MultipleWidget, TemplateMS2):
-    pass
+    search_fields = TemplateMS2.search_fields
 
 
 class TemplateS2Widget(s2forms.ModelSelect2Widget, TemplateMS2):
-    pass
+    search_fields = TemplateMS2.search_fields
 
 
 class AssocMS2:
@@ -218,11 +218,11 @@ class AssocMS2:
 
 
 class AssocMemberS2WidgetMulti(s2forms.ModelSelect2MultipleWidget, AssocMS2):
-    pass
+    search_fields = AssocMS2.search_fields
 
 
 class AssocMemberS2Widget(s2forms.ModelSelect2Widget, AssocMS2):
-    pass
+    search_fields = AssocMS2.search_fields
 
 
 class RegisteredMS2:
@@ -253,11 +253,11 @@ class RegisteredMS2:
 
 
 class RunMemberS2WidgetMulti(s2forms.ModelSelect2MultipleWidget, RegisteredMS2):
-    pass
+    search_fields = RegisteredMS2.search_fields
 
 
 class RunMemberS2Widget(s2forms.ModelSelect2Widget, RegisteredMS2):
-    pass
+    search_fields = RegisteredMS2.search_fields
 
 
 def get_assoc_people(assoc_id):
@@ -352,11 +352,11 @@ class EventCharacterS2:
 
 
 class EventCharacterS2WidgetMulti(s2forms.ModelSelect2MultipleWidget, EventCharacterS2):
-    pass
+    search_fields = EventCharacterS2.search_fields
 
 
 class EventCharacterS2Widget(s2forms.ModelSelect2Widget, EventCharacterS2):
-    pass
+    search_fields = EventCharacterS2.search_fields
 
 
 class EventWritingOptionS2:
@@ -373,11 +373,11 @@ class EventWritingOptionS2:
 
 
 class EventWritingOptionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget, EventWritingOptionS2):
-    pass
+    search_fields = EventWritingOptionS2.search_fields
 
 
 class EventWritingOptionS2Widget(s2forms.ModelSelect2Widget, EventWritingOptionS2):
-    pass
+    search_fields = EventWritingOptionS2.search_fields
 
 
 class FactionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
