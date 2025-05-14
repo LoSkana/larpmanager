@@ -657,6 +657,9 @@ msgstr "Soldadura"
 msgid "Casting"
 msgstr "Asignación"
 
+msgid "Concept"
+msgstr "Concepto"
+
 msgid "Confirm"
 msgstr "Confirmar"
 

@@ -657,6 +657,9 @@ msgstr "Równowaga"
 msgid "Casting"
 msgstr "Casting"
 
+msgid "Concept"
+msgstr "Koncepcja"
+
 msgid "Confirm"
 msgstr "Potwierdzenie"
 

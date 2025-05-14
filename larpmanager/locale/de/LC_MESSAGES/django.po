@@ -657,6 +657,9 @@ msgstr "Lötmittel"
 msgid "Casting"
 msgstr "Gießen"
 
+msgid "Concept"
+msgstr "Konzept"
+
 msgid "Confirm"
 msgstr "Bewerbung"
 

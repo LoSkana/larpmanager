@@ -6459,7 +6459,7 @@ msgstr ""
 msgid "This page shows the event plots."
 msgstr ""
 
-msgid "Reading"
+msgid "Concept"
 msgstr ""
 
 msgid "Progress step"
@@ -6476,6 +6476,9 @@ msgid "This page shows the types of event prologue."
 msgstr ""
 
 msgid "This page shows the prologues of the event."
+msgstr ""
+
+msgid "Reading"
 msgstr ""
 
 msgid "Props"

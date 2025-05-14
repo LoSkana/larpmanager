@@ -657,6 +657,9 @@ msgstr "Soldeer"
 msgid "Casting"
 msgstr "Gieten"
 
+msgid "Concept"
+msgstr "Concept"
+
 msgid "Confirm"
 msgstr "Toepassen"
 

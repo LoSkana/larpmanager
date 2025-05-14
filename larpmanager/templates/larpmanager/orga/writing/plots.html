@@ -20,6 +20,8 @@
                 {% if features.assigned %}
                     <th class="hide assign">{% trans "Assigned" %}</th>
                 {% endif %}
+                <th>{% trans "Concept" %}</th>
+                <th>(L)</th>
                 {% if features.preview %}
                     <th>{% trans "Preview" %}</th>
                     <th>(L)</th>
@@ -38,9 +40,6 @@
                     </td>
                     <td>{{ el }}</td>
                     <td>
-                        <!--
-            <a href="{% url 'orga_plots_view' run.event.slug run.number el.id %}">{% trans "Reading" %}</a>
--->
                         <a href="{% url 'orga_plots_versions' run.event.slug run.number el.id %}">{% trans "Versions" %}</a>
                     </td>
                     {% if features.progress %}
@@ -51,6 +50,8 @@
                             {% if el.assigned_id %}{{ assigned|get:el.assigned_id }}{% endif %}
                         </td>
                     {% endif %}
+                    <td>{{ el.teaser_red | safe }}</td>
+                    <td>{{ el.teaser_ln }}</td>
                     {% if features.preview %}
                         <td>{{ el.preview_red | safe }}</td>
                         <td>{{ el.preview_ln }}</td>

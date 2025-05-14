@@ -657,6 +657,9 @@ msgstr "Lödning"
 msgid "Casting"
 msgstr "Gjutning"
 
+msgid "Concept"
+msgstr "Koncept"
+
 msgid "Confirm"
 msgstr "Tillämpa"
 

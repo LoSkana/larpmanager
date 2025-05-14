@@ -657,6 +657,9 @@ msgstr "Lodding"
 msgid "Casting"
 msgstr "Støping"
 
+msgid "Concept"
+msgstr "Konsept"
+
 msgid "Confirm"
 msgstr "Søke"
 
