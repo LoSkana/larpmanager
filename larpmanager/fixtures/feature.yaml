@@ -322,17 +322,6 @@
     placeholder: false
     order: 40
 - model: larpmanager.feature
-  pk: 49
-  fields:
-    name: Faction-based questions
-    descr: Allows a registration form question to be visible only if the player is
-      assigned to certain factions.
-    slug: reg_que_faction
-    overall: false
-    module: 4
-    placeholder: false
-    order: 100
-- model: larpmanager.feature
   pk: 50
   fields:
     name: Lottery
@@ -419,17 +408,6 @@
     module: 3
     placeholder: false
     order: 40
-- model: larpmanager.feature
-  pk: 61
-  fields:
-    name: Ticket-based questions
-    descr: Allows a registration form question to be visible based on the selected
-      registration ticket.
-    slug: reg_que_tickets
-    overall: false
-    module: 4
-    placeholder: false
-    order: 110
 - model: larpmanager.feature
   pk: 62
   fields:
@@ -1098,17 +1076,6 @@
     module: 8
     placeholder: false
     order: 9999
-- model: larpmanager.feature
-  pk: 159
-  fields:
-    name: Age-based options
-    descr: Makes certain registration options visible only to players who meet a specified
-      minimum age.
-    slug: reg_que_age
-    overall: false
-    module: 4
-    placeholder: false
-    order: 120
 - model: larpmanager.feature
   pk: 162
   fields:

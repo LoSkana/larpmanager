@@ -1906,6 +1906,9 @@ msgstr "Odmowa dostępu"
 msgid "Accessibility"
 msgstr "Dostępność"
 
+msgid "Age selection"
+msgstr "Wybór wieku"
+
 msgid "Are you sure?"
 msgstr "Jesteś pewien?"
 
@@ -2525,6 +2528,9 @@ msgstr "Pokaż linki do wydarzeń"
 msgid "Show explanation"
 msgstr "Pokaż wyjaśnienie"
 
+msgid "Ticket selection"
+msgstr "Wybór biletów"
+
 msgid "Tokens / Credits"
 msgstr "Tokeny / Kredyty"
 
@@ -2560,9 +2566,6 @@ msgstr "Dodatkowe pola"
 
 msgid "Advanced features"
 msgstr "Zaawansowane funkcje"
-
-msgid "Age-based options"
-msgstr "Opcje oparte na wieku"
 
 msgid "All comunications"
 msgstr "Cała komunikacja"
@@ -2605,6 +2608,9 @@ msgstr "Element zatwierdzony!"
 
 msgid "Experience points"
 msgstr "Punkty doświadczenia"
+
+msgid "Faction selection"
+msgstr "Wybór frakcji"
 
 msgid "Feature activated"
 msgstr "Funkcja aktywowana"
@@ -3300,9 +3306,6 @@ msgstr "Zatwierdzenie roli %(role)s"
 msgid "Select your character!"
 msgstr "Wybierz swoją postać!"
 
-msgid "Ticket-based questions"
-msgstr "Pytania oparte na biletach"
-
 msgid "Unknow error on upload"
 msgstr "Nieznany błąd podczas przesyłania"
 
@@ -3347,9 +3350,6 @@ msgstr "Czy chcesz kontynuować?"
 
 msgid "Download complete sheet"
 msgstr "Pobierz pełny arkusz"
-
-msgid "Faction-based questions"
-msgstr "Pytania oparte na frakcjach"
 
 msgid "Follow the steps below:"
 msgstr "Wykonaj poniższe czynności:"
@@ -6665,6 +6665,13 @@ msgstr ""
 "ich przesłaniem!"
 
 msgid ""
+"If checked, allows a registration form question to be visible based on the "
+"player's age."
+msgstr ""
+"Zaznaczenie tej opcji powoduje, że pytanie w formularzu rejestracyjnym "
+"będzie widoczne na podstawie wieku gracza."
+
+msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "
 "registration"
 msgstr ""
@@ -6861,13 +6868,6 @@ msgstr ""
 "Wartość zniżki dla zarejestrowanego gracza, który przekaże kod znajomemu, "
 "który się zarejestruje."
 
-msgid ""
-"Allows a registration form question to be visible based on the selected "
-"registration ticket."
-msgstr ""
-"Umożliwia wyświetlenie pytania formularza rejestracyjnego na podstawie "
-"wybranego biletu rejestracyjnego."
-
 #, python-format
 msgid ""
 "Alternatively, you can request a reimbursement in <a href='%(url)s'>your "
@@ -6889,13 +6889,6 @@ msgid ""
 msgstr ""
 "Udział we wszystkich naszych wydarzeniach na żywo jest obowiązkowy, ponieważ"
 " obejmuje również opłatę ubezpieczeniową."
-
-msgid ""
-"Makes certain registration options visible only to players who meet a "
-"specified minimum age."
-msgstr ""
-"Sprawia, że niektóre opcje rejestracji są widoczne tylko dla graczy, którzy "
-"osiągnęli określony minimalny wiek."
 
 #, python-format
 msgid ""
@@ -7349,13 +7342,6 @@ msgstr ""
 "klikając przycisk Potwierdź."
 
 msgid ""
-"Allows a registration form question to be visible only if the player is "
-"assigned to certain factions."
-msgstr ""
-"Umożliwia wyświetlenie pytania formularza rejestracyjnego tylko wtedy, gdy "
-"gracz jest przypisany do określonej frakcji."
-
-msgid ""
 "Enables a 'campaign' style setup where multiple events share the same set of"
 " characters and factions."
 msgstr ""
@@ -7501,6 +7487,13 @@ msgid ""
 msgstr ""
 "Włącza wątki fabularne z udziałem wybranych postaci, dodając dodatkową "
 "zawartość do ich kart postaci."
+
+msgid ""
+"If checked, allows a registration form question to be visible based on the "
+"selected registration ticket."
+msgstr ""
+"Jeśli opcja ta jest zaznaczona, umożliwia wyświetlenie pytania formularza "
+"rejestracyjnego na podstawie wybranego biletu rejestracyjnego."
 
 msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "
@@ -7854,6 +7847,13 @@ msgid ""
 msgstr ""
 "Umożliwia ustalanie stałych terminów rat opłat rejestracyjnych, pozwalając "
 "na definiowanie wielu terminów i kwot."
+
+msgid ""
+"If checked, allows a registration form question to be visible only if the "
+"player is assigned to certain factions."
+msgstr ""
+"Jeśli opcja ta jest zaznaczona, pytanie w formularzu rejestracyjnym może być"
+" widoczne tylko wtedy, gdy gracz jest przypisany do określonej frakcji."
 
 msgid ""
 "The character has been proposed to the staff, who will examine it and "

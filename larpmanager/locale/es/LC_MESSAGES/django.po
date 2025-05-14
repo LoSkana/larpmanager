@@ -1906,6 +1906,9 @@ msgstr "Acceso denegado"
 msgid "Accessibility"
 msgstr "Accesibilidad"
 
+msgid "Age selection"
+msgstr "Selección de edad"
+
 msgid "Are you sure?"
 msgstr "¿Seguro?"
 
@@ -2525,6 +2528,9 @@ msgstr "Mostrar enlaces de eventos"
 msgid "Show explanation"
 msgstr "Mostrar explicación"
 
+msgid "Ticket selection"
+msgstr "Selección de entradas"
+
 msgid "Tokens / Credits"
 msgstr "Tokens / Créditos"
 
@@ -2560,9 +2566,6 @@ msgstr "Campos adicionales"
 
 msgid "Advanced features"
 msgstr "Funciones avanzadas"
-
-msgid "Age-based options"
-msgstr "Opciones por edad"
 
 msgid "All comunications"
 msgstr "Todas las comunicaciones"
@@ -2605,6 +2608,9 @@ msgstr "¡Elemento aprobado!"
 
 msgid "Experience points"
 msgstr "Puntos de experiencia"
+
+msgid "Faction selection"
+msgstr "Selección de facciones"
 
 msgid "Feature activated"
 msgstr "Función activada"
@@ -3300,9 +3306,6 @@ msgstr "Aprobación de roles %(role)s"
 msgid "Select your character!"
 msgstr "Selecciona tu personaje"
 
-msgid "Ticket-based questions"
-msgstr "Preguntas basadas en billetes"
-
 msgid "Unknow error on upload"
 msgstr "Error desconocido al cargar"
 
@@ -3347,9 +3350,6 @@ msgstr "¿Quieres continuar?"
 
 msgid "Download complete sheet"
 msgstr "Descargar la ficha completa"
-
-msgid "Faction-based questions"
-msgstr "Preguntas basadas en facciones"
 
 msgid "Follow the steps below:"
 msgstr "Sigue los pasos a continuación:"
@@ -6706,6 +6706,13 @@ msgstr ""
 "asignaciones antes de subirlas!"
 
 msgid ""
+"If checked, allows a registration form question to be visible based on the "
+"player's age."
+msgstr ""
+"Si está marcada, permite que sea visible una pregunta del formulario de "
+"registro basada en la edad del jugador."
+
+msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "
 "registration"
 msgstr ""
@@ -6902,13 +6909,6 @@ msgstr ""
 "Valor del descuento para el jugador que da su código a un amigo que se "
 "inscribe al evento"
 
-msgid ""
-"Allows a registration form question to be visible based on the selected "
-"registration ticket."
-msgstr ""
-"Permite que una pregunta del formulario de registro sea visible en función "
-"del ticket de registro seleccionado."
-
 #, python-format
 msgid ""
 "Alternatively, you can request a reimbursement in <a href='%(url)s'>your "
@@ -6930,13 +6930,6 @@ msgid ""
 msgstr ""
 "Es obligatorio participar en todos nuestros eventos en directo, ya que "
 "también incluye la cuota del seguro."
-
-msgid ""
-"Makes certain registration options visible only to players who meet a "
-"specified minimum age."
-msgstr ""
-"Hace que determinadas opciones de registro sólo sean visibles para los "
-"jugadores que cumplan una edad mínima especificada."
 
 #, python-format
 msgid ""
@@ -7391,13 +7384,6 @@ msgstr ""
 "haciendo clic en confirmar."
 
 msgid ""
-"Allows a registration form question to be visible only if the player is "
-"assigned to certain factions."
-msgstr ""
-"Permite que una pregunta del formulario de registro sólo sea visible si el "
-"jugador está asignado a determinadas facciones."
-
-msgid ""
 "Enables a 'campaign' style setup where multiple events share the same set of"
 " characters and factions."
 msgstr ""
@@ -7543,6 +7529,13 @@ msgid ""
 msgstr ""
 "Habilita tramas, arcos argumentales que involucran a personajes "
 "seleccionados, añadiendo contenido extra a sus hojas de personaje."
+
+msgid ""
+"If checked, allows a registration form question to be visible based on the "
+"selected registration ticket."
+msgstr ""
+"Si está marcada, permite que una pregunta del formulario de registro sea "
+"visible en función del ticket de registro seleccionado."
 
 msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "
@@ -7897,6 +7890,13 @@ msgid ""
 msgstr ""
 "Habilita plazos fijos para las cuotas de inscripción, permitiéndole definir "
 "múltiples fechas de vencimiento e importes."
+
+msgid ""
+"If checked, allows a registration form question to be visible only if the "
+"player is assigned to certain factions."
+msgstr ""
+"Si está marcada, permite que una pregunta del formulario de registro sólo "
+"sea visible si el jugador está asignado a determinadas facciones."
 
 msgid ""
 "The character has been proposed to the staff, who will examine it and "

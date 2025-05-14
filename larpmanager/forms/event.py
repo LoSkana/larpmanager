@@ -212,15 +212,25 @@ class OrgaConfigForm(ConfigForm):
         help_text = _("If checked: Show summary page with number of tickets/options used")
         self.add_configs("show_limitations", ConfigType.BOOL, section, label, help_text)
 
-        section = _("Registration form")
-        label = _("Hide not available")
-        help_text = _(
-            "If checked, options no longer available in the registration form are hidden, "
-            "instead of being displayed disabled"
-        )
-        self.add_configs("registration_hide_unavailable", ConfigType.BOOL, section, label, help_text)
+        self.set_config_reg_form()
 
+        self.set_config_gallery()
+
+        self.set_config_structure()
+
+        self.set_config_character()
+
+        self.set_config_custom()
+
+        self.set_config_accounting()
+
+        self.set_config_casting()
+
+        self.set_config_registration()
+
+    def set_config_gallery(self):
         section = _("Gallery")
+
         label = _("Request login")
         help_text = _("If checked, the gallery will not be displayed to those not logged in to the system")
         self.add_configs("gallery_hide_login", ConfigType.BOOL, section, label, help_text)
@@ -240,17 +250,32 @@ class OrgaConfigForm(ConfigForm):
             help_text = _("If checked, does not show players in the gallery who have not been assigned a character")
             self.add_configs("gallery_hide_uncasted_players", ConfigType.BOOL, section, label, help_text)
 
-        self.set_config_structure()
+    def set_config_reg_form(self):
+        section = _("Registration form")
 
-        self.set_config_character()
+        label = _("Hide not available")
+        help_text = _(
+            "If checked, options no longer available in the registration form are hidden, "
+            "instead of being displayed disabled"
+        )
+        self.add_configs("registration_hide_unavailable", ConfigType.BOOL, section, label, help_text)
 
-        self.set_config_custom()
+        label = _("Faction selection")
+        help_text = _(
+            "If checked, allows a registration form question to be visible only if the player is "
+            "assigned to certain factions."
+        )
+        self.add_configs("registration_reg_que_faction", ConfigType.BOOL, section, label, help_text)
 
-        self.set_config_accounting()
+        label = _("Ticket selection")
+        help_text = _(
+            "If checked, allows a registration form question to be visible based on the selected registration ticket."
+        )
+        self.add_configs("registration_reg_que_tickets", ConfigType.BOOL, section, label, help_text)
 
-        self.set_config_casting()
-
-        self.set_config_registration()
+        label = _("Age selection")
+        help_text = _("If checked, allows a registration form question to be visible based on the player's age.")
+        self.add_configs("registration_reg_que_age", ConfigType.BOOL, section, label, help_text)
 
     def set_config_structure(self):
         if "pre_register" in self.params["features"]:
