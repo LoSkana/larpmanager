@@ -202,12 +202,12 @@ def acc_pay(request, s, n, method=None):
 
 
 @login_required
-def acc_reg(request, r, method=None):
+def acc_reg(request, reg_id, method=None):
     check_assoc_feature(request, "payment")
 
     try:
         reg = Registration.objects.select_related("run", "run__event").get(
-            id=r,
+            id=reg_id,
             member=request.user.member,
             cancellation_date__isnull=True,
             run__event__assoc_id=request.assoc["id"],
@@ -265,7 +265,7 @@ def acc_reg(request, r, method=None):
 
 
 @login_required
-def acc_membership(request):
+def acc_membership(request, method=None):
     check_assoc_feature(request, "membership")
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
@@ -285,6 +285,9 @@ def acc_membership(request):
     ctx["year"] = year
 
     key = f"{request.user.member.id}_{year}"
+
+    if method:
+        ctx["def_method"] = method
 
     if request.method == "POST":
         form = MembershipForm(request.POST, ctx=ctx)

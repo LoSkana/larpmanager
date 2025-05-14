@@ -245,17 +245,22 @@ urlpatterns = [
         name="acc_pay",
     ),
     path(
-        "accounting/registration/<int:r>/",
+        "accounting/registration/<int:reg_id>/",
         views_ua.acc_reg,
         name="acc_reg",
     ),
     path(
-        "accounting/registration/<int:r>/<slug:method>/",
+        "accounting/registration/<int:reg_id>/<slug:method>/",
         views_ua.acc_reg,
         name="acc_reg",
     ),
     path(
         "accounting/membership/",
+        views_ua.acc_membership,
+        name="acc_membership",
+    ),
+    path(
+        "accounting/membership/<slug:method>/",
         views_ua.acc_membership,
         name="acc_membership",
     ),
