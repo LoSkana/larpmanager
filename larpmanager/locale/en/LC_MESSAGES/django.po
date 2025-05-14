@@ -1416,10 +1416,8 @@ msgid "Concept"
 msgstr ""
 
 msgid ""
-"\n"
-"            Describe the core idea or premise of the plot. This text will "
-"NOT be shown to players.\n"
-"        "
+"Describe the core idea or premise of the plot. This text will NOT be shown "
+"to players."
 msgstr ""
 
 #, python-brace-format
