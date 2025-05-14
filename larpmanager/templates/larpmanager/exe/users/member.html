@@ -93,7 +93,6 @@
         <table class="writing tablesorter">
             <thead>
                 <tr>
-                    <th>{% trans "Registration" %}</th>
                     <th>{% trans "Run" %}</th>
                     <th>{% trans "Discount" %}</th>
                     <th>{% trans "Detail" %}</th>
@@ -101,7 +100,6 @@
             </thead>
             {% for el in discounts %}
                 <tr>
-                    <td>{{ el.reg.search }}</td>
                     <td>{{ el.run.search }}</td>
                     <td>{{ el.disc }}</td>
                     <td>{{ el.detail }}</td>
@@ -117,7 +115,8 @@
                height="500px">
     {% else %}
         <img class="membership_request"
-             src="{{ member.membership.get_document_filepath }}" />
+             src="{{ member.membership.get_document_filepath }}"
+             alt="membership request" />
     {% endif %}
     <hr class="c" />
     {% if '.pdf' in req_path %}
@@ -127,7 +126,8 @@
                height="500px">
     {% else %}
         <img class="membership_request"
-             src="{{ member.membership.get_request_filepath }}" />
+             src="{{ member.membership.get_request_filepath }}"
+             alt="membership request" />
     {% endif %}
 {% endblock content %}
 {% block js %}
