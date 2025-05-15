@@ -47,7 +47,7 @@ def exe_profile(live_server, page):
     page.locator("#id_birth_place").select_option("m")
     page.locator("#id_document_type").select_option("m")
     page.locator("#id_diet").select_option("o")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/profile")
     page.get_by_role("textbox", name="Name (*)", exact=True).click()

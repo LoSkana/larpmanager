@@ -50,7 +50,7 @@ def exe_membership(live_server, page):
     # register
     go_to(page, live_server, "/test/1/register")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # confirm profile
     page.get_by_role("checkbox", name="Authorisation").check()

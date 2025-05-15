@@ -59,7 +59,7 @@ def orga_character_form(live_server, page):
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
     page.locator("#id_user_character_approval").check()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # create character form
     go_to(page, live_server, "/test/1/manage/characters/form/")
@@ -95,7 +95,7 @@ def create_second_char(live_server, page):
     login_user(page, live_server)
     go_to(page, live_server, "/test/1/register/")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("link", name="Access character creation!").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("olivaaaa")
@@ -124,7 +124,7 @@ def create_second_char(live_server, page):
     expect(page.locator('[id="_tr"]')).to_contain_text("options: 1 / 2")
     page.locator("#id_q9").click()
     page.locator("#id_q9").fill("asda")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     expect(page.locator("#one")).to_contain_text(
         "Player: User Test Status: Creation dsfdfsd Private area Sheet sdfdsfds"
     )
@@ -135,7 +135,7 @@ def show_chars(page, live_server):
     page.locator("#id_show_char").check()
     page.locator("#id_show_teaser").check()
     page.locator("#id_show_text").check()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
 
 def check_first_char(page, live_server):
@@ -151,7 +151,7 @@ def check_first_char(page, live_server):
     )
     expect(page.locator("#id_q9")).to_have_value("fill mandatory")
     expect(page.locator("#id_q12")).to_have_value("public")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/test/1/manage/characters/")
     page.locator('[id="\\32 "]').get_by_role("link", name="").click()
@@ -174,7 +174,7 @@ def check_first_char(page, live_server):
     page.locator("#id_q10").press("Tab")
     page.locator("#id_q11").fill("hidden")
     page.locator("#id_status").select_option("a")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.locator('[id="\\32 "]').get_by_role("link", name="").click()
     expect(page.locator("#id_q4")).to_have_value("cccccccccc")
     expect(page.get_by_text("dddddddddd")).to_have_value("dddddddddd")
@@ -195,18 +195,18 @@ def recheck_char(live_server, page):
     expect(page.locator("#main_form")).to_contain_text("restricted textonly only descrall all descr")
     expect(page.locator('[id="_tr"]')).to_contain_text("multiple text")
     expect(page.locator('[id="_tr"]')).to_contain_text("multiple descrall all descrmany many descrfew few descr")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     go_to(page, live_server, "/test/1/character/list")
     page.get_by_role("link", name="").click()
     expect(page.locator("#id_q10")).to_have_value("disabled")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
 
 def create_first_char(live_server, page):
     go_to(page, live_server, "/test/1/register/")
     page.get_by_role("link", name="Register").click()
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("link", name="Access character creation!").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("pinoloooooooooo")
@@ -246,10 +246,10 @@ def create_first_char(live_server, page):
     page.locator("#id_q12").fill("public")
     page.locator("#id_q12").press("Tab")
     page.locator("#id_q13").fill("create")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.locator("#id_q9").fill("fill mandatory")
     page.locator("#id_propose").check()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
 
 def fill_presentation_text(page):
@@ -271,7 +271,7 @@ def add_field_special(page):
     page.locator("#id_display").press("Tab")
     page.locator("#id_description").fill("mandatory descr")
     page.locator("#id_status").select_option("m")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
     page.locator("#id_typ").press("Tab")
@@ -279,7 +279,7 @@ def add_field_special(page):
     page.locator("#id_display").press("Tab")
     page.locator("#id_description").fill("disabled descr")
     page.locator("#id_status").select_option("d")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
     page.locator("#id_typ").press("Tab")
@@ -287,7 +287,7 @@ def add_field_special(page):
     page.locator("#id_display").press("Tab")
     page.locator("#id_description").fill("hidden descr")
     page.locator("#id_status").select_option("h")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
     page.locator("#id_typ").press("Tab")
@@ -295,7 +295,7 @@ def add_field_special(page):
     page.locator("#id_display").press("Tab")
     page.locator("#id_description").fill("public descr")
     page.locator("#id_visibility").select_option("c")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
     page.locator("#id_typ").press("Tab")
@@ -303,7 +303,7 @@ def add_field_special(page):
     page.locator("#id_display").press("Tab")
     page.locator("#id_description").fill("only descr")
     page.get_by_role("checkbox", name="Creation").check()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
 
 def add_field_restricted(page):
@@ -318,7 +318,7 @@ def add_field_restricted(page):
     page.locator("#id_display").press("Tab")
     page.locator("#id_details").fill("all descr")
     page.locator("#id_details").press("Tab")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_display").click()
     page.locator("#id_display").fill("few")
@@ -326,8 +326,8 @@ def add_field_restricted(page):
     page.locator("#id_details").fill("few descr")
     page.locator("#id_details").press("Tab")
     page.locator("#id_max_available").fill("1")
-    page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.locator('[id="\\38 "]').get_by_role("link", name="").click()
     page.locator('[id="\\38 "]').get_by_role("link", name="").click()
     page.get_by_role("link", name="").click()
@@ -339,8 +339,8 @@ def add_field_restricted(page):
     page.locator("#id_display").press("Tab")
     page.locator("#id_details").press("Home")
     page.locator("#id_details").fill("only descr")
-    page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
 
 def add_field_multiple(page):
@@ -357,7 +357,7 @@ def add_field_multiple(page):
     page.locator("#id_display").fill("all")
     page.locator("#id_display").press("Tab")
     page.locator("#id_details").fill("all descr")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_display").click()
     page.locator("#id_display").fill("many")
@@ -365,7 +365,7 @@ def add_field_multiple(page):
     page.locator("#id_details").fill("many descr")
     page.locator("#id_details").press("Tab")
     page.locator("#id_max_available").fill("2")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_text("New Search List").click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_display").click()
@@ -378,8 +378,8 @@ def add_field_multiple(page):
     page.locator("#id_details").fill("few descr")
     page.locator("#id_details").press("Tab")
     page.locator("#id_max_available").fill("1")
-    page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
 
 def add_field_available(page):
@@ -396,7 +396,7 @@ def add_field_available(page):
     page.locator("#id_display").press("Tab")
     page.locator("#id_details").fill("all")
     page.locator("#id_details").press("Tab")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_text("New Search List").click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_display").click()
@@ -405,7 +405,7 @@ def add_field_available(page):
     page.locator("#id_details").fill("few descr")
     page.locator("#id_details").press("Tab")
     page.locator("#id_max_available").fill("2")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_text("New Search List Upload").click()
 
@@ -421,7 +421,7 @@ def add_field_text(page):
     page.locator("#id_max_length").click()
     page.locator("#id_max_length").press("ArrowLeft")
     page.locator("#id_max_length").fill("10")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("p")
     page.locator("#id_typ").press("Tab")
@@ -436,4 +436,4 @@ def add_field_text(page):
     page.get_by_role("checkbox", name="Revision").press("Tab")
     page.get_by_role("checkbox", name="Approved").press("Tab")
     page.locator("#id_max_length").fill("10")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
