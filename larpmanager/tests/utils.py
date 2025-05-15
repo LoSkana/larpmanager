@@ -118,6 +118,7 @@ def login(pg, live_server, name):
 def handle_error(page, e, test_name):
     print(f"Error on {test_name}: {page.url}\n")
     print(e)
+    raise (e)
 
 
 def print_text(page):
