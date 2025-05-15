@@ -124,6 +124,7 @@ class WritingQuestion(BaseModel):
         default="",
         max_length=20,
         null=True,
+        blank=True,
         verbose_name=_("Editable"),
         help_text=_(
             "This field can be edited by the player only when the character is in one of the selected statuses"
@@ -149,6 +150,7 @@ class WritingQuestion(BaseModel):
         default=QuestionApplicable.CHARACTER,
         max_length=20,
         null=True,
+        blank=True,
         verbose_name=_("Applicable"),
         help_text=_("Select the types of writing elements that this question applies to."),
     )

@@ -583,13 +583,12 @@ class OrgaWritingQuestionForm(MyForm):
                     widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
                     required=False,
                 )
+                if self.instance and self.instance.pk:
+                    self.initial["applicable"] = self.instance.get_applicable()
+                else:
+                    self.initial["applicable"] = QuestionApplicable.CHARACTER
             else:
-                self.fields["applicable"] = forms.CharField(widget=forms.HiddenInput())
-
-            if self.instance and self.instance.pk:
-                self.initial["applicable"] = self.instance.get_applicable()
-            else:
-                self.initial["applicable"] = QuestionApplicable.CHARACTER
+                del self.fields["applicable"]
 
     def clean_editable(self):
         return ",".join(self.cleaned_data["editable"])
