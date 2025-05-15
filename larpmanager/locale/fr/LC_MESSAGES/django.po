@@ -1371,6 +1371,9 @@ msgstr "Navigation"
 msgid "Need help?"
 msgstr "Besoin d'aide ?"
 
+msgid "Net profit"
+msgstr "Bénéfice net"
+
 msgid "New member"
 msgstr "Nouveau membre"
 
@@ -1586,9 +1589,6 @@ msgstr "Gérer les courses"
 
 msgid "Nationality"
 msgstr "Nationalité"
-
-msgid "Net revenue"
-msgstr "Recettes nettes"
 
 msgid "New answer!"
 msgstr "Nouvelle réponse !"
@@ -2064,6 +2064,9 @@ msgstr "Remplisseur de tickets"
 
 msgid "Ticket chosen"
 msgstr "Billet sélectionné"
+
+msgid "Total revenue"
+msgstr "Recettes totales"
 
 msgid "URL shortener"
 msgstr "Raccourcisseur d'URL"
@@ -6382,6 +6385,13 @@ msgstr ""
 "Vous pouvez retirer votre consentement au partage des données en cliquant "
 "sur le lien approprié."
 
+msgid ""
+"this balance reflects payments currently received and expenses recorded to "
+"date."
+msgstr ""
+"ce solde reflète les paiements actuellement reçus et les dépenses "
+"enregistrées à ce jour."
+
 #, python-format
 msgid ""
 "Reimbursement of %(amount).2f %(credits)s with reason '%(reason)s' was "
@@ -7691,13 +7701,6 @@ msgid ""
 msgstr ""
 "Cette page résume les rôles à attribuer pour utiliser les fonctions "
 "concernant l'organisation."
-
-msgid ""
-"(this balance takes into account payments currently received, and "
-"expenditures currently put into system)"
-msgstr ""
-"(ces chiffres tiennent compte des paiements actuellement reçus et des "
-"dépenses actuellement marquées)"
 
 msgid ""
 "Adds a 'preview' field to writing elements, shareable with the player before"

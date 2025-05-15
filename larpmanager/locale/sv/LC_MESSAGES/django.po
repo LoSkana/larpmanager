@@ -1371,6 +1371,9 @@ msgstr "Navigering"
 msgid "Need help?"
 msgstr "Behöver du hjälp?"
 
+msgid "Net profit"
+msgstr "Nettovinst"
+
 msgid "New member"
 msgstr "Ny medlem"
 
@@ -1586,9 +1589,6 @@ msgstr "Hantera körningar"
 
 msgid "Nationality"
 msgstr "Nationalitet"
-
-msgid "Net revenue"
-msgstr "Nettoinkomster"
 
 msgid "New answer!"
 msgstr "Nytt svar!"
@@ -2064,6 +2064,9 @@ msgstr "Biljettfyllare"
 
 msgid "Ticket chosen"
 msgstr "Biljett vald"
+
+msgid "Total revenue"
+msgstr "Summa intäkter"
 
 msgid "URL shortener"
 msgstr "URL-förkortare"
@@ -6256,6 +6259,13 @@ msgstr ""
 "Du kan ta bort ditt samtycke till datadelning genom att klicka på lämplig "
 "länk."
 
+msgid ""
+"this balance reflects payments currently received and expenses recorded to "
+"date."
+msgstr ""
+"Detta saldo återspeglar betalningar som för närvarande erhållits och "
+"kostnader som bokförts till dags dato."
+
 #, python-format
 msgid ""
 "Reimbursement of %(amount).2f %(credits)s with reason '%(reason)s' was "
@@ -7557,13 +7567,6 @@ msgid ""
 msgstr ""
 "På denna sida sammanfattas de roller som måste tilldelas för att kunna "
 "använda de funktioner som rör organisationen."
-
-msgid ""
-"(this balance takes into account payments currently received, and "
-"expenditures currently put into system)"
-msgstr ""
-"(dessa siffror tar hänsyn till betalningar som för närvarande erhålls och "
-"utgifter som för närvarande bokförs)"
 
 msgid ""
 "Adds a 'preview' field to writing elements, shareable with the player before"

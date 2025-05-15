@@ -7,7 +7,7 @@ SLUG_ASSOC = 'def'
 DATABASES = {
     'default': {
         'ENGINE': 'dj_db_conn_pool.backends.postgresql',
-        'NAME': 'larpmanager',
+        'NAME': 'larpmanager_test',
         'USER': 'larpmanager',
         'PASSWORD': 'larpmanager',
         'HOST': 'localhost',

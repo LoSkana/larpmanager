@@ -1371,6 +1371,9 @@ msgstr "Nawigacja"
 msgid "Need help?"
 msgstr "Potrzebujesz pomocy?"
 
+msgid "Net profit"
+msgstr "Zysk netto"
+
 msgid "New member"
 msgstr "Nowy członek"
 
@@ -1586,9 +1589,6 @@ msgstr "Zarządzanie przebiegami"
 
 msgid "Nationality"
 msgstr "Narodowość"
-
-msgid "Net revenue"
-msgstr "Przychody netto"
 
 msgid "New answer!"
 msgstr "Nowa odpowiedź!"
@@ -2064,6 +2064,9 @@ msgstr "Wypełniacz biletów"
 
 msgid "Ticket chosen"
 msgstr "Wybrany bilet"
+
+msgid "Total revenue"
+msgstr "Całkowity przychód"
 
 msgid "URL shortener"
 msgstr "Skracacz adresów URL"
@@ -6236,6 +6239,13 @@ msgid ""
 "link."
 msgstr "Zgodę na udostępnianie danych można usunąć, klikając odpowiedni link."
 
+msgid ""
+"this balance reflects payments currently received and expenses recorded to "
+"date."
+msgstr ""
+"Saldo to odzwierciedla obecnie otrzymane płatności i dotychczas zaksięgowane"
+" wydatki."
+
 #, python-format
 msgid ""
 "Reimbursement of %(amount).2f %(credits)s with reason '%(reason)s' was "
@@ -7536,13 +7546,6 @@ msgid ""
 msgstr ""
 "Ta strona zawiera podsumowanie ról, które należy przypisać w celu "
 "korzystania z funkcji dotyczących organizacji."
-
-msgid ""
-"(this balance takes into account payments currently received, and "
-"expenditures currently put into system)"
-msgstr ""
-"(saldo to uwzględnia obecnie otrzymywane płatności i wydatki obecnie "
-"wprowadzane do systemu)"
 
 msgid ""
 "Adds a 'preview' field to writing elements, shareable with the player before"

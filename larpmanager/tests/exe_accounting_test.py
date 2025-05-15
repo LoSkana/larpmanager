@@ -56,8 +56,8 @@ def exe_accounting(live_server, page):
 
 def verify(page, live_server):
     go_to(page, live_server, "/test/1/manage/accounting/")
-    expect(page.locator("#one")).to_contain_text("Net revenue: 133.00")
-    expect(page.locator("#one")).to_contain_text("Balance: 71.00")
+    expect(page.locator("#one")).to_contain_text("Total revenue: 133.00")
+    expect(page.locator("#one")).to_contain_text("Net profit: 71.00")
     expect(page.locator("#one")).to_contain_text("Organization tax: 17.29")
     expect(page.locator("#one")).to_contain_text("Registrations: 70.00")
     expect(page.locator("#one")).to_contain_text("Outflows: 62.00")
@@ -214,3 +214,4 @@ def config(page, live_server):
     page.get_by_role("link", name="Organisation fee ").click()
     page.get_by_role("cell", name="Percentage of takings").click()
     page.locator("#id_organization_tax_perc").fill("13")
+    page.get_by_role("button", name="Confirm").click()

@@ -76,9 +76,9 @@ def orga_character_form(live_server, page):
 
     create_first_char(live_server, page)
 
-    recheck_char(live_server, page)
-
     check_first_char(page, live_server)
+
+    recheck_char(live_server, page)
 
     show_chars(page, live_server)
 
