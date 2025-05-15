@@ -18,13 +18,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.apps import AppConfig
+from django.dispatch import Signal
 
-
-class LarpManagerConfig(AppConfig):
-    name = "larpmanager"
-
-    # Import signals
-    def ready(self):
-        _ = __import__("larpmanager.models.signals")
-        _ = __import__("larpmanager.utils.profiler.receivers") 
+profiler_response_signal = Signal()
