@@ -214,5 +214,3 @@ def config(page, live_server):
     page.get_by_role("link", name="Organisation fee ").click()
     page.get_by_role("cell", name="Percentage of takings").click()
     page.locator("#id_organization_tax_perc").fill("13")
-    page.get_by_role("link", name="Accounting ").click()
-    page.get_by_role("row", name="Activate Verification").get_by_role("link").click()
