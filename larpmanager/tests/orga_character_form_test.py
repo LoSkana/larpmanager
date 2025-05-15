@@ -76,6 +76,8 @@ def orga_character_form(live_server, page):
 
     create_first_char(live_server, page)
 
+    recheck_char(live_server, page)
+
     check_first_char(page, live_server)
 
     show_chars(page, live_server)
@@ -185,7 +187,6 @@ def check_first_char(page, live_server):
     expect(page.locator("#lbl_id_q5")).to_contain_text("long text")
     expect(page.locator("#main_form")).to_contain_text("short descr")
     page.get_by_text("long descr").click()
-    recheck_char(live_server, page)
 
 
 def recheck_char(live_server, page):
