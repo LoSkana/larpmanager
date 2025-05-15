@@ -43,8 +43,10 @@ class ProfilerMiddleware:
                         view_func_name=request._profiler_func_name,
                         duration=duration,
                     )
-                except Exception:
-                    pass  # fail silently
+                except Exception as err:
+                    # pass  # fail silently
+                    print(f"ProfilerMiddleware fail: {err}")
+
         return response
 
     def process_view(self, request, view_func, view_args, view_kwargs):
