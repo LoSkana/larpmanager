@@ -193,12 +193,12 @@ class AssocMS2:
         return f"{obj.display_real()} - {obj.email}"
 
 
-class AssocMemberS2WidgetMulti(s2forms.ModelSelect2MultipleWidget, AssocMS2):
-    search_fields = AssocMS2.search_fields
+class AssocMemberS2WidgetMulti(AssocMS2, s2forms.ModelSelect2MultipleWidget):
+    pass
 
 
-class AssocMemberS2Widget(s2forms.ModelSelect2Widget, AssocMS2):
-    search_fields = AssocMS2.search_fields
+class AssocMemberS2Widget(AssocMS2, s2forms.ModelSelect2Widget):
+    pass
 
 
 class RunMemberS2Widget(s2forms.ModelSelect2Widget):
@@ -320,12 +320,12 @@ class EventCharacterS2:
         return self.event.get_elements(Character)
 
 
-class EventCharacterS2WidgetMulti(s2forms.ModelSelect2MultipleWidget, EventCharacterS2):
-    search_fields = EventCharacterS2.search_fields
+class EventCharacterS2WidgetMulti(EventCharacterS2, s2forms.ModelSelect2MultipleWidget):
+    pass
 
 
-class EventCharacterS2Widget(s2forms.ModelSelect2Widget, EventCharacterS2):
-    search_fields = EventCharacterS2.search_fields
+class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
+    pass
 
 
 class EventWritingOptionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
