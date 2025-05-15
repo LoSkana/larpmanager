@@ -5629,15 +5629,18 @@ msgid ""
 "expense types."
 msgstr ""
 
-msgid "Net revenue"
+msgid "Total revenue"
+msgstr ""
+
+msgid "Net profit"
 msgstr ""
 
 msgid "Organization tax"
 msgstr ""
 
 msgid ""
-"(this balance takes into account payments currently received, and "
-"expenditures currently put into system)"
+"this balance reflects payments currently received and expenses recorded to "
+"date."
 msgstr ""
 
 msgid "Item"

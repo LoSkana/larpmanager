@@ -1371,6 +1371,9 @@ msgstr "Navigatie"
 msgid "Need help?"
 msgstr "Hulp nodig?"
 
+msgid "Net profit"
+msgstr "Nettowinst"
+
 msgid "New member"
 msgstr "Nieuw lid"
 
@@ -1586,9 +1589,6 @@ msgstr "Runs beheren"
 
 msgid "Nationality"
 msgstr "Nationaliteit"
-
-msgid "Net revenue"
-msgstr "Netto ontvangsten"
 
 msgid "New answer!"
 msgstr "Nieuw antwoord!"
@@ -2064,6 +2064,9 @@ msgstr "Ticketvuller"
 
 msgid "Ticket chosen"
 msgstr "Geselecteerd ticket"
+
+msgid "Total revenue"
+msgstr "Totale inkomsten"
 
 msgid "URL shortener"
 msgstr "URL-verkorter"
@@ -6360,6 +6363,13 @@ msgstr ""
 "U kunt uw toestemming voor het delen van gegevens intrekken door op de "
 "betreffende koppeling te klikken."
 
+msgid ""
+"this balance reflects payments currently received and expenses recorded to "
+"date."
+msgstr ""
+"Dit saldo weerspiegelt de betalingen die op dit moment zijn ontvangen en de "
+"uitgaven die tot nu toe zijn geboekt."
+
 #, python-format
 msgid ""
 "Reimbursement of %(amount).2f %(credits)s with reason '%(reason)s' was "
@@ -7665,13 +7675,6 @@ msgid ""
 msgstr ""
 "Deze pagina geeft een overzicht van de rollen die moeten worden toegewezen "
 "om de functies met betrekking tot de organisatie te kunnen gebruiken."
-
-msgid ""
-"(this balance takes into account payments currently received, and "
-"expenditures currently put into system)"
-msgstr ""
-"(deze tellingen houden rekening met betalingen die momenteel worden "
-"ontvangen en uitgaven die momenteel worden gemarkeerd)"
 
 msgid ""
 "Adds a 'preview' field to writing elements, shareable with the player before"

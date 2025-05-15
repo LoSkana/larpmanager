@@ -123,7 +123,7 @@ def save_permissions_role(instance, form):
     instance.save()
 
 
-class EventMS2:
+class EventS2Widget(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
     ]
@@ -141,15 +141,7 @@ class EventMS2:
         return que
 
 
-class EventS2WidgetMulti(s2forms.ModelSelect2MultipleWidget, EventMS2):
-    search_fields = EventMS2.search_fields
-
-
-class EventS2Widget(s2forms.ModelSelect2Widget, EventMS2):
-    search_fields = EventMS2.search_fields
-
-
-class CampaignMS2:
+class CampaignS2Widget(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
     ]
@@ -170,15 +162,7 @@ class CampaignMS2:
         return que
 
 
-class CampaignS2WidgetMulti(s2forms.ModelSelect2MultipleWidget, CampaignMS2):
-    search_fields = CampaignMS2.search_fields
-
-
-class CampaignS2Widget(s2forms.ModelSelect2Widget, CampaignMS2):
-    search_fields = CampaignMS2.search_fields
-
-
-class TemplateMS2:
+class TemplateS2Widget(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
     ]
@@ -188,14 +172,6 @@ class TemplateMS2:
 
     def get_queryset(self):
         return Event.objects.filter(assoc_id=self.aid, template=True)
-
-
-class TemplateS2WidgetMulti(s2forms.ModelSelect2MultipleWidget, TemplateMS2):
-    search_fields = TemplateMS2.search_fields
-
-
-class TemplateS2Widget(s2forms.ModelSelect2Widget, TemplateMS2):
-    search_fields = TemplateMS2.search_fields
 
 
 class AssocMS2:
@@ -217,15 +193,15 @@ class AssocMS2:
         return f"{obj.display_real()} - {obj.email}"
 
 
-class AssocMemberS2WidgetMulti(s2forms.ModelSelect2MultipleWidget, AssocMS2):
-    search_fields = AssocMS2.search_fields
+class AssocMemberS2WidgetMulti(AssocMS2, s2forms.ModelSelect2MultipleWidget):
+    pass
 
 
-class AssocMemberS2Widget(s2forms.ModelSelect2Widget, AssocMS2):
-    search_fields = AssocMS2.search_fields
+class AssocMemberS2Widget(AssocMS2, s2forms.ModelSelect2Widget):
+    pass
 
 
-class RegisteredMS2:
+class RunMemberS2Widget(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
         "surname__icontains",
@@ -233,7 +209,8 @@ class RegisteredMS2:
         "user__email__icontains",
     ]
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.allowed = None
 
     def set_run(self, run):
@@ -250,14 +227,6 @@ class RegisteredMS2:
     @staticmethod
     def label_from_instance(obj):
         return f"{obj.display_real()} - {obj.email}"
-
-
-class RunMemberS2WidgetMulti(s2forms.ModelSelect2MultipleWidget, RegisteredMS2):
-    search_fields = RegisteredMS2.search_fields
-
-
-class RunMemberS2Widget(s2forms.ModelSelect2Widget, RegisteredMS2):
-    search_fields = RegisteredMS2.search_fields
 
 
 def get_assoc_people(assoc_id):
@@ -351,15 +320,15 @@ class EventCharacterS2:
         return self.event.get_elements(Character)
 
 
-class EventCharacterS2WidgetMulti(s2forms.ModelSelect2MultipleWidget, EventCharacterS2):
-    search_fields = EventCharacterS2.search_fields
+class EventCharacterS2WidgetMulti(EventCharacterS2, s2forms.ModelSelect2MultipleWidget):
+    pass
 
 
-class EventCharacterS2Widget(s2forms.ModelSelect2Widget, EventCharacterS2):
-    search_fields = EventCharacterS2.search_fields
+class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
+    pass
 
 
-class EventWritingOptionS2:
+class EventWritingOptionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
     search_fields = [
         "display__icontains",
         "details__icontains",
@@ -370,14 +339,6 @@ class EventWritingOptionS2:
 
     def get_queryset(self):
         return self.event.get_elements(WritingOption)
-
-
-class EventWritingOptionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget, EventWritingOptionS2):
-    search_fields = EventWritingOptionS2.search_fields
-
-
-class EventWritingOptionS2Widget(s2forms.ModelSelect2Widget, EventWritingOptionS2):
-    search_fields = EventWritingOptionS2.search_fields
 
 
 class FactionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):

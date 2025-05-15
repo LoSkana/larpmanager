@@ -120,18 +120,19 @@ def discount(live_server, page):
     page.locator("#id_visible").check()
     page.locator("#id_only_reg").uncheck()
     page.get_by_role("button", name="Confirm").click()
+
     go_to(page, live_server, "/test/1/register/")
     page.get_by_role("link", name="Discounts ").click()
     page.locator("#id_discount").click()
     page.locator("#id_discount").fill("code")
-    page.get_by_role("button", name="Confirm").click()
+    page.locator("#discount_go").click()
     expect(page.locator("#discount_res")).to_contain_text(
         "The discount has been added! It has been reserved for you for 15 minutes, after which it will be removed"
     )
     expect(page.locator("#discount_tbl")).to_contain_text("20.00€")
     page.get_by_role("button", name="Continue").click()
     expect(page.locator("#riepilogo")).to_contain_text("Your updated registration total is: 80€.")
-    page.get_by_role("button", name="Confirm").click()
+    page.locator("#register_go").click()
 
 
 def pay(live_server, page):

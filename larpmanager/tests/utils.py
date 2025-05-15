@@ -22,55 +22,12 @@ import os
 import time
 from datetime import datetime
 
-import pytest
 from django.utils.translation import activate
 from playwright.sync_api import expect
 
 password = "banana"
 orga_user = "orga@test.it"
 test_user = "user@test.it"
-
-
-@pytest.hookimpl(tryfirst=True, hookwrapper=True)
-def pytest_runtest_makereport(item, call):
-    outcome = yield
-    result = outcome.get_result()
-    setattr(item, f"rep_{result.when}", result)
-
-
-@pytest.fixture(scope="function", autouse=True)
-def handle_video_and_screenshot(request, page):
-    yield  # Run the test
-
-    test_name = request.node.name
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-
-    video_path = None
-    try:
-        video_path = page.video.path()
-    except Exception:
-        pass  # Ignore if video is unavailable
-
-    if request.node.rep_call.failed:
-        # Test failed → save screenshot and video
-        os.makedirs("test_screenshots", exist_ok=True)
-        os.makedirs("test_videos", exist_ok=True)
-
-        screenshot_file = f"test_screenshots/{test_name}_{timestamp}.png"
-        page.screenshot(path=screenshot_file)
-
-        if video_path and os.path.exists(video_path):
-            try:
-                new_video_path = f"test_videos/{test_name}_{timestamp}.webm"
-                os.rename(video_path, new_video_path)
-            except Exception as e:
-                print(f"[!] Failed to save video: {e}")
-    # Test passed → delete the video
-    elif video_path and os.path.exists(video_path):
-        try:
-            os.remove(video_path)
-        except Exception as e:
-            print(f"[!] Failed to delete video: {e}")
 
 
 def page_start(p, show=False):
@@ -118,6 +75,18 @@ def login(pg, live_server, name):
 def handle_error(page, e, test_name):
     print(f"Error on {test_name}: {page.url}\n")
     print(e)
+
+    uid = datetime.now().strftime("%Y%m%d_%H%M%S")
+    page.screenshot(path=f"test_screenshots/{test_name}_{uid}.png")
+    try:
+        video_path = page.video.path()
+        os.rename(video_path, f"test_videos/{test_name}_{uid}.webm")
+    except Exception as ve:
+        print(f"[!] Errore video: {ve}")
+
+    # print("Captured Visible Page Text:\n")
+    # print(print_text(page))
+    raise e
 
 
 def print_text(page):
