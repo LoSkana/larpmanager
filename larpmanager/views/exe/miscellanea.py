@@ -21,7 +21,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from larpmanager.cache.role import check_assoc_permission
 from larpmanager.forms.miscellanea import (
     ExeInventoryBoxForm,
     ExeUrlShortnerForm,
@@ -32,6 +31,7 @@ from larpmanager.models.miscellanea import (
     InventoryBoxHistory,
     UrlShortner,
 )
+from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.common import (
     check_diff,
 )
