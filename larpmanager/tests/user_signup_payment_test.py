@@ -27,7 +27,7 @@ from playwright.sync_api import expect, sync_playwright
 from larpmanager.tests.utils import go_to, handle_error, login_orga, page_start, submit
 
 
-@pytest.mark.django_db(transaction=True)
+@pytest.mark.django_db
 def test_user_signup_payment(live_server):
     with sync_playwright() as p:
         browser, context, page = page_start(p)
