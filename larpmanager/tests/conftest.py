@@ -23,6 +23,7 @@ import subprocess
 
 
 def pytest_sessionstart(session):
+    print(">>> pytest_sessionstart eseguito <<<")
     env = os.environ.copy()
     env["PGPASSWORD"] = "larpmanager"
 

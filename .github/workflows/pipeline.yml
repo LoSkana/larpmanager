@@ -61,7 +61,6 @@ jobs:
 
     - name: Migrate database
       run: |
-        python manage.py migrate
         python manage.py compilemessages
         python manage.py collectstatic --noinput
         python manage.py compress
