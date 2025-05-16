@@ -21,9 +21,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from larpmanager.cache.role import get_index_assoc_permissions
 from larpmanager.models.association import Association
-from larpmanager.utils.base import def_user_ctx
+from larpmanager.utils.base import def_user_ctx, get_index_assoc_permissions
 from larpmanager.utils.event import get_event_run, get_index_event_permissions
 from larpmanager.utils.miscellanea import check_centauri
 from larpmanager.views.larpmanager import lm_home
@@ -51,8 +50,6 @@ def manage(request, s=None, n=None):
         get_index_event_permissions(ctx, request, s)
         if assoc.get_config("interface_admin_links", False):
             get_index_assoc_permissions(ctx, request, request.assoc["id"], check=False)
-
-    ctx["manage"] = 1
 
     return render(request, "larpmanager/manage/index.html", ctx)
 

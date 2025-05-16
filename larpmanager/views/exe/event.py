@@ -23,7 +23,6 @@ from django.shortcuts import redirect, render
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
-from larpmanager.cache.role import check_assoc_permission
 from larpmanager.forms.event import (
     ExeEventForm,
     ExeTemplateForm,
@@ -37,7 +36,7 @@ from larpmanager.models.event import (
     Event,
     Run,
 )
-from larpmanager.utils.base import def_user_ctx
+from larpmanager.utils.base import check_assoc_permission, def_user_ctx
 from larpmanager.utils.common import (
     get_event_template,
 )

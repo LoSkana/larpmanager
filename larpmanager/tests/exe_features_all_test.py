@@ -26,7 +26,7 @@ from playwright.sync_api import sync_playwright
 from larpmanager.tests.utils import _checkboxes, go_to, go_to_check, handle_error, login_orga, page_start
 
 
-@pytest.mark.django_db(transaction=True)
+@pytest.mark.django_db
 def test_exe_features_all(live_server):
     with sync_playwright() as p:
         browser, context, page = page_start(p)
