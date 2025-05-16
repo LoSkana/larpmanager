@@ -25,9 +25,9 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_USER: test
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: test_db
+          POSTGRES_USER: larpmanager
+          POSTGRES_PASSWORD: larpmanager
+          POSTGRES_DB: larpmanager
           POSTGRES_OPTS: "-c fsync=off -c full_page_writes=off -c synchronous_commit=off"
         options: >-
           --health-cmd "pg_isready -U test"
@@ -65,7 +65,7 @@ jobs:
       run: |
         export PYTEST_CURRENT_TEST="true"
         # multiple parallel workers with -n
-        pytest -rs -n 4 -vvv
+        pytest -rs -n 4 -vvv --reuse-db
 
     - name: Debug contenuto cartelle test
       run: |

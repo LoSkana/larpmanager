@@ -156,7 +156,7 @@ def add_single_options(page):
     page.locator("#id_price").press("Tab")
     page.locator("#id_max_available").fill("1")
     page.get_by_role("button", name="Confirm", exact=True).click()
-    page.get_by_role("button", name="Confirm", exact=True)
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
 
 def add_multiple(page):

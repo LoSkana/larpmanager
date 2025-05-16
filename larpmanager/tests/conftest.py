@@ -18,12 +18,76 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import pytest
-from django.core.management import call_command
+import os
+import subprocess
 
 
-@pytest.fixture(scope="function", autouse=True)
-def load_fixtures(django_db_setup, django_db_blocker):
-    """Load test data and re-hash passwords."""
-    with django_db_blocker.unblock():
-        call_command("reset")
+def pytest_sessionstart(session):
+    env = os.environ.copy()
+    env["PGPASSWORD"] = "larpmanager"
+
+    sql_path = os.path.join(os.path.dirname(__file__), "test_db.sql")
+
+    # stop connections to db
+    subprocess.run(
+        [
+            "psql",
+            "-U",
+            "larpmanager",
+            "-h",
+            "localhost",
+            "-d",
+            "postgres",
+            "-c",
+            (
+                "SELECT pg_terminate_backend(pid) "
+                "FROM pg_stat_activity "
+                "WHERE datname = 'test_larpmanager' AND pid <> pg_backend_pid();"
+            ),
+        ],
+        check=True,
+        env=env,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+
+    # drop db
+    subprocess.run(
+        ["dropdb", "test_larpmanager", "-U", "larpmanager", "-h", "localhost"],
+        check=True,
+        env=env,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+
+    # create db
+    subprocess.run(
+        ["createdb", "test_larpmanager", "-U", "larpmanager", "-h", "localhost"],
+        check=True,
+        env=env,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+
+    # load db
+    subprocess.run(
+        [
+            "psql",
+            "-q",  # quiet mode
+            "-X",  # no config
+            "-v",
+            "ON_ERROR_STOP=1",
+            "-U",
+            "larpmanager",
+            "-h",
+            "localhost",
+            "-d",
+            "test_larpmanager",
+            "-f",
+            sql_path,
+        ],
+        check=True,
+        env=env,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
