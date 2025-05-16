@@ -24,7 +24,7 @@ from playwright.sync_api import sync_playwright
 from larpmanager.tests.utils import check_download, go_to, handle_error, login_orga, page_start
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_user_pdf(live_server):
     with sync_playwright() as p:
         browser, context, page = page_start(p)

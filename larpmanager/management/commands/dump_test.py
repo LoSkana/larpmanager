@@ -39,6 +39,7 @@ class Command(BaseCommand):
             "larpmanager",
             "-h",
             "localhost",
+            "--inserts",
             "-d",
             "larpmanager",
             "-f",

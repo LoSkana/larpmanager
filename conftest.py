@@ -21,13 +21,48 @@
 import os
 import subprocess
 
+import pytest
 
-def pytest_sessionstart(session):
-    print(">>> pytest_sessionstart eseguito <<<")
+
+@pytest.fixture(scope="session", autouse=True)
+def preload_test_db(django_db_setup, django_db_blocker):
+    # Do not repeat if multiple xdist workers
+    if os.environ.get("PYTEST_XDIST_WORKER", "gw0") != "gw0":
+        return
+
     env = os.environ.copy()
     env["PGPASSWORD"] = "larpmanager"
 
-    sql_path = os.path.join(os.path.dirname(__file__), "test_db.sql")
+    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
+        host = "postgres"
+    else:
+        host = "localhost"
+        clean_db(env)
+
+    sql_path = os.path.join(os.path.dirname(__file__), "larpmanager", "tests", "test_db.sql")
+
+    with django_db_blocker.unblock():
+        subprocess.run(
+            [
+                "psql",
+                "-v",
+                "ON_ERROR_STOP=1",
+                "-U",
+                "larpmanager",
+                "-h",
+                host,
+                "-d",
+                "test_larpmanager",
+                "-f",
+                sql_path,
+            ],
+            check=True,
+            env=env,
+        )
+
+
+def clean_db(env):
+    host = "localhost"
 
     # stop connections to db
     subprocess.run(
@@ -36,7 +71,7 @@ def pytest_sessionstart(session):
             "-U",
             "larpmanager",
             "-h",
-            "localhost",
+            host,
             "-d",
             "postgres",
             "-c",
@@ -48,47 +83,24 @@ def pytest_sessionstart(session):
         ],
         check=True,
         env=env,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
+        # stdout=subprocess.DEVNULL,
+        # stderr=subprocess.DEVNULL,
     )
 
     # drop db
     subprocess.run(
-        ["dropdb", "test_larpmanager", "-U", "larpmanager", "-h", "localhost"],
+        ["psql", "-U", "larpmanager", "-h", host, "-d", "postgres", "-c", "DROP DATABASE IF EXISTS test_larpmanager;"],
         check=True,
         env=env,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
+        # stdout=subprocess.DEVNULL,
+        # stderr=subprocess.DEVNULL,
     )
 
     # create db
     subprocess.run(
-        ["createdb", "test_larpmanager", "-U", "larpmanager", "-h", "localhost"],
+        ["createdb", "test_larpmanager", "-U", "larpmanager", "-h", host],
         check=True,
         env=env,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
-
-    # load db
-    subprocess.run(
-        [
-            "psql",
-            "-q",  # quiet mode
-            "-X",  # no config
-            "-v",
-            "ON_ERROR_STOP=1",
-            "-U",
-            "larpmanager",
-            "-h",
-            "localhost",
-            "-d",
-            "test_larpmanager",
-            "-f",
-            sql_path,
-        ],
-        check=True,
-        env=env,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
+        # stdout=subprocess.DEVNULL,
+        # stderr=subprocess.DEVNULL,
     )

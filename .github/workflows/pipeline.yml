@@ -69,7 +69,7 @@ jobs:
       run: |
         export PYTEST_CURRENT_TEST="true"
         # multiple parallel workers with -n
-        pytest -rs -n 4 -vvv --reuse-db
+        pytest -rs -n auto -vvv --reuse-db
 
     - name: Debug contenuto cartelle test
       run: |
