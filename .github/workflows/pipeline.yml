@@ -40,6 +40,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    - name: Setup Git LFS
+      run: git lfs pull
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
