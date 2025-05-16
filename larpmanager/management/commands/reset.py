@@ -19,14 +19,13 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.apps import apps
-from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 from django.db import connection, transaction
 
 
 class Command(BaseCommand):
-    help = "Reset DB, load fixtures, and re-hash passwords (only safe in non-prod environments)"
+    help = "Reset DB"
 
     def handle(self, *args, **options):
         self.stdout.write("Resetting database...")
@@ -48,14 +47,4 @@ class Command(BaseCommand):
                     cursor.execute("PRAGMA foreign_keys = ON;")
 
         # Load fixtures
-        call_command("import_features")
-        call_command("loaddata", "test.yaml", verbosity=0)
-
-        # Re-hash user passwords
-        user_model = get_user_model()
-        for user in user_model.objects.all():
-            user.set_password("banana")
-            user.is_active = True
-            user.save()
-
-        self.stdout.write("All done.")
+        call_command("init_db")

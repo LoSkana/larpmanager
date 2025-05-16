@@ -27,7 +27,6 @@ AUTO_BACKGROUND_TASKS = True
 DEBUG = False
 EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
 CELERY_TASK_ALWAYS_EAGER = True
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 LOGGING = {
     'version': 1,

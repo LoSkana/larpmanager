@@ -59,7 +59,7 @@ jobs:
         cp -r larpmanager/tests/media/* ../media/
         ls -al ../media/
 
-    - name: Migrate database
+    - name: Prepare statics
       run: |
         python manage.py compilemessages
         python manage.py collectstatic --noinput
@@ -69,7 +69,7 @@ jobs:
       run: |
         export PYTEST_CURRENT_TEST="true"
         # multiple parallel workers with -n
-        pytest -rs -n auto -vvv --reuse-db
+        pytest -rs -n auto -vvv
 
     - name: Debug contenuto cartelle test
       run: |

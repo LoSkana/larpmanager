@@ -22,50 +22,40 @@ import os
 import subprocess
 
 import pytest
+from django.core.management import call_command
 
 
-@pytest.fixture(scope="session", autouse=True)
-def preload_test_db(django_db_setup, django_db_blocker):
-    # Do not repeat if multiple xdist workers
-    if os.environ.get("PYTEST_XDIST_WORKER", "gw0") != "gw0":
+@pytest.fixture(autouse=True, scope="function")
+def load_fixtures(db):
+    print("<<<< LOAD FIXTURE >>>>")
+    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
+        call_command("init_db")
+
+
+def psql(params, env):
+    subprocess.run(params, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=env, text=True)
+
+
+def pytest_sessionstart(session):
+    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
         return
 
     env = os.environ.copy()
     env["PGPASSWORD"] = "larpmanager"
 
-    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
-        host = "postgres"
-    else:
-        host = "localhost"
-        clean_db(env)
+    host = "localhost"
+    clean_db(host, env)
 
     sql_path = os.path.join(os.path.dirname(__file__), "larpmanager", "tests", "test_db.sql")
 
-    with django_db_blocker.unblock():
-        subprocess.run(
-            [
-                "psql",
-                "-v",
-                "ON_ERROR_STOP=1",
-                "-U",
-                "larpmanager",
-                "-h",
-                host,
-                "-d",
-                "test_larpmanager",
-                "-f",
-                sql_path,
-            ],
-            check=True,
-            env=env,
-        )
+    psql(
+        ["psql", "-v", "ON_ERROR_STOP=1", "-U", "larpmanager", "-h", host, "-d", "test_larpmanager", "-f", sql_path],
+        env,
+    )
 
 
-def clean_db(env):
-    host = "localhost"
-
-    # stop connections to db
-    subprocess.run(
+def clean_db(host, env):
+    psql(
         [
             "psql",
             "-U",
@@ -73,34 +63,9 @@ def clean_db(env):
             "-h",
             host,
             "-d",
-            "postgres",
+            "test_larpmanager",
             "-c",
-            (
-                "SELECT pg_terminate_backend(pid) "
-                "FROM pg_stat_activity "
-                "WHERE datname = 'test_larpmanager' AND pid <> pg_backend_pid();"
-            ),
+            "DROP SCHEMA public CASCADE; CREATE SCHEMA public;",
         ],
-        check=True,
-        env=env,
-        # stdout=subprocess.DEVNULL,
-        # stderr=subprocess.DEVNULL,
-    )
-
-    # drop db
-    subprocess.run(
-        ["psql", "-U", "larpmanager", "-h", host, "-d", "postgres", "-c", "DROP DATABASE IF EXISTS test_larpmanager;"],
-        check=True,
-        env=env,
-        # stdout=subprocess.DEVNULL,
-        # stderr=subprocess.DEVNULL,
-    )
-
-    # create db
-    subprocess.run(
-        ["createdb", "test_larpmanager", "-U", "larpmanager", "-h", host],
-        check=True,
-        env=env,
-        # stdout=subprocess.DEVNULL,
-        # stderr=subprocess.DEVNULL,
+        env,
     )
