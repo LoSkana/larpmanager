@@ -46,6 +46,8 @@ def def_user_ctx(request):
     if hasattr(request, "user") and hasattr(request.user, "member"):
         res["member"] = request.user.member
         res["membership"] = get_user_membership(request.user.member, request.assoc["id"])
+        get_index_assoc_permissions(res, request, request.assoc["id"], check=False)
+
     res.update(cache_event_links(request))
 
     if "token_credit" in res["features"]:
@@ -53,8 +55,6 @@ def def_user_ctx(request):
             res["token_name"] = _("Tokens")
         if not res["credit_name"]:
             res["credit_name"] = _("Credits")
-
-    get_index_assoc_permissions(res, request, request.assoc["id"], check=False)
 
     return res
 
