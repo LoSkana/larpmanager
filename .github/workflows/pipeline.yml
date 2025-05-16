@@ -12,7 +12,7 @@ jobs:
     runs-on: self-hosted
 
     container:
-      image: ghcr.io/loskana/playwright-django:latest
+      image: ghcr.io/loskana/larpmanager-ci:latest
 
       credentials:
         username: loskana
