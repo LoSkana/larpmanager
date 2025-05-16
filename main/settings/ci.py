@@ -7,12 +7,15 @@ SLUG_ASSOC = 'def'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test_db',
-        'USER': 'test',
-        'PASSWORD': 'password',
+        'NAME': 'larpmanager',
+        'USER': 'larpmanager',
+        'PASSWORD': 'larpmanager',
         'HOST': 'postgres',
         'PORT': '5432',
-    }
+        'TEST': {
+            'NAME': 'test_larpmanager',
+        },
+   }
 }
 
 STATIC_ROOT = os.path.join(BASE_DIR, '../static')
@@ -20,6 +23,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 COMPRESS_ENABLED = True
 
 AUTO_BACKGROUND_TASKS = True
+
+DEBUG = False
+EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+CELERY_TASK_ALWAYS_EAGER = True
 
 LOGGING = {
     'version': 1,

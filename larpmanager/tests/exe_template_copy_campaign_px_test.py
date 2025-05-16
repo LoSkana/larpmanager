@@ -26,7 +26,7 @@ from playwright.sync_api import expect, sync_playwright
 from larpmanager.tests.utils import fill_tinymce, go_to, handle_error, login_orga, page_start
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_exe_template_copy(live_server):
     with sync_playwright() as p:
         browser, context, page = page_start(p)
@@ -64,7 +64,7 @@ def template(live_server, page):
     page.locator("#id_name").fill("template")
     page.locator("div.feature_checkbox", has_text="Characters").locator("input[type='checkbox']").check()
     page.locator("div.feature_checkbox", has_text="Copy").locator("input[type='checkbox']").check()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("link", name="Add").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("base role")
@@ -72,11 +72,11 @@ def template(live_server, page):
     page.get_by_role("searchbox").fill("user")
     page.get_by_role("option", name="User Test - user@test.it").click()
     page.locator("#id_Appearance div").filter(has_text="Texts").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("gridcell", name="Configuration").get_by_role("link").click()
     page.get_by_role("link", name="Gallery ").click()
     page.locator("#id_gallery_hide_signup").check()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     # create new event from template
     go_to(page, live_server, "/manage/events")
     page.get_by_role("link", name="New").click()
@@ -87,7 +87,7 @@ def template(live_server, page):
     page.get_by_label("", exact=True).click()
     page.get_by_role("searchbox").fill("tem")
     page.get_by_role("option", name="template").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     # check roles
     go_to(page, live_server, "/fromtemplate/1/manage/roles/")
     expect(page.locator('[id="\\35 "]')).to_contain_text("User Test")
@@ -113,7 +113,7 @@ def setup_test(live_server, page):
     go_to(page, live_server, "/test/1/manage/config/")
     page.get_by_role("link", name="Gallery ").click()
     page.locator("#id_gallery_hide_login").check()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/test/1/manage/roles/")
     page.get_by_role("link", name="New").click()
@@ -124,7 +124,7 @@ def setup_test(live_server, page):
     page.get_by_role("option", name="User Test - user@test.it").click()
     page.locator("#id_Appearance").get_by_text("Navigation").click()
     page.locator("#id_Writing").get_by_text("Factions").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
 
 def px(live_server, page):
@@ -133,13 +133,13 @@ def px(live_server, page):
     page.get_by_role("link", name=re.compile(r"^Experience points")).click()
     page.locator("#id_px_start").click()
     page.locator("#id_px_start").fill("10")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/test/1/manage/px/ability_types/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("base ability")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/test/1/manage/px/abilities/")
     page.get_by_role("link", name="New").click()
@@ -152,7 +152,7 @@ def px(live_server, page):
     page.locator("#id_cost").fill("1")
     frame = page.locator('iframe[title="Rich Text Area"]')
     fill_tinymce(frame, "sdsfdsfds")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/test/1/manage/px/deliveries/")
     page.get_by_role("link", name="New").click()
@@ -163,7 +163,7 @@ def px(live_server, page):
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # check px computation
     go_to(page, live_server, "/test/1/manage/characters/")
@@ -178,7 +178,7 @@ def px(live_server, page):
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("swo")
     page.get_by_role("option", name="sword1").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("link", name="XP").click()
     expect(page.locator('[id="\\31 "]')).to_contain_text("11")
     expect(page.locator('[id="\\31 "]')).to_contain_text("12")
@@ -193,7 +193,7 @@ def copy(live_server, page):
     page.locator("#id_name").fill("copy")
     page.locator("#id_name").press("Tab")
     page.locator("#slug").fill("copy")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/copy/1/manage/features/10/on")
     go_to(page, live_server, "/copy/1/manage/copy/")
@@ -232,7 +232,7 @@ def campaign(live_server, page):
     page.locator("#select2-id_parent-container").click()
     page.get_by_role("searchbox").fill("tes")
     page.get_by_role("option", name="Test Larp", exact=True).click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     go_to(page, live_server, "/campaign/1/manage/characters/")
     page.get_by_role("link", name="XP").click()
     expect(page.locator('[id="\\31 "]')).to_contain_text("12")

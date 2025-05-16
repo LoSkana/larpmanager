@@ -18,12 +18,24 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import pytest
+from django.contrib.auth import get_user_model
 from django.core.management import call_command
+from django.core.management.base import BaseCommand
 
 
-@pytest.fixture(scope="function", autouse=True)
-def load_fixtures(django_db_setup, django_db_blocker):
-    """Load test data and re-hash passwords."""
-    with django_db_blocker.unblock():
-        call_command("reset")
+class Command(BaseCommand):
+    help = "Init DB"
+
+    def handle(self, *args, **options):
+        # Load fixtures
+        call_command("import_features")
+        call_command("loaddata", "test.yaml", verbosity=0)
+
+        # Re-hash user passwords
+        user_model = get_user_model()
+        for user in user_model.objects.all():
+            user.set_password("banana")
+            user.is_active = True
+            user.save()
+
+        self.stdout.write("All done.")

@@ -24,7 +24,7 @@ from playwright.sync_api import expect, sync_playwright
 from larpmanager.tests.utils import go_to, handle_error, login_orga, login_user, logout, page_start
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_exe_assoc_role(live_server):
     with sync_playwright() as p:
         browser, context, page = page_start(p)
@@ -56,7 +56,7 @@ def exe_assoc_role(live_server, page):
     page.get_by_role("option", name="User Test -").click()
     page.get_by_role("checkbox", name="Configuration").check()
     page.get_by_role("checkbox", name="Accounting").check()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("gridcell", name="Accounting , Configuration").click()
     expect(page.locator('[id="\\32 "]')).to_contain_text("Accounting , Configuration")
 
