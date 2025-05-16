@@ -141,7 +141,6 @@ def add_exe(page, live_server):
     page.locator("#id_invoice").set_input_files(str(image_path))
     page.locator("#id_exp").select_option("c")
     page.get_by_role("button", name="Confirm", exact=True).click()
-    page.get_by_role("link", name="Organization").click()
 
     go_to(page, live_server, "/manage/inflows")
     page.get_by_role("link", name="New").click()
