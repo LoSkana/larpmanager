@@ -29,6 +29,7 @@ from django.core.management import call_command
 def load_fixtures(db):
     print("<<<< LOAD FIXTURE >>>>")
     if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
+        call_command("flush", interactive=False)
         call_command("init_db")
 
 
