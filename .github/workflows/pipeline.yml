@@ -41,7 +41,9 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Setup Git LFS
-      run: git lfs pull
+      run: |
+        git config --global --add safe.directory /__w/larpmanager/larpmanager
+        git lfs pull
 
     - name: Install dependencies
       run: |
