@@ -167,17 +167,22 @@ Thanks in advance for contributing! Here's the steps:
    ./scripts/record-test.sh
    ```
    To run an instance of playwright that will record all your actions, in code that can later be inserted into the test.
-6. Before pushing make sure that all the tests passes using:
+7. If you're changing the model or the fixtures, run:
+   ```bash
+   python manage.py dump_test
+   ```
+   to update the dump used by tests and ci.
+8. Before pushing make sure that all the tests passes using:
    ```bash
    pytest
    ```
    *Note that the tests will take some time to complete*.
-7. When you're ready to push your new branch, run
+9. When you're ready to push your new branch, run
    ```bash
    ./scripts/upgrade.sh
    ```
    This will execute some helpful activities like making sure you're updated with main branch, deleting old local branches, and other small things like that.
-8. Go and open [a new pull request](https://github.com/loskana/larpmanager/pulls). Make sure to explain clearly in the description what's happening.
+10. Go and open [a new pull request](https://github.com/loskana/larpmanager/pulls). Make sure to explain clearly in the description what's happening.
 
 ### New features
 

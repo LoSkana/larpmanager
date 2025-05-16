@@ -12,7 +12,7 @@ jobs:
     runs-on: self-hosted
 
     container:
-      image: ghcr.io/loskana/playwright-django:latest
+      image: ghcr.io/loskana/larpmanager-ci:latest
 
       credentials:
         username: loskana
@@ -25,9 +25,9 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_USER: test
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: test_db
+          POSTGRES_USER: larpmanager
+          POSTGRES_PASSWORD: larpmanager
+          POSTGRES_DB: larpmanager
           POSTGRES_OPTS: "-c fsync=off -c full_page_writes=off -c synchronous_commit=off"
         options: >-
           --health-cmd "pg_isready -U test"
@@ -39,6 +39,11 @@ jobs:
 
     - name: Checkout repository
       uses: actions/checkout@v4
+
+    - name: Setup Git LFS
+      run: |
+        git config --global --add safe.directory /__w/larpmanager/larpmanager
+        git lfs pull
 
     - name: Install dependencies
       run: |
@@ -54,9 +59,8 @@ jobs:
         cp -r larpmanager/tests/media/* ../media/
         ls -al ../media/
 
-    - name: Migrate database
+    - name: Prepare statics
       run: |
-        python manage.py migrate
         python manage.py compilemessages
         python manage.py collectstatic --noinput
         python manage.py compress
@@ -65,7 +69,7 @@ jobs:
       run: |
         export PYTEST_CURRENT_TEST="true"
         # multiple parallel workers with -n
-        pytest -rs -n 4 -vvv
+        pytest -rs -n auto -vvv
 
     - name: Debug contenuto cartelle test
       run: |

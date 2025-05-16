@@ -25,7 +25,7 @@ from playwright.sync_api import expect, sync_playwright
 from larpmanager.tests.utils import go_to, handle_error, login_orga, page_start
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_exe_accounting(live_server):
     with sync_playwright() as p:
         browser, context, page = page_start(p)
@@ -84,7 +84,7 @@ def sign_up_pay(page, live_server):
     page.locator("#id_price").click()
     page.locator("#id_price").press("Home")
     page.locator("#id_price").fill("50.00")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "test/1/manage/registrations/form/")
     page.get_by_role("link", name="New").click()
@@ -98,11 +98,11 @@ def sign_up_pay(page, live_server):
     page.locator("#id_details").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("20")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/test/1/register/")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/test/1/manage/payments/")
     page.get_by_role("link", name="New").click()
@@ -114,7 +114,7 @@ def sign_up_pay(page, live_server):
     page.get_by_role("option", name="Test Larp - Admin Test", exact=True).click()
     page.get_by_role("row", name="Info").locator("td").click()
     page.locator("#id_info").fill("sss")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
 
 def add_exe(page, live_server):
@@ -129,7 +129,7 @@ def add_exe(page, live_server):
     page.locator("#id_invoice").set_input_files(str(image_path))
     page.get_by_role("cell", name="--------- Indicate the").click()
     page.locator("#id_exp").select_option("a")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_value").click()
     page.locator("#id_value").fill("15")
@@ -140,8 +140,7 @@ def add_exe(page, live_server):
     page.locator("#id_descr").fill("bibi")
     page.locator("#id_invoice").set_input_files(str(image_path))
     page.locator("#id_exp").select_option("c")
-    page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("link", name="Organization").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/manage/inflows")
     page.get_by_role("link", name="New").click()
@@ -154,7 +153,7 @@ def add_exe(page, live_server):
     page.get_by_role("combobox", name="×Test Larp").press("Tab")
     page.locator("#id_descr").fill("ggg")
     page.locator("#id_invoice").set_input_files(str(image_path))
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_value").click()
     page.locator("#id_value").fill("30")
@@ -162,7 +161,7 @@ def add_exe(page, live_server):
     page.locator("#id_descr").click()
     page.locator("#id_descr").fill("sdfs")
     page.locator("#id_invoice").set_input_files(str(image_path))
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
 
 def add_orga(page, live_server):
@@ -174,7 +173,7 @@ def add_orga(page, live_server):
     page.locator("#id_descr").fill("asdsada")
     image_path = Path(__file__).parent / "image.jpg"
     page.locator("#id_invoice").set_input_files(str(image_path))
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     expect(page.locator('[id="\\33 "]')).to_contain_text("13.00")
     expect(page.locator('[id="\\31 "]')).to_contain_text("50.00")
     expect(page.locator('[id="\\33 "]')).to_contain_text("asdsada")
@@ -188,7 +187,7 @@ def add_orga(page, live_server):
     page.locator("#id_descr").fill("asdsad")
     page.locator("#id_invoice").set_input_files(str(image_path))
     page.locator("#id_exp").select_option("e")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
 
 def config(page, live_server):
@@ -214,4 +213,4 @@ def config(page, live_server):
     page.get_by_role("link", name="Organisation fee ").click()
     page.get_by_role("cell", name="Percentage of takings").click()
     page.locator("#id_organization_tax_perc").fill("13")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()

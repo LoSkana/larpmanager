@@ -24,7 +24,7 @@ from playwright.sync_api import sync_playwright
 from larpmanager.tests.utils import check_download, go_to, handle_error, login_orga, page_start
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_user_pdf(live_server):
     with sync_playwright() as p:
         browser, context, page = page_start(p)
@@ -54,7 +54,7 @@ def user_pdf(live_server, page):
     # signup
     go_to(page, live_server, "/test/1/register")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # Assign character
     go_to(page, live_server, "/test/1/manage/registrations")
@@ -62,7 +62,7 @@ def user_pdf(live_server, page):
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # Go to character, test download pdf
     go_to(page, live_server, "/test/1/character/1")

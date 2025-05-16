@@ -177,4 +177,4 @@ def _checkboxes(page, check=True):
                 checkbox.check()
         elif checkbox.is_checked():
             checkbox.uncheck()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()

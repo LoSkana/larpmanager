@@ -27,7 +27,7 @@ from playwright.sync_api import expect, sync_playwright
 from larpmanager.tests.utils import go_to, handle_error, login_orga, page_start, submit
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_user_signup_payment(live_server):
     with sync_playwright() as p:
         browser, context, page = page_start(p)
@@ -63,13 +63,13 @@ def prepare(page, live_server):
     page.locator("#id_mail_signup_update").check()
     page.locator("#id_mail_signup_del").check()
     page.locator("#id_mail_payment").check()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/manage/payments/details")
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("wir")
     page.get_by_role("option", name="Wire").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     page.get_by_role("link", name=re.compile(r"^wire")).click()
     page.locator("#id_wire_descr").click()
@@ -78,14 +78,14 @@ def prepare(page, live_server):
     page.locator("#id_wire_payee").fill("test beneficiary")
     page.locator("#id_wire_payee").press("Tab")
     page.locator("#id_wire_iban").fill("test iban")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # set ticket price
     go_to(page, live_server, "/test/1/manage/registrations/tickets")
     page.locator("a:has(i.fas.fa-edit)").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100.00")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
 
 def signup(page, live_server):
@@ -93,7 +93,7 @@ def signup(page, live_server):
     go_to(page, live_server, "/test/1/register")
     page.get_by_role("button", name="Continue").click()
     expect(page.locator("#riepilogo")).to_contain_text("provisional status")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # Check we are on payment page
     expect(page.locator("#header")).to_contain_text("Payment")
@@ -141,7 +141,7 @@ def characters(page, live_server):
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # test mails
     go_to(page, live_server, "/debug/mail")
@@ -150,7 +150,7 @@ def characters(page, live_server):
     go_to(page, live_server, "/test/1/manage/registrations")
     page.locator("a:has(i.fas.fa-edit)").click()
     page.get_by_role("listitem", name="#1 Test Character").locator("span").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # test mails
     go_to(page, live_server, "/debug/mail")

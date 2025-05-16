@@ -24,7 +24,7 @@ from playwright.sync_api import sync_playwright
 from larpmanager.tests.utils import go_to, handle_error, login_orga, page_start, submit
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_exe_profile(live_server):
     with sync_playwright() as p:
         browser, context, page = page_start(p)
@@ -47,7 +47,7 @@ def exe_profile(live_server, page):
     page.locator("#id_birth_place").select_option("m")
     page.locator("#id_document_type").select_option("m")
     page.locator("#id_diet").select_option("o")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/profile")
     page.get_by_role("textbox", name="Name (*)", exact=True).click()

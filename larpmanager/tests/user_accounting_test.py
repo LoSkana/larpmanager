@@ -27,7 +27,7 @@ from playwright.sync_api import expect, sync_playwright
 from larpmanager.tests.utils import go_to, handle_error, login_orga, page_start, submit
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_user_accounting(live_server):
     with sync_playwright() as p:
         browser, context, page = page_start(p)
@@ -69,13 +69,13 @@ def prepare(page, live_server):
     page.get_by_role("link", name=re.compile(r"^Payments")).click()
     page.locator("#id_payment_special_code").check()
 
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/manage/payments/details")
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("wir")
     page.get_by_role("option", name="Wire").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     page.get_by_role("link", name=re.compile(r"^wire")).click()
     page.locator("#id_wire_descr").click()
@@ -84,7 +84,7 @@ def prepare(page, live_server):
     page.locator("#id_wire_payee").fill("test beneficiary")
     page.locator("#id_wire_payee").press("Tab")
     page.locator("#id_wire_iban").fill("test iban")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
 
 def donation(page, live_server):
@@ -148,7 +148,7 @@ def membership_fees(page, live_server):
     page.locator("#id_membership_grazing").fill("12")
     page.locator("#id_membership_day").click()
     page.locator("#id_membership_day").fill("01-01")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/accounting")
     expect(page.locator("#one")).to_contain_text("Payment membership fee")
@@ -203,6 +203,6 @@ def collections(page, live_server):
     page.get_by_role("link", name="Manage it here!").click()
     page.get_by_role("link", name="Link to close the collection").click()
     page.get_by_role("link", name="Collection links").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/accounting")

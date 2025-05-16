@@ -24,7 +24,7 @@ from playwright.sync_api import expect, sync_playwright
 from larpmanager.tests.utils import go_to, handle_error, login_orga, page_start
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_exe_events_run(live_server):
     with sync_playwright() as p:
         browser, context, page = page_start(p)
@@ -53,7 +53,7 @@ def exe_events_run(live_server, page):
     frame.locator("body").fill("sadsadasdsaas")
     page.locator("#id_max_pg").click()
     page.locator("#id_max_pg").fill("10")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     page.locator("#id_development").select_option("1")
     page.locator("#id_development").click()
@@ -65,7 +65,7 @@ def exe_events_run(live_server, page):
     page.locator("i").nth(3).click()
     page.get_by_text("2050").nth(2).click()
     page.get_by_role("cell", name="16").locator("div").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     expect(page.locator("#one")).to_contain_text("Prova Event")
     go_to(page, live_server, "/prova/1/manage/")
