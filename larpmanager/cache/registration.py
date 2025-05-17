@@ -26,7 +26,7 @@ from django.dispatch import receiver
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import RegistrationChoice, WritingChoice
-from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
+from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import Character
 
 
@@ -65,9 +65,9 @@ def update_reg_counts(r):
     for el in que.values_list("ticket__id", "ticket__tier", "additionals"):
         num_tickets = 1 + el[2]
         for tp in [
-            ("staff", RegistrationTicket.STAFF),
-            ("wait", RegistrationTicket.WAITING),
-            ("fill", RegistrationTicket.FILLER),
+            ("staff", TicketTier.STAFF),
+            ("wait", TicketTier.WAITING),
+            ("fill", TicketTier.FILLER),
         ]:
             if el[1] == tp[1]:
                 add_count(s, f"count_{tp[0]}", num_tickets)

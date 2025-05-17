@@ -44,6 +44,9 @@ msgstr "Fine"
 msgid "Fee"
 msgstr "Fee"
 
+msgid "NPC"
+msgstr "PNG"
+
 msgid "Net"
 msgstr "Netto"
 
@@ -534,6 +537,9 @@ msgstr "Numero"
 msgid "Object"
 msgstr "Oggetto"
 
+msgid "Patron"
+msgstr "Sostenitore"
+
 msgid "Player"
 msgstr "Giocatore"
 
@@ -563,6 +569,9 @@ msgstr "Segreto"
 
 msgid "Select"
 msgstr "Seleziona"
+
+msgid "Seller"
+msgstr "Venditore"
 
 msgid "Shared"
 msgstr "Condiviso"
@@ -761,6 +770,9 @@ msgstr "Lettura"
 
 msgid "Receipt"
 msgstr "Receipt"
+
+msgid "Reduced"
+msgstr "Ridotto"
 
 msgid "Refunds"
 msgstr "Rimborsi"
@@ -3993,6 +4005,9 @@ msgstr "Compila le domande preparatorie all'evento!"
 msgid "For more information, write to us!"
 msgstr "Per maggiori informazioni, scrivici!"
 
+msgid "If checked, allow ticket tier: NPC"
+msgstr "Se selezionata, consente il livello dei biglietti: PNG"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Iscrizione aggiornata per %(event)s"
@@ -4086,6 +4101,9 @@ msgstr "Errore nel processare il pagamento, contattaci"
 msgid "Extended description - international"
 msgstr "Descrizione estesa - in inglese"
 
+msgid "If checked, allow ticket tier: Staff"
+msgstr "Se selezionata, consente il livello di biglietto: Staff"
+
 msgid "Indicate the amount of your donation"
 msgstr "Indica la cifra della tua donazione"
 
@@ -4134,6 +4152,9 @@ msgstr "qui le condizioni di iscrizione agli eventi."
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Fai la tua votazione per il nuovo Direttivo!"
+
+msgid "If checked, allow ticket tier: Seller"
+msgstr "Se selezionata, consente il livello del biglietto: Venditore"
 
 msgid "Indicates accurate safety information"
 msgstr "Indica informazioni di safety precise"
@@ -4410,6 +4431,9 @@ msgstr "Ordine di visualizzazione rispetto tutte le domande"
 
 msgid "Freely indicate the amount of your donation"
 msgstr "Indica liberamente l'ammontare della tua donazione"
+
+msgid "If checked, allow ticket tier: Collaborator"
+msgstr "Se selezionata, consente il ticket tier: Collaboratore"
 
 msgid "If checked, makes quests and traits visible"
 msgstr "Se checkato, rende visibile le quest ed i tratti"

@@ -43,7 +43,7 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association
 from larpmanager.models.event import Run
 from larpmanager.models.member import Membership
-from larpmanager.models.registration import Registration, RegistrationTicket
+from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.utils import get_sum
 
 
@@ -75,7 +75,7 @@ def get_acc_reg_type(el):
         return "", ""
     return (
         el.ticket.tier,
-        get_display_choice(RegistrationTicket.TIER_CHOICES, el.ticket.tier),
+        get_display_choice(TicketTier.choices, el.ticket.tier),
     )
 
 

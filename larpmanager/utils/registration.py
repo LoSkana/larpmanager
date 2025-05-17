@@ -29,7 +29,7 @@ from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.accounting import PaymentInvoice
 from larpmanager.models.form import RegistrationAnswer, RegistrationChoice, RegistrationQuestion
 from larpmanager.models.member import Membership, get_user_membership
-from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
+from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.common import format_datetime, get_time_diff_today
 from larpmanager.utils.exceptions import SignupError, WaitingError
@@ -149,16 +149,16 @@ def registration_status_signed(run, features, register_url):
         run.status["text"] = register_text
         return
 
-    if run.reg.ticket and run.reg.ticket.tier == RegistrationTicket.WAITING:
+    if run.reg.ticket and run.reg.ticket.tier == TicketTier.WAITING:
         mes = _("You are signed up in the waiting list!")
-    elif run.reg.ticket and run.reg.ticket.tier == RegistrationTicket.FILLER:
+    elif run.reg.ticket and run.reg.ticket.tier == TicketTier.FILLER:
         mes = _("You are signed up as Filler!")
     else:
         mes = _("You are regularly signed up!")
 
     run.status["text"] = f"<a href='{register_url}'>{mes}</a>"
 
-    if run.reg.ticket and run.reg.ticket.tier == RegistrationTicket.PATRON:
+    if run.reg.ticket and run.reg.ticket.tier == TicketTier.PATRON:
         run.status["text"] += " " + _("Thanks for your support!")
 
 
@@ -311,7 +311,7 @@ def registration_status_characters(run, features):
     elif len(aux) > 1:
         run.status["details"] += _("Your characters are") + ": " + ", ".join(aux)
 
-    reg_waiting = run.reg.ticket and run.reg.ticket.tier == RegistrationTicket.WAITING
+    reg_waiting = run.reg.ticket and run.reg.ticket.tier == TicketTier.WAITING
 
     if "user_character" in features and not reg_waiting:
         if not check_character_maximum(run.event, run.reg.member):
@@ -390,7 +390,7 @@ def check_signup(request, ctx):
     if not reg:
         raise SignupError(ctx["event"].slug, ctx["run"].number)
 
-    if reg.ticket and reg.ticket.tier == RegistrationTicket.WAITING:
+    if reg.ticket and reg.ticket.tier == TicketTier.WAITING:
         raise WaitingError(ctx["event"].slug, ctx["run"].number)
 
 
@@ -412,11 +412,7 @@ def _check_assign_character(request, ctx):
 
 def get_reduced_available_count(run):
     ratio = int(run.event.get_config("reduced_ratio", 10))
-    red = Registration.objects.filter(
-        run=run, ticket__tier=RegistrationTicket.REDUCED, cancellation_date__isnull=True
-    ).count()
-    pat = Registration.objects.filter(
-        run=run, ticket__tier=RegistrationTicket.PATRON, cancellation_date__isnull=True
-    ).count()
+    red = Registration.objects.filter(run=run, ticket__tier=TicketTier.REDUCED, cancellation_date__isnull=True).count()
+    pat = Registration.objects.filter(run=run, ticket__tier=TicketTier.PATRON, cancellation_date__isnull=True).count()
     # silv = Registration.objects.filter(run=run, ticket__tier=RegistrationTicket.SILVER).count()
     return math.floor(pat * ratio / 10.0) - red

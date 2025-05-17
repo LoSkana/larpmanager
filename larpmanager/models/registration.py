@@ -33,34 +33,30 @@ from larpmanager.models.utils import UploadToPathAndRename, decimal_to_str, my_u
 from larpmanager.models.writing import Character
 
 
+class TicketTier(models.TextChoices):
+    STANDARD = "b", _("Standard")
+    LOTTERY = "l", _("Lottery")
+    WAITING = "w", _("Waiting")
+    FILLER = "f", _("Filler")
+    REDUCED = "r", _("Reduced")
+    PATRON = "p", _("Patron")
+    STAFF = "t", _("Staff")
+    NPC = "n", _("NPC")
+    COLLABORATOR = "c", _("Collaborator")
+    SELLER = "s", _("Seller")
+
+
 class RegistrationTicket(BaseModel):
     search = models.CharField(max_length=150, editable=False)
 
     number = models.IntegerField()
 
-    LOTTERY = "l"
-    WAITING = "w"
-    FILLER = "f"
-    STAFF = "t"
-    REDUCED = "r"
-    PATRON = "p"
-    STANDARD = "b"
-    TIER_CHOICES = [
-        (LOTTERY, "Lottery"),
-        (FILLER, "Filler"),
-        (STANDARD, "Standard"),
-        (WAITING, "Waiting"),
-        (STAFF, "Staff"),
-        (REDUCED, "Reduced"),
-        (PATRON, "Patron"),
-    ]
-
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="tickets")
 
     tier = models.CharField(
         max_length=1,
-        choices=TIER_CHOICES,
-        default=STANDARD,
+        choices=TicketTier.choices,
+        default=TicketTier.STANDARD,
         help_text=_("Type of ticket"),
     )
 

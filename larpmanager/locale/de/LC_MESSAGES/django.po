@@ -44,6 +44,9 @@ msgstr "Ende"
 msgid "Fee"
 msgstr "Gebühr"
 
+msgid "NPC"
+msgstr "NPC"
+
 msgid "Net"
 msgstr "Netz"
 
@@ -534,6 +537,9 @@ msgstr "Nummer"
 msgid "Object"
 msgstr "Objekt"
 
+msgid "Patron"
+msgstr "Schirmherr"
+
 msgid "Player"
 msgstr "Spieler"
 
@@ -563,6 +569,9 @@ msgstr "Geheimnis"
 
 msgid "Select"
 msgstr "Wählen Sie"
+
+msgid "Seller"
+msgstr "Verkäufer"
 
 msgid "Shared"
 msgstr "Gemeinsame"
@@ -761,6 +770,9 @@ msgstr "Lesen"
 
 msgid "Receipt"
 msgstr "Quittung"
+
+msgid "Reduced"
+msgstr "Verringert"
 
 msgid "Refunds"
 msgstr "Erstattungen"
@@ -3994,6 +4006,9 @@ msgstr "Füllen Sie die vorbereitenden Fragen für die Veranstaltung aus!"
 msgid "For more information, write to us!"
 msgstr "Für weitere Informationen, schreiben Sie uns!"
 
+msgid "If checked, allow ticket tier: NPC"
+msgstr "Wenn diese Option aktiviert ist, wird die Ticketstufe zugelassen: NPC"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Aktualisierter Eintrag für %(event)s"
@@ -4088,6 +4103,9 @@ msgstr "Fehler bei der Zahlungsabwicklung, kontaktieren Sie uns"
 msgid "Extended description - international"
 msgstr "Erweiterte Beschreibung - auf Englisch"
 
+msgid "If checked, allow ticket tier: Staff"
+msgstr "Wenn angekreuzt, Ticketstufe zulassen: Personal"
+
 msgid "Indicate the amount of your donation"
 msgstr "Geben Sie den Betrag Ihrer Spende an"
 
@@ -4136,6 +4154,9 @@ msgstr "hier die Bedingungen für die Anmeldung zur Veranstaltung."
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Geben Sie Ihre Stimme für die neue Exekutive ab!"
+
+msgid "If checked, allow ticket tier: Seller"
+msgstr "Wenn angekreuzt, Ticketstufe zulassen: Verkäufer"
 
 msgid "Indicates accurate safety information"
 msgstr "Weist auf genaue Sicherheitsinformationen hin"
@@ -4416,6 +4437,11 @@ msgstr "Reihenfolge in Bezug auf alle Fragen anzeigen"
 
 msgid "Freely indicate the amount of your donation"
 msgstr "Geben Sie den Betrag Ihrer Spende frei an"
+
+msgid "If checked, allow ticket tier: Collaborator"
+msgstr ""
+"Wenn diese Option aktiviert ist, wird die Ticket-Ebene zugelassen: "
+"Kollaborateur"
 
 msgid "If checked, makes quests and traits visible"
 msgstr "Wenn aktiviert, werden Quests und Eigenschaften sichtbar"

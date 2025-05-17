@@ -44,6 +44,9 @@ msgstr "Slutt"
 msgid "Fee"
 msgstr "Avgift"
 
+msgid "NPC"
+msgstr "NPC"
+
 msgid "Net"
 msgstr "Netto"
 
@@ -534,6 +537,9 @@ msgstr "Antall"
 msgid "Object"
 msgstr "Objekt"
 
+msgid "Patron"
+msgstr "Beskytter"
+
 msgid "Player"
 msgstr "Spiller"
 
@@ -563,6 +569,9 @@ msgstr "Hemmelig"
 
 msgid "Select"
 msgstr "Velg"
+
+msgid "Seller"
+msgstr "Selger"
 
 msgid "Shared"
 msgstr "Delte"
@@ -761,6 +770,9 @@ msgstr "Lesing"
 
 msgid "Receipt"
 msgstr "Kvittering"
+
+msgid "Reduced"
+msgstr "Redusert"
 
 msgid "Refunds"
 msgstr "Refusjon"
@@ -3993,6 +4005,9 @@ msgstr "Fyll ut de forberedende spørsmålene til arrangementet!"
 msgid "For more information, write to us!"
 msgstr "For mer informasjon, skriv til oss!"
 
+msgid "If checked, allow ticket tier: NPC"
+msgstr "Hvis avkrysset, tillat billettnivå: NPC"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Oppdatert oppføring for %(event)s"
@@ -4086,6 +4101,9 @@ msgstr "Feil ved behandling av betaling, kontakt oss"
 msgid "Extended description - international"
 msgstr "Utvidet beskrivelse - på engelsk"
 
+msgid "If checked, allow ticket tier: Staff"
+msgstr "Hvis avkrysset, tillat billettnivå: Staff"
+
 msgid "Indicate the amount of your donation"
 msgstr "Angi beløpet for donasjonen din"
 
@@ -4134,6 +4152,9 @@ msgstr "her vilkårene for registrering av arrangementet."
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Gi din stemme til den nye direktøren!"
+
+msgid "If checked, allow ticket tier: Seller"
+msgstr "Hvis avkrysset, tillat billettnivå: Selger"
 
 msgid "Indicates accurate safety information"
 msgstr "Angir presis sikkerhetsinformasjon"
@@ -4411,6 +4432,9 @@ msgstr "Vis rekkefølge med hensyn til alle spørsmål"
 
 msgid "Freely indicate the amount of your donation"
 msgstr "Angi fritt hvor mye du vil donere"
+
+msgid "If checked, allow ticket tier: Collaborator"
+msgstr "Hvis avkrysset, tillat billettnivå: Samarbeidspartner"
 
 msgid "If checked, makes quests and traits visible"
 msgstr "Hvis avkrysset, blir oppdrag og egenskaper synlige."

@@ -44,6 +44,9 @@ msgstr "Slut"
 msgid "Fee"
 msgstr "Avgift"
 
+msgid "NPC"
+msgstr "NPC"
+
 msgid "Net"
 msgstr "Netto"
 
@@ -534,6 +537,9 @@ msgstr "Antal"
 msgid "Object"
 msgstr "Objekt"
 
+msgid "Patron"
+msgstr "Beskyddare"
+
 msgid "Player"
 msgstr "Spelare"
 
@@ -563,6 +569,9 @@ msgstr "Hemlighet"
 
 msgid "Select"
 msgstr "Välj"
+
+msgid "Seller"
+msgstr "Säljare"
 
 msgid "Shared"
 msgstr "Delad"
@@ -761,6 +770,9 @@ msgstr "Läsning"
 
 msgid "Receipt"
 msgstr "Kvitto"
+
+msgid "Reduced"
+msgstr "Reducerad"
 
 msgid "Refunds"
 msgstr "Återbetalningar"
@@ -3993,6 +4005,9 @@ msgstr "Fyll i de förberedande frågorna för evenemanget!"
 msgid "For more information, write to us!"
 msgstr "För mer information, skriv till oss!"
 
+msgid "If checked, allow ticket tier: NPC"
+msgstr "Om markerad, tillåt biljettnivå: NPC"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Uppdaterad post för %(event)s"
@@ -4086,6 +4101,9 @@ msgstr "Fel vid betalning, kontakta oss"
 msgid "Extended description - international"
 msgstr "Utökad beskrivning - på engelska"
 
+msgid "If checked, allow ticket tier: Staff"
+msgstr "Om markerat, tillåt biljettnivå: Personal"
+
 msgid "Indicate the amount of your donation"
 msgstr "Ange beloppet för din donation"
 
@@ -4134,6 +4152,9 @@ msgstr "här villkoren för registrering av evenemang."
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Lägg din röst på den nya verkställande direktören!"
+
+msgid "If checked, allow ticket tier: Seller"
+msgstr "Om markerat, tillåt biljettnivå: Säljare"
 
 msgid "Indicates accurate safety information"
 msgstr "Anger exakt säkerhetsinformation"
@@ -4411,6 +4432,9 @@ msgstr "Visa order med avseende på alla frågor"
 
 msgid "Freely indicate the amount of your donation"
 msgstr "Ange fritt beloppet för din donation"
+
+msgid "If checked, allow ticket tier: Collaborator"
+msgstr "Om markerat, tillåt biljettnivå: Samarbetspartner"
 
 msgid "If checked, makes quests and traits visible"
 msgstr "Om markerat, gör uppdrag och egenskaper synliga"

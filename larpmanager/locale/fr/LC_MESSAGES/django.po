@@ -44,6 +44,9 @@ msgstr "Fin"
 msgid "Fee"
 msgstr "Frais"
 
+msgid "NPC"
+msgstr "PNJ"
+
 msgid "Net"
 msgstr "Net"
 
@@ -534,6 +537,9 @@ msgstr "Nombre"
 msgid "Object"
 msgstr "Objet"
 
+msgid "Patron"
+msgstr "Patron"
+
 msgid "Player"
 msgstr "Joueur"
 
@@ -563,6 +569,9 @@ msgstr "Secret"
 
 msgid "Select"
 msgstr "Sélectionner"
+
+msgid "Seller"
+msgstr "Vendeur"
 
 msgid "Shared"
 msgstr "Partagé"
@@ -761,6 +770,9 @@ msgstr "Lecture"
 
 msgid "Receipt"
 msgstr "Accusé de réception"
+
+msgid "Reduced"
+msgstr "Réduit"
 
 msgid "Refunds"
 msgstr "Remboursements"
@@ -3994,6 +4006,9 @@ msgstr "Remplissez les questions préparatoires à l'événement !"
 msgid "For more information, write to us!"
 msgstr "Pour plus d'informations, écrivez-nous !"
 
+msgid "If checked, allow ticket tier: NPC"
+msgstr "Si cette case est cochée, le niveau de ticket est autorisé : PNJ"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Entrée mise à jour pour %(event)s"
@@ -4087,6 +4102,9 @@ msgstr "Erreur dans le traitement du paiement, contactez-nous"
 msgid "Extended description - international"
 msgstr "Description détaillée - en anglais"
 
+msgid "If checked, allow ticket tier: Staff"
+msgstr "Si la case est cochée, autoriser le niveau de ticket : Personnel"
+
 msgid "Indicate the amount of your donation"
 msgstr "Indiquez le montant de votre don"
 
@@ -4135,6 +4153,9 @@ msgstr "ici les conditions d'inscription à l'événement."
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Votez pour le nouvel exécutif !"
+
+msgid "If checked, allow ticket tier: Seller"
+msgstr "Si la case est cochée, autoriser le niveau de ticket : Vendeur"
 
 msgid "Indicates accurate safety information"
 msgstr "Indique des informations précises sur la sécurité"
@@ -4411,6 +4432,9 @@ msgstr "Ordre d'affichage pour toutes les questions"
 
 msgid "Freely indicate the amount of your donation"
 msgstr "Indiquez librement le montant de votre don"
+
+msgid "If checked, allow ticket tier: Collaborator"
+msgstr "Si la case est cochée, autoriser le niveau de ticket : Collaborateur"
 
 msgid "If checked, makes quests and traits visible"
 msgstr "Si cette case est cochée, les quêtes et les traits sont visibles"

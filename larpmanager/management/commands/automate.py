@@ -42,7 +42,7 @@ from larpmanager.models.accounting import AccountingItemDiscount, AccountingItem
 from larpmanager.models.association import Association
 from larpmanager.models.event import Run
 from larpmanager.models.member import Badge, Membership, get_user_membership
-from larpmanager.models.registration import Registration, RegistrationTicket
+from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.common import get_time_diff_today
 from larpmanager.utils.pdf import print_run_bkg
 from larpmanager.utils.tasks import mail_error
@@ -131,14 +131,14 @@ class Command(BaseCommand):
         # past events
         for run in Run.objects.filter(end__lt=datetime.today(), event__assoc=assoc):
             que = Registration.objects.filter(run=run, cancellation_date__isnull=True)
-            for reg in que.exclude(ticket__tier__in=[RegistrationTicket.WAITING, RegistrationTicket.STAFF]):
+            for reg in que.exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF]):
                 self.check_ach_player(reg, cache)
             ev[run.event.id] = run.event
 
         # future events
         for run in Run.objects.filter(end__gt=datetime.today()):
             for reg in Registration.objects.filter(run=run, cancellation_date__isnull=True).exclude(
-                ticket__tier=RegistrationTicket.WAITING
+                ticket__tier=TicketTier.WAITING
             ):
                 self.check_friends_player(reg, cache)
 
@@ -273,7 +273,7 @@ class Command(BaseCommand):
             return
 
         # if the player is not waiting
-        if reg.ticket and reg.ticket.tier != RegistrationTicket.WAITING:
+        if reg.ticket and reg.ticket.tier != TicketTier.WAITING:
             if not reg.member.membership.compiled:
                 remember_profile(reg)
             elif "membership" in ev_features:

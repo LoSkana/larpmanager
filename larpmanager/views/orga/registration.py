@@ -72,6 +72,7 @@ from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
     RegistrationTicket,
+    TicketTier,
 )
 from larpmanager.utils.common import (
     get_char,
@@ -116,7 +117,18 @@ def orga_registrations_traits(r, ctx):
 
 
 def orga_registrations_tickets(r, ctx):
-    typ = ("1", "Confermate")
+    typ = ("1", _("Standard"))
+
+    ticket_types = {
+        TicketTier.FILLER: ("2", _("Filler")),
+        TicketTier.WAITING: ("3", _("Waiting")),
+        TicketTier.LOTTERY: ("4", _("Lottery")),
+        TicketTier.NPC: ("5", _("NPC")),
+        TicketTier.COLLABORATOR: ("6", _("Collaborator")),
+        TicketTier.STAFF: ("7", _("Staff")),
+        TicketTier.SELLER: ("8", _("Seller")),
+    }
+
     if not r.ticket_id or r.ticket_id not in ctx["reg_tickets"]:
         regs_list_add(ctx, "list_tickets", "e", r.member)
     else:
@@ -124,17 +136,14 @@ def orga_registrations_tickets(r, ctx):
         regs_list_add(ctx, "list_tickets", t.name, r.member)
         r.ticket_show = t.name
 
-        if t.tier == RegistrationTicket.STAFF:
-            typ = ("4", "Staff")
-        elif t.tier == RegistrationTicket.WAITING:
-            typ = ("3", "Waiting")
-        elif t.tier == RegistrationTicket.FILLER:
-            typ = ("2", "Filler")
-        elif is_reg_provisional(r, ctx["features"]):
+        if is_reg_provisional(r, ctx["features"]):
             typ = ("0", _("Provisional"))
+        elif t.tier in ticket_types:
+            typ = ticket_types[t.tier]
 
     if typ[0] not in ctx["reg_all"]:
         ctx["reg_all"][typ[0]] = {"count": 0, "type": typ[1], "list": []}
+
     ctx["reg_all"][typ[0]]["list"].append(r)
     ctx["reg_all"][typ[0]]["count"] += 1
 
@@ -299,17 +308,14 @@ def orga_registrations(request, s, n):
             ctx["memberships"][el.member_id] = el
 
     for r in ctx["reg_list"]:
-        # standard stuff
         orga_registrations_standard(r, ctx, cache)
 
         if "discount" in ctx["features"]:
             if r.member_id in ctx["reg_discounts"]:
                 r.discounts = ctx["reg_discounts"][r.member_id]
 
-        # features
         orga_registrations_traits(r, ctx)
 
-        # ticket status
         orga_registrations_tickets(r, ctx)
 
     ctx["reg_all"] = sorted(ctx["reg_all"].items())
@@ -742,14 +748,14 @@ def lottery_info(request, ctx):
     ctx["ticket"] = ctx["event"].get_config("lottery_ticket", "")
     ctx["num_lottery"] = Registration.objects.filter(
         run=ctx["run"],
-        ticket__tier=RegistrationTicket.LOTTERY,
+        ticket__tier=TicketTier.LOTTERY,
         cancellation_date__isnull=True,
     ).count()
     ctx["num_def"] = (
         Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-        .exclude(ticket__tier=RegistrationTicket.LOTTERY)
-        .exclude(ticket__tier=RegistrationTicket.STAFF)
-        .exclude(ticket__tier=RegistrationTicket.WAITING)
+        .exclude(ticket__tier=TicketTier.LOTTERY)
+        .exclude(ticket__tier=TicketTier.STAFF)
+        .exclude(ticket__tier=TicketTier.WAITING)
         .count()
     )
 
@@ -764,7 +770,7 @@ def orga_lottery(request, s, n):
         if to_upgrade <= 0:
             raise Http404("already filled!")
         # do assignment
-        regs = Registration.objects.filter(run=ctx["run"], ticket__tier=RegistrationTicket.LOTTERY)
+        regs = Registration.objects.filter(run=ctx["run"], ticket__tier=TicketTier.LOTTERY)
         regs = list(regs)
         shuffle(regs)
         chosen = regs[0:to_upgrade]

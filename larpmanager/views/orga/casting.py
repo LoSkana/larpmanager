@@ -35,7 +35,7 @@ from larpmanager.models.member import Member, Membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
-    RegistrationTicket,
+    TicketTier,
 )
 from larpmanager.models.writing import (
     Character,
@@ -223,7 +223,7 @@ def get_casting_data(request, ctx, typ, form):
 
     # loop over registered players
     que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-    que = que.exclude(ticket__tier__in=[RegistrationTicket.WAITING, RegistrationTicket.STAFF])
+    que = que.exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF])
     que = que.order_by("created").select_related("ticket", "member")
     for reg in que:
         if check_casting_player(ctx, reg, options, typ, cache_membs, cache_aim):

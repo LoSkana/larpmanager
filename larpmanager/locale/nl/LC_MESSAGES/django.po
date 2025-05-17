@@ -44,6 +44,9 @@ msgstr "Einde"
 msgid "Fee"
 msgstr "Vergoeding"
 
+msgid "NPC"
+msgstr "NPC"
+
 msgid "Net"
 msgstr "Netto"
 
@@ -534,6 +537,9 @@ msgstr "Aantal"
 msgid "Object"
 msgstr "Object"
 
+msgid "Patron"
+msgstr "Beschermheer"
+
 msgid "Player"
 msgstr "Speler"
 
@@ -563,6 +569,9 @@ msgstr "Geheim"
 
 msgid "Select"
 msgstr "Selecteer"
+
+msgid "Seller"
+msgstr "Verkoper"
 
 msgid "Shared"
 msgstr "Gedeelde"
@@ -761,6 +770,9 @@ msgstr "Lezen"
 
 msgid "Receipt"
 msgstr "Ontvangstbewijs"
+
+msgid "Reduced"
+msgstr "Verminderd"
 
 msgid "Refunds"
 msgstr "Terugbetalingen"
@@ -3993,6 +4005,9 @@ msgstr "Vul de voorbereidende vragen voor het evenement in!"
 msgid "For more information, write to us!"
 msgstr "Schrijf ons voor meer informatie!"
 
+msgid "If checked, allow ticket tier: NPC"
+msgstr "Indien aangevinkt, ticketniveau toestaan: NPC"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Bijgewerkte invoer voor %(event)s"
@@ -4086,6 +4101,9 @@ msgstr "Fout bij het verwerken van betaling, neem contact met ons op"
 msgid "Extended description - international"
 msgstr "Uitgebreide beschrijving - in het Engels"
 
+msgid "If checked, allow ticket tier: Staff"
+msgstr "Indien aangevinkt, ticketniveau toestaan: Personeel"
+
 msgid "Indicate the amount of your donation"
 msgstr "Vermeld het bedrag van je donatie"
 
@@ -4134,6 +4152,9 @@ msgstr "hier de voorwaarden voor registratie voor het evenement."
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Breng je stem uit voor de nieuwe Executive!"
+
+msgid "If checked, allow ticket tier: Seller"
+msgstr "Indien aangevinkt, ticketniveau toestaan: Verkoper"
 
 msgid "Indicates accurate safety information"
 msgstr "Geeft nauwkeurige veiligheidsinformatie aan"
@@ -4413,6 +4434,9 @@ msgstr "Weergavevolgorde met betrekking tot alle vragen"
 
 msgid "Freely indicate the amount of your donation"
 msgstr "Geef vrij het bedrag van je donatie aan"
+
+msgid "If checked, allow ticket tier: Collaborator"
+msgstr "Indien aangevinkt, ticket tier toestaan: Medewerker"
 
 msgid "If checked, makes quests and traits visible"
 msgstr "Indien aangevinkt, maakt dit quests en eigenschappen zichtbaar"
