@@ -713,14 +713,15 @@ class OrgaRegistrationTicketForm(MyForm):
         }
         ev_features = get_event_features(event.id)
         for tp in TicketTier.choices:
+            (value, label) = tp
             # skip ticket if feature not set
-            if tp.value in ticket_features:
-                if ticket_features[tp.value] not in ev_features:
+            if value in ticket_features:
+                if ticket_features[value] not in ev_features:
                     continue
 
             # skip ticket if config not set
-            if tp.value in ticket_configs:
-                if not event.get_config(f"ticket_{ticket_configs[tp.value]}", False):
+            if value in ticket_configs:
+                if not event.get_config(f"ticket_{ticket_configs[value]}", False):
                     continue
 
             aux.append(tp)
