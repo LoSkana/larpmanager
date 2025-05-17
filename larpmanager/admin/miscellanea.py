@@ -178,6 +178,7 @@ class EmailAdmin(DefModelAdmin):
     list_display = ("assoc", "run", "recipient", "sent", "subj", "body_red")
     list_filter = (AssocFilter, RunFilter)
     autocomplete_fields = ["assoc", "run"]
+    search_fields = ["subj", "body", "recipient"]
 
     @staticmethod
     def body_red(instance):

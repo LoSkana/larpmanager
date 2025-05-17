@@ -3575,8 +3575,8 @@ msgid "Click on the image below (Paypal.me) to open the payment."
 msgstr ""
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field 'notes' "
-"(this is important!)"
+"Copy and paste exactly all the coloured text below into the field "
+"'notes' (this is important!)"
 msgstr ""
 
 msgid "Indicates that payment is sent 'to friends and family'."
@@ -7681,8 +7681,8 @@ msgid "Provisional"
 msgstr ""
 
 msgid ""
-"'player' (player's email), 'ticket' (ticket name or number), 'character' "
-"(character name or number to be assigned), 'pwyw' (donation)."
+"'player' (player's email), 'ticket' (ticket name or number), "
+"'character' (character name or number to be assigned), 'pwyw' (donation)."
 msgstr ""
 
 msgid "Registration cancelled"
