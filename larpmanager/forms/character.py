@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django import forms
-from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
 from django.utils.translation import gettext_lazy as _
@@ -27,18 +26,23 @@ from django_select2 import forms as s2forms
 from tinymce.widgets import TinyMCE
 
 from larpmanager.cache.registration import get_reg_counts
-from larpmanager.forms.base import BaseRegistrationForm, MyForm
+from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import (
     AssocMemberS2Widget,
     EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
     TicketS2WidgetMulti,
 )
-from larpmanager.forms.writing import WritingForm
+from larpmanager.forms.writing import BaseWritingForm, WritingForm
 from larpmanager.models.casting import AssignmentTrait
 from larpmanager.models.event import Run, RunText
 from larpmanager.models.experience import AbilityPx, DeliveryPx
-from larpmanager.models.form import QuestionType, WritingAnswer, WritingChoice, WritingOption, WritingQuestion
+from larpmanager.models.form import (
+    QuestionApplicable,
+    QuestionType,
+    WritingOption,
+    WritingQuestion,
+)
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, CharacterStatus, Faction, PlotCharacterRel
 
@@ -56,26 +60,6 @@ class CharacterCocreationForm(forms.Form):
             required=False,
         )
         self.initial[k] = text
-
-
-class BaseWritingForm(BaseRegistrationForm):
-    gift = False
-    answer_class = WritingAnswer
-    choice_class = WritingChoice
-    option_class = WritingOption
-    question_class = WritingQuestion
-    instance_key = "element_id"
-
-    def get_options_query(self, event):
-        query = super().get_options_query(event)
-        return query.annotate(tickets_map=ArrayAgg("tickets"))
-
-    def get_option_key_count(self, option):
-        key = f"option_char_{option.id}"
-        return key
-
-    class Meta:
-        abstract = True
 
 
 class CharacterForm(WritingForm, BaseWritingForm):
@@ -115,6 +99,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
         self.details = {}
 
         self._init_character()
+
+    def get_applicable(self):
+        return QuestionApplicable.CHARACTER
 
     def check_editable(self, question):
         if not self.params["event"].get_config("user_character_approval", False):
@@ -522,6 +509,20 @@ class OrgaWritingQuestionForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self._init_type()
+
+        if "user_character" not in self.params["features"]:
+            self.delete_field("max_length")
+            self.delete_field("status")
+
+        if "print_pdf" not in self.params["features"]:
+            self.delete_field("printable")
+
+        self._init_editable()
+
+        self._init_applicable()
+
+    def _init_type(self):
         # Add type of character question to the available types
         already = list(
             WritingQuestion.objects.filter(event=self.params["event"]).values_list("typ", flat=True).distinct()
@@ -538,7 +539,6 @@ class OrgaWritingQuestionForm(MyForm):
             def_type = self.instance.typ in {QuestionType.NAME}
             type_feature = self.instance.typ in self.params["features"]
             self.prevent_canc = not basic_type and def_type or type_feature
-
         choices = []
         for choice in QuestionType.choices:
             if len(choice[0]) > 1:
@@ -552,10 +552,7 @@ class OrgaWritingQuestionForm(MyForm):
             choices.append(choice)
         self.fields["typ"].choices = choices
 
-        if "user_character" not in self.params["features"]:
-            self.delete_field("max_length")
-            self.delete_field("status")
-
+    def _init_editable(self):
         if not self.params["event"].get_config("user_character_approval", False):
             self.delete_field("editable")
         else:
@@ -567,8 +564,37 @@ class OrgaWritingQuestionForm(MyForm):
             if self.instance and self.instance.pk:
                 self.initial["editable"] = self.instance.get_editable()
 
+    def _init_applicable(self):
+        # check if set applicable (avoid for standard ones)
+        typ_def = ["name", "teaser", "text"]
+        if self.instance.pk and self.instance.typ in typ_def:
+            del self.fields["applicable"]
+        else:
+            all_choices = {"characters": QuestionApplicable.CHARACTER, "plot": QuestionApplicable.PLOT}
+            choices = []
+            for feature, choice in all_choices.items():
+                if feature not in self.params["features"]:
+                    continue
+                choices.append((choice.value, choice.label))
+
+            if len(choices) > 1:
+                self.fields["applicable"] = forms.MultipleChoiceField(
+                    choices=choices,
+                    widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
+                    required=False,
+                )
+                if self.instance and self.instance.pk:
+                    self.initial["applicable"] = self.instance.get_applicable()
+                else:
+                    self.initial["applicable"] = QuestionApplicable.CHARACTER
+            else:
+                del self.fields["applicable"]
+
     def clean_editable(self):
         return ",".join(self.cleaned_data["editable"])
+
+    def clean_applicable(self):
+        return ",".join(self.cleaned_data["applicable"])
 
 
 class OrgaWritingOptionForm(MyForm):

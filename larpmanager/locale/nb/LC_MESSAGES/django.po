@@ -666,6 +666,9 @@ msgstr "Lodding"
 msgid "Casting"
 msgstr "Støping"
 
+msgid "Concept"
+msgstr "Konsept"
+
 msgid "Confirm"
 msgstr "Søke"
 
@@ -1305,6 +1308,9 @@ msgstr "WS Svar"
 msgid "Appearance"
 msgstr "Utseende"
 
+msgid "Applicable"
+msgstr "Gjelder"
+
 msgid "Appointees"
 msgstr "Utnevnte"
 
@@ -1376,6 +1382,9 @@ msgstr "Navigasjon"
 
 msgid "Need help?"
 msgstr "Trenger du hjelp?"
+
+msgid "Net profit"
+msgstr "Nettoresultat"
 
 msgid "New member"
 msgstr "Nytt medlem"
@@ -1592,9 +1601,6 @@ msgstr "Administrer kjøringer"
 
 msgid "Nationality"
 msgstr "Nasjonalitet"
-
-msgid "Net revenue"
-msgstr "Netto inntekter"
 
 msgid "New answer!"
 msgstr "Nytt svar!"
@@ -1866,6 +1872,9 @@ msgstr "Tekst (kort)"
 msgid "Three quotas"
 msgstr "Tre kvoter"
 
+msgid "Total number"
+msgstr "Totalt antall"
+
 msgid "Transactions"
 msgstr "Transaksjoner"
 
@@ -1909,11 +1918,17 @@ msgstr "Tilgang avslått"
 msgid "Accessibility"
 msgstr "Tilgjengelighet"
 
+msgid "Age selection"
+msgstr "Valg av alder"
+
 msgid "Are you sure?"
 msgstr "Er du sikker?"
 
 msgid "Authorisation"
 msgstr "Autorisasjon"
+
+msgid "Average value"
+msgstr "Gjennomsnittlig verdi"
 
 msgid "Cancellations"
 msgstr "Avbestillinger"
@@ -2061,6 +2076,9 @@ msgstr "Billettfyller"
 
 msgid "Ticket chosen"
 msgstr "Billett valgt"
+
+msgid "Total revenue"
+msgstr "Totale inntekter"
 
 msgid "URL shortener"
 msgstr "URL-forkortelse"
@@ -2525,6 +2543,9 @@ msgstr "Vis lenker til arrangementer"
 msgid "Show explanation"
 msgstr "Vis forklaring"
 
+msgid "Ticket selection"
+msgstr "Valg av billett"
+
 msgid "Tokens / Credits"
 msgstr "Tokens / Kreditter"
 
@@ -2560,9 +2581,6 @@ msgstr "Ytterligere felt"
 
 msgid "Advanced features"
 msgstr "Avanserte funksjoner"
-
-msgid "Age-based options"
-msgstr "Aldersbaserte alternativer"
 
 msgid "All comunications"
 msgstr "All kommunikasjon"
@@ -2605,6 +2623,9 @@ msgstr "Godkjent element!"
 
 msgid "Experience points"
 msgstr "Erfaringspoeng"
+
+msgid "Faction selection"
+msgstr "Valg av fraksjon"
 
 msgid "Feature activated"
 msgstr "Funksjon aktivert"
@@ -2683,9 +2704,6 @@ msgstr "Standardfunksjoner"
 
 msgid "Technical Support"
 msgstr "Teknisk støtte"
-
-msgid "Total preferences"
-msgstr "Antall preferanser"
 
 msgid "Welcome on board!"
 msgstr "Velkommen om bord!"
@@ -2845,9 +2863,6 @@ msgstr "Still et nytt spørsmål"
 
 msgid "Assigned character!"
 msgstr "Tildelt karakter!"
-
-msgid "Average preferences"
-msgstr "Gjennomsnittlige preferanser"
 
 msgid "Change registration"
 msgstr "Rediger oppføring"
@@ -3306,9 +3321,6 @@ msgstr "Godkjenning av rolle %(role)s"
 msgid "Select your character!"
 msgstr "Velg din karakter!"
 
-msgid "Ticket-based questions"
-msgstr "Billettbaserte spørsmål"
-
 msgid "Unknow error on upload"
 msgstr "Ukjent feil ved opplasting"
 
@@ -3353,9 +3365,6 @@ msgstr "Vil du fortsette?"
 
 msgid "Download complete sheet"
 msgstr "Last ned hele arket"
-
-msgid "Faction-based questions"
-msgstr "Fraksjonsbaserte spørsmål"
 
 msgid "Follow the steps below:"
 msgstr "Følg trinnene nedenfor:"
@@ -5499,6 +5508,9 @@ msgstr ""
 "Liste over brukere som ikke har registrert seg for en fremtidig utgave av "
 "arrangementet."
 
+msgid "Select the types of writing elements that this question applies to."
+msgstr "Velg hvilke typer skriveelementer dette spørsmålet gjelder."
+
 msgid "The payment of your membership fee for this year has been received!"
 msgstr "Vi bekrefter betalingen av medlemskontingenten for inneværende år!"
 
@@ -6255,6 +6267,13 @@ msgstr ""
 "Du kan trekke tilbake ditt samtykke til datadeling ved å klikke på den "
 "aktuelle lenken."
 
+msgid ""
+"this balance reflects payments currently received and expenses recorded to "
+"date."
+msgstr ""
+"denne saldoen gjenspeiler innbetalinger som er mottatt og utgifter som er "
+"bokført til dags dato."
+
 #, python-format
 msgid ""
 "Reimbursement of %(amount).2f %(credits)s with reason '%(reason)s' was "
@@ -6511,6 +6530,13 @@ msgstr ""
 "og lagres i systemet."
 
 msgid ""
+"Describe the core idea or premise of the plot. This text will NOT be shown "
+"to players."
+msgstr ""
+"Beskriv kjerneideen eller premisset for handlingen. Denne teksten vil IKKE "
+"bli vist til spillerne."
+
+msgid ""
 "If checked, automatically removes formatting when pasting text into the "
 "WYSIWYG editor"
 msgstr ""
@@ -6668,6 +6694,13 @@ msgid ""
 msgstr ""
 "OBS: operasjonen er endelig, vennligst dobbeltsjekk oppgavene før du laster "
 "dem opp!"
+
+msgid ""
+"If checked, allows a registration form question to be visible based on the "
+"player's age."
+msgstr ""
+"Hvis avkrysset, kan et spørsmål i registreringsskjemaet være synlig basert "
+"på spillerens alder."
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "
@@ -6866,13 +6899,6 @@ msgstr ""
 "Verdien av rabatten for den registrerte spilleren som gir koden til en venn "
 "som registrerer seg."
 
-msgid ""
-"Allows a registration form question to be visible based on the selected "
-"registration ticket."
-msgstr ""
-"Gjør det mulig å vise et spørsmål i registreringsskjemaet basert på den "
-"valgte registreringsbilletten."
-
 #, python-format
 msgid ""
 "Alternatively, you can request a reimbursement in <a href='%(url)s'>your "
@@ -6893,13 +6919,6 @@ msgid ""
 msgstr ""
 "Det er obligatorisk å delta på alle våre live-arrangementer, ettersom det "
 "også inkluderer forsikringsavgiften."
-
-msgid ""
-"Makes certain registration options visible only to players who meet a "
-"specified minimum age."
-msgstr ""
-"Gjør visse registreringsalternativer kun synlige for spillere som oppfyller "
-"en spesifisert minimumsalder."
 
 #, python-format
 msgid ""
@@ -7354,13 +7373,6 @@ msgstr ""
 "bekreft."
 
 msgid ""
-"Allows a registration form question to be visible only if the player is "
-"assigned to certain factions."
-msgstr ""
-"Gjør at et spørsmål i registreringsskjemaet bare er synlig hvis spilleren "
-"tilhører en bestemt fraksjon."
-
-msgid ""
 "Enables a 'campaign' style setup where multiple events share the same set of"
 " characters and factions."
 msgstr ""
@@ -7508,6 +7520,13 @@ msgstr ""
 "karakterer, og legger til ekstra innhold i karakterarkene deres."
 
 msgid ""
+"If checked, allows a registration form question to be visible based on the "
+"selected registration ticket."
+msgstr ""
+"Hvis avkrysset, kan et spørsmål i registreringsskjemaet være synlig basert "
+"på den valgte registreringsbilletten."
+
+msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "
 "popular streaming-service layouts."
 msgstr ""
@@ -7548,13 +7567,6 @@ msgid ""
 msgstr ""
 "Denne siden oppsummerer hvilke roller som må tildeles for å kunne bruke "
 "funksjonene som gjelder organisasjonen."
-
-msgid ""
-"(this balance takes into account payments currently received, and "
-"expenditures currently put into system)"
-msgstr ""
-"(disse tallene tar hensyn til innbetalinger som for øyeblikket er mottatt, "
-"og utgifter som for øyeblikket er merket)."
 
 msgid ""
 "Adds a 'preview' field to writing elements, shareable with the player before"
@@ -7857,6 +7869,13 @@ msgid ""
 msgstr ""
 "Gjør det mulig å fastsette faste avdragsfrister for registreringsavgifter, "
 "slik at du kan definere flere forfallsdatoer og beløp."
+
+msgid ""
+"If checked, allows a registration form question to be visible only if the "
+"player is assigned to certain factions."
+msgstr ""
+"Hvis avkrysset, kan et spørsmål i registreringsskjemaet bare være synlig "
+"hvis spilleren tilhører en bestemt fraksjon."
 
 msgid ""
 "The character has been proposed to the staff, who will examine it and "

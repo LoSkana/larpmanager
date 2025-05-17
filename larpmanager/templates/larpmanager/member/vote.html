@@ -10,7 +10,7 @@
         </p>
     {% else %}
         {% if vote_open %}
-            <div style="text-align:center">
+            <div class="centerized">
                 <h3>{% trans "Candidates" %}</h3>
                 <p>
                     <i>
@@ -24,13 +24,17 @@
                         {% for el in candidates %}
                             <tr>
                                 <td>
-                                    {% if el.profile %}<img src="{{ el.profile_thumb.url }}" style="width:7em; height: 7em" />{% endif %}
+                                    {% if el.profile %}
+                                        <img src="{{ el.profile_thumb.url }}"
+                                             class="vote-profile"
+                                             alt="profile of {{ el }}" />
+                                    {% endif %}
                                 </td>
                                 <td>
                                     <input type="checkbox"
                                            id="vote_{{ el.id }}"
                                            name="vote_{{ el.id }}"
-                                           class='votes'>
+                                           class="votes">
                                 </td>
                                 <td>
                                     <b>{{ el }}</b>

@@ -29,7 +29,6 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.balance import assoc_accounting, assoc_accounting_data, check_accounting, get_run_accounting
 from larpmanager.accounting.invoice import invoice_verify
-from larpmanager.cache.role import check_assoc_permission
 from larpmanager.forms.accounting import (
     ExeCollectionForm,
     ExeCreditForm,
@@ -68,6 +67,7 @@ from larpmanager.models.registration import (
     Registration,
 )
 from larpmanager.models.utils import get_sum
+from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.edit import backend_get, exe_edit
 from larpmanager.utils.paginate import exe_paginate
 from larpmanager.views.orga.accounting import assign_payment_fee

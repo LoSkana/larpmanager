@@ -674,17 +674,6 @@ msgstr ""
 msgid "If checked: Show summary page with number of tickets/options used"
 msgstr ""
 
-msgid "Registration form"
-msgstr ""
-
-msgid "Hide not available"
-msgstr ""
-
-msgid ""
-"If checked, options no longer available in the registration form are hidden, "
-"instead of being displayed disabled"
-msgstr ""
-
 msgid "Gallery"
 msgstr ""
 
@@ -718,6 +707,41 @@ msgstr ""
 msgid ""
 "If checked, does not show players in the gallery who have not been assigned "
 "a character"
+msgstr ""
+
+msgid "Registration form"
+msgstr ""
+
+msgid "Hide not available"
+msgstr ""
+
+msgid ""
+"If checked, options no longer available in the registration form are hidden, "
+"instead of being displayed disabled"
+msgstr ""
+
+msgid "Faction selection"
+msgstr ""
+
+msgid ""
+"If checked, allows a registration form question to be visible only if the "
+"player is assigned to certain factions."
+msgstr ""
+
+msgid "Ticket selection"
+msgstr ""
+
+msgid ""
+"If checked, allows a registration form question to be visible based on the "
+"selected registration ticket."
+msgstr ""
+
+msgid "Age selection"
+msgstr ""
+
+msgid ""
+"If checked, allows a registration form question to be visible based on the "
+"player's age."
 msgstr ""
 
 msgid "Pre-registration"
@@ -1422,6 +1446,14 @@ msgid "You cannot add a relationship from character to self!"
 msgstr ""
 
 msgid "Plot"
+msgstr ""
+
+msgid "Concept"
+msgstr ""
+
+msgid ""
+"Describe the core idea or premise of the plot. This text will NOT be shown "
+"to players."
 msgstr ""
 
 #, python-brace-format
@@ -2583,6 +2615,12 @@ msgstr ""
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr ""
 
+msgid "Applicable"
+msgstr ""
+
+msgid "Select the types of writing elements that this question applies to."
+msgstr ""
+
 msgid ""
 "Optional - Indicates additional details on the option, will be shown below "
 "the question"
@@ -3573,8 +3611,8 @@ msgid "Click on the image below (Paypal.me) to open the payment."
 msgstr ""
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field "
-"'notes' (this is important!)"
+"Copy and paste exactly all the coloured text below into the field 'notes' "
+"(this is important!)"
 msgstr ""
 
 msgid "Indicates that payment is sent 'to friends and family'."
@@ -3744,16 +3782,19 @@ msgstr ""
 msgid "Go to the history preferences for"
 msgstr ""
 
+msgid "Historical"
+msgstr ""
+
 msgid "Preferences"
 msgstr ""
 
 msgid "Go to the preferences for"
 msgstr ""
 
-msgid "Total preferences"
+msgid "Total number"
 msgstr ""
 
-msgid "Average preferences"
+msgid "Average value"
 msgstr ""
 
 msgid "Participate in the co-creation of the character!"
@@ -5621,15 +5662,18 @@ msgid ""
 "expense types."
 msgstr ""
 
-msgid "Net revenue"
+msgid "Total revenue"
+msgstr ""
+
+msgid "Net profit"
 msgstr ""
 
 msgid "Organization tax"
 msgstr ""
 
 msgid ""
-"(this balance takes into account payments currently received, and "
-"expenditures currently put into system)"
+"this balance reflects payments currently received and expenses recorded to "
+"date."
 msgstr ""
 
 msgid "Item"
@@ -6474,9 +6518,6 @@ msgstr ""
 msgid "This page shows the event plots."
 msgstr ""
 
-msgid "Reading"
-msgstr ""
-
 msgid "Progress step"
 msgstr ""
 
@@ -6491,6 +6532,9 @@ msgid "This page shows the types of event prologue."
 msgstr ""
 
 msgid "This page shows the prologues of the event."
+msgstr ""
+
+msgid "Reading"
 msgstr ""
 
 msgid "Props"
@@ -6832,14 +6876,6 @@ msgid ""
 "instead of the standard one."
 msgstr ""
 
-msgid "Faction-based questions"
-msgstr ""
-
-msgid ""
-"Allows a registration form question to be visible only if the player is "
-"assigned to certain factions."
-msgstr ""
-
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "
 "which a random subset is converted into normal tickets."
@@ -6888,14 +6924,6 @@ msgstr ""
 msgid ""
 "Enables a ticket-like system for in-game 'problems,' where staff can log "
 "issues, assign severity/urgency, and track them."
-msgstr ""
-
-msgid "Ticket-based questions"
-msgstr ""
-
-msgid ""
-"Allows a registration form question to be visible based on the selected "
-"registration ticket."
 msgstr ""
 
 msgid ""
@@ -7271,14 +7299,6 @@ msgstr ""
 msgid "Enables a volunteer register, as required by Italian RUNTS regulations."
 msgstr ""
 
-msgid "Age-based options"
-msgstr ""
-
-msgid ""
-"Makes certain registration options visible only to players who meet a "
-"specified minimum age."
-msgstr ""
-
 msgid "Default miscellany"
 msgstr ""
 
@@ -7392,9 +7412,6 @@ msgid "Expenses (Personal)"
 msgstr ""
 
 msgid "Handout Models"
-msgstr ""
-
-msgid "Historical"
 msgstr ""
 
 msgid "Statistics"
@@ -7688,8 +7705,8 @@ msgid "Provisional"
 msgstr ""
 
 msgid ""
-"'player' (player's email), 'ticket' (ticket name or number), "
-"'character' (character name or number to be assigned), 'pwyw' (donation)."
+"'player' (player's email), 'ticket' (ticket name or number), 'character' "
+"(character name or number to be assigned), 'pwyw' (donation)."
 msgstr ""
 
 msgid "Registration cancelled"

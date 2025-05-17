@@ -27,6 +27,7 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.writing import get_cache_cocreation, get_cache_text_field
@@ -35,7 +36,7 @@ from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Trait
 from larpmanager.models.event import ProgressStep, RunText
 from larpmanager.models.experience import AbilityPx
-from larpmanager.models.form import WritingAnswer, WritingQuestion
+from larpmanager.models.form import QuestionApplicable, QuestionType, WritingAnswer, WritingQuestion
 from larpmanager.models.writing import (
     Character,
     CharacterConfig,
@@ -187,7 +188,33 @@ def writing_list(request, ctx, typ, nm):
         orga_list_progress_assign(ctx, typ)  # pyright: ignore[reportArgumentType]
         writing_list_text_fields(ctx, text_fields, typ)
 
+    _get_custom_form(ctx, nm)
+
     return render(request, "larpmanager/orga/writing/" + nm + "s.html", ctx)
+
+
+def _get_custom_form(ctx, nm):
+    # default name for fields
+    ctx["fields_name"] = {
+        QuestionType.NAME.value: _("Name"),
+        QuestionType.TEASER.value: _("Presentation"),
+        QuestionType.SHEET.value: _("Text"),
+        QuestionType.FACTIONS.value: _("Factions"),
+    }
+
+    mapping = {"character": QuestionApplicable.CHARACTER, "plot": QuestionApplicable.PLOT}
+    if nm not in mapping:
+        return
+
+    if "character_form" in ctx["features"]:
+        que = ctx["event"].get_elements(WritingQuestion).order_by("order")
+        que = que.filter(applicable__icontains=mapping[nm])
+        ctx["form_questions"] = {}
+        for q in que:
+            if q.typ in ctx["fields_name"].keys():
+                ctx["fields_name"][q.typ] = q.display
+            else:
+                ctx["form_questions"][q.id] = q
 
 
 def writing_list_query(ctx, ev, typ):

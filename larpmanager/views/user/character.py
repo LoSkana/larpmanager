@@ -52,6 +52,7 @@ from larpmanager.models.event import (
     RunText,
 )
 from larpmanager.models.form import (
+    QuestionApplicable,
     WritingOption,
     WritingQuestion,
 )
@@ -350,6 +351,7 @@ def get_options_dependencies(ctx):
         return
 
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
+    que = que.filter(applicable__icontains=QuestionApplicable.CHARACTER)
     question_idxs = que.values_list("id", flat=True)
 
     que = ctx["event"].get_elements(WritingOption).filter(question_id__in=question_idxs)
@@ -420,7 +422,7 @@ def character_relationships(request, s, n, num):
         else:
             try:
                 ch = Character.objects.get(event=ctx["event"], number=tg_num)
-                show = ch.show(ctx["event"])
+                show = ch.show(ctx["run"])
             except ObjectDoesNotExist:
                 continue
 

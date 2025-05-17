@@ -30,7 +30,6 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.registration import update_member_registrations
-from larpmanager.cache.role import check_assoc_permission
 from larpmanager.forms.member import (
     ExeBadgeForm,
     ExeMemberForm,
@@ -61,6 +60,7 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import (
     Registration,
 )
+from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.common import (
     get_member,
     normalize_string,
@@ -234,7 +234,7 @@ def exe_member(request, num):
 
     ctx["discounts"] = AccountingItemDiscount.objects.filter(
         member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
-    ).select_related("reg")
+    )
 
     member = ctx["member"]
     get_user_membership(member, ctx["a_id"])

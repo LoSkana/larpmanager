@@ -123,7 +123,7 @@ def save_permissions_role(instance, form):
     instance.save()
 
 
-class EventMS2Widget:
+class EventS2Widget(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
     ]
@@ -141,15 +141,7 @@ class EventMS2Widget:
         return que
 
 
-class EventS2WidgetMulti(EventMS2Widget, s2forms.ModelSelect2MultipleWidget):
-    pass
-
-
-class EventS2Widget(EventMS2Widget, s2forms.ModelSelect2Widget):
-    pass
-
-
-class CampaignMS2Widget:
+class CampaignS2Widget(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
     ]
@@ -170,15 +162,7 @@ class CampaignMS2Widget:
         return que
 
 
-class CampaignS2WidgetMulti(CampaignMS2Widget, s2forms.ModelSelect2MultipleWidget):
-    pass
-
-
-class CampaignS2Widget(CampaignMS2Widget, s2forms.ModelSelect2Widget):
-    pass
-
-
-class TemplateMS2Widget:
+class TemplateS2Widget(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
     ]
@@ -190,15 +174,7 @@ class TemplateMS2Widget:
         return Event.objects.filter(assoc_id=self.aid, template=True)
 
 
-class TemplateS2WidgetMulti(TemplateMS2Widget, s2forms.ModelSelect2MultipleWidget):
-    pass
-
-
-class TemplateS2Widget(TemplateMS2Widget, s2forms.ModelSelect2Widget):
-    pass
-
-
-class AssocMS2Widget:
+class AssocMS2:
     search_fields = [
         "name__icontains",
         "surname__icontains",
@@ -217,15 +193,15 @@ class AssocMS2Widget:
         return f"{obj.display_real()} - {obj.email}"
 
 
-class AssocMemberS2WidgetMulti(AssocMS2Widget, s2forms.ModelSelect2MultipleWidget):
+class AssocMemberS2WidgetMulti(AssocMS2, s2forms.ModelSelect2MultipleWidget):
     pass
 
 
-class AssocMemberS2Widget(AssocMS2Widget, s2forms.ModelSelect2Widget):
+class AssocMemberS2Widget(AssocMS2, s2forms.ModelSelect2Widget):
     pass
 
 
-class RegisteredMS2Widget:
+class RunMemberS2Widget(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
         "surname__icontains",
@@ -233,7 +209,8 @@ class RegisteredMS2Widget:
         "user__email__icontains",
     ]
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.allowed = None
 
     def set_run(self, run):
@@ -250,14 +227,6 @@ class RegisteredMS2Widget:
     @staticmethod
     def label_from_instance(obj):
         return f"{obj.display_real()} - {obj.email}"
-
-
-class RunMemberS2WidgetMulti(RegisteredMS2Widget, s2forms.ModelSelect2MultipleWidget):
-    pass
-
-
-class RunMemberS2Widget(RegisteredMS2Widget, s2forms.ModelSelect2Widget):
-    pass
 
 
 def get_assoc_people(assoc_id):
@@ -359,7 +328,7 @@ class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
     pass
 
 
-class EventWritingOptionS2:
+class EventWritingOptionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
     search_fields = [
         "display__icontains",
         "details__icontains",
@@ -370,14 +339,6 @@ class EventWritingOptionS2:
 
     def get_queryset(self):
         return self.event.get_elements(WritingOption)
-
-
-class EventWritingOptionS2WidgetMulti(EventWritingOptionS2, s2forms.ModelSelect2MultipleWidget):
-    pass
-
-
-class EventWritingOptionS2Widget(EventWritingOptionS2, s2forms.ModelSelect2Widget):
-    pass
 
 
 class FactionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):

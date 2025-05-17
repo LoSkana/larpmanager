@@ -69,6 +69,11 @@ class QuestionVisibility(models.TextChoices):
     PRIVATE = "e", _("Private")
 
 
+class QuestionApplicable(models.TextChoices):
+    CHARACTER = "c", _("Character")
+    PLOT = "p", _("Plot")
+
+
 class WritingQuestion(BaseModel):
     typ = models.CharField(
         max_length=10,
@@ -80,7 +85,7 @@ class WritingQuestion(BaseModel):
 
     search = models.CharField(max_length=1000, editable=False)
 
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="char_questions")
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="form_questions")
 
     display = models.CharField(max_length=100, verbose_name=_("Display"), help_text=_("Question display text"))
 
@@ -119,6 +124,7 @@ class WritingQuestion(BaseModel):
         default="",
         max_length=20,
         null=True,
+        blank=True,
         verbose_name=_("Editable"),
         help_text=_(
             "This field can be edited by the player only when the character is in one of the selected statuses"
@@ -138,6 +144,15 @@ class WritingQuestion(BaseModel):
         default=True,
         verbose_name=_("Printable"),
         help_text=_("Indicate whether the field is printed in PDF generations"),
+    )
+
+    applicable = models.CharField(
+        default=QuestionApplicable.CHARACTER,
+        max_length=20,
+        null=True,
+        blank=True,
+        verbose_name=_("Applicable"),
+        help_text=_("Select the types of writing elements that this question applies to."),
     )
 
     def __str__(self):
@@ -165,6 +180,15 @@ class WritingQuestion(BaseModel):
 
     def get_editable_display(self):
         return ", ".join([str(label) for value, label in CharacterStatus.choices if value in self.get_editable()])
+
+    def get_applicable(self):
+        return self.applicable.split(",") if self.applicable else []
+
+    def set_applicable(self, applicable_list):
+        self.applicable = ",".join(applicable_list)
+
+    def get_applicable_display(self):
+        return ", ".join([str(label) for value, label in QuestionApplicable.choices if value in self.get_applicable()])
 
 
 class WritingOption(BaseModel):

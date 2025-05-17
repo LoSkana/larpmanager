@@ -21,14 +21,11 @@
 from django.core.cache import cache
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
-from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.cache.links import cache_event_links
-from larpmanager.cache.permission import get_assoc_permission_feature
-from larpmanager.models.access import AssocPermission, AssocRole, EventRole
-from larpmanager.utils.base import def_user_ctx
-from larpmanager.utils.exceptions import FeatureError, PermissionError
+from larpmanager.models.access import AssocRole, EventRole
+from larpmanager.utils.exceptions import PermissionError
 
 
 def cache_assoc_role_key(ar_id):
@@ -175,40 +172,3 @@ def has_event_permission(ctx, request, slug, perm=None):
     if not perm:
         return len(names) > 0
     return perm in permissions
-
-
-def check_assoc_permission(request, slug):
-    ctx = def_user_ctx(request)
-    if not has_assoc_permission(request, slug):
-        raise PermissionError()
-    feature = get_assoc_permission_feature(slug)
-    if feature != "def" and feature not in request.assoc["features"]:
-        raise FeatureError(path=request.path, feature=feature, run=0)
-    ctx["manage"] = 1
-    get_index_assoc_permissions(ctx, request, request.assoc["id"])
-    ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", False)
-    return ctx
-
-
-def get_index_assoc_permissions(ctx, request, assoc_id, check=True):
-    (is_admin, user_assoc_permissions, names) = get_assoc_roles(request)
-    if check and not names and not is_admin:
-        raise PermissionError()
-    ctx["role_names"] = names
-    features = get_assoc_features(assoc_id)
-    ctx["assoc_pms"] = get_index_permissions(features, is_admin, user_assoc_permissions, AssocPermission)
-
-
-def get_index_permissions(features, has_default, permissions, typ):
-    res = {}
-    for ar in typ.objects.select_related("feature", "feature__module").order_by("feature__module__order", "number"):
-        if not has_default and ar.slug not in permissions:
-            continue
-        if not ar.feature.placeholder and ar.feature.slug not in features:
-            continue
-        mod_name = _(ar.feature.module.name)
-        if mod_name not in res:
-            res[mod_name] = []
-        res[mod_name].append(ar)
-
-    return res

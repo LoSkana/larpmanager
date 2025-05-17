@@ -56,7 +56,7 @@ def exe_assoc_role(live_server, page):
     page.get_by_role("option", name="User Test -").click()
     page.get_by_role("checkbox", name="Configuration").check()
     page.get_by_role("checkbox", name="Accounting").check()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("gridcell", name="Accounting , Configuration").click()
     expect(page.locator('[id="\\32 "]')).to_contain_text("Accounting , Configuration")
 

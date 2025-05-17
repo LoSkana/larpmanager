@@ -666,6 +666,9 @@ msgstr "Lötmittel"
 msgid "Casting"
 msgstr "Gießen"
 
+msgid "Concept"
+msgstr "Konzept"
+
 msgid "Confirm"
 msgstr "Bewerbung"
 
@@ -1305,6 +1308,9 @@ msgstr "WS-Antworten"
 msgid "Appearance"
 msgstr "Erscheinungsbild"
 
+msgid "Applicable"
+msgstr "Anwendbar"
+
 msgid "Appointees"
 msgstr "Beauftragte"
 
@@ -1376,6 +1382,9 @@ msgstr "Navigation"
 
 msgid "Need help?"
 msgstr "Brauchen Sie Hilfe?"
+
+msgid "Net profit"
+msgstr "Reingewinn"
 
 msgid "New member"
 msgstr "Neues Mitglied"
@@ -1592,9 +1601,6 @@ msgstr "Verwalten von Läufen"
 
 msgid "Nationality"
 msgstr "Nationalität"
-
-msgid "Net revenue"
-msgstr "Nettoeinnahmen"
 
 msgid "New answer!"
 msgstr "Neue Antwort!"
@@ -1866,6 +1872,9 @@ msgstr "Text (kurz)"
 msgid "Three quotas"
 msgstr "Drei Quoten"
 
+msgid "Total number"
+msgstr "Gesamtzahl"
+
 msgid "Transactions"
 msgstr "Transaktionen"
 
@@ -1909,11 +1918,17 @@ msgstr "Zugang verweigert"
 msgid "Accessibility"
 msgstr "Erreichbarkeit"
 
+msgid "Age selection"
+msgstr "Auswahl des Alters"
+
 msgid "Are you sure?"
 msgstr "Sind Sie sicher?"
 
 msgid "Authorisation"
 msgstr "Autorisierung"
+
+msgid "Average value"
+msgstr "Durchschnittlicher Wert"
 
 msgid "Cancellations"
 msgstr "Annullierungen"
@@ -2061,6 +2076,9 @@ msgstr "Ticket-Ausfüller"
 
 msgid "Ticket chosen"
 msgstr "Ticket ausgewählt"
+
+msgid "Total revenue"
+msgstr "Einnahmen insgesamt"
 
 msgid "URL shortener"
 msgstr "URL-Verkürzer"
@@ -2525,6 +2543,9 @@ msgstr "Veranstaltungslinks anzeigen"
 msgid "Show explanation"
 msgstr "Erklärung anzeigen"
 
+msgid "Ticket selection"
+msgstr "Ticket-Auswahl"
+
 msgid "Tokens / Credits"
 msgstr "Wertmarken/Credits"
 
@@ -2560,9 +2581,6 @@ msgstr "Zusätzliche Felder"
 
 msgid "Advanced features"
 msgstr "Erweiterte Funktionen"
-
-msgid "Age-based options"
-msgstr "Altersabhängige Optionen"
 
 msgid "All comunications"
 msgstr "Alle Mitteilungen"
@@ -2605,6 +2623,9 @@ msgstr "Bewährtes Element!"
 
 msgid "Experience points"
 msgstr "Erfahrungspunkte"
+
+msgid "Faction selection"
+msgstr "Auswahl der Fraktionen"
 
 msgid "Feature activated"
 msgstr "Funktion aktiviert"
@@ -2683,9 +2704,6 @@ msgstr "Standardmerkmale"
 
 msgid "Technical Support"
 msgstr "Technische Unterstützung"
-
-msgid "Total preferences"
-msgstr "Anzahl der Präferenzen"
 
 msgid "Welcome on board!"
 msgstr "Willkommen an Bord!"
@@ -2845,9 +2863,6 @@ msgstr "Stellen Sie eine neue Frage"
 
 msgid "Assigned character!"
 msgstr "Zugewiesenes Zeichen!"
-
-msgid "Average preferences"
-msgstr "Durchschnittliche Präferenzen"
 
 msgid "Change registration"
 msgstr "Eintrag bearbeiten"
@@ -3306,9 +3321,6 @@ msgstr "Rollenfreigabe %(role)s"
 msgid "Select your character!"
 msgstr "Wählen Sie Ihren Charakter!"
 
-msgid "Ticket-based questions"
-msgstr "Ticket-basierte Fragen"
-
 msgid "Unknow error on upload"
 msgstr "Unbekannter Fehler beim Hochladen"
 
@@ -3353,9 +3365,6 @@ msgstr "Möchten Sie fortfahren?"
 
 msgid "Download complete sheet"
 msgstr "Komplettes Blatt herunterladen"
-
-msgid "Faction-based questions"
-msgstr "Fraktionsbezogene Fragen"
 
 msgid "Follow the steps below:"
 msgstr "Folgen Sie den nachstehenden Schritten:"
@@ -5653,6 +5662,10 @@ msgstr ""
 "Liste der Nutzer, die sich nicht für einen zukünftigen Lauf der "
 "Veranstaltung angemeldet haben"
 
+msgid "Select the types of writing elements that this question applies to."
+msgstr ""
+"Wählen Sie die Arten von Schriftelementen aus, auf die diese Frage zutrifft."
+
 msgid "The payment of your membership fee for this year has been received!"
 msgstr ""
 "Wir bestätigen die Zahlung Ihres Mitgliedsbeitrags für das laufende Jahr!"
@@ -6506,6 +6519,13 @@ msgstr ""
 "Sie können Ihre Zustimmung zur Datenweitergabe widerrufen, indem Sie auf den"
 " entsprechenden Link klicken."
 
+msgid ""
+"this balance reflects payments currently received and expenses recorded to "
+"date."
+msgstr ""
+"Dieser Saldo spiegelt die aktuellen Zahlungseingänge und die bis dato "
+"verbuchten Ausgaben wider."
+
 #, python-format
 msgid ""
 "Reimbursement of %(amount).2f %(credits)s with reason '%(reason)s' was "
@@ -6776,6 +6796,13 @@ msgstr ""
 "im System gespeichert werden."
 
 msgid ""
+"Describe the core idea or premise of the plot. This text will NOT be shown "
+"to players."
+msgstr ""
+"Beschreiben Sie die Kernidee oder Prämisse der Handlung. Dieser Text wird "
+"den Spielern NICHT gezeigt."
+
+msgid ""
 "If checked, automatically removes formatting when pasting text into the "
 "WYSIWYG editor"
 msgstr ""
@@ -6934,6 +6961,13 @@ msgid ""
 msgstr ""
 "Achtung: der Vorgang ist endgültig, bitte überprüfen Sie die Zuordnungen vor"
 " dem Hochladen!"
+
+msgid ""
+"If checked, allows a registration form question to be visible based on the "
+"player's age."
+msgstr ""
+"Wenn diese Option aktiviert ist, kann eine Frage des Registrierungsformulars"
+" basierend auf dem Alter des Spielers angezeigt werden."
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "
@@ -7134,13 +7168,6 @@ msgstr ""
 "Wert des Rabatts für den registrierten Spieler, der den Code an einen Freund"
 " weitergibt, der sich anmeldet"
 
-msgid ""
-"Allows a registration form question to be visible based on the selected "
-"registration ticket."
-msgstr ""
-"Ermöglicht die Sichtbarkeit einer Frage des Registrierungsformulars auf der "
-"Grundlage des ausgewählten Registrierungstickets."
-
 #, python-format
 msgid ""
 "Alternatively, you can request a reimbursement in <a href='%(url)s'>your "
@@ -7162,13 +7189,6 @@ msgid ""
 msgstr ""
 "Die Teilnahme an allen unseren Live-Veranstaltungen ist obligatorisch, da "
 "darin auch die Versicherungsgebühr enthalten ist."
-
-msgid ""
-"Makes certain registration options visible only to players who meet a "
-"specified minimum age."
-msgstr ""
-"Macht bestimmte Registrierungsoptionen nur für Spieler sichtbar, die ein "
-"bestimmtes Mindestalter erreichen."
 
 #, python-format
 msgid ""
@@ -7624,13 +7644,6 @@ msgstr ""
 "Felder ändern und auf \"Bestätigen\" klicken."
 
 msgid ""
-"Allows a registration form question to be visible only if the player is "
-"assigned to certain factions."
-msgstr ""
-"Ermöglicht es, dass eine Frage im Registrierungsformular nur dann sichtbar "
-"ist, wenn der Spieler bestimmten Fraktionen zugeordnet ist."
-
-msgid ""
 "Enables a 'campaign' style setup where multiple events share the same set of"
 " characters and factions."
 msgstr ""
@@ -7778,6 +7791,13 @@ msgstr ""
 "Charakterbögen zusätzlichen Inhalt hinzufügen."
 
 msgid ""
+"If checked, allows a registration form question to be visible based on the "
+"selected registration ticket."
+msgstr ""
+"Wenn diese Option aktiviert ist, kann eine Frage des Registrierungsformulars"
+" auf der Grundlage des ausgewählten Registrierungstickets angezeigt werden."
+
+msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "
 "popular streaming-service layouts."
 msgstr ""
@@ -7819,13 +7839,6 @@ msgid ""
 msgstr ""
 "Auf dieser Seite sind die Rollen zusammengefasst, die zugewiesen werden "
 "müssen, um die die Organisation betreffenden Funktionen zu nutzen."
-
-msgid ""
-"(this balance takes into account payments currently received, and "
-"expenditures currently put into system)"
-msgstr ""
-"(bei diesen Zählungen werden die derzeit eingegangenen Zahlungen und die "
-"derzeit ausgewiesenen Ausgaben berücksichtigt)"
 
 msgid ""
 "Adds a 'preview' field to writing elements, shareable with the player before"
@@ -8136,6 +8149,14 @@ msgid ""
 msgstr ""
 "Ermöglicht feste Ratenzahlungsfristen für Einschreibegebühren, so dass Sie "
 "mehrere Fälligkeitsdaten und Beträge festlegen können."
+
+msgid ""
+"If checked, allows a registration form question to be visible only if the "
+"player is assigned to certain factions."
+msgstr ""
+"Wenn diese Option aktiviert ist, kann eine Frage im Registrierungsformular "
+"nur dann angezeigt werden, wenn der Spieler einer bestimmten Fraktion "
+"angehört."
 
 msgid ""
 "The character has been proposed to the staff, who will examine it and "

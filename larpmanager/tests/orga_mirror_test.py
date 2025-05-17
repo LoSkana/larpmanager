@@ -50,7 +50,7 @@ def orga_mirror(live_server, page):
     # show chars
     go_to(page, live_server, "/test/1/manage/run")
     page.locator("#id_show_char").check()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # check gallery
     go_to(page, live_server, "/test/1/")
@@ -65,7 +65,7 @@ def orga_mirror(live_server, page):
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Mirror")
     page.locator("#id_mirror").select_option("1")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # check gallery
     go_to(page, live_server, "/test/1/")
@@ -83,12 +83,12 @@ def orga_mirror(live_server, page):
     page.locator("#id_casting_min").fill("1")
     page.locator("#id_casting_max").click()
     page.locator("#id_casting_max").fill("1")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # sign up and fill preferences
     go_to(page, live_server, "/test/1/register")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/test/1/casting")
     page.locator("#faction0").select_option("all")

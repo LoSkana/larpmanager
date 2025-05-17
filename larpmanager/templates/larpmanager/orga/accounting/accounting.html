@@ -7,12 +7,12 @@
     {% trans "This page shows the accounting status of the event, divided into the various expense types." %}
 {% endblock info %}
 {% block content %}
-    <h2>{% trans "Net revenue" %}: {{ run.revenue }}</h2>
-    <h2>{% trans "Balance" %}: {{ run.balance }}</h2>
+    <h2>{% trans "Total revenue" %}: {{ run.revenue }}</h2>
+    <h2>{% trans "Net profit" %}: {{ run.balance }}</h2>
     {% if 'organization_tax' in features %}
         <h2>{% trans "Organization tax" %}: {{ run.tax }}</h2>
     {% endif %}
-    <i>{% trans "(this balance takes into account payments currently received, and expenditures currently put into system)" %}</i>
+    <i>({% trans "this balance reflects payments currently received and expenses recorded to date." %})</i>
     <br />
     <table class="mob tablesorter">
         <tr>

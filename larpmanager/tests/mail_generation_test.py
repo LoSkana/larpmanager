@@ -93,10 +93,10 @@ def resubmit_membership(live_server, page):
     page.locator("a:has(i.fas.fa-edit)").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("link", name="Register").click()
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     # Set membership fee
     go_to(page, live_server, "/manage/config/")
     page.get_by_role("link", name=re.compile(r"^Members")).click()
@@ -104,11 +104,11 @@ def resubmit_membership(live_server, page):
     page.locator("#id_membership_fee").fill("10")
     page.locator("#id_membership_day").click()
     page.locator("#id_membership_day").fill("01-01")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     # update signup, go to membership
     go_to(page, live_server, "/test/1/register/")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     submit(page)
     page.locator("#id_confirm_1").check()
     page.locator("#id_confirm_2").check()
@@ -131,7 +131,7 @@ def submit_membership(image_path, live_server, page):
 
     page.locator("#main_form").click()
     page.locator("#id_typ").select_option("m")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     go_to(page, live_server, "/membership")
     page.get_by_role("checkbox", name="Authorisation").check()
     submit(page)
@@ -177,7 +177,7 @@ def badge(live_server, page):
     page.locator("#id_img").set_input_files(str(image_path))
     page.get_by_role("searchbox").fill("user")
     page.get_by_role("option", name="User Test - user@test.it").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     return image_path
 
 

@@ -64,12 +64,12 @@ def signup(live_server, page):
     page.locator("#id_mail_signup_update").check()
     page.locator("#id_mail_signup_del").check()
     page.locator("#id_mail_payment").check()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     go_to(page, live_server, "/manage/payments/details")
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("wir")
     page.get_by_role("option", name="Wire").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("link", name=re.compile(r"^wire")).click()
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("test wire")
@@ -77,18 +77,18 @@ def signup(live_server, page):
     page.locator("#id_wire_payee").fill("test beneficiary")
     page.locator("#id_wire_payee").press("Tab")
     page.locator("#id_wire_iban").fill("test iban")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     # set ticket price
     go_to(page, live_server, "/test/1/manage/registrations/tickets")
     page.locator("a:has(i.fas.fa-edit)").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100.00")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     # signup
     go_to(page, live_server, "/test/1/register")
     page.get_by_role("button", name="Continue").click()
     expect(page.locator("#riepilogo")).to_contain_text("you must request to register as a member")
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
 
 def membership(live_server, page):

@@ -28,7 +28,6 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
-from larpmanager.cache.role import check_assoc_permission
 from larpmanager.forms.accounting import (
     ExePaymentSettingsForm,
 )
@@ -49,6 +48,7 @@ from larpmanager.models.base import Feature
 from larpmanager.models.event import (
     Run,
 )
+from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.common import (
     get_feature,
     get_payment_methods_ids,

@@ -9,27 +9,25 @@
             <p>
                 {% trans "Go to the history preferences for" %}:
                 <a href="{% url 'orga_casting_history' event.slug run.number 0 %}">{% trans "characters" %}</a>,
-                {% for qt in quest_types %}
-                    {% include "elements/comma.html" %}
-                    <a href="{% url 'orga_casting_history' event.slug run.number qt.number %}">{{ qt.name }}</a>
+                {% for num, qt in quest_types.items %}
+                    , <a href="{% url 'orga_casting_history' event.slug run.number qt.number %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
         {% else %}
             <p>
                 {% trans "Go to the history preferences for" %}:
                 <a href="{% url 'casting_history' event.slug run.number 0 %}">{% trans "characters" %}</a>,
-                {% for qt in quest_types %}
-                    {% include "elements/comma.html" %}
-                    <a href="{% url 'casting_history' event.slug run.number qt.number %}">{{ qt.name }}</a>
+                {% for num, qt in quest_types.items %}
+                    , <a href="{% url 'casting_history' event.slug run.number qt.number %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
         {% endif %}
-        <h3>Storico preferenze {{ gl_name }}</h3>
+        <h3>{% trans "Historical" %} {{ gl_name }}</h3>
     {% endif %}
     <table id="preferences" class="tablesorter mob">
         <thead>
             <tr>
-                <th>Giocatore</th>
+                <th>{% trans "Player" %}</th>
                 {% with ""|center:casting_max as range %}
                     {% for _ in range %}<th>Preferenza {{ forloop.counter }}</th>{% endfor %}
                 {% endwith %}

@@ -31,6 +31,7 @@ from larpmanager.cache.registration import search_player
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
+    QuestionApplicable,
     QuestionStatus,
     QuestionVisibility,
     WritingAnswer,
@@ -90,7 +91,7 @@ def get_event_cache_characters(ctx, res):
         if mirror and ch.mirror_id in assigned_chars:
             continue
 
-        data = ch.show(ctx["event"])
+        data = ch.show(ctx["run"])
         data["fields"] = {}
         search_player(ch, data, ctx)
         if hide_uncasted_characters and data["player_id"] == 0:
@@ -154,7 +155,9 @@ def get_character_fields(ctx, only_visible=True):
         return
 
     # get visible question fields
-    que = ctx["event"].get_elements(WritingQuestion).exclude(status=QuestionStatus.HIDDEN).order_by("order")
+    que = ctx["event"].get_elements(WritingQuestion).order_by("order")
+    que = que.filter(applicable__icontains=QuestionApplicable.CHARACTER)
+    que = que.exclude(status=QuestionStatus.HIDDEN)
     if only_visible:
         que = que.filter(visibility__in=[QuestionVisibility.SEARCHABLE, QuestionVisibility.PUBLIC])
     ctx["questions"] = {el[0]: {"display": el[1], "typ": el[2]} for el in que.values_list("id", "display", "typ")}
@@ -171,6 +174,7 @@ def get_searcheable_character_fields(ctx):
         return
 
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
+    que = que.filter(applicable__icontains=QuestionApplicable.CHARACTER)
     que = que.filter(visibility=QuestionVisibility.SEARCHABLE).prefetch_related("options")
     ctx["searchable"] = {el.id: list(el.options.order_by("order").values_list("id", flat=True)) for el in que}
 

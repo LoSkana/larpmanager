@@ -18,12 +18,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import pytest
-from django.core.management import call_command
+from django.dispatch import Signal
 
-
-@pytest.fixture(scope="function", autouse=True)
-def load_fixtures(django_db_setup, django_db_blocker):
-    """Load test data and re-hash passwords."""
-    with django_db_blocker.unblock():
-        call_command("reset")
+profiler_response_signal = Signal()

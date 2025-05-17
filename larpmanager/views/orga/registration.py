@@ -176,10 +176,11 @@ def orga_registrations_standard(r, ctx, cache):
         r.factions = []
         r.chars = ctx["reg_chars"][r.member_id]
         for char in r.chars:
-            r.factions.extend(char["factions"])
-            for fnum in char["factions"]:
-                if fnum in ctx["factions"]:
-                    regs_list_add(ctx, "list_factions", ctx["factions"][fnum]["name"], r.member)
+            if "factions" in char:
+                r.factions.extend(char["factions"])
+                for fnum in char["factions"]:
+                    if fnum in ctx["factions"]:
+                        regs_list_add(ctx, "list_factions", ctx["factions"][fnum]["name"], r.member)
 
             if "custom_character" in ctx["features"]:
                 orga_registrations_custom(r, ctx, char)

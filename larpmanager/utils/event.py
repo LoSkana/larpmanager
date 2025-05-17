@@ -27,13 +27,13 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.button import get_event_button_cache
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.permission import get_event_permission_feature
-from larpmanager.cache.role import get_event_roles, get_index_permissions, has_event_permission
+from larpmanager.cache.role import get_event_roles, has_event_permission
 from larpmanager.cache.run import get_cache_run
 from larpmanager.models.access import EventPermission
 from larpmanager.models.event import Event, Run
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, Faction
-from larpmanager.utils.base import def_user_ctx
+from larpmanager.utils.base import def_user_ctx, get_index_permissions
 from larpmanager.utils.exceptions import FeatureError, PermissionError, UnknowRunError, check_event_feature
 from larpmanager.utils.registration import check_signup, registration_status
 

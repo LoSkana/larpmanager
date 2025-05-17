@@ -77,7 +77,7 @@ class OrgaExpenseForm(MyFormRun):
     class Meta:
         model = AccountingItemExpense
         exclude = ("inv", "hide")
-        widgets = {"member": RunMemberS2Widget, "run": forms.HiddenInput()}
+        widgets = {"member": RunMemberS2Widget}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
