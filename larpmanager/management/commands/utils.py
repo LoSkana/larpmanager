@@ -18,28 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.contrib.auth import get_user_model
-from django.core.management import call_command
-from django.core.management.base import BaseCommand
+import subprocess
 
-from larpmanager.management.commands.utils import check_branch
+from django.core.management.base import CommandError
 
 
-class Command(BaseCommand):
-    help = "Init DB"
-
-    def handle(self, *args, **options):
-        check_branch()
-
-        # Load fixtures
-        call_command("import_features")
-        call_command("loaddata", "test.yaml", verbosity=0)
-
-        # Re-hash user passwords
-        user_model = get_user_model()
-        for user in user_model.objects.all():
-            user.set_password("banana")
-            user.is_active = True
-            user.save()
-
-        self.stdout.write("All done.")
+def check_branch():
+    branch = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], text=True).strip()
+    if branch == "main":
+        raise CommandError("This command cannot be executed while on 'main'")

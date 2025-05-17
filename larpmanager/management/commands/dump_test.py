@@ -22,11 +22,15 @@ import subprocess
 
 from django.core.management import BaseCommand, call_command
 
+from larpmanager.management.commands.utils import check_branch
+
 
 class Command(BaseCommand):
     help = "Dump test db"
 
     def handle(self, *args, **kwargs):
+        check_branch()
+
         call_command("reset", verbosity=0)
         call_command("migrate", verbosity=0)
 
