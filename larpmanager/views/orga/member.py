@@ -33,10 +33,7 @@ from larpmanager.models.access import get_event_staffers
 from larpmanager.models.event import PreRegistration
 from larpmanager.models.member import Member, Membership
 from larpmanager.models.miscellanea import Email, HelpQuestion
-from larpmanager.models.registration import (
-    Registration,
-    RegistrationTicket,
-)
+from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.paginate import orga_paginate
 from larpmanager.utils.tasks import send_mail_exec
@@ -46,7 +43,7 @@ from larpmanager.utils.tasks import send_mail_exec
 def orga_newsletter(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_newsletter")
     que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-    que = que.exclude(ticket__tier=RegistrationTicket.WAITING).select_related("member")
+    que = que.exclude(ticket__tier=TicketTier.WAITING).select_related("member")
     ctx["list"] = que.values_list("member__id", "member__email", "member__name", "member__surname")
     return render(request, "larpmanager/orga/users/newsletter.html", ctx)
 

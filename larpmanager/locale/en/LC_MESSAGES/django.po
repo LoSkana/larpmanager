@@ -969,6 +969,21 @@ msgid ""
 "registered player"
 msgstr ""
 
+msgid "Tickets"
+msgstr ""
+
+msgid "If checked, allow ticket tier: Staff"
+msgstr ""
+
+msgid "If checked, allow ticket tier: NPC"
+msgstr ""
+
+msgid "If checked, allow ticket tier: Collaborator"
+msgstr ""
+
+msgid "If checked, allow ticket tier: Seller"
+msgstr ""
+
 msgid "Name of the free donation field"
 msgstr ""
 
@@ -1348,9 +1363,6 @@ msgstr ""
 msgid ""
 "This page allows you to add or change the types of ticket with which players "
 "can register."
-msgstr ""
-
-msgid "Tickets"
 msgstr ""
 
 msgid ""
@@ -3017,6 +3029,30 @@ msgstr ""
 msgid "Who takes it upon themselves to solve it."
 msgstr ""
 
+msgid "Waiting"
+msgstr ""
+
+msgid "Filler"
+msgstr ""
+
+msgid "Reduced"
+msgstr ""
+
+msgid "Patron"
+msgstr ""
+
+msgid "Staff"
+msgstr ""
+
+msgid "NPC"
+msgstr ""
+
+msgid "Collaborator"
+msgstr ""
+
+msgid "Seller"
+msgstr ""
+
 msgid "Type of ticket"
 msgstr ""
 
@@ -4421,9 +4457,6 @@ msgid ""
 "expertise."
 msgstr ""
 
-msgid "Staff"
-msgstr ""
-
 msgid ""
 "This page shows in the detail of an event, the list of expertises covered by "
 "the contributors."
@@ -5712,9 +5745,6 @@ msgid ""
 "This page summarises the disbursements recorded in the system for this run of"
 msgstr ""
 
-msgid "Collaborator"
-msgstr ""
-
 msgid "This page shows the discounts activated for this event."
 msgstr ""
 
@@ -6150,12 +6180,6 @@ msgid "Unique registration code, used for payment checks"
 msgstr ""
 
 msgid "Recalculate"
-msgstr ""
-
-msgid "Filler"
-msgstr ""
-
-msgid "Waiting"
 msgstr ""
 
 msgid "Registration sections"

@@ -47,7 +47,7 @@ from larpmanager.models.event import Event, EventButton, EventConfig, EventText,
 from larpmanager.models.form import QuestionStatus, QuestionType, QuestionVisibility, WritingQuestion
 from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTutorial
 from larpmanager.models.member import Member, Membership
-from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
+from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Faction, Plot, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.utils.common import copy_class
 
@@ -271,9 +271,9 @@ def save_event_update(sender, instance, **kwargs):
 def save_event_tickets(features, instance):
     # create tickets if not exists
     tickets = [
-        ("", RegistrationTicket.STANDARD, "Standard"),
-        ("waiting", RegistrationTicket.WAITING, "Waiting"),
-        ("filler", RegistrationTicket.FILLER, "Filler"),
+        ("", TicketTier.STANDARD, "Standard"),
+        ("waiting", TicketTier.WAITING, "Waiting"),
+        ("filler", TicketTier.FILLER, "Filler"),
     ]
     for ticket in tickets:
         if ticket[0] and ticket[0] not in features:

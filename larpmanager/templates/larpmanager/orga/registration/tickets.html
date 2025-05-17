@@ -14,7 +14,9 @@
                 <th class="hide">number</th>
                 <th></th>
                 <th>{% trans "Name" %}</th>
-                <th>{% trans "Type" %}</th>
+                {% if tiers|length > 1 %}
+                    <th>{% trans "Type" %}</th>
+                {% endif %}
                 {% if features.casting %}
                     <th>{% trans "Casting priority" %}</th>
                 {% endif %}
@@ -38,7 +40,7 @@
                         </a>
                     </td>
                     <td>{{ el.name }}</td>
-                    <td>{{ el.get_tier_display }}</td>
+                    {% if tiers|length > 1 %}<td>{{ el.get_tier_display }}</td>{% endif %}
                     {% if features.casting %}<td>{{ el.casting_priority }}</td>{% endif %}
                     <td>{{ el.price }}</td>
                     <td>

@@ -46,6 +46,7 @@ from larpmanager.models.registration import (
     RegistrationInstallment,
     RegistrationSurcharge,
     RegistrationTicket,
+    TicketTier,
 )
 from larpmanager.models.utils import get_sum
 from larpmanager.utils.common import get_time_diff, get_time_diff_today
@@ -69,7 +70,7 @@ def get_reg_iscr(instance):
         tot_iscr += instance.pay_what
 
     for c in RegistrationChoice.objects.filter(reg=instance).select_related("option"):
-        if "reg_opt_staff_price" in features and instance.ticket and instance.ticket.tier == RegistrationTicket.STAFF:
+        if "reg_opt_staff_price" in features and instance.ticket and instance.ticket.tier == TicketTier.STAFF:
             tot_iscr += c.option.price_staff
         else:
             tot_iscr += c.option.price
@@ -327,7 +328,7 @@ def pre_save_registration(sender, instance, *args, **kwargs):
 def get_date_surcharge(reg, event):
     if reg and reg.ticket:
         t = reg.ticket.tier
-        if t in (RegistrationTicket.WAITING, RegistrationTicket.STAFF):
+        if t in (TicketTier.WAITING, TicketTier.STAFF):
             return 0
 
     dt = datetime.now().date()

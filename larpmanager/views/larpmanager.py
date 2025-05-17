@@ -67,21 +67,12 @@ from larpmanager.models.larpmanager import (
     LarpManagerTutorial,
 )
 from larpmanager.models.member import Member, Membership, get_user_membership
-from larpmanager.models.registration import (
-    Registration,
-    RegistrationTicket,
-)
-from larpmanager.models.writing import (
-    Character,
-)
+from larpmanager.models.registration import Registration, TicketTier
+from larpmanager.models.writing import Character
 from larpmanager.utils.auth import check_lm_admin
-from larpmanager.utils.common import (
-    round_to_two_significant_digits,
-)
+from larpmanager.utils.common import round_to_two_significant_digits
 from larpmanager.utils.event import get_event_run
-from larpmanager.utils.exceptions import (
-    PermissionError,
-)
+from larpmanager.utils.exceptions import PermissionError
 from larpmanager.utils.tasks import my_send_mail, my_send_simple_mail, send_mail_exec
 from larpmanager.utils.text import get_assoc_text
 
@@ -518,7 +509,7 @@ def get_run_lm_payment(el):
     el.features = len(get_assoc_features(el.event.assoc_id)) + len(get_event_features(el.event_id))
     el.active_registrations = (
         Registration.objects.filter(run__id=el.id, cancellation_date__isnull=True)
-        .exclude(ticket__tier__in=[RegistrationTicket.STAFF, RegistrationTicket.WAITING])
+        .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.WAITING])
         .count()
     )
     if el.plan == LarpManagerPlan.FREE:

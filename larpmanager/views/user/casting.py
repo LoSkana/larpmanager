@@ -30,24 +30,16 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.mail.base import mail_confirm_casting
 from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType, Trait
-from larpmanager.models.registration import (
-    Registration,
-    RegistrationTicket,
-)
-from larpmanager.models.writing import (
-    Character,
-    Faction,
-)
+from larpmanager.models.registration import Registration, TicketTier
+from larpmanager.models.writing import Character, Faction
 from larpmanager.utils.common import get_element
 from larpmanager.utils.event import get_event_filter_characters, get_event_run
-from larpmanager.utils.exceptions import (
-    check_event_feature,
-)
+from larpmanager.utils.exceptions import check_event_feature
 from larpmanager.utils.registration import registration_status
 
 
 def casting_characters(ctx, reg):
-    filter_filler = hasattr(reg, "ticket") and reg.ticket and reg.ticket.tier != RegistrationTicket.FILLER
+    filter_filler = hasattr(reg, "ticket") and reg.ticket and reg.ticket.tier != TicketTier.FILLER
     filters = {"png": True, "free": True, "mirror": True, "filler": filter_filler, "nonfiller": not filter_filler}
     get_event_filter_characters(ctx, filters)
     choices = {}
@@ -119,7 +111,7 @@ def casting(request, s, n, typ=0):
         messages.success(request, _("You must signed up in order to select your preferences!"))
         return redirect("gallery", s=ctx["event"].slug, n=ctx["run"].number)
 
-    if ctx["run"].reg and ctx["run"].reg.ticket and ctx["run"].reg.ticket.tier == RegistrationTicket.WAITING:
+    if ctx["run"].reg and ctx["run"].reg.ticket and ctx["run"].reg.ticket.tier == TicketTier.WAITING:
         messages.success(
             request,
             _(
@@ -329,7 +321,7 @@ def casting_history_characters(ctx):
 
     query = (
         Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-        .exclude(ticket__tier=RegistrationTicket.STAFF)
+        .exclude(ticket__tier=TicketTier.STAFF)
         .select_related("member")
     )
 
@@ -373,7 +365,7 @@ def casting_history_traits(ctx):
 
     for reg in (
         Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-        .exclude(ticket__tier=RegistrationTicket.STAFF)
+        .exclude(ticket__tier=TicketTier.STAFF)
         .select_related("member")
     ):
         reg.prefs = {}

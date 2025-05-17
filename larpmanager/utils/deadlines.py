@@ -26,7 +26,7 @@ from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.casting import Casting
 from larpmanager.models.member import Member, Membership
-from larpmanager.models.registration import Registration, RegistrationTicket
+from larpmanager.models.registration import Registration, TicketTier
 
 
 def get_users_data(ids):
@@ -58,7 +58,7 @@ def check_run_deadlines(runs):
         members_map[run.id] = []
 
     reg_que = Registration.objects.filter(run_id__in=run_ids, cancellation_date__isnull=True)
-    reg_que = reg_que.exclude(ticket__tier=RegistrationTicket.WAITING)
+    reg_que = reg_que.exclude(ticket__tier=TicketTier.WAITING)
     for reg in reg_que:
         regs_id.append(reg.id)
         members_id.append(reg.member_id)
@@ -88,7 +88,7 @@ def check_run_deadlines(runs):
         player_ids = []
 
         for reg in all_regs[run.id]:
-            if reg.ticket and reg.ticket.tier != RegistrationTicket.STAFF:
+            if reg.ticket and reg.ticket.tier != TicketTier.STAFF:
                 player_ids.append(reg.member_id)
 
             if uses_membership:

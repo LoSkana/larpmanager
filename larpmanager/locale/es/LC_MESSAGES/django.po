@@ -44,6 +44,9 @@ msgstr "Fin"
 msgid "Fee"
 msgstr "Tasa"
 
+msgid "NPC"
+msgstr "NPC"
+
 msgid "Net"
 msgstr "Neto"
 
@@ -534,6 +537,9 @@ msgstr "Número"
 msgid "Object"
 msgstr "Objeto"
 
+msgid "Patron"
+msgstr "Patrón"
+
 msgid "Player"
 msgstr "Jugador"
 
@@ -563,6 +569,9 @@ msgstr "Secreto"
 
 msgid "Select"
 msgstr "Seleccionar"
+
+msgid "Seller"
+msgstr "Vendedor"
 
 msgid "Shared"
 msgstr "Compartido"
@@ -764,6 +773,9 @@ msgstr "Lectura"
 
 msgid "Receipt"
 msgstr "Recibo"
+
+msgid "Reduced"
+msgstr "Reducido"
 
 msgid "Refunds"
 msgstr "Reembolsos"
@@ -4002,6 +4014,9 @@ msgstr "Rellena las preguntas preparatorias del evento."
 msgid "For more information, write to us!"
 msgstr "Si desea más información, escríbanos."
 
+msgid "If checked, allow ticket tier: NPC"
+msgstr "Si está marcada, permite el nivel de ticket: NPC"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Inscripción a %(event)s actualizada"
@@ -4095,6 +4110,9 @@ msgstr "Error al procesar el pago, contáctanos"
 msgid "Extended description - international"
 msgstr "Descripción ampliada - internacional"
 
+msgid "If checked, allow ticket tier: Staff"
+msgstr "Si está marcada, permite el nivel de entrada: Personal"
+
 msgid "Indicate the amount of your donation"
 msgstr "Indica el importe de tu donación"
 
@@ -4143,6 +4161,9 @@ msgstr "aquí las condiciones de inscripción."
 
 msgid "Cast your vote for the new Executive!"
 msgstr "¡Vota para la nueva junta ejecutiva!"
+
+msgid "If checked, allow ticket tier: Seller"
+msgstr "Si está marcada, permite el nivel de entradas: Vendedor"
 
 msgid "Indicates accurate safety information"
 msgstr "Indicanos la información de seguridad precisa"
@@ -4419,6 +4440,9 @@ msgstr "Orden de visualización con respecto a todas las preguntas"
 
 msgid "Freely indicate the amount of your donation"
 msgstr "Indica libremente la cantidad de tu donación"
+
+msgid "If checked, allow ticket tier: Collaborator"
+msgstr "Si está marcada, permite el nivel de ticket: Colaborador"
 
 msgid "If checked, makes quests and traits visible"
 msgstr "Si está marcada, hace visibles las misiones y los agentes"

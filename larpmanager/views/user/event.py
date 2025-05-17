@@ -44,6 +44,7 @@ from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
     RegistrationTicket,
+    TicketTier,
 )
 from larpmanager.models.writing import (
     Character,
@@ -266,7 +267,7 @@ def gallery(request, s, n):
             assigned = que.values_list("reg_id", flat=True)
 
             que_reg = Registration.objects.filter(run_id=ctx["run"].id, cancellation_date__isnull=True)
-            que_reg = que_reg.exclude(pk__in=assigned).exclude(ticket__tier=RegistrationTicket.WAITING)
+            que_reg = que_reg.exclude(pk__in=assigned).exclude(ticket__tier=TicketTier.WAITING)
             for reg in que_reg.select_related("member", "ticket").order_by("search"):
                 if not is_reg_provisional(reg, features):
                     ctx["reg_list"].append(reg.member)

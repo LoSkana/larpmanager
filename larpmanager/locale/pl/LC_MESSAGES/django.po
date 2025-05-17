@@ -44,6 +44,9 @@ msgstr "Koniec"
 msgid "Fee"
 msgstr "Opłata"
 
+msgid "NPC"
+msgstr "NPC"
+
 msgid "Net"
 msgstr "Netto"
 
@@ -534,6 +537,9 @@ msgstr "Liczba"
 msgid "Object"
 msgstr "Obiekt"
 
+msgid "Patron"
+msgstr "Patron"
+
 msgid "Player"
 msgstr "Gracz"
 
@@ -563,6 +569,9 @@ msgstr "Sekret"
 
 msgid "Select"
 msgstr "Wybierz"
+
+msgid "Seller"
+msgstr "Sprzedawca"
 
 msgid "Shared"
 msgstr "Współdzielony"
@@ -764,6 +773,9 @@ msgstr "Czytanie"
 
 msgid "Receipt"
 msgstr "Pokwitowanie"
+
+msgid "Reduced"
+msgstr "Zmniejszony"
 
 msgid "Refunds"
 msgstr "Zwroty kosztów"
@@ -4002,6 +4014,9 @@ msgstr "Wypełnij pytania przygotowujące do wydarzenia!"
 msgid "For more information, write to us!"
 msgstr "Aby uzyskać więcej informacji, napisz do nas!"
 
+msgid "If checked, allow ticket tier: NPC"
+msgstr "Jeśli zaznaczone, zezwala na poziom biletów: NPC"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Zaktualizowano rejestrację dla %(event)s"
@@ -4095,6 +4110,9 @@ msgstr "Błąd przetwarzania płatności, skontaktuj się z nami"
 msgid "Extended description - international"
 msgstr "Rozszerzony opis - międzynarodowy"
 
+msgid "If checked, allow ticket tier: Staff"
+msgstr "Jeśli zaznaczone, zezwól na poziom biletu: Personel"
+
 msgid "Indicate the amount of your donation"
 msgstr "Wskaż kwotę darowizny"
 
@@ -4143,6 +4161,9 @@ msgstr "tutaj warunki rejestracji."
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Oddaj swój głos na nowego dyrektora!"
+
+msgid "If checked, allow ticket tier: Seller"
+msgstr "Jeśli zaznaczone, zezwól na poziom biletu: Sprzedawca"
 
 msgid "Indicates accurate safety information"
 msgstr "Wskazuje dokładne informacje dotyczące bezpieczeństwa"
@@ -4418,6 +4439,9 @@ msgstr "Wyświetlanie kolejności w odniesieniu do wszystkich pytań"
 
 msgid "Freely indicate the amount of your donation"
 msgstr "Dowolnie wskaż kwotę darowizny"
+
+msgid "If checked, allow ticket tier: Collaborator"
+msgstr "Jeśli zaznaczone, zezwala na poziom biletów: Współpracownik"
 
 msgid "If checked, makes quests and traits visible"
 msgstr "Jeśli zaznaczone, sprawia, że zadania i cechy są widoczne."

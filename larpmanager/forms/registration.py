@@ -26,6 +26,7 @@ from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
 from larpmanager.accounting.registration import get_date_surcharge
+from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.forms.base import BaseRegistrationForm, MyForm
 from larpmanager.forms.utils import (
@@ -45,6 +46,7 @@ from larpmanager.models.registration import (
     RegistrationSection,
     RegistrationSurcharge,
     RegistrationTicket,
+    TicketTier,
 )
 from larpmanager.models.writing import Character, Faction
 from larpmanager.utils.common import get_time_diff_today
@@ -77,7 +79,7 @@ class RegistrationForm(BaseRegistrationForm):
         self.waiting_check = (
             self.instance
             and self.instance.ticket
-            and self.instance.ticket.tier == RegistrationTicket.WAITING
+            and self.instance.ticket.tier == TicketTier.WAITING
             or not self.instance
             and "waiting" in run.status
         )
@@ -280,7 +282,7 @@ class RegistrationForm(BaseRegistrationForm):
         return self.instance.pk and self.instance.ticket and self.instance.ticket.tier == tier
 
     def has_ticket_primary(self):
-        not_primary_tiers = [RegistrationTicket.WAITING, RegistrationTicket.FILLER]
+        not_primary_tiers = [TicketTier.WAITING, TicketTier.FILLER]
         return self.instance.pk and self.instance.ticket and self.instance.ticket.tier not in not_primary_tiers
 
     def check_ticket_visibility(self, ticket):
@@ -297,8 +299,8 @@ class RegistrationForm(BaseRegistrationForm):
 
     def get_available_tickets(self, event, reg_counts, run):
         # If the user is registered as a staff, show those options
-        if self.has_ticket(RegistrationTicket.STAFF):
-            return RegistrationTicket.objects.filter(event=event, tier=RegistrationTicket.STAFF).order_by("order")
+        if self.has_ticket(TicketTier.STAFF):
+            return RegistrationTicket.objects.filter(event=event, tier=TicketTier.STAFF).order_by("order")
 
         # Check closed inscriptions
         if not self.instance.pk and "closed" in run.status:
@@ -329,7 +331,7 @@ class RegistrationForm(BaseRegistrationForm):
 
     def skip_ticket_reduced(self, run, ticket):
         # if this reduced, check count
-        if ticket.tier == RegistrationTicket.REDUCED:
+        if ticket.tier == TicketTier.REDUCED:
             if not self.instance or ticket != self.instance.ticket:
                 ticket.available = get_reduced_available_count(run)
                 if ticket.available <= 0:
@@ -353,22 +355,22 @@ class RegistrationForm(BaseRegistrationForm):
             return False
 
         # Show Waiting tickets only if you are Waiting, or if the player is enrolled in Waiting
-        if ticket.tier == RegistrationTicket.WAITING:
-            if "waiting" not in run.status and not self.has_ticket(RegistrationTicket.WAITING):
+        if ticket.tier == TicketTier.WAITING:
+            if "waiting" not in run.status and not self.has_ticket(TicketTier.WAITING):
                 return True
 
-        elif ticket.tier == RegistrationTicket.FILLER:
+        elif ticket.tier == TicketTier.FILLER:
             filler_alway = event.get_config("filler_alway", False)
             if filler_alway:
                 # Show Filler Tickets only if you have been filler or primary, or if the player is signed up for Filler
                 if (
                     "filler" not in run.status
                     and "primary" not in run.status
-                    and not self.has_ticket(RegistrationTicket.FILLER)
+                    and not self.has_ticket(TicketTier.FILLER)
                 ):
                     return True
             # Show Filler Tickets only if you have been fillers, or if the player is subscribed Filler
-            elif "filler" not in run.status and not self.has_ticket(RegistrationTicket.FILLER):
+            elif "filler" not in run.status and not self.has_ticket(TicketTier.FILLER):
                 return True
 
         # Show Primary Tickets only if he was primary, or if the player is registered
@@ -681,27 +683,49 @@ class OrgaRegistrationTicketForm(MyForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # ev = self.params["run"].event
-        aux = []
-        for tp in self.fields["tier"].choices:
-            if tp[0] == RegistrationTicket.LOTTERY and "lottery" not in self.params["features"]:
-                continue
-            if tp[0] == RegistrationTicket.WAITING and "waiting" not in self.params["features"]:
-                continue
-            if tp[0] == RegistrationTicket.FILLER and "filler" not in self.params["features"]:
-                continue
-            if (
-                tp[0] == RegistrationTicket.REDUCED or tp[0] == RegistrationTicket.PATRON
-            ) and "reduced" not in self.params["features"]:
-                continue
-            aux.append(tp)
-        self.fields["tier"].choices = aux
+        tiers = self.get_tier_available(self.params["run"].event)
+        if len(tiers) > 1:
+            self.fields["tier"].choices = tiers
+        else:
+            del self.fields["tier"]
 
         if "casting" not in self.params["features"]:
             self.delete_field("casting_priority")
 
         if "gift" not in self.params["features"]:
             self.delete_field("giftable")
+
+    @staticmethod
+    def get_tier_available(event):
+        aux = []
+        ticket_features = {
+            TicketTier.LOTTERY: "lottery",
+            TicketTier.WAITING: "waiting",
+            TicketTier.FILLER: "filler",
+            TicketTier.PATRON: "reduced",
+            TicketTier.REDUCED: "reduced",
+        }
+        ticket_configs = {
+            TicketTier.STAFF: "staff",
+            TicketTier.NPC: "npc",
+            TicketTier.COLLABORATOR: "collaborator",
+            TicketTier.SELLER: "seller",
+        }
+        ev_features = get_event_features(event.id)
+        for tp in TicketTier.choices:
+            (value, label) = tp
+            # skip ticket if feature not set
+            if value in ticket_features:
+                if ticket_features[value] not in ev_features:
+                    continue
+
+            # skip ticket if config not set
+            if value in ticket_configs:
+                if not event.get_config(f"ticket_{ticket_configs[value]}", False):
+                    continue
+
+            aux.append(tp)
+        return aux
 
 
 class OrgaRegistrationSectionForm(MyForm):
