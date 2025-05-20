@@ -17,13 +17,16 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import os
 import subprocess
 
 from django.core.management.base import CommandError
 
 
 def check_branch():
+    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
+        return
+
     branch = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], text=True).strip()
     if branch == "main":
         raise CommandError("This command cannot be executed while on 'main'")
