@@ -48,7 +48,7 @@ from larpmanager.models.miscellanea import (
     WorkshopOption,
     WorkshopQuestion,
 )
-from larpmanager.models.registration import RegistrationTicket
+from larpmanager.models.registration import RegistrationTicket, TicketTier
 from larpmanager.models.utils import generate_id
 from larpmanager.models.writing import Faction
 from larpmanager.utils.common import FileTypeValidator
@@ -260,8 +260,8 @@ class OrganizerCastingOptionsForm(forms.Form):
 
         ticks = (
             RegistrationTicket.objects.filter(event=self.params["event"])
-            .exclude(tier=RegistrationTicket.WAITING)
-            .exclude(tier=RegistrationTicket.STAFF)
+            .exclude(tier=TicketTier.WAITING)
+            .exclude(tier=TicketTier.STAFF)
             .values_list("id", "name")
         )
 

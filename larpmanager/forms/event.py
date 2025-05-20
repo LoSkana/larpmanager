@@ -466,6 +466,24 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("bring_friend_discount_from", ConfigType.INT, section, label, help_text)
 
     def set_config_registration(self):
+        section = _("Tickets")
+
+        label = "Staff"
+        help_text = _("If checked, allow ticket tier: Staff")
+        self.add_configs("ticket_staff", ConfigType.BOOL, section, label, help_text)
+
+        label = "NPC"
+        help_text = _("If checked, allow ticket tier: NPC")
+        self.add_configs("ticket_npc", ConfigType.BOOL, section, label, help_text)
+
+        label = "Collaborator"
+        help_text = _("If checked, allow ticket tier: Collaborator")
+        self.add_configs("ticket_collaborator", ConfigType.BOOL, section, label, help_text)
+
+        label = "Seller"
+        help_text = _("If checked, allow ticket tier: Seller")
+        self.add_configs("ticket_seller", ConfigType.BOOL, section, label, help_text)
+
         if "pay_what_you_want" in self.params["features"]:
             section = "Pay what you want"
 

@@ -59,6 +59,7 @@ from larpmanager.utils.upload import upload_elements
 def orga_registration_tickets(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_registration_tickets")
     ctx["list"] = RegistrationTicket.objects.filter(event=ctx["event"]).order_by("order")
+    ctx["tiers"] = OrgaRegistrationTicketForm.get_tier_available(ctx["event"])
     return render(request, "larpmanager/orga/registration/tickets.html", ctx)
 
 

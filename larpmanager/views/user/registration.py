@@ -57,6 +57,7 @@ from larpmanager.models.member import Membership, get_user_membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
+    TicketTier,
 )
 from larpmanager.models.utils import my_uuid
 from larpmanager.utils.base import def_user_ctx
@@ -209,7 +210,7 @@ def registration_redirect(request, reg, new_reg, run):
             return redirect("profile")
 
         memb_status = request.user.member.membership.status
-        if memb_status in [Membership.EMPTY, Membership.JOINED] and reg.ticket.tier != RegistrationTicket.WAITING:
+        if memb_status in [Membership.EMPTY, Membership.JOINED] and reg.ticket.tier != TicketTier.WAITING:
             mes = _("To confirm your registration, apply to become a member of the Association.")
             messages.success(request, mes)
             return redirect("membership")
@@ -369,7 +370,7 @@ def _apply_ticket(ctx, tk):
     try:
         tick = RegistrationTicket.objects.get(pk=tk)
         ctx["tier"] = tick.tier
-        if tick.tier == RegistrationTicket.STAFF and "closed" in ctx["run"].status:
+        if tick.tier == TicketTier.STAFF and "closed" in ctx["run"].status:
             del ctx["run"].status["closed"]
 
         ctx["ticket"] = tk
@@ -387,7 +388,7 @@ def _check_secret_code(ctx, secret_code):
 
 def _check_redirect_registration(request, ctx, event):
     if "register_link" in ctx["features"] and event.register_link:
-        if "tier" not in ctx or ctx["tier"] != RegistrationTicket.STAFF:
+        if "tier" not in ctx or ctx["tier"] != TicketTier.STAFF:
             return redirect(event.register_link)
 
     if "registration_open" in ctx["features"]:

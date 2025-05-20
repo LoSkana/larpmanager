@@ -44,6 +44,9 @@ msgstr "Konec"
 msgid "Fee"
 msgstr "Poplatek"
 
+msgid "NPC"
+msgstr "NPC"
+
 msgid "Net"
 msgstr "Net"
 
@@ -534,6 +537,9 @@ msgstr "Číslo"
 msgid "Object"
 msgstr "Objekt"
 
+msgid "Patron"
+msgstr "Patron"
+
 msgid "Player"
 msgstr "Hráč"
 
@@ -563,6 +569,9 @@ msgstr "Tajné"
 
 msgid "Select"
 msgstr "Vyberte"
+
+msgid "Seller"
+msgstr "Prodejce"
 
 msgid "Shared"
 msgstr "Sdílené stránky"
@@ -764,6 +773,9 @@ msgstr "Čtení"
 
 msgid "Receipt"
 msgstr "Příjem"
+
+msgid "Reduced"
+msgstr "Snížení"
 
 msgid "Refunds"
 msgstr "Náhrady"
@@ -4002,6 +4014,9 @@ msgstr "Vyplňte přípravné otázky k události!"
 msgid "For more information, write to us!"
 msgstr "Pro více informací nám napište!"
 
+msgid "If checked, allow ticket tier: NPC"
+msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: NPC"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Aktualizovaný záznam pro %(event)s"
@@ -4095,6 +4110,9 @@ msgstr "Chyba při zpracování platby, kontaktujte nás"
 msgid "Extended description - international"
 msgstr "Rozšířený popis - v angličtině"
 
+msgid "If checked, allow ticket tier: Staff"
+msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: Staff"
+
 msgid "Indicate the amount of your donation"
 msgstr "Uveďte výši svého daru"
 
@@ -4143,6 +4161,9 @@ msgstr "zde podmínky registrace na akci."
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Hlasujte pro nového výkonného ředitele!"
+
+msgid "If checked, allow ticket tier: Seller"
+msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: Prodejce"
 
 msgid "Indicates accurate safety information"
 msgstr "Uvádí přesné bezpečnostní informace"
@@ -4418,6 +4439,9 @@ msgstr "Zobrazení pořadí u všech otázek"
 
 msgid "Freely indicate the amount of your donation"
 msgstr "Volně uveďte výši svého daru"
+
+msgid "If checked, allow ticket tier: Collaborator"
+msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: Spolupracovník"
 
 msgid "If checked, makes quests and traits visible"
 msgstr "Pokud je zaškrtnuto, zviditelní úkoly a vlastnosti."
