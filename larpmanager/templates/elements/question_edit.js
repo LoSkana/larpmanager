@@ -8,14 +8,14 @@
                 $('#options').fadeOut();
             }
 
-            max_lengtheable = ["m", "t", "p", "name", "teaser", "text", "title"]
+            max_lengtheable = ["m", "t", "p", "e", "name", "teaser", "text", "title"]
             if (max_lengtheable.includes(selectedValue)) {
                 $('#id_max_length_tr').fadeIn();
             } else {
                 $('#id_max_length_tr').fadeOut();
             }
 
-            if (["s", "m", "t", "p"].includes(selectedValue)) {
+            if (["s", "m", "t", "p", "e"].includes(selectedValue)) {
                 $('#id_printable_tr').fadeIn();
                 $('#id_visibility_tr').fadeIn();
             } else {

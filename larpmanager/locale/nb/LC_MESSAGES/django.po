@@ -1668,9 +1668,6 @@ msgstr "Vis stengt"
 msgid "Simple list"
 msgstr "Enkel liste"
 
-msgid "Text (long)"
-msgstr "Tekst (lang)"
-
 msgid "Ticket list"
 msgstr "Billettliste"
 
@@ -1865,9 +1862,6 @@ msgstr "Finn ut mer"
 
 msgid "Test gallery"
 msgstr "Testgalleri"
-
-msgid "Text (short)"
-msgstr "Tekst (kort)"
 
 msgid "Three quotas"
 msgstr "Tre kvoter"
@@ -2324,6 +2318,9 @@ msgstr "Medlem nektet!"
 msgid "Membership fees"
 msgstr "Foreningsavgifter"
 
+msgid "Multi-line text"
+msgstr "Tekst på flere linjer"
+
 msgid "Multiple choice"
 msgstr "Flere valgmuligheter"
 
@@ -2531,6 +2528,9 @@ msgstr "Påminnelsesprofil"
 msgid "Request approved"
 msgstr "Anmodning godkjent"
 
+msgid "Rich text editor"
+msgstr "Redigeringsprogram for rik tekst"
+
 msgid "Selected options"
 msgstr "Utvalgte alternativer"
 
@@ -2542,6 +2542,9 @@ msgstr "Vis lenker til arrangementer"
 
 msgid "Show explanation"
 msgstr "Vis forklaring"
+
+msgid "Single-line text"
+msgstr "Tekst på én linje"
 
 msgid "Ticket selection"
 msgstr "Valg av billett"

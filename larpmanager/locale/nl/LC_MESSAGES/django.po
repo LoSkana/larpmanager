@@ -1668,9 +1668,6 @@ msgstr "Toon gesloten"
 msgid "Simple list"
 msgstr "Eenvoudige lijst"
 
-msgid "Text (long)"
-msgstr "Tekst (lang)"
-
 msgid "Ticket list"
 msgstr "Ticketlijst"
 
@@ -1865,9 +1862,6 @@ msgstr "Lees meer"
 
 msgid "Test gallery"
 msgstr "Test galerij"
-
-msgid "Text (short)"
-msgstr "Tekst (kort)"
 
 msgid "Three quotas"
 msgstr "Drie quota"
@@ -2324,6 +2318,9 @@ msgstr "Lid geweigerd!"
 msgid "Membership fees"
 msgstr "Verenigingskosten"
 
+msgid "Multi-line text"
+msgstr "Meerregelige tekst"
+
 msgid "Multiple choice"
 msgstr "Meerkeuze"
 
@@ -2531,6 +2528,9 @@ msgstr "Herinnering profiel"
 msgid "Request approved"
 msgstr "Verzoek goedgekeurd"
 
+msgid "Rich text editor"
+msgstr "Tekstverwerker"
+
 msgid "Selected options"
 msgstr "Geselecteerde opties"
 
@@ -2542,6 +2542,9 @@ msgstr "Links naar evenementen weergeven"
 
 msgid "Show explanation"
 msgstr "Uitleg tonen"
+
+msgid "Single-line text"
+msgstr "Enkelvoudige tekst"
 
 msgid "Ticket selection"
 msgstr "Selectie van tickets"

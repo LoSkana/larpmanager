@@ -304,7 +304,13 @@ def save_event_character_form(features, instance):
     # evaluate each question type field
     choices = dict(QuestionType.choices)
     all_types = choices.keys()
-    custom_tps = {QuestionType.SINGLE, QuestionType.MULTIPLE, QuestionType.TEXT, QuestionType.PARAGRAPH}
+    custom_tps = {
+        QuestionType.SINGLE,
+        QuestionType.MULTIPLE,
+        QuestionType.TEXT,
+        QuestionType.PARAGRAPH,
+        QuestionType.EDITOR,
+    }
     all_types -= custom_tps
     def_tps = {
         QuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 100),

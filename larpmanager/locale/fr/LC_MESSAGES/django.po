@@ -1668,9 +1668,6 @@ msgstr "Fermeture de l'exposition"
 msgid "Simple list"
 msgstr "Liste simple"
 
-msgid "Text (long)"
-msgstr "Texte (long)"
-
 msgid "Ticket list"
 msgstr "Liste des billets"
 
@@ -1865,9 +1862,6 @@ msgstr "En savoir plus"
 
 msgid "Test gallery"
 msgstr "Galerie de test"
-
-msgid "Text (short)"
-msgstr "Texte (court)"
 
 msgid "Three quotas"
 msgstr "Trois quotas"
@@ -2324,6 +2318,9 @@ msgstr "Membre refusé !"
 msgid "Membership fees"
 msgstr "Frais d'association"
 
+msgid "Multi-line text"
+msgstr "Texte multiligne"
+
 msgid "Multiple choice"
 msgstr "Choix multiple"
 
@@ -2531,6 +2528,9 @@ msgstr "Profil de rappel"
 msgid "Request approved"
 msgstr "Demande approuvée"
 
+msgid "Rich text editor"
+msgstr "Editeur de texte riche"
+
 msgid "Selected options"
 msgstr "Options sélectionnées"
 
@@ -2542,6 +2542,9 @@ msgstr "Afficher les liens vers les événements"
 
 msgid "Show explanation"
 msgstr "Montrer l'explication"
+
+msgid "Single-line text"
+msgstr "Texte sur une seule ligne"
 
 msgid "Ticket selection"
 msgstr "Sélection des billets"

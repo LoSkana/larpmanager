@@ -37,7 +37,15 @@
         </th>
         <td>
             {% if field.errors %}{{ field.errors }}{% endif %}
-            {{ field }}
+            {% if form.show_link and field.id_for_label in form.show_link %}
+                <p>
+                    <a href="#" class="my_toggle" tog="f_{{ field.id_for_label }}">{% trans "Show" %}</a>
+                </p>
+                <div style="display: none"
+                     class="hide hide_later f_{{ field.id_for_label }}">{{ field }}</div>
+            {% else %}
+                {{ field }}
+            {% endif %}
             {% if field.help_text %}
                 <br>
                 <div class="helptext">{{ field.help_text | safe }}</div>
@@ -59,7 +67,7 @@
                 <br />
                 <br />
                 <a href="{{ profile }}" target="_blank">
-                    <img src="{{ profile }}" />
+                    <img src="{{ profile }}" alt="question profile image" />
                 </a>
                 <br>
                 <span class="helptext">{% trans "(click on image to enlarge)" %}</span>

@@ -2527,10 +2527,13 @@ msgstr ""
 msgid "Multiple choice"
 msgstr ""
 
-msgid "Text (short)"
+msgid "Single-line text"
 msgstr ""
 
-msgid "Text (long)"
+msgid "Multi-line text"
+msgstr ""
+
+msgid "Rich text editor"
 msgstr ""
 
 msgid "Presentation"
@@ -3367,6 +3370,9 @@ msgid ""
 "confirmed when your ticket payment is received."
 msgstr ""
 
+msgid "Show"
+msgstr ""
+
 msgid "characters"
 msgstr ""
 
@@ -3383,9 +3389,6 @@ msgid "Translate"
 msgstr ""
 
 msgid "Original"
-msgstr ""
-
-msgid "Show"
 msgstr ""
 
 msgid "Confirm"

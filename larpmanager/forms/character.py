@@ -512,7 +512,6 @@ class OrgaWritingQuestionForm(MyForm):
         self._init_type()
 
         if "user_character" not in self.params["features"]:
-            self.delete_field("max_length")
             self.delete_field("status")
 
         if "print_pdf" not in self.params["features"]:
@@ -535,6 +534,7 @@ class OrgaWritingQuestionForm(MyForm):
                 QuestionType.MULTIPLE,
                 QuestionType.TEXT,
                 QuestionType.PARAGRAPH,
+                QuestionType.EDITOR,
             }
             def_type = self.instance.typ in {QuestionType.NAME}
             type_feature = self.instance.typ in self.params["features"]

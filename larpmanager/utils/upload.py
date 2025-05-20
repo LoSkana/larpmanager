@@ -438,7 +438,7 @@ def assign_choice_answer(ctx, character, value, key):
     question_id = ctx["questions_inverted"][key]
 
     # check if answer
-    if ctx["questions"][question_id]["typ"] in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
+    if ctx["questions"][question_id]["typ"] in [QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.EDITOR]:
         (car, cr) = WritingAnswer.objects.get_or_create(element_id=character.id, question_id=question_id)
         car.text = value
         car.save()

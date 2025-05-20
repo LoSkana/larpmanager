@@ -1668,9 +1668,6 @@ msgstr "Geschlossen anzeigen"
 msgid "Simple list"
 msgstr "Einfache Liste"
 
-msgid "Text (long)"
-msgstr "Text (lang)"
-
 msgid "Ticket list"
 msgstr "Ticket-Liste"
 
@@ -1865,9 +1862,6 @@ msgstr "Weitere Informationen"
 
 msgid "Test gallery"
 msgstr "Test-Galerie"
-
-msgid "Text (short)"
-msgstr "Text (kurz)"
 
 msgid "Three quotas"
 msgstr "Drei Quoten"
@@ -2324,6 +2318,9 @@ msgstr "Mitglied abgelehnt!"
 msgid "Membership fees"
 msgstr "Verbandsbeiträge"
 
+msgid "Multi-line text"
+msgstr "Mehrzeiliger Text"
+
 msgid "Multiple choice"
 msgstr "Mehrfachauswahl"
 
@@ -2531,6 +2528,9 @@ msgstr "Erinnerungsprofil"
 msgid "Request approved"
 msgstr "Antrag genehmigt"
 
+msgid "Rich text editor"
+msgstr "Rich-Text-Editor"
+
 msgid "Selected options"
 msgstr "Ausgewählte Optionen"
 
@@ -2542,6 +2542,9 @@ msgstr "Veranstaltungslinks anzeigen"
 
 msgid "Show explanation"
 msgstr "Erklärung anzeigen"
+
+msgid "Single-line text"
+msgstr "Einzeiliger Text"
 
 msgid "Ticket selection"
 msgstr "Ticket-Auswahl"

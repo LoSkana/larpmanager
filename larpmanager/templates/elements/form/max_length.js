@@ -4,7 +4,7 @@
 
 var simple_count = ["t", "p", "name", "title"];
 var multiple_count = ["m"];
-var tinymce_count = ["teaser", "text"];
+var tinymce_count = ["teaser", "text", "editor"];
 
 var tm_done = [];
 

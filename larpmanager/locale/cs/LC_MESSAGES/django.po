@@ -1668,9 +1668,6 @@ msgstr "Zobrazit uzavřeno"
 msgid "Simple list"
 msgstr "Jednoduchý seznam"
 
-msgid "Text (long)"
-msgstr "Text (dlouhý)"
-
 msgid "Ticket list"
 msgstr "Seznam vstupenek"
 
@@ -1865,9 +1862,6 @@ msgstr "Zjistěte více"
 
 msgid "Test gallery"
 msgstr "Testovací galerie"
-
-msgid "Text (short)"
-msgstr "Text (krátký)"
 
 msgid "Three quotas"
 msgstr "Tři kvóty"
@@ -2324,6 +2318,9 @@ msgstr "Člen odmítl!"
 msgid "Membership fees"
 msgstr "Poplatky sdružení"
 
+msgid "Multi-line text"
+msgstr "Víceřádkový text"
+
 msgid "Multiple choice"
 msgstr "Vícenásobná volba"
 
@@ -2531,6 +2528,9 @@ msgstr "Připomínkový profil"
 msgid "Request approved"
 msgstr "Žádost schválena"
 
+msgid "Rich text editor"
+msgstr "Textový editor"
+
 msgid "Selected options"
 msgstr "Vybrané možnosti"
 
@@ -2542,6 +2542,9 @@ msgstr "Zobrazit odkazy na události"
 
 msgid "Show explanation"
 msgstr "Zobrazit vysvětlení"
+
+msgid "Single-line text"
+msgstr "Jednořádkový text"
 
 msgid "Ticket selection"
 msgstr "Výběr vstupenek"

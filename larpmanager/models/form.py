@@ -41,8 +41,9 @@ from larpmanager.models.writing import CharacterStatus, Faction
 class QuestionType(models.TextChoices):
     SINGLE = "s", _("Single choice")
     MULTIPLE = "m", _("Multiple choice")
-    TEXT = "t", _("Text (short)")
-    PARAGRAPH = "p", _("Text (long)")
+    TEXT = "t", _("Single-line text")
+    PARAGRAPH = "p", _("Multi-line text")
+    EDITOR = "e", _("Rich text editor")
     NAME = "name", _("Name")
     TEASER = "teaser", _("Presentation")
     SHEET = "text", _("Sheet")

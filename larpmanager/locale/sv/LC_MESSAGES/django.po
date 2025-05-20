@@ -1668,9 +1668,6 @@ msgstr "Visa stängd"
 msgid "Simple list"
 msgstr "Enkel lista"
 
-msgid "Text (long)"
-msgstr "Text (lång)"
-
 msgid "Ticket list"
 msgstr "Biljettlista"
 
@@ -1865,9 +1862,6 @@ msgstr "Ta reda på mer"
 
 msgid "Test gallery"
 msgstr "Testgalleri"
-
-msgid "Text (short)"
-msgstr "Text (kort)"
 
 msgid "Three quotas"
 msgstr "Tre kvoter"
@@ -2324,6 +2318,9 @@ msgstr "Medlem nekad!"
 msgid "Membership fees"
 msgstr "Föreningens avgifter"
 
+msgid "Multi-line text"
+msgstr "Text på flera rader"
+
 msgid "Multiple choice"
 msgstr "Flera valmöjligheter"
 
@@ -2531,6 +2528,9 @@ msgstr "Påminnelseprofil"
 msgid "Request approved"
 msgstr "Begäran godkänd"
 
+msgid "Rich text editor"
+msgstr "Rich text editor"
+
 msgid "Selected options"
 msgstr "Valda alternativ"
 
@@ -2542,6 +2542,9 @@ msgstr "Visa länkar till evenemang"
 
 msgid "Show explanation"
 msgstr "Visa förklaring"
+
+msgid "Single-line text"
+msgstr "Text på en rad"
 
 msgid "Ticket selection"
 msgstr "Val av biljett"

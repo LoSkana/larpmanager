@@ -44,6 +44,7 @@ from larpmanager.cache.links import reset_run_event_links
 from larpmanager.cache.registration import reset_cache_reg_counts
 from larpmanager.cache.role import has_event_permission
 from larpmanager.cache.run import reset_cache_run
+from larpmanager.cache.writing import remove_html_tags
 from larpmanager.forms.registration import (
     OrgaRegistrationForm,
     RegistrationCharacterRelForm,
@@ -428,12 +429,12 @@ def orga_registration_form_list(request, s, n):
                 res[el.reg_id] = []
             res[el.reg_id].append(cho[el.option_id])
 
-    elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
+    elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.EDITOR]:
         que = RegistrationAnswer.objects.filter(question=q, reg__run=ctx["run"])
-        que = que.annotate(short_text=Substr("text", 1, max_length))
+        que = que.annotate(short_text=Substr("text", 1, max_length + 20))
         que = que.values("reg_id", "short_text")
         for el in que:
-            answer = el["short_text"]
+            answer = remove_html_tags(el["short_text"])[:max_length]
             if len(answer) == max_length:
                 popup.append(el["reg_id"])
             res[el["reg_id"]] = answer

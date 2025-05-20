@@ -182,7 +182,7 @@ def orga_character_form_list(request, s, n):
                 res[el.element_id] = []
             res[el.element_id].append(cho[el.option_id])
 
-    elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
+    elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.EDITOR]:
         que = WritingAnswer.objects.filter(question=q, element_id__in=character_ids)
         que = que.annotate(short_text=Substr("text", 1, max_length))
         que = que.values("element_id", "short_text")
