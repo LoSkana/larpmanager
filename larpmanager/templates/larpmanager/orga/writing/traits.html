@@ -33,12 +33,6 @@
                 {% if features.hide %}
                     <th class="hide nasc">Nascondi" %}</th>
                 {% endif %}
-                {% if features.keywords %}
-                    <th class="hide keywords">Parole chiave" %}</th>
-                {% endif %}
-                {% if features.role %}
-                    <th class="hide role">Ruolo" %}</th>
-                {% endif %}
                 {% if features.assigned %}
                     <th class="hide assign">{% trans "Assigned" %}</th>
                 {% endif %}
@@ -78,8 +72,6 @@
                             {% if el.hide %}Si{% endif %}
                         </td>
                     {% endif %}
-                    {% if features.keywords %}<td class="hide keywords">Parole chiave</td>{% endif %}
-                    {% if features.role %}<td class="hide role">Ruolo</td>{% endif %}
                     {% if features.assigned %}
                         <td class="hide assign">
                             {% if el.assigned_id %}{{ assigned|get:el.assigned_id }}{% endif %}

@@ -597,9 +597,6 @@ msgstr "Żetony"
 msgid "Traits"
 msgstr "Cechy"
 
-msgid "Unisex"
-msgstr "Unisex"
-
 msgid "Unread"
 msgstr "Nieprzeczytane"
 
@@ -1808,9 +1805,6 @@ msgstr "Rejestracja wstępna"
 
 msgid "Presentation"
 msgstr "Prezentacja"
-
-msgid "Private area"
-msgstr "Obszar prywatny"
 
 msgid "Questbuilder"
 msgstr "Questbuilder"

@@ -597,9 +597,6 @@ msgstr "Gettoni"
 msgid "Traits"
 msgstr "Tratti"
 
-msgid "Unisex"
-msgstr "Unisex"
-
 msgid "Unread"
 msgstr "Non letti"
 
@@ -1808,9 +1805,6 @@ msgstr "Pre-Iscriviti"
 
 msgid "Presentation"
 msgstr "Presentazione"
-
-msgid "Private area"
-msgstr "Area privata"
 
 msgid "Questbuilder"
 msgstr "Questbuilder"

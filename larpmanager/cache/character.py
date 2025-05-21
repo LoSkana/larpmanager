@@ -160,7 +160,10 @@ def get_character_fields(ctx, only_visible=True):
     que = que.exclude(status=QuestionStatus.HIDDEN)
     if only_visible:
         que = que.filter(visibility__in=[QuestionVisibility.SEARCHABLE, QuestionVisibility.PUBLIC])
-    ctx["questions"] = {el[0]: {"display": el[1], "typ": el[2]} for el in que.values_list("id", "display", "typ")}
+    ctx["questions"] = {
+        el[0]: {"display": el[1], "typ": el[2], "printable": el[3]}
+        for el in que.values_list("id", "display", "typ", "printable")
+    }
 
     que = ctx["event"].get_elements(WritingOption).filter(question_id__in=ctx["questions"].keys())
     ctx["options"] = {

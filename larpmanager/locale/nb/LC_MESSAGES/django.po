@@ -597,9 +597,6 @@ msgstr "Poletter"
 msgid "Traits"
 msgstr "Egenskaper"
 
-msgid "Unisex"
-msgstr "Unisex"
-
 msgid "Unread"
 msgstr "Ulest"
 
@@ -1808,9 +1805,6 @@ msgstr "Forhåndspåmelding"
 
 msgid "Presentation"
 msgstr "Presentasjon"
-
-msgid "Private area"
-msgstr "Privat område"
 
 msgid "Questbuilder"
 msgstr "Questbuilder"

@@ -597,9 +597,6 @@ msgstr "Tokens"
 msgid "Traits"
 msgstr "Eigenschappen"
 
-msgid "Unisex"
-msgstr "Unisex"
-
 msgid "Unread"
 msgstr "Ongelezen"
 
@@ -1808,9 +1805,6 @@ msgstr "Voorinschrijven"
 
 msgid "Presentation"
 msgstr "Presentatie"
-
-msgid "Private area"
-msgstr "Privéruimte"
 
 msgid "Questbuilder"
 msgstr "Questbuilder"

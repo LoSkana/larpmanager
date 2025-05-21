@@ -3648,7 +3648,70 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-msgid "Unisex"
+msgid "Participate in the co-creation of the character!"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+msgid "Edit your character's data!"
+msgstr ""
+
+msgid "Buy skills for your character!"
+msgstr ""
+
+msgid "Customize"
+msgstr ""
+
+msgid "Modify some character elements to make it yours!"
+msgstr ""
+
+msgid "Relationships"
+msgstr ""
+
+msgid "Fill in your character's relationships!"
+msgstr ""
+
+msgid "Questions"
+msgstr ""
+
+msgid "Write here questions about your character directly to the authors!"
+msgstr ""
+
+msgid "Answers"
+msgstr ""
+
+msgid "Download complete sheet"
+msgstr ""
+
+msgid "Download light sheet"
+msgstr ""
+
+msgid "Download relationships"
+msgstr ""
+
+msgid ""
+"This character represents the true secret identity of another character."
+msgstr ""
+
+msgid "You can give a preference to play it, as with other characters."
+msgstr ""
+
+msgid ""
+"If it is assigned to you, you will automatically be assigned the original "
+"character it mirrors."
+msgstr ""
+
+msgid "Public informations"
+msgstr ""
+
+msgid "Preferences - Total"
+msgstr ""
+
+msgid "Average"
+msgstr ""
+
+msgid "Graph"
 msgstr ""
 
 msgid ""
@@ -3667,6 +3730,12 @@ msgid "Ability list"
 msgstr ""
 
 msgid "Delivery list"
+msgstr ""
+
+msgid "Relationship"
+msgstr ""
+
+msgid "Other characters"
 msgstr ""
 
 msgid "No organization found"
@@ -3790,81 +3859,6 @@ msgid "Total number"
 msgstr ""
 
 msgid "Average value"
-msgstr ""
-
-msgid "Participate in the co-creation of the character!"
-msgstr ""
-
-msgid "Change"
-msgstr ""
-
-msgid "Edit your character's data!"
-msgstr ""
-
-msgid "Buy skills for your character!"
-msgstr ""
-
-msgid "Customize"
-msgstr ""
-
-msgid "Modify some character elements to make it yours!"
-msgstr ""
-
-msgid "Relationships"
-msgstr ""
-
-msgid "Fill in your character's relationships!"
-msgstr ""
-
-msgid "Questions"
-msgstr ""
-
-msgid "Write here questions about your character directly to the authors!"
-msgstr ""
-
-msgid ""
-"This character represents the true secret identity of another character."
-msgstr ""
-
-msgid "You can give a preference to play it, as with other characters."
-msgstr ""
-
-msgid ""
-"If it is assigned to you, you will automatically be assigned the original "
-"character it mirrors."
-msgstr ""
-
-msgid "Public informations"
-msgstr ""
-
-msgid "Preferences - Total"
-msgstr ""
-
-msgid "Average"
-msgstr ""
-
-msgid "Graph"
-msgstr ""
-
-msgid "Other characters"
-msgstr ""
-
-msgid "Download complete sheet"
-msgstr ""
-
-msgid "Download light sheet"
-msgstr ""
-
-msgid "Download relationships"
-msgstr ""
-
-msgid "Private area"
-msgstr ""
-
-msgid "Answers"
-msgstr ""
-
-msgid "Relationship"
 msgstr ""
 
 msgid "Obtain ability"

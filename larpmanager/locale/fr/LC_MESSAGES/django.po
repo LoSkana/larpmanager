@@ -597,9 +597,6 @@ msgstr "Jetons"
 msgid "Traits"
 msgstr "Traits"
 
-msgid "Unisex"
-msgstr "Unisexe"
-
 msgid "Unread"
 msgstr "Non lu"
 
@@ -1808,9 +1805,6 @@ msgstr "Pré-inscription"
 
 msgid "Presentation"
 msgstr "Présentation"
-
-msgid "Private area"
-msgstr "Espace privé"
 
 msgid "Questbuilder"
 msgstr "Bâtisseur de quêtes"

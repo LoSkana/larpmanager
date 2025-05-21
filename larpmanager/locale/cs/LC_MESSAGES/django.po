@@ -597,9 +597,6 @@ msgstr "Žetony"
 msgid "Traits"
 msgstr "Vlastnosti"
 
-msgid "Unisex"
-msgstr "Unisex"
-
 msgid "Unread"
 msgstr "Nepřečtené"
 
@@ -1808,9 +1805,6 @@ msgstr "Předběžná registrace"
 
 msgid "Presentation"
 msgstr "Prezentace"
-
-msgid "Private area"
-msgstr "Soukromý prostor"
 
 msgid "Questbuilder"
 msgstr "Questbuilder"

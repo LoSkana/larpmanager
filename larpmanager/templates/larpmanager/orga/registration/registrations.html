@@ -72,9 +72,6 @@
             {% if features.discount %}
                 <a href="#" class="my_toggle" tog='disc'>{% trans "Discounts" %}</a>
             {% endif %}
-            {% if features.role %}
-                <a href="#" class="my_toggle" tog='role'>{% trans "Roles" %}</a>
-            {% endif %}
         </div>
     </div>
     {% if reg_questions %}
@@ -141,9 +138,6 @@
                     {% for key, que in reg_questions.items %}<th class="hide q_{{ key }}">{{ que.display }}</th>{% endfor %}
                     {% if features.discount %}
                         <th class="hide disc">{% trans "Discounts" %}</th>
-                    {% endif %}
-                    {% if features.role %}
-                        <th class="hide role">{% trans "Roles" %}</th>
                     {% endif %}
                     <th class="hide date">{% trans "Creation" %} (y/m/d)</th>
                     <th class="hide date">{% trans "Last change" %} (y/m/d)</th>
@@ -277,7 +271,6 @@
                                 <a href="{% url 'orga_registration_discounts' run.event.slug run.number reg.id %}">{% trans "Manage" %}</a>
                             </td>
                         {% endif %}
-                        {% if features.role %}<th class="hide role">{{ reg.roles }}</th>{% endif %}
                         <td class="hide date">{{ reg.created | date:"y/m/d H:i" }}</td>
                         <td class="hide date">{{ reg.updated | date:"y/m/d H:i" }}</td>
                         {% if features.pay_what_you_want %}

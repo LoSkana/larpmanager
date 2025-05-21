@@ -597,9 +597,6 @@ msgstr "Wertmarken"
 msgid "Traits"
 msgstr "Eigenschaften"
 
-msgid "Unisex"
-msgstr "Unisex"
-
 msgid "Unread"
 msgstr "Ungelesen"
 
@@ -1808,9 +1805,6 @@ msgstr "Vorregistrierung"
 
 msgid "Presentation"
 msgstr "Präsentation"
-
-msgid "Private area"
-msgstr "Privater Bereich"
 
 msgid "Questbuilder"
 msgstr "Questbuilder"
