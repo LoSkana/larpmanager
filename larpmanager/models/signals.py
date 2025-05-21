@@ -322,10 +322,13 @@ def save_event_character_form(features, instance):
     }
 
     _init_character_form_questions(custom_tps, def_tps, features, instance)
-    _init_plot_form_questions(def_tps, instance)
+    _init_plot_form_questions(def_tps, instance, features)
 
 
-def _init_plot_form_questions(def_tps, instance):
+def _init_plot_form_questions(def_tps, instance, features):
+    if "plot" not in features:
+        return
+
     que = WritingQuestion.objects.filter(event=instance, applicable=QuestionApplicable.PLOT)
     types = set(que.values_list("typ", flat=True).distinct())
 
