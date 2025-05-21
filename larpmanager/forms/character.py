@@ -524,9 +524,8 @@ class OrgaWritingQuestionForm(MyForm):
 
     def _init_type(self):
         # Add type of character question to the available types
-        already = list(
-            WritingQuestion.objects.filter(event=self.params["event"]).values_list("typ", flat=True).distinct()
-        )
+        que = self.params["event"].get_elements(WritingQuestion).values_list("typ", flat=True)
+        already = list(que.distinct())
         if self.instance.pk and self.instance.typ:
             already.remove(self.instance.typ)
 
