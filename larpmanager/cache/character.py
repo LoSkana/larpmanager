@@ -156,7 +156,7 @@ def get_character_fields(ctx, only_visible=True):
 
     # get visible question fields
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-    que = que.filter(applicable__icontains=QuestionApplicable.CHARACTER)
+    que = que.filter(applicable=QuestionApplicable.CHARACTER)
     que = que.exclude(status=QuestionStatus.HIDDEN)
     if only_visible:
         que = que.filter(visibility__in=[QuestionVisibility.SEARCHABLE, QuestionVisibility.PUBLIC])
@@ -174,7 +174,7 @@ def get_searcheable_character_fields(ctx):
         return
 
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-    que = que.filter(applicable__icontains=QuestionApplicable.CHARACTER)
+    que = que.filter(applicable=QuestionApplicable.CHARACTER)
     que = que.filter(visibility=QuestionVisibility.SEARCHABLE).prefetch_related("options")
     ctx["searchable"] = {el.id: list(el.options.order_by("order").values_list("id", flat=True)) for el in que}
 

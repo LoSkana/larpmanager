@@ -2141,6 +2141,9 @@ msgstr "Språkarrangementer"
 msgid "Executive Vote"
 msgstr "Avstemning i ledelsen"
 
+msgid "Form questions"
+msgstr "Skjema for spørsmål"
+
 msgid "Full returning"
 msgstr "Totalavkastning"
 
@@ -2528,9 +2531,6 @@ msgstr "Påminnelsesprofil"
 msgid "Request approved"
 msgstr "Anmodning godkjent"
 
-msgid "Rich text editor"
-msgstr "Redigeringsprogram for rik tekst"
-
 msgid "Selected options"
 msgstr "Utvalgte alternativer"
 
@@ -2780,6 +2780,9 @@ msgstr "Elementer lastet!"
 msgid "Feature activated:"
 msgstr "Funksjonen er aktivert:"
 
+msgid "Go to the form for"
+msgstr "Gå til skjemaet for"
+
 msgid "Hide not available"
 msgstr "Skjul ikke tilgjengelig"
 
@@ -2869,9 +2872,6 @@ msgstr "Tildelt karakter!"
 
 msgid "Change registration"
 msgstr "Rediger oppføring"
-
-msgid "Character questions"
-msgstr "Karakterspørsmål"
 
 msgid "Charging the player"
 msgstr "Lading av spilleren"
@@ -2993,6 +2993,9 @@ msgstr "--- IKKE TILDELT ---"
 
 msgid "Accounting - History"
 msgstr "Regnskap - Historisk"
+
+msgid "Advanced text editor"
+msgstr "Avansert tekstredigeringsprogram"
 
 msgid "Are you really sure?"
 msgstr "Er du virkelig sikker?"
@@ -6533,13 +6536,6 @@ msgstr ""
 "og lagres i systemet."
 
 msgid ""
-"Describe the core idea or premise of the plot. This text will NOT be shown "
-"to players."
-msgstr ""
-"Beskriv kjerneideen eller premisset for handlingen. Denne teksten vil IKKE "
-"bli vist til spillerne."
-
-msgid ""
 "If checked, automatically removes formatting when pasting text into the "
 "WYSIWYG editor"
 msgstr ""
@@ -7900,6 +7896,13 @@ msgid ""
 msgstr ""
 "Denne siden oppsummerer e-postlistene til brukerne, inndelt etter hvilke "
 "preferanser de har gitt uttrykk for når det gjelder nyhetsbrev."
+
+msgid ""
+"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
+"text, 'p' for long text, 'e' for editor)"
+msgstr ""
+"typ (type: 's' for enkeltvalg, 'm' for flervalg, 't' for kort tekst, 'p' for"
+" lang tekst, 'e' for editor)"
 
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "

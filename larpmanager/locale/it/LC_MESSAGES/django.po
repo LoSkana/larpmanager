@@ -1489,7 +1489,7 @@ msgid "additional"
 msgstr "aggiuntivi"
 
 msgid "characters"
-msgstr "caratteri"
+msgstr "personaggi"
 
 msgid "chronology"
 msgstr "cronologia"
@@ -2141,6 +2141,9 @@ msgstr "Lingua eventi"
 msgid "Executive Vote"
 msgstr "Votazione Direttivo"
 
+msgid "Form questions"
+msgstr "Domande sul modulo"
+
 msgid "Full returning"
 msgstr "Restituzione totale"
 
@@ -2528,9 +2531,6 @@ msgstr "Profilo di promemoria"
 msgid "Request approved"
 msgstr "Richiesta approvata"
 
-msgid "Rich text editor"
-msgstr "Editor di testo ricco"
-
 msgid "Selected options"
 msgstr "Opzioni selezionate"
 
@@ -2780,6 +2780,9 @@ msgstr "Elementi caricati!"
 msgid "Feature activated:"
 msgstr "Feature attivata: "
 
+msgid "Go to the form for"
+msgstr "Vai al modulo per"
+
 msgid "Hide not available"
 msgstr "Nascondi non disponibili"
 
@@ -2869,9 +2872,6 @@ msgstr "Personaggio assegnato!"
 
 msgid "Change registration"
 msgstr "Modifica iscrizione"
-
-msgid "Character questions"
-msgstr "Domande personaggio"
 
 msgid "Charging the player"
 msgstr "Addebito al giocatore"
@@ -2993,6 +2993,9 @@ msgstr "--- NON ASSEGNATO ---"
 
 msgid "Accounting - History"
 msgstr "Contabilità - Storico"
+
+msgid "Advanced text editor"
+msgstr "Editor di testo avanzato"
 
 msgid "Are you really sure?"
 msgstr "Sei davvero sicuro?"
@@ -6637,13 +6640,6 @@ msgstr ""
 "memorizzati nel sistema."
 
 msgid ""
-"Describe the core idea or premise of the plot. This text will NOT be shown "
-"to players."
-msgstr ""
-"Descrivete l'idea centrale o la premessa della trama. Questo testo NON verrà"
-" mostrato ai giocatori."
-
-msgid ""
 "If checked, automatically removes formatting when pasting text into the "
 "WYSIWYG editor"
 msgstr ""
@@ -8011,6 +8007,13 @@ msgid ""
 msgstr ""
 "Questa pagina riepiloga gli elenchi email di utenti, divisi per le loro "
 "preferenze espresse riguardanti le comunicazioni newsletter."
+
+msgid ""
+"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
+"text, 'p' for long text, 'e' for editor)"
+msgstr ""
+"typ (tipo: 's' per scelta singola, 'm' per scelta multipla, 't' per testo "
+"breve, 'p' per testo lungo, 'e' per editor)"
 
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "

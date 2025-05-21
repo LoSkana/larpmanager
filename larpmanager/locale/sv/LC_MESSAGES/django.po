@@ -2141,6 +2141,9 @@ msgstr "Språkevenemang"
 msgid "Executive Vote"
 msgstr "Ledningens omröstning"
 
+msgid "Form questions"
+msgstr "Formulärfrågor"
+
 msgid "Full returning"
 msgstr "Total avkastning"
 
@@ -2528,9 +2531,6 @@ msgstr "Påminnelseprofil"
 msgid "Request approved"
 msgstr "Begäran godkänd"
 
-msgid "Rich text editor"
-msgstr "Rich text editor"
-
 msgid "Selected options"
 msgstr "Valda alternativ"
 
@@ -2780,6 +2780,9 @@ msgstr "Elementen är laddade!"
 msgid "Feature activated:"
 msgstr "Funktion aktiverad:"
 
+msgid "Go to the form for"
+msgstr "Gå till formuläret för"
+
 msgid "Hide not available"
 msgstr "Dölj inte tillgängligt"
 
@@ -2869,9 +2872,6 @@ msgstr "Tilldelad karaktär!"
 
 msgid "Change registration"
 msgstr "Redigera post"
-
-msgid "Character questions"
-msgstr "Frågor om karaktären"
 
 msgid "Charging the player"
 msgstr "Laddning av spelaren"
@@ -2993,6 +2993,9 @@ msgstr "--- INTE TILLDELAD ---"
 
 msgid "Accounting - History"
 msgstr "Redovisning - Historisk"
+
+msgid "Advanced text editor"
+msgstr "Avancerad textredigerare"
 
 msgid "Are you really sure?"
 msgstr "Är du verkligen säker?"
@@ -6559,13 +6562,6 @@ msgstr ""
 " i systemet."
 
 msgid ""
-"Describe the core idea or premise of the plot. This text will NOT be shown "
-"to players."
-msgstr ""
-"Beskriv den centrala idén eller förutsättningen för handlingen. Denna text "
-"kommer INTE att visas för spelarna."
-
-msgid ""
 "If checked, automatically removes formatting when pasting text into the "
 "WYSIWYG editor"
 msgstr ""
@@ -7924,6 +7920,13 @@ msgid ""
 msgstr ""
 "Denna sida sammanfattar användarnas e-postlistor, uppdelade efter deras "
 "uttryckta preferenser när det gäller nyhetsbrev."
+
+msgid ""
+"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
+"text, 'p' for long text, 'e' for editor)"
+msgstr ""
+"typ (typ: \"s\" för enstaka val, \"m\" för flera val, \"t\" för kort text, "
+"\"p\" för lång text, \"e\" för editor)"
 
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "

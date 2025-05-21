@@ -43,7 +43,7 @@ class QuestionType(models.TextChoices):
     MULTIPLE = "m", _("Multiple choice")
     TEXT = "t", _("Single-line text")
     PARAGRAPH = "p", _("Multi-line text")
-    EDITOR = "e", _("Rich text editor")
+    EDITOR = "e", _("Advanced text editor")
     NAME = "name", _("Name")
     TEASER = "teaser", _("Presentation")
     SHEET = "text", _("Sheet")
@@ -73,6 +73,15 @@ class QuestionVisibility(models.TextChoices):
 class QuestionApplicable(models.TextChoices):
     CHARACTER = "c", _("Character")
     PLOT = "p", _("Plot")
+
+    @staticmethod
+    def get_applicable(model_name):
+        if model_name == "character":
+            return QuestionApplicable.CHARACTER
+        elif model_name == "plot":
+            return QuestionApplicable.PLOT
+        else:
+            return None
 
 
 class WritingQuestion(BaseModel):
@@ -148,10 +157,9 @@ class WritingQuestion(BaseModel):
     )
 
     applicable = models.CharField(
+        max_length=1,
+        choices=QuestionApplicable.choices,
         default=QuestionApplicable.CHARACTER,
-        max_length=20,
-        null=True,
-        blank=True,
         verbose_name=_("Applicable"),
         help_text=_("Select the types of writing elements that this question applies to."),
     )
@@ -181,15 +189,6 @@ class WritingQuestion(BaseModel):
 
     def get_editable_display(self):
         return ", ".join([str(label) for value, label in CharacterStatus.choices if value in self.get_editable()])
-
-    def get_applicable(self):
-        return self.applicable.split(",") if self.applicable else []
-
-    def set_applicable(self, applicable_list):
-        self.applicable = ",".join(applicable_list)
-
-    def get_applicable_display(self):
-        return ", ".join([str(label) for value, label in QuestionApplicable.choices if value in self.get_applicable()])
 
 
 class WritingOption(BaseModel):
@@ -255,8 +254,6 @@ class WritingChoice(BaseModel):
 
     element_id = models.IntegerField(blank=True, null=True)
 
-    element_id = models.IntegerField(blank=True, null=True)
-
     def __str__(self):
         # noinspection PyUnresolvedReferences
         return f"{self.element_id} ({self.question.display}) {self.option.display}"
@@ -266,8 +263,6 @@ class WritingAnswer(BaseModel):
     question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="answers")
 
     text = models.TextField(max_length=5000)
-
-    element_id = models.IntegerField(blank=True, null=True)
 
     element_id = models.IntegerField(blank=True, null=True)
 

@@ -2141,6 +2141,9 @@ msgstr "Événements linguistiques"
 msgid "Executive Vote"
 msgstr "Vote de la direction"
 
+msgid "Form questions"
+msgstr "Questions de forme"
+
 msgid "Full returning"
 msgstr "Rendement total"
 
@@ -2528,9 +2531,6 @@ msgstr "Profil de rappel"
 msgid "Request approved"
 msgstr "Demande approuvée"
 
-msgid "Rich text editor"
-msgstr "Editeur de texte riche"
-
 msgid "Selected options"
 msgstr "Options sélectionnées"
 
@@ -2780,6 +2780,9 @@ msgstr "Éléments chargés !"
 msgid "Feature activated:"
 msgstr "Fonction activée :"
 
+msgid "Go to the form for"
+msgstr "Accéder au formulaire pour"
+
 msgid "Hide not available"
 msgstr "Masquer non disponible"
 
@@ -2869,9 +2872,6 @@ msgstr "Personnage assigné !"
 
 msgid "Change registration"
 msgstr "Modifier l'entrée"
-
-msgid "Character questions"
-msgstr "Questions sur les personnages"
 
 msgid "Charging the player"
 msgstr "Chargement du lecteur"
@@ -2993,6 +2993,9 @@ msgstr "--- NON ATTRIBUÉ ---"
 
 msgid "Accounting - History"
 msgstr "Comptabilité - Historique"
+
+msgid "Advanced text editor"
+msgstr "Editeur de texte avancé"
 
 msgid "Are you really sure?"
 msgstr "Êtes-vous vraiment sûr ?"
@@ -6687,13 +6690,6 @@ msgstr ""
 "et stockées dans le système."
 
 msgid ""
-"Describe the core idea or premise of the plot. This text will NOT be shown "
-"to players."
-msgstr ""
-"Décrivez l'idée centrale ou la prémisse de l'intrigue. Ce texte ne sera PAS "
-"montré aux joueurs."
-
-msgid ""
 "If checked, automatically removes formatting when pasting text into the "
 "WYSIWYG editor"
 msgstr ""
@@ -8063,6 +8059,13 @@ msgstr ""
 "Cette page résume les listes d'adresses électroniques des utilisateurs, "
 "réparties en fonction des préférences qu'ils ont exprimées en ce qui "
 "concerne les bulletins d'information."
+
+msgid ""
+"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
+"text, 'p' for long text, 'e' for editor)"
+msgstr ""
+"typ (type : 's' pour choix unique, 'm' pour choix multiple, 't' pour texte "
+"court, 'p' pour texte long, 'e' pour éditeur)"
 
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "

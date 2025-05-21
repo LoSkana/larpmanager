@@ -2141,6 +2141,9 @@ msgstr "Sprachliche Veranstaltungen"
 msgid "Executive Vote"
 msgstr "Abstimmung der Verwaltung"
 
+msgid "Form questions"
+msgstr "Fragen zum Formular"
+
 msgid "Full returning"
 msgstr "Gesamtrendite"
 
@@ -2528,9 +2531,6 @@ msgstr "Erinnerungsprofil"
 msgid "Request approved"
 msgstr "Antrag genehmigt"
 
-msgid "Rich text editor"
-msgstr "Rich-Text-Editor"
-
 msgid "Selected options"
 msgstr "Ausgewählte Optionen"
 
@@ -2780,6 +2780,9 @@ msgstr "Elemente geladen!"
 msgid "Feature activated:"
 msgstr "Funktion aktiviert:"
 
+msgid "Go to the form for"
+msgstr "Weiter zum Formular für"
+
 msgid "Hide not available"
 msgstr "Ausblenden nicht verfügbar"
 
@@ -2869,9 +2872,6 @@ msgstr "Zugewiesenes Zeichen!"
 
 msgid "Change registration"
 msgstr "Eintrag bearbeiten"
-
-msgid "Character questions"
-msgstr "Fragen zum Charakter"
 
 msgid "Charging the player"
 msgstr "Aufladen des Players"
@@ -2993,6 +2993,9 @@ msgstr "--- NICHT ZUGEORDNET ---"
 
 msgid "Accounting - History"
 msgstr "Buchhaltung - Historisch"
+
+msgid "Advanced text editor"
+msgstr "Erweiterter Texteditor"
 
 msgid "Are you really sure?"
 msgstr "Sind Sie wirklich sicher?"
@@ -6799,13 +6802,6 @@ msgstr ""
 "im System gespeichert werden."
 
 msgid ""
-"Describe the core idea or premise of the plot. This text will NOT be shown "
-"to players."
-msgstr ""
-"Beschreiben Sie die Kernidee oder Prämisse der Handlung. Dieser Text wird "
-"den Spielern NICHT gezeigt."
-
-msgid ""
 "If checked, automatically removes formatting when pasting text into the "
 "WYSIWYG editor"
 msgstr ""
@@ -8181,6 +8177,13 @@ msgid ""
 msgstr ""
 "Diese Seite fasst die E-Mail-Listen der Nutzer zusammen, unterteilt nach den"
 " von ihnen geäußerten Präferenzen in Bezug auf Newsletter-Mitteilungen."
+
+msgid ""
+"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
+"text, 'p' for long text, 'e' for editor)"
+msgstr ""
+"typ (Typ: 's' für Einfachauswahl, 'm' für Mehrfachauswahl, 't' für Kurztext,"
+" 'p' für Langtext, 'e' für Editor)"
 
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "

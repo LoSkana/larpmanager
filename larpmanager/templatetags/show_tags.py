@@ -440,3 +440,8 @@ def abs_value(value):
         return abs(value)
     except (TypeError, ValueError):
         return value
+
+
+@register.filter
+def concat(val1, val2):
+    return f"{val1}{val2}"

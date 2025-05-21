@@ -19,11 +19,10 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import traceback
-from abc import abstractmethod
 
 from django import forms
 from django.contrib.postgres.aggregates import ArrayAgg
-from django.db.models import Max, Q
+from django.db.models import Max
 from django.forms import CharField
 from django.utils.translation import gettext_lazy as _
 from tinymce.widgets import TinyMCE
@@ -187,13 +186,8 @@ class BaseWritingForm(BaseRegistrationForm):
 
     def _init_questions(self, event):
         super()._init_questions(event)
-        self.questions = self.questions.filter(
-            Q(applicable__icontains=self.get_applicable()) | Q(applicable__isnull=True) | Q(applicable="")
-        )
-
-    @abstractmethod
-    def get_applicable(self):
-        pass
+        applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)
+        self.questions = self.questions.filter(applicable=applicable)
 
     def get_options_query(self, event):
         query = super().get_options_query(event)
@@ -227,11 +221,6 @@ class PlotForm(WritingForm, BaseWritingForm):
         super().__init__(*args, **kwargs)
 
         self.init_orga_fields()
-
-        self.fields["teaser"].label = _("Concept")
-        self.fields["teaser"].help_text = _(
-            "Describe the core idea or premise of the plot. This text will NOT be shown to players."
-        )
         self.reorder_field("characters")
 
         # PLOT CHARACTERS REL
@@ -253,11 +242,6 @@ class PlotForm(WritingForm, BaseWritingForm):
                 self.initial[field] = ch[3]
 
                 self.show_link.append("id_" + field)
-
-        # print(self.show_link)
-
-    def get_applicable(self):
-        return QuestionApplicable.PLOT
 
     def get_init_multi_character(self):
         que = PlotCharacterRel.objects.filter(plot__id=self.instance.pk)

@@ -44,7 +44,13 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association
 from larpmanager.models.casting import Trait, update_traits_all
 from larpmanager.models.event import Event, EventButton, EventConfig, EventText, Run
-from larpmanager.models.form import QuestionStatus, QuestionType, QuestionVisibility, WritingQuestion
+from larpmanager.models.form import (
+    QuestionApplicable,
+    QuestionStatus,
+    QuestionType,
+    QuestionVisibility,
+    WritingQuestion,
+)
 from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTutorial
 from larpmanager.models.member import Member, Membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
@@ -287,7 +293,6 @@ def save_event_character_form(features, instance):
     if "character_form" not in features:
         return
 
-    types = set(WritingQuestion.objects.filter(event=instance).values_list("typ", flat=True).distinct())
     # get most common language between organizers
     langs = {}
     for orga in get_event_organizers(instance):
@@ -301,9 +306,13 @@ def save_event_character_form(features, instance):
     else:
         max_lang = "en"
     activate(max_lang)
-    # evaluate each question type field
-    choices = dict(QuestionType.choices)
-    all_types = choices.keys()
+
+    def_tps = {
+        QuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 100),
+        QuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000),
+        QuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 5000),
+    }
+
     custom_tps = {
         QuestionType.SINGLE,
         QuestionType.MULTIPLE,
@@ -311,17 +320,54 @@ def save_event_character_form(features, instance):
         QuestionType.PARAGRAPH,
         QuestionType.EDITOR,
     }
-    all_types -= custom_tps
-    def_tps = {
-        QuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 100),
-        QuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000),
-        QuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 5000),
-    }
+
+    _init_character_form_questions(custom_tps, def_tps, features, instance)
+    _init_plot_form_questions(def_tps, instance)
+
+
+def _init_plot_form_questions(def_tps, instance):
+    que = WritingQuestion.objects.filter(event=instance, applicable=QuestionApplicable.PLOT)
+    types = set(que.values_list("typ", flat=True).distinct())
+
+    def_tps[QuestionType.TEASER] = ("Concept", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000)
+
+    # add default types if none are present
     if not types:
         for el, add in def_tps.items():
             WritingQuestion.objects.create(
-                event=instance, typ=el, display=_(add[0]), status=add[1], visibility=add[2], max_length=add[3]
+                event=instance,
+                typ=el,
+                display=_(add[0]),
+                status=add[1],
+                visibility=add[2],
+                max_length=add[3],
+                applicable=QuestionApplicable.PLOT,
             )
+
+
+def _init_character_form_questions(custom_tps, def_tps, features, instance):
+    que = WritingQuestion.objects.filter(event=instance, applicable=QuestionApplicable.CHARACTER)
+    types = set(que.values_list("typ", flat=True).distinct())
+
+    # evaluate each question type field
+    choices = dict(QuestionType.choices)
+    all_types = choices.keys()
+    all_types -= custom_tps
+
+    # add default types if none are present
+    if not types:
+        for el, add in def_tps.items():
+            WritingQuestion.objects.create(
+                event=instance,
+                typ=el,
+                display=_(add[0]),
+                status=add[1],
+                visibility=add[2],
+                max_length=add[3],
+                applicable=QuestionApplicable.CHARACTER,
+            )
+
+    # add types from feature if the feature is active but the field is missing
     all_types -= set(def_tps.keys())
     for el in all_types:
         if el in features and el not in types:
@@ -332,6 +378,7 @@ def save_event_character_form(features, instance):
                 status=QuestionStatus.HIDDEN,
                 visibility=QuestionVisibility.PRIVATE,
                 max_length=1000,
+                applicable=QuestionApplicable.CHARACTER,
             )
         if el not in features and el in types:
             WritingQuestion.objects.filter(event=instance, typ=el).delete()

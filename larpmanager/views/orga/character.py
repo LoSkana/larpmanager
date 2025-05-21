@@ -22,11 +22,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import Max, Q
 from django.db.models.functions import Length, Substr
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all
+from larpmanager.cache.writing import remove_html_tags
 from larpmanager.forms.character import (
     OrgaCharacterForm,
     OrgaWritingOptionForm,
@@ -37,6 +38,7 @@ from larpmanager.forms.writing import (
     UploadElementsForm,
 )
 from larpmanager.models.form import (
+    QuestionApplicable,
     QuestionType,
     WritingAnswer,
     WritingChoice,
@@ -71,6 +73,7 @@ from larpmanager.utils.writing import writing_list, writing_versions, writing_vi
 def orga_characters(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_characters")
     get_event_cache_all(ctx)
+    ctx["writing_typ"] = QuestionApplicable.CHARACTER
     ctx["user_character_approval"] = ctx["event"].get_config("user_character_approval", False)
 
     return writing_list(request, ctx, Character, "character")
@@ -156,8 +159,9 @@ def orga_characters_summary(request, s, n, num):
 
 
 @login_required
-def orga_character_form_list(request, s, n):
+def orga_writing_form_list(request, s, n, typ):
     ctx = check_event_permission(request, s, n, "orga_characters")
+    check_writing_form_type(ctx, typ)
     event = ctx["event"]
     if event.parent:
         event = event.parent
@@ -184,10 +188,10 @@ def orga_character_form_list(request, s, n):
 
     elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.EDITOR]:
         que = WritingAnswer.objects.filter(question=q, element_id__in=character_ids)
-        que = que.annotate(short_text=Substr("text", 1, max_length))
+        que = que.annotate(short_text=Substr("text", 1, max_length + 20))
         que = que.values("element_id", "short_text")
         for el in que:
-            answer = el["short_text"]
+            answer = remove_html_tags(el["short_text"])[:max_length]
             if len(answer) == max_length:
                 popup.append(el["element_id"])
             res[el["element_id"]] = answer
@@ -196,8 +200,9 @@ def orga_character_form_list(request, s, n):
 
 
 @login_required
-def orga_character_form_email(request, s, n):
+def orga_writing_form_email(request, s, n, typ):
     ctx = check_event_permission(request, s, n, "orga_characters")
+    check_writing_form_type(ctx, typ)
     event = ctx["event"]
     if event.parent:
         event = event.parent
@@ -239,7 +244,28 @@ def orga_character_form_email(request, s, n):
 
 @login_required
 def orga_character_form(request, s, n):
+    return redirect("orga_writing_form", s=s, n=n, typ="characters")
+
+
+def check_writing_form_type(ctx, typ):
+    typ = typ.lower()
+    orig = {
+        "characters": QuestionApplicable.CHARACTER,
+        "plot": QuestionApplicable.PLOT,
+    }
+    available = {k: v for k, v in orig.items() if k in ctx["features"]}
+    if typ.lower() not in available:
+        raise Http404(f"unknown writing form type: {typ}")
+    ctx["typ"] = typ
+    ctx["writing_typ"] = available[typ]
+    ctx["label_typ"] = typ.capitalize()
+    ctx["available_typ"] = {k.capitalize(): v for k, v in available.items()}
+
+
+@login_required
+def orga_writing_form(request, s, n, typ):
     ctx = check_event_permission(request, s, n, "orga_character_form")
+    check_writing_form_type(ctx, typ)
 
     if request.method == "POST":
         if request.POST.get("download") == "1":
@@ -249,7 +275,10 @@ def orga_character_form(request, s, n):
 
     ctx["form"] = UploadElementsForm()
     ctx["upload"] = (
-        _("typ (type: 's' for single choice, 'm' for multiple choice, 't' for short text, 'p' for long text)") + ", "
+        _(
+            "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short text, 'p' for long text, 'e' for editor)"
+        )
+        + ", "
     )
     ctx["upload"] += _("display (question text)") + ", " + _("description (application description)") + ", "
     ctx["upload"] += (
@@ -268,6 +297,7 @@ def orga_character_form(request, s, n):
     ctx["download"] = 1
 
     ctx["list"] = ctx["event"].get_elements(WritingQuestion).order_by("order").prefetch_related("options")
+    ctx["list"] = ctx["list"].filter(applicable=ctx["writing_typ"])
     for el in ctx["list"]:
         el.options_list = el.options.order_by("order")
 
@@ -277,53 +307,62 @@ def orga_character_form(request, s, n):
 
 
 @login_required
-def orga_character_form_edit(request, s, n, num):
+def orga_writing_form_edit(request, s, n, typ, num):
     perm = "orga_character_form"
     ctx = check_event_permission(request, s, n, perm)
+    check_writing_form_type(ctx, typ)
     if backend_edit(request, ctx, OrgaWritingQuestionForm, num, assoc=False):
         if str(request.POST.get("new_option", "")) == "1":
-            return redirect(orga_character_options_new, s=ctx["event"].slug, n=ctx["run"].number, num=ctx["saved"].id)
-        return redirect(perm, s=ctx["event"].slug, n=ctx["run"].number)
+            return redirect(
+                orga_writing_options_new, s=ctx["event"].slug, n=ctx["run"].number, typ=typ, num=ctx["saved"].id
+            )
+        return redirect("orga_writing_form", s=ctx["event"].slug, n=ctx["run"].number, typ=typ)
 
-    ctx["list"] = WritingOption.objects.filter(question=ctx["el"]).order_by("order")
+    ctx["list"] = WritingOption.objects.filter(question=ctx["el"], question__applicable=ctx["writing_typ"]).order_by(
+        "order"
+    )
 
     return render(request, "larpmanager/orga/characters/form_edit.html", ctx)
 
 
 @login_required
-def orga_character_form_order(request, s, n, num):
+def orga_writing_form_order(request, s, n, typ, num):
     ctx = check_event_permission(request, s, n, "orga_character_form")
+    check_writing_form_type(ctx, typ)
     exchange_order(ctx, WritingQuestion, num)
     return redirect("orga_character_form", s=ctx["event"].slug, n=ctx["run"].number)
 
 
 @login_required
-def orga_character_options_edit(request, s, n, num):
+def orga_writing_options_edit(request, s, n, typ, num):
     ctx = check_event_permission(request, s, n, "orga_character_form")
-    return character_option_edit(ctx, num, request)
+    check_writing_form_type(ctx, typ)
+    return writing_option_edit(ctx, num, request, typ)
 
 
 @login_required
-def orga_character_options_new(request, s, n, num):
+def orga_writing_options_new(request, s, n, typ, num):
     ctx = check_event_permission(request, s, n, "orga_character_form")
+    check_writing_form_type(ctx, typ)
     ctx["question_id"] = num
-    return character_option_edit(ctx, 0, request)
+    return writing_option_edit(ctx, 0, request, typ)
 
 
-def character_option_edit(ctx, num, request):
+def writing_option_edit(ctx, num, request, typ):
     if backend_edit(request, ctx, OrgaWritingOptionForm, num, assoc=False):
         return redirect(
-            "orga_character_form_edit", s=ctx["event"].slug, n=ctx["run"].number, num=ctx["saved"].question_id
+            "orga_writing_form_edit", s=ctx["event"].slug, n=ctx["run"].number, typ=typ, num=ctx["saved"].question_id
         )
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
 @login_required
-def orga_character_options_order(request, s, n, num):
+def orga_writing_options_order(request, s, n, typ, num):
     ctx = check_event_permission(request, s, n, "orga_character_form")
+    check_writing_form_type(ctx, typ)
     exchange_order(ctx, WritingOption, num)
     return redirect(
-        "orga_character_form_edit", s=ctx["event"].slug, n=ctx["run"].number, num=ctx["current"].question_id
+        "orga_writing_form_edit", s=ctx["event"].slug, n=ctx["run"].number, typ=typ, num=ctx["current"].question_id
     )
 
 

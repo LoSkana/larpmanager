@@ -208,7 +208,7 @@ def _get_custom_form(ctx, nm):
 
     if "character_form" in ctx["features"]:
         que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-        que = que.filter(applicable__icontains=mapping[nm])
+        que = que.filter(applicable=mapping[nm])
         ctx["form_questions"] = {}
         for q in que:
             if q.typ in ctx["fields_name"].keys():
@@ -249,6 +249,11 @@ def writing_list_query(ctx, ev, typ):
 
 
 def writing_list_text_fields(ctx, text_fields, typ):
+    # add editor type questions
+    que = WritingQuestion.objects.filter(applicable=QuestionApplicable.get_applicable(typ._meta.model_name))
+    for que_id in que.filter(typ=QuestionType.EDITOR).values_list("pk", flat=True):
+        text_fields.append(str(que_id))
+
     gctf = get_cache_text_field(typ, ctx["event"])
     for el in ctx["list"]:
         if el.number not in gctf:

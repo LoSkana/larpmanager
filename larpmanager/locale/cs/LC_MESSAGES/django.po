@@ -2141,6 +2141,9 @@ msgstr "Jazykové akce"
 msgid "Executive Vote"
 msgstr "Hlasování vedení"
 
+msgid "Form questions"
+msgstr "Formulářové otázky"
+
 msgid "Full returning"
 msgstr "Celková návratnost"
 
@@ -2528,9 +2531,6 @@ msgstr "Připomínkový profil"
 msgid "Request approved"
 msgstr "Žádost schválena"
 
-msgid "Rich text editor"
-msgstr "Textový editor"
-
 msgid "Selected options"
 msgstr "Vybrané možnosti"
 
@@ -2780,6 +2780,9 @@ msgstr "Prvky jsou načteny!"
 msgid "Feature activated:"
 msgstr "Aktivovaná funkce:"
 
+msgid "Go to the form for"
+msgstr "Přejděte na formulář pro"
+
 msgid "Hide not available"
 msgstr "Skrýt není k dispozici"
 
@@ -2869,9 +2872,6 @@ msgstr "Přidělená postava!"
 
 msgid "Change registration"
 msgstr "Upravit položku"
-
-msgid "Character questions"
-msgstr "Otázky týkající se charakteru"
 
 msgid "Charging the player"
 msgstr "Nabíjení přehrávače"
@@ -2993,6 +2993,9 @@ msgstr "--- NEPŘIDĚLENO ---"
 
 msgid "Accounting - History"
 msgstr "Účetnictví - historické"
+
+msgid "Advanced text editor"
+msgstr "Pokročilý textový editor"
 
 msgid "Are you really sure?"
 msgstr "Jste si opravdu jistý?"
@@ -6444,13 +6447,6 @@ msgstr ""
 "systému."
 
 msgid ""
-"Describe the core idea or premise of the plot. This text will NOT be shown "
-"to players."
-msgstr ""
-"Popište hlavní myšlenku nebo předpoklad zápletky. Tento text NEBUDE hráčům "
-"zobrazen."
-
-msgid ""
 "If checked, automatically removes formatting when pasting text into the "
 "WYSIWYG editor"
 msgstr ""
@@ -7795,6 +7791,13 @@ msgid ""
 msgstr ""
 "Tato stránka shrnuje seznamy e-mailových adres uživatelů rozdělených podle "
 "jejich vyjádřených preferencí ohledně zasílání novinek."
+
+msgid ""
+"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
+"text, 'p' for long text, 'e' for editor)"
+msgstr ""
+"typ (typ: \"s\" pro jednu volbu, \"m\" pro více voleb, \"t\" pro krátký "
+"text, \"p\" pro dlouhý text, \"e\" pro editor)"
 
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "

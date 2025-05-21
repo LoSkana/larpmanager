@@ -2141,6 +2141,9 @@ msgstr "Taalevenementen"
 msgid "Executive Vote"
 msgstr "Stemming management"
 
+msgid "Form questions"
+msgstr "Formulier vragen"
+
 msgid "Full returning"
 msgstr "Totaal rendement"
 
@@ -2528,9 +2531,6 @@ msgstr "Herinnering profiel"
 msgid "Request approved"
 msgstr "Verzoek goedgekeurd"
 
-msgid "Rich text editor"
-msgstr "Tekstverwerker"
-
 msgid "Selected options"
 msgstr "Geselecteerde opties"
 
@@ -2780,6 +2780,9 @@ msgstr "Elementen geladen!"
 msgid "Feature activated:"
 msgstr "Functie geactiveerd:"
 
+msgid "Go to the form for"
+msgstr "Ga naar het formulier voor"
+
 msgid "Hide not available"
 msgstr "Verberg niet beschikbaar"
 
@@ -2869,9 +2872,6 @@ msgstr "Karakter toegewezen!"
 
 msgid "Change registration"
 msgstr "Bericht bewerken"
-
-msgid "Character questions"
-msgstr "Karakter vragen"
 
 msgid "Charging the player"
 msgstr "De speler opladen"
@@ -2993,6 +2993,9 @@ msgstr "--- NIET TOEGEWEZEN ---"
 
 msgid "Accounting - History"
 msgstr "Boekhouding - Historisch"
+
+msgid "Advanced text editor"
+msgstr "Geavanceerde teksteditor"
 
 msgid "Are you really sure?"
 msgstr "Weet je het echt zeker?"
@@ -6664,13 +6667,6 @@ msgstr ""
 " opgeslagen in het systeem."
 
 msgid ""
-"Describe the core idea or premise of the plot. This text will NOT be shown "
-"to players."
-msgstr ""
-"Beschrijf de kerngedachte of het uitgangspunt van de plot. Deze tekst wordt "
-"NIET aan de spelers getoond."
-
-msgid ""
 "If checked, automatically removes formatting when pasting text into the "
 "WYSIWYG editor"
 msgstr ""
@@ -8037,6 +8033,13 @@ msgstr ""
 "Deze pagina geeft een overzicht van de e-maillijsten van gebruikers, "
 "onderverdeeld naar hun uitgesproken voorkeuren met betrekking tot "
 "nieuwsbriefcommunicatie."
+
+msgid ""
+"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
+"text, 'p' for long text, 'e' for editor)"
+msgstr ""
+"typ (type: \"s\" voor enkele keuze, \"m\" voor meerkeuze, \"t\" voor korte "
+"tekst, \"p\" voor lange tekst, \"e\" voor editor)"
 
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "

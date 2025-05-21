@@ -334,8 +334,9 @@ class BaseRegistrationForm(MyFormRun):
 
         if not orga:
             self.fields[key].disabled = not active
-            if question.max_length:
-                self.max_lengths[f"id_{key}"] = (question.max_length, question.typ)
+
+        if question.max_length:
+            self.max_lengths[f"id_{key}"] = (question.max_length, question.typ)
 
         if question.status == QuestionStatus.MANDATORY:
             self.fields[key].label += " (*)"

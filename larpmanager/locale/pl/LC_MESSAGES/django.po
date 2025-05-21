@@ -2141,6 +2141,9 @@ msgstr "Język wydarzeń"
 msgid "Executive Vote"
 msgstr "Głosowanie wykonawcze"
 
+msgid "Form questions"
+msgstr "Pytania dotyczące formularza"
+
 msgid "Full returning"
 msgstr "Pełny powrót"
 
@@ -2528,9 +2531,6 @@ msgstr "Profil przypomnienia"
 msgid "Request approved"
 msgstr "Wniosek zatwierdzony"
 
-msgid "Rich text editor"
-msgstr "Edytor tekstu sformatowanego"
-
 msgid "Selected options"
 msgstr "Wybrane opcje"
 
@@ -2780,6 +2780,9 @@ msgstr "Elementy przesłane!"
 msgid "Feature activated:"
 msgstr "Funkcja aktywowana:"
 
+msgid "Go to the form for"
+msgstr "Przejdź do formularza dla"
+
 msgid "Hide not available"
 msgstr "Ukryj niedostępne"
 
@@ -2869,9 +2872,6 @@ msgstr "Przydzielona postać!"
 
 msgid "Change registration"
 msgstr "Zmiana rejestracji"
-
-msgid "Character questions"
-msgstr "Pytania dotyczące postaci"
 
 msgid "Charging the player"
 msgstr "Ładowanie odtwarzacza"
@@ -2993,6 +2993,9 @@ msgstr "--- NIE PRZYPISANO ---"
 
 msgid "Accounting - History"
 msgstr "Rachunkowość - historia"
+
+msgid "Advanced text editor"
+msgstr "Zaawansowany edytor tekstu"
 
 msgid "Are you really sure?"
 msgstr "Naprawdę jesteś pewien?"
@@ -6539,13 +6542,6 @@ msgstr ""
 "przechowywane w systemie."
 
 msgid ""
-"Describe the core idea or premise of the plot. This text will NOT be shown "
-"to players."
-msgstr ""
-"Opisz główną ideę lub założenie fabuły. Ten tekst NIE będzie pokazywany "
-"graczom."
-
-msgid ""
 "If checked, automatically removes formatting when pasting text into the "
 "WYSIWYG editor"
 msgstr ""
@@ -7905,6 +7901,13 @@ msgid ""
 msgstr ""
 "Na tej stronie wyświetlane są listy e-mail użytkowników, podzielone według "
 "wyrażonych przez nich preferencji dotyczących otrzymywania newslettera."
+
+msgid ""
+"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
+"text, 'p' for long text, 'e' for editor)"
+msgstr ""
+"typ (typ: \"s\" dla pojedynczego wyboru, \"m\" dla wielokrotnego wyboru, "
+"\"t\" dla krótkiego tekstu, \"p\" dla długiego tekstu, \"e\" dla edytora)"
 
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "

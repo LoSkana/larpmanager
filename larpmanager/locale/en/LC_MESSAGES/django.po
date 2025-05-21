@@ -1448,14 +1448,6 @@ msgstr ""
 msgid "Plot"
 msgstr ""
 
-msgid "Concept"
-msgstr ""
-
-msgid ""
-"Describe the core idea or premise of the plot. This text will NOT be shown "
-"to players."
-msgstr ""
-
 #, python-brace-format
 msgid "This text will be added to the sheet of {name}"
 msgstr ""
@@ -2533,7 +2525,7 @@ msgstr ""
 msgid "Multi-line text"
 msgstr ""
 
-msgid "Rich text editor"
+msgid "Advanced text editor"
 msgstr ""
 
 msgid "Presentation"
@@ -5886,10 +5878,13 @@ msgstr ""
 msgid "Email list"
 msgstr ""
 
-msgid "Character questions"
+msgid "Form questions"
 msgstr ""
 
 msgid "This page summarises the available questions of the character form."
+msgstr ""
+
+msgid "Go to the form for"
 msgstr ""
 
 msgid "Modifiable"
@@ -6519,6 +6514,9 @@ msgid "External"
 msgstr ""
 
 msgid "This page shows the event plots."
+msgstr ""
+
+msgid "Concept"
 msgstr ""
 
 msgid "Progress step"
@@ -7654,7 +7652,7 @@ msgstr ""
 
 msgid ""
 "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
-"text, 'p' for long text)"
+"text, 'p' for long text, 'e' for editor)"
 msgstr ""
 
 msgid "display (question text)"
@@ -7688,6 +7686,11 @@ msgid "Can't copy from same event"
 msgstr ""
 
 msgid "Copy done"
+msgstr ""
+
+msgid ""
+"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
+"text, 'p' for long text)"
 msgstr ""
 
 msgid ""

@@ -26,6 +26,7 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from larpmanager.models.event import RunText
+from larpmanager.models.form import QuestionApplicable, QuestionType, WritingAnswer, WritingQuestion
 from larpmanager.models.writing import Character, Writing
 
 
@@ -57,17 +58,26 @@ def get_single_cache_text_field(el, f, v):
 def init_cache_text_field(typ, event):
     res = {}
     for el in typ.objects.filter(event=event.get_class_parent(typ)):
-        update_element_cache_text_field(el, res)
+        update_element_cache_text_field(typ, el, res)
     return res
 
 
-def update_element_cache_text_field(el, res):
+def update_element_cache_text_field(typ, el, res):
     if el.number not in res:
         res[el.number] = {}
 
     for f in ["teaser", "text", "preview"]:
         v = getattr(el, f)
         res[el.number][f] = get_single_cache_text_field(el, f, v)
+
+    que = WritingQuestion.objects.filter(applicable=QuestionApplicable.get_applicable(typ._meta.model_name))
+    for que_id in que.filter(typ=QuestionType.EDITOR).values_list("pk", flat=True):
+        try:
+            v = WritingAnswer.objects.get(question_id=que_id, element_id=el.id).text
+            field = str(que_id)
+            res[el.number][field] = get_single_cache_text_field(el, field, v)
+        except ObjectDoesNotExist:
+            pass
 
 
 def get_cache_text_field(typ, event, el=None):
@@ -77,7 +87,7 @@ def get_cache_text_field(typ, event, el=None):
         res = init_cache_text_field(typ, event)
         cache.set(key, res)
     if el:
-        update_element_cache_text_field(el, res)
+        update_element_cache_text_field(typ, el, res)
         cache.set(key, res)
     return res
 

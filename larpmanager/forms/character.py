@@ -40,6 +40,7 @@ from larpmanager.models.experience import AbilityPx, DeliveryPx
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionType,
+    QuestionVisibility,
     WritingOption,
     WritingQuestion,
 )
@@ -99,9 +100,6 @@ class CharacterForm(WritingForm, BaseWritingForm):
         self.details = {}
 
         self._init_character()
-
-    def get_applicable(self):
-        return QuestionApplicable.CHARACTER
 
     def check_editable(self, question):
         if not self.params["event"].get_config("user_character_approval", False):
@@ -511,21 +509,35 @@ class OrgaWritingQuestionForm(MyForm):
 
         self._init_type()
 
-        if "user_character" not in self.params["features"]:
+        if (
+            "user_character" not in self.params["features"]
+            or self.params["writing_typ"] != QuestionApplicable.CHARACTER
+        ):
             self.delete_field("status")
 
-        if "print_pdf" not in self.params["features"]:
+        if "print_pdf" not in self.params["features"] or self.params["writing_typ"] == QuestionApplicable.PLOT:
             self.delete_field("printable")
 
         self._init_editable()
 
         self._init_applicable()
 
+        # remove visibility from plot
+        if self.params["writing_typ"] == QuestionApplicable.PLOT:
+            self.delete_field("visibility")
+        # set only private and public visibility if different from character
+        elif self.params["writing_typ"] != QuestionApplicable.CHARACTER:
+            self.fields["visibility"].choices = [
+                (choice.value, choice.label) for choice in QuestionVisibility if choice != QuestionVisibility.SEARCHABLE
+            ]
+            help_text = self.fields["visibility"].help_text
+            updated_help_text = ".".join(help_text.split(".", 1)[1:]).lstrip()
+            self.fields["visibility"].help_text = updated_help_text
+
     def _init_type(self):
         # Add type of character question to the available types
-        already = list(
-            WritingQuestion.objects.filter(event=self.params["event"]).values_list("typ", flat=True).distinct()
-        )
+        que = WritingQuestion.objects.filter(event=self.params["event"], applicable=self.params["writing_typ"])
+        already = list(que.values_list("typ", flat=True).distinct())
         if self.instance.pk and self.instance.typ:
             already.remove(self.instance.typ)
 
@@ -536,7 +548,7 @@ class OrgaWritingQuestionForm(MyForm):
                 QuestionType.PARAGRAPH,
                 QuestionType.EDITOR,
             }
-            def_type = self.instance.typ in {QuestionType.NAME}
+            def_type = self.instance.typ in {QuestionType.NAME, QuestionType.TEASER, QuestionType.TEXT}
             type_feature = self.instance.typ in self.params["features"]
             self.prevent_canc = not basic_type and def_type or type_feature
         choices = []
@@ -565,36 +577,15 @@ class OrgaWritingQuestionForm(MyForm):
                 self.initial["editable"] = self.instance.get_editable()
 
     def _init_applicable(self):
-        # check if set applicable (avoid for standard ones)
-        typ_def = ["name", "teaser", "text"]
-        if self.instance.pk and self.instance.typ in typ_def:
+        if self.instance.pk:
             del self.fields["applicable"]
-        else:
-            all_choices = {"characters": QuestionApplicable.CHARACTER, "plot": QuestionApplicable.PLOT}
-            choices = []
-            for feature, choice in all_choices.items():
-                if feature not in self.params["features"]:
-                    continue
-                choices.append((choice.value, choice.label))
+            return
 
-            if len(choices) > 1:
-                self.fields["applicable"] = forms.MultipleChoiceField(
-                    choices=choices,
-                    widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
-                    required=False,
-                )
-                if self.instance and self.instance.pk:
-                    self.initial["applicable"] = self.instance.get_applicable()
-                else:
-                    self.initial["applicable"] = QuestionApplicable.CHARACTER
-            else:
-                del self.fields["applicable"]
+        self.fields["applicable"].widget = forms.HiddenInput()
+        self.initial["applicable"] = self.params["writing_typ"]
 
     def clean_editable(self):
         return ",".join(self.cleaned_data["editable"])
-
-    def clean_applicable(self):
-        return ",".join(self.cleaned_data["applicable"])
 
 
 class OrgaWritingOptionForm(MyForm):

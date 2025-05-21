@@ -2141,6 +2141,9 @@ msgstr "Idioma del evento"
 msgid "Executive Vote"
 msgstr "Voto ejecutivo"
 
+msgid "Form questions"
+msgstr "Preguntas de formulario"
+
 msgid "Full returning"
 msgstr "Rentabilidad total"
 
@@ -2528,9 +2531,6 @@ msgstr "Perfil recordatorio"
 msgid "Request approved"
 msgstr "Solicitud aprobada"
 
-msgid "Rich text editor"
-msgstr "Editor de texto enriquecido"
-
 msgid "Selected options"
 msgstr "Opciones seleccionadas"
 
@@ -2780,6 +2780,9 @@ msgstr "¡Elementos subidos!"
 msgid "Feature activated:"
 msgstr "Función activada:"
 
+msgid "Go to the form for"
+msgstr "Ir al formulario de"
+
 msgid "Hide not available"
 msgstr "Ocultar no disponible"
 
@@ -2869,9 +2872,6 @@ msgstr "¡Personaje asignado!"
 
 msgid "Change registration"
 msgstr "Editar inscripción"
-
-msgid "Character questions"
-msgstr "Cuestiones de carácter"
 
 msgid "Charging the player"
 msgstr "Cargar el jucador"
@@ -2993,6 +2993,9 @@ msgstr "--- NO ASIGNADO ---"
 
 msgid "Accounting - History"
 msgstr "Contabilidad - Histórico"
+
+msgid "Advanced text editor"
+msgstr "Editor de texto avanzado"
 
 msgid "Are you really sure?"
 msgstr "¿Estás seguro?"
@@ -6579,13 +6582,6 @@ msgstr ""
 "almacenan en el sistema."
 
 msgid ""
-"Describe the core idea or premise of the plot. This text will NOT be shown "
-"to players."
-msgstr ""
-"Describa la idea central o premisa de la trama. Este texto NO se mostrará a "
-"los jugadores."
-
-msgid ""
 "If checked, automatically removes formatting when pasting text into the "
 "WYSIWYG editor"
 msgstr ""
@@ -7948,6 +7944,13 @@ msgid ""
 msgstr ""
 "Esta página muestra las listas de correo electrónico de los usuarios, "
 "divididas según sus preferencias de recepción de boletines de noticias."
+
+msgid ""
+"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
+"text, 'p' for long text, 'e' for editor)"
+msgstr ""
+"typ (tipo: \"s\" para opción única, \"m\" para opción múltiple, \"t\" para "
+"texto corto, \"p\" para texto largo, \"e\" para editor)"
 
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "
