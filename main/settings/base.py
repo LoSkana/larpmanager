@@ -183,7 +183,7 @@ TINYMCE_DEFAULT_CONFIG = {
     'toolbar': 'undo redo | styleselect | bold italic fontsizeselect forecolor backcolor hr | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | restoredraft searchreplace | fullscreen code wordcount | image media emoticons accordion codesample anchor',
     'menubar': 'file edit insert view format table link image tools help',
     'convert_urls': False,
-    'content_style': 'p {margin: 0.2em}',
+    'content_style': 'p {margin: 0.2em} .marker { color: #006ce7 !important; font-weight: bold; }',
     # 'paste_as_text': True,
     'contextmenu': False,
     'license_key': 'gpl',

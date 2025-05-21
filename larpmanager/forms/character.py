@@ -23,7 +23,6 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
-from tinymce.widgets import TinyMCE
 
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.forms.base import MyForm
@@ -32,6 +31,7 @@ from larpmanager.forms.utils import (
     EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
     TicketS2WidgetMulti,
+    WritingTinyMCE,
 )
 from larpmanager.forms.writing import BaseWritingForm, WritingForm
 from larpmanager.models.casting import AssignmentTrait
@@ -55,7 +55,7 @@ class CharacterCocreationForm(forms.Form):
         super().__init__(*args, **kwargs)
         k = "co_creation_answer"
         self.fields[k] = forms.CharField(
-            widget=TinyMCE(attrs={"cols": 80, "rows": 10}),
+            widget=WritingTinyMCE(),
             label="Risposte",
             help_text=_("Freely answer the co-creation questions"),
             required=False,
@@ -88,8 +88,8 @@ class CharacterForm(WritingForm, BaseWritingForm):
         ]
 
         widgets = {
-            "teaser": TinyMCE(attrs={"cols": 80, "rows": 10}),
-            "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
+            "teaser": WritingTinyMCE(),
+            "text": WritingTinyMCE(),
             "player": AssocMemberS2Widget,
             "characters": EventCharacterS2WidgetMulti,
         }
@@ -352,7 +352,7 @@ class OrgaCharacterForm(CharacterForm):
             plot = f"#{pl[1]} {pl[2]}"
             field = f"pl_{pl[0]}"
             self.fields[field] = forms.CharField(
-                widget=TinyMCE(attrs={"cols": 80, "rows": 10}),
+                widget=WritingTinyMCE(),
                 label=plot,
                 help_text=_("This text will be added to the sheet, in the plot paragraph %(name)s") % {"name": plot},
                 required=False,
@@ -446,7 +446,7 @@ class OrgaCharacterForm(CharacterForm):
 
         k = "co_creation_question"
         self.fields[k] = forms.CharField(
-            widget=TinyMCE(attrs={"cols": 80, "rows": 10}),
+            widget=WritingTinyMCE(),
             label=_("Co-creation questions"),
             help_text=_("Questions for the co-creation section, editable only by authors"),
             required=False,
@@ -457,7 +457,7 @@ class OrgaCharacterForm(CharacterForm):
 
         k = "co_creation_answer"
         self.fields[k] = forms.CharField(
-            widget=TinyMCE(attrs={"cols": 80, "rows": 10}),
+            widget=WritingTinyMCE(),
             label=_("Co-creation answers"),
             help_text=_("Answers for the co-creation section, editable by both players and authors"),
             required=False,

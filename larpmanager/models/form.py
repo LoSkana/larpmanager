@@ -86,7 +86,7 @@ class QuestionApplicable(models.TextChoices):
     def get_applicable_inverse(typ):
         # noinspection PyUnresolvedReferences
         model_name = QuestionApplicable(typ).label.lower()
-        return apps.get_model("main", model_name)
+        return apps.get_model("larpmanager", model_name)
 
 
 class WritingQuestion(BaseModel):

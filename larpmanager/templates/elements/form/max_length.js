@@ -13,6 +13,59 @@ function tiny_count(editor, key) {
     $('#' + key + '_tr .count').html(cl);
 }
 
+// Add markers for #XX
+function addMarkers(content) {
+  const container = $('<div>').html(content);
+
+  // Delete all span.marker
+  container.find('span.marker').each(function () {
+    $(this).replaceWith($(this).text());
+  });
+
+  // Create marker only #number
+  container.contents().each(function processNode() {
+    if (this.nodeType === 3) {
+      let text = this.nodeValue;
+      let parent = this.parentNode;
+
+      if (!$(parent).is('span.marker')) {
+        let replaced = text.replace(/#(\d+)(?!\d|\w)/g, '<span class="marker">#$1</span>');
+        if (replaced !== text) {
+          $(this).replaceWith(replaced);
+        }
+      }
+    } else if (this.nodeType === 1 && !$(this).is('span.marker')) {
+      $(this).contents().each(processNode);
+    }
+  });
+
+  return container.html();
+}
+
+function updateEditorWithMarkers(editor) {
+  const rng = editor.selection.getRng();
+  const marker = document.createElement('span');
+  marker.id = 'cursor-marker';
+  marker.appendChild(document.createTextNode('\u200B')); // zero-width space
+  rng.insertNode(marker);
+
+  const content = editor.getContent();
+  const newContent = addMarkers(content);
+
+  editor.setContent(newContent);
+
+  const newMarker = editor.getDoc().getElementById('cursor-marker');
+  if (newMarker) {
+    const range = editor.getDoc().createRange();
+    range.setStartAfter(newMarker);
+    range.collapse(true);
+    const sel = editor.selection.getSel();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    newMarker.remove();
+  }
+}
+
 function update_count(key, limit, typ) {
     var el = $('#' + key);
     if (simple_count.includes(typ)) {
@@ -32,13 +85,12 @@ function update_count(key, limit, typ) {
         const editor = tinymce.get(key);
 
         if (editor) {
-                console.log(editor);
-                        console.log(key);
             // Count characters
               editor.on('input', () => {
                 tiny_count(editor, key);
 
-                const content = editor.getContent({ format: 'text' });
+                var content = editor.getContent({ format: 'text' });
+                content = addMarkers(content);
                   if (content.length > limit) {
                     const truncated = content.substring(0, MAX_CHARS);
                     editor.setContent(truncated);
@@ -55,18 +107,24 @@ function update_count(key, limit, typ) {
                 const allowedKeys = [8, 37, 38, 39, 40, 46];
                 if (cl >= limit && !allowedKeys.includes(e.keyCode)) {
                     e.preventDefault();
+                } else {
+                  updateEditorWithMarkers(editor);
                 }
+
+
             });
 
             // prevent paste to surpass max length
             editor.on('paste', function (e) {
               const clipboard = (e.clipboardData || window.clipboardData).getData('text');
-              const content = editor.getContent({ format: 'text' });
+              var content = editor.getContent({ format: 'text' });
               if ((content.length + clipboard.length) >= limit) {
                 e.preventDefault();
                 const allowed = limit - content.length;
                 if (allowed > 0) {
-                  editor.insertContent(clipboard.substring(0, allowed));
+                  content = clipboard.substring(0, allowed);
+                  content = addMarkers(content);
+                  editor.insertContent(content);
                 }
               }
 

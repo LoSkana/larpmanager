@@ -25,10 +25,9 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import Max
 from django.forms import CharField
 from django.utils.translation import gettext_lazy as _
-from tinymce.widgets import TinyMCE
 
 from larpmanager.forms.base import BaseRegistrationForm, MyForm
-from larpmanager.forms.utils import EventCharacterS2Widget, EventCharacterS2WidgetMulti
+from larpmanager.forms.utils import EventCharacterS2Widget, EventCharacterS2WidgetMulti, WritingTinyMCE
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep, Run
@@ -234,7 +233,7 @@ class PlotForm(WritingForm, BaseWritingForm):
                 char = f"#{ch[1]} {ch[2]}"
                 field = f"ch_{ch[0]}"
                 self.fields[field] = forms.CharField(
-                    widget=TinyMCE(attrs={"cols": 80, "rows": 10}),
+                    widget=WritingTinyMCE(),
                     label=char,
                     help_text=_("This text will be added to the sheet of {name}".format(name=char)),
                     required=False,
@@ -287,8 +286,8 @@ class FactionForm(WritingForm):
 
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
-            "teaser": TinyMCE(attrs={"cols": 80, "rows": 1}),
-            "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
+            "teaser": WritingTinyMCE(),
+            "text": WritingTinyMCE(),
         }
 
     def __init__(self, *args, **kwargs):
@@ -305,8 +304,8 @@ class QuestTypeForm(WritingForm):
         fields = ["progress", "name", "assigned", "teaser", "preview", "props", "event"]
 
         widgets = {
-            "teaser": TinyMCE(attrs={"cols": 80, "rows": 1}),
-            "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
+            "teaser": WritingTinyMCE(),
+            "text": WritingTinyMCE(),
         }
 
 
@@ -330,8 +329,8 @@ class QuestForm(WritingForm):
         ]
 
         widgets = {
-            "teaser": TinyMCE(attrs={"cols": 80, "rows": 1}),
-            "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
+            "teaser": WritingTinyMCE(),
+            "text": WritingTinyMCE(),
         }
 
     def __init__(self, *args, **kwargs):
@@ -395,8 +394,8 @@ class TraitForm(WritingForm):
         ]
 
         widgets = {
-            "teaser": TinyMCE(attrs={"cols": 80, "rows": 1}),
-            "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
+            "teaser": WritingTinyMCE(),
+            "text": WritingTinyMCE(),
         }
 
     def __init__(self, *args, **kwargs):
@@ -414,7 +413,7 @@ class HandoutForm(WritingForm):
         fields = ["progress", "template", "name", "assigned", "text", "event"]
 
         widgets = {
-            "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
+            "text": WritingTinyMCE(),
         }
 
     def __init__(self, *args, **kwargs):
@@ -451,7 +450,7 @@ class PrologueForm(WritingForm):
 
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
-            "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
+            "text": WritingTinyMCE(),
         }
 
     def __init__(self, *args, **kwargs):
@@ -471,7 +470,7 @@ class SpeedLarpForm(WritingForm):
 
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
-            "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
+            "text": WritingTinyMCE(),
         }
 
     def __init__(self, *args, **kwargs):

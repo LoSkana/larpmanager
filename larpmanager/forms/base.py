@@ -26,9 +26,8 @@ from django.core.files.storage import default_storage
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
-from tinymce.widgets import TinyMCE
 
-from larpmanager.forms.utils import css_delimeter
+from larpmanager.forms.utils import WritingTinyMCE, css_delimeter
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
@@ -376,7 +375,7 @@ class BaseRegistrationForm(MyFormRun):
         self.fields[key] = forms.CharField(
             required=required,
             max_length=question.max_length if question.max_length else 100000,
-            widget=TinyMCE(attrs={"style": "min-height: 300px;"}, mce_attrs={"height": 300}),
+            widget=WritingTinyMCE(),
             label=question.display,
             help_text=question.description,
         )
