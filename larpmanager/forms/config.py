@@ -129,6 +129,7 @@ class ConfigForm(MyForm):
 
     def _get_all_element_configs(self):
         res = {}
-        for config in self.instance.configs.all():
-            res[config.name] = config.value
+        if self.instance.pk:
+            for config in self.instance.configs.all():
+                res[config.name] = config.value
         return res
