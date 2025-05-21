@@ -31,7 +31,7 @@
             {% define "" as old_section %}
         {% endif %}
     {% endif %}
-    <tr>
+    <tr id="{{ field.id_for_label }}_tr">
         <th>
             <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
         </th>
@@ -52,13 +52,13 @@
             {% endif %}
             {% if field.auto_id in form.max_lengths %}
                 {% get_field form.max_lengths field.auto_id as args %}
-                {% if args.1 == "t" or args.1 == "p" %}
-                    <div class="helptext">
-                        {% trans "characters" %}: <span class="count"></span> / {{ args.0 }}
-                    </div>
-                {% elif args.1 == "m" %}
+                {% if args.1 == "m" %}
                     <div class="helptext">
                         {% trans "options" %}: <span class="count"></span> / {{ args.0 }}
+                    </div>
+                {% else %}
+                    <div class="helptext">
+                        {% trans "characters" %}: <span class="count"></span> / {{ args.0 }}
                     </div>
                 {% endif %}
             {% endif %}

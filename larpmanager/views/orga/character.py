@@ -27,7 +27,7 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all
-from larpmanager.cache.writing import remove_html_tags
+from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.forms.character import (
     OrgaCharacterForm,
     OrgaWritingOptionForm,
@@ -73,7 +73,6 @@ from larpmanager.utils.writing import writing_list, writing_versions, writing_vi
 def orga_characters(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_characters")
     get_event_cache_all(ctx)
-    ctx["writing_typ"] = QuestionApplicable.CHARACTER
     ctx["user_character_approval"] = ctx["event"].get_config("user_character_approval", False)
 
     return writing_list(request, ctx, Character, "character")
@@ -244,17 +243,13 @@ def orga_writing_form_email(request, s, n, typ):
 
 @login_required
 def orga_character_form(request, s, n):
-    return redirect("orga_writing_form", s=s, n=n, typ="characters")
+    return redirect("orga_writing_form", s=s, n=n, typ="character")
 
 
 def check_writing_form_type(ctx, typ):
     typ = typ.lower()
-    orig = {
-        "characters": QuestionApplicable.CHARACTER,
-        "plot": QuestionApplicable.PLOT,
-    }
-    available = {k: v for k, v in orig.items() if k in ctx["features"]}
-    if typ.lower() not in available:
+    available = {v: k for k, v in QuestionApplicable.choices if v in ctx["features"]}
+    if typ not in available:
         raise Http404(f"unknown writing form type: {typ}")
     ctx["typ"] = typ
     ctx["writing_typ"] = available[typ]
@@ -330,7 +325,7 @@ def orga_writing_form_order(request, s, n, typ, num):
     ctx = check_event_permission(request, s, n, "orga_character_form")
     check_writing_form_type(ctx, typ)
     exchange_order(ctx, WritingQuestion, num)
-    return redirect("orga_character_form", s=ctx["event"].slug, n=ctx["run"].number)
+    return redirect("orga_writing_form", s=ctx["event"].slug, typ=typ, n=ctx["run"].number)
 
 
 @login_required

@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.apps import apps
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models
 from django.db.models import F
@@ -71,17 +72,21 @@ class QuestionVisibility(models.TextChoices):
 
 
 class QuestionApplicable(models.TextChoices):
-    CHARACTER = "c", _("Character")
-    PLOT = "p", _("Plot")
+    CHARACTER = "c", "character"
+    PLOT = "p", "plot"
+
+    @classmethod
+    def get_applicable(cls, model_name):
+        for value, label in cls.choices:
+            if model_name.lower() == label.lower():
+                return value
+        return None
 
     @staticmethod
-    def get_applicable(model_name):
-        if model_name == "character":
-            return QuestionApplicable.CHARACTER
-        elif model_name == "plot":
-            return QuestionApplicable.PLOT
-        else:
-            return None
+    def get_applicable_inverse(typ):
+        # noinspection PyUnresolvedReferences
+        model_name = QuestionApplicable(typ).label.lower()
+        return apps.get_model("main", model_name)
 
 
 class WritingQuestion(BaseModel):
@@ -262,7 +267,7 @@ class WritingChoice(BaseModel):
 class WritingAnswer(BaseModel):
     question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="answers")
 
-    text = models.TextField(max_length=5000)
+    text = models.TextField(max_length=100000)
 
     element_id = models.IntegerField(blank=True, null=True)
 

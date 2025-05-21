@@ -247,6 +247,7 @@ def pre_save_event_prepare_campaign(sender, instance, **kwargs):
 @receiver(post_save, sender=Event)
 def post_save_event_campaign(sender, instance, **kwargs):
     if instance.parent_id:
+        # noinspection PyProtectedMember
         if instance._old_parent_id != instance.parent_id:
             # copy config, texts, roles
             copy_class(instance.pk, instance.parent_id, EventConfig)

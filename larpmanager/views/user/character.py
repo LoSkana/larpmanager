@@ -74,13 +74,13 @@ from larpmanager.utils.edit import user_edit
 from larpmanager.utils.event import get_event_run
 from larpmanager.utils.experience import get_available_ability_px
 from larpmanager.utils.registration import (
-    _check_assign_character,
+    check_assign_character,
     check_character_maximum,
     get_player_characters,
     registration_find,
 )
 from larpmanager.utils.writing import char_add_addit
-from larpmanager.views.user.casting import _casting_details, get_casting_preferences
+from larpmanager.views.user.casting import casting_details, get_casting_preferences
 from larpmanager.views.user.registration import init_form_submitted
 
 
@@ -105,7 +105,7 @@ def character(request, s, n, num):
     else:
         get_character_fields(ctx, only_visible=True)
 
-    _casting_details(ctx, 0)
+    casting_details(ctx, 0)
     if ctx["casting_show_pref"] and not ctx["char"]["player_id"]:
         ctx["pref"] = get_casting_preferences(ctx["char"]["id"], ctx, 0)
 
@@ -172,7 +172,7 @@ def character_form(request, ctx, s, n, instance, form_class):
             if mes:
                 messages.success(request, mes)
 
-            _check_assign_character(request, ctx)
+            check_assign_character(request, ctx)
 
             number = None
             if isinstance(element, Character):

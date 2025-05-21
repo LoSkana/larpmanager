@@ -394,7 +394,7 @@ def check_signup(request, ctx):
         raise WaitingError(ctx["event"].slug, ctx["run"].number)
 
 
-def _check_assign_character(request, ctx):
+def check_assign_character(request, ctx):
     # if the player has a single character, then assign it to their signup
     reg = get_player_signup(request, ctx)
     if not reg:

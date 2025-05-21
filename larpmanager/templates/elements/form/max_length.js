@@ -30,7 +30,10 @@ function update_count(key, limit, typ) {
         el.parent().find(".count").html(checkedCount);
     } else {
         const editor = tinymce.get(key);
+
         if (editor) {
+                console.log(editor);
+                        console.log(key);
             // Count characters
               editor.on('input', () => {
                 tiny_count(editor, key);

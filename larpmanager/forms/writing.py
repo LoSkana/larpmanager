@@ -186,6 +186,7 @@ class BaseWritingForm(BaseRegistrationForm):
 
     def _init_questions(self, event):
         super()._init_questions(event)
+        # noinspection PyProtectedMember
         applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)
         self.questions = self.questions.filter(applicable=applicable)
 

@@ -241,7 +241,7 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("gallery_hide_signup", ConfigType.BOOL, section, label, help_text)
 
-        if "characters" in self.params["features"]:
+        if "character" in self.params["features"]:
             label = _("Hide unassigned characters")
             help_text = _("If checked, does not show characters in the gallery who have not been assigned a player")
             self.add_configs("gallery_hide_uncasted_characters", ConfigType.BOOL, section, label, help_text)
@@ -310,7 +310,7 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("cover_orig", ConfigType.BOOL, section, label, help_text)
 
     def set_config_character(self):
-        if "characters" in self.params["features"]:
+        if "character" in self.params["features"]:
             section = _("Writing")
 
             label = _("Replacing names")
@@ -704,7 +704,7 @@ class OrgaRunForm(ConfigForm):
     def set_configs(self):
         ls = []
 
-        if "characters" not in self.params["features"]:
+        if "character" not in self.params["features"]:
             return ls
 
         shows = [

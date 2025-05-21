@@ -82,8 +82,12 @@
             {% trans "Registration questions" %}:
             <div class="nav">
                 {% for key, que in reg_questions.items %}
-                    <a href="#" class="load_que lq_{{ key }}"  key="{{ key }}">{{ que.display | truncatechars:50 }}</a>
-                    <a href="#" class="my_toggle hide" tog='q_{{ key }}'>hidden</a>
+                    {% if que.typ == 'e' %}
+                        <a href="#" class="my_toggle" tog='q_{{ key }}'>{{ que.display | truncatechars:50 }}</a>
+                    {% else %}
+                        <a href="#" class="load_que lq_{{ key }}"  key="{{ key }}">{{ que.display | truncatechars:50 }}</a>
+                        <a href="#" class="my_toggle hide" tog='q_{{ key }}'>hidden</a>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
@@ -169,7 +173,6 @@
                     {% if features.info %}
                         <th class="hide info">{% trans "Info" %}</th>
                     {% endif %}
-                    <!-- <th></th>         -->
                 </tr>
             </thead>
             <tbody>
@@ -251,10 +254,19 @@
                             {% endfor %}
                         {% endif %}
                         {% for key, que in reg_questions.items %}
-                            <td class="hide question q_{{ key }}">
-                                <span class='has_show_tooltip res_{{ key }}'></span>
-                                <span class='hide show_tooltip'>{{ que.display }}</span></span>
-                            </td>
+                            {% if que.typ == 'e' %}
+                                <td class="hide question q_{{ key }}">
+                                    {% with ed_id=key|concat:'_red' %}
+                                        {% lookup reg ed_id as value %}
+                                        {{ value | safe }}
+                                    {% endwith %}
+                                </td>
+                            {% else %}
+                                <td class="hide question q_{{ key }}">
+                                    <span class="has_show_tooltip res_{{ key }}"></span>
+                                    <span class="hide show_tooltip">{{ que.display }}</span>
+                                </td>
+                            {% endif %}
                         {% endfor %}
                         {% if features.discount %}
                             <td class="hide disc">
@@ -270,52 +282,65 @@
                         <td class="hide date">{{ reg.updated | date:"y/m/d H:i" }}</td>
                         {% if features.pay_what_you_want %}
                             <td class="hide acc">
-                                <span class='has_show_tooltip pay_what'></span><span class='hide show_tooltip'>{% trans "Additional free payment fee" %}</span></span>
+                                <span class="has_show_tooltip pay_what"></span>
+                                <span class="hide show_tooltip">{% trans "Additional free payment fee" %}</span>
                             </td>
                         {% endif %}
                         {% if features.surcharge %}
                             <td class="hide sur">
-                                <span class='has_show_tooltip surcharge'></span><span class='hide show_tooltip'>{% trans "Surcharge applied to the ticket" %}</span></span>
+                                <span class="has_show_tooltip surcharge"></span>
+                                <span class="hide show_tooltip">{% trans "Surcharge applied to the ticket" %}</span>
                             </td>
                         {% endif %}
                         {% if features.reg_quotas or features.reg_installments %}
                             <td class="hide acc">
-                                <span class='has_show_tooltip quota'></span><span class='hide show_tooltip'>{% trans "Amount of the next payment instalment required" %}</span></span>
+                                <span class="has_show_tooltip quota"></span>
+                                <span class="hide show_tooltip">{% trans "Amount of the next payment instalment required" %}</span>
                             </td>
                         {% endif %}
                         <td class="hide acc">
-                            <span class='has_show_tooltip deadline'></span><span class='hide show_tooltip'>{% trans "Number of days within which the player must pay his next installment" %}</span></span>
+                            <span class="has_show_tooltip deadline"></span>
+                            <span class="hide show_tooltip">{% trans "Number of days within which the player must pay his next installment" %}</span>
                         </td>
                         <td class="hide acc">
-                            <span class='has_show_tooltip remaining'></span><span class='hide show_tooltip'>{% trans "Total remaining to be paid" %}</span></span>
+                            <span class="has_show_tooltip remaining"></span>
+                            <span class="hide show_tooltip">{% trans "Total remaining to be paid" %}</span>
                         </td>
                         <td class="hide acc">
-                            <span class='has_show_tooltip tot_payed'></span><span class='hide show_tooltip'>{% trans "Total of what has already been paid at the current date" %}</span></span>
+                            <span class="has_show_tooltip tot_payed"></span>
+                            <span class="hide show_tooltip">{% trans "Total of what has already been paid at the current date" %}</span>
                         </td>
                         <td class="hide acc">
-                            <span class='has_show_tooltip tot_iscr'></span><span class='hide show_tooltip'>{% trans "Sum of the signup fee, total to be paid" %}</span></span>
+                            <span class="has_show_tooltip tot_iscr"></span>
+                            <span class="hide show_tooltip">{% trans "Sum of the signup fee, total to be paid" %}</span>
                         </td>
                         <td class="hide acc">
-                            <span class='has_show_tooltip ticket_price'></span><span class='hide show_tooltip'>{% trans "Part of the registration fee derived only from the ticket chosen" %}</span></span>
+                            <span class="has_show_tooltip ticket_price"></span>
+                            <span class="hide show_tooltip">{% trans "Part of the registration fee derived only from the ticket chosen" %}</span>
                         </td>
                         <td class="hide acc">
-                            <span class='has_show_tooltip options_price'></span><span class='hide show_tooltip'>{% trans "Part of the registration fee derived only from the additional options chosen" %}</span></span>
+                            <span class="has_show_tooltip options_price"></span>
+                            <span class="hide show_tooltip">{% trans "Part of the registration fee derived only from the additional options chosen" %}</span>
                         </td>
                         {% if 'token_credit' in assoc.features %}
                             <td class="hide acc">
-                                <span class='has_show_tooltip pay_a'></span><span class='hide show_tooltip'>{% trans "Sum of payments received with means of payment" %}</span></span>
+                                <span class="has_show_tooltip pay_a"></span>
+                                <span class="hide show_tooltip">{% trans "Sum of payments received with means of payment" %}</span>
                             </td>
                             <td class="hide acc">
-                                <span class='has_show_tooltip pay_b'></span><span class='hide show_tooltip'>{% trans "Sum of payments received through" %} {{ credit_name }}</span></span>
+                                <span class="has_show_tooltip pay_b"></span>
+                                <span class="hide show_tooltip">{% trans "Sum of payments received through" %} {{ credit_name }}</span>
                             </td>
                             <td class="hide acc">
-                                <span class='has_show_tooltip pay_c'></span><span class='hide show_tooltip'>{% trans "Sum of payments received through" %} {{ token_name }}</span></span>
+                                <span class="has_show_tooltip pay_c"></span>
+                                <span class="hide show_tooltip">{% trans "Sum of payments received through" %} {{ token_name }}</span>
                             </td>
                         {% endif %}
                         {% if features.unique_code %}
                             <td class="hide special_cod">
                                 {% if reg.special_cod %}
-                                    <span class='has_show_tooltip special_code'>{{ reg.special_cod }}</span><span class='hide show_tooltip'>{% trans "Unique registration code, used for payment checks" %}</span></span>
+                                    <span class="has_show_tooltip special_code">{{ reg.special_cod }}</span>
+                                    <span class="hide show_tooltip">{% trans "Unique registration code, used for payment checks" %}</span>
                                 {% endif %}
                             </td>
                         {% endif %}
@@ -348,6 +373,7 @@
         {% if features.discount %}
             <a href="#" class="my_toggle" tog='email_disc'>{% trans "Discounts" %}</a>,
         {% endif %}
+    </p>
         <div class="hide email_players">
             <br />
             <h4>{% trans "Players" %}</h4>

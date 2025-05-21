@@ -249,11 +249,13 @@ def writing_edit_save_ajax(form, request, ctx):
     if eid <= 0:
         return res
 
+    # noinspection PyProtectedMember
     typ = form._meta.model
 
     # copy fields and save
     obj = typ.objects.get(pk=eid)
     obj.temp = True
+    # noinspection PyProtectedMember
     for f in typ._meta.get_fields():
         if f.name not in form.cleaned_data:
             continue

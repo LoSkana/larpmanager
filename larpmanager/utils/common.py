@@ -585,11 +585,14 @@ def copy_class(target_id, source_id, cls):
     for obj in cls.objects.filter(event_id=source_id):
         # save a copy of m2m relations
         m2m_data = {}
+
+        # noinspection PyProtectedMember
         for field in obj._meta.many_to_many:
             m2m_data[field.name] = list(getattr(obj, field.name).all())
 
         obj.pk = None
         obj.event_id = target_id
+        # noinspection PyProtectedMember
         obj._state.adding = True
         obj.save()
 

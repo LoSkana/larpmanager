@@ -3365,10 +3365,10 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-msgid "characters"
+msgid "options"
 msgstr ""
 
-msgid "options"
+msgid "characters"
 msgstr ""
 
 msgid "(click on image to enlarge)"

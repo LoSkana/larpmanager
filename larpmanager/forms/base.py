@@ -375,7 +375,7 @@ class BaseRegistrationForm(MyFormRun):
     def init_editor(self, key, question, required):
         self.fields[key] = forms.CharField(
             required=required,
-            max_length=question.max_length if question.max_length else 5000,
+            max_length=question.max_length if question.max_length else 100000,
             widget=TinyMCE(attrs={"style": "min-height: 300px;"}, mce_attrs={"height": 300}),
             label=question.display,
             help_text=question.description,
