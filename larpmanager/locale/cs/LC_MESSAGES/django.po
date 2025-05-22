@@ -2020,9 +2020,6 @@ msgstr "Editor hráčů"
 msgid "Prerequisites"
 msgstr "Předpoklady"
 
-msgid "Presentations"
-msgstr "Prezentace"
-
 msgid "Progress step"
 msgstr "Krok vpřed"
 
@@ -4266,6 +4263,9 @@ msgstr "Vyplňte vztahy své postavy!"
 msgid "Freely answer the co-creation questions"
 msgstr "Volně odpovídejte na otázky týkající se spoluvytváření"
 
+msgid "If checked, makes visible the speedlarp"
+msgstr "Pokud je zaškrtnuto, zviditelní speedlarp"
+
 #, python-format
 msgid "Membership fee of %(user)s for %(year)s"
 msgstr "Podíl %(user)s na %(year)s"
@@ -4793,6 +4793,9 @@ msgstr "Zde je několik užitečných odkazů, které vám pomohou začít:"
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Několikrát jsem to dělal, mám základní zkušenosti."
 
+msgid "If checked, makes characters visible to all players"
+msgstr "Pokud je zaškrtnuto, postavy jsou viditelné pro všechny hráče"
+
 msgid "If you wish, you can delete past pre-registrations."
 msgstr "Pokud chcete, můžete předchozí předběžné registrace smazat."
 
@@ -5077,6 +5080,9 @@ msgstr "Umožňuje vytvořit a spravovat více běhů události."
 msgid "Automatically saves writing elements to prevent data loss."
 msgstr "Automaticky ukládá prvky zápisu, aby se zabránilo ztrátě dat."
 
+msgid "If checked, makes the field content visible to all players"
+msgstr "Pokud je zaškrtnuto, obsah pole je viditelný pro všechny hráče."
+
 msgid "If checked, makes workshops visible for players to fill in"
 msgstr "Pokud je zaškrtnuto, zviditelní se dílny, které mohou hráči vyplnit."
 
@@ -5206,8 +5212,8 @@ msgstr "Umožňuje hráčům kdykoli zrušit vlastní registraci."
 msgid "Enables customization of all event-related pages' appearance."
 msgstr "Umožňuje přizpůsobit vzhled všech stránek souvisejících s událostí."
 
-msgid "If checked, makes prologues of the assigned character visible"
-msgstr "Pokud je zaškrtnuto, zviditelní prology přiřazené postavy."
+msgid "If checked, makes prologues visible to the assigned character"
+msgstr "Pokud je zaškrtnuto, zviditelní prology pro přiřazenou postavu."
 
 msgid "Order in which the option is shown with respect to the others"
 msgstr "Pořadí, v jakém je možnost v aplikaci uvedena"
@@ -5418,6 +5424,9 @@ msgstr ""
 
 msgid "If checked, PG names will be automatically replaced by a reference"
 msgstr "Pokud je zaškrtnuto, názvy PG budou automaticky nahrazeny odkazem."
+
+msgid "If checked, makes the field content visible to the assigned player"
+msgstr "Pokud je zaškrtnuto, obsah pole je viditelný pro přiřazeného hráče."
 
 msgid "Indicates whether the option can be included in the gifted signups"
 msgstr "Označuje, zda lze možnost zahrnout do volných položek"
@@ -5843,10 +5852,6 @@ msgstr ""
 "Na jakou dobu budete potřebovat dopravu (časové pásmo místa konání akce)"
 
 msgid ""
-"If checked, makes factions visible, as th character assignments to factions"
-msgstr "Pokud je zaškrtnuto, zviditelní frakce a přiřazení postav k frakcím."
-
-msgid ""
 "Indicates the title of the character - it will be shown along with the name"
 msgstr "Uveďte název postavy - zobrazí se společně se jménem."
 
@@ -5881,6 +5886,11 @@ msgid ""
 msgstr ""
 "Vyplňte formulář a klikněte na tlačítko potvrdit, čímž se dostanete k "
 "dalšímu kroku!"
+
+msgid ""
+"If checked, makes factions visible, as the character assignments to factions"
+msgstr ""
+"Pokud je zaškrtnuto, zviditelní frakce, protože přiřazení postavy k frakcím"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
@@ -6010,13 +6020,6 @@ msgid ""
 msgstr ""
 "Odpovězte na následující otázky. Vyberte *všechny* odpovědi, které se vám "
 "zdají správné."
-
-msgid ""
-"If checked, make the presentations (public information) visible to all "
-"players"
-msgstr ""
-"Pokud je zaškrtnuto, budou prezentace (veřejné informace) viditelné pro "
-"všechny hráče."
 
 msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
@@ -6347,13 +6350,6 @@ msgid ""
 msgstr ""
 "Typ souboru '%(detected_type)s' není povolen.Povolené typy jsou: "
 "'%(allowed_types)s'."
-
-msgid ""
-"If checked, makes visible the speedlarp in which the character participates "
-"assigned"
-msgstr ""
-"Pokud je zaškrtnuto, zviditelní speedlarp, kterého se účastní přiřazená "
-"postava."
 
 msgid ""
 "If checked: Does not send communication to the player when the character is "
@@ -7258,20 +7254,6 @@ msgid ""
 msgstr ""
 "Umožňuje nastavení ve stylu \"kampaně\", kdy více událostí sdílí stejnou "
 "sadu postav a frakcí."
-
-msgid ""
-"If checked, makes characters visible with basic information such as name, "
-"title, motto to all players"
-msgstr ""
-"Pokud je zaškrtnuto, zviditelní postavy se základními informacemi, jako je "
-"jméno, titul, motto, pro všechny hráče."
-
-msgid ""
-"If checked, makes texts (private information) visible only to the player to "
-"whom the item is assigned"
-msgstr ""
-"Pokud je zaškrtnuto, jsou texty (soukromé informace) viditelné pouze pro "
-"hráče, kterému je položka přiřazena."
 
 msgid ""
 "If checked, the subscribers' gallery will not be displayed to those who are "

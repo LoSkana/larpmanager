@@ -25,6 +25,7 @@ from django.forms import Textarea
 from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.character import get_character_fields
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm
@@ -42,6 +43,7 @@ from larpmanager.forms.utils import (
 )
 from larpmanager.models.access import EventPermission, EventRole
 from larpmanager.models.event import Event, EventButton, EventConfig, EventText, EventTextType, ProgressStep, Run
+from larpmanager.models.form import QuestionType, QuestionVisibility
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.common import copy_class
 
@@ -711,25 +713,24 @@ class OrgaRunForm(ConfigForm):
             (
                 "char",
                 _("Characters"),
-                _(
-                    "If checked, makes characters visible with basic information such as name, title, "
-                    "motto to all players"
-                ),
-            ),
-            (
-                "teaser",
-                _("Presentations"),
-                _("If checked, make the presentations (public information) visible to all players"),
-            ),
-            (
-                "text",
-                _("Texts"),
-                _(
-                    "If checked, makes texts (private information) visible only to the "
-                    "player to whom the item is assigned"
-                ),
-            ),
+                _("If checked, makes characters visible to all players"),
+            )
         ]
+
+        basics = QuestionType.get_basic_types()
+        get_character_fields(self.params, False)
+        for que_id, question in self.params["questions"].items():
+            typ = question["typ"]
+            if typ in basics:
+                typ = f"{que_id}"
+            elif typ not in ["teaser", "text"]:
+                continue
+
+            help_text = _("If checked, makes the field content visible to all players")
+            if question["visibility"] == QuestionVisibility.PRIVATE:
+                help_text = _("If checked, makes the field content visible to the assigned player")
+
+            shows.append((typ, question["display"], help_text))
 
         addit_show = [
             (
@@ -740,17 +741,17 @@ class OrgaRunForm(ConfigForm):
             (
                 "faction",
                 _("Factions"),
-                _("If checked, makes factions visible, as th character assignments to factions"),
+                _("If checked, makes factions visible, as the character assignments to factions"),
             ),
             (
                 "speedlarp",
                 _("Speedlarp"),
-                _("If checked, makes visible the speedlarp in which the character participates assigned"),
+                _("If checked, makes visible the speedlarp"),
             ),
             (
                 "prologue",
                 _("Prologues"),
-                _("If checked, makes prologues of the assigned character visible"),
+                _("If checked, makes prologues visible to the assigned character"),
             ),
             ("questbuilder", _("Questbuilder"), _("If checked, makes quests and traits visible")),
             (

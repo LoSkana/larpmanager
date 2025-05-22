@@ -2020,9 +2020,6 @@ msgstr "Spelarredaktör"
 msgid "Prerequisites"
 msgstr "Förkunskapskrav"
 
-msgid "Presentations"
-msgstr "Presentationer"
-
 msgid "Progress step"
 msgstr "Ta ett steg framåt"
 
@@ -4268,6 +4265,9 @@ msgstr "Fyll i din karaktärs relationer!"
 msgid "Freely answer the co-creation questions"
 msgstr "Svara fritt på frågorna om samskapande"
 
+msgid "If checked, makes visible the speedlarp"
+msgstr "Om markerad, gör speedlarp synlig"
+
 #, python-format
 msgid "Membership fee of %(user)s for %(year)s"
 msgstr "Andel %(user)s per %(year)s"
@@ -4797,6 +4797,9 @@ msgstr "Här är några användbara länkar som hjälper dig att komma igång:"
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jag har gjort det några gånger, jag har grundläggande erfarenhet"
 
+msgid "If checked, makes characters visible to all players"
+msgstr "Om markerad, gör karaktärer synliga för alla spelare"
+
 msgid "If you wish, you can delete past pre-registrations."
 msgstr "Om du vill kan du radera tidigare förhandsregistreringar."
 
@@ -5093,6 +5096,9 @@ msgstr ""
 msgid "Automatically saves writing elements to prevent data loss."
 msgstr "Sparar automatiskt skrivelement för att förhindra dataförlust."
 
+msgid "If checked, makes the field content visible to all players"
+msgstr "Om markerad, gör fältinnehållet synligt för alla spelare"
+
 msgid "If checked, makes workshops visible for players to fill in"
 msgstr "Om markerat, synliggörs de workshops som spelarna kan fylla i"
 
@@ -5230,8 +5236,8 @@ msgstr "Tillåter spelare att när som helst avboka sina egna registreringar."
 msgid "Enables customization of all event-related pages' appearance."
 msgstr "Möjliggör anpassning av utseendet på alla eventrelaterade sidor."
 
-msgid "If checked, makes prologues of the assigned character visible"
-msgstr "Om markerat, gör prologer av den tilldelade karaktären synliga"
+msgid "If checked, makes prologues visible to the assigned character"
+msgstr "Om markerad, gör prologer synliga för den tilldelade karaktären"
 
 msgid "Order in which the option is shown with respect to the others"
 msgstr "Ordning i vilken alternativet presenteras i ansökan"
@@ -5463,6 +5469,9 @@ msgstr ""
 
 msgid "If checked, PG names will be automatically replaced by a reference"
 msgstr "Om markerat kommer PG-namn automatiskt att ersättas med en referens"
+
+msgid "If checked, makes the field content visible to the assigned player"
+msgstr "Om markerad, gör fältinnehållet synligt för den tilldelade spelaren"
 
 msgid "Indicates whether the option can be included in the gifted signups"
 msgstr "Anger om optionen kan inkluderas i de fria posterna"
@@ -5920,12 +5929,6 @@ msgstr ""
 "evenemangsplatsen)"
 
 msgid ""
-"If checked, makes factions visible, as th character assignments to factions"
-msgstr ""
-"Om markerat, gör fraktioner synliga, och karaktärstilldelningar till "
-"fraktioner"
-
-msgid ""
 "Indicates the title of the character - it will be shown along with the name"
 msgstr ""
 "Ange rollpersonens titel - den kommer att visas tillsammans med namnet"
@@ -5965,6 +5968,12 @@ msgid ""
 "Fill in the form and click on confirm, it will take you to the next passage!"
 msgstr ""
 "Fyll i formuläret och klicka på bekräfta, det tar dig till nästa steg!"
+
+msgid ""
+"If checked, makes factions visible, as the character assignments to factions"
+msgstr ""
+"Om markerad, gör fraktioner synliga, eftersom karaktären tilldelar "
+"fraktioner"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
@@ -6096,13 +6105,6 @@ msgid ""
 "correct."
 msgstr ""
 "Svara på följande frågor. Markera *alla* svar som du tycker verkar korrekta."
-
-msgid ""
-"If checked, make the presentations (public information) visible to all "
-"players"
-msgstr ""
-"Om markerat, gör presentationerna (offentlig information) synliga för alla "
-"spelare"
 
 msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
@@ -6457,12 +6459,6 @@ msgid ""
 msgstr ""
 "Filtypen '%(detected_type)s' är inte tillåten. Tillåtna typer är: "
 "'%(allowed_types)s'."
-
-msgid ""
-"If checked, makes visible the speedlarp in which the character participates "
-"assigned"
-msgstr ""
-"Om markerad, synliggör den speedlarp som den tilldelade karaktären deltar i"
 
 msgid ""
 "If checked: Does not send communication to the player when the character is "
@@ -7389,20 +7385,6 @@ msgid ""
 msgstr ""
 "Möjliggör ett upplägg i kampanjstil där flera evenemang delar samma "
 "uppsättning karaktärer och fraktioner."
-
-msgid ""
-"If checked, makes characters visible with basic information such as name, "
-"title, motto to all players"
-msgstr ""
-"Om markerad, gör karaktärer synliga med grundläggande information som namn, "
-"titel, motto för alla spelare"
-
-msgid ""
-"If checked, makes texts (private information) visible only to the player to "
-"whom the item is assigned"
-msgstr ""
-"Om markerad, gör texter (privat information) synliga endast för den spelare "
-"som objektet är tilldelat"
 
 msgid ""
 "If checked, the subscribers' gallery will not be displayed to those who are "

@@ -492,13 +492,7 @@ class OrgaWritingQuestionForm(MyForm):
         if self.instance.pk and self.instance.typ:
             already.remove(self.instance.typ)
 
-            basic_type = self.instance.typ in {
-                QuestionType.SINGLE,
-                QuestionType.MULTIPLE,
-                QuestionType.TEXT,
-                QuestionType.PARAGRAPH,
-                QuestionType.EDITOR,
-            }
+            basic_type = self.instance.typ in QuestionType.get_basic_types()
             def_type = self.instance.typ in {QuestionType.NAME, QuestionType.TEASER, QuestionType.TEXT}
             type_feature = self.instance.typ in self.params["features"]
             self.prevent_canc = not basic_type and def_type or type_feature

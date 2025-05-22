@@ -2020,9 +2020,6 @@ msgstr "Spilleredaktør"
 msgid "Prerequisites"
 msgstr "Forutsetninger"
 
-msgid "Presentations"
-msgstr "Presentasjoner"
-
 msgid "Progress step"
 msgstr "Ta et skritt frem"
 
@@ -4268,6 +4265,9 @@ msgstr "Fyll inn karakterens relasjoner!"
 msgid "Freely answer the co-creation questions"
 msgstr "Svar fritt på spørsmålene om samskaping"
 
+msgid "If checked, makes visible the speedlarp"
+msgstr "Hvis avkrysset, gjør speedlarp synlig"
+
 #, python-format
 msgid "Membership fee of %(user)s for %(year)s"
 msgstr "Andel %(user)s per %(year)s"
@@ -4795,6 +4795,9 @@ msgstr "Her er noen nyttige lenker som kan hjelpe deg i gang:"
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jeg har gjort det noen ganger, jeg har grunnleggende erfaring."
 
+msgid "If checked, makes characters visible to all players"
+msgstr "Hvis avkrysset, gjør tegnene synlige for alle spillere"
+
 msgid "If you wish, you can delete past pre-registrations."
 msgstr "Hvis du ønsker det, kan du slette tidligere forhåndsregistreringer."
 
@@ -5094,6 +5097,9 @@ msgstr ""
 msgid "Automatically saves writing elements to prevent data loss."
 msgstr "Lagrer automatisk skriveelementer for å forhindre tap av data."
 
+msgid "If checked, makes the field content visible to all players"
+msgstr "Hvis avkrysset, blir feltinnholdet synlig for alle spillere"
+
 msgid "If checked, makes workshops visible for players to fill in"
 msgstr "Hvis avkrysset, synliggjøres verkstedene som spillerne kan fylle ut."
 
@@ -5235,8 +5241,8 @@ msgid "Enables customization of all event-related pages' appearance."
 msgstr ""
 "Gjør det mulig å tilpasse utseendet til alle hendelsesrelaterte sider."
 
-msgid "If checked, makes prologues of the assigned character visible"
-msgstr "Hvis avkrysset, synliggjøres prologen til den tildelte karakteren."
+msgid "If checked, makes prologues visible to the assigned character"
+msgstr "Hvis avkrysset, gjør prologer synlige for den tildelte karakteren"
 
 msgid "Order in which the option is shown with respect to the others"
 msgstr "Rekkefølgen alternativene presenteres i i applikasjonen."
@@ -5468,6 +5474,10 @@ msgstr "Feil ved innlasting. Ugyldig filformat - vi godtar kun pdf og bilder."
 msgid "If checked, PG names will be automatically replaced by a reference"
 msgstr ""
 "Hvis avkrysset, vil PG-navnene automatisk bli erstattet av en referanse."
+
+msgid "If checked, makes the field content visible to the assigned player"
+msgstr ""
+"Hvis avkrysset, blir feltinnholdet synlig for den tilordnede spilleren"
 
 msgid "Indicates whether the option can be included in the gifted signups"
 msgstr "Angir om alternativet kan inkluderes i de frie oppføringene"
@@ -5914,12 +5924,6 @@ msgid ""
 msgstr "Når trenger du transport (tidssone for arrangementsstedet)?"
 
 msgid ""
-"If checked, makes factions visible, as th character assignments to factions"
-msgstr ""
-"Hvis avkrysset, synliggjøres fraksjoner og tilordning av karakterer til "
-"fraksjoner."
-
-msgid ""
 "Indicates the title of the character - it will be shown along with the name"
 msgstr "Angi karakterens tittel - den vises sammen med navnet."
 
@@ -5954,6 +5958,12 @@ msgstr ""
 msgid ""
 "Fill in the form and click on confirm, it will take you to the next passage!"
 msgstr "Fyll ut skjemaet og klikk på bekreft, så kommer du til neste trinn!"
+
+msgid ""
+"If checked, makes factions visible, as the character assignments to factions"
+msgstr ""
+"Hvis avkrysset, blir fraksjoner synlige, ettersom karakterenes tilordning "
+"til fraksjoner"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
@@ -6085,13 +6095,6 @@ msgid ""
 "Answer the following questions. Select *all* of the answers that seem "
 "correct."
 msgstr "Svar på følgende spørsmål. Velg *alle* svar som du synes er riktige."
-
-msgid ""
-"If checked, make the presentations (public information) visible to all "
-"players"
-msgstr ""
-"Hvis avkrysset, gjør presentasjonene (offentlig informasjon) synlige for "
-"alle spillere"
 
 msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
@@ -6434,13 +6437,6 @@ msgid ""
 msgstr ""
 "Filtypen '%(detected_type)s' er ikke tillatt. Tillatte typer er: "
 "'%(allowed_types)s'."
-
-msgid ""
-"If checked, makes visible the speedlarp in which the character participates "
-"assigned"
-msgstr ""
-"Hvis avkrysset, synliggjøres speedlarpen som den tildelte karakteren deltar "
-"i."
 
 msgid ""
 "If checked: Does not send communication to the player when the character is "
@@ -7365,20 +7361,6 @@ msgid ""
 msgstr ""
 "Muliggjør et \"kampanje\"-oppsett der flere arrangementer deler samme sett "
 "med figurer og fraksjoner."
-
-msgid ""
-"If checked, makes characters visible with basic information such as name, "
-"title, motto to all players"
-msgstr ""
-"Hvis avkrysset, gjør karakterene synlige med grunnleggende informasjon som "
-"navn, tittel og motto for alle spillere"
-
-msgid ""
-"If checked, makes texts (private information) visible only to the player to "
-"whom the item is assigned"
-msgstr ""
-"Hvis avkrysset, blir tekstene (privat informasjon) kun synlige for den "
-"spilleren som gjenstanden er tilordnet"
 
 msgid ""
 "If checked, the subscribers' gallery will not be displayed to those who are "

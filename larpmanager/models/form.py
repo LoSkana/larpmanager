@@ -58,6 +58,16 @@ class QuestionType(models.TextChoices):
     PROGRESS = "progress", _("Progress")
     ASSIGNED = "assigned", _("Assigned")
 
+    @staticmethod
+    def get_basic_types():
+        return {
+            QuestionType.SINGLE,
+            QuestionType.MULTIPLE,
+            QuestionType.TEXT,
+            QuestionType.PARAGRAPH,
+            QuestionType.EDITOR,
+        }
+
 
 class QuestionStatus(models.TextChoices):
     OPTIONAL = "o", _("Optional")

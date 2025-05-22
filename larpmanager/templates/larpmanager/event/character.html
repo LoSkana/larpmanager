@@ -6,7 +6,7 @@
 {% block nav %}
     {% include "larpmanager/manage/nav.html" %}
     {% if char.player_id == request.user.member.id %}
-        {% include "larpmanager/manage/char_nav.html" %}
+        {% include "elements/sheet/char_nav.html" %}
     {% endif %}
 {% endblock nav %}
 {% block content %}
@@ -19,7 +19,14 @@
             </div>
             <div class="text">
                 <div class="presentation">
-                    {% include "elements/sheet/presentation.html" %}
+                    <div class="first">
+                        {% include "elements/sheet/presentation.html" %}
+                        {% if check %}
+                            {% include "elements/sheet/fields.html" with char=sheet_char %}
+                        {% else %}
+                            {% include "elements/sheet/fields.html" %}
+                        {% endif %}
+                    </div>
                     {% include "elements/sheet/teaser.html" %}
                 </div>
                 <div class="sheet">

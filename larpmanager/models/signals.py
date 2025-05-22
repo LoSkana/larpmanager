@@ -314,13 +314,7 @@ def save_event_character_form(features, instance):
         QuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 5000),
     }
 
-    custom_tps = {
-        QuestionType.SINGLE,
-        QuestionType.MULTIPLE,
-        QuestionType.TEXT,
-        QuestionType.PARAGRAPH,
-        QuestionType.EDITOR,
-    }
+    custom_tps = QuestionType.get_basic_types()
 
     _init_character_form_questions(custom_tps, def_tps, features, instance)
     _init_plot_form_questions(def_tps, instance, features)

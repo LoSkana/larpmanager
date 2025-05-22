@@ -1050,22 +1050,13 @@ msgstr ""
 msgid "Characters"
 msgstr ""
 
-msgid ""
-"If checked, makes characters visible with basic information such as name, "
-"title, motto to all players"
+msgid "If checked, makes characters visible to all players"
 msgstr ""
 
-msgid "Presentations"
+msgid "If checked, makes the field content visible to all players"
 msgstr ""
 
-msgid ""
-"If checked, make the presentations (public information) visible to all "
-"players"
-msgstr ""
-
-msgid ""
-"If checked, makes texts (private information) visible only to the player to "
-"whom the item is assigned"
+msgid "If checked, makes the field content visible to the assigned player"
 msgstr ""
 
 msgid "Preview"
@@ -1080,21 +1071,19 @@ msgid "Factions"
 msgstr ""
 
 msgid ""
-"If checked, makes factions visible, as th character assignments to factions"
+"If checked, makes factions visible, as the character assignments to factions"
 msgstr ""
 
 msgid "Speedlarp"
 msgstr ""
 
-msgid ""
-"If checked, makes visible the speedlarp in which the character participates "
-"assigned"
+msgid "If checked, makes visible the speedlarp"
 msgstr ""
 
 msgid "Prologues"
 msgstr ""
 
-msgid "If checked, makes prologues of the assigned character visible"
+msgid "If checked, makes prologues visible to the assigned character"
 msgstr ""
 
 msgid "Questbuilder"
