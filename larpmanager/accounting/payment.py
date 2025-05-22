@@ -19,8 +19,10 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import math
+import re
 from datetime import datetime
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
@@ -47,6 +49,7 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import Association
 from larpmanager.models.base import PaymentMethod
+from larpmanager.models.form import QuestionType, RegistrationAnswer, RegistrationChoice, RegistrationQuestion
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import generate_id, get_payment_details
 from larpmanager.utils.base import update_payment_details
@@ -72,40 +75,74 @@ def unique_invoice_cod(length=16):
 
 
 def set_data_invoice(request, ctx, invoice, form, assoc):
-    real = request.user.member.display_real()
+    member_real = request.user.member.display_real()
     if invoice.typ == PaymentInvoice.REGISTRATION:
-        invoice.idx = ctx["reg"].id
-        invoice.reg = ctx["reg"]
-        custom_reason = ctx["reg"].run.event.get_config("payment_custom_reason")
-        if not custom_reason:
-            invoice.causal = _("Registration fee %(number)d of %(user)s per %(event)s") % {
-                "user": real,
-                "event": str(ctx["reg"].run),
-                "number": ctx["reg"].num_payments,
-            }
-        else:
-            custom_reason = custom_reason.replace("{player_name}", real)
-            invoice.causal = custom_reason
+        invoice.causal = _("Registration fee %(number)d of %(user)s per %(event)s") % {
+            "user": member_real,
+            "event": str(ctx["reg"].run),
+            "number": ctx["reg"].num_payments,
+        }
+        _custom_reason_reg(ctx, invoice, member_real)
+
     elif invoice.typ == PaymentInvoice.MEMBERSHIP:
         invoice.causal = _("Membership fee of %(user)s for %(year)s") % {
-            "user": real,
+            "user": member_real,
             "year": ctx["year"],
         }
     elif invoice.typ == PaymentInvoice.DONATE:
         descr = form.cleaned_data["descr"]
         invoice.causal = _("Donation of %(user)s, with reason: '%(reason)s'") % {
-            "user": real,
+            "user": member_real,
             "reason": descr,
         }
     elif invoice.typ == PaymentInvoice.COLLECTION:
         invoice.idx = ctx["coll"].id
         invoice.causal = _("Collected contribution of %(user)s for %(recipient)s") % {
-            "user": real,
+            "user": member_real,
             "recipient": ctx["coll"].display_member(),
         }
 
     if assoc.get_config("payment_special_code", False):
         invoice.causal = f"{invoice.cod} - {invoice.causal}"
+
+
+def _custom_reason_reg(ctx, invoice, member_real):
+    invoice.idx = ctx["reg"].id
+    invoice.reg = ctx["reg"]
+    custom_reason = ctx["reg"].run.event.get_config("payment_custom_reason")
+    if not custom_reason:
+        return
+
+    # find all matches
+    pattern = r"\{([^}]+)\}"
+    keys = re.findall(pattern, custom_reason)
+
+    values = {}
+    name = "player_name"
+    if name in keys:
+        values[name] = member_real
+        keys.remove(name)
+    for key in keys:
+        # Look for a registration question with that name
+        try:
+            question = RegistrationQuestion.objects.get(event=ctx["reg"].run.event, display__iexact=key)
+            if question.typ in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
+                aux = []
+                que = RegistrationChoice.objects.filter(question=question, reg_id=ctx["reg"].id)
+                for choice in que.select_related("option"):
+                    aux.append(choice.option.display)
+                value = ",".join(aux)
+            else:
+                value = RegistrationAnswer.objects.get(question=question, reg_id=ctx["reg"].id).text
+            values[key] = value
+        except ObjectDoesNotExist:
+            pass
+
+    def replace(match):
+        key = match.group(1)
+        return values.get(key, match.group(0))
+
+    invoice.causal = re.sub(pattern, replace, custom_reason)
 
 
 def round_up_to_two_decimals(number):

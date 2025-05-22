@@ -440,10 +440,12 @@ class OrgaConfigForm(ConfigForm):
 
             label = _("Causal")
             help_text = _(
-                "If present, it indicates the reason for the payment that the player must put on the payments he makes."
+                "If present, it indicates the reason for the payment that the player must put on the payments they make."
             )
             help_text += (
-                " " + _("You can use the following fields, they will be filled in automatically:") + "{player_name}"
+                " "
+                + _("You can use the following fields, they will be filled in automatically:")
+                + "{player_name}, {question_name}"
             )
             self.add_configs("payment_custom_reason", ConfigType.CHAR, section, label, help_text)
 

@@ -338,10 +338,7 @@ def register(request, s, n, sc="", dis="", tk=0):
     new_reg = _register_prepare(ctx, ctx["run_reg"])
 
     if new_reg:
-        if not _check_secret_code(ctx, sc):
-            raise Http404("wrong registration code")
-
-        res = _check_redirect_registration(request, ctx, event)
+        res = _check_redirect_registration(request, ctx, event, sc)
         if res:
             return res
 
@@ -378,15 +375,12 @@ def _apply_ticket(ctx, tk):
         pass
 
 
-def _check_secret_code(ctx, secret_code):
-    if secret_code:
+def _check_redirect_registration(request, ctx, event, secret_code):
+    if "registration_secret" in ctx["features"] and secret_code:
         if ctx["run"].registration_secret != secret_code:
-            return False
-        ctx["advance"] = True
-    return True
+            raise Http404("wrong registration code")
+        return None
 
-
-def _check_redirect_registration(request, ctx, event):
     if "register_link" in ctx["features"] and event.register_link:
         if "tier" not in ctx or ctx["tier"] != TicketTier.STAFF:
             return redirect(event.register_link)

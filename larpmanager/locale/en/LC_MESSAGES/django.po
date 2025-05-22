@@ -924,7 +924,7 @@ msgstr ""
 
 msgid ""
 "If present, it indicates the reason for the payment that the player must put "
-"on the payments he makes."
+"on the payments they make."
 msgstr ""
 
 msgid "You can use the following fields, they will be filled in automatically:"

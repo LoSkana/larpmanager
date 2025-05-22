@@ -23,9 +23,17 @@ from typing import Optional
 from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 
+from larpmanager.cache.feature import get_event_features
 from larpmanager.models.experience import AbilityPx, DeliveryPx, update_px
+from larpmanager.models.form import QuestionApplicable, WritingChoice
 from larpmanager.models.writing import Character
 from larpmanager.utils.common import add_char_addit
+
+
+@receiver(post_save, sender=Character)
+def post_character_update_px(sender, instance, *args, **kwargs):
+    if "px" in get_event_features(instance.event_id):
+        update_px(instance)
 
 
 @receiver(post_save, sender=AbilityPx)
@@ -71,7 +79,8 @@ def get_available_ability_px(char):
     current_char_abilities = set(char.px_ability_list.values_list("pk", flat=True))
 
     # get the options selected for the character
-    current_char_choices = set(char.choices.values_list("option_id", flat=True))
+    que = WritingChoice.objects.filter(element_id=char.id, question__applicable=QuestionApplicable.CHARACTER)
+    current_char_choices = set(que.values_list("option_id", flat=True))
 
     # get px available
     add_char_addit(char)
