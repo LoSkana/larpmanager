@@ -30,7 +30,7 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all
-from larpmanager.cache.writing import get_cache_cocreation, get_cache_text_field
+from larpmanager.cache.text_fields import get_cache_cocreation, get_cache_text_field
 from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Trait
@@ -206,9 +206,9 @@ def _get_custom_form(ctx, nm):
     if nm not in mapping:
         return
 
-    if "character_form" in ctx["features"]:
+    if "character" in ctx["features"]:
         que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-        que = que.filter(applicable__icontains=mapping[nm])
+        que = que.filter(applicable=mapping[nm])
         ctx["form_questions"] = {}
         for q in que:
             if q.typ in ctx["fields_name"].keys():
@@ -249,14 +249,23 @@ def writing_list_query(ctx, ev, typ):
 
 
 def writing_list_text_fields(ctx, text_fields, typ):
+    # noinspection PyProtectedMember
+    ctx["label_typ"] = typ._meta.model_name
+    ctx["writing_typ"] = QuestionApplicable.get_applicable(ctx["label_typ"])
+
+    # add editor type questions
+    que = WritingQuestion.objects.filter(applicable=ctx["writing_typ"])
+    for que_id in que.filter(typ=QuestionType.EDITOR).values_list("pk", flat=True):
+        text_fields.append(str(que_id))
+
     gctf = get_cache_text_field(typ, ctx["event"])
     for el in ctx["list"]:
-        if el.number not in gctf:
+        if el.id not in gctf:
             continue
         for f in text_fields:
-            if f not in gctf[el.number]:
+            if f not in gctf[el.id]:
                 continue
-            (red, ln) = gctf[el.number][f]
+            (red, ln) = gctf[el.id][f]
             setattr(el, f + "_red", red)
             setattr(el, f + "_ln", ln)
 
@@ -267,12 +276,12 @@ def writing_list_cocreation(ctx, typ):
 
     gcc = get_cache_cocreation(ctx["run"])
     for el in ctx["list"]:
-        if el.number not in gcc:
+        if el.id not in gcc:
             continue
         for f in ["co_creation_question", "co_creation_answer"]:
-            if f not in gcc[el.number]:
+            if f not in gcc[el.id]:
                 continue
-            (red, ln) = gcc[el.number][f]
+            (red, ln) = gcc[el.id][f]
             setattr(el, f + "_red", red)
             setattr(el, f + "_ln", ln)
 

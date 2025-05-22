@@ -1,0 +1,19 @@
+{% load show_tags i18n %}
+{% if show_print_pdf %}
+    <p>
+        <a href="{% url 'character_pdf_sheet' event.slug run.number char.number %}">{% trans "Download complete sheet" %}</a>
+    </p>
+    <p>
+        <a href="{% url 'character_pdf_sheet_friendly' event.slug run.number char.number %}">
+            {% trans "Download light sheet" %}
+        </a>
+    </p>
+    {% if features.relationships or features.player_relationships %}
+        <p>
+            <a href="{% url 'character_pdf_relationships' event.slug run.number char.number %}">
+                {% trans "Download relationships" %}
+            </a>
+        </p>
+    {% endif %}
+    <hr class="clear" />
+{% endif %}

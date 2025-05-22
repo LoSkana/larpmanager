@@ -570,14 +570,6 @@ msgid ""
 "in the future."
 msgstr ""
 
-msgid "Presentation text, visible to other players"
-msgstr ""
-
-msgid ""
-"Private text, visible only to you and the organizers. You can use it for "
-"write background or a journal."
-msgstr ""
-
 msgid "Select one primary faction"
 msgstr ""
 
@@ -1058,22 +1050,13 @@ msgstr ""
 msgid "Characters"
 msgstr ""
 
-msgid ""
-"If checked, makes characters visible with basic information such as name, "
-"title, motto to all players"
+msgid "If checked, makes characters visible to all players"
 msgstr ""
 
-msgid "Presentations"
+msgid "If checked, makes the field content visible to all players"
 msgstr ""
 
-msgid ""
-"If checked, make the presentations (public information) visible to all "
-"players"
-msgstr ""
-
-msgid ""
-"If checked, makes texts (private information) visible only to the player to "
-"whom the item is assigned"
+msgid "If checked, makes the field content visible to the assigned player"
 msgstr ""
 
 msgid "Preview"
@@ -1088,21 +1071,19 @@ msgid "Factions"
 msgstr ""
 
 msgid ""
-"If checked, makes factions visible, as th character assignments to factions"
+"If checked, makes factions visible, as the character assignments to factions"
 msgstr ""
 
 msgid "Speedlarp"
 msgstr ""
 
-msgid ""
-"If checked, makes visible the speedlarp in which the character participates "
-"assigned"
+msgid "If checked, makes visible the speedlarp"
 msgstr ""
 
 msgid "Prologues"
 msgstr ""
 
-msgid "If checked, makes prologues of the assigned character visible"
+msgid "If checked, makes prologues visible to the assigned character"
 msgstr ""
 
 msgid "Questbuilder"
@@ -1446,14 +1427,6 @@ msgid "You cannot add a relationship from character to self!"
 msgstr ""
 
 msgid "Plot"
-msgstr ""
-
-msgid "Concept"
-msgstr ""
-
-msgid ""
-"Describe the core idea or premise of the plot. This text will NOT be shown "
-"to players."
 msgstr ""
 
 #, python-brace-format
@@ -2527,10 +2500,13 @@ msgstr ""
 msgid "Multiple choice"
 msgstr ""
 
-msgid "Text (short)"
+msgid "Single-line text"
 msgstr ""
 
-msgid "Text (long)"
+msgid "Multi-line text"
+msgstr ""
+
+msgid "Advanced text editor"
 msgstr ""
 
 msgid "Presentation"
@@ -3367,10 +3343,13 @@ msgid ""
 "confirmed when your ticket payment is received."
 msgstr ""
 
-msgid "characters"
+msgid "Show"
 msgstr ""
 
 msgid "options"
+msgstr ""
+
+msgid "characters"
 msgstr ""
 
 msgid "(click on image to enlarge)"
@@ -3383,9 +3362,6 @@ msgid "Translate"
 msgstr ""
 
 msgid "Original"
-msgstr ""
-
-msgid "Show"
 msgstr ""
 
 msgid "Confirm"
@@ -3653,7 +3629,70 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-msgid "Unisex"
+msgid "Participate in the co-creation of the character!"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+msgid "Edit your character's data!"
+msgstr ""
+
+msgid "Buy skills for your character!"
+msgstr ""
+
+msgid "Customize"
+msgstr ""
+
+msgid "Modify some character elements to make it yours!"
+msgstr ""
+
+msgid "Relationships"
+msgstr ""
+
+msgid "Fill in your character's relationships!"
+msgstr ""
+
+msgid "Questions"
+msgstr ""
+
+msgid "Write here questions about your character directly to the authors!"
+msgstr ""
+
+msgid "Answers"
+msgstr ""
+
+msgid "Download complete sheet"
+msgstr ""
+
+msgid "Download light sheet"
+msgstr ""
+
+msgid "Download relationships"
+msgstr ""
+
+msgid ""
+"This character represents the true secret identity of another character."
+msgstr ""
+
+msgid "You can give a preference to play it, as with other characters."
+msgstr ""
+
+msgid ""
+"If it is assigned to you, you will automatically be assigned the original "
+"character it mirrors."
+msgstr ""
+
+msgid "Public informations"
+msgstr ""
+
+msgid "Preferences - Total"
+msgstr ""
+
+msgid "Average"
+msgstr ""
+
+msgid "Graph"
 msgstr ""
 
 msgid ""
@@ -3672,6 +3711,12 @@ msgid "Ability list"
 msgstr ""
 
 msgid "Delivery list"
+msgstr ""
+
+msgid "Relationship"
+msgstr ""
+
+msgid "Other characters"
 msgstr ""
 
 msgid "No organization found"
@@ -3795,81 +3840,6 @@ msgid "Total number"
 msgstr ""
 
 msgid "Average value"
-msgstr ""
-
-msgid "Participate in the co-creation of the character!"
-msgstr ""
-
-msgid "Change"
-msgstr ""
-
-msgid "Edit your character's data!"
-msgstr ""
-
-msgid "Buy skills for your character!"
-msgstr ""
-
-msgid "Customize"
-msgstr ""
-
-msgid "Modify some character elements to make it yours!"
-msgstr ""
-
-msgid "Relationships"
-msgstr ""
-
-msgid "Fill in your character's relationships!"
-msgstr ""
-
-msgid "Questions"
-msgstr ""
-
-msgid "Write here questions about your character directly to the authors!"
-msgstr ""
-
-msgid ""
-"This character represents the true secret identity of another character."
-msgstr ""
-
-msgid "You can give a preference to play it, as with other characters."
-msgstr ""
-
-msgid ""
-"If it is assigned to you, you will automatically be assigned the original "
-"character it mirrors."
-msgstr ""
-
-msgid "Public informations"
-msgstr ""
-
-msgid "Preferences - Total"
-msgstr ""
-
-msgid "Average"
-msgstr ""
-
-msgid "Graph"
-msgstr ""
-
-msgid "Other characters"
-msgstr ""
-
-msgid "Download complete sheet"
-msgstr ""
-
-msgid "Download light sheet"
-msgstr ""
-
-msgid "Download relationships"
-msgstr ""
-
-msgid "Private area"
-msgstr ""
-
-msgid "Answers"
-msgstr ""
-
-msgid "Relationship"
 msgstr ""
 
 msgid "Obtain ability"
@@ -5883,10 +5853,13 @@ msgstr ""
 msgid "Email list"
 msgstr ""
 
-msgid "Character questions"
+msgid "Form questions"
 msgstr ""
 
 msgid "This page summarises the available questions of the character form."
+msgstr ""
+
+msgid "Go to the form for"
 msgstr ""
 
 msgid "Modifiable"
@@ -6516,6 +6489,9 @@ msgid "External"
 msgstr ""
 
 msgid "This page shows the event plots."
+msgstr ""
+
+msgid "Concept"
 msgstr ""
 
 msgid "Progress step"
@@ -7345,14 +7321,6 @@ msgid ""
 "provided to the gift recipient for registration."
 msgstr ""
 
-msgid "Character form"
-msgstr ""
-
-msgid ""
-"Lets you define custom fields in the character form, which display in the "
-"character sheet, gallery, and search filters."
-msgstr ""
-
 msgid "Allows a user to reserve extra tickets in addition to their own."
 msgstr ""
 
@@ -7651,7 +7619,7 @@ msgstr ""
 
 msgid ""
 "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
-"text, 'p' for long text)"
+"text, 'p' for long text, 'e' for editor)"
 msgstr ""
 
 msgid "display (question text)"
@@ -7685,6 +7653,11 @@ msgid "Can't copy from same event"
 msgstr ""
 
 msgid "Copy done"
+msgstr ""
+
+msgid ""
+"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
+"text, 'p' for long text)"
 msgstr ""
 
 msgid ""

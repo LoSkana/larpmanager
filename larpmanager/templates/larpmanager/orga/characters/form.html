@@ -1,12 +1,27 @@
 {% extends "utils.html" %}
 {% load i18n show_tags %}
 {% block title %}
-    {% trans "Character questions" %} - {{ run }}
+    {% trans label_typ as name %}
+    {% trans "Form questions" %} - {{ name }} - {{ run }}
 {% endblock title %}
 {% block info %}
     {% trans "This page summarises the available questions of the character form." %}
 {% endblock info %}
 {% block content %}
+    {% if available_typ|length > 1 %}
+        <p>
+            {% trans "Go to the form for" %}:
+            {% for nm in available_typ.keys %}
+                {% include "elements/comma.html" %}
+                {% if nm == label_typ %}
+                    {% trans nm as name %}{{ name }}
+                {% else %}
+                    <a href="{% url 'orga_writing_form' run.event.slug run.number nm %}">{% trans nm as name %}{{ name }}</a>
+                {% endif %}
+            {% endfor %}
+        </p>
+        <hr />
+    {% endif %}
     {% include "elements/header/orga.html" %}
     <table id="character_questions" class="tablesorter mob writing">
         <thead>
@@ -28,7 +43,7 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_character_form_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'orga_writing_form_edit' run.event.slug run.number typ el.id %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.get_typ_display }}</td>
                     <td>{{ el.display }}</td>
@@ -41,12 +56,12 @@
                     <td>
                         {% for ch in el.options_list %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_character_options_edit' run.event.slug run.number ch.id %}">{{ ch.display }}</a>
+                            <a href="{% url 'orga_writing_options_edit' run.event.slug run.number typ ch.id %}">{{ ch.display }}</a>
                         {% endfor %}
                     </td>
                     <td>
                         {% if not forloop.first %}
-                            <a href="{% url 'orga_character_form_order' run.event.slug run.number el.id %}">
+                            <a href="{% url 'orga_writing_form_order' run.event.slug run.number typ el.id %}">
                                 <i class="fa-solid fa-arrow-up"></i>
                             </a>
                         {% endif %}

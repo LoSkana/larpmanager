@@ -28,6 +28,7 @@ from larpmanager.models.base import Feature, FeatureModule, PaymentMethod
 class Command(BaseCommand):
     help = "Export features to yaml"
 
+    # noinspection PyProtectedMember
     def handle(self, *args, **options):
         models = {
             "module": (FeatureModule, ("id", "name", "descr", "order", "default")),

@@ -286,7 +286,7 @@ def registration_find(r, u, my_regs=None):
 def check_character_maximum(event, member):
     # check the amount of characters of the character
     current_chars = event.get_elements(Character).filter(player=member).count()
-    max_chars = int(event.get_config("user_character_max", 1))
+    max_chars = int(event.get_config("user_character_max", 0))
     return current_chars >= max_chars
 
 
@@ -394,7 +394,7 @@ def check_signup(request, ctx):
         raise WaitingError(ctx["event"].slug, ctx["run"].number)
 
 
-def _check_assign_character(request, ctx):
+def check_assign_character(request, ctx):
     # if the player has a single character, then assign it to their signup
     reg = get_player_signup(request, ctx)
     if not reg:

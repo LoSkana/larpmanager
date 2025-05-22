@@ -27,7 +27,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
-from larpmanager.forms.utils import css_delimeter
+from larpmanager.forms.utils import WritingTinyMCE, css_delimeter
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
@@ -176,6 +176,7 @@ class BaseRegistrationForm(MyFormRun):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.show_link = []
         self.sections = {}
 
     def _init_reg_question(self, instance, event):
@@ -332,8 +333,9 @@ class BaseRegistrationForm(MyFormRun):
 
         if not orga:
             self.fields[key].disabled = not active
-            if question.max_length:
-                self.max_lengths[f"id_{key}"] = (question.max_length, question.typ)
+
+        if question.max_length:
+            self.max_lengths[f"id_{key}"] = (question.max_length, question.typ)
 
         if question.status == QuestionStatus.MANDATORY:
             self.fields[key].label += " (*)"
@@ -355,6 +357,9 @@ class BaseRegistrationForm(MyFormRun):
         elif question.typ == QuestionType.PARAGRAPH:
             self.init_paragraph(key, question, required)
 
+        elif question.typ == QuestionType.EDITOR:
+            self.init_editor(key, question, required)
+
         else:
             key = question.typ
             mapping = {"faction": "factions_list"}
@@ -365,6 +370,19 @@ class BaseRegistrationForm(MyFormRun):
             self.reorder_field(key)
             self.fields[key].required = required
         return key
+
+    def init_editor(self, key, question, required):
+        self.fields[key] = forms.CharField(
+            required=required,
+            max_length=question.max_length if question.max_length else 100000,
+            widget=WritingTinyMCE(),
+            label=question.display,
+            help_text=question.description,
+        )
+        if question.id in self.answers:
+            self.initial[key] = self.answers[question.id].text
+
+        self.show_link.append(f"id_{key}")
 
     def init_paragraph(self, key, question, required):
         self.fields[key] = forms.CharField(
@@ -446,7 +464,7 @@ class BaseRegistrationForm(MyFormRun):
                 self.save_reg_multiple(instance, oid, q)
             elif q.typ == QuestionType.SINGLE:
                 self.save_reg_single(instance, oid, q)
-            elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
+            elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.EDITOR]:
                 self.save_reg_text(instance, oid, q)
 
     def save_reg_text(self, instance, oid, q):

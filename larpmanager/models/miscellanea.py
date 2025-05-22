@@ -33,7 +33,7 @@ from larpmanager.models.base import BaseModel
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
-from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_miny, show_thumb, strip_tags
+from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_miny, show_thumb
 from larpmanager.models.writing import Character
 
 
@@ -624,4 +624,4 @@ class Email(BaseModel):
     search = models.CharField(max_length=500, blank=True)
 
     def __str__(self):
-        return f"{self.recipient} - {self.subj} - {strip_tags(self.body)[:500]}"[:500]
+        return f"{self.recipient} - {self.subj}"
