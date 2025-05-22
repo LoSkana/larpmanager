@@ -26,7 +26,7 @@ from django.dispatch import receiver
 from larpmanager.cache.button import get_event_button_cache
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event, Run
-from larpmanager.models.form import QuestionType, WritingQuestion
+from larpmanager.models.form import QuestionApplicable, QuestionType, WritingQuestion
 
 
 def reset_cache_run(a, s, n):
@@ -120,7 +120,7 @@ def init_cache_config_run(run):
 
     basics = QuestionType.get_basic_types()
     que = run.event.get_elements(WritingQuestion).order_by("order")
-    for question in que.filter(typ__in=basics):
+    for question in que.filter(applicable=QuestionApplicable.CHARACTER, typ__in=basics):
         ctx[f"show_{question.id}"] = run.get_config(f"show_{question.id}", False)
 
     return ctx
