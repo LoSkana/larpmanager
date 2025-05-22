@@ -1686,6 +1686,9 @@ msgstr "okamžitě"
 msgid "leaderboard"
 msgstr "žebříčku!"
 
+msgid "text length"
+msgstr "délka textu"
+
 msgid "unique code"
 msgstr "jedinečný kód"
 

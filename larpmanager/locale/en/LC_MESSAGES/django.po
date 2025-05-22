@@ -3349,7 +3349,7 @@ msgstr ""
 msgid "options"
 msgstr ""
 
-msgid "characters"
+msgid "text length"
 msgstr ""
 
 msgid "(click on image to enlarge)"
@@ -3362,6 +3362,9 @@ msgid "Translate"
 msgstr ""
 
 msgid "Original"
+msgstr ""
+
+msgid "characters"
 msgstr ""
 
 msgid "Confirm"

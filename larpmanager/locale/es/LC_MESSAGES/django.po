@@ -1686,6 +1686,9 @@ msgstr "inmediatamente"
 msgid "leaderboard"
 msgstr "clasificación"
 
+msgid "text length"
+msgstr "longitud del texto"
+
 msgid "unique code"
 msgstr "código único"
 

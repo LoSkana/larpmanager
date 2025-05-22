@@ -1686,6 +1686,9 @@ msgstr "sofort"
 msgid "leaderboard"
 msgstr "Rangliste!"
 
+msgid "text length"
+msgstr "Textlänge"
+
 msgid "unique code"
 msgstr "einzigartiger Code"
 

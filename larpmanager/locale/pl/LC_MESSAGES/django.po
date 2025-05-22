@@ -1686,6 +1686,9 @@ msgstr "natychmiast"
 msgid "leaderboard"
 msgstr "tabela liderów"
 
+msgid "text length"
+msgstr "długość tekstu"
+
 msgid "unique code"
 msgstr "unikalny kod"
 

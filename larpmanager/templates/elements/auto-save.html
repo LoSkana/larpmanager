@@ -7,7 +7,7 @@ function submitForm() {
 tinyMCE.triggerSave();
 var formData = $('form').serialize() + "&ajax=" + 1;
 if (eid > 0) formData += "&eid=" + eid + "&type=" + type;
-console.log(formData);
+// console.log(formData);
 // console.log(post_url);
 $.ajax({
 type: "POST",

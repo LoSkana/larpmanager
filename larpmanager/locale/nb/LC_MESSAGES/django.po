@@ -1686,6 +1686,9 @@ msgstr "umiddelbart"
 msgid "leaderboard"
 msgstr "rangering!"
 
+msgid "text length"
+msgstr "tekstlengde"
+
 msgid "unique code"
 msgstr "unik kode"
 

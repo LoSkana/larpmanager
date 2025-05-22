@@ -1686,6 +1686,9 @@ msgstr "omedelbart"
 msgid "leaderboard"
 msgstr "ranking!"
 
+msgid "text length"
+msgstr "textlängd"
+
 msgid "unique code"
 msgstr "unik kod"
 
