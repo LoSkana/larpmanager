@@ -2714,6 +2714,12 @@ msgstr "non sono ancora aperte!"
 msgid "download document"
 msgstr "scarica documento"
 
+msgid "this is important"
+msgstr "è importante"
+
+msgid "'pwyw' (donation)."
+msgstr "'pwyw' (donazione)."
+
 msgid "Access the history"
 msgstr "Accedi allo storico"
 
@@ -3498,6 +3504,9 @@ msgstr "check relazioni in meno"
 msgid "not visible at this time"
 msgstr "non visibili in questo momento"
 
+msgid "'player' (player's email)"
+msgstr "'player' (email del giocatore)"
+
 msgid "Feature already activated"
 msgstr "Feature già attivata"
 
@@ -3880,6 +3889,9 @@ msgstr "Hai completato il versamento!"
 
 msgid "check nonexistent relationships"
 msgstr "check relazioni inesistenti"
+
+msgid "'ticket' (ticket name or number)"
+msgstr "'ticket' (nome o numero del biglietto)"
 
 msgid "Browse the presentation website!"
 msgstr "Naviga il sito di presentazione!"
@@ -4871,6 +4883,9 @@ msgstr " qui le condizioni di disiscrizione di questo evento."
 msgid "%(amount)d %(tokens)s were disbursed with %(reason)s."
 msgstr "%(amount)d %(tokens)s sono stati erogati con motivazione \"%(reason)s\"."
 
+msgid "'character' (character name or number to be assigned)"
+msgstr "'personaggio' (nome del personaggio o numero da assegnare)"
+
 msgid "Adds a short (2-3 words) 'title' field to characters."
 msgstr "Aggiunge un campo \"titolo\" breve (2-3 parole) ai caratteri."
 
@@ -5492,6 +5507,11 @@ msgstr ""
 msgid "Allows authors to prepare a list of inter-character relationships."
 msgstr ""
 "Consente agli autori di preparare un elenco di relazioni tra personaggi."
+
+msgid "Copy and paste exactly all the coloured text below into the notes."
+msgstr ""
+"Copiate e incollate esattamente tutto il testo colorato qui sotto nelle "
+"note."
 
 msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr ""
@@ -7098,13 +7118,6 @@ msgstr ""
 "e la invia per e-mail all'utente."
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field 'notes' "
-"(this is important!)"
-msgstr ""
-"Copiate e incollate esattamente tutto il testo colorato qui sotto nel campo "
-"\"note\" (è importante!)."
-
-msgid ""
 "Optional - Indicate additional details on the ticket, they will be shown "
 "below the application"
 msgstr ""
@@ -8390,14 +8403,6 @@ msgid ""
 msgstr ""
 "questa cifra è il netto che dovrebbe risultare come disponibilità degli "
 "strumenti finanziari - non tiene conto di token e di crediti"
-
-msgid ""
-"'player' (player's email), 'ticket' (ticket name or number), 'character' "
-"(character name or number to be assigned), 'pwyw' (donation)."
-msgstr ""
-"'player' (email del giocatore), 'ticket' (nome o numero del biglietto), "
-"'character' (nome o numero del personaggio da assegnare), 'pwyw' "
-"(donazione)."
 
 msgid ""
 "Lets you upload and host files directly on larpmanager, making them "

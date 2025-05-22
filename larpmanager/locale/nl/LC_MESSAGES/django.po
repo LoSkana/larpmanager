@@ -2714,6 +2714,12 @@ msgstr "zijn nog niet open!"
 msgid "download document"
 msgstr "download document"
 
+msgid "this is important"
+msgstr "dit is belangrijk"
+
+msgid "'pwyw' (donation)."
+msgstr "pwyw\" (donatie)."
+
 msgid "Access the history"
 msgstr "Toegang tot de geschiedenis"
 
@@ -3498,6 +3504,9 @@ msgstr "controleer rapporten minder"
 msgid "not visible at this time"
 msgstr "momenteel niet zichtbaar"
 
+msgid "'player' (player's email)"
+msgstr "\"speler\" (e-mailadres van de speler)"
+
 msgid "Feature already activated"
 msgstr "Functie al geactiveerd"
 
@@ -3880,6 +3889,9 @@ msgstr "Je hebt de storting voltooid!"
 
 msgid "check nonexistent relationships"
 msgstr "controleer niet-bestaande relaties"
+
+msgid "'ticket' (ticket name or number)"
+msgstr "\"ticket\" (naam of nummer van het ticket)"
 
 msgid "Browse the presentation website!"
 msgstr "Blader door de presentatiesite!"
@@ -4889,6 +4901,9 @@ msgstr "Dit zijn de voorwaarden om u af te melden voor dit evenement."
 msgid "%(amount)d %(tokens)s were disbursed with %(reason)s."
 msgstr "%(amount)d %(tokens)s werden uitbetaald met %(reason)s."
 
+msgid "'character' (character name or number to be assigned)"
+msgstr "karakter\" (karakternaam of nummer dat moet worden toegewezen)"
+
 msgid "Adds a short (2-3 words) 'title' field to characters."
 msgstr "Voegt een kort (2-3 woorden) 'titel'-veld toe aan tekens."
 
@@ -5520,6 +5535,10 @@ msgstr ""
 msgid "Allows authors to prepare a list of inter-character relationships."
 msgstr ""
 "Hiermee kunnen auteurs een lijst maken van relaties tussen personages."
+
+msgid "Copy and paste exactly all the coloured text below into the notes."
+msgstr ""
+"Kopieer en plak precies alle gekleurde tekst hieronder in de notities."
 
 msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr ""
@@ -7123,13 +7142,6 @@ msgstr ""
 "mailt deze naar de gebruiker."
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field 'notes' "
-"(this is important!)"
-msgstr ""
-"Kopieer en plak precies alle gekleurde tekst hieronder in het veld "
-"'notities' (dit is belangrijk!)"
-
-msgid ""
 "Optional - Indicate additional details on the ticket, they will be shown "
 "below the application"
 msgstr ""
@@ -8425,14 +8437,6 @@ msgstr ""
 "dit cijfer is het nettoresultaat dat zou moeten resulteren uit de "
 "beschikbaarheid van financiële instrumenten - het houdt geen rekening met "
 "tokens en kredieten"
-
-msgid ""
-"'player' (player's email), 'ticket' (ticket name or number), 'character' "
-"(character name or number to be assigned), 'pwyw' (donation)."
-msgstr ""
-"\"speler\" (e-mailadres van de speler), \"ticket\" (naam of nummer van het "
-"ticket), \"personage\" (naam of nummer van het personage dat wordt "
-"toegewezen), \"pwyw\" (donatie)."
 
 msgid ""
 "Lets you upload and host files directly on larpmanager, making them "
