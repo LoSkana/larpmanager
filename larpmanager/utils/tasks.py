@@ -30,7 +30,7 @@ from django.core.mail import EmailMultiAlternatives, get_connection
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.writing import remove_html_tags
+from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.models.association import Association, AssocTextType, get_url
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member

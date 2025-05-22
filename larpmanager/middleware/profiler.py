@@ -35,6 +35,7 @@ class ProfilerMiddleware:
             duration = (now() - request._profiler_start_ts).total_seconds()
             if duration >= 1:
                 try:
+                    # noinspection PyProtectedMember
                     profiler_response_signal.send(
                         sender=None,
                         domain=request.get_host(),

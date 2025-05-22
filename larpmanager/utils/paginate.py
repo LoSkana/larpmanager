@@ -21,6 +21,8 @@ def paginate(request, ctx, typ, exe, selrel, show_runs, afield, subtype):
         typ = typ.model
 
     elements = cls.filter(assoc_id=ctx["a_id"]).order_by("-created")
+
+    # noinspection PyProtectedMember
     if "hide" in [f.name for f in typ._meta.get_fields()]:
         elements = elements.filter(hide=False)
 

@@ -80,7 +80,7 @@ def casting_quest_traits(ctx, typ):
     ctx["choices"] = json.dumps(choices)
 
 
-def _casting_details(ctx, typ):
+def casting_details(ctx, typ):
     get_event_cache_all(ctx)
 
     if typ > 0:
@@ -121,7 +121,7 @@ def casting(request, s, n, typ=0):
         )
         return redirect("gallery", s=ctx["event"].slug, n=ctx["run"].number)
 
-    _casting_details(ctx, typ)
+    casting_details(ctx, typ)
     # print(ctx)
 
     red = "larpmanager/event/casting/casting.html"
@@ -287,7 +287,7 @@ def casting_preferences_traits(ctx, typ):
 @login_required
 def casting_preferences(request, s, n, typ=0):
     ctx = get_event_run(request, s, n, signup=True, status=True)
-    _casting_details(ctx, typ)
+    casting_details(ctx, typ)
 
     if not ctx["casting_show_pref"]:
         raise Http404("Not cool, bro!")
@@ -383,7 +383,7 @@ def casting_history_traits(ctx):
 @login_required
 def casting_history(request, s, n, typ=0):
     ctx = get_event_run(request, s, n, signup=True, status=True)
-    _casting_details(ctx, typ)
+    casting_details(ctx, typ)
 
     if not ctx["casting_history"]:
         raise Http404("Not cool, bro!")
@@ -391,7 +391,7 @@ def casting_history(request, s, n, typ=0):
     if ctx["run"].reg is None and "staff" not in ctx:
         raise Http404("not registered")
 
-    _casting_details(ctx, typ)
+    casting_details(ctx, typ)
 
     if typ == 0:
         casting_history_characters(ctx)

@@ -59,7 +59,7 @@ def exe_inventory(request):
 
 
 def get_inventory_fields():
-    # noinspection PyUnresolvedReferences
+    # noinspection PyUnresolvedReferences, PyProtectedMember
     aux = [f.name for f in Inventory._meta.get_fields()]
     aux.remove("deleted")
     aux.remove("deleted_by_cascade")

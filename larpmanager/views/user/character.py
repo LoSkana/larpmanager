@@ -31,6 +31,7 @@ from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.http import require_POST
 from PIL import Image
 
 from larpmanager.cache.character import get_character_cache_fields, get_character_fields, get_event_cache_all
@@ -66,6 +67,7 @@ from larpmanager.models.writing import (
     Character,
     CharacterStatus,
 )
+from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
 from larpmanager.utils.common import (
     get_player_relationship,
@@ -74,13 +76,13 @@ from larpmanager.utils.edit import user_edit
 from larpmanager.utils.event import get_event_run
 from larpmanager.utils.experience import get_available_ability_px
 from larpmanager.utils.registration import (
-    _check_assign_character,
+    check_assign_character,
     check_character_maximum,
     get_player_characters,
     registration_find,
 )
 from larpmanager.utils.writing import char_add_addit
-from larpmanager.views.user.casting import _casting_details, get_casting_preferences
+from larpmanager.views.user.casting import casting_details, get_casting_preferences
 from larpmanager.views.user.registration import init_form_submitted
 
 
@@ -105,7 +107,7 @@ def character(request, s, n, num):
     else:
         get_character_fields(ctx, only_visible=True)
 
-    _casting_details(ctx, 0)
+    casting_details(ctx, 0)
     if ctx["casting_show_pref"] and not ctx["char"]["player_id"]:
         ctx["pref"] = get_casting_preferences(ctx["char"]["id"], ctx, 0)
 
@@ -172,7 +174,7 @@ def character_form(request, ctx, s, n, instance, form_class):
             if mes:
                 messages.success(request, mes)
 
-            _check_assign_character(request, ctx)
+            check_assign_character(request, ctx)
 
             number = None
             if isinstance(element, Character):
@@ -317,7 +319,7 @@ def character_list(request, s, n):
     # add character configs
     char_add_addit(ctx)
     for el in ctx["list"]:
-        if "character_form" in ctx["features"]:
+        if "character" in ctx["features"]:
             el.fields = get_character_cache_fields(ctx, el.id, only_visible=True)
 
     ctx["char_maximum"] = check_character_maximum(ctx["event"], request.user.member)
@@ -347,11 +349,11 @@ def character_edit(request, s, n, num):
 
 def get_options_dependencies(ctx):
     ctx["dependencies"] = {}
-    if "character_form" not in ctx["features"]:
+    if "character" not in ctx["features"]:
         return
 
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-    que = que.filter(applicable__icontains=QuestionApplicable.CHARACTER)
+    que = que.filter(applicable=QuestionApplicable.CHARACTER)
     question_idxs = que.values_list("id", flat=True)
 
     que = ctx["event"].get_elements(WritingOption).filter(question_id__in=question_idxs)
@@ -445,3 +447,20 @@ def character_relationships_edit(request, s, n, num, oth):
     if user_edit(request, ctx, PlayerRelationshipForm, "relationship", oth):
         return redirect("character_relationships", s=ctx["event"].slug, n=ctx["run"].number, num=ctx["char"]["number"])
     return render(request, "larpmanager/orga/edit.html", ctx)
+
+
+@require_POST
+def show_char(request, s, n):
+    ctx = get_event_run(request, s, n)
+    get_event_cache_all(ctx)
+    search = request.POST.get("text", "").strip()
+    if not search.startswith("#"):
+        raise Http404(f"malformed request {search}")
+    search = int(search.replace("#", ""))
+    if not search:
+        raise Http404(f"not valid search {search}")
+    if search not in ctx["chars"]:
+        raise Http404(f"not present char number {search}")
+    ch = ctx["chars"][search]
+    tooltip = get_tooltip(ctx, ch)
+    return JsonResponse({"content": f"<div class='show_char'>{tooltip}</div>"})

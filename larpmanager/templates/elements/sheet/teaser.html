@@ -1,0 +1,52 @@
+{% load show_tags i18n %}
+{% if char.teaser and show_teaser %}
+    <hr class="no-clear" />
+    <div class="teaser">{% show_char char.teaser run 1 %}</div>
+{% endif %}
+{% for fnum in char.factions %}
+    {% with factions|get:fnum as g %}
+        {% if not g.typ == 'g' %}
+            {% if show_faction and g.number %}
+                <h2>
+                    <a href="{% url 'faction' event.slug run.number g.number %}">{{ g.name }}</a>
+                </h2>
+            {% else %}
+                <h2>{{ g.name }}</h2>
+            {% endif %}
+            {% if g.teaser and show_teaser %}
+                {% show_char g.teaser run 1 %}
+            {% endif %}
+        {% endif %}
+    {% endwith %}
+{% endfor %}
+{% if features.questbuilder %}
+    {% for tnum in char.traits %}
+        {% with traits|get:tnum as f %}
+            {% with quests|get:f.quest as quest %}
+                {% if quest.open or check %}
+                    {% with quest_types|get:f.typ as qt %}<h2>{{ qt.name }}</h2>{% endwith %}
+                    <div class="go-inline">
+                        <b>{% trans "Quest" %}: </b>{{ quest.name }}, <b>{% trans "Trait" %}: </b>{{ f.name }}
+                    </div>
+                    {% if quest.teaser and show_teaser %}
+                        {% show_char quest.teaser run 1 %}
+                    {% endif %}
+                    {% if f.teaser and show_teaser %}
+                        {% show_char f.teaser run 1 %}
+                    {% endif %}
+                    {% if f.open %}
+                        <div class="go-inline">
+                            <b>{% trans "Other characters" %}: </b>
+                        </div>
+                        {% for el in f.traits %}
+                            {% if el.char and el.char.number != char.number %}
+                                {{ el.name }} ( <a href="{% url 'character' slug run.number el.char.number %}">{{ el.char.name }}</a> )
+                                <br />
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+            {% endwith %}
+        {% endwith %}
+    {% endfor %}
+{% endif %}

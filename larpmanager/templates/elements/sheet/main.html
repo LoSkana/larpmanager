@@ -45,7 +45,7 @@
         {% endif %}
     </tr>
 </table>
-{% include "elements/sheet/character_fields.html" with char=sheet_char %}
+{% include "elements/sheet/fields.html" with char=sheet_char %}
 {% if sheet_char.teaser and show_teaser %}
     <div class="teaser">
         <div class="pre-section"></div>
@@ -72,18 +72,8 @@
     </div>
     <hr class="clear" />
 {% endfor %}
-{% if sheet_char.text and show_text %}
-    <div class="sheet">
-        <div class="pre-section"></div>
-        <h2 class="title">
-            {% if run.event.lang == 'it' %}
-                Scheda
-            {% else %}
-                Background
-            {% endif %}
-        </h2>
-        <div class="text">{% show_char sheet_char run 0 %}</div>
-        <div class="post-section"></div>
-    </div>
-    <hr class="clear" />
-{% endif %}
+<div class="sheet">
+    <div class="pre-section"></div>
+    {% include "elements/sheet/texts.html" with char=sheet_char %}
+    <div class="post-section"></div>
+</div>

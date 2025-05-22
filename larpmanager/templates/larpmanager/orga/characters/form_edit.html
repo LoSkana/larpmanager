@@ -37,7 +37,7 @@
                 {% for el in list %}
                     <tr id="{{ el.id }}">
                         <td>
-                            <a href="{% url 'orga_character_options_edit' run.event.slug run.number el.id %}">
+                            <a href="{% url 'orga_writing_options_edit' run.event.slug run.number typ el.id %}">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>
@@ -58,7 +58,7 @@
                         </td>
                         <td>
                             {% if not forloop.first %}
-                                <a href="{% url 'orga_character_options_order' run.event.slug run.number el.id %}">
+                                <a href="{% url 'orga_writing_options_order' run.event.slug run.number typ el.id %}">
                                     <i class="fa-solid fa-arrow-up"></i>
                                 </a>
                             {% endif %}
@@ -71,7 +71,7 @@
 {% endblock content %}
 {% block js %}
     <script>
-    var newUrl = '{% url 'orga_character_options_new' run.event.slug run.number num %}';
+    var newUrl = '{% url 'orga_writing_options_new' run.event.slug run.number typ num %}';
 
     {% include "elements/question_edit.js" %}
 

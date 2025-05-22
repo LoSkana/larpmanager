@@ -23,7 +23,6 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
-from tinymce.widgets import TinyMCE
 
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.forms.base import MyForm
@@ -32,6 +31,7 @@ from larpmanager.forms.utils import (
     EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
     TicketS2WidgetMulti,
+    WritingTinyMCE,
 )
 from larpmanager.forms.writing import BaseWritingForm, WritingForm
 from larpmanager.models.casting import AssignmentTrait
@@ -40,6 +40,7 @@ from larpmanager.models.experience import AbilityPx, DeliveryPx
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionType,
+    QuestionVisibility,
     WritingOption,
     WritingQuestion,
 )
@@ -54,7 +55,7 @@ class CharacterCocreationForm(forms.Form):
         super().__init__(*args, **kwargs)
         k = "co_creation_answer"
         self.fields[k] = forms.CharField(
-            widget=TinyMCE(attrs={"cols": 80, "rows": 10}),
+            widget=WritingTinyMCE(),
             label="Risposte",
             help_text=_("Freely answer the co-creation questions"),
             required=False,
@@ -87,8 +88,8 @@ class CharacterForm(WritingForm, BaseWritingForm):
         ]
 
         widgets = {
-            "teaser": TinyMCE(attrs={"cols": 80, "rows": 10}),
-            "text": TinyMCE(attrs={"cols": 80, "rows": 20}),
+            "teaser": WritingTinyMCE(),
+            "text": WritingTinyMCE(),
             "player": AssocMemberS2Widget,
             "characters": EventCharacterS2WidgetMulti,
         }
@@ -99,9 +100,6 @@ class CharacterForm(WritingForm, BaseWritingForm):
         self.details = {}
 
         self._init_character()
-
-    def get_applicable(self):
-        return QuestionApplicable.CHARACTER
 
     def check_editable(self, question):
         if not self.params["event"].get_config("user_character_approval", False):
@@ -154,40 +152,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
     def _init_character(self):
         self._init_factions()
 
-        # custom fields
-        if "character_form" in self.params["features"]:
-            self._init_custom_fields()
-            return
-
-        self.delete_field("characters")
-
-        self.fields["teaser"].help_text = _("Presentation text, visible to other players")
-
-        self.fields["text"].help_text = _(
-            "Private text, visible only to you and the organizers. You can use it for write background or a journal."
-        )
-
-        # STANDARD FIELDS
-        st_fields = ["title", "mirror", "hide"]
-        for s in st_fields:
-            if s in self.fields and s not in self.params["features"]:
-                del self.fields[s]
-
-        # ORGA FIELDS
-        if not self.orga:
-            for s in [
-                "progress",
-                "assigned",
-                "props",
-                "mirror",
-                "hide",
-                "cover",
-                "characters",
-                "status",
-                "player",
-            ]:
-                if s in self.fields:
-                    del self.fields[s]
+        self._init_custom_fields()
 
     def _init_factions(self):
         if "faction" not in self.params["features"]:
@@ -273,23 +238,7 @@ class OrgaCharacterForm(CharacterForm):
     def _init_character(self):
         self._init_factions()
 
-        # custom fields
-        if "character_form" in self.params["features"]:
-            self._init_custom_fields()
-        else:
-            # STANDARD FIELDS
-            st_fields = [
-                "title",
-                "mirror",
-                "hide",
-                "progress",
-                "assigned",
-                "props",
-                "cover",
-            ]
-            for s in st_fields:
-                if s in self.fields and s not in self.params["features"]:
-                    del self.fields[s]
+        self._init_custom_fields()
 
         if "user_character" in self.params["features"]:
             self.fields["player"].widget.set_assoc(aid=self.params["a_id"])
@@ -354,7 +303,7 @@ class OrgaCharacterForm(CharacterForm):
             plot = f"#{pl[1]} {pl[2]}"
             field = f"pl_{pl[0]}"
             self.fields[field] = forms.CharField(
-                widget=TinyMCE(attrs={"cols": 80, "rows": 10}),
+                widget=WritingTinyMCE(),
                 label=plot,
                 help_text=_("This text will be added to the sheet, in the plot paragraph %(name)s") % {"name": plot},
                 required=False,
@@ -448,7 +397,7 @@ class OrgaCharacterForm(CharacterForm):
 
         k = "co_creation_question"
         self.fields[k] = forms.CharField(
-            widget=TinyMCE(attrs={"cols": 80, "rows": 10}),
+            widget=WritingTinyMCE(),
             label=_("Co-creation questions"),
             help_text=_("Questions for the co-creation section, editable only by authors"),
             required=False,
@@ -459,7 +408,7 @@ class OrgaCharacterForm(CharacterForm):
 
         k = "co_creation_answer"
         self.fields[k] = forms.CharField(
-            widget=TinyMCE(attrs={"cols": 80, "rows": 10}),
+            widget=WritingTinyMCE(),
             label=_("Co-creation answers"),
             help_text=_("Answers for the co-creation section, editable by both players and authors"),
             required=False,
@@ -511,31 +460,40 @@ class OrgaWritingQuestionForm(MyForm):
 
         self._init_type()
 
-        if "user_character" not in self.params["features"]:
-            self.delete_field("max_length")
+        if (
+            "user_character" not in self.params["features"]
+            or self.params["writing_typ"] != QuestionApplicable.CHARACTER
+        ):
             self.delete_field("status")
 
-        if "print_pdf" not in self.params["features"]:
+        if "print_pdf" not in self.params["features"] or self.params["writing_typ"] == QuestionApplicable.PLOT:
             self.delete_field("printable")
 
         self._init_editable()
 
         self._init_applicable()
 
+        # remove visibility from plot
+        if self.params["writing_typ"] == QuestionApplicable.PLOT:
+            self.delete_field("visibility")
+        # set only private and public visibility if different from character
+        elif self.params["writing_typ"] != QuestionApplicable.CHARACTER:
+            self.fields["visibility"].choices = [
+                (choice.value, choice.label) for choice in QuestionVisibility if choice != QuestionVisibility.SEARCHABLE
+            ]
+            help_text = self.fields["visibility"].help_text
+            updated_help_text = ".".join(help_text.split(".", 1)[1:]).lstrip()
+            self.fields["visibility"].help_text = updated_help_text
+
     def _init_type(self):
         # Add type of character question to the available types
-        que = self.params["event"].get_elements(WritingQuestion).values_list("typ", flat=True)
-        already = list(que.distinct())
+        que = WritingQuestion.objects.filter(event=self.params["event"], applicable=self.params["writing_typ"])
+        already = list(que.values_list("typ", flat=True).distinct())
         if self.instance.pk and self.instance.typ:
             already.remove(self.instance.typ)
 
-            basic_type = self.instance.typ in {
-                QuestionType.SINGLE,
-                QuestionType.MULTIPLE,
-                QuestionType.TEXT,
-                QuestionType.PARAGRAPH,
-            }
-            def_type = self.instance.typ in {QuestionType.NAME}
+            basic_type = self.instance.typ in QuestionType.get_basic_types()
+            def_type = self.instance.typ in {QuestionType.NAME, QuestionType.TEASER, QuestionType.TEXT}
             type_feature = self.instance.typ in self.params["features"]
             self.prevent_canc = not basic_type and def_type or type_feature
         choices = []
@@ -564,36 +522,15 @@ class OrgaWritingQuestionForm(MyForm):
                 self.initial["editable"] = self.instance.get_editable()
 
     def _init_applicable(self):
-        # check if set applicable (avoid for standard ones)
-        typ_def = ["name", "teaser", "text"]
-        if self.instance.pk and self.instance.typ in typ_def:
+        if self.instance.pk:
             del self.fields["applicable"]
-        else:
-            all_choices = {"characters": QuestionApplicable.CHARACTER, "plot": QuestionApplicable.PLOT}
-            choices = []
-            for feature, choice in all_choices.items():
-                if feature not in self.params["features"]:
-                    continue
-                choices.append((choice.value, choice.label))
+            return
 
-            if len(choices) > 1:
-                self.fields["applicable"] = forms.MultipleChoiceField(
-                    choices=choices,
-                    widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
-                    required=False,
-                )
-                if self.instance and self.instance.pk:
-                    self.initial["applicable"] = self.instance.get_applicable()
-                else:
-                    self.initial["applicable"] = QuestionApplicable.CHARACTER
-            else:
-                del self.fields["applicable"]
+        self.fields["applicable"].widget = forms.HiddenInput()
+        self.initial["applicable"] = self.params["writing_typ"]
 
     def clean_editable(self):
         return ",".join(self.cleaned_data["editable"])
-
-    def clean_applicable(self):
-        return ",".join(self.cleaned_data["applicable"])
 
 
 class OrgaWritingOptionForm(MyForm):

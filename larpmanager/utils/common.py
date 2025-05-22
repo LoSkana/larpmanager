@@ -35,7 +35,6 @@ from diff_match_patch import diff_match_patch
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from django.template.defaulttags import register
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext_lazy as _
 
@@ -122,11 +121,6 @@ def check_diff(self, tx1, tx2):
     self.diff = dmp.diff_main(tx1, tx2)
     dmp.diff_cleanupEfficiency(self.diff)
     self.diff = dmp.diff_prettyHtml(self.diff)
-
-
-@register.filter
-def get_item(dictionary, key):
-    return dictionary.get(key)
 
 
 def get_assoc(request):
@@ -557,6 +551,8 @@ def exchange_order(ctx, cls, num):
         prev = prev.filter(question=current.question)
     if hasattr(current, "section"):
         prev = prev.filter(section=current.section)
+    if hasattr(current, "applicable"):
+        prev = prev.filter(applicable=current.applicable)
 
     if len(prev) == 0:
         current.order -= 1
@@ -589,11 +585,14 @@ def copy_class(target_id, source_id, cls):
     for obj in cls.objects.filter(event_id=source_id):
         # save a copy of m2m relations
         m2m_data = {}
+
+        # noinspection PyProtectedMember
         for field in obj._meta.many_to_many:
             m2m_data[field.name] = list(getattr(obj, field.name).all())
 
         obj.pk = None
         obj.event_id = target_id
+        # noinspection PyProtectedMember
         obj._state.adding = True
         obj.save()
 

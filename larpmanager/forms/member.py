@@ -65,7 +65,7 @@ class MyAuthForm(AuthenticationForm):
 
 
 class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
-    # noinspection PyUnresolvedReferences
+    # noinspection PyUnresolvedReferences, PyProtectedMember
     def __init__(self, *args, **kwargs):
         super(RegistrationFormUniqueEmail, self).__init__(*args, **kwargs)
         self.fields["username"].widget = forms.HiddenInput()
@@ -79,6 +79,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
         )
 
         self.fields["email"].widget.attrs["maxlength"] = 70
+
         self.fields["password1"].widget.attrs["maxlength"] = 70
 
         self.fields["name"] = forms.CharField(
@@ -92,6 +93,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             label=Member._meta.get_field("surname").verbose_name,
             help_text=Member._meta.get_field("surname").help_text,
         )
+
         self.fields["newsletter"] = forms.ChoiceField(
             required=True,
             choices=Member.NEWSLETTER_CHOICES,
@@ -148,6 +150,7 @@ class MyPasswordResetForm(PasswordResetForm):
         self.fields["email"].widget.attrs["maxlength"] = 70
 
     def get_users(self, email):
+        # noinspection PyProtectedMember
         active_users = get_user_model()._default_manager.filter(email__iexact=email, is_active=True)
         return (u for u in active_users)
 
@@ -578,7 +581,7 @@ class ExeProfileForm(MyForm):
             "legal_gender",
         ]
         choices = []
-        # noinspection PyUnresolvedReferences
+        # noinspection PyUnresolvedReferences,PyProtectedMember
         for f in Member._meta.get_fields():
             if not str(f).startswith("larpmanager.Member."):
                 continue
