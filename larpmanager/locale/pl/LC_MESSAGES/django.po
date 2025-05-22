@@ -2102,9 +2102,6 @@ msgstr "Obraz karuzeli"
 msgid "Character Edit"
 msgstr "Edycja postaci"
 
-msgid "Character form"
-msgstr "Postać"
-
 msgid "Character name"
 msgstr "Nazwa postaci"
 
@@ -4454,9 +4451,6 @@ msgstr "Wskaż dokładnie swoją dziedzinę doświadczenia"
 
 msgid "Indicate the tickets for which it is active"
 msgstr "Wskaż bilety, dla których jest aktywny"
-
-msgid "Presentation text, visible to other players"
-msgstr "Tekst prezentacji, widoczny dla innych graczy"
 
 msgid "This page performs checks on members' data."
 msgstr "Ta strona sprawdza dane członków."
@@ -7495,13 +7489,6 @@ msgstr ""
 "użytkownik musi wyrazić zgodę na udostępnianie swoich danych."
 
 msgid ""
-"Private text, visible only to you and the organizers. You can use it for "
-"write background or a journal."
-msgstr ""
-"Prywatny tekst, widoczny tylko dla Ciebie i organizatorów. Można go używać "
-"do pisania w tle lub w dzienniku."
-
-msgid ""
 "(You can also refer to traits from other quests, but be careful that  are "
 "always of the same macrotype)."
 msgstr ""
@@ -8037,13 +8024,6 @@ msgid ""
 msgstr ""
 "Jeśli pytanie dotyczy konkretnego wydarzenia, wybierz je! Jeśli jest to "
 "pytanie ogólne, pozostaw je puste."
-
-msgid ""
-"Lets you define custom fields in the character form, which display in the "
-"character sheet, gallery, and search filters."
-msgstr ""
-"Pozwala zdefiniować niestandardowe pola w formularzu postaci, które będą "
-"wyświetlane w arkuszu postaci, galerii i filtrach wyszukiwania."
 
 msgid ""
 "This page allows you to change the appearance settings and presentation of "

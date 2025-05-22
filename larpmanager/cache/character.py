@@ -110,7 +110,7 @@ def get_event_cache_characters(ctx, res):
 
 
 def get_event_cache_fields(ctx, res, only_visible=True):
-    if "character_form" not in ctx["features"]:
+    if "character" not in ctx["features"]:
         return
 
     # get visible question ids
@@ -148,7 +148,7 @@ def get_event_cache_fields(ctx, res, only_visible=True):
 
 
 def get_character_fields(ctx, only_visible=True):
-    if "character_form" not in ctx["features"]:
+    if "character" not in ctx["features"]:
         return
 
     if "questions" in ctx:
@@ -173,7 +173,7 @@ def get_character_fields(ctx, only_visible=True):
 
 
 def get_searcheable_character_fields(ctx):
-    if "character_form" not in ctx["features"]:
+    if "character" not in ctx["features"]:
         return
 
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
@@ -304,7 +304,7 @@ def reset_event_cache_all(run):
 
 def update_character_fields(instance, data):
     features = get_event_features(instance.event.id)
-    if "character_form" not in features:
+    if "character" not in features:
         return
 
     ctx = {"features": features, "event": instance.event}

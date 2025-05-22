@@ -291,7 +291,7 @@ def save_event_tickets(features, instance):
 
 def save_event_character_form(features, instance):
     # create fields if not exists / delete if feature not active
-    if "character_form" not in features:
+    if "character" not in features:
         return
 
     # get most common language between organizers

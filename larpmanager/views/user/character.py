@@ -317,7 +317,7 @@ def character_list(request, s, n):
     # add character configs
     char_add_addit(ctx)
     for el in ctx["list"]:
-        if "character_form" in ctx["features"]:
+        if "character" in ctx["features"]:
             el.fields = get_character_cache_fields(ctx, el.id, only_visible=True)
 
     ctx["char_maximum"] = check_character_maximum(ctx["event"], request.user.member)
@@ -347,7 +347,7 @@ def character_edit(request, s, n, num):
 
 def get_options_dependencies(ctx):
     ctx["dependencies"] = {}
-    if "character_form" not in ctx["features"]:
+    if "character" not in ctx["features"]:
         return
 
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")

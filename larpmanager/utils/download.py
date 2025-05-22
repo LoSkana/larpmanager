@@ -115,7 +115,7 @@ def _download_questions(ctx, el, first, key, res, val):
 
 def _download_prepare(ctx, nm, query, typ):
     res = None
-    if nm == "character" and "character_form" in ctx["features"]:
+    if nm == "character" and "character" in ctx["features"]:
         res = {"chars": {}}
         get_event_cache_fields(ctx, res, only_visible=False)
     if check_field(typ, "event"):

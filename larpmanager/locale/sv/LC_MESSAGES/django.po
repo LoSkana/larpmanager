@@ -2102,9 +2102,6 @@ msgstr "Bildkarusell"
 msgid "Character Edit"
 msgstr "Redigera karaktär"
 
-msgid "Character form"
-msgstr "Karaktärsform"
-
 msgid "Character name"
 msgstr "Karaktärens namn"
 
@@ -4456,9 +4453,6 @@ msgstr "Ange exakt inom vilket område du har erfarenhet"
 
 msgid "Indicate the tickets for which it is active"
 msgstr "Ange de biljetter för vilka den är aktiv"
-
-msgid "Presentation text, visible to other players"
-msgstr "Presentationstext, synlig för andra spelare"
 
 msgid "This page performs checks on members' data."
 msgstr "Denna sida utför kontroller av medlemmarnas uppgifter."
@@ -7516,13 +7510,6 @@ msgstr ""
 "uppgifter delas med oss."
 
 msgid ""
-"Private text, visible only to you and the organizers. You can use it for "
-"write background or a journal."
-msgstr ""
-"Privat text, endast synlig för dig och arrangörerna. Du kan använda den för "
-"att skriva bakgrund eller en dagbok"
-
-msgid ""
 "(You can also refer to traits from other quests, but be careful that  are "
 "always of the same macrotype)."
 msgstr ""
@@ -8057,13 +8044,6 @@ msgid ""
 msgstr ""
 "Om din fråga gäller ett specifikt evenemang, vänligen välj det! Om det är en"
 " allmän fråga, vänligen lämna fältet tomt"
-
-msgid ""
-"Lets you define custom fields in the character form, which display in the "
-"character sheet, gallery, and search filters."
-msgstr ""
-"Här kan du definiera anpassade fält i karaktärsformuläret, som visas i "
-"karaktärsbladet, galleriet och sökfiltren."
 
 msgid ""
 "This page allows you to change the appearance settings and presentation of "

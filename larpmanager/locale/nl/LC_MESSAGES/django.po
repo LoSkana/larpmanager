@@ -2102,9 +2102,6 @@ msgstr "Afbeeldingencarrousel"
 msgid "Character Edit"
 msgstr "Karakter bewerken"
 
-msgid "Character form"
-msgstr "Karaktervorm"
-
 msgid "Character name"
 msgstr "Naam personage"
 
@@ -4458,9 +4455,6 @@ msgstr "Geef precies aan wat je ervaringsgebied is"
 
 msgid "Indicate the tickets for which it is active"
 msgstr "Geef aan voor welke tickets het actief is"
-
-msgid "Presentation text, visible to other players"
-msgstr "Presentatietekst, zichtbaar voor andere spelers"
 
 msgid "This page performs checks on members' data."
 msgstr "Deze pagina voert controles uit op de gegevens van leden."
@@ -7624,13 +7618,6 @@ msgstr ""
 "toestemming geven voor het delen van uw gegevens."
 
 msgid ""
-"Private text, visible only to you and the organizers. You can use it for "
-"write background or a journal."
-msgstr ""
-"Privétekst, alleen zichtbaar voor jou en de organisatoren. Je kunt het "
-"gebruiken om achtergronden of een dagboek te schrijven"
-
-msgid ""
 "(You can also refer to traits from other quests, but be careful that  are "
 "always of the same macrotype)."
 msgstr ""
@@ -8171,14 +8158,6 @@ msgid ""
 msgstr ""
 "Als je vraag over een specifiek evenement gaat, selecteer dit dan! Als het "
 "een algemene vraag is, laat deze dan leeg"
-
-msgid ""
-"Lets you define custom fields in the character form, which display in the "
-"character sheet, gallery, and search filters."
-msgstr ""
-"Hiermee kun je aangepaste velden definiëren in het formulier voor "
-"personages, die worden weergegeven in de personagefiche, galerij en "
-"zoekfilters."
 
 msgid ""
 "This page allows you to change the appearance settings and presentation of "

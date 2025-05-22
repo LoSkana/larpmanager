@@ -152,40 +152,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
     def _init_character(self):
         self._init_factions()
 
-        # custom fields
-        if "character_form" in self.params["features"]:
-            self._init_custom_fields()
-            return
-
-        self.delete_field("characters")
-
-        self.fields["teaser"].help_text = _("Presentation text, visible to other players")
-
-        self.fields["text"].help_text = _(
-            "Private text, visible only to you and the organizers. You can use it for write background or a journal."
-        )
-
-        # STANDARD FIELDS
-        st_fields = ["title", "mirror", "hide"]
-        for s in st_fields:
-            if s in self.fields and s not in self.params["features"]:
-                del self.fields[s]
-
-        # ORGA FIELDS
-        if not self.orga:
-            for s in [
-                "progress",
-                "assigned",
-                "props",
-                "mirror",
-                "hide",
-                "cover",
-                "characters",
-                "status",
-                "player",
-            ]:
-                if s in self.fields:
-                    del self.fields[s]
+        self._init_custom_fields()
 
     def _init_factions(self):
         if "faction" not in self.params["features"]:
@@ -271,23 +238,7 @@ class OrgaCharacterForm(CharacterForm):
     def _init_character(self):
         self._init_factions()
 
-        # custom fields
-        if "character_form" in self.params["features"]:
-            self._init_custom_fields()
-        else:
-            # STANDARD FIELDS
-            st_fields = [
-                "title",
-                "mirror",
-                "hide",
-                "progress",
-                "assigned",
-                "props",
-                "cover",
-            ]
-            for s in st_fields:
-                if s in self.fields and s not in self.params["features"]:
-                    del self.fields[s]
+        self._init_custom_fields()
 
         if "user_character" in self.params["features"]:
             self.fields["player"].widget.set_assoc(aid=self.params["a_id"])

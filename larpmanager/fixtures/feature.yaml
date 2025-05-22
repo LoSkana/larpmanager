@@ -1209,17 +1209,6 @@
     placeholder: false
     order: 60
 - model: larpmanager.feature
-  pk: 176
-  fields:
-    name: Character form
-    descr: Lets you define custom fields in the character form, which display in the
-      character sheet, gallery, and search filters.
-    slug: character_form
-    overall: false
-    module: 1
-    placeholder: false
-    order: 20
-- model: larpmanager.feature
   pk: 177
   fields:
     name: Additional tickets

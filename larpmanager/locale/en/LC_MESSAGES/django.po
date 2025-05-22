@@ -570,14 +570,6 @@ msgid ""
 "in the future."
 msgstr ""
 
-msgid "Presentation text, visible to other players"
-msgstr ""
-
-msgid ""
-"Private text, visible only to you and the organizers. You can use it for "
-"write background or a journal."
-msgstr ""
-
 msgid "Select one primary faction"
 msgstr ""
 
@@ -7338,14 +7330,6 @@ msgstr ""
 msgid ""
 "Allows players to purchase tickets as gifts. A special code is generated and "
 "provided to the gift recipient for registration."
-msgstr ""
-
-msgid "Character form"
-msgstr ""
-
-msgid ""
-"Lets you define custom fields in the character form, which display in the "
-"character sheet, gallery, and search filters."
 msgstr ""
 
 msgid "Allows a user to reserve extra tickets in addition to their own."

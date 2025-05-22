@@ -2102,9 +2102,6 @@ msgstr "Kolotoč obrázků"
 msgid "Character Edit"
 msgstr "Úprava postavy"
 
-msgid "Character form"
-msgstr "Podoba postavy"
-
 msgid "Character name"
 msgstr "Jméno postavy"
 
@@ -4454,9 +4451,6 @@ msgstr "Přesně uveďte obor své praxe"
 
 msgid "Indicate the tickets for which it is active"
 msgstr "Uveďte tipy, pro které je aktivní"
-
-msgid "Presentation text, visible to other players"
-msgstr "Text prezentace viditelný pro ostatní hráče"
 
 msgid "This page performs checks on members' data."
 msgstr "Tato stránka provádí kontroly údajů členů."
@@ -7385,13 +7379,6 @@ msgstr ""
 "údajů."
 
 msgid ""
-"Private text, visible only to you and the organizers. You can use it for "
-"write background or a journal."
-msgstr ""
-"Soukromý text, viditelný pouze pro vás a organizátory. Můžete jej použít k "
-"psaní pozadí nebo deníku."
-
-msgid ""
 "(You can also refer to traits from other quests, but be careful that  are "
 "always of the same macrotype)."
 msgstr ""
@@ -7926,13 +7913,6 @@ msgid ""
 msgstr ""
 "Pokud se váš dotaz týká konkrétní události, vyberte ji! Pokud se jedná o "
 "obecnou otázku, nechte ji prosím nevyplněnou."
-
-msgid ""
-"Lets you define custom fields in the character form, which display in the "
-"character sheet, gallery, and search filters."
-msgstr ""
-"Umožňuje definovat vlastní pole ve formuláři postavy, která se zobrazují v "
-"listu postavy, galerii a ve vyhledávacích filtrech."
 
 msgid ""
 "This page allows you to change the appearance settings and presentation of "

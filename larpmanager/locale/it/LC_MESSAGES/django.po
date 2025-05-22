@@ -2102,9 +2102,6 @@ msgstr "Immagine carousel"
 msgid "Character Edit"
 msgstr "Modifica personaggio"
 
-msgid "Character form"
-msgstr "Form personaggio"
-
 msgid "Character name"
 msgstr "Nome personaggio"
 
@@ -4455,9 +4452,6 @@ msgstr "Indica in modo preciso il tuo campo di esperienza"
 
 msgid "Indicate the tickets for which it is active"
 msgstr "Indicare i biglietti per cui è attivo"
-
-msgid "Presentation text, visible to other players"
-msgstr "Testo di presentazione, visibile agli altri giocatori"
 
 msgid "This page performs checks on members' data."
 msgstr "Questa pagina esegue dei controlli sui dati dei soci."
@@ -7599,13 +7593,6 @@ msgstr ""
 "autorizzare la condivisione dei tuoi dati."
 
 msgid ""
-"Private text, visible only to you and the organizers. You can use it for "
-"write background or a journal."
-msgstr ""
-"Testo privato, visibile solo a te e agli organizzatori. Puoi usarlo per "
-"scrivere il background od un diario"
-
-msgid ""
 "(You can also refer to traits from other quests, but be careful that  are "
 "always of the same macrotype)."
 msgstr ""
@@ -8143,14 +8130,6 @@ msgid ""
 msgstr ""
 "Se la tua domanda riguarda un evento specifico, per favore selezionalo! Se "
 "invece è una domanda generica, lascia pure vuoto"
-
-msgid ""
-"Lets you define custom fields in the character form, which display in the "
-"character sheet, gallery, and search filters."
-msgstr ""
-"Consente di definire campi personalizzati nella scheda del personaggio, che "
-"vengono visualizzati nella scheda del personaggio, nella galleria e nei "
-"filtri di ricerca."
 
 msgid ""
 "This page allows you to change the appearance settings and presentation of "

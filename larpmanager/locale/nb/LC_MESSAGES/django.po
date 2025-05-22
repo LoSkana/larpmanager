@@ -2102,9 +2102,6 @@ msgstr "Bildekarusell"
 msgid "Character Edit"
 msgstr "Tegnredigering"
 
-msgid "Character form"
-msgstr "Tegnform"
-
 msgid "Character name"
 msgstr "Tegnets navn"
 
@@ -4456,9 +4453,6 @@ msgstr "Angi nøyaktig hva du har erfaring med"
 
 msgid "Indicate the tickets for which it is active"
 msgstr "Angi hvilke billetter den er aktiv for"
-
-msgid "Presentation text, visible to other players"
-msgstr "Presentasjonstekst, synlig for andre spillere"
 
 msgid "This page performs checks on members' data."
 msgstr "Denne siden utfører kontroller av medlemmenes data."
@@ -7492,13 +7486,6 @@ msgstr ""
 "opplysningene dine."
 
 msgid ""
-"Private text, visible only to you and the organizers. You can use it for "
-"write background or a journal."
-msgstr ""
-"Privat tekst som bare er synlig for deg og arrangørene. Du kan bruke den til"
-" å skrive bakgrunn eller dagbok."
-
-msgid ""
 "(You can also refer to traits from other quests, but be careful that  are "
 "always of the same macrotype)."
 msgstr ""
@@ -8033,13 +8020,6 @@ msgid ""
 msgstr ""
 "Hvis spørsmålet ditt gjelder et bestemt arrangement, vennligst velg det! "
 "Hvis det er et generelt spørsmål, kan du la det stå tomt."
-
-msgid ""
-"Lets you define custom fields in the character form, which display in the "
-"character sheet, gallery, and search filters."
-msgstr ""
-"Lar deg definere egendefinerte felt i tegnskjemaet, som vises i tegnarket, "
-"galleriet og søkefiltrene."
 
 msgid ""
 "This page allows you to change the appearance settings and presentation of "
