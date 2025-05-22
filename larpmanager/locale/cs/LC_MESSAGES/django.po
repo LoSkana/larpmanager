@@ -2717,6 +2717,12 @@ msgstr "ještě nejsou otevřeny!"
 msgid "download document"
 msgstr "stáhnout dokument"
 
+msgid "this is important"
+msgstr "to je důležité"
+
+msgid "'pwyw' (donation)."
+msgstr "\"pwyw\" (dar)."
+
 msgid "Access the history"
 msgstr "Přístup k historii"
 
@@ -3501,6 +3507,9 @@ msgstr "méně kontrolních hlášení"
 msgid "not visible at this time"
 msgstr "v tuto chvíli není viditelný"
 
+msgid "'player' (player's email)"
+msgstr "'player' (e-mail hráče)"
+
 msgid "Feature already activated"
 msgstr "Funkce je již aktivována"
 
@@ -3883,6 +3892,9 @@ msgstr "Vklad jste dokončili!"
 
 msgid "check nonexistent relationships"
 msgstr "kontrola neexistujících vztahů"
+
+msgid "'ticket' (ticket name or number)"
+msgstr "\"tip\" (název nebo číslo tipu)"
 
 msgid "Browse the presentation website!"
 msgstr "Prohlédněte si prezentační stránky!"
@@ -4870,6 +4882,9 @@ msgstr "zde jsou uvedeny podmínky pro odhlášení z této akce."
 msgid "%(amount)d %(tokens)s were disbursed with %(reason)s."
 msgstr "%(amount)d %(tokens)s byly vyplaceny s %(reason)s."
 
+msgid "'character' (character name or number to be assigned)"
+msgstr "'character' (jméno nebo číslo postavy, které má být přiřazeno)"
+
 msgid "Adds a short (2-3 words) 'title' field to characters."
 msgstr "Přidá ke znakům krátké (2-3 slova) pole \"název\"."
 
@@ -5420,6 +5435,10 @@ msgstr "Níže uvedené údaje slouží k žádosti o převod z vaší banky."
 
 msgid "Allows authors to prepare a list of inter-character relationships."
 msgstr "Umožňuje autorům připravit seznam vztahů mezi postavami."
+
+msgid "Copy and paste exactly all the coloured text below into the notes."
+msgstr ""
+"Zkopírujte a vložte do poznámek přesně celý níže uvedený barevný text."
 
 msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr ""
@@ -6892,13 +6911,6 @@ msgstr ""
 " PDF a odešle ji uživateli e-mailem."
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field 'notes' "
-"(this is important!)"
-msgstr ""
-"Zkopírujte a vložte přesně celý barevný text níže do pole \"poznámky\" (je "
-"to důležité!)."
-
-msgid ""
 "Optional - Indicate additional details on the ticket, they will be shown "
 "below the application"
 msgstr "Nepovinné - Uvádí další podrobnosti o tipu, zobrazí se pod žádostí."
@@ -8167,14 +8179,6 @@ msgid ""
 msgstr ""
 "tento údaj je čistá hodnota, která by měla být výsledkem dostupnosti "
 "finančních nástrojů - nezohledňuje tokeny a kredity."
-
-msgid ""
-"'player' (player's email), 'ticket' (ticket name or number), 'character' "
-"(character name or number to be assigned), 'pwyw' (donation)."
-msgstr ""
-"\"player\" (e-mail hráče), \"ticket\" (jméno nebo číslo vstupenky), "
-"\"character\" (jméno nebo číslo postavy, která má být přidělena), \"pwyw\" "
-"(příspěvek)."
 
 msgid ""
 "Lets you upload and host files directly on larpmanager, making them "

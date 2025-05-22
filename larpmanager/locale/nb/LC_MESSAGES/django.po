@@ -2717,6 +2717,12 @@ msgstr "er ennå ikke åpnet!"
 msgid "download document"
 msgstr "Last ned dokumentet"
 
+msgid "this is important"
+msgstr "dette er viktig"
+
+msgid "'pwyw' (donation)."
+msgstr "\"pwyw\" (donasjon)."
+
 msgid "Access the history"
 msgstr "Få tilgang til historikken"
 
@@ -3501,6 +3507,9 @@ msgstr "sjekk rapporter mindre"
 msgid "not visible at this time"
 msgstr "ikke synlig på dette tidspunktet"
 
+msgid "'player' (player's email)"
+msgstr "\"spiller\" (spillerens e-postadresse)"
+
 msgid "Feature already activated"
 msgstr "Funksjonen er allerede aktivert"
 
@@ -3883,6 +3892,9 @@ msgstr "Du har fullført innbetalingen!"
 
 msgid "check nonexistent relationships"
 msgstr "sjekke ikke-eksisterende relasjoner"
+
+msgid "'ticket' (ticket name or number)"
+msgstr "\"billett\" (billettens navn eller nummer)"
 
 msgid "Browse the presentation website!"
 msgstr "Bla gjennom presentasjonssiden!"
@@ -4875,6 +4887,9 @@ msgstr "her er vilkårene for å melde deg av dette arrangementet."
 msgid "%(amount)d %(tokens)s were disbursed with %(reason)s."
 msgstr "%(amount)d %(tokens)s ble utbetalt med %(reason)s."
 
+msgid "'character' (character name or number to be assigned)"
+msgstr "\"tegn\" (tegnnavn eller nummer som skal tildeles)"
+
 msgid "Adds a short (2-3 words) 'title' field to characters."
 msgstr "Legger til et kort (2-3 ord) \"tittelfelt\" i tegnene."
 
@@ -5470,6 +5485,10 @@ msgid "Allows authors to prepare a list of inter-character relationships."
 msgstr ""
 "Gjør det mulig for forfattere å utarbeide en liste over relasjoner mellom "
 "karakterer."
+
+msgid "Copy and paste exactly all the coloured text below into the notes."
+msgstr ""
+"Kopier og lim inn nøyaktig all den fargede teksten nedenfor i notatene."
 
 msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr "Feil ved innlasting. Ugyldig filformat - vi godtar kun pdf og bilder."
@@ -6993,13 +7012,6 @@ msgstr ""
 "sender den til brukeren via e-post."
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field 'notes' "
-"(this is important!)"
-msgstr ""
-"Kopier og lim inn nøyaktig all den fargede teksten nedenfor i feltet "
-"\"notater\" (dette er viktig!)"
-
-msgid ""
 "Optional - Indicate additional details on the ticket, they will be shown "
 "below the application"
 msgstr ""
@@ -8281,14 +8293,6 @@ msgid ""
 msgstr ""
 "dette tallet er nettotallet som skal resultere i tilgjengeligheten av "
 "finansielle instrumenter - det tar ikke hensyn til tokens og kreditter."
-
-msgid ""
-"'player' (player's email), 'ticket' (ticket name or number), 'character' "
-"(character name or number to be assigned), 'pwyw' (donation)."
-msgstr ""
-"\"player\" (spillerens e-post), \"ticket\" (billettnavn eller -nummer), "
-"\"character\" (karakternavn eller -nummer som skal tildeles), \"pwyw\" "
-"(donasjon)."
 
 msgid ""
 "Lets you upload and host files directly on larpmanager, making them "

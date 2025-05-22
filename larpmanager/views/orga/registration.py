@@ -346,9 +346,13 @@ def orga_registrations(request, s, n):
     ctx["typ"] = "registration"
     ctx["form"] = UploadElementsForm()
 
-    ctx["upload"] = _(
-        "'player' (player's email), 'ticket' (ticket name or number), 'character' "
-        "(character name or number to be assigned), 'pwyw' (donation)."
+    ctx["upload"] = ",".join(
+        [
+            _("'player' (player's email)"),
+            _("'ticket' (ticket name or number)"),
+            _("'character' (character name or number to be assigned)"),
+            _("'pwyw' (donation)."),
+        ]
     )
 
     return render(request, "larpmanager/orga/registration/registrations.html", ctx)

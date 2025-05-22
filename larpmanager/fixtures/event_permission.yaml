@@ -480,7 +480,7 @@
     name: Form
     slug: orga_character_form
     number: 12
-    feature: 176
+    feature: 178
 - model: larpmanager.eventpermission
   pk: 76
   fields:
