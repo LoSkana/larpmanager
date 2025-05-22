@@ -186,7 +186,9 @@ def copy_character_config(e_id, p_id):
     for obj in Character.objects.filter(event_id=p_id):
         new_id = cache[obj.number]
         for el in CharacterConfig.objects.filter(character=obj):
-            CharacterConfig.objects.create(character_id=new_id, name=el.name, value=el.value)
+            (cg, created) = CharacterConfig.objects.get_or_create(character_id=new_id, name=el.name)
+            cg.value = el.value
+            cg.save()
 
 
 def copy(request, ctx, parent, event, element):
