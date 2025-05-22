@@ -24,6 +24,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.db import IntegrityError, transaction
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
@@ -185,10 +186,18 @@ def copy_character_config(e_id, p_id):
 
     for obj in Character.objects.filter(event_id=p_id):
         new_id = cache[obj.number]
-        if new_id == obj.id:
-            continue
         for el in CharacterConfig.objects.filter(character=obj):
-            CharacterConfig.objects.create(character_id=new_id, name=el.name, value=el.value)
+            for _idx in range(2):
+                try:
+                    with transaction.atomic():
+                        cg, created = CharacterConfig.objects.update_or_create(
+                            character_id=new_id, name=el.name, defaults={"value": el.value}
+                        )
+                    break
+                except IntegrityError:
+                    if _idx == 0:
+                        continue
+                    raise
 
 
 def copy(request, ctx, parent, event, element):
