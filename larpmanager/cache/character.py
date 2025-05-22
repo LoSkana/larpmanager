@@ -151,9 +151,6 @@ def get_character_fields(ctx, only_visible=True):
     if "character" not in ctx["features"]:
         return
 
-    if "questions" in ctx:
-        return
-
     # get visible question fields
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
     que = que.filter(applicable=QuestionApplicable.CHARACTER)
