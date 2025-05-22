@@ -23,10 +23,17 @@ from typing import Optional
 from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 
+from larpmanager.cache.feature import get_event_features
 from larpmanager.models.experience import AbilityPx, DeliveryPx, update_px
 from larpmanager.models.form import QuestionApplicable, WritingChoice
 from larpmanager.models.writing import Character
 from larpmanager.utils.common import add_char_addit
+
+
+@receiver(post_save, sender=Character)
+def post_character_update_px(sender, instance, *args, **kwargs):
+    if "px" in get_event_features(instance.event_id):
+        update_px(instance)
 
 
 @receiver(post_save, sender=AbilityPx)
