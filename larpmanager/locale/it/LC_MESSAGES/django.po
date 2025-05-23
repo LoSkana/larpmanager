@@ -3097,9 +3097,6 @@ msgstr "Terms and Conditions"
 msgid "Terms and conditions"
 msgstr "Termini e condizioni"
 
-msgid "The LarpManager team"
-msgstr "Il team di LarpManager"
-
 msgid "Yes, keep me posted!"
 msgstr "Sì, tenetemi aggiornato!"
 
@@ -3504,9 +3501,6 @@ msgstr "non visibili in questo momento"
 msgid "Feature already activated"
 msgstr "Feature già attivata"
 
-msgid "Glad to have you with us!"
-msgstr "Sono felice di averti con noi!"
-
 msgid "Go to the preferences for"
 msgstr "Vai alle preferenze per"
 
@@ -3875,9 +3869,6 @@ msgstr "Finora hai versato un totale di"
 msgid "Surcharge applied to the ticket"
 msgstr "Sovraprezzo applicato al biglietto"
 
-msgid "Thanks for joining LarpManager!"
-msgstr "Grazie per esserti unito a LarpManager!"
-
 msgid "To log back in with the account"
 msgstr "Per tornare ad essere collegato con l'account"
 
@@ -3953,9 +3944,6 @@ msgstr "Questa pagina riepiloga le trame dell'evento."
 
 msgid "This page shows the run signups."
 msgstr "Questa pagina riepiloga le iscrizioni alla run."
-
-msgid "To get started, check these out:"
-msgstr "Per iniziare, date un'occhiata a questi:"
 
 msgid "We ask you to pay the difference"
 msgstr "Ti chiediamo di versare la differenza"
@@ -4307,9 +4295,6 @@ msgstr "Clicca qui sotto per confermare la cancellazione:"
 msgid "Enables free pre-registration to events."
 msgstr "Consente la pre-registrazione gratuita agli eventi."
 
-msgid "Got questions? Just reply to this email."
-msgstr "Avete domande? Rispondete a questa e-mail."
-
 msgid "If you no longer wish to attend, you can"
 msgstr "Se non si desidera più partecipare, si può"
 
@@ -4386,9 +4371,6 @@ msgstr "Il numero della tua tessera è: <b>%(number)03d</b>."
 
 msgid "if the character belongs to this element."
 msgstr "se il personaggio appartiene a questo elemento."
-
-msgid "(You might want to keep this email handy.)"
-msgstr "(Si consiglia di tenere a portata di mano questa e-mail)."
 
 msgid "Character already assigned, not selectable"
 msgstr "Personaggio già assegnato, non selezionalbile"
@@ -4471,9 +4453,6 @@ msgstr "Indicare i biglietti per cui è attivo"
 msgid "Presentation text, visible to other players"
 msgstr "Testo di presentazione, visibile agli altri giocatori"
 
-msgid "Short guides to help you set up your events"
-msgstr "Brevi guide per aiutarvi a organizzare i vostri eventi"
-
 msgid "This page performs checks on members' data."
 msgstr "Questa pagina esegue dei controlli sui dati dei soci."
 
@@ -4497,9 +4476,6 @@ msgstr "Sconto non comulabile con altre agevolazioni"
 
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Desideri venire rimborsato? Apri una nuova"
-
-msgid "Here’s your organization’s LarpManager page:"
-msgstr "Ecco la pagina LarpManager della vostra organizzazione:"
 
 msgid "If checked: shows the tagline for each event"
 msgstr "Se checkato: mostra la tagline per ogni evento"
@@ -4651,9 +4627,6 @@ msgstr "Questa pagina riepiloga le erogazioni di px ai personaggi."
 
 msgid "A description of the skills / abilities involved"
 msgstr "Una descrizione delle abilità della competenza"
-
-msgid "And here’s the link to manage your organization:"
-msgstr "Ed ecco il link per gestire la vostra organizzazione:"
 
 msgid "Discounts only applicable with new registrations"
 msgstr "Codice applicabile solo in fase di nuova iscrizione"
@@ -4822,10 +4795,6 @@ msgstr "Se lo desideri, puoi cancellare le pre-iscrizioni passate."
 
 msgid "Indicates the currency in which to receive payments"
 msgstr "Indica la valuta in cui ricevere i pagamenti"
-
-msgid "Join our Discord for help, ideas, or to report bugs"
-msgstr ""
-"Unitevi al nostro Discord per ricevere aiuto, idee o per segnalare bug."
 
 msgid "Thank you for choosing to be part of our community!"
 msgstr "Ti ringraziamo per aver scelto di far parte della nostra community!"

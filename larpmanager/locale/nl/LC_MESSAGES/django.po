@@ -3097,9 +3097,6 @@ msgstr "Algemene voorwaarden"
 msgid "Terms and conditions"
 msgstr "Algemene voorwaarden"
 
-msgid "The LarpManager team"
-msgstr "Het team van LarpManager"
-
 msgid "Yes, keep me posted!"
 msgstr "Ja, hou me op de hoogte!"
 
@@ -3504,9 +3501,6 @@ msgstr "momenteel niet zichtbaar"
 msgid "Feature already activated"
 msgstr "Functie al geactiveerd"
 
-msgid "Glad to have you with us!"
-msgstr "Blij dat je bij ons bent!"
-
 msgid "Go to the preferences for"
 msgstr "Ga naar voorkeuren voor"
 
@@ -3875,9 +3869,6 @@ msgstr "Tot nu toe heb je in totaal"
 msgid "Surcharge applied to the ticket"
 msgstr "Toeslag op ticket"
 
-msgid "Thanks for joining LarpManager!"
-msgstr "Bedankt voor je deelname aan LarpManager!"
-
 msgid "To log back in with the account"
 msgstr "Om weer in te loggen met het account"
 
@@ -3953,9 +3944,6 @@ msgstr "Deze pagina geeft een samenvatting van de kavels van het evenement."
 
 msgid "This page shows the run signups."
 msgstr "Op deze pagina staat een overzicht van de inschrijvingen voor de run."
-
-msgid "To get started, check these out:"
-msgstr "Bekijk deze om te beginnen:"
 
 msgid "We ask you to pay the difference"
 msgstr "We vragen je om het verschil te betalen"
@@ -4309,9 +4297,6 @@ msgstr "Klik hieronder om uw annulering te bevestigen:"
 msgid "Enables free pre-registration to events."
 msgstr "Maakt gratis voorregistratie voor evenementen mogelijk."
 
-msgid "Got questions? Just reply to this email."
-msgstr "Heb je vragen? Beantwoord deze e-mail."
-
 msgid "If you no longer wish to attend, you can"
 msgstr "Als je niet langer wilt deelnemen, kun je"
 
@@ -4389,9 +4374,6 @@ msgstr "Je kaartnummer is: <b>%(number)03d</b>."
 
 msgid "if the character belongs to this element."
 msgstr "als het teken bij dit element hoort."
-
-msgid "(You might want to keep this email handy.)"
-msgstr "(Misschien wil je deze e-mail bij de hand houden)."
 
 msgid "Character already assigned, not selectable"
 msgstr "Karakter al toegewezen, niet selecteerbaar"
@@ -4474,9 +4456,6 @@ msgstr "Geef aan voor welke tickets het actief is"
 msgid "Presentation text, visible to other players"
 msgstr "Presentatietekst, zichtbaar voor andere spelers"
 
-msgid "Short guides to help you set up your events"
-msgstr "Korte gidsen om je te helpen bij het opzetten van je evenementen"
-
 msgid "This page performs checks on members' data."
 msgstr "Deze pagina voert controles uit op de gegevens van leden."
 
@@ -4500,9 +4479,6 @@ msgstr "Korting niet combineerbaar met andere concessies"
 
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Wil je een vergoeding? Open een nieuwe"
-
-msgid "Here’s your organization’s LarpManager page:"
-msgstr "Dit is de LarpManager-pagina van je organisatie:"
 
 msgid "If checked: shows the tagline for each event"
 msgstr "Indien aangevinkt: toont de tagline voor elk evenement"
@@ -4662,9 +4638,6 @@ msgstr "Deze pagina geeft een overzicht van de verdeling van px over tekens."
 
 msgid "A description of the skills / abilities involved"
 msgstr "Een beschrijving van de competentievaardigheden"
-
-msgid "And here’s the link to manage your organization:"
-msgstr "En hier is de link om je organisatie te beheren:"
 
 msgid "Discounts only applicable with new registrations"
 msgstr "Code alleen van toepassing op nieuwe registratie"
@@ -4835,9 +4808,6 @@ msgstr "Als je wilt, kun je eerdere voorregistraties verwijderen."
 
 msgid "Indicates the currency in which to receive payments"
 msgstr "Geeft de valuta aan waarin betalingen moeten worden ontvangen"
-
-msgid "Join our Discord for help, ideas, or to report bugs"
-msgstr "Word lid van onze Discord voor hulp, ideeën of om bugs te melden"
 
 msgid "Thank you for choosing to be part of our community!"
 msgstr "Bedankt dat je deel wilt uitmaken van onze gemeenschap!"

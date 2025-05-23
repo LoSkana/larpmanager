@@ -3097,9 +3097,6 @@ msgstr "Podmínky a pravidla"
 msgid "Terms and conditions"
 msgstr "Podmínky a pravidla"
 
-msgid "The LarpManager team"
-msgstr "Tým LarpManager"
-
 msgid "Yes, keep me posted!"
 msgstr "Ano, informujte mě!"
 
@@ -3504,9 +3501,6 @@ msgstr "v tuto chvíli není viditelný"
 msgid "Feature already activated"
 msgstr "Funkce je již aktivována"
 
-msgid "Glad to have you with us!"
-msgstr "Jsme rádi, že jste mezi námi!"
-
 msgid "Go to the preferences for"
 msgstr "Přejděte do předvoleb pro"
 
@@ -3875,9 +3869,6 @@ msgstr "Dosud jste zaplatili celkem"
 msgid "Surcharge applied to the ticket"
 msgstr "Příplatek k jízdence"
 
-msgid "Thanks for joining LarpManager!"
-msgstr "Děkujeme, že jste se připojili k LarpManageru!"
-
 msgid "To log back in with the account"
 msgstr "Opětovné přihlášení pomocí účtu"
 
@@ -3953,9 +3944,6 @@ msgstr "Na této stránce jsou shrnuty pozemky této akce."
 
 msgid "This page shows the run signups."
 msgstr "Tato stránka shrnuje přihlášky na běh."
-
-msgid "To get started, check these out:"
-msgstr "Pro začátek se podívejte na tyto stránky:"
 
 msgid "We ask you to pay the difference"
 msgstr "Žádáme vás o zaplacení rozdílu"
@@ -4307,9 +4295,6 @@ msgstr "Kliknutím níže potvrdíte zrušení rezervace:"
 msgid "Enables free pre-registration to events."
 msgstr "Umožňuje bezplatnou předběžnou registraci na události."
 
-msgid "Got questions? Just reply to this email."
-msgstr "Máte otázky? Stačí odpovědět na tento e-mail."
-
 msgid "If you no longer wish to attend, you can"
 msgstr "Pokud si již nepřejete účastnit se, můžete."
 
@@ -4385,9 +4370,6 @@ msgstr "Číslo vaší karty je: <b>%(number)03d</b>."
 
 msgid "if the character belongs to this element."
 msgstr "pokud znak patří k tomuto prvku."
-
-msgid "(You might want to keep this email handy.)"
-msgstr "(Možná byste si tento e-mail měli nechat po ruce.)"
 
 msgid "Character already assigned, not selectable"
 msgstr "Znak již přiřazen, nelze vybrat"
@@ -4470,9 +4452,6 @@ msgstr "Uveďte tipy, pro které je aktivní"
 msgid "Presentation text, visible to other players"
 msgstr "Text prezentace viditelný pro ostatní hráče"
 
-msgid "Short guides to help you set up your events"
-msgstr "Krátké příručky, které vám pomohou s nastavením událostí"
-
 msgid "This page performs checks on members' data."
 msgstr "Tato stránka provádí kontroly údajů členů."
 
@@ -4496,9 +4475,6 @@ msgstr "Slevu nelze kombinovat s jinými úlevami"
 
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Chcete, aby vám byly náklady proplaceny? Otevřete novou"
-
-msgid "Here’s your organization’s LarpManager page:"
-msgstr "Zde je stránka vaší organizace v LarpManageru:"
 
 msgid "If checked: shows the tagline for each event"
 msgstr "Pokud je zaškrtnuto: zobrazuje slogan pro každou událost."
@@ -4650,9 +4626,6 @@ msgstr "Tato stránka shrnuje rozdělení px na znaky."
 
 msgid "A description of the skills / abilities involved"
 msgstr "Popis kompetenčních dovedností"
-
-msgid "And here’s the link to manage your organization:"
-msgstr "A zde je odkaz na správu vaší organizace:"
 
 msgid "Discounts only applicable with new registrations"
 msgstr "Kód použitelný pouze při nové registraci"
@@ -4822,10 +4795,6 @@ msgstr "Pokud chcete, můžete předchozí předběžné registrace smazat."
 
 msgid "Indicates the currency in which to receive payments"
 msgstr "Uvádí měnu, ve které se mají přijímat platby"
-
-msgid "Join our Discord for help, ideas, or to report bugs"
-msgstr ""
-"Připojte se k našemu Discordu a získejte pomoc, nápady nebo nahlaste chyby."
 
 msgid "Thank you for choosing to be part of our community!"
 msgstr "Děkujeme, že jste se rozhodli být součástí naší komunity!"

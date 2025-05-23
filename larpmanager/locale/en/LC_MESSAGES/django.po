@@ -6590,36 +6590,6 @@ msgstr ""
 msgid "Hi"
 msgstr ""
 
-msgid "Thanks for joining LarpManager!"
-msgstr ""
-
-msgid "Here’s your organization’s LarpManager page:"
-msgstr ""
-
-msgid "And here’s the link to manage your organization:"
-msgstr ""
-
-msgid "(You might want to keep this email handy.)"
-msgstr ""
-
-msgid "To get started, check these out:"
-msgstr ""
-
-msgid "Short guides to help you set up your events"
-msgstr ""
-
-msgid "Join our Discord for help, ideas, or to report bugs"
-msgstr ""
-
-msgid "Got questions? Just reply to this email."
-msgstr ""
-
-msgid "Glad to have you with us!"
-msgstr ""
-
-msgid "The LarpManager team"
-msgstr ""
-
 msgid "Your membership"
 msgstr ""
 

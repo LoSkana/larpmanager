@@ -3097,9 +3097,6 @@ msgstr "Bedingungen und Konditionen"
 msgid "Terms and conditions"
 msgstr "Bedingungen und Konditionen"
 
-msgid "The LarpManager team"
-msgstr "Das LarpManager-Team"
-
 msgid "Yes, keep me posted!"
 msgstr "Ja, halten Sie mich auf dem Laufenden!"
 
@@ -3504,9 +3501,6 @@ msgstr "zur Zeit nicht sichtbar"
 msgid "Feature already activated"
 msgstr "Funktion bereits aktiviert"
 
-msgid "Glad to have you with us!"
-msgstr "Schön, dass Sie bei uns sind!"
-
 msgid "Go to the preferences for"
 msgstr "Gehen Sie zu den Einstellungen für"
 
@@ -3875,9 +3869,6 @@ msgstr "Bislang haben Sie insgesamt"
 msgid "Surcharge applied to the ticket"
 msgstr "Aufpreis zum Fahrschein"
 
-msgid "Thanks for joining LarpManager!"
-msgstr "Danke, dass du dich dem LarpManager angeschlossen hast!"
-
 msgid "To log back in with the account"
 msgstr "So melden Sie sich wieder mit dem Konto an"
 
@@ -3954,9 +3945,6 @@ msgstr ""
 
 msgid "This page shows the run signups."
 msgstr "Auf dieser Seite sind die Anmeldungen für den Lauf zusammengefasst."
-
-msgid "To get started, check these out:"
-msgstr "Für den Anfang sollten Sie sich dies ansehen:"
 
 msgid "We ask you to pay the difference"
 msgstr "Wir bitten Sie, die Differenz zu bezahlen"
@@ -4312,9 +4300,6 @@ msgstr "Klicken Sie unten, um Ihre Stornierung zu bestätigen:"
 msgid "Enables free pre-registration to events."
 msgstr "Ermöglicht die kostenlose Vorregistrierung für Veranstaltungen."
 
-msgid "Got questions? Just reply to this email."
-msgstr "Haben Sie Fragen? Antworten Sie einfach auf diese E-Mail."
-
 msgid "If you no longer wish to attend, you can"
 msgstr "Wenn Sie nicht mehr teilnehmen möchten, können Sie"
 
@@ -4392,9 +4377,6 @@ msgstr "Ihre Kartennummer lautet: <b>%(number)03d</b>."
 
 msgid "if the character belongs to this element."
 msgstr "wenn das Zeichen zu diesem Element gehört."
-
-msgid "(You might want to keep this email handy.)"
-msgstr "(Sie sollten diese E-Mail griffbereit halten.)"
 
 msgid "Character already assigned, not selectable"
 msgstr "Zeichen bereits zugewiesen, nicht auswählbar"
@@ -4479,9 +4461,6 @@ msgstr "Geben Sie die Tickets an, für die sie aktiv ist"
 msgid "Presentation text, visible to other players"
 msgstr "Präsentationstext, sichtbar für andere Spieler"
 
-msgid "Short guides to help you set up your events"
-msgstr "Kurze Anleitungen für die Organisation Ihrer Veranstaltungen"
-
 msgid "This page performs checks on members' data."
 msgstr "Auf dieser Seite werden die Daten der Mitglieder überprüft."
 
@@ -4505,9 +4484,6 @@ msgstr "Rabatt nicht mit anderen Vergünstigungen kombinierbar"
 
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Möchten Sie eine Rückerstattung erhalten? Öffnen Sie ein neues"
-
-msgid "Here’s your organization’s LarpManager page:"
-msgstr "Hier ist die LarpManager-Seite Ihrer Organisation:"
 
 msgid "If checked: shows the tagline for each event"
 msgstr "Wenn markiert: zeigt die Tagline für jedes Ereignis an"
@@ -4671,9 +4647,6 @@ msgstr ""
 
 msgid "A description of the skills / abilities involved"
 msgstr "Eine Beschreibung der Kompetenzfähigkeiten"
-
-msgid "And here’s the link to manage your organization:"
-msgstr "Und hier ist der Link zur Verwaltung Ihrer Organisation:"
 
 msgid "Discounts only applicable with new registrations"
 msgstr "Code gilt nur bei Neuanmeldung"
@@ -4855,11 +4828,6 @@ msgstr "Wenn Sie möchten, können Sie frühere Vorregistrierungen löschen."
 
 msgid "Indicates the currency in which to receive payments"
 msgstr "Gibt die Währung an, in der Zahlungen empfangen werden sollen"
-
-msgid "Join our Discord for help, ideas, or to report bugs"
-msgstr ""
-"Treten Sie unserem Discord bei, um Hilfe und Ideen zu erhalten oder um "
-"Fehler zu melden."
 
 msgid "Thank you for choosing to be part of our community!"
 msgstr ""
