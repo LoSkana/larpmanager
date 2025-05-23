@@ -22,6 +22,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordResetConfirmView
+from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django_registration import signals
 from django_registration.backends.one_step.views import RegistrationView
@@ -48,6 +50,12 @@ class MyRegistrationView(RegistrationView):
             mb.save()
 
         return new_user
+
+    def get_success_url(self, user=None):
+        next_url = self.request.POST.get("next") or self.request.GET.get("next")
+        if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={self.request.get_host()}):
+            return next_url
+        return self.success_url or reverse("home")
 
 
 class MyPasswordResetConfirmView(PasswordResetConfirmView):
