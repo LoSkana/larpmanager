@@ -4361,6 +4361,9 @@ msgstr "Chcete zaplatit jinou částku?"
 msgid "You are excluding (none of these filters)"
 msgstr "Vylučujete (žádný z těchto filtrů)"
 
+msgid "You have exceeded the maximum text length"
+msgstr "Překročili jste maximální délku textu"
+
 msgid "You think you should have an achievement?"
 msgstr "Myslíte si, že máte nárok na úspěch?"
 

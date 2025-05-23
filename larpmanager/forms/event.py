@@ -571,7 +571,7 @@ class OrgaAppearanceForm(MyCssForm):
         )
 
     event_css = forms.CharField(
-        widget=Textarea(attrs={"cols": 80, "rows": 15}),
+        widget=Textarea(attrs={"rows": 15}),
         required=False,
         help_text=_("These CSS commands will be carried over to all pages in your Association space."),
     )

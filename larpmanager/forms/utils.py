@@ -442,6 +442,4 @@ def get_members_queryset(aid):
 
 class WritingTinyMCE(TinyMCE):
     def __init__(self):
-        super().__init__(
-            attrs={"cols": 80, "rows": 20, "content_style": ".char-marker { background: yellow !important; }"}
-        )
+        super().__init__(attrs={"rows": 20, "content_style": ".char-marker { background: yellow !important; }"})

@@ -545,6 +545,9 @@ msgstr ""
 msgid "You have exceeded the maximum number of selectable options"
 msgstr ""
 
+msgid "You have exceeded the maximum text length"
+msgstr ""
+
 msgid "Available"
 msgstr ""
 

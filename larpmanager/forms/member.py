@@ -326,9 +326,9 @@ class ProfileForm(BaseProfileForm):
         )
 
         widgets = {
-            "diet": Textarea(attrs={"cols": 80, "rows": 5}),
-            "safety": Textarea(attrs={"cols": 80, "rows": 5}),
-            "presentation": Textarea(attrs={"cols": 80, "rows": 5}),
+            "diet": Textarea(attrs={"rows": 5}),
+            "safety": Textarea(attrs={"rows": 5}),
+            "presentation": Textarea(attrs={"rows": 5}),
             "birth_date": DatePickerInput,
             "document_issued": DatePickerInput,
             "document_expiration": DatePickerInput,

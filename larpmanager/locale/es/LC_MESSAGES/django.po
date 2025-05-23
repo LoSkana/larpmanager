@@ -4362,6 +4362,9 @@ msgstr "¿Desea pagar un importe diferente?"
 msgid "You are excluding (none of these filters)"
 msgstr "Estás excluyendo (ninguno de estos filtros)"
 
+msgid "You have exceeded the maximum text length"
+msgstr "Ha superado la longitud máxima de texto"
+
 msgid "You think you should have an achievement?"
 msgstr "¿Crees que deberías tener un logro?"
 

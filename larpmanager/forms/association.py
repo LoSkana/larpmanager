@@ -174,7 +174,7 @@ class ExeAppearanceForm(MyCssForm):
         fields = ("background", "font", "pri_rgb", "sec_rgb", "ter_rgb")
 
     assoc_css = forms.CharField(
-        widget=Textarea(attrs={"cols": 80, "rows": 15}),
+        widget=Textarea(attrs={"rows": 15}),
         required=False,
         help_text=_(
             "Freely insert CSS commands, they will be reported in all pages  in the space of "
