@@ -70,6 +70,8 @@ def prepare(page, live_server):
     page.locator("#id_user_character_approval").check()
     page.get_by_role("cell", name="Maximum number of characters").click()
     page.locator("#id_user_character_max").fill("1")
+    page.get_by_role("link", name="Character form ").click()
+    page.locator("#id_character_form_wri_que_max").check()
     page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/test/1/manage/characters/form")

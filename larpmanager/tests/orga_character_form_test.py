@@ -59,6 +59,8 @@ def orga_character_form(live_server, page):
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
     page.locator("#id_user_character_approval").check()
+    page.get_by_role("link", name="Character form ").click()
+    page.locator("#id_character_form_wri_que_max").check()
     page.get_by_role("button", name="Confirm", exact=True).click()
 
     # create character form
