@@ -3378,7 +3378,7 @@ msgstr ""
 msgid "options"
 msgstr ""
 
-msgid "characters"
+msgid "text length"
 msgstr ""
 
 msgid "(click on image to enlarge)"
@@ -3391,9 +3391,6 @@ msgid "Translate"
 msgstr ""
 
 msgid "Original"
-msgstr ""
-
-msgid "text length"
 msgstr ""
 
 msgid "Confirm"
@@ -3858,6 +3855,9 @@ msgid "History preferences"
 msgstr ""
 
 msgid "Go to the history preferences for"
+msgstr ""
+
+msgid "characters"
 msgstr ""
 
 msgid "Historical"
