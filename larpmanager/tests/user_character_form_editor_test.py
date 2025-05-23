@@ -67,6 +67,9 @@ def prepare(page, live_server):
     page.locator("#id_user_character_approval").check()
     page.get_by_role("cell", name="Maximum number of characters").click()
     page.locator("#id_user_character_max").fill("1")
+    page.get_by_role("link", name="Character form ").click()
+    page.locator("#id_character_form_wri_que_max").check()
+    page.locator("#id_character_form_wri_que_dependents").check()
     page.get_by_role("button", name="Confirm", exact=True).click()
 
     go_to(page, live_server, "/test/1/manage/characters/form")
@@ -133,7 +136,7 @@ def field_multiple(page, live_server):
     page.locator("#id_display").fill("14")
     page.locator("#id_max_available").click()
     page.locator("#id_max_available").fill("3")
-    page.get_by_role("row", name="Dependents Indicates other").get_by_role("searchbox").fill("ww")
+    page.get_by_role("row", name="Prerequisites").get_by_role("searchbox").fill("ww")
     page.get_by_role("option", name="Test Larp - single wwww").click()
     page.get_by_role("button", name="Confirm", exact=True).click()
 

@@ -1,29 +1,25 @@
 {% load i18n %}
-<p>{% trans "Hi" %} {{ member.name }},</p>
-<p>{% trans "Thank you for joining LarpManager! We are thrilled to have you with us." %}</p>
-<p>{% trans "We advise you to keep this email for future reference." %}</p>
+<p>Hi {{ member.name }},</p>
+<p>Thanks for joining LarpManager!</p>
 <p>
-    {% trans "First of all, here is the address of the LarpManager for your association:" %}
-    <a href="https://{{ assoc.slug }}.larpmanager.com">{{ assoc.name }}</a>.
+    Here’s your organization’s LarpManager page: <a href="https://{{ assoc.slug }}.larpmanager.com">{{ assoc.name }}</a>
 </p>
 <p>
-    {% trans "This is instead the address of your association's management panel:" %}
-    <a href="https://{{ assoc.slug }}.larpmanager.com/manage">{% trans "Management" %} {{ assoc.name }}</a>.
+    And here’s the link to manage your organization: <a href="https://{{ assoc.slug }}.larpmanager.com/manage">Management {{ assoc.name }}</a>
 </p>
-<p>{% trans "Here are some useful links to help you get started:" %}</p>
+<p>(You might want to keep this email handy.)</p>
+<p>To get started, check these out:</p>
 <ul>
     <li>
-        <a href="https://{{ assoc.slug }}.larpmanager.com/tutorials">Tutorials</a>:
-        {% trans "Follow the tutorials to start setting up your first event right away" %}
+        <a href="https://{{ assoc.slug }}.larpmanager.com/tutorials">Tutorials</a>: Short guides to help you set up your events
     </li>
     <li>
-        <a href="https://discord.gg/C4KuyQbuft">Discord</a>:
-        {% trans "Join the Discord to receive assistance, suggest improvements or notify bug reports" %}
+        <a href="https://discord.gg/C4KuyQbuft">Discord</a>: Join our Discord for help, ideas, or to report bugs
     </li>
 </ul>
-<p>{% trans "If you have any questions, please do not hesitate to contact us: just reply to this email." %}</p>
-<p>{% trans "Welcome on board!" %}</p>
+<p>Got questions? Just reply to this email.</p>
+<p>Glad to have you with us!</p>
 <br />
 <p>
-    <i>{% trans "The LarpManager team" %}</i>
+    <i>The LarpManager team</i>
 </p>

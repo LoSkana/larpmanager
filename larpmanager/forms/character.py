@@ -550,10 +550,18 @@ class OrgaWritingOptionForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields["tickets"].widget.set_event(self.params["event"])
-
         if "question_id" in self.params:
             self.initial["question"] = self.params["question_id"]
 
-        for s in ["dependents"]:
-            self.fields[s].widget.set_event(self.params["event"])
+        if "wri_que_max" not in self.params["features"]:
+            self.delete_field("max_available")
+
+        if "wri_que_tickets" not in self.params["features"]:
+            self.delete_field("tickets")
+        else:
+            self.fields["tickets"].widget.set_event(self.params["event"])
+
+        if "wri_que_dependents" not in self.params["features"]:
+            self.delete_field("dependents")
+        else:
+            self.fields["dependents"].widget.set_event(self.params["event"])

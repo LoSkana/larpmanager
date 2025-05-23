@@ -236,6 +236,7 @@ class WritingOption(BaseModel):
         related_name="dependents_inv",
         symmetrical=False,
         blank=True,
+        verbose_name=_("Prerequisites"),
         help_text=_("Indicates other options that must be selected for this option to be selectable"),
     )
 

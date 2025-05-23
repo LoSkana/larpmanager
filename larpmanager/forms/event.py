@@ -222,6 +222,8 @@ class OrgaConfigForm(ConfigForm):
 
         self.set_config_character()
 
+        self.set_config_char_form()
+
         self.set_config_custom()
 
         self.set_config_accounting()
@@ -278,6 +280,27 @@ class OrgaConfigForm(ConfigForm):
         label = _("Age selection")
         help_text = _("If checked, allows a registration form question to be visible based on the player's age.")
         self.add_configs("registration_reg_que_age", ConfigType.BOOL, section, label, help_text)
+
+    def set_config_char_form(self):
+        section = _("Character form")
+
+        label = _("Hide not available")
+        help_text = _(
+            "If checked, options no longer available in the form are hidden, instead of being displayed disabled"
+        )
+        self.add_configs("character_form_hide_unavailable", ConfigType.BOOL, section, label, help_text)
+
+        label = _("Maximum available")
+        help_text = _("If checked, an option can be chosen a maximum number of times.")
+        self.add_configs("character_form_wri_que_max", ConfigType.BOOL, section, label, help_text)
+
+        label = _("Ticket selection")
+        help_text = _("If checked, allows a option to be visible only to players with selected ticket.")
+        self.add_configs("character_form_wri_que_tickets", ConfigType.BOOL, section, label, help_text)
+
+        label = _("Prerequisites")
+        help_text = _("If checked, allows a option to be visible only if other options are selected.")
+        self.add_configs("character_form_wri_que_dependents", ConfigType.BOOL, section, label, help_text)
 
     def set_config_structure(self):
         if "pre_register" in self.params["features"]:

@@ -2099,6 +2099,9 @@ msgstr "Kolotoč obrázků"
 msgid "Character Edit"
 msgstr "Úprava postavy"
 
+msgid "Character form"
+msgstr "Podoba postavy"
+
 msgid "Character name"
 msgstr "Jméno postavy"
 
@@ -2636,6 +2639,9 @@ msgstr "Inventární položky"
 msgid "Invoice not found"
 msgstr "Faktura nebyla nalezena"
 
+msgid "Maximum available"
+msgstr "Maximální dostupný počet"
+
 msgid "May the best win!"
 msgstr "Ať vyhraje ten nejlepší!"
 
@@ -2695,9 +2701,6 @@ msgstr "Standardní funkce"
 
 msgid "Technical Support"
 msgstr "Technická podpora"
-
-msgid "Welcome on board!"
-msgstr "Vítejte na palubě!"
 
 msgid "Your achievements"
 msgstr "Vaše úspěchy"
@@ -3099,9 +3102,6 @@ msgstr "Podmínky a pravidla"
 
 msgid "Terms and conditions"
 msgstr "Podmínky a pravidla"
-
-msgid "The LarpManager team"
-msgstr "Tým LarpManager"
 
 msgid "Yes, keep me posted!"
 msgstr "Ano, informujte mě!"
@@ -4799,9 +4799,6 @@ msgstr "Nemůžete si vytvořit vztah sami k sobě!"
 msgid "Fill in this field if you have accessibility needs."
 msgstr "Toto pole vyplňte, pokud máte požadavky na přístupnost."
 
-msgid "Here are some useful links to help you get started:"
-msgstr "Zde je několik užitečných odkazů, které vám pomohou začít:"
-
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Několikrát jsem to dělal, mám základní zkušenosti."
 
@@ -4970,10 +4967,6 @@ msgstr "Tato stránka shrnuje uživatele, které lze přesvědčit k registraci.
 
 msgid "This page summarises the list of members as a registry"
 msgstr "Tato stránka shrnuje seznam členů jako rejstřík."
-
-msgid "We advise you to keep this email for future reference."
-msgstr ""
-"Doporučujeme vám, abyste si tento e-mail uschovali pro budoucí použití."
 
 msgid "Write here additional information to your registration"
 msgstr "Zde uveďte, zda k vaší registraci potřebujete další informace"
@@ -5257,6 +5250,9 @@ msgstr "Sdílení dat s touto organizací jste již povolili!"
 msgid "%(amount)d %(credits)s were used to participate in this event!"
 msgstr "K účasti na této akci bylo použito %(amount)d %(credits)s!"
 
+msgid "If checked, an option can be chosen a maximum number of times."
+msgstr "Pokud je tato možnost zaškrtnuta, lze ji zvolit maximálně několikrát."
+
 msgid "If checked, shows players the histories of preferences entered"
 msgstr "Pokud je zaškrtnuto, zobrazí hráčům historii zadaných předvoleb."
 
@@ -5481,9 +5477,6 @@ msgstr "Vyberte typy prvků psaní, kterých se tato otázka týká."
 msgid "The payment of your membership fee for this year has been received!"
 msgstr "Potvrzujeme zaplacení členského příspěvku na aktuální rok!"
 
-msgid "This is instead the address of your association's management panel:"
-msgstr "Místo toho je to adresa panelu správy vašeho sdružení:"
-
 msgid "This page summarises the available questions of the character form."
 msgstr ""
 "Na této stránce jsou shrnuty dostupné otázky formuláře pro zadávání znaků."
@@ -5504,10 +5497,6 @@ msgstr "Díky těmto návodům se tento nástroj naučíte používat během chv
 
 msgid "Does the character have a public role/archetype? If not, leave blank"
 msgstr "Má postava veřejnou roli/archetyp? Pokud ne, nechte prázdné."
-
-msgid "Follow the tutorials to start setting up your first event right away"
-msgstr ""
-"Postupujte podle návodů a začněte ihned nastavovat svou první událost."
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Počet dnů, které máte k dispozici na zaplacení další splátky"
@@ -5696,11 +5685,6 @@ msgstr ""
 "prosím níže."
 
 msgid ""
-"Thank you for joining LarpManager! We are thrilled to have you with us."
-msgstr ""
-"Děkujeme, že jste se připojili k LarpManageru! Jsme nadšeni, že jste s námi."
-
-msgid ""
 "The request of removal from further communication has been successfull!"
 msgstr "Vaše žádost o odhlášení z odběru zpráv byla úspěšná."
 
@@ -5832,10 +5816,6 @@ msgstr ""
 msgid ""
 "if the character does NOT belong to this element, but is only referenced."
 msgstr "pokud znak NENÍ součástí tohoto prvku, ale je pouze pojmenován."
-
-msgid ""
-"First of all, here is the address of the LarpManager for your association:"
-msgstr "Nejprve je zde adresa LarpManageru pro vaše sdružení:"
 
 msgid ""
 "I confirm that all my required personal data have been filled in correctly"
@@ -5974,6 +5954,13 @@ msgstr ""
 "Dobrý den! Obracíme se na vás ohledně vaší registrace na <b>%(event)s</b>."
 
 msgid ""
+"If checked, allows a option to be visible only if other options are "
+"selected."
+msgstr ""
+"Pokud je zaškrtnuto, je možnost viditelná pouze v případě, že jsou vybrány "
+"jiné možnosti."
+
+msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr ""
@@ -6103,6 +6090,13 @@ msgid ""
 "them."
 msgstr ""
 "Umožňuje hráčům zadávat otázky a organizátorům je kontrolovat a organizovat."
+
+msgid ""
+"If checked, allows a option to be visible only to players with selected "
+"ticket."
+msgstr ""
+"Pokud je tato volba zaškrtnuta, bude viditelná pouze pro hráče s vybraným "
+"tipem."
 
 msgid ""
 "These CSS commands will be carried over to all pages in your Association "
@@ -6282,13 +6276,6 @@ msgid ""
 msgstr ""
 "Uveďte možnosti postavy, které musí být vybrány, aby byla dovednost "
 "dostupná."
-
-msgid ""
-"Join the Discord to receive assistance, suggest improvements or notify bug "
-"reports"
-msgstr ""
-"Připojte se k Discordu a získejte pomoc, navrhněte vylepšení nebo oznamte "
-"hlášení chyb."
 
 msgid ""
 "To register for the event, please fill in the following form and click on "
@@ -6740,13 +6727,6 @@ msgstr ""
 "href='%(url)s'>Odhlásit se</a>"
 
 msgid ""
-"If you have any questions, please do not hesitate to contact us: just reply "
-"to this email."
-msgstr ""
-"Pokud máte jakékoli dotazy, neváhejte nás kontaktovat: stačí odpovědět na "
-"tento e-mail."
-
-msgid ""
 "This page allows you to add or change the types of ticket with which players"
 " can register."
 msgstr ""
@@ -7156,6 +7136,13 @@ msgid ""
 msgstr ""
 "Umožňuje hráčům posílat si navzájem soukromé zprávy, aniž by došlo k "
 "odhalení osobních e-mailových adres."
+
+msgid ""
+"If checked, options no longer available in the form are hidden, instead of "
+"being displayed disabled"
+msgstr ""
+"Pokud je zaškrtnuto, možnosti, které již nejsou ve formuláři k dispozici, se"
+" skryjí, místo aby se zobrazily zakázané."
 
 msgid ""
 "Indicate the description you wish to be displayed when this payment method "

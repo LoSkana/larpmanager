@@ -2099,6 +2099,9 @@ msgstr "Carrusel de imágenes"
 msgid "Character Edit"
 msgstr "Edición de personajes"
 
+msgid "Character form"
+msgstr "Forma de carácter"
+
 msgid "Character name"
 msgstr "Nombre del personaje"
 
@@ -2636,6 +2639,9 @@ msgstr "Artículos del inventario"
 msgid "Invoice not found"
 msgstr "Factura no encontrada"
 
+msgid "Maximum available"
+msgstr "Máximo disponible"
+
 msgid "May the best win!"
 msgstr "¡Que gane el mejor!"
 
@@ -2695,9 +2701,6 @@ msgstr "Características de serie"
 
 msgid "Technical Support"
 msgstr "Asistencia técnica"
-
-msgid "Welcome on board!"
-msgstr "¡Bienvenido a bordo!"
 
 msgid "Your achievements"
 msgstr "Sus logros"
@@ -3099,9 +3102,6 @@ msgstr "Términos y Condiciones"
 
 msgid "Terms and conditions"
 msgstr "Condiciones generales"
-
-msgid "The LarpManager team"
-msgstr "El equipo de LarpManager"
 
 msgid "Yes, keep me posted!"
 msgstr "¡Sí, mantenedme informado!"
@@ -4801,9 +4801,6 @@ msgstr "No puedes crear una relación contigo mismo."
 msgid "Fill in this field if you have accessibility needs."
 msgstr "Rellene este campo si tiene necesidades de accesibilidad."
 
-msgid "Here are some useful links to help you get started:"
-msgstr "Aquí tienes algunos enlaces útiles que te ayudarán a empezar:"
-
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Lo he hecho unas cuantas veces, tengo cierta experiencia"
 
@@ -4973,9 +4970,6 @@ msgstr ""
 
 msgid "This page summarises the list of members as a registry"
 msgstr "Esta página muestra la lista de miembros a modo de registro"
-
-msgid "We advise you to keep this email for future reference."
-msgstr "Te aconsejamos que conserves este correo para futuras consultas."
 
 msgid "Write here additional information to your registration"
 msgstr "Escribe aquí cualquier información adicional para tu inscripción"
@@ -5283,6 +5277,9 @@ msgstr "Ya has autorizado el intercambio de datos con esta organización."
 msgid "%(amount)d %(credits)s were used to participate in this event!"
 msgstr "¡%(amount)d %(credits)s se utilizaron para participar en este evento!"
 
+msgid "If checked, an option can be chosen a maximum number of times."
+msgstr "Si está marcada, una opción puede elegirse un número máximo de veces."
+
 msgid "If checked, shows players the histories of preferences entered"
 msgstr ""
 "Si está marcada, muestra a los jugadores el historial de preferencias "
@@ -5531,10 +5528,6 @@ msgid "The payment of your membership fee for this year has been received!"
 msgstr ""
 "¡Se ha recibido el pago de tu cuota de afiliación para el año en curso!"
 
-msgid "This is instead the address of your association's management panel:"
-msgstr ""
-"En su lugar, se trata de la dirección del panel de gestión de su asociación:"
-
 msgid "This page summarises the available questions of the character form."
 msgstr ""
 "Esta página resume las preguntas disponibles del formulario de caracteres."
@@ -5560,10 +5553,6 @@ msgstr ""
 msgid "Does the character have a public role/archetype? If not, leave blank"
 msgstr ""
 "¿Tiene el personaje un concepto/arquetipo público? Si no, déjalo en blanco"
-
-msgid "Follow the tutorials to start setting up your first event right away"
-msgstr ""
-"Sigue los tutoriales para empezar a organizar tu primer evento de inmediato"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Número de días disponibles para pagar el siguiente plazo"
@@ -5775,12 +5764,6 @@ msgstr ""
 "continuación."
 
 msgid ""
-"Thank you for joining LarpManager! We are thrilled to have you with us."
-msgstr ""
-"¡Gracias por unirte a LarpManager! Estamos encantados de tenerte con "
-"nosotros."
-
-msgid ""
 "The request of removal from further communication has been successfull!"
 msgstr ""
 "Tu solicitud para darte de baja de las comunicaciones ha sido aceptada."
@@ -5926,12 +5909,6 @@ msgid ""
 "if the character does NOT belong to this element, but is only referenced."
 msgstr ""
 "si el personaje NO pertenece a este elemento, sino que sólo se le nombra."
-
-msgid ""
-"First of all, here is the address of the LarpManager for your association:"
-msgstr ""
-"En primer lugar, aquí tienes la dirección del LarpManager de tu "
-"organización:"
 
 msgid ""
 "I confirm that all my required personal data have been filled in correctly"
@@ -6084,6 +6061,13 @@ msgstr ""
 "<b>%(event)s</b>."
 
 msgid ""
+"If checked, allows a option to be visible only if other options are "
+"selected."
+msgstr ""
+"Si está marcada, permite que una opción sea visible sólo si otras opciones "
+"están seleccionadas."
+
+msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr ""
@@ -6221,6 +6205,13 @@ msgid ""
 msgstr ""
 "Permite a los jugadores enviar preguntas y a los organizadores revisarlas y "
 "organizarlas."
+
+msgid ""
+"If checked, allows a option to be visible only to players with selected "
+"ticket."
+msgstr ""
+"Si está marcada, permite que una opción sólo sea visible para los jugadores "
+"con el ticket seleccionado."
 
 msgid ""
 "These CSS commands will be carried over to all pages in your Association "
@@ -6416,12 +6407,6 @@ msgid ""
 msgstr ""
 "Indicar las opciones de carácter que deben seleccionarse para que la "
 "habilidad esté disponible"
-
-msgid ""
-"Join the Discord to receive assistance, suggest improvements or notify bug "
-"reports"
-msgstr ""
-"Únase al Discord para recibir ayuda, sugerir mejoras o notificar errores"
 
 msgid ""
 "To register for the event, please fill in the following form and click on "
@@ -6890,13 +6875,6 @@ msgstr ""
 "href='%(url)s'>Darse de baja</a>"
 
 msgid ""
-"If you have any questions, please do not hesitate to contact us: just reply "
-"to this email."
-msgstr ""
-"Si tiene alguna pregunta, no dude en ponerse en contacto con nosotros: sólo "
-"tiene que responder a este correo electrónico."
-
-msgid ""
 "This page allows you to add or change the types of ticket with which players"
 " can register."
 msgstr ""
@@ -7313,6 +7291,13 @@ msgid ""
 msgstr ""
 "Permite a los jugadores enviarse mensajes privados sin revelar sus "
 "direcciones de correo electrónico personales."
+
+msgid ""
+"If checked, options no longer available in the form are hidden, instead of "
+"being displayed disabled"
+msgstr ""
+"Si está marcada, las opciones que ya no están disponibles en el formulario "
+"se ocultan, en lugar de mostrarse desactivadas"
 
 msgid ""
 "Indicate the description you wish to be displayed when this payment method "

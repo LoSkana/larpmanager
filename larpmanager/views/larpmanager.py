@@ -36,7 +36,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django_ratelimit.decorators import ratelimit
 
 from larpmanager.cache.feature import get_assoc_features, get_event_features
-from larpmanager.cache.larpmanager import get_cache_promoters
+from larpmanager.cache.larpmanager import get_cache_lm_home
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
 from larpmanager.forms.association import (
     FirstAssociationForm,
@@ -47,13 +47,9 @@ from larpmanager.forms.utils import RedirectForm
 from larpmanager.mail.base import join_email
 from larpmanager.mail.remind import remember_membership, remember_membership_fee, remember_pay, remember_profile
 from larpmanager.models.access import AssocRole, EventRole
-from larpmanager.models.accounting import (
-    PaymentInvoice,
-)
 from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.base import Feature
 from larpmanager.models.event import (
-    Event,
     Run,
 )
 from larpmanager.models.larpmanager import (
@@ -62,15 +58,11 @@ from larpmanager.models.larpmanager import (
     LarpManagerHowto,
     LarpManagerPlan,
     LarpManagerProfiler,
-    LarpManagerReview,
-    LarpManagerShowcase,
     LarpManagerTutorial,
 )
-from larpmanager.models.member import Member, Membership, get_user_membership
+from larpmanager.models.member import Membership, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
-from larpmanager.models.writing import Character
 from larpmanager.utils.auth import check_lm_admin
-from larpmanager.utils.common import round_to_two_significant_digits
 from larpmanager.utils.event import get_event_run
 from larpmanager.utils.exceptions import PermissionError
 from larpmanager.utils.tasks import my_send_mail, my_send_simple_mail, send_mail_exec
@@ -80,13 +72,10 @@ from larpmanager.utils.text import get_assoc_text
 def lm_home(request):
     ctx = get_lm_assocs()
     ctx["index"] = True
-    ctx["promoters"] = get_cache_promoters()
+    ctx.update(get_cache_lm_home())
     random.shuffle(ctx["promoters"])
-    for el in [Event, Character, Registration, Member, PaymentInvoice]:
-        nm = str(el.__name__).lower()
-        cnt = el.objects.count()
-        ctx[f"cnt_{nm}"] = int(round_to_two_significant_digits(cnt))
-    ctx["showcase"] = LarpManagerShowcase.objects.order_by("number")
+    random.shuffle(ctx["reviews"])
+
     return render(request, "larpmanager/larpmanager/home.html", ctx)
 
 
@@ -452,7 +441,6 @@ def usage(request):
 def about_us(request):
     ctx = get_lm_assocs()
     ctx["index"] = True
-    ctx["list"] = list(LarpManagerReview.objects.all())
     return render(request, "larpmanager/larpmanager/about_us.html", ctx)
 
 
