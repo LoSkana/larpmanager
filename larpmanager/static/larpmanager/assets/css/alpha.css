@@ -717,10 +717,31 @@ input[type="checkbox"]:checked {
     text-align: center;
 }
 
+#review-carousel {
+    margin: 2em auto;
+    max-width: 100%;
+    width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    #review-carousel {
+        margin: 2em;
+    }
+}
+
 #review-carousel .text {
     color: #181818;
 }
 
 #review-carousel .author {
     color: #47787e;
+}
+
+.owl-carousel .owl-item {
+    box-sizing: border-box;
+    max-width: 100%;
+}
+.owl-carousel {
+    overflow: hidden;
+    width: 100%;
 }
