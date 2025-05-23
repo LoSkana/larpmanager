@@ -2645,6 +2645,9 @@ msgstr "Inventární položky"
 msgid "Invoice not found"
 msgstr "Faktura nebyla nalezena"
 
+msgid "Maximum available"
+msgstr "Maximální dostupný počet"
+
 msgid "May the best win!"
 msgstr "Ať vyhraje ten nejlepší!"
 
@@ -5229,6 +5232,9 @@ msgstr "Sdílení dat s touto organizací jste již povolili!"
 msgid "%(amount)d %(credits)s were used to participate in this event!"
 msgstr "K účasti na této akci bylo použito %(amount)d %(credits)s!"
 
+msgid "If checked, an option can be chosen a maximum number of times."
+msgstr "Pokud je tato možnost zaškrtnuta, lze ji zvolit maximálně několikrát."
+
 msgid "If checked, shows players the histories of preferences entered"
 msgstr "Pokud je zaškrtnuto, zobrazí hráčům historii zadaných předvoleb."
 
@@ -5922,6 +5928,13 @@ msgstr ""
 "Dobrý den! Obracíme se na vás ohledně vaší registrace na <b>%(event)s</b>."
 
 msgid ""
+"If checked, allows a option to be visible only if other options are "
+"selected."
+msgstr ""
+"Pokud je zaškrtnuto, je možnost viditelná pouze v případě, že jsou vybrány "
+"jiné možnosti."
+
+msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr ""
@@ -6058,6 +6071,13 @@ msgid ""
 "them."
 msgstr ""
 "Umožňuje hráčům zadávat otázky a organizátorům je kontrolovat a organizovat."
+
+msgid ""
+"If checked, allows a option to be visible only to players with selected "
+"ticket."
+msgstr ""
+"Pokud je tato volba zaškrtnuta, bude viditelná pouze pro hráče s vybraným "
+"tipem."
 
 msgid ""
 "These CSS commands will be carried over to all pages in your Association "
@@ -7118,6 +7138,13 @@ msgid ""
 msgstr ""
 "Umožňuje hráčům posílat si navzájem soukromé zprávy, aniž by došlo k "
 "odhalení osobních e-mailových adres."
+
+msgid ""
+"If checked, options no longer available in the form are hidden, instead of "
+"being displayed disabled"
+msgstr ""
+"Pokud je zaškrtnuto, možnosti, které již nejsou ve formuláři k dispozici, se"
+" skryjí, místo aby se zobrazily zakázané."
 
 msgid ""
 "Indicate the description you wish to be displayed when this payment method "

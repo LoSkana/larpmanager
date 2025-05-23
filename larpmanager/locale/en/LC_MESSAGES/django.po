@@ -744,6 +744,32 @@ msgid ""
 "player's age."
 msgstr ""
 
+msgid "Character form"
+msgstr ""
+
+msgid ""
+"If checked, options no longer available in the form are hidden, instead of "
+"being displayed disabled"
+msgstr ""
+
+msgid "Maximum available"
+msgstr ""
+
+msgid "If checked, an option can be chosen a maximum number of times."
+msgstr ""
+
+msgid ""
+"If checked, allows a option to be visible only to players with selected "
+"ticket."
+msgstr ""
+
+msgid "Prerequisites"
+msgstr ""
+
+msgid ""
+"If checked, allows a option to be visible only if other options are selected."
+msgstr ""
+
 msgid "Pre-registration"
 msgstr ""
 
@@ -5892,9 +5918,6 @@ msgstr ""
 msgid "Modifiable"
 msgstr ""
 
-msgid "Prerequisites"
-msgstr ""
-
 msgid "Pdf"
 msgstr ""
 
@@ -7308,9 +7331,6 @@ msgstr ""
 msgid ""
 "Allows players to purchase tickets as gifts. A special code is generated and "
 "provided to the gift recipient for registration."
-msgstr ""
-
-msgid "Character form"
 msgstr ""
 
 msgid ""

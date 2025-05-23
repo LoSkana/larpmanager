@@ -2645,6 +2645,9 @@ msgstr "Oggetti inventario"
 msgid "Invoice not found"
 msgstr "Invoice non trovato"
 
+msgid "Maximum available"
+msgstr "Massimo disponibile"
+
 msgid "May the best win!"
 msgstr "Che vinca il migliore!"
 
@@ -5273,6 +5276,10 @@ msgid "%(amount)d %(credits)s were used to participate in this event!"
 msgstr ""
 "%(amount)d %(credits)s sono stati usati per partecipare a questo evento!"
 
+msgid "If checked, an option can be chosen a maximum number of times."
+msgstr ""
+"Se selezionata, un'opzione può essere scelta un numero massimo di volte."
+
 msgid "If checked, shows players the histories of preferences entered"
 msgstr "Se checkato, mostra ai giocatori gli storici delle preferenze immesse"
 
@@ -6079,6 +6086,13 @@ msgid ""
 msgstr "Ciao! Ti contattiamo riguardo la tua iscrizione a <b>%(event)s</b>."
 
 msgid ""
+"If checked, allows a option to be visible only if other options are "
+"selected."
+msgstr ""
+"Se selezionata, consente a un'opzione di essere visibile solo se sono "
+"selezionate altre opzioni."
+
+msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr ""
@@ -6221,6 +6235,13 @@ msgid ""
 msgstr ""
 "Permette ai giocatori di inviare domande e agli organizzatori di rivederle e"
 " organizzarle."
+
+msgid ""
+"If checked, allows a option to be visible only to players with selected "
+"ticket."
+msgstr ""
+"Se selezionata, l'opzione è visibile solo ai giocatori con il biglietto "
+"selezionato."
 
 msgid ""
 "These CSS commands will be carried over to all pages in your Association "
@@ -7326,6 +7347,13 @@ msgid ""
 msgstr ""
 "Permette ai giocatori di inviarsi messaggi privati, senza rivelare gli "
 "indirizzi e-mail personali."
+
+msgid ""
+"If checked, options no longer available in the form are hidden, instead of "
+"being displayed disabled"
+msgstr ""
+"Se si seleziona, le opzioni non più disponibili nel modulo vengono nascoste,"
+" invece di essere visualizzate disattivate."
 
 msgid ""
 "Indicate the description you wish to be displayed when this payment method "
