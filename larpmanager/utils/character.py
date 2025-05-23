@@ -177,7 +177,7 @@ def get_character_sheet_factions(ctx):
 
 
 def get_character_sheet_fields(ctx):
-    if "character_form" not in ctx["features"]:
+    if "character" not in ctx["features"]:
         return
 
     fields = get_character_cache_fields(ctx, ctx["char"]["id"], only_visible=False)

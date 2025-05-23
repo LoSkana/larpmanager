@@ -11,6 +11,8 @@ DATABASES = {
     }
 }
 
+DEBUG_TOOLBAR = False
+
 DEEPL_API_KEY = '???'
 
 # CREATE DATABASE larpmanager;

@@ -47,9 +47,6 @@ def orga_character_form(live_server, page):
     # activate characters
     go_to(page, live_server, "/manage/features/178/on")
 
-    # activate form
-    go_to(page, live_server, "/manage/features/176/on")
-
     # activate player editor
     go_to(page, live_server, "/manage/features/120/on")
 
@@ -59,6 +56,8 @@ def orga_character_form(live_server, page):
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
     page.locator("#id_user_character_approval").check()
+    page.get_by_role("link", name="Character form ").click()
+    page.locator("#id_character_form_wri_que_max").check()
     page.get_by_role("button", name="Confirm", exact=True).click()
 
     # create character form
@@ -125,9 +124,7 @@ def create_second_char(live_server, page):
     page.locator("#id_q9").click()
     page.locator("#id_q9").fill("asda")
     page.get_by_role("button", name="Confirm", exact=True).click()
-    expect(page.locator("#one")).to_contain_text(
-        "Player: User Test Status: Creation dsfdfsd Private area Sheet sdfdsfds"
-    )
+    expect(page.locator("#one")).to_contain_text("Player: User Test Status: Creation dsfdfsd Text sdfdsfds")
 
 
 def show_chars(page, live_server):
@@ -225,7 +222,7 @@ def create_first_char(live_server, page):
     page.locator("#id_q5").fill("bbbbbbbbbb")
     expect(page.locator("#id_q5")).to_have_value("bbbbbbbbbb")
     expect(page.locator("#main_form")).to_contain_text("long descr")
-    expect(page.locator("#main_form")).to_contain_text("characters: 10 / 10")
+    expect(page.locator("#main_form")).to_contain_text("text length: 10 / 10")
     expect(page.locator("#lbl_id_q6")).to_contain_text("available text")
     expect(page.locator("#main_form")).to_contain_text("available descrall allfew few descr")
     page.locator("#id_q6").select_option("1")

@@ -13,19 +13,9 @@
 {% endblock info %}
 {% block content %}
     {% include "elements/form/sections.html" %}
-    <!--
-<br />
-
-<h3><a href="#" class="my_toggle" tog='del'>{% trans "Cancellation" %}</a></h3>
-
-<div class="hide del">
-
-    Conferma che vuoi rimuovere questo elemento: <input type="checkbox" name="delete" style="float:none; display: inline-block;" />. Dopodichè invia il form con "Conferma".
-
-</div>
--->
 {% endblock content %}
 {% block js %}
+    {% include "elements/form/max_length.js" %}
     <script>
 function translate(id, text) {
 
@@ -58,6 +48,7 @@ function translate(id, text) {
 
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
+
         $('form').on('submit', function() {
             return confirm('{% trans "Are you really sure?" %}');
         });

@@ -258,13 +258,6 @@
     number: 99
     feature: 45
 - model: larpmanager.assocpermission
-  pk: 41
-  fields:
-    name: LarpManager
-    slug: exe_larpmanager
-    number: 10
-    feature: 165
-- model: larpmanager.assocpermission
   pk: 42
   fields:
     name: Profile

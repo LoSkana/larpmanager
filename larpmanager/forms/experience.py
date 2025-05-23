@@ -76,9 +76,6 @@ class OrgaAbilityPxForm(PxBaseForm):
 
         px_user = not self.params["event"].get_config("px_user", False)
 
-        if "character_form" not in self.params["features"] or not px_user:
-            self.delete_field("dependents")
-
         self.fields["typ"].choices = [
             (el[0], el[1]) for el in self.params["event"].get_elements(AbilityTypePx).values_list("id", "name")
         ]

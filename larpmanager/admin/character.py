@@ -85,14 +85,20 @@ class WritingOptionAdmin(DefModelAdmin):
 
 @admin.register(WritingChoice)
 class WritingChoiceAdmin(DefModelAdmin):
+    list_display = ("id", "question", "option", "element_id")
     autocomplete_fields = ["question", "option"]
     list_filter = (WritingQuestionFilter,)
 
 
 @admin.register(WritingAnswer)
 class WritingAnswerAdmin(DefModelAdmin):
+    list_display = ("id", "question", "text_red", "element_id")
     autocomplete_fields = ["question"]
     list_filter = (WritingQuestionFilter,)
+
+    @staticmethod
+    def text_red(instance):
+        return reduced(instance.text)
 
 
 class SourceFilter(AutocompleteFilter):

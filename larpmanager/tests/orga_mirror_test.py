@@ -56,7 +56,7 @@ def orga_mirror(live_server, page):
     go_to(page, live_server, "/test/1/")
     expect(page.locator("#one")).to_contain_text("Test Character")
 
-    # activate mirror
+    # activate mirroro
     go_to(page, live_server, "/test/1/manage/features/4/on")
 
     # create mirror

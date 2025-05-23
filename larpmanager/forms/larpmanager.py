@@ -33,7 +33,7 @@ class LarpManagerContact(LarpManagerCheck):
         required=True,
         max_length=3000,
         label="",
-        widget=Textarea(attrs={"cols": 80, "rows": 10, "placeholder": "Content"}),
+        widget=Textarea(attrs={"rows": 10, "placeholder": "Content"}),
     )
 
 

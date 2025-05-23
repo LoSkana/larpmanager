@@ -604,10 +604,6 @@ input[type="datetime_p"]:focus {
   display: block;
 }
 
-.show_char .motto {
-  font-size: 110%;
-}
-
 .show_char .name {
   font-size: 140%;
 }

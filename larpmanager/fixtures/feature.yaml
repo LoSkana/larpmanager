@@ -1,14 +1,4 @@
 - model: larpmanager.feature
-  pk: 1
-  fields:
-    name: Motto
-    descr: Adds a 'motto' field to characters, a short phrase they frequently use.
-    slug: motto
-    overall: false
-    module: 1
-    placeholder: false
-    order: 40
-- model: larpmanager.feature
   pk: 2
   fields:
     name: Title
@@ -1209,17 +1199,6 @@
     placeholder: false
     order: 60
 - model: larpmanager.feature
-  pk: 176
-  fields:
-    name: Character form
-    descr: Lets you define custom fields in the character form, which display in the
-      character sheet, gallery, and search filters.
-    slug: character_form
-    overall: false
-    module: 1
-    placeholder: false
-    order: 20
-- model: larpmanager.feature
   pk: 177
   fields:
     name: Additional tickets
@@ -1235,7 +1214,7 @@
     name: Characters
     descr: Enables the creation, editing, and assignment of characters to registered
       players.
-    slug: characters
+    slug: character
     overall: false
     module: 1
     placeholder: false

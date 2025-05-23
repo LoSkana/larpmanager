@@ -24,11 +24,10 @@ from django.db.models import Prefetch
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.button import get_event_button_cache
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.permission import get_event_permission_feature
 from larpmanager.cache.role import get_event_roles, has_event_permission
-from larpmanager.cache.run import get_cache_run
+from larpmanager.cache.run import get_cache_config_run, get_cache_run
 from larpmanager.models.access import EventPermission
 from larpmanager.models.event import Event, Run
 from larpmanager.models.registration import RegistrationCharacterRel
@@ -81,50 +80,28 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
     if status:
         registration_status(ctx["run"], request.user)
 
-    if hasattr(request, "assoc"):
-        ctx["assoc_slug"] = request.assoc["slug"]
-    else:
-        ctx["assoc_slug"] = ctx["event"].assoc.slug
-
-    ctx["buttons"] = get_event_button_cache(ctx["event"].id)
-
-    ctx["show_limitations"] = ctx["event"].get_config("show_limitations", False)
-
     # check if the user has any role
     if has_event_permission(ctx, request, s):
         ctx["manage"] = 1
         get_index_event_permissions(ctx, request, s)
         ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", False)
 
+    if hasattr(request, "assoc"):
+        ctx["assoc_slug"] = request.assoc["slug"]
+    else:
+        ctx["assoc_slug"] = ctx["event"].assoc.slug
+
+    config_run = get_cache_config_run(ctx["run"])
+
     if has_event_permission(ctx, request, s, "orga_characters"):
         ctx["staff"] = "1"
         ctx["skip"] = "1"
 
-    for config_name in ["char", "teaser", "preview", "text"]:
-        ctx["show_" + config_name] = "staff" in ctx or ctx["run"].get_config("show_" + config_name, False)
+        for config_name in config_run.keys():
+            if config_name.startswith("show_"):
+                config_run[config_name] = True
 
-    ctx["px_user"] = ctx["event"].get_config("px_user", False)
-    if ctx["event"].parent:
-        ctx["px_user"] = ctx["event"].parent.get_config("px_user", False)
-
-    ctx["user_character_max"] = ctx["event"].get_config("user_character_max", 0)
-
-    for config_name in [
-        "faction",
-        "speedlarp",
-        "prologue",
-        "questbuilder",
-        "workshop",
-        "print_pdf",
-        "co_creation",
-        "preview",
-    ]:
-        if config_name not in ctx["features"]:
-            continue
-
-        ctx["show_" + config_name] = "staff" in ctx or ctx["run"].get_config("show_" + config_name, False)
-
-    ctx["cover_orig"] = ctx["event"].get_config("cover_orig", False)
+    ctx.update(config_run)
 
     return ctx
 

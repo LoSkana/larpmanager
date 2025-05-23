@@ -74,13 +74,13 @@ from larpmanager.utils.edit import user_edit
 from larpmanager.utils.event import get_event_run
 from larpmanager.utils.experience import get_available_ability_px
 from larpmanager.utils.registration import (
-    _check_assign_character,
+    check_assign_character,
     check_character_maximum,
     get_player_characters,
     registration_find,
 )
 from larpmanager.utils.writing import char_add_addit
-from larpmanager.views.user.casting import _casting_details, get_casting_preferences
+from larpmanager.views.user.casting import casting_details, get_casting_preferences
 from larpmanager.views.user.registration import init_form_submitted
 
 
@@ -105,7 +105,7 @@ def character(request, s, n, num):
     else:
         get_character_fields(ctx, only_visible=True)
 
-    _casting_details(ctx, 0)
+    casting_details(ctx, 0)
     if ctx["casting_show_pref"] and not ctx["char"]["player_id"]:
         ctx["pref"] = get_casting_preferences(ctx["char"]["id"], ctx, 0)
 
@@ -172,7 +172,7 @@ def character_form(request, ctx, s, n, instance, form_class):
             if mes:
                 messages.success(request, mes)
 
-            _check_assign_character(request, ctx)
+            check_assign_character(request, ctx)
 
             number = None
             if isinstance(element, Character):
@@ -317,7 +317,7 @@ def character_list(request, s, n):
     # add character configs
     char_add_addit(ctx)
     for el in ctx["list"]:
-        if "character_form" in ctx["features"]:
+        if "character" in ctx["features"]:
             el.fields = get_character_cache_fields(ctx, el.id, only_visible=True)
 
     ctx["char_maximum"] = check_character_maximum(ctx["event"], request.user.member)
@@ -347,11 +347,11 @@ def character_edit(request, s, n, num):
 
 def get_options_dependencies(ctx):
     ctx["dependencies"] = {}
-    if "character_form" not in ctx["features"]:
+    if "character" not in ctx["features"]:
         return
 
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-    que = que.filter(applicable__icontains=QuestionApplicable.CHARACTER)
+    que = que.filter(applicable=QuestionApplicable.CHARACTER)
     question_idxs = que.values_list("id", flat=True)
 
     que = ctx["event"].get_elements(WritingOption).filter(question_id__in=question_idxs)

@@ -154,7 +154,7 @@ def assign_faction(ch, v, run):
 
 def elements_load(request, ctx, csv_upload, typ, nm):
     # prepare custom fields for character
-    if nm == "character" and "character_form" in ctx["features"]:
+    if nm == "character" and "character" in ctx["features"]:
         res = {"chars": {}}
         get_event_cache_fields(ctx, res, only_visible=False)
         inv = {value["display"].lower(): key for key, value in ctx["questions"].items()}
@@ -438,7 +438,7 @@ def assign_choice_answer(ctx, character, value, key):
     question_id = ctx["questions_inverted"][key]
 
     # check if answer
-    if ctx["questions"][question_id]["typ"] in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
+    if ctx["questions"][question_id]["typ"] in [QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.EDITOR]:
         (car, cr) = WritingAnswer.objects.get_or_create(element_id=character.id, question_id=question_id)
         car.text = value
         car.save()

@@ -476,7 +476,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.init_info(reg_section)
 
         # ## CHARACTERS
-        if "characters" in self.params["features"]:
+        if "character" in self.params["features"]:
             self.init_character(char_section)
 
         # ## REGISTRATION OPTIONS
