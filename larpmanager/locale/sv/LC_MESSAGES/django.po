@@ -2705,9 +2705,6 @@ msgstr "Standardutrustning"
 msgid "Technical Support"
 msgstr "Teknisk support"
 
-msgid "Welcome on board!"
-msgstr "Välkommen ombord!"
-
 msgid "Your achievements"
 msgstr "Dina prestationer"
 
@@ -3099,9 +3096,6 @@ msgstr "Villkor och anvisningar"
 
 msgid "Terms and conditions"
 msgstr "Villkor och bestämmelser"
-
-msgid "The LarpManager team"
-msgstr "LarpManager-teamet"
 
 msgid "Yes, keep me posted!"
 msgstr "Ja, håll mig uppdaterad!"
@@ -4797,9 +4791,6 @@ msgstr "Du kan inte skapa en relation till dig själv!"
 msgid "Fill in this field if you have accessibility needs."
 msgstr "Fyll i detta fält om du har tillgänglighetsbehov."
 
-msgid "Here are some useful links to help you get started:"
-msgstr "Här är några användbara länkar som hjälper dig att komma igång:"
-
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jag har gjort det några gånger, jag har grundläggande erfarenhet"
 
@@ -4969,9 +4960,6 @@ msgstr ""
 
 msgid "This page summarises the list of members as a registry"
 msgstr "Denna sida sammanfattar medlemsförteckningen som ett register"
-
-msgid "We advise you to keep this email for future reference."
-msgstr "Vi råder dig att spara detta e-postmeddelande för framtida bruk."
 
 msgid "Write here additional information to your registration"
 msgstr "Ange här om ytterligare information till din post"
@@ -5508,9 +5496,6 @@ msgstr "Välj de typer av skrivelement som den här frågan gäller."
 msgid "The payment of your membership fee for this year has been received!"
 msgstr "Vi bekräftar betalningen av din medlemsavgift för innevarande år!"
 
-msgid "This is instead the address of your association's management panel:"
-msgstr "Detta är istället adressen till din förenings administrationspanel:"
-
 msgid "This page summarises the available questions of the character form."
 msgstr ""
 "På den här sidan sammanfattas de frågor som finns tillgängliga i "
@@ -5536,9 +5521,6 @@ msgstr ""
 
 msgid "Does the character have a public role/archetype? If not, leave blank"
 msgstr "Har karaktären en offentlig roll/arketyp? Om inte, lämna tomt"
-
-msgid "Follow the tutorials to start setting up your first event right away"
-msgstr "Följ anvisningarna för att börja skapa ditt första evenemang direkt"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Antal dagar tillgängliga för att betala nästa delbetalning"
@@ -5748,11 +5730,6 @@ msgstr ""
 "nedan."
 
 msgid ""
-"Thank you for joining LarpManager! We are thrilled to have you with us."
-msgstr ""
-"Tack för att du är med i LarpManager! Vi är glada över att ha dig hos oss."
-
-msgid ""
 "The request of removal from further communication has been successfull!"
 msgstr "Din begäran om att avregistrera dig från kommunikation lyckades."
 
@@ -5884,10 +5861,6 @@ msgstr ""
 msgid ""
 "if the character does NOT belong to this element, but is only referenced."
 msgstr "om karaktären INTE tillhör detta element, utan bara är namngiven."
-
-msgid ""
-"First of all, here is the address of the LarpManager for your association:"
-msgstr "Först av allt, här är adressen till LarpManager för din förening:"
 
 msgid ""
 "I confirm that all my required personal data have been filled in correctly"
@@ -6375,13 +6348,6 @@ msgstr ""
 "tillgänglig"
 
 msgid ""
-"Join the Discord to receive assistance, suggest improvements or notify bug "
-"reports"
-msgstr ""
-"Gå med i Discord för att få hjälp, föreslå förbättringar eller anmäla "
-"felrapporter"
-
-msgid ""
 "To register for the event, please fill in the following form and click on "
 "confirm."
 msgstr ""
@@ -6858,13 +6824,6 @@ msgid ""
 msgstr ""
 "Vill du avregistrera dig från våra kommunikationslistor? <a "
 "href='%(url)s'>Avregistrera</a>"
-
-msgid ""
-"If you have any questions, please do not hesitate to contact us: just reply "
-"to this email."
-msgstr ""
-"Om du har några frågor, tveka inte att kontakta oss: svara bara på det här "
-"e-postmeddelandet."
 
 msgid ""
 "This page allows you to add or change the types of ticket with which players"
