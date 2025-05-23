@@ -44,29 +44,28 @@
                 <hr />
                 <h3>Trusted by organizers around the world, completely free and open source!</h3>
                 <br />
-                <section id="promoter-carousel">
-                    <div class="owl-carousel owl-theme">
-                        {% for el in promoters %}
-                            <div class="item">
-                                <a href="https://{{ el.slug }}.larpmanager.com" title="{{ el.name }}">
-                                    <img src="{{ el.promoter_url }}" alt="preview image {{ el.name }}" />
-                                </a>
-                            </div>
-                        {% endfor %}
-                    </div>
+                <section id="promoter-carousel" class="owl-carousel owl-theme">
+                    {% for el in promoters %}
+                        <div class="item">
+                            <a href="https://{{ el.slug }}.larpmanager.com" title="{{ el.name }}">
+                                <img src="{{ el.promoter_url }}" alt="preview image {{ el.name }}" />
+                            </a>
+                        </div>
+                    {% endfor %}
                 </section>
             </header>
         </section>
-        <div class="review-carousel">
+        <div id="review-carousel" class="owl-carousel owl-theme">
             {% for el in reviews %}
                 <div class="item">
                     <i class="fa-solid fa-quote-left"></i>
-                    {{ el.text }}
+                    <span class="text">{{ el.text }}</span>
                     <i class="fa-solid fa-quote-right"> </i> &nbsp;
-                    <b>({{ el.author }})</b>
+                    <b class="author">({{ el.author }})</b>
                 </div>
             {% endfor %}
         </div>
+        <br />
         <p class="starter">What can LarpManager do for you?</p>
         <section class="box special showcase">
             {% for el in showcase %}
@@ -190,97 +189,51 @@ window.addEventListener('DOMContentLoaded', function() {
         updateCount();
       });
 
-    var owl;
-
-	(function($){
-		$.fn.shuffle = function() {
-
-			var allElems = this.get(),
-				getRandom = function(max) {
-					return Math.floor(Math.random() * max);
-				},
-				shuffled = $.map(allElems, function(){
-					var random = getRandom(allElems.length),
-						randEl = $(allElems[random]).clone(true)[0];
-					allElems.splice(random, 1);
-					return randEl;
-			   });
-
-			this.each(function(i){
-				$(this).replaceWith($(shuffled[i]));
-			});
-			return $(shuffled);
-		};
-	})(jQuery);
-
     $(function() {
         $('body').addClass('landing');
 
         $('#header').addClass('alt');
 
-        $(".owl-carousel .item").shuffle();
-
-        promot = $('#promoter-carousel .owl-carousel').owlCarousel({
-          responsive : {
-              // breakpoint from 0 up
-              0 : {
-                items: 3,
-                loop: true,
-                margin: 30,
-                autoplay: true,
-                autoplayTimeout: 2000,
-                stagePadding: 0,
-                responsiveClass: true,
-                dots: false,
-                nav: true,
-                autoHeight: true,
-              },
-              // breakpoint from 768 up
-              768 : {
-                items: 5,
-                loop: true,
-                margin: 30,
-                autoplay: true,
-                autoplayTimeout: 2000,
-                stagePadding: 0,
-                responsiveClass: true,
-                dots: false,
-                nav: true,
-                autoHeight: true,
-              }
+        $('#promoter-carousel').owlCarousel({
+            loop: true,
+            margin: 30,
+            autoplay: true,
+            autoplayTimeout: 2000,
+            stagePadding: 0,
+            responsiveClass: true,
+            dots: false,
+            nav: true,
+            autoHeight: true,
+            responsive: {
+                0: {
+                    items: 3
+                },
+                768: {
+                    items: 5
+                }
             }
-		});
+        });
 
-        reviews = $('#review-carousel .owl-carousel').owlCarousel({
-          responsive : {
-              // breakpoint from 0 up
-              0 : {
-                items: 3,
-                loop: true,
-                margin: 30,
-                autoplay: true,
-                autoplayTimeout: 2000,
-                stagePadding: 0,
-                responsiveClass: true,
-                dots: false,
-                nav: true,
-                autoHeight: true,
-              },
-              // breakpoint from 768 up
-              768 : {
-                items: 4,
-                loop: true,
-                margin: 30,
-                autoplay: true,
-                autoplayTimeout: 2000,
-                stagePadding: 0,
-                responsiveClass: true,
-                dots: false,
-                nav: true,
-                autoHeight: true,
-              }
+        $('#review-carousel').owlCarousel({
+            loop: true,
+            margin: 30,
+            autoplay: true,
+            autoplayTimeout: 5000,
+            stagePadding: 0,
+            responsiveClass: true,
+            dots: false,
+            nav: true,
+            autoHeight: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                768: {
+                    items: 3
+                }
             }
-		});
+        });
+
     });
 
 });

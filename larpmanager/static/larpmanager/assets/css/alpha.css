@@ -575,7 +575,7 @@ ul.special {
 
 @media(max-width: 860px) {
 
-    #promoter-carousel {
+    #promoter-carousel, #review-carousel,  {
         padding: 2em 1em 0em 1em;
     }
 
@@ -711,4 +711,16 @@ input[type="checkbox"]:checked {
 
 .final {
     margin-top:2em;
+}
+
+.owl-nav {
+    text-align: center;
+}
+
+#review-carousel .text {
+    color: #181818;
+}
+
+#review-carousel .author {
+    color: #47787e;
 }
