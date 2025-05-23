@@ -122,9 +122,7 @@ def create_second_char(live_server, page):
     page.locator("#id_q9").click()
     page.locator("#id_q9").fill("asda")
     page.get_by_role("button", name="Confirm", exact=True).click()
-    expect(page.locator("#one")).to_contain_text(
-        "Player: User Test Status: Creation dsfdfsd Private area Sheet sdfdsfds"
-    )
+    expect(page.locator("#one")).to_contain_text("Player: User Test Status: Creation dsfdfsd Text sdfdsfds")
 
 
 def show_chars(page, live_server):
