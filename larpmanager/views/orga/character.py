@@ -27,7 +27,6 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all
-from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.forms.character import (
     OrgaCharacterForm,
     OrgaWritingOptionForm,
@@ -185,12 +184,12 @@ def orga_writing_form_list(request, s, n, typ):
                 res[el.element_id] = []
             res[el.element_id].append(cho[el.option_id])
 
-    elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.EDITOR]:
+    elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
         que = WritingAnswer.objects.filter(question=q, element_id__in=character_ids)
-        que = que.annotate(short_text=Substr("text", 1, max_length + 20))
+        que = que.annotate(short_text=Substr("text", 1, max_length))
         que = que.values("element_id", "short_text")
         for el in que:
-            answer = remove_html_tags(el["short_text"])[:max_length]
+            answer = el["short_text"]
             if len(answer) == max_length:
                 popup.append(el["element_id"])
             res[el["element_id"]] = answer

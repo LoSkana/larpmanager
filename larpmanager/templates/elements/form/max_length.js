@@ -4,6 +4,7 @@
 
 var simple_count = ["t", "p", "name", "title"];
 var multiple_count = ["m"];
+var tinymce_count = ["teaser", "text"];
 
 var tm_done = [];
 
@@ -28,7 +29,7 @@ function update_count(key, limit, typ) {
         var checkedCount = group.filter(':checked').length;
         group.not(':checked').not('.unavail').prop('disabled', checkedCount >= limit);
         el.parent().find(".count").html(checkedCount);
-    } else {
+    } else if (tinymce_count.includes(typ)) {
         const editor = tinymce.get(key);
         if (editor) {
             // Count characters
