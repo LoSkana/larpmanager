@@ -12,6 +12,7 @@
         <table class="mob no_csv">
             {{ form.as_table }}
         </table>
+        {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
         <br />
         <input type="submit" value="{% trans "Submit" %}" />
     </form>
