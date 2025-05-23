@@ -47,9 +47,6 @@ def orga_character_form(live_server, page):
     # activate characters
     go_to(page, live_server, "/manage/features/178/on")
 
-    # activate form
-    go_to(page, live_server, "/manage/features/176/on")
-
     # activate player editor
     go_to(page, live_server, "/manage/features/120/on")
 
