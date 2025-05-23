@@ -123,7 +123,7 @@
                     {% if features.additional_tickets %}
                         <th class="additionals">{% trans "Additions" %}</th>
                     {% endif %}
-                    {% if features.characters %}
+                    {% if features.character %}
                         <th>{% trans "Character" %}</th>
                     {% endif %}
                     {% if features.faction %}
@@ -200,7 +200,7 @@
                                 {% if reg.additionals %}{{ reg.additionals }}{% endif %}
                             </td>
                         {% endif %}
-                        {% if features.characters %}
+                        {% if features.character %}
                             <td>
                                 {% for el in reg.chars %}
                                     {% include "elements/comma.html" %}

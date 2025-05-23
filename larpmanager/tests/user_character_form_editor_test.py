@@ -59,9 +59,6 @@ def prepare(page, live_server):
     # Activate characters
     go_to(page, live_server, "/manage/features/178/on")
 
-    # Activate character form
-    go_to(page, live_server, "/manage/features/176/on")
-
     # Activate player editor
     go_to(page, live_server, "/manage/features/120/on")
 
