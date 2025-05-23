@@ -112,6 +112,13 @@ class LarpManagerShowcase(BaseModel):
     def text_red(self):
         return self.text[:100]
 
+    def as_dict(self, many_to_many=True):
+        res = super().as_dict(many_to_many)
+        if self.reduced:
+            # noinspection PyUnresolvedReferences
+            res["reduced_url"] = self.reduced.url
+        return res
+
 
 class LarpManagerBlog(BaseModel):
     number = models.IntegerField(blank=True, null=True)
