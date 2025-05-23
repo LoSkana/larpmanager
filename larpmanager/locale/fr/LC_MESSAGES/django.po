@@ -2705,9 +2705,6 @@ msgstr "Caractéristiques standard"
 msgid "Technical Support"
 msgstr "Support technique"
 
-msgid "Welcome on board!"
-msgstr "Bienvenue à bord !"
-
 msgid "Your achievements"
 msgstr "Vos réalisations"
 
@@ -3507,6 +3504,9 @@ msgstr "non visible pour l'instant"
 msgid "Feature already activated"
 msgstr "Fonctionnalité déjà activée"
 
+msgid "Glad to have you with us!"
+msgstr "Heureux de vous compter parmi nous !"
+
 msgid "Go to the preferences for"
 msgstr "Aller dans les préférences pour"
 
@@ -3875,6 +3875,9 @@ msgstr "Jusqu'à présent, vous avez payé un total de"
 msgid "Surcharge applied to the ticket"
 msgstr "Supplément appliqué au billet"
 
+msgid "Thanks for joining LarpManager!"
+msgstr "Merci d'avoir rejoint LarpManager !"
+
 msgid "To log back in with the account"
 msgstr "Pour se reconnecter avec le compte"
 
@@ -3950,6 +3953,9 @@ msgstr "Cette page résume les parcelles de l'événement."
 
 msgid "This page shows the run signups."
 msgstr "Cette page résume les inscriptions à la course."
+
+msgid "To get started, check these out:"
+msgstr "Pour commencer, jetez un coup d'œil à ce qui suit :"
 
 msgid "We ask you to pay the difference"
 msgstr "Nous vous demandons de payer la différence"
@@ -4303,6 +4309,9 @@ msgstr "Cliquez ci-dessous pour confirmer votre annulation :"
 msgid "Enables free pre-registration to events."
 msgstr "Permet de s'inscrire gratuitement à l'avance à des événements."
 
+msgid "Got questions? Just reply to this email."
+msgstr "Vous avez des questions ? Répondez à cet e-mail."
+
 msgid "If you no longer wish to attend, you can"
 msgstr "Si vous ne souhaitez plus participer, vous pouvez"
 
@@ -4378,6 +4387,9 @@ msgstr "Votre numéro de carte est : <b>%(number)03d</b>."
 
 msgid "if the character belongs to this element."
 msgstr "si le caractère appartient à cet élément."
+
+msgid "(You might want to keep this email handy.)"
+msgstr "(Vous voudrez peut-être garder cet e-mail à portée de main)."
 
 msgid "Character already assigned, not selectable"
 msgstr "Caractère déjà attribué, non sélectionnable"
@@ -4460,6 +4472,9 @@ msgstr "Indiquer les billets pour lesquels il est actif"
 msgid "Presentation text, visible to other players"
 msgstr "Texte de présentation, visible par les autres joueurs"
 
+msgid "Short guides to help you set up your events"
+msgstr "Petits guides pour vous aider à organiser vos événements"
+
 msgid "This page performs checks on members' data."
 msgstr "Cette page effectue des contrôles sur les données des membres."
 
@@ -4484,6 +4499,9 @@ msgstr "Remise non cumulable avec d'autres concessions"
 
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Souhaitez-vous être remboursé ? Ouvrez un nouveau"
+
+msgid "Here’s your organization’s LarpManager page:"
+msgstr "Voici la page LarpManager de votre organisation :"
 
 msgid "If checked: shows the tagline for each event"
 msgstr "Si coché : affiche le slogan de chaque événement"
@@ -4639,6 +4657,9 @@ msgstr "Cette page résume la répartition des px entre les caractères."
 
 msgid "A description of the skills / abilities involved"
 msgstr "Une description des compétences"
+
+msgid "And here’s the link to manage your organization:"
+msgstr "Et voici le lien pour gérer votre organisation :"
 
 msgid "Discounts only applicable with new registrations"
 msgstr "Code applicable uniquement lors d'une nouvelle inscription"
@@ -4805,9 +4826,6 @@ msgid "Fill in this field if you have accessibility needs."
 msgstr ""
 "Remplissez ce champ si vous avez des besoins en matière d'accessibilité."
 
-msgid "Here are some useful links to help you get started:"
-msgstr "Voici quelques liens utiles pour vous aider à démarrer :"
-
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Je l'ai fait plusieurs fois, j'ai une expérience de base."
 
@@ -4817,6 +4835,11 @@ msgstr ""
 
 msgid "Indicates the currency in which to receive payments"
 msgstr "Indique la devise dans laquelle les paiements doivent être reçus"
+
+msgid "Join our Discord for help, ideas, or to report bugs"
+msgstr ""
+"Rejoignez notre Discord pour obtenir de l'aide, des idées ou pour signaler "
+"des bugs."
 
 msgid "Thank you for choosing to be part of our community!"
 msgstr "Merci d'avoir choisi de faire partie de notre communauté !"
@@ -4981,10 +5004,6 @@ msgstr ""
 
 msgid "This page summarises the list of members as a registry"
 msgstr "Cette page résume la liste des membres sous forme de registre"
-
-msgid "We advise you to keep this email for future reference."
-msgstr ""
-"Nous vous conseillons de conserver cet e-mail pour référence ultérieure."
 
 msgid "Write here additional information to your registration"
 msgstr "Indiquez ici si vous avez besoin d'informations supplémentaires"
@@ -5578,10 +5597,6 @@ msgid "The payment of your membership fee for this year has been received!"
 msgstr ""
 "Nous confirmons le paiement de votre cotisation pour l'année en cours !"
 
-msgid "This is instead the address of your association's management panel:"
-msgstr ""
-"Il s'agit plutôt de l'adresse du panneau de gestion de votre association :"
-
 msgid "This page summarises the available questions of the character form."
 msgstr ""
 "Cette page résume les questions disponibles dans la fiche de renseignements."
@@ -5610,11 +5625,6 @@ msgid "Does the character have a public role/archetype? If not, leave blank"
 msgstr ""
 "Le personnage a-t-il un rôle/type d'archétype public ? Si ce n'est pas le "
 "cas, laissez un blanc"
-
-msgid "Follow the tutorials to start setting up your first event right away"
-msgstr ""
-"Suivez les tutoriels pour commencer à organiser votre premier événement "
-"immédiatement."
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Nombre de jours disponibles pour payer le prochain versement"
@@ -5842,12 +5852,6 @@ msgstr ""
 " ci-dessous."
 
 msgid ""
-"Thank you for joining LarpManager! We are thrilled to have you with us."
-msgstr ""
-"Merci d'avoir rejoint LarpManager ! Nous sommes ravis de vous compter parmi "
-"nous."
-
-msgid ""
 "The request of removal from further communication has been successfull!"
 msgstr "Votre demande de désinscription des communications a été acceptée."
 
@@ -5995,10 +5999,6 @@ msgid ""
 "if the character does NOT belong to this element, but is only referenced."
 msgstr ""
 "si le caractère n'appartient PAS à cet élément, mais est seulement nommé."
-
-msgid ""
-"First of all, here is the address of the LarpManager for your association:"
-msgstr "Tout d'abord, voici l'adresse du LarpManager de votre association :"
 
 msgid ""
 "I confirm that all my required personal data have been filled in correctly"
@@ -6502,13 +6502,6 @@ msgstr ""
 " compétence soit disponible."
 
 msgid ""
-"Join the Discord to receive assistance, suggest improvements or notify bug "
-"reports"
-msgstr ""
-"Rejoignez le Discord pour recevoir de l'aide, suggérer des améliorations ou "
-"signaler des bogues."
-
-msgid ""
 "To register for the event, please fill in the following form and click on "
 "confirm."
 msgstr ""
@@ -6988,13 +6981,6 @@ msgid ""
 msgstr ""
 "Souhaitez-vous vous désinscrire de nos listes de communication ? <a "
 "href='%(url)s'>Désinscription</a>"
-
-msgid ""
-"If you have any questions, please do not hesitate to contact us: just reply "
-"to this email."
-msgstr ""
-"Si vous avez des questions, n'hésitez pas à nous contacter : répondez "
-"simplement à cet e-mail."
 
 msgid ""
 "This page allows you to add or change the types of ticket with which players"

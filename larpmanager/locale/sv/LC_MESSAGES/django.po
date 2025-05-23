@@ -2705,9 +2705,6 @@ msgstr "Standardutrustning"
 msgid "Technical Support"
 msgstr "Teknisk support"
 
-msgid "Welcome on board!"
-msgstr "Välkommen ombord!"
-
 msgid "Your achievements"
 msgstr "Dina prestationer"
 
@@ -3507,6 +3504,9 @@ msgstr "inte synlig för närvarande"
 msgid "Feature already activated"
 msgstr "Funktionen är redan aktiverad"
 
+msgid "Glad to have you with us!"
+msgstr "Kul att ha dig med oss!"
+
 msgid "Go to the preferences for"
 msgstr "Gå till preferenser för"
 
@@ -3875,6 +3875,9 @@ msgstr "Hittills har du betalat totalt"
 msgid "Surcharge applied to the ticket"
 msgstr "Tilläggsavgift till biljett"
 
+msgid "Thanks for joining LarpManager!"
+msgstr "Tack för att du går med i LarpManager!"
+
 msgid "To log back in with the account"
 msgstr "För att logga in igen med kontot"
 
@@ -3950,6 +3953,9 @@ msgstr "På denna sida sammanfattas händelserna under evenemanget."
 
 msgid "This page shows the run signups."
 msgstr "På denna sida finns en sammanfattning av anmälningarna till loppet."
+
+msgid "To get started, check these out:"
+msgstr "För att komma igång kan du kolla in dessa:"
 
 msgid "We ask you to pay the difference"
 msgstr "Vi ber dig att betala mellanskillnaden"
@@ -4303,6 +4309,9 @@ msgstr "Klicka nedan för att bekräfta din avbokning:"
 msgid "Enables free pre-registration to events."
 msgstr "Möjliggör kostnadsfri föranmälan till evenemang."
 
+msgid "Got questions? Just reply to this email."
+msgstr "Har du några frågor? Svara bara på detta e-postmeddelande."
+
 msgid "If you no longer wish to attend, you can"
 msgstr "Om du inte längre vill delta kan du"
 
@@ -4378,6 +4387,9 @@ msgstr "Ditt kortnummer är: <b>%(number)03d</b>."
 
 msgid "if the character belongs to this element."
 msgstr "om karaktären tillhör detta element."
+
+msgid "(You might want to keep this email handy.)"
+msgstr "(Du kanske vill ha det här e-postmeddelandet till hands.)"
 
 msgid "Character already assigned, not selectable"
 msgstr "Karaktär redan tilldelad, inte valbar"
@@ -4460,6 +4472,9 @@ msgstr "Ange de biljetter för vilka den är aktiv"
 msgid "Presentation text, visible to other players"
 msgstr "Presentationstext, synlig för andra spelare"
 
+msgid "Short guides to help you set up your events"
+msgstr "Korta guider som hjälper dig att sätta upp dina evenemang"
+
 msgid "This page performs checks on members' data."
 msgstr "Denna sida utför kontroller av medlemmarnas uppgifter."
 
@@ -4483,6 +4498,9 @@ msgstr "Rabatt som inte kan kombineras med andra förmåner"
 
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr "Vill du ha ersättning för dina kostnader? Öppna en ny"
+
+msgid "Here’s your organization’s LarpManager page:"
+msgstr "Här är din organisations LarpManager-sida:"
 
 msgid "If checked: shows the tagline for each event"
 msgstr "Om markerat: visar tagline för varje evenemang"
@@ -4637,6 +4655,9 @@ msgstr "Denna sida sammanfattar fördelningen av px till tecken."
 
 msgid "A description of the skills / abilities involved"
 msgstr "En beskrivning av kompetensens färdigheter"
+
+msgid "And here’s the link to manage your organization:"
+msgstr "Och här är länken för att hantera din organisation:"
 
 msgid "Discounts only applicable with new registrations"
 msgstr "Koden gäller endast vid nyregistrering"
@@ -4797,9 +4818,6 @@ msgstr "Du kan inte skapa en relation till dig själv!"
 msgid "Fill in this field if you have accessibility needs."
 msgstr "Fyll i detta fält om du har tillgänglighetsbehov."
 
-msgid "Here are some useful links to help you get started:"
-msgstr "Här är några användbara länkar som hjälper dig att komma igång:"
-
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jag har gjort det några gånger, jag har grundläggande erfarenhet"
 
@@ -4808,6 +4826,9 @@ msgstr "Om du vill kan du radera tidigare förhandsregistreringar."
 
 msgid "Indicates the currency in which to receive payments"
 msgstr "Anger den valuta i vilken betalningar ska tas emot"
+
+msgid "Join our Discord for help, ideas, or to report bugs"
+msgstr "Gå med i vår Discord för hjälp, idéer eller för att rapportera buggar"
 
 msgid "Thank you for choosing to be part of our community!"
 msgstr "Tack för att du väljer att vara en del av vår gemenskap!"
@@ -4969,9 +4990,6 @@ msgstr ""
 
 msgid "This page summarises the list of members as a registry"
 msgstr "Denna sida sammanfattar medlemsförteckningen som ett register"
-
-msgid "We advise you to keep this email for future reference."
-msgstr "Vi råder dig att spara detta e-postmeddelande för framtida bruk."
 
 msgid "Write here additional information to your registration"
 msgstr "Ange här om ytterligare information till din post"
@@ -5508,9 +5526,6 @@ msgstr "Välj de typer av skrivelement som den här frågan gäller."
 msgid "The payment of your membership fee for this year has been received!"
 msgstr "Vi bekräftar betalningen av din medlemsavgift för innevarande år!"
 
-msgid "This is instead the address of your association's management panel:"
-msgstr "Detta är istället adressen till din förenings administrationspanel:"
-
 msgid "This page summarises the available questions of the character form."
 msgstr ""
 "På den här sidan sammanfattas de frågor som finns tillgängliga i "
@@ -5536,9 +5551,6 @@ msgstr ""
 
 msgid "Does the character have a public role/archetype? If not, leave blank"
 msgstr "Har karaktären en offentlig roll/arketyp? Om inte, lämna tomt"
-
-msgid "Follow the tutorials to start setting up your first event right away"
-msgstr "Följ anvisningarna för att börja skapa ditt första evenemang direkt"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Antal dagar tillgängliga för att betala nästa delbetalning"
@@ -5748,11 +5760,6 @@ msgstr ""
 "nedan."
 
 msgid ""
-"Thank you for joining LarpManager! We are thrilled to have you with us."
-msgstr ""
-"Tack för att du är med i LarpManager! Vi är glada över att ha dig hos oss."
-
-msgid ""
 "The request of removal from further communication has been successfull!"
 msgstr "Din begäran om att avregistrera dig från kommunikation lyckades."
 
@@ -5884,10 +5891,6 @@ msgstr ""
 msgid ""
 "if the character does NOT belong to this element, but is only referenced."
 msgstr "om karaktären INTE tillhör detta element, utan bara är namngiven."
-
-msgid ""
-"First of all, here is the address of the LarpManager for your association:"
-msgstr "Först av allt, här är adressen till LarpManager för din förening:"
 
 msgid ""
 "I confirm that all my required personal data have been filled in correctly"
@@ -6375,13 +6378,6 @@ msgstr ""
 "tillgänglig"
 
 msgid ""
-"Join the Discord to receive assistance, suggest improvements or notify bug "
-"reports"
-msgstr ""
-"Gå med i Discord för att få hjälp, föreslå förbättringar eller anmäla "
-"felrapporter"
-
-msgid ""
 "To register for the event, please fill in the following form and click on "
 "confirm."
 msgstr ""
@@ -6858,13 +6854,6 @@ msgid ""
 msgstr ""
 "Vill du avregistrera dig från våra kommunikationslistor? <a "
 "href='%(url)s'>Avregistrera</a>"
-
-msgid ""
-"If you have any questions, please do not hesitate to contact us: just reply "
-"to this email."
-msgstr ""
-"Om du har några frågor, tveka inte att kontakta oss: svara bara på det här "
-"e-postmeddelandet."
 
 msgid ""
 "This page allows you to add or change the types of ticket with which players"

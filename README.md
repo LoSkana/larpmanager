@@ -54,6 +54,14 @@ Now you're ready for liftoff!
 
 ---
 
+*Windows user*: On some cases the docker fails to start up, you might want to try
+
+```
+dos2unix scripts/entrypoint.sh
+```
+
+---
+
 If you want some more extra juicy stuff, you can set an automatic execution of
 
 ```
