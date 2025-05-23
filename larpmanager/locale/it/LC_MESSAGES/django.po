@@ -339,9 +339,6 @@ msgstr "Login"
 msgid "Money"
 msgstr "Soldi"
 
-msgid "Motto"
-msgstr "Motto"
-
 msgid "Names"
 msgstr "Nomi"
 
@@ -422,9 +419,6 @@ msgstr "Video"
 
 msgid "Where"
 msgstr "Dove"
-
-msgid "cover"
-msgstr "cover"
 
 msgid "email"
 msgstr "email"
@@ -617,9 +611,6 @@ msgstr "emessi"
 
 msgid "member"
 msgstr "socio"
-
-msgid "mirror"
-msgstr "mirror"
 
 msgid "player"
 msgstr "giocatore"
@@ -851,9 +842,6 @@ msgstr "indirizzo"
 
 msgid "options"
 msgstr "opzioni"
-
-msgid "preview"
-msgstr "anteprima"
 
 msgid "Accepted"
 msgstr "Accettato"
@@ -1685,6 +1673,9 @@ msgstr "immediatamente"
 
 msgid "leaderboard"
 msgstr "classifica!"
+
+msgid "text length"
+msgstr "lunghezza del testo"
 
 msgid "unique code"
 msgstr "codice unico"
@@ -3030,9 +3021,6 @@ msgstr "Biglietto regalo cancellato!"
 msgid "Independent factions"
 msgstr "Fazioni indipendenti"
 
-msgid "Informations private"
-msgstr "Informazioni private"
-
 msgid "Last membership date"
 msgstr "Data ultimo tesseramento"
 
@@ -3075,9 +3063,6 @@ msgstr "Struttura predefinita"
 
 msgid "Preference not valid"
 msgstr "Preferenza non valida"
-
-msgid "Private informations"
-msgstr "informazioni private"
 
 msgid "Registration closed."
 msgstr "Iscrizioni chiuse."
@@ -5757,12 +5742,6 @@ msgstr "se il personaggio NON conosce l'identità dell'altro tratto."
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
 msgstr "Assente (nelle relazioni di questo personaggio è assente l'altro)"
-
-msgid ""
-"Adds a 'motto' field to characters, a short phrase they frequently use."
-msgstr ""
-"Aggiunge un campo \"motto\" ai personaggi, una breve frase che usano di "
-"frequente."
 
 msgid ""
 "Allows players to select hidden roles without spoiling them for others."

@@ -222,7 +222,7 @@ def create_first_char(live_server, page):
     page.locator("#id_q5").fill("bbbbbbbbbb")
     expect(page.locator("#id_q5")).to_have_value("bbbbbbbbbb")
     expect(page.locator("#main_form")).to_contain_text("long descr")
-    expect(page.locator("#main_form")).to_contain_text("characters: 10 / 10")
+    expect(page.locator("#main_form")).to_contain_text("text length: 10 / 10")
     expect(page.locator("#lbl_id_q6")).to_contain_text("available text")
     expect(page.locator("#main_form")).to_contain_text("available descrall allfew few descr")
     page.locator("#id_q6").select_option("1")

@@ -339,9 +339,6 @@ msgstr "Přihlášení"
 msgid "Money"
 msgstr "Peníze"
 
-msgid "Motto"
-msgstr "Motto"
-
 msgid "Names"
 msgstr "Jména"
 
@@ -422,9 +419,6 @@ msgstr "Video"
 
 msgid "Where"
 msgstr "Kde:"
-
-msgid "cover"
-msgstr "kryt"
 
 msgid "email"
 msgstr "e-mail"
@@ -617,9 +611,6 @@ msgstr "vydáno"
 
 msgid "member"
 msgstr "člen"
-
-msgid "mirror"
-msgstr "zrcadlo"
 
 msgid "player"
 msgstr "hráč"
@@ -851,9 +842,6 @@ msgstr "adresa"
 
 msgid "options"
 msgstr "možnosti"
-
-msgid "preview"
-msgstr "náhled"
 
 msgid "Accepted"
 msgstr "Přijato"
@@ -1685,6 +1673,9 @@ msgstr "okamžitě"
 
 msgid "leaderboard"
 msgstr "žebříčku!"
+
+msgid "text length"
+msgstr "délka textu"
 
 msgid "unique code"
 msgstr "jedinečný kód"
@@ -3030,9 +3021,6 @@ msgstr "Dárková karta zrušena!"
 msgid "Independent factions"
 msgstr "Nezávislé frakce"
 
-msgid "Informations private"
-msgstr "Soukromé informace"
-
 msgid "Last membership date"
 msgstr "Datum posledního členství"
 
@@ -3075,9 +3063,6 @@ msgstr "Předdefinovaná struktura"
 
 msgid "Preference not valid"
 msgstr "Neplatná předvolba"
-
-msgid "Private informations"
-msgstr "soukromé informace"
 
 msgid "Registration closed."
 msgstr "Registrace je uzavřena."
@@ -5640,10 +5625,6 @@ msgstr "pokud postava NEZNÁ identitu jiného rysu."
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
 msgstr "Nepřítomný (ve vztazích této postavy chybí druhá postava)"
-
-msgid ""
-"Adds a 'motto' field to characters, a short phrase they frequently use."
-msgstr "Přidá k postavám pole \"motto\", krátkou frázi, kterou často používají."
 
 msgid ""
 "Allows players to select hidden roles without spoiling them for others."

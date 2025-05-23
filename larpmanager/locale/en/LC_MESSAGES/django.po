@@ -3390,6 +3390,9 @@ msgstr ""
 msgid "Original"
 msgstr ""
 
+msgid "text length"
+msgstr ""
+
 msgid "Confirm"
 msgstr ""
 
@@ -6353,27 +6356,6 @@ msgstr ""
 msgid "This page shows the characters of the event."
 msgstr ""
 
-msgid "title"
-msgstr ""
-
-msgid "preview"
-msgstr ""
-
-msgid "hide"
-msgstr ""
-
-msgid "mirror"
-msgstr ""
-
-msgid "cover"
-msgstr ""
-
-msgid "speedlarp"
-msgstr ""
-
-msgid "assigned"
-msgstr ""
-
 msgid "player"
 msgstr ""
 
@@ -6383,10 +6365,7 @@ msgstr ""
 msgid "XP"
 msgstr ""
 
-msgid "Private informations"
-msgstr ""
-
-msgid "Informations private"
+msgid "speedlarp"
 msgstr ""
 
 msgid "Questions CC"
@@ -6552,6 +6531,12 @@ msgstr ""
 msgid "This page shows the event quests."
 msgstr ""
 
+msgid "hide"
+msgstr ""
+
+msgid "assigned"
+msgstr ""
+
 msgid "This page shows the relationships between characters."
 msgstr ""
 
@@ -6577,6 +6562,9 @@ msgid "Station"
 msgstr ""
 
 msgid "This page shows the traits assigned to the characters in the run."
+msgstr ""
+
+msgid "title"
 msgstr ""
 
 msgid ""
@@ -6662,12 +6650,6 @@ msgid "Manage players' data"
 msgstr ""
 
 msgid "Standard features"
-msgstr ""
-
-msgid "Motto"
-msgstr ""
-
-msgid "Adds a 'motto' field to characters, a short phrase they frequently use."
 msgstr ""
 
 msgid "Adds a short (2-3 words) 'title' field to characters."

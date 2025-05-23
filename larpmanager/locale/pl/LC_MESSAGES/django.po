@@ -339,9 +339,6 @@ msgstr "Logowanie"
 msgid "Money"
 msgstr "Pieniądze"
 
-msgid "Motto"
-msgstr "Motto"
-
 msgid "Names"
 msgstr "Nazwy"
 
@@ -422,9 +419,6 @@ msgstr "Wideo"
 
 msgid "Where"
 msgstr "Gdzie"
-
-msgid "cover"
-msgstr "okładka"
 
 msgid "email"
 msgstr "e-mail"
@@ -617,9 +611,6 @@ msgstr "wydany"
 
 msgid "member"
 msgstr "członek"
-
-msgid "mirror"
-msgstr "lustro"
 
 msgid "player"
 msgstr "gracz"
@@ -851,9 +842,6 @@ msgstr "adres"
 
 msgid "options"
 msgstr "opcje"
-
-msgid "preview"
-msgstr "podgląd"
 
 msgid "Accepted"
 msgstr "Przyjęte"
@@ -1685,6 +1673,9 @@ msgstr "natychmiast"
 
 msgid "leaderboard"
 msgstr "tabela liderów"
+
+msgid "text length"
+msgstr "długość tekstu"
 
 msgid "unique code"
 msgstr "unikalny kod"
@@ -3030,9 +3021,6 @@ msgstr "Karta podarunkowa anulowana!"
 msgid "Independent factions"
 msgstr "Niezależne frakcje"
 
-msgid "Informations private"
-msgstr "Informacje prywatne"
-
 msgid "Last membership date"
 msgstr "Data ostatniego członkostwa"
 
@@ -3075,9 +3063,6 @@ msgstr "Predefiniowana struktura"
 
 msgid "Preference not valid"
 msgstr "Preferencja nieważna"
-
-msgid "Private informations"
-msgstr "Informacje prywatne"
 
 msgid "Registration closed."
 msgstr "Rejestracja została zamknięta."
@@ -5688,10 +5673,6 @@ msgstr "czy postać NIE jest świadoma tożsamości drugiej cechy."
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
 msgstr "Nieobecny (w relacjach tej postaci druga jest nieobecna)"
-
-msgid ""
-"Adds a 'motto' field to characters, a short phrase they frequently use."
-msgstr "Dodaje pole \"motto\" do postaci, krótką frazę, której często używają."
 
 msgid ""
 "Allows players to select hidden roles without spoiling them for others."

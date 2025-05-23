@@ -339,9 +339,6 @@ msgstr "Connexion"
 msgid "Money"
 msgstr "L'argent"
 
-msgid "Motto"
-msgstr "Devise"
-
 msgid "Names"
 msgstr "Noms"
 
@@ -422,9 +419,6 @@ msgstr "Vidéo"
 
 msgid "Where"
 msgstr "Où"
-
-msgid "cover"
-msgstr "couverture"
 
 msgid "email"
 msgstr "courriel"
@@ -617,9 +611,6 @@ msgstr "émis"
 
 msgid "member"
 msgstr "membre"
-
-msgid "mirror"
-msgstr "miroir"
 
 msgid "player"
 msgstr "joueur"
@@ -851,9 +842,6 @@ msgstr "adresse"
 
 msgid "options"
 msgstr "options"
-
-msgid "preview"
-msgstr "aperçu"
 
 msgid "Accepted"
 msgstr "Accepté"
@@ -1685,6 +1673,9 @@ msgstr "immédiatement"
 
 msgid "leaderboard"
 msgstr "classement !"
+
+msgid "text length"
+msgstr "longueur du texte"
 
 msgid "unique code"
 msgstr "code unique"
@@ -3030,9 +3021,6 @@ msgstr "Carte cadeau annulée !"
 msgid "Independent factions"
 msgstr "Les factions indépendantes"
 
-msgid "Informations private"
-msgstr "Informations privées"
-
 msgid "Last membership date"
 msgstr "Dernière date d'adhésion"
 
@@ -3075,9 +3063,6 @@ msgstr "Structure prédéfinie"
 
 msgid "Preference not valid"
 msgstr "Préférence non valide"
-
-msgid "Private informations"
-msgstr "informations privées"
 
 msgid "Registration closed."
 msgstr "Les inscriptions sont closes."
@@ -5805,12 +5790,6 @@ msgstr "si le personnage ne connaît PAS l'identité de l'autre trait."
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
 msgstr "Absent (dans les relations de ce personnage, l'autre est absent)"
-
-msgid ""
-"Adds a 'motto' field to characters, a short phrase they frequently use."
-msgstr ""
-"Ajoute un champ \"devise\" aux personnages, une courte phrase qu'ils "
-"utilisent fréquemment."
 
 msgid ""
 "Allows players to select hidden roles without spoiling them for others."

@@ -339,9 +339,6 @@ msgstr "Inloggen"
 msgid "Money"
 msgstr "Geld"
 
-msgid "Motto"
-msgstr "Motto"
-
 msgid "Names"
 msgstr "Namen"
 
@@ -422,9 +419,6 @@ msgstr "Video"
 
 msgid "Where"
 msgstr "Waar"
-
-msgid "cover"
-msgstr "cover"
 
 msgid "email"
 msgstr "e-mail"
@@ -617,9 +611,6 @@ msgstr "uitgegeven"
 
 msgid "member"
 msgstr "lid"
-
-msgid "mirror"
-msgstr "spiegel"
 
 msgid "player"
 msgstr "speler"
@@ -851,9 +842,6 @@ msgstr "adres"
 
 msgid "options"
 msgstr "opties"
-
-msgid "preview"
-msgstr "voorbeeld"
 
 msgid "Accepted"
 msgstr "Geaccepteerd"
@@ -1685,6 +1673,9 @@ msgstr "onmiddellijk"
 
 msgid "leaderboard"
 msgstr "ranking!"
+
+msgid "text length"
+msgstr "tekstlengte"
 
 msgid "unique code"
 msgstr "unieke code"
@@ -3030,9 +3021,6 @@ msgstr "Cadeaubon geannuleerd!"
 msgid "Independent factions"
 msgstr "Onafhankelijke facties"
 
-msgid "Informations private"
-msgstr "Privé-informatie"
-
 msgid "Last membership date"
 msgstr "Laatste lidmaatschapsdatum"
 
@@ -3075,9 +3063,6 @@ msgstr "Vooraf gedefinieerde structuur"
 
 msgid "Preference not valid"
 msgstr "Ongeldige voorkeur"
-
-msgid "Private informations"
-msgstr "privé-informatie"
 
 msgid "Registration closed."
 msgstr "Registratie gesloten."
@@ -5790,12 +5775,6 @@ msgstr "als het personage de identiteit van de andere eigenschap NIET kent."
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
 msgstr "Afwezig (in de relaties van dit personage is de ander afwezig)"
-
-msgid ""
-"Adds a 'motto' field to characters, a short phrase they frequently use."
-msgstr ""
-"Voegt een 'motto'-veld toe aan personages, een korte zin die ze vaak "
-"gebruiken."
 
 msgid ""
 "Allows players to select hidden roles without spoiling them for others."

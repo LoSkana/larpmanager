@@ -335,12 +335,15 @@ class BaseRegistrationForm(MyFormRun):
             self.fields[key].disabled = not active
 
         if question.max_length:
-            self.max_lengths[f"id_{key}"] = (question.max_length, question.typ)
+            if question.typ in QuestionType.get_max_length():
+                self.max_lengths[f"id_{key}"] = (question.max_length, question.typ)
 
         if question.status == QuestionStatus.MANDATORY:
             self.fields[key].label += " (*)"
             self.has_mandatory = True
             self.mandatory.append("id_" + key)
+
+        question.basic_typ = question.typ in QuestionType.get_basic_types()
 
         return key
 

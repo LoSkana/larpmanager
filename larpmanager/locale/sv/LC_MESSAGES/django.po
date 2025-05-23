@@ -339,9 +339,6 @@ msgstr "Inloggning"
 msgid "Money"
 msgstr "Pengar"
 
-msgid "Motto"
-msgstr "Motto"
-
 msgid "Names"
 msgstr "Namn"
 
@@ -422,9 +419,6 @@ msgstr "Video"
 
 msgid "Where"
 msgstr "Var"
-
-msgid "cover"
-msgstr "skydd"
 
 msgid "email"
 msgstr "e-post"
@@ -617,9 +611,6 @@ msgstr "utfärdade"
 
 msgid "member"
 msgstr "medlem"
-
-msgid "mirror"
-msgstr "spegel"
 
 msgid "player"
 msgstr "spelare"
@@ -851,9 +842,6 @@ msgstr "adress"
 
 msgid "options"
 msgstr "alternativ"
-
-msgid "preview"
-msgstr "förhandsvisning"
 
 msgid "Accepted"
 msgstr "Godkänd"
@@ -1685,6 +1673,9 @@ msgstr "omedelbart"
 
 msgid "leaderboard"
 msgstr "ranking!"
+
+msgid "text length"
+msgstr "textlängd"
 
 msgid "unique code"
 msgstr "unik kod"
@@ -3030,9 +3021,6 @@ msgstr "Presentkortet är annullerat!"
 msgid "Independent factions"
 msgstr "Oberoende fraktioner"
 
-msgid "Informations private"
-msgstr "Privat information"
-
 msgid "Last membership date"
 msgstr "Senaste datum för medlemskap"
 
@@ -3075,9 +3063,6 @@ msgstr "Fördefinierad struktur"
 
 msgid "Preference not valid"
 msgstr "Ogiltig preferens"
-
-msgid "Private informations"
-msgstr "privat information"
 
 msgid "Registration closed."
 msgstr "Registreringen är stängd."
@@ -5709,12 +5694,6 @@ msgstr "om rollpersonen INTE känner till den andra egenskapens identitet."
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
 msgstr "Frånvarande (i denna karaktärs relationer är den andra frånvarande)"
-
-msgid ""
-"Adds a 'motto' field to characters, a short phrase they frequently use."
-msgstr ""
-"Lägger till ett \"motto\"-fält för karaktärer, en kort fras som de ofta "
-"använder."
 
 msgid ""
 "Allows players to select hidden roles without spoiling them for others."

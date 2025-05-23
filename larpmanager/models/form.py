@@ -68,6 +68,19 @@ class QuestionType(models.TextChoices):
             QuestionType.EDITOR,
         }
 
+    @classmethod
+    def get_max_length(cls):
+        return {
+            QuestionType.NAME,
+            QuestionType.SHEET,
+            QuestionType.TEASER,
+            QuestionType.PREVIEW,
+            QuestionType.TEXT,
+            QuestionType.PARAGRAPH,
+            QuestionType.MULTIPLE,
+            QuestionType.EDITOR,
+        }
+
 
 class QuestionStatus(models.TextChoices):
     OPTIONAL = "o", _("Optional")
