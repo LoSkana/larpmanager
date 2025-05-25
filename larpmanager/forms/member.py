@@ -254,7 +254,7 @@ class ResidenceField(forms.MultiValueField):
             forms.ChoiceField(choices=COUNTRY_CHOICES),
             forms.ChoiceField(choices=PROVINCE_CHOICES),
             forms.CharField(validators=[validate_no_pipe]),
-            forms.CharField(max_length=6),
+            forms.CharField(max_length=7),
             forms.CharField(max_length=30),
             forms.CharField(max_length=10),
         ]

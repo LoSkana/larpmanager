@@ -39,9 +39,9 @@ from xhtml2pdf import pisa
 
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.models.association import AssocTextType
-from larpmanager.models.casting import AssignmentTrait, Casting
+from larpmanager.models.casting import AssignmentTrait, Casting, Trait
 from larpmanager.models.miscellanea import PlayerRelationship, Util
-from larpmanager.models.registration import Registration
+from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
     Faction,
@@ -368,20 +368,19 @@ def post_save_pdf_faction(sender, instance, **kwargs):
         remove_char_pdf(char, runs=runs)
 
 
-def remove_pdf_at(instance):
-    for c in Casting.objects.filter(member=instance.member, run=instance.run, typ=instance.typ):
-        c.active = False
-        c.save()
-    try:
-        ch = Registration.objects.get(run=instance.run, member=instance.member)
-        remove_char_pdf(ch, instance.run)
-    except ObjectDoesNotExist:
-        pass
+def remove_pdf_assignment_trait(instance):
+    for casting in Casting.objects.filter(member=instance.member, run=instance.run, typ=instance.typ):
+        casting.active = False
+        casting.save()
+
+    char = get_trait_character(instance.run, instance.trait.number)
+    if char:
+        remove_char_pdf(char, instance.run)
 
 
 @receiver(pre_delete, sender=AssignmentTrait)
 def pre_delete_pdf_assignment_trait(sender, instance, **kwargs):
-    remove_pdf_at(instance)
+    remove_pdf_assignment_trait(instance)
 
 
 @receiver(post_save, sender=AssignmentTrait)
@@ -389,7 +388,7 @@ def post_save_assignment_trait(sender, instance, created, **kwargs):
     if not instance.member or not created:
         return
 
-    remove_pdf_at(instance)
+    remove_pdf_assignment_trait(instance)
 
 
 # ## TASKS
@@ -597,3 +596,15 @@ def update_content(ctx, working_dir, zip_dir, char, aux_template):
         styles.append(ch)
 
     doc.write(content, pretty_print=True)
+
+
+def get_trait_character(run, number):
+    try:
+        tr = Trait.objects.get(event=run.event, number=number)
+        mb = AssignmentTrait.objects.get(run=run, trait=tr).member
+        rcrs = RegistrationCharacterRel.objects.filter(reg__run=run, reg__member=mb).select_related("character")
+        if rcrs.count() == 0:
+            return None
+        return rcrs.first().character
+    except ObjectDoesNotExist:
+        return None

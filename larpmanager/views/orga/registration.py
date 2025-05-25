@@ -94,7 +94,7 @@ def check_time(times, step, start=None):
 
 
 def orga_registrations_traits(r, ctx):
-    if "questbuilder" in ctx["features"]:
+    if "questbuilder" not in ctx["features"]:
         return
 
     r.traits = {}
@@ -504,31 +504,7 @@ def orga_registrations_edit(request, s, n, num):
             form.save_reg_questions(reg)
 
             if "questbuilder" in ctx["features"]:
-                done = []
-                for qt in QuestType.objects.filter(event=ctx["event"]):
-                    qt_id = f"qt_{qt.number}"
-                    tid = form.cleaned_data[qt_id]
-                    if int(tid):
-                        done.append(qt.number)
-                        # check if already existing
-                        if (
-                            AssignmentTrait.objects.filter(
-                                run=ctx["run"],
-                                member=reg.member,
-                                trait_id=tid,
-                                typ=qt.number,
-                            ).count()
-                            == 0
-                        ):
-                            AssignmentTrait.objects.filter(run=ctx["run"], member=reg.member, typ=qt.number).delete()
-                            AssignmentTrait.objects.create(
-                                run=ctx["run"],
-                                member=reg.member,
-                                trait_id=tid,
-                                typ=qt.number,
-                            )
-
-                AssignmentTrait.objects.filter(run=ctx["run"], member=reg.member).exclude(typ__in=done).delete()
+                _save_questbuilder(ctx, form, reg)
 
             return redirect("orga_registrations", s=ctx["event"].slug, n=ctx["run"].number)
     elif num != 0:
@@ -539,6 +515,25 @@ def orga_registrations_edit(request, s, n, num):
     ctx["form"] = form
 
     return render(request, "larpmanager/orga/edit.html", ctx)
+
+
+def _save_questbuilder(ctx, form, reg):
+    for qt in QuestType.objects.filter(event=ctx["event"]):
+        qt_id = f"qt_{qt.number}"
+        tid = int(form.cleaned_data[qt_id])
+        base_kwargs = {"run": ctx["run"], "member": reg.member, "typ": qt.number}
+
+        if tid:
+            ait = AssignmentTrait.objects.filter(**base_kwargs).first()
+
+            if ait and ait.trait_id != tid:
+                ait.delete()
+                ait = None
+
+            if not ait:
+                AssignmentTrait.objects.create(**base_kwargs, trait_id=tid)
+        else:
+            AssignmentTrait.objects.filter(**base_kwargs).delete()
 
 
 @login_required
