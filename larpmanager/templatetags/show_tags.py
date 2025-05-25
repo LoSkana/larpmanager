@@ -19,11 +19,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
+from enum import member
 
 from allauth.utils import get_request_param
 from django import template
 from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.templatetags.static import static
 from django.urls import reverse
@@ -33,11 +33,11 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.registration import round_to_nearest_cent
 from larpmanager.models.association import get_url
-from larpmanager.models.casting import AssignmentTrait, Trait
-from larpmanager.models.registration import Registration
+from larpmanager.models.casting import Trait
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, Faction
 from larpmanager.utils.common import html_clean
+from larpmanager.utils.pdf import get_trait_character
 
 register = template.Library()
 
@@ -187,12 +187,10 @@ def go_trait(context, search, number, tx, run, go_tooltip, simple=False):
     if number in context["traits"]:
         ch_number = context["traits"][number]["char"]
     else:
-        try:
-            tr = Trait.objects.get(event=run.event, number=number)
-            mb = AssignmentTrait.objects.get(run=run, trait=tr).member
-            ch_number = Registration.objects.get(run=run, member=mb).character.number
-        except ObjectDoesNotExist:
+        char = get_trait_character(run, member)
+        if not char:
             return tx
+        ch_number = char.number
 
     if ch_number not in context["chars"]:
         return tx
