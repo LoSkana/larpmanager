@@ -93,6 +93,7 @@ class QuestionVisibility(models.TextChoices):
     SEARCHABLE = "s", _("Searchable")
     PUBLIC = "c", _("Public")
     PRIVATE = "e", _("Private")
+    HIDDEN = "h", _("Hidden")
 
 
 class QuestionApplicable(models.TextChoices):
@@ -153,9 +154,10 @@ class WritingQuestion(BaseModel):
         default=QuestionVisibility.PRIVATE,
         verbose_name=_("Visibility"),
         help_text=_(
-            "Searchable: Characters can be filtered according to this question. Public: The "
-            "answer to this question is publicly visible. Private: The answer to this "
-            "question is only visible to the player and organisers."
+            "Searchable: Characters can be filtered according to this question. "
+            "Public: The answer to this question is publicly visible. "
+            "Private: The answer to this question is only visible to the player. "
+            "Hidden: The answer is hidden to all players."
         ),
     )
 

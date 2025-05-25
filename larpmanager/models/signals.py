@@ -374,7 +374,7 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
                 typ=el,
                 display=_(el.capitalize()),
                 status=QuestionStatus.HIDDEN,
-                visibility=QuestionVisibility.PRIVATE,
+                visibility=QuestionVisibility.HIDDEN,
                 max_length=1000,
                 applicable=QuestionApplicable.CHARACTER,
             )
