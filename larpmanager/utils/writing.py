@@ -338,6 +338,7 @@ def writing_view(request, ctx, nm):
     ctx["el"] = ctx[nm]
     ctx["el"].data = ctx["el"].show_complete()
     ctx["nm"] = nm
+    get_event_cache_all(ctx)
     return render(request, "larpmanager/orga/writing/view.html", ctx)
 
 
