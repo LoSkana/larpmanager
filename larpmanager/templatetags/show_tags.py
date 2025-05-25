@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
-from enum import member
 
 from allauth.utils import get_request_param
 from django import template
@@ -187,7 +186,7 @@ def go_trait(context, search, number, tx, run, go_tooltip, simple=False):
     if number in context["traits"]:
         ch_number = context["traits"][number]["char"]
     else:
-        char = get_trait_character(run, member)
+        char = get_trait_character(run, number)
         if not char:
             return tx
         ch_number = char.number
