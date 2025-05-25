@@ -20,10 +20,13 @@
 
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import pre_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
+from larpmanager.cache.button import get_event_button_cache
+from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event, Run
+from larpmanager.models.form import QuestionApplicable, QuestionType, WritingQuestion
 
 
 def reset_cache_run(a, s, n):
@@ -64,3 +67,73 @@ def pre_save_event(sender, instance, **kwargs):
     if instance.pk:
         for run in instance.runs.all():
             reset_cache_run(instance.assoc_id, instance.slug, run.number)
+
+
+def reset_cache_config_run(run):
+    key = cache_config_run_key(run)
+    cache.delete(key)
+
+
+def cache_config_run_key(run):
+    return f"run_config_{run.id}"
+
+
+def get_cache_config_run(run):
+    key = cache_config_run_key(run)
+    res = cache.get(key)
+    if not res:
+        res = init_cache_config_run(run)
+        cache.set(key, res)
+    return res
+
+
+def init_cache_config_run(run):
+    ev_features = get_event_features(run.event_id)
+    ctx = {
+        "buttons": get_event_button_cache(run.event_id),
+        "show_limitations": run.event.get_config("show_limitations", False),
+        "user_character_max": run.event.get_config("user_character_max", 0),
+        "cover_orig": run.event.get_config("cover_orig", False),
+        "px_user": run.event.get_config("px_user", False),
+    }
+
+    if run.event.parent:
+        ctx["px_user"] = run.event.parent.get_config("px_user", False)
+
+    conf_features = [
+        "faction",
+        "speedlarp",
+        "prologue",
+        "questbuilder",
+        "workshop",
+        "print_pdf",
+        "co_creation",
+        "preview",
+    ]
+    for config_name in conf_features:
+        if config_name not in ev_features:
+            continue
+        ctx["show_" + config_name] = run.get_config("show_" + config_name, False)
+
+    for config_name in ["char", "teaser", "preview", "text"]:
+        ctx["show_" + config_name] = run.get_config("show_" + config_name, False)
+
+    basics = QuestionType.get_basic_types()
+    que = run.event.get_elements(WritingQuestion).order_by("order")
+    for question in que.filter(applicable=QuestionApplicable.CHARACTER, typ__in=basics):
+        ctx[f"show_{question.id}"] = run.get_config(f"show_{question.id}", False)
+
+    return ctx
+
+
+@receiver(post_save, sender=Run)
+def post_run_reset_cache_config_run(sender, instance, **kwargs):
+    if instance.pk:
+        reset_cache_config_run(instance)
+
+
+@receiver(post_save, sender=Event)
+def post_event_reset_cache_config_run(sender, instance, **kwargs):
+    if instance.pk:
+        for run in instance.runs.all():
+            reset_cache_config_run(run)

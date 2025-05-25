@@ -48,7 +48,7 @@ from larpmanager.utils.common import (
 from larpmanager.utils.deadlines import get_membership_fee_year
 from larpmanager.utils.event import check_event_permission
 from larpmanager.views.user.casting import (
-    _casting_details,
+    casting_details,
     casting_history_characters,
     casting_history_traits,
     casting_preferences_characters,
@@ -59,7 +59,7 @@ from larpmanager.views.user.casting import (
 @login_required
 def orga_casting_preferences(request, s, n, typ=0):
     ctx = check_event_permission(request, s, n, "orga_casting_preferences")
-    _casting_details(ctx, typ)
+    casting_details(ctx, typ)
     if typ == 0:
         casting_preferences_characters(ctx)
     else:
@@ -71,7 +71,7 @@ def orga_casting_preferences(request, s, n, typ=0):
 @login_required
 def orga_casting_history(request, s, n, typ=0):
     ctx = check_event_permission(request, s, n, "orga_casting_history")
-    _casting_details(ctx, typ)
+    casting_details(ctx, typ)
     if typ == 0:
         casting_history_characters(ctx)
     else:
@@ -203,7 +203,7 @@ def get_casting_data(request, ctx, typ, form):
     options = form.get_data()
     # print(options)
 
-    _casting_details(ctx, typ)
+    casting_details(ctx, typ)
 
     players = {}
     didnt_choose = []
@@ -332,7 +332,7 @@ def orga_casting(request, s, n, typ=None, tick=""):
             return redirect(request.path_info)
     else:
         form = OrganizerCastingOptionsForm(ctx=ctx)
-    _casting_details(ctx, typ)
+    casting_details(ctx, typ)
     get_casting_data(request, ctx, typ, form)
     ctx["form"] = form
     return render(request, "larpmanager/orga/casting.html", ctx)

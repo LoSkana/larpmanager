@@ -25,6 +25,7 @@ from django.forms.widgets import Widget
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
+from tinymce.widgets import TinyMCE
 
 from larpmanager.models.access import EventRole
 from larpmanager.models.base import FeatureModule, PaymentMethod
@@ -224,8 +225,8 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
     def get_queryset(self):
         return Member.objects.filter(pk__in=self.allowed)
 
-    @staticmethod
-    def label_from_instance(obj):
+    def label_from_instance(self, obj):
+        # noinspection PyUnresolvedReferences
         return f"{obj.display_real()} - {obj.email}"
 
 
@@ -437,3 +438,8 @@ def get_members_queryset(aid):
     qs = Member.objects.prefetch_related("memberships")
     qs = qs.filter(memberships__assoc_id=aid, memberships__status__in=allwd)
     return qs
+
+
+class WritingTinyMCE(TinyMCE):
+    def __init__(self):
+        super().__init__(attrs={"rows": 20, "content_style": ".char-marker { background: yellow !important; }"})

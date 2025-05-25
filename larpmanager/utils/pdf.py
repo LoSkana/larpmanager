@@ -537,7 +537,7 @@ def replace_data(path, char):
     with open(path) as file:
         filedata = file.read()
 
-    for s in ["number", "name", "title", "motto"]:
+    for s in ["number", "name", "title"]:
         if s not in char:
             continue
         filedata = filedata.replace(f"#{s}#", str(char[s]))

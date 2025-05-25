@@ -115,7 +115,7 @@ def _download_questions(ctx, el, first, key, res, val):
 
 def _download_prepare(ctx, nm, query, typ):
     res = None
-    if nm == "character" and "character_form" in ctx["features"]:
+    if nm == "character" and "character" in ctx["features"]:
         res = {"chars": {}}
         get_event_cache_fields(ctx, res, only_visible=False)
     if check_field(typ, "event"):
@@ -156,7 +156,7 @@ def orga_character_form_download(request, ctx):
     writer.writerow(["typ", "display", "description", "status", "visibility", "options"])
 
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-    que = que.filter(applicable__icontains=QuestionApplicable.CHARACTER)
+    que = que.filter(applicable=QuestionApplicable.CHARACTER)
     for el in que.prefetch_related("options"):
         options = el.options.order_by("order")
         row = [el.typ, el.display, el.description, el.status, el.visibility, len(options)]

@@ -44,6 +44,7 @@ from larpmanager.cache.links import reset_run_event_links
 from larpmanager.cache.registration import reset_cache_reg_counts
 from larpmanager.cache.role import has_event_permission
 from larpmanager.cache.run import reset_cache_run
+from larpmanager.cache.text_fields import get_cache_reg_field
 from larpmanager.forms.registration import (
     OrgaRegistrationForm,
     RegistrationCharacterRelForm,
@@ -93,7 +94,7 @@ def check_time(times, step, start=None):
     return now
 
 
-def orga_registrations_traits(r, ctx):
+def _orga_registrations_traits(r, ctx):
     if "questbuilder" not in ctx["features"]:
         return
 
@@ -116,7 +117,7 @@ def orga_registrations_traits(r, ctx):
         r.traits[typ] = ",".join(r.traits[typ])
 
 
-def orga_registrations_tickets(r, ctx):
+def _orga_registrations_tickets(r, ctx):
     typ = ("1", _("Standard"))
 
     ticket_types = {
@@ -170,7 +171,7 @@ def regs_list_add(ctx, list, name, member):
         ctx[list][key]["players"].append(member.display_member())
 
 
-def orga_registrations_standard(r, ctx, cache):
+def _orga_registrations_standard(r, ctx, cache):
     regs_list_add(ctx, "list_all", "all", r.member)
     if r.member_id in ctx["reg_chars"]:
         r.factions = []
@@ -230,7 +231,7 @@ def registrations_popup(request, ctx):
         return JsonResponse({"k": 0})
 
 
-def orga_registrations_custom_character(ctx):
+def _orga_registrations_custom_character(ctx):
     if "custom_character" not in ctx["features"]:
         return
     ctx["custom_info"] = []
@@ -240,7 +241,7 @@ def orga_registrations_custom_character(ctx):
         ctx["custom_info"].append(field)
 
 
-def orga_registrations_prepare(ctx, request):
+def _orga_registrations_prepare(ctx, request):
     ctx["reg_chars"] = {}
     for _chnum, char in ctx["chars"].items():
         if "player_id" not in char:
@@ -263,7 +264,7 @@ def orga_registrations_prepare(ctx, request):
         ctx["reg_questions"][q.id] = q
 
 
-def orga_registrations_discount(ctx):
+def _orga_registrations_discount(ctx):
     if "discount" not in ctx["features"]:
         return
     ctx["reg_discounts"] = {}
@@ -273,6 +274,25 @@ def orga_registrations_discount(ctx):
         if aid.member_id not in ctx["reg_discounts"]:
             ctx["reg_discounts"][aid.member_id] = []
         ctx["reg_discounts"][aid.member_id].append(aid.disc.name)
+
+
+def _orga_registrations_text_fields(ctx):
+    # add editor type questions
+    text_fields = []
+    que = RegistrationQuestion.objects.filter(event=ctx["event"])
+    for que_id in que.filter(typ=QuestionType.EDITOR).values_list("pk", flat=True):
+        text_fields.append(str(que_id))
+
+    gctf = get_cache_reg_field(ctx["run"])
+    for el in ctx["reg_list"]:
+        if el.id not in gctf:
+            continue
+        for f in text_fields:
+            if f not in gctf[el.id]:
+                continue
+            (red, ln) = gctf[el.id][f]
+            setattr(el, f + "_red", red)
+            setattr(el, f + "_ln", ln)
 
 
 @login_required
@@ -289,11 +309,11 @@ def orga_registrations(request, s, n):
 
     get_event_cache_all(ctx)
 
-    orga_registrations_prepare(ctx, request)
+    _orga_registrations_prepare(ctx, request)
 
-    orga_registrations_discount(ctx)
+    _orga_registrations_discount(ctx)
 
-    orga_registrations_custom_character(ctx)
+    _orga_registrations_custom_character(ctx)
 
     ctx["reg_all"] = {}
 
@@ -309,24 +329,30 @@ def orga_registrations(request, s, n):
             ctx["memberships"][el.member_id] = el
 
     for r in ctx["reg_list"]:
-        orga_registrations_standard(r, ctx, cache)
+        _orga_registrations_standard(r, ctx, cache)
 
         if "discount" in ctx["features"]:
             if r.member_id in ctx["reg_discounts"]:
                 r.discounts = ctx["reg_discounts"][r.member_id]
 
-        orga_registrations_traits(r, ctx)
+        _orga_registrations_traits(r, ctx)
 
-        orga_registrations_tickets(r, ctx)
+        _orga_registrations_tickets(r, ctx)
 
     ctx["reg_all"] = sorted(ctx["reg_all"].items())
+
+    _orga_registrations_text_fields(ctx)
 
     ctx["typ"] = "registration"
     ctx["form"] = UploadElementsForm()
 
-    ctx["upload"] = _(
-        "'player' (player's email), 'ticket' (ticket name or number), 'character' "
-        "(character name or number to be assigned), 'pwyw' (donation)."
+    ctx["upload"] = ",".join(
+        [
+            str(_("'player' (player's email)")),
+            str(_("'ticket' (ticket name or number)")),
+            str(_("'character' (character name or number to be assigned)")),
+            str(_("'pwyw' (donation).")),
+        ]
     )
 
     return render(request, "larpmanager/orga/registration/registrations.html", ctx)
