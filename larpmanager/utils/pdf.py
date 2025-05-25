@@ -373,7 +373,7 @@ def remove_pdf_assignment_trait(instance):
         casting.active = False
         casting.save()
 
-    char = get_trait_character(instance.run, instance.member)
+    char = get_trait_character(instance.run, instance.number)
     if char:
         remove_char_pdf(char, instance.run)
 
