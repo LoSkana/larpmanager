@@ -563,6 +563,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             required=False,
         )
         self.sections["id_characters_new"] = char_section
+
         if "questbuilder" in self.params["features"]:
             already = []
             assigned = []
@@ -578,7 +579,8 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             available = Trait.objects.filter(event=self.event).exclude(number__in=already)
             for qtnum, qt in self.params["quest_types"].items():
                 qt_id = f"qt_{qt['number']}"
-                self.sections["id_" + qt_id] = char_section
+                key = "id_" + qt_id
+                self.sections[key] = char_section
                 choices = [("0", _("--- NOT ASSIGNED ---"))]
                 for _qnum, q in self.params["quests"].items():
                     if q["typ"] != qtnum:

@@ -543,3 +543,13 @@ def reset_event_cache_all_runs(event):
         # reset also runs of parent event
         for r in event.parent.runs.all():
             reset_run(r)
+
+
+@receiver(post_save, sender=AssignmentTrait)
+def post_save_assignment_trait_reset(sender, instance, **kwargs):
+    reset_run(instance.run)
+
+
+@receiver(post_delete, sender=AssignmentTrait)
+def post_delete_assignment_trait_reset(sender, instance, **kwargs):
+    reset_run(instance.run)
