@@ -1659,6 +1659,9 @@ msgstr "Seznam vstupenek"
 msgid "Ties (Test)"
 msgstr "Vazby (test)"
 
+msgid "Total costs"
+msgstr "Celkové náklady"
+
 msgid "Transversal"
 msgstr "Příčná"
 
@@ -1850,6 +1853,9 @@ msgstr "Testovací galerie"
 
 msgid "Three quotas"
 msgstr "Tři kvóty"
+
+msgid "Total issued"
+msgstr "Vydáno celkem"
 
 msgid "Total number"
 msgstr "Celkový počet"
@@ -3866,6 +3872,9 @@ msgstr "Příplatek k jízdence"
 msgid "To log back in with the account"
 msgstr "Opětovné přihlášení pomocí účtu"
 
+msgid "Total of recorded money inflows"
+msgstr "Součet zaznamenaných přílivů peněz"
+
 msgid "Will be shown in the event page"
 msgstr "Zobrazí se na stránce události"
 
@@ -3942,6 +3951,9 @@ msgstr "Na této stránce jsou shrnuty pozemky této akce."
 msgid "This page shows the run signups."
 msgstr "Tato stránka shrnuje přihlášky na běh."
 
+msgid "Total of recorded money outflows"
+msgstr "Součet zaznamenaných odlivů peněz"
+
 msgid "We ask you to pay the difference"
 msgstr "Žádáme vás o zaplacení rozdílu"
 
@@ -3977,6 +3989,9 @@ msgstr "Nahrajte prosím svou profilovou fotografii!"
 
 msgid "This page shows the event quests."
 msgstr "Tato stránka shrnuje úkoly událostí."
+
+msgid "Total participation fees received"
+msgstr "Celková výše přijatých účastnických poplatků"
 
 msgid "Verify that the data are correct:"
 msgstr "Zkontrolujte, zda jsou údaje správné:"
@@ -4180,6 +4195,9 @@ msgstr "Vyberte organizaci, na kterou chcete přejít"
 
 msgid "Show all the traits to those present?"
 msgstr "Ukázat přítomným všechny vlastnosti?"
+
+msgid "Total amount refunded to participants"
+msgstr "Celková částka vrácená účastníkům"
 
 msgid "Update here the registration options!"
 msgstr "Aktualizujte své možnosti členství!"
@@ -4584,6 +4602,9 @@ msgstr "Tato stránka shrnuje nastavení pro tisk PDF."
 msgid "This text will be added to the sheet of {name}"
 msgstr "Tento text bude přidán do listu {name}"
 
+msgid "Total amount withheld for transfer commissions"
+msgstr "Celková částka sražená na provize za převod"
+
 msgid "Do you wish to be always updated on our events?"
 msgstr "Chcete být informováni o našich akcích?"
 
@@ -4777,6 +4798,9 @@ msgstr "Na této stránce můžete upravovat texty specifické pro danou událos
 
 msgid "This page shows all inflows received for this run."
 msgstr "Tato stránka shrnuje všechny záznamy tohoto běhu."
+
+msgid "Total participation fees reduced through discounts"
+msgstr "Celkové účastnické poplatky snížené díky slevám"
 
 msgid "Warning. The form contains errors to the fields - "
 msgstr "Pozor! Formulář obsahuje chyby v polích -"
@@ -5060,6 +5084,9 @@ msgstr "Na této stránce můžete přidat nebo upravit položku běhu."
 
 msgid "This page shows all expense items recorded in the system."
 msgstr "Tato stránka shrnuje všechny výdajové položky zapsané v systému."
+
+msgid "Total of expenses submitted by collaborators and approved"
+msgstr "Součet výdajů předložených spolupracovníky a schválených"
 
 msgid "We ask you to pay the difference from the next instalment"
 msgstr "Žádáme vás, abyste rozdíl doplatili z další splátky."
@@ -5459,6 +5486,11 @@ msgstr ""
 msgid "List of users who have not registered for a future run of the event"
 msgstr "Seznam uživatelů, kteří se nezaregistrovali do budoucího běhu akce"
 
+msgid "Minimum amount of net profit to be retained for the association tax"
+msgstr ""
+"Minimální částka čistého zisku, která má být ponechána pro účely daně ze "
+"sdružení"
+
 msgid "Select the types of writing elements that this question applies to."
 msgstr "Vyberte typy prvků psaní, kterých se tato otázka týká."
 
@@ -5762,6 +5794,10 @@ msgstr ""
 "postavy."
 
 msgid ""
+"Net profit of the event, difference between total revenue and total costs"
+msgstr "Čistý zisk akce, rozdíl mezi celkovými výnosy a celkovými náklady."
+
+msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr ""
 "Poznámka: Speciální kód se generuje znovu při každé změně dárkové karty."
@@ -5950,6 +5986,11 @@ msgid ""
 msgstr ""
 "Uveďte, zda je dovednost viditelná pro uživatele a zda ji lze volně "
 "zakoupit."
+
+msgid ""
+"Theoretical total of income due to participation fees selected by the "
+"players"
+msgstr "Teoretický součet příjmů z účastnických poplatků vybraných hráči"
 
 msgid ""
 "This page prepares the cash balance already formatted for annual "
@@ -6168,6 +6209,13 @@ msgstr ""
 "ve výši:"
 
 msgid ""
+"Total amount of money received for this event, minus commission fees and "
+"refunds"
+msgstr ""
+"Celková částka obdržená za tuto událost, snížená o poplatky za provizi a "
+"náhrady."
+
+msgid ""
 "Warning. This event is in a different language than the one set in your "
 "profile."
 msgstr ""
@@ -6178,12 +6226,6 @@ msgid ""
 "You can remove your consent to data sharing by clicking on the appropriate "
 "link."
 msgstr "Souhlas se sdílením údajů můžete zrušit kliknutím na příslušný odkaz."
-
-msgid ""
-"this balance reflects payments currently received and expenses recorded to "
-"date."
-msgstr ""
-"tento zůstatek odráží aktuálně přijaté platby a dosud zaznamenané výdaje."
 
 #, python-format
 msgid ""
@@ -7885,6 +7927,13 @@ msgid ""
 msgstr ""
 "Na této stránce můžete změnit vzhled a nastavení prezentace systému správy "
 "sdružení."
+
+msgid ""
+"Total of all expenses incurred for the event, both personal and "
+"organizational, including any tokens and credits issued"
+msgstr ""
+"Součet všech výdajů vynaložených na akci, osobních i organizačních, včetně "
+"všech vydaných žetonů a kreditů."
 
 #, python-format
 msgid ""

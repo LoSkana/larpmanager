@@ -1659,6 +1659,9 @@ msgstr "Liste des billets"
 msgid "Ties (Test)"
 msgstr "Cravates (test)"
 
+msgid "Total costs"
+msgstr "Coûts totaux"
+
 msgid "Transversal"
 msgstr "Transversale"
 
@@ -1850,6 +1853,9 @@ msgstr "Galerie de test"
 
 msgid "Three quotas"
 msgstr "Trois quotas"
+
+msgid "Total issued"
+msgstr "Total émis"
 
 msgid "Total number"
 msgstr "Nombre total"
@@ -3866,6 +3872,9 @@ msgstr "Supplément appliqué au billet"
 msgid "To log back in with the account"
 msgstr "Pour se reconnecter avec le compte"
 
+msgid "Total of recorded money inflows"
+msgstr "Total des entrées d'argent enregistrées"
+
 msgid "Will be shown in the event page"
 msgstr "Sera affiché sur la page de l'événement"
 
@@ -3942,6 +3951,9 @@ msgstr "Cette page résume les parcelles de l'événement."
 msgid "This page shows the run signups."
 msgstr "Cette page résume les inscriptions à la course."
 
+msgid "Total of recorded money outflows"
+msgstr "Total des sorties d'argent enregistrées"
+
 msgid "We ask you to pay the difference"
 msgstr "Nous vous demandons de payer la différence"
 
@@ -3977,6 +3989,9 @@ msgstr "Veuillez télécharger votre photo de profil !"
 
 msgid "This page shows the event quests."
 msgstr "Cette page résume les quêtes de l'événement."
+
+msgid "Total participation fees received"
+msgstr "Total des frais de participation perçus"
 
 msgid "Verify that the data are correct:"
 msgstr "Vérifier que les données sont correctes :"
@@ -4181,6 +4196,9 @@ msgstr "Sélectionnez l'organisation à laquelle vous souhaitez vous adresser"
 
 msgid "Show all the traits to those present?"
 msgstr "Montrer tous les traits aux personnes présentes ?"
+
+msgid "Total amount refunded to participants"
+msgstr "Montant total remboursé aux participants"
 
 msgid "Update here the registration options!"
 msgstr "Mettez à jour vos options d'adhésion !"
@@ -4588,6 +4606,9 @@ msgstr "Cette page résume les paramètres de l'impression PDF."
 msgid "This text will be added to the sheet of {name}"
 msgstr "Ce texte sera ajouté à la feuille de {name}"
 
+msgid "Total amount withheld for transfer commissions"
+msgstr "Montant total retenu pour les commissions de transfert"
+
 msgid "Do you wish to be always updated on our events?"
 msgstr "Vous souhaitez être tenu au courant de nos événements ?"
 
@@ -4788,6 +4809,9 @@ msgstr "Cette page vous permet d'éditer des textes spécifiques à l'événemen
 
 msgid "This page shows all inflows received for this run."
 msgstr "Cette page résume toutes les entrées de cette course."
+
+msgid "Total participation fees reduced through discounts"
+msgstr "Total des frais de participation réduits par des remises"
 
 msgid "Warning. The form contains errors to the fields - "
 msgstr "Attention ! Le formulaire contient des erreurs dans les champs -"
@@ -5098,6 +5122,9 @@ msgid "This page shows all expense items recorded in the system."
 msgstr ""
 "Cette page récapitule tous les postes de dépenses enregistrés dans le "
 "système."
+
+msgid "Total of expenses submitted by collaborators and approved"
+msgstr "Total des dépenses soumises par les collaborateurs et approuvées"
 
 msgid "We ask you to pay the difference from the next instalment"
 msgstr ""
@@ -5583,6 +5610,10 @@ msgstr ""
 "Liste des utilisateurs qui ne se sont pas inscrits à une prochaine édition "
 "de l'événement"
 
+msgid "Minimum amount of net profit to be retained for the association tax"
+msgstr ""
+"Montant minimum du bénéfice net à conserver pour l'impôt de l'association"
+
 msgid "Select the types of writing elements that this question applies to."
 msgstr ""
 "Sélectionnez les types d'éléments d'écriture auxquels cette question "
@@ -5947,6 +5978,12 @@ msgstr ""
 "profil de leur personnage."
 
 msgid ""
+"Net profit of the event, difference between total revenue and total costs"
+msgstr ""
+"Bénéfice net de l'événement, différence entre le total des recettes et le "
+"total des coûts"
+
+msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr ""
 "Note : Le code spécial est généré à nouveau chaque fois que vous changez la "
@@ -6158,6 +6195,13 @@ msgid ""
 msgstr ""
 "Indiquer si la compétence est visible pour les utilisateurs et si elle peut "
 "être achetée librement."
+
+msgid ""
+"Theoretical total of income due to participation fees selected by the "
+"players"
+msgstr ""
+"Total théorique des revenus dus aux frais de participation choisis par les "
+"joueurs"
 
 msgid ""
 "This page prepares the cash balance already formatted for annual "
@@ -6392,6 +6436,13 @@ msgstr ""
 " annuelle d'un montant de 1 000 euros :"
 
 msgid ""
+"Total amount of money received for this event, minus commission fees and "
+"refunds"
+msgstr ""
+"Montant total de l'argent reçu pour cet événement, moins les frais de "
+"commission et les remboursements"
+
+msgid ""
 "Warning. This event is in a different language than the one set in your "
 "profile."
 msgstr ""
@@ -6404,13 +6455,6 @@ msgid ""
 msgstr ""
 "Vous pouvez retirer votre consentement au partage des données en cliquant "
 "sur le lien approprié."
-
-msgid ""
-"this balance reflects payments currently received and expenses recorded to "
-"date."
-msgstr ""
-"ce solde reflète les paiements actuellement reçus et les dépenses "
-"enregistrées à ce jour."
 
 #, python-format
 msgid ""
@@ -8159,6 +8203,13 @@ msgid ""
 msgstr ""
 "Cette page vous permet de modifier les paramètres d'apparence et de "
 "présentation du système de gestion de votre association."
+
+msgid ""
+"Total of all expenses incurred for the event, both personal and "
+"organizational, including any tokens and credits issued"
+msgstr ""
+"Total de toutes les dépenses encourues pour l'événement, tant personnelles "
+"qu'organisationnelles, y compris tous les jetons et crédits émis"
 
 #, python-format
 msgid ""

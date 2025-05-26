@@ -4,34 +4,62 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Registrations"
+msgid "Expenses"
 msgstr ""
 
-msgid "Expenses"
+msgid "Total of expenses submitted by collaborators and approved"
 msgstr ""
 
 msgid "Outflows"
 msgstr ""
 
+msgid "Total of recorded money outflows"
+msgstr ""
+
 msgid "Inflows"
+msgstr ""
+
+msgid "Total of recorded money inflows"
 msgstr ""
 
 msgid "Income"
 msgstr ""
 
+msgid "Total participation fees received"
+msgstr ""
+
 msgid "Transactions"
+msgstr ""
+
+msgid "Total amount withheld for transfer commissions"
 msgstr ""
 
 msgid "Refunds"
 msgstr ""
 
+msgid "Total amount refunded to participants"
+msgstr ""
+
 msgid "Tokens"
+msgstr ""
+
+msgid "Total issued"
 msgstr ""
 
 msgid "Credits"
 msgstr ""
 
 msgid "Discount"
+msgstr ""
+
+msgid "Total participation fees reduced through discounts"
+msgstr ""
+
+msgid "Registrations"
+msgstr ""
+
+msgid ""
+"Theoretical total of income due to participation fees selected by the players"
 msgstr ""
 
 #, python-format
@@ -5676,15 +5704,30 @@ msgstr ""
 msgid "Total revenue"
 msgstr ""
 
+msgid ""
+"Total amount of money received for this event, minus commission fees and "
+"refunds"
+msgstr ""
+
+msgid "Total costs"
+msgstr ""
+
+msgid ""
+"Total of all expenses incurred for the event, both personal and "
+"organizational, including any tokens and credits issued"
+msgstr ""
+
 msgid "Net profit"
+msgstr ""
+
+msgid ""
+"Net profit of the event, difference between total revenue and total costs"
 msgstr ""
 
 msgid "Organization tax"
 msgstr ""
 
-msgid ""
-"this balance reflects payments currently received and expenses recorded to "
-"date."
+msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
 
 msgid "Item"
