@@ -1659,6 +1659,9 @@ msgstr "Biljettlista"
 msgid "Ties (Test)"
 msgstr "Slipsar (test)"
 
+msgid "Total costs"
+msgstr "Totala kostnader"
+
 msgid "Transversal"
 msgstr "Transversal"
 
@@ -1850,6 +1853,9 @@ msgstr "Testgalleri"
 
 msgid "Three quotas"
 msgstr "Tre kvoter"
+
+msgid "Total issued"
+msgstr "Totalt emitterat"
 
 msgid "Total number"
 msgstr "Totalt antal"
@@ -3863,6 +3869,9 @@ msgstr "Tilläggsavgift till biljett"
 msgid "To log back in with the account"
 msgstr "För att logga in igen med kontot"
 
+msgid "Total of recorded money inflows"
+msgstr "Totalt antal registrerade penninginflöden"
+
 msgid "Will be shown in the event page"
 msgstr "Kommer att visas på evenemangssidan"
 
@@ -3939,6 +3948,9 @@ msgstr "På denna sida sammanfattas händelserna under evenemanget."
 msgid "This page shows the run signups."
 msgstr "På denna sida finns en sammanfattning av anmälningarna till loppet."
 
+msgid "Total of recorded money outflows"
+msgstr "Totalt antal registrerade penningutflöden"
+
 msgid "We ask you to pay the difference"
 msgstr "Vi ber dig att betala mellanskillnaden"
 
@@ -3974,6 +3986,9 @@ msgstr "Vänligen ladda upp ditt profilfoto!"
 
 msgid "This page shows the event quests."
 msgstr "Denna sida sammanfattar uppdragen för evenemanget."
+
+msgid "Total participation fees received"
+msgstr "Summa erhållna deltagaravgifter"
 
 msgid "Verify that the data are correct:"
 msgstr "Kontrollera att uppgifterna är korrekta:"
@@ -4177,6 +4192,9 @@ msgstr "Välj den organisation som du vill gå vidare till"
 
 msgid "Show all the traits to those present?"
 msgstr "Visa alla egenskaper för de närvarande?"
+
+msgid "Total amount refunded to participants"
+msgstr "Totalt belopp som återbetalas till deltagarna"
 
 msgid "Update here the registration options!"
 msgstr "Uppdatera dina medlemsalternativ!"
@@ -4585,6 +4603,9 @@ msgstr "Denna sida sammanfattar inställningarna för PDF-utskrift."
 msgid "This text will be added to the sheet of {name}"
 msgstr "Denna text kommer att läggas till i arket för {name}"
 
+msgid "Total amount withheld for transfer commissions"
+msgstr "Totalt belopp som innehållits för överföringsprovisioner"
+
 msgid "Do you wish to be always updated on our events?"
 msgstr "Vill du hålla dig uppdaterad om våra evenemang?"
 
@@ -4778,6 +4799,9 @@ msgstr "På den här sidan kan du redigera evenemangsspecifika texter."
 
 msgid "This page shows all inflows received for this run."
 msgstr "Denna sida sammanfattar alla poster för denna körning."
+
+msgid "Total participation fees reduced through discounts"
+msgstr "Totala deltagaravgifter reducerade genom rabatter"
 
 msgid "Warning. The form contains errors to the fields - "
 msgstr "Var uppmärksam! Formuläret innehåller fel i fälten -"
@@ -5073,6 +5097,9 @@ msgstr "På den här sidan kan du lägga till eller redigera en körningspost."
 msgid "This page shows all expense items recorded in the system."
 msgstr ""
 "Denna sida sammanfattar alla utgiftsposter som är registrerade i systemet."
+
+msgid "Total of expenses submitted by collaborators and approved"
+msgstr "Summa av kostnader som lämnats in av medarbetare och godkänts"
 
 msgid "We ask you to pay the difference from the next instalment"
 msgstr "Vi ber dig betala mellanskillnaden från och med nästa delbetalning"
@@ -5506,6 +5533,9 @@ msgstr ""
 "Lista över användare som inte registrerade sig för en framtida körning av "
 "evenemanget"
 
+msgid "Minimum amount of net profit to be retained for the association tax"
+msgstr "Minsta belopp av nettovinsten som ska behållas för föreningsskatten"
+
 msgid "Select the types of writing elements that this question applies to."
 msgstr "Välj de typer av skrivelement som den här frågan gäller."
 
@@ -5834,6 +5864,12 @@ msgid ""
 msgstr "Om markerad, tillåter spelare att anpassa sina karaktärers profilbild"
 
 msgid ""
+"Net profit of the event, difference between total revenue and total costs"
+msgstr ""
+"Evenemangets nettovinst, skillnaden mellan totala intäkter och totala "
+"kostnader"
+
+msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr "Obs: Specialkoden genereras på nytt varje gång du byter presentkort"
 
@@ -6031,6 +6067,12 @@ msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr "Ange om färdigheten är synlig för användare och kan köpas fritt"
+
+msgid ""
+"Theoretical total of income due to participation fees selected by the "
+"players"
+msgstr ""
+"Teoretisk total inkomst på grund av deltagaravgifter som valts av spelarna"
 
 msgid ""
 "This page prepares the cash balance already formatted for annual "
@@ -6259,6 +6301,13 @@ msgstr ""
 "på:"
 
 msgid ""
+"Total amount of money received for this event, minus commission fees and "
+"refunds"
+msgstr ""
+"Total summa pengar som erhållits för detta evenemang, minus provisioner och "
+"återbetalningar"
+
+msgid ""
 "Warning. This event is in a different language than the one set in your "
 "profile."
 msgstr ""
@@ -6271,13 +6320,6 @@ msgid ""
 msgstr ""
 "Du kan ta bort ditt samtycke till datadelning genom att klicka på lämplig "
 "länk."
-
-msgid ""
-"this balance reflects payments currently received and expenses recorded to "
-"date."
-msgstr ""
-"Detta saldo återspeglar betalningar som för närvarande erhållits och "
-"kostnader som bokförts till dags dato."
 
 #, python-format
 msgid ""
@@ -8012,6 +8054,13 @@ msgid ""
 msgstr ""
 "På den här sidan kan du ändra inställningarna för utseende och presentation "
 "av administrationssystemet för din förening."
+
+msgid ""
+"Total of all expenses incurred for the event, both personal and "
+"organizational, including any tokens and credits issued"
+msgstr ""
+"Totalsumman av alla kostnader för evenemanget, både personliga och "
+"organisatoriska, inklusive eventuella utfärdade polletter och krediter"
 
 #, python-format
 msgid ""
