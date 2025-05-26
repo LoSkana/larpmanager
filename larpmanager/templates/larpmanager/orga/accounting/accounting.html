@@ -8,29 +8,45 @@
 {% endblock info %}
 {% block content %}
     <h2>{% trans "Total revenue" %}: {{ run.revenue }}</h2>
+    <p>
+        <i>{% trans "Total amount of money received for this event, minus commission fees and refunds" %}</i>
+    </p>
+    <h2>{% trans "Total costs" %}: {{ run.revenue }}</h2>
+    <p>
+        <i>{% trans "Total of all expenses incurred for the event, both personal and organizational, including any tokens and credits issued" %}</i>
+    </p>
     <h2>{% trans "Net profit" %}: {{ run.balance }}</h2>
+    <p>
+        <i>{% trans "Net profit of the event, difference between total revenue and total costs" %}</i>
+    </p>
     {% if 'organization_tax' in features %}
         <h2>{% trans "Organization tax" %}: {{ run.tax }}</h2>
+        <p>
+            <i>{% trans "Minimum amount of net profit to be retained for the association tax" %}</i>
+        </p>
     {% endif %}
-    <i>({% trans "this balance reflects payments currently received and expenses recorded to date." %})</i>
-    <br />
-    <table class="mob tablesorter">
+    <hr />
+    <table class="mob tablesorter no_csv">
         <tr>
             <th>{% trans "Item" %}</th>
             <th>{% trans "Total" %}</th>
             <th>{% trans "Number" %}</th>
+            <th></th>
         </tr>
         {% for k, v in dc.items %}
             <tr>
                 <td>{{ v.name }}</td>
                 <td>{{ v.tot }}</td>
                 <td>{{ v.num }}</td>
+                <td>
+                    <i>{{ v.descr }}</i>
+                </td>
             </tr>
         {% endfor %}
     </table>
     {% for k, v in dc.items %}
         <h2>{{ v.name }}: {{ v.tot }}</h2>
-        <table class="mob tablesorter">
+        <table class="mob tablesorter no_csv">
             {% for y, w in v.detail.items %}
                 <tr>
                     <td>{{ w.name }}</td>

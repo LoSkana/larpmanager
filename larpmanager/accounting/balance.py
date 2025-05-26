@@ -47,8 +47,8 @@ from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.utils import get_sum
 
 
-def get_acc_detail(nm, run, cls, cho, typ, filters=None, reg=False):
-    dc = {"tot": 0, "num": 0, "detail": {}, "name": nm}
+def get_acc_detail(nm, run, descr, cls, cho, typ, filters=None, reg=False):
+    dc = {"tot": 0, "num": 0, "detail": {}, "name": nm, "descr": descr}
     if reg:
         lst = cls.objects.filter(reg__run=run)
     else:
@@ -79,8 +79,8 @@ def get_acc_reg_type(el):
     )
 
 
-def get_acc_reg_detail(nm, run):
-    dc = {"tot": 0, "num": 0, "detail": {}, "name": nm}
+def get_acc_reg_detail(nm, run, descr):
+    dc = {"tot": 0, "num": 0, "detail": {}, "name": nm, "descr": descr}
     for reg in Registration.objects.filter(run=run).select_related("ticket").filter(cancellation_date__isnull=True):
         (tp, descr) = get_acc_reg_type(reg)
         if tp not in dc["detail"]:
@@ -104,33 +104,62 @@ def get_token_details(nm, run):
 def get_run_accounting(run, ctx):
     dc = {}
     features = get_event_features(run.event_id)
-    dc["reg"] = get_acc_reg_detail(_("Registrations"), run)
 
     s_expenses = 0
     if "expense" in features:
-        dc["exp"] = get_acc_detail(_("Expenses"), run, AccountingItemExpense, AccountingItem.EXPENSE_CHOICES, "exp")
+        dc["exp"] = get_acc_detail(
+            _("Expenses"),
+            run,
+            _("Total of expenses submitted by collaborators and approved"),
+            AccountingItemExpense,
+            AccountingItem.EXPENSE_CHOICES,
+            "exp",
+        )
         s_expenses = dc["exp"]["tot"]
 
     s_outflows = 0
     if "outflow" in features:
-        dc["out"] = get_acc_detail(_("Outflows"), run, AccountingItemOutflow, AccountingItem.EXPENSE_CHOICES, "exp")
+        dc["out"] = get_acc_detail(
+            _("Outflows"),
+            run,
+            _("Total of recorded money outflows"),
+            AccountingItemOutflow,
+            AccountingItem.EXPENSE_CHOICES,
+            "exp",
+        )
         s_outflows = dc["out"]["tot"]
 
     s_inflows = 0
     if "inflow" in features:
-        dc["in"] = get_acc_detail(_("Inflows"), run, AccountingItemInflow, None, None)
+        dc["in"] = get_acc_detail(
+            _("Inflows"), run, _("Total of recorded money inflows"), AccountingItemInflow, None, None
+        )
         s_inflows = dc["in"]["tot"]
 
     s_payments = 0
     if "payment" in features:
         dc["pay"] = get_acc_detail(
-            _("Income"), run, AccountingItemPayment, AccountingItemPayment.PAYMENT_CHOICES, "pay", reg=True
+            _("Income"),
+            run,
+            AccountingItemPayment,
+            _("Total participation fees received"),
+            AccountingItemPayment.PAYMENT_CHOICES,
+            "pay",
+            reg=True,
         )
         s_payments = dc["pay"]["tot"]
 
     s_fees = 0
     if "payment_fees" in features:
-        dc["trs"] = get_acc_detail(_("Transactions"), run, AccountingItemTransaction, None, None, reg=True)
+        dc["trs"] = get_acc_detail(
+            _("Transactions"),
+            _("Total amount withheld for transfer commissions"),
+            run,
+            AccountingItemTransaction,
+            None,
+            None,
+            reg=True,
+        )
         s_fees = dc["trs"]["tot"]
 
     s_refund = 0
@@ -138,6 +167,7 @@ def get_run_accounting(run, ctx):
         dc["ref"] = get_acc_detail(
             _("Refunds"),
             run,
+            _("Total amount refunded to participants"),
             AccountingItemOther,
             AccountingItemOther.OTHER_CHOICES,
             "oth",
@@ -151,6 +181,7 @@ def get_run_accounting(run, ctx):
         dc["tok"] = get_acc_detail(
             ctx.get("token_name", _("Tokens")),
             run,
+            _("Total issued"),
             AccountingItemOther,
             AccountingItemOther.OTHER_CHOICES,
             "oth",
@@ -160,6 +191,7 @@ def get_run_accounting(run, ctx):
         dc["cre"] = get_acc_detail(
             ctx.get("credit_name", _("Credits")),
             run,
+            _("Total issued"),
             AccountingItemOther,
             AccountingItemOther.OTHER_CHOICES,
             "oth",
@@ -171,10 +203,22 @@ def get_run_accounting(run, ctx):
         s_credits = dc["cre"]["tot"]
 
     if "discount" in features:
-        dc["dis"] = get_acc_detail(_("Discount"), run, AccountingItemDiscount, None, None)
+        dc["dis"] = get_acc_detail(
+            _("Discount"),
+            run,
+            _("Total participation fees reduced through discounts"),
+            AccountingItemDiscount,
+            None,
+            None,
+        )
+
+    dc["reg"] = get_acc_reg_detail(
+        _("Registrations"), run, _("Theoretical total of income due to participation fees selected by the players")
+    )
 
     run.revenue = s_payments + s_inflows - (s_fees + s_refund)
-    run.balance = run.revenue - (s_outflows + s_expenses + s_tokens + s_credits)
+    run.costs = s_outflows + s_expenses + s_tokens + s_credits
+    run.balance = run.revenue - run.costs
 
     if "organization_tax" in features:
         tax = int(run.event.assoc.get_config("organization_tax_perc", "10"))

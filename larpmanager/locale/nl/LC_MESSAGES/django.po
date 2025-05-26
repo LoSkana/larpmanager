@@ -1659,6 +1659,9 @@ msgstr "Ticketlijst"
 msgid "Ties (Test)"
 msgstr "Dassen (Test)"
 
+msgid "Total costs"
+msgstr "Totale kosten"
+
 msgid "Transversal"
 msgstr "Dwars"
 
@@ -1850,6 +1853,9 @@ msgstr "Test galerij"
 
 msgid "Three quotas"
 msgstr "Drie quota"
+
+msgid "Total issued"
+msgstr "Totaal uitgegeven"
 
 msgid "Total number"
 msgstr "Totaal aantal"
@@ -3863,6 +3869,9 @@ msgstr "Toeslag op ticket"
 msgid "To log back in with the account"
 msgstr "Om weer in te loggen met het account"
 
+msgid "Total of recorded money inflows"
+msgstr "Totaal van geregistreerde geldinstroom"
+
 msgid "Will be shown in the event page"
 msgstr "Wordt getoond op de evenementpagina"
 
@@ -3939,6 +3948,9 @@ msgstr "Deze pagina geeft een samenvatting van de kavels van het evenement."
 msgid "This page shows the run signups."
 msgstr "Op deze pagina staat een overzicht van de inschrijvingen voor de run."
 
+msgid "Total of recorded money outflows"
+msgstr "Totaal van geregistreerde uitgaande geldstromen"
+
 msgid "We ask you to pay the difference"
 msgstr "We vragen je om het verschil te betalen"
 
@@ -3974,6 +3986,9 @@ msgstr "Upload je profielfoto!"
 
 msgid "This page shows the event quests."
 msgstr "Deze pagina geeft een overzicht van de quests van het evenement."
+
+msgid "Total participation fees received"
+msgstr "Totaal ontvangen deelnamekosten"
 
 msgid "Verify that the data are correct:"
 msgstr "Controleer of de gegevens correct zijn:"
@@ -4177,6 +4192,9 @@ msgstr "Selecteer de organisatie om verder te gaan"
 
 msgid "Show all the traits to those present?"
 msgstr "Alle eigenschappen laten zien aan de aanwezigen?"
+
+msgid "Total amount refunded to participants"
+msgstr "Totaalbedrag terugbetaald aan deelnemers"
 
 msgid "Update here the registration options!"
 msgstr "Update je lidmaatschapsopties!"
@@ -4591,6 +4609,9 @@ msgstr ""
 msgid "This text will be added to the sheet of {name}"
 msgstr "Deze tekst wordt toegevoegd aan het blad van {name}"
 
+msgid "Total amount withheld for transfer commissions"
+msgstr "Totaal ingehouden bedrag voor overschrijvingsprovisies"
+
 msgid "Do you wish to be always updated on our events?"
 msgstr "Wil je op de hoogte blijven van onze evenementen?"
 
@@ -4787,6 +4808,9 @@ msgstr "Op deze pagina kun je evenement-specifieke teksten bewerken."
 
 msgid "This page shows all inflows received for this run."
 msgstr "Deze pagina geeft een overzicht van alle inzendingen voor deze run."
+
+msgid "Total participation fees reduced through discounts"
+msgstr "Totale deelnamekosten verlaagd door kortingen"
 
 msgid "Warning. The form contains errors to the fields - "
 msgstr "Attentie! Het formulier bevat fouten in de velden -"
@@ -5102,6 +5126,9 @@ msgid "This page shows all expense items recorded in the system."
 msgstr ""
 "Deze pagina geeft een overzicht van alle uitgavenposten die in het systeem "
 "zijn geregistreerd."
+
+msgid "Total of expenses submitted by collaborators and approved"
+msgstr "Totaal van uitgaven ingediend door medewerkers en goedgekeurd"
 
 msgid "We ask you to pay the difference from the next instalment"
 msgstr ""
@@ -5574,6 +5601,11 @@ msgstr ""
 "Lijst van gebruikers die zich niet hebben geregistreerd voor een toekomstige"
 " uitvoering van het evenement"
 
+msgid "Minimum amount of net profit to be retained for the association tax"
+msgstr ""
+"Minimumbedrag van de nettowinst dat moet worden ingehouden voor de "
+"vennootschapsbelasting"
+
 msgid "Select the types of writing elements that this question applies to."
 msgstr ""
 "Selecteer de soorten schrijfelementen waarop deze vraag van toepassing is."
@@ -5922,6 +5954,12 @@ msgstr ""
 "personage aanpassen."
 
 msgid ""
+"Net profit of the event, difference between total revenue and total costs"
+msgstr ""
+"Nettowinst van het evenement, verschil tussen totale inkomsten en totale "
+"kosten"
+
+msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr ""
 "Opmerking: De speciale code wordt elke keer dat je de cadeaubon wijzigt "
@@ -6135,6 +6173,12 @@ msgid ""
 msgstr ""
 "Geef aan of de vaardigheid zichtbaar is voor gebruikers en vrij kan worden "
 "gekocht"
+
+msgid ""
+"Theoretical total of income due to participation fees selected by the "
+"players"
+msgstr ""
+"Theoretisch totaal van inkomsten uit door de spelers gekozen deelnamekosten"
 
 msgid ""
 "This page prepares the cash balance already formatted for annual "
@@ -6364,6 +6408,13 @@ msgstr ""
 "lidmaatschapsbijdrage van:"
 
 msgid ""
+"Total amount of money received for this event, minus commission fees and "
+"refunds"
+msgstr ""
+"Totaalbedrag aan ontvangen geld voor dit evenement, minus commissiekosten en"
+" terugbetalingen"
+
+msgid ""
 "Warning. This event is in a different language than the one set in your "
 "profile."
 msgstr ""
@@ -6376,13 +6427,6 @@ msgid ""
 msgstr ""
 "U kunt uw toestemming voor het delen van gegevens intrekken door op de "
 "betreffende koppeling te klikken."
-
-msgid ""
-"this balance reflects payments currently received and expenses recorded to "
-"date."
-msgstr ""
-"Dit saldo weerspiegelt de betalingen die op dit moment zijn ontvangen en de "
-"uitgaven die tot nu toe zijn geboekt."
 
 #, python-format
 msgid ""
@@ -8126,6 +8170,13 @@ msgid ""
 msgstr ""
 "Op deze pagina kun je het uiterlijk en de presentatie-instellingen van het "
 "beheersysteem voor je vereniging wijzigen."
+
+msgid ""
+"Total of all expenses incurred for the event, both personal and "
+"organizational, including any tokens and credits issued"
+msgstr ""
+"Totaal van alle gemaakte kosten voor het evenement, zowel persoonlijk als "
+"organisatorisch, inclusief eventuele uitgegeven tokens en credits"
 
 #, python-format
 msgid ""
