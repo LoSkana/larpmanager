@@ -141,8 +141,8 @@ def get_run_accounting(run, ctx):
         dc["pay"] = get_acc_detail(
             _("Income"),
             run,
-            AccountingItemPayment,
             _("Total participation fees received"),
+            AccountingItemPayment,
             AccountingItemPayment.PAYMENT_CHOICES,
             "pay",
             reg=True,
