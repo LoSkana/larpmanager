@@ -19,8 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django import forms
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.db.models import Max
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
@@ -34,8 +33,7 @@ from larpmanager.forms.utils import (
     WritingTinyMCE,
 )
 from larpmanager.forms.writing import BaseWritingForm, WritingForm
-from larpmanager.models.casting import AssignmentTrait
-from larpmanager.models.event import Run, RunText
+from larpmanager.models.event import RunText
 from larpmanager.models.experience import AbilityPx, DeliveryPx
 from larpmanager.models.form import (
     QuestionApplicable,
@@ -44,7 +42,6 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
 )
-from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, CharacterStatus, Faction, PlotCharacterRel
 
 
@@ -233,8 +230,6 @@ class OrgaCharacterForm(CharacterForm):
 
         self._init_plots()
 
-        self._init_questbuilder()
-
     def _init_character(self):
         self._init_factions()
 
@@ -252,43 +247,6 @@ class OrgaCharacterForm(CharacterForm):
             que = self.params["run"].event.get_elements(Character).all()
             choices = [(m.id, m.name) for m in que]
             self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---"))] + choices
-
-    def _init_questbuilder(self):
-        if "questbuilder" not in self.params["features"]:
-            return
-
-        tot_runs = Run.objects.filter(event=self.params["run"].event).aggregate(Max("number"))["number__max"]
-        if tot_runs != 1:
-            return
-
-        # check if in this run it has been assigned
-        try:
-            rcr = RegistrationCharacterRel.objects.get(reg__run=self.params["run"], character=self.instance.pk)
-        except ObjectDoesNotExist:
-            return
-
-        reg = rcr.reg
-
-        # get other traits
-        que = (
-            AssignmentTrait.objects.filter(run=self.params["run"], member=reg.member)
-            .select_related("trait")
-            .order_by("trait_id")
-        )
-
-        for at in que:
-            if self.details["id_concept"]:
-                self.details["id_concept"] += '</div><div class="plot">'
-
-            self.details["id_concept"] += f"<h4>{at.trait.quest.name} - {at.trait.name}</h4>"
-            if at.trait.quest.concept:
-                self.details["id_concept"] += "<hr />" + at.trait.quest.concept
-            if at.trait.quest.text:
-                self.details["id_concept"] += "<hr />" + at.trait.quest.text
-            if at.trait.concept:
-                self.details["id_concept"] += "<hr />" + at.trait.concept
-            if at.trait.text:
-                self.details["id_concept"] += "<hr />" + at.trait.text
 
     def _init_plots(self):
         if "plot" not in self.params["features"]:
