@@ -3822,6 +3822,9 @@ msgstr "Twoje konto zostało aktywowane."
 msgid "Your friend code has been used"
 msgstr "Twój kod znajomego został użyty"
 
+msgid "After confirmation, add another"
+msgstr "Po potwierdzeniu dodaj kolejny"
+
 msgid "Assigning characters to players"
 msgstr "Przypisywanie postaci do graczy"
 
