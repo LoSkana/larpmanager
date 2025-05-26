@@ -2333,9 +2333,6 @@ msgstr "Fremgang"
 msgid "Question saved!"
 msgstr "Underdanig spørsmål!"
 
-msgid "Question status"
-msgstr "Søknadsstatus"
-
 msgid "Replacing names"
 msgstr "Erstatning av navn"
 
@@ -8854,6 +8851,16 @@ msgstr ""
 "foreslå den for personalet. Vær forsiktig: Noen felt kan ikke lenger "
 "redigeres. La feltet stå tomt for å lagre endringene dine og for å kunne "
 "fortsette med dem i fremtiden."
+
+msgid ""
+"Optional: The question is shown, and can be filled by the player. Mandatory:"
+" The question needs to be filled by the player. Disabled: The question is "
+"shown, but cannot be changed by the player. Hidden: The question is not "
+"shown to the player."
+msgstr ""
+"Valgfritt: Spørsmålet vises og kan fylles ut av spilleren. Obligatorisk: "
+"Spørsmålet må fylles ut av spilleren. Deaktivert: Spørsmålet vises, men kan "
+"ikke endres av spilleren. Skjult: Spørsmålet vises ikke for spilleren."
 
 msgid ""
 "Indicate severity: RED (risks ruining the game for more than half of the "

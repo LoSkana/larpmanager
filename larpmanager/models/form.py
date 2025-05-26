@@ -145,7 +145,12 @@ class WritingQuestion(BaseModel):
         choices=QuestionStatus.choices,
         default=QuestionStatus.OPTIONAL,
         verbose_name=_("Status"),
-        help_text=_("Question status"),
+        help_text=_(
+            "Optional: The question is shown, and can be filled by the player. "
+            "Mandatory: The question needs to be filled by the player. "
+            "Disabled: The question is shown, but cannot be changed by the player. "
+            "Hidden: The question is not shown to the player."
+        ),
     )
 
     visibility = models.CharField(
@@ -331,8 +336,13 @@ class RegistrationQuestion(BaseModel):
         max_length=1,
         choices=QuestionStatus.choices,
         default=QuestionStatus.OPTIONAL,
-        help_text=_("Question status"),
         verbose_name=_("Status"),
+        help_text=_(
+            "Optional: The question is shown, and can be filled by the player. "
+            "Mandatory: The question needs to be filled by the player. "
+            "Disabled: The question is shown, but cannot be changed by the player. "
+            "Hidden: The question is not shown to the player."
+        ),
     )
 
     max_length = models.IntegerField(

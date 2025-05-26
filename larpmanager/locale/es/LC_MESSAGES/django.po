@@ -2333,9 +2333,6 @@ msgstr "Estado del progreso"
 msgid "Question saved!"
 msgstr "¡Pregunta guardada!"
 
-msgid "Question status"
-msgstr "Estado de la solicitud"
-
 msgid "Replacing names"
 msgstr "Sustitución de nombres"
 
@@ -8911,6 +8908,17 @@ msgstr ""
 "para proponerlo al personal. Cuidado: puede que algunos campos ya no sean "
 "editables. Deje el campo en blanco para guardar sus cambios y poder "
 "continuarlos en el futuro."
+
+msgid ""
+"Optional: The question is shown, and can be filled by the player. Mandatory:"
+" The question needs to be filled by the player. Disabled: The question is "
+"shown, but cannot be changed by the player. Hidden: The question is not "
+"shown to the player."
+msgstr ""
+"Opcional: La pregunta se muestra, y puede ser rellenada por el jugador. "
+"Obligatorio: La pregunta debe ser rellenada por el jugador. Desactivada: La "
+"pregunta se muestra, pero no puede ser modificada por el jugador. Oculta: La"
+" pregunta no se muestra al jugador."
 
 msgid ""
 "Indicate severity: RED (risks ruining the game for more than half of the "

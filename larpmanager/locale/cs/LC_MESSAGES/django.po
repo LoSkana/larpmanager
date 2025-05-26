@@ -2333,9 +2333,6 @@ msgstr "Progress"
 msgid "Question saved!"
 msgstr "Submisivní otázka!"
 
-msgid "Question status"
-msgstr "Stav aplikace"
-
 msgid "Replacing names"
 msgstr "Nahrazování názvů"
 
@@ -8716,6 +8713,16 @@ msgstr ""
 "navrhnout personálu. Buďte opatrní: některá pole již nemusí být "
 "editovatelná. Ponechte pole prázdné, abyste uložili své změny a mohli v nich"
 " v budoucnu pokračovat."
+
+msgid ""
+"Optional: The question is shown, and can be filled by the player. Mandatory:"
+" The question needs to be filled by the player. Disabled: The question is "
+"shown, but cannot be changed by the player. Hidden: The question is not "
+"shown to the player."
+msgstr ""
+"Volitelně: Otázka je zobrazena a hráč ji může vyplnit. Povinné: Otázka musí "
+"být vyplněna hráčem. Zakázáno: Otázka je zobrazena, ale hráč ji nemůže "
+"změnit. Skrytá: Otázka se hráči nezobrazuje."
 
 msgid ""
 "Indicate severity: RED (risks ruining the game for more than half of the "

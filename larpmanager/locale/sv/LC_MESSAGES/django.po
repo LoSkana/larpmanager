@@ -2333,9 +2333,6 @@ msgstr "Framsteg"
 msgid "Question saved!"
 msgstr "Undergiven fråga!"
 
-msgid "Question status"
-msgstr "Status för ansökan"
-
 msgid "Replacing names"
 msgstr "Byte av namn"
 
@@ -8875,6 +8872,16 @@ msgstr ""
 "föreslå den för personalen. Var försiktig: vissa fält kanske inte längre är "
 "redigerbara. Lämna fältet tomt för att spara dina ändringar och för att "
 "kunna fortsätta med dem i framtiden."
+
+msgid ""
+"Optional: The question is shown, and can be filled by the player. Mandatory:"
+" The question needs to be filled by the player. Disabled: The question is "
+"shown, but cannot be changed by the player. Hidden: The question is not "
+"shown to the player."
+msgstr ""
+"Valfri fråga: Frågan visas och kan fyllas i av spelaren. Obligatorisk: "
+"Frågan måste fyllas i av spelaren. Inaktiverad: Frågan visas, men kan inte "
+"ändras av spelaren. Dold: Frågan visas inte för spelaren."
 
 msgid ""
 "Indicate severity: RED (risks ruining the game for more than half of the "

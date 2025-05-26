@@ -2333,9 +2333,6 @@ msgstr "Fortschritt"
 msgid "Question saved!"
 msgstr "Unterwürfige Frage!"
 
-msgid "Question status"
-msgstr "Status der Bewerbung"
-
 msgid "Replacing names"
 msgstr "Ersetzen von Namen"
 
@@ -9185,6 +9182,17 @@ msgstr ""
 "haben und bereit sind, ihn den Mitarbeitern vorzuschlagen. Achtung: Einige "
 "Felder sind möglicherweise nicht mehr bearbeitbar. Lassen Sie das Feld leer,"
 " um Ihre Änderungen zu speichern und sie in Zukunft fortsetzen zu können."
+
+msgid ""
+"Optional: The question is shown, and can be filled by the player. Mandatory:"
+" The question needs to be filled by the player. Disabled: The question is "
+"shown, but cannot be changed by the player. Hidden: The question is not "
+"shown to the player."
+msgstr ""
+"Optional: Die Frage wird angezeigt und kann vom Spieler ausgefüllt werden. "
+"Obligatorisch: Die Frage muss vom Spieler ausgefüllt werden. Deaktiviert: "
+"Die Frage wird angezeigt, kann aber vom Spieler nicht geändert werden. "
+"Ausgeblendet: Die Frage wird dem Spieler nicht angezeigt."
 
 msgid ""
 "Indicate severity: RED (risks ruining the game for more than half of the "

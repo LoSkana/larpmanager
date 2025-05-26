@@ -2333,9 +2333,6 @@ msgstr "Vooruitgang"
 msgid "Question saved!"
 msgstr "Onderdanige vraag!"
 
-msgid "Question status"
-msgstr "Aanvraagstatus"
-
 msgid "Replacing names"
 msgstr "Namen vervangen"
 
@@ -9017,6 +9014,17 @@ msgstr ""
 "om het voor te stellen aan het personeel. Let op: sommige velden kunnen niet"
 " meer bewerkt worden. Laat het veld leeg om je wijzigingen op te slaan en er"
 " in de toekomst mee door te kunnen gaan."
+
+msgid ""
+"Optional: The question is shown, and can be filled by the player. Mandatory:"
+" The question needs to be filled by the player. Disabled: The question is "
+"shown, but cannot be changed by the player. Hidden: The question is not "
+"shown to the player."
+msgstr ""
+"Optioneel: De vraag wordt getoond en kan door de speler worden ingevuld. "
+"Verplicht: De vraag moet worden ingevuld door de speler. Uitgeschakeld: De "
+"vraag wordt getoond, maar kan niet worden veranderd door de speler. "
+"Verborgen: De vraag wordt niet getoond aan de speler."
 
 msgid ""
 "Indicate severity: RED (risks ruining the game for more than half of the "

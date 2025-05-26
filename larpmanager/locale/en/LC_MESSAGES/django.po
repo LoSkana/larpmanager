@@ -2589,7 +2589,11 @@ msgstr ""
 msgid "Display order with respect to all questions"
 msgstr ""
 
-msgid "Question status"
+msgid ""
+"Optional: The question is shown, and can be filled by the player. Mandatory: "
+"The question needs to be filled by the player. Disabled: The question is "
+"shown, but cannot be changed by the player. Hidden: The question is not "
+"shown to the player."
 msgstr ""
 
 msgid ""
