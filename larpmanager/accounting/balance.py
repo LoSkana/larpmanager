@@ -153,8 +153,8 @@ def get_run_accounting(run, ctx):
     if "payment_fees" in features:
         dc["trs"] = get_acc_detail(
             _("Transactions"),
-            _("Total amount withheld for transfer commissions"),
             run,
+            _("Total amount withheld for transfer commissions"),
             AccountingItemTransaction,
             None,
             None,
