@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.apps import apps
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models
 from django.db.models import F
@@ -41,11 +42,13 @@ from larpmanager.models.writing import CharacterStatus, Faction
 class QuestionType(models.TextChoices):
     SINGLE = "s", _("Single choice")
     MULTIPLE = "m", _("Multiple choice")
-    TEXT = "t", _("Text (short)")
-    PARAGRAPH = "p", _("Text (long)")
+    TEXT = "t", _("Single-line text")
+    PARAGRAPH = "p", _("Multi-line text")
+    EDITOR = "e", _("Advanced text editor")
     NAME = "name", _("Name")
     TEASER = "teaser", _("Presentation")
     SHEET = "text", _("Sheet")
+    PREVIEW = "preview", _("Preview")
     COVER = "cover", _("Cover")
     FACTIONS = "faction", _("Factions")
     TITLE = "title", _("Title")
@@ -54,6 +57,29 @@ class QuestionType(models.TextChoices):
     HIDE = "hide", _("Hide")
     PROGRESS = "progress", _("Progress")
     ASSIGNED = "assigned", _("Assigned")
+
+    @staticmethod
+    def get_basic_types():
+        return {
+            QuestionType.SINGLE,
+            QuestionType.MULTIPLE,
+            QuestionType.TEXT,
+            QuestionType.PARAGRAPH,
+            QuestionType.EDITOR,
+        }
+
+    @classmethod
+    def get_max_length(cls):
+        return {
+            QuestionType.NAME,
+            QuestionType.SHEET,
+            QuestionType.TEASER,
+            QuestionType.PREVIEW,
+            QuestionType.TEXT,
+            QuestionType.PARAGRAPH,
+            QuestionType.MULTIPLE,
+            QuestionType.EDITOR,
+        }
 
 
 class QuestionStatus(models.TextChoices):
@@ -67,11 +93,25 @@ class QuestionVisibility(models.TextChoices):
     SEARCHABLE = "s", _("Searchable")
     PUBLIC = "c", _("Public")
     PRIVATE = "e", _("Private")
+    HIDDEN = "h", _("Hidden")
 
 
 class QuestionApplicable(models.TextChoices):
-    CHARACTER = "c", _("Character")
-    PLOT = "p", _("Plot")
+    CHARACTER = "c", "character"
+    PLOT = "p", "plot"
+
+    @classmethod
+    def get_applicable(cls, model_name):
+        for value, label in cls.choices:
+            if model_name.lower() == label.lower():
+                return value
+        return None
+
+    @staticmethod
+    def get_applicable_inverse(typ):
+        # noinspection PyUnresolvedReferences
+        model_name = QuestionApplicable(typ).label.lower()
+        return apps.get_model("larpmanager", model_name)
 
 
 class WritingQuestion(BaseModel):
@@ -105,7 +145,12 @@ class WritingQuestion(BaseModel):
         choices=QuestionStatus.choices,
         default=QuestionStatus.OPTIONAL,
         verbose_name=_("Status"),
-        help_text=_("Question status"),
+        help_text=_(
+            "Optional: The question is shown, and can be filled by the player. "
+            "Mandatory: The question needs to be filled by the player. "
+            "Disabled: The question is shown, but cannot be changed by the player. "
+            "Hidden: The question is not shown to the player."
+        ),
     )
 
     visibility = models.CharField(
@@ -114,9 +159,10 @@ class WritingQuestion(BaseModel):
         default=QuestionVisibility.PRIVATE,
         verbose_name=_("Visibility"),
         help_text=_(
-            "Searchable: Characters can be filtered according to this question. Public: The "
-            "answer to this question is publicly visible. Private: The answer to this "
-            "question is only visible to the player and organisers."
+            "Searchable: Characters can be filtered according to this question. "
+            "Public: The answer to this question is publicly visible. "
+            "Private: The answer to this question is only visible to the player. "
+            "Hidden: The answer is hidden to all players."
         ),
     )
 
@@ -147,10 +193,9 @@ class WritingQuestion(BaseModel):
     )
 
     applicable = models.CharField(
+        max_length=1,
+        choices=QuestionApplicable.choices,
         default=QuestionApplicable.CHARACTER,
-        max_length=20,
-        null=True,
-        blank=True,
         verbose_name=_("Applicable"),
         help_text=_("Select the types of writing elements that this question applies to."),
     )
@@ -180,15 +225,6 @@ class WritingQuestion(BaseModel):
 
     def get_editable_display(self):
         return ", ".join([str(label) for value, label in CharacterStatus.choices if value in self.get_editable()])
-
-    def get_applicable(self):
-        return self.applicable.split(",") if self.applicable else []
-
-    def set_applicable(self, applicable_list):
-        self.applicable = ",".join(applicable_list)
-
-    def get_applicable_display(self):
-        return ", ".join([str(label) for value, label in QuestionApplicable.choices if value in self.get_applicable()])
 
 
 class WritingOption(BaseModel):
@@ -220,6 +256,7 @@ class WritingOption(BaseModel):
         related_name="dependents_inv",
         symmetrical=False,
         blank=True,
+        verbose_name=_("Prerequisites"),
         help_text=_("Indicates other options that must be selected for this option to be selectable"),
     )
 
@@ -254,8 +291,6 @@ class WritingChoice(BaseModel):
 
     element_id = models.IntegerField(blank=True, null=True)
 
-    element_id = models.IntegerField(blank=True, null=True)
-
     def __str__(self):
         # noinspection PyUnresolvedReferences
         return f"{self.element_id} ({self.question.display}) {self.option.display}"
@@ -264,9 +299,7 @@ class WritingChoice(BaseModel):
 class WritingAnswer(BaseModel):
     question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="answers")
 
-    text = models.TextField(max_length=5000)
-
-    element_id = models.IntegerField(blank=True, null=True)
+    text = models.TextField(max_length=100000)
 
     element_id = models.IntegerField(blank=True, null=True)
 
@@ -303,8 +336,13 @@ class RegistrationQuestion(BaseModel):
         max_length=1,
         choices=QuestionStatus.choices,
         default=QuestionStatus.OPTIONAL,
-        help_text=_("Question status"),
         verbose_name=_("Status"),
+        help_text=_(
+            "Optional: The question is shown, and can be filled by the player. "
+            "Mandatory: The question needs to be filled by the player. "
+            "Disabled: The question is shown, but cannot be changed by the player. "
+            "Hidden: The question is not shown to the player."
+        ),
     )
 
     max_length = models.IntegerField(

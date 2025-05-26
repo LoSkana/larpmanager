@@ -110,7 +110,7 @@ def get_event_cache_characters(ctx, res):
 
 
 def get_event_cache_fields(ctx, res, only_visible=True):
-    if "character_form" not in ctx["features"]:
+    if "character" not in ctx["features"]:
         return
 
     # get visible question ids
@@ -148,19 +148,19 @@ def get_event_cache_fields(ctx, res, only_visible=True):
 
 
 def get_character_fields(ctx, only_visible=True):
-    if "character_form" not in ctx["features"]:
-        return
-
-    if "questions" in ctx:
+    if "character" not in ctx["features"]:
         return
 
     # get visible question fields
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-    que = que.filter(applicable__icontains=QuestionApplicable.CHARACTER)
-    que = que.exclude(status=QuestionStatus.HIDDEN)
+    que = que.filter(applicable=QuestionApplicable.CHARACTER)
+    que = que.exclude(status=QuestionStatus.HIDDEN, visibility=QuestionVisibility.HIDDEN)
     if only_visible:
         que = que.filter(visibility__in=[QuestionVisibility.SEARCHABLE, QuestionVisibility.PUBLIC])
-    ctx["questions"] = {el[0]: {"display": el[1], "typ": el[2]} for el in que.values_list("id", "display", "typ")}
+    ctx["questions"] = {
+        el[0]: {"display": el[1], "typ": el[2], "printable": el[3], "visibility": el[4]}
+        for el in que.values_list("id", "display", "typ", "printable", "visibility")
+    }
 
     que = ctx["event"].get_elements(WritingOption).filter(question_id__in=ctx["questions"].keys())
     ctx["options"] = {
@@ -170,11 +170,11 @@ def get_character_fields(ctx, only_visible=True):
 
 
 def get_searcheable_character_fields(ctx):
-    if "character_form" not in ctx["features"]:
+    if "character" not in ctx["features"]:
         return
 
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-    que = que.filter(applicable__icontains=QuestionApplicable.CHARACTER)
+    que = que.filter(applicable=QuestionApplicable.CHARACTER)
     que = que.filter(visibility=QuestionVisibility.SEARCHABLE).prefetch_related("options")
     ctx["searchable"] = {el.id: list(el.options.order_by("order").values_list("id", flat=True)) for el in que}
 
@@ -182,11 +182,20 @@ def get_searcheable_character_fields(ctx):
 def get_character_cache_fields(ctx, character_id, only_visible=True):
     get_character_fields(ctx, only_visible=only_visible)
     get_searcheable_character_fields(ctx)
+
+    # remove not visible questions
+    question_visible = []
+    for question_id in ctx["questions"].keys():
+        config = f"show_{question_id}"
+        if config not in ctx or not ctx[config]:
+            continue
+        question_visible.append(question_id)
+
     fields = {}
-    que = WritingAnswer.objects.filter(element_id=character_id, question_id__in=ctx["questions"].keys())
+    que = WritingAnswer.objects.filter(element_id=character_id, question_id__in=question_visible)
     for el in que.values_list("question_id", "text"):
         fields[el[0]] = el[1]
-    que = WritingChoice.objects.filter(element_id=character_id, question_id__in=ctx["questions"].keys())
+    que = WritingChoice.objects.filter(element_id=character_id, question_id__in=question_visible)
     for el in que.values_list("question_id", "option_id"):
         if el[0] not in fields:
             fields[el[0]] = []
@@ -301,7 +310,7 @@ def reset_event_cache_all(run):
 
 def update_character_fields(instance, data):
     features = get_event_features(instance.event.id)
-    if "character_form" not in features:
+    if "character" not in features:
         return
 
     ctx = {"features": features, "event": instance.event}

@@ -259,7 +259,7 @@ def signup_check(live_server, page):
     expect(page.locator("#register_form")).to_contain_text("short description")
     expect(page.get_by_role("textbox", name="short text")).to_have_value("aaaaaaaaaa")
     expect(page.locator("#register_form")).to_contain_text("long description")
-    expect(page.locator("#register_form")).to_contain_text("characters: 10 / 10")
+    expect(page.locator("#register_form")).to_contain_text("text length: 10 / 10")
     expect(page.get_by_role("textbox", name="long text")).to_have_value("BBBBBBBBBB")
     expect(page.get_by_label("choice")).to_have_value("2")
     expect(page.locator("#register_form")).to_contain_text("choice descrfree freemany manyfew few descr")

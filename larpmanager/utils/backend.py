@@ -43,6 +43,8 @@ class EmailOrUsernameModelBackend(ModelBackend):
         # technically a given email address could be present in either field,
         # possibly even for different users, so we'll query for all matching
         # records and test each one.
+
+        # noinspection PyProtectedMember
         users = user_model._default_manager.filter(
             Q(**{user_model.USERNAME_FIELD: username}) | Q(email__iexact=username)
         )

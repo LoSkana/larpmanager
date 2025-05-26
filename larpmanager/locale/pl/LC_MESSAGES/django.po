@@ -339,9 +339,6 @@ msgstr "Logowanie"
 msgid "Money"
 msgstr "Pieniądze"
 
-msgid "Motto"
-msgstr "Motto"
-
 msgid "Names"
 msgstr "Nazwy"
 
@@ -422,9 +419,6 @@ msgstr "Wideo"
 
 msgid "Where"
 msgstr "Gdzie"
-
-msgid "cover"
-msgstr "okładka"
 
 msgid "email"
 msgstr "e-mail"
@@ -597,9 +591,6 @@ msgstr "Żetony"
 msgid "Traits"
 msgstr "Cechy"
 
-msgid "Unisex"
-msgstr "Unisex"
-
 msgid "Unread"
 msgstr "Nieprzeczytane"
 
@@ -620,9 +611,6 @@ msgstr "wydany"
 
 msgid "member"
 msgstr "członek"
-
-msgid "mirror"
-msgstr "lustro"
 
 msgid "player"
 msgstr "gracz"
@@ -854,9 +842,6 @@ msgstr "adres"
 
 msgid "options"
 msgstr "opcje"
-
-msgid "preview"
-msgstr "podgląd"
 
 msgid "Accepted"
 msgstr "Przyjęte"
@@ -1668,9 +1653,6 @@ msgstr "Pokaz zamknięty"
 msgid "Simple list"
 msgstr "Prosta lista"
 
-msgid "Text (long)"
-msgstr "Tekst (długi)"
-
 msgid "Ticket list"
 msgstr "Lista biletów"
 
@@ -1691,6 +1673,9 @@ msgstr "natychmiast"
 
 msgid "leaderboard"
 msgstr "tabela liderów"
+
+msgid "text length"
+msgstr "długość tekstu"
 
 msgid "unique code"
 msgstr "unikalny kod"
@@ -1812,9 +1797,6 @@ msgstr "Rejestracja wstępna"
 msgid "Presentation"
 msgstr "Prezentacja"
 
-msgid "Private area"
-msgstr "Obszar prywatny"
-
 msgid "Questbuilder"
 msgstr "Questbuilder"
 
@@ -1865,9 +1847,6 @@ msgstr "Powiedz mi więcej"
 
 msgid "Test gallery"
 msgstr "Galeria testowa"
-
-msgid "Text (short)"
-msgstr "Tekst (krótki)"
 
 msgid "Three quotas"
 msgstr "Trzy kwoty"
@@ -2032,9 +2011,6 @@ msgstr "Edytor gracza"
 msgid "Prerequisites"
 msgstr "Wymagania wstępne"
 
-msgid "Presentations"
-msgstr "Prezentacje"
-
 msgid "Progress step"
 msgstr "Krok postępu"
 
@@ -2146,6 +2122,9 @@ msgstr "Język wydarzeń"
 
 msgid "Executive Vote"
 msgstr "Głosowanie wykonawcze"
+
+msgid "Form questions"
+msgstr "Pytania dotyczące formularza"
 
 msgid "Full returning"
 msgstr "Pełny powrót"
@@ -2324,6 +2303,9 @@ msgstr "Członek odmówił!"
 msgid "Membership fees"
 msgstr "Opłaty członkowskie"
 
+msgid "Multi-line text"
+msgstr "Tekst wielowierszowy"
+
 msgid "Multiple choice"
 msgstr "Wielokrotny wybór"
 
@@ -2350,9 +2332,6 @@ msgstr "Status postępu"
 
 msgid "Question saved!"
 msgstr "Pytanie zapisane!"
-
-msgid "Question status"
-msgstr "Status pytania"
 
 msgid "Replacing names"
 msgstr "Zastępowanie nazw"
@@ -2543,6 +2522,9 @@ msgstr "Pokaż linki do wydarzeń"
 msgid "Show explanation"
 msgstr "Pokaż wyjaśnienie"
 
+msgid "Single-line text"
+msgstr "Tekst jednowierszowy"
+
 msgid "Ticket selection"
 msgstr "Wybór biletów"
 
@@ -2645,6 +2627,9 @@ msgstr "Obiekty inwentaryzacji"
 msgid "Invoice not found"
 msgstr "Nie znaleziono faktury"
 
+msgid "Maximum available"
+msgstr "Maksymalna dostępna wartość"
+
 msgid "May the best win!"
 msgstr "Niech wygra najlepszy!"
 
@@ -2720,6 +2705,12 @@ msgstr "nie są jeszcze otwarte!"
 msgid "download document"
 msgstr "pobierz dokument"
 
+msgid "this is important"
+msgstr "to jest ważne"
+
+msgid "'pwyw' (donation)."
+msgstr "\"pwyw\" (darowizna)."
+
 msgid "Access the history"
 msgstr "Dostęp do historii"
 
@@ -2773,6 +2764,9 @@ msgstr "Elementy przesłane!"
 
 msgid "Feature activated:"
 msgstr "Funkcja aktywowana:"
+
+msgid "Go to the form for"
+msgstr "Przejdź do formularza dla"
 
 msgid "Hide not available"
 msgstr "Ukryj niedostępne"
@@ -2863,9 +2857,6 @@ msgstr "Przydzielona postać!"
 
 msgid "Change registration"
 msgstr "Zmiana rejestracji"
-
-msgid "Character questions"
-msgstr "Pytania dotyczące postaci"
 
 msgid "Charging the player"
 msgstr "Ładowanie odtwarzacza"
@@ -2988,6 +2979,9 @@ msgstr "--- NIE PRZYPISANO ---"
 msgid "Accounting - History"
 msgstr "Rachunkowość - historia"
 
+msgid "Advanced text editor"
+msgstr "Zaawansowany edytor tekstu"
+
 msgid "Are you really sure?"
 msgstr "Naprawdę jesteś pewien?"
 
@@ -3023,9 +3017,6 @@ msgstr "Karta podarunkowa anulowana!"
 
 msgid "Independent factions"
 msgstr "Niezależne frakcje"
-
-msgid "Informations private"
-msgstr "Informacje prywatne"
 
 msgid "Last membership date"
 msgstr "Data ostatniego członkostwa"
@@ -3069,9 +3060,6 @@ msgstr "Predefiniowana struktura"
 
 msgid "Preference not valid"
 msgstr "Preferencja nieważna"
-
-msgid "Private informations"
-msgstr "Informacje prywatne"
 
 msgid "Registration closed."
 msgstr "Rejestracja została zamknięta."
@@ -3498,6 +3486,9 @@ msgstr "sprawdzić brak relacji"
 msgid "not visible at this time"
 msgstr "obecnie niewidoczne"
 
+msgid "'player' (player's email)"
+msgstr "'player' (adres e-mail gracza)"
+
 msgid "Feature already activated"
 msgstr "Funkcja już aktywowana"
 
@@ -3881,6 +3872,9 @@ msgstr "Płatność została zrealizowana!"
 msgid "check nonexistent relationships"
 msgstr "sprawdzić nieistniejące relacje"
 
+msgid "'ticket' (ticket name or number)"
+msgstr "\"ticket\" (nazwa lub numer biletu)"
+
 msgid "Browse the presentation website!"
 msgstr "Przejrzyj stronę prezentacji!"
 
@@ -4263,6 +4257,9 @@ msgstr "Uzupełnij relacje swoich postaci!"
 msgid "Freely answer the co-creation questions"
 msgstr "Swobodnie odpowiadaj na pytania dotyczące współtworzenia"
 
+msgid "If checked, makes visible the speedlarp"
+msgstr "Zaznaczenie tej opcji powoduje, że speedlarp jest widoczny"
+
 #, python-format
 msgid "Membership fee of %(user)s for %(year)s"
 msgstr "Opłata członkowska w wysokości %(user)s za %(year)s"
@@ -4361,6 +4358,9 @@ msgstr "Czy chcesz zapłacić inną kwotę?"
 msgid "You are excluding (none of these filters)"
 msgstr "Wykluczasz (żaden z tych filtrów)"
 
+msgid "You have exceeded the maximum text length"
+msgstr "Przekroczono maksymalną długość tekstu"
+
 msgid "You think you should have an achievement?"
 msgstr "Myślisz, że powinieneś mieć osiągnięcia?"
 
@@ -4448,9 +4448,6 @@ msgstr "Wskaż dokładnie swoją dziedzinę doświadczenia"
 
 msgid "Indicate the tickets for which it is active"
 msgstr "Wskaż bilety, dla których jest aktywny"
-
-msgid "Presentation text, visible to other players"
-msgstr "Tekst prezentacji, widoczny dla innych graczy"
 
 msgid "This page performs checks on members' data."
 msgstr "Ta strona sprawdza dane członków."
@@ -4789,6 +4786,9 @@ msgstr "Wypełnij to pole, jeśli potrzebujesz ułatwień dostępu."
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Robiłem to kilka razy, mam podstawowe doświadczenie"
 
+msgid "If checked, makes characters visible to all players"
+msgstr "Jeśli zaznaczone, postacie będą widoczne dla wszystkich graczy"
+
 msgid "If you wish, you can delete past pre-registrations."
 msgstr "Jeśli chcesz, możesz usunąć wcześniejsze rejestracje wstępne."
 
@@ -4861,6 +4861,9 @@ msgstr " tutaj warunki wyrejestrowania dla tego zdarzenia."
 #, python-format
 msgid "%(amount)d %(tokens)s were disbursed with %(reason)s."
 msgstr "%(amount)d %(tokens)s zostały wypłacone z %(reason)s."
+
+msgid "'character' (character name or number to be assigned)"
+msgstr "\"znak\" (nazwa znaku lub numer do przypisania)"
 
 msgid "Adds a short (2-3 words) 'title' field to characters."
 msgstr "Dodaje krótkie (2-3 słowa) pole \"tytuł\" do znaków."
@@ -5074,6 +5077,11 @@ msgstr "Umożliwia tworzenie i zarządzanie wieloma przebiegami wydarzenia."
 msgid "Automatically saves writing elements to prevent data loss."
 msgstr "Automatycznie zapisuje elementy zapisu, aby zapobiec utracie danych."
 
+msgid "If checked, makes the field content visible to all players"
+msgstr ""
+"Jeśli zaznaczone, sprawia, że zawartość pola jest widoczna dla wszystkich "
+"graczy."
+
 msgid "If checked, makes workshops visible for players to fill in"
 msgstr "Jeśli zaznaczone, warsztaty będą widoczne dla graczy do wypełnienia."
 
@@ -5211,8 +5219,9 @@ msgid "Enables customization of all event-related pages' appearance."
 msgstr ""
 "Umożliwia dostosowanie wyglądu wszystkich stron związanych z wydarzeniami."
 
-msgid "If checked, makes prologues of the assigned character visible"
-msgstr "Jeśli zaznaczone, sprawia, że prologi przypisanej postaci są widoczne"
+msgid "If checked, makes prologues visible to the assigned character"
+msgstr ""
+"Jeśli zaznaczone, sprawia, że prologi są widoczne dla przypisanej postaci"
 
 msgid "Order in which the option is shown with respect to the others"
 msgstr "Kolejność, w jakiej opcja jest wyświetlana względem innych"
@@ -5242,6 +5251,9 @@ msgid "%(amount)d %(credits)s were used to participate in this event!"
 msgstr ""
 "%(amount)d %(credits)s zostały wykorzystane do wzięcia udziału w tym "
 "wydarzeniu!"
+
+msgid "If checked, an option can be chosen a maximum number of times."
+msgstr "Jeśli opcja jest zaznaczona, można ją wybrać maksymalnie kilka razy."
 
 msgid "If checked, shows players the histories of preferences entered"
 msgstr ""
@@ -5432,6 +5444,9 @@ msgstr ""
 msgid "Allows authors to prepare a list of inter-character relationships."
 msgstr "Umożliwia autorom przygotowanie listy relacji między postaciami."
 
+msgid "Copy and paste exactly all the coloured text below into the notes."
+msgstr "Skopiuj i wklej dokładnie cały kolorowy tekst poniżej do notatek."
+
 msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr ""
 "Błąd ładowania. Nieprawidłowy format pliku (akceptujemy tylko pliki pdf lub "
@@ -5440,6 +5455,11 @@ msgstr ""
 msgid "If checked, PG names will be automatically replaced by a reference"
 msgstr ""
 "Jeśli zaznaczone, nazwy PG będą automatycznie zastępowane przez odniesienie"
+
+msgid "If checked, makes the field content visible to the assigned player"
+msgstr ""
+"Jeśli zaznaczone, sprawia, że zawartość pola jest widoczna dla przypisanego "
+"gracza."
 
 msgid "Indicates whether the option can be included in the gifted signups"
 msgstr "Wskazuje, czy opcja może być włączona do subskrypcji prezentów."
@@ -5653,10 +5673,6 @@ msgstr "czy postać NIE jest świadoma tożsamości drugiej cechy."
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
 msgstr "Nieobecny (w relacjach tej postaci druga jest nieobecna)"
-
-msgid ""
-"Adds a 'motto' field to characters, a short phrase they frequently use."
-msgstr "Dodaje pole \"motto\" do postaci, krótką frazę, której często używają."
 
 msgid ""
 "Allows players to select hidden roles without spoiling them for others."
@@ -5882,12 +5898,6 @@ msgstr ""
 "larpa)"
 
 msgid ""
-"If checked, makes factions visible, as th character assignments to factions"
-msgstr ""
-"Jeśli zaznaczone, sprawia, że frakcje są widoczne, podobnie jak przypisania "
-"postaci do frakcji."
-
-msgid ""
 "Indicates the title of the character - it will be shown along with the name"
 msgstr "Wskazuje tytuł postaci - będzie on wyświetlany wraz z imieniem."
 
@@ -5925,6 +5935,12 @@ msgid ""
 msgstr ""
 "Wypełnij formularz i kliknij potwierdź, a przejdziesz do następnego "
 "przejścia!"
+
+msgid ""
+"If checked, makes factions visible, as the character assignments to factions"
+msgstr ""
+"Zaznaczenie tej opcji sprawia, że frakcje są widoczne, podobnie jak "
+"przypisania postaci do frakcji."
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
@@ -5988,6 +6004,13 @@ msgid ""
 "Hello! We are contacting you regarding your registration at "
 "<b>%(event)s</b>."
 msgstr "Witaj! Kontaktujemy się w sprawie rejestracji w <b>%(event)s</b>."
+
+msgid ""
+"If checked, allows a option to be visible only if other options are "
+"selected."
+msgstr ""
+"Jeśli opcja jest zaznaczona, może być widoczna tylko wtedy, gdy zaznaczone "
+"są inne opcje."
 
 msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
@@ -6060,13 +6083,6 @@ msgstr ""
 "się poprawne."
 
 msgid ""
-"If checked, make the presentations (public information) visible to all "
-"players"
-msgstr ""
-"Jeśli zaznaczone, prezentacje (informacje publiczne) będą widoczne dla "
-"wszystkich graczy."
-
-msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
 "processed!"
 msgstr ""
@@ -6132,6 +6148,13 @@ msgid ""
 msgstr ""
 "Umożliwia graczom przesyłanie pytań, a organizatorom ich przeglądanie i "
 "porządkowanie."
+
+msgid ""
+"If checked, allows a option to be visible only to players with selected "
+"ticket."
+msgstr ""
+"Jeśli opcja jest zaznaczona, może być widoczna tylko dla graczy z wybranym "
+"kuponem."
 
 msgid ""
 "These CSS commands will be carried over to all pages in your Association "
@@ -6410,11 +6433,6 @@ msgstr ""
 "'%(allowed_types)s'."
 
 msgid ""
-"If checked, makes visible the speedlarp in which the character participates "
-"assigned"
-msgstr "Jeśli zaznaczone, wyświetla speedlarp, w którym postać bierze udział."
-
-msgid ""
 "If checked: Does not send communication to the player when the character is "
 "assigned"
 msgstr ""
@@ -6497,13 +6515,6 @@ msgid ""
 msgstr ""
 "Umożliwia precyzyjne określenie, które dane użytkownika są gromadzone i "
 "przechowywane w systemie."
-
-msgid ""
-"Describe the core idea or premise of the plot. This text will NOT be shown "
-"to players."
-msgstr ""
-"Opisz główną ideę lub założenie fabuły. Ten tekst NIE będzie pokazywany "
-"graczom."
 
 msgid ""
 "If checked, automatically removes formatting when pasting text into the "
@@ -6967,13 +6978,6 @@ msgstr ""
 "i wysyła je e-mailem do użytkownika."
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field 'notes' "
-"(this is important!)"
-msgstr ""
-"Skopiuj i wklej dokładnie cały kolorowy tekst poniżej do pola \"notatki\" "
-"(to ważne!)."
-
-msgid ""
 "Optional - Indicate additional details on the ticket, they will be shown "
 "below the application"
 msgstr ""
@@ -7228,6 +7232,13 @@ msgstr ""
 "osobistych adresów e-mail."
 
 msgid ""
+"If checked, options no longer available in the form are hidden, instead of "
+"being displayed disabled"
+msgstr ""
+"Jeśli opcja ta jest zaznaczona, opcje niedostępne w formularzu są ukrywane, "
+"zamiast być wyświetlane jako wyłączone"
+
+msgid ""
 "Indicate the description you wish to be displayed when this payment method "
 "is proposed to the user."
 msgstr ""
@@ -7339,20 +7350,6 @@ msgstr ""
 "współdzieli ten sam zestaw postaci i frakcji."
 
 msgid ""
-"If checked, makes characters visible with basic information such as name, "
-"title, motto to all players"
-msgstr ""
-"Zaznaczenie tej opcji sprawia, że postacie są widoczne dla wszystkich graczy"
-" wraz z podstawowymi informacjami, takimi jak imię, tytuł i motto."
-
-msgid ""
-"If checked, makes texts (private information) visible only to the player to "
-"whom the item is assigned"
-msgstr ""
-"Jeśli zaznaczone, teksty (prywatne informacje) będą widoczne tylko dla "
-"gracza, do którego przedmiot jest przypisany."
-
-msgid ""
 "If checked, the subscribers' gallery will not be displayed to those who are "
 "not subscribed to the run"
 msgstr ""
@@ -7456,13 +7453,6 @@ msgid ""
 msgstr ""
 "Aby móc uczestniczyć w wydarzeniach organizowanych przez to stowarzyszenie, "
 "użytkownik musi wyrazić zgodę na udostępnianie swoich danych."
-
-msgid ""
-"Private text, visible only to you and the organizers. You can use it for "
-"write background or a journal."
-msgstr ""
-"Prywatny tekst, widoczny tylko dla Ciebie i organizatorów. Można go używać "
-"do pisania w tle lub w dzienniku."
 
 msgid ""
 "(You can also refer to traits from other quests, but be careful that  are "
@@ -7860,6 +7850,13 @@ msgstr ""
 "wyrażonych przez nich preferencji dotyczących otrzymywania newslettera."
 
 msgid ""
+"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
+"text, 'p' for long text, 'e' for editor)"
+msgstr ""
+"typ (typ: \"s\" dla pojedynczego wyboru, \"m\" dla wielokrotnego wyboru, "
+"\"t\" dla krótkiego tekstu, \"p\" dla długiego tekstu, \"e\" dla edytora)"
+
+msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "
 "and full bank details, paypal link, etc)"
 msgstr ""
@@ -7993,13 +7990,6 @@ msgid ""
 msgstr ""
 "Jeśli pytanie dotyczy konkretnego wydarzenia, wybierz je! Jeśli jest to "
 "pytanie ogólne, pozostaw je puste."
-
-msgid ""
-"Lets you define custom fields in the character form, which display in the "
-"character sheet, gallery, and search filters."
-msgstr ""
-"Pozwala zdefiniować niestandardowe pola w formularzu postaci, które będą "
-"wyświetlane w arkuszu postaci, galerii i filtrach wyszukiwania."
 
 msgid ""
 "This page allows you to change the appearance settings and presentation of "
@@ -8274,14 +8264,6 @@ msgid ""
 msgstr ""
 "liczba ta jest wartością netto, która powinna wynikać z dostępności "
 "instrumentów finansowych - nie uwzględnia tokenów i kredytów"
-
-msgid ""
-"'player' (player's email), 'ticket' (ticket name or number), 'character' "
-"(character name or number to be assigned), 'pwyw' (donation)."
-msgstr ""
-"\"player\" (adres e-mail gracza), \"ticket\" (nazwa lub numer biletu), "
-"\"character\" (nazwa lub numer postaci do przypisania), \"pwyw\" "
-"(darowizna)."
 
 msgid ""
 "Lets you upload and host files directly on larpmanager, making them "
@@ -8744,15 +8726,6 @@ msgstr ""
 "członkostwo w tym roku kalendarzowym, w kolejności odnowienia."
 
 msgid ""
-"Searchable: Characters can be filtered according to this question. Public: "
-"The answer to this question is publicly visible. Private: The answer to this"
-" question is only visible to the player and organisers."
-msgstr ""
-"Możliwość wyszukiwania: Znaki mogą być filtrowane według tego pytania. "
-"Publiczne: Odpowiedź na to pytanie jest widoczna publicznie. Prywatne: "
-"Odpowiedź na to pytanie jest widoczna tylko dla gracza i organizatorów."
-
-msgid ""
 "There are only two steps left to complete the procedure, enter the last "
 "necessary data. With this information, your membership application will be "
 "pre-filled; all you have to do is print it out and sign it."
@@ -8862,6 +8835,17 @@ msgstr ""
 "regulować płatności za wydarzenia, na które się zapisałeś!"
 
 msgid ""
+"Searchable: Characters can be filtered according to this question. Public: "
+"The answer to this question is publicly visible. Private: The answer to this"
+" question is only visible to the player. Hidden: The answer is hidden to all"
+" players."
+msgstr ""
+"Możliwość wyszukiwania: Znaki mogą być filtrowane według tego pytania. "
+"Publiczne: Odpowiedź na to pytanie jest widoczna publicznie. Prywatne: "
+"Odpowiedź na to pytanie jest widoczna tylko dla gracza. Ukryte: Odpowiedź "
+"jest ukryta dla wszystkich graczy."
+
+msgid ""
 "If for whatever reason the first and last name shown on your documents is "
 "different from the one you prefer to use, then write it here. It will only "
 "be used for internal bureaucratic purposes, and will NEVER be displayed to "
@@ -8882,6 +8866,17 @@ msgstr ""
 "zaproponowania jej personelowi. Uwaga: niektóre pola mogą nie być już "
 "edytowalne. Pozostaw pole puste, aby zapisać zmiany i móc je kontynuować w "
 "przyszłości."
+
+msgid ""
+"Optional: The question is shown, and can be filled by the player. Mandatory:"
+" The question needs to be filled by the player. Disabled: The question is "
+"shown, but cannot be changed by the player. Hidden: The question is not "
+"shown to the player."
+msgstr ""
+"Opcjonalnie: Pytanie jest wyświetlane i może zostać wypełnione przez gracza."
+" Obowiązkowe: Pytanie musi zostać wypełnione przez gracza. Wyłączone: "
+"Pytanie jest wyświetlane, ale gracz nie może go zmienić. Ukryte: Pytanie nie"
+" jest wyświetlane graczowi."
 
 msgid ""
 "Indicate severity: RED (risks ruining the game for more than half of the "

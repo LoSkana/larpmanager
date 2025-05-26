@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from django.conf import settings
+
 
 def is_ajax(request):
     return request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest"
@@ -26,11 +28,4 @@ def show_toolbar(request):
     """
     Default function to determine whether to show the toolbar on a given page.
     """
-    staging = (
-        request.enviro == "staging"
-        and not is_ajax(request)
-        and request.user.is_authenticated
-        and request.user.is_superuser
-    )
-    development = request.enviro == "dev" and not is_ajax(request)
-    return staging or development
+    return getattr(settings, "DEBUG_TOOLBAR", False) and not is_ajax(request)

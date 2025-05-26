@@ -160,7 +160,7 @@ def exe_features_off(request, num):
 
 @login_required
 def exe_larpmanager(request):
-    ctx = check_assoc_permission(request, "exe_larpmanager")
+    ctx = check_assoc_permission(request, "exe_association")
     que = Run.objects.filter(event__assoc_id=ctx["a_id"])
     ctx["list"] = que.select_related("event").order_by("start")
     for run in ctx["list"]:

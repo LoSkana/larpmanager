@@ -339,9 +339,6 @@ msgstr "Inloggning"
 msgid "Money"
 msgstr "Pengar"
 
-msgid "Motto"
-msgstr "Motto"
-
 msgid "Names"
 msgstr "Namn"
 
@@ -422,9 +419,6 @@ msgstr "Video"
 
 msgid "Where"
 msgstr "Var"
-
-msgid "cover"
-msgstr "skydd"
 
 msgid "email"
 msgstr "e-post"
@@ -597,9 +591,6 @@ msgstr "Tokens"
 msgid "Traits"
 msgstr "Egenskaper"
 
-msgid "Unisex"
-msgstr "Unisex"
-
 msgid "Unread"
 msgstr "Oläst"
 
@@ -620,9 +611,6 @@ msgstr "utfärdade"
 
 msgid "member"
 msgstr "medlem"
-
-msgid "mirror"
-msgstr "spegel"
 
 msgid "player"
 msgstr "spelare"
@@ -854,9 +842,6 @@ msgstr "adress"
 
 msgid "options"
 msgstr "alternativ"
-
-msgid "preview"
-msgstr "förhandsvisning"
 
 msgid "Accepted"
 msgstr "Godkänd"
@@ -1668,9 +1653,6 @@ msgstr "Visa stängd"
 msgid "Simple list"
 msgstr "Enkel lista"
 
-msgid "Text (long)"
-msgstr "Text (lång)"
-
 msgid "Ticket list"
 msgstr "Biljettlista"
 
@@ -1691,6 +1673,9 @@ msgstr "omedelbart"
 
 msgid "leaderboard"
 msgstr "ranking!"
+
+msgid "text length"
+msgstr "textlängd"
 
 msgid "unique code"
 msgstr "unik kod"
@@ -1812,9 +1797,6 @@ msgstr "Förhandsanmälan"
 msgid "Presentation"
 msgstr "Presentation"
 
-msgid "Private area"
-msgstr "Privat område"
-
 msgid "Questbuilder"
 msgstr "Questbyggare"
 
@@ -1865,9 +1847,6 @@ msgstr "Ta reda på mer"
 
 msgid "Test gallery"
 msgstr "Testgalleri"
-
-msgid "Text (short)"
-msgstr "Text (kort)"
 
 msgid "Three quotas"
 msgstr "Tre kvoter"
@@ -2032,9 +2011,6 @@ msgstr "Spelarredaktör"
 msgid "Prerequisites"
 msgstr "Förkunskapskrav"
 
-msgid "Presentations"
-msgstr "Presentationer"
-
 msgid "Progress step"
 msgstr "Ta ett steg framåt"
 
@@ -2146,6 +2122,9 @@ msgstr "Språkevenemang"
 
 msgid "Executive Vote"
 msgstr "Ledningens omröstning"
+
+msgid "Form questions"
+msgstr "Formulärfrågor"
 
 msgid "Full returning"
 msgstr "Total avkastning"
@@ -2324,6 +2303,9 @@ msgstr "Medlem nekad!"
 msgid "Membership fees"
 msgstr "Föreningens avgifter"
 
+msgid "Multi-line text"
+msgstr "Text på flera rader"
+
 msgid "Multiple choice"
 msgstr "Flera valmöjligheter"
 
@@ -2350,9 +2332,6 @@ msgstr "Framsteg"
 
 msgid "Question saved!"
 msgstr "Undergiven fråga!"
-
-msgid "Question status"
-msgstr "Status för ansökan"
 
 msgid "Replacing names"
 msgstr "Byte av namn"
@@ -2543,6 +2522,9 @@ msgstr "Visa länkar till evenemang"
 msgid "Show explanation"
 msgstr "Visa förklaring"
 
+msgid "Single-line text"
+msgstr "Text på en rad"
+
 msgid "Ticket selection"
 msgstr "Val av biljett"
 
@@ -2645,6 +2627,9 @@ msgstr "Lagerposter"
 msgid "Invoice not found"
 msgstr "Fakturan hittades inte"
 
+msgid "Maximum available"
+msgstr "Maximalt tillgänglig"
+
 msgid "May the best win!"
 msgstr "Må den bästa mannen vinna!"
 
@@ -2720,6 +2705,12 @@ msgstr "är ännu inte öppna!"
 msgid "download document"
 msgstr "ladda ner dokument"
 
+msgid "this is important"
+msgstr "detta är viktigt"
+
+msgid "'pwyw' (donation)."
+msgstr "\"pwyw\" (donation)."
+
 msgid "Access the history"
 msgstr "Få tillgång till historiken"
 
@@ -2773,6 +2764,9 @@ msgstr "Elementen är laddade!"
 
 msgid "Feature activated:"
 msgstr "Funktion aktiverad:"
+
+msgid "Go to the form for"
+msgstr "Gå till formuläret för"
 
 msgid "Hide not available"
 msgstr "Dölj inte tillgängligt"
@@ -2863,9 +2857,6 @@ msgstr "Tilldelad karaktär!"
 
 msgid "Change registration"
 msgstr "Redigera post"
-
-msgid "Character questions"
-msgstr "Frågor om karaktären"
 
 msgid "Charging the player"
 msgstr "Laddning av spelaren"
@@ -2988,6 +2979,9 @@ msgstr "--- INTE TILLDELAD ---"
 msgid "Accounting - History"
 msgstr "Redovisning - Historisk"
 
+msgid "Advanced text editor"
+msgstr "Avancerad textredigerare"
+
 msgid "Are you really sure?"
 msgstr "Är du verkligen säker?"
 
@@ -3023,9 +3017,6 @@ msgstr "Presentkortet är annullerat!"
 
 msgid "Independent factions"
 msgstr "Oberoende fraktioner"
-
-msgid "Informations private"
-msgstr "Privat information"
 
 msgid "Last membership date"
 msgstr "Senaste datum för medlemskap"
@@ -3069,9 +3060,6 @@ msgstr "Fördefinierad struktur"
 
 msgid "Preference not valid"
 msgstr "Ogiltig preferens"
-
-msgid "Private informations"
-msgstr "privat information"
 
 msgid "Registration closed."
 msgstr "Registreringen är stängd."
@@ -3498,6 +3486,9 @@ msgstr "kontrollera rapporter mindre"
 msgid "not visible at this time"
 msgstr "inte synlig för närvarande"
 
+msgid "'player' (player's email)"
+msgstr "\"player\" (spelarens e-postadress)"
+
 msgid "Feature already activated"
 msgstr "Funktionen är redan aktiverad"
 
@@ -3880,6 +3871,9 @@ msgstr "Du har slutfört insättningen!"
 
 msgid "check nonexistent relationships"
 msgstr "kontrollera icke-existerande relationer"
+
+msgid "'ticket' (ticket name or number)"
+msgstr "\"ticket\" (biljettens namn eller nummer)"
 
 msgid "Browse the presentation website!"
 msgstr "Bläddra igenom presentationswebbplatsen!"
@@ -4265,6 +4259,9 @@ msgstr "Fyll i din karaktärs relationer!"
 msgid "Freely answer the co-creation questions"
 msgstr "Svara fritt på frågorna om samskapande"
 
+msgid "If checked, makes visible the speedlarp"
+msgstr "Om markerad, gör speedlarp synlig"
+
 #, python-format
 msgid "Membership fee of %(user)s for %(year)s"
 msgstr "Andel %(user)s per %(year)s"
@@ -4363,6 +4360,9 @@ msgstr "Skulle du vilja betala ett annat belopp?"
 msgid "You are excluding (none of these filters)"
 msgstr "Du utesluter (inget av dessa filter)"
 
+msgid "You have exceeded the maximum text length"
+msgstr "Du har överskridit den maximala textlängden"
+
 msgid "You think you should have an achievement?"
 msgstr "Tycker du att du har rätt till en prestation?"
 
@@ -4450,9 +4450,6 @@ msgstr "Ange exakt inom vilket område du har erfarenhet"
 
 msgid "Indicate the tickets for which it is active"
 msgstr "Ange de biljetter för vilka den är aktiv"
-
-msgid "Presentation text, visible to other players"
-msgstr "Presentationstext, synlig för andra spelare"
 
 msgid "This page performs checks on members' data."
 msgstr "Denna sida utför kontroller av medlemmarnas uppgifter."
@@ -4794,6 +4791,9 @@ msgstr "Fyll i detta fält om du har tillgänglighetsbehov."
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jag har gjort det några gånger, jag har grundläggande erfarenhet"
 
+msgid "If checked, makes characters visible to all players"
+msgstr "Om markerad, gör karaktärer synliga för alla spelare"
+
 msgid "If you wish, you can delete past pre-registrations."
 msgstr "Om du vill kan du radera tidigare förhandsregistreringar."
 
@@ -4867,6 +4867,9 @@ msgstr "här är villkoren för att avregistrera sig från detta evenemang."
 #, python-format
 msgid "%(amount)d %(tokens)s were disbursed with %(reason)s."
 msgstr "%(amount)d %(tokens)s betalades ut med \"%(reason)s\"."
+
+msgid "'character' (character name or number to be assigned)"
+msgstr "\"character\" (karaktärens namn eller nummer som ska tilldelas)"
 
 msgid "Adds a short (2-3 words) 'title' field to characters."
 msgstr "Lägger till ett kort (2-3 ord) \"title\"-fält för tecken."
@@ -5087,6 +5090,9 @@ msgstr ""
 msgid "Automatically saves writing elements to prevent data loss."
 msgstr "Sparar automatiskt skrivelement för att förhindra dataförlust."
 
+msgid "If checked, makes the field content visible to all players"
+msgstr "Om markerad, gör fältinnehållet synligt för alla spelare"
+
 msgid "If checked, makes workshops visible for players to fill in"
 msgstr "Om markerat, synliggörs de workshops som spelarna kan fylla i"
 
@@ -5224,8 +5230,8 @@ msgstr "Tillåter spelare att när som helst avboka sina egna registreringar."
 msgid "Enables customization of all event-related pages' appearance."
 msgstr "Möjliggör anpassning av utseendet på alla eventrelaterade sidor."
 
-msgid "If checked, makes prologues of the assigned character visible"
-msgstr "Om markerat, gör prologer av den tilldelade karaktären synliga"
+msgid "If checked, makes prologues visible to the assigned character"
+msgstr "Om markerad, gör prologer synliga för den tilldelade karaktären"
 
 msgid "Order in which the option is shown with respect to the others"
 msgstr "Ordning i vilken alternativet presenteras i ansökan"
@@ -5257,6 +5263,10 @@ msgstr "Du har redan beviljat datadelning med denna organisation!"
 #, python-format
 msgid "%(amount)d %(credits)s were used to participate in this event!"
 msgstr "%(amount)d %(credits)s användes för att delta i detta evenemang!"
+
+msgid "If checked, an option can be chosen a maximum number of times."
+msgstr ""
+"Om den är markerad kan ett alternativ väljas ett maximalt antal gånger."
 
 msgid "If checked, shows players the histories of preferences entered"
 msgstr "Om markerat, visar spelarna historiken för de preferenser som angetts"
@@ -5451,12 +5461,18 @@ msgstr ""
 "Tillåter författare att förbereda en lista över relationer mellan "
 "karaktärer."
 
+msgid "Copy and paste exactly all the coloured text below into the notes."
+msgstr "Kopiera och klistra in exakt all färgad text nedan i anteckningarna."
+
 msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr ""
 "Fel vid inläsning. Ogiltigt filformat - vi accepterar endast pdf och bilder."
 
 msgid "If checked, PG names will be automatically replaced by a reference"
 msgstr "Om markerat kommer PG-namn automatiskt att ersättas med en referens"
+
+msgid "If checked, makes the field content visible to the assigned player"
+msgstr "Om markerad, gör fältinnehållet synligt för den tilldelade spelaren"
 
 msgid "Indicates whether the option can be included in the gifted signups"
 msgstr "Anger om optionen kan inkluderas i de fria posterna"
@@ -5680,12 +5696,6 @@ msgid ""
 msgstr "Frånvarande (i denna karaktärs relationer är den andra frånvarande)"
 
 msgid ""
-"Adds a 'motto' field to characters, a short phrase they frequently use."
-msgstr ""
-"Lägger till ett \"motto\"-fält för karaktärer, en kort fras som de ofta "
-"använder."
-
-msgid ""
 "Allows players to select hidden roles without spoiling them for others."
 msgstr ""
 "Gör det möjligt för spelare att välja dolda roller utan att avslöja dem för "
@@ -5899,12 +5909,6 @@ msgstr ""
 "evenemangsplatsen)"
 
 msgid ""
-"If checked, makes factions visible, as th character assignments to factions"
-msgstr ""
-"Om markerat, gör fraktioner synliga, och karaktärstilldelningar till "
-"fraktioner"
-
-msgid ""
 "Indicates the title of the character - it will be shown along with the name"
 msgstr ""
 "Ange rollpersonens titel - den kommer att visas tillsammans med namnet"
@@ -5944,6 +5948,12 @@ msgid ""
 "Fill in the form and click on confirm, it will take you to the next passage!"
 msgstr ""
 "Fyll i formuläret och klicka på bekräfta, det tar dig till nästa steg!"
+
+msgid ""
+"If checked, makes factions visible, as the character assignments to factions"
+msgstr ""
+"Om markerad, gör fraktioner synliga, eftersom karaktären tilldelar "
+"fraktioner"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
@@ -6009,6 +6019,13 @@ msgid ""
 "<b>%(event)s</b>."
 msgstr ""
 "Hallå där! Vi kontaktar dig angående din anmälan till <b>%(event)s</b>."
+
+msgid ""
+"If checked, allows a option to be visible only if other options are "
+"selected."
+msgstr ""
+"Om den är markerad kan ett alternativ endast visas om andra alternativ är "
+"valda."
 
 msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
@@ -6077,13 +6094,6 @@ msgstr ""
 "Svara på följande frågor. Markera *alla* svar som du tycker verkar korrekta."
 
 msgid ""
-"If checked, make the presentations (public information) visible to all "
-"players"
-msgstr ""
-"Om markerat, gör presentationerna (offentlig information) synliga för alla "
-"spelare"
-
-msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
 "processed!"
 msgstr ""
@@ -6150,6 +6160,12 @@ msgid ""
 msgstr ""
 "Gör det möjligt för spelare att skicka in frågor och för arrangörer att "
 "granska och organisera dem."
+
+msgid ""
+"If checked, allows a option to be visible only to players with selected "
+"ticket."
+msgstr ""
+"Om alternativet är markerat kan det bara visas för spelare med vald biljett."
 
 msgid ""
 "These CSS commands will be carried over to all pages in your Association "
@@ -6431,12 +6447,6 @@ msgstr ""
 "'%(allowed_types)s'."
 
 msgid ""
-"If checked, makes visible the speedlarp in which the character participates "
-"assigned"
-msgstr ""
-"Om markerad, synliggör den speedlarp som den tilldelade karaktären deltar i"
-
-msgid ""
 "If checked: Does not send communication to the player when the character is "
 "assigned"
 msgstr ""
@@ -6520,13 +6530,6 @@ msgid ""
 msgstr ""
 "Ger dig möjlighet att ange exakt vilka användardata som samlas in och lagras"
 " i systemet."
-
-msgid ""
-"Describe the core idea or premise of the plot. This text will NOT be shown "
-"to players."
-msgstr ""
-"Beskriv den centrala idén eller förutsättningen för handlingen. Denna text "
-"kommer INTE att visas för spelarna."
 
 msgid ""
 "If checked, automatically removes formatting when pasting text into the "
@@ -6990,13 +6993,6 @@ msgstr ""
 " skickar det till användaren via e-post."
 
 msgid ""
-"Copy and paste exactly all the coloured text below into the field 'notes' "
-"(this is important!)"
-msgstr ""
-"Kopiera och klistra in exakt all färgad text nedan i fältet \"anteckningar\""
-" (detta är viktigt!)"
-
-msgid ""
 "Optional - Indicate additional details on the ticket, they will be shown "
 "below the application"
 msgstr ""
@@ -7251,6 +7247,13 @@ msgstr ""
 "utan att avslöja personliga e-postadresser."
 
 msgid ""
+"If checked, options no longer available in the form are hidden, instead of "
+"being displayed disabled"
+msgstr ""
+"Om den är markerad döljs alternativ som inte längre är tillgängliga i "
+"formuläret, istället för att visas inaktiverade"
+
+msgid ""
 "Indicate the description you wish to be displayed when this payment method "
 "is proposed to the user."
 msgstr ""
@@ -7363,20 +7366,6 @@ msgstr ""
 "uppsättning karaktärer och fraktioner."
 
 msgid ""
-"If checked, makes characters visible with basic information such as name, "
-"title, motto to all players"
-msgstr ""
-"Om markerad, gör karaktärer synliga med grundläggande information som namn, "
-"titel, motto för alla spelare"
-
-msgid ""
-"If checked, makes texts (private information) visible only to the player to "
-"whom the item is assigned"
-msgstr ""
-"Om markerad, gör texter (privat information) synliga endast för den spelare "
-"som objektet är tilldelat"
-
-msgid ""
 "If checked, the subscribers' gallery will not be displayed to those who are "
 "not subscribed to the run"
 msgstr ""
@@ -7480,13 +7469,6 @@ msgid ""
 msgstr ""
 "För att kunna delta i föreningens evenemang måste du godkänna att dina "
 "uppgifter delas med oss."
-
-msgid ""
-"Private text, visible only to you and the organizers. You can use it for "
-"write background or a journal."
-msgstr ""
-"Privat text, endast synlig för dig och arrangörerna. Du kan använda den för "
-"att skriva bakgrund eller en dagbok"
 
 msgid ""
 "(You can also refer to traits from other quests, but be careful that  are "
@@ -7882,6 +7864,13 @@ msgstr ""
 "uttryckta preferenser när det gäller nyhetsbrev."
 
 msgid ""
+"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
+"text, 'p' for long text, 'e' for editor)"
+msgstr ""
+"typ (typ: \"s\" för enstaka val, \"m\" för flera val, \"t\" för kort text, "
+"\"p\" för lång text, \"e\" för editor)"
+
+msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "
 "and full bank details, paypal link, etc)"
 msgstr ""
@@ -8016,13 +8005,6 @@ msgid ""
 msgstr ""
 "Om din fråga gäller ett specifikt evenemang, vänligen välj det! Om det är en"
 " allmän fråga, vänligen lämna fältet tomt"
-
-msgid ""
-"Lets you define custom fields in the character form, which display in the "
-"character sheet, gallery, and search filters."
-msgstr ""
-"Här kan du definiera anpassade fält i karaktärsformuläret, som visas i "
-"karaktärsbladet, galleriet och sökfiltren."
 
 msgid ""
 "This page allows you to change the appearance settings and presentation of "
@@ -8299,14 +8281,6 @@ msgid ""
 msgstr ""
 "denna siffra är det netto som bör bli resultatet av tillgången till "
 "finansiella instrument - den tar inte hänsyn till tokens och krediter"
-
-msgid ""
-"'player' (player's email), 'ticket' (ticket name or number), 'character' "
-"(character name or number to be assigned), 'pwyw' (donation)."
-msgstr ""
-"\"player\" (spelarens e-postadress), \"ticket\" (biljettens namn eller "
-"nummer), \"character\" (karaktärens namn eller nummer som ska tilldelas), "
-"\"pwyw\" (donation)."
 
 msgid ""
 "Lets you upload and host files directly on larpmanager, making them "
@@ -8758,15 +8732,6 @@ msgstr ""
 "sitt medlemskap under detta kalenderår, i förnyelseordning."
 
 msgid ""
-"Searchable: Characters can be filtered according to this question. Public: "
-"The answer to this question is publicly visible. Private: The answer to this"
-" question is only visible to the player and organisers."
-msgstr ""
-"Sökbar: Tecken kan filtreras enligt denna fråga. Public: Svaret på denna "
-"fråga är synligt för allmänheten. Privat: Svaret på denna fråga är endast "
-"synligt för spelaren och organisatörerna."
-
-msgid ""
 "There are only two steps left to complete the procedure, enter the last "
 "necessary data. With this information, your membership application will be "
 "pre-filled; all you have to do is print it out and sign it."
@@ -8876,6 +8841,17 @@ msgstr ""
 "betala för de evenemang du har anmält dig till!"
 
 msgid ""
+"Searchable: Characters can be filtered according to this question. Public: "
+"The answer to this question is publicly visible. Private: The answer to this"
+" question is only visible to the player. Hidden: The answer is hidden to all"
+" players."
+msgstr ""
+"Sökbar: Tecken kan filtreras enligt denna fråga. Offentlig: Svaret på den "
+"här frågan är synligt för allmänheten. Privat: Svaret på frågan är privat: "
+"Svaret på den här frågan är endast synligt för spelaren. Dold (Hidden): "
+"Svaret är dolt för alla spelare."
+
+msgid ""
 "If for whatever reason the first and last name shown on your documents is "
 "different from the one you prefer to use, then write it here. It will only "
 "be used for internal bureaucratic purposes, and will NEVER be displayed to "
@@ -8896,6 +8872,16 @@ msgstr ""
 "föreslå den för personalen. Var försiktig: vissa fält kanske inte längre är "
 "redigerbara. Lämna fältet tomt för att spara dina ändringar och för att "
 "kunna fortsätta med dem i framtiden."
+
+msgid ""
+"Optional: The question is shown, and can be filled by the player. Mandatory:"
+" The question needs to be filled by the player. Disabled: The question is "
+"shown, but cannot be changed by the player. Hidden: The question is not "
+"shown to the player."
+msgstr ""
+"Valfri fråga: Frågan visas och kan fyllas i av spelaren. Obligatorisk: "
+"Frågan måste fyllas i av spelaren. Inaktiverad: Frågan visas, men kan inte "
+"ändras av spelaren. Dold: Frågan visas inte för spelaren."
 
 msgid ""
 "Indicate severity: RED (risks ruining the game for more than half of the "

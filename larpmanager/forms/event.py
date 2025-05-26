@@ -25,6 +25,7 @@ from django.forms import Textarea
 from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.character import get_character_fields
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm
@@ -42,6 +43,7 @@ from larpmanager.forms.utils import (
 )
 from larpmanager.models.access import EventPermission, EventRole
 from larpmanager.models.event import Event, EventButton, EventConfig, EventText, EventTextType, ProgressStep, Run
+from larpmanager.models.form import QuestionType, QuestionVisibility
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.common import copy_class
 
@@ -220,6 +222,8 @@ class OrgaConfigForm(ConfigForm):
 
         self.set_config_character()
 
+        self.set_config_char_form()
+
         self.set_config_custom()
 
         self.set_config_accounting()
@@ -241,7 +245,7 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("gallery_hide_signup", ConfigType.BOOL, section, label, help_text)
 
-        if "characters" in self.params["features"]:
+        if "character" in self.params["features"]:
             label = _("Hide unassigned characters")
             help_text = _("If checked, does not show characters in the gallery who have not been assigned a player")
             self.add_configs("gallery_hide_uncasted_characters", ConfigType.BOOL, section, label, help_text)
@@ -277,6 +281,27 @@ class OrgaConfigForm(ConfigForm):
         help_text = _("If checked, allows a registration form question to be visible based on the player's age.")
         self.add_configs("registration_reg_que_age", ConfigType.BOOL, section, label, help_text)
 
+    def set_config_char_form(self):
+        section = _("Character form")
+
+        label = _("Hide not available")
+        help_text = _(
+            "If checked, options no longer available in the form are hidden, instead of being displayed disabled"
+        )
+        self.add_configs("character_form_hide_unavailable", ConfigType.BOOL, section, label, help_text)
+
+        label = _("Maximum available")
+        help_text = _("If checked, an option can be chosen a maximum number of times.")
+        self.add_configs("character_form_wri_que_max", ConfigType.BOOL, section, label, help_text)
+
+        label = _("Ticket selection")
+        help_text = _("If checked, allows a option to be visible only to players with selected ticket.")
+        self.add_configs("character_form_wri_que_tickets", ConfigType.BOOL, section, label, help_text)
+
+        label = _("Prerequisites")
+        help_text = _("If checked, allows a option to be visible only if other options are selected.")
+        self.add_configs("character_form_wri_que_dependents", ConfigType.BOOL, section, label, help_text)
+
     def set_config_structure(self):
         if "pre_register" in self.params["features"]:
             section = _("Pre-registration")
@@ -310,7 +335,7 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("cover_orig", ConfigType.BOOL, section, label, help_text)
 
     def set_config_character(self):
-        if "characters" in self.params["features"]:
+        if "character" in self.params["features"]:
             section = _("Writing")
 
             label = _("Replacing names")
@@ -546,7 +571,7 @@ class OrgaAppearanceForm(MyCssForm):
         )
 
     event_css = forms.CharField(
-        widget=Textarea(attrs={"cols": 80, "rows": 15}),
+        widget=Textarea(attrs={"rows": 15}),
         required=False,
         help_text=_("These CSS commands will be carried over to all pages in your Association space."),
     )
@@ -706,32 +731,31 @@ class OrgaRunForm(ConfigForm):
     def set_configs(self):
         ls = []
 
-        if "characters" not in self.params["features"]:
+        if "character" not in self.params["features"]:
             return ls
 
         shows = [
             (
                 "char",
                 _("Characters"),
-                _(
-                    "If checked, makes characters visible with basic information such as name, title, "
-                    "motto to all players"
-                ),
-            ),
-            (
-                "teaser",
-                _("Presentations"),
-                _("If checked, make the presentations (public information) visible to all players"),
-            ),
-            (
-                "text",
-                _("Texts"),
-                _(
-                    "If checked, makes texts (private information) visible only to the "
-                    "player to whom the item is assigned"
-                ),
-            ),
+                _("If checked, makes characters visible to all players"),
+            )
         ]
+
+        basics = QuestionType.get_basic_types()
+        get_character_fields(self.params, False)
+        for que_id, question in self.params["questions"].items():
+            typ = question["typ"]
+            if typ in basics:
+                typ = f"{que_id}"
+            elif typ not in ["teaser", "text"]:
+                continue
+
+            help_text = _("If checked, makes the field content visible to all players")
+            if question["visibility"] == QuestionVisibility.PRIVATE:
+                help_text = _("If checked, makes the field content visible to the assigned player")
+
+            shows.append((typ, question["display"], help_text))
 
         addit_show = [
             (
@@ -742,17 +766,17 @@ class OrgaRunForm(ConfigForm):
             (
                 "faction",
                 _("Factions"),
-                _("If checked, makes factions visible, as th character assignments to factions"),
+                _("If checked, makes factions visible, as the character assignments to factions"),
             ),
             (
                 "speedlarp",
                 _("Speedlarp"),
-                _("If checked, makes visible the speedlarp in which the character participates assigned"),
+                _("If checked, makes visible the speedlarp"),
             ),
             (
                 "prologue",
                 _("Prologues"),
-                _("If checked, makes prologues of the assigned character visible"),
+                _("If checked, makes prologues visible to the assigned character"),
             ),
             ("questbuilder", _("Questbuilder"), _("If checked, makes quests and traits visible")),
             (

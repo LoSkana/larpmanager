@@ -29,6 +29,7 @@ from larpmanager.management.commands.utils import check_branch
 class Command(BaseCommand):
     help = "Reset DB"
 
+    # noinspection PyProtectedMember
     def handle(self, *args, **options):
         check_branch()
 

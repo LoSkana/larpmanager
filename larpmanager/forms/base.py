@@ -27,7 +27,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
-from larpmanager.forms.utils import css_delimeter
+from larpmanager.forms.utils import WritingTinyMCE, css_delimeter
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
@@ -38,7 +38,7 @@ from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
 )
-from larpmanager.models.utils import generate_id, get_attr
+from larpmanager.models.utils import generate_id, get_attr, strip_tags
 from larpmanager.templatetags.show_tags import hex_to_rgb
 
 
@@ -163,6 +163,14 @@ def max_selections_validator(max_choices):
     return validator
 
 
+def max_length_validator(max_length):
+    def validator(value):
+        if len(strip_tags(value)) > max_length:
+            raise ValidationError(_("You have exceeded the maximum text length"))
+
+    return validator
+
+
 class BaseRegistrationForm(MyFormRun):
     gift = False
     answer_class = RegistrationAnswer
@@ -176,6 +184,7 @@ class BaseRegistrationForm(MyFormRun):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.show_link = []
         self.sections = {}
 
     def _init_reg_question(self, instance, event):
@@ -332,13 +341,17 @@ class BaseRegistrationForm(MyFormRun):
 
         if not orga:
             self.fields[key].disabled = not active
-            if question.max_length:
+
+        if question.max_length:
+            if question.typ in QuestionType.get_max_length():
                 self.max_lengths[f"id_{key}"] = (question.max_length, question.typ)
 
         if question.status == QuestionStatus.MANDATORY:
             self.fields[key].label += " (*)"
             self.has_mandatory = True
             self.mandatory.append("id_" + key)
+
+        question.basic_typ = question.typ in QuestionType.get_basic_types()
 
         return key
 
@@ -355,6 +368,9 @@ class BaseRegistrationForm(MyFormRun):
         elif question.typ == QuestionType.PARAGRAPH:
             self.init_paragraph(key, question, required)
 
+        elif question.typ == QuestionType.EDITOR:
+            self.init_editor(key, question, required)
+
         else:
             key = question.typ
             mapping = {"faction": "factions_list"}
@@ -366,23 +382,36 @@ class BaseRegistrationForm(MyFormRun):
             self.fields[key].required = required
         return key
 
-    def init_paragraph(self, key, question, required):
+    def init_editor(self, key, question, required):
+        validators = [max_length_validator(question.max_length)] if question.max_length else []
         self.fields[key] = forms.CharField(
             required=required,
-            max_length=question.max_length if question.max_length else 5000,
-            widget=forms.Textarea,
+            widget=WritingTinyMCE(),
             label=question.display,
             help_text=question.description,
+            validators=validators,
+        )
+        if question.id in self.answers:
+            self.initial[key] = self.answers[question.id].text
+
+        self.show_link.append(f"id_{key}")
+
+    def init_paragraph(self, key, question, required):
+        validators = [max_length_validator(question.max_length)] if question.max_length else []
+        self.fields[key] = forms.CharField(
+            required=required,
+            widget=forms.Textarea(attrs={"rows": 4}),
+            label=question.display,
+            help_text=question.description,
+            validators=validators,
         )
         if question.id in self.answers:
             self.initial[key] = self.answers[question.id].text
 
     def init_text(self, key, question, required):
+        validators = [max_length_validator(question.max_length)] if question.max_length else []
         self.fields[key] = forms.CharField(
-            required=required,
-            max_length=question.max_length if question.max_length else 1000,
-            label=question.display,
-            help_text=question.description,
+            required=required, label=question.display, help_text=question.description, validators=validators
         )
         if question.id in self.answers:
             self.initial[key] = self.answers[question.id].text
@@ -446,7 +475,7 @@ class BaseRegistrationForm(MyFormRun):
                 self.save_reg_multiple(instance, oid, q)
             elif q.typ == QuestionType.SINGLE:
                 self.save_reg_single(instance, oid, q)
-            elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
+            elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.EDITOR]:
                 self.save_reg_text(instance, oid, q)
 
     def save_reg_text(self, instance, oid, q):

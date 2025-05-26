@@ -52,7 +52,7 @@ class Writing(BaseConceptModel):
     )
 
     teaser = HTMLField(
-        max_length=10000,
+        max_length=100000,
         blank=True,
         verbose_name=_("Presentation"),
         help_text=_("Presentation visible to all players, when 'show presentation' is checked"),
@@ -65,7 +65,7 @@ class Writing(BaseConceptModel):
     )
 
     preview = HTMLField(
-        max_length=10000,
+        max_length=100000,
         blank=True,
         help_text=_("Preview visible only by the assigned player, when 'show preview' is checked"),
     )

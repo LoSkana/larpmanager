@@ -31,26 +31,34 @@
             {% define "" as old_section %}
         {% endif %}
     {% endif %}
-    <tr>
+    <tr id="{{ field.id_for_label }}_tr">
         <th>
             <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
         </th>
         <td>
             {% if field.errors %}{{ field.errors }}{% endif %}
-            {{ field }}
+            {% if form.show_link and field.id_for_label in form.show_link %}
+                <p>
+                    <a href="#" class="my_toggle" tog="f_{{ field.id_for_label }}">{% trans "Show" %}</a>
+                </p>
+                <div style="display: none"
+                     class="hide hide_later f_{{ field.id_for_label }}">{{ field }}</div>
+            {% else %}
+                {{ field }}
+            {% endif %}
             {% if field.help_text %}
                 <br>
                 <div class="helptext">{{ field.help_text | safe }}</div>
             {% endif %}
             {% if field.auto_id in form.max_lengths %}
                 {% get_field form.max_lengths field.auto_id as args %}
-                {% if args.1 == "t" or args.1 == "p" %}
-                    <div class="helptext">
-                        {% trans "characters" %}: <span class="count"></span> / {{ args.0 }}
-                    </div>
-                {% elif args.1 == "m" %}
+                {% if args.1 == "m" %}
                     <div class="helptext">
                         {% trans "options" %}: <span class="count"></span> / {{ args.0 }}
+                    </div>
+                {% else %}
+                    <div class="helptext">
+                        {% trans "text length" %}: <span class="count"></span> / {{ args.0 }}
                     </div>
                 {% endif %}
             {% endif %}
@@ -59,7 +67,7 @@
                 <br />
                 <br />
                 <a href="{{ profile }}" target="_blank">
-                    <img src="{{ profile }}" />
+                    <img src="{{ profile }}" alt="question profile image" />
                 </a>
                 <br>
                 <span class="helptext">{% trans "(click on image to enlarge)" %}</span>
