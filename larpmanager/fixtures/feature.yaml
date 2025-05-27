@@ -938,17 +938,6 @@
     placeholder: false
     order: 120
 - model: larpmanager.feature
-  pk: 153
-  fields:
-    name: Co-creation
-    descr: Allows organizers to pose questions about a character, which the player
-      can answer.
-    slug: co_creation
-    overall: false
-    module: 1
-    placeholder: false
-    order: 170
-- model: larpmanager.feature
   pk: 155
   fields:
     name: Restrict Staff Access

@@ -439,11 +439,6 @@ urlpatterns = [
         name="character_profile_upload",
     ),
     path(
-        "<slug:s>/<int:n>/character/<int:num>/co_creation/",
-        views_uc.character_co_creation,
-        name="character_co_creation",
-    ),
-    path(
         "<slug:s>/<int:n>/character/list/",
         views_uc.character_list,
         name="character_list",

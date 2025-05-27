@@ -585,9 +585,6 @@ msgstr ""
 msgid "Not selected"
 msgstr ""
 
-msgid "Freely answer the co-creation questions"
-msgstr ""
-
 msgid "Character"
 msgstr ""
 
@@ -618,19 +615,6 @@ msgid "Abilities"
 msgstr ""
 
 msgid "Delivery"
-msgstr ""
-
-msgid "Co-creation questions"
-msgstr ""
-
-msgid "Questions for the co-creation section, editable only by authors"
-msgstr ""
-
-msgid "Co-creation answers"
-msgstr ""
-
-msgid ""
-"Answers for the co-creation section, editable by both players and authors"
 msgstr ""
 
 msgid ""
@@ -1196,12 +1180,6 @@ msgid "PDF"
 msgstr ""
 
 msgid "If checked, makes visible the PDF version of the character sheets"
-msgstr ""
-
-msgid "Co-creation"
-msgstr ""
-
-msgid "If checked, makes co-creation questions and answers visible"
 msgstr ""
 
 msgid "Visibility"
@@ -3713,9 +3691,6 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-msgid "Participate in the co-creation of the character!"
-msgstr ""
-
 msgid "Change"
 msgstr ""
 
@@ -3738,9 +3713,6 @@ msgid "Questions"
 msgstr ""
 
 msgid "Write here questions about your character directly to the authors!"
-msgstr ""
-
-msgid "Answers"
 msgstr ""
 
 msgid "Download complete sheet"
@@ -6437,12 +6409,6 @@ msgstr ""
 msgid "speedlarp"
 msgstr ""
 
-msgid "Questions CC"
-msgstr ""
-
-msgid "Answers CC"
-msgstr ""
-
 msgid "Plots"
 msgstr ""
 
@@ -7243,11 +7209,6 @@ msgid ""
 "all events, instead of each event's organizers."
 msgstr ""
 
-msgid ""
-"Allows organizers to pose questions about a character, which the player can "
-"answer."
-msgstr ""
-
 msgid "Restrict Staff Access"
 msgstr ""
 
@@ -7378,6 +7339,9 @@ msgid "Statistics"
 msgstr ""
 
 msgid "Modules"
+msgstr ""
+
+msgid "Answers"
 msgstr ""
 
 msgid "Cache Reloading"
@@ -7790,9 +7754,6 @@ msgstr ""
 msgid ""
 "The character has been proposed to the staff, who will examine it and "
 "approve it or request changes if necessary."
-msgstr ""
-
-msgid "Co-creation answers saved!"
 msgstr ""
 
 msgid "You have reached the maximum number of characters that can be created"

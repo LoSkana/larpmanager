@@ -816,11 +816,6 @@ class OrgaRunForm(ConfigForm):
                 _("PDF"),
                 _("If checked, makes visible the PDF version of the character sheets"),
             ),
-            (
-                "co_creation",
-                _("Co-creation"),
-                _("If checked, makes co-creation questions and answers visible"),
-            ),
         ]
 
         for f in addit_show:

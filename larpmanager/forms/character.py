@@ -33,7 +33,6 @@ from larpmanager.forms.utils import (
     WritingTinyMCE,
 )
 from larpmanager.forms.writing import BaseWritingForm, WritingForm
-from larpmanager.models.event import RunText
 from larpmanager.models.experience import AbilityPx, DeliveryPx
 from larpmanager.models.form import (
     QuestionApplicable,
@@ -43,21 +42,6 @@ from larpmanager.models.form import (
     WritingQuestion,
 )
 from larpmanager.models.writing import Character, CharacterStatus, Faction, PlotCharacterRel
-
-
-class CharacterCocreationForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        super().__init__()
-        text = kwargs.pop("text")
-        super().__init__(*args, **kwargs)
-        k = "co_creation_answer"
-        self.fields[k] = forms.CharField(
-            widget=WritingTinyMCE(),
-            label="Risposte",
-            help_text=_("Freely answer the co-creation questions"),
-            required=False,
-        )
-        self.initial[k] = text
 
 
 class CharacterForm(WritingForm, BaseWritingForm):
@@ -222,8 +206,6 @@ class OrgaCharacterForm(CharacterForm):
         if not self.instance.pk:
             return
 
-        self._init_cocreation()
-
         self._init_px()
 
         self._init_plots()
@@ -344,58 +326,12 @@ class OrgaCharacterForm(CharacterForm):
                 fact_tx += "<hr />" + fc[3]
         self.show_link.append("id_factions_list")
 
-    def _init_cocreation(self):
-        if "co_creation" not in self.params["features"]:
-            return
-
-        (el, creat) = RunText.objects.get_or_create(
-            run=self.params["run"], eid=self.instance.number, typ=RunText.COCREATION
-        )
-
-        k = "co_creation_question"
-        self.fields[k] = forms.CharField(
-            widget=WritingTinyMCE(),
-            label=_("Co-creation questions"),
-            help_text=_("Questions for the co-creation section, editable only by authors"),
-            required=False,
-        )
-        if el.first:
-            self.initial[k] = el.first
-        self.show_link.append(f"id_{k}")
-
-        k = "co_creation_answer"
-        self.fields[k] = forms.CharField(
-            widget=WritingTinyMCE(),
-            label=_("Co-creation answers"),
-            help_text=_("Answers for the co-creation section, editable by both players and authors"),
-            required=False,
-        )
-        if el.second:
-            self.initial[k] = el.second
-        self.show_link.append(f"id_{k}")
-
-    def _save_cocreation(self):
-        if "co_creation" not in self.params["features"]:
-            return
-
-        (el, creat) = RunText.objects.get_or_create(
-            run=self.params["run"],
-            eid=self.instance.number,
-            typ=RunText.COCREATION,
-        )
-        if "co_creation_question" in self.cleaned_data:
-            el.first = self.cleaned_data["co_creation_question"]
-        if "co_creation_answer" in self.cleaned_data:
-            el.second = self.cleaned_data["co_creation_answer"]
-        el.save()
-
     def save(self, commit=True):
         instance = super().save()
 
         if instance.pk:
             self._save_plot()
             self._save_px(instance)
-            self._save_cocreation()
 
         return instance
 

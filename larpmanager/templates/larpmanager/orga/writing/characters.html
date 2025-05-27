@@ -31,9 +31,6 @@
                 {% endif %}
             {% endfor %}
         {% endif %}
-        {% if features.co_creation %}
-            <a href="#" class="my_toggle" tog='co_creat'>{% trans "Co-creation" %}</a>
-        {% endif %}
         {% if features.speedlarp %}
             <a href="#" class="my_toggle" tog='speedlarp'>{% trans "speedlarp" %}</a>
         {% endif %}
@@ -60,10 +57,6 @@
                         <th class="hide q_{{ key }}">{{ que.display }}</th>
                         {% if que.typ == 'e' or que.typ == 'teaser' or que.typ == 'text' %}<th class="hide q_{{ key }}">(L)</th>{% endif %}
                     {% endfor %}
-                {% endif %}
-                {% if features.co_creation %}
-                    <th class="hide co_creat">{% trans "Questions CC" %}</th>
-                    <th class="hide co_creat">{% trans "Answers CC" %}</th>
                 {% endif %}
                 {% if features.plot %}
                     <th>{% trans "Plots" %}</th>
@@ -161,10 +154,6 @@
                             </td>
                         {% endif %}
                     {% endfor %}
-                    {% if features.co_creation %}
-                        <td class="hide co_creat">{{ el.co_creation_question_red | safe }}</td>
-                        <td class="hide co_creat">{{ el.co_creation_answer_red | safe }}</td>
-                    {% endif %}
                     {% if features.plot %}
                         <td>
                             {% for p in el.plts %}
