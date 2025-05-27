@@ -208,7 +208,7 @@ def writing_edit(request, ctx, form_type, nm, tp, redr=None):
     if request.method == "POST":
         form = form_type(request.POST, request.FILES, instance=ctx[nm], ctx=ctx)
         if form.is_valid():
-            _writing_save(ctx, form, form_type, nm, redr, request, tp)
+            return _writing_save(ctx, form, form_type, nm, redr, request, tp)
     else:
         form = form_type(instance=ctx[nm], ctx=ctx)
 

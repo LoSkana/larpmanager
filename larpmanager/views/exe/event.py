@@ -69,6 +69,7 @@ def exe_events_edit(request, num):
             er.save()
             return redirect("orga_run", s=ctx["saved"].slug, n=1)
         return redirect("exe_events")
+    ctx["add_another"] = False
     return render(request, "larpmanager/exe/edit.html", ctx)
 
 

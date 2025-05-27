@@ -306,6 +306,8 @@ def orga_writing_form_edit(request, s, n, typ, num):
     ctx = check_event_permission(request, s, n, perm)
     check_writing_form_type(ctx, typ)
     if backend_edit(request, ctx, OrgaWritingQuestionForm, num, assoc=False):
+        if "continue" in request.POST:
+            return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, num=0)
         if str(request.POST.get("new_option", "")) == "1":
             return redirect(
                 orga_writing_options_new, s=ctx["event"].slug, n=ctx["run"].number, typ=typ, num=ctx["saved"].id
@@ -344,8 +346,11 @@ def orga_writing_options_new(request, s, n, typ, num):
 
 def writing_option_edit(ctx, num, request, typ):
     if backend_edit(request, ctx, OrgaWritingOptionForm, num, assoc=False):
+        redirect_target = "orga_writing_form_edit"
+        if "continue" in request.POST:
+            redirect_target = "orga_writing_options_new"
         return redirect(
-            "orga_writing_form_edit", s=ctx["event"].slug, n=ctx["run"].number, typ=typ, num=ctx["saved"].question_id
+            redirect_target, s=ctx["event"].slug, n=ctx["run"].number, typ=typ, num=ctx["saved"].question_id
         )
     return render(request, "larpmanager/orga/edit.html", ctx)
 

@@ -107,6 +107,7 @@ def exe_payment_details(request):
             return redirect("manage")
         else:
             return redirect("exe_payment_details")
+    ctx["add_another"] = False
     return render(request, "larpmanager/exe/edit.html", ctx)
 
 
