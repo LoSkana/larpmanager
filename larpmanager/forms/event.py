@@ -360,10 +360,6 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("writing_assigned", ConfigType.BOOL, section, label, help_text)
 
-            label = _("Progress")
-            help_text = _("Enables field 'progress', to track the development status of writing elements")
-            self.add_configs("writing_progress", ConfigType.BOOL, section, label, help_text)
-
             label = _("Props")
             help_text = _("Enables field 'props', where staff can note needed or prepared items")
             self.add_configs("writing_props", ConfigType.BOOL, section, label, help_text)

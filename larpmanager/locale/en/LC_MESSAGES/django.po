@@ -841,13 +841,6 @@ msgid ""
 "each writing element"
 msgstr ""
 
-msgid "Progress"
-msgstr ""
-
-msgid ""
-"Enables field 'progress', to track the development status of writing elements"
-msgstr ""
-
 msgid "Props"
 msgstr ""
 
@@ -2631,6 +2624,9 @@ msgid "Sheet"
 msgstr ""
 
 msgid "Prop"
+msgstr ""
+
+msgid "Progress"
 msgstr ""
 
 msgid "Disabled"
@@ -7017,6 +7013,11 @@ msgstr ""
 msgid ""
 "Shows a complete list of all events the player has attended on their public "
 "player page."
+msgstr ""
+
+msgid ""
+"Adds a 'progress' status field (e.g. draft, ready, approved) to key writing "
+"elements."
 msgstr ""
 
 msgid ""

@@ -6,7 +6,7 @@ def remove_obsolete_features(apps, schema_editor):
     Feature = apps.get_model("larpmanager", "Feature")
     EventConfig = apps.get_model("larpmanager", "EventConfig")
     features = {
-        "writing": {2: "title", 3: "props", 19: "cover", 22: "hide", 91: "progress", 92: "assigned"},
+        "writing": {2: "title", 3: "props", 19: "cover", 22: "hide", 92: "assigned"},
         "casting": {4: "mirror"},
         "user_character": {76: "player_relationships"},
     }

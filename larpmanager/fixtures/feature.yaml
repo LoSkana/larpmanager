@@ -477,6 +477,17 @@
     placeholder: false
     order: 100
 - model: larpmanager.feature
+  pk: 91
+  fields:
+    name: Progress
+    descr: Adds a 'progress' status field (e.g. draft, ready, approved) to key writing
+      elements.
+    slug: progress
+    overall: false
+    module: 1
+    placeholder: false
+    order: 110
+- model: larpmanager.feature
   pk: 93
   fields:
     name: Diet
