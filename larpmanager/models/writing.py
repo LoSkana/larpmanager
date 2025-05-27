@@ -368,7 +368,17 @@ class Faction(Writing):
         (SECRET, _("Secret")),
     ]
 
-    typ = models.CharField(max_length=1, choices=FACTION_CHOICES, default=PRIM)
+    typ = models.CharField(
+        max_length=1,
+        choices=FACTION_CHOICES,
+        default=PRIM,
+        verbose_name=_("Type"),
+        help_text=_(
+            "Primary: main grouping / affiliation for characters. "
+            "Transversal: secondary grouping across primary factions. "
+            "Secret: hidden faction visible only to assigned characters"
+        ),
+    )
 
     order = models.IntegerField(default=0, help_text=_("Display order"))
 

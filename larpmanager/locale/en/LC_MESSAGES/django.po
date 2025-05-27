@@ -3274,6 +3274,12 @@ msgstr ""
 msgid "Secret"
 msgstr ""
 
+msgid ""
+"Primary: main grouping / affiliation for characters. Transversal: secondary "
+"grouping across primary factions. Secret: hidden faction visible only to "
+"assigned characters"
+msgstr ""
+
 msgid "Display order"
 msgstr ""
 
