@@ -30,7 +30,9 @@
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Description" %}</th>
                 <th>{% trans "Type" %}</th>
-                <th>{% trans "Status" %}</th>
+                {% if status %}
+                    <th>{% trans "Status" %}</th>
+                {% endif %}
                 <th>{% trans "Visibility" %}</th>
                 {% if approval %}
                     <th>{% trans "Modifiable" %}</th>
@@ -48,7 +50,7 @@
                     <td>{{ el.display }}</td>
                     <td>{{ el.description | truncatechars:50 }}</td>
                     <td>{{ el.get_typ_display }}</td>
-                    <td>{{ el.get_status_display }}</td>
+                    {% if status %}<td>{{ el.get_status_display }}</td>{% endif %}
                     <td>
                         {% if el.typ|not_in:"name,teaser,text,factions_list" %}{{ el.get_visibility_display }}{% endif %}
                     </td>

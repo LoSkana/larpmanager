@@ -125,7 +125,7 @@ def backend_get(ctx, typ, eid, afield=None):
     ctx["name"] = str(el)
 
 
-def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
+def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False, add_another=True):
     typ = form_type.Meta.model
     ctx["elementTyp"] = typ
     ctx["request"] = request
@@ -167,23 +167,29 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
     if eid != 0:
         ctx["name"] = str(ctx["el"])
 
+    ctx["add_another"] = add_another
+
     return False
 
 
-def orga_edit(request, s, n, perm, form_type, eid, red=None, afield=None):
+def orga_edit(request, s, n, perm, form_type, eid, red=None, add_another=True):
     ctx = check_event_permission(request, s, n, perm)
-    if backend_edit(request, ctx, form_type, eid, afield=afield, assoc=False):
+    if backend_edit(request, ctx, form_type, eid, afield=None, assoc=False, add_another=add_another):
+        if "continue" in request.POST:
+            return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, num=0)
         if not red:
             red = perm
         return redirect(red, s=ctx["event"].slug, n=ctx["run"].number)
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
-def exe_edit(request, form_type, eid, perm, red=None, afield=None, add_ctx=None):
+def exe_edit(request, form_type, eid, perm, red=None, afield=None, add_ctx=None, add_another=True):
     ctx = check_assoc_permission(request, perm)
     if add_ctx:
         ctx.update(add_ctx)
-    if backend_edit(request, ctx, form_type, eid, afield=afield, assoc=True):
+    if backend_edit(request, ctx, form_type, eid, afield=afield, assoc=True, add_another=add_another):
+        if "continue" in request.POST:
+            return redirect(request.resolver_match.view_name, num=0)
         if not red:
             red = perm
         return redirect(red)
@@ -201,41 +207,47 @@ def writing_edit(request, ctx, form_type, nm, tp, redr=None):
 
     if request.method == "POST":
         form = form_type(request.POST, request.FILES, instance=ctx[nm], ctx=ctx)
-
         if form.is_valid():
-            # Auto save ajax
-            if "ajax" in request.POST:
-                if nm in ctx:
-                    return writing_edit_save_ajax(form, request, ctx)
-                else:
-                    return JsonResponse({"res": "ko"})
-
-            # Normal save
-            p = form.save()
-
-            dl = "delete" in request.POST and request.POST["delete"] == "1"
-
-            if tp:
-                save_version(p, tp, request.user.member, dl)
-            else:
-                save_log(request.user.member, form_type, p)
-
-            if dl:
-                p.delete()
-
-            messages.success(request, _("Operation completed!"))
-
-            if redr:
-                ctx["element"] = p
-                return redr(ctx)
-            return redirect("orga_" + nm + "s", s=ctx["event"].slug, n=ctx["run"].number)
+            return _writing_save(ctx, form, form_type, nm, redr, request, tp)
     else:
         form = form_type(instance=ctx[nm], ctx=ctx)
 
     ctx["nm"] = nm
     ctx["form"] = form
+    ctx["add_another"] = True
 
     return render(request, "larpmanager/orga/writing/writing.html", ctx)
+
+
+def _writing_save(ctx, form, form_type, nm, redr, request, tp):
+    # Auto save ajax
+    if "ajax" in request.POST:
+        if nm in ctx:
+            return writing_edit_save_ajax(form, request, ctx)
+        else:
+            return JsonResponse({"res": "ko"})
+
+    # Normal save
+    p = form.save()
+    dl = "delete" in request.POST and request.POST["delete"] == "1"
+    if tp:
+        save_version(p, tp, request.user.member, dl)
+    else:
+        save_log(request.user.member, form_type, p)
+
+    if dl:
+        p.delete()
+
+    messages.success(request, _("Operation completed!"))
+
+    if "continue" in request.POST:
+        return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, num=0)
+
+    if redr:
+        ctx["element"] = p
+        return redr(ctx)
+
+    return redirect("orga_" + nm + "s", s=ctx["event"].slug, n=ctx["run"].number)
 
 
 def writing_edit_cache_key(eid, typ):

@@ -59,7 +59,7 @@ from larpmanager.views.larpmanager import get_run_lm_payment
 
 @login_required
 def exe_association(request):
-    return exe_edit(request, ExeAssociationForm, None, "exe_association", "manage")
+    return exe_edit(request, ExeAssociationForm, None, "exe_association", "manage", add_another=False)
 
 
 @login_required
@@ -78,12 +78,12 @@ def exe_roles_edit(request, num):
 
 @login_required
 def exe_config(request):
-    return exe_edit(request, ExeConfigForm, None, "exe_config", "manage")
+    return exe_edit(request, ExeConfigForm, None, "exe_config", "manage", add_another=False)
 
 
 @login_required
 def exe_profile(request):
-    return exe_edit(request, ExeProfileForm, None, "exe_profile", "manage")
+    return exe_edit(request, ExeProfileForm, None, "exe_profile", "manage", add_another=False)
 
 
 @login_required
@@ -107,12 +107,13 @@ def exe_payment_details(request):
             return redirect("manage")
         else:
             return redirect("exe_payment_details")
+    ctx["add_another"] = False
     return render(request, "larpmanager/exe/edit.html", ctx)
 
 
 @login_required
 def exe_appearance(request):
-    return exe_edit(request, ExeAppearanceForm, None, "exe_appearance", "manage")
+    return exe_edit(request, ExeAppearanceForm, None, "exe_appearance", "manage", add_another=False)
 
 
 def f_k_exe(f_id, r_id):
@@ -121,7 +122,7 @@ def f_k_exe(f_id, r_id):
 
 @login_required
 def exe_features(request):
-    return exe_edit(request, ExeFeatureForm, None, "exe_features", "manage")
+    return exe_edit(request, ExeFeatureForm, None, "exe_features", "manage", add_another=False)
 
 
 def exe_features_go(request, ctx, num, on=True):

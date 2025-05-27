@@ -3429,6 +3429,9 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
+msgid "After confirmation, add another"
+msgstr ""
+
 msgid "The form is saved every 30 seconds."
 msgstr ""
 

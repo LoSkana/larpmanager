@@ -3828,6 +3828,9 @@ msgstr "Il tuo account ora è attivo!"
 msgid "Your friend code has been used"
 msgstr "Il tuo codice amico è stato usato"
 
+msgid "After confirmation, add another"
+msgstr "Dopo la conferma, aggiungi un altro"
+
 msgid "Assigning characters to players"
 msgstr "Assegnare i personaggi ai giocatori"
 

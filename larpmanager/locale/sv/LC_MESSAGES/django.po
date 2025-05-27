@@ -3828,6 +3828,9 @@ msgstr "Ditt konto är nu aktivt!"
 msgid "Your friend code has been used"
 msgstr "Din vänkod har använts"
 
+msgid "After confirmation, add another"
+msgstr "Efter bekräftelse, lägg till ytterligare en"
+
 msgid "Assigning characters to players"
 msgstr "Tilldelning av karaktärer till spelare"
 

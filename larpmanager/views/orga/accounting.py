@@ -81,7 +81,10 @@ def orga_expenses_my_new(request, s, n):
             exp.assoc_id = request.assoc["id"]
             exp.save()
             messages.success(request, _("Reimbursement request item added"))
-            return redirect(request.path_info)
+
+            if "continue" in request.POST:
+                return redirect("orga_expenses_my_new", s=ctx["event"].slug, n=ctx["run"].number)
+            return redirect("orga_expenses_my", s=ctx["event"].slug, n=ctx["run"].number)
     else:
         form = OrgaPersonalExpenseForm(ctx=ctx)
 
