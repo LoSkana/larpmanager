@@ -45,7 +45,7 @@ from larpmanager.utils.event import check_event_permission
 
 @login_required
 def orga_event(request, s, n):
-    return orga_edit(request, s, n, "orga_event", OrgaEventForm, None, "manage")
+    return orga_edit(request, s, n, "orga_event", OrgaEventForm, None, "manage", add_another=False)
 
 
 @login_required
@@ -64,13 +64,13 @@ def orga_roles_edit(request, s, n, num):
 
 @login_required
 def orga_appearance(request, s, n):
-    return orga_edit(request, s, n, "orga_appearance", OrgaAppearanceForm, None, "manage")
+    return orga_edit(request, s, n, "orga_appearance", OrgaAppearanceForm, None, "manage", add_another=False)
 
 
 @login_required
 def orga_run(request, s, n):
     run = get_cache_run(request.assoc["id"], s, n)
-    return orga_edit(request, s, n, "orga_run", OrgaRunForm, run, "manage")
+    return orga_edit(request, s, n, "orga_run", OrgaRunForm, run, "manage", add_another=False)
 
 
 @login_required
@@ -99,12 +99,12 @@ def orga_buttons_edit(request, s, n, num):
 
 @login_required
 def orga_config(request, s, n):
-    return orga_edit(request, s, n, "orga_config", OrgaConfigForm, None, "manage")
+    return orga_edit(request, s, n, "orga_config", OrgaConfigForm, None, "manage", add_another=False)
 
 
 @login_required
 def orga_features(request, s, n):
-    return orga_edit(request, s, n, "orga_features", OrgaFeatureForm, None, "manage")
+    return orga_edit(request, s, n, "orga_features", OrgaFeatureForm, None, "manage", add_another=False)
 
 
 def orga_features_go(request, ctx, num, on=True):

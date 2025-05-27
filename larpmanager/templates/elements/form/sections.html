@@ -101,7 +101,14 @@
     </div>
     <input type="submit" value="{% trans "Confirm" %}">
     <br />
-    <br />
+    {% if add_another %}
+        <br />
+        <div class="continue">
+            <input type="checkbox" id="continue" name="continue" class="hide">
+            <label for="continue">{% trans "After confirmation, add another" %}</label>
+        </div>
+        <br />
+    {% endif %}
     {% if eid %}
         <p>{% trans "The form is saved every 30 seconds." %}</p>
     {% endif %}

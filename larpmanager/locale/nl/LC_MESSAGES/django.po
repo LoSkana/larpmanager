@@ -3828,6 +3828,9 @@ msgstr "Je account is nu actief!"
 msgid "Your friend code has been used"
 msgstr "Uw vriendencode is gebruikt"
 
+msgid "After confirmation, add another"
+msgstr "Voeg na bevestiging nog een"
+
 msgid "Assigning characters to players"
 msgstr "Personages aan spelers toewijzen"
 

@@ -48,7 +48,7 @@
                             </a>
                         </td>
                         <td>{{ el.display }}</td>
-                        <td>{{ el.description | truncatechars:50 }}</td>
+                        <td>{{ el.details | truncatechars:50 }}</td>
                         {% if features.wri_que_max %}<td>{{ el.max_available }}</td>{% endif %}
                         {% if features.wri_que_tickets %}
                             <td>
