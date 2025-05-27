@@ -3426,6 +3426,9 @@ msgstr ""
 msgid "Original"
 msgstr ""
 
+msgid "characters"
+msgstr ""
+
 msgid "Confirm"
 msgstr ""
 

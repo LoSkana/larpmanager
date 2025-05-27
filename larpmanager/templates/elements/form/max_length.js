@@ -14,7 +14,50 @@ function tiny_count(editor, key) {
     $('#' + key + '_tr .count').html(cl);
 }
 
-function update_count(key, limit, typ) {
+function initEditor(key, limit) {
+    const editor = tinymce.get(key);
+    // Count characters
+    editor.on('input', () => {
+        tiny_count(editor, key);
+        var content = editor.getContent({ format: 'text' });
+            if (content.length > limit) {
+                const truncated = content.substring(0, MAX_CHARS);
+                editor.setContent(truncated);
+
+                editor.selection.select(editor.getBody(), true);
+                editor.selection.collapse(false);
+            }
+    });
+
+    // prevent to surpass max length
+    editor.on('keydown', function (e) {
+        const content = editor.getContent({ format: 'text' });
+        const cl = content.length;
+        const allowedKeys = [8, 37, 38, 39, 40, 46];
+        if (cl >= limit && !allowedKeys.includes(e.keyCode)) {
+            e.preventDefault();
+        }
+    });
+
+    // prevent paste to surpass max length
+    editor.on('paste', function (e) {
+      const clipboard = (e.clipboardData || window.clipboardData).getData('text');
+      var content = editor.getContent({ format: 'text' });
+      if ((content.length + clipboard.length) >= limit) {
+        e.preventDefault();
+        const allowed = limit - content.length;
+        if (allowed > 0) {
+          content = clipboard.substring(0, allowed);
+          editor.insertContent(content);
+        }
+      }
+
+        tiny_count(editor, key);
+    });
+}
+
+
+function update_count(key, limit, typ, keep) {
     var el = $('#' + key);
     if (simple_count.includes(typ)) {
         cl = el.val().length;
@@ -31,49 +74,13 @@ function update_count(key, limit, typ) {
         el.parent().find(".count").html(checkedCount);
     } else if (tinymce_count.includes(typ)) {
         const editor = tinymce.get(key);
-        if (editor) {
-            // Count characters
-              editor.on('input', () => {
-                tiny_count(editor, key);
-
-                const content = editor.getContent({ format: 'text' });
-                  if (content.length > limit) {
-                    const truncated = content.substring(0, MAX_CHARS);
-                    editor.setContent(truncated);
-
-                    editor.selection.select(editor.getBody(), true);
-                    editor.selection.collapse(false);
-                  }
-              });
-
-            // prevent to surpass max length
-            editor.on('keydown', function (e) {
-                const content = editor.getContent({ format: 'text' });
-                const cl = content.length;
-                const allowedKeys = [8, 37, 38, 39, 40, 46];
-                if (cl >= limit && !allowedKeys.includes(e.keyCode)) {
-                    e.preventDefault();
-                }
-            });
-
-            // prevent paste to surpass max length
-            editor.on('paste', function (e) {
-              const clipboard = (e.clipboardData || window.clipboardData).getData('text');
-              const content = editor.getContent({ format: 'text' });
-              if ((content.length + clipboard.length) >= limit) {
-                e.preventDefault();
-                const allowed = limit - content.length;
-                if (allowed > 0) {
-                  editor.insertContent(clipboard.substring(0, allowed));
-                }
-              }
-
-                tiny_count(editor, key);
-            });
-        }
-
         tiny_count(editor, key);
     }
+
+    if (keep) setTimeout(
+        () => update_count(key, limit, typ, keep),
+        1000
+    )
 }
 
 window.addEventListener('DOMContentLoaded', function() {
@@ -81,9 +88,13 @@ window.addEventListener('DOMContentLoaded', function() {
 
         {% for key, args in form.max_lengths.items %}
             $('#' + '{{ key }}').on('input', function() {
-                update_count('{{ key }}', {{ args.0 }}, '{{ args.1 }}');
+                update_count('{{ key }}', {{ args.0 }}, '{{ args.1 }}', false);
             });
-            update_count('{{ key }}', {{ args.0 }}, '{{ args.1 }}');
+
+            if (tinymce_count.includes('{{ args.1 }}'))
+                initEditor('{{ key }}', {{ args.0 }});
+
+            update_count('{{ key }}', {{ args.0 }}, '{{ args.1 }}', true);
         {% endfor %}
 
     });
