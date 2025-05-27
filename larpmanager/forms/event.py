@@ -179,6 +179,7 @@ class OrgaFeatureForm(FeatureForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._init_features(False)
+        self.prevent_canc = True
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -219,6 +220,8 @@ class OrgaConfigForm(ConfigForm):
         self.set_config_gallery()
 
         self.set_config_structure()
+
+        self.set_config_writing()
 
         self.set_config_character()
 
@@ -334,9 +337,29 @@ class OrgaConfigForm(ConfigForm):
             help_text = _("If checked, shows the original image in the cover, not the thumbnail version")
             self.add_configs("cover_orig", ConfigType.BOOL, section, label, help_text)
 
-    def set_config_character(self):
+    def set_config_writing(self):
         if "character" in self.params["features"]:
             section = _("Writing")
+
+            label = _("Title")
+            help_text = _("Enables field 'title', a short (2-3 words) text added to the character's name")
+            self.add_configs("writing_title", ConfigType.BOOL, section, label, help_text)
+
+            label = _("Cover")
+            help_text = _(
+                "Enables field 'cover', to shown a specific image in the gallery - until assigned to a player"
+            )
+            self.add_configs("writing_cover", ConfigType.BOOL, section, label, help_text)
+
+            label = _("Hide")
+            help_text = _("Enables field 'hide', to be able to hide writing element from players")
+            self.add_configs("writing_hide?", ConfigType.BOOL, section, label, help_text)
+
+            label = _("Assigned")
+            help_text = _(
+                "Enables field 'assigned', to track which staff member is responsible for each writing element"
+            )
+            self.add_configs("writing_assigned", ConfigType.BOOL, section, label, help_text)
 
             label = _("Replacing names")
             help_text = _("If checked, PG names will be automatically replaced by a reference")
@@ -352,6 +375,7 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("writing_working_ticket", ConfigType.BOOL, section, label, help_text)
 
+    def set_config_character(self):
         if "campaign" in self.params["features"]:
             section = _("Campaign")
             label = _("Independent factions")
@@ -381,6 +405,10 @@ class OrgaConfigForm(ConfigForm):
             label = _("Approval")
             help_text = _("If checked, activates a staff-managed approval process for characters")
             self.add_configs("user_character_approval", ConfigType.BOOL, section, label, help_text)
+
+            label = _("Relationships")
+            help_text = _("If checked, enables players to write their own list of character relationships")
+            self.add_configs("user_character_player_relationships", ConfigType.BOOL, section, label, help_text)
 
     def set_config_custom(self):
         if "custom_character" in self.params["features"]:
@@ -422,6 +450,10 @@ class OrgaConfigForm(ConfigForm):
             label = _("Assignments")
             help_text = _("Number of characters to be assigned (default 1)")
             self.add_configs("casting_characters", ConfigType.INT, section, label, help_text)
+
+            label = _("Mirror")
+            help_text = _("Enables to set a character as a 'mirror' for another, to hide it's true nature")
+            self.add_configs("casting_mirror", ConfigType.BOOL, section, label, help_text)
 
             label = _("Minimum preferences")
             help_text = _("Minimum number of preferences")

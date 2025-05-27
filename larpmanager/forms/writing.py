@@ -52,7 +52,7 @@ class WritingForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        for s in ["props", "cover"]:
+        for s in ["cover"]:
             if s in self.fields and s not in self.params["features"]:
                 del self.fields[s]
 
@@ -304,7 +304,7 @@ class QuestTypeForm(WritingForm):
 
     class Meta:
         model = QuestType
-        fields = ["progress", "name", "assigned", "teaser", "preview", "props", "event"]
+        fields = ["progress", "name", "assigned", "teaser", "preview", "event"]
 
         widgets = {
             "teaser": WritingTinyMCE(),
@@ -325,7 +325,6 @@ class QuestForm(WritingForm):
             "teaser",
             "preview",
             "text",
-            "props",
             "hide",
             "open_show",
             "event",
@@ -389,7 +388,6 @@ class TraitForm(WritingForm):
             "preview",
             "text",
             "role",
-            "props",
             "keywords",
             "safety",
             "hide",

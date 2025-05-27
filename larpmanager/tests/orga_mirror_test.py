@@ -56,8 +56,14 @@ def orga_mirror(live_server, page):
     go_to(page, live_server, "/test/1/")
     expect(page.locator("#one")).to_contain_text("Test Character")
 
-    # activate mirroro
-    go_to(page, live_server, "/test/1/manage/features/4/on")
+    # activate casting
+    go_to(page, live_server, "/test/1/manage/features/27/on")
+
+    # activate mirror
+    go_to(page, live_server, "/test/1/manage/config")
+    page.get_by_role("link", name=re.compile(r"^Casting")).click()
+    page.locator("#id_casting_mirror").check()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # create mirror
     go_to(page, live_server, "/test/1/manage/characters/")
@@ -71,9 +77,6 @@ def orga_mirror(live_server, page):
     go_to(page, live_server, "/test/1/")
     expect(page.locator("#one")).to_contain_text("Mirror")
     expect(page.locator("#one")).to_contain_text("Test Character")
-
-    # activate casting
-    go_to(page, live_server, "/test/1/manage/features/27/on")
 
     go_to(page, live_server, "/test/1/manage/config")
     page.get_by_role("link", name=re.compile(r"^Casting")).click()

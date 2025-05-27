@@ -354,15 +354,6 @@ def orga_assignments(request, s, n):
 
 
 @login_required
-def orga_props(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_props")
-    get_event_cache_all(ctx)
-    que = ctx["event"].get_elements(Character).exclude(props__isnull=True)
-    ctx["list"] = que.exclude(props__exact="").values_list("number", "props")
-    return render(request, "larpmanager/orga/writing/props.html", ctx)
-
-
-@login_required
 def orga_progress_steps(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_progress_steps")
     return writing_list(request, ctx, ProgressStep, "progress_step")

@@ -75,7 +75,6 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "teaser",
             "preview",
             "text",
-            "props",
             "mirror",
             "hide",
             "cover",

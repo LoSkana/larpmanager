@@ -200,9 +200,6 @@ msgstr "Aansluitpoort"
 msgid "Prev"
 msgstr "Prev"
 
-msgid "Prop"
-msgstr "Prop"
-
 msgid "Role"
 msgstr "Rol"
 
@@ -365,9 +362,6 @@ msgstr "Prijs"
 
 msgid "Print"
 msgstr "Afdrukken"
-
-msgid "Props"
-msgstr "Rekwisieten"
 
 msgid "Quest"
 msgstr "Zoektocht"
@@ -3801,9 +3795,6 @@ msgstr "Volledige betaling voor %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Uitstel van jaarlijkse contributie"
 
-msgid "Does it require special props?"
-msgstr "Zijn er speciale rekwisieten voor nodig?"
-
 msgid "Font to be used in page titles"
 msgstr "Lettertype voor titels"
 
@@ -3833,9 +3824,6 @@ msgstr "Voeg na bevestiging nog een"
 
 msgid "Assigning characters to players"
 msgstr "Personages aan spelers toewijzen"
-
-msgid "Character relationships (staff)"
-msgstr "Karakter relaties (personeel)"
 
 msgid "Choice available, click to lock"
 msgstr "Keuze beschikbaar, klik om te vergrendelen"
@@ -3899,9 +3887,6 @@ msgstr "Annulering wegens ontbrekend profiel"
 #, python-format
 msgid "Character assigned for %(event)s"
 msgstr "Karakter toegewezen voor %(event)s"
-
-msgid "Character relationships (player)"
-msgstr "Karakterrelaties (speler)"
 
 msgid "Costumes - make up, cloth, armor"
 msgstr "Kostuums - schmink, stof, harnas"
@@ -4343,6 +4328,9 @@ msgid "This page shows inventory custody items."
 msgstr ""
 "Op deze pagina wordt een overzicht gegeven van de items in de "
 "inventarisbewaring."
+
+msgid "View the list of characters and players!"
+msgstr "Bekijk de lijst met personages en spelers!"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Goed gedaan, je hebt alle modules gehaald!"
@@ -4857,11 +4845,6 @@ msgstr ""
 "Deze pagina geeft een overzicht van alle betalingen die voor deze run zijn "
 "ontvangen."
 
-msgid "This page shows the props marked in the characters."
-msgstr ""
-"Deze pagina geeft een overzicht van de rekwisieten die in de personages zijn"
-" gemarkeerd."
-
 msgid "This page shows the questions submitted by players."
 msgstr ""
 "Deze pagina geeft een overzicht van de vragen die door spelers zijn "
@@ -4912,9 +4895,6 @@ msgstr "%(amount)d %(tokens)s werden uitbetaald met %(reason)s."
 
 msgid "'character' (character name or number to be assigned)"
 msgstr "karakter\" (karakternaam of nummer dat moet worden toegewezen)"
-
-msgid "Adds a short (2-3 words) 'title' field to characters."
-msgstr "Voegt een kort (2-3 woorden) 'titel'-veld toe aan tekens."
 
 msgid "As a final step, we ask you to complete your profile."
 msgstr "Als laatste stap vragen we je om je profiel in te vullen."
@@ -5056,9 +5036,6 @@ msgstr "Deze pagina vat de aangepaste teksten van het evenement samen."
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Totaal van wat al is betaald op de huidige datum"
-
-msgid "View the complete list of characters and their players!"
-msgstr "Bekijk de volledige lijst met personages en hun spelers!"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr ""
@@ -5680,6 +5657,11 @@ msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr ""
 "Je hebt de registratie voor het %(event)s-evenement correct geannuleerd"
 
+msgid "Enables field 'hide', to be able to hide writing element from players"
+msgstr ""
+"Maakt het veld 'verbergen' mogelijk, om het schrijfelement voor spelers te "
+"verbergen"
+
 msgid "Enter any useful information for the organizers to verify the payment"
 msgstr ""
 "Voer alle informatie in die nuttig is voor de organisatoren om de betaling "
@@ -5810,12 +5792,6 @@ msgstr "als het personage de identiteit van de andere eigenschap NIET kent."
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
 msgstr "Afwezig (in de relaties van dit personage is de ander afwezig)"
-
-msgid ""
-"Allows players to select hidden roles without spoiling them for others."
-msgstr ""
-"Spelers kunnen verborgen rollen selecteren zonder ze voor anderen te "
-"verpesten."
 
 #, python-format
 msgid ""
@@ -6149,6 +6125,13 @@ msgstr ""
 "exacte gemeente)"
 
 msgid ""
+"Enables field 'title', a short (2-3 words) text added to the character's "
+"name"
+msgstr ""
+"Maakt veld 'titel' mogelijk, een korte (2-3 woorden) tekst toegevoegd aan de"
+" naam van het personage"
+
+msgid ""
 "Generates an annual summary of fiscal activity for the Italian budget "
 "report."
 msgstr ""
@@ -6233,18 +6216,25 @@ msgstr ""
 "verloren gaan."
 
 msgid ""
-"Adds a 'hide' field to main writing elements, to prevent players viewing "
-"them."
-msgstr ""
-"Voegt een 'verberg'-veld toe aan hoofdschrijfelementen om te voorkomen dat "
-"spelers ze zien."
-
-msgid ""
 "Answer the following questions. Select *all* of the answers that seem "
 "correct."
 msgstr ""
 "Beantwoord de volgende vragen. Selecteer *alle* antwoorden die je juist "
 "lijken."
+
+msgid ""
+"Enables to set a character as a 'mirror' for another, to hide it's true "
+"nature"
+msgstr ""
+"Maakt het mogelijk om een personage als 'spiegel' voor een ander personage "
+"te gebruiken, om zijn ware aard te verbergen"
+
+msgid ""
+"If checked, enables players to write their own list of character "
+"relationships"
+msgstr ""
+"Als deze optie is aangevinkt, kunnen spelers hun eigen lijst met relaties "
+"tussen personages schrijven."
 
 msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
@@ -7049,6 +7039,13 @@ msgstr ""
 "boekhouding</a>.</i>"
 
 msgid ""
+"Enables field 'cover', to shown a specific image in the gallery - until "
+"assigned to a player"
+msgstr ""
+"Maakt het veld 'cover' mogelijk, om een specifieke afbeelding in de galerij "
+"te tonen - totdat deze is toegewezen aan een speler"
+
+msgid ""
 "If the event is part of a campaign, specify the parent event whose "
 "characters will be shared"
 msgstr ""
@@ -7105,6 +7102,13 @@ msgid ""
 msgstr ""
 "Met 'Factions' kun je personages indelen in zichtbare, transversale of "
 "geheime groepen."
+
+msgid ""
+"Enables field 'assigned', to track which staff member is responsible for "
+"each writing element"
+msgstr ""
+"Maakt veld 'toegewezen' mogelijk om bij te houden welk personeelslid "
+"verantwoordelijk is voor elk schrijfelement"
 
 msgid ""
 "If checked, it allows players to enter public information on their "
@@ -7189,13 +7193,6 @@ msgid ""
 msgstr ""
 "(Let op: als je andere afspraken met ons hebt gemaakt, kun je deze e-mail "
 "gerust negeren)!"
-
-msgid ""
-"Adds a 'props' field to main writing elements, allowing staff to note needed"
-" or prepared items."
-msgstr ""
-"Voegt een veld 'rekwisieten' toe aan de belangrijkste schrijfelementen, "
-"zodat medewerkers benodigde of voorbereide items kunnen noteren."
 
 #, python-format
 msgid ""
@@ -7802,13 +7799,6 @@ msgstr ""
 "een speciale inwisselcode gegenereerd!"
 
 msgid ""
-"Adds a 'cover' field to a character, to shown a specific image in the "
-"gallery - until assigned to a player."
-msgstr ""
-"Voegt een 'cover'-veld toe aan een personage, om een specifieke afbeelding "
-"in de galerij te tonen - tot deze wordt toegewezen aan een speler."
-
-msgid ""
 "Adds support for assigning XP (experience points) to characters, which can "
 "then be used to purchase skills."
 msgstr ""
@@ -7956,14 +7946,6 @@ msgid ""
 msgstr ""
 "Je staat op de wachtlijst, je moet geregistreerd zijn met een regulier "
 "ticket om je voorkeuren te kunnen selecteren!"
-
-msgid ""
-"Adds an 'assigned' field for main writing elements, letting you track which "
-"staff member is responsible for each."
-msgstr ""
-"Voegt een 'toegewezen' veld toe voor de belangrijkste schrijfelementen, "
-"zodat je kunt bijhouden welke medewerker verantwoordelijk is voor elk "
-"element."
 
 #, python-format
 msgid ""
@@ -8271,14 +8253,6 @@ msgstr ""
 "De optimale toewijzing op basis van de ingestelde waarden wordt gesimuleerd;"
 " je kunt het zo vaak uitvoeren als je wilt voordat het definitief wordt "
 "geladen."
-
-msgid ""
-"Enables players to write their own list of character relationships, helping "
-"them familiarize themselves ahead of the event."
-msgstr ""
-"Stelt spelers in staat om hun eigen lijst met relaties tussen personages op "
-"te stellen, zodat ze zich van tevoren vertrouwd kunnen maken met het "
-"evenement."
 
 msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "

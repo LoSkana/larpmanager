@@ -74,8 +74,6 @@ class Writing(BaseConceptModel):
 
     hide = models.BooleanField(default=False)
 
-    props = models.CharField(max_length=500, blank=True, help_text=_("Does it require special props?"))
-
     class Meta:
         abstract = True
 
@@ -113,7 +111,6 @@ class Writing(BaseConceptModel):
             # ('assigned', 'email of the staff members to which to assign this element'),
             ("title", "short text, the title of the element"),
             ("mirror", "number, the number of the element mirroring"),
-            ("props", "short text, the props of the element"),
             ("cover", "url of the element cover"),
             ("hide", "single character, t (true), f (false)"),
         ]:

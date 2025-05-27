@@ -165,7 +165,8 @@ def get_character_sheet_plots(ctx):
         tx = el.plot.text
         if tx and el.text:
             tx += "<hr />"
-        tx += el.text
+        if el.text:
+            tx += el.text
         ctx["sheet_plots"].append({"name": el.plot.name, "text": tx})
 
 

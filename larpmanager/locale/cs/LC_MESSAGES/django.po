@@ -200,9 +200,6 @@ msgstr "Připojovací port"
 msgid "Prev"
 msgstr "Předchozí"
 
-msgid "Prop"
-msgstr "Rekvizita"
-
 msgid "Role"
 msgstr "Role"
 
@@ -365,9 +362,6 @@ msgstr "Cena"
 
 msgid "Print"
 msgstr "Tisk"
-
-msgid "Props"
-msgstr "Rekvizity"
 
 msgid "Quest"
 msgstr "Quest"
@@ -3801,9 +3795,6 @@ msgstr "Kompletní platba za %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Zpoždění ročního členského poplatku"
 
-msgid "Does it require special props?"
-msgstr "Vyžaduje to speciální rekvizity?"
-
 msgid "Font to be used in page titles"
 msgstr "písmo, které se má použít v nadpisech"
 
@@ -3833,9 +3824,6 @@ msgstr "Po potvrzení přidejte další"
 
 msgid "Assigning characters to players"
 msgstr "Přiřazení postav hráčům"
-
-msgid "Character relationships (staff)"
-msgstr "Vztahy mezi postavami (zaměstnanci)"
 
 msgid "Choice available, click to lock"
 msgstr "Možnost volby, klikněte pro uzamčení"
@@ -3899,9 +3887,6 @@ msgstr "Zrušení pro chybějící profil"
 #, python-format
 msgid "Character assigned for %(event)s"
 msgstr "Znak přiřazený pro %(event)s"
-
-msgid "Character relationships (player)"
-msgstr "Vztahy mezi postavami (hráč)"
 
 msgid "Costumes - make up, cloth, armor"
 msgstr "Kostýmy - make-up, látky, brnění"
@@ -4339,6 +4324,9 @@ msgstr "Sbírka byla doručena uživateli"
 
 msgid "This page shows inventory custody items."
 msgstr "Tato stránka shrnuje položky inventární úschovy."
+
+msgid "View the list of characters and players!"
+msgstr "Prohlédněte si seznam postav a hráčů!"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Výborně, splnili jste všechny moduly!"
@@ -4841,9 +4829,6 @@ msgstr "Na této stránce můžete odpovědět na otázku hráče."
 msgid "This page shows all payments received for this run."
 msgstr "Na této stránce jsou shrnuty všechny platby přijaté za tento běh."
 
-msgid "This page shows the props marked in the characters."
-msgstr "Na této stránce jsou shrnuty rekvizity vyznačené v postavách."
-
 msgid "This page shows the questions submitted by players."
 msgstr "Tato stránka shrnuje otázky zaslané hráči."
 
@@ -4890,9 +4875,6 @@ msgstr "%(amount)d %(tokens)s byly vyplaceny s %(reason)s."
 
 msgid "'character' (character name or number to be assigned)"
 msgstr "'character' (jméno nebo číslo postavy, které má být přiřazeno)"
-
-msgid "Adds a short (2-3 words) 'title' field to characters."
-msgstr "Přidá ke znakům krátké (2-3 slova) pole \"název\"."
 
 msgid "As a final step, we ask you to complete your profile."
 msgstr "V posledním kroku vás požádáme o vyplnění vašeho profilu."
@@ -5021,9 +5003,6 @@ msgstr "Tato stránka shrnuje přizpůsobené texty události."
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Součet toho, co již bylo vyplaceno k aktuálnímu datu"
-
-msgid "View the complete list of characters and their players!"
-msgstr "Prohlédněte si kompletní seznam postav a jejich hráčů!"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Narazili jsme na problém s daňovým kódem, který jste nám poskytli."
@@ -5551,6 +5530,10 @@ msgstr "Potvrzujeme, že registrace na tuto akci byla zrušena."
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr "Správně jste zrušili registraci na událost %(event)s"
 
+msgid "Enables field 'hide', to be able to hide writing element from players"
+msgstr ""
+"Povoluje pole 'hide', aby bylo možné skrýt prvek pro zápis před hráči."
+
 msgid "Enter any useful information for the organizers to verify the payment"
 msgstr ""
 "Zadejte veškeré informace, které jsou pro organizátory užitečné pro ověření "
@@ -5660,10 +5643,6 @@ msgstr "pokud postava NEZNÁ identitu jiného rysu."
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
 msgstr "Nepřítomný (ve vztazích této postavy chybí druhá postava)"
-
-msgid ""
-"Allows players to select hidden roles without spoiling them for others."
-msgstr "Umožňuje hráčům vybrat si skryté role, aniž by je zkazili ostatním."
 
 #, python-format
 msgid ""
@@ -5961,6 +5940,12 @@ msgstr ""
 "Nesouhlasí znaky týkající se místa narození (zkontrolujte přesnou obec)"
 
 msgid ""
+"Enables field 'title', a short (2-3 words) text added to the character's "
+"name"
+msgstr ""
+"Povoluje pole \"title\", krátký (2-3 slova) text přidaný ke jménu postavy."
+
+msgid ""
 "Generates an annual summary of fiscal activity for the Italian budget "
 "report."
 msgstr ""
@@ -6039,18 +6024,25 @@ msgstr ""
 "Nemůžete na něm pracovat současně: práce jednoho z vás by byla ztracena."
 
 msgid ""
-"Adds a 'hide' field to main writing elements, to prevent players viewing "
-"them."
-msgstr ""
-"Přidá pole \"skrýt\" k hlavním prvkům zápisu, aby se zabránilo jejich "
-"zobrazení hráči."
-
-msgid ""
 "Answer the following questions. Select *all* of the answers that seem "
 "correct."
 msgstr ""
 "Odpovězte na následující otázky. Vyberte *všechny* odpovědi, které se vám "
 "zdají správné."
+
+msgid ""
+"Enables to set a character as a 'mirror' for another, to hide it's true "
+"nature"
+msgstr ""
+"Umožňuje nastavit postavu jako \"zrcadlo\" pro jinou postavu a skrýt tak "
+"její skutečnou povahu."
+
+msgid ""
+"If checked, enables players to write their own list of character "
+"relationships"
+msgstr ""
+"Pokud je zaškrtnuto, umožňuje hráčům napsat vlastní seznam vztahů mezi "
+"postavami."
 
 msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
@@ -6816,6 +6808,13 @@ msgstr ""
 "Případně můžete požádat o proplacení v <a href='%(url)s'>účetnictví</a>.</i>"
 
 msgid ""
+"Enables field 'cover', to shown a specific image in the gallery - until "
+"assigned to a player"
+msgstr ""
+"Povoluje pole \"cover\", aby se v galerii zobrazil konkrétní obrázek - dokud"
+" není přiřazen hráči."
+
+msgid ""
 "If the event is part of a campaign, specify the parent event whose "
 "characters will be shared"
 msgstr ""
@@ -6871,6 +6870,13 @@ msgid ""
 "transversal or secret."
 msgstr ""
 "Umožňuje organizovat postavy do viditelných, příčných nebo tajných skupin."
+
+msgid ""
+"Enables field 'assigned', to track which staff member is responsible for "
+"each writing element"
+msgstr ""
+"Umožňuje pole \"přiřazeno\", aby bylo možné sledovat, který pracovník je "
+"odpovědný za jednotlivé prvky zápisu."
 
 msgid ""
 "If checked, it allows players to enter public information on their "
@@ -6952,13 +6958,6 @@ msgid ""
 msgstr ""
 "(Upozorňujeme, že pokud jste se s námi domluvili jinak, můžete tento e-mail "
 "bez obav ignorovat)!"
-
-msgid ""
-"Adds a 'props' field to main writing elements, allowing staff to note needed"
-" or prepared items."
-msgstr ""
-"Přidává pole \"rekvizity\" do hlavních prvků pro psaní, které umožňuje "
-"zaměstnancům zaznamenávat potřebné nebo připravené předměty."
 
 #, python-format
 msgid ""
@@ -7562,13 +7561,6 @@ msgstr ""
 "vygenerován speciální výkupní kód!"
 
 msgid ""
-"Adds a 'cover' field to a character, to shown a specific image in the "
-"gallery - until assigned to a player."
-msgstr ""
-"Přidá k postavě pole \"cover\", které zobrazí konkrétní obrázek v galerii - "
-"dokud není přiřazen hráči."
-
-msgid ""
 "Adds support for assigning XP (experience points) to characters, which can "
 "then be used to purchase skills."
 msgstr ""
@@ -7715,13 +7707,6 @@ msgid ""
 msgstr ""
 "Jste na čekací listině, musíte být zaregistrováni s běžnou vstupenkou, "
 "abyste si mohli vybrat své preference!"
-
-msgid ""
-"Adds an 'assigned' field for main writing elements, letting you track which "
-"staff member is responsible for each."
-msgstr ""
-"Přidává pole \"přiřazeno\" pro hlavní prvky psaní, které umožňuje sledovat, "
-"který pracovník je za ně zodpovědný."
 
 #, python-format
 msgid ""
@@ -8021,13 +8006,6 @@ msgid ""
 msgstr ""
 "Na základě zadaných hodnot se simuluje optimální alokace; před finálním "
 "načtením ji můžete spustit libovolně mnohokrát."
-
-msgid ""
-"Enables players to write their own list of character relationships, helping "
-"them familiarize themselves ahead of the event."
-msgstr ""
-"Umožňuje hráčům napsat si vlastní seznam vztahů mezi postavami, což jim "
-"pomáhá seznámit se s nimi ještě před akcí."
 
 msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "

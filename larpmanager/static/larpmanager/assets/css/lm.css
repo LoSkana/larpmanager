@@ -990,6 +990,7 @@ header.sec h1 {
 
 #one .inner {
     padding-bottom: 2em !important;
+    overflow-x: auto;
 }
 
 .login {

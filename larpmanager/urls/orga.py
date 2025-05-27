@@ -66,11 +66,6 @@ urlpatterns = [
         name="orga_pre_registrations",
     ),
     path(
-        "<slug:s>/<int:n>/manage/props/",
-        views_ow.orga_props,
-        name="orga_props",
-    ),
-    path(
         "<slug:s>/<int:n>/manage/assignments/",
         views_ow.orga_assignments,
         name="orga_assignments",

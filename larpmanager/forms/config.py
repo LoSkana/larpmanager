@@ -54,6 +54,8 @@ class ConfigForm(MyForm):
             self._get_custom_field(el, config_values)
         save_all_element_configs(instance, config_values)
 
+        instance.save()
+
         return instance
 
     def _get_custom_field(self, el, res):

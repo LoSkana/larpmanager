@@ -200,9 +200,6 @@ msgstr "Port"
 msgid "Prev"
 msgstr "Prev"
 
-msgid "Prop"
-msgstr "Śmigło"
-
 msgid "Role"
 msgstr "Rola"
 
@@ -365,9 +362,6 @@ msgstr "Cena"
 
 msgid "Print"
 msgstr "Drukuj"
-
-msgid "Props"
-msgstr "Rekwizyty"
 
 msgid "Quest"
 msgstr "Quest"
@@ -3801,9 +3795,6 @@ msgstr "Pełna płatność za %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Opóźnienie rocznej opłaty członkowskiej"
 
-msgid "Does it require special props?"
-msgstr "Czy wymaga to specjalnych rekwizytów?"
-
 msgid "Font to be used in page titles"
 msgstr "Czcionka używana w tytułach stron"
 
@@ -3833,9 +3824,6 @@ msgstr "Po potwierdzeniu dodaj kolejny"
 
 msgid "Assigning characters to players"
 msgstr "Przypisywanie postaci do graczy"
-
-msgid "Character relationships (staff)"
-msgstr "Relacje między postaciami (personel)"
 
 msgid "Choice available, click to lock"
 msgstr "Dostępny wybór, kliknij, aby zablokować"
@@ -3899,9 +3887,6 @@ msgstr "Anulowanie z powodu braku profilu"
 #, python-format
 msgid "Character assigned for %(event)s"
 msgstr "Znak przypisany do %(event)s"
-
-msgid "Character relationships (player)"
-msgstr "Relacje między postaciami (gracz)"
 
 msgid "Costumes - make up, cloth, armor"
 msgstr "Kostiumy - makijaż, tkanina, zbroja"
@@ -4339,6 +4324,9 @@ msgstr "Kolekcja została dostarczona do użytkownika"
 
 msgid "This page shows inventory custody items."
 msgstr "Na tej stronie wyświetlane są pozycje przechowywania zapasów."
+
+msgid "View the list of characters and players!"
+msgstr "Zobacz listę postaci i graczy!"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Brawo, ukończyłeś wszystkie moduły!"
@@ -4842,9 +4830,6 @@ msgstr ""
 "Na tej stronie wyświetlane są wszystkie płatności otrzymane dla tego "
 "przebiegu."
 
-msgid "This page shows the props marked in the characters."
-msgstr "Ta strona przedstawia rekwizyty oznaczone postaciami."
-
 msgid "This page shows the questions submitted by players."
 msgstr "Ta strona pokazuje pytania przesłane przez graczy."
 
@@ -4891,9 +4876,6 @@ msgstr "%(amount)d %(tokens)s zostały wypłacone z %(reason)s."
 
 msgid "'character' (character name or number to be assigned)"
 msgstr "\"znak\" (nazwa znaku lub numer do przypisania)"
-
-msgid "Adds a short (2-3 words) 'title' field to characters."
-msgstr "Dodaje krótkie (2-3 słowa) pole \"tytuł\" do znaków."
 
 msgid "As a final step, we ask you to complete your profile."
 msgstr "Ostatnim krokiem jest uzupełnienie profilu."
@@ -5022,9 +5004,6 @@ msgstr "Ta strona podsumowuje niestandardowe teksty wydarzenia."
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Suma kwot już zapłaconych na bieżący dzień"
-
-msgid "View the complete list of characters and their players!"
-msgstr "Zobacz pełną listę postaci i ich graczy!"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Napotkaliśmy problem z podanym kodem podatkowym"
@@ -5590,6 +5569,9 @@ msgstr "Potwierdzamy, że rejestracja na to wydarzenie została anulowana."
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr "Rejestracja na wydarzenie %(event)s została poprawnie anulowana"
 
+msgid "Enables field 'hide', to be able to hide writing element from players"
+msgstr "Włącza pole \"hide\", aby móc ukryć element pisania przed graczami."
+
 msgid "Enter any useful information for the organizers to verify the payment"
 msgstr ""
 "Wprowadź wszelkie informacje przydatne organizatorom do weryfikacji "
@@ -5707,10 +5689,6 @@ msgstr "czy postać NIE jest świadoma tożsamości drugiej cechy."
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
 msgstr "Nieobecny (w relacjach tej postaci druga jest nieobecna)"
-
-msgid ""
-"Allows players to select hidden roles without spoiling them for others."
-msgstr "Pozwala graczom wybierać ukryte role bez zdradzania ich innym."
 
 #, python-format
 msgid ""
@@ -6033,6 +6011,12 @@ msgstr ""
 "Znaki odnoszące się do miejsca urodzenia nie pasują (sprawdź dokładną gminę)"
 
 msgid ""
+"Enables field 'title', a short (2-3 words) text added to the character's "
+"name"
+msgstr ""
+"Włącza pole \"tytuł\", krótki (2-3 słowa) tekst dodawany do nazwy postaci."
+
+msgid ""
 "Generates an annual summary of fiscal activity for the Italian budget "
 "report."
 msgstr ""
@@ -6115,18 +6099,25 @@ msgstr ""
 "zostałaby zaprzepaszczona."
 
 msgid ""
-"Adds a 'hide' field to main writing elements, to prevent players viewing "
-"them."
-msgstr ""
-"Dodaje pole \"ukryj\" do głównych elementów pisma, aby uniemożliwić graczom "
-"ich wyświetlanie."
-
-msgid ""
 "Answer the following questions. Select *all* of the answers that seem "
 "correct."
 msgstr ""
 "Odpowiedz na poniższe pytania. Wybierz *wszystkie* odpowiedzi, które wydają "
 "się poprawne."
+
+msgid ""
+"Enables to set a character as a 'mirror' for another, to hide it's true "
+"nature"
+msgstr ""
+"Umożliwia ustawienie postaci jako \"lustra\" dla innej, aby ukryć jej "
+"prawdziwą naturę."
+
+msgid ""
+"If checked, enables players to write their own list of character "
+"relationships"
+msgstr ""
+"Jeśli opcja ta jest zaznaczona, umożliwia graczom stworzenie własnej listy "
+"relacji między postaciami."
 
 msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
@@ -6924,6 +6915,13 @@ msgstr ""
 "href=\"%(url)s\">księgowości</a>.</i>."
 
 msgid ""
+"Enables field 'cover', to shown a specific image in the gallery - until "
+"assigned to a player"
+msgstr ""
+"Włącza pole \"okładka\", aby wyświetlić określony obraz w galerii - do "
+"momentu przypisania do gracza."
+
+msgid ""
 "If the event is part of a campaign, specify the parent event whose "
 "characters will be shared"
 msgstr ""
@@ -6980,6 +6978,13 @@ msgid ""
 msgstr ""
 "Umożliwia \"Frakcjom\" organizowanie postaci w grupy, widoczne, poprzeczne "
 "lub tajne."
+
+msgid ""
+"Enables field 'assigned', to track which staff member is responsible for "
+"each writing element"
+msgstr ""
+"Włącza pole \"przypisany\", aby śledzić, który pracownik jest odpowiedzialny"
+" za każdy element pisma."
 
 msgid ""
 "If checked, it allows players to enter public information on their "
@@ -7064,13 +7069,6 @@ msgid ""
 msgstr ""
 "(Pamiętaj, że jeśli zawarłeś z nami inną umowę, możesz bezpiecznie "
 "zignorować tę wiadomość e-mail)!"
-
-msgid ""
-"Adds a 'props' field to main writing elements, allowing staff to note needed"
-" or prepared items."
-msgstr ""
-"Dodaje pole \"rekwizyty\" do głównych elementów pisma, umożliwiając "
-"pracownikom odnotowywanie potrzebnych lub przygotowanych przedmiotów."
 
 #, python-format
 msgid ""
@@ -7677,13 +7675,6 @@ msgstr ""
 "specjalny kod wykupu!"
 
 msgid ""
-"Adds a 'cover' field to a character, to shown a specific image in the "
-"gallery - until assigned to a player."
-msgstr ""
-"Dodaje pole \"okładki\" do postaci, aby wyświetlić określony obraz w galerii"
-" - do momentu przypisania do gracza."
-
-msgid ""
 "Adds support for assigning XP (experience points) to characters, which can "
 "then be used to purchase skills."
 msgstr ""
@@ -7830,13 +7821,6 @@ msgid ""
 msgstr ""
 "Jesteś na liście oczekujących, musisz być zarejestrowany z biletem "
 "normalnym, aby móc wybrać swoje preferencje!"
-
-msgid ""
-"Adds an 'assigned' field for main writing elements, letting you track which "
-"staff member is responsible for each."
-msgstr ""
-"Dodaje pole \"przypisane\" dla głównych elementów pisania, pozwalając "
-"śledzić, który pracownik jest odpowiedzialny za każdy z nich."
 
 #, python-format
 msgid ""
@@ -8138,13 +8122,6 @@ msgid ""
 msgstr ""
 "Symulowana jest optymalna alokacja oparta na ustawionych wartościach; można "
 "ją uruchomić dowolną liczbę razy przed ostatecznym załadowaniem"
-
-msgid ""
-"Enables players to write their own list of character relationships, helping "
-"them familiarize themselves ahead of the event."
-msgstr ""
-"Umożliwia graczom napisanie własnej listy relacji między postaciami, "
-"pomagając im zapoznać się z nimi przed wydarzeniem."
 
 msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "

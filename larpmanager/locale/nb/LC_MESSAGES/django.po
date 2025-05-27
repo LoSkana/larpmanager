@@ -200,9 +200,6 @@ msgstr "Tilkoblingsport"
 msgid "Prev"
 msgstr "Forrige"
 
-msgid "Prop"
-msgstr "Rekvisitt"
-
 msgid "Role"
 msgstr "Rolle"
 
@@ -365,9 +362,6 @@ msgstr "Pris"
 
 msgid "Print"
 msgstr "Skriv ut"
-
-msgid "Props"
-msgstr "Rekvisitter"
 
 msgid "Quest"
 msgstr "Søken"
@@ -3801,9 +3795,6 @@ msgstr "Fullfør betaling for %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Forsinkelse i årlig medlemsavgift"
 
-msgid "Does it require special props?"
-msgstr "Krever det spesielle rekvisitter?"
-
 msgid "Font to be used in page titles"
 msgstr "skrifttype som skal brukes i titler"
 
@@ -3833,9 +3824,6 @@ msgstr "Etter bekreftelse legger du til en ny"
 
 msgid "Assigning characters to players"
 msgstr "Tildeling av karakterer til spillere"
-
-msgid "Character relationships (staff)"
-msgstr "Karakterforhold (ansatte)"
 
 msgid "Choice available, click to lock"
 msgstr "Valg tilgjengelig, klikk for å låse"
@@ -3899,9 +3887,6 @@ msgstr "Avbestilling på grunn av manglende profil"
 #, python-format
 msgid "Character assigned for %(event)s"
 msgstr "Tegn tildelt for %(event)s"
-
-msgid "Character relationships (player)"
-msgstr "Karakterrelasjoner (spiller)"
 
 msgid "Costumes - make up, cloth, armor"
 msgstr "Kostymer - sminke, tøy, rustning"
@@ -4341,6 +4326,9 @@ msgstr "Samlingen ble levert til brukeren"
 
 msgid "This page shows inventory custody items."
 msgstr "På denne siden finner du en oppsummering av lagerbeholdningen."
+
+msgid "View the list of characters and players!"
+msgstr "Se listen over karakterer og spillere!"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Godt gjort, du har fullført alle modulene!"
@@ -4846,9 +4834,6 @@ msgid "This page shows all payments received for this run."
 msgstr ""
 "Denne siden oppsummerer alle betalinger som er mottatt for denne kjøringen."
 
-msgid "This page shows the props marked in the characters."
-msgstr "Denne siden oppsummerer rekvisittene som er merket i tegnene."
-
 msgid "This page shows the questions submitted by players."
 msgstr "Denne siden oppsummerer spørsmålene som spillerne har sendt inn."
 
@@ -4895,9 +4880,6 @@ msgstr "%(amount)d %(tokens)s ble utbetalt med %(reason)s."
 
 msgid "'character' (character name or number to be assigned)"
 msgstr "\"tegn\" (tegnnavn eller nummer som skal tildeles)"
-
-msgid "Adds a short (2-3 words) 'title' field to characters."
-msgstr "Legger til et kort (2-3 ord) \"tittelfelt\" i tegnene."
 
 msgid "As a final step, we ask you to complete your profile."
 msgstr "Til slutt ber vi deg om å fylle ut profilen din."
@@ -5035,9 +5017,6 @@ msgstr "Denne siden oppsummerer de tilpassede tekstene for arrangementet."
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Summen av det som allerede er betalt per dags dato."
-
-msgid "View the complete list of characters and their players!"
-msgstr "Se den komplette listen over rollefigurer og deres spillere!"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Vi har støtt på et problem med skattekoden du oppga"
@@ -5614,6 +5593,10 @@ msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr ""
 "Du har avbestilt påmeldingen til %(event)s-arrangementet på korrekt måte"
 
+msgid "Enables field 'hide', to be able to hide writing element from players"
+msgstr ""
+"Aktiverer feltet \"skjul\", for å kunne skjule skriveelementet fra spillerne"
+
 msgid "Enter any useful information for the organizers to verify the payment"
 msgstr ""
 "Oppgi all informasjon som er nyttig for arrangørene for å verifisere "
@@ -5730,12 +5713,6 @@ msgstr "hvis karakteren IKKE kjenner identiteten til den andre egenskapen."
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
 msgstr "Fraværende (i denne karakterens relasjoner er den andre fraværende)"
-
-msgid ""
-"Allows players to select hidden roles without spoiling them for others."
-msgstr ""
-"Gjør det mulig for spillerne å velge skjulte roller uten å avsløre dem for "
-"andre."
 
 #, python-format
 msgid ""
@@ -6038,6 +6015,13 @@ msgstr ""
 "Tegn knyttet til fødested stemmer ikke overens (sjekk nøyaktig kommune)"
 
 msgid ""
+"Enables field 'title', a short (2-3 words) text added to the character's "
+"name"
+msgstr ""
+"Aktiverer feltet \"tittel\", en kort tekst (2-3 ord) som legges til "
+"karakterens navn"
+
+msgid ""
 "Generates an annual summary of fiscal activity for the Italian budget "
 "report."
 msgstr ""
@@ -6118,16 +6102,22 @@ msgstr ""
 "tapt."
 
 msgid ""
-"Adds a 'hide' field to main writing elements, to prevent players viewing "
-"them."
-msgstr ""
-"Legger til et \"skjul\"-felt i hovedelementer for å hindre at spillerne ser "
-"dem."
-
-msgid ""
 "Answer the following questions. Select *all* of the answers that seem "
 "correct."
 msgstr "Svar på følgende spørsmål. Velg *alle* svar som du synes er riktige."
+
+msgid ""
+"Enables to set a character as a 'mirror' for another, to hide it's true "
+"nature"
+msgstr ""
+"Gjør det mulig å sette en karakter som et \"speil\" for en annen, for å "
+"skjule dens sanne natur"
+
+msgid ""
+"If checked, enables players to write their own list of character "
+"relationships"
+msgstr ""
+"Hvis avkrysset, kan spillerne skrive sin egen liste over karakterrelasjoner"
 
 msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
@@ -6916,6 +6906,13 @@ msgstr ""
 "Alternativt kan du be om refusjon i <a href='%(url)s'>regnskapet ditt</a>."
 
 msgid ""
+"Enables field 'cover', to shown a specific image in the gallery - until "
+"assigned to a player"
+msgstr ""
+"Aktiverer feltet \"cover\", for å vise et bestemt bilde i galleriet - inntil"
+" det er tilordnet en spiller"
+
+msgid ""
 "If the event is part of a campaign, specify the parent event whose "
 "characters will be shared"
 msgstr ""
@@ -6972,6 +6969,13 @@ msgid ""
 msgstr ""
 "Gjør det mulig å organisere rollefigurene i grupper, enten synlige, "
 "tverrgående eller hemmelige."
+
+msgid ""
+"Enables field 'assigned', to track which staff member is responsible for "
+"each writing element"
+msgstr ""
+"Gjør det mulig å spore hvilken medarbeider som er ansvarlig for hvert "
+"skriveelement i feltet \"tildelt"
 
 msgid ""
 "If checked, it allows players to enter public information on their "
@@ -7056,13 +7060,6 @@ msgid ""
 msgstr ""
 "(Merk at hvis du har gjort andre avtaler med oss, kan du trygt ignorere "
 "denne e-posten)!"
-
-msgid ""
-"Adds a 'props' field to main writing elements, allowing staff to note needed"
-" or prepared items."
-msgstr ""
-"Legger til et rekvisittfelt i de viktigste skriveelementene, slik at "
-"personalet kan notere ting de trenger eller har forberedt."
 
 #, python-format
 msgid ""
@@ -7670,13 +7667,6 @@ msgstr ""
 "innløsningskode vil bli generert!"
 
 msgid ""
-"Adds a 'cover' field to a character, to shown a specific image in the "
-"gallery - until assigned to a player."
-msgstr ""
-"Legger til et \"cover\"-felt til en karakter, for å vise et bestemt bilde i "
-"galleriet - inntil det er tildelt en spiller."
-
-msgid ""
 "Adds support for assigning XP (experience points) to characters, which can "
 "then be used to purchase skills."
 msgstr ""
@@ -7821,13 +7811,6 @@ msgid ""
 msgstr ""
 "Du står på venteliste, du må være registrert med en vanlig billett for å "
 "kunne velge dine preferanser!"
-
-msgid ""
-"Adds an 'assigned' field for main writing elements, letting you track which "
-"staff member is responsible for each."
-msgstr ""
-"Legger til et \"tildelt\"-felt for de viktigste skriveelementene, slik at du"
-" kan spore hvilken medarbeider som er ansvarlig for hvert enkelt element."
 
 #, python-format
 msgid ""
@@ -8130,14 +8113,6 @@ msgid ""
 msgstr ""
 "Den optimale allokeringen basert på de innstilte verdiene simuleres; du kan "
 "kjøre den så mange ganger du vil før den endelige innlastingen"
-
-msgid ""
-"Enables players to write their own list of character relationships, helping "
-"them familiarize themselves ahead of the event."
-msgstr ""
-"Gjør det mulig for spillerne å skrive sin egen liste over "
-"karakterrelasjoner, slik at de kan gjøre seg kjent med dem i forkant av "
-"arrangementet."
 
 msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "

@@ -812,6 +812,35 @@ msgstr ""
 msgid "Writing"
 msgstr ""
 
+msgid "Title"
+msgstr ""
+
+msgid ""
+"Enables field 'title', a short (2-3 words) text added to the character's name"
+msgstr ""
+
+msgid "Cover"
+msgstr ""
+
+msgid ""
+"Enables field 'cover', to shown a specific image in the gallery - until "
+"assigned to a player"
+msgstr ""
+
+msgid "Hide"
+msgstr ""
+
+msgid "Enables field 'hide', to be able to hide writing element from players"
+msgstr ""
+
+msgid "Assigned"
+msgstr ""
+
+msgid ""
+"Enables field 'assigned', to track which staff member is responsible for "
+"each writing element"
+msgstr ""
+
 msgid "Replacing names"
 msgstr ""
 
@@ -875,6 +904,14 @@ msgstr ""
 msgid "If checked, activates a staff-managed approval process for characters"
 msgstr ""
 
+msgid "Relationships"
+msgstr ""
+
+msgid ""
+"If checked, enables players to write their own list of character "
+"relationships"
+msgstr ""
+
 msgid "Character customisation"
 msgstr ""
 
@@ -924,6 +961,14 @@ msgid "Assignments"
 msgstr ""
 
 msgid "Number of characters to be assigned (default 1)"
+msgstr ""
+
+msgid "Mirror"
+msgstr ""
+
+msgid ""
+"Enables to set a character as a 'mirror' for another, to hide it's true "
+"nature"
 msgstr ""
 
 msgid "Minimum preferences"
@@ -2572,25 +2617,7 @@ msgstr ""
 msgid "Sheet"
 msgstr ""
 
-msgid "Cover"
-msgstr ""
-
-msgid "Title"
-msgstr ""
-
-msgid "Mirror"
-msgstr ""
-
-msgid "Prop"
-msgstr ""
-
-msgid "Hide"
-msgstr ""
-
 msgid "Progress"
-msgstr ""
-
-msgid "Assigned"
 msgstr ""
 
 msgid "Disabled"
@@ -3203,9 +3230,6 @@ msgid ""
 "Preview visible only by the assigned player, when 'show preview' is checked"
 msgstr ""
 
-msgid "Does it require special props?"
-msgstr ""
-
 msgid "Creation"
 msgstr ""
 
@@ -3717,9 +3741,6 @@ msgid "Customize"
 msgstr ""
 
 msgid "Modify some character elements to make it yours!"
-msgstr ""
-
-msgid "Relationships"
 msgstr ""
 
 msgid "Fill in your character's relationships!"
@@ -5023,7 +5044,7 @@ msgstr ""
 msgid "Discover what this event is about!"
 msgstr ""
 
-msgid "View the complete list of characters and their players!"
+msgid "View the list of characters and players!"
 msgstr ""
 
 msgid "Scroll through the characters, and can you filter/search them!"
@@ -6576,12 +6597,6 @@ msgstr ""
 msgid "Reading"
 msgstr ""
 
-msgid "Props"
-msgstr ""
-
-msgid "This page shows the props marked in the characters."
-msgstr ""
-
 msgid "Quest Type"
 msgstr ""
 
@@ -6712,17 +6727,6 @@ msgstr ""
 msgid "Standard features"
 msgstr ""
 
-msgid "Adds a short (2-3 words) 'title' field to characters."
-msgstr ""
-
-msgid ""
-"Adds a 'props' field to main writing elements, allowing staff to note needed "
-"or prepared items."
-msgstr ""
-
-msgid "Allows players to select hidden roles without spoiling them for others."
-msgstr ""
-
 msgid ""
 "Enables \"Prologues\", short introductory paragraphs for each act of the "
 "game, which players receive to guide them."
@@ -6766,11 +6770,6 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Adds a 'cover' field to a character, to shown a specific image in the "
-"gallery - until assigned to a player."
-msgstr ""
-
-msgid ""
 "Enables 'bring a friend' discount. A registered player provides their unique "
 "code to a new registrant, granting both a discounted price."
 msgstr ""
@@ -6781,11 +6780,6 @@ msgstr ""
 msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "player profiles."
-msgstr ""
-
-msgid ""
-"Adds a 'hide' field to main writing elements, to prevent players viewing "
-"them."
 msgstr ""
 
 msgid ""
@@ -6966,18 +6960,7 @@ msgid ""
 "define multiple due dates and amounts."
 msgstr ""
 
-msgid "Character relationships (staff)"
-msgstr ""
-
 msgid "Allows authors to prepare a list of inter-character relationships."
-msgstr ""
-
-msgid "Character relationships (player)"
-msgstr ""
-
-msgid ""
-"Enables players to write their own list of character relationships, helping "
-"them familiarize themselves ahead of the event."
 msgstr ""
 
 msgid "Sections"
@@ -7020,11 +7003,6 @@ msgstr ""
 msgid ""
 "Adds a 'progress' status field (e.g. draft, ready, approved) to key writing "
 "elements."
-msgstr ""
-
-msgid ""
-"Adds an 'assigned' field for main writing elements, letting you track which "
-"staff member is responsible for each."
 msgstr ""
 
 msgid ""
