@@ -4325,6 +4325,9 @@ msgstr "Sbírka byla doručena uživateli"
 msgid "This page shows inventory custody items."
 msgstr "Tato stránka shrnuje položky inventární úschovy."
 
+msgid "View the list of characters and players!"
+msgstr "Prohlédněte si seznam postav a hráčů!"
+
 msgid "Well done, you've completed all modules!"
 msgstr "Výborně, splnili jste všechny moduly!"
 
@@ -5000,9 +5003,6 @@ msgstr "Tato stránka shrnuje přizpůsobené texty události."
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Součet toho, co již bylo vyplaceno k aktuálnímu datu"
-
-msgid "View the complete list of characters and their players!"
-msgstr "Prohlédněte si kompletní seznam postav a jejich hráčů!"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Narazili jsme na problém s daňovým kódem, který jste nám poskytli."

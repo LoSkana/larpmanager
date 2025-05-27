@@ -179,6 +179,7 @@ class OrgaFeatureForm(FeatureForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._init_features(False)
+        self.prevent_canc = True
 
     def save(self, commit=True):
         instance = super().save(commit=False)

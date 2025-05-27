@@ -4325,6 +4325,9 @@ msgstr "Kolekcja została dostarczona do użytkownika"
 msgid "This page shows inventory custody items."
 msgstr "Na tej stronie wyświetlane są pozycje przechowywania zapasów."
 
+msgid "View the list of characters and players!"
+msgstr "Zobacz listę postaci i graczy!"
+
 msgid "Well done, you've completed all modules!"
 msgstr "Brawo, ukończyłeś wszystkie moduły!"
 
@@ -5001,9 +5004,6 @@ msgstr "Ta strona podsumowuje niestandardowe teksty wydarzenia."
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Suma kwot już zapłaconych na bieżący dzień"
-
-msgid "View the complete list of characters and their players!"
-msgstr "Zobacz pełną listę postaci i ich graczy!"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Napotkaliśmy problem z podanym kodem podatkowym"

@@ -4327,6 +4327,9 @@ msgstr "Samlingen ble levert til brukeren"
 msgid "This page shows inventory custody items."
 msgstr "På denne siden finner du en oppsummering av lagerbeholdningen."
 
+msgid "View the list of characters and players!"
+msgstr "Se listen over karakterer og spillere!"
+
 msgid "Well done, you've completed all modules!"
 msgstr "Godt gjort, du har fullført alle modulene!"
 
@@ -5014,9 +5017,6 @@ msgstr "Denne siden oppsummerer de tilpassede tekstene for arrangementet."
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Summen av det som allerede er betalt per dags dato."
-
-msgid "View the complete list of characters and their players!"
-msgstr "Se den komplette listen over rollefigurer og deres spillere!"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Vi har støtt på et problem med skattekoden du oppga"

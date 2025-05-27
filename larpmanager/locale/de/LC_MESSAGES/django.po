@@ -4332,6 +4332,9 @@ msgstr ""
 "Auf dieser Seite finden Sie eine Übersicht über die Gegenstände des "
 "Bestandsschutzes."
 
+msgid "View the list of characters and players!"
+msgstr "Sehen Sie sich die Liste der Charaktere und Spieler an!"
+
 msgid "Well done, you've completed all modules!"
 msgstr "Gut gemacht, Sie haben alle Module abgeschlossen!"
 
@@ -5082,10 +5085,6 @@ msgstr ""
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Summe der zum aktuellen Datum bereits gezahlten Beträge"
-
-msgid "View the complete list of characters and their players!"
-msgstr ""
-"Sehen Sie sich die vollständige Liste der Charaktere und ihrer Spieler an!"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr ""

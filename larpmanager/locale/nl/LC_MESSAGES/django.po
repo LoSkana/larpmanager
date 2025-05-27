@@ -4329,6 +4329,9 @@ msgstr ""
 "Op deze pagina wordt een overzicht gegeven van de items in de "
 "inventarisbewaring."
 
+msgid "View the list of characters and players!"
+msgstr "Bekijk de lijst met personages en spelers!"
+
 msgid "Well done, you've completed all modules!"
 msgstr "Goed gedaan, je hebt alle modules gehaald!"
 
@@ -5033,9 +5036,6 @@ msgstr "Deze pagina vat de aangepaste teksten van het evenement samen."
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Totaal van wat al is betaald op de huidige datum"
-
-msgid "View the complete list of characters and their players!"
-msgstr "Bekijk de volledige lijst met personages en hun spelers!"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr ""

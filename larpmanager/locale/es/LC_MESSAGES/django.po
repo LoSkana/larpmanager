@@ -4326,6 +4326,9 @@ msgstr "La colección se entregó al usuario"
 msgid "This page shows inventory custody items."
 msgstr "Esta página muestra los artículos de custodia del inventario."
 
+msgid "View the list of characters and players!"
+msgstr "Ver la lista de personajes y jugadores"
+
 msgid "Well done, you've completed all modules!"
 msgstr "Bien hecho, ¡has completado todos los módulos!"
 
@@ -5003,9 +5006,6 @@ msgstr "Esta página muestra los textos personalizados del evento."
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Total de lo que ya se ha pagado en la fecha actual"
-
-msgid "View the complete list of characters and their players!"
-msgstr "Consulta la lista completa de personajes y sus protagonistas."
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr ""

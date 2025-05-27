@@ -5044,7 +5044,7 @@ msgstr ""
 msgid "Discover what this event is about!"
 msgstr ""
 
-msgid "View the complete list of characters and their players!"
+msgid "View the list of characters and players!"
 msgstr ""
 
 msgid "Scroll through the characters, and can you filter/search them!"
