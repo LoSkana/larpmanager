@@ -296,6 +296,7 @@ def orga_writing_form(request, s, n, typ):
         el.options_list = el.options.order_by("order")
 
     ctx["approval"] = ctx["event"].get_config("user_character_approval", False)
+    ctx["status"] = "user_character" in ctx["features"] and typ.lower() == "character"
 
     return render(request, "larpmanager/orga/characters/form.html", ctx)
 
