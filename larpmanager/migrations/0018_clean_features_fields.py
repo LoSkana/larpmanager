@@ -11,7 +11,7 @@ def remove_obsolete_features(apps, schema_editor):
         "user_character": {76: "player_relationships"},
     }
     for feat_name, feat_items in features.items():
-        for feature_id, feature_name in feat_items:
+        for feature_id, feature_name in feat_items.items():
             try:
                 feature = Feature.objects.get(pk=feature_id)
             except ObjectDoesNotExist:
@@ -23,13 +23,15 @@ def remove_obsolete_features(apps, schema_editor):
 
     # create question and answer to save data in "props"
     Character = apps.get_model("larpmanager", "Character")
-    CharacterQuestion = apps.get_model("larpmanager", "CharacterQuestion")
-    CharacterAnswer = apps.get_model("larpmanager", "CharacterAnswer")
+    WritingQuestion = apps.get_model("larpmanager", "WritingQuestion")
+    WritingAnswer = apps.get_model("larpmanager", "WritingAnswer")
     for char in Character.objects.exclude(props="").exclude(props__isnull=True):
-        (que, cr) = CharacterQuestion.objects.get_or_create(event=char.event, typ="t", display="Props")
-        (ca, cr) = CharacterAnswer.objects.get_or_create(character=char, question=que)
-        ca.text = char.concept
+        (que, cr) = WritingQuestion.objects.get_or_create(event=char.event, typ="t", display="Props")
+        (ca, cr) = WritingAnswer.objects.get_or_create(element_id=char.id, question=que)
+        ca.text = char.props
         ca.save()
+
+    WritingQuestion.objects.filter(typ="props").delete()
 
     # Delete orga_props permission
     EventPermission = apps.get_model("larpmanager", "EventPermission")

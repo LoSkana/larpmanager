@@ -206,6 +206,7 @@ def _get_custom_form(ctx, nm):
         que = que.filter(applicable=mapping[nm])
         ctx["form_questions"] = {}
         for q in que:
+            q.basic_typ = q.typ in QuestionType.get_basic_types()
             if q.typ in ctx["fields_name"].keys():
                 ctx["fields_name"][q.typ] = q.display
             else:
