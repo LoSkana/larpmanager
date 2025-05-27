@@ -211,6 +211,13 @@ class Association(BaseModel):
     def get_config(self, name, def_v=None):
         return get_element_config(self, name, def_v)
 
+    def promoter_dict(self):
+        res = {"slug": self.slug, "name": self.name}
+        if self.promoter_thumb:
+            # noinspection PyUnresolvedReferences
+            res["promoter_url"] = self.promoter_thumb.url
+        return res
+
 
 class AssociationConfig(BaseModel):
     name = models.CharField(max_length=150)

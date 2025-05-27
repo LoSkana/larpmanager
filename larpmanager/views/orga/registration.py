@@ -44,7 +44,7 @@ from larpmanager.cache.links import reset_run_event_links
 from larpmanager.cache.registration import reset_cache_reg_counts
 from larpmanager.cache.role import has_event_permission
 from larpmanager.cache.run import reset_cache_run
-from larpmanager.cache.text_fields import get_cache_reg_field, remove_html_tags
+from larpmanager.cache.text_fields import get_cache_reg_field
 from larpmanager.forms.registration import (
     OrgaRegistrationForm,
     RegistrationCharacterRelForm,
@@ -95,7 +95,7 @@ def check_time(times, step, start=None):
 
 
 def _orga_registrations_traits(r, ctx):
-    if "questbuilder" in ctx["features"]:
+    if "questbuilder" not in ctx["features"]:
         return
 
     r.traits = {}
@@ -348,10 +348,10 @@ def orga_registrations(request, s, n):
 
     ctx["upload"] = ",".join(
         [
-            _("'player' (player's email)"),
-            _("'ticket' (ticket name or number)"),
-            _("'character' (character name or number to be assigned)"),
-            _("'pwyw' (donation)."),
+            str(_("'player' (player's email)")),
+            str(_("'ticket' (ticket name or number)")),
+            str(_("'character' (character name or number to be assigned)")),
+            str(_("'pwyw' (donation).")),
         ]
     )
 
@@ -454,12 +454,12 @@ def orga_registration_form_list(request, s, n):
                 res[el.reg_id] = []
             res[el.reg_id].append(cho[el.option_id])
 
-    elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.EDITOR]:
+    elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
         que = RegistrationAnswer.objects.filter(question=q, reg__run=ctx["run"])
-        que = que.annotate(short_text=Substr("text", 1, max_length + 20))
+        que = que.annotate(short_text=Substr("text", 1, max_length))
         que = que.values("reg_id", "short_text")
         for el in que:
-            answer = remove_html_tags(el["short_text"])[:max_length]
+            answer = el["short_text"]
             if len(answer) == max_length:
                 popup.append(el["reg_id"])
             res[el["reg_id"]] = answer
@@ -530,31 +530,7 @@ def orga_registrations_edit(request, s, n, num):
             form.save_reg_questions(reg)
 
             if "questbuilder" in ctx["features"]:
-                done = []
-                for qt in QuestType.objects.filter(event=ctx["event"]):
-                    qt_id = f"qt_{qt.number}"
-                    tid = form.cleaned_data[qt_id]
-                    if int(tid):
-                        done.append(qt.number)
-                        # check if already existing
-                        if (
-                            AssignmentTrait.objects.filter(
-                                run=ctx["run"],
-                                member=reg.member,
-                                trait_id=tid,
-                                typ=qt.number,
-                            ).count()
-                            == 0
-                        ):
-                            AssignmentTrait.objects.filter(run=ctx["run"], member=reg.member, typ=qt.number).delete()
-                            AssignmentTrait.objects.create(
-                                run=ctx["run"],
-                                member=reg.member,
-                                trait_id=tid,
-                                typ=qt.number,
-                            )
-
-                AssignmentTrait.objects.filter(run=ctx["run"], member=reg.member).exclude(typ__in=done).delete()
+                _save_questbuilder(ctx, form, reg)
 
             return redirect("orga_registrations", s=ctx["event"].slug, n=ctx["run"].number)
     elif num != 0:
@@ -565,6 +541,25 @@ def orga_registrations_edit(request, s, n, num):
     ctx["form"] = form
 
     return render(request, "larpmanager/orga/edit.html", ctx)
+
+
+def _save_questbuilder(ctx, form, reg):
+    for qt in QuestType.objects.filter(event=ctx["event"]):
+        qt_id = f"qt_{qt.number}"
+        tid = int(form.cleaned_data[qt_id])
+        base_kwargs = {"run": ctx["run"], "member": reg.member, "typ": qt.number}
+
+        if tid:
+            ait = AssignmentTrait.objects.filter(**base_kwargs).first()
+
+            if ait and ait.trait_id != tid:
+                ait.delete()
+                ait = None
+
+            if not ait:
+                AssignmentTrait.objects.create(**base_kwargs, trait_id=tid)
+        else:
+            AssignmentTrait.objects.filter(**base_kwargs).delete()
 
 
 @login_required

@@ -195,12 +195,7 @@ def writing_list(request, ctx, typ, nm):
 
 def _get_custom_form(ctx, nm):
     # default name for fields
-    ctx["fields_name"] = {
-        QuestionType.NAME.value: _("Name"),
-        QuestionType.TEASER.value: _("Presentation"),
-        QuestionType.SHEET.value: _("Text"),
-        QuestionType.FACTIONS.value: _("Factions"),
-    }
+    ctx["fields_name"] = {QuestionType.NAME.value: _("Name")}
 
     mapping = {"character": QuestionApplicable.CHARACTER, "plot": QuestionApplicable.PLOT}
     if nm not in mapping:
@@ -347,6 +342,7 @@ def writing_view(request, ctx, nm):
     ctx["el"] = ctx[nm]
     ctx["el"].data = ctx["el"].show_complete()
     ctx["nm"] = nm
+    get_event_cache_all(ctx)
     return render(request, "larpmanager/orga/writing/view.html", ctx)
 
 

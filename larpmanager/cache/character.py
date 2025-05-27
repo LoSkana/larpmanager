@@ -154,7 +154,7 @@ def get_character_fields(ctx, only_visible=True):
     # get visible question fields
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
     que = que.filter(applicable=QuestionApplicable.CHARACTER)
-    que = que.exclude(status=QuestionStatus.HIDDEN)
+    que = que.exclude(status=QuestionStatus.HIDDEN, visibility=QuestionVisibility.HIDDEN)
     if only_visible:
         que = que.filter(visibility__in=[QuestionVisibility.SEARCHABLE, QuestionVisibility.PUBLIC])
     ctx["questions"] = {
@@ -552,3 +552,13 @@ def reset_event_cache_all_runs(event):
         # reset also runs of parent event
         for r in event.parent.runs.all():
             reset_run(r)
+
+
+@receiver(post_save, sender=AssignmentTrait)
+def post_save_assignment_trait_reset(sender, instance, **kwargs):
+    reset_run(instance.run)
+
+
+@receiver(post_delete, sender=AssignmentTrait)
+def post_delete_assignment_trait_reset(sender, instance, **kwargs):
+    reset_run(instance.run)

@@ -1,14 +1,4 @@
 - model: larpmanager.feature
-  pk: 1
-  fields:
-    name: Motto
-    descr: Adds a 'motto' field to characters, a short phrase they frequently use.
-    slug: motto
-    overall: false
-    module: 1
-    placeholder: false
-    order: 40
-- model: larpmanager.feature
   pk: 2
   fields:
     name: Title

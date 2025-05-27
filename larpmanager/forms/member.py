@@ -257,7 +257,7 @@ class ResidenceField(forms.MultiValueField):
             forms.ChoiceField(choices=COUNTRY_CHOICES),
             forms.ChoiceField(choices=PROVINCE_CHOICES),
             forms.CharField(validators=[validate_no_pipe]),
-            forms.CharField(max_length=6),
+            forms.CharField(max_length=7),
             forms.CharField(max_length=30),
             forms.CharField(max_length=10),
         ]
@@ -326,9 +326,9 @@ class ProfileForm(BaseProfileForm):
         )
 
         widgets = {
-            "diet": Textarea(attrs={"cols": 80, "rows": 5}),
-            "safety": Textarea(attrs={"cols": 80, "rows": 5}),
-            "presentation": Textarea(attrs={"cols": 80, "rows": 5}),
+            "diet": Textarea(attrs={"rows": 5}),
+            "safety": Textarea(attrs={"rows": 5}),
+            "presentation": Textarea(attrs={"rows": 5}),
             "birth_date": DatePickerInput,
             "document_issued": DatePickerInput,
             "document_expiration": DatePickerInput,

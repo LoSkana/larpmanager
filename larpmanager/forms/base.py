@@ -38,7 +38,7 @@ from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
 )
-from larpmanager.models.utils import generate_id, get_attr
+from larpmanager.models.utils import generate_id, get_attr, strip_tags
 from larpmanager.templatetags.show_tags import hex_to_rgb
 
 
@@ -159,6 +159,14 @@ def max_selections_validator(max_choices):
     def validator(value):
         if len(value) > max_choices:
             raise ValidationError(_("You have exceeded the maximum number of selectable options"))
+
+    return validator
+
+
+def max_length_validator(max_length):
+    def validator(value):
+        if len(strip_tags(value)) > max_length:
+            raise ValidationError(_("You have exceeded the maximum text length"))
 
     return validator
 
@@ -335,12 +343,15 @@ class BaseRegistrationForm(MyFormRun):
             self.fields[key].disabled = not active
 
         if question.max_length:
-            self.max_lengths[f"id_{key}"] = (question.max_length, question.typ)
+            if question.typ in QuestionType.get_max_length():
+                self.max_lengths[f"id_{key}"] = (question.max_length, question.typ)
 
         if question.status == QuestionStatus.MANDATORY:
             self.fields[key].label += " (*)"
             self.has_mandatory = True
             self.mandatory.append("id_" + key)
+
+        question.basic_typ = question.typ in QuestionType.get_basic_types()
 
         return key
 
@@ -372,12 +383,13 @@ class BaseRegistrationForm(MyFormRun):
         return key
 
     def init_editor(self, key, question, required):
+        validators = [max_length_validator(question.max_length)] if question.max_length else []
         self.fields[key] = forms.CharField(
             required=required,
-            max_length=question.max_length if question.max_length else 100000,
             widget=WritingTinyMCE(),
             label=question.display,
             help_text=question.description,
+            validators=validators,
         )
         if question.id in self.answers:
             self.initial[key] = self.answers[question.id].text
@@ -385,22 +397,21 @@ class BaseRegistrationForm(MyFormRun):
         self.show_link.append(f"id_{key}")
 
     def init_paragraph(self, key, question, required):
+        validators = [max_length_validator(question.max_length)] if question.max_length else []
         self.fields[key] = forms.CharField(
             required=required,
-            max_length=question.max_length if question.max_length else 5000,
-            widget=forms.Textarea,
+            widget=forms.Textarea(attrs={"rows": 4}),
             label=question.display,
             help_text=question.description,
+            validators=validators,
         )
         if question.id in self.answers:
             self.initial[key] = self.answers[question.id].text
 
     def init_text(self, key, question, required):
+        validators = [max_length_validator(question.max_length)] if question.max_length else []
         self.fields[key] = forms.CharField(
-            required=required,
-            max_length=question.max_length if question.max_length else 1000,
-            label=question.display,
-            help_text=question.description,
+            required=required, label=question.display, help_text=question.description, validators=validators
         )
         if question.id in self.answers:
             self.initial[key] = self.answers[question.id].text

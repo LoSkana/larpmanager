@@ -36,7 +36,6 @@
                     <a href="{% url 'character' event.slug run.number el.number %}">{{ el.name }}</a>
                     {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
                     {% if el.pronoun %}({{ el.pronoun }}){% endif %}
-                    {% if el.motto %}- <i>{{ el.motto | safe | clean_tags }}</i>{% endif %}
                     -
                     {% if el.player_id > 0 %}
                         <b>{% trans "Player" %}:</b>&nbsp;<a href="{% url 'public' el.player_id %}">

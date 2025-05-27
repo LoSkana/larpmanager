@@ -27,7 +27,6 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all
-from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.forms.character import (
     OrgaCharacterForm,
     OrgaWritingOptionForm,
@@ -185,12 +184,12 @@ def orga_writing_form_list(request, s, n, typ):
                 res[el.element_id] = []
             res[el.element_id].append(cho[el.option_id])
 
-    elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.EDITOR]:
+    elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
         que = WritingAnswer.objects.filter(question=q, element_id__in=character_ids)
-        que = que.annotate(short_text=Substr("text", 1, max_length + 20))
+        que = que.annotate(short_text=Substr("text", 1, max_length))
         que = que.values("element_id", "short_text")
         for el in que:
-            answer = remove_html_tags(el["short_text"])[:max_length]
+            answer = el["short_text"]
             if len(answer) == max_length:
                 popup.append(el["element_id"])
             res[el["element_id"]] = answer
@@ -297,6 +296,7 @@ def orga_writing_form(request, s, n, typ):
         el.options_list = el.options.order_by("order")
 
     ctx["approval"] = ctx["event"].get_config("user_character_approval", False)
+    ctx["status"] = "user_character" in ctx["features"] and typ.lower() == "character"
 
     return render(request, "larpmanager/orga/characters/form.html", ctx)
 
@@ -307,6 +307,8 @@ def orga_writing_form_edit(request, s, n, typ, num):
     ctx = check_event_permission(request, s, n, perm)
     check_writing_form_type(ctx, typ)
     if backend_edit(request, ctx, OrgaWritingQuestionForm, num, assoc=False):
+        if "continue" in request.POST:
+            return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, typ=typ, num=0)
         if str(request.POST.get("new_option", "")) == "1":
             return redirect(
                 orga_writing_options_new, s=ctx["event"].slug, n=ctx["run"].number, typ=typ, num=ctx["saved"].id
@@ -345,8 +347,11 @@ def orga_writing_options_new(request, s, n, typ, num):
 
 def writing_option_edit(ctx, num, request, typ):
     if backend_edit(request, ctx, OrgaWritingOptionForm, num, assoc=False):
+        redirect_target = "orga_writing_form_edit"
+        if "continue" in request.POST:
+            redirect_target = "orga_writing_options_new"
         return redirect(
-            "orga_writing_form_edit", s=ctx["event"].slug, n=ctx["run"].number, typ=typ, num=ctx["saved"].question_id
+            redirect_target, s=ctx["event"].slug, n=ctx["run"].number, typ=typ, num=ctx["saved"].question_id
         )
     return render(request, "larpmanager/orga/edit.html", ctx)
 

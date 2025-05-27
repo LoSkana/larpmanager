@@ -339,9 +339,6 @@ msgstr "Inloggning"
 msgid "Money"
 msgstr "Pengar"
 
-msgid "Motto"
-msgstr "Motto"
-
 msgid "Names"
 msgstr "Namn"
 
@@ -422,9 +419,6 @@ msgstr "Video"
 
 msgid "Where"
 msgstr "Var"
-
-msgid "cover"
-msgstr "skydd"
 
 msgid "email"
 msgstr "e-post"
@@ -617,9 +611,6 @@ msgstr "utfärdade"
 
 msgid "member"
 msgstr "medlem"
-
-msgid "mirror"
-msgstr "spegel"
 
 msgid "player"
 msgstr "spelare"
@@ -851,9 +842,6 @@ msgstr "adress"
 
 msgid "options"
 msgstr "alternativ"
-
-msgid "preview"
-msgstr "förhandsvisning"
 
 msgid "Accepted"
 msgstr "Godkänd"
@@ -1671,6 +1659,9 @@ msgstr "Biljettlista"
 msgid "Ties (Test)"
 msgstr "Slipsar (test)"
 
+msgid "Total costs"
+msgstr "Totala kostnader"
+
 msgid "Transversal"
 msgstr "Transversal"
 
@@ -1862,6 +1853,9 @@ msgstr "Testgalleri"
 
 msgid "Three quotas"
 msgstr "Tre kvoter"
+
+msgid "Total issued"
+msgstr "Totalt emitterat"
 
 msgid "Total number"
 msgstr "Totalt antal"
@@ -2102,6 +2096,9 @@ msgstr "Bildkarusell"
 msgid "Character Edit"
 msgstr "Redigera karaktär"
 
+msgid "Character form"
+msgstr "Karaktärsform"
+
 msgid "Character name"
 msgstr "Karaktärens namn"
 
@@ -2341,9 +2338,6 @@ msgstr "Framsteg"
 
 msgid "Question saved!"
 msgstr "Undergiven fråga!"
-
-msgid "Question status"
-msgstr "Status för ansökan"
 
 msgid "Replacing names"
 msgstr "Byte av namn"
@@ -2639,6 +2633,9 @@ msgstr "Lagerposter"
 msgid "Invoice not found"
 msgstr "Fakturan hittades inte"
 
+msgid "Maximum available"
+msgstr "Maximalt tillgänglig"
+
 msgid "May the best win!"
 msgstr "Må den bästa mannen vinna!"
 
@@ -2698,9 +2695,6 @@ msgstr "Standardutrustning"
 
 msgid "Technical Support"
 msgstr "Teknisk support"
-
-msgid "Welcome on board!"
-msgstr "Välkommen ombord!"
 
 msgid "Your achievements"
 msgstr "Dina prestationer"
@@ -3030,9 +3024,6 @@ msgstr "Presentkortet är annullerat!"
 msgid "Independent factions"
 msgstr "Oberoende fraktioner"
 
-msgid "Informations private"
-msgstr "Privat information"
-
 msgid "Last membership date"
 msgstr "Senaste datum för medlemskap"
 
@@ -3076,9 +3067,6 @@ msgstr "Fördefinierad struktur"
 msgid "Preference not valid"
 msgstr "Ogiltig preferens"
 
-msgid "Private informations"
-msgstr "privat information"
-
 msgid "Registration closed."
 msgstr "Registreringen är stängd."
 
@@ -3102,9 +3090,6 @@ msgstr "Villkor och anvisningar"
 
 msgid "Terms and conditions"
 msgstr "Villkor och bestämmelser"
-
-msgid "The LarpManager team"
-msgstr "LarpManager-teamet"
 
 msgid "Yes, keep me posted!"
 msgstr "Ja, håll mig uppdaterad!"
@@ -3843,6 +3828,9 @@ msgstr "Ditt konto är nu aktivt!"
 msgid "Your friend code has been used"
 msgstr "Din vänkod har använts"
 
+msgid "After confirmation, add another"
+msgstr "Efter bekräftelse, lägg till ytterligare en"
+
 msgid "Assigning characters to players"
 msgstr "Tilldelning av karaktärer till spelare"
 
@@ -3883,6 +3871,9 @@ msgstr "Tilläggsavgift till biljett"
 
 msgid "To log back in with the account"
 msgstr "För att logga in igen med kontot"
+
+msgid "Total of recorded money inflows"
+msgstr "Totalt antal registrerade penninginflöden"
 
 msgid "Will be shown in the event page"
 msgstr "Kommer att visas på evenemangssidan"
@@ -3960,6 +3951,9 @@ msgstr "På denna sida sammanfattas händelserna under evenemanget."
 msgid "This page shows the run signups."
 msgstr "På denna sida finns en sammanfattning av anmälningarna till loppet."
 
+msgid "Total of recorded money outflows"
+msgstr "Totalt antal registrerade penningutflöden"
+
 msgid "We ask you to pay the difference"
 msgstr "Vi ber dig att betala mellanskillnaden"
 
@@ -3995,6 +3989,9 @@ msgstr "Vänligen ladda upp ditt profilfoto!"
 
 msgid "This page shows the event quests."
 msgstr "Denna sida sammanfattar uppdragen för evenemanget."
+
+msgid "Total participation fees received"
+msgstr "Summa erhållna deltagaravgifter"
 
 msgid "Verify that the data are correct:"
 msgstr "Kontrollera att uppgifterna är korrekta:"
@@ -4199,6 +4196,9 @@ msgstr "Välj den organisation som du vill gå vidare till"
 msgid "Show all the traits to those present?"
 msgstr "Visa alla egenskaper för de närvarande?"
 
+msgid "Total amount refunded to participants"
+msgstr "Totalt belopp som återbetalas till deltagarna"
+
 msgid "Update here the registration options!"
 msgstr "Uppdatera dina medlemsalternativ!"
 
@@ -4380,6 +4380,9 @@ msgstr "Skulle du vilja betala ett annat belopp?"
 
 msgid "You are excluding (none of these filters)"
 msgstr "Du utesluter (inget av dessa filter)"
+
+msgid "You have exceeded the maximum text length"
+msgstr "Du har överskridit den maximala textlängden"
 
 msgid "You think you should have an achievement?"
 msgstr "Tycker du att du har rätt till en prestation?"
@@ -4603,6 +4606,9 @@ msgstr "Denna sida sammanfattar inställningarna för PDF-utskrift."
 msgid "This text will be added to the sheet of {name}"
 msgstr "Denna text kommer att läggas till i arket för {name}"
 
+msgid "Total amount withheld for transfer commissions"
+msgstr "Totalt belopp som innehållits för överföringsprovisioner"
+
 msgid "Do you wish to be always updated on our events?"
 msgstr "Vill du hålla dig uppdaterad om våra evenemang?"
 
@@ -4797,6 +4803,9 @@ msgstr "På den här sidan kan du redigera evenemangsspecifika texter."
 msgid "This page shows all inflows received for this run."
 msgstr "Denna sida sammanfattar alla poster för denna körning."
 
+msgid "Total participation fees reduced through discounts"
+msgstr "Totala deltagaravgifter reducerade genom rabatter"
+
 msgid "Warning. The form contains errors to the fields - "
 msgstr "Var uppmärksam! Formuläret innehåller fel i fälten -"
 
@@ -4805,9 +4814,6 @@ msgstr "Du kan inte skapa en relation till dig själv!"
 
 msgid "Fill in this field if you have accessibility needs."
 msgstr "Fyll i detta fält om du har tillgänglighetsbehov."
-
-msgid "Here are some useful links to help you get started:"
-msgstr "Här är några användbara länkar som hjälper dig att komma igång:"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jag har gjort det några gånger, jag har grundläggande erfarenhet"
@@ -4985,9 +4991,6 @@ msgstr ""
 msgid "This page summarises the list of members as a registry"
 msgstr "Denna sida sammanfattar medlemsförteckningen som ett register"
 
-msgid "We advise you to keep this email for future reference."
-msgstr "Vi råder dig att spara detta e-postmeddelande för framtida bruk."
-
 msgid "Write here additional information to your registration"
 msgstr "Ange här om ytterligare information till din post"
 
@@ -5097,6 +5100,9 @@ msgstr "På den här sidan kan du lägga till eller redigera en körningspost."
 msgid "This page shows all expense items recorded in the system."
 msgstr ""
 "Denna sida sammanfattar alla utgiftsposter som är registrerade i systemet."
+
+msgid "Total of expenses submitted by collaborators and approved"
+msgstr "Summa av kostnader som lämnats in av medarbetare och godkänts"
 
 msgid "We ask you to pay the difference from the next instalment"
 msgstr "Vi ber dig betala mellanskillnaden från och med nästa delbetalning"
@@ -5287,6 +5293,10 @@ msgstr "Du har redan beviljat datadelning med denna organisation!"
 #, python-format
 msgid "%(amount)d %(credits)s were used to participate in this event!"
 msgstr "%(amount)d %(credits)s användes för att delta i detta evenemang!"
+
+msgid "If checked, an option can be chosen a maximum number of times."
+msgstr ""
+"Om den är markerad kan ett alternativ väljas ett maximalt antal gånger."
 
 msgid "If checked, shows players the histories of preferences entered"
 msgstr "Om markerat, visar spelarna historiken för de preferenser som angetts"
@@ -5526,14 +5536,14 @@ msgstr ""
 "Lista över användare som inte registrerade sig för en framtida körning av "
 "evenemanget"
 
+msgid "Minimum amount of net profit to be retained for the association tax"
+msgstr "Minsta belopp av nettovinsten som ska behållas för föreningsskatten"
+
 msgid "Select the types of writing elements that this question applies to."
 msgstr "Välj de typer av skrivelement som den här frågan gäller."
 
 msgid "The payment of your membership fee for this year has been received!"
 msgstr "Vi bekräftar betalningen av din medlemsavgift för innevarande år!"
-
-msgid "This is instead the address of your association's management panel:"
-msgstr "Detta är istället adressen till din förenings administrationspanel:"
 
 msgid "This page summarises the available questions of the character form."
 msgstr ""
@@ -5560,9 +5570,6 @@ msgstr ""
 
 msgid "Does the character have a public role/archetype? If not, leave blank"
 msgstr "Har karaktären en offentlig roll/arketyp? Om inte, lämna tomt"
-
-msgid "Follow the tutorials to start setting up your first event right away"
-msgstr "Följ anvisningarna för att börja skapa ditt första evenemang direkt"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Antal dagar tillgängliga för att betala nästa delbetalning"
@@ -5722,12 +5729,6 @@ msgid ""
 msgstr "Frånvarande (i denna karaktärs relationer är den andra frånvarande)"
 
 msgid ""
-"Adds a 'motto' field to characters, a short phrase they frequently use."
-msgstr ""
-"Lägger till ett \"motto\"-fält för karaktärer, en kort fras som de ofta "
-"använder."
-
-msgid ""
 "Allows players to select hidden roles without spoiling them for others."
 msgstr ""
 "Gör det möjligt för spelare att välja dolda roller utan att avslöja dem för "
@@ -5770,11 +5771,6 @@ msgid ""
 msgstr ""
 "Hoppsan! Du har angett ett eller flera felaktiga svar. Kontrollera dem "
 "nedan."
-
-msgid ""
-"Thank you for joining LarpManager! We are thrilled to have you with us."
-msgstr ""
-"Tack för att du är med i LarpManager! Vi är glada över att ha dig hos oss."
 
 msgid ""
 "The request of removal from further communication has been successfull!"
@@ -5871,6 +5867,12 @@ msgid ""
 msgstr "Om markerad, tillåter spelare att anpassa sina karaktärers profilbild"
 
 msgid ""
+"Net profit of the event, difference between total revenue and total costs"
+msgstr ""
+"Evenemangets nettovinst, skillnaden mellan totala intäkter och totala "
+"kostnader"
+
+msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr "Obs: Specialkoden genereras på nytt varje gång du byter presentkort"
 
@@ -5908,10 +5910,6 @@ msgstr ""
 msgid ""
 "if the character does NOT belong to this element, but is only referenced."
 msgstr "om karaktären INTE tillhör detta element, utan bara är namngiven."
-
-msgid ""
-"First of all, here is the address of the LarpManager for your association:"
-msgstr "Först av allt, här är adressen till LarpManager för din förening:"
 
 msgid ""
 "I confirm that all my required personal data have been filled in correctly"
@@ -6062,9 +6060,22 @@ msgstr ""
 "Hallå där! Vi kontaktar dig angående din anmälan till <b>%(event)s</b>."
 
 msgid ""
+"If checked, allows a option to be visible only if other options are "
+"selected."
+msgstr ""
+"Om den är markerad kan ett alternativ endast visas om andra alternativ är "
+"valda."
+
+msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr "Ange om färdigheten är synlig för användare och kan köpas fritt"
+
+msgid ""
+"Theoretical total of income due to participation fees selected by the "
+"players"
+msgstr ""
+"Teoretisk total inkomst på grund av deltagaravgifter som valts av spelarna"
 
 msgid ""
 "This page prepares the cash balance already formatted for annual "
@@ -6196,6 +6207,12 @@ msgstr ""
 "granska och organisera dem."
 
 msgid ""
+"If checked, allows a option to be visible only to players with selected "
+"ticket."
+msgstr ""
+"Om alternativet är markerat kan det bara visas för spelare med vald biljett."
+
+msgid ""
 "These CSS commands will be carried over to all pages in your Association "
 "space."
 msgstr ""
@@ -6287,6 +6304,13 @@ msgstr ""
 "på:"
 
 msgid ""
+"Total amount of money received for this event, minus commission fees and "
+"refunds"
+msgstr ""
+"Total summa pengar som erhållits för detta evenemang, minus provisioner och "
+"återbetalningar"
+
+msgid ""
 "Warning. This event is in a different language than the one set in your "
 "profile."
 msgstr ""
@@ -6299,13 +6323,6 @@ msgid ""
 msgstr ""
 "Du kan ta bort ditt samtycke till datadelning genom att klicka på lämplig "
 "länk."
-
-msgid ""
-"this balance reflects payments currently received and expenses recorded to "
-"date."
-msgstr ""
-"Detta saldo återspeglar betalningar som för närvarande erhållits och "
-"kostnader som bokförts till dags dato."
 
 #, python-format
 msgid ""
@@ -6390,13 +6407,6 @@ msgid ""
 msgstr ""
 "Ange de teckenalternativ som måste väljas för att göra färdigheten "
 "tillgänglig"
-
-msgid ""
-"Join the Discord to receive assistance, suggest improvements or notify bug "
-"reports"
-msgstr ""
-"Gå med i Discord för att få hjälp, föreslå förbättringar eller anmäla "
-"felrapporter"
 
 msgid ""
 "To register for the event, please fill in the following form and click on "
@@ -6864,13 +6874,6 @@ msgstr ""
 "href='%(url)s'>Avregistrera</a>"
 
 msgid ""
-"If you have any questions, please do not hesitate to contact us: just reply "
-"to this email."
-msgstr ""
-"Om du har några frågor, tveka inte att kontakta oss: svara bara på det här "
-"e-postmeddelandet."
-
-msgid ""
 "This page allows you to add or change the types of ticket with which players"
 " can register."
 msgstr ""
@@ -7287,6 +7290,13 @@ msgid ""
 msgstr ""
 "Gör det möjligt för spelare att skicka privata meddelanden till varandra "
 "utan att avslöja personliga e-postadresser."
+
+msgid ""
+"If checked, options no longer available in the form are hidden, instead of "
+"being displayed disabled"
+msgstr ""
+"Om den är markerad döljs alternativ som inte längre är tillgängliga i "
+"formuläret, istället för att visas inaktiverade"
 
 msgid ""
 "Indicate the description you wish to be displayed when this payment method "
@@ -8048,6 +8058,13 @@ msgstr ""
 "På den här sidan kan du ändra inställningarna för utseende och presentation "
 "av administrationssystemet för din förening."
 
+msgid ""
+"Total of all expenses incurred for the event, both personal and "
+"organizational, including any tokens and credits issued"
+msgstr ""
+"Totalsumman av alla kostnader för evenemanget, både personliga och "
+"organisatoriska, inklusive eventuella utfärdade polletter och krediter"
+
 #, python-format
 msgid ""
 "We confirm we received the donation of %(amount)d %(currency)s. We thank you"
@@ -8767,15 +8784,6 @@ msgstr ""
 "sitt medlemskap under detta kalenderår, i förnyelseordning."
 
 msgid ""
-"Searchable: Characters can be filtered according to this question. Public: "
-"The answer to this question is publicly visible. Private: The answer to this"
-" question is only visible to the player and organisers."
-msgstr ""
-"Sökbar: Tecken kan filtreras enligt denna fråga. Public: Svaret på denna "
-"fråga är synligt för allmänheten. Privat: Svaret på denna fråga är endast "
-"synligt för spelaren och organisatörerna."
-
-msgid ""
 "There are only two steps left to complete the procedure, enter the last "
 "necessary data. With this information, your membership application will be "
 "pre-filled; all you have to do is print it out and sign it."
@@ -8885,6 +8893,17 @@ msgstr ""
 "betala för de evenemang du har anmält dig till!"
 
 msgid ""
+"Searchable: Characters can be filtered according to this question. Public: "
+"The answer to this question is publicly visible. Private: The answer to this"
+" question is only visible to the player. Hidden: The answer is hidden to all"
+" players."
+msgstr ""
+"Sökbar: Tecken kan filtreras enligt denna fråga. Offentlig: Svaret på den "
+"här frågan är synligt för allmänheten. Privat: Svaret på frågan är privat: "
+"Svaret på den här frågan är endast synligt för spelaren. Dold (Hidden): "
+"Svaret är dolt för alla spelare."
+
+msgid ""
 "If for whatever reason the first and last name shown on your documents is "
 "different from the one you prefer to use, then write it here. It will only "
 "be used for internal bureaucratic purposes, and will NEVER be displayed to "
@@ -8905,6 +8924,16 @@ msgstr ""
 "föreslå den för personalen. Var försiktig: vissa fält kanske inte längre är "
 "redigerbara. Lämna fältet tomt för att spara dina ändringar och för att "
 "kunna fortsätta med dem i framtiden."
+
+msgid ""
+"Optional: The question is shown, and can be filled by the player. Mandatory:"
+" The question needs to be filled by the player. Disabled: The question is "
+"shown, but cannot be changed by the player. Hidden: The question is not "
+"shown to the player."
+msgstr ""
+"Valfri fråga: Frågan visas och kan fyllas i av spelaren. Obligatorisk: "
+"Frågan måste fyllas i av spelaren. Inaktiverad: Frågan visas, men kan inte "
+"ändras av spelaren. Dold: Frågan visas inte för spelaren."
 
 msgid ""
 "Indicate severity: RED (risks ruining the game for more than half of the "

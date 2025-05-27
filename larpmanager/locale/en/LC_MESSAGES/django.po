@@ -4,34 +4,62 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Registrations"
+msgid "Expenses"
 msgstr ""
 
-msgid "Expenses"
+msgid "Total of expenses submitted by collaborators and approved"
 msgstr ""
 
 msgid "Outflows"
 msgstr ""
 
+msgid "Total of recorded money outflows"
+msgstr ""
+
 msgid "Inflows"
+msgstr ""
+
+msgid "Total of recorded money inflows"
 msgstr ""
 
 msgid "Income"
 msgstr ""
 
+msgid "Total participation fees received"
+msgstr ""
+
 msgid "Transactions"
+msgstr ""
+
+msgid "Total amount withheld for transfer commissions"
 msgstr ""
 
 msgid "Refunds"
 msgstr ""
 
+msgid "Total amount refunded to participants"
+msgstr ""
+
 msgid "Tokens"
+msgstr ""
+
+msgid "Total issued"
 msgstr ""
 
 msgid "Credits"
 msgstr ""
 
 msgid "Discount"
+msgstr ""
+
+msgid "Total participation fees reduced through discounts"
+msgstr ""
+
+msgid "Registrations"
+msgstr ""
+
+msgid ""
+"Theoretical total of income due to participation fees selected by the players"
 msgstr ""
 
 #, python-format
@@ -545,6 +573,9 @@ msgstr ""
 msgid "You have exceeded the maximum number of selectable options"
 msgstr ""
 
+msgid "You have exceeded the maximum text length"
+msgstr ""
+
 msgid "Available"
 msgstr ""
 
@@ -734,6 +765,32 @@ msgstr ""
 msgid ""
 "If checked, allows a registration form question to be visible based on the "
 "player's age."
+msgstr ""
+
+msgid "Character form"
+msgstr ""
+
+msgid ""
+"If checked, options no longer available in the form are hidden, instead of "
+"being displayed disabled"
+msgstr ""
+
+msgid "Maximum available"
+msgstr ""
+
+msgid "If checked, an option can be chosen a maximum number of times."
+msgstr ""
+
+msgid ""
+"If checked, allows a option to be visible only to players with selected "
+"ticket."
+msgstr ""
+
+msgid "Prerequisites"
+msgstr ""
+
+msgid ""
+"If checked, allows a option to be visible only if other options are selected."
 msgstr ""
 
 msgid "Pre-registration"
@@ -2560,13 +2617,18 @@ msgstr ""
 msgid "Display order with respect to all questions"
 msgstr ""
 
-msgid "Question status"
+msgid ""
+"Optional: The question is shown, and can be filled by the player. Mandatory: "
+"The question needs to be filled by the player. Disabled: The question is "
+"shown, but cannot be changed by the player. Hidden: The question is not "
+"shown to the player."
 msgstr ""
 
 msgid ""
 "Searchable: Characters can be filtered according to this question. Public: "
 "The answer to this question is publicly visible. Private: The answer to this "
-"question is only visible to the player and organisers."
+"question is only visible to the player. Hidden: The answer is hidden to all "
+"players."
 msgstr ""
 
 msgid "Editable"
@@ -3370,6 +3432,9 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
+msgid "After confirmation, add another"
+msgstr ""
+
 msgid "The form is saved every 30 seconds."
 msgstr ""
 
@@ -3829,6 +3894,9 @@ msgid "History preferences"
 msgstr ""
 
 msgid "Go to the history preferences for"
+msgstr ""
+
+msgid "characters"
 msgstr ""
 
 msgid "Historical"
@@ -5639,15 +5707,30 @@ msgstr ""
 msgid "Total revenue"
 msgstr ""
 
+msgid ""
+"Total amount of money received for this event, minus commission fees and "
+"refunds"
+msgstr ""
+
+msgid "Total costs"
+msgstr ""
+
+msgid ""
+"Total of all expenses incurred for the event, both personal and "
+"organizational, including any tokens and credits issued"
+msgstr ""
+
 msgid "Net profit"
+msgstr ""
+
+msgid ""
+"Net profit of the event, difference between total revenue and total costs"
 msgstr ""
 
 msgid "Organization tax"
 msgstr ""
 
-msgid ""
-"this balance reflects payments currently received and expenses recorded to "
-"date."
+msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
 
 msgid "Item"
@@ -5867,9 +5950,6 @@ msgid "Go to the form for"
 msgstr ""
 
 msgid "Modifiable"
-msgstr ""
-
-msgid "Prerequisites"
 msgstr ""
 
 msgid "Pdf"
@@ -6333,27 +6413,6 @@ msgstr ""
 msgid "This page shows the characters of the event."
 msgstr ""
 
-msgid "title"
-msgstr ""
-
-msgid "preview"
-msgstr ""
-
-msgid "hide"
-msgstr ""
-
-msgid "mirror"
-msgstr ""
-
-msgid "cover"
-msgstr ""
-
-msgid "speedlarp"
-msgstr ""
-
-msgid "assigned"
-msgstr ""
-
 msgid "player"
 msgstr ""
 
@@ -6363,10 +6422,7 @@ msgstr ""
 msgid "XP"
 msgstr ""
 
-msgid "Private informations"
-msgstr ""
-
-msgid "Informations private"
+msgid "speedlarp"
 msgstr ""
 
 msgid "Questions CC"
@@ -6532,6 +6588,12 @@ msgstr ""
 msgid "This page shows the event quests."
 msgstr ""
 
+msgid "hide"
+msgstr ""
+
+msgid "assigned"
+msgstr ""
+
 msgid "This page shows the relationships between characters."
 msgstr ""
 
@@ -6559,6 +6621,9 @@ msgstr ""
 msgid "This page shows the traits assigned to the characters in the run."
 msgstr ""
 
+msgid "title"
+msgstr ""
+
 msgid ""
 "This page shows the different versions available of the character, and the "
 "differences between them."
@@ -6568,41 +6633,6 @@ msgid "This page allows you to fully view a character."
 msgstr ""
 
 msgid "Hi"
-msgstr ""
-
-msgid "Thank you for joining LarpManager! We are thrilled to have you with us."
-msgstr ""
-
-msgid "We advise you to keep this email for future reference."
-msgstr ""
-
-msgid ""
-"First of all, here is the address of the LarpManager for your association:"
-msgstr ""
-
-msgid "This is instead the address of your association's management panel:"
-msgstr ""
-
-msgid "Here are some useful links to help you get started:"
-msgstr ""
-
-msgid "Follow the tutorials to start setting up your first event right away"
-msgstr ""
-
-msgid ""
-"Join the Discord to receive assistance, suggest improvements or notify bug "
-"reports"
-msgstr ""
-
-msgid ""
-"If you have any questions, please do not hesitate to contact us: just reply "
-"to this email."
-msgstr ""
-
-msgid "Welcome on board!"
-msgstr ""
-
-msgid "The LarpManager team"
 msgstr ""
 
 msgid "Your membership"
@@ -6677,12 +6707,6 @@ msgid "Manage players' data"
 msgstr ""
 
 msgid "Standard features"
-msgstr ""
-
-msgid "Motto"
-msgstr ""
-
-msgid "Adds a 'motto' field to characters, a short phrase they frequently use."
 msgstr ""
 
 msgid "Adds a short (2-3 words) 'title' field to characters."

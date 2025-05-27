@@ -10,6 +10,9 @@ def remove_obsolete_features(apps, schema_editor):
     for event in Event.objects.all():
         event.save()
 
+    AssocPermission = apps.get_model("larpmanager", "AssocPermission")
+    AssocPermission.objects.filter(id__in=[41]).delete()
+
 
 class Migration(migrations.Migration):
     dependencies = [

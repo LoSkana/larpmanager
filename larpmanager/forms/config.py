@@ -84,7 +84,7 @@ class ConfigForm(MyForm):
             ConfigType.INT: lambda: forms.IntegerField(label=label, help_text=help_text, required=False),
             ConfigType.TEXTAREA: lambda: forms.CharField(
                 label=label,
-                widget=Textarea(attrs={"cols": 80, "rows": 5}),
+                widget=Textarea(attrs={"rows": 5}),
                 help_text=help_text,
                 required=False,
             ),

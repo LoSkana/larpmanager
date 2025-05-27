@@ -339,9 +339,6 @@ msgstr "Logg inn"
 msgid "Money"
 msgstr "Penger"
 
-msgid "Motto"
-msgstr "Motto"
-
 msgid "Names"
 msgstr "Navn"
 
@@ -422,9 +419,6 @@ msgstr "Video"
 
 msgid "Where"
 msgstr "Hvor"
-
-msgid "cover"
-msgstr "omslag"
 
 msgid "email"
 msgstr "e-post"
@@ -617,9 +611,6 @@ msgstr "utstedt"
 
 msgid "member"
 msgstr "medlem"
-
-msgid "mirror"
-msgstr "speil"
 
 msgid "player"
 msgstr "aktør"
@@ -851,9 +842,6 @@ msgstr "adresse"
 
 msgid "options"
 msgstr "alternativer"
-
-msgid "preview"
-msgstr "forhåndsvisning"
 
 msgid "Accepted"
 msgstr "Akseptert"
@@ -1671,6 +1659,9 @@ msgstr "Billettliste"
 msgid "Ties (Test)"
 msgstr "Slips (test)"
 
+msgid "Total costs"
+msgstr "Totale kostnader"
+
 msgid "Transversal"
 msgstr "Tverrgående"
 
@@ -1862,6 +1853,9 @@ msgstr "Testgalleri"
 
 msgid "Three quotas"
 msgstr "Tre kvoter"
+
+msgid "Total issued"
+msgstr "Totalt utstedt"
 
 msgid "Total number"
 msgstr "Totalt antall"
@@ -2102,6 +2096,9 @@ msgstr "Bildekarusell"
 msgid "Character Edit"
 msgstr "Tegnredigering"
 
+msgid "Character form"
+msgstr "Tegnform"
+
 msgid "Character name"
 msgstr "Tegnets navn"
 
@@ -2341,9 +2338,6 @@ msgstr "Fremgang"
 
 msgid "Question saved!"
 msgstr "Underdanig spørsmål!"
-
-msgid "Question status"
-msgstr "Søknadsstatus"
 
 msgid "Replacing names"
 msgstr "Erstatning av navn"
@@ -2639,6 +2633,9 @@ msgstr "Varer på lager"
 msgid "Invoice not found"
 msgstr "Faktura ikke funnet"
 
+msgid "Maximum available"
+msgstr "Maksimalt tilgjengelig"
+
 msgid "May the best win!"
 msgstr "Måtte den beste vinne!"
 
@@ -2698,9 +2695,6 @@ msgstr "Standardfunksjoner"
 
 msgid "Technical Support"
 msgstr "Teknisk støtte"
-
-msgid "Welcome on board!"
-msgstr "Velkommen om bord!"
 
 msgid "Your achievements"
 msgstr "Dine prestasjoner"
@@ -3030,9 +3024,6 @@ msgstr "Gavekortet er kansellert!"
 msgid "Independent factions"
 msgstr "Uavhengige fraksjoner"
 
-msgid "Informations private"
-msgstr "Privat informasjon"
-
 msgid "Last membership date"
 msgstr "Siste dato for medlemskap"
 
@@ -3076,9 +3067,6 @@ msgstr "Forhåndsdefinert struktur"
 msgid "Preference not valid"
 msgstr "Ugyldig preferanse"
 
-msgid "Private informations"
-msgstr "privat informasjon"
-
 msgid "Registration closed."
 msgstr "Registreringen er stengt."
 
@@ -3102,9 +3090,6 @@ msgstr "Vilkår og betingelser"
 
 msgid "Terms and conditions"
 msgstr "Vilkår og betingelser"
-
-msgid "The LarpManager team"
-msgstr "LarpManager-teamet"
 
 msgid "Yes, keep me posted!"
 msgstr "Ja, hold meg oppdatert!"
@@ -3843,6 +3828,9 @@ msgstr "Kontoen din er nå aktiv!"
 msgid "Your friend code has been used"
 msgstr "Din vennekode har blitt brukt"
 
+msgid "After confirmation, add another"
+msgstr "Etter bekreftelse legger du til en ny"
+
 msgid "Assigning characters to players"
 msgstr "Tildeling av karakterer til spillere"
 
@@ -3883,6 +3871,9 @@ msgstr "Tillegg på billetten"
 
 msgid "To log back in with the account"
 msgstr "Slik logger du inn igjen med kontoen"
+
+msgid "Total of recorded money inflows"
+msgstr "Summen av registrerte pengestrømmer"
 
 msgid "Will be shown in the event page"
 msgstr "Vil bli vist på arrangementssiden"
@@ -3960,6 +3951,9 @@ msgstr "På denne siden finner du en oppsummering av arrangementets tomter."
 msgid "This page shows the run signups."
 msgstr "Denne siden oppsummerer påmeldingene til løpet."
 
+msgid "Total of recorded money outflows"
+msgstr "Summen av registrerte pengeutbetalinger"
+
 msgid "We ask you to pay the difference"
 msgstr "Vi ber deg om å betale differansen"
 
@@ -3995,6 +3989,9 @@ msgstr "Vennligst last opp profilbildet ditt!"
 
 msgid "This page shows the event quests."
 msgstr "Denne siden oppsummerer oppdragene under arrangementet."
+
+msgid "Total participation fees received"
+msgstr "Totalt mottatt deltakeravgift"
 
 msgid "Verify that the data are correct:"
 msgstr "Kontroller at dataene er korrekte:"
@@ -4199,6 +4196,9 @@ msgstr "Velg organisasjonen du vil gå videre til"
 msgid "Show all the traits to those present?"
 msgstr "Vise alle egenskapene til de som er til stede?"
 
+msgid "Total amount refunded to participants"
+msgstr "Totalt beløp refundert til deltakerne"
+
 msgid "Update here the registration options!"
 msgstr "Oppdater alternativene for medlemskap!"
 
@@ -4380,6 +4380,9 @@ msgstr "Ønsker du å betale et annet beløp?"
 
 msgid "You are excluding (none of these filters)"
 msgstr "Du ekskluderer (ingen av disse filtrene)"
+
+msgid "You have exceeded the maximum text length"
+msgstr "Du har overskredet den maksimale tekstlengden"
 
 msgid "You think you should have an achievement?"
 msgstr "Synes du at du har krav på en prestasjon?"
@@ -4603,6 +4606,9 @@ msgstr "Denne siden oppsummerer innstillingene for PDF-utskrift."
 msgid "This text will be added to the sheet of {name}"
 msgstr "Denne teksten vil bli lagt til i arket til {name}."
 
+msgid "Total amount withheld for transfer commissions"
+msgstr "Totalt beløp holdt tilbake for overføringsprovisjoner"
+
 msgid "Do you wish to be always updated on our events?"
 msgstr "Vil du holde deg oppdatert om arrangementene våre?"
 
@@ -4795,6 +4801,9 @@ msgstr "På denne siden kan du redigere hendelsesspesifikke tekster."
 msgid "This page shows all inflows received for this run."
 msgstr "Denne siden oppsummerer alle oppføringer for dette løpet."
 
+msgid "Total participation fees reduced through discounts"
+msgstr "Totale deltakeravgifter redusert gjennom rabatter"
+
 msgid "Warning. The form contains errors to the fields - "
 msgstr "Vær oppmerksom på dette! Skjemaet inneholder feil i feltene"
 
@@ -4803,9 +4812,6 @@ msgstr "Du kan ikke skape et forhold til deg selv!"
 
 msgid "Fill in this field if you have accessibility needs."
 msgstr "Fyll ut dette feltet hvis du har behov for universell utforming."
-
-msgid "Here are some useful links to help you get started:"
-msgstr "Her er noen nyttige lenker som kan hjelpe deg i gang:"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jeg har gjort det noen ganger, jeg har grunnleggende erfaring."
@@ -4985,10 +4991,6 @@ msgid "This page summarises the list of members as a registry"
 msgstr ""
 "På denne siden finner du en oversikt over medlemslisten som et register"
 
-msgid "We advise you to keep this email for future reference."
-msgstr ""
-"Vi anbefaler at du tar vare på denne e-posten for fremtidig referanse."
-
 msgid "Write here additional information to your registration"
 msgstr ""
 "Angi her om det er behov for ytterligere informasjon i forbindelse med "
@@ -5098,6 +5100,9 @@ msgstr "På denne siden kan du legge til eller redigere en kjøringspost."
 msgid "This page shows all expense items recorded in the system."
 msgstr ""
 "Denne siden oppsummerer alle utgiftsposter som er registrert i systemet."
+
+msgid "Total of expenses submitted by collaborators and approved"
+msgstr "Summen av utgifter som er sendt inn av samarbeidspartnere og godkjent"
 
 msgid "We ask you to pay the difference from the next instalment"
 msgstr "Vi ber deg betale differansen fra neste avdrag"
@@ -5291,6 +5296,10 @@ msgstr ""
 #, python-format
 msgid "%(amount)d %(credits)s were used to participate in this event!"
 msgstr "%(amount)d %(credits)s ble brukt til å delta i dette arrangementet!"
+
+msgid "If checked, an option can be chosen a maximum number of times."
+msgstr ""
+"Hvis det er krysset av, kan et alternativ velges maksimalt antall ganger."
 
 msgid "If checked, shows players the histories of preferences entered"
 msgstr ""
@@ -5534,14 +5543,15 @@ msgstr ""
 "Liste over brukere som ikke har registrert seg for en fremtidig utgave av "
 "arrangementet."
 
+msgid "Minimum amount of net profit to be retained for the association tax"
+msgstr ""
+"Minimumsbeløp av nettoresultatet som skal tilbakeholdes til foreningsskatt"
+
 msgid "Select the types of writing elements that this question applies to."
 msgstr "Velg hvilke typer skriveelementer dette spørsmålet gjelder."
 
 msgid "The payment of your membership fee for this year has been received!"
 msgstr "Vi bekrefter betalingen av medlemskontingenten for inneværende år!"
-
-msgid "This is instead the address of your association's management panel:"
-msgstr "Dette er i stedet adressen til foreningens administrasjonspanel:"
 
 msgid "This page summarises the available questions of the character form."
 msgstr ""
@@ -5568,10 +5578,6 @@ msgstr ""
 msgid "Does the character have a public role/archetype? If not, leave blank"
 msgstr ""
 "Har karakteren en offentlig rolle/arketype? Hvis ikke, la det stå tomt"
-
-msgid "Follow the tutorials to start setting up your first event right away"
-msgstr ""
-"Følg veiledningene for å sette opp ditt første arrangement med en gang"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Antall dager du har til rådighet for å betale neste avdrag"
@@ -5726,10 +5732,6 @@ msgid ""
 msgstr "Fraværende (i denne karakterens relasjoner er den andre fraværende)"
 
 msgid ""
-"Adds a 'motto' field to characters, a short phrase they frequently use."
-msgstr "Legger til et \"motto\"-felt for tegn, en kort setning de ofte bruker."
-
-msgid ""
 "Allows players to select hidden roles without spoiling them for others."
 msgstr ""
 "Gjør det mulig for spillerne å velge skjulte roller uten å avsløre dem for "
@@ -5770,12 +5772,6 @@ msgid ""
 "Oops! You gave one or more incorrect answers. Please check them below. "
 msgstr ""
 "Du har oppgitt ett eller flere feil svar. Vennligst sjekk dem nedenfor."
-
-msgid ""
-"Thank you for joining LarpManager! We are thrilled to have you with us."
-msgstr ""
-"Takk for at du har blitt en del av LarpManager! Vi er glade for å ha deg hos"
-" oss."
 
 msgid ""
 "The request of removal from further communication has been successfull!"
@@ -5872,6 +5868,12 @@ msgstr ""
 "Hvis avkrysset, kan spillerne tilpasse profilbildet til karakterene sine"
 
 msgid ""
+"Net profit of the event, difference between total revenue and total costs"
+msgstr ""
+"Nettoresultat av arrangementet, differansen mellom totale inntekter og "
+"totale kostnader"
+
+msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr "Merk: Spesialkoden genereres på nytt hver gang du endrer gavekortet"
 
@@ -5909,10 +5911,6 @@ msgstr ""
 msgid ""
 "if the character does NOT belong to this element, but is only referenced."
 msgstr "hvis tegnet IKKE tilhører dette elementet, men bare er navngitt."
-
-msgid ""
-"First of all, here is the address of the LarpManager for your association:"
-msgstr "Her er adressen til LarpManager for din forening:"
 
 msgid ""
 "I confirm that all my required personal data have been filled in correctly"
@@ -6053,9 +6051,22 @@ msgid ""
 msgstr "Hallo! Vi kontakter deg angående din påmelding til <b>%(event)s</b>."
 
 msgid ""
+"If checked, allows a option to be visible only if other options are "
+"selected."
+msgstr ""
+"Hvis avkrysset, kan et alternativ bare være synlig hvis andre alternativer "
+"er valgt."
+
+msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr "Angi om ferdigheten er synlig for brukerne og kan kjøpes fritt."
+
+msgid ""
+"Theoretical total of income due to participation fees selected by the "
+"players"
+msgstr ""
+"Teoretisk total inntekt på grunn av deltakeravgifter valgt av spillerne"
 
 msgid ""
 "This page prepares the cash balance already formatted for annual "
@@ -6186,6 +6197,13 @@ msgstr ""
 "gjennom og organisere dem."
 
 msgid ""
+"If checked, allows a option to be visible only to players with selected "
+"ticket."
+msgstr ""
+"Hvis avkrysset, kan et alternativ bare være synlig for spillere med valgt "
+"billett."
+
+msgid ""
 "These CSS commands will be carried over to all pages in your Association "
 "space."
 msgstr ""
@@ -6273,6 +6291,13 @@ msgstr ""
 "på:"
 
 msgid ""
+"Total amount of money received for this event, minus commission fees and "
+"refunds"
+msgstr ""
+"Totalt beløp mottatt for dette arrangementet, minus provisjonsgebyrer og "
+"refusjoner"
+
+msgid ""
 "Warning. This event is in a different language than the one set in your "
 "profile."
 msgstr ""
@@ -6285,13 +6310,6 @@ msgid ""
 msgstr ""
 "Du kan trekke tilbake ditt samtykke til datadeling ved å klikke på den "
 "aktuelle lenken."
-
-msgid ""
-"this balance reflects payments currently received and expenses recorded to "
-"date."
-msgstr ""
-"denne saldoen gjenspeiler innbetalinger som er mottatt og utgifter som er "
-"bokført til dags dato."
 
 #, python-format
 msgid ""
@@ -6371,13 +6389,6 @@ msgid ""
 "available"
 msgstr ""
 "Angi tegnalternativene som må velges for å gjøre ferdigheten tilgjengelig"
-
-msgid ""
-"Join the Discord to receive assistance, suggest improvements or notify bug "
-"reports"
-msgstr ""
-"Bli med i Discord for å få hjelp, foreslå forbedringer eller varsle om "
-"feilrapporter"
 
 msgid ""
 "To register for the event, please fill in the following form and click on "
@@ -6842,13 +6853,6 @@ msgstr ""
 " deg</a>"
 
 msgid ""
-"If you have any questions, please do not hesitate to contact us: just reply "
-"to this email."
-msgstr ""
-"Hvis du har spørsmål, er du velkommen til å kontakte oss: Bare svar på denne"
-" e-posten."
-
-msgid ""
 "This page allows you to add or change the types of ticket with which players"
 " can register."
 msgstr ""
@@ -7264,6 +7268,13 @@ msgid ""
 msgstr ""
 "Gjør det mulig for spillerne å sende private meldinger til hverandre uten å "
 "avsløre personlige e-postadresser."
+
+msgid ""
+"If checked, options no longer available in the form are hidden, instead of "
+"being displayed disabled"
+msgstr ""
+"Hvis avkrysset, skjules alternativer som ikke lenger er tilgjengelige i "
+"skjemaet, i stedet for å vises deaktivert"
 
 msgid ""
 "Indicate the description you wish to be displayed when this payment method "
@@ -8025,6 +8036,14 @@ msgstr ""
 "På denne siden kan du endre utseendet og presentasjonsinnstillingene for "
 "foreningens administrasjonssystem."
 
+msgid ""
+"Total of all expenses incurred for the event, both personal and "
+"organizational, including any tokens and credits issued"
+msgstr ""
+"Summen av alle utgifter som påløper i forbindelse med arrangementet, både "
+"personlige og organisatoriske, inkludert eventuelle utstedte poletter og "
+"kreditter"
+
 #, python-format
 msgid ""
 "We confirm we received the donation of %(amount)d %(currency)s. We thank you"
@@ -8746,15 +8765,6 @@ msgstr ""
 "medlemskapet."
 
 msgid ""
-"Searchable: Characters can be filtered according to this question. Public: "
-"The answer to this question is publicly visible. Private: The answer to this"
-" question is only visible to the player and organisers."
-msgstr ""
-"Søkbar: Tegn kan filtreres i henhold til dette spørsmålet. Offentlig: Svaret"
-" på dette spørsmålet er synlig for alle. Privat: Svaret på dette spørsmålet "
-"er kun synlig for spilleren og arrangørene."
-
-msgid ""
 "There are only two steps left to complete the procedure, enter the last "
 "necessary data. With this information, your membership application will be "
 "pre-filled; all you have to do is print it out and sign it."
@@ -8864,6 +8874,17 @@ msgstr ""
 "arrangementene du har meldt deg på!"
 
 msgid ""
+"Searchable: Characters can be filtered according to this question. Public: "
+"The answer to this question is publicly visible. Private: The answer to this"
+" question is only visible to the player. Hidden: The answer is hidden to all"
+" players."
+msgstr ""
+"Søkbar: Tegn kan filtreres i henhold til dette spørsmålet. Offentlig: Svaret"
+" på dette spørsmålet er offentlig synlig. Privat: Privat: Svaret på dette "
+"spørsmålet er kun synlig for spilleren. Skjult: Skjult: Svaret er skjult for"
+" alle spillere."
+
+msgid ""
 "If for whatever reason the first and last name shown on your documents is "
 "different from the one you prefer to use, then write it here. It will only "
 "be used for internal bureaucratic purposes, and will NEVER be displayed to "
@@ -8884,6 +8905,16 @@ msgstr ""
 "foreslå den for personalet. Vær forsiktig: Noen felt kan ikke lenger "
 "redigeres. La feltet stå tomt for å lagre endringene dine og for å kunne "
 "fortsette med dem i fremtiden."
+
+msgid ""
+"Optional: The question is shown, and can be filled by the player. Mandatory:"
+" The question needs to be filled by the player. Disabled: The question is "
+"shown, but cannot be changed by the player. Hidden: The question is not "
+"shown to the player."
+msgstr ""
+"Valgfritt: Spørsmålet vises og kan fylles ut av spilleren. Obligatorisk: "
+"Spørsmålet må fylles ut av spilleren. Deaktivert: Spørsmålet vises, men kan "
+"ikke endres av spilleren. Skjult: Spørsmålet vises ikke for spilleren."
 
 msgid ""
 "Indicate severity: RED (risks ruining the game for more than half of the "

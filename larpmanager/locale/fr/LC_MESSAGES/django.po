@@ -339,9 +339,6 @@ msgstr "Connexion"
 msgid "Money"
 msgstr "L'argent"
 
-msgid "Motto"
-msgstr "Devise"
-
 msgid "Names"
 msgstr "Noms"
 
@@ -422,9 +419,6 @@ msgstr "Vidéo"
 
 msgid "Where"
 msgstr "Où"
-
-msgid "cover"
-msgstr "couverture"
 
 msgid "email"
 msgstr "courriel"
@@ -617,9 +611,6 @@ msgstr "émis"
 
 msgid "member"
 msgstr "membre"
-
-msgid "mirror"
-msgstr "miroir"
 
 msgid "player"
 msgstr "joueur"
@@ -851,9 +842,6 @@ msgstr "adresse"
 
 msgid "options"
 msgstr "options"
-
-msgid "preview"
-msgstr "aperçu"
 
 msgid "Accepted"
 msgstr "Accepté"
@@ -1671,6 +1659,9 @@ msgstr "Liste des billets"
 msgid "Ties (Test)"
 msgstr "Cravates (test)"
 
+msgid "Total costs"
+msgstr "Coûts totaux"
+
 msgid "Transversal"
 msgstr "Transversale"
 
@@ -1862,6 +1853,9 @@ msgstr "Galerie de test"
 
 msgid "Three quotas"
 msgstr "Trois quotas"
+
+msgid "Total issued"
+msgstr "Total émis"
 
 msgid "Total number"
 msgstr "Nombre total"
@@ -2102,6 +2096,9 @@ msgstr "Carrousel d'images"
 msgid "Character Edit"
 msgstr "Édition des personnages"
 
+msgid "Character form"
+msgstr "Forme du caractère"
+
 msgid "Character name"
 msgstr "Nom du personnage"
 
@@ -2341,9 +2338,6 @@ msgstr "Progrès"
 
 msgid "Question saved!"
 msgstr "Question de soumission !"
-
-msgid "Question status"
-msgstr "Statut de la demande"
 
 msgid "Replacing names"
 msgstr "Remplacement des noms"
@@ -2639,6 +2633,9 @@ msgstr "Éléments d'inventaire"
 msgid "Invoice not found"
 msgstr "Facture non trouvée"
 
+msgid "Maximum available"
+msgstr "Maximum disponible"
+
 msgid "May the best win!"
 msgstr "Que le meilleur gagne !"
 
@@ -2698,9 +2695,6 @@ msgstr "Caractéristiques standard"
 
 msgid "Technical Support"
 msgstr "Support technique"
-
-msgid "Welcome on board!"
-msgstr "Bienvenue à bord !"
 
 msgid "Your achievements"
 msgstr "Vos réalisations"
@@ -3030,9 +3024,6 @@ msgstr "Carte cadeau annulée !"
 msgid "Independent factions"
 msgstr "Les factions indépendantes"
 
-msgid "Informations private"
-msgstr "Informations privées"
-
 msgid "Last membership date"
 msgstr "Dernière date d'adhésion"
 
@@ -3076,9 +3067,6 @@ msgstr "Structure prédéfinie"
 msgid "Preference not valid"
 msgstr "Préférence non valide"
 
-msgid "Private informations"
-msgstr "informations privées"
-
 msgid "Registration closed."
 msgstr "Les inscriptions sont closes."
 
@@ -3102,9 +3090,6 @@ msgstr "Conditions générales d'utilisation"
 
 msgid "Terms and conditions"
 msgstr "Conditions générales d'utilisation"
-
-msgid "The LarpManager team"
-msgstr "L'équipe de LarpManager"
 
 msgid "Yes, keep me posted!"
 msgstr "Oui, tenez-moi au courant !"
@@ -3843,6 +3828,9 @@ msgstr "Votre compte est maintenant actif !"
 msgid "Your friend code has been used"
 msgstr "Votre code d'ami a été utilisé"
 
+msgid "After confirmation, add another"
+msgstr "Après confirmation, ajoutez un autre"
+
 msgid "Assigning characters to players"
 msgstr "Attribution des personnages aux joueurs"
 
@@ -3883,6 +3871,9 @@ msgstr "Supplément appliqué au billet"
 
 msgid "To log back in with the account"
 msgstr "Pour se reconnecter avec le compte"
+
+msgid "Total of recorded money inflows"
+msgstr "Total des entrées d'argent enregistrées"
 
 msgid "Will be shown in the event page"
 msgstr "Sera affiché sur la page de l'événement"
@@ -3960,6 +3951,9 @@ msgstr "Cette page résume les parcelles de l'événement."
 msgid "This page shows the run signups."
 msgstr "Cette page résume les inscriptions à la course."
 
+msgid "Total of recorded money outflows"
+msgstr "Total des sorties d'argent enregistrées"
+
 msgid "We ask you to pay the difference"
 msgstr "Nous vous demandons de payer la différence"
 
@@ -3995,6 +3989,9 @@ msgstr "Veuillez télécharger votre photo de profil !"
 
 msgid "This page shows the event quests."
 msgstr "Cette page résume les quêtes de l'événement."
+
+msgid "Total participation fees received"
+msgstr "Total des frais de participation perçus"
 
 msgid "Verify that the data are correct:"
 msgstr "Vérifier que les données sont correctes :"
@@ -4200,6 +4197,9 @@ msgstr "Sélectionnez l'organisation à laquelle vous souhaitez vous adresser"
 msgid "Show all the traits to those present?"
 msgstr "Montrer tous les traits aux personnes présentes ?"
 
+msgid "Total amount refunded to participants"
+msgstr "Montant total remboursé aux participants"
+
 msgid "Update here the registration options!"
 msgstr "Mettez à jour vos options d'adhésion !"
 
@@ -4380,6 +4380,9 @@ msgstr "Souhaitez-vous payer un montant différent ?"
 
 msgid "You are excluding (none of these filters)"
 msgstr "Vous excluez (aucun de ces filtres)"
+
+msgid "You have exceeded the maximum text length"
+msgstr "Vous avez dépassé la longueur maximale du texte"
 
 msgid "You think you should have an achievement?"
 msgstr "Pensez-vous avoir droit à une récompense ?"
@@ -4603,6 +4606,9 @@ msgstr "Cette page résume les paramètres de l'impression PDF."
 msgid "This text will be added to the sheet of {name}"
 msgstr "Ce texte sera ajouté à la feuille de {name}"
 
+msgid "Total amount withheld for transfer commissions"
+msgstr "Montant total retenu pour les commissions de transfert"
+
 msgid "Do you wish to be always updated on our events?"
 msgstr "Vous souhaitez être tenu au courant de nos événements ?"
 
@@ -4804,6 +4810,9 @@ msgstr "Cette page vous permet d'éditer des textes spécifiques à l'événemen
 msgid "This page shows all inflows received for this run."
 msgstr "Cette page résume toutes les entrées de cette course."
 
+msgid "Total participation fees reduced through discounts"
+msgstr "Total des frais de participation réduits par des remises"
+
 msgid "Warning. The form contains errors to the fields - "
 msgstr "Attention ! Le formulaire contient des erreurs dans les champs -"
 
@@ -4813,9 +4822,6 @@ msgstr "Vous ne pouvez pas créer une relation avec vous-même !"
 msgid "Fill in this field if you have accessibility needs."
 msgstr ""
 "Remplissez ce champ si vous avez des besoins en matière d'accessibilité."
-
-msgid "Here are some useful links to help you get started:"
-msgstr "Voici quelques liens utiles pour vous aider à démarrer :"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Je l'ai fait plusieurs fois, j'ai une expérience de base."
@@ -4998,10 +5004,6 @@ msgstr ""
 msgid "This page summarises the list of members as a registry"
 msgstr "Cette page résume la liste des membres sous forme de registre"
 
-msgid "We advise you to keep this email for future reference."
-msgstr ""
-"Nous vous conseillons de conserver cet e-mail pour référence ultérieure."
-
 msgid "Write here additional information to your registration"
 msgstr "Indiquez ici si vous avez besoin d'informations supplémentaires"
 
@@ -5120,6 +5122,9 @@ msgid "This page shows all expense items recorded in the system."
 msgstr ""
 "Cette page récapitule tous les postes de dépenses enregistrés dans le "
 "système."
+
+msgid "Total of expenses submitted by collaborators and approved"
+msgstr "Total des dépenses soumises par les collaborateurs et approuvées"
 
 msgid "We ask you to pay the difference from the next instalment"
 msgstr ""
@@ -5331,6 +5336,11 @@ msgstr ""
 msgid "%(amount)d %(credits)s were used to participate in this event!"
 msgstr ""
 "%(amount)d %(credits)s ont été utilisés pour participer à cet événement !"
+
+msgid "If checked, an option can be chosen a maximum number of times."
+msgstr ""
+"Si cette case est cochée, une option peut être choisie un nombre maximum de "
+"fois."
 
 msgid "If checked, shows players the histories of preferences entered"
 msgstr ""
@@ -5600,6 +5610,10 @@ msgstr ""
 "Liste des utilisateurs qui ne se sont pas inscrits à une prochaine édition "
 "de l'événement"
 
+msgid "Minimum amount of net profit to be retained for the association tax"
+msgstr ""
+"Montant minimum du bénéfice net à conserver pour l'impôt de l'association"
+
 msgid "Select the types of writing elements that this question applies to."
 msgstr ""
 "Sélectionnez les types d'éléments d'écriture auxquels cette question "
@@ -5608,10 +5622,6 @@ msgstr ""
 msgid "The payment of your membership fee for this year has been received!"
 msgstr ""
 "Nous confirmons le paiement de votre cotisation pour l'année en cours !"
-
-msgid "This is instead the address of your association's management panel:"
-msgstr ""
-"Il s'agit plutôt de l'adresse du panneau de gestion de votre association :"
 
 msgid "This page summarises the available questions of the character form."
 msgstr ""
@@ -5641,11 +5651,6 @@ msgid "Does the character have a public role/archetype? If not, leave blank"
 msgstr ""
 "Le personnage a-t-il un rôle/type d'archétype public ? Si ce n'est pas le "
 "cas, laissez un blanc"
-
-msgid "Follow the tutorials to start setting up your first event right away"
-msgstr ""
-"Suivez les tutoriels pour commencer à organiser votre premier événement "
-"immédiatement."
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Nombre de jours disponibles pour payer le prochain versement"
@@ -5821,12 +5826,6 @@ msgid ""
 msgstr "Absent (dans les relations de ce personnage, l'autre est absent)"
 
 msgid ""
-"Adds a 'motto' field to characters, a short phrase they frequently use."
-msgstr ""
-"Ajoute un champ \"devise\" aux personnages, une courte phrase qu'ils "
-"utilisent fréquemment."
-
-msgid ""
 "Allows players to select hidden roles without spoiling them for others."
 msgstr ""
 "Permet aux joueurs de choisir des rôles cachés sans les dévoiler aux autres."
@@ -5871,12 +5870,6 @@ msgid ""
 msgstr ""
 "Vous avez donné une ou plusieurs réponses incorrectes. Veuillez les vérifier"
 " ci-dessous."
-
-msgid ""
-"Thank you for joining LarpManager! We are thrilled to have you with us."
-msgstr ""
-"Merci d'avoir rejoint LarpManager ! Nous sommes ravis de vous compter parmi "
-"nous."
 
 msgid ""
 "The request of removal from further communication has been successfull!"
@@ -5985,6 +5978,12 @@ msgstr ""
 "profil de leur personnage."
 
 msgid ""
+"Net profit of the event, difference between total revenue and total costs"
+msgstr ""
+"Bénéfice net de l'événement, différence entre le total des recettes et le "
+"total des coûts"
+
+msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr ""
 "Note : Le code spécial est généré à nouveau chaque fois que vous changez la "
@@ -6026,10 +6025,6 @@ msgid ""
 "if the character does NOT belong to this element, but is only referenced."
 msgstr ""
 "si le caractère n'appartient PAS à cet élément, mais est seulement nommé."
-
-msgid ""
-"First of all, here is the address of the LarpManager for your association:"
-msgstr "Tout d'abord, voici l'adresse du LarpManager de votre association :"
 
 msgid ""
 "I confirm that all my required personal data have been filled in correctly"
@@ -6188,11 +6183,25 @@ msgstr ""
 "<b>%(event)s</b>."
 
 msgid ""
+"If checked, allows a option to be visible only if other options are "
+"selected."
+msgstr ""
+"Si cette case est cochée, l'option n'est visible que si d'autres options "
+"sont sélectionnées."
+
+msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr ""
 "Indiquer si la compétence est visible pour les utilisateurs et si elle peut "
 "être achetée librement."
+
+msgid ""
+"Theoretical total of income due to participation fees selected by the "
+"players"
+msgstr ""
+"Total théorique des revenus dus aux frais de participation choisis par les "
+"joueurs"
 
 msgid ""
 "This page prepares the cash balance already formatted for annual "
@@ -6329,6 +6338,13 @@ msgstr ""
 "examiner et de les organiser."
 
 msgid ""
+"If checked, allows a option to be visible only to players with selected "
+"ticket."
+msgstr ""
+"Si cette case est cochée, l'option n'est visible que pour les joueurs ayant "
+"le ticket sélectionné."
+
+msgid ""
 "These CSS commands will be carried over to all pages in your Association "
 "space."
 msgstr ""
@@ -6420,6 +6436,13 @@ msgstr ""
 " annuelle d'un montant de 1 000 euros :"
 
 msgid ""
+"Total amount of money received for this event, minus commission fees and "
+"refunds"
+msgstr ""
+"Montant total de l'argent reçu pour cet événement, moins les frais de "
+"commission et les remboursements"
+
+msgid ""
 "Warning. This event is in a different language than the one set in your "
 "profile."
 msgstr ""
@@ -6432,13 +6455,6 @@ msgid ""
 msgstr ""
 "Vous pouvez retirer votre consentement au partage des données en cliquant "
 "sur le lien approprié."
-
-msgid ""
-"this balance reflects payments currently received and expenses recorded to "
-"date."
-msgstr ""
-"ce solde reflète les paiements actuellement reçus et les dépenses "
-"enregistrées à ce jour."
 
 #, python-format
 msgid ""
@@ -6524,13 +6540,6 @@ msgid ""
 msgstr ""
 "Indiquer les options de caractère qui doivent être sélectionnées pour que la"
 " compétence soit disponible."
-
-msgid ""
-"Join the Discord to receive assistance, suggest improvements or notify bug "
-"reports"
-msgstr ""
-"Rejoignez le Discord pour recevoir de l'aide, suggérer des améliorations ou "
-"signaler des bogues."
 
 msgid ""
 "To register for the event, please fill in the following form and click on "
@@ -7000,13 +7009,6 @@ msgstr ""
 "href='%(url)s'>Désinscription</a>"
 
 msgid ""
-"If you have any questions, please do not hesitate to contact us: just reply "
-"to this email."
-msgstr ""
-"Si vous avez des questions, n'hésitez pas à nous contacter : répondez "
-"simplement à cet e-mail."
-
-msgid ""
 "This page allows you to add or change the types of ticket with which players"
 " can register."
 msgstr ""
@@ -7423,6 +7425,13 @@ msgid ""
 msgstr ""
 "Permet aux joueurs de s'envoyer des messages privés sans révéler leur "
 "adresse électronique personnelle."
+
+msgid ""
+"If checked, options no longer available in the form are hidden, instead of "
+"being displayed disabled"
+msgstr ""
+"Si cette case est cochée, les options qui ne sont plus disponibles dans le "
+"formulaire sont masquées, au lieu d'être affichées désactivées."
 
 msgid ""
 "Indicate the description you wish to be displayed when this payment method "
@@ -8195,6 +8204,13 @@ msgstr ""
 "Cette page vous permet de modifier les paramètres d'apparence et de "
 "présentation du système de gestion de votre association."
 
+msgid ""
+"Total of all expenses incurred for the event, both personal and "
+"organizational, including any tokens and credits issued"
+msgstr ""
+"Total de toutes les dépenses encourues pour l'événement, tant personnelles "
+"qu'organisationnelles, y compris tous les jetons et crédits émis"
+
 #, python-format
 msgid ""
 "We confirm we received the donation of %(amount)d %(currency)s. We thank you"
@@ -8947,16 +8963,6 @@ msgstr ""
 "renouvellement."
 
 msgid ""
-"Searchable: Characters can be filtered according to this question. Public: "
-"The answer to this question is publicly visible. Private: The answer to this"
-" question is only visible to the player and organisers."
-msgstr ""
-"Recherchable : Les caractères peuvent être filtrés en fonction de cette "
-"question. Publique : la réponse à cette question est visible publiquement. "
-"Privé : La réponse à cette question n'est visible que par le joueur et les "
-"organisateurs."
-
-msgid ""
 "There are only two steps left to complete the procedure, enter the last "
 "necessary data. With this information, your membership application will be "
 "pre-filled; all you have to do is print it out and sign it."
@@ -9069,6 +9075,17 @@ msgstr ""
 "inscrit(e) !"
 
 msgid ""
+"Searchable: Characters can be filtered according to this question. Public: "
+"The answer to this question is publicly visible. Private: The answer to this"
+" question is only visible to the player. Hidden: The answer is hidden to all"
+" players."
+msgstr ""
+"Recherche possible : Les caractères peuvent être filtrés en fonction de "
+"cette question. Publique : La réponse à cette question est visible "
+"publiquement. Privée : La réponse à cette question n'est visible que par le "
+"joueur. Cachée : La réponse est cachée à tous les joueurs."
+
+msgid ""
 "If for whatever reason the first and last name shown on your documents is "
 "different from the one you prefer to use, then write it here. It will only "
 "be used for internal bureaucratic purposes, and will NEVER be displayed to "
@@ -9089,6 +9106,17 @@ msgstr ""
 "êtes prêt à le proposer au personnel. Attention : certains champs peuvent ne"
 " plus être modifiables. Laissez le champ vide pour enregistrer vos "
 "modifications et pouvoir les poursuivre à l'avenir."
+
+msgid ""
+"Optional: The question is shown, and can be filled by the player. Mandatory:"
+" The question needs to be filled by the player. Disabled: The question is "
+"shown, but cannot be changed by the player. Hidden: The question is not "
+"shown to the player."
+msgstr ""
+"Facultatif : La question est affichée et peut être remplie par le joueur. "
+"Obligatoire : La question doit être remplie par le joueur. Désactivée : La "
+"question est affichée, mais ne peut pas être modifiée par le joueur. Cachée "
+": La question n'est pas montrée au joueur."
 
 msgid ""
 "Indicate severity: RED (risks ruining the game for more than half of the "

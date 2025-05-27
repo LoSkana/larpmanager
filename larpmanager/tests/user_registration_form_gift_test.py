@@ -200,7 +200,7 @@ def field_text(page, live_server):
     page.get_by_role("textbox", name="who").fill("sadsadas")
     page.get_by_role("textbox", name="when").click()
     page.get_by_role("textbox", name="when").fill("sadsadsadsad")
-    expect(page.locator("#register_form")).to_contain_text("characters: 12 / 100")
+    expect(page.locator("#register_form")).to_contain_text("text length: 12 / 100")
     page.get_by_role("button", name="Continue").click()
     page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("link", name="Register").click()
