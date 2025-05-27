@@ -338,6 +338,34 @@ class OrgaConfigForm(ConfigForm):
         if "character" in self.params["features"]:
             section = _("Writing")
 
+            label = _("Title")
+            help_text = _("Enables field 'title', a short (2-3 words) text added to the character's name")
+            self.add_configs("writing_title", ConfigType.BOOL, section, label, help_text)
+
+            label = _("Cover")
+            help_text = _(
+                "Enables field 'cover', to shown a specific image in the gallery - until assigned to a player"
+            )
+            self.add_configs("writing_cover", ConfigType.BOOL, section, label, help_text)
+
+            label = _("Hide")
+            help_text = _("Enables field 'hide', to be able to hide writing element from players")
+            self.add_configs("writing_hide?", ConfigType.BOOL, section, label, help_text)
+
+            label = _("Assigned")
+            help_text = _(
+                "Enables field 'assigned', to track which staff member is responsible for each writing element"
+            )
+            self.add_configs("writing_assigned", ConfigType.BOOL, section, label, help_text)
+
+            label = _("Progress")
+            help_text = _("Enables field 'progress', to track the development status of writing elements")
+            self.add_configs("writing_progress", ConfigType.BOOL, section, label, help_text)
+
+            label = _("Props")
+            help_text = _("Enables field 'props', where staff can note needed or prepared items")
+            self.add_configs("writing_props", ConfigType.BOOL, section, label, help_text)
+
             label = _("Replacing names")
             help_text = _("If checked, PG names will be automatically replaced by a reference")
             self.add_configs("writing_substitute", ConfigType.BOOL, section, label, help_text)
@@ -422,6 +450,10 @@ class OrgaConfigForm(ConfigForm):
             label = _("Assignments")
             help_text = _("Number of characters to be assigned (default 1)")
             self.add_configs("casting_characters", ConfigType.INT, section, label, help_text)
+
+            label = _("Mirror")
+            help_text = _("Enables to set a character as a 'mirror' for another, to hide it's true nature")
+            self.add_configs("casting_mirror", ConfigType.BOOL, section, label, help_text)
 
             label = _("Minimum preferences")
             help_text = _("Minimum number of preferences")

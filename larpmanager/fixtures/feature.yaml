@@ -1,35 +1,4 @@
 - model: larpmanager.feature
-  pk: 2
-  fields:
-    name: Title
-    descr: Adds a short (2-3 words) 'title' field to characters.
-    slug: title
-    overall: false
-    module: 1
-    placeholder: false
-    order: 30
-- model: larpmanager.feature
-  pk: 3
-  fields:
-    name: Props
-    descr: Adds a 'props' field to main writing elements, allowing staff to note needed
-      or prepared items.
-    slug: props
-    overall: false
-    module: 1
-    placeholder: false
-    order: 150
-- model: larpmanager.feature
-  pk: 4
-  fields:
-    name: Mirror
-    descr: Allows players to select hidden roles without spoiling them for others.
-    slug: mirror
-    overall: false
-    module: 1
-    placeholder: false
-    order: 230
-- model: larpmanager.feature
   pk: 6
   fields:
     name: Prologues
@@ -106,17 +75,6 @@
     placeholder: false
     order: 20
 - model: larpmanager.feature
-  pk: 19
-  fields:
-    name: Cover
-    descr: Adds a 'cover' field to a character, to shown a specific image in the gallery
-      - until assigned to a player.
-    slug: cover
-    overall: false
-    module: 1
-    placeholder: false
-    order: 50
-- model: larpmanager.feature
   pk: 20
   fields:
     name: Bring a friend
@@ -138,17 +96,6 @@
     module: 1
     placeholder: false
     order: 25
-- model: larpmanager.feature
-  pk: 22
-  fields:
-    name: Hide
-    descr: Adds a 'hide' field to main writing elements, to prevent players viewing
-      them.
-    slug: hide
-    overall: false
-    module: 1
-    placeholder: false
-    order: 210
 - model: larpmanager.feature
   pk: 24
   fields:
@@ -538,28 +485,6 @@
     slug: player_larp_history
     overall: true
     module: 8
-    placeholder: false
-    order: 100
-- model: larpmanager.feature
-  pk: 91
-  fields:
-    name: Progress
-    descr: Adds a 'progress' status field (e.g. draft, ready, approved) to key writing
-      elements.
-    slug: progress
-    overall: false
-    module: 1
-    placeholder: false
-    order: 110
-- model: larpmanager.feature
-  pk: 92
-  fields:
-    name: Assigned
-    descr: Adds an 'assigned' field for main writing elements, letting you track which
-      staff member is responsible for each.
-    slug: assigned
-    overall: false
-    module: 1
     placeholder: false
     order: 100
 - model: larpmanager.feature
