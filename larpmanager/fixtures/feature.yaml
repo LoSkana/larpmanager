@@ -414,24 +414,13 @@
 - model: larpmanager.feature
   pk: 75
   fields:
-    name: Character relationships (staff)
+    name: Relationships
     descr: Allows authors to prepare a list of inter-character relationships.
     slug: relationships
     overall: false
     module: 1
     placeholder: false
     order: 200
-- model: larpmanager.feature
-  pk: 76
-  fields:
-    name: Character relationships (player)
-    descr: Enables players to write their own list of character relationships, helping
-      them familiarize themselves ahead of the event.
-    slug: player_relationships
-    overall: false
-    module: 1
-    placeholder: false
-    order: 190
 - model: larpmanager.feature
   pk: 77
   fields:

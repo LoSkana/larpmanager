@@ -96,6 +96,7 @@ def update_event_features(ev_id):
             "registration": ["reg_que_age", "reg_que_faction", "reg_que_tickets"],
             "character_form": ["wri_que_max", "wri_que_tickets", "wri_que_dependents"],
             "casting": ["mirror"],
+            "user_character": ["player_relationships"],
         }
         for config_type, config_names in ex_features.items():
             for slug in config_names:

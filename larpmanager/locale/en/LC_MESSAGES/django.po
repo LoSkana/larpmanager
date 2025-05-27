@@ -917,6 +917,14 @@ msgstr ""
 msgid "If checked, activates a staff-managed approval process for characters"
 msgstr ""
 
+msgid "Relationships"
+msgstr ""
+
+msgid ""
+"If checked, enables players to write their own list of character "
+"relationships"
+msgstr ""
+
 msgid "Character customisation"
 msgstr ""
 
@@ -3749,9 +3757,6 @@ msgid "Customize"
 msgstr ""
 
 msgid "Modify some character elements to make it yours!"
-msgstr ""
-
-msgid "Relationships"
 msgstr ""
 
 msgid "Fill in your character's relationships!"
@@ -6974,18 +6979,7 @@ msgid ""
 "define multiple due dates and amounts."
 msgstr ""
 
-msgid "Character relationships (staff)"
-msgstr ""
-
 msgid "Allows authors to prepare a list of inter-character relationships."
-msgstr ""
-
-msgid "Character relationships (player)"
-msgstr ""
-
-msgid ""
-"Enables players to write their own list of character relationships, helping "
-"them familiarize themselves ahead of the event."
 msgstr ""
 
 msgid "Sections"

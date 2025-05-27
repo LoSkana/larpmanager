@@ -3834,9 +3834,6 @@ msgstr "Po potvrzení přidejte další"
 msgid "Assigning characters to players"
 msgstr "Přiřazení postav hráčům"
 
-msgid "Character relationships (staff)"
-msgstr "Vztahy mezi postavami (zaměstnanci)"
-
 msgid "Choice available, click to lock"
 msgstr "Možnost volby, klikněte pro uzamčení"
 
@@ -3899,9 +3896,6 @@ msgstr "Zrušení pro chybějící profil"
 #, python-format
 msgid "Character assigned for %(event)s"
 msgstr "Znak přiřazený pro %(event)s"
-
-msgid "Character relationships (player)"
-msgstr "Vztahy mezi postavami (hráč)"
 
 msgid "Costumes - make up, cloth, armor"
 msgstr "Kostýmy - make-up, látky, brnění"
@@ -6066,6 +6060,13 @@ msgstr ""
 "její skutečnou povahu."
 
 msgid ""
+"If checked, enables players to write their own list of character "
+"relationships"
+msgstr ""
+"Pokud je zaškrtnuto, umožňuje hráčům napsat vlastní seznam vztahů mezi "
+"postavami."
+
+msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
 "processed!"
 msgstr ""
@@ -8020,13 +8021,6 @@ msgid ""
 msgstr ""
 "Na základě zadaných hodnot se simuluje optimální alokace; před finálním "
 "načtením ji můžete spustit libovolně mnohokrát."
-
-msgid ""
-"Enables players to write their own list of character relationships, helping "
-"them familiarize themselves ahead of the event."
-msgstr ""
-"Umožňuje hráčům napsat si vlastní seznam vztahů mezi postavami, což jim "
-"pomáhá seznámit se s nimi ještě před akcí."
 
 msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "

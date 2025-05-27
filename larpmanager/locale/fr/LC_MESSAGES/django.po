@@ -3834,9 +3834,6 @@ msgstr "Après confirmation, ajoutez un autre"
 msgid "Assigning characters to players"
 msgstr "Attribution des personnages aux joueurs"
 
-msgid "Character relationships (staff)"
-msgstr "Relations de caractère (personnel)"
-
 msgid "Choice available, click to lock"
 msgstr "Choix possible, cliquer pour verrouiller"
 
@@ -3899,9 +3896,6 @@ msgstr "Annulation pour profil manquant"
 #, python-format
 msgid "Character assigned for %(event)s"
 msgstr "Caractère attribué pour les %(event)s"
-
-msgid "Character relationships (player)"
-msgstr "Relations entre les personnages (joueur)"
 
 msgid "Costumes - make up, cloth, armor"
 msgstr "Costumes - maquillage, tissu, armure"
@@ -6284,6 +6278,13 @@ msgstr ""
 "véritable nature."
 
 msgid ""
+"If checked, enables players to write their own list of character "
+"relationships"
+msgstr ""
+"Si cette case est cochée, les joueurs peuvent rédiger leur propre liste de "
+"relations entre les personnages."
+
+msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
 "processed!"
 msgstr ""
@@ -8302,13 +8303,6 @@ msgstr ""
 "L'allocation optimale basée sur les valeurs définies est simulée ; vous "
 "pouvez l'exécuter autant de fois que vous le souhaitez avant le chargement "
 "final."
-
-msgid ""
-"Enables players to write their own list of character relationships, helping "
-"them familiarize themselves ahead of the event."
-msgstr ""
-"Permet aux joueurs de rédiger leur propre liste de relations entre les "
-"personnages, ce qui les aide à se familiariser avec l'événement."
 
 msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "

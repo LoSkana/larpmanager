@@ -220,6 +220,8 @@ class OrgaConfigForm(ConfigForm):
 
         self.set_config_structure()
 
+        self.set_config_writing()
+
         self.set_config_character()
 
         self.set_config_char_form()
@@ -334,7 +336,7 @@ class OrgaConfigForm(ConfigForm):
             help_text = _("If checked, shows the original image in the cover, not the thumbnail version")
             self.add_configs("cover_orig", ConfigType.BOOL, section, label, help_text)
 
-    def set_config_character(self):
+    def set_config_writing(self):
         if "character" in self.params["features"]:
             section = _("Writing")
 
@@ -380,6 +382,7 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("writing_working_ticket", ConfigType.BOOL, section, label, help_text)
 
+    def set_config_character(self):
         if "campaign" in self.params["features"]:
             section = _("Campaign")
             label = _("Independent factions")
@@ -409,6 +412,10 @@ class OrgaConfigForm(ConfigForm):
             label = _("Approval")
             help_text = _("If checked, activates a staff-managed approval process for characters")
             self.add_configs("user_character_approval", ConfigType.BOOL, section, label, help_text)
+
+            label = _("Relationships")
+            help_text = _("If checked, enables players to write their own list of character relationships")
+            self.add_configs("user_character_player_relationships", ConfigType.BOOL, section, label, help_text)
 
     def set_config_custom(self):
         if "custom_character" in self.params["features"]:

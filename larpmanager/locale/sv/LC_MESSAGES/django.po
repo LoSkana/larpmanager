@@ -3834,9 +3834,6 @@ msgstr "Efter bekräftelse, lägg till ytterligare en"
 msgid "Assigning characters to players"
 msgstr "Tilldelning av karaktärer till spelare"
 
-msgid "Character relationships (staff)"
-msgstr "Karaktärsrelationer (personal)"
-
 msgid "Choice available, click to lock"
 msgstr "Val tillgängligt, klicka för att låsa"
 
@@ -3899,9 +3896,6 @@ msgstr "Avbokning för saknad profil"
 #, python-format
 msgid "Character assigned for %(event)s"
 msgstr "Tecken tilldelade för %(event)s"
-
-msgid "Character relationships (player)"
-msgstr "Karaktärsrelationer (spelare)"
 
 msgid "Costumes - make up, cloth, armor"
 msgstr "Dräkter - smink, tyg, rustning"
@@ -6153,6 +6147,13 @@ msgstr ""
 "att dölja dess sanna natur"
 
 msgid ""
+"If checked, enables players to write their own list of character "
+"relationships"
+msgstr ""
+"Om markerad, gör det möjligt för spelare att skriva sin egen lista över "
+"karaktärsrelationer"
+
+msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
 "processed!"
 msgstr ""
@@ -8152,13 +8153,6 @@ msgid ""
 msgstr ""
 "Den optimala fördelningen baserat på de inställda värdena simuleras; du kan "
 "köra den så många gånger du vill innan den slutliga laddningen"
-
-msgid ""
-"Enables players to write their own list of character relationships, helping "
-"them familiarize themselves ahead of the event."
-msgstr ""
-"Gör det möjligt för spelarna att skriva sin egen lista över "
-"karaktärsrelationer, vilket hjälper dem att bekanta sig inför evenemanget."
 
 msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
