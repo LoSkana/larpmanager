@@ -156,15 +156,16 @@ def get_character_sheet_questbuilder(ctx):
 
 
 def get_character_sheet_plots(ctx):
-    if "plots" not in ctx["features"]:
+    if "plot" not in ctx["features"]:
         return
 
     ctx["sheet_plots"] = []
     que = PlotCharacterRel.objects.filter(character=ctx["character"])
     for el in que.order_by("plot__number"):
         tx = el.plot.text
-        if el.text:
-            tx += "<hr />" + el.text
+        if tx and el.text:
+            tx += "<hr />"
+        tx += el.text
         ctx["sheet_plots"].append({"name": el.plot.name, "text": tx})
 
 
