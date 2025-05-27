@@ -200,9 +200,6 @@ msgstr "Porta di connessione"
 msgid "Prev"
 msgstr "Prev"
 
-msgid "Prop"
-msgstr "Prop"
-
 msgid "Role"
 msgstr "Ruolo"
 
@@ -365,9 +362,6 @@ msgstr "Prezzo"
 
 msgid "Print"
 msgstr "Stampa"
-
-msgid "Props"
-msgstr "Props"
 
 msgid "Quest"
 msgstr "Quest"
@@ -3801,9 +3795,6 @@ msgstr "Completa il pagamento per %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Ritardo nella quota associativa annuale"
 
-msgid "Does it require special props?"
-msgstr "Richiede prop particolari?"
-
 msgid "Font to be used in page titles"
 msgstr "font da utilizzare nei titoli"
 
@@ -4837,9 +4828,6 @@ msgstr "Questa pagina ti permette di rispondere alla domanda di un giocatore."
 msgid "This page shows all payments received for this run."
 msgstr "Questa pagina riepiloga tutti i pagamenti ricevuti per questa run."
 
-msgid "This page shows the props marked in the characters."
-msgstr "Questa pagina riepiloga le props segnate nei personaggi."
-
 msgid "This page shows the questions submitted by players."
 msgstr "Questa pagina riepiloga le domande inviate dai giocatori."
 
@@ -5595,11 +5583,6 @@ msgstr ""
 
 msgid "Does the character have a public role/archetype? If not, leave blank"
 msgstr "Il personaggio ha un ruolo / archetipo pubblico? Se no lascia vuoto"
-
-msgid "Enables field 'props', where staff can note needed or prepared items"
-msgstr ""
-"Consente di utilizzare il campo \"oggetti di scena\", dove lo staff può "
-"annotare gli articoli necessari o preparati."
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr ""

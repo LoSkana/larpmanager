@@ -200,9 +200,6 @@ msgstr "Připojovací port"
 msgid "Prev"
 msgstr "Předchozí"
 
-msgid "Prop"
-msgstr "Rekvizita"
-
 msgid "Role"
 msgstr "Role"
 
@@ -365,9 +362,6 @@ msgstr "Cena"
 
 msgid "Print"
 msgstr "Tisk"
-
-msgid "Props"
-msgstr "Rekvizity"
 
 msgid "Quest"
 msgstr "Quest"
@@ -3801,9 +3795,6 @@ msgstr "Kompletní platba za %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Zpoždění ročního členského poplatku"
 
-msgid "Does it require special props?"
-msgstr "Vyžaduje to speciální rekvizity?"
-
 msgid "Font to be used in page titles"
 msgstr "písmo, které se má použít v nadpisech"
 
@@ -4835,9 +4826,6 @@ msgstr "Na této stránce můžete odpovědět na otázku hráče."
 msgid "This page shows all payments received for this run."
 msgstr "Na této stránce jsou shrnuty všechny platby přijaté za tento běh."
 
-msgid "This page shows the props marked in the characters."
-msgstr "Na této stránce jsou shrnuty rekvizity vyznačené v postavách."
-
 msgid "This page shows the questions submitted by players."
 msgstr "Tato stránka shrnuje otázky zaslané hráči."
 
@@ -5508,11 +5496,6 @@ msgstr "Díky těmto návodům se tento nástroj naučíte používat během chv
 
 msgid "Does the character have a public role/archetype? If not, leave blank"
 msgstr "Má postava veřejnou roli/archetyp? Pokud ne, nechte prázdné."
-
-msgid "Enables field 'props', where staff can note needed or prepared items"
-msgstr ""
-"Umožňuje pole \"rekvizity\", kam si zaměstnanci mohou poznamenat potřebné "
-"nebo připravené položky."
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Počet dnů, které máte k dispozici na zaplacení další splátky"

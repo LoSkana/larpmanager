@@ -53,7 +53,6 @@ class QuestionType(models.TextChoices):
     FACTIONS = "faction", _("Factions")
     TITLE = "title", _("Title")
     MIRROR = "mirror", _("Mirror")
-    PROPS = "props", _("Prop")
     HIDE = "hide", _("Hide")
     PROGRESS = "progress", _("Progress")
     ASSIGNED = "assigned", _("Assigned")

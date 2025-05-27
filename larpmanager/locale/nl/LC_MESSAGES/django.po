@@ -200,9 +200,6 @@ msgstr "Aansluitpoort"
 msgid "Prev"
 msgstr "Prev"
 
-msgid "Prop"
-msgstr "Prop"
-
 msgid "Role"
 msgstr "Rol"
 
@@ -365,9 +362,6 @@ msgstr "Prijs"
 
 msgid "Print"
 msgstr "Afdrukken"
-
-msgid "Props"
-msgstr "Rekwisieten"
 
 msgid "Quest"
 msgstr "Zoektocht"
@@ -3801,9 +3795,6 @@ msgstr "Volledige betaling voor %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Uitstel van jaarlijkse contributie"
 
-msgid "Does it require special props?"
-msgstr "Zijn er speciale rekwisieten voor nodig?"
-
 msgid "Font to be used in page titles"
 msgstr "Lettertype voor titels"
 
@@ -4851,11 +4842,6 @@ msgstr ""
 "Deze pagina geeft een overzicht van alle betalingen die voor deze run zijn "
 "ontvangen."
 
-msgid "This page shows the props marked in the characters."
-msgstr ""
-"Deze pagina geeft een overzicht van de rekwisieten die in de personages zijn"
-" gemarkeerd."
-
 msgid "This page shows the questions submitted by players."
 msgstr ""
 "Deze pagina geeft een overzicht van de vragen die door spelers zijn "
@@ -5631,11 +5617,6 @@ msgstr "Met deze tutorials leer je de tool in een mum van tijd gebruiken!"
 
 msgid "Does the character have a public role/archetype? If not, leave blank"
 msgstr "Heeft het personage een openbare rol/archetype? Zo niet, laat leeg"
-
-msgid "Enables field 'props', where staff can note needed or prepared items"
-msgstr ""
-"Maakt 'rekwisieten' mogelijk, waar medewerkers benodigde of voorbereide "
-"items kunnen noteren"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Aantal dagen beschikbaar om de volgende termijn te betalen"

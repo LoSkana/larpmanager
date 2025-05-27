@@ -360,10 +360,6 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("writing_assigned", ConfigType.BOOL, section, label, help_text)
 
-            label = _("Props")
-            help_text = _("Enables field 'props', where staff can note needed or prepared items")
-            self.add_configs("writing_props", ConfigType.BOOL, section, label, help_text)
-
             label = _("Replacing names")
             help_text = _("If checked, PG names will be automatically replaced by a reference")
             self.add_configs("writing_substitute", ConfigType.BOOL, section, label, help_text)

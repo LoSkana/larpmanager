@@ -200,9 +200,6 @@ msgstr "Tilkoblingsport"
 msgid "Prev"
 msgstr "Forrige"
 
-msgid "Prop"
-msgstr "Rekvisitt"
-
 msgid "Role"
 msgstr "Rolle"
 
@@ -365,9 +362,6 @@ msgstr "Pris"
 
 msgid "Print"
 msgstr "Skriv ut"
-
-msgid "Props"
-msgstr "Rekvisitter"
 
 msgid "Quest"
 msgstr "Søken"
@@ -3801,9 +3795,6 @@ msgstr "Fullfør betaling for %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Forsinkelse i årlig medlemsavgift"
 
-msgid "Does it require special props?"
-msgstr "Krever det spesielle rekvisitter?"
-
 msgid "Font to be used in page titles"
 msgstr "skrifttype som skal brukes i titler"
 
@@ -4840,9 +4831,6 @@ msgid "This page shows all payments received for this run."
 msgstr ""
 "Denne siden oppsummerer alle betalinger som er mottatt for denne kjøringen."
 
-msgid "This page shows the props marked in the characters."
-msgstr "Denne siden oppsummerer rekvisittene som er merket i tegnene."
-
 msgid "This page shows the questions submitted by players."
 msgstr "Denne siden oppsummerer spørsmålene som spillerne har sendt inn."
 
@@ -5569,11 +5557,6 @@ msgstr ""
 msgid "Does the character have a public role/archetype? If not, leave blank"
 msgstr ""
 "Har karakteren en offentlig rolle/arketype? Hvis ikke, la det stå tomt"
-
-msgid "Enables field 'props', where staff can note needed or prepared items"
-msgstr ""
-"Muliggjør \"rekvisitter\" i felt, der personalet kan notere ting de trenger "
-"eller har forberedt"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Antall dager du har til rådighet for å betale neste avdrag"

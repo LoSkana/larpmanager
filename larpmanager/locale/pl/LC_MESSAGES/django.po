@@ -200,9 +200,6 @@ msgstr "Port"
 msgid "Prev"
 msgstr "Prev"
 
-msgid "Prop"
-msgstr "Śmigło"
-
 msgid "Role"
 msgstr "Rola"
 
@@ -365,9 +362,6 @@ msgstr "Cena"
 
 msgid "Print"
 msgstr "Drukuj"
-
-msgid "Props"
-msgstr "Rekwizyty"
 
 msgid "Quest"
 msgstr "Quest"
@@ -3801,9 +3795,6 @@ msgstr "Pełna płatność za %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Opóźnienie rocznej opłaty członkowskiej"
 
-msgid "Does it require special props?"
-msgstr "Czy wymaga to specjalnych rekwizytów?"
-
 msgid "Font to be used in page titles"
 msgstr "Czcionka używana w tytułach stron"
 
@@ -4836,9 +4827,6 @@ msgstr ""
 "Na tej stronie wyświetlane są wszystkie płatności otrzymane dla tego "
 "przebiegu."
 
-msgid "This page shows the props marked in the characters."
-msgstr "Ta strona przedstawia rekwizyty oznaczone postaciami."
-
 msgid "This page shows the questions submitted by players."
 msgstr "Ta strona pokazuje pytania przesłane przez graczy."
 
@@ -5545,11 +5533,6 @@ msgstr ""
 msgid "Does the character have a public role/archetype? If not, leave blank"
 msgstr ""
 "Czy postać ma publiczną rolę/typ postaci? Jeśli nie, pozostaw puste pole"
-
-msgid "Enables field 'props', where staff can note needed or prepared items"
-msgstr ""
-"Umożliwia tworzenie \"rekwizytów\" w terenie, w których pracownicy mogą "
-"odnotowywać potrzebne lub przygotowane elementy."
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Liczba dni, w ciągu których gracz musi zapłacić kolejną ratę"

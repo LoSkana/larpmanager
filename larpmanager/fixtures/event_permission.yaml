@@ -349,13 +349,6 @@
     number: 131
     feature: 105
 - model: larpmanager.eventpermission
-  pk: 56
-  fields:
-    name: Props
-    slug: orga_props
-    number: 141
-    feature: 3
-- model: larpmanager.eventpermission
   pk: 57
   fields:
     name: Ability type

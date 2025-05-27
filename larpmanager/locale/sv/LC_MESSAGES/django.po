@@ -200,9 +200,6 @@ msgstr "Anslutningsport"
 msgid "Prev"
 msgstr "Före"
 
-msgid "Prop"
-msgstr "Prop"
-
 msgid "Role"
 msgstr "Roll"
 
@@ -365,9 +362,6 @@ msgstr "Pris"
 
 msgid "Print"
 msgstr "Skriv ut"
-
-msgid "Props"
-msgstr "Props"
 
 msgid "Quest"
 msgstr "Quest"
@@ -3801,9 +3795,6 @@ msgstr "Fullständig betalning för %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Försening av årlig medlemsavgift"
 
-msgid "Does it require special props?"
-msgstr "Krävs det särskilda rekvisita?"
-
 msgid "Font to be used in page titles"
 msgstr "teckensnitt som ska användas i titlar"
 
@@ -4842,9 +4833,6 @@ msgid "This page shows all payments received for this run."
 msgstr ""
 "Denna sida sammanfattar alla betalningar som mottagits för denna körning."
 
-msgid "This page shows the props marked in the characters."
-msgstr "Denna sida sammanfattar den rekvisita som används i rollfigurerna."
-
 msgid "This page shows the questions submitted by players."
 msgstr "Denna sida sammanfattar de frågor som spelarna har skickat in."
 
@@ -5561,11 +5549,6 @@ msgstr ""
 
 msgid "Does the character have a public role/archetype? If not, leave blank"
 msgstr "Har karaktären en offentlig roll/arketyp? Om inte, lämna tomt"
-
-msgid "Enables field 'props', where staff can note needed or prepared items"
-msgstr ""
-"Möjliggör \"rekvisita\" i fält, där personalen kan notera nödvändiga eller "
-"förberedda artiklar"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Antal dagar tillgängliga för att betala nästa delbetalning"

@@ -841,12 +841,6 @@ msgid ""
 "each writing element"
 msgstr ""
 
-msgid "Props"
-msgstr ""
-
-msgid "Enables field 'props', where staff can note needed or prepared items"
-msgstr ""
-
 msgid "Replacing names"
 msgstr ""
 
@@ -2623,9 +2617,6 @@ msgstr ""
 msgid "Sheet"
 msgstr ""
 
-msgid "Prop"
-msgstr ""
-
 msgid "Progress"
 msgstr ""
 
@@ -3237,9 +3228,6 @@ msgstr ""
 
 msgid ""
 "Preview visible only by the assigned player, when 'show preview' is checked"
-msgstr ""
-
-msgid "Does it require special props?"
 msgstr ""
 
 msgid "Creation"
@@ -6607,9 +6595,6 @@ msgid "This page shows the prologues of the event."
 msgstr ""
 
 msgid "Reading"
-msgstr ""
-
-msgid "This page shows the props marked in the characters."
 msgstr ""
 
 msgid "Quest Type"
