@@ -11,9 +11,9 @@ def clean_preview(apps, schema_editor):
     for char in Character.objects.exclude(preview="").exclude(preview__isnull=True):
         (que, cr) = WritingQuestion.objects.get_or_create(event=char.event, typ="e", display="Preview")
         (ca, cr) = WritingAnswer.objects.get_or_create(element_id=char.id, question=que)
-        ca.text = char.Preview
+        ca.text = char.preview
         ca.save()
-    WritingQuestion.objects.filter(typ="Preview").delete()
+    WritingQuestion.objects.filter(typ="preview").delete()
 
     # Delete feature
     Feature = apps.get_model("larpmanager", "Feature")
