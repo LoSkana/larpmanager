@@ -131,6 +131,7 @@ class OrgaPaymentForm(MyFormRun):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["reg"].widget.set_event(self.params["event"])
+        self.fields["reg"].required = True
 
 
 class ExeOutflowForm(MyForm):
