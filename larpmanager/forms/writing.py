@@ -101,6 +101,7 @@ class PlayerRelationshipForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["target"].widget.set_event(self.params["run"].event)
+        self.fields["target"].required = True
 
     def clean(self):
         cleaned_data = super().clean()
@@ -141,7 +142,9 @@ class OrgaRelationshipForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["source"].widget.set_event(self.params["event"])
+        self.fields["source"].required = True
         self.fields["target"].widget.set_event(self.params["event"])
+        self.fields["target"].required = True
 
     def clean(self):
         cleaned_data = super().clean()
