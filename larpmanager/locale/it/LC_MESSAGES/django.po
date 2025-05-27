@@ -726,9 +726,6 @@ msgstr "Giocatore:"
 msgid "Players"
 msgstr "Giocatori"
 
-msgid "Preview"
-msgstr "Preview"
-
 msgid "Primary"
 msgstr "Primari"
 
@@ -6009,12 +6006,6 @@ msgstr ""
 "Versamento ricevuto! Non appena verrà approvato, la tua contabilità sarà "
 "aggiornata."
 
-msgid ""
-"Preview visible only by the assigned player, when 'show preview' is checked"
-msgstr ""
-"Anteprima visibile solo dal giocatore assegnato, quando è selezionata "
-"l'opzione \"mostra anteprima\"."
-
 #, python-format
 msgid ""
 "(check the available number of discounts <a href='%(url)s'>on this page</a>)"
@@ -7174,13 +7165,6 @@ msgstr ""
 "'%(allowed_extensions)s'."
 
 msgid ""
-"If checked, makes visible the preview, reserved only to the player to whom "
-"the item is assigned"
-msgstr ""
-"Se checkato, rende visibile le anteprime, riservate solo al giocatore a cui "
-"è assegnato l'elemento"
-
-msgid ""
 "If it is assigned to you, you will automatically be assigned the original "
 "character it mirrors."
 msgstr ""
@@ -7656,13 +7640,6 @@ msgid ""
 msgstr ""
 "Questa pagina riepiloga i ruoli da assegnare per utilizzare le funzioni "
 "riguardanti l'organizzazione."
-
-msgid ""
-"Adds a 'preview' field to writing elements, shareable with the player before"
-" the full sheet is published."
-msgstr ""
-"Aggiunge un campo \"anteprima\" agli elementi di scrittura, condivisibile "
-"con il giocatore prima della pubblicazione del foglio completo."
 
 msgid ""
 "Allows players to create and contribute to collections aimed at assisting "

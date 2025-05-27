@@ -14,10 +14,5 @@
             <h2 class="c title">{{ question.display }}</h2>
             <div class="plot text">{% show_char sheet_char.text run 1 %}</div>
         {% endif %}
-    {% elif question.typ == 'preview' %}
-        {% if sheet_char.preview and show_preview %}
-            <h2 class="c title">{{ question.display }}</h2>
-            <div class="plot text">{% show_char sheet_char.preview run 1 %}</div>
-        {% endif %}
     {% endif %}
 {% endfor %}

@@ -726,9 +726,6 @@ msgstr "Gracz:"
 msgid "Players"
 msgstr "Gracze"
 
-msgid "Preview"
-msgstr "Podgląd"
-
 msgid "Primary"
 msgstr "Podstawowe"
 
@@ -5931,12 +5928,6 @@ msgstr ""
 "Płatność otrzymana! Jak tylko płatność zostanie zatwierdzona, konta zostaną "
 "zaktualizowane."
 
-msgid ""
-"Preview visible only by the assigned player, when 'show preview' is checked"
-msgstr ""
-"Podgląd widoczny tylko przez przypisanego gracza, gdy zaznaczona jest opcja "
-"\"pokaż podgląd\"."
-
 #, python-format
 msgid ""
 "(check the available number of discounts <a href='%(url)s'>on this page</a>)"
@@ -7079,13 +7070,6 @@ msgstr ""
 " to: '%(allowed_extensions)s'."
 
 msgid ""
-"If checked, makes visible the preview, reserved only to the player to whom "
-"the item is assigned"
-msgstr ""
-"Jeśli zaznaczone, uwidacznia podgląd, zarezerwowany tylko dla gracza, do "
-"którego przedmiot jest przypisany."
-
-msgid ""
 "If it is assigned to you, you will automatically be assigned the original "
 "character it mirrors."
 msgstr ""
@@ -7560,13 +7544,6 @@ msgid ""
 msgstr ""
 "Ta strona zawiera podsumowanie ról, które należy przypisać w celu "
 "korzystania z funkcji dotyczących organizacji."
-
-msgid ""
-"Adds a 'preview' field to writing elements, shareable with the player before"
-" the full sheet is published."
-msgstr ""
-"Dodaje pole \"podglądu\" do elementów zapisu, które można udostępnić "
-"graczowi przed opublikowaniem pełnego arkusza."
 
 msgid ""
 "Allows players to create and contribute to collections aimed at assisting "

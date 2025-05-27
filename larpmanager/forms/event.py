@@ -791,11 +791,6 @@ class OrgaRunForm(ConfigForm):
 
         addit_show = [
             (
-                "preview",
-                _("Preview"),
-                _("If checked, makes visible the preview, reserved only to the player to whom the item is assigned"),
-            ),
-            (
                 "faction",
                 _("Factions"),
                 _("If checked, makes factions visible, as the character assignments to factions"),

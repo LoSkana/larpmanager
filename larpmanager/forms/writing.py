@@ -81,11 +81,6 @@ class WritingForm(MyForm):
 
         self.show_link = ["id_teaser", "id_text"]
 
-        if "preview" in self.params["features"]:
-            self.show_link.append("id_preview")
-        elif "preview" in self.fields:
-            self.delete_field("preview")
-
 
 class PlayerRelationshipForm(MyForm):
     page_title = _("Character Relationship")
@@ -304,7 +299,7 @@ class QuestTypeForm(WritingForm):
 
     class Meta:
         model = QuestType
-        fields = ["progress", "name", "assigned", "teaser", "preview", "event"]
+        fields = ["progress", "name", "assigned", "teaser", "event"]
 
         widgets = {
             "teaser": WritingTinyMCE(),
@@ -323,7 +318,6 @@ class QuestForm(WritingForm):
             "name",
             "assigned",
             "teaser",
-            "preview",
             "text",
             "hide",
             "open_show",
@@ -385,7 +379,6 @@ class TraitForm(WritingForm):
             "name",
             "assigned",
             "teaser",
-            "preview",
             "text",
             "role",
             "keywords",

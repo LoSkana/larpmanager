@@ -62,9 +62,6 @@
     <div class="faction">
         <div class="pre-section"></div>
         <h2 class="title">{{ g.name }}</h2>
-        {% if g.preview and show_preview %}
-            <div class="plot">{% show_char g.preview run 0 %}</div>
-        {% endif %}
         {% if g.text and show_text %}
             <div class="plot">{% show_char g run 0 %}</div>
         {% endif %}

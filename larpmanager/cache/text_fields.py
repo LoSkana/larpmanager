@@ -75,7 +75,7 @@ def _init_element_cache_text_field(el, res, typ):
     if el.id not in res:
         res[el.id] = {}
 
-    for f in ["teaser", "text", "preview"]:
+    for f in ["teaser", "text"]:
         v = getattr(el, f)
         res[el.id][f] = get_single_cache_text_field(el.id, f, v)
 

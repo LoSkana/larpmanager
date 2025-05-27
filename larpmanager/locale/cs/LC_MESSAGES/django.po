@@ -726,9 +726,6 @@ msgstr "Hráč:"
 msgid "Players"
 msgstr "Hráči"
 
-msgid "Preview"
-msgstr "Náhled"
-
 msgid "Primary"
 msgstr "Primární"
 
@@ -5863,12 +5860,6 @@ msgid ""
 msgstr ""
 "Platba přijata! Jakmile bude schválena, vaše účty budou aktualizovány."
 
-msgid ""
-"Preview visible only by the assigned player, when 'show preview' is checked"
-msgstr ""
-"Náhled viditelný pouze přiřazeným přehrávačem, pokud je zaškrtnuto "
-"\"zobrazit náhled\"."
-
 #, python-format
 msgid ""
 "(check the available number of discounts <a href='%(url)s'>on this page</a>)"
@@ -6968,13 +6959,6 @@ msgstr ""
 "'%(allowed_extensions)s'."
 
 msgid ""
-"If checked, makes visible the preview, reserved only to the player to whom "
-"the item is assigned"
-msgstr ""
-"Pokud je zaškrtnuto, náhledy jsou viditelné a vyhrazené pouze pro hráče, "
-"kterému je položka přiřazena."
-
-msgid ""
 "If it is assigned to you, you will automatically be assigned the original "
 "character it mirrors."
 msgstr ""
@@ -7446,13 +7430,6 @@ msgid ""
 msgstr ""
 "Na této stránce jsou shrnuty role, které je třeba přiřadit, aby bylo možné "
 "používat funkce týkající se organizace."
-
-msgid ""
-"Adds a 'preview' field to writing elements, shareable with the player before"
-" the full sheet is published."
-msgstr ""
-"Přidává k prvkům pro psaní pole \"náhled\", které lze sdílet s hráčem před "
-"zveřejněním celého listu."
 
 msgid ""
 "Allows players to create and contribute to collections aimed at assisting "

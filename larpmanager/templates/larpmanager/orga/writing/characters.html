@@ -58,9 +58,7 @@
                 {% if form_questions %}
                     {% for key, que in form_questions.items %}
                         <th class="hide q_{{ key }}">{{ que.display }}</th>
-                        {% if que.typ == 'e' or que.typ == 'teaser' or que.typ == 'text' or que.typ == 'preview' %}
-                            <th class="hide q_{{ key }}">(L)</th>
-                        {% endif %}
+                        {% if que.typ == 'e' or que.typ == 'teaser' or que.typ == 'text' %}<th class="hide q_{{ key }}">(L)</th>{% endif %}
                     {% endfor %}
                 {% endif %}
                 {% if features.co_creation %}
@@ -103,7 +101,7 @@
                         <td class="hide px">{{ el.addit | get:'px_avail' }}</td>
                     {% endif %}
                     {% for key, que in form_questions.items %}
-                        {% if que.typ == 'teaser' or que.typ == 'text' or que.typ == 'preview' %}
+                        {% if que.typ == 'teaser' or que.typ == 'text' %}
                             <td class="hide q_{{ key }}">
                                 {% with ed_id=que.typ|concat:'_red' %}
                                     {% lookup el ed_id as value %}
@@ -237,7 +235,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         setTimeout(function() {
         {% for key, que in form_questions.items %}
-            {% if que.typ == 'teaser' or que.typ == 'text' or que.typ == 'preview' %}
+            {% if que.typ == 'teaser' or que.typ == 'text' %}
                 $('a.my_toggle[tog="q_{{ key }}"]').trigger('click');
                 console.log('{{ key }}');
             {% endif %}

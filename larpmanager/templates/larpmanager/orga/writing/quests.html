@@ -35,10 +35,6 @@
                 {% endif %}
                 <th>{% trans "Presentation" %}</th>
                 <th>(L)</th>
-                {% if features.preview %}
-                    <th>{% trans "Preview" %}</th>
-                    <th>(L)</th>
-                {% endif %}
                 <th>{% trans "Sheet" %}</th>
                 <th>(L)</th>
                 <th>{% trans "Traits" %}</th>
@@ -74,10 +70,6 @@
                     {% endif %}
                     <td>{{ el.teaser_red | safe }}</td>
                     <td>{{ el.teaser_ln }}</td>
-                    {% if features.preview %}
-                        <td>{{ el.preview_red | safe }}</td>
-                        <td>{{ el.preview_ln }}</td>
-                    {% endif %}
                     <td>{{ el.text_red | safe }}</td>
                     <td>{{ el.text_ln }}</td>
                     <td>
