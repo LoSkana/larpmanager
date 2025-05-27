@@ -5461,10 +5461,6 @@ msgstr ""
 "Błąd ładowania. Nieprawidłowy format pliku (akceptujemy tylko pliki pdf lub "
 "obrazy)."
 
-msgid "If checked, PG names will be automatically replaced by a reference"
-msgstr ""
-"Jeśli zaznaczone, nazwy PG będą automatycznie zastępowane przez odniesienie"
-
 msgid "If checked, makes the field content visible to the assigned player"
 msgstr ""
 "Jeśli zaznaczone, sprawia, że zawartość pola jest widoczna dla przypisanego "
@@ -5825,6 +5821,12 @@ msgid ""
 msgstr ""
 "Jeśli opcja ta jest zaznaczona, umożliwia graczom dostosowanie zdjęcia "
 "profilowego postaci."
+
+msgid ""
+"If checked, character names will be automatically replaced by a reference"
+msgstr ""
+"Jeśli zaznaczone, nazwy znaków będą automatycznie zastępowane przez "
+"odniesienie"
 
 msgid ""
 "Net profit of the event, difference between total revenue and total costs"

@@ -844,7 +844,8 @@ msgstr ""
 msgid "Replacing names"
 msgstr ""
 
-msgid "If checked, PG names will be automatically replaced by a reference"
+msgid ""
+"If checked, character names will be automatically replaced by a reference"
 msgstr ""
 
 msgid "Paste as text"

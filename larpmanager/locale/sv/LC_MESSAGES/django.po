@@ -5477,9 +5477,6 @@ msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr ""
 "Fel vid inläsning. Ogiltigt filformat - vi accepterar endast pdf och bilder."
 
-msgid "If checked, PG names will be automatically replaced by a reference"
-msgstr "Om markerat kommer PG-namn automatiskt att ersättas med en referens"
-
 msgid "If checked, makes the field content visible to the assigned player"
 msgstr "Om markerad, gör fältinnehållet synligt för den tilldelade spelaren"
 
@@ -5842,6 +5839,11 @@ msgstr ""
 msgid ""
 "If checked, allows players to customise their characters' profile picture"
 msgstr "Om markerad, tillåter spelare att anpassa sina karaktärers profilbild"
+
+msgid ""
+"If checked, character names will be automatically replaced by a reference"
+msgstr ""
+"Om markerad, kommer teckennamn automatiskt att ersättas av en referens"
 
 msgid ""
 "Net profit of the event, difference between total revenue and total costs"
