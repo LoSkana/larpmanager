@@ -5398,9 +5398,6 @@ msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr ""
 "Chybné načítání. Nesprávný formát souboru - přijímáme pouze pdf a obrázky."
 
-msgid "If checked, PG names will be automatically replaced by a reference"
-msgstr "Pokud je zaškrtnuto, názvy PG budou automaticky nahrazeny odkazem."
-
 msgid "If checked, makes the field content visible to the assigned player"
 msgstr "Pokud je zaškrtnuto, obsah pole je viditelný pro přiřazeného hráče."
 
@@ -5733,6 +5730,10 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, umožňuje hráčům přizpůsobit si profilový obrázek své "
 "postavy."
+
+msgid ""
+"If checked, character names will be automatically replaced by a reference"
+msgstr "Pokud je zaškrtnuto, názvy znaků budou automaticky nahrazeny odkazem."
 
 msgid ""
 "Net profit of the event, difference between total revenue and total costs"

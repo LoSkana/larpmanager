@@ -14,7 +14,7 @@
 {% block content %}
     {% include "elements/form/sections.html" %}
 {% endblock content %}
-{% block js %}
+{% block js2 %}
     {% include "elements/form/max_length.js" %}
     <script>
 function translate(id, text) {
@@ -87,9 +87,4 @@ var eid = -1;
 });
 
     </script>
-    {% if form.load_js %}
-        {% with template_name=form.load_js|stringformat:"s"|add:".js" %}
-            {% include "elements/"|add:template_name %}
-        {% endwith %}
-    {% endif %}
-{% endblock js %}
+{% endblock js2 %}
