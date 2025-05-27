@@ -179,7 +179,7 @@
                     {% if features.speedlarp %}
                         <td class="hide speedlarp">
                             {% for p in el.speedlarps_list.all %}
-                                <a href="{% url 'orga_speedlarps_edit' run.event.slug run.number p.number %}">{{ p }}</a>
+                                <a href="{% url 'orga_speedlarps_edit' run.event.slug run.number p.id %}">{{ p }}</a>
                             {% endfor %}
                         </td>
                         <td class="hide speedlarp">{{ el.speedlarps_list.count }}</td>

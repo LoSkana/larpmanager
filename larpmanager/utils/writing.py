@@ -310,7 +310,7 @@ def writing_list_char(ctx, ev, text_fields):
         for el in PlotCharacterRel.objects.filter(character__event=ctx["event"]).select_related("plot", "character"):
             if el.character.number not in ctx["plots"]:
                 ctx["plots"][el.character.number] = []
-            ctx["plots"][el.character.number].append((f"[T{el.plot.number}] {el.plot.name}", el.plot.number))
+            ctx["plots"][el.character.number].append((f"[T{el.plot.number}] {el.plot.name}", el.plot.id))
 
         for el in ctx["list"]:
             if el.number in ctx["plots"]:
