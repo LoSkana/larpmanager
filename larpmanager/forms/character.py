@@ -269,7 +269,8 @@ class OrgaCharacterForm(CharacterForm):
             if pl[0] in pcr:
                 self.initial[field] = pcr[pl[0]]
 
-            self.details[f"id_{field}"] = pl[3]
+            if pl[3]:
+                self.details[f"id_{field}"] = pl[3]
             self.show_link.append(f"id_{field}")
 
     def _save_plot(self):
