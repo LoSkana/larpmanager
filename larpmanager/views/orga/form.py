@@ -198,7 +198,7 @@ def orga_registration_quotas_edit(request, s, n, num):
 @login_required
 def orga_registration_installments(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_registration_installments")
-    ctx["list"] = RegistrationInstallment.objects.filter(event=ctx["event"]).order_by(("order", "amount"))
+    ctx["list"] = RegistrationInstallment.objects.filter(event=ctx["event"]).order_by("order", "amount")
     return render(request, "larpmanager/orga/registration/installments.html", ctx)
 
 
