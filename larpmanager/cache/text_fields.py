@@ -25,7 +25,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
-from larpmanager.models.event import RunText
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionType,
@@ -35,7 +34,7 @@ from larpmanager.models.form import (
     WritingQuestion,
 )
 from larpmanager.models.registration import Registration
-from larpmanager.models.writing import Character, Writing
+from larpmanager.models.writing import Writing
 
 
 def cache_text_field_key(typ, element):
@@ -175,53 +174,6 @@ def update_cache_reg_fields_answer(instance):
     field = str(instance.question_id)
     res[instance.reg_id][field] = get_single_cache_text_field(instance.reg_id, field, instance.text)
     cache.set(key, res)
-
-
-# Cocreation
-
-
-def cache_cocreation_key(run):
-    return f"cocreation_{run.id}"
-
-
-def init_cache_cocreation(run):
-    res = {}
-
-    for rt in RunText.objects.filter(run=run, typ=RunText.COCREATION):
-        update_element_cache_cocreation(rt, res, run)
-
-    return res
-
-
-def update_element_cache_cocreation(rt, res, run):
-    try:
-        el = Character.objects.get(event=run.event.get_class_parent("character"), number=rt.eid)
-    except ObjectDoesNotExist:
-        return
-
-    res[el.id] = {
-        "co_creation_question": get_single_cache_text_field(el.id, "co_creation_question", rt.first),
-        "co_creation_answer": get_single_cache_text_field(el.id, "co_creation_answer", rt.second),
-    }
-    return
-
-
-def get_cache_cocreation(run, el=None):
-    key = cache_cocreation_key(run)
-    res = cache.get(key)
-    if not res:
-        res = init_cache_cocreation(run)
-        cache.set(key, res)
-    if el:
-        update_element_cache_cocreation(el, res, run)
-        cache.set(key, res)
-    return res
-
-
-@receiver(post_save, sender=RunText)
-def update_cache_text_field_run_text(sender, instance, **kwargs):
-    if instance.typ == RunText.COCREATION:
-        get_cache_cocreation(instance.run, instance)
 
 
 @receiver(post_save)

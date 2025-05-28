@@ -1275,9 +1275,6 @@ msgstr "Contabilità"
 msgid "Annual fee"
 msgstr "Quota annuale"
 
-msgid "Answers CC"
-msgstr "Risposte CC"
-
 msgid "Answers WS"
 msgstr "Risposte WS"
 
@@ -1508,9 +1505,6 @@ msgstr "Numero tessera"
 
 msgid "Change gift"
 msgstr "Modifica regalo"
-
-msgid "Co-creation"
-msgstr "Co-creazione"
 
 msgid "Collections"
 msgstr "Collette"
@@ -1793,9 +1787,6 @@ msgstr "Presentazione"
 
 msgid "Questbuilder"
 msgstr "Questbuilder"
-
-msgid "Questions CC"
-msgstr "Domande CC"
 
 msgid "Questions WS"
 msgstr "Domande WS"
@@ -2858,9 +2849,6 @@ msgstr "Modifica iscrizione"
 msgid "Charging the player"
 msgstr "Addebito al giocatore"
 
-msgid "Co-creation answers"
-msgstr "Risposte co-creazione"
-
 msgid "Confirmation delete"
 msgstr "Conferma cancella"
 
@@ -3096,9 +3084,6 @@ msgstr "Membro dello staff assegnato"
 
 msgid "Character not visible"
 msgstr "Personaggio non visibile"
-
-msgid "Co-creation questions"
-msgstr "Domande co-creazione"
 
 msgid "Code 'Bring a friend'"
 msgstr "Codice porta un amico"
@@ -3553,9 +3538,6 @@ msgstr "Non è possibile copiare dallo stesso evento"
 
 msgid "Check inverse relationship"
 msgstr "check relazione inversa"
-
-msgid "Co-creation answers saved!"
-msgstr "Risposte di co-creazione salvate!"
 
 msgid "Give a card to your friend"
 msgstr "Regala un biglietto ad un tuo amico"
@@ -4257,9 +4239,6 @@ msgstr "Elettronica - computer, hitech, luci"
 msgid "Fill in your character's relationships!"
 msgstr "Compilate le relazioni del vostro personaggio!"
 
-msgid "Freely answer the co-creation questions"
-msgstr "Rispondi liberamente alle domande di co-creazione"
-
 msgid "If checked, makes visible the speedlarp"
 msgstr "Se selezionato, rende visibile lo speedlarp"
 
@@ -4647,9 +4626,6 @@ msgstr "Modifica alcune caratteristiche del personaggio per renderlo tuo!"
 
 msgid "Names of the collaborators who are organizing it"
 msgstr "Nomi dei collaboratori che lo stanno organizzando"
-
-msgid "Participate in the co-creation of the character!"
-msgstr "Partecipa alla co-creazione del personaggio!"
 
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
@@ -5142,9 +5118,6 @@ msgstr "Ciao! La tua iscrizione a <b>%(event)s</b> è stata aggiornata!"
 msgid "I am not good what to say. I never thought it would happen."
 msgstr "Non sono bene cosa dire. Non pensavo sarebbe mai successo."
 
-msgid "If checked, makes co-creation questions and answers visible"
-msgstr "Se checkato, rende visibili le domande e le risposte di co-creazione"
-
 msgid "If checked, makes pre-registration for this event available"
 msgstr "Se checkato, rende disponibile la pre-iscrizione per questo evento"
 
@@ -5352,10 +5325,6 @@ msgstr ""
 
 msgid "Indicates whether the discount is visible and usable by players"
 msgstr "Indica se lo sconto è visibile ed utilizzabile dai giocatori"
-
-msgid "Questions for the co-creation section, editable only by authors"
-msgstr ""
-"Domande per la sezione di co-creazione, modificabili solo dagli autori"
 
 msgid "You can give a preference to play it, as with other characters."
 msgstr ""
@@ -5869,12 +5838,6 @@ msgid ""
 msgstr ""
 "Permette all'organizzazione di assegnare badge e di attivare una classifica "
 "pubblica."
-
-msgid ""
-"Answers for the co-creation section, editable by both players and authors"
-msgstr ""
-"Risposte per la sezione di co-creazione, modificabili sia da giocatori che "
-"autori"
 
 msgid ""
 "Enter the order of preference of your pre-registration (1 is the maximum)"
@@ -6493,13 +6456,6 @@ msgid ""
 msgstr ""
 "Preferenze addizionali, per assegnazione casuale quando non viene trovata "
 "una soluzione (default 0)"
-
-msgid ""
-"Allows organizers to pose questions about a character, which the player can "
-"answer."
-msgstr ""
-"Permette agli organizzatori di porre domande su un personaggio, alle quali "
-"il giocatore può rispondere."
 
 msgid ""
 "Enables management of expenses paid using the organization's financial "

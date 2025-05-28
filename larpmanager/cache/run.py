@@ -107,7 +107,6 @@ def init_cache_config_run(run):
         "questbuilder",
         "workshop",
         "print_pdf",
-        "co_creation",
     ]
     for config_name in conf_features:
         if config_name not in ev_features:

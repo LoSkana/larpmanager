@@ -1275,9 +1275,6 @@ msgstr "Účetnictví"
 msgid "Annual fee"
 msgstr "Roční poplatek"
 
-msgid "Answers CC"
-msgstr "Odpovědi CC"
-
 msgid "Answers WS"
 msgstr "Odpovědi WS"
 
@@ -1508,9 +1505,6 @@ msgstr "Číslo karty"
 
 msgid "Change gift"
 msgstr "Dárek ke změně"
-
-msgid "Co-creation"
-msgstr "Spoluvytváření"
 
 msgid "Collections"
 msgstr "Collette"
@@ -1793,9 +1787,6 @@ msgstr "Prezentace"
 
 msgid "Questbuilder"
 msgstr "Questbuilder"
-
-msgid "Questions CC"
-msgstr "Otázky CC"
 
 msgid "Questions WS"
 msgstr "Otázky WS"
@@ -2858,9 +2849,6 @@ msgstr "Upravit položku"
 msgid "Charging the player"
 msgstr "Nabíjení přehrávače"
 
-msgid "Co-creation answers"
-msgstr "Odpovědi na otázky spoluvytváření"
-
 msgid "Confirmation delete"
 msgstr "Odstranění potvrzení"
 
@@ -3096,9 +3084,6 @@ msgstr "Přidělený zaměstnanec"
 
 msgid "Character not visible"
 msgstr "Znak není viditelný"
-
-msgid "Co-creation questions"
-msgstr "Otázky týkající se spoluvytváření"
 
 msgid "Code 'Bring a friend'"
 msgstr "Přineste kód přítele"
@@ -3553,9 +3538,6 @@ msgstr "Nelze kopírovat ze stejné události"
 
 msgid "Check inverse relationship"
 msgstr "kontrola inverzního vztahu"
-
-msgid "Co-creation answers saved!"
-msgstr "Spoluvytváření odpovědí zachráněno!"
 
 msgid "Give a card to your friend"
 msgstr "Dejte přání svému příteli"
@@ -4257,9 +4239,6 @@ msgstr "Elektronika - počítače, hitech, světla"
 msgid "Fill in your character's relationships!"
 msgstr "Vyplňte vztahy své postavy!"
 
-msgid "Freely answer the co-creation questions"
-msgstr "Volně odpovídejte na otázky týkající se spoluvytváření"
-
 msgid "If checked, makes visible the speedlarp"
 msgstr "Pokud je zaškrtnuto, zviditelní speedlarp"
 
@@ -4647,9 +4626,6 @@ msgstr "Upravte si některé vlastnosti postavy podle sebe!"
 
 msgid "Names of the collaborators who are organizing it"
 msgstr "Jména spolupracovníků, kteří ji organizují"
-
-msgid "Participate in the co-creation of the character!"
-msgstr "Podílejte se na spoluvytváření postavy!"
 
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
@@ -5119,9 +5095,6 @@ msgstr "Ahoj! Vaše registrace do <b>%(event)s</b> byla aktualizována!"
 msgid "I am not good what to say. I never thought it would happen."
 msgstr "Nevím, co na to říct. Nikdy jsem si nemyslel, že se to stane."
 
-msgid "If checked, makes co-creation questions and answers visible"
-msgstr "Pokud je zaškrtnuto, zviditelní otázky a odpovědi spolutvorby."
-
 msgid "If checked, makes pre-registration for this event available"
 msgstr ""
 "Pokud je zaškrtnuto, zpřístupní předběžnou registraci na tuto událost."
@@ -5304,9 +5277,6 @@ msgstr "Uveďte, ke kterému dni byl proveden pohyb ve finančním nástroji."
 
 msgid "Indicates whether the discount is visible and usable by players"
 msgstr "Označuje, zda je sleva viditelná a použitelná pro hráče."
-
-msgid "Questions for the co-creation section, editable only by authors"
-msgstr "Otázky pro sekci spoluvytváření, editovatelné pouze autory"
 
 msgid "You can give a preference to play it, as with other characters."
 msgstr "Stejně jako u ostatních postav můžete dát přednost jeho hraní."
@@ -5743,11 +5713,6 @@ msgstr "Tato postava představuje skutečnou tajnou identitu jiné postavy."
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard."
 msgstr "Umožňuje organizaci udělovat odznaky a umožňuje veřejný žebříček."
-
-msgid ""
-"Answers for the co-creation section, editable by both players and authors"
-msgstr ""
-"Odpovědi pro sekci spoluvytváření, které mohou upravovat hráči i autoři."
 
 msgid ""
 "Enter the order of preference of your pre-registration (1 is the maximum)"
@@ -6314,13 +6279,6 @@ msgid ""
 msgstr ""
 "Další preference pro náhodné přiřazení, pokud nebylo nalezeno žádné řešení "
 "(výchozí 0)"
-
-msgid ""
-"Allows organizers to pose questions about a character, which the player can "
-"answer."
-msgstr ""
-"Umožňuje organizátorům klást otázky týkající se postavy, na které může hráč "
-"odpovídat."
 
 msgid ""
 "Enables management of expenses paid using the organization's financial "

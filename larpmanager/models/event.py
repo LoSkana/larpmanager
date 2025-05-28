@@ -587,22 +587,6 @@ class RunConfig(BaseModel):
         ]
 
 
-class RunText(BaseModel):
-    COCREATION = "c"
-    TYPE_CHOICES = [
-        (COCREATION, "Co-creation"),
-    ]
-
-    first = HTMLField(blank=True, null=True)
-    second = HTMLField(blank=True, null=True)
-
-    run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="texts")
-
-    eid = models.IntegerField()
-
-    typ = models.CharField(max_length=1, choices=TYPE_CHOICES)
-
-
 class PreRegistration(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="pre_registrations")
 
