@@ -493,9 +493,8 @@ def orga_registration_form_email(request, s, n):
     for opt in RegistrationOption.objects.filter(question=q):
         cho[opt.id] = opt.display
 
-    for el in RegistrationChoice.objects.filter(question=q, reg__run=ctx["run"]).select_related("reg", "reg__member"):
-        if el.reg.cancellation_date:
-            continue
+    que = RegistrationChoice.objects.filter(question=q, reg__run=ctx["run"], reg__cancellation_date__isnull=True)
+    for el in que.select_related("reg", "reg__member"):
         if el.option_id not in res:
             res[el.option_id] = {"emails": [], "names": []}
         res[el.option_id]["emails"].append(el.reg.member.email)
