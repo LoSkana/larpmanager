@@ -61,4 +61,8 @@ class Migration(migrations.Migration):
             name="nationality",
             field=models.CharField(blank=True, choices=[("it", "Italy")], max_length=2, null=True),
         ),
+        migrations.RemoveField(
+            model_name="registration",
+            name="info",
+        ),
     ]
