@@ -2438,9 +2438,6 @@ msgstr "Člen schválen!"
 msgid "Membership check"
 msgstr "Kontrola členství"
 
-msgid "More information"
-msgstr "Další informace"
-
 msgid "No comunications"
 msgstr "Žádná komunikace"
 
@@ -2897,9 +2894,6 @@ msgstr "Historie předvoleb"
 
 msgid "I am not interested"
 msgstr "Nemám zájem"
-
-msgid "Informations given:"
-msgstr "Uvedené informace:"
 
 msgid "Informations saved!"
 msgstr "Informace uloženy!"
@@ -7180,13 +7174,6 @@ msgid ""
 msgstr ""
 "Stisknutím tlačítka potvrdit bude tento záznam přiřazen k vám a vy budete "
 "řádně zaregistrováni."
-
-msgid ""
-"Do you have something you'd like to tell us or report to us about your "
-"registration? Use this field!"
-msgstr ""
-"Chcete nám něco sdělit nebo nás informovat o svém členství? Použijte toto "
-"pole!"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

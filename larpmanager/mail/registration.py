@@ -126,9 +126,6 @@ def registration_options(instance):
         for el in res:
             body += f"<br />{el[0]} - {el[1]}"
 
-    if instance.info:
-        body += "<br /><br />" + _("Informations given:") + " " + instance.info
-
     return body
 
 

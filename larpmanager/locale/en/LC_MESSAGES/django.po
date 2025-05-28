@@ -1349,14 +1349,6 @@ msgstr ""
 msgid "Set if you want to reserve tickets in addition to your"
 msgstr ""
 
-msgid "More information"
-msgstr ""
-
-msgid ""
-"Do you have something you'd like to tell us or report to us about your "
-"registration? Use this field!"
-msgstr ""
-
 #, python-format
 msgid ""
 "Enter here the 'bring a friend' code given to you by an already registered "
@@ -1967,9 +1959,6 @@ msgid "Payments already received: <b>%(amount).2f %(currency)s</b>."
 msgstr ""
 
 msgid "Selected options:"
-msgstr ""
-
-msgid "Informations given:"
 msgstr ""
 
 #, python-format

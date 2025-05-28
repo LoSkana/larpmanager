@@ -2438,9 +2438,6 @@ msgstr "Approuvé par les membres !"
 msgid "Membership check"
 msgstr "Vérification de l'adhésion"
 
-msgid "More information"
-msgstr "Plus d'informations"
-
 msgid "No comunications"
 msgstr "Pas de communication"
 
@@ -2897,9 +2894,6 @@ msgstr "Historique des préférences"
 
 msgid "I am not interested"
 msgstr "Pas intéressé"
-
-msgid "Informations given:"
-msgstr "Informations indiquées :"
 
 msgid "Informations saved!"
 msgstr "Information sauvegardée !"
@@ -7441,13 +7435,6 @@ msgid ""
 msgstr ""
 "En appuyant sur la touche \"confirmer\", cette inscription vous sera "
 "attribuée et vous serez alors dûment inscrit(e)."
-
-msgid ""
-"Do you have something you'd like to tell us or report to us about your "
-"registration? Use this field!"
-msgstr ""
-"Vous souhaitez nous faire part de quelque chose ou nous informer sur votre "
-"adhésion ? Utilisez ce champ !"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

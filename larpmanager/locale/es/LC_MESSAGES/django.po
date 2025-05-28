@@ -2438,9 +2438,6 @@ msgstr "¡Miembro aprobado!"
 msgid "Membership check"
 msgstr "Comprobación de afiliación"
 
-msgid "More information"
-msgstr "Más información"
-
 msgid "No comunications"
 msgstr "No hay comunicaciones"
 
@@ -2897,9 +2894,6 @@ msgstr "Preferencias del historial"
 
 msgid "I am not interested"
 msgstr "No me interesa"
-
-msgid "Informations given:"
-msgstr "Información proporcionada:"
 
 msgid "Informations saved!"
 msgstr "¡Información guardada!"
@@ -7335,13 +7329,6 @@ msgid ""
 msgstr ""
 "Al pulsar confirmar, se le asignará esta entrada y quedará debidamente "
 "registrado."
-
-msgid ""
-"Do you have something you'd like to tell us or report to us about your "
-"registration? Use this field!"
-msgstr ""
-"¿Tienes algo que contarnos o informarnos sobre tu inscripción al evento? "
-"Utiliza este campo."
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

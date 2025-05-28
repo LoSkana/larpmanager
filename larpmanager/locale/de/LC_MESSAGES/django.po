@@ -2438,9 +2438,6 @@ msgstr "Mitglied genehmigt!"
 msgid "Membership check"
 msgstr "Mitgliedschaftsprüfung"
 
-msgid "More information"
-msgstr "Weitere Informationen"
-
 msgid "No comunications"
 msgstr "Keine Kommunikation"
 
@@ -2897,9 +2894,6 @@ msgstr "Geschichte der Präferenzen"
 
 msgid "I am not interested"
 msgstr "Nicht interessiert"
-
-msgid "Informations given:"
-msgstr "Angegebene Informationen:"
 
 msgid "Informations saved!"
 msgstr "Informationen gespeichert!"
@@ -7552,13 +7546,6 @@ msgid ""
 msgstr ""
 "Wenn Sie auf \"Bestätigen\" klicken, wird dieser Eintrag Ihnen zugewiesen "
 "und Sie sind dann ordnungsgemäß registriert."
-
-msgid ""
-"Do you have something you'd like to tell us or report to us about your "
-"registration? Use this field!"
-msgstr ""
-"Möchten Sie uns etwas über Ihre Mitgliedschaft mitteilen oder berichten? "
-"Nutzen Sie dieses Feld!"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

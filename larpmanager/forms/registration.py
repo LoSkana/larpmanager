@@ -126,24 +126,6 @@ class RegistrationForm(BaseRegistrationForm):
         if self.instance:
             self.initial["additionals"] = self.instance.additionals
 
-    def init_info(self, run):
-        if "info" not in self.params["features"]:
-            return
-
-        self.fields["info"] = forms.CharField(
-            required=False,
-            max_length=5000,
-            widget=forms.Textarea,
-            label=_("More information"),
-            help_text=_(
-                "Do you have something you'd like to tell us or report to us about your registration? Use this field!"
-            ),
-        )
-        if self.instance:
-            self.initial["info"] = self.instance.info
-
-        # pprint(self.initial)
-
     def init_bring_friend(self):
         if "bring_friend" not in self.params["features"]:
             return

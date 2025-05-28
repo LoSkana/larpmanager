@@ -2438,9 +2438,6 @@ msgstr "Lid goedgekeurd!"
 msgid "Membership check"
 msgstr "Lidmaatschap controleren"
 
-msgid "More information"
-msgstr "Meer informatie"
-
 msgid "No comunications"
 msgstr "Geen communicatie"
 
@@ -2897,9 +2894,6 @@ msgstr "Voorkeur geschiedenis"
 
 msgid "I am not interested"
 msgstr "Niet geïnteresseerd"
-
-msgid "Informations given:"
-msgstr "Aangegeven informatie:"
 
 msgid "Informations saved!"
 msgstr "Informatie opgeslagen!"
@@ -7416,12 +7410,6 @@ msgid ""
 msgstr ""
 "Door op bevestigen te drukken, wordt deze vermelding aan u toegewezen en "
 "bent u geregistreerd."
-
-msgid ""
-"Do you have something you'd like to tell us or report to us about your "
-"registration? Use this field!"
-msgstr ""
-"Wil je ons iets vertellen of melden over je lidmaatschap? Gebruik dit veld!"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

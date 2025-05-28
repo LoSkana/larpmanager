@@ -2438,9 +2438,6 @@ msgstr "Membro approvato!"
 msgid "Membership check"
 msgstr "Controllo dei soci"
 
-msgid "More information"
-msgstr "Ulteriori informazioni"
-
 msgid "No comunications"
 msgstr "Nessuna comunicazione"
 
@@ -2897,9 +2894,6 @@ msgstr "Storico preferenze"
 
 msgid "I am not interested"
 msgstr "Non sono interessato"
-
-msgid "Informations given:"
-msgstr "Informazioni indicate:"
 
 msgid "Informations saved!"
 msgstr "Informazioni salvate!"
@@ -7388,13 +7382,6 @@ msgid ""
 msgstr ""
 "Premendo conferma, questa iscrizione ti verrà assegnata, e risulterai dunque"
 " regolarmente iscritto"
-
-msgid ""
-"Do you have something you'd like to tell us or report to us about your "
-"registration? Use this field!"
-msgstr ""
-"Hai qualcosa che vorresti dirci o segnalarci in merito alla tua iscrizione? "
-"Usa questo campo!"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

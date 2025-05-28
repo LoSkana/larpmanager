@@ -2438,9 +2438,6 @@ msgstr "Medlem godkjent!"
 msgid "Membership check"
 msgstr "Medlemskapssjekk"
 
-msgid "More information"
-msgstr "Ytterligere informasjon"
-
 msgid "No comunications"
 msgstr "Ingen kommunikasjon"
 
@@ -2897,9 +2894,6 @@ msgstr "Historikk over preferanser"
 
 msgid "I am not interested"
 msgstr "Ikke interessert"
-
-msgid "Informations given:"
-msgstr "Angitt informasjon:"
 
 msgid "Informations saved!"
 msgstr "Informasjon lagret!"
@@ -7284,13 +7278,6 @@ msgid ""
 msgstr ""
 "Ved å trykke på bekreft, vil denne oppføringen bli tildelt deg, og du vil da"
 " bli behørig registrert"
-
-msgid ""
-"Do you have something you'd like to tell us or report to us about your "
-"registration? Use this field!"
-msgstr ""
-"Har du noe du vil fortelle oss eller rapportere til oss om medlemskapet "
-"ditt? Bruk dette feltet!"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "
