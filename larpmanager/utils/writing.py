@@ -215,7 +215,7 @@ def _get_custom_form(ctx, nm):
 
 def writing_list_query(ctx, ev, typ):
     writing = issubclass(typ, Writing)
-    text_fields = ["teaser", "text", "preview"]
+    text_fields = ["teaser", "text"]
     ctx["list"] = typ.objects.filter(event=ev.get_class_parent(typ))
     if writing:
         for f in text_fields:

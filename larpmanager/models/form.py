@@ -48,7 +48,6 @@ class QuestionType(models.TextChoices):
     NAME = "name", _("Name")
     TEASER = "teaser", _("Presentation")
     SHEET = "text", _("Sheet")
-    PREVIEW = "preview", _("Preview")
     COVER = "cover", _("Cover")
     FACTIONS = "faction", _("Factions")
     TITLE = "title", _("Title")
@@ -73,7 +72,6 @@ class QuestionType(models.TextChoices):
             QuestionType.NAME,
             QuestionType.SHEET,
             QuestionType.TEASER,
-            QuestionType.PREVIEW,
             QuestionType.TEXT,
             QuestionType.PARAGRAPH,
             QuestionType.MULTIPLE,

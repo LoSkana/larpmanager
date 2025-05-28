@@ -48,8 +48,6 @@ def save_version(el, tp, mb, dl=False):
     tv.eid = el.id
     tv.tp = tp
     tv.text = el.text
-    if hasattr(el, "preview"):
-        tv.preview = el.preview
     tv.version = n
     tv.member = mb
     tv.dl = dl

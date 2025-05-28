@@ -726,9 +726,6 @@ msgstr "Spiller:"
 msgid "Players"
 msgstr "Spillere"
 
-msgid "Preview"
-msgstr "Forhåndsvisning"
-
 msgid "Primary"
 msgstr "Primær"
 
@@ -5935,12 +5932,6 @@ msgid ""
 msgstr ""
 "Betaling mottatt! Så snart den er godkjent, vil kontoene dine bli oppdatert."
 
-msgid ""
-"Preview visible only by the assigned player, when 'show preview' is checked"
-msgstr ""
-"Forhåndsvisning er kun synlig for den tildelte spilleren, når \"vis "
-"forhåndsvisning\" er merket av"
-
 #, python-format
 msgid ""
 "(check the available number of discounts <a href='%(url)s'>on this page</a>)"
@@ -7072,13 +7063,6 @@ msgstr ""
 "'%(allowed_extensions)s'."
 
 msgid ""
-"If checked, makes visible the preview, reserved only to the player to whom "
-"the item is assigned"
-msgstr ""
-"Hvis avkrysset, blir forhåndsvisningene synlige, men forbeholdt spilleren "
-"som har fått tildelt elementet."
-
-msgid ""
 "If it is assigned to you, you will automatically be assigned the original "
 "character it mirrors."
 msgstr ""
@@ -7554,13 +7538,6 @@ msgid ""
 msgstr ""
 "Denne siden oppsummerer hvilke roller som må tildeles for å kunne bruke "
 "funksjonene som gjelder organisasjonen."
-
-msgid ""
-"Adds a 'preview' field to writing elements, shareable with the player before"
-" the full sheet is published."
-msgstr ""
-"Legger til et \"forhåndsvisningsfelt\" i skriveelementer, som kan deles med "
-"spilleren før hele arket publiseres."
 
 msgid ""
 "Allows players to create and contribute to collections aimed at assisting "

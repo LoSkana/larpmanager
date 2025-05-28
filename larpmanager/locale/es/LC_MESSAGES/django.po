@@ -726,9 +726,6 @@ msgstr "Jugador:"
 msgid "Players"
 msgstr "Jugadores"
 
-msgid "Preview"
-msgstr "Vista previa"
-
 msgid "Primary"
 msgstr "Principal"
 
@@ -5959,12 +5956,6 @@ msgid ""
 "Payment received! As soon as it is approved, your accounts will be updated."
 msgstr "¡Pago recibido! En cuanto se apruebe, se actualizarán tus cuentas."
 
-msgid ""
-"Preview visible only by the assigned player, when 'show preview' is checked"
-msgstr ""
-"Vista previa visible sólo por el reproductor asignado, cuando está marcada "
-"la opción \"mostrar vista previa\"."
-
 #, python-format
 msgid ""
 "(check the available number of discounts <a href='%(url)s'>on this page</a>)"
@@ -7123,13 +7114,6 @@ msgstr ""
 "permitidas son: '%(allowed_extensions)s'."
 
 msgid ""
-"If checked, makes visible the preview, reserved only to the player to whom "
-"the item is assigned"
-msgstr ""
-"Si está marcada, hace visible la vista previa solo para el jugador al que "
-"está asignado el elemento"
-
-msgid ""
 "If it is assigned to you, you will automatically be assigned the original "
 "character it mirrors."
 msgstr ""
@@ -7605,13 +7589,6 @@ msgid ""
 msgstr ""
 "Esta página muestra los cargos que pueden asignarse para utilizar las "
 "funciones relativas a la organización."
-
-msgid ""
-"Adds a 'preview' field to writing elements, shareable with the player before"
-" the full sheet is published."
-msgstr ""
-"Añade un campo de \"vista previa\" a los elementos de escritura, que se "
-"puede compartir con el jugador antes de publicar la hoja completa."
 
 msgid ""
 "Allows players to create and contribute to collections aimed at assisting "

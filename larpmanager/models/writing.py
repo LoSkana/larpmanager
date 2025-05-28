@@ -64,12 +64,6 @@ class Writing(BaseConceptModel):
         help_text=_("Text visible only by the assigned player, when 'show text' is checked"),
     )
 
-    preview = HTMLField(
-        max_length=100000,
-        blank=True,
-        help_text=_("Preview visible only by the assigned player, when 'show preview' is checked"),
-    )
-
     temp = models.BooleanField(default=False)
 
     hide = models.BooleanField(default=False)
@@ -92,7 +86,6 @@ class Writing(BaseConceptModel):
     def show_complete(self):
         js = self.show()
         self.upd_js_attr(js, "text")
-        self.upd_js_attr(js, "preview")
         return js
 
     @classmethod
@@ -541,8 +534,6 @@ class TextVersion(BaseModel):
     teaser = HTMLField(blank=True)
 
     text = HTMLField(blank=True)
-
-    preview = HTMLField(blank=True)
 
     dl = models.BooleanField(default=False)
 

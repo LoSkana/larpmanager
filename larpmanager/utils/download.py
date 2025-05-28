@@ -78,7 +78,7 @@ def _writing_field(ctx, first, k, key, v, val):
     if k.startswith("custom_"):
         return
 
-    if k in ["title", "preview"]:
+    if k in ["title"]:
         if k not in ctx["features"]:
             return
 

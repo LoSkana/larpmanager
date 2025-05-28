@@ -1162,14 +1162,6 @@ msgstr ""
 msgid "If checked, makes the field content visible to the assigned player"
 msgstr ""
 
-msgid "Preview"
-msgstr ""
-
-msgid ""
-"If checked, makes visible the preview, reserved only to the player to whom "
-"the item is assigned"
-msgstr ""
-
 msgid "Factions"
 msgstr ""
 
@@ -3225,10 +3217,6 @@ msgid ""
 msgstr ""
 
 msgid "Text visible only by the assigned player, when 'show text' is checked"
-msgstr ""
-
-msgid ""
-"Preview visible only by the assigned player, when 'show preview' is checked"
 msgstr ""
 
 msgid "Creation"
@@ -7116,11 +7104,6 @@ msgstr ""
 msgid ""
 "Allows you to set a 'tax' percentage on event income that must be set aside "
 "for the organisation."
-msgstr ""
-
-msgid ""
-"Adds a 'preview' field to writing elements, shareable with the player before "
-"the full sheet is published."
 msgstr ""
 
 msgid "Centaurs"

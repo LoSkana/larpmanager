@@ -726,9 +726,6 @@ msgstr "Spieler:"
 msgid "Players"
 msgstr "Spieler"
 
-msgid "Preview"
-msgstr "Vorschau"
-
 msgid "Primary"
 msgstr "Primäre Seite"
 
@@ -6170,12 +6167,6 @@ msgid ""
 msgstr ""
 "Zahlung erhalten! Sobald sie genehmigt ist, werden Ihre Konten aktualisiert."
 
-msgid ""
-"Preview visible only by the assigned player, when 'show preview' is checked"
-msgstr ""
-"Vorschau nur für den zugewiesenen Spieler sichtbar, wenn \"Vorschau "
-"anzeigen\" aktiviert ist"
-
 #, python-format
 msgid ""
 "(check the available number of discounts <a href='%(url)s'>on this page</a>)"
@@ -7344,13 +7335,6 @@ msgstr ""
 "\"%(allowed_extensions)s\"."
 
 msgid ""
-"If checked, makes visible the preview, reserved only to the player to whom "
-"the item is assigned"
-msgstr ""
-"Wenn diese Option aktiviert ist, ist die Vorschau nur für den Spieler "
-"sichtbar, dem das Objekt zugewiesen ist."
-
-msgid ""
 "If it is assigned to you, you will automatically be assigned the original "
 "character it mirrors."
 msgstr ""
@@ -7828,13 +7812,6 @@ msgid ""
 msgstr ""
 "Auf dieser Seite sind die Rollen zusammengefasst, die zugewiesen werden "
 "müssen, um die die Organisation betreffenden Funktionen zu nutzen."
-
-msgid ""
-"Adds a 'preview' field to writing elements, shareable with the player before"
-" the full sheet is published."
-msgstr ""
-"Fügt ein \"Vorschaufeld\" zu Schreibelementen hinzu, das mit dem Spieler "
-"geteilt werden kann, bevor das vollständige Blatt veröffentlicht wird."
 
 msgid ""
 "Allows players to create and contribute to collections aimed at assisting "

@@ -704,17 +704,6 @@
     placeholder: false
     order: 110
 - model: larpmanager.feature
-  pk: 122
-  fields:
-    name: Preview
-    descr: Adds a 'preview' field to writing elements, shareable with the player before
-      the full sheet is published.
-    slug: preview
-    overall: false
-    module: 1
-    placeholder: false
-    order: 90
-- model: larpmanager.feature
   pk: 124
   fields:
     name: Centaurs

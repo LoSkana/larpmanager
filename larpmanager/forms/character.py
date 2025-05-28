@@ -73,7 +73,6 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "assigned",
             "title",
             "teaser",
-            "preview",
             "text",
             "mirror",
             "hide",

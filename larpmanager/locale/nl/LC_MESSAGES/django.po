@@ -726,9 +726,6 @@ msgstr "Speler:"
 msgid "Players"
 msgstr "Spelers"
 
-msgid "Preview"
-msgstr "Voorbeeld"
-
 msgid "Primary"
 msgstr "Primair"
 
@@ -6040,12 +6037,6 @@ msgstr ""
 "Betaling ontvangen! Zodra de betaling is goedgekeurd, worden je accounts "
 "bijgewerkt."
 
-msgid ""
-"Preview visible only by the assigned player, when 'show preview' is checked"
-msgstr ""
-"Preview alleen zichtbaar voor de toegewezen speler als 'show preview' is "
-"aangevinkt"
-
 #, python-format
 msgid ""
 "(check the available number of discounts <a href='%(url)s'>on this page</a>)"
@@ -7204,13 +7195,6 @@ msgstr ""
 "zijn: '%(allowed_extensions)s'."
 
 msgid ""
-"If checked, makes visible the preview, reserved only to the player to whom "
-"the item is assigned"
-msgstr ""
-"Als deze optie is aangevinkt, worden de voorvertoningen zichtbaar, maar "
-"alleen voor de speler aan wie het item is toegewezen."
-
-msgid ""
 "If it is assigned to you, you will automatically be assigned the original "
 "character it mirrors."
 msgstr ""
@@ -7685,13 +7669,6 @@ msgid ""
 msgstr ""
 "Deze pagina geeft een overzicht van de rollen die moeten worden toegewezen "
 "om de functies met betrekking tot de organisatie te kunnen gebruiken."
-
-msgid ""
-"Adds a 'preview' field to writing elements, shareable with the player before"
-" the full sheet is published."
-msgstr ""
-"Voegt een 'preview'-veld toe aan schrijfelementen, dat gedeeld kan worden "
-"met de speler voordat de volledige sheet wordt gepubliceerd."
 
 msgid ""
 "Allows players to create and contribute to collections aimed at assisting "
