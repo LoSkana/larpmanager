@@ -23,9 +23,9 @@ from django.db.models import Q, UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 
+from larpmanager.cache.config import save_all_element_configs
 from larpmanager.models.event import BaseConceptModel
 from larpmanager.models.form import WritingOption
-from larpmanager.models.utils import save_all_element_configs
 from larpmanager.models.writing import Character
 
 

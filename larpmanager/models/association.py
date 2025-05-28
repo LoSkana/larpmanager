@@ -28,9 +28,10 @@ from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFill, ResizeToFit
 from tinymce.models import HTMLField
 
+from larpmanager.cache.config import get_element_config
 from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, FeatureNationality, PaymentMethod
 from larpmanager.models.larpmanager import LarpManagerPlan
-from larpmanager.models.utils import UploadToPathAndRename, get_element_config
+from larpmanager.models.utils import UploadToPathAndRename
 
 
 class MemberFieldType(models.TextChoices):
