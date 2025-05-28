@@ -18,12 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.apps import apps
 from django.core.cache import cache
-from django.db.models.signals import post_delete, post_save
-from django.dispatch import receiver
-
-from larpmanager.models.association import Association, AssociationConfig
-from larpmanager.models.event import Event, EventConfig, Run, RunConfig
 
 
 def reset_configs(element):
@@ -45,49 +41,19 @@ def get_configs(element):
 
 
 def update_configs(element):
-    if isinstance(element, Event):
-        que = EventConfig.objects.filter(event=element)
-    elif isinstance(element, Association):
-        que = AssociationConfig.objects.filter(assoc=element)
-    elif isinstance(element, Run):
-        que = RunConfig.objects.filter(run=element)
-    else:
+    model_map = {
+        "event": ("EventConfig", "event"),
+        "association": ("AssociationConfig", "assoc"),
+        "run": ("RunConfig", "run"),
+    }
+    # noinspection PyProtectedMember
+    model = element._meta.model_name.lower()
+    if model not in model_map:
         return {}
-
-    res = {}
-    for config in que:
-        res[config.name] = config.value
-    return res
-
-
-@receiver(post_save, sender=EventConfig)
-def post_save_reset_event_config(sender, instance, **kwargs):
-    reset_configs(instance.event)
-
-
-@receiver(post_delete, sender=EventConfig)
-def post_delete_reset_event_config(sender, instance, **kwargs):
-    reset_configs(instance.event)
-
-
-@receiver(post_save, sender=AssociationConfig)
-def post_save_reset_assoc_config(sender, instance, **kwargs):
-    reset_configs(instance.assoc)
-
-
-@receiver(post_delete, sender=AssociationConfig)
-def post_delete_reset_assoc_config(sender, instance, **kwargs):
-    reset_configs(instance.assoc)
-
-
-@receiver(post_save, sender=RunConfig)
-def post_save_reset_run_config(sender, instance, **kwargs):
-    reset_configs(instance.run)
-
-
-@receiver(post_delete, sender=RunConfig)
-def post_delete_reset_run_config(sender, instance, **kwargs):
-    reset_configs(instance.run)
+    config_model, fk_field = model_map[model]
+    cls = apps.get_model("larpmanager", config_model)
+    que = cls.objects.filter(**{fk_field: element})
+    return {c.name: c.value for c in que}
 
 
 def save_all_element_configs(obj, dct):
