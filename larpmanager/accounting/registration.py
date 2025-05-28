@@ -184,7 +184,7 @@ def quota_check(reg, start, alert, assoc_id):
 def installment_check(reg, alert, assoc_id):
     if not reg.ticket:
         return
-    # print(reg.tot_payed)
+
     tot = 0
 
     que = RegistrationInstallment.objects.filter(event=reg.run.event)
@@ -204,9 +204,9 @@ def installment_check(reg, alert, assoc_id):
             deadline = get_time_diff_today(i.date_deadline)
         else:
             deadline = None
-
+        
         if deadline and deadline >= alert:
-            continue
+            continue        
 
         if i.amount:
             tot += i.amount
@@ -233,8 +233,9 @@ def installment_check(reg, alert, assoc_id):
         return
 
     # If not installment is found
-    reg.deadline = get_time_diff_today(reg.created.date())
-    reg.quota = reg.tot_iscr - reg.tot_payed
+    if not tot:
+        reg.deadline = get_time_diff_today(reg.created.date())
+        reg.quota = reg.tot_iscr - reg.tot_payed
 
 
 def get_payment_deadline(reg, i, assoc_id):
