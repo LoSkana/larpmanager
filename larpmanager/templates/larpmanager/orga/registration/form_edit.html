@@ -42,8 +42,12 @@
                         </td>
                         <td>{{ el.display }}</td>
                         <td>{{ el.details | truncatechars:50 }}</td>
-                        <td>{{ el.price }}</td>
-                        <td>{{ el.max_available }}</td>
+                        <td>
+                            {% if el.price %}{{ el.price }}{% endif %}
+                        </td>
+                        <td>
+                            {% if el.max_available %}{{ el.max_available }}{% endif %}
+                        </td>
                         <td>
                             {% if not forloop.first %}
                                 <a href="{% url 'orga_registration_options_order' run.event.slug run.number el.id %}">
