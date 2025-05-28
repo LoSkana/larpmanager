@@ -330,6 +330,9 @@ msgstr "Brutto"
 msgid "Image"
 msgstr "Obraz"
 
+msgid "Italy"
+msgstr "Włochy"
+
 msgid "Login"
 msgstr "Logowanie"
 
@@ -1939,6 +1942,9 @@ msgstr "Link zewnętrzny"
 msgid "Faction cover"
 msgstr "Osłona frakcji"
 
+msgid "Fiscal Budget"
+msgstr "Budżet fiskalny"
+
 msgid "Free donation"
 msgstr "Bezpłatna darowizna"
 
@@ -2417,6 +2423,9 @@ msgstr "Rabat terminowy"
 msgid "Handout template"
 msgstr "Szablon materiałów informacyjnych"
 
+msgid "Italian features"
+msgstr "Włoskie cechy"
+
 msgid "Loading template"
 msgstr "Ładowanie szablonu"
 
@@ -2883,9 +2892,6 @@ msgstr "Wydatki (osobiste)"
 msgid "Feature deactivated"
 msgstr "Funkcja wyłączona"
 
-msgid "Fiscal Budget (ITA)"
-msgstr "Budżet fiskalny (ITA)"
-
 msgid "History preferences"
 msgstr "Preferencje dotyczące historii"
 
@@ -3166,9 +3172,6 @@ msgstr "Rejestracja nie jest otwarta"
 
 msgid "Registration sections"
 msgstr "Sekcje rejestracji"
-
-msgid "Restrict Staff Access"
-msgstr "Ograniczenie dostępu pracowników"
 
 msgid "Tax code verification"
 msgstr "Weryfikacja kodu podatkowego"
@@ -4307,9 +4310,6 @@ msgstr "Zobacz listę postaci i graczy!"
 msgid "Well done, you've completed all modules!"
 msgstr "Brawo, ukończyłeś wszystkie moduły!"
 
-msgid "Adds to all registrations an unique code."
-msgstr "Dodaje do wszystkich rejestracji unikalny kod."
-
 msgid "Allows you to download data in CSV files."
 msgstr "Umożliwia pobieranie danych w plikach CSV."
 
@@ -4935,9 +4935,6 @@ msgstr ""
 
 msgid "This page summarises the list of members as a registry"
 msgstr "Ta strona podsumowuje listę członków jako rejestr"
-
-msgid "Write here additional information to your registration"
-msgstr "Wpisz tutaj dodatkowe informacje dotyczące rejestracji"
 
 msgid "You have not reached the minimum number of preferences"
 msgstr "Nie osiągnięto minimalnej liczby preferencji"
@@ -5618,6 +5615,11 @@ msgstr ""
 msgid "Follow the link below to complete your payment on the Paypal platform."
 msgstr "Kliknij poniższy link, aby dokonać płatności na platformie Paypal."
 
+msgid "If checked, adds to all registrations an unique code to reference them"
+msgstr ""
+"Jeśli zaznaczone, dodaje do wszystkich rejestracji unikalny kod, aby się do "
+"nich odwoływać."
+
 msgid "If checked, it allows players to indicate the song of their characters"
 msgstr ""
 "Jeśli opcja ta jest zaznaczona, pozwala graczom wskazać piosenkę ich postaci"
@@ -5842,6 +5844,12 @@ msgid ""
 msgstr ""
 "Potwierdzam, że wszystkie wymagane przeze mnie dane osobowe zostały "
 "wypełnione prawidłowo."
+
+msgid ""
+"Indicate the organization nationality to activate nation-specific features"
+msgstr ""
+"Wskaż narodowość organizacji, aby aktywować funkcje specyficzne dla danego "
+"kraju."
 
 msgid ""
 "Indicates the maximum number of times it can be requested (0 for infinite)"
@@ -7405,13 +7413,6 @@ msgstr ""
 "jest świadoma."
 
 msgid ""
-"Adds a free-text field to the registration form so players can share any "
-"extra information or comments."
-msgstr ""
-"Dodaje pole tekstowe do formularza rejestracyjnego, aby gracze mogli dzielić"
-" się dodatkowymi informacjami lub komentarzami."
-
-msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
 "available during registration."
 msgstr ""
@@ -7671,13 +7672,6 @@ msgid ""
 msgstr ""
 "Niestety, bez pozostałej części opłaty NIE jest możliwe, abyśmy pozwolili ci"
 " wziąć udział w wydarzeniu."
-
-msgid ""
-"Allows more fine-grained control over which staff members can view players' "
-"answers to registration questions."
-msgstr ""
-"Umożliwia bardziej szczegółową kontrolę nad tym, którzy członkowie personelu"
-" mogą przeglądać odpowiedzi graczy na pytania rejestracyjne."
 
 msgid ""
 "First and last name characters do not match (remember to enter the correct "
@@ -8135,6 +8129,13 @@ msgid ""
 msgstr ""
 "Ta strona pokazuje preferencje obsady wyrażone przez graczy i umożliwia ich "
 "przypisanie za pomocą algorytmu optymalizacji."
+
+msgid ""
+"If checked, enables to set for each registration question the list of staff "
+"members allowed to see it's answers from the players"
+msgstr ""
+"Jeśli zaznaczone, umożliwia ustawienie dla każdego pytania rejestracyjnego "
+"listy członków personelu, którzy mogą zobaczyć odpowiedzi od graczy."
 
 msgid ""
 "Please remember that the information on this page was given with the "

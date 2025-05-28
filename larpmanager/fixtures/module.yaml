@@ -61,3 +61,11 @@
     descr: Standard features
     order: 0
     default: true
+- model: larpmanager.featuremodule
+  pk: 10
+  fields:
+    name: Italy
+    descr: Italian features
+    order: 9
+    default: false
+    nationality: it

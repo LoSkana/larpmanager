@@ -83,6 +83,10 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         return data
 
 
+class FeatureNationality(models.TextChoices):
+    ITALY = "it", _("Italy")
+
+
 class FeatureModule(BaseModel):
     name = models.CharField(max_length=100)
 
@@ -91,6 +95,8 @@ class FeatureModule(BaseModel):
     order = models.IntegerField()
 
     default = models.BooleanField(default=False)
+
+    nationality = models.CharField(max_length=2, choices=FeatureNationality.choices, blank=True, null=True)
 
 
 class Feature(BaseModel):

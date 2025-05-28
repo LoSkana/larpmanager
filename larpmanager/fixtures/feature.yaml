@@ -600,11 +600,11 @@
 - model: larpmanager.feature
   pk: 110
   fields:
-    name: Fiscal Budget (ITA)
+    name: Fiscal Budget
     descr: Generates an annual summary of fiscal activity for the Italian budget report.
     slug: ita_balance
     overall: true
-    module: 2
+    module: 10
     placeholder: false
     order: 150
 - model: larpmanager.feature
@@ -661,17 +661,6 @@
     placeholder: false
     order: 10
 - model: larpmanager.feature
-  pk: 117
-  fields:
-    name: Info
-    descr: Adds a free-text field to the registration form so players can share any
-      extra information or comments.
-    slug: info
-    overall: false
-    module: 4
-    placeholder: false
-    order: 150
-- model: larpmanager.feature
   pk: 118
   fields:
     name: Experience points
@@ -711,7 +700,7 @@
       and optionally assigns a result.
     slug: centauri
     overall: true
-    module: 3
+    module: 10
     placeholder: false
     order: 40
 - model: larpmanager.feature
@@ -938,17 +927,6 @@
     placeholder: false
     order: 120
 - model: larpmanager.feature
-  pk: 155
-  fields:
-    name: Restrict Staff Access
-    descr: Allows more fine-grained control over which staff members can view players'
-      answers to registration questions.
-    slug: reg_que_allowed
-    overall: false
-    module: 4
-    placeholder: false
-    order: 140
-- model: larpmanager.feature
   pk: 156
   fields:
     name: Receipt
@@ -966,7 +944,7 @@
     descr: Enables a volunteer register, as required by Italian RUNTS regulations.
     slug: volunteer_registry
     overall: true
-    module: 8
+    module: 10
     placeholder: false
     order: 9999
 - model: larpmanager.feature
@@ -1133,13 +1111,3 @@
     module: 7
     placeholder: false
     order: 1
-- model: larpmanager.feature
-  pk: 180
-  fields:
-    name: Unique code
-    descr: Adds to all registrations an unique code.
-    slug: unique_code
-    overall: false
-    module: 4
-    placeholder: false
-    order: 130

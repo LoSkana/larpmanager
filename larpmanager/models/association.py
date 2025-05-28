@@ -28,7 +28,7 @@ from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFill, ResizeToFit
 from tinymce.models import HTMLField
 
-from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, PaymentMethod
+from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, FeatureNationality, PaymentMethod
 from larpmanager.models.larpmanager import LarpManagerPlan
 from larpmanager.models.utils import UploadToPathAndRename, get_element_config
 
@@ -178,6 +178,15 @@ class Association(BaseModel):
 
     # payment setting key file
     key = models.BinaryField(null=True)
+
+    nationality = models.CharField(
+        max_length=2,
+        choices=FeatureNationality.choices,
+        blank=True,
+        null=True,
+        verbose_name=_("Nationality"),
+        help_text=_("Indicate the organization nationality to activate nation-specific features"),
+    )
 
     class Meta:
         constraints = [

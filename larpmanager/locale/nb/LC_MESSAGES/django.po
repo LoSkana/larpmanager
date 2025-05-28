@@ -330,6 +330,9 @@ msgstr "Brutto"
 msgid "Image"
 msgstr "Bilde"
 
+msgid "Italy"
+msgstr "Italia"
+
 msgid "Login"
 msgstr "Logg inn"
 
@@ -1939,6 +1942,9 @@ msgstr "Ekstern url"
 msgid "Faction cover"
 msgstr "Gruppedekning"
 
+msgid "Fiscal Budget"
+msgstr "Statsbudsjettet"
+
 msgid "Free donation"
 msgstr "Gratis donasjon"
 
@@ -2417,6 +2423,9 @@ msgstr "Terminrabatt"
 msgid "Handout template"
 msgstr "Mal for utdeling"
 
+msgid "Italian features"
+msgstr "Italienske trekk"
+
 msgid "Loading template"
 msgstr "Lasting av mal"
 
@@ -2883,9 +2892,6 @@ msgstr "Utgifter (personlige)"
 msgid "Feature deactivated"
 msgstr "Funksjonen er deaktivert"
 
-msgid "Fiscal Budget (ITA)"
-msgstr "Statsbudsjettet (ITA)"
-
 msgid "History preferences"
 msgstr "Historikk over preferanser"
 
@@ -3166,9 +3172,6 @@ msgstr "Registreringen er ikke åpen"
 
 msgid "Registration sections"
 msgstr "Seksjonene for medlemskap"
-
-msgid "Restrict Staff Access"
-msgstr "Begrense personalets tilgang"
 
 msgid "Tax code verification"
 msgstr "Verifisering av skattekode"
@@ -4309,9 +4312,6 @@ msgstr "Se listen over karakterer og spillere!"
 msgid "Well done, you've completed all modules!"
 msgstr "Godt gjort, du har fullført alle modulene!"
 
-msgid "Adds to all registrations an unique code."
-msgstr "Legger til en unik kode til alle registreringer."
-
 msgid "Allows you to download data in CSV files."
 msgstr "Gjør det mulig å laste ned data i CSV-filer."
 
@@ -4945,11 +4945,6 @@ msgstr ""
 msgid "This page summarises the list of members as a registry"
 msgstr ""
 "På denne siden finner du en oversikt over medlemslisten som et register"
-
-msgid "Write here additional information to your registration"
-msgstr ""
-"Angi her om det er behov for ytterligere informasjon i forbindelse med "
-"registreringen"
 
 msgid "You have not reached the minimum number of preferences"
 msgstr "Du har ikke nådd minimumsantallet av preferanser som skal angis."
@@ -5644,6 +5639,11 @@ msgstr "Beskriv det i feltet nedenfor, så ordner vi det så snart som mulig!"
 msgid "Follow the link below to complete your payment on the Paypal platform."
 msgstr "Følg lenken nedenfor for å fullføre betalingen på Paypal-plattformen."
 
+msgid "If checked, adds to all registrations an unique code to reference them"
+msgstr ""
+"Hvis avkrysset, legges det til en unik kode til alle registreringer for å "
+"referere til dem"
+
 msgid "If checked, it allows players to indicate the song of their characters"
 msgstr ""
 "Hvis det er krysset av, kan spillerne angi sangen til karakterene sine"
@@ -5856,6 +5856,11 @@ msgstr "hvis tegnet IKKE tilhører dette elementet, men bare er navngitt."
 msgid ""
 "I confirm that all my required personal data have been filled in correctly"
 msgstr "Jeg bekrefter at alle nødvendige personopplysninger er korrekt utfylt"
+
+msgid ""
+"Indicate the organization nationality to activate nation-specific features"
+msgstr ""
+"Angi organisasjonens nasjonalitet for å aktivere landsspesifikke funksjoner"
 
 msgid ""
 "Indicates the maximum number of times it can be requested (0 for infinite)"
@@ -7400,13 +7405,6 @@ msgstr ""
 "karakteren er klar over."
 
 msgid ""
-"Adds a free-text field to the registration form so players can share any "
-"extra information or comments."
-msgstr ""
-"Legger til et fritekstfelt i registreringsskjemaet, slik at spillerne kan "
-"dele ekstra informasjon eller kommentarer."
-
-msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
 "available during registration."
 msgstr ""
@@ -7666,13 +7664,6 @@ msgid ""
 msgstr ""
 "Uten restbeløpet er det dessverre IKKE mulig for oss å la deg delta i "
 "arrangementet."
-
-msgid ""
-"Allows more fine-grained control over which staff members can view players' "
-"answers to registration questions."
-msgstr ""
-"Gir mer detaljert kontroll over hvilke ansatte som kan se spillernes svar på"
-" registreringsspørsmål."
 
 msgid ""
 "First and last name characters do not match (remember to enter the correct "
@@ -8131,6 +8122,13 @@ msgid ""
 msgstr ""
 "Denne siden viser spillernes preferanser for rollebesetning og gjør det "
 "mulig å tildele dem via en optimaliseringsalgoritme."
+
+msgid ""
+"If checked, enables to set for each registration question the list of staff "
+"members allowed to see it's answers from the players"
+msgstr ""
+"Hvis avkrysset, gjør det mulig å angi for hvert registreringsspørsmål listen"
+" over ansatte som har tillatelse til å se svarene fra spillerne"
 
 msgid ""
 "Please remember that the information on this page was given with the "

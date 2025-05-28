@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
@@ -27,7 +28,10 @@ class FeatureForm(MyForm):
         if self.instance.pk:
             init_features = [str(v) for v in self.instance.features.values_list("pk", flat=True)]
 
-        for module in FeatureModule.objects.exclude(order=0).order_by("order"):
+        modules = FeatureModule.objects.exclude(order=0).order_by("order")
+        if overall:
+            modules = modules.filter(Q(nationality__isnull=True) | Q(nationality=self.instance.nationality))
+        for module in modules:
             choices = [
                 (str(feat.id), _(feat.name))
                 for feat in module.features.filter(overall=overall, placeholder=False).order_by("order")
