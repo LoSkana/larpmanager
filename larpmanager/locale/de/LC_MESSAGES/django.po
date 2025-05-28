@@ -330,6 +330,9 @@ msgstr "Brutto"
 msgid "Image"
 msgstr "Bild"
 
+msgid "Italy"
+msgstr "Italien"
+
 msgid "Login"
 msgstr "Anmeldung"
 
@@ -1939,6 +1942,9 @@ msgstr "Externe Url"
 msgid "Faction cover"
 msgstr "Gruppendeckung"
 
+msgid "Fiscal Budget"
+msgstr "Finanzieller Haushalt"
+
 msgid "Free donation"
 msgstr "Kostenlose Spende"
 
@@ -2417,6 +2423,9 @@ msgstr "Terminrabatt"
 msgid "Handout template"
 msgstr "Handout-Vorlage"
 
+msgid "Italian features"
+msgstr "Italienische Besonderheiten"
+
 msgid "Loading template"
 msgstr "Vorlage laden"
 
@@ -2428,9 +2437,6 @@ msgstr "Mitglied genehmigt!"
 
 msgid "Membership check"
 msgstr "Mitgliedschaftsprüfung"
-
-msgid "More information"
-msgstr "Weitere Informationen"
 
 msgid "No comunications"
 msgstr "Keine Kommunikation"
@@ -2883,17 +2889,11 @@ msgstr "Ausgaben (persönlich)"
 msgid "Feature deactivated"
 msgstr "Funktion deaktiviert"
 
-msgid "Fiscal Budget (ITA)"
-msgstr "Steuerlicher Haushalt (ITA)"
-
 msgid "History preferences"
 msgstr "Geschichte der Präferenzen"
 
 msgid "I am not interested"
 msgstr "Nicht interessiert"
-
-msgid "Informations given:"
-msgstr "Angegebene Informationen:"
 
 msgid "Informations saved!"
 msgstr "Informationen gespeichert!"
@@ -3166,9 +3166,6 @@ msgstr "Registrierung nicht geöffnet"
 
 msgid "Registration sections"
 msgstr "Abschnitte zur Mitgliedschaft"
-
-msgid "Restrict Staff Access"
-msgstr "Zugang für Mitarbeiter einschränken"
 
 msgid "Tax code verification"
 msgstr "Überprüfung der Steuernummer"
@@ -4314,9 +4311,6 @@ msgstr "Sehen Sie sich die Liste der Charaktere und Spieler an!"
 msgid "Well done, you've completed all modules!"
 msgstr "Gut gemacht, Sie haben alle Module abgeschlossen!"
 
-msgid "Adds to all registrations an unique code."
-msgstr "Fügt allen Registrierungen einen eindeutigen Code hinzu."
-
 msgid "Allows you to download data in CSV files."
 msgstr "Ermöglicht das Herunterladen von Daten in CSV-Dateien."
 
@@ -5003,11 +4997,6 @@ msgid "This page summarises the list of members as a registry"
 msgstr ""
 "Auf dieser Seite ist die Liste der Mitglieder in Form eines Registers "
 "zusammengefasst"
-
-msgid "Write here additional information to your registration"
-msgstr ""
-"Geben Sie hier an, ob Sie zusätzliche Informationen zu Ihrer Anmeldung "
-"benötigen"
 
 msgid "You have not reached the minimum number of preferences"
 msgstr ""
@@ -5828,6 +5817,11 @@ msgstr ""
 "Folgen Sie dem unten stehenden Link, um die Zahlung auf der Paypal-Plattform"
 " abzuschließen."
 
+msgid "If checked, adds to all registrations an unique code to reference them"
+msgstr ""
+"Wenn diese Option aktiviert ist, wird allen Registrierungen ein eindeutiger "
+"Code hinzugefügt, um sie zu referenzieren."
+
 msgid "If checked, it allows players to indicate the song of their characters"
 msgstr ""
 "Wenn diese Option aktiviert ist, können die Spieler das Lied ihrer "
@@ -6075,6 +6069,12 @@ msgid ""
 msgstr ""
 "Ich bestätige, dass ich alle erforderlichen Angaben zu meiner Person korrekt"
 " ausgefüllt habe."
+
+msgid ""
+"Indicate the organization nationality to activate nation-specific features"
+msgstr ""
+"Geben Sie die Nationalität der Organisation an, um länderspezifische "
+"Funktionen zu aktivieren"
 
 msgid ""
 "Indicates the maximum number of times it can be requested (0 for infinite)"
@@ -7548,13 +7548,6 @@ msgstr ""
 "und Sie sind dann ordnungsgemäß registriert."
 
 msgid ""
-"Do you have something you'd like to tell us or report to us about your "
-"registration? Use this field!"
-msgstr ""
-"Möchten Sie uns etwas über Ihre Mitgliedschaft mitteilen oder berichten? "
-"Nutzen Sie dieses Feld!"
-
-msgid ""
 "Lets you define sections in the registration form, grouping questions to "
 "make lengthy forms clearer."
 msgstr ""
@@ -7666,13 +7659,6 @@ msgid ""
 msgstr ""
 "für wechselseitige Beziehungen (Liebe, Kollegen, Rivalen), von denen die "
 "andere Person Kenntnis hat."
-
-msgid ""
-"Adds a free-text field to the registration form so players can share any "
-"extra information or comments."
-msgstr ""
-"Fügt dem Anmeldeformular ein Freitextfeld hinzu, damit die Spieler "
-"zusätzliche Informationen oder Kommentare mitteilen können."
 
 msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
@@ -7937,13 +7923,6 @@ msgid ""
 msgstr ""
 "Ohne die Restzahlung der Gebühr können wir Sie leider NICHT an der "
 "Veranstaltung teilnehmen lassen."
-
-msgid ""
-"Allows more fine-grained control over which staff members can view players' "
-"answers to registration questions."
-msgstr ""
-"Ermöglicht eine detailliertere Kontrolle darüber, welche Mitarbeiter die "
-"Antworten der Spieler auf Registrierungsfragen einsehen können."
 
 msgid ""
 "First and last name characters do not match (remember to enter the correct "
@@ -8420,6 +8399,14 @@ msgstr ""
 "Auf dieser Seite werden die von den Spielern geäußerten "
 "Besetzungspräferenzen angezeigt und können mit Hilfe eines "
 "Optimierungsalgorithmus zugewiesen werden."
+
+msgid ""
+"If checked, enables to set for each registration question the list of staff "
+"members allowed to see it's answers from the players"
+msgstr ""
+"Wenn diese Option aktiviert ist, können Sie für jede Registrierungsfrage die"
+" Liste der Mitarbeiter festlegen, die die Antworten der Spieler sehen "
+"dürfen."
 
 msgid ""
 "Please remember that the information on this page was given with the "

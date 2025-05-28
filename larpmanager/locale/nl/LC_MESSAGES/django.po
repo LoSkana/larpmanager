@@ -330,6 +330,9 @@ msgstr "Bruto"
 msgid "Image"
 msgstr "Afbeelding"
 
+msgid "Italy"
+msgstr "Italië"
+
 msgid "Login"
 msgstr "Inloggen"
 
@@ -1939,6 +1942,9 @@ msgstr "Externe url"
 msgid "Faction cover"
 msgstr "Groepsdekking"
 
+msgid "Fiscal Budget"
+msgstr "Fiscale begroting"
+
 msgid "Free donation"
 msgstr "Gratis donatie"
 
@@ -2417,6 +2423,9 @@ msgstr "Termijnkorting"
 msgid "Handout template"
 msgstr "Sjabloon voor hand-outs"
 
+msgid "Italian features"
+msgstr "Italiaanse kenmerken"
+
 msgid "Loading template"
 msgstr "Sjabloon laden"
 
@@ -2428,9 +2437,6 @@ msgstr "Lid goedgekeurd!"
 
 msgid "Membership check"
 msgstr "Lidmaatschap controleren"
-
-msgid "More information"
-msgstr "Meer informatie"
 
 msgid "No comunications"
 msgstr "Geen communicatie"
@@ -2883,17 +2889,11 @@ msgstr "Uitgaven (persoonlijk)"
 msgid "Feature deactivated"
 msgstr "Functie gedeactiveerd"
 
-msgid "Fiscal Budget (ITA)"
-msgstr "Fiscale begroting (ITA)"
-
 msgid "History preferences"
 msgstr "Voorkeur geschiedenis"
 
 msgid "I am not interested"
 msgstr "Niet geïnteresseerd"
-
-msgid "Informations given:"
-msgstr "Aangegeven informatie:"
 
 msgid "Informations saved!"
 msgstr "Informatie opgeslagen!"
@@ -3166,9 +3166,6 @@ msgstr "Registratie niet geopend"
 
 msgid "Registration sections"
 msgstr "Lidmaatschap secties"
-
-msgid "Restrict Staff Access"
-msgstr "Toegang personeel beperken"
 
 msgid "Tax code verification"
 msgstr "Verificatie van de belastingcode"
@@ -4311,9 +4308,6 @@ msgstr "Bekijk de lijst met personages en spelers!"
 msgid "Well done, you've completed all modules!"
 msgstr "Goed gedaan, je hebt alle modules gehaald!"
 
-msgid "Adds to all registrations an unique code."
-msgstr "Voegt aan alle registraties een unieke code toe."
-
 msgid "Allows you to download data in CSV files."
 msgstr "Hiermee kun je gegevens downloaden in CSV-bestanden."
 
@@ -4964,10 +4958,6 @@ msgstr ""
 
 msgid "This page summarises the list of members as a registry"
 msgstr "Deze pagina vat de ledenlijst samen als een register"
-
-msgid "Write here additional information to your registration"
-msgstr ""
-"Geef hier aan of je aanvullende informatie nodig hebt voor je registratie"
 
 msgid "You have not reached the minimum number of preferences"
 msgstr "Je hebt het minimumaantal voorkeuren niet bereikt om aan te geven"
@@ -5715,6 +5705,11 @@ msgstr ""
 "Volg de onderstaande link om de betaling te voltooien op het Paypal-"
 "platform."
 
+msgid "If checked, adds to all registrations an unique code to reference them"
+msgstr ""
+"Als deze optie is ingeschakeld, wordt aan alle registraties een unieke code "
+"toegevoegd om ernaar te verwijzen"
+
 msgid "If checked, it allows players to indicate the song of their characters"
 msgstr ""
 "Als deze optie is aangevinkt, kunnen spelers het lied van hun personages "
@@ -5947,6 +5942,12 @@ msgid ""
 "I confirm that all my required personal data have been filled in correctly"
 msgstr ""
 "Ik bevestig dat al mijn vereiste persoonlijke gegevens correct zijn ingevuld"
+
+msgid ""
+"Indicate the organization nationality to activate nation-specific features"
+msgstr ""
+"Geef de nationaliteit van de organisatie op om landspecifieke functies te "
+"activeren"
 
 msgid ""
 "Indicates the maximum number of times it can be requested (0 for infinite)"
@@ -7411,12 +7412,6 @@ msgstr ""
 "bent u geregistreerd."
 
 msgid ""
-"Do you have something you'd like to tell us or report to us about your "
-"registration? Use this field!"
-msgstr ""
-"Wil je ons iets vertellen of melden over je lidmaatschap? Gebruik dit veld!"
-
-msgid ""
 "Lets you define sections in the registration form, grouping questions to "
 "make lengthy forms clearer."
 msgstr ""
@@ -7527,13 +7522,6 @@ msgid ""
 msgstr ""
 "voor tweerichtingsrelaties (liefde, collega's, rivalen), waarvan het andere "
 "personage op de hoogte is."
-
-msgid ""
-"Adds a free-text field to the registration form so players can share any "
-"extra information or comments."
-msgstr ""
-"Voegt een veld voor vrije tekst toe aan het registratieformulier zodat "
-"spelers extra informatie of opmerkingen kunnen delen."
 
 msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
@@ -7795,13 +7783,6 @@ msgid ""
 msgstr ""
 "Zonder het restbedrag is het voor ons helaas NIET mogelijk om je te laten "
 "deelnemen aan het evenement."
-
-msgid ""
-"Allows more fine-grained control over which staff members can view players' "
-"answers to registration questions."
-msgstr ""
-"Maakt fijnmazigere controle mogelijk over welke personeelsleden de "
-"antwoorden van spelers op registratievragen kunnen bekijken."
 
 msgid ""
 "First and last name characters do not match (remember to enter the correct "
@@ -8268,6 +8249,13 @@ msgid ""
 msgstr ""
 "Deze pagina toont de castingvoorkeuren die door de spelers zijn uitgesproken"
 " en maakt het mogelijk om ze toe te wijzen via een optimalisatiealgoritme."
+
+msgid ""
+"If checked, enables to set for each registration question the list of staff "
+"members allowed to see it's answers from the players"
+msgstr ""
+"Als deze optie is aangevinkt, kan voor elke registratievraag worden "
+"ingesteld welke personeelsleden de antwoorden van de spelers mogen zien."
 
 msgid ""
 "Please remember that the information on this page was given with the "

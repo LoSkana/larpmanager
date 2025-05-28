@@ -719,6 +719,17 @@ msgstr ""
 msgid "Registration form"
 msgstr ""
 
+msgid "If checked, adds to all registrations an unique code to reference them"
+msgstr ""
+
+msgid "Allowed"
+msgstr ""
+
+msgid ""
+"If checked, enables to set for each registration question the list of staff "
+"members allowed to see it's answers from the players"
+msgstr ""
+
 msgid "Hide not available"
 msgstr ""
 
@@ -1338,14 +1349,6 @@ msgstr ""
 msgid "Set if you want to reserve tickets in addition to your"
 msgstr ""
 
-msgid "More information"
-msgstr ""
-
-msgid ""
-"Do you have something you'd like to tell us or report to us about your "
-"registration? Use this field!"
-msgstr ""
-
 #, python-format
 msgid ""
 "Enter here the 'bring a friend' code given to you by an already registered "
@@ -1958,9 +1961,6 @@ msgstr ""
 msgid "Selected options:"
 msgstr ""
 
-msgid "Informations given:"
-msgstr ""
-
 #, python-format
 msgid ""
 "You must pay at least <b>%(amount).2f %(currency)s</b> by %(deadline)d days. "
@@ -2362,6 +2362,13 @@ msgstr ""
 msgid "Indicate the color that will be used for the links"
 msgstr ""
 
+msgid "Nationality"
+msgstr ""
+
+msgid ""
+"Indicate the organization nationality to activate nation-specific features"
+msgstr ""
+
 msgid "Home"
 msgstr ""
 
@@ -2408,6 +2415,9 @@ msgid "Language"
 msgstr ""
 
 msgid "Text language"
+msgstr ""
+
+msgid "Italy"
 msgstr ""
 
 msgid ""
@@ -2709,9 +2719,6 @@ msgid ""
 "shown at the start of the form)"
 msgstr ""
 
-msgid "Allowed"
-msgstr ""
-
 msgid ""
 "Staff members who are allowed to be able to see the responses of players "
 "(leave blank to let everyone see)"
@@ -2789,9 +2796,6 @@ msgid "Pronouns"
 msgstr ""
 
 msgid "Indicate the pronouns you wish to be used to refer to you"
-msgstr ""
-
-msgid "Nationality"
 msgstr ""
 
 msgid "Indicate the country of which you are a citizen"
@@ -3147,9 +3151,6 @@ msgid "Surcharge applied to the ticket"
 msgstr ""
 
 msgid "Date from when the surcharge is applied"
-msgstr ""
-
-msgid "Write here additional information to your registration"
 msgstr ""
 
 msgid "Character name"
@@ -6682,6 +6683,9 @@ msgstr ""
 msgid "Standard features"
 msgstr ""
 
+msgid "Italian features"
+msgstr ""
+
 msgid ""
 "Enables \"Prologues\", short introductory paragraphs for each act of the "
 "game, which players receive to guide them."
@@ -7016,7 +7020,7 @@ msgid ""
 "match and approve corresponding wire payments."
 msgstr ""
 
-msgid "Fiscal Budget (ITA)"
+msgid "Fiscal Budget"
 msgstr ""
 
 msgid ""
@@ -7049,11 +7053,6 @@ msgstr ""
 msgid ""
 "Adds a link to legal notices on every page, and provides a management panel "
 "link to edit the content of that notice."
-msgstr ""
-
-msgid ""
-"Adds a free-text field to the registration form so players can share any "
-"extra information or comments."
 msgstr ""
 
 msgid ""
@@ -7210,14 +7209,6 @@ msgid ""
 "all events, instead of each event's organizers."
 msgstr ""
 
-msgid "Restrict Staff Access"
-msgstr ""
-
-msgid ""
-"Allows more fine-grained control over which staff members can view players' "
-"answers to registration questions."
-msgstr ""
-
 msgid ""
 "Automatically generates a customizable PDF receipt for each payment and "
 "emails it to the user."
@@ -7286,9 +7277,6 @@ msgstr ""
 msgid ""
 "Lets you create 'template' events whose configurations and settings can be "
 "used as a starting point for other events."
-msgstr ""
-
-msgid "Adds to all registrations an unique code."
 msgstr ""
 
 msgid "Audits"

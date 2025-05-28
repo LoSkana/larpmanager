@@ -261,14 +261,6 @@ class Registration(BaseModel):
 
     pay_what = models.IntegerField(default=0)
 
-    info = models.TextField(
-        max_length=500,
-        blank=True,
-        null=True,
-        verbose_name=_("More information"),
-        help_text=_("Write here additional information to your registration"),
-    )
-
     num_payments = models.IntegerField(default=1)
 
     tot_payed = models.DecimalField(max_digits=10, decimal_places=2, default=0)

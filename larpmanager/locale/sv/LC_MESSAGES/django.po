@@ -330,6 +330,9 @@ msgstr "Brutto"
 msgid "Image"
 msgstr "Bild"
 
+msgid "Italy"
+msgstr "Italien"
+
 msgid "Login"
 msgstr "Inloggning"
 
@@ -1939,6 +1942,9 @@ msgstr "Extern webbadress"
 msgid "Faction cover"
 msgstr "Gruppens täckning"
 
+msgid "Fiscal Budget"
+msgstr "Finanspolitisk budget"
+
 msgid "Free donation"
 msgstr "Gratis donation"
 
@@ -2417,6 +2423,9 @@ msgstr "Terminsrabatt"
 msgid "Handout template"
 msgstr "Mall för handout"
 
+msgid "Italian features"
+msgstr "Italienska inslag"
+
 msgid "Loading template"
 msgstr "Ladda mall"
 
@@ -2428,9 +2437,6 @@ msgstr "Godkänd av medlem!"
 
 msgid "Membership check"
 msgstr "Medlemskapskontroll"
-
-msgid "More information"
-msgstr "Ytterligare information"
 
 msgid "No comunications"
 msgstr "Ingen kommunikation"
@@ -2883,17 +2889,11 @@ msgstr "Utgifter (personliga)"
 msgid "Feature deactivated"
 msgstr "Funktion avaktiverad"
 
-msgid "Fiscal Budget (ITA)"
-msgstr "Finanspolitisk budget (ITA)"
-
 msgid "History preferences"
 msgstr "Preferenshistorik"
 
 msgid "I am not interested"
 msgstr "Inte intresserad"
-
-msgid "Informations given:"
-msgstr "Angiven information:"
 
 msgid "Informations saved!"
 msgstr "Information sparad!"
@@ -3166,9 +3166,6 @@ msgstr "Registreringen är inte öppen"
 
 msgid "Registration sections"
 msgstr "Medlemskapets sektioner"
-
-msgid "Restrict Staff Access"
-msgstr "Begränsa personalens åtkomst"
 
 msgid "Tax code verification"
 msgstr "Verifiering av skattekod"
@@ -4309,9 +4306,6 @@ msgstr "Visa listan över karaktärer och spelare!"
 msgid "Well done, you've completed all modules!"
 msgstr "Bra jobbat, du har klarat alla moduler!"
 
-msgid "Adds to all registrations an unique code."
-msgstr "Lägger till en unik kod till alla registreringar."
-
 msgid "Allows you to download data in CSV files."
 msgstr "Gör att du kan ladda ner data i CSV-filer."
 
@@ -4945,9 +4939,6 @@ msgstr ""
 
 msgid "This page summarises the list of members as a registry"
 msgstr "Denna sida sammanfattar medlemsförteckningen som ett register"
-
-msgid "Write here additional information to your registration"
-msgstr "Ange här om ytterligare information till din post"
 
 msgid "You have not reached the minimum number of preferences"
 msgstr "Du har inte uppnått det minsta antalet preferenser för att ange"
@@ -5640,6 +5631,11 @@ msgstr "Beskriv det i fältet nedan så åtgärdar vi det så snart som möjligt
 msgid "Follow the link below to complete your payment on the Paypal platform."
 msgstr "Följ länken nedan för att slutföra betalningen på Paypal-plattformen."
 
+msgid "If checked, adds to all registrations an unique code to reference them"
+msgstr ""
+"Om markerad, lägger till en unik kod till alla registreringar för att "
+"referera till dem"
+
 msgid "If checked, it allows players to indicate the song of their characters"
 msgstr "Om den är markerad kan spelarna ange sången för sina karaktärer"
 
@@ -5855,6 +5851,12 @@ msgid ""
 msgstr ""
 "Jag bekräftar att alla mina obligatoriska personuppgifter har fyllts i "
 "korrekt"
+
+msgid ""
+"Indicate the organization nationality to activate nation-specific features"
+msgstr ""
+"Ange organisationens nationalitet för att aktivera nationsspecifika "
+"funktioner"
 
 msgid ""
 "Indicates the maximum number of times it can be requested (0 for infinite)"
@@ -7302,13 +7304,6 @@ msgstr ""
 "kommer då att vara vederbörligen registrerad"
 
 msgid ""
-"Do you have something you'd like to tell us or report to us about your "
-"registration? Use this field!"
-msgstr ""
-"Har du något du vill berätta för oss eller informera oss om ditt medlemskap?"
-" Använd detta fält!"
-
-msgid ""
 "Lets you define sections in the registration form, grouping questions to "
 "make lengthy forms clearer."
 msgstr ""
@@ -7419,13 +7414,6 @@ msgid ""
 msgstr ""
 "för tvåvägsrelationer (kärlek, kollegor, rivaler), som den andra karaktären "
 "är medveten om."
-
-msgid ""
-"Adds a free-text field to the registration form so players can share any "
-"extra information or comments."
-msgstr ""
-"Lägger till ett fritextfält i registreringsformuläret så att spelarna kan "
-"dela med sig av extra information eller kommentarer."
 
 msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
@@ -7685,13 +7673,6 @@ msgid ""
 msgstr ""
 "Tyvärr är det INTE möjligt för oss att låta dig delta i evenemanget utan "
 "återstoden av avgiften."
-
-msgid ""
-"Allows more fine-grained control over which staff members can view players' "
-"answers to registration questions."
-msgstr ""
-"Möjliggör mer detaljerad kontroll över vilka anställda som kan se spelarnas "
-"svar på registreringsfrågor."
 
 msgid ""
 "First and last name characters do not match (remember to enter the correct "
@@ -8151,6 +8132,13 @@ msgid ""
 msgstr ""
 "Denna sida visar de castingpreferenser som spelarna har uttryckt och gör det"
 " möjligt att tilldela dem via en optimeringsalgoritm."
+
+msgid ""
+"If checked, enables to set for each registration question the list of staff "
+"members allowed to see it's answers from the players"
+msgstr ""
+"Om markerad, gör det möjligt att för varje registreringsfråga ange listan "
+"över personalmedlemmar som får se svaren från spelarna"
 
 msgid ""
 "Please remember that the information on this page was given with the "

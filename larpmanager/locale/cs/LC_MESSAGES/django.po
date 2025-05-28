@@ -330,6 +330,9 @@ msgstr "Hrubý"
 msgid "Image"
 msgstr "Obrázek"
 
+msgid "Italy"
+msgstr "Itálie"
+
 msgid "Login"
 msgstr "Přihlášení"
 
@@ -1939,6 +1942,9 @@ msgstr "Externí url"
 msgid "Faction cover"
 msgstr "Skupinové krytí"
 
+msgid "Fiscal Budget"
+msgstr "Fiskální rozpočet"
+
 msgid "Free donation"
 msgstr "Bezplatný příspěvek"
 
@@ -2417,6 +2423,9 @@ msgstr "Forwardová sleva"
 msgid "Handout template"
 msgstr "Šablona letáku"
 
+msgid "Italian features"
+msgstr "Italské rysy"
+
 msgid "Loading template"
 msgstr "Načítání šablony"
 
@@ -2428,9 +2437,6 @@ msgstr "Člen schválen!"
 
 msgid "Membership check"
 msgstr "Kontrola členství"
-
-msgid "More information"
-msgstr "Další informace"
 
 msgid "No comunications"
 msgstr "Žádná komunikace"
@@ -2883,17 +2889,11 @@ msgstr "Výdaje (osobní)"
 msgid "Feature deactivated"
 msgstr "Funkce deaktivována"
 
-msgid "Fiscal Budget (ITA)"
-msgstr "Fiskální rozpočet (ITA)"
-
 msgid "History preferences"
 msgstr "Historie předvoleb"
 
 msgid "I am not interested"
 msgstr "Nemám zájem"
-
-msgid "Informations given:"
-msgstr "Uvedené informace:"
 
 msgid "Informations saved!"
 msgstr "Informace uloženy!"
@@ -3166,9 +3166,6 @@ msgstr "Registrace není otevřena"
 
 msgid "Registration sections"
 msgstr "Sekce členství"
-
-msgid "Restrict Staff Access"
-msgstr "Omezení přístupu zaměstnanců"
 
 msgid "Tax code verification"
 msgstr "Ověření daňového kódu"
@@ -4307,9 +4304,6 @@ msgstr "Prohlédněte si seznam postav a hráčů!"
 msgid "Well done, you've completed all modules!"
 msgstr "Výborně, splnili jste všechny moduly!"
 
-msgid "Adds to all registrations an unique code."
-msgstr "Přidá ke všem registracím jedinečný kód."
-
 msgid "Allows you to download data in CSV files."
 msgstr "Umožňuje stahovat data v souborech CSV."
 
@@ -4934,9 +4928,6 @@ msgstr "Tato stránka shrnuje uživatele, které lze přesvědčit k registraci.
 
 msgid "This page summarises the list of members as a registry"
 msgstr "Tato stránka shrnuje seznam členů jako rejstřík."
-
-msgid "Write here additional information to your registration"
-msgstr "Zde uveďte, zda k vaší registraci potřebujete další informace"
 
 msgid "You have not reached the minimum number of preferences"
 msgstr "Nedosáhli jste minimálního počtu preferencí, které je třeba uvést"
@@ -5579,6 +5570,11 @@ msgid "Follow the link below to complete your payment on the Paypal platform."
 msgstr ""
 "Pro dokončení platby na platformě Paypal následujte níže uvedený odkaz."
 
+msgid "If checked, adds to all registrations an unique code to reference them"
+msgstr ""
+"Pokud je zaškrtnuto, přidá ke všem registracím jedinečný kód, který na ně "
+"odkazuje."
+
 msgid "If checked, it allows players to indicate the song of their characters"
 msgstr "Pokud je zaškrtnuto, umožňuje hráčům uvést píseň jejich postavy."
 
@@ -5782,6 +5778,12 @@ msgstr "pokud znak NENÍ součástí tohoto prvku, ale je pouze pojmenován."
 msgid ""
 "I confirm that all my required personal data have been filled in correctly"
 msgstr "Potvrzuji, že všechny požadované osobní údaje byly vyplněny správně."
+
+msgid ""
+"Indicate the organization nationality to activate nation-specific features"
+msgstr ""
+"Uveďte státní příslušnost organizace, abyste aktivovali funkce specifické "
+"pro danou zemi."
 
 msgid ""
 "Indicates the maximum number of times it can be requested (0 for infinite)"
@@ -7174,13 +7176,6 @@ msgstr ""
 "řádně zaregistrováni."
 
 msgid ""
-"Do you have something you'd like to tell us or report to us about your "
-"registration? Use this field!"
-msgstr ""
-"Chcete nám něco sdělit nebo nás informovat o svém členství? Použijte toto "
-"pole!"
-
-msgid ""
 "Lets you define sections in the registration form, grouping questions to "
 "make lengthy forms clearer."
 msgstr ""
@@ -7291,13 +7286,6 @@ msgid ""
 msgstr ""
 "pro obousměrné vztahy (láska, kolegové, rivalové), o kterých druhá postava "
 "ví."
-
-msgid ""
-"Adds a free-text field to the registration form so players can share any "
-"extra information or comments."
-msgstr ""
-"Do registračního formuláře přidá pole s volným textem, aby hráči mohli "
-"sdílet další informace nebo komentáře."
 
 msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
@@ -7559,13 +7547,6 @@ msgid ""
 msgstr ""
 "Bez uhrazení zbývající části poplatku vám bohužel NEMŮŽEME umožnit účast na "
 "akci."
-
-msgid ""
-"Allows more fine-grained control over which staff members can view players' "
-"answers to registration questions."
-msgstr ""
-"Umožňuje jemnější kontrolu nad tím, kteří zaměstnanci mohou zobrazit "
-"odpovědi hráčů na registrační otázky."
 
 msgid ""
 "First and last name characters do not match (remember to enter the correct "
@@ -8019,6 +8000,13 @@ msgid ""
 msgstr ""
 "Tato stránka zobrazuje preference obsazení vyjádřené hráči a umožňuje jejich"
 " přiřazení pomocí optimalizačního algoritmu."
+
+msgid ""
+"If checked, enables to set for each registration question the list of staff "
+"members allowed to see it's answers from the players"
+msgstr ""
+"Pokud je zaškrtnuto, umožňuje nastavit pro každou registrační otázku seznam "
+"členů personálu, kteří mohou vidět odpovědi hráčů."
 
 msgid ""
 "Please remember that the information on this page was given with the "

@@ -260,6 +260,16 @@ class OrgaConfigForm(ConfigForm):
     def set_config_reg_form(self):
         section = _("Registration form")
 
+        label = _("Unique code")
+        help_text = _("If checked, adds to all registrations an unique code to reference them")
+        self.add_configs("registration_unique_code", ConfigType.BOOL, section, label, help_text)
+
+        label = _("Allowed")
+        help_text = _(
+            "If checked, enables to set for each registration question the list of staff members allowed to see it's answers from the players"
+        )
+        self.add_configs("registration_reg_que_allowed", ConfigType.BOOL, section, label, help_text)
+
         label = _("Hide not available")
         help_text = _(
             "If checked, options no longer available in the registration form are hidden, "
