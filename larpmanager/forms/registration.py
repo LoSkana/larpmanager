@@ -94,8 +94,6 @@ class RegistrationForm(BaseRegistrationForm):
 
         self.init_bring_friend()
 
-        self.init_info(run)
-
     def sel_ticket_map(self, ticket):
         """
         Check if given the selected ticket, we need to not require questions reserved
@@ -455,8 +453,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         self.init_pay_what(reg_section)
 
-        self.init_info(reg_section)
-
         # ## CHARACTERS
         if "character" in self.params["features"]:
             self.init_character(char_section)
@@ -472,12 +468,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         if "reg_que_sections" not in self.params["features"]:
             self.show_sections = True
-
-    def init_info(self, reg_section):
-        if "info" in self.params["features"]:
-            self.sections["id_info"] = reg_section
-        else:
-            self.delete_field("info")
 
     def init_additionals(self, reg_section):
         if "additional_tickets" in self.params["features"]:
