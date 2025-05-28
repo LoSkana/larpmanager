@@ -66,6 +66,6 @@
   fields:
     name: Italy
     descr: Italian features
-    order: 9
+    order: 11
     default: false
     nationality: it

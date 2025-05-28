@@ -13,9 +13,9 @@ def clean_fields(apps, schema_editor):
             event=reg.run.event,
             typ="p",
             display="More information",
-            details="Write here additional information to your registration",
+            description="Write here additional information to your registration",
         )
-        (ca, cr) = RegistrationAnswer.objects.get_or_create(element_id=reg.id, question=que)
+        (ca, cr) = RegistrationAnswer.objects.get_or_create(reg_id=reg.id, question=que)
         ca.text = reg.info
         ca.save()
 

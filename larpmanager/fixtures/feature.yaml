@@ -606,7 +606,7 @@
     overall: true
     module: 10
     placeholder: false
-    order: 150
+    order: 10
 - model: larpmanager.feature
   pk: 111
   fields:
@@ -702,7 +702,7 @@
     overall: true
     module: 10
     placeholder: false
-    order: 40
+    order: 9999
 - model: larpmanager.feature
   pk: 125
   fields:
@@ -946,7 +946,7 @@
     overall: true
     module: 10
     placeholder: false
-    order: 9999
+    order: 20
 - model: larpmanager.feature
   pk: 162
   fields:
