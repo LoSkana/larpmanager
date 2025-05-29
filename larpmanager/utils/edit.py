@@ -22,14 +22,17 @@ import time
 
 from django.contrib import messages
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
 from larpmanager.models.member import Log
 from larpmanager.models.writing import TextVersion
 from larpmanager.utils.base import check_assoc_permission
+from larpmanager.utils.common import html_clean
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.exceptions import NotFoundError
 
@@ -47,17 +50,47 @@ def save_version(el, tp, mb, dl=False):
     tv = TextVersion()
     tv.eid = el.id
     tv.tp = tp
-    tv.text = el.text
     tv.version = n
     tv.member = mb
     tv.dl = dl
-    if hasattr(el, "teaser"):
-        tv.teaser = el.teaser
-    if hasattr(el, "teaser_eng"):
-        tv.teaser_eng = el.teaser_eng
-    if hasattr(el, "text_eng"):
-        tv.text_eng = el.text_eng
+
+    if tp in QuestionApplicable.values:
+        texts = []
+        for que in WritingQuestion.objects.filter(applicable=tp).order_by("order"):
+            value = _get_field_value(el, que)
+            if not value:
+                continue
+            value = html_clean(value)
+            texts.append(f"{que.display}: {value}")
+
+        tv.text = "\n".join(texts)
+    else:
+        tv.text = el.text
+
     tv.save()
+
+
+def _get_field_value(el, que):
+    mapping = {
+        "text": lambda: el.text,
+        "teaser": lambda: el.teaser,
+        "name": lambda: el.name,
+        "title": lambda: el.title,
+    }
+
+    if que.typ in mapping:
+        return mapping[que.typ]()
+
+    if que.typ in {"p", "t", "e"}:
+        try:
+            return WritingAnswer.objects.get(question=que, element_id=el.id).text
+        except ObjectDoesNotExist:
+            return ""
+
+    if que.typ in {"s", "m"}:
+        return ", ".join(c.option.display for c in WritingChoice.objects.filter(question=que, element_id=el.id))
+
+    return None
 
 
 def check_run(el, ctx, afield=None):
