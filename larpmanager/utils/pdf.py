@@ -27,16 +27,18 @@ from datetime import datetime, timedelta, timezone
 import lxml.etree
 import pdfkit
 from django.conf import settings as conf_settings
+from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template import Context, Template
 from django.template.loader import get_template
 from django.utils.translation import gettext_lazy as _
 from xhtml2pdf import pisa
 
+from larpmanager.cache.association import get_cache_assoc
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.models.association import AssocTextType
 from larpmanager.models.casting import AssignmentTrait, Casting, Trait
@@ -399,9 +401,17 @@ def print_handout_go(ctx, c):
     print_handout(ctx)
 
 
+def get_fake_request(assoc_slug):
+    request = HttpRequest()
+    request.assoc = get_cache_assoc(assoc_slug)
+    request.user = AnonymousUser()
+    return request
+
+
 @background_auto(queue="pdf")
-def print_handout_bkg(s, n, c):
-    ctx = get_event_run(None, s, n)
+def print_handout_bkg(a, s, n, c):
+    request = get_fake_request(a)
+    ctx = get_event_run(request, s, n)
     print_handout_go(ctx, c)
 
 
@@ -418,14 +428,16 @@ def print_character_go(ctx, c):
 
 
 @background_auto(queue="pdf")
-def print_character_bkg(s, n, c):
-    ctx = get_event_run(None, s, n)
+def print_character_bkg(a, s, n, c):
+    request = get_fake_request(a)
+    ctx = get_event_run(request, s, n)
     print_character_go(ctx, c)
 
 
 @background_auto(queue="pdf")
-def print_run_bkg(s, n):
-    ctx = get_event_run(None, s, n)
+def print_run_bkg(a, s, n):
+    request = get_fake_request(a)
+    ctx = get_event_run(request, s, n)
 
     print_gallery(ctx)
     print_profiles(ctx)

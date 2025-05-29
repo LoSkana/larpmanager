@@ -66,7 +66,7 @@ def orga_pdf_regenerate(request, s, n):
     chs = ctx["event"].get_elements(Character)
     for run in Run.objects.filter(event=ctx["event"], end__gte=datetime.now()):
         for ch in chs:
-            print_character_bkg(ctx["event"].slug, run.number, ch.number)
+            print_character_bkg(ctx["event"].assoc.slug, ctx["event"].slug, run.number, ch.number)
     messages.success(request, _("Regeneration pdf started!"))
     return redirect("orga_characters_pdf", s=ctx["event"].slug, n=ctx["run"].number)
 

@@ -23,6 +23,10 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
 
 
 class FeatureForm(MyForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.prevent_canc = True
+
     def _init_features(self, overall):
         init_features = None
         if self.instance.pk:

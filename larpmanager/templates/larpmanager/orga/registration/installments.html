@@ -44,13 +44,3 @@
         </tbody>
     </table>
 {% endblock content %}
-{% block js2 %}
-    <script>window.addEventListener('DOMContentLoaded', function() {
-        $(document).ready(function() {
-            setTimeout(function() {
-                $('*[data-column="2"]').click();
-            }, 500);
-        });
-    });
-    </script>
-{% endblock js2 %}
