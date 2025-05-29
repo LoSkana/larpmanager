@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import time
 from os import listdir
 from os.path import isdir, join
 
@@ -52,6 +52,7 @@ class Command(BaseCommand):
             result = self.translator.translate_text(entry.msgid, source_lang="EN", target_lang=tgt)
             entry.msgstr = str(result)
             self.stdout.write(f"-> {entry.msgstr}\n")
+            time.sleep(1)
         except deepl.exceptions.DeepLException as e:
             self.stdout.write(e)
             self.stdout.write(entry.msgid)

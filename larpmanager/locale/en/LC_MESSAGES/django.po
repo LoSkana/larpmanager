@@ -167,6 +167,53 @@ msgstr ""
 msgid "This page allows you to edit organization-specific text."
 msgstr ""
 
+msgid "Added at the top of the user profile page"
+msgstr ""
+
+msgid "Added at the top of the main calendar page"
+msgstr ""
+
+msgid "Added at the bottom of all mails confirming signup to players"
+msgstr ""
+
+msgid "Content of the membership request filled with user data"
+msgstr ""
+
+msgid "Added to the membership page as the paragraph for statute info"
+msgstr ""
+
+msgid "Content of legal notice page linked at the bottom of all pages"
+msgstr ""
+
+msgid "Added to the bottom of all pages"
+msgstr ""
+
+msgid ""
+"Terms and conditions of signup, shown in a page linked in the registration "
+"form"
+msgstr ""
+
+msgid "Content of the receipt created for each payment and sent to players"
+msgstr ""
+
+msgid "Added to the bottom of all mails sent"
+msgstr ""
+
+msgid "Content of privacy page linked at the bottom of all pages"
+msgstr ""
+
+msgid "Content of mail reminding players to fill their membership request"
+msgstr ""
+
+msgid "Content of mail reminding players to pay the membership fee"
+msgstr ""
+
+msgid "Content of mail reminding players to pay their signup fee"
+msgstr ""
+
+msgid "Content of mail reminding players to fill their profile"
+msgstr ""
+
 msgid "Roles"
 msgstr ""
 
@@ -1128,6 +1175,27 @@ msgid ""
 msgstr ""
 
 msgid "This page allows you to edit event-specific texts."
+msgstr ""
+
+msgid "Added to the registration page, before the form"
+msgstr ""
+
+msgid "Added at the top of the search page of characters"
+msgstr ""
+
+msgid "Added at the bottom of mail confirming signup to players"
+msgstr ""
+
+msgid "Added at the bottom of mail notifying players of character assignment"
+msgstr ""
+
+msgid "Content of mail notifying players of their character in proposed status"
+msgstr ""
+
+msgid "Content of mail notifying players of their character in approved status"
+msgstr ""
+
+msgid "Content of mail notifying players of their character in review status"
 msgstr ""
 
 msgid "This page allows you to change the access roles for the event."

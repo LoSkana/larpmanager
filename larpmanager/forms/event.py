@@ -678,6 +678,27 @@ class OrgaEventTextForm(MyForm):
             ch = remove_choice(ch, tp)
         self.fields["typ"].choices = ch
 
+        help_texts = {
+            EventTextType.TOC: _("Terms and conditions of signup, shown in a page linked in the registration form"),
+            EventTextType.REGISTER: _("Added to the registration page, before the form"),
+            EventTextType.SEARCH: _("Added at the top of the search page of characters"),
+            EventTextType.SIGNUP: _("Added at the bottom of mail confirming signup to players"),
+            EventTextType.ASSIGNMENT: _("Added at the bottom of mail notifying players of character assignment"),
+            EventTextType.CHARACTER_PROPOSED: _(
+                "Content of mail notifying players of their character in proposed status"
+            ),
+            EventTextType.CHARACTER_APPROVED: _(
+                "Content of mail notifying players of their character in approved status"
+            ),
+            EventTextType.CHARACTER_REVIEW: _("Content of mail notifying players of their character in review status"),
+        }
+        help_text = []
+        for choice_typ, text in help_texts.items():
+            if choice_typ in delete_choice:
+                continue
+            help_text.append(f"<b>{choice_typ.label}</b>: {text}")
+        self.fields["typ"].help_text = " - ".join(help_text)
+
     def clean(self):
         cleaned_data = super().clean()
 
