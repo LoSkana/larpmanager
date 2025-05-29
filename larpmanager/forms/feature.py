@@ -27,12 +27,6 @@ class FeatureForm(MyForm):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def save(self, commit=True):
-        instance = super().save(commit=False)
-        self._save_features(instance)
-        instance.save()
-        return instance
-
     def _init_features(self, overall):
         init_features = None
         if self.instance.pk:
