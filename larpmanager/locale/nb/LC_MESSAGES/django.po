@@ -3851,6 +3851,9 @@ msgstr "sjekke ikke-eksisterende relasjoner"
 msgid "'ticket' (ticket name or number)"
 msgstr "\"billett\" (billettens navn eller nummer)"
 
+msgid "Added to the bottom of all pages"
+msgstr "Lagt til nederst på alle sider"
+
 msgid "Browse the presentation website!"
 msgstr "Bla gjennom presentasjonssiden!"
 
@@ -4126,6 +4129,9 @@ msgstr "Du er for øyeblikket logget inn med"
 msgid "here the conditions of registration."
 msgstr "her vilkårene for registrering av arrangementet."
 
+msgid "Added to the bottom of all mails sent"
+msgstr "Lagt til nederst i alle e-poster som sendes"
+
 msgid "Cast your vote for the new Executive!"
 msgstr "Gi din stemme til den nye direktøren!"
 
@@ -4306,6 +4312,9 @@ msgstr "Se listen over karakterer og spillere!"
 msgid "Well done, you've completed all modules!"
 msgstr "Godt gjort, du har fullført alle modulene!"
 
+msgid "Added at the top of the user profile page"
+msgstr "Lagt til øverst på brukerprofilsiden"
+
 msgid "Allows you to download data in CSV files."
 msgstr "Gjør det mulig å laste ned data i CSV-filer."
 
@@ -4351,6 +4360,9 @@ msgstr "Kortnummeret ditt er: <b>%(number)03d</b>."
 
 msgid "if the character belongs to this element."
 msgstr "hvis tegnet tilhører dette elementet."
+
+msgid "Added at the top of the main calendar page"
+msgstr "Lagt til øverst på hovedkalendersiden"
 
 msgid "Character already assigned, not selectable"
 msgstr "Tegn som allerede er tildelt, kan ikke velges"
@@ -4567,6 +4579,9 @@ msgstr "Denne teksten vil bli lagt til i arket til {name}."
 msgid "Total amount withheld for transfer commissions"
 msgstr "Totalt beløp holdt tilbake for overføringsprovisjoner"
 
+msgid "Added to the registration page, before the form"
+msgstr "Lagt til på registreringssiden, før skjemaet"
+
 msgid "Do you wish to be always updated on our events?"
 msgstr "Vil du holde deg oppdatert om arrangementene våre?"
 
@@ -4656,6 +4671,9 @@ msgstr "for å bekrefte det, send inn medlemssøknaden din."
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>!"
 msgstr "Få tilgang til karakteren din <a href='%(url)s'>her</a>!"
+
+msgid "Added at the top of the search page of characters"
+msgstr "Lagt til øverst på søkesiden for tegn"
 
 msgid "Attention! The form contains errors in the fields"
 msgstr "Vær oppmerksom på følgende! Skjemaet inneholder feil i feltene"
@@ -4946,6 +4964,12 @@ msgstr "Du har ikke nådd minimumsantallet av preferanser som skal angis."
 msgid "Your tax code has a problem that we ask you to correct"
 msgstr "Skattekoden din har et problem som vi ber deg om å rette opp"
 
+msgid "Content of mail reminding players to fill their profile"
+msgstr "Innholdet i e-poster som minner spillerne om å fylle ut profilen sin"
+
+msgid "Content of the membership request filled with user data"
+msgstr "Innholdet i medlemsforespørselen fylles med brukerdata"
+
 msgid "Everything is in order about the payment of this event!"
 msgstr "Alt er i orden for at vi skal kunne betale for dette arrangementet!"
 
@@ -4989,6 +5013,9 @@ msgstr "Du må være registrert for å kunne velge dine preferanser!"
 msgid "Your membership application was successfully submitted!"
 msgstr "Medlemskapssøknaden din ble sendt inn!"
 
+msgid "Added at the bottom of mail confirming signup to players"
+msgstr "Lagt til nederst i e-posten som bekrefter påmelding til spillere"
+
 msgid "Application to be given to them to sign and then upload:"
 msgstr "Søknaden skal signeres og deretter lastes opp:"
 
@@ -5025,6 +5052,13 @@ msgstr "Gjør det mulig å definere et annet språk for hver hendelse."
 
 msgid "Click on the image below (Paypal.me) to open the payment."
 msgstr "Klikk på bildet nedenfor (Paypal.me) for å åpne betalingsskjermen."
+
+msgid "Content of mail reminding players to pay their signup fee"
+msgstr ""
+"Innholdet i e-posten som minner spillerne om å betale registreringsavgiften"
+
+msgid "Content of privacy page linked at the bottom of all pages"
+msgstr "Innholdet på personvern-siden er lenket til nederst på alle sider"
 
 msgid "Indicate the pronouns you wish to be used to refer to you"
 msgstr "Angi pronomenene du ønsker skal brukes for å referere til deg."
@@ -5095,6 +5129,9 @@ msgid "Allows you to copy any element directly from another event."
 msgstr ""
 "Gjør det mulig å kopiere et hvilket som helst element direkte fra en annen "
 "hendelse."
+
+msgid "Content of mail reminding players to pay the membership fee"
+msgstr "Innholdet i mailen som minner spillerne om å betale medlemsavgiften"
 
 #, python-format
 msgid "Hi! Your registration to <b>%(event)s</b> has been updated!"
@@ -5189,6 +5226,9 @@ msgstr "%(amount)d %(tokens)s ble brukt for å delta i dette arrangementet!"
 msgid "Access the management panel <a href= %(url)s'>from here!</a>."
 msgstr "Få tilgang til administrasjonspanelet <a href= %(url)s'>herfra!</a>."
 
+msgid "Added at the bottom of all mails confirming signup to players"
+msgstr "Lagt til nederst i alle e-poster som bekrefter påmelding til spillere"
+
 msgid "Adds a page where you can define shorter URLs for long links."
 msgstr ""
 "Legger til en side der du kan definere kortere URL-er for lange lenker."
@@ -5234,6 +5274,14 @@ msgstr ""
 #, python-format
 msgid "%(amount)d %(credits)s were used to participate in this event!"
 msgstr "%(amount)d %(credits)s ble brukt til å delta i dette arrangementet!"
+
+msgid "Added to the membership page as the paragraph for statute info"
+msgstr "Lagt til på medlemssiden som avsnitt for vedtektsinformasjon"
+
+msgid "Content of legal notice page linked at the bottom of all pages"
+msgstr ""
+"Innholdet på siden med juridiske merknader er lenket til nederst på alle "
+"sider"
 
 msgid "If checked, an option can be chosen a maximum number of times."
 msgstr ""
@@ -5430,6 +5478,10 @@ msgstr ""
 "Gjør det mulig for forfattere å utarbeide en liste over relasjoner mellom "
 "karakterer."
 
+msgid "Content of mail reminding players to fill their membership request"
+msgstr ""
+"Innholdet i mailen som minner spillerne om å fylle ut medlemsforespørselen"
+
 msgid "Copy and paste exactly all the coloured text below into the notes."
 msgstr ""
 "Kopier og lim inn nøyaktig all den fargede teksten nedenfor i notatene."
@@ -5460,6 +5512,11 @@ msgid "A payment of %(amount).2f %(currency)s was received for this event!"
 msgstr ""
 "En betaling på %(amount).2f %(currency)s ble mottatt for dette "
 "arrangementet!"
+
+msgid "Content of the receipt created for each payment and sent to players"
+msgstr ""
+"Innholdet i kvitteringen som opprettes for hver betaling og sendes til "
+"spillerne"
 
 msgid "I confirm that my face and name are clearly visible in the document"
 msgstr "Jeg bekrefter at mitt ansikt og navn er tydelig synlig i dokumentet"
@@ -5544,6 +5601,14 @@ msgstr "Vi bekrefter at påmeldingen til dette arrangementet er avlyst."
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr ""
 "Du har avbestilt påmeldingen til %(event)s-arrangementet på korrekt måte"
+
+msgid "Added at the bottom of mail notifying players of character assignment"
+msgstr "Lagt til nederst i e-posten som varsler spillere om karaktertildeling"
+
+msgid "Content of mail notifying players of their character in review status"
+msgstr ""
+"Innholdet i e-posten som varsler spillerne om at karakteren deres er under "
+"vurdering"
 
 msgid "Enables field 'hide', to be able to hide writing element from players"
 msgstr ""
@@ -5670,6 +5735,18 @@ msgstr "hvis karakteren IKKE kjenner identiteten til den andre egenskapen."
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
 msgstr "Fraværende (i denne karakterens relasjoner er den andre fraværende)"
+
+msgid ""
+"Content of mail notifying players of their character in approved status"
+msgstr ""
+"Innholdet i e-posten som varsler spillerne om at karakteren deres har fått "
+"godkjent status"
+
+msgid ""
+"Content of mail notifying players of their character in proposed status"
+msgstr ""
+"Innholdet i e-posten som varsler spillerne om at karakteren deres har fått "
+"foreslått status"
 
 #, python-format
 msgid ""
@@ -6149,6 +6226,13 @@ msgid ""
 msgstr ""
 "Hvis avkrysset, kan et alternativ bare være synlig for spillere med valgt "
 "billett."
+
+msgid ""
+"Terms and conditions of signup, shown in a page linked in the registration "
+"form"
+msgstr ""
+"Vilkår og betingelser for registrering, vist på en side som er lenket til i "
+"registreringsskjemaet"
 
 msgid ""
 "These CSS commands will be carried over to all pages in your Association "

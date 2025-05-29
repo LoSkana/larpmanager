@@ -3851,6 +3851,9 @@ msgstr "controleer niet-bestaande relaties"
 msgid "'ticket' (ticket name or number)"
 msgstr "\"ticket\" (naam of nummer van het ticket)"
 
+msgid "Added to the bottom of all pages"
+msgstr "Toegevoegd aan de onderkant van alle pagina's"
+
 msgid "Browse the presentation website!"
 msgstr "Blader door de presentatiesite!"
 
@@ -4126,6 +4129,9 @@ msgstr "U bent momenteel aangemeld met de"
 msgid "here the conditions of registration."
 msgstr "hier de voorwaarden voor registratie voor het evenement."
 
+msgid "Added to the bottom of all mails sent"
+msgstr "Toegevoegd aan de onderkant van alle verzonden e-mails"
+
 msgid "Cast your vote for the new Executive!"
 msgstr "Breng je stem uit voor de nieuwe Executive!"
 
@@ -4308,6 +4314,9 @@ msgstr "Bekijk de lijst met personages en spelers!"
 msgid "Well done, you've completed all modules!"
 msgstr "Goed gedaan, je hebt alle modules gehaald!"
 
+msgid "Added at the top of the user profile page"
+msgstr "Toegevoegd bovenaan de gebruikersprofielpagina"
+
 msgid "Allows you to download data in CSV files."
 msgstr "Hiermee kun je gegevens downloaden in CSV-bestanden."
 
@@ -4353,6 +4362,9 @@ msgstr "Je kaartnummer is: <b>%(number)03d</b>."
 
 msgid "if the character belongs to this element."
 msgstr "als het teken bij dit element hoort."
+
+msgid "Added at the top of the main calendar page"
+msgstr "Bovenaan de hoofdkalenderpagina toegevoegd"
 
 msgid "Character already assigned, not selectable"
 msgstr "Karakter al toegewezen, niet selecteerbaar"
@@ -4573,6 +4585,9 @@ msgstr "Deze tekst wordt toegevoegd aan het blad van {name}"
 msgid "Total amount withheld for transfer commissions"
 msgstr "Totaal ingehouden bedrag voor overschrijvingsprovisies"
 
+msgid "Added to the registration page, before the form"
+msgstr "Toegevoegd aan de registratiepagina, vóór het formulier"
+
 msgid "Do you wish to be always updated on our events?"
 msgstr "Wil je op de hoogte blijven van onze evenementen?"
 
@@ -4665,6 +4680,9 @@ msgstr "om het te bevestigen, stuur je je lidmaatschapsaanvraag."
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>!"
 msgstr "Krijg toegang tot je personage <a href='%(url)s'>hier</a>!"
+
+msgid "Added at the top of the search page of characters"
+msgstr "Bovenaan de zoekpagina van tekens toegevoegd"
 
 msgid "Attention! The form contains errors in the fields"
 msgstr "Attentie! Het formulier bevat fouten in de velden"
@@ -4965,6 +4983,13 @@ msgstr "Je hebt het minimumaantal voorkeuren niet bereikt om aan te geven"
 msgid "Your tax code has a problem that we ask you to correct"
 msgstr "Je belastingcode heeft een probleem dat we je vragen te corrigeren"
 
+msgid "Content of mail reminding players to fill their profile"
+msgstr ""
+"Inhoud van e-mail om spelers eraan te herinneren hun profiel in te vullen"
+
+msgid "Content of the membership request filled with user data"
+msgstr "Inhoud van de lidmaatschapsaanvraag gevuld met gebruikersgegevens"
+
 msgid "Everything is in order about the payment of this event!"
 msgstr "Alles is in orde om dit evenement te betalen!"
 
@@ -5010,6 +5035,10 @@ msgstr "Je moet geregistreerd zijn om je voorkeuren te kunnen selecteren!"
 msgid "Your membership application was successfully submitted!"
 msgstr "Je lidmaatschapsaanvraag is succesvol ingediend!"
 
+msgid "Added at the bottom of mail confirming signup to players"
+msgstr ""
+"Toegevoegd onderaan de e-mail ter bevestiging van inschrijving aan spelers"
+
 msgid "Application to be given to them to sign and then upload:"
 msgstr "Aanvraag moet worden ondertekend en vervolgens geüpload:"
 
@@ -5051,6 +5080,14 @@ msgid "Click on the image below (Paypal.me) to open the payment."
 msgstr ""
 "Klik op de onderstaande afbeelding (Paypal.me) om het betaalscherm te "
 "openen."
+
+msgid "Content of mail reminding players to pay their signup fee"
+msgstr ""
+"Inhoud van e-mail waarin spelers worden herinnerd om hun inschrijfgeld te "
+"betalen"
+
+msgid "Content of privacy page linked at the bottom of all pages"
+msgstr "Inhoud van privacy pagina gelinkt onderaan alle pagina's"
 
 msgid "Indicate the pronouns you wish to be used to refer to you"
 msgstr "Geef aan met welke voornaamwoorden je wilt worden aangeduid"
@@ -5128,6 +5165,11 @@ msgstr "U hebt het maximum aantal selecteerbare opties overschreden"
 msgid "Allows you to copy any element directly from another event."
 msgstr ""
 "Hiermee kun je elk element rechtstreeks uit een andere gebeurtenis kopiëren."
+
+msgid "Content of mail reminding players to pay the membership fee"
+msgstr ""
+"Inhoud van e-mail waarin spelers worden herinnerd aan het betalen van "
+"contributie"
 
 #, python-format
 msgid "Hi! Your registration to <b>%(event)s</b> has been updated!"
@@ -5221,6 +5263,10 @@ msgstr ""
 msgid "Access the management panel <a href= %(url)s'>from here!</a>."
 msgstr "Ga naar het beheerpaneel <a href= %(url)s'>van hieruit!</a>."
 
+msgid "Added at the bottom of all mails confirming signup to players"
+msgstr ""
+"Toegevoegd onderaan alle mails ter bevestiging van inschrijving aan spelers"
+
 msgid "Adds a page where you can define shorter URLs for long links."
 msgstr ""
 "Voegt een pagina toe waar je kortere URL's kunt definiëren voor lange links."
@@ -5272,6 +5318,12 @@ msgstr ""
 msgid "%(amount)d %(credits)s were used to participate in this event!"
 msgstr ""
 "%(amount)d %(credits)s werden gebruikt om deel te nemen aan dit evenement!"
+
+msgid "Added to the membership page as the paragraph for statute info"
+msgstr "Toegevoegd aan de lidmaatschapspagina als paragraaf voor statuutinfo"
+
+msgid "Content of legal notice page linked at the bottom of all pages"
+msgstr "Inhoud van de pagina met juridische informatie onderaan alle pagina's"
 
 msgid "If checked, an option can be chosen a maximum number of times."
 msgstr ""
@@ -5483,6 +5535,11 @@ msgid "Allows authors to prepare a list of inter-character relationships."
 msgstr ""
 "Hiermee kunnen auteurs een lijst maken van relaties tussen personages."
 
+msgid "Content of mail reminding players to fill their membership request"
+msgstr ""
+"Inhoud van e-mail waarin spelers worden herinnerd om hun "
+"lidmaatschapsaanvraag in te vullen"
+
 msgid "Copy and paste exactly all the coloured text below into the notes."
 msgstr ""
 "Kopieer en plak precies alle gekleurde tekst hieronder in de notities."
@@ -5516,6 +5573,11 @@ msgid "A payment of %(amount).2f %(currency)s was received for this event!"
 msgstr ""
 "Er is een betaling van %(amount).2f %(currency)s ontvangen voor dit "
 "evenement!"
+
+msgid "Content of the receipt created for each payment and sent to players"
+msgstr ""
+"Inhoud van het ontvangstbewijs dat voor elke betaling wordt aangemaakt en "
+"naar spelers wordt verzonden"
 
 msgid "I confirm that my face and name are clearly visible in the document"
 msgstr ""
@@ -5607,6 +5669,16 @@ msgstr "We bevestigen dat de registratie voor dit evenement is geannuleerd."
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr ""
 "Je hebt de registratie voor het %(event)s-evenement correct geannuleerd"
+
+msgid "Added at the bottom of mail notifying players of character assignment"
+msgstr ""
+"Onderaan de mail toegevoegd om spelers te informeren over de toewijzing van "
+"personages"
+
+msgid "Content of mail notifying players of their character in review status"
+msgstr ""
+"Inhoud van mail die spelers op de hoogte brengt van de status van hun "
+"personage in beoordeling"
 
 msgid "Enables field 'hide', to be able to hide writing element from players"
 msgstr ""
@@ -5748,6 +5820,18 @@ msgstr "als het personage de identiteit van de andere eigenschap NIET kent."
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
 msgstr "Afwezig (in de relaties van dit personage is de ander afwezig)"
+
+msgid ""
+"Content of mail notifying players of their character in approved status"
+msgstr ""
+"Inhoud van mail die spelers op de hoogte brengt van hun karakter in "
+"goedgekeurde status"
+
+msgid ""
+"Content of mail notifying players of their character in proposed status"
+msgstr ""
+"Inhoud van mail die spelers informeert over hun karakter in voorgestelde "
+"status"
 
 #, python-format
 msgid ""
@@ -6267,6 +6351,13 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, is deze alleen zichtbaar voor spelers met een "
 "geselecteerd ticket."
+
+msgid ""
+"Terms and conditions of signup, shown in a page linked in the registration "
+"form"
+msgstr ""
+"Inschrijvingsvoorwaarden, weergegeven op een pagina waarnaar wordt verwezen "
+"in het inschrijvingsformulier"
 
 msgid ""
 "These CSS commands will be carried over to all pages in your Association "

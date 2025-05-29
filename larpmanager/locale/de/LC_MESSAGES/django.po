@@ -3851,6 +3851,9 @@ msgstr "Prüfung nicht vorhandener Beziehungen"
 msgid "'ticket' (ticket name or number)"
 msgstr "Ticket\" (Name oder Nummer des Tickets)"
 
+msgid "Added to the bottom of all pages"
+msgstr "Am unteren Rand aller Seiten hinzugefügt"
+
 msgid "Browse the presentation website!"
 msgstr "Durchsuchen Sie die Präsentationsseite!"
 
@@ -4128,6 +4131,9 @@ msgstr "Sie sind derzeit mit dem"
 msgid "here the conditions of registration."
 msgstr "hier die Bedingungen für die Anmeldung zur Veranstaltung."
 
+msgid "Added to the bottom of all mails sent"
+msgstr "Wird am Ende aller gesendeten Mails hinzugefügt"
+
 msgid "Cast your vote for the new Executive!"
 msgstr "Geben Sie Ihre Stimme für die neue Exekutive ab!"
 
@@ -4311,6 +4317,9 @@ msgstr "Sehen Sie sich die Liste der Charaktere und Spieler an!"
 msgid "Well done, you've completed all modules!"
 msgstr "Gut gemacht, Sie haben alle Module abgeschlossen!"
 
+msgid "Added at the top of the user profile page"
+msgstr "Oben auf der Seite des Benutzerprofils hinzugefügt"
+
 msgid "Allows you to download data in CSV files."
 msgstr "Ermöglicht das Herunterladen von Daten in CSV-Dateien."
 
@@ -4356,6 +4365,9 @@ msgstr "Ihre Kartennummer lautet: <b>%(number)03d</b>."
 
 msgid "if the character belongs to this element."
 msgstr "wenn das Zeichen zu diesem Element gehört."
+
+msgid "Added at the top of the main calendar page"
+msgstr "Oben auf der Hauptseite des Kalenders hinzugefügt"
 
 msgid "Character already assigned, not selectable"
 msgstr "Zeichen bereits zugewiesen, nicht auswählbar"
@@ -4581,6 +4593,9 @@ msgstr "Dieser Text wird dem Blatt von {name} hinzugefügt."
 msgid "Total amount withheld for transfer commissions"
 msgstr "Für Überweisungsprovisionen einbehaltener Gesamtbetrag"
 
+msgid "Added to the registration page, before the form"
+msgstr "Zur Registrierungsseite hinzugefügt, vor dem Formular"
+
 msgid "Do you wish to be always updated on our events?"
 msgstr "Möchten Sie über unsere Veranstaltungen auf dem Laufenden bleiben?"
 
@@ -4678,6 +4693,9 @@ msgstr "um sie zu bestätigen, senden Sie Ihren Mitgliedsantrag."
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>!"
 msgstr "Rufen Sie Ihren Charakter <a href='%(url)s'>hier</a> auf!"
+
+msgid "Added at the top of the search page of characters"
+msgstr "Oben auf der Suchseite der Zeichen hinzugefügt"
 
 msgid "Attention! The form contains errors in the fields"
 msgstr "Achtung! Das Formular enthält Fehler in den Feldern"
@@ -5007,6 +5025,13 @@ msgid "Your tax code has a problem that we ask you to correct"
 msgstr ""
 "Ihr Steuerkennzeichen hat ein Problem, das wir Sie bitten, zu korrigieren"
 
+msgid "Content of mail reminding players to fill their profile"
+msgstr ""
+"Inhalt der E-Mail, die die Spieler daran erinnert, ihr Profil auszufüllen"
+
+msgid "Content of the membership request filled with user data"
+msgstr "Inhalt des mit Benutzerdaten gefüllten Mitgliedsantrags"
+
 msgid "Everything is in order about the payment of this event!"
 msgstr ""
 "Alles ist in Ordnung, damit wir für diese Veranstaltung bezahlen können!"
@@ -5058,6 +5083,10 @@ msgstr "Sie müssen registriert sein, um Ihre Präferenzen auswählen zu können
 msgid "Your membership application was successfully submitted!"
 msgstr "Ihr Mitgliedsantrag wurde erfolgreich eingereicht!"
 
+msgid "Added at the bottom of mail confirming signup to players"
+msgstr ""
+"Am Ende der E-Mail zur Bestätigung der Anmeldung an die Spieler hinzugefügt"
+
 msgid "Application to be given to them to sign and then upload:"
 msgstr "Der Antrag ist zu unterschreiben und dann hochzuladen:"
 
@@ -5099,6 +5128,14 @@ msgstr ""
 msgid "Click on the image below (Paypal.me) to open the payment."
 msgstr ""
 "Klicken Sie auf das Bild unten (Paypal.me), um die Zahlungsseite zu öffnen."
+
+msgid "Content of mail reminding players to pay their signup fee"
+msgstr ""
+"Inhalt der E-Mail, in der die Spieler an die Zahlung ihrer Anmeldegebühr "
+"erinnert werden"
+
+msgid "Content of privacy page linked at the bottom of all pages"
+msgstr "Inhalt der Datenschutzseite, die unten auf allen Seiten verlinkt ist"
 
 msgid "Indicate the pronouns you wish to be used to refer to you"
 msgstr "Geben Sie die Pronomen an, mit denen Sie bezeichnet werden möchten"
@@ -5185,6 +5222,11 @@ msgid "Allows you to copy any element directly from another event."
 msgstr ""
 "Ermöglicht es Ihnen, ein beliebiges Element direkt aus einer anderen "
 "Veranstaltung zu kopieren."
+
+msgid "Content of mail reminding players to pay the membership fee"
+msgstr ""
+"Inhalt der E-Mail, in der die Spieler an die Zahlung des Mitgliedsbeitrags "
+"erinnert werden"
 
 #, python-format
 msgid "Hi! Your registration to <b>%(event)s</b> has been updated!"
@@ -5296,6 +5338,10 @@ msgid "Access the management panel <a href= %(url)s'>from here!</a>."
 msgstr ""
 "Greifen Sie auf das Verwaltungspanel <a href= %(url)s'>von hier aus zu!</a>."
 
+msgid "Added at the bottom of all mails confirming signup to players"
+msgstr ""
+"Am Ende aller Mails zur Bestätigung der Anmeldung an Spieler hinzugefügt"
+
 msgid "Adds a page where you can define shorter URLs for long links."
 msgstr ""
 "Fügt eine Seite hinzu, auf der Sie kürzere URLs für lange Links definieren "
@@ -5351,6 +5397,16 @@ msgid "%(amount)d %(credits)s were used to participate in this event!"
 msgstr ""
 "%(amount)d %(credits)s wurden für die Teilnahme an dieser Veranstaltung "
 "verwendet!"
+
+msgid "Added to the membership page as the paragraph for statute info"
+msgstr ""
+"Auf der Mitgliedschaftsseite als Absatz für Statuteninformationen "
+"hinzugefügt"
+
+msgid "Content of legal notice page linked at the bottom of all pages"
+msgstr ""
+"Inhalt der Seite mit den rechtlichen Hinweisen, die am Ende aller Seiten "
+"verlinkt ist"
 
 msgid "If checked, an option can be chosen a maximum number of times."
 msgstr ""
@@ -5578,6 +5634,11 @@ msgstr ""
 "Ermöglicht es den Autoren, eine Liste der Beziehungen zwischen den "
 "Charakteren zu erstellen."
 
+msgid "Content of mail reminding players to fill their membership request"
+msgstr ""
+"Inhalt der E-Mail, in der die Spieler daran erinnert werden, ihren "
+"Mitgliedsantrag auszufüllen"
+
 msgid "Copy and paste exactly all the coloured text below into the notes."
 msgstr ""
 "Kopieren Sie den gesamten unten stehenden farbigen Text und fügen Sie ihn in"
@@ -5612,6 +5673,11 @@ msgid "A payment of %(amount).2f %(currency)s was received for this event!"
 msgstr ""
 "Für dieses Ereignis wurde eine Zahlung in Höhe von %(amount).2f %(currency)s"
 " geleistet!"
+
+msgid "Content of the receipt created for each payment and sent to players"
+msgstr ""
+"Inhalt der Quittung, die für jede Zahlung erstellt und an die Spieler "
+"gesendet wird"
 
 msgid "I confirm that my face and name are clearly visible in the document"
 msgstr ""
@@ -5711,6 +5777,16 @@ msgstr ""
 msgid "You have correctly cancelled the registration to the %(event)s event"
 msgstr ""
 "Sie haben die Anmeldung zu der Veranstaltung von %(event)s korrekt storniert"
+
+msgid "Added at the bottom of mail notifying players of character assignment"
+msgstr ""
+"Am Ende der Mail, die die Spieler über die Zuweisung des Charakters "
+"informiert, wurde hinzugefügt"
+
+msgid "Content of mail notifying players of their character in review status"
+msgstr ""
+"Inhalt der E-Mail, die die Spieler über den Status ihres Charakters in der "
+"Überprüfung informiert"
 
 msgid "Enables field 'hide', to be able to hide writing element from players"
 msgstr ""
@@ -5864,6 +5940,18 @@ msgid ""
 "Absent (in the relationships of this character the other one is absent)"
 msgstr ""
 "Abwesend (in den Beziehungen dieses Charakters ist der andere abwesend)"
+
+msgid ""
+"Content of mail notifying players of their character in approved status"
+msgstr ""
+"Inhalt der E-Mail, in der die Spieler über den genehmigten Status ihres "
+"Charakters informiert werden"
+
+msgid ""
+"Content of mail notifying players of their character in proposed status"
+msgstr ""
+"Inhalt der E-Mail, in der die Spieler über den vorgeschlagenen Status ihres "
+"Charakters informiert werden"
 
 #, python-format
 msgid ""
@@ -6395,6 +6483,13 @@ msgid ""
 msgstr ""
 "Wenn diese Option aktiviert ist, kann sie nur von Spielern mit dem "
 "ausgewählten Ticket gesehen werden."
+
+msgid ""
+"Terms and conditions of signup, shown in a page linked in the registration "
+"form"
+msgstr ""
+"Allgemeine Geschäftsbedingungen für die Anmeldung, die auf einer im "
+"Anmeldeformular verlinkten Seite angezeigt werden"
 
 msgid ""
 "These CSS commands will be carried over to all pages in your Association "
