@@ -25,7 +25,7 @@ from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Q
-from django.db.models.signals import post_save, pre_delete, pre_save
+from django.db.models.signals import post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
@@ -33,6 +33,7 @@ from slugify import slugify
 
 from larpmanager.accounting.vat import compute_vat
 from larpmanager.cache.button import event_button_key
+from larpmanager.cache.config import reset_configs
 from larpmanager.cache.feature import get_assoc_features, get_event_features, reset_event_features
 from larpmanager.models.access import AssocPermission, EventPermission, EventRole, get_event_organizers
 from larpmanager.models.accounting import (
@@ -41,9 +42,9 @@ from larpmanager.models.accounting import (
     AccountingItemTransaction,
     Collection,
 )
-from larpmanager.models.association import Association
+from larpmanager.models.association import Association, AssociationConfig
 from larpmanager.models.casting import Trait, update_traits_all
-from larpmanager.models.event import Event, EventButton, EventConfig, EventText, Run
+from larpmanager.models.event import Event, EventButton, EventConfig, EventText, Run, RunConfig
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
@@ -425,3 +426,33 @@ def post_save_accounting_item_payment_vat(sender, instance, created, **kwargs):
         return
 
     compute_vat(instance)
+
+
+@receiver(post_save, sender=EventConfig)
+def post_save_reset_event_config(sender, instance, **kwargs):
+    reset_configs(instance.event)
+
+
+@receiver(post_delete, sender=EventConfig)
+def post_delete_reset_event_config(sender, instance, **kwargs):
+    reset_configs(instance.event)
+
+
+@receiver(post_save, sender=AssociationConfig)
+def post_save_reset_assoc_config(sender, instance, **kwargs):
+    reset_configs(instance.assoc)
+
+
+@receiver(post_delete, sender=AssociationConfig)
+def post_delete_reset_assoc_config(sender, instance, **kwargs):
+    reset_configs(instance.assoc)
+
+
+@receiver(post_save, sender=RunConfig)
+def post_save_reset_run_config(sender, instance, **kwargs):
+    reset_configs(instance.run)
+
+
+@receiver(post_delete, sender=RunConfig)
+def post_delete_reset_run_config(sender, instance, **kwargs):
+    reset_configs(instance.run)
