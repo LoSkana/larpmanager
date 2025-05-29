@@ -541,8 +541,6 @@ class TextVersion(BaseModel):
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="text_versions", null=True)
 
-    teaser = HTMLField(blank=True)
-
     text = HTMLField(blank=True)
 
     dl = models.BooleanField(default=False)
