@@ -581,9 +581,19 @@ class RunConfig(BaseModel):
         return f"{self.run} {self.name}"
 
     class Meta:
-        unique_together = ("run", "name")
         indexes = [
             models.Index(fields=["run", "name"]),
+        ]
+        constraints = [
+            UniqueConstraint(
+                fields=["run", "name", "deleted"],
+                name="unique_run_config_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["run", "name"],
+                condition=Q(deleted=None),
+                name="unique_run_config_without_optional",
+            ),
         ]
 
 

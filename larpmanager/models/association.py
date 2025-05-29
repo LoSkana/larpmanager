@@ -240,7 +240,6 @@ class AssociationConfig(BaseModel):
         return f"{self.assoc} {self.name}"
 
     class Meta:
-        unique_together = ("assoc", "name")
         indexes = [
             models.Index(fields=["assoc", "name"]),
         ]

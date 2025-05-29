@@ -297,9 +297,19 @@ class CharacterConfig(BaseModel):
         return f"{self.character} {self.name}"
 
     class Meta:
-        unique_together = ("character", "name")
         indexes = [
             models.Index(fields=["character", "name"]),
+        ]
+        constraints = [
+            UniqueConstraint(
+                fields=["character", "name", "deleted"],
+                name="unique_character_config_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["character", "name"],
+                condition=Q(deleted=None),
+                name="unique_character_config_without_optional",
+            ),
         ]
 
 
