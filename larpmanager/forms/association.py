@@ -24,6 +24,7 @@ from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext
 
+from larpmanager.cache.feature import reset_assoc_features, reset_event_features
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm
@@ -218,6 +219,9 @@ class ExeFeatureForm(FeatureForm):
     def save(self, commit=True):
         instance = super().save(commit=False)
         self._save_features(instance)
+        reset_assoc_features(self.instance.pk)
+        for event in self.instance.events.all():
+            reset_event_features(event.id)
         return instance
 
 

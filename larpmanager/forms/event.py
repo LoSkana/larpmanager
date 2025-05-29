@@ -26,6 +26,7 @@ from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_character_fields
+from larpmanager.cache.feature import reset_event_features
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm
@@ -184,6 +185,7 @@ class OrgaFeatureForm(FeatureForm):
     def save(self, commit=True):
         instance = super().save(commit=False)
         self._save_features(instance)
+        reset_event_features(self.instance.pk)
         return instance
 
 
