@@ -58,6 +58,8 @@ def save_version(el, tp, mb, dl=False):
         texts = []
         for que in WritingQuestion.objects.filter(applicable=tp).order_by("order"):
             value = _get_field_value(el, que)
+            if not value:
+                continue
             value = html_clean(value)
             texts.append(f"{que.display}: {value}")
 
