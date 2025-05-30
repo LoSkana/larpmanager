@@ -68,6 +68,11 @@ def _export_data(ctx, model, typ, member_cover=False):
             val, key = _get_standard_row(ctx, el)
         vals.append(val)
 
+    order_column = 1
+    if member_cover:
+        order_column = 2
+    vals = sorted(vals, key=lambda x: x[order_column])
+
     return key, vals
 
 
@@ -164,7 +169,7 @@ def _row_header(ctx, el, key, member_cover, model, val):
         key.append(_("Player"))
         display = ""
         if member:
-            display = member.display_member()
+            display = member.display_real()
         val.append(display)
 
         key.append(_("Email"))
