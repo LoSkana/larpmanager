@@ -52,8 +52,9 @@ def writing_download(ctx, typ, model):
     questions = []
     if applicable:
         el_ids = {el.id for el in query}
-        questions = WritingQuestion.objects.filter(applicable=applicable).order_by("order")
-        que_choice = WritingChoice.objects.filter(question__applicable=applicable, element_id__in=el_ids)
+        questions = WritingQuestion.objects.filter(applicable=applicable, event=ctx["event"]).order_by("order")
+        que_ids = {que.id for que in questions}
+        que_choice = WritingChoice.objects.filter(question_id__in=que_ids, element_id__in=el_ids)
         for choice in que_choice.select_related("option"):
             if choice.question_id not in choices:
                 choices[choice.question_id] = {}
@@ -61,7 +62,7 @@ def writing_download(ctx, typ, model):
                 choices[choice.question_id][choice.element_id] = []
             choices[choice.question_id][choice.element_id].append(choice.option.display)
 
-        que_answer = WritingAnswer.objects.filter(question__applicable=applicable, element_id__in=el_ids)
+        que_answer = WritingAnswer.objects.filter(question_id__in=que_ids, element_id__in=el_ids)
         for answer in que_answer:
             if answer.question_id not in answers:
                 answers[answer.question_id] = {}
