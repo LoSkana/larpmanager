@@ -4,20 +4,20 @@
         <div class="el">
             <div class="icon">
                 <a href="{% url 'public' mb.id %}">
-                    <div class='img_cover'
-                         style="background-image:url('{% if mb.profile %}{{ mb.profile_thumb.url }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')" />
-                </div>
-                <div class="icon-name">
-                    <p>
-                        {% if run.id in all_runs or run.reg %}
-                            {{ mb }}
-                        {% else %}
-                            {{ mb.display_member }}
-                        {% endif %}
-                    </p>
-                </div>
-            </a>
+                    <div class="img_cover"
+                         style="background-image:url('{% if mb.profile %}{{ mb.profile_thumb.url }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
+                    </div>
+                    <div class="icon-name">
+                        <p>
+                            {% if run.id in all_runs or run.reg %}
+                                {{ mb }}
+                            {% else %}
+                                {{ mb.display_member }}
+                            {% endif %}
+                        </p>
+                    </div>
+                </a>
+            </div>
         </div>
-    </div>
-{% endfor %}
+    {% endfor %}
 </div>

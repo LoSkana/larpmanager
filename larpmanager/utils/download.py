@@ -35,6 +35,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     get_ordered_registration_questions,
 )
+from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.utils.common import check_field
 from larpmanager.utils.edit import _get_values_mapping
 
@@ -42,12 +43,35 @@ from larpmanager.utils.edit import _get_values_mapping
 def download(ctx, typ, model):
     response, writer = get_writer(ctx, model)
 
+    key, vals = _export_data(ctx, model, typ)
+
+    writer.writerow(key)
+    for val in vals:
+        writer.writerow(val)
+
+    return response
+
+
+def _export_data(ctx, model, typ, member_cover=False):
     query = typ.objects.all()
-
     get_event_cache_all(ctx)
-
     query = _download_prepare(ctx, model, query, typ)
 
+    answers, applicable, choices, questions = _prepare_export(ctx, model, query)
+
+    key = None
+    vals = []
+    for el in query:
+        if applicable or model == "registration":
+            val, key = _get_applicable_row(ctx, el, choices, answers, questions, model, member_cover)
+        else:
+            val, key = _get_standard_row(ctx, el)
+        vals.append(val)
+
+    return key, vals
+
+
+def _prepare_export(ctx, model, query):
     # noinspection PyProtectedMember
     applicable = QuestionApplicable.get_applicable(model)
     choices = {}
@@ -89,30 +113,18 @@ def download(ctx, typ, model):
             if answer.question_id not in answers:
                 answers[answer.question_id] = {}
             answers[answer.question_id][element_id] = answer.text
-
-    first = True
-    for el in query:
-        if applicable or model == "registration":
-            val, key = _get_applicable_row(ctx, el, choices, answers, questions, model)
-        else:
-            val, key = _get_standard_row(ctx, el, first)
-
-        if first:
-            writer.writerow(key)
-            first = False
-
-        writer.writerow(val)
-
-    return response
+    if model == "character":
+        ctx["assignments"] = {}
+        for rcr in RegistrationCharacterRel.objects.filter(reg__run=ctx["run"]).select_related("reg", "reg__member"):
+            ctx["assignments"][rcr.character.id] = rcr.reg.member
+    return answers, applicable, choices, questions
 
 
-def _get_applicable_row(ctx, el, choices, answers, questions, model):
-    if model == "registration":
-        val = [el.member.display_member(), el.member.email, el.ticket.name]
-        key = [_("Player"), _("Email"), _("Ticket")]
-    else:
-        val = [el.number]
-        key = ["number"]
+def _get_applicable_row(ctx, el, choices, answers, questions, model, member_cover=False):
+    val = []
+    key = []
+
+    _row_header(ctx, el, key, member_cover, model, val)
 
     # add question values
     for que in questions:
@@ -130,27 +142,55 @@ def _get_applicable_row(ctx, el, choices, answers, questions, model):
         value = value.replace("\t", "").replace("\n", "<br />")
         val.append(value)
 
-    if model == "character":
-        if ctx["event"].get_config("user_character_max", 0):
-            key.append(_("Player"))
-            value = ""
-            if el.player:
-                value = el.player.display_member()
-            val.append(value)
-
     return val, key
 
 
-def _get_standard_row(ctx, el, first):
+def _row_header(ctx, el, key, member_cover, model, val):
+    member = None
+    if model == "registration":
+        member = el.member
+    elif model == "character":
+        if el.id in ctx["assignments"]:
+            member = ctx["assignments"][el.id]
+
+    if member_cover:
+        key.append("")
+        profile = ""
+        if member and member.profile:
+            profile = member.profile_thumb.url
+        val.append(profile)
+
+    if model in ["registration", "character"]:
+        key.append(_("Player"))
+        display = ""
+        if member:
+            display = member.display_member()
+        val.append(display)
+
+        key.append(_("Email"))
+        email = ""
+        if member:
+            email = member.email
+        val.append(email)
+
+    if model == "registration":
+        val.extend(el.ticket.name)
+        key.extend(_("Ticket"))
+    else:
+        val.extend([el.number])
+        key.extend(["number"])
+
+
+def _get_standard_row(ctx, el):
     val = []
     key = []
     for k, v in el.show_complete().items():
-        _writing_field(ctx, first, k, key, v, val)
+        _writing_field(ctx, k, key, v, val)
 
     return val, key
 
 
-def _writing_field(ctx, first, k, key, v, val):
+def _writing_field(ctx, k, key, v, val):
     new_val = v
     skip_fields = [
         "id",
@@ -185,8 +225,7 @@ def _writing_field(ctx, first, k, key, v, val):
 
     soup = BeautifulSoup(str(new_val), features="lxml")
     val.append(soup.get_text("\n").replace("\n", " "))
-    if first:
-        key.append(k)
+    key.append(k)
 
 
 def _download_prepare(ctx, nm, query, typ):

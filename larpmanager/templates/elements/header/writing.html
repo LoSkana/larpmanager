@@ -27,6 +27,11 @@
             <input type="hidden" name="download" value="1">
             <button type="submit" name="submit" value="1">{% trans "Download" %}</button>
         </form>
+        {% if export %}
+            <button>
+                <a href="{% url 'orga_export' run.event.slug run.number export %}">{% trans "Export" %}</a>
+            </button>
+        {% endif %}
         {% if features.cover and nm == 'character' %}
             <button class="my_toggle" tog='cover-form'>
                 <a href="#">{% trans "Upload cover" %}</a>

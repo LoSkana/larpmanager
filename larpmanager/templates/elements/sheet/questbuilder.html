@@ -8,7 +8,7 @@
                     <div class="el">
                         <div class="icon">
                             <div class="img_cover"
-                                 style="background-image:url('{% if el.player_id > 0 %}{{ el.player_prof }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')" />
+                                 style="background-image:url('{% if el.player_id > 0 %}{{ el.player_prof }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
                             </div>
                         </div>
                     </div>
@@ -36,7 +36,8 @@
                         </div>
                     </div>
                     <hr class="clear" />
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-    {% endif %}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+{% endif %}

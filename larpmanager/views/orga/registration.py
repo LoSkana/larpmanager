@@ -360,6 +360,8 @@ def orga_registrations(request, s, n):
     )
 
     ctx["download"] = 1
+    if ctx["event"].get_config("show_export", False):
+        ctx["export"] = "registration"
 
     return render(request, "larpmanager/orga/registration/registrations.html", ctx)
 

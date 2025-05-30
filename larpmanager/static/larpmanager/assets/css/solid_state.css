@@ -1500,6 +1500,10 @@ input[type="submit"], input[type="reset"], input[type="button"], button, .button
     border-radius: 10%;
 }
 
+.member_cover {
+    width: 10em;
+}
+
 .go_table {
     margin-top: 2em;
 }

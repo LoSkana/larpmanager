@@ -1,7 +1,7 @@
 {% load show_tags i18n %}
 <div class="staff-list">
     <div class="orga-buttons">
-        <a class='new button' href="#">{% trans "New" %}</a>
+        <a class="new button" href="#">{% trans "New" %}</a>
         <script>
         document.querySelector('a.new').addEventListener('click', function(event) {
             event.preventDefault();
@@ -25,11 +25,16 @@
             </button>
         {% endif %}
         {% if download %}
-            <form action="{{ request.path }}" method="post" style="display: inline; ">
+            <form action="{{ request.path }}" method="post" class="inline">
                 {% csrf_token %}
                 <input type="hidden" name="download" value="1">
                 <button type="submit" name="submit" value="1">{% trans "Download" %}</button>
             </form>
+        {% endif %}
+        {% if export %}
+            <button>
+                <a href="{% url 'orga_export' run.event.slug run.number export %}">{% trans "Export" %}</a>
+            </button>
         {% endif %}
     </div>
     <div class="hide search">

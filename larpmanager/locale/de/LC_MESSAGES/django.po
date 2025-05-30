@@ -465,6 +465,9 @@ msgstr "Einzelheiten"
 msgid "Events"
 msgstr "Veranstaltungen"
 
+msgid "Export"
+msgstr "Exportieren"
+
 msgid "Female"
 msgstr "Weiblich"
 
@@ -6602,6 +6605,13 @@ msgid ""
 msgstr ""
 "Sie können Ihre Zustimmung zur Datenweitergabe widerrufen, indem Sie auf den"
 " entsprechenden Link klicken."
+
+msgid ""
+"If checked: allow to export characters and registration in a easily readable"
+" page"
+msgstr ""
+"Wenn angekreuzt: Export von Zeichen und Registrierung in einer leicht "
+"lesbaren Seite erlauben"
 
 #, python-format
 msgid ""

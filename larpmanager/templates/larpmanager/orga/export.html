@@ -1,0 +1,46 @@
+{% load static compress %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Export {{ export }}</title>
+        <meta charset="utf-8">
+        <meta name="keywords" content="none">
+        <meta name="description" content="none">
+        <link rel="stylesheet" href="{% static 'larpmanager/assets/css/lm.css' %}" />
+        <link rel="stylesheet"
+              href="{% static 'larpmanager/assets/css/solid_state.css' %}" />
+        <style>body { background: white; }</style>
+        {% if assoc.css_code %}
+            <link rel="stylesheet"
+                  href="{% get_media_prefix %}/css/{{ assoc.slug }}_{{ assoc.css_code }}.css" />
+        {% endif %}
+        {% if event and event.css_code %}
+            <link rel="stylesheet"
+                  href="{% get_media_prefix %}/css/{{ assoc.slug }}_{{ event.slug }}_{{ event.css_code }}.css" />
+        {% endif %}
+    </head>
+    <body>
+        <div class="export">
+            <table class="{{ nm }}">
+                <tr>
+                    {% for el in key %}<th>{{ el }}</th>{% endfor %}
+                </tr>
+                {% for row in vals %}
+                    <tr>
+                        {% for el in row %}
+                            {% if forloop.first %}
+                                <td class="member_cover">
+                                    <div class="img_cover"
+                                         style="background-image:url('{% if el %}{{ el }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
+                                    </div>
+                                </td>
+                            {% else %}
+                                <td>{{ el }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </body>
+</html>
