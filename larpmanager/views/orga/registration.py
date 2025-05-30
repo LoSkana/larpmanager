@@ -863,6 +863,7 @@ def orga_registration_member(request, s, n):
                 "document_issued",
                 "document_expiration",
                 "accessibility",
+                "residence_address",
             ]
         )
 
