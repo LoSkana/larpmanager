@@ -152,21 +152,30 @@ def _row_header(ctx, el, key, member_cover, model, val):
     elif model == "character":
         if el.id in ctx["assignments"]:
             member = ctx["assignments"][el.id]
+
     if member_cover:
         key.append("")
         profile = ""
         if member and member.profile:
             profile = member.profile_thumb.url
         val.append(profile)
+
     if model in ["registration", "character"]:
         key.append(_("Player"))
         display = ""
         if member:
             display = member.display_member()
         val.append(display)
+
+        key.append(_("Email"))
+        email = ""
+        if member:
+            email = member.email
+        val.append(email)
+
     if model == "registration":
-        val.extend([el.member.email, el.ticket.name])
-        key.extend([_("Email"), _("Ticket")])
+        val.extend(el.ticket.name)
+        key.extend(_("Ticket"))
     else:
         val.extend([el.number])
         key.extend(["number"])
