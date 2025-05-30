@@ -100,6 +100,7 @@ def _get_applicable_row(ctx, el, choices, answers, questions, model):
         elif que.typ in {"s", "m"}:
             if que.id in choices and el.id in choices[que.id]:
                 value = ", ".join(choices[que.id][el.id])
+        value = value.replace("\t", "").replace("\n", "<br />")
         val.append(value)
 
     if model == "character":
