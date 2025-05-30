@@ -3554,9 +3554,6 @@ msgstr "Ontvangst al bevestigd."
 msgid "Registration not yet open!"
 msgstr "De registratie is nog niet geopend."
 
-msgid "Select one primary faction"
-msgstr "Selecteer een primaire factie"
-
 msgid "Short name - international"
 msgstr "Korte naam - in het Engels"
 
@@ -3820,6 +3817,9 @@ msgstr "Wachtwoord reset van gebruiker %(user)s"
 
 msgid "Relationships of your character"
 msgstr "Links van je personage"
+
+msgid "Select only one primary faction"
+msgstr "Selecteer slechts één primaire factie"
 
 msgid "Set design - staging, materials"
 msgstr "Decorontwerp - inrichting, materialen"

@@ -1248,7 +1248,11 @@ th select {
     height: 7em;
 }
 
+
 .avatar_help {
     max-width:700px;
     margin: auto
-}
+
+.inline {
+    display: inline;
+  }

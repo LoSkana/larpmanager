@@ -178,7 +178,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
                     prim += 1
 
             if prim > 1:
-                raise ValidationError({"factions_list": _("Select one primary faction")})
+                raise ValidationError({"factions_list": _("Select only one primary faction")})
 
         return cleaned_data
 
