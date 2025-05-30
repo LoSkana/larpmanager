@@ -68,9 +68,6 @@ msgstr "MOMS"
 msgid "Who"
 msgstr "Vem"
 
-msgid "age"
-msgstr "ålder"
-
 msgid "for"
 msgstr "för"
 
@@ -82,9 +79,6 @@ msgstr "Kropp"
 
 msgid "Card"
 msgstr "Kort"
-
-msgid "Cell"
-msgstr "Cell"
 
 msgid "Chat"
 msgstr "Chatt"
@@ -248,9 +242,6 @@ msgstr "Vad är det?"
 msgid "When"
 msgstr "När"
 
-msgid "cell"
-msgstr "cell"
-
 msgid "days"
 msgstr "dagar"
 
@@ -259,9 +250,6 @@ msgstr "gåva"
 
 msgid "hide"
 msgstr "gömma"
-
-msgid "info"
-msgstr "info"
 
 msgid "past"
 msgstr "förflutet"

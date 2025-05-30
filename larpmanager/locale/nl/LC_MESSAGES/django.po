@@ -68,9 +68,6 @@ msgstr "BTW"
 msgid "Who"
 msgstr "Wie"
 
-msgid "age"
-msgstr "leeftijd"
-
 msgid "for"
 msgstr "voor"
 
@@ -82,9 +79,6 @@ msgstr "Lichaam"
 
 msgid "Card"
 msgstr "Kaart"
-
-msgid "Cell"
-msgstr "Cel"
 
 msgid "Chat"
 msgstr "Chat"
@@ -248,9 +242,6 @@ msgstr "Wat"
 msgid "When"
 msgstr "Wanneer"
 
-msgid "cell"
-msgstr "cel"
-
 msgid "days"
 msgstr "dagen"
 
@@ -259,9 +250,6 @@ msgstr "cadeau"
 
 msgid "hide"
 msgstr "verbergen"
-
-msgid "info"
-msgstr "info"
 
 msgid "past"
 msgstr "verleden"

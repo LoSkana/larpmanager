@@ -68,9 +68,6 @@ msgstr "IVA"
 msgid "Who"
 msgstr "Quién"
 
-msgid "age"
-msgstr "edad"
-
 msgid "for"
 msgstr "para"
 
@@ -82,9 +79,6 @@ msgstr "Cuerpo"
 
 msgid "Card"
 msgstr "Tarjeta"
-
-msgid "Cell"
-msgstr "Celda"
 
 msgid "Chat"
 msgstr "Chat"
@@ -248,9 +242,6 @@ msgstr "Qué"
 msgid "When"
 msgstr "En"
 
-msgid "cell"
-msgstr "celda"
-
 msgid "days"
 msgstr "días"
 
@@ -259,9 +250,6 @@ msgstr "regalo"
 
 msgid "hide"
 msgstr "ocultar"
-
-msgid "info"
-msgstr "información"
 
 msgid "past"
 msgstr "pasado"

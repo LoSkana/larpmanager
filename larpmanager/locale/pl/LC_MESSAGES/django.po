@@ -68,9 +68,6 @@ msgstr "VAT"
 msgid "Who"
 msgstr "Kto"
 
-msgid "age"
-msgstr "wiek"
-
 msgid "for"
 msgstr "dla"
 
@@ -82,9 +79,6 @@ msgstr "Ciało"
 
 msgid "Card"
 msgstr "Karta"
-
-msgid "Cell"
-msgstr "Komórka"
 
 msgid "Chat"
 msgstr "Czat"
@@ -248,9 +242,6 @@ msgstr "Co"
 msgid "When"
 msgstr "Kiedy"
 
-msgid "cell"
-msgstr "komórka"
-
 msgid "days"
 msgstr "dni"
 
@@ -259,9 +250,6 @@ msgstr "prezent"
 
 msgid "hide"
 msgstr "ukrycie"
-
-msgid "info"
-msgstr "info"
 
 msgid "past"
 msgstr "przeszłość"

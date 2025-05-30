@@ -68,9 +68,6 @@ msgstr "DPH"
 msgid "Who"
 msgstr "Kdo"
 
-msgid "age"
-msgstr "věk"
-
 msgid "for"
 msgstr "pro"
 
@@ -82,9 +79,6 @@ msgstr "Tělo"
 
 msgid "Card"
 msgstr "Karta"
-
-msgid "Cell"
-msgstr "Buňky"
 
 msgid "Chat"
 msgstr "Chat"
@@ -248,9 +242,6 @@ msgstr "Co"
 msgid "When"
 msgstr "Když"
 
-msgid "cell"
-msgstr "buňka"
-
 msgid "days"
 msgstr "dny"
 
@@ -259,9 +250,6 @@ msgstr "dárek"
 
 msgid "hide"
 msgstr "skrýt"
-
-msgid "info"
-msgstr "informace"
 
 msgid "past"
 msgstr "minulost"

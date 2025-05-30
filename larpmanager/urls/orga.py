@@ -261,6 +261,11 @@ urlpatterns = [
         name="orga_registration_secret",
     ),
     path(
+        "<slug:s>/<int:n>/manage/registrations/member",
+        views_or.orga_registration_member,
+        name="orga_registration_member",
+    ),
+    path(
         "<slug:s>/<int:n>/manage/albums/",
         views_oms.orga_albums,
         name="orga_albums",

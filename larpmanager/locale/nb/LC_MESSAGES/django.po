@@ -68,9 +68,6 @@ msgstr "MVA"
 msgid "Who"
 msgstr "Hvem"
 
-msgid "age"
-msgstr "alder"
-
 msgid "for"
 msgstr "for"
 
@@ -82,9 +79,6 @@ msgstr "Kropp"
 
 msgid "Card"
 msgstr "Kort"
-
-msgid "Cell"
-msgstr "Celle"
 
 msgid "Chat"
 msgstr "Chat"
@@ -248,9 +242,6 @@ msgstr "Hva er det?"
 msgid "When"
 msgstr "Når"
 
-msgid "cell"
-msgstr "celle"
-
 msgid "days"
 msgstr "dager"
 
@@ -259,9 +250,6 @@ msgstr "gave"
 
 msgid "hide"
 msgstr "skjul"
-
-msgid "info"
-msgstr "info"
 
 msgid "past"
 msgstr "fortid"

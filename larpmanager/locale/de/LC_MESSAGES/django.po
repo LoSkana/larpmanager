@@ -68,9 +68,6 @@ msgstr "MEHRWERTSTEUER"
 msgid "Who"
 msgstr "Wer"
 
-msgid "age"
-msgstr "Alter"
-
 msgid "for"
 msgstr "für"
 
@@ -82,9 +79,6 @@ msgstr "Körper"
 
 msgid "Card"
 msgstr "Karte"
-
-msgid "Cell"
-msgstr "Zelle"
 
 msgid "Chat"
 msgstr "Chat"
@@ -248,9 +242,6 @@ msgstr "Was"
 msgid "When"
 msgstr "Wenn"
 
-msgid "cell"
-msgstr "Zelle"
-
 msgid "days"
 msgstr "Tage"
 
@@ -259,9 +250,6 @@ msgstr "Geschenk"
 
 msgid "hide"
 msgstr "ausblenden"
-
-msgid "info"
-msgstr "Infos"
 
 msgid "past"
 msgstr "Vergangenheit"

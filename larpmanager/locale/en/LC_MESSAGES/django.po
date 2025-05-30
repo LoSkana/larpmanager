@@ -6207,18 +6207,6 @@ msgstr ""
 msgid "email"
 msgstr ""
 
-msgid "cell"
-msgstr ""
-
-msgid "age"
-msgstr ""
-
-msgid "info"
-msgstr ""
-
-msgid "chronology"
-msgstr ""
-
 msgid "unique code"
 msgstr ""
 
@@ -6240,10 +6228,10 @@ msgstr ""
 msgid "surcharge"
 msgstr ""
 
-msgid "Age (during the event)"
+msgid "chronology"
 msgstr ""
 
-msgid "Cell"
+msgid "Age (during the event)"
 msgstr ""
 
 msgid "Additions"
