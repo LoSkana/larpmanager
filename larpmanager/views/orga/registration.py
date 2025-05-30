@@ -842,11 +842,10 @@ def orga_registration_member(request, s, n):
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
-    text = ""
-    if member.profile:
-        text += f"<img src='{member.profile_thumb.url}' style='width: 15em; float: left; margin: 1em; border-radius: 5%;' />"
+    text = f"<h2>{member.display_member()}</h2>"
 
-    text += f"<h2>{member.display_member()}</h2>"
+    if member.profile:
+        text += f"<img src='{member.profile_thumb.url}' style='width: 15em; margin: 1em; border-radius: 5%;' />"
 
     # check if the user can see sensitive data
     exclude = ["profile", "newsletter", "language", "presentation"]
@@ -875,6 +874,9 @@ def orga_registration_member(request, s, n):
             continue
         # noinspection PyUnresolvedReferences, PyProtectedMember
         field_label = member_cls._meta.get_field(field_name).verbose_name
-        text += f"<p><b>{field_label}</b>: {getattr(member, field_name)}</p>"
+        value = getattr(member, field_name)
+        if not value:
+            continue
+        text += f"<p><b>{field_label}</b>: {value}</p>"
 
     return JsonResponse({"k": 1, "v": text})
