@@ -27,6 +27,9 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.models.form import (
     QuestionApplicable,
+    RegistrationAnswer,
+    RegistrationChoice,
+    RegistrationQuestion,
     WritingAnswer,
     WritingChoice,
     WritingQuestion,
@@ -36,7 +39,7 @@ from larpmanager.utils.common import check_field
 from larpmanager.utils.edit import _get_values_mapping
 
 
-def writing_download(ctx, typ, model):
+def download(ctx, typ, model):
     response, writer = get_writer(ctx, model)
 
     query = typ.objects.all()
@@ -50,27 +53,46 @@ def writing_download(ctx, typ, model):
     choices = {}
     answers = {}
     questions = []
-    if applicable:
+    if applicable or model == "registration":
+        question_cls = RegistrationQuestion
+        choices_cls = RegistrationChoice
+        answers_cls = RegistrationAnswer
+        ref_field = "reg_id"
+        if model != "registration":
+            question_cls = WritingQuestion
+            choices_cls = WritingChoice
+            answers_cls = WritingAnswer
+            ref_field = "element_id"
+
         el_ids = {el.id for el in query}
-        questions = WritingQuestion.objects.filter(applicable=applicable, event=ctx["event"]).order_by("order")
+
+        questions = question_cls.objects.filter(event=ctx["event"]).order_by("order")
+        if model != "registration":
+            questions = questions.filter(applicable=applicable)
+
         que_ids = {que.id for que in questions}
-        que_choice = WritingChoice.objects.filter(question_id__in=que_ids, element_id__in=el_ids)
+
+        filter_kwargs = {"question_id__in": que_ids, f"{ref_field}__in": el_ids}
+
+        que_choice = choices_cls.objects.filter(**filter_kwargs)
         for choice in que_choice.select_related("option"):
+            element_id = getattr(choice, ref_field)
             if choice.question_id not in choices:
                 choices[choice.question_id] = {}
-            if choice.element_id not in choices[choice.question_id]:
-                choices[choice.question_id][choice.element_id] = []
-            choices[choice.question_id][choice.element_id].append(choice.option.display)
+            if element_id not in choices[choice.question_id]:
+                choices[choice.question_id][element_id] = []
+            choices[choice.question_id][element_id].append(choice.option.display)
 
-        que_answer = WritingAnswer.objects.filter(question_id__in=que_ids, element_id__in=el_ids)
+        que_answer = answers_cls.objects.filter(**filter_kwargs)
         for answer in que_answer:
+            element_id = getattr(answer, ref_field)
             if answer.question_id not in answers:
                 answers[answer.question_id] = {}
-            answers[answer.question_id][answer.element_id] = answer.text
+            answers[answer.question_id][element_id] = answer.text
 
     first = True
     for el in query:
-        if applicable:
+        if applicable or model == "registration":
             val, key = _get_applicable_row(ctx, el, choices, answers, questions, model)
         else:
             val, key = _get_standard_row(ctx, el, first)
@@ -85,8 +107,12 @@ def writing_download(ctx, typ, model):
 
 
 def _get_applicable_row(ctx, el, choices, answers, questions, model):
-    val = [el.number]
-    key = ["number"]
+    if model == "registration":
+        val = [el.member.display_member(), el.member.email, el.ticket.name]
+        key = [_("Player"), _("Email"), _("Ticket")]
+    else:
+        val = [el.number]
+        key = ["number"]
 
     # add question values
     for que in questions:
@@ -174,7 +200,10 @@ def _download_prepare(ctx, nm, query, typ):
         query = query.order_by("number")
 
     if nm == "character":
-        query = query.prefetch_related("factions_list")
+        query = query.prefetch_related("factions_list").select_related("player")
+
+    if nm == "registration":
+        query = query.select_related("ticket")
 
     return query
 

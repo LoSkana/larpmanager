@@ -81,6 +81,7 @@ from larpmanager.utils.common import (
     get_registration,
     get_time_diff,
 )
+from larpmanager.utils.download import download
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.registration import is_reg_provisional
 from larpmanager.utils.upload import upload_elements
@@ -302,6 +303,9 @@ def orga_registrations(request, s, n):
     if request.method == "POST":
         if request.POST.get("popup") == "1":
             return registrations_popup(request, ctx)
+
+        if request.POST.get("download") == "1":
+            return download(ctx, Registration, "registration")
 
         return upload_elements(request, ctx, Registration, "registration", "orga_registrations")
 

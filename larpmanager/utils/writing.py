@@ -48,7 +48,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.templatetags.show_tags import show_char, show_trait
 from larpmanager.utils.common import check_field, compute_diff
-from larpmanager.utils.download import writing_download
+from larpmanager.utils.download import download
 from larpmanager.utils.upload import upload_elements
 
 
@@ -145,7 +145,7 @@ def writing_example(ctx, typ):
 
 def writing_post(request, ctx, typ, nm):
     if request.POST.get("download") == "1":
-        return writing_download(ctx, typ, nm)
+        return download(ctx, typ, nm)
 
     if request.POST.get("example") == "1":
         return writing_example(ctx, typ)
