@@ -212,6 +212,11 @@ class OrgaConfigForm(ConfigForm):
         self.add_configs("mail_character", ConfigType.BOOL, section, label, help_text)
 
         section = _("Visualisation")
+
+        label = _("Export")
+        help_text = _("If checked: allow to export characters and registration in a easily readable page")
+        self.add_configs("show_export", ConfigType.BOOL, section, label, help_text)
+
         label = _("Limitations")
         help_text = _("If checked: Show summary page with number of tickets/options used")
         self.add_configs("show_limitations", ConfigType.BOOL, section, label, help_text)

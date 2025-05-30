@@ -465,6 +465,9 @@ msgstr "Detail"
 msgid "Events"
 msgstr "Události"
 
+msgid "Export"
+msgstr "Export"
+
 msgid "Female"
 msgstr "Samice"
 
@@ -6254,6 +6257,13 @@ msgid ""
 "You can remove your consent to data sharing by clicking on the appropriate "
 "link."
 msgstr "Souhlas se sdílením údajů můžete zrušit kliknutím na příslušný odkaz."
+
+msgid ""
+"If checked: allow to export characters and registration in a easily readable"
+" page"
+msgstr ""
+"Pokud je zaškrtnuto: umožňuje exportovat znaky a registraci do snadno "
+"čitelné stránky."
 
 #, python-format
 msgid ""

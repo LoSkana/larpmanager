@@ -1,5 +1,5 @@
 {% extends "utils.html" %}
-{% load i18n %}
+{% load i18n static %}
 {% block title %}
     {% trans "Diet" %} - {{ run }}
 {% endblock title %}
@@ -15,12 +15,18 @@
     </p>
     <table class="mob">
         <tr>
+            <th></th>
             <th>{% trans "Player" %}</th>
             <th>{% trans "Characters" %}</th>
             <th>{% trans "Diet" %}</th>
         </tr>
         {% for el in list %}
             <tr>
+                <td class="member_cover">
+                    <div class="img_cover"
+                         style="background-image:url('{% if el.profile %}{{ el.profile_thumb.url }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
+                    </div>
+                </td>
                 <td>{{ el }}</td>
                 <td>
                     {% if el.chars %}

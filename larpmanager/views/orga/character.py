@@ -73,6 +73,8 @@ def orga_characters(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_characters")
     get_event_cache_all(ctx)
     ctx["user_character_approval"] = ctx["event"].get_config("user_character_approval", False)
+    if ctx["event"].get_config("show_export", False):
+        ctx["export"] = "character"
 
     return writing_list(request, ctx, Character, "character")
 

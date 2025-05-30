@@ -465,6 +465,9 @@ msgstr "Detail"
 msgid "Events"
 msgstr "Evenementen"
 
+msgid "Export"
+msgstr "Exporteer"
+
 msgid "Female"
 msgstr "Vrouw"
 
@@ -6467,6 +6470,13 @@ msgid ""
 msgstr ""
 "U kunt uw toestemming voor het delen van gegevens intrekken door op de "
 "betreffende koppeling te klikken."
+
+msgid ""
+"If checked: allow to export characters and registration in a easily readable"
+" page"
+msgstr ""
+"Indien aangevinkt: toestaan om tekens en registratie te exporteren in een "
+"gemakkelijk leesbare pagina"
 
 #, python-format
 msgid ""

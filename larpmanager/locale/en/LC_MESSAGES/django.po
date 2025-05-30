@@ -722,6 +722,14 @@ msgstr ""
 msgid "Visualisation"
 msgstr ""
 
+msgid "Export"
+msgstr ""
+
+msgid ""
+"If checked: allow to export characters and registration in a easily readable "
+"page"
+msgstr ""
+
 msgid "Limitations"
 msgstr ""
 

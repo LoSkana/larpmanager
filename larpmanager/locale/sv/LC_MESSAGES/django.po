@@ -465,6 +465,9 @@ msgstr "Detalj"
 msgid "Events"
 msgstr "Händelser"
 
+msgid "Export"
+msgstr "Export"
+
 msgid "Female"
 msgstr "Kvinna"
 
@@ -6357,6 +6360,13 @@ msgid ""
 msgstr ""
 "Du kan ta bort ditt samtycke till datadelning genom att klicka på lämplig "
 "länk."
+
+msgid ""
+"If checked: allow to export characters and registration in a easily readable"
+" page"
+msgstr ""
+"Om markerad: gör det möjligt att exportera tecken och registrering i en "
+"lättläst sida"
 
 #, python-format
 msgid ""

@@ -465,6 +465,9 @@ msgstr "Détail"
 msgid "Events"
 msgstr "Evénements"
 
+msgid "Export"
+msgstr "Exportation"
+
 msgid "Female"
 msgstr "Femme"
 
@@ -6491,6 +6494,13 @@ msgid ""
 msgstr ""
 "Vous pouvez retirer votre consentement au partage des données en cliquant "
 "sur le lien approprié."
+
+msgid ""
+"If checked: allow to export characters and registration in a easily readable"
+" page"
+msgstr ""
+"Si coché : permet d'exporter les caractères et l'enregistrement dans une "
+"page facilement lisible."
 
 #, python-format
 msgid ""

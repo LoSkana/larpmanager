@@ -33,31 +33,31 @@
                                         <div class="el">
                                             <div class="icon">
                                                 <a href="{% url 'character' run.event.slug run.number ch.number %}">
-                                                    <div class='img_cover'
-                                                         style="background-image:url('{% get_char_profile ch %}')" />
-                                                </div>
-                                                <div class="icon-name">
-                                                    <p>
-                                                        {{ ch.name }}
-                                                        {% if ch.title %}- {{ ch.title }}{% endif %}
-                                                    </p>
-                                                </div>
-                                            </a>
+                                                    <div class="img_cover"
+                                                         style="background-image:url('{% get_char_profile ch %}')">
+                                                    </div>
+                                                    <div class="icon-name">
+                                                        <p>
+                                                            {{ ch.name }}
+                                                            {% if ch.title %}- {{ ch.title }}{% endif %}
+                                                        </p>
+                                                    </div>
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
-                                {% endif %}
-                            {% endwith %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% endwith %}
-        {% endfor %}
+                                    {% endif %}
+                                {% endwith %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}
+        {% endif %}
+        {% if reg_list %}
+            <h1 class="title">{% trans "Registered" %}</h1>
+            {% include "elements/gallery.html" with list=reg_list %}
+        {% endif %}
     {% endif %}
-    {% if reg_list %}
-        <h1 class="title">{% trans "Registered" %}</h1>
-        {% include "elements/gallery.html" with list=reg_list %}
-    {% endif %}
-{% endif %}
 {% endblock content %}
 {% block js %}
     <script>

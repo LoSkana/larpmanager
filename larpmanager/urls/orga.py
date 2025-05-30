@@ -970,4 +970,9 @@ urlpatterns = [
         views_ow.orga_multichoice_available,
         name="orga_multichoice_available",
     ),
+    path(
+        "<slug:s>/<int:n>/manage/export/<slug:nm>",
+        views_ow.orga_export,
+        name="orga_export",
+    ),
 ]
