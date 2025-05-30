@@ -81,20 +81,26 @@
         let countryCode = $('#id_residence_address_0').val();
         let $provinceSelect = $('#id_residence_address_1');
 
-        $provinceSelect.empty().append('<option value="" disabled selected>----</option>');
+
         if (countrySubdivisions[countryCode] && countrySubdivisions[countryCode].length > 0) {
+            $provinceSelect.empty().append('<option value="" disabled selected>----</option>');
             $.each(countrySubdivisions[countryCode], function(index, subdivision) {
                 $provinceSelect.append(new Option(subdivision[1], subdivision[0]));
             });
             $provinceSelect.prop('required', true);
         } else {
+            $provinceSelect.empty().append('<option value="" selected>----</option>');
             $provinceSelect.prop('required', false);
         }
 
         {% if form.initial_province %}
-        $provinceSelect.val('{{ form.initial_province }}');
+        if ($provinceSelect.find('option[value="{{ form.initial_province }}"]').length) {
+            $provinceSelect.val('{{ form.initial_province }}');
+        }
         {% endif %}
+
     }
+
 {% endif %}
 
  {% if avatar_form %}
