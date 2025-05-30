@@ -842,7 +842,7 @@ def orga_registration_member(request, s, n):
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
-    text = f"<h2>{member.display_member()}</h2>"
+    text = f"<h2>{member.display_real()}</h2>"
 
     if member.profile:
         text += f"<img src='{member.profile_thumb.url}' style='width: 15em; margin: 1em; border-radius: 5%;' />"
