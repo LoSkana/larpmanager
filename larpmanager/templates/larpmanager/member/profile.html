@@ -34,20 +34,20 @@
               method="post"
               id="avatar_form">
             {% csrf_token %}
-            <div style="text-align: center">
+            <div class="centerized">
                 <h4>{% trans "Current profile image" %}:</h4>
-                <div class="helptext" style="max-width:700px; margin: auto">
+                <div class="helptext avatar_help">
                     {% trans "Upload your portrait photo. It will be shown to other players together with the your character, so as to help recognize you in the game. Choose a photo that you would put in an official document (in which you are alone, centered on your face). " %}
                 </div>
                 <br />
                 <br />
                 <input type="button"
-                       id='change_photo'
-                       value='{% trans "Change photo" %}'
+                       id="change_photo"
+                       value="{% trans "Change photo" %}"
                        class="my_toggle"
                        tog="change-field">
-                <input type="button" id='rotate_l_btn' value='{% trans "Rotate left" %}' \>
-                <input type="button" id='rotate_r_btn' value='{% trans "Rotate right" %}' \>
+                <input type="button" id="rotate_l_btn" value="{% trans "Rotate left" %}" \>
+                <input type="button" id="rotate_r_btn" value="{% trans "Rotate right" %}" \>
                 <br />
                 <br />
                 <div class="hide change-field">
@@ -55,7 +55,9 @@
                     <br />
                     <br />
                 </div>
-                <img id="profile" {% if profile %}src={{ profile }}{% endif %} />
+                <img id="profile"
+                     {% if profile %}src={{ profile }}{% endif %}
+                     alt="image profile" />
             </div>
         </form>
         <hr />
@@ -80,10 +82,13 @@
         let $provinceSelect = $('#id_residence_address_1');
 
         $provinceSelect.empty().append('<option value="" disabled selected>----</option>');
-        if (countrySubdivisions[countryCode]) {
+        if (countrySubdivisions[countryCode] && countrySubdivisions[countryCode].length > 0) {
             $.each(countrySubdivisions[countryCode], function(index, subdivision) {
                 $provinceSelect.append(new Option(subdivision[1], subdivision[0]));
             });
+            $provinceSelect.prop('required', true);
+        } else {
+            $provinceSelect.prop('required', false);
         }
 
         {% if form.initial_province %}
