@@ -211,17 +211,12 @@
 var url_load_questions = "{% url 'orga_writing_form_list' run.event.slug run.number label_typ %}";
 var url_load_questions_email = "{% url 'orga_writing_form_email' run.event.slug run.number label_typ %}";
 
-var download_text = '{% trans "Download" %}';
-
 var accounting = false;
 
 {% include "elements/questions/load.js" %}
 
 window.addEventListener('DOMContentLoaded', function() {
     $(document).ready(function() {
-        el = $('#show');
-        if ($('.fields').find('a').length == 0) el.hide();
-
         setTimeout(function() {
         {% for key, que in form_questions.items %}
             {% if que.typ == 'teaser' or que.typ == 'text' %}

@@ -71,12 +71,7 @@ def save_version(el, tp, mb, dl=False):
 
 
 def _get_field_value(el, que):
-    mapping = {
-        "text": lambda: el.text,
-        "teaser": lambda: el.teaser,
-        "name": lambda: el.name,
-        "title": lambda: el.title,
-    }
+    mapping = _get_values_mapping(el)
 
     if que.typ in mapping:
         return mapping[que.typ]()
@@ -91,6 +86,17 @@ def _get_field_value(el, que):
         return ", ".join(c.option.display for c in WritingChoice.objects.filter(question=que, element_id=el.id))
 
     return None
+
+
+def _get_values_mapping(el):
+    mapping = {
+        "text": lambda: el.text,
+        "teaser": lambda: el.teaser,
+        "name": lambda: el.name,
+        "title": lambda: el.title,
+        "faction": lambda: ", ".join([fac.name for fac in el.factions_list.all()]),
+    }
+    return mapping
 
 
 def check_run(el, ctx, afield=None):

@@ -3554,9 +3554,6 @@ msgstr "Der Eingang wurde bereits bestätigt."
 msgid "Registration not yet open!"
 msgstr "Die Anmeldung ist noch nicht geöffnet."
 
-msgid "Select one primary faction"
-msgstr "Wählen Sie eine Hauptfraktion"
-
 msgid "Short name - international"
 msgstr "Kurzer Name - auf Englisch"
 
@@ -3820,6 +3817,9 @@ msgstr "Zurücksetzen des Passworts von Benutzer %(user)s"
 
 msgid "Relationships of your character"
 msgstr "Links deines Charakters"
+
+msgid "Select only one primary faction"
+msgstr "Wählen Sie nur eine Hauptfraktion"
 
 msgid "Set design - staging, materials"
 msgstr "Bühnenbild - Ausstattung, Materialien"
