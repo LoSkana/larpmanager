@@ -1111,3 +1111,13 @@
     module: 7
     placeholder: false
     order: 1
+- model: larpmanager.feature
+  pk: 185
+  fields:
+    name: Fiscal code check
+    descr: Check the validity of the fiscal code.
+    slug: fiscal_code_check
+    overall: true
+    module: 10
+    placeholder: false
+    order: 30

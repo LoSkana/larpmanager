@@ -2597,6 +2597,9 @@ msgstr "Výběr frakce"
 msgid "Feature activated"
 msgstr "Aktivovaná funkce"
 
+msgid "Fiscal code check"
+msgstr "Kontrola daňového kódu"
+
 msgid "Fixed instalments"
 msgstr "Pevné splátky"
 
@@ -4183,6 +4186,9 @@ msgstr "Přiřaďte vybrané postavy hráčům."
 msgid "Briefly describe what the box contains"
 msgstr "Stručně popište, co krabice obsahuje"
 
+msgid "Check the validity of the fiscal code."
+msgstr "Zkontrolujte platnost fiskálního kódu."
+
 msgid "Complete name of the LARP Organization"
 msgstr "Úplný název sdružení"
 
@@ -4255,9 +4261,6 @@ msgstr "Počet splátek, které mají být zaplaceny."
 
 msgid "You are logged in with an email address"
 msgstr "Jste přihlášeni pomocí e-mailové adresy"
-
-msgid "Apply a check on the tax code of players"
-msgstr "Použít kontrolu daňového kódu hráčů"
 
 msgid "Characters are not visible at the moment"
 msgstr "Postavy nejsou v tuto chvíli viditelné"

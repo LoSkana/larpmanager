@@ -438,12 +438,6 @@ msgid ""
 "which to make free membership fee payment"
 msgstr ""
 
-msgid "Tax code check"
-msgstr ""
-
-msgid "Apply a check on the tax code of players"
-msgstr ""
-
 msgid "Voting"
 msgstr ""
 
@@ -4794,6 +4788,9 @@ msgstr ""
 msgid "This page performs checks on members' data."
 msgstr ""
 
+msgid "Tax code check"
+msgstr ""
+
 msgid "Card"
 msgstr ""
 
@@ -7341,6 +7338,12 @@ msgstr ""
 msgid ""
 "Lets you create 'template' events whose configurations and settings can be "
 "used as a starting point for other events."
+msgstr ""
+
+msgid "Fiscal code check"
+msgstr ""
+
+msgid "Check the validity of the fiscal code."
 msgstr ""
 
 msgid "Audits"

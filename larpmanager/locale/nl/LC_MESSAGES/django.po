@@ -2597,6 +2597,9 @@ msgstr "Factieselectie"
 msgid "Feature activated"
 msgstr "Functie geactiveerd"
 
+msgid "Fiscal code check"
+msgstr "Fiscale code controle"
+
 msgid "Fixed instalments"
 msgstr "Vaste termijnen"
 
@@ -4183,6 +4186,9 @@ msgstr "Wijs geselecteerde personages toe aan spelers."
 msgid "Briefly describe what the box contains"
 msgstr "Beschrijf kort wat de doos bevat"
 
+msgid "Check the validity of the fiscal code."
+msgstr "Controleer de geldigheid van de fiscale code."
+
 msgid "Complete name of the LARP Organization"
 msgstr "Volledige naam van de vereniging"
 
@@ -4257,9 +4263,6 @@ msgstr "Het aantal termijnen dat moet worden betaald."
 
 msgid "You are logged in with an email address"
 msgstr "U bent aangemeld met een e-mailadres"
-
-msgid "Apply a check on the tax code of players"
-msgstr "Controleer de belastingcode van spelers"
 
 msgid "Characters are not visible at the moment"
 msgstr "Personages zijn momenteel niet zichtbaar"

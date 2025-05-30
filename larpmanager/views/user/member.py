@@ -253,8 +253,7 @@ def membership(request):
 
     ctx.update({"member": request.user.member, "membership": el, "form": form})
 
-    assoc = Association.objects.get(pk=ctx["a_id"])
-    if assoc.get_config("membership_cf", False):
+    if "fiscal_code_check" in ctx["features"]:
         ctx.update(calculate_fiscal_code(ctx["member"]))
 
     ctx["fee_payed"] = AccountingItemMembership.objects.filter(

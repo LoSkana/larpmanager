@@ -2597,6 +2597,9 @@ msgstr "Wybór frakcji"
 msgid "Feature activated"
 msgstr "Funkcja aktywowana"
 
+msgid "Fiscal code check"
+msgstr "Kontrola kodu fiskalnego"
+
 msgid "Fixed instalments"
 msgstr "Stałe raty"
 
@@ -4183,6 +4186,9 @@ msgstr "Przypisz wybrane postacie do graczy."
 msgid "Briefly describe what the box contains"
 msgstr "Krótki opis zawartości pudełka"
 
+msgid "Check the validity of the fiscal code."
+msgstr "Sprawdź ważność kodu fiskalnego."
+
 msgid "Complete name of the LARP Organization"
 msgstr "Pełna nazwa organizacji LARP"
 
@@ -4255,9 +4261,6 @@ msgstr "Liczba płatności do podziału opłaty"
 
 msgid "You are logged in with an email address"
 msgstr "Jesteś zalogowany przy użyciu adresu e-mail"
-
-msgid "Apply a check on the tax code of players"
-msgstr "Zastosuj kontrolę kodu podatkowego graczy"
 
 msgid "Characters are not visible at the moment"
 msgstr "Postacie nie są obecnie widoczne"

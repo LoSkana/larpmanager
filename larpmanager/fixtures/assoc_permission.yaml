@@ -242,7 +242,7 @@
     name: Membership check
     slug: exe_membership_check
     number: 99
-    feature: 45
+    feature: 185
 - model: larpmanager.assocpermission
   pk: 39
   fields:

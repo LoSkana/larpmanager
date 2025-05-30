@@ -2597,6 +2597,9 @@ msgstr "Val av fraktion"
 msgid "Feature activated"
 msgstr "Funktion aktiverad"
 
+msgid "Fiscal code check"
+msgstr "Kontroll av skattekod"
+
 msgid "Fixed instalments"
 msgstr "Fasta avbetalningar"
 
@@ -4183,6 +4186,9 @@ msgstr "Tilldela valda karaktärer till spelare."
 msgid "Briefly describe what the box contains"
 msgstr "Beskriv kortfattat vad lådan innehåller"
 
+msgid "Check the validity of the fiscal code."
+msgstr "Kontrollera att skattekoden är giltig."
+
 msgid "Complete name of the LARP Organization"
 msgstr "Föreningens fullständiga namn"
 
@@ -4257,9 +4263,6 @@ msgstr "Antalet delbetalningar som ska göras."
 
 msgid "You are logged in with an email address"
 msgstr "Du är inloggad med en e-postadress"
-
-msgid "Apply a check on the tax code of players"
-msgstr "Tillämpa en kontroll av spelarnas skattekod"
 
 msgid "Characters are not visible at the moment"
 msgstr "Tecknen är inte synliga för tillfället"
