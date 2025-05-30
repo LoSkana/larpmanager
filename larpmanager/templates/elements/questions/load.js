@@ -2,11 +2,6 @@ done = {};
 down_all = false;
 
 function load_que(index, first) {
-    if (index >= regs.length) {
-        setTimeout(check_download_all, 300);
-        return;
-    }
-
     num = regs[index];
 
     if (num in done) {
@@ -118,105 +113,8 @@ function reload_table() {
 
 regs = [];
 
-// first is true on first execution
-function download_all(first) {
-
-    down_all = true;
-
-    if (first) {
-        start_spinner();
-        $( '.load_que' ).each(function() {
-          regs.push($( this ).attr("key"));
-        });
-    }
-
-    if (accounting) {
-        if ('acc' in done) {
-            load_que(0, true);
-        } else {
-            if (first) {
-                $('#load_accounting').trigger('click');
-            }
-            setTimeout(function() {
-                download_all(false);
-            }, 50);
-        }
-    } else {
-        load_que(0, true);
-    }
-}
-
-function check_download_all() {
-
-    all = true;
-
-    if (accounting) {
-        if (!('acc' in done)) all = false;
-    }
-
-    for (const num of regs) {
-        if (!(num in done)) all = false;
-    }
-
-    if (all) {
-
-        down_all = false;
-
-        setTimeout(reload_table, 1000);
-
-        $('.hide .question').show();
-        $('.hide .acc').show();
-        $('#load_accounting').addClass('select');
-        $('.load_que').addClass('select');
-
-        stop_spinner();
-
-        $('.download_table tbody').empty();
-        $('table.regs').each(function() {
-            var rows = $(this).find('tbody tr').clone();
-            $('.download_table tbody').append(rows);
-            $('.download_table thead').empty();
-            var rows = $(this).find('thead tr').clone();
-            $('.download_table thead').append(rows);
-        });
-
-        $('.download_table .show_tooltip').remove();
-        $('.download_table a').each(function() {
-            if ($(this).text().trim() === "Manage") {
-                $(this).remove();
-            }
-        });
-        $('.download_table td, .download_table th').each(function() {
-            var trimmedText = $(this).text().trim();
-            var cleanedText = trimmedText.replace(/\t/g, '');
-            $(this).text(cleanedText);
-        });
-
-        setTimeout(go_download_all, 1000);
-    } else {
-        setTimeout(check_download_all, 300);
-    }
-}
-
-function go_download_all() {
-    $('.go_table a').first().trigger('click');
-}
-
-function hide_download_link() {
-    $('.go_table').hide();
-}
-
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
-
-        $('.orga-buttons').append('<a id="download_all" class="button" href="#">' + download_text + '</a>');
-
-        setTimeout(hide_download_link, 100);
-
-        $('#download_all').on('click', function () {
-            download_all(true);
-            return false;
-        });
 
         setTimeout(reload_table, 1000);
 

@@ -3554,9 +3554,6 @@ msgstr "Kvittot är redan bekräftat."
 msgid "Registration not yet open!"
 msgstr "Registreringen är ännu inte öppen."
 
-msgid "Select one primary faction"
-msgstr "Välj en primär fraktion"
-
 msgid "Short name - international"
 msgstr "Kort namn - på engelska"
 
@@ -3820,6 +3817,9 @@ msgstr "Lösenordsåterställning för användare %(user)s"
 
 msgid "Relationships of your character"
 msgstr "Länkar till din karaktär"
+
+msgid "Select only one primary faction"
+msgstr "Välj endast en primär fraktion"
 
 msgid "Set design - staging, materials"
 msgstr "Scenografi - inredning, material"

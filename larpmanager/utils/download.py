@@ -22,30 +22,57 @@ import csv
 
 from bs4 import BeautifulSoup
 from django.http import HttpResponse
+from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_event_cache_all, get_event_cache_fields
-from larpmanager.models.form import QuestionApplicable, WritingQuestion, get_ordered_registration_questions
+from larpmanager.cache.character import get_event_cache_all
+from larpmanager.models.form import (
+    QuestionApplicable,
+    WritingAnswer,
+    WritingChoice,
+    WritingQuestion,
+    get_ordered_registration_questions,
+)
 from larpmanager.utils.common import check_field
+from larpmanager.utils.edit import _get_values_mapping
 
 
-def writing_download(request, ctx, typ, nm):
-    response, writer = get_writer(ctx, nm)
+def writing_download(ctx, typ, model):
+    response, writer = get_writer(ctx, model)
 
     query = typ.objects.all()
-    # fields = typ._meta.get_fields()
 
     get_event_cache_all(ctx)
 
-    query, res = _download_prepare(ctx, nm, query, typ)
+    query = _download_prepare(ctx, model, query, typ)
+
+    # noinspection PyProtectedMember
+    applicable = QuestionApplicable.get_applicable(model)
+    choices = {}
+    answers = {}
+    questions = []
+    if applicable:
+        el_ids = {el.id for el in query}
+        questions = WritingQuestion.objects.filter(applicable=applicable).order_by("order")
+        que_choice = WritingChoice.objects.filter(question__applicable=applicable, element_id__in=el_ids)
+        for choice in que_choice.select_related("option"):
+            if choice.question_id not in choices:
+                choices[choice.question_id] = {}
+            if choice.element_id not in choices[choice.question_id]:
+                choices[choice.question_id][choice.element_id] = []
+            choices[choice.question_id][choice.element_id].append(choice.option.display)
+
+        que_answer = WritingAnswer.objects.filter(question__applicable=applicable, element_id__in=el_ids)
+        for answer in que_answer:
+            if answer.question_id not in answers:
+                answers[answer.question_id] = {}
+            answers[answer.question_id][answer.element_id] = answer.text
 
     first = True
-    key = []
     for el in query:
-        val = []
-        for k, v in el.show_complete().items():
-            _writing_field(ctx, first, k, key, v, val)
-
-        _download_questions(ctx, el, first, key, res, val)
+        if applicable:
+            val, key = _get_applicable_row(ctx, el, choices, answers, questions, model)
+        else:
+            val, key = _get_standard_row(ctx, el, first)
 
         if first:
             writer.writerow(key)
@@ -54,6 +81,45 @@ def writing_download(request, ctx, typ, nm):
         writer.writerow(val)
 
     return response
+
+
+def _get_applicable_row(ctx, el, choices, answers, questions, model):
+    val = [el.number]
+    key = ["number"]
+
+    # add question values
+    for que in questions:
+        key.append(que.display)
+        mapping = _get_values_mapping(el)
+        value = ""
+        if que.typ in mapping:
+            value = mapping[que.typ]()
+        elif que.typ in {"p", "t", "e"}:
+            if que.id in answers and el.id in answers[que.id]:
+                value = answers[que.id][el.id]
+        elif que.typ in {"s", "m"}:
+            if que.id in choices and el.id in choices[que.id]:
+                value = ", ".join(choices[que.id][el.id])
+        val.append(value)
+
+    if model == "character":
+        if ctx["event"].get_config("user_character_max", 0):
+            key.append(_("Player"))
+            value = ""
+            if el.player:
+                value = el.player.display_member()
+            val.append(value)
+
+    return val, key
+
+
+def _get_standard_row(ctx, el, first):
+    val = []
+    key = []
+    for k, v in el.show_complete().items():
+        _writing_field(ctx, first, k, key, v, val)
+
+    return val, key
 
 
 def _writing_field(ctx, first, k, key, v, val):
@@ -95,36 +161,20 @@ def _writing_field(ctx, first, k, key, v, val):
         key.append(k)
 
 
-def _download_questions(ctx, el, first, key, res, val):
-    # Add character question and answers
-    if not res:
-        return
-
-    for idq, question in ctx["questions"].items():
-        if first:
-            key.append(question["display"])
-
-        v = ""
-        if el.number in res["chars"]:
-            if idq in res["chars"][el.number]["fields"]:
-                v = res["chars"][el.number]["fields"][idq]
-                if not isinstance(v, str):
-                    v = ", ".join([ctx["options"][ido]["display"] for ido in v])
-        val.append(str(v))
-
-
 def _download_prepare(ctx, nm, query, typ):
-    res = None
-    if nm == "character" and "character" in ctx["features"]:
-        res = {"chars": {}}
-        get_event_cache_fields(ctx, res, only_visible=False)
     if check_field(typ, "event"):
         query = query.filter(event=ctx["event"])
+
     elif check_field(typ, "run"):
         query = query.filter(run=ctx["run"])
+
     if check_field(typ, "number"):
         query = query.order_by("number")
-    return query, res
+
+    if nm == "character":
+        query = query.prefetch_related("factions_list")
+
+    return query
 
 
 def get_writer(ctx, nm):

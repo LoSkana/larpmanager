@@ -1247,3 +1247,7 @@ th select {
     width:7em;
     height: 7em;
 }
+
+.inline {
+    display: inline;
+}

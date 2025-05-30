@@ -355,6 +355,8 @@ def orga_registrations(request, s, n):
         ]
     )
 
+    ctx["download"] = 1
+
     return render(request, "larpmanager/orga/registration/registrations.html", ctx)
 
 

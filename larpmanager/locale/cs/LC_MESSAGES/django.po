@@ -3554,9 +3554,6 @@ msgstr "Příjem již potvrzen."
 msgid "Registration not yet open!"
 msgstr "Registrace ještě není otevřena."
 
-msgid "Select one primary faction"
-msgstr "Vyberte jednu primární frakci"
-
 msgid "Short name - international"
 msgstr "Krátký název - v angličtině"
 
@@ -3820,6 +3817,9 @@ msgstr "Obnovení hesla uživatele %(user)s"
 
 msgid "Relationships of your character"
 msgstr "Odkazy vaší postavy"
+
+msgid "Select only one primary faction"
+msgstr "Vyberte pouze jednu primární frakci"
 
 msgid "Set design - staging, materials"
 msgstr "Scénografie - kování, materiály"

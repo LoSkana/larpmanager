@@ -3554,9 +3554,6 @@ msgstr "Kvitteringen er allerede bekreftet."
 msgid "Registration not yet open!"
 msgstr "Registreringen er ennå ikke åpen."
 
-msgid "Select one primary faction"
-msgstr "Velg én primær fraksjon"
-
 msgid "Short name - international"
 msgstr "Kort navn - på engelsk"
 
@@ -3820,6 +3817,9 @@ msgstr "Tilbakestilling av passord for bruker %(user)s"
 
 msgid "Relationships of your character"
 msgstr "Lenker til karakteren din"
+
+msgid "Select only one primary faction"
+msgstr "Velg bare én primær fraksjon"
 
 msgid "Set design - staging, materials"
 msgstr "Scenografi - innredning, materialer"

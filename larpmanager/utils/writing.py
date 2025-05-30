@@ -145,7 +145,7 @@ def writing_example(ctx, typ):
 
 def writing_post(request, ctx, typ, nm):
     if request.POST.get("download") == "1":
-        return writing_download(request, ctx, typ, nm)
+        return writing_download(ctx, typ, nm)
 
     if request.POST.get("example") == "1":
         return writing_example(ctx, typ)

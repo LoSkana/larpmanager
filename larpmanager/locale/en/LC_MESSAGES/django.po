@@ -645,7 +645,7 @@ msgid ""
 "in the future."
 msgstr ""
 
-msgid "Select one primary faction"
+msgid "Select only one primary faction"
 msgstr ""
 
 msgid "This page allows you to add or edit a character."
