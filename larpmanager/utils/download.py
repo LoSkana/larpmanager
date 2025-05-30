@@ -68,9 +68,9 @@ def _export_data(ctx, model, typ, member_cover=False):
             val, key = _get_standard_row(ctx, el)
         vals.append(val)
 
-    order_column = 1
+    order_column = 0
     if member_cover:
-        order_column = 2
+        order_column = 1
     vals = sorted(vals, key=lambda x: x[order_column])
 
     return key, vals
