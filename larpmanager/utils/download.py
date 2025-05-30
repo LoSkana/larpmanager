@@ -179,11 +179,11 @@ def _row_header(ctx, el, key, member_cover, model, val):
         val.append(email)
 
     if model == "registration":
-        val.extend(el.ticket.name)
-        key.extend(_("Ticket"))
+        val.append(el.ticket.name)
+        key.append(_("Ticket"))
     else:
-        val.extend([el.number])
-        key.extend(["number"])
+        val.append(el.number)
+        key.append("number")
 
 
 def _get_standard_row(ctx, el):
@@ -247,7 +247,7 @@ def _download_prepare(ctx, nm, query, typ):
         query = query.prefetch_related("factions_list").select_related("player")
 
     if nm == "registration":
-        query = query.select_related("ticket")
+        query = query.filter(cancellation_date__isnull=True).select_related("ticket")
 
     return query
 
