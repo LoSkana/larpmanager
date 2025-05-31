@@ -95,7 +95,7 @@ def _prepare_export(ctx, model, query):
 
         el_ids = {el.id for el in query}
 
-        questions = question_cls.objects.filter(event=ctx["event"]).order_by("order")
+        questions = question_cls.get_instance_questions(ctx["event"], ctx["features"])
         if model != "registration":
             questions = questions.filter(applicable=applicable)
 
