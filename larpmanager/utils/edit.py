@@ -56,7 +56,8 @@ def save_version(el, tp, mb, dl=False):
 
     if tp in QuestionApplicable.values:
         texts = []
-        for que in WritingQuestion.objects.filter(applicable=tp).order_by("order"):
+        query = el.event.get_elements(WritingQuestion)
+        for que in query.filter(applicable=tp).order_by("order"):
             value = _get_field_value(el, que)
             if not value:
                 continue

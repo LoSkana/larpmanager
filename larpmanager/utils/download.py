@@ -68,6 +68,11 @@ def _export_data(ctx, model, typ, member_cover=False):
             val, key = _get_standard_row(ctx, el)
         vals.append(val)
 
+    order_column = 0
+    if member_cover:
+        order_column = 1
+    vals = sorted(vals, key=lambda x: x[order_column])
+
     return key, vals
 
 
@@ -90,7 +95,7 @@ def _prepare_export(ctx, model, query):
 
         el_ids = {el.id for el in query}
 
-        questions = question_cls.objects.filter(event=ctx["event"]).order_by("order")
+        questions = question_cls.get_instance_questions(ctx["event"], ctx["features"])
         if model != "registration":
             questions = questions.filter(applicable=applicable)
 
@@ -164,7 +169,7 @@ def _row_header(ctx, el, key, member_cover, model, val):
         key.append(_("Player"))
         display = ""
         if member:
-            display = member.display_member()
+            display = member.display_real()
         val.append(display)
 
         key.append(_("Email"))
@@ -174,11 +179,11 @@ def _row_header(ctx, el, key, member_cover, model, val):
         val.append(email)
 
     if model == "registration":
-        val.extend(el.ticket.name)
-        key.extend(_("Ticket"))
+        val.append(el.ticket.name)
+        key.append(_("Ticket"))
     else:
-        val.extend([el.number])
-        key.extend(["number"])
+        val.append(el.number)
+        key.append("number")
 
 
 def _get_standard_row(ctx, el):
@@ -242,7 +247,7 @@ def _download_prepare(ctx, nm, query, typ):
         query = query.prefetch_related("factions_list").select_related("player")
 
     if nm == "registration":
-        query = query.select_related("ticket")
+        query = query.filter(cancellation_date__isnull=True).select_related("ticket")
 
     return query
 

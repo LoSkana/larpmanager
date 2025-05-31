@@ -70,6 +70,9 @@ def orga_safety(request, s, n):
             if el.member_id in member_chars:
                 el.member.chars = member_chars[el.member_id]
             ctx["list"].append(el.member)
+
+    ctx["list"] = sorted(ctx["list"], key=lambda x: x.display_member())
+
     return render(request, "larpmanager/orga/users/safety.html", ctx)
 
 
@@ -95,6 +98,9 @@ def orga_diet(request, s, n):
             if el.member_id in member_chars:
                 el.member.chars = member_chars[el.member_id]
             ctx["list"].append(el.member)
+
+    ctx["list"] = sorted(ctx["list"], key=lambda x: x.display_member())
+
     return render(request, "larpmanager/orga/users/diet.html", ctx)
 
 
@@ -306,6 +312,8 @@ def orga_sensitive(request, s, n):
             continue
         # noinspection PyUnresolvedReferences, PyProtectedMember
         ctx["fields"][field_name] = member_cls._meta.get_field(field_name).verbose_name
+
+    ctx["list"] = sorted(ctx["list"], key=lambda x: x.display_member())
 
     return render(request, "larpmanager/orga/users/sensitive.html", ctx)
 

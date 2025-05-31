@@ -166,8 +166,7 @@ def exe_membership_evaluation(request, num):
             if normalize_string(other[0]) == normalized_surname:
                 ctx["member_exists"] = True
 
-    assoc = Association.objects.get(pk=ctx["a_id"])
-    if assoc.get_config("membership_cf", False):
+    if "fiscal_code_check" in ctx["features"]:
         ctx.update(calculate_fiscal_code(member))
 
     return render(request, "larpmanager/exe/users/membership_evaluation.html", ctx)
@@ -182,7 +181,7 @@ def exe_membership_request(request, num):
 
 @login_required
 def exe_membership_check(request):
-    ctx = check_assoc_permission(request, "exe_membership")
+    ctx = check_assoc_permission(request, "exe_membership_check")
 
     member_ids = set(
         Membership.objects.filter(assoc_id=ctx["a_id"])
@@ -191,8 +190,7 @@ def exe_membership_check(request):
         .values_list("member_id", flat=True)
     )
 
-    assoc = Association.objects.get(pk=ctx["a_id"])
-    if assoc.get_config("membership_cf", False):
+    if "fiscal_code_check" in ctx["features"]:
         ctx["cf"] = []
         for mb in Member.objects.filter(pk__in=member_ids):
             check = calculate_fiscal_code(mb)
@@ -245,8 +243,7 @@ def exe_member(request, num):
     if member.membership.request:
         ctx["req_path"] = member.membership.get_request_filepath().lower()
 
-    assoc = Association.objects.get(pk=ctx["a_id"])
-    if assoc.get_config("membership_cf", False):
+    if "fiscal_code_check" in ctx["features"]:
         ctx.update(calculate_fiscal_code(ctx["member"]))
 
     return render(request, "larpmanager/exe/users/member.html", ctx)

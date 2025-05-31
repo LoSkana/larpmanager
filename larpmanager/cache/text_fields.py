@@ -79,8 +79,9 @@ def _init_element_cache_text_field(el, res, typ):
         res[el.id][f] = get_single_cache_text_field(el.id, f, v)
 
     # noinspection PyProtectedMember
-    que = WritingQuestion.objects.filter(applicable=QuestionApplicable.get_applicable(typ._meta.model_name))
-    for que_id in que.filter(event=el.event, typ=QuestionType.EDITOR).values_list("pk", flat=True):
+    applicable = QuestionApplicable.get_applicable(typ._meta.model_name)
+    que = el.event.get_elements(WritingQuestion).filter(applicable=applicable)
+    for que_id in que.filter(typ=QuestionType.EDITOR).values_list("pk", flat=True):
         try:
             v = WritingAnswer.objects.get(question_id=que_id, element_id=el.id).text
             field = str(que_id)

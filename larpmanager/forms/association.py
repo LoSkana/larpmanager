@@ -411,10 +411,6 @@ class ExeConfigForm(ConfigForm):
             )
             self.add_configs("membership_grazing", ConfigType.INT, section, label, help_text)
 
-            label = _("Tax code check")
-            help_text = _("Apply a check on the tax code of players")
-            self.add_configs("membership_cf", ConfigType.BOOL, section, label, help_text)
-
         if "vote" in self.params["features"]:
             section = _("Voting")
 

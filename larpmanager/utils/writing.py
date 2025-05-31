@@ -242,7 +242,7 @@ def writing_list_text_fields(ctx, text_fields, typ):
     ctx["writing_typ"] = QuestionApplicable.get_applicable(ctx["label_typ"])
 
     # add editor type questions
-    que = WritingQuestion.objects.filter(applicable=ctx["writing_typ"])
+    que = ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"])
     for que_id in que.filter(typ=QuestionType.EDITOR).values_list("pk", flat=True):
         text_fields.append(str(que_id))
 

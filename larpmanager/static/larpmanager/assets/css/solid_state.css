@@ -1502,6 +1502,7 @@ input[type="submit"], input[type="reset"], input[type="button"], button, .button
 
 .member_cover {
     width: 10em;
+    min-width: 10em;
 }
 
 .go_table {

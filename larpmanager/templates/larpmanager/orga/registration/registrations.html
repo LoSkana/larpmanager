@@ -42,16 +42,6 @@
             <a href="#" id="load_accounting">{% trans "accounting" %}</a>
             <a href="#" class="my_toggle hide" tog='acc'>hidden</a>
             <a href="#" class="my_toggle" tog='email'>{% trans "email" %}</a>
-            {% if 'phone_contact' in request.assoc.members_fields %}
-                <a href="#" class="my_toggle" tog='cell'>{% trans "cell" %}</a>
-            {% endif %}
-            {% if 'birth_date' in request.assoc.members_fields %}
-                <a href="#" class="my_toggle" tog='age'>{% trans "age" %}</a>
-            {% endif %}
-            {% if features.info %}
-                <a href="#" class="my_toggle" tog='info'>{% trans "info" %}</a>
-            {% endif %}
-            <a href="#" class="my_toggle" tog='date'>{% trans "chronology" %}</a>
             {% if features.unique_code %}
                 <a href="#" class="my_toggle" tog='special_cod'>{% trans "unique code" %}</a>
             {% endif %}
@@ -76,6 +66,7 @@
             {% if features.discount %}
                 <a href="#" class="my_toggle" tog='disc'>{% trans "Discounts" %}</a>
             {% endif %}
+            <a href="#" class="my_toggle" tog='date'>{% trans "chronology" %}</a>
         </div>
     </div>
     {% if reg_questions %}
@@ -109,13 +100,10 @@
                 <tr>
                     <th></th>
                     <th>{% trans "Member" %}</th>
-                    {% if 'birth_date' in request.assoc.members_fields %}
+                    {% if registration_reg_que_age %}
                         <th class="hide age">{% trans "Age (during the event)" %}</th>
                     {% endif %}
                     <th class="hide email">{% trans "Email" %}</th>
-                    {% if 'phone_contact' in request.assoc.members_fields %}
-                        <th class="hide cell">{% trans "Cell" %}</th>
-                    {% endif %}
                     {% if features.gift %}
                         <th class="hide gift">{% trans "Gift" %}</th>
                     {% endif %}
@@ -168,9 +156,6 @@
                     {% if features.unique_code %}
                         <th class="hide special_cod">{% trans "Code" %}</th>
                     {% endif %}
-                    {% if features.info %}
-                        <th class="hide info">{% trans "Info" %}</th>
-                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -180,15 +165,11 @@
                             <a href="{% url 'orga_registrations_edit' run.event.slug run.number reg.id %}"><i class="fas fa-edit"></i></a>
                         </td>
                         <td>
-                            <a href="{% url 'public' reg.member.id %}">{{ reg.member | title }}</a>
+                            {{ reg.member | title }}
+                            <a href="#" class="post_popup_member" pop="{{ reg.member.id }}"><i class="fas fa-eye"></i></a>
                         </td>
-                        {% if 'birth_date' in request.assoc.members_fields %}<td class="hide age">{{ reg.age }}</td>{% endif %}
+                        {% if registration_reg_que_age %}<td class="hide age">{{ reg.age }}</td>{% endif %}
                         <td class="hide email">{{ reg.member.email }}</td>
-                        {% if 'phone_contact' in request.assoc.members_fields %}
-                            <td class="hide cell">
-                                {% if reg.member.phone_contact %}{{ reg.member.phone_contact }}{% endif %}
-                            </td>
-                        {% endif %}
                         {% if features.gift %}
                             <td class="hide gift">
                                 {% if reg.redeem_code %}<i class="fa-solid fa-gift"></i>{% endif %}
@@ -338,19 +319,6 @@
                                 {% if reg.special_cod %}
                                     <span class="has_show_tooltip special_code">{{ reg.special_cod }}</span>
                                     <span class="hide show_tooltip">{% trans "Unique registration code, used for payment checks" %}</span>
-                                {% endif %}
-                            </td>
-                        {% endif %}
-                        {% if features.info %}
-                            <td class="hide info">
-                                {% if reg.info %}
-                                    {{ reg.info | safe | clean_tags | truncatechars:80 }}
-                                    {% if reg.info_ln > 80 %}
-                                        <a href="#" class="show_popup" pop="{{ reg.id }}" fie="infor"><i class="fas fa-eye"></i></a>
-                                        <span class="popup_text infor">
-                                            <h2>{% trans "Info" %}</h2>
-                                        {{ reg.info | safe }} </span>
-                                    {% endif %}
                                 {% endif %}
                             </td>
                         {% endif %}
@@ -627,6 +595,30 @@ window.addEventListener('DOMContentLoaded', function() {
             load_accounting($(this));
             return false;
         });
+
+        $(document).on('click', '.post_popup_member', function (e) {
+
+                start_spinner();
+
+                request = $.ajax({
+                    url: "{% url 'orga_registration_member' run.event.slug run.number %}",
+                    method: "POST",
+                    data: { mid: $(this).attr("pop") },
+                    datatype: "json",
+                });
+
+                request.done(function(res) {
+                    if (res.k == 0) return;
+                    stop_spinner();
+
+                    uglipop({class:'popup', source:'html', content: res.v});
+
+                    $('.popup').scrollTop( 0 );
+                    $(".popup .hide").hide();
+                });
+
+                return false;
+            });
 
     });
 });
