@@ -15,20 +15,20 @@
               method="post"
               id="avatar_form">
             {% csrf_token %}
-            <div style="text-align: center">
+            <div class="centerized">
                 <h4>{% trans "Character profile" %}:</h4>
-                <div class="helptext" style="max-width:700px; margin: auto">
+                <div class="helptext char_profile">
                     {% trans "Upload a photo of yourself associated with your character specifically for this event!" %}
                 </div>
                 <br />
                 <br />
                 <input type="button"
-                       id='change_photo'
-                       value='{% trans "Change photo" %}'
+                       id="change_photo"
+                       value="{% trans "Change photo" %}"
                        class="my_toggle"
                        tog="change-field">
-                <input type="button" id='rotate_l_btn' value='{% trans "Rotate left" %}' \>
-                <input type="button" id='rotate_r_btn' value='{% trans "Rotate right" %}' \>
+                <input type="button" id="rotate_l_btn" value="{% trans "Rotate left" %}" \>
+                <input type="button" id="rotate_r_btn" value="{% trans "Rotate right" %}" \>
                 <br />
                 <br />
                 <div class="hide change-field">
@@ -37,7 +37,8 @@
                     <br />
                 </div>
                 <img id="profile"
-                     {% if custom_profile %}src={{ custom_profile }}{% endif %} />
+                     {% if custom_profile %}src={{ custom_profile }}{% endif %}
+                     alt="custom character profile" />
             </div>
         </form>
         <hr />
@@ -51,6 +52,8 @@
 
     var unavail = {{ form.unavail }};
 
+    var hide_unavailable = {{ hide_unavailable | yesno:"true,false" }};
+
     var diss = '-------';
     var submitted = {{ submitted | safe }};
     var mandatory = {{ form.mandatory | safe }};
@@ -63,9 +66,19 @@
                 if ( $( "#" + el ).length ) mandatory.unshift(el);
             }
 
-            unavail.forEach(value => {
-                $('option[value="' + value + '"]').prop("disabled", true);
-                $('input[type="checkbox"][value="' + value + '"]').prop("disabled", true);
+            Object.entries(unavail).forEach(([question, values]) => {
+                values.forEach(value => {
+                    const selectorPrefix = '#id_q' + question + '_tr ';
+                    if (hide_unavailable) {
+                        $(selectorPrefix + 'option[value="' + value + '"]').remove();
+                        $(selectorPrefix + 'input[type="checkbox"][value="' + value + '"]').closest('label').remove();
+                    } else {
+                        $(selectorPrefix + 'option[value="' + value + '"]').prop("disabled", true);
+                        $(selectorPrefix + 'input[type="checkbox"][value="' + value + '"]')
+                            .prop("disabled", true)
+                            .addClass("unavail");
+                    }
+                });
             });
 
             $('select').each(function(index, value) {

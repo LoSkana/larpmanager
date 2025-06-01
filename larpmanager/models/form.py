@@ -208,7 +208,7 @@ class WritingQuestion(BaseModel):
 
     @staticmethod
     def get_instance_questions(event, features):
-        return WritingQuestion.objects.filter(event=event).order_by("order")
+        return event.get_elements(WritingQuestion).order_by("order")
 
     @staticmethod
     def skip(instance, features, params, orga):

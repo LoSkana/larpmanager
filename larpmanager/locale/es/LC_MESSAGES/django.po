@@ -68,9 +68,6 @@ msgstr "IVA"
 msgid "Who"
 msgstr "Quién"
 
-msgid "age"
-msgstr "edad"
-
 msgid "for"
 msgstr "para"
 
@@ -82,9 +79,6 @@ msgstr "Cuerpo"
 
 msgid "Card"
 msgstr "Tarjeta"
-
-msgid "Cell"
-msgstr "Celda"
 
 msgid "Chat"
 msgstr "Chat"
@@ -248,9 +242,6 @@ msgstr "Qué"
 msgid "When"
 msgstr "En"
 
-msgid "cell"
-msgstr "celda"
-
 msgid "days"
 msgstr "días"
 
@@ -259,9 +250,6 @@ msgstr "regalo"
 
 msgid "hide"
 msgstr "ocultar"
-
-msgid "info"
-msgstr "información"
 
 msgid "past"
 msgstr "pasado"
@@ -2609,6 +2597,9 @@ msgstr "Selección de facciones"
 msgid "Feature activated"
 msgstr "Función activada"
 
+msgid "Fiscal code check"
+msgstr "Comprobación del código fiscal"
+
 msgid "Fixed instalments"
 msgstr "Plazos fijos"
 
@@ -4195,6 +4186,9 @@ msgstr "Asigna los personajes seleccionados a los jugadores."
 msgid "Briefly describe what the box contains"
 msgstr "Describe brevemente el contenido de la caja"
 
+msgid "Check the validity of the fiscal code."
+msgstr "Compruebe la validez del código fiscal."
+
 msgid "Complete name of the LARP Organization"
 msgstr "Nombre completo de la organización"
 
@@ -4268,9 +4262,6 @@ msgstr "El número de plazos para dividir la cuota."
 
 msgid "You are logged in with an email address"
 msgstr "Ha iniciado sesión con una dirección de correo electrónico"
-
-msgid "Apply a check on the tax code of players"
-msgstr "Verificar el identificador fiscal de los jugadores"
 
 msgid "Characters are not visible at the moment"
 msgstr "Los personajes no son visibles por el momento"

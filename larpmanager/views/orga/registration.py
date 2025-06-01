@@ -29,6 +29,7 @@ from django.db.models.functions import Substr
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.http import require_POST
 from slugify import slugify
 
 from larpmanager.accounting.registration import (
@@ -68,7 +69,7 @@ from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
 )
-from larpmanager.models.member import Membership, get_user_membership
+from larpmanager.models.member import Member, Membership, get_user_membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -85,6 +86,7 @@ from larpmanager.utils.download import download
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.registration import is_reg_provisional
 from larpmanager.utils.upload import upload_elements
+from larpmanager.views.orga.member import member_field_correct
 
 
 def check_time(times, step, start=None):
@@ -198,8 +200,9 @@ def _orga_registrations_standard(r, ctx, cache):
         orga_registrations_membership(r, ctx)
 
     # age at run
-    if r.member.birth_date and ctx["run"].start:
-        r.age = calculate_age(r.member.birth_date, ctx["run"].start)
+    if ctx["registration_reg_que_age"]:
+        if r.member.birth_date and ctx["run"].start:
+            r.age = calculate_age(r.member.birth_date, ctx["run"].start)
 
 
 def orga_registrations_custom(r, ctx, char):
@@ -318,6 +321,8 @@ def orga_registrations(request, s, n):
     _orga_registrations_discount(ctx)
 
     _orga_registrations_custom_character(ctx)
+
+    ctx["registration_reg_que_age"] = ctx["event"].get_config("registration_reg_que_age", False)
 
     ctx["reg_all"] = {}
 
@@ -818,3 +823,61 @@ def orga_lottery(request, s, n):
 
 def calculate_age(born, today):
     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+
+@require_POST
+def orga_registration_member(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_registrations")
+    member_id = request.POST.get("mid")
+
+    # check it's a member
+    try:
+        member = Member.objects.get(pk=member_id)
+    except ObjectDoesNotExist:
+        return JsonResponse({"k": 0})
+
+    # check they have a registration it this event
+    try:
+        Registration.objects.get(member=member, run=ctx["run"])
+    except ObjectDoesNotExist:
+        return JsonResponse({"k": 0})
+
+    text = f"<h2>{member.display_real()}</h2>"
+
+    if member.profile:
+        text += f"<img src='{member.profile_thumb.url}' style='width: 15em; margin: 1em; border-radius: 5%;' />"
+
+    # check if the user can see sensitive data
+    exclude = ["profile", "newsletter", "language", "presentation"]
+    if not has_event_permission(ctx, request, s, "orga_sensitive"):
+        exclude.extend(
+            [
+                "diet",
+                "safety",
+                "legal_name",
+                "birth_date",
+                "birth_place",
+                "fiscal_code",
+                "document_type",
+                "document",
+                "document_issued",
+                "document_expiration",
+                "accessibility",
+                "residence_address",
+            ]
+        )
+
+    member_cls: type[Member] = Member
+    member_fields = sorted(request.assoc["members_fields"])
+    member_field_correct(member, member_fields)
+    for field_name in member_fields:
+        if field_name in exclude:
+            continue
+        # noinspection PyUnresolvedReferences, PyProtectedMember
+        field_label = member_cls._meta.get_field(field_name).verbose_name
+        value = getattr(member, field_name)
+        if not value:
+            continue
+        text += f"<p><b>{field_label}</b>: {value}</p>"
+
+    return JsonResponse({"k": 1, "v": text})

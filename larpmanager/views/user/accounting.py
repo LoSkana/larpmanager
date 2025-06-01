@@ -189,8 +189,7 @@ def acc_pay(request, s, n, method=None):
     else:
         reg = ctx["run"].reg
 
-    assoc = Association.objects.get(pk=ctx["a_id"])
-    if assoc.get_config("membership_cf", False):
+    if "fiscal_code_check" in ctx["features"]:
         result = calculate_fiscal_code(ctx["member"])
         if "error_cf" in result:
             messages.warning(

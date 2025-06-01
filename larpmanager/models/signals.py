@@ -295,6 +295,10 @@ def save_event_character_form(features, instance):
     if "character" not in features:
         return
 
+    # if has parent, use those
+    if instance.parent:
+        return
+
     # get most common language between organizers
     langs = {}
     for orga in get_event_organizers(instance):
@@ -325,7 +329,8 @@ def _init_plot_form_questions(def_tps, instance, features):
     if "plot" not in features:
         return
 
-    que = WritingQuestion.objects.filter(event=instance, applicable=QuestionApplicable.PLOT)
+    que = instance.get_elements(WritingQuestion)
+    que = que.filter(applicable=QuestionApplicable.PLOT)
     types = set(que.values_list("typ", flat=True).distinct())
 
     def_tps[QuestionType.TEASER] = ("Concept", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000)
@@ -345,7 +350,7 @@ def _init_plot_form_questions(def_tps, instance, features):
 
 
 def _init_character_form_questions(custom_tps, def_tps, features, instance):
-    que = WritingQuestion.objects.filter(event=instance, applicable=QuestionApplicable.CHARACTER)
+    que = instance.get_elements(WritingQuestion).filter(applicable=QuestionApplicable.CHARACTER)
     types = set(que.values_list("typ", flat=True).distinct())
 
     # evaluate each question type field

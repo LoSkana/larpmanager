@@ -182,6 +182,8 @@ def character_form(request, ctx, s, n, instance, form_class):
     ctx["form"] = form
     init_form_submitted(ctx, form, request)
 
+    ctx["hide_unavailable"] = ctx["event"].get_config("character_form_hide_unavailable", False)
+
     return render(request, "larpmanager/event/character/edit.html", ctx)
 
 

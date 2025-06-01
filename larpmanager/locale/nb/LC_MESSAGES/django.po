@@ -68,9 +68,6 @@ msgstr "MVA"
 msgid "Who"
 msgstr "Hvem"
 
-msgid "age"
-msgstr "alder"
-
 msgid "for"
 msgstr "for"
 
@@ -82,9 +79,6 @@ msgstr "Kropp"
 
 msgid "Card"
 msgstr "Kort"
-
-msgid "Cell"
-msgstr "Celle"
 
 msgid "Chat"
 msgstr "Chat"
@@ -248,9 +242,6 @@ msgstr "Hva er det?"
 msgid "When"
 msgstr "Når"
 
-msgid "cell"
-msgstr "celle"
-
 msgid "days"
 msgstr "dager"
 
@@ -259,9 +250,6 @@ msgstr "gave"
 
 msgid "hide"
 msgstr "skjul"
-
-msgid "info"
-msgstr "info"
 
 msgid "past"
 msgstr "fortid"
@@ -2609,6 +2597,9 @@ msgstr "Valg av fraksjon"
 msgid "Feature activated"
 msgstr "Funksjon aktivert"
 
+msgid "Fiscal code check"
+msgstr "Kontroll av skattekode"
+
 msgid "Fixed instalments"
 msgstr "Faste avdrag"
 
@@ -4195,6 +4186,9 @@ msgstr "Tildel utvalgte figurer til spillerne."
 msgid "Briefly describe what the box contains"
 msgstr "Beskriv kort hva esken inneholder"
 
+msgid "Check the validity of the fiscal code."
+msgstr "Kontroller gyldigheten av skattekoden."
+
 msgid "Complete name of the LARP Organization"
 msgstr "Foreningens fulle navn"
 
@@ -4269,9 +4263,6 @@ msgstr "Antall avdrag som skal betales."
 
 msgid "You are logged in with an email address"
 msgstr "Du er logget inn med en e-postadresse"
-
-msgid "Apply a check on the tax code of players"
-msgstr "Bruk en sjekk på skattekoden til spillerne"
 
 msgid "Characters are not visible at the moment"
 msgstr "Tegnene er ikke synlige for øyeblikket"
