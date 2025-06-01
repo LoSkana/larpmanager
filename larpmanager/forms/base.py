@@ -384,6 +384,9 @@ class BaseRegistrationForm(MyFormRun):
             self.fields[key].required = required
             if key in ["name", "teaser", "text"]:
                 self.fields[key].validators = [max_length_validator(question.max_length)] if question.max_length else []
+
+        self.fields[key].key = key
+
         return key
 
     def init_editor(self, key, question, required):
