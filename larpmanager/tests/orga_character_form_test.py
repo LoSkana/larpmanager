@@ -251,11 +251,11 @@ def create_first_char(live_server, page):
 
 def fill_presentation_text(page):
     page.get_by_role("row", name="Presentation (*) Show").get_by_role("link").click()
-    time.sleep(2)
+    time.sleep(5)
     frame = page.get_by_role("row", name="Presentation (*) Show").locator('iframe[title="Rich Text Area"]')
     fill_tinymce(frame, "baba")
     page.get_by_role("row", name="Text (*) Show").get_by_role("link").click()
-    time.sleep(2)
+    time.sleep(5)
     frame = page.get_by_role("row", name="Text (*) Show").locator('iframe[title="Rich Text Area"]')
     fill_tinymce(frame, "bebe")
 

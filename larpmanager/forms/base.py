@@ -75,7 +75,7 @@ class MyForm(forms.ModelForm):
         self.answers = {}
         self.singles = {}
         self.multiples = {}
-        self.unavail = []
+        self.unavail = {}
         self.max_lengths = {}
 
     def get_automatic_field(self):
@@ -253,7 +253,9 @@ class BaseRegistrationForm(MyFormRun):
             if key in reg_count:
                 avail -= reg_count[key]
             if avail <= 0:
-                self.unavail.append(option.id)
+                if option.question_id not in self.unavail:
+                    self.unavail[option.question_id] = []
+                self.unavail[option.question_id].append(option.id)
             else:
                 name += " - (" + _("Available") + f" {avail})"
 
@@ -276,12 +278,12 @@ class BaseRegistrationForm(MyFormRun):
                     for sel in form_data[k]:
                         if not sel:
                             continue
-                        if int(sel) in self.unavail:
+                        if q.id in self.unavail and int(sel) in self.unavail[q.id]:
                             self.add_error(k, _("Option no longer available"))
                 elif q.typ == QuestionType.SINGLE:
                     if not form_data[k]:
                         continue
-                    if int(form_data[k]) in self.unavail:
+                    if q.id in self.unavail and int(form_data[k]) in self.unavail[q.id]:
                         self.add_error(k, _("Option no longer available"))
 
         return form_data

@@ -1256,3 +1256,8 @@ th select {
 .inline {
     display: inline;
 }
+
+.char_profile {
+    max-width:700px;
+    margin: auto;
+}
