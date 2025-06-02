@@ -68,6 +68,9 @@ msgstr "MOMS"
 msgid "Who"
 msgstr "Vem"
 
+msgid "age"
+msgstr "ålder"
+
 msgid "for"
 msgstr "för"
 

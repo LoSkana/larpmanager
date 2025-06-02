@@ -68,6 +68,9 @@ msgstr "IVA"
 msgid "Who"
 msgstr "Quién"
 
+msgid "age"
+msgstr "edad"
+
 msgid "for"
 msgstr "para"
 

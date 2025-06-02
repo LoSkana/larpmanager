@@ -45,6 +45,9 @@
             {% if features.unique_code %}
                 <a href="#" class="my_toggle" tog='special_cod'>{% trans "unique code" %}</a>
             {% endif %}
+            {% if registration_reg_que_age %}
+                <a href="#" class="my_toggle" tog='age'>{% trans "age" %}</a>
+            {% endif %}
             {% if features.additional_tickets %}
                 <a href="#" class="my_toggle" tog='additionals'>{% trans "additional" %}</a>
             {% endif %}
