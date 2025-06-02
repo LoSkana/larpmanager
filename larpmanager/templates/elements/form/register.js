@@ -241,8 +241,6 @@ function slugify(text) {
 
 function check_mandatory() {
 
-    console.log(mandatory);
-
     for (var ix = 0; ix < mandatory.length; ix++) {
         var k = mandatory[ix];
         var el = $('#' + k);
