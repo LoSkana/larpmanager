@@ -3431,6 +3431,9 @@ msgstr ""
 msgid "Missing casting preferences"
 msgstr ""
 
+msgid "Select a character to add a new relationship"
+msgstr ""
+
 msgid "Direct"
 msgstr ""
 
@@ -7630,6 +7633,9 @@ msgid "Receipt already confirmed."
 msgstr ""
 
 msgid "Results not present"
+msgstr ""
+
+msgid "new_rel_select"
 msgstr ""
 
 msgid ""

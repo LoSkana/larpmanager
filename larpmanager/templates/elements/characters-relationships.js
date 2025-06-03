@@ -6,7 +6,11 @@
 
 const tinymceConfig = JSON.parse(document.getElementById('tinymce-config').textContent);
 
+const editUrl = "{% url 'orga_characters_edit' run.event.slug run.number 0 %}";
+
 window.addEventListener('DOMContentLoaded', function() {
+
+    var already = [];
 
     function addTinyMCETextarea(sel) {
         let config = Object.assign({}, tinymceConfig);
@@ -19,14 +23,77 @@ window.addEventListener('DOMContentLoaded', function() {
         tinymce.init(config);
     }
 
+    function add_relationship(ch_id, ch_name) {
+        console.log("add_relationship");
+        console.log(ch_id);
+        console.log(ch_name);
+
+        charUrl = editUrl;
+
+        var html = `
+        <h3>
+            <a href="URL_DA_SOSTITUIRE">{1}</a>
+        </h3>
+        <table class="no_csv">
+            <tr>
+                <th>{% trans "Direct" %}</th>
+                <td>
+                    <p>
+                        <a href="#" class="my_toggle" tog="f_{0}_direct">{% trans "Show" %}</a>
+                    </p>
+                    <div class="hide hide_later f_{0}_direct">
+                        <textarea name="rel_{0}_direct"></textarea>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>{% trans "Inverse" %}</th>
+                <td>
+                    <p>
+                        <a href="#" class="my_toggle" tog="f_{0}_inverse">{% trans "Show" %}</a>
+                    </p>
+                    <div class="hide hide_later f_{0}_inverse">
+                        <textarea name="rel_{0}_inverse"></textarea>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        `.format(ch_id, ch_name, charUrl);
+
+        $('#form_relationships').prepend(html);
+
+        addTinyMCETextarea('.f_{0}_direct textarea'.format(ch_id));
+        addTinyMCETextarea('.f_{0}_inverse textarea'.format(ch_id));
+        already.push(ch_id);
+    }
+
     $(function() {
         {% for key, item in relationships.items %}
             addTinyMCETextarea('.f_{{ key }}_direct textarea');
             addTinyMCETextarea('.f_{{ key }}_inverse textarea');
+            already.push('{{ key }}');
         {% endfor %}
 
         document.getElementById('main_form').addEventListener('submit', function(e) {
             tinymce.triggerSave();
+        });
+
+        // add new
+        $('#new_rel_select').on('select2:select select2:unselect change', function(e) {
+            var value = $(this).val();
+            if (value == null || value == '') return;
+
+            if (value == {{ eid }}) {
+                alert('You have selected the character you are editing');
+            }
+            else if (already.includes(value)) {
+                alert('Relationship with this character already exists');
+            } else {
+                var name = $(this).find('option:selected').text();
+                add_relationship(value, name);
+            }
+
+            $(this).val(null).trigger('change');
         });
     });
 

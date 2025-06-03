@@ -2237,6 +2237,9 @@ msgstr "Din karakter"
 msgid "customisations"
 msgstr "tilpasninger"
 
+msgid "new_rel_select"
+msgstr "new_rel_select"
+
 msgid "refund request"
 msgstr "anmodning om refusjon"
 
@@ -4477,6 +4480,9 @@ msgstr "Hvis avkrysset: viser nettstedet for hvert arrangement"
 
 msgid "Remember to put the prefix at the beginning!"
 msgstr "Husk å sette prefikset i begynnelsen!"
+
+msgid "Select a character to add a new relationship"
+msgstr "Velg et tegn for å legge til en ny relasjon"
 
 #, python-format
 msgid "The sum was disbursed to you as %(credits)s."

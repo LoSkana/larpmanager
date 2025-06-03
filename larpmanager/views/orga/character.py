@@ -17,7 +17,6 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from django import forms
 from django.conf import settings as conf_settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
@@ -111,9 +110,9 @@ def _characters_relationships(ctx):
 
         ctx["relationships"] = dict(sorted_rels)
         ctx["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
-        widget = EventCharacterS2Widget()
+        widget = EventCharacterS2Widget(attrs={"id": "new_rel_select"})
         widget.set_event(ctx["event"])
-        ctx["new_rel"] = forms.ChoiceField(widget=widget)
+        ctx["new_rel"] = widget.render(name=_("new_rel_select"), value="")
 
 
 def update_relationship(request, ctx, nm, fl):

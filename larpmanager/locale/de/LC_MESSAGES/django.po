@@ -2237,6 +2237,9 @@ msgstr "Dein Charakter"
 msgid "customisations"
 msgstr "Anpassungen"
 
+msgid "new_rel_select"
+msgstr "neu_rel_select"
+
 msgid "refund request"
 msgstr "Antrag auf Erstattung"
 
@@ -4484,6 +4487,9 @@ msgstr "Wenn angekreuzt: zeigt die Website für jedes Ereignis"
 
 msgid "Remember to put the prefix at the beginning!"
 msgstr "Denken Sie daran, das Präfix an den Anfang zu stellen!"
+
+msgid "Select a character to add a new relationship"
+msgstr "Wählen Sie ein Zeichen, um eine neue Beziehung hinzuzufügen"
 
 #, python-format
 msgid "The sum was disbursed to you as %(credits)s."

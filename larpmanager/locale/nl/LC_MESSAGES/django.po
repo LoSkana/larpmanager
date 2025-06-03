@@ -2237,6 +2237,9 @@ msgstr "Je personage"
 msgid "customisations"
 msgstr "aanpassingen"
 
+msgid "new_rel_select"
+msgstr "nieuwe_rel_select"
+
 msgid "refund request"
 msgstr "verzoek om terugbetaling"
 
@@ -4479,6 +4482,9 @@ msgstr "Indien aangevinkt: toont de website voor elk evenement"
 
 msgid "Remember to put the prefix at the beginning!"
 msgstr "Vergeet niet het voorvoegsel aan het begin te zetten!"
+
+msgid "Select a character to add a new relationship"
+msgstr "Selecteer een personage om een nieuwe relatie toe te voegen"
 
 #, python-format
 msgid "The sum was disbursed to you as %(credits)s."

@@ -2237,6 +2237,9 @@ msgstr "Vaše postava"
 msgid "customisations"
 msgstr "přizpůsobení"
 
+msgid "new_rel_select"
+msgstr "new_rel_select"
+
 msgid "refund request"
 msgstr "žádost o proplacení"
 
@@ -4475,6 +4478,9 @@ msgstr "Pokud je zaškrtnuto: zobrazí webové stránky pro každou událost"
 
 msgid "Remember to put the prefix at the beginning!"
 msgstr "Nezapomeňte uvést předponu na začátku!"
+
+msgid "Select a character to add a new relationship"
+msgstr "Výběrem postavy přidáte nový vztah"
 
 #, python-format
 msgid "The sum was disbursed to you as %(credits)s."

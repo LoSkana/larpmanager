@@ -2237,6 +2237,9 @@ msgstr "Din karaktär"
 msgid "customisations"
 msgstr "Anpassningar"
 
+msgid "new_rel_select"
+msgstr "nytt_rel_urval"
+
 msgid "refund request"
 msgstr "begäran om återbetalning"
 
@@ -4477,6 +4480,9 @@ msgstr "Om markerat: visar webbplatsen för varje evenemang"
 
 msgid "Remember to put the prefix at the beginning!"
 msgstr "Kom ihåg att sätta prefixet i början!"
+
+msgid "Select a character to add a new relationship"
+msgstr "Välj en karaktär för att lägga till en ny relation"
 
 #, python-format
 msgid "The sum was disbursed to you as %(credits)s."
