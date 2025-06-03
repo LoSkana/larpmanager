@@ -64,17 +64,9 @@ class Writing(BaseConceptModel):
         help_text=_("Text visible only by the assigned player, when 'show text' is checked"),
     )
 
-    preview = HTMLField(
-        max_length=100000,
-        blank=True,
-        help_text=_("Preview visible only by the assigned player, when 'show preview' is checked"),
-    )
-
     temp = models.BooleanField(default=False)
 
     hide = models.BooleanField(default=False)
-
-    props = models.CharField(max_length=500, blank=True, help_text=_("Does it require special props?"))
 
     class Meta:
         abstract = True
@@ -94,7 +86,6 @@ class Writing(BaseConceptModel):
     def show_complete(self):
         js = self.show()
         self.upd_js_attr(js, "text")
-        self.upd_js_attr(js, "preview")
         return js
 
     @classmethod
@@ -113,7 +104,6 @@ class Writing(BaseConceptModel):
             # ('assigned', 'email of the staff members to which to assign this element'),
             ("title", "short text, the title of the element"),
             ("mirror", "number, the number of the element mirroring"),
-            ("props", "short text, the props of the element"),
             ("cover", "url of the element cover"),
             ("hide", "single character, t (true), f (false)"),
         ]:
@@ -307,9 +297,19 @@ class CharacterConfig(BaseModel):
         return f"{self.character} {self.name}"
 
     class Meta:
-        unique_together = ("character", "name")
         indexes = [
             models.Index(fields=["character", "name"]),
+        ]
+        constraints = [
+            UniqueConstraint(
+                fields=["character", "name", "deleted"],
+                name="unique_character_config_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["character", "name"],
+                condition=Q(deleted=None),
+                name="unique_character_config_without_optional",
+            ),
         ]
 
 
@@ -368,7 +368,17 @@ class Faction(Writing):
         (SECRET, _("Secret")),
     ]
 
-    typ = models.CharField(max_length=1, choices=FACTION_CHOICES, default=PRIM)
+    typ = models.CharField(
+        max_length=1,
+        choices=FACTION_CHOICES,
+        default=PRIM,
+        verbose_name=_("Type"),
+        help_text=_(
+            "Primary: main grouping / affiliation for characters. "
+            "Transversal: secondary grouping across primary factions. "
+            "Secret: hidden faction visible only to assigned characters"
+        ),
+    )
 
     order = models.IntegerField(default=0, help_text=_("Display order"))
 
@@ -531,11 +541,7 @@ class TextVersion(BaseModel):
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="text_versions", null=True)
 
-    teaser = HTMLField(blank=True)
-
     text = HTMLField(blank=True)
-
-    preview = HTMLField(blank=True)
 
     dl = models.BooleanField(default=False)
 

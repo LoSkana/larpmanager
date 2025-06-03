@@ -22,41 +22,180 @@ import csv
 
 from bs4 import BeautifulSoup
 from django.http import HttpResponse
+from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_event_cache_all, get_event_cache_fields
-from larpmanager.models.form import QuestionApplicable, WritingQuestion, get_ordered_registration_questions
+from larpmanager.cache.character import get_event_cache_all
+from larpmanager.models.form import (
+    QuestionApplicable,
+    RegistrationAnswer,
+    RegistrationChoice,
+    RegistrationQuestion,
+    WritingAnswer,
+    WritingChoice,
+    WritingQuestion,
+    get_ordered_registration_questions,
+)
+from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.utils.common import check_field
+from larpmanager.utils.edit import _get_values_mapping
 
 
-def writing_download(request, ctx, typ, nm):
-    response, writer = get_writer(ctx, nm)
+def download(ctx, typ, model):
+    response, writer = get_writer(ctx, model)
 
-    query = typ.objects.all()
-    # fields = typ._meta.get_fields()
+    key, vals = _export_data(ctx, model, typ)
 
-    get_event_cache_all(ctx)
-
-    query, res = _download_prepare(ctx, nm, query, typ)
-
-    first = True
-    key = []
-    for el in query:
-        val = []
-        for k, v in el.show_complete().items():
-            _writing_field(ctx, first, k, key, v, val)
-
-        _download_questions(ctx, el, first, key, res, val)
-
-        if first:
-            writer.writerow(key)
-            first = False
-
+    writer.writerow(key)
+    for val in vals:
         writer.writerow(val)
 
     return response
 
 
-def _writing_field(ctx, first, k, key, v, val):
+def _export_data(ctx, model, typ, member_cover=False):
+    query = typ.objects.all()
+    get_event_cache_all(ctx)
+    query = _download_prepare(ctx, model, query, typ)
+
+    answers, applicable, choices, questions = _prepare_export(ctx, model, query)
+
+    key = None
+    vals = []
+    for el in query:
+        if applicable or model == "registration":
+            val, key = _get_applicable_row(ctx, el, choices, answers, questions, model, member_cover)
+        else:
+            val, key = _get_standard_row(ctx, el)
+        vals.append(val)
+
+    order_column = 0
+    if member_cover:
+        order_column = 1
+    vals = sorted(vals, key=lambda x: x[order_column])
+
+    return key, vals
+
+
+def _prepare_export(ctx, model, query):
+    # noinspection PyProtectedMember
+    applicable = QuestionApplicable.get_applicable(model)
+    choices = {}
+    answers = {}
+    questions = []
+    if applicable or model == "registration":
+        question_cls = RegistrationQuestion
+        choices_cls = RegistrationChoice
+        answers_cls = RegistrationAnswer
+        ref_field = "reg_id"
+        if model != "registration":
+            question_cls = WritingQuestion
+            choices_cls = WritingChoice
+            answers_cls = WritingAnswer
+            ref_field = "element_id"
+
+        el_ids = {el.id for el in query}
+
+        questions = question_cls.get_instance_questions(ctx["event"], ctx["features"])
+        if model != "registration":
+            questions = questions.filter(applicable=applicable)
+
+        que_ids = {que.id for que in questions}
+
+        filter_kwargs = {"question_id__in": que_ids, f"{ref_field}__in": el_ids}
+
+        que_choice = choices_cls.objects.filter(**filter_kwargs)
+        for choice in que_choice.select_related("option"):
+            element_id = getattr(choice, ref_field)
+            if choice.question_id not in choices:
+                choices[choice.question_id] = {}
+            if element_id not in choices[choice.question_id]:
+                choices[choice.question_id][element_id] = []
+            choices[choice.question_id][element_id].append(choice.option.display)
+
+        que_answer = answers_cls.objects.filter(**filter_kwargs)
+        for answer in que_answer:
+            element_id = getattr(answer, ref_field)
+            if answer.question_id not in answers:
+                answers[answer.question_id] = {}
+            answers[answer.question_id][element_id] = answer.text
+    if model == "character":
+        ctx["assignments"] = {}
+        for rcr in RegistrationCharacterRel.objects.filter(reg__run=ctx["run"]).select_related("reg", "reg__member"):
+            ctx["assignments"][rcr.character.id] = rcr.reg.member
+    return answers, applicable, choices, questions
+
+
+def _get_applicable_row(ctx, el, choices, answers, questions, model, member_cover=False):
+    val = []
+    key = []
+
+    _row_header(ctx, el, key, member_cover, model, val)
+
+    # add question values
+    for que in questions:
+        key.append(que.display)
+        mapping = _get_values_mapping(el)
+        value = ""
+        if que.typ in mapping:
+            value = mapping[que.typ]()
+        elif que.typ in {"p", "t", "e"}:
+            if que.id in answers and el.id in answers[que.id]:
+                value = answers[que.id][el.id]
+        elif que.typ in {"s", "m"}:
+            if que.id in choices and el.id in choices[que.id]:
+                value = ", ".join(choices[que.id][el.id])
+        value = value.replace("\t", "").replace("\n", "<br />")
+        val.append(value)
+
+    return val, key
+
+
+def _row_header(ctx, el, key, member_cover, model, val):
+    member = None
+    if model == "registration":
+        member = el.member
+    elif model == "character":
+        if el.id in ctx["assignments"]:
+            member = ctx["assignments"][el.id]
+
+    if member_cover:
+        key.append("")
+        profile = ""
+        if member and member.profile:
+            profile = member.profile_thumb.url
+        val.append(profile)
+
+    if model in ["registration", "character"]:
+        key.append(_("Player"))
+        display = ""
+        if member:
+            display = member.display_real()
+        val.append(display)
+
+        key.append(_("Email"))
+        email = ""
+        if member:
+            email = member.email
+        val.append(email)
+
+    if model == "registration":
+        val.append(el.ticket.name)
+        key.append(_("Ticket"))
+    else:
+        val.append(el.number)
+        key.append("number")
+
+
+def _get_standard_row(ctx, el):
+    val = []
+    key = []
+    for k, v in el.show_complete().items():
+        _writing_field(ctx, k, key, v, val)
+
+    return val, key
+
+
+def _writing_field(ctx, k, key, v, val):
     new_val = v
     skip_fields = [
         "id",
@@ -78,7 +217,7 @@ def _writing_field(ctx, first, k, key, v, val):
     if k.startswith("custom_"):
         return
 
-    if k in ["title", "preview"]:
+    if k in ["title"]:
         if k not in ctx["features"]:
             return
 
@@ -91,40 +230,26 @@ def _writing_field(ctx, first, k, key, v, val):
 
     soup = BeautifulSoup(str(new_val), features="lxml")
     val.append(soup.get_text("\n").replace("\n", " "))
-    if first:
-        key.append(k)
-
-
-def _download_questions(ctx, el, first, key, res, val):
-    # Add character question and answers
-    if not res:
-        return
-
-    for idq, question in ctx["questions"].items():
-        if first:
-            key.append(question["display"])
-
-        v = ""
-        if el.number in res["chars"]:
-            if idq in res["chars"][el.number]["fields"]:
-                v = res["chars"][el.number]["fields"][idq]
-                if not isinstance(v, str):
-                    v = ", ".join([ctx["options"][ido]["display"] for ido in v])
-        val.append(str(v))
+    key.append(k)
 
 
 def _download_prepare(ctx, nm, query, typ):
-    res = None
-    if nm == "character" and "character" in ctx["features"]:
-        res = {"chars": {}}
-        get_event_cache_fields(ctx, res, only_visible=False)
     if check_field(typ, "event"):
         query = query.filter(event=ctx["event"])
+
     elif check_field(typ, "run"):
         query = query.filter(run=ctx["run"])
+
     if check_field(typ, "number"):
         query = query.order_by("number")
-    return query, res
+
+    if nm == "character":
+        query = query.prefetch_related("factions_list").select_related("player")
+
+    if nm == "registration":
+        query = query.filter(cancellation_date__isnull=True).select_related("ticket")
+
+    return query
 
 
 def get_writer(ctx, nm):

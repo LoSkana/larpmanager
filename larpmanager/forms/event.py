@@ -26,6 +26,7 @@ from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_character_fields
+from larpmanager.cache.feature import reset_event_features
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm
@@ -183,6 +184,7 @@ class OrgaFeatureForm(FeatureForm):
     def save(self, commit=True):
         instance = super().save(commit=False)
         self._save_features(instance)
+        reset_event_features(instance.id)
         return instance
 
 
@@ -210,6 +212,11 @@ class OrgaConfigForm(ConfigForm):
         self.add_configs("mail_character", ConfigType.BOOL, section, label, help_text)
 
         section = _("Visualisation")
+
+        label = _("Export")
+        help_text = _("If checked: allow to export characters and registration in a easily readable page")
+        self.add_configs("show_export", ConfigType.BOOL, section, label, help_text)
+
         label = _("Limitations")
         help_text = _("If checked: Show summary page with number of tickets/options used")
         self.add_configs("show_limitations", ConfigType.BOOL, section, label, help_text)
@@ -220,7 +227,11 @@ class OrgaConfigForm(ConfigForm):
 
         self.set_config_structure()
 
+        self.set_config_writing()
+
         self.set_config_character()
+
+        self.set_config_char_form()
 
         self.set_config_custom()
 
@@ -255,6 +266,16 @@ class OrgaConfigForm(ConfigForm):
     def set_config_reg_form(self):
         section = _("Registration form")
 
+        label = _("Unique code")
+        help_text = _("If checked, adds to all registrations an unique code to reference them")
+        self.add_configs("registration_unique_code", ConfigType.BOOL, section, label, help_text)
+
+        label = _("Allowed")
+        help_text = _(
+            "If checked, enables to set for each registration question the list of staff members allowed to see it's answers from the players"
+        )
+        self.add_configs("registration_reg_que_allowed", ConfigType.BOOL, section, label, help_text)
+
         label = _("Hide not available")
         help_text = _(
             "If checked, options no longer available in the registration form are hidden, "
@@ -278,6 +299,27 @@ class OrgaConfigForm(ConfigForm):
         label = _("Age selection")
         help_text = _("If checked, allows a registration form question to be visible based on the player's age.")
         self.add_configs("registration_reg_que_age", ConfigType.BOOL, section, label, help_text)
+
+    def set_config_char_form(self):
+        section = _("Character form")
+
+        label = _("Hide not available")
+        help_text = _(
+            "If checked, options no longer available in the form are hidden, instead of being displayed disabled"
+        )
+        self.add_configs("character_form_hide_unavailable", ConfigType.BOOL, section, label, help_text)
+
+        label = _("Maximum available")
+        help_text = _("If checked, an option can be chosen a maximum number of times.")
+        self.add_configs("character_form_wri_que_max", ConfigType.BOOL, section, label, help_text)
+
+        label = _("Ticket selection")
+        help_text = _("If checked, allows a option to be visible only to players with selected ticket.")
+        self.add_configs("character_form_wri_que_tickets", ConfigType.BOOL, section, label, help_text)
+
+        label = _("Prerequisites")
+        help_text = _("If checked, allows a option to be visible only if other options are selected.")
+        self.add_configs("character_form_wri_que_dependents", ConfigType.BOOL, section, label, help_text)
 
     def set_config_structure(self):
         if "pre_register" in self.params["features"]:
@@ -311,12 +353,32 @@ class OrgaConfigForm(ConfigForm):
             help_text = _("If checked, shows the original image in the cover, not the thumbnail version")
             self.add_configs("cover_orig", ConfigType.BOOL, section, label, help_text)
 
-    def set_config_character(self):
+    def set_config_writing(self):
         if "character" in self.params["features"]:
             section = _("Writing")
 
+            label = _("Title")
+            help_text = _("Enables field 'title', a short (2-3 words) text added to the character's name")
+            self.add_configs("writing_title", ConfigType.BOOL, section, label, help_text)
+
+            label = _("Cover")
+            help_text = _(
+                "Enables field 'cover', to shown a specific image in the gallery - until assigned to a player"
+            )
+            self.add_configs("writing_cover", ConfigType.BOOL, section, label, help_text)
+
+            label = _("Hide")
+            help_text = _("Enables field 'hide', to be able to hide writing element from players")
+            self.add_configs("writing_hide?", ConfigType.BOOL, section, label, help_text)
+
+            label = _("Assigned")
+            help_text = _(
+                "Enables field 'assigned', to track which staff member is responsible for each writing element"
+            )
+            self.add_configs("writing_assigned", ConfigType.BOOL, section, label, help_text)
+
             label = _("Replacing names")
-            help_text = _("If checked, PG names will be automatically replaced by a reference")
+            help_text = _("If checked, character names will be automatically replaced by a reference")
             self.add_configs("writing_substitute", ConfigType.BOOL, section, label, help_text)
 
             label = _("Paste as text")
@@ -329,6 +391,7 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("writing_working_ticket", ConfigType.BOOL, section, label, help_text)
 
+    def set_config_character(self):
         if "campaign" in self.params["features"]:
             section = _("Campaign")
             label = _("Independent factions")
@@ -358,6 +421,10 @@ class OrgaConfigForm(ConfigForm):
             label = _("Approval")
             help_text = _("If checked, activates a staff-managed approval process for characters")
             self.add_configs("user_character_approval", ConfigType.BOOL, section, label, help_text)
+
+            label = _("Relationships")
+            help_text = _("If checked, enables players to write their own list of character relationships")
+            self.add_configs("user_character_player_relationships", ConfigType.BOOL, section, label, help_text)
 
     def set_config_custom(self):
         if "custom_character" in self.params["features"]:
@@ -399,6 +466,10 @@ class OrgaConfigForm(ConfigForm):
             label = _("Assignments")
             help_text = _("Number of characters to be assigned (default 1)")
             self.add_configs("casting_characters", ConfigType.INT, section, label, help_text)
+
+            label = _("Mirror")
+            help_text = _("Enables to set a character as a 'mirror' for another, to hide it's true nature")
+            self.add_configs("casting_mirror", ConfigType.BOOL, section, label, help_text)
 
             label = _("Minimum preferences")
             help_text = _("Minimum number of preferences")
@@ -548,7 +619,7 @@ class OrgaAppearanceForm(MyCssForm):
         )
 
     event_css = forms.CharField(
-        widget=Textarea(attrs={"cols": 80, "rows": 15}),
+        widget=Textarea(attrs={"rows": 15}),
         required=False,
         help_text=_("These CSS commands will be carried over to all pages in your Association space."),
     )
@@ -611,6 +682,27 @@ class OrgaEventTextForm(MyForm):
         for tp in delete_choice:
             ch = remove_choice(ch, tp)
         self.fields["typ"].choices = ch
+
+        help_texts = {
+            EventTextType.TOC: _("Terms and conditions of signup, shown in a page linked in the registration form"),
+            EventTextType.REGISTER: _("Added to the registration page, before the form"),
+            EventTextType.SEARCH: _("Added at the top of the search page of characters"),
+            EventTextType.SIGNUP: _("Added at the bottom of mail confirming signup to players"),
+            EventTextType.ASSIGNMENT: _("Added at the bottom of mail notifying players of character assignment"),
+            EventTextType.CHARACTER_PROPOSED: _(
+                "Content of mail notifying players of their character in proposed status"
+            ),
+            EventTextType.CHARACTER_APPROVED: _(
+                "Content of mail notifying players of their character in approved status"
+            ),
+            EventTextType.CHARACTER_REVIEW: _("Content of mail notifying players of their character in review status"),
+        }
+        help_text = []
+        for choice_typ, text in help_texts.items():
+            if choice_typ in delete_choice:
+                continue
+            help_text.append(f"<b>{choice_typ.label}</b>: {text}")
+        self.fields["typ"].help_text = " - ".join(help_text)
 
     def clean(self):
         cleaned_data = super().clean()
@@ -736,11 +828,6 @@ class OrgaRunForm(ConfigForm):
 
         addit_show = [
             (
-                "preview",
-                _("Preview"),
-                _("If checked, makes visible the preview, reserved only to the player to whom the item is assigned"),
-            ),
-            (
                 "faction",
                 _("Factions"),
                 _("If checked, makes factions visible, as the character assignments to factions"),
@@ -765,11 +852,6 @@ class OrgaRunForm(ConfigForm):
                 "print_pdf",
                 _("PDF"),
                 _("If checked, makes visible the PDF version of the character sheets"),
-            ),
-            (
-                "co_creation",
-                _("Co-creation"),
-                _("If checked, makes co-creation questions and answers visible"),
             ),
         ]
 

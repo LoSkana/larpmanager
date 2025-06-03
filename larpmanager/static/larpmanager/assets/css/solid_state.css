@@ -604,10 +604,6 @@ input[type="datetime_p"]:focus {
   display: block;
 }
 
-.show_char .motto {
-  font-size: 110%;
-}
-
 .show_char .name {
   font-size: 140%;
 }
@@ -1502,6 +1498,11 @@ input[type="submit"], input[type="reset"], input[type="button"], button, .button
     background-position: center center;
     background-repeat: no-repeat;
     border-radius: 10%;
+}
+
+.member_cover {
+    width: 10em;
+    min-width: 10em;
 }
 
 .go_table {

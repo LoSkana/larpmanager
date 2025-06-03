@@ -25,7 +25,7 @@ from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Q
-from django.db.models.signals import post_save, pre_delete, pre_save
+from django.db.models.signals import post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
@@ -33,6 +33,7 @@ from slugify import slugify
 
 from larpmanager.accounting.vat import compute_vat
 from larpmanager.cache.button import event_button_key
+from larpmanager.cache.config import reset_configs
 from larpmanager.cache.feature import get_assoc_features, get_event_features, reset_event_features
 from larpmanager.models.access import AssocPermission, EventPermission, EventRole, get_event_organizers
 from larpmanager.models.accounting import (
@@ -41,9 +42,9 @@ from larpmanager.models.accounting import (
     AccountingItemTransaction,
     Collection,
 )
-from larpmanager.models.association import Association
+from larpmanager.models.association import Association, AssociationConfig
 from larpmanager.models.casting import Trait, update_traits_all
-from larpmanager.models.event import Event, EventButton, EventConfig, EventText, Run
+from larpmanager.models.event import Event, EventButton, EventConfig, EventText, Run, RunConfig
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
@@ -294,6 +295,10 @@ def save_event_character_form(features, instance):
     if "character" not in features:
         return
 
+    # if has parent, use those
+    if instance.parent:
+        return
+
     # get most common language between organizers
     langs = {}
     for orga in get_event_organizers(instance):
@@ -324,7 +329,8 @@ def _init_plot_form_questions(def_tps, instance, features):
     if "plot" not in features:
         return
 
-    que = WritingQuestion.objects.filter(event=instance, applicable=QuestionApplicable.PLOT)
+    que = instance.get_elements(WritingQuestion)
+    que = que.filter(applicable=QuestionApplicable.PLOT)
     types = set(que.values_list("typ", flat=True).distinct())
 
     def_tps[QuestionType.TEASER] = ("Concept", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000)
@@ -344,7 +350,7 @@ def _init_plot_form_questions(def_tps, instance, features):
 
 
 def _init_character_form_questions(custom_tps, def_tps, features, instance):
-    que = WritingQuestion.objects.filter(event=instance, applicable=QuestionApplicable.CHARACTER)
+    que = instance.get_elements(WritingQuestion).filter(applicable=QuestionApplicable.CHARACTER)
     types = set(que.values_list("typ", flat=True).distinct())
 
     # evaluate each question type field
@@ -374,7 +380,7 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
                 typ=el,
                 display=_(el.capitalize()),
                 status=QuestionStatus.HIDDEN,
-                visibility=QuestionVisibility.PRIVATE,
+                visibility=QuestionVisibility.HIDDEN,
                 max_length=1000,
                 applicable=QuestionApplicable.CHARACTER,
             )
@@ -425,3 +431,33 @@ def post_save_accounting_item_payment_vat(sender, instance, created, **kwargs):
         return
 
     compute_vat(instance)
+
+
+@receiver(post_save, sender=EventConfig)
+def post_save_reset_event_config(sender, instance, **kwargs):
+    reset_configs(instance.event)
+
+
+@receiver(post_delete, sender=EventConfig)
+def post_delete_reset_event_config(sender, instance, **kwargs):
+    reset_configs(instance.event)
+
+
+@receiver(post_save, sender=AssociationConfig)
+def post_save_reset_assoc_config(sender, instance, **kwargs):
+    reset_configs(instance.assoc)
+
+
+@receiver(post_delete, sender=AssociationConfig)
+def post_delete_reset_assoc_config(sender, instance, **kwargs):
+    reset_configs(instance.assoc)
+
+
+@receiver(post_save, sender=RunConfig)
+def post_save_reset_run_config(sender, instance, **kwargs):
+    reset_configs(instance.run)
+
+
+@receiver(post_delete, sender=RunConfig)
+def post_delete_reset_run_config(sender, instance, **kwargs):
+    reset_configs(instance.run)

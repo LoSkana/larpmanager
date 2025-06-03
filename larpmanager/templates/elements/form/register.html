@@ -31,18 +31,17 @@
             {% define "" as old_section %}
         {% endif %}
     {% endif %}
-    <tr id="{{ field.id_for_label }}_tr">
+    <tr id="{{ field.auto_id }}_tr">
         <th>
-            <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+            <label for="{{ field.auto_id }}">{{ field.label }}:</label>
         </th>
         <td>
             {% if field.errors %}{{ field.errors }}{% endif %}
-            {% if form.show_link and field.id_for_label in form.show_link %}
+            {% if form.show_link and field.auto_id in form.show_link %}
                 <p>
-                    <a href="#" class="my_toggle" tog="f_{{ field.id_for_label }}">{% trans "Show" %}</a>
+                    <a href="#" class="my_toggle" tog="f_{{ field.auto_id }}">{% trans "Show" %}</a>
                 </p>
-                <div style="display: none"
-                     class="hide hide_later f_{{ field.id_for_label }}">{{ field }}</div>
+                <div style="display: none" class="hide hide_later f_{{ field.auto_id }}">{{ field }}</div>
             {% else %}
                 {{ field }}
             {% endif %}

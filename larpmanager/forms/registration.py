@@ -94,8 +94,6 @@ class RegistrationForm(BaseRegistrationForm):
 
         self.init_bring_friend()
 
-        self.init_info(run)
-
     def sel_ticket_map(self, ticket):
         """
         Check if given the selected ticket, we need to not require questions reserved
@@ -125,24 +123,6 @@ class RegistrationForm(BaseRegistrationForm):
         )
         if self.instance:
             self.initial["additionals"] = self.instance.additionals
-
-    def init_info(self, run):
-        if "info" not in self.params["features"]:
-            return
-
-        self.fields["info"] = forms.CharField(
-            required=False,
-            max_length=5000,
-            widget=forms.Textarea,
-            label=_("More information"),
-            help_text=_(
-                "Do you have something you'd like to tell us or report to us about your registration? Use this field!"
-            ),
-        )
-        if self.instance:
-            self.initial["info"] = self.instance.info
-
-        # pprint(self.initial)
 
     def init_bring_friend(self):
         if "bring_friend" not in self.params["features"]:
@@ -473,8 +453,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         self.init_pay_what(reg_section)
 
-        self.init_info(reg_section)
-
         # ## CHARACTERS
         if "character" in self.params["features"]:
             self.init_character(char_section)
@@ -490,12 +468,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         if "reg_que_sections" not in self.params["features"]:
             self.show_sections = True
-
-    def init_info(self, reg_section):
-        if "info" in self.params["features"]:
-            self.sections["id_info"] = reg_section
-        else:
-            self.delete_field("info")
 
     def init_additionals(self, reg_section):
         if "additional_tickets" in self.params["features"]:
@@ -563,6 +535,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             required=False,
         )
         self.sections["id_characters_new"] = char_section
+
         if "questbuilder" in self.params["features"]:
             already = []
             assigned = []
@@ -578,7 +551,8 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             available = Trait.objects.filter(event=self.event).exclude(number__in=already)
             for qtnum, qt in self.params["quest_types"].items():
                 qt_id = f"qt_{qt['number']}"
-                self.sections["id_" + qt_id] = char_section
+                key = "id_" + qt_id
+                self.sections[key] = char_section
                 choices = [("0", _("--- NOT ASSIGNED ---"))]
                 for _qnum, q in self.params["quests"].items():
                     if q["typ"] != qtnum:

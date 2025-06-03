@@ -98,19 +98,7 @@ def cantor(k1, k2):
 
 
 def compute_diff(self, other):
-    tx = other.text
-    if other.preview:
-        tx = other.preview + "\n--------------------\n" + tx
-    if other.teaser:
-        tx = other.teaser + "\n--------------------\n" + tx
-    tx1 = html_clean(tx)
-    tx = self.text
-    if self.preview:
-        tx = self.preview + "\n--------------------\n" + tx
-    if self.teaser:
-        tx = self.teaser + "\n--------------------\n" + tx
-    tx2 = html_clean(tx)
-    check_diff(self, tx1, tx2)
+    check_diff(self, other.text, self.text)
 
 
 def check_diff(self, tx1, tx2):

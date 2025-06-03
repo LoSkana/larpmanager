@@ -24,6 +24,7 @@ from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext
 
+from larpmanager.cache.feature import reset_assoc_features
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm
@@ -117,6 +118,30 @@ class ExeAssocTextForm(MyForm):
 
         self.fields["typ"].choices = ch
 
+        help_texts = {
+            AssocTextType.PROFILE: _("Added at the top of the user profile page"),
+            AssocTextType.HOME: _("Added at the top of the main calendar page"),
+            AssocTextType.SIGNUP: _("Added at the bottom of all mails confirming signup to players"),
+            AssocTextType.MEMBERSHIP: _("Content of the membership request filled with user data"),
+            AssocTextType.STATUTE: _("Added to the membership page as the paragraph for statute info"),
+            AssocTextType.LEGAL: _("Content of legal notice page linked at the bottom of all pages"),
+            AssocTextType.FOOTER: _("Added to the bottom of all pages"),
+            AssocTextType.TOC: _("Terms and conditions of signup, shown in a page linked in the registration form"),
+            AssocTextType.RECEIPT: _("Content of the receipt created for each payment and sent to players"),
+            AssocTextType.SIGNATURE: _("Added to the bottom of all mails sent"),
+            AssocTextType.PRIVACY: _("Content of privacy page linked at the bottom of all pages"),
+            AssocTextType.REMINDER_MEMBERSHIP: _("Content of mail reminding players to fill their membership request"),
+            AssocTextType.REMINDER_MEMBERSHIP_FEE: _("Content of mail reminding players to pay the membership fee"),
+            AssocTextType.REMINDER_PAY: _("Content of mail reminding players to pay their signup fee"),
+            AssocTextType.REMINDER_PROFILE: _("Content of mail reminding players to fill their profile"),
+        }
+        help_text = []
+        for choice_typ, text in help_texts.items():
+            if choice_typ in delete_choice:
+                continue
+            help_text.append(f"<b>{choice_typ.label}</b>: {text}")
+        self.fields["typ"].help_text = " - ".join(help_text)
+
     def clean(self):
         cleaned_data = super().clean()
 
@@ -174,7 +199,7 @@ class ExeAppearanceForm(MyCssForm):
         fields = ("background", "font", "pri_rgb", "sec_rgb", "ter_rgb")
 
     assoc_css = forms.CharField(
-        widget=Textarea(attrs={"cols": 80, "rows": 15}),
+        widget=Textarea(attrs={"rows": 15}),
         required=False,
         help_text=_(
             "Freely insert CSS commands, they will be reported in all pages  in the space of "
@@ -217,6 +242,7 @@ class ExeFeatureForm(FeatureForm):
     def save(self, commit=True):
         instance = super().save(commit=False)
         self._save_features(instance)
+        reset_assoc_features(instance.id)
         return instance
 
 
@@ -384,10 +410,6 @@ class ExeConfigForm(ConfigForm):
                 "to make free membership fee payment"
             )
             self.add_configs("membership_grazing", ConfigType.INT, section, label, help_text)
-
-            label = _("Tax code check")
-            help_text = _("Apply a check on the tax code of players")
-            self.add_configs("membership_cf", ConfigType.BOOL, section, label, help_text)
 
         if "vote" in self.params["features"]:
             section = _("Voting")

@@ -30,11 +30,11 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all
-from larpmanager.cache.text_fields import get_cache_cocreation, get_cache_text_field
+from larpmanager.cache.text_fields import get_cache_text_field
 from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Trait
-from larpmanager.models.event import ProgressStep, RunText
+from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityPx
 from larpmanager.models.form import QuestionApplicable, QuestionType, WritingAnswer, WritingQuestion
 from larpmanager.models.writing import (
@@ -48,7 +48,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.templatetags.show_tags import show_char, show_trait
 from larpmanager.utils.common import check_field, compute_diff
-from larpmanager.utils.download import writing_download
+from larpmanager.utils.download import download
 from larpmanager.utils.upload import upload_elements
 
 
@@ -117,13 +117,6 @@ def writing_popup(request, ctx, typ):
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
-    if "co_creation" in ctx["features"]:
-        cc = {"co_creation_question": "first", "co_creation_answer": "second"}
-        if tp in cc:
-            (el, creat) = RunText.objects.get_or_create(run=ctx["run"], eid=idx, typ=RunText.COCREATION)
-            v = getattr(el, cc[tp])
-            setattr(el, tp, v)
-
     if not hasattr(el, tp):
         return JsonResponse({"k": 0})
 
@@ -152,7 +145,7 @@ def writing_example(ctx, typ):
 
 def writing_post(request, ctx, typ, nm):
     if request.POST.get("download") == "1":
-        return writing_download(request, ctx, typ, nm)
+        return download(ctx, typ, nm)
 
     if request.POST.get("example") == "1":
         return writing_example(ctx, typ)
@@ -176,7 +169,6 @@ def writing_list(request, ctx, typ, nm):
 
     if issubclass(typ, Character):
         writing_list_char(ctx, ev, text_fields)
-        writing_list_cocreation(ctx, typ)
 
     if issubclass(typ, Plot):
         writing_list_plot(ctx)
@@ -195,12 +187,7 @@ def writing_list(request, ctx, typ, nm):
 
 def _get_custom_form(ctx, nm):
     # default name for fields
-    ctx["fields_name"] = {
-        QuestionType.NAME.value: _("Name"),
-        QuestionType.TEASER.value: _("Presentation"),
-        QuestionType.SHEET.value: _("Text"),
-        QuestionType.FACTIONS.value: _("Factions"),
-    }
+    ctx["fields_name"] = {QuestionType.NAME.value: _("Name")}
 
     mapping = {"character": QuestionApplicable.CHARACTER, "plot": QuestionApplicable.PLOT}
     if nm not in mapping:
@@ -211,6 +198,7 @@ def _get_custom_form(ctx, nm):
         que = que.filter(applicable=mapping[nm])
         ctx["form_questions"] = {}
         for q in que:
+            q.basic_typ = q.typ in QuestionType.get_basic_types()
             if q.typ in ctx["fields_name"].keys():
                 ctx["fields_name"][q.typ] = q.display
             else:
@@ -219,7 +207,7 @@ def _get_custom_form(ctx, nm):
 
 def writing_list_query(ctx, ev, typ):
     writing = issubclass(typ, Writing)
-    text_fields = ["teaser", "text", "preview"]
+    text_fields = ["teaser", "text"]
     ctx["list"] = typ.objects.filter(event=ev.get_class_parent(typ))
     if writing:
         for f in text_fields:
@@ -254,7 +242,7 @@ def writing_list_text_fields(ctx, text_fields, typ):
     ctx["writing_typ"] = QuestionApplicable.get_applicable(ctx["label_typ"])
 
     # add editor type questions
-    que = WritingQuestion.objects.filter(applicable=ctx["writing_typ"])
+    que = ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"])
     for que_id in que.filter(typ=QuestionType.EDITOR).values_list("pk", flat=True):
         text_fields.append(str(que_id))
 
@@ -266,22 +254,6 @@ def writing_list_text_fields(ctx, text_fields, typ):
             if f not in gctf[el.id]:
                 continue
             (red, ln) = gctf[el.id][f]
-            setattr(el, f + "_red", red)
-            setattr(el, f + "_ln", ln)
-
-
-def writing_list_cocreation(ctx, typ):
-    if "co_creation" not in ctx["features"] or not issubclass(typ, Character):
-        return
-
-    gcc = get_cache_cocreation(ctx["run"])
-    for el in ctx["list"]:
-        if el.id not in gcc:
-            continue
-        for f in ["co_creation_question", "co_creation_answer"]:
-            if f not in gcc[el.id]:
-                continue
-            (red, ln) = gcc[el.id][f]
             setattr(el, f + "_red", red)
             setattr(el, f + "_ln", ln)
 
@@ -298,8 +270,6 @@ def writing_list_plot(ctx):
 
 
 def writing_list_char(ctx, ev, text_fields):
-    if "co_creation" in ctx["features"]:
-        text_fields.extend(["co_creation_question", "co_creation_answer"])
     if "user_character" in ctx["features"]:
         ctx["list"] = ctx["list"].select_related("player")
     if "relationships" in ctx["features"]:
@@ -315,7 +285,7 @@ def writing_list_char(ctx, ev, text_fields):
         for el in PlotCharacterRel.objects.filter(character__event=ctx["event"]).select_related("plot", "character"):
             if el.character.number not in ctx["plots"]:
                 ctx["plots"][el.character.number] = []
-            ctx["plots"][el.character.number].append((f"[T{el.plot.number}] {el.plot.name}", el.plot.number))
+            ctx["plots"][el.character.number].append((f"[T{el.plot.number}] {el.plot.name}", el.plot.id))
 
         for el in ctx["list"]:
             if el.number in ctx["plots"]:
@@ -347,6 +317,7 @@ def writing_view(request, ctx, nm):
     ctx["el"] = ctx[nm]
     ctx["el"].data = ctx["el"].show_complete()
     ctx["nm"] = nm
+    get_event_cache_all(ctx)
     return render(request, "larpmanager/orga/writing/view.html", ctx)
 
 

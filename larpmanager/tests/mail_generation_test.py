@@ -76,7 +76,7 @@ def expense(image_path, live_server, page):
     page.get_by_label("Type").select_option("g")
     page.get_by_role("textbox", name="Descr").click()
     page.get_by_role("textbox", name="Descr").fill("dsadas")
-    submit(page)
+    page.get_by_role("button", name="Confirm", exact=True).click()
     go_to(page, live_server, "/test/1/manage/expenses")
     page.get_by_role("link", name="Approve").click()
 

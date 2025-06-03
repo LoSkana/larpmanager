@@ -45,34 +45,33 @@
                         {% define section as old_section %}
                     {% endif %}
                 {% endif %}
-                <tr id="{{ field.id_for_label }}_tr">
+                <tr id="{{ field.auto_id }}_tr">
                     <th>
-                        <label id="lbl_{{ field.id_for_label }}">{{ field.label }}</label>
-                        {% if form.translate and field.id_for_label in form.translate %}
+                        <label id="lbl_{{ field.auto_id }}">{{ field.label }}</label>
+                        {% if form.translate and field.auto_id in form.translate %}
                             <br />
                             <br />
-                            <a onclick="return translate('{{ field.id_for_label }}');">{% trans "Translate" %}</a>
+                            <a onclick="return translate('{{ field.auto_id }}');">{% trans "Translate" %}</a>
                         {% endif %}
                     </th>
                     <td>
                         {% if field.errors %}{{ field.errors }}{% endif %}
-                        {% if form.translate and field.id_for_label in form.translate %}
+                        {% if form.translate and field.auto_id in form.translate %}
                             <div class="orig hide">
                                 <p>{% trans "Original" %}</p>
-                                <div class="plot">{% get_field form.translate field.id_for_label %}</div>
+                                <div class="plot">{% get_field form.translate field.auto_id %}</div>
                             </div>
                         {% endif %}
-                        {% if form.details and field.id_for_label in form.details %}
+                        {% if form.details and field.auto_id in form.details %}
                             {% autoescape off %}
-                                <div class="plot">{% get_field_show_char form.details field.id_for_label run 1 %}</div>
+                                <div class="plot">{% get_field_show_char form.details field.auto_id run 1 %}</div>
                             {% endautoescape %}
                         {% endif %}
-                        {% if form.show_link and field.id_for_label in form.show_link %}
+                        {% if form.show_link and field.auto_id in form.show_link %}
                             <p>
-                                <a href="#" class="my_toggle" tog="f_{{ field.id_for_label }}">{% trans "Show" %}</a>
+                                <a href="#" class="my_toggle" tog="f_{{ field.auto_id }}">{% trans "Show" %}</a>
                             </p>
-                            <div style="display: none"
-                                 class="hide hide_later f_{{ field.id_for_label }}">{{ field }}</div>
+                            <div style="display: none" class="hide hide_later f_{{ field.auto_id }}">{{ field }}</div>
                         {% else %}
                             {{ field }}
                         {% endif %}
@@ -90,7 +89,7 @@
                                 </div>
                             {% else %}
                                 <div class="helptext">
-                                    {% trans "characters" %}: <span class="count"></span> / {{ args.0 }}
+                                    {% trans "text length" %}: <span class="count"></span> / {{ args.0 }}
                                 </div>
                             {% endif %}
                         {% endif %}
@@ -101,7 +100,14 @@
     </div>
     <input type="submit" value="{% trans "Confirm" %}">
     <br />
-    <br />
+    {% if add_another %}
+        <br />
+        <div class="continue">
+            <input type="checkbox" id="continue" name="continue" class="hide">
+            <label for="continue">{% trans "After confirmation, add another" %}</label>
+        </div>
+        <br />
+    {% endif %}
     {% if eid %}
         <p>{% trans "The form is saved every 30 seconds." %}</p>
     {% endif %}

@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+from django.apps import apps
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
@@ -63,6 +63,7 @@ from larpmanager.utils.common import (
     get_speedlarp,
     get_trait,
 )
+from larpmanager.utils.download import _export_data
 from larpmanager.utils.edit import orga_edit, writing_edit
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.pdf import (
@@ -354,15 +355,6 @@ def orga_assignments(request, s, n):
 
 
 @login_required
-def orga_props(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_props")
-    get_event_cache_all(ctx)
-    que = ctx["event"].get_elements(Character).exclude(props__isnull=True)
-    ctx["list"] = que.exclude(props__exact="").values_list("number", "props")
-    return render(request, "larpmanager/orga/writing/props.html", ctx)
-
-
-@login_required
 def orga_progress_steps(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_progress_steps")
     return writing_list(request, ctx, ProgressStep, "progress_step")
@@ -406,3 +398,14 @@ def orga_multichoice_available(request, s, n):
     ctx["list"] = ctx["list"].exclude(pk__in=taken_characters)
     res = [(el.id, str(el)) for el in ctx["list"]]
     return JsonResponse({"res": res})
+
+
+@login_required
+def orga_export(request, s, n, nm):
+    perm = f"orga_{nm}s"
+    ctx = check_event_permission(request, s, n, perm)
+    model = apps.get_model("larpmanager", nm.capitalize())
+
+    ctx["nm"] = nm
+    ctx["key"], ctx["vals"] = _export_data(ctx, nm, model, True)
+    return render(request, "larpmanager/orga/export.html", ctx)

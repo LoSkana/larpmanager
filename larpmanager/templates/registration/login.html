@@ -40,7 +40,11 @@
             <br />
             <br />
             <p class="registration_register">
-                <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>
+                {% if request.GET.next %}
+                    <a href="{% url 'registration_register' %}?next={{ request.GET.next|urlencode }}">{% trans "Register" %}</a>
+                {% else %}
+                    <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>
+                {% endif %}
             </p>
             <p class="password_reset">
                 <a href="{% url 'password_reset' %}">{% trans "Password reset" %}</a>

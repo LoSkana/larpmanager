@@ -28,9 +28,10 @@ from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFill, ResizeToFit
 from tinymce.models import HTMLField
 
-from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, PaymentMethod
+from larpmanager.cache.config import get_element_config
+from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, FeatureNationality, PaymentMethod
 from larpmanager.models.larpmanager import LarpManagerPlan
-from larpmanager.models.utils import UploadToPathAndRename, get_element_config
+from larpmanager.models.utils import UploadToPathAndRename
 
 
 class MemberFieldType(models.TextChoices):
@@ -179,6 +180,15 @@ class Association(BaseModel):
     # payment setting key file
     key = models.BinaryField(null=True)
 
+    nationality = models.CharField(
+        max_length=2,
+        choices=FeatureNationality.choices,
+        blank=True,
+        null=True,
+        verbose_name=_("Nationality"),
+        help_text=_("Indicate the organization nationality to activate nation-specific features"),
+    )
+
     class Meta:
         constraints = [
             UniqueConstraint(fields=["slug", "deleted"], name="unique_association_with_optional"),
@@ -211,6 +221,13 @@ class Association(BaseModel):
     def get_config(self, name, def_v=None):
         return get_element_config(self, name, def_v)
 
+    def promoter_dict(self):
+        res = {"slug": self.slug, "name": self.name}
+        if self.promoter_thumb:
+            # noinspection PyUnresolvedReferences
+            res["promoter_url"] = self.promoter_thumb.url
+        return res
+
 
 class AssociationConfig(BaseModel):
     name = models.CharField(max_length=150)
@@ -223,7 +240,6 @@ class AssociationConfig(BaseModel):
         return f"{self.assoc} {self.name}"
 
     class Meta:
-        unique_together = ("assoc", "name")
         indexes = [
             models.Index(fields=["assoc", "name"]),
         ]

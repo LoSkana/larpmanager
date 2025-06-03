@@ -184,7 +184,7 @@ def quota_check(reg, start, alert, assoc_id):
 def installment_check(reg, alert, assoc_id):
     if not reg.ticket:
         return
-    # print(reg.tot_payed)
+
     tot = 0
 
     que = RegistrationInstallment.objects.filter(event=reg.run.event)
@@ -198,12 +198,7 @@ def installment_check(reg, alert, assoc_id):
         if tickets_id and reg.ticket_id not in tickets_id:
             continue
 
-        if i.days_deadline:
-            deadline = get_payment_deadline(reg, i.days_deadline, assoc_id)
-        elif i.date_deadline:
-            deadline = get_time_diff_today(i.date_deadline)
-        else:
-            deadline = None
+        deadline = _get_deadline_installment(assoc_id, i, reg)
 
         if deadline and deadline >= alert:
             continue
@@ -233,8 +228,19 @@ def installment_check(reg, alert, assoc_id):
         return
 
     # If not installment is found
-    reg.deadline = get_time_diff_today(reg.created.date())
-    reg.quota = reg.tot_iscr - reg.tot_payed
+    if not tot:
+        reg.deadline = get_time_diff_today(reg.created.date())
+        reg.quota = reg.tot_iscr - reg.tot_payed
+
+
+def _get_deadline_installment(assoc_id, i, reg):
+    if i.days_deadline:
+        deadline = get_payment_deadline(reg, i.days_deadline, assoc_id)
+    elif i.date_deadline:
+        deadline = get_time_diff_today(i.date_deadline)
+    else:
+        deadline = None
+    return deadline
 
 
 def get_payment_deadline(reg, i, assoc_id):
@@ -295,7 +301,7 @@ def cancel_reg(reg):
     AssignmentTrait.objects.filter(run=reg.run, member=reg.member).delete()
 
     # delete discounts
-    AccountingItemDiscount.objects.filter(run=reg.run).delete()
+    AccountingItemDiscount.objects.filter(run=reg.run, member=reg.member).delete()
 
     # delete bonus credits / tokens
     AccountingItemOther.objects.filter(ref_addit=reg.id).delete()

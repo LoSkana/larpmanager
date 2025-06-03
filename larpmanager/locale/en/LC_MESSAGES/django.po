@@ -4,34 +4,62 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Registrations"
+msgid "Expenses"
 msgstr ""
 
-msgid "Expenses"
+msgid "Total of expenses submitted by collaborators and approved"
 msgstr ""
 
 msgid "Outflows"
 msgstr ""
 
+msgid "Total of recorded money outflows"
+msgstr ""
+
 msgid "Inflows"
+msgstr ""
+
+msgid "Total of recorded money inflows"
 msgstr ""
 
 msgid "Income"
 msgstr ""
 
+msgid "Total participation fees received"
+msgstr ""
+
 msgid "Transactions"
+msgstr ""
+
+msgid "Total amount withheld for transfer commissions"
 msgstr ""
 
 msgid "Refunds"
 msgstr ""
 
+msgid "Total amount refunded to participants"
+msgstr ""
+
 msgid "Tokens"
+msgstr ""
+
+msgid "Total issued"
 msgstr ""
 
 msgid "Credits"
 msgstr ""
 
 msgid "Discount"
+msgstr ""
+
+msgid "Total participation fees reduced through discounts"
+msgstr ""
+
+msgid "Registrations"
+msgstr ""
+
+msgid ""
+"Theoretical total of income due to participation fees selected by the players"
 msgstr ""
 
 #, python-format
@@ -137,6 +165,53 @@ msgid "Texts"
 msgstr ""
 
 msgid "This page allows you to edit organization-specific text."
+msgstr ""
+
+msgid "Added at the top of the user profile page"
+msgstr ""
+
+msgid "Added at the top of the main calendar page"
+msgstr ""
+
+msgid "Added at the bottom of all mails confirming signup to players"
+msgstr ""
+
+msgid "Content of the membership request filled with user data"
+msgstr ""
+
+msgid "Added to the membership page as the paragraph for statute info"
+msgstr ""
+
+msgid "Content of legal notice page linked at the bottom of all pages"
+msgstr ""
+
+msgid "Added to the bottom of all pages"
+msgstr ""
+
+msgid ""
+"Terms and conditions of signup, shown in a page linked in the registration "
+"form"
+msgstr ""
+
+msgid "Content of the receipt created for each payment and sent to players"
+msgstr ""
+
+msgid "Added to the bottom of all mails sent"
+msgstr ""
+
+msgid "Content of privacy page linked at the bottom of all pages"
+msgstr ""
+
+msgid "Content of mail reminding players to fill their membership request"
+msgstr ""
+
+msgid "Content of mail reminding players to pay the membership fee"
+msgstr ""
+
+msgid "Content of mail reminding players to pay their signup fee"
+msgstr ""
+
+msgid "Content of mail reminding players to fill their profile"
 msgstr ""
 
 msgid "Roles"
@@ -363,12 +438,6 @@ msgid ""
 "which to make free membership fee payment"
 msgstr ""
 
-msgid "Tax code check"
-msgstr ""
-
-msgid "Apply a check on the tax code of players"
-msgstr ""
-
 msgid "Voting"
 msgstr ""
 
@@ -545,6 +614,9 @@ msgstr ""
 msgid "You have exceeded the maximum number of selectable options"
 msgstr ""
 
+msgid "You have exceeded the maximum text length"
+msgstr ""
+
 msgid "Available"
 msgstr ""
 
@@ -552,9 +624,6 @@ msgid "Option no longer available"
 msgstr ""
 
 msgid "Not selected"
-msgstr ""
-
-msgid "Freely answer the co-creation questions"
 msgstr ""
 
 msgid "Character"
@@ -570,7 +639,7 @@ msgid ""
 "in the future."
 msgstr ""
 
-msgid "Select one primary faction"
+msgid "Select only one primary faction"
 msgstr ""
 
 msgid "This page allows you to add or edit a character."
@@ -587,19 +656,6 @@ msgid "Abilities"
 msgstr ""
 
 msgid "Delivery"
-msgstr ""
-
-msgid "Co-creation questions"
-msgstr ""
-
-msgid "Questions for the co-creation section, editable only by authors"
-msgstr ""
-
-msgid "Co-creation answers"
-msgstr ""
-
-msgid ""
-"Answers for the co-creation section, editable by both players and authors"
 msgstr ""
 
 msgid ""
@@ -660,6 +716,14 @@ msgstr ""
 msgid "Visualisation"
 msgstr ""
 
+msgid "Export"
+msgstr ""
+
+msgid ""
+"If checked: allow to export characters and registration in a easily readable "
+"page"
+msgstr ""
+
 msgid "Limitations"
 msgstr ""
 
@@ -704,6 +768,17 @@ msgstr ""
 msgid "Registration form"
 msgstr ""
 
+msgid "If checked, adds to all registrations an unique code to reference them"
+msgstr ""
+
+msgid "Allowed"
+msgstr ""
+
+msgid ""
+"If checked, enables to set for each registration question the list of staff "
+"members allowed to see it's answers from the players"
+msgstr ""
+
 msgid "Hide not available"
 msgstr ""
 
@@ -736,6 +811,32 @@ msgid ""
 "player's age."
 msgstr ""
 
+msgid "Character form"
+msgstr ""
+
+msgid ""
+"If checked, options no longer available in the form are hidden, instead of "
+"being displayed disabled"
+msgstr ""
+
+msgid "Maximum available"
+msgstr ""
+
+msgid "If checked, an option can be chosen a maximum number of times."
+msgstr ""
+
+msgid ""
+"If checked, allows a option to be visible only to players with selected "
+"ticket."
+msgstr ""
+
+msgid "Prerequisites"
+msgstr ""
+
+msgid ""
+"If checked, allows a option to be visible only if other options are selected."
+msgstr ""
+
 msgid "Pre-registration"
 msgstr ""
 
@@ -755,10 +856,40 @@ msgstr ""
 msgid "Writing"
 msgstr ""
 
+msgid "Title"
+msgstr ""
+
+msgid ""
+"Enables field 'title', a short (2-3 words) text added to the character's name"
+msgstr ""
+
+msgid "Cover"
+msgstr ""
+
+msgid ""
+"Enables field 'cover', to shown a specific image in the gallery - until "
+"assigned to a player"
+msgstr ""
+
+msgid "Hide"
+msgstr ""
+
+msgid "Enables field 'hide', to be able to hide writing element from players"
+msgstr ""
+
+msgid "Assigned"
+msgstr ""
+
+msgid ""
+"Enables field 'assigned', to track which staff member is responsible for "
+"each writing element"
+msgstr ""
+
 msgid "Replacing names"
 msgstr ""
 
-msgid "If checked, PG names will be automatically replaced by a reference"
+msgid ""
+"If checked, character names will be automatically replaced by a reference"
 msgstr ""
 
 msgid "Paste as text"
@@ -818,6 +949,14 @@ msgstr ""
 msgid "If checked, activates a staff-managed approval process for characters"
 msgstr ""
 
+msgid "Relationships"
+msgstr ""
+
+msgid ""
+"If checked, enables players to write their own list of character "
+"relationships"
+msgstr ""
+
 msgid "Character customisation"
 msgstr ""
 
@@ -867,6 +1006,14 @@ msgid "Assignments"
 msgstr ""
 
 msgid "Number of characters to be assigned (default 1)"
+msgstr ""
+
+msgid "Mirror"
+msgstr ""
+
+msgid ""
+"Enables to set a character as a 'mirror' for another, to hide it's true "
+"nature"
 msgstr ""
 
 msgid "Minimum preferences"
@@ -1032,6 +1179,27 @@ msgstr ""
 msgid "This page allows you to edit event-specific texts."
 msgstr ""
 
+msgid "Added to the registration page, before the form"
+msgstr ""
+
+msgid "Added at the top of the search page of characters"
+msgstr ""
+
+msgid "Added at the bottom of mail confirming signup to players"
+msgstr ""
+
+msgid "Added at the bottom of mail notifying players of character assignment"
+msgstr ""
+
+msgid "Content of mail notifying players of their character in proposed status"
+msgstr ""
+
+msgid "Content of mail notifying players of their character in approved status"
+msgstr ""
+
+msgid "Content of mail notifying players of their character in review status"
+msgstr ""
+
 msgid "This page allows you to change the access roles for the event."
 msgstr ""
 
@@ -1057,14 +1225,6 @@ msgid "If checked, makes the field content visible to all players"
 msgstr ""
 
 msgid "If checked, makes the field content visible to the assigned player"
-msgstr ""
-
-msgid "Preview"
-msgstr ""
-
-msgid ""
-"If checked, makes visible the preview, reserved only to the player to whom "
-"the item is assigned"
 msgstr ""
 
 msgid "Factions"
@@ -1102,12 +1262,6 @@ msgid "PDF"
 msgstr ""
 
 msgid "If checked, makes visible the PDF version of the character sheets"
-msgstr ""
-
-msgid "Co-creation"
-msgstr ""
-
-msgid "If checked, makes co-creation questions and answers visible"
 msgstr ""
 
 msgid "Visibility"
@@ -1263,14 +1417,6 @@ msgid "Additional tickets"
 msgstr ""
 
 msgid "Set if you want to reserve tickets in addition to your"
-msgstr ""
-
-msgid "More information"
-msgstr ""
-
-msgid ""
-"Do you have something you'd like to tell us or report to us about your "
-"registration? Use this field!"
 msgstr ""
 
 #, python-format
@@ -1885,9 +2031,6 @@ msgstr ""
 msgid "Selected options:"
 msgstr ""
 
-msgid "Informations given:"
-msgstr ""
-
 #, python-format
 msgid ""
 "You must pay at least <b>%(amount).2f %(currency)s</b> by %(deadline)d days. "
@@ -2289,6 +2432,13 @@ msgstr ""
 msgid "Indicate the color that will be used for the links"
 msgstr ""
 
+msgid "Nationality"
+msgstr ""
+
+msgid ""
+"Indicate the organization nationality to activate nation-specific features"
+msgstr ""
+
 msgid "Home"
 msgstr ""
 
@@ -2335,6 +2485,9 @@ msgid "Language"
 msgstr ""
 
 msgid "Text language"
+msgstr ""
+
+msgid "Italy"
 msgstr ""
 
 msgid ""
@@ -2515,25 +2668,7 @@ msgstr ""
 msgid "Sheet"
 msgstr ""
 
-msgid "Cover"
-msgstr ""
-
-msgid "Title"
-msgstr ""
-
-msgid "Mirror"
-msgstr ""
-
-msgid "Prop"
-msgstr ""
-
-msgid "Hide"
-msgstr ""
-
 msgid "Progress"
-msgstr ""
-
-msgid "Assigned"
 msgstr ""
 
 msgid "Disabled"
@@ -2560,13 +2695,18 @@ msgstr ""
 msgid "Display order with respect to all questions"
 msgstr ""
 
-msgid "Question status"
+msgid ""
+"Optional: The question is shown, and can be filled by the player. Mandatory: "
+"The question needs to be filled by the player. Disabled: The question is "
+"shown, but cannot be changed by the player. Hidden: The question is not "
+"shown to the player."
 msgstr ""
 
 msgid ""
 "Searchable: Characters can be filtered according to this question. Public: "
 "The answer to this question is publicly visible. Private: The answer to this "
-"question is only visible to the player and organisers."
+"question is only visible to the player. Hidden: The answer is hidden to all "
+"players."
 msgstr ""
 
 msgid "Editable"
@@ -2649,9 +2789,6 @@ msgid ""
 "shown at the start of the form)"
 msgstr ""
 
-msgid "Allowed"
-msgstr ""
-
 msgid ""
 "Staff members who are allowed to be able to see the responses of players "
 "(leave blank to let everyone see)"
@@ -2729,9 +2866,6 @@ msgid "Pronouns"
 msgstr ""
 
 msgid "Indicate the pronouns you wish to be used to refer to you"
-msgstr ""
-
-msgid "Nationality"
 msgstr ""
 
 msgid "Indicate the country of which you are a citizen"
@@ -3089,9 +3223,6 @@ msgstr ""
 msgid "Date from when the surcharge is applied"
 msgstr ""
 
-msgid "Write here additional information to your registration"
-msgstr ""
-
 msgid "Character name"
 msgstr ""
 
@@ -3137,13 +3268,6 @@ msgstr ""
 msgid "Text visible only by the assigned player, when 'show text' is checked"
 msgstr ""
 
-msgid ""
-"Preview visible only by the assigned player, when 'show preview' is checked"
-msgstr ""
-
-msgid "Does it require special props?"
-msgstr ""
-
 msgid "Creation"
 msgstr ""
 
@@ -3178,6 +3302,12 @@ msgid "Transversal"
 msgstr ""
 
 msgid "Secret"
+msgstr ""
+
+msgid ""
+"Primary: main grouping / affiliation for characters. Transversal: secondary "
+"grouping across primary factions. Secret: hidden faction visible only to "
+"assigned characters"
 msgstr ""
 
 msgid "Display order"
@@ -3368,6 +3498,9 @@ msgid "characters"
 msgstr ""
 
 msgid "Confirm"
+msgstr ""
+
+msgid "After confirmation, add another"
 msgstr ""
 
 msgid "The form is saved every 30 seconds."
@@ -3633,9 +3766,6 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-msgid "Participate in the co-creation of the character!"
-msgstr ""
-
 msgid "Change"
 msgstr ""
 
@@ -3651,9 +3781,6 @@ msgstr ""
 msgid "Modify some character elements to make it yours!"
 msgstr ""
 
-msgid "Relationships"
-msgstr ""
-
 msgid "Fill in your character's relationships!"
 msgstr ""
 
@@ -3661,9 +3788,6 @@ msgid "Questions"
 msgstr ""
 
 msgid "Write here questions about your character directly to the authors!"
-msgstr ""
-
-msgid "Answers"
 msgstr ""
 
 msgid "Download complete sheet"
@@ -3829,6 +3953,9 @@ msgid "History preferences"
 msgstr ""
 
 msgid "Go to the history preferences for"
+msgstr ""
+
+msgid "characters"
 msgstr ""
 
 msgid "Historical"
@@ -4664,6 +4791,9 @@ msgstr ""
 msgid "This page performs checks on members' data."
 msgstr ""
 
+msgid "Tax code check"
+msgstr ""
+
 msgid "Card"
 msgstr ""
 
@@ -4952,7 +5082,7 @@ msgstr ""
 msgid "Discover what this event is about!"
 msgstr ""
 
-msgid "View the complete list of characters and their players!"
+msgid "View the list of characters and players!"
 msgstr ""
 
 msgid "Scroll through the characters, and can you filter/search them!"
@@ -5639,15 +5769,30 @@ msgstr ""
 msgid "Total revenue"
 msgstr ""
 
+msgid ""
+"Total amount of money received for this event, minus commission fees and "
+"refunds"
+msgstr ""
+
+msgid "Total costs"
+msgstr ""
+
+msgid ""
+"Total of all expenses incurred for the event, both personal and "
+"organizational, including any tokens and credits issued"
+msgstr ""
+
 msgid "Net profit"
+msgstr ""
+
+msgid ""
+"Net profit of the event, difference between total revenue and total costs"
 msgstr ""
 
 msgid "Organization tax"
 msgstr ""
 
-msgid ""
-"this balance reflects payments currently received and expenses recorded to "
-"date."
+msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
 
 msgid "Item"
@@ -5869,9 +6014,6 @@ msgstr ""
 msgid "Modifiable"
 msgstr ""
 
-msgid "Prerequisites"
-msgstr ""
-
 msgid "Pdf"
 msgstr ""
 
@@ -6065,19 +6207,10 @@ msgstr ""
 msgid "email"
 msgstr ""
 
-msgid "cell"
+msgid "unique code"
 msgstr ""
 
 msgid "age"
-msgstr ""
-
-msgid "info"
-msgstr ""
-
-msgid "chronology"
-msgstr ""
-
-msgid "unique code"
 msgstr ""
 
 msgid "additional"
@@ -6098,10 +6231,10 @@ msgstr ""
 msgid "surcharge"
 msgstr ""
 
-msgid "Age (during the event)"
+msgid "chronology"
 msgstr ""
 
-msgid "Cell"
+msgid "Age (during the event)"
 msgstr ""
 
 msgid "Additions"
@@ -6333,27 +6466,6 @@ msgstr ""
 msgid "This page shows the characters of the event."
 msgstr ""
 
-msgid "title"
-msgstr ""
-
-msgid "preview"
-msgstr ""
-
-msgid "hide"
-msgstr ""
-
-msgid "mirror"
-msgstr ""
-
-msgid "cover"
-msgstr ""
-
-msgid "speedlarp"
-msgstr ""
-
-msgid "assigned"
-msgstr ""
-
 msgid "player"
 msgstr ""
 
@@ -6363,16 +6475,7 @@ msgstr ""
 msgid "XP"
 msgstr ""
 
-msgid "Private informations"
-msgstr ""
-
-msgid "Informations private"
-msgstr ""
-
-msgid "Questions CC"
-msgstr ""
-
-msgid "Answers CC"
+msgid "speedlarp"
 msgstr ""
 
 msgid "Plots"
@@ -6517,12 +6620,6 @@ msgstr ""
 msgid "Reading"
 msgstr ""
 
-msgid "Props"
-msgstr ""
-
-msgid "This page shows the props marked in the characters."
-msgstr ""
-
 msgid "Quest Type"
 msgstr ""
 
@@ -6530,6 +6627,12 @@ msgid "This page shows the types of quests in the event."
 msgstr ""
 
 msgid "This page shows the event quests."
+msgstr ""
+
+msgid "hide"
+msgstr ""
+
+msgid "assigned"
 msgstr ""
 
 msgid "This page shows the relationships between characters."
@@ -6559,6 +6662,9 @@ msgstr ""
 msgid "This page shows the traits assigned to the characters in the run."
 msgstr ""
 
+msgid "title"
+msgstr ""
+
 msgid ""
 "This page shows the different versions available of the character, and the "
 "differences between them."
@@ -6568,41 +6674,6 @@ msgid "This page allows you to fully view a character."
 msgstr ""
 
 msgid "Hi"
-msgstr ""
-
-msgid "Thank you for joining LarpManager! We are thrilled to have you with us."
-msgstr ""
-
-msgid "We advise you to keep this email for future reference."
-msgstr ""
-
-msgid ""
-"First of all, here is the address of the LarpManager for your association:"
-msgstr ""
-
-msgid "This is instead the address of your association's management panel:"
-msgstr ""
-
-msgid "Here are some useful links to help you get started:"
-msgstr ""
-
-msgid "Follow the tutorials to start setting up your first event right away"
-msgstr ""
-
-msgid ""
-"Join the Discord to receive assistance, suggest improvements or notify bug "
-"reports"
-msgstr ""
-
-msgid ""
-"If you have any questions, please do not hesitate to contact us: just reply "
-"to this email."
-msgstr ""
-
-msgid "Welcome on board!"
-msgstr ""
-
-msgid "The LarpManager team"
 msgstr ""
 
 msgid "Your membership"
@@ -6679,21 +6750,7 @@ msgstr ""
 msgid "Standard features"
 msgstr ""
 
-msgid "Motto"
-msgstr ""
-
-msgid "Adds a 'motto' field to characters, a short phrase they frequently use."
-msgstr ""
-
-msgid "Adds a short (2-3 words) 'title' field to characters."
-msgstr ""
-
-msgid ""
-"Adds a 'props' field to main writing elements, allowing staff to note needed "
-"or prepared items."
-msgstr ""
-
-msgid "Allows players to select hidden roles without spoiling them for others."
+msgid "Italian features"
 msgstr ""
 
 msgid ""
@@ -6739,11 +6796,6 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Adds a 'cover' field to a character, to shown a specific image in the "
-"gallery - until assigned to a player."
-msgstr ""
-
-msgid ""
 "Enables 'bring a friend' discount. A registered player provides their unique "
 "code to a new registrant, granting both a discounted price."
 msgstr ""
@@ -6754,11 +6806,6 @@ msgstr ""
 msgid ""
 "Automatically generates and updates PDFs of character sheets, gallery and "
 "player profiles."
-msgstr ""
-
-msgid ""
-"Adds a 'hide' field to main writing elements, to prevent players viewing "
-"them."
 msgstr ""
 
 msgid ""
@@ -6939,18 +6986,7 @@ msgid ""
 "define multiple due dates and amounts."
 msgstr ""
 
-msgid "Character relationships (staff)"
-msgstr ""
-
 msgid "Allows authors to prepare a list of inter-character relationships."
-msgstr ""
-
-msgid "Character relationships (player)"
-msgstr ""
-
-msgid ""
-"Enables players to write their own list of character relationships, helping "
-"them familiarize themselves ahead of the event."
 msgstr ""
 
 msgid "Sections"
@@ -6993,11 +7029,6 @@ msgstr ""
 msgid ""
 "Adds a 'progress' status field (e.g. draft, ready, approved) to key writing "
 "elements."
-msgstr ""
-
-msgid ""
-"Adds an 'assigned' field for main writing elements, letting you track which "
-"staff member is responsible for each."
 msgstr ""
 
 msgid ""
@@ -7056,7 +7087,7 @@ msgid ""
 "match and approve corresponding wire payments."
 msgstr ""
 
-msgid "Fiscal Budget (ITA)"
+msgid "Fiscal Budget"
 msgstr ""
 
 msgid ""
@@ -7092,11 +7123,6 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Adds a free-text field to the registration form so players can share any "
-"extra information or comments."
-msgstr ""
-
-msgid ""
 "Adds support for assigning XP (experience points) to characters, which can "
 "then be used to purchase skills."
 msgstr ""
@@ -7110,11 +7136,6 @@ msgstr ""
 msgid ""
 "Allows you to set a 'tax' percentage on event income that must be set aside "
 "for the organisation."
-msgstr ""
-
-msgid ""
-"Adds a 'preview' field to writing elements, shareable with the player before "
-"the full sheet is published."
 msgstr ""
 
 msgid "Centaurs"
@@ -7256,19 +7277,6 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Allows organizers to pose questions about a character, which the player can "
-"answer."
-msgstr ""
-
-msgid "Restrict Staff Access"
-msgstr ""
-
-msgid ""
-"Allows more fine-grained control over which staff members can view players' "
-"answers to registration questions."
-msgstr ""
-
-msgid ""
 "Automatically generates a customizable PDF receipt for each payment and "
 "emails it to the user."
 msgstr ""
@@ -7338,7 +7346,10 @@ msgid ""
 "used as a starting point for other events."
 msgstr ""
 
-msgid "Adds to all registrations an unique code."
+msgid "Fiscal code check"
+msgstr ""
+
+msgid "Check the validity of the fiscal code."
 msgstr ""
 
 msgid "Audits"
@@ -7390,6 +7401,9 @@ msgid "Statistics"
 msgstr ""
 
 msgid "Modules"
+msgstr ""
+
+msgid "Answers"
 msgstr ""
 
 msgid "Cache Reloading"
@@ -7802,9 +7816,6 @@ msgstr ""
 msgid ""
 "The character has been proposed to the staff, who will examine it and "
 "approve it or request changes if necessary."
-msgstr ""
-
-msgid "Co-creation answers saved!"
 msgstr ""
 
 msgid "You have reached the maximum number of characters that can be created"

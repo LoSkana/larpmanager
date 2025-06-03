@@ -12,27 +12,6 @@
         <b>{% trans "Show / hide" %}</b>
     </p>
     <div class="nav fields">
-        {% if features.title %}
-            <a href="#" class="my_toggle" tog='titlee'>{% trans "title" %}</a>
-        {% endif %}
-        {% if features.preview %}
-            <a href="#" class="my_toggle" tog='preview'>{% trans "preview" %}</a>
-        {% endif %}
-        {% if features.hide %}
-            <a href="#" class="my_toggle" tog='nasc'>{% trans "hide" %}</a>
-        {% endif %}
-        {% if features.mirror %}
-            <a href="#" class="my_toggle" tog='mirr'>{% trans "mirror" %}</a>
-        {% endif %}
-        {% if features.cover %}
-            <a href="#" class="my_toggle" tog='cover'>{% trans "cover" %}</a>
-        {% endif %}
-        {% if features.speedlarp %}
-            <a href="#" class="my_toggle" tog='speedlarp'>{% trans "speedlarp" %}</a>
-        {% endif %}
-        {% if features.assigned %}
-            <a href="#" class="my_toggle" tog='assign'>{% trans "assigned" %}</a>
-        {% endif %}
         {% if user_character_max %}
             <a href="#" class="my_toggle" tog='player'>{% trans "player" %}</a>
         {% endif %}
@@ -42,21 +21,18 @@
         {% if features.px %}
             <a href="#" class="my_toggle" tog='px'>{% trans "XP" %}</a>
         {% endif %}
-        {% if features.private_info %}
-            <a href="#" class="my_toggle" tog='pinfo'>{% trans "Private informations" %}</a>
-        {% endif %}
-        {% if features.co_creation %}
-            <a href="#" class="my_toggle" tog='co_creat'>{% trans "Co-creation" %}</a>
-        {% endif %}
         {% if form_questions %}
             {% for key, que in form_questions.items %}
-                {% if que.typ == 'e' %}
-                    <a href="#" class="my_toggle" tog='q_{{ key }}'>{{ que.display | truncatechars:50 }}</a>
-                {% else %}
+                {% if que.basic_typ %}
                     <a href="#" class="load_que lq_{{ key }}"  key="{{ key }}">{{ que.display | truncatechars:50 }}</a>
                     <a href="#" class="my_toggle hide" tog='q_{{ key }}'>hidden</a>
+                {% else %}
+                    <a href="#" class="my_toggle" tog='q_{{ key }}'>{{ que.display | truncatechars:50 }}</a>
                 {% endif %}
             {% endfor %}
+        {% endif %}
+        {% if features.speedlarp %}
+            <a href="#" class="my_toggle" tog='speedlarp'>{% trans "speedlarp" %}</a>
         {% endif %}
     </div>
     <table id="characters" class="tablesorter mob writing regs">
@@ -65,33 +41,11 @@
                 <th></th>
                 <th>{{ fields_name.name }}</th>
                 <th></th>
-                {% if features.progress %}
-                    <th>{% trans "Progress" %}</th>
-                {% endif %}
-                {% if features.title %}
-                    <th class="hide titlee">{% trans "Title" %}</th>
-                {% endif %}
-                {% if features.assigned %}
-                    <th class="hide assign">{% trans "Assigned" %}</th>
-                {% endif %}
                 {% if user_character_max %}
                     <th class="hide player">{% trans "Player" %}</th>
                 {% endif %}
                 {% if user_character_approval %}
                     <th class="hide status">{% trans "Status" %}</th>
-                {% endif %}
-                {% if features.faction %}<th>{{ fields_name.faction }}</th>{% endif %}
-                {% if features.mirror %}
-                    <th class="hide mirr">{% trans "Mirror" %}</th>
-                {% endif %}
-                {% if features.hide %}
-                    <th class="hide nasc">{% trans "Hide" %}</th>
-                {% endif %}
-                {% if features.cover %}
-                    <th class="hide cover">{% trans "Cover" %}</th>
-                {% endif %}
-                {% if features.private_info %}
-                    <th class="hide pinfo">{% trans "Informations private" %}</th>
                 {% endif %}
                 {% if features.px %}
                     <th class="hide px">{% trans "XP tot" %}</th>
@@ -99,20 +53,11 @@
                     <th class="hide px">{% trans "XP avail" %}</th>
                 {% endif %}
                 {% if form_questions %}
-                    {% for key, que in form_questions.items %}<th class="hide q_{{ key }}">{{ que.display }}</th>{% endfor %}
+                    {% for key, que in form_questions.items %}
+                        <th class="hide q_{{ key }}">{{ que.display }}</th>
+                        {% if que.typ == 'e' or que.typ == 'teaser' or que.typ == 'text' %}<th class="hide q_{{ key }}">(L)</th>{% endif %}
+                    {% endfor %}
                 {% endif %}
-                <th>{{ fields_name.teaser }}</th>
-                <th>(L)</th>
-                {% if features.preview %}
-                    <th class="hide preview">{% trans "Preview" %}</th>
-                    <th class="hide preview">(L)</th>
-                {% endif %}
-                {% if features.co_creation %}
-                    <th class="hide co_creat">{% trans "Questions CC" %}</th>
-                    <th class="hide co_creat">{% trans "Answers CC" %}</th>
-                {% endif %}
-                <th>{{ fields_name.text }}</th>
-                <th>(L)</th>
                 {% if features.plot %}
                     <th>{% trans "Plots" %}</th>
                     <th>(N)</th>
@@ -141,79 +86,74 @@
                             <a href="{% url 'orga_characters_relationships' run.event.slug run.number el.id %}">{% trans "Relationships" %}</a>   &nbsp;
                         {% endif %}
                     </td>
-                    {% if features.progress %}
-                        <td>{% include "elements/show_progress.html" with el=el %}</td>
-                    {% endif %}
-                    {% if features.title %}<td class="hide titlee">{{ el.title | safe | striptags }}</td>{% endif %}
-                    {% if features.assigned %}
-                        <td class="hide assign">
-                            {% if el.assigned_id %}{{ assigned|get:el.assigned_id }}{% endif %}
-                        </td>
-                    {% endif %}
                     {% if features.user_character %}<td class="hide player">{{ el.player.show_nick }}</td>{% endif %}
                     {% if user_character_approval %}<td class="hide status">{{ el.get_status_display }}</td>{% endif %}
-                    {% if features.faction %}
-                        <td>
-                            {% for g in el.factions %}
-                                <a href="{% url 'orga_factions_edit' run.event.slug run.number g.id %}">{{ g.name }}</a>
-                                <br />
-                            {% endfor %}
-                        </td>
-                    {% endif %}
-                    {% if features.mirror %}
-                        <td class="hide mirr">
-                            {% if el.mirror %}<i>{{ el.mirror }}</i>{% endif %}
-                        </td>
-                    {% endif %}
-                    {% if features.hide %}
-                        <td class="hide nasc">
-                            {% if el.hide %}Si{% endif %}
-                        </td>
-                    {% endif %}
-                    {% if features.cover %}
-                        <td class="hide cover">
-                            {% if el.cover %}
-                                <a href="{{ el.thumb.url }}">
-                                    <img src="{{ el.thumb.url }}"
-                                         class="character-cover"
-                                         alt="character cover" />
-                                </a>
-                            {% endif %}
-                        </td>
-                    {% endif %}
-                    {% if features.private_info %}<td class="hide pinfo">{{ el.private_info }}</td>{% endif %}
                     {% if features.px %}
                         <td class="hide px">{{ el.addit | get:'px_tot' }}</td>
                         <td class="hide px">{{ el.addit | get:'px_used' }}</td>
                         <td class="hide px">{{ el.addit | get:'px_avail' }}</td>
                     {% endif %}
                     {% for key, que in form_questions.items %}
-                        {% if que.typ == 'e' %}
+                        {% if que.typ == 'teaser' or que.typ == 'text' %}
+                            <td class="hide q_{{ key }}">
+                                {% with ed_id=que.typ|concat:'_red' %}
+                                    {% lookup el ed_id as value %}
+                                    {{ value | safe }}
+                                {% endwith %}
+                            </td>
+                            <td class="hide q_{{ key }}">
+                                {% with ed_id=que.typ|concat:'_ln' %}
+                                    {% lookup el ed_id as value %}
+                                    {{ value }}
+                                {% endwith %}
+                            </td>
+                        {% elif que.typ == 'e' %}
                             <td class="hide question q_{{ key }}">
                                 {% with ed_id=key|concat:'_red' %}
                                     {% lookup el ed_id as value %}
                                     {{ value | safe }}
                                 {% endwith %}
                             </td>
-                        {% else %}
+                            <td class="hide question q_{{ key }}">
+                                {% with ed_id=key|concat:'_ln' %}
+                                    {% lookup el ed_id as value %}
+                                    {{ value }}
+                                {% endwith %}
+                            </td>
+                        {% elif que.typ == 's' or que.typ == 'm' or que.typ == 't' or que.typ == 'p' %}
                             <td class="hide question q_{{ key }}">
                                 <span class="has_show_tooltip res_{{ key }}"></span>
                                 <span class="hide show_tooltip">{{ que.display }}</span>
                             </td>
+                        {% else %}
+                            <td class="hide q_{{ key }}">
+                                {% if que.typ == 'progress' %}
+                                    {% include "elements/show_progress.html" with el=el %}
+                                {% elif que.typ == 'title' %}
+                                    {{ el.title | safe | striptags }}
+                                {% elif que.typ == 'assigned' %}
+                                    {% if el.assigned_id %}{{ assigned|get:el.assigned_id }}{% endif %}
+                                {% elif que.typ == 'faction' %}
+                                    {% for g in el.factions %}
+                                        <a href="{% url 'orga_factions_edit' run.event.slug run.number g.id %}">{{ g.name }}</a>
+                                        <br />
+                                    {% endfor %}
+                                {% elif que.typ == 'mirror' %}
+                                    {% if el.mirror %}<i>{{ el.mirror }}</i>{% endif %}
+                                {% elif que.typ == 'hide' %}
+                                    {% if el.hide %}<i class="fa-solid fa-check"></i>{% endif %}
+                                {% elif que.typ == 'cover' %}
+                                    {% if el.cover %}
+                                        <a href="{{ el.thumb.url }}">
+                                            <img src="{{ el.thumb.url }}"
+                                                 class="character-cover"
+                                                 alt="character cover" />
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
                         {% endif %}
                     {% endfor %}
-                    <td>{{ el.teaser_red | safe }}</td>
-                    <td>{{ el.teaser_ln }}</td>
-                    {% if features.preview %}
-                        <td class="hide preview">{{ el.preview_red | safe }}</td>
-                        <td class="hide preview">{{ el.preview_ln }}</td>
-                    {% endif %}
-                    {% if features.co_creation %}
-                        <td class="hide co_creat">{{ el.co_creation_question_red | safe }}</td>
-                        <td class="hide co_creat">{{ el.co_creation_answer_red | safe }}</td>
-                    {% endif %}
-                    <td>{{ el.text_red | safe }}</td>
-                    <td>{{ el.text_ln }}</td>
                     {% if features.plot %}
                         <td>
                             {% for p in el.plts %}
@@ -226,7 +166,7 @@
                     {% if features.speedlarp %}
                         <td class="hide speedlarp">
                             {% for p in el.speedlarps_list.all %}
-                                <a href="{% url 'orga_speedlarps_edit' run.event.slug run.number p.number %}">{{ p }}</a>
+                                <a href="{% url 'orga_speedlarps_edit' run.event.slug run.number p.id %}">{{ p }}</a>
                             {% endfor %}
                         </td>
                         <td class="hide speedlarp">{{ el.speedlarps_list.count }}</td>
@@ -271,17 +211,20 @@
 var url_load_questions = "{% url 'orga_writing_form_list' run.event.slug run.number label_typ %}";
 var url_load_questions_email = "{% url 'orga_writing_form_email' run.event.slug run.number label_typ %}";
 
-var download_text = '{% trans "Download" %}';
-
 var accounting = false;
 
 {% include "elements/questions/load.js" %}
 
 window.addEventListener('DOMContentLoaded', function() {
     $(document).ready(function() {
-        el = $('#show');
-        if ($('.fields').find('a').length == 0) el.hide();
-        // console.log($('.fields').find('a').length);
+        setTimeout(function() {
+        {% for key, que in form_questions.items %}
+            {% if que.typ == 'teaser' or que.typ == 'text' %}
+                $('a.my_toggle[tog="q_{{ key }}"]').trigger('click');
+                console.log('{{ key }}');
+            {% endif %}
+        {% endfor %}
+        }, 100);
     });
 });
 

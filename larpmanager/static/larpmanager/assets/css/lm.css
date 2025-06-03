@@ -1,4 +1,4 @@
--.hide { display: none; }
+.hide { display: none; }
 
 input[type="submit"], input[type="reset"], input[type="button"], button, .button {
     font-family: inherit;
@@ -990,6 +990,7 @@ header.sec h1 {
 
 #one .inner {
     padding-bottom: 2em !important;
+    overflow-x: auto;
 }
 
 .login {
@@ -1247,6 +1248,16 @@ th select {
     height: 7em;
 }
 
-.char-marker {
-    color: yellow;
+.avatar_help {
+    max-width:700px;
+    margin: auto
+}
+
+.inline {
+    display: inline;
+}
+
+.char_profile {
+    max-width:700px;
+    margin: auto;
 }

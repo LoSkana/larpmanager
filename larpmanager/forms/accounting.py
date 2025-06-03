@@ -131,6 +131,7 @@ class OrgaPaymentForm(MyFormRun):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["reg"].widget.set_event(self.params["event"])
+        self.fields["reg"].required = True
 
 
 class ExeOutflowForm(MyForm):
@@ -297,7 +298,7 @@ class ExeExpenseForm(MyForm):
 
 class DonateForm(MembershipForm):
     amount = forms.DecimalField(min_value=0.01, max_value=1000, decimal_places=2)
-    descr = forms.CharField(max_length=1000, widget=forms.Textarea(attrs={"rows": 2, "cols": 80}))
+    descr = forms.CharField(max_length=1000, widget=forms.Textarea(attrs={"rows": 2}))
 
 
 class CollectionForm(BaseAccForm):

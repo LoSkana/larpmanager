@@ -58,7 +58,7 @@ class WritingForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        for s in ["props", "cover"]:
+        for s in ["cover"]:
             if s in self.fields and s not in self.params["features"]:
                 del self.fields[s]
 
@@ -87,11 +87,6 @@ class WritingForm(MyForm):
 
         self.show_link = ["id_teaser", "id_text"]
 
-        if "preview" in self.params["features"]:
-            self.show_link.append("id_preview")
-        elif "preview" in self.fields:
-            self.delete_field("preview")
-
 
 class PlayerRelationshipForm(MyForm):
     page_title = _("Character Relationship")
@@ -107,6 +102,7 @@ class PlayerRelationshipForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["target"].widget.set_event(self.params["run"].event)
+        self.fields["target"].required = True
 
     def clean(self):
         cleaned_data = super().clean()
@@ -147,7 +143,9 @@ class OrgaRelationshipForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["source"].widget.set_event(self.params["event"])
+        self.fields["source"].required = True
         self.fields["target"].widget.set_event(self.params["event"])
+        self.fields["target"].required = True
 
     def clean(self):
         cleaned_data = super().clean()
@@ -307,7 +305,7 @@ class QuestTypeForm(WritingForm):
 
     class Meta:
         model = QuestType
-        fields = ["progress", "name", "assigned", "teaser", "preview", "props", "event"]
+        fields = ["progress", "name", "assigned", "teaser", "event"]
 
         widgets = {
             "teaser": WritingTinyMCE(),
@@ -326,9 +324,7 @@ class QuestForm(WritingForm):
             "name",
             "assigned",
             "teaser",
-            "preview",
             "text",
-            "props",
             "hide",
             "open_show",
             "event",
@@ -389,10 +385,8 @@ class TraitForm(WritingForm):
             "name",
             "assigned",
             "teaser",
-            "preview",
             "text",
             "role",
-            "props",
             "keywords",
             "safety",
             "hide",

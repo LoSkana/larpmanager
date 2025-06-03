@@ -14,7 +14,14 @@
         <table class="mob no_csv">
             {{ form.as_table }}
         </table>
-        <input type="submit" value="Submit">
+        <input type="submit" value="Confirm">
+        <br />
+        <br />
+        <div class="continue">
+            <input type="checkbox" id="continue" name="continue" class="hide">
+            <label for="continue">{% trans "After confirmation, add another" %}</label>
+        </div>
+        <br />
     </form>
 {% endblock content %}
 {% block js %}

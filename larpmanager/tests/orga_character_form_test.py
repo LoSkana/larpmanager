@@ -47,9 +47,6 @@ def orga_character_form(live_server, page):
     # activate characters
     go_to(page, live_server, "/manage/features/178/on")
 
-    # activate form
-    go_to(page, live_server, "/manage/features/176/on")
-
     # activate player editor
     go_to(page, live_server, "/manage/features/120/on")
 
@@ -59,6 +56,8 @@ def orga_character_form(live_server, page):
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
     page.locator("#id_user_character_approval").check()
+    page.get_by_role("link", name="Character form ").click()
+    page.locator("#id_character_form_wri_que_max").check()
     page.get_by_role("button", name="Confirm", exact=True).click()
 
     # create character form
@@ -121,13 +120,11 @@ def create_second_char(live_server, page):
     )
     expect(page.get_by_role("checkbox", name="few")).to_be_disabled()
     page.get_by_role("checkbox", name="many - (Available 1)").check()
-    expect(page.locator('[id="_tr"]')).to_contain_text("options: 1 / 2")
+    expect(page.locator('[id="id_q7_tr"]')).to_contain_text("options: 1 / 2")
     page.locator("#id_q9").click()
     page.locator("#id_q9").fill("asda")
     page.get_by_role("button", name="Confirm", exact=True).click()
-    expect(page.locator("#one")).to_contain_text(
-        "Player: User Test Status: Creation dsfdfsd Private area Sheet sdfdsfds"
-    )
+    expect(page.locator("#one")).to_contain_text("Player: User Test Status: Creation dsfdfsd Text sdfdsfds")
 
 
 def show_chars(page, live_server):
@@ -193,8 +190,8 @@ def recheck_char(live_server, page):
     expect(page.locator("#main_form")).to_contain_text("long descr")
     expect(page.locator("#lbl_id_q8")).to_contain_text("restricted")
     expect(page.locator("#main_form")).to_contain_text("restricted textonly only descrall all descr")
-    expect(page.locator('[id="_tr"]')).to_contain_text("multiple text")
-    expect(page.locator('[id="_tr"]')).to_contain_text("multiple descrall all descrmany many descrfew few descr")
+    expect(page.locator('[id="id_q7_tr"]')).to_contain_text("multiple text")
+    expect(page.locator('[id="id_q7_tr"]')).to_contain_text("multiple descrall all descrmany many descrfew few descr")
     page.get_by_role("button", name="Confirm", exact=True).click()
     go_to(page, live_server, "/test/1/character/list")
     page.get_by_role("link", name="").click()
@@ -225,7 +222,7 @@ def create_first_char(live_server, page):
     page.locator("#id_q5").fill("bbbbbbbbbb")
     expect(page.locator("#id_q5")).to_have_value("bbbbbbbbbb")
     expect(page.locator("#main_form")).to_contain_text("long descr")
-    expect(page.locator("#main_form")).to_contain_text("characters: 10 / 10")
+    expect(page.locator("#main_form")).to_contain_text("text length: 10 / 10")
     expect(page.locator("#lbl_id_q6")).to_contain_text("available text")
     expect(page.locator("#main_form")).to_contain_text("available descrall allfew few descr")
     page.locator("#id_q6").select_option("1")
@@ -237,8 +234,8 @@ def create_first_char(live_server, page):
     expect(page.locator("#id_q7")).to_contain_text("many - (Available 2)")
     expect(page.locator("#id_q7")).to_contain_text("few - (Available 1)")
     page.get_by_text("multiple descrall all").click()
-    expect(page.locator('[id="_tr"]')).to_contain_text("multiple descrall all descrmany many descrfew few descr")
-    expect(page.locator('[id="_tr"]')).to_contain_text("multiple text")
+    expect(page.locator('[id="id_q7_tr"]')).to_contain_text("multiple descrall all descrmany many descrfew few descr")
+    expect(page.locator('[id="id_q7_tr"]')).to_contain_text("multiple text")
     page.get_by_role("checkbox", name="all").check()
     page.get_by_role("checkbox", name="many - (Available 2)").check()
     page.get_by_text("options: 2 /").click()
@@ -254,11 +251,11 @@ def create_first_char(live_server, page):
 
 def fill_presentation_text(page):
     page.get_by_role("row", name="Presentation (*) Show").get_by_role("link").click()
-    time.sleep(2)
+    time.sleep(5)
     frame = page.get_by_role("row", name="Presentation (*) Show").locator('iframe[title="Rich Text Area"]')
     fill_tinymce(frame, "baba")
     page.get_by_role("row", name="Text (*) Show").get_by_role("link").click()
-    time.sleep(2)
+    time.sleep(5)
     frame = page.get_by_role("row", name="Text (*) Show").locator('iframe[title="Rich Text Area"]')
     fill_tinymce(frame, "bebe")
 

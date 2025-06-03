@@ -33,6 +33,7 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
+from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association
 from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature
 from larpmanager.models.larpmanager import LarpManagerPlan
@@ -41,7 +42,6 @@ from larpmanager.models.utils import (
     UploadToPathAndRename,
     download,
     get_attr,
-    get_element_config,
     my_uuid_short,
     show_thumb,
 )
@@ -581,26 +581,20 @@ class RunConfig(BaseModel):
         return f"{self.run} {self.name}"
 
     class Meta:
-        unique_together = ("run", "name")
         indexes = [
             models.Index(fields=["run", "name"]),
         ]
-
-
-class RunText(BaseModel):
-    COCREATION = "c"
-    TYPE_CHOICES = [
-        (COCREATION, "Co-creation"),
-    ]
-
-    first = HTMLField(blank=True, null=True)
-    second = HTMLField(blank=True, null=True)
-
-    run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="texts")
-
-    eid = models.IntegerField()
-
-    typ = models.CharField(max_length=1, choices=TYPE_CHOICES)
+        constraints = [
+            UniqueConstraint(
+                fields=["run", "name", "deleted"],
+                name="unique_run_config_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["run", "name"],
+                condition=Q(deleted=None),
+                name="unique_run_config_without_optional",
+            ),
+        ]
 
 
 class PreRegistration(BaseModel):

@@ -29,6 +29,7 @@ from django.db.models.functions import Substr
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.http import require_POST
 from slugify import slugify
 
 from larpmanager.accounting.registration import (
@@ -44,7 +45,7 @@ from larpmanager.cache.links import reset_run_event_links
 from larpmanager.cache.registration import reset_cache_reg_counts
 from larpmanager.cache.role import has_event_permission
 from larpmanager.cache.run import reset_cache_run
-from larpmanager.cache.text_fields import get_cache_reg_field, remove_html_tags
+from larpmanager.cache.text_fields import get_cache_reg_field
 from larpmanager.forms.registration import (
     OrgaRegistrationForm,
     RegistrationCharacterRelForm,
@@ -68,7 +69,7 @@ from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
 )
-from larpmanager.models.member import Membership, get_user_membership
+from larpmanager.models.member import Member, Membership, get_user_membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -81,9 +82,11 @@ from larpmanager.utils.common import (
     get_registration,
     get_time_diff,
 )
+from larpmanager.utils.download import download
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.registration import is_reg_provisional
 from larpmanager.utils.upload import upload_elements
+from larpmanager.views.orga.member import member_field_correct
 
 
 def check_time(times, step, start=None):
@@ -95,7 +98,7 @@ def check_time(times, step, start=None):
 
 
 def _orga_registrations_traits(r, ctx):
-    if "questbuilder" in ctx["features"]:
+    if "questbuilder" not in ctx["features"]:
         return
 
     r.traits = {}
@@ -197,8 +200,9 @@ def _orga_registrations_standard(r, ctx, cache):
         orga_registrations_membership(r, ctx)
 
     # age at run
-    if r.member.birth_date and ctx["run"].start:
-        r.age = calculate_age(r.member.birth_date, ctx["run"].start)
+    if ctx["registration_reg_que_age"]:
+        if r.member.birth_date and ctx["run"].start:
+            r.age = calculate_age(r.member.birth_date, ctx["run"].start)
 
 
 def orga_registrations_custom(r, ctx, char):
@@ -303,6 +307,9 @@ def orga_registrations(request, s, n):
         if request.POST.get("popup") == "1":
             return registrations_popup(request, ctx)
 
+        if request.POST.get("download") == "1":
+            return download(ctx, Registration, "registration")
+
         return upload_elements(request, ctx, Registration, "registration", "orga_registrations")
 
     cache = {}
@@ -314,6 +321,8 @@ def orga_registrations(request, s, n):
     _orga_registrations_discount(ctx)
 
     _orga_registrations_custom_character(ctx)
+
+    ctx["registration_reg_que_age"] = ctx["event"].get_config("registration_reg_que_age", False)
 
     ctx["reg_all"] = {}
 
@@ -348,12 +357,16 @@ def orga_registrations(request, s, n):
 
     ctx["upload"] = ",".join(
         [
-            _("'player' (player's email)"),
-            _("'ticket' (ticket name or number)"),
-            _("'character' (character name or number to be assigned)"),
-            _("'pwyw' (donation)."),
+            str(_("'player' (player's email)")),
+            str(_("'ticket' (ticket name or number)")),
+            str(_("'character' (character name or number to be assigned)")),
+            str(_("'pwyw' (donation).")),
         ]
     )
+
+    ctx["download"] = 1
+    if ctx["event"].get_config("show_export", False):
+        ctx["export"] = "registration"
 
     return render(request, "larpmanager/orga/registration/registrations.html", ctx)
 
@@ -454,12 +467,12 @@ def orga_registration_form_list(request, s, n):
                 res[el.reg_id] = []
             res[el.reg_id].append(cho[el.option_id])
 
-    elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.EDITOR]:
+    elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
         que = RegistrationAnswer.objects.filter(question=q, reg__run=ctx["run"])
-        que = que.annotate(short_text=Substr("text", 1, max_length + 20))
+        que = que.annotate(short_text=Substr("text", 1, max_length))
         que = que.values("reg_id", "short_text")
         for el in que:
-            answer = remove_html_tags(el["short_text"])[:max_length]
+            answer = el["short_text"]
             if len(answer) == max_length:
                 popup.append(el["reg_id"])
             res[el["reg_id"]] = answer
@@ -493,7 +506,8 @@ def orga_registration_form_email(request, s, n):
     for opt in RegistrationOption.objects.filter(question=q):
         cho[opt.id] = opt.display
 
-    for el in RegistrationChoice.objects.filter(question=q, reg__run=ctx["run"]).select_related("reg", "reg__member"):
+    que = RegistrationChoice.objects.filter(question=q, reg__run=ctx["run"], reg__cancellation_date__isnull=True)
+    for el in que.select_related("reg", "reg__member"):
         if el.option_id not in res:
             res[el.option_id] = {"emails": [], "names": []}
         res[el.option_id]["emails"].append(el.reg.member.email)
@@ -530,31 +544,7 @@ def orga_registrations_edit(request, s, n, num):
             form.save_reg_questions(reg)
 
             if "questbuilder" in ctx["features"]:
-                done = []
-                for qt in QuestType.objects.filter(event=ctx["event"]):
-                    qt_id = f"qt_{qt.number}"
-                    tid = form.cleaned_data[qt_id]
-                    if int(tid):
-                        done.append(qt.number)
-                        # check if already existing
-                        if (
-                            AssignmentTrait.objects.filter(
-                                run=ctx["run"],
-                                member=reg.member,
-                                trait_id=tid,
-                                typ=qt.number,
-                            ).count()
-                            == 0
-                        ):
-                            AssignmentTrait.objects.filter(run=ctx["run"], member=reg.member, typ=qt.number).delete()
-                            AssignmentTrait.objects.create(
-                                run=ctx["run"],
-                                member=reg.member,
-                                trait_id=tid,
-                                typ=qt.number,
-                            )
-
-                AssignmentTrait.objects.filter(run=ctx["run"], member=reg.member).exclude(typ__in=done).delete()
+                _save_questbuilder(ctx, form, reg)
 
             return redirect("orga_registrations", s=ctx["event"].slug, n=ctx["run"].number)
     elif num != 0:
@@ -565,6 +555,25 @@ def orga_registrations_edit(request, s, n, num):
     ctx["form"] = form
 
     return render(request, "larpmanager/orga/edit.html", ctx)
+
+
+def _save_questbuilder(ctx, form, reg):
+    for qt in QuestType.objects.filter(event=ctx["event"]):
+        qt_id = f"qt_{qt.number}"
+        tid = int(form.cleaned_data[qt_id])
+        base_kwargs = {"run": ctx["run"], "member": reg.member, "typ": qt.number}
+
+        if tid:
+            ait = AssignmentTrait.objects.filter(**base_kwargs).first()
+
+            if ait and ait.trait_id != tid:
+                ait.delete()
+                ait = None
+
+            if not ait:
+                AssignmentTrait.objects.create(**base_kwargs, trait_id=tid)
+        else:
+            AssignmentTrait.objects.filter(**base_kwargs).delete()
 
 
 @login_required
@@ -814,3 +823,64 @@ def orga_lottery(request, s, n):
 
 def calculate_age(born, today):
     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+
+@require_POST
+def orga_registration_member(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_registrations")
+    member_id = request.POST.get("mid")
+
+    # check it's a member
+    try:
+        member = Member.objects.get(pk=member_id)
+    except ObjectDoesNotExist:
+        return JsonResponse({"k": 0})
+
+    # check they have a registration it this event
+    try:
+        Registration.objects.filter(member=member, run=ctx["run"]).first()
+    except ObjectDoesNotExist:
+        return JsonResponse({"k": 0})
+
+    text = f"<h2>{member.display_real()}</h2>"
+
+    if member.profile:
+        text += f"<img src='{member.profile_thumb.url}' style='width: 15em; margin: 1em; border-radius: 5%;' />"
+
+    # check if the user can see sensitive data
+    exclude = ["profile", "newsletter", "language", "presentation"]
+    if not has_event_permission(ctx, request, s, "orga_sensitive"):
+        exclude.extend(
+            [
+                "diet",
+                "safety",
+                "legal_name",
+                "birth_date",
+                "birth_place",
+                "fiscal_code",
+                "document_type",
+                "document",
+                "document_issued",
+                "document_expiration",
+                "accessibility",
+                "residence_address",
+            ]
+        )
+
+    member_cls: type[Member] = Member
+    member_fields = sorted(request.assoc["members_fields"])
+    member_field_correct(member, member_fields)
+    for field_name in member_fields:
+        if not field_name:
+            continue
+
+        if field_name in exclude:
+            continue
+        # noinspection PyUnresolvedReferences, PyProtectedMember
+        field_label = member_cls._meta.get_field(field_name).verbose_name
+        value = getattr(member, field_name)
+        if not value:
+            continue
+        text += f"<p><b>{field_label}</b>: {value}</p>"
+
+    return JsonResponse({"k": 1, "v": text})

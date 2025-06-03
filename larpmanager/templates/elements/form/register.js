@@ -71,16 +71,21 @@ $(document).ready(function(){
         $('#confirm').prop('disabled', !dis);
     }
 
-    unavail.forEach(value => {
-        if (hide_unavailable) {
-            $('option[value="' + value + '"]').remove();
-            $('input[type="checkbox"][value="' + value + '"]').closest('label').remove();
-        } else {
-            $('option[value="' + value + '"]').prop("disabled", true);
-            $('input[type="checkbox"][value="' + value + '"]')
-                .prop("disabled", true)
-                .addClass("unavail");
-        }
+    Object.entries(unavail).forEach(([question, values]) => {
+        console.log(question);
+        console.log(values);
+        values.forEach(value => {
+            const selectorPrefix = '#id_q' + question + '_tr ';
+            if (hide_unavailable) {
+                $(selectorPrefix + 'option[value="' + value + '"]').remove();
+                $(selectorPrefix + 'input[type="checkbox"][value="' + value + '"]').closest('label').remove();
+            } else {
+                $(selectorPrefix + 'option[value="' + value + '"]').prop("disabled", true);
+                $(selectorPrefix + 'input[type="checkbox"][value="' + value + '"]')
+                    .prop("disabled", true)
+                    .addClass("unavail");
+            }
+        });
     });
 
     for (const el of ['id_quotas', 'id_ticket', 'id_additionals']) {

@@ -107,15 +107,13 @@ def init_cache_config_run(run):
         "questbuilder",
         "workshop",
         "print_pdf",
-        "co_creation",
-        "preview",
     ]
     for config_name in conf_features:
         if config_name not in ev_features:
             continue
         ctx["show_" + config_name] = run.get_config("show_" + config_name, False)
 
-    for config_name in ["char", "teaser", "preview", "text"]:
+    for config_name in ["char", "teaser", "text"]:
         ctx["show_" + config_name] = run.get_config("show_" + config_name, False)
 
     basics = QuestionType.get_basic_types()

@@ -131,6 +131,9 @@ def orga_registration_form_edit(request, s, n, num):
     perm = "orga_registration_form"
     ctx = check_event_permission(request, s, n, perm)
     if backend_edit(request, ctx, OrgaRegistrationQuestionForm, num, assoc=False):
+        if "continue" in request.POST:
+            return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, num=0)
+
         if str(request.POST.get("new_option", "")) == "1":
             return redirect(
                 orga_registration_options_new, s=ctx["event"].slug, n=ctx["run"].number, num=ctx["saved"].id
@@ -163,9 +166,11 @@ def orga_registration_options_new(request, s, n, num):
 
 def registration_option_edit(ctx, num, request):
     if backend_edit(request, ctx, OrgaRegistrationOptionForm, num, assoc=False):
-        return redirect(
-            "orga_registration_form_edit", s=ctx["event"].slug, n=ctx["run"].number, num=ctx["saved"].question_id
-        )
+        redirect_target = "orga_registration_form_edit"
+        if "continue" in request.POST:
+            redirect_target = "orga_registration_options_new"
+        return redirect(redirect_target, s=ctx["event"].slug, n=ctx["run"].number, num=ctx["saved"].question_id)
+
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
@@ -193,7 +198,7 @@ def orga_registration_quotas_edit(request, s, n, num):
 @login_required
 def orga_registration_installments(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_registration_installments")
-    ctx["list"] = RegistrationInstallment.objects.filter(event=ctx["event"]).order_by("number")
+    ctx["list"] = RegistrationInstallment.objects.filter(event=ctx["event"]).order_by("order", "amount")
     return render(request, "larpmanager/orga/registration/installments.html", ctx)
 
 

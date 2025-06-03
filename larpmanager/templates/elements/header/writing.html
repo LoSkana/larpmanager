@@ -1,7 +1,7 @@
 {% load show_tags i18n %}
 <div class="staff-list">
     <div class="orga-buttons">
-        <a class='new button' href="#">{% trans "New" %}</a>
+        <a class="new button" href="#">{% trans "New" %}</a>
         <script>
         document.querySelector('a.new').addEventListener('click', function(event) {
             event.preventDefault();
@@ -22,12 +22,15 @@
         <button class="my_toggle" tog='load-form'>
             <a href="#">{% trans "Upload" %}</a>
         </button>
-        {% if nm != 'character' %}
-            <form action="{{ request.path }}" method="post" style="display: inline; ">
-                {% csrf_token %}
-                <input type="hidden" name="download" value="1">
-                <button type="submit" name="submit" value="1">{% trans "Download" %}</button>
-            </form>
+        <form action="{{ request.path }}" method="post" class="inline">
+            {% csrf_token %}
+            <input type="hidden" name="download" value="1">
+            <button type="submit" name="submit" value="1">{% trans "Download" %}</button>
+        </form>
+        {% if export %}
+            <button>
+                <a href="{% url 'orga_export' run.event.slug run.number export %}">{% trans "Export" %}</a>
+            </button>
         {% endif %}
         {% if features.cover and nm == 'character' %}
             <button class="my_toggle" tog='cover-form'>
@@ -72,7 +75,7 @@
         {% trans "The first line are the field names, such as 'number', 'name', 'presentation', 'text'. (Only 'number' is required)" %}
         <br />
         {% trans "If you want to download an example file, click here." %}
-        <form action="{{ request.path }}" method="post" style="display: inline; ">
+        <form action="{{ request.path }}" method="post" class="inline">
             {% csrf_token %}
             <input type="hidden" name="example" value="1">
             <button type="submit" name="submit" value="1">{% trans "Loading template" %}</button>
@@ -158,13 +161,29 @@
 </div>
 <div id="overlay">
     <div class="lds-roller">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+        <div>
+            <!-- spinner -->
+        </div>
+        <div>
+            <!-- spinner -->
+        </div>
+        <div>
+            <!-- spinner -->
+        </div>
+        <div>
+            <!-- spinner -->
+        </div>
+        <div>
+            <!-- spinner -->
+        </div>
+        <div>
+            <!-- spinner -->
+        </div>
+        <div>
+            <!-- spinner -->
+        </div>
+        <div>
+            <!-- spinner -->
+        </div>
     </div>
 </div>

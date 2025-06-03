@@ -19,38 +19,76 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.core.cache import cache
+from django.db.models import Count
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from larpmanager.models.accounting import PaymentInvoice
 from larpmanager.models.association import Association
+from larpmanager.models.event import Event, Run
+from larpmanager.models.larpmanager import LarpManagerReview, LarpManagerShowcase
+from larpmanager.models.member import Member
+from larpmanager.models.registration import Registration
+from larpmanager.models.writing import Character
+from larpmanager.utils.common import round_to_two_significant_digits
 
 
-def reset_cache_promoters():
-    cache.delete(cache_cache_promoters_key())
+def reset_cache_lm_home():
+    cache.delete(cache_cache_lm_home_key())
 
 
-def cache_cache_promoters_key():
-    return "cache_promoters"
+def cache_cache_lm_home_key():
+    return "cache_lm_home"
 
 
-def get_cache_promoters():
-    key = cache_cache_promoters_key()
+def get_cache_lm_home():
+    key = cache_cache_lm_home_key()
     res = cache.get(key)
     if not res:
-        res = update_cache_promoters()
-        cache.set(key, res)
+        res = update_cache_lm_home()
+        cache.set(key, res, timeout=60 * 15)
     return res
 
 
-def update_cache_promoters():
+def update_cache_lm_home():
+    ctx = {}
+    for el in [Event, Character, Registration, Member, PaymentInvoice]:
+        nm = str(el.__name__).lower()
+        cnt = el.objects.count()
+        ctx[f"cnt_{nm}"] = int(round_to_two_significant_digits(cnt))
+
+    que_run = Run.objects.annotate(num_reg=Count("registrations")).filter(num_reg__gt=5)
+    ctx["cnt_run"] = int(round_to_two_significant_digits(que_run.count()))
+
+    ctx["promoters"] = _get_promoters()
+    ctx["showcase"] = _get_showcases()
+    ctx["reviews"] = _get_reviews()
+    return ctx
+
+
+def _get_reviews():
+    res = []
+    for element in LarpManagerReview.objects.all():
+        res.append(element.as_dict())
+    return res
+
+
+def _get_showcases():
+    res = []
+    for element in LarpManagerShowcase.objects.order_by("number"):
+        res.append(element.as_dict())
+    return res
+
+
+def _get_promoters():
     que = Association.objects.exclude(promoter__isnull=True)
     que = que.exclude(promoter__exact="")
     res = []
-    for s in que:
-        res.append((s.slug, s.name, s.promoter_thumb.url))
+    for element in que:
+        res.append(element.promoter_dict())
     return res
 
 
 @receiver(post_save, sender=Association)
-def update_association_reset_promoters(sender, instance, **kwargs):
-    reset_cache_promoters()
+def update_association_reset_lm_home(sender, instance, **kwargs):
+    reset_cache_lm_home()

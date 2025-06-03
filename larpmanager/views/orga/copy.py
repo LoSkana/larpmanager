@@ -59,16 +59,39 @@ from larpmanager.utils.common import copy_class
 from larpmanager.utils.event import check_event_permission
 
 
+def correct_rels_many(e_id, cls_p, cls, field, rel_field="number"):
+    cache_t = {}
+
+    for obj in cls_p.objects.filter(event_id=e_id):
+        rel_value = getattr(obj, rel_field)
+        cache_t[rel_value] = obj.id
+
+    for obj in cls.objects.filter(event_id=e_id):
+        m2m_field = getattr(obj, field)
+        m2m_data = list(m2m_field.all())
+        new_values = []
+
+        for old_rel in m2m_data:
+            v = getattr(old_rel, rel_field)
+            new_rel = cache_t[v]
+            new_values.append(new_rel)
+
+        m2m_field.set(new_values, clear=True)
+
+
 def correct_rels(e_id, p_id, cls_p, cls, field, rel_field="number"):
     cache_f = {}
     cache_t = {}
     field = field + "_id"
+
     for obj in cls_p.objects.filter(event_id=p_id):
         rel_value = getattr(obj, rel_field)
         cache_f[obj.id] = rel_value
+
     for obj in cls_p.objects.filter(event_id=e_id):
         rel_value = getattr(obj, rel_field)
         cache_t[rel_value] = obj.id
+
     for obj in cls.objects.filter(event_id=e_id):
         v = getattr(obj, field)
         if v not in cache_f:
@@ -265,6 +288,7 @@ def copy_registration(all, e_id, element, p_id):
         copy_class(e_id, p_id, RegistrationQuota)
     if all or element == "installment":
         copy_class(e_id, p_id, RegistrationInstallment)
+        correct_rels_many(e_id, RegistrationTicket, RegistrationInstallment, "tickets", "name")
     if all or element == "surcharge":
         copy_class(e_id, p_id, RegistrationSurcharge)
 

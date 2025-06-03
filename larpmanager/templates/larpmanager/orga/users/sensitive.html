@@ -1,5 +1,5 @@
 {% extends "utils.html" %}
-{% load i18n show_tags %}
+{% load i18n show_tags static %}
 {% block title %}
     {% trans "Sensitive data" %} - {{ run }}
 {% endblock title %}
@@ -12,13 +12,19 @@
     </p>
     <table class="mob">
         <tr>
+            <th></th>
             <th>{% trans "Player" %}</th>
             <th>{% trans "Characters" %}</th>
             {% for field_name, field_verbose in fields.items %}<th>{{ field_verbose }}</th>{% endfor %}
         </tr>
         {% for el in list %}
             <tr>
-                <td>{{ el }}</td>
+                <td class="member_cover">
+                    <div class="img_cover"
+                         style="background-image:url('{% if el.profile %}{{ el.profile_thumb.url }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
+                    </div>
+                </td>
+                <td>{{ el.display_real }}</td>
                 <td>
                     {% if el.chars %}
                         {% for ch in el.chars %}

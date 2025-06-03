@@ -36,7 +36,6 @@ from PIL import Image
 
 from larpmanager.cache.character import get_character_cache_fields, get_character_fields, get_event_cache_all
 from larpmanager.forms.character import (
-    CharacterCocreationForm,
     CharacterForm,
 )
 from larpmanager.forms.experience import SelectNewAbility
@@ -48,9 +47,6 @@ from larpmanager.forms.registration import (
 )
 from larpmanager.forms.writing import (
     PlayerRelationshipForm,
-)
-from larpmanager.models.event import (
-    RunText,
 )
 from larpmanager.models.form import (
     QuestionApplicable,
@@ -188,6 +184,8 @@ def character_form(request, ctx, s, n, instance, form_class):
     ctx["form"] = form
     init_form_submitted(ctx, form, request)
 
+    ctx["hide_unavailable"] = ctx["event"].get_config("character_form_hide_unavailable", False)
+
     return render(request, "larpmanager/event/character/edit.html", ctx)
 
 
@@ -286,29 +284,6 @@ def character_profile_rotate(request, s, n, num, r):
     rgr.save()
 
     return JsonResponse({"res": "ok", "src": rgr.profile_thumb.url})
-
-
-@login_required
-def character_co_creation(request, s, n, num):
-    ctx = get_event_run(request, s, n, status=True, signup=True)
-    get_char_check(request, ctx, num, True)
-
-    (ctx["co_creation"], creat) = RunText.objects.get_or_create(
-        run=ctx["run"], eid=ctx["character"].number, typ=RunText.COCREATION
-    )
-
-    if request.method == "POST":
-        form = CharacterCocreationForm(request.POST, request.FILES, text=ctx["co_creation"].second)
-        if form.is_valid():
-            ctx["co_creation"].second = form.cleaned_data["co_creation_answer"]
-            ctx["co_creation"].save()
-            messages.success(request, _("Co-creation answers saved!"))
-            return redirect("character_your", s=ctx["event"].slug, n=ctx["run"].number)
-    else:
-        form = CharacterCocreationForm(text=ctx["co_creation"].second)
-
-    ctx["form"] = form
-    return render(request, "larpmanager/event/character/cocreation.html", ctx)
 
 
 @login_required

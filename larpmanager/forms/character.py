@@ -19,8 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django import forms
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.db.models import Max
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
@@ -34,8 +33,6 @@ from larpmanager.forms.utils import (
     WritingTinyMCE,
 )
 from larpmanager.forms.writing import BaseWritingForm, WritingForm
-from larpmanager.models.casting import AssignmentTrait
-from larpmanager.models.event import Run, RunText
 from larpmanager.models.experience import AbilityPx, DeliveryPx
 from larpmanager.models.form import (
     QuestionApplicable,
@@ -44,23 +41,7 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
 )
-from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, CharacterStatus, Faction, PlotCharacterRel
-
-
-class CharacterCocreationForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        super().__init__()
-        text = kwargs.pop("text")
-        super().__init__(*args, **kwargs)
-        k = "co_creation_answer"
-        self.fields[k] = forms.CharField(
-            widget=WritingTinyMCE(),
-            label="Risposte",
-            help_text=_("Freely answer the co-creation questions"),
-            required=False,
-        )
-        self.initial[k] = text
 
 
 class CharacterForm(WritingForm, BaseWritingForm):
@@ -76,9 +57,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "assigned",
             "title",
             "teaser",
-            "preview",
             "text",
-            "props",
             "mirror",
             "hide",
             "cover",
@@ -199,7 +178,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
                     prim += 1
 
             if prim > 1:
-                raise ValidationError({"factions_list": _("Select one primary faction")})
+                raise ValidationError({"factions_list": _("Select only one primary faction")})
 
         return cleaned_data
 
@@ -227,13 +206,9 @@ class OrgaCharacterForm(CharacterForm):
         if not self.instance.pk:
             return
 
-        self._init_cocreation()
-
         self._init_px()
 
         self._init_plots()
-
-        self._init_questbuilder()
 
     def _init_character(self):
         self._init_factions()
@@ -252,43 +227,6 @@ class OrgaCharacterForm(CharacterForm):
             que = self.params["run"].event.get_elements(Character).all()
             choices = [(m.id, m.name) for m in que]
             self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---"))] + choices
-
-    def _init_questbuilder(self):
-        if "questbuilder" not in self.params["features"]:
-            return
-
-        tot_runs = Run.objects.filter(event=self.params["run"].event).aggregate(Max("number"))["number__max"]
-        if tot_runs != 1:
-            return
-
-        # check if in this run it has been assigned
-        try:
-            rcr = RegistrationCharacterRel.objects.get(reg__run=self.params["run"], character=self.instance.pk)
-        except ObjectDoesNotExist:
-            return
-
-        reg = rcr.reg
-
-        # get other traits
-        que = (
-            AssignmentTrait.objects.filter(run=self.params["run"], member=reg.member)
-            .select_related("trait")
-            .order_by("trait_id")
-        )
-
-        for at in que:
-            if self.details["id_concept"]:
-                self.details["id_concept"] += '</div><div class="plot">'
-
-            self.details["id_concept"] += f"<h4>{at.trait.quest.name} - {at.trait.name}</h4>"
-            if at.trait.quest.concept:
-                self.details["id_concept"] += "<hr />" + at.trait.quest.concept
-            if at.trait.quest.text:
-                self.details["id_concept"] += "<hr />" + at.trait.quest.text
-            if at.trait.concept:
-                self.details["id_concept"] += "<hr />" + at.trait.concept
-            if at.trait.text:
-                self.details["id_concept"] += "<hr />" + at.trait.text
 
     def _init_plots(self):
         if "plot" not in self.params["features"]:
@@ -311,7 +249,8 @@ class OrgaCharacterForm(CharacterForm):
             if pl[0] in pcr:
                 self.initial[field] = pcr[pl[0]]
 
-            self.details[f"id_{field}"] = pl[3]
+            if pl[3]:
+                self.details[f"id_{field}"] = pl[3]
             self.show_link.append(f"id_{field}")
 
     def _save_plot(self):
@@ -387,58 +326,12 @@ class OrgaCharacterForm(CharacterForm):
                 fact_tx += "<hr />" + fc[3]
         self.show_link.append("id_factions_list")
 
-    def _init_cocreation(self):
-        if "co_creation" not in self.params["features"]:
-            return
-
-        (el, creat) = RunText.objects.get_or_create(
-            run=self.params["run"], eid=self.instance.number, typ=RunText.COCREATION
-        )
-
-        k = "co_creation_question"
-        self.fields[k] = forms.CharField(
-            widget=WritingTinyMCE(),
-            label=_("Co-creation questions"),
-            help_text=_("Questions for the co-creation section, editable only by authors"),
-            required=False,
-        )
-        if el.first:
-            self.initial[k] = el.first
-        self.show_link.append(f"id_{k}")
-
-        k = "co_creation_answer"
-        self.fields[k] = forms.CharField(
-            widget=WritingTinyMCE(),
-            label=_("Co-creation answers"),
-            help_text=_("Answers for the co-creation section, editable by both players and authors"),
-            required=False,
-        )
-        if el.second:
-            self.initial[k] = el.second
-        self.show_link.append(f"id_{k}")
-
-    def _save_cocreation(self):
-        if "co_creation" not in self.params["features"]:
-            return
-
-        (el, creat) = RunText.objects.get_or_create(
-            run=self.params["run"],
-            eid=self.instance.number,
-            typ=RunText.COCREATION,
-        )
-        if "co_creation_question" in self.cleaned_data:
-            el.first = self.cleaned_data["co_creation_question"]
-        if "co_creation_answer" in self.cleaned_data:
-            el.second = self.cleaned_data["co_creation_answer"]
-        el.save()
-
     def save(self, commit=True):
         instance = super().save()
 
         if instance.pk:
             self._save_plot()
             self._save_px(instance)
-            self._save_cocreation()
 
         return instance
 
@@ -487,7 +380,8 @@ class OrgaWritingQuestionForm(MyForm):
 
     def _init_type(self):
         # Add type of character question to the available types
-        que = WritingQuestion.objects.filter(event=self.params["event"], applicable=self.params["writing_typ"])
+        que = self.params["event"].get_elements(WritingQuestion)
+        que = que.filter(applicable=self.params["writing_typ"])
         already = list(que.values_list("typ", flat=True).distinct())
         if self.instance.pk and self.instance.typ:
             already.remove(self.instance.typ)
@@ -550,10 +444,18 @@ class OrgaWritingOptionForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields["tickets"].widget.set_event(self.params["event"])
-
         if "question_id" in self.params:
             self.initial["question"] = self.params["question_id"]
 
-        for s in ["dependents"]:
-            self.fields[s].widget.set_event(self.params["event"])
+        if "wri_que_max" not in self.params["features"]:
+            self.delete_field("max_available")
+
+        if "wri_que_tickets" not in self.params["features"]:
+            self.delete_field("tickets")
+        else:
+            self.fields["tickets"].widget.set_event(self.params["event"])
+
+        if "wri_que_dependents" not in self.params["features"]:
+            self.delete_field("dependents")
+        else:
+            self.fields["dependents"].widget.set_event(self.params["event"])

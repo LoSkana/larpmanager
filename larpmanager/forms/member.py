@@ -204,7 +204,7 @@ FULL_PROVINCE_CHOICES = sorted(
     [(province.code, province.name, province.country_code) for province in pycountry.subdivisions], key=lambda x: x[1]
 )
 
-PROVINCE_CHOICES = [(province[0], province[1]) for province in FULL_PROVINCE_CHOICES]
+PROVINCE_CHOICES = [("", "----")] + [(province[0], province[1]) for province in FULL_PROVINCE_CHOICES]
 
 country_subdivisions_map = {}
 for province in FULL_PROVINCE_CHOICES:
@@ -232,7 +232,7 @@ class ResidenceWidget(forms.MultiWidget):
         attr_common = {"class": "form-control"}
         widgets = [
             forms.Select(choices=COUNTRY_CHOICES),
-            forms.Select(),
+            forms.Select(choices=PROVINCE_CHOICES),
             forms.TextInput(attrs={**attr_common, "placeholder": _("Municipality")}),
             forms.TextInput(attrs={**attr_common, "placeholder": _("Postal code")}),
             forms.TextInput(attrs={**attr_common, "placeholder": _("Street")}),
@@ -255,17 +255,36 @@ class ResidenceField(forms.MultiValueField):
     def __init__(self, *args, **kwargs):
         fields = [
             forms.ChoiceField(choices=COUNTRY_CHOICES),
-            forms.ChoiceField(choices=PROVINCE_CHOICES),
+            forms.ChoiceField(choices=PROVINCE_CHOICES, required=False),
             forms.CharField(validators=[validate_no_pipe]),
-            forms.CharField(max_length=6),
-            forms.CharField(max_length=30),
-            forms.CharField(max_length=10),
+            forms.CharField(max_length=7, validators=[validate_no_pipe]),
+            forms.CharField(max_length=30, validators=[validate_no_pipe]),
+            forms.CharField(max_length=10, validators=[validate_no_pipe]),
         ]
         widget = ResidenceWidget(attrs=None)
         super().__init__(*args, fields=fields, widget=widget, **kwargs)
 
     def compress(self, values):
-        return "|".join(values) if values else ""
+        if not values:
+            return ""
+        values = [v if v is not None else "" for v in values]
+        return "|".join(values)
+
+    def clean(self, value):
+        if not value:
+            value = self.compress([None] * len(self.fields))
+            return value
+
+        try:
+            cleaned_data = []
+            for i, field in enumerate(self.fields):
+                if i == 1 and (value[i] in (None, "")):
+                    cleaned_data.append("")
+                else:
+                    cleaned_data.append(field.clean(value[i]))
+            return self.compress(cleaned_data)
+        except forms.ValidationError as err:
+            raise err
 
 
 class BaseProfileForm(MyForm):
@@ -326,9 +345,9 @@ class ProfileForm(BaseProfileForm):
         )
 
         widgets = {
-            "diet": Textarea(attrs={"cols": 80, "rows": 5}),
-            "safety": Textarea(attrs={"cols": 80, "rows": 5}),
-            "presentation": Textarea(attrs={"cols": 80, "rows": 5}),
+            "diet": Textarea(attrs={"rows": 5}),
+            "safety": Textarea(attrs={"rows": 5}),
+            "presentation": Textarea(attrs={"rows": 5}),
             "birth_date": DatePickerInput,
             "document_issued": DatePickerInput,
             "document_expiration": DatePickerInput,

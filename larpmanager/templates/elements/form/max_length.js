@@ -14,20 +14,22 @@ function tiny_count(editor, key) {
     $('#' + key + '_tr .count').html(cl);
 }
 
-function initEditor(key, limit) {
-    const editor = tinymce.get(key);
+function prepare_tinymce(key, limit) {
+  const editor = tinymce.get(key);
+    if (editor) {
     // Count characters
-    editor.on('input', () => {
+      editor.on('input', () => {
         tiny_count(editor, key);
-        var content = editor.getContent({ format: 'text' });
-            if (content.length > limit) {
-                const truncated = content.substring(0, MAX_CHARS);
-                editor.setContent(truncated);
 
-                editor.selection.select(editor.getBody(), true);
-                editor.selection.collapse(false);
-            }
-    });
+        const content = editor.getContent({ format: 'text' });
+          if (content.length > limit) {
+            const truncated = content.substring(0, MAX_CHARS);
+            editor.setContent(truncated);
+
+            editor.selection.select(editor.getBody(), true);
+            editor.selection.collapse(false);
+          }
+      });
 
     // prevent to surpass max length
     editor.on('keydown', function (e) {
@@ -41,23 +43,23 @@ function initEditor(key, limit) {
 
     // prevent paste to surpass max length
     editor.on('paste', function (e) {
-      const clipboard = (e.clipboardData || window.clipboardData).getData('text');
-      var content = editor.getContent({ format: 'text' });
-      if ((content.length + clipboard.length) >= limit) {
-        e.preventDefault();
-        const allowed = limit - content.length;
-        if (allowed > 0) {
-          content = clipboard.substring(0, allowed);
-          editor.insertContent(content);
+        const clipboard = (e.clipboardData || window.clipboardData).getData('text');
+        const content = editor.getContent({ format: 'text' });
+        if ((content.length + clipboard.length) >= limit) {
+            e.preventDefault();
+            const allowed = limit - content.length;
+            if (allowed > 0) {
+                editor.insertContent(clipboard.substring(0, allowed));
+            }
         }
-      }
 
         tiny_count(editor, key);
     });
+
+  }
 }
 
-
-function update_count(key, limit, typ, keep) {
+function update_count(key, limit, typ, loop) {
     var el = $('#' + key);
     if (simple_count.includes(typ)) {
         cl = el.val().length;
@@ -77,10 +79,12 @@ function update_count(key, limit, typ, keep) {
         tiny_count(editor, key);
     }
 
-    if (keep) setTimeout(
-        () => update_count(key, limit, typ, keep),
-        1000
-    )
+    if (loop) {
+        setTimeout(
+            ()=> update_count(key, limit, typ, loop),
+            1000
+        );
+    }
 }
 
 window.addEventListener('DOMContentLoaded', function() {
@@ -88,13 +92,12 @@ window.addEventListener('DOMContentLoaded', function() {
 
         {% for key, args in form.max_lengths.items %}
             $('#' + '{{ key }}').on('input', function() {
-                update_count('{{ key }}', {{ args.0 }}, '{{ args.1 }}', false);
+                update_count('{{ key }}', {{ args.0 }}, '{{ args.1 }}');
             });
+            update_count('{{ key }}', {{ args.0 }}, '{{ args.1 }}', true);
 
             if (tinymce_count.includes('{{ args.1 }}'))
-                initEditor('{{ key }}', {{ args.0 }});
-
-            update_count('{{ key }}', {{ args.0 }}, '{{ args.1 }}', true);
+                prepare_tinymce('{{ key }}', {{ args.0 }});
         {% endfor %}
 
     });

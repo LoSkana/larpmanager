@@ -38,7 +38,7 @@ from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
 )
-from larpmanager.models.utils import generate_id, get_attr
+from larpmanager.models.utils import generate_id, get_attr, strip_tags
 from larpmanager.templatetags.show_tags import hex_to_rgb
 
 
@@ -75,7 +75,7 @@ class MyForm(forms.ModelForm):
         self.answers = {}
         self.singles = {}
         self.multiples = {}
-        self.unavail = []
+        self.unavail = {}
         self.max_lengths = {}
 
     def get_automatic_field(self):
@@ -163,6 +163,14 @@ def max_selections_validator(max_choices):
     return validator
 
 
+def max_length_validator(max_length):
+    def validator(value):
+        if len(strip_tags(value)) > max_length:
+            raise ValidationError(_("You have exceeded the maximum text length"))
+
+    return validator
+
+
 class BaseRegistrationForm(MyFormRun):
     gift = False
     answer_class = RegistrationAnswer
@@ -245,7 +253,9 @@ class BaseRegistrationForm(MyFormRun):
             if key in reg_count:
                 avail -= reg_count[key]
             if avail <= 0:
-                self.unavail.append(option.id)
+                if option.question_id not in self.unavail:
+                    self.unavail[option.question_id] = []
+                self.unavail[option.question_id].append(option.id)
             else:
                 name += " - (" + _("Available") + f" {avail})"
 
@@ -268,12 +278,12 @@ class BaseRegistrationForm(MyFormRun):
                     for sel in form_data[k]:
                         if not sel:
                             continue
-                        if int(sel) in self.unavail:
+                        if q.id in self.unavail and int(sel) in self.unavail[q.id]:
                             self.add_error(k, _("Option no longer available"))
                 elif q.typ == QuestionType.SINGLE:
                     if not form_data[k]:
                         continue
-                    if int(form_data[k]) in self.unavail:
+                    if q.id in self.unavail and int(form_data[k]) in self.unavail[q.id]:
                         self.add_error(k, _("Option no longer available"))
 
         return form_data
@@ -335,12 +345,15 @@ class BaseRegistrationForm(MyFormRun):
             self.fields[key].disabled = not active
 
         if question.max_length:
-            self.max_lengths[f"id_{key}"] = (question.max_length, question.typ)
+            if question.typ in QuestionType.get_max_length():
+                self.max_lengths[f"id_{key}"] = (question.max_length, question.typ)
 
         if question.status == QuestionStatus.MANDATORY:
             self.fields[key].label += " (*)"
             self.has_mandatory = True
             self.mandatory.append("id_" + key)
+
+        question.basic_typ = question.typ in QuestionType.get_basic_types()
 
         return key
 
@@ -369,15 +382,21 @@ class BaseRegistrationForm(MyFormRun):
             self.fields[key].help_text = question.description
             self.reorder_field(key)
             self.fields[key].required = required
+            if key in ["name", "teaser", "text"]:
+                self.fields[key].validators = [max_length_validator(question.max_length)] if question.max_length else []
+
+        self.fields[key].key = key
+
         return key
 
     def init_editor(self, key, question, required):
+        validators = [max_length_validator(question.max_length)] if question.max_length else []
         self.fields[key] = forms.CharField(
             required=required,
-            max_length=question.max_length if question.max_length else 100000,
             widget=WritingTinyMCE(),
             label=question.display,
             help_text=question.description,
+            validators=validators,
         )
         if question.id in self.answers:
             self.initial[key] = self.answers[question.id].text
@@ -385,22 +404,21 @@ class BaseRegistrationForm(MyFormRun):
         self.show_link.append(f"id_{key}")
 
     def init_paragraph(self, key, question, required):
+        validators = [max_length_validator(question.max_length)] if question.max_length else []
         self.fields[key] = forms.CharField(
             required=required,
-            max_length=question.max_length if question.max_length else 5000,
-            widget=forms.Textarea,
+            widget=forms.Textarea(attrs={"rows": 4}),
             label=question.display,
             help_text=question.description,
+            validators=validators,
         )
         if question.id in self.answers:
             self.initial[key] = self.answers[question.id].text
 
     def init_text(self, key, question, required):
+        validators = [max_length_validator(question.max_length)] if question.max_length else []
         self.fields[key] = forms.CharField(
-            required=required,
-            max_length=question.max_length if question.max_length else 1000,
-            label=question.display,
-            help_text=question.description,
+            required=required, label=question.display, help_text=question.description, validators=validators
         )
         if question.id in self.answers:
             self.initial[key] = self.answers[question.id].text

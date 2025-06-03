@@ -62,12 +62,12 @@ PAY_CHOICES = (
 
 
 class SendMailForm(forms.Form):
-    players = forms.CharField(widget=forms.Textarea(attrs={"rows": 3, "cols": 80}))
+    players = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}))
     subject = forms.CharField()
-    body = forms.CharField(widget=TinyMCE(attrs={"cols": 80, "rows": 30}))
+    body = forms.CharField(widget=TinyMCE(attrs={"rows": 30}))
     reply_to = forms.CharField(help_text=_("Optional - email reply to"), required=False)
     raw = forms.CharField(
-        widget=forms.Textarea(attrs={"rows": 2, "cols": 80}),
+        widget=forms.Textarea(attrs={"rows": 2}),
         help_text=_("Optional - ram html code (substitute the text before)"),
         required=False,
     )
@@ -94,7 +94,7 @@ class HelpQuestionForm(MyForm):
         fields = ("text", "attachment", "run")
 
         widgets = {
-            "text": Textarea(attrs={"cols": 80, "rows": 5}),
+            "text": Textarea(attrs={"rows": 5}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -115,7 +115,7 @@ class OrgaHelpQuestionForm(MyForm):
         fields = ("text", "attachment")
 
         widgets = {
-            "text": Textarea(attrs={"cols": 80, "rows": 5}),
+            "text": Textarea(attrs={"rows": 5}),
         }
 
 
@@ -176,11 +176,11 @@ class OrgaProblemForm(MyForm):
         exclude = ("number",)
 
         widgets = {
-            "where": Textarea(attrs={"cols": 80, "rows": 3}),
-            "when": Textarea(attrs={"cols": 80, "rows": 3}),
-            "what": Textarea(attrs={"cols": 80, "rows": 3}),
-            "who": Textarea(attrs={"cols": 80, "rows": 3}),
-            "comments": Textarea(attrs={"cols": 80, "rows": 3}),
+            "where": Textarea(attrs={"rows": 3}),
+            "when": Textarea(attrs={"rows": 3}),
+            "what": Textarea(attrs={"rows": 3}),
+            "who": Textarea(attrs={"rows": 3}),
+            "comments": Textarea(attrs={"rows": 3}),
         }
 
 
@@ -224,7 +224,7 @@ class ExeInventoryBoxForm(MyForm):
         model = InventoryBox
         exclude = ()
 
-        widgets = {"description": Textarea(attrs={"cols": 80, "rows": 5})}
+        widgets = {"description": Textarea(attrs={"rows": 5})}
 
 
 class ExeCompetenceForm(MyForm):
@@ -235,7 +235,7 @@ class ExeCompetenceForm(MyForm):
         exclude = ("number", "members")
 
         widgets = {
-            "descr": Textarea(attrs={"cols": 80, "rows": 5}),
+            "descr": Textarea(attrs={"rows": 5}),
         }
 
 

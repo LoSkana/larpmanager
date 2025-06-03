@@ -48,12 +48,10 @@ class QuestionType(models.TextChoices):
     NAME = "name", _("Name")
     TEASER = "teaser", _("Presentation")
     SHEET = "text", _("Sheet")
-    PREVIEW = "preview", _("Preview")
     COVER = "cover", _("Cover")
     FACTIONS = "faction", _("Factions")
     TITLE = "title", _("Title")
     MIRROR = "mirror", _("Mirror")
-    PROPS = "props", _("Prop")
     HIDE = "hide", _("Hide")
     PROGRESS = "progress", _("Progress")
     ASSIGNED = "assigned", _("Assigned")
@@ -65,6 +63,18 @@ class QuestionType(models.TextChoices):
             QuestionType.MULTIPLE,
             QuestionType.TEXT,
             QuestionType.PARAGRAPH,
+            QuestionType.EDITOR,
+        }
+
+    @classmethod
+    def get_max_length(cls):
+        return {
+            QuestionType.NAME,
+            QuestionType.SHEET,
+            QuestionType.TEASER,
+            QuestionType.TEXT,
+            QuestionType.PARAGRAPH,
+            QuestionType.MULTIPLE,
             QuestionType.EDITOR,
         }
 
@@ -80,6 +90,7 @@ class QuestionVisibility(models.TextChoices):
     SEARCHABLE = "s", _("Searchable")
     PUBLIC = "c", _("Public")
     PRIVATE = "e", _("Private")
+    HIDDEN = "h", _("Hidden")
 
 
 class QuestionApplicable(models.TextChoices):
@@ -131,7 +142,12 @@ class WritingQuestion(BaseModel):
         choices=QuestionStatus.choices,
         default=QuestionStatus.OPTIONAL,
         verbose_name=_("Status"),
-        help_text=_("Question status"),
+        help_text=_(
+            "Optional: The question is shown, and can be filled by the player. "
+            "Mandatory: The question needs to be filled by the player. "
+            "Disabled: The question is shown, but cannot be changed by the player. "
+            "Hidden: The question is not shown to the player."
+        ),
     )
 
     visibility = models.CharField(
@@ -140,9 +156,10 @@ class WritingQuestion(BaseModel):
         default=QuestionVisibility.PRIVATE,
         verbose_name=_("Visibility"),
         help_text=_(
-            "Searchable: Characters can be filtered according to this question. Public: The "
-            "answer to this question is publicly visible. Private: The answer to this "
-            "question is only visible to the player and organisers."
+            "Searchable: Characters can be filtered according to this question. "
+            "Public: The answer to this question is publicly visible. "
+            "Private: The answer to this question is only visible to the player. "
+            "Hidden: The answer is hidden to all players."
         ),
     )
 
@@ -191,7 +208,7 @@ class WritingQuestion(BaseModel):
 
     @staticmethod
     def get_instance_questions(event, features):
-        return WritingQuestion.objects.filter(event=event).order_by("order")
+        return event.get_elements(WritingQuestion).order_by("order")
 
     @staticmethod
     def skip(instance, features, params, orga):
@@ -236,6 +253,7 @@ class WritingOption(BaseModel):
         related_name="dependents_inv",
         symmetrical=False,
         blank=True,
+        verbose_name=_("Prerequisites"),
         help_text=_("Indicates other options that must be selected for this option to be selectable"),
     )
 
@@ -315,8 +333,13 @@ class RegistrationQuestion(BaseModel):
         max_length=1,
         choices=QuestionStatus.choices,
         default=QuestionStatus.OPTIONAL,
-        help_text=_("Question status"),
         verbose_name=_("Status"),
+        help_text=_(
+            "Optional: The question is shown, and can be filled by the player. "
+            "Mandatory: The question needs to be filled by the player. "
+            "Disabled: The question is shown, but cannot be changed by the player. "
+            "Hidden: The question is not shown to the player."
+        ),
     )
 
     max_length = models.IntegerField(

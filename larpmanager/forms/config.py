@@ -5,9 +5,9 @@ from django import forms
 from django.forms import Textarea
 from tinymce.widgets import TinyMCE
 
+from larpmanager.cache.config import save_all_element_configs
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import AssocMemberS2WidgetMulti, get_members_queryset
-from larpmanager.models.utils import save_all_element_configs
 
 
 class ConfigType(IntEnum):
@@ -54,12 +54,16 @@ class ConfigForm(MyForm):
             self._get_custom_field(el, config_values)
         save_all_element_configs(instance, config_values)
 
+        instance.save()
+
         return instance
 
     def _get_custom_field(self, el, res):
         k = el["key"]
 
         val = self.cleaned_data[k]
+        if not val:
+            return
 
         if el["type"] == ConfigType.MEMBERS:
             val = ",".join([str(el.id) for el in val])
@@ -84,7 +88,7 @@ class ConfigForm(MyForm):
             ConfigType.INT: lambda: forms.IntegerField(label=label, help_text=help_text, required=False),
             ConfigType.TEXTAREA: lambda: forms.CharField(
                 label=label,
-                widget=Textarea(attrs={"cols": 80, "rows": 5}),
+                widget=Textarea(attrs={"rows": 5}),
                 help_text=help_text,
                 required=False,
             ),

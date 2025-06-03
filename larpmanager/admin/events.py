@@ -21,16 +21,7 @@
 from django.contrib import admin
 
 from larpmanager.admin.base import AssocFilter, DefModelAdmin, EventFilter, RunFilter
-from larpmanager.models.event import (
-    Event,
-    EventConfig,
-    EventText,
-    PreRegistration,
-    ProgressStep,
-    Run,
-    RunConfig,
-    RunText,
-)
+from larpmanager.models.event import Event, EventConfig, EventText, PreRegistration, ProgressStep, Run, RunConfig
 
 
 @admin.register(ProgressStep)
@@ -77,13 +68,6 @@ class EventTextAdmin(DefModelAdmin):
     list_display = ("event", "typ", "language", "default")
     list_filter = (EventFilter, "typ", "language")
     autocomplete_fields = ["event"]
-
-
-@admin.register(RunText)
-class RunTextAdmin(DefModelAdmin):
-    list_display = ("run", "typ", "eid")
-    list_filter = (RunFilter, "typ")
-    autocomplete_fields = ["run"]
 
 
 @admin.register(PreRegistration)

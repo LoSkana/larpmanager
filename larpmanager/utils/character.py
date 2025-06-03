@@ -23,7 +23,6 @@ from django.http import Http404
 
 from larpmanager.cache.character import get_character_cache_fields, get_event_cache_all
 from larpmanager.models.casting import Trait
-from larpmanager.models.event import RunText
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, PlotCharacterRel, Relationship
@@ -84,8 +83,6 @@ def get_character_sheet(ctx):
 
     get_character_sheet_speedlarp(ctx)
 
-    get_character_sheet_cocreation(ctx)
-
     get_character_sheet_prologue(ctx)
 
     get_character_sheet_px(ctx)
@@ -112,15 +109,6 @@ def get_character_sheet_prologue(ctx):
     for s in ctx["character"].prologues_list.order_by("typ__number"):
         s.data = s.show_complete()
         ctx["sheet_prologues"].append(s)
-
-
-def get_character_sheet_cocreation(ctx):
-    if "co_creation" not in ctx["features"]:
-        return
-
-    (ctx["co_creation"], creat) = RunText.objects.get_or_create(
-        run=ctx["run"], eid=ctx["character"].number, typ=RunText.COCREATION
-    )
 
 
 def get_character_sheet_speedlarp(ctx):
@@ -156,15 +144,17 @@ def get_character_sheet_questbuilder(ctx):
 
 
 def get_character_sheet_plots(ctx):
-    if "plots" not in ctx["features"]:
+    if "plot" not in ctx["features"]:
         return
 
     ctx["sheet_plots"] = []
     que = PlotCharacterRel.objects.filter(character=ctx["character"])
     for el in que.order_by("plot__number"):
         tx = el.plot.text
+        if tx and el.text:
+            tx += "<hr />"
         if el.text:
-            tx += "<hr />" + el.text
+            tx += el.text
         ctx["sheet_plots"].append({"name": el.plot.name, "text": tx})
 
 

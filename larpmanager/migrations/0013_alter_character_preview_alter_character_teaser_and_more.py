@@ -272,4 +272,15 @@ class Migration(migrations.Migration):
                 verbose_name="Type",
             ),
         ),
+        migrations.AlterField(
+            model_name="writingoption",
+            name="dependents",
+            field=models.ManyToManyField(
+                blank=True,
+                help_text="Indicates other options that must be selected for this option to be selectable",
+                related_name="dependents_inv",
+                to="larpmanager.writingoption",
+                verbose_name="Prerequisites",
+            ),
+        ),
     ]

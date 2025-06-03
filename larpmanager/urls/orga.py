@@ -66,11 +66,6 @@ urlpatterns = [
         name="orga_pre_registrations",
     ),
     path(
-        "<slug:s>/<int:n>/manage/props/",
-        views_ow.orga_props,
-        name="orga_props",
-    ),
-    path(
         "<slug:s>/<int:n>/manage/assignments/",
         views_ow.orga_assignments,
         name="orga_assignments",
@@ -264,6 +259,11 @@ urlpatterns = [
         "<slug:s>/<int:n>/manage/registration/secret/",
         views_or.orga_registration_secret,
         name="orga_registration_secret",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/registrations/member",
+        views_or.orga_registration_member,
+        name="orga_registration_member",
     ),
     path(
         "<slug:s>/<int:n>/manage/albums/",
@@ -974,5 +974,10 @@ urlpatterns = [
         "<slug:s>/<int:n>/manage/multichoice/available",
         views_ow.orga_multichoice_available,
         name="orga_multichoice_available",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/export/<slug:nm>",
+        views_ow.orga_export,
+        name="orga_export",
     ),
 ]

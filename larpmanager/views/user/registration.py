@@ -181,8 +181,6 @@ def save_registration(request, ctx, form, run, event, reg, gifted=False):
 def save_registration_standard(ctx, event, form, gifted, provisional, reg):
     if not gifted and not provisional:
         reg.modified = reg.modified + 1
-    if "info" in form.cleaned_data:
-        reg.info = form.cleaned_data["info"]
     if "additionals" in form.cleaned_data:
         reg.additionals = int(form.cleaned_data["additionals"])
     if "quotas" in form.cleaned_data and form.cleaned_data["quotas"]:
