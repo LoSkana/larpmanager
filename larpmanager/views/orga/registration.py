@@ -838,7 +838,7 @@ def orga_registration_member(request, s, n):
 
     # check they have a registration it this event
     try:
-        Registration.objects.get(member=member, run=ctx["run"])
+        Registration.objects.filter(member=member, run=ctx["run"]).first()
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
@@ -871,6 +871,9 @@ def orga_registration_member(request, s, n):
     member_fields = sorted(request.assoc["members_fields"])
     member_field_correct(member, member_fields)
     for field_name in member_fields:
+        if not field_name:
+            continue
+
         if field_name in exclude:
             continue
         # noinspection PyUnresolvedReferences, PyProtectedMember
