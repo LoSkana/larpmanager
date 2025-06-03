@@ -68,6 +68,9 @@ msgstr "VAT"
 msgid "Who"
 msgstr "Kto"
 
+msgid "age"
+msgstr "wiek"
+
 msgid "for"
 msgstr "dla"
 

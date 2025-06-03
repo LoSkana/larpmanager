@@ -68,6 +68,9 @@ msgstr "MVA"
 msgid "Who"
 msgstr "Hvem"
 
+msgid "age"
+msgstr "alder"
+
 msgid "for"
 msgstr "for"
 

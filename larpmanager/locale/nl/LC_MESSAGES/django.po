@@ -68,6 +68,9 @@ msgstr "BTW"
 msgid "Who"
 msgstr "Wie"
 
+msgid "age"
+msgstr "leeftijd"
+
 msgid "for"
 msgstr "voor"
 

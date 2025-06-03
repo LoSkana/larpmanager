@@ -68,6 +68,9 @@ msgstr "DPH"
 msgid "Who"
 msgstr "Kdo"
 
+msgid "age"
+msgstr "věk"
+
 msgid "for"
 msgstr "pro"
 

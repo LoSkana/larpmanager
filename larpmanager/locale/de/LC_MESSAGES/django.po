@@ -68,6 +68,9 @@ msgstr "MEHRWERTSTEUER"
 msgid "Who"
 msgstr "Wer"
 
+msgid "age"
+msgstr "Alter"
+
 msgid "for"
 msgstr "für"
 

@@ -301,9 +301,10 @@ def post_save_pdf_handout_template(sender, instance, **kwargs):
 
 
 def safe_remove(path):
-    if not os.path.exists(path):
-        return
-    os.remove(path)
+    try:
+        os.remove(path)
+    except FileNotFoundError:
+        pass
 
 
 def remove_run_pdf(event):
