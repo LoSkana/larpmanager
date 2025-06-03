@@ -838,7 +838,7 @@ def orga_registration_member(request, s, n):
 
     # check they have a registration it this event
     try:
-        Registration.objects.get(member=member, run=ctx["run"])
+        Registration.objects.filter(member=member, run=ctx["run"]).first()
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
