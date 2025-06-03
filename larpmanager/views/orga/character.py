@@ -112,7 +112,7 @@ def _characters_relationships(ctx):
         ctx["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
         widget = EventCharacterS2Widget(attrs={"id": "new_rel_select"})
         widget.set_event(ctx["event"])
-        ctx["new_rel"] = widget.render(name=_("new_rel_select"), value="")
+        ctx["new_rel"] = widget.render(name="new_rel_select", value="")
 
 
 def update_relationship(request, ctx, nm, fl):

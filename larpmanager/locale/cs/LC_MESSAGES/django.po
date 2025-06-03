@@ -2237,9 +2237,6 @@ msgstr "Vaše postava"
 msgid "customisations"
 msgstr "přizpůsobení"
 
-msgid "new_rel_select"
-msgstr "new_rel_select"
-
 msgid "refund request"
 msgstr "žádost o proplacení"
 

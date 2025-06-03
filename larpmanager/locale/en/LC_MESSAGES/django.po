@@ -7635,9 +7635,6 @@ msgstr ""
 msgid "Results not present"
 msgstr ""
 
-msgid "new_rel_select"
-msgstr ""
-
 msgid ""
 "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
 "text, 'p' for long text, 'e' for editor)"

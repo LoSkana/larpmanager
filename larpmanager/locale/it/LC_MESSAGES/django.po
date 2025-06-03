@@ -2237,9 +2237,6 @@ msgstr "Il tuo personaggio"
 msgid "customisations"
 msgstr "personalizzazioni"
 
-msgid "new_rel_select"
-msgstr "nuova_rel_selezione"
-
 msgid "refund request"
 msgstr "richiesta di rimborso"
 

@@ -2237,9 +2237,6 @@ msgstr "Din karaktär"
 msgid "customisations"
 msgstr "Anpassningar"
 
-msgid "new_rel_select"
-msgstr "nytt_rel_urval"
-
 msgid "refund request"
 msgstr "begäran om återbetalning"
 
