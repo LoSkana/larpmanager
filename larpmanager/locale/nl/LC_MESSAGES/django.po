@@ -453,6 +453,9 @@ msgstr "Verwijder"
 msgid "Detail"
 msgstr "Detail"
 
+msgid "Direct"
+msgstr "Direct"
+
 msgid "Events"
 msgstr "Evenementen"
 
@@ -689,6 +692,9 @@ msgstr "Identiteitskaart"
 
 msgid "Inflows"
 msgstr "Inkomsten"
+
+msgid "Inverse"
+msgstr "Omgekeerd"
 
 msgid "Invoice"
 msgstr "Factuur"
@@ -4924,9 +4930,6 @@ msgstr ""
 msgid "This page shows the workshop questions for the event."
 msgstr "Deze pagina vat de workshopvragen van het evenement samen."
 
-msgid "You cannot add a relationship from character to self!"
-msgstr "Je kunt geen relatie toevoegen van personage naar zelf!"
-
 msgid "You have been gifted a registration to this event, by"
 msgstr "Je hebt toegang gekregen tot dit evenement, door"
 
@@ -5788,10 +5791,6 @@ msgid "Something went wrong in the account activation. Tell us more details. "
 msgstr ""
 "Er is iets misgegaan met je gebruikersactivering. Schrijf ons om het te "
 "corrigeren."
-
-msgid "This page allows you to add or edit a relationship between characters."
-msgstr ""
-"Op deze pagina kun je een relatie tussen personages toevoegen of bewerken."
 
 msgid "This page allows you to change the main settings of your Organization."
 msgstr ""

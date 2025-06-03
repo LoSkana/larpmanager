@@ -453,6 +453,9 @@ msgstr "Elimina"
 msgid "Detail"
 msgstr "Dettaglio"
 
+msgid "Direct"
+msgstr "Diretto"
+
 msgid "Events"
 msgstr "Eventi"
 
@@ -689,6 +692,9 @@ msgstr "Carta identità"
 
 msgid "Inflows"
 msgstr "Entrate"
+
+msgid "Inverse"
+msgstr "Inverso"
 
 msgid "Invoice"
 msgstr "Invoice"
@@ -4902,9 +4908,6 @@ msgstr "Questa pagina riepiloga i legami tra i personaggi."
 msgid "This page shows the workshop questions for the event."
 msgstr "Questa pagina riepiloga le domande workshop dell'evento."
 
-msgid "You cannot add a relationship from character to self!"
-msgstr "Non puoi aggiungere una relazione dal personaggio a sè stesso!"
-
 msgid "You have been gifted a registration to this event, by"
 msgstr "Ti è stata regalata una iscrizione a questo evento, da parte di "
 
@@ -5757,11 +5760,6 @@ msgid "Something went wrong in the account activation. Tell us more details. "
 msgstr ""
 "Qualcosa è andato storto nell'attivazione del tuo utente. Scrivici per "
 "correggerla. "
-
-msgid "This page allows you to add or edit a relationship between characters."
-msgstr ""
-"Questa pagina ti permette di aggiungere o modificare una relazione tra "
-"personaggi."
 
 msgid "This page allows you to change the main settings of your Organization."
 msgstr ""

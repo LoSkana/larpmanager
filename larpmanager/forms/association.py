@@ -229,7 +229,7 @@ class ExeFeatureForm(FeatureForm):
         "This page allows you to select the features activated for the organization, and all its events. Click on a feature to show its description."
     )
 
-    load_js = "feature_checkbox"
+    load_js = ["feature_checkbox"]
 
     class Meta:
         model = Association
@@ -253,7 +253,7 @@ class ExeConfigForm(ConfigForm):
 
     section_replace = True
 
-    load_js = "config-search"
+    load_js = ["config-search"]
 
     istr = []
 
