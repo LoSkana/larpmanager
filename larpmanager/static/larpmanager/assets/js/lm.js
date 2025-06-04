@@ -26,6 +26,8 @@ $.ajaxSetup({
 
 $(document).ready(function() {
 
+    $(".hide:visible").hide();
+
     $('#banner h1').textfill({
     });
 
