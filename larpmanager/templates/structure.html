@@ -103,7 +103,8 @@
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         {% block sidebar %}
             {% if manage %}
-                <div id="sidebar">
+                <div id="sidebar"
+                     {% if is_sidebar_open %}style="display: block"{% endif %}>
                     {% if run %}
                         <h1>
                             <span>{{ run }}</span>
@@ -151,7 +152,7 @@
             {% endif %}
         {% endblock sidebar %}
         <!-- Page Wrapper -->
-        <div id="page-wrapper">
+        <div id="page-wrapper" {% if is_sidebar_open %}class="sidebar"{% endif %}>
             {% block main %}
             {% endblock main %}
         </div>
@@ -258,10 +259,6 @@
                 });
             });
         });
-
-        {% if is_sidebar_open %}
-            toggle_sidebar();
-        {% endif %}
 
     });
         </script>
