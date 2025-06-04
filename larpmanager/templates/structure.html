@@ -18,7 +18,7 @@
         <meta property="og:url" content="{{ request.path }}">
         <meta property="og:type" content="website">
         <meta property="og:logo" content="{% static 'lm_fav_new.png' %}">
-        <style>.hide { display: none; }</style>
+        <style>html body .hide { display: none; }</style>
         {% if assoc.id == 0 %}
             <link rel="icon" type="image/png" href="{% static 'lm_fav_new.png' %}">
             <link rel="apple-touch-icon" href="{% static 'lm_fav_new.png' %}">
