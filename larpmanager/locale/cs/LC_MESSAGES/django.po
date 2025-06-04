@@ -2813,6 +2813,9 @@ msgstr "Celková položka"
 msgid "Transaction totals"
 msgstr "Celkový počet transakcí"
 
+msgid "Use these formats:"
+msgstr "Použijte tyto formáty:"
+
 msgid "Verified payments!"
 msgstr "Ověřené platby!"
 
@@ -4693,6 +4696,9 @@ msgstr "Suroviny, spotřební materiál a zboží"
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Připomenutí platby členských příspěvků za %(event)s"
 
+msgid "Select a character to insert their reference code"
+msgstr "Vyberte znak a vložte jeho referenční kód"
+
 msgid "The user has been enabled for the indicated role."
 msgstr "Uživateli byla povolena uvedená role."
 
@@ -5028,9 +5034,6 @@ msgstr "Na této stránce můžete sledovat nahlášené problémy."
 msgid "We are processing your payment. Please wait a moment... "
 msgstr "Zpracováváme vaši platbu. Chvíli prosím počkejte..."
 
-msgid "to indicate only the proper name of the other character."
-msgstr "označit pouze vlastní jméno druhého znaku."
-
 msgid "Allows you to define a different language for each event."
 msgstr "Umožňuje definovat pro každou událost jiný jazyk."
 
@@ -5297,6 +5300,9 @@ msgstr "Abyste mohli hlasovat, musíte uhradit členský poplatek!"
 
 msgid "Your request has been sent, we will reply as soon as possible!"
 msgstr "Vaše žádost byla odeslána, odpovíme vám co nejdříve!"
+
+msgid "for no relationship, only to display the other character name."
+msgstr "pro žádný vztah, pouze pro zobrazení jména druhého znaku."
 
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Popis - zobrazí se na začátku sekce"
@@ -6476,6 +6482,13 @@ msgstr ""
 " každou postavu."
 
 msgid ""
+"In rich text editors, you can reference other characters directly using "
+"their number."
+msgstr ""
+"V textových editorech můžete odkazovat na jiné znaky přímo pomocí jejich "
+"čísla."
+
+msgid ""
 "Requires Executive Committee approval of membership before participating in "
 "an event."
 msgstr "Před účastí na akci vyžaduje schválení členství výkonným výborem."
@@ -6832,6 +6845,16 @@ msgid ""
 msgstr ""
 "Hodnota slevy pro registrovaného hráče, který předá kód příteli, který se "
 "zaregistruje."
+
+msgid ""
+"for bidirectional relationships, where the other character is also aware of "
+"the connection."
+msgstr "pro obousměrné vztahy, kdy o spojení ví i druhá postava."
+
+msgid ""
+"for unidirectional relationships, where the other character is NOT aware of "
+"the connection."
+msgstr "pro jednosměrné vztahy, kdy si druhá postava NENÍ vědoma spojení."
 
 #, python-format
 msgid ""
@@ -7360,13 +7383,6 @@ msgid ""
 msgstr ""
 "Na této stránce můžete vybrat funkce šablony. Kliknutím na funkci zobrazíte "
 "její popis."
-
-msgid ""
-"for bidirectional relationships (love, colleagues, rivals), of which the "
-"other  character is aware of."
-msgstr ""
-"pro obousměrné vztahy (láska, kolegové, rivalové), o kterých druhá postava "
-"ví."
 
 msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
@@ -7927,13 +7943,6 @@ msgstr ""
 "vám za vaši podporu a za to, že v nás věříte!"
 
 msgid ""
-"for unidirectional relationships (secret hatred, loves but is unrequited), "
-"of that the other character is NOT aware of."
-msgstr ""
-"pro jednosměrné vztahy (tajná nenávist, neopětovaná láska), o kterých druhá "
-"postava NEví."
-
-msgid ""
 "Enables basic inventory management. Users can add items to a warehouse "
 "table, track quantities, and note item locations."
 msgstr ""
@@ -8174,6 +8183,13 @@ msgstr ""
 " které je třeba sledovat, a seznam uživatelů, které je třeba oslovit."
 
 msgid ""
+"When the text is displayed to the player, the number is automatically "
+"replaced with the character’s name and a link to their profile."
+msgstr ""
+"Když se text zobrazí hráči, číslo se automaticky nahradí jménem postavy a "
+"odkazem na její profil."
+
+msgid ""
 "this figure is the net that should result as availability of financial "
 "instruments - it does not take into account tokens and credits"
 msgstr ""
@@ -8295,6 +8311,13 @@ msgid ""
 msgstr ""
 "V textovém vyhledávání můžete zadat libovolný text; vyhledávání se provede "
 "podle čísla, jména, upoutávky, hráče, skupiny, do které postava patří."
+
+msgid ""
+"You can press Ctrl+Alt+H to get a character’s number, or select the "
+"reference number in the text to see a highlight with the character’s name."
+msgstr ""
+"Stisknutím klávesové zkratky Ctrl+Alt+H získáte číslo znaku nebo můžete v "
+"textu vybrat referenční číslo a zobrazit zvýraznění se jménem znaku."
 
 msgid ""
 "Access has been granted by you in the past by signing up for one of their  "
@@ -8658,15 +8681,6 @@ msgstr ""
 "Musíte zaplatit alespoň <b>%(amount).2f %(currency)s</b> do %(deadline)d "
 "dnů. Platbu proveďte <a href='%(url)s'>na této stránce</a>. Pokud platbu "
 "neobdržíme do stanoveného termínu, může být vaše členství zrušeno."
-
-msgid ""
-"In the 'Presentation' and 'Text' fields you can refer to other characters "
-"using their number directly, in the final text the number will automatically"
-" be replaced with their name, and a link to the character. Use:"
-msgstr ""
-"V polích \"Prezentace\" a \"Text\" můžete odkazovat na jiné postavy přímo "
-"pomocí jejich čísla, v konečném textu bude číslo automaticky nahrazeno "
-"jejich jménem a odkazem na danou postavu. Použijte:"
 
 msgid ""
 "Indicates the ratio between reduced and patron tickets, multiplied by 10. "

@@ -9,21 +9,30 @@ window.addEventListener('DOMContentLoaded', function() {
         $(document).on('keydown', function(e) {
             if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'h') {
                 e.preventDefault();
-                char_finder();
+                char_finder(false);
             }
         });
 
-        if (window.tinymce) {
-            tinymce.on('AddEditor', function(e) {
-                e.editor.on('keydown', function(ev) {
-                    if (ev.ctrlKey && ev.altKey && ev.key.toLowerCase() === 'h') {
-                        ev.preventDefault();
-                        console.log('ciao');
-                        char_finder();
-                    }
-                });
+        function setUpCharFinder(key) {
+            const editor = tinymce.get(key);
+            if (!editor) return;
+            editor.on('keydown', function(ev) {
+                if (ev.ctrlKey && ev.altKey && ev.key.toLowerCase() === 'h') {
+                    ev.preventDefault();
+                    char_finder(key);
+                }
             });
         }
+
+        {% for question in form.questions %}
+            {% if question.typ == 'e' %}
+                setUpCharFinder('id_q{{ question.id }}');
+            {% elif question.typ == 'text' %}
+                setUpCharFinder('id_text');
+            {% elif question.typ == 'teaser' %}
+                setUpCharFinder('id_teaser');
+            {% endif %}
+        {% endfor %}
 
         function close_char_finder() {
             $('#char-finder-popup').fadeOut(200);
@@ -32,20 +41,30 @@ window.addEventListener('DOMContentLoaded', function() {
 
         var savedFocusElem = null;
         var savedCursorPos = null;
+        var bookmark = null;
+        var key = null;
 
-        function char_finder() {
+        function char_finder(tinymce_key) {
 
-            var $active = $(document.activeElement);
-            if ($active.is('input, textarea')) {
-                savedFocusElem = $active;
-                var el = $active.get(0);
-                savedCursorPos = {
-                    start: el.selectionStart,
-                    end: el.selectionEnd
-                };
+            savedFocusElem = null;
+            savedCursorPos = null;
+            bookmark = null;
+            key = null;
+
+            if (tinymce_key) {
+                key = tinymce_key;
+                editor = tinymce.get(key);
+                bookmark = editor.selection.getBookmark(2, true);
             } else {
-                savedFocusElem = null;
-                savedCursorPos = null;
+                var $active = $(document.activeElement);
+                if ($active.is('input, textarea')) {
+                    savedFocusElem = $active;
+                    var el = $active.get(0);
+                    savedCursorPos = {
+                        start: el.selectionStart,
+                        end: el.selectionEnd
+                    };
+                }
             }
 
             $('#char-finder-popup').fadeIn(200);
@@ -66,11 +85,17 @@ window.addEventListener('DOMContentLoaded', function() {
 
                 $('#char_finder').val(null).trigger('change');
                 close_char_finder();
-                insertReference('#' + result.number);
+                insertReference(' #' + result.number);
             });
         });
 
         function insertReference(text) {
+
+            if (key) {
+                editor = tinymce.get(key);
+                editor.selection.moveToBookmark(bookmark);
+                editor.insertContent(text);
+            }
 
             if (savedFocusElem && savedCursorPos) {
                 var el = savedFocusElem.get(0);
