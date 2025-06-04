@@ -86,7 +86,7 @@
                             <a href="{% url 'orga_characters_relationships' run.event.slug run.number el.id %}">{% trans "Relationships" %}</a>   &nbsp;
                         {% endif %}
                     </td>
-                    {% if features.user_character %}<td class="hide player">{{ el.player.show_nick }}</td>{% endif %}
+                    {% if user_character_max %}<td class="hide player">{{ el.player.show_nick }}</td>{% endif %}
                     {% if user_character_approval %}<td class="hide status">{{ el.get_status_display }}</td>{% endif %}
                     {% if features.px %}
                         <td class="hide px">{{ el.addit | get:'px_tot' }}</td>
