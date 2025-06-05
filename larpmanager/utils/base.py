@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.conf import settings as conf_settings
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_assoc_features
@@ -55,6 +56,9 @@ def def_user_ctx(request):
             res["token_name"] = _("Tokens")
         if not res["credit_name"]:
             res["credit_name"] = _("Credits")
+
+    res["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
+    res["TINYMCE_JS_URL"] = conf_settings.TINYMCE_JS_URL
 
     return res
 

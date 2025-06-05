@@ -20,11 +20,13 @@
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Q
 from django.db.models.functions import Length, Substr
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.http import require_POST
 
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.character import (
@@ -496,3 +498,78 @@ def check_speedlarp_prepare(el, id_number_map, speeds):
         if el.typ not in speeds[ch]:
             speeds[ch][el.typ] = []
         speeds[ch][el.typ].append(str(el))
+
+
+@require_POST
+def orga_writing_excel_edit(request, s, n, typ):
+    try:
+        ctx = _get_excel_form(request, s, n, typ)
+    except ObjectDoesNotExist:
+        return JsonResponse({"k": 0})
+
+    tinymce = False
+    if ctx["question"].typ in [QuestionType.TEASER, QuestionType.SHEET, QuestionType.EDITOR]:
+        tinymce = True
+
+    confirm = _("Confirm")
+    field = ctx["form"][ctx["field_key"]]
+    value = f"""
+        <h2>{ctx["question"].display}: {ctx["element"]}</h2>
+        <form id='form-excel'>
+            {field.as_widget()}
+        </form>
+        <br />
+        <input type='submit' value='{confirm}'>
+        <a href="#" class="close"><i class="fa-solid fa-xmark"></i></a>
+    """
+    return JsonResponse({"k": 1, "v": value, "tinymce": tinymce})
+
+
+@require_POST
+def orga_writing_excel_submit(request, s, n, typ):
+    try:
+        ctx = _get_excel_form(request, s, n, typ, submit=True)
+    except ObjectDoesNotExist:
+        return JsonResponse({"k": 0})
+
+    if ctx["form"].is_valid():
+        ctx["form"].save()
+        return JsonResponse({"k": 1})
+    else:
+        return JsonResponse({"k": 2, "errors": ctx["form"].errors})
+
+
+def _get_excel_form(request, s, n, typ, submit=False):
+    ctx = check_event_permission(request, s, n, f"orga_{typ}s")
+    check_writing_form_type(ctx, typ)
+    question_id = int(request.POST.get("qid"))
+    element_id = int(request.POST.get("eid"))
+
+    question = ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"]).get(pk=question_id)
+    applicable = QuestionApplicable.get_applicable_inverse(ctx["writing_typ"])
+    element = ctx["event"].get_elements(applicable).get(pk=element_id)
+
+    # Init form
+    # TODO correct type given the one supplied
+    if submit:
+        form = OrgaCharacterForm(request.POST, ctx=ctx, instance=element)
+    else:
+        form = OrgaCharacterForm(ctx=ctx, instance=element)
+
+    # Remove question other than the one requested
+    keep_key = f"q{question_id}"
+    if question.typ not in QuestionType.get_basic_types():
+        keep_key = question.typ
+    remove_keys = []
+    for key in form.fields:
+        if key != keep_key:
+            remove_keys.append(key)
+    for key in remove_keys:
+        form.delete_field(key)
+
+    ctx["form"] = form
+    ctx["question"] = question
+    ctx["element"] = element
+    ctx["field_key"] = keep_key
+
+    return ctx

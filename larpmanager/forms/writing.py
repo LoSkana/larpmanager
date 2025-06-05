@@ -22,6 +22,7 @@ import traceback
 
 from django import forms
 from django.contrib.postgres.aggregates import ArrayAgg
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.forms import CharField
 from django.utils.translation import gettext_lazy as _
@@ -108,7 +109,7 @@ class PlayerRelationshipForm(MyForm):
             rel = PlayerRelationship.objects.get(reg=self.params["run"].reg, target=self.cleaned_data["target"])
             if rel.id != self.instance.id:
                 self.add_error("target", _("Already existing relationship!"))
-        except Exception:
+        except ObjectDoesNotExist:
             pass
 
         return cleaned_data
@@ -181,11 +182,15 @@ class BaseWritingForm(BaseRegistrationForm):
     question_class = WritingQuestion
     instance_key = "element_id"
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # noinspection PyProtectedMember
+        self.applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)
+
     def _init_questions(self, event):
         super()._init_questions(event)
         # noinspection PyProtectedMember
-        applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)
-        self.questions = self.questions.filter(applicable=applicable)
+        self.questions = self.questions.filter(applicable=self.applicable)
 
     def get_options_query(self, event):
         query = super().get_options_query(event)
@@ -194,9 +199,6 @@ class BaseWritingForm(BaseRegistrationForm):
     def get_option_key_count(self, option):
         key = f"option_char_{option.id}"
         return key
-
-    class Meta:
-        abstract = True
 
 
 class PlotForm(WritingForm, BaseWritingForm):
@@ -359,7 +361,7 @@ class QuestForm(WritingForm):
                 for rcr in reg.rcrs.all():
                     chars.append(f"#{rcr.character.number}")
                 char_name = ", ".join(chars)
-            except Exception:
+            except ObjectDoesNotExist:
                 print(traceback.format_exc())
                 pass
 

@@ -1,5 +1,5 @@
 {% extends "utils.html" %}
-{% load show_tags i18n %}
+{% load show_tags i18n static %}
 {% block title %}
     {% trans "Characters" %} - {{ run }}
 {% endblock title %}
@@ -95,7 +95,7 @@
                     {% endif %}
                     {% for key, que in form_questions.items %}
                         {% if que.typ == 'teaser' or que.typ == 'text' %}
-                            <td class="hide q_{{ key }}">
+                            <td class="hide q_{{ key }} editable" qid="{{ que.id }}">
                                 {% with ed_id=que.typ|concat:'_red' %}
                                     {% lookup el ed_id as value %}
                                     {{ value | safe }}
@@ -108,7 +108,7 @@
                                 {% endwith %}
                             </td>
                         {% elif que.typ == 'e' %}
-                            <td class="hide question q_{{ key }}">
+                            <td class="hide question q_{{ key }} editable" qid="{{ que.id }}">
                                 {% with ed_id=key|concat:'_red' %}
                                     {% lookup el ed_id as value %}
                                     {{ value | safe }}
@@ -121,7 +121,7 @@
                                 {% endwith %}
                             </td>
                         {% elif que.typ == 's' or que.typ == 'm' or que.typ == 't' or que.typ == 'p' %}
-                            <td class="hide question q_{{ key }}">
+                            <td class="hide question q_{{ key }} editable" qid="{{ que.id }}">
                                 <span class="has_show_tooltip res_{{ key }}"></span>
                                 <span class="hide show_tooltip">{{ que.display }}</span>
                             </td>
@@ -205,28 +205,18 @@
             {% endif %}
         {% endfor %}
     {% endif %}
+    <div id="excel-edit"></div>
 {% endblock content %}
 {% block js %}
+    <script defer src="{% static TINYMCE_JS_URL %}"></script>
+    {% include "elements/writing/excel-edit.js" %}
+    {% include "elements/writing/que-open.js" %}
     <script>
-var url_load_questions = "{% url 'orga_writing_form_list' run.event.slug run.number label_typ %}";
-var url_load_questions_email = "{% url 'orga_writing_form_email' run.event.slug run.number label_typ %}";
+        var url_load_questions = "{% url 'orga_writing_form_list' run.event.slug run.number label_typ %}";
+        var url_load_questions_email = "{% url 'orga_writing_form_email' run.event.slug run.number label_typ %}";
 
-var accounting = false;
+        var accounting = false;
 
-{% include "elements/questions/load.js" %}
-
-window.addEventListener('DOMContentLoaded', function() {
-    $(document).ready(function() {
-        setTimeout(function() {
-        {% for key, que in form_questions.items %}
-            {% if que.typ == 'teaser' or que.typ == 'text' %}
-                $('a.my_toggle[tog="q_{{ key }}"]').trigger('click');
-                console.log('{{ key }}');
-            {% endif %}
-        {% endfor %}
-        }, 100);
-    });
-});
-
+        {% include "elements/questions/load.js" %}
     </script>
 {% endblock js %}

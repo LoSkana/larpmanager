@@ -1265,3 +1265,47 @@ th select {
     max-width:700px;
     margin: auto;
 }
+
+#excel-edit {
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    padding:3em;
+    border-radius:10px;
+    min-width:320px;
+
+    padding: 3em;
+    border-radius: 2em;
+    background-color: rgba(var(--sec-rgb), 0.9);
+    -webkit-box-shadow: 0px 0px 39px 12px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 39px 12px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 39px 12px rgba(0,0,0,0.75);
+    overflow: scroll;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    text-align: center;
+
+    opacity: 0;
+    transition: opacity 0.2s;
+    transition-delay: 0.1s;
+    pointer-events: none;
+}
+
+#excel-edit.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#excel-edit .close {
+    position:absolute;
+    top:0.5em;
+    right:1em;
+    z-index:1;
+    background:transparent;
+    border:none;
+    font-size:1.5em;
+    cursor:pointer;
+}

@@ -11,7 +11,7 @@ fi
 git fetch --prune
 
 # delete local branches fully merged in origin main
-git branch --merged origin/main | grep -Ev "^\*?\s*(main|main|staging)$" | xargs git branch -d
+git branch --merged origin/main | grep -Ev "^\*?\s*(main|main|staging)$" | xargs git branch -D
 
 git add -A && git commit
 
