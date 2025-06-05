@@ -65,7 +65,8 @@ class Association(BaseModel):
         upload_to=UploadToPathAndRename("association/"),
         verbose_name=_("Logo"),
         null=True,
-        help_text=_("Logo image - you can upload a file of any size, it will be automatically resized"),
+        blank=True,
+        help_text=_("Optional logo image - you can upload a file of any size, it will be automatically resized"),
     )
 
     profile_thumb = ImageSpecField(

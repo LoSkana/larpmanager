@@ -2380,8 +2380,8 @@ msgid "Logo"
 msgstr ""
 
 msgid ""
-"Logo image - you can upload a file of any size, it will be automatically "
-"resized"
+"Optional logo image - you can upload a file of any size, it will be "
+"automatically resized"
 msgstr ""
 
 msgid "Please indicate an email for the organization"
