@@ -151,6 +151,11 @@ urlpatterns = [
         name="discord",
     ),
     path(
+        "donate/",
+        views_lm.donate,
+        name="donate",
+    ),
+    path(
         "ticket/",
         views_lm.ticket,
         name="ticket",
