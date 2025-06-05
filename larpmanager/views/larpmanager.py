@@ -547,3 +547,19 @@ def lm_profile_rm(request, func):
     check_lm_admin(request)
     LarpManagerProfiler.objects.filter(view_func_name=func).delete()
     return redirect("lm_profile")
+
+
+@ratelimit(key="ip", rate="5/m", block=True)
+def donate(request):
+    user_agent = request.META.get("HTTP_USER_AGENT", "")
+    if is_suspicious_user_agent(user_agent):
+        return HttpResponseForbidden("Bots not allowed.")
+
+    if request.POST:
+        form = LarpManagerCheck(request.POST)
+        if form.is_valid():
+            return redirect("https://www.paypal.com/paypalme/mscanagatta")
+    else:
+        form = LarpManagerCheck()
+    ctx = {"form": form}
+    return render(request, "larpmanager/larpmanager/donate.html", ctx)

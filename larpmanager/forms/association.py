@@ -560,8 +560,7 @@ class ExeConfigForm(ConfigForm):
 class FirstAssociationForm(MyForm):
     class Meta:
         model = Association
-        fields = ("name", "profile", "slug", "main_mail")  # 'main_language',
-
+        fields = ("name", "profile", "slug", "main_mail")
         widgets = {
             "slug": SlugInput,
         }
