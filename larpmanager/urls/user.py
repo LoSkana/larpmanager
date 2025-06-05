@@ -664,6 +664,11 @@ urlpatterns = [
         name="help",
     ),
     path(
+        "<slug:s>/<int:n>/show_char/",
+        views_uc.show_char,
+        name="show_char",
+    ),
+    path(
         "register/conditions/",
         views_ur.register_conditions,
         name="register_conditions",
