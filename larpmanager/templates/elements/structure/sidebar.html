@@ -29,12 +29,14 @@
                         <h2>{% trans mod %}</h2>
                         <p>
                             {% for ap in list %}
-                                <a class="sidebar-link"
-                                   href="{% url ap.slug run.event.slug run.number %}"
-                                   {% if request.func_name == ap.slug %}class="select"{% endif %}>
-                                    {% trans ap.name %}
-                                </a>
-                                <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
+                                <span class="sidebar-link-wrap">
+                                    <a class="sidebar-link"
+                                       href="{% url ap.slug run.event.slug run.number %}"
+                                       {% if request.func_name == ap.slug %}class="select"{% endif %}>
+                                        {% trans ap.name %}
+                                    </a>
+                                    <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
+                                </span>
                             {% endfor %}
                         </p>
                     </div>
@@ -45,12 +47,14 @@
                         <h2>{% trans mod %}</h2>
                         <p>
                             {% for ap in list %}
-                                <a class="sidebar-link"
-                                   href="{% url ap.slug %}"
-                                   {% if request.func_name == ap.slug %}class="select"{% endif %}>
-                                    {% trans ap.name %}
-                                </a>
-                                <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
+                                <span class="sidebar-link-wrap">
+                                    <a class="sidebar-link"
+                                       href="{% url ap.slug %}"
+                                       {% if request.func_name == ap.slug %}class="select"{% endif %}>
+                                        {% trans ap.name %}
+                                    </a>
+                                    <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
+                                </span>
                             {% endfor %}
                         </p>
                     </div>

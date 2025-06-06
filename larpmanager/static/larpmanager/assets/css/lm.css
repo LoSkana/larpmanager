@@ -1301,6 +1301,18 @@ th select {
     position: relative;
 }
 
+.sidebar-link-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+.sidebar-link,
+.explain-icon {
+  display: inline;
+  margin: 0;
+}
+
 @media(max-width: 768px) {
     #mobile-bar {
         display: block;
