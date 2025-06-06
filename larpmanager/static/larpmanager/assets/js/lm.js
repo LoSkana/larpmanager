@@ -62,8 +62,8 @@ $(document).ready(function() {
                     $(this).fadeIn(500);
                 }
             }, position: {
-                my: 'center left',
-                at: 'center right',
+                my: 'top center',
+                at: 'bottom center',
             }
         });
     });
@@ -81,8 +81,8 @@ $(document).ready(function() {
             event: 'unfocus'
         },
         position: {
-            my: 'center left',
-            at: 'top right',
+            my: 'top center',
+            at: 'bottom center',
             target: function() {
                 return $(this).prevAll('.sidebar-link').first();
             }
