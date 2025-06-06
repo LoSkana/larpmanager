@@ -1274,7 +1274,7 @@ th select {
   bottom: 0;
   width: 100%;
   text-align: center;
-  line-height: 60px;
+  line-height: 2.5em;
   z-index: 9999;
   background-color: rgba(var(--sec-rgb), 0.9);
   color: var(--ter-clr);
@@ -1319,6 +1319,7 @@ th select {
     }
 
     #sidebar {
+        padding: 1em 0em 3.5em 0em;
 		-moz-align-items: center;
 		-webkit-align-items: center;
 		-ms-align-items: center;
