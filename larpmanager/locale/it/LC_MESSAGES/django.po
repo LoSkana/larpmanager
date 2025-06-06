@@ -1698,6 +1698,9 @@ msgstr "Collaboratore"
 msgid "Disbursement"
 msgstr "Erogazione"
 
+msgid "Event status"
+msgstr "Stato dell'evento"
+
 msgid "Experimental"
 msgstr "Experimental"
 
@@ -3797,6 +3800,9 @@ msgstr "Strumenti generali di gestione degli eventi"
 
 msgid "List inverse relationships of "
 msgstr "Elenco legami inversi di "
+
+msgid "Registrations on external link"
+msgstr "Registrazioni su link esterno"
 
 msgid "Select the new photo to upload"
 msgstr "Seleziona la nuova foto da caricare"

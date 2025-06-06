@@ -1698,6 +1698,9 @@ msgstr "Bidragsyter"
 msgid "Disbursement"
 msgstr "Utbetaling"
 
+msgid "Event status"
+msgstr "Status for hendelsen"
+
 msgid "Experimental"
 msgstr "Eksperimentell"
 
@@ -3797,6 +3800,9 @@ msgstr "Generelle verktøy for håndtering av arrangementer"
 
 msgid "List inverse relationships of "
 msgstr "Liste over omvendte obligasjoner"
+
+msgid "Registrations on external link"
+msgstr "Registreringer på ekstern lenke"
 
 msgid "Select the new photo to upload"
 msgstr "Velg det nye bildet som skal lastes opp"

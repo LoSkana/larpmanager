@@ -1698,6 +1698,9 @@ msgstr "Přispěvatel"
 msgid "Disbursement"
 msgstr "Výplata"
 
+msgid "Event status"
+msgstr "Stav události"
+
 msgid "Experimental"
 msgstr "Experimentální"
 
@@ -3797,6 +3800,9 @@ msgstr "Obecné nástroje pro správu událostí"
 
 msgid "List inverse relationships of "
 msgstr "Inverzní seznam dluhopisů"
+
+msgid "Registrations on external link"
+msgstr "Registrace na externím odkazu"
 
 msgid "Select the new photo to upload"
 msgstr "Vyberte novou fotografii, kterou chcete nahrát"

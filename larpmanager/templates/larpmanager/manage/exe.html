@@ -15,7 +15,6 @@
                         - {{ run.get_development_display }}
                         - <a href="{% url 'register' run.event.slug run.number %}">{{ run.registration_status }}</a>
                     </li>
-                    {% if run.registration_open %}{% endif %}
                 {% endfor %}
             </ul>
         {% else %}

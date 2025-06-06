@@ -1698,6 +1698,9 @@ msgstr "Bidragsgivare"
 msgid "Disbursement"
 msgstr "Utbetalning"
 
+msgid "Event status"
+msgstr "Status för händelse"
+
 msgid "Experimental"
 msgstr "Experimentell"
 
@@ -3797,6 +3800,9 @@ msgstr "Verktyg för hantering av allmänna evenemang"
 
 msgid "List inverse relationships of "
 msgstr "Lista över inversa obligationer"
+
+msgid "Registrations on external link"
+msgstr "Registreringar på extern länk"
 
 msgid "Select the new photo to upload"
 msgstr "Välj det nya foto som ska laddas upp"

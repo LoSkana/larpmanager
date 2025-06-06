@@ -5137,6 +5137,9 @@ msgstr ""
 msgid "Register to the event"
 msgstr ""
 
+msgid "Event status"
+msgstr ""
+
 msgid "Donation"
 msgstr ""
 
@@ -7572,6 +7575,9 @@ msgid "invalid form"
 msgstr ""
 
 msgid "Registration completed successfully!"
+msgstr ""
+
+msgid "Registrations on external link"
 msgstr ""
 
 msgid "Pre-registration active"

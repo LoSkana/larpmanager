@@ -1698,6 +1698,9 @@ msgstr "Contributeur"
 msgid "Disbursement"
 msgstr "Décaissement"
 
+msgid "Event status"
+msgstr "Statut de l'événement"
+
 msgid "Experimental"
 msgstr "Expérimental"
 
@@ -3797,6 +3800,9 @@ msgstr "Outils généraux de gestion d'événements"
 
 msgid "List inverse relationships of "
 msgstr "Liste des obligations inversées"
+
+msgid "Registrations on external link"
+msgstr "Inscriptions sur lien externe"
 
 msgid "Select the new photo to upload"
 msgstr "Sélectionnez la nouvelle photo à télécharger"

@@ -1698,6 +1698,9 @@ msgstr "Beitragende"
 msgid "Disbursement"
 msgstr "Auszahlung"
 
+msgid "Event status"
+msgstr "Status der Veranstaltung"
+
 msgid "Experimental"
 msgstr "Experimentelle"
 
@@ -3797,6 +3800,9 @@ msgstr "Allgemeine Tools für das Veranstaltungsmanagement"
 
 msgid "List inverse relationships of "
 msgstr "Liste der umgekehrten Anleihen"
+
+msgid "Registrations on external link"
+msgstr "Anmeldungen über externen Link"
 
 msgid "Select the new photo to upload"
 msgstr "Wählen Sie das neue Foto zum Hochladen aus"

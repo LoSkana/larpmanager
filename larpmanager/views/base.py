@@ -54,11 +54,13 @@ def manage(request, s=None, n=None):
 
 
 def _get_registration_status(run):
+    features = get_event_features(run.event_id)
+    if "register_link" in features and run.event.register_link:
+        return _("Registrations on external link")
+
     # check pre-register
     if not run.registration_open and run.event.get_config("pre_register_active", False):
         return _("Pre-registration active")
-
-    features = get_event_features(run.event_id)
 
     dt = datetime.today()
     # check registration open
@@ -107,6 +109,8 @@ def _orga_manage(request, s, n):
     assoc = Association.objects.get(pk=request.assoc["id"])
     if assoc.get_config("interface_admin_links", False):
         get_index_assoc_permissions(ctx, request, request.assoc["id"], check=False)
+
+    ctx["registration_status"] = _get_registration_status(ctx["run"])
     return render(request, "larpmanager/manage/orga.html", ctx)
 
 

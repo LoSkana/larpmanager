@@ -1698,6 +1698,9 @@ msgstr "Deelnemer"
 msgid "Disbursement"
 msgstr "Uitbetaling"
 
+msgid "Event status"
+msgstr "Gebeurtenisstatus"
+
 msgid "Experimental"
 msgstr "Experimenteel"
 
@@ -3797,6 +3800,9 @@ msgstr "Algemene hulpmiddelen voor evenementenbeheer"
 
 msgid "List inverse relationships of "
 msgstr "Inverse obligatielijst van"
+
+msgid "Registrations on external link"
+msgstr "Registraties op externe link"
 
 msgid "Select the new photo to upload"
 msgstr "Selecteer de nieuwe foto die u wilt uploaden"
