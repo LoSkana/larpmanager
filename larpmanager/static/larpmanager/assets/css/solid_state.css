@@ -1378,7 +1378,7 @@ body.loaded .fade-in {
 }
 
 .qtip {
- width: 280px !important;
+ max-width: 280px !important;
 }
 
 .xdsoft_datepicker {

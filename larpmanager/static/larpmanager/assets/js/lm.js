@@ -47,6 +47,48 @@ $(document).ready(function() {
             $('body').toggleClass('is-sidebar-visible');
     });
 
+    $('.sidebar-link').each(function() {
+        $(this).qtip({
+            content: {
+                text: 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum '
+            }, style: {
+                classes: 'qtip-dark qtip-rounded qtip-shadow'
+            }, hide: {
+                effect: function(offset) {
+                    $(this).fadeOut(500);
+                }
+            }, show: {
+                effect: function(offset) {
+                    $(this).fadeIn(500);
+                }
+            }, position: {
+                my: 'bottom center',
+                at: 'top center',
+            }
+        });
+    });
+
+    $('.explain-icon').qtip({
+        content: {
+            text: 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum '
+        }, style: {
+            classes: 'qtip-dark qtip-rounded qtip-shadow'
+        }, show: {
+            event: 'click',
+            solo: true
+        },
+        hide: {
+            event: 'unfocus'
+        },
+        position: {
+            my: 'bottom center',
+            at: 'top center',
+            target: function() {
+                return $(this).prevAll('.sidebar-link').first();
+            }
+        }
+    });
+
     // Menu.
             $menu_openers = $('#menu .opener');
 
