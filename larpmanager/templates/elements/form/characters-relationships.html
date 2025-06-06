@@ -32,11 +32,7 @@
                         <p>
                             <a href="#" class="my_toggle" tog="f_{{ key }}_inverse">{% trans "Show" %}</a>
                         </p>
-                        <div class="hide hide_later f_{{ key }}_inverse">
-                            <textarea name="rel_{{ key }}_inverse">
-                                {{ item.inverse | safe }}
-                            </textarea>
-                        </div>
+                        <div class="hide hide_later f_{{ key }}_inverse">{{ item.inverse | safe }}</div>
                     </td>
                 </tr>
             </table>

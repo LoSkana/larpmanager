@@ -46,12 +46,6 @@ window.addEventListener('DOMContentLoaded', function() {
             <tr>
                 <th>{% trans "Inverse" %}</th>
                 <td>
-                    <p>
-                        <a href="#" class="my_toggle" tog="f_{0}_inverse">{% trans "Show" %}</a>
-                    </p>
-                    <div class="hide hide_later f_{0}_inverse">
-                        <textarea name="rel_{0}_inverse"></textarea>
-                    </div>
                 </td>
             </tr>
         </table>
@@ -60,14 +54,12 @@ window.addEventListener('DOMContentLoaded', function() {
         $('#form_relationships').prepend(html);
 
         addTinyMCETextarea('.f_{0}_direct textarea'.format(ch_id));
-        addTinyMCETextarea('.f_{0}_inverse textarea'.format(ch_id));
         already.push(ch_id);
     }
 
     $(function() {
         {% for key, item in relationships.items %}
             addTinyMCETextarea('.f_{{ key }}_direct textarea');
-            addTinyMCETextarea('.f_{{ key }}_inverse textarea');
             already.push('{{ key }}');
         {% endfor %}
 
