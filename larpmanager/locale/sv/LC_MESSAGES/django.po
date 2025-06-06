@@ -74,6 +74,9 @@ msgstr "ålder"
 msgid "for"
 msgstr "för"
 
+msgid "npc"
+msgstr "npc"
+
 msgid "Band"
 msgstr "Fascia"
 
@@ -417,6 +420,9 @@ msgstr "pengar"
 msgid "other"
 msgstr "mer"
 
+msgid "staff"
+msgstr "Personal"
+
 msgid "title"
 msgstr "titel"
 
@@ -597,6 +603,9 @@ msgstr "Omröstning"
 msgid "XP tot"
 msgstr "Px Tot"
 
+msgid "filler"
+msgstr "fyllnadsmedel"
+
 msgid "issued"
 msgstr "utfärdade"
 
@@ -605,6 +614,9 @@ msgstr "medlem"
 
 msgid "player"
 msgstr "spelare"
+
+msgid "seller"
+msgstr "Säljare"
 
 msgid "status"
 msgstr "status"
@@ -830,6 +842,9 @@ msgstr "adress"
 
 msgid "options"
 msgstr "alternativ"
+
+msgid "waiting"
+msgstr "väntar"
 
 msgid "Accepted"
 msgstr "Godkänd"
@@ -1659,6 +1674,9 @@ msgstr "omedelbart"
 msgid "leaderboard"
 msgstr "ranking!"
 
+msgid "provisional"
+msgstr "provisorisk"
+
 msgid "text length"
 msgstr "textlängd"
 
@@ -1865,6 +1883,9 @@ msgstr "Vi är på väg"
 
 msgid "You must pay"
 msgstr "Du måste betala"
+
+msgid "collaborator"
+msgstr "medarbetare"
 
 msgid "invalid form"
 msgstr "ogiltigt formulär"
@@ -3906,6 +3927,9 @@ msgstr "Har du kontrollerat och är det korrekt?"
 msgid "Discover the coming soon events!"
 msgstr "Upptäck vilka evenemang som är på gång!"
 
+msgid "Filter or search the characters!"
+msgstr "Filtrera eller sök bland karaktärerna!"
+
 msgid "Hide players without a character"
 msgstr "Dölj spelare utan karaktär"
 
@@ -5325,9 +5349,6 @@ msgstr "Ange här varje element som du vill undvika i uppgiften"
 
 msgid "Maximum number of primary spots to be managed (0 for infinite)"
 msgstr "Maximalt antal primära inlägg som ska hanteras (0 för oändligt)"
-
-msgid "Scroll through the characters, and can you filter/search them!"
-msgstr "Bläddra bland alla tecken, filtrera eller sök bland dem!"
 
 msgid "These are the workshops you must complete before you can play."
 msgstr "Detta är de workshops som du måste genomföra innan du kan spela."

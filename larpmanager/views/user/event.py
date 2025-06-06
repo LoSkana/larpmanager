@@ -27,6 +27,7 @@ from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.cache.character import get_character_fields, get_event_cache_all, get_searcheable_character_fields
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
@@ -58,7 +59,7 @@ from larpmanager.utils.event import get_event, get_event_run
 from larpmanager.utils.exceptions import (
     HiddenError,
 )
-from larpmanager.utils.registration import is_reg_provisional, registration_status
+from larpmanager.utils.registration import registration_status
 from larpmanager.utils.text import get_assoc_text, get_event_text
 
 

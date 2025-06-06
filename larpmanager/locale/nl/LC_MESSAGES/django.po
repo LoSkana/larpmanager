@@ -74,6 +74,9 @@ msgstr "leeftijd"
 msgid "for"
 msgstr "voor"
 
+msgid "npc"
+msgstr "npc"
+
 msgid "Band"
 msgstr "Fascia"
 
@@ -417,6 +420,9 @@ msgstr "geld"
 msgid "other"
 msgstr "meer"
 
+msgid "staff"
+msgstr "personeel"
+
 msgid "title"
 msgstr "titel"
 
@@ -597,6 +603,9 @@ msgstr "Stemmen"
 msgid "XP tot"
 msgstr "Px Tot"
 
+msgid "filler"
+msgstr "vulstof"
+
 msgid "issued"
 msgstr "uitgegeven"
 
@@ -605,6 +614,9 @@ msgstr "lid"
 
 msgid "player"
 msgstr "speler"
+
+msgid "seller"
+msgstr "verkoper"
 
 msgid "status"
 msgstr "status"
@@ -830,6 +842,9 @@ msgstr "adres"
 
 msgid "options"
 msgstr "opties"
+
+msgid "waiting"
+msgstr "wachtend"
 
 msgid "Accepted"
 msgstr "Geaccepteerd"
@@ -1659,6 +1674,9 @@ msgstr "onmiddellijk"
 msgid "leaderboard"
 msgstr "ranking!"
 
+msgid "provisional"
+msgstr "voorlopig"
+
 msgid "text length"
 msgstr "tekstlengte"
 
@@ -1865,6 +1883,9 @@ msgstr "We komen eraan"
 
 msgid "You must pay"
 msgstr "U moet betalen"
+
+msgid "collaborator"
+msgstr "medewerker"
 
 msgid "invalid form"
 msgstr "ongeldige vorm"
@@ -3906,6 +3927,9 @@ msgstr "Heb je dit gecontroleerd en klopt het?"
 msgid "Discover the coming soon events!"
 msgstr "Ontdek de evenementen die op stapel staan!"
 
+msgid "Filter or search the characters!"
+msgstr "Filter of zoek de tekens!"
+
 msgid "Hide players without a character"
 msgstr "Verberg spelers zonder personage"
 
@@ -5372,9 +5396,6 @@ msgstr "Geef hier elk element aan dat je wilt vermijden in de opdracht"
 msgid "Maximum number of primary spots to be managed (0 for infinite)"
 msgstr ""
 "Maximum aantal primaire berichten dat moet worden beheerd (0 voor oneindig)"
-
-msgid "Scroll through the characters, and can you filter/search them!"
-msgstr "Blader door alle personages, filter of zoek ze!"
 
 msgid "These are the workshops you must complete before you can play."
 msgstr "Dit zijn de workshops die je moet voltooien voordat je kunt spelen."

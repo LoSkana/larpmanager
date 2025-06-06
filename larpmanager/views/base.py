@@ -24,6 +24,7 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features
+from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.association import Association
 from larpmanager.models.event import Run
 from larpmanager.utils.base import def_user_ctx, get_index_assoc_permissions
@@ -94,11 +95,11 @@ def _exe_manage(request):
     ctx = def_user_ctx(request)
     get_index_assoc_permissions(ctx, request, request.assoc["id"])
 
-    ctx["runs"] = Run.objects.filter(event__assoc_id=ctx["a_id"], development__in=[Run.START, Run.SHOW]).select_related(
-        "event"
-    )
+    ctx["runs"] = Run.objects.filter(event__assoc_id=ctx["a_id"], development__in=[Run.START, Run.SHOW])
+    ctx["runs"] = ctx["runs"].select_related("event").order_by("end")
     for run in ctx["runs"]:
         run.registration_status = _get_registration_status(run)
+        run.counts = get_reg_counts(run)
 
     return render(request, "larpmanager/manage/exe.html", ctx)
 
@@ -111,6 +112,7 @@ def _orga_manage(request, s, n):
         get_index_assoc_permissions(ctx, request, request.assoc["id"], check=False)
 
     ctx["registration_status"] = _get_registration_status(ctx["run"])
+    ctx["counts"] = get_reg_counts(ctx["run"])
     return render(request, "larpmanager/manage/orga.html", ctx)
 
 

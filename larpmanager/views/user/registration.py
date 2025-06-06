@@ -30,6 +30,7 @@ from django.utils.timezone import now as timezone_now
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.accounting.member import info_accounting
 from larpmanager.accounting.registration import cancel_reg
 from larpmanager.cache.feature import get_assoc_features
@@ -69,7 +70,7 @@ from larpmanager.utils.exceptions import (
     RedirectError,
     check_event_feature,
 )
-from larpmanager.utils.registration import check_assign_character, get_reduced_available_count, is_reg_provisional
+from larpmanager.utils.registration import check_assign_character, get_reduced_available_count
 from larpmanager.utils.text import get_assoc_text, get_event_text
 
 

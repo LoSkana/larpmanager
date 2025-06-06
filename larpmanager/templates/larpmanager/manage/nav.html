@@ -33,7 +33,7 @@
         <div class="lm_tooltip">
             <a href="{% url 'search' run.event.slug run.number %}"
                {% if request.func_name == "search" %}class="select"{% endif %}>{% trans "Search" %}</a>
-            <div class="lm_tooltiptext">{% trans "Scroll through the characters, and can you filter/search them!" %}</div>
+            <div class="lm_tooltiptext">{% trans "Filter or search the characters!" %}</div>
         </div>
         {% for el in buttons %}
             <div class="lm_tooltip">

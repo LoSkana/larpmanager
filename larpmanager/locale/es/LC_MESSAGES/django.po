@@ -74,6 +74,9 @@ msgstr "edad"
 msgid "for"
 msgstr "para"
 
+msgid "npc"
+msgstr "npc"
+
 msgid "Band"
 msgstr "Banda"
 
@@ -417,6 +420,9 @@ msgstr "dinero"
 msgid "other"
 msgstr "otro"
 
+msgid "staff"
+msgstr "personal"
+
 msgid "title"
 msgstr "título"
 
@@ -597,6 +603,9 @@ msgstr "Votar"
 msgid "XP tot"
 msgstr "Px Tot"
 
+msgid "filler"
+msgstr "relleno"
+
 msgid "issued"
 msgstr "publicado"
 
@@ -605,6 +614,9 @@ msgstr "miembro"
 
 msgid "player"
 msgstr "jugador"
+
+msgid "seller"
+msgstr "vendedor"
 
 msgid "status"
 msgstr "estado"
@@ -830,6 +842,9 @@ msgstr "dirección"
 
 msgid "options"
 msgstr "opciones"
+
+msgid "waiting"
+msgstr "esperando"
 
 msgid "Accepted"
 msgstr "Aceptado"
@@ -1659,6 +1674,9 @@ msgstr "inmediatamente"
 msgid "leaderboard"
 msgstr "clasificación"
 
+msgid "provisional"
+msgstr "provisional"
+
 msgid "text length"
 msgstr "longitud del texto"
 
@@ -1865,6 +1883,9 @@ msgstr "Estamos en camino"
 
 msgid "You must pay"
 msgstr "Debe pagar"
+
+msgid "collaborator"
+msgstr "colaborador"
 
 msgid "invalid form"
 msgstr "formulario no válido"
@@ -3906,6 +3927,9 @@ msgstr "¿Lo has comprobado y es correcto?"
 msgid "Discover the coming soon events!"
 msgstr "¡Descubre los próximos eventos!"
 
+msgid "Filter or search the characters!"
+msgstr "Filtra o busca los personajes"
+
 msgid "Hide players without a character"
 msgstr "Ocultar a los jugadores sin personaje"
 
@@ -5333,9 +5357,6 @@ msgstr "Indique aquí cada elemento que desee evitar en la tarea"
 
 msgid "Maximum number of primary spots to be managed (0 for infinite)"
 msgstr "Número máximo de plazas principales a gestionar (0 para infinito)"
-
-msgid "Scroll through the characters, and can you filter/search them!"
-msgstr "Examina los personajes, puedes filtrarlos y buscarlos."
 
 msgid "These are the workshops you must complete before you can play."
 msgstr "Estos son los talleres que debes completar antes de poder jugar."

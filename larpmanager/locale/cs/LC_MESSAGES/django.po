@@ -74,6 +74,9 @@ msgstr "věk"
 msgid "for"
 msgstr "pro"
 
+msgid "npc"
+msgstr "npc"
+
 msgid "Band"
 msgstr "Fascie"
 
@@ -417,6 +420,9 @@ msgstr "peníze"
 msgid "other"
 msgstr "více"
 
+msgid "staff"
+msgstr "zaměstnanci"
+
 msgid "title"
 msgstr "název"
 
@@ -597,6 +603,9 @@ msgstr "Hlasování"
 msgid "XP tot"
 msgstr "Px Tot"
 
+msgid "filler"
+msgstr "výplň"
+
 msgid "issued"
 msgstr "vydáno"
 
@@ -605,6 +614,9 @@ msgstr "člen"
 
 msgid "player"
 msgstr "hráč"
+
+msgid "seller"
+msgstr "prodejce"
 
 msgid "status"
 msgstr "stav"
@@ -830,6 +842,9 @@ msgstr "adresa"
 
 msgid "options"
 msgstr "možnosti"
+
+msgid "waiting"
+msgstr "čekání"
 
 msgid "Accepted"
 msgstr "Přijato"
@@ -1659,6 +1674,9 @@ msgstr "okamžitě"
 msgid "leaderboard"
 msgstr "žebříčku!"
 
+msgid "provisional"
+msgstr "prozatímní"
+
 msgid "text length"
 msgstr "délka textu"
 
@@ -1865,6 +1883,9 @@ msgstr "Přicházíme"
 
 msgid "You must pay"
 msgstr "Musíte zaplatit"
+
+msgid "collaborator"
+msgstr "spolupracovník"
 
 msgid "invalid form"
 msgstr "neplatný formulář"
@@ -3906,6 +3927,9 @@ msgstr "Zkontrolovali jste to a je to správně?"
 msgid "Discover the coming soon events!"
 msgstr "Objevte připravované akce!"
 
+msgid "Filter or search the characters!"
+msgstr "Filtrujte nebo vyhledávejte postavy!"
+
 msgid "Hide players without a character"
 msgstr "Skrýt hráče bez postavy"
 
@@ -5298,9 +5322,6 @@ msgid "Maximum number of primary spots to be managed (0 for infinite)"
 msgstr ""
 "Maximální počet primárních příspěvků, které mají být spravovány (0 pro "
 "nekonečno)"
-
-msgid "Scroll through the characters, and can you filter/search them!"
-msgstr "Procházejte všechny postavy, filtrujte je nebo je vyhledávejte!"
 
 msgid "These are the workshops you must complete before you can play."
 msgstr "Tyto semináře musíte dokončit, abyste mohli hrát."

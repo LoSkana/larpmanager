@@ -5088,7 +5088,7 @@ msgstr ""
 msgid "View the list of characters and players!"
 msgstr ""
 
-msgid "Scroll through the characters, and can you filter/search them!"
+msgid "Filter or search the characters!"
 msgstr ""
 
 msgid "Browse the presentation website!"
@@ -5138,6 +5138,27 @@ msgid "Register to the event"
 msgstr ""
 
 msgid "Event status"
+msgstr ""
+
+msgid "provisional"
+msgstr ""
+
+msgid "staff"
+msgstr ""
+
+msgid "filler"
+msgstr ""
+
+msgid "waiting"
+msgstr ""
+
+msgid "collaborator"
+msgstr ""
+
+msgid "npc"
+msgstr ""
+
+msgid "seller"
 msgstr ""
 
 msgid "Donation"

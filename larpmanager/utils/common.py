@@ -38,6 +38,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import Collection, Discount
 from larpmanager.models.association import Association
 from larpmanager.models.base import Feature, FeatureModule
@@ -608,3 +609,31 @@ def clean(s):
     s = re.sub(r" +", "", s)  # remove spaces
     s = s.replace("ò", "o").replace("ù", "u").replace("à", "a").replace("è", "e").replace("é", "e").replace("ì", "i")
     return s
+
+
+def _search_char_reg(ctx, char, js):
+    js["name"] = char.name
+    if char.rcr and char.rcr.custom_name:
+        js["name"] = char.rcr.custom_name
+
+    js["player"] = char.reg.display_member()
+    js["player_full"] = str(char.reg.member)
+    js["player_id"] = char.reg.member.id
+    js["first_aid"] = char.reg.member.first_aid
+
+    if char.rcr.profile_thumb:
+        js["player_prof"] = char.rcr.profile_thumb.url
+        js["profile"] = char.rcr.profile_thumb.url
+    elif char.reg.member.profile_thumb:
+        js["player_prof"] = char.reg.member.profile_thumb.url
+    else:
+        js["player_prof"] = None
+
+    for s in ["pronoun", "song", "public", "private"]:
+        if hasattr(char.rcr, "custom_" + s):
+            js[s] = getattr(char.rcr, "custom_" + s)
+
+    # if the event has both cover and character created by user, use that as player profile
+    if {"cover", "user_character"}.issubset(get_event_features(ctx["run"].event_id)):
+        if char.cover:
+            js["player_prof"] = char.thumb.url

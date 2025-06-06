@@ -7,16 +7,27 @@
     <div id="manage">
         {% if runs %}
             <h2>{% trans "Ongoing events" %}</h2>
-            <ul>
+            <table>
                 {% for run in runs %}
-                    <li>
-                        <a href="{% url 'manage' run.event.slug run.number %}">{{ run }}</a>
-                        (<i>{{ run.pretty_dates }}</i>)
-                        - {{ run.get_development_display }}
-                        - <a href="{% url 'register' run.event.slug run.number %}">{{ run.registration_status }}</a>
-                    </li>
+                    <tr>
+                        <td>
+                            <a href="{% url 'manage' run.event.slug run.number %}">{{ run }}</a>
+                        </td>
+                        <td>
+                            <i>{{ run.pretty_dates }}</i>
+                        </td>
+                        <td>{{ run.get_development_display }}</td>
+                        <td>
+                            <a href="{% url 'register' run.event.slug run.number %}">{{ run.registration_status }}</a>
+                        </td>
+                        <td>
+                            {% if run.counts.count_reg %}
+                                ({% trans "registrations" %}: {{ run.counts.count_reg }})
+                            {% endif %}
+                        </td>
+                    </tr>
                 {% endfor %}
-            </ul>
+            </table>
         {% else %}
             {% trans "There are no active events" %}: <a href="{% url 'exe_events' %}">{% trans "create one here" %}</a>
         {% endif %}
