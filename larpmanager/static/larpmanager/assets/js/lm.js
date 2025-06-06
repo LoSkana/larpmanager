@@ -62,8 +62,10 @@ $(document).ready(function() {
                     $(this).fadeIn(500);
                 }
             }, position: {
-                my: 'top center',
+                my: 'top left',
                 at: 'bottom center',
+                viewport: window,
+                adjust: { method: 'flipinvert shift' }
             }
         });
     });
@@ -83,6 +85,8 @@ $(document).ready(function() {
         position: {
             my: 'top center',
             at: 'bottom center',
+            viewport: window,
+            adjust: { method: 'flipinvert shift' },
             target: function() {
                 return $(this).prevAll('.sidebar-link').first();
             }
