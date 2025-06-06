@@ -117,7 +117,6 @@ $(document).ready(function() {
             }, 3000);
 
             v = v.replace(sl, '');
-            console.log(v);
             $(this).val(v);
         }
     });

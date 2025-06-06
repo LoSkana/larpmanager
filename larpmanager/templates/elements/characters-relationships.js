@@ -24,9 +24,6 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     function add_relationship(ch_id, ch_name) {
-        console.log("add_relationship");
-        console.log(ch_id);
-        console.log(ch_name);
 
         charUrl = editUrl;
 

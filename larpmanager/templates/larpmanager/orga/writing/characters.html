@@ -231,7 +231,7 @@ window.addEventListener('DOMContentLoaded', function() {
         {% for key, que in form_questions.items %}
             {% if que.typ == 'teaser' or que.typ == 'text' %}
                 $('a.my_toggle[tog="q_{{ key }}"]').trigger('click');
-                console.log('{{ key }}');
+                // console.log('{{ key }}');
             {% endif %}
         {% endfor %}
         }, 100);

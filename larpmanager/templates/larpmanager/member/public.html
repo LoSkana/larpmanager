@@ -8,9 +8,10 @@
         <div class="el">
             <div class="icon">
                 {% if member.profile_thumb %}
-                    <img src="{{ member.profile_thumb.url }}" />
+                    <img src="{{ member.profile_thumb.url }}" alt="player profile" />
                 {% else %}
-                    <img src="{% static 'larpmanager/assets/blank-avatar.svg' %}" />
+                    <img src="{% static 'larpmanager/assets/blank-avatar.svg' %}"
+                         alt="player profile" />
                 {% endif %}
             </div>
         </div>
@@ -76,9 +77,10 @@
             {% endif %}
             <hr />
         </div>
-    {% endblock content %}
-    {% block js %}
-        <script>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script>
 window.addEventListener('DOMContentLoaded', function() {
     $(document).ready(function() {
       resize_to_fit();
@@ -91,7 +93,7 @@ function resize_to_fit() {
             textLength = that.html().length
         ;
 
-        console.log(textLength);
+        // console.log(textLength);
 
         if (textLength > 60) {
             that.css('font-size', '60%');
@@ -105,5 +107,5 @@ function resize_to_fit() {
     });
 
 }
-        </script>
-    {% endblock js %}
+    </script>
+{% endblock js %}
