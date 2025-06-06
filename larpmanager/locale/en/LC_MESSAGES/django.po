@@ -3844,6 +3844,9 @@ msgstr ""
 msgid "Other characters"
 msgstr ""
 
+msgid "Role"
+msgstr ""
+
 msgid "No organization found"
 msgstr ""
 
@@ -4667,9 +4670,6 @@ msgstr ""
 msgid "Users"
 msgstr ""
 
-msgid "Role"
-msgstr ""
-
 msgid ""
 "This page shows all the runs saved in the system. From here you can edit "
 "them, or create new ones."
@@ -4935,9 +4935,6 @@ msgstr ""
 msgid "Tell us here!"
 msgstr ""
 
-msgid "Event language"
-msgstr ""
-
 msgid "upcoming events"
 msgstr ""
 
@@ -5074,6 +5071,15 @@ msgid ""
 msgstr ""
 
 msgid "Management"
+msgstr ""
+
+msgid "Ongoing events"
+msgstr ""
+
+msgid "There are no active events"
+msgstr ""
+
+msgid "create one here"
 msgstr ""
 
 msgid "Discover what this event is about!"
@@ -7566,6 +7572,28 @@ msgid "invalid form"
 msgstr ""
 
 msgid "Registration completed successfully!"
+msgstr ""
+
+msgid "Pre-registration active"
+msgstr ""
+
+msgid "Registrations opening not set"
+msgstr ""
+
+#, python-format
+msgid "Registrations opening at: %(date)s"
+msgstr ""
+
+msgid "Registrations open"
+msgstr ""
+
+msgid "Filler registrations"
+msgstr ""
+
+msgid "Waiting list registrations"
+msgstr ""
+
+msgid "Registration closed"
 msgstr ""
 
 msgid "Request approved"

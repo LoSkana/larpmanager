@@ -189,7 +189,7 @@ def workshops(request, s, n):
             >= 1
         )
         ctx["list"].append(dt)
-    return render(request, "larpmanager/event/workshops/index.html", ctx)
+    return render(request, "larpmanager/event/workshops/exe.html", ctx)
 
 
 def valid_workshop_answer(request, ctx):

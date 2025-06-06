@@ -1313,6 +1313,14 @@ th select {
   margin: 0;
 }
 
+#sidebar .close {
+    display: none;
+}
+
+#sidebar .roles {
+    text-align: center;
+}
+
 @media(max-width: 768px) {
     #mobile-bar {
         display: block;
@@ -1395,6 +1403,24 @@ th select {
         color: var(--pri-clr);
     }
 
+    #sidebar .close {
+        background-image: url("images/close.svg");
+        background-position: 75% 25%;
+        background-repeat: no-repeat;
+        background-size: 2em 2em;
+        border: 0;
+        content: '';
+        display: block;
+        height: 4em;
+        overflow: hidden;
+        position: absolute;
+        right: 0;
+        text-align: center;
+        text-indent: 4em;
+        top: 0;
+        width: 4em;
+    }
+
     body.is-sidebar-visible #page-wrapper {
         -moz-filter: blur(1.5px);
         -webkit-filter: blur(1.5px);
@@ -1415,4 +1441,12 @@ th select {
         transform: translateY(0);
         opacity: 1;
     }
+}
+
+#manage ul {
+    margin: 0.5em;
+}
+
+.clearer {
+    clear: both;
 }

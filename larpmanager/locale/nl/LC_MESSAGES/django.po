@@ -2105,9 +2105,6 @@ msgstr "Evenement Sjabloon"
 msgid "Event features"
 msgstr "Functies van het evenement"
 
-msgid "Event language"
-msgstr "Taalevenementen"
-
 msgid "Executive Vote"
 msgstr "Stemming management"
 
@@ -2146,6 +2143,9 @@ msgstr "Meertalig"
 
 msgid "Obtain ability"
 msgstr "Vaardigheden verwerven"
+
+msgid "Ongoing events"
+msgstr "Lopende evenementen"
 
 msgid "Outflows total"
 msgstr "Totale kosten"
@@ -2353,6 +2353,9 @@ msgstr "Uw personages"
 
 msgid "Your membership"
 msgstr "Uw lidmaatschap"
+
+msgid "create one here"
+msgstr "maak er hier een"
 
 msgid "expected within"
 msgstr "verwacht binnen"
@@ -2801,6 +2804,9 @@ msgstr "Voorgesteld karakter"
 msgid "Reason for payment"
 msgstr "Reden voor betaling"
 
+msgid "Registrations open"
+msgstr "Registraties geopend"
+
 msgid "Show cancellations"
 msgstr "Show annuleringen"
 
@@ -2937,6 +2943,9 @@ msgstr "Totaal aantal quota"
 msgid "Redeem registration"
 msgstr "Inwisselen"
 
+msgid "Registration closed"
+msgstr "Registratie gesloten"
+
 msgid "Results not present"
 msgstr "Resultaten niet aanwezig"
 
@@ -2993,6 +3002,9 @@ msgstr "Externe mailserver"
 
 msgid "Field for exclusions"
 msgstr "Veld voor uitsluitingen"
+
+msgid "Filler registrations"
+msgstr "Filler-registraties"
 
 msgid "Gift card cancelled!"
 msgstr "Cadeaubon geannuleerd!"
@@ -3364,6 +3376,9 @@ msgstr "Betalingen (Bevestiging)"
 msgid "Pre registrations total"
 msgstr "Totaal voorregistraties"
 
+msgid "Pre-registration active"
+msgstr "Voorinschrijving actief"
+
 msgid "Registration conditions"
 msgstr "Voorwaarden"
 
@@ -3560,11 +3575,17 @@ msgstr "Het volgende wordt gebruikt"
 msgid "The name of the competence"
 msgstr "De naam van competentie"
 
+msgid "There are no active events"
+msgstr "Er zijn geen actieve evenementen"
+
 msgid "These fields are mandatory"
 msgstr "Deze velden zijn verplicht"
 
 msgid "Total remaining to be paid"
 msgstr "Totaal nog te betalen"
+
+msgid "Waiting list registrations"
+msgstr "Registraties op wachtlijst"
 
 msgid "We're sorry to see you go!"
 msgstr "We vinden het jammer dat je weggaat!"
@@ -3732,6 +3753,9 @@ msgstr "Gewenste navigatietaal"
 
 msgid "Promotion - site, advertising"
 msgstr "Promotie - site, reclame"
+
+msgid "Registrations opening not set"
+msgstr "Registraties openen niet ingesteld"
 
 #, python-format
 msgid "Request refund from: %(user)s"
@@ -3991,6 +4015,10 @@ msgstr "Bijgewerkte invoer voor %(event)s"
 #, python-format
 msgid "Registration updated to %(event)s!"
 msgstr "Registratie bijgewerkt tot %(event)s!"
+
+#, python-format
+msgid "Registrations opening at: %(date)s"
+msgstr "Registraties openen op: %(date)s"
 
 msgid "Secretarial - stationery, printing"
 msgstr "Secretariaat - briefpapier, drukwerk"

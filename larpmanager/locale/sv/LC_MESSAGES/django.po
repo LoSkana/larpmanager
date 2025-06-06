@@ -2105,9 +2105,6 @@ msgstr "Mall för evenemang"
 msgid "Event features"
 msgstr "Funktioner för evenemang"
 
-msgid "Event language"
-msgstr "Språkevenemang"
-
 msgid "Executive Vote"
 msgstr "Ledningens omröstning"
 
@@ -2146,6 +2143,9 @@ msgstr "Flerspråkig"
 
 msgid "Obtain ability"
 msgstr "Förvärva färdigheter"
+
+msgid "Ongoing events"
+msgstr "Pågående evenemang"
 
 msgid "Outflows total"
 msgstr "Summa kostnader"
@@ -2353,6 +2353,9 @@ msgstr "Dina karaktärer"
 
 msgid "Your membership"
 msgstr "Ditt medlemskap"
+
+msgid "create one here"
+msgstr "skapa en här"
 
 msgid "expected within"
 msgstr "förväntas inom"
@@ -2801,6 +2804,9 @@ msgstr "Föreslagen karaktär"
 msgid "Reason for payment"
 msgstr "Orsak till betalning"
 
+msgid "Registrations open"
+msgstr "Registreringar öppna"
+
 msgid "Show cancellations"
 msgstr "Avbokningar av visningar"
 
@@ -2937,6 +2943,9 @@ msgstr "Totalt antal kvoter"
 msgid "Redeem registration"
 msgstr "Lösa in post"
 
+msgid "Registration closed"
+msgstr "Registreringen stängd"
+
 msgid "Results not present"
 msgstr "Resultat ej presenterade"
 
@@ -2993,6 +3002,9 @@ msgstr "Extern e-postserver"
 
 msgid "Field for exclusions"
 msgstr "Fält för undantag"
+
+msgid "Filler registrations"
+msgstr "Registreringar av fyllnadsmaterial"
 
 msgid "Gift card cancelled!"
 msgstr "Presentkortet är annullerat!"
@@ -3364,6 +3376,9 @@ msgstr "Betalningar (bekräftelse)"
 msgid "Pre registrations total"
 msgstr "Totalt antal förhandsregistreringar"
 
+msgid "Pre-registration active"
+msgstr "Förhandsregistrering aktiv"
+
 msgid "Registration conditions"
 msgstr "Villkor för tillträde"
 
@@ -3560,11 +3575,17 @@ msgstr "Följande kommer att användas"
 msgid "The name of the competence"
 msgstr "Kompetensens namn"
 
+msgid "There are no active events"
+msgstr "Det finns inga aktiva händelser"
+
 msgid "These fields are mandatory"
 msgstr "Dessa fält är obligatoriska"
 
 msgid "Total remaining to be paid"
 msgstr "Totalt återstående att betala"
+
+msgid "Waiting list registrations"
+msgstr "Registreringar på väntelista"
 
 msgid "We're sorry to see you go!"
 msgstr "Vi är ledsna att se dig gå!"
@@ -3732,6 +3753,9 @@ msgstr "Förvalt navigationsspråk"
 
 msgid "Promotion - site, advertising"
 msgstr "Marknadsföring - webbplats, reklam"
+
+msgid "Registrations opening not set"
+msgstr "Registreringsöppning ej fastställd"
 
 #, python-format
 msgid "Request refund from: %(user)s"
@@ -3991,6 +4015,10 @@ msgstr "Uppdaterad post för %(event)s"
 #, python-format
 msgid "Registration updated to %(event)s!"
 msgstr "Registrering uppdaterad till %(event)s!"
+
+#, python-format
+msgid "Registrations opening at: %(date)s"
+msgstr "Registreringar öppnar kl: %(date)s"
 
 msgid "Secretarial - stationery, printing"
 msgstr "Sekretariat - brevpapper, tryckning"

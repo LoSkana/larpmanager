@@ -2105,9 +2105,6 @@ msgstr "Modèle d'événement"
 msgid "Event features"
 msgstr "Caractéristiques de l'événement"
 
-msgid "Event language"
-msgstr "Événements linguistiques"
-
 msgid "Executive Vote"
 msgstr "Vote de la direction"
 
@@ -2146,6 +2143,9 @@ msgstr "Multi-langues"
 
 msgid "Obtain ability"
 msgstr "Acquérir des compétences"
+
+msgid "Ongoing events"
+msgstr "Evénements en cours"
 
 msgid "Outflows total"
 msgstr "Dépenses totales"
@@ -2353,6 +2353,9 @@ msgstr "Vos personnages"
 
 msgid "Your membership"
 msgstr "Votre adhésion"
+
+msgid "create one here"
+msgstr "créez-en un ici"
 
 msgid "expected within"
 msgstr "attendue dans les"
@@ -2801,6 +2804,9 @@ msgstr "Caractère proposé"
 msgid "Reason for payment"
 msgstr "Motif du paiement"
 
+msgid "Registrations open"
+msgstr "Ouverture des inscriptions"
+
 msgid "Show cancellations"
 msgstr "Annulation d'un spectacle"
 
@@ -2937,6 +2943,9 @@ msgstr "Nombre total de quotas"
 msgid "Redeem registration"
 msgstr "Rembourser l'entrée"
 
+msgid "Registration closed"
+msgstr "Inscription clôturée"
+
 msgid "Results not present"
 msgstr "Résultats non disponibles"
 
@@ -2993,6 +3002,9 @@ msgstr "Serveur de messagerie externe"
 
 msgid "Field for exclusions"
 msgstr "Champ d'exclusion"
+
+msgid "Filler registrations"
+msgstr "Enregistrements de remplissage"
 
 msgid "Gift card cancelled!"
 msgstr "Carte cadeau annulée !"
@@ -3364,6 +3376,9 @@ msgstr "Paiements (confirmation)"
 msgid "Pre registrations total"
 msgstr "Total des pré-inscriptions"
 
+msgid "Pre-registration active"
+msgstr "Préinscription active"
+
 msgid "Registration conditions"
 msgstr "Conditions d'entrée"
 
@@ -3560,11 +3575,17 @@ msgstr "Les éléments suivants seront utilisés"
 msgid "The name of the competence"
 msgstr "Le nom de la compétence"
 
+msgid "There are no active events"
+msgstr "Il n'y a pas d'événements actifs"
+
 msgid "These fields are mandatory"
 msgstr "Ces champs sont obligatoires"
 
 msgid "Total remaining to be paid"
 msgstr "Total restant à payer"
+
+msgid "Waiting list registrations"
+msgstr "Inscriptions sur liste d'attente"
 
 msgid "We're sorry to see you go!"
 msgstr "Nous sommes désolés de vous voir partir !"
@@ -3732,6 +3753,9 @@ msgstr "Langue de navigation préférée"
 
 msgid "Promotion - site, advertising"
 msgstr "Promotion - site, publicité"
+
+msgid "Registrations opening not set"
+msgstr "Ouverture des inscriptions non fixée"
 
 #, python-format
 msgid "Request refund from: %(user)s"
@@ -3992,6 +4016,10 @@ msgstr "Entrée mise à jour pour %(event)s"
 #, python-format
 msgid "Registration updated to %(event)s!"
 msgstr "Inscription mise à jour à %(event)s !"
+
+#, python-format
+msgid "Registrations opening at: %(date)s"
+msgstr "Ouverture des inscriptions le : %(date)s"
 
 msgid "Secretarial - stationery, printing"
 msgstr "Secrétariat - papeterie, impression"
