@@ -82,7 +82,7 @@ $(document).ready(function() {
         },
         position: {
             my: 'center left',
-            at: 'center right',
+            at: 'top right',
             target: function() {
                 return $(this).prevAll('.sidebar-link').first();
             }
