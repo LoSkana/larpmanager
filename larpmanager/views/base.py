@@ -23,6 +23,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.balance import get_run_accounting
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.association import Association
@@ -113,6 +114,8 @@ def _orga_manage(request, s, n):
 
     ctx["registration_status"] = _get_registration_status(ctx["run"])
     ctx["counts"] = get_reg_counts(ctx["run"])
+    ctx["dc"] = get_run_accounting(ctx["run"], ctx)
+
     return render(request, "larpmanager/manage/orga.html", ctx)
 
 

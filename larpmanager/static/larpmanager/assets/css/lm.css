@@ -1450,3 +1450,7 @@ th select {
 .clearer {
     clear: both;
 }
+
+.smaller {
+    font-size: 70%;
+}
