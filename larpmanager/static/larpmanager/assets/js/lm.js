@@ -42,6 +42,11 @@ $(document).ready(function() {
         $( this ).text(txt.replace(":", ""));
     });
 
+    // Sidebar
+    $('#sidebar-mobile').on('click', function(event) {
+            $('body').toggleClass('is-sidebar-visible');
+    });
+
     // Menu.
             $menu_openers = $('#menu .opener');
 

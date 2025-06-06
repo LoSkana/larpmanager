@@ -84,7 +84,7 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
     if has_event_permission(ctx, request, s):
         ctx["manage"] = 1
         get_index_event_permissions(ctx, request, s)
-        ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", False)
+        ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
     if hasattr(request, "assoc"):
         ctx["assoc_slug"] = request.assoc["slug"]

@@ -8,44 +8,14 @@
     {% endif %}
 {% endblock title %}
 {% block content %}
-    <div class="links staff">
-        <table class="mob">
-            {% include "larpmanager/manage/lm.html" %}
-        </table>
-        {% if event_pms %}
-            <h2>{% trans "Event" %}</h2>
-            <table class="mob">
-                {% for mod, list in event_pms.items %}
-                    <tr>
-                        <th>
-                            <h3>{% trans mod %}</h3>
-                        </th>
-                        <td>
-                            {% for ap in list %}
-                                <a href="{% url ap.slug run.event.slug run.number %}">{% trans ap.name %}</a>
-                            {% endfor %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
+    <h2>
+        {% if run %}
+            {% trans "Management" %} - {{ run }}
+        {% else %}
+            {% trans "Management" %} - {{ assoc.name }}
         {% endif %}
-        {% if assoc_pms %}
-            <h2>{% trans "Organization" %}</h2>
-            <table class="mob">
-                {% for mod, list in assoc_pms.items %}
-                    <tr>
-                        <th>
-                            <h3>{% trans mod %}</h3>
-                        </th>
-                        <td>
-                            {% for ap in list %}
-                                <a href="{% url ap.slug %}">{% trans ap.name %}</a>
-                            {% endfor %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-        {% endif %}
+    </h2>
+    <div class="roles">
         {% if role_names %}
             <i>{% trans "Role" %}:
                 {% for rn in role_names %}

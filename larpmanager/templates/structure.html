@@ -105,49 +105,53 @@
             {% if manage %}
                 <div id="sidebar"
                      {% if is_sidebar_open %}style="display: block"{% endif %}>
-                    {% if run %}
-                        <h1>
-                            <span>{{ run }}</span>
-                        </h1>
-                    {% else %}
-                        <h1>
-                            <span>{{ assoc.name }}</span>
-                        </h1>
-                    {% endif %}
-                    <hr />
-                    <h2>Larpmanager</h2>
-                    <p>
-                        <a href="{% url 'tutorials' %}">Tutorials</a>
-                        <a href="{% url 'howto' %}">Howto</a>
-                        {% if admin %}
-                            <a href="{% url 'exe_larpmanager' %}">Subscription</a>
+                    <div class="inner">
+                        <div class="header">
+                            {% if run %}
+                                <h1>
+                                    <span>{{ run }}</span>
+                                </h1>
+                            {% else %}
+                                <h1>
+                                    <span>{{ assoc.name }}</span>
+                                </h1>
+                            {% endif %}
+                            <hr />
+                        </div>
+                        <h2>Larpmanager</h2>
+                        <p>
+                            <a href="{% url 'tutorials' %}">Tutorials</a>
+                            <a href="{% url 'howto' %}">Howto</a>
+                            {% if admin %}
+                                <a href="{% url 'exe_larpmanager' %}">Subscription</a>
+                            {% endif %}
+                        </p>
+                        {% if run %}
+                            {% for mod, list in event_pms.items %}
+                                <h2>{% trans mod %}</h2>
+                                <p>
+                                    {% for ap in list %}
+                                        <a href="{% url ap.slug run.event.slug run.number %}"
+                                           {% if request.func_name == ap.slug %}class="select"{% endif %}>
+                                            {% trans ap.name %}
+                                        </a>
+                                    {% endfor %}
+                                </p>
+                            {% endfor %}
+                        {% else %}
+                            {% for mod, list in assoc_pms.items %}
+                                <h2>{% trans mod %}</h2>
+                                <p>
+                                    {% for ap in list %}
+                                        <a href="{% url ap.slug %}"
+                                           {% if request.func_name == ap.slug %}class="select"{% endif %}>
+                                            {% trans ap.name %}
+                                        </a>
+                                    {% endfor %}
+                                </p>
+                            {% endfor %}
                         {% endif %}
-                    </p>
-                    {% if run %}
-                        {% for mod, list in event_pms.items %}
-                            <h2>{% trans mod %}</h2>
-                            <p>
-                                {% for ap in list %}
-                                    <a href="{% url ap.slug run.event.slug run.number %}"
-                                       {% if request.func_name == ap.slug %}class="select"{% endif %}>
-                                        {% trans ap.name %}
-                                    </a>
-                                {% endfor %}
-                            </p>
-                        {% endfor %}
-                    {% else %}
-                        {% for mod, list in assoc_pms.items %}
-                            <h2>{% trans mod %}</h2>
-                            <p>
-                                {% for ap in list %}
-                                    <a href="{% url ap.slug %}"
-                                       {% if request.func_name == ap.slug %}class="select"{% endif %}>
-                                        {% trans ap.name %}
-                                    </a>
-                                {% endfor %}
-                            </p>
-                        {% endfor %}
-                    {% endif %}
+                    </div>
                 </div>
             {% endif %}
         {% endblock sidebar %}
@@ -155,6 +159,20 @@
         <div id="page-wrapper" {% if is_sidebar_open %}class="sidebar"{% endif %}>
             {% block main %}
             {% endblock main %}
+        </div>
+        <div id="mobile-bar">
+            {% if manage %}
+                <nav class="sidebar">
+                    <a id="sidebar-mobile" href="#sidebar">
+                        <span>Sidebar</span>
+                    </a>
+                </nav>
+            {% endif %}
+            <nav class="menu">
+                <a id="menu-open" href="#menu">
+                    <span>Menu</span>
+                </a>
+            </nav>
         </div>
         <script>
     var set_language_url = "{% url 'set_language' %}";
