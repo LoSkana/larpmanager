@@ -77,7 +77,7 @@ class OrgaEventForm(MyForm):
 
     page_info = _("This page allows you to change general event settings.")
 
-    load_templates = "event"
+    load_templates = ["event"]
 
     class Meta:
         model = Event
@@ -171,7 +171,7 @@ class OrgaFeatureForm(FeatureForm):
         "This page allows you to select the features activated for this event, and all its runs. Click on a feature to show its description."
     )
 
-    load_js = "feature_checkbox"
+    load_js = ["feature_checkbox"]
 
     class Meta:
         model = Event
@@ -195,7 +195,7 @@ class OrgaConfigForm(ConfigForm):
 
     section_replace = True
 
-    load_js = "config-search"
+    load_js = ["config-search"]
 
     class Meta:
         model = Event
@@ -914,7 +914,7 @@ class ExeTemplateForm(FeatureForm):
         "This page allows you to select the features of a template. Click on a feature to show its description."
     )
 
-    load_js = "feature_checkbox"
+    load_js = ["feature_checkbox"]
 
     class Meta:
         model = Event

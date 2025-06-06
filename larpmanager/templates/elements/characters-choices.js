@@ -20,10 +20,7 @@ window.addEventListener('DOMContentLoaded', function() {
             request.done(function(data) {
                 res = data["res"];
                 html = "";
-                console.log(res);
                 for (let index in res) {
-                    console.log(index);
-                    console.log(res[index]);
                     html += "{1}<br /><br />".format(res[index][0], res[index][1]);
                 }
 

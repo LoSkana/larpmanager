@@ -39,7 +39,7 @@ class PxBaseForm(MyForm):
 
 
 class OrgaDeliveryPxForm(PxBaseForm):
-    load_js = "characters-choices"
+    load_js = ["characters-choices"]
 
     page_title = _("Delivery")
 
@@ -54,7 +54,7 @@ class OrgaDeliveryPxForm(PxBaseForm):
 
 
 class OrgaAbilityPxForm(PxBaseForm):
-    load_js = "characters-choices"
+    load_js = ["characters-choices"]
 
     page_title = _("Ability")
 

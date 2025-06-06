@@ -22,7 +22,7 @@ import csv
 import io
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count, Model
+from django.db.models import Model, Prefetch
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.http import HttpResponse, JsonResponse
@@ -42,6 +42,7 @@ from larpmanager.models.writing import (
     CharacterConfig,
     Plot,
     PlotCharacterRel,
+    Relationship,
     TextVersion,
     Writing,
     replace_chars_all,
@@ -272,14 +273,12 @@ def writing_list_plot(ctx):
 def writing_list_char(ctx, ev, text_fields):
     if "user_character" in ctx["features"]:
         ctx["list"] = ctx["list"].select_related("player")
-    if "relationships" in ctx["features"]:
-        cache = {}
-        res = Character.objects.filter(event=ev.get_class_parent("relationships")).annotate(dc=Count("characters"))
-        for el in res:
-            cache[el.number] = el.dc
 
-        for el in ctx["list"]:
-            el.cache_relationship_count = cache[el.number]
+    if "relationships" in ctx["features"]:
+        ctx["list"] = ctx["list"].prefetch_related(
+            Prefetch("source", queryset=Relationship.objects.filter(deleted=None))
+        )
+
     if "plot" in ctx["features"]:
         ctx["plots"] = {}
         for el in PlotCharacterRel.objects.filter(character__event=ctx["event"]).select_related("plot", "character"):

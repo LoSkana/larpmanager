@@ -511,7 +511,7 @@ class ExeMemberForm(BaseProfileForm):
 class ExeMembershipForm(MyForm):
     page_info = _("This page allows you to change a member's membership status.")
 
-    load_templates = "membership"
+    load_templates = ["membership"]
 
     class Meta:
         model = Membership

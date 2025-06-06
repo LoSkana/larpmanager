@@ -398,7 +398,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
     page_title = _("Registrations")
 
-    load_js = "characters-reg-choices"
+    load_js = ["characters-reg-choices"]
 
     class Meta:
         model = Registration
