@@ -28,7 +28,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssocTextType, get_url, hdr
-from larpmanager.models.event import EventTextType, PreRegistration, Run
+from larpmanager.models.event import DevelopStatus, EventTextType, PreRegistration
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.utils.registration import get_registration_options, is_reg_provisional
@@ -223,7 +223,7 @@ def update_registration_cancellation(instance):
 
 @receiver(pre_save, sender=Registration)
 def update_registration(sender, instance, **kwargs):
-    if instance.run and instance.run.development == Run.DONE:
+    if instance.run and instance.run.development == DevelopStatus.DONE:
         return
 
     prev = None
