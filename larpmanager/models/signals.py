@@ -393,6 +393,9 @@ def post_save_registration_campaign(sender, instance, **kwargs):
     if not instance.member:
         return
 
+    if instance.cancellation_date:
+        return
+
     # auto assign last character if campaign
     if "campaign" not in get_event_features(instance.run.event_id):
         return
@@ -400,7 +403,7 @@ def post_save_registration_campaign(sender, instance, **kwargs):
         return
 
     # if already has a character, do not proceed
-    if RegistrationCharacterRel.objects.filter(reg=instance).count() > 0:
+    if RegistrationCharacterRel.objects.filter(reg__run=instance.run).count() > 0:
         return
 
     # get last run of campaign
