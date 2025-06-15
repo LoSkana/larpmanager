@@ -442,7 +442,7 @@ class ExePaymentSettingsForm(MyForm):
         self.methods = PaymentMethod.objects.order_by("id")
         self.section_descriptions = {}
         for el in self.methods:
-            self.section_descriptions[el.slug] = el.instructions
+            self.section_descriptions[el.name] = el.instructions
 
         self.all_methods = self.methods
 
