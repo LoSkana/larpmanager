@@ -1161,9 +1161,6 @@ msgstr "Primeros auxilios"
 msgid "Frequency"
 msgstr "Frecuencia"
 
-msgid "Interface"
-msgstr "Interfaz"
-
 msgid "Inventory"
 msgstr "Inventario"
 
@@ -3346,6 +3343,9 @@ msgstr "Edad mínima: %(number)d"
 msgid "Minimum number of votes"
 msgstr "Número mínimo de votos"
 
+msgid "Move registration event"
+msgstr "Mover el evento de registro"
+
 msgid "Number of primary spots"
 msgstr "Número de plazas principales"
 
@@ -3431,9 +3431,6 @@ msgstr "¡Preinscripciones guardadas!"
 
 msgid "Provisional registration"
 msgstr "Registro provisional"
-
-msgid "Quick links organisation"
-msgstr "Organización de enlaces rápidos"
 
 msgid "Secret registration link"
 msgstr "Enlace de inscripción secreto"
@@ -4402,6 +4399,9 @@ msgstr "Esta página muestra los álbumes de fotos cargados."
 
 msgid "This page summarises the system entries of"
 msgstr "Esta página resume las entradas del sistema de"
+
+msgid "Allow to switch registration between events"
+msgstr "Permitir cambiar de registro entre eventos"
 
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
@@ -6848,13 +6848,6 @@ msgid ""
 msgstr ""
 "Si está marcada: Añade un código único a cada pago, lo que ayuda a "
 "reconocerlo."
-
-msgid ""
-"If checked: In the event management panel, it also shows the association "
-"management links"
-msgstr ""
-"Si está marcada: En el panel de gestión de eventos, también muestra los "
-"enlaces de gestión de asociaciones"
 
 msgid ""
 "Indicate the maximum number of such discounts that can be requested (0 for "

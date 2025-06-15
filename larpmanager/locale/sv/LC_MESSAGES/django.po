@@ -1161,9 +1161,6 @@ msgstr "Första hjälpen"
 msgid "Frequency"
 msgstr "Frekvens"
 
-msgid "Interface"
-msgstr "Gränssnitt"
-
 msgid "Inventory"
 msgstr "Inventering"
 
@@ -3346,6 +3343,9 @@ msgstr "Lägsta ålder: %(number)d"
 msgid "Minimum number of votes"
 msgstr "Minsta antal röster som skall avges"
 
+msgid "Move registration event"
+msgstr "Flytta registreringshändelse"
+
 msgid "Number of primary spots"
 msgstr "Antal platser i primärvården"
 
@@ -3431,9 +3431,6 @@ msgstr "Förhandsanmälningar sparade!"
 
 msgid "Provisional registration"
 msgstr "Provisorisk registrering"
-
-msgid "Quick links organisation"
-msgstr "Organisation för snabblänkar"
 
 msgid "Secret registration link"
 msgstr "Hemlig registreringslänk"
@@ -4403,6 +4400,9 @@ msgstr "Denna sida sammanfattar de uppladdade fotoalbumen."
 
 msgid "This page summarises the system entries of"
 msgstr "Denna sida sammanfattar systemposterna för"
+
+msgid "Allow to switch registration between events"
+msgstr "Möjlighet att byta registrering mellan evenemang"
 
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
@@ -6811,13 +6811,6 @@ msgid ""
 msgstr ""
 "Om markerat: Lägger till en unik kod till varje betalning, vilket gör det "
 "lättare att känna igen den"
-
-msgid ""
-"If checked: In the event management panel, it also shows the association "
-"management links"
-msgstr ""
-"Om markerad: I panelen för evenemangshantering visas även länkarna för "
-"föreningshantering"
 
 msgid ""
 "Indicate the maximum number of such discounts that can be requested (0 for "
