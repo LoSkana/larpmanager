@@ -33,7 +33,7 @@ from larpmanager.models.accounting import (
     RefundRequest,
 )
 from larpmanager.models.association import Association
-from larpmanager.models.event import Run
+from larpmanager.models.event import DevelopStatus
 from larpmanager.models.form import RegistrationChoice
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration
@@ -61,7 +61,7 @@ def info_accounting(request, ctx):
         ctx[s] = []
 
     reg_que = Registration.objects.filter(member=member, run__event__assoc_id=ctx["a_id"])
-    reg_que = reg_que.exclude(run__development__in=[Run.CANC])
+    reg_que = reg_que.exclude(run__development__in=[DevelopStatus.CANC])
     for reg in reg_que.select_related("run", "run__event", "ticket"):
         _init_regs(choices, ctx, pending, reg)
 

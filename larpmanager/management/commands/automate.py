@@ -40,7 +40,7 @@ from larpmanager.mail.remind import (
 )
 from larpmanager.models.accounting import AccountingItemDiscount, AccountingItemMembership, Discount, PaymentInvoice
 from larpmanager.models.association import Association
-from larpmanager.models.event import Run
+from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.member import Badge, Membership, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.common import get_time_diff_today
@@ -81,7 +81,7 @@ class Command(BaseCommand):
         self.check_old_payments()
 
         # perform check on runs
-        for run in Run.objects.exclude(development__in=[Run.DONE, Run.CANC]):
+        for run in Run.objects.exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC]):
             ev_features = get_event_features(run.event_id)
             if "deadlines" in ev_features:
                 self.check_deadline(run)
