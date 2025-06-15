@@ -595,16 +595,16 @@ class MyCssForm(MyForm):
 
 class BaseAccForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        ctx = kwargs.pop("ctx")
+        self.ctx = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)
-        self.methods = ctx["methods"]
+        self.methods = self.ctx["methods"]
         cho = []
         for s in self.methods:
             cho.append((s, self.methods[s]["name"]))
         self.fields["method"] = forms.ChoiceField(choices=cho)
 
-        if "association" in ctx:
-            self.assoc = ctx["association"]
+        if "association" in self.ctx:
+            self.assoc = self.ctx["association"]
         else:
-            self.assoc = get_object_or_404(Association, pk=ctx["a_id"])
-        ctx["user_fees"] = self.assoc.get_config("payment_fees_user", False)
+            self.assoc = get_object_or_404(Association, pk=self.ctx["a_id"])
+        self.ctx["user_fees"] = self.assoc.get_config("payment_fees_user", False)
