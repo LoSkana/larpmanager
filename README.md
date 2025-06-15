@@ -152,9 +152,16 @@ Thanks in advance for contributing! Here's the steps:
    pre-commit install
    ```
 
-2. In the `main/settings/dev.py` settings file, add a `DEEPL_API_KEY` value. You can obtain a API key for the *DeepL API Free* (up to 500k characters monthly) [here](https://www.deepl.com/en/pro).
+2. Install and activate LFS to handle big files (like the test dump):
+   ```bash
+   sudo apt install git-lfs
+   git lfs install
+   git lfs pull
+   ```
 
-3. Create a new branch:
+3. In the `main/settings/dev.py` settings file, add a `DEEPL_API_KEY` value. You can obtain a API key for the *DeepL API Free* (up to 500k characters monthly) [here](https://www.deepl.com/en/pro).
+
+4. Create a new branch:
    ```bash
    git checkout -b prefix/feature-name
    ```
@@ -165,12 +172,12 @@ Thanks in advance for contributing! Here's the steps:
    - *refactor* for code changes not related to functions
    - *locale* for changes in translation codes.
 
-4. When you'are ready with the code changes, to make sure that all entries have been translated (default language is English), run
+5. When you'are ready with the code changes, to make sure that all entries have been translated (default language is English), run
    ```bash
    ./scripts/translate.sh
    ```
    This will updated all your translations, have correct the untranslated / fuzzy ones with Deepl API. In the terminal, take some time to review them before proceeding.
-5. If you're creating a new feature, write a playwright test suite that covers it. Look in the `larpmanager/tests` folder to see how it's done. Run
+6. If you're creating a new feature, write a playwright test suite that covers it. Look in the `larpmanager/tests` folder to see how it's done. Run
    ```bash
    ./scripts/record-test.sh
    ```
@@ -190,6 +197,7 @@ Thanks in advance for contributing! Here's the steps:
    ./scripts/upgrade.sh
    ```
    This will execute some helpful activities like making sure you're updated with main branch, deleting old local branches, and other small things like that.
+
 10. Go and open [a new pull request](https://github.com/loskana/larpmanager/pulls). Make sure to explain clearly in the description what's happening.
 
 ### New features

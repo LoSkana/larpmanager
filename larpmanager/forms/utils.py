@@ -28,7 +28,7 @@ from django_select2 import forms as s2forms
 from tinymce.widgets import TinyMCE
 
 from larpmanager.models.access import EventRole
-from larpmanager.models.base import FeatureModule, PaymentMethod
+from larpmanager.models.base import FeatureModule
 from larpmanager.models.event import (
     DevelopStatus,
     Event,
@@ -396,15 +396,6 @@ class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
     def get_queryset(self):
         return Member.objects.filter(pk__in=self.allowed)
-
-
-class PaymentsS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
-    search_fields = [
-        "name__icontains",
-    ]
-
-    def get_queryset(self):
-        return PaymentMethod.objects.all()
 
 
 class InventoryS2Widget(s2forms.ModelSelect2Widget):

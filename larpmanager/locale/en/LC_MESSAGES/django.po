@@ -146,6 +146,14 @@ msgstr ""
 msgid "This page allows you to set up your payment methods."
 msgstr ""
 
+msgid "Description of this payment method to be displayed to the user"
+msgstr ""
+
+msgid ""
+"Percentage to be retained by the payment system - enter the value as a "
+"number, without the percentage symbol"
+msgstr ""
+
 msgid "Description"
 msgstr ""
 
@@ -3592,29 +3600,6 @@ msgid "Utils"
 msgstr ""
 
 msgid "Application to be given to them to sign and then upload:"
-msgstr ""
-
-msgid ""
-"Select the payment methods to be activated; then return to this page to "
-"enter the necessary information."
-msgstr ""
-
-msgid ""
-"Each payment method works differently, click on its name for a detailed "
-"guide on how to proceed."
-msgstr ""
-
-msgid ""
-"Indicate the description you wish to be displayed when this payment method "
-"is proposed to the user."
-msgstr ""
-
-msgid ""
-"Enter the percentage to be managed as retained by the payment system. Enter "
-"the value as a number, without entering the percentage symbol."
-msgstr ""
-
-msgid "Available payment methods:"
 msgstr ""
 
 msgid "Select from the dropdown the characters to be added to the plot."
