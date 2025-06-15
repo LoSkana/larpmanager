@@ -93,6 +93,7 @@ class MyForm(forms.ModelForm):
             child = Event.objects.filter(parent_id=self.params["event"].id).values_list("pk", flat=True)
             event_ids.update(child)
             if self.params["event"].parent_id:
+                event_ids.add(self.params["event"].parent_id)
                 siblings = Event.objects.filter(parent_id=self.params["event"].parent_id).values_list("pk", flat=True)
                 event_ids.update(siblings)
             print(event_ids)
