@@ -429,9 +429,9 @@ def show_char(request, s, n):
     ctx = get_event_run(request, s, n)
     get_event_cache_all(ctx)
     search = request.POST.get("text", "").strip()
-    if not search.startswith("#"):
+    if not search.startswith(("#", "@", "^")):
         raise Http404(f"malformed request {search}")
-    search = int(search.replace("#", ""))
+    search = int(search[1:])
     if not search:
         raise Http404(f"not valid search {search}")
     if search not in ctx["chars"]:

@@ -9,7 +9,8 @@ window.addEventListener('DOMContentLoaded', function() {
         $(document).on('keydown', function(ev) {
             const triggerKeys = ['#', '@', '^'];
             if (triggerKeys.includes(ev.key)) {
-                char_finder(false);
+                ev.preventDefault();
+                char_finder(ev.key, false);
             }
         });
 
@@ -19,7 +20,8 @@ window.addEventListener('DOMContentLoaded', function() {
             editor.on('keydown', function(ev) {
                 const triggerKeys = ['#', '@', '^'];
                 if (triggerKeys.includes(ev.key)) {
-                    char_finder(key);
+                    ev.preventDefault();
+                    char_finder(ev.key, key);
                 }
             });
         }
@@ -36,6 +38,25 @@ window.addEventListener('DOMContentLoaded', function() {
 
         function close_char_finder() {
             $('#char-finder-popup').fadeOut(200);
+
+            const x = window.scrollX;
+            const y = window.scrollY;
+
+            if (key) {
+                editor = tinymce.get(key);
+                editor.focus();
+                editor.selection.moveToBookmark(bookmark);
+            }
+
+            if (savedFocusElem && savedCursorPos) {
+                savedFocusElem.focus();
+            }
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    window.scrollTo(x, y);
+                });
+            });
         }
         $('#char-finder-close').on('click', close_char_finder);
 
@@ -43,15 +64,15 @@ window.addEventListener('DOMContentLoaded', function() {
         var savedCursorPos = null;
         var bookmark = null;
         var key = null;
+        var symbol_key = null;
 
-        function char_finder(tinymce_key) {
-
-            console.log(tinymce_key);
+        function char_finder(ev_key, tinymce_key) {
 
             savedFocusElem = null;
             savedCursorPos = null;
             bookmark = null;
             key = null;
+            symbol_key = ev_key;
 
             if (tinymce_key) {
                 key = tinymce_key;
@@ -69,7 +90,19 @@ window.addEventListener('DOMContentLoaded', function() {
                 }
             }
 
+            char_finder_symbol = null;
+            if (ev_key === '#')
+                char_finder_symbol = '#XX: ' + '{% trans "bidirectional relationships" %}';
+            else if (ev_key === '@')
+                char_finder_symbol = '@XX: ' + '{% trans "unidirectional relationships" %}';
+            else if (ev_key === '^')
+                char_finder_symbol = '^XX: ' + '{% trans "simple reference" %}';
+
+            $('.char-finder-symbol').text(char_finder_symbol);
+
             $('#char-finder-popup').fadeIn(200);
+
+            $('#char_finder').select2('open');
         }
 
         $('#char_finder').on('change', function(e) {
@@ -87,7 +120,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
                 $('#char_finder').val(null).trigger('change');
                 close_char_finder();
-                insertReference(result.number);
+                insertReference(symbol_key + result.number);
             });
         });
 
