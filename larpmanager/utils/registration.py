@@ -442,7 +442,7 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
     # look for similar ticket to update
     ticket_name = instance.ticket.name
     try:
-        instance.ticket = instance.run.event.get_elements(RegistrationTicket).filter(name__iexact=ticket_name)
+        instance.ticket = instance.run.event.get_elements(RegistrationTicket).get(name__iexact=ticket_name)
     except ObjectDoesNotExist:
         instance.ticket = None
 
@@ -451,10 +451,10 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
         question_display = choice.question.display
         option_display = choice.option.display
         try:
-            choice.question = instance.run.event.get_elements(RegistrationQuestion).filter(
+            choice.question = instance.run.event.get_elements(RegistrationQuestion).get(
                 display__iexact=question_display
             )
-            choice.option = instance.run.event.get_elements(RegistrationOption).filter(
+            choice.option = instance.run.event.get_elements(RegistrationOption).get(
                 question=choice.question, display__iexact=option_display
             )
             choice.save()
@@ -466,7 +466,7 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
     for answer in RegistrationAnswer.objects.filter(reg=instance):
         question_display = answer.question.display
         try:
-            answer.question = instance.run.event.get_elements(RegistrationQuestion).filter(
+            answer.question = instance.run.event.get_elements(RegistrationQuestion).get(
                 display__iexact=question_display
             )
             answer.save()
