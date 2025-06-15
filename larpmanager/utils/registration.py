@@ -275,15 +275,20 @@ def _get_features_map(features_map, run):
     return features
 
 
-def registration_find(r, u, my_regs=None):
+def registration_find(run, user, my_regs=None):
+    if not user.is_authenticated:
+        run.reg = None
+        return
+
     if my_regs is not None:
-        r.reg = get_match_reg(r, my_regs)
-    else:
-        try:
-            que = Registration.objects.select_related("ticket")
-            r.reg = que.get(run=r, member=u.member, redeem_code__isnull=True, cancellation_date__isnull=True)
-        except ObjectDoesNotExist:
-            r.reg = None
+        run.reg = get_match_reg(run, my_regs)
+        return
+
+    try:
+        que = Registration.objects.select_related("ticket")
+        run.reg = que.get(run=run, member=user.member, redeem_code__isnull=True, cancellation_date__isnull=True)
+    except ObjectDoesNotExist:
+        run.reg = None
 
 
 def check_character_maximum(event, member):
@@ -437,7 +442,7 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
     # look for similar ticket to update
     ticket_name = instance.ticket.name
     try:
-        instance.ticket = RegistrationTicket.objects.get(event_id=instance.run.event_id, name__iexact=ticket_name)
+        instance.ticket = instance.run.event.get_elements(RegistrationTicket).filter(name__iexact=ticket_name)
     except ObjectDoesNotExist:
         instance.ticket = None
 
@@ -446,15 +451,14 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
         question_display = choice.question.display
         option_display = choice.option.display
         try:
-            choice.question = RegistrationQuestion.objects.get(
-                event_id=instance.run.event_id, display__iexact=question_display
+            choice.question = instance.run.event.get_elements(RegistrationQuestion).filter(
+                display__iexact=question_display
             )
-            choice.option = RegistrationOption.objects.get(
-                event_id=instance.run.event_id, question=choice.question, display__iexact=option_display
+            choice.option = instance.run.event.get_elements(RegistrationOption).filter(
+                question=choice.question, display__iexact=option_display
             )
             choice.save()
-        except ObjectDoesNotExist as err:
-            print(err)
+        except ObjectDoesNotExist:
             choice.question = None
             choice.option = None
 
@@ -462,10 +466,9 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
     for answer in RegistrationAnswer.objects.filter(reg=instance):
         question_display = answer.question.display
         try:
-            answer.question = RegistrationQuestion.objects.get(
-                event_id=instance.run.event_id, display__iexact=question_display
+            answer.question = instance.run.event.get_elements(RegistrationQuestion).filter(
+                display__iexact=question_display
             )
             answer.save()
-        except ObjectDoesNotExist as err:
-            print(err)
+        except ObjectDoesNotExist:
             answer.question = None
