@@ -20,11 +20,13 @@
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Q
 from django.db.models.functions import Length, Substr
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.http import require_POST
 
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.character import (
@@ -496,3 +498,14 @@ def check_speedlarp_prepare(el, id_number_map, speeds):
         if el.typ not in speeds[ch]:
             speeds[ch][el.typ] = []
         speeds[ch][el.typ].append(str(el))
+
+
+@require_POST
+def orga_character_get_number(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_characters")
+    idx = request.POST.get("idx")
+    try:
+        char = ctx["event"].get_elements(Character).get(pk=idx)
+        return JsonResponse({"res": "ok", "number": char.number})
+    except ObjectDoesNotExist:
+        JsonResponse({"res": "ko"})

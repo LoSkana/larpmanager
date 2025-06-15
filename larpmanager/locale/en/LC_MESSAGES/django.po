@@ -891,6 +891,14 @@ msgid ""
 "each writing element"
 msgstr ""
 
+msgid "Disable character finder"
+msgstr ""
+
+msgid ""
+"Disable the system that finds the character number when a special reference "
+"symbol is written"
+msgstr ""
+
 msgid "Replacing names"
 msgstr ""
 
@@ -3560,22 +3568,35 @@ msgid "Instructions"
 msgstr ""
 
 msgid ""
-"In the 'Presentation' and 'Text' fields you can refer to other characters "
-"using their number directly, in the final text the number will automatically "
-"be replaced with their name, and a link to the character. Use:"
+"In rich text editors, you can reference other characters directly using "
+"their number."
 msgstr ""
 
 msgid ""
-"for bidirectional relationships (love, colleagues, rivals), of which the "
-"other  character is aware of."
+"When the text is displayed to the player, the number is automatically "
+"replaced with the character’s name and a link to their profile."
+msgstr ""
+
+msgid "Use these formats:"
 msgstr ""
 
 msgid ""
-"for unidirectional relationships (secret hatred, loves but is unrequited), "
-"of that the other character is NOT aware of."
+"for bidirectional relationships, where the other character is also aware of "
+"the connection."
 msgstr ""
 
-msgid "to indicate only the proper name of the other character."
+msgid ""
+"for unidirectional relationships, where the other character is NOT aware of "
+"the connection."
+msgstr ""
+
+msgid "for no relationship, only to display the other character name."
+msgstr ""
+
+msgid ""
+"When you press one of the special reference symbols, a popup will help you "
+"get the reference number of a character; you can also select a reference "
+"number to see the character’s name."
 msgstr ""
 
 msgid ""
@@ -6648,6 +6669,9 @@ msgid ""
 msgstr ""
 
 msgid "This page allows you to fully view a character."
+msgstr ""
+
+msgid "Select a character to insert their reference code"
 msgstr ""
 
 msgid "Hi"

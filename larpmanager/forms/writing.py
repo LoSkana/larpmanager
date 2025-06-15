@@ -31,7 +31,13 @@ from larpmanager.forms.utils import EventCharacterS2Widget, EventCharacterS2Widg
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep, Run
-from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingOption, WritingQuestion
+from larpmanager.models.form import (
+    QuestionApplicable,
+    WritingAnswer,
+    WritingChoice,
+    WritingOption,
+    WritingQuestion,
+)
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import (

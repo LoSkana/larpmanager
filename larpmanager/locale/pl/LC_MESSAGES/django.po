@@ -2810,6 +2810,9 @@ msgstr "Całkowita rejestracja"
 msgid "Transaction totals"
 msgstr "Suma transakcji"
 
+msgid "Use these formats:"
+msgstr "Użyj tych formatów:"
+
 msgid "Verified payments!"
 msgstr "Zweryfikowane płatności!"
 
@@ -3396,6 +3399,9 @@ msgstr "Sprawdź brakującą prędkość larpa"
 
 msgid "Code two capital letters"
 msgstr "Zakoduj dwie duże litery"
+
+msgid "Disable character finder"
+msgstr "Wyłączanie wyszukiwarki znaków"
 
 #, python-format
 msgid "Disbursement %(credits)s"
@@ -4690,6 +4696,9 @@ msgstr "Surowce, materiały pomocnicze, materiały eksploatacyjne i towary"
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Przypomnienie o płatności składek członkowskich za %(event)s"
 
+msgid "Select a character to insert their reference code"
+msgstr "Wybierz znak, aby wstawić jego kod referencyjny"
+
 msgid "The user has been enabled for the indicated role."
 msgstr "Użytkownik został włączony dla wskazanej roli."
 
@@ -5027,9 +5036,6 @@ msgstr "Ta strona umożliwia śledzenie zgłoszonych problemów."
 msgid "We are processing your payment. Please wait a moment... "
 msgstr "Przetwarzamy Twoją płatność. Poczekaj chwilę..."
 
-msgid "to indicate only the proper name of the other character."
-msgstr "aby wskazać tylko nazwę własną drugiego znaku."
-
 msgid "Allows you to define a different language for each event."
 msgstr "Umożliwia zdefiniowanie innego języka dla każdego zdarzenia."
 
@@ -5313,6 +5319,9 @@ msgstr "Aby móc głosować, należy opłacić składki członkowskie!"
 
 msgid "Your request has been sent, we will reply as soon as possible!"
 msgstr "Twoja prośba została wysłana, odpowiemy tak szybko, jak to możliwe!"
+
+msgid "for no relationship, only to display the other character name."
+msgstr "bez związku, tylko w celu wyświetlenia nazwy drugiej postaci."
 
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Opis - będzie wyświetlany na początku sekcji."
@@ -6572,6 +6581,13 @@ msgstr ""
 "preferencji dla każdej postaci."
 
 msgid ""
+"In rich text editors, you can reference other characters directly using "
+"their number."
+msgstr ""
+"W edytorach tekstu sformatowanego można odwoływać się bezpośrednio do innych"
+" znaków, używając ich numerów."
+
+msgid ""
 "Requires Executive Committee approval of membership before participating in "
 "an event."
 msgstr ""
@@ -6938,6 +6954,20 @@ msgstr ""
 "Wartość zniżki dla zarejestrowanego gracza, który przekaże kod znajomemu, "
 "który się zarejestruje."
 
+msgid ""
+"for bidirectional relationships, where the other character is also aware of "
+"the connection."
+msgstr ""
+"dla relacji dwukierunkowych, w których druga postać jest również świadoma "
+"połączenia."
+
+msgid ""
+"for unidirectional relationships, where the other character is NOT aware of "
+"the connection."
+msgstr ""
+"dla relacji jednokierunkowych, gdzie druga postać NIE jest świadoma "
+"połączenia."
+
 #, python-format
 msgid ""
 "Alternatively, you can request a reimbursement in <a href='%(url)s'>your "
@@ -7003,6 +7033,13 @@ msgid ""
 msgstr ""
 "Twój wniosek o zwrot %(amount).2f, z powodem \"%(reason)s\", został "
 "zatwierdzony!"
+
+msgid ""
+"Disable the system that finds the character number when a special reference "
+"symbol is written"
+msgstr ""
+"Wyłączenie systemu, który wyszukuje numer znaku po wpisaniu specjalnego "
+"symbolu referencyjnego."
 
 msgid ""
 "Enables 'Factions' to organize characters into groups, either visible, "
@@ -7459,13 +7496,6 @@ msgid ""
 msgstr ""
 "Ta strona umożliwia wybór funkcji szablonu. Kliknięcie funkcji powoduje "
 "wyświetlenie jej opisu."
-
-msgid ""
-"for bidirectional relationships (love, colleagues, rivals), of which the "
-"other  character is aware of."
-msgstr ""
-"dla relacji dwukierunkowych (miłość, koledzy, rywale), których druga postać "
-"jest świadoma."
 
 msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
@@ -8027,13 +8057,6 @@ msgstr ""
 " Dziękujemy za wsparcie i wiarę w nas!"
 
 msgid ""
-"for unidirectional relationships (secret hatred, loves but is unrequited), "
-"of that the other character is NOT aware of."
-msgstr ""
-"dla relacji jednokierunkowych (sekretna nienawiść, miłość, ale "
-"nieodwzajemniona), których druga postać NIE jest świadoma."
-
-msgid ""
 "Enables basic inventory management. Users can add items to a warehouse "
 "table, track quantities, and note item locations."
 msgstr ""
@@ -8277,6 +8300,13 @@ msgstr ""
 "Na tej stronie wyświetlane są terminy nadchodzących wydarzeń organizowanych "
 "przez organizację, działania, które mają być monitorowane, oraz lista "
 "użytkowników, do których należy się zwrócić."
+
+msgid ""
+"When the text is displayed to the player, the number is automatically "
+"replaced with the character’s name and a link to their profile."
+msgstr ""
+"Gdy tekst jest wyświetlany graczowi, numer jest automatycznie zastępowany "
+"imieniem postaci i linkiem do jej profilu."
 
 msgid ""
 "this figure is the net that should result as availability of financial "
@@ -8675,6 +8705,15 @@ msgstr ""
 "rejestracji!"
 
 msgid ""
+"When you press one of the special reference symbols, a popup will help you "
+"get the reference number of a character; you can also select a reference "
+"number to see the character’s name."
+msgstr ""
+"Po naciśnięciu jednego ze specjalnych symboli referencyjnych, pojawi się "
+"okienko, które pomoże ci uzyskać numer referencyjny postaci; możesz także "
+"wybrać numer referencyjny, aby zobaczyć nazwę postaci."
+
+msgid ""
 "We only ask you to indicate a <b>order</b> of preference for the your pre-"
 "registrations (imagining you have to choose which one to play, indicates in "
 "what order you want to play them)."
@@ -8786,15 +8825,6 @@ msgstr ""
 " dni. Dokonaj płatności <a href='%(url)s'>na tej stronie</a>. Jeśli nie "
 "otrzymamy płatności przed upływem terminu, rejestracja może zostać "
 "anulowana."
-
-msgid ""
-"In the 'Presentation' and 'Text' fields you can refer to other characters "
-"using their number directly, in the final text the number will automatically"
-" be replaced with their name, and a link to the character. Use:"
-msgstr ""
-"W polach \"Prezentacja\" i \"Tekst\" można odwoływać się do innych postaci, "
-"używając bezpośrednio ich numerów, a w tekście końcowym numer zostanie "
-"automatycznie zastąpiony ich nazwą i linkiem do postaci. Użyj:"
 
 msgid ""
 "Indicates the ratio between reduced and patron tickets, multiplied by 10. "
