@@ -451,7 +451,8 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
             choice.option = RegistrationOption.objects.get(
                 event_id=instance.run.event_id, question=choice.question, display__iexact=option_display
             )
-        except ObjectDoesNotExist:
+        except ObjectDoesNotExist as err:
+            print(err)
             choice.question = None
             choice.option = None
 
@@ -462,5 +463,6 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
             answer.question = RegistrationQuestion.objects.get(
                 event_id=instance.run.event_id, display__iexact=question_display
             )
-        except ObjectDoesNotExist:
+        except ObjectDoesNotExist as err:
+            print(err)
             answer.question = None
