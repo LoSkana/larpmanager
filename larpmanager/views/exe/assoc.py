@@ -51,9 +51,8 @@ from larpmanager.models.event import (
 from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.common import (
     get_feature,
-    get_payment_methods_ids,
 )
-from larpmanager.utils.edit import backend_edit, exe_edit
+from larpmanager.utils.edit import exe_edit
 from larpmanager.views.larpmanager import get_run_lm_payment
 
 
@@ -100,15 +99,7 @@ def exe_texts_edit(request, num):
 
 @login_required
 def exe_payment_details(request):
-    ctx = check_assoc_permission(request, "exe_payment_details")
-    methods = get_payment_methods_ids(ctx)
-    if backend_edit(request, ctx, ExePaymentSettingsForm, None, afield=None, assoc=True):
-        if methods == get_payment_methods_ids(ctx):
-            return redirect("manage")
-        else:
-            return redirect("exe_payment_details")
-    ctx["add_another"] = False
-    return render(request, "larpmanager/exe/edit.html", ctx)
+    return exe_edit(request, ExePaymentSettingsForm, None, "exe_payment_details", "manage", add_another=False)
 
 
 @login_required
