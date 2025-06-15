@@ -805,6 +805,10 @@ table {
     font-size: 90%;
 }
 
+#sidebar:focus {
+  outline: none;
+}
+
 #sidebar h1 {
     text-align: center;
     padding: 0.1em;

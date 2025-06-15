@@ -43,7 +43,16 @@ from larpmanager.forms.utils import (
     save_permissions_role,
 )
 from larpmanager.models.access import EventPermission, EventRole
-from larpmanager.models.event import Event, EventButton, EventConfig, EventText, EventTextType, ProgressStep, Run
+from larpmanager.models.event import (
+    DevelopStatus,
+    Event,
+    EventButton,
+    EventConfig,
+    EventText,
+    EventTextType,
+    ProgressStep,
+    Run,
+)
 from larpmanager.models.form import QuestionType, QuestionVisibility
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.common import copy_class
@@ -787,6 +796,14 @@ class OrgaRunForm(ConfigForm):
             self.fields["event"].widget = EventS2Widget()
             self.fields["event"].widget.set_assoc(self.params["a_id"])
             self.choose_event = True
+
+        # do not show cancelled or done options for development if date are not set
+        if not self.instance.pk or not self.instance.start or not self.instance.end:
+            self.fields["development"].choices = [
+                (choice.value, choice.label)
+                for choice in DevelopStatus
+                if choice not in [DevelopStatus.CANC, DevelopStatus.DONE]
+            ]
 
         for s in ["registration_open", "registration_secret"]:
             if not self.instance.pk or not self.instance.event or s not in self.params["features"]:
