@@ -30,6 +30,7 @@ from tinymce.widgets import TinyMCE
 from larpmanager.models.access import EventRole
 from larpmanager.models.base import FeatureModule, PaymentMethod
 from larpmanager.models.event import (
+    DevelopStatus,
     Event,
     Run,
 )
@@ -244,7 +245,7 @@ def get_run_choices(self, past=False):
     runs = Run.objects.filter(event__assoc_id=self.params["a_id"]).select_related("event").order_by("-end")
     if past:
         ref = datetime.now() - timedelta(days=30)
-        runs = runs.filter(end__gte=ref.date(), development__in=[Run.SHOW, Run.DONE])
+        runs = runs.filter(end__gte=ref.date(), development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])
     for r in runs:
         cho.append((r.id, str(r)))
 

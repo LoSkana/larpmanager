@@ -27,7 +27,7 @@ from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
 from larpmanager.models.access import AssocRole, EventRole
-from larpmanager.models.event import Event, Run
+from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.registration import Registration
 from larpmanager.utils.auth import is_lm_admin
 
@@ -85,7 +85,7 @@ def cache_event_links(request):
         if not roles:
             continue
         ctx["all_runs"][r.id] = roles
-        if r.development not in (Run.DONE, Run.CANC):
+        if r.development not in (DevelopStatus.DONE, DevelopStatus.CANC):
             ctx["open_runs"][r.id] = {
                 "e": r.event.slug,
                 "r": r.number,
