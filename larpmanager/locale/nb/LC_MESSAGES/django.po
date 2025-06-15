@@ -1161,9 +1161,6 @@ msgstr "Førstehjelp"
 msgid "Frequency"
 msgstr "Frekvens"
 
-msgid "Interface"
-msgstr "Grensesnitt"
-
 msgid "Inventory"
 msgstr "Lagerbeholdning"
 
@@ -3346,6 +3343,9 @@ msgstr "Minimumsalder: %(number)d"
 msgid "Minimum number of votes"
 msgstr "Minimum antall stemmer som skal sendes inn"
 
+msgid "Move registration event"
+msgstr "Flytt registreringsarrangement"
+
 msgid "Number of primary spots"
 msgstr "Antall primærplasser"
 
@@ -3431,9 +3431,6 @@ msgstr "Forhåndsregistreringene er lagret!"
 
 msgid "Provisional registration"
 msgstr "Foreløpig registrering"
-
-msgid "Quick links organisation"
-msgstr "Organisering av hurtigkoblinger"
 
 msgid "Secret registration link"
 msgstr "Hemmelig registreringslenke"
@@ -4400,6 +4397,9 @@ msgstr "Denne siden oppsummerer de opplastede fotoalbumene."
 
 msgid "This page summarises the system entries of"
 msgstr "Denne siden oppsummerer systemoppføringene til"
+
+msgid "Allow to switch registration between events"
+msgstr "Tillat å bytte registrering mellom arrangementer"
 
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
@@ -6787,13 +6787,6 @@ msgid ""
 msgstr ""
 "Hvis avkrysset: Legger til en unik kode for hver betaling, noe som gjør det "
 "lettere å gjenkjenne den."
-
-msgid ""
-"If checked: In the event management panel, it also shows the association "
-"management links"
-msgstr ""
-"Hvis avkrysset: I panelet for hendelsesadministrasjon vises også koblingene "
-"for assosiasjonsadministrasjon"
 
 msgid ""
 "Indicate the maximum number of such discounts that can be requested (0 for "

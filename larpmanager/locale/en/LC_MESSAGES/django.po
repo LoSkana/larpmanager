@@ -306,17 +306,6 @@ msgstr ""
 msgid "If checked: shows the tagline for each event"
 msgstr ""
 
-msgid "Interface"
-msgstr ""
-
-msgid "Quick links organisation"
-msgstr ""
-
-msgid ""
-"If checked: In the event management panel, it also shows the association "
-"management links"
-msgstr ""
-
 msgid "Email notifications"
 msgstr ""
 
@@ -394,6 +383,15 @@ msgid "Page"
 msgstr ""
 
 msgid "Contents of the special page"
+msgstr ""
+
+msgid "Campaign"
+msgstr ""
+
+msgid "Move registration event"
+msgstr ""
+
+msgid "Allow to switch registration between events"
 msgstr ""
 
 msgid "Deadline"
@@ -914,9 +912,6 @@ msgstr ""
 msgid ""
 "If checked, prevents multiple users from editing the same item at the same "
 "time to avoid conflicts"
-msgstr ""
-
-msgid "Campaign"
 msgstr ""
 
 msgid "Independent factions"

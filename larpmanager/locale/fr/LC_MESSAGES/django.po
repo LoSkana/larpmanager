@@ -1161,9 +1161,6 @@ msgstr "Premiers secours"
 msgid "Frequency"
 msgstr "Fréquence"
 
-msgid "Interface"
-msgstr "Interface"
-
 msgid "Inventory"
 msgstr "Inventaire"
 
@@ -3346,6 +3343,9 @@ msgstr "Âge minimum : %(number)d"
 msgid "Minimum number of votes"
 msgstr "Nombre minimum de votes à soumettre"
 
+msgid "Move registration event"
+msgstr "Déménagement de l'événement d'enregistrement"
+
 msgid "Number of primary spots"
 msgstr "Nombre de places dans les écoles primaires"
 
@@ -3431,9 +3431,6 @@ msgstr "Les pré-inscriptions sont sauvées !"
 
 msgid "Provisional registration"
 msgstr "Enregistrement provisoire"
-
-msgid "Quick links organisation"
-msgstr "Organisation de liens rapides"
 
 msgid "Secret registration link"
 msgstr "Lien d'enregistrement secret"
@@ -4400,6 +4397,9 @@ msgstr "Cette page résume les albums photos téléchargés."
 
 msgid "This page summarises the system entries of"
 msgstr "Cette page résume les entrées système de"
+
+msgid "Allow to switch registration between events"
+msgstr "Permettre de passer d'une inscription à l'autre entre les événements"
 
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
@@ -6949,13 +6949,6 @@ msgid ""
 msgstr ""
 "Si la case est cochée : ajoute un code unique à chaque paiement, ce qui "
 "permet de le reconnaître."
-
-msgid ""
-"If checked: In the event management panel, it also shows the association "
-"management links"
-msgstr ""
-"Si la case est cochée : Dans le panneau de gestion des événements, il "
-"affiche également les liens de gestion des associations."
 
 msgid ""
 "Indicate the maximum number of such discounts that can be requested (0 for "

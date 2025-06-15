@@ -1161,9 +1161,6 @@ msgstr "První pomoc"
 msgid "Frequency"
 msgstr "Frekvence"
 
-msgid "Interface"
-msgstr "Rozhraní"
-
 msgid "Inventory"
 msgstr "Inventura"
 
@@ -3346,6 +3343,9 @@ msgstr "Minimální věk: %(number)d"
 msgid "Minimum number of votes"
 msgstr "Minimální počet hlasů, které je třeba odevzdat"
 
+msgid "Move registration event"
+msgstr "Přesun registrační události"
+
 msgid "Number of primary spots"
 msgstr "Počet základních míst"
 
@@ -3431,9 +3431,6 @@ msgstr "Předběžné registrace jsou uloženy!"
 
 msgid "Provisional registration"
 msgstr "Prozatímní registrace"
-
-msgid "Quick links organisation"
-msgstr "Organizace rychlých odkazů"
 
 msgid "Secret registration link"
 msgstr "Tajný registrační odkaz"
@@ -4398,6 +4395,9 @@ msgstr "Tato stránka shrnuje nahraná fotoalba."
 
 msgid "This page summarises the system entries of"
 msgstr "Na této stránce jsou shrnuty systémové záznamy o"
+
+msgid "Allow to switch registration between events"
+msgstr "Umožnit přepínání registrace mezi událostmi"
 
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
@@ -6685,13 +6685,6 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto: Přidá ke každé platbě jedinečný kód, který pomůže "
 "platbu rozpoznat."
-
-msgid ""
-"If checked: In the event management panel, it also shows the association "
-"management links"
-msgstr ""
-"Pokud je zaškrtnuto: V panelu správy událostí se také zobrazí odkazy na "
-"správu asociací."
 
 msgid ""
 "Indicate the maximum number of such discounts that can be requested (0 for "

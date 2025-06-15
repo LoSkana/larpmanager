@@ -1161,9 +1161,6 @@ msgstr "Eerste hulp"
 msgid "Frequency"
 msgstr "Frequentie"
 
-msgid "Interface"
-msgstr "Interface"
-
 msgid "Inventory"
 msgstr "Inventaris"
 
@@ -3346,6 +3343,9 @@ msgstr "Minimumleeftijd: %(number)d"
 msgid "Minimum number of votes"
 msgstr "Minimumaantal in te dienen stemmen"
 
+msgid "Move registration event"
+msgstr "Verhuis registratie evenement"
+
 msgid "Number of primary spots"
 msgstr "Aantal primaire plaatsen"
 
@@ -3431,9 +3431,6 @@ msgstr "Voorinschrijvingen opgeslagen!"
 
 msgid "Provisional registration"
 msgstr "Voorlopige registratie"
-
-msgid "Quick links organisation"
-msgstr "Snelle links organisatie"
 
 msgid "Secret registration link"
 msgstr "Geheime registratie link"
@@ -4402,6 +4399,9 @@ msgstr "Deze pagina geeft een overzicht van de geüploade fotoalbums."
 
 msgid "This page summarises the system entries of"
 msgstr "Deze pagina geeft een overzicht van de systeemingangen van"
+
+msgid "Allow to switch registration between events"
+msgstr "Registratie schakelen tussen evenementen toestaan"
 
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
@@ -6927,13 +6927,6 @@ msgid ""
 msgstr ""
 "Indien aangevinkt: Voegt een unieke code toe aan elke betaling, waardoor "
 "deze beter kan worden herkend."
-
-msgid ""
-"If checked: In the event management panel, it also shows the association "
-"management links"
-msgstr ""
-"Indien aangevinkt: In het paneel voor gebeurtenissenbeheer worden ook de "
-"koppelingen voor associatiebeheer weergegeven"
 
 msgid ""
 "Indicate the maximum number of such discounts that can be requested (0 for "

@@ -86,7 +86,21 @@ class MyForm(forms.ModelForm):
 
     def allow_run_choice(self):
         runs = Run.objects.filter(event=self.params["event"])
+
+        # if campaign switch is active, show as runs all of the events sharing the campaign
+        if self.params["event"].assoc.get_config("campaign_switch"):
+            event_ids = {self.params["event"].id}
+            child = Event.objects.filter(parent_id=self.params["event"].id).values_list("pk", flat=True)
+            event_ids.update(child)
+            if self.params["event"].parent_id:
+                event_ids.add(self.params["event"].parent_id)
+                siblings = Event.objects.filter(parent_id=self.params["event"].parent_id).values_list("pk", flat=True)
+                event_ids.update(siblings)
+
+            runs = Run.objects.filter(event_id__in=event_ids)
+
         runs = runs.select_related("event").order_by("end")
+
         self.initial["run"] = self.params["run"].id
         if len(runs) <= 1:
             if self.instance.pk:
