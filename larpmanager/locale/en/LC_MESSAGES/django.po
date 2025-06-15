@@ -3734,6 +3734,12 @@ msgstr ""
 msgid "overdue by"
 msgstr ""
 
+msgid "No additional payments are required at this time"
+msgstr ""
+
+msgid "you can still pay the remaining amount if you wish"
+msgstr ""
+
 msgid "Organization"
 msgstr ""
 

@@ -4630,6 +4630,9 @@ msgstr "Modifica alcune caratteristiche del personaggio per renderlo tuo!"
 msgid "Names of the collaborators who are organizing it"
 msgstr "Nomi dei collaboratori che lo stanno organizzando"
 
+msgid "No additional payments are required at this time"
+msgstr "Al momento non sono richiesti pagamenti aggiuntivi"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Cancellazione iscrizione a %(event)s di %(user)s"
@@ -4772,6 +4775,9 @@ msgstr "Attenzione! Il form contiene degli errori ai campi - "
 
 msgid "You cannot create a relationship towards yourself!"
 msgstr "Non puoi creare una relazione verso te stesso!"
+
+msgid "you can still pay the remaining amount if you wish"
+msgstr "se lo desideri, puoi comunque pagare l'importo rimanente"
 
 msgid "Fill in this field if you have accessibility needs."
 msgstr ""

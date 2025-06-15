@@ -4652,6 +4652,9 @@ msgstr ""
 msgid "Names of the collaborators who are organizing it"
 msgstr "Namen der Mitarbeiter, die die Veranstaltung organisieren"
 
+msgid "No additional payments are required at this time"
+msgstr "Zu diesem Zeitpunkt sind keine weiteren Zahlungen erforderlich."
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Abbestellung von %(event)s durch %(user)s"
@@ -4806,6 +4809,10 @@ msgstr "Achtung! Das Formular enthält Fehler in den Feldern -"
 
 msgid "You cannot create a relationship towards yourself!"
 msgstr "Sie können keine Beziehung zu sich selbst aufbauen!"
+
+msgid "you can still pay the remaining amount if you wish"
+msgstr ""
+"Sie können den Restbetrag immer noch bezahlen, wenn Sie dies wünschen."
 
 msgid "Fill in this field if you have accessibility needs."
 msgstr ""

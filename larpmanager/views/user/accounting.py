@@ -222,7 +222,7 @@ def acc_reg(request, reg_id, method=None):
 
     reg.membership = get_user_membership(reg.member, request.assoc["id"])
 
-    if reg.quota <= 0:
+    if reg.tot_iscr == reg.tot_payed:
         messages.success(request, _("Everything is in order about the payment of this event!"))
         return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
 
@@ -245,7 +245,11 @@ def acc_reg(request, reg_id, method=None):
         return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
 
     ctx["reg"] = reg
-    ctx["quota"] = reg.quota
+
+    if reg.quota:
+        ctx["quota"] = reg.quota
+    else:
+        ctx["quota"] = reg.tot_iscr - reg.tot_payed
 
     key = f"{reg.id}_{reg.num_payments}"
 

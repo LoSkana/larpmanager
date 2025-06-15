@@ -4630,6 +4630,9 @@ msgstr "Upravte si některé vlastnosti postavy podle sebe!"
 msgid "Names of the collaborators who are organizing it"
 msgstr "Jména spolupracovníků, kteří ji organizují"
 
+msgid "No additional payments are required at this time"
+msgstr "V tuto chvíli nejsou vyžadovány žádné další platby"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Zrušení odběru %(event)s pomocí %(user)s"
@@ -4774,6 +4777,9 @@ msgstr "Pozor! Formulář obsahuje chyby v polích -"
 
 msgid "You cannot create a relationship towards yourself!"
 msgstr "Nemůžete si vytvořit vztah sami k sobě!"
+
+msgid "you can still pay the remaining amount if you wish"
+msgstr "pokud si přejete, můžete zaplatit zbývající částku."
 
 msgid "Fill in this field if you have accessibility needs."
 msgstr "Toto pole vyplňte, pokud máte požadavky na přístupnost."

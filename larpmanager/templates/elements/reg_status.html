@@ -23,6 +23,9 @@
                     {% trans "overdue by" %} {{ run.reg.deadline | abs_value }} {% trans "days" %}
                 {% endif %}
             </a>
+        {% elif run.reg.tot_iscr > run.reg.tot_payed %}
+            {% trans "No additional payments are required at this time" %},
+            <a href="{% url 'acc_reg' run.reg.id %}">{% trans "you can still pay the remaining amount if you wish" %}</a>
         {% endif %}
     </span>
 {% endif %}

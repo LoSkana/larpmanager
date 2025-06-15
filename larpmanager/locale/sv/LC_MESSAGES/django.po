@@ -4635,6 +4635,9 @@ msgstr "Ändra några karaktärsdrag för att göra den till din egen!"
 msgid "Names of the collaborators who are organizing it"
 msgstr "Namn på de medarbetare som organiserar det"
 
+msgid "No additional payments are required at this time"
+msgstr "Inga ytterligare betalningar krävs för närvarande"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Avprenumerera på %(event)s av %(user)s"
@@ -4778,6 +4781,9 @@ msgstr "Var uppmärksam! Formuläret innehåller fel i fälten -"
 
 msgid "You cannot create a relationship towards yourself!"
 msgstr "Du kan inte skapa en relation till dig själv!"
+
+msgid "you can still pay the remaining amount if you wish"
+msgstr "du kan fortfarande betala det återstående beloppet om du vill"
 
 msgid "Fill in this field if you have accessibility needs."
 msgstr "Fyll i detta fält om du har tillgänglighetsbehov."
