@@ -2804,9 +2804,6 @@ msgstr "Show annuleringen"
 msgid "Total payment sent"
 msgstr "Totaal verzonden betaling"
 
-msgid "Total registration"
-msgstr "Totale invoer"
-
 msgid "Transaction totals"
 msgstr "Totaal transacties"
 
@@ -3275,6 +3272,9 @@ msgstr "Rolgoedkeuring %(role)s"
 
 msgid "Select your character!"
 msgstr "Selecteer je personage!"
+
+msgid "Total registration fee"
+msgstr "Totale registratiekosten"
 
 msgid "Unknow error on upload"
 msgstr "Onbekende fout bij uploaden"
@@ -3909,9 +3909,6 @@ msgstr "Op deze pagina staat een overzicht van de inschrijvingen voor de run."
 msgid "Total of recorded money outflows"
 msgstr "Totaal van geregistreerde uitgaande geldstromen"
 
-msgid "We ask you to pay the difference"
-msgstr "We vragen je om het verschil te betalen"
-
 msgid "Your question has been answered:"
 msgstr "Je vraag is beantwoord:"
 
@@ -4203,6 +4200,9 @@ msgstr "De volgende inzendingen zijn getrokken"
 
 msgid "This page shows cancelled enrollments."
 msgstr "Deze pagina geeft een overzicht van geannuleerde registraties."
+
+msgid "We ask you to pay the remaining amount"
+msgstr "We vragen je om het resterende bedrag te betalen"
 
 msgid "You already have an assigned character"
 msgstr "Je hebt al een toegewezen personage"
@@ -5110,10 +5110,6 @@ msgstr ""
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Totaal van uitgaven ingediend door medewerkers en goedgekeurd"
 
-msgid "We ask you to pay the difference from the next instalment"
-msgstr ""
-"We vragen je om het verschil te betalen vanaf de volgende betalingstermijn"
-
 msgid "You cannot redeem a membership, you are already a member!"
 msgstr "Je kunt geen lidmaatschap inwisselen, je bent al lid!"
 
@@ -5376,6 +5372,9 @@ msgstr ""
 
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "Om je inschrijving te bevestigen, betaal je het aangegeven bedrag."
+
+msgid "We ask you to pay the amount requested for the next instalment"
+msgstr "We vragen u het gevraagde bedrag voor de volgende termijn te betalen"
 
 msgid "You must complete payment of membership dues in order to vote!"
 msgstr "Je moet je lidmaatschapsgeld betalen om te kunnen stemmen!"

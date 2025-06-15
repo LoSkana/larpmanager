@@ -2804,9 +2804,6 @@ msgstr "Absagen von Veranstaltungen"
 msgid "Total payment sent"
 msgstr "Gesamtzahlung gesendet"
 
-msgid "Total registration"
-msgstr "Eintrag insgesamt"
-
 msgid "Transaction totals"
 msgstr "Transaktionen insgesamt"
 
@@ -3275,6 +3272,9 @@ msgstr "Rollenfreigabe %(role)s"
 
 msgid "Select your character!"
 msgstr "Wählen Sie Ihren Charakter!"
+
+msgid "Total registration fee"
+msgstr "Anmeldegebühr insgesamt"
 
 msgid "Unknow error on upload"
 msgstr "Unbekannter Fehler beim Hochladen"
@@ -3910,9 +3910,6 @@ msgstr "Auf dieser Seite sind die Anmeldungen für den Lauf zusammengefasst."
 msgid "Total of recorded money outflows"
 msgstr "Summe der verbuchten Geldabflüsse"
 
-msgid "We ask you to pay the difference"
-msgstr "Wir bitten Sie, die Differenz zu bezahlen"
-
 msgid "Your question has been answered:"
 msgstr "Ihre Frage wurde bereits beantwortet:"
 
@@ -4206,6 +4203,9 @@ msgstr "Die folgenden Beiträge wurden ausgelost"
 msgid "This page shows cancelled enrollments."
 msgstr ""
 "Auf dieser Seite sind die annullierten Registrierungen zusammengefasst."
+
+msgid "We ask you to pay the remaining amount"
+msgstr "Wir bitten Sie, den Restbetrag zu zahlen"
 
 msgid "You already have an assigned character"
 msgstr "Sie haben bereits ein zugewiesenes Zeichen"
@@ -5160,9 +5160,6 @@ msgstr ""
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Summe der von den Mitarbeitern eingereichten und genehmigten Ausgaben"
 
-msgid "We ask you to pay the difference from the next instalment"
-msgstr "Wir bitten Sie, die Differenz ab der nächsten Rate zu zahlen"
-
 msgid "You cannot redeem a membership, you are already a member!"
 msgstr ""
 "Sie können eine Mitgliedschaft nicht einlösen, Sie sind bereits Mitglied!"
@@ -5462,6 +5459,10 @@ msgstr ""
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr ""
 "Um Ihre Anmeldung zu bestätigen, zahlen Sie bitte den angegebenen Betrag."
+
+msgid "We ask you to pay the amount requested for the next instalment"
+msgstr ""
+"Wir bitten Sie, den angeforderten Betrag für die nächste Rate zu zahlen"
 
 msgid "You must complete payment of membership dues in order to vote!"
 msgstr ""

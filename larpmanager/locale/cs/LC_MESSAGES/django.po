@@ -2804,9 +2804,6 @@ msgstr "Zrušení výstavy"
 msgid "Total payment sent"
 msgstr "Celková odeslaná platba"
 
-msgid "Total registration"
-msgstr "Celková položka"
-
 msgid "Transaction totals"
 msgstr "Celkový počet transakcí"
 
@@ -3275,6 +3272,9 @@ msgstr "Schválení role %(role)s"
 
 msgid "Select your character!"
 msgstr "Vyberte si svou postavu!"
+
+msgid "Total registration fee"
+msgstr "Celkový registrační poplatek"
 
 msgid "Unknow error on upload"
 msgstr "Neznámá chyba při nahrávání"
@@ -3909,9 +3909,6 @@ msgstr "Tato stránka shrnuje přihlášky na běh."
 msgid "Total of recorded money outflows"
 msgstr "Součet zaznamenaných odlivů peněz"
 
-msgid "We ask you to pay the difference"
-msgstr "Žádáme vás o zaplacení rozdílu"
-
 msgid "Your question has been answered:"
 msgstr "Vaše otázka byla zodpovězena:"
 
@@ -4203,6 +4200,9 @@ msgstr "Byly vylosovány tyto položky"
 
 msgid "This page shows cancelled enrollments."
 msgstr "Tato stránka shrnuje zrušené registrace."
+
+msgid "We ask you to pay the remaining amount"
+msgstr "Žádáme vás, abyste zaplatili zbývající částku"
 
 msgid "You already have an assigned character"
 msgstr "Již máte přidělenou postavu"
@@ -5066,9 +5066,6 @@ msgstr "Tato stránka shrnuje všechny výdajové položky zapsané v systému."
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Součet výdajů předložených spolupracovníky a schválených"
 
-msgid "We ask you to pay the difference from the next instalment"
-msgstr "Žádáme vás, abyste rozdíl doplatili z další splátky."
-
 msgid "You cannot redeem a membership, you are already a member!"
 msgstr "Členství nelze vyměnit, jste již členem!"
 
@@ -5297,6 +5294,9 @@ msgstr ""
 
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "Pro potvrzení registrace prosím zaplaťte uvedenou částku."
+
+msgid "We ask you to pay the amount requested for the next instalment"
+msgstr "Žádáme vás, abyste zaplatili požadovanou částku na další splátku."
 
 msgid "You must complete payment of membership dues in order to vote!"
 msgstr "Abyste mohli hlasovat, musíte uhradit členský poplatek!"

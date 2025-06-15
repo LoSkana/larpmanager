@@ -2804,9 +2804,6 @@ msgstr "Mostra disdette"
 msgid "Total payment sent"
 msgstr "Totale del pagamento inviato"
 
-msgid "Total registration"
-msgstr "Totale iscrizione"
-
 msgid "Transaction totals"
 msgstr "Transazione totali"
 
@@ -3275,6 +3272,9 @@ msgstr "Approvazione ruolo %(role)s"
 
 msgid "Select your character!"
 msgstr "Seleziona il tuo personaggio!"
+
+msgid "Total registration fee"
+msgstr "Quota di iscrizione totale"
 
 msgid "Unknow error on upload"
 msgstr "Errore sconosciuto durante il caricamento"
@@ -3909,9 +3909,6 @@ msgstr "Questa pagina riepiloga le iscrizioni alla run."
 msgid "Total of recorded money outflows"
 msgstr "Totale dei flussi di denaro in uscita registrati"
 
-msgid "We ask you to pay the difference"
-msgstr "Ti chiediamo di versare la differenza"
-
 msgid "Your question has been answered:"
 msgstr "E' stata data una risposta alla tua domanda:"
 
@@ -4203,6 +4200,9 @@ msgstr "Sono stati estratte le seguenti iscrizioni"
 
 msgid "This page shows cancelled enrollments."
 msgstr "Questa pagina riepiloga le iscrizioni disdette."
+
+msgid "We ask you to pay the remaining amount"
+msgstr "Ti chiediamo di pagare l'importo rimanente"
 
 msgid "You already have an assigned character"
 msgstr "Hai già un personaggio assegnato"
@@ -5085,9 +5085,6 @@ msgstr "Questa pagina riepiloga tutte le voci di spesa registrate a sistema."
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Totale delle spese presentate dai collaboratori e approvate"
 
-msgid "We ask you to pay the difference from the next instalment"
-msgstr "Ti chiediamo di versare la differenza rispetto la prossima rata"
-
 msgid "You cannot redeem a membership, you are already a member!"
 msgstr "Non puoi riscattare una iscrizione, risulti già iscritto!"
 
@@ -5349,6 +5346,9 @@ msgstr ""
 
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "Per confermare l'iscrizione, salda la somma indicata."
+
+msgid "We ask you to pay the amount requested for the next instalment"
+msgstr "Ti chiediamo di pagare l'importo richiesto per la rata successiva"
 
 msgid "You must complete payment of membership dues in order to vote!"
 msgstr "Devi completare il pagamento della quota sociale per poter votare!"

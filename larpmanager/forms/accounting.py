@@ -314,7 +314,7 @@ class PaymentForm(BaseAccForm):
             min_value=0.01,
             max_value=self.reg.tot_iscr - self.reg.tot_payed,
             decimal_places=2,
-            initial=self.reg.quota,
+            initial=self.ctx["quota"],
         )
 
 

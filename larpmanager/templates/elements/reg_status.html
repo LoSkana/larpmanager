@@ -9,11 +9,11 @@
 {% endif %}
 {% if features.payment and run.reg and run.reg.tot_iscr %}
     <span class="hide reg_accounting">
-        {% trans "Total registration" %}: {{ run.reg.tot_iscr|format_decimal }}
         {% if run.reg.tot_payed %}
-            , {% trans "Total payments" %}: {{ run.reg.tot_payed|format_decimal }}
+            {% trans "Total registration fee" %}: {{ run.reg.tot_iscr|format_decimal }}, {% trans "Total payments" %}: {{ run.reg.tot_payed|format_decimal }}.
+        {% else %}
+            {% trans "Total registration fee" %}: {{ run.reg.tot_iscr|format_decimal }}.
         {% endif %}
-        .
         {% if run.reg.quota %}
             <a href="{% url 'acc_reg' run.reg.id %}">
                 {% trans "Next payment:" %} {{ run.reg.quota | format_decimal }}{{ currency_symbol }},
