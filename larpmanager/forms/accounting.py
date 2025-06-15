@@ -30,7 +30,6 @@ from larpmanager.forms.utils import (
     AssocRegS2Widget,
     DatePickerInput,
     EventRegS2Widget,
-    PaymentsS2WidgetMulti,
     RunMemberS2Widget,
     RunS2Widget,
     get_run_choices,
@@ -423,14 +422,14 @@ class ExePaymentSettingsForm(MyForm):
 
     page_info = _("This page allows you to set up your payment methods.")
 
-    load_templates = "payment-details"
+    load_js = "payment-details"
 
     class Meta:
         model = Association
         fields = ("payment_methods",)
 
         widgets = {
-            "payment_methods": PaymentsS2WidgetMulti,
+            "payment_methods": forms.CheckboxSelectMultiple,
         }
 
     def __init__(self, *args, **kwargs):
@@ -438,18 +437,33 @@ class ExePaymentSettingsForm(MyForm):
 
         self.prevent_canc = True
 
-        self.all_methods = PaymentMethod.objects.all().values_list("name", flat=True)
+        self.fields["payment_methods"].queryset = self.fields["payment_methods"].queryset.order_by("id")
 
-        self.methods = self.instance.payment_methods.all()
+        self.methods = PaymentMethod.objects.order_by("id")
+        self.section_descriptions = {}
+        for el in self.methods:
+            self.section_descriptions[el.slug] = el.instructions
+
+        self.all_methods = self.methods
 
         self.sections = {}
-        self.payment_details = self.instance.get_payment_details_fields(self.params["features"])
-        for slug, lst in self.payment_details.items():
-            for el in lst:
+        self.payment_details = self.get_payment_details_fields()
+        for method in self.methods:
+            for el in self.payment_details[method.slug]:
                 self.fields[el] = forms.CharField()
                 self.fields[el].required = False
-                self.sections["id_" + el] = slug
-                label = el.replace(f"{slug}_", "")
+                self.sections["id_" + el] = method.name
+                label = el.replace(f"{method.slug}_", "")
+
+                help_dict = {
+                    "descr": _("Description of this payment method to be displayed to the user"),
+                    "fee": _(
+                        "Percentage to be retained by the payment system - enter the value as a number, without the percentage symbol"
+                    ),
+                }
+                if label in help_dict:
+                    self.fields[el].help_text = help_dict[label]
+
                 repl_dict = {
                     "descr": _("Description"),
                     "fee": _("Fee"),
@@ -472,7 +486,7 @@ class ExePaymentSettingsForm(MyForm):
         instance = super().save(commit=commit)
 
         res = get_payment_details(self.instance)
-        for _slug, lst in self.instance.get_payment_details_fields(self.params["features"]).items():
+        for _slug, lst in self.get_payment_details_fields().items():
             for el in lst:
                 if el in self.cleaned_data:
                     input_value = self.cleaned_data[el]
@@ -488,14 +502,31 @@ class ExePaymentSettingsForm(MyForm):
                         data_string = self.mask_string(orig_value)
 
                     if input_value != data_string:
-                        res[el] = input_value
-                        now = datetime.now()
-                        old_key = f"old-{el}-{now.strftime('%Y%m%d%H%M%S')}"
-                        res[old_key] = orig_value
+                        if input_value not in [None, ""] or orig_value not in [None, ""]:
+                            res[el] = input_value
+                            now = datetime.now()
+                            old_key = f"old-{el}-{now.strftime('%Y%m%d%H%M%S')}"
+                            res[old_key] = orig_value
 
         save_payment_details(self.instance, res)
 
         return instance
+
+    def get_payment_details_fields(self):
+        res = {}
+        # noinspection PyUnresolvedReferences
+        for el in self.methods:
+            ls = [el.slug + "_descr"]
+            if "payment_fees" in self.params["features"]:
+                ls.append(el.slug + "_fee")
+            if not el.slug:
+                continue
+            fields = el.fields.replace(" ", "")
+            for field in fields.split(","):
+                if field:
+                    ls.append(el.slug + "_" + field)
+            res[el.slug] = ls
+        return res
 
     @staticmethod
     def mask_string(data_string):
