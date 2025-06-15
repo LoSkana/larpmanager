@@ -96,7 +96,7 @@ class MyForm(forms.ModelForm):
                 event_ids.add(self.params["event"].parent_id)
                 siblings = Event.objects.filter(parent_id=self.params["event"].parent_id).values_list("pk", flat=True)
                 event_ids.update(siblings)
-            print(event_ids)
+
             runs = Run.objects.filter(event_id__in=event_ids)
 
         runs = runs.select_related("event").order_by("end")

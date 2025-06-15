@@ -21,15 +21,18 @@
 import math
 from datetime import datetime
 
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.accounting import PaymentInvoice
-from larpmanager.models.form import RegistrationAnswer, RegistrationChoice, RegistrationQuestion
+from larpmanager.models.form import RegistrationAnswer, RegistrationChoice, RegistrationOption, RegistrationQuestion
 from larpmanager.models.member import Membership, get_user_membership
-from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
+from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.common import format_datetime, get_time_diff_today
 from larpmanager.utils.exceptions import SignupError, WaitingError
@@ -279,7 +282,7 @@ def registration_find(r, u, my_regs=None):
         try:
             que = Registration.objects.select_related("ticket")
             r.reg = que.get(run=r, member=u.member, redeem_code__isnull=True, cancellation_date__isnull=True)
-        except Exception:
+        except ObjectDoesNotExist:
             r.reg = None
 
 
@@ -416,3 +419,48 @@ def get_reduced_available_count(run):
     pat = Registration.objects.filter(run=run, ticket__tier=TicketTier.PATRON, cancellation_date__isnull=True).count()
     # silv = Registration.objects.filter(run=run, ticket__tier=RegistrationTicket.SILVER).count()
     return math.floor(pat * ratio / 10.0) - red
+
+
+@receiver(pre_save, sender=Registration)
+def pre_save_registration_switch_event(sender, instance, **kwargs):
+    prev = None
+    if instance.pk:
+        try:
+            prev = Registration.objects.get(pk=instance.pk)
+        except ObjectDoesNotExist:
+            pass
+
+    if prev.run.event_id == instance.run.event_id:
+        return
+
+    # look for similar ticket to update
+    ticket_name = instance.ticket.name
+    try:
+        instance.ticket = RegistrationTicket.objects.get(event_id=instance.run.event_id, name__iexact=ticket_name)
+    except ObjectDoesNotExist:
+        instance.ticket = None
+
+    # look for similar registration choice
+    for choice in RegistrationChoice.objects.get(reg=instance):
+        question_display = choice.question.display
+        option_display = choice.option.display
+        try:
+            choice.question = RegistrationQuestion.objects.get(
+                event_id=instance.run.event_id, display__iexact=question_display
+            )
+            choice.option = RegistrationOption.objects.get(
+                event_id=instance.run.event_id, question=instance.question, display__iexact=option_display
+            )
+        except ObjectDoesNotExist:
+            choice.question = None
+            choice.option = None
+
+    # look for similar registration answer
+    for answer in RegistrationAnswer.objects.get(reg=instance):
+        question_display = answer.question.display
+        try:
+            answer.question = RegistrationQuestion.objects.get(
+                event_id=instance.run.event_id, display__iexact=question_display
+            )
+        except ObjectDoesNotExist:
+            answer.question = None
