@@ -386,6 +386,13 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("writing_assigned", ConfigType.BOOL, section, label, help_text)
 
+            label = _("Disable character finder")
+            help_text = (
+                _("Disable the system that finds the character number when a special reference symbol is written")
+                + " (#, @, ^)"
+            )
+            self.add_configs("writing_disable_char_finder", ConfigType.BOOL, section, label, help_text)
+
             label = _("Replacing names")
             help_text = _("If checked, character names will be automatically replaced by a reference")
             self.add_configs("writing_substitute", ConfigType.BOOL, section, label, help_text)

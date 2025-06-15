@@ -6,9 +6,9 @@ window.addEventListener('DOMContentLoaded', function() {
     $(function() {
 
         // char finder
-        $(document).on('keydown', function(e) {
-            if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'h') {
-                e.preventDefault();
+        $(document).on('keydown', function(ev) {
+            const triggerKeys = ['#', '@', '^'];
+            if (triggerKeys.includes(ev.key)) {
                 char_finder(false);
             }
         });
@@ -17,8 +17,8 @@ window.addEventListener('DOMContentLoaded', function() {
             const editor = tinymce.get(key);
             if (!editor) return;
             editor.on('keydown', function(ev) {
-                if (ev.ctrlKey && ev.altKey && ev.key.toLowerCase() === 'h') {
-                    ev.preventDefault();
+                const triggerKeys = ['#', '@', '^'];
+                if (triggerKeys.includes(ev.key)) {
                     char_finder(key);
                 }
             });
@@ -45,6 +45,8 @@ window.addEventListener('DOMContentLoaded', function() {
         var key = null;
 
         function char_finder(tinymce_key) {
+
+            console.log(tinymce_key);
 
             savedFocusElem = null;
             savedCursorPos = null;
@@ -85,7 +87,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
                 $('#char_finder').val(null).trigger('change');
                 close_char_finder();
-                insertReference(' #' + result.number);
+                insertReference(result.number);
             });
         });
 

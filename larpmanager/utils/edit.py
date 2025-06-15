@@ -255,9 +255,11 @@ def writing_edit(request, ctx, form_type, nm, tp, redr=None):
     ctx["form"] = form
     ctx["add_another"] = True
 
-    widget = EventCharacterS2Widget(attrs={"id": "char_finder"})
-    widget.set_event(ctx["event"])
-    ctx["char_finder"] = widget.render(name="char_finder", value="")
+    ctx["disable_char_finder"] = ctx["event"].get_config("writing_disable_char_finder", False)
+    if not ctx["disable_char_finder"]:
+        widget = EventCharacterS2Widget(attrs={"id": "char_finder"})
+        widget.set_event(ctx["event"])
+        ctx["char_finder"] = widget.render(name="char_finder", value="")
 
     return render(request, "larpmanager/orga/writing/writing.html", ctx)
 

@@ -893,6 +893,14 @@ msgid ""
 "each writing element"
 msgstr ""
 
+msgid "Disable character finder"
+msgstr ""
+
+msgid ""
+"Disable the system that finds the character number when a special reference "
+"symbol is written"
+msgstr ""
+
 msgid "Replacing names"
 msgstr ""
 
@@ -3591,8 +3599,9 @@ msgid "for no relationship, only to display the other character name."
 msgstr ""
 
 msgid ""
-"You can press Ctrl+Alt+H to get a character’s number, or select the "
-"reference number in the text to see a highlight with the character’s name."
+"When you press one of the special reference symbols, a popup will help you "
+"get the reference number of a character; you can also select a reference "
+"number to see the character’s name."
 msgstr ""
 
 msgid ""

@@ -24,7 +24,9 @@
 {% block js2 %}
     {% include "elements/form/max_length.js" %}
     {% include "elements/form/char_highlight.js" %}
-    {% include "elements/form/char_finder.js" %}
+    {% if not disable_char_finder %}
+        {% include "elements/form/char_finder.js" %}
+    {% endif %}
     <script>
 function translate(id, text) {
 
