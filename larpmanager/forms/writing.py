@@ -48,7 +48,6 @@ from larpmanager.models.writing import (
     PlotCharacterRel,
     Prologue,
     PrologueType,
-    Relationship,
     SpeedLarp,
 )
 from larpmanager.utils.common import FileTypeValidator
@@ -130,39 +129,6 @@ class PlayerRelationshipForm(MyForm):
         return instance
 
 
-class OrgaRelationshipForm(MyForm):
-    page_info = _("This page allows you to add or edit a relationship between characters.")
-
-    page_title = _("Character Relationship")
-
-    class Meta:
-        model = Relationship
-        fields = "__all__"
-        widgets = {"source": EventCharacterS2Widget, "target": EventCharacterS2Widget}
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["source"].widget.set_event(self.params["event"])
-        self.fields["source"].required = True
-        self.fields["target"].widget.set_event(self.params["event"])
-        self.fields["target"].required = True
-
-    def clean(self):
-        cleaned_data = super().clean()
-
-        if self.cleaned_data["source"] == self.cleaned_data["target"]:
-            self.add_error("source", _("You cannot add a relationship from character to self!"))
-
-        try:
-            rel = Relationship.objects.get(source_id=self.cleaned_data["source"], target_id=self.cleaned_data["target"])
-            if rel.id != self.instance.id:
-                self.add_error("source", _("Already existing relationship!"))
-        except Exception:
-            pass
-
-        return cleaned_data
-
-
 class UploadElementsForm(forms.Form):
     elem = forms.FileField(
         validators=[
@@ -206,9 +172,9 @@ class BaseWritingForm(BaseRegistrationForm):
 
 
 class PlotForm(WritingForm, BaseWritingForm):
-    load_templates = "plot"
+    load_templates = ["plot"]
 
-    load_js = "characters-choices"
+    load_js = ["characters-choices"]
 
     page_title = _("Plot")
 
@@ -278,8 +244,9 @@ class PlotForm(WritingForm, BaseWritingForm):
 
 
 class FactionForm(WritingForm):
-    load_templates = "faction"
-    load_js = "characters-choices"
+    load_templates = ["faction"]
+
+    load_js = ["characters-choices"]
 
     page_title = _("Faction")
 
@@ -375,7 +342,7 @@ class QuestForm(WritingForm):
 class TraitForm(WritingForm):
     page_title = _("Trait")
 
-    load_templates = "trait"
+    load_templates = ["trait"]
 
     class Meta:
         model = Trait
@@ -423,7 +390,7 @@ class HandoutForm(WritingForm):
 
 
 class HandoutTemplateForm(MyForm):
-    load_templates = "handout-template"
+    load_templates = ["handout-template"]
 
     class Meta:
         model = HandoutTemplate
@@ -441,7 +408,7 @@ class PrologueTypeForm(MyForm):
 class PrologueForm(WritingForm):
     page_title = _("Prologue")
 
-    load_js = "characters-choices"
+    load_js = ["characters-choices"]
 
     class Meta:
         model = Prologue
@@ -462,7 +429,7 @@ class PrologueForm(WritingForm):
 class SpeedLarpForm(WritingForm):
     page_title = _("Speed larp")
 
-    load_js = "characters-choices"
+    load_js = ["characters-choices"]
 
     class Meta:
         model = SpeedLarp

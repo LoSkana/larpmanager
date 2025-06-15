@@ -1577,12 +1577,6 @@ msgstr ""
 msgid "Already existing relationship!"
 msgstr ""
 
-msgid "This page allows you to add or edit a relationship between characters."
-msgstr ""
-
-msgid "You cannot add a relationship from character to self!"
-msgstr ""
-
 msgid "Plot"
 msgstr ""
 
@@ -3448,6 +3442,18 @@ msgstr ""
 msgid "Missing casting preferences"
 msgstr ""
 
+msgid "Select a character to add a new relationship"
+msgstr ""
+
+msgid "Direct"
+msgstr ""
+
+msgid "Show"
+msgstr ""
+
+msgid "Inverse"
+msgstr ""
+
 msgid "Continue"
 msgstr ""
 
@@ -3482,9 +3488,6 @@ msgstr ""
 msgid ""
 "Your registration will now be saved in provisional status. It will be "
 "confirmed when your ticket payment is received."
-msgstr ""
-
-msgid "Show"
 msgstr ""
 
 msgid "options"
@@ -6473,10 +6476,10 @@ msgstr ""
 msgid "XP"
 msgstr ""
 
-msgid "speedlarp"
+msgid "Plots"
 msgstr ""
 
-msgid "Plots"
+msgid "speedlarp"
 msgstr ""
 
 msgid "Versions"

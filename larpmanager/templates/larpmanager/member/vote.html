@@ -58,10 +58,10 @@
 {% block js %}
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(document).ready(function () {
-    console.log("ciao");
+    // console.log("ciao");
     $( "input.votes" ).change(function() {
         var cnt = $( "input.votes:checked" ).length;
-        console.log(cnt);
+        // console.log(cnt);
         $( "#submit" ).attr("disabled", cnt < {{ vote_min }} || cnt > {{ vote_max }} );
     });
 });

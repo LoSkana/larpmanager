@@ -12,9 +12,10 @@
                 <div class="icon">
                     <a href="{% url 'public' el.id %}">
                         {% if el.profile_thumb %}
-                            <img src="{{ el.profile_thumb.url }}" />
+                            <img src="{{ el.profile_thumb.url }}" alt="player profile" />
                         {% else %}
-                            <img src="{% static 'larpmanager/assets/blank-avatar.svg' %}" />
+                            <img src="{% static 'larpmanager/assets/blank-avatar.svg' %}"
+                                 alt="player profile" />
                         {% endif %}
                         <div class="icon-name">
                             <p>{{ el.display_member }}</p>
@@ -38,7 +39,7 @@ function resize_to_fit() {
             textLength = that.html().length
         ;
 
-        console.log(textLength);
+        // console.log(textLength);
 
         if (textLength > 60) {
             that.css('font-size', '60%');

@@ -74,7 +74,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
        $('.allauth_signin a').each(function(index) {
             var href = $(this).attr('href');
-            console.log(href);
+            // console.log(href);
 
             const domain = '{{ assoc.slug }}';
             let url = new URL(href || window.location.pathname, 'https://larpmanager.com');

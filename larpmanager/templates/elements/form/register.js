@@ -72,8 +72,8 @@ $(document).ready(function(){
     }
 
     Object.entries(unavail).forEach(([question, values]) => {
-        console.log(question);
-        console.log(values);
+        // console.log(question);
+        // console.log(values);
         values.forEach(value => {
             const selectorPrefix = '#id_q' + question + '_tr ';
             if (hide_unavailable) {
