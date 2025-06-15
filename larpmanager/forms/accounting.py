@@ -422,7 +422,7 @@ class ExePaymentSettingsForm(MyForm):
 
     page_info = _("This page allows you to set up your payment methods.")
 
-    load_js = "payment-details"
+    load_js = ["payment-details"]
 
     class Meta:
         model = Association
