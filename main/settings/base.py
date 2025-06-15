@@ -226,12 +226,14 @@ CLEAN_DB = [
     "delete from larpmanager_accountingitempayment where deleted < CURRENT_DATE - INTERVAL '6 months';",
     "delete from larpmanager_accountingitemtransaction where deleted < CURRENT_DATE - INTERVAL '6 months';",
     "delete from larpmanager_accountingitemdiscount where deleted < CURRENT_DATE - INTERVAL '6 months';",
+    "delete from larpmanager_registrationcharacterrel where deleted < CURRENT_DATE - INTERVAL '6 months';",
 
     "delete from larpmanager_registrationchoice where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
     "delete from larpmanager_registrationanswer where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
     "delete from larpmanager_accountingitempayment where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
     "delete from larpmanager_accountingitemtransaction where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
     "delete from larpmanager_playerrelationship where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
+    "delete from larpmanager_registrationcharacterrel where reg_id in ( select id from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months');",
     "delete from larpmanager_registration where deleted < CURRENT_DATE - INTERVAL '6 months';",
 
     "delete from larpmanager_casting where deleted < CURRENT_DATE - INTERVAL '6 months';",

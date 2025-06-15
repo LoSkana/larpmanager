@@ -366,6 +366,11 @@ urlpatterns = [
         name="orga_characters_summary",
     ),
     path(
+        "<slug:s>/<int:n>/manage/characters/get/number/",
+        views_oc.orga_character_get_number,
+        name="orga_character_get_number",
+    ),
+    path(
         "<slug:s>/<int:n>/manage/characters/<int:num>/relationships/",
         views_oc.orga_characters_relationships,
         name="orga_characters_relationships",

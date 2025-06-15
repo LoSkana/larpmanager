@@ -146,6 +146,14 @@ msgstr ""
 msgid "This page allows you to set up your payment methods."
 msgstr ""
 
+msgid "Description of this payment method to be displayed to the user"
+msgstr ""
+
+msgid ""
+"Percentage to be retained by the payment system - enter the value as a "
+"number, without the percentage symbol"
+msgstr ""
+
 msgid "Description"
 msgstr ""
 
@@ -298,17 +306,6 @@ msgstr ""
 msgid "If checked: shows the tagline for each event"
 msgstr ""
 
-msgid "Interface"
-msgstr ""
-
-msgid "Quick links organisation"
-msgstr ""
-
-msgid ""
-"If checked: In the event management panel, it also shows the association "
-"management links"
-msgstr ""
-
 msgid "Email notifications"
 msgstr ""
 
@@ -386,6 +383,15 @@ msgid "Page"
 msgstr ""
 
 msgid "Contents of the special page"
+msgstr ""
+
+msgid "Campaign"
+msgstr ""
+
+msgid "Move registration event"
+msgstr ""
+
+msgid "Allow to switch registration between events"
 msgstr ""
 
 msgid "Deadline"
@@ -885,6 +891,14 @@ msgid ""
 "each writing element"
 msgstr ""
 
+msgid "Disable character finder"
+msgstr ""
+
+msgid ""
+"Disable the system that finds the character number when a special reference "
+"symbol is written"
+msgstr ""
+
 msgid "Replacing names"
 msgstr ""
 
@@ -906,9 +920,6 @@ msgstr ""
 msgid ""
 "If checked, prevents multiple users from editing the same item at the same "
 "time to avoid conflicts"
-msgstr ""
-
-msgid "Campaign"
 msgstr ""
 
 msgid "Independent factions"
@@ -2374,8 +2385,8 @@ msgid "Logo"
 msgstr ""
 
 msgid ""
-"Logo image - you can upload a file of any size, it will be automatically "
-"resized"
+"Optional logo image - you can upload a file of any size, it will be "
+"automatically resized"
 msgstr ""
 
 msgid "Please indicate an email for the organization"
@@ -3560,22 +3571,35 @@ msgid "Instructions"
 msgstr ""
 
 msgid ""
-"In the 'Presentation' and 'Text' fields you can refer to other characters "
-"using their number directly, in the final text the number will automatically "
-"be replaced with their name, and a link to the character. Use:"
+"In rich text editors, you can reference other characters directly using "
+"their number."
 msgstr ""
 
 msgid ""
-"for bidirectional relationships (love, colleagues, rivals), of which the "
-"other  character is aware of."
+"When the text is displayed to the player, the number is automatically "
+"replaced with the character’s name and a link to their profile."
+msgstr ""
+
+msgid "Use these formats:"
 msgstr ""
 
 msgid ""
-"for unidirectional relationships (secret hatred, loves but is unrequited), "
-"of that the other character is NOT aware of."
+"for bidirectional relationships, where the other character is also aware of "
+"the connection."
 msgstr ""
 
-msgid "to indicate only the proper name of the other character."
+msgid ""
+"for unidirectional relationships, where the other character is NOT aware of "
+"the connection."
+msgstr ""
+
+msgid "for no relationship, only to display the other character name."
+msgstr ""
+
+msgid ""
+"When you press one of the special reference symbols, a popup will help you "
+"get the reference number of a character; you can also select a reference "
+"number to see the character’s name."
 msgstr ""
 
 msgid ""
@@ -3600,29 +3624,6 @@ msgid "Utils"
 msgstr ""
 
 msgid "Application to be given to them to sign and then upload:"
-msgstr ""
-
-msgid ""
-"Select the payment methods to be activated; then return to this page to "
-"enter the necessary information."
-msgstr ""
-
-msgid ""
-"Each payment method works differently, click on its name for a detailed "
-"guide on how to proceed."
-msgstr ""
-
-msgid ""
-"Indicate the description you wish to be displayed when this payment method "
-"is proposed to the user."
-msgstr ""
-
-msgid ""
-"Enter the percentage to be managed as retained by the payment system. Enter "
-"the value as a number, without entering the percentage symbol."
-msgstr ""
-
-msgid "Available payment methods:"
 msgstr ""
 
 msgid "Select from the dropdown the characters to be added to the plot."
@@ -6671,6 +6672,9 @@ msgid ""
 msgstr ""
 
 msgid "This page allows you to fully view a character."
+msgstr ""
+
+msgid "Select a character to insert their reference code"
 msgstr ""
 
 msgid "Hi"

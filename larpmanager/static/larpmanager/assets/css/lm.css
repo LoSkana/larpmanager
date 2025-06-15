@@ -805,6 +805,10 @@ table {
     font-size: 90%;
 }
 
+#sidebar:focus {
+  outline: none;
+}
+
 #sidebar h1 {
     text-align: center;
     padding: 0.1em;
@@ -1260,4 +1264,28 @@ th select {
 .char_profile {
     max-width:700px;
     margin: auto;
+}
+
+#char-finder-popup {
+    display:none;
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    background:rgba(0,0,0,0.85);
+    padding:3em;
+    border-radius:10px;
+    min-width:320px;
+    z-index: 10;
+}
+
+#char-finder-close {
+    position:absolute;
+    top:0.5em;
+    right:1em;
+    z-index:1;
+    background:transparent;
+    border:none;
+    font-size:1.5em;
+    cursor:pointer;
 }

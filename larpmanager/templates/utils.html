@@ -11,7 +11,7 @@
     {% if form.load_js %}
         {% for item in form.load_js %}
             {% with template_name=item|stringformat:"s"|add:".js" %}
-                {% include "elements/"|add:template_name %}
+                {% include "elements/helpers/"|add:template_name %}
             {% endwith %}
         {% endfor %}
     {% endif %}

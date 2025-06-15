@@ -3,7 +3,7 @@
 {% block main %}
     {% if assoc.id == 0 %}
         <!-- Header -->
-        <header id="header">
+        <header id="header" {% if is_sidebar_open %}class="sidebar"{% endif %}>
             <!--
             <a href="{% url 'home' %}" class="main" aria-label="LarpManager">
                 <span class="logo"><img src="{% static 'lm_logo.png' %}" alt="Logo" /></span>
@@ -48,7 +48,7 @@
         {% block alpha %}
         {% endblock alpha %}
         <!-- Footer -->
-        <footer id="footer">
+        <footer id="footer" {% if is_sidebar_open %}class="sidebar"{% endif %}>
             {% if contact_form %}
                 <h3>Contact us</h3>
                 <form class="contact"
@@ -82,7 +82,7 @@
         </footer>
     {% else %}
         <!-- Header -->
-        <header id="header" class="alt">
+        <header id="header" class="alt {% if is_sidebar_open %}sidebar{% endif %}">
             {% block sidebar_logo %}
                 {% if manage %}
                     <nav id="sidebar-nav">
@@ -304,7 +304,7 @@
                     </div>
                 </div>
             </div>
-            <div id="footer">
+            <div id="footer" {% if is_sidebar_open %}class="sidebar"{% endif %}>
                 <div class="inner">
                     {% if assoc.footer %}
                         <div class="footer-text">
@@ -317,8 +317,7 @@
                             {% if 'help' in assoc.features %}
                                 <td>
                                     <p>
-                                        {% trans "Need help?" %}
-                                        <a href=" {% if run %}{% url 'help' run.event.slug run.number %}{% else %}{% url 'help' %}{% endif %} ">{% trans "Write here!" %}</a>
+                                        <a href=" {% if run %}{% url 'help' run.event.slug run.number %}{% else %}{% url 'help' %}{% endif %} ">{% trans "Need help?" %}</a>
                                     </p>
                                 </td>
                             {% endif %}

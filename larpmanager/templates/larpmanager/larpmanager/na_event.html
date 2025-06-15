@@ -1,13 +1,18 @@
 {% extends "utils.html" %}
 {% load i18n static %}
 {% block title %}
-    Join first!
+    Event not found
 {% endblock title %}
 {% block content %}
-    Hi there! You requested an advanced function of the larpmanager, but we couldn't find an existing event that you organize. Wanna join? <a href="{% url 'join' %}">It's super easy!</a>
-    <br />
+    <p>Heya! You requested an advanced feature of the larpmanager, but we couldn't find an event that you manage.</p>
     <p>
-        <i>Need help? Would you like to get in touch with us? <span class="contact-mail"></span> (we are happy to organize a demo of the tool for you!)</i>
+        Maybe someone already created the event? In this case ask them to add you to one of the roles in order to help them manage it!
+    </p>
+    <p>
+        If the event does not exists yet, <a href="{% url 'exe_events' %}">click here to create one</a>.
+    </p>
+    <p>
+        <i>Need help? <span class="contact-mail"></span></i>
     </p>
 {% endblock content %}
 {% block js %}

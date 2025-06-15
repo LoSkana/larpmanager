@@ -41,7 +41,7 @@ from larpmanager.models.accounting import (
     RecordAccounting,
 )
 from larpmanager.models.association import Association
-from larpmanager.models.event import Run
+from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.member import Membership
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.utils import get_sum
@@ -318,13 +318,13 @@ def assoc_accounting(ctx):
         ctx["credits_sum"] += el.credit
     ctx["runs"] = (
         Run.objects.filter(event__assoc_id=ctx["a_id"])
-        .exclude(development=Run.START)
-        .exclude(development=Run.CANC)
+        .exclude(development=DevelopStatus.START)
+        .exclude(development=DevelopStatus.CANC)
         .select_related("event")
         .order_by("-end")
     )
     for el in ctx["runs"]:
-        if el.development == Run.DONE:
+        if el.development == DevelopStatus.DONE:
             ctx["balance_sum"] += el.balance
 
     assoc_accounting_data(ctx)

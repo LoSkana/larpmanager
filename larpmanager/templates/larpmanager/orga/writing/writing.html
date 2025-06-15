@@ -13,9 +13,22 @@
 {% endblock info %}
 {% block content %}
     {% include "elements/form/sections.html" %}
+    <div id="char-finder-popup">
+        <p>
+            <i>{% trans "Select a character to insert their reference code" %}</i>
+        </p>
+        <br />
+        <p class="char-finder-symbol"></p>
+        {{ char_finder }}
+        <a href="#" id="char-finder-close"><i class="fa-solid fa-xmark"></i></a>
+    </div>
 {% endblock content %}
 {% block js2 %}
     {% include "elements/form/max_length.js" %}
+    {% include "elements/form/char_highlight.js" %}
+    {% if not disable_char_finder %}
+        {% include "elements/form/char_finder.js" %}
+    {% endif %}
     <script>
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {

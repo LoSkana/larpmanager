@@ -28,6 +28,7 @@ from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.forms.utils import EventCharacterS2Widget
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
 from larpmanager.models.member import Log
 from larpmanager.models.writing import TextVersion
@@ -253,6 +254,12 @@ def writing_edit(request, ctx, form_type, nm, tp, redr=None):
     ctx["nm"] = nm
     ctx["form"] = form
     ctx["add_another"] = True
+
+    ctx["disable_char_finder"] = ctx["event"].get_config("writing_disable_char_finder", False)
+    if not ctx["disable_char_finder"]:
+        widget = EventCharacterS2Widget(attrs={"id": "char_finder"})
+        widget.set_event(ctx["event"])
+        ctx["char_finder"] = widget.render(name="char_finder", value="")
 
     return render(request, "larpmanager/orga/writing/writing.html", ctx)
 

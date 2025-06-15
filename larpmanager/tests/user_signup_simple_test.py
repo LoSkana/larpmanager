@@ -90,7 +90,7 @@ def signup(live_server, page):
 def help_questions(live_server, page):
     # test help
     go_to(page, live_server, "/manage/features/28/on")
-    page.get_by_role("link", name="Write here!").click()
+    page.get_by_role("link", name="Need help?").click()
     page.get_by_role("textbox", name="Text").click()
     page.get_by_role("textbox", name="Text").fill("please help me")
     image_path = Path(__file__).parent / "image.jpg"
@@ -107,7 +107,7 @@ def help_questions(live_server, page):
     page.get_by_role("textbox", name="Text").click()
     page.get_by_role("textbox", name="Text").fill("aasadsada")
     page.get_by_role("button", name="Confirm", exact=True).click()
-    page.get_by_role("link", name="Write here!").click()
+    page.get_by_role("link", name="Need help?").click()
     page.get_by_role("textbox", name="Text").click()
     page.get_by_role("textbox", name="Text").fill("e adessoooo")
     page.get_by_role("button", name="Confirm", exact=True).click()

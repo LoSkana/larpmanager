@@ -25,7 +25,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
 from larpmanager.models.base import Feature
-from larpmanager.models.event import Run
+from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.utils.exceptions import (
     FeatureError,
     HiddenError,
@@ -59,7 +59,7 @@ class ExceptionHandlingMiddleware:
                     request,
                     "exception/runs.html",
                     {
-                        "runs": Run.objects.filter(development=Run.SHOW)
+                        "runs": Run.objects.filter(development=DevelopStatus.SHOW)
                         .exclude(event__visible=False)
                         .select_related("event")
                         .filter(event__assoc_id=request.assoc["id"])
