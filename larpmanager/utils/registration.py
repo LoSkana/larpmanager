@@ -423,12 +423,13 @@ def get_reduced_available_count(run):
 
 @receiver(pre_save, sender=Registration)
 def pre_save_registration_switch_event(sender, instance, **kwargs):
-    prev = None
-    if instance.pk:
-        try:
-            prev = Registration.objects.get(pk=instance.pk)
-        except ObjectDoesNotExist:
-            pass
+    if not instance.pk:
+        return
+
+    try:
+        prev = Registration.objects.get(pk=instance.pk)
+    except ObjectDoesNotExist:
+        return
 
     if prev.run.event_id == instance.run.event_id:
         return
