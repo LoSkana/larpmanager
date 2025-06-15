@@ -441,7 +441,7 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
         instance.ticket = None
 
     # look for similar registration choice
-    for choice in RegistrationChoice.objects.get(reg=instance):
+    for choice in RegistrationChoice.objects.filter(reg=instance):
         question_display = choice.question.display
         option_display = choice.option.display
         try:
@@ -456,7 +456,7 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
             choice.option = None
 
     # look for similar registration answer
-    for answer in RegistrationAnswer.objects.get(reg=instance):
+    for answer in RegistrationAnswer.objects.filter(reg=instance):
         question_display = answer.question.display
         try:
             answer.question = RegistrationQuestion.objects.get(
