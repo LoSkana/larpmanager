@@ -1,4 +1,4 @@
-{% load static %}
+{% load static show_tags %}
 {% if form_questions %}
     {% for key, que in form_questions.items %}
         {% if que.typ == 'teaser' or que.typ == 'text' %}

@@ -6299,6 +6299,9 @@ msgstr ""
 msgid "Recalculate"
 msgstr ""
 
+msgid "Load list"
+msgstr ""
+
 msgid "Registration sections"
 msgstr ""
 

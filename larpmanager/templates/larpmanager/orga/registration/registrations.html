@@ -512,12 +512,17 @@
     {% endif %}
     {% if reg_questions %}
         <br />
-        {% for key, que in reg_questions.items %}
-            {% if que.typ == 's' or que.typ == 'm' %}
-                <a href="#" class="load_email_que" key="{{ key }}">{{ que.display }}</a>,
-                <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
-            {% endif %}
-        {% endfor %}
+        <p id="show">
+            <b>{% trans "Load list" %}</b>
+        </p>
+        <div class="nav fields">
+            {% for key, que in reg_questions.items %}
+                {% if que.typ == 's' or que.typ == 'm' %}
+                    <a href="#" class="load_email_que" key="{{ key }}">{{ que.display | truncatechars:50 }}</a>
+                    <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
+                {% endif %}
+            {% endfor %}
+        </div>
         {% for key, que in reg_questions.items %}
             {% if que.typ == 's' or que.typ == 'm' %}
                 <div class="hide email_que_{{ key }}">

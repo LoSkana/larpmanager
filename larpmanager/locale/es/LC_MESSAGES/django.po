@@ -1170,6 +1170,9 @@ msgstr "Frecuencia"
 msgid "Inventory"
 msgstr "Inventario"
 
+msgid "Load list"
+msgstr "Lista de carga"
+
 msgid "Mandatory"
 msgstr "Obligatorio"
 

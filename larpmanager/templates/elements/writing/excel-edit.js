@@ -4,6 +4,8 @@
 
 const tinymceConfig = JSON.parse(document.getElementById('tinymce-config').textContent);
 
+console.log(tinymceConfig);
+
 window.addEventListener('DOMContentLoaded', function() {
 
     var keyTinyMCE;
@@ -11,6 +13,9 @@ window.addEventListener('DOMContentLoaded', function() {
     var eid;
 
     function closeEdit () {
+        const x = window.scrollX;
+        const y = window.scrollY;
+
         $('#excel-edit').removeClass('visible');
         if (keyTinyMCE) {
             editor = tinymce.get(keyTinyMCE);
@@ -20,6 +25,12 @@ window.addEventListener('DOMContentLoaded', function() {
             }
             keyTinyMCE = null;
         }
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                window.scrollTo(x, y);
+            });
+        });
 
     }
 
@@ -46,6 +57,7 @@ window.addEventListener('DOMContentLoaded', function() {
             // success
             if (res.k == 1) {
                 closeEdit();
+                $('#' + res.eid + ' [qid=' + res.qid + ']').html(res.update);
                 return;
             }
             // form error

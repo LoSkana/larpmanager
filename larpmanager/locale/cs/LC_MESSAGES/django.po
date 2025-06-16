@@ -1170,6 +1170,9 @@ msgstr "Frekvence"
 msgid "Inventory"
 msgstr "Inventura"
 
+msgid "Load list"
+msgstr "Seznam zatížení"
+
 msgid "Mandatory"
 msgstr "Povinné"
 

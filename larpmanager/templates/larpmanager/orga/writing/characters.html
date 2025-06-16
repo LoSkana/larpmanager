@@ -16,7 +16,7 @@
     {% if features.px %}
         <a href="#" class="my_toggle" tog='px'>{% trans "XP" %}</a>
     {% endif %}
-    {% includes "elements/writing/questions_nav.html" %}
+    {% include "elements/writing/questions_nav.html" %}
     {% if features.plot %}
         <a href="#" class="my_toggle" tog='plots'>{% trans "Plots" %}</a>
     {% endif %}
@@ -42,7 +42,7 @@
         <th class="hide px">{% trans "XP used" %}</th>
         <th class="hide px">{% trans "XP avail" %}</th>
     {% endif %}
-    {% includes "elements/writing/questions_header.html" %}
+    {% include "elements/writing/questions_header.html" %}
     {% if features.plot %}
         <th class="hide plots">{% trans "Plots" %}</th>
         <th class="hide plots">(N)</th>
@@ -74,7 +74,7 @@
                 <td class="hide px">{{ el.addit | get:'px_used' }}</td>
                 <td class="hide px">{{ el.addit | get:'px_avail' }}</td>
             {% endif %}
-            {% includes "elements/writing/questions_body.html" %}
+            {% include "elements/writing/questions_body.html" %}
             {% if features.plot %}
                 <td class="hide plots">
                     {% for p in el.plts %}
@@ -105,12 +105,17 @@
 {% block additional %}
     {% if form_questions %}
         <br />
-        {% for key, que in form_questions.items %}
-            {% if que.typ == 's' or que.typ == 'm' %}
-                <a href="#" class="load_email_que" key="{{ key }}">{{ que.display }}</a>,
-                <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
-            {% endif %}
-        {% endfor %}
+        <p id="show">
+            <b>{% trans "Load list" %}</b>
+        </p>
+        <div class="nav fields">
+            {% for key, que in form_questions.items %}
+                {% if que.typ == 's' or que.typ == 'm' %}
+                    <a href="#" class="load_email_que" key="{{ key }}">{{ que.display | truncatechars:50 }}</a>
+                    <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
+                {% endif %}
+            {% endfor %}
+        </div>
         {% for key, que in form_questions.items %}
             {% if que.typ == 's' or que.typ == 'm' %}
                 <div class="hide email_que_{{ key }}">

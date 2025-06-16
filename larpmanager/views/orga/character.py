@@ -44,6 +44,7 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
 )
+from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
     Character,
     Faction,
@@ -193,7 +194,7 @@ def orga_writing_form_list(request, s, n, typ):
         for opt in event.get_elements(WritingOption).filter(question=q):
             cho[opt.id] = opt.display
 
-        for el in WritingChoice.objects.filter(question=q, element_id__in=character_ids):
+        for el in WritingChoice.objects.filter(question=q, element_id__in=character_ids).order_by("option__order"):
             if el.element_id not in res:
                 res[el.element_id] = []
             res[el.element_id].append(cho[el.option_id])
@@ -546,7 +547,8 @@ def orga_writing_excel_submit(request, s, n, typ):
 
     if ctx["form"].is_valid():
         ctx["form"].save()
-        return JsonResponse({"k": 1})
+        response = {"k": 1, "qid": ctx["question"].id, "eid": ctx["element"].id, "update": _get_question_update(ctx)}
+        return JsonResponse(response)
     else:
         return JsonResponse({"k": 2, "errors": ctx["form"].errors})
 
@@ -585,3 +587,29 @@ def _get_excel_form(request, s, n, typ, submit=False):
     ctx["field_key"] = keep_key
 
     return ctx
+
+
+def _get_question_update(ctx):
+    question_key = f"q{ctx['question'].id}"
+    question_slug = str(ctx["question"].id)
+    if ctx["question"].typ not in QuestionType.get_basic_types():
+        question_key = ctx["question"].typ
+        question_slug = ctx["question"].typ
+
+    value = ctx["form"].cleaned_data[question_key]
+    if ctx["question"].typ in [QuestionType.TEASER, QuestionType.SHEET, QuestionType.EDITOR]:
+        value = strip_tags(value)
+
+    if ctx["question"].typ in [QuestionType.MULTIPLE, QuestionType.SINGLE]:
+        # get option names
+        option_ids = [int(val) for val in value]
+        query = ctx["event"].get_elements(WritingOption).filter(pk__in=option_ids).order_by("order")
+        value = ", ".join([display for display in query.values_list("display", flat=True)])
+    else:
+        # check if it is over the character limit
+        limit = conf_settings.FIELD_SNIPPET_LIMIT
+        if len(value) > limit:
+            value = value[:limit]
+            value += f"... <a href='#' class='post_popup' pop='{ctx['element'].id}' fie='{question_slug}'><i class='fas fa-eye'></i></a>"
+
+    return value

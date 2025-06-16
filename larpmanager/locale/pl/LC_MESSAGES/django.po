@@ -1170,6 +1170,9 @@ msgstr "Częstotliwość"
 msgid "Inventory"
 msgstr "Inwentaryzacja"
 
+msgid "Load list"
+msgstr "Lista obciążeń"
+
 msgid "Mandatory"
 msgstr "Obowiązkowe"
 

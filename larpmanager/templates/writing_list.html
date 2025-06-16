@@ -15,23 +15,25 @@
         {% block nav_fields %}
         {% endblock nav_fields %}
     </div>
-    <table class="tablesorter mob writing regs">
-        <thead>
-            {% block thead %}
-            {% endblock thead %}
-        </thead>
-        <tbody>
-            {% block tbody %}
-            {% endblock tbody %}
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="tablesorter writing regs">
+            <thead>
+                {% block thead %}
+                {% endblock thead %}
+            </thead>
+            <tbody>
+                {% block tbody %}
+                {% endblock tbody %}
+            </tbody>
+        </table>
+    </div>
     {% block additional %}
     {% endblock additional %}
     <div id="excel-edit"></div>
 {% endblock content %}
 {% block js %}
     <script defer src="{% static TINYMCE_JS_URL %}"></script>
-    <script>{{ TINYMCE_DEFAULT_CONFIG|json_script:"tinymce-config" }}</script>
+    {{ TINYMCE_DEFAULT_CONFIG|json_script:"tinymce-config" }}
     {% include "elements/writing/excel-edit.js" %}
     {% include "elements/writing/que-open.js" %}
     <script>

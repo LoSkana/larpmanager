@@ -1,4 +1,4 @@
-{% load static %}
+{% load static show_tags %}
 {% if form_questions %}
     {% for key, que in form_questions.items %}
         <th class="hide q_{{ key }}">{{ que.display }}</th>

@@ -128,7 +128,7 @@ select {
         display: none;
     }
 
-    .tablesorter-headerRow, thead {
+    .mob thead {
         display: none !important;
     }
 
@@ -1266,6 +1266,15 @@ th select {
     margin: auto;
 }
 
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.table-responsive table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
 #char-finder-popup {
     display:none;
     position:fixed;
@@ -1291,13 +1300,17 @@ th select {
 }
 
 #excel-edit {
+    max-width: 90vw;
+    max-height: 90vh;
+
+    min-width: 80vw;
+
     position:fixed;
     top:50%;
     left:50%;
     transform:translate(-50%, -50%);
     padding:3em;
     border-radius:10px;
-    min-width:320px;
 
     padding: 3em;
     border-radius: 2em;
@@ -1316,6 +1329,15 @@ th select {
     transition: opacity 0.2s;
     transition-delay: 0.1s;
     pointer-events: none;
+}
+
+#excel-edit iframe {
+    max-height: 100%;
+    width: 100%;
+}
+
+#excel-edit textarea {
+    width: 100%;
 }
 
 #excel-edit.visible {
