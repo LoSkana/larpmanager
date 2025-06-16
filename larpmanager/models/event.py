@@ -458,24 +458,20 @@ class ProgressStep(BaseConceptModel):
         return f"{self.order} - {self.name}"
 
 
-class Run(BaseModel):
-    START = "0"
-    SHOW = "1"
-    CANC = "8"
-    DONE = "9"
-    DEVELOP_CHOICES = [
-        (START, _("Hidden")),
-        (SHOW, _("Visible")),
-        (CANC, _("Cancelled")),
-        (DONE, _("Concluded")),
-    ]
+class DevelopStatus(models.TextChoices):
+    START = "0", _("Hidden")
+    SHOW = "1", _("Visible")
+    CANC = "8", _("Cancelled")
+    DONE = "9", _("Concluded")
 
+
+class Run(BaseModel):
     search = models.CharField(max_length=150, editable=False)
 
     development = models.CharField(
         max_length=1,
-        choices=DEVELOP_CHOICES,
-        default=START,
+        choices=DevelopStatus.choices,
+        default=DevelopStatus.START,
         verbose_name=_("Status"),
     )
 

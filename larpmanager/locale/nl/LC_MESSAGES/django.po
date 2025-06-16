@@ -453,6 +453,9 @@ msgstr "Verwijder"
 msgid "Detail"
 msgstr "Detail"
 
+msgid "Direct"
+msgstr "Direct"
+
 msgid "Events"
 msgstr "Evenementen"
 
@@ -689,6 +692,9 @@ msgstr "Identiteitskaart"
 
 msgid "Inflows"
 msgstr "Inkomsten"
+
+msgid "Inverse"
+msgstr "Omgekeerd"
 
 msgid "Invoice"
 msgstr "Factuur"
@@ -1160,9 +1166,6 @@ msgstr "Eerste hulp"
 
 msgid "Frequency"
 msgstr "Frequentie"
-
-msgid "Interface"
-msgstr "Interface"
 
 msgid "Inventory"
 msgstr "Inventaris"
@@ -2807,11 +2810,11 @@ msgstr "Show annuleringen"
 msgid "Total payment sent"
 msgstr "Totaal verzonden betaling"
 
-msgid "Total registration"
-msgstr "Totale invoer"
-
 msgid "Transaction totals"
 msgstr "Totaal transacties"
+
+msgid "Use these formats:"
+msgstr "Gebruik deze indelingen:"
 
 msgid "Verified payments!"
 msgstr "Geverifieerde betalingen!"
@@ -3279,6 +3282,9 @@ msgstr "Rolgoedkeuring %(role)s"
 msgid "Select your character!"
 msgstr "Selecteer je personage!"
 
+msgid "Total registration fee"
+msgstr "Totale registratiekosten"
+
 msgid "Unknow error on upload"
 msgstr "Onbekende fout bij uploaden"
 
@@ -3346,6 +3352,9 @@ msgstr "Minimumleeftijd: %(number)d"
 msgid "Minimum number of votes"
 msgstr "Minimumaantal in te dienen stemmen"
 
+msgid "Move registration event"
+msgstr "Verhuis registratie evenement"
+
 msgid "Number of primary spots"
 msgstr "Aantal primaire plaatsen"
 
@@ -3397,6 +3406,9 @@ msgstr "Controle snelheid larp ontbreekt"
 msgid "Code two capital letters"
 msgstr "Codeer twee hoofdletters"
 
+msgid "Disable character finder"
+msgstr "Tekenzoeker uitschakelen"
+
 #, python-format
 msgid "Disbursement %(credits)s"
 msgstr "Uitbetaling %(credits)s"
@@ -3431,9 +3443,6 @@ msgstr "Voorinschrijvingen opgeslagen!"
 
 msgid "Provisional registration"
 msgstr "Voorlopige registratie"
-
-msgid "Quick links organisation"
-msgstr "Snelle links organisatie"
 
 msgid "Secret registration link"
 msgstr "Geheime registratie link"
@@ -3523,9 +3532,6 @@ msgstr "Gebruik van activa van derden"
 
 msgid "Access character creation!"
 msgstr "Toegang tot het maken van personages!"
-
-msgid "Available payment methods:"
-msgstr "Beschikbare betalingsmethoden:"
 
 msgid "Can't copy from same event"
 msgstr "Kan niet kopiëren van dezelfde gebeurtenis"
@@ -3915,9 +3921,6 @@ msgstr "Op deze pagina staat een overzicht van de inschrijvingen voor de run."
 msgid "Total of recorded money outflows"
 msgstr "Totaal van geregistreerde uitgaande geldstromen"
 
-msgid "We ask you to pay the difference"
-msgstr "We vragen je om het verschil te betalen"
-
 msgid "Your question has been answered:"
 msgstr "Je vraag is beantwoord:"
 
@@ -4210,6 +4213,9 @@ msgstr "De volgende inzendingen zijn getrokken"
 msgid "This page shows cancelled enrollments."
 msgstr "Deze pagina geeft een overzicht van geannuleerde registraties."
 
+msgid "We ask you to pay the remaining amount"
+msgstr "We vragen je om het resterende bedrag te betalen"
+
 msgid "You already have an assigned character"
 msgstr "Je hebt al een toegewezen personage"
 
@@ -4406,6 +4412,9 @@ msgstr "Deze pagina geeft een overzicht van de geüploade fotoalbums."
 msgid "This page summarises the system entries of"
 msgstr "Deze pagina geeft een overzicht van de systeemingangen van"
 
+msgid "Allow to switch registration between events"
+msgstr "Registratie schakelen tussen evenementen toestaan"
+
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
 msgstr "Goedkeuring %(user)s als %(role)s voor %(event)s"
@@ -4473,6 +4482,9 @@ msgstr "Indien aangevinkt: toont de website voor elk evenement"
 
 msgid "Remember to put the prefix at the beginning!"
 msgstr "Vergeet niet het voorvoegsel aan het begin te zetten!"
+
+msgid "Select a character to add a new relationship"
+msgstr "Selecteer een personage om een nieuwe relatie toe te voegen"
 
 #, python-format
 msgid "The sum was disbursed to you as %(credits)s."
@@ -4646,6 +4658,9 @@ msgstr ""
 msgid "Names of the collaborators who are organizing it"
 msgstr "Namen van de medewerkers die het organiseren"
 
+msgid "No additional payments are required at this time"
+msgstr "Op dit moment zijn geen extra betalingen vereist"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Uitschrijven op %(event)s door %(user)s"
@@ -4705,6 +4720,9 @@ msgstr "Grondstoffen, verbruiksgoederen en goederen"
 #, python-format
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Herinnering betaling lidmaatschapsgeld voor %(event)s"
+
+msgid "Select a character to insert their reference code"
+msgstr "Selecteer een teken om hun referentiecode in te voegen"
 
 msgid "The user has been enabled for the indicated role."
 msgstr "De gebruiker is ingeschakeld voor de aangegeven rol."
@@ -4790,6 +4808,9 @@ msgstr "Attentie! Het formulier bevat fouten in de velden -"
 
 msgid "You cannot create a relationship towards yourself!"
 msgstr "Je kunt geen relatie met jezelf creëren!"
+
+msgid "you can still pay the remaining amount if you wish"
+msgstr "je kunt nog steeds het resterende bedrag betalen als je dat wilt"
 
 msgid "Fill in this field if you have accessibility needs."
 msgstr "Vul dit veld in als je toegankelijkheid nodig hebt."
@@ -4923,9 +4944,6 @@ msgstr ""
 
 msgid "This page shows the workshop questions for the event."
 msgstr "Deze pagina vat de workshopvragen van het evenement samen."
-
-msgid "You cannot add a relationship from character to self!"
-msgstr "Je kunt geen relatie toevoegen van personage naar zelf!"
 
 msgid "You have been gifted a registration to this event, by"
 msgstr "Je hebt toegang gekregen tot dit evenement, door"
@@ -5067,9 +5085,6 @@ msgid "We are processing your payment. Please wait a moment... "
 msgstr ""
 "We zijn je betaling aan het verwerken. Een ogenblik geduld alstublieft..."
 
-msgid "to indicate only the proper name of the other character."
-msgstr "om alleen de eigennaam van het andere teken aan te geven."
-
 msgid "Allows you to define a different language for each event."
 msgstr "Hiermee kun je voor elke gebeurtenis een andere taal instellen."
 
@@ -5106,10 +5121,6 @@ msgstr ""
 
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Totaal van uitgaven ingediend door medewerkers en goedgekeurd"
-
-msgid "We ask you to pay the difference from the next instalment"
-msgstr ""
-"We vragen je om het verschil te betalen vanaf de volgende betalingstermijn"
 
 msgid "You cannot redeem a membership, you are already a member!"
 msgstr "Je kunt geen lidmaatschap inwisselen, je bent al lid!"
@@ -5322,6 +5333,11 @@ msgstr "Toegevoegd aan de lidmaatschapspagina als paragraaf voor statuutinfo"
 msgid "Content of legal notice page linked at the bottom of all pages"
 msgstr "Inhoud van de pagina met juridische informatie onderaan alle pagina's"
 
+msgid "Description of this payment method to be displayed to the user"
+msgstr ""
+"Beschrijving van deze betaalmethode die moet worden weergegeven aan de "
+"gebruiker"
+
 msgid "If checked, an option can be chosen a maximum number of times."
 msgstr ""
 "Als deze optie is aangevinkt, kan deze een maximaal aantal keer worden "
@@ -5369,11 +5385,18 @@ msgstr ""
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "Om je inschrijving te bevestigen, betaal je het aangegeven bedrag."
 
+msgid "We ask you to pay the amount requested for the next instalment"
+msgstr "We vragen u het gevraagde bedrag voor de volgende termijn te betalen"
+
 msgid "You must complete payment of membership dues in order to vote!"
 msgstr "Je moet je lidmaatschapsgeld betalen om te kunnen stemmen!"
 
 msgid "Your request has been sent, we will reply as soon as possible!"
 msgstr "Je verzoek is verzonden, we zullen zo snel mogelijk antwoorden!"
+
+msgid "for no relationship, only to display the other character name."
+msgstr ""
+"voor geen relatie, alleen om de naam van het andere personage weer te geven."
 
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Beschrijving - wordt aan het begin van de sectie weergegeven"
@@ -5788,10 +5811,6 @@ msgid "Something went wrong in the account activation. Tell us more details. "
 msgstr ""
 "Er is iets misgegaan met je gebruikersactivering. Schrijf ons om het te "
 "corrigeren."
-
-msgid "This page allows you to add or edit a relationship between characters."
-msgstr ""
-"Op deze pagina kun je een relatie tussen personages toevoegen of bewerken."
 
 msgid "This page allows you to change the main settings of your Organization."
 msgstr ""
@@ -6697,6 +6716,13 @@ msgstr ""
 " elk personage bekijken."
 
 msgid ""
+"In rich text editors, you can reference other characters directly using "
+"their number."
+msgstr ""
+"In rich text editors kun je rechtstreeks naar andere tekens verwijzen door "
+"hun nummer te gebruiken."
+
+msgid ""
 "Requires Executive Committee approval of membership before participating in "
 "an event."
 msgstr ""
@@ -6927,13 +6953,6 @@ msgstr ""
 "deze beter kan worden herkend."
 
 msgid ""
-"If checked: In the event management panel, it also shows the association "
-"management links"
-msgstr ""
-"Indien aangevinkt: In het paneel voor gebeurtenissenbeheer worden ook de "
-"koppelingen voor associatiebeheer weergegeven"
-
-msgid ""
 "Indicate the maximum number of such discounts that can be requested (0 for "
 "infinite uses)"
 msgstr ""
@@ -7074,6 +7093,20 @@ msgstr ""
 "Waarde van de korting voor de geregistreerde speler die de code geeft aan "
 "een vriend die zich inschrijft"
 
+msgid ""
+"for bidirectional relationships, where the other character is also aware of "
+"the connection."
+msgstr ""
+"voor tweerichtingsrelaties, waarbij het andere personage ook op de hoogte is"
+" van de verbinding."
+
+msgid ""
+"for unidirectional relationships, where the other character is NOT aware of "
+"the connection."
+msgstr ""
+"voor unidirectionele relaties, waarbij het andere personage zich NIET bewust"
+" is van de verbinding."
+
 #, python-format
 msgid ""
 "Alternatively, you can request a reimbursement in <a href='%(url)s'>your "
@@ -7139,6 +7172,13 @@ msgid ""
 msgstr ""
 "Uw verzoek om terugbetaling van %(amount).2f, met reden '%(reason)s', is "
 "goedgekeurd!"
+
+msgid ""
+"Disable the system that finds the character number when a special reference "
+"symbol is written"
+msgstr ""
+"Het systeem uitschakelen dat het tekennummer vindt wanneer een speciaal "
+"verwijzingssymbool wordt geschreven"
 
 msgid ""
 "Enables 'Factions' to organize characters into groups, either visible, "
@@ -7274,13 +7314,6 @@ msgid ""
 msgstr ""
 "Je wordt op de hoogte gehouden wanneer er een nieuwe loop wordt "
 "georganiseerd en je hebt voorrang bij inschrijving!"
-
-msgid ""
-"Each payment method works differently, click on its name for a detailed "
-"guide on how to proceed."
-msgstr ""
-"Elke betaalmethode werkt anders. Klik op de naam voor een gedetailleerde "
-"handleiding."
 
 msgid ""
 "For each character added, a specific field will be available to add "
@@ -7444,13 +7477,6 @@ msgstr ""
 " in het formulier verborgen in plaats van uitgeschakeld weergegeven."
 
 msgid ""
-"Indicate the description you wish to be displayed when this payment method "
-"is proposed to the user."
-msgstr ""
-"Geef de beschrijving op die u wilt weergeven wanneer deze betaalmethode "
-"wordt voorgesteld aan de gebruiker."
-
-msgid ""
 "Provides users with comprehensive privacy controls to manage how their data "
 "is shared or displayed."
 msgstr ""
@@ -7612,13 +7638,6 @@ msgstr ""
 "kenmerk om de beschrijving weer te geven."
 
 msgid ""
-"for bidirectional relationships (love, colleagues, rivals), of which the "
-"other  character is aware of."
-msgstr ""
-"voor tweerichtingsrelaties (liefde, collega's, rivalen), waarvan het andere "
-"personage op de hoogte is."
-
-msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
 "available during registration."
 msgstr ""
@@ -7680,13 +7699,6 @@ msgid ""
 msgstr ""
 "Aantal dagen na de deadline waarna registraties worden gemarkeerd als "
 "geannuleerd (standaard 30 dagen)"
-
-msgid ""
-"Select the payment methods to be activated; then return to this page to "
-"enter the necessary information."
-msgstr ""
-"Selecteer de betaalmethoden die moeten worden geactiveerd; keer vervolgens "
-"terug naar deze pagina om de benodigde informatie in te voeren."
 
 msgid ""
 "The discount has been added! It has been reserved for you for 15 minutes, "
@@ -7856,6 +7868,13 @@ msgid ""
 msgstr ""
 "Toont af en toe een speciale pagina aan gebruikers, gebaseerd op een "
 "gedefinieerde waarschijnlijkheid, en kent optioneel een resultaat toe."
+
+msgid ""
+"Percentage to be retained by the payment system - enter the value as a "
+"number, without the percentage symbol"
+msgstr ""
+"Door het betalingssysteem in te houden percentage - voer de waarde in als "
+"een getal, zonder het procentsymbool"
 
 #, python-format
 msgid ""
@@ -8182,13 +8201,6 @@ msgstr ""
 "ontvangen. Wij danken u voor uw steun en voor uw geloof in ons!"
 
 msgid ""
-"for unidirectional relationships (secret hatred, loves but is unrequited), "
-"of that the other character is NOT aware of."
-msgstr ""
-"voor eenrichtingsrelaties (geheime haat, liefde maar onbeantwoord), waarvan "
-"het andere personage zich NIET bewust is."
-
-msgid ""
 "Enables basic inventory management. Users can add items to a warehouse "
 "table, track quantities, and note item locations."
 msgstr ""
@@ -8443,6 +8455,13 @@ msgstr ""
 "lijst van gebruikers die moeten worden gevraagd."
 
 msgid ""
+"When the text is displayed to the player, the number is automatically "
+"replaced with the character’s name and a link to their profile."
+msgstr ""
+"Wanneer de tekst aan de speler wordt getoond, wordt het nummer automatisch "
+"vervangen door de naam van het personage en een link naar hun profiel."
+
+msgid ""
 "this figure is the net that should result as availability of financial "
 "instruments - it does not take into account tokens and credits"
 msgstr ""
@@ -8511,14 +8530,6 @@ msgstr ""
 "Maakt 'breng een vriend mee'-korting mogelijk. Een geregistreerde speler "
 "geeft zijn unieke code aan een nieuwe geregistreerde, waardoor beiden "
 "korting krijgen."
-
-msgid ""
-"Enter the percentage to be managed as retained by the payment system. Enter "
-"the value as a number, without entering the percentage symbol."
-msgstr ""
-"Voer het percentage in dat moet worden beheerd als ingehouden door het "
-"betalingssysteem. Voer de waarde in als een getal, zonder het procentsymbool"
-" in te voeren."
 
 msgid ""
 "Manages pre-larp 'mini-scenes.' You can create any number of scenes and "
@@ -8852,6 +8863,15 @@ msgstr ""
 "het dan door en nodig anderen uit om zich voor te registreren!"
 
 msgid ""
+"When you press one of the special reference symbols, a popup will help you "
+"get the reference number of a character; you can also select a reference "
+"number to see the character’s name."
+msgstr ""
+"Als je op een van de speciale referentiesymbolen drukt, krijg je een pop-"
+"upvenster met het referentienummer van een personage; je kunt ook een "
+"referentienummer selecteren om de naam van het personage te zien."
+
+msgid ""
 "We only ask you to indicate a <b>order</b> of preference for the your pre-"
 "registrations (imagining you have to choose which one to play, indicates in "
 "what order you want to play them)."
@@ -8962,16 +8982,6 @@ msgstr ""
 "%(deadline)d dagen. Doe je betaling <a href='%(url)s'>op deze pagina</a>. "
 "Als we de betaling niet op tijd ontvangen, kan je lidmaatschap worden "
 "geannuleerd."
-
-msgid ""
-"In the 'Presentation' and 'Text' fields you can refer to other characters "
-"using their number directly, in the final text the number will automatically"
-" be replaced with their name, and a link to the character. Use:"
-msgstr ""
-"In de velden 'Presentatie' en 'Tekst' kun je rechtstreeks naar andere "
-"personages verwijzen door hun nummer te gebruiken. In de uiteindelijke tekst"
-" wordt het nummer automatisch vervangen door hun naam en een link naar het "
-"personage. Gebruik:"
 
 msgid ""
 "Indicates the ratio between reduced and patron tickets, multiplied by 10. "

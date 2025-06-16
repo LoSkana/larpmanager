@@ -31,6 +31,12 @@
                 {% endif %}
             {% endfor %}
         {% endif %}
+        {% if features.plot %}
+            <a href="#" class="my_toggle" tog='plots'>{% trans "Plots" %}</a>
+        {% endif %}
+        {% if features.relationships %}
+            <a href="#" class="my_toggle" tog='relationships'>{% trans "Relationships" %}</a>
+        {% endif %}
         {% if features.speedlarp %}
             <a href="#" class="my_toggle" tog='speedlarp'>{% trans "speedlarp" %}</a>
         {% endif %}
@@ -59,11 +65,12 @@
                     {% endfor %}
                 {% endif %}
                 {% if features.plot %}
-                    <th>{% trans "Plots" %}</th>
-                    <th>(N)</th>
+                    <th class="hide plots">{% trans "Plots" %}</th>
+                    <th class="hide plots">(N)</th>
                 {% endif %}
                 {% if features.relationships %}
-                    <th>{% trans "Relationships" %} (N)</th>
+                    <th class="hide relationships">{% trans "Relationships" %}</th>
+                    <th class="hide relationships">(N)</th>
                 {% endif %}
                 {% if features.speedlarp %}
                     <th class="hide speedlarp">{% trans "Speedlarp" %}</th>
@@ -81,10 +88,6 @@
                     <td>
                         <a href="{% url 'orga_characters_versions' run.event.slug run.number el.id %}">{% trans "Versions" %}</a> &nbsp;
                         <a href="{% url 'character' run.event.slug run.number el.number %}">{% trans "Gallery" %}</a> &nbsp;
-                        {% if features.relationships %}
-                            <br />
-                            <a href="{% url 'orga_characters_relationships' run.event.slug run.number el.id %}">{% trans "Relationships" %}</a>   &nbsp;
-                        {% endif %}
                     </td>
                     {% if user_character_max %}<td class="hide player">{{ el.player.show_nick }}</td>{% endif %}
                     {% if user_character_approval %}<td class="hide status">{{ el.get_status_display }}</td>{% endif %}
@@ -155,14 +158,21 @@
                         {% endif %}
                     {% endfor %}
                     {% if features.plot %}
-                        <td>
+                        <td class="hide plots">
                             {% for p in el.plts %}
                                 <a href="{% url 'orga_plots_edit' run.event.slug run.number p.1 %}">{{ p.0 }}</a>
                             {% endfor %}
                         </td>
-                        <td>{{ el.plts | length }}</td>
+                        <td class="hide plots">{{ el.plts | length }}</td>
                     {% endif %}
-                    {% if features.relationships %}<td>{{ el.cache_relationship_count }}</td>{% endif %}
+                    {% if features.relationships %}
+                        <td class="hide relationships">
+                            {% for rel in el.source.all %}
+                                <a href="{% url 'orga_characters_edit' run.event.slug run.number rel.target_id %}">{{ rel.target }}</a>
+                            {% endfor %}
+                        </td>
+                        <td class="hide relationships">{{ el.source.count }}</td>
+                    {% endif %}
                     {% if features.speedlarp %}
                         <td class="hide speedlarp">
                             {% for p in el.speedlarps_list.all %}

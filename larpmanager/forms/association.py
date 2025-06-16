@@ -229,7 +229,7 @@ class ExeFeatureForm(FeatureForm):
         "This page allows you to select the features activated for the organization, and all its events. Click on a feature to show its description."
     )
 
-    load_js = "feature_checkbox"
+    load_js = ["feature_checkbox"]
 
     class Meta:
         model = Association
@@ -253,7 +253,7 @@ class ExeConfigForm(ConfigForm):
 
     section_replace = True
 
-    load_js = "config-search"
+    load_js = ["config-search"]
 
     istr = []
 
@@ -301,14 +301,7 @@ class ExeConfigForm(ConfigForm):
         help_text = _("If checked: shows the tagline for each event")
         self.add_configs("calendar_tagline", ConfigType.BOOL, section, label, help_text)
 
-        # ## INTERFACE
-
-        section = _("Interface")
-        label = _("Quick links organisation")
-        help_text = _("If checked: In the event management panel, it also shows the association management links")
-        self.add_configs("interface_admin_links", ConfigType.BOOL, section, label, help_text)
-
-        # ## MAIL
+        # MAIL
         section = _("Email notifications")
 
         label = _("Carbon copy")
@@ -374,6 +367,13 @@ class ExeConfigForm(ConfigForm):
             label = _("Page")
             help_text = _("Contents of the special page")
             self.add_configs("centauri_content", ConfigType.HTML, section, label, help_text)
+
+        if "campaign" in self.params["features"]:
+            section = _("Campaign")
+
+            label = _("Move registration event")
+            help_text = _("Allow to switch registration between events")
+            self.add_configs("campaign_switch", ConfigType.BOOL, section, label, help_text)
 
     def set_config_members(self):
         if "deadlines" in self.params["features"]:

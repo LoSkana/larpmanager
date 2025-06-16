@@ -25,7 +25,7 @@ from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.models.accounting import AccountingItemExpense, AccountingItemOther, AccountingItemPayment
-from larpmanager.models.event import Run
+from larpmanager.models.event import DevelopStatus
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_sum
@@ -70,7 +70,7 @@ def registration_tokens_credits(reg, remaining, features, assoc_id):
 
 def get_runs_paying_incomplete():
     reg_que = Registration.objects.filter(cancellation_date__isnull=True)
-    reg_que = reg_que.exclude(run__development__in=[Run.CANC, Run.DONE])
+    reg_que = reg_que.exclude(run__development__in=[DevelopStatus.CANC, DevelopStatus.DONE])
     reg_que = reg_que.annotate(diff=Abs(F("tot_payed") - F("tot_iscr"))).exclude(diff__lt=0.05)
     return reg_que
 

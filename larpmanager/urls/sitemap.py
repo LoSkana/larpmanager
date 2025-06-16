@@ -38,6 +38,7 @@ from larpmanager.models.association import (
     Association,
 )
 from larpmanager.models.event import (
+    DevelopStatus,
     Run,
 )
 from larpmanager.models.larpmanager import (
@@ -107,7 +108,7 @@ class EventSitemap(sitemaps.Sitemap):
     ):
         s = []
         cache = {}
-        que = Run.objects.exclude(development=Run.START).exclude(development=Run.CANC)
+        que = Run.objects.exclude(development=DevelopStatus.START).exclude(development=DevelopStatus.CANC)
         que = que.select_related(
             "event",
             "event__assoc",

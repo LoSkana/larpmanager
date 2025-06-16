@@ -16,13 +16,19 @@
             </p>
         {% endif %}
         {% if features.reg_installments or features.reg_quotas %}
-            <p>
-                {% trans "We ask you to pay the difference from the next instalment" %}: <b>{{ reg.quota|format_decimal }}{{ currency_symbol }}</b>
-            </p>
+            {% if reg.quota %}
+                <p>
+                    {% trans "We ask you to pay the amount requested for the next instalment" %}: <b>{{ reg.quota|format_decimal }}{{ currency_symbol }}</b>
+                </p>
+            {% else %}
+                <p>
+                    {% trans "We ask you to pay the remaining amount" %}: <b>{{ quota|format_decimal }}{{ currency_symbol }}</b>
+                </p>
+            {% endif %}
         {% else %}
             {% if reg.tot_payed %}
                 <p>
-                    {% trans "We ask you to pay the difference" %}: <b>{{ reg.quota|format_decimal }}{{ currency_symbol }}</b>
+                    {% trans "We ask you to pay the remaining amount" %}: <b>{{ reg.quota|format_decimal }}{{ currency_symbol }}</b>
                 </p>
             {% endif %}
         {% endif %}

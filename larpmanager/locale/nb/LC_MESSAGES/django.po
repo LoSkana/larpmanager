@@ -453,6 +453,9 @@ msgstr "Slett"
 msgid "Detail"
 msgstr "Detaljer"
 
+msgid "Direct"
+msgstr "Direkte"
+
 msgid "Events"
 msgstr "Arrangementer"
 
@@ -689,6 +692,9 @@ msgstr "Identitetskort"
 
 msgid "Inflows"
 msgstr "Inntekter"
+
+msgid "Inverse"
+msgstr "Invers"
 
 msgid "Invoice"
 msgstr "Faktura"
@@ -1160,9 +1166,6 @@ msgstr "Førstehjelp"
 
 msgid "Frequency"
 msgstr "Frekvens"
-
-msgid "Interface"
-msgstr "Grensesnitt"
 
 msgid "Inventory"
 msgstr "Lagerbeholdning"
@@ -2807,11 +2810,11 @@ msgstr "Avlysninger av forestillinger"
 msgid "Total payment sent"
 msgstr "Total innbetaling sendt"
 
-msgid "Total registration"
-msgstr "Total oppføring"
-
 msgid "Transaction totals"
 msgstr "Transaksjoner totalt"
+
+msgid "Use these formats:"
+msgstr "Bruk disse formatene:"
 
 msgid "Verified payments!"
 msgstr "Verifiserte betalinger!"
@@ -3279,6 +3282,9 @@ msgstr "Godkjenning av rolle %(role)s"
 msgid "Select your character!"
 msgstr "Velg din karakter!"
 
+msgid "Total registration fee"
+msgstr "Total registreringsavgift"
+
 msgid "Unknow error on upload"
 msgstr "Ukjent feil ved opplasting"
 
@@ -3346,6 +3352,9 @@ msgstr "Minimumsalder: %(number)d"
 msgid "Minimum number of votes"
 msgstr "Minimum antall stemmer som skal sendes inn"
 
+msgid "Move registration event"
+msgstr "Flytt registreringsarrangement"
+
 msgid "Number of primary spots"
 msgstr "Antall primærplasser"
 
@@ -3397,6 +3406,9 @@ msgstr "Sjekk hastighet larp mangler"
 msgid "Code two capital letters"
 msgstr "Kode to store bokstaver"
 
+msgid "Disable character finder"
+msgstr "Deaktiver tegnfinner"
+
 #, python-format
 msgid "Disbursement %(credits)s"
 msgstr "Utbetaling %(credits)s"
@@ -3431,9 +3443,6 @@ msgstr "Forhåndsregistreringene er lagret!"
 
 msgid "Provisional registration"
 msgstr "Foreløpig registrering"
-
-msgid "Quick links organisation"
-msgstr "Organisering av hurtigkoblinger"
 
 msgid "Secret registration link"
 msgstr "Hemmelig registreringslenke"
@@ -3523,9 +3532,6 @@ msgstr "Bruk av tredjeparts eiendeler"
 
 msgid "Access character creation!"
 msgstr "Få tilgang til karakteroppretting!"
-
-msgid "Available payment methods:"
-msgstr "Tilgjengelige betalingsmetoder:"
 
 msgid "Can't copy from same event"
 msgstr "Kan ikke kopiere fra samme hendelse"
@@ -3915,9 +3921,6 @@ msgstr "Denne siden oppsummerer påmeldingene til løpet."
 msgid "Total of recorded money outflows"
 msgstr "Summen av registrerte pengeutbetalinger"
 
-msgid "We ask you to pay the difference"
-msgstr "Vi ber deg om å betale differansen"
-
 msgid "Your question has been answered:"
 msgstr "Du har fått svar på spørsmålet ditt:"
 
@@ -4210,6 +4213,9 @@ msgstr "Følgende bidrag ble trukket ut"
 msgid "This page shows cancelled enrollments."
 msgstr "Denne siden oppsummerer kansellerte registreringer."
 
+msgid "We ask you to pay the remaining amount"
+msgstr "Vi ber deg om å betale det resterende beløpet"
+
 msgid "You already have an assigned character"
 msgstr "Du har allerede en tildelt karakter"
 
@@ -4404,6 +4410,9 @@ msgstr "Denne siden oppsummerer de opplastede fotoalbumene."
 msgid "This page summarises the system entries of"
 msgstr "Denne siden oppsummerer systemoppføringene til"
 
+msgid "Allow to switch registration between events"
+msgstr "Tillat å bytte registrering mellom arrangementer"
+
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
 msgstr "Godkjenning av %(user)s som %(role)s for %(event)s"
@@ -4471,6 +4480,9 @@ msgstr "Hvis avkrysset: viser nettstedet for hvert arrangement"
 
 msgid "Remember to put the prefix at the beginning!"
 msgstr "Husk å sette prefikset i begynnelsen!"
+
+msgid "Select a character to add a new relationship"
+msgstr "Velg et tegn for å legge til en ny relasjon"
 
 #, python-format
 msgid "The sum was disbursed to you as %(credits)s."
@@ -4637,6 +4649,9 @@ msgstr "Endre noen karakteregenskaper for å gjøre den til din egen!"
 msgid "Names of the collaborators who are organizing it"
 msgstr "Navn på samarbeidspartnerne som organiserer den"
 
+msgid "No additional payments are required at this time"
+msgstr "Ingen ytterligere innbetalinger er påkrevd på dette tidspunktet"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Avslutte abonnementet på %(event)s av %(user)s"
@@ -4696,6 +4711,9 @@ msgstr "Råvarer, forbruksvarer og varer"
 #, python-format
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Påminnelse om betaling av medlemskontingent for %(event)s"
+
+msgid "Select a character to insert their reference code"
+msgstr "Velg et tegn for å sette inn referansekoden"
 
 msgid "The user has been enabled for the indicated role."
 msgstr "Brukeren har blitt aktivert for den angitte rollen."
@@ -4779,6 +4797,9 @@ msgstr "Vær oppmerksom på dette! Skjemaet inneholder feil i feltene"
 
 msgid "You cannot create a relationship towards yourself!"
 msgstr "Du kan ikke skape et forhold til deg selv!"
+
+msgid "you can still pay the remaining amount if you wish"
+msgstr "du kan fortsatt betale det resterende beløpet hvis du ønsker det"
 
 msgid "Fill in this field if you have accessibility needs."
 msgstr "Fyll ut dette feltet hvis du har behov for universell utforming."
@@ -4905,9 +4926,6 @@ msgstr "Denne siden oppsummerer koblingene mellom karakterene."
 
 msgid "This page shows the workshop questions for the event."
 msgstr "Denne siden oppsummerer spørsmålene fra workshopen."
-
-msgid "You cannot add a relationship from character to self!"
-msgstr "Du kan ikke legge til en relasjon fra karakteren til deg selv!"
 
 msgid "You have been gifted a registration to this event, by"
 msgstr "Du har fått en inngangsbillett til dette arrangementet av"
@@ -5041,9 +5059,6 @@ msgstr "På denne siden kan du holde oversikt over rapporterte problemer."
 msgid "We are processing your payment. Please wait a moment... "
 msgstr "Vi behandler betalingen din. Vennligst vent et øyeblikk..."
 
-msgid "to indicate only the proper name of the other character."
-msgstr "for å angi bare egennavnet til det andre tegnet."
-
 msgid "Allows you to define a different language for each event."
 msgstr "Gjør det mulig å definere et annet språk for hver hendelse."
 
@@ -5075,9 +5090,6 @@ msgstr ""
 
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Summen av utgifter som er sendt inn av samarbeidspartnere og godkjent"
-
-msgid "We ask you to pay the difference from the next instalment"
-msgstr "Vi ber deg betale differansen fra neste avdrag"
 
 msgid "You cannot redeem a membership, you are already a member!"
 msgstr "Du kan ikke løse inn et medlemskap, du er allerede medlem!"
@@ -5280,6 +5292,9 @@ msgstr ""
 "Innholdet på siden med juridiske merknader er lenket til nederst på alle "
 "sider"
 
+msgid "Description of this payment method to be displayed to the user"
+msgstr "Beskrivelse av betalingsmåten som skal vises for brukeren"
+
 msgid "If checked, an option can be chosen a maximum number of times."
 msgstr ""
 "Hvis det er krysset av, kan et alternativ velges maksimalt antall ganger."
@@ -5322,11 +5337,17 @@ msgstr ""
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "For å bekrefte påmeldingen må du betale det angitte beløpet."
 
+msgid "We ask you to pay the amount requested for the next instalment"
+msgstr "Vi ber deg om å betale det beløpet vi ber om for neste avdrag"
+
 msgid "You must complete payment of membership dues in order to vote!"
 msgstr "Du må fullføre betalingen av medlemskontingenten for å kunne stemme!"
 
 msgid "Your request has been sent, we will reply as soon as possible!"
 msgstr "Forespørselen din er sendt, vi vil svare så snart som mulig!"
+
+msgid "for no relationship, only to display the other character name."
+msgstr "for ingen relasjon, bare for å vise det andre tegnnavnet."
 
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Beskrivelse - vises i begynnelsen av seksjonen"
@@ -5708,10 +5729,6 @@ msgid "Something went wrong in the account activation. Tell us more details. "
 msgstr ""
 "Noe gikk galt med brukeraktiveringen din. Skriv til oss for å rette opp i "
 "dette."
-
-msgid "This page allows you to add or edit a relationship between characters."
-msgstr ""
-"På denne siden kan du legge til eller redigere en relasjon mellom tegn."
 
 msgid "This page allows you to change the main settings of your Organization."
 msgstr "På denne siden kan du endre hovedinnstillingene for foreningen."
@@ -6560,6 +6577,13 @@ msgstr ""
 "karakter."
 
 msgid ""
+"In rich text editors, you can reference other characters directly using "
+"their number."
+msgstr ""
+"I redigeringsprogrammer for rik tekst kan du referere til andre tegn direkte"
+" ved hjelp av nummeret deres."
+
+msgid ""
 "Requires Executive Committee approval of membership before participating in "
 "an event."
 msgstr ""
@@ -6789,13 +6813,6 @@ msgstr ""
 "lettere å gjenkjenne den."
 
 msgid ""
-"If checked: In the event management panel, it also shows the association "
-"management links"
-msgstr ""
-"Hvis avkrysset: I panelet for hendelsesadministrasjon vises også koblingene "
-"for assosiasjonsadministrasjon"
-
-msgid ""
 "Indicate the maximum number of such discounts that can be requested (0 for "
 "infinite uses)"
 msgstr ""
@@ -6935,6 +6952,20 @@ msgstr ""
 "Verdien av rabatten for den registrerte spilleren som gir koden til en venn "
 "som registrerer seg."
 
+msgid ""
+"for bidirectional relationships, where the other character is also aware of "
+"the connection."
+msgstr ""
+"for toveis relasjoner, der den andre karakteren også er klar over "
+"forbindelsen."
+
+msgid ""
+"for unidirectional relationships, where the other character is NOT aware of "
+"the connection."
+msgstr ""
+"for ensrettede relasjoner, der det andre tegnet IKKE er klar over "
+"forbindelsen."
+
 #, python-format
 msgid ""
 "Alternatively, you can request a reimbursement in <a href='%(url)s'>your "
@@ -6999,6 +7030,13 @@ msgid ""
 msgstr ""
 "Din anmodning om tilbakebetaling av %(amount).2f, med årsak '%(reason)s', er"
 " godkjent!"
+
+msgid ""
+"Disable the system that finds the character number when a special reference "
+"symbol is written"
+msgstr ""
+"Deaktiver systemet som finner tegnnummeret når et spesielt referansesymbol "
+"skrives"
 
 msgid ""
 "Enables 'Factions' to organize characters into groups, either visible, "
@@ -7134,13 +7172,6 @@ msgid ""
 msgstr ""
 "Du vil bli informert når det arrangeres et nytt løp, og du har forkjøpsrett "
 "ved påmelding!"
-
-msgid ""
-"Each payment method works differently, click on its name for a detailed "
-"guide on how to proceed."
-msgstr ""
-"Hver betalingsmetode fungerer forskjellig, klikk på navnet for å få en "
-"detaljert veiledning om hvordan du går frem."
 
 msgid ""
 "For each character added, a specific field will be available to add "
@@ -7304,13 +7335,6 @@ msgstr ""
 "skjemaet, i stedet for å vises deaktivert"
 
 msgid ""
-"Indicate the description you wish to be displayed when this payment method "
-"is proposed to the user."
-msgstr ""
-"Angi beskrivelsen du ønsker skal vises når denne betalingsmåten foreslås for"
-" brukeren."
-
-msgid ""
 "Provides users with comprehensive privacy controls to manage how their data "
 "is shared or displayed."
 msgstr ""
@@ -7472,13 +7496,6 @@ msgstr ""
 "å vise beskrivelsen av den."
 
 msgid ""
-"for bidirectional relationships (love, colleagues, rivals), of which the "
-"other  character is aware of."
-msgstr ""
-"for toveisrelasjoner (kjærlighet, kolleger, rivaler) som den andre "
-"karakteren er klar over."
-
-msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
 "available during registration."
 msgstr ""
@@ -7540,13 +7557,6 @@ msgid ""
 msgstr ""
 "Antall dager etter at fristen er utløpt som registreringer markeres som "
 "kansellerte (standard 30 dager)"
-
-msgid ""
-"Select the payment methods to be activated; then return to this page to "
-"enter the necessary information."
-msgstr ""
-"Velg betalingsmåtene som skal aktiveres, og gå deretter tilbake til denne "
-"siden for å legge inn nødvendig informasjon."
 
 msgid ""
 "The discount has been added! It has been reserved for you for 15 minutes, "
@@ -7716,6 +7726,13 @@ msgid ""
 msgstr ""
 "Viser av og til en spesiell side til brukerne, basert på en definert "
 "sannsynlighet, og tildeler eventuelt et resultat."
+
+msgid ""
+"Percentage to be retained by the payment system - enter the value as a "
+"number, without the percentage symbol"
+msgstr ""
+"Prosentandel som skal beholdes av betalingssystemet - skriv inn verdien som "
+"et tall, uten prosentsymbolet"
 
 #, python-format
 msgid ""
@@ -8038,13 +8055,6 @@ msgstr ""
 "takker for støtten og for at du tror på oss!"
 
 msgid ""
-"for unidirectional relationships (secret hatred, loves but is unrequited), "
-"of that the other character is NOT aware of."
-msgstr ""
-"for enveisforhold (hemmelig hat, ulykkelig kjærlighet), som den andre "
-"karakteren IKKE er klar over."
-
-msgid ""
 "Enables basic inventory management. Users can add items to a warehouse "
 "table, track quantities, and note item locations."
 msgstr ""
@@ -8291,6 +8301,13 @@ msgstr ""
 "aktivitetene som skal overvåkes og listen over brukere som skal forespørres."
 
 msgid ""
+"When the text is displayed to the player, the number is automatically "
+"replaced with the character’s name and a link to their profile."
+msgstr ""
+"Når teksten vises for spilleren, erstattes nummeret automatisk med "
+"karakterens navn og en lenke til profilen."
+
+msgid ""
 "this figure is the net that should result as availability of financial "
 "instruments - it does not take into account tokens and credits"
 msgstr ""
@@ -8357,13 +8374,6 @@ msgid ""
 msgstr ""
 "Aktiverer \"ta med en venn\"-rabatt. En registrert spiller gir sin unike "
 "kode til en ny registrert, slik at begge får rabatt."
-
-msgid ""
-"Enter the percentage to be managed as retained by the payment system. Enter "
-"the value as a number, without entering the percentage symbol."
-msgstr ""
-"Angi prosentandelen som skal forvaltes som tilbakeholdt av "
-"betalingssystemet. Angi verdien som et tall, uten å angi prosentsymbolet."
 
 msgid ""
 "Manages pre-larp 'mini-scenes.' You can create any number of scenes and "
@@ -8685,6 +8695,15 @@ msgstr ""
 "inviter andre til å forhåndspåmelde seg!"
 
 msgid ""
+"When you press one of the special reference symbols, a popup will help you "
+"get the reference number of a character; you can also select a reference "
+"number to see the character’s name."
+msgstr ""
+"Når du trykker på et av de spesielle referansesymbolene, får du opp et "
+"popup-vindu som hjelper deg med å finne referansenummeret til et tegn; du "
+"kan også velge et referansenummer for å se tegnets navn."
+
+msgid ""
 "We only ask you to indicate a <b>order</b> of preference for the your pre-"
 "registrations (imagining you have to choose which one to play, indicates in "
 "what order you want to play them)."
@@ -8794,15 +8813,6 @@ msgstr ""
 "Du må betale minst <b>%(amount).2f %(currency)s</b> innen %(deadline)d "
 "dager. Gjør betalingen <a href='%(url)s'>på denne siden</a>. Hvis vi ikke "
 "mottar betaling innen fristen, kan medlemskapet ditt bli kansellert."
-
-msgid ""
-"In the 'Presentation' and 'Text' fields you can refer to other characters "
-"using their number directly, in the final text the number will automatically"
-" be replaced with their name, and a link to the character. Use:"
-msgstr ""
-"I feltene \"Presentasjon\" og \"Tekst\" kan du henvise til andre tegn ved å "
-"bruke nummeret deres direkte, og i den endelige teksten vil nummeret "
-"automatisk bli erstattet med navnet deres og en lenke til tegnet. Brukes:"
 
 msgid ""
 "Indicates the ratio between reduced and patron tickets, multiplied by 10. "

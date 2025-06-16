@@ -31,6 +31,7 @@ from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.http import require_POST
 from PIL import Image
 
 from larpmanager.cache.character import get_character_cache_fields, get_character_fields, get_event_cache_all
@@ -62,6 +63,7 @@ from larpmanager.models.writing import (
     Character,
     CharacterStatus,
 )
+from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
 from larpmanager.utils.common import (
     get_player_relationship,
@@ -420,3 +422,20 @@ def character_relationships_edit(request, s, n, num, oth):
     if user_edit(request, ctx, PlayerRelationshipForm, "relationship", oth):
         return redirect("character_relationships", s=ctx["event"].slug, n=ctx["run"].number, num=ctx["char"]["number"])
     return render(request, "larpmanager/orga/edit.html", ctx)
+
+
+@require_POST
+def show_char(request, s, n):
+    ctx = get_event_run(request, s, n)
+    get_event_cache_all(ctx)
+    search = request.POST.get("text", "").strip()
+    if not search.startswith(("#", "@", "^")):
+        raise Http404(f"malformed request {search}")
+    search = int(search[1:])
+    if not search:
+        raise Http404(f"not valid search {search}")
+    if search not in ctx["chars"]:
+        raise Http404(f"not present char number {search}")
+    ch = ctx["chars"][search]
+    tooltip = get_tooltip(ctx, ch)
+    return JsonResponse({"content": f"<div class='show_char'>{tooltip}</div>"})

@@ -204,21 +204,6 @@ class Association(BaseModel):
         # noinspection PyUnresolvedReferences
         return get_currency_symbol(self.get_payment_currency_display())
 
-    def get_payment_details_fields(self, features):
-        res = {}
-        # noinspection PyUnresolvedReferences
-        for el in self.payment_methods.values_list("slug", "fields"):
-            ls = [el[0] + "_descr"]
-            if "payment_fees" in features:
-                ls.append(el[0] + "_fee")
-            if not el[1]:
-                continue
-            fields = el[1].replace(" ", "")
-            for s in fields.split(","):
-                ls.append(el[0] + "_" + s)
-            res[el[0]] = ls
-        return res
-
     def get_config(self, name, def_v=None):
         return get_element_config(self, name, def_v)
 
