@@ -3740,7 +3740,7 @@ msgstr ""
 msgid "Accounting"
 msgstr ""
 
-msgid "Total registration"
+msgid "Total registration fee"
 msgstr ""
 
 msgid "Total payments"
@@ -3756,6 +3756,12 @@ msgid "days"
 msgstr ""
 
 msgid "overdue by"
+msgstr ""
+
+msgid "No additional payments are required at this time"
+msgstr ""
+
+msgid "you can still pay the remaining amount if you wish"
 msgstr ""
 
 msgid "Organization"
@@ -5239,10 +5245,10 @@ msgstr ""
 msgid "So far you have paid a total of"
 msgstr ""
 
-msgid "We ask you to pay the difference from the next instalment"
+msgid "We ask you to pay the amount requested for the next instalment"
 msgstr ""
 
-msgid "We ask you to pay the difference"
+msgid "We ask you to pay the remaining amount"
 msgstr ""
 
 msgid "Would you like to pay a different amount?"

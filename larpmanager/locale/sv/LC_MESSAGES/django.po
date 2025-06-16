@@ -2810,9 +2810,6 @@ msgstr "Avbokningar av visningar"
 msgid "Total payment sent"
 msgstr "Totalt skickad betalning"
 
-msgid "Total registration"
-msgstr "Total post"
-
 msgid "Transaction totals"
 msgstr "Summa transaktioner"
 
@@ -3284,6 +3281,9 @@ msgstr "Godkännande av roll %(role)s"
 
 msgid "Select your character!"
 msgstr "Välj din karaktär!"
+
+msgid "Total registration fee"
+msgstr "Total registreringsavgift"
 
 msgid "Unknow error on upload"
 msgstr "Okänt fel vid uppladdning"
@@ -3921,9 +3921,6 @@ msgstr "På denna sida finns en sammanfattning av anmälningarna till loppet."
 msgid "Total of recorded money outflows"
 msgstr "Totalt antal registrerade penningutflöden"
 
-msgid "We ask you to pay the difference"
-msgstr "Vi ber dig att betala mellanskillnaden"
-
 msgid "Your question has been answered:"
 msgstr "Din fråga har besvarats:"
 
@@ -4215,6 +4212,9 @@ msgstr "Följande bidrag lottades ut"
 
 msgid "This page shows cancelled enrollments."
 msgstr "Denna sida sammanfattar annullerade registreringar."
+
+msgid "We ask you to pay the remaining amount"
+msgstr "Vi ber dig att betala det återstående beloppet"
 
 msgid "You already have an assigned character"
 msgstr "Du har redan en tilldelad karaktär"
@@ -4650,6 +4650,9 @@ msgstr "Ändra några karaktärsdrag för att göra den till din egen!"
 msgid "Names of the collaborators who are organizing it"
 msgstr "Namn på de medarbetare som organiserar det"
 
+msgid "No additional payments are required at this time"
+msgstr "Inga ytterligare betalningar krävs för närvarande"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Avprenumerera på %(event)s av %(user)s"
@@ -4796,6 +4799,9 @@ msgstr "Var uppmärksam! Formuläret innehåller fel i fälten -"
 
 msgid "You cannot create a relationship towards yourself!"
 msgstr "Du kan inte skapa en relation till dig själv!"
+
+msgid "you can still pay the remaining amount if you wish"
+msgstr "du kan fortfarande betala det återstående beloppet om du vill"
 
 msgid "Fill in this field if you have accessibility needs."
 msgstr "Fyll i detta fält om du har tillgänglighetsbehov."
@@ -5086,9 +5092,6 @@ msgstr ""
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Summa av kostnader som lämnats in av medarbetare och godkänts"
 
-msgid "We ask you to pay the difference from the next instalment"
-msgstr "Vi ber dig betala mellanskillnaden från och med nästa delbetalning"
-
 msgid "You cannot redeem a membership, you are already a member!"
 msgstr "Du kan inte lösa in ett medlemskap, du är redan medlem!"
 
@@ -5332,6 +5335,9 @@ msgstr ""
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr ""
 "För att bekräfta din registrering, vänligen betala det belopp som anges."
+
+msgid "We ask you to pay the amount requested for the next instalment"
+msgstr "Vi ber dig att betala det belopp som begärs för nästa delbetalning"
 
 msgid "You must complete payment of membership dues in order to vote!"
 msgstr "Du måste ha betalat medlemsavgiften för att få rösta!"

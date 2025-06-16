@@ -2810,9 +2810,6 @@ msgstr "Anulowanie pokazu"
 msgid "Total payment sent"
 msgstr "Całkowita wysłana płatność"
 
-msgid "Total registration"
-msgstr "Całkowita rejestracja"
-
 msgid "Transaction totals"
 msgstr "Suma transakcji"
 
@@ -3284,6 +3281,9 @@ msgstr "Zatwierdzenie roli %(role)s"
 
 msgid "Select your character!"
 msgstr "Wybierz swoją postać!"
+
+msgid "Total registration fee"
+msgstr "Całkowita opłata rejestracyjna"
 
 msgid "Unknow error on upload"
 msgstr "Nieznany błąd podczas przesyłania"
@@ -3921,9 +3921,6 @@ msgstr "Ta strona pokazuje zapisy do biegu."
 msgid "Total of recorded money outflows"
 msgstr "Suma zarejestrowanych wypływów pieniężnych"
 
-msgid "We ask you to pay the difference"
-msgstr "Prosimy o zapłatę różnicy"
-
 msgid "Your question has been answered:"
 msgstr "Odpowiedź na twoje pytanie została udzielona:"
 
@@ -4215,6 +4212,9 @@ msgstr "Wylosowano następujące rejestracje"
 
 msgid "This page shows cancelled enrollments."
 msgstr "Na tej stronie wyświetlane są anulowane zapisy."
+
+msgid "We ask you to pay the remaining amount"
+msgstr "Prosimy o wpłacenie pozostałej kwoty"
 
 msgid "You already have an assigned character"
 msgstr "Masz już przypisaną postać"
@@ -4645,6 +4645,9 @@ msgstr "Zmodyfikuj niektóre elementy postaci, aby uczynić ją swoją!"
 msgid "Names of the collaborators who are organizing it"
 msgstr "Nazwiska współpracowników, którzy go organizują"
 
+msgid "No additional payments are required at this time"
+msgstr "Obecnie nie są wymagane żadne dodatkowe płatności"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Rejestracja anulowana dla %(event)s przez %(user)s"
@@ -4791,6 +4794,9 @@ msgstr "Ostrzeżenie. Formularz zawiera błędy w polach -"
 
 msgid "You cannot create a relationship towards yourself!"
 msgstr "Nie możesz stworzyć relacji z samym sobą!"
+
+msgid "you can still pay the remaining amount if you wish"
+msgstr "Jeśli chcesz, nadal możesz zapłacić pozostałą kwotę"
 
 msgid "Fill in this field if you have accessibility needs."
 msgstr "Wypełnij to pole, jeśli potrzebujesz ułatwień dostępu."
@@ -5075,9 +5081,6 @@ msgstr ""
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Suma wydatków przedstawionych przez współpracowników i zatwierdzonych"
 
-msgid "We ask you to pay the difference from the next instalment"
-msgstr "Prosimy o zapłatę różnicy od następnej raty"
-
 msgid "You cannot redeem a membership, you are already a member!"
 msgstr "Nie możesz wykupić członkostwa, jesteś już członkiem!"
 
@@ -5319,6 +5322,9 @@ msgstr ""
 
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "Aby potwierdzić rejestrację, należy wpłacić wskazaną kwotę."
+
+msgid "We ask you to pay the amount requested for the next instalment"
+msgstr "Prosimy o zapłatę żądanej kwoty za kolejną ratę"
 
 msgid "You must complete payment of membership dues in order to vote!"
 msgstr "Aby móc głosować, należy opłacić składki członkowskie!"

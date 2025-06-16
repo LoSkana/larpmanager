@@ -139,7 +139,7 @@ def pay(live_server, page):
     # check accounting
     go_to(page, live_server, "/test/1/register")
     page.locator("#one").get_by_role("link", name="Accounting").click()
-    expect(page.locator("#one")).to_contain_text("Total registration: 100")
+    expect(page.locator("#one")).to_contain_text("Total registration fee: 100")
     expect(page.locator("#one")).to_contain_text("Total payments: 48")
     expect(page.locator("#one")).to_contain_text("Next payment: 52")
     go_to(page, live_server, "/test/1/manage/registrations")
