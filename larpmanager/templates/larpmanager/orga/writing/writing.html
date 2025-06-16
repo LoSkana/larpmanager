@@ -57,11 +57,11 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 
 {% if eid %}
-var eid = {{ eid }};
-var type = '{{ type }}';
-    {% include "elements/auto-save.html" %}
+    var eid = {{ eid }};
+    var type = '{{ type }}';
+    {% include "elements/auto-save.js" %}
 {% else %}
-var eid = -1;
+    var eid = -1;
 {% endif %}
 
 });

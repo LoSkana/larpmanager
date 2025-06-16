@@ -1,7 +1,7 @@
-var timeout = 30 * 1000;
+var timeout = 10 * 1000;
 var post_url = '{{ request.path }}';
 $(function() {
-setTimeout(submitForm, timeout);
+submitForm();
 });
 function submitForm() {
 tinyMCE.triggerSave();

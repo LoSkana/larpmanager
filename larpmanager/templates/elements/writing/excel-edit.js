@@ -36,7 +36,7 @@ window.addEventListener('DOMContentLoaded', function() {
     function submitExcelForm(auto) {
         // if auto, set timeout next invocation, and return if it's not visible
         if (auto) {
-            setTimeout(() => submitExcelForm(auto), 30 * 1000);
+            setTimeout(() => submitExcelForm(auto), 10 * 1000);
             if (!$('#excel-edit').hasClass('visible')) return;
         }
 

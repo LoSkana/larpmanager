@@ -620,4 +620,10 @@ def _get_question_update(ctx):
 
 
 def _check_working_ticket(request, ctx, response):
-    writing_edit_working_ticket(request, ctx["applicable"], ctx["element"].id, response)
+    # perform normal check, if somebody else has opened the character to edit it
+    writing_edit_working_ticket(request, ctx["typ"], ctx["element"].id, response, False)
+    if "warn" in response:
+        return
+
+    # perform check if somebody has opened the same field to edit it
+    writing_edit_working_ticket(request, ctx["typ"], f"{ctx['element'].id}_{ctx['question'].id}", response)
