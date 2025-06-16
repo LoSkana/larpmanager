@@ -1,7 +1,5 @@
 {% load i18n %}
 
-{{ TINYMCE_DEFAULT_CONFIG|json_script:"tinymce-config" }}
-
 <script>
 
 const tinymceConfig = JSON.parse(document.getElementById('tinymce-config').textContent);
