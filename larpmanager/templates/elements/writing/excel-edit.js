@@ -4,8 +4,6 @@
 
 const tinymceConfig = JSON.parse(document.getElementById('tinymce-config').textContent);
 
-console.log(tinymceConfig);
-
 window.addEventListener('DOMContentLoaded', function() {
 
     var keyTinyMCE;
@@ -34,7 +32,14 @@ window.addEventListener('DOMContentLoaded', function() {
 
     }
 
-    function submitExcelForm() {
+    // auto: if the function is called automatically to perform auto-save
+    function submitExcelForm(auto) {
+        // if auto, set timeout next invocation, and return if it's not visible
+        if (auto) {
+            setTimeout(() => submitExcelForm(auto), 30 * 1000);
+            if (!$('#excel-edit').hasClass('visible')) return;
+        }
+
         if (keyTinyMCE) {
             editor = tinymce.get(keyTinyMCE);
             if (editor) {
@@ -42,7 +47,9 @@ window.addEventListener('DOMContentLoaded', function() {
             }
         }
         formData = $('#form-excel').serialize();
-        formData += '&eid=' + encodeURIComponent(eid) + '&qid=' + encodeURIComponent(qid);
+        formData += '&eid=' + encodeURIComponent(eid) +
+                    '&qid=' + encodeURIComponent(qid) +
+                    '&auto=' + (auto ? 1 : 0);
 
         request = $.ajax({
             url: "{% url 'orga_writing_excel_submit' run.event.slug run.number label_typ %}",
@@ -52,6 +59,10 @@ window.addEventListener('DOMContentLoaded', function() {
         });
 
         request.done(function(res) {
+            if (auto) {
+                if (res.warn) alert(res.warn);
+                return;
+            }
             // server error
             if (res.k == 0) return;
             // success
@@ -66,6 +77,8 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     $(function() {
+
+        submitExcelForm(true);
 
         // On double click on cell editable, start the single field edit
         $(document).on('dblclick', '.editable', function(event) {
@@ -95,7 +108,9 @@ window.addEventListener('DOMContentLoaded', function() {
                     };
                     tinymce.init(config);
                  }
-                $('#excel-edit input[type="submit"]').on( "click", submitExcelForm );
+                $('#excel-edit input[type="submit"]').on("click", function() {
+                    submitExcelForm(false);
+                });
                 $('#excel-edit').addClass('visible');
 
                 $('#excel-edit .close').on( "click", closeEdit );

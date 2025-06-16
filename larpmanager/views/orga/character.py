@@ -62,7 +62,7 @@ from larpmanager.utils.common import (
     get_element,
 )
 from larpmanager.utils.download import orga_character_form_download
-from larpmanager.utils.edit import backend_edit, writing_edit
+from larpmanager.utils.edit import backend_edit, writing_edit, writing_edit_working_ticket
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.upload import upload_elements
 from larpmanager.utils.writing import writing_list, writing_versions, writing_view
@@ -545,9 +545,13 @@ def orga_writing_excel_submit(request, s, n, typ):
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
+    ctx["auto"] = int(request.POST.get("auto"))
+
     if ctx["form"].is_valid():
         ctx["form"].save()
         response = {"k": 1, "qid": ctx["question"].id, "eid": ctx["element"].id, "update": _get_question_update(ctx)}
+        if ctx["auto"] and "working_ticket" in ctx["features"]:
+            _check_working_ticket(request, ctx, response)
         return JsonResponse(response)
     else:
         return JsonResponse({"k": 2, "errors": ctx["form"].errors})
@@ -560,8 +564,8 @@ def _get_excel_form(request, s, n, typ, submit=False):
     element_id = int(request.POST.get("eid"))
 
     question = ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"]).get(pk=question_id)
-    applicable = QuestionApplicable.get_applicable_inverse(ctx["writing_typ"])
-    element = ctx["event"].get_elements(applicable).get(pk=element_id)
+    ctx["applicable"] = QuestionApplicable.get_applicable_inverse(ctx["writing_typ"])
+    element = ctx["event"].get_elements(ctx["applicable"]).get(pk=element_id)
 
     # Init form
     # TODO correct type given the one supplied
@@ -613,3 +617,7 @@ def _get_question_update(ctx):
             value += f"... <a href='#' class='post_popup' pop='{ctx['element'].id}' fie='{question_slug}'><i class='fas fa-eye'></i></a>"
 
     return value
+
+
+def _check_working_ticket(request, ctx, response):
+    writing_edit_working_ticket(request, ctx["applicable"], ctx["element"].id, response)

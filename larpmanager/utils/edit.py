@@ -331,13 +331,13 @@ def writing_edit_save_ajax(form, request, ctx):
     obj.save()
 
     if "working_ticket" in ctx["features"]:
-        writing_edit_working_ticket(eid, request, res)
+        tp = request.POST["type"]
+        writing_edit_working_ticket(request, tp, eid, res)
 
     return JsonResponse(res)
 
 
-def writing_edit_working_ticket(eid, request, res):
-    tp = request.POST["type"]
+def writing_edit_working_ticket(request, tp, eid, res):
     now = int(time.time())
     key = writing_edit_cache_key(eid, tp)
     ticket = cache.get(key)
