@@ -118,6 +118,8 @@ def update_cache_text_fields_answer(instance):
     key = cache_text_field_key(typ, event)
     res = get_cache_text_field(typ, event)
     field = str(instance.question_id)
+    if instance.element_id not in res:
+        res[instance.element_id] = {}
     res[instance.element_id][field] = get_single_cache_text_field(instance.element_id, field, instance.text)
     cache.set(key, res)
 
