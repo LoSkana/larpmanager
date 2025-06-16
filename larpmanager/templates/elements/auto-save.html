@@ -5,21 +5,16 @@ setTimeout(submitForm, timeout);
 });
 function submitForm() {
 tinyMCE.triggerSave();
-var formData = $('form').serialize() + "&ajax=" + 1;
-if (eid > 0) formData += "&eid=" + eid + "&type=" + type;
-// console.log(formData);
-// console.log(post_url);
+var formData = $('form').serialize() + "&ajax=1";
+if (typeof eid !== 'undefined' && eid > 0)
+formData += "&eid=" + eid + "&type=" + type;
 $.ajax({
 type: "POST",
 url: post_url,
 data: formData,
-success: function(msg){
-// console.log("Data Saved: " +  JSON.stringify(msg) );
+success: function(msg) {
 setTimeout(confirmSubmit, 100);
-if (msg.warn) { alert(msg.warn); }
-},
-error: function(XMLHttpRequest, textStatus, errorThrown) {
-alert("some error");
+if (msg.warn) alert(msg.warn);
 }
 });
 setTimeout(submitForm, timeout);

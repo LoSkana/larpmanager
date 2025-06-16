@@ -17,11 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+from django.conf import settings as conf_settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Max, Q
+from django.db.models import Max
 from django.db.models.functions import Length, Substr
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
@@ -34,10 +34,8 @@ from larpmanager.forms.character import (
     OrgaWritingOptionForm,
     OrgaWritingQuestionForm,
 )
-from larpmanager.forms.writing import (
-    OrgaRelationshipForm,
-    UploadElementsForm,
-)
+from larpmanager.forms.utils import EventCharacterS2Widget
+from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionType,
@@ -61,7 +59,6 @@ from larpmanager.utils.common import (
     exchange_order,
     get_char,
     get_element,
-    get_relationship,
 )
 from larpmanager.utils.download import orga_character_form_download
 from larpmanager.utils.edit import backend_edit, writing_edit
@@ -87,7 +84,37 @@ def orga_characters_edit(request, s, n, num):
     get_event_cache_all(ctx)
     if num != 0:
         get_element(ctx, num, "character", Character)
+
+    _characters_relationships(ctx)
+
     return writing_edit(request, ctx, OrgaCharacterForm, "character", TextVersion.CHARACTER)
+
+
+def _characters_relationships(ctx):
+    ctx["relationships"] = {}
+    if "relationships" in ctx["features"]:
+        rels = {}
+        for rel in Relationship.objects.filter(source=ctx["character"]):
+            if rel.target.id not in rels:
+                rels[rel.target.id] = {"char": rel.target}
+            rels[rel.target.id]["direct"] = rel.text
+
+        for rel in Relationship.objects.filter(target=ctx["character"]):
+            if rel.source.id not in rels:
+                rels[rel.source.id] = {"char": rel.source}
+            rels[rel.source.id]["inverse"] = rel.text
+
+        sorted_rels = sorted(
+            rels.items(),
+            key=lambda item: len(item[1].get("direct", "")) + len(item[1].get("inverse", "")),
+            reverse=True,
+        )
+
+        ctx["relationships"] = dict(sorted_rels)
+        ctx["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
+        widget = EventCharacterS2Widget(attrs={"id": "new_rel_select"})
+        widget.set_event(ctx["event"])
+        ctx["new_rel"] = widget.render(name="new_rel_select", value="")
 
 
 def update_relationship(request, ctx, nm, fl):
@@ -113,23 +140,6 @@ def orga_characters_relationships(request, s, n, num):
         Length("text").asc(), "source__number"
     )
     return render(request, "larpmanager/orga/characters/relationships.html", ctx)
-
-
-@login_required
-def orga_relationship_edit(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_characters")
-    if num != 0:
-        get_relationship(ctx, num)
-
-    def redr(ctx_curr):
-        return redirect(
-            "orga_characters_relationships",
-            s=ctx_curr["event"].slug,
-            n=ctx_curr["run"].number,
-            num=ctx_curr["element"].source_id,
-        )
-
-    return writing_edit(request, ctx, OrgaRelationshipForm, "relationship", TextVersion.RELATIONSHIP, redr=redr)
 
 
 @login_required
@@ -368,15 +378,6 @@ def orga_writing_options_order(request, s, n, typ, num):
     return redirect(
         "orga_writing_form_edit", s=ctx["event"].slug, n=ctx["run"].number, typ=typ, num=ctx["current"].question_id
     )
-
-
-@login_required
-def orga_relationships(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_characters")
-    ctx["list"] = Relationship.objects.filter(Q(source__event=ctx["event"]) | Q(target__event=ctx["event"])).order_by(
-        Length("text").asc()
-    )
-    return render(request, "larpmanager/orga/writing/relationships.html", ctx)
 
 
 @login_required

@@ -453,6 +453,9 @@ msgstr "Slett"
 msgid "Detail"
 msgstr "Detaljer"
 
+msgid "Direct"
+msgstr "Direkte"
+
 msgid "Events"
 msgstr "Arrangementer"
 
@@ -689,6 +692,9 @@ msgstr "Identitetskort"
 
 msgid "Inflows"
 msgstr "Inntekter"
+
+msgid "Inverse"
+msgstr "Invers"
 
 msgid "Invoice"
 msgstr "Faktura"
@@ -4475,6 +4481,9 @@ msgstr "Hvis avkrysset: viser nettstedet for hvert arrangement"
 msgid "Remember to put the prefix at the beginning!"
 msgstr "Husk å sette prefikset i begynnelsen!"
 
+msgid "Select a character to add a new relationship"
+msgstr "Velg et tegn for å legge til en ny relasjon"
+
 #, python-format
 msgid "The sum was disbursed to you as %(credits)s."
 msgstr "Beløpet ble utbetalt til deg som %(credits)s."
@@ -4911,9 +4920,6 @@ msgstr "Denne siden oppsummerer koblingene mellom karakterene."
 
 msgid "This page shows the workshop questions for the event."
 msgstr "Denne siden oppsummerer spørsmålene fra workshopen."
-
-msgid "You cannot add a relationship from character to self!"
-msgstr "Du kan ikke legge til en relasjon fra karakteren til deg selv!"
 
 msgid "You have been gifted a registration to this event, by"
 msgstr "Du har fått en inngangsbillett til dette arrangementet av"
@@ -5717,10 +5723,6 @@ msgid "Something went wrong in the account activation. Tell us more details. "
 msgstr ""
 "Noe gikk galt med brukeraktiveringen din. Skriv til oss for å rette opp i "
 "dette."
-
-msgid "This page allows you to add or edit a relationship between characters."
-msgstr ""
-"På denne siden kan du legge til eller redigere en relasjon mellom tegn."
 
 msgid "This page allows you to change the main settings of your Organization."
 msgstr "På denne siden kan du endre hovedinnstillingene for foreningen."
