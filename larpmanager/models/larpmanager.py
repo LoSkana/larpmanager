@@ -43,16 +43,6 @@ class LarpManagerTutorial(BaseModel):
     order = models.IntegerField()
 
 
-class LarpManagerHowto(BaseModel):
-    order = models.IntegerField()
-
-    name = models.CharField(max_length=100)
-
-    descr = models.TextField(max_length=500)
-
-    link = models.CharField(max_length=500, blank=True)
-
-
 class LarpManagerReview(BaseModel):
     text = models.CharField(max_length=1000)
 

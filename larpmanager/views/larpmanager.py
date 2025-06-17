@@ -55,7 +55,6 @@ from larpmanager.models.event import (
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
     LarpManagerDiscover,
-    LarpManagerHowto,
     LarpManagerPlan,
     LarpManagerProfiler,
     LarpManagerTutorial,
@@ -362,13 +361,6 @@ def discover(request):
     ctx["index"] = True
     ctx["discover"] = LarpManagerDiscover.objects.order_by("order")
     return render(request, "larpmanager/larpmanager/discover.html", ctx)
-
-
-@cache_page(60 * 15)
-def howto(request):
-    ctx = get_lm_assocs()
-    ctx["list"] = LarpManagerHowto.objects.order_by("order")
-    return render(request, "larpmanager/larpmanager/howto.html", ctx)
 
 
 @override("en")
