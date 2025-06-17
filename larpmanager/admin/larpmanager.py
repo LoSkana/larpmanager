@@ -26,7 +26,6 @@ from larpmanager.models.larpmanager import (
     LarpManagerDiscover,
     LarpManagerFaq,
     LarpManagerFaqType,
-    LarpManagerHowto,
     LarpManagerProfiler,
     LarpManagerReview,
     LarpManagerShowcase,
@@ -95,8 +94,3 @@ class LarpManagerDiscoverAdmin(DefModelAdmin):
 @admin.register(LarpManagerReview)
 class LMReviewAdmin(DefModelAdmin):
     list_display = ("text", "author")
-
-
-@admin.register(LarpManagerHowto)
-class LMHowtoAdmin(DefModelAdmin):
-    list_display = ("order", "name", "link")

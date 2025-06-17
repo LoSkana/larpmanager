@@ -36,11 +36,6 @@ urlpatterns = [
         name="discover",
     ),
     path(
-        "howto/",
-        views_lm.howto,
-        name="howto",
-    ),
-    path(
         "tutorials/",
         views_lm.tutorials,
         name="tutorials",
