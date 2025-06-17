@@ -30,6 +30,7 @@
     {% block additional %}
     {% endblock additional %}
     <div id="excel-edit"></div>
+    {% include "elements/form/char_finder.html" %}
 {% endblock content %}
 {% block js %}
     <script defer src="{% static TINYMCE_JS_URL %}"></script>
@@ -39,6 +40,7 @@
     {% include "elements/form/max_length.js" %}
     {% include "elements/form/char_highlight.js" %}
     {% if not disable_char_finder %}
+        {{ char_finder_media }}
         {% include "elements/form/char_finder.js" %}
     {% endif %}
     <script>

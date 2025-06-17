@@ -50,6 +50,7 @@ from larpmanager.models.writing import (
 from larpmanager.templatetags.show_tags import show_char, show_trait
 from larpmanager.utils.common import check_field, compute_diff
 from larpmanager.utils.download import download
+from larpmanager.utils.edit import _setup_char_finder
 from larpmanager.utils.upload import upload_elements
 
 
@@ -180,6 +181,7 @@ def writing_list(request, ctx, typ, nm):
     if writing:
         orga_list_progress_assign(ctx, typ)  # pyright: ignore[reportArgumentType]
         writing_list_text_fields(ctx, text_fields, typ)
+        _setup_char_finder(ctx)
 
     _get_custom_form(ctx, nm)
 

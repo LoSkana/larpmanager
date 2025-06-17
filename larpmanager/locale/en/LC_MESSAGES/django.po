@@ -3442,6 +3442,9 @@ msgstr ""
 msgid "Missing casting preferences"
 msgstr ""
 
+msgid "Select a character to insert their reference code"
+msgstr ""
+
 msgid "Select a character to add a new relationship"
 msgstr ""
 
@@ -6681,9 +6684,6 @@ msgid ""
 msgstr ""
 
 msgid "This page allows you to fully view a character."
-msgstr ""
-
-msgid "Select a character to insert their reference code"
 msgstr ""
 
 msgid "Hi"
