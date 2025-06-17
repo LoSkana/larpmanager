@@ -100,11 +100,6 @@ window.addEventListener('DOMContentLoaded', function() {
 
                 console.log(res);
 
-                // set up max length
-                if (res.max_length > 0) {
-                    update_count(res.key, res.max_length, res.typ);
-                }
-
                 if (res.tinymce) {
                     let config = Object.assign({}, tinymceConfig);
                     config.selector = '#excel-edit textarea' + ':not(.tinymce-initialized)';
@@ -122,6 +117,11 @@ window.addEventListener('DOMContentLoaded', function() {
 
                         // set up char finder
                         setUpCharFinder(keyTinyMCE);
+
+                        // set up max length
+                        if (res.max_length > 0) {
+                            update_count(res.key, res.max_length, res.typ);
+                        }
                     }, 100);
                  }
                 $('#excel-edit input[type="submit"]').on("click", function() {
