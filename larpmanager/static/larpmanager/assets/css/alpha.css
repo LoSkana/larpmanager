@@ -328,15 +328,6 @@ table td, table th {
     margin: auto;
 }
 
-#howtos th {
-    font-size:1.2em;
-    font-weight: 500;
-}
-
-#howtos td {
-    padding: 1.5em;
-}
-
 #yt {
   position: relative;
   padding-bottom: 56.25%;

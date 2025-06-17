@@ -98,7 +98,6 @@ class FeatureAdmin(DefModelAdmin):
         "order",
         "module",
         "slug",
-        "link",
         "tutorial",
         "descr",
         "placeholder",

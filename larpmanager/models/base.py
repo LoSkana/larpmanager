@@ -110,8 +110,6 @@ class Feature(BaseModel):
 
     overall = models.BooleanField(default=False)
 
-    link = models.CharField(max_length=500, blank=True)
-
     tutorial = models.CharField(max_length=500, blank=True)
 
     module = models.ForeignKey(

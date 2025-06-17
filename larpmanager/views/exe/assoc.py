@@ -196,10 +196,4 @@ def feature_description(request):
             <iframe src="{_add_in_iframe_param(feature.tutorial)}" width="100%" height="300"></iframe><br /><br />
         """
 
-    if feature.link:
-        txt += f"""
-            <iframe width='100%' height='400' frameborder='0' allow='encrypted-media' "
-            allowfullscreen src='https://www.youtube.com/embed/{feature.link}'></iframe>"
-        """
-
     return JsonResponse({"res": "ok", "txt": txt})
