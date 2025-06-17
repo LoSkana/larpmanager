@@ -535,7 +535,15 @@ def orga_writing_excel_edit(request, s, n, typ):
         <input type='submit' value='{confirm}'>
         <a href="#" class="close"><i class="fa-solid fa-xmark"></i></a>
     """
-    return JsonResponse({"k": 1, "v": value, "tinymce": tinymce})
+    response = {
+        "k": 1,
+        "v": value,
+        "tinymce": tinymce,
+        "typ": ctx["question"].typ,
+        "max_length": ctx["question"].max_length,
+        "key": field.auto_id,
+    }
+    return JsonResponse(response)
 
 
 @require_POST

@@ -3009,9 +3009,6 @@ msgstr "Niezależne frakcje"
 msgid "Last membership date"
 msgstr "Data ostatniego członkostwa"
 
-msgid "List of other users:"
-msgstr "Lista innych użytkowników:"
-
 msgid "Mail added to queue!"
 msgstr "Poczta dodana do kolejki!"
 
@@ -3123,6 +3120,9 @@ msgstr "Jeśli nieobecny, wskaż 0"
 
 msgid "Links to be accessed:"
 msgstr "Dostępne linki:"
+
+msgid "List of other users: "
+msgstr "Lista innych użytkowników:"
 
 msgid "Make the request now!"
 msgstr "Złóż wniosek teraz!"

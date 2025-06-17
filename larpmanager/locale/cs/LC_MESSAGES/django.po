@@ -3009,9 +3009,6 @@ msgstr "Nezávislé frakce"
 msgid "Last membership date"
 msgstr "Datum posledního členství"
 
-msgid "List of other users:"
-msgstr "Seznam dalších uživatelů:"
-
 msgid "Mail added to queue!"
 msgstr "Mail přidán do fronty!"
 
@@ -3123,6 +3120,9 @@ msgstr "Pokud chybí, uveďte 0"
 
 msgid "Links to be accessed:"
 msgstr "Odkazy, ke kterým je třeba přistupovat:"
+
+msgid "List of other users: "
+msgstr "Seznam dalších uživatelů:"
 
 msgid "Make the request now!"
 msgstr "Přihlaste se nyní!"

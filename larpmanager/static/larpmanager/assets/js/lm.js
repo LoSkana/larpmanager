@@ -132,7 +132,7 @@ $(document).ready(function() {
         // console.log(el.is(":visible"));
          if (el.is(":visible")) {
              var elements = document.getElementsByClassName(k);
-             if (elements.length > 0)  {
+             if (elements.length > 0 && ! $(this).hasClass("no_jump"))  {
                 jump_to(elements[0]);
             }
             $(this).addClass('select');

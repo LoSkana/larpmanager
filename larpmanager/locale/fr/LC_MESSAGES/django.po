@@ -3009,9 +3009,6 @@ msgstr "Les factions indépendantes"
 msgid "Last membership date"
 msgstr "Dernière date d'adhésion"
 
-msgid "List of other users:"
-msgstr "Liste des autres utilisateurs :"
-
 msgid "Mail added to queue!"
 msgstr "Courrier ajouté à la file d'attente !"
 
@@ -3123,6 +3120,9 @@ msgstr "En cas d'absence, indiquer 0"
 
 msgid "Links to be accessed:"
 msgstr "Liens à consulter :"
+
+msgid "List of other users: "
+msgstr "Liste des autres utilisateurs :"
 
 msgid "Make the request now!"
 msgstr "Postulez maintenant !"

@@ -7450,7 +7450,7 @@ msgid ""
 "You cannot work on it at the same time: the work of one of you would be lost."
 msgstr ""
 
-msgid "List of other users:"
+msgid "List of other users: "
 msgstr ""
 
 msgid "Show available characters"

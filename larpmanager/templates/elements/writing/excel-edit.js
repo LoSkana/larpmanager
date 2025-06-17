@@ -97,6 +97,14 @@ window.addEventListener('DOMContentLoaded', function() {
             request.done(function(res) {
                 if (res.k == 0) return;
                 $('#excel-edit').empty().append(res.v);
+
+                console.log(res);
+
+                // set up max length
+                if (res.max_length > 0) {
+                    update_count(res.key, res.max_length, res.typ);
+                }
+
                 if (res.tinymce) {
                     let config = Object.assign({}, tinymceConfig);
                     config.selector = '#excel-edit textarea' + ':not(.tinymce-initialized)';
@@ -107,6 +115,14 @@ window.addEventListener('DOMContentLoaded', function() {
                         });
                     };
                     tinymce.init(config);
+
+                    setTimeout(() => {
+                        // set up char highlight
+                        setUpHighlight(keyTinyMCE);
+
+                        // set up char finder
+                        setUpCharFinder(keyTinyMCE);
+                    }, 100);
                  }
                 $('#excel-edit input[type="submit"]').on("click", function() {
                     submitExcelForm(false);
