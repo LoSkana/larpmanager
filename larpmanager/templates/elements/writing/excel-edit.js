@@ -98,8 +98,6 @@ window.addEventListener('DOMContentLoaded', function() {
                 if (res.k == 0) return;
                 $('#excel-edit').empty().append(res.v);
 
-                console.log(res);
-
                 if (res.tinymce) {
                     let config = Object.assign({}, tinymceConfig);
                     config.selector = '#excel-edit textarea' + ':not(.tinymce-initialized)';
@@ -110,30 +108,41 @@ window.addEventListener('DOMContentLoaded', function() {
                         });
                     };
                     tinymce.init(config);
+                }
 
-                    setTimeout(() => {
+                setTimeout(() => {
+                    if (res.tinymce) {
                         // set up char highlight
                         setUpHighlight(keyTinyMCE);
 
                         // set up char finder
                         setUpCharFinder(keyTinyMCE);
 
-                        // set up max length
-                        if (res.max_length > 0) {
+                        // prepare tinymce count
+                        prepare_tinymce(res.key, res.max_length);
+                    }
+
+                    // set up max length
+                    if (res.max_length > 0) {
+                        update_count(res.key, res.max_length, res.typ);
+                        $('#' + res.key).on('input', function() {
                             update_count(res.key, res.max_length, res.typ);
-                        }
-                    }, 100);
-                 }
+                        });
+                    }
+                }, 100);
+
                 $('#excel-edit input[type="submit"]').on("click", function() {
                     submitExcelForm(false);
                 });
+
                 $('#excel-edit').addClass('visible');
 
                 $('#excel-edit .close').on( "click", closeEdit );
-            });
 
-            return false;
+            });
         });
+
+        return false;
     });
 });
 

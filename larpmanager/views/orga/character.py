@@ -524,12 +524,23 @@ def orga_writing_excel_edit(request, s, n, typ):
     if ctx["question"].typ in [QuestionType.TEASER, QuestionType.SHEET, QuestionType.EDITOR]:
         tinymce = True
 
+    counter = ""
+    if ctx["question"].max_length:
+        if ctx["question"].typ == "m":
+            name = _("options")
+        else:
+            name = "text length"
+        counter = f'<div class="helptext">{name}: <span class="count"></span> / {ctx["question"].max_length}</div>'
+
     confirm = _("Confirm")
     field = ctx["form"][ctx["field_key"]]
     value = f"""
         <h2>{ctx["question"].display}: {ctx["element"]}</h2>
         <form id='form-excel'>
-            {field.as_widget()}
+            <div id='{field.auto_id}_tr'>
+                {field.as_widget()}
+                {counter}
+            </div>
         </form>
         <br />
         <input type='submit' value='{confirm}'>
