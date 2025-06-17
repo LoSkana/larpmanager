@@ -1355,3 +1355,14 @@ th select {
     font-size:1.5em;
     cursor:pointer;
 }
+
+form th {
+  max-width: 30%;
+  width: 30%;
+}
+
+@media(max-width: 1000px) {
+    form th {
+      max-width: 100%;
+  }
+}
