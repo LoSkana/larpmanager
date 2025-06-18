@@ -1355,3 +1355,7 @@ th select {
     font-size:1.5em;
     cursor:pointer;
 }
+
+.editable {
+  cursor: cell;
+}
