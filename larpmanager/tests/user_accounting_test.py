@@ -164,9 +164,6 @@ def membership_fees(page, live_server):
     go_to(page, live_server, "/accounting")
     expect(page.locator("#one")).not_to_contain_text("Payment membership fee")
 
-    page.get_by_role("link", name="Organization").click()
-    page.get_by_role("link", name="Invoices").click()
-
 
 def collections(page, live_server):
     # test collections
