@@ -130,7 +130,7 @@ def setup_test(live_server, page):
 def px(live_server, page):
     # set up xp
     go_to(page, live_server, "/test/1/manage/config/")
-    page.get_by_role("link", name=re.compile(r"^Experience points")).click()
+    page.get_by_role("link", name=re.compile(r"^Experience points.+")).click()
     page.locator("#id_px_start").click()
     page.locator("#id_px_start").fill("10")
     page.get_by_role("button", name="Confirm", exact=True).click()
@@ -209,7 +209,7 @@ def copy(live_server, page):
 
     page.get_by_role("link", name="Gallery ").click()
     expect(page.locator("#id_gallery_hide_login")).to_be_checked()
-    page.get_by_role("link", name=re.compile(r"^Experience points")).click()
+    page.get_by_role("link", name=re.compile(r"^Experience points.+")).click()
     expect(page.locator("#id_px_start")).to_have_value("10")
 
     go_to(page, live_server, "/copy/1/manage/characters/")
