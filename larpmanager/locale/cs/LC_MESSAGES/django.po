@@ -459,6 +459,9 @@ msgstr "Odstranit"
 msgid "Detail"
 msgstr "Detail"
 
+msgid "Direct"
+msgstr "Přímý"
+
 msgid "Events"
 msgstr "Události"
 
@@ -701,6 +704,9 @@ msgstr "Průkaz totožnosti"
 
 msgid "Inflows"
 msgstr "Příjmy"
+
+msgid "Inverse"
+msgstr "Inverzní"
 
 msgid "Invoice"
 msgstr "Faktura"
@@ -1176,11 +1182,11 @@ msgstr "První pomoc"
 msgid "Frequency"
 msgstr "Frekvence"
 
-msgid "Interface"
-msgstr "Rozhraní"
-
 msgid "Inventory"
 msgstr "Inventura"
+
+msgid "Load list"
+msgstr "Seznam zatížení"
 
 msgid "Mandatory"
 msgstr "Povinné"
@@ -2837,11 +2843,11 @@ msgstr "Zrušení výstavy"
 msgid "Total payment sent"
 msgstr "Celková odeslaná platba"
 
-msgid "Total registration"
-msgstr "Celková položka"
-
 msgid "Transaction totals"
 msgstr "Celkový počet transakcí"
+
+msgid "Use these formats:"
+msgstr "Použijte tyto formáty:"
 
 msgid "Verified payments!"
 msgstr "Ověřené platby!"
@@ -3039,9 +3045,6 @@ msgstr "Nezávislé frakce"
 msgid "Last membership date"
 msgstr "Datum posledního členství"
 
-msgid "List of other users:"
-msgstr "Seznam dalších uživatelů:"
-
 msgid "Mail added to queue!"
 msgstr "Mail přidán do fronty!"
 
@@ -3153,6 +3156,9 @@ msgstr "Pokud chybí, uveďte 0"
 
 msgid "Links to be accessed:"
 msgstr "Odkazy, ke kterým je třeba přistupovat:"
+
+msgid "List of other users: "
+msgstr "Seznam dalších uživatelů:"
 
 msgid "Make the request now!"
 msgstr "Přihlaste se nyní!"
@@ -3315,6 +3321,9 @@ msgstr "Schválení role %(role)s"
 msgid "Select your character!"
 msgstr "Vyberte si svou postavu!"
 
+msgid "Total registration fee"
+msgstr "Celkový registrační poplatek"
+
 msgid "Unknow error on upload"
 msgstr "Neznámá chyba při nahrávání"
 
@@ -3382,6 +3391,9 @@ msgstr "Minimální věk: %(number)d"
 msgid "Minimum number of votes"
 msgstr "Minimální počet hlasů, které je třeba odevzdat"
 
+msgid "Move registration event"
+msgstr "Přesun registrační události"
+
 msgid "Number of primary spots"
 msgstr "Počet základních míst"
 
@@ -3436,6 +3448,9 @@ msgstr "Zkontrolujte chybějící rychlosti larpů"
 msgid "Code two capital letters"
 msgstr "Kód dvě velká písmena"
 
+msgid "Disable character finder"
+msgstr "Zakázat vyhledávač znaků"
+
 #, python-format
 msgid "Disbursement %(credits)s"
 msgstr "Výplata %(credits)s"
@@ -3470,9 +3485,6 @@ msgstr "Předběžné registrace jsou uloženy!"
 
 msgid "Provisional registration"
 msgstr "Prozatímní registrace"
-
-msgid "Quick links organisation"
-msgstr "Organizace rychlých odkazů"
 
 msgid "Secret registration link"
 msgstr "Tajný registrační odkaz"
@@ -3562,9 +3574,6 @@ msgstr "Použití majetku třetích stran"
 
 msgid "Access character creation!"
 msgstr "Přístup k tvorbě postavy!"
-
-msgid "Available payment methods:"
-msgstr "Dostupné platební metody:"
 
 msgid "Can't copy from same event"
 msgstr "Nelze kopírovat ze stejné události"
@@ -3969,9 +3978,6 @@ msgstr "Tato stránka shrnuje přihlášky na běh."
 msgid "Total of recorded money outflows"
 msgstr "Součet zaznamenaných odlivů peněz"
 
-msgid "We ask you to pay the difference"
-msgstr "Žádáme vás o zaplacení rozdílu"
-
 msgid "Your question has been answered:"
 msgstr "Vaše otázka byla zodpovězena:"
 
@@ -4268,6 +4274,9 @@ msgstr "Byly vylosovány tyto položky"
 msgid "This page shows cancelled enrollments."
 msgstr "Tato stránka shrnuje zrušené registrace."
 
+msgid "We ask you to pay the remaining amount"
+msgstr "Žádáme vás, abyste zaplatili zbývající částku"
+
 msgid "You already have an assigned character"
 msgstr "Již máte přidělenou postavu"
 
@@ -4460,6 +4469,9 @@ msgstr "Tato stránka shrnuje nahraná fotoalba."
 msgid "This page summarises the system entries of"
 msgstr "Na této stránce jsou shrnuty systémové záznamy o"
 
+msgid "Allow to switch registration between events"
+msgstr "Umožnit přepínání registrace mezi událostmi"
+
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
 msgstr "Schválení %(user)s jako %(role)s pro %(event)s"
@@ -4527,6 +4539,9 @@ msgstr "Pokud je zaškrtnuto: zobrazí webové stránky pro každou událost"
 
 msgid "Remember to put the prefix at the beginning!"
 msgstr "Nezapomeňte uvést předponu na začátku!"
+
+msgid "Select a character to add a new relationship"
+msgstr "Výběrem postavy přidáte nový vztah"
 
 #, python-format
 msgid "The sum was disbursed to you as %(credits)s."
@@ -4691,6 +4706,9 @@ msgstr "Upravte si některé vlastnosti postavy podle sebe!"
 msgid "Names of the collaborators who are organizing it"
 msgstr "Jména spolupracovníků, kteří ji organizují"
 
+msgid "No additional payments are required at this time"
+msgstr "V tuto chvíli nejsou vyžadovány žádné další platby"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Zrušení odběru %(event)s pomocí %(user)s"
@@ -4750,6 +4768,9 @@ msgstr "Suroviny, spotřební materiál a zboží"
 #, python-format
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Připomenutí platby členských příspěvků za %(event)s"
+
+msgid "Select a character to insert their reference code"
+msgstr "Vyberte znak a vložte jeho referenční kód"
 
 msgid "The user has been enabled for the indicated role."
 msgstr "Uživateli byla povolena uvedená role."
@@ -4835,6 +4856,9 @@ msgstr "Pozor! Formulář obsahuje chyby v polích -"
 
 msgid "You cannot create a relationship towards yourself!"
 msgstr "Nemůžete si vytvořit vztah sami k sobě!"
+
+msgid "you can still pay the remaining amount if you wish"
+msgstr "pokud si přejete, můžete zaplatit zbývající částku."
 
 msgid "Fill in this field if you have accessibility needs."
 msgstr "Toto pole vyplňte, pokud máte požadavky na přístupnost."
@@ -4957,9 +4981,6 @@ msgstr "Tato stránka shrnuje vazby mezi jednotlivými postavami."
 
 msgid "This page shows the workshop questions for the event."
 msgstr "Na této stránce jsou shrnuty otázky z workshopu."
-
-msgid "You cannot add a relationship from character to self!"
-msgstr "Nelze přidat vztah od postavy k sobě!"
 
 msgid "You have been gifted a registration to this event, by"
 msgstr "Vstup na tuto událost vám darovali"
@@ -5086,9 +5107,6 @@ msgstr "Na této stránce můžete sledovat nahlášené problémy."
 msgid "We are processing your payment. Please wait a moment... "
 msgstr "Zpracováváme vaši platbu. Chvíli prosím počkejte..."
 
-msgid "to indicate only the proper name of the other character."
-msgstr "označit pouze vlastní jméno druhého znaku."
-
 msgid "Allows you to define a different language for each event."
 msgstr "Umožňuje definovat pro každou událost jiný jazyk."
 
@@ -5120,9 +5138,6 @@ msgstr "Tato stránka shrnuje všechny výdajové položky zapsané v systému."
 
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Součet výdajů předložených spolupracovníky a schválených"
-
-msgid "We ask you to pay the difference from the next instalment"
-msgstr "Žádáme vás, abyste rozdíl doplatili z další splátky."
 
 msgid "You cannot redeem a membership, you are already a member!"
 msgstr "Členství nelze vyměnit, jste již členem!"
@@ -5309,6 +5324,9 @@ msgstr ""
 "Obsah stránky s právním upozorněním, na kterou je odkazováno v dolní části "
 "všech stránek"
 
+msgid "Description of this payment method to be displayed to the user"
+msgstr "Popis tohoto způsobu platby, který se zobrazí uživateli"
+
 msgid "If checked, an option can be chosen a maximum number of times."
 msgstr "Pokud je tato možnost zaškrtnuta, lze ji zvolit maximálně několikrát."
 
@@ -5347,11 +5365,17 @@ msgstr ""
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "Pro potvrzení registrace prosím zaplaťte uvedenou částku."
 
+msgid "We ask you to pay the amount requested for the next instalment"
+msgstr "Žádáme vás, abyste zaplatili požadovanou částku na další splátku."
+
 msgid "You must complete payment of membership dues in order to vote!"
 msgstr "Abyste mohli hlasovat, musíte uhradit členský poplatek!"
 
 msgid "Your request has been sent, we will reply as soon as possible!"
 msgstr "Vaše žádost byla odeslána, odpovíme vám co nejdříve!"
+
+msgid "for no relationship, only to display the other character name."
+msgstr "pro žádný vztah, pouze pro zobrazení jména druhého znaku."
 
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Popis - zobrazí se na začátku sekce"
@@ -5695,9 +5719,6 @@ msgstr "Pokud je zaškrtnuto, umožňuje hráčům uvést píseň jejich postavy
 msgid "Something went wrong in the account activation. Tell us more details. "
 msgstr ""
 "Něco se pokazilo při aktivaci uživatele. Napište nám, abychom to napravili."
-
-msgid "This page allows you to add or edit a relationship between characters."
-msgstr "Na této stránce můžete přidat nebo upravit vztah mezi postavami."
 
 msgid "This page allows you to change the main settings of your Organization."
 msgstr "Na této stránce můžete změnit hlavní nastavení asociace."
@@ -6524,6 +6545,13 @@ msgstr ""
 " každou postavu."
 
 msgid ""
+"In rich text editors, you can reference other characters directly using "
+"their number."
+msgstr ""
+"V textových editorech můžete odkazovat na jiné znaky přímo pomocí jejich "
+"čísla."
+
+msgid ""
 "Requires Executive Committee approval of membership before participating in "
 "an event."
 msgstr "Před účastí na akci vyžaduje schválení členství výkonným výborem."
@@ -6742,13 +6770,6 @@ msgstr ""
 "platbu rozpoznat."
 
 msgid ""
-"If checked: In the event management panel, it also shows the association "
-"management links"
-msgstr ""
-"Pokud je zaškrtnuto: V panelu správy událostí se také zobrazí odkazy na "
-"správu asociací."
-
-msgid ""
 "Indicate the maximum number of such discounts that can be requested (0 for "
 "infinite uses)"
 msgstr ""
@@ -6888,6 +6909,16 @@ msgstr ""
 "Hodnota slevy pro registrovaného hráče, který předá kód příteli, který se "
 "zaregistruje."
 
+msgid ""
+"for bidirectional relationships, where the other character is also aware of "
+"the connection."
+msgstr "pro obousměrné vztahy, kdy o spojení ví i druhá postava."
+
+msgid ""
+"for unidirectional relationships, where the other character is NOT aware of "
+"the connection."
+msgstr "pro jednosměrné vztahy, kdy si druhá postava NENÍ vědoma spojení."
+
 #, python-format
 msgid ""
 "Alternatively, you can request a reimbursement in <a href='%(url)s'>your "
@@ -6952,6 +6983,13 @@ msgid ""
 msgstr ""
 "Vaše žádost o proplacení částky %(amount).2f s důvodem \"%(reason)s\" byla "
 "schválena!"
+
+msgid ""
+"Disable the system that finds the character number when a special reference "
+"symbol is written"
+msgstr ""
+"Vypnutí systému, který při zápisu speciálního referenčního symbolu zjišťuje "
+"číslo znaku."
 
 msgid ""
 "Enables 'Factions' to organize characters into groups, either visible, "
@@ -7083,13 +7121,6 @@ msgid ""
 msgstr ""
 "Budete informováni o tom, kdy se bude konat nový běh, a budete mít právo "
 "první volby při registraci!"
-
-msgid ""
-"Each payment method works differently, click on its name for a detailed "
-"guide on how to proceed."
-msgstr ""
-"Každá platební metoda funguje jinak, kliknutím na její název získáte "
-"podrobný návod, jak postupovat."
 
 msgid ""
 "For each character added, a specific field will be available to add "
@@ -7251,13 +7282,6 @@ msgstr ""
 " skryjí, místo aby se zobrazily zakázané."
 
 msgid ""
-"Indicate the description you wish to be displayed when this payment method "
-"is proposed to the user."
-msgstr ""
-"Uveďte popis, který si přejete zobrazit, když je uživateli nabídnut tento "
-"způsob platby."
-
-msgid ""
 "Provides users with comprehensive privacy controls to manage how their data "
 "is shared or displayed."
 msgstr ""
@@ -7417,13 +7441,6 @@ msgstr ""
 "její popis."
 
 msgid ""
-"for bidirectional relationships (love, colleagues, rivals), of which the "
-"other  character is aware of."
-msgstr ""
-"pro obousměrné vztahy (láska, kolegové, rivalové), o kterých druhá postava "
-"ví."
-
-msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
 "available during registration."
 msgstr ""
@@ -7485,13 +7502,6 @@ msgid ""
 msgstr ""
 "Počet dní po uplynutí lhůty, po které jsou registrace označeny jako zrušené "
 "(výchozí 30 dní)."
-
-msgid ""
-"Select the payment methods to be activated; then return to this page to "
-"enter the necessary information."
-msgstr ""
-"Vyberte platební metody, které chcete aktivovat, a poté se vraťte na tuto "
-"stránku a zadejte potřebné informace."
 
 msgid ""
 "The discount has been added! It has been reserved for you for 15 minutes, "
@@ -7661,6 +7671,13 @@ msgid ""
 msgstr ""
 "Příležitostně zobrazí uživatelům speciální stránku na základě definované "
 "pravděpodobnosti a volitelně přiřadí výsledek."
+
+msgid ""
+"Percentage to be retained by the payment system - enter the value as a "
+"number, without the percentage symbol"
+msgstr ""
+"Procento, které si má platební systém ponechat - zadejte hodnotu jako číslo "
+"bez symbolu procenta."
 
 #, python-format
 msgid ""
@@ -7982,13 +7999,6 @@ msgstr ""
 "vám za vaši podporu a za to, že v nás věříte!"
 
 msgid ""
-"for unidirectional relationships (secret hatred, loves but is unrequited), "
-"of that the other character is NOT aware of."
-msgstr ""
-"pro jednosměrné vztahy (tajná nenávist, neopětovaná láska), o kterých druhá "
-"postava NEví."
-
-msgid ""
 "Enables basic inventory management. Users can add items to a warehouse "
 "table, track quantities, and note item locations."
 msgstr ""
@@ -8229,6 +8239,13 @@ msgstr ""
 " které je třeba sledovat, a seznam uživatelů, které je třeba oslovit."
 
 msgid ""
+"When the text is displayed to the player, the number is automatically "
+"replaced with the character’s name and a link to their profile."
+msgstr ""
+"Když se text zobrazí hráči, číslo se automaticky nahradí jménem postavy a "
+"odkazem na její profil."
+
+msgid ""
 "this figure is the net that should result as availability of financial "
 "instruments - it does not take into account tokens and credits"
 msgstr ""
@@ -8291,13 +8308,6 @@ msgid ""
 msgstr ""
 "Umožňuje slevu \"přiveďte kamaráda\". Registrovaný hráč poskytne svůj "
 "jedinečný kód novému registrovanému hráči a oba získají slevu."
-
-msgid ""
-"Enter the percentage to be managed as retained by the payment system. Enter "
-"the value as a number, without entering the percentage symbol."
-msgstr ""
-"Zadejte procento, které má být spravováno jako zadržené platebním systémem. "
-"Hodnotu zadejte jako číslo, bez uvedení symbolu procenta."
 
 msgid ""
 "Manages pre-larp 'mini-scenes.' You can create any number of scenes and "
@@ -8610,6 +8620,15 @@ msgstr ""
 "ostatní k předběžné registraci!"
 
 msgid ""
+"When you press one of the special reference symbols, a popup will help you "
+"get the reference number of a character; you can also select a reference "
+"number to see the character’s name."
+msgstr ""
+"Po stisknutí jednoho ze speciálních referenčních symbolů se zobrazí "
+"vyskakovací okno, které vám pomůže zjistit referenční číslo znaku; můžete "
+"také vybrat referenční číslo a zobrazit jméno znaku."
+
+msgid ""
 "We only ask you to indicate a <b>order</b> of preference for the your pre-"
 "registrations (imagining you have to choose which one to play, indicates in "
 "what order you want to play them)."
@@ -8713,15 +8732,6 @@ msgstr ""
 "Musíte zaplatit alespoň <b>%(amount).2f %(currency)s</b> do %(deadline)d "
 "dnů. Platbu proveďte <a href='%(url)s'>na této stránce</a>. Pokud platbu "
 "neobdržíme do stanoveného termínu, může být vaše členství zrušeno."
-
-msgid ""
-"In the 'Presentation' and 'Text' fields you can refer to other characters "
-"using their number directly, in the final text the number will automatically"
-" be replaced with their name, and a link to the character. Use:"
-msgstr ""
-"V polích \"Prezentace\" a \"Text\" můžete odkazovat na jiné postavy přímo "
-"pomocí jejich čísla, v konečném textu bude číslo automaticky nahrazeno "
-"jejich jménem a odkazem na danou postavu. Použijte:"
 
 msgid ""
 "Indicates the ratio between reduced and patron tickets, multiplied by 10. "

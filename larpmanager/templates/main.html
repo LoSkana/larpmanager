@@ -317,8 +317,7 @@
                             {% if 'help' in assoc.features %}
                                 <td>
                                     <p>
-                                        {% trans "Need help?" %}
-                                        <a href=" {% if run %}{% url 'help' run.event.slug run.number %}{% else %}{% url 'help' %}{% endif %} ">{% trans "Write here!" %}</a>
+                                        <a href=" {% if run %}{% url 'help' run.event.slug run.number %}{% else %}{% url 'help' %}{% endif %} ">{% trans "Need help?" %}</a>
                                     </p>
                                 </td>
                             {% endif %}
@@ -460,7 +459,7 @@
           },
           success: function (response) {
             if (response.status === 'Language changed') {
-              console.log(`Language switched to ${response.language}`);
+              // console.log(`Language switched to ${response.language}`);
               location.reload();
             }
           },
@@ -513,7 +512,7 @@
                     fls.push('{{ field.label }}');
                 {% endif %}
             {% endfor %}
-            console.log(fls);
+            // console.log(fls);
 
             $.toast({
                 text: txt + ': ' + fls.join(', '),

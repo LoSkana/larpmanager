@@ -18,8 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import re
+
 from django import forms
 from django.core.exceptions import ValidationError
+from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
@@ -41,7 +44,8 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
 )
-from larpmanager.models.writing import Character, CharacterStatus, Faction, PlotCharacterRel
+from larpmanager.models.writing import Character, CharacterStatus, Faction, PlotCharacterRel, Relationship, TextVersion
+from larpmanager.utils.edit import save_version
 
 
 class CharacterForm(WritingForm, BaseWritingForm):
@@ -194,9 +198,11 @@ class OrgaCharacterForm(CharacterForm):
 
     page_title = _("Character")
 
-    load_templates = "char"
+    load_templates = ["char"]
 
-    load_js = "characters-choices"
+    load_js = ["characters-choices", "characters-relationships"]
+
+    load_form = ["characters-relationships"]
 
     orga = True
 
@@ -253,11 +259,11 @@ class OrgaCharacterForm(CharacterForm):
                 self.details[f"id_{field}"] = pl[3]
             self.show_link.append(f"id_{field}")
 
-    def _save_plot(self):
+    def _save_plot(self, instance):
         if "plot" not in self.params["features"]:
             return
 
-        for pr in self.instance.get_plot_characters():
+        for pr in instance.get_plot_characters():
             field = f"pl_{pr.plot_id}"
             if field not in self.cleaned_data:
                 continue
@@ -326,12 +332,61 @@ class OrgaCharacterForm(CharacterForm):
                 fact_tx += "<hr />" + fc[3]
         self.show_link.append("id_factions_list")
 
+    def _save_relationships(self, instance):
+        if "relationships" not in self.params["features"]:
+            return
+
+        chars_ids = [char["id"] for char in self.params["chars"].values()]
+
+        rel_data = {k: v for k, v in self.data.items() if k.startswith("rel")}
+        for key, value in rel_data.items():
+            match = re.match(r"rel_(\d+)_(\w+)", key)
+            if not match:
+                continue
+            ch_id = int(match.group(1))
+            rel_type = match.group(2)
+
+            # check ch_id is in chars of the event
+            if ch_id not in chars_ids:
+                raise Http404(f"char {ch_id} not recognized")
+
+            # if value is empty
+            if not value:
+                # if wasn't present, do nothing
+                if ch_id not in self.params["relationships"] or rel_type not in self.params["relationships"][ch_id]:
+                    continue
+                # else delete
+                else:
+                    rel = self._get_rel(ch_id, instance, rel_type)
+                    save_version(rel, TextVersion.RELATIONSHIP, self.params["member"], True)
+                    rel.delete()
+                    continue
+
+            # if the value is present, and is the same as before, do nothing
+            if ch_id in self.params["relationships"] and rel_type in self.params["relationships"][ch_id]:
+                if value == self.params["relationships"][ch_id][rel_type]:
+                    continue
+
+            rel = self._get_rel(ch_id, instance, rel_type)
+            rel.text = value
+            rel.save()
+
+            save_version(rel, TextVersion.RELATIONSHIP, self.params["member"], False)
+
+    def _get_rel(self, ch_id, instance, rel_type):
+        if rel_type == "direct":
+            (rel, cr) = Relationship.objects.get_or_create(source_id=instance.pk, target_id=ch_id)
+        else:
+            (rel, cr) = Relationship.objects.get_or_create(target_id=instance.pk, source_id=ch_id)
+        return rel
+
     def save(self, commit=True):
         instance = super().save()
 
         if instance.pk:
-            self._save_plot()
+            self._save_plot(instance)
             self._save_px(instance)
+            self._save_relationships(instance)
 
         return instance
 

@@ -22,7 +22,7 @@ import csv
 import io
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count, Model
+from django.db.models import Model, Prefetch
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.http import HttpResponse, JsonResponse
@@ -42,6 +42,7 @@ from larpmanager.models.writing import (
     CharacterConfig,
     Plot,
     PlotCharacterRel,
+    Relationship,
     TextVersion,
     Writing,
     replace_chars_all,
@@ -49,6 +50,7 @@ from larpmanager.models.writing import (
 from larpmanager.templatetags.show_tags import show_char, show_trait
 from larpmanager.utils.common import check_field, compute_diff
 from larpmanager.utils.download import download
+from larpmanager.utils.edit import _setup_char_finder
 from larpmanager.utils.upload import upload_elements
 
 
@@ -179,6 +181,7 @@ def writing_list(request, ctx, typ, nm):
     if writing:
         orga_list_progress_assign(ctx, typ)  # pyright: ignore[reportArgumentType]
         writing_list_text_fields(ctx, text_fields, typ)
+        _setup_char_finder(ctx)
 
     _get_custom_form(ctx, nm)
 
@@ -272,14 +275,12 @@ def writing_list_plot(ctx):
 def writing_list_char(ctx, ev, text_fields):
     if "user_character" in ctx["features"]:
         ctx["list"] = ctx["list"].select_related("player")
-    if "relationships" in ctx["features"]:
-        cache = {}
-        res = Character.objects.filter(event=ev.get_class_parent("relationships")).annotate(dc=Count("characters"))
-        for el in res:
-            cache[el.number] = el.dc
 
-        for el in ctx["list"]:
-            el.cache_relationship_count = cache[el.number]
+    if "relationships" in ctx["features"]:
+        ctx["list"] = ctx["list"].prefetch_related(
+            Prefetch("source", queryset=Relationship.objects.filter(deleted=None))
+        )
+
     if "plot" in ctx["features"]:
         ctx["plots"] = {}
         for el in PlotCharacterRel.objects.filter(character__event=ctx["event"]).select_related("plot", "character"):

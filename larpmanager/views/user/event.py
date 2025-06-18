@@ -34,6 +34,7 @@ from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.association import AssocTextType
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import (
+    DevelopStatus,
     EventTextType,
     Run,
 )
@@ -97,8 +98,8 @@ def calendar(request, lang):
 
 def get_coming_runs(assoc_id, lang=None, future=True):
     runs = (
-        Run.objects.exclude(development=Run.START)
-        .exclude(development=Run.CANC)
+        Run.objects.exclude(development=DevelopStatus.START)
+        .exclude(development=DevelopStatus.CANC)
         .exclude(event__visible=False)
         .select_related("event")
     )
@@ -139,8 +140,8 @@ def carousel(request):
     # ref = datetime.now() - timedelta(days=3)
     for run in (
         Run.objects.filter(event__assoc_id=request.assoc["id"])
-        .exclude(development=Run.START)
-        .exclude(development=Run.CANC)
+        .exclude(development=DevelopStatus.START)
+        .exclude(development=DevelopStatus.CANC)
         .order_by("-end")
         .select_related("event")
     ):
@@ -191,7 +192,7 @@ def event_register(request, s):
     # check future runs
     runs = (
         Run.objects.filter(event=ctx["event"], end__gte=datetime.now())
-        .exclude(development=Run.START)
+        .exclude(development=DevelopStatus.START)
         .exclude(event__visible=False)
         .order_by("end")
     )

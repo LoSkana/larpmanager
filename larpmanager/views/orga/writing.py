@@ -377,19 +377,14 @@ def orga_multichoice_available(request, s, n):
     if not request.method == "POST":
         return Http404()
 
-    type = request.POST.get("type", "")
-    class_name = None
-    for v, nm in TextVersion.TEXT_CHOICES:
-        if v == type:
-            class_name = nm
-
-    if not class_name:
+    class_name = request.POST.get("type", "")
+    if class_name == "registrations":
         ctx = check_event_permission(request, s, n, "orga_registrations")
         taken_characters = RegistrationCharacterRel.objects.filter(reg__run_id=ctx["run"].id).values_list(
             "character_id", flat=True
         )
     else:
-        ctx = check_event_permission(request, s, n, "orga_" + class_name.lower() + "s")
+        ctx = check_event_permission(request, s, n, "orga_" + class_name + "s")
         main_class = globals()[class_name]
         eid = int(request.POST.get("eid", ""))
         taken_characters = main_class.objects.get(pk=eid).characters.values_list("id", flat=True)

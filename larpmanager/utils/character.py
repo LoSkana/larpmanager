@@ -137,6 +137,8 @@ def get_character_sheet_questbuilder(ctx):
 
         data["rels"] = []
         for snum in el["traits"]:
+            if snum not in ctx["traits"]:
+                continue
             num = ctx["traits"][snum]["char"]
             data["rels"].append(ctx["chars"][num])
 

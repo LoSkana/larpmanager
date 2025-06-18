@@ -22,6 +22,7 @@ import traceback
 
 from django import forms
 from django.contrib.postgres.aggregates import ArrayAgg
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.forms import CharField
 from django.utils.translation import gettext_lazy as _
@@ -31,7 +32,13 @@ from larpmanager.forms.utils import EventCharacterS2Widget, EventCharacterS2Widg
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep, Run
-from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingOption, WritingQuestion
+from larpmanager.models.form import (
+    QuestionApplicable,
+    WritingAnswer,
+    WritingChoice,
+    WritingOption,
+    WritingQuestion,
+)
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import (
@@ -42,7 +49,6 @@ from larpmanager.models.writing import (
     PlotCharacterRel,
     Prologue,
     PrologueType,
-    Relationship,
     SpeedLarp,
 )
 from larpmanager.utils.common import FileTypeValidator
@@ -108,7 +114,7 @@ class PlayerRelationshipForm(MyForm):
             rel = PlayerRelationship.objects.get(reg=self.params["run"].reg, target=self.cleaned_data["target"])
             if rel.id != self.instance.id:
                 self.add_error("target", _("Already existing relationship!"))
-        except Exception:
+        except ObjectDoesNotExist:
             pass
 
         return cleaned_data
@@ -122,39 +128,6 @@ class PlayerRelationshipForm(MyForm):
         instance.save()
 
         return instance
-
-
-class OrgaRelationshipForm(MyForm):
-    page_info = _("This page allows you to add or edit a relationship between characters.")
-
-    page_title = _("Character Relationship")
-
-    class Meta:
-        model = Relationship
-        fields = "__all__"
-        widgets = {"source": EventCharacterS2Widget, "target": EventCharacterS2Widget}
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["source"].widget.set_event(self.params["event"])
-        self.fields["source"].required = True
-        self.fields["target"].widget.set_event(self.params["event"])
-        self.fields["target"].required = True
-
-    def clean(self):
-        cleaned_data = super().clean()
-
-        if self.cleaned_data["source"] == self.cleaned_data["target"]:
-            self.add_error("source", _("You cannot add a relationship from character to self!"))
-
-        try:
-            rel = Relationship.objects.get(source_id=self.cleaned_data["source"], target_id=self.cleaned_data["target"])
-            if rel.id != self.instance.id:
-                self.add_error("source", _("Already existing relationship!"))
-        except Exception:
-            pass
-
-        return cleaned_data
 
 
 class UploadElementsForm(forms.Form):
@@ -181,11 +154,15 @@ class BaseWritingForm(BaseRegistrationForm):
     question_class = WritingQuestion
     instance_key = "element_id"
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # noinspection PyProtectedMember
+        self.applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)
+
     def _init_questions(self, event):
         super()._init_questions(event)
         # noinspection PyProtectedMember
-        applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)
-        self.questions = self.questions.filter(applicable=applicable)
+        self.questions = self.questions.filter(applicable=self.applicable)
 
     def get_options_query(self, event):
         query = super().get_options_query(event)
@@ -195,14 +172,11 @@ class BaseWritingForm(BaseRegistrationForm):
         key = f"option_char_{option.id}"
         return key
 
-    class Meta:
-        abstract = True
-
 
 class PlotForm(WritingForm, BaseWritingForm):
-    load_templates = "plot"
+    load_templates = ["plot"]
 
-    load_js = "characters-choices"
+    load_js = ["characters-choices"]
 
     page_title = _("Plot")
 
@@ -272,8 +246,9 @@ class PlotForm(WritingForm, BaseWritingForm):
 
 
 class FactionForm(WritingForm):
-    load_templates = "faction"
-    load_js = "characters-choices"
+    load_templates = ["faction"]
+
+    load_js = ["characters-choices"]
 
     page_title = _("Faction")
 
@@ -359,7 +334,7 @@ class QuestForm(WritingForm):
                 for rcr in reg.rcrs.all():
                     chars.append(f"#{rcr.character.number}")
                 char_name = ", ".join(chars)
-            except Exception:
+            except ObjectDoesNotExist:
                 print(traceback.format_exc())
                 pass
 
@@ -369,7 +344,7 @@ class QuestForm(WritingForm):
 class TraitForm(WritingForm):
     page_title = _("Trait")
 
-    load_templates = "trait"
+    load_templates = ["trait"]
 
     class Meta:
         model = Trait
@@ -417,7 +392,7 @@ class HandoutForm(WritingForm):
 
 
 class HandoutTemplateForm(MyForm):
-    load_templates = "handout-template"
+    load_templates = ["handout-template"]
 
     class Meta:
         model = HandoutTemplate
@@ -435,7 +410,7 @@ class PrologueTypeForm(MyForm):
 class PrologueForm(WritingForm):
     page_title = _("Prologue")
 
-    load_js = "characters-choices"
+    load_js = ["characters-choices"]
 
     class Meta:
         model = Prologue
@@ -456,7 +431,7 @@ class PrologueForm(WritingForm):
 class SpeedLarpForm(WritingForm):
     page_title = _("Speed larp")
 
-    load_js = "characters-choices"
+    load_js = ["characters-choices"]
 
     class Meta:
         model = SpeedLarp

@@ -168,7 +168,6 @@ $(document).ready(function() {
             }, 3000);
 
             v = v.replace(sl, '');
-            console.log(v);
             $(this).val(v);
         }
     });
@@ -177,14 +176,14 @@ $(document).ready(function() {
 
     reload_has_tooltip();
 
-    $('.my_toggle').on( "click", function() {
+    $(document).on("click", ".my_toggle", function() {
         var k = $(this).attr("tog");
         var el =  $("." + k);
         el.toggle();
         // console.log(el.is(":visible"));
          if (el.is(":visible")) {
              var elements = document.getElementsByClassName(k);
-             if (elements.length > 0)  {
+             if (elements.length > 0 && ! $(this).hasClass("no_jump"))  {
                 jump_to(elements[0]);
             }
             $(this).addClass('select');

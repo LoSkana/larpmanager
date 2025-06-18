@@ -86,7 +86,21 @@ class MyForm(forms.ModelForm):
 
     def allow_run_choice(self):
         runs = Run.objects.filter(event=self.params["event"])
+
+        # if campaign switch is active, show as runs all of the events sharing the campaign
+        if self.params["event"].assoc.get_config("campaign_switch"):
+            event_ids = {self.params["event"].id}
+            child = Event.objects.filter(parent_id=self.params["event"].id).values_list("pk", flat=True)
+            event_ids.update(child)
+            if self.params["event"].parent_id:
+                event_ids.add(self.params["event"].parent_id)
+                siblings = Event.objects.filter(parent_id=self.params["event"].parent_id).values_list("pk", flat=True)
+                event_ids.update(siblings)
+
+            runs = Run.objects.filter(event_id__in=event_ids)
+
         runs = runs.select_related("event").order_by("end")
+
         self.initial["run"] = self.params["run"].id
         if len(runs) <= 1:
             if self.instance.pk:
@@ -581,16 +595,16 @@ class MyCssForm(MyForm):
 
 class BaseAccForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        ctx = kwargs.pop("ctx")
+        self.ctx = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)
-        self.methods = ctx["methods"]
+        self.methods = self.ctx["methods"]
         cho = []
         for s in self.methods:
             cho.append((s, self.methods[s]["name"]))
         self.fields["method"] = forms.ChoiceField(choices=cho)
 
-        if "association" in ctx:
-            self.assoc = ctx["association"]
+        if "association" in self.ctx:
+            self.assoc = self.ctx["association"]
         else:
-            self.assoc = get_object_or_404(Association, pk=ctx["a_id"])
-        ctx["user_fees"] = self.assoc.get_config("payment_fees_user", False)
+            self.assoc = get_object_or_404(Association, pk=self.ctx["a_id"])
+        self.ctx["user_fees"] = self.assoc.get_config("payment_fees_user", False)

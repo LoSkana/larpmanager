@@ -177,7 +177,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '../../media')
 TINYMCE_JS_URL = 'node_modules/tinymce/tinymce.min.js'
 TINYMCE_DEFAULT_CONFIG = {
     'width': '100%',
-    'heigth': '15em',
+    'height': '15em',
     # 'theme': 'advanced',
     'plugins': 'lists advlist autosave fullscreen table image link  code autoresize wordcount autolink accordion emoticons media searchreplace codesample anchor',
     'toolbar': 'undo redo | styleselect | bold italic fontsizeselect forecolor backcolor hr | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | restoredraft searchreplace | fullscreen code wordcount | image media emoticons accordion codesample anchor',
@@ -293,3 +293,6 @@ FORMS_URLFIELD_ASSUME_HTTPS = True
 
 RECAPTCHA_PUBLIC_KEY = '???'
 RECAPTCHA_PRIVATE_KEY = '???'
+
+# max size of snippet
+FIELD_SNIPPET_LIMIT = 150

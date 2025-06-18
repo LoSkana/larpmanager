@@ -282,7 +282,7 @@ function exec_assigner() {
             constr['c' + key] = {'max': 1};
         }
 
-        console.log(constr);
+        // console.log(constr);
 
         var model = {
             'optimize': 'disappoint',
@@ -321,7 +321,7 @@ function exec_assigner() {
 
         var results = solver.Solve(model);
         // debug(results);
-        console.log(results);
+        // console.log(results);
 
         var counter = {};
         var tot = 0;

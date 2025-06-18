@@ -459,6 +459,9 @@ msgstr "Elimina"
 msgid "Detail"
 msgstr "Dettaglio"
 
+msgid "Direct"
+msgstr "Diretto"
+
 msgid "Events"
 msgstr "Eventi"
 
@@ -701,6 +704,9 @@ msgstr "Carta identità"
 
 msgid "Inflows"
 msgstr "Entrate"
+
+msgid "Inverse"
+msgstr "Inverso"
 
 msgid "Invoice"
 msgstr "Invoice"
@@ -1176,11 +1182,11 @@ msgstr "Primo soccorso"
 msgid "Frequency"
 msgstr "Frequenza"
 
-msgid "Interface"
-msgstr "Interfaccia"
-
 msgid "Inventory"
 msgstr "Inventario"
+
+msgid "Load list"
+msgstr "Elenco di carico"
 
 msgid "Mandatory"
 msgstr "Obbligatoria"
@@ -2837,11 +2843,11 @@ msgstr "Mostra disdette"
 msgid "Total payment sent"
 msgstr "Totale del pagamento inviato"
 
-msgid "Total registration"
-msgstr "Totale iscrizione"
-
 msgid "Transaction totals"
 msgstr "Transazione totali"
+
+msgid "Use these formats:"
+msgstr "Utilizza questi formati:"
 
 msgid "Verified payments!"
 msgstr "Pagamenti verificati!"
@@ -3039,9 +3045,6 @@ msgstr "Fazioni indipendenti"
 msgid "Last membership date"
 msgstr "Data ultimo tesseramento"
 
-msgid "List of other users:"
-msgstr "Lista altri utenti: "
-
 msgid "Mail added to queue!"
 msgstr "Mail aggiunta alla coda!"
 
@@ -3153,6 +3156,9 @@ msgstr "Se assente, indicare 0"
 
 msgid "Links to be accessed:"
 msgstr "Link da accedere:"
+
+msgid "List of other users: "
+msgstr "Elenco degli altri utenti:"
 
 msgid "Make the request now!"
 msgstr "Fai subito la richiesta!"
@@ -3315,6 +3321,9 @@ msgstr "Approvazione ruolo %(role)s"
 msgid "Select your character!"
 msgstr "Seleziona il tuo personaggio!"
 
+msgid "Total registration fee"
+msgstr "Quota di iscrizione totale"
+
 msgid "Unknow error on upload"
 msgstr "Errore sconosciuto durante il caricamento"
 
@@ -3382,6 +3391,9 @@ msgstr "Età minima: %(number)d"
 msgid "Minimum number of votes"
 msgstr "Numero minimo di voti da inviare"
 
+msgid "Move registration event"
+msgstr "Spostare l'evento di registrazione"
+
 msgid "Number of primary spots"
 msgstr "Numero posti primari"
 
@@ -3436,6 +3448,9 @@ msgstr "Check speed larp mancanti"
 msgid "Code two capital letters"
 msgstr "Codice due lettere maiuscole"
 
+msgid "Disable character finder"
+msgstr "Disattivare il cercatore di caratteri"
+
 #, python-format
 msgid "Disbursement %(credits)s"
 msgstr "Erogazione %(credits)s"
@@ -3470,9 +3485,6 @@ msgstr "Pre-iscrizioni salvate!"
 
 msgid "Provisional registration"
 msgstr "Iscrizione provvisoria"
-
-msgid "Quick links organisation"
-msgstr "Link rapidi organizzazione"
 
 msgid "Secret registration link"
 msgstr "Link iscrizione segreto"
@@ -3562,9 +3574,6 @@ msgstr "Godimento di beni di terzi"
 
 msgid "Access character creation!"
 msgstr "Accedi alla creazione personaggio!"
-
-msgid "Available payment methods:"
-msgstr "Metodi di pagamento disponibili: "
 
 msgid "Can't copy from same event"
 msgstr "Non è possibile copiare dallo stesso evento"
@@ -3969,9 +3978,6 @@ msgstr "Questa pagina riepiloga le iscrizioni alla run."
 msgid "Total of recorded money outflows"
 msgstr "Totale dei flussi di denaro in uscita registrati"
 
-msgid "We ask you to pay the difference"
-msgstr "Ti chiediamo di versare la differenza"
-
 msgid "Your question has been answered:"
 msgstr "E' stata data una risposta alla tua domanda:"
 
@@ -4268,6 +4274,9 @@ msgstr "Sono stati estratte le seguenti iscrizioni"
 msgid "This page shows cancelled enrollments."
 msgstr "Questa pagina riepiloga le iscrizioni disdette."
 
+msgid "We ask you to pay the remaining amount"
+msgstr "Ti chiediamo di pagare l'importo rimanente"
+
 msgid "You already have an assigned character"
 msgstr "Hai già un personaggio assegnato"
 
@@ -4460,6 +4469,9 @@ msgstr "Questa pagina riepiloga gli album foto caricati."
 msgid "This page summarises the system entries of"
 msgstr "Questa pagina riepiloga le voci registrati a sistema di"
 
+msgid "Allow to switch registration between events"
+msgstr "Permettere di cambiare la registrazione tra gli eventi"
+
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
 msgstr "Approvazione %(user)s come %(role)s per %(event)s"
@@ -4527,6 +4539,9 @@ msgstr "Se checkato: mostra il sito web per ogni evento"
 
 msgid "Remember to put the prefix at the beginning!"
 msgstr "Ricorda di mettere il prefisso all'inizio!"
+
+msgid "Select a character to add a new relationship"
+msgstr "Selezionare un personaggio per aggiungere una nuova relazione"
 
 #, python-format
 msgid "The sum was disbursed to you as %(credits)s."
@@ -4691,6 +4706,9 @@ msgstr "Modifica alcune caratteristiche del personaggio per renderlo tuo!"
 msgid "Names of the collaborators who are organizing it"
 msgstr "Nomi dei collaboratori che lo stanno organizzando"
 
+msgid "No additional payments are required at this time"
+msgstr "Al momento non sono richiesti pagamenti aggiuntivi"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Cancellazione iscrizione a %(event)s di %(user)s"
@@ -4750,6 +4768,9 @@ msgstr "Materie prime, sussidiarie, di consumo e di merci"
 #, python-format
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Reminder versamento quota sociale per %(event)s"
+
+msgid "Select a character to insert their reference code"
+msgstr "Selezionare un personaggio per inserire il suo codice di riferimento"
 
 msgid "The user has been enabled for the indicated role."
 msgstr "L'utente è stato abilitato al ruolo indicato."
@@ -4833,6 +4854,9 @@ msgstr "Attenzione! Il form contiene degli errori ai campi - "
 
 msgid "You cannot create a relationship towards yourself!"
 msgstr "Non puoi creare una relazione verso te stesso!"
+
+msgid "you can still pay the remaining amount if you wish"
+msgstr "se lo desideri, puoi comunque pagare l'importo rimanente"
 
 msgid "Fill in this field if you have accessibility needs."
 msgstr ""
@@ -4959,9 +4983,6 @@ msgstr "Questa pagina riepiloga i legami tra i personaggi."
 
 msgid "This page shows the workshop questions for the event."
 msgstr "Questa pagina riepiloga le domande workshop dell'evento."
-
-msgid "You cannot add a relationship from character to self!"
-msgstr "Non puoi aggiungere una relazione dal personaggio a sè stesso!"
 
 msgid "You have been gifted a registration to this event, by"
 msgstr "Ti è stata regalata una iscrizione a questo evento, da parte di "
@@ -5100,9 +5121,6 @@ msgstr ""
 msgid "We are processing your payment. Please wait a moment... "
 msgstr "Stiamo elaborando il tuo pagamento. Per favore attendi un attimo... "
 
-msgid "to indicate only the proper name of the other character."
-msgstr "per indicare il solo nome proprio dell'altro personaggio."
-
 msgid "Allows you to define a different language for each event."
 msgstr "Consente di definire una lingua diversa per ogni evento."
 
@@ -5139,9 +5157,6 @@ msgstr "Questa pagina riepiloga tutte le voci di spesa registrate a sistema."
 
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Totale delle spese presentate dai collaboratori e approvate"
-
-msgid "We ask you to pay the difference from the next instalment"
-msgstr "Ti chiediamo di versare la differenza rispetto la prossima rata"
 
 msgid "You cannot redeem a membership, you are already a member!"
 msgstr "Non puoi riscattare una iscrizione, risulti già iscritto!"
@@ -5360,6 +5375,9 @@ msgstr ""
 "Contenuto della pagina delle note legali collegata in fondo a tutte le "
 "pagine"
 
+msgid "Description of this payment method to be displayed to the user"
+msgstr "Descrizione di questo metodo di pagamento da mostrare all'utente"
+
 msgid "If checked, an option can be chosen a maximum number of times."
 msgstr ""
 "Se selezionata, un'opzione può essere scelta un numero massimo di volte."
@@ -5399,11 +5417,19 @@ msgstr ""
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "Per confermare l'iscrizione, salda la somma indicata."
 
+msgid "We ask you to pay the amount requested for the next instalment"
+msgstr "Ti chiediamo di pagare l'importo richiesto per la rata successiva"
+
 msgid "You must complete payment of membership dues in order to vote!"
 msgstr "Devi completare il pagamento della quota sociale per poter votare!"
 
 msgid "Your request has been sent, we will reply as soon as possible!"
 msgstr "La tua richiesta è stata inviata, risponderemo il prima possibile!"
+
+msgid "for no relationship, only to display the other character name."
+msgstr ""
+"senza alcuna relazione, solo per visualizzare il nome dell'altro "
+"personaggio."
 
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Descrizione - verrà visualizzato all'inizio della sezione"
@@ -5812,11 +5838,6 @@ msgid "Something went wrong in the account activation. Tell us more details. "
 msgstr ""
 "Qualcosa è andato storto nell'attivazione del tuo utente. Scrivici per "
 "correggerla. "
-
-msgid "This page allows you to add or edit a relationship between characters."
-msgstr ""
-"Questa pagina ti permette di aggiungere o modificare una relazione tra "
-"personaggi."
 
 msgid "This page allows you to change the main settings of your Organization."
 msgstr ""
@@ -6727,6 +6748,13 @@ msgstr ""
 "statistiche di preferenza"
 
 msgid ""
+"In rich text editors, you can reference other characters directly using "
+"their number."
+msgstr ""
+"Negli editor di testo ricco, è possibile fare riferimento ad altri "
+"personaggi direttamente utilizzando il loro numero."
+
+msgid ""
 "Requires Executive Committee approval of membership before participating in "
 "an event."
 msgstr ""
@@ -6957,13 +6985,6 @@ msgstr ""
 "poterlo riconoscere"
 
 msgid ""
-"If checked: In the event management panel, it also shows the association "
-"management links"
-msgstr ""
-"Se checkato: Nel pannello di gestione degli eventi mostra anche i link di "
-"gestione associativa"
-
-msgid ""
 "Indicate the maximum number of such discounts that can be requested (0 for "
 "infinite uses)"
 msgstr ""
@@ -7104,6 +7125,20 @@ msgstr ""
 "Valore dello sconto per il giocatore iscritto che dà il codice ad un amico "
 "che si iscrive"
 
+msgid ""
+"for bidirectional relationships, where the other character is also aware of "
+"the connection."
+msgstr ""
+"per le relazioni bidirezionali, in cui anche l'altro personaggio è a "
+"conoscenza della relazione."
+
+msgid ""
+"for unidirectional relationships, where the other character is NOT aware of "
+"the connection."
+msgstr ""
+"per relazioni unidirezionali, in cui l'altro personaggio NON è a conoscenza "
+"della relazione."
+
 #, python-format
 msgid ""
 "Alternatively, you can request a reimbursement in <a href='%(url)s'>your "
@@ -7169,6 +7204,13 @@ msgid ""
 msgstr ""
 "La tua richiesta di rimborso di %(amount).2f, con motivazione '%(reason)s', "
 "è stata approvata!"
+
+msgid ""
+"Disable the system that finds the character number when a special reference "
+"symbol is written"
+msgstr ""
+"Disabilita il sistema che trova il numero del carattere quando viene scritto"
+" un simbolo di riferimento speciale."
 
 msgid ""
 "Enables 'Factions' to organize characters into groups, either visible, "
@@ -7304,13 +7346,6 @@ msgid ""
 msgstr ""
 "Sarai informato quando verrà organizzata una nuova run, ed avrai diritto di "
 "prelazione sull'iscrizione!"
-
-msgid ""
-"Each payment method works differently, click on its name for a detailed "
-"guide on how to proceed."
-msgstr ""
-"Ogni metodo di pagamento ha un funzionamento diverso, clicca sul suo nome "
-"per avere una guida dettagliata su come procedere."
 
 msgid ""
 "For each character added, a specific field will be available to add "
@@ -7474,13 +7509,6 @@ msgstr ""
 " invece di essere visualizzate disattivate."
 
 msgid ""
-"Indicate the description you wish to be displayed when this payment method "
-"is proposed to the user."
-msgstr ""
-"Indica la descrizione che desideri venga visualizzata quando questo metodo "
-"di pagamento viene proposto all'utente."
-
-msgid ""
 "Provides users with comprehensive privacy controls to manage how their data "
 "is shared or displayed."
 msgstr ""
@@ -7642,13 +7670,6 @@ msgstr ""
 "su una funzionalità per visualizzarne la descrizione."
 
 msgid ""
-"for bidirectional relationships (love, colleagues, rivals), of which the "
-"other  character is aware of."
-msgstr ""
-"per le relazioni bidirezionali (amore, colleghi, rivali), di cui l'altro "
-"personaggio è a conoscenza."
-
-msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
 "available during registration."
 msgstr ""
@@ -7710,13 +7731,6 @@ msgid ""
 msgstr ""
 "Numero di giorni oltre la scadenza oltre i quali le iscrizioni sono indicate"
 " da cancellare (default 30 giorni)"
-
-msgid ""
-"Select the payment methods to be activated; then return to this page to "
-"enter the necessary information."
-msgstr ""
-"Seleziona i metodi di pagamento da attivare; dopo torna in questa pagina per"
-" inserire le informazioni necessarie."
 
 msgid ""
 "The discount has been added! It has been reserved for you for 15 minutes, "
@@ -7886,6 +7900,13 @@ msgid ""
 msgstr ""
 "Mostra occasionalmente una pagina speciale agli utenti, in base a una "
 "probabilità definita, e assegna facoltativamente un risultato."
+
+msgid ""
+"Percentage to be retained by the payment system - enter the value as a "
+"number, without the percentage symbol"
+msgstr ""
+"Percentuale da trattenere da parte del sistema di pagamento - inserire il "
+"valore come numero, senza il simbolo della percentuale"
 
 #, python-format
 msgid ""
@@ -8209,13 +8230,6 @@ msgstr ""
 "ringraziamo per il tuo sostegno e per aver creduto in noi!"
 
 msgid ""
-"for unidirectional relationships (secret hatred, loves but is unrequited), "
-"of that the other character is NOT aware of."
-msgstr ""
-"per le relazioni unidirezionali (odio segreto, ama ma non è corrisposto), di"
-" cui l'altro personaggio NON è a conoscenza."
-
-msgid ""
 "Enables basic inventory management. Users can add items to a warehouse "
 "table, track quantities, and note item locations."
 msgstr ""
@@ -8464,6 +8478,14 @@ msgstr ""
 "attività da controllare e la lista di utenti da sollecitare."
 
 msgid ""
+"When the text is displayed to the player, the number is automatically "
+"replaced with the character’s name and a link to their profile."
+msgstr ""
+"Quando il testo viene visualizzato dal giocatore, il numero viene "
+"automaticamente sostituito dal nome del personaggio e da un link al suo "
+"profilo."
+
+msgid ""
 "this figure is the net that should result as availability of financial "
 "instruments - it does not take into account tokens and credits"
 msgstr ""
@@ -8530,14 +8552,6 @@ msgstr ""
 "Abilita lo sconto \"porta un amico\". Un giocatore registrato fornisce il "
 "proprio codice univoco a un nuovo iscritto, garantendo a entrambi un prezzo "
 "scontato."
-
-msgid ""
-"Enter the percentage to be managed as retained by the payment system. Enter "
-"the value as a number, without entering the percentage symbol."
-msgstr ""
-"Indica la percentuale da gestire come trattenuta dal sistema di pagamento. "
-"Inserisci il valore come numero, senza inserire il simbolo della "
-"percentuale."
 
 msgid ""
 "Manages pre-larp 'mini-scenes.' You can create any number of scenes and "
@@ -8869,6 +8883,16 @@ msgstr ""
 " la voce e invita altri a pre-iscriverti!"
 
 msgid ""
+"When you press one of the special reference symbols, a popup will help you "
+"get the reference number of a character; you can also select a reference "
+"number to see the character’s name."
+msgstr ""
+"Quando si preme uno dei simboli di riferimento speciali, si apre un popup "
+"che consente di ottenere il numero di riferimento di un personaggio; è anche"
+" possibile selezionare un numero di riferimento per vedere il nome del "
+"personaggio."
+
+msgid ""
 "We only ask you to indicate a <b>order</b> of preference for the your pre-"
 "registrations (imagining you have to choose which one to play, indicates in "
 "what order you want to play them)."
@@ -8980,16 +9004,6 @@ msgstr ""
 "%(deadline)d giorni. Effettua il tuo pagamento <a href='%(url)s'>in questa "
 "pagina</a>. Se non riceveremo il pagamento entro la scadenza, la tua "
 "iscrizione potrebbe essere disdetta."
-
-msgid ""
-"In the 'Presentation' and 'Text' fields you can refer to other characters "
-"using their number directly, in the final text the number will automatically"
-" be replaced with their name, and a link to the character. Use:"
-msgstr ""
-"Nei campi \"Presentazione\" e \"Testo\" è possibile fare riferimento ad "
-"altri personaggi usando direttamente il loro numero; nel testo finale il "
-"numero sarà automaticamente sostituito dal loro nome e da un link al "
-"personaggio. Utilizzo:"
 
 msgid ""
 "Indicates the ratio between reduced and patron tickets, multiplied by 10. "

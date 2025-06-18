@@ -38,7 +38,7 @@ from larpmanager.models.accounting import (
     AccountingItemTransaction,
 )
 from larpmanager.models.casting import AssignmentTrait
-from larpmanager.models.event import Run
+from larpmanager.models.event import DevelopStatus
 from larpmanager.models.form import RegistrationChoice, RegistrationOption
 from larpmanager.models.member import Membership, get_user_membership
 from larpmanager.models.registration import (
@@ -434,7 +434,7 @@ def check_reg_bkg_go(reg_id):
 
 
 def update_registration_accounting(reg):
-    for s in [Run.CANC, Run.DONE]:
+    for s in [DevelopStatus.CANC, DevelopStatus.DONE]:
         if reg.run.development == s:
             return
 

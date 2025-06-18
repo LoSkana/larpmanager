@@ -21,10 +21,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 res = data["res"];
 //                html = "<a id='multichoice_add'>{% trans 'Add' %}</a> <br /><br />";
                 html = "";
-                console.log(res);
                 for (let index in res) {
-                    console.log(index);
-                    console.log(res[index]);
                     //html += "<input class='checkbox' type='checkbox' value='{0}'><span>{1}</span><br /><br />".format(res[index][0], res[index][1]);
                     html += "{1}<br /><br />".format(res[index][0], res[index][1]);
                 }

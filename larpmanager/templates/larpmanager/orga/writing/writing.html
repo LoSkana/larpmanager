@@ -13,39 +13,16 @@
 {% endblock info %}
 {% block content %}
     {% include "elements/form/sections.html" %}
+    {% include "elements/form/char_finder.html" %}
 {% endblock content %}
 {% block js2 %}
     {% include "elements/form/max_length.js" %}
+    {% include "elements/form/char_highlight.js" %}
+    {% if not disable_char_finder %}
+        {{ char_finder_media }}
+        {% include "elements/form/char_finder.js" %}
+    {% endif %}
     <script>
-function translate(id, text) {
-
-    // get text
-    var tx = $('#' + id + '_tr .orig .plot').first().html();
-
-    // get translation
-    // console.log(tx);
-
-    $.post("{% url 'orga_translate' event.slug run.number %}", {
-        tx: tx,
-        csrfmiddlewaretoken: '{{ csrf_token }}'
-    }, function(data, status){
-        console.log(data.res);
-
-        try {
-            $('#' + id).val(data.res);
-
-            tinymce.get(id).setContent(data.res);
-        } catch (e) {
-            console.log(e);
-        }
-
-        // show orig
-        $('#' + id + '_tr .orig').show();
-    });
-
-    return false;
-}
-
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
 
@@ -56,10 +33,6 @@ window.addEventListener('DOMContentLoaded', function() {
         $('option:selected').each(function(){
             $(this).prop('selected',true);
         });
-
-        //~ $('input[type=text]').each(function() {
-            //~ console.log($(this));
-        //~ });
 
         $('.link_show_char').each(function(){
             v = $(this).text();
@@ -77,11 +50,11 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 
 {% if eid %}
-var eid = {{ eid }};
-var type = '{{ type }}';
-    {% include "elements/auto-save.html" %}
+    var eid = {{ eid }};
+    var type = '{{ type }}';
+    {% include "elements/auto-save.js" %}
 {% else %}
-var eid = -1;
+    var eid = -1;
 {% endif %}
 
 });
