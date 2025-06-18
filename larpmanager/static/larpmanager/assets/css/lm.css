@@ -1545,6 +1545,16 @@ th select {
     cursor:pointer;
 }
 
+form th {
+  max-width: 20%;
+  width: 20%;
+}
+
+@media(max-width: 1000px) {
+    form th {
+      max-width: 100%;
+  }
+
 .editable {
   cursor: cell;
 }

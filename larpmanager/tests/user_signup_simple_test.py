@@ -121,7 +121,7 @@ def help_questions(live_server, page):
 def pre_register(live_server, page):
     # Set email send
     go_to(page, live_server, "/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Email notifications")).click()
+    page.get_by_role("link", name=re.compile(r"^Email notifications.+")).click()
     page.locator("#id_mail_cc").check()
     page.locator("#id_mail_signup_new").check()
     page.locator("#id_mail_signup_update").check()
@@ -132,7 +132,7 @@ def pre_register(live_server, page):
     go_to(page, live_server, "/manage/features/32/on")
 
     go_to(page, live_server, "/test/1/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Pre-registration")).click()
+    page.get_by_role("link", name=re.compile(r"^Pre-registration.+")).click()
     page.locator("#id_pre_register_active").check()
     page.get_by_role("button", name="Confirm", exact=True).click()
 
@@ -151,6 +151,6 @@ def pre_register(live_server, page):
 
     # disable preregistration, sign up really
     go_to(page, live_server, "/test/1/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Pre-registration")).click()
+    page.get_by_role("link", name=re.compile(r"^Pre-registration.+")).click()
     page.locator("#id_pre_register_active").uncheck()
     page.get_by_role("button", name="Confirm", exact=True).click()

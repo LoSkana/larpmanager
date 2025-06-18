@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import inflection
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, JsonResponse
@@ -378,16 +379,18 @@ def orga_multichoice_available(request, s, n):
         return Http404()
 
     class_name = request.POST.get("type", "")
+    taken_characters = set()
     if class_name == "registrations":
         ctx = check_event_permission(request, s, n, "orga_registrations")
         taken_characters = RegistrationCharacterRel.objects.filter(reg__run_id=ctx["run"].id).values_list(
             "character_id", flat=True
         )
     else:
+        eid = request.POST.get("eid", "")
         ctx = check_event_permission(request, s, n, "orga_" + class_name + "s")
-        main_class = globals()[class_name]
-        eid = int(request.POST.get("eid", ""))
-        taken_characters = main_class.objects.get(pk=eid).characters.values_list("id", flat=True)
+        if eid:
+            model_class = apps.get_model("larpmanager", inflection.camelize(class_name))
+            taken_characters = model_class.objects.get(pk=int(eid)).characters.values_list("id", flat=True)
 
     ctx["list"] = ctx["event"].get_elements(Character).order_by("number")
     ctx["list"] = ctx["list"].exclude(pk__in=taken_characters)

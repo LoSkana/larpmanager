@@ -60,6 +60,7 @@ holidays
 html5lib
 
 humanize
+inflection
 
 jellyfish
 lxml
