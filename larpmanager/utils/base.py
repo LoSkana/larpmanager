@@ -60,6 +60,8 @@ def def_user_ctx(request):
     res["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
     res["TINYMCE_JS_URL"] = conf_settings.TINYMCE_JS_URL
 
+    res["request_func_name"] = request.resolver_match.func.__name__
+
     return res
 
 
@@ -85,6 +87,7 @@ def check_assoc_permission(request, slug):
     ctx["manage"] = 1
     get_index_assoc_permissions(ctx, request, request.assoc["id"])
     ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
+    ctx["exe_page"] = 1
     return ctx
 
 

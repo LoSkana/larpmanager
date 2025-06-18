@@ -2,6 +2,7 @@
   pk: 1
   fields:
     name: Event
+    descr: 'Manage the event settings: name, description,  and other data'
     slug: orga_event
     number: 11
     feature: 165
@@ -9,6 +10,7 @@
   pk: 2
   fields:
     name: Run
+    descr: 'Manage the run settings: date, registrations, elements visibility'
     slug: orga_run
     number: 21
     feature: 165
@@ -16,6 +18,7 @@
   pk: 3
   fields:
     name: Roles
+    descr: Assign roles to staff members, and give access to specific functions
     slug: orga_roles
     number: 31
     feature: 165
@@ -23,6 +26,7 @@
   pk: 4
   fields:
     name: Configuration
+    descr: Manage the configuration of the activated features
     slug: orga_config
     number: 41
     feature: 165
@@ -30,6 +34,7 @@
   pk: 5
   fields:
     name: Features
+    descr: Activate features for the event
     slug: orga_features
     number: 51
     feature: 165
@@ -37,6 +42,7 @@
   pk: 6
   fields:
     name: Appearance
+    descr: 'Set visual aspect: colors, background, cover image'
     slug: orga_appearance
     number: 11
     feature: 168
@@ -44,6 +50,7 @@
   pk: 8
   fields:
     name: Copy
+    descr: Copy elements from another event
     slug: orga_copy
     number: 11
     feature: 10
@@ -51,6 +58,7 @@
   pk: 9
   fields:
     name: Casting
+    descr: Assign the characters following the players' preferences
     slug: orga_casting
     number: 11
     feature: 27
@@ -58,6 +66,7 @@
   pk: 10
   fields:
     name: Accounting
+    descr: Manage event accounting
     slug: orga_accounting
     number: 11
     feature: 163
@@ -65,6 +74,7 @@
   pk: 11
   fields:
     name: Payments
+    descr: Manage payments performed by players to cover the registration fee
     slug: orga_payments
     number: 21
     feature: 111
@@ -72,6 +82,7 @@
   pk: 12
   fields:
     name: Expenses
+    descr: Manage expenses uploaded by staff members and approve them
     slug: orga_expenses
     number: 31
     feature: 106
@@ -79,6 +90,7 @@
   pk: 13
   fields:
     name: Tokens
+    descr: Manages tokens used by players to cover the registration fee
     slug: orga_tokens
     number: 41
     feature: 107
@@ -86,6 +98,7 @@
   pk: 14
   fields:
     name: Credits
+    descr: Manages credits used by players to cover the registration fee
     slug: orga_credits
     number: 51
     feature: 107
@@ -93,6 +106,7 @@
   pk: 15
   fields:
     name: Inflows
+    descr: Manages event revenues
     slug: orga_inflows
     number: 61
     feature: 144
@@ -100,6 +114,7 @@
   pk: 16
   fields:
     name: Outflows
+    descr: Manages event's expenses
     slug: orga_outflows
     number: 71
     feature: 108
@@ -107,6 +122,7 @@
   pk: 17
   fields:
     name: Safety
+    descr: Review players' safety-related informations
     slug: orga_safety
     number: 11
     feature: 26
@@ -114,6 +130,7 @@
   pk: 18
   fields:
     name: Diet
+    descr: Review players' dietary restrictions and allergies.
     slug: orga_diet
     number: 21
     feature: 93
@@ -121,6 +138,7 @@
   pk: 19
   fields:
     name: Sensitive data
+    descr: Review players' sensitive data
     slug: orga_sensitive
     number: 31
     feature: 166
@@ -128,6 +146,7 @@
   pk: 20
   fields:
     name: Questions
+    descr: Manage questions asked by the players
     slug: orga_questions
     number: 41
     feature: 28
@@ -135,6 +154,7 @@
   pk: 21
   fields:
     name: Spam
+    descr: Displays full lists of usual players not already signed up
     slug: orga_spam
     number: 51
     feature: 40
@@ -142,6 +162,7 @@
   pk: 22
   fields:
     name: Preaching
+    descr: Displays lists of players to persuade to sign up
     slug: orga_persuade
     number: 61
     feature: 40
@@ -149,6 +170,7 @@
   pk: 23
   fields:
     name: Characters
+    descr: Manage the event characters
     slug: orga_characters
     number: 11
     feature: 178
@@ -156,6 +178,7 @@
   pk: 26
   fields:
     name: Plots
+    descr: Manage the event plots
     slug: orga_plots
     number: 41
     feature: 103
@@ -163,6 +186,7 @@
   pk: 27
   fields:
     name: Factions
+    descr: Manage the event factions
     slug: orga_factions
     number: 51
     feature: 104
@@ -170,6 +194,7 @@
   pk: 28
   fields:
     name: Quest type
+    descr: Manage the type of event quests
     slug: orga_quest_types
     number: 21
     feature: 7
@@ -177,6 +202,7 @@
   pk: 29
   fields:
     name: Quest
+    descr: Manage the event quests
     slug: orga_quests
     number: 31
     feature: 7
@@ -184,6 +210,7 @@
   pk: 30
   fields:
     name: Traits
+    descr: Manage the traits available in the event quests
     slug: orga_traits
     number: 41
     feature: 7
@@ -191,6 +218,7 @@
   pk: 31
   fields:
     name: Prologues type
+    descr: Manage the type of event prologues
     slug: orga_prologue_types
     number: 61
     feature: 6
@@ -198,6 +226,7 @@
   pk: 32
   fields:
     name: Prologues
+    descr: Manage the event prologues
     slug: orga_prologues
     number: 71
     feature: 6
@@ -205,6 +234,7 @@
   pk: 33
   fields:
     name: Speed larp
+    descr: Manage the event speed-larps
     slug: orga_speedlarps
     number: 21
     feature: 25
@@ -212,6 +242,7 @@
   pk: 34
   fields:
     name: Check
+    descr: Perform check on the consistency of character sheets
     slug: orga_check
     number: 81
     feature: 178
@@ -219,6 +250,7 @@
   pk: 35
   fields:
     name: Progress
+    descr: Manage the progress steps for the writing elements
     slug: orga_progress_steps
     number: 91
     feature: 91
@@ -226,6 +258,7 @@
   pk: 36
   fields:
     name: Registrations
+    descr: Manage player registrations
     slug: orga_registrations
     number: 11
     feature: 169
@@ -233,6 +266,7 @@
   pk: 37
   fields:
     name: Tickets
+    descr: 'Manage the registration tickets '
     slug: orga_registration_tickets
     number: 21
     feature: 169
@@ -240,6 +274,7 @@
   pk: 38
   fields:
     name: Sections
+    descr: 'Manage the registration sections '
     slug: orga_registration_sections
     number: 31
     feature: 77
@@ -247,6 +282,7 @@
   pk: 39
   fields:
     name: Form
+    descr: Manage the registration questions and options
     slug: orga_registration_form
     number: 41
     feature: 169
@@ -254,6 +290,7 @@
   pk: 41
   fields:
     name: Surcharges
+    descr: Manage the registration surcharges
     slug: orga_registration_surcharges
     number: 61
     feature: 139
@@ -261,6 +298,7 @@
   pk: 42
   fields:
     name: Dynamic rates
+    descr: Manage dynamic installment payments for registrations
     slug: orga_registration_quotas
     number: 71
     feature: 62
@@ -268,6 +306,7 @@
   pk: 43
   fields:
     name: Fixed instalments
+    descr: Manages fixed installment payments for registrations
     slug: orga_registration_installments
     number: 81
     feature: 74
@@ -275,6 +314,7 @@
   pk: 44
   fields:
     name: Discounts
+    descr: Manage registrations discounts available to players
     slug: orga_discounts
     number: 91
     feature: 12
@@ -282,6 +322,7 @@
   pk: 45
   fields:
     name: Pre-Registrations
+    descr: Manage the pre-registrations received
     slug: orga_pre_registrations
     number: 101
     feature: 32
@@ -289,6 +330,7 @@
   pk: 46
   fields:
     name: Cancellations
+    descr: Manages registration cancellations
     slug: orga_cancellations
     number: 111
     feature: 169
@@ -296,6 +338,7 @@
   pk: 47
   fields:
     name: Newsletter
+    descr: Displays list of emails of signed-up players
     slug: orga_newsletter
     number: 71
     feature: 40
@@ -303,6 +346,7 @@
   pk: 49
   fields:
     name: Assignments
+    descr: Manages and assigns tasks to characters
     slug: orga_assignments
     number: 51
     feature: 7
@@ -310,6 +354,7 @@
   pk: 50
   fields:
     name: Payments (Confirmation)
+    descr: Manually confirm payments received
     slug: orga_invoices
     number: 81
     feature: 111
@@ -317,6 +362,7 @@
   pk: 51
   fields:
     name: Expenses (Personal)
+    descr: Manage your event expenses and upload receipts
     slug: orga_expenses_my
     number: 91
     feature: 106
@@ -324,6 +370,7 @@
   pk: 52
   fields:
     name: Deadlines
+    descr: Displays players overdue for payment or other deadlines
     slug: orga_deadlines
     number: 31
     feature: 94
@@ -331,6 +378,7 @@
   pk: 53
   fields:
     name: PDF
+    descr: Set the options for the automatic PDF generation of characters sheets
     slug: orga_characters_pdf
     number: 111
     feature: 21
@@ -338,6 +386,7 @@
   pk: 54
   fields:
     name: Handout Models
+    descr: Manage the models for event handouts
     slug: orga_handout_templates
     number: 121
     feature: 105
@@ -345,6 +394,7 @@
   pk: 55
   fields:
     name: Handouts
+    descr: Manage the event handouts
     slug: orga_handouts
     number: 131
     feature: 105
@@ -352,6 +402,7 @@
   pk: 57
   fields:
     name: Ability type
+    descr: 'Manage the type of character skills '
     slug: orga_px_ability_types
     number: 41
     feature: 118
@@ -359,6 +410,7 @@
   pk: 58
   fields:
     name: Ability
+    descr: Manage the character skills purchaseable with XP
     slug: orga_px_abilities
     number: 51
     feature: 118
@@ -366,6 +418,7 @@
   pk: 59
   fields:
     name: Delivery
+    descr: Manage XP distributions for character skill purchases.
     slug: orga_px_deliveries
     number: 61
     feature: 118
@@ -373,6 +426,7 @@
   pk: 60
   fields:
     name: Historical
+    descr: Display full history of player preferences on characters
     slug: orga_casting_history
     number: 61
     feature: 27
@@ -380,6 +434,7 @@
   pk: 61
   fields:
     name: Statistics
+    descr: Displays statistics on player preferences on characters
     slug: orga_casting_preferences
     number: 71
     feature: 27
@@ -387,6 +442,7 @@
   pk: 63
   fields:
     name: Utility
+    descr: 'Upload and host files directly '
     slug: orga_utils
     number: 31
     feature: 43
@@ -394,6 +450,7 @@
   pk: 64
   fields:
     name: Problems
+    descr: Manage in-game issues
     slug: orga_problems
     number: 41
     feature: 60
@@ -401,6 +458,7 @@
   pk: 65
   fields:
     name: Lottery
+    descr: Select randomly lottery tickets to upgrade
     slug: orga_lottery
     number: 121
     feature: 50
@@ -408,6 +466,7 @@
   pk: 66
   fields:
     name: Workshops
+    descr: 'Manage quiz-style workshops '
     slug: orga_workshops
     number: 51
     feature: 24
@@ -415,6 +474,7 @@
   pk: 67
   fields:
     name: Modules
+    descr: Manages modules for workshops
     slug: orga_workshop_modules
     number: 61
     feature: 24
@@ -422,6 +482,7 @@
   pk: 68
   fields:
     name: Questions
+    descr: Manage questions for workshops
     slug: orga_workshop_questions
     number: 71
     feature: 24
@@ -429,6 +490,7 @@
   pk: 69
   fields:
     name: Answers
+    descr: Manage answers for workshop questions
     slug: orga_workshop_options
     number: 81
     feature: 24
@@ -436,6 +498,7 @@
   pk: 70
   fields:
     name: Texts
+    descr: Customize specific texts on the event interface
     slug: orga_texts
     number: 20
     feature: 168
@@ -443,6 +506,7 @@
   pk: 71
   fields:
     name: Navigation
+    descr: Customize buttons in the event navigation bar
     slug: orga_buttons
     number: 30
     feature: 168
@@ -450,6 +514,7 @@
   pk: 72
   fields:
     name: Secret registration link
+    descr: Display secret registration link
     slug: orga_registration_secret
     number: 100
     feature: 69
@@ -457,6 +522,7 @@
   pk: 73
   fields:
     name: Cache Reloading
+    descr: Reload cached event data
     slug: orga_reload_cache
     number: 999
     feature: 167
@@ -464,6 +530,7 @@
   pk: 74
   fields:
     name: Send e-mail
+    descr: Send e-mail
     slug: orga_send_mail
     number: 99
     feature: 166
@@ -471,6 +538,7 @@
   pk: 75
   fields:
     name: Form
+    descr: Manage questions and options for characters and writing elements
     slug: orga_character_form
     number: 12
     feature: 178
@@ -478,6 +546,7 @@
   pk: 76
   fields:
     name: Archive
+    descr: Display sent e-mails
     slug: orga_archive_email
     number: 100
     feature: 166

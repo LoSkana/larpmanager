@@ -7431,61 +7431,378 @@ msgstr ""
 msgid "Check the validity of the fiscal code."
 msgstr ""
 
+msgid "Manage the organization main settings"
+msgstr ""
+
+msgid "Assign roles to collaborators and grant access to specific functions"
+msgstr ""
+
+msgid "Manage the configuration of the activated features"
+msgstr ""
+
+msgid "Activate features for the organization"
+msgstr ""
+
+msgid "Manage organization accounting"
+msgstr ""
+
+msgid "Manage payments performed by players on all events"
+msgstr ""
+
+msgid "Manage donations performed by players"
+msgstr ""
+
+msgid "Manages events or organization expenses "
+msgstr ""
+
+msgid "Manages events or organization revenues"
+msgstr ""
+
+msgid "Manage staff expenses based on receipts uploaded for all events"
+msgstr ""
+
+msgid ""
+"Manages credits used by players to cover the registration fee on all events"
+msgstr ""
+
+msgid "Manage refund requests"
+msgstr ""
+
+msgid "Manage collections participated by players"
+msgstr ""
+
 msgid "Audits"
+msgstr ""
+
+msgid "Verify manually approved payments"
+msgstr ""
+
+msgid "Review the annual budget report"
 msgstr ""
 
 msgid "Historical accounting"
 msgstr ""
 
+msgid "Review historical financial records"
+msgstr ""
+
+msgid "Set visual aspect: colors, background, cover image"
+msgstr ""
+
+msgid "Customize textual elements of the organization interface"
+msgstr ""
+
+msgid "Manage url shortner"
+msgstr ""
+
+msgid "Manage inventory and items"
+msgstr ""
+
+msgid "Manage events"
+msgstr ""
+
 msgid "Runs"
+msgstr ""
+
+msgid "Manages the runs of events"
 msgstr ""
 
 msgid "Pre-Registrations"
 msgstr ""
 
+msgid "Manage the pre-registration of all events"
+msgstr ""
+
+msgid "Displays players overdue for payment or other deadlines for all events"
+msgstr ""
+
 msgid "Send e-mail"
+msgstr ""
+
+msgid "Review all members"
+msgstr ""
+
+msgid "Manage player votes for the assignment of roles in the organization"
 msgstr ""
 
 msgid "Badges"
 msgstr ""
 
+msgid "Manage badges and assign them to players"
+msgstr ""
+
+msgid "Manage player questions and answer them"
+msgstr ""
+
+msgid "Displays list of emails of users"
+msgstr ""
+
+msgid "Manage volunteer registry"
+msgstr ""
+
 msgid "Enrolment"
+msgstr ""
+
+msgid "Display all users data"
 msgstr ""
 
 msgid "Payment Settings"
 msgstr ""
 
+msgid "Configure gateways to process player payments"
+msgstr ""
+
+msgid "Manage invoices of payments and approve them"
+msgstr ""
+
 msgid "Membership check"
+msgstr ""
+
+msgid "Check consistency of the members’ personal data"
+msgstr ""
+
+msgid ""
+"Manages tokens used by players to cover the registration fee for all events"
+msgstr ""
+
+msgid "Display all users data as members registry"
+msgstr ""
+
+msgid "Manage fields that track players’ data"
+msgstr ""
+
+msgid "Manage event templates used as starting points for new events"
 msgstr ""
 
 msgid "Archive"
 msgstr ""
 
+msgid "Display all sent e-mails "
+msgstr ""
+
+msgid "Manage the event settings: name, description,  and other data"
+msgstr ""
+
+msgid "Manage the run settings: date, registrations, elements visibility"
+msgstr ""
+
+msgid "Assign roles to staff members, and give access to specific functions"
+msgstr ""
+
+msgid "Activate features for the event"
+msgstr ""
+
+msgid "Copy elements from another event"
+msgstr ""
+
+msgid "Assign the characters following the players' preferences"
+msgstr ""
+
+msgid "Manage event accounting"
+msgstr ""
+
+msgid "Manage payments performed by players to cover the registration fee"
+msgstr ""
+
+msgid "Manage expenses uploaded by staff members and approve them"
+msgstr ""
+
+msgid "Manages tokens used by players to cover the registration fee"
+msgstr ""
+
+msgid "Manages credits used by players to cover the registration fee"
+msgstr ""
+
+msgid "Manages event revenues"
+msgstr ""
+
+msgid "Manages event's expenses"
+msgstr ""
+
+msgid "Review players' safety-related informations"
+msgstr ""
+
+msgid "Review players' dietary restrictions and allergies."
+msgstr ""
+
+msgid "Review players' sensitive data"
+msgstr ""
+
+msgid "Manage questions asked by the players"
+msgstr ""
+
+msgid "Displays full lists of usual players not already signed up"
+msgstr ""
+
+msgid "Displays lists of players to persuade to sign up"
+msgstr ""
+
+msgid "Manage the event characters"
+msgstr ""
+
+msgid "Manage the event plots"
+msgstr ""
+
+msgid "Manage the event factions"
+msgstr ""
+
+msgid "Manage the type of event quests"
+msgstr ""
+
+msgid "Manage the event quests"
+msgstr ""
+
+msgid "Manage the traits available in the event quests"
+msgstr ""
+
 msgid "Prologues type"
+msgstr ""
+
+msgid "Manage the type of event prologues"
+msgstr ""
+
+msgid "Manage the event prologues"
+msgstr ""
+
+msgid "Manage the event speed-larps"
+msgstr ""
+
+msgid "Perform check on the consistency of character sheets"
+msgstr ""
+
+msgid "Manage the progress steps for the writing elements"
+msgstr ""
+
+msgid "Manage player registrations"
+msgstr ""
+
+msgid "Manage the registration tickets "
+msgstr ""
+
+msgid "Manage the registration sections "
 msgstr ""
 
 msgid "Form"
 msgstr ""
 
+msgid "Manage the registration questions and options"
+msgstr ""
+
+msgid "Manage the registration surcharges"
+msgstr ""
+
+msgid "Manage dynamic installment payments for registrations"
+msgstr ""
+
+msgid "Manages fixed installment payments for registrations"
+msgstr ""
+
+msgid "Manage registrations discounts available to players"
+msgstr ""
+
+msgid "Manage the pre-registrations received"
+msgstr ""
+
+msgid "Manages registration cancellations"
+msgstr ""
+
+msgid "Displays list of emails of signed-up players"
+msgstr ""
+
+msgid "Manages and assigns tasks to characters"
+msgstr ""
+
 msgid "Payments (Confirmation)"
+msgstr ""
+
+msgid "Manually confirm payments received"
 msgstr ""
 
 msgid "Expenses (Personal)"
 msgstr ""
 
+msgid "Manage your event expenses and upload receipts"
+msgstr ""
+
+msgid "Displays players overdue for payment or other deadlines"
+msgstr ""
+
+msgid "Set the options for the automatic PDF generation of characters sheets"
+msgstr ""
+
 msgid "Handout Models"
+msgstr ""
+
+msgid "Manage the models for event handouts"
+msgstr ""
+
+msgid "Manage the event handouts"
+msgstr ""
+
+msgid "Manage the type of character skills "
+msgstr ""
+
+msgid "Manage the character skills purchaseable with XP"
+msgstr ""
+
+msgid "Manage XP distributions for character skill purchases."
+msgstr ""
+
+msgid "Display full history of player preferences on characters"
 msgstr ""
 
 msgid "Statistics"
 msgstr ""
 
+msgid "Displays statistics on player preferences on characters"
+msgstr ""
+
+msgid "Upload and host files directly "
+msgstr ""
+
+msgid "Manage in-game issues"
+msgstr ""
+
+msgid "Select randomly lottery tickets to upgrade"
+msgstr ""
+
+msgid "Manage quiz-style workshops "
+msgstr ""
+
 msgid "Modules"
+msgstr ""
+
+msgid "Manages modules for workshops"
+msgstr ""
+
+msgid "Manage questions for workshops"
 msgstr ""
 
 msgid "Answers"
 msgstr ""
 
+msgid "Manage answers for workshop questions"
+msgstr ""
+
+msgid "Customize specific texts on the event interface"
+msgstr ""
+
+msgid "Customize buttons in the event navigation bar"
+msgstr ""
+
+msgid "Display secret registration link"
+msgstr ""
+
 msgid "Cache Reloading"
+msgstr ""
+
+msgid "Reload cached event data"
+msgstr ""
+
+msgid "Manage questions and options for characters and writing elements"
+msgstr ""
+
+msgid "Display sent e-mails"
 msgstr ""
 
 #, python-format
