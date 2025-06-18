@@ -1407,6 +1407,9 @@ msgstr "Tipo de misión"
 msgid "Quest type"
 msgstr "Tipo de misión"
 
+msgid "Quick Help"
+msgstr "Ayuda rápida"
+
 msgid "Refund for"
 msgstr "Reembolso de"
 
@@ -1472,6 +1475,9 @@ msgstr "Dos plazos"
 
 msgid "Visibility"
 msgstr "Visibilidad"
+
+msgid "Welcome to"
+msgstr "Bienvenido a"
 
 msgid "accounting"
 msgstr "contabilidad"
@@ -1655,6 +1661,9 @@ msgstr "Ver cerrados"
 
 msgid "Simple list"
 msgstr "Lista simple"
+
+msgid "Suggestions"
+msgstr "Sugerencias"
 
 msgid "Ticket list"
 msgstr "Lista de entradas"
@@ -2383,9 +2392,6 @@ msgstr "Tus personajes"
 
 msgid "Your membership"
 msgstr "Tu afiliación"
-
-msgid "create one here"
-msgstr "cree uno aquí"
 
 msgid "expected within"
 msgstr "esperado dentro de"
@@ -3608,9 +3614,6 @@ msgstr "Se utilizará lo siguiente"
 msgid "The name of the competence"
 msgstr "El nombre de la competencia"
 
-msgid "There are no active events"
-msgstr "No hay eventos activos"
-
 msgid "These fields are mandatory"
 msgstr "Estos campos son obligatorios"
 
@@ -4313,6 +4316,9 @@ msgstr "Rellena las relaciones de tu personaje"
 msgid "If checked, makes visible the speedlarp"
 msgstr "Si está marcada, hace visible el speedlarp"
 
+msgid "If you need help, remember to check out"
+msgstr "Si necesita ayuda, no olvide consultar"
+
 #, python-format
 msgid "Membership fee of %(user)s for %(year)s"
 msgstr "Porcentaje de %(user)s por %(year)s"
@@ -4878,6 +4884,13 @@ msgstr "Si lo deseas, puedes cancelar las preinscripciones anteriores."
 
 msgid "Indicates the currency in which to receive payments"
 msgstr "Indica la divisa en la que se recibirán los pagos"
+
+msgid "Join our Discord for help, ideas, or to report bugs"
+msgstr ""
+"Únete a nuestro Discord para obtener ayuda, ideas o informar de errores."
+
+msgid "Short guides to help you learn how the system works"
+msgstr "Guías breves para ayudarle a aprender cómo funciona el sistema"
 
 msgid "Thank you for choosing to be part of our community!"
 msgstr "Gracias por elegir formar parte de nuestra comunidad."
@@ -6102,6 +6115,12 @@ msgstr ""
 "paso!"
 
 msgid ""
+"Hover on the link, or click on the question icon, to see what the link does."
+msgstr ""
+"Pase el ratón por encima del enlace, o haga clic en el icono de la pregunta,"
+" para ver lo que hace el enlace."
+
+msgid ""
 "If checked, makes factions visible, as the character assignments to factions"
 msgstr ""
 "Si está marcada, hace visibles las facciones, ya que las asignaciones de "
@@ -6553,6 +6572,13 @@ msgstr ""
 "habilidad esté disponible"
 
 msgid ""
+"There are no active events, to create a new one access the events management"
+" page:"
+msgstr ""
+"No hay eventos activos, para crear uno nuevo accede a la página de gestión "
+"de eventos:"
+
+msgid ""
 "To register for the event, please fill in the following form and click on "
 "confirm."
 msgstr ""
@@ -6712,6 +6738,13 @@ msgid ""
 msgstr ""
 "Requiere la aprobación de los miembros del Comité Ejecutivo antes de "
 "participar en un evento."
+
+msgid ""
+"Tip: Pin this page to your browser for faster access to your organization "
+"and events!"
+msgstr ""
+"Consejo: Ancle esta página a su navegador para acceder más rápidamente a su "
+"organización y eventos."
 
 msgid ""
 "Allows you to specify precisely which user data is collected and stored in "
@@ -7852,6 +7885,13 @@ msgstr ""
 "probabilidad definida, y opcionalmente asigna un resultado."
 
 msgid ""
+"On the left, you'll find the quick links sidebar (on mobile, open it by "
+"tapping “Management” at the bottom)."
+msgstr ""
+"A la izquierda, encontrarás la barra lateral de enlaces rápidos (en móvil, "
+"ábrela pulsando \"Gestión\" en la parte inferior)."
+
+msgid ""
 "Percentage to be retained by the payment system - enter the value as a "
 "number, without the percentage symbol"
 msgstr ""
@@ -8334,6 +8374,14 @@ msgstr ""
 "optimización."
 
 msgid ""
+"You can now freely explore the system. You'll find below some suggestions on"
+" what you could do now to set up everything nicely!"
+msgstr ""
+"Ahora puedes explorar libremente el sistema. A continuación encontrará "
+"algunas sugerencias sobre lo que puede hacer ahora para configurarlo todo "
+"correctamente."
+
+msgid ""
 "If checked, enables to set for each registration question the list of staff "
 "members allowed to see it's answers from the players"
 msgstr ""
@@ -8626,6 +8674,15 @@ msgstr ""
 "De acuerdo con las normas de privacidad de LarpManager, sólo puedes ver los "
 "usuarios que han concedido permiso a LarpManager para compartir sus datos "
 "con tu organización."
+
+msgid ""
+"At the top, you'll find shortcuts to access your organization dashboard "
+"(this page), as well as the active event dashboards, when you'll create "
+"them."
+msgstr ""
+"En la parte superior, encontrará accesos directos para acceder al panel de "
+"control de su organización (esta página), así como a los paneles de control "
+"de eventos activos, cuando los cree."
 
 msgid ""
 "Generates a special, hidden link that lets certain players register even if "

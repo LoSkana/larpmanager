@@ -1407,6 +1407,9 @@ msgstr "Typ úkolu"
 msgid "Quest type"
 msgstr "Typ úkolu"
 
+msgid "Quick Help"
+msgstr "Rychlá nápověda"
+
 msgid "Refund for"
 msgstr "Úhrada za"
 
@@ -1472,6 +1475,9 @@ msgstr "Dvě kvóty"
 
 msgid "Visibility"
 msgstr "Viditelnost"
+
+msgid "Welcome to"
+msgstr "Vítejte v"
 
 msgid "accounting"
 msgstr "účetnictví"
@@ -1655,6 +1661,9 @@ msgstr "Zobrazit uzavřeno"
 
 msgid "Simple list"
 msgstr "Jednoduchý seznam"
+
+msgid "Suggestions"
+msgstr "Návrhy"
 
 msgid "Ticket list"
 msgstr "Seznam vstupenek"
@@ -2383,9 +2392,6 @@ msgstr "Vaše postavy"
 
 msgid "Your membership"
 msgstr "Vaše členství"
-
-msgid "create one here"
-msgstr "vytvořit zde"
 
 msgid "expected within"
 msgstr "očekává se v rámci"
@@ -3608,9 +3614,6 @@ msgstr "Budou použity tyto údaje"
 msgid "The name of the competence"
 msgstr "Název kompetence"
 
-msgid "There are no active events"
-msgstr "Nejsou žádné aktivní události"
-
 msgid "These fields are mandatory"
 msgstr "Tato pole jsou povinná"
 
@@ -4312,6 +4315,9 @@ msgstr "Vyplňte vztahy své postavy!"
 msgid "If checked, makes visible the speedlarp"
 msgstr "Pokud je zaškrtnuto, zviditelní speedlarp"
 
+msgid "If you need help, remember to check out"
+msgstr "Pokud potřebujete pomoc, nezapomeňte se podívat na"
+
 #, python-format
 msgid "Membership fee of %(user)s for %(year)s"
 msgstr "Podíl %(user)s na %(year)s"
@@ -4874,6 +4880,13 @@ msgstr "Pokud chcete, můžete předchozí předběžné registrace smazat."
 
 msgid "Indicates the currency in which to receive payments"
 msgstr "Uvádí měnu, ve které se mají přijímat platby"
+
+msgid "Join our Discord for help, ideas, or to report bugs"
+msgstr ""
+"Připojte se k našemu Discordu a získejte pomoc, nápady nebo nahlaste chyby."
+
+msgid "Short guides to help you learn how the system works"
+msgstr "Krátké průvodce, které vám pomohou naučit se, jak systém funguje."
 
 msgid "Thank you for choosing to be part of our community!"
 msgstr "Děkujeme, že jste se rozhodli být součástí naší komunity!"
@@ -5989,6 +6002,11 @@ msgstr ""
 "dalšímu kroku!"
 
 msgid ""
+"Hover on the link, or click on the question icon, to see what the link does."
+msgstr ""
+"Najetím na odkaz nebo kliknutím na ikonu otázky zjistíte, co odkaz dělá."
+
+msgid ""
 "If checked, makes factions visible, as the character assignments to factions"
 msgstr ""
 "Pokud je zaškrtnuto, zviditelní frakce, protože přiřazení postavy k frakcím"
@@ -6405,6 +6423,13 @@ msgstr ""
 "dostupná."
 
 msgid ""
+"There are no active events, to create a new one access the events management"
+" page:"
+msgstr ""
+"Neexistují žádné aktivní události, chcete-li vytvořit novou, přejděte na "
+"stránku správy událostí:"
+
+msgid ""
 "To register for the event, please fill in the following form and click on "
 "confirm."
 msgstr ""
@@ -6555,6 +6580,13 @@ msgid ""
 "Requires Executive Committee approval of membership before participating in "
 "an event."
 msgstr "Před účastí na akci vyžaduje schválení členství výkonným výborem."
+
+msgid ""
+"Tip: Pin this page to your browser for faster access to your organization "
+"and events!"
+msgstr ""
+"Tip: Připněte si tuto stránku do prohlížeče pro rychlejší přístup k "
+"organizaci a událostem!"
 
 msgid ""
 "Allows you to specify precisely which user data is collected and stored in "
@@ -7673,6 +7705,13 @@ msgstr ""
 "pravděpodobnosti a volitelně přiřadí výsledek."
 
 msgid ""
+"On the left, you'll find the quick links sidebar (on mobile, open it by "
+"tapping “Management” at the bottom)."
+msgstr ""
+"Vlevo najdete postranní panel rychlých odkazů (v mobilu jej otevřete "
+"klepnutím na položku \"Správa\" ve spodní části)."
+
+msgid ""
 "Percentage to be retained by the payment system - enter the value as a "
 "number, without the percentage symbol"
 msgstr ""
@@ -8148,6 +8187,13 @@ msgstr ""
 " přiřazení pomocí optimalizačního algoritmu."
 
 msgid ""
+"You can now freely explore the system. You'll find below some suggestions on"
+" what you could do now to set up everything nicely!"
+msgstr ""
+"Nyní můžete systém volně prozkoumávat. Níže najdete několik návrhů, co byste"
+" nyní mohli udělat, abyste vše pěkně nastavili!"
+
+msgid ""
 "If checked, enables to set for each registration question the list of staff "
 "members allowed to see it's answers from the players"
 msgstr ""
@@ -8428,6 +8474,14 @@ msgstr ""
 "Podle pravidel ochrany osobních údajů LarpManageru můžete zobrazit pouze "
 "uživatele, kteří udělili LarpManageru povolení sdílet jejich údaje s vaší "
 "organizací."
+
+msgid ""
+"At the top, you'll find shortcuts to access your organization dashboard "
+"(this page), as well as the active event dashboards, when you'll create "
+"them."
+msgstr ""
+"V horní části najdete zkratky pro přístup k ovládacímu panelu organizace "
+"(tato stránka) a k aktivním ovládacím panelům událostí, pokud je vytvoříte."
 
 msgid ""
 "Generates a special, hidden link that lets certain players register even if "

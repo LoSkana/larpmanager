@@ -41,7 +41,7 @@ class AssocPermissionResource(resources.ModelResource):
 @admin.register(AssocPermission)
 class AssocPermissionAdmin(ImportExportModelAdmin):
     resource_classes = [AssocPermissionResource]
-    list_display = ("name", "slug", "number", "module", "feature")
+    list_display = ("name", "slug", "number", "descr", "module", "feature")
     search_fields = ("name",)
     autocomplete_fields = ["feature"]
 
@@ -62,5 +62,5 @@ class EventPermissionResource(resources.ModelResource):
 class EventPermissionAdmin(ImportExportModelAdmin):
     resource_classes = [EventPermissionResource]
     autocomplete_fields = ["feature"]
-    list_display = ("name", "slug", "number", "module", "feature")
+    list_display = ("name", "slug", "number", "descr", "module", "feature")
     search_fields = ("name",)

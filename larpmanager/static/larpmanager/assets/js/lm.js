@@ -50,7 +50,9 @@ $(document).ready(function() {
     $('.sidebar-link').each(function() {
         $(this).qtip({
             content: {
-                text: 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum '
+                text: function() {
+                    return $(this).parent().attr('descr');
+                }
             }, style: {
                 classes: 'qtip-dark qtip-rounded qtip-shadow'
             }, hide: {
@@ -72,7 +74,9 @@ $(document).ready(function() {
 
     $('.explain-icon').qtip({
         content: {
-            text: 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum '
+            text: function() {
+                return $(this).parent().attr('descr');
+            }
         }, style: {
             classes: 'qtip-dark qtip-rounded qtip-shadow'
         }, show: {

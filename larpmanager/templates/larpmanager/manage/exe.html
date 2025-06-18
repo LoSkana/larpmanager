@@ -5,10 +5,15 @@
 {% endblock title %}
 {% block content %}
     <div id="manage">
-        {% if runs %}
+        {% if not event_counts %}
+            <h2>{% trans "Welcome to" %} LarpManager!</h2>
+            {% include "larpmanager/manage/assoc_help.html" %}
+            <hr />
+        {% endif %}
+        {% if ongoing_runs %}
             <h2>{% trans "Ongoing events" %}</h2>
             <table class="mob">
-                {% for run in runs %}
+                {% for run in ongoing_runs %}
                     <tr>
                         <td>
                             <a href="{% url 'manage' run.event.slug run.number %}">{{ run }}</a>
@@ -28,20 +33,36 @@
                     </tr>
                 {% endfor %}
             </table>
-        {% else %}
-            {% trans "There are no active events" %}: <a href="{% url 'exe_events' %}">{% trans "create one here" %}</a>
+            <hr />
         {% endif %}
-        <hr />
-        <h2>{% trans "Accounting" %}</h2>
-        <p>
-            {% trans "Global balance" %}: <b>{{ global_sum }}</b>
-        </p>
-        <p>
-            {% trans "Overall balance" %}: <b>{{ bank_sum }}</b>
-        </p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        {% if global_sum %}
+            <h2>{% trans "Accounting" %}</h2>
+            <p>
+                {% trans "Global balance" %}: <b>{{ global_sum }}</b>
+            </p>
+            <p>
+                {% trans "Overall balance" %}: <b>{{ bank_sum }}</b>
+            </p>
+            <hr />
+        {% endif %}
+        {% if suggestions %}
+            <h2>{% trans "Suggestions" %}</h2>
+            <table>
+                {% for sugg in suggestions %}
+                    <tr>
+                        <td>
+                            {{ sugg.text }}
+                            <a href="{{ sugg.href }}" target="_blank">{{ sugg.link }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+        {% if event_counts %}
+            <h2>
+                <a href="#" class="my_toggle" tog='quick_help'>{% trans "Quick Help" %}</a>
+            </h2>
+            <div class="hide quick_help">{% include "larpmanager/manage/assoc_help.html" %}</div>
+        {% endif %}
     </div>
 {% endblock content %}

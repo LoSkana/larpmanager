@@ -141,7 +141,7 @@
 - model: larpmanager.assocpermission
   pk: 21
   fields:
-    name: Event
+    name: Events
     slug: exe_events
     number: 11
     feature: 167

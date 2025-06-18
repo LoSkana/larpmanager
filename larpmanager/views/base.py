@@ -21,13 +21,15 @@ from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.balance import get_run_accounting
+from larpmanager.accounting.balance import assoc_accounting, get_run_accounting
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
+from larpmanager.cache.role import has_assoc_permission, has_event_permission
 from larpmanager.models.association import Association
-from larpmanager.models.event import Run
+from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.utils.base import def_user_ctx, get_index_assoc_permissions
 from larpmanager.utils.common import format_datetime
 from larpmanager.utils.event import get_event_run, get_index_event_permissions
@@ -96,11 +98,25 @@ def _exe_manage(request):
     ctx = def_user_ctx(request)
     get_index_assoc_permissions(ctx, request, request.assoc["id"])
 
-    ctx["runs"] = Run.objects.filter(event__assoc_id=ctx["a_id"], development__in=[Run.START, Run.SHOW])
-    ctx["runs"] = ctx["runs"].select_related("event").order_by("end")
-    for run in ctx["runs"]:
+    ctx["event_counts"] = Event.objects.filter(assoc_id=ctx["a_id"]).count()
+
+    que = Run.objects.filter(event__assoc_id=ctx["a_id"], development__in=[DevelopStatus.START, DevelopStatus.SHOW])
+    ctx["ongoing_runs"] = que.select_related("event").order_by("end")
+    for run in ctx["ongoing_runs"]:
         run.registration_status = _get_registration_status(run)
         run.counts = get_reg_counts(run)
+
+    if has_assoc_permission(request, "exe_accounting"):
+        assoc_accounting(ctx)
+
+    # if no event active, suggest to create one
+    if not ctx["ongoing_runs"]:
+        _add_suggestion(
+            ctx,
+            _("There are no active events, to create a new one access the events management page:"),
+            _("Events"),
+            "exe_events",
+        )
 
     return render(request, "larpmanager/manage/exe.html", ctx)
 
@@ -113,10 +129,21 @@ def _orga_manage(request, s, n):
         get_index_assoc_permissions(ctx, request, request.assoc["id"], check=False)
 
     ctx["registration_status"] = _get_registration_status(ctx["run"])
-    ctx["counts"] = get_reg_counts(ctx["run"])
-    ctx["dc"] = get_run_accounting(ctx["run"], ctx)
+
+    if has_event_permission(ctx, request, s, "orga_registrations"):
+        ctx["counts"] = get_reg_counts(ctx["run"])
+
+    if has_event_permission(ctx, request, s, "orga_accounting"):
+        ctx["dc"] = get_run_accounting(ctx["run"], ctx)
 
     return render(request, "larpmanager/manage/orga.html", ctx)
+
+
+def _add_suggestion(ctx, text, link, perm):
+    if "suggestions" not in ctx:
+        ctx["suggestions"] = []
+
+    ctx["suggestions"].append({"text": text, "link": link, "href": reverse(perm)})
 
 
 def error_404(request, exception):

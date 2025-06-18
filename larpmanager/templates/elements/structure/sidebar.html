@@ -26,7 +26,7 @@
                         <h2>{% trans mod %}</h2>
                         <p>
                             {% for ap in list %}
-                                <span class="sidebar-link-wrap">
+                                <span class="sidebar-link-wrap" descr="{% trans ap.descr %}">
                                     <a class="sidebar-link"
                                        href="{% url ap.slug run.event.slug run.number %}"
                                        {% if request.func_name == ap.slug %}class="select"{% endif %}>
@@ -44,7 +44,7 @@
                         <h2>{% trans mod %}</h2>
                         <p>
                             {% for ap in list %}
-                                <span class="sidebar-link-wrap">
+                                <span class="sidebar-link-wrap" descr="{% trans ap.descr %}">
                                     <a class="sidebar-link"
                                        href="{% url ap.slug %}"
                                        {% if request.func_name == ap.slug %}class="select"{% endif %}>
