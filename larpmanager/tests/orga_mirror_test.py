@@ -61,7 +61,7 @@ def orga_mirror(live_server, page):
 
     # activate mirror
     go_to(page, live_server, "/test/1/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Casting.+")).click()
+    page.get_by_role("link", name=re.compile(r"^Casting\s.+")).click()
     page.locator("#id_casting_mirror").check()
     page.get_by_role("button", name="Confirm", exact=True).click()
 
@@ -79,7 +79,7 @@ def orga_mirror(live_server, page):
     expect(page.locator("#one")).to_contain_text("Test Character")
 
     go_to(page, live_server, "/test/1/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Casting.+")).click()
+    page.get_by_role("link", name=re.compile(r"^Casting\s.+")).click()
     page.locator("#id_casting_characters").click()
     page.locator("#id_casting_characters").fill("1")
     page.locator("#id_casting_min").click()
