@@ -93,7 +93,15 @@ def orga_characters_edit(request, s, n, num):
 
 def _characters_relationships(ctx):
     ctx["relationships"] = {}
-    if "relationships" in ctx["features"]:
+    if "relationships" not in ctx["features"]:
+        return
+
+    ctx["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
+    widget = EventCharacterS2Widget(attrs={"id": "new_rel_select"})
+    widget.set_event(ctx["event"])
+    ctx["new_rel"] = widget.render(name="new_rel_select", value="")
+
+    if "character" in ctx:
         rels = {}
         for rel in Relationship.objects.filter(source=ctx["character"]):
             if rel.target.id not in rels:
@@ -110,12 +118,7 @@ def _characters_relationships(ctx):
             key=lambda item: len(item[1].get("direct", "")) + len(item[1].get("inverse", "")),
             reverse=True,
         )
-
         ctx["relationships"] = dict(sorted_rels)
-        ctx["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
-        widget = EventCharacterS2Widget(attrs={"id": "new_rel_select"})
-        widget.set_event(ctx["event"])
-        ctx["new_rel"] = widget.render(name="new_rel_select", value="")
 
 
 def update_relationship(request, ctx, nm, fl):
