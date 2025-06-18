@@ -1,5 +1,5 @@
 {% load i18n static %}
-{% if relationships %}
+{% if new_rel %}
     <h2>{% trans "Relationships" %}</h2>
     <div class="add_new">
         <p>
@@ -29,13 +29,15 @@
                 <tr>
                     <th>{% trans "Inverse" %}</th>
                     <td>
-                        <p>
-                            <a href="#" class="my_toggle" tog="f_{{ key }}_inverse">{% trans "Show" %}</a>
-                        </p>
-                        <div class="hide hide_later f_{{ key }}_inverse">{{ item.inverse | safe }}</div>
+                        {% if item.inverse %}
+                            <p>
+                                <a href="#" class="my_toggle" tog="f_{{ key }}_inverse">{% trans "Show" %}</a>
+                            </p>
+                            <div class="hide hide_later f_{{ key }}_inverse">{{ item.inverse | safe }}</div>
+                        {% endif %}
                     </td>
                 </tr>
             </table>
         {% endfor %}
-    {% endif %}
-</div>
+    </div>
+{% endif %}
