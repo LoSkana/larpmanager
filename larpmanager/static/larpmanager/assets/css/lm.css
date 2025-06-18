@@ -1365,4 +1365,7 @@ form th {
     form th {
       max-width: 100%;
   }
+
+.editable {
+  cursor: cell;
 }
