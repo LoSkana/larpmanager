@@ -3442,6 +3442,9 @@ msgstr ""
 msgid "Missing casting preferences"
 msgstr ""
 
+msgid "Select a character to insert their reference code"
+msgstr ""
+
 msgid "Select a character to add a new relationship"
 msgstr ""
 
@@ -6299,6 +6302,9 @@ msgstr ""
 msgid "Recalculate"
 msgstr ""
 
+msgid "Load list"
+msgstr ""
+
 msgid "Registration sections"
 msgstr ""
 
@@ -6678,9 +6684,6 @@ msgid ""
 msgstr ""
 
 msgid "This page allows you to fully view a character."
-msgstr ""
-
-msgid "Select a character to insert their reference code"
 msgstr ""
 
 msgid "Hi"
@@ -7447,7 +7450,7 @@ msgid ""
 "You cannot work on it at the same time: the work of one of you would be lost."
 msgstr ""
 
-msgid "List of other users:"
+msgid "List of other users: "
 msgstr ""
 
 msgid "Show available characters"

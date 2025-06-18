@@ -238,7 +238,7 @@ def exe_edit(request, form_type, eid, perm, red=None, afield=None, add_ctx=None,
 def writing_edit(request, ctx, form_type, nm, tp, redr=None):
     ctx["elementTyp"] = form_type.Meta.model
     if nm in ctx:
-        ctx["type"] = tp
+        ctx["type"] = ctx["elementTyp"].__name__.lower()
         ctx["eid"] = ctx[nm].id
         ctx["name"] = str(ctx[nm])
     else:
@@ -255,13 +255,18 @@ def writing_edit(request, ctx, form_type, nm, tp, redr=None):
     ctx["form"] = form
     ctx["add_another"] = True
 
+    _setup_char_finder(ctx)
+
+    return render(request, "larpmanager/orga/writing/writing.html", ctx)
+
+
+def _setup_char_finder(ctx):
     ctx["disable_char_finder"] = ctx["event"].get_config("writing_disable_char_finder", False)
     if not ctx["disable_char_finder"]:
         widget = EventCharacterS2Widget(attrs={"id": "char_finder"})
         widget.set_event(ctx["event"])
         ctx["char_finder"] = widget.render(name="char_finder", value="")
-
-    return render(request, "larpmanager/orga/writing/writing.html", ctx)
+        ctx["char_finder_media"] = widget.media
 
 
 def _writing_save(ctx, form, form_type, nm, redr, request, tp):
@@ -331,13 +336,13 @@ def writing_edit_save_ajax(form, request, ctx):
     obj.save()
 
     if "working_ticket" in ctx["features"]:
-        writing_edit_working_ticket(eid, request, res)
+        tp = request.POST["type"]
+        writing_edit_working_ticket(request, tp, eid, res)
 
     return JsonResponse(res)
 
 
-def writing_edit_working_ticket(eid, request, res):
-    tp = request.POST["type"]
+def writing_edit_working_ticket(request, tp, eid, res, add_ticket=True):
     now = int(time.time())
     key = writing_edit_cache_key(eid, tp)
     ticket = cache.get(key)
@@ -345,7 +350,7 @@ def writing_edit_working_ticket(eid, request, res):
     if not ticket:
         ticket = {}
     others = []
-    ticket_time = 60
+    ticket_time = 15
     for idx, el in ticket.items():
         (name, tm) = el
         if idx != mid and now - tm < ticket_time:
@@ -353,7 +358,11 @@ def writing_edit_working_ticket(eid, request, res):
         if len(others) > 0:
             warn = _("Warning! Other users are editing this item.")
             warn += " " + _("You cannot work on it at the same time: the work of one of you would be lost.")
-            warn += " " + _("List of other users:") + ", ".join(others)
+            warn += " " + _("List of other users: ") + ", ".join(others)
             res["warn"] = warn
+
+    if not add_ticket:
+        return
+
     ticket[mid] = (str(request.user.member), now)
     cache.set(key, ticket, ticket_time)

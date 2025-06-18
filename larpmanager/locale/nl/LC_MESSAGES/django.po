@@ -1170,6 +1170,9 @@ msgstr "Frequentie"
 msgid "Inventory"
 msgstr "Inventaris"
 
+msgid "Load list"
+msgstr "Lijst laden"
+
 msgid "Mandatory"
 msgstr "Verplicht"
 
@@ -3006,9 +3009,6 @@ msgstr "Onafhankelijke facties"
 msgid "Last membership date"
 msgstr "Laatste lidmaatschapsdatum"
 
-msgid "List of other users:"
-msgstr "Lijst van andere gebruikers:"
-
 msgid "Mail added to queue!"
 msgstr "Mail toegevoegd aan wachtrij!"
 
@@ -3120,6 +3120,9 @@ msgstr "Indien afwezig, geef 0 aan"
 
 msgid "Links to be accessed:"
 msgstr "Te openen links:"
+
+msgid "List of other users: "
+msgstr "Lijst van andere gebruikers:"
 
 msgid "Make the request now!"
 msgstr "Solliciteer nu!"

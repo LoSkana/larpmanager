@@ -75,7 +75,7 @@
                     <td>{{ el.text_ln }}</td>
                     <td>
                         {% for ch in el.characters.all %}
-                            <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.number %}">{{ ch }}</a>&nbsp;
+                            <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.id %}">{{ ch }}</a>&nbsp;
                         {% endfor %}
                     </td>
                     <td>{{ el.characters.all | length }}</td>

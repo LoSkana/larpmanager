@@ -18,46 +18,20 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.urls import (
-    path,
-)
+from django.urls import path
 
-from larpmanager.views.orga import (
-    accounting as views_oa,
-)
-from larpmanager.views.orga import (
-    casting as views_oca,
-)
-from larpmanager.views.orga import (
-    character as views_oc,
-)
-from larpmanager.views.orga import (
-    copy as views_oy,
-)
-from larpmanager.views.orga import (
-    event as views_oe,
-)
-from larpmanager.views.orga import (
-    experience as views_ox,
-)
-from larpmanager.views.orga import (
-    form as views_of,
-)
-from larpmanager.views.orga import (
-    member as views_om,
-)
-from larpmanager.views.orga import (
-    miscellanea as views_oms,
-)
-from larpmanager.views.orga import (
-    pdf as views_op,
-)
-from larpmanager.views.orga import (
-    registration as views_or,
-)
-from larpmanager.views.orga import (
-    writing as views_ow,
-)
+from larpmanager.views.orga import accounting as views_oa
+from larpmanager.views.orga import casting as views_oca
+from larpmanager.views.orga import character as views_oc
+from larpmanager.views.orga import copy as views_oy
+from larpmanager.views.orga import event as views_oe
+from larpmanager.views.orga import experience as views_ox
+from larpmanager.views.orga import form as views_of
+from larpmanager.views.orga import member as views_om
+from larpmanager.views.orga import miscellanea as views_oms
+from larpmanager.views.orga import pdf as views_op
+from larpmanager.views.orga import registration as views_or
+from larpmanager.views.orga import writing as views_ow
 
 urlpatterns = [
     path(
@@ -424,6 +398,16 @@ urlpatterns = [
         "<slug:s>/<int:n>/manage/writing/options/<slug:typ>/order/<int:num>/",
         views_oc.orga_writing_options_order,
         name="orga_writing_options_order",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/writing/edit/<slug:typ>/",
+        views_oc.orga_writing_excel_edit,
+        name="orga_writing_excel_edit",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/writing/submit/<slug:typ>/",
+        views_oc.orga_writing_excel_submit,
+        name="orga_writing_excel_submit",
     ),
     path(
         "<slug:s>/<int:n>/manage/utils/",

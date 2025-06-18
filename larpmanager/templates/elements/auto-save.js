@@ -1,13 +1,14 @@
-var timeout = 30 * 1000; // todo fix
+var timeout = 10 * 1000;
 var post_url = '{{ request.path }}';
 $(function() {
-setTimeout(submitForm, timeout);
+submitForm();
 });
 function submitForm() {
 tinyMCE.triggerSave();
 var formData = $('form').serialize() + "&ajax=1";
-if (typeof eid !== 'undefined' && eid > 0)
+if (typeof eid !== 'undefined' && eid > 0) {
 formData += "&eid=" + eid + "&type=" + type;
+}
 $.ajax({
 type: "POST",
 url: post_url,

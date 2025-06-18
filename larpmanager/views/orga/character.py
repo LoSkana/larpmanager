@@ -44,6 +44,7 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
 )
+from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
     Character,
     Faction,
@@ -61,7 +62,7 @@ from larpmanager.utils.common import (
     get_element,
 )
 from larpmanager.utils.download import orga_character_form_download
-from larpmanager.utils.edit import backend_edit, writing_edit
+from larpmanager.utils.edit import backend_edit, writing_edit, writing_edit_working_ticket
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.upload import upload_elements
 from larpmanager.utils.writing import writing_list, writing_versions, writing_view
@@ -193,7 +194,7 @@ def orga_writing_form_list(request, s, n, typ):
         for opt in event.get_elements(WritingOption).filter(question=q):
             cho[opt.id] = opt.display
 
-        for el in WritingChoice.objects.filter(question=q, element_id__in=character_ids):
+        for el in WritingChoice.objects.filter(question=q, element_id__in=character_ids).order_by("option__order"):
             if el.element_id not in res:
                 res[el.element_id] = []
             res[el.element_id].append(cho[el.option_id])
@@ -510,3 +511,138 @@ def orga_character_get_number(request, s, n):
         return JsonResponse({"res": "ok", "number": char.number})
     except ObjectDoesNotExist:
         JsonResponse({"res": "ko"})
+
+
+@require_POST
+def orga_writing_excel_edit(request, s, n, typ):
+    try:
+        ctx = _get_excel_form(request, s, n, typ)
+    except ObjectDoesNotExist:
+        return JsonResponse({"k": 0})
+
+    tinymce = False
+    if ctx["question"].typ in [QuestionType.TEASER, QuestionType.SHEET, QuestionType.EDITOR]:
+        tinymce = True
+
+    counter = ""
+    if ctx["question"].max_length:
+        if ctx["question"].typ == "m":
+            name = _("options")
+        else:
+            name = "text length"
+        counter = f'<div class="helptext">{name}: <span class="count"></span> / {ctx["question"].max_length}</div>'
+
+    confirm = _("Confirm")
+    field = ctx["form"][ctx["field_key"]]
+    value = f"""
+        <h2>{ctx["question"].display}: {ctx["element"]}</h2>
+        <form id='form-excel'>
+            <div id='{field.auto_id}_tr'>
+                {field.as_widget()}
+                {counter}
+            </div>
+        </form>
+        <br />
+        <input type='submit' value='{confirm}'>
+        <a href="#" class="close"><i class="fa-solid fa-xmark"></i></a>
+    """
+    response = {
+        "k": 1,
+        "v": value,
+        "tinymce": tinymce,
+        "typ": ctx["question"].typ,
+        "max_length": ctx["question"].max_length,
+        "key": field.auto_id,
+    }
+    return JsonResponse(response)
+
+
+@require_POST
+def orga_writing_excel_submit(request, s, n, typ):
+    try:
+        ctx = _get_excel_form(request, s, n, typ, submit=True)
+    except ObjectDoesNotExist:
+        return JsonResponse({"k": 0})
+
+    ctx["auto"] = int(request.POST.get("auto"))
+
+    if ctx["form"].is_valid():
+        ctx["form"].save()
+        response = {"k": 1, "qid": ctx["question"].id, "eid": ctx["element"].id, "update": _get_question_update(ctx)}
+        if ctx["auto"] and "working_ticket" in ctx["features"]:
+            _check_working_ticket(request, ctx, response)
+        return JsonResponse(response)
+    else:
+        return JsonResponse({"k": 2, "errors": ctx["form"].errors})
+
+
+def _get_excel_form(request, s, n, typ, submit=False):
+    ctx = check_event_permission(request, s, n, f"orga_{typ}s")
+    check_writing_form_type(ctx, typ)
+    question_id = int(request.POST.get("qid"))
+    element_id = int(request.POST.get("eid"))
+
+    question = ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"]).get(pk=question_id)
+    ctx["applicable"] = QuestionApplicable.get_applicable_inverse(ctx["writing_typ"])
+    element = ctx["event"].get_elements(ctx["applicable"]).get(pk=element_id)
+
+    # Init form
+    # TODO correct type given the one supplied
+    if submit:
+        form = OrgaCharacterForm(request.POST, ctx=ctx, instance=element)
+    else:
+        form = OrgaCharacterForm(ctx=ctx, instance=element)
+
+    # Remove question other than the one requested
+    keep_key = f"q{question_id}"
+    if question.typ not in QuestionType.get_basic_types():
+        keep_key = question.typ
+    remove_keys = []
+    for key in form.fields:
+        if key != keep_key:
+            remove_keys.append(key)
+    for key in remove_keys:
+        form.delete_field(key)
+
+    ctx["form"] = form
+    ctx["question"] = question
+    ctx["element"] = element
+    ctx["field_key"] = keep_key
+
+    return ctx
+
+
+def _get_question_update(ctx):
+    question_key = f"q{ctx['question'].id}"
+    question_slug = str(ctx["question"].id)
+    if ctx["question"].typ not in QuestionType.get_basic_types():
+        question_key = ctx["question"].typ
+        question_slug = ctx["question"].typ
+
+    value = ctx["form"].cleaned_data[question_key]
+    if ctx["question"].typ in [QuestionType.TEASER, QuestionType.SHEET, QuestionType.EDITOR]:
+        value = strip_tags(value)
+
+    if ctx["question"].typ in [QuestionType.MULTIPLE, QuestionType.SINGLE]:
+        # get option names
+        option_ids = [int(val) for val in value]
+        query = ctx["event"].get_elements(WritingOption).filter(pk__in=option_ids).order_by("order")
+        value = ", ".join([display for display in query.values_list("display", flat=True)])
+    else:
+        # check if it is over the character limit
+        limit = conf_settings.FIELD_SNIPPET_LIMIT
+        if len(value) > limit:
+            value = value[:limit]
+            value += f"... <a href='#' class='post_popup' pop='{ctx['element'].id}' fie='{question_slug}'><i class='fas fa-eye'></i></a>"
+
+    return value
+
+
+def _check_working_ticket(request, ctx, response):
+    # perform normal check, if somebody else has opened the character to edit it
+    writing_edit_working_ticket(request, ctx["typ"], ctx["element"].id, response, False)
+    if "warn" in response:
+        return
+
+    # perform check if somebody has opened the same field to edit it
+    writing_edit_working_ticket(request, ctx["typ"], f"{ctx['element'].id}_{ctx['question'].id}", response)

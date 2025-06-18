@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block special %}
+    table_csv
+{% endblock special %}
+{% block meta %}
+    <meta name="csrf-token" content="{{ csrf_token }}">
+{% endblock meta %}
+{% block content %}
+    {% include "elements/header/writing.html" %}
+    <p id="show">
+        <b>{% trans "Show / hide" %}</b>
+    </p>
+    <div class="nav fields">
+        {% block nav_fields %}
+        {% endblock nav_fields %}
+    </div>
+    <div class="table-responsive">
+        <table class="tablesorter writing regs">
+            <thead>
+                {% block thead %}
+                {% endblock thead %}
+            </thead>
+            <tbody>
+                {% block tbody %}
+                {% endblock tbody %}
+            </tbody>
+        </table>
+    </div>
+    {% block additional %}
+    {% endblock additional %}
+    <div id="excel-edit"></div>
+    {% include "elements/form/char_finder.html" %}
+{% endblock content %}
+{% block js %}
+    <script defer src="{% static TINYMCE_JS_URL %}"></script>
+    {{ TINYMCE_DEFAULT_CONFIG|json_script:"tinymce-config" }}
+    {% include "elements/writing/excel-edit.js" %}
+    {% include "elements/writing/que-open.js" %}
+    {% include "elements/form/max_length.js" %}
+    {% include "elements/form/char_highlight.js" %}
+    {% if not disable_char_finder %}
+        {{ char_finder_media }}
+        {% include "elements/form/char_finder.js" %}
+    {% endif %}
+    <script>
+        var url_load_questions = "{% url 'orga_writing_form_list' run.event.slug run.number label_typ %}";
+        var url_load_questions_email = "{% url 'orga_writing_form_email' run.event.slug run.number label_typ %}";
+
+        var accounting = false;
+
+        {% include "elements/questions/load.js" %}
+    </script>
+{% endblock js %}

@@ -1170,6 +1170,9 @@ msgstr "Frequenz"
 msgid "Inventory"
 msgstr "Bestandsaufnahme"
 
+msgid "Load list"
+msgstr "Liste laden"
+
 msgid "Mandatory"
 msgstr "Obligatorisch"
 
@@ -3006,9 +3009,6 @@ msgstr "Unabhängige Fraktionen"
 msgid "Last membership date"
 msgstr "Datum der letzten Mitgliedschaft"
 
-msgid "List of other users:"
-msgstr "Liste der anderen Benutzer:"
-
 msgid "Mail added to queue!"
 msgstr "Mail zur Warteschlange hinzugefügt!"
 
@@ -3120,6 +3120,9 @@ msgstr "Falls nicht vorhanden, 0 angeben"
 
 msgid "Links to be accessed:"
 msgstr "Links, die aufgerufen werden können:"
+
+msgid "List of other users: "
+msgstr "Liste der anderen Benutzer:"
 
 msgid "Make the request now!"
 msgstr "Jetzt bewerben!"

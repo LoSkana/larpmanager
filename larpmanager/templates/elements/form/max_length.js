@@ -23,7 +23,7 @@ function prepare_tinymce(key, limit) {
 
         const content = editor.getContent({ format: 'text' });
           if (content.length > limit) {
-            const truncated = content.substring(0, MAX_CHARS);
+            const truncated = content.substring(0, limit);
             editor.setContent(truncated);
 
             editor.selection.select(editor.getBody(), true);

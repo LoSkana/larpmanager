@@ -1170,6 +1170,9 @@ msgstr "Frecuencia"
 msgid "Inventory"
 msgstr "Inventario"
 
+msgid "Load list"
+msgstr "Lista de carga"
+
 msgid "Mandatory"
 msgstr "Obligatorio"
 
@@ -3006,9 +3009,6 @@ msgstr "Facciones independientes"
 msgid "Last membership date"
 msgstr "Última fecha de afiliación"
 
-msgid "List of other users:"
-msgstr "Lista de otros usuarios:"
-
 msgid "Mail added to queue!"
 msgstr "¡Correo añadido a la cola!"
 
@@ -3120,6 +3120,9 @@ msgstr "Si está ausente, indique 0"
 
 msgid "Links to be accessed:"
 msgstr "Enlaces a los que acceder:"
+
+msgid "List of other users: "
+msgstr "Lista de otros usuarios:"
 
 msgid "Make the request now!"
 msgstr "¡Haz la solicitud ahora!"
