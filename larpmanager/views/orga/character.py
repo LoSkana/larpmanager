@@ -578,6 +578,7 @@ def orga_writing_excel_submit(request, s, n, typ):
 
 def _get_excel_form(request, s, n, typ, submit=False):
     ctx = check_event_permission(request, s, n, f"orga_{typ}s")
+    get_event_cache_all(ctx)
     check_writing_form_type(ctx, typ)
     question_id = int(request.POST.get("qid"))
     element_id = int(request.POST.get("eid"))
