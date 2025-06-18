@@ -97,6 +97,7 @@ def _get_registration_status(run):
 def _exe_manage(request):
     ctx = def_user_ctx(request)
     get_index_assoc_permissions(ctx, request, request.assoc["id"])
+    ctx["exe_page"] = 1
 
     ctx["event_counts"] = Event.objects.filter(assoc_id=ctx["a_id"]).count()
 
