@@ -238,11 +238,12 @@ def exe_edit(request, form_type, eid, perm, red=None, afield=None, add_ctx=None,
 def writing_edit(request, ctx, form_type, nm, tp, redr=None):
     ctx["elementTyp"] = form_type.Meta.model
     if nm in ctx:
-        ctx["type"] = ctx["elementTyp"].__name__.lower()
         ctx["eid"] = ctx[nm].id
         ctx["name"] = str(ctx[nm])
     else:
         ctx[nm] = None
+
+    ctx["type"] = ctx["elementTyp"].__name__.lower()
 
     if request.method == "POST":
         form = form_type(request.POST, request.FILES, instance=ctx[nm], ctx=ctx)
