@@ -5219,9 +5219,6 @@ msgstr ""
 msgid "Organization tax"
 msgstr ""
 
-msgid "Suggestions"
-msgstr ""
-
 msgid "Donation"
 msgstr ""
 
@@ -6824,8 +6821,8 @@ msgid "Pay what you want"
 msgstr ""
 
 msgid ""
-"Allows players to add an optional extra amount to their registration fee "
-"(e.g. for donations or to help cover others' fees)."
+"Allows players to add an optional extra amount to their registration fee (e."
+"g. for donations or to help cover others' fees)."
 msgstr ""
 
 msgid ""
@@ -8036,6 +8033,56 @@ msgid ""
 msgstr ""
 
 msgid ""
+"To grant access to organization management for other users and define roles "
+"with specific permissions, access the roles management page:"
+msgstr ""
+
+msgid ""
+"To customize the appearance of all organizational pages, including colors, "
+"fonts, and images, access the appearance management page:"
+msgstr ""
+
+msgid ""
+"To activate new features and enhance the functionality of the platform, "
+"access the features management page:"
+msgstr ""
+
+msgid ""
+"To set specific values for the interface configuration or features, access "
+"the configuration management page:"
+msgstr ""
+
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> expenses to approve, access the expenses "
+"management panel:"
+msgstr ""
+
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> payments to approve, access the invoices "
+"management panel:"
+msgstr ""
+
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> refunds to deliver, access the refunds "
+"management panel:"
+msgstr ""
+
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> members to approve, access the membership "
+"management panel:"
+msgstr ""
+
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> characters in proposed status, approve them in "
+"the character management panel:"
+msgstr ""
+
+msgid ""
 "To set the tickets that users can select during registration, access the "
 "tickets management page:"
 msgstr ""
@@ -8043,6 +8090,32 @@ msgstr ""
 msgid ""
 "To define the registration form, and set up any number of registration "
 "questions and their options, access the registration form management page:"
+msgstr ""
+
+msgid ""
+"To grant access to event management for other users and define roles with "
+"specific permissions, access the roles management page:"
+msgstr ""
+
+msgid ""
+"To customize the appearance of all event pages, including colors, fonts, and "
+"images, access the appearance management page:"
+msgstr ""
+
+msgid ""
+"To activate new features and enhance the functionality of the event, access "
+"the features management page:"
+msgstr ""
+
+msgid ""
+"To set specific values for configuration of features of the event, access "
+"the configuration management page:"
+msgstr ""
+
+msgid "Suggestions"
+msgstr ""
+
+msgid "Actions"
 msgstr ""
 
 msgid "Reimbursement request item added"

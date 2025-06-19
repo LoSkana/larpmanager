@@ -31,7 +31,7 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.miscellanea import OrgaHelpQuestionForm, SendMailForm
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.event import PreRegistration
-from larpmanager.models.member import Member, Membership
+from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import Email, HelpQuestion
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.event import check_event_permission
@@ -117,7 +117,7 @@ def orga_spam(request, s, n):
     already.extend([mb.id for mb in get_event_staffers(ctx["event"])])
 
     members = Membership.objects.filter(assoc_id=ctx["a_id"])
-    members = members.exclude(status=Membership.EMPTY).values_list("member_id", flat=True)
+    members = members.exclude(status=MembershipStatus.EMPTY).values_list("member_id", flat=True)
 
     lst = {}
     que = Member.objects.filter(newsletter=Member.ALL)
@@ -145,7 +145,7 @@ def orga_persuade(request, s, n):
     already.extend([mb.id for mb in get_event_staffers(ctx["event"])])
 
     members = Membership.objects.filter(assoc_id=ctx["a_id"])
-    members = members.exclude(status=Membership.EMPTY).values_list("member_id", flat=True)
+    members = members.exclude(status=MembershipStatus.EMPTY).values_list("member_id", flat=True)
 
     que = Member.objects.filter(id__in=members)
     que = que.exclude(id__in=already)

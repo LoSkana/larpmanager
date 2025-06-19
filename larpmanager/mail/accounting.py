@@ -32,7 +32,7 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
     Collection,
-    PaymentInvoice,
+    PaymentType,
 )
 from larpmanager.models.association import get_url, hdr
 from larpmanager.models.member import Member
@@ -378,7 +378,7 @@ def notify_invoice_check(inv):
             my_send_mail(subj, body, orga, inv)
 
     # if it is for a sign up, send the confirmation to the organizers
-    elif inv.typ == PaymentInvoice.REGISTRATION and inv.reg:
+    elif inv.typ == PaymentType.REGISTRATION and inv.reg:
         for orga in get_event_organizers(inv.reg.run.event):
             activate(orga.language)
             body, subj = get_invoice_email(inv)

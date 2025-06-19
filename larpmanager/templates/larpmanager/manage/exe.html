@@ -10,6 +10,9 @@
             {% include "larpmanager/manage/assoc_help.html" %}
             <hr />
         {% endif %}
+        {% with list=actions header=actions_header %}
+            {% include "larpmanager/manage/helpers.html" %}
+        {% endwith %}
         {% if ongoing_runs %}
             <h2>{% trans "Ongoing events" %}</h2>
             <table class="mob">
@@ -57,7 +60,9 @@
             </table>
             <hr />
         {% endif %}
-        {% include "larpmanager/manage/suggestions.html" %}
+        {% with list=suggestions header=suggestions_header suggestion=1 %}
+            {% include "larpmanager/manage/helpers.html" %}
+        {% endwith %}
         {% if event_counts %}
             <h2>
                 <a href="#" class="my_toggle" tog='quick_help'>{% trans "Quick Help" %}</a>

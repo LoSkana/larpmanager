@@ -10,8 +10,17 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
 from larpmanager.models.access import AssocPermission, EventPermission
+from larpmanager.models.accounting import (
+    AccountingItemExpense,
+    PaymentInvoice,
+    PaymentStatus,
+    RefundRequest,
+    RefundStatus,
+)
 from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus, Event, Run
+from larpmanager.models.member import Membership, MembershipStatus
+from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.base import check_assoc_permission, def_user_ctx, get_index_assoc_permissions
 from larpmanager.utils.common import format_datetime
 from larpmanager.utils.edit import set_suggestion
@@ -91,6 +100,16 @@ def _exe_manage(request):
             "exe_events",
         )
 
+    _exe_suggestions(ctx)
+
+    _exe_actions(ctx)
+
+    _compile(request, ctx)
+
+    return render(request, "larpmanager/manage/exe.html", ctx)
+
+
+def _exe_suggestions(ctx):
     suggestions = {
         "exe_payment_details": _(
             "To set up the gateway payment available to players, to let them pay the registration fee through the platform, "
@@ -100,6 +119,22 @@ def _exe_manage(request):
             "To define which data will be asked in the profile form to the users once they sign up, "
             "access the profile management page:"
         ),
+        "exe_roles": _(
+            "To grant access to organization management for other users and define roles with specific permissions, "
+            "access the roles management page:"
+        ),
+        "exe_appearance": _(
+            "To customize the appearance of all organizational pages, including colors, fonts, and images, "
+            "access the appearance management page:"
+        ),
+        "exe_features": _(
+            "To activate new features and enhance the functionality of the platform, "
+            "access the features management page:"
+        ),
+        "exe_config": _(
+            "To set specific values for the interface configuration or features, "
+            "access the configuration management page:"
+        ),
     }
 
     assoc = Association.objects.get(pk=ctx["a_id"])
@@ -108,13 +143,47 @@ def _exe_manage(request):
             continue
         _add_suggestion(ctx, text, perm)
 
-    _compile_suggestions(request, ctx)
 
-    return render(request, "larpmanager/manage/exe.html", ctx)
+def _exe_actions(ctx):
+    expenses_approve = AccountingItemExpense.objects.filter(run__event__assoc_id=ctx["a_id"], is_approved=False).count()
+    if expenses_approve:
+        _add_action(
+            ctx,
+            _("There are <b>%(number)s</b> expenses to approve, access the expenses management panel:")
+            % {"number": expenses_approve},
+            "exe_expenses",
+        )
+
+    payments_approve = PaymentInvoice.objects.filter(assoc_id=ctx["a_id"], status=PaymentStatus.SUBMITTED).count()
+    if payments_approve:
+        _add_action(
+            ctx,
+            _("There are <b>%(number)s</b> payments to approve, access the invoices management panel:")
+            % {"number": payments_approve},
+            "exe_invoices",
+        )
+
+    refund_approve = RefundRequest.objects.filter(assoc_id=ctx["a_id"], status=RefundStatus.REQUEST).count()
+    if refund_approve:
+        _add_action(
+            ctx,
+            _("There are <b>%(number)s</b> refunds to deliver, access the refunds management panel:")
+            % {"number": refund_approve},
+            "exe_refunds",
+        )
+
+    members_approve = Membership.objects.filter(assoc_id=ctx["a_id"], status=MembershipStatus.SUBMITTED).count()
+    if members_approve:
+        _add_action(
+            ctx,
+            _("There are <b>%(number)s</b> members to approve, access the membership management panel:")
+            % {"number": members_approve},
+            "exe_membership",
+        )
 
 
 def _orga_manage(request, s, n):
-    ctx = get_event_run(request, s, n, status=True)
+    ctx = get_event_run(request, s, n)
     get_index_event_permissions(ctx, request, s)
     assoc = Association.objects.get(pk=request.assoc["id"])
     if assoc.get_config("interface_admin_links", False):
@@ -134,6 +203,47 @@ def _orga_manage(request, s, n):
     if has_event_permission(ctx, request, s, "orga_accounting"):
         ctx["dc"] = get_run_accounting(ctx["run"], ctx)
 
+    _orga_actions(ctx)
+
+    _orga_suggestions(ctx)
+
+    _compile(request, ctx)
+
+    return render(request, "larpmanager/manage/orga.html", ctx)
+
+
+def _orga_actions(ctx):
+    char_proposed = ctx["event"].get_elements(Character).filter(status=CharacterStatus.PROPOSED).count()
+    if char_proposed:
+        _add_action(
+            ctx,
+            _(
+                "There are <b>%(number)s</b> characters in proposed status, approve them in the character management panel:"
+            )
+            % {"number": char_proposed},
+            "orga_characters",
+        )
+
+    expenses_approve = AccountingItemExpense.objects.filter(run=ctx["run"], is_approved=False).count()
+    if expenses_approve:
+        _add_action(
+            ctx,
+            _("There are <b>%(number)s</b> expenses to approve, access the expenses management panel:")
+            % {"number": expenses_approve},
+            "orga_expenses",
+        )
+
+    payments_approve = PaymentInvoice.objects.filter(reg__run=ctx["run"], status=PaymentStatus.SUBMITTED).count()
+    if payments_approve:
+        _add_action(
+            ctx,
+            _("There are <b>%(number)s</b> payments to approve, access the invoices management panel:")
+            % {"number": payments_approve},
+            "orga_invoices",
+        )
+
+
+def _orga_suggestions(ctx):
     suggestions = {
         "orga_registration_tickets": _(
             "To set the tickets that users can select during registration, access the tickets management page:"
@@ -142,6 +252,21 @@ def _orga_manage(request, s, n):
             "To define the registration form, and set up any number of registration questions and their options, "
             "access the registration form management page:"
         ),
+        "orga_roles": _(
+            "To grant access to event management for other users and define roles with specific permissions, "
+            "access the roles management page:"
+        ),
+        "orga_appearance": _(
+            "To customize the appearance of all event pages, including colors, fonts, and images, "
+            "access the appearance management page:"
+        ),
+        "orga_features": _(
+            "To activate new features and enhance the functionality of the event, access the features management page:"
+        ),
+        "orga_config": _(
+            "To set specific values for configuration of features of the event, "
+            "access the configuration management page:"
+        ),
     }
 
     for perm, text in suggestions.items():
@@ -149,16 +274,20 @@ def _orga_manage(request, s, n):
             continue
         _add_suggestion(ctx, text, perm)
 
-    _compile_suggestions(request, ctx)
 
-    return render(request, "larpmanager/manage/orga.html", ctx)
+def _add_item(ctx, list_name, text, perm):
+    if list_name not in ctx:
+        ctx[list_name] = []
+
+    ctx[list_name].append((text, perm))
+
+
+def _add_action(ctx, text, perm):
+    _add_item(ctx, "actions_list", text, perm)
 
 
 def _add_suggestion(ctx, text, perm):
-    if "suggestions_list" not in ctx:
-        ctx["suggestions_list"] = []
-
-    ctx["suggestions_list"].append((text, perm))
+    _add_item(ctx, "suggestions_list", text, perm)
 
 
 def _has_permission(request, ctx, perm):
@@ -174,27 +303,38 @@ def _get_href(ctx, perm):
     return reverse(perm, args=[ctx["event"].slug, ctx["run"].number])
 
 
-def _compile_suggestions(request, ctx):
-    ctx["suggestions"] = []
-    if "suggestions_list" not in ctx:
+def _compile(request, ctx):
+    ctx["suggestions_header"] = _("Suggestions")
+    ctx["actions_header"] = _("Actions")
+    section_list = ["suggestions", "actions"]
+    empty = True
+    for section in section_list:
+        ctx[section] = []
+        if f"{section}_list" in ctx:
+            empty = False
+
+    if empty:
         return
 
     cache = {}
-    perm_list = [slug for _, slug in ctx["suggestions_list"] if _has_permission(request, ctx, slug)]
+    perm_list = []
+    for section in section_list:
+        perm_list.extend([slug for _, slug in ctx[f"{section}_list"] if _has_permission(request, ctx, slug)])
 
     for model in (EventPermission, AssocPermission):
         queryset = model.objects.filter(slug__in=perm_list).select_related("feature")
         for slug, name, tutorial in queryset.values_list("slug", "name", "feature__tutorial"):
             cache[slug] = (name, tutorial)
 
-    for text, slug in ctx["suggestions_list"]:
-        if slug not in cache:
-            continue
+    for section in section_list:
+        for text, slug in ctx[f"{section}_list"]:
+            if slug not in cache:
+                continue
 
-        (name, tutorial) = cache[slug]
-        ctx["suggestions"].append(
-            {"text": text, "link": _(name), "href": _get_href(ctx, slug), "tutorial": tutorial, "slug": slug}
-        )
+            (name, tutorial) = cache[slug]
+            ctx[section].append(
+                {"text": text, "link": _(name), "href": _get_href(ctx, slug), "tutorial": tutorial, "slug": slug}
+            )
 
 
 def exe_close_suggestion(request, perm):
