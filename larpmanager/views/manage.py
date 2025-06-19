@@ -327,6 +327,9 @@ def _compile(request, ctx):
             cache[slug] = (name, tutorial)
 
     for section in section_list:
+        if f"{section}_list" not in ctx:
+            continue
+
         for text, slug in ctx[f"{section}_list"]:
             if slug not in cache:
                 continue
