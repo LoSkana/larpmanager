@@ -8,19 +8,18 @@
         {% with list=actions header=actions_header %}
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}
-        <h3>
+        <h2>
             <a href="{% url 'orga_run' run.event.slug run.number %}">{% trans "Event status" %}</a>
-        </h3>
+        </h2>
         <b>{{ run }}</b>
         (<i>{{ run.pretty_dates }}</i>)
         - {{ run.get_development_display }}
         - <a href="{% url 'register' run.event.slug run.number %}">{{ registration_status }}</a>
         <br />
-        <hr />
         {% if counts %}
-            <h3>
+            <h2>
                 <a href="{% url 'orga_registrations' run.event.slug run.number %}">{% trans "Registrations" %}</a>: {{ counts.count_reg }}
-            </h3>
+            </h2>
             <table>
                 <tr>
                     {% for key, count in reg_counts.items %}
@@ -33,12 +32,11 @@
                     {% endfor %}
                 </tr>
             </table>
-            <hr />
         {% endif %}
         {% if run.revenue %}
-            <h3>
+            <h2>
                 <a href="{% url 'orga_accounting' run.event.slug run.number %}">{% trans "Accounting" %}</a>
-            </h3>
+            </h2>
             <table>
                 <tr>
                     <th descr="{% trans "Total amount of money received for this event, minus commission fees and refunds" %}">
@@ -67,7 +65,6 @@
                     {% if 'organization_tax' in features %}<td>{{ run.tax }}</td>{% endif %}
                 </tr>
             </table>
-            <hr />
         {% endif %}
         {% with list=suggestions header=suggestions_header suggestion=1 %}
             {% include "larpmanager/manage/helpers.html" %}

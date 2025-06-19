@@ -36,7 +36,6 @@
                     </tr>
                 {% endfor %}
             </table>
-            <hr />
         {% endif %}
         {% if global_sum or bank_sum %}
             <h2>
@@ -58,7 +57,6 @@
                     <td>{{ bank_sum }}</td>
                 </tr>
             </table>
-            <hr />
         {% endif %}
         {% with list=suggestions header=suggestions_header suggestion=1 %}
             {% include "larpmanager/manage/helpers.html" %}
