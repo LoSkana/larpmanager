@@ -319,6 +319,9 @@ def _compile(request, ctx):
     cache = {}
     perm_list = []
     for section in section_list:
+        if f"{section}_list" not in ctx:
+            continue
+
         perm_list.extend([slug for _, slug in ctx[f"{section}_list"] if _has_permission(request, ctx, slug)])
 
     for model in (EventPermission, AssocPermission):
