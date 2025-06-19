@@ -133,6 +133,12 @@ def _orga_manage(request, s, n):
 
     if has_event_permission(ctx, request, s, "orga_registrations"):
         ctx["counts"] = get_reg_counts(ctx["run"])
+        ctx["reg_counts"] = {}
+        # TODO simplify
+        for tier in ["player", "staff", "wait", "fill", "seller", "npc", "collaborator"]:
+            key = f"count_{tier}"
+            if key in ctx["counts"]:
+                ctx["reg_counts"][_(tier.capitalize())] = ctx["counts"][key]
 
     if has_event_permission(ctx, request, s, "orga_accounting"):
         ctx["dc"] = get_run_accounting(ctx["run"], ctx)

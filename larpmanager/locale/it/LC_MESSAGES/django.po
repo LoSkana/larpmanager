@@ -74,9 +74,6 @@ msgstr "età"
 msgid "for"
 msgstr "per"
 
-msgid "npc"
-msgstr "npc"
-
 msgid "Band"
 msgstr "Fascia"
 
@@ -420,9 +417,6 @@ msgstr "soldi"
 msgid "other"
 msgstr "altro"
 
-msgid "staff"
-msgstr "personale"
-
 msgid "title"
 msgstr "titolo"
 
@@ -606,9 +600,6 @@ msgstr "Votazioni"
 msgid "XP tot"
 msgstr "Px Tot"
 
-msgid "filler"
-msgstr "riempimento"
-
 msgid "issued"
 msgstr "emessi"
 
@@ -617,9 +608,6 @@ msgstr "socio"
 
 msgid "player"
 msgstr "giocatore"
-
-msgid "seller"
-msgstr "venditore"
 
 msgid "status"
 msgstr "stato"
@@ -848,9 +836,6 @@ msgstr "indirizzo"
 
 msgid "options"
 msgstr "opzioni"
-
-msgid "waiting"
-msgstr "in attesa"
 
 msgid "Accepted"
 msgstr "Accettato"
@@ -1689,9 +1674,6 @@ msgstr "immediatamente"
 msgid "leaderboard"
 msgstr "classifica!"
 
-msgid "provisional"
-msgstr "provvisorio"
-
 msgid "text length"
 msgstr "lunghezza del testo"
 
@@ -1898,9 +1880,6 @@ msgstr "Stiamo arrivando"
 
 msgid "You must pay"
 msgstr "Devi versare"
-
-msgid "collaborator"
-msgstr "collaboratore"
 
 msgid "invalid form"
 msgstr "modulo non valido"
@@ -2381,6 +2360,9 @@ msgstr "Totale soci: "
 msgid "Transaction fee"
 msgstr "Tassa di transazione"
 
+msgid "Upload Expenses"
+msgstr "Carica Spese"
+
 msgid "Volounteer data"
 msgstr "Dati volontario"
 
@@ -2422,6 +2404,9 @@ msgstr "Link di riscossione"
 
 msgid "Color background"
 msgstr "Sfondo testo"
+
+msgid "Confirm Payments"
+msgstr "Conferma Pagamenti"
 
 msgid "Current template"
 msgstr "Template attuale"
@@ -2927,9 +2912,6 @@ msgstr "Notifiche email"
 
 msgid "Event Configuration"
 msgstr "Configurazione Evento"
-
-msgid "Expenses (Personal)"
-msgstr "Spese (personali)"
 
 msgid "Feature deactivated"
 msgstr "Feature disattivata"
@@ -3444,9 +3426,6 @@ msgstr "Aspetto dell'organizzazione"
 
 msgid "Payment membership fee:"
 msgstr "Pagamento quota sociale:"
-
-msgid "Payments (Confirmation)"
-msgstr "Pagamenti (conferma)"
 
 msgid "Pre registrations total"
 msgstr "Preiscrizioni totali"

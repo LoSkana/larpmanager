@@ -74,9 +74,6 @@ msgstr "wiek"
 msgid "for"
 msgstr "dla"
 
-msgid "npc"
-msgstr "npc"
-
 msgid "Band"
 msgstr "Zespół"
 
@@ -420,9 +417,6 @@ msgstr "pieniądze"
 msgid "other"
 msgstr "inne"
 
-msgid "staff"
-msgstr "personel"
-
 msgid "title"
 msgstr "tytuł"
 
@@ -606,9 +600,6 @@ msgstr "Głosowanie"
 msgid "XP tot"
 msgstr "XP tot"
 
-msgid "filler"
-msgstr "wypełniacz"
-
 msgid "issued"
 msgstr "wydany"
 
@@ -617,9 +608,6 @@ msgstr "członek"
 
 msgid "player"
 msgstr "gracz"
-
-msgid "seller"
-msgstr "sprzedawca"
 
 msgid "status"
 msgstr "status"
@@ -848,9 +836,6 @@ msgstr "adres"
 
 msgid "options"
 msgstr "opcje"
-
-msgid "waiting"
-msgstr "oczekiwanie"
 
 msgid "Accepted"
 msgstr "Przyjęte"
@@ -1689,9 +1674,6 @@ msgstr "natychmiast"
 msgid "leaderboard"
 msgstr "tabela liderów"
 
-msgid "provisional"
-msgstr "tymczasowy"
-
 msgid "text length"
 msgstr "długość tekstu"
 
@@ -1898,9 +1880,6 @@ msgstr "Nadchodzimy"
 
 msgid "You must pay"
 msgstr "Musisz zapłacić"
-
-msgid "collaborator"
-msgstr "współpracownik"
 
 msgid "invalid form"
 msgstr "nieprawidłowy formularz"
@@ -2381,6 +2360,9 @@ msgstr "Łączna liczba członków:"
 msgid "Transaction fee"
 msgstr "Opłata transakcyjna"
 
+msgid "Upload Expenses"
+msgstr "Prześlij wydatki"
+
 msgid "Volounteer data"
 msgstr "Dane wolontariusza"
 
@@ -2422,6 +2404,9 @@ msgstr "Linki do kolekcji"
 
 msgid "Color background"
 msgstr "Kolor tła"
+
+msgid "Confirm Payments"
+msgstr "Potwierdzanie płatności"
 
 msgid "Current template"
 msgstr "Aktualny szablon"
@@ -2927,9 +2912,6 @@ msgstr "Powiadomienia e-mail"
 
 msgid "Event Configuration"
 msgstr "Konfiguracja zdarzeń"
-
-msgid "Expenses (Personal)"
-msgstr "Wydatki (osobiste)"
 
 msgid "Feature deactivated"
 msgstr "Funkcja wyłączona"
@@ -3444,9 +3426,6 @@ msgstr "Wygląd organizacji"
 
 msgid "Payment membership fee:"
 msgstr "Płatność składki członkowskiej:"
-
-msgid "Payments (Confirmation)"
-msgstr "Płatności (potwierdzenie)"
 
 msgid "Pre registrations total"
 msgstr "Łączna liczba rejestracji wstępnych"

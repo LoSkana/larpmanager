@@ -353,7 +353,7 @@
 - model: larpmanager.eventpermission
   pk: 50
   fields:
-    name: Payments (Confirmation)
+    name: Confirm Payments
     descr: Manually confirm payments received
     slug: orga_invoices
     number: 81
@@ -361,7 +361,7 @@
 - model: larpmanager.eventpermission
   pk: 51
   fields:
-    name: Expenses (Personal)
+    name: Upload Expenses
     descr: Manage your event expenses and upload receipts
     slug: orga_expenses_my
     number: 91

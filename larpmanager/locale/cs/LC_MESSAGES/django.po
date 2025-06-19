@@ -74,9 +74,6 @@ msgstr "věk"
 msgid "for"
 msgstr "pro"
 
-msgid "npc"
-msgstr "npc"
-
 msgid "Band"
 msgstr "Fascie"
 
@@ -420,9 +417,6 @@ msgstr "peníze"
 msgid "other"
 msgstr "více"
 
-msgid "staff"
-msgstr "zaměstnanci"
-
 msgid "title"
 msgstr "název"
 
@@ -606,9 +600,6 @@ msgstr "Hlasování"
 msgid "XP tot"
 msgstr "Px Tot"
 
-msgid "filler"
-msgstr "výplň"
-
 msgid "issued"
 msgstr "vydáno"
 
@@ -617,9 +608,6 @@ msgstr "člen"
 
 msgid "player"
 msgstr "hráč"
-
-msgid "seller"
-msgstr "prodejce"
 
 msgid "status"
 msgstr "stav"
@@ -848,9 +836,6 @@ msgstr "adresa"
 
 msgid "options"
 msgstr "možnosti"
-
-msgid "waiting"
-msgstr "čekání"
 
 msgid "Accepted"
 msgstr "Přijato"
@@ -1689,9 +1674,6 @@ msgstr "okamžitě"
 msgid "leaderboard"
 msgstr "žebříčku!"
 
-msgid "provisional"
-msgstr "prozatímní"
-
 msgid "text length"
 msgstr "délka textu"
 
@@ -1898,9 +1880,6 @@ msgstr "Přicházíme"
 
 msgid "You must pay"
 msgstr "Musíte zaplatit"
-
-msgid "collaborator"
-msgstr "spolupracovník"
 
 msgid "invalid form"
 msgstr "neplatný formulář"
@@ -2381,6 +2360,9 @@ msgstr "Celkový počet členů:"
 msgid "Transaction fee"
 msgstr "Transakční poplatek"
 
+msgid "Upload Expenses"
+msgstr "Nahrávání výdajů"
+
 msgid "Volounteer data"
 msgstr "Dobrovolné údaje"
 
@@ -2422,6 +2404,9 @@ msgstr "Odkazy na sbírku"
 
 msgid "Color background"
 msgstr "Textové pozadí"
+
+msgid "Confirm Payments"
+msgstr "Potvrzení plateb"
 
 msgid "Current template"
 msgstr "Aktuální šablona"
@@ -2927,9 +2912,6 @@ msgstr "E-mailová oznámení"
 
 msgid "Event Configuration"
 msgstr "Konfigurace události"
-
-msgid "Expenses (Personal)"
-msgstr "Výdaje (osobní)"
 
 msgid "Feature deactivated"
 msgstr "Funkce deaktivována"
@@ -3444,9 +3426,6 @@ msgstr "Vzhled organizace"
 
 msgid "Payment membership fee:"
 msgstr "Platba členských příspěvků:"
-
-msgid "Payments (Confirmation)"
-msgstr "Platby (potvrzení)"
 
 msgid "Pre registrations total"
 msgstr "Celkový počet předběžných registrací"

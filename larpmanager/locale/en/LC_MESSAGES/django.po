@@ -5189,42 +5189,12 @@ msgstr ""
 msgid "Event status"
 msgstr ""
 
-msgid "provisional"
-msgstr ""
-
-msgid "staff"
-msgstr ""
-
-msgid "filler"
-msgstr ""
-
-msgid "waiting"
-msgstr ""
-
-msgid "collaborator"
-msgstr ""
-
-msgid "npc"
-msgstr ""
-
-msgid "seller"
-msgstr ""
-
-msgid "Total revenue"
-msgstr ""
-
-msgid "Total costs"
-msgstr ""
-
-msgid "Net profit"
-msgstr ""
-
-msgid "Organization tax"
-msgstr ""
-
 msgid ""
 "Total amount of money received for this event, minus commission fees and "
 "refunds"
+msgstr ""
+
+msgid "Total revenue"
 msgstr ""
 
 msgid ""
@@ -5232,11 +5202,20 @@ msgid ""
 "organizational, including any tokens and credits issued"
 msgstr ""
 
+msgid "Total costs"
+msgstr ""
+
 msgid ""
 "Net profit of the event, difference between total revenue and total costs"
 msgstr ""
 
+msgid "Net profit"
+msgstr ""
+
 msgid "Minimum amount of net profit to be retained for the association tax"
+msgstr ""
+
+msgid "Organization tax"
 msgstr ""
 
 msgid "Donation"
@@ -7712,13 +7691,13 @@ msgstr ""
 msgid "Manages and assigns tasks to characters"
 msgstr ""
 
-msgid "Payments (Confirmation)"
+msgid "Confirm Payments"
 msgstr ""
 
 msgid "Manually confirm payments received"
 msgstr ""
 
-msgid "Expenses (Personal)"
+msgid "Upload Expenses"
 msgstr ""
 
 msgid "Manage your event expenses and upload receipts"

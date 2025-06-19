@@ -74,9 +74,6 @@ msgstr "Alter"
 msgid "for"
 msgstr "für"
 
-msgid "npc"
-msgstr "npc"
-
 msgid "Band"
 msgstr "Faszien"
 
@@ -420,9 +417,6 @@ msgstr "Geld"
 msgid "other"
 msgstr "mehr"
 
-msgid "staff"
-msgstr "Mitarbeiter"
-
 msgid "title"
 msgstr "Titel"
 
@@ -606,9 +600,6 @@ msgstr "Abstimmen"
 msgid "XP tot"
 msgstr "Px Tot"
 
-msgid "filler"
-msgstr "Füllstoff"
-
 msgid "issued"
 msgstr "ausgestellt"
 
@@ -617,9 +608,6 @@ msgstr "Mitglied"
 
 msgid "player"
 msgstr "Spieler"
-
-msgid "seller"
-msgstr "Verkäufer"
 
 msgid "status"
 msgstr "Status"
@@ -848,9 +836,6 @@ msgstr "Adresse"
 
 msgid "options"
 msgstr "Optionen"
-
-msgid "waiting"
-msgstr "Warten"
 
 msgid "Accepted"
 msgstr "Angenommen"
@@ -1689,9 +1674,6 @@ msgstr "sofort"
 msgid "leaderboard"
 msgstr "Rangliste!"
 
-msgid "provisional"
-msgstr "provisorisch"
-
 msgid "text length"
 msgstr "Textlänge"
 
@@ -1898,9 +1880,6 @@ msgstr "Wir kommen"
 
 msgid "You must pay"
 msgstr "Sie müssen zahlen"
-
-msgid "collaborator"
-msgstr "Kollaborateur"
 
 msgid "invalid form"
 msgstr "ungültige Form"
@@ -2381,6 +2360,9 @@ msgstr "Mitglieder insgesamt:"
 msgid "Transaction fee"
 msgstr "Transaktionsgebühr"
 
+msgid "Upload Expenses"
+msgstr "Ausgaben hochladen"
+
 msgid "Volounteer data"
 msgstr "Freiwillige Angaben"
 
@@ -2422,6 +2404,9 @@ msgstr "Links zur Sammlung"
 
 msgid "Color background"
 msgstr "Text-Hintergrund"
+
+msgid "Confirm Payments"
+msgstr "Bestätigen Sie Zahlungen"
 
 msgid "Current template"
 msgstr "Aktuelle Vorlage"
@@ -2927,9 +2912,6 @@ msgstr "E-Mail-Benachrichtigungen"
 
 msgid "Event Configuration"
 msgstr "Ereignis-Konfiguration"
-
-msgid "Expenses (Personal)"
-msgstr "Ausgaben (persönlich)"
 
 msgid "Feature deactivated"
 msgstr "Funktion deaktiviert"
@@ -3444,9 +3426,6 @@ msgstr "Organisation Erscheinungsbild"
 
 msgid "Payment membership fee:"
 msgstr "Zahlung der Mitgliedsbeiträge:"
-
-msgid "Payments (Confirmation)"
-msgstr "Zahlungen (Bestätigungen)"
 
 msgid "Pre registrations total"
 msgstr "Vorregistrierungen insgesamt"

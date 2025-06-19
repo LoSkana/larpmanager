@@ -78,6 +78,8 @@ def update_reg_counts(r):
             key = tier_map.get(reg.ticket.tier)
             if key:
                 add_count(s, f"count_{key}", num_tickets)
+            else:
+                add_count(s, "count_player", num_tickets)
 
         add_count(s, "count_reg", num_tickets)
 

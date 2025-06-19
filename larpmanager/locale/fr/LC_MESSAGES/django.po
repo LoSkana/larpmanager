@@ -74,9 +74,6 @@ msgstr "âge"
 msgid "for"
 msgstr "pour"
 
-msgid "npc"
-msgstr "npc"
-
 msgid "Band"
 msgstr "Fascia"
 
@@ -420,9 +417,6 @@ msgstr "argent"
 msgid "other"
 msgstr "plus"
 
-msgid "staff"
-msgstr "le personnel"
-
 msgid "title"
 msgstr "titre"
 
@@ -606,9 +600,6 @@ msgstr "Vote"
 msgid "XP tot"
 msgstr "Px Tot"
 
-msgid "filler"
-msgstr "bouche-trou"
-
 msgid "issued"
 msgstr "émis"
 
@@ -617,9 +608,6 @@ msgstr "membre"
 
 msgid "player"
 msgstr "joueur"
-
-msgid "seller"
-msgstr "vendeur"
 
 msgid "status"
 msgstr "statut"
@@ -848,9 +836,6 @@ msgstr "adresse"
 
 msgid "options"
 msgstr "options"
-
-msgid "waiting"
-msgstr "attente"
 
 msgid "Accepted"
 msgstr "Accepté"
@@ -1689,9 +1674,6 @@ msgstr "immédiatement"
 msgid "leaderboard"
 msgstr "classement !"
 
-msgid "provisional"
-msgstr "provisoire"
-
 msgid "text length"
 msgstr "longueur du texte"
 
@@ -1898,9 +1880,6 @@ msgstr "Nous arrivons"
 
 msgid "You must pay"
 msgstr "Vous devez payer"
-
-msgid "collaborator"
-msgstr "collaborateur"
 
 msgid "invalid form"
 msgstr "formulaire non valide"
@@ -2381,6 +2360,9 @@ msgstr "Nombre total de membres :"
 msgid "Transaction fee"
 msgstr "Frais de transaction"
 
+msgid "Upload Expenses"
+msgstr "Télécharger les dépenses"
+
 msgid "Volounteer data"
 msgstr "Données volontaires"
 
@@ -2422,6 +2404,9 @@ msgstr "Liens de la collection"
 
 msgid "Color background"
 msgstr "Arrière-plan du texte"
+
+msgid "Confirm Payments"
+msgstr "Confirmer les paiements"
 
 msgid "Current template"
 msgstr "Modèle actuel"
@@ -2927,9 +2912,6 @@ msgstr "Notifications par courrier électronique"
 
 msgid "Event Configuration"
 msgstr "Configuration des événements"
-
-msgid "Expenses (Personal)"
-msgstr "Dépenses (personnelles)"
 
 msgid "Feature deactivated"
 msgstr "Fonction désactivée"
@@ -3444,9 +3426,6 @@ msgstr "Apparence de l'organisation"
 
 msgid "Payment membership fee:"
 msgstr "Paiement des cotisations :"
-
-msgid "Payments (Confirmation)"
-msgstr "Paiements (confirmation)"
 
 msgid "Pre registrations total"
 msgstr "Total des pré-inscriptions"

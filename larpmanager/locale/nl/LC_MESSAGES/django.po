@@ -74,9 +74,6 @@ msgstr "leeftijd"
 msgid "for"
 msgstr "voor"
 
-msgid "npc"
-msgstr "npc"
-
 msgid "Band"
 msgstr "Fascia"
 
@@ -420,9 +417,6 @@ msgstr "geld"
 msgid "other"
 msgstr "meer"
 
-msgid "staff"
-msgstr "personeel"
-
 msgid "title"
 msgstr "titel"
 
@@ -606,9 +600,6 @@ msgstr "Stemmen"
 msgid "XP tot"
 msgstr "Px Tot"
 
-msgid "filler"
-msgstr "vulstof"
-
 msgid "issued"
 msgstr "uitgegeven"
 
@@ -617,9 +608,6 @@ msgstr "lid"
 
 msgid "player"
 msgstr "speler"
-
-msgid "seller"
-msgstr "verkoper"
 
 msgid "status"
 msgstr "status"
@@ -848,9 +836,6 @@ msgstr "adres"
 
 msgid "options"
 msgstr "opties"
-
-msgid "waiting"
-msgstr "wachtend"
 
 msgid "Accepted"
 msgstr "Geaccepteerd"
@@ -1689,9 +1674,6 @@ msgstr "onmiddellijk"
 msgid "leaderboard"
 msgstr "ranking!"
 
-msgid "provisional"
-msgstr "voorlopig"
-
 msgid "text length"
 msgstr "tekstlengte"
 
@@ -1898,9 +1880,6 @@ msgstr "We komen eraan"
 
 msgid "You must pay"
 msgstr "U moet betalen"
-
-msgid "collaborator"
-msgstr "medewerker"
 
 msgid "invalid form"
 msgstr "ongeldige vorm"
@@ -2381,6 +2360,9 @@ msgstr "Totaal aantal leden:"
 msgid "Transaction fee"
 msgstr "Transactievergoeding"
 
+msgid "Upload Expenses"
+msgstr "Uitgaven uploaden"
+
 msgid "Volounteer data"
 msgstr "Vrijwillige gegevens"
 
@@ -2422,6 +2404,9 @@ msgstr "Collectie koppelingen"
 
 msgid "Color background"
 msgstr "Tekst achtergrond"
+
+msgid "Confirm Payments"
+msgstr "Betalingen bevestigen"
 
 msgid "Current template"
 msgstr "Huidige sjabloon"
@@ -2927,9 +2912,6 @@ msgstr "Kennisgevingen per e-mail"
 
 msgid "Event Configuration"
 msgstr "Gebeurtenis Configuratie"
-
-msgid "Expenses (Personal)"
-msgstr "Uitgaven (persoonlijk)"
 
 msgid "Feature deactivated"
 msgstr "Functie gedeactiveerd"
@@ -3444,9 +3426,6 @@ msgstr "Organisatie Verschijning"
 
 msgid "Payment membership fee:"
 msgstr "Betaling van lidmaatschapsgeld:"
-
-msgid "Payments (Confirmation)"
-msgstr "Betalingen (Bevestiging)"
 
 msgid "Pre registrations total"
 msgstr "Totaal voorregistraties"

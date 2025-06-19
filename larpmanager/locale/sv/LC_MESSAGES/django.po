@@ -74,9 +74,6 @@ msgstr "ålder"
 msgid "for"
 msgstr "för"
 
-msgid "npc"
-msgstr "npc"
-
 msgid "Band"
 msgstr "Fascia"
 
@@ -420,9 +417,6 @@ msgstr "pengar"
 msgid "other"
 msgstr "mer"
 
-msgid "staff"
-msgstr "Personal"
-
 msgid "title"
 msgstr "titel"
 
@@ -606,9 +600,6 @@ msgstr "Omröstning"
 msgid "XP tot"
 msgstr "Px Tot"
 
-msgid "filler"
-msgstr "fyllnadsmedel"
-
 msgid "issued"
 msgstr "utfärdade"
 
@@ -617,9 +608,6 @@ msgstr "medlem"
 
 msgid "player"
 msgstr "spelare"
-
-msgid "seller"
-msgstr "Säljare"
 
 msgid "status"
 msgstr "status"
@@ -848,9 +836,6 @@ msgstr "adress"
 
 msgid "options"
 msgstr "alternativ"
-
-msgid "waiting"
-msgstr "väntar"
 
 msgid "Accepted"
 msgstr "Godkänd"
@@ -1689,9 +1674,6 @@ msgstr "omedelbart"
 msgid "leaderboard"
 msgstr "ranking!"
 
-msgid "provisional"
-msgstr "provisorisk"
-
 msgid "text length"
 msgstr "textlängd"
 
@@ -1898,9 +1880,6 @@ msgstr "Vi är på väg"
 
 msgid "You must pay"
 msgstr "Du måste betala"
-
-msgid "collaborator"
-msgstr "medarbetare"
 
 msgid "invalid form"
 msgstr "ogiltigt formulär"
@@ -2381,6 +2360,9 @@ msgstr "Totalt antal medlemmar:"
 msgid "Transaction fee"
 msgstr "Transaktionsavgift"
 
+msgid "Upload Expenses"
+msgstr "Ladda upp kostnader"
+
 msgid "Volounteer data"
 msgstr "Frivilliga uppgifter"
 
@@ -2422,6 +2404,9 @@ msgstr "Länkar till samlingar"
 
 msgid "Color background"
 msgstr "Text bakgrund"
+
+msgid "Confirm Payments"
+msgstr "Bekräfta betalningar"
 
 msgid "Current template"
 msgstr "Nuvarande mall"
@@ -2927,9 +2912,6 @@ msgstr "E-postmeddelanden"
 
 msgid "Event Configuration"
 msgstr "Händelsekonfiguration"
-
-msgid "Expenses (Personal)"
-msgstr "Utgifter (personliga)"
 
 msgid "Feature deactivated"
 msgstr "Funktion avaktiverad"
@@ -3444,9 +3426,6 @@ msgstr "Organisation Utseende"
 
 msgid "Payment membership fee:"
 msgstr "Betalning av medlemsavgifter:"
-
-msgid "Payments (Confirmation)"
-msgstr "Betalningar (bekräftelse)"
 
 msgid "Pre registrations total"
 msgstr "Totalt antal förhandsregistreringar"
