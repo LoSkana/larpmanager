@@ -18,7 +18,7 @@
 {% block content %}
     <div class="login">
         <br />
-        {% if not request.staging and not request.development %}
+        {% if request.enviro == "prod" %}
             <div class="allauth_signin">
                 <a href="{% get_login_url 'google' %}">
                     <img src="{% static 'larpmanager/assets/' %}google_signin.png"

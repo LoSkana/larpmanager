@@ -73,7 +73,7 @@ def del_assoc_role_reset(sender, instance, **kwargs):
 def get_assoc_roles(request):
     pms = {}
     if request.user.is_superuser:
-        return True, [], []
+        return True, [], ["superuser"]
     ctx = cache_event_links(request)
     is_admin = False
     names = []
@@ -143,7 +143,7 @@ def del_event_role_reset(sender, instance, **kwargs):
 def get_event_roles(request, slug):
     pms = {}
     if request.user.is_superuser:
-        return True, [], []
+        return True, [], ["superuser"]
     ctx = cache_event_links(request)
     if slug not in ctx["event_role"]:
         return False, [], []

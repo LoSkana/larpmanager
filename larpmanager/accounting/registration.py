@@ -26,6 +26,7 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
+from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.accounting.token_credit import registration_tokens_credits
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
@@ -50,7 +51,6 @@ from larpmanager.models.registration import (
 )
 from larpmanager.models.utils import get_sum
 from larpmanager.utils.common import get_time_diff, get_time_diff_today
-from larpmanager.utils.registration import is_reg_provisional
 from larpmanager.utils.tasks import background_auto
 
 

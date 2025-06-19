@@ -32,6 +32,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 from slugify import slugify
 
+from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.accounting.registration import (
     cancel_reg,
     check_reg_bkg,
@@ -84,7 +85,6 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.download import download
 from larpmanager.utils.event import check_event_permission
-from larpmanager.utils.registration import is_reg_provisional
 from larpmanager.utils.upload import upload_elements
 from larpmanager.views.orga.member import member_field_correct
 

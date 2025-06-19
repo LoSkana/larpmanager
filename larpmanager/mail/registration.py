@@ -25,13 +25,14 @@ from django.dispatch import receiver
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssocTextType, get_url, hdr
 from larpmanager.models.event import DevelopStatus, EventTextType, PreRegistration
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
-from larpmanager.utils.registration import get_registration_options, is_reg_provisional
+from larpmanager.utils.registration import get_registration_options
 from larpmanager.utils.tasks import background_auto, my_send_mail
 from larpmanager.utils.text import get_assoc_text, get_event_text
 

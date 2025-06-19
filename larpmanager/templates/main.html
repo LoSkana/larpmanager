@@ -99,7 +99,7 @@
                     {% endblock title %}
                 </span>
             </h1>
-            <nav>
+            <nav id="menu-bar">
                 <a id="menu-open" href="#menu"><span>Menu</span>
                     <img alt="menu" src="{% static 'larpmanager/assets/menu.png' %}" />
                 </a>
@@ -297,7 +297,7 @@
                             {% block info %}
                             {% endblock info %}
                         </div>
-                        <div class="page_{{ request.func_name }} {% block special %}{% endblock special %}">
+                        <div class="page_{{ request_func_name }} {% block special %}{% endblock special %}">
                             {% block content %}
                             {% endblock content %}
                         </div>

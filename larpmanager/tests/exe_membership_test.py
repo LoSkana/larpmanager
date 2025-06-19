@@ -85,7 +85,7 @@ def exe_membership(live_server, page):
     expect(page.locator("#banner")).not_to_contain_text("Oops!")
 
     go_to(page, live_server, "/manage/membership/")
-    page.get_by_role("link", name="Member").click()
+    page.get_by_role("link", name="Member", exact=True).click()
     expect(page.locator("#banner")).not_to_contain_text("Oops!")
 
     # approve

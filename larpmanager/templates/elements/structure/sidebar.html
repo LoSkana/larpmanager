@@ -1,0 +1,80 @@
+{% load static i18n %}
+{% if manage %}
+    <div id="sidebar"
+         {% if not is_sidebar_open %}style="display: none"{% endif %}>
+        <div class="inner">
+            <div class="header">
+                {% if run %}
+                    <h1>
+                        <span>{{ run }}</span>
+                    </h1>
+                {% else %}
+                    <h1>
+                        <span>{{ assoc.name }}</span>
+                    </h1>
+                {% endif %}
+                <hr />
+            </div>
+            <h2>Larpmanager</h2>
+            <p>
+                <a href="https://discord.gg/C4KuyQbuft">Discord</a>
+                <a href="{% url 'tutorials' %}">Tutorials</a>
+            </p>
+            {% if run %}
+                {% for mod, list in event_pms.items %}
+                    <div class="h2-p-row">
+                        <h2>{% trans mod %}</h2>
+                        <p>
+                            {% for ap in list %}
+                                <span class="sidebar-link-wrap" descr="{% trans ap.descr %}">
+                                    <a class="sidebar-link"
+                                       href="{% url ap.slug run.event.slug run.number %}"
+                                       {% if request_func_name == ap.slug %}class="select"{% endif %}>
+                                        {% trans ap.name %}
+                                    </a>
+                                    <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
+                                </span>
+                            {% endfor %}
+                        </p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                {% for mod, list in assoc_pms.items %}
+                    <div class="h2-p-row">
+                        <h2>{% trans mod %}</h2>
+                        <p>
+                            {% for ap in list %}
+                                <span class="sidebar-link-wrap" descr="{% trans ap.descr %}">
+                                    <a class="sidebar-link"
+                                       href="{% url ap.slug %}"
+                                       {% if request_func_name == ap.slug %}class="select"{% endif %}>
+                                        {% trans ap.name %}
+                                    </a>
+                                    <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
+                                </span>
+                            {% endfor %}
+                        </p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% if role_names %}
+                <hr />
+                <div class="roles">
+                    <i>{% trans "Role" %}:
+                        {% for rn in role_names %}
+                            {% include "elements/comma.html" %}
+                            {{ rn }}
+                        {% endfor %}
+                    </i>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div id="mobile-bar">
+        <nav>
+            <a id="sidebar-mobile" href="#sidebar">
+                <span>Management</span>
+            </a>
+        </nav>
+    </div>
+{% endif %}

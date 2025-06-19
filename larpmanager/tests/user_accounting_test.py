@@ -59,14 +59,14 @@ def prepare(page, live_server):
     go_to(page, live_server, "/manage/features/111/on")
 
     go_to(page, live_server, "/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Email notifications")).click()
+    page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
     page.locator("#id_mail_cc").check()
     page.locator("#id_mail_signup_new").check()
     page.locator("#id_mail_signup_update").check()
     page.locator("#id_mail_signup_del").check()
     page.locator("#id_mail_payment").check()
 
-    page.get_by_role("link", name=re.compile(r"^Payments")).click()
+    page.get_by_role("link", name=re.compile(r"^Payments\s.+")).click()
     page.locator("#id_payment_special_code").check()
 
     page.get_by_role("button", name="Confirm", exact=True).click()
@@ -136,7 +136,7 @@ def membership_fees(page, live_server):
     page.get_by_role("button", name="Approve").click()
 
     go_to(page, live_server, "/manage/config")
-    page.get_by_role("link", name=re.compile(r"Members")).click()
+    page.get_by_role("link", name=re.compile(r"Members\s.+")).click()
     page.locator("#id_membership_fee").click()
     page.locator("#id_membership_fee").fill("15")
     page.locator("#id_membership_grazing").click()
@@ -163,9 +163,6 @@ def membership_fees(page, live_server):
 
     go_to(page, live_server, "/accounting")
     expect(page.locator("#one")).not_to_contain_text("Payment membership fee")
-
-    page.get_by_role("link", name="Organization").click()
-    page.get_by_role("link", name="Invoices").click()
 
 
 def collections(page, live_server):

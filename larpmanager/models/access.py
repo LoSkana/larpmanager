@@ -36,6 +36,8 @@ class AssocPermission(BaseModel):
 
     feature = models.ForeignKey(Feature, on_delete=models.CASCADE, related_name="assoc_permissions")
 
+    descr = models.CharField(max_length=1000)
+
     def module(self):
         # noinspection PyUnresolvedReferences
         return self.feature.module
@@ -94,6 +96,8 @@ class EventPermission(BaseModel):
     number = models.IntegerField(blank=True)
 
     feature = models.ForeignKey(Feature, on_delete=models.CASCADE, related_name="event_permissions")
+
+    descr = models.CharField(max_length=1000)
 
     def module(self):
         # noinspection PyUnresolvedReferences

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Management" %} - {{ run }}
+{% endblock title %}
+{% block content %}
+    <div id="manage">
+        <h3>
+            <a href="{% url 'orga_run' run.event.slug run.number %}">{% trans "Event status" %}</a>
+        </h3>
+        <b>{{ run }}</b>
+        (<i>{{ run.pretty_dates }}</i>)
+        - {{ run.get_development_display }}
+        - <a href="{% url 'register' run.event.slug run.number %}">{{ registration_status }}</a>
+        <br />
+        <hr />
+        {% if counts %}
+            <h3>
+                <a href="{% url 'orga_registrations' run.event.slug run.number %}">{% trans "Registrations" %}</a>: {{ counts.count_reg }}
+            </h3>
+            <table>
+                <tr>
+                    {% for key, count in reg_counts.items %}
+                        {% if count %}<th>{{ key }}</th>{% endif %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for key, count in reg_counts.items %}
+                        {% if count %}<td>{{ count }}</td>{% endif %}
+                    {% endfor %}
+                </tr>
+            </table>
+            <hr />
+        {% endif %}
+        {% if run.revenue %}
+            <h3>
+                <a href="{% url 'orga_accounting' run.event.slug run.number %}">{% trans "Accounting" %}</a>
+            </h3>
+            <table class="mob">
+                <tr>
+                    <th descr="{% trans "Total amount of money received for this event, minus commission fees and refunds" %}">
+                        <a href="#" class="sidebar-link">{% trans "Total revenue" %}</a>
+                        <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                    </th>
+                    <th descr="{% trans "Total of all expenses incurred for the event, both personal and organizational, including any tokens and credits issued" %}">
+                        <a href="#" class="sidebar-link">{% trans "Total costs" %}</a>
+                        <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                    </th>
+                    <th descr="{% trans "Net profit of the event, difference between total revenue and total costs" %}">
+                        <a href="#" class="sidebar-link">{% trans "Net profit" %}</a>
+                        <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                    </th>
+                    {% if 'organization_tax' in features %}
+                        <th descr="{% trans "Minimum amount of net profit to be retained for the association tax" %}">
+                            <a href="#" class="sidebar-link">{% trans "Organization tax" %}</a>
+                            <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                        </th>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td>{{ run.revenue }}</td>
+                    <td>{{ run.costs }}</td>
+                    <td>{{ run.balance }}</td>
+                    {% if 'organization_tax' in features %}<td>{{ run.tax }}</td>{% endif %}
+                </tr>
+            </table>
+            <hr />
+        {% endif %}
+    </div>
+{% endblock content %}
