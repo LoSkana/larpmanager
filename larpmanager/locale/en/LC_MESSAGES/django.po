@@ -6372,6 +6372,16 @@ msgid ""
 "diet."
 msgstr ""
 
+msgid ""
+"Please remember that the information on this page was given with the "
+"implicit trust that it will be treated with the utmost care."
+msgstr ""
+
+msgid ""
+"Communicate them only if strictly necessary, and if possible communicate "
+"them in anonymous form."
+msgstr ""
+
 msgid "This page shows the email lists of subscribers."
 msgstr ""
 
@@ -6411,11 +6421,6 @@ msgid "Sensitive data"
 msgstr ""
 
 msgid "This page shows the general information of registered players."
-msgstr ""
-
-msgid ""
-"Please remember that the information on this page was given with the "
-"implicit trust that it will be treated with the utmost care."
 msgstr ""
 
 msgid "Spam"

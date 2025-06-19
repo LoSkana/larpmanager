@@ -7188,6 +7188,13 @@ msgstr ""
 "mieć możliwość szybkiej rejestracji!"
 
 msgid ""
+"Communicate them only if strictly necessary, and if possible communicate "
+"them in anonymous form."
+msgstr ""
+"Przekazuj je tylko wtedy, gdy jest to absolutnie konieczne, a jeśli to "
+"możliwe, przekazuj je w formie anonimowej."
+
+msgid ""
 "For each character added, a specific field will be available to add "
 "additional plot information."
 msgstr ""

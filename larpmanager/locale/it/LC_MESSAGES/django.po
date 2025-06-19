@@ -7293,6 +7293,13 @@ msgstr ""
 "prelazione sull'iscrizione!"
 
 msgid ""
+"Communicate them only if strictly necessary, and if possible communicate "
+"them in anonymous form."
+msgstr ""
+"Comunicatele solo se strettamente necessario e, se possibile, in forma "
+"anonima."
+
+msgid ""
 "For each character added, a specific field will be available to add "
 "additional plot information."
 msgstr ""

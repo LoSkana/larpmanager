@@ -58,7 +58,7 @@ from larpmanager.views.larpmanager import get_run_lm_payment
 
 @login_required
 def exe_association(request):
-    return exe_edit(request, ExeAssociationForm, None, "exe_association", "manage", add_another=False)
+    return exe_edit(request, ExeAssociationForm, None, "exe_association", "manage", add_ctx={"add_another": False})
 
 
 @login_required
@@ -76,13 +76,15 @@ def exe_roles_edit(request, num):
 
 
 @login_required
-def exe_config(request):
-    return exe_edit(request, ExeConfigForm, None, "exe_config", "manage", add_another=False)
+def exe_config(request, section=None):
+    add_ctx = {"jump_section": section} if section else {}
+    add_ctx["add_another"] = False
+    return exe_edit(request, ExeConfigForm, None, "exe_config", "manage", add_ctx=add_ctx)
 
 
 @login_required
 def exe_profile(request):
-    return exe_edit(request, ExeProfileForm, None, "exe_profile", "manage", add_another=False)
+    return exe_edit(request, ExeProfileForm, None, "exe_profile", "manage", add_ctx={"add_another": False})
 
 
 @login_required
@@ -99,12 +101,14 @@ def exe_texts_edit(request, num):
 
 @login_required
 def exe_payment_details(request):
-    return exe_edit(request, ExePaymentSettingsForm, None, "exe_payment_details", "manage", add_another=False)
+    return exe_edit(
+        request, ExePaymentSettingsForm, None, "exe_payment_details", "manage", add_ctx={"add_another": False}
+    )
 
 
 @login_required
 def exe_appearance(request):
-    return exe_edit(request, ExeAppearanceForm, None, "exe_appearance", "manage", add_another=False)
+    return exe_edit(request, ExeAppearanceForm, None, "exe_appearance", "manage", add_ctx={"add_another": False})
 
 
 def f_k_exe(f_id, r_id):
@@ -113,7 +117,7 @@ def f_k_exe(f_id, r_id):
 
 @login_required
 def exe_features(request):
-    return exe_edit(request, ExeFeatureForm, None, "exe_features", "manage", add_another=False)
+    return exe_edit(request, ExeFeatureForm, None, "exe_features", "manage", add_ctx={"add_another": False})
 
 
 def exe_features_go(request, ctx, num, on=True):

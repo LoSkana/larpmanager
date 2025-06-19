@@ -7177,6 +7177,13 @@ msgstr ""
 "ved påmelding!"
 
 msgid ""
+"Communicate them only if strictly necessary, and if possible communicate "
+"them in anonymous form."
+msgstr ""
+"Kommuniser dem bare hvis det er strengt nødvendig, og kommuniser dem om "
+"mulig i anonymisert form."
+
+msgid ""
 "For each character added, a specific field will be available to add "
 "additional plot information."
 msgstr ""

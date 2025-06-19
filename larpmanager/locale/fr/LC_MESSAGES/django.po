@@ -7338,6 +7338,13 @@ msgstr ""
 "un droit de préemption sur l'inscription !"
 
 msgid ""
+"Communicate them only if strictly necessary, and if possible communicate "
+"them in anonymous form."
+msgstr ""
+"Ne les communiquez qu'en cas de stricte nécessité et, si possible, sous une "
+"forme anonyme."
+
+msgid ""
 "For each character added, a specific field will be available to add "
 "additional plot information."
 msgstr ""

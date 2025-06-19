@@ -7319,6 +7319,13 @@ msgstr ""
 "georganiseerd en je hebt voorrang bij inschrijving!"
 
 msgid ""
+"Communicate them only if strictly necessary, and if possible communicate "
+"them in anonymous form."
+msgstr ""
+"Communiceer ze alleen als het strikt noodzakelijk is, en indien mogelijk in "
+"anonieme vorm."
+
+msgid ""
 "For each character added, a specific field will be available to add "
 "additional plot information."
 msgstr ""

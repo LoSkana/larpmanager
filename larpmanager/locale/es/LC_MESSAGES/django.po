@@ -7242,6 +7242,13 @@ msgstr ""
 "la inscripción!"
 
 msgid ""
+"Communicate them only if strictly necessary, and if possible communicate "
+"them in anonymous form."
+msgstr ""
+"Comuníquelas sólo si es estrictamente necesario y, si es posible, de forma "
+"anónima."
+
+msgid ""
 "For each character added, a specific field will be available to add "
 "additional plot information."
 msgstr ""

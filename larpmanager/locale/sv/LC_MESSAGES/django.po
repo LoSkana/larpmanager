@@ -7202,6 +7202,13 @@ msgstr ""
 "förtur till registrering!"
 
 msgid ""
+"Communicate them only if strictly necessary, and if possible communicate "
+"them in anonymous form."
+msgstr ""
+"Kommunicera dem endast om det är absolut nödvändigt, och om möjligt i "
+"anonymiserad form."
+
+msgid ""
 "For each character added, a specific field will be available to add "
 "additional plot information."
 msgstr ""

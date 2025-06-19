@@ -7459,6 +7459,13 @@ msgstr ""
 "das Vorkaufsrecht bei der Anmeldung!"
 
 msgid ""
+"Communicate them only if strictly necessary, and if possible communicate "
+"them in anonymous form."
+msgstr ""
+"Teilen Sie sie nur mit, wenn es unbedingt notwendig ist, und wenn möglich in"
+" anonymer Form."
+
+msgid ""
 "For each character added, a specific field will be available to add "
 "additional plot information."
 msgstr ""

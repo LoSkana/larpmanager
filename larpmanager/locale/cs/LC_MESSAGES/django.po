@@ -7068,6 +7068,13 @@ msgstr ""
 "první volby při registraci!"
 
 msgid ""
+"Communicate them only if strictly necessary, and if possible communicate "
+"them in anonymous form."
+msgstr ""
+"Sdělujte je pouze tehdy, je-li to nezbytně nutné, a pokud možno v anonymní "
+"podobě."
+
+msgid ""
 "For each character added, a specific field will be available to add "
 "additional plot information."
 msgstr ""
