@@ -17,7 +17,6 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-import time
 
 import pytest
 from playwright.sync_api import expect, sync_playwright
@@ -58,7 +57,7 @@ def exe_events_run(live_server, page):
     page.locator("#id_development").select_option("1")
     page.locator("#id_start").fill("2025-06-11")
     page.locator("#id_end").fill("2025-06-13")
-    time.sleep(2)
+    page.locator("#id_development").click()
     page.get_by_role("button", name="Confirm", exact=True).click()
 
     expect(page.locator("#one")).to_contain_text("Prova Event")
