@@ -1,0 +1,15 @@
+{% load i18n %}
+{% if suggestions %}
+    <h2>{% trans "Suggestions" %}</h2>
+    <table>
+        {% for sugg in suggestions %}
+            <tr>
+                <td>
+                    {{ sugg.text }}
+                    <a href="{{ sugg.href }}" target="_blank">{{ sugg.link }}</a>
+                    {% if sugg.tutorial %}(<a href="{{ sugg.tutorial }}" target="_blank">Tutorial</a>){% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}

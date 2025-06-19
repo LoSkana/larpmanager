@@ -7824,6 +7824,13 @@ msgstr ""
 "om de functies met betrekking tot het evenement te kunnen gebruiken."
 
 msgid ""
+"To set the tickets that users can select during registration, access the "
+"tickets management page:"
+msgstr ""
+"Om de tickets in te stellen die gebruikers kunnen selecteren tijdens de "
+"registratie, ga je naar de pagina voor ticketbeheer:"
+
+msgid ""
 "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
 "text, 'p' for long text)"
 msgstr ""

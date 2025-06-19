@@ -7561,6 +7561,13 @@ msgstr ""
 "používat funkce týkající se události."
 
 msgid ""
+"To set the tickets that users can select during registration, access the "
+"tickets management page:"
+msgstr ""
+"Chcete-li nastavit tipy, které si uživatelé mohou vybrat během registrace, "
+"přejděte na stránku správy tipů:"
+
+msgid ""
 "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
 "text, 'p' for long text)"
 msgstr ""

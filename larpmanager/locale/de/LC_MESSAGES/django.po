@@ -7978,6 +7978,13 @@ msgstr ""
 "Funktionen für die Veranstaltung nutzen zu können."
 
 msgid ""
+"To set the tickets that users can select during registration, access the "
+"tickets management page:"
+msgstr ""
+"Um die Tickets festzulegen, die Benutzer bei der Registrierung auswählen "
+"können, rufen Sie die Seite zur Verwaltung der Tickets auf:"
+
+msgid ""
 "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
 "text, 'p' for long text)"
 msgstr ""

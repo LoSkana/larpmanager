@@ -7862,6 +7862,13 @@ msgstr ""
 "relatives à l'événement."
 
 msgid ""
+"To set the tickets that users can select during registration, access the "
+"tickets management page:"
+msgstr ""
+"Pour définir les tickets que les utilisateurs peuvent sélectionner lors de "
+"l'enregistrement, accédez à la page de gestion des tickets :"
+
+msgid ""
 "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
 "text, 'p' for long text)"
 msgstr ""

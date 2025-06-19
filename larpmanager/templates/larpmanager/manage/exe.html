@@ -45,19 +45,7 @@
             </p>
             <hr />
         {% endif %}
-        {% if suggestions %}
-            <h2>{% trans "Suggestions" %}</h2>
-            <table>
-                {% for sugg in suggestions %}
-                    <tr>
-                        <td>
-                            {{ sugg.text }}
-                            <a href="{{ sugg.href }}" target="_blank">{{ sugg.link }}</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-        {% endif %}
+        {% include "larpmanager/manage/suggestions.html" %}
         {% if event_counts %}
             <h2>
                 <a href="#" class="my_toggle" tog='quick_help'>{% trans "Quick Help" %}</a>

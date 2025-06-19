@@ -7696,6 +7696,13 @@ msgstr ""
 "korzystania z funkcji dotyczących wydarzenia."
 
 msgid ""
+"To set the tickets that users can select during registration, access the "
+"tickets management page:"
+msgstr ""
+"Aby ustawić bilety, które użytkownicy mogą wybrać podczas rejestracji, "
+"przejdź do strony zarządzania biletami:"
+
+msgid ""
 "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
 "text, 'p' for long text)"
 msgstr ""

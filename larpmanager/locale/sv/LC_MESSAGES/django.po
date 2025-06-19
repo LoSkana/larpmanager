@@ -7703,6 +7703,13 @@ msgstr ""
 "använda funktionerna för evenemanget."
 
 msgid ""
+"To set the tickets that users can select during registration, access the "
+"tickets management page:"
+msgstr ""
+"Om du vill ange vilka biljetter som användarna kan välja under "
+"registreringen går du till sidan för biljetthantering:"
+
+msgid ""
 "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
 "text, 'p' for long text)"
 msgstr ""

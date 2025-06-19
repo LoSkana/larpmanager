@@ -5125,9 +5125,6 @@ msgstr ""
 msgid "Ongoing events"
 msgstr ""
 
-msgid "Suggestions"
-msgstr ""
-
 msgid "Quick Help"
 msgstr ""
 
@@ -5216,6 +5213,9 @@ msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
 
 msgid "Organization tax"
+msgstr ""
+
+msgid "Suggestions"
 msgstr ""
 
 msgid "Donation"
@@ -7974,6 +7974,11 @@ msgstr ""
 msgid ""
 "There are no active events, to create a new one access the events management "
 "page:"
+msgstr ""
+
+msgid ""
+"To set the tickets that users can select during registration, access the "
+"tickets management page:"
 msgstr ""
 
 msgid "Request approved"

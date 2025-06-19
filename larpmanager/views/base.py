@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
@@ -28,6 +29,7 @@ from larpmanager.accounting.balance import assoc_accounting, get_run_accounting
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
+from larpmanager.models.access import AssocPermission, EventPermission
 from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.utils.base import def_user_ctx, get_index_assoc_permissions
@@ -115,9 +117,10 @@ def _exe_manage(request):
         _add_suggestion(
             ctx,
             _("There are no active events, to create a new one access the events management page:"),
-            _("Events"),
             "exe_events",
         )
+
+    _compile_suggestions(request, ctx)
 
     return render(request, "larpmanager/manage/exe.html", ctx)
 
@@ -143,14 +146,61 @@ def _orga_manage(request, s, n):
     if has_event_permission(ctx, request, s, "orga_accounting"):
         ctx["dc"] = get_run_accounting(ctx["run"], ctx)
 
+    suggestions = {
+        "orga_registration_tickets": _(
+            "To set the tickets that users can select during registration, access the tickets management page:"
+        )
+    }
+
+    for perm, text in suggestions.items():
+        if ctx["event"].get_config(f"{perm}_suggestion"):
+            continue
+        _add_suggestion(ctx, text, perm)
+
+    _compile_suggestions(request, ctx)
+
     return render(request, "larpmanager/manage/orga.html", ctx)
 
 
-def _add_suggestion(ctx, text, link, perm):
-    if "suggestions" not in ctx:
-        ctx["suggestions"] = []
+def _add_suggestion(ctx, text, perm):
+    if "suggestions_list" not in ctx:
+        ctx["suggestions_list"] = []
 
-    ctx["suggestions"].append({"text": text, "link": link, "href": reverse(perm)})
+    ctx["suggestions_list"].append((text, perm))
+
+
+def _has_permission(request, ctx, perm):
+    if perm.startswith("exe"):
+        return has_assoc_permission(request, perm)
+    return has_event_permission(ctx, request, ctx["event"].slug, perm)
+
+
+def _get_href(ctx, perm):
+    if perm.startswith("exe"):
+        return reverse(perm)
+
+    return reverse(perm, args=[ctx["event"].slug, ctx["run"].number])
+
+
+def _compile_suggestions(request, ctx):
+    ctx["suggestions"] = []
+    if "suggestions_list" not in ctx:
+        return
+
+    cache = {}
+    perm_list = [slug for _, slug in ctx["suggestions_list"] if _has_permission(request, ctx, slug)]
+
+    for model in (EventPermission, AssocPermission):
+        queryset = model.objects.filter(slug__in=perm_list).select_related("feature")
+        for slug, name, tutorial in queryset.values_list("slug", "name", "feature__tutorial"):
+            cache[slug] = (name, tutorial)
+
+    for text, slug in ctx["suggestions_list"]:
+        if slug not in cache:
+            continue
+
+        (name, tutorial) = cache[slug]
+        ctx["suggestions"].append({"text": text, "link": _(name), "href": _get_href(ctx, slug), "tutorial": tutorial})
 
 
 def error_404(request, exception):
