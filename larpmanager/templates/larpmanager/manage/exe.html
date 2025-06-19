@@ -35,14 +35,26 @@
             </table>
             <hr />
         {% endif %}
-        {% if global_sum %}
-            <h2>{% trans "Accounting" %}</h2>
-            <p>
-                {% trans "Global balance" %}: <b>{{ global_sum }}</b>
-            </p>
-            <p>
-                {% trans "Overall balance" %}: <b>{{ bank_sum }}</b>
-            </p>
+        {% if global_sum or bank_sum %}
+            <h2>
+                <a href="{% url 'exe_accounting' %}">{% trans "Accounting" %}</a>
+            </h2>
+            <table>
+                <tr>
+                    <th descr="{% trans "This is the associative positive operating margin, taking into account the budgets of completed runs, minus credits or tokens issued" %}">
+                        <a href="#" class="sidebar-link">{% trans "Global balance" %}</a>
+                        <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                    </th>
+                    <th descr="{% trans "This is the overall amount that should be held in the organization’s bank and financial accounts" %}">
+                        <a href="#" class="sidebar-link">{% trans "Overall balance" %}</a>
+                        <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                    </th>
+                </tr>
+                <tr>
+                    <td>{{ global_sum }}</td>
+                    <td>{{ bank_sum }}</td>
+                </tr>
+            </table>
             <hr />
         {% endif %}
         {% include "larpmanager/manage/suggestions.html" %}

@@ -20,6 +20,7 @@
 
 from django.urls import path
 
+from larpmanager.views import manage as views_mg
 from larpmanager.views.orga import accounting as views_oa
 from larpmanager.views.orga import casting as views_oca
 from larpmanager.views.orga import character as views_oc
@@ -34,6 +35,11 @@ from larpmanager.views.orga import registration as views_or
 from larpmanager.views.orga import writing as views_ow
 
 urlpatterns = [
+    path(
+        "<slug:s>/<int:n>/manage/",
+        views_mg.manage,
+        name="manage",
+    ),
     path(
         "<slug:s>/<int:n>/manage/pre_registrations/",
         views_or.orga_pre_registrations,
@@ -958,5 +964,10 @@ urlpatterns = [
         "<slug:s>/<int:n>/manage/export/<slug:nm>",
         views_ow.orga_export,
         name="orga_export",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/suggestions/<slug:perm>/",
+        views_mg.orga_close_suggestion,
+        name="orga_close_suggestion",
     ),
 ]

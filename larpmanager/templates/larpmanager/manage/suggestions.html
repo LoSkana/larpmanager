@@ -9,6 +9,19 @@
                     <a href="{{ sugg.href }}" target="_blank">{{ sugg.link }}</a>
                     {% if sugg.tutorial %}(<a href="{{ sugg.tutorial }}" target="_blank">Tutorial</a>){% endif %}
                 </td>
+                <td>
+                    <span class="suggestions-close">
+                        {% if event %}
+                            <a href="{% url 'orga_close_suggestion' event.slug run.number sugg.slug %}">
+                                <i class="fa fa-window-close" aria-hidden="true"></i>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'exe_close_suggestion' sugg.slug %}">
+                                <i class="fa fa-window-close" aria-hidden="true"></i>
+                            </a>
+                        {% endif %}
+                    </span>
+                </td>
             </tr>
         {% endfor %}
     </table>
