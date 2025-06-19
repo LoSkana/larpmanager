@@ -8083,6 +8083,32 @@ msgid ""
 msgstr ""
 
 msgid ""
+"You have activated both fixed and dynamic installments; they are not meant "
+"to be used together, deactivate one of the two in the features management "
+"panel:"
+msgstr ""
+
+msgid ""
+"You have activated dynamic installments, but none have been yet created; "
+"access the dynamic installments management panel:"
+msgstr ""
+
+msgid ""
+"You have activated fixed installments, but none have been yet created; "
+"access the fixed installments management panel:"
+msgstr ""
+
+msgid ""
+"You have activated registration opening date, but no value has been set; "
+"access the run management panel:"
+msgstr ""
+
+msgid ""
+"You have activated registration secret link, but no value has been set; "
+"access the run management panel:"
+msgstr ""
+
+msgid ""
 "To set the tickets that users can select during registration, access the "
 "tickets management page:"
 msgstr ""

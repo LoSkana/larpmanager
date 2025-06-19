@@ -20,6 +20,7 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.member import Membership, MembershipStatus
+from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.base import check_assoc_permission, def_user_ctx, get_index_assoc_permissions
 from larpmanager.utils.common import format_datetime
@@ -240,6 +241,58 @@ def _orga_actions(ctx):
             _("There are <b>%(number)s</b> payments to approve, access the invoices management panel:")
             % {"number": payments_approve},
             "orga_invoices",
+        )
+
+    features = get_event_features(ctx["event"].id)
+
+    if "reg_installments" in features and "reg_quotas" in features:
+        _add_action(
+            ctx,
+            _(
+                "You have activated both fixed and dynamic installments; they are not meant to be used together, "
+                "deactivate one of the two in the features management panel:"
+            ),
+            "orga_features",
+        )
+
+    if "reg_quotas" in features and not ctx["event"].get_elements(RegistrationQuota).count():
+        _add_action(
+            ctx,
+            _(
+                "You have activated dynamic installments, but none have been yet created; "
+                "access the dynamic installments management panel:"
+            ),
+            "orga_registration_quotas",
+        )
+
+    if "reg_installments" in features and not ctx["event"].get_elements(RegistrationInstallment).count():
+        _add_action(
+            ctx,
+            _(
+                "You have activated fixed installments, but none have been yet created; "
+                "access the fixed installments management panel:"
+            ),
+            "orga_registration_installments",
+        )
+
+    if "registration_open" in features and not ctx["run"].registration_open:
+        _add_action(
+            ctx,
+            _(
+                "You have activated registration opening date, but no value has been set; "
+                "access the run management panel:"
+            ),
+            "orga_run",
+        )
+
+    if "registration_secret" in features and not ctx["run"].registration_secret:
+        _add_action(
+            ctx,
+            _(
+                "You have activated registration secret link, but no value has been set; "
+                "access the run management panel:"
+            ),
+            "orga_run",
         )
 
 
