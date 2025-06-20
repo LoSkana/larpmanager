@@ -23,11 +23,12 @@ from django.db.models import Count
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from larpmanager.cache.feature import get_event_features
+from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import RegistrationChoice, WritingChoice
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import Character
+from larpmanager.utils.common import _search_char_reg
 
 
 def reset_cache_reg_counts(r):
@@ -59,22 +60,30 @@ def add_count(s, param, v=1):
 
 
 def update_reg_counts(r):
-    que = Registration.objects.filter(run=r, cancellation_date__isnull=True)
-    que = que.select_related("ticket")
     s = {"count_reg": 0, "count_wait": 0, "count_staff": 0, "count_fill": 0}
-    for el in que.values_list("ticket__id", "ticket__tier", "additionals"):
-        num_tickets = 1 + el[2]
-        for tp in [
-            ("staff", TicketTier.STAFF),
-            ("wait", TicketTier.WAITING),
-            ("fill", TicketTier.FILLER),
-        ]:
-            if el[1] == tp[1]:
-                add_count(s, f"count_{tp[0]}", num_tickets)
+    que = Registration.objects.filter(run=r, cancellation_date__isnull=True)
+    for reg in que.select_related("ticket"):
+        num_tickets = 1 + reg.additionals
+        if is_reg_provisional(reg):
+            add_count(s, "count_provisional", num_tickets)
+        else:
+            tier_map = {
+                TicketTier.STAFF: "staff",
+                TicketTier.WAITING: "wait",
+                TicketTier.FILLER: "fill",
+                TicketTier.SELLER: "seller",
+                TicketTier.NPC: "npc",
+                TicketTier.COLLABORATOR: "collaborator",
+            }
+            key = tier_map.get(reg.ticket.tier)
+            if key:
+                add_count(s, f"count_{key}", num_tickets)
+            else:
+                add_count(s, "count_player", num_tickets)
 
         add_count(s, "count_reg", num_tickets)
 
-        add_count(s, f"tk_{el[0]}", num_tickets)
+        add_count(s, f"tk_{reg.ticket_id}", num_tickets)
 
     que = RegistrationChoice.objects.filter(reg__run=r, reg__cancellation_date__isnull=True)
     for el in que.values("option_id").annotate(total=Count("option_id")):
@@ -141,31 +150,3 @@ def search_player(char, js, ctx):
         _search_char_reg(ctx, char, js)
     else:
         js["player_id"] = 0
-
-
-def _search_char_reg(ctx, char, js):
-    js["name"] = char.name
-    if char.rcr and char.rcr.custom_name:
-        js["name"] = char.rcr.custom_name
-
-    js["player"] = char.reg.display_member()
-    js["player_full"] = str(char.reg.member)
-    js["player_id"] = char.reg.member.id
-    js["first_aid"] = char.reg.member.first_aid
-
-    if char.rcr.profile_thumb:
-        js["player_prof"] = char.rcr.profile_thumb.url
-        js["profile"] = char.rcr.profile_thumb.url
-    elif char.reg.member.profile_thumb:
-        js["player_prof"] = char.reg.member.profile_thumb.url
-    else:
-        js["player_prof"] = None
-
-    for s in ["pronoun", "song", "public", "private"]:
-        if hasattr(char.rcr, "custom_" + s):
-            js[s] = getattr(char.rcr, "custom_" + s)
-
-    # if the event has both cover and character created by user, use that as player profile
-    if {"cover", "user_character"}.issubset(get_event_features(ctx["run"].event_id)):
-        if char.cover:
-            js["player_prof"] = char.thumb.url

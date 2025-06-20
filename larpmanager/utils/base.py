@@ -60,6 +60,8 @@ def def_user_ctx(request):
     res["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
     res["TINYMCE_JS_URL"] = conf_settings.TINYMCE_JS_URL
 
+    res["request_func_name"] = request.resolver_match.func.__name__
+
     return res
 
 
@@ -84,7 +86,8 @@ def check_assoc_permission(request, slug):
         raise FeatureError(path=request.path, feature=feature, run=0)
     ctx["manage"] = 1
     get_index_assoc_permissions(ctx, request, request.assoc["id"])
-    ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", False)
+    ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
+    ctx["exe_page"] = 1
     return ctx
 
 
@@ -100,7 +103,7 @@ def get_index_assoc_permissions(ctx, request, assoc_id, check=True):
     features = get_assoc_features(assoc_id)
     ctx["manage"] = 1
     ctx["assoc_pms"] = get_index_permissions(features, is_admin, user_assoc_permissions, AssocPermission)
-    ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", False)
+    ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
 
 def get_index_permissions(features, has_default, permissions, typ):

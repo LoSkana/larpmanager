@@ -15,35 +15,8 @@
 {% block title %}
     {{ assoc.name }}
 {% endblock title %}
-<!--
-{% block lnav2 %}
-
-{% if lang %}
-
-    {% trans "Event language" %}:
-
-    <a href="{% url 'home' %}" class="sss">
-        <img class="lang" src="https://unpkg.com/language-icons/icons/{{ lang }}.svg">
-    </a>
-{% endif %}
-
-{% if langs|length > 1%}
-
-    {% trans "Event language" %}:
-
-    {% for f in langs %}
-    <a href="{% url 'home' f %}">
-        <img class="lang" src="https://unpkg.com/language-icons/icons/{{ f }}.svg">
-    </a>
-    {% endfor %}
-
-{% endif %}
-
-{% endblock lnav2 %}
-
--->
 {% block content %}
-    <div style="clear:both;"></div>
+    <div class="clearer"></div>
     {% if custom_text %}
         {{ custom_text | safe }}
         <hr />

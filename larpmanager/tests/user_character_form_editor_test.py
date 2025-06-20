@@ -178,6 +178,7 @@ def field_text(page, live_server):
     frame = page.get_by_role("row", name="Text (*) Show").locator('iframe[title="Rich Text Area"]')
     fill_tinymce(frame, "rrrr")
 
+    time.sleep(2)
     page.locator("#id_q4").select_option("3")
     page.locator("#id_q4").select_option("1")
     page.get_by_role("checkbox", name="q2").check()

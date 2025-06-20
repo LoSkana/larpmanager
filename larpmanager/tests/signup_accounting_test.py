@@ -244,7 +244,7 @@ def setup_payment(live_server, page):
     # Activate payments
     go_to(page, live_server, "/manage/features/111/on")
     go_to(page, live_server, "/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Email notifications")).click()
+    page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
     page.locator("#id_mail_cc").check()
     page.locator("#id_mail_signup_new").check()
     page.locator("#id_mail_signup_update").check()

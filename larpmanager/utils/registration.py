@@ -27,6 +27,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.accounting import PaymentInvoice
@@ -334,17 +335,6 @@ def registration_status_characters(run, features):
                 run.status["details"] += " - "
             mes = _("Select your character!")
             run.status["details"] += f"<a href='{url}'>{mes}</a>"
-
-
-def is_reg_provisional(instance, features=None):
-    if not features:
-        features = get_event_features(instance.run.event_id)
-
-    if "payment" in features:
-        if instance.tot_iscr > 0 >= instance.tot_payed:
-            return True
-
-    return False
 
 
 def get_registration_options(instance):

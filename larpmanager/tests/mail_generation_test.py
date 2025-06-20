@@ -99,7 +99,7 @@ def resubmit_membership(live_server, page):
     page.get_by_role("button", name="Confirm", exact=True).click()
     # Set membership fee
     go_to(page, live_server, "/manage/config/")
-    page.get_by_role("link", name=re.compile(r"^Members")).click()
+    page.get_by_role("link", name=re.compile(r"^Members\s.+")).click()
     page.locator("#id_membership_fee").click()
     page.locator("#id_membership_fee").fill("10")
     page.locator("#id_membership_day").click()

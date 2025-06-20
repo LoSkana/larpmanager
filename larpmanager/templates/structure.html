@@ -101,53 +101,7 @@
     </head>
     <body class="is-preload">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
-        {% block sidebar %}
-            {% if manage %}
-                <div id="sidebar"
-                     {% if is_sidebar_open %}style="display: block"{% endif %}>
-                    {% if run %}
-                        <h1>
-                            <span>{{ run }}</span>
-                        </h1>
-                    {% else %}
-                        <h1>
-                            <span>{{ assoc.name }}</span>
-                        </h1>
-                    {% endif %}
-                    <hr />
-                    <h2>Larpmanager</h2>
-                    <p>
-                        <a href="https://discord.gg/C4KuyQbuft">Discord</a>
-                        <a href="{% url 'tutorials' %}">Tutorials</a>
-                    </p>
-                    {% if run %}
-                        {% for mod, list in event_pms.items %}
-                            <h2>{% trans mod %}</h2>
-                            <p>
-                                {% for ap in list %}
-                                    <a href="{% url ap.slug run.event.slug run.number %}"
-                                       {% if request.func_name == ap.slug %}class="select"{% endif %}>
-                                        {% trans ap.name %}
-                                    </a>
-                                {% endfor %}
-                            </p>
-                        {% endfor %}
-                    {% else %}
-                        {% for mod, list in assoc_pms.items %}
-                            <h2>{% trans mod %}</h2>
-                            <p>
-                                {% for ap in list %}
-                                    <a href="{% url ap.slug %}"
-                                       {% if request.func_name == ap.slug %}class="select"{% endif %}>
-                                        {% trans ap.name %}
-                                    </a>
-                                {% endfor %}
-                            </p>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-            {% endif %}
-        {% endblock sidebar %}
+        {% include "elements/structure/sidebar.html" %}
         <!-- Page Wrapper -->
         <div id="page-wrapper" {% if is_sidebar_open %}class="sidebar"{% endif %}>
             {% block main %}

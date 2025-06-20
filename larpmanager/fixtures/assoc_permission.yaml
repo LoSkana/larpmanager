@@ -2,6 +2,7 @@
   pk: 1
   fields:
     name: Organization
+    descr: Manage the organization main settings
     slug: exe_association
     number: 2
     feature: 165
@@ -9,6 +10,7 @@
   pk: 2
   fields:
     name: Roles
+    descr: Assign roles to collaborators and grant access to specific functions
     slug: exe_roles
     number: 3
     feature: 165
@@ -16,6 +18,7 @@
   pk: 3
   fields:
     name: Configuration
+    descr: Manage the configuration of the activated features
     slug: exe_config
     number: 4
     feature: 165
@@ -23,6 +26,7 @@
   pk: 4
   fields:
     name: Features
+    descr: Activate features for the organization
     slug: exe_features
     number: 5
     feature: 165
@@ -30,6 +34,7 @@
   pk: 5
   fields:
     name: Accounting
+    descr: Manage organization accounting
     slug: exe_accounting
     number: 2
     feature: 163
@@ -37,6 +42,7 @@
   pk: 6
   fields:
     name: Payments
+    descr: Manage payments performed by players on all events
     slug: exe_payments
     number: 3
     feature: 111
@@ -44,6 +50,7 @@
   pk: 7
   fields:
     name: Donations
+    descr: Manage donations performed by players
     slug: exe_donations
     number: 4
     feature: 36
@@ -51,6 +58,7 @@
   pk: 8
   fields:
     name: Outflows
+    descr: 'Manages events or organization expenses '
     slug: exe_outflows
     number: 5
     feature: 108
@@ -58,6 +66,7 @@
   pk: 9
   fields:
     name: Inflows
+    descr: Manages events or organization revenues
     slug: exe_inflows
     number: 6
     feature: 144
@@ -65,6 +74,7 @@
   pk: 10
   fields:
     name: Expenses
+    descr: Manage staff expenses based on receipts uploaded for all events
     slug: exe_expenses
     number: 7
     feature: 106
@@ -72,6 +82,7 @@
   pk: 11
   fields:
     name: Credits
+    descr: Manages credits used by players to cover the registration fee on all events
     slug: exe_credits
     number: 8
     feature: 107
@@ -79,6 +90,7 @@
   pk: 12
   fields:
     name: Refunds
+    descr: Manage refund requests
     slug: exe_refunds
     number: 9
     feature: 112
@@ -86,6 +98,7 @@
   pk: 13
   fields:
     name: Collections
+    descr: Manage collections participated by players
     slug: exe_collections
     number: 10
     feature: 31
@@ -93,6 +106,7 @@
   pk: 14
   fields:
     name: Audits
+    descr: Verify manually approved payments
     slug: exe_verification
     number: 11
     feature: 109
@@ -100,6 +114,7 @@
   pk: 15
   fields:
     name: Balance
+    descr: Review the annual budget report
     slug: exe_balance
     number: 12
     feature: 110
@@ -107,6 +122,7 @@
   pk: 16
   fields:
     name: Historical accounting
+    descr: Review historical financial records
     slug: exe_accounting_rec
     number: 13
     feature: 86
@@ -114,6 +130,7 @@
   pk: 17
   fields:
     name: Appearance
+    descr: 'Set visual aspect: colors, background, cover image'
     slug: exe_appearance
     number: 11
     feature: 168
@@ -121,6 +138,7 @@
   pk: 18
   fields:
     name: Texts
+    descr: Customize textual elements of the organization interface
     slug: exe_texts
     number: 21
     feature: 168
@@ -128,6 +146,7 @@
   pk: 19
   fields:
     name: URL shortener
+    descr: Manage url shortner
     slug: exe_urlshortner
     number: 11
     feature: 138
@@ -135,6 +154,7 @@
   pk: 20
   fields:
     name: Inventory
+    descr: Manage inventory and items
     slug: exe_inventory
     number: 21
     feature: 66
@@ -142,6 +162,7 @@
   pk: 21
   fields:
     name: Event
+    descr: Manage events
     slug: exe_events
     number: 11
     feature: 167
@@ -149,6 +170,7 @@
   pk: 22
   fields:
     name: Runs
+    descr: Manages the runs of events
     slug: exe_runs
     number: 21
     feature: 167
@@ -156,6 +178,7 @@
   pk: 23
   fields:
     name: Pre-Registrations
+    descr: Manage the pre-registration of all events
     slug: exe_pre_registrations
     number: 31
     feature: 32
@@ -163,6 +186,7 @@
   pk: 24
   fields:
     name: Deadlines
+    descr: Displays players overdue for payment or other deadlines for all events
     slug: exe_deadlines
     number: 41
     feature: 94
@@ -170,6 +194,7 @@
   pk: 25
   fields:
     name: Send e-mail
+    descr: Send e-mail
     slug: exe_send_mail
     number: 11
     feature: 166
@@ -177,6 +202,7 @@
   pk: 26
   fields:
     name: Membership
+    descr: Review all members
     slug: exe_membership
     number: 15
     feature: 45
@@ -184,6 +210,7 @@
   pk: 27
   fields:
     name: Vote
+    descr: Manage player votes for the assignment of roles in the organization
     slug: exe_vote
     number: 21
     feature: 63
@@ -191,6 +218,7 @@
   pk: 28
   fields:
     name: Badges
+    descr: Manage badges and assign them to players
     slug: exe_badges
     number: 31
     feature: 65
@@ -198,6 +226,7 @@
   pk: 29
   fields:
     name: Questions
+    descr: Manage player questions and answer them
     slug: exe_questions
     number: 41
     feature: 28
@@ -205,6 +234,7 @@
   pk: 30
   fields:
     name: Newsletter
+    descr: Displays list of emails of users
     slug: exe_newsletter
     number: 51
     feature: 40
@@ -212,6 +242,7 @@
   pk: 32
   fields:
     name: Volunteer Registry
+    descr: Manage volunteer registry
     slug: exe_volunteer_registry
     number: 71
     feature: 158
@@ -219,6 +250,7 @@
   pk: 33
   fields:
     name: Enrolment
+    descr: Display all users data
     slug: exe_enrolment
     number: 81
     feature: 45
@@ -226,6 +258,7 @@
   pk: 34
   fields:
     name: Payment Settings
+    descr: Configure gateways to process player payments
     slug: exe_payment_details
     number: 23
     feature: 111
@@ -233,6 +266,7 @@
   pk: 35
   fields:
     name: Invoices
+    descr: Manage invoices of payments and approve them
     slug: exe_invoices
     number: 33
     feature: 111
@@ -240,13 +274,15 @@
   pk: 38
   fields:
     name: Membership check
+    descr: Check consistency of the members’ personal data
     slug: exe_membership_check
     number: 99
-    feature: 185
+    feature: 45
 - model: larpmanager.assocpermission
   pk: 39
   fields:
     name: Tokens
+    descr: Manages tokens used by players to cover the registration fee for all events
     slug: exe_tokens
     number: 8
     feature: 107
@@ -254,6 +290,7 @@
   pk: 40
   fields:
     name: Registry
+    descr: Display all users data as members registry
     slug: exe_membership_registry
     number: 99
     feature: 45
@@ -261,6 +298,7 @@
   pk: 42
   fields:
     name: Profile
+    descr: Manage fields that track players’ data
     slug: exe_profile
     number: 1
     feature: 166
@@ -268,6 +306,7 @@
   pk: 43
   fields:
     name: Template
+    descr: Manage event templates used as starting points for new events
     slug: exe_templates
     number: 51
     feature: 179
@@ -275,6 +314,7 @@
   pk: 44
   fields:
     name: Archive
+    descr: 'Display all sent e-mails '
     slug: exe_archive_email
     number: 91
     feature: 166

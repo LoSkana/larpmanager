@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Management" %} - {{ assoc.name }}
+{% endblock title %}
+{% block content %}
+    <div id="manage">
+        {% if not event_counts %}
+            <h2>{% trans "Welcome to" %} LarpManager!</h2>
+            {% include "larpmanager/manage/assoc_help.html" %}
+            <hr />
+        {% endif %}
+        {% if ongoing_runs %}
+            <h2>{% trans "Ongoing events" %}</h2>
+            <table class="mob">
+                {% for run in ongoing_runs %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'manage' run.event.slug run.number %}">{{ run }}</a>
+                        </td>
+                        <td>
+                            <i>{{ run.pretty_dates }}</i>
+                        </td>
+                        <td>{{ run.get_development_display }}</td>
+                        <td>
+                            <a href="{% url 'register' run.event.slug run.number %}">{{ run.registration_status }}</a>
+                        </td>
+                        <td>
+                            {% if run.counts.count_reg %}
+                                ({% trans "registrations" %}: {{ run.counts.count_reg }})
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <hr />
+        {% endif %}
+        {% if global_sum %}
+            <h2>{% trans "Accounting" %}</h2>
+            <p>
+                {% trans "Global balance" %}: <b>{{ global_sum }}</b>
+            </p>
+            <p>
+                {% trans "Overall balance" %}: <b>{{ bank_sum }}</b>
+            </p>
+            <hr />
+        {% endif %}
+        {% if suggestions %}
+            <h2>{% trans "Suggestions" %}</h2>
+            <table>
+                {% for sugg in suggestions %}
+                    <tr>
+                        <td>
+                            {{ sugg.text }}
+                            <a href="{{ sugg.href }}" target="_blank">{{ sugg.link }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+        {% if event_counts %}
+            <h2>
+                <a href="#" class="my_toggle" tog='quick_help'>{% trans "Quick Help" %}</a>
+            </h2>
+            <div class="hide quick_help">{% include "larpmanager/manage/assoc_help.html" %}</div>
+        {% endif %}
+    </div>
+{% endblock content %}

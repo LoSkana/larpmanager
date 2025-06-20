@@ -441,6 +441,7 @@ ul, ol {
     .info {
         margin-bottom: 0em;
         font-size: 80%;
+        padding: 0 2em;
     }
 
     .staff-list button, .staff-list .button  {
@@ -792,7 +793,7 @@ table {
 /* Sidebar */
 
 #sidebar {
-    display: none;
+    display: block;
     width: 20%;
     height: 100vh;
     position: fixed;
@@ -859,8 +860,8 @@ nav#sidebar-nav {
 }
 
 @media(max-width: 800px) {
-    nav#sidebar-nav, #sidebar {
-        display: none !important;
+    #sidebar, nav#sidebar-nav {
+        display: none;
     }
 
     #page-wrapper.sidebar {
@@ -1264,6 +1265,194 @@ th select {
 .char_profile {
     max-width:700px;
     margin: auto;
+}
+
+#mobile-bar {
+  display: none;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  line-height: 2.5em;
+  z-index: 9999;
+  background-color: rgba(var(--sec-rgb), 0.9);
+  color: var(--ter-clr);
+}
+
+#mobile-bar nav {
+    text-transform: uppercase;
+}
+
+#mobile-bar .sidebar {
+    float: left;
+    margin-left: 2em;
+}
+
+#mobile-bar .menu {
+    float: right;
+    margin-right: 2em;
+}
+
+.explain-icon {
+    font-size: 0.7em;
+    vertical-align: top;
+    cursor: pointer;
+    position: relative;
+}
+
+.sidebar-link-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+.sidebar-link,
+.explain-icon {
+  display: inline;
+  margin: 0;
+}
+
+#sidebar .close {
+    display: none;
+}
+
+#sidebar .roles {
+    text-align: center;
+}
+
+@media(max-width: 768px) {
+    #mobile-bar {
+        display: block;
+    }
+
+    #sidebar {
+        padding: 1em 0em 3.5em 0em;
+		-moz-align-items: center;
+		-webkit-align-items: center;
+		-ms-align-items: center;
+		align-items: center;
+		display: -moz-flex;
+		display: -webkit-flex;
+		display: -ms-flex;
+		display: flex;
+		-moz-justify-content: center;
+		-webkit-justify-content: center;
+		-ms-justify-content: center;
+		justify-content: center;
+		pointer-events: none;
+		-moz-transition: opacity 0.35s ease, visibility 0.35s;
+		-webkit-transition: opacity 0.35s ease, visibility 0.35s;
+		-ms-transition: opacity 0.35s ease, visibility 0.35s;
+		transition: opacity 0.35s ease, visibility 0.35s;
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+		-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        background-color: rgba(var(--pri-rgb), 0.7);
+		cursor: default;
+		height: 100%;
+		left: 0;
+		opacity: 0;
+		position: fixed;
+		text-align: center;
+		top: 0;
+		visibility: hidden;
+		width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 99;
+	}
+
+	#sidebar h2, #sidebar p {
+	    display: inline;
+	}
+
+	#sidebar .h2-p-row {
+	    margin: 0.5em;
+	}
+
+	#sidebar .header {
+	    display: none;
+	}
+
+    #sidebar .inner {
+        padding: 1em ;
+        -moz-transform: translateY(0.5em);
+        -webkit-transform: translateY(0.5em);
+        -ms-transform: translateY(0.5em);
+        transform: translateY(0.5em);
+        -moz-transition: opacity 0.35s ease, -moz-transform 0.35s ease;
+        -webkit-transition: opacity 0.35s ease, -webkit-transform 0.35s ease;
+        -ms-transition: opacity 0.35s ease, -ms-transform 0.35s ease;
+        transition: opacity 0.35s ease, transform 0.35s ease;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 5px;
+        display: block;
+        max-width: 100%;
+        opacity: 0;
+        position: relative;
+        width: 80%;
+        max-height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        font-size: 110%;
+        background-color: rgba(var(--sec-rgb), 0.7);
+        color: var(--pri-clr);
+    }
+
+    #sidebar .close {
+        background-image: url("images/close.svg");
+        background-position: 75% 25%;
+        background-repeat: no-repeat;
+        background-size: 2em 2em;
+        border: 0;
+        content: '';
+        display: block;
+        height: 4em;
+        overflow: hidden;
+        position: absolute;
+        right: 0;
+        text-align: center;
+        text-indent: 4em;
+        top: 0;
+        width: 4em;
+    }
+
+    body.is-sidebar-visible #page-wrapper {
+        -moz-filter: blur(1.5px);
+        -webkit-filter: blur(1.5px);
+        -ms-filter: blur(1.5px);
+        filter: blur(1.5px);
+    }
+
+    body.is-sidebar-visible #sidebar {
+        pointer-events: auto;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    body.is-sidebar-visible #sidebar .inner {
+        -moz-transform: translateY(0);
+        -webkit-transform: translateY(0);
+        -ms-transform: translateY(0);
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+#manage ul {
+    margin: 0.5em;
+}
+
+.clearer {
+    clear: both;
+}
+
+.smaller {
+    font-size: 70%;
 }
 
 .table-responsive {

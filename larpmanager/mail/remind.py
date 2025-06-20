@@ -21,10 +21,10 @@
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssocTextType, get_url, hdr
 from larpmanager.utils.deadlines import check_run_deadlines
-from larpmanager.utils.registration import is_reg_provisional
 from larpmanager.utils.tasks import my_send_mail
 from larpmanager.utils.text import get_assoc_text
 
