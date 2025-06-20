@@ -329,7 +329,7 @@ class QuestForm(WritingForm):
             char_name = "<" + _("NOT ASSIGNED") + ">"
             try:
                 at = AssignmentTrait.objects.get(run=self.params["run"], trait=trait)
-                reg = Registration.objects.get(run=self.params["run"], member=at.member)
+                reg = Registration.objects.get(run=self.params["run"], member=at.member, cancellation_date__isnull=True)
                 chars = []
                 for rcr in reg.rcrs.all():
                     chars.append(f"#{rcr.character.number}")

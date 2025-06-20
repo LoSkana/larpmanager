@@ -581,7 +581,9 @@ def orga_registrations_customization(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_registrations")
     get_event_cache_all(ctx)
     get_char(ctx, num)
-    rcr = RegistrationCharacterRel.objects.get(character_id=ctx["character"].id, reg__run_id=ctx["run"].id)
+    rcr = RegistrationCharacterRel.objects.get(
+        character_id=ctx["character"].id, reg__run_id=ctx["run"].id, reg__cancellation_date__isnull=True
+    )
 
     if request.method == "POST":
         form = RegistrationCharacterRelForm(request.POST, ctx=ctx, instance=rcr)
