@@ -62,7 +62,7 @@ from larpmanager.utils.common import (
     get_element,
 )
 from larpmanager.utils.download import orga_character_form_download
-from larpmanager.utils.edit import backend_edit, writing_edit, writing_edit_working_ticket
+from larpmanager.utils.edit import backend_edit, set_suggestion, writing_edit, writing_edit_working_ticket
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.upload import upload_elements
 from larpmanager.utils.writing import writing_list, writing_versions, writing_view
@@ -325,6 +325,7 @@ def orga_writing_form_edit(request, s, n, typ, num):
     ctx = check_event_permission(request, s, n, perm)
     check_writing_form_type(ctx, typ)
     if backend_edit(request, ctx, OrgaWritingQuestionForm, num, assoc=False):
+        set_suggestion(ctx, perm)
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, typ=typ, num=0)
         if str(request.POST.get("new_option", "")) == "1":

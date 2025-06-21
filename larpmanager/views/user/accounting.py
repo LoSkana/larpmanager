@@ -60,9 +60,11 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     Collection,
     PaymentInvoice,
+    PaymentStatus,
+    PaymentType,
 )
 from larpmanager.models.association import Association
-from larpmanager.models.member import Member, Membership, get_user_membership
+from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
     Registration,
 )
@@ -230,8 +232,8 @@ def acc_reg(request, reg_id, method=None):
         PaymentInvoice.objects.filter(
             idx=reg.id,
             member_id=reg.member_id,
-            status=PaymentInvoice.SUBMITTED,
-            typ=PaymentInvoice.REGISTRATION,
+            status=PaymentStatus.SUBMITTED,
+            typ=PaymentType.REGISTRATION,
         ).count()
         > 0
     )
@@ -262,7 +264,7 @@ def acc_reg(request, reg_id, method=None):
     if request.method == "POST":
         form = PaymentForm(request.POST, reg=reg, ctx=ctx)
         if form.is_valid():
-            get_payment_form(request, form, PaymentInvoice.REGISTRATION, ctx, key)
+            get_payment_form(request, form, PaymentType.REGISTRATION, ctx, key)
     else:
         form = PaymentForm(reg=reg, ctx=ctx)
     ctx["form"] = form
@@ -276,7 +278,7 @@ def acc_membership(request, method=None):
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
     memb = get_user_membership(request.user.member, request.assoc["id"])
-    if memb.status != Membership.ACCEPTED:
+    if memb.status != MembershipStatus.ACCEPTED:
         messages.success(request, _("It is not possible for you to pay dues at this time."))
         return redirect("accounting")
 
@@ -298,7 +300,7 @@ def acc_membership(request, method=None):
     if request.method == "POST":
         form = MembershipForm(request.POST, ctx=ctx)
         if form.is_valid():
-            get_payment_form(request, form, PaymentInvoice.MEMBERSHIP, ctx, key)
+            get_payment_form(request, form, PaymentType.MEMBERSHIP, ctx, key)
     else:
         form = MembershipForm(ctx=ctx)
     ctx["form"] = form
@@ -315,7 +317,7 @@ def acc_donate(request):
     if request.method == "POST":
         form = DonateForm(request.POST, ctx=ctx)
         if form.is_valid():
-            get_payment_form(request, form, PaymentInvoice.DONATE, ctx)
+            get_payment_form(request, form, PaymentType.DONATE, ctx)
     else:
         form = DonateForm(ctx=ctx)
     ctx["form"] = form
@@ -370,7 +372,7 @@ def acc_collection_participate(request, s):
     if request.method == "POST":
         form = CollectionForm(request.POST, ctx=ctx)
         if form.is_valid():
-            get_payment_form(request, form, PaymentInvoice.COLLECTION, ctx)
+            get_payment_form(request, form, PaymentType.COLLECTION, ctx)
     else:
         form = CollectionForm(ctx=ctx)
     ctx["form"] = form
@@ -478,7 +480,7 @@ def acc_profile_check(request, mes, inv):
 
 
 def acc_redirect(inv):
-    if inv.typ == PaymentInvoice.REGISTRATION:
+    if inv.typ == PaymentType.REGISTRATION:
         reg = Registration.objects.get(id=inv.idx)
         return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
     return redirect("accounting")
@@ -530,7 +532,7 @@ def acc_submit(request, s, p):
     elif s == "any":
         inv.text = form.cleaned_data["text"]
 
-    inv.status = PaymentInvoice.SUBMITTED
+    inv.status = PaymentStatus.SUBMITTED
 
     inv.txn_id = datetime.now().timestamp()
     inv.save()
@@ -549,7 +551,7 @@ def acc_confirm(request, c):
         messages.error(request, _("Invoice not found"))
         return redirect("home")
 
-    if inv.status != PaymentInvoice.SUBMITTED:
+    if inv.status != PaymentStatus.SUBMITTED:
         messages.error(request, _("Invoice already confirmed"))
         return redirect("home")
 
@@ -564,11 +566,11 @@ def acc_confirm(request, c):
                 found = True
 
     if not found:
-        if inv.typ == PaymentInvoice.REGISTRATION:
+        if inv.typ == PaymentType.REGISTRATION:
             reg = Registration.objects.get(pk=inv.idx)
             check_event_permission(request, reg.run.event.slug, reg.run.number)
 
-    inv.status = PaymentInvoice.CONFIRMED
+    inv.status = PaymentStatus.CONFIRMED
     inv.save()
 
     messages.success(request, _("Payment confirmed"))

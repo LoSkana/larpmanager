@@ -28,7 +28,9 @@ from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import _get_fkey_config
 from larpmanager.forms.utils import EventCharacterS2Widget
+from larpmanager.models.association import Association
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
 from larpmanager.models.member import Log
 from larpmanager.models.writing import TextVersion
@@ -214,6 +216,7 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False, add_ano
 def orga_edit(request, s, n, perm, form_type, eid, red=None, add_another=True):
     ctx = check_event_permission(request, s, n, perm)
     if backend_edit(request, ctx, form_type, eid, afield=None, assoc=False, add_another=add_another):
+        set_suggestion(ctx, perm)
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, num=0)
         if not red:
@@ -227,12 +230,30 @@ def exe_edit(request, form_type, eid, perm, red=None, afield=None, add_ctx=None,
     if add_ctx:
         ctx.update(add_ctx)
     if backend_edit(request, ctx, form_type, eid, afield=afield, assoc=True, add_another=add_another):
+        set_suggestion(ctx, perm)
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, num=0)
         if not red:
             red = perm
         return redirect(red)
     return render(request, "larpmanager/exe/edit.html", ctx)
+
+
+def set_suggestion(ctx, perm):
+    if "event" in ctx:
+        obj = ctx["event"]
+    else:
+        obj = Association.objects.get(pk=ctx["a_id"])
+
+    key = f"{perm}_suggestion"
+    suggestion = obj.get_config(key, False)
+    if suggestion:
+        return
+
+    fk_field = _get_fkey_config(obj)
+    (config, created) = obj.configs.model.objects.get_or_create(**{fk_field: obj, "name": key})
+    config.value = True
+    config.save()
 
 
 def writing_edit(request, ctx, form_type, nm, tp, redr=None):

@@ -9,18 +9,12 @@
 {% block content %}
     {% include "elements/header/exe.html" %}
     <p>
-        <a href="#" class="my_toggle" tog='missing'>{% trans "Can't find a user?" %}</a>
+        <i>
+            {% trans "To assign a user to a role, they must first be added to the organization." %}
+            {% trans "If you don't see an user, ask them to access" %}
+            <a href="{% url 'share' %}">{% trans "this link" %}</a>.
+        </i>
     </p>
-    <div class="hide missing">
-        <p>
-            {% trans "According to LarpManager's privacy rules, you can only view users who have
-            granted LarpManager permission to share their data with your organisation." %}
-            {% trans "Ask your co-workers to access this link; after their confirmation, their
-            data will be shared with your organisation, and you will be able to add them to roles." %}
-            {% trans "Links to be accessed:" %} &nbsp;
-            <a href="{% url 'share' %}">https://{{ assoc.slug }}.larpmanager.com{% url 'share' %}</a>
-        </p>
-    </div>
     <table id="roles" class="tablesorter mob">
         <thead>
             <tr>

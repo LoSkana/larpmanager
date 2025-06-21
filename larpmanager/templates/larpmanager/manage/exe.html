@@ -10,6 +10,9 @@
             {% include "larpmanager/manage/assoc_help.html" %}
             <hr />
         {% endif %}
+        {% with list=actions header=actions_header %}
+            {% include "larpmanager/manage/helpers.html" %}
+        {% endwith %}
         {% if ongoing_runs %}
             <h2>{% trans "Ongoing events" %}</h2>
             <table class="mob">
@@ -33,31 +36,31 @@
                     </tr>
                 {% endfor %}
             </table>
-            <hr />
         {% endif %}
-        {% if global_sum %}
-            <h2>{% trans "Accounting" %}</h2>
-            <p>
-                {% trans "Global balance" %}: <b>{{ global_sum }}</b>
-            </p>
-            <p>
-                {% trans "Overall balance" %}: <b>{{ bank_sum }}</b>
-            </p>
-            <hr />
-        {% endif %}
-        {% if suggestions %}
-            <h2>{% trans "Suggestions" %}</h2>
+        {% if global_sum or bank_sum %}
+            <h2>
+                <a href="{% url 'exe_accounting' %}">{% trans "Accounting" %}</a>
+            </h2>
             <table>
-                {% for sugg in suggestions %}
-                    <tr>
-                        <td>
-                            {{ sugg.text }}
-                            <a href="{{ sugg.href }}" target="_blank">{{ sugg.link }}</a>
-                        </td>
-                    </tr>
-                {% endfor %}
+                <tr>
+                    <th descr="{% trans "This is the associative positive operating margin, taking into account the budgets of completed runs, minus credits or tokens issued" %}">
+                        <a href="#" class="sidebar-link">{% trans "Global balance" %}</a>
+                        <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                    </th>
+                    <th descr="{% trans "This is the overall amount that should be held in the organization’s bank and financial accounts" %}">
+                        <a href="#" class="sidebar-link">{% trans "Overall balance" %}</a>
+                        <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                    </th>
+                </tr>
+                <tr>
+                    <td>{{ global_sum }}</td>
+                    <td>{{ bank_sum }}</td>
+                </tr>
             </table>
         {% endif %}
+        {% with list=suggestions header=suggestions_header suggestion=1 %}
+            {% include "larpmanager/manage/helpers.html" %}
+        {% endwith %}
         {% if event_counts %}
             <h2>
                 <a href="#" class="my_toggle" tog='quick_help'>{% trans "Quick Help" %}</a>

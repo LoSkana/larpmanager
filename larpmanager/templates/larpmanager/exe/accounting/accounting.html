@@ -10,7 +10,7 @@
     <p>
         {% trans "Global balance" %}: <b>{{ global_sum }}</b>
         <br />
-        <i>({% trans "this figure is the associative positive, the operating margin. It takes into account the budgets of the completed runs" %})</i>
+        <i>({% trans "This is the associative positive operating margin, taking into account the budgets of completed runs, minus credits or tokens issued" %})</i>
         <br />
         <br />
     </p>
@@ -71,7 +71,7 @@
     <p>
         {% trans "Overall balance" %}: <b>{{ bank_sum }}</b>
         <br />
-        <i>({% trans "this figure is the net that should result as the availability of financial instruments" %})</i>
+        <i>({% trans "This is the overall amount that should be held in the organization’s bank and financial accounts" %})</i>
         <br />
         <br />
     </p>
@@ -147,7 +147,7 @@
     {% for year in sum_year %}
         <div class="hide sum_{{ year }}">
             <h2>{% trans "Summary" %} {{ year }}</h2>
-            <p></p>
+            <br />
             <table class="mob">
                 {% if features.membership %}
                     <tr>

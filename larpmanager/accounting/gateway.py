@@ -43,7 +43,7 @@ from satispaython.utils import load_key
 from larpmanager.accounting.invoice import invoice_received_money
 from larpmanager.mail.base import notify_admins
 from larpmanager.models.access import get_assoc_executives
-from larpmanager.models.accounting import PaymentInvoice
+from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.models.association import Association
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.base import def_user_ctx, update_payment_details
@@ -89,7 +89,7 @@ def satispay_check(request, ctx):
 
     que = PaymentInvoice.objects.filter(
         method__slug="satispay",
-        status=PaymentInvoice.CREATED,
+        status=PaymentStatus.CREATED,
     )
     if que.count() == 0:
         return
@@ -112,7 +112,7 @@ def satispay_verify(request, cod):
         print(f"Wrong slug method - invoice {cod}")
         return
 
-    if invoice.status != PaymentInvoice.CREATED:
+    if invoice.status != PaymentStatus.CREATED:
         print(f"Already confirmed - invoice {cod}")
         return
 

@@ -59,7 +59,7 @@ from larpmanager.models.larpmanager import (
     LarpManagerProfiler,
     LarpManagerTutorial,
 )
-from larpmanager.models.member import Membership, get_user_membership
+from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.auth import check_lm_admin
 from larpmanager.utils.event import get_event_run
@@ -329,7 +329,7 @@ def join(request):
             ar.members.add(request.user.member)
             ar.save()
             el = get_user_membership(request.user.member, assoc.id)
-            el.status = Membership.JOINED
+            el.status = MembershipStatus.JOINED
             el.save()
             msg = _("Welcome to LarpManager!")
             messages.success(request, msg)

@@ -56,8 +56,11 @@ from larpmanager.models.accounting import (
     AccountingItemTransaction,
     Collection,
     PaymentInvoice,
+    PaymentStatus,
+    PaymentType,
     RecordAccounting,
     RefundRequest,
+    RefundStatus,
 )
 from larpmanager.models.association import Association
 from larpmanager.models.event import (
@@ -194,8 +197,8 @@ def exe_invoices_confirm(request, num):
     ctx = check_assoc_permission(request, "exe_invoices")
     backend_get(ctx, PaymentInvoice, num)
 
-    if ctx["el"].status == PaymentInvoice.CREATED or ctx["el"].status == PaymentInvoice.SUBMITTED:
-        ctx["el"].status = PaymentInvoice.CONFIRMED
+    if ctx["el"].status == PaymentStatus.CREATED or ctx["el"].status == PaymentStatus.SUBMITTED:
+        ctx["el"].status = PaymentStatus.CONFIRMED
     else:
         raise Http404("already done")
 
@@ -240,8 +243,8 @@ def exe_refunds_confirm(request, num):
     ctx = check_assoc_permission(request, "exe_refunds")
     backend_get(ctx, RefundRequest, num)
 
-    if ctx["el"].status == RefundRequest.REQUEST:
-        ctx["el"].status = RefundRequest.PAYED
+    if ctx["el"].status == RefundStatus.REQUEST:
+        ctx["el"].status = RefundStatus.PAYED
     else:
         raise Http404("already done")
 
@@ -389,12 +392,12 @@ def exe_verification(request):
 
     ctx["todo"] = (
         PaymentInvoice.objects.filter(assoc_id=ctx["a_id"], verified=False)
-        .exclude(status=PaymentInvoice.CREATED)
+        .exclude(status=PaymentStatus.CREATED)
         .exclude(method__slug__in=["redsys", "satispay", "paypal", "stripe", "sumup"])
         .select_related("method")
     )
 
-    check = [el.id for el in ctx["todo"] if el.typ == PaymentInvoice.REGISTRATION]
+    check = [el.id for el in ctx["todo"] if el.typ == PaymentType.REGISTRATION]
 
     payments = AccountingItemPayment.objects.filter(inv_id__in=check)
 

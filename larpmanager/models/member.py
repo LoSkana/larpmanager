@@ -350,8 +350,8 @@ class Member(BaseModel):
 
     def join(self, assoc):
         mmb = get_user_membership(self, assoc.id)  # type: ignore
-        if mmb.status == Membership.EMPTY:
-            mmb.status = Membership.JOINED
+        if mmb.status == MembershipStatus.EMPTY:
+            mmb.status = MembershipStatus.JOINED
             mmb.save()
 
     def get_residence(self):
@@ -362,31 +362,22 @@ class Member(BaseModel):
         return f"{aux[4]} {aux[5]}, {aux[2]} ({aux[3]}), {aux[1].replace('IT-', '')} ({aux[0]})"
 
 
+class MembershipStatus(models.TextChoices):
+    EMPTY = "e", _("Absent")
+    JOINED = "j", _("Shared")
+    UPLOADED = "u", _("Uploaded")
+    SUBMITTED = "s", _("Submitted")
+    ACCEPTED = "a", _("Accepted")
+    REWOKED = "r", _("Kicked out")
+
+
+class NewsletterChoices(models.TextChoices):
+    ALL = "a", _("Yes, keep me posted!")
+    ONLY = "o", _("Only really important communications.")
+    NO = "n", _("No, I don't want updates.")
+
+
 class Membership(BaseModel):
-    EMPTY = "e"
-    UPLOADED = "u"
-    SUBMITTED = "s"
-    ACCEPTED = "a"
-    REWOKED = "r"
-    JOINED = "j"
-    MEMBERSHIP_STATUS = [
-        (EMPTY, _("Absent")),
-        (JOINED, _("Shared")),
-        (UPLOADED, _("Uploaded")),
-        (SUBMITTED, _("Submitted")),
-        (ACCEPTED, _("Accepted")),
-        (REWOKED, _("Kicked out")),
-    ]
-
-    ALL = "a"
-    ONLY = "o"
-    NO = "n"
-    NEWSLETTER_CHOICES = [
-        (ALL, _("Yes, keep me posted!")),
-        (ONLY, _("Only really important communications.")),
-        (NO, _("No, I don't want updates.")),
-    ]
-
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="memberships")
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="memberships")
@@ -397,7 +388,9 @@ class Membership(BaseModel):
 
     tokens = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
-    status = models.CharField(max_length=1, choices=MEMBERSHIP_STATUS, default=EMPTY, db_index=True)
+    status = models.CharField(
+        max_length=1, choices=MembershipStatus.choices, default=MembershipStatus.EMPTY, db_index=True
+    )
 
     request = models.FileField(upload_to=UploadToPathAndRename("request/"), null=True, blank=True)
 
@@ -411,8 +404,8 @@ class Membership(BaseModel):
 
     newsletter = models.CharField(
         max_length=1,
-        choices=NEWSLETTER_CHOICES,
-        default=ALL,
+        choices=NewsletterChoices.choices,
+        default=NewsletterChoices.ALL,
         verbose_name=_("Newsletter"),
         help_text=_("Do you wish to be always updated on our events?"),
     )

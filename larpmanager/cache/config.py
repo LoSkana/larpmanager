@@ -57,15 +57,7 @@ def update_configs(element):
 
 
 def save_all_element_configs(obj, dct):
-    fk_field_map = {
-        "Event": "event",
-        "Run": "run",
-        "Association": "assoc",
-        "Character": "character",
-    }
-
-    model_name = obj.__class__.__name__
-    fk_field = fk_field_map.get(model_name)
+    fk_field = _get_fkey_config(obj)
 
     existing_configs = {config.name: config for config in obj.configs.all()}
     incoming_names = set(dct.keys())
@@ -83,6 +75,18 @@ def save_all_element_configs(obj, dct):
     # add new configs
     for name in incoming_names - set(existing_configs.keys()):
         obj.configs.model.objects.create(**{fk_field: obj, "name": name, "value": dct[name]})
+
+
+def _get_fkey_config(obj):
+    fk_field_map = {
+        "Event": "event",
+        "Run": "run",
+        "Association": "assoc",
+        "Character": "character",
+    }
+    model_name = obj.__class__.__name__
+    fk_field = fk_field_map.get(model_name)
+    return fk_field
 
 
 def get_element_config(element, name, def_value):

@@ -7,6 +7,7 @@ from larpmanager.models.accounting import (
     AccountingItemExpense,
     AccountingItemOther,
     PaymentInvoice,
+    PaymentStatus,
     RefundRequest,
 )
 from larpmanager.models.event import Run
@@ -101,7 +102,7 @@ def _apply_custom_queries(ctx, elements, subtype, typ):
     if issubclass(typ, PaymentInvoice):
         elements = elements.annotate(
             is_submitted=Case(
-                When(status=PaymentInvoice.SUBMITTED, then=Value(0)),
+                When(status=PaymentStatus.SUBMITTED, then=Value(0)),
                 default=Value(1),
                 output_field=IntegerField(),
             )

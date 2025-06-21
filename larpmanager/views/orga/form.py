@@ -50,7 +50,7 @@ from larpmanager.utils.common import (
     exchange_order,
 )
 from larpmanager.utils.download import orga_registration_form_download
-from larpmanager.utils.edit import backend_edit, orga_edit
+from larpmanager.utils.edit import backend_edit, orga_edit, set_suggestion
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.upload import upload_elements
 
@@ -131,6 +131,7 @@ def orga_registration_form_edit(request, s, n, num):
     perm = "orga_registration_form"
     ctx = check_event_permission(request, s, n, perm)
     if backend_edit(request, ctx, OrgaRegistrationQuestionForm, num, assoc=False):
+        set_suggestion(ctx, perm)
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, num=0)
 

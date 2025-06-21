@@ -38,10 +38,17 @@ from larpmanager.mail.remind import (
     remember_pay,
     remember_profile,
 )
-from larpmanager.models.accounting import AccountingItemDiscount, AccountingItemMembership, Discount, PaymentInvoice
+from larpmanager.models.accounting import (
+    AccountingItemDiscount,
+    AccountingItemMembership,
+    Discount,
+    PaymentInvoice,
+    PaymentStatus,
+    PaymentType,
+)
 from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus, Run
-from larpmanager.models.member import Badge, Membership, get_user_membership
+from larpmanager.models.member import Badge, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.common import get_time_diff_today
 from larpmanager.utils.pdf import print_run_bkg
@@ -94,14 +101,14 @@ class Command(BaseCommand):
     def check_old_payments():
         # delete old payment invoice
         ref = datetime.now() - timedelta(days=60)
-        que = PaymentInvoice.objects.filter(status=PaymentInvoice.CREATED)
+        que = PaymentInvoice.objects.filter(status=PaymentStatus.CREATED)
         for pi in que.filter(created__lte=ref.date()):
             pi.delete()
 
     @staticmethod
     def check_payment_not_approved():
         # Notify payment invoices not approved
-        for p in PaymentInvoice.objects.filter(status=PaymentInvoice.SUBMITTED):
+        for p in PaymentInvoice.objects.filter(status=PaymentStatus.SUBMITTED):
             try:
                 notify_invoice_check(p)
             except ObjectDoesNotExist:
@@ -278,10 +285,10 @@ class Command(BaseCommand):
                 remember_profile(reg)
             elif "membership" in ev_features:
                 # check if player is a member
-                if reg.member.membership.status in [Membership.EMPTY, Membership.JOINED]:
+                if reg.member.membership.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED]:
                     remember_membership(reg)
                 # check if players has not payed yet it's membership fee
-                elif "laog" not in ev_features and reg.member.membership.status == Membership.ACCEPTED:
+                elif "laog" not in ev_features and reg.member.membership.status == MembershipStatus.ACCEPTED:
                     self.check_membership_fee(reg)
 
         self.check_payment(reg)
@@ -298,8 +305,8 @@ class Command(BaseCommand):
 
         membership_pending = PaymentInvoice.objects.filter(
             member=reg.member,
-            status=PaymentInvoice.SUBMITTED,
-            typ=PaymentInvoice.REGISTRATION,
+            status=PaymentStatus.SUBMITTED,
+            typ=PaymentType.REGISTRATION,
         ).count()
         if membership_pending > 0:
             return
@@ -318,8 +325,8 @@ class Command(BaseCommand):
         # check if there is a submitted payment
         pending_que = PaymentInvoice.objects.filter(
             member_id=reg.member_id,
-            status=PaymentInvoice.SUBMITTED,
-            typ=PaymentInvoice.REGISTRATION,
+            status=PaymentStatus.SUBMITTED,
+            typ=PaymentType.REGISTRATION,
             idx=reg.id,
         )
         if pending_que.count() > 0:

@@ -50,7 +50,15 @@ from larpmanager.models.accounting import (
     AccountingItemMembership,
 )
 from larpmanager.models.association import Association, AssocTextType
-from larpmanager.models.member import Badge, Member, Membership, Vote, get_user_membership
+from larpmanager.models.member import (
+    Badge,
+    Member,
+    Membership,
+    MembershipStatus,
+    NewsletterChoices,
+    Vote,
+    get_user_membership,
+)
 from larpmanager.models.miscellanea import (
     ChatMessage,
     Contact,
@@ -85,15 +93,15 @@ def profile(request):
         if form.is_valid():
             prof = form.save()
             ctx["membership"].compiled = True
-            if ctx["membership"].status == Membership.EMPTY:
-                ctx["membership"].status = Membership.JOINED
+            if ctx["membership"].status == MembershipStatus.EMPTY:
+                ctx["membership"].status = MembershipStatus.JOINED
             ctx["membership"].save()
             activate(prof.language)
 
             mes = _("Personal data updated!")
 
             if "membership" in request.assoc["features"]:
-                if ctx["membership"].status in [Membership.EMPTY, Membership.JOINED]:
+                if ctx["membership"].status in [MembershipStatus.EMPTY, MembershipStatus.JOINED]:
                     mes += " " + _("Last step, please upload your membership application.")
                     messages.success(request, mes)
                     return redirect("membership")
@@ -186,8 +194,8 @@ def profile_privacy(request):
     ctx.update(
         {
             "member": request.user.member,
-            "joined": request.user.member.memberships.exclude(status=Membership.EMPTY).exclude(
-                status=Membership.REWOKED
+            "joined": request.user.member.memberships.exclude(status=MembershipStatus.EMPTY).exclude(
+                status=MembershipStatus.REWOKED
             ),
         }
     )
@@ -201,7 +209,7 @@ def profile_privacy_rewoke(request, slug):
     try:
         assoc = Association.objects.get(slug=slug)
         membership = Membership.objects.get(assoc=assoc, member=request.user.member)
-        membership.status = Membership.EMPTY
+        membership.status = MembershipStatus.EMPTY
         membership.save()
         messages.success(request, _("Data share removed successfully!"))
     except Exception as err:
@@ -219,14 +227,14 @@ def membership(request):
         return redirect("profile")
 
     if request.method == "POST":
-        if el.status not in [Membership.EMPTY, Membership.JOINED, Membership.UPLOADED]:
+        if el.status not in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
             raise Http404("wrong membership")
 
         # Second pass - if the user already uploaded the files
-        if el.status == Membership.UPLOADED:
+        if el.status == MembershipStatus.UPLOADED:
             form = MembershipConfirmForm(request.POST, request.FILES)
             if form.is_valid():
-                el.status = Membership.SUBMITTED
+                el.status = MembershipStatus.SUBMITTED
                 el.save()
                 send_membership_confirm(request, el)
                 mes = _("Your membership application was successfully submitted!")
@@ -238,7 +246,7 @@ def membership(request):
             form = MembershipRequestForm(request.POST, request.FILES, instance=el)
             if form.is_valid():
                 form.save()
-                el.status = Membership.UPLOADED
+                el.status = MembershipStatus.UPLOADED
                 el.save()
                 form = MembershipConfirmForm()
                 ctx["doc_path"] = el.get_document_filepath().lower()
@@ -246,8 +254,8 @@ def membership(request):
 
     else:
         # Bring back to empty if uploaded
-        if el.status == Membership.UPLOADED:
-            el.status = Membership.JOINED
+        if el.status == MembershipStatus.UPLOADED:
+            el.status = MembershipStatus.JOINED
             el.save()
         form = MembershipRequestForm(instance=el)
 
@@ -262,7 +270,7 @@ def membership(request):
         member_id=request.user.member.id,
     ).exists()
 
-    if el.status == Membership.ACCEPTED:
+    if el.status == MembershipStatus.ACCEPTED:
         ctx["statute"] = get_assoc_text(request.assoc["id"], AssocTextType.STATUTE)
 
     ctx["disable_join"] = True
@@ -443,7 +451,7 @@ def unsubscribe(request):
     ctx = def_user_ctx(request)
     ctx.update({"member": request.user.member, "a_id": request.assoc["id"]})
     mb = get_user_membership(ctx["member"], ctx["a_id"])
-    mb.newsletter = Membership.NO
+    mb.newsletter = NewsletterChoices.NO
     mb.save()
     messages.success(request, _("The request of removal from further communication has been successfull!"))
     return redirect("home")
