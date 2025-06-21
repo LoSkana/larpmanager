@@ -2,6 +2,9 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
+msgid "-"
+msgstr "-"
+
 msgid "e"
 msgstr "e"
 
@@ -2624,9 +2627,6 @@ msgstr "Puntos de experiencia"
 msgid "Faction selection"
 msgstr "Selección de facciones"
 
-msgid "Feature activated"
-msgstr "Función activada"
-
 msgid "Fiscal code check"
 msgstr "Comprobación del código fiscal"
 
@@ -2912,9 +2912,6 @@ msgstr "Notificaciones por correo electrónico"
 
 msgid "Event Configuration"
 msgstr "Configuración de eventos"
-
-msgid "Feature deactivated"
-msgstr "Función desactivada"
 
 msgid "History preferences"
 msgstr "Preferencias del historial"
@@ -3543,9 +3540,6 @@ msgstr "'player' (correo electrónico del jugador)"
 msgid "Display all sent e-mails "
 msgstr "Mostrar todos los correos electrónicos enviados"
 
-msgid "Feature already activated"
-msgstr "Función ya activada"
-
 msgid "Go to the preferences for"
 msgstr "Ir a preferencias para"
 
@@ -3698,8 +3692,9 @@ msgstr "¡Descubre las facciones de juego!"
 msgid "Edit your character's data!"
 msgstr "Edita los datos de tu personaje"
 
-msgid "Feature already deactivated"
-msgstr "Función ya desactivada"
+#, python-format
+msgid "Feature %(name)s activated!"
+msgstr "¡Característica %(name)s activada!"
 
 msgid "Loading performed, see logs"
 msgstr "Carga realizada, ver logs"
@@ -3721,6 +3716,9 @@ msgstr "Faltan preferencias de reparto"
 
 msgid "Name of badge to be awarded"
 msgstr "Nombre de la insignia que se concederá"
+
+msgid "Now you can select expenses"
+msgstr "Ahora puede seleccionar los gastos"
 
 msgid "Player registration process"
 msgstr "Proceso de registro de jugadores"
@@ -3808,6 +3806,10 @@ msgstr "Aprobación %(user)s como %(role)s"
 
 msgid "Date of issue of the document"
 msgstr "Fecha de expedición del documento"
+
+#, python-format
+msgid "Feature %(name)s deactivated!"
+msgstr "¡Característica %(name)s desactivada!"
 
 msgid "If checked: members can vote."
 msgstr "Si está marcada: los miembros pueden votar"
@@ -4201,6 +4203,10 @@ msgstr "(<a href='%(url)s'>responda aquí</a>)"
 msgid "Access the list of your characters!"
 msgstr "¡Accede a la lista de personajes!"
 
+#, python-format
+msgid "Feature %(name)s already activated!"
+msgstr "La función %(name)s ya está activada."
+
 msgid "Find out what quests are available!"
 msgstr "¡Descubre las misiones disponibles!"
 
@@ -4312,6 +4318,10 @@ msgstr "Añadido al final de todos los correos enviados"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "¡Vota para la nueva junta ejecutiva!"
+
+#, python-format
+msgid "Feature %(name)s already deactivated!"
+msgstr "La función %(name)s ya está desactivada."
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Si está marcada, permite el nivel de entradas: Vendedor"

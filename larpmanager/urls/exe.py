@@ -140,7 +140,7 @@ urlpatterns = [
         name="exe_profile",
     ),
     path(
-        "manage/payments/details/",
+        "manage/payment/settings/",
         views_eas.exe_payment_details,
         name="exe_payment_details",
     ),

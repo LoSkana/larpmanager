@@ -25,6 +25,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
@@ -128,23 +129,33 @@ def exe_features_go(request, ctx, num, on=True):
     if on:
         if ctx["feature"].slug not in request.assoc["features"]:
             assoc.features.add(f_id)
-            messages.success(request, _("Feature activated"))
+            msg = _("Feature %(name)s activated!")
         else:
-            messages.success(request, _("Feature already activated"))
+            msg = _("Feature %(name)s already activated!")
     elif ctx["feature"].slug not in request.assoc["features"]:
-        messages.success(request, _("Feature already deactivated"))
+        msg = _("Feature %(name)s already deactivated!")
     else:
         assoc.features.remove(f_id)
-        messages.success(request, _("Feature deactivated"))
+        msg = _("Feature %(name)s deactivated!")
 
     assoc.save()
+
+    msg = msg % {"name": _(ctx["feature"].name)}
+    if ctx["feature"].after_text:
+        msg += " " + ctx["feature"].after_text
+    messages.success(request, msg)
+
+    return ctx["feature"]
 
 
 @login_required
 def exe_features_on(request, num):
     ctx = check_assoc_permission(request, "exe_features")
-    exe_features_go(request, ctx, num, on=True)
-    return redirect("manage")
+    feature = exe_features_go(request, ctx, num, on=True)
+    after_link = feature.after_link
+    if after_link and after_link.startswith("exe"):
+        return redirect(after_link)
+    return redirect("manage") + after_link
 
 
 @login_required
@@ -196,8 +207,9 @@ def feature_description(request):
     txt = f"<h2>{feature.name}</h2> {feature.descr}<br /><br />"
 
     if feature.tutorial:
+        tutorial = reverse("tutorials") + feature.tutorial
         txt += f"""
-            <iframe src="{_add_in_iframe_param(feature.tutorial)}" width="100%" height="300"></iframe><br /><br />
+            <iframe src="{_add_in_iframe_param(tutorial)}" width="100%" height="300"></iframe><br /><br />
         """
 
     return JsonResponse({"res": "ok", "txt": txt})

@@ -119,26 +119,36 @@ def orga_features_go(request, ctx, num, on=True):
     if on:
         if f_id not in feat_id:
             ctx["event"].features.add(f_id)
-            messages.success(request, _("Feature activated"))
+            msg = _("Feature %(name)s activated!")
         else:
-            messages.success(request, _("Feature already activated"))
+            msg = _("Feature %(name)s already activated!")
     elif f_id not in feat_id:
-        messages.success(request, _("Feature already deactivated"))
+        msg = _("Feature %(name)s already deactivated!")
     else:
         ctx["event"].features.remove(f_id)
-        messages.success(request, _("Feature deactivated"))
+        msg = _("Feature %(name)s deactivated!")
 
     ctx["event"].save()
     # update cached event features, for itself, and the events for which they are parent
     for ev in Event.objects.filter(parent=ctx["event"]):
         ev.save()
 
+    msg = msg % {"name": _(ctx["feature"].name)}
+    if ctx["feature"].after_text:
+        msg += " " + ctx["feature"].after_text
+    messages.success(request, msg)
+
+    return ctx["feature"]
+
 
 @login_required
 def orga_features_on(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_features")
-    orga_features_go(request, ctx, num, on=True)
-    return redirect("manage", s=s, n=n)
+    feature = orga_features_go(request, ctx, num, on=True)
+    after_link = feature.after_link
+    if after_link and after_link.startswith("orga"):
+        return redirect(after_link, s=s, n=n)
+    return redirect("manage", s=s, n=n) + after_link
 
 
 @login_required

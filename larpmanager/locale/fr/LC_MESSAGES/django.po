@@ -2,6 +2,9 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
+msgid "-"
+msgstr "-"
+
 msgid "e"
 msgstr "e"
 
@@ -2624,9 +2627,6 @@ msgstr "Points d'expérience"
 msgid "Faction selection"
 msgstr "Sélection des factions"
 
-msgid "Feature activated"
-msgstr "Fonction activée"
-
 msgid "Fiscal code check"
 msgstr "Contrôle du code fiscal"
 
@@ -2912,9 +2912,6 @@ msgstr "Notifications par courrier électronique"
 
 msgid "Event Configuration"
 msgstr "Configuration des événements"
-
-msgid "Feature deactivated"
-msgstr "Fonction désactivée"
 
 msgid "History preferences"
 msgstr "Historique des préférences"
@@ -3543,9 +3540,6 @@ msgstr "'player' (email du joueur)"
 msgid "Display all sent e-mails "
 msgstr "Afficher tous les courriels envoyés"
 
-msgid "Feature already activated"
-msgstr "Fonctionnalité déjà activée"
-
 msgid "Go to the preferences for"
 msgstr "Aller dans les préférences pour"
 
@@ -3698,8 +3692,9 @@ msgstr "Découvrez les groupes de jeu !"
 msgid "Edit your character's data!"
 msgstr "Modifiez les données de votre personnage !"
 
-msgid "Feature already deactivated"
-msgstr "Fonctionnalité déjà désactivée"
+#, python-format
+msgid "Feature %(name)s activated!"
+msgstr "Fonctionnalité %(name)s activée !"
 
 msgid "Loading performed, see logs"
 msgstr "Chargement effectué, voir les journaux"
@@ -3721,6 +3716,9 @@ msgstr "Préférences de casting manquantes"
 
 msgid "Name of badge to be awarded"
 msgstr "Nom de l'insigne à décerner"
+
+msgid "Now you can select expenses"
+msgstr "Vous pouvez maintenant sélectionner les dépenses"
 
 msgid "Player registration process"
 msgstr "Procédure d'inscription des joueurs"
@@ -3808,6 +3806,10 @@ msgstr "Approbation des %(user)s en tant que %(role)s"
 
 msgid "Date of issue of the document"
 msgstr "Date de délivrance du document"
+
+#, python-format
+msgid "Feature %(name)s deactivated!"
+msgstr "Fonctionnalité %(name)s désactivée !"
 
 msgid "If checked: members can vote."
 msgstr "Si coché : les membres peuvent voter"
@@ -4202,6 +4204,10 @@ msgstr "(<a href='%(url)s'>réponse ici</a>)"
 msgid "Access the list of your characters!"
 msgstr "Accédez à votre liste de personnages !"
 
+#, python-format
+msgid "Feature %(name)s already activated!"
+msgstr "Fonctionnalité %(name)s déjà activée !"
+
 msgid "Find out what quests are available!"
 msgstr "Découvrez les quêtes disponibles !"
 
@@ -4313,6 +4319,10 @@ msgstr "Ajouté au bas de tous les courriers envoyés"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Votez pour le nouvel exécutif !"
+
+#, python-format
+msgid "Feature %(name)s already deactivated!"
+msgstr "Fonctionnalité %(name)s déjà désactivée !"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Si la case est cochée, autoriser le niveau de ticket : Vendeur"

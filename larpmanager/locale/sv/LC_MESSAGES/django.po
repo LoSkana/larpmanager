@@ -2,6 +2,9 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
+msgid "-"
+msgstr "-"
+
 msgid "e"
 msgstr "e"
 
@@ -2624,9 +2627,6 @@ msgstr "Erfarenhetspoäng"
 msgid "Faction selection"
 msgstr "Val av fraktion"
 
-msgid "Feature activated"
-msgstr "Funktion aktiverad"
-
 msgid "Fiscal code check"
 msgstr "Kontroll av skattekod"
 
@@ -2912,9 +2912,6 @@ msgstr "E-postmeddelanden"
 
 msgid "Event Configuration"
 msgstr "Händelsekonfiguration"
-
-msgid "Feature deactivated"
-msgstr "Funktion avaktiverad"
 
 msgid "History preferences"
 msgstr "Preferenshistorik"
@@ -3543,9 +3540,6 @@ msgstr "\"player\" (spelarens e-postadress)"
 msgid "Display all sent e-mails "
 msgstr "Visa alla skickade e-postmeddelanden"
 
-msgid "Feature already activated"
-msgstr "Funktionen är redan aktiverad"
-
 msgid "Go to the preferences for"
 msgstr "Gå till preferenser för"
 
@@ -3698,8 +3692,9 @@ msgstr "Upptäck spelgrupperna!"
 msgid "Edit your character's data!"
 msgstr "Redigera din karaktärs data!"
 
-msgid "Feature already deactivated"
-msgstr "Funktionen är redan avaktiverad"
+#, python-format
+msgid "Feature %(name)s activated!"
+msgstr "Funktion %(name)s aktiverad!"
 
 msgid "Loading performed, see logs"
 msgstr "Lastning utförd, se loggar"
@@ -3721,6 +3716,9 @@ msgstr "Saknade castingpreferenser"
 
 msgid "Name of badge to be awarded"
 msgstr "Namn på märket som ska delas ut"
+
+msgid "Now you can select expenses"
+msgstr "Nu kan du välja utgifter"
 
 msgid "Player registration process"
 msgstr "Registreringsprocess för spelare"
@@ -3808,6 +3806,10 @@ msgstr "Godkännande av %(user)s som %(role)s"
 
 msgid "Date of issue of the document"
 msgstr "Datum för utfärdande av dokumentet"
+
+#, python-format
+msgid "Feature %(name)s deactivated!"
+msgstr "Funktion %(name)s avaktiverad!"
 
 msgid "If checked: members can vote."
 msgstr "Om markerat: medlemmar kan rösta"
@@ -4201,6 +4203,10 @@ msgstr "(<a href='%(url)s'>svara här</a>)"
 msgid "Access the list of your characters!"
 msgstr "Öppna din karaktärslista!"
 
+#, python-format
+msgid "Feature %(name)s already activated!"
+msgstr "Funktionen %(name)s är redan aktiverad!"
+
 msgid "Find out what quests are available!"
 msgstr "Upptäck de tillgängliga uppdragen!"
 
@@ -4312,6 +4318,10 @@ msgstr "Läggs till längst ner i alla utskickade mail"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Lägg din röst på den nya verkställande direktören!"
+
+#, python-format
+msgid "Feature %(name)s already deactivated!"
+msgstr "Funktion %(name)s redan avaktiverad!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Om markerat, tillåt biljettnivå: Säljare"

@@ -2,6 +2,9 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
+msgid "-"
+msgstr "-"
+
 msgid "e"
 msgstr "e"
 
@@ -2624,9 +2627,6 @@ msgstr "Ervaringspunten"
 msgid "Faction selection"
 msgstr "Factieselectie"
 
-msgid "Feature activated"
-msgstr "Functie geactiveerd"
-
 msgid "Fiscal code check"
 msgstr "Fiscale code controle"
 
@@ -2912,9 +2912,6 @@ msgstr "Kennisgevingen per e-mail"
 
 msgid "Event Configuration"
 msgstr "Gebeurtenis Configuratie"
-
-msgid "Feature deactivated"
-msgstr "Functie gedeactiveerd"
 
 msgid "History preferences"
 msgstr "Voorkeur geschiedenis"
@@ -3543,9 +3540,6 @@ msgstr "\"speler\" (e-mailadres van de speler)"
 msgid "Display all sent e-mails "
 msgstr "Alle verzonden e-mails weergeven"
 
-msgid "Feature already activated"
-msgstr "Functie al geactiveerd"
-
 msgid "Go to the preferences for"
 msgstr "Ga naar voorkeuren voor"
 
@@ -3698,8 +3692,9 @@ msgstr "Ontdek de spelgroepen!"
 msgid "Edit your character's data!"
 msgstr "Bewerk de gegevens van je personage!"
 
-msgid "Feature already deactivated"
-msgstr "Functie al gedeactiveerd"
+#, python-format
+msgid "Feature %(name)s activated!"
+msgstr "Functie %(name)s geactiveerd!"
 
 msgid "Loading performed, see logs"
 msgstr "Laden uitgevoerd, zie logboeken"
@@ -3721,6 +3716,9 @@ msgstr "Ontbrekende gietvoorkeuren"
 
 msgid "Name of badge to be awarded"
 msgstr "Naam van de badge die wordt uitgereikt"
+
+msgid "Now you can select expenses"
+msgstr "Nu kunt u uitgaven selecteren"
 
 msgid "Player registration process"
 msgstr "Registratieprocedure voor spelers"
@@ -3808,6 +3806,10 @@ msgstr "Goedkeuring %(user)s als %(role)s"
 
 msgid "Date of issue of the document"
 msgstr "Datum van uitgifte van het document"
+
+#, python-format
+msgid "Feature %(name)s deactivated!"
+msgstr "Functie %(name)s gedeactiveerd!"
 
 msgid "If checked: members can vote."
 msgstr "Indien aangevinkt: leden kunnen stemmen"
@@ -4201,6 +4203,10 @@ msgstr "(<a href='%(url)s'>antwoord hier</a>)"
 msgid "Access the list of your characters!"
 msgstr "Toegang tot je karakterlijst!"
 
+#, python-format
+msgid "Feature %(name)s already activated!"
+msgstr "Functie %(name)s is al geactiveerd!"
+
 msgid "Find out what quests are available!"
 msgstr "Ontdek de beschikbare quests!"
 
@@ -4312,6 +4318,10 @@ msgstr "Toegevoegd aan de onderkant van alle verzonden e-mails"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Breng je stem uit voor de nieuwe Executive!"
+
+#, python-format
+msgid "Feature %(name)s already deactivated!"
+msgstr "Functie %(name)s is al gedeactiveerd!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Indien aangevinkt, ticketniveau toestaan: Verkoper"
