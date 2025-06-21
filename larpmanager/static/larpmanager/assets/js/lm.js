@@ -97,6 +97,15 @@ $(document).ready(function() {
         }
     });
 
+    // set select on sidebar
+    var currentUrl = window.location.href;
+    $('.sidebar-link').each(function() {
+        var linkHref = $(this).attr('href');
+        if (linkHref && currentUrl.includes(linkHref)) {
+            $(this).addClass('select');
+        }
+    });
+
     // Menu.
             $menu_openers = $('#menu .opener');
 

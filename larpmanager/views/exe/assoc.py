@@ -25,6 +25,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
@@ -58,7 +59,7 @@ from larpmanager.views.larpmanager import get_run_lm_payment
 
 @login_required
 def exe_association(request):
-    return exe_edit(request, ExeAssociationForm, None, "exe_association", "manage", add_another=False)
+    return exe_edit(request, ExeAssociationForm, None, "exe_association", "manage", add_ctx={"add_another": False})
 
 
 @login_required
@@ -76,13 +77,15 @@ def exe_roles_edit(request, num):
 
 
 @login_required
-def exe_config(request):
-    return exe_edit(request, ExeConfigForm, None, "exe_config", "manage", add_another=False)
+def exe_config(request, section=None):
+    add_ctx = {"jump_section": section} if section else {}
+    add_ctx["add_another"] = False
+    return exe_edit(request, ExeConfigForm, None, "exe_config", "manage", add_ctx=add_ctx)
 
 
 @login_required
 def exe_profile(request):
-    return exe_edit(request, ExeProfileForm, None, "exe_profile", "manage", add_another=False)
+    return exe_edit(request, ExeProfileForm, None, "exe_profile", "manage", add_ctx={"add_another": False})
 
 
 @login_required
@@ -99,12 +102,14 @@ def exe_texts_edit(request, num):
 
 @login_required
 def exe_payment_details(request):
-    return exe_edit(request, ExePaymentSettingsForm, None, "exe_payment_details", "manage", add_another=False)
+    return exe_edit(
+        request, ExePaymentSettingsForm, None, "exe_payment_details", "manage", add_ctx={"add_another": False}
+    )
 
 
 @login_required
 def exe_appearance(request):
-    return exe_edit(request, ExeAppearanceForm, None, "exe_appearance", "manage", add_another=False)
+    return exe_edit(request, ExeAppearanceForm, None, "exe_appearance", "manage", add_ctx={"add_another": False})
 
 
 def f_k_exe(f_id, r_id):
@@ -113,7 +118,7 @@ def f_k_exe(f_id, r_id):
 
 @login_required
 def exe_features(request):
-    return exe_edit(request, ExeFeatureForm, None, "exe_features", "manage", add_another=False)
+    return exe_edit(request, ExeFeatureForm, None, "exe_features", "manage", add_ctx={"add_another": False})
 
 
 def exe_features_go(request, ctx, num, on=True):
@@ -124,23 +129,33 @@ def exe_features_go(request, ctx, num, on=True):
     if on:
         if ctx["feature"].slug not in request.assoc["features"]:
             assoc.features.add(f_id)
-            messages.success(request, _("Feature activated"))
+            msg = _("Feature %(name)s activated!")
         else:
-            messages.success(request, _("Feature already activated"))
+            msg = _("Feature %(name)s already activated!")
     elif ctx["feature"].slug not in request.assoc["features"]:
-        messages.success(request, _("Feature already deactivated"))
+        msg = _("Feature %(name)s already deactivated!")
     else:
         assoc.features.remove(f_id)
-        messages.success(request, _("Feature deactivated"))
+        msg = _("Feature %(name)s deactivated!")
 
     assoc.save()
+
+    msg = msg % {"name": _(ctx["feature"].name)}
+    if ctx["feature"].after_text:
+        msg += " " + ctx["feature"].after_text
+    messages.success(request, msg)
+
+    return ctx["feature"]
 
 
 @login_required
 def exe_features_on(request, num):
     ctx = check_assoc_permission(request, "exe_features")
-    exe_features_go(request, ctx, num, on=True)
-    return redirect("manage")
+    feature = exe_features_go(request, ctx, num, on=True)
+    after_link = feature.after_link
+    if after_link and after_link.startswith("exe"):
+        return redirect(after_link)
+    return redirect("manage") + after_link
 
 
 @login_required
@@ -192,8 +207,9 @@ def feature_description(request):
     txt = f"<h2>{feature.name}</h2> {feature.descr}<br /><br />"
 
     if feature.tutorial:
+        tutorial = reverse("tutorials") + feature.tutorial
         txt += f"""
-            <iframe src="{_add_in_iframe_param(feature.tutorial)}" width="100%" height="300"></iframe><br /><br />
+            <iframe src="{_add_in_iframe_param(tutorial)}" width="100%" height="300"></iframe><br /><br />
         """
 
     return JsonResponse({"res": "ok", "txt": txt})

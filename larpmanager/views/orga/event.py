@@ -45,7 +45,7 @@ from larpmanager.utils.event import check_event_permission
 
 @login_required
 def orga_event(request, s, n):
-    return orga_edit(request, s, n, "orga_event", OrgaEventForm, None, "manage", add_another=False)
+    return orga_edit(request, s, n, "orga_event", OrgaEventForm, None, "manage", add_ctx={"add_another": False})
 
 
 @login_required
@@ -64,13 +64,15 @@ def orga_roles_edit(request, s, n, num):
 
 @login_required
 def orga_appearance(request, s, n):
-    return orga_edit(request, s, n, "orga_appearance", OrgaAppearanceForm, None, "manage", add_another=False)
+    return orga_edit(
+        request, s, n, "orga_appearance", OrgaAppearanceForm, None, "manage", add_ctx={"add_another": False}
+    )
 
 
 @login_required
 def orga_run(request, s, n):
     run = get_cache_run(request.assoc["id"], s, n)
-    return orga_edit(request, s, n, "orga_run", OrgaRunForm, run, "manage", add_another=False)
+    return orga_edit(request, s, n, "orga_run", OrgaRunForm, run, "manage", add_ctx={"add_another": False})
 
 
 @login_required
@@ -98,13 +100,15 @@ def orga_buttons_edit(request, s, n, num):
 
 
 @login_required
-def orga_config(request, s, n):
-    return orga_edit(request, s, n, "orga_config", OrgaConfigForm, None, "manage", add_another=False)
+def orga_config(request, s, n, section=None):
+    add_ctx = {"jump_section": section} if section else {}
+    add_ctx["add_another"] = False
+    return orga_edit(request, s, n, "orga_config", OrgaConfigForm, None, "manage", add_ctx=add_ctx)
 
 
 @login_required
 def orga_features(request, s, n):
-    return orga_edit(request, s, n, "orga_features", OrgaFeatureForm, None, "manage", add_another=False)
+    return orga_edit(request, s, n, "orga_features", OrgaFeatureForm, None, "manage", add_ctx={"add_another": False})
 
 
 def orga_features_go(request, ctx, num, on=True):
@@ -115,26 +119,36 @@ def orga_features_go(request, ctx, num, on=True):
     if on:
         if f_id not in feat_id:
             ctx["event"].features.add(f_id)
-            messages.success(request, _("Feature activated"))
+            msg = _("Feature %(name)s activated!")
         else:
-            messages.success(request, _("Feature already activated"))
+            msg = _("Feature %(name)s already activated!")
     elif f_id not in feat_id:
-        messages.success(request, _("Feature already deactivated"))
+        msg = _("Feature %(name)s already deactivated!")
     else:
         ctx["event"].features.remove(f_id)
-        messages.success(request, _("Feature deactivated"))
+        msg = _("Feature %(name)s deactivated!")
 
     ctx["event"].save()
     # update cached event features, for itself, and the events for which they are parent
     for ev in Event.objects.filter(parent=ctx["event"]):
         ev.save()
 
+    msg = msg % {"name": _(ctx["feature"].name)}
+    if ctx["feature"].after_text:
+        msg += " " + ctx["feature"].after_text
+    messages.success(request, msg)
+
+    return ctx["feature"]
+
 
 @login_required
 def orga_features_on(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_features")
-    orga_features_go(request, ctx, num, on=True)
-    return redirect("manage", s=s, n=n)
+    feature = orga_features_go(request, ctx, num, on=True)
+    after_link = feature.after_link
+    if after_link and after_link.startswith("orga"):
+        return redirect(after_link, s=s, n=n)
+    return redirect("manage", s=s, n=n) + after_link
 
 
 @login_required

@@ -120,6 +120,10 @@ class Feature(BaseModel):
         related_name="features",
     )
 
+    after_link = models.TextField(max_length=100, blank=True, null=True)
+
+    after_text = models.TextField(max_length=300, blank=True, null=True)
+
     # If the feature is a placeholder (used to indicate the permissions that does not require a true feature)
     placeholder = models.BooleanField(default=False)
 

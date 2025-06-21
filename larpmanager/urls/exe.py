@@ -125,6 +125,11 @@ urlpatterns = [
         name="exe_appearance",
     ),
     path(
+        "manage/config/<slug:section>/",
+        views_eas.exe_config,
+        name="exe_config",
+    ),
+    path(
         "manage/config/",
         views_eas.exe_config,
         name="exe_config",
@@ -135,7 +140,7 @@ urlpatterns = [
         name="exe_profile",
     ),
     path(
-        "manage/payments/details/",
+        "manage/payment/settings/",
         views_eas.exe_payment_details,
         name="exe_payment_details",
     ),

@@ -92,16 +92,7 @@ class FeatureResource(resources.ModelResource):
 
 @admin.register(Feature)
 class FeatureAdmin(DefModelAdmin):
-    list_display = (
-        "name",
-        "overall",
-        "order",
-        "module",
-        "slug",
-        "tutorial",
-        "descr",
-        "placeholder",
-    )
+    list_display = ("name", "overall", "order", "module", "slug", "tutorial", "descr", "placeholder", "after_link")
     list_filter = ("module",)
     autocomplete_fields = ["module", "associations", "events"]
     search_fields = ["name"]

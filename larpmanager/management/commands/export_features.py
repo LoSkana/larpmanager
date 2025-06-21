@@ -32,7 +32,21 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         models = {
             "module": (FeatureModule, ("id", "name", "descr", "order", "default")),
-            "feature": (Feature, ("id", "name", "descr", "slug", "overall", "module", "placeholder", "order")),
+            "feature": (
+                Feature,
+                (
+                    "id",
+                    "name",
+                    "descr",
+                    "slug",
+                    "overall",
+                    "module",
+                    "placeholder",
+                    "order",
+                    "after_text",
+                    "after_link",
+                ),
+            ),
             "assoc_permission": (AssocPermission, ("id", "name", "descr", "slug", "number", "feature")),
             "event_permission": (EventPermission, ("id", "name", "descr", "slug", "number", "feature")),
             "payment_methods": (PaymentMethod, ("id", "name", "slug", "instructions", "fields", "profile")),

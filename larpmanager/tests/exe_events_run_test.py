@@ -59,7 +59,6 @@ def exe_events_run(live_server, page):
     page.locator("#id_start").click()
     page.locator("#id_end").fill("2025-06-13")
     page.locator("#id_end").click()
-    page.locator("#id_development").click()
     page.get_by_role("button", name="Confirm", exact=True).click()
 
     expect(page.locator("#one")).to_contain_text("Prova Event")

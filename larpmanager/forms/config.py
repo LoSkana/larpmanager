@@ -23,6 +23,8 @@ class ConfigForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.config_fields = []
+        self._section = None
+        self.jump_section = None
 
         self.set_configs()
 
@@ -34,12 +36,17 @@ class ConfigForm(MyForm):
     def set_configs(self):
         pass
 
-    def add_configs(self, key, config_type, section, label, help_text, element_id=None):
+    def set_section(self, slug, name):
+        self._section = name
+        if self.params.get("jump_section", "") == slug:
+            self.jump_section = name
+
+    def add_configs(self, key, config_type, label, help_text, element_id=None):
         self.config_fields.append(
             {
                 "key": key,
                 "type": config_type,
-                "section": section,
+                "section": self._section,
                 "label": label,
                 "help_text": help_text,
                 "element_id": element_id,

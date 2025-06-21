@@ -6417,6 +6417,16 @@ msgid ""
 "diet."
 msgstr ""
 
+msgid ""
+"Please remember that the information on this page was given with the "
+"implicit trust that it will be treated with the utmost care."
+msgstr ""
+
+msgid ""
+"Communicate them only if strictly necessary, and if possible communicate "
+"them in anonymous form."
+msgstr ""
+
 msgid "This page shows the email lists of subscribers."
 msgstr ""
 
@@ -6456,11 +6466,6 @@ msgid "Sensitive data"
 msgstr ""
 
 msgid "This page shows the general information of registered players."
-msgstr ""
-
-msgid ""
-"Please remember that the information on this page was given with the "
-"implicit trust that it will be treated with the utmost care."
 msgstr ""
 
 msgid "Spam"
@@ -6884,6 +6889,9 @@ msgid ""
 "information."
 msgstr ""
 
+msgid "-"
+msgstr ""
+
 msgid "Casting algorithm"
 msgstr ""
 
@@ -7125,6 +7133,9 @@ msgstr ""
 msgid ""
 "Lets staff upload receipts for event expenses, tracking both the event "
 "expenses, and the amount to refund the staff."
+msgstr ""
+
+msgid "Now you can select expenses"
 msgstr ""
 
 msgid ""
@@ -7991,16 +8002,20 @@ msgstr ""
 msgid "Payment confirmed"
 msgstr ""
 
-msgid "Feature activated"
+#, python-format
+msgid "Feature %(name)s activated!"
 msgstr ""
 
-msgid "Feature already activated"
+#, python-format
+msgid "Feature %(name)s already activated!"
 msgstr ""
 
-msgid "Feature already deactivated"
+#, python-format
+msgid "Feature %(name)s already deactivated!"
 msgstr ""
 
-msgid "Feature deactivated"
+#, python-format
+msgid "Feature %(name)s deactivated!"
 msgstr ""
 
 msgid "Member approved!"
