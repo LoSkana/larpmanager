@@ -124,7 +124,7 @@ def orga_features(request, s, n):
             clear_messages(request)
             messages.success(request, msg)
             return redirect(feature.follow_link)
-        return render(request, "larpmanager/orga/features.html", ctx)
+        return render(request, "larpmanager/manage/features.html", ctx)
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 

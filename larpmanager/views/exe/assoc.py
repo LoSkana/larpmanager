@@ -51,9 +51,10 @@ from larpmanager.models.event import (
 )
 from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.common import (
+    clear_messages,
     get_feature,
 )
-from larpmanager.utils.edit import exe_edit
+from larpmanager.utils.edit import backend_edit, exe_edit
 from larpmanager.views.larpmanager import get_run_lm_payment
 
 
@@ -118,7 +119,22 @@ def f_k_exe(f_id, r_id):
 
 @login_required
 def exe_features(request):
-    return exe_edit(request, ExeFeatureForm, None, "exe_features", "manage", add_ctx={"add_another": False})
+    ctx = check_assoc_permission(request, "exe_features")
+    ctx["add_another"] = False
+    if backend_edit(request, ctx, ExeFeatureForm, None, afield=None, assoc=True):
+        ctx["new_features"] = Feature.objects.filter(pk__in=ctx["form"].added_features, after_link__isnull=False)
+        if not ctx["new_features"]:
+            return redirect("manage")
+        for el in ctx["new_features"]:
+            el.follow_link = _exe_feature_after_link(el)
+        if len(ctx["new_features"]) == 1:
+            feature = ctx["new_features"][0]
+            msg = _("Feature %(name)s activated!") % {"name": feature.name} + " " + feature.after_text
+            clear_messages(request)
+            messages.success(request, msg)
+            return redirect(feature.follow_link)
+        return render(request, "larpmanager/manage/features.html", ctx)
+    return render(request, "larpmanager/exe/edit.html", ctx)
 
 
 def exe_features_go(request, ctx, num, on=True):
@@ -148,14 +164,18 @@ def exe_features_go(request, ctx, num, on=True):
     return ctx["feature"]
 
 
+def _exe_feature_after_link(feature):
+    after_link = feature.after_link
+    if after_link and after_link.startswith("exe"):
+        return reverse(after_link)
+    return reverse("manage") + after_link
+
+
 @login_required
 def exe_features_on(request, num):
     ctx = check_assoc_permission(request, "exe_features")
     feature = exe_features_go(request, ctx, num, on=True)
-    after_link = feature.after_link
-    if after_link and after_link.startswith("exe"):
-        return redirect(after_link)
-    return redirect("manage") + after_link
+    return redirect(_exe_feature_after_link(feature))
 
 
 @login_required
