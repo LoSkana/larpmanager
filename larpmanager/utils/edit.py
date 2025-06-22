@@ -174,6 +174,7 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
         if eid is None:
             eid = request.assoc["id"]
             ctx["nonum"] = True
+
     elif eid is None:
         eid = ctx["event"].id
         ctx["nonum"] = True
@@ -183,11 +184,12 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
     else:
         ctx["el"] = None
 
+    ctx["num"] = eid
     if request.method == "POST":
-        form = form_type(request.POST, request.FILES, instance=ctx["el"], ctx=ctx)
+        ctx["form"] = form_type(request.POST, request.FILES, instance=ctx["el"], ctx=ctx)
 
-        if form.is_valid():
-            p = form.save()
+        if ctx["form"].is_valid():
+            p = ctx["form"].save()
             messages.success(request, _("Operation completed!"))
 
             dl = "delete" in request.POST and request.POST["delete"] == "1"
@@ -199,10 +201,8 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
 
             return True
     else:
-        form = form_type(instance=ctx["el"], ctx=ctx)
+        ctx["form"] = form_type(instance=ctx["el"], ctx=ctx)
 
-    ctx["form"] = form
-    ctx["num"] = eid
     if eid != 0:
         ctx["name"] = str(ctx["el"])
 

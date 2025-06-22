@@ -6135,6 +6135,18 @@ msgstr ""
 msgid "This page shows the deadlines to be met for this run."
 msgstr ""
 
+msgid "Features activated"
+msgstr ""
+
+msgid ""
+"You have activated the following features, for each here's the links to "
+"follow: "
+msgstr ""
+
+#, python-format
+msgid "%(feature.after_text)s"
+msgstr ""
+
 msgid ""
 "This page shows problems reported by contributors, for direct management "
 "during the event."
@@ -6821,6 +6833,9 @@ msgid ""
 "game, which players receive to guide them."
 msgstr ""
 
+msgid "Now you can create prologues for the event: "
+msgstr ""
+
 msgid "Quests and Traits"
 msgstr ""
 
@@ -6829,7 +6844,13 @@ msgid ""
 "multiple 'traits'."
 msgstr ""
 
+msgid "Now you can create quests for the event: "
+msgstr ""
+
 msgid "Allows you to copy any element directly from another event."
+msgstr ""
+
+msgid "Now you can copy elements from an other event: "
 msgstr ""
 
 msgid "Pay what you want"
@@ -6840,9 +6861,15 @@ msgid ""
 "g. for donations or to help cover others' fees)."
 msgstr ""
 
+msgid "Now you can set the optional amount field: "
+msgstr ""
+
 msgid ""
 "Allows you to generate discount codes that players can use to reduce their "
 "ticket price."
+msgstr ""
+
+msgid "Now you can create discounts for the event: "
 msgstr ""
 
 msgid "LAOG"
@@ -6858,9 +6885,15 @@ msgid ""
 "emails automatically."
 msgstr ""
 
+msgid "Now you can set the reminder options: "
+msgstr ""
+
 msgid ""
 "Enables 'bring a friend' discount. A registered player provides their unique "
 "code to a new registrant, granting both a discounted price."
+msgstr ""
+
+msgid "Now you can set the discount options: "
 msgstr ""
 
 msgid "PDF generation"
@@ -6871,9 +6904,15 @@ msgid ""
 "player profiles."
 msgstr ""
 
+msgid "Now you can set the PDF generation options: "
+msgstr ""
+
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "
 "forms, questions, and correct answers for players to complete."
+msgstr ""
+
+msgid "Now you can start creating workshops, starting from modules: "
 msgstr ""
 
 msgid "Speed Larp"
@@ -6884,12 +6923,13 @@ msgid ""
 "assign players to them, with checks to avoid scheduling conflicts."
 msgstr ""
 
-msgid ""
-"Lets players safely submit lines, veils, and other safety-related "
-"information."
+msgid "Now you can start creating speed-larps: "
 msgstr ""
 
-msgid "-"
+msgid "Lets staff access the safety information submitted by players."
+msgstr ""
+
+msgid "Now you can review the safety information submitted by players: "
 msgstr ""
 
 msgid "Casting algorithm"
@@ -6900,6 +6940,9 @@ msgid ""
 "match."
 msgstr ""
 
+msgid "Now you can set the casting options: "
+msgstr ""
+
 msgid "Help"
 msgstr ""
 
@@ -6908,12 +6951,21 @@ msgid ""
 "them."
 msgstr ""
 
+msgid "Now you can review players' questions: "
+msgstr ""
+
 msgid ""
 "Allows players to create and contribute to collections aimed at assisting "
 "another player with event fees."
 msgstr ""
 
+msgid "Now players can submit collections, and you can review them: "
+msgstr ""
+
 msgid "Enables free pre-registration to events."
+msgstr ""
+
+msgid "Now players can submit preregistrations, and you can review them: "
 msgstr ""
 
 msgid "Multi-language"
@@ -6927,9 +6979,15 @@ msgid ""
 "the association freely."
 msgstr ""
 
+msgid "Now players can submit donation, and you can review them: "
+msgstr ""
+
 msgid ""
 "Adds a page displaying member mailing lists, sorted by members' newsletter "
 "preferences."
+msgstr ""
+
+msgid "Now you can review users mailing list: "
 msgstr ""
 
 msgid "Utility"
@@ -6940,6 +6998,9 @@ msgid ""
 "available either to staff or to players via secret external links."
 msgstr ""
 
+msgid "Now you can host files in the platform: "
+msgstr ""
+
 msgid "Character customization"
 msgstr ""
 
@@ -6948,9 +7009,15 @@ msgid ""
 "info, etc.) of the characters they're assigned."
 msgstr ""
 
+msgid "Now you can set customization options: "
+msgstr ""
+
 msgid ""
 "Requires Executive Committee approval of membership before participating in "
 "an event."
+msgstr ""
+
+msgid "Now you can review all organizations's members: "
 msgstr ""
 
 msgid "Shuttle"
@@ -6969,14 +7036,23 @@ msgid ""
 "instead of the standard one."
 msgstr ""
 
+msgid "Now you can set the external mail server settings: "
+msgstr ""
+
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "
 "which a random subset is converted into normal tickets."
 msgstr ""
 
+msgid "Now you can create the lottery ticket: "
+msgstr ""
+
 msgid ""
 "Enables 'Filler' characters: simpler character sheets, assigned to players "
 "who are ready to replacing last-minute dropout of main characters."
+msgstr ""
+
+msgid "Now you can create the filler ticket: "
 msgstr ""
 
 msgid "Chat"
@@ -6992,12 +7068,18 @@ msgid ""
 "are sold out."
 msgstr ""
 
+msgid "Now you can create the waiting ticket: "
+msgstr ""
+
 msgid "Event T&C"
 msgstr ""
 
 msgid ""
 "Allows custom Terms and Conditions for a specific event, displayed during "
 "registration."
+msgstr ""
+
+msgid "Now you can set the terms and conditions text: "
 msgstr ""
 
 msgid "Player cancellation"
@@ -7014,9 +7096,15 @@ msgid ""
 "external registration link."
 msgstr ""
 
+msgid "Now you can set the external registration link: "
+msgstr ""
+
 msgid ""
 "Enables a ticket-like system for in-game 'problems,' where staff can log "
 "issues, assign severity/urgency, and track them."
+msgstr ""
+
+msgid "Now you can review the event's problems: "
 msgstr ""
 
 msgid ""
@@ -7025,18 +7113,30 @@ msgid ""
 "remaining days until the event."
 msgstr ""
 
+msgid "Now you can set the dynamic installments: "
+msgstr ""
+
 msgid ""
 "Lets members cast votes for the election of the organisation's Executive "
 "Committee."
+msgstr ""
+
+msgid "Now you can set the vote options"
 msgstr ""
 
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard."
 msgstr ""
 
+msgid "Now you can create badges: "
+msgstr ""
+
 msgid ""
 "Enables basic inventory management. Users can add items to a warehouse "
 "table, track quantities, and note item locations."
+msgstr ""
+
+msgid "Now you can add inventory items: "
 msgstr ""
 
 msgid "Secret link"
@@ -7047,12 +7147,21 @@ msgid ""
 "general registration is closed (e.g., early access for a specific group)."
 msgstr ""
 
+msgid "Now you can set the registration secret link: "
+msgstr ""
+
 msgid ""
 "Enables fixed installment deadlines for registration fees, allowing you to "
 "define multiple due dates and amounts."
 msgstr ""
 
-msgid "Allows authors to prepare a list of inter-character relationships."
+msgid "Now you can create fixed installments: "
+msgstr ""
+
+msgid "Allows authors to add relationships to characters."
+msgstr ""
+
+msgid "Now you can add relationships when editing a character: "
 msgstr ""
 
 msgid "Sections"
@@ -7061,6 +7170,9 @@ msgstr ""
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "
 "make lengthy forms clearer."
+msgstr ""
+
+msgid "Now you can define registration form sections: "
 msgstr ""
 
 msgid ""
@@ -7076,12 +7188,18 @@ msgid ""
 "one Reduced ticket available."
 msgstr ""
 
+msgid "Now you can create the 'patron' and 'reduced' tickets: "
+msgstr ""
+
 msgid "Accounting tracking"
 msgstr ""
 
 msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "
 "displaying trend graphs over time."
+msgstr ""
+
+msgid "Now you can review the historical accounting informations: "
 msgstr ""
 
 msgid "Player Larp History"
@@ -7097,14 +7215,21 @@ msgid ""
 "elements."
 msgstr ""
 
-msgid ""
-"Allows players to securely input dietary restrictions/allergies in their "
-"profiles."
+msgid "Now you can create the progress steps: "
+msgstr ""
+
+msgid "Lets staff access the diet information submitted by players."
+msgstr ""
+
+msgid "Now you can review the diet information submitted by players: "
 msgstr ""
 
 msgid ""
 "Activates a page summarizing overdue players and their deadlines (payments, "
 "memberships, forms, casting, etc.)."
+msgstr ""
+
+msgid "Now you can review the organization's deadlines: "
 msgstr ""
 
 msgid "Organization T&C"
@@ -7120,9 +7245,15 @@ msgid ""
 "content to their character sheets."
 msgstr ""
 
+msgid "Now you can create the plots of the event: "
+msgstr ""
+
 msgid ""
 "Enables 'Factions' to organize characters into groups, either visible, "
 "transversal or secret."
+msgstr ""
+
+msgid "Now you can create the factions of the event: "
 msgstr ""
 
 msgid ""
@@ -7130,12 +7261,15 @@ msgid ""
 "or lore."
 msgstr ""
 
+msgid "Now you can create the handouts of the event: "
+msgstr ""
+
 msgid ""
 "Lets staff upload receipts for event expenses, tracking both the event "
 "expenses, and the amount to refund the staff."
 msgstr ""
 
-msgid "Now you can select expenses"
+msgid "Now staff members can upload expenses, and you can review them: "
 msgstr ""
 
 msgid ""
@@ -7148,12 +7282,18 @@ msgid ""
 "instruments."
 msgstr ""
 
+msgid "Now you can create outflows: "
+msgstr ""
+
 msgid "Verification payments"
 msgstr ""
 
 msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "
 "match and approve corresponding wire payments."
+msgstr ""
+
+msgid "Now you can verify wire payments: "
 msgstr ""
 
 msgid "Fiscal Budget"
@@ -7163,11 +7303,20 @@ msgid ""
 "Generates an annual summary of fiscal activity for the Italian budget report."
 msgstr ""
 
+msgid "Now you can review the annual balance: "
+msgstr ""
+
 msgid "Enables payment processing, specifying which payment methods to accept."
+msgstr ""
+
+msgid "Now you can set the payment gateways settings: "
 msgstr ""
 
 msgid ""
 "Enables members to request a refund (a money transfer from the organization)"
+msgstr ""
+
+msgid "Now players can create refund requests, and you can review them: "
 msgstr ""
 
 msgid "Transaction fee"
@@ -7178,6 +7327,9 @@ msgid ""
 "adding it to the final ticket price."
 msgstr ""
 
+msgid "Now you can set the fee for each payment gateway: "
+msgstr ""
+
 msgid "Opening date"
 msgstr ""
 
@@ -7186,9 +7338,15 @@ msgid ""
 "it closed until then."
 msgstr ""
 
+msgid "Now you can set the registration opening date: "
+msgstr ""
+
 msgid ""
 "Adds a link to legal notices on every page, and provides a management panel "
 "link to edit the content of that notice."
+msgstr ""
+
+msgid "Now you can set the legal notice text: "
 msgstr ""
 
 msgid ""
@@ -7196,7 +7354,13 @@ msgid ""
 "then be used to purchase skills."
 msgstr ""
 
+msgid "Now you can create abilities, starting from their types: "
+msgstr ""
+
 msgid "Allows players to create and modify their own characters freely."
+msgstr ""
+
+msgid "Now you can set the player editing settings: "
 msgstr ""
 
 msgid "Organisation tax"
@@ -7207,12 +7371,18 @@ msgid ""
 "for the organisation."
 msgstr ""
 
+msgid "Now you can set the organization tax options: "
+msgstr ""
+
 msgid "Centaurs"
 msgstr ""
 
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "
 "and optionally assigns a result."
+msgstr ""
+
+msgid "Now you can se the special page options: "
 msgstr ""
 
 msgid "Create Organization"
@@ -7299,9 +7469,15 @@ msgstr ""
 msgid "Adds a page where you can define shorter URLs for long links."
 msgstr ""
 
+msgid "Now you can create url shortners: "
+msgstr ""
+
 msgid ""
 "Enables the definition of surcharges that are added to every registration "
 "made after a specified date."
+msgstr ""
+
+msgid "Now you can create registration surcharges: "
 msgstr ""
 
 msgid "Advanced features"
@@ -7315,6 +7491,9 @@ msgstr ""
 msgid ""
 "Enables managing of entry of revenue for an event that do not originate from "
 "player registrations."
+msgstr ""
+
+msgid "Now you can create inflows: "
 msgstr ""
 
 msgid ""
@@ -7350,10 +7529,16 @@ msgid ""
 "emails it to the user."
 msgstr ""
 
+msgid "Now you can create the receipt text: "
+msgstr ""
+
 msgid "Register of volunteers"
 msgstr ""
 
 msgid "Enables a volunteer register, as required by Italian RUNTS regulations."
+msgstr ""
+
+msgid "Now you can review the volunteers registry: "
 msgstr ""
 
 msgid "Default miscellany"
@@ -7389,6 +7574,9 @@ msgstr ""
 msgid "Shows the calculated tax amount on each payment."
 msgstr ""
 
+msgid "Now you can set the taxes options: "
+msgstr ""
+
 msgid "Delegated accounts"
 msgstr ""
 
@@ -7402,6 +7590,9 @@ msgid ""
 "provided to the gift recipient for registration."
 msgstr ""
 
+msgid "Now you can select which tickets can be gifted: "
+msgstr ""
+
 msgid "Allows a user to reserve extra tickets in addition to their own."
 msgstr ""
 
@@ -7410,15 +7601,24 @@ msgid ""
 "players."
 msgstr ""
 
+msgid "Now you can create characters: "
+msgstr ""
+
 msgid ""
 "Lets you create 'template' events whose configurations and settings can be "
 "used as a starting point for other events."
+msgstr ""
+
+msgid "Now you can create event templates: "
 msgstr ""
 
 msgid "Fiscal code check"
 msgstr ""
 
 msgid "Check the validity of the fiscal code."
+msgstr ""
+
+msgid "Now you can peform the fiscal code validity check: "
 msgstr ""
 
 msgid "Manage the organization main settings"

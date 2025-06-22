@@ -1,0 +1,19 @@
+{% extends "utils.html" %}
+{% load i18n show_tags %}
+{% block title %}
+    {% trans "Features activated" %}
+    - {{ run }}
+{% endblock title %}
+{% block content %}
+    {% trans "You have activated the following features, for each here's the links to follow: " %}
+    <table class="no_csv">
+        {% for feature in new_features %}
+            <tr>
+                <td>{{ feature.name }}</td>
+                <td>
+                    <a href="{{ follow_link }}" target="_blank">{% blocktrans %}{{ feature.after_text }}{% endblocktrans %}</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock content %}

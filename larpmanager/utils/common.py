@@ -637,3 +637,8 @@ def _search_char_reg(ctx, char, js):
     if {"cover", "user_character"}.issubset(get_event_features(ctx["run"].event_id)):
         if char.cover:
             js["player_prof"] = char.thumb.url
+
+
+def clear_messages(request):
+    if hasattr(request, "_messages"):
+        request._messages._queued_messages.clear()

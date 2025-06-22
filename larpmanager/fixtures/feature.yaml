@@ -9,7 +9,7 @@
     module: 1
     placeholder: false
     order: 240
-    after_text: ''
+    after_text: 'Now you can create prologues for the event: '
     after_link: orga_prologues
 - model: larpmanager.feature
   pk: 7
@@ -22,8 +22,8 @@
     module: 5
     placeholder: false
     order: 20
-    after_text: ''
-    after_link: orga_assignments
+    after_text: 'Now you can create quests for the event: '
+    after_link: orga_quests
 - model: larpmanager.feature
   pk: 10
   fields:
@@ -34,7 +34,7 @@
     module: 3
     placeholder: false
     order: 10
-    after_text: ''
+    after_text: 'Now you can copy elements from an other event: '
     after_link: orga_copy
 - model: larpmanager.feature
   pk: 11
@@ -47,8 +47,8 @@
     module: 2
     placeholder: false
     order: 50
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can set the optional amount field: '
+    after_link: config/pay_what_you_want
 - model: larpmanager.feature
   pk: 12
   fields:
@@ -60,7 +60,7 @@
     module: 2
     placeholder: false
     order: 30
-    after_text: ''
+    after_text: 'Now you can create discounts for the event: '
     after_link: orga_discounts
 - model: larpmanager.feature
   pk: 15
@@ -86,8 +86,8 @@
     module: 4
     placeholder: false
     order: 20
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can set the reminder options: '
+    after_link: config/remind
 - model: larpmanager.feature
   pk: 20
   fields:
@@ -99,8 +99,8 @@
     module: 2
     placeholder: false
     order: 9999
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can set the discount options: '
+    after_link: config/bring_friend
 - model: larpmanager.feature
   pk: 21
   fields:
@@ -112,7 +112,7 @@
     module: 1
     placeholder: false
     order: 25
-    after_text: ''
+    after_text: 'Now you can set the PDF generation options: '
     after_link: orga_characters_pdf
 - model: larpmanager.feature
   pk: 24
@@ -125,8 +125,8 @@
     module: 3
     placeholder: false
     order: 20
-    after_text: ''
-    after_link: orga_workshop_options
+    after_text: 'Now you can start creating workshops, starting from modules: '
+    after_link: orga_workshop_modules
 - model: larpmanager.feature
   pk: 25
   fields:
@@ -138,20 +138,20 @@
     module: 7
     placeholder: false
     order: 60
-    after_text: ''
+    after_text: 'Now you can start creating speed-larps: '
     after_link: orga_speedlarps
 - model: larpmanager.feature
   pk: 26
   fields:
     name: Safety
-    descr: Lets players safely submit lines, veils, and other safety-related information.
+    descr: Lets staff access the safety information submitted by players.
     slug: safety
-    overall: true
+    overall: false
     module: 8
     placeholder: false
     order: 20
-    after_text: '-'
-    after_link: '-'
+    after_text: 'Now you can review the safety information submitted by players: '
+    after_link: orga_safety
 - model: larpmanager.feature
   pk: 27
   fields:
@@ -163,8 +163,8 @@
     module: 5
     placeholder: false
     order: 10
-    after_text: ''
-    after_link: orga_casting_preferences
+    after_text: 'Now you can set the casting options: '
+    after_link: config/casting
 - model: larpmanager.feature
   pk: 28
   fields:
@@ -176,8 +176,8 @@
     module: 8
     placeholder: false
     order: 10
-    after_text: '-'
-    after_link: '-'
+    after_text: 'Now you can review players'' questions: '
+    after_link: exe_questions
 - model: larpmanager.feature
   pk: 31
   fields:
@@ -189,7 +189,7 @@
     module: 2
     placeholder: false
     order: 40
-    after_text: ''
+    after_text: 'Now players can submit collections, and you can review them: '
     after_link: exe_collections
 - model: larpmanager.feature
   pk: 32
@@ -201,7 +201,7 @@
     module: 4
     placeholder: false
     order: 30
-    after_text: '-'
+    after_text: 'Now players can submit preregistrations, and you can review them: '
     after_link: exe_pre_registrations
 - model: larpmanager.feature
   pk: 34
@@ -226,7 +226,7 @@
     module: 2
     placeholder: false
     order: 20
-    after_text: ''
+    after_text: 'Now players can submit donation, and you can review them: '
     after_link: exe_donations
 - model: larpmanager.feature
   pk: 40
@@ -239,8 +239,8 @@
     module: 8
     placeholder: false
     order: 60
-    after_text: '-'
-    after_link: '-'
+    after_text: 'Now you can review users mailing list: '
+    after_link: exe_newsletter
 - model: larpmanager.feature
   pk: 43
   fields:
@@ -252,7 +252,7 @@
     module: 3
     placeholder: false
     order: 30
-    after_text: ''
+    after_text: 'Now you can host files in the platform: '
     after_link: orga_utils
 - model: larpmanager.feature
   pk: 44
@@ -265,8 +265,8 @@
     module: 7
     placeholder: false
     order: 40
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can set customization options: '
+    after_link: config/custom_character
 - model: larpmanager.feature
   pk: 45
   fields:
@@ -278,8 +278,8 @@
     module: 8
     placeholder: false
     order: 40
-    after_text: ''
-    after_link: exe_membership_registry
+    after_text: 'Now you can review all organizations''s members: '
+    after_link: exe_membership
 - model: larpmanager.feature
   pk: 46
   fields:
@@ -304,8 +304,8 @@
     module: 7
     placeholder: false
     order: 40
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can set the external mail server settings: '
+    after_link: config/custom_mail_server
 - model: larpmanager.feature
   pk: 50
   fields:
@@ -317,8 +317,8 @@
     module: 4
     placeholder: false
     order: 90
-    after_text: ''
-    after_link: orga_lottery
+    after_text: 'Now you can create the lottery ticket: '
+    after_link: orga_registration_tickets
 - model: larpmanager.feature
   pk: 51
   fields:
@@ -330,8 +330,8 @@
     module: 4
     placeholder: false
     order: 70
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can create the filler ticket: '
+    after_link: orga_registration_tickets
 - model: larpmanager.feature
   pk: 52
   fields:
@@ -356,8 +356,8 @@
     module: 4
     placeholder: false
     order: 60
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can create the waiting ticket: '
+    after_link: orga_registration_tickets
 - model: larpmanager.feature
   pk: 56
   fields:
@@ -369,8 +369,8 @@
     module: 7
     placeholder: false
     order: 10
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can set the terms and conditions text: '
+    after_link: orga_texts
 - model: larpmanager.feature
   pk: 57
   fields:
@@ -394,8 +394,8 @@
     module: 4
     placeholder: false
     order: 30
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can set the external registration link: '
+    after_link: orga_run
 - model: larpmanager.feature
   pk: 60
   fields:
@@ -407,7 +407,7 @@
     module: 3
     placeholder: false
     order: 40
-    after_text: ''
+    after_text: 'Now you can review the event''s problems: '
     after_link: orga_problems
 - model: larpmanager.feature
   pk: 62
@@ -421,7 +421,7 @@
     module: 2
     placeholder: false
     order: 20
-    after_text: ''
+    after_text: 'Now you can set the dynamic installments: '
     after_link: orga_registration_quotas
 - model: larpmanager.feature
   pk: 63
@@ -434,8 +434,8 @@
     module: 8
     placeholder: false
     order: 90
-    after_text: ''
-    after_link: exe_vote
+    after_text: Now you can set the vote options
+    after_link: config/vote
 - model: larpmanager.feature
   pk: 65
   fields:
@@ -446,7 +446,7 @@
     module: 8
     placeholder: false
     order: 80
-    after_text: ''
+    after_text: 'Now you can create badges: '
     after_link: exe_badges
 - model: larpmanager.feature
   pk: 66
@@ -459,7 +459,7 @@
     module: 3
     placeholder: false
     order: 20
-    after_text: ''
+    after_text: 'Now you can add inventory items: '
     after_link: exe_inventory
 - model: larpmanager.feature
   pk: 69
@@ -472,8 +472,8 @@
     module: 4
     placeholder: false
     order: 20
-    after_text: ''
-    after_link: orga_registration_secret
+    after_text: 'Now you can set the registration secret link: '
+    after_link: orga_run
 - model: larpmanager.feature
   pk: 74
   fields:
@@ -485,20 +485,20 @@
     module: 2
     placeholder: false
     order: 10
-    after_text: ''
+    after_text: 'Now you can create fixed installments: '
     after_link: orga_registration_installments
 - model: larpmanager.feature
   pk: 75
   fields:
     name: Relationships
-    descr: Allows authors to prepare a list of inter-character relationships.
+    descr: Allows authors to add relationships to characters.
     slug: relationships
     overall: false
     module: 1
     placeholder: false
     order: 200
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can add relationships when editing a character: '
+    after_link: orga_characters
 - model: larpmanager.feature
   pk: 77
   fields:
@@ -510,7 +510,7 @@
     module: 4
     placeholder: false
     order: 40
-    after_text: ''
+    after_text: 'Now you can define registration form sections: '
     after_link: orga_registration_sections
 - model: larpmanager.feature
   pk: 79
@@ -536,8 +536,8 @@
     module: 4
     placeholder: false
     order: 80
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can create the ''patron'' and ''reduced'' tickets: '
+    after_link: orga_registration_tickets
 - model: larpmanager.feature
   pk: 86
   fields:
@@ -549,7 +549,7 @@
     module: 2
     placeholder: false
     order: 140
-    after_text: ''
+    after_text: 'Now you can review the historical accounting informations: '
     after_link: exe_accounting_rec
 - model: larpmanager.feature
   pk: 88
@@ -575,21 +575,20 @@
     module: 1
     placeholder: false
     order: 110
-    after_text: ''
+    after_text: 'Now you can create the progress steps: '
     after_link: orga_progress_steps
 - model: larpmanager.feature
   pk: 93
   fields:
     name: Diet
-    descr: Allows players to securely input dietary restrictions/allergies in their
-      profiles.
+    descr: Lets staff access the diet information submitted by players.
     slug: diet
-    overall: true
+    overall: false
     module: 8
     placeholder: false
     order: 30
-    after_text: '-'
-    after_link: '-'
+    after_text: 'Now you can review the diet information submitted by players: '
+    after_link: orga_diet
 - model: larpmanager.feature
   pk: 94
   fields:
@@ -601,7 +600,7 @@
     module: 4
     placeholder: false
     order: 10
-    after_text: '-'
+    after_text: 'Now you can review the organization''s deadlines: '
     after_link: exe_deadlines
 - model: larpmanager.feature
   pk: 95
@@ -614,8 +613,8 @@
     module: 7
     placeholder: false
     order: 10
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can set the terms and conditions text: '
+    after_link: exe_texts
 - model: larpmanager.feature
   pk: 103
   fields:
@@ -627,7 +626,7 @@
     module: 1
     placeholder: false
     order: 130
-    after_text: ''
+    after_text: 'Now you can create the plots of the event: '
     after_link: orga_plots
 - model: larpmanager.feature
   pk: 104
@@ -640,7 +639,7 @@
     module: 1
     placeholder: false
     order: 120
-    after_text: ''
+    after_text: 'Now you can create the factions of the event: '
     after_link: orga_factions
 - model: larpmanager.feature
   pk: 105
@@ -653,7 +652,7 @@
     module: 1
     placeholder: false
     order: 140
-    after_text: ''
+    after_text: 'Now you can create the handouts of the event: '
     after_link: orga_handouts
 - model: larpmanager.feature
   pk: 106
@@ -666,7 +665,7 @@
     module: 2
     placeholder: false
     order: 30
-    after_text: Now you can select expenses
+    after_text: 'Now staff members can upload expenses, and you can review them: '
     after_link: exe_expenses
 - model: larpmanager.feature
   pk: 107
@@ -679,8 +678,8 @@
     module: 2
     placeholder: false
     order: 50
-    after_text: '-'
-    after_link: exe_credits
+    after_text: ''
+    after_link: ''
 - model: larpmanager.feature
   pk: 108
   fields:
@@ -692,7 +691,7 @@
     module: 2
     placeholder: false
     order: 90
-    after_text: '-'
+    after_text: 'Now you can create outflows: '
     after_link: exe_outflows
 - model: larpmanager.feature
   pk: 109
@@ -705,7 +704,7 @@
     module: 2
     placeholder: false
     order: 130
-    after_text: ''
+    after_text: 'Now you can verify wire payments: '
     after_link: exe_verification
 - model: larpmanager.feature
   pk: 110
@@ -717,7 +716,7 @@
     module: 10
     placeholder: false
     order: 10
-    after_text: ''
+    after_text: 'Now you can review the annual balance: '
     after_link: exe_balance
 - model: larpmanager.feature
   pk: 111
@@ -729,8 +728,8 @@
     module: 2
     placeholder: false
     order: 10
-    after_text: '-'
-    after_link: exe_invoices
+    after_text: 'Now you can set the payment gateways settings: '
+    after_link: exe_payment_details
 - model: larpmanager.feature
   pk: 112
   fields:
@@ -741,7 +740,7 @@
     module: 2
     placeholder: false
     order: 60
-    after_text: ''
+    after_text: 'Now players can create refund requests, and you can review them: '
     after_link: exe_refunds
 - model: larpmanager.feature
   pk: 113
@@ -754,8 +753,8 @@
     module: 2
     placeholder: false
     order: 15
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can set the fee for each payment gateway: '
+    after_link: exe_payment_details
 - model: larpmanager.feature
   pk: 114
   fields:
@@ -767,8 +766,8 @@
     module: 4
     placeholder: false
     order: 10
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can set the registration opening date: '
+    after_link: orga_run
 - model: larpmanager.feature
   pk: 115
   fields:
@@ -780,8 +779,8 @@
     module: 6
     placeholder: false
     order: 10
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can set the legal notice text: '
+    after_link: exe_texts
 - model: larpmanager.feature
   pk: 118
   fields:
@@ -793,8 +792,8 @@
     module: 7
     placeholder: false
     order: 50
-    after_text: ''
-    after_link: orga_px_deliveries
+    after_text: 'Now you can create abilities, starting from their types: '
+    after_link: orga_px_ability_types
 - model: larpmanager.feature
   pk: 120
   fields:
@@ -805,8 +804,8 @@
     module: 7
     placeholder: false
     order: 30
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can set the player editing settings: '
+    after_link: config/user_character
 - model: larpmanager.feature
   pk: 121
   fields:
@@ -818,8 +817,8 @@
     module: 2
     placeholder: false
     order: 110
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can set the organization tax options: '
+    after_link: config/organization_tax
 - model: larpmanager.feature
   pk: 124
   fields:
@@ -831,8 +830,8 @@
     module: 10
     placeholder: false
     order: 9999
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can se the special page options: '
+    after_link: config/centauri
 - model: larpmanager.feature
   pk: 125
   fields:
@@ -983,7 +982,7 @@
     module: 3
     placeholder: false
     order: 10
-    after_text: ''
+    after_text: 'Now you can create url shortners: '
     after_link: exe_urlshortner
 - model: larpmanager.feature
   pk: 139
@@ -996,7 +995,7 @@
     module: 2
     placeholder: false
     order: 40
-    after_text: ''
+    after_text: 'Now you can create registration surcharges: '
     after_link: orga_registration_surcharges
 - model: larpmanager.feature
   pk: 140
@@ -1022,7 +1021,7 @@
     module: 2
     placeholder: false
     order: 80
-    after_text: '-'
+    after_text: 'Now you can create inflows: '
     after_link: exe_inflows
 - model: larpmanager.feature
   pk: 146
@@ -1105,12 +1104,12 @@
     descr: Automatically generates a customizable PDF receipt for each payment and
       emails it to the user.
     slug: receipts
-    overall: false
+    overall: true
     module: 2
     placeholder: false
     order: 9999
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can create the receipt text: '
+    after_link: exe_texts
 - model: larpmanager.feature
   pk: 158
   fields:
@@ -1121,7 +1120,7 @@
     module: 10
     placeholder: false
     order: 20
-    after_text: ''
+    after_text: 'Now you can review the volunteers registry: '
     after_link: exe_volunteer_registry
 - model: larpmanager.feature
   pk: 162
@@ -1253,8 +1252,8 @@
     module: 2
     placeholder: false
     order: 100
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can set the taxes options: '
+    after_link: config/vat
 - model: larpmanager.feature
   pk: 174
   fields:
@@ -1279,8 +1278,8 @@
     module: 2
     placeholder: false
     order: 60
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can select which tickets can be gifted: '
+    after_link: orga_registration_tickets
 - model: larpmanager.feature
   pk: 177
   fields:
@@ -1304,7 +1303,7 @@
     module: 1
     placeholder: false
     order: 1
-    after_text: ''
+    after_text: 'Now you can create characters: '
     after_link: orga_character_form
 - model: larpmanager.feature
   pk: 179
@@ -1317,7 +1316,7 @@
     module: 7
     placeholder: false
     order: 1
-    after_text: ''
+    after_text: 'Now you can create event templates: '
     after_link: exe_templates
 - model: larpmanager.feature
   pk: 185
@@ -1329,5 +1328,5 @@
     module: 10
     placeholder: false
     order: 30
-    after_text: ''
-    after_link: ''
+    after_text: 'Now you can peform the fiscal code validity check: '
+    after_link: exe_membership_check
