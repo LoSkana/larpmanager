@@ -52,12 +52,18 @@ class FeatureForm(MyForm):
                 self.initial[f"mod_{module.id}"] = init_features
 
     def _save_features(self, instance):
+        old_features = set(instance.features.values_list("id", flat=True))
         instance.features.clear()
+
         features_id = []
         for module_id in FeatureModule.objects.values_list("pk", flat=True):
             key = f"mod_{module_id}"
             if key not in self.cleaned_data:
                 continue
             features_id.extend([int(v) for v in self.cleaned_data[key]])
+
         instance.features.set(features_id)
         instance.save()
+
+        new_features = set(features_id)
+        self.added_features = new_features - old_features

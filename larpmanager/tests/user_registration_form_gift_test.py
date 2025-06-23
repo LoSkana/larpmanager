@@ -80,7 +80,7 @@ def prepare(page, live_server):
     page.get_by_role("button", name="Confirm", exact=True).click()
 
     # Activate gift
-    go_to(page, live_server, "/manage/features/175/on")
+    go_to(page, live_server, "/test/1/manage/features/175/on")
 
     go_to(page, live_server, "/test/1/manage/registrations/form/")
 

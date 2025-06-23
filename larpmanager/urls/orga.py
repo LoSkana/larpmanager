@@ -851,6 +851,11 @@ urlpatterns = [
         name="orga_appearance",
     ),
     path(
+        "<slug:s>/<int:n>/manage/config/<slug:section>/",
+        views_oe.orga_config,
+        name="orga_config",
+    ),
+    path(
         "<slug:s>/<int:n>/manage/config/",
         views_oe.orga_config,
         name="orga_config",

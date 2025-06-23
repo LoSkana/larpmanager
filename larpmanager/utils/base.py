@@ -81,13 +81,15 @@ def check_assoc_permission(request, slug):
     ctx = def_user_ctx(request)
     if not has_assoc_permission(request, slug):
         raise PermissionError()
-    feature = get_assoc_permission_feature(slug)
+    (feature, tutorial) = get_assoc_permission_feature(slug)
     if feature != "def" and feature not in request.assoc["features"]:
         raise FeatureError(path=request.path, feature=feature, run=0)
     ctx["manage"] = 1
     get_index_assoc_permissions(ctx, request, request.assoc["id"])
     ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
     ctx["exe_page"] = 1
+    if "tutorial" not in ctx:
+        ctx["tutorial"] = tutorial
     return ctx
 
 

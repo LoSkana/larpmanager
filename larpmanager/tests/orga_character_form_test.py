@@ -45,10 +45,10 @@ def orga_character_form(live_server, page):
     login_orga(page, live_server)
 
     # activate characters
-    go_to(page, live_server, "/manage/features/178/on")
+    go_to(page, live_server, "/test/1/manage/features/178/on")
 
     # activate player editor
-    go_to(page, live_server, "/manage/features/120/on")
+    go_to(page, live_server, "/test/1/manage/features/120/on")
 
     # set config
     go_to(page, live_server, "/test/1/manage/config")
