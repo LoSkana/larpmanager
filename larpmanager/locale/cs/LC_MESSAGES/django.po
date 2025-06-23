@@ -915,9 +915,6 @@ msgstr "Datum ukončení"
 msgid "Excluded"
 msgstr "S výjimkou"
 
-msgid "Exe Runs"
-msgstr "Exe Runs"
-
 msgid "Expected"
 msgstr "Očekávané"
 
@@ -971,9 +968,6 @@ msgstr "Přezdívka"
 
 msgid "Optional"
 msgstr "Volitelně"
-
-msgid "Orga Run"
-msgstr "Orga Run"
 
 msgid "Original"
 msgstr "Originál"
@@ -1167,15 +1161,6 @@ msgstr "Zápis na"
 msgid "Event T&C"
 msgstr "Podmínky a pravidla akce"
 
-msgid "Exe Event"
-msgstr "Událost Exe"
-
-msgid "Exe Roles"
-msgstr "Role Exe"
-
-msgid "Exe Texts"
-msgstr "Texty Exe"
-
 msgid "Factions:"
 msgstr "Skupiny:"
 
@@ -1202,9 +1187,6 @@ msgstr "Další běhy"
 
 msgid "Operation"
 msgstr "Operace"
-
-msgid "Orga Form"
-msgstr "Formulář Orga"
 
 msgid "Organizer"
 msgstr "Organizátor"
@@ -1398,12 +1380,6 @@ msgstr "Zpravodaj"
 msgid "Next quota"
 msgstr "Další kvóta"
 
-msgid "Orga Event"
-msgstr "Událost Orga"
-
-msgid "Orga Roles"
-msgstr "Role ve skupině Orga"
-
 msgid "Passengers"
 msgstr "Cestující"
 
@@ -1571,12 +1547,6 @@ msgstr "Výplata"
 
 msgid "Event texts"
 msgstr "Texty událostí"
-
-msgid "Exe Archive"
-msgstr "Archiv Exe"
-
-msgid "Exe Profile"
-msgstr "Profil Exe"
 
 msgid "Fiscal code"
 msgstr "Daňový zákoník"
@@ -1746,9 +1716,6 @@ msgstr "Výplata"
 msgid "Event status"
 msgstr "Stav události"
 
-msgid "Exe Features"
-msgstr "Funkce Exe"
-
 msgid "Experimental"
 msgstr "Experimentální"
 
@@ -1811,9 +1778,6 @@ msgstr "Nevybráno"
 
 msgid "Opening date"
 msgstr "Datum otevření"
-
-msgid "Orga Tickets"
-msgstr "Vstupenky Orga"
 
 msgid "Organization"
 msgstr "Sdružení"
@@ -2023,9 +1987,6 @@ msgstr "Není dokončeno"
 msgid "Number events"
 msgstr "Počet událostí"
 
-msgid "Orga Features"
-msgstr "Funkce společnosti Orga"
-
 msgid "Passages made"
 msgstr "Přijaté kroky"
 
@@ -2155,12 +2116,6 @@ msgstr "Šablona události"
 
 msgid "Event features"
 msgstr "Funkce události"
-
-msgid "Exe Accounting"
-msgstr "Účetnictví Exe"
-
-msgid "Exe Appearance"
-msgstr "Vzhled Exe"
 
 msgid "Executive Vote"
 msgstr "Hlasování vedení"
@@ -2324,9 +2279,6 @@ msgstr "Číslo dokumentu"
 msgid "Event not found"
 msgstr "Událost nebyla nalezena"
 
-msgid "Exe Send e-mail"
-msgstr "Exe Odeslat e-mail"
-
 msgid "Filter factions"
 msgstr "Skupiny filtrů"
 
@@ -2347,12 +2299,6 @@ msgstr "Víceřádkový text"
 
 msgid "Multiple choice"
 msgstr "Vícenásobná volba"
-
-msgid "Orga Accounting"
-msgstr "Účetnictví Orga"
-
-msgid "Orga Appearance"
-msgstr "Vzhled společnosti Orga"
 
 msgid "Overall balance"
 msgstr "Peněžní rozpočet"
@@ -2467,9 +2413,6 @@ msgstr "Účtování událostí"
 
 msgid "Event navigation"
 msgstr "Navigace v událostech"
-
-msgid "Exe Organization"
-msgstr "Organizace Exe"
 
 msgid "Foreign language"
 msgstr "Cizí jazyk"
@@ -2651,9 +2594,6 @@ msgstr "Stáhnout dokument"
 msgid "Element approved!"
 msgstr "Schválený prvek!"
 
-msgid "Exe Configuration"
-msgstr "Konfigurace Exe"
-
 msgid "Experience points"
 msgstr "Zkušenostní body"
 
@@ -2819,15 +2759,6 @@ msgstr "Kontroly členských údajů"
 msgid "New refund request"
 msgstr "Nová žádost o vrácení peněz"
 
-msgid "Orga Cancellations"
-msgstr "Zrušení služby Orga"
-
-msgid "Orga Configuration"
-msgstr "Konfigurace systému Orga"
-
-msgid "Orga Registrations"
-msgstr "Registrace Orga"
-
 msgid "Patron and Reduced"
 msgstr "Patron a snížené"
 
@@ -2966,9 +2897,6 @@ msgstr "Nekumulativní kód"
 
 msgid "Number of event run"
 msgstr "Číslo běhu události"
-
-msgid "Orga Sensitive data"
-msgstr "Orga Citlivé údaje"
 
 msgid "Password of account"
 msgstr "Heslo účtu"

@@ -915,9 +915,6 @@ msgstr "Einddatum"
 msgid "Excluded"
 msgstr "Exclusief"
 
-msgid "Exe Runs"
-msgstr "Exe-runs"
-
 msgid "Expected"
 msgstr "Verwacht"
 
@@ -971,9 +968,6 @@ msgstr "Bijnaam"
 
 msgid "Optional"
 msgstr "Optioneel"
-
-msgid "Orga Run"
-msgstr "Orga Run"
 
 msgid "Original"
 msgstr "Origineel"
@@ -1167,15 +1161,6 @@ msgstr "Inschrijving"
 msgid "Event T&C"
 msgstr "Evenement AV"
 
-msgid "Exe Event"
-msgstr "Exe Gebeurtenis"
-
-msgid "Exe Roles"
-msgstr "Exe Rollen"
-
-msgid "Exe Texts"
-msgstr "Exe teksten"
-
 msgid "Factions:"
 msgstr "Groepen:"
 
@@ -1202,9 +1187,6 @@ msgstr "Volgende runs"
 
 msgid "Operation"
 msgstr "Operatie"
-
-msgid "Orga Form"
-msgstr "Orga-formulier"
 
 msgid "Organizer"
 msgstr "Organisator"
@@ -1398,12 +1380,6 @@ msgstr "Nieuwsbrief"
 msgid "Next quota"
 msgstr "Volgende quota"
 
-msgid "Orga Event"
-msgstr "Orga Evenement"
-
-msgid "Orga Roles"
-msgstr "Orga Rollen"
-
 msgid "Passengers"
 msgstr "Passagiers"
 
@@ -1571,12 +1547,6 @@ msgstr "Uitbetaling"
 
 msgid "Event texts"
 msgstr "Evenementteksten"
-
-msgid "Exe Archive"
-msgstr "Exe Archief"
-
-msgid "Exe Profile"
-msgstr "Exe profiel"
 
 msgid "Fiscal code"
 msgstr "Belastingcode"
@@ -1746,9 +1716,6 @@ msgstr "Uitbetaling"
 msgid "Event status"
 msgstr "Gebeurtenisstatus"
 
-msgid "Exe Features"
-msgstr "Exe-functies"
-
 msgid "Experimental"
 msgstr "Experimenteel"
 
@@ -1811,9 +1778,6 @@ msgstr "Niet geselecteerd"
 
 msgid "Opening date"
 msgstr "Openingsdatum"
-
-msgid "Orga Tickets"
-msgstr "Orga Tickets"
 
 msgid "Organization"
 msgstr "Vereniging"
@@ -2023,9 +1987,6 @@ msgstr "Niet voltooid"
 msgid "Number events"
 msgstr "Aantal gebeurtenissen"
 
-msgid "Orga Features"
-msgstr "Orga functies"
-
 msgid "Passages made"
 msgstr "Ondernomen stappen"
 
@@ -2155,12 +2116,6 @@ msgstr "Evenement Sjabloon"
 
 msgid "Event features"
 msgstr "Functies van het evenement"
-
-msgid "Exe Accounting"
-msgstr "Exe Boekhouding"
-
-msgid "Exe Appearance"
-msgstr "Exe-uiterlijk"
 
 msgid "Executive Vote"
 msgstr "Stemming management"
@@ -2324,9 +2279,6 @@ msgstr "Documentnummer"
 msgid "Event not found"
 msgstr "Evenement niet gevonden"
 
-msgid "Exe Send e-mail"
-msgstr "Exe E-mail verzenden"
-
 msgid "Filter factions"
 msgstr "Filtergroepen"
 
@@ -2347,12 +2299,6 @@ msgstr "Meerregelige tekst"
 
 msgid "Multiple choice"
 msgstr "Meerkeuze"
-
-msgid "Orga Accounting"
-msgstr "Orga Boekhouding"
-
-msgid "Orga Appearance"
-msgstr "Orga Verschijning"
 
 msgid "Overall balance"
 msgstr "Kasbudget"
@@ -2467,9 +2413,6 @@ msgstr "Evenement Boekhouding"
 
 msgid "Event navigation"
 msgstr "Navigatie op evenementen"
-
-msgid "Exe Organization"
-msgstr "Exe Organisatie"
 
 msgid "Foreign language"
 msgstr "Vreemde taal"
@@ -2651,9 +2594,6 @@ msgstr "Document downloaden"
 msgid "Element approved!"
 msgstr "Goedgekeurd element!"
 
-msgid "Exe Configuration"
-msgstr "Exe-configuratie"
-
 msgid "Experience points"
 msgstr "Ervaringspunten"
 
@@ -2819,15 +2759,6 @@ msgstr "Gegevens van leden controleren"
 msgid "New refund request"
 msgstr "Nieuw verzoek om terugbetaling"
 
-msgid "Orga Cancellations"
-msgstr "Orga Annuleringen"
-
-msgid "Orga Configuration"
-msgstr "Orga-configuratie"
-
-msgid "Orga Registrations"
-msgstr "Orga Registraties"
-
 msgid "Patron and Reduced"
 msgstr "Beschermheer en Verminderd"
 
@@ -2966,9 +2897,6 @@ msgstr "Niet-cumulatieve code"
 
 msgid "Number of event run"
 msgstr "Evenement Runnummer"
-
-msgid "Orga Sensitive data"
-msgstr "Orga Gevoelige gegevens"
 
 msgid "Password of account"
 msgstr "Wachtwoord account"

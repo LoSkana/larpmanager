@@ -915,9 +915,6 @@ msgstr "Slutdatum"
 msgid "Excluded"
 msgstr "Exklusive"
 
-msgid "Exe Runs"
-msgstr "Exe körningar"
-
 msgid "Expected"
 msgstr "Förväntad"
 
@@ -971,9 +968,6 @@ msgstr "Smeknamn"
 
 msgid "Optional"
 msgstr "Valfritt"
-
-msgid "Orga Run"
-msgstr "Orga Run"
 
 msgid "Original"
 msgstr "Original"
@@ -1167,15 +1161,6 @@ msgstr "Anmälan"
 msgid "Event T&C"
 msgstr "Villkor för evenemang"
 
-msgid "Exe Event"
-msgstr "Exe-evenemang"
-
-msgid "Exe Roles"
-msgstr "Exe-roller"
-
-msgid "Exe Texts"
-msgstr "Exe-texter"
-
 msgid "Factions:"
 msgstr "Grupper:"
 
@@ -1202,9 +1187,6 @@ msgstr "Nästa körningar"
 
 msgid "Operation"
 msgstr "Drift"
-
-msgid "Orga Form"
-msgstr "Orga Form"
 
 msgid "Organizer"
 msgstr "Organisatör"
@@ -1398,12 +1380,6 @@ msgstr "Nyhetsbrev"
 msgid "Next quota"
 msgstr "Nästa kvot"
 
-msgid "Orga Event"
-msgstr "Orga Event"
-
-msgid "Orga Roles"
-msgstr "Orga Roller"
-
 msgid "Passengers"
 msgstr "Passagerare"
 
@@ -1571,12 +1547,6 @@ msgstr "Utbetalning"
 
 msgid "Event texts"
 msgstr "Händelsetexter"
-
-msgid "Exe Archive"
-msgstr "Exe-arkiv"
-
-msgid "Exe Profile"
-msgstr "Exe-profil"
 
 msgid "Fiscal code"
 msgstr "Skattekod"
@@ -1746,9 +1716,6 @@ msgstr "Utbetalning"
 msgid "Event status"
 msgstr "Status för händelse"
 
-msgid "Exe Features"
-msgstr "Exe-funktioner"
-
 msgid "Experimental"
 msgstr "Experimentell"
 
@@ -1811,9 +1778,6 @@ msgstr "Ej vald"
 
 msgid "Opening date"
 msgstr "Öppningsdatum"
-
-msgid "Orga Tickets"
-msgstr "Orga Biljetter"
 
 msgid "Organization"
 msgstr "Förening"
@@ -2023,9 +1987,6 @@ msgstr "Ej slutfört"
 msgid "Number events"
 msgstr "Antal evenemang"
 
-msgid "Orga Features"
-msgstr "Orga Funktioner"
-
 msgid "Passages made"
 msgstr "Åtgärder som vidtagits"
 
@@ -2155,12 +2116,6 @@ msgstr "Mall för evenemang"
 
 msgid "Event features"
 msgstr "Funktioner för evenemang"
-
-msgid "Exe Accounting"
-msgstr "Exe Redovisning"
-
-msgid "Exe Appearance"
-msgstr "Exe Utseende"
 
 msgid "Executive Vote"
 msgstr "Ledningens omröstning"
@@ -2324,9 +2279,6 @@ msgstr "Dokumentnummer"
 msgid "Event not found"
 msgstr "Händelsen hittades inte"
 
-msgid "Exe Send e-mail"
-msgstr "Exe Skicka e-post"
-
 msgid "Filter factions"
 msgstr "Filtrera grupper"
 
@@ -2347,12 +2299,6 @@ msgstr "Text på flera rader"
 
 msgid "Multiple choice"
 msgstr "Flera valmöjligheter"
-
-msgid "Orga Accounting"
-msgstr "Orga Redovisning"
-
-msgid "Orga Appearance"
-msgstr "Orga Utseende"
 
 msgid "Overall balance"
 msgstr "Budget för likvida medel"
@@ -2467,9 +2413,6 @@ msgstr "Redovisning av evenemang"
 
 msgid "Event navigation"
 msgstr "Navigation för evenemang"
-
-msgid "Exe Organization"
-msgstr "Exe Organisation"
 
 msgid "Foreign language"
 msgstr "Utländskt språk"
@@ -2651,9 +2594,6 @@ msgstr "Ladda ner dokument"
 msgid "Element approved!"
 msgstr "Godkänt element!"
 
-msgid "Exe Configuration"
-msgstr "Exe-konfiguration"
-
 msgid "Experience points"
 msgstr "Erfarenhetspoäng"
 
@@ -2819,15 +2759,6 @@ msgstr "Kontroll av medlemsuppgifter"
 msgid "New refund request"
 msgstr "Ny begäran om återbetalning"
 
-msgid "Orga Cancellations"
-msgstr "Orga Avbokningar"
-
-msgid "Orga Configuration"
-msgstr "Orga Konfiguration"
-
-msgid "Orga Registrations"
-msgstr "Orga Registreringar"
-
 msgid "Patron and Reduced"
 msgstr "Beskyddare och reducerad"
 
@@ -2966,9 +2897,6 @@ msgstr "Icke-kumulativ kod"
 
 msgid "Number of event run"
 msgstr "Händelsens löpnummer"
-
-msgid "Orga Sensitive data"
-msgstr "Orga Känsliga uppgifter"
 
 msgid "Password of account"
 msgstr "Lösenord för konto"

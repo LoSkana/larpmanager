@@ -915,9 +915,6 @@ msgstr "Date de fin"
 msgid "Excluded"
 msgstr "A l'exclusion de"
 
-msgid "Exe Runs"
-msgstr "Exécutions Exe"
-
 msgid "Expected"
 msgstr "Attendu"
 
@@ -971,9 +968,6 @@ msgstr "Surnom"
 
 msgid "Optional"
 msgstr "En option"
-
-msgid "Orga Run"
-msgstr "Orga Run"
 
 msgid "Original"
 msgstr "Original"
@@ -1167,15 +1161,6 @@ msgstr "Inscription"
 msgid "Event T&C"
 msgstr "Conditions générales d'utilisation"
 
-msgid "Exe Event"
-msgstr "Événement Exe"
-
-msgid "Exe Roles"
-msgstr "Rôles de l'Exe"
-
-msgid "Exe Texts"
-msgstr "Textes Exe"
-
 msgid "Factions:"
 msgstr "Les groupes :"
 
@@ -1202,9 +1187,6 @@ msgstr "Prochaines courses"
 
 msgid "Operation"
 msgstr "Fonctionnement"
-
-msgid "Orga Form"
-msgstr "Formulaire Orga"
 
 msgid "Organizer"
 msgstr "Organisateur"
@@ -1398,12 +1380,6 @@ msgstr "Bulletin d'information"
 msgid "Next quota"
 msgstr "Prochain quota"
 
-msgid "Orga Event"
-msgstr "Événement Orga"
-
-msgid "Orga Roles"
-msgstr "Rôles d'Orga"
-
 msgid "Passengers"
 msgstr "Passagers"
 
@@ -1571,12 +1547,6 @@ msgstr "Décaissement"
 
 msgid "Event texts"
 msgstr "Textes de l'événement"
-
-msgid "Exe Archive"
-msgstr "Archives Exe"
-
-msgid "Exe Profile"
-msgstr "Profil Exe"
 
 msgid "Fiscal code"
 msgstr "Code des impôts"
@@ -1746,9 +1716,6 @@ msgstr "Décaissement"
 msgid "Event status"
 msgstr "Statut de l'événement"
 
-msgid "Exe Features"
-msgstr "Caractéristiques Exe"
-
 msgid "Experimental"
 msgstr "Expérimental"
 
@@ -1811,9 +1778,6 @@ msgstr "Non sélectionné"
 
 msgid "Opening date"
 msgstr "Date d'ouverture"
-
-msgid "Orga Tickets"
-msgstr "Billets Orga"
 
 msgid "Organization"
 msgstr "Association"
@@ -2023,9 +1987,6 @@ msgstr "Pas terminé"
 msgid "Number events"
 msgstr "Nombre d'événements"
 
-msgid "Orga Features"
-msgstr "Caractéristiques d'Orga"
-
 msgid "Passages made"
 msgstr "Mesures prises"
 
@@ -2155,12 +2116,6 @@ msgstr "Modèle d'événement"
 
 msgid "Event features"
 msgstr "Caractéristiques de l'événement"
-
-msgid "Exe Accounting"
-msgstr "Comptabilité Exe"
-
-msgid "Exe Appearance"
-msgstr "Apparence de l'exe"
 
 msgid "Executive Vote"
 msgstr "Vote de la direction"
@@ -2324,9 +2279,6 @@ msgstr "Numéro du document"
 msgid "Event not found"
 msgstr "Événement non trouvé"
 
-msgid "Exe Send e-mail"
-msgstr "Exe Envoyer un e-mail"
-
 msgid "Filter factions"
 msgstr "Groupes de filtres"
 
@@ -2347,12 +2299,6 @@ msgstr "Texte multiligne"
 
 msgid "Multiple choice"
 msgstr "Choix multiple"
-
-msgid "Orga Accounting"
-msgstr "Orga Comptabilité"
-
-msgid "Orga Appearance"
-msgstr "Apparition d'Orga"
 
 msgid "Overall balance"
 msgstr "Budget de trésorerie"
@@ -2467,9 +2413,6 @@ msgstr "Comptabilité des événements"
 
 msgid "Event navigation"
 msgstr "Navigation pour les événements"
-
-msgid "Exe Organization"
-msgstr "Organisation Exe"
 
 msgid "Foreign language"
 msgstr "Langue étrangère"
@@ -2651,9 +2594,6 @@ msgstr "Télécharger le document"
 msgid "Element approved!"
 msgstr "Élément approuvé !"
 
-msgid "Exe Configuration"
-msgstr "Configuration de l'exe"
-
 msgid "Experience points"
 msgstr "Points d'expérience"
 
@@ -2819,15 +2759,6 @@ msgstr "Contrôle des données des membres"
 msgid "New refund request"
 msgstr "Nouvelle demande de remboursement"
 
-msgid "Orga Cancellations"
-msgstr "Annulations de l'Orga"
-
-msgid "Orga Configuration"
-msgstr "Configuration de l'Orga"
-
-msgid "Orga Registrations"
-msgstr "Inscriptions à l'Orga"
-
 msgid "Patron and Reduced"
 msgstr "Patron et réduit"
 
@@ -2966,9 +2897,6 @@ msgstr "Code non cumulatif"
 
 msgid "Number of event run"
 msgstr "Numéro d'exécution de l'événement"
-
-msgid "Orga Sensitive data"
-msgstr "Orga Données sensibles"
 
 msgid "Password of account"
 msgstr "Mot de passe du compte"

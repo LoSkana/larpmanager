@@ -915,9 +915,6 @@ msgstr "Sluttdato"
 msgid "Excluded"
 msgstr "Med unntak av"
 
-msgid "Exe Runs"
-msgstr "Exe Runs"
-
 msgid "Expected"
 msgstr "Forventet"
 
@@ -971,9 +968,6 @@ msgstr "Kallenavn"
 
 msgid "Optional"
 msgstr "Valgfritt"
-
-msgid "Orga Run"
-msgstr "Orga Run"
 
 msgid "Original"
 msgstr "Original"
@@ -1167,15 +1161,6 @@ msgstr "Innmelding"
 msgid "Event T&C"
 msgstr "Vilkår og betingelser for arrangementer"
 
-msgid "Exe Event"
-msgstr "Exe-arrangement"
-
-msgid "Exe Roles"
-msgstr "Exe-roller"
-
-msgid "Exe Texts"
-msgstr "Exe-tekster"
-
 msgid "Factions:"
 msgstr "Grupper:"
 
@@ -1202,9 +1187,6 @@ msgstr "Neste løp"
 
 msgid "Operation"
 msgstr "Drift"
-
-msgid "Orga Form"
-msgstr "Orga Form"
 
 msgid "Organizer"
 msgstr "Arrangør"
@@ -1398,12 +1380,6 @@ msgstr "Nyhetsbrev"
 msgid "Next quota"
 msgstr "Neste kvote"
 
-msgid "Orga Event"
-msgstr "Orga-arrangement"
-
-msgid "Orga Roles"
-msgstr "Orga-roller"
-
 msgid "Passengers"
 msgstr "Passasjerer"
 
@@ -1571,12 +1547,6 @@ msgstr "Utbetaling"
 
 msgid "Event texts"
 msgstr "Begivenhetstekster"
-
-msgid "Exe Archive"
-msgstr "Exe-arkivet"
-
-msgid "Exe Profile"
-msgstr "Exe-profil"
 
 msgid "Fiscal code"
 msgstr "Skatteregler"
@@ -1746,9 +1716,6 @@ msgstr "Utbetaling"
 msgid "Event status"
 msgstr "Status for hendelsen"
 
-msgid "Exe Features"
-msgstr "Exe-funksjoner"
-
 msgid "Experimental"
 msgstr "Eksperimentell"
 
@@ -1811,9 +1778,6 @@ msgstr "Ikke valgt"
 
 msgid "Opening date"
 msgstr "Åpningsdato"
-
-msgid "Orga Tickets"
-msgstr "Orga Billetter"
 
 msgid "Organization"
 msgstr "Forening"
@@ -2023,9 +1987,6 @@ msgstr "Ikke fullført"
 msgid "Number events"
 msgstr "Antall hendelser"
 
-msgid "Orga Features"
-msgstr "Orga-funksjoner"
-
 msgid "Passages made"
 msgstr "Tiltak som er iverksatt"
 
@@ -2155,12 +2116,6 @@ msgstr "Mal for arrangement"
 
 msgid "Event features"
 msgstr "Arrangementets funksjoner"
-
-msgid "Exe Accounting"
-msgstr "Exe Regnskap"
-
-msgid "Exe Appearance"
-msgstr "Exe-utseende"
 
 msgid "Executive Vote"
 msgstr "Avstemning i ledelsen"
@@ -2324,9 +2279,6 @@ msgstr "Dokumentnummer"
 msgid "Event not found"
 msgstr "Hendelsen ble ikke funnet"
 
-msgid "Exe Send e-mail"
-msgstr "Exe Send e-post"
-
 msgid "Filter factions"
 msgstr "Filtergrupper"
 
@@ -2347,12 +2299,6 @@ msgstr "Tekst på flere linjer"
 
 msgid "Multiple choice"
 msgstr "Flere valgmuligheter"
-
-msgid "Orga Accounting"
-msgstr "Orga Regnskap"
-
-msgid "Orga Appearance"
-msgstr "Orga-utseende"
 
 msgid "Overall balance"
 msgstr "Kontantbudsjett"
@@ -2467,9 +2413,6 @@ msgstr "Regnskap for arrangementer"
 
 msgid "Event navigation"
 msgstr "Navigering av hendelser"
-
-msgid "Exe Organization"
-msgstr "Exe-organisasjon"
 
 msgid "Foreign language"
 msgstr "Fremmedspråk"
@@ -2651,9 +2594,6 @@ msgstr "Last ned dokumentet"
 msgid "Element approved!"
 msgstr "Godkjent element!"
 
-msgid "Exe Configuration"
-msgstr "Exe-konfigurasjon"
-
 msgid "Experience points"
 msgstr "Erfaringspoeng"
 
@@ -2819,15 +2759,6 @@ msgstr "Kontroll av medlemsdata"
 msgid "New refund request"
 msgstr "Ny forespørsel om refusjon"
 
-msgid "Orga Cancellations"
-msgstr "Orga-avbestillinger"
-
-msgid "Orga Configuration"
-msgstr "Orga-konfigurasjon"
-
-msgid "Orga Registrations"
-msgstr "Orga-registreringer"
-
 msgid "Patron and Reduced"
 msgstr "Beskytter og redusert"
 
@@ -2966,9 +2897,6 @@ msgstr "Ikke-kumulativ kode"
 
 msgid "Number of event run"
 msgstr "Nummer på hendelsen"
-
-msgid "Orga Sensitive data"
-msgstr "Orga Sensitive data"
 
 msgid "Password of account"
 msgstr "Passord for konto"
