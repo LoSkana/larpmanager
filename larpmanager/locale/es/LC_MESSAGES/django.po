@@ -3124,6 +3124,9 @@ msgstr "Miembro del personal asignado"
 msgid "Character not visible"
 msgstr "Carácter no visible"
 
+msgid "Character sheet intro"
+msgstr "Introducción de la hoja de personaje"
+
 msgid "Code 'Bring a friend'"
 msgstr "Código de “Trae a un amigo”"
 

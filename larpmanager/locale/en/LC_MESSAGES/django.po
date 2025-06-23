@@ -2568,6 +2568,9 @@ msgid ""
 "characters will be shared"
 msgstr ""
 
+msgid "Character sheet intro"
+msgstr ""
+
 msgid "Terms and conditions"
 msgstr ""
 
@@ -6821,8 +6824,8 @@ msgid "Pay what you want"
 msgstr ""
 
 msgid ""
-"Allows players to add an optional extra amount to their registration fee (e."
-"g. for donations or to help cover others' fees)."
+"Allows players to add an optional extra amount to their registration fee "
+"(e.g. for donations or to help cover others' fees)."
 msgstr ""
 
 msgid ""

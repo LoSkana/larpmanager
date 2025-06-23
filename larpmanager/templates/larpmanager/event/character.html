@@ -32,6 +32,7 @@
                 <div class="sheet">
                     {% if check %}
                         <hr class="clear" />
+                        {% if intro %}{{ intro | safe }}{% endif %}
                         {% include "elements/sheet/pdf.html" %}
                         {% include "elements/sheet/px.html" %}
                         {% include "elements/sheet/factions.html" %}

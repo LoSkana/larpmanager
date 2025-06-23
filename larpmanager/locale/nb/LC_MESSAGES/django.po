@@ -3124,6 +3124,9 @@ msgstr "Tildelt medarbeider"
 msgid "Character not visible"
 msgstr "Tegn ikke synlig"
 
+msgid "Character sheet intro"
+msgstr "Intro til karakterark"
+
 msgid "Code 'Bring a friend'"
 msgstr "Ta med en vennekode"
 
