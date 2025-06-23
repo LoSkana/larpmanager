@@ -71,7 +71,7 @@ def prepare(page, live_server):
 
     page.get_by_role("button", name="Confirm", exact=True).click()
 
-    go_to(page, live_server, "/manage/payment/settings")
+    go_to(page, live_server, "/manage/payments/details")
     page.locator('#id_payment_methods input[type="checkbox"][value="1"]').check()
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("test wire")
