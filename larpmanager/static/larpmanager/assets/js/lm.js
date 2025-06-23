@@ -1,3 +1,5 @@
+$(".hide:visible").hide();
+
 window.addEventListener('DOMContentLoaded', function() {
 
 $.ajaxSetup({
@@ -25,8 +27,6 @@ $.ajaxSetup({
 });
 
 $(document).ready(function() {
-
-    $(".hide:visible").hide();
 
     $('#banner h1').textfill({
     });
@@ -97,14 +97,17 @@ $(document).ready(function() {
         }
     });
 
+    setTimeout(() => {
     // set select on sidebar
-    var currentUrl = window.location.href;
+    var currentUrl = window.location.pathname.replace(/\/$/, '');
     $('.sidebar-link').each(function() {
-        var linkHref = $(this).attr('href');
-        if (linkHref && currentUrl.includes(linkHref)) {
+        var linkHref = $(this).attr('href').replace(/\/$/, '');
+        var regex = new RegExp('^' + linkHref + '(?:\\/(\\d+|edit\\/\\d+))?\\/?$');
+        if (regex.test(currentUrl)) {
             $(this).addClass('select');
         }
     });
+    }, 100);
 
     // Menu.
             $menu_openers = $('#menu .opener');
