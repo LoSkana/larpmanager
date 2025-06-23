@@ -23,7 +23,7 @@
     placeholder: false
     order: 20
     after_text: Now you can create quests for the event
-    after_link: orga_quests
+    after_link: orga_quest_types
 - model: larpmanager.feature
   pk: 10
   fields:

@@ -5,7 +5,7 @@
         {% for obj in list %}
             <tr>
                 <td>
-                    {{ obj.text | safe }}
+                    {{ obj.text | safe }}:
                     <a href="{{ obj.href }}" target="_blank">{{ obj.link }}</a>
                     {% if obj.tutorial %}(<a href="{{ obj.tutorial }}" target="_blank">Tutorial</a>){% endif %}
                 </td>
