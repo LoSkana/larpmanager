@@ -3124,6 +3124,9 @@ msgstr "Przydzielony pracownik"
 msgid "Character not visible"
 msgstr "Postać niewidoczna"
 
+msgid "Character sheet intro"
+msgstr "Wprowadzenie do arkusza postaci"
+
 msgid "Code 'Bring a friend'"
 msgstr "Kod \"Przyprowadź znajomego"
 

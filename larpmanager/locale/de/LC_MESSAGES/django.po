@@ -3124,6 +3124,9 @@ msgstr "Zugewiesener Mitarbeiter"
 msgid "Character not visible"
 msgstr "Zeichen nicht sichtbar"
 
+msgid "Character sheet intro"
+msgstr "Charakterbogen Intro"
+
 msgid "Code 'Bring a friend'"
 msgstr "Bringen Sie einen Freundschaftscode mit"
 

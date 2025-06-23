@@ -2568,6 +2568,9 @@ msgid ""
 "characters will be shared"
 msgstr ""
 
+msgid "Character sheet intro"
+msgstr ""
+
 msgid "Terms and conditions"
 msgstr ""
 
