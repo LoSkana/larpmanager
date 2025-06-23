@@ -3067,6 +3067,9 @@ msgstr "Přidělený zaměstnanec"
 msgid "Character not visible"
 msgstr "Znak není viditelný"
 
+msgid "Character sheet intro"
+msgstr "Úvodní list postavy"
+
 msgid "Code 'Bring a friend'"
 msgstr "Přineste kód přítele"
 

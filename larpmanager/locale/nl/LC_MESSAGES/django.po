@@ -3067,6 +3067,9 @@ msgstr "Toegewezen medewerker"
 msgid "Character not visible"
 msgstr "Karakter niet zichtbaar"
 
+msgid "Character sheet intro"
+msgstr "Karakterblad intro"
+
 msgid "Code 'Bring a friend'"
 msgstr "Neem een vriendencode mee"
 

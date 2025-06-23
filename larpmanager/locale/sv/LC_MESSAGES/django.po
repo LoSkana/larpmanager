@@ -3067,6 +3067,9 @@ msgstr "Utsedd tjänsteman"
 msgid "Character not visible"
 msgstr "Karaktär inte synlig"
 
+msgid "Character sheet intro"
+msgstr "Introduktion till karaktärsblad"
+
 msgid "Code 'Bring a friend'"
 msgstr "Ta med en vän kod"
 

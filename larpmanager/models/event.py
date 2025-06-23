@@ -392,6 +392,7 @@ class EventButton(BaseConceptModel):
 
 
 class EventTextType(models.TextChoices):
+    INTRO = "i", _("Character sheet intro")
     TOC = "t", _("Terms and conditions")
     REGISTER = "r", _("Registration form")
     SEARCH = "s", _("Search")

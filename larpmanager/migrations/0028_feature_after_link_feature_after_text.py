@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("larpmanager", "0026_assocpermission_descr_eventpermission_descr"),
+        ("larpmanager", "0027_alter_eventtext_typ"),
     ]
 
     operations = [

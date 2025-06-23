@@ -681,6 +681,9 @@ class OrgaEventTextForm(MyForm):
         ch = EventTextType.choices
         delete_choice = []
 
+        if "character" not in self.params["features"]:
+            delete_choice.append(EventTextType.INTRO)
+
         if "event_tac" not in self.params["features"]:
             delete_choice.append(EventTextType.TOC)
 
