@@ -215,7 +215,9 @@ def check_event_permission(request, s, n, perm=None):
     if not has_event_permission(ctx, request, s, perm):
         raise PermissionError()
     if perm:
-        feature = get_event_permission_feature(perm)
+        (feature, tutorial) = get_event_permission_feature(perm)
+        if "tutorial" not in ctx:
+            ctx["tutorial"] = tutorial
         if feature != "def" and feature not in ctx["features"]:
             raise FeatureError(path=request.path, feature=feature, run=ctx["run"].id)
     get_index_event_permissions(ctx, request, s)

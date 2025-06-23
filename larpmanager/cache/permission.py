@@ -30,11 +30,12 @@ def assoc_permission_feature_key(slug):
 def update_assoc_permission_feature(slug):
     feature = AssocPermission.objects.select_related("feature").get(slug=slug).feature
     if feature.placeholder:
-        res = "def"
+        slug = "def"
     else:
-        res = feature.slug
-    cache.set(assoc_permission_feature_key(slug), res)
-    return res
+        slug = feature.slug
+    tutorial = feature.tutorial or ""
+    cache.set(assoc_permission_feature_key(slug), (slug, tutorial))
+    return slug
 
 
 def get_assoc_permission_feature(slug):
@@ -51,11 +52,12 @@ def event_permission_feature_key(slug):
 def update_event_permission_feature(slug):
     feature = EventPermission.objects.select_related("feature").get(slug=slug).feature
     if feature.placeholder:
-        res = "def"
+        slug = "def"
     else:
-        res = feature.slug
-    cache.set(event_permission_feature_key(slug), res)
-    return res
+        slug = feature.slug
+    tutorial = feature.tutorial or ""
+    cache.set(event_permission_feature_key(slug), (slug, tutorial))
+    return slug
 
 
 def get_event_permission_feature(slug):
