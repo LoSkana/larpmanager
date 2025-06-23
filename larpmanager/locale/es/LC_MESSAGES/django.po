@@ -2249,6 +2249,9 @@ msgstr "solicitud de reembolso"
 msgid "Bring a friend!"
 msgstr "¡Trae a un amigo!"
 
+msgid "Cache Reloading"
+msgstr "Recarga de cachés"
+
 msgid "Change password"
 msgstr "Recuperación de contraseñas"
 
@@ -2961,6 +2964,9 @@ msgstr "Ficha completa (Pdf)"
 msgid "Create new character"
 msgstr "Crear un nuevo personaje"
 
+msgid "Display sent e-mails"
+msgstr "Visualizar los correos electrónicos enviados"
+
 msgid "Download light sheet"
 msgstr "Descargar hoja de luz"
 
@@ -3440,6 +3446,9 @@ msgstr "¡Preinscripciones guardadas!"
 
 msgid "Provisional registration"
 msgstr "Registro provisional"
+
+msgid "Reload cached event data"
+msgstr "Recargar datos de eventos en caché"
 
 msgid "Secret registration link"
 msgstr "Enlace de inscripción secreto"
@@ -4810,6 +4819,9 @@ msgstr "Esta página muestra los tipos de prólogo del evento."
 msgid "Configure gateways to process player payments"
 msgstr "Configurar pasarelas para procesar los pagos de los jugadores"
 
+msgid "Customize buttons in the event navigation bar"
+msgstr "Personalizar los botones de la barra de navegación de eventos"
+
 msgid "Elements you wish to avoid in the assignment:"
 msgstr "Elementos que desea evitar en la tarea:"
 
@@ -4922,6 +4934,9 @@ msgstr "Añadido a la página de registro, antes del formulario"
 
 msgid "Check consistency of the members’ personal data"
 msgstr "Comprobar la coherencia de los datos personales de los afiliados"
+
+msgid "Customize specific texts on the event interface"
+msgstr "Personalizar textos específicos en la interfaz de eventos"
 
 msgid "Do you wish to be always updated on our events?"
 msgstr "¿Quieres estar al día de nuestros eventos?"

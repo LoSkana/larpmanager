@@ -2249,6 +2249,9 @@ msgstr "žádost o proplacení"
 msgid "Bring a friend!"
 msgstr "Přiveďte kamaráda!"
 
+msgid "Cache Reloading"
+msgstr "Doplňování mezipaměti"
+
 msgid "Change password"
 msgstr "Obnovení hesla"
 
@@ -2961,6 +2964,9 @@ msgstr "Kompletní list (Pdf)"
 msgid "Create new character"
 msgstr "Vytvoření nové postavy"
 
+msgid "Display sent e-mails"
+msgstr "Zobrazení odeslaných e-mailů"
+
 msgid "Download light sheet"
 msgstr "Stáhnout světelný list"
 
@@ -3440,6 +3446,9 @@ msgstr "Předběžné registrace jsou uloženy!"
 
 msgid "Provisional registration"
 msgstr "Prozatímní registrace"
+
+msgid "Reload cached event data"
+msgstr "Načtení dat událostí z mezipaměti"
 
 msgid "Secret registration link"
 msgstr "Tajný registrační odkaz"
@@ -4809,6 +4818,9 @@ msgstr "Tato stránka shrnuje typy prologů událostí."
 msgid "Configure gateways to process player payments"
 msgstr "Konfigurace bran pro zpracování plateb hráčů"
 
+msgid "Customize buttons in the event navigation bar"
+msgstr "Přizpůsobení tlačítek na navigačním panelu události"
+
 msgid "Elements you wish to avoid in the assignment:"
 msgstr "Prvky, kterým se chcete v zadání vyhnout:"
 
@@ -4921,6 +4933,9 @@ msgstr "Přidáno na registrační stránku před formulář"
 
 msgid "Check consistency of the members’ personal data"
 msgstr "Kontrola konzistence osobních údajů členů"
+
+msgid "Customize specific texts on the event interface"
+msgstr "Přizpůsobení konkrétních textů v rozhraní události"
 
 msgid "Do you wish to be always updated on our events?"
 msgstr "Chcete být informováni o našich akcích?"

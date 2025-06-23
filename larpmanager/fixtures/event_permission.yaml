@@ -5,7 +5,7 @@
     descr: 'Manage the event settings: name, description,  and other data'
     slug: orga_event
     number: 11
-    feature: 197
+    feature: 215
 - model: larpmanager.eventpermission
   pk: 2
   fields:
@@ -13,7 +13,7 @@
     descr: 'Manage the run settings: date, registrations, elements visibility'
     slug: orga_run
     number: 21
-    feature: 196
+    feature: 214
 - model: larpmanager.eventpermission
   pk: 3
   fields:
@@ -21,7 +21,7 @@
     descr: Assign roles to staff members, and give access to specific functions
     slug: orga_roles
     number: 31
-    feature: 195
+    feature: 213
 - model: larpmanager.eventpermission
   pk: 4
   fields:
@@ -29,7 +29,7 @@
     descr: Manage the configuration of the activated features
     slug: orga_config
     number: 41
-    feature: 194
+    feature: 212
 - model: larpmanager.eventpermission
   pk: 5
   fields:
@@ -37,7 +37,7 @@
     descr: Activate features for the event
     slug: orga_features
     number: 51
-    feature: 193
+    feature: 211
 - model: larpmanager.eventpermission
   pk: 6
   fields:
@@ -45,7 +45,7 @@
     descr: 'Set visual aspect: colors, background, cover image'
     slug: orga_appearance
     number: 11
-    feature: 192
+    feature: 210
 - model: larpmanager.eventpermission
   pk: 8
   fields:
@@ -69,7 +69,7 @@
     descr: Manage event accounting
     slug: orga_accounting
     number: 11
-    feature: 191
+    feature: 209
 - model: larpmanager.eventpermission
   pk: 11
   fields:
@@ -141,7 +141,7 @@
     descr: Review players' sensitive data
     slug: orga_sensitive
     number: 31
-    feature: 190
+    feature: 208
 - model: larpmanager.eventpermission
   pk: 20
   fields:
@@ -261,7 +261,7 @@
     descr: Manage player registrations
     slug: orga_registrations
     number: 11
-    feature: 189
+    feature: 207
 - model: larpmanager.eventpermission
   pk: 37
   fields:
@@ -269,7 +269,7 @@
     descr: 'Manage the registration tickets '
     slug: orga_registration_tickets
     number: 21
-    feature: 188
+    feature: 206
 - model: larpmanager.eventpermission
   pk: 38
   fields:
@@ -285,7 +285,7 @@
     descr: Manage the registration questions and options
     slug: orga_registration_form
     number: 41
-    feature: 187
+    feature: 205
 - model: larpmanager.eventpermission
   pk: 41
   fields:
@@ -333,7 +333,7 @@
     descr: Manages registration cancellations
     slug: orga_cancellations
     number: 111
-    feature: 186
+    feature: 204
 - model: larpmanager.eventpermission
   pk: 47
   fields:
@@ -495,6 +495,22 @@
     number: 81
     feature: 24
 - model: larpmanager.eventpermission
+  pk: 70
+  fields:
+    name: Texts
+    descr: Customize specific texts on the event interface
+    slug: orga_texts
+    number: 20
+    feature: 203
+- model: larpmanager.eventpermission
+  pk: 71
+  fields:
+    name: Navigation
+    descr: Customize buttons in the event navigation bar
+    slug: orga_buttons
+    number: 30
+    feature: 202
+- model: larpmanager.eventpermission
   pk: 72
   fields:
     name: Secret registration link
@@ -503,6 +519,22 @@
     number: 100
     feature: 69
 - model: larpmanager.eventpermission
+  pk: 73
+  fields:
+    name: Cache Reloading
+    descr: Reload cached event data
+    slug: orga_reload_cache
+    number: 999
+    feature: 201
+- model: larpmanager.eventpermission
+  pk: 74
+  fields:
+    name: Send e-mail
+    descr: Send e-mail
+    slug: orga_send_mail
+    number: 99
+    feature: 200
+- model: larpmanager.eventpermission
   pk: 75
   fields:
     name: Form
@@ -510,3 +542,11 @@
     slug: orga_character_form
     number: 12
     feature: 178
+- model: larpmanager.eventpermission
+  pk: 76
+  fields:
+    name: Archive
+    descr: Display sent e-mails
+    slug: orga_archive_email
+    number: 100
+    feature: 199

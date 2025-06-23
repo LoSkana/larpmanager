@@ -1010,25 +1010,13 @@
     after_text: Now you can peform the fiscal code validity check
     after_link: exe_membership_check
 - model: larpmanager.feature
-  pk: 186
-  fields:
-    name: Orga Cancellations
-    descr: ''
-    slug: ''
-    overall: false
-    module: 9
-    placeholder: true
-    order: 9999
-    after_text: null
-    after_link: null
-- model: larpmanager.feature
   pk: 187
   fields:
-    name: Orga Form
+    name: Exe Archive
     descr: ''
-    slug: ''
-    overall: false
-    module: 9
+    slug: exe_archive_email
+    overall: true
+    module: 8
     placeholder: true
     order: 9999
     after_text: null
@@ -1036,11 +1024,11 @@
 - model: larpmanager.feature
   pk: 188
   fields:
-    name: Orga Tickets
+    name: Exe Profile
     descr: ''
-    slug: ''
-    overall: false
-    module: 9
+    slug: exe_profile
+    overall: true
+    module: 8
     placeholder: true
     order: 9999
     after_text: null
@@ -1048,11 +1036,11 @@
 - model: larpmanager.feature
   pk: 189
   fields:
-    name: Orga Registrations
+    name: Exe Send e-mail
     descr: ''
-    slug: ''
-    overall: false
-    module: 9
+    slug: exe_send_mail
+    overall: true
+    module: 8
     placeholder: true
     order: 9999
     after_text: null
@@ -1060,11 +1048,11 @@
 - model: larpmanager.feature
   pk: 190
   fields:
-    name: Orga Sensitive data
+    name: Exe Runs
     descr: ''
-    slug: ''
-    overall: false
-    module: 9
+    slug: exe_runs
+    overall: true
+    module: 7
     placeholder: true
     order: 9999
     after_text: null
@@ -1072,11 +1060,11 @@
 - model: larpmanager.feature
   pk: 191
   fields:
-    name: Orga Accounting
+    name: Exe Event
     descr: ''
-    slug: ''
-    overall: false
-    module: 9
+    slug: exe_events
+    overall: true
+    module: 7
     placeholder: true
     order: 9999
     after_text: null
@@ -1084,11 +1072,11 @@
 - model: larpmanager.feature
   pk: 192
   fields:
-    name: Orga Appearance
+    name: Exe Texts
     descr: ''
-    slug: ''
-    overall: false
-    module: 9
+    slug: exe_texts
+    overall: true
+    module: 6
     placeholder: true
     order: 9999
     after_text: null
@@ -1096,11 +1084,11 @@
 - model: larpmanager.feature
   pk: 193
   fields:
-    name: Orga Features
+    name: Exe Appearance
     descr: ''
-    slug: ''
-    overall: false
-    module: 9
+    slug: exe_appearance
+    overall: true
+    module: 6
     placeholder: true
     order: 9999
     after_text: null
@@ -1108,11 +1096,11 @@
 - model: larpmanager.feature
   pk: 194
   fields:
-    name: Orga Configuration
+    name: Exe Accounting
     descr: ''
-    slug: ''
-    overall: false
-    module: 9
+    slug: exe_accounting
+    overall: true
+    module: 2
     placeholder: true
     order: 9999
     after_text: null
@@ -1120,10 +1108,10 @@
 - model: larpmanager.feature
   pk: 195
   fields:
-    name: Orga Roles
+    name: Exe Features
     descr: ''
-    slug: ''
-    overall: false
+    slug: exe_features
+    overall: true
     module: 9
     placeholder: true
     order: 9999
@@ -1132,10 +1120,10 @@
 - model: larpmanager.feature
   pk: 196
   fields:
-    name: Orga Run
+    name: Exe Configuration
     descr: ''
-    slug: ''
-    overall: false
+    slug: exe_config
+    overall: true
     module: 9
     placeholder: true
     order: 9999
@@ -1144,10 +1132,10 @@
 - model: larpmanager.feature
   pk: 197
   fields:
-    name: Orga Event
+    name: Exe Roles
     descr: ''
-    slug: ''
-    overall: false
+    slug: exe_roles
+    overall: true
     module: 9
     placeholder: true
     order: 9999
@@ -1156,9 +1144,9 @@
 - model: larpmanager.feature
   pk: 198
   fields:
-    name: Exe Archive
+    name: Exe Organization
     descr: ''
-    slug: ''
+    slug: exe_association
     overall: true
     module: 9
     placeholder: true
@@ -1168,11 +1156,11 @@
 - model: larpmanager.feature
   pk: 199
   fields:
-    name: Exe Profile
+    name: Orga Archive
     descr: ''
-    slug: ''
-    overall: true
-    module: 9
+    slug: orga_archive_email
+    overall: false
+    module: 8
     placeholder: true
     order: 9999
     after_text: null
@@ -1180,11 +1168,11 @@
 - model: larpmanager.feature
   pk: 200
   fields:
-    name: Exe Send e-mail
+    name: Orga Send e-mail
     descr: ''
-    slug: ''
-    overall: true
-    module: 9
+    slug: orga_send_mail
+    overall: false
+    module: 8
     placeholder: true
     order: 9999
     after_text: null
@@ -1192,11 +1180,11 @@
 - model: larpmanager.feature
   pk: 201
   fields:
-    name: Exe Runs
+    name: Orga Cache Reloading
     descr: ''
-    slug: ''
-    overall: true
-    module: 9
+    slug: orga_reload_cache
+    overall: false
+    module: 7
     placeholder: true
     order: 9999
     after_text: null
@@ -1204,11 +1192,11 @@
 - model: larpmanager.feature
   pk: 202
   fields:
-    name: Exe Event
+    name: Orga Navigation
     descr: ''
-    slug: ''
-    overall: true
-    module: 9
+    slug: orga_buttons
+    overall: false
+    module: 6
     placeholder: true
     order: 9999
     after_text: null
@@ -1216,11 +1204,11 @@
 - model: larpmanager.feature
   pk: 203
   fields:
-    name: Exe Texts
+    name: Orga Texts
     descr: ''
-    slug: ''
-    overall: true
-    module: 9
+    slug: orga_texts
+    overall: false
+    module: 6
     placeholder: true
     order: 9999
     after_text: null
@@ -1228,11 +1216,11 @@
 - model: larpmanager.feature
   pk: 204
   fields:
-    name: Exe Appearance
+    name: Orga Cancellations
     descr: ''
-    slug: ''
-    overall: true
-    module: 9
+    slug: orga_cancellations
+    overall: false
+    module: 4
     placeholder: true
     order: 9999
     after_text: null
@@ -1240,11 +1228,11 @@
 - model: larpmanager.feature
   pk: 205
   fields:
-    name: Exe Accounting
+    name: Orga Form
     descr: ''
-    slug: ''
-    overall: true
-    module: 9
+    slug: orga_registration_form
+    overall: false
+    module: 4
     placeholder: true
     order: 9999
     after_text: null
@@ -1252,11 +1240,11 @@
 - model: larpmanager.feature
   pk: 206
   fields:
-    name: Exe Features
+    name: Orga Tickets
     descr: ''
-    slug: ''
-    overall: true
-    module: 9
+    slug: orga_registration_tickets
+    overall: false
+    module: 4
     placeholder: true
     order: 9999
     after_text: null
@@ -1264,11 +1252,11 @@
 - model: larpmanager.feature
   pk: 207
   fields:
-    name: Exe Configuration
+    name: Orga Registrations
     descr: ''
-    slug: ''
-    overall: true
-    module: 9
+    slug: orga_registrations
+    overall: false
+    module: 4
     placeholder: true
     order: 9999
     after_text: null
@@ -1276,11 +1264,11 @@
 - model: larpmanager.feature
   pk: 208
   fields:
-    name: Exe Roles
+    name: Orga Sensitive data
     descr: ''
-    slug: ''
-    overall: true
-    module: 9
+    slug: orga_sensitive
+    overall: false
+    module: 8
     placeholder: true
     order: 9999
     after_text: null
@@ -1288,10 +1276,82 @@
 - model: larpmanager.feature
   pk: 209
   fields:
-    name: Exe Organization
+    name: Orga Accounting
     descr: ''
-    slug: ''
-    overall: true
+    slug: orga_accounting
+    overall: false
+    module: 2
+    placeholder: true
+    order: 9999
+    after_text: null
+    after_link: null
+- model: larpmanager.feature
+  pk: 210
+  fields:
+    name: Orga Appearance
+    descr: ''
+    slug: orga_appearance
+    overall: false
+    module: 6
+    placeholder: true
+    order: 9999
+    after_text: null
+    after_link: null
+- model: larpmanager.feature
+  pk: 211
+  fields:
+    name: Orga Features
+    descr: ''
+    slug: orga_features
+    overall: false
+    module: 9
+    placeholder: true
+    order: 9999
+    after_text: null
+    after_link: null
+- model: larpmanager.feature
+  pk: 212
+  fields:
+    name: Orga Configuration
+    descr: ''
+    slug: orga_config
+    overall: false
+    module: 9
+    placeholder: true
+    order: 9999
+    after_text: null
+    after_link: null
+- model: larpmanager.feature
+  pk: 213
+  fields:
+    name: Orga Roles
+    descr: ''
+    slug: orga_roles
+    overall: false
+    module: 9
+    placeholder: true
+    order: 9999
+    after_text: null
+    after_link: null
+- model: larpmanager.feature
+  pk: 214
+  fields:
+    name: Orga Run
+    descr: ''
+    slug: orga_run
+    overall: false
+    module: 9
+    placeholder: true
+    order: 9999
+    after_text: null
+    after_link: null
+- model: larpmanager.feature
+  pk: 215
+  fields:
+    name: Orga Event
+    descr: ''
+    slug: orga_event
+    overall: false
     module: 9
     placeholder: true
     order: 9999

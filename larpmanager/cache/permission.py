@@ -19,6 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.core.cache import cache
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from larpmanager.models.access import AssocPermission, EventPermission
 
@@ -45,6 +47,11 @@ def get_assoc_permission_feature(slug):
     return res
 
 
+@receiver(post_save, sender=AssocPermission)
+def save_event_assoc_permission_reset(sender, instance, **kwargs):
+    cache.delete(assoc_permission_feature_key(instance.slug))
+
+
 def event_permission_feature_key(slug):
     return f"event_permission_feature_{slug}"
 
@@ -65,3 +72,8 @@ def get_event_permission_feature(slug):
     if not res:
         res = update_event_permission_feature(slug)
     return res
+
+
+@receiver(post_save, sender=EventPermission)
+def save_event_event_permission_reset(sender, instance, **kwargs):
+    cache.delete(event_permission_feature_key(instance.slug))

@@ -2249,6 +2249,9 @@ msgstr "verzoek om terugbetaling"
 msgid "Bring a friend!"
 msgstr "Neem een vriend mee!"
 
+msgid "Cache Reloading"
+msgstr "Cache herladen"
+
 msgid "Change password"
 msgstr "Wachtwoord herstel"
 
@@ -2961,6 +2964,9 @@ msgstr "Volledig blad (Pdf)"
 msgid "Create new character"
 msgstr "Nieuw personage maken"
 
+msgid "Display sent e-mails"
+msgstr "Verzonden e-mails weergeven"
+
 msgid "Download light sheet"
 msgstr "Download lichtblad"
 
@@ -3440,6 +3446,9 @@ msgstr "Voorinschrijvingen opgeslagen!"
 
 msgid "Provisional registration"
 msgstr "Voorlopige registratie"
+
+msgid "Reload cached event data"
+msgstr "Gebeurtenisgegevens uit de cache opnieuw laden"
 
 msgid "Secret registration link"
 msgstr "Geheime registratie link"
@@ -4816,6 +4825,9 @@ msgstr "Deze pagina geeft een overzicht van de soorten proloog."
 msgid "Configure gateways to process player payments"
 msgstr "Gateways configureren om betalingen van spelers te verwerken"
 
+msgid "Customize buttons in the event navigation bar"
+msgstr "Knoppen in de evenementnavigatiebalk aanpassen"
+
 msgid "Elements you wish to avoid in the assignment:"
 msgstr "Elementen die je wilt vermijden in de opdracht:"
 
@@ -4931,6 +4943,9 @@ msgstr "Toegevoegd aan de registratiepagina, vóór het formulier"
 
 msgid "Check consistency of the members’ personal data"
 msgstr "Controleer de consistentie van de persoonlijke gegevens van de leden"
+
+msgid "Customize specific texts on the event interface"
+msgstr "Specifieke teksten op de evenementinterface aanpassen"
 
 msgid "Do you wish to be always updated on our events?"
 msgstr "Wil je op de hoogte blijven van onze evenementen?"

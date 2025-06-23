@@ -7832,10 +7832,25 @@ msgstr ""
 msgid "Manage answers for workshop questions"
 msgstr ""
 
+msgid "Customize specific texts on the event interface"
+msgstr ""
+
+msgid "Customize buttons in the event navigation bar"
+msgstr ""
+
 msgid "Display secret registration link"
 msgstr ""
 
+msgid "Cache Reloading"
+msgstr ""
+
+msgid "Reload cached event data"
+msgstr ""
+
 msgid "Manage questions and options for characters and writing elements"
+msgstr ""
+
+msgid "Display sent e-mails"
 msgstr ""
 
 #, python-format

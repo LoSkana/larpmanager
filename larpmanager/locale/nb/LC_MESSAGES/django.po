@@ -2249,6 +2249,9 @@ msgstr "anmodning om refusjon"
 msgid "Bring a friend!"
 msgstr "Ta med en venn!"
 
+msgid "Cache Reloading"
+msgstr "Cache-omlasting"
+
 msgid "Change password"
 msgstr "Gjenoppretting av passord"
 
@@ -2961,6 +2964,9 @@ msgstr "Komplett ark (Pdf)"
 msgid "Create new character"
 msgstr "Opprett ny karakter"
 
+msgid "Display sent e-mails"
+msgstr "Vis sendte e-poster"
+
 msgid "Download light sheet"
 msgstr "Last ned lysark"
 
@@ -3440,6 +3446,9 @@ msgstr "Forhåndsregistreringene er lagret!"
 
 msgid "Provisional registration"
 msgstr "Foreløpig registrering"
+
+msgid "Reload cached event data"
+msgstr "Last inn mellomlagrede hendelsesdata på nytt"
 
 msgid "Secret registration link"
 msgstr "Hemmelig registreringslenke"
@@ -4813,6 +4822,9 @@ msgstr "Denne siden oppsummerer de ulike typene arrangementsprologer."
 msgid "Configure gateways to process player payments"
 msgstr "Konfigurere gatewayer for å behandle spillerbetalinger"
 
+msgid "Customize buttons in the event navigation bar"
+msgstr "Tilpass knappene i navigasjonsfeltet for hendelser"
+
 msgid "Elements you wish to avoid in the assignment:"
 msgstr "Elementer du ønsker å unngå i oppgaven:"
 
@@ -4925,6 +4937,9 @@ msgstr "Lagt til på registreringssiden, før skjemaet"
 
 msgid "Check consistency of the members’ personal data"
 msgstr "Kontroller at medlemmenes personopplysninger er konsistente"
+
+msgid "Customize specific texts on the event interface"
+msgstr "Tilpass spesifikke tekster på hendelsesgrensesnittet"
 
 msgid "Do you wish to be always updated on our events?"
 msgstr "Vil du holde deg oppdatert om arrangementene våre?"

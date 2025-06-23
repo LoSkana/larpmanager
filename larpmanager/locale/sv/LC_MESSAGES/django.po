@@ -2249,6 +2249,9 @@ msgstr "begäran om återbetalning"
 msgid "Bring a friend!"
 msgstr "Ta med en vän!"
 
+msgid "Cache Reloading"
+msgstr "Cache Återladdning"
+
 msgid "Change password"
 msgstr "Återställning av lösenord"
 
@@ -2961,6 +2964,9 @@ msgstr "Komplett blad (Pdf)"
 msgid "Create new character"
 msgstr "Skapa ny karaktär"
 
+msgid "Display sent e-mails"
+msgstr "Visa skickade e-postmeddelanden"
+
 msgid "Download light sheet"
 msgstr "Ladda ner ljusblad"
 
@@ -3440,6 +3446,9 @@ msgstr "Förhandsanmälningar sparade!"
 
 msgid "Provisional registration"
 msgstr "Provisorisk registrering"
+
+msgid "Reload cached event data"
+msgstr "Ladda om cachad händelsedata"
 
 msgid "Secret registration link"
 msgstr "Hemlig registreringslänk"
@@ -4813,6 +4822,9 @@ msgstr "Denna sida sammanfattar de olika typerna av händelseprolog."
 msgid "Configure gateways to process player payments"
 msgstr "Konfigurera gateways för att behandla spelarbetalningar"
 
+msgid "Customize buttons in the event navigation bar"
+msgstr "Anpassa knapparna i navigeringsfältet för evenemang"
+
 msgid "Elements you wish to avoid in the assignment:"
 msgstr "Element som du vill undvika i uppdraget:"
 
@@ -4925,6 +4937,9 @@ msgstr "Tillagd på registreringssidan, före formuläret"
 
 msgid "Check consistency of the members’ personal data"
 msgstr "Kontrollera att medlemmarnas personuppgifter är korrekta"
+
+msgid "Customize specific texts on the event interface"
+msgstr "Anpassa specifika texter på eventgränssnittet"
 
 msgid "Do you wish to be always updated on our events?"
 msgstr "Vill du hålla dig uppdaterad om våra evenemang?"
