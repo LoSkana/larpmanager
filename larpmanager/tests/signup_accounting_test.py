@@ -103,7 +103,7 @@ def discount(live_server, page):
     page.get_by_role("button", name="Confirm", exact=True).click()
 
     # use discount
-    go_to(page, live_server, "/manage/features/12/on")
+    go_to(page, live_server, "/test/1/manage/features/12/on")
     go_to(page, live_server, "/test/1/manage/discounts/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()

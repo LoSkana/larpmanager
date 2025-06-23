@@ -46,7 +46,7 @@ def user_pdf(live_server, page):
     go_to(page, live_server, "/test/1/manage/features/178/on")
 
     # activate relationships
-    go_to(page, live_server, "/manage/features/75/on")
+    go_to(page, live_server, "/test/1/manage/features/75/on")
 
     # activate pdf
     go_to(page, live_server, "/manage/features/21/on")
