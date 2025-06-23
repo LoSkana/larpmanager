@@ -915,6 +915,9 @@ msgstr "Einddatum"
 msgid "Excluded"
 msgstr "Exclusief"
 
+msgid "Exe Runs"
+msgstr "Exe-runs"
+
 msgid "Expected"
 msgstr "Verwacht"
 
@@ -968,6 +971,9 @@ msgstr "Bijnaam"
 
 msgid "Optional"
 msgstr "Optioneel"
+
+msgid "Orga Run"
+msgstr "Orga Run"
 
 msgid "Original"
 msgstr "Origineel"
@@ -1161,6 +1167,15 @@ msgstr "Inschrijving"
 msgid "Event T&C"
 msgstr "Evenement AV"
 
+msgid "Exe Event"
+msgstr "Exe Gebeurtenis"
+
+msgid "Exe Roles"
+msgstr "Exe Rollen"
+
+msgid "Exe Texts"
+msgstr "Exe teksten"
+
 msgid "Factions:"
 msgstr "Groepen:"
 
@@ -1187,6 +1202,9 @@ msgstr "Volgende runs"
 
 msgid "Operation"
 msgstr "Operatie"
+
+msgid "Orga Form"
+msgstr "Orga-formulier"
 
 msgid "Organizer"
 msgstr "Organisator"
@@ -1380,6 +1398,12 @@ msgstr "Nieuwsbrief"
 msgid "Next quota"
 msgstr "Volgende quota"
 
+msgid "Orga Event"
+msgstr "Orga Evenement"
+
+msgid "Orga Roles"
+msgstr "Orga Rollen"
+
 msgid "Passengers"
 msgstr "Passagiers"
 
@@ -1545,11 +1569,14 @@ msgstr "Directe link"
 msgid "Disbursment"
 msgstr "Uitbetaling"
 
-msgid "Event Roles"
-msgstr "Evenement Rollen"
-
 msgid "Event texts"
 msgstr "Evenementteksten"
+
+msgid "Exe Archive"
+msgstr "Exe Archief"
+
+msgid "Exe Profile"
+msgstr "Exe profiel"
 
 msgid "Fiscal code"
 msgstr "Belastingcode"
@@ -1580,9 +1607,6 @@ msgstr "Lichtgewicht"
 
 msgid "Limitations"
 msgstr "Beperkingen"
-
-msgid "Manage Runs"
-msgstr "Runs beheren"
 
 msgid "Nationality"
 msgstr "Nationaliteit"
@@ -1722,6 +1746,9 @@ msgstr "Uitbetaling"
 msgid "Event status"
 msgstr "Gebeurtenisstatus"
 
+msgid "Exe Features"
+msgstr "Exe-functies"
+
 msgid "Experimental"
 msgstr "Experimenteel"
 
@@ -1784,6 +1811,9 @@ msgstr "Niet geselecteerd"
 
 msgid "Opening date"
 msgstr "Openingsdatum"
+
+msgid "Orga Tickets"
+msgstr "Orga Tickets"
 
 msgid "Organization"
 msgstr "Vereniging"
@@ -1933,9 +1963,6 @@ msgstr "Configuratie"
 msgid "Deadline date"
 msgstr "Uiterste datum"
 
-msgid "Default users"
-msgstr "Standaard gebruikers"
-
 msgid "Delivery list"
 msgstr "Uitbetalingslijst"
 
@@ -1972,12 +1999,6 @@ msgstr "Totale inkomsten"
 msgid "Internal link"
 msgstr "Interne link"
 
-msgid "Manage Events"
-msgstr "Evenementen beheren"
-
-msgid "Manage Ticket"
-msgstr "Ticket beheren"
-
 msgid "Manage events"
 msgstr "Evenementen beheren"
 
@@ -2001,6 +2022,9 @@ msgstr "Niet voltooid"
 
 msgid "Number events"
 msgstr "Aantal gebeurtenissen"
+
+msgid "Orga Features"
+msgstr "Orga functies"
 
 msgid "Passages made"
 msgstr "Ondernomen stappen"
@@ -2131,6 +2155,12 @@ msgstr "Evenement Sjabloon"
 
 msgid "Event features"
 msgstr "Functies van het evenement"
+
+msgid "Exe Accounting"
+msgstr "Exe Boekhouding"
+
+msgid "Exe Appearance"
+msgstr "Exe-uiterlijk"
 
 msgid "Executive Vote"
 msgstr "Stemming management"
@@ -2264,9 +2294,6 @@ msgstr "verzoek om terugbetaling"
 msgid "Bring a friend!"
 msgstr "Neem een vriend mee!"
 
-msgid "Cache Reloading"
-msgstr "Cache herladen"
-
 msgid "Change password"
 msgstr "Wachtwoord herstel"
 
@@ -2288,12 +2315,6 @@ msgstr "Uiterste datum"
 msgid "Deadline (days)"
 msgstr "Termijn (dagen)"
 
-msgid "Default casting"
-msgstr "Standaard casting"
-
-msgid "Default writing"
-msgstr "Standaard schrijven"
-
 msgid "Disable credits"
 msgstr "Credits uitschakelen"
 
@@ -2302,6 +2323,9 @@ msgstr "Documentnummer"
 
 msgid "Event not found"
 msgstr "Evenement niet gevonden"
+
+msgid "Exe Send e-mail"
+msgstr "Exe E-mail verzenden"
 
 msgid "Filter factions"
 msgstr "Filtergroepen"
@@ -2323,6 +2347,12 @@ msgstr "Meerregelige tekst"
 
 msgid "Multiple choice"
 msgstr "Meerkeuze"
+
+msgid "Orga Accounting"
+msgstr "Orga Boekhouding"
+
+msgid "Orga Appearance"
+msgstr "Orga Verschijning"
 
 msgid "Overall balance"
 msgstr "Kasbudget"
@@ -2393,9 +2423,6 @@ msgstr "Geplande evenementen"
 msgid "Activate feature"
 msgstr "Functie activeren"
 
-msgid "Automatic saving"
-msgstr "Automatisch opslaan"
-
 msgid "Background image"
 msgstr "Achtergrondafbeelding"
 
@@ -2440,6 +2467,9 @@ msgstr "Evenement Boekhouding"
 
 msgid "Event navigation"
 msgstr "Navigatie op evenementen"
+
+msgid "Exe Organization"
+msgstr "Exe Organisatie"
 
 msgid "Foreign language"
 msgstr "Vreemde taal"
@@ -2582,9 +2612,6 @@ msgstr "Actieve collectie"
 msgid "Additional fields"
 msgstr "Extra velden"
 
-msgid "Advanced features"
-msgstr "Geavanceerde functies"
-
 msgid "All comunications"
 msgstr "Alle communicatie"
 
@@ -2623,6 +2650,9 @@ msgstr "Document downloaden"
 
 msgid "Element approved!"
 msgstr "Goedgekeurd element!"
+
+msgid "Exe Configuration"
+msgstr "Exe-configuratie"
 
 msgid "Experience points"
 msgstr "Ervaringspunten"
@@ -2762,15 +2792,6 @@ msgstr "Persoonlijke vaardigheden"
 msgid "Cover (thumb) link"
 msgstr "Linkafdekking (duim)"
 
-msgid "Default accounting"
-msgstr "Standaard boekhouding"
-
-msgid "Default appearance"
-msgstr "Standaard uiterlijk"
-
-msgid "Default miscellany"
-msgstr "Standaard prullaria"
-
 msgid "Delegated accounts"
 msgstr "Gedelegeerde accounts"
 
@@ -2798,8 +2819,14 @@ msgstr "Gegevens van leden controleren"
 msgid "New refund request"
 msgstr "Nieuw verzoek om terugbetaling"
 
-msgid "Organization Roles"
-msgstr "Organisatie Rollen"
+msgid "Orga Cancellations"
+msgstr "Orga Annuleringen"
+
+msgid "Orga Configuration"
+msgstr "Orga-configuratie"
+
+msgid "Orga Registrations"
+msgstr "Orga Registraties"
 
 msgid "Patron and Reduced"
 msgstr "Beschermheer en Verminderd"
@@ -2813,17 +2840,11 @@ msgstr "Betalingsverwerking"
 msgid "Perform extraction"
 msgstr "Extractie uitvoeren"
 
-msgid "Player information"
-msgstr "Spelersinformatie"
-
 msgid "Pre-register here!"
 msgstr "Pre-registreer hier!"
 
 msgid "Preferences saved!"
 msgstr "Voorkeuren opgeslagen!"
-
-msgid "Privacy management"
-msgstr "Beheer van privacy"
 
 msgid "Proposed character"
 msgstr "Voorgesteld karakter"
@@ -2891,9 +2912,6 @@ msgstr "De speler opladen"
 msgid "Confirmation delete"
 msgstr "Bevestiging verwijderen"
 
-msgid "Create Organization"
-msgstr "Organisatie maken"
-
 msgid "Credit disbursement"
 msgstr "Krediet uitbetaling"
 
@@ -2948,6 +2966,9 @@ msgstr "Niet-cumulatieve code"
 
 msgid "Number of event run"
 msgstr "Evenement Runnummer"
+
+msgid "Orga Sensitive data"
+msgstr "Orga Gevoelige gegevens"
 
 msgid "Password of account"
 msgstr "Wachtwoord account"
@@ -3012,12 +3033,6 @@ msgstr "Volledig blad (Pdf)"
 msgid "Create new character"
 msgstr "Nieuw personage maken"
 
-msgid "Default registration"
-msgstr "Standaard registratie"
-
-msgid "Display sent e-mails"
-msgstr "Verzonden e-mails weergeven"
-
 msgid "Download light sheet"
 msgstr "Download lichtblad"
 
@@ -3075,9 +3090,6 @@ msgstr "Bevestiging van betalingen"
 
 msgid "Payments in approval"
 msgstr "Betalingen onder goedkeuring"
-
-msgid "Predefined structure"
-msgstr "Vooraf gedefinieerde structuur"
 
 msgid "Preference not valid"
 msgstr "Ongeldige voorkeur"
@@ -3418,9 +3430,6 @@ msgstr "Aantal primaire plaatsen"
 msgid "Number of waiting spots"
 msgstr "Aantal wachtplaatsen"
 
-msgid "Organization Appearance"
-msgstr "Organisatie Verschijning"
-
 msgid "Payment membership fee:"
 msgstr "Betaling van lidmaatschapsgeld:"
 
@@ -3503,9 +3512,6 @@ msgstr "Voorinschrijvingen opgeslagen!"
 
 msgid "Provisional registration"
 msgstr "Voorlopige registratie"
-
-msgid "Reload cached event data"
-msgstr "Gebeurtenisgegevens uit de cache opnieuw laden"
 
 msgid "Secret registration link"
 msgstr "Geheime registratie link"
@@ -4473,14 +4479,8 @@ msgstr "Controleer de geldigheid van de fiscale code."
 msgid "Complete name of the LARP Organization"
 msgstr "Volledige naam van de vereniging"
 
-msgid "Enables searching across all elements."
-msgstr "Maakt zoeken in alle elementen mogelijk."
-
 msgid "Event display and visual customization"
 msgstr "Gebeurtenisweergave en visuele aanpassing"
-
-msgid "Lets you upload items from a CSV file."
-msgstr "Hiermee kun je items uploaden vanuit een CSV-bestand."
 
 msgid "Manage fields that track players’ data"
 msgstr "Beheer velden die spelersgegevens bijhouden"
@@ -4633,9 +4633,6 @@ msgstr "Goed gedaan, je hebt alle modules gehaald!"
 
 msgid "Added at the top of the user profile page"
 msgstr "Toegevoegd bovenaan de gebruikersprofielpagina"
-
-msgid "Allows you to download data in CSV files."
-msgstr "Hiermee kun je gegevens downloaden in CSV-bestanden."
 
 msgid "Choice locked, click to make it available"
 msgstr "Keuze vergrendeld, klik om deze beschikbaar te maken"
@@ -4891,9 +4888,6 @@ msgstr "Deze pagina geeft een overzicht van de soorten proloog."
 msgid "Configure gateways to process player payments"
 msgstr "Gateways configureren om betalingen van spelers te verwerken"
 
-msgid "Customize buttons in the event navigation bar"
-msgstr "Knoppen in de evenementnavigatiebalk aanpassen"
-
 msgid "Elements you wish to avoid in the assignment:"
 msgstr "Elementen die je wilt vermijden in de opdracht:"
 
@@ -5009,9 +5003,6 @@ msgstr "Toegevoegd aan de registratiepagina, vóór het formulier"
 
 msgid "Check consistency of the members’ personal data"
 msgstr "Controleer de consistentie van de persoonlijke gegevens van de leden"
-
-msgid "Customize specific texts on the event interface"
-msgstr "Specifieke teksten op de evenementinterface aanpassen"
 
 msgid "Do you wish to be always updated on our events?"
 msgstr "Wil je op de hoogte blijven van onze evenementen?"
@@ -5635,13 +5626,6 @@ msgstr "Je kunt geen lidmaatschap inwisselen, je bent al lid!"
 msgid "(Optional) an image that will be shown inside the question"
 msgstr "(Optioneel) een afbeelding die in de vraag wordt getoond"
 
-msgid "Allows you to create and manage multiple runs of an event."
-msgstr "Hiermee kun je meerdere runs van een evenement maken en beheren."
-
-msgid "Automatically saves writing elements to prevent data loss."
-msgstr ""
-"Slaat schrijfelementen automatisch op om gegevensverlies te voorkomen."
-
 msgid "Displays full lists of usual players not already signed up"
 msgstr ""
 "Toont volledige lijsten van gebruikelijke spelers die nog niet zijn "
@@ -5747,9 +5731,6 @@ msgstr "U hebt dezelfde optie in meer dan één voorkeur aangegeven"
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr "WAARSCHUWING: deze actie overschrijft wijzigingen in deze gebeurtenis"
 
-msgid "Gives organizers complete control over player registrations."
-msgstr "Geeft organisatoren volledige controle over spelersregistraties."
-
 msgid "If checked: shows a link to the event in the navigation bar."
 msgstr ""
 "Indien aangevinkt: toont een link naar het evenement in de navigatiebalk."
@@ -5815,11 +5796,6 @@ msgstr ""
 
 msgid "Allows players to cancel their own registrations at any time."
 msgstr "Spelers kunnen hun eigen registratie op elk moment annuleren."
-
-msgid "Enables customization of all event-related pages' appearance."
-msgstr ""
-"Maakt het mogelijk om het uiterlijk van alle evenementpagina's aan te "
-"passen."
 
 msgid "If checked, makes prologues visible to the assigned character"
 msgstr ""
@@ -7030,13 +7006,6 @@ msgstr ""
 " mogelijke manieren te helpen!"
 
 msgid ""
-"Allows you to define which users can access the event organizer "
-"functionalities."
-msgstr ""
-"Hiermee kun je bepalen welke gebruikers toegang hebben tot de functies van "
-"de organisator van het evenement."
-
-msgid ""
 "Indicate the date when registration opens. Leave blank to not open "
 "registrations"
 msgstr ""
@@ -7152,13 +7121,6 @@ msgid ""
 msgstr ""
 "Hiermee kunnen personages worden aangemaakt, bewerkt en toegewezen aan "
 "geregistreerde spelers."
-
-msgid ""
-"Enables the creation, editing, and complete customization of any number of "
-"events."
-msgstr ""
-"Maakt het mogelijk om een willekeurig aantal gebeurtenissen aan te maken, te"
-" bewerken en volledig aan te passen."
 
 msgid ""
 "Go ahead and click on this button to perform the extraction. Warning: it is "
@@ -7367,13 +7329,6 @@ msgstr ""
 "organisatie en evenementen!"
 
 msgid ""
-"Allows you to specify precisely which user data is collected and stored in "
-"the system."
-msgstr ""
-"Hiermee kun je precies aangeven welke gebruikersgegevens worden verzameld en"
-" opgeslagen in het systeem."
-
-msgid ""
 "If checked, automatically removes formatting when pasting text into the "
 "WYSIWYG editor"
 msgstr ""
@@ -7442,13 +7397,6 @@ msgid ""
 msgstr ""
 "Maakt aangepaste Algemene voorwaarden voor een specifiek evenement mogelijk,"
 " die tijdens de registratie worden weergegeven."
-
-msgid ""
-"Defines which users have permission to manage the organisation's settings "
-"and features."
-msgstr ""
-"Definieert welke gebruikers toestemming hebben om de instellingen en "
-"functies van de organisatie te beheren."
 
 msgid ""
 "Displays the organisation-wide Terms and Conditions during registration for "
@@ -8117,25 +8065,11 @@ msgstr ""
 "hetzelfde item tegelijkertijd bewerken om conflicten te voorkomen."
 
 msgid ""
-"Lets you create, edit, and manage any number of registration ticket types "
-"that players can choose."
-msgstr ""
-"Hiermee kun je een willekeurig aantal typen registratietickets maken, "
-"bewerken en beheren die spelers kunnen kiezen."
-
-msgid ""
 "This page shows all the runs saved in the system. From here you can edit "
 "them, or create new ones."
 msgstr ""
 "Deze pagina geeft een overzicht van alle runs die in het systeem zijn "
 "opgeslagen. Van hieruit kun je ze bewerken of nieuwe aanmaken."
-
-msgid ""
-"Enables creating a new organisation in larpmanager, defining how many events"
-" and runs it will have."
-msgstr ""
-"Maakt het mogelijk om een nieuwe organisatie aan te maken in larpmanager en "
-"te definiëren hoeveel evenementen en runs deze organisatie zal hebben."
 
 msgid ""
 "Enables players to send private messages to each other, without revealing "
@@ -8150,13 +8084,6 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, worden opties die niet langer beschikbaar zijn"
 " in het formulier verborgen in plaats van uitgeschakeld weergegeven."
-
-msgid ""
-"Provides users with comprehensive privacy controls to manage how their data "
-"is shared or displayed."
-msgstr ""
-"Biedt gebruikers uitgebreide privacycontrole om te beheren hoe hun gegevens "
-"worden gedeeld of weergegeven."
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "
@@ -8297,13 +8224,6 @@ msgid ""
 msgstr ""
 "In plaats van een intern registratieformulier te gebruiken, wordt de speler "
 "omgeleid naar een externe registratielink."
-
-msgid ""
-"Lets you freely choose which features to activate for the entire "
-"organisation or for a specific event."
-msgstr ""
-"Je kunt vrij kiezen welke functies je wilt activeren voor de hele "
-"organisatie of voor een specifiek evenement."
 
 msgid ""
 "This page allows you to select the features of a template. Click on a "
@@ -8652,13 +8572,6 @@ msgstr ""
 "deadlines (betalingen, lidmaatschappen, formulieren, casting, enz.)."
 
 msgid ""
-"Enables managing the registration form questions (short text, long text, "
-"single choice, multiple choice, etc.)."
-msgstr ""
-"Hiermee kunnen de vragen op het registratieformulier worden beheerd (korte "
-"tekst, lange tekst, enkele keuze, meerkeuze, enzovoort)."
-
-msgid ""
 "If you select one (or more) tickets, the option will only be available to "
 "players who have selected that ticket"
 msgstr ""
@@ -8983,13 +8896,6 @@ msgid ""
 msgstr ""
 "Geef aan of de korting alleen kan worden gebruikt bij een nieuwe registratie"
 " of ook door reeds geregistreerde spelers kan worden gebruikt."
-
-msgid ""
-"Lets you customize the appearance (style/theme) for the entire organisation "
-"across all larpmanager pages in the subdomain."
-msgstr ""
-"Hiermee kun je het uiterlijk (stijl/thema) aanpassen voor de hele "
-"organisatie op alle larpmanagerpagina's in het subdomein."
 
 #, python-format
 msgid ""

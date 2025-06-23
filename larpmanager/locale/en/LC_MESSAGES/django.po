@@ -7371,84 +7371,6 @@ msgstr ""
 msgid "Now you can se the special page options"
 msgstr ""
 
-msgid "Create Organization"
-msgstr ""
-
-msgid ""
-"Enables creating a new organisation in larpmanager, defining how many events "
-"and runs it will have."
-msgstr ""
-
-msgid "Player information"
-msgstr ""
-
-msgid ""
-"Allows you to specify precisely which user data is collected and stored in "
-"the system."
-msgstr ""
-
-msgid "Organization Appearance"
-msgstr ""
-
-msgid ""
-"Lets you customize the appearance (style/theme) for the entire organisation "
-"across all larpmanager pages in the subdomain."
-msgstr ""
-
-msgid "Manage Events"
-msgstr ""
-
-msgid ""
-"Enables the creation, editing, and complete customization of any number of "
-"events."
-msgstr ""
-
-msgid "Manage Runs"
-msgstr ""
-
-msgid "Allows you to create and manage multiple runs of an event."
-msgstr ""
-
-msgid "Manage Ticket"
-msgstr ""
-
-msgid ""
-"Lets you create, edit, and manage any number of registration ticket types "
-"that players can choose."
-msgstr ""
-
-msgid "Enables customization of all event-related pages' appearance."
-msgstr ""
-
-msgid ""
-"Enables managing the registration form questions (short text, long text, "
-"single choice, multiple choice, etc.)."
-msgstr ""
-
-msgid "Organization Roles"
-msgstr ""
-
-msgid ""
-"Defines which users have permission to manage the organisation's settings "
-"and features."
-msgstr ""
-
-msgid "Event Roles"
-msgstr ""
-
-msgid ""
-"Allows you to define which users can access the event organizer "
-"functionalities."
-msgstr ""
-
-msgid "Privacy management"
-msgstr ""
-
-msgid ""
-"Provides users with comprehensive privacy controls to manage how their data "
-"is shared or displayed."
-msgstr ""
-
 msgid "URL shortener"
 msgstr ""
 
@@ -7466,14 +7388,6 @@ msgstr ""
 msgid "Now you can create registration surcharges"
 msgstr ""
 
-msgid "Advanced features"
-msgstr ""
-
-msgid ""
-"Lets you freely choose which features to activate for the entire "
-"organisation or for a specific event."
-msgstr ""
-
 msgid ""
 "Enables managing of entry of revenue for an event that do not originate from "
 "player registrations."
@@ -7485,21 +7399,6 @@ msgstr ""
 msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "
 "popular streaming-service layouts."
-msgstr ""
-
-msgid "Lets you upload items from a CSV file."
-msgstr ""
-
-msgid "Allows you to download data in CSV files."
-msgstr ""
-
-msgid "Enables searching across all elements."
-msgstr ""
-
-msgid "Automatic saving"
-msgstr ""
-
-msgid "Automatically saves writing elements to prevent data loss."
 msgstr ""
 
 msgid "Treasurer"
@@ -7525,33 +7424,6 @@ msgid "Enables a volunteer register, as required by Italian RUNTS regulations."
 msgstr ""
 
 msgid "Now you can review the volunteers registry"
-msgstr ""
-
-msgid "Default miscellany"
-msgstr ""
-
-msgid "Default accounting"
-msgstr ""
-
-msgid "Default casting"
-msgstr ""
-
-msgid "Default users"
-msgstr ""
-
-msgid "Predefined structure"
-msgstr ""
-
-msgid "Default appearance"
-msgstr ""
-
-msgid "Default registration"
-msgstr ""
-
-msgid "Default writing"
-msgstr ""
-
-msgid "Gives organizers complete control over player registrations."
 msgstr ""
 
 msgid "Taxes"
@@ -7605,6 +7477,78 @@ msgid "Check the validity of the fiscal code."
 msgstr ""
 
 msgid "Now you can peform the fiscal code validity check"
+msgstr ""
+
+msgid "Orga Cancellations"
+msgstr ""
+
+msgid "Orga Form"
+msgstr ""
+
+msgid "Orga Tickets"
+msgstr ""
+
+msgid "Orga Registrations"
+msgstr ""
+
+msgid "Orga Sensitive data"
+msgstr ""
+
+msgid "Orga Accounting"
+msgstr ""
+
+msgid "Orga Appearance"
+msgstr ""
+
+msgid "Orga Features"
+msgstr ""
+
+msgid "Orga Configuration"
+msgstr ""
+
+msgid "Orga Roles"
+msgstr ""
+
+msgid "Orga Run"
+msgstr ""
+
+msgid "Orga Event"
+msgstr ""
+
+msgid "Exe Archive"
+msgstr ""
+
+msgid "Exe Profile"
+msgstr ""
+
+msgid "Exe Send e-mail"
+msgstr ""
+
+msgid "Exe Runs"
+msgstr ""
+
+msgid "Exe Event"
+msgstr ""
+
+msgid "Exe Texts"
+msgstr ""
+
+msgid "Exe Appearance"
+msgstr ""
+
+msgid "Exe Accounting"
+msgstr ""
+
+msgid "Exe Features"
+msgstr ""
+
+msgid "Exe Configuration"
+msgstr ""
+
+msgid "Exe Roles"
+msgstr ""
+
+msgid "Exe Organization"
 msgstr ""
 
 msgid "Manage the organization main settings"
@@ -7960,25 +7904,10 @@ msgstr ""
 msgid "Manage answers for workshop questions"
 msgstr ""
 
-msgid "Customize specific texts on the event interface"
-msgstr ""
-
-msgid "Customize buttons in the event navigation bar"
-msgstr ""
-
 msgid "Display secret registration link"
 msgstr ""
 
-msgid "Cache Reloading"
-msgstr ""
-
-msgid "Reload cached event data"
-msgstr ""
-
 msgid "Manage questions and options for characters and writing elements"
-msgstr ""
-
-msgid "Display sent e-mails"
 msgstr ""
 
 #, python-format

@@ -915,6 +915,9 @@ msgstr "Slutdatum"
 msgid "Excluded"
 msgstr "Exklusive"
 
+msgid "Exe Runs"
+msgstr "Exe körningar"
+
 msgid "Expected"
 msgstr "Förväntad"
 
@@ -968,6 +971,9 @@ msgstr "Smeknamn"
 
 msgid "Optional"
 msgstr "Valfritt"
+
+msgid "Orga Run"
+msgstr "Orga Run"
 
 msgid "Original"
 msgstr "Original"
@@ -1161,6 +1167,15 @@ msgstr "Anmälan"
 msgid "Event T&C"
 msgstr "Villkor för evenemang"
 
+msgid "Exe Event"
+msgstr "Exe-evenemang"
+
+msgid "Exe Roles"
+msgstr "Exe-roller"
+
+msgid "Exe Texts"
+msgstr "Exe-texter"
+
 msgid "Factions:"
 msgstr "Grupper:"
 
@@ -1187,6 +1202,9 @@ msgstr "Nästa körningar"
 
 msgid "Operation"
 msgstr "Drift"
+
+msgid "Orga Form"
+msgstr "Orga Form"
 
 msgid "Organizer"
 msgstr "Organisatör"
@@ -1380,6 +1398,12 @@ msgstr "Nyhetsbrev"
 msgid "Next quota"
 msgstr "Nästa kvot"
 
+msgid "Orga Event"
+msgstr "Orga Event"
+
+msgid "Orga Roles"
+msgstr "Orga Roller"
+
 msgid "Passengers"
 msgstr "Passagerare"
 
@@ -1545,11 +1569,14 @@ msgstr "Direkt länk"
 msgid "Disbursment"
 msgstr "Utbetalning"
 
-msgid "Event Roles"
-msgstr "Event-roller"
-
 msgid "Event texts"
 msgstr "Händelsetexter"
+
+msgid "Exe Archive"
+msgstr "Exe-arkiv"
+
+msgid "Exe Profile"
+msgstr "Exe-profil"
 
 msgid "Fiscal code"
 msgstr "Skattekod"
@@ -1580,9 +1607,6 @@ msgstr "Lättvikt"
 
 msgid "Limitations"
 msgstr "Begränsningar"
-
-msgid "Manage Runs"
-msgstr "Hantera körningar"
 
 msgid "Nationality"
 msgstr "Nationalitet"
@@ -1722,6 +1746,9 @@ msgstr "Utbetalning"
 msgid "Event status"
 msgstr "Status för händelse"
 
+msgid "Exe Features"
+msgstr "Exe-funktioner"
+
 msgid "Experimental"
 msgstr "Experimentell"
 
@@ -1784,6 +1811,9 @@ msgstr "Ej vald"
 
 msgid "Opening date"
 msgstr "Öppningsdatum"
+
+msgid "Orga Tickets"
+msgstr "Orga Biljetter"
 
 msgid "Organization"
 msgstr "Förening"
@@ -1933,9 +1963,6 @@ msgstr "Konfiguration"
 msgid "Deadline date"
 msgstr "Sista inlämningsdag"
 
-msgid "Default users"
-msgstr "Standardanvändare"
-
 msgid "Delivery list"
 msgstr "Lista över utbetalningar"
 
@@ -1972,12 +1999,6 @@ msgstr "Totala intäkter"
 msgid "Internal link"
 msgstr "Intern länk"
 
-msgid "Manage Events"
-msgstr "Hantera evenemang"
-
-msgid "Manage Ticket"
-msgstr "Hantera biljett"
-
 msgid "Manage events"
 msgstr "Hantera evenemang"
 
@@ -2001,6 +2022,9 @@ msgstr "Ej slutfört"
 
 msgid "Number events"
 msgstr "Antal evenemang"
+
+msgid "Orga Features"
+msgstr "Orga Funktioner"
 
 msgid "Passages made"
 msgstr "Åtgärder som vidtagits"
@@ -2131,6 +2155,12 @@ msgstr "Mall för evenemang"
 
 msgid "Event features"
 msgstr "Funktioner för evenemang"
+
+msgid "Exe Accounting"
+msgstr "Exe Redovisning"
+
+msgid "Exe Appearance"
+msgstr "Exe Utseende"
 
 msgid "Executive Vote"
 msgstr "Ledningens omröstning"
@@ -2264,9 +2294,6 @@ msgstr "begäran om återbetalning"
 msgid "Bring a friend!"
 msgstr "Ta med en vän!"
 
-msgid "Cache Reloading"
-msgstr "Cache Återladdning"
-
 msgid "Change password"
 msgstr "Återställning av lösenord"
 
@@ -2288,12 +2315,6 @@ msgstr "Tidsfrist (datum)"
 msgid "Deadline (days)"
 msgstr "Tidsfrist (dagar)"
 
-msgid "Default casting"
-msgstr "Standardgjutning"
-
-msgid "Default writing"
-msgstr "Standardskrivning"
-
 msgid "Disable credits"
 msgstr "Avaktivera krediter"
 
@@ -2302,6 +2323,9 @@ msgstr "Dokumentnummer"
 
 msgid "Event not found"
 msgstr "Händelsen hittades inte"
+
+msgid "Exe Send e-mail"
+msgstr "Exe Skicka e-post"
 
 msgid "Filter factions"
 msgstr "Filtrera grupper"
@@ -2323,6 +2347,12 @@ msgstr "Text på flera rader"
 
 msgid "Multiple choice"
 msgstr "Flera valmöjligheter"
+
+msgid "Orga Accounting"
+msgstr "Orga Redovisning"
+
+msgid "Orga Appearance"
+msgstr "Orga Utseende"
 
 msgid "Overall balance"
 msgstr "Budget för likvida medel"
@@ -2393,9 +2423,6 @@ msgstr "Planerade händelser"
 msgid "Activate feature"
 msgstr "Aktivera funktion"
 
-msgid "Automatic saving"
-msgstr "Automatiskt sparande"
-
 msgid "Background image"
 msgstr "Bakgrundsbild"
 
@@ -2440,6 +2467,9 @@ msgstr "Redovisning av evenemang"
 
 msgid "Event navigation"
 msgstr "Navigation för evenemang"
+
+msgid "Exe Organization"
+msgstr "Exe Organisation"
 
 msgid "Foreign language"
 msgstr "Utländskt språk"
@@ -2582,9 +2612,6 @@ msgstr "Aktiv samling"
 msgid "Additional fields"
 msgstr "Ytterligare fält"
 
-msgid "Advanced features"
-msgstr "Avancerade funktioner"
-
 msgid "All comunications"
 msgstr "Alla meddelanden"
 
@@ -2623,6 +2650,9 @@ msgstr "Ladda ner dokument"
 
 msgid "Element approved!"
 msgstr "Godkänt element!"
+
+msgid "Exe Configuration"
+msgstr "Exe-konfiguration"
 
 msgid "Experience points"
 msgstr "Erfarenhetspoäng"
@@ -2762,15 +2792,6 @@ msgstr "Personliga färdigheter"
 msgid "Cover (thumb) link"
 msgstr "Länkskydd (tumme)"
 
-msgid "Default accounting"
-msgstr "Standardredovisning"
-
-msgid "Default appearance"
-msgstr "Standardutseende"
-
-msgid "Default miscellany"
-msgstr "Standard för diverse"
-
 msgid "Delegated accounts"
 msgstr "Delegerade konton"
 
@@ -2798,8 +2819,14 @@ msgstr "Kontroll av medlemsuppgifter"
 msgid "New refund request"
 msgstr "Ny begäran om återbetalning"
 
-msgid "Organization Roles"
-msgstr "Organisationens roller"
+msgid "Orga Cancellations"
+msgstr "Orga Avbokningar"
+
+msgid "Orga Configuration"
+msgstr "Orga Konfiguration"
+
+msgid "Orga Registrations"
+msgstr "Orga Registreringar"
 
 msgid "Patron and Reduced"
 msgstr "Beskyddare och reducerad"
@@ -2813,17 +2840,11 @@ msgstr "Hantering av betalningar"
 msgid "Perform extraction"
 msgstr "Utför extraktion"
 
-msgid "Player information"
-msgstr "Information om spelaren"
-
 msgid "Pre-register here!"
 msgstr "Föranmäl dig här!"
 
 msgid "Preferences saved!"
 msgstr "Inställningar sparade!"
-
-msgid "Privacy management"
-msgstr "Sekretesshantering"
 
 msgid "Proposed character"
 msgstr "Föreslagen karaktär"
@@ -2891,9 +2912,6 @@ msgstr "Laddning av spelaren"
 msgid "Confirmation delete"
 msgstr "Bekräftelse radera"
 
-msgid "Create Organization"
-msgstr "Skapa organisation"
-
 msgid "Credit disbursement"
 msgstr "Utbetalning av kredit"
 
@@ -2948,6 +2966,9 @@ msgstr "Icke-kumulativ kod"
 
 msgid "Number of event run"
 msgstr "Händelsens löpnummer"
+
+msgid "Orga Sensitive data"
+msgstr "Orga Känsliga uppgifter"
 
 msgid "Password of account"
 msgstr "Lösenord för konto"
@@ -3012,12 +3033,6 @@ msgstr "Komplett blad (Pdf)"
 msgid "Create new character"
 msgstr "Skapa ny karaktär"
 
-msgid "Default registration"
-msgstr "Standardregistrering"
-
-msgid "Display sent e-mails"
-msgstr "Visa skickade e-postmeddelanden"
-
 msgid "Download light sheet"
 msgstr "Ladda ner ljusblad"
 
@@ -3075,9 +3090,6 @@ msgstr "Bekräftelse av betalningar"
 
 msgid "Payments in approval"
 msgstr "Betalningar under godkännande"
-
-msgid "Predefined structure"
-msgstr "Fördefinierad struktur"
 
 msgid "Preference not valid"
 msgstr "Ogiltig preferens"
@@ -3418,9 +3430,6 @@ msgstr "Antal platser i primärvården"
 msgid "Number of waiting spots"
 msgstr "Antal väntande platser"
 
-msgid "Organization Appearance"
-msgstr "Organisation Utseende"
-
 msgid "Payment membership fee:"
 msgstr "Betalning av medlemsavgifter:"
 
@@ -3503,9 +3512,6 @@ msgstr "Förhandsanmälningar sparade!"
 
 msgid "Provisional registration"
 msgstr "Provisorisk registrering"
-
-msgid "Reload cached event data"
-msgstr "Ladda om cachad händelsedata"
 
 msgid "Secret registration link"
 msgstr "Hemlig registreringslänk"
@@ -4473,14 +4479,8 @@ msgstr "Kontrollera att skattekoden är giltig."
 msgid "Complete name of the LARP Organization"
 msgstr "Föreningens fullständiga namn"
 
-msgid "Enables searching across all elements."
-msgstr "Möjliggör sökning över alla element."
-
 msgid "Event display and visual customization"
 msgstr "Händelsevisning och visuell anpassning"
-
-msgid "Lets you upload items from a CSV file."
-msgstr "Låter dig ladda upp objekt från en CSV-fil."
 
 msgid "Manage fields that track players’ data"
 msgstr "Hantera fält som spårar spelardata"
@@ -4631,9 +4631,6 @@ msgstr "Bra jobbat, du har klarat alla moduler!"
 
 msgid "Added at the top of the user profile page"
 msgstr "Tillagd högst upp på sidan med användarprofilen"
-
-msgid "Allows you to download data in CSV files."
-msgstr "Gör att du kan ladda ner data i CSV-filer."
 
 msgid "Choice locked, click to make it available"
 msgstr "Valet låst, klicka för att göra det tillgängligt"
@@ -4888,9 +4885,6 @@ msgstr "Denna sida sammanfattar de olika typerna av händelseprolog."
 msgid "Configure gateways to process player payments"
 msgstr "Konfigurera gateways för att behandla spelarbetalningar"
 
-msgid "Customize buttons in the event navigation bar"
-msgstr "Anpassa knapparna i navigeringsfältet för evenemang"
-
 msgid "Elements you wish to avoid in the assignment:"
 msgstr "Element som du vill undvika i uppdraget:"
 
@@ -5003,9 +4997,6 @@ msgstr "Tillagd på registreringssidan, före formuläret"
 
 msgid "Check consistency of the members’ personal data"
 msgstr "Kontrollera att medlemmarnas personuppgifter är korrekta"
-
-msgid "Customize specific texts on the event interface"
-msgstr "Anpassa specifika texter på eventgränssnittet"
 
 msgid "Do you wish to be always updated on our events?"
 msgstr "Vill du hålla dig uppdaterad om våra evenemang?"
@@ -5605,13 +5596,6 @@ msgstr "Du kan inte lösa in ett medlemskap, du är redan medlem!"
 msgid "(Optional) an image that will be shown inside the question"
 msgstr "(Valfritt) en bild som kommer att visas i frågan"
 
-msgid "Allows you to create and manage multiple runs of an event."
-msgstr ""
-"Ger dig möjlighet att skapa och hantera flera körningar av ett evenemang."
-
-msgid "Automatically saves writing elements to prevent data loss."
-msgstr "Sparar automatiskt skrivelement för att förhindra dataförlust."
-
 msgid "Displays full lists of usual players not already signed up"
 msgstr ""
 "Visar fullständiga listor över vanliga spelare som inte redan har anmält sig"
@@ -5710,9 +5694,6 @@ msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
 "VARNING: denna åtgärd skriver över ändringar som gjorts till detta evenemang"
 
-msgid "Gives organizers complete control over player registrations."
-msgstr "Ger arrangörerna fullständig kontroll över spelarregistreringarna."
-
 msgid "If checked: shows a link to the event in the navigation bar."
 msgstr "Om markerad: visar en länk till evenemanget i navigeringsfältet."
 
@@ -5777,9 +5758,6 @@ msgstr ""
 
 msgid "Allows players to cancel their own registrations at any time."
 msgstr "Tillåter spelare att när som helst avboka sina egna registreringar."
-
-msgid "Enables customization of all event-related pages' appearance."
-msgstr "Möjliggör anpassning av utseendet på alla eventrelaterade sidor."
 
 msgid "If checked, makes prologues visible to the assigned character"
 msgstr "Om markerad, gör prologer synliga för den tilldelade karaktären"
@@ -6910,13 +6888,6 @@ msgstr ""
 " på alla sätt vi kan!"
 
 msgid ""
-"Allows you to define which users can access the event organizer "
-"functionalities."
-msgstr ""
-"Ger dig möjlighet att definiera vilka användare som har tillgång till "
-"funktionerna för evenemangsarrangörer."
-
-msgid ""
 "Indicate the date when registration opens. Leave blank to not open "
 "registrations"
 msgstr ""
@@ -7034,13 +7005,6 @@ msgid ""
 msgstr ""
 "Möjliggör skapande, redigering och tilldelning av karaktärer till "
 "registrerade spelare."
-
-msgid ""
-"Enables the creation, editing, and complete customization of any number of "
-"events."
-msgstr ""
-"Möjliggör skapande, redigering och fullständig anpassning av ett obegränsat "
-"antal händelser."
 
 msgid ""
 "Go ahead and click on this button to perform the extraction. Warning: it is "
@@ -7247,13 +7211,6 @@ msgstr ""
 "din organisation och dina evenemang!"
 
 msgid ""
-"Allows you to specify precisely which user data is collected and stored in "
-"the system."
-msgstr ""
-"Ger dig möjlighet att ange exakt vilka användardata som samlas in och lagras"
-" i systemet."
-
-msgid ""
 "If checked, automatically removes formatting when pasting text into the "
 "WYSIWYG editor"
 msgstr ""
@@ -7323,13 +7280,6 @@ msgid ""
 msgstr ""
 "Tillåter anpassade villkor för ett specifikt evenemang, som visas vid "
 "registreringen."
-
-msgid ""
-"Defines which users have permission to manage the organisation's settings "
-"and features."
-msgstr ""
-"Definierar vilka användare som har behörighet att hantera organisationens "
-"inställningar och funktioner."
 
 msgid ""
 "Displays the organisation-wide Terms and Conditions during registration for "
@@ -7993,25 +7943,11 @@ msgstr ""
 "samtidigt för att undvika konflikter"
 
 msgid ""
-"Lets you create, edit, and manage any number of registration ticket types "
-"that players can choose."
-msgstr ""
-"Låter dig skapa, redigera och hantera valfritt antal typer av "
-"registreringsbiljetter som spelarna kan välja."
-
-msgid ""
 "This page shows all the runs saved in the system. From here you can edit "
 "them, or create new ones."
 msgstr ""
 "Denna sida sammanfattar alla körningar som sparats i systemet. Härifrån kan "
 "du redigera dem eller skapa nya."
-
-msgid ""
-"Enables creating a new organisation in larpmanager, defining how many events"
-" and runs it will have."
-msgstr ""
-"Gör det möjligt att skapa en ny organisation i larpmanager och definiera hur"
-" många evenemang och körningar den ska ha."
 
 msgid ""
 "Enables players to send private messages to each other, without revealing "
@@ -8026,13 +7962,6 @@ msgid ""
 msgstr ""
 "Om den är markerad döljs alternativ som inte längre är tillgängliga i "
 "formuläret, istället för att visas inaktiverade"
-
-msgid ""
-"Provides users with comprehensive privacy controls to manage how their data "
-"is shared or displayed."
-msgstr ""
-"Ger användarna omfattande sekretesskontroller för att hantera hur deras data"
-" delas eller visas."
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "
@@ -8173,13 +8102,6 @@ msgid ""
 msgstr ""
 "I stället för att använda ett internt registreringsformulär omdirigeras "
 "spelaren till en extern registreringslänk."
-
-msgid ""
-"Lets you freely choose which features to activate for the entire "
-"organisation or for a specific event."
-msgstr ""
-"Låter dig fritt välja vilka funktioner som ska aktiveras för hela "
-"organisationen eller för ett specifikt evenemang."
 
 msgid ""
 "This page allows you to select the features of a template. Click on a "
@@ -8526,13 +8448,6 @@ msgstr ""
 "(betalningar, medlemskap, formulär, casting etc.)."
 
 msgid ""
-"Enables managing the registration form questions (short text, long text, "
-"single choice, multiple choice, etc.)."
-msgstr ""
-"Gör det möjligt att hantera frågorna i registreringsformuläret (kort text, "
-"lång text, envalsfrågor, flervalsfrågor osv.)"
-
-msgid ""
 "If you select one (or more) tickets, the option will only be available to "
 "players who have selected that ticket"
 msgstr ""
@@ -8853,13 +8768,6 @@ msgid ""
 msgstr ""
 "Ange om rabatten endast kan användas i samband med en ny registrering, eller"
 " om den kan användas av redan registrerade spelare"
-
-msgid ""
-"Lets you customize the appearance (style/theme) for the entire organisation "
-"across all larpmanager pages in the subdomain."
-msgstr ""
-"Gör att du kan anpassa utseendet (stil/tema) för hela organisationen på alla"
-" larpmanager-sidor i underdomänen."
 
 #, python-format
 msgid ""

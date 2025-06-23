@@ -3,12 +3,9 @@
   fields:
     name: Wire
     slug: wire
-    instructions: "<p><strong>Beneficiary: </strong>Name of the recipient account\
-      \ holder.&nbsp;</p>\r\n<p><strong>IBAN</strong>: <span data-huuid=\"9902777109390532710\"\
-      >International Bank Account Number</span> of the recipient account (27-character\
-      \ long)</p>"
+    instructions: <p>Wire instructions</p>
     fields: payee, iban
-    profile: payment_methods/1_274bdcf7af444edd874d03c2fd897c5b.jpg
+    profile: ''
 - model: larpmanager.paymentmethod
   pk: 2
   fields:
