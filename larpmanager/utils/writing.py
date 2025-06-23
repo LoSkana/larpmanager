@@ -33,7 +33,7 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.text_fields import get_cache_text_field
 from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.access import get_event_staffers
-from larpmanager.models.casting import Trait
+from larpmanager.models.casting import Quest, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityPx
 from larpmanager.models.form import QuestionApplicable, QuestionType, WritingAnswer, WritingQuestion
@@ -123,7 +123,7 @@ def writing_popup(request, ctx, typ):
         return JsonResponse({"k": 0})
 
     tx = f"<h2>{el} - {tp}</h2>"
-    if typ == Trait:
+    if typ in [Trait, Quest]:
         tx += show_trait(ctx, getattr(el, tp), ctx["run"], 1)
     else:
         tx += show_char(ctx, getattr(el, tp), ctx["run"], 1)

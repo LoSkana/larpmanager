@@ -31,11 +31,11 @@ window.addEventListener('DOMContentLoaded', function() {
 
     function add_relationship(ch_id, ch_name) {
 
-        charUrl = editUrl;
+        charUrl = editUrl.replace(/\/0\/$/, `/${ch_id}/`);;
 
         var html = `
         <h3>
-            <a href="URL_DA_SOSTITUIRE">{1}</a>
+            <a href="{2}">{1}</a>
         </h3>
         <table class="no_csv">
             <tr>
