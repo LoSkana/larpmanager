@@ -41,7 +41,7 @@ from larpmanager.models.event import (
 from larpmanager.models.form import (
     RegistrationOption,
 )
-from larpmanager.models.member import Membership, get_user_membership
+from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -164,12 +164,12 @@ def share(request):
     ctx = def_user_ctx(request)
 
     el = get_user_membership(request.user.member, request.assoc["id"])
-    if el.status != Membership.EMPTY:
+    if el.status != MembershipStatus.EMPTY:
         messages.success(request, _("You have already granted data sharing with this organisation!"))
         return redirect("home")
 
     if request.method == "POST":
-        el.status = Membership.JOINED
+        el.status = MembershipStatus.JOINED
         el.save()
         messages.success(request, _("You have granted data sharing with this organisation!"))
         return redirect("home")

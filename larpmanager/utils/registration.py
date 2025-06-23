@@ -30,9 +30,9 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
-from larpmanager.models.accounting import PaymentInvoice
+from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
 from larpmanager.models.form import RegistrationAnswer, RegistrationChoice, RegistrationOption, RegistrationQuestion
-from larpmanager.models.member import Membership, get_user_membership
+from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.common import format_datetime, get_time_diff_today
@@ -127,14 +127,14 @@ def registration_status_signed(run, features, register_url):
     register_text = f"<a href='{register_url}'>{register_msg}</a>"
 
     if "membership" in features:
-        if mb.status in [Membership.EMPTY, Membership.JOINED, Membership.UPLOADED]:
+        if mb.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
             membership_url = reverse("membership")
             mes = _("to confirm it, send your membership application.")
             text_url = f", <a href='{membership_url}'>{mes}</a>"
             run.status["text"] = register_text + text_url
             return
 
-        if mb.status in [Membership.SUBMITTED]:
+        if mb.status in [MembershipStatus.SUBMITTED]:
             run.status["text"] = register_text + ", " + _("awaiting member approval to proceed with payment")
             return
 
@@ -170,8 +170,8 @@ def _status_payment(register_text, run):
     pending = PaymentInvoice.objects.filter(
         idx=run.reg.id,
         member_id=run.reg.member_id,
-        status=PaymentInvoice.SUBMITTED,
-        typ=PaymentInvoice.REGISTRATION,
+        status=PaymentStatus.SUBMITTED,
+        typ=PaymentType.REGISTRATION,
     )
     if pending.count() > 0:
         run.status["text"] = register_text + ", " + _("payment pending confirmation")
@@ -181,8 +181,8 @@ def _status_payment(register_text, run):
         wire_created = PaymentInvoice.objects.filter(
             idx=run.reg.id,
             member_id=run.reg.member_id,
-            status=PaymentInvoice.CREATED,
-            typ=PaymentInvoice.REGISTRATION,
+            status=PaymentStatus.CREATED,
+            typ=PaymentType.REGISTRATION,
             method__slug="wire",
         )
         if wire_created.count() > 0:

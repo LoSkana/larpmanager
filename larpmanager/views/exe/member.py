@@ -52,7 +52,15 @@ from larpmanager.models.association import Association
 from larpmanager.models.event import (
     Run,
 )
-from larpmanager.models.member import Badge, Member, Membership, VolunteerRegistry, Vote, get_user_membership
+from larpmanager.models.member import (
+    Badge,
+    Member,
+    Membership,
+    MembershipStatus,
+    VolunteerRegistry,
+    Vote,
+    get_user_membership,
+)
 from larpmanager.models.miscellanea import (
     Email,
     HelpQuestion,
@@ -97,7 +105,7 @@ def exe_membership(request):
         next_regs[member_id].append(run_id)
 
     que = Membership.objects.filter(assoc_id=ctx["a_id"]).select_related("member")
-    que = que.exclude(status__in=[Membership.EMPTY, Membership.JOINED]).order_by("member__surname")
+    que = que.exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED]).order_by("member__surname")
     values = ("member__id", "member__surname", "member__name", "member__email", "card_number", "status")
     for member in que.values_list(*values):
         v = member[5]
@@ -132,13 +140,13 @@ def exe_membership_evaluation(request, num):
         if form.is_valid():
             resp = request.POST["response"]
             if request.POST["approved"] == "1":
-                member.membership.status = Membership.ACCEPTED
+                member.membership.status = MembershipStatus.ACCEPTED
                 member.membership.save()
                 notify_membership_approved(member, resp)
                 update_member_registrations(member)
                 messages.success(request, _("Member approved!"))
             else:
-                member.membership.status = Membership.EMPTY
+                member.membership.status = MembershipStatus.EMPTY
                 member.membership.save()
                 notify_membership_reject(member, resp)
                 messages.success(request, _("Member refused!"))
@@ -160,7 +168,7 @@ def exe_membership_evaluation(request, num):
 
     ctx["member_exists"] = False
     que = Membership.objects.select_related("member").filter(assoc_id=ctx["a_id"])
-    que = que.exclude(status__in=[Membership.EMPTY, Membership.JOINED]).exclude(member_id=member.id)
+    que = que.exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED]).exclude(member_id=member.id)
     for other in que.values_list("member__surname", "member__name"):
         if normalize_string(other[1]) == normalized_name:
             if normalize_string(other[0]) == normalized_surname:
@@ -186,7 +194,7 @@ def exe_membership_check(request):
     member_ids = set(
         Membership.objects.filter(assoc_id=ctx["a_id"])
         .select_related("member")
-        .exclude(status__in=[Membership.EMPTY, Membership.JOINED])
+        .exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED])
         .values_list("member_id", flat=True)
     )
 

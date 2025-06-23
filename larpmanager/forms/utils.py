@@ -38,7 +38,7 @@ from larpmanager.models.experience import AbilityPx
 from larpmanager.models.form import (
     WritingOption,
 )
-from larpmanager.models.member import Member, Membership
+from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
@@ -234,7 +234,7 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
 def get_assoc_people(assoc_id):
     ls = []
     que = Membership.objects.select_related("member").filter(assoc_id=assoc_id)
-    que = que.exclude(status=Membership.EMPTY).exclude(status=Membership.REWOKED)
+    que = que.exclude(status=MembershipStatus.EMPTY).exclude(status=MembershipStatus.REWOKED)
     for f in que:
         ls.append((f.member.id, f"{str(f.member)} - {f.member.email}"))
     return ls
@@ -426,7 +426,7 @@ class RedirectForm(forms.Form):
 
 
 def get_members_queryset(aid):
-    allwd = [Membership.ACCEPTED, Membership.SUBMITTED, Membership.JOINED]
+    allwd = [MembershipStatus.ACCEPTED, MembershipStatus.SUBMITTED, MembershipStatus.JOINED]
     qs = Member.objects.prefetch_related("memberships")
     qs = qs.filter(memberships__assoc_id=aid, memberships__status__in=allwd)
     return qs
