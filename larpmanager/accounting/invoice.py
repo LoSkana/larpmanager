@@ -25,7 +25,7 @@ from io import StringIO
 from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.mail.base import notify_admins
-from larpmanager.models.accounting import PaymentInvoice
+from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.utils.common import clean, detect_delimiter
 
 
@@ -96,13 +96,13 @@ def invoice_received_money(cod, gross=None, fee=None, txn_id=None):
     if txn_id:
         invoice.txn_id = txn_id
 
-    if invoice.status in (PaymentInvoice.CHECKED, PaymentInvoice.CONFIRMED):
+    if invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
         return True
 
     # ~ invoice.mc_gross = ipn_obj.mc_gross
     # ~ invoice.mc_fee = ipn_obj.mc_fee
     # ~ invoice.txn_id = ipn_obj.txn_id
-    invoice.status = PaymentInvoice.CHECKED
+    invoice.status = PaymentStatus.CHECKED
     invoice.save()
 
     # print(invoice)

@@ -53,7 +53,7 @@ from larpmanager.models.form import (
     WritingQuestion,
 )
 from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTutorial
-from larpmanager.models.member import Member, Membership
+from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Faction, Plot, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.utils.common import copy_class
@@ -207,7 +207,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(pre_save, sender=Membership)
 def pre_save_membership(sender, instance, **kwargs):
-    if instance.status == Membership.ACCEPTED:
+    if instance.status == MembershipStatus.ACCEPTED:
         if not instance.card_number:
             n = Membership.objects.filter(assoc=instance.assoc).aggregate(Max("card_number"))["card_number__max"]
             if not n:
@@ -216,7 +216,7 @@ def pre_save_membership(sender, instance, **kwargs):
         if not instance.date:
             instance.date = date.today()
 
-    if instance.status == Membership.EMPTY:
+    if instance.status == MembershipStatus.EMPTY:
         if instance.card_number:
             instance.card_number = None
         if instance.date:

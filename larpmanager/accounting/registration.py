@@ -40,7 +40,7 @@ from larpmanager.models.accounting import (
 from larpmanager.models.casting import AssignmentTrait
 from larpmanager.models.event import DevelopStatus
 from larpmanager.models.form import RegistrationChoice, RegistrationOption
-from larpmanager.models.member import Membership, get_user_membership
+from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -467,7 +467,7 @@ def update_registration_accounting(reg):
     if "membership" in features and "laog" not in features:
         if not hasattr(reg, "membership"):
             reg.membership = get_user_membership(reg.member, assoc_id)
-        if reg.membership.status != Membership.ACCEPTED:
+        if reg.membership.status != MembershipStatus.ACCEPTED:
             return
 
     registration_tokens_credits(reg, remaining, features, assoc_id)

@@ -18,27 +18,21 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.urls import (
-    path,
-)
+from django.urls import path
 
-from larpmanager.views.exe import (
-    accounting as views_ea,
-)
-from larpmanager.views.exe import (
-    assoc as views_eas,
-)
-from larpmanager.views.exe import (
-    event as views_ee,
-)
-from larpmanager.views.exe import (
-    member as views_em,
-)
-from larpmanager.views.exe import (
-    miscellanea as views_ems,
-)
+from larpmanager.views import manage as views_mg
+from larpmanager.views.exe import accounting as views_ea
+from larpmanager.views.exe import assoc as views_eas
+from larpmanager.views.exe import event as views_ee
+from larpmanager.views.exe import member as views_em
+from larpmanager.views.exe import miscellanea as views_ems
 
 urlpatterns = [
+    path(
+        "manage/",
+        views_mg.manage,
+        name="manage",
+    ),
     path(
         "manage/deadlines/",
         views_ee.exe_deadlines,
@@ -443,5 +437,10 @@ urlpatterns = [
         "feature/description/",
         views_eas.feature_description,
         name="feature_description",
+    ),
+    path(
+        "manage/suggestions/<slug:perm>/",
+        views_mg.exe_close_suggestion,
+        name="exe_close_suggestion",
     ),
 ]

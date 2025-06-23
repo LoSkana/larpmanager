@@ -47,6 +47,8 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     Discount,
     PaymentInvoice,
+    PaymentStatus,
+    PaymentType,
 )
 from larpmanager.models.association import AssocTextType
 from larpmanager.models.event import (
@@ -54,7 +56,7 @@ from larpmanager.models.event import (
     EventTextType,
     PreRegistration,
 )
-from larpmanager.models.member import Membership, get_user_membership
+from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
@@ -209,7 +211,7 @@ def registration_redirect(request, reg, new_reg, run):
             return redirect("profile")
 
         memb_status = request.user.member.membership.status
-        if memb_status in [Membership.EMPTY, Membership.JOINED] and reg.ticket.tier != TicketTier.WAITING:
+        if memb_status in [MembershipStatus.EMPTY, MembershipStatus.JOINED] and reg.ticket.tier != TicketTier.WAITING:
             mes = _("To confirm your registration, apply to become a member of the Association.")
             messages.success(request, mes)
             return redirect("membership")
@@ -413,8 +415,8 @@ def _register_prepare(ctx, reg):
             PaymentInvoice.objects.filter(
                 idx=reg.id,
                 member_id=reg.member_id,
-                status=PaymentInvoice.SUBMITTED,
-                typ=PaymentInvoice.REGISTRATION,
+                status=PaymentStatus.SUBMITTED,
+                typ=PaymentType.REGISTRATION,
             ).count()
             > 0
         )

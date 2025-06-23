@@ -4397,8 +4397,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"this figure is the associative positive, the operating margin. It takes into "
-"account the budgets of the completed runs"
+"This is the associative positive operating margin, taking into account the "
+"budgets of completed runs, minus credits or tokens issued"
 msgstr ""
 
 msgid "Membership fees"
@@ -4414,8 +4414,8 @@ msgid "issued"
 msgstr ""
 
 msgid ""
-"this figure is the net that should result as the availability of financial "
-"instruments"
+"This is the overall amount that should be held in the organization’s bank "
+"and financial accounts"
 msgstr ""
 
 msgid "Transaction totals"
@@ -4674,10 +4674,14 @@ msgid ""
 "concerning the organisation."
 msgstr ""
 
-msgid "Can't find a user?"
+msgid ""
+"To assign a user to a role, they must first be added to the organization."
 msgstr ""
 
-msgid "Links to be accessed:"
+msgid "If you don't see an user, ask them to access"
+msgstr ""
+
+msgid "this link"
 msgstr ""
 
 msgid "Users"
@@ -5123,9 +5127,6 @@ msgid "Welcome to"
 msgstr ""
 
 msgid "Ongoing events"
-msgstr ""
-
-msgid "Suggestions"
 msgstr ""
 
 msgid "Quick Help"
@@ -6390,17 +6391,6 @@ msgid ""
 "concerning the event."
 msgstr ""
 
-msgid ""
-"According to LarpManager's privacy rules, you can only view users who have "
-"granted LarpManager permission to share their data with your organisation."
-msgstr ""
-
-msgid ""
-"Ask your co-workers to access this link; after their confirmation, their "
-"data will be shared with your organisation, and you will be able to add them "
-"to roles."
-msgstr ""
-
 msgid "Secret registration link"
 msgstr ""
 
@@ -6857,8 +6847,8 @@ msgid "Pay what you want"
 msgstr ""
 
 msgid ""
-"Allows players to add an optional extra amount to their registration fee (e."
-"g. for donations or to help cover others' fees)."
+"Allows players to add an optional extra amount to their registration fee "
+"(e.g. for donations or to help cover others' fees)."
 msgstr ""
 
 msgid "Now you can set the optional amount field"
@@ -8157,36 +8147,6 @@ msgstr ""
 msgid "Registration completed successfully!"
 msgstr ""
 
-msgid "Registrations on external link"
-msgstr ""
-
-msgid "Pre-registration active"
-msgstr ""
-
-msgid "Registrations opening not set"
-msgstr ""
-
-#, python-format
-msgid "Registrations opening at: %(date)s"
-msgstr ""
-
-msgid "Registrations open"
-msgstr ""
-
-msgid "Filler registrations"
-msgstr ""
-
-msgid "Waiting list registrations"
-msgstr ""
-
-msgid "Registration closed"
-msgstr ""
-
-msgid ""
-"There are no active events, to create a new one access the events management "
-"page:"
-msgstr ""
-
 msgid "Request approved"
 msgstr ""
 
@@ -8244,6 +8204,159 @@ msgstr ""
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
+msgstr ""
+
+msgid "Registrations on external link"
+msgstr ""
+
+msgid "Pre-registration active"
+msgstr ""
+
+msgid "Registrations opening not set"
+msgstr ""
+
+#, python-format
+msgid "Registrations opening at: %(date)s"
+msgstr ""
+
+msgid "Registrations open"
+msgstr ""
+
+msgid "Filler registrations"
+msgstr ""
+
+msgid "Waiting list registrations"
+msgstr ""
+
+msgid "Registration closed"
+msgstr ""
+
+msgid ""
+"There are no active events, to create a new one access the events management "
+"page:"
+msgstr ""
+
+msgid ""
+"To set up the gateway payment available to players, to let them pay the "
+"registration fee through the platform, access the payment settings "
+"management page:"
+msgstr ""
+
+msgid ""
+"To define which data will be asked in the profile form to the users once "
+"they sign up, access the profile management page:"
+msgstr ""
+
+msgid ""
+"To grant access to organization management for other users and define roles "
+"with specific permissions, access the roles management page:"
+msgstr ""
+
+msgid ""
+"To customize the appearance of all organizational pages, including colors, "
+"fonts, and images, access the appearance management page:"
+msgstr ""
+
+msgid ""
+"To activate new features and enhance the functionality of the platform, "
+"access the features management page:"
+msgstr ""
+
+msgid ""
+"To set specific values for the interface configuration or features, access "
+"the configuration management page:"
+msgstr ""
+
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> expenses to approve, access the expenses "
+"management panel:"
+msgstr ""
+
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> payments to approve, access the invoices "
+"management panel:"
+msgstr ""
+
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> refunds to deliver, access the refunds "
+"management panel:"
+msgstr ""
+
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> members to approve, access the membership "
+"management panel:"
+msgstr ""
+
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> characters in proposed status, approve them in "
+"the character management panel:"
+msgstr ""
+
+msgid ""
+"You have activated both fixed and dynamic installments; they are not meant "
+"to be used together, deactivate one of the two in the features management "
+"panel:"
+msgstr ""
+
+msgid ""
+"You have activated dynamic installments, but none have been yet created; "
+"access the dynamic installments management panel:"
+msgstr ""
+
+msgid ""
+"You have activated fixed installments, but none have been yet created; "
+"access the fixed installments management panel:"
+msgstr ""
+
+msgid ""
+"You have activated registration opening date, but no value has been set; "
+"access the run management panel:"
+msgstr ""
+
+msgid ""
+"You have activated registration secret link, but no value has been set; "
+"access the run management panel:"
+msgstr ""
+
+msgid ""
+"To set the tickets that users can select during registration, access the "
+"tickets management page:"
+msgstr ""
+
+msgid ""
+"To define the registration form, and set up any number of registration "
+"questions and their options, access the registration form management page:"
+msgstr ""
+
+msgid ""
+"To grant access to event management for other users and define roles with "
+"specific permissions, access the roles management page:"
+msgstr ""
+
+msgid ""
+"To customize the appearance of all event pages, including colors, fonts, and "
+"images, access the appearance management page:"
+msgstr ""
+
+msgid ""
+"To activate new features and enhance the functionality of the event, access "
+"the features management page:"
+msgstr ""
+
+msgid ""
+"To set specific values for configuration of features of the event, access "
+"the configuration management page:"
+msgstr ""
+
+msgid "Suggestions"
+msgstr ""
+
+msgid "Actions"
 msgstr ""
 
 msgid "Reimbursement request item added"

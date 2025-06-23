@@ -30,7 +30,9 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     Collection,
     PaymentInvoice,
-    RefundRequest,
+    PaymentStatus,
+    PaymentType,
+    RefundStatus,
 )
 from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus
@@ -66,7 +68,7 @@ def info_accounting(request, ctx):
         _init_regs(choices, ctx, pending, reg)
 
     # check open refund requests
-    ctx["refunds"] = ctx["member"].refund_requests.filter(status=RefundRequest.REQUEST, assoc_id=ctx["a_id"])
+    ctx["refunds"] = ctx["member"].refund_requests.filter(status=RefundStatus.REQUEST, assoc_id=ctx["a_id"])
 
     _info_token_credit(ctx, member)
 
@@ -93,8 +95,8 @@ def _init_pending(member):
     pending = {}
     pending_que = PaymentInvoice.objects.filter(
         member_id=member.id,
-        status=PaymentInvoice.SUBMITTED,
-        typ=PaymentInvoice.REGISTRATION,
+        status=PaymentStatus.SUBMITTED,
+        typ=PaymentType.REGISTRATION,
     )
     for el in pending_que:
         if el.idx not in pending:
@@ -162,8 +164,8 @@ def _info_membership(ctx, member, request):
     ctx["year_membership_fee"] = year in ctx["membership_fee"]
     pending_que = PaymentInvoice.objects.filter(
         member=member,
-        status=PaymentInvoice.SUBMITTED,
-        typ=PaymentInvoice.MEMBERSHIP,
+        status=PaymentStatus.SUBMITTED,
+        typ=PaymentType.MEMBERSHIP,
     )
     if pending_que.count() > 0:
         ctx["year_membership_pending"] = True
