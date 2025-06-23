@@ -3224,10 +3224,6 @@ msgstr "Ověřovací platby"
 msgid "You have already paid"
 msgstr "Již jste zaplatili"
 
-#, python-format
-msgid "%(feature.after_text)s"
-msgstr "%(feature.after_text)s"
-
 msgid "Access your character!"
 msgstr "Získejte přístup ke své postavě!"
 

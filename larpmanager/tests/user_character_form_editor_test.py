@@ -57,10 +57,10 @@ def user_character_form_editor(live_server, page):
 
 def prepare(page, live_server):
     # Activate characters
-    go_to(page, live_server, "/manage/features/178/on")
+    go_to(page, live_server, "/test/1/manage/features/178/on")
 
     # Activate player editor
-    go_to(page, live_server, "/manage/features/120/on")
+    go_to(page, live_server, "/test/1/manage/features/120/on")
 
     go_to(page, live_server, "/test/1/manage/config")
     page.get_by_role("link", name="Player editor ").click()

@@ -3224,10 +3224,6 @@ msgstr "Pagamenti di verifica"
 msgid "You have already paid"
 msgstr "Hai già versato"
 
-#, python-format
-msgid "%(feature.after_text)s"
-msgstr "%(feature.after_text)s"
-
 msgid "Access your character!"
 msgstr "Accedi al tuo personaggio!"
 

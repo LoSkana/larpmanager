@@ -3224,10 +3224,6 @@ msgstr "Zahlungen zur Überprüfung"
 msgid "You have already paid"
 msgstr "Sie haben bereits bezahlt"
 
-#, python-format
-msgid "%(feature.after_text)s"
-msgstr "%(feature.after_text)s"
-
 msgid "Access your character!"
 msgstr "Greifen Sie auf Ihren Charakter zu!"
 

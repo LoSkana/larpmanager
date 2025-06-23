@@ -3224,10 +3224,6 @@ msgstr "Verifiering av betalningar"
 msgid "You have already paid"
 msgstr "Du har redan betalat"
 
-#, python-format
-msgid "%(feature.after_text)s"
-msgstr "%(feature.after_text)s"
-
 msgid "Access your character!"
 msgstr "Få tillgång till din karaktär!"
 

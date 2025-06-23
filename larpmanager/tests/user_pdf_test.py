@@ -43,7 +43,7 @@ def user_pdf(live_server, page):
     login_orga(page, live_server)
 
     # activate characters
-    go_to(page, live_server, "/manage/features/178/on")
+    go_to(page, live_server, "/test/1/manage/features/178/on")
 
     # activate relationships
     go_to(page, live_server, "/manage/features/75/on")

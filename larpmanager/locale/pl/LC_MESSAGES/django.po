@@ -3224,10 +3224,6 @@ msgstr "Płatności weryfikacyjne"
 msgid "You have already paid"
 msgstr "Już zapłaciłeś"
 
-#, python-format
-msgid "%(feature.after_text)s"
-msgstr "%(feature.after_text)s"
-
 msgid "Access your character!"
 msgstr "Uzyskaj dostęp do swojej postaci!"
 

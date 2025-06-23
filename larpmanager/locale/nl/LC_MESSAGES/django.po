@@ -3224,10 +3224,6 @@ msgstr "Verificatie betalingen"
 msgid "You have already paid"
 msgstr "U hebt al betaald"
 
-#, python-format
-msgid "%(feature.after_text)s"
-msgstr "%(feature.after_text)s"
-
 msgid "Access your character!"
 msgstr "Toegang tot je personage!"
 

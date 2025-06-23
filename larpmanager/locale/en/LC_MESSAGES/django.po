@@ -5140,10 +5140,6 @@ msgid ""
 "follow: "
 msgstr ""
 
-#, python-format
-msgid "%(feature.after_text)s"
-msgstr ""
-
 msgid "Discover what this event is about!"
 msgstr ""
 

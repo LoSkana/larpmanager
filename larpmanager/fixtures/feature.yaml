@@ -1304,7 +1304,7 @@
     placeholder: false
     order: 1
     after_text: 'Now you can create characters'
-    after_link: orga_character_form
+    after_link: orga_characters
 - model: larpmanager.feature
   pk: 179
   fields:
