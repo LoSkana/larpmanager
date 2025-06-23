@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -19,6 +20,7 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus, Event, Run
+from larpmanager.models.experience import AbilityTypePx, DeliveryPx
 from larpmanager.models.member import Membership, MembershipStatus
 from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota
 from larpmanager.models.writing import Character, CharacterStatus
@@ -245,6 +247,50 @@ def _orga_actions(ctx):
 
     features = get_event_features(ctx["event"].id)
 
+    _orga_reg_actions(ctx, features)
+
+    _orga_px_actions(ctx, features)
+
+
+def _orga_px_actions(ctx, features):
+    if "px" not in features:
+        return
+
+    if not ctx["event"].get_config("px_start", 0):
+        _add_action(
+            ctx,
+            _("Set the initial amount of experience points in the configuration panel: "),
+            "orga_px_abilities",
+            "config/px",
+        )
+
+    if not ctx["event"].get_elements(AbilityTypePx).count():
+        _add_action(
+            ctx,
+            _("No ability types have been created; use the ability type management panel to define them: "),
+            "orga_px_ability_types",
+        )
+
+    unused_ability_types = AbilityTypePx.objects.annotate(ability_count=Count("abilities")).filter(ability_count=0)
+    if unused_ability_types.count():
+        _add_action(
+            ctx,
+            _(
+                "There are ability types without abilities: %(list)s. Create abilities for them in the ability management panel:"
+            )
+            % {"list": ", ".join([ability.name for ability in unused_ability_types])},
+            "orga_px_abilities",
+        )
+
+    if not ctx["event"].get_elements(DeliveryPx).count():
+        _add_action(
+            ctx,
+            _("No delivery for experience points have been created; create one in the delivery management panel:"),
+            "orga_px_deliveries",
+        )
+
+
+def _orga_reg_actions(ctx, features):
     if "reg_installments" in features and "reg_quotas" in features:
         _add_action(
             ctx,
@@ -254,7 +300,6 @@ def _orga_actions(ctx):
             ),
             "orga_features",
         )
-
     if "reg_quotas" in features and not ctx["event"].get_elements(RegistrationQuota).count():
         _add_action(
             ctx,
@@ -264,7 +309,6 @@ def _orga_actions(ctx):
             ),
             "orga_registration_quotas",
         )
-
     if "reg_installments" in features and not ctx["event"].get_elements(RegistrationInstallment).count():
         _add_action(
             ctx,
@@ -274,7 +318,6 @@ def _orga_actions(ctx):
             ),
             "orga_registration_installments",
         )
-
     if "registration_open" in features and not ctx["run"].registration_open:
         _add_action(
             ctx,
@@ -284,7 +327,6 @@ def _orga_actions(ctx):
             ),
             "orga_run",
         )
-
     if "registration_secret" in features and not ctx["run"].registration_secret:
         _add_action(
             ctx,
@@ -328,19 +370,19 @@ def _orga_suggestions(ctx):
         _add_suggestion(ctx, text, perm)
 
 
-def _add_item(ctx, list_name, text, perm):
+def _add_item(ctx, list_name, text, perm, link):
     if list_name not in ctx:
         ctx[list_name] = []
 
-    ctx[list_name].append((text, perm))
+    ctx[list_name].append((text, perm, link))
 
 
-def _add_action(ctx, text, perm):
-    _add_item(ctx, "actions_list", text, perm)
+def _add_action(ctx, text, perm, link=None):
+    _add_item(ctx, "actions_list", text, perm, link)
 
 
-def _add_suggestion(ctx, text, perm):
-    _add_item(ctx, "suggestions_list", text, perm)
+def _add_suggestion(ctx, text, perm, link=None):
+    _add_item(ctx, "suggestions_list", text, perm, link)
 
 
 def _has_permission(request, ctx, perm):
@@ -349,11 +391,17 @@ def _has_permission(request, ctx, perm):
     return has_event_permission(ctx, request, ctx["event"].slug, perm)
 
 
-def _get_href(ctx, perm):
-    if perm.startswith("exe"):
-        return reverse(perm)
+def _get_href(ctx, perm, name, custom_link):
+    if custom_link:
+        return _("Configuration"), _get_perm_link(ctx, perm, "manage") + custom_link
 
-    return reverse(perm, args=[ctx["event"].slug, ctx["run"].number])
+    return _(name), _get_perm_link(ctx, perm, perm)
+
+
+def _get_perm_link(ctx, perm, view):
+    if perm.startswith("exe"):
+        return reverse(view)
+    return reverse(view, args=[ctx["event"].slug, ctx["run"].number])
 
 
 def _compile(request, ctx):
@@ -375,7 +423,7 @@ def _compile(request, ctx):
         if f"{section}_list" not in ctx:
             continue
 
-        perm_list.extend([slug for _, slug in ctx[f"{section}_list"] if _has_permission(request, ctx, slug)])
+        perm_list.extend([slug for _, slug, _ in ctx[f"{section}_list"] if _has_permission(request, ctx, slug)])
 
     for model in (EventPermission, AssocPermission):
         queryset = model.objects.filter(slug__in=perm_list).select_related("feature")
@@ -386,14 +434,13 @@ def _compile(request, ctx):
         if f"{section}_list" not in ctx:
             continue
 
-        for text, slug in ctx[f"{section}_list"]:
+        for text, slug, custom_link in ctx[f"{section}_list"]:
             if slug not in cache:
                 continue
 
             (name, tutorial) = cache[slug]
-            ctx[section].append(
-                {"text": text, "link": _(name), "href": _get_href(ctx, slug), "tutorial": tutorial, "slug": slug}
-            )
+            link_name, link_url = _get_href(ctx, slug, name, custom_link)
+            ctx[section].append({"text": text, "link": link_name, "href": link_url, "tutorial": tutorial, "slug": slug})
 
 
 def exe_close_suggestion(request, perm):

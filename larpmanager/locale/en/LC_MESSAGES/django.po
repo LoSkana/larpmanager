@@ -8169,6 +8169,26 @@ msgid ""
 msgstr ""
 
 msgid ""
+"Set the initial amount of experience points in the configuration panel: "
+msgstr ""
+
+msgid ""
+"No ability types have been created; use the ability type management panel to "
+"define them: "
+msgstr ""
+
+#, python-format
+msgid ""
+"There are ability types without abilities: %(list)s. Create abilities for "
+"them in the ability management panel:"
+msgstr ""
+
+msgid ""
+"No delivery for experience points have been created; create one in the "
+"delivery management panel:"
+msgstr ""
+
+msgid ""
 "You have activated both fixed and dynamic installments; they are not meant "
 "to be used together, deactivate one of the two in the features management "
 "panel:"

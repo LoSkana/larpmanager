@@ -11,11 +11,17 @@
         <h2>
             <a href="{% url 'orga_run' run.event.slug run.number %}">{% trans "Event status" %}</a>
         </h2>
-        <b>{{ run }}</b>
-        (<i>{{ run.pretty_dates }}</i>)
-        - {{ run.get_development_display }}
-        - <a href="{% url 'register' run.event.slug run.number %}">{{ registration_status }}</a>
-        <br />
+        <p>
+            <b>{{ run }}</b>
+            (<i>{{ run.pretty_dates }}</i>)
+            - {{ run.get_development_display }}
+            - <a href="{% url 'register' run.event.slug run.number %}">{{ registration_status }}</a>
+        </p>
+        {% if event.parent %}
+            <p>
+                <b>{% trans "Campaign" %}:</b> {{ event.parent }}
+            </p>
+        {% endif %}
         {% if counts %}
             <h2>
                 <a href="{% url 'orga_registrations' run.event.slug run.number %}">{% trans "Registrations" %}</a>: {{ counts.count_reg }}

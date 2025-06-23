@@ -6363,6 +6363,10 @@ msgstr ""
 "\"pokaż prezentację\"."
 
 msgid ""
+"Set the initial amount of experience points in the configuration panel: "
+msgstr "Ustaw początkową liczbę punktów doświadczenia w panelu konfiguracji:"
+
+msgid ""
 "The collection is ready to be delivered, give this link to the recipient"
 msgstr "Kolekcja jest gotowa do dostarczenia, podaj ten link odbiorcy"
 
@@ -7461,6 +7465,13 @@ msgstr ""
 "href='%(url)s'>Rezygnacja z subskrypcji</a>."
 
 msgid ""
+"No ability types have been created; use the ability type management panel to"
+" define them: "
+msgstr ""
+"Nie utworzono żadnych typów umiejętności; użyj panelu zarządzania typami "
+"umiejętności, aby je zdefiniować:"
+
+msgid ""
 "This page allows you to add or change the types of ticket with which players"
 " can register."
 msgstr ""
@@ -7828,6 +7839,13 @@ msgid ""
 msgstr ""
 "Pozwala określić datę (i godzinę) otwarcia rejestracji, która do tego czasu "
 "pozostanie zamknięta."
+
+msgid ""
+"No delivery for experience points have been created; create one in the "
+"delivery management panel:"
+msgstr ""
+"Nie utworzono żadnej dostawy punktów doświadczenia; utwórz ją w panelu "
+"zarządzania dostawami:"
 
 msgid ""
 "The collection grows: we have no doubt, the fortunate will live soon an "
@@ -8404,6 +8422,14 @@ msgid ""
 msgstr ""
 "Umożliwia zdefiniowanie procentowej opłaty za przetwarzanie dla każdej "
 "metody płatności, opcjonalnie dodając ją do ostatecznej ceny biletu."
+
+#, python-format
+msgid ""
+"There are ability types without abilities: %(list)s. Create abilities for "
+"them in the ability management panel:"
+msgstr ""
+"Istnieją typy zdolności bez zdolności: %(list)s. Utwórz dla nich zdolności w"
+" panelu zarządzania zdolnościami:"
 
 msgid ""
 "For text questions, maximum number of characters; For multiple options, "

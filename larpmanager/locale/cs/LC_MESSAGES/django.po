@@ -6296,6 +6296,10 @@ msgstr ""
 "\"zobrazit prezentaci\"."
 
 msgid ""
+"Set the initial amount of experience points in the configuration panel: "
+msgstr "Na konfiguračním panelu nastavte počáteční počet zkušenostních bodů:"
+
+msgid ""
 "The collection is ready to be delivered, give this link to the recipient"
 msgstr "Sbírka je připravena k doručení, předejte příjemci tento odkaz."
 
@@ -7338,6 +7342,13 @@ msgstr ""
 "href='%(url)s'>Odhlásit se</a>"
 
 msgid ""
+"No ability types have been created; use the ability type management panel to"
+" define them: "
+msgstr ""
+"Nebyly vytvořeny žádné typy schopností; k jejich definování použijte panel "
+"pro správu typů schopností:"
+
+msgid ""
 "This page allows you to add or change the types of ticket with which players"
 " can register."
 msgstr ""
@@ -7695,6 +7706,13 @@ msgid ""
 msgstr ""
 "Umožňuje zadat datum (a čas), kdy bude registrace otevřena, a do té doby "
 "zůstane uzavřena."
+
+msgid ""
+"No delivery for experience points have been created; create one in the "
+"delivery management panel:"
+msgstr ""
+"Nebyla vytvořena žádná dodávka pro zkušenostní body; vytvořte ji na panelu "
+"pro správu dodávek:"
 
 msgid ""
 "The collection grows: we have no doubt, the fortunate will live soon an "
@@ -8269,6 +8287,14 @@ msgid ""
 msgstr ""
 "Umožňuje definovat procento poplatku za zpracování pro každý způsob platby a"
 " volitelně jej přidat ke konečné ceně tipu."
+
+#, python-format
+msgid ""
+"There are ability types without abilities: %(list)s. Create abilities for "
+"them in the ability management panel:"
+msgstr ""
+"Existují typy schopností bez schopností: %(list)s. Vytvořte pro ně "
+"schopnosti na panelu správy schopností:"
 
 msgid ""
 "For text questions, maximum number of characters; For multiple options, "
