@@ -37,7 +37,7 @@ def update_assoc_permission_feature(slug):
         slug = feature.slug
     tutorial = feature.tutorial or ""
     cache.set(assoc_permission_feature_key(slug), (slug, tutorial))
-    return slug
+    return slug, tutorial
 
 
 def get_assoc_permission_feature(slug):
@@ -64,7 +64,7 @@ def update_event_permission_feature(slug):
         slug = feature.slug
     tutorial = feature.tutorial or ""
     cache.set(event_permission_feature_key(slug), (slug, tutorial))
-    return slug
+    return slug, tutorial
 
 
 def get_event_permission_feature(slug):
