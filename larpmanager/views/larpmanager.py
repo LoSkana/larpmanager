@@ -370,15 +370,15 @@ def tutorials(request, slug=None):
 
     try:
         if slug:
-            ctx["tutorial"] = LarpManagerTutorial.objects.get(slug=slug)
+            tutorial = LarpManagerTutorial.objects.get(slug=slug)
         else:
-            ctx["tutorial"] = LarpManagerTutorial.objects.order_by("order").first()
+            tutorial = LarpManagerTutorial.objects.order_by("order").first()
             ctx["intro"] = True
     except ObjectDoesNotExist as err:
         raise Http404("tutorial not found") from err
 
-    if ctx["tutorial"]:
-        order = ctx["tutorial"].order
+    if tutorial:
+        order = tutorial.order
         ctx["seq"] = order
 
         que = LarpManagerTutorial.objects.order_by("order")
@@ -393,6 +393,7 @@ def tutorials(request, slug=None):
                 ctx["next"] = el
 
     ctx["iframe"] = request.GET.get("in_iframe") == "1"
+    ctx["opened"] = tutorial
 
     return render(request, "larpmanager/larpmanager/tutorials.html", ctx)
 
