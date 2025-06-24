@@ -498,9 +498,9 @@ ul, ol {
 
 #tutorials img {
     max-width: 100%;
-    display: block;
     width: auto;
     height: auto;
+    margin: auto;
 }
 
 #tutorials ul li {
