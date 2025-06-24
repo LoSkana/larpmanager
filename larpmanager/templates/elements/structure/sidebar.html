@@ -28,10 +28,7 @@
                             {% for ap in list %}
                                 <span class="sidebar-link-wrap" descr="{% trans ap.descr %}">
                                     <a class="sidebar-link"
-                                       href="{% url ap.slug run.event.slug run.number %}"
-                                       {% if request_func_name == ap.slug %}class="select"{% endif %}>
-                                        {% trans ap.name %}
-                                    </a>
+                                       href="{% url ap.slug run.event.slug run.number %}">{% trans ap.name %}</a>
                                     <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
                                 </span>
                             {% endfor %}
@@ -45,11 +42,7 @@
                         <p>
                             {% for ap in list %}
                                 <span class="sidebar-link-wrap" descr="{% trans ap.descr %}">
-                                    <a class="sidebar-link"
-                                       href="{% url ap.slug %}"
-                                       {% if request_func_name == ap.slug %}class="select"{% endif %}>
-                                        {% trans ap.name %}
-                                    </a>
+                                    <a class="sidebar-link" href="{% url ap.slug %}">{% trans ap.name %}</a>
                                     <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
                                 </span>
                             {% endfor %}

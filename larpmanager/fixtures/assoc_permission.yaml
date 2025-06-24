@@ -5,7 +5,7 @@
     descr: Manage the organization main settings
     slug: exe_association
     number: 2
-    feature: 165
+    feature: 198
 - model: larpmanager.assocpermission
   pk: 2
   fields:
@@ -13,7 +13,7 @@
     descr: Assign roles to collaborators and grant access to specific functions
     slug: exe_roles
     number: 3
-    feature: 165
+    feature: 197
 - model: larpmanager.assocpermission
   pk: 3
   fields:
@@ -21,7 +21,7 @@
     descr: Manage the configuration of the activated features
     slug: exe_config
     number: 4
-    feature: 165
+    feature: 196
 - model: larpmanager.assocpermission
   pk: 4
   fields:
@@ -29,7 +29,7 @@
     descr: Activate features for the organization
     slug: exe_features
     number: 5
-    feature: 165
+    feature: 195
 - model: larpmanager.assocpermission
   pk: 5
   fields:
@@ -37,7 +37,7 @@
     descr: Manage organization accounting
     slug: exe_accounting
     number: 2
-    feature: 163
+    feature: 194
 - model: larpmanager.assocpermission
   pk: 6
   fields:
@@ -133,7 +133,7 @@
     descr: 'Set visual aspect: colors, background, cover image'
     slug: exe_appearance
     number: 11
-    feature: 168
+    feature: 193
 - model: larpmanager.assocpermission
   pk: 18
   fields:
@@ -141,7 +141,7 @@
     descr: Customize textual elements of the organization interface
     slug: exe_texts
     number: 21
-    feature: 168
+    feature: 192
 - model: larpmanager.assocpermission
   pk: 19
   fields:
@@ -165,7 +165,7 @@
     descr: Manage events
     slug: exe_events
     number: 11
-    feature: 167
+    feature: 191
 - model: larpmanager.assocpermission
   pk: 22
   fields:
@@ -173,7 +173,7 @@
     descr: Manages the runs of events
     slug: exe_runs
     number: 21
-    feature: 167
+    feature: 190
 - model: larpmanager.assocpermission
   pk: 23
   fields:
@@ -197,7 +197,7 @@
     descr: Send e-mail
     slug: exe_send_mail
     number: 11
-    feature: 166
+    feature: 189
 - model: larpmanager.assocpermission
   pk: 26
   fields:
@@ -277,7 +277,7 @@
     descr: Check consistency of the members’ personal data
     slug: exe_membership_check
     number: 99
-    feature: 45
+    feature: 185
 - model: larpmanager.assocpermission
   pk: 39
   fields:
@@ -301,7 +301,7 @@
     descr: Manage fields that track players’ data
     slug: exe_profile
     number: 1
-    feature: 166
+    feature: 188
 - model: larpmanager.assocpermission
   pk: 43
   fields:
@@ -317,4 +317,4 @@
     descr: 'Display all sent e-mails '
     slug: exe_archive_email
     number: 91
-    feature: 166
+    feature: 187

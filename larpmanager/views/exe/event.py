@@ -75,7 +75,7 @@ def exe_events_edit(request, num):
 
 @login_required
 def exe_events_appearance(request, num):
-    return exe_edit(request, OrgaAppearanceForm, num, "exe_events", add_another=False)
+    return exe_edit(request, OrgaAppearanceForm, num, "exe_events", add_ctx={"add_another": False})
 
 
 @login_required
@@ -116,7 +116,8 @@ def exe_templates_config(request, num):
     add_ctx = def_user_ctx(request)
     get_event_template(add_ctx, num)
     add_ctx["features"].update(get_event_features(add_ctx["event"].id))
-    return exe_edit(request, OrgaConfigForm, num, "exe_templates", add_ctx=add_ctx, add_another=False)
+    add_ctx["add_another"] = False
+    return exe_edit(request, OrgaConfigForm, num, "exe_templates", add_ctx=add_ctx)
 
 
 @login_required

@@ -1002,10 +1002,6 @@ header.sec h1 {
     padding-bottom: 2em !important;
 }
 
-#sidebar .select {
-    color: var(--sec-clr);
-}
-
 table.fixed {
     table-layout: fixed;
 }
@@ -1311,6 +1307,14 @@ th select {
 .explain-icon {
   display: inline;
   margin: 0;
+}
+
+.sidebar-link {
+    transition: color 0.5s;
+}
+
+.sidebar-link.select {
+    color: var(--sec-clr);
 }
 
 #sidebar .close {

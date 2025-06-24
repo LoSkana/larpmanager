@@ -166,7 +166,7 @@ def backend_get(ctx, typ, eid, afield=None):
     ctx["name"] = str(el)
 
 
-def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False, add_another=True):
+def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
     typ = form_type.Meta.model
     ctx["elementTyp"] = typ
     ctx["request"] = request
@@ -176,6 +176,7 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False, add_ano
         if eid is None:
             eid = request.assoc["id"]
             ctx["nonum"] = True
+
     elif eid is None:
         eid = ctx["event"].id
         ctx["nonum"] = True
@@ -185,11 +186,12 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False, add_ano
     else:
         ctx["el"] = None
 
+    ctx["num"] = eid
     if request.method == "POST":
-        form = form_type(request.POST, request.FILES, instance=ctx["el"], ctx=ctx)
+        ctx["form"] = form_type(request.POST, request.FILES, instance=ctx["el"], ctx=ctx)
 
-        if form.is_valid():
-            p = form.save()
+        if ctx["form"].is_valid():
+            p = ctx["form"].save()
             messages.success(request, _("Operation completed!"))
 
             dl = "delete" in request.POST and request.POST["delete"] == "1"
@@ -201,21 +203,21 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False, add_ano
 
             return True
     else:
-        form = form_type(instance=ctx["el"], ctx=ctx)
+        ctx["form"] = form_type(instance=ctx["el"], ctx=ctx)
 
-    ctx["form"] = form
-    ctx["num"] = eid
     if eid != 0:
         ctx["name"] = str(ctx["el"])
 
-    ctx["add_another"] = add_another
+    ctx["add_another"] = "add_another" not in ctx or ctx["add_another"]
 
     return False
 
 
-def orga_edit(request, s, n, perm, form_type, eid, red=None, add_another=True):
+def orga_edit(request, s, n, perm, form_type, eid, red=None, add_ctx=None):
     ctx = check_event_permission(request, s, n, perm)
-    if backend_edit(request, ctx, form_type, eid, afield=None, assoc=False, add_another=add_another):
+    if add_ctx:
+        ctx.update(add_ctx)
+    if backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
         set_suggestion(ctx, perm)
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, num=0)
@@ -225,11 +227,11 @@ def orga_edit(request, s, n, perm, form_type, eid, red=None, add_another=True):
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
-def exe_edit(request, form_type, eid, perm, red=None, afield=None, add_ctx=None, add_another=True):
+def exe_edit(request, form_type, eid, perm, red=None, afield=None, add_ctx=None):
     ctx = check_assoc_permission(request, perm)
     if add_ctx:
         ctx.update(add_ctx)
-    if backend_edit(request, ctx, form_type, eid, afield=afield, assoc=True, add_another=add_another):
+    if backend_edit(request, ctx, form_type, eid, afield=afield, assoc=True):
         set_suggestion(ctx, perm)
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, num=0)
