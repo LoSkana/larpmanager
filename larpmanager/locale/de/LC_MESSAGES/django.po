@@ -3462,6 +3462,9 @@ msgstr "Geheimer Registrierungslink"
 msgid "Thanks for your support!"
 msgstr "Vielen Dank für Ihre Unterstützung!"
 
+msgid "The subdomain identifier"
+msgstr "Die Kennung der Subdomäne"
+
 msgid "Try the sheet generation"
 msgstr "Kartenerstellung ausprobieren"
 
@@ -3559,6 +3562,9 @@ msgstr "Zugang zur Charaktererstellung!"
 
 msgid "Access the event dashboard"
 msgstr "Zugriff auf das Ereignis-Dashboard"
+
+msgid "Benvenuto in FederManager!"
+msgstr "Benvenuto im FederManager!"
 
 msgid "Can't copy from same event"
 msgstr "Kann nicht vom gleichen Ereignis kopieren"
@@ -4058,6 +4064,9 @@ msgstr "Zugriff auf das Dashboard der Organisation"
 msgid "Achievement assignment: %(badge)s"
 msgstr "Zuweisung von Leistungen: %(badge)s"
 
+msgid "Complete name of the Organization"
+msgstr "Vollständiger Name der Organisation"
+
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Bestätigen Sie die Eingabe von %(event)s"
@@ -4426,9 +4435,6 @@ msgstr "Beschreiben Sie kurz, was die Box enthält"
 
 msgid "Check the validity of the fiscal code."
 msgstr "Prüfen Sie die Gültigkeit des Steuerkennzeichens."
-
-msgid "Complete name of the LARP Organization"
-msgstr "Vollständiger Name der Vereinigung"
 
 msgid "Event display and visual customization"
 msgstr "Ereignisanzeige und visuelle Anpassung"
@@ -7005,6 +7011,13 @@ msgstr ""
 "würde verloren gehen."
 
 msgid ""
+"Your data will be saved in the system, which is used by several "
+"associations."
+msgstr ""
+"Ihre Daten werden in dem System gespeichert, das von mehreren Verbänden "
+"genutzt wird."
+
+msgid ""
 "Answer the following questions. Select *all* of the answers that seem "
 "correct."
 msgstr ""
@@ -7788,13 +7801,6 @@ msgid ""
 msgstr ""
 "Sie können neue Delegiertenkonten erstellen oder sich mit ihnen anmelden, "
 "indem Sie auf die entsprechende Schaltfläche klicken"
-
-msgid ""
-"Your data will be saved in the LarpManager system, which is used by several "
-"associations."
-msgstr ""
-"Ihre Daten werden im LarpManager-System gespeichert, das von mehreren "
-"Verbänden genutzt wird."
 
 msgid ""
 "for each option four columns: name, description, price, available places (0 "
@@ -9201,13 +9207,6 @@ msgstr ""
 "zu decken)."
 
 msgid ""
-"If you wish to confirm that you share your data in the LarpManager system "
-"with this organisation, click on the button below:"
-msgstr ""
-"Wenn Sie bestätigen möchten, dass Sie Ihre Daten im LarpManager-System mit "
-"dieser Organisation teilen, klicken Sie auf die Schaltfläche unten:"
-
-msgid ""
 "Specify your custom character name (depending on the event you can choose "
 "the name, or adapt the name to your chosen gender)"
 msgstr ""
@@ -9742,6 +9741,15 @@ msgstr ""
 "Frage beantworten oder sie schließen, wenn keine weiteren Maßnahmen "
 "erforderlich sind."
 
+msgid ""
+"In order to participate in this organization's events, you must consent to "
+"the sharing of your personal data in accordance with the GDPR and our "
+"Privacy Policy"
+msgstr ""
+"Um an den Veranstaltungen dieser Organisation teilnehmen zu können, müssen "
+"Sie der Weitergabe Ihrer persönlichen Daten gemäß der GDPR und unserer "
+"Datenschutzrichtlinie zustimmen."
+
 #, python-format
 msgid ""
 "Hello! You have signed up for %(event)s, but have not yet completed your "
@@ -9797,6 +9805,16 @@ msgstr ""
 "Um Ihre Mitgliedschaft zu bestätigen, müssen Sie beantragen, als Mitglied "
 "der Vereinigung registriert zu werden. Das Verfahren wird Sie automatisch "
 "durch die erforderlichen Schritte führen."
+
+msgid ""
+"By clicking the button below, you confirm that you consent to the sharing of"
+" your personal data with this organization, in accordance with the GDPR and "
+"our Privacy Policy:"
+msgstr ""
+"Indem Sie auf die Schaltfläche unten klicken, bestätigen Sie, dass Sie mit "
+"der Weitergabe Ihrer persönlichen Daten an diese Organisation in "
+"Übereinstimmung mit der DSGVO und unserer Datenschutzrichtlinie "
+"einverstanden sind:"
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "

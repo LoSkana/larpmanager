@@ -64,7 +64,7 @@ class AssociationIdentifyMiddleware:
                 slug = assoc["slug"]
                 domain = assoc["skin_domain"]
                 return redirect(f"https://{slug}.{domain}{request.get_full_path()}")
-            return cls.load_assoc(request, assoc, base_domain)
+            return cls.load_assoc(request, assoc)
 
         if local or domain == "larpmanager":
             assoc = {
@@ -77,6 +77,7 @@ class AssociationIdentifyMiddleware:
                 "logo": "https://larpmanager.com/static/lm_logo.png",
                 "main_mail": "info@larpmanager.com",
                 "favicon": "https://larpmanager.com/static/lm_fav.png",
+                "base_domain": base_domain,
             }
             return cls.load_assoc(request, assoc)
 
@@ -89,7 +90,7 @@ class AssociationIdentifyMiddleware:
         return render(request, "exception/assoc.html", {})
 
     @staticmethod
-    def load_assoc(request, assoc, base_domain):
+    def load_assoc(request, assoc):
         request.assoc = assoc
         lang = get_language()
         request.assoc["footer"] = get_assoc_text(request.assoc["id"], AssocTextType.FOOTER, lang)

@@ -1338,6 +1338,12 @@ msgstr ""
 msgid "Residence address"
 msgstr ""
 
+msgid ""
+"In order to participate in this organization's events, you must consent to "
+"the sharing of your personal data in accordance with the GDPR and our "
+"Privacy Policy"
+msgstr ""
+
 #, python-format
 msgid "Minimum age: %(number)d"
 msgstr ""
@@ -2372,10 +2378,13 @@ msgstr ""
 msgid "Mandatory"
 msgstr ""
 
-msgid "Complete name of the LARP Organization"
+msgid "Complete name of the Organization"
 msgstr ""
 
 msgid "URL identifier"
+msgstr ""
+
+msgid "The subdomain identifier"
 msgstr ""
 
 msgid "Only lowercase characters and numbers are allowed, no spaces or symbols"
@@ -5745,8 +5754,7 @@ msgid "submit your vote here!"
 msgstr ""
 
 msgid ""
-"Your data will be saved in the LarpManager system, which is used by several "
-"associations."
+"Your data will be saved in the system, which is used by several associations."
 msgstr ""
 
 msgid ""
@@ -5823,8 +5831,9 @@ msgid "Sharing"
 msgstr ""
 
 msgid ""
-"If you wish to confirm that you share your data in the LarpManager system "
-"with this organisation, click on the button below:"
+"By clicking the button below, you confirm that you consent to the sharing of "
+"your personal data with this organization, in accordance with the GDPR and "
+"our Privacy Policy:"
 msgstr ""
 
 msgid "Technical Support"
@@ -8071,6 +8080,9 @@ msgid "Mail added to queue!"
 msgstr ""
 
 msgid "Answer submitted!"
+msgstr ""
+
+msgid "Benvenuto in FederManager!"
 msgstr ""
 
 msgid "Feature activated:"

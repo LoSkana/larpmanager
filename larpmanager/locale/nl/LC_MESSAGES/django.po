@@ -3462,6 +3462,9 @@ msgstr "Geheime registratie link"
 msgid "Thanks for your support!"
 msgstr "Bedankt voor je steun!"
 
+msgid "The subdomain identifier"
+msgstr "De identifier van het subdomein"
+
 msgid "Try the sheet generation"
 msgstr "Probeer kaarten te genereren"
 
@@ -3559,6 +3562,9 @@ msgstr "Toegang tot het maken van personages!"
 
 msgid "Access the event dashboard"
 msgstr "Toegang tot het dashboard van het evenement"
+
+msgid "Benvenuto in FederManager!"
+msgstr "Benvenuto in FederManager!"
 
 msgid "Can't copy from same event"
 msgstr "Kan niet kopiëren van dezelfde gebeurtenis"
@@ -4057,6 +4063,9 @@ msgstr "Toegang tot het organisatiedashboard"
 msgid "Achievement assignment: %(badge)s"
 msgstr "Prestatieopdracht: %(badge)s"
 
+msgid "Complete name of the Organization"
+msgstr "Volledige naam van de organisatie"
+
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Toegang tot %(event)s bevestigen"
@@ -4424,9 +4433,6 @@ msgstr "Beschrijf kort wat de doos bevat"
 
 msgid "Check the validity of the fiscal code."
 msgstr "Controleer de geldigheid van de fiscale code."
-
-msgid "Complete name of the LARP Organization"
-msgstr "Volledige naam van de vereniging"
 
 msgid "Event display and visual customization"
 msgstr "Gebeurtenisweergave en visuele aanpassing"
@@ -6846,6 +6852,13 @@ msgstr ""
 "verloren gaan."
 
 msgid ""
+"Your data will be saved in the system, which is used by several "
+"associations."
+msgstr ""
+"Je gegevens worden opgeslagen in het systeem, dat door verschillende "
+"verenigingen wordt gebruikt."
+
+msgid ""
 "Answer the following questions. Select *all* of the answers that seem "
 "correct."
 msgstr ""
@@ -7622,13 +7635,6 @@ msgid ""
 msgstr ""
 "Je kunt nieuwe gedelegeerde accounts aanmaken of ermee inloggen door op de "
 "betreffende knop te drukken"
-
-msgid ""
-"Your data will be saved in the LarpManager system, which is used by several "
-"associations."
-msgstr ""
-"Je gegevens worden opgeslagen in het LarpManager systeem, dat door "
-"verschillende verenigingen wordt gebruikt."
 
 msgid ""
 "for each option four columns: name, description, price, available places (0 "
@@ -9024,13 +9030,6 @@ msgstr ""
 "anderen te helpen dekken)."
 
 msgid ""
-"If you wish to confirm that you share your data in the LarpManager system "
-"with this organisation, click on the button below:"
-msgstr ""
-"Als je wilt bevestigen dat je je gegevens in het LarpManager systeem deelt "
-"met deze organisatie, klik dan op de knop hieronder:"
-
-msgid ""
 "Specify your custom character name (depending on the event you can choose "
 "the name, or adapt the name to your chosen gender)"
 msgstr ""
@@ -9545,6 +9544,15 @@ msgstr ""
 "hebben. Je kunt de vraag beantwoorden of sluiten als er geen verdere actie "
 "nodig is."
 
+msgid ""
+"In order to participate in this organization's events, you must consent to "
+"the sharing of your personal data in accordance with the GDPR and our "
+"Privacy Policy"
+msgstr ""
+"Om deel te nemen aan de evenementen van deze organisatie, moet u toestemming"
+" geven voor het delen van uw persoonlijke gegevens in overeenstemming met de"
+" GDPR en ons Privacybeleid."
+
 #, python-format
 msgid ""
 "Hello! You have signed up for %(event)s, but have not yet completed your "
@@ -9600,6 +9608,15 @@ msgstr ""
 "Om je lidmaatschap te bevestigen, moet je een verzoek indienen om je te "
 "registreren als lid van de Vereniging. De procedure zal je automatisch door "
 "de vereiste stappen leiden."
+
+msgid ""
+"By clicking the button below, you confirm that you consent to the sharing of"
+" your personal data with this organization, in accordance with the GDPR and "
+"our Privacy Policy:"
+msgstr ""
+"Door op de onderstaande knop te klikken, bevestig je dat je toestemming "
+"geeft voor het delen van je persoonlijke gegevens met deze organisatie, in "
+"overeenstemming met de GDPR en ons Privacybeleid:"
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    FederManager - Il gestionale di FederLudo
+{% endblock maintitle %}
+{% block header %}
+{% endblock header %}
+{% block css %}
+    <style>
+        html, body { background: white; }
+        #banner { background: none; padding: 1em }
+        #banner h2 { color: #00916f }
+        #banner h1 { color: #000 }
+        .federlogo { text-align: center; }
+        .federlogo img { width: 100%; max-width: 400px; margin: 1em auto; }
+        .starter { line-height: normal; padding: 0 1em }
+    </style>
+{% endblock css %}
+{% block alpha %}
+    <!-- Banner -->
+    <section id="banner">
+        <h2 class="home">FederManager</h2>
+        <h1 class="home">Il gestionale di FederLudo</h1>
+    </section>
+    <p class="federlogo">
+        <img src="{% static 'larpmanager/assets/img/federludo.png' %}"
+             alt="federludo logo" />
+    </p>
+    <p class="starter">Compila il form per inizare ad usarlo per la tua FederAssociata, è facilissimo!</p>
+    <form action="{{ request.path }}"
+          enctype="multipart/form-data"
+          method="post">
+        {% csrf_token %}
+        <table class="mob no_csv">
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="{% trans "Submit" %}">
+    </form>
+{% endblock alpha %}
+{% block js %}
+    <script> const base_domain = ".feder-manager.it"; </script>
+    {% include "elements/assoc_preview.js" %}
+{% endblock js %}

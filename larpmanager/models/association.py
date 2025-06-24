@@ -68,12 +68,14 @@ class AssociationSkin(BaseModel):
 class Association(BaseModel):
     skin = models.ForeignKey(AssociationSkin, on_delete=models.CASCADE, null=True, blank=True)
 
-    name = models.CharField(max_length=100, help_text=_("Complete name of the LARP Organization"))
+    name = models.CharField(max_length=100, help_text=_("Complete name of the Organization"))
 
     slug = models.CharField(
         max_length=20,
         verbose_name=_("URL identifier"),
-        help_text=_("Only lowercase characters and numbers are allowed, no spaces or symbols"),
+        help_text=_("The subdomain identifier")
+        + " - "
+        + _("Only lowercase characters and numbers are allowed, no spaces or symbols"),
         validators=[AlphanumericValidator],
         db_index=True,
     )

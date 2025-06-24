@@ -3462,6 +3462,9 @@ msgstr "Hemmelig registreringslenke"
 msgid "Thanks for your support!"
 msgstr "Takk for støtten!"
 
+msgid "The subdomain identifier"
+msgstr "Identifikatoren for underdomenet"
+
 msgid "Try the sheet generation"
 msgstr "Prøv kortgenerering"
 
@@ -3559,6 +3562,9 @@ msgstr "Få tilgang til karakteroppretting!"
 
 msgid "Access the event dashboard"
 msgstr "Få tilgang til hendelsesoversikten"
+
+msgid "Benvenuto in FederManager!"
+msgstr "Benvenuto i FederManager!"
 
 msgid "Can't copy from same event"
 msgstr "Kan ikke kopiere fra samme hendelse"
@@ -4057,6 +4063,9 @@ msgstr "Få tilgang til organisasjonens dashbord"
 msgid "Achievement assignment: %(badge)s"
 msgstr "Prestasjonsoppgave: %(badge)s"
 
+msgid "Complete name of the Organization"
+msgstr "Fullstendig navn på organisasjonen"
+
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Bekreft oppføring til %(event)s"
@@ -4424,9 +4433,6 @@ msgstr "Beskriv kort hva esken inneholder"
 
 msgid "Check the validity of the fiscal code."
 msgstr "Kontroller gyldigheten av skattekoden."
-
-msgid "Complete name of the LARP Organization"
-msgstr "Foreningens fulle navn"
 
 msgid "Event display and visual customization"
 msgstr "Visning av hendelser og visuell tilpasning"
@@ -6724,6 +6730,12 @@ msgstr ""
 "tapt."
 
 msgid ""
+"Your data will be saved in the system, which is used by several "
+"associations."
+msgstr ""
+"Opplysningene dine blir lagret i systemet, som brukes av flere foreninger."
+
+msgid ""
 "Answer the following questions. Select *all* of the answers that seem "
 "correct."
 msgstr "Svar på følgende spørsmål. Velg *alle* svar som du synes er riktige."
@@ -7480,13 +7492,6 @@ msgid ""
 msgstr ""
 "Du kan opprette nye delegatkontoer, eller logge inn med dem ved å trykke på "
 "den relevante knappen"
-
-msgid ""
-"Your data will be saved in the LarpManager system, which is used by several "
-"associations."
-msgstr ""
-"Opplysningene dine blir lagret i LarpManager-systemet, som brukes av flere "
-"foreninger."
 
 msgid ""
 "for each option four columns: name, description, price, available places (0 "
@@ -8873,13 +8878,6 @@ msgstr ""
 "andres avgifter)."
 
 msgid ""
-"If you wish to confirm that you share your data in the LarpManager system "
-"with this organisation, click on the button below:"
-msgstr ""
-"Hvis du ønsker å bekrefte at du deler opplysningene dine i LarpManager-"
-"systemet med denne organisasjonen, klikker du på knappen nedenfor:"
-
-msgid ""
 "Specify your custom character name (depending on the event you can choose "
 "the name, or adapt the name to your chosen gender)"
 msgstr ""
@@ -9379,6 +9377,15 @@ msgstr ""
 "etter hendelsene de gjelder. Du kan svare på spørsmålet eller lukke det hvis"
 " det ikke er behov for ytterligere tiltak."
 
+msgid ""
+"In order to participate in this organization's events, you must consent to "
+"the sharing of your personal data in accordance with the GDPR and our "
+"Privacy Policy"
+msgstr ""
+"For å kunne delta på denne organisasjonens arrangementer må du samtykke til "
+"deling av dine personopplysninger i samsvar med GDPR og vår "
+"personvernerklæring"
+
 #, python-format
 msgid ""
 "Hello! You have signed up for %(event)s, but have not yet completed your "
@@ -9432,6 +9439,15 @@ msgid ""
 msgstr ""
 "For å bekrefte medlemskapet ditt må du be om å bli registrert som medlem av "
 "foreningen. Prosedyren vil automatisk ta deg gjennom de nødvendige trinnene."
+
+msgid ""
+"By clicking the button below, you confirm that you consent to the sharing of"
+" your personal data with this organization, in accordance with the GDPR and "
+"our Privacy Policy:"
+msgstr ""
+"Ved å klikke på knappen nedenfor bekrefter du at du samtykker til at dine "
+"personopplysninger deles med denne organisasjonen, i samsvar med GDPR og vår"
+" personvernerklæring:"
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "

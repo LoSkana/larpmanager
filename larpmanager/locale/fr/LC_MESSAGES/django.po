@@ -3462,6 +3462,9 @@ msgstr "Lien d'enregistrement secret"
 msgid "Thanks for your support!"
 msgstr "Merci pour votre soutien !"
 
+msgid "The subdomain identifier"
+msgstr "L'identifiant du sous-domaine"
+
 msgid "Try the sheet generation"
 msgstr "Essayer la génération de cartes"
 
@@ -3559,6 +3562,9 @@ msgstr "Accédez à la création de personnages !"
 
 msgid "Access the event dashboard"
 msgstr "Accéder au tableau de bord de l'événement"
+
+msgid "Benvenuto in FederManager!"
+msgstr "Benvenuto dans FederManager !"
 
 msgid "Can't copy from same event"
 msgstr "Impossible de copier le même événement"
@@ -4057,6 +4063,9 @@ msgstr "Accéder au tableau de bord de l'organisation"
 msgid "Achievement assignment: %(badge)s"
 msgstr "Attribution des résultats : %(badge)s"
 
+msgid "Complete name of the Organization"
+msgstr "Nom complet de l'organisation"
+
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Confirmer l'entrée dans %(event)s"
@@ -4426,9 +4435,6 @@ msgstr "Décrivez brièvement le contenu de la boîte"
 
 msgid "Check the validity of the fiscal code."
 msgstr "Vérifier la validité du code fiscal."
-
-msgid "Complete name of the LARP Organization"
-msgstr "Nom complet de l'association"
 
 msgid "Event display and visual customization"
 msgstr "Affichage des événements et personnalisation visuelle"
@@ -6906,6 +6912,13 @@ msgstr ""
 "vous serait perdu."
 
 msgid ""
+"Your data will be saved in the system, which is used by several "
+"associations."
+msgstr ""
+"Vos données seront enregistrées dans le système, qui est utilisé par "
+"plusieurs associations."
+
+msgid ""
 "Answer the following questions. Select *all* of the answers that seem "
 "correct."
 msgstr ""
@@ -7684,13 +7697,6 @@ msgid ""
 msgstr ""
 "Vous pouvez créer de nouveaux comptes de délégués ou vous connecter avec eux"
 " en appuyant sur le bouton correspondant."
-
-msgid ""
-"Your data will be saved in the LarpManager system, which is used by several "
-"associations."
-msgstr ""
-"Vos données seront enregistrées dans le système LarpManager, qui est utilisé"
-" par plusieurs associations."
 
 msgid ""
 "for each option four columns: name, description, price, available places (0 "
@@ -9093,13 +9099,6 @@ msgstr ""
 "frais d'autres personnes)."
 
 msgid ""
-"If you wish to confirm that you share your data in the LarpManager system "
-"with this organisation, click on the button below:"
-msgstr ""
-"Si vous souhaitez confirmer que vous partagez vos données dans le système "
-"LarpManager avec cette organisation, cliquez sur le bouton ci-dessous :"
-
-msgid ""
 "Specify your custom character name (depending on the event you can choose "
 "the name, or adapt the name to your chosen gender)"
 msgstr ""
@@ -9625,6 +9624,15 @@ msgstr ""
 "selon les événements auxquels elles se rapportent. Vous pouvez répondre à la"
 " question ou la clôturer si aucune action n'est requise."
 
+msgid ""
+"In order to participate in this organization's events, you must consent to "
+"the sharing of your personal data in accordance with the GDPR and our "
+"Privacy Policy"
+msgstr ""
+"Pour participer aux événements organisés par cette organisation, vous devez "
+"consentir au partage de vos données personnelles conformément au GDPR et à "
+"notre politique de confidentialité."
+
 #, python-format
 msgid ""
 "Hello! You have signed up for %(event)s, but have not yet completed your "
@@ -9680,6 +9688,15 @@ msgstr ""
 "Afin de confirmer votre adhésion, vous devez demander à vous inscrire en "
 "tant que membre de l'Association. La procédure vous conduira automatiquement"
 " à travers les étapes requises."
+
+msgid ""
+"By clicking the button below, you confirm that you consent to the sharing of"
+" your personal data with this organization, in accordance with the GDPR and "
+"our Privacy Policy:"
+msgstr ""
+"En cliquant sur le bouton ci-dessous, vous confirmez que vous consentez au "
+"partage de vos données personnelles avec cette organisation, conformément au"
+" GDPR et à notre politique de confidentialité :"
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "

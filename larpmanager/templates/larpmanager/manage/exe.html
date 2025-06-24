@@ -6,7 +6,7 @@
 {% block content %}
     <div id="manage">
         {% if not event_counts %}
-            <h2>{% trans "Welcome to" %} LarpManager!</h2>
+            <h2>{% trans "Welcome to" %} {{ assoc.platform }}!</h2>
             {% include "larpmanager/manage/assoc_help.html" %}
             <hr />
         {% endif %}

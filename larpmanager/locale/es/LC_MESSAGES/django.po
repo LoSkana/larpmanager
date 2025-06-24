@@ -3462,6 +3462,9 @@ msgstr "Enlace de inscripción secreto"
 msgid "Thanks for your support!"
 msgstr "Gracias por su apoyo al acto."
 
+msgid "The subdomain identifier"
+msgstr "El identificador del subdominio"
+
 msgid "Try the sheet generation"
 msgstr "Probar la generación de hojas"
 
@@ -3559,6 +3562,9 @@ msgstr "Acceso a la creación de personajes"
 
 msgid "Access the event dashboard"
 msgstr "Acceder al panel de eventos"
+
+msgid "Benvenuto in FederManager!"
+msgstr "¡Benvenuto in FederManager!"
 
 msgid "Can't copy from same event"
 msgstr "No se puede copiar desde el mismo evento"
@@ -4057,6 +4063,9 @@ msgstr "Acceder al panel de control de la organización"
 msgid "Achievement assignment: %(badge)s"
 msgstr "Asignación de logros: %(badge)s"
 
+msgid "Complete name of the Organization"
+msgstr "Nombre completo de la Organización"
+
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Confirmar entrada a %(event)s"
@@ -4424,9 +4433,6 @@ msgstr "Describe brevemente el contenido de la caja"
 
 msgid "Check the validity of the fiscal code."
 msgstr "Compruebe la validez del código fiscal."
-
-msgid "Complete name of the LARP Organization"
-msgstr "Nombre completo de la organización"
 
 msgid "Event display and visual customization"
 msgstr "Visualización y personalización de eventos"
@@ -6790,6 +6796,12 @@ msgstr ""
 "perdería."
 
 msgid ""
+"Your data will be saved in the system, which is used by several "
+"associations."
+msgstr ""
+"Sus datos se guardarán en el sistema, que utilizan varias asociaciones."
+
+msgid ""
 "Answer the following questions. Select *all* of the answers that seem "
 "correct."
 msgstr ""
@@ -7564,13 +7576,6 @@ msgid ""
 msgstr ""
 "Puede crear nuevas cuentas de delegado o iniciar sesión con ellas pulsando "
 "el botón correspondiente"
-
-msgid ""
-"Your data will be saved in the LarpManager system, which is used by several "
-"associations."
-msgstr ""
-"Tus datos se guardarán en el sistema LarpManager, que utilizan varias "
-"asociaciones."
 
 msgid ""
 "for each option four columns: name, description, price, available places (0 "
@@ -8962,13 +8967,6 @@ msgstr ""
 "de otros)."
 
 msgid ""
-"If you wish to confirm that you share your data in the LarpManager system "
-"with this organisation, click on the button below:"
-msgstr ""
-"Si deseas confirmar que compartes tus datos en el sistema LarpManager con "
-"esta organización, haz clic en el siguiente botón:"
-
-msgid ""
 "Specify your custom character name (depending on the event you can choose "
 "the name, or adapt the name to your chosen gender)"
 msgstr ""
@@ -9477,6 +9475,15 @@ msgstr ""
 "por los eventos a los que se refieren. Puedes responder a la pregunta o "
 "cerrarla si no requiere realizar ninguna otra acción."
 
+msgid ""
+"In order to participate in this organization's events, you must consent to "
+"the sharing of your personal data in accordance with the GDPR and our "
+"Privacy Policy"
+msgstr ""
+"Para participar en los eventos de esta organización, debe dar su "
+"consentimiento para que se compartan sus datos personales de conformidad con"
+" el GDPR y nuestra Política de privacidad"
+
 #, python-format
 msgid ""
 "Hello! You have signed up for %(event)s, but have not yet completed your "
@@ -9531,6 +9538,15 @@ msgstr ""
 "Para confirmar su afiliación, debe solicitar su inscripción como miembro de "
 "la Asociación. El procedimiento le llevará automáticamente por los pasos "
 "requeridos."
+
+msgid ""
+"By clicking the button below, you confirm that you consent to the sharing of"
+" your personal data with this organization, in accordance with the GDPR and "
+"our Privacy Policy:"
+msgstr ""
+"Al hacer clic en el siguiente botón, confirma que da su consentimiento para "
+"compartir sus datos personales con esta organización, de conformidad con el "
+"GDPR y nuestra Política de privacidad:"
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "
