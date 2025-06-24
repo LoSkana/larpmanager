@@ -213,7 +213,7 @@ def _exe_users_actions(assoc, ctx, features):
 
 
 def _exe_accounting_actions(assoc, ctx, features):
-    if "payments" in features:
+    if "payment" in features:
         if not assoc.payment_methods.count():
             _add_action(
                 ctx,
@@ -222,7 +222,7 @@ def _exe_accounting_actions(assoc, ctx, features):
             )
 
     if "payment_fees" in features:
-        if "payments" not in features:
+        if "payment" not in features:
             _add_action(ctx, _("Payment fees require payments, activate it in the features panel"), "exe_features")
 
         details = get_payment_details(assoc)
