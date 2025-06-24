@@ -1566,9 +1566,6 @@ msgstr "Galerie Pdf"
 msgid "Installment"
 msgstr "Paiement échelonné"
 
-msgid "LarpManager"
-msgstr "LarpManager"
-
 msgid "Last change"
 msgstr "Dernière modification"
 

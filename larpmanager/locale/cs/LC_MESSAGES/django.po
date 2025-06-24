@@ -1566,9 +1566,6 @@ msgstr "Galerie Pdf"
 msgid "Installment"
 msgstr "Splátky"
 
-msgid "LarpManager"
-msgstr "LarpManager"
-
 msgid "Last change"
 msgstr "Naposledy upraveno"
 

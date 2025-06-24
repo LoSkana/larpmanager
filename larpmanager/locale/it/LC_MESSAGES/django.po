@@ -1566,9 +1566,6 @@ msgstr "Galleria Pdf"
 msgid "Installment"
 msgstr "Rata"
 
-msgid "LarpManager"
-msgstr "LarpManager"
-
 msgid "Last change"
 msgstr "Ultima modifica"
 

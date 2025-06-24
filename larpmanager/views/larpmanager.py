@@ -84,6 +84,7 @@ def lm_home(request):
 
 def ludomanager(ctx, request):
     ctx["assoc_skin"] = "LudoManager"
+    ctx["platform"] = "LudoManager"
     assoc = _join_form(ctx, request)
     if assoc:
         messages.success(request, _("Benvenuto in LudoManager!"))
@@ -468,7 +469,7 @@ def about_us(request):
 def get_lm_contact():
     # if check and request.assoc["id"] != 0:
     # return {"red": "https://larpmanager.com" + request.get_full_path()}
-    ctx = {"lm": 1, "contact_form": LarpManagerContact()}
+    ctx = {"lm": 1, "contact_form": LarpManagerContact(), "platform": "LarpManager"}
     return ctx
 
 

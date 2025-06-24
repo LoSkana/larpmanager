@@ -1566,9 +1566,6 @@ msgstr "Pdf Galerij"
 msgid "Installment"
 msgstr "Termijn"
 
-msgid "LarpManager"
-msgstr "LarpManager"
-
 msgid "Last change"
 msgstr "Laatst gewijzigd"
 
