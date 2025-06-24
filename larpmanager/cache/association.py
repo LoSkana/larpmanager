@@ -83,6 +83,9 @@ def init_cache_assoc(a_slug):
 
     _init_features(assoc, el)
 
+    if assoc.skin:
+        el["skin_css"] = assoc.skin.default_css
+
     return el
 
 

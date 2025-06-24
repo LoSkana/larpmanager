@@ -24,6 +24,7 @@ from cryptography.fernet import Fernet
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.db.models import Max, Q
 from django.db.models.signals import post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
@@ -81,7 +82,7 @@ def pre_save_callback(sender, instance, *args, **kwargs):
 
 
 @receiver(pre_save, sender=Association)
-def pre_save_association(sender, instance, **kwargs):
+def pre_save_association_generate_fernet(sender, instance, **kwargs):
     if not instance.key:
         instance.key = Fernet.generate_key()
 
@@ -464,3 +465,28 @@ def post_save_reset_run_config(sender, instance, **kwargs):
 @receiver(post_delete, sender=RunConfig)
 def post_delete_reset_run_config(sender, instance, **kwargs):
     reset_configs(instance.run)
+
+
+@receiver(pre_save, sender=Association)
+def pre_save_association_set_skin_features(sender, instance, **kwargs):
+    if not instance.skin:
+        return
+
+    # execute if new association, or if changed skin
+    if instance.pk:
+        prev = Association.objects.get(pk=instance.pk)
+        if instance.skin == prev.skin:
+            return
+
+    instance._update_skin_features = True
+
+
+@receiver(post_save, sender=Association)
+def post_save_association_set_skin_features(sender, instance, created, **kwargs):
+    if not hasattr(instance, "_update_skin_features"):
+        return
+
+    def update_features():
+        instance.features.set(instance.skin.default_features.all())
+
+    transaction.on_commit(update_features)

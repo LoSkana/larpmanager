@@ -83,6 +83,7 @@
                       href="{% static 'larpmanager/assets/css/solid_state.css' %}" />
                 <link rel="stylesheet" href="{% static 'larpmanager/assets/css/lm.css' %}" />
             {% endcompress %}
+            {% if assoc.skin_css %}<style>{{ assoc.skin_css }}</style>{% endif %}
             {% if assoc.css_code %}
                 <link rel="stylesheet"
                       href="{% get_media_prefix %}/css/{{ assoc.slug }}_{{ assoc.css_code }}.css" />

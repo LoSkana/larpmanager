@@ -39,12 +39,14 @@ class AssociationIdentifyMiddleware:
     @classmethod
     def get_assoc_info(cls, request):
         # get assoc slug from host
-        hst = request.get_host()
+        host = request.get_host().split(":")[0]
+        domain = host.split(".")[0]
+        base_domain = ".".join(host.split(".")[-2:])
 
         local = False
         if os.getenv("env") == "prod":
             request.enviro = "prod"
-        elif "xyz" in hst:
+        elif "xyz" in host:
             request.enviro = "staging"
         else:
             # dev environment
@@ -54,13 +56,13 @@ class AssociationIdentifyMiddleware:
             else:
                 request.enviro = "test"
 
-        domain = request.get_host().split(".")[0]
-
         assoc_slug = request.session.get("debug_slug", None) or getattr(conf_settings, "SLUG_ASSOC", None) or domain
 
         assoc = get_cache_assoc(assoc_slug)
         if assoc:
-            return cls.load_assoc(request, assoc)
+            if assoc.skin and assoc.skin.domain != base_domain:
+                return redirect(f"https://{assoc.slug}.{assoc.skin.domain}{request.get_full_path()}")
+            return cls.load_assoc(request, assoc, base_domain)
 
         if local or domain == "larpmanager":
             assoc = {
@@ -85,7 +87,7 @@ class AssociationIdentifyMiddleware:
         return render(request, "exception/assoc.html", {})
 
     @staticmethod
-    def load_assoc(request, assoc):
+    def load_assoc(request, assoc, base_domain):
         request.assoc = assoc
         lang = get_language()
         request.assoc["footer"] = get_assoc_text(request.assoc["id"], AssocTextType.FOOTER, lang)
