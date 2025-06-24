@@ -210,6 +210,7 @@ def character(page, live_server):
     frame = page.get_by_role("row", name="Text (*) Show").locator('iframe[title="Rich Text Area"]')
     fill_tinymce(frame, "so braaaave")
 
+    time.sleep(2)
     page.locator("#id_q4").select_option("1")
     page.locator("#id_q4").select_option("3")
     page.get_by_role("checkbox", name="- (Available 3)").check()

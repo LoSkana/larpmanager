@@ -347,7 +347,7 @@ def _orga_casting_actions(ctx, features):
             )
 
         unused_quest_types = (
-            ctx["event"].get_elements(QuestType).objects.annotate(quest_count=Count("quests")).filter(quest_count=0)
+            ctx["event"].get_elements(QuestType).annotate(quest_count=Count("quests")).filter(quest_count=0)
         )
         if unused_quest_types.count():
             _add_action(
@@ -357,9 +357,7 @@ def _orga_casting_actions(ctx, features):
                 "orga_quests",
             )
 
-        unused_quests = (
-            ctx["event"].get_elements(Quest).objects.annotate(trait_count=Count("traits")).filter(trait_count=0)
-        )
+        unused_quests = ctx["event"].get_elements(Quest).annotate(trait_count=Count("traits")).filter(trait_count=0)
         if unused_quests.count():
             _add_action(
                 ctx,
