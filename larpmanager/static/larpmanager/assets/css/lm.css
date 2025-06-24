@@ -1555,16 +1555,21 @@ th select {
 }
 
 form th {
-  max-width: 20%;
-  width: 20%;
+    max-width: 20%;
+    width: 20%;
+}
+
+form td {
+    display: flex
+    align-items: center;
+}
+
+.editable {
+    cursor: cell;
 }
 
 @media(max-width: 1000px) {
     form th {
-      max-width: 100%;
-  }
-
-.editable {
-  cursor: cell;
-}
+        max-width: 100%;
+    }
 }
