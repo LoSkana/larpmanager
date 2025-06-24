@@ -473,14 +473,6 @@ class OrgaConfigForm(ConfigForm):
         if "casting" in self.params["features"]:
             self.set_section("casting", _("Casting"))
 
-            label = _("Assignments")
-            help_text = _("Number of characters to be assigned (default 1)")
-            self.add_configs("casting_characters", ConfigType.INT, label, help_text)
-
-            label = _("Mirror")
-            help_text = _("Enables to set a character as a 'mirror' for another, to hide it's true nature")
-            self.add_configs("casting_mirror", ConfigType.BOOL, label, help_text)
-
             label = _("Minimum preferences")
             help_text = _("Minimum number of preferences")
             self.add_configs("casting_min", ConfigType.INT, label, help_text)
@@ -499,6 +491,14 @@ class OrgaConfigForm(ConfigForm):
                 "wish to avoid altogether"
             )
             self.add_configs("casting_avoid", ConfigType.BOOL, label, help_text)
+
+            label = _("Assignments")
+            help_text = _("Number of characters to be assigned (default 1)")
+            self.add_configs("casting_characters", ConfigType.INT, label, help_text)
+
+            label = _("Mirror")
+            help_text = _("Enables to set a character as a 'mirror' for another, to hide it's true nature")
+            self.add_configs("casting_mirror", ConfigType.BOOL, label, help_text)
 
             label = _("Show statistics")
             help_text = _("If checked, players will be able to view for each character the preference statistics")

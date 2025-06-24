@@ -1562,3 +1562,8 @@ form th {
 .editable {
   cursor: cell;
 }
+
+.char_intro, .char_intro img {
+    max-width: 95%;
+    text-align: center;
+}
