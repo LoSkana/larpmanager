@@ -3554,6 +3554,9 @@ msgstr "Téléchargement de photos et de vidéos"
 msgid "Use of third party assets"
 msgstr "Utilisation d'actifs de tiers"
 
+msgid "What would you like to do"
+msgstr "Qu'aimeriez-vous faire ?"
+
 msgid "Access character creation!"
 msgstr "Accédez à la création de personnages !"
 

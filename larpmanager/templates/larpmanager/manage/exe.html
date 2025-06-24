@@ -10,6 +10,11 @@
             {% include "larpmanager/manage/assoc_help.html" %}
             <hr />
         {% endif %}
+        <input type="text"
+               name="tutorial_query"
+               id="tutorial_query"
+               placeholder="{% trans "What would you like to do" %}?" />
+        <hr />
         {% with list=actions header=actions_header %}
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}
@@ -69,3 +74,6 @@
         {% endif %}
     </div>
 {% endblock content %}
+{% block js %}
+    {% include "elements/tutorial_query.js" %}
+{% endblock js %}

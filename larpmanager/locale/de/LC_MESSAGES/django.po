@@ -3554,6 +3554,9 @@ msgstr "Hochladen von Fotos und Videos"
 msgid "Use of third party assets"
 msgstr "Nutzung von Vermögenswerten Dritter"
 
+msgid "What would you like to do"
+msgstr "Was würden Sie gerne tun?"
+
 msgid "Access character creation!"
 msgstr "Zugang zur Charaktererstellung!"
 

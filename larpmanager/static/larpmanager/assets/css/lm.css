@@ -1573,3 +1573,107 @@ form td {
         max-width: 100%;
     }
 }
+
+/*** POPUP ***/
+
+.popup_text {
+    display: none;
+}
+
+.popup {
+    border-radius: 2em;
+    background-color: rgba(18, 18, 18, 0.9);
+    color: white !important;
+    padding: 1em;
+    -webkit-box-shadow: 0px 0px 39px 12px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 39px 12px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 39px 12px rgba(0,0,0,0.75);
+    overflow: scroll;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    text-align: center;
+}
+
+.popup_tutorial {
+    width: 60em;
+    height: 40em;
+
+    border-radius: 2em;
+    background-color: rgba(18, 18, 18, 0.9);
+    color: white !important;
+    padding: 1em;
+    -webkit-box-shadow: 0px 0px 39px 12px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 39px 12px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 39px 12px rgba(0,0,0,0.75);
+    overflow: scroll;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    text-align: center;
+}
+
+.popup_query {
+    width: 90vw;
+    max-height: 90vh;
+
+    border-radius: 2em;
+    background-color: rgba(18, 18, 18, 0.95);
+    color: white !important;
+    padding: 1em;
+    -webkit-box-shadow: 0px 0px 39px 12px rgba(0,0,0,0.85);
+    -moz-box-shadow: 0px 0px 39px 12px rgba(0,0,0,0.85);
+    box-shadow: 0px 0px 39px 12px rgba(0,0,0,0.85);
+    overflow: scroll;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    text-align: center;
+
+    font-size: 80%;
+}
+
+.popup_tutorial p, .popup_tutorial h1, .popup_tutorial h2 {
+    color: white !important;
+}
+
+@media(max-width: 840px) {
+    .popup_tutorial {
+    width: 20em;
+    }
+}
+
+.popup_tutorial h2 {
+    margin: 1em;
+}
+
+.popup_tutorial::-webkit-scrollbar{
+    display: none;
+  }
+
+.reg_profile {
+    width:8em;
+}
+
+.popup_tutorial .reg_profile {
+    width:auto;
+    height: 90%;
+    margin: auto;
+}
+
+#header nav {
+    left: 0.75em;
+}
+
+.popup_tutorial strong, #tutorials strong, #article strong, #usage strong, #usage h3 {
+    color: #47787e !important;
+}
+
+.popup_tutorial img, #tutorials img {
+    max-width: 100%;
+    margin: auto;
+    height: auto;
+}

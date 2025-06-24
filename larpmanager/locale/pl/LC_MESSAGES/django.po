@@ -3554,6 +3554,9 @@ msgstr "Przesyłanie zdjęć i filmów"
 msgid "Use of third party assets"
 msgstr "Korzystanie z aktywów stron trzecich"
 
+msgid "What would you like to do"
+msgstr "Co chciałbyś robić?"
+
 msgid "Access character creation!"
 msgstr "Dostęp do tworzenia postaci!"
 

@@ -3554,6 +3554,9 @@ msgstr "Nahrávání fotografií a videí"
 msgid "Use of third party assets"
 msgstr "Použití majetku třetích stran"
 
+msgid "What would you like to do"
+msgstr "Co byste chtěli dělat"
+
 msgid "Access character creation!"
 msgstr "Přístup k tvorbě postavy!"
 

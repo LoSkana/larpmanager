@@ -3554,6 +3554,9 @@ msgstr "Opplasting av bilder og videoer"
 msgid "Use of third party assets"
 msgstr "Bruk av tredjeparts eiendeler"
 
+msgid "What would you like to do"
+msgstr "Hva har du lyst til å gjøre"
+
 msgid "Access character creation!"
 msgstr "Få tilgang til karakteroppretting!"
 

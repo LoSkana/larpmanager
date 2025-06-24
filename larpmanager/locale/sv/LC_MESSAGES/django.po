@@ -3554,6 +3554,9 @@ msgstr "Ladda upp foton och videor"
 msgid "Use of third party assets"
 msgstr "Användning av tredje parts tillgångar"
 
+msgid "What would you like to do"
+msgstr "Vad skulle du vilja göra"
+
 msgid "Access character creation!"
 msgstr "Få tillgång till karaktärsskapande!"
 

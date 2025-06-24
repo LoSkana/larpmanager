@@ -705,4 +705,9 @@ urlpatterns = [
         views_base.after_login,
         name="after_login",
     ),
+    path(
+        "tutorial_query/",
+        views_base.tutorial_query,
+        name="tutorial_query",
+    ),
 ]
