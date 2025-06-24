@@ -74,7 +74,7 @@ class OrgaAbilityPxForm(PxBaseForm):
         for s in ["prerequisites", "dependents"]:
             self.fields[s].widget.set_event(self.params["event"])
 
-        px_user = not self.params["event"].get_config("px_user", False)
+        px_user = self.params["event"].get_config("px_user", False)
 
         self.fields["typ"].choices = [
             (el[0], el[1]) for el in self.params["event"].get_elements(AbilityTypePx).values_list("id", "name")
