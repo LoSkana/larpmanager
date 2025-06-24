@@ -40,13 +40,33 @@ class MemberFieldType(models.TextChoices):
     MANDATORY = "m", _("Mandatory")
 
 
+class Currency(models.TextChoices):
+    EUR = "e", "EUR"
+    USD = "u", "USD"
+    GBP = "g", "GBP"
+    CAD = "c", "CAD"
+    JPY = "j", "JPY"
+
+
+class AssociationSkin(BaseModel):
+    name = models.CharField(max_length=100)
+
+    domain = models.CharField(max_length=100)
+
+    default_features = models.ManyToManyField(Feature, related_name="skins", blank=True)
+
+    default_css = models.CharField(max_length=1000, blank=True)
+
+    default_nation = models.CharField(
+        max_length=2,
+        choices=FeatureNationality.choices,
+        blank=True,
+        null=True,
+    )
+
+
 class Association(BaseModel):
-    EUR = "e"
-    USD = "u"
-    GBP = "g"
-    JPY = "j"
-    CAD = "c"
-    CURRENCY_CHOICES = [(EUR, "EUR"), (USD, "USD"), (GBP, "GBP"), (CAD, "CAD"), (JPY, "JPY")]
+    skin = models.ForeignKey(AssociationSkin, on_delete=models.CASCADE, null=True, blank=True)
 
     name = models.CharField(max_length=100, help_text=_("Complete name of the LARP Organization"))
 
@@ -99,8 +119,8 @@ class Association(BaseModel):
 
     payment_currency = models.CharField(
         max_length=1,
-        choices=CURRENCY_CHOICES,
-        default=EUR,
+        choices=Currency.choices,
+        default=Currency.EUR,
         blank=True,
         null=True,
         verbose_name=_("Payment currency"),
