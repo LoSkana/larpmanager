@@ -85,7 +85,7 @@ def orga_character_form(live_server, page):
 
     go_to(page, live_server, "/test/1/")
     page.get_by_role("link", name="pinoloooooooooo").click()
-    expect(page.locator("#one")).to_contain_text("Player: Admin Test public: public baba")
+    expect(page.locator("#one")).to_contain_text("Player: Admin Test public: public Presentation baba")
 
     create_second_char(live_server, page)
 
@@ -124,7 +124,9 @@ def create_second_char(live_server, page):
     page.locator("#id_q9").click()
     page.locator("#id_q9").fill("asda")
     page.get_by_role("button", name="Confirm", exact=True).click()
-    expect(page.locator("#one")).to_contain_text("Player: User Test Status: Creation dsfdfsd Text sdfdsfds")
+    expect(page.locator("#one")).to_contain_text(
+        "Player: User Test Status: Creation Presentation dsfdfsd Text sdfdsfds"
+    )
 
 
 def show_chars(page, live_server):

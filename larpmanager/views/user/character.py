@@ -51,6 +51,7 @@ from larpmanager.forms.writing import (
 from larpmanager.models.event import EventTextType
 from larpmanager.models.form import (
     QuestionApplicable,
+    QuestionType,
     WritingOption,
     WritingQuestion,
 )
@@ -105,6 +106,14 @@ def character(request, s, n, num):
         ctx["intro"] = get_event_text(ctx["event"].id, EventTextType.INTRO)
     else:
         get_character_fields(ctx, only_visible=True)
+
+    tn = (
+        ctx["event"]
+        .get_elements(WritingQuestion)
+        .filter(typ=QuestionType.TEASER, applicable=QuestionApplicable.CHARACTER)
+    )
+    if tn:
+        ctx["teaser_name"] = tn.first().display
 
     casting_details(ctx, 0)
     if ctx["casting_show_pref"] and not ctx["char"]["player_id"]:

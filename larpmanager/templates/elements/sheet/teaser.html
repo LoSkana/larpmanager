@@ -1,6 +1,6 @@
 {% load show_tags i18n %}
 {% if char.teaser and show_teaser %}
-    <hr class="no-clear" />
+    <h2>{{ teaser_name }}</h2>
     <div class="teaser">{% show_char char.teaser run 1 %}</div>
 {% endif %}
 {% for fnum in char.factions %}
