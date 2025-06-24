@@ -1549,6 +1549,11 @@ th select {
     cursor:pointer;
 }
 
+.char_intro, .char_intro p, .char_intro img {
+    max-width: 100%;
+    text-align: center;
+}
+
 form th {
   max-width: 20%;
   width: 20%;
@@ -1562,8 +1567,4 @@ form th {
 .editable {
   cursor: cell;
 }
-
-.char_intro, .char_intro img {
-    max-width: 95%;
-    text-align: center;
 }
