@@ -8289,6 +8289,13 @@ msgstr ""
 "přejděte na stránku správy konfigurace."
 
 msgid ""
+"You have activated registration external link, but no value has been set; "
+"access the event management panel"
+msgstr ""
+"Aktivovali jste externí odkaz pro registraci, ale nebyla nastavena žádná "
+"hodnota; vstupte na panel správy událostí."
+
+msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "
 "and optionally assigns a result."
 msgstr ""

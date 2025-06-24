@@ -6855,8 +6855,8 @@ msgid "Pay what you want"
 msgstr ""
 
 msgid ""
-"Allows players to add an optional extra amount to their registration fee (e."
-"g. for donations or to help cover others' fees)."
+"Allows players to add an optional extra amount to their registration fee "
+"(e.g. for donations or to help cover others' fees)."
 msgstr ""
 
 msgid "Now you can set the optional amount field"
@@ -8270,6 +8270,11 @@ msgstr ""
 msgid ""
 "You have activated registration secret link, but no value has been set; "
 "access the run management panel"
+msgstr ""
+
+msgid ""
+"You have activated registration external link, but no value has been set; "
+"access the event management panel"
 msgstr ""
 
 msgid ""

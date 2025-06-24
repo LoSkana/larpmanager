@@ -395,7 +395,7 @@
     placeholder: false
     order: 30
     after_text: Now you can set the external registration link
-    after_link: orga_run
+    after_link: orga_event
 - model: larpmanager.feature
   pk: 60
   fields:

@@ -8557,6 +8557,13 @@ msgstr ""
 "voor de configuratie van functies van de gebeurtenis"
 
 msgid ""
+"You have activated registration external link, but no value has been set; "
+"access the event management panel"
+msgstr ""
+"U hebt registratie externe link geactiveerd, maar er is geen waarde "
+"ingesteld; ga naar het paneel voor gebeurtenissenbeheer"
+
+msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "
 "and optionally assigns a result."
 msgstr ""

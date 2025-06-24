@@ -227,7 +227,7 @@ def _exe_accounting_actions(assoc, ctx, features):
 
         details = get_payment_details(assoc)
         configured = False
-        for key, value in details.items:
+        for key, value in details.items():
             if key.endswith("_fee") and value:
                 configured = True
 
@@ -431,6 +431,7 @@ def _orga_reg_actions(ctx, features):
             ),
             "orga_registration_installments",
         )
+
     if "registration_open" in features and not ctx["run"].registration_open:
         _add_action(
             ctx,
@@ -440,6 +441,7 @@ def _orga_reg_actions(ctx, features):
             ),
             "orga_run",
         )
+
     if "registration_secret" in features and not ctx["run"].registration_secret:
         _add_action(
             ctx,
@@ -448,6 +450,16 @@ def _orga_reg_actions(ctx, features):
                 "access the run management panel"
             ),
             "orga_run",
+        )
+
+    if "register_link" in features and not ctx["event"].register_link:
+        _add_action(
+            ctx,
+            _(
+                "You have activated registration external link, but no value has been set; "
+                "access the event management panel"
+            ),
+            "orga_event",
         )
 
     if "custom_character" in features:

@@ -8728,6 +8728,13 @@ msgstr ""
 "festzulegen, rufen Sie die Seite für die Konfigurationsverwaltung auf"
 
 msgid ""
+"You have activated registration external link, but no value has been set; "
+"access the event management panel"
+msgstr ""
+"Sie haben den externen Link für die Registrierung aktiviert, aber es wurde "
+"kein Wert gesetzt; rufen Sie die Ereignisverwaltung auf"
+
+msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "
 "and optionally assigns a result."
 msgstr ""

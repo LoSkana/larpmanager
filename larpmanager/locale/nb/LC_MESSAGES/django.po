@@ -8414,6 +8414,13 @@ msgstr ""
 "åpner du siden for konfigurasjonsadministrasjon"
 
 msgid ""
+"You have activated registration external link, but no value has been set; "
+"access the event management panel"
+msgstr ""
+"Du har aktivert en ekstern lenke for registrering, men ingen verdi er "
+"angitt; gå til panelet for hendelsesadministrasjon"
+
+msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "
 "and optionally assigns a result."
 msgstr ""

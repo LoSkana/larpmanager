@@ -8423,6 +8423,13 @@ msgstr ""
 "przejść do strony zarządzania konfiguracją"
 
 msgid ""
+"You have activated registration external link, but no value has been set; "
+"access the event management panel"
+msgstr ""
+"Aktywowałeś zewnętrzny link do rejestracji, ale nie ustawiono żadnej "
+"wartości; wejdź do panelu zarządzania wydarzeniami"
+
+msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "
 "and optionally assigns a result."
 msgstr ""

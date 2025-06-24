@@ -8550,6 +8550,13 @@ msgstr ""
 "dell'evento, accedi alla pagina di gestione delle configurazioni"
 
 msgid ""
+"You have activated registration external link, but no value has been set; "
+"access the event management panel"
+msgstr ""
+"È stato attivato il link esterno di registrazione, ma non è stato impostato "
+"alcun valore; accedi al pannello di gestione dell'evento"
+
+msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "
 "and optionally assigns a result."
 msgstr ""
