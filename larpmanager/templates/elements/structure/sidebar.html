@@ -15,12 +15,15 @@
                 {% endif %}
                 <hr />
             </div>
-            <h2>Larpmanager</h2>
-            <p>
-                <a href="https://discord.gg/C4KuyQbuft">Discord</a>
-                <a href="{% url 'tutorials' %}">Tutorials</a>
-            </p>
             {% if run %}
+                <p>
+                    <span class="sidebar-link-wrap"
+                          descr="{% trans "Access the event dashboard" %}">
+                        <a class="sidebar-link"
+                           href="{% url 'manage' run.event.slug run.number %}">{% trans "Dashboard" %}</a>
+                        <a href="#" class="explain-icon" tog="manage"><i class="fas fa-question-circle"></i></a>
+                    </span>
+                </p>
                 {% for mod, list in event_pms.items %}
                     <div class="h2-p-row">
                         <h2>{% trans mod %}</h2>
@@ -36,6 +39,13 @@
                     </div>
                 {% endfor %}
             {% else %}
+                <p>
+                    <span class="sidebar-link-wrap"
+                          descr="{% trans "Access the organization dashboard" %}">
+                        <a class="sidebar-link" href="{% url 'manage' %}">{% trans "Dashboard" %}</a>
+                        <a href="#" class="explain-icon" tog="manage"><i class="fas fa-question-circle"></i></a>
+                    </span>
+                </p>
                 {% for mod, list in assoc_pms.items %}
                     <div class="h2-p-row">
                         <h2>{% trans mod %}</h2>
@@ -50,6 +60,11 @@
                     </div>
                 {% endfor %}
             {% endif %}
+            <h2>Larpmanager</h2>
+            <p>
+                <a href="https://discord.gg/C4KuyQbuft">Discord</a>
+                <a href="{% url 'tutorials' %}">Tutorials</a>
+            </p>
             {% if role_names %}
                 <hr />
                 <div class="roles">
@@ -66,7 +81,7 @@
     <div id="mobile-bar">
         <nav>
             <a id="sidebar-mobile" href="#sidebar">
-                <span>Management</span>
+                <span>Shortcuts</span>
             </a>
         </nav>
     </div>

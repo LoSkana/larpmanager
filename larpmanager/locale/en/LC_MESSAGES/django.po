@@ -1013,20 +1013,6 @@ msgstr ""
 msgid "Casting"
 msgstr ""
 
-msgid "Assignments"
-msgstr ""
-
-msgid "Number of characters to be assigned (default 1)"
-msgstr ""
-
-msgid "Mirror"
-msgstr ""
-
-msgid ""
-"Enables to set a character as a 'mirror' for another, to hide it's true "
-"nature"
-msgstr ""
-
 msgid "Minimum preferences"
 msgstr ""
 
@@ -1053,6 +1039,20 @@ msgstr ""
 msgid ""
 "If checked, it adds a field in which the player can indicate which elements "
 "they wish to avoid altogether"
+msgstr ""
+
+msgid "Assignments"
+msgstr ""
+
+msgid "Number of characters to be assigned (default 1)"
+msgstr ""
+
+msgid "Mirror"
+msgstr ""
+
+msgid ""
+"Enables to set a character as a 'mirror' for another, to hide it's true "
+"nature"
 msgstr ""
 
 msgid "Show statistics"
@@ -3860,6 +3860,15 @@ msgstr ""
 msgid "Other characters"
 msgstr ""
 
+msgid "Access the event dashboard"
+msgstr ""
+
+msgid "Dashboard"
+msgstr ""
+
+msgid "Access the organization dashboard"
+msgstr ""
+
 msgid "Role"
 msgstr ""
 
@@ -5091,8 +5100,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"On the left, you'll find the quick links sidebar (on mobile, open it by "
-"tapping “Management” at the bottom)."
+"The quick access sidebar is on the left (on mobile, tap “Shortcuts” at the "
+"bottom to open it)."
 msgstr ""
 
 msgid ""
@@ -5121,9 +5130,6 @@ msgstr ""
 msgid ""
 "Tip: Pin this page to your browser for faster access to your organization "
 "and events!"
-msgstr ""
-
-msgid "Management"
 msgstr ""
 
 msgid "Welcome to"
@@ -6805,6 +6811,9 @@ msgstr ""
 msgid "Event display and visual customization"
 msgstr ""
 
+msgid "Management"
+msgstr ""
+
 msgid "General event management tools"
 msgstr ""
 
@@ -8104,124 +8113,203 @@ msgstr ""
 
 msgid ""
 "There are no active events, to create a new one access the events management "
-"page:"
+"page"
 msgstr ""
 
 msgid ""
 "To set up the gateway payment available to players, to let them pay the "
 "registration fee through the platform, access the payment settings "
-"management page:"
+"management page"
 msgstr ""
 
 msgid ""
 "To define which data will be asked in the profile form to the users once "
-"they sign up, access the profile management page:"
+"they sign up, access the profile management page"
 msgstr ""
 
 msgid ""
 "To grant access to organization management for other users and define roles "
-"with specific permissions, access the roles management page:"
+"with specific permissions, access the roles management page"
 msgstr ""
 
 msgid ""
 "To customize the appearance of all organizational pages, including colors, "
-"fonts, and images, access the appearance management page:"
+"fonts, and images, access the appearance management page"
 msgstr ""
 
 msgid ""
 "To activate new features and enhance the functionality of the platform, "
-"access the features management page:"
+"access the features management page"
 msgstr ""
 
 msgid ""
 "To set specific values for the interface configuration or features, access "
-"the configuration management page:"
+"the configuration management page"
 msgstr ""
 
 #, python-format
 msgid ""
 "There are <b>%(number)s</b> expenses to approve, access the expenses "
-"management panel:"
+"management panel"
 msgstr ""
 
 #, python-format
 msgid ""
 "There are <b>%(number)s</b> payments to approve, access the invoices "
-"management panel:"
+"management panel"
 msgstr ""
 
 #, python-format
 msgid ""
 "There are <b>%(number)s</b> refunds to deliver, access the refunds "
-"management panel:"
+"management panel"
 msgstr ""
 
 #, python-format
 msgid ""
 "There are <b>%(number)s</b> members to approve, access the membership "
-"management panel:"
+"management panel"
+msgstr ""
+
+msgid ""
+"The membership request text is missing, create it in the texts management "
+"panel"
+msgstr ""
+
+msgid ""
+"There are no candidates for the voting, set them in the configuration panel"
+msgstr ""
+
+msgid ""
+"There are no payment gateway active, configure them in the payment settings "
+"panel"
+msgstr ""
+
+msgid "Payment fees require payments, activate it in the features panel"
+msgstr ""
+
+msgid ""
+"There are no payment gateway set with a transaction fee, configure them in "
+"the payment settings panel"
+msgstr ""
+
+msgid ""
+"The organization tax configuration is missing, set them in the configuration "
+"panel"
+msgstr ""
+
+msgid "The taxes configuration is missing, set them in the configuration panel"
 msgstr ""
 
 #, python-format
 msgid ""
 "There are <b>%(number)s</b> characters in proposed status, approve them in "
-"the character management panel:"
+"the character management panel"
+msgstr ""
+
+msgid "Set the casting options in the configuration panel"
+msgstr ""
+
+msgid ""
+"No quest types have been created; use the quest type management panel to "
+"define them"
+msgstr ""
+
+#, python-format
+msgid ""
+"There are quest types without quests: %(list)s. Create them in the quests "
+"management panel"
+msgstr ""
+
+#, python-format
+msgid ""
+"There are quests without traits: %(list)s. Create them in the trait "
+"management panel"
+msgstr ""
+
+msgid "Set the initial amount of experience points in the configuration panel"
+msgstr ""
+
+msgid ""
+"No ability types have been created; use the ability type management panel to "
+"define them"
+msgstr ""
+
+#, python-format
+msgid ""
+"There are ability types without abilities: %(list)s. Create abilities for "
+"them in the ability management panel"
+msgstr ""
+
+msgid ""
+"No delivery for experience points have been created; create one in the "
+"delivery management panel"
 msgstr ""
 
 msgid ""
 "You have activated both fixed and dynamic installments; they are not meant "
 "to be used together, deactivate one of the two in the features management "
-"panel:"
+"panel"
 msgstr ""
 
 msgid ""
 "You have activated dynamic installments, but none have been yet created; "
-"access the dynamic installments management panel:"
+"access the dynamic installments management panel"
 msgstr ""
 
 msgid ""
 "You have activated fixed installments, but none have been yet created; "
-"access the fixed installments management panel:"
+"access the fixed installments management panel"
 msgstr ""
 
 msgid ""
 "You have activated registration opening date, but no value has been set; "
-"access the run management panel:"
+"access the run management panel"
 msgstr ""
 
 msgid ""
 "You have activated registration secret link, but no value has been set; "
-"access the run management panel:"
+"access the run management panel"
+msgstr ""
+
+msgid ""
+"You have activated registration external link, but no value has been set; "
+"access the event management panel"
+msgstr ""
+
+msgid ""
+"You have activated character customization, but no fields has been set; "
+"access the configuration panel"
 msgstr ""
 
 msgid ""
 "To set the tickets that users can select during registration, access the "
-"tickets management page:"
+"tickets management page"
 msgstr ""
 
 msgid ""
 "To define the registration form, and set up any number of registration "
-"questions and their options, access the registration form management page:"
+"questions and their options, access the registration form management page"
 msgstr ""
 
 msgid ""
 "To grant access to event management for other users and define roles with "
-"specific permissions, access the roles management page:"
+"specific permissions, access the roles management page"
 msgstr ""
 
 msgid ""
 "To customize the appearance of all event pages, including colors, fonts, and "
-"images, access the appearance management page:"
+"images, access the appearance management page"
 msgstr ""
 
 msgid ""
 "To activate new features and enhance the functionality of the event, access "
-"the features management page:"
+"the features management page"
 msgstr ""
 
 msgid ""
 "To set specific values for configuration of features of the event, access "
-"the configuration management page:"
+"the configuration management page"
 msgstr ""
 
 msgid "Suggestions"
