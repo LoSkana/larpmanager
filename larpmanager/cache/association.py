@@ -85,6 +85,7 @@ def init_cache_assoc(a_slug):
 
     if assoc.skin:
         el["skin_css"] = assoc.skin.default_css
+        el["skin_domain"] = assoc.skin.domain
 
     return el
 

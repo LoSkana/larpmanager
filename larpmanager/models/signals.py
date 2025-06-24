@@ -479,6 +479,8 @@ def pre_save_association_set_skin_features(sender, instance, **kwargs):
             return
 
     instance._update_skin_features = True
+    if not instance.nationality:
+        instance.nationality = instance.skin.default_nation
 
 
 @receiver(post_save, sender=Association)

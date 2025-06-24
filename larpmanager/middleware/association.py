@@ -60,8 +60,10 @@ class AssociationIdentifyMiddleware:
 
         assoc = get_cache_assoc(assoc_slug)
         if assoc:
-            if assoc.skin and assoc.skin.domain != base_domain:
-                return redirect(f"https://{assoc.slug}.{assoc.skin.domain}{request.get_full_path()}")
+            if "skin_domain" in assoc and assoc["skin_domain"] != base_domain:
+                slug = assoc["slug"]
+                domain = assoc["skin_domain"]
+                return redirect(f"https://{slug}.{domain}{request.get_full_path()}")
             return cls.load_assoc(request, assoc, base_domain)
 
         if local or domain == "larpmanager":

@@ -24,13 +24,14 @@ import yaml
 from django.apps import apps
 from django.conf import settings as conf_settings
 from django.core.management.base import BaseCommand
+from django.db import transaction
 
 
 class Command(BaseCommand):
     help = "Reload features from yaml"
 
     def handle(self, *args, **options):
-        for fixture in ["skin", "module", "feature", "assoc_permission", "event_permission", "payment_methods"]:
+        for fixture in ["module", "feature", "assoc_permission", "event_permission", "payment_methods", "skin"]:
             fixture_path = os.path.join(conf_settings.BASE_DIR, "..", "larpmanager", "fixtures", f"{fixture}.yaml")
             with open(fixture_path, encoding="utf-8") as f:
                 data = yaml.safe_load(f)
@@ -42,8 +43,17 @@ class Command(BaseCommand):
                 pk = obj["pk"]
                 fields = obj["fields"]
 
-                for s in ["feature", "module"]:
-                    if s in fields:
-                        fields[f"{s}_id"] = fields.pop(s)
+                m2m_fields = {}
+                for key in list(fields.keys()):
+                    value = fields[key]
+                    if isinstance(value, list):  # assume m2m
+                        m2m_fields[key] = value
+                        fields.pop(key)
+                    elif key in ["feature", "module"]:  # rename foreign key
+                        fields[f"{key}_id"] = fields.pop(key)
 
-                Model.objects.update_or_create(pk=pk, defaults=fields)
+                with transaction.atomic():
+                    instance, _ = Model.objects.update_or_create(pk=pk, defaults=fields)
+
+                    for field, ids in m2m_fields.items():
+                        getattr(instance, field).set(ids)
