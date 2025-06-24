@@ -14,8 +14,7 @@
             <h2>
                 <a id="{{ el.id }}_go">{{ el.name }}</a>
             </h2>
-            <div id="{{ el.id }}_sec"
-                 {% if not el.cmr %}style="display: none"{% endif %}>
+            <div id="{{ el.id }}_sec" {% if not el.cmr %}class="hide"{% endif %}>
                 <table class="mob">
                     <tr>
                         <th>{% trans "Description" %}</th>

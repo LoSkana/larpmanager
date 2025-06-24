@@ -1577,3 +1577,15 @@ td:has(input[type="checkbox"]) .helptext {
         max-width: 100%;
     }
 }
+
+#not_chosen {
+    color: red
+}
+
+.max_width {
+    max-width: 100% !important;
+}
+
+#discount_tbl {
+    margin-bottom: 2em;
+}

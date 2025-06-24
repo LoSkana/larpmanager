@@ -215,11 +215,11 @@ def mail_confirm_casting(member, run, gl_name, lst, avoid):
         "type": gl_name,
         "event": run,
     }
-    body = _("Your preferences have been saved in the system (in that order):")
+    body = _("Your preferences have been saved in the system") + ":"
     body += "<br /><br />" + "<br />".join(lst)
     if avoid:
         body += "<br/><br />"
-        body += _("Elements you wish to avoid in the assignment:")
+        body += _("Elements you wish to avoid in the assignment") + ":"
         body += f" {avoid}"
     my_send_mail(subj, body, member, run)
 

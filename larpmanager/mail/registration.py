@@ -123,7 +123,7 @@ def registration_options(instance):
 
     res = get_registration_options(instance)
     if res:
-        body += "<br /><br />" + _("Selected options:")
+        body += "<br /><br />" + _("Selected options") + ":"
         for el in res:
             body += f"<br />{el[0]} - {el[1]}"
 

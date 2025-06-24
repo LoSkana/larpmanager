@@ -28,10 +28,12 @@
                 </thead>
                 {% for el in given %}
                     <tr>
-                        <td data-title='{% trans "Run" %}'>{% if el.run %}{{ el.run }}{% endif %}</td>
-                        <td data-title='{% trans "Date" %}'>{{ el.created |date:'Y-m-d' }}</td>
-                        <td data-title='{% trans "Description" %}'>{{ el.descr }}</td>
-                        <td data-title='{% trans "Amount" %}'>{{ el.value }}</td>
+                        <td data-title="{% trans "Run" %}">
+                            {% if el.run %}{{ el.run }}{% endif %}
+                        </td>
+                        <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
+                        <td data-title="{% trans "Description" %}">{{ el.descr }}</td>
+                        <td data-title="{% trans "Amount" %}">{{ el.value }}</td>
                     </tr>
                 {% endfor %}
             </table>
@@ -50,9 +52,9 @@
                 </thead>
                 {% for el in used %}
                     <tr>
-                        <td data-title='{% trans "Run" %}'>{{ el.reg.run }}</td>
-                        <td data-title='{% trans "Date" %}'>{{ el.created |date:'Y-m-d' }}</td>
-                        <td data-title='{% trans "Amount" %}'>{{ el.value }}</td>
+                        <td data-title="{% trans "Run" %}">{{ el.reg.run }}</td>
+                        <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
+                        <td data-title="{% trans "Amount" %}">{{ el.value }}</td>
                     </tr>
                 {% endfor %}
             </table>

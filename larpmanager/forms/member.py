@@ -248,7 +248,7 @@ class ResidenceWidget(forms.MultiWidget):
 
 def validate_no_pipe(value):
     if "|" in value:
-        raise forms.ValidationError(_("Character not allowed:") + " |")
+        raise forms.ValidationError(_("Character not allowed") + ": |")
 
 
 class ResidenceField(forms.MultiValueField):
@@ -436,13 +436,13 @@ class MembershipRequestForm(forms.ModelForm):
 
     request = forms.FileField(
         label=_("Request signed"),
-        help_text=_("Upload the scan of your signed application (image or pdf document):"),
+        help_text=_("Upload the scan of your signed application (image or pdf document)"),
         validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
     )
 
     document = forms.FileField(
         label=_("Photo of an ID"),
-        help_text=_("Upload a photo of the identity document that you listed in the request (image or pdf)."),
+        help_text=_("Upload a photo of the identity document that you listed in the request (image or pdf)"),
         validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
     )
 

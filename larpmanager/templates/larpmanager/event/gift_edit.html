@@ -13,7 +13,7 @@
         {% if event.website %}
             <p>
                 {% trans "View all event information, and any specifics tickets costs, in its" %}
-                <a target=”_blank” href="{{ event.website }}">website</a> {% trans "dedicated!" %}
+                <a target="_blank" href="{{ event.website }}">website</a>!
             </p>
             <hr />
         {% endif %}
@@ -21,7 +21,7 @@
             {{ custom_text | safe }}
             <hr />
         {% endif %}
-        <div style="text-align: center">
+        <div class="centerized">
             <form id="main_form" action="{{ request.path }}" method="post">
                 {% csrf_token %}
                 <div>
@@ -31,7 +31,7 @@
                 </div>
                 <input type="button" id="confirm" value="{% trans "Continue" %}" />
                 {% include "elements/form/delete.html" %}
-                <div id='riepilogo' style='display: none'>
+                <div id="riepilogo" class="hide">
                     <br />
                     <table class="mob">
                         <tbody>

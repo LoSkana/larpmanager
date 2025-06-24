@@ -116,8 +116,10 @@ def notify_membership_approved(member, resp):
 
     membership_fee = False
     if regs:
-        body += "<br /><br />" + _(
-            "To confirm your event registrations, please make your payment within one week. You can make it from here:"
+        body += (
+            "<br /><br />"
+            + _("To confirm your event registration, please complete your payment within one week. You can do so here")
+            + ": "
         )
         first = True
         for r in regs:
@@ -188,7 +190,7 @@ def notify_help_question(sender, instance, **kwargs):
         # new answer
         activate(mb.language)
         subj = hdr(instance) + _("New answer!")
-        body = _("Your question has been answered:") + f" {instance.text}"
+        body = _("Your question has been answered") + f": {instance.text}"
 
         if instance.run:
             url = get_url(

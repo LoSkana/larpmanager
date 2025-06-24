@@ -525,7 +525,8 @@ class OrgaConfigForm(ConfigForm):
             )
             help_text += (
                 " "
-                + _("You can use the following fields, they will be filled in automatically:")
+                + _("You can use the following fields, they will be filled in automatically")
+                + ":"
                 + "{player_name}, {question_name}"
             )
             self.add_configs("payment_custom_reason", ConfigType.CHAR, label, help_text)

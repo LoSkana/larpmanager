@@ -23,7 +23,7 @@
             {{ form.descr }}
             <br />
         {% endif %}
-        <p>{% trans "Choose the payment method: " %}</p>
+        <p>{% trans "Choose the payment method" %}:</p>
         <table id="payment_form" class="no_csv">
             {% for key, el in form.methods.items %}
                 <tr id="row_{{ el.slug }}"
@@ -41,7 +41,7 @@
                     {% if 'payment_fees' in assoc.features and user_fees %}
                         <th>
                             {% if el.fee %}
-                                {% trans "Fee: " %} +{{ el.fee }}%
+                                {% trans "Fee" %}: +{{ el.fee }}%
                             {% endif %}
                         </th>
                     {% endif %}
