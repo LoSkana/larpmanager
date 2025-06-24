@@ -1,8 +1,8 @@
 - model: larpmanager.associationskin
   pk: 1
   fields:
-    name: FederManager
-    domain: feder-manager.it
+    name: LudoManager
+    domain: ludomanager.it
     default_css: 'html, body { background: white }  :root { --sec-rgb: 190,190,190;
       }              :root { --pri-rgb: 44,118,110; }    :root { --ter-rgb: 53,67,68;
       }'

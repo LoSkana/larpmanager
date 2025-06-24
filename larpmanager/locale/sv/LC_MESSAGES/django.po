@@ -3489,6 +3489,9 @@ msgstr "inte synlig för närvarande"
 msgid "'player' (player's email)"
 msgstr "\"player\" (spelarens e-postadress)"
 
+msgid "Benvenuto in LudoManager!"
+msgstr "Benvenuto i LudoManager!"
+
 msgid "Display all sent e-mails "
 msgstr "Visa alla skickade e-postmeddelanden"
 
@@ -3562,9 +3565,6 @@ msgstr "Få tillgång till karaktärsskapande!"
 
 msgid "Access the event dashboard"
 msgstr "Få tillgång till evenemangets instrumentpanel"
-
-msgid "Benvenuto in FederManager!"
-msgstr "Benvenuto i FederManager!"
 
 msgid "Can't copy from same event"
 msgstr "Kan inte kopiera från samma händelse"

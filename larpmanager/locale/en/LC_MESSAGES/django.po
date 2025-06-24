@@ -8082,7 +8082,7 @@ msgstr ""
 msgid "Answer submitted!"
 msgstr ""
 
-msgid "Benvenuto in FederManager!"
+msgid "Benvenuto in LudoManager!"
 msgstr ""
 
 msgid "Feature activated:"

@@ -3489,6 +3489,9 @@ msgstr "no visible en este momento"
 msgid "'player' (player's email)"
 msgstr "'player' (correo electrónico del jugador)"
 
+msgid "Benvenuto in LudoManager!"
+msgstr "¡Benvenuto en LudoManager!"
+
 msgid "Display all sent e-mails "
 msgstr "Mostrar todos los correos electrónicos enviados"
 
@@ -3562,9 +3565,6 @@ msgstr "Acceso a la creación de personajes"
 
 msgid "Access the event dashboard"
 msgstr "Acceder al panel de eventos"
-
-msgid "Benvenuto in FederManager!"
-msgstr "¡Benvenuto in FederManager!"
 
 msgid "Can't copy from same event"
 msgstr "No se puede copiar desde el mismo evento"

@@ -3489,6 +3489,9 @@ msgstr "v tuto chvíli není viditelný"
 msgid "'player' (player's email)"
 msgstr "'player' (e-mail hráče)"
 
+msgid "Benvenuto in LudoManager!"
+msgstr "Benvenuto v LudoManageru!"
+
 msgid "Display all sent e-mails "
 msgstr "Zobrazení všech odeslaných e-mailů"
 
@@ -3562,9 +3565,6 @@ msgstr "Přístup k tvorbě postavy!"
 
 msgid "Access the event dashboard"
 msgstr "Přístup k ovládacímu panelu události"
-
-msgid "Benvenuto in FederManager!"
-msgstr "Benvenuto ve FederManageru!"
 
 msgid "Can't copy from same event"
 msgstr "Nelze kopírovat ze stejné události"

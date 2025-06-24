@@ -47,7 +47,7 @@ from larpmanager.forms.utils import RedirectForm
 from larpmanager.mail.base import join_email
 from larpmanager.mail.remind import remember_membership, remember_membership_fee, remember_pay, remember_profile
 from larpmanager.models.access import AssocRole, EventRole
-from larpmanager.models.association import Association, AssocTextType
+from larpmanager.models.association import Association, AssociationSkin, AssocTextType
 from larpmanager.models.base import Feature
 from larpmanager.models.event import (
     Run,
@@ -72,9 +72,8 @@ def lm_home(request):
     ctx = get_lm_contact()
     ctx["index"] = True
 
-    # TODO rimuovI!!
-    if True or request.assoc["base_domain"] == "feder-manager.it":
-        return federmanager(ctx, request)
+    if request.assoc["base_domain"] == "ludomanager.it":
+        return ludomanager(ctx, request)
 
     ctx.update(get_cache_lm_home())
     random.shuffle(ctx["promoters"])
@@ -83,13 +82,14 @@ def lm_home(request):
     return render(request, "larpmanager/larpmanager/home.html", ctx)
 
 
-def federmanager(ctx, request):
+def ludomanager(ctx, request):
+    ctx["assoc_skin"] = "LudoManager"
     assoc = _join_form(ctx, request)
     if assoc:
-        messages.success(request, _("Benvenuto in FederManager!"))
-        return go_redirect(request, assoc.slug, "manage", "feder-manager.it")
+        messages.success(request, _("Benvenuto in LudoManager!"))
+        return go_redirect(request, assoc.slug, "manage", "ludomanager.it")
 
-    return render(request, "larpmanager/larpmanager/skin/federmanager.html", ctx)
+    return render(request, "larpmanager/larpmanager/skin/ludomanager.html", ctx)
 
 
 @csrf_exempt
@@ -350,6 +350,11 @@ def _join_form(ctx, request):
         form = FirstAssociationForm(request.POST, request.FILES)
         if form.is_valid():
             assoc = form.save()
+
+            # set skin
+            if "assoc_skin" in ctx:
+                assoc.skin = AssociationSkin.objects.get(name__iexact=ctx["assoc_skin"])
+                assoc.save()
 
             # Add member to admins
             (ar, created) = AssocRole.objects.get_or_create(assoc=assoc, number=1, name="Admin")
