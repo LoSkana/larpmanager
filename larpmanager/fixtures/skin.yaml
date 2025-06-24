@@ -1,0 +1,15 @@
+- model: larpmanager.associationskin
+  pk: 1
+  fields:
+    name: FederManager
+    domain: feder-manager.it
+    default_css: 'html, body { background: white }  :root { --sec-rgb: 190,190,190;
+      }              :root { --pri-rgb: 44,118,110; }    :root { --ter-rgb: 53,67,68;
+      }'
+    default_nation: it
+    default_features:
+    - 110
+    - 45
+    - 106
+    - 144
+    - 108
