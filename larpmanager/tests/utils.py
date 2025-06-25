@@ -46,6 +46,8 @@ def page_start(p, show=False):
 
     page.on("response", on_response)
 
+    _checkboxes_fix(page)
+
     activate("en")
     return browser, context, page
 
@@ -119,6 +121,17 @@ def _checkboxes_fix(page):
             display: table-cell !important;
         }
     """
+    )
+
+    page.on(
+        "framenavigated",
+        lambda frame: frame.add_style_tag(
+            content="""
+        td:has(input[type="checkbox"]) {
+            display: table-cell !important;
+        }
+    """
+        ),
     )
 
 
