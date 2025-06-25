@@ -6810,17 +6810,17 @@ msgstr ""
 "Ta strona pokazuje poufne informacje zarejestrowanych graczy dotyczące diety"
 
 msgid ""
-"You have activated the following features, for each here's the links to "
-"follow"
-msgstr ""
-"Aktywowałeś następujące funkcje, dla każdej z nich są linki do naśladowania"
-
-msgid ""
 "Type a keyword in the search bar to find a reference - please write in "
 "English"
 msgstr ""
 "Wpisz słowo kluczowe w pasku wyszukiwania, aby znaleźć odnośnik - pisz w "
 "języku angielskim."
+
+msgid ""
+"You have activated the following features, for each here's the links to "
+"follow"
+msgstr ""
+"Aktywowałeś następujące funkcje, dla każdej z nich są linki do naśladowania"
 
 msgid ""
 "Allows players to submit questions, and organizers to review and organize "
