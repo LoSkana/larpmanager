@@ -10,7 +10,7 @@ from larpmanager.mail.base import notify_admins
 from larpmanager.models.larpmanager import LarpManagerTutorial
 from larpmanager.utils.tasks import background_auto
 
-INDEX_DIR = "whoosh_index"
+INDEX_DIR = "data/whoosh_index"
 
 
 def get_or_create_index(index_dir):
@@ -19,8 +19,8 @@ def get_or_create_index(index_dir):
     )
     if not os.path.exists(index_dir):
         os.mkdir(index_dir)
-        return create_in(index_dir, schema)
-    return open_dir(index_dir)
+        return create_in(index_dir, schema, "MAIN")
+    return open_dir(index_dir, "MAIN")
 
 
 @background_auto(queue="whoosh")
