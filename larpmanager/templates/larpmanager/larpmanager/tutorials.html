@@ -96,7 +96,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
        $('h2').each(function() {
             var h2Text = $(this).text();
-            if (h2Text === 'Menu') continue;
+            if (h2Text === 'Menu') return;
             var slug = slugify(h2Text);
 
             $(this).attr('id', slug);

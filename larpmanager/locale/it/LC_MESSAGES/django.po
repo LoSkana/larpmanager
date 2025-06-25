@@ -3554,6 +3554,9 @@ msgstr "Caricamento di foto e video"
 msgid "Use of third party assets"
 msgstr "Godimento di beni di terzi"
 
+msgid "What would you like to do"
+msgstr "Cosa vuoi fare"
+
 msgid "Access character creation!"
 msgstr "Accedi alla creazione personaggio!"
 
@@ -6911,6 +6914,13 @@ msgid ""
 msgstr ""
 "Per utilizzare la funzione che hai richiesto, è necessario attivare la "
 "seguente feature: "
+
+msgid ""
+"Type a keyword in the search bar to find a reference - please write in "
+"English"
+msgstr ""
+"Digita una parola chiave nella barra di ricerca per trovare un riferimento -"
+" per favore scrivi in inglese"
 
 msgid ""
 "Allows players to submit questions, and organizers to review and organize "
