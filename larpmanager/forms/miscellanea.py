@@ -106,7 +106,7 @@ class HelpQuestionForm(MyForm):
 
 
 class OrgaHelpQuestionForm(MyForm):
-    page_info = _("This page allows you to answer a player's question.")
+    page_info = _("This page allows you to answer a player's question")
 
     page_title = _("Player Questions")
 
@@ -150,7 +150,7 @@ class WorkshopOptionForm(MyForm):
 
 
 class OrgaAlbumForm(MyForm):
-    page_info = _("This page allows you to add or edit an album.")
+    page_info = _("This page allows you to add or edit an album")
 
     page_title = _("Album")
 
@@ -167,7 +167,7 @@ class OrgaAlbumForm(MyForm):
 
 
 class OrgaProblemForm(MyForm):
-    page_info = _("This page allows you to keep track of reported problems.")
+    page_info = _("This page allows you to keep track of reported problems")
 
     page_title = _("Problems")
 
@@ -206,7 +206,7 @@ class CompetencesForm(forms.Form):
 
 
 class ExeUrlShortnerForm(MyForm):
-    page_info = _("This page allows you to add or edit a url shortner.")
+    page_info = _("This page allows you to add or edit a url shortner")
 
     page_title = _("Shorten URL")
 
@@ -216,7 +216,7 @@ class ExeUrlShortnerForm(MyForm):
 
 
 class ExeInventoryBoxForm(MyForm):
-    page_info = _("This page allows you to add or edit a new item of inventory.")
+    page_info = _("This page allows you to add or edit a new item of inventory")
 
     page_title = _("Inventory")
 
@@ -228,7 +228,7 @@ class ExeInventoryBoxForm(MyForm):
 
 
 class ExeCompetenceForm(MyForm):
-    page_info = _("This page allows you to add or edit a competency.")
+    page_info = _("This page allows you to add or edit a competency")
 
     class Meta:
         model = Competence

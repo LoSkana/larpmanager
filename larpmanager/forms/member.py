@@ -461,7 +461,7 @@ class MembershipResponseForm(forms.Form):
 class ExeVolunteerRegistryForm(MyForm):
     page_title = _("Volounteer data")
 
-    page_info = _("This page allows you to add or edit a volunteer entry.")
+    page_info = _("This page allows you to add or edit a volunteer entry")
 
     class Meta:
         model = VolunteerRegistry
@@ -493,7 +493,7 @@ class MembershipForm(BaseAccForm):
 
 
 class ExeMemberForm(BaseProfileForm):
-    page_info = _("This page allows you to edit a member's profile.")
+    page_info = _("This page allows you to edit a member's profile")
 
     class Meta:
         model = Member
@@ -509,7 +509,7 @@ class ExeMemberForm(BaseProfileForm):
 
 
 class ExeMembershipForm(MyForm):
-    page_info = _("This page allows you to change a member's membership status.")
+    page_info = _("This page allows you to change a member's membership status")
 
     load_templates = ["membership"]
 
@@ -529,7 +529,7 @@ class ExeMembershipForm(MyForm):
 
 
 class ExeBadgeForm(MyForm):
-    page_info = _("This page allows you to add or edit a badge, or assign it  to users.")
+    page_info = _("This page allows you to add or edit a badge, or assign it  to users")
 
     page_title = _("Badge")
 
@@ -549,7 +549,7 @@ class ExeBadgeForm(MyForm):
 class ExeProfileForm(MyForm):
     page_title = _("Profile")
 
-    page_info = _("This page allows you to set up the fields that players can fill in in their user profile.")
+    page_info = _("This page allows you to set up the fields that players can fill in in their user profile")
 
     class Meta:
         model = Association

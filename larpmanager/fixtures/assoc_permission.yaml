@@ -58,7 +58,7 @@
   pk: 8
   fields:
     name: Outflows
-    descr: 'Manages events or organization expenses '
+    descr: 'Manages events or organization expenses'
     slug: exe_outflows
     number: 5
     feature: 108
@@ -314,7 +314,7 @@
   pk: 44
   fields:
     name: Archive
-    descr: 'Display all sent e-mails '
+    descr: 'Display all sent e-mails'
     slug: exe_archive_email
     number: 91
     feature: 187

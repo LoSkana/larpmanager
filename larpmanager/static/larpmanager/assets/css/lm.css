@@ -1589,3 +1589,12 @@ td:has(input[type="checkbox"]) .helptext {
 #discount_tbl {
     margin-bottom: 2em;
 }
+
+.inv_photo {
+    height: 5em;
+}
+
+.acc_rec {
+    height: 400px;
+    width: 100%;
+}

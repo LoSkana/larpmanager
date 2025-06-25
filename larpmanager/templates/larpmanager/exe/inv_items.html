@@ -4,7 +4,7 @@
     {% trans "Inventory objects" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows organization inventory items." %}
+    {% trans "This page shows organization inventory items" %}.
 {% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
@@ -29,7 +29,7 @@
                     <td>{{ el.name }}</td>
                     <td>{{ el.description }}</td>
                     <td>
-                        <img src="{{ el.thumb.url }}" style="width:5em" />
+                        <img src="{{ el.thumb.url }}" class="inv_photo" alt="item photo" />
                     </td>
                     <td>{{ el.get_typ_display }}</td>
                     <td>{{ el.get_setting_display }}</td>
