@@ -109,6 +109,13 @@ def print_text(page):
 def go_to(page, live_server, path):
     go_to_check(page, f"{live_server.url}/{path}")
     time.sleep(0.1)
+    page.add_style_tag(
+        content="""
+        td:has(input[type="checkbox"]) {
+            display: table-cell !important;
+        }
+    """
+    )
 
 
 def go_to_check(page, path):
