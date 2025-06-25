@@ -14,7 +14,8 @@
     <br />
     <div class="workshop">
         <p>
-            {% trans "Oops! You gave one or more incorrect answers. Please check them below. " %}
+            {% trans "Oops! You gave one or more incorrect answers" %}.
+            {% trans "Please check them below" %}.
             <a href="{% url "workshop_answer" slug run.number workshop.id %}">{% trans "Retry!" %}</a>
         </p>
         <hr class="c" />
@@ -23,7 +24,7 @@
             <div class="question num_{{ el.answer | length }}">
                 {% if el.failed %}
                     <p class="fail">{% trans "You have made a mistake!" %}</p>
-                    <p>{% trans "Hint: The correct answers to this question are " %}{{ el.correct | length }}.</p>
+                    <p>{% trans "Hint: The correct answers to this question are" %} {{ el.correct | length }}.</p>
                 {% else %}
                     <p class="correct">{% trans "Correct!" %}</p>
                 {% endif %}

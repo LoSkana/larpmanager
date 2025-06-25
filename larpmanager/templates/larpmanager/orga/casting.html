@@ -20,10 +20,10 @@
         <form action="{{ request.path }}"
               method="post"
               enctype="multipart/form-data">
-            <div class='casting no_csv'>
+            <div class="casting no_csv">
                 <p>{{ result }}</p>
-                <p id='not_chosen' style='color: red'></p>
-                <p id='didnt_choose'></p>
+                <p id="not_chosen"></p>
+                <p id="didnt_choose"></p>
                 {% csrf_token %}
                 <table class="mob tablesorter no_csv">
                     <tr>
@@ -46,23 +46,23 @@
                             <input type="submit"
                                    name='update'
                                    value="{% trans "Update" %}"
-                                   style="max-width: 100% !important">
+                                   class="max_width">
                         </td>
                     </tr>
                 </table>
             </div>
-            <p style="display: none">
-                {% trans "Players: " %}<span id="num_pl"></span>, {% trans "Characters: " %}<span id="num_ch"></span>
+            <p class="hide">
+                {% trans "Players" %}: <span id="num_pl"></span>, {% trans "Characters" %}: <span id="num_ch"></span>
             </p>
             <hr />
-            <div style="text-align: center">
-                <button id='exec'>{% trans "Start algorithm" %}</button>
+            <div class="centerized">
+                <button id="exec">{% trans "Start algorithm" %}</button>
             </div>
             <hr />
             <i>({% trans "The optimal allocation based on the set values is simulated; you can run it as many times as you like before final loading" %})</i>
             <hr />
             <p>
-                <i>{% trans "Legend: " %}
+                <i>{% trans "Legend" %}:
                     <span class="YES">YES</span> - {% trans "Choice available, click to lock" %},
                     <span class="NO">NO</span> - {% trans "Choice locked, click to make it available" %},
                     <span class="MR">MR</span> - {% trans "Mirror type character, not selectable" %},
@@ -71,19 +71,20 @@
                 </i>
             </p>
             <hr />
-            <table id='main_grid' class='tablesorter mob no_csv'>
+            <table id="main_grid" class="tablesorter mob no_csv">
                 <tbody>
+                    <!-- filled later -->
                 </tbody>
             </table>
             <hr />
-            <div id='risultati'></div>
-            <div id='load' style="text-align: center">
-                <input id='res' name='res' type='hidden' />
-                <input type='submit'
-                       id='go'
-                       name='submit'
+            <div id="risultati"></div>
+            <div id="load" class="centerized">
+                <input id="res" name="res" type="hidden" />
+                <input type="submit"
+                       id="go"
+                       name="submit"
                        onclick="return confirm('Confermi davvero? Non si torna indietro')"
-                       value='{% trans "Upload" %}' />
+                       value="{% trans "Upload" %}" />
                 <p>
                     {% trans "Assign selected characters to players." %}
                     <br />
@@ -91,11 +92,11 @@
                 </p>
             </div>
         </form>
-        <p id='assegnazioni'></p>
+        <p id="assegnazioni"></p>
     </div>
 {% endblock content %}
 {% block js %}
-    <script src='{% static "node_modules/javascript-lp-solver/prod/solver.js" %}'></script>
+    <script src="{% static "node_modules/javascript-lp-solver/prod/solver.js" %}"></script>
     <script>
 window['num_pref'] = {{ num_choices }};
 window['choices'] = {{ choices | safe }};

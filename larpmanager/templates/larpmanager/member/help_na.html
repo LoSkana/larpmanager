@@ -5,7 +5,7 @@
     {% if run %}- {{ run }}{% endif %}
 {% endblock title %}
 {% block content %}
-    {% trans "You can contact us at this " %} <a class="mail"
+    {% trans "You can contact us at this" %} <a class="mail"
     href="mailto:{{ mail.0 }}@badmail-{{ mail.1 }}{% if run %}?subject=[{{ run }}]{% endif %}">{% trans "address" %}</a>!
 {% endblock content %}
 {% block js %}

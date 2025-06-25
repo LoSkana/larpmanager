@@ -9,7 +9,7 @@
 {% block content %}
     <div class="staff-list">
         <div class="orga-buttons">
-            <a class='new button'
+            <a class="new button"
                href="{% url 'orga_relationship_edit' run.event.slug run.number 0 %}">{% trans "New" %}</a>
         </div>
     </div>
@@ -31,7 +31,7 @@
             </tr>
         {% endfor %}
     </table>
-    <h2>{% trans "List inverse relationships of " %} {{ character.name }}</h2>
+    <h2>{% trans "List inverse relationships of" %} {{ character.name }}</h2>
     <table class="mob">
         <tr>
             <th></th>

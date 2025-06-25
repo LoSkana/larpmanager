@@ -14,8 +14,8 @@
                 <h3>{% trans "Candidates" %}</h3>
                 <p>
                     <i>
-                        {% trans "Minimum number of votes:" %} {{ vote_min }}.
-                        {% trans "Maximum number of votes:" %} {{ vote_max }}.
+                        {% trans "Minimum number of votes" %}: {{ vote_min }}.
+                        {% trans "Maximum number of votes" %}: {{ vote_max }}.
                     </i>
                 </p>
                 <form action="{{ request.path }}"  method="post">

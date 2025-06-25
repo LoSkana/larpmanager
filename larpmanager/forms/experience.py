@@ -81,12 +81,9 @@ class OrgaAbilityPxForm(PxBaseForm):
         ]
 
         if not px_user:
+            self.delete_field("dependents")
             self.delete_field("prerequisites")
             self.delete_field("visible")
-        else:
-            self.fields["prerequisites"].choices = [
-                (el[0], el[1]) for el in self.params["event"].get_elements(AbilityPx).values_list("id", "name")
-            ]
 
 
 class OrgaAbilityTypePxForm(MyForm):

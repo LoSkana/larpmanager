@@ -194,7 +194,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
 
 class OrgaCharacterForm(CharacterForm):
-    page_info = _("This page allows you to add or edit a character.")
+    page_info = _("This page allows you to add or edit a character")
 
     page_title = _("Character")
 
@@ -392,7 +392,7 @@ class OrgaCharacterForm(CharacterForm):
 
 
 class OrgaWritingQuestionForm(MyForm):
-    page_info = _("This page allows you to add or modify a form question for a writing element.")
+    page_info = _("This page allows you to add or modify a form question for a writing element")
 
     page_title = _("Writing Question")
 
@@ -483,7 +483,7 @@ class OrgaWritingQuestionForm(MyForm):
 
 
 class OrgaWritingOptionForm(MyForm):
-    page_info = _("This page allows you to add or modify an option in a form question for a writing element.")
+    page_info = _("This page allows you to add or modify an option in a form question for a writing element")
 
     page_title = _("Writing option")
 

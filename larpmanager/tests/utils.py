@@ -46,6 +46,8 @@ def page_start(p, show=False):
 
     page.on("response", on_response)
 
+    _checkboxes_fix(page)
+
     activate("en")
     return browser, context, page
 
@@ -109,17 +111,41 @@ def print_text(page):
 def go_to(page, live_server, path):
     go_to_check(page, f"{live_server.url}/{path}")
     time.sleep(0.1)
+    _checkboxes_fix(page)
+
+
+def _checkboxes_fix(page):
+    page.add_style_tag(
+        content="""
+        td:has(input[type="checkbox"]) {
+            display: table-cell !important;
+        }
+    """
+    )
+
+    page.on(
+        "framenavigated",
+        lambda frame: frame.add_style_tag(
+            content="""
+        td:has(input[type="checkbox"]) {
+            display: table-cell !important;
+        }
+    """
+        ),
+    )
 
 
 def go_to_check(page, path):
     page.goto(path)
     ooops_check(page)
+    _checkboxes_fix(page)
 
 
 def submit(page):
     page.get_by_role("button", name="Submit").click()
     page.wait_for_load_state("networkidle")
     ooops_check(page)
+    _checkboxes_fix(page)
 
 
 def ooops_check(page):

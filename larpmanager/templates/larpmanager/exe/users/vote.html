@@ -4,11 +4,11 @@
     {% trans "Vote" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the settings available for the membership voting." %}
+    {% trans "This page shows the settings available for the membership voting" %}.
 {% endblock info %}
 {% block content %}
     <h3>{% trans "Collected votes" %}</h3>
-    <table class='tablesorter mob'>
+    <table class="tablesorter mob">
         <thead>
             <tr>
                 <th>Nome</th>
@@ -22,18 +22,18 @@
                     <td>{{ el.votes }}</td>
                 </tr>
             {% endfor %}
-            <tbody>
-            </table>
-            <h3>{% trans "List of voters" %}</h3>
-            <p>
-                {% for el in voters %}
-                    {% include "elements/comma.html" %}
-                    {{ el }}
-                {% endfor %}
-            </p>
-        {% endblock content %}
-        {% block js %}
-            <script>window.addEventListener('DOMContentLoaded', function() {
+        </tbody>
+    </table>
+    <h3>{% trans "List of voters" %}</h3>
+    <p>
+        {% for el in voters %}
+            {% include "elements/comma.html" %}
+            {{ el }}
+        {% endfor %}
+    </p>
+{% endblock content %}
+{% block js %}
+    <script>window.addEventListener('DOMContentLoaded', function() {
         $(document).ready(function() {
             setTimeout(function() {
                 $('*[data-column="1"]').click();
@@ -41,5 +41,5 @@
             }, 500);
         });
     });
-            </script>
-        {% endblock js %}
+    </script>
+{% endblock js %}

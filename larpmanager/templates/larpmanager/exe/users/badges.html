@@ -4,7 +4,7 @@
     {% trans "Badge" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows membership badges. You can edit them, assign them, create new ones." %}
+    {% trans "This page shows membership badges. You can edit them, assign them, create new ones" %}.
 {% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
@@ -27,7 +27,7 @@
                     </td>
                     <td>{{ el.name }}</td>
                     <td>
-                        <img src="{{ el.img_thumb.url }}" style="width:5em" />
+                        <img src="{{ el.img_thumb.url }}" class="inv_photo" alt="badge image" />
                     </td>
                     <td>{{ el.descr }}</td>
                     <td>{{ el.cod }}</td>
