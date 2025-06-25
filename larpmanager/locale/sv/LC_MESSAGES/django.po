@@ -3533,6 +3533,9 @@ msgstr "Ladda upp ditt profilfoto"
 msgid "Use of third party assets"
 msgstr "Användning av tredje parts tillgångar"
 
+msgid "What would you like to do"
+msgstr "Vad skulle du vilja göra"
+
 msgid "Access character creation!"
 msgstr "Få tillgång till karaktärsskapande!"
 
@@ -6813,6 +6816,13 @@ msgid ""
 msgstr ""
 "Du har aktiverat följande funktioner, för varje funktion finns här länkar "
 "att följa"
+
+msgid ""
+"Type a keyword in the search bar to find a reference - please write in "
+"English"
+msgstr ""
+"Skriv ett nyckelord i sökfältet för att hitta en referens - skriv på "
+"engelska"
 
 msgid ""
 "Allows players to submit questions, and organizers to review and organize "

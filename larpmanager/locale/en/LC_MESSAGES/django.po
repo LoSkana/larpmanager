@@ -5124,6 +5124,14 @@ msgstr ""
 msgid "Welcome to"
 msgstr ""
 
+msgid "What would you like to do"
+msgstr ""
+
+msgid ""
+"Type a keyword in the search bar to find a reference - please write in "
+"English"
+msgstr ""
+
 msgid "Ongoing events"
 msgstr ""
 

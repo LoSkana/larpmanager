@@ -19,8 +19,10 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
 
 from larpmanager.utils.miscellanea import check_centauri
+from larpmanager.utils.tutorial_query import query_index
 from larpmanager.views.larpmanager import lm_home
 from larpmanager.views.user.event import calendar
 
@@ -42,3 +44,8 @@ def error_500(request):
 
 def after_login(request, subdomain, path=""):
     return redirect(f"https://{subdomain}.larpmanager.com/{path}")
+
+
+@require_POST
+def tutorial_query(request):
+    return query_index(request)

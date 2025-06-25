@@ -196,6 +196,7 @@ class PlotForm(WritingForm, BaseWritingForm):
         self.reorder_field("characters")
 
         # PLOT CHARACTERS REL
+        self.add_char_finder = []
         if self.instance.pk:
             for ch in (
                 self.instance.get_plot_characters()
@@ -214,6 +215,7 @@ class PlotForm(WritingForm, BaseWritingForm):
                 self.initial[field] = ch[3]
 
                 self.show_link.append("id_" + field)
+                self.add_char_finder.append("id_" + field)
 
     def get_init_multi_character(self):
         que = PlotCharacterRel.objects.filter(plot__id=self.instance.pk)

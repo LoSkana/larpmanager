@@ -3533,6 +3533,9 @@ msgstr "Nahrání profilové fotografie"
 msgid "Use of third party assets"
 msgstr "Použití majetku třetích stran"
 
+msgid "What would you like to do"
+msgstr "Co byste chtěli dělat"
+
 msgid "Access character creation!"
 msgstr "Přístup k tvorbě postavy!"
 
@@ -6725,6 +6728,13 @@ msgid ""
 msgstr ""
 "Aktivovali jste následující funkce, pro každou z nich zde najdete odkazy, "
 "které je třeba sledovat"
+
+msgid ""
+"Type a keyword in the search bar to find a reference - please write in "
+"English"
+msgstr ""
+"Zadejte klíčové slovo do vyhledávacího řádku a najděte odkaz - pište prosím "
+"v angličtině."
 
 msgid ""
 "Allows players to submit questions, and organizers to review and organize "

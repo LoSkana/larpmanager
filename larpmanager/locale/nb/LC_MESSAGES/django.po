@@ -3533,6 +3533,9 @@ msgstr "Last opp profilbildet ditt"
 msgid "Use of third party assets"
 msgstr "Bruk av tredjeparts eiendeler"
 
+msgid "What would you like to do"
+msgstr "Hva har du lyst til å gjøre"
+
 msgid "Access character creation!"
 msgstr "Få tilgang til karakteroppretting!"
 
@@ -6804,6 +6807,13 @@ msgid ""
 msgstr ""
 "Du har aktivert følgende funksjoner, og her er lenkene du må følge for hver "
 "av dem"
+
+msgid ""
+"Type a keyword in the search bar to find a reference - please write in "
+"English"
+msgstr ""
+"Skriv inn et nøkkelord i søkefeltet for å finne en referanse - skriv på "
+"engelsk"
 
 msgid ""
 "Allows players to submit questions, and organizers to review and organize "

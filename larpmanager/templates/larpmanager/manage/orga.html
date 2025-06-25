@@ -5,6 +5,16 @@
 {% endblock title %}
 {% block content %}
     <div id="manage">
+        <input type="text"
+               name="tutorial_query"
+               id="tutorial_query"
+               placeholder="{% trans "What would you like to do" %}?" />
+        <div class="helptext">
+            <i>
+                ({% trans "Type a keyword in the search bar to find a reference - please write in English" %})
+            </i>
+        </div>
+        <hr />
         {% with list=actions header=actions_header %}
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}
@@ -77,3 +87,6 @@
         {% endwith %}
     </div>
 {% endblock content %}
+{% block js %}
+    {% include "elements/tutorial_query.js" %}
+{% endblock js %}
