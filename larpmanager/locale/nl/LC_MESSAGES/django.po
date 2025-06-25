@@ -3554,6 +3554,9 @@ msgstr "Foto's en video's uploaden"
 msgid "Use of third party assets"
 msgstr "Gebruik van activa van derden"
 
+msgid "What would you like to do"
+msgstr "Wat zou je willen doen"
+
 msgid "Access character creation!"
 msgstr "Toegang tot het maken van personages!"
 
@@ -6920,6 +6923,13 @@ msgid ""
 msgstr ""
 "Om de functie die je hebt aangevraagd te kunnen gebruiken, moet de volgende "
 "functie geactiveerd zijn:"
+
+msgid ""
+"Type a keyword in the search bar to find a reference - please write in "
+"English"
+msgstr ""
+"Typ een trefwoord in de zoekbalk om een referentie te vinden - schrijf "
+"a.u.b. in het Engels"
 
 msgid ""
 "Allows players to submit questions, and organizers to review and organize "
