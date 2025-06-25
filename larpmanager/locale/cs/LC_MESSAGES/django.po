@@ -6710,6 +6710,13 @@ msgstr ""
 "funkce:"
 
 msgid ""
+"Type a keyword in the search bar to find a reference - please write in "
+"English"
+msgstr ""
+"Zadejte klíčové slovo do vyhledávacího řádku a najděte odkaz - pište prosím "
+"v angličtině."
+
+msgid ""
 "Allows players to submit questions, and organizers to review and organize "
 "them."
 msgstr ""

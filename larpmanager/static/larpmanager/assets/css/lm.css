@@ -1664,10 +1664,6 @@ form td {
     margin: auto;
 }
 
-#header nav {
-    left: 0.75em;
-}
-
 .popup_tutorial strong, #tutorials strong, #article strong, #usage strong, #usage h3 {
     color: #47787e !important;
 }

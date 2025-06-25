@@ -6868,6 +6868,13 @@ msgstr ""
 " función:"
 
 msgid ""
+"Type a keyword in the search bar to find a reference - please write in "
+"English"
+msgstr ""
+"Escriba una palabra clave en la barra de búsqueda para encontrar una "
+"referencia - por favor, escriba en inglés"
+
+msgid ""
 "Allows players to submit questions, and organizers to review and organize "
 "them."
 msgstr ""

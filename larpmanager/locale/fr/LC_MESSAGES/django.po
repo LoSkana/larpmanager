@@ -6986,6 +6986,13 @@ msgstr ""
 "être activée :"
 
 msgid ""
+"Type a keyword in the search bar to find a reference - please write in "
+"English"
+msgstr ""
+"Tapez un mot-clé dans la barre de recherche pour trouver une référence - "
+"veuillez écrire en anglais"
+
+msgid ""
 "Allows players to submit questions, and organizers to review and organize "
 "them."
 msgstr ""

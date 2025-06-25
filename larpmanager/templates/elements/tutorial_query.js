@@ -40,11 +40,13 @@ window.addEventListener('DOMContentLoaded', function() {
                 request.done(function(data) {
                     result = '';
                     data.forEach(item => {
-                        result += '<h2><a href="' + tutorials_url + item.slug + '#' + slugify(item.section) + '" target="_blank">'
-                            + item.title + ' - ' + item.section + '</a></h2><p><i>' + item.snippet + '</i></p>';
+                        result += '<tr><td><h3>' + item.title + ' - ' + item.section + '</h3></td><td>' +
+                        '<td><p><a href="' + tutorials_url + item.slug + '#' + slugify(item.section) + '" target="_blank"><i>' + item.snippet + ' [...]</i></a></p></td></tr>';
                     });
 
-                    if (result.trim() === "") return;
+                    if (result.trim() === "")
+                        result = "{% trans "No results found; please try with more simpler terms (remember to write in English)" %}";
+                    else result = '<h2>{% trans "Results" %}</h2><table class="no_csv">' + result + '</table>';
 
                     uglipop({class:'popup_query', source:'html', content: result});
                 });

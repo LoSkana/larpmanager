@@ -5138,6 +5138,11 @@ msgstr ""
 msgid "What would you like to do"
 msgstr ""
 
+msgid ""
+"Type a keyword in the search bar to find a reference - please write in "
+"English"
+msgstr ""
+
 msgid "Ongoing events"
 msgstr ""
 
@@ -6858,8 +6863,8 @@ msgid "Pay what you want"
 msgstr ""
 
 msgid ""
-"Allows players to add an optional extra amount to their registration fee (e."
-"g. for donations or to help cover others' fees)."
+"Allows players to add an optional extra amount to their registration fee "
+"(e.g. for donations or to help cover others' fees)."
 msgstr ""
 
 msgid "Now you can set the optional amount field"

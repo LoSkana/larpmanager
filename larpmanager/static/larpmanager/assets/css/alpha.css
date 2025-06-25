@@ -652,3 +652,7 @@ input[type="checkbox"]:checked {
     overflow: hidden;
     width: 100%;
 }
+
+#header nav {
+    left: 0.75em;
+}

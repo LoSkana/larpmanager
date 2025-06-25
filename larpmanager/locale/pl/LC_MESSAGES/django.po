@@ -6802,6 +6802,13 @@ msgstr ""
 "Aby korzystać z żądanej funkcji, należy aktywować następującą funkcję:"
 
 msgid ""
+"Type a keyword in the search bar to find a reference - please write in "
+"English"
+msgstr ""
+"Wpisz słowo kluczowe w pasku wyszukiwania, aby znaleźć odnośnik - pisz w "
+"języku angielskim."
+
+msgid ""
 "Allows players to submit questions, and organizers to review and organize "
 "them."
 msgstr ""
