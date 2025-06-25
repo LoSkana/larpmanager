@@ -6,6 +6,7 @@ from whoosh.fields import TEXT, Schema
 from whoosh.index import create_in, open_dir
 from whoosh.qparser import QueryParser
 
+from larpmanager.mail.base import notify_admins
 from larpmanager.models.larpmanager import LarpManagerTutorial
 from larpmanager.utils.tasks import background_auto
 
@@ -53,6 +54,7 @@ def delete_index(tutorial_id):
 
 def query_index(request):
     query_string = request.POST.get("q", "")
+    notify_admins(f"query_index: {query_string}", "")
     ix = get_or_create_index(INDEX_DIR)
     with ix.searcher() as searcher:
         query = QueryParser("content", ix.schema).parse(query_string)
