@@ -60,7 +60,7 @@ def def_user_ctx(request):
     res["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
     res["TINYMCE_JS_URL"] = conf_settings.TINYMCE_JS_URL
 
-    if request:
+    if request and request.resolver_match:
         res["request_func_name"] = request.resolver_match.func.__name__
 
     return res
