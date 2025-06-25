@@ -126,6 +126,12 @@ window.addEventListener('DOMContentLoaded', function() {
             {% endif %}
         {% endfor %}
 
+        {% if form.add_char_finder %}
+            {% for field in form.add_char_finder %}
+                setUpCharFinder('{{ field }}');
+            {% endfor %}
+        {% endif %}
+
         $('#char_finder').on('change', function(e) {
             var value = $(this).val();
             if (value == null || value == '') return;
