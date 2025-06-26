@@ -3850,9 +3850,6 @@ msgstr ""
 msgid "Delivery list"
 msgstr ""
 
-msgid "Relationship"
-msgstr ""
-
 msgid "Other characters"
 msgstr ""
 
@@ -4046,6 +4043,9 @@ msgid "Character relationships"
 msgstr ""
 
 msgid "Relationships of your character"
+msgstr ""
+
+msgid "Relationship"
 msgstr ""
 
 msgid "Select which of your characters you want to access"

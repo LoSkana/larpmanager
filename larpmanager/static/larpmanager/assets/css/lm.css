@@ -1597,6 +1597,15 @@ td:has(input[type="checkbox"]) .helptext {
 .acc_rec {
     height: 400px;
     width: 100%;
+}
+
+a label {
+    color: inherit;
+}
+
+a label:hover {
+    cursor: pointer;
+}
 
 /*** POPUP ***/
 

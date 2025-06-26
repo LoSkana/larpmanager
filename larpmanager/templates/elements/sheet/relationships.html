@@ -31,9 +31,7 @@
                         {% endwith %}
                     {% endfor %}
                 </div>
-                <div class="go-inline">
-                    <b>{% trans "Relationship" %}:&nbsp;</b>{{ el.text }}
-                </div>
+                {{ el.text | safe }}
             </div>
         </div>
         <hr class="clear" />
