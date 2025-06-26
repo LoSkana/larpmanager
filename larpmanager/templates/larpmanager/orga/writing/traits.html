@@ -60,7 +60,7 @@
                     {% endif %}
                     <td>
                         {% if el.quest %}
-                            <a href="{% url 'orga_quests_edit' run.event.slug run.number el.quest.number %}">{{ el.quest }}</a>
+                            <a href="{% url 'orga_quests_edit' run.event.slug run.number el.quest.id %}">{{ el.quest }}</a>
                         {% endif %}
                     </td>
                     {% if features.hide %}
@@ -79,7 +79,7 @@
                     <td>{{ el.text_ln }}</td>
                     <td>
                         {% for p in el.traits.all %}
-                            <a href="{% url 'orga_traits_edit' run.event.slug run.number p.number %}">{{ p }}</a>
+                            <a href="{% url 'orga_traits_edit' run.event.slug run.number p.id %}">{{ p }}</a>
                         {% endfor %}
                     </td>
                     <td>{{ el.traits.all | length }}</td>

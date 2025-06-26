@@ -28,7 +28,7 @@
                     <td>
                         {% for p in el.handouts.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_handouts_edit' run.event.slug run.number p.number %}">{{ p }}</a>
+                            <a href="{% url 'orga_handouts_edit' run.event.slug run.number p.id %}">{{ p }}</a>
                         {% endfor %}
                     </td>
                 </tr>

@@ -266,7 +266,7 @@ def writing_list_plot(ctx):
     for el in PlotCharacterRel.objects.filter(character__event=ctx["event"]).select_related("plot", "character"):
         if el.plot.number not in ctx["chars"]:
             ctx["chars"][el.plot.number] = []
-        ctx["chars"][el.plot.number].append((f"#{el.character.number} {el.character.name}", el.character.number))
+        ctx["chars"][el.plot.number].append((f"#{el.character.number} {el.character.name}", el.character.id))
     for el in ctx["list"]:
         if el.number in ctx["chars"]:
             el.chars = ctx["chars"][el.number]

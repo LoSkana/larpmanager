@@ -52,7 +52,7 @@
                     <td>
                         {% for p in el.quests.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_quests_edit' run.event.slug run.number p.number %}">{{ p }}</a>
+                            <a href="{% url 'orga_quests_edit' run.event.slug run.number p.id %}">{{ p }}</a>
                         {% endfor %}
                     </td>
                     <td>{{ el.traits.all | length }}</td>

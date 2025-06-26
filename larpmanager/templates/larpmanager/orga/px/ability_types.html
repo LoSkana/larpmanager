@@ -26,7 +26,7 @@
                     <td>
                         {% for ab in el.abilities.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number ab.number %}">{{ ab.name }}</a>
+                            <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number ab.id %}">{{ ab.name }}</a>
                         {% endfor %}
                     </td>
                 </tr>
