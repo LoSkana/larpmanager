@@ -49,7 +49,12 @@
                 {% endif %}
                 <tr id="{{ field.auto_id }}_tr">
                     <th>
-                        <label id="lbl_{{ field.auto_id }}">{{ field.label }}</label>
+                        {% if form.field_link and field.auto_id in form.field_link %}
+                            {% get_field form.field_link field.auto_id as link %}
+                            <a href="{{ link }}">{% include "elements/form/label.html" %}</a>
+                        {% else %}
+                            {% include "elements/form/label.html" %}
+                        {% endif %}
                         {% if form.translate and field.auto_id in form.translate %}
                             <br />
                             <br />

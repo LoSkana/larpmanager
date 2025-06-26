@@ -23,6 +23,7 @@ import re
 from django import forms
 from django.core.exceptions import ValidationError
 from django.http import Http404
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
@@ -242,10 +243,13 @@ class OrgaCharacterForm(CharacterForm):
         for el in PlotCharacterRel.objects.filter(character=self.instance):
             pcr[el.plot_id] = el.text
 
+        self.add_char_finder = []
+        self.field_link = {}
         que = self.instance.plots.order_by("number").values_list("id", "number", "name", "text")
         for pl in que:
             plot = f"#{pl[1]} {pl[2]}"
             field = f"pl_{pl[0]}"
+            id_field = f"id_{field}"
             self.fields[field] = forms.CharField(
                 widget=WritingTinyMCE(),
                 label=plot,
@@ -256,8 +260,12 @@ class OrgaCharacterForm(CharacterForm):
                 self.initial[field] = pcr[pl[0]]
 
             if pl[3]:
-                self.details[f"id_{field}"] = pl[3]
-            self.show_link.append(f"id_{field}")
+                self.details[id_field] = pl[3]
+            self.show_link.append(id_field)
+            self.add_char_finder.append(id_field)
+
+            reverse_args = [self.params["event"].slug, self.params["run"].number, pl[0]]
+            self.field_link[id_field] = reverse("orga_plots_edit", args=reverse_args)
 
     def _save_plot(self, instance):
         if "plot" not in self.params["features"]:
