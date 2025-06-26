@@ -110,11 +110,11 @@ def check_run(el, ctx, afield=None):
     if afield:
         el = getattr(el, afield)
 
-    if not hasattr(el, "run"):
-        return
-
-    if el.run != ctx["run"]:
+    if hasattr(el, "run") and el.run != ctx["run"]:
         raise Http404("not your run")
+
+    if hasattr(el, "event") and el.event != ctx["event"]:
+        raise Http404("not your event")
 
 
 def check_assoc(el, ctx, afield=None):

@@ -203,9 +203,9 @@
                             <th class="hide factions">
                                 {% for fnum in reg.factions %}
                                     {% with factions|get:fnum as ft %}
-                                        {% if ft.number %}
+                                        {% if ft.id %}
                                             {% include "elements/comma.html" %}
-                                            <a href="{% url 'orga_factions_edit' run.event.slug run.number ft.number %}">{{ ft.name }}</a>
+                                            <a href="{% url 'orga_factions_edit' run.event.slug run.number ft.id %}">{{ ft.name }}</a>
                                         {% endif %}
                                     {% endwith %}
                                 {% endfor %}
