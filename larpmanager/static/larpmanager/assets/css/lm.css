@@ -1688,3 +1688,11 @@ form th {
     margin: auto;
     height: auto;
 }
+
+.redderized {
+    color: red;
+}
+
+.greenized {
+    color: green;
+}
