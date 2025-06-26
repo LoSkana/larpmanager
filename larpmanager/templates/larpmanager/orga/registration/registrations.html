@@ -205,7 +205,7 @@
                                     {% with factions|get:fnum as ft %}
                                         {% if ft.id %}
                                             {% include "elements/comma.html" %}
-                                            <a href="{% url 'orga_factions_edit' run.event.slug run.number ft.id %}">{{ ft.id }}</a>
+                                            <a href="{% url 'orga_factions_edit' run.event.slug run.number ft.id %}">{{ ft.name }}</a>
                                         {% endif %}
                                     {% endwith %}
                                 {% endfor %}
