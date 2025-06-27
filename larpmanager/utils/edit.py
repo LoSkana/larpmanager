@@ -110,11 +110,11 @@ def check_run(el, ctx, afield=None):
     if afield:
         el = getattr(el, afield)
 
-    if not hasattr(el, "run"):
-        return
-
-    if el.run != ctx["run"]:
+    if hasattr(el, "run") and el.run != ctx["run"]:
         raise Http404("not your run")
+
+    if hasattr(el, "event") and el.event != ctx["event"]:
+        raise Http404("not your event")
 
 
 def check_assoc(el, ctx, afield=None):
@@ -382,7 +382,7 @@ def writing_edit_working_ticket(request, tp, eid, res, add_ticket=True):
         if len(others) > 0:
             warn = _("Warning! Other users are editing this item.")
             warn += " " + _("You cannot work on it at the same time: the work of one of you would be lost.")
-            warn += " " + _("List of other users: ") + ", ".join(others)
+            warn += " " + _("List of other users") + ": " + ", ".join(others)
             res["warn"] = warn
 
     if not add_ticket:

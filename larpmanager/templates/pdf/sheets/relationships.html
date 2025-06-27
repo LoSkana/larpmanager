@@ -55,7 +55,7 @@ table, tr, td, th, tbody, thead, tfoot {
                                 <b>Player:</b> <a href="{% url 'public' el.player_id %}">{{ el.player }}</a>
                             </p>
                         {% endif %}
-                        <b>Factions:</b>
+                        <b>{% trans "Factions" %}:</b>
                         {% for g in el.factions %}
                             {% if not g.typ == 'g' %}
                                 {% include "elements/comma.html" %}

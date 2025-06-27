@@ -4,21 +4,21 @@
     {% trans "Accounting - History" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the historical accounting of the organization." %}
+    {% trans "This page shows the historical accounting of the organization" %}.
 {% endblock info %}
 {% block content %}
     <h2>{% trans "Global balance" %}</h2>
     <br />
-    <i>({% trans "this figure is the main positive, the operating margin. It takes into account of budgets for events that have been over two months, which are considered to be closed, and treats all tokens and credits as reimbursed." %})</i>
+    <i>({% trans "this figure is the main positive, the operating margin. It takes into account of budgets for events that have been over two months, which are considered to be closed, and treats all tokens and credits as reimbursed" %}.)</i>
     <br />
     <br />
-    <div id="globalSumContainer" style="height: 400px; width: 100%;"></div>
+    <div id="globalSumContainer" class="acc_rec"></div>
     <h2>{% trans "Overall balance" %}</h2>
     <br />
     <i>({% trans "this figure is the net that should result as availability of financial instruments - it does not take into account tokens and credits" %})</i>
     <br />
     <br />
-    <div id="bankSumContainer" style="height: 400px; width: 100%;"></div>
+    <div id="bankSumContainer" class="acc_rec"></div>
 {% endblock content %}
 {% block js %}
     <script type="text/javascript"

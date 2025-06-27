@@ -42,7 +42,7 @@ from larpmanager.models.association import Association, AssocText, AssocTextType
 class ExeAssociationForm(MyForm):
     page_title = _("Settings")
 
-    page_info = _("This page allows you to change the main settings of your Organization.")
+    page_info = _("This page allows you to change the main settings of your Organization")
 
     class Meta:
         model = Association
@@ -76,7 +76,7 @@ class ExeAssociationForm(MyForm):
 class ExeAssocTextForm(MyForm):
     page_title = _("Texts")
 
-    page_info = _("This page allows you to edit organization-specific text.")
+    page_info = _("This page allows you to edit organization-specific text")
 
     class Meta:
         abstract = True
@@ -169,7 +169,7 @@ class ExeAssocTextForm(MyForm):
 class ExeAssocRoleForm(MyForm):
     page_title = _("Roles")
 
-    page_info = _("This page allows you to edit the roles of the association.")
+    page_info = _("This page allows you to edit the roles of the association")
 
     class Meta:
         model = AssocRole
@@ -250,7 +250,7 @@ class ExeFeatureForm(FeatureForm):
 class ExeConfigForm(ConfigForm):
     page_title = _("Configuration")
 
-    page_info = _("This page allows you to edit the configuration of the activated features.")
+    page_info = _("This page allows you to edit the configuration of the activated features")
 
     section_replace = True
 
@@ -271,11 +271,11 @@ class ExeConfigForm(ConfigForm):
         self.set_section("calendar", _("Calendar"))
 
         label = _("Show event links")
-        help_text = _("If checked: shows a link to the event in the navigation bar.")
+        help_text = _("If checked: shows a link to the event in the navigation bar")
         self.add_configs("calendar_show_event", ConfigType.BOOL, label, help_text)
 
         label = _("Past events")
-        help_text = _("If checked: shows a link in the calendar to past events.")
+        help_text = _("If checked: shows a link in the calendar to past events")
         self.add_configs("calendar_past_events", ConfigType.BOOL, label, help_text)
 
         label = _("Website")
@@ -416,7 +416,7 @@ class ExeConfigForm(ConfigForm):
             self.set_section("vote", _("Voting"))
 
             label = _("Active")
-            help_text = _("If checked: members can vote.")
+            help_text = _("If checked: members can vote")
             self.add_configs("vote_open", ConfigType.BOOL, label, help_text)
 
             label = _("Candidates")
@@ -496,7 +496,7 @@ class ExeConfigForm(ConfigForm):
             self.set_section("payment_fees", _("Payment fees"))
 
             label = _("Charging the player")
-            help_text = _("If checked: the system will add payment fees to the ticket, making the player pay for them.")
+            help_text = _("If checked: the system will add payment fees to the ticket, making the player pay for them")
             self.add_configs("payment_fees_user", ConfigType.BOOL, label, help_text)
 
     def set_config_einvoice(self):
@@ -513,7 +513,7 @@ class ExeConfigForm(ConfigForm):
         help_text = ""
         self.add_configs("einvoice_idcodice", ConfigType.CHAR, label, help_text)
 
-        label = _("VAT No.")
+        label = _("VAT No")
         help_text = ""
         self.add_configs("einvoice_partitaiva", ConfigType.CHAR, label, help_text)
 

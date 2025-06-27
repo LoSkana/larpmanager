@@ -28,7 +28,9 @@
         </p>
         <hr />
         <p>
-            {% trans "Once downloaded you must print it, sign it, take a digital scan, and upload it to the form below. Your request will be considered at the  next meeting of the Board. You will receive confirmation of the outcome of its  evaluation. " %}
+            {% trans "Once downloaded you must print it, sign it, take a digital scan, and upload it to the form below" %}.
+            {% trans "Your request will be considered at the next meeting of the Board" %}.
+            {% trans "You will receive confirmation of the outcome of its  evaluation" %}.
         </p>
         <hr />
         <p>{% trans "Upload the scan of both your signed request, and your document (image or pdf document)" %}:</p>
@@ -59,7 +61,8 @@
                        height="500px">
             {% else %}
                 <img class="membership_request"
-                     src="{{ member.membership.get_document_filepath }}" />
+                     src="{{ member.membership.get_document_filepath }}"
+                     alt="membership request" />
             {% endif %}
             <hr />
             {{ form.confirm_1 }} {% trans "I confirm that I have uploaded a valid document issued by the state of my nationality" %}
@@ -76,7 +79,8 @@
                        height="500px">
             {% else %}
                 <img class="membership_request"
-                     src="{{ member.membership.get_request_filepath }}" />
+                     src="{{ member.membership.get_request_filepath }}"
+                     alt="membership request" />
             {% endif %}
             <hr />
             {{ form.confirm_3 }} {% trans "I confirm that all my required personal data have been filled in correctly" %}
@@ -113,7 +117,7 @@
                 {% trans "The payment of your membership fee for this year has been received. You have the right to participate to the organization events." %}
             </p>
         {% else %}
-            <h2>{% trans "Payment membership fee:" %} {{ year }}</h2>
+            <h2>{% trans "Payment membership fee" %}: {{ year }}</h2>
             <p>
                 {% trans "The payment of your membership fee for this year has NOT been received: it is necessary in order to participate to the events, and the organization meetings." %} <a href="{% url 'acc_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
             </p>

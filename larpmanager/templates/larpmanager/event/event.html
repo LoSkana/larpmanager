@@ -70,15 +70,15 @@
                 </thead>
                 {% for run in coming %}
                     <tr>
-                        <td data-title='{% trans "Name" %}'>
+                        <td data-title="{% trans "Name" %}">
                             <h3>
                                 <a href="{% url 'gallery' event.slug run.number %}">{{ run.search }}</a>
                             </h3>
                         </td>
-                        <td data-title='{% trans "Date" %}'>
+                        <td data-title="{% trans "Date" %}">
                             <i>{{ run.pretty_dates }} </i>
                         </td>
-                        <td data-title='{% trans "Registrations" %}'>{% include "elements/reg_status.html" with run=run %}</td>
+                        <td data-title="{% trans "Registrations" %}">{% include "elements/reg_status.html" with run=run %}</td>
                     </tr>
                 {% endfor %}
             </table>
@@ -102,7 +102,7 @@
             <h2>
                 <a onClick="$('#past-runs').toggle(500);return false;">{% trans "Past runs" %}</a>
             </h2>
-            <table id="past-runs" style="display: none">
+            <table id="past-runs" class="hide">
                 <thead>
                     <tr>
                         <th>{% trans "Name" %}</th>
@@ -113,16 +113,16 @@
                 </thead>
                 {% for run in past %}
                     <tr>
-                        <td data-title='{% trans "Name" %}'>
+                        <td data-title="{% trans "Name" %}">
                             <h3>{{ run.search }}</h3>
                         </td>
-                        <td data-title='{% trans "Date" %}'>
+                        <td data-title="{% trans "Date" %}">
                             <i>{{ run.pretty_dates }} </i>
                         </td>
-                        <td data-title='{% trans "Link" %}'>
+                        <td data-title="{% trans "Link" %}">
                             <a href="{% url 'gallery' event.slug run.number %}">{% trans "Gallery" %}</a>
                         </td>
-                        <td data-title='{% trans "Character" %}'>
+                        <td data-title="{% trans "Character" %}">
                             {% if run.reg and run.reg.character %}
                                 <a href="{% url 'character' event.slug run.number run.reg.character.number %}">{{ run.reg.display_character }}</a>
                             {% endif %}

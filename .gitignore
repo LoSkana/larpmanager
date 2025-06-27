@@ -5,6 +5,8 @@ static-prod/
 .idea/
 deploy
 
+whoosh_index/
+
 playwright.config.js
 
 static

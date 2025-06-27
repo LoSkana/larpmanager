@@ -45,7 +45,7 @@
                     <td>
                         {% for ab in el.characters.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_characters_edit' run.event.slug run.number ab.number %}">{{ ab.name }}</a>
+                            <a href="{% url 'orga_characters_edit' run.event.slug run.number ab.id %}">{{ ab.name }}</a>
                         {% endfor %}
                     </td>
                     {% if px_user %}
@@ -53,7 +53,7 @@
                         <td>
                             {% for ab in el.prerequisites.all %}
                                 {% include "elements/comma.html" %}
-                                <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number ab.number %}">{{ ab.name }}</a>
+                                <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number ab.id %}">{{ ab.name }}</a>
                             {% endfor %}
                         </td>
                         {% if features.character_form %}

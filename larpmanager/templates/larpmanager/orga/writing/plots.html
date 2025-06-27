@@ -4,7 +4,7 @@
     {% trans "Plots" %} - {{ event.name }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the event plots." %}
+    {% trans "This page shows the event plots" %}.
 {% endblock info %}
 {% block content %}
     {% include "elements/header/writing.html" %}
@@ -51,9 +51,9 @@
                     <td>{{ el.text_red | safe }}</td>
                     <td>{{ el.text_ln }}</td>
                     <td>
-                        {% for name, num in el.chars %}
+                        {% for name, idx in el.chars %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_characters_edit' run.event.slug run.number num %}">{{ name }}</a>
+                            <a href="{% url 'orga_characters_edit' run.event.slug run.number idx %}">{{ name }}</a>
                         {% endfor %}
                     </td>
                     <td>{{ el.chars|length }}</td>

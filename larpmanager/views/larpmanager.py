@@ -214,7 +214,7 @@ def activate_feature_assoc(request, cod, p=None):
     assoc.features.add(feature)
     assoc.save()
 
-    messages.success(request, _("Feature activated:") + feature.name)
+    messages.success(request, _("Feature activated") + ":" + feature.name)
 
     # redirect either to the requested next, or to the best match for the permission asked
     if p:
@@ -237,7 +237,7 @@ def activate_feature_event(request, s, n, cod, p=None):
     ctx["event"].features.add(feature)
     ctx["event"].save()
 
-    messages.success(request, _("Feature activated:") + feature.name)
+    messages.success(request, _("Feature activated") + ":" + feature.name)
 
     # redirect either to the requested next, or to the best match for the permission asked
     if p:

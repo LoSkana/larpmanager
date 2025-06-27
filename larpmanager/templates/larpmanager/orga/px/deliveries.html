@@ -4,7 +4,7 @@
     {% trans "Delivery" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page summarizes px delivery to characters." %}
+    {% trans "This page summarizes px delivery to characters" %}.
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
@@ -28,7 +28,7 @@
                     <td>
                         {% for ab in el.characters.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_characters_edit' run.event.slug run.number ab.number %}">{{ ab.name }}</a>
+                            <a href="{% url 'orga_characters_edit' run.event.slug run.number ab.id %}">{{ ab.name }}</a>
                         {% endfor %}
                     </td>
                 </tr>

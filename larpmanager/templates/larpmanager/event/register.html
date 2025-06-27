@@ -27,10 +27,10 @@
             </p>
             <p>{% trans "Copy this code and share it with friends!" %}</p>
             <p>
-                {% trans "Every friend who registers and uses this code will receive the following discount directly on their ticket:" %} {{ bring_friend_discount_to|floatformat:"0" }}{{ currency_symbol_symbol }}.
+                {% trans "Every friend who registers and uses this code will receive the following discount directly on their ticket" %}: {{ bring_friend_discount_to|floatformat:"0" }}{{ currency_symbol_symbol }}.
             </p>
             <p>
-                {% trans "For each of them, you will receive the following discount on your membership event registration:" %} {{ bring_friend_discount_from|floatformat:"0" }}{{ currency_symbol_symbol }}.
+                {% trans "For each of them, you will receive the following discount on your membership event registration" %}: {{ bring_friend_discount_from|floatformat:"0" }}{{ currency_symbol_symbol }}.
             </p>
         {% endif %}
     {% else %}
@@ -40,7 +40,7 @@
         {% if event.website %}
             <hr />
             <p>
-                {% trans "View all event information in the" %} <a target=”_blank” href="{{ event.website }}">{% trans "website!" %}</a>
+                {% trans "View all event information in the" %} <a target="_blank" href="{{ event.website }}">{% trans "website!" %}</a>
             </p>
         {% endif %}
         {% if not features.laog %}
@@ -65,7 +65,7 @@
             <hr />
             {{ custom_text | safe }}
         {% endif %}
-        <div style="text-align: center">
+        <div class="centerized">
             <form id="register_form" action="{{ request.path }}" method="post">
                 {% csrf_token %}
                 <div>
@@ -82,10 +82,9 @@
                             <table class="mob section no_csv" section="discount">
                                 <tr>
                                     <td class="discount_wrp">
-                                        <p id="discount_res" class="error" style="display: none"></p>
-                                        <div id="discount_riep"
-                                             {% if not discounts %}style="display: none"{% endif %}>
-                                            <table id="discount_tbl" style="margin-bottom:2em">
+                                        <p id="discount_res" class="error hide"></p>
+                                        <div id="discount_riep" {% if not discounts %}class="hide"{% endif %}>
+                                            <table id="discount_tbl">
                                                 <tr>
                                                     <th>{% trans "Name" %}</th>
                                                     <th>{% trans "Value" %}</th>
@@ -104,7 +103,7 @@
                     {% endif %}
                 </div>
                 <input type="button" id="confirm" value="{% trans "Continue" %}" />
-                <div id='riepilogo' style='display: none'>
+                <div id="riepilogo" class="hide">
                     <br />
                     <table class="mob">
                         <tbody>
@@ -120,9 +119,9 @@
                                             {% if membership_fee == 'done' %}
                                                 {% trans "You have already paid your dues for the current year, so you are already covered for this event!" %}
                                             {% elif membership_fee == 'future' %}
-                                                {% trans "To participate in this event, you will have to pay the annual membership fee of:" %} <b>{{ membership_amount }}{{ currency_symbol }}</b>.
+                                                {% trans "To participate in this event, you will have to pay the annual membership fee of" %}: <b>{{ membership_amount }}{{ currency_symbol }}</b>.
                                             {% else %}
-                                                {% trans "To participate in this event, you will have to pay in addition the annual membership fee of:" %} <b>{{ membership_amount }}{{ currency_symbol }}</b>.
+                                                {% trans "To participate in this event, you will have to pay in addition the annual membership fee of" %}: <b>{{ membership_amount }}{{ currency_symbol }}</b>.
                                             {% endif %}
                                         </td>
                                     </tr>

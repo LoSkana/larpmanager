@@ -25,6 +25,7 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.forms import CharField
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.base import BaseRegistrationForm, MyForm
@@ -196,6 +197,8 @@ class PlotForm(WritingForm, BaseWritingForm):
         self.reorder_field("characters")
 
         # PLOT CHARACTERS REL
+        self.add_char_finder = []
+        self.field_link = {}
         if self.instance.pk:
             for ch in (
                 self.instance.get_plot_characters()
@@ -204,6 +207,7 @@ class PlotForm(WritingForm, BaseWritingForm):
             ):
                 char = f"#{ch[1]} {ch[2]}"
                 field = f"ch_{ch[0]}"
+                id_field = f"id_{field}"
                 self.fields[field] = forms.CharField(
                     widget=WritingTinyMCE(),
                     label=char,
@@ -213,7 +217,10 @@ class PlotForm(WritingForm, BaseWritingForm):
 
                 self.initial[field] = ch[3]
 
-                self.show_link.append("id_" + field)
+                self.show_link.append(id_field)
+                self.add_char_finder.append(id_field)
+                reverse_args = [self.params["event"].slug, self.params["run"].number, ch[0]]
+                self.field_link[id_field] = reverse("orga_characters_edit", args=reverse_args)
 
     def get_init_multi_character(self):
         que = PlotCharacterRel.objects.filter(plot__id=self.instance.pk)

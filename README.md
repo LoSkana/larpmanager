@@ -119,6 +119,19 @@ playwright install
 
 ---
 
+## Cloud
+
+For cloud deploy, we suggest the following configuration:
+- OS: Ubuntu 22.04 LTS
+- A "burstable" instance (instead of memory or compute-optimized), as to allow to better handle bursts of user activity
+
+Some typical options could be:
+- EC2: t3.small / t3.medium
+- GCP: e2-small / e2-medium
+- Azure: B1ms / B2s
+
+---
+
 ## Deploy
 
 In order to deploy:

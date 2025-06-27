@@ -58,6 +58,7 @@ from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Faction, Plot, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.utils.common import copy_class
+from larpmanager.utils.tutorial_query import delete_index, index_tutorial
 
 
 @receiver(pre_save)
@@ -498,3 +499,13 @@ def post_save_association_set_skin_features(sender, instance, created, **kwargs)
         instance.features.set(instance.skin.default_features.all())
 
     transaction.on_commit(update_features)
+
+
+@receiver(post_save, sender=LarpManagerTutorial)
+def post_save_index_tutorial(sender, instance, **kwargs):
+    index_tutorial(instance.id)
+
+
+@receiver(post_delete, sender=LarpManagerTutorial)
+def delete_tutorial_from_index(sender, instance, **kwargs):
+    delete_index(instance.id)

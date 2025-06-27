@@ -918,11 +918,6 @@ div.ui-lm_tooltip {
     pointer-events: none;
 }
 
-.presentation h2, .sheet h2 {
-    margin-top: 1em;
-    margin-bottom: 0.3em;
-}
-
 .workshop {
     text-align: center;
 }

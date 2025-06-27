@@ -2,7 +2,7 @@
 <div class="centerized">
     {% if form.errors %}
         <p class="payment-form-error">
-            {% trans "Warning. The form contains errors to the fields - " %}
+            {% trans "Warning. The form contains errors to the fields" %} -
             {% for field in form.visible_fields %}
                 {% if field.errors %}{{ field.label }} -{% endif %}
             {% endfor %}
@@ -23,7 +23,7 @@
             {{ form.descr }}
             <br />
         {% endif %}
-        <p>{% trans "Choose the payment method: " %}</p>
+        <p>{% trans "Choose the payment method" %}:</p>
         <table id="payment_form" class="no_csv">
             {% for key, el in form.methods.items %}
                 <tr id="row_{{ el.slug }}"
@@ -41,7 +41,7 @@
                     {% if 'payment_fees' in assoc.features and user_fees %}
                         <th>
                             {% if el.fee %}
-                                {% trans "Fee: " %} +{{ el.fee }}%
+                                {% trans "Fee" %}: +{{ el.fee }}%
                             {% endif %}
                         </th>
                     {% endif %}

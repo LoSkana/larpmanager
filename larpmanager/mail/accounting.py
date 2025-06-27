@@ -398,7 +398,7 @@ def notify_refund_request(p):
 
 
 def get_invoice_email(inv):
-    body = _("Verify that the data are correct:")
+    body = _("Verify that the data are correct") + ":"
     body += "<br /><br />" + _("Reason for payment") + f": <b>{inv.causal}</b>"
     body += "<br /><br />" + _("Amount") + f": <b>{inv.mc_gross:.2f}</b>"
     if inv.invoice:

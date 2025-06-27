@@ -16,7 +16,7 @@
         {% endif %}
         {% if run.reg.quota %}
             <a href="{% url 'acc_reg' run.reg.id %}">
-                {% trans "Next payment:" %} {{ run.reg.quota | format_decimal }}{{ currency_symbol }},
+                {% trans "Next payment" %}: {{ run.reg.quota | format_decimal }}{{ currency_symbol }},
                 {% if run.reg.deadline > 0 %}
                     {% trans "expected within" %} {{ run.reg.deadline }} {% trans "days" %}
                 {% else %}

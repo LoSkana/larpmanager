@@ -4,7 +4,7 @@
     {% trans "Quest" %} - {{ event.name }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the event quests." %}
+    {% trans "This page shows the event quests" %}.
 {% endblock info %}
 {% block content %}
     {% include "elements/header/writing.html" %}
@@ -75,7 +75,7 @@
                     <td>
                         {% for p in el.traits.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_traits_edit' run.event.slug run.number p.number %}">{{ p }}</a>
+                            <a href="{% url 'orga_traits_edit' run.event.slug run.number p.id %}">{{ p }}</a>
                         {% endfor %}
                     </td>
                     <td>{{ el.traits.all | length }}</td>

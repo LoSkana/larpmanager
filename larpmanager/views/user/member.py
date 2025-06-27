@@ -528,7 +528,9 @@ def delegated(request):
     if request.user.member.parent:
         if request.method == "POST":
             login(request, request.user.member.parent.user, backend=backend)
-            messages.success(request, _("You are now logged in with your main account:") + str(request.user.member))
+            messages.success(
+                request, _("You are now logged in with your main account") + ":" + str(request.user.member)
+            )
             return redirect("home")
         return render(request, "larpmanager/member/delegated.html", ctx)
 
@@ -544,7 +546,7 @@ def delegated(request):
                 raise Http404(f"delegated account not found: {account_login}")
             delegated = del_dict[account_login]
             login(request, delegated.user, backend=backend)
-            messages.success(request, _("You are now logged in with the delegate account:") + str(delegated))
+            messages.success(request, _("You are now logged in with the delegate account") + ":" + str(delegated))
             return redirect("home")
 
         form = ProfileForm(request.POST, request=request)

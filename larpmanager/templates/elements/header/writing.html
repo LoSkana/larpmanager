@@ -70,11 +70,11 @@
         <hr />
     </div>
     <div class="hide load-form">
-        {% trans "You can upload data directly from a csv file." %}
+        {% trans "You can upload data directly from a csv file" %}.
         <br />
         {% trans "The first line are the field names, such as 'number', 'name', 'presentation', 'text'. (Only 'number' is required)" %}
         <br />
-        {% trans "If you want to download an example file, click here." %}
+        {% trans "If you want to download an example file, click here" %}.
         <form action="{{ request.path }}" method="post" class="inline">
             {% csrf_token %}
             <input type="hidden" name="example" value="1">
@@ -82,7 +82,7 @@
         </form>
         <br />
         <br />
-        {% trans "If you already have the file ready, upload it here (pay attention to the 'csv' format): " %}
+        {% trans "If you already have the file ready, upload it here (pay attention to the 'csv' format)" %}:
         <form action="{{ request.path }}"
               enctype="multipart/form-data"
               method="post">
@@ -100,8 +100,8 @@
                   enctype="multipart/form-data"
                   method="post">
                 {% csrf_token %}
-                {% trans "Select a file with extension 'zip'." %}
-                {% trans "Inside this file must be the photos, named by the number of the character." %}
+                {% trans "Select a file with extension 'zip'" %}.
+                {% trans "Inside this file must be the photos, named by the number of the character" %}.
                 <br />
                 <br />
                 <table class="no_csv">

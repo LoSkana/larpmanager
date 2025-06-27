@@ -8,6 +8,6 @@
     <br />
     <br />
     {% if run.registration_open %}
-        {% trans "Will open at:" %} <b>{{ run.registration_open | localtime }}</b>
+        {% trans "Will open at" %}: <b>{{ run.registration_open | localtime }}</b>
     {% endif %}
 {% endblock content %}

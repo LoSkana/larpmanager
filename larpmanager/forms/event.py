@@ -78,7 +78,7 @@ class EventCharactersPdfForm(ConfigForm):
 class OrgaEventForm(MyForm):
     page_title = _("Event Settings")
 
-    page_info = _("This page allows you to change general event settings.")
+    page_info = _("This page allows you to change general event settings")
 
     load_templates = ["event"]
 
@@ -194,7 +194,7 @@ class OrgaFeatureForm(FeatureForm):
 class OrgaConfigForm(ConfigForm):
     page_title = _("Event Configuration")
 
-    page_info = _("This page allows you to edit the configuration of the activated features.")
+    page_info = _("This page allows you to edit the configuration of the activated features")
 
     section_replace = True
 
@@ -300,7 +300,7 @@ class OrgaConfigForm(ConfigForm):
         self.add_configs("registration_reg_que_tickets", ConfigType.BOOL, label, help_text)
 
         label = _("Age selection")
-        help_text = _("If checked, allows a registration form question to be visible based on the player's age.")
+        help_text = _("If checked, allows a registration form question to be visible based on the player's age")
         self.add_configs("registration_reg_que_age", ConfigType.BOOL, label, help_text)
 
     def set_config_char_form(self):
@@ -313,7 +313,7 @@ class OrgaConfigForm(ConfigForm):
         self.add_configs("character_form_hide_unavailable", ConfigType.BOOL, label, help_text)
 
         label = _("Maximum available")
-        help_text = _("If checked, an option can be chosen a maximum number of times.")
+        help_text = _("If checked, an option can be chosen a maximum number of times")
         self.add_configs("character_form_wri_que_max", ConfigType.BOOL, label, help_text)
 
         label = _("Ticket selection")
@@ -525,7 +525,8 @@ class OrgaConfigForm(ConfigForm):
             )
             help_text += (
                 " "
-                + _("You can use the following fields, they will be filled in automatically:")
+                + _("You can use the following fields, they will be filled in automatically")
+                + ":"
                 + "{player_name}, {question_name}"
             )
             self.add_configs("payment_custom_reason", ConfigType.CHAR, label, help_text)

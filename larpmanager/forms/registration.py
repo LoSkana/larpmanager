@@ -394,7 +394,7 @@ class RegistrationGiftForm(RegistrationForm):
 
 
 class OrgaRegistrationForm(BaseRegistrationForm):
-    page_info = _("This page allows you to add or edit a signup to this run.")
+    page_info = _("This page allows you to add or edit a signup to this run")
 
     page_title = _("Registrations")
 
@@ -643,7 +643,7 @@ class RegistrationCharacterRelForm(MyForm):
 
 
 class OrgaRegistrationTicketForm(MyForm):
-    page_info = _("This page allows you to add or change the types of ticket with which players can register.")
+    page_info = _("This page allows you to add or change the types of ticket with which players can register")
 
     page_title = _("Tickets")
 

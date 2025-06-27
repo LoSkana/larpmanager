@@ -377,7 +377,7 @@ class FileTypeValidator:
     type_message = _("File type '%(detected_type)s' is not allowed.Allowed types are: '%(allowed_types)s'.")
 
     extension_message = _(
-        "File extension '%(extension)s' is not allowed.Allowed extensions are: '%(allowed_extensions)s'."
+        "File extension '%(extension)s' is not allowed. Allowed extensions are: '%(allowed_extensions)s'."
     )
 
     invalid_message = _(

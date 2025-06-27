@@ -4,7 +4,7 @@
     {% trans "Balance" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page allows you to check the payment items in the system. The source of the data should be one of the verified payment systems,  from which to take the list of payments, showing the code of the payment." %}
+    {% trans "This page allows you to check the payment items in the system. The source of the data should be one of the verified payment systems,  from which to take the list of payments, showing the code of the payment" %}.
 {% endblock info %}
 {% block content %}
     <h2>{% trans "Upload verified payments" %}</h2>
@@ -13,8 +13,8 @@
           method="post">
         {% csrf_token %}
         {% trans "Select a file with extension csv" %}
-        {% trans "The first column the amount, the second the receipts." %}
-        {% trans "Get this data from the bank or equivalent, to verify the entries marked." %}
+        {% trans "The first column the amount, the second the receipts" %}.
+        {% trans "Get this data from the bank or equivalent, to verify the entries marked" %}.
         <br />
         <br />
         <table class="no_csv">

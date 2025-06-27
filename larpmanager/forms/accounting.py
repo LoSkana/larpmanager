@@ -54,7 +54,7 @@ from larpmanager.utils.common import FileTypeValidator
 
 
 class OrgaPersonalExpenseForm(MyFormRun):
-    page_info = _("This page allows you to add or edit an expense item of a contributor.")
+    page_info = _("This page allows you to add or edit an expense item of a contributor")
 
     page_title = _("Expenses")
 
@@ -71,7 +71,7 @@ class OrgaPersonalExpenseForm(MyFormRun):
 class OrgaExpenseForm(MyFormRun):
     page_title = _("Expenses collaborators")
 
-    page_info = _("This page allows you to add or edit the expense of a contributor.")
+    page_info = _("This page allows you to add or edit the expense of a contributor")
 
     class Meta:
         model = AccountingItemExpense
@@ -103,7 +103,7 @@ class OrgaTokenForm(MyFormRun):
 
 
 class OrgaCreditForm(MyFormRun):
-    page_info = _("This page allows you to add or edit a disbursement credits item.")
+    page_info = _("This page allows you to add or edit a disbursement credits item")
 
     class Meta:
         model = AccountingItemOther
@@ -120,7 +120,7 @@ class OrgaCreditForm(MyFormRun):
 class OrgaPaymentForm(MyFormRun):
     page_title = _("Payments")
 
-    page_info = _("This page allows you to add or edit a payment item.")
+    page_info = _("This page allows you to add or edit a payment item")
 
     class Meta:
         model = AccountingItemPayment
@@ -136,7 +136,7 @@ class OrgaPaymentForm(MyFormRun):
 class ExeOutflowForm(MyForm):
     page_title = _("Outflows")
 
-    page_info = _("This page allows you to add or edit an expense item incurred.")
+    page_info = _("This page allows you to add or edit an expense item incurred")
 
     class Meta:
         model = AccountingItemOutflow
@@ -210,7 +210,7 @@ class ExeDonationForm(MyForm):
 class ExePaymentForm(MyForm):
     page_title = _("Payments")
 
-    page_info = _("This page allows you to add or edit a payment item.")
+    page_info = _("This page allows you to add or edit a payment item")
 
     class Meta:
         model = AccountingItemPayment
@@ -227,7 +227,7 @@ class ExePaymentForm(MyForm):
 class ExeInvoiceForm(MyForm):
     page_title = _("Invoices")
 
-    page_info = _("This page allows you to add or edit an invoice.")
+    page_info = _("This page allows you to add or edit an invoice")
 
     class Meta:
         model = PaymentInvoice
@@ -240,7 +240,7 @@ class ExeInvoiceForm(MyForm):
 
 
 class ExeCreditForm(MyForm):
-    page_info = _("This page allows you to add or edit a disbursement credits item.")
+    page_info = _("This page allows you to add or edit a disbursement credits item")
 
     class Meta:
         model = AccountingItemOther
@@ -279,7 +279,7 @@ class ExeTokenForm(MyForm):
 class ExeExpenseForm(MyForm):
     page_title = _("Expenses")
 
-    page_info = _("This page allows you to add or edit an expense item of a contributor.")
+    page_info = _("This page allows you to add or edit an expense item of a contributor")
 
     class Meta:
         model = AccountingItemExpense
@@ -342,7 +342,7 @@ class ExeCollectionForm(CollectionNewForm):
 
 
 class OrgaDiscountForm(MyForm):
-    page_info = _("This page allows you to add or edit a discount.")
+    page_info = _("This page allows you to add or edit a discount")
 
     page_title = _("Discount")
 
@@ -420,7 +420,7 @@ class ExeRefundRequestForm(MyForm):
 class ExePaymentSettingsForm(MyForm):
     page_title = _("Payment details")
 
-    page_info = _("This page allows you to set up your payment methods.")
+    page_info = _("This page allows you to set up your payment methods")
 
     load_js = ["payment-details"]
 
