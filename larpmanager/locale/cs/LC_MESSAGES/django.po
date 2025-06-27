@@ -7524,6 +7524,14 @@ msgstr ""
 "Uživatel požádal o obnovení hesla, ale nedokončil je. Poskytněte mu tento "
 "odkaz: %(url)s"
 
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> questions to answer, access the users questions "
+"management panel"
+msgstr ""
+"Existují <b>%(number)s</b> otázky, na které je třeba odpovědět, přístup k "
+"panelu správy otázek uživatelů."
+
 msgid ""
 "This page shows the email addresses to which to send updates in order to get"
 " them to sign up"

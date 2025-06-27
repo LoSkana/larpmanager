@@ -7647,6 +7647,14 @@ msgstr ""
 "Użytkownik poprosił o zresetowanie hasła, ale go nie ukończył. Podaj mu ten "
 "link: %(url)s"
 
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> questions to answer, access the users questions "
+"management panel"
+msgstr ""
+"Istnieją <b>%(number)s</b> pytania, na które należy odpowiedzieć, uzyskując "
+"dostęp do panelu zarządzania pytaniami użytkowników"
+
 msgid ""
 "This page shows the email addresses to which to send updates in order to get"
 " them to sign up"

@@ -8172,6 +8172,12 @@ msgid ""
 "There are no candidates for the voting, set them in the configuration panel"
 msgstr ""
 
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> questions to answer, access the users questions "
+"management panel"
+msgstr ""
+
 msgid ""
 "There are no payment gateway active, configure them in the payment settings "
 "panel"
