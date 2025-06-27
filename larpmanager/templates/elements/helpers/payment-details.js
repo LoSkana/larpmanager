@@ -2,6 +2,8 @@
 
 <script>
 
+window.disable_jump = true;
+
 const methodsMapping = {
     {% for obj in form.methods %}
         {{ obj.id }}: "{{ obj.name | slugify }}"{% if not forloop.last %},{% endif %}
@@ -29,6 +31,10 @@ window.addEventListener('DOMContentLoaded', function() {
                 if (sec_visible != this.checked) link.click();
             });
         });
+
+        setTimeout(() => {
+            window.disable_jump = false;
+        }, 500);
     });
 
 });

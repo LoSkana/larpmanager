@@ -199,7 +199,8 @@ $(document).ready(function() {
         // console.log(el.is(":visible"));
          if (el.is(":visible")) {
              var elements = document.getElementsByClassName(k);
-             if (elements.length > 0 && ! $(this).hasClass("no_jump"))  {
+
+             if (elements.length > 0 && ! $(this).hasClass("no_jump") && !window.disable_jump)  {
                 jump_to(elements[0]);
             }
             $(this).addClass('select');
