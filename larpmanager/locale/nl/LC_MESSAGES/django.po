@@ -1894,9 +1894,6 @@ msgstr "Toegankelijkheid"
 msgid "Age selection"
 msgstr "Leeftijdselectie"
 
-msgid "Are you sure?"
-msgstr "Weet je het zeker?"
-
 msgid "Authorisation"
 msgstr "Autorisatie"
 
@@ -2234,6 +2231,9 @@ msgstr "aanpassingen"
 msgid "refund request"
 msgstr "verzoek om terugbetaling"
 
+msgid "Ability missing"
+msgstr "Vermogen ontbreekt"
+
 msgid "Bring a friend!"
 msgstr "Neem een vriend mee!"
 
@@ -2353,6 +2353,9 @@ msgstr "verwacht binnen"
 
 msgid "upcoming events"
 msgstr "Geplande evenementen"
+
+msgid "Ability acquired"
+msgstr "Verworven vermogen"
 
 msgid "Activate feature"
 msgstr "Functie activeren"
@@ -2534,9 +2537,6 @@ msgstr "hier downloaden"
 msgid "follow this link"
 msgstr "volg deze link"
 
-msgid "Ability acquired!"
-msgstr "Vaardigheid verworven!"
-
 msgid "Activation failed"
 msgstr "Activering mislukt"
 
@@ -2659,6 +2659,9 @@ msgstr "Onderdanig verzoek"
 
 msgid "Residence address"
 msgstr "Woonadres"
+
+msgid "Seleziona abilità"
+msgstr "Seleziona abilità"
 
 msgid "Short description"
 msgstr "Korte beschrijving"
@@ -2928,6 +2931,9 @@ msgstr "globale voorkeuren."
 msgid "--- NOT ASSIGNED ---"
 msgstr "--- NIET TOEGEWEZEN ---"
 
+msgid "Ability type missing"
+msgstr "Vermogenstype ontbreekt"
+
 msgid "Accounting - History"
 msgstr "Boekhouding - Historisch"
 
@@ -3027,6 +3033,9 @@ msgstr "Registratie aanvragen"
 
 msgid "Returning percentage"
 msgstr "Rendement percentage"
+
+msgid "Selezione non valida"
+msgstr "Selezione non valida"
 
 msgid "Sign up as a filler!"
 msgstr "Meld je aan als vuller!"
@@ -4914,6 +4923,9 @@ msgstr "Nu kun je alle leden van organisaties bekijken"
 msgid "Now you can select which tickets can be gifted"
 msgstr "Nu kun je selecteren welke tickets kunnen worden geschonken"
 
+msgid "Now you can set the experience points settings"
+msgstr "Nu kun je de ervaringspunten instellen"
+
 msgid "Now you can set the external registration link"
 msgstr "Nu kun je de externe registratielink instellen"
 
@@ -5447,9 +5459,6 @@ msgstr "Geef zo nauwkeurig mogelijk aan waar je opgehaald kunt worden"
 
 msgid "Indicate how spending is allocated at the budget level."
 msgstr "Geef aan hoe de uitgaven zijn geconfigureerd op budgetniveau"
-
-msgid "Now you can create abilities, starting from their types"
-msgstr "Nu kun je vaardigheden maken, beginnend bij hun types"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Bekijk de gebruikers die de deadlines van het evenement missen"

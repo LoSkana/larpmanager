@@ -792,8 +792,8 @@
     module: 7
     placeholder: false
     order: 50
-    after_text: Now you can create abilities, starting from their types
-    after_link: orga_px_ability_types
+    after_text: Now you can set the experience points settings
+    after_link: config/px
 - model: larpmanager.feature
   pk: 120
   fields:

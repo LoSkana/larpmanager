@@ -1894,9 +1894,6 @@ msgstr "Erreichbarkeit"
 msgid "Age selection"
 msgstr "Auswahl des Alters"
 
-msgid "Are you sure?"
-msgstr "Sind Sie sicher?"
-
 msgid "Authorisation"
 msgstr "Autorisierung"
 
@@ -2234,6 +2231,9 @@ msgstr "Anpassungen"
 msgid "refund request"
 msgstr "Antrag auf Erstattung"
 
+msgid "Ability missing"
+msgstr "Fehlende Fähigkeit"
+
 msgid "Bring a friend!"
 msgstr "Bringen Sie einen Freund mit!"
 
@@ -2353,6 +2353,9 @@ msgstr "erwartet innerhalb"
 
 msgid "upcoming events"
 msgstr "Geplante Ereignisse"
+
+msgid "Ability acquired"
+msgstr "Erworbene Fähigkeit"
 
 msgid "Activate feature"
 msgstr "Funktion aktivieren"
@@ -2534,9 +2537,6 @@ msgstr "hier herunterladen"
 msgid "follow this link"
 msgstr "Folgen Sie diesem Link"
 
-msgid "Ability acquired!"
-msgstr "Fertigkeit erworben!"
-
 msgid "Activation failed"
 msgstr "Aktivierung fehlgeschlagen"
 
@@ -2659,6 +2659,9 @@ msgstr "Unterwürfige Anfrage"
 
 msgid "Residence address"
 msgstr "Wohnanschrift"
+
+msgid "Seleziona abilità"
+msgstr "Seleziona abilità"
 
 msgid "Short description"
 msgstr "Kurzbeschreibung"
@@ -2928,6 +2931,9 @@ msgstr "globale Präferenzen."
 msgid "--- NOT ASSIGNED ---"
 msgstr "--- NICHT ZUGEORDNET ---"
 
+msgid "Ability type missing"
+msgstr "Fähigkeitstyp fehlt"
+
 msgid "Accounting - History"
 msgstr "Buchhaltung - Historisch"
 
@@ -3027,6 +3033,9 @@ msgstr "Anmeldung anfordern"
 
 msgid "Returning percentage"
 msgstr "Prozentsatz der Rendite"
+
+msgid "Selezione non valida"
+msgstr "Ungültige Auswahl"
 
 msgid "Sign up as a filler!"
 msgstr "Melden Sie sich als Füller an!"
@@ -4923,6 +4932,9 @@ msgstr "Jetzt können Sie alle Mitglieder einer Organisation überprüfen"
 msgid "Now you can select which tickets can be gifted"
 msgstr "Jetzt können Sie auswählen, welche Tickets verschenkt werden können"
 
+msgid "Now you can set the experience points settings"
+msgstr "Jetzt können Sie die Einstellungen für die Erfahrungspunkte festlegen"
+
 msgid "Now you can set the external registration link"
 msgstr "Jetzt können Sie den externen Registrierungslink setzen"
 
@@ -5493,9 +5505,6 @@ msgstr "Geben Sie so genau wie möglich an, wo Sie abgeholt werden sollen"
 
 msgid "Indicate how spending is allocated at the budget level."
 msgstr "Geben Sie an, wie die Ausgaben auf Haushaltsebene gestaltet sind"
-
-msgid "Now you can create abilities, starting from their types"
-msgstr "Jetzt kannst du Fähigkeiten erstellen, ausgehend von ihren Typen"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr ""

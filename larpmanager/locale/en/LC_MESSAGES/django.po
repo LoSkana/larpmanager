@@ -3995,7 +3995,7 @@ msgstr ""
 msgid "Select the new ability to get"
 msgstr ""
 
-msgid "Are you sure?"
+msgid "Seleziona abilità"
 msgstr ""
 
 msgid "Character Edit"
@@ -7347,7 +7347,7 @@ msgid ""
 "then be used to purchase skills."
 msgstr ""
 
-msgid "Now you can create abilities, starting from their types"
+msgid "Now you can set the experience points settings"
 msgstr ""
 
 msgid "Allows players to create and modify their own characters freely."
@@ -8530,7 +8530,16 @@ msgstr ""
 msgid "Assigned character!"
 msgstr ""
 
-msgid "Ability acquired!"
+msgid "Ability type missing"
+msgstr ""
+
+msgid "Ability missing"
+msgstr ""
+
+msgid "Selezione non valida"
+msgstr ""
+
+msgid "Ability acquired"
 msgstr ""
 
 msgid "You have already granted data sharing with this organisation!"

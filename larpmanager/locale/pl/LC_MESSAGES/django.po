@@ -1894,9 +1894,6 @@ msgstr "Dostępność"
 msgid "Age selection"
 msgstr "Wybór wieku"
 
-msgid "Are you sure?"
-msgstr "Jesteś pewien?"
-
 msgid "Authorisation"
 msgstr "Autoryzacja"
 
@@ -2234,6 +2231,9 @@ msgstr "dostosowania"
 msgid "refund request"
 msgstr "żądanie zwrotu pieniędzy"
 
+msgid "Ability missing"
+msgstr "Brak umiejętności"
+
 msgid "Bring a friend!"
 msgstr "Przyprowadź przyjaciela!"
 
@@ -2353,6 +2353,9 @@ msgstr "oczekiwany w ciągu"
 
 msgid "upcoming events"
 msgstr "nadchodzące wydarzenia"
+
+msgid "Ability acquired"
+msgstr "Zdolność nabyta"
 
 msgid "Activate feature"
 msgstr "Aktywuj funkcję"
@@ -2534,9 +2537,6 @@ msgstr "Pobierz tutaj"
 msgid "follow this link"
 msgstr "kliknij ten link"
 
-msgid "Ability acquired!"
-msgstr "Zdolność nabyta!"
-
 msgid "Activation failed"
 msgstr "Aktywacja nie powiodła się"
 
@@ -2659,6 +2659,9 @@ msgstr "Złożony wniosek"
 
 msgid "Residence address"
 msgstr "Adres zamieszkania"
+
+msgid "Seleziona abilità"
+msgstr "Wybór umiejętności"
 
 msgid "Short description"
 msgstr "Krótki opis"
@@ -2928,6 +2931,9 @@ msgstr "globalne preferencje."
 msgid "--- NOT ASSIGNED ---"
 msgstr "--- NIE PRZYPISANO ---"
 
+msgid "Ability type missing"
+msgstr "Brak typu umiejętności"
+
 msgid "Accounting - History"
 msgstr "Rachunkowość - historia"
 
@@ -3027,6 +3033,9 @@ msgstr "Żądanie rejestracji"
 
 msgid "Returning percentage"
 msgstr "Zwracający się procent"
+
+msgid "Selezione non valida"
+msgstr "Wybór nie jest prawidłowy"
 
 msgid "Sign up as a filler!"
 msgstr "Zarejestruj się jako wypełniacz!"
@@ -4909,6 +4918,9 @@ msgstr "Teraz możesz przeglądać członków wszystkich organizacji"
 msgid "Now you can select which tickets can be gifted"
 msgstr "Teraz możesz wybrać, które bilety mogą zostać podarowane"
 
+msgid "Now you can set the experience points settings"
+msgstr "Teraz możesz ustawić punkty doświadczenia"
+
 msgid "Now you can set the external registration link"
 msgstr "Teraz możesz ustawić zewnętrzny link rejestracyjny"
 
@@ -5431,9 +5443,6 @@ msgstr "Wskaż jak najdokładniej, gdzie można Cię odebrać."
 
 msgid "Indicate how spending is allocated at the budget level."
 msgstr "Wskazanie sposobu alokacji wydatków na poziomie budżetu."
-
-msgid "Now you can create abilities, starting from their types"
-msgstr "Teraz możesz tworzyć zdolności, zaczynając od ich typów"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Przejrzyj użytkowników, którzy nie dotrzymali terminów wydarzenia."

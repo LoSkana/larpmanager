@@ -1894,9 +1894,6 @@ msgstr "Tilgjengelighet"
 msgid "Age selection"
 msgstr "Valg av alder"
 
-msgid "Are you sure?"
-msgstr "Er du sikker?"
-
 msgid "Authorisation"
 msgstr "Autorisasjon"
 
@@ -2234,6 +2231,9 @@ msgstr "tilpasninger"
 msgid "refund request"
 msgstr "anmodning om refusjon"
 
+msgid "Ability missing"
+msgstr "Evne mangler"
+
 msgid "Bring a friend!"
 msgstr "Ta med en venn!"
 
@@ -2353,6 +2353,9 @@ msgstr "forventet innen"
 
 msgid "upcoming events"
 msgstr "Planlagte arrangementer"
+
+msgid "Ability acquired"
+msgstr "Ervervet evne"
 
 msgid "Activate feature"
 msgstr "Aktiver funksjonen"
@@ -2534,9 +2537,6 @@ msgstr "last den ned her"
 msgid "follow this link"
 msgstr "Følg denne lenken"
 
-msgid "Ability acquired!"
-msgstr "Ferdigheter tilegnet!"
-
 msgid "Activation failed"
 msgstr "Aktivering mislyktes"
 
@@ -2659,6 +2659,9 @@ msgstr "Underdanig forespørsel"
 
 msgid "Residence address"
 msgstr "Bostedsadresse"
+
+msgid "Seleziona abilità"
+msgstr "Seleziona abilità"
 
 msgid "Short description"
 msgstr "Kort beskrivelse"
@@ -2928,6 +2931,9 @@ msgstr "globale preferanser."
 msgid "--- NOT ASSIGNED ---"
 msgstr "--- IKKE TILDELT ---"
 
+msgid "Ability type missing"
+msgstr "Evnetype mangler"
+
 msgid "Accounting - History"
 msgstr "Regnskap - Historisk"
 
@@ -3027,6 +3033,9 @@ msgstr "Be om registrering"
 
 msgid "Returning percentage"
 msgstr "Avkastning i prosent"
+
+msgid "Selezione non valida"
+msgstr "Selezione non valida"
 
 msgid "Sign up as a filler!"
 msgstr "Registrer deg som utfyller!"
@@ -4913,6 +4922,9 @@ msgstr "Nå kan du se alle organisasjonens medlemmer"
 msgid "Now you can select which tickets can be gifted"
 msgstr "Nå kan du velge hvilke billetter som kan gis i gave"
 
+msgid "Now you can set the experience points settings"
+msgstr "Nå kan du angi innstillingene for erfaringspoeng"
+
 msgid "Now you can set the external registration link"
 msgstr "Nå kan du angi den eksterne registreringslenken"
 
@@ -5430,9 +5442,6 @@ msgstr "Angi så nøyaktig som mulig hvor du skal hentes."
 
 msgid "Indicate how spending is allocated at the budget level."
 msgstr "Angi hvordan utgiftene er konfigurert på budsjettnivå."
-
-msgid "Now you can create abilities, starting from their types"
-msgstr "Nå kan du opprette evner, med utgangspunkt i deres typer"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Gå gjennom brukerne som ikke overholder arrangementets tidsfrister"
