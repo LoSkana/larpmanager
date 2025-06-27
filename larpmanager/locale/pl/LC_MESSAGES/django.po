@@ -1891,9 +1891,6 @@ msgstr "Dostępność"
 msgid "Age selection"
 msgstr "Wybór wieku"
 
-msgid "Are you sure?"
-msgstr "Jesteś pewien?"
-
 msgid "Authorisation"
 msgstr "Autoryzacja"
 
@@ -2231,6 +2228,9 @@ msgstr "dostosowania"
 msgid "refund request"
 msgstr "żądanie zwrotu pieniędzy"
 
+msgid "Ability missing"
+msgstr "Brak umiejętności"
+
 msgid "Bring a friend!"
 msgstr "Przyprowadź przyjaciela!"
 
@@ -2350,6 +2350,9 @@ msgstr "oczekiwany w ciągu"
 
 msgid "upcoming events"
 msgstr "nadchodzące wydarzenia"
+
+msgid "Ability acquired"
+msgstr "Zdolność nabyta"
 
 msgid "Activate feature"
 msgstr "Aktywuj funkcję"
@@ -2531,9 +2534,6 @@ msgstr "Pobierz tutaj"
 msgid "follow this link"
 msgstr "kliknij ten link"
 
-msgid "Ability acquired!"
-msgstr "Zdolność nabyta!"
-
 msgid "Activation failed"
 msgstr "Aktywacja nie powiodła się"
 
@@ -2656,6 +2656,9 @@ msgstr "Złożony wniosek"
 
 msgid "Residence address"
 msgstr "Adres zamieszkania"
+
+msgid "Seleziona abilità"
+msgstr "Wybór umiejętności"
 
 msgid "Short description"
 msgstr "Krótki opis"
@@ -2925,6 +2928,9 @@ msgstr "globalne preferencje."
 msgid "--- NOT ASSIGNED ---"
 msgstr "--- NIE PRZYPISANO ---"
 
+msgid "Ability type missing"
+msgstr "Brak typu umiejętności"
+
 msgid "Accounting - History"
 msgstr "Rachunkowość - historia"
 
@@ -3024,6 +3030,9 @@ msgstr "Żądanie rejestracji"
 
 msgid "Returning percentage"
 msgstr "Zwracający się procent"
+
+msgid "Selezione non valida"
+msgstr "Wybór nie jest prawidłowy"
 
 msgid "Sign up as a filler!"
 msgstr "Zarejestruj się jako wypełniacz!"
@@ -7649,6 +7658,14 @@ msgstr ""
 "Użytkownik poprosił o zresetowanie hasła, ale go nie ukończył. Podaj mu ten "
 "link: %(url)s"
 
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> questions to answer, access the users questions "
+"management panel"
+msgstr ""
+"Istnieją <b>%(number)s</b> pytania, na które należy odpowiedzieć, uzyskując "
+"dostęp do panelu zarządzania pytaniami użytkowników"
+
 msgid ""
 "This page shows the email addresses to which to send updates in order to get"
 " them to sign up"
@@ -8517,6 +8534,13 @@ msgstr ""
 "metody płatności, opcjonalnie dodając ją do ostatecznej ceny biletu."
 
 msgid ""
+"The feature 'Diet' requires the diet field to be set in the user profile, "
+"access the organization profile panel"
+msgstr ""
+"Funkcja \"Dieta\" wymaga ustawienia pola diety w profilu użytkownika, dostęp"
+" do panelu profilu organizacji"
+
+msgid ""
 "This page displays the application for membership in the organization. You "
 "can accept or reject the application"
 msgstr ""
@@ -8656,6 +8680,13 @@ msgid ""
 msgstr ""
 "Liczba miesięcy, począwszy od początku roku członkowskiego, za które należy "
 "uiścić bezpłatną składkę członkowską"
+
+msgid ""
+"The feature 'Safety' requires the safety field to be set in the user "
+"profile, access the organization profile panel"
+msgstr ""
+"Funkcja \"Bezpieczeństwo\" wymaga ustawienia pola bezpieczeństwa w profilu "
+"użytkownika, dostęp do panelu profilu organizacji"
 
 msgid ""
 "Adds a link to legal notices on every page, and provides a management panel "
@@ -8873,6 +8904,14 @@ msgstr ""
 "Pozwala określić zestaw użytkowników, którzy otrzymają wiadomości e-mail z "
 "potwierdzeniem płatności za wszystkie wydarzenia, zamiast organizatorów "
 "każdego wydarzenia."
+
+#, python-format
+msgid ""
+"You have some tickets without a final installment (with 0 amount): %(list)s;"
+" access the fixed installments management panel"
+msgstr ""
+"Masz kilka biletów bez raty końcowej (z kwotą 0): %(list)s; dostęp do panelu"
+" zarządzania ratami stałymi"
 
 msgid ""
 "Allows players to add an optional extra amount to their registration fee "
@@ -9441,6 +9480,16 @@ msgstr ""
 "Chcesz pomóc jednemu ze swoich znajomych zagrać z nami? Zorganizuj zbiórkę: "
 "Ty i każdy, kto chce pomóc, będzie mógł przekazać część swoich opłat "
 "rejestracyjnych!"
+
+#, python-format
+msgid ""
+"You have some fixed installments with both date and days set, but those "
+"values cannot be set at the same time: %(list)s; access the fixed "
+"installments management panel"
+msgstr ""
+"Masz kilka stałych rat z ustawioną zarówno datą, jak i dniami, ale wartości "
+"tych nie można ustawić w tym samym czasie: %(list)s; dostęp do panelu "
+"zarządzania stałymi ratami"
 
 msgid ""
 "Primary: main grouping / affiliation for characters. Transversal: secondary "

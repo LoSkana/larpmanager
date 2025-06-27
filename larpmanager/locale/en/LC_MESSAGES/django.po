@@ -4004,7 +4004,7 @@ msgstr ""
 msgid "Select the new ability to get"
 msgstr ""
 
-msgid "Are you sure?"
+msgid "Seleziona abilità"
 msgstr ""
 
 msgid "Character Edit"
@@ -8181,6 +8181,12 @@ msgid ""
 "There are no candidates for the voting, set them in the configuration panel"
 msgstr ""
 
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> questions to answer, access the users questions "
+"management panel"
+msgstr ""
+
 msgid ""
 "There are no payment gateway active, configure them in the payment settings "
 "panel"
@@ -8206,6 +8212,16 @@ msgstr ""
 msgid ""
 "There are <b>%(number)s</b> characters in proposed status, approve them in "
 "the character management panel"
+msgstr ""
+
+msgid ""
+"The feature 'Safety' requires the safety field to be set in the user "
+"profile, access the organization profile panel"
+msgstr ""
+
+msgid ""
+"The feature 'Diet' requires the diet field to be set in the user profile, "
+"access the organization profile panel"
 msgstr ""
 
 msgid "Set the casting options in the configuration panel"
@@ -8260,6 +8276,19 @@ msgstr ""
 
 msgid ""
 "You have activated fixed installments, but none have been yet created; "
+"access the fixed installments management panel"
+msgstr ""
+
+#, python-format
+msgid ""
+"You have some fixed installments with both date and days set, but those "
+"values cannot be set at the same time: %(list)s; access the fixed "
+"installments management panel"
+msgstr ""
+
+#, python-format
+msgid ""
+"You have some tickets without a final installment (with 0 amount): %(list)s; "
 "access the fixed installments management panel"
 msgstr ""
 
@@ -8520,7 +8549,16 @@ msgstr ""
 msgid "Assigned character!"
 msgstr ""
 
-msgid "Ability acquired!"
+msgid "Ability type missing"
+msgstr ""
+
+msgid "Ability missing"
+msgstr ""
+
+msgid "Selezione non valida"
+msgstr ""
+
+msgid "Ability acquired"
 msgstr ""
 
 msgid "You have already granted data sharing with this organisation!"

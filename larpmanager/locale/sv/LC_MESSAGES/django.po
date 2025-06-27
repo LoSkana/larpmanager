@@ -1891,9 +1891,6 @@ msgstr "Tillgänglighet"
 msgid "Age selection"
 msgstr "Val av ålder"
 
-msgid "Are you sure?"
-msgstr "Är du säker på det?"
-
 msgid "Authorisation"
 msgstr "Auktorisation"
 
@@ -2231,6 +2228,9 @@ msgstr "Anpassningar"
 msgid "refund request"
 msgstr "begäran om återbetalning"
 
+msgid "Ability missing"
+msgstr "Förmåga saknas"
+
 msgid "Bring a friend!"
 msgstr "Ta med en vän!"
 
@@ -2350,6 +2350,9 @@ msgstr "förväntas inom"
 
 msgid "upcoming events"
 msgstr "Planerade händelser"
+
+msgid "Ability acquired"
+msgstr "Förmåga förvärvad"
 
 msgid "Activate feature"
 msgstr "Aktivera funktion"
@@ -2531,9 +2534,6 @@ msgstr "ladda ner den här"
 msgid "follow this link"
 msgstr "följ denna länk"
 
-msgid "Ability acquired!"
-msgstr "Färdighet förvärvad!"
-
 msgid "Activation failed"
 msgstr "Aktivering misslyckades"
 
@@ -2656,6 +2656,9 @@ msgstr "Undergiven begäran"
 
 msgid "Residence address"
 msgstr "Bostadsadress"
+
+msgid "Seleziona abilità"
+msgstr "Välj förmåga"
 
 msgid "Short description"
 msgstr "Kort beskrivning"
@@ -2925,6 +2928,9 @@ msgstr "globala preferenser."
 msgid "--- NOT ASSIGNED ---"
 msgstr "--- INTE TILLDELAD ---"
 
+msgid "Ability type missing"
+msgstr "Typ av förmåga saknas"
+
 msgid "Accounting - History"
 msgstr "Redovisning - Historisk"
 
@@ -3024,6 +3030,9 @@ msgstr "Begär registrering"
 
 msgid "Returning percentage"
 msgstr "Procentuell avkastning"
+
+msgid "Selezione non valida"
+msgstr "Valet är inte giltigt"
 
 msgid "Sign up as a filler!"
 msgstr "Registrera dig som utfyllare!"
@@ -7654,6 +7663,14 @@ msgstr ""
 "Användaren begärde återställning av lösenordet, men slutförde den inte. Ge "
 "dem den här länken: %(url)s"
 
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> questions to answer, access the users questions "
+"management panel"
+msgstr ""
+"Det finns <b>%(number)s</b> frågor att besvara, gå till panelen för "
+"hantering av användarnas frågor"
+
 msgid ""
 "This page shows the email addresses to which to send updates in order to get"
 " them to sign up"
@@ -8521,6 +8538,13 @@ msgstr ""
 "och eventuellt lägga till den till det slutliga biljettpriset."
 
 msgid ""
+"The feature 'Diet' requires the diet field to be set in the user profile, "
+"access the organization profile panel"
+msgstr ""
+"Funktionen \"Diet\" kräver att dietfältet ställs in i användarprofilen, få "
+"åtkomst till organisationsprofilpanelen"
+
+msgid ""
 "This page displays the application for membership in the organization. You "
 "can accept or reject the application"
 msgstr ""
@@ -8660,6 +8684,13 @@ msgid ""
 msgstr ""
 "Antal månader, med början från början av medlemsåret, för vilka "
 "medlemsavgiften kan betalas kostnadsfritt"
+
+msgid ""
+"The feature 'Safety' requires the safety field to be set in the user "
+"profile, access the organization profile panel"
+msgstr ""
+"Funktionen \"Säkerhet\" kräver att säkerhetsfältet ställs in i "
+"användarprofilen, få åtkomst till organisationsprofilpanelen"
 
 msgid ""
 "Adds a link to legal notices on every page, and provides a management panel "
@@ -8878,6 +8909,14 @@ msgstr ""
 "Låter dig ange en uppsättning användare som får e-postmeddelanden om "
 "betalningsbekräftelse för alla evenemang, i stället för varje evenemangs "
 "arrangörer."
+
+#, python-format
+msgid ""
+"You have some tickets without a final installment (with 0 amount): %(list)s;"
+" access the fixed installments management panel"
+msgstr ""
+"Du har några biljetter utan en slutlig avbetalning (med 0 list): %(list)s; "
+"gå till panelen för hantering av fasta avbetalningar"
 
 msgid ""
 "Allows players to add an optional extra amount to their registration fee "
@@ -9438,6 +9477,16 @@ msgid ""
 msgstr ""
 "Vill du hjälpa en vän till dig att spela hos oss? Organisera en insamling: "
 "du och alla som vill bidra kan skänka en del av medlemsavgiften!"
+
+#, python-format
+msgid ""
+"You have some fixed installments with both date and days set, but those "
+"values cannot be set at the same time: %(list)s; access the fixed "
+"installments management panel"
+msgstr ""
+"Du har några fasta avbetalningar med både datum och dagar inställda, men "
+"dessa värden kan inte ställas in samtidigt: %(list)s; gå till panelen för "
+"hantering av fasta avbetalningar"
 
 msgid ""
 "Primary: main grouping / affiliation for characters. Transversal: secondary "

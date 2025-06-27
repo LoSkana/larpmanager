@@ -1891,9 +1891,6 @@ msgstr "Přístupnost"
 msgid "Age selection"
 msgstr "Výběr věku"
 
-msgid "Are you sure?"
-msgstr "Jste si jistý?"
-
 msgid "Authorisation"
 msgstr "Autorizace"
 
@@ -2231,6 +2228,9 @@ msgstr "přizpůsobení"
 msgid "refund request"
 msgstr "žádost o proplacení"
 
+msgid "Ability missing"
+msgstr "Chybějící schopnost"
+
 msgid "Bring a friend!"
 msgstr "Přiveďte kamaráda!"
 
@@ -2350,6 +2350,9 @@ msgstr "očekává se v rámci"
 
 msgid "upcoming events"
 msgstr "Naplánované události"
+
+msgid "Ability acquired"
+msgstr "Získané schopnosti"
 
 msgid "Activate feature"
 msgstr "Aktivace funkce"
@@ -2531,9 +2534,6 @@ msgstr "stáhněte si ji zde"
 msgid "follow this link"
 msgstr "následujte tento odkaz"
 
-msgid "Ability acquired!"
-msgstr "Získaná dovednost!"
-
 msgid "Activation failed"
 msgstr "Aktivace se nezdařila"
 
@@ -2656,6 +2656,9 @@ msgstr "Submisivní žádost"
 
 msgid "Residence address"
 msgstr "Adresa bydliště"
+
+msgid "Seleziona abilità"
+msgstr "Seleziona abilità"
 
 msgid "Short description"
 msgstr "Krátký popis"
@@ -2925,6 +2928,9 @@ msgstr "globální preference."
 msgid "--- NOT ASSIGNED ---"
 msgstr "--- NEPŘIDĚLENO ---"
 
+msgid "Ability type missing"
+msgstr "Chybějící typ schopnosti"
+
 msgid "Accounting - History"
 msgstr "Účetnictví - historické"
 
@@ -3024,6 +3030,9 @@ msgstr "Žádost o registraci"
 
 msgid "Returning percentage"
 msgstr "Procento návratnosti"
+
+msgid "Selezione non valida"
+msgstr "Selezione non valida"
 
 msgid "Sign up as a filler!"
 msgstr "Zaregistrujte se jako výplň!"
@@ -7524,6 +7533,14 @@ msgstr ""
 "Uživatel požádal o obnovení hesla, ale nedokončil je. Poskytněte mu tento "
 "odkaz: %(url)s"
 
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> questions to answer, access the users questions "
+"management panel"
+msgstr ""
+"Existují <b>%(number)s</b> otázky, na které je třeba odpovědět, přístup k "
+"panelu správy otázek uživatelů."
+
 msgid ""
 "This page shows the email addresses to which to send updates in order to get"
 " them to sign up"
@@ -8385,6 +8402,13 @@ msgstr ""
 " volitelně jej přidat ke konečné ceně tipu."
 
 msgid ""
+"The feature 'Diet' requires the diet field to be set in the user profile, "
+"access the organization profile panel"
+msgstr ""
+"Funkce \"Dieta\" vyžaduje, aby bylo v profilu uživatele nastaveno pole pro "
+"dietu, přístup k panelu profilu organizace."
+
+msgid ""
 "This page displays the application for membership in the organization. You "
 "can accept or reject the application"
 msgstr ""
@@ -8524,6 +8548,13 @@ msgid ""
 msgstr ""
 "Počet měsíců, počínaje začátkem členského roku, za které lze zaplatit "
 "členský příspěvek zdarma"
+
+msgid ""
+"The feature 'Safety' requires the safety field to be set in the user "
+"profile, access the organization profile panel"
+msgstr ""
+"Funkce \"Bezpečnost\" vyžaduje, aby bylo v profilu uživatele nastaveno pole "
+"Bezpečnost, přístup k panelu profilu organizace."
 
 msgid ""
 "Adds a link to legal notices on every page, and provides a management panel "
@@ -8738,6 +8769,14 @@ msgid ""
 msgstr ""
 "Umožňuje zadat sadu uživatelů, kterým budou zasílány e-maily s potvrzením o "
 "platbě pro všechny události namísto organizátorů jednotlivých událostí."
+
+#, python-format
+msgid ""
+"You have some tickets without a final installment (with 0 amount): %(list)s;"
+" access the fixed installments management panel"
+msgstr ""
+"Některé tipy jsou bez poslední splátky (s částkou 0): %(list)s; přístup do "
+"panelu pro správu pevných splátek"
 
 msgid ""
 "Allows players to add an optional extra amount to their registration fee "
@@ -9281,6 +9320,15 @@ msgid ""
 msgstr ""
 "Chcete pomoci svému kamarádovi hrát s námi? Uspořádejte sbírku: vy a každý, "
 "kdo chce přispět, můžete věnovat část členských příspěvků!"
+
+#, python-format
+msgid ""
+"You have some fixed installments with both date and days set, but those "
+"values cannot be set at the same time: %(list)s; access the fixed "
+"installments management panel"
+msgstr ""
+"U některých pevných splátek máte nastaveno datum i dny, ale tyto hodnoty "
+"nelze nastavit současně: %(list)s; přístup na panel správy pevných splátek."
 
 msgid ""
 "Primary: main grouping / affiliation for characters. Transversal: secondary "

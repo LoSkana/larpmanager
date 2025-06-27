@@ -6,11 +6,11 @@
       game, which players receive to guide them.
     slug: prologue
     overall: false
+    module: 1
     placeholder: false
     order: 240
     after_text: Now you can create prologues for the event
     after_link: orga_prologues
-    module: 1
 - model: larpmanager.feature
   pk: 7
   fields:
@@ -19,11 +19,11 @@
       multiple 'traits'.
     slug: questbuilder
     overall: false
+    module: 5
     placeholder: false
     order: 20
     after_text: Now you can create quests for the event
-    after_link: orga_quests
-    module: 5
+    after_link: orga_quest_types
 - model: larpmanager.feature
   pk: 10
   fields:
@@ -31,11 +31,11 @@
     descr: Allows you to copy any element directly from another event.
     slug: copy
     overall: false
+    module: 3
     placeholder: false
     order: 10
     after_text: Now you can copy elements from an other event
     after_link: orga_copy
-    module: 3
 - model: larpmanager.feature
   pk: 11
   fields:
@@ -44,11 +44,11 @@
       (e.g. for donations or to help cover others' fees).
     slug: pay_what_you_want
     overall: false
+    module: 2
     placeholder: false
     order: 50
     after_text: Now you can set the optional amount field
     after_link: config/pay_what_you_want
-    module: 2
 - model: larpmanager.feature
   pk: 12
   fields:
@@ -57,11 +57,11 @@
       ticket price.
     slug: discount
     overall: false
+    module: 2
     placeholder: false
     order: 30
     after_text: Now you can create discounts for the event
     after_link: orga_discounts
-    module: 2
 - model: larpmanager.feature
   pk: 15
   fields:
@@ -70,11 +70,11 @@
       in-person registration.
     slug: laog
     overall: false
+    module: 7
     placeholder: false
     order: 70
     after_text: ''
     after_link: ''
-    module: 7
 - model: larpmanager.feature
   pk: 18
   fields:
@@ -83,11 +83,11 @@
       emails automatically.
     slug: remind
     overall: true
+    module: 4
     placeholder: false
     order: 20
     after_text: Now you can set the reminder options
     after_link: config/remind
-    module: 4
 - model: larpmanager.feature
   pk: 20
   fields:
@@ -96,11 +96,11 @@
       code to a new registrant, granting both a discounted price.
     slug: bring_friend
     overall: false
+    module: 2
     placeholder: false
     order: 9999
     after_text: Now you can set the discount options
     after_link: config/bring_friend
-    module: 2
 - model: larpmanager.feature
   pk: 21
   fields:
@@ -109,11 +109,11 @@
       player profiles.
     slug: print_pdf
     overall: false
+    module: 1
     placeholder: false
     order: 25
     after_text: Now you can set the PDF generation options
     after_link: orga_characters_pdf
-    module: 1
 - model: larpmanager.feature
   pk: 24
   fields:
@@ -122,11 +122,11 @@
       forms, questions, and correct answers for players to complete.
     slug: workshop
     overall: false
+    module: 3
     placeholder: false
     order: 20
     after_text: Now you can start creating workshops, starting from modules
     after_link: orga_workshop_modules
-    module: 3
 - model: larpmanager.feature
   pk: 25
   fields:
@@ -135,11 +135,11 @@
       assign players to them, with checks to avoid scheduling conflicts.
     slug: speedlarp
     overall: false
+    module: 7
     placeholder: false
     order: 60
     after_text: Now you can start creating speed-larps
     after_link: orga_speedlarps
-    module: 7
 - model: larpmanager.feature
   pk: 26
   fields:
@@ -147,11 +147,11 @@
     descr: Lets staff access the safety information submitted by players.
     slug: safety
     overall: false
+    module: 8
     placeholder: false
     order: 20
     after_text: Now you can review the safety information submitted by players
     after_link: orga_safety
-    module: 8
 - model: larpmanager.feature
   pk: 27
   fields:
@@ -160,11 +160,11 @@
       match.
     slug: casting
     overall: false
+    module: 5
     placeholder: false
     order: 10
     after_text: Now you can set the casting options
     after_link: config/casting
-    module: 5
 - model: larpmanager.feature
   pk: 28
   fields:
@@ -173,11 +173,11 @@
       them.
     slug: help
     overall: true
+    module: 8
     placeholder: false
     order: 10
     after_text: Now you can review players' questions
     after_link: exe_questions
-    module: 8
 - model: larpmanager.feature
   pk: 31
   fields:
@@ -186,11 +186,11 @@
       another player with event fees.
     slug: collection
     overall: true
+    module: 2
     placeholder: false
     order: 40
     after_text: Now players can submit collections, and you can review them
     after_link: exe_collections
-    module: 2
 - model: larpmanager.feature
   pk: 32
   fields:
@@ -198,11 +198,11 @@
     descr: Enables free pre-registration to events.
     slug: pre_register
     overall: true
+    module: 4
     placeholder: false
     order: 30
     after_text: Now players can submit preregistrations, and you can review them
     after_link: exe_pre_registrations
-    module: 4
 - model: larpmanager.feature
   pk: 34
   fields:
@@ -210,11 +210,11 @@
     descr: Allows you to define a different language for each event.
     slug: multi_lang
     overall: true
+    module: 7
     placeholder: false
     order: 9999
     after_text: ''
     after_link: ''
-    module: 7
 - model: larpmanager.feature
   pk: 36
   fields:
@@ -223,11 +223,11 @@
       to the association freely.
     slug: donate
     overall: true
+    module: 2
     placeholder: false
     order: 20
     after_text: Now players can submit donation, and you can review them
     after_link: exe_donations
-    module: 2
 - model: larpmanager.feature
   pk: 40
   fields:
@@ -236,11 +236,11 @@
       preferences.
     slug: newsletter
     overall: true
+    module: 8
     placeholder: false
     order: 60
     after_text: Now you can review users mailing list
     after_link: exe_newsletter
-    module: 8
 - model: larpmanager.feature
   pk: 43
   fields:
@@ -249,11 +249,11 @@
       either to staff or to players via secret external links.
     slug: utils
     overall: false
+    module: 3
     placeholder: false
     order: 30
     after_text: Now you can host files in the platform
     after_link: orga_utils
-    module: 3
 - model: larpmanager.feature
   pk: 44
   fields:
@@ -262,11 +262,11 @@
       info, etc.) of the characters they're assigned.
     slug: custom_character
     overall: false
+    module: 7
     placeholder: false
     order: 40
     after_text: Now you can set customization options
     after_link: config/custom_character
-    module: 7
 - model: larpmanager.feature
   pk: 45
   fields:
@@ -275,11 +275,11 @@
       in an event.
     slug: membership
     overall: true
+    module: 8
     placeholder: false
     order: 40
     after_text: Now you can review all organizations's members
     after_link: exe_membership
-    module: 8
 - model: larpmanager.feature
   pk: 46
   fields:
@@ -288,11 +288,11 @@
       staff can manage the status of those requests.
     slug: shuttle
     overall: true
+    module: 3
     placeholder: false
     order: 30
     after_text: ''
     after_link: ''
-    module: 3
 - model: larpmanager.feature
   pk: 47
   fields:
@@ -301,11 +301,11 @@
       instead of the standard one.
     slug: custom_mail
     overall: true
+    module: 7
     placeholder: false
     order: 40
     after_text: Now you can set the external mail server settings
     after_link: config/custom_mail_server
-    module: 7
 - model: larpmanager.feature
   pk: 50
   fields:
@@ -314,11 +314,11 @@
       which a random subset is converted into normal tickets.
     slug: lottery
     overall: false
+    module: 4
     placeholder: false
     order: 90
     after_text: Now you can create the lottery ticket
     after_link: orga_registration_tickets
-    module: 4
 - model: larpmanager.feature
   pk: 51
   fields:
@@ -327,11 +327,11 @@
       who are ready to replacing last-minute dropout of main characters.'
     slug: filler
     overall: false
+    module: 4
     placeholder: false
     order: 70
     after_text: Now you can create the filler ticket
     after_link: orga_registration_tickets
-    module: 4
 - model: larpmanager.feature
   pk: 52
   fields:
@@ -340,11 +340,11 @@
       personal email addresses.
     slug: chat
     overall: true
+    module: 8
     placeholder: false
     order: 50
     after_text: ''
     after_link: ''
-    module: 8
 - model: larpmanager.feature
   pk: 53
   fields:
@@ -353,11 +353,11 @@
       are sold out.
     slug: waiting
     overall: false
+    module: 4
     placeholder: false
     order: 60
     after_text: Now you can create the waiting ticket
     after_link: orga_registration_tickets
-    module: 4
 - model: larpmanager.feature
   pk: 56
   fields:
@@ -366,11 +366,11 @@
       registration.
     slug: event_tac
     overall: false
+    module: 7
     placeholder: false
     order: 10
     after_text: Now you can set the terms and conditions text
     after_link: orga_texts
-    module: 7
 - model: larpmanager.feature
   pk: 57
   fields:
@@ -378,11 +378,11 @@
     descr: Allows players to cancel their own registrations at any time.
     slug: player_cancellation
     overall: false
+    module: 7
     placeholder: false
     order: 20
     after_text: ''
     after_link: ''
-    module: 7
 - model: larpmanager.feature
   pk: 58
   fields:
@@ -391,11 +391,11 @@
       an external registration link.
     slug: register_link
     overall: false
+    module: 4
     placeholder: false
     order: 30
     after_text: Now you can set the external registration link
-    after_link: orga_run
-    module: 4
+    after_link: orga_event
 - model: larpmanager.feature
   pk: 60
   fields:
@@ -404,11 +404,11 @@
       issues, assign severity/urgency, and track them.
     slug: problems
     overall: false
+    module: 3
     placeholder: false
     order: 40
     after_text: Now you can review the event's problems
     after_link: orga_problems
-    module: 3
 - model: larpmanager.feature
   pk: 62
   fields:
@@ -418,11 +418,11 @@
       days until the event.'
     slug: reg_quotas
     overall: false
+    module: 2
     placeholder: false
     order: 20
     after_text: Now you can set the dynamic installments
     after_link: orga_registration_quotas
-    module: 2
 - model: larpmanager.feature
   pk: 63
   fields:
@@ -431,11 +431,11 @@
       Committee.
     slug: vote
     overall: true
+    module: 8
     placeholder: false
     order: 90
     after_text: Now you can set the vote options
     after_link: config/vote
-    module: 8
 - model: larpmanager.feature
   pk: 65
   fields:
@@ -443,11 +443,11 @@
     descr: Allows the organisation to award badges and enables a public leaderboard.
     slug: badge
     overall: true
+    module: 8
     placeholder: false
     order: 80
     after_text: Now you can create badges
     after_link: exe_badges
-    module: 8
 - model: larpmanager.feature
   pk: 66
   fields:
@@ -456,11 +456,11 @@
       table, track quantities, and note item locations.
     slug: inventory
     overall: true
+    module: 3
     placeholder: false
     order: 20
     after_text: Now you can add inventory items
     after_link: exe_inventory
-    module: 3
 - model: larpmanager.feature
   pk: 69
   fields:
@@ -469,11 +469,11 @@
       if general registration is closed (e.g., early access for a specific group).
     slug: registration_secret
     overall: false
+    module: 4
     placeholder: false
     order: 20
     after_text: Now you can set the registration secret link
     after_link: orga_run
-    module: 4
 - model: larpmanager.feature
   pk: 74
   fields:
@@ -482,11 +482,11 @@
       to define multiple due dates and amounts.
     slug: reg_installments
     overall: false
+    module: 2
     placeholder: false
     order: 10
     after_text: Now you can create fixed installments
     after_link: orga_registration_installments
-    module: 2
 - model: larpmanager.feature
   pk: 75
   fields:
@@ -494,11 +494,11 @@
     descr: Allows authors to add relationships to characters.
     slug: relationships
     overall: false
+    module: 1
     placeholder: false
     order: 200
     after_text: Now you can add relationships when editing a character
     after_link: orga_characters
-    module: 1
 - model: larpmanager.feature
   pk: 77
   fields:
@@ -507,11 +507,11 @@
       make lengthy forms clearer.
     slug: reg_que_sections
     overall: false
+    module: 4
     placeholder: false
     order: 40
     after_text: Now you can define registration form sections
     after_link: orga_registration_sections
-    module: 4
 - model: larpmanager.feature
   pk: 79
   fields:
@@ -520,11 +520,11 @@
       of characters and factions.
     slug: campaign
     overall: true
+    module: 7
     placeholder: false
     order: 30
     after_text: ''
     after_link: ''
-    module: 7
 - model: larpmanager.feature
   pk: 81
   fields:
@@ -533,11 +533,11 @@
       makes one Reduced ticket available.
     slug: reduced
     overall: false
+    module: 4
     placeholder: false
     order: 80
     after_text: Now you can create the 'patron' and 'reduced' tickets
     after_link: orga_registration_tickets
-    module: 4
 - model: larpmanager.feature
   pk: 86
   fields:
@@ -546,11 +546,11 @@
       displaying trend graphs over time.
     slug: record_acc
     overall: true
+    module: 2
     placeholder: false
     order: 140
     after_text: Now you can review the historical accounting informations
     after_link: exe_accounting_rec
-    module: 2
 - model: larpmanager.feature
   pk: 88
   fields:
@@ -559,11 +559,11 @@
       player page.
     slug: player_larp_history
     overall: true
+    module: 8
     placeholder: false
     order: 100
     after_text: ''
     after_link: ''
-    module: 8
 - model: larpmanager.feature
   pk: 91
   fields:
@@ -572,11 +572,11 @@
       elements.
     slug: progress
     overall: false
+    module: 1
     placeholder: false
     order: 110
     after_text: Now you can create the progress steps
     after_link: orga_progress_steps
-    module: 1
 - model: larpmanager.feature
   pk: 93
   fields:
@@ -584,11 +584,11 @@
     descr: Lets staff access the diet information submitted by players.
     slug: diet
     overall: false
+    module: 8
     placeholder: false
     order: 30
     after_text: Now you can review the diet information submitted by players
     after_link: orga_diet
-    module: 8
 - model: larpmanager.feature
   pk: 94
   fields:
@@ -597,11 +597,11 @@
       memberships, forms, casting, etc.).
     slug: deadlines
     overall: true
+    module: 4
     placeholder: false
     order: 10
     after_text: Now you can review the organization's deadlines
     after_link: exe_deadlines
-    module: 4
 - model: larpmanager.feature
   pk: 95
   fields:
@@ -610,11 +610,11 @@
       for all events.
     slug: assoc_tac
     overall: true
+    module: 7
     placeholder: false
     order: 10
     after_text: Now you can set the terms and conditions text
     after_link: exe_texts
-    module: 7
 - model: larpmanager.feature
   pk: 103
   fields:
@@ -623,11 +623,11 @@
       to their character sheets.
     slug: plot
     overall: false
+    module: 1
     placeholder: false
     order: 130
     after_text: Now you can create the plots of the event
     after_link: orga_plots
-    module: 1
 - model: larpmanager.feature
   pk: 104
   fields:
@@ -636,11 +636,11 @@
       transversal or secret.
     slug: faction
     overall: false
+    module: 1
     placeholder: false
     order: 120
     after_text: Now you can create the factions of the event
     after_link: orga_factions
-    module: 1
 - model: larpmanager.feature
   pk: 105
   fields:
@@ -649,11 +649,11 @@
       plot or lore.
     slug: handout
     overall: false
+    module: 1
     placeholder: false
     order: 140
     after_text: Now you can create the handouts of the event
     after_link: orga_handouts
-    module: 1
 - model: larpmanager.feature
   pk: 106
   fields:
@@ -662,11 +662,11 @@
       expenses, and the amount to refund the staff.
     slug: expense
     overall: true
+    module: 2
     placeholder: false
     order: 30
     after_text: Now staff members can upload expenses, and you can review them
     after_link: exe_expenses
-    module: 2
 - model: larpmanager.feature
   pk: 107
   fields:
@@ -675,11 +675,11 @@
       for registration fees. Credits can also be redeemed for cash.
     slug: token_credit
     overall: true
+    module: 2
     placeholder: false
     order: 50
     after_text: ''
     after_link: ''
-    module: 2
 - model: larpmanager.feature
   pk: 108
   fields:
@@ -688,11 +688,11 @@
       instruments.
     slug: outflow
     overall: true
+    module: 2
     placeholder: false
     order: 90
     after_text: Now you can create outflows
     after_link: exe_outflows
-    module: 2
 - model: larpmanager.feature
   pk: 109
   fields:
@@ -701,11 +701,11 @@
       to match and approve corresponding wire payments.
     slug: verification
     overall: true
+    module: 2
     placeholder: false
     order: 130
     after_text: Now you can verify wire payments
     after_link: exe_verification
-    module: 2
 - model: larpmanager.feature
   pk: 110
   fields:
@@ -713,11 +713,11 @@
     descr: Generates an annual summary of fiscal activity for the Italian budget report.
     slug: ita_balance
     overall: true
+    module: 10
     placeholder: false
     order: 10
     after_text: Now you can review the annual balance
     after_link: exe_balance
-    module: 10
 - model: larpmanager.feature
   pk: 111
   fields:
@@ -725,11 +725,11 @@
     descr: Enables payment processing, specifying which payment methods to accept.
     slug: payment
     overall: true
+    module: 2
     placeholder: false
     order: 10
     after_text: Now you can set the payment gateways settings
     after_link: exe_payment_details
-    module: 2
 - model: larpmanager.feature
   pk: 112
   fields:
@@ -737,11 +737,11 @@
     descr: Enables members to request a refund (a money transfer from the organization)
     slug: refund
     overall: true
+    module: 2
     placeholder: false
     order: 60
     after_text: Now players can create refund requests, and you can review them
     after_link: exe_refunds
-    module: 2
 - model: larpmanager.feature
   pk: 113
   fields:
@@ -750,11 +750,11 @@
       adding it to the final ticket price.
     slug: payment_fees
     overall: true
+    module: 2
     placeholder: false
     order: 15
     after_text: Now you can set the fee for each payment gateway
     after_link: exe_payment_details
-    module: 2
 - model: larpmanager.feature
   pk: 114
   fields:
@@ -763,11 +763,11 @@
       it closed until then.
     slug: registration_open
     overall: false
+    module: 4
     placeholder: false
     order: 10
     after_text: Now you can set the registration opening date
     after_link: orga_run
-    module: 4
 - model: larpmanager.feature
   pk: 115
   fields:
@@ -776,11 +776,11 @@
       link to edit the content of that notice.
     slug: legal_notice
     overall: true
+    module: 6
     placeholder: false
     order: 10
     after_text: Now you can set the legal notice text
     after_link: exe_texts
-    module: 6
 - model: larpmanager.feature
   pk: 118
   fields:
@@ -789,11 +789,11 @@
       can then be used to purchase skills.
     slug: px
     overall: false
+    module: 7
     placeholder: false
     order: 50
     after_text: Now you can create abilities, starting from their types
     after_link: orga_px_ability_types
-    module: 7
 - model: larpmanager.feature
   pk: 120
   fields:
@@ -801,11 +801,11 @@
     descr: Allows players to create and modify their own characters freely.
     slug: user_character
     overall: false
+    module: 7
     placeholder: false
     order: 30
     after_text: Now you can set the player editing settings
     after_link: config/user_character
-    module: 7
 - model: larpmanager.feature
   pk: 121
   fields:
@@ -814,11 +814,11 @@
       for the organisation.
     slug: organization_tax
     overall: true
+    module: 2
     placeholder: false
     order: 110
     after_text: Now you can set the organization tax options
     after_link: config/organization_tax
-    module: 2
 - model: larpmanager.feature
   pk: 124
   fields:
@@ -827,11 +827,11 @@
       and optionally assigns a result.
     slug: centauri
     overall: true
+    module: 10
     placeholder: false
     order: 9999
     after_text: Now you can se the special page options
     after_link: config/centauri
-    module: 10
 - model: larpmanager.feature
   pk: 138
   fields:
@@ -839,11 +839,11 @@
     descr: Adds a page where you can define shorter URLs for long links.
     slug: urlshortner
     overall: true
+    module: 3
     placeholder: false
     order: 10
     after_text: Now you can create url shortners
     after_link: exe_urlshortner
-    module: 3
 - model: larpmanager.feature
   pk: 139
   fields:
@@ -852,11 +852,11 @@
       made after a specified date.
     slug: reg_surcharges
     overall: false
+    module: 2
     placeholder: false
     order: 40
     after_text: Now you can create registration surcharges
     after_link: orga_registration_surcharges
-    module: 2
 - model: larpmanager.feature
   pk: 144
   fields:
@@ -865,11 +865,11 @@
       from player registrations.
     slug: inflow
     overall: true
+    module: 2
     placeholder: false
     order: 80
     after_text: Now you can create inflows
     after_link: exe_inflows
-    module: 2
 - model: larpmanager.feature
   pk: 146
   fields:
@@ -878,11 +878,11 @@
       streaming-service layouts.
     slug: carousel
     overall: true
+    module: 6
     placeholder: false
     order: 20
     after_text: ''
     after_link: ''
-    module: 6
 - model: larpmanager.feature
   pk: 152
   fields:
@@ -891,11 +891,11 @@
       for all events, instead of each event's organizers.
     slug: treasurer
     overall: true
+    module: 2
     placeholder: false
     order: 120
     after_text: ''
     after_link: ''
-    module: 2
 - model: larpmanager.feature
   pk: 156
   fields:
@@ -904,11 +904,11 @@
       emails it to the user.
     slug: receipts
     overall: true
+    module: 2
     placeholder: false
     order: 9999
     after_text: Now you can create the receipt text
     after_link: exe_texts
-    module: 2
 - model: larpmanager.feature
   pk: 158
   fields:
@@ -916,11 +916,11 @@
     descr: Enables a volunteer register, as required by Italian RUNTS regulations.
     slug: volunteer_registry
     overall: true
+    module: 10
     placeholder: false
     order: 20
     after_text: Now you can review the volunteers registry
     after_link: exe_volunteer_registry
-    module: 10
 - model: larpmanager.feature
   pk: 173
   fields:
@@ -928,11 +928,11 @@
     descr: Shows the calculated tax amount on each payment.
     slug: vat
     overall: true
+    module: 2
     placeholder: false
     order: 100
     after_text: Now you can set the taxes options
     after_link: config/vat
-    module: 2
 - model: larpmanager.feature
   pk: 174
   fields:
@@ -941,11 +941,11 @@
       avoiding the need for separate login credentials.
     slug: delegated_members
     overall: true
+    module: 8
     placeholder: false
     order: 70
     after_text: ''
     after_link: ''
-    module: 8
 - model: larpmanager.feature
   pk: 175
   fields:
@@ -954,11 +954,11 @@
       and provided to the gift recipient for registration.
     slug: gift
     overall: false
+    module: 2
     placeholder: false
     order: 60
     after_text: Now you can select which tickets can be gifted
     after_link: orga_registration_tickets
-    module: 2
 - model: larpmanager.feature
   pk: 177
   fields:
@@ -966,11 +966,11 @@
     descr: Allows a user to reserve extra tickets in addition to their own.
     slug: additional_tickets
     overall: false
+    module: 4
     placeholder: false
     order: 50
     after_text: ''
     after_link: ''
-    module: 4
 - model: larpmanager.feature
   pk: 178
   fields:
@@ -979,11 +979,11 @@
       players.
     slug: character
     overall: false
+    module: 1
     placeholder: false
     order: 1
     after_text: Now you can create characters
     after_link: orga_characters
-    module: 1
 - model: larpmanager.feature
   pk: 179
   fields:
@@ -992,11 +992,11 @@
       be used as a starting point for other events.
     slug: template
     overall: true
+    module: 7
     placeholder: false
     order: 1
     after_text: Now you can create event templates
     after_link: exe_templates
-    module: 7
 - model: larpmanager.feature
   pk: 185
   fields:
@@ -1004,11 +1004,11 @@
     descr: Check the validity of the fiscal code.
     slug: fiscal_code_check
     overall: true
+    module: 10
     placeholder: false
     order: 30
     after_text: Now you can peform the fiscal code validity check
     after_link: exe_membership_check
-    module: 10
 - model: larpmanager.feature
   pk: 187
   fields:
@@ -1016,11 +1016,11 @@
     descr: ''
     slug: exe_archive_email
     overall: true
+    module: 8
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 8
 - model: larpmanager.feature
   pk: 188
   fields:
@@ -1028,11 +1028,11 @@
     descr: ''
     slug: exe_profile
     overall: true
+    module: 8
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 8
 - model: larpmanager.feature
   pk: 189
   fields:
@@ -1040,11 +1040,11 @@
     descr: ''
     slug: exe_send_mail
     overall: true
+    module: 8
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 8
 - model: larpmanager.feature
   pk: 190
   fields:
@@ -1052,11 +1052,11 @@
     descr: ''
     slug: exe_runs
     overall: true
+    module: 7
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 7
 - model: larpmanager.feature
   pk: 191
   fields:
@@ -1064,11 +1064,11 @@
     descr: ''
     slug: exe_events
     overall: true
+    module: 7
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 7
 - model: larpmanager.feature
   pk: 192
   fields:
@@ -1076,11 +1076,11 @@
     descr: ''
     slug: exe_texts
     overall: true
+    module: 6
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 6
 - model: larpmanager.feature
   pk: 193
   fields:
@@ -1088,11 +1088,11 @@
     descr: ''
     slug: exe_appearance
     overall: true
+    module: 6
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 6
 - model: larpmanager.feature
   pk: 194
   fields:
@@ -1100,11 +1100,11 @@
     descr: ''
     slug: exe_accounting
     overall: true
+    module: 2
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 2
 - model: larpmanager.feature
   pk: 195
   fields:
@@ -1112,11 +1112,11 @@
     descr: ''
     slug: exe_features
     overall: true
+    module: 9
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 9
 - model: larpmanager.feature
   pk: 196
   fields:
@@ -1124,11 +1124,11 @@
     descr: ''
     slug: exe_config
     overall: true
+    module: 9
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 9
 - model: larpmanager.feature
   pk: 197
   fields:
@@ -1136,11 +1136,11 @@
     descr: ''
     slug: exe_roles
     overall: true
+    module: 9
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 9
 - model: larpmanager.feature
   pk: 198
   fields:
@@ -1148,11 +1148,11 @@
     descr: ''
     slug: exe_association
     overall: true
+    module: 9
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 9
 - model: larpmanager.feature
   pk: 199
   fields:
@@ -1160,11 +1160,11 @@
     descr: ''
     slug: orga_archive_email
     overall: false
+    module: 8
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 8
 - model: larpmanager.feature
   pk: 200
   fields:
@@ -1172,11 +1172,11 @@
     descr: ''
     slug: orga_send_mail
     overall: false
+    module: 8
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 8
 - model: larpmanager.feature
   pk: 201
   fields:
@@ -1184,11 +1184,11 @@
     descr: ''
     slug: orga_reload_cache
     overall: false
+    module: 7
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 7
 - model: larpmanager.feature
   pk: 202
   fields:
@@ -1196,11 +1196,11 @@
     descr: ''
     slug: orga_buttons
     overall: false
+    module: 6
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 6
 - model: larpmanager.feature
   pk: 203
   fields:
@@ -1208,11 +1208,11 @@
     descr: ''
     slug: orga_texts
     overall: false
+    module: 6
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 6
 - model: larpmanager.feature
   pk: 204
   fields:
@@ -1220,11 +1220,11 @@
     descr: ''
     slug: orga_cancellations
     overall: false
+    module: 4
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 4
 - model: larpmanager.feature
   pk: 205
   fields:
@@ -1232,11 +1232,11 @@
     descr: ''
     slug: orga_registration_form
     overall: false
+    module: 4
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 4
 - model: larpmanager.feature
   pk: 206
   fields:
@@ -1244,11 +1244,11 @@
     descr: ''
     slug: orga_registration_tickets
     overall: false
+    module: 4
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 4
 - model: larpmanager.feature
   pk: 207
   fields:
@@ -1256,11 +1256,11 @@
     descr: ''
     slug: orga_registrations
     overall: false
+    module: 4
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 4
 - model: larpmanager.feature
   pk: 208
   fields:
@@ -1268,11 +1268,11 @@
     descr: ''
     slug: orga_sensitive
     overall: false
+    module: 8
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 8
 - model: larpmanager.feature
   pk: 209
   fields:
@@ -1280,11 +1280,11 @@
     descr: ''
     slug: orga_accounting
     overall: false
+    module: 2
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 2
 - model: larpmanager.feature
   pk: 210
   fields:
@@ -1292,11 +1292,11 @@
     descr: ''
     slug: orga_appearance
     overall: false
+    module: 6
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 6
 - model: larpmanager.feature
   pk: 211
   fields:
@@ -1304,11 +1304,11 @@
     descr: ''
     slug: orga_features
     overall: false
+    module: 9
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 9
 - model: larpmanager.feature
   pk: 212
   fields:
@@ -1316,11 +1316,11 @@
     descr: ''
     slug: orga_config
     overall: false
+    module: 9
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 9
 - model: larpmanager.feature
   pk: 213
   fields:
@@ -1328,11 +1328,11 @@
     descr: ''
     slug: orga_roles
     overall: false
+    module: 9
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 9
 - model: larpmanager.feature
   pk: 214
   fields:
@@ -1340,11 +1340,11 @@
     descr: ''
     slug: orga_run
     overall: false
+    module: 9
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 9
 - model: larpmanager.feature
   pk: 215
   fields:
@@ -1352,8 +1352,8 @@
     descr: ''
     slug: orga_event
     overall: false
+    module: 9
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
-    module: 9

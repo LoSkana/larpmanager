@@ -38,7 +38,6 @@ from larpmanager.cache.character import get_character_cache_fields, get_characte
 from larpmanager.forms.character import (
     CharacterForm,
 )
-from larpmanager.forms.experience import SelectNewAbility
 from larpmanager.forms.member import (
     AvatarForm,
 )
@@ -374,7 +373,7 @@ def character_abilities(request, s, n, num):
 
     get_char_check(request, ctx, num, True)
 
-    ctx["list"] = get_available_ability_px(ctx["character"])
+    ctx["available"] = get_available_ability_px(ctx["character"])
 
     ctx["sheet_abilities"] = {}
     for el in ctx["character"].px_ability_list.all():
@@ -383,18 +382,36 @@ def character_abilities(request, s, n, num):
         ctx["sheet_abilities"][el.typ.name].append(el)
 
     if request.method == "POST":
-        form = SelectNewAbility(request.POST, request.FILES, ctx=ctx)
-        if form.is_valid():
-            sel = form.cleaned_data["sel"]
-            ctx["character"].px_ability_list.add(sel)
-            ctx["character"].save()
-            messages.success(request, _("Ability acquired!"))
-            return redirect(request.path_info)
-    else:
-        form = SelectNewAbility(ctx=ctx)
-    ctx["form"] = form
+        _save_character_abilities(ctx, request)
+        return redirect(request.path_info)
+
+    ctx["type_available"] = {
+        typ_id: data["name"] for typ_id, data in sorted(ctx["available"].items(), key=lambda x: x[1]["order"])
+    }
 
     return render(request, "larpmanager/event/character/abilities.html", ctx)
+
+
+def _save_character_abilities(ctx, request):
+    selected_type = request.POST.get("ability_type")
+    if not selected_type:
+        messages.error(request, _("Ability type missing"))
+        return
+
+    selected_type = int(selected_type)
+    selected_id = request.POST.get("ability_select")
+    if not selected_id:
+        messages.error(request, _("Ability missing"))
+        return
+
+    selected_id = int(selected_id)
+    if selected_type not in ctx["available"] or selected_id not in ctx["available"][selected_type]["list"]:
+        messages.error(request, _("Selezione non valida"))
+        return
+
+    ctx["character"].px_ability_list.add(selected_id)
+    ctx["character"].save()
+    messages.success(request, _("Ability acquired") + "!")
 
 
 @login_required

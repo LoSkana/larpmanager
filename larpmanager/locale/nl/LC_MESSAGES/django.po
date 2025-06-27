@@ -1891,9 +1891,6 @@ msgstr "Toegankelijkheid"
 msgid "Age selection"
 msgstr "Leeftijdselectie"
 
-msgid "Are you sure?"
-msgstr "Weet je het zeker?"
-
 msgid "Authorisation"
 msgstr "Autorisatie"
 
@@ -2231,6 +2228,9 @@ msgstr "aanpassingen"
 msgid "refund request"
 msgstr "verzoek om terugbetaling"
 
+msgid "Ability missing"
+msgstr "Vermogen ontbreekt"
+
 msgid "Bring a friend!"
 msgstr "Neem een vriend mee!"
 
@@ -2350,6 +2350,9 @@ msgstr "verwacht binnen"
 
 msgid "upcoming events"
 msgstr "Geplande evenementen"
+
+msgid "Ability acquired"
+msgstr "Verworven vermogen"
 
 msgid "Activate feature"
 msgstr "Functie activeren"
@@ -2531,9 +2534,6 @@ msgstr "hier downloaden"
 msgid "follow this link"
 msgstr "volg deze link"
 
-msgid "Ability acquired!"
-msgstr "Vaardigheid verworven!"
-
 msgid "Activation failed"
 msgstr "Activering mislukt"
 
@@ -2656,6 +2656,9 @@ msgstr "Onderdanig verzoek"
 
 msgid "Residence address"
 msgstr "Woonadres"
+
+msgid "Seleziona abilità"
+msgstr "Seleziona abilità"
 
 msgid "Short description"
 msgstr "Korte beschrijving"
@@ -2925,6 +2928,9 @@ msgstr "globale voorkeuren."
 msgid "--- NOT ASSIGNED ---"
 msgstr "--- NIET TOEGEWEZEN ---"
 
+msgid "Ability type missing"
+msgstr "Vermogenstype ontbreekt"
+
 msgid "Accounting - History"
 msgstr "Boekhouding - Historisch"
 
@@ -3024,6 +3030,9 @@ msgstr "Registratie aanvragen"
 
 msgid "Returning percentage"
 msgstr "Rendement percentage"
+
+msgid "Selezione non valida"
+msgstr "Selezione non valida"
 
 msgid "Sign up as a filler!"
 msgstr "Meld je aan als vuller!"
@@ -7774,6 +7783,14 @@ msgstr ""
 "De gebruiker heeft de wachtwoordreset aangevraagd, maar niet voltooid. Geef "
 "ze deze link: %(url)s"
 
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> questions to answer, access the users questions "
+"management panel"
+msgstr ""
+"Er zijn <b>%(number)s</b> vragen om te beantwoorden, ga naar het paneel voor"
+" het beheer van gebruikersvragen"
+
 msgid ""
 "This page shows the email addresses to which to send updates in order to get"
 " them to sign up"
@@ -8643,6 +8660,13 @@ msgstr ""
 " optioneel toe te voegen aan de uiteindelijke ticketprijs."
 
 msgid ""
+"The feature 'Diet' requires the diet field to be set in the user profile, "
+"access the organization profile panel"
+msgstr ""
+"Voor de functie 'Dieet' moet het veld 'Dieet' worden ingesteld in het "
+"gebruikersprofiel, ga naar het organisatieprofielpaneel"
+
+msgid ""
 "This page displays the application for membership in the organization. You "
 "can accept or reject the application"
 msgstr ""
@@ -8783,6 +8807,13 @@ msgid ""
 msgstr ""
 "Aantal maanden, vanaf het begin van het lidmaatschapsjaar, waarvoor de "
 "lidmaatschapsbijdrage gratis kan worden betaald"
+
+msgid ""
+"The feature 'Safety' requires the safety field to be set in the user "
+"profile, access the organization profile panel"
+msgstr ""
+"Voor de functie 'Veiligheid' moet het veiligheidsveld worden ingesteld in "
+"het gebruikersprofiel, ga naar het organisatieprofielpaneel"
 
 msgid ""
 "Adds a link to legal notices on every page, and provides a management panel "
@@ -9006,6 +9037,14 @@ msgstr ""
 "Hiermee kun je een set gebruikers opgeven die e-mails met "
 "betalingsbevestigingen ontvangen voor alle evenementen, in plaats van de "
 "organisatoren van elk evenement."
+
+#, python-format
+msgid ""
+"You have some tickets without a final installment (with 0 amount): %(list)s;"
+" access the fixed installments management panel"
+msgstr ""
+"Je hebt een aantal tickets zonder slottermijn (met 0 bedrag): %(list)s; ga "
+"naar het beheerpaneel voor vaste termijnen"
 
 msgid ""
 "Allows players to add an optional extra amount to their registration fee "
@@ -9584,6 +9623,16 @@ msgstr ""
 "Wil je een vriend of vriendin helpen om bij ons te spelen? Organiseer een "
 "inzameling: jij en iedereen die wil bijdragen kan een deel van het lidgeld "
 "doneren!"
+
+#, python-format
+msgid ""
+"You have some fixed installments with both date and days set, but those "
+"values cannot be set at the same time: %(list)s; access the fixed "
+"installments management panel"
+msgstr ""
+"Je hebt een aantal vaste termijnen met zowel datum als dagen ingesteld, maar"
+" deze waarden kunnen niet tegelijkertijd worden ingesteld: %(list)s; ga naar"
+" het beheerpaneel voor vaste termijnen"
 
 msgid ""
 "Primary: main grouping / affiliation for characters. Transversal: secondary "

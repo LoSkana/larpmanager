@@ -1891,9 +1891,6 @@ msgstr "Accessibilité"
 msgid "Age selection"
 msgstr "Sélection de l'âge"
 
-msgid "Are you sure?"
-msgstr "Êtes-vous sûr ?"
-
 msgid "Authorisation"
 msgstr "Autorisation"
 
@@ -2231,6 +2228,9 @@ msgstr "personnalisations"
 msgid "refund request"
 msgstr "demande de remboursement"
 
+msgid "Ability missing"
+msgstr "Capacité manquante"
+
 msgid "Bring a friend!"
 msgstr "Amenez un(e) ami(e) !"
 
@@ -2350,6 +2350,9 @@ msgstr "attendue dans les"
 
 msgid "upcoming events"
 msgstr "Événements programmés"
+
+msgid "Ability acquired"
+msgstr "Capacité acquise"
 
 msgid "Activate feature"
 msgstr "Activer la fonction"
@@ -2531,9 +2534,6 @@ msgstr "télécharger ici"
 msgid "follow this link"
 msgstr "suivre ce lien"
 
-msgid "Ability acquired!"
-msgstr "Compétence acquise !"
-
 msgid "Activation failed"
 msgstr "Échec de l'activation"
 
@@ -2656,6 +2656,9 @@ msgstr "Demande de soumission"
 
 msgid "Residence address"
 msgstr "Adresse résidentielle"
+
+msgid "Seleziona abilità"
+msgstr "Sélectionner les compétences"
 
 msgid "Short description"
 msgstr "Brève description"
@@ -2925,6 +2928,9 @@ msgstr "les préférences mondiales."
 msgid "--- NOT ASSIGNED ---"
 msgstr "--- NON ATTRIBUÉ ---"
 
+msgid "Ability type missing"
+msgstr "Type de capacité manquant"
+
 msgid "Accounting - History"
 msgstr "Comptabilité - Historique"
 
@@ -3024,6 +3030,9 @@ msgstr "Demande d'inscription"
 
 msgid "Returning percentage"
 msgstr "Pourcentage de retour"
+
+msgid "Selezione non valida"
+msgstr "Sélection non valide"
 
 msgid "Sign up as a filler!"
 msgstr "Inscrivez-vous comme remplisseur !"
@@ -7846,6 +7855,14 @@ msgstr ""
 "L'utilisateur a demandé la réinitialisation de son mot de passe, mais ne l'a"
 " pas terminée. Donnez-lui ce lien : %(url)s"
 
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> questions to answer, access the users questions "
+"management panel"
+msgstr ""
+"Il y a <b>%(number)s</b> questions auxquelles il faut répondre, accédez au "
+"panneau de gestion des questions des utilisateurs."
+
 msgid ""
 "This page shows the email addresses to which to send updates in order to get"
 " them to sign up"
@@ -8718,6 +8735,13 @@ msgstr ""
 "paiement, en l'ajoutant éventuellement au prix final du billet."
 
 msgid ""
+"The feature 'Diet' requires the diet field to be set in the user profile, "
+"access the organization profile panel"
+msgstr ""
+"La fonction \"Régime\" nécessite que le champ \"Régime\" soit défini dans le"
+" profil de l'utilisateur, accéder au panneau de profil de l'organisation."
+
+msgid ""
 "This page displays the application for membership in the organization. You "
 "can accept or reject the application"
 msgstr ""
@@ -8861,6 +8885,13 @@ msgid ""
 msgstr ""
 "Nombre de mois, à partir du début de l'année d'adhésion, pour lesquels la "
 "cotisation peut être payée gratuitement"
+
+msgid ""
+"The feature 'Safety' requires the safety field to be set in the user "
+"profile, access the organization profile panel"
+msgstr ""
+"La fonction \"Sécurité\" exige que le champ de sécurité soit défini dans le "
+"profil de l'utilisateur, accéder au panneau de profil de l'organisation."
 
 msgid ""
 "Adds a link to legal notices on every page, and provides a management panel "
@@ -9086,6 +9117,14 @@ msgstr ""
 "Permet de spécifier un ensemble d'utilisateurs qui recevront les courriels "
 "de confirmation de paiement pour tous les événements, au lieu des "
 "organisateurs de chaque événement."
+
+#, python-format
+msgid ""
+"You have some tickets without a final installment (with 0 amount): %(list)s;"
+" access the fixed installments management panel"
+msgstr ""
+"Vous avez des tickets sans versement final (avec un montant de 0) : %(list)s"
+" ; accéder au panneau de gestion des versements fixes"
 
 msgid ""
 "Allows players to add an optional extra amount to their registration fee "
@@ -9675,6 +9714,16 @@ msgstr ""
 "Vous voulez aider un ami à jouer avec nous ? Organisez une collecte : vous "
 "et tous ceux qui veulent contribuer peuvent faire don d'une partie des "
 "cotisations !"
+
+#, python-format
+msgid ""
+"You have some fixed installments with both date and days set, but those "
+"values cannot be set at the same time: %(list)s; access the fixed "
+"installments management panel"
+msgstr ""
+"Vous avez des versements fixes dont la date et les jours sont définis, mais "
+"ces valeurs ne peuvent pas être définies en même temps : %(list)s ; accéder "
+"au panneau de gestion des versements fixes"
 
 msgid ""
 "Primary: main grouping / affiliation for characters. Transversal: secondary "

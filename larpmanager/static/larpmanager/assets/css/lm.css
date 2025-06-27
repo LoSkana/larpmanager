@@ -1705,3 +1705,7 @@ a label:hover {
 .greenized {
     color: green;
 }
+
+.checkbox_single input[type="checkbox"] {
+    display: block;
+}

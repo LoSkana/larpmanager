@@ -1891,9 +1891,6 @@ msgstr "Tilgjengelighet"
 msgid "Age selection"
 msgstr "Valg av alder"
 
-msgid "Are you sure?"
-msgstr "Er du sikker?"
-
 msgid "Authorisation"
 msgstr "Autorisasjon"
 
@@ -2231,6 +2228,9 @@ msgstr "tilpasninger"
 msgid "refund request"
 msgstr "anmodning om refusjon"
 
+msgid "Ability missing"
+msgstr "Evne mangler"
+
 msgid "Bring a friend!"
 msgstr "Ta med en venn!"
 
@@ -2350,6 +2350,9 @@ msgstr "forventet innen"
 
 msgid "upcoming events"
 msgstr "Planlagte arrangementer"
+
+msgid "Ability acquired"
+msgstr "Ervervet evne"
 
 msgid "Activate feature"
 msgstr "Aktiver funksjonen"
@@ -2531,9 +2534,6 @@ msgstr "last den ned her"
 msgid "follow this link"
 msgstr "Følg denne lenken"
 
-msgid "Ability acquired!"
-msgstr "Ferdigheter tilegnet!"
-
 msgid "Activation failed"
 msgstr "Aktivering mislyktes"
 
@@ -2656,6 +2656,9 @@ msgstr "Underdanig forespørsel"
 
 msgid "Residence address"
 msgstr "Bostedsadresse"
+
+msgid "Seleziona abilità"
+msgstr "Seleziona abilità"
 
 msgid "Short description"
 msgstr "Kort beskrivelse"
@@ -2925,6 +2928,9 @@ msgstr "globale preferanser."
 msgid "--- NOT ASSIGNED ---"
 msgstr "--- IKKE TILDELT ---"
 
+msgid "Ability type missing"
+msgstr "Evnetype mangler"
+
 msgid "Accounting - History"
 msgstr "Regnskap - Historisk"
 
@@ -3024,6 +3030,9 @@ msgstr "Be om registrering"
 
 msgid "Returning percentage"
 msgstr "Avkastning i prosent"
+
+msgid "Selezione non valida"
+msgstr "Selezione non valida"
 
 msgid "Sign up as a filler!"
 msgstr "Registrer deg som utfyller!"
@@ -7631,6 +7640,14 @@ msgstr ""
 "Brukeren ba om tilbakestilling av passordet, men fullførte det ikke. Gi dem "
 "denne lenken: %(url)s"
 
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> questions to answer, access the users questions "
+"management panel"
+msgstr ""
+"Det er <b>%(number)s</b> spørsmål som skal besvares, få tilgang til "
+"brukerens spørsmålsadministrasjonspanel"
+
 msgid ""
 "This page shows the email addresses to which to send updates in order to get"
 " them to sign up"
@@ -8498,6 +8515,13 @@ msgstr ""
 "eventuelt legge den til den endelige billettprisen."
 
 msgid ""
+"The feature 'Diet' requires the diet field to be set in the user profile, "
+"access the organization profile panel"
+msgstr ""
+"Funksjonen \"Kosthold\" krever at kostholdsfeltet er angitt i "
+"brukerprofilen, få tilgang til organisasjonsprofilpanelet"
+
+msgid ""
 "This page displays the application for membership in the organization. You "
 "can accept or reject the application"
 msgstr ""
@@ -8637,6 +8661,13 @@ msgid ""
 msgstr ""
 "Antall måneder, regnet fra begynnelsen av medlemsåret, hvor "
 "medlemskontingenten kan betales gratis."
+
+msgid ""
+"The feature 'Safety' requires the safety field to be set in the user "
+"profile, access the organization profile panel"
+msgstr ""
+"Funksjonen \"Sikkerhet\" krever at sikkerhetsfeltet er angitt i "
+"brukerprofilen, få tilgang til organisasjonsprofilpanelet"
 
 msgid ""
 "Adds a link to legal notices on every page, and provides a management panel "
@@ -8856,6 +8887,14 @@ msgstr ""
 "Gjør det mulig å angi et sett med brukere som skal motta e-poster med "
 "betalingsbekreftelser for alle arrangementer, i stedet for arrangørene av "
 "hvert enkelt arrangement."
+
+#, python-format
+msgid ""
+"You have some tickets without a final installment (with 0 amount): %(list)s;"
+" access the fixed installments management panel"
+msgstr ""
+"Du har noen billetter uten en endelig avbetaling (med 0 beløp): %(list)s; få"
+" tilgang til administrasjonspanelet for faste avdrag"
 
 msgid ""
 "Allows players to add an optional extra amount to their registration fee "
@@ -9417,6 +9456,16 @@ msgid ""
 msgstr ""
 "Vil du hjelpe en venn av deg med å spille hos oss? Organiser en innsamling: "
 "du og alle som ønsker å bidra kan donere en del av medlemskontingenten!"
+
+#, python-format
+msgid ""
+"You have some fixed installments with both date and days set, but those "
+"values cannot be set at the same time: %(list)s; access the fixed "
+"installments management panel"
+msgstr ""
+"Du har noen faste avdrag med både dato og dager angitt, men disse verdiene "
+"kan ikke angis samtidig: %(list)s; få tilgang til administrasjonspanelet for"
+" faste avdrag"
 
 msgid ""
 "Primary: main grouping / affiliation for characters. Transversal: secondary "
