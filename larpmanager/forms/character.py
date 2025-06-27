@@ -132,6 +132,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
                         "the future."
                     ),
                 )
+                self.fields["propose"].custom_class = "checkbox_single"
 
     def _init_character(self):
         self._init_factions()

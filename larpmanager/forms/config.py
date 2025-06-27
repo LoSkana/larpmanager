@@ -28,6 +28,8 @@ class ConfigForm(MyForm):
 
         self.set_configs()
 
+        self.main_class = "checkbox_single"
+
         res = self._get_all_element_configs()
         for el in self.config_fields:
             self._add_custom_field(el, res)
