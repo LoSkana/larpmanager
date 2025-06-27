@@ -266,7 +266,7 @@
   pk: 37
   fields:
     name: Tickets
-    descr: 'Manage the registration tickets'
+    descr: Manage the registration tickets
     slug: orga_registration_tickets
     number: 21
     feature: 206
@@ -274,7 +274,7 @@
   pk: 38
   fields:
     name: Sections
-    descr: 'Manage the registration sections'
+    descr: Manage the registration sections
     slug: orga_registration_sections
     number: 31
     feature: 77
@@ -402,7 +402,7 @@
   pk: 57
   fields:
     name: Ability type
-    descr: 'Manage the type of character skills'
+    descr: Manage the type of character skills
     slug: orga_px_ability_types
     number: 41
     feature: 118
@@ -442,7 +442,7 @@
   pk: 63
   fields:
     name: Utility
-    descr: 'Upload and host files directly'
+    descr: Upload and host files directly
     slug: orga_utils
     number: 31
     feature: 43
@@ -466,7 +466,7 @@
   pk: 66
   fields:
     name: Workshops
-    descr: 'Manage quiz-style workshops'
+    descr: Manage quiz-style workshops
     slug: orga_workshops
     number: 51
     feature: 24
