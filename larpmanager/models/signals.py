@@ -482,6 +482,12 @@ def pre_save_association_set_skin_features(sender, instance, **kwargs):
     if not instance.nationality:
         instance.nationality = instance.skin.default_nation
 
+    if not instance.optional_fields:
+        instance.optional_fields = instance.skin.default_optional_fields
+
+    if not instance.mandatory_fields:
+        instance.mandatory_fields = instance.skin.default_mandatory_fields
+
 
 @receiver(post_save, sender=Association)
 def post_save_association_set_skin_features(sender, instance, created, **kwargs):

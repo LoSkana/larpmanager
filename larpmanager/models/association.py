@@ -55,6 +55,10 @@ class AssociationSkin(BaseModel):
 
     default_features = models.ManyToManyField(Feature, related_name="skins", blank=True)
 
+    default_mandatory_fields = models.CharField(max_length=1000, blank=True)
+
+    default_optional_fields = models.CharField(max_length=1000, blank=True)
+
     default_css = models.CharField(max_length=1000, blank=True)
 
     default_nation = models.CharField(

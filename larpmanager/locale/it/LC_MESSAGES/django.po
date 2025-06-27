@@ -2454,7 +2454,7 @@ msgid "Organisation fee"
 msgstr "Tassa organizzativa"
 
 msgid "Organisation tax"
-msgstr "Imposta sull'associazione"
+msgstr "Tassa associazione"
 
 msgid "Organization T&C"
 msgstr "T&C dell'associazione"
@@ -2823,7 +2823,7 @@ msgid "by the deadline of"
 msgstr "entro la scadenza di"
 
 msgid "Accounting tracking"
-msgstr "Monitoraggio della contabilità"
+msgstr "Storico contabilità"
 
 msgid "Activate account on"
 msgstr "Attiva account su"
@@ -2905,7 +2905,7 @@ msgid "Password of account"
 msgstr "Password dell'account"
 
 msgid "Player Larp History"
-msgstr "Giocatore Storia del Larp"
+msgstr "Storico Larp Giocatore"
 
 msgid "Player cancellation"
 msgstr "Cancellazione del giocatore"
@@ -3168,7 +3168,7 @@ msgid "To access the history"
 msgstr "Per accedere allo storico"
 
 msgid "Verification payments"
-msgstr "Pagamenti di verifica"
+msgstr "Verifica Pagamenti"
 
 msgid "You have already paid"
 msgstr "Hai già versato"

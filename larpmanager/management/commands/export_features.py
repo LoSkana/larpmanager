@@ -33,7 +33,19 @@ class Command(BaseCommand):
     # noinspection PyProtectedMember
     def handle(self, *args, **options):
         export_models = {
-            "skin": (AssociationSkin, ("id", "name", "domain", "default_features", "default_css", "default_nation")),
+            "skin": (
+                AssociationSkin,
+                (
+                    "id",
+                    "name",
+                    "domain",
+                    "default_features",
+                    "default_css",
+                    "default_nation",
+                    "default_mandatory_fields",
+                    "default_optional_fields",
+                ),
+            ),
             "module": (FeatureModule, ("id", "name", "descr", "order", "default")),
             "feature": (
                 Feature,
