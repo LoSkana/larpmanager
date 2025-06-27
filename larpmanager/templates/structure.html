@@ -12,8 +12,8 @@
             {% endblock maintitle %}
         </title>
         {% block meta %}
-            <meta name="keywords" content="{{ platform }}">
-            <meta name="description" content="{{ platform }}">
+            <meta name="keywords" content="{{ assoc.platform }}">
+            <meta name="description" content="{{ assoc.platform }}">
         {% endblock meta %}
         <meta property="og:url" content="{{ request.path }}">
         <meta property="og:type" content="website">
@@ -22,7 +22,7 @@
         {% if assoc.id == 0 %}
             <link rel="icon" type="image/png" href="{% static 'lm_fav_new.png' %}">
             <link rel="apple-touch-icon" href="{% static 'lm_fav_new.png' %}">
-            <meta property="og:site_name" content="{{ platform }}">
+            <meta property="og:site_name" content="{{ assoc.platform }}">
             {% if og_title %}<meta property="og:title" content="{{ og_title }}">{% endif %}
             {% if og_image %}
                 <meta property="og:image" content="{{ og_image }}">
