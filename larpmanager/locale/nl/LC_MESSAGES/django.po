@@ -9020,6 +9020,14 @@ msgstr ""
 "betalingsbevestigingen ontvangen voor alle evenementen, in plaats van de "
 "organisatoren van elk evenement."
 
+#, python-format
+msgid ""
+"You have some tickets without a final installment (with 0 amount): %(list)s;"
+" access the fixed installments management panel"
+msgstr ""
+"Je hebt een aantal tickets zonder slottermijn (met 0 bedrag): %(list)s; ga "
+"naar het beheerpaneel voor vaste termijnen"
+
 msgid ""
 "Allows players to add an optional extra amount to their registration fee "
 "(e.g. for donations or to help cover others' fees)."
@@ -9588,6 +9596,16 @@ msgstr ""
 "Wil je een vriend of vriendin helpen om bij ons te spelen? Organiseer een "
 "inzameling: jij en iedereen die wil bijdragen kan een deel van het lidgeld "
 "doneren!"
+
+#, python-format
+msgid ""
+"You have some fixed installments with both date and days set, but those "
+"values cannot be set at the same time: %(list)s; access the fixed "
+"installments management panel"
+msgstr ""
+"Je hebt een aantal vaste termijnen met zowel datum als dagen ingesteld, maar"
+" deze waarden kunnen niet tegelijkertijd worden ingesteld: %(list)s; ga naar"
+" het beheerpaneel voor vaste termijnen"
 
 msgid ""
 "Primary: main grouping / affiliation for characters. Transversal: secondary "

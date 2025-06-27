@@ -8893,6 +8893,14 @@ msgstr ""
 "betalningsbekräftelse för alla evenemang, i stället för varje evenemangs "
 "arrangörer."
 
+#, python-format
+msgid ""
+"You have some tickets without a final installment (with 0 amount): %(list)s;"
+" access the fixed installments management panel"
+msgstr ""
+"Du har några biljetter utan en slutlig avbetalning (med 0 list): %(list)s; "
+"gå till panelen för hantering av fasta avbetalningar"
+
 msgid ""
 "Allows players to add an optional extra amount to their registration fee "
 "(e.g. for donations or to help cover others' fees)."
@@ -9444,6 +9452,16 @@ msgid ""
 msgstr ""
 "Vill du hjälpa en vän till dig att spela hos oss? Organisera en insamling: "
 "du och alla som vill bidra kan skänka en del av medlemsavgiften!"
+
+#, python-format
+msgid ""
+"You have some fixed installments with both date and days set, but those "
+"values cannot be set at the same time: %(list)s; access the fixed "
+"installments management panel"
+msgstr ""
+"Du har några fasta avbetalningar med både datum och dagar inställda, men "
+"dessa värden kan inte ställas in samtidigt: %(list)s; gå till panelen för "
+"hantering av fasta avbetalningar"
 
 msgid ""
 "Primary: main grouping / affiliation for characters. Transversal: secondary "

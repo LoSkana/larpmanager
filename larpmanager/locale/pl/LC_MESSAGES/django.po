@@ -8887,6 +8887,14 @@ msgstr ""
 "potwierdzeniem płatności za wszystkie wydarzenia, zamiast organizatorów "
 "każdego wydarzenia."
 
+#, python-format
+msgid ""
+"You have some tickets without a final installment (with 0 amount): %(list)s;"
+" access the fixed installments management panel"
+msgstr ""
+"Masz kilka biletów bez raty końcowej (z kwotą 0): %(list)s; dostęp do panelu"
+" zarządzania ratami stałymi"
+
 msgid ""
 "Allows players to add an optional extra amount to their registration fee "
 "(e.g. for donations or to help cover others' fees)."
@@ -9445,6 +9453,16 @@ msgstr ""
 "Chcesz pomóc jednemu ze swoich znajomych zagrać z nami? Zorganizuj zbiórkę: "
 "Ty i każdy, kto chce pomóc, będzie mógł przekazać część swoich opłat "
 "rejestracyjnych!"
+
+#, python-format
+msgid ""
+"You have some fixed installments with both date and days set, but those "
+"values cannot be set at the same time: %(list)s; access the fixed "
+"installments management panel"
+msgstr ""
+"Masz kilka stałych rat z ustawioną zarówno datą, jak i dniami, ale wartości "
+"tych nie można ustawić w tym samym czasie: %(list)s; dostęp do panelu "
+"zarządzania stałymi ratami"
 
 msgid ""
 "Primary: main grouping / affiliation for characters. Transversal: secondary "
