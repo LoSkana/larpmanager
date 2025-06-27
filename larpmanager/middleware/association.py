@@ -60,10 +60,10 @@ class AssociationIdentifyMiddleware:
 
         assoc = get_cache_assoc(assoc_slug)
         if assoc:
-            if "skin_domain" in assoc and assoc["skin_domain"] != base_domain:
+            if "main_domain" in assoc and assoc["main_domain"] != base_domain:
                 if request.enviro == "prod":
                     slug = assoc["slug"]
-                    domain = assoc["skin_domain"]
+                    domain = assoc["main_domain"]
                     return redirect(f"https://{slug}.{domain}{request.get_full_path()}")
             return cls.load_assoc(request, assoc)
 

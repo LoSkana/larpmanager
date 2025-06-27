@@ -77,11 +77,11 @@ window.addEventListener('DOMContentLoaded', function() {
             // console.log(href);
 
             const domain = '{{ assoc.slug }}';
-            let url = new URL(href || window.location.pathname, 'https://larpmanager.com');
+            let url = new URL(href || window.location.pathname, 'https://{{ main_domain }}');
 
             // build the “next” target, appending any existing next-path if present
             const existingNext = url.searchParams.get('next');
-            const nextTarget = `https://larpmanager.com/after_login/${domain}`
+            const nextTarget = `https://{{ main_domain }}/after_login/${domain}`
                              + (existingNext ? `/${existingNext}` : '');
 
             url.searchParams.set('next', nextTarget);

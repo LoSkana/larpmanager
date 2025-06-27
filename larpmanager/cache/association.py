@@ -84,10 +84,10 @@ def init_cache_assoc(a_slug):
     _init_features(assoc, el)
 
     el["platform"] = "LarpManager"
-    el["skin_domain"] = "larpmanager.com"
+    el["main_domain"] = "larpmanager.com"
     if assoc.skin:
         el["skin_css"] = assoc.skin.default_css
-        el["skin_domain"] = assoc.skin.domain
+        el["main_domain"] = assoc.skin.domain
         el["platform"] = assoc.skin.name
 
     return el
