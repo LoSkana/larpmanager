@@ -7774,6 +7774,14 @@ msgstr ""
 "De gebruiker heeft de wachtwoordreset aangevraagd, maar niet voltooid. Geef "
 "ze deze link: %(url)s"
 
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> questions to answer, access the users questions "
+"management panel"
+msgstr ""
+"Er zijn <b>%(number)s</b> vragen om te beantwoorden, ga naar het paneel voor"
+" het beheer van gebruikersvragen"
+
 msgid ""
 "This page shows the email addresses to which to send updates in order to get"
 " them to sign up"

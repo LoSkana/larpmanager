@@ -27,7 +27,7 @@ from larpmanager.models.registration import RegistrationInstallment, Registratio
 from larpmanager.models.utils import get_payment_details
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.base import check_assoc_permission, def_user_ctx, get_index_assoc_permissions
-from larpmanager.utils.common import format_datetime
+from larpmanager.utils.common import _get_help_questions, format_datetime
 from larpmanager.utils.edit import set_suggestion
 from larpmanager.utils.event import check_event_permission, get_event_run, get_index_event_permissions
 from larpmanager.utils.registration import registration_available
@@ -115,7 +115,7 @@ def _exe_manage(request):
 
     _exe_accounting_actions(assoc, ctx, features)
 
-    _exe_users_actions(assoc, ctx, features)
+    _exe_users_actions(request, assoc, ctx, features)
 
     _compile(request, ctx)
 
@@ -195,7 +195,7 @@ def _exe_actions(ctx):
         )
 
 
-def _exe_users_actions(assoc, ctx, features):
+def _exe_users_actions(request, assoc, ctx, features):
     if "membership" in features:
         if not get_assoc_text(ctx["a_id"], AssocTextType.MEMBERSHIP):
             _add_action(
@@ -203,12 +203,23 @@ def _exe_users_actions(assoc, ctx, features):
                 _("The membership request text is missing, create it in the texts management panel"),
                 "exe_membership",
             )
+
     if "vote" in features:
         if not assoc.get_config("vote_candidates", ""):
             _add_action(
                 ctx,
                 _("There are no candidates for the voting, set them in the configuration panel"),
                 "exe_config",
+            )
+
+    if "help" in features:
+        _closed_q, open_q = _get_help_questions(ctx, request)
+        if open_q:
+            _add_action(
+                ctx,
+                _("There are <b>%(number)s</b> questions to answer, access the users questions management panel")
+                % {"number": len(open_q)},
+                "exe_questions",
             )
 
 
@@ -280,7 +291,7 @@ def _orga_manage(request, s, n):
     if has_event_permission(ctx, request, s, "orga_accounting"):
         ctx["dc"] = get_run_accounting(ctx["run"], ctx)
 
-    _orga_actions(ctx)
+    _orga_actions(request, ctx)
 
     _orga_suggestions(ctx)
 
@@ -289,7 +300,7 @@ def _orga_manage(request, s, n):
     return render(request, "larpmanager/manage/orga.html", ctx)
 
 
-def _orga_actions(ctx):
+def _orga_actions(request, ctx):
     char_proposed = ctx["event"].get_elements(Character).filter(status=CharacterStatus.PROPOSED).count()
     if char_proposed:
         _add_action(
@@ -320,6 +331,16 @@ def _orga_actions(ctx):
         )
 
     features = get_event_features(ctx["event"].id)
+
+    if "help" in features:
+        _closed_q, open_q = _get_help_questions(ctx, request)
+        if open_q:
+            _add_action(
+                ctx,
+                _("There are <b>%(number)s</b> questions to answer, access the users questions management panel")
+                % {"number": len(open_q)},
+                "exe_questions",
+            )
 
     _orga_reg_actions(ctx, features)
 
@@ -569,7 +590,7 @@ def _compile(request, ctx):
         if f"{section}_list" not in ctx:
             continue
 
-        perm_list.extend([slug for _, slug, _ in ctx[f"{section}_list"] if _has_permission(request, ctx, slug)])
+        perm_list.extend([slug for _n, slug, _u in ctx[f"{section}_list"] if _has_permission(request, ctx, slug)])
 
     for model in (EventPermission, AssocPermission):
         queryset = model.objects.filter(slug__in=perm_list).select_related("feature")

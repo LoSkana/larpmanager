@@ -7931,6 +7931,14 @@ msgstr ""
 "Der Benutzer hat das Zurücksetzen des Kennworts angefordert, es aber nicht "
 "abgeschlossen. Geben Sie ihm diesen Link: %(url)s"
 
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> questions to answer, access the users questions "
+"management panel"
+msgstr ""
+"Es gibt <b>%(number)s</b> Fragen, die Sie beantworten müssen. Rufen Sie das "
+"Panel zur Verwaltung der Benutzerfragen auf"
+
 msgid ""
 "This page shows the email addresses to which to send updates in order to get"
 " them to sign up"

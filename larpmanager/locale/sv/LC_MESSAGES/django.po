@@ -7654,6 +7654,14 @@ msgstr ""
 "Användaren begärde återställning av lösenordet, men slutförde den inte. Ge "
 "dem den här länken: %(url)s"
 
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> questions to answer, access the users questions "
+"management panel"
+msgstr ""
+"Det finns <b>%(number)s</b> frågor att besvara, gå till panelen för "
+"hantering av användarnas frågor"
+
 msgid ""
 "This page shows the email addresses to which to send updates in order to get"
 " them to sign up"

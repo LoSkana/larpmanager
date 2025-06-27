@@ -7846,6 +7846,14 @@ msgstr ""
 "L'utilisateur a demandé la réinitialisation de son mot de passe, mais ne l'a"
 " pas terminée. Donnez-lui ce lien : %(url)s"
 
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> questions to answer, access the users questions "
+"management panel"
+msgstr ""
+"Il y a <b>%(number)s</b> questions auxquelles il faut répondre, accédez au "
+"panneau de gestion des questions des utilisateurs."
+
 msgid ""
 "This page shows the email addresses to which to send updates in order to get"
 " them to sign up"
