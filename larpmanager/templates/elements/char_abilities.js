@@ -1,4 +1,6 @@
-            <script>
+{% load show_tags i18n %}
+
+<script>
 
 const abilities = {{ available | safe }};
 
@@ -32,4 +34,4 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 });
 
- </script>
+</script>

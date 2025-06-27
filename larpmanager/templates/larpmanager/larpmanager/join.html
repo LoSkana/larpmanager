@@ -16,16 +16,6 @@
     </form>
 {% endblock content %}
 {% block js %}
-    <script>
-window.addEventListener('DOMContentLoaded', function() {
-
-    $(function() {
-
-        $('#slug').on('input', function() {
-            let sl = $(this).val();
-            $('.slug_pre').text("Preview: https://" + sl + ".larpmanager.com");
-        });
-    });
-});
-    </script>
+    <script> const base_domain = ".larpmanager.com"; </script>
+    {% include "elements/assoc_preview.js" %}
 {% endblock js %}

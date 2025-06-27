@@ -4,9 +4,16 @@
     {% trans "Sharing" %}
 {% endblock title %}
 {% block content %}
-    <i>{% trans "Your data will be saved in the LarpManager system, which is used  by several LARP Organizations. We value the privacy of your data, and we  we will treat it with the utmost care. In particular, it will be made visible  only to the organizers of the events you decide to sign up. Under no any other circumstances they will be disclosed, shared, or processed." %}</i>
     <p>
-        {% trans "If you wish to confirm that you share your data in the LarpManager system with this organisation, click on the button below" %}:
+        <i>
+            {% trans "Your data will be saved in the system, which is used by several associations" %}.
+            {% trans "We value the privacy of your data and will treat it with the utmost care" %}.
+            {% trans "In particular, they will only be made visible to the organisers of the events you decide to register for" %}.
+            {% trans "They will not be communicated, shared or processed in any other way" %}.
+        </i>
+    </p>
+    <p>
+        {% trans "By clicking the button below, you confirm that you consent to the sharing of your personal data with this organization, in accordance with the GDPR and our Privacy Policy" %}:
     </p>
     <form action="{{ request.path }}"
           method="post"

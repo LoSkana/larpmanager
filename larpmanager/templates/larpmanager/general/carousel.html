@@ -2,7 +2,7 @@
 {% load i18n static %}
 {% block maintitle %}
     {{ assoc.name }}
-    {% if assoc.id > 0 %}- LarpManager{% endif %}
+    {% if assoc.id > 0 %}- {{ assoc.platform }}{% endif %}
 {% endblock maintitle %}
 {% block robots %}
     {% include "elements/robots_show.html" %}

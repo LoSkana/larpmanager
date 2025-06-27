@@ -1551,9 +1551,6 @@ msgstr "Galleria Pdf"
 msgid "Installment"
 msgstr "Rata"
 
-msgid "LarpManager"
-msgstr "LarpManager"
-
 msgid "Last change"
 msgstr "Ultima modifica"
 
@@ -3447,6 +3444,9 @@ msgstr "Link iscrizione segreto"
 msgid "Thanks for your support!"
 msgstr "Grazie per il tuo supporto!"
 
+msgid "The subdomain identifier"
+msgstr "L'identificatore del sottodominio"
+
 msgid "Try the sheet generation"
 msgstr "Prova la generazione schede"
 
@@ -3470,6 +3470,9 @@ msgstr "non visibili in questo momento"
 
 msgid "'player' (player's email)"
 msgstr "'player' (email del giocatore)"
+
+msgid "Benvenuto in LudoManager!"
+msgstr "Benvenuto in LudoManager!"
 
 msgid "Choose the payment method"
 msgstr "Scegli il mezzo di pagamento"
@@ -4063,6 +4066,9 @@ msgstr "Assegnazione achievement: %(badge)s"
 msgid "Ask the organisers to activate it"
 msgstr "Chiedete agli organizzatori di attivarlo"
 
+msgid "Complete name of the Organization"
+msgstr "Nome completo dell'organizzazione"
+
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Conferma l'iscrizione a %(event)s"
@@ -4418,9 +4424,6 @@ msgstr "Descrivi in breve cosa contiene la scatola"
 
 msgid "Check the validity of the fiscal code."
 msgstr "Verificare la validità del codice fiscale."
-
-msgid "Complete name of the LARP Organization"
-msgstr "Nome completo dell'Associazione"
 
 msgid "Event display and visual customization"
 msgstr "Visualizzazione degli eventi e personalizzazione visiva"
@@ -4918,9 +4921,6 @@ msgstr "Ora è possibile esaminare i membri di tutte le organizzazioni"
 
 msgid "Now you can select which tickets can be gifted"
 msgstr "Ora è possibile selezionare quali biglietti possono essere regalati"
-
-msgid "Now you can set the experience points settings"
-msgstr "Ora è possibile impostare i punti esperienza"
 
 msgid "Now you can set the external registration link"
 msgstr "Ora è possibile impostare il link di registrazione esterno"
@@ -5449,6 +5449,9 @@ msgstr ""
 
 msgid "Indicate how spending is allocated at the budget level."
 msgstr "Indicare come viene configurata la spesa a livello di bilancio"
+
+msgid "Now you can create abilities, starting from their types"
+msgstr "Ora è possibile creare le abilità, a partire dal loro tipo."
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Verifica gli utenti che non hanno rispettato le scadenze dell'evento."
@@ -6763,6 +6766,12 @@ msgstr ""
 "seguente feature"
 
 msgid ""
+"Your data will be saved in the system, which is used by several associations"
+msgstr ""
+"I vostri dati saranno salvati nel sistema, che viene utilizzato da diverse "
+"associazioni"
+
+msgid ""
 "Characters relating to place of birth do not match (check exact "
 "municipality)"
 msgstr ""
@@ -7564,13 +7573,6 @@ msgid ""
 msgstr ""
 "Questa pagina consente di impostare i campi che i giocatori possono "
 "compilare nel loro profilo utente."
-
-msgid ""
-"Your data will be saved in the LarpManager system, which is used by several "
-"associations"
-msgstr ""
-"I vostri dati saranno salvati nel sistema LarpManager, utilizzato da diverse"
-" associazioni."
 
 #, python-format
 msgid ""
@@ -9024,13 +9026,6 @@ msgstr ""
 "dell'aspetto"
 
 msgid ""
-"If you wish to confirm that you share your data in the LarpManager system "
-"with this organisation, click on the button below"
-msgstr ""
-"Se desideri confermare di convididere i tuoi dati nel sistema LarpManager "
-"con questa organizzazione, clicca sul bottone qui sotto"
-
-msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
 "all events, instead of each event's organizers."
 msgstr ""
@@ -9576,6 +9571,15 @@ msgstr ""
 "Non hai ancora versato la quota sociale: essa è necessaria per poter "
 "partecipare agli eventi, e per votare alla Assemblea associativa!"
 
+msgid ""
+"In order to participate in this organization's events, you must consent to "
+"the sharing of your personal data in accordance with the GDPR and our "
+"Privacy Policy"
+msgstr ""
+"Per partecipare agli eventi di questa organizzazione, è necessario "
+"acconsentire alla condivisione dei propri dati personali in conformità con "
+"il GDPR e la nostra Politica sulla privacy"
+
 #, python-format
 msgid ""
 "Hello! You have signed up for %(event)s, but have not yet completed your "
@@ -9640,6 +9644,15 @@ msgstr ""
 "Per confermare la tua iscrizione, è necessario che tu richieda di iscriverti"
 " come socio all'Associazione. La procedura ti condurrà automaticamente nei "
 "passaggi richiesti."
+
+msgid ""
+"By clicking the button below, you confirm that you consent to the sharing of"
+" your personal data with this organization, in accordance with the GDPR and "
+"our Privacy Policy"
+msgstr ""
+"Facendo clic sul pulsante qui sotto, confermate di acconsentire alla "
+"condivisione dei vostri dati personali con questa organizzazione, in "
+"conformità con il GDPR e la nostra Politica sulla privacy"
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "

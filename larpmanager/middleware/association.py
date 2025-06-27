@@ -39,12 +39,14 @@ class AssociationIdentifyMiddleware:
     @classmethod
     def get_assoc_info(cls, request):
         # get assoc slug from host
-        hst = request.get_host()
+        host = request.get_host().split(":")[0]
+        domain = host.split(".")[0]
+        base_domain = ".".join(host.split(".")[-2:])
 
         local = False
         if os.getenv("env") == "prod":
             request.enviro = "prod"
-        elif "xyz" in hst:
+        elif "xyz" in host:
             request.enviro = "staging"
         else:
             # dev environment
@@ -54,12 +56,15 @@ class AssociationIdentifyMiddleware:
             else:
                 request.enviro = "test"
 
-        domain = request.get_host().split(".")[0]
-
         assoc_slug = request.session.get("debug_slug", None) or getattr(conf_settings, "SLUG_ASSOC", None) or domain
 
         assoc = get_cache_assoc(assoc_slug)
         if assoc:
+            if "main_domain" in assoc and assoc["main_domain"] != base_domain:
+                if request.enviro == "prod":
+                    slug = assoc["slug"]
+                    domain = assoc["main_domain"]
+                    return redirect(f"https://{slug}.{domain}{request.get_full_path()}")
             return cls.load_assoc(request, assoc)
 
         if local or domain == "larpmanager":
@@ -73,6 +78,7 @@ class AssociationIdentifyMiddleware:
                 "logo": "https://larpmanager.com/static/lm_logo.png",
                 "main_mail": "info@larpmanager.com",
                 "favicon": "https://larpmanager.com/static/lm_fav.png",
+                "base_domain": base_domain,
             }
             return cls.load_assoc(request, assoc)
 

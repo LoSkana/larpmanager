@@ -1551,9 +1551,6 @@ msgstr "Galerie Pdf"
 msgid "Installment"
 msgstr "Splátky"
 
-msgid "LarpManager"
-msgstr "LarpManager"
-
 msgid "Last change"
 msgstr "Naposledy upraveno"
 
@@ -3447,6 +3444,9 @@ msgstr "Tajný registrační odkaz"
 msgid "Thanks for your support!"
 msgstr "Děkujeme vám za podporu!"
 
+msgid "The subdomain identifier"
+msgstr "Identifikátor subdomény"
+
 msgid "Try the sheet generation"
 msgstr "Vyzkoušejte generování karet"
 
@@ -3470,6 +3470,9 @@ msgstr "v tuto chvíli není viditelný"
 
 msgid "'player' (player's email)"
 msgstr "'player' (e-mail hráče)"
+
+msgid "Benvenuto in LudoManager!"
+msgstr "Benvenuto v LudoManageru!"
 
 msgid "Choose the payment method"
 msgstr "Zvolte způsob platby"
@@ -4063,6 +4066,9 @@ msgstr "Přiřazení úspěchu: %(badge)s"
 msgid "Ask the organisers to activate it"
 msgstr "Požádejte organizátory o aktivaci"
 
+msgid "Complete name of the Organization"
+msgstr "Úplný název organizace"
+
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Potvrzení vstupu do %(event)s"
@@ -4418,9 +4424,6 @@ msgstr "Stručně popište, co krabice obsahuje"
 
 msgid "Check the validity of the fiscal code."
 msgstr "Zkontrolujte platnost fiskálního kódu."
-
-msgid "Complete name of the LARP Organization"
-msgstr "Úplný název sdružení"
 
 msgid "Event display and visual customization"
 msgstr "Zobrazení události a vizuální přizpůsobení"
@@ -4917,9 +4920,6 @@ msgstr "Nyní si můžete prohlédnout všechny členy organizací"
 
 msgid "Now you can select which tickets can be gifted"
 msgstr "Nyní můžete vybrat, které vstupenky lze darovat."
-
-msgid "Now you can set the experience points settings"
-msgstr "Nyní můžete nastavit body zkušeností"
 
 msgid "Now you can set the external registration link"
 msgstr "Nyní můžete nastavit externí registrační odkaz"
@@ -5438,6 +5438,9 @@ msgstr "Co nejpřesněji uveďte, kde vás vyzvednout."
 
 msgid "Indicate how spending is allocated at the budget level."
 msgstr "Uveďte, jak jsou výdaje nastaveny na úrovni rozpočtu."
+
+msgid "Now you can create abilities, starting from their types"
+msgstr "Nyní můžete vytvářet schopnosti, počínaje jejich typy."
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Přehled uživatelů, kteří nedodržují termíny události."
@@ -6570,6 +6573,10 @@ msgstr ""
 "funkce"
 
 msgid ""
+"Your data will be saved in the system, which is used by several associations"
+msgstr "Vaše údaje budou uloženy v systému, který využívá několik sdružení."
+
+msgid ""
 "Characters relating to place of birth do not match (check exact "
 "municipality)"
 msgstr ""
@@ -7324,13 +7331,6 @@ msgid ""
 msgstr ""
 "Tato stránka umožňuje nastavit pole, která mohou hráči vyplnit ve svém "
 "uživatelském profilu."
-
-msgid ""
-"Your data will be saved in the LarpManager system, which is used by several "
-"associations"
-msgstr ""
-"Vaše data budou uložena v systému LarpManager, který používá několik "
-"asociací."
 
 #, python-format
 msgid ""
@@ -8764,13 +8764,6 @@ msgstr ""
 "obrázků, přejděte na stránku správy vzhledu."
 
 msgid ""
-"If you wish to confirm that you share your data in the LarpManager system "
-"with this organisation, click on the button below"
-msgstr ""
-"Pokud chcete potvrdit, že sdílíte své údaje v systému LarpManager s touto "
-"organizací, klikněte na tlačítko níže"
-
-msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
 "all events, instead of each event's organizers."
 msgstr ""
@@ -9284,6 +9277,15 @@ msgstr ""
 "Ještě jste nezaplatili členský příspěvek: je nutný pro účast na akcích a "
 "hlasování na valné hromadě!"
 
+msgid ""
+"In order to participate in this organization's events, you must consent to "
+"the sharing of your personal data in accordance with the GDPR and our "
+"Privacy Policy"
+msgstr ""
+"Chcete-li se účastnit akcí této organizace, musíte souhlasit se sdílením "
+"svých osobních údajů v souladu s GDPR a našimi zásadami ochrany osobních "
+"údajů."
+
 #, python-format
 msgid ""
 "Hello! You have signed up for %(event)s, but have not yet completed your "
@@ -9344,6 +9346,15 @@ msgid ""
 msgstr ""
 "Pro potvrzení členství je nutné požádat o registraci jako člen asociace. "
 "Postup vás automaticky provede požadovanými kroky."
+
+msgid ""
+"By clicking the button below, you confirm that you consent to the sharing of"
+" your personal data with this organization, in accordance with the GDPR and "
+"our Privacy Policy"
+msgstr ""
+"Kliknutím na tlačítko níže potvrzujete, že souhlasíte se sdílením svých "
+"osobních údajů s touto organizací v souladu s GDPR a našimi zásadami ochrany"
+" osobních údajů."
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "

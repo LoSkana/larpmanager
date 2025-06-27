@@ -389,8 +389,8 @@ class ProfileForm(BaseProfileForm):
                 required=True,
                 label=_("Authorisation"),
                 help_text=_(
-                    "In order to participate in the events of this association, you must authorise "
-                    "the sharing of your data."
+                    "In order to participate in this organization's events, you must consent to the sharing "
+                    "of your personal data in accordance with the GDPR and our Privacy Policy"
                 ),
             )
 
