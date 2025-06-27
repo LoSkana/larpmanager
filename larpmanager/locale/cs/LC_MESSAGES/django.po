@@ -1894,9 +1894,6 @@ msgstr "Přístupnost"
 msgid "Age selection"
 msgstr "Výběr věku"
 
-msgid "Are you sure?"
-msgstr "Jste si jistý?"
-
 msgid "Authorisation"
 msgstr "Autorizace"
 
@@ -2234,6 +2231,9 @@ msgstr "přizpůsobení"
 msgid "refund request"
 msgstr "žádost o proplacení"
 
+msgid "Ability missing"
+msgstr "Chybějící schopnost"
+
 msgid "Bring a friend!"
 msgstr "Přiveďte kamaráda!"
 
@@ -2353,6 +2353,9 @@ msgstr "očekává se v rámci"
 
 msgid "upcoming events"
 msgstr "Naplánované události"
+
+msgid "Ability acquired"
+msgstr "Získané schopnosti"
 
 msgid "Activate feature"
 msgstr "Aktivace funkce"
@@ -2534,9 +2537,6 @@ msgstr "stáhněte si ji zde"
 msgid "follow this link"
 msgstr "následujte tento odkaz"
 
-msgid "Ability acquired!"
-msgstr "Získaná dovednost!"
-
 msgid "Activation failed"
 msgstr "Aktivace se nezdařila"
 
@@ -2659,6 +2659,9 @@ msgstr "Submisivní žádost"
 
 msgid "Residence address"
 msgstr "Adresa bydliště"
+
+msgid "Seleziona abilità"
+msgstr "Seleziona abilità"
 
 msgid "Short description"
 msgstr "Krátký popis"
@@ -2928,6 +2931,9 @@ msgstr "globální preference."
 msgid "--- NOT ASSIGNED ---"
 msgstr "--- NEPŘIDĚLENO ---"
 
+msgid "Ability type missing"
+msgstr "Chybějící typ schopnosti"
+
 msgid "Accounting - History"
 msgstr "Účetnictví - historické"
 
@@ -3027,6 +3033,9 @@ msgstr "Žádost o registraci"
 
 msgid "Returning percentage"
 msgstr "Procento návratnosti"
+
+msgid "Selezione non valida"
+msgstr "Selezione non valida"
 
 msgid "Sign up as a filler!"
 msgstr "Zaregistrujte se jako výplň!"
@@ -4909,6 +4918,9 @@ msgstr "Nyní si můžete prohlédnout všechny členy organizací"
 msgid "Now you can select which tickets can be gifted"
 msgstr "Nyní můžete vybrat, které vstupenky lze darovat."
 
+msgid "Now you can set the experience points settings"
+msgstr "Nyní můžete nastavit body zkušeností"
+
 msgid "Now you can set the external registration link"
 msgstr "Nyní můžete nastavit externí registrační odkaz"
 
@@ -5426,9 +5438,6 @@ msgstr "Co nejpřesněji uveďte, kde vás vyzvednout."
 
 msgid "Indicate how spending is allocated at the budget level."
 msgstr "Uveďte, jak jsou výdaje nastaveny na úrovni rozpočtu."
-
-msgid "Now you can create abilities, starting from their types"
-msgstr "Nyní můžete vytvářet schopnosti, počínaje jejich typy."
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Přehled uživatelů, kteří nedodržují termíny události."

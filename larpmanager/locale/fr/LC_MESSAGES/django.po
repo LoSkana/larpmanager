@@ -1894,9 +1894,6 @@ msgstr "Accessibilité"
 msgid "Age selection"
 msgstr "Sélection de l'âge"
 
-msgid "Are you sure?"
-msgstr "Êtes-vous sûr ?"
-
 msgid "Authorisation"
 msgstr "Autorisation"
 
@@ -2234,6 +2231,9 @@ msgstr "personnalisations"
 msgid "refund request"
 msgstr "demande de remboursement"
 
+msgid "Ability missing"
+msgstr "Capacité manquante"
+
 msgid "Bring a friend!"
 msgstr "Amenez un(e) ami(e) !"
 
@@ -2353,6 +2353,9 @@ msgstr "attendue dans les"
 
 msgid "upcoming events"
 msgstr "Événements programmés"
+
+msgid "Ability acquired"
+msgstr "Capacité acquise"
 
 msgid "Activate feature"
 msgstr "Activer la fonction"
@@ -2534,9 +2537,6 @@ msgstr "télécharger ici"
 msgid "follow this link"
 msgstr "suivre ce lien"
 
-msgid "Ability acquired!"
-msgstr "Compétence acquise !"
-
 msgid "Activation failed"
 msgstr "Échec de l'activation"
 
@@ -2659,6 +2659,9 @@ msgstr "Demande de soumission"
 
 msgid "Residence address"
 msgstr "Adresse résidentielle"
+
+msgid "Seleziona abilità"
+msgstr "Sélectionner les compétences"
 
 msgid "Short description"
 msgstr "Brève description"
@@ -2928,6 +2931,9 @@ msgstr "les préférences mondiales."
 msgid "--- NOT ASSIGNED ---"
 msgstr "--- NON ATTRIBUÉ ---"
 
+msgid "Ability type missing"
+msgstr "Type de capacité manquant"
+
 msgid "Accounting - History"
 msgstr "Comptabilité - Historique"
 
@@ -3027,6 +3033,9 @@ msgstr "Demande d'inscription"
 
 msgid "Returning percentage"
 msgstr "Pourcentage de retour"
+
+msgid "Selezione non valida"
+msgstr "Sélection non valide"
 
 msgid "Sign up as a filler!"
 msgstr "Inscrivez-vous comme remplisseur !"
@@ -4919,6 +4928,9 @@ msgid "Now you can select which tickets can be gifted"
 msgstr ""
 "Vous pouvez maintenant sélectionner les billets qui peuvent être offerts."
 
+msgid "Now you can set the experience points settings"
+msgstr "Vous pouvez maintenant définir les paramètres des points d'expérience"
+
 msgid "Now you can set the external registration link"
 msgstr "Vous pouvez maintenant définir le lien d'enregistrement externe"
 
@@ -5465,10 +5477,6 @@ msgstr ""
 
 msgid "Indicate how spending is allocated at the budget level."
 msgstr "Indiquer comment les dépenses sont configurées au niveau du budget"
-
-msgid "Now you can create abilities, starting from their types"
-msgstr ""
-"Vous pouvez maintenant créer des capacités, en commençant par leur type"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr ""
