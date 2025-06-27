@@ -98,6 +98,13 @@ window.addEventListener('DOMContentLoaded', function() {
             {% endif %}
         {% endfor %}
 
+        {% if form.add_char_finder %}
+            {% for field in form.add_char_finder %}
+                setUpHighlight('{{ field }}');
+            {% endfor %}
+        {% endif %}
+
+
     });
 
 });
