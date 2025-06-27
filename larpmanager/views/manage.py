@@ -291,7 +291,7 @@ def _orga_manage(request, s, n):
     if has_event_permission(ctx, request, s, "orga_accounting"):
         ctx["dc"] = get_run_accounting(ctx["run"], ctx)
 
-    _orga_actions(request, ctx)
+    _orga_actions(request, ctx, assoc)
 
     _orga_suggestions(ctx)
 
@@ -300,7 +300,7 @@ def _orga_manage(request, s, n):
     return render(request, "larpmanager/manage/orga.html", ctx)
 
 
-def _orga_actions(request, ctx):
+def _orga_actions(request, ctx, assoc):
     char_proposed = ctx["event"].get_elements(Character).filter(status=CharacterStatus.PROPOSED).count()
     if char_proposed:
         _add_action(
@@ -332,6 +332,18 @@ def _orga_actions(request, ctx):
 
     features = get_event_features(ctx["event"].id)
 
+    _orga_user_actions(ctx, features, request, assoc)
+
+    _orga_reg_acc_actions(ctx, features)
+
+    _orga_reg_actions(ctx, features)
+
+    _orga_px_actions(ctx, features)
+
+    _orga_casting_actions(ctx, features)
+
+
+def _orga_user_actions(ctx, features, request, assoc):
     if "help" in features:
         _closed_q, open_q = _get_help_questions(ctx, request)
         if open_q:
@@ -342,13 +354,27 @@ def _orga_actions(request, ctx):
                 "exe_questions",
             )
 
-    _orga_reg_acc_actions(ctx, features)
+    fields = assoc.mandatory_fields + ", " + assoc.optional_fields
 
-    _orga_reg_actions(ctx, features)
+    if "safety" in features:
+        if "safety" not in fields:
+            _add_action(
+                ctx,
+                _(
+                    "The feature 'Safety' requires the safety field to be set in the user profile, access the organization profile panel"
+                ),
+                "exe_profile",
+            )
 
-    _orga_px_actions(ctx, features)
-
-    _orga_casting_actions(ctx, features)
+    if "diet" in features:
+        if "diet" not in fields:
+            _add_action(
+                ctx,
+                _(
+                    "The feature 'Diet' requires the diet field to be set in the user profile, access the organization profile panel"
+                ),
+                "exe_profile",
+            )
 
 
 def _orga_casting_actions(ctx, features):
