@@ -24,7 +24,7 @@ import random
 import re
 import string
 import unicodedata
-from datetime import datetime
+from datetime import datetime, timedelta
 from decimal import ROUND_DOWN, Decimal
 from pathlib import Path
 
@@ -33,6 +33,7 @@ import pytz
 from background_task.models import Task
 from diff_match_patch import diff_match_patch
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db.models import Max, Subquery
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.deconstruct import deconstructible
@@ -48,6 +49,7 @@ from larpmanager.models.member import Badge, Member
 from larpmanager.models.miscellanea import (
     Album,
     Contact,
+    HelpQuestion,
     PlayerRelationship,
     WorkshopModule,
     WorkshopOption,
@@ -642,3 +644,28 @@ def _search_char_reg(ctx, char, js):
 def clear_messages(request):
     if hasattr(request, "_messages"):
         request._messages._queued_messages.clear()
+
+
+def _get_help_questions(ctx, request):
+    base_qs = HelpQuestion.objects.filter(assoc_id=ctx["a_id"])
+    if "run" in ctx:
+        base_qs = base_qs.filter(run=ctx["run"])
+
+    if request.method != "POST":
+        base_qs = base_qs.filter(created__gte=datetime.now() - timedelta(days=90))
+
+    # last created question for each member_id
+    latest = base_qs.values("member_id").annotate(latest_created=Max("created")).values("latest_created")
+
+    # last message for each member_id
+    que = base_qs.filter(created__in=Subquery(latest)).select_related("member", "run", "run__event")
+
+    open_q = []
+    closed_q = []
+    for cq in que:
+        if cq.is_user and not cq.closed:
+            open_q.append(cq)
+        else:
+            closed_q.append(cq)
+
+    return closed_q, open_q

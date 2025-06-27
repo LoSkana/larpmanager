@@ -20,7 +20,7 @@
 
 import csv
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -70,6 +70,7 @@ from larpmanager.models.registration import (
 )
 from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.common import (
+    _get_help_questions,
     get_member,
     normalize_string,
 )
@@ -467,32 +468,15 @@ def exe_archive_email(request):
 def exe_questions(request):
     ctx = check_assoc_permission(request, "exe_questions")
 
-    que = HelpQuestion.objects.filter(assoc_id=ctx["a_id"])
-    que = que.select_related("member", "run", "run__event")
-
-    if not request.method == "POST":
-        limit = datetime.now() - timedelta(days=3 * 30)
-        que = que.filter(created__gte=limit)
-
-    last_q = {}
-    for cq in que.order_by("created"):
-        last_q[cq.member_id] = (cq, cq.is_user, cq.closed)
-
-    ctx["open"] = []
-    ctx["closed"] = []
-    for _cid, value in last_q.items():
-        (cq, is_user, closed) = value
-        if is_user and not closed:
-            ctx["open"].append(cq)
-        else:
-            ctx["closed"].append(cq)
+    closed_q, open_q = _get_help_questions(ctx, request)
 
     if request.method == "POST":
-        ctx["open"].extend(ctx["closed"])
-        ctx["closed"] = []
+        open_q.extend(closed_q)
+        closed_q = []
 
-    ctx["open"].sort(key=lambda x: x.created)
-    ctx["closed"].sort(key=lambda x: x.created, reverse=True)
+    ctx["open"] = sorted(open_q, key=lambda x: x.created)
+    ctx["closed"] = sorted(closed_q, key=lambda x: x.created, reverse=True)
+
     return render(request, "larpmanager/exe/users/questions.html", ctx)
 
 

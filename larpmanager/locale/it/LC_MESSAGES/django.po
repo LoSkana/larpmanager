@@ -7771,6 +7771,14 @@ msgstr ""
 "L'utente ha richiesto la reimpostazione della password, ma non l'ha "
 "completata. Fornire questo link: %(url)s"
 
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> questions to answer, access the users questions "
+"management panel"
+msgstr ""
+"Ci sono <b>%(number)s</b> domande a cui rispondere, accedere al pannello di "
+"gestione delle domande degli utenti"
+
 msgid ""
 "This page shows the email addresses to which to send updates in order to get"
 " them to sign up"

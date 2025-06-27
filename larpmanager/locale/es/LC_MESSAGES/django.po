@@ -7726,6 +7726,14 @@ msgstr ""
 "El usuario solicitó el restablecimiento de contraseña, pero no lo completó. "
 "Dale este enlace: %(url)s"
 
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> questions to answer, access the users questions "
+"management panel"
+msgstr ""
+"Hay <b>%(number)s</b> preguntas que responder, accede al panel de gestión de"
+" preguntas de los usuarios"
+
 msgid ""
 "This page shows the email addresses to which to send updates in order to get"
 " them to sign up"

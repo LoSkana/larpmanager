@@ -7630,6 +7630,14 @@ msgstr ""
 "Brukeren ba om tilbakestilling av passordet, men fullførte det ikke. Gi dem "
 "denne lenken: %(url)s"
 
+#, python-format
+msgid ""
+"There are <b>%(number)s</b> questions to answer, access the users questions "
+"management panel"
+msgstr ""
+"Det er <b>%(number)s</b> spørsmål som skal besvares, få tilgang til "
+"brukerens spørsmålsadministrasjonspanel"
+
 msgid ""
 "This page shows the email addresses to which to send updates in order to get"
 " them to sign up"
