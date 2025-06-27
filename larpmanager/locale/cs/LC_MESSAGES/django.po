@@ -8754,6 +8754,14 @@ msgstr ""
 "Umožňuje zadat sadu uživatelů, kterým budou zasílány e-maily s potvrzením o "
 "platbě pro všechny události namísto organizátorů jednotlivých událostí."
 
+#, python-format
+msgid ""
+"You have some tickets without a final installment (with 0 amount): %(list)s;"
+" access the fixed installments management panel"
+msgstr ""
+"Některé tipy jsou bez poslední splátky (s částkou 0): %(list)s; přístup do "
+"panelu pro správu pevných splátek"
+
 msgid ""
 "Allows players to add an optional extra amount to their registration fee "
 "(e.g. for donations or to help cover others' fees)."
@@ -9287,6 +9295,15 @@ msgid ""
 msgstr ""
 "Chcete pomoci svému kamarádovi hrát s námi? Uspořádejte sbírku: vy a každý, "
 "kdo chce přispět, můžete věnovat část členských příspěvků!"
+
+#, python-format
+msgid ""
+"You have some fixed installments with both date and days set, but those "
+"values cannot be set at the same time: %(list)s; access the fixed "
+"installments management panel"
+msgstr ""
+"U některých pevných splátek máte nastaveno datum i dny, ale tyto hodnoty "
+"nelze nastavit současně: %(list)s; přístup na panel správy pevných splátek."
 
 msgid ""
 "Primary: main grouping / affiliation for characters. Transversal: secondary "

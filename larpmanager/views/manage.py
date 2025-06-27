@@ -23,7 +23,7 @@ from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.experience import AbilityTypePx, DeliveryPx
 from larpmanager.models.member import Membership, MembershipStatus
-from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota
+from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota, RegistrationTicket
 from larpmanager.models.utils import get_payment_details
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.base import check_assoc_permission, def_user_ctx, get_index_assoc_permissions
@@ -342,6 +342,8 @@ def _orga_actions(request, ctx):
                 "exe_questions",
             )
 
+    _orga_reg_acc_actions(ctx, features)
+
     _orga_reg_actions(ctx, features)
 
     _orga_px_actions(ctx, features)
@@ -428,7 +430,7 @@ def _orga_px_actions(ctx, features):
         )
 
 
-def _orga_reg_actions(ctx, features):
+def _orga_reg_acc_actions(ctx, features):
     if "reg_installments" in features and "reg_quotas" in features:
         _add_action(
             ctx,
@@ -438,6 +440,7 @@ def _orga_reg_actions(ctx, features):
             ),
             "orga_features",
         )
+
     if "reg_quotas" in features and not ctx["event"].get_elements(RegistrationQuota).count():
         _add_action(
             ctx,
@@ -447,16 +450,48 @@ def _orga_reg_actions(ctx, features):
             ),
             "orga_registration_quotas",
         )
-    if "reg_installments" in features and not ctx["event"].get_elements(RegistrationInstallment).count():
-        _add_action(
-            ctx,
-            _(
-                "You have activated fixed installments, but none have been yet created; "
-                "access the fixed installments management panel"
-            ),
-            "orga_registration_installments",
-        )
 
+    if "reg_installments" in features:
+        if not ctx["event"].get_elements(RegistrationInstallment).count():
+            _add_action(
+                ctx,
+                _(
+                    "You have activated fixed installments, but none have been yet created; "
+                    "access the fixed installments management panel"
+                ),
+                "orga_registration_installments",
+            )
+        else:
+            both_set = (
+                ctx["event"]
+                .get_elements(RegistrationInstallment)
+                .filter(date_deadline__isnull=False, days_deadline__isnull=False)
+            )
+            if both_set:
+                _add_action(
+                    ctx,
+                    _(
+                        "You have some fixed installments with both date and days set, but those values cannot be set at the same time: %(list)s; "
+                        "access the fixed installments management panel"
+                    )
+                    % {"list": ", ".join([obj.name for obj in both_set])},
+                    "orga_registration_installments",
+                )
+
+            missing_final = ctx["event"].get_elements(RegistrationTicket).exclude(installments__amount=0)
+            if missing_final:
+                _add_action(
+                    ctx,
+                    _(
+                        "You have some tickets without a final installment (with 0 amount): %(list)s; "
+                        "access the fixed installments management panel"
+                    )
+                    % {"list": ", ".join([obj.name for obj in missing_final])},
+                    "orga_registration_installments",
+                )
+
+
+def _orga_reg_actions(ctx, features):
     if "registration_open" in features and not ctx["run"].registration_open:
         _add_action(
             ctx,

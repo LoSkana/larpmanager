@@ -8260,6 +8260,19 @@ msgid ""
 "access the fixed installments management panel"
 msgstr ""
 
+#, python-format
+msgid ""
+"You have some fixed installments with both date and days set, but those "
+"values cannot be set at the same time: %(list)s; access the fixed "
+"installments management panel"
+msgstr ""
+
+#, python-format
+msgid ""
+"You have some tickets without a final installment (with 0 amount): %(list)s; "
+"access the fixed installments management panel"
+msgstr ""
+
 msgid ""
 "You have activated registration opening date, but no value has been set; "
 "access the run management panel"
