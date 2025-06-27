@@ -8205,6 +8205,16 @@ msgid ""
 "the character management panel"
 msgstr ""
 
+msgid ""
+"The feature 'Safety' requires the safety field to be set in the user "
+"profile, access the organization profile panel"
+msgstr ""
+
+msgid ""
+"The feature 'Diet' requires the diet field to be set in the user profile, "
+"access the organization profile panel"
+msgstr ""
+
 msgid "Set the casting options in the configuration panel"
 msgstr ""
 
