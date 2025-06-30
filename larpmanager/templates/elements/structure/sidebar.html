@@ -59,9 +59,9 @@
                     </div>
                 {% endfor %}
             {% endif %}
-            <h2>Larpmanager</h2>
+            <h2>{{ assoc.platform }}</h2>
             <p>
-                <a href="https://discord.gg/C4KuyQbuft">Discord</a>
+                {% if assoc.skin_id == 1 %}<a href="https://discord.gg/C4KuyQbuft">Discord</a>{% endif %}
                 <a href="{% url 'tutorials' %}">Tutorials</a>
             </p>
             {% if role_names %}

@@ -83,12 +83,16 @@ def init_cache_assoc(a_slug):
 
     _init_features(assoc, el)
 
-    if assoc.skin:
-        el["skin_css"] = assoc.skin.default_css
-        el["main_domain"] = assoc.skin.domain
-        el["platform"] = assoc.skin.name
+    _init_skin(assoc, el)
 
     return el
+
+
+def _init_skin(assoc, el):
+    el["skin_css"] = assoc.skin.default_css
+    el["main_domain"] = assoc.skin.domain
+    el["platform"] = assoc.skin.name
+    el["skin_id"] = assoc.skin.id
 
 
 def _init_features(assoc, el):

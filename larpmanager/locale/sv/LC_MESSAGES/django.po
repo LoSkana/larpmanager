@@ -3043,6 +3043,10 @@ msgstr "Villkor och anvisningar"
 msgid "Terms and conditions"
 msgstr "Villkor och bestämmelser"
 
+#, python-format
+msgid "Welcome to %(name)s!"
+msgstr "Välkommen till %(name)s!"
+
 msgid "Yes, keep me posted!"
 msgstr "Ja, håll mig uppdaterad!"
 

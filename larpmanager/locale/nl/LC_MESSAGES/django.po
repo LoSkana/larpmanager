@@ -3043,6 +3043,10 @@ msgstr "Algemene voorwaarden"
 msgid "Terms and conditions"
 msgstr "Algemene voorwaarden"
 
+#, python-format
+msgid "Welcome to %(name)s!"
+msgstr "Welkom bij %(name)s!"
+
 msgid "Yes, keep me posted!"
 msgstr "Ja, hou me op de hoogte!"
 

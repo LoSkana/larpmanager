@@ -8080,6 +8080,10 @@ msgstr ""
 msgid "Your request has been sent, we will reply as soon as possible!"
 msgstr ""
 
+#, python-format
+msgid "Welcome to %(name)s!"
+msgstr ""
+
 msgid "New organization created"
 msgstr ""
 

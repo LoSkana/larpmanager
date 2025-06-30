@@ -3043,6 +3043,10 @@ msgstr "Terms and Conditions"
 msgid "Terms and conditions"
 msgstr "Termini e condizioni"
 
+#, python-format
+msgid "Welcome to %(name)s!"
+msgstr "Benvenuti a %(name)s!"
+
 msgid "Yes, keep me posted!"
 msgstr "Sì, tenetemi aggiornato!"
 

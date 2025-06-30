@@ -103,7 +103,7 @@
                   href="{% static 'larpmanager/assets/css/noscript.css' %}" />
         </noscript>
     </head>
-    <body class="is-preload {{">
+    <body class="is-preload" id="{{ assoc.name | slugify }}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         {% include "elements/structure/sidebar.html" %}
         <!-- Page Wrapper -->

@@ -45,7 +45,7 @@ from larpmanager.forms.utils import RedirectForm
 from larpmanager.mail.base import join_email
 from larpmanager.mail.remind import remember_membership, remember_membership_fee, remember_pay, remember_profile
 from larpmanager.models.access import AssocRole, EventRole
-from larpmanager.models.association import Association, AssociationSkin, AssocTextType
+from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
 from larpmanager.models.larpmanager import (
@@ -333,9 +333,10 @@ def join(request):
     assoc = _join_form(ctx, request)
     if assoc:
         # send message
-        messages.success(request, _("Welcome to LarpManager!"))
+        messages.success(request, _("Welcome to %(name)s!") % {"name": request.assoc["name"]})
         # send email
-        join_email(assoc)
+        if request.assoc["skin_id"] == 1:
+            join_email(assoc)
         # redirect
         return go_redirect(request, assoc.slug, "manage")
 
@@ -346,12 +347,10 @@ def _join_form(ctx, request):
     if request.method == "POST":
         form = FirstAssociationForm(request.POST, request.FILES)
         if form.is_valid():
-            assoc = form.save()
-
             # set skin
-            if "assoc_skin" in ctx:
-                assoc.skin = AssociationSkin.objects.get(name__iexact=ctx["assoc_skin"])
-                assoc.save()
+            assoc = form.save(commit=False)
+            assoc.skin_id = request.assoc["skin_id"]
+            assoc.save()
 
             # Add member to admins
             (ar, created) = AssocRole.objects.get_or_create(assoc=assoc, number=1, name="Admin")

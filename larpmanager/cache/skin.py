@@ -63,6 +63,7 @@ def init_cache_skin(domain):
         "main_mail": "info@larpmanager.com",
         "favicon": "https://larpmanager.com/static/lm_fav.png",
         "base_domain": domain,
+        "skin_id": skin.id,
     }
 
 
