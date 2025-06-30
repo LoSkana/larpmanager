@@ -38,9 +38,7 @@ from django_ratelimit.decorators import ratelimit
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.cache.larpmanager import get_cache_lm_home
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
-from larpmanager.forms.association import (
-    FirstAssociationForm,
-)
+from larpmanager.forms.association import FirstAssociationForm
 from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, LarpManagerTicket
 from larpmanager.forms.miscellanea import SendMailForm
 from larpmanager.forms.utils import RedirectForm
@@ -49,9 +47,7 @@ from larpmanager.mail.remind import remember_membership, remember_membership_fee
 from larpmanager.models.access import AssocRole, EventRole
 from larpmanager.models.association import Association, AssociationSkin, AssocTextType
 from larpmanager.models.base import Feature
-from larpmanager.models.event import (
-    Run,
-)
+from larpmanager.models.event import Run
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
     LarpManagerDiscover,

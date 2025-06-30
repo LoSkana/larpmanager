@@ -44,18 +44,18 @@ class AssociationIdentifyMiddleware:
         domain = host.split(".")[0]
         base_domain = ".".join(host.split(".")[-2:])
 
-        local = False
         if os.getenv("env") == "prod":
             request.enviro = "prod"
         elif "xyz" in host:
             request.enviro = "staging"
         else:
             # dev environment
-            local = True
             if not os.getenv("PYTEST_CURRENT_TEST"):
                 request.enviro = "dev"
             else:
                 request.enviro = "test"
+
+            base_domain = "ludomanager.it"
 
         assoc_slug = request.session.get("debug_slug", None) or getattr(conf_settings, "SLUG_ASSOC", None) or domain
 
@@ -68,7 +68,7 @@ class AssociationIdentifyMiddleware:
                     return redirect(f"https://{slug}.{domain}{request.get_full_path()}")
             return cls.load_assoc(request, assoc)
 
-        skin = get_cache_skin(base_domain, local)
+        skin = get_cache_skin(base_domain)
         if skin:
             return cls.load_assoc(request, skin)
 
