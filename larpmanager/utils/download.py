@@ -24,7 +24,9 @@ from bs4 import BeautifulSoup
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.registration import round_to_nearest_cent
 from larpmanager.cache.character import get_event_cache_all
+from larpmanager.models.accounting import AccountingItemPayment
 from larpmanager.models.form import (
     QuestionApplicable,
     RegistrationAnswer,
@@ -35,7 +37,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     get_ordered_registration_questions,
 )
-from larpmanager.models.registration import RegistrationCharacterRel
+from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
 from larpmanager.utils.common import check_field
 from larpmanager.utils.edit import _get_values_mapping
 
@@ -83,15 +85,11 @@ def _prepare_export(ctx, model, query):
     answers = {}
     questions = []
     if applicable or model == "registration":
-        question_cls = RegistrationQuestion
-        choices_cls = RegistrationChoice
-        answers_cls = RegistrationAnswer
-        ref_field = "reg_id"
-        if model != "registration":
-            question_cls = WritingQuestion
-            choices_cls = WritingChoice
-            answers_cls = WritingAnswer
-            ref_field = "element_id"
+        is_reg = model == "registration"
+        question_cls = RegistrationQuestion if is_reg else WritingQuestion
+        choices_cls = RegistrationChoice if is_reg else WritingChoice
+        answers_cls = RegistrationAnswer if is_reg else WritingAnswer
+        ref_field = "reg_id" if is_reg else "element_id"
 
         el_ids = {el.id for el in query}
 
@@ -118,10 +116,12 @@ def _prepare_export(ctx, model, query):
             if answer.question_id not in answers:
                 answers[answer.question_id] = {}
             answers[answer.question_id][element_id] = answer.text
+
     if model == "character":
         ctx["assignments"] = {}
         for rcr in RegistrationCharacterRel.objects.filter(reg__run=ctx["run"]).select_related("reg", "reg__member"):
             ctx["assignments"][rcr.character.id] = rcr.reg.member
+
     return answers, applicable, choices, questions
 
 
@@ -181,9 +181,65 @@ def _row_header(ctx, el, key, member_cover, model, val):
     if model == "registration":
         val.append(el.ticket.name)
         key.append(_("Ticket"))
+
+        _header_regs(ctx, el, key, val)
+
     else:
         val.append(el.number)
         key.append("number")
+
+
+def _expand_val(val, el, field):
+    if hasattr(el, field):
+        value = getattr(el, field)
+        if value:
+            val.append(value)
+            return
+
+    val.append("")
+
+
+def _header_regs(ctx, el, key, val):
+    if "pay_what_you_want" in ctx["features"]:
+        val.append(el.pay_what)
+        key.append("PWYW")
+
+    if "surcharge" in ctx["features"]:
+        val.append(el.surcharge)
+        key.append(_("Surcharge"))
+
+    if "reg_quotas" in ctx["features"] or "reg_installments" in ctx["features"]:
+        val.append(el.quota)
+        key.append(_("Next quota"))
+
+    val.append(el.deadline)
+    key.append(_("Deadline"))
+
+    val.append(el.remaining)
+    key.append(_("Owing"))
+
+    val.append(el.tot_payed)
+    key.append(_("Payed"))
+
+    val.append(el.tot_iscr)
+    key.append(_("Total"))
+
+    if "vat" in ctx["features"]:
+        val.append(el.ticket_price)
+        key.append(_("Ticket"))
+
+        val.append(el.options_price)
+        key.append(_("Options"))
+
+    if "token_credit" in ctx["features"]:
+        _expand_val(val, el, "pay_a")
+        key.append(_("Money"))
+
+        _expand_val(val, el, "pay_b")
+        key.append(ctx["credit_name"])
+
+        _expand_val(val, el, "pay_c")
+        key.append(ctx["token_name"])
 
 
 def _get_standard_row(ctx, el):
@@ -248,6 +304,12 @@ def _download_prepare(ctx, nm, query, typ):
 
     if nm == "registration":
         query = query.filter(cancellation_date__isnull=True).select_related("ticket")
+        resp = _orga_registrations_acc(ctx, query)
+        for el in query:
+            if el.id not in resp:
+                continue
+            for key, value in resp[el.id].items():
+                setattr(el, key, value)
 
     return query
 
@@ -292,3 +354,64 @@ def orga_character_form_download(request, ctx):
         writer.writerow(row)
 
     return response
+
+
+def _orga_registrations_acc(ctx, regs=None):
+    ctx["reg_tickets"] = {}
+    for t in RegistrationTicket.objects.filter(event=ctx["event"]).order_by("-price"):
+        t.emails = []
+        ctx["reg_tickets"][t.id] = t
+
+    cache_aip = {}
+    if "token_credit" in ctx["features"]:
+        que = AccountingItemPayment.objects.filter(reg__run=ctx["run"])
+        que = que.filter(pay__in=[AccountingItemPayment.TOKEN, AccountingItemPayment.CREDIT])
+        for el in que.exclude(hide=True).values_list("member_id", "value", "pay"):
+            if el[0] not in cache_aip:
+                cache_aip[el[0]] = {"total": 0}
+            cache_aip[el[0]]["total"] += el[1]
+            if el[2] not in cache_aip[el[0]]:
+                cache_aip[el[0]][el[2]] = 0
+            cache_aip[el[0]][el[2]] += el[1]
+
+    if not regs:
+        regs = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
+    res = {}
+    for r in regs:
+        dt = _orga_registrations_acc_reg(r, ctx, cache_aip)
+        res[r.id] = {key: f"{value:g}" for key, value in dt.items()}
+
+    return res
+
+
+def _orga_registrations_acc_reg(reg, ctx, cache_aip):
+    dt = {}
+
+    max_rounding = 0.05
+
+    for k in ["tot_payed", "tot_iscr", "quota", "deadline", "pay_what", "surcharge"]:
+        dt[k] = round_to_nearest_cent(getattr(reg, k, 0))
+
+    if "token_credit" in ctx["features"]:
+        if reg.member_id in cache_aip:
+            for pay in ["b", "c"]:
+                v = 0
+                if pay in cache_aip[reg.member_id]:
+                    v = cache_aip[reg.member_id][pay]
+                dt["pay_" + pay] = float(v)
+            dt["pay_a"] = dt["tot_payed"] - (dt["pay_b"] + dt["pay_c"])
+        else:
+            dt["pay_a"] = dt["tot_payed"]
+
+    dt["remaining"] = dt["tot_iscr"] - dt["tot_payed"]
+    if abs(dt["remaining"]) < max_rounding:
+        dt["remaining"] = 0
+
+    if reg.ticket_id in ctx["reg_tickets"]:
+        t = ctx["reg_tickets"][reg.ticket_id]
+        dt["ticket_price"] = t.price
+        if reg.pay_what:
+            dt["ticket_price"] += reg.pay_what
+        dt["options_price"] = reg.tot_iscr - dt["ticket_price"]
+
+    return dt

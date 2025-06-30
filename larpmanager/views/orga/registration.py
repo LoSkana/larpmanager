@@ -38,7 +38,6 @@ from larpmanager.accounting.registration import (
     check_reg_bkg,
     get_accounting_refund,
     get_reg_payments,
-    round_to_nearest_cent,
 )
 from larpmanager.cache.character import get_event_cache_all, reset_run
 from larpmanager.cache.feature import reset_event_features
@@ -83,7 +82,7 @@ from larpmanager.utils.common import (
     get_registration,
     get_time_diff,
 )
-from larpmanager.utils.download import download
+from larpmanager.utils.download import _orga_registrations_acc, download
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.upload import upload_elements
 from larpmanager.views.orga.member import member_field_correct
@@ -375,64 +374,9 @@ def orga_registrations(request, s, n):
 def orga_registrations_accounting(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_registrations")
 
-    ctx["reg_tickets"] = {}
-    for t in RegistrationTicket.objects.filter(event=ctx["event"]).order_by("-price"):
-        t.emails = []
-        ctx["reg_tickets"][t.id] = t
-
-    cache_aip = {}
-
-    if "token_credit" in ctx["features"]:
-        que = AccountingItemPayment.objects.filter(reg__run=ctx["run"])
-        que = que.filter(pay__in=[AccountingItemPayment.TOKEN, AccountingItemPayment.CREDIT])
-        for el in que.exclude(hide=True).values_list("member_id", "value", "pay"):
-            if el[0] not in cache_aip:
-                cache_aip[el[0]] = {"total": 0}
-            cache_aip[el[0]]["total"] += el[1]
-            if el[2] not in cache_aip[el[0]]:
-                cache_aip[el[0]][el[2]] = 0
-            cache_aip[el[0]][el[2]] += el[1]
-
-    res = {}
-    que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-    for r in que:
-        dt = orga_registrations_money(r, ctx, cache_aip)
-        res[r.id] = {key: f"{value:g}" for key, value in dt.items()}
+    res = _orga_registrations_acc(ctx)
 
     return JsonResponse(res)
-
-
-def orga_registrations_money(reg, ctx, cache_aip):
-    dt = {}
-
-    max_rounding = 0.05
-
-    for k in ["tot_payed", "tot_iscr", "quota", "deadline", "pay_what", "surcharge"]:
-        dt[k] = round_to_nearest_cent(getattr(reg, k, 0))
-
-    if "token_credit" in ctx["features"]:
-        if reg.member_id in cache_aip:
-            for pay in ["b", "c"]:
-                v = 0
-                if pay in cache_aip[reg.member_id]:
-                    v = cache_aip[reg.member_id][pay]
-                dt["pay_" + pay] = float(v)
-            dt["pay_a"] = dt["tot_payed"] - (dt["pay_b"] + dt["pay_c"])
-        else:
-            dt["pay_a"] = dt["tot_payed"]
-
-    dt["remaining"] = dt["tot_iscr"] - dt["tot_payed"]
-    if abs(dt["remaining"]) < max_rounding:
-        dt["remaining"] = 0
-
-    if reg.ticket_id in ctx["reg_tickets"]:
-        t = ctx["reg_tickets"][reg.ticket_id]
-        dt["ticket_price"] = t.price
-        if reg.pay_what:
-            dt["ticket_price"] += reg.pay_what
-        dt["options_price"] = reg.tot_iscr - dt["ticket_price"]
-
-    return dt
 
 
 @login_required

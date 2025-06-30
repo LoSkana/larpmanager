@@ -149,8 +149,10 @@
                     <th class="hide acc">{% trans "Owing" %}</th>
                     <th class="hide acc">{% trans "Payed" %}</th>
                     <th class="hide acc">{% trans "Total" %}</th>
-                    <th class="hide acc">{% trans "Ticket" %}</th>
-                    <th class="hide acc">{% trans "Options" %}</th>
+                    {% if features.vat %}
+                        <th class="hide acc">{% trans "Ticket" %}</th>
+                        <th class="hide acc">{% trans "Options" %}</th>
+                    {% endif %}
                     {% if 'token_credit' in assoc.features %}
                         <th class="hide acc">{% trans "Money" %}</th>
                         <th class="hide acc">{{ credit_name }}</th>
@@ -295,14 +297,16 @@
                             <span class="has_show_tooltip tot_iscr"></span>
                             <span class="hide show_tooltip">{% trans "Sum of the signup fee, total to be paid" %}</span>
                         </td>
-                        <td class="hide acc">
-                            <span class="has_show_tooltip ticket_price"></span>
-                            <span class="hide show_tooltip">{% trans "Part of the registration fee derived only from the ticket chosen" %}</span>
-                        </td>
-                        <td class="hide acc">
-                            <span class="has_show_tooltip options_price"></span>
-                            <span class="hide show_tooltip">{% trans "Part of the registration fee derived only from the additional options chosen" %}</span>
-                        </td>
+                        {% if features.vat %}
+                            <td class="hide acc">
+                                <span class="has_show_tooltip ticket_price"></span>
+                                <span class="hide show_tooltip">{% trans "Part of the registration fee derived only from the ticket chosen" %}</span>
+                            </td>
+                            <td class="hide acc">
+                                <span class="has_show_tooltip options_price"></span>
+                                <span class="hide show_tooltip">{% trans "Part of the registration fee derived only from the additional options chosen" %}</span>
+                            </td>
+                        {% endif %}
                         {% if 'token_credit' in assoc.features %}
                             <td class="hide acc">
                                 <span class="has_show_tooltip pay_a"></span>
