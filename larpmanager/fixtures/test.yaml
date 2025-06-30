@@ -3,6 +3,8 @@
   fields:
     name: LarpManager
     domain: larpmanager.com
+    created: 2025-03-19 09:06:22.735509
+    updated: 2025-03-19 09:06:22.887608
 - model: auth.user
   pk: 1
   fields:
