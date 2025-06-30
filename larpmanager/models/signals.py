@@ -475,7 +475,10 @@ def pre_save_association_set_skin_features(sender, instance, **kwargs):
 
     # execute if new association, or if changed skin
     if instance.pk:
-        prev = Association.objects.get(pk=instance.pk)
+        try:
+            prev = Association.objects.get(pk=instance.pk)
+        except ObjectDoesNotExist:
+            return
         if instance.skin == prev.skin:
             return
 
