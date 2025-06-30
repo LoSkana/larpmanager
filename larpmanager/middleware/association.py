@@ -25,6 +25,7 @@ from django.shortcuts import redirect, render
 from django.utils.translation import get_language
 
 from larpmanager.cache.association import get_cache_assoc
+from larpmanager.cache.skin import get_cache_skin
 from larpmanager.models.association import AssocTextType
 from larpmanager.utils.text import get_assoc_text
 
@@ -67,20 +68,9 @@ class AssociationIdentifyMiddleware:
                     return redirect(f"https://{slug}.{domain}{request.get_full_path()}")
             return cls.load_assoc(request, assoc)
 
-        if local or domain == "larpmanager":
-            assoc = {
-                "id": 0,
-                "name": "LarpManager",
-                "shuttle": [],
-                "features": ["assoc_css"],
-                "css_code": "main",
-                "slug": "lm",
-                "logo": "https://larpmanager.com/static/lm_logo.png",
-                "main_mail": "info@larpmanager.com",
-                "favicon": "https://larpmanager.com/static/lm_fav.png",
-                "base_domain": base_domain,
-            }
-            return cls.load_assoc(request, assoc)
+        skin = get_cache_skin(base_domain, local)
+        if skin:
+            return cls.load_assoc(request, skin)
 
         if request.get_host().endswith("larpmanager.com"):
             return redirect(f"https://larpmanager.com{request.get_full_path()}")

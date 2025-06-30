@@ -5,17 +5,6 @@
 {% endblock maintitle %}
 {% block header %}
 {% endblock header %}
-{% block css %}
-    <style>
-        html, body { background: white; }
-        #banner { background: none; padding: 1em }
-        #banner h2 { color: #00916f }
-        #banner h1 { color: #000 }
-        .federlogo { text-align: center; }
-        .federlogo img { width: 100%; max-width: 400px; margin: 1em auto; }
-        .starter { line-height: normal; padding: 0 1em }
-    </style>
-{% endblock css %}
 {% block alpha %}
     <!-- Banner -->
     <section id="banner">
@@ -26,18 +15,13 @@
         <img src="{% static 'larpmanager/assets/img/federludo.png' %}"
              alt="federludo logo" />
     </p>
-    <p class="starter">Compila il form per inizare ad usarlo per la tua FederAssociata, è facilissimo!</p>
-    <form action="{{ request.path }}"
-          enctype="multipart/form-data"
-          method="post">
-        {% csrf_token %}
-        <table class="mob no_csv">
-            {{ form.as_table }}
-        </table>
-        <input type="submit" value="{% trans "Submit" %}">
-    </form>
+    <p class="starter">
+        Un sistema gestionale in convenzione ad uso gratuito per le FederAssociate, per gestire iscrizioni, pagamenti, registro sociale, bilanci, e molto altro!
+    </p>
+    <p class="starter">Clicca qui sotto per inizare ad usarlo per la tua associazione, è facilissimo!</p>
+    <ul class="actions special">
+        <li>
+            <a href="{% url 'join' %}" title="Free trial" class="button alt">Get Started</a>
+        </li>
+    </ul>
 {% endblock alpha %}
-{% block js %}
-    <script> const base_domain = ".ludomanager.it"; </script>
-    {% include "elements/assoc_preview.js" %}
-{% endblock js %}

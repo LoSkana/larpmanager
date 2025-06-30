@@ -1,6 +1,11 @@
 - model: larpmanager.associationskin
   pk: 1
   fields:
+    name: LarpManager
+    domain: larpmanager.com
+- model: larpmanager.associationskin
+  pk: 2
+  fields:
     name: LudoManager
     domain: ludomanager.it
     default_css: 'html, body { background: white }  :root { --sec-rgb: 190,190,190;

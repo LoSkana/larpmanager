@@ -8,6 +8,19 @@ import model_clone.mixin
 from django.db import migrations, models
 
 
+def create_default_skin(apps, schema_editor):
+    AssociationSkin = apps.get_model("larpmanager", "AssociationSkin")
+    AssociationSkin.objects.create(
+        id=1,
+        name="LarpManager",
+        domain="larpmanager.com",
+        default_mandatory_fields="",
+        default_optional_fields="",
+        default_css="",
+        default_nation="it",
+    )
+
+
 class Migration(migrations.Migration):
     dependencies = [
         ("larpmanager", "0029_alter_member_profile"),
@@ -59,11 +72,12 @@ class Migration(migrations.Migration):
             },
             bases=(model_clone.mixin.CloneMixin, models.Model),
         ),
+        migrations.RunPython(create_default_skin, reverse_code=migrations.RunPython.noop),
         migrations.AddField(
             model_name="association",
             name="skin",
             field=models.ForeignKey(
-                blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to="larpmanager.associationskin"
+                default=1, on_delete=django.db.models.deletion.CASCADE, to="larpmanager.associationskin"
             ),
         ),
     ]
