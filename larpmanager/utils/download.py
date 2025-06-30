@@ -189,6 +189,16 @@ def _row_header(ctx, el, key, member_cover, model, val):
         key.append("number")
 
 
+def _expand_val(val, field):
+    if hasattr(val, field):
+        value = getattr(val, field)
+        if value:
+            val.append(value)
+            return
+
+    val.append("")
+
+
 def _header_regs(ctx, el, key, val):
     if "pay_what_you_want" in ctx["features"]:
         val.append(el.pay_what)
@@ -222,13 +232,13 @@ def _header_regs(ctx, el, key, val):
         key.append(_("Options"))
 
     if "token_credit" in ctx["features"]:
-        val.append(el.pay_a)
+        _expand_val(val, "pay_a")
         key.append(_("Money"))
 
-        val.append(el.pay_b)
+        _expand_val(val, "pay_b")
         key.append(ctx["credit_name"])
 
-        val.append(el.pay_c)
+        _expand_val(val, "pay_c")
         key.append(ctx["token_name"])
 
 
