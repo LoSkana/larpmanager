@@ -70,7 +70,7 @@ class AssociationSkin(BaseModel):
 
 
 class Association(BaseModel):
-    skin = models.ForeignKey(AssociationSkin, on_delete=models.CASCADE)
+    skin = models.ForeignKey(AssociationSkin, on_delete=models.CASCADE, default=1)
 
     name = models.CharField(max_length=100, help_text=_("Complete name of the Organization"))
 

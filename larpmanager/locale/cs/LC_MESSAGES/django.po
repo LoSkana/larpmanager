@@ -227,6 +227,9 @@ msgstr "Úroveň"
 msgid "Time"
 msgstr "Nyní"
 
+msgid "Tipo"
+msgstr "Tipo"
+
 msgid "Type"
 msgstr "Typ"
 

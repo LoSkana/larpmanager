@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 from django.conf import settings as conf_settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
@@ -182,28 +183,28 @@ def orga_writing_form_list(request, s, n, typ):
     if event.parent:
         event = event.parent
     eid = request.POST.get("num")
-    q = event.get_elements(WritingQuestion).get(pk=eid)
+
+    applicable = QuestionApplicable.get_applicable(typ)
+    element_typ = QuestionApplicable.get_applicable_inverse(applicable)
+    element_ids = element_typ.objects.filter(event=event).values_list("id", flat=True)
 
     res = {}
-
     popup = []
-
     max_length = 100
 
-    character_ids = Character.objects.filter(event=event).values_list("id", flat=True)
-
-    if q.typ in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
+    question = event.get_elements(WritingQuestion).get(pk=eid, applicable=applicable)
+    if question.typ in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
         cho = {}
-        for opt in event.get_elements(WritingOption).filter(question=q):
+        for opt in event.get_elements(WritingOption).filter(question=question):
             cho[opt.id] = opt.display
 
-        for el in WritingChoice.objects.filter(question=q, element_id__in=character_ids).order_by("option__order"):
+        for el in WritingChoice.objects.filter(question=question, element_id__in=element_ids).order_by("option__order"):
             if el.element_id not in res:
                 res[el.element_id] = []
             res[el.element_id].append(cho[el.option_id])
 
-    elif q.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
-        que = WritingAnswer.objects.filter(question=q, element_id__in=character_ids)
+    elif question.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
+        que = WritingAnswer.objects.filter(question=question, element_id__in=element_ids)
         que = que.annotate(short_text=Substr("text", 1, max_length))
         que = que.values("element_id", "short_text")
         for el in que:
@@ -212,7 +213,7 @@ def orga_writing_form_list(request, s, n, typ):
                 popup.append(el["element_id"])
             res[el["element_id"]] = answer
 
-    return JsonResponse({"res": res, "popup": popup, "num": q.id})
+    return JsonResponse({"res": res, "popup": popup, "num": question.id})
 
 
 @login_required

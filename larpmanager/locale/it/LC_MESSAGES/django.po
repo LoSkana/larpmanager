@@ -227,6 +227,9 @@ msgstr "Tier"
 msgid "Time"
 msgstr "Ora"
 
+msgid "Tipo"
+msgstr "Tipo"
+
 msgid "Type"
 msgstr "Tipo"
 

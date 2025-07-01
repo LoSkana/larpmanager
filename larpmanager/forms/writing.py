@@ -173,6 +173,18 @@ class BaseWritingForm(BaseRegistrationForm):
         key = f"option_char_{option.id}"
         return key
 
+    def save(self, commit=True):
+        instance = super().save()
+
+        instance.save()
+        if hasattr(self, "questions"):
+            orga = True
+            if hasattr(self, "orga"):
+                orga = self.orga
+            self.save_reg_questions(instance, orga=orga)
+
+        return instance
+
 
 class PlotForm(WritingForm, BaseWritingForm):
     load_templates = ["plot"]
@@ -236,9 +248,6 @@ class PlotForm(WritingForm, BaseWritingForm):
     def save(self, commit=True):
         instance = super().save()
 
-        if hasattr(self, "questions"):
-            self.save_reg_questions(instance)
-
         if instance.pk:
             for pr in self.instance.get_plot_characters():
                 field = f"ch_{pr.character_id}"
@@ -252,7 +261,7 @@ class PlotForm(WritingForm, BaseWritingForm):
         return instance
 
 
-class FactionForm(WritingForm):
+class FactionForm(WritingForm, BaseWritingForm):
     load_templates = ["faction"]
 
     load_js = ["characters-choices"]
@@ -266,14 +275,15 @@ class FactionForm(WritingForm):
 
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
-            "teaser": WritingTinyMCE(),
-            "text": WritingTinyMCE(),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if "user_character" not in self.params["features"]:
             self.delete_field("selectable")
+
+        self.init_orga_fields()
+        self.reorder_field("characters")
 
 
 class QuestTypeForm(WritingForm):
