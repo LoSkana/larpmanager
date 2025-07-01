@@ -674,8 +674,8 @@ def _get_help_questions(ctx, request):
 
 
 def get_recaptcha_secrets(request):
-    public = conf_settings.RECAPTCHA_PUBLIC
-    private = conf_settings.RECAPTCHA_PRIVATE
+    public = conf_settings.RECAPTCHA_PUBLIC_KEY
+    private = conf_settings.RECAPTCHA_PRIVATE_KEY
 
     # if multi-site settings
     if ":" in public:
