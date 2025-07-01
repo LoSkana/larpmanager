@@ -114,12 +114,9 @@ def check_run(el, ctx, afield=None):
         raise Http404("not your run")
 
     if hasattr(el, "event"):
-        if el.event != ctx["event"] and not el.event.parent_id:
-            raise Http404("not your event")
-
-        is_child = el.parent_id is not None
-        event_matches = el.event == ctx["event"]
-        parent_matches = el.parent_id == ctx["event"]
+        is_child = ctx["event"].parent_id is not None
+        event_matches = el.event_id == ctx["event"].id
+        parent_matches = el.event_id == ctx["event"].parent_id
 
         if (not is_child and not event_matches) or (is_child and not event_matches and not parent_matches):
             raise Http404("not your event")
