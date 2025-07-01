@@ -3475,9 +3475,6 @@ msgstr "inte synlig för närvarande"
 msgid "'player' (player's email)"
 msgstr "\"player\" (spelarens e-postadress)"
 
-msgid "Benvenuto in LudoManager!"
-msgstr "Benvenuto i LudoManager!"
-
 msgid "Choose the payment method"
 msgstr "Välj betalningssätt"
 
@@ -4929,6 +4926,9 @@ msgstr "Nu kan du granska alla organisationers medlemmar"
 msgid "Now you can select which tickets can be gifted"
 msgstr "Nu kan du välja vilka biljetter som kan ges i gåva"
 
+msgid "Now you can set the experience points settings"
+msgstr "Nu kan du ange inställningar för erfarenhetspoäng"
+
 msgid "Now you can set the external registration link"
 msgstr "Nu kan du ange den externa registreringslänken"
 
@@ -5446,9 +5446,6 @@ msgstr "Ange så exakt som möjligt var du ska hämtas"
 
 msgid "Indicate how spending is allocated at the budget level."
 msgstr "Ange hur utgifterna är utformade på budgetnivå"
-
-msgid "Now you can create abilities, starting from their types"
-msgstr "Nu kan du skapa förmågor, med utgångspunkt från deras typer"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Granska de användare som inte klarar evenemangets deadlines"

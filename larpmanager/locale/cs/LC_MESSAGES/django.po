@@ -3475,9 +3475,6 @@ msgstr "v tuto chvíli není viditelný"
 msgid "'player' (player's email)"
 msgstr "'player' (e-mail hráče)"
 
-msgid "Benvenuto in LudoManager!"
-msgstr "Benvenuto v LudoManageru!"
-
 msgid "Choose the payment method"
 msgstr "Zvolte způsob platby"
 
@@ -4925,6 +4922,9 @@ msgstr "Nyní si můžete prohlédnout všechny členy organizací"
 msgid "Now you can select which tickets can be gifted"
 msgstr "Nyní můžete vybrat, které vstupenky lze darovat."
 
+msgid "Now you can set the experience points settings"
+msgstr "Nyní můžete nastavit body zkušeností"
+
 msgid "Now you can set the external registration link"
 msgstr "Nyní můžete nastavit externí registrační odkaz"
 
@@ -5442,9 +5442,6 @@ msgstr "Co nejpřesněji uveďte, kde vás vyzvednout."
 
 msgid "Indicate how spending is allocated at the budget level."
 msgstr "Uveďte, jak jsou výdaje nastaveny na úrovni rozpočtu."
-
-msgid "Now you can create abilities, starting from their types"
-msgstr "Nyní můžete vytvářet schopnosti, počínaje jejich typy."
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Přehled uživatelů, kteří nedodržují termíny události."

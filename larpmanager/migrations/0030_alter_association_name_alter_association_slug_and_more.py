@@ -21,6 +21,12 @@ def create_default_skin(apps, schema_editor):
     )
 
 
+def trigger_save_assocs(apps, schema_editor):
+    Association = apps.get_model("larpmanager", "Association")
+    for assoc in Association.objects.all():
+        assoc.save()
+
+
 class Migration(migrations.Migration):
     dependencies = [
         ("larpmanager", "0029_alter_member_profile"),
@@ -80,4 +86,5 @@ class Migration(migrations.Migration):
                 default=1, on_delete=django.db.models.deletion.CASCADE, to="larpmanager.associationskin"
             ),
         ),
+        migrations.RunPython(trigger_save_assocs, reverse_code=migrations.RunPython.noop),
     ]

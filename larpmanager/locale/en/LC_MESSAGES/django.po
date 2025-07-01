@@ -7353,7 +7353,7 @@ msgid ""
 "then be used to purchase skills."
 msgstr ""
 
-msgid "Now you can create abilities, starting from their types"
+msgid "Now you can set the experience points settings"
 msgstr ""
 
 msgid "Allows players to create and modify their own characters freely."
@@ -8072,9 +8072,6 @@ msgid "Mail added to queue!"
 msgstr ""
 
 msgid "Answer submitted!"
-msgstr ""
-
-msgid "Benvenuto in LudoManager!"
 msgstr ""
 
 msgid "Your request has been sent, we will reply as soon as possible!"

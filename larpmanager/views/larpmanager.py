@@ -81,11 +81,6 @@ def lm_home(request):
 def ludomanager(ctx, request):
     ctx["assoc_skin"] = "LudoManager"
     ctx["platform"] = "LudoManager"
-    assoc = _join_form(ctx, request)
-    if assoc:
-        messages.success(request, _("Benvenuto in LudoManager!"))
-        return go_redirect(request, assoc.slug, "manage", "ludomanager.it")
-
     return render(request, "larpmanager/larpmanager/skin/ludomanager.html", ctx)
 
 
