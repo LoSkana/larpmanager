@@ -1307,8 +1307,8 @@ msgid "Authorisation"
 msgstr ""
 
 msgid ""
-"In order to participate in the events of this association, you must "
-"authorise the sharing of your data."
+"Do you consent to the sharing of your personal data in accordance with the "
+"GDPR and our Privacy Policy"
 msgstr ""
 
 msgid "Absent"
@@ -1336,12 +1336,6 @@ msgid "Character not allowed"
 msgstr ""
 
 msgid "Residence address"
-msgstr ""
-
-msgid ""
-"In order to participate in this organization's events, you must consent to "
-"the sharing of your personal data in accordance with the GDPR and our "
-"Privacy Policy"
 msgstr ""
 
 #, python-format

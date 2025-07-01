@@ -43,7 +43,7 @@ from larpmanager.forms.base import BaseAccForm, MyForm
 from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput
 from larpmanager.models.association import Association, MemberFieldType
 from larpmanager.models.member import Badge, Member, Membership, VolunteerRegistry, get_user_membership
-from larpmanager.utils.common import FileTypeValidator
+from larpmanager.utils.common import FileTypeValidator, get_recaptcha_secrets
 from larpmanager.utils.tasks import my_send_mail
 
 
@@ -67,6 +67,7 @@ class MyAuthForm(AuthenticationForm):
 class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
     # noinspection PyUnresolvedReferences, PyProtectedMember
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request", None)
         super(RegistrationFormUniqueEmail, self).__init__(*args, **kwargs)
         self.fields["username"].widget = forms.HiddenInput()
 
@@ -106,13 +107,14 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             required=True,
             label=_("Authorisation"),
             help_text=_(
-                "In order to participate in the events of this association, you must authorise "
-                "the sharing of your data."
-            ),
+                "Do you consent to the sharing of your personal data in accordance with the GDPR and our Privacy Policy"
+            )
+            + "?",
         )
 
         if not conf_settings.DEBUG and not os.getenv("PYTEST_CURRENT_TEST"):
-            self.fields["captcha"] = ReCaptchaField(label="Captcha")
+            public, private = get_recaptcha_secrets(self.request)
+            self.fields["captcha"] = ReCaptchaField(label="Captcha", public_key=public, private_key=private)
 
         # place language as first
         new_order = ["lang"] + [key for key in self.fields if key != "lang"]
@@ -389,9 +391,9 @@ class ProfileForm(BaseProfileForm):
                 required=True,
                 label=_("Authorisation"),
                 help_text=_(
-                    "In order to participate in this organization's events, you must consent to the sharing "
-                    "of your personal data in accordance with the GDPR and our Privacy Policy"
-                ),
+                    "Do you consent to the sharing of your personal data in accordance with the GDPR and our Privacy Policy"
+                )
+                + "?",
             )
 
     def clean_birth_date(self):

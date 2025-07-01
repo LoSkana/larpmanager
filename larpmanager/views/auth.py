@@ -57,6 +57,11 @@ class MyRegistrationView(RegistrationView):
             return next_url
         return self.success_url or reverse("home")
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["request"] = self.request
+        return kwargs
+
 
 class MyPasswordResetConfirmView(PasswordResetConfirmView):
     def form_valid(self, form):
