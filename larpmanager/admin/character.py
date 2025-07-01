@@ -61,7 +61,7 @@ class CharacterConfigAdmin(DefModelAdmin):
 class WritingQuestionAdmin(DefModelAdmin):
     list_display = ("event", "typ", "display", "description_red", "order", "status", "visibility")
     exclude = ("search",)
-    search_fields = ("search",)
+    search_fields = ("search", "display")
     autocomplete_fields = ["event"]
     list_filter = (EventFilter,)
 
@@ -74,7 +74,7 @@ class WritingQuestionAdmin(DefModelAdmin):
 class WritingOptionAdmin(DefModelAdmin):
     list_display = ("question", "display", "event", "details_red", "max_available", "order")
     exclude = ("search",)
-    search_fields = ("search",)
+    search_fields = ("search", "display")
     autocomplete_fields = ["question", "event"]
     list_filter = (WritingQuestionFilter, EventFilter)
 

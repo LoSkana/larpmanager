@@ -39,10 +39,10 @@ table, tr, td, th, tbody, thead, tfoot {
                     {% endif %}
                     <td>
                         {% if el.player_id > 0 %}
-                            <img src="https://larpmanager.com/{{ el.player_prof }}"
+                            <img src="https://{{ assoc.main_domain }}/{{ el.player_prof }}"
                                  alt="player profile" />
                         {% else %}
-                            <img src="https://larpmanager.com/{% static 'larpmanager/assets/blank-avatar.png' %}"
+                            <img src="https://{{ assoc.main_domain }}/{% static 'larpmanager/assets/blank-avatar.png' %}"
                                  alt="player profile" />
                         {% endif %}
                         <p>
@@ -70,7 +70,7 @@ table, tr, td, th, tbody, thead, tfoot {
             </tr>
         </table>
     </body>
-    <script src="https://proxima.larpmanager.com/{% static "larpmanager/assets/js/jquery.min.js" %}"></script>
+    <script src="https://{{ assoc.slug }}.{{ assoc.main_domain }}/{% static "larpmanager/assets/js/jquery.min.js" %}"></script>
     <script>
 $(function() {
   resize_texts();

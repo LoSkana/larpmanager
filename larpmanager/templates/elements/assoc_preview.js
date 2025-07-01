@@ -1,4 +1,3 @@
-{% load show_tags i18n %}
 <script>
 window.addEventListener('DOMContentLoaded', function() {
 
@@ -6,7 +5,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         $('#slug').on('input', function() {
             let sl = $(this).val();
-            $('.slug_pre').text("Preview: https://{{ assoc.slug }}.{{ assoc.main_domain }}/" + sl);
+            $('.slug_pre').text("Preview: https://" + sl + base_domain);
         });
     });
 });

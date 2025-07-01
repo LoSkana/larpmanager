@@ -1,0 +1,27 @@
+- model: larpmanager.associationskin
+  pk: 1
+  fields:
+    name: LarpManager
+    domain: larpmanager.com
+- model: larpmanager.associationskin
+  pk: 2
+  fields:
+    name: LudoManager
+    domain: ludomanager.it
+    default_css: 'html, body { background: white }  :root { --sec-rgb: 190,190,190;
+      }              :root { --pri-rgb: 44,118,110; }    :root { --ter-rgb: 53,67,68;
+      }'
+    default_nation: it
+    default_mandatory_fields: nationality,phone_contact,social_contact,birth_date,birth_place,document_type,document,residence_address,profile
+    default_optional_fields: nickname,legal_name,pronoun,gender,first_aid,fiscal_code,diet,safety
+    default_features:
+    - 110
+    - 158
+    - 185
+    - 45
+    - 111
+    - 113
+    - 106
+    - 144
+    - 108
+    - 86

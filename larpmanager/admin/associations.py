@@ -21,7 +21,7 @@
 from django.contrib import admin
 
 from larpmanager.admin.base import AssocFilter, DefModelAdmin
-from larpmanager.models.association import Association, AssociationConfig, AssocText
+from larpmanager.models.association import Association, AssociationConfig, AssociationSkin, AssocText
 
 
 @admin.register(Association)
@@ -48,3 +48,13 @@ class AssocTextAdmin(DefModelAdmin):
     list_display = ("assoc", "typ", "language", "default")
     list_filter = (AssocFilter, "typ", "language")
     autocomplete_fields = ["assoc"]
+
+
+@admin.register(AssociationSkin)
+class AssociationSkinAdmin(DefModelAdmin):
+    list_display = ("name",)
+    search_fields = ("name",)
+
+    autocomplete_fields = [
+        "default_features",
+    ]

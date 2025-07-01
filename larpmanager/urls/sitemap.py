@@ -18,44 +18,21 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.contrib import (
-    sitemaps,
-)
-from django.contrib.sitemaps.views import (
-    sitemap,
-)
-from django.urls import (
-    path,
-)
-from django.utils import (
-    translation,
-)
-from django.utils.translation import (
-    gettext_lazy as _,
-)
+from django.contrib import sitemaps
+from django.contrib.sitemaps.views import sitemap
+from django.urls import path
+from django.utils import translation
+from django.utils.translation import gettext_lazy as _
 
-from larpmanager.models.association import (
-    Association,
-)
-from larpmanager.models.event import (
-    DevelopStatus,
-    Run,
-)
-from larpmanager.models.larpmanager import (
-    LarpManagerBlog,
-    LarpManagerTutorial,
-)
+from larpmanager.models.association import Association
+from larpmanager.models.event import DevelopStatus, Run
+from larpmanager.models.larpmanager import LarpManagerBlog, LarpManagerTutorial
 
 translation.activate("en")
 
 
 class MainSitemap(sitemaps.Sitemap):
-    def _urls(
-        self,
-        page,
-        protocol,
-        domain,
-    ):
+    def _urls(self, page, protocol, domain):
         s = []
         for el in [
             "",
@@ -120,7 +97,7 @@ class EventSitemap(sitemaps.Sitemap):
             s.append(
                 {
                     "item": el.event.name,
-                    "location": f"https://{el.event.assoc.slug}.larpmanager.com/{el.event.slug}/{el.number}/event/",
+                    "location": f"https://{el.event.assoc.slug}.{_get_base_domain(el.event.assoc)}/{el.event.slug}/{el.number}/event/",
                     "lastmod": None,
                     "changefreq": "daily",
                     "priority": "",
@@ -130,17 +107,18 @@ class EventSitemap(sitemaps.Sitemap):
         return s
 
 
+def _get_base_domain(assoc):
+    if assoc.skin:
+        return assoc.skin.domain
+    return "larpmanager.com"
+
+
 class AssociationMap(sitemaps.Sitemap):
-    def _urls(
-        self,
-        page,
-        protocol,
-        domain,
-    ):
+    def _urls(self, page, protocol, domain):
         return [
             {
                 "item": assoc.name,
-                "location": f"https://{assoc.slug}.larpmanager.com/",
+                "location": f"https://{assoc.slug}.{_get_base_domain(assoc)}/",
                 "lastmod": None,
                 "changefreq": "daily",
                 "priority": "",

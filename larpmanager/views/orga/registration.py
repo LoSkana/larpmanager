@@ -793,6 +793,8 @@ def orga_registration_member(request, s, n):
     if member.profile:
         text += f"<img src='{member.profile_thumb.url}' style='width: 15em; margin: 1em; border-radius: 5%;' />"
 
+    text += f"<p><b>Email</b>: {member.email}</p>"
+
     # check if the user can see sensitive data
     exclude = ["profile", "newsletter", "language", "presentation"]
     if not has_event_permission(ctx, request, s, "orga_sensitive"):

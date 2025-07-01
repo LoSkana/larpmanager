@@ -1551,9 +1551,6 @@ msgstr "Pdf-Galerie"
 msgid "Installment"
 msgstr "Ratenzahlung"
 
-msgid "LarpManager"
-msgstr "LarpManager"
-
 msgid "Last change"
 msgstr "Zuletzt geändert"
 
@@ -3046,6 +3043,10 @@ msgstr "Bedingungen und Konditionen"
 msgid "Terms and conditions"
 msgstr "Bedingungen und Konditionen"
 
+#, python-format
+msgid "Welcome to %(name)s!"
+msgstr "Willkommen bei %(name)s!"
+
 msgid "Yes, keep me posted!"
 msgstr "Ja, halten Sie mich auf dem Laufenden!"
 
@@ -3446,6 +3447,9 @@ msgstr "Geheimer Registrierungslink"
 
 msgid "Thanks for your support!"
 msgstr "Vielen Dank für Ihre Unterstützung!"
+
+msgid "The subdomain identifier"
+msgstr "Die Kennung der Subdomäne"
 
 msgid "Try the sheet generation"
 msgstr "Kartenerstellung ausprobieren"
@@ -4063,6 +4067,9 @@ msgstr "Zuweisung von Leistungen: %(badge)s"
 msgid "Ask the organisers to activate it"
 msgstr "Bitten Sie die Organisatoren, sie zu aktivieren"
 
+msgid "Complete name of the Organization"
+msgstr "Vollständiger Name der Organisation"
+
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Bestätigen Sie die Eingabe von %(event)s"
@@ -4419,9 +4426,6 @@ msgstr "Beschreiben Sie kurz, was die Box enthält"
 
 msgid "Check the validity of the fiscal code."
 msgstr "Prüfen Sie die Gültigkeit des Steuerkennzeichens."
-
-msgid "Complete name of the LARP Organization"
-msgstr "Vollständiger Name der Vereinigung"
 
 msgid "Event display and visual customization"
 msgstr "Ereignisanzeige und visuelle Anpassung"
@@ -6910,6 +6914,12 @@ msgstr ""
 "aktiviert sein"
 
 msgid ""
+"Your data will be saved in the system, which is used by several associations"
+msgstr ""
+"Ihre Daten werden in dem System gespeichert, das von mehreren Verbänden "
+"genutzt wird"
+
+msgid ""
 "Characters relating to place of birth do not match (check exact "
 "municipality)"
 msgstr ""
@@ -7721,13 +7731,6 @@ msgid ""
 msgstr ""
 "Auf dieser Seite können Sie die Felder einrichten, die Spieler in ihrem "
 "Benutzerprofil ausfüllen können"
-
-msgid ""
-"Your data will be saved in the LarpManager system, which is used by several "
-"associations"
-msgstr ""
-"Ihre Daten werden im LarpManager-System gespeichert, das von mehreren "
-"Verbänden genutzt wird"
 
 #, python-format
 msgid ""
@@ -9196,13 +9199,6 @@ msgstr ""
 "Erscheinungsbilds auf"
 
 msgid ""
-"If you wish to confirm that you share your data in the LarpManager system "
-"with this organisation, click on the button below"
-msgstr ""
-"Wenn Sie bestätigen möchten, dass Sie Ihre Daten im LarpManager-System mit "
-"dieser Organisation teilen, klicken Sie auf die Schaltfläche unten"
-
-msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
 "all events, instead of each event's organizers."
 msgstr ""
@@ -9769,6 +9765,15 @@ msgstr ""
 " an Veranstaltungen teilzunehmen und bei der Hauptversammlung abstimmen zu "
 "können!"
 
+msgid ""
+"In order to participate in this organization's events, you must consent to "
+"the sharing of your personal data in accordance with the GDPR and our "
+"Privacy Policy"
+msgstr ""
+"Um an den Veranstaltungen dieser Organisation teilnehmen zu können, müssen "
+"Sie der Weitergabe Ihrer persönlichen Daten gemäß der GDPR und unserer "
+"Datenschutzrichtlinie zustimmen."
+
 #, python-format
 msgid ""
 "Hello! You have signed up for %(event)s, but have not yet completed your "
@@ -9834,6 +9839,16 @@ msgstr ""
 "Um Ihre Mitgliedschaft zu bestätigen, müssen Sie beantragen, als Mitglied "
 "der Vereinigung registriert zu werden. Das Verfahren wird Sie automatisch "
 "durch die erforderlichen Schritte führen."
+
+msgid ""
+"By clicking the button below, you confirm that you consent to the sharing of"
+" your personal data with this organization, in accordance with the GDPR and "
+"our Privacy Policy"
+msgstr ""
+"Indem Sie auf die Schaltfläche unten klicken, bestätigen Sie, dass Sie mit "
+"der Weitergabe Ihrer persönlichen Daten an diese Organisation in "
+"Übereinstimmung mit der GDPR und unserer Datenschutzrichtlinie einverstanden"
+" sind"
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "

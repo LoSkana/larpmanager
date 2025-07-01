@@ -2,49 +2,51 @@
 {% load i18n static %}
 {% block main %}
     {% if assoc.id == 0 %}
-        <!-- Header -->
-        <header id="header" {% if is_sidebar_open %}class="sidebar"{% endif %}>
-            <!--
+        {% block header %}
+            <!-- Header -->
+            <header id="header" {% if is_sidebar_open %}class="sidebar"{% endif %}>
+                <!--
             <a href="{% url 'home' %}" class="main" aria-label="LarpManager">
                 <span class="logo"><img src="{% static 'lm_logo.png' %}" alt="Logo" /></span>
                 LarpManager
             </a>
 -->
-            <nav id="nav">
-                <ul>
-                    <li>
-                        <a href="{% url 'home' %}" title="Home">Home</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'discover' %}"
-                           title="Discover the platform"
-                           {% if request.resolver_match.url_name == "discover" %}class="sel"{% endif %}>Discover</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'tutorials' %}"
-                           title="Learn how the system works"
-                           {% if request.resolver_match.url_name == "tutorials" %}class="sel"{% endif %}>Tutorials</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'usage' %}"
-                           title="Understand how to use it"
-                           {% if request.resolver_match.url_name == "usage" %}class="sel"{% endif %}>Usage</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'about_us' %}"
-                           title="Meet the team"
-                           {% if request.resolver_match.url_name == "about_us" %}class="sel"{% endif %}>About us</a>
-                    </li>
-                    <li>
-                        <a id="join"
-                           href="{% url 'join' %}"
-                           title="Join us"
-                           class="button"
-                           {% if request.resolver_match.url_name == "join" %}class="sel"{% endif %}>Join now</a>
-                    </li>
-                </ul>
-            </nav>
-        </header>
+                <nav id="nav">
+                    <ul>
+                        <li>
+                            <a href="{% url 'home' %}" title="Home">Home</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'discover' %}"
+                               title="Discover the platform"
+                               {% if request.resolver_match.url_name == "discover" %}class="sel"{% endif %}>Discover</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'tutorials' %}"
+                               title="Learn how the system works"
+                               {% if request.resolver_match.url_name == "tutorials" %}class="sel"{% endif %}>Tutorials</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'usage' %}"
+                               title="Understand how to use it"
+                               {% if request.resolver_match.url_name == "usage" %}class="sel"{% endif %}>Usage</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'about_us' %}"
+                               title="Meet the team"
+                               {% if request.resolver_match.url_name == "about_us" %}class="sel"{% endif %}>About us</a>
+                        </li>
+                        <li>
+                            <a id="join"
+                               href="{% url 'join' %}"
+                               title="Join us"
+                               class="button"
+                               {% if request.resolver_match.url_name == "join" %}class="sel"{% endif %}>Join now</a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+        {% endblock header %}
         {% block alpha %}
         {% endblock alpha %}
         <!-- Footer -->
@@ -341,7 +343,7 @@
                     </table>
                     <p>
                         <!-- Please, do not remove! -->
-                        Powered by <a href="https://larpmanager.com">LarpManager</a>
+                        Powered by <a href="https://{{ assoc.main_domain }}">{{ assoc.platform }}</a>
                     </p>
                 </div>
             </div>

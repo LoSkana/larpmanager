@@ -38,9 +38,7 @@ from django_ratelimit.decorators import ratelimit
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.cache.larpmanager import get_cache_lm_home
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
-from larpmanager.forms.association import (
-    FirstAssociationForm,
-)
+from larpmanager.forms.association import FirstAssociationForm
 from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, LarpManagerTicket
 from larpmanager.forms.miscellanea import SendMailForm
 from larpmanager.forms.utils import RedirectForm
@@ -49,9 +47,7 @@ from larpmanager.mail.remind import remember_membership, remember_membership_fee
 from larpmanager.models.access import AssocRole, EventRole
 from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.base import Feature
-from larpmanager.models.event import (
-    Run,
-)
+from larpmanager.models.event import Run
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
     LarpManagerDiscover,
@@ -69,13 +65,23 @@ from larpmanager.utils.text import get_assoc_text
 
 
 def lm_home(request):
-    ctx = get_lm_assocs()
+    ctx = get_lm_contact()
     ctx["index"] = True
+
+    if request.assoc["base_domain"] == "ludomanager.it":
+        return ludomanager(ctx, request)
+
     ctx.update(get_cache_lm_home())
     random.shuffle(ctx["promoters"])
     random.shuffle(ctx["reviews"])
 
     return render(request, "larpmanager/larpmanager/home.html", ctx)
+
+
+def ludomanager(ctx, request):
+    ctx["assoc_skin"] = "LudoManager"
+    ctx["platform"] = "LudoManager"
+    return render(request, "larpmanager/larpmanager/skin/ludomanager.html", ctx)
 
 
 @csrf_exempt
@@ -95,14 +101,14 @@ def contact(request):
     return render(request, "larpmanager/larpmanager/contact.html", ctx)
 
 
-def go_redirect(request, slug, p):
+def go_redirect(request, slug, p, base_domain="larpmanager.com"):
     if request.enviro in ["dev", "test"]:
         return redirect("http://127.0.0.1:8000/")
 
     if slug:
-        n_p = f"https://{slug}.larpmanager.com/"
+        n_p = f"https://{slug}.{base_domain}/"
     else:
-        n_p = "https://larpmanager.com/"
+        n_p = f"https://{base_domain}/"
 
     if p:
         n_p += p
@@ -315,14 +321,31 @@ def discord(request):
 
 @login_required
 def join(request):
-    ctx = get_lm_assocs()
+    ctx = get_lm_contact()
     if "red" in ctx:
         return redirect(ctx["red"])
 
+    assoc = _join_form(ctx, request)
+    if assoc:
+        # send message
+        messages.success(request, _("Welcome to %(name)s!") % {"name": request.assoc["name"]})
+        # send email
+        if request.assoc["skin_id"] == 1:
+            join_email(assoc)
+        # redirect
+        return go_redirect(request, assoc.slug, "manage")
+
+    return render(request, "larpmanager/larpmanager/join.html", ctx)
+
+
+def _join_form(ctx, request):
     if request.method == "POST":
         form = FirstAssociationForm(request.POST, request.FILES)
         if form.is_valid():
-            assoc = form.save()
+            # set skin
+            assoc = form.save(commit=False)
+            assoc.skin_id = request.assoc["skin_id"]
+            assoc.save()
 
             # Add member to admins
             (ar, created) = AssocRole.objects.get_or_create(assoc=assoc, number=1, name="Admin")
@@ -331,10 +354,6 @@ def join(request):
             el = get_user_membership(request.user.member, assoc.id)
             el.status = MembershipStatus.JOINED
             el.save()
-            msg = _("Welcome to LarpManager!")
-            messages.success(request, msg)
-
-            join_email(assoc)
 
             for _name, email in conf_settings.ADMINS:
                 subj = _("New organization created")
@@ -347,17 +366,17 @@ def join(request):
                 my_send_mail(subj, body, email)
 
             # return redirect('first', assoc=assoc.slug)
-            return go_redirect(request, assoc.slug, "manage")
+            return assoc
     else:
         form = FirstAssociationForm()
-    ctx["form"] = form
 
-    return render(request, "larpmanager/larpmanager/join.html", ctx)
+    ctx["form"] = form
+    return None
 
 
 @cache_page(60 * 15)
 def discover(request):
-    ctx = get_lm_assocs()
+    ctx = get_lm_contact()
     ctx["index"] = True
     ctx["discover"] = LarpManagerDiscover.objects.order_by("order")
     return render(request, "larpmanager/larpmanager/discover.html", ctx)
@@ -365,7 +384,7 @@ def discover(request):
 
 @override("en")
 def tutorials(request, slug=None):
-    ctx = get_lm_assocs()
+    ctx = get_lm_contact()
     ctx["index"] = True
 
     try:
@@ -400,7 +419,7 @@ def tutorials(request, slug=None):
 
 @cache_page(60 * 15)
 def blog(request, slug=""):
-    ctx = get_lm_assocs()
+    ctx = get_lm_contact()
     ctx["index"] = True
     if slug:
         try:
@@ -418,29 +437,29 @@ def blog(request, slug=""):
 
 @cache_page(60 * 15)
 def privacy(request):
-    ctx = get_lm_assocs()
+    ctx = get_lm_contact()
     ctx.update({"text": get_assoc_text(request.assoc["id"], AssocTextType.PRIVACY)})
     return render(request, "larpmanager/larpmanager/privacy.html", ctx)
 
 
 @cache_page(60 * 15)
 def usage(request):
-    ctx = get_lm_assocs()
+    ctx = get_lm_contact()
     ctx["index"] = True
     return render(request, "larpmanager/larpmanager/usage.html", ctx)
 
 
 @cache_page(60 * 15)
 def about_us(request):
-    ctx = get_lm_assocs()
+    ctx = get_lm_contact()
     ctx["index"] = True
     return render(request, "larpmanager/larpmanager/about_us.html", ctx)
 
 
-def get_lm_assocs():
+def get_lm_contact():
     # if check and request.assoc["id"] != 0:
     # return {"red": "https://larpmanager.com" + request.get_full_path()}
-    ctx = {"lm": 1, "contact_form": LarpManagerContact()}
+    ctx = {"lm": 1, "contact_form": LarpManagerContact(), "platform": "LarpManager"}
     return ctx
 
 

@@ -12,8 +12,8 @@
             {% endblock maintitle %}
         </title>
         {% block meta %}
-            <meta name="keywords" content="larpmanager">
-            <meta name="description" content="larpmanager">
+            <meta name="keywords" content="{{ assoc.platform }}">
+            <meta name="description" content="{{ assoc.platform }}">
         {% endblock meta %}
         <meta property="og:url" content="{{ request.path }}">
         <meta property="og:type" content="website">
@@ -22,7 +22,7 @@
         {% if assoc.id == 0 %}
             <link rel="icon" type="image/png" href="{% static 'lm_fav_new.png' %}">
             <link rel="apple-touch-icon" href="{% static 'lm_fav_new.png' %}">
-            <meta property="og:site_name" content="LarpManager">
+            <meta property="og:site_name" content="{{ assoc.platform }}">
             {% if og_title %}<meta property="og:title" content="{{ og_title }}">{% endif %}
             {% if og_image %}
                 <meta property="og:image" content="{{ og_image }}">
@@ -47,7 +47,8 @@
             <link rel="icon" type="image/png" href="{{ assoc.favicon }}">
             <link rel="apple-touch-icon" href="{{ assoc.favicon }}">
             <meta name="thumbnail" content="{{ assoc.logo }}">
-            <meta property="og:site_name" content="{{ assoc.name }} - LarpManager">
+            <meta property="og:site_name"
+                  content="{{ assoc.name }} - {{ assoc.platform }}">
             <meta property="og:image" content="{{ assoc.favicon }}">
             <!--
              <PageMap>
@@ -74,6 +75,8 @@
                 <link rel="stylesheet"
                       href="{% static 'larpmanager/assets/css/alpha.css' %}" />
                 <link rel="stylesheet" href="{% static 'larpmanager/assets/css/lm.css' %}" />
+                <link rel="stylesheet"
+                      href="{% static 'larpmanager/assets/css/skins.css' %}" />
             {% endcompress %}
         {% else %}
             {% compress css %}
@@ -83,6 +86,7 @@
                       href="{% static 'larpmanager/assets/css/solid_state.css' %}" />
                 <link rel="stylesheet" href="{% static 'larpmanager/assets/css/lm.css' %}" />
             {% endcompress %}
+            {% if assoc.skin_css %}<style>{{ assoc.skin_css }}</style>{% endif %}
             {% if assoc.css_code %}
                 <link rel="stylesheet"
                       href="{% get_media_prefix %}/css/{{ assoc.slug }}_{{ assoc.css_code }}.css" />
@@ -99,7 +103,7 @@
                   href="{% static 'larpmanager/assets/css/noscript.css' %}" />
         </noscript>
     </head>
-    <body class="is-preload">
+    <body class="is-preload" id="{{ assoc.name | slugify }}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         {% include "elements/structure/sidebar.html" %}
         <!-- Page Wrapper -->

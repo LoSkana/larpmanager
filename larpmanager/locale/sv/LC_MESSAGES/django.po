@@ -1551,9 +1551,6 @@ msgstr "Pdf-galleri"
 msgid "Installment"
 msgstr "Avbetalning"
 
-msgid "LarpManager"
-msgstr "LarpManager"
-
 msgid "Last change"
 msgstr "Senast ändrad"
 
@@ -3046,6 +3043,10 @@ msgstr "Villkor och anvisningar"
 msgid "Terms and conditions"
 msgstr "Villkor och bestämmelser"
 
+#, python-format
+msgid "Welcome to %(name)s!"
+msgstr "Välkommen till %(name)s!"
+
 msgid "Yes, keep me posted!"
 msgstr "Ja, håll mig uppdaterad!"
 
@@ -3446,6 +3447,9 @@ msgstr "Hemlig registreringslänk"
 
 msgid "Thanks for your support!"
 msgstr "Tack för ert stöd!"
+
+msgid "The subdomain identifier"
+msgstr "Identifieraren för underdomänen"
 
 msgid "Try the sheet generation"
 msgstr "Försök med kortgenerering"
@@ -4063,6 +4067,9 @@ msgstr "Prestationsuppgift: %(badge)s"
 msgid "Ask the organisers to activate it"
 msgstr "Be arrangörerna att aktivera den"
 
+msgid "Complete name of the Organization"
+msgstr "Organisationens fullständiga namn"
+
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Bekräfta inmatning till %(event)s"
@@ -4418,9 +4425,6 @@ msgstr "Beskriv kortfattat vad lådan innehåller"
 
 msgid "Check the validity of the fiscal code."
 msgstr "Kontrollera att skattekoden är giltig."
-
-msgid "Complete name of the LARP Organization"
-msgstr "Föreningens fullständiga namn"
 
 msgid "Event display and visual customization"
 msgstr "Händelsevisning och visuell anpassning"
@@ -6653,6 +6657,11 @@ msgstr ""
 "vara aktiverad"
 
 msgid ""
+"Your data will be saved in the system, which is used by several associations"
+msgstr ""
+"Dina uppgifter kommer att sparas i systemet, som används av flera föreningar"
+
+msgid ""
 "Characters relating to place of birth do not match (check exact "
 "municipality)"
 msgstr ""
@@ -7446,13 +7455,6 @@ msgid ""
 msgstr ""
 "På den här sidan kan du ställa in de fält som spelarna kan fylla i i sin "
 "användarprofil"
-
-msgid ""
-"Your data will be saved in the LarpManager system, which is used by several "
-"associations"
-msgstr ""
-"Dina uppgifter kommer att sparas i LarpManager-systemet, som används av "
-"flera föreningar"
 
 #, python-format
 msgid ""
@@ -8902,13 +8904,6 @@ msgstr ""
 "teckensnitt och bilder, går du till sidan för utseendehantering"
 
 msgid ""
-"If you wish to confirm that you share your data in the LarpManager system "
-"with this organisation, click on the button below"
-msgstr ""
-"Om du vill bekräfta att du delar dina uppgifter i LarpManager-systemet med "
-"denna organisation, klicka på knappen nedan"
-
-msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
 "all events, instead of each event's organizers."
 msgstr ""
@@ -9439,6 +9434,14 @@ msgstr ""
 "Du har ännu inte betalat din medlemsavgift: den krävs för att kunna delta i "
 "evenemang och rösta vid årsstämman!"
 
+msgid ""
+"In order to participate in this organization's events, you must consent to "
+"the sharing of your personal data in accordance with the GDPR and our "
+"Privacy Policy"
+msgstr ""
+"För att kunna delta i denna organisations evenemang måste du samtycka till "
+"att dina personuppgifter delas i enlighet med GDPR och vår integritetspolicy"
+
 #, python-format
 msgid ""
 "Hello! You have signed up for %(event)s, but have not yet completed your "
@@ -9503,6 +9506,15 @@ msgstr ""
 "För att kunna bekräfta ditt medlemskap måste du begära att få registrera dig"
 " som medlem i föreningen. Förfarandet kommer automatiskt att ta dig genom de"
 " nödvändiga stegen."
+
+msgid ""
+"By clicking the button below, you confirm that you consent to the sharing of"
+" your personal data with this organization, in accordance with the GDPR and "
+"our Privacy Policy"
+msgstr ""
+"Genom att klicka på knappen nedan bekräftar du att du samtycker till att "
+"dina personuppgifter delas med denna organisation, i enlighet med GDPR och "
+"vår integritetspolicy"
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "

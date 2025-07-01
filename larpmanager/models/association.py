@@ -40,20 +40,46 @@ class MemberFieldType(models.TextChoices):
     MANDATORY = "m", _("Mandatory")
 
 
-class Association(BaseModel):
-    EUR = "e"
-    USD = "u"
-    GBP = "g"
-    JPY = "j"
-    CAD = "c"
-    CURRENCY_CHOICES = [(EUR, "EUR"), (USD, "USD"), (GBP, "GBP"), (CAD, "CAD"), (JPY, "JPY")]
+class Currency(models.TextChoices):
+    EUR = "e", "EUR"
+    USD = "u", "USD"
+    GBP = "g", "GBP"
+    CAD = "c", "CAD"
+    JPY = "j", "JPY"
 
-    name = models.CharField(max_length=100, help_text=_("Complete name of the LARP Organization"))
+
+class AssociationSkin(BaseModel):
+    name = models.CharField(max_length=100)
+
+    domain = models.CharField(max_length=100)
+
+    default_features = models.ManyToManyField(Feature, related_name="skins", blank=True)
+
+    default_mandatory_fields = models.CharField(max_length=1000, blank=True)
+
+    default_optional_fields = models.CharField(max_length=1000, blank=True)
+
+    default_css = models.CharField(max_length=1000, blank=True)
+
+    default_nation = models.CharField(
+        max_length=2,
+        choices=FeatureNationality.choices,
+        blank=True,
+        null=True,
+    )
+
+
+class Association(BaseModel):
+    skin = models.ForeignKey(AssociationSkin, on_delete=models.CASCADE)
+
+    name = models.CharField(max_length=100, help_text=_("Complete name of the Organization"))
 
     slug = models.CharField(
         max_length=20,
         verbose_name=_("URL identifier"),
-        help_text=_("Only lowercase characters and numbers are allowed, no spaces or symbols"),
+        help_text=_("The subdomain identifier")
+        + " - "
+        + _("Only lowercase characters and numbers are allowed, no spaces or symbols"),
         validators=[AlphanumericValidator],
         db_index=True,
     )
@@ -99,8 +125,8 @@ class Association(BaseModel):
 
     payment_currency = models.CharField(
         max_length=1,
-        choices=CURRENCY_CHOICES,
-        default=EUR,
+        choices=Currency.choices,
+        default=Currency.EUR,
         blank=True,
         null=True,
         verbose_name=_("Payment currency"),

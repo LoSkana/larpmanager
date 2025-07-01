@@ -1551,9 +1551,6 @@ msgstr "Galerie Pdf"
 msgid "Installment"
 msgstr "Paiement échelonné"
 
-msgid "LarpManager"
-msgstr "LarpManager"
-
 msgid "Last change"
 msgstr "Dernière modification"
 
@@ -3046,6 +3043,10 @@ msgstr "Conditions générales d'utilisation"
 msgid "Terms and conditions"
 msgstr "Conditions générales d'utilisation"
 
+#, python-format
+msgid "Welcome to %(name)s!"
+msgstr "Bienvenue à %(name)s !"
+
 msgid "Yes, keep me posted!"
 msgstr "Oui, tenez-moi au courant !"
 
@@ -3446,6 +3447,9 @@ msgstr "Lien d'enregistrement secret"
 
 msgid "Thanks for your support!"
 msgstr "Merci pour votre soutien !"
+
+msgid "The subdomain identifier"
+msgstr "L'identifiant du sous-domaine"
 
 msgid "Try the sheet generation"
 msgstr "Essayer la génération de cartes"
@@ -4063,6 +4067,9 @@ msgstr "Attribution des résultats : %(badge)s"
 msgid "Ask the organisers to activate it"
 msgstr "Demander aux organisateurs de l'activer"
 
+msgid "Complete name of the Organization"
+msgstr "Nom complet de l'organisation"
+
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Confirmer l'entrée dans %(event)s"
@@ -4420,9 +4427,6 @@ msgstr "Décrivez brièvement le contenu de la boîte"
 
 msgid "Check the validity of the fiscal code."
 msgstr "Vérifier la validité du code fiscal."
-
-msgid "Complete name of the LARP Organization"
-msgstr "Nom complet de l'association"
 
 msgid "Event display and visual customization"
 msgstr "Affichage des événements et personnalisation visuelle"
@@ -6829,6 +6833,12 @@ msgstr ""
 "être activée "
 
 msgid ""
+"Your data will be saved in the system, which is used by several associations"
+msgstr ""
+"Vos données seront enregistrées dans le système, qui est utilisé par "
+"plusieurs associations."
+
+msgid ""
 "Characters relating to place of birth do not match (check exact "
 "municipality)"
 msgstr ""
@@ -7637,13 +7647,6 @@ msgid ""
 msgstr ""
 "Cette page vous permet de définir les champs que les joueurs peuvent remplir"
 " dans leur profil d'utilisateur."
-
-msgid ""
-"Your data will be saved in the LarpManager system, which is used by several "
-"associations"
-msgstr ""
-"Vos données seront sauvegardées dans le système LarpManager, qui est utilisé"
-" par plusieurs associations."
 
 #, python-format
 msgid ""
@@ -9108,13 +9111,6 @@ msgstr ""
 "l'apparence."
 
 msgid ""
-"If you wish to confirm that you share your data in the LarpManager system "
-"with this organisation, click on the button below"
-msgstr ""
-"Si vous souhaitez confirmer que vous partagez vos données dans le système "
-"LarpManager avec cette organisation, cliquez sur le bouton ci-dessous "
-
-msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
 "all events, instead of each event's organizers."
 msgstr ""
@@ -9672,6 +9668,15 @@ msgstr ""
 "Vous n'avez pas encore payé votre cotisation : elle est nécessaire pour "
 "participer aux événements et pour voter à l'assemblée générale annuelle !"
 
+msgid ""
+"In order to participate in this organization's events, you must consent to "
+"the sharing of your personal data in accordance with the GDPR and our "
+"Privacy Policy"
+msgstr ""
+"Pour participer aux événements organisés par cette organisation, vous devez "
+"consentir au partage de vos données personnelles conformément au GDPR et à "
+"notre politique de confidentialité."
+
 #, python-format
 msgid ""
 "Hello! You have signed up for %(event)s, but have not yet completed your "
@@ -9737,6 +9742,15 @@ msgstr ""
 "Afin de confirmer votre adhésion, vous devez demander à vous inscrire en "
 "tant que membre de l'Association. La procédure vous conduira automatiquement"
 " à travers les étapes requises."
+
+msgid ""
+"By clicking the button below, you confirm that you consent to the sharing of"
+" your personal data with this organization, in accordance with the GDPR and "
+"our Privacy Policy"
+msgstr ""
+"En cliquant sur le bouton ci-dessous, vous confirmez que vous consentez au "
+"partage de vos données personnelles avec cette organisation, conformément au"
+" GDPR et à notre politique de confidentialité."
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "

@@ -1551,9 +1551,6 @@ msgstr "Galería Pdf"
 msgid "Installment"
 msgstr "Pago a plazos"
 
-msgid "LarpManager"
-msgstr "LarpManager"
-
 msgid "Last change"
 msgstr "Última modificación"
 
@@ -3046,6 +3043,10 @@ msgstr "Términos y Condiciones"
 msgid "Terms and conditions"
 msgstr "Condiciones generales"
 
+#, python-format
+msgid "Welcome to %(name)s!"
+msgstr "¡Bienvenido a %(name)s!"
+
 msgid "Yes, keep me posted!"
 msgstr "¡Sí, mantenedme informado!"
 
@@ -3446,6 +3447,9 @@ msgstr "Enlace de inscripción secreto"
 
 msgid "Thanks for your support!"
 msgstr "Gracias por su apoyo al acto."
+
+msgid "The subdomain identifier"
+msgstr "El identificador del subdominio"
 
 msgid "Try the sheet generation"
 msgstr "Probar la generación de hojas"
@@ -4063,6 +4067,9 @@ msgstr "Asignación de logros: %(badge)s"
 msgid "Ask the organisers to activate it"
 msgstr "Pide a los organizadores que lo activen"
 
+msgid "Complete name of the Organization"
+msgstr "Nombre completo de la Organización"
+
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Confirmar entrada a %(event)s"
@@ -4418,9 +4425,6 @@ msgstr "Describe brevemente el contenido de la caja"
 
 msgid "Check the validity of the fiscal code."
 msgstr "Compruebe la validez del código fiscal."
-
-msgid "Complete name of the LARP Organization"
-msgstr "Nombre completo de la organización"
 
 msgid "Event display and visual customization"
 msgstr "Visualización y personalización de eventos"
@@ -6716,6 +6720,11 @@ msgstr ""
 " función"
 
 msgid ""
+"Your data will be saved in the system, which is used by several associations"
+msgstr ""
+"Tus datos se guardarán en el sistema, que utilizan varias asociaciones"
+
+msgid ""
 "Characters relating to place of birth do not match (check exact "
 "municipality)"
 msgstr ""
@@ -7519,13 +7528,6 @@ msgid ""
 msgstr ""
 "Esta página le permite configurar los campos que los jugadores pueden "
 "rellenar en su perfil de usuario"
-
-msgid ""
-"Your data will be saved in the LarpManager system, which is used by several "
-"associations"
-msgstr ""
-"Tus datos se guardarán en el sistema LarpManager, que utilizan varias "
-"asociaciones"
 
 #, python-format
 msgid ""
@@ -8982,13 +8984,6 @@ msgstr ""
 "colores, fuentes e imágenes, acceda a la página de gestión de la apariencia"
 
 msgid ""
-"If you wish to confirm that you share your data in the LarpManager system "
-"with this organisation, click on the button below"
-msgstr ""
-"Si deseas confirmar que compartes tus datos en el sistema LarpManager con "
-"esta organización, haz clic en el siguiente botón"
-
-msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
 "all events, instead of each event's organizers."
 msgstr ""
@@ -9529,6 +9524,15 @@ msgstr ""
 "No se ha recibido el pago de tu afiliación de este año. Es necesario para "
 "participar en los eventos y reuniones de la organización."
 
+msgid ""
+"In order to participate in this organization's events, you must consent to "
+"the sharing of your personal data in accordance with the GDPR and our "
+"Privacy Policy"
+msgstr ""
+"Para participar en los eventos de esta organización, debe dar su "
+"consentimiento para que se compartan sus datos personales de conformidad con"
+" el GDPR y nuestra Política de privacidad"
+
 #, python-format
 msgid ""
 "Hello! You have signed up for %(event)s, but have not yet completed your "
@@ -9593,6 +9597,15 @@ msgstr ""
 "Para confirmar su afiliación, debe solicitar su inscripción como miembro de "
 "la Asociación. El procedimiento le llevará automáticamente por los pasos "
 "requeridos."
+
+msgid ""
+"By clicking the button below, you confirm that you consent to the sharing of"
+" your personal data with this organization, in accordance with the GDPR and "
+"our Privacy Policy"
+msgstr ""
+"Al hacer clic en el botón de abajo, confirmas que das tu consentimiento para"
+" compartir tus datos personales con esta organización, de acuerdo con el "
+"GDPR y nuestra Política de Privacidad"
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "
