@@ -15,3 +15,5 @@
 #ludomanager .starter { line-height: normal; padding: 0 1em }
 
 #ludomanager .special { font-size: 120%; }
+
+#ludomanager .box { box-shadow: 0; padding: 0; }

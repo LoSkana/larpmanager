@@ -41,6 +41,9 @@ class LarpManagerContact(LarpManagerCheck):
         label="",
         widget=Textarea(attrs={"rows": 10, "placeholder": "Content"}),
     )
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class LarpManagerTicket(LarpManagerContact):
