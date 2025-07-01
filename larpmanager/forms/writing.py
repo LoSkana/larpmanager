@@ -174,10 +174,14 @@ class BaseWritingForm(BaseRegistrationForm):
         return key
 
     def save(self, commit=True):
-        instance = super().save(commit)
+        instance = super().save()
 
+        instance.save()
         if hasattr(self, "questions"):
-            self.save_reg_questions(instance)
+            orga = True
+            if hasattr(self, "orga"):
+                orga = self.orga
+            self.save_reg_questions(instance, orga=orga)
 
         return instance
 

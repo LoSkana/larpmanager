@@ -188,12 +188,6 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         return cleaned_data
 
-    def save(self, commit=True):
-        instance = super().save()
-        if hasattr(self, "questions"):
-            self.save_reg_questions(instance, orga=self.orga)
-        return instance
-
 
 class OrgaCharacterForm(CharacterForm):
     page_info = _("This page allows you to add or edit a character")
