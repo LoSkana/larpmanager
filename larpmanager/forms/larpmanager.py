@@ -22,9 +22,15 @@ from django import forms
 from django.forms import Textarea
 from django_recaptcha.fields import ReCaptchaField
 
+from larpmanager.utils.common import get_recaptcha_secrets
+
 
 class LarpManagerCheck(forms.Form):
-    captcha = ReCaptchaField(label="")
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request", None)
+        super().__init__(*args, **kwargs)
+        public, private = get_recaptcha_secrets(self.request)
+        self.fields["captcha"] = ReCaptchaField(label="", public_key=public, private_key=private)
 
 
 class LarpManagerContact(LarpManagerCheck):

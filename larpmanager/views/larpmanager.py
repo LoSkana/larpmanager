@@ -310,11 +310,11 @@ def discord(request):
         return HttpResponseForbidden("Bots not allowed.")
 
     if request.POST:
-        form = LarpManagerCheck(request.POST)
+        form = LarpManagerCheck(request.POST, request=request)
         if form.is_valid():
             return redirect("https://discord.gg/C4KuyQbuft")
     else:
-        form = LarpManagerCheck()
+        form = LarpManagerCheck(request=request)
     ctx = {"form": form}
     return render(request, "larpmanager/larpmanager/discord.html", ctx)
 
@@ -568,10 +568,10 @@ def donate(request):
         return HttpResponseForbidden("Bots not allowed.")
 
     if request.POST:
-        form = LarpManagerCheck(request.POST)
+        form = LarpManagerCheck(request.POST, request=request)
         if form.is_valid():
             return redirect("https://www.paypal.com/paypalme/mscanagatta")
     else:
-        form = LarpManagerCheck()
+        form = LarpManagerCheck(request=request)
     ctx = {"form": form}
     return render(request, "larpmanager/larpmanager/donate.html", ctx)

@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import html
+import json
 import os
 import random
 import re
@@ -32,6 +33,7 @@ import magic
 import pytz
 from background_task.models import Task
 from diff_match_patch import diff_match_patch
+from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max, Subquery
 from django.http import Http404
@@ -669,3 +671,16 @@ def _get_help_questions(ctx, request):
             closed_q.append(cq)
 
     return closed_q, open_q
+
+
+def get_recaptcha_secrets(request):
+    public = conf_settings.RECAPTCHA_PUBLIC
+    private = conf_settings.RECAPTCHA_PRIVATE
+
+    # if multi-site settings
+    if ":" in public:
+        skin_id = request.assoc["skin_id"]
+        public = json.loads(public)[skin_id]
+        private = json.load(private)[skin_id]
+
+    return public, private
