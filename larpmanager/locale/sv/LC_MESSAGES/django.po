@@ -227,6 +227,9 @@ msgstr "Nivå"
 msgid "Time"
 msgstr "nu"
 
+msgid "Tipo"
+msgstr "Tipo"
+
 msgid "Type"
 msgstr "Typ"
 

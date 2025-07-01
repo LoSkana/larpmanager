@@ -6643,6 +6643,9 @@ msgstr ""
 msgid "This page shows the factions (character groups) of the event."
 msgstr ""
 
+msgid "Tipo"
+msgstr ""
+
 msgid "Selectable"
 msgstr ""
 

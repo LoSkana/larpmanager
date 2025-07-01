@@ -227,6 +227,9 @@ msgstr "Poziom"
 msgid "Time"
 msgstr "Czas"
 
+msgid "Tipo"
+msgstr "Tipo"
+
 msgid "Type"
 msgstr "Typ"
 

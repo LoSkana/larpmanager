@@ -96,6 +96,7 @@ class QuestionVisibility(models.TextChoices):
 class QuestionApplicable(models.TextChoices):
     CHARACTER = "c", "character"
     PLOT = "p", "plot"
+    FACTION = "f", "faction"
 
     @classmethod
     def get_applicable(cls, model_name):

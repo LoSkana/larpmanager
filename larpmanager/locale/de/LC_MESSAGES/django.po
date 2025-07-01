@@ -227,6 +227,9 @@ msgstr "Ebene"
 msgid "Time"
 msgstr "Jetzt"
 
+msgid "Tipo"
+msgstr "Tipo"
+
 msgid "Type"
 msgstr "Typ"
 

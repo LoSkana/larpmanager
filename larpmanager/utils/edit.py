@@ -82,7 +82,7 @@ def _get_field_value(el, que):
 
     if que.typ in {"p", "t", "e"}:
         try:
-            return WritingAnswer.objects.get(question=que, element_id=el.id).text
+            return WritingAnswer.objects.filter(question=que, element_id=el.id).first().text
         except ObjectDoesNotExist:
             return ""
 

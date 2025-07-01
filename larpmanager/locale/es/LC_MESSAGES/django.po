@@ -227,6 +227,9 @@ msgstr "Nivel"
 msgid "Time"
 msgstr "Hora"
 
+msgid "Tipo"
+msgstr "Tipo"
+
 msgid "Type"
 msgstr "Tipo"
 

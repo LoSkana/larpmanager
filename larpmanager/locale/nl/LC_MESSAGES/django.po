@@ -227,6 +227,9 @@ msgstr "Niveau"
 msgid "Time"
 msgstr "Nu"
 
+msgid "Tipo"
+msgstr "Tipo"
+
 msgid "Type"
 msgstr "Type"
 

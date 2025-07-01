@@ -179,33 +179,33 @@ def writing_list(request, ctx, typ, nm):
         ctx["list"] = ctx["list"].prefetch_related("prerequisites")
 
     if writing:
+        # noinspection PyProtectedMember, PyUnresolvedReferences
+        ctx["label_typ"] = typ._meta.model_name
+        ctx["writing_typ"] = QuestionApplicable.get_applicable(ctx["label_typ"])
         orga_list_progress_assign(ctx, typ)  # pyright: ignore[reportArgumentType]
         writing_list_text_fields(ctx, text_fields, typ)
         _setup_char_finder(ctx)
-
-    _get_custom_form(ctx, nm)
+        _get_custom_form(ctx)
 
     return render(request, "larpmanager/orga/writing/" + nm + "s.html", ctx)
 
 
-def _get_custom_form(ctx, nm):
+def _get_custom_form(ctx):
+    if not ctx["writing_typ"]:
+        return
+
     # default name for fields
     ctx["fields_name"] = {QuestionType.NAME.value: _("Name")}
 
-    mapping = {"character": QuestionApplicable.CHARACTER, "plot": QuestionApplicable.PLOT}
-    if nm not in mapping:
-        return
-
-    if "character" in ctx["features"]:
-        que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-        que = que.filter(applicable=mapping[nm])
-        ctx["form_questions"] = {}
-        for q in que:
-            q.basic_typ = q.typ in QuestionType.get_basic_types()
-            if q.typ in ctx["fields_name"].keys():
-                ctx["fields_name"][q.typ] = q.display
-            else:
-                ctx["form_questions"][q.id] = q
+    que = ctx["event"].get_elements(WritingQuestion).order_by("order")
+    que = que.filter(applicable=ctx["writing_typ"])
+    ctx["form_questions"] = {}
+    for q in que:
+        q.basic_typ = q.typ in QuestionType.get_basic_types()
+        if q.typ in ctx["fields_name"].keys():
+            ctx["fields_name"][q.typ] = q.display
+        else:
+            ctx["form_questions"][q.id] = q
 
 
 def writing_list_query(ctx, ev, typ):
@@ -240,10 +240,6 @@ def writing_list_query(ctx, ev, typ):
 
 
 def writing_list_text_fields(ctx, text_fields, typ):
-    # noinspection PyProtectedMember
-    ctx["label_typ"] = typ._meta.model_name
-    ctx["writing_typ"] = QuestionApplicable.get_applicable(ctx["label_typ"])
-
     # add editor type questions
     que = ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"])
     for que_id in que.filter(typ=QuestionType.EDITOR).values_list("pk", flat=True):
@@ -291,10 +287,12 @@ def writing_list_char(ctx, ev, text_fields):
         for el in ctx["list"]:
             if el.number in ctx["plots"]:
                 el.plts = ctx["plots"][el.number]
+
     if "faction" in ctx["features"]:
         fac_event = ctx["event"].get_class_parent("faction")
         for el in ctx["list"]:
             el.factions = el.factions_list.filter(event=fac_event)
+
     # add character configs
     char_add_addit(ctx)
 
