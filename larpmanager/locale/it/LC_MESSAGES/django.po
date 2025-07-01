@@ -2631,7 +2631,7 @@ msgid "Pre registrations"
 msgstr "Pre iscrizioni"
 
 msgid "Pre-Registrations"
-msgstr "Pre-registrazioni"
+msgstr "Pre-iscrizioni"
 
 msgid "Quests and Traits"
 msgstr "Missioni e tratti"
@@ -2769,7 +2769,7 @@ msgid "Reason for payment"
 msgstr "Motivo del pagamento"
 
 msgid "Registrations open"
-msgstr "Le registrazioni sono aperte"
+msgstr "Le iscrizioni sono aperte"
 
 msgid "Review all members"
 msgstr "Esamina tutti i membri"
@@ -3850,7 +3850,7 @@ msgid "Manage questions for workshops"
 msgstr "Gestisci le domande per i workshop"
 
 msgid "Registrations on external link"
-msgstr "Registrazioni su link esterno"
+msgstr "Iscrizoni su link esterno"
 
 msgid "Review players' sensitive data"
 msgstr "Esamina i dati sensibili dei giocatori"
@@ -5954,7 +5954,7 @@ msgstr ""
 
 msgid "Now players can submit preregistrations, and you can review them"
 msgstr ""
-"Ora i giocatori possono inviare le preregistrazioni e voi potete esaminarle."
+"Ora i giocatori possono inviare le preiscrizioni e voi potete esaminarle."
 
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "Parte della quota di iscrizione derivata solo dal biglietto scelto"
@@ -6041,7 +6041,7 @@ msgstr ""
 
 msgid "Manage the run settings: date, registrations, elements visibility"
 msgstr ""
-"Gestisci le impostazioni della run: data, registrazioni, visibilità degli "
+"Gestisci le impostazioni della run: data, iscrizioni, visibilità degli "
 "elementi"
 
 #, python-format
@@ -6341,7 +6341,7 @@ msgstr ""
 
 msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
-"Se selezionata, aggiunge a tutte le registrazioni un codice univoco di "
+"Se selezionata, aggiunge a tutte le iscrizioni un codice univoco di "
 "riferimento."
 
 msgid "If checked, it allows players to indicate the song of their characters"
