@@ -65,7 +65,7 @@ from larpmanager.utils.text import get_assoc_text
 
 
 def lm_home(request):
-    ctx = get_lm_contact()
+    ctx = get_lm_contact(request)
     ctx["index"] = True
 
     if request.assoc["base_domain"] == "ludomanager.it":
@@ -88,7 +88,7 @@ def ludomanager(ctx, request):
 def contact(request):
     ctx = {}
     if request.POST:
-        form = LarpManagerContact(request.POST)
+        form = LarpManagerContact(request.POST, request=request)
         if form.is_valid():
             ct = form.cleaned_data["email"]
             for _name, email in conf_settings.ADMINS:
@@ -96,7 +96,7 @@ def contact(request):
                 body = form.cleaned_data["content"]
                 my_send_simple_mail(subj, body, email)
     else:
-        form = LarpManagerContact()
+        form = LarpManagerContact(request=request)
         ctx["contact_form"] = form
     return render(request, "larpmanager/larpmanager/contact.html", ctx)
 
@@ -279,7 +279,7 @@ def debug_slug(request, s=""):
 def ticket(request, s=""):
     ctx = {"reason": s}
     if request.POST:
-        form = LarpManagerTicket(request.POST)
+        form = LarpManagerTicket(request.POST, request=request)
         if form.is_valid():
             for _name, email in conf_settings.ADMINS:
                 subj = "LarpManager ticket"
@@ -293,7 +293,7 @@ def ticket(request, s=""):
             messages.success(request, _("Your request has been sent, we will reply as soon as possible!"))
             return redirect("home")
     else:
-        form = LarpManagerTicket()
+        form = LarpManagerTicket(request=request)
     ctx["form"] = form
     return render(request, "larpmanager/member/ticket.html", ctx)
 
@@ -321,7 +321,7 @@ def discord(request):
 
 @login_required
 def join(request):
-    ctx = get_lm_contact()
+    ctx = get_lm_contact(request)
     if "red" in ctx:
         return redirect(ctx["red"])
 
@@ -376,7 +376,7 @@ def _join_form(ctx, request):
 
 @cache_page(60 * 15)
 def discover(request):
-    ctx = get_lm_contact()
+    ctx = get_lm_contact(request)
     ctx["index"] = True
     ctx["discover"] = LarpManagerDiscover.objects.order_by("order")
     return render(request, "larpmanager/larpmanager/discover.html", ctx)
@@ -384,7 +384,7 @@ def discover(request):
 
 @override("en")
 def tutorials(request, slug=None):
-    ctx = get_lm_contact()
+    ctx = get_lm_contact(request)
     ctx["index"] = True
 
     try:
@@ -419,7 +419,7 @@ def tutorials(request, slug=None):
 
 @cache_page(60 * 15)
 def blog(request, slug=""):
-    ctx = get_lm_contact()
+    ctx = get_lm_contact(request)
     ctx["index"] = True
     if slug:
         try:
@@ -437,29 +437,29 @@ def blog(request, slug=""):
 
 @cache_page(60 * 15)
 def privacy(request):
-    ctx = get_lm_contact()
+    ctx = get_lm_contact(request)
     ctx.update({"text": get_assoc_text(request.assoc["id"], AssocTextType.PRIVACY)})
     return render(request, "larpmanager/larpmanager/privacy.html", ctx)
 
 
 @cache_page(60 * 15)
 def usage(request):
-    ctx = get_lm_contact()
+    ctx = get_lm_contact(request)
     ctx["index"] = True
     return render(request, "larpmanager/larpmanager/usage.html", ctx)
 
 
 @cache_page(60 * 15)
 def about_us(request):
-    ctx = get_lm_contact()
+    ctx = get_lm_contact(request)
     ctx["index"] = True
     return render(request, "larpmanager/larpmanager/about_us.html", ctx)
 
 
-def get_lm_contact():
+def get_lm_contact(request):
     # if check and request.assoc["id"] != 0:
     # return {"red": "https://larpmanager.com" + request.get_full_path()}
-    ctx = {"lm": 1, "contact_form": LarpManagerContact(), "platform": "LarpManager"}
+    ctx = {"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"}
     return ctx
 
 

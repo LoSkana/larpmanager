@@ -21,97 +21,98 @@
 import re
 
 import pytest
-from playwright.sync_api import expect, sync_playwright
+from playwright.async_api import async_playwright, expect
 
 from larpmanager.tests.utils import go_to, handle_error, login_orga, page_start, submit
 
 
 @pytest.mark.django_db
-def test_orga_mirror(live_server):
-    with sync_playwright() as p:
-        browser, context, page = page_start(p)
+@pytest.mark.asyncio
+async def test_orga_mirror(live_server):
+    async with async_playwright() as p:
+        browser, context, page = await page_start(p)
         try:
-            orga_mirror(live_server, page)
+            await orga_mirror(live_server, page)
 
         except Exception as e:
-            handle_error(page, e, "orga_mirror")
+            await handle_error(page, e, "orga_mirror")
 
         finally:
-            context.close()
-            browser.close()
+            await context.close()
+            await browser.close()
 
 
-def orga_mirror(live_server, page):
-    login_orga(page, live_server)
+async def orga_mirror(live_server, page):
+    await login_orga(page, live_server)
 
     # activate characters
-    go_to(page, live_server, "/test/1/manage/features/178/on")
+    await go_to(page, live_server, "/test/1/manage/features/178/on")
 
     # show chars
-    go_to(page, live_server, "/test/1/manage/run")
-    page.locator("#id_show_char").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    await go_to(page, live_server, "/test/1/manage/run")
+    await page.locator("#id_show_char").check()
+    await page.get_by_role("button", name="Confirm", exact=True).click()
 
     # check gallery
-    go_to(page, live_server, "/test/1/")
-    expect(page.locator("#one")).to_contain_text("Test Character")
+    await go_to(page, live_server, "/test/1/")
+    await expect(page.locator("#one")).to_contain_text("Test Character")
 
     # activate casting
-    go_to(page, live_server, "/test/1/manage/features/27/on")
+    await go_to(page, live_server, "/test/1/manage/features/27/on")
 
     # activate mirror
-    go_to(page, live_server, "/test/1/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Casting\s.+")).click()
-    page.locator("#id_casting_mirror").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    await go_to(page, live_server, "/test/1/manage/config")
+    await page.get_by_role("link", name=re.compile(r"^Casting\s.+")).click()
+    await page.locator("#id_casting_mirror").check()
+    await page.get_by_role("button", name="Confirm", exact=True).click()
 
     # create mirror
-    go_to(page, live_server, "/test/1/manage/characters/")
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Mirror")
-    page.locator("#id_mirror").select_option("1")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    await go_to(page, live_server, "/test/1/manage/characters/")
+    await page.get_by_role("link", name="New").click()
+    await page.locator("#id_name").click()
+    await page.locator("#id_name").fill("Mirror")
+    await page.locator("#id_mirror").select_option("1")
+    await page.get_by_role("button", name="Confirm", exact=True).click()
 
     # check gallery
-    go_to(page, live_server, "/test/1/")
-    expect(page.locator("#one")).to_contain_text("Mirror")
-    expect(page.locator("#one")).to_contain_text("Test Character")
+    await go_to(page, live_server, "/test/1/")
+    await expect(page.locator("#one")).to_contain_text("Mirror")
+    await expect(page.locator("#one")).to_contain_text("Test Character")
 
-    go_to(page, live_server, "/test/1/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Casting\s.+")).click()
-    page.locator("#id_casting_characters").click()
-    page.locator("#id_casting_characters").fill("1")
-    page.locator("#id_casting_min").click()
-    page.locator("#id_casting_min").fill("1")
-    page.locator("#id_casting_max").click()
-    page.locator("#id_casting_max").fill("1")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    await go_to(page, live_server, "/test/1/manage/config")
+    await page.get_by_role("link", name=re.compile(r"^Casting\s.+")).click()
+    await page.locator("#id_casting_characters").click()
+    await page.locator("#id_casting_characters").fill("1")
+    await page.locator("#id_casting_min").click()
+    await page.locator("#id_casting_min").fill("1")
+    await page.locator("#id_casting_max").click()
+    await page.locator("#id_casting_max").fill("1")
+    await page.get_by_role("button", name="Confirm", exact=True).click()
 
     # sign up and fill preferences
-    go_to(page, live_server, "/test/1/register")
-    page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    await go_to(page, live_server, "/test/1/register")
+    await page.get_by_role("button", name="Continue").click()
+    await page.get_by_role("button", name="Confirm", exact=True).click()
 
-    go_to(page, live_server, "/test/1/casting")
-    page.locator("#faction0").select_option("all")
-    page.locator("#choice0").click()
-    expect(page.locator("#casting")).to_contain_text("Mirror")
-    expect(page.locator("#casting")).to_contain_text("Test Character")
-    page.locator("#choice0").select_option("2")
-    submit(page)
+    await go_to(page, live_server, "/test/1/casting")
+    await page.locator("#faction0").select_option("all")
+    await page.locator("#choice0").click()
+    await expect(page.locator("#casting")).to_contain_text("Mirror")
+    await expect(page.locator("#casting")).to_contain_text("Test Character")
+    await page.locator("#choice0").select_option("2")
+    await submit(page)
 
     # perform casting
-    go_to(page, live_server, "/test/1/manage/casting")
-    page.get_by_role("button", name="Start algorithm").click()
-    expect(page.locator("#assegnazioni")).to_contain_text("#1 Test Character")
-    expect(page.locator("#assegnazioni")).to_contain_text("-> #2 Mirror")
-    page.get_by_role("button", name="Upload").click()
+    await go_to(page, live_server, "/test/1/manage/casting")
+    await page.get_by_role("button", name="Start algorithm").click()
+    await expect(page.locator("#assegnazioni")).to_contain_text("#1 Test Character")
+    await expect(page.locator("#assegnazioni")).to_contain_text("-> #2 Mirror")
+    await page.get_by_role("button", name="Upload").click()
 
     # check assignment
-    go_to(page, live_server, "/test/1/manage/registrations")
-    expect(page.locator("#regs")).to_contain_text("#1 Test Character")
+    await go_to(page, live_server, "/test/1/manage/registrations")
+    await expect(page.locator("#regs")).to_contain_text("#1 Test Character")
 
-    go_to(page, live_server, "/test/1")
-    expect(page.locator("#one")).to_contain_text("Test Character")
-    expect(page.locator("#one")).not_to_contain_text("Mirror")
+    await go_to(page, live_server, "/test/1")
+    await expect(page.locator("#one")).to_contain_text("Test Character")
+    await expect(page.locator("#one")).not_to_contain_text("Mirror")

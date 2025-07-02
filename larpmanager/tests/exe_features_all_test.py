@@ -21,39 +21,40 @@
 from urllib.parse import urlparse
 
 import pytest
-from playwright.sync_api import sync_playwright
+from playwright.async_api import async_playwright
 
 from larpmanager.tests.utils import _checkboxes, go_to, go_to_check, handle_error, login_orga, page_start
 
 
 @pytest.mark.django_db
-def test_exe_features_all(live_server):
-    with sync_playwright() as p:
-        browser, context, page = page_start(p)
+@pytest.mark.asyncio
+async def test_exe_features_all(live_server):
+    async with async_playwright() as p:
+        browser, context, page = await page_start(p)
         try:
-            exe_features_all(live_server, page)
+            await exe_features_all(live_server, page)
 
         except Exception as e:
-            handle_error(page, e, "exe_features")
+            await handle_error(page, e, "exe_features")
 
         finally:
-            context.close()
-            browser.close()
+            await context.close()
+            await browser.close()
 
 
-def exe_features_all(live_server, page):
-    login_orga(page, live_server)
+async def exe_features_all(live_server, page):
+    await login_orga(page, live_server)
 
-    go_to(page, live_server, "/manage/features")
-    _checkboxes(page, True)
+    await go_to(page, live_server, "/manage/features")
+    await _checkboxes(page, True)
 
-    visit_all(page, live_server)
+    await visit_all(page, live_server)
 
-    go_to(page, live_server, "/manage/features")
-    _checkboxes(page, False)
+    await go_to(page, live_server, "/manage/features")
+    await _checkboxes(page, False)
 
 
-def visit_all(page, live_server):
+async def visit_all(page, live_server):
     # Visit every link
     visited_links = set()
     links_to_visit = {live_server.url + "/manage/"}
@@ -63,9 +64,9 @@ def visit_all(page, live_server):
             continue
         visited_links.add(current_link)
 
-        go_to_check(page, current_link)
+        await go_to_check(page, current_link)
 
-        new_links = page.eval_on_selector_all("a", "elements => elements.map(e => e.href)")
+        new_links = await page.eval_on_selector_all("a", "elements => elements.map(e => e.href)")
         for link in new_links:
             if "logout" in link:
                 continue

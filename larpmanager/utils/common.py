@@ -678,9 +678,13 @@ def get_recaptcha_secrets(request):
     private = conf_settings.RECAPTCHA_PRIVATE_KEY
 
     # if multi-site settings
-    if ":" in public:
+    if "," in public:
         skin_id = request.assoc["skin_id"]
-        public = json.loads(public)[skin_id]
-        private = json.load(private)[skin_id]
+        pairs = dict(item.split(":") for item in public.split(",") if ":" in item)
+        public = pairs.get(str(skin_id))
+        pairs = dict(item.split(":") for item in private.split(",") if ":" in item)
+        private = pairs.get(str(skin_id))
 
+    print(public)
+    print(private)
     return public, private
