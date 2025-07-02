@@ -100,11 +100,11 @@ async def create_second_char(live_server, page):
     await page.locator("#id_name").fill("olivaaaa")
     await page.get_by_role("row", name="Presentation (*) Show").get_by_role("link").click()
     await asyncio.sleep(2)
-    frame = await page.get_by_role("row", name="Presentation (*) Show").locator('iframe[title="Rich Text Area"]')
+    frame = page.get_by_role("row", name="Presentation (*) Show").locator('iframe[title="Rich Text Area"]')
     await fill_tinymce(frame, "dsfdfsd")
     await page.get_by_role("row", name="Text (*) Show").get_by_role("link").click()
     await asyncio.sleep(2)
-    frame = await page.get_by_role("row", name="Text (*) Show").locator('iframe[title="Rich Text Area"]')
+    frame = page.get_by_role("row", name="Text (*) Show").locator('iframe[title="Rich Text Area"]')
     await fill_tinymce(frame, "sdfdsfds")
     await expect(page.locator("#id_q6")).to_match_aria_snapshot(
         '- combobox:\n  - option "-------" [disabled] [selected]\n  - option "all"\n  - option "few - (Available 1)"'
@@ -258,11 +258,11 @@ async def create_first_char(live_server, page):
 async def fill_presentation_text(page):
     await page.get_by_role("row", name="Presentation (*) Show").get_by_role("link").click()
     await asyncio.sleep(5)
-    frame = await page.get_by_role("row", name="Presentation (*) Show").locator('iframe[title="Rich Text Area"]')
+    frame = page.get_by_role("row", name="Presentation (*) Show").locator('iframe[title="Rich Text Area"]')
     await fill_tinymce(frame, "baba")
     await page.get_by_role("row", name="Text (*) Show").get_by_role("link").click()
     await asyncio.sleep(5)
-    frame = await page.get_by_role("row", name="Text (*) Show").locator('iframe[title="Rich Text Area"]')
+    frame = page.get_by_role("row", name="Text (*) Show").locator('iframe[title="Rich Text Area"]')
     await fill_tinymce(frame, "bebe")
 
 

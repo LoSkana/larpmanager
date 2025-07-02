@@ -170,12 +170,12 @@ async def field_text(page, live_server):
 
     await page.get_by_role("row", name="Presentation (*) Show").get_by_role("link").click()
     await asyncio.sleep(2)
-    frame = await page.get_by_role("row", name="Presentation (*) Show").locator('iframe[title="Rich Text Area"]')
+    frame = page.get_by_role("row", name="Presentation (*) Show").locator('iframe[title="Rich Text Area"]')
     await fill_tinymce(frame, "adsdsadsa")
 
     await page.get_by_role("row", name="Text (*) Show").get_by_role("link").click()
     await asyncio.sleep(2)
-    frame = await page.get_by_role("row", name="Text (*) Show").locator('iframe[title="Rich Text Area"]')
+    frame = page.get_by_role("row", name="Text (*) Show").locator('iframe[title="Rich Text Area"]')
     await fill_tinymce(frame, "rrrr")
 
     await asyncio.sleep(2)
@@ -202,12 +202,12 @@ async def character(page, live_server):
 
     await page.get_by_role("row", name="Presentation (*) Show").get_by_role("link").click()
     await asyncio.sleep(2)
-    frame = await page.get_by_role("row", name="Presentation (*) Show").locator('iframe[title="Rich Text Area"]')
+    frame = page.get_by_role("row", name="Presentation (*) Show").locator('iframe[title="Rich Text Area"]')
     await fill_tinymce(frame, "so coool")
 
     await page.get_by_role("row", name="Text (*) Show").get_by_role("link").click()
     await asyncio.sleep(2)
-    frame = await page.get_by_role("row", name="Text (*) Show").locator('iframe[title="Rich Text Area"]')
+    frame = page.get_by_role("row", name="Text (*) Show").locator('iframe[title="Rich Text Area"]')
     await fill_tinymce(frame, "so braaaave")
 
     await asyncio.sleep(2)

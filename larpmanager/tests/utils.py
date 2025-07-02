@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import asyncio
 import os
-import time
 from datetime import datetime
 
 from playwright.async_api import expect
@@ -150,21 +149,11 @@ async def check_download(page, link):
             current_try += 1
 
 
-async def fill_tinymce(iframe_locator, value):
-    await iframe_locator.wait_for(state="visible")
-
-    frame = await iframe_locator.content_frame()
-
-    timeout = time.time() + 30
-    while frame is None:
-        if time.time() > timeout:
-            raise TimeoutError("Iframe not available")
-        await asyncio.sleep(0.1)
-        frame = await iframe_locator.content_frame()
-
-    rich_text = frame.locator('[aria-label="Rich Text Area"]')
-    await rich_text.wait_for(state="visible")
-    await rich_text.fill(value)
+async def fill_tinymce(page, iframe_id: str, text: str):
+    frame_locator = page.frame_locator(f"iframe#{iframe_id}")
+    editor = frame_locator.locator("body#tinymce")
+    await editor.wait_for(state="visible")
+    await editor.fill(text)
 
 
 async def _checkboxes(page, check=True):

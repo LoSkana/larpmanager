@@ -126,7 +126,7 @@ async def submit_membership(image_path, live_server, page):
 
     await page.locator('iframe[title="Rich Text Area"]').content_frame.locator("html").click()
     await asyncio.sleep(2)
-    frame = await page.locator('iframe[title="Rich Text Area"]')
+    frame = page.locator('iframe[title="Rich Text Area"]')
     await fill_tinymce(frame, "Ciao {{ member.name }}!")
 
     await page.locator("#main_form").click()

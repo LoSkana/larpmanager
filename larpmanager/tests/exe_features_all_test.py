@@ -66,7 +66,7 @@ async def visit_all(page, live_server):
 
         await go_to_check(page, current_link)
 
-        new_links = page.eval_on_selector_all("a", "elements => elements.map(e => e.href)")
+        new_links = await page.eval_on_selector_all("a", "elements => elements.map(e => e.href)")
         for link in new_links:
             if "logout" in link:
                 continue
