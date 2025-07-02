@@ -174,6 +174,7 @@ async def field_text(page, live_server):
     await page.get_by_role("row", name="Text (*) Show").get_by_role("link").click()
     await fill_tinymce(page, "id_text_ifr", "rrrr")
 
+    await asyncio.sleep(1)
     await page.locator("#id_q4").select_option("3")
     await page.locator("#id_q4").select_option("1")
     await page.get_by_role("checkbox", name="q2").check()

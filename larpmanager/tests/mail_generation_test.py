@@ -17,14 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-import os
 import re
 from pathlib import Path
 
 import pytest
 from playwright.async_api import async_playwright
 
-from larpmanager.tests.utils import fill_tinymce, go_to, handle_error, login_orga, page_start, submit
+from larpmanager.tests.utils import check_download, fill_tinymce, go_to, handle_error, login_orga, page_start, submit
 
 
 @pytest.mark.django_db
@@ -123,8 +122,7 @@ async def submit_membership(image_path, live_server, page):
     await page.wait_for_timeout(2000)
     await page.get_by_role("link", name="New").click()
 
-    await page.locator('iframe[title="Rich Text Area"]').content_frame.locator("html").click()
-    await fill_tinymce(page, "id_html_ifr", "Ciao {{ member.name }}!")
+    await fill_tinymce(page, "id_text_ifr", "Ciao {{ member.name }}!")
 
     await page.locator("#main_form").click()
     await page.locator("#id_typ").select_option("m")
@@ -132,14 +130,9 @@ async def submit_membership(image_path, live_server, page):
     await go_to(page, live_server, "/membership")
     await page.get_by_role("checkbox", name="Authorisation").check()
     await submit(page)
-    # Check file generated
-    with page.expect_download(timeout=160000) as download_info:
-        await page.get_by_role("link", name="download it here").click()
-    download = download_info.value
-    path = download.path()
-    assert path is not None
-    file_size = os.path.getsize(path)
-    assert file_size > 0
+
+    await check_download(page, "download it here")
+
     await page.locator("#id_request").set_input_files(str(image_path))
     await page.locator("#id_document").set_input_files(str(image_path))
     await submit(page)

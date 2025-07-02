@@ -23,6 +23,7 @@ from datetime import datetime
 from decimal import Decimal
 
 from django.contrib.postgres.aggregates import ArrayAgg
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
@@ -428,8 +429,7 @@ def check_reg_bkg_go(reg_id):
     try:
         instance = Registration.objects.get(pk=reg_id)
         instance.save()
-    except Exception:
-        print(f"not found registration {str(reg_id)}")
+    except ObjectDoesNotExist:
         return
 
 
