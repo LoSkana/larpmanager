@@ -133,8 +133,14 @@ async def submit_membership(image_path, live_server, page):
 
     await check_download(page, "download it here")
 
-    await page.locator("#id_request").set_input_files(str(image_path))
-    await page.locator("#id_document").set_input_files(str(image_path))
+    input_locator = page.locator("#id_request")
+    await input_locator.wait_for(state="visible")
+    await input_locator.set_input_files(str(image_path))
+
+    input_locator = page.locator("#id_document")
+    await input_locator.wait_for(state="visible")
+    await input_locator.set_input_files(str(image_path))
+
     await submit(page)
     await page.locator("#id_confirm_1").check()
     await page.get_by_text("I confirm that I have").click()
