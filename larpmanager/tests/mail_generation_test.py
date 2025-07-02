@@ -47,9 +47,11 @@ async def mail_generation(live_server, page):
 
     await chat(live_server, page)
 
-    image_path = badge(live_server, page)
+    image_path = Path(__file__).parent / "image.jpg"
 
-    await submit_membership(image_path, live_server, page)
+    await badge(live_server, page, image_path)
+
+    await submit_membership(live_server, page, image_path)
 
     await resubmit_membership(live_server, page)
 
@@ -115,7 +117,7 @@ async def resubmit_membership(live_server, page):
     await submit(page)
 
 
-async def submit_membership(image_path, live_server, page):
+async def submit_membership(live_server, page, image_path):
     # Test membership
     await go_to(page, live_server, "/manage/features/45/on")
     await go_to(page, live_server, "/manage/texts")
@@ -133,13 +135,8 @@ async def submit_membership(image_path, live_server, page):
 
     await check_download(page, "download it here")
 
-    input_locator = page.locator("#id_request")
-    await input_locator.wait_for(state="visible")
-    await input_locator.set_input_files(str(image_path))
-
-    input_locator = page.locator("#id_document")
-    await input_locator.wait_for(state="visible")
-    await input_locator.set_input_files(str(image_path))
+    await page.locator("#id_request").set_input_files(str(image_path))
+    await page.locator("#id_document").set_input_files(str(image_path))
 
     await submit(page)
     await page.locator("#id_confirm_1").check()
@@ -151,7 +148,7 @@ async def submit_membership(image_path, live_server, page):
     await submit(page)
 
 
-async def badge(live_server, page):
+async def badge(live_server, page, image_path):
     # Test badge
     await go_to(page, live_server, "/manage/features/65/on")
     await go_to(page, live_server, "/manage/badges")
@@ -169,12 +166,11 @@ async def badge(live_server, page):
     await page.locator("#id_cod").click()
     await page.locator("#id_cod").fill("asasdsadd")
     await page.locator("#id_img").click()
-    image_path = Path(__file__).parent / "image.jpg"
+
     await page.locator("#id_img").set_input_files(str(image_path))
     await page.get_by_role("searchbox").fill("user")
     await page.get_by_role("option", name="User Test - user@test.it").click()
     await page.get_by_role("button", name="Confirm", exact=True).click()
-    return image_path
 
 
 async def chat(live_server, page):
