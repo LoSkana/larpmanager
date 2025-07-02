@@ -17,7 +17,6 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-import asyncio
 
 import pytest
 from playwright.async_api import async_playwright, expect
@@ -99,13 +98,9 @@ async def create_second_char(live_server, page):
     await page.locator("#id_name").click()
     await page.locator("#id_name").fill("olivaaaa")
     await page.get_by_role("row", name="Presentation (*) Show").get_by_role("link").click()
-    await asyncio.sleep(2)
-    frame = page.get_by_role("row", name="Presentation (*) Show").locator('iframe[title="Rich Text Area"]')
-    await fill_tinymce(frame, "dsfdfsd")
+    await fill_tinymce(page, "id_teaser_ifr", "dsfdfsd")
     await page.get_by_role("row", name="Text (*) Show").get_by_role("link").click()
-    await asyncio.sleep(2)
-    frame = page.get_by_role("row", name="Text (*) Show").locator('iframe[title="Rich Text Area"]')
-    await fill_tinymce(frame, "sdfdsfds")
+    await fill_tinymce(page, "id_text_ifr", "sdfdsfds")
     await expect(page.locator("#id_q6")).to_match_aria_snapshot(
         '- combobox:\n  - option "-------" [disabled] [selected]\n  - option "all"\n  - option "few - (Available 1)"'
     )
@@ -257,13 +252,9 @@ async def create_first_char(live_server, page):
 
 async def fill_presentation_text(page):
     await page.get_by_role("row", name="Presentation (*) Show").get_by_role("link").click()
-    await asyncio.sleep(5)
-    frame = page.get_by_role("row", name="Presentation (*) Show").locator('iframe[title="Rich Text Area"]')
-    await fill_tinymce(frame, "baba")
+    await fill_tinymce(page, "id_teaser_ifr", "baba")
     await page.get_by_role("row", name="Text (*) Show").get_by_role("link").click()
-    await asyncio.sleep(5)
-    frame = page.get_by_role("row", name="Text (*) Show").locator('iframe[title="Rich Text Area"]')
-    await fill_tinymce(frame, "bebe")
+    await fill_tinymce(page, "id_text_ifr", "bebe")
 
 
 async def add_field_special(page):

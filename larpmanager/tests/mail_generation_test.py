@@ -17,7 +17,6 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-import asyncio
 import os
 import re
 from pathlib import Path
@@ -125,9 +124,7 @@ async def submit_membership(image_path, live_server, page):
     await page.get_by_role("link", name="New").click()
 
     await page.locator('iframe[title="Rich Text Area"]').content_frame.locator("html").click()
-    await asyncio.sleep(2)
-    frame = page.locator('iframe[title="Rich Text Area"]')
-    await fill_tinymce(frame, "Ciao {{ member.name }}!")
+    await fill_tinymce(page, "id_html_ifr", "Ciao {{ member.name }}!")
 
     await page.locator("#main_form").click()
     await page.locator("#id_typ").select_option("m")

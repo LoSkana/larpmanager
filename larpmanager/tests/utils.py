@@ -17,7 +17,6 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-import asyncio
 import os
 from datetime import datetime
 
@@ -105,7 +104,6 @@ async def print_text(page):
 
 async def go_to(page, live_server, path):
     await go_to_check(page, f"{live_server.url}/{path}")
-    await asyncio.sleep(0.1)
 
 
 async def go_to_check(page, path):
