@@ -426,6 +426,8 @@ def check_reg_bkg(reg_ids):
 
 
 def check_reg_bkg_go(reg_id):
+    if not reg_id:
+        return
     try:
         instance = Registration.objects.get(pk=reg_id)
         instance.save()
