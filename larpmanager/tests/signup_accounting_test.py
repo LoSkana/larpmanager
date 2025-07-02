@@ -83,7 +83,7 @@ async def check_delete(live_server, page):
     await page.get_by_role("button", name="Confirmation delete").click()
     await go_to(page, live_server, "/test/1/manage/payments")
     row = page.get_by_role("row", name=re.compile(r"Admin Test Money"))
-    row.get_by_role("link", name="").click()
+    await row.get_by_role("link", name="").click()
     await page.get_by_role("link", name="Delete").click()
     await page.get_by_role("button", name="Confirmation delete").click()
 
