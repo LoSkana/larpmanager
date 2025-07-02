@@ -22,120 +22,121 @@ import re
 from pathlib import Path
 
 import pytest
-from playwright.sync_api import expect, sync_playwright
+from playwright.async_api import async_playwright, expect
 
 from larpmanager.tests.utils import check_download, go_to, handle_error, login_orga, page_start, submit
 
 
 @pytest.mark.django_db
-def test_user_signup_membership(live_server):
-    with sync_playwright() as p:
-        browser, context, page = page_start(p)
+@pytest.mark.asyncio
+async def test_user_signup_membership(live_server):
+    async with async_playwright() as p:
+        browser, context, page = await page_start(p)
         try:
-            user_signup_membership(live_server, page)
+            await user_signup_membership(live_server, page)
 
         except Exception as e:
-            handle_error(page, e, "user_signup_membership")
+            await handle_error(page, e, "user_signup_membership")
 
         finally:
-            context.close()
-            browser.close()
+            await context.close()
+            await browser.close()
 
 
-def user_signup_membership(live_server, page):
-    login_orga(page, live_server)
+async def user_signup_membership(live_server, page):
+    await login_orga(page, live_server)
 
-    signup(live_server, page)
+    await signup(live_server, page)
 
-    membership(live_server, page)
+    await membership(live_server, page)
 
-    pay(live_server, page)
+    await pay(live_server, page)
 
 
-def signup(live_server, page):
+async def signup(live_server, page):
     # Activate payments
-    go_to(page, live_server, "/manage/features/111/on")
+    await go_to(page, live_server, "/manage/features/111/on")
     # Activate membership
-    go_to(page, live_server, "/manage/features/45/on")
-    go_to(page, live_server, "/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
-    page.locator("#id_mail_cc").check()
-    page.locator("#id_mail_signup_new").check()
-    page.locator("#id_mail_signup_update").check()
-    page.locator("#id_mail_signup_del").check()
-    page.locator("#id_mail_payment").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
-    go_to(page, live_server, "/manage/payments/details")
-    page.locator('#id_payment_methods input[type="checkbox"][value="1"]').check()
-    page.locator("#id_wire_descr").click()
-    page.locator("#id_wire_descr").fill("test wire")
-    page.locator("#id_wire_descr").press("Tab")
-    page.locator("#id_wire_payee").fill("test beneficiary")
-    page.locator("#id_wire_payee").press("Tab")
-    page.locator("#id_wire_iban").fill("test iban")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    await go_to(page, live_server, "/manage/features/45/on")
+    await go_to(page, live_server, "/manage/config")
+    await page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
+    await page.locator("#id_mail_cc").check()
+    await page.locator("#id_mail_signup_new").check()
+    await page.locator("#id_mail_signup_update").check()
+    await page.locator("#id_mail_signup_del").check()
+    await page.locator("#id_mail_payment").check()
+    await page.get_by_role("button", name="Confirm", exact=True).click()
+    await go_to(page, live_server, "/manage/payments/details")
+    await page.locator('#id_payment_methods input[type="checkbox"][value="1"]').check()
+    await page.locator("#id_wire_descr").click()
+    await page.locator("#id_wire_descr").fill("test wire")
+    await page.locator("#id_wire_descr").press("Tab")
+    await page.locator("#id_wire_payee").fill("test beneficiary")
+    await page.locator("#id_wire_payee").press("Tab")
+    await page.locator("#id_wire_iban").fill("test iban")
+    await page.get_by_role("button", name="Confirm", exact=True).click()
     # set ticket price
-    go_to(page, live_server, "/test/1/manage/registrations/tickets")
-    page.locator("a:has(i.fas.fa-edit)").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").fill("100.00")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    await go_to(page, live_server, "/test/1/manage/registrations/tickets")
+    await page.locator("a:has(i.fas.fa-edit)").click()
+    await page.locator("#id_price").click()
+    await page.locator("#id_price").fill("100.00")
+    await page.get_by_role("button", name="Confirm", exact=True).click()
     # signup
-    go_to(page, live_server, "/test/1/register")
-    page.get_by_role("button", name="Continue").click()
-    expect(page.locator("#riepilogo")).to_contain_text("you must request to register as a member")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    await go_to(page, live_server, "/test/1/register")
+    await page.get_by_role("button", name="Continue").click()
+    await expect(page.locator("#riepilogo")).to_contain_text("you must request to register as a member")
+    await page.get_by_role("button", name="Confirm", exact=True).click()
 
 
-def membership(live_server, page):
+async def membership(live_server, page):
     # send membership
-    go_to(page, live_server, "/test/1/register")
-    expect(page.locator("#one")).to_contain_text("Provisional registration")
-    expect(page.locator("#one")).to_contain_text("to confirm it, send your membership application")
-    page.get_by_role("link", name="to confirm it, send your").click()
-    page.get_by_role("checkbox", name="Authorisation").check()
-    page.get_by_role("button", name="Submit").click()
+    await go_to(page, live_server, "/test/1/register")
+    await expect(page.locator("#one")).to_contain_text("Provisional registration")
+    await expect(page.locator("#one")).to_contain_text("to confirm it, send your membership application")
+    await page.get_by_role("link", name="to confirm it, send your").click()
+    await page.get_by_role("checkbox", name="Authorisation").check()
+    await page.get_by_role("button", name="Submit").click()
     # compile request
     image_path = Path(__file__).parent / "image.jpg"
-    page.locator("#id_request").set_input_files(str(image_path))
-    page.locator("#id_document").set_input_files(str(image_path))
-    check_download(page, "download it here")
-    submit(page)
+    await page.locator("#id_request").set_input_files(str(image_path))
+    await page.locator("#id_document").set_input_files(str(image_path))
+    await check_download(page, "download it here")
+    await submit(page)
     # confirm request
-    page.locator("#id_confirm_1").check()
-    page.get_by_text("I confirm that I have").click()
-    page.locator("#id_confirm_2").check()
-    page.get_by_text("I confirm that I have").click()
-    page.locator("#id_confirm_3").check()
-    page.locator("#id_confirm_4").check()
-    submit(page)
+    await page.locator("#id_confirm_1").check()
+    await page.get_by_text("I confirm that I have").click()
+    await page.locator("#id_confirm_2").check()
+    await page.get_by_text("I confirm that I have").click()
+    await page.locator("#id_confirm_3").check()
+    await page.locator("#id_confirm_4").check()
+    await submit(page)
     # approve request signup
-    go_to(page, live_server, "/manage/membership/")
-    page.get_by_role("link", name="Request").click()
-    page.get_by_role("button", name="Approve").click()
+    await go_to(page, live_server, "/manage/membership/")
+    await page.get_by_role("link", name="Request").click()
+    await page.get_by_role("button", name="Approve").click()
     # check register
-    go_to(page, live_server, "/test/1/register")
-    expect(page.locator("#one")).to_contain_text("to confirm it proceed with payment")
-    page.get_by_role("link", name="to confirm it proceed with").click()
+    await go_to(page, live_server, "/test/1/register")
+    await expect(page.locator("#one")).to_contain_text("to confirm it proceed with payment")
+    await page.get_by_role("link", name="to confirm it proceed with").click()
 
 
-def pay(live_server, page):
+async def pay(live_server, page):
     # pay
-    page.get_by_role("cell", name="Wire", exact=True).click()
-    expect(page.locator("b")).to_contain_text("100")
-    submit(page)
+    await page.get_by_role("cell", name="Wire", exact=True).click()
+    await expect(page.locator("b")).to_contain_text("100")
+    await submit(page)
     image_path = Path(__file__).parent / "image.jpg"
-    page.locator("#id_invoice").set_input_files(str(image_path))
-    submit(page)
+    await page.locator("#id_invoice").set_input_files(str(image_path))
+    await submit(page)
     # approve payment
-    go_to(page, live_server, "/test/1/manage/invoices")
-    page.get_by_role("link", name="Confirm", exact=True).click()
+    await go_to(page, live_server, "/test/1/manage/invoices")
+    await page.get_by_role("link", name="Confirm", exact=True).click()
     # check payment
-    go_to(page, live_server, "/test/1/register")
-    expect(page.locator("#one")).to_contain_text("You are regularly signed up")
-    page.locator("a#menu-open").click()
-    page.get_by_role("link", name="Logout").click()
-    expect(page.locator("#one")).to_contain_text("Registration is open!")
-    expect(page.locator("#one")).to_contain_text("Hurry: only 9 tickets available")
+    await go_to(page, live_server, "/test/1/register")
+    await expect(page.locator("#one")).to_contain_text("You are regularly signed up")
+    await page.locator("a#menu-open").click()
+    await page.get_by_role("link", name="Logout").click()
+    await expect(page.locator("#one")).to_contain_text("Registration is open!")
+    await expect(page.locator("#one")).to_contain_text("Hurry: only 9 tickets available")
     # test mails
-    go_to(page, live_server, "/debug/mail")
+    await go_to(page, live_server, "/debug/mail")
