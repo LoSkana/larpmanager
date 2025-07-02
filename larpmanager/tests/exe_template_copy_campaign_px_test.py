@@ -173,6 +173,7 @@ async def px(live_server, page):
     await expect(page.locator('[id="\\31 "]')).to_contain_text("0")
     await page.get_by_role("link", name="").click()
     await page.wait_for_load_state("load")
+    await asyncio.sleep(1)
     await page.get_by_role("row", name="Abilities Show").get_by_role("link").click()
     await page.get_by_role("searchbox").click()
     await page.get_by_role("searchbox").fill("swo")
