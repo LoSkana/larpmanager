@@ -685,6 +685,4 @@ def get_recaptcha_secrets(request):
         pairs = dict(item.split(":") for item in private.split(",") if ":" in item)
         private = pairs.get(str(skin_id))
 
-    print(public)
-    print(private)
     return public, private
