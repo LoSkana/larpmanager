@@ -8,7 +8,7 @@
         {% if redirect %}
             <h2>{% trans "Step 3 / 4" %}</h2>
             <p>
-                {% trans "There are only two steps left to complete the procedure, enter the last necessary data. With this information, your membership application will be pre-filled; all you have to do is print it out and sign it." %}
+                {% trans "There are only two steps left to complete the procedure, enter the last necessary data. With this information, your membership application will be pre-filled; all you have to do is print it out and sign it" %}.
                 {% trans "Need help?" %} <a href="{% url 'help' %}">{% trans "Write here!" %}</a>
             </p>
             <i>{% trans "Fill in the form and click on confirm, it will take you to the next passage!" %}</i>
@@ -17,7 +17,7 @@
         {% else %}
             {% if not member.membership.compiled_adv %}
                 <h2>{% trans "New member" %}</h2>
-                <i>{% trans "We are almost there, you just need to enter the last necessary data here. With this data your membership application will be pre-filled;  you will just have to print it out and sign it." %}</i>
+                <i>{% trans "We are almost there, you just need to enter the last necessary data here. With this data your membership application will be pre-filled;  you will just have to print it out and sign it" %}.</i>
                 <br />
                 <br />
                 <i>{% trans "Fill in the form and click on confirm, it will take you to the next passage!" %}</i>

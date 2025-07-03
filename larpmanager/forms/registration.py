@@ -220,8 +220,8 @@ class RegistrationForm(BaseRegistrationForm):
         if not quota_chs:
             quota_chs.append((1, _("Default")))
         ht = _("The number of payments to split the fee")
-        ht += " " + _("The ticket will be divided equally in the number of quotas indicated.")
-        ht += " " + _("Payment deadlines will be similarly equally divided, based on the date of registration.")
+        ht += " " + _("The ticket will be divided equally in the number of quotas indicated") + "."
+        ht += " " + _("Payment deadlines will be similarly equally divided, based on the date of registration") + "."
         self.fields["quotas"] = forms.ChoiceField(required=True, choices=quota_chs, label=_("Quotas"), help_text=ht)
         if len(quota_chs) == 1:
             self.fields["quotas"].widget = forms.HiddenInput()

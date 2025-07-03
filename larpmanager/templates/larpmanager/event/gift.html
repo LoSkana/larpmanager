@@ -5,7 +5,7 @@
 {% endblock title %}
 {% block content %}
     <p>
-        {% trans "On this page you can book tickets for the event; once paid, a special code will be generated." %}
+        {% trans "On this page you can book tickets for the event; once paid, a special code will be generated" %}.
         {% trans "A friend of yours will be able to receive the registration as a gift by accessing this special link!" %}
     </p>
     <div class="c nav">
@@ -43,23 +43,25 @@
                 </td>
                 <td>
                     {% if reg.payment %}
-                        <a href="{% url 'acc_reg' reg.id %}">
-                            {{ reg.payment.quota | format_decimal }}{{ currency_symbol }}
-                            {% if reg.deadline > 0 %}
+                        {% if reg.deadline > 0 %}
+                            <a href="{% url 'acc_reg' reg.id %}">
+                                {{ reg.payment.quota | format_decimal }}{{ currency_symbol }}
                             {% trans "within" %} {{ reg.payment.deadline }} {% trans "days" %}</a>
                         {% else %}
-                            {% trans "immediately" %}</a> <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
+                            <a href="{% url 'acc_reg' reg.id %}">
+                                {{ reg.payment.quota | format_decimal }}{{ currency_symbol }}
+                                {% trans "immediately" %}</a> <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
+                            {% endif %}
+                        {% elif reg.pending %}
+                            {% trans "Payment currently in review by the staff" %}.
+                        {% else %}
+                            <a href="{% url 'gift_redeem' event.slug run.number reg.redeem_code %}">{% trans "Redeem code" %}</a>
                         {% endif %}
-                    {% elif reg.pending %}
-                        {% trans "Payment currently in review by the staff." %}
-                    {% else %}
-                        <a href="{% url 'gift_redeem' event.slug run.number reg.redeem_code %}">{% trans "Redeem code" %}</a>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-    <p>
-        <i>{% trans "Note: The special code is re-generated each time you change the gift card" %}</i>
-    </p>
-{% endblock content %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p>
+            <i>{% trans "Note: The special code is re-generated each time you change the gift card" %}</i>
+        </p>
+    {% endblock content %}

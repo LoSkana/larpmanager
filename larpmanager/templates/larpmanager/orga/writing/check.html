@@ -11,7 +11,7 @@
         {% if checks.relat_missing %}
             <span class="redderized">KO - {{ checks.relat_missing | length }}</span> </b>
         <p>
-            <i>{% trans "The character on the left has in relationships the one on the right, but the reverse is not true. Check whether to remove the relationship to the one on the left, or add it on the one on the right." %}</i>
+            <i>{% trans "The character on the left has in relationships the one on the right, but the reverse is not true. Check whether to remove the relationship to the one on the left, or add it on the one on the right" %}.</i>
         </p>
         <table class="mob">
             <tr>
@@ -40,7 +40,7 @@
         {% if checks.relat_extinct %}
             <span class="redderized">KO {{ checks.relat_extinct | length }}</span> </b>
         <p>
-            <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist." %}</i>
+            <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist" %}.</i>
         </p>
         <table class="mob">
             <tr>
@@ -69,7 +69,7 @@
     {{ checks.relat_empty | length }} </b>
 
 
-    <p><i>{% trans "The relationship between these characters turns out to be empty. Check whether it should be written something." %}</i></p>
+    <p><i>{% trans "The relationship between these characters turns out to be empty. Check whether it should be written something" %}.</i></p>
 
     <table class="mob">
         <tr>
@@ -101,7 +101,7 @@
 
     <span class="redderized">KO {{ checks.character_extinct | length }}</span> </b>
 
-    <p><i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist." %}</i></p>
+    <p><i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist" %}.</i></p>
 
     <table class="mob">
         <tr>
@@ -132,7 +132,7 @@
 
     <span class="redderized">KO {{ checks.character_missing | length }}</span> </b>
 
-    <p><i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but in the relationships instead that character was not related. Check whether it is necessary to create a relationship to the character, or remove the reference from the text." %}</i></p>
+    <p><i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but in the relationships instead that character was not related. Check whether it is necessary to create a relationship to the character, or remove the reference from the text" %}.</i></p>
 
     <table class="mob">
         <tr>
@@ -163,7 +163,7 @@
 
     <span class="redderized">KO {{ checks.character_interloper | length }}</span> </b>
 
-    <p><i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but in the relationships instead it is related. Check whether it is necessary to remove the relationship to the character, or indicate in the text a reference to the character." %}</i></p>
+    <p><i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but in the relationships instead it is related. Check whether it is necessary to remove the relationship to the character, or indicate in the text a reference to the character" %}.</i></p>
 
     <table class="mob">
         <tr>
@@ -194,7 +194,7 @@
             {% if checks.faction_extinct %}
                 <span class="redderized">KO {{ checks.faction_extinct | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist." %}</i>
+                <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist" %}.</i>
             </p>
             <table class="mob">
                 <tr>
@@ -217,7 +217,7 @@
             {% if checks.faction_missing %}
                 <span class="redderized">KO {{ checks.faction_missing | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text." %}</i>
+                <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text" %}.</i>
             </p>
             <table class="mob">
                 <tr>
@@ -240,7 +240,7 @@
             {% if checks.faction_interloper %}
                 <span class="redderized">KO {{ checks.faction_interloper | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character." %}</i>
+                <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character" %}.</i>
             </p>
             <table class="mob">
                 <tr>
@@ -265,7 +265,7 @@
             {% if checks.prologue_extinct %}
                 <span class="redderized">KO {{ checks.prologue_extinct | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist." %}</i>
+                <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist" %}.</i>
             </p>
             <table class="mob">
                 <tr>
@@ -288,7 +288,7 @@
             {% if checks.prologue_missing %}
                 <span class="redderized">KO {{ checks.prologue_missing | length }}</span>  </b>
             <p>
-                <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text." %}</i>
+                <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text" %}.</i>
             </p>
             <table class="mob">
                 <tr>
@@ -311,7 +311,7 @@
             {% if checks.prologue_interloper %}
                 <span class="redderized">KO {{ checks.prologue_interloper | length }}</span>  </b>
             <p>
-                <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character." %}</i>
+                <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character" %}.</i>
             </p>
             <table class="mob">
                 <tr>
@@ -336,7 +336,7 @@
             {% if checks.plot_extinct %}
                 <span class="redderized">KO {{ checks.plot_extinct | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist." %}</i>
+                <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist" %}.</i>
             </p>
             <table class="mob">
                 <tr>
@@ -359,7 +359,7 @@
             {% if checks.plot_missing %}
                 <span class="redderized">KO {{ checks.plot_missing | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text." %}</i>
+                <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text" %}.</i>
             </p>
             <table class="mob">
                 <tr>
@@ -382,7 +382,7 @@
             {% if checks.plot_interloper %}
                 <span class="redderized">KO {{ checks.plot_interloper | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character." %}</i>
+                <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character" %}.</i>
             </p>
             <table class="mob">
                 <tr>
@@ -407,7 +407,7 @@
             {% if checks.speedlarp_extinct %}
                 <span class="redderized">KO {{ checks.speedlarp_extinct | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist." %}</i>
+                <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist" %}.</i>
             </p>
             <table class="mob">
                 <tr>
@@ -430,7 +430,7 @@
             {% if checks.speedlarp_missing %}
                 <span class="redderized">KO {{ checks.speedlarp_missing | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text." %}</i>
+                <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text" %}.</i>
             </p>
             <table class="mob">
                 <tr>
@@ -452,7 +452,7 @@
                 {% if checks.speedlarp_interloper %}
                     <span class="redderized">KO {{ checks.speedlarp_interloper | length }}</span> </b>
                 <p>
-                    <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character." %}</i>
+                    <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character" %}.</i>
                 </p>
                 <table class="mob">
                     <tr>

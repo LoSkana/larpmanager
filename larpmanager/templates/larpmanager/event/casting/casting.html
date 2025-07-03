@@ -17,7 +17,7 @@
         {% endif %}
         {% if casting_history %}
             <p>
-                {% trans "Show the" %} <a href="{% url 'casting_history' event.slug run.number typ %}">{% trans "history of preferences." %}</a>
+                {% trans "Show the" %} <a href="{% url 'casting_history' event.slug run.number typ %}">{% trans "history of preferences" %}.</a>
             </p>
         {% endif %}
         {% if assigned %}
@@ -28,7 +28,7 @@
             <p>{% trans "Enter your preferences here!" %}</p>
             {% if casting_show_pref %}
                 <p>
-                    {% trans "Show the" %} <a href="{% url 'casting_preferences' event.slug run.number typ %}">{% trans "global preferences." %}</a>
+                    {% trans "Show the" %} <a href="{% url 'casting_preferences' event.slug run.number typ %}">{% trans "global preferences" %}.</a>
                 </p>
             {% endif %}
             {% if faction_filter %}
@@ -36,7 +36,7 @@
                 <h3>
                     <a href="#" class="my_toggle" tog='factions'>{% trans "Filter factions" %}</a>
                 </h3>
-                <span class="helptext">{% trans "Select the faction on which you want to filter characters." %}</span>
+                <span class="helptext">{% trans "Select the faction on which you want to filter characters" %}.</span>
                 <div id="factions" class="nav hide factions">
                     {% for f in faction_filter %}
                         <a id="f{{ f.id }}" href="#" onclick="return select_f({{ f.id }});">{{ f.name }}</a>
@@ -53,7 +53,9 @@
                         <th>{{ cl_name }}</th>
                         <th>{{ el_name }}</th>
                     </tr>
-                    <tr></tr>
+                    <tr>
+                        <!-- filled later -->
+                    </tr>
                 </table>
                 {% if casting_avoid %}
                     <p>

@@ -20,11 +20,11 @@
     {% endif %}
     {% if member.membership.status == 'e' or member.membership.status == 'j' %}
         <h3>{% trans "You are not yet a Member of the Organization!" %}</h3>
-        <p>{% trans "In order to subscribe to the Organization's events you must apply to be admitted as a Member." %}</p>
+        <p>{% trans "In order to subscribe to the Organization's events you must apply to be admitted as a Member" %}.</p>
         <p>
             {% trans "We have pre-filled the application form based on the data you provided us" %}: <a href="{% url 'membership_request' %}" download>{% trans "download it here" %}</a>.
             <br />
-            ({% trans "If there are wrong data you can update your" %} <a href="{% url 'profile' %}">{% trans "user profile" %}</a>. {% trans "The registration request will be updated automatically." %})
+            ({% trans "If there are wrong data you can update your" %} <a href="{% url 'profile' %}">{% trans "user profile" %}</a>. {% trans "The registration request will be updated automatically" %}.)
         </p>
         <hr />
         <p>
@@ -96,14 +96,14 @@
     {% elif member.membership.status == 's' %}
         <h3>{% trans "Request sent for approval" %}</h3>
         <p>
-            {% trans "Your request will be approved at the next Board meeting. You will receive confirmation of the outcome of its evaluation very soon." %}
+            {% trans "Your request will be approved at the next Board meeting. You will receive confirmation of the outcome of its evaluation very soon" %}.
         </p>
         <p>
             {% trans "Request submitted" %}: <a href="{{ member.membership.get_request_filepath }}" download>{% trans "download it here" %}</a>.
         </p>
     {% elif member.membership.status == 'r' %}
         <h3>{% trans "Member revoked" %}</h3>
-        <p>{% trans "I am not good what to say. I never thought it would happen." %}</p>
+        <p>{% trans "I am not good what to say. I never thought it would happen" %}.</p>
     {% else %}
         <h3>{% trans "Members of the Organization" %}</h3>
         <p>
@@ -114,12 +114,12 @@
         </p>
         {% if fee_payed %}
             <p>
-                {% trans "The payment of your membership fee for this year has been received. You have the right to participate to the organization events." %}
+                {% trans "The payment of your membership fee for this year has been received. You have the right to participate to the organization events" %}.
             </p>
         {% else %}
             <h2>{% trans "Payment membership fee" %}: {{ year }}</h2>
             <p>
-                {% trans "The payment of your membership fee for this year has NOT been received: it is necessary in order to participate to the events, and the organization meetings." %} <a href="{% url 'acc_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
+                {% trans "The payment of your membership fee for this year has NOT been received: it is necessary in order to participate to the events, and the organization meetings" %}. <a href="{% url 'acc_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
             </p>
         {% endif %}
     {% endif %}

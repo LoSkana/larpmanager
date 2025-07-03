@@ -1472,12 +1472,12 @@ msgstr ""
 msgid "The number of payments to split the fee"
 msgstr ""
 
-msgid "The ticket will be divided equally in the number of quotas indicated."
+msgid "The ticket will be divided equally in the number of quotas indicated"
 msgstr ""
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "
-"registration."
+"registration"
 msgstr ""
 
 msgid "Quotas"
@@ -3339,13 +3339,13 @@ msgstr ""
 msgid "Activation failed"
 msgstr ""
 
-msgid "Activation failed. Mail us the details."
+msgid "Activation failed. Mail us the details"
 msgstr ""
 
 msgid "Activation complete"
 msgstr ""
 
-msgid "Your account is now activated."
+msgid "Your account is now activated"
 msgstr ""
 
 msgid "Log in"
@@ -3368,7 +3368,7 @@ msgstr ""
 msgid "Something went wrong in the account activation"
 msgstr ""
 
-msgid "Registration closed."
+msgid "Registration closed"
 msgstr ""
 
 msgid "Registration complete"
@@ -3376,7 +3376,7 @@ msgstr ""
 
 msgid ""
 "You are now registered, but your account is inactive. We have sent an "
-"activation email."
+"activation email"
 msgstr ""
 
 msgid "Register"
@@ -3941,19 +3941,19 @@ msgstr ""
 msgid "Show the"
 msgstr ""
 
-msgid "history of preferences."
+msgid "history of preferences"
 msgstr ""
 
 msgid "Enter your preferences here!"
 msgstr ""
 
-msgid "global preferences."
+msgid "global preferences"
 msgstr ""
 
 msgid "Filter factions"
 msgstr ""
 
-msgid "Select the faction on which you want to filter characters."
+msgid "Select the faction on which you want to filter characters"
 msgstr ""
 
 msgid "Indicate here each element you wish to avoid in the assignment"
@@ -4060,7 +4060,7 @@ msgstr ""
 msgid "Next runs"
 msgstr ""
 
-msgid "There are no new runs scheduled at this time."
+msgid "There are no new runs scheduled at this time"
 msgstr ""
 
 msgid "Pre-register here!"
@@ -4097,7 +4097,7 @@ msgstr ""
 
 msgid ""
 "On this page you can book tickets for the event; once paid, a special code "
-"will be generated."
+"will be generated"
 msgstr ""
 
 msgid ""
@@ -4117,7 +4117,7 @@ msgstr ""
 msgid "If no payment is received, registration may be cancelled"
 msgstr ""
 
-msgid "Payment currently in review by the staff."
+msgid "Payment currently in review by the staff"
 msgstr ""
 
 msgid "Redeem code"
@@ -4150,7 +4150,7 @@ msgid ""
 "then be duly registered"
 msgstr ""
 
-msgid "Here are the sign up options with limited number."
+msgid "Here are the sign up options with limited number"
 msgstr ""
 
 msgid "Discounts"
@@ -4188,13 +4188,13 @@ msgstr ""
 
 msgid ""
 "You can update your registration by simply changing the value of the fields "
-"and clicking on confirm."
+"and clicking on confirm"
 msgstr ""
 
 msgid "If you no longer wish to attend, you can"
 msgstr ""
 
-msgid "cancel your registrations."
+msgid "cancel your registrations"
 msgstr ""
 
 msgid "Bring a friend!"
@@ -4218,7 +4218,7 @@ msgstr ""
 
 msgid ""
 "To register for the event, please fill in the following form and click on "
-"confirm."
+"confirm"
 msgstr ""
 
 msgid "View all event information in the"
@@ -4235,10 +4235,10 @@ msgstr ""
 
 msgid ""
 "Warning. This event is in a different language than the one set in your "
-"profile."
+"profile"
 msgstr ""
 
-msgid "If you have a discount code, enter it here and press enter."
+msgid "If you have a discount code, enter it here and press enter"
 msgstr ""
 
 msgid ""
@@ -4259,13 +4259,13 @@ msgstr ""
 msgid ""
 "In order to confirm your registration, you must request to register as a "
 "member of the Association. The procedure will automatically take you through "
-"the required steps."
+"the required steps"
 msgstr ""
 
 msgid ""
 "By proceeding with your registration for this event, you are giving us your "
 "authorisation to share your data saved on our platform with the organisers "
-"of the event."
+"of the event"
 msgstr ""
 
 msgid "Registration conditions"
@@ -4281,17 +4281,17 @@ msgid "Characters link"
 msgstr ""
 
 msgid ""
-"On this page you can filter characters and directly view their information."
+"On this page you can filter characters and directly view their information"
 msgstr ""
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "
-"number, name, teaser, player, groups to which the character belong."
+"number, name, teaser, player, groups to which the character belong"
 msgstr ""
 
 msgid ""
 "Where you find a button like this, you can press it to perform filtering "
-"further."
+"further"
 msgstr ""
 
 msgid "Example"
@@ -4299,7 +4299,7 @@ msgstr ""
 
 msgid ""
 "If you press once, it will be *included* in the search. If a character "
-"belongs to at least one inclusion category, it will be shown in the search."
+"belongs to at least one inclusion category, it will be shown in the search"
 msgstr ""
 
 msgid "Included"
@@ -4308,7 +4308,7 @@ msgstr ""
 msgid ""
 "If you press a second time, it will be *excluded* in the search. If a "
 "character belongs to even one exclusion category, it will not be shown in "
-"the search."
+"the search"
 msgstr ""
 
 msgid "Excluded"
@@ -4317,7 +4317,7 @@ msgstr ""
 msgid "Insert"
 msgstr ""
 
-msgid "Click on a name to go and view it directly."
+msgid "Click on a name to go and view it directly"
 msgstr ""
 
 msgid "Characters list"
@@ -4344,13 +4344,13 @@ msgstr ""
 msgid "We're sorry to see you go!"
 msgstr ""
 
-msgid "Unfortunately these things happen."
+msgid "Unfortunately these things happen"
 msgstr ""
 
 msgid "You can consult"
 msgstr ""
 
-msgid " here the conditions of disenrollment for this event."
+msgid " here the conditions of disenrollment for this event"
 msgstr ""
 
 msgid "Click below to confirm the cancellation"
@@ -4360,8 +4360,7 @@ msgid "Fill out the event prep questions!"
 msgstr ""
 
 msgid ""
-"Answer the following questions. Select *all* of the answers that seem "
-"correct."
+"Answer the following questions. Select *all* of the answers that seem correct"
 msgstr ""
 
 msgid "Retry!"
@@ -4385,7 +4384,7 @@ msgstr ""
 msgid "Workshops"
 msgstr ""
 
-msgid "These are the workshops you must complete before you can play."
+msgid "These are the workshops you must complete before you can play"
 msgstr ""
 
 msgid "Done!"
@@ -5004,13 +5003,13 @@ msgstr ""
 msgid "Operation"
 msgstr ""
 
-msgid "If you like or are interested in an event, you can <b>pre-register</b>."
+msgid "If you like or are interested in an event, you can <b>pre-register</b>"
 msgstr ""
 
 msgid ""
-"This <b>is</b> not binding, and <b>does</b> not</b> automatically secure you "
-"a place at the event, but you will be offered a preferential registration "
-"before the public opening of registration."
+"This <b>is</b> not binding, and <b>does</b> not automatically secure you a "
+"place at the event, but you will be offered a preferential registration "
+"before the public opening of registration"
 msgstr ""
 
 msgid ""
@@ -5022,10 +5021,10 @@ msgstr ""
 msgid ""
 "We only ask you to indicate a <b>order</b> of preference for the your pre-"
 "registrations (imagining you have to choose which one to play, indicates in "
-"what order you want to play them)."
+"what order you want to play them)"
 msgstr ""
 
-msgid "If you wish, you can delete past pre-registrations."
+msgid "If you wish, you can delete past pre-registrations"
 msgstr ""
 
 msgid "Do you want to tell us something?"
@@ -5059,13 +5058,13 @@ msgstr ""
 
 msgid ""
 "The larpmanager has a over 100 different features. There is one for every "
-"single aspect of event organising: signups, accounting, writing, logistics."
+"single aspect of event organising: signups, accounting, writing, logistics"
 msgstr ""
 
 msgid ""
 "Below you will find all the features available; you can write a search "
 "keyword to filter them. Then click on 'Video', and you will see the video "
-"directly."
+"directly"
 msgstr ""
 
 msgid "Tutorial"
@@ -5085,21 +5084,21 @@ msgstr ""
 
 msgid ""
 "You can read them in order, or scroll directly to the one that interests you "
-"most."
+"most"
 msgstr ""
 
 msgid ""
 "The quick access sidebar is on the left (on mobile, tap “Shortcuts” at the "
-"bottom to open it)."
+"bottom to open it)"
 msgstr ""
 
 msgid ""
-"Hover on the link, or click on the question icon, to see what the link does."
+"Hover on the link, or click on the question icon, to see what the link does"
 msgstr ""
 
 msgid ""
 "At the top, you'll find shortcuts to access your organization dashboard "
-"(this page), as well as the active event dashboards, when you'll create them."
+"(this page), as well as the active event dashboards, when you'll create them"
 msgstr ""
 
 msgid ""
@@ -5358,7 +5357,7 @@ msgstr ""
 msgid "Please wait a moment"
 msgstr ""
 
-msgid "here the conditions of registration."
+msgid "here the conditions of registration"
 msgstr ""
 
 msgid "Payments in approval"
@@ -5372,7 +5371,7 @@ msgstr ""
 msgid "Pending payments"
 msgstr ""
 
-msgid "These are the event registrations for which you have to make a payment."
+msgid "These are the event registrations for which you have to make a payment"
 msgstr ""
 
 msgid "You must pay"
@@ -5386,7 +5385,7 @@ msgstr ""
 
 msgid ""
 "These are delegated account registrations for which you have to make a "
-"payment."
+"payment"
 msgstr ""
 
 msgid "by"
@@ -5421,7 +5420,7 @@ msgstr ""
 msgid ""
 "The payment of your membership fee for this year has NOT been received: it "
 "is necessary in order to participate to the events, and the organization "
-"meetings."
+"meetings"
 msgstr ""
 
 msgid "Membership request not submitted"
@@ -5430,7 +5429,7 @@ msgstr ""
 msgid ""
 "You have not yet submitted your application for membership to the "
 "Organization. If you are not a Member, we cannot accept payment from you, "
-"and you cannot confirm your event registrations."
+"and you cannot confirm your event registrations"
 msgstr ""
 
 msgid "Make the request now!"
@@ -5509,7 +5508,7 @@ msgstr ""
 msgid ""
 "You have submitted a deposit, and it is being reviewed by the staff. You "
 "don't have to do anything for the time being, as soon as it is confirmed the "
-"accounting of the event will be updated."
+"accounting of the event will be updated"
 msgstr ""
 
 msgid "Ticket chosen"
@@ -5534,12 +5533,12 @@ msgid "Your competences"
 msgstr ""
 
 msgid ""
-"On this page you can mark your specialties to collaborate on our  events."
+"On this page you can mark your specialties to collaborate on our  events"
 msgstr ""
 
 msgid ""
 "Click on the roles you'd like to collaborate on, then enter your degree of "
-"experience, and finally indicate precisely your field of experience."
+"experience, and finally indicate precisely your field of experience"
 msgstr ""
 
 msgid "I am not interested"
@@ -5603,7 +5602,7 @@ msgstr ""
 
 msgid ""
 "In order to subscribe to the Organization's events you must apply to be "
-"admitted as a Member."
+"admitted as a Member"
 msgstr ""
 
 msgid ""
@@ -5616,7 +5615,7 @@ msgstr ""
 msgid "If there are wrong data you can update your"
 msgstr ""
 
-msgid "The registration request will be updated automatically."
+msgid "The registration request will be updated automatically"
 msgstr ""
 
 msgid ""
@@ -5673,13 +5672,13 @@ msgstr ""
 
 msgid ""
 "Your request will be approved at the next Board meeting. You will receive "
-"confirmation of the outcome of its evaluation very soon."
+"confirmation of the outcome of its evaluation very soon"
 msgstr ""
 
 msgid "Request submitted"
 msgstr ""
 
-msgid "I am not good what to say. I never thought it would happen."
+msgid "I am not good what to say. I never thought it would happen"
 msgstr ""
 
 msgid "Members of the Organization"
@@ -5695,33 +5694,34 @@ msgstr ""
 
 msgid ""
 "The payment of your membership fee for this year has been received. You have "
-"the right to participate to the organization events."
+"the right to participate to the organization events"
 msgstr ""
 
 msgid "Did you check the required data properly?"
 msgstr ""
 
 msgid ""
-"Your data will be saved in the LarpManager system, which is used  by several "
-"LARP Organizations. We value the privacy of your data, and we  we will treat "
-"it with the utmost care. In particular, it will be made visible  only to the "
-"organizers of the events you decide to sign up. Under no any other "
-"circumstances they will be disclosed, shared, or processed."
+"Your data will be saved in the system, which is used by several associations"
 msgstr ""
 
 msgid ""
-"Here is the complete list of all organizations registered with LarpManager "
-"that have access to your data."
+"We value the privacy of your data and will treat it with the utmost care"
 msgstr ""
 
 msgid ""
-"Access has been granted by you in the past by signing up for one of their  "
-"events, or by agreeing to participate as a staff member / organizer."
+"In particular, they will only be made visible to the organisers of the "
+"events you decide to register for"
+msgstr ""
+
+msgid "They will not be communicated, shared or processed in any other way"
 msgstr ""
 
 msgid ""
-"You can remove your consent to data sharing by clicking on the appropriate "
-"link."
+"Here is the complete list of all organizations that have access to your data"
+msgstr ""
+
+msgid ""
+"You can withdraw your consent to data sharing by clicking the related link"
 msgstr ""
 
 msgid "Remove consent"
@@ -5740,22 +5740,6 @@ msgid "Voting for the Executive is open"
 msgstr ""
 
 msgid "submit your vote here!"
-msgstr ""
-
-msgid ""
-"Your data will be saved in the system, which is used by several associations"
-msgstr ""
-
-msgid ""
-"We value the privacy of your data and will treat it with the utmost care"
-msgstr ""
-
-msgid ""
-"In particular, they will only be made visible to the organisers of the "
-"events you decide to register for"
-msgstr ""
-
-msgid "They will not be communicated, shared or processed in any other way"
 msgstr ""
 
 msgid ""
@@ -5784,7 +5768,7 @@ msgstr ""
 msgid ""
 "There are only two steps left to complete the procedure, enter the last "
 "necessary data. With this information, your membership application will be "
-"pre-filled; all you have to do is print it out and sign it."
+"pre-filled; all you have to do is print it out and sign it"
 msgstr ""
 
 msgid "Need help?"
@@ -5803,7 +5787,7 @@ msgstr ""
 msgid ""
 "We are almost there, you just need to enter the last necessary data here. "
 "With this data your membership application will be pre-filled;  you will "
-"just have to print it out and sign it."
+"just have to print it out and sign it"
 msgstr ""
 
 msgid "Private message"
@@ -5832,10 +5816,10 @@ msgstr ""
 
 msgid ""
 "To request a change of your e-mail address, please indicate both your old "
-"and your new address."
+"and your new address"
 msgstr ""
 
-msgid "We will send you a confirmation e-mail when the change has been made."
+msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr ""
 
 msgid ""
@@ -5985,7 +5969,7 @@ msgstr ""
 
 msgid ""
 "Select a zip file for upload. Directories will become albums, photos and the "
-"videos inside will be placed in the corresponding albums."
+"videos inside will be placed in the corresponding albums"
 msgstr ""
 
 msgid "Event navigation"
@@ -5999,7 +5983,7 @@ msgstr ""
 
 msgid ""
 "This page shows the casting preferences expressed by players, and allows "
-"them to be assigned through an optimization algorithm."
+"them to be assigned through an optimization algorithm"
 msgstr ""
 
 msgid "Casting management for"
@@ -6040,7 +6024,7 @@ msgstr ""
 msgid "Preference not valid"
 msgstr ""
 
-msgid "Assign selected characters to players."
+msgid "Assign selected characters to players"
 msgstr ""
 
 msgid ""
@@ -6135,7 +6119,7 @@ msgstr ""
 msgid "This page allows you to copy the event settings from another one"
 msgstr ""
 
-msgid "Select which elements to copy, from which other event."
+msgid "Select which elements to copy, from which other event"
 msgstr ""
 
 msgid "ATTENTION: This action overwrites changes made to this event"
@@ -6252,7 +6236,7 @@ msgstr ""
 
 msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
-"available during registration."
+"available during registration"
 msgstr ""
 
 msgid "Available days"
@@ -6383,16 +6367,12 @@ msgid ""
 "concerning the event"
 msgstr ""
 
-msgid ""
-"To assign a user to a role, they must first be added to the organization."
-msgstr ""
-
 msgid "Secret registration link"
 msgstr ""
 
 msgid ""
 "Here is the secret registration code: only users accessing from this address "
-"will be able to register."
+"will be able to register"
 msgstr ""
 
 msgid "Event texts"
@@ -6417,12 +6397,12 @@ msgstr ""
 
 msgid ""
 "Please remember that the information on this page was given with the "
-"implicit trust that it will be treated with the utmost care."
+"implicit trust that it will be treated with the utmost care"
 msgstr ""
 
 msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
-"them in anonymous form."
+"them in anonymous form"
 msgstr ""
 
 msgid "This page shows the email lists of subscribers"
@@ -6458,11 +6438,6 @@ msgstr ""
 msgid ""
 "This page shows the sensitive information of registered players regarding "
 "safety"
-msgstr ""
-
-msgid ""
-"Please remember that the information on this page was given with the "
-"implicit trust that it will be treated with the utmost care"
 msgstr ""
 
 msgid "Sensitive data"
@@ -6565,7 +6540,7 @@ msgstr ""
 msgid ""
 "The character on the left has in relationships the one on the right, but the "
 "reverse is not true. Check whether to remove the relationship to the one on "
-"the left, or add it on the one on the right."
+"the left, or add it on the one on the right"
 msgstr ""
 
 msgid "Absent (in the relationships of this character the other one is absent)"
@@ -6579,7 +6554,7 @@ msgstr ""
 
 msgid ""
 "In the text of the element on the left, it is referenced a character with "
-"the number indicated on the right, but the latter does not appear to exist."
+"the number indicated on the right, but the latter does not appear to exist"
 msgstr ""
 
 msgid "Number not found"
@@ -6590,7 +6565,7 @@ msgstr ""
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "
-"whether it should be written something."
+"whether it should be written something"
 msgstr ""
 
 msgid "check lack relationships"
@@ -6600,7 +6575,7 @@ msgid ""
 "In the text of the element on the left, it appears a character with the "
 "number indicated on the right, but in the relationships instead that "
 "character was not related. Check whether it is necessary to create a "
-"relationship to the character, or remove the reference from the text."
+"relationship to the character, or remove the reference from the text"
 msgstr ""
 
 msgid "check excessive relationships"
@@ -6610,21 +6585,21 @@ msgid ""
 "In the text of the element on the left, a character is NOT indicated with "
 "the number shown on the right, but in the relationships instead it is "
 "related. Check whether it is necessary to remove the relationship to the "
-"character, or indicate in the text a reference to the character."
+"character, or indicate in the text a reference to the character"
 msgstr ""
 
 msgid ""
 "In the text of the element on the left, it appears a character with the "
 "number indicated on the right, but instead in the relationships the "
 "character was not related. Check whether it is necessary to create a "
-"relationship, or remove the reference from the text."
+"relationship, or remove the reference from the text"
 msgstr ""
 
 msgid ""
 "In the text of the element on the left, a character is NOT indicated with "
 "the number shown on the right, but instead in the relationships the "
 "character is related. Check whether it is necessary to remove the "
-"relationship, or indicate in the text a reference to the character."
+"relationship, or indicate in the text a reference to the character"
 msgstr ""
 
 msgid "Check double speed larps"
@@ -6736,7 +6711,7 @@ msgstr ""
 
 msgid ""
 "This page shows the different versions available of the character, and the "
-"differences between them."
+"differences between them"
 msgstr ""
 
 msgid "This page allows you to fully view a character"
@@ -7994,6 +7969,9 @@ msgstr ""
 msgid "Join the waiting list!"
 msgstr ""
 
+msgid "Registration closed."
+msgstr ""
+
 msgid "Your character is"
 msgstr ""
 
@@ -8104,9 +8082,6 @@ msgid "Filler registrations"
 msgstr ""
 
 msgid "Waiting list registrations"
-msgstr ""
-
-msgid "Registration closed"
 msgstr ""
 
 msgid ""
