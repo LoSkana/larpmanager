@@ -48,11 +48,13 @@ class AbilityTypePx(BaseConceptModel):
 
 
 class AbilityPx(BaseConceptModel):
-    typ = models.ForeignKey(AbilityTypePx, on_delete=models.CASCADE, blank=True, null=True, related_name="abilities")
+    typ = models.ForeignKey(
+        AbilityTypePx, on_delete=models.CASCADE, blank=True, null=True, related_name="abilities", verbose_name=_("Type")
+    )
 
     cost = models.IntegerField()
 
-    descr = HTMLField(max_length=5000, blank=True, null=True)
+    descr = HTMLField(max_length=5000, blank=True, null=True, verbose_name=_("Description"))
 
     visible = models.BooleanField(
         default=True,

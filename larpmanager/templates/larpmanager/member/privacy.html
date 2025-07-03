@@ -4,15 +4,15 @@
     {% trans "Privacy" %}
 {% endblock title %}
 {% block content %}
-    <i>{% trans "Your data will be saved in the LarpManager system, which is used  by several LARP Organizations. We value the privacy of your data, and we  we will treat it with the utmost care. In particular, it will be made visible  only to the organizers of the events you decide to sign up. Under no any other circumstances they will be disclosed, shared, or processed." %}</i>
+    <i>
+        {% trans "Your data will be saved in the system, which is used by several associations" %}.
+        {% trans "We value the privacy of your data and will treat it with the utmost care" %}.
+        {% trans "In particular, they will only be made visible to the organisers of the events you decide to register for" %}.
+        {% trans "They will not be communicated, shared or processed in any other way" %}.
+    </i>
     <hr />
-    <p>
-        {% trans "Here is the complete list of all organizations registered with LarpManager that have access to your data." %}
-    </p>
-    <p>
-        {% trans "Access has been granted by you in the past by signing up for one of their  events, or by agreeing to participate as a staff member / organizer." %}
-    </p>
-    <p>{% trans "You can remove your consent to data sharing by clicking on the appropriate link." %}</p>
+    <p>{% trans "Here is the complete list of all organizations that have access to your data" %}.</p>
+    <p>{% trans "You can withdraw your consent to data sharing by clicking the related link" %}.</p>
     <hr />
     <table class="mob">
         <tr>

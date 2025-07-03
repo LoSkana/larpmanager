@@ -85,22 +85,32 @@ def get_remember_pay_body(context, provisional, reg):
     payment_url = f"{url}/{reg.run.event.slug}/{reg.id}"
 
     if provisional:
-        body = _("Hello! We are contacting you regarding your provisional registration at <b>%(event)s</b>.") % context
+        body = (
+            _("Hello! We are contacting you regarding your provisional registration at <b>%(event)s</b>") % context
+            + "."
+        )
     else:
-        body = _("Hello! We are contacting you regarding your registration at <b>%(event)s</b>.") % context
+        body = _("Hello! We are contacting you regarding your registration at <b>%(event)s</b>") % context + "."
 
     if deadline <= 0:
-        body += "<br /><br />" + _("To confirm it, we ask you to pay this amount as soon as possible: %(amount)s.") % {
-            "amount": amount
-        }
+        body += (
+            "<br /><br />"
+            + _("To confirm it, we ask you to pay this amount as soon as possible: %(amount)s") % {"amount": amount}
+            + "."
+        )
 
     else:
-        body += "<br /><br />" + _(
-            "To confirm it, we ask you to pay this amount: %(amount)s, within this number of days: %(days)s."
-        ) % {"amount": amount, "days": deadline}
+        body += (
+            "<br /><br />"
+            + _("To confirm it, we ask you to pay this amount: %(amount)s, within this number of days: %(days)s")
+            % {"amount": amount, "days": deadline}
+            + "."
+        )
 
-    body += "<br /><br />" + _(
-        "(Please note that if you have with us a different agreement, you can safely ignore this email!)"
+    body += (
+        "<br /><br />("
+        + _("Please note that if you have with us a different agreement, you can safely ignore this email")
+        + "!)"
     )
 
     body += "<br /><br />" + _(

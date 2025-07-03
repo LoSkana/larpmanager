@@ -22,7 +22,6 @@ import time
 
 from django.contrib import messages
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
@@ -81,10 +80,10 @@ def _get_field_value(el, que):
         return mapping[que.typ]()
 
     if que.typ in {"p", "t", "e"}:
-        try:
-            return WritingAnswer.objects.filter(question=que, element_id=el.id).first().text
-        except ObjectDoesNotExist:
-            return ""
+        answers = WritingAnswer.objects.filter(question=que, element_id=el.id)
+        if answers:
+            return answers.first().text
+        return ""
 
     if que.typ in {"s", "m"}:
         return ", ".join(c.option.display for c in WritingChoice.objects.filter(question=que, element_id=el.id))
@@ -139,7 +138,7 @@ def user_edit(request, ctx, form_type, nm, eid):
 
         if form.is_valid():
             p = form.save()
-            messages.success(request, _("Operation completed!"))
+            messages.success(request, _("Operation completed") + "!")
 
             dl = "delete" in request.POST and request.POST["delete"] == "1"
             save_log(request.user.member, form_type, p, dl)
@@ -197,7 +196,7 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
 
         if ctx["form"].is_valid():
             p = ctx["form"].save()
-            messages.success(request, _("Operation completed!"))
+            messages.success(request, _("Operation completed") + "!")
 
             dl = "delete" in request.POST and request.POST["delete"] == "1"
             save_log(request.user.member, form_type, p, dl)
@@ -317,7 +316,7 @@ def _writing_save(ctx, form, form_type, nm, redr, request, tp):
     if dl:
         p.delete()
 
-    messages.success(request, _("Operation completed!"))
+    messages.success(request, _("Operation completed") + "!")
 
     if "continue" in request.POST:
         return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, num=0)
@@ -385,8 +384,8 @@ def writing_edit_working_ticket(request, tp, eid, res, add_ticket=True):
         if idx != mid and now - tm < ticket_time:
             others.append(name)
         if len(others) > 0:
-            warn = _("Warning! Other users are editing this item.")
-            warn += " " + _("You cannot work on it at the same time: the work of one of you would be lost.")
+            warn = _("Warning! Other users are editing this item") + "."
+            warn += " " + _("You cannot work on it at the same time: the work of one of you would be lost") + "."
             warn += " " + _("List of other users") + ": " + ", ".join(others)
             res["warn"] = warn
 

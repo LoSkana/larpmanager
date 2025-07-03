@@ -1709,3 +1709,11 @@ a label:hover {
 .checkbox_single input[type="checkbox"] {
     display: block;
 }
+
+#tutorial_query {
+    display: inline-block;
+}
+
+#tutorial_query_go {
+    padding: 0.7em 1em;
+}

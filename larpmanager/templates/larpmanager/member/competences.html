@@ -4,9 +4,9 @@
     {% trans "Your competences" %}
 {% endblock title %}
 {% block content %}
-    <p>{% trans "On this page you can mark your specialties to collaborate on our  events." %}</p>
+    <p>{% trans "On this page you can mark your specialties to collaborate on our  events" %}.</p>
     <p>
-        {% trans "Click on the roles you'd like to collaborate on, then enter your degree of experience, and finally indicate precisely your field of experience." %}
+        {% trans "Click on the roles you'd like to collaborate on, then enter your degree of experience, and finally indicate precisely your field of experience" %}.
     </p>
     <form action="{{ request.path }}"  method="post">
         {% csrf_token %}

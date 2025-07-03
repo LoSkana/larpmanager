@@ -7,7 +7,7 @@ const abilities = {{ available | safe }};
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
         $('form').on('submit', function() {
-            return confirm('{% trans "Are you sure?" %}');
+            return confirm('{% trans "Are you sure" %}?');
         });
 
         $('input[type="submit"]').prop('disabled', true);

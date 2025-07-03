@@ -53,7 +53,7 @@
     {% endif %}
     {% if data.website %}
         <p>
-            <a href="{{ data.website }}" class="button primary" target="_blank">{% trans "Discover the web site!" %}</a>
+            <a href="{{ data.website }}" class="button primary" target="_blank">{% trans "Discover the web site" %}!</a>
         </p>
         <hr />
     {% endif %}
@@ -87,10 +87,10 @@
         <table class="mob">
             <tr>
                 <th>
-                    {% trans "There are no new runs scheduled at this time." %}
+                    {% trans "There are no new runs scheduled at this time" %}.
                     {% if features.pre_register %}
-                        <a href="{% url 'pre_register' event.slug %}">{% trans "Pre-register here!" %}</a>
-                        {% trans "You will be notified when a new run is organized, and you will have fast-track on registration!" %}
+                        <a href="{% url 'pre_register' event.slug %}">{% trans "Pre-register here" %}!</a>
+                        {% trans "You will be notified when a new run is organized, and you will have fast-track on registration" %}!
                     </th>
                 </tr>
             {% endif %}

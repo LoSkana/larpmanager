@@ -98,7 +98,7 @@
 {% endif %}
 {% if method == 'any' %}
     <p>
-        {% trans "Please indicate below the exact method of payment you made. Remember to submit the form, otherwise your payment will not be processed!" %}
+        {% trans "Please indicate below the exact method of payment you made. Remember to submit the form, otherwise your payment will not be processed" %}!
     </p>
     <form action="{% url 'acc_submit' 'any' request.path %}"
           method="post"
@@ -116,7 +116,7 @@
         <b>(1)</b> {% trans "Use the information below to request the transfer from your bank" %}.
     </p>
     <p>
-        <b>(2)</b> {% trans "Please check that you have copied the entire message for payment exactly (in coloured text), it is important!" %}
+        <b>(2)</b> {% trans "Please check that you have copied the entire message for payment exactly (in coloured text), it is important" %}!
     </p>
     <p>
         <b>(3)</b> {% trans "Once the transfer is confirmed, request the slip (the receipt of confirmation) and upload it below. You can upload a file in pdf format, or an image" %}.
@@ -132,7 +132,7 @@
     </form>
     <hr />
     <p>
-        <b><i>{% trans "Please be careful to perform these steps - otherwise your  payment will not be processed!" %}</i></b>
+        <b><i>{% trans "Please be careful to perform these steps - otherwise your  payment will not be processed" %}!</i></b>
     </p>
     <hr />
     <table class="mob no_csv">
@@ -196,7 +196,7 @@
     </form>
     <hr />
     <p>
-        <b><i>{% trans "Please be careful to perform these steps - otherwise your  payment will not be processed!" %}</i></b>
+        <b><i>{% trans "Please be careful to perform these steps - otherwise your  payment will not be processed" %}!</i></b>
     </p>
     <hr />
     <a href="https://PayPal.Me/{{ paypal_nf_handle }}/{{ invoice.mc_gross | floatformat:2 }}"

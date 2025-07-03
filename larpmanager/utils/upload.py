@@ -72,7 +72,7 @@ def upload_elements(request, ctx, typ, nm, red):
             # print(request.FILES)
             ctx["logs"] = element_load(request, ctx, request.FILES["elem"], typ, nm)
             ctx["redr"] = redr
-            messages.success(request, _("Elements uploaded!"))
+            messages.success(request, _("Elements uploaded") + "!")
             return render(request, "larpmanager/orga/uploads.html", ctx)
 
         except Exception as exp:

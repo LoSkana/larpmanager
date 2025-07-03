@@ -10,7 +10,7 @@
     <br />
     <br />
     {% if permission %}
-        {% trans "Do you want to proceed?" %}
+        {% trans "Do you want to proceed" %}?
         {% if run %}
             <a href="{% url 'activate_feature_event' run.event.slug run.number exe.feature exe.path %}">{% trans "Activate" %}</a>
         {% else %}

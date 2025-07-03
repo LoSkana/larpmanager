@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import traceback
 from datetime import datetime, timedelta
 from typing import Optional
 
@@ -36,7 +36,7 @@ from larpmanager.models.casting import AssignmentTrait, Casting
 from larpmanager.models.event import EventTextType
 from larpmanager.models.member import Member
 from larpmanager.models.writing import Character, CharacterStatus
-from larpmanager.utils.tasks import my_send_mail, my_send_simple_mail
+from larpmanager.utils.tasks import my_send_mail
 from larpmanager.utils.text import get_event_text
 
 
@@ -53,7 +53,7 @@ def check_holiday():
 def join_email(assoc):
     for member in get_assoc_executives(assoc):
         activate(member.language)
-        subj = _("Welcome to LarpManager!")
+        subj = _("Welcome to LarpManager") + "!"
         body = render_to_string("mails/join_assoc.html", {"member": member, "assoc": assoc})
         my_send_mail(subj, body, member, assoc)
 
@@ -87,7 +87,7 @@ def assoc_roles_changed(sender, **kwargs):
             activate(mb.language)
             subj = hdr(instance.assoc) + _("Role approval %(role)s") % {"role": instance.name}
             url = get_url("manage", instance.assoc)
-            body = _("Access the management panel <a href= %(url)s'>from here!</a>.") % {"url": url}
+            body = _("Access the management panel <a href= %(url)s'>from here!</a>") % {"url": url} + "."
             my_send_mail(subj, body, mb, instance.assoc)
 
             # notify organizers
@@ -99,7 +99,7 @@ def assoc_roles_changed(sender, **kwargs):
                     "user": mb,
                     "role": instance.name,
                 }
-                body = _("The user has been enabled for the indicated role.")
+                body = _("The user has been assigned the specified role") + "."
                 my_send_mail(subj, body, m, instance.assoc)
 
 
@@ -131,7 +131,7 @@ def event_roles_changed(sender, **kwargs):
                 "event": instance.event,
             }
             url = get_url(f"{instance.event.slug}/1/manage/", instance.event.assoc)
-            body = _("Access the management panel <a href= %(url)s'>from here!</a>.") % {"url": url}
+            body = _("Access the management panel <a href= %(url)s'>from here!</a>") % {"url": url} + "."
             my_send_mail(subj, body, mb, instance.event)
 
             # notify organizers
@@ -144,7 +144,7 @@ def event_roles_changed(sender, **kwargs):
                     "role": instance.name,
                     "event": instance.event,
                 }
-                body = _("The user was enabled in the role for the indicated event.")
+                body = _("The user has been assigned the specified role") + "."
                 my_send_mail(subj, body, m, instance.event)
 
 
@@ -153,7 +153,7 @@ m2m_changed.connect(event_roles_changed, sender=EventRole.members.through)
 
 def bring_friend_instructions(reg, ctx):
     activate(reg.member.language)
-    subj = hdr(reg.run.event) + _("Bring a friend to %(event)s!") % {"event": reg.run}
+    subj = hdr(reg.run.event) + _("Bring a friend to %(event)s") % {"event": reg.run} + "!"
     body = _("Personal code: <b>%(cod)s</b>") % {"cod": reg.special_cod}
     body += "<br /><br />" + _(
         "Copy this code and share it with friends! Every friend who signs up  and uses "
@@ -168,7 +168,7 @@ def bring_friend_instructions(reg, ctx):
     body += "<br /><br />" + _("(check the available number of discounts <a href='%(url)s'>on this page</a>)") % {
         "url": f"{reg.run.event.slug}/{reg.run.number}/limitations/"
     }
-    body += "<br /><br />" + _("See you soon!")
+    body += "<br /><br />" + _("See you soon") + "!"
     my_send_mail(subj, body, reg.member, reg.run)
 
 
@@ -196,7 +196,7 @@ def notify_trait_assigned(sender, instance, created, **kwargs):
         f"{instance.run.event.slug}/{instance.run.number}/character/your",
         instance.run.event,
     )
-    body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>!") % {"url": url}
+    body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>") % {"url": url} + "!"
     if instance.run.get_config("show_text", False):
         body += "<br/><br />" + _(
             "Please note that your character sheet may contain  personal secrets, not to be "
@@ -249,6 +249,9 @@ def character_update_status(sender, instance, **kwargs):
             my_send_mail(subj, body, instance.player, instance.event)
 
 
-def notify_admins(subj, text):
+def notify_admins(subj, text, exception=None):
+    if exception:
+        tb = "".join(traceback.format_exception(type(exception), exception, exception.__traceback__))
+        text += "\n" + tb
     for _name, email in conf_settings.ADMINS:
-        my_send_simple_mail(subj, text, email)
+        my_send_mail(subj, text, email)

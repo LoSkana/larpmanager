@@ -346,7 +346,7 @@ class AccountingItemExpense(AccountingItem):
         max_length=1,
         choices=AccountingItem.BALANCE_CHOICES,
         verbose_name=_("Balance"),
-        help_text=_("Indicate how spending is allocated at the budget level."),
+        help_text=_("Indicate how spending is allocated at the budget level"),
         null=True,
         blank=False,
     )
@@ -393,7 +393,7 @@ class AccountingItemOutflow(AccountingItemFlow):
         max_length=1,
         choices=AccountingItem.BALANCE_CHOICES,
         verbose_name=_("Balance"),
-        help_text=_("Indicate how spending is allocated at the budget level."),
+        help_text=_("Indicate how spending is allocated at the budget level"),
         null=True,
         blank=False,
     )

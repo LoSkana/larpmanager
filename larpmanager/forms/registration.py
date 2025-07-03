@@ -220,8 +220,8 @@ class RegistrationForm(BaseRegistrationForm):
         if not quota_chs:
             quota_chs.append((1, _("Default")))
         ht = _("The number of payments to split the fee")
-        ht += " " + _("The ticket will be divided equally in the number of quotas indicated.")
-        ht += " " + _("Payment deadlines will be similarly equally divided, based on the date of registration.")
+        ht += " " + _("The ticket will be divided equally in the number of quotas indicated") + "."
+        ht += " " + _("Payment deadlines will be similarly equally divided, based on the date of registration") + "."
         self.fields["quotas"] = forms.ChoiceField(required=True, choices=quota_chs, label=_("Quotas"), help_text=ht)
         if len(quota_chs) == 1:
             self.fields["quotas"].widget = forms.HiddenInput()
@@ -716,7 +716,7 @@ class OrgaRegistrationSectionForm(MyForm):
 
 
 class OrgaRegistrationQuestionForm(MyForm):
-    page_info = _("This page allows you to add or edit a question from the sign up form.")
+    page_info = _("This page allows you to add or edit a question from the sign up form")
 
     page_title = _("Form element")
 
@@ -767,7 +767,7 @@ class OrgaRegistrationQuestionForm(MyForm):
 
 
 class OrgaRegistrationOptionForm(MyForm):
-    page_info = _("This page allows you to add or edit an option in a sign up form question.")
+    page_info = _("This page allows you to add or edit an option in a sign up form question")
 
     page_title = _("Form Options")
 
@@ -799,7 +799,7 @@ class OrgaRegistrationQuotaForm(MyForm):
 
 
 class OrgaRegistrationInstallmentForm(MyForm):
-    page_info = _("This page allows you to add or change the fixed instalments in which a player must pay.")
+    page_info = _("This page allows you to add or change the fixed instalments in which a player must pay")
 
     page_title = _("Fixed instalments")
 
@@ -831,7 +831,7 @@ class OrgaRegistrationInstallmentForm(MyForm):
 
 
 class OrgaRegistrationSurchargeForm(MyForm):
-    page_info = _("This page allows you to add or edit the registration surcharges.")
+    page_info = _("This page allows you to add or edit the registration surcharges")
 
     page_title = _("Surcharge")
 
@@ -871,5 +871,5 @@ class PreRegistrationForm(forms.Form):
             required=False,
             max_length=255,
             label=_("Informations"),
-            help_text=_("Is there anything else you would like to tell us?"),
+            help_text=_("Is there anything else you would like to tell us") + "?",
         )
