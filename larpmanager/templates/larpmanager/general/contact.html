@@ -5,7 +5,7 @@
 {% endblock title %}
 {% block content %}
     {% if sent %}
-        <h2>{% trans "Message sent, thanks for writing us!" %}</h2>
+        <h2>{% trans "Message sent, thanks for writing us" %}!</h2>
         <script>
          setTimeout(function(){
             window.location.href = "{% url 'home' %}";

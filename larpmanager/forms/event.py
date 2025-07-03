@@ -317,11 +317,11 @@ class OrgaConfigForm(ConfigForm):
         self.add_configs("character_form_wri_que_max", ConfigType.BOOL, label, help_text)
 
         label = _("Ticket selection")
-        help_text = _("If checked, allows a option to be visible only to players with selected ticket.")
+        help_text = _("If checked, allows a option to be visible only to players with selected ticket")
         self.add_configs("character_form_wri_que_tickets", ConfigType.BOOL, label, help_text)
 
         label = _("Prerequisites")
-        help_text = _("If checked, allows a option to be visible only if other options are selected.")
+        help_text = _("If checked, allows a option to be visible only if other options are selected")
         self.add_configs("character_form_wri_que_dependents", ConfigType.BOOL, label, help_text)
 
     def set_config_structure(self):
@@ -614,7 +614,7 @@ class OrgaConfigForm(ConfigForm):
 class OrgaAppearanceForm(MyCssForm):
     page_title = _("Event Appearance")
 
-    page_info = _("This page allows you to change the appearance and presentation of the event.")
+    page_info = _("This page allows you to change the appearance and presentation of the event")
 
     class Meta:
         model = Event
@@ -632,7 +632,7 @@ class OrgaAppearanceForm(MyCssForm):
     event_css = forms.CharField(
         widget=Textarea(attrs={"rows": 15}),
         required=False,
-        help_text=_("These CSS commands will be carried over to all pages in your Association space."),
+        help_text=_("These CSS commands will be carried over to all pages in your Association space"),
     )
 
     def __init__(self, *args: object, **kwargs: object):
@@ -670,7 +670,7 @@ class OrgaAppearanceForm(MyCssForm):
 class OrgaEventTextForm(MyForm):
     page_title = _("Texts")
 
-    page_info = _("This page allows you to edit event-specific texts.")
+    page_info = _("This page allows you to edit event-specific texts")
 
     class Meta:
         abstract = True
@@ -742,7 +742,7 @@ class OrgaEventTextForm(MyForm):
 class OrgaEventRoleForm(MyForm):
     page_title = _("Roles")
 
-    page_info = _("This page allows you to change the access roles for the event.")
+    page_info = _("This page allows you to change the access roles for the event")
 
     class Meta:
         model = EventRole
@@ -763,7 +763,7 @@ class OrgaEventRoleForm(MyForm):
 class OrgaEventButtonForm(MyForm):
     page_title = _("Navigation")
 
-    page_info = _("This page allows you to edit the event navigation buttons.")
+    page_info = _("This page allows you to edit the event navigation buttons")
 
     class Meta:
         model = EventButton
@@ -773,7 +773,7 @@ class OrgaEventButtonForm(MyForm):
 class OrgaRunForm(ConfigForm):
     page_title = _("Run Settings")
 
-    page_info = _("This page allows you to change the general settings of this run.")
+    page_info = _("This page allows you to change the general settings of this run")
 
     class Meta:
         model = Run

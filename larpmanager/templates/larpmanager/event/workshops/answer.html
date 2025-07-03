@@ -7,13 +7,13 @@
     {% include "larpmanager/manage/nav.html" %}
     <div class="lm_tooltip">
         <a href="{% url 'workshops' slug run.number %}">Workshop</a>
-        <div class="lm_tooltiptext">{% trans "Fill out the event prep questions!" %}</div>
+        <div class="lm_tooltiptext">{% trans "Fill out the event prep questions" %}!</div>
     </div>
 {% endblock nav %}
 {% block content %}
     <br />
     <div class="workshop">
-        <p>{% trans "Answer the following questions. Select *all* of the answers that seem correct." %}</p>
+        <p>{% trans "Answer the following questions. Select *all* of the answers that seem correct" %}.</p>
         <hr class="c" />
         <form action="{{ request.path }}"  method="post">
             {% csrf_token %}

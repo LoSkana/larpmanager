@@ -19,7 +19,7 @@
         </p>
         <br />
         <p>
-            {% trans "When you want to close the collection, follow the link below. A special redemption code will be generated!" %}
+            {% trans "When you want to close the collection, follow the link below. A special redemption code will be generated" %}!
             <br />
             <a href="{% url 'acc_collection_close' coll.contribute_code %}">{% trans "Link to close the collection" %}</a>
         </p>
@@ -43,7 +43,7 @@
 window.addEventListener('DOMContentLoaded', function() {
 
 $('#close').click(function(){
-    return confirm("Sei sicuro di procedere?");
+    return confirm("{% trans "Confirm" %}?");
 })
 });
     </script>

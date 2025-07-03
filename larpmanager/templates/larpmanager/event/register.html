@@ -11,21 +11,21 @@
 {% block content %}
     {% if run.reg and not run.reg.provisional %}
         <p>
-            {% trans "You can update your registration by simply changing the value of the fields and clicking on confirm." %}
+            {% trans "You can update your registration by simply changing the value of the fields and clicking on confirm" %}.
         </p>
         {% if features.player_cancellation %}
             <hr />
             <p>
-                {% trans "If you no longer wish to attend, you can" %} <a href="{% url 'unregister' event.slug run.number %}">{% trans "cancel your registrations." %}</a>
+                {% trans "If you no longer wish to attend, you can" %} <a href="{% url 'unregister' event.slug run.number %}">{% trans "cancel your registrations" %}.</a>
             </p>
         {% endif %}
         {% if features.bring_friend %}
             <hr />
-            <h4>{% trans "Bring a friend!" %}</h4>
+            <h4>{% trans "Bring a friend" %}!</h4>
             <p>
                 {% trans "Personal code" %}: <b>{{ run.reg.special_cod }}</b>
             </p>
-            <p>{% trans "Copy this code and share it with friends!" %}</p>
+            <p>{% trans "Copy this code and share it with friends" %}!</p>
             <p>
                 {% trans "Every friend who registers and uses this code will receive the following discount directly on their ticket" %}: {{ bring_friend_discount_to|floatformat:"0" }}{{ currency_symbol_symbol }}.
             </p>
@@ -34,13 +34,13 @@
             </p>
         {% endif %}
     {% else %}
-        <p>{% trans "To register for the event, please fill in the following form and click on confirm." %}</p>
+        <p>{% trans "To register for the event, please fill in the following form and click on confirm" %}.</p>
     {% endif %}
     {% if run.reg or not run.status.closed %}
         {% if event.website %}
             <hr />
             <p>
-                {% trans "View all event information in the" %} <a target="_blank" href="{{ event.website }}">{% trans "website!" %}</a>
+                {% trans "View all event information in the" %} <a target="_blank" href="{{ event.website }}">{% trans "website" %}!</a>
             </p>
         {% endif %}
         {% if not features.laog %}
@@ -59,7 +59,7 @@
         {% if event.lang and lang != event.lang %}
             <hr />
             <h1>{% trans "Foreign language" %}</h1>
-            <p>{% trans "Warning. This event is in a different language than the one set in your profile." %}</p>
+            <p>{% trans "Warning. This event is in a different language than the one set in your profile" %}.</p>
         {% endif %}
         {% if custom_text %}
             <hr />
@@ -95,7 +95,7 @@
                                         <input type="text" name="discount" id="id_discount">
                                         <input type="button" value="{% trans "Confirm" %}" id="discount_go">
                                         <br>
-                                        <span class="helptext">{% trans "If you have a discount code, enter it here and press enter." %}</span>
+                                        <span class="helptext">{% trans "If you have a discount code, enter it here and press enter" %}.</span>
                                     </td>
                                 </tr>
                             </table>
@@ -117,7 +117,7 @@
                                     <tr>
                                         <td>
                                             {% if membership_fee == 'done' %}
-                                                {% trans "You have already paid your dues for the current year, so you are already covered for this event!" %}
+                                                {% trans "You have already paid your dues for the current year, so you are already covered for this event" %}!
                                             {% elif membership_fee == 'future' %}
                                                 {% trans "To participate in this event, you will have to pay the annual membership fee of" %}: <b>{{ membership_amount }}{{ currency_symbol }}</b>.
                                             {% else %}
@@ -129,7 +129,7 @@
                                 {% if member.membership.status == 'e' or member.membership.status == 'j' %}
                                     <tr>
                                         <td>
-                                            {% trans "In order to confirm your registration, you must request to register as a member of the Association. The procedure will automatically take you through the required steps." %}
+                                            {% trans "In order to confirm your registration, you must request to register as a member of the Association. The procedure will automatically take you through the required steps" %}.
                                         </td>
                                     </tr>
                                 {% endif %}
@@ -137,7 +137,7 @@
                             {% if not run.reg %}
                                 <tr>
                                     <td>
-                                        {% trans "By proceeding with your registration for this event, you are giving us your authorisation to share your data saved on our platform with the organisers of the event." %}
+                                        {% trans "By proceeding with your registration for this event, you are giving us your authorisation to share your data saved on our platform with the organisers of the event" %}.
                                     </td>
                                 </tr>
                             {% endif %}

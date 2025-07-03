@@ -4,13 +4,13 @@
     {{ name }} - {% trans "Versions" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the different versions available of the character, and the differences between them." %}
+    {% trans "This page shows the different versions available of the character, and the differences between them" %}.
 {% endblock info %}
 {% block content %}
     {% for v in versions reversed %}
         {% if v.diff %}
             <h3>Versione {{ v.version }} - {{ v.member }} - {{ v.created }}</h3>
-            <div class='diff-version plot'>{{ v.diff | safe }}</div>
+            <div class="diff-version plot">{{ v.diff | safe }}</div>
         {% endif %}
     {% endfor %}
 {% endblock content %}

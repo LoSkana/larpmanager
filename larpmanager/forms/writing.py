@@ -109,12 +109,12 @@ class PlayerRelationshipForm(MyForm):
         cleaned_data = super().clean()
 
         if self.cleaned_data["target"].id == self.params["char"]["id"]:
-            self.add_error("target", _("You cannot create a relationship towards yourself!"))
+            self.add_error("target", _("You cannot create a relationship towards yourself") + "!")
 
         try:
             rel = PlayerRelationship.objects.get(reg=self.params["run"].reg, target=self.cleaned_data["target"])
             if rel.id != self.instance.id:
-                self.add_error("target", _("Already existing relationship!"))
+                self.add_error("target", _("Already existing relationship") + "!")
         except ObjectDoesNotExist:
             pass
 

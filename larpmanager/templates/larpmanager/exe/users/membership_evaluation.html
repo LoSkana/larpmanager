@@ -9,7 +9,7 @@
 {% block content %}
     {% include "elements/membership_cf.html" %}
     {% if member_exists %}
-        <h2>{% trans "Warning: there is already an approved member with the same name!" %}</h2>
+        <h2>{% trans "Warning: there is already an approved member with the same name" %}!</h2>
         <hr />
     {% endif %}
     <h1>{% trans "Request for" %}: {{ member }}</h1>

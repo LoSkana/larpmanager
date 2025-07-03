@@ -418,7 +418,7 @@ class ProfileForm(BaseProfileForm):
 
         if "profile" in self.allowed and "profile" in self.mandatory:
             if not self.instance.profile:
-                self.add_error(None, _("Please upload your profile photo!"))
+                self.add_error(None, _("Please upload your profile photo") + "!")
 
         return cleaned_data
 
