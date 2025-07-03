@@ -3649,6 +3649,9 @@ msgstr "Ange dina preferenser här"
 msgid "Feature %(name)s activated!"
 msgstr "Funktion %(name)s aktiverad!"
 
+msgid "Is it selectable by players"
+msgstr "Kan den väljas av spelarna"
+
 msgid "Loading performed, see logs"
 msgstr "Lastning utförd, se loggar"
 
@@ -3715,9 +3718,6 @@ msgstr "Beskrivning av gratis donation"
 
 msgid "If checked: members can vote"
 msgstr "Om markerat: medlemmar kan rösta"
-
-msgid "Is it selectable by players?"
-msgstr "Kan den väljas av spelarna?"
 
 msgid "Link to close the collection"
 msgstr "Länk för att stänga samlingen"
@@ -3885,6 +3885,9 @@ msgstr "Bläddra igenom presentationswebbplatsen"
 msgid "Choice available, click to lock"
 msgstr "Val tillgängligt, klicka för att låsa"
 
+msgid "Did you check and is it correct"
+msgstr "Har du kontrollerat och är det korrekt"
+
 msgid "Discover the coming soon events"
 msgstr "Upptäck vilka evenemang som är på gång"
 
@@ -3983,9 +3986,6 @@ msgstr "Dräkter - smink, tyg, rustning"
 
 msgid "Data share removed successfully!"
 msgstr "Datadelning framgångsrikt borttagen!"
-
-msgid "Did you check and is it correct?"
-msgstr "Har du kontrollerat och är det korrekt?"
 
 msgid "Display secret registration link"
 msgstr "Visa hemlig registreringslänk"
@@ -4292,6 +4292,9 @@ msgstr "Registrering bekräftad vid %(event)s!"
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Rollgodkännande %(role)s per %(event)s"
 
+msgid "Show all the traits to those present"
+msgstr "Visa alla egenskaper för de närvarande"
+
 msgid "Terms and Conditions of registration"
 msgstr "Villkor och anvisningar för deltagande"
 
@@ -4390,9 +4393,6 @@ msgstr "Inmatning i %(event)s av %(user)s"
 
 msgid "Select the organisation to proceed to"
 msgstr "Välj den organisation som du vill gå vidare till"
-
-msgid "Show all the traits to those present?"
-msgstr "Visa alla egenskaper för de närvarande?"
 
 msgid "This page shows cancelled enrollments"
 msgstr "Denna sida sammanfattar annullerade registreringar"
@@ -4908,6 +4908,9 @@ msgstr "Tecknen är endast synliga för inloggade användare"
 msgid "Cover in rectangular format - aspect ratio 4:3"
 msgstr "Omslag i rektangulärt format - bildförhållande 4:3"
 
+msgid "Do you wish to be always updated on our events"
+msgstr "Vill du hålla dig uppdaterad om våra evenemang"
+
 msgid "Hint: The correct answers to this question are"
 msgstr "Ledtråd: De rätta svaren på denna fråga är"
 
@@ -4975,9 +4978,6 @@ msgstr "Kontrollera att medlemmarnas personuppgifter är korrekta"
 msgid "Customize specific texts on the event interface"
 msgstr "Anpassa specifika texter på eventgränssnittet"
 
-msgid "Do you wish to be always updated on our events?"
-msgstr "Vill du hålla dig uppdaterad om våra evenemang?"
-
 #, python-format
 msgid "Donation of %(user)s, with reason: '%(reason)s'"
 msgstr "Donation av %(user)s, med anledning: \"%(reason)s\""
@@ -5035,6 +5035,9 @@ msgstr "Jag är intresserad, men har inte så mycket erfarenhet"
 
 msgid "If checked: shows the description for each event"
 msgstr "Om markerat: visar beskrivningen för varje händelse"
+
+msgid "Is there anything else you would like to tell us"
+msgstr "Är det något annat du vill berätta för oss"
 
 msgid "Manage the character skills purchaseable with XP"
 msgstr "Hantera karaktärens färdigheter som kan köpas med XP"
@@ -5105,9 +5108,6 @@ msgstr "Beskriv exakt vilka risker det innebär för spelet"
 
 msgid "Insert the css code to customize the pdf printing"
 msgstr "Ange css-koden för att anpassa trycket"
-
-msgid "Is there anything else you would like to tell us?"
-msgstr "Är det något annat du vill berätta för oss?"
 
 msgid "Now you can peform the fiscal code validity check"
 msgstr "Nu kan du göra en kontroll av skattekodens giltighet"
@@ -7312,6 +7312,13 @@ msgstr ""
 "Ladda upp din undertecknade ansökan och ett foto av din identitetshandling"
 
 msgid ""
+"We cannot find your registration for this event. Are you logged in as the "
+"correct user"
+msgstr ""
+"Vi kan inte hitta din registrering för detta evenemang. Är du inloggad som "
+"rätt användare"
+
+msgid ""
 "You are now registered, but your account is inactive. We have sent an "
 "activation email"
 msgstr ""
@@ -7386,13 +7393,6 @@ msgid ""
 msgstr ""
 "Värdet på rabatten för den vän som registrerar sig med en registrerad "
 "spelares kod"
-
-msgid ""
-"We cannot find your registration for this event. Are you logged in as the "
-"correct user?"
-msgstr ""
-"Vi kan inte hitta din registrering för detta evenemang. Är du inloggad som "
-"rätt användare?"
 
 msgid ""
 "Allows you to generate discount codes that players can use to reduce their "

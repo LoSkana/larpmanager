@@ -3649,6 +3649,9 @@ msgstr "Wprowadź swoje preferencje tutaj"
 msgid "Feature %(name)s activated!"
 msgstr "Funkcja %(name)s aktywowana!"
 
+msgid "Is it selectable by players"
+msgstr "Czy gracze mogą ją wybrać"
+
 msgid "Loading performed, see logs"
 msgstr "Wykonano ładowanie, patrz dzienniki"
 
@@ -3715,9 +3718,6 @@ msgstr "Opis bezpłatnej darowizny"
 
 msgid "If checked: members can vote"
 msgstr "Jeśli zaznaczone: członkowie mogą głosować"
-
-msgid "Is it selectable by players?"
-msgstr "Czy gracze mogą ją wybrać?"
 
 msgid "Link to close the collection"
 msgstr "Link do zamknięcia kolekcji"
@@ -3885,6 +3885,9 @@ msgstr "Przejrzyj stronę prezentacji"
 msgid "Choice available, click to lock"
 msgstr "Dostępny wybór, kliknij, aby zablokować"
 
+msgid "Did you check and is it correct"
+msgstr "Czy sprawdziłeś i czy jest prawidłowy"
+
 msgid "Discover the coming soon events"
 msgstr "Odkryj nadchodzące wydarzenia"
 
@@ -3983,9 +3986,6 @@ msgstr "Kostiumy - makijaż, tkanina, zbroja"
 
 msgid "Data share removed successfully!"
 msgstr "Udostępnianie danych zostało pomyślnie usunięte!"
-
-msgid "Did you check and is it correct?"
-msgstr "Czy sprawdziłeś i czy jest prawidłowy?"
 
 msgid "Display secret registration link"
 msgstr "Wyświetlanie linku do tajnej rejestracji"
@@ -4292,6 +4292,9 @@ msgstr "Rejestracja potwierdzona na %(event)s!"
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Zatwierdzenie roli %(role)s na %(event)s"
 
+msgid "Show all the traits to those present"
+msgstr "Pokazać wszystkie cechy obecnym"
+
 msgid "Terms and Conditions of registration"
 msgstr "Warunki i zasady rejestracji"
 
@@ -4390,9 +4393,6 @@ msgstr "Rejestracja w %(event)s przez %(user)s"
 
 msgid "Select the organisation to proceed to"
 msgstr "Wybierz organizację, do której chcesz przejść"
-
-msgid "Show all the traits to those present?"
-msgstr "Pokazać wszystkie cechy obecnym?"
 
 msgid "This page shows cancelled enrollments"
 msgstr "Na tej stronie wyświetlane są anulowane zapisy"
@@ -4904,6 +4904,9 @@ msgstr "Znaki są widoczne tylko dla zalogowanych użytkowników"
 msgid "Cover in rectangular format - aspect ratio 4:3"
 msgstr "Okładka w formacie prostokątnym - proporcje 4:3"
 
+msgid "Do you wish to be always updated on our events"
+msgstr "Chcesz być zawsze na bieżąco z naszymi wydarzeniami"
+
 msgid "Hint: The correct answers to this question are"
 msgstr "Wskazówka: Prawidłowe odpowiedzi na to pytanie to"
 
@@ -4971,9 +4974,6 @@ msgstr "Sprawdzanie spójności danych osobowych członków"
 msgid "Customize specific texts on the event interface"
 msgstr "Dostosowywanie określonych tekstów w interfejsie wydarzenia"
 
-msgid "Do you wish to be always updated on our events?"
-msgstr "Chcesz być zawsze na bieżąco z naszymi wydarzeniami?"
-
 #, python-format
 msgid "Donation of %(user)s, with reason: '%(reason)s'"
 msgstr "Darowizna %(user)s, z powodem: '%(reason)s'"
@@ -5031,6 +5031,9 @@ msgstr "Jestem zainteresowany, ale nie mam dużego doświadczenia"
 
 msgid "If checked: shows the description for each event"
 msgstr "Jeśli zaznaczone: wyświetla opis każdego wydarzenia"
+
+msgid "Is there anything else you would like to tell us"
+msgstr "Czy jest coś jeszcze, co chciałbyś nam powiedzieć"
 
 msgid "Manage the character skills purchaseable with XP"
 msgstr "Zarządzaj umiejętnościami postaci, które można kupić za PD"
@@ -5101,9 +5104,6 @@ msgstr "Opisz dokładnie, jakie ryzyko stwarza to dla gry."
 
 msgid "Insert the css code to customize the pdf printing"
 msgstr "Wstaw kod css, aby dostosować drukowanie plików PDF"
-
-msgid "Is there anything else you would like to tell us?"
-msgstr "Czy jest coś jeszcze, co chciałbyś nam powiedzieć?"
 
 msgid "Now you can peform the fiscal code validity check"
 msgstr "Teraz można wykonać sprawdzenie poprawności kodu fiskalnego"
@@ -7305,6 +7305,13 @@ msgstr ""
 "dokumentu PDF)."
 
 msgid ""
+"We cannot find your registration for this event. Are you logged in as the "
+"correct user"
+msgstr ""
+"Nie możemy znaleźć Twojej rejestracji na to wydarzenie. Czy jesteś "
+"zalogowany jako właściwy użytkownik"
+
+msgid ""
 "You are now registered, but your account is inactive. We have sent an "
 "activation email"
 msgstr ""
@@ -7380,13 +7387,6 @@ msgid ""
 msgstr ""
 "Wartość zniżki dla znajomego, który zarejestruje się przy użyciu kodu "
 "zarejestrowanego gracza."
-
-msgid ""
-"We cannot find your registration for this event. Are you logged in as the "
-"correct user?"
-msgstr ""
-"Nie możemy znaleźć Twojej rejestracji na to wydarzenie. Czy jesteś "
-"zalogowany jako właściwy użytkownik?"
 
 msgid ""
 "Allows you to generate discount codes that players can use to reduce their "

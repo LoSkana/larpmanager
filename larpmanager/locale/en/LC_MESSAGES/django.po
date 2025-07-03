@@ -1562,7 +1562,7 @@ msgstr ""
 msgid "Informations"
 msgstr ""
 
-msgid "Is there anything else you would like to tell us?"
+msgid "Is there anything else you would like to tell us"
 msgstr ""
 
 msgid "Run"
@@ -1623,7 +1623,7 @@ msgstr ""
 msgid "download document"
 msgstr ""
 
-msgid "Did you check and is it correct?"
+msgid "Did you check and is it correct"
 msgstr ""
 
 msgid "Confirmation of expenditure"
@@ -2503,7 +2503,7 @@ msgid ""
 "automatically)"
 msgstr ""
 
-msgid "Show all the traits to those present?"
+msgid "Show all the traits to those present"
 msgstr ""
 
 msgid "Does the character have a public role/archetype? If not, leave blank"
@@ -2979,7 +2979,7 @@ msgstr ""
 msgid "Newsletter"
 msgstr ""
 
-msgid "Do you wish to be always updated on our events?"
+msgid "Do you wish to be always updated on our events"
 msgstr ""
 
 msgid "Portrait"
@@ -3185,7 +3185,7 @@ msgstr ""
 msgid "Maximum number of tickets available (0 for infinite)"
 msgstr ""
 
-msgid "Is it selectable by players?"
+msgid "Is it selectable by players"
 msgstr ""
 
 msgid ""
@@ -8410,7 +8410,7 @@ msgstr ""
 
 msgid ""
 "We cannot find your registration for this event. Are you logged in as the "
-"correct user?"
+"correct user"
 msgstr ""
 
 msgid "Your tax code has a problem that we ask you to correct"

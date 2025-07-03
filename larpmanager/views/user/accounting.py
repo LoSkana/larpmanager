@@ -185,7 +185,7 @@ def acc_pay(request, s, n, method=None):
 
     if not ctx["run"].reg:
         messages.warning(
-            request, _("We cannot find your registration for this event. Are you logged in as the correct user?")
+            request, _("We cannot find your registration for this event. Are you logged in as the correct user") + "?"
         )
         return redirect("accounting")
     else:

@@ -263,7 +263,7 @@ class Member(BaseModel):
         choices=NEWSLETTER_CHOICES,
         default=ALL,
         verbose_name=_("Newsletter"),
-        help_text=_("Do you wish to be always updated on our events?"),
+        help_text=_("Do you wish to be always updated on our events") + "?",
         null=True,
     )
 
@@ -407,7 +407,7 @@ class Membership(BaseModel):
         choices=NewsletterChoices.choices,
         default=NewsletterChoices.ALL,
         verbose_name=_("Newsletter"),
-        help_text=_("Do you wish to be always updated on our events?"),
+        help_text=_("Do you wish to be always updated on our events") + "?",
     )
 
     class Meta:

@@ -871,5 +871,5 @@ class PreRegistrationForm(forms.Form):
             required=False,
             max_length=255,
             label=_("Informations"),
-            help_text=_("Is there anything else you would like to tell us?"),
+            help_text=_("Is there anything else you would like to tell us") + "?",
         )

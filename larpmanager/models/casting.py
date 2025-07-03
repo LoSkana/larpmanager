@@ -46,7 +46,7 @@ class QuestType(Writing):
 class Quest(Writing):
     typ = models.ForeignKey(QuestType, on_delete=models.CASCADE, null=True, related_name="quests")
 
-    open_show = models.BooleanField(default=False, help_text=_("Show all the traits to those present?"))
+    open_show = models.BooleanField(default=False, help_text=_("Show all the traits to those present") + "?")
 
     class Meta:
         indexes = [models.Index(fields=["number", "event"])]

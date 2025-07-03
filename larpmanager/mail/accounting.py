@@ -63,7 +63,7 @@ def get_expense_mail(instance):
     }
     url = get_url(instance.download(), instance)
     body += f"<br /><br /><a href='{url}'>" + _("download document") + "</a>"
-    body += "<br /><br />" + _("Did you check and is it correct?")
+    body += "<br /><br />" + _("Did you check and is it correct") + "?"
     url = f"{instance.run.event.slug}/{instance.run.number}/manage/expenses/approve/{instance.pk}"
     body += f"<a href='{url}'>" + _("Confirmation of expenditure") + "</a>"
     return body, subj
@@ -406,7 +406,7 @@ def get_invoice_email(inv):
         body += f"<br /><br /><a href='{url}'>" + _("Download document") + "</a>"
     elif inv.method and inv.method.slug == "any":
         body += f"<br /><br /><i>{inv.text}</i>"
-    body += "<br /><br />" + _("Did you check and is it correct?")
+    body += "<br /><br />" + _("Did you check and is it correct") + "?"
     url = get_url("accounting/confirm", inv)
     body += f" <a href='{url}/{inv.cod}'>" + _("Payment confirmation") + "</a>"
     causal = inv.causal

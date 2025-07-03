@@ -3649,6 +3649,9 @@ msgstr "Angi dine preferanser her"
 msgid "Feature %(name)s activated!"
 msgstr "Funksjon %(name)s aktivert!"
 
+msgid "Is it selectable by players"
+msgstr "Kan den velges av spillerne"
+
 msgid "Loading performed, see logs"
 msgstr "Lasting utført, se logger"
 
@@ -3715,9 +3718,6 @@ msgstr "Beskrivelse av gratis donasjon"
 
 msgid "If checked: members can vote"
 msgstr "Hvis avkrysset: medlemmene kan stemme"
-
-msgid "Is it selectable by players?"
-msgstr "Kan den velges av spillerne?"
 
 msgid "Link to close the collection"
 msgstr "Lenke for å lukke samlingen"
@@ -3885,6 +3885,9 @@ msgstr "Bla gjennom presentasjonssiden"
 msgid "Choice available, click to lock"
 msgstr "Valg tilgjengelig, klikk for å låse"
 
+msgid "Did you check and is it correct"
+msgstr "Har du sjekket, og er det riktig"
+
 msgid "Discover the coming soon events"
 msgstr "Se hvilke arrangementer som er på trappene"
 
@@ -3983,9 +3986,6 @@ msgstr "Kostymer - sminke, tøy, rustning"
 
 msgid "Data share removed successfully!"
 msgstr "Datadeling er fjernet!"
-
-msgid "Did you check and is it correct?"
-msgstr "Har du sjekket, og er det riktig?"
 
 msgid "Display secret registration link"
 msgstr "Vis hemmelig registreringslenke"
@@ -4292,6 +4292,9 @@ msgstr "Påmelding bekreftet på %(event)s!"
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Rollegodkjenning %(role)s per %(event)s"
 
+msgid "Show all the traits to those present"
+msgstr "Vise alle egenskapene til de som er til stede"
+
 msgid "Terms and Conditions of registration"
 msgstr "Vilkår og betingelser for deltakelse"
 
@@ -4390,9 +4393,6 @@ msgstr "Oppføring i %(event)s av %(user)s"
 
 msgid "Select the organisation to proceed to"
 msgstr "Velg organisasjonen du vil gå videre til"
-
-msgid "Show all the traits to those present?"
-msgstr "Vise alle egenskapene til de som er til stede?"
 
 msgid "This page shows cancelled enrollments"
 msgstr "Denne siden oppsummerer kansellerte registreringer"
@@ -4907,6 +4907,9 @@ msgstr "Tegnene er bare synlige for innloggede brukere"
 msgid "Cover in rectangular format - aspect ratio 4:3"
 msgstr "Omslag i rektangulært format - størrelsesforhold 4:3"
 
+msgid "Do you wish to be always updated on our events"
+msgstr "Vil du holde deg oppdatert om arrangementene våre"
+
 msgid "Hint: The correct answers to this question are"
 msgstr "Hint: De riktige svarene på dette spørsmålet er"
 
@@ -4974,9 +4977,6 @@ msgstr "Kontroller at medlemmenes personopplysninger er konsistente"
 msgid "Customize specific texts on the event interface"
 msgstr "Tilpass spesifikke tekster på hendelsesgrensesnittet"
 
-msgid "Do you wish to be always updated on our events?"
-msgstr "Vil du holde deg oppdatert om arrangementene våre?"
-
 #, python-format
 msgid "Donation of %(user)s, with reason: '%(reason)s'"
 msgstr "Donasjon av %(user)s, med årsak: '%(reason)s'"
@@ -5034,6 +5034,9 @@ msgstr "Jeg er interessert, men har ikke mye erfaring."
 
 msgid "If checked: shows the description for each event"
 msgstr "Hvis avkrysset: viser beskrivelsen for hver hendelse"
+
+msgid "Is there anything else you would like to tell us"
+msgstr "Er det noe annet du vil fortelle oss"
 
 msgid "Manage the character skills purchaseable with XP"
 msgstr "Administrer karakterferdighetene som kan kjøpes med XP"
@@ -5103,9 +5106,6 @@ msgstr "Beskriv nøyaktig hvilke risikoer det innebærer for spillet."
 
 msgid "Insert the css code to customize the pdf printing"
 msgstr "Skriv inn css-koden for å tilpasse utskriften"
-
-msgid "Is there anything else you would like to tell us?"
-msgstr "Er det noe annet du vil fortelle oss?"
 
 msgid "Now you can peform the fiscal code validity check"
 msgstr "Nå kan du utføre gyldighetskontrollen av skattekoden"
@@ -7285,6 +7285,13 @@ msgstr ""
 "ditt."
 
 msgid ""
+"We cannot find your registration for this event. Are you logged in as the "
+"correct user"
+msgstr ""
+"Vi finner ikke din påmelding til dette arrangementet. Er du logget inn som "
+"riktig bruker"
+
+msgid ""
 "You are now registered, but your account is inactive. We have sent an "
 "activation email"
 msgstr ""
@@ -7360,13 +7367,6 @@ msgid ""
 msgstr ""
 "Verdien av rabatten for vennen som registrerer seg ved hjelp av koden til en"
 " registrert spiller."
-
-msgid ""
-"We cannot find your registration for this event. Are you logged in as the "
-"correct user?"
-msgstr ""
-"Vi finner ikke din påmelding til dette arrangementet. Er du logget inn som "
-"riktig bruker?"
 
 msgid ""
 "Allows you to generate discount codes that players can use to reduce their "
