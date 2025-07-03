@@ -21,11 +21,9 @@
 import re
 import traceback
 from functools import wraps
-from time import sleep
 
 from background_task import background
 from django.conf import settings as conf_settings
-from django.core.cache import cache
 from django.core.mail import EmailMultiAlternatives, get_connection
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -115,14 +113,6 @@ def my_send_mail_bkg(email_pk):
     email.save()
 
 
-def send_email_lock(sender_email):
-    # wait for lock
-    lock_key = f"mail-lock-{sender_email}"
-    lock_expiration = 10
-    while not cache.add(lock_key, True, lock_expiration):
-        sleep(1)
-
-
 def clean_sender(name):
     name = name.replace(":", " ")
     name = name.split(",")[0]
@@ -149,7 +139,6 @@ def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_t
             if email_host_user:
                 sender_email = email_host_user
                 sender = f"{clean_sender(event.name)} <{sender_email}>"
-                send_email_lock(sender_email)
                 connection = get_connection(
                     host=event.get_config("mail_server_host", ""),
                     port=event.get_config("mail_server_port", ""),
@@ -171,7 +160,6 @@ def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_t
                 if not event_settings:
                     sender_email = email_host_user
                     sender = f"{clean_sender(assoc.name)} <{sender_email}>"
-                    send_email_lock(sender_email)
                     connection = get_connection(
                         host=assoc.get_config("mail_server_host", ""),
                         port=assoc.get_config("mail_server_port", ""),
@@ -185,7 +173,6 @@ def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_t
                 sender = f"{clean_sender(assoc.name)} <{sender_email}>"
 
         if not connection:
-            send_email_lock(sender_email)
             connection = get_connection()
 
         if reply_to:
