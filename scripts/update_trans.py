@@ -3,7 +3,7 @@ from pathlib import Path
 
 import polib
 
-symbol = "."
+symbol = "!"
 
 subprocess.run(["git", "stash", "--include-untracked", "--", "*.po"], check=True)
 

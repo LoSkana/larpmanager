@@ -11,11 +11,11 @@
         <p>{% trans "Supplied" %}: {{ supplied_cf }}</p>
         {% if calculated_cf != supplied_cf %}
             <p class="warning">
-                <i>{% trans "Attention, the tax code does not match!" %}</i>
+                <i>{% trans "Attention, the tax code does not match" %}!</i>
             </p>
         {% else %}
             <p class="success">
-                <i>{% trans "The tax code matches!" %}</i>
+                <i>{% trans "The tax code matches" %}!</i>
             </p>
         {% endif %}
     {% else %}

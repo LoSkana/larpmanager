@@ -19,7 +19,7 @@
                         <td>{{ el.display }}</td>
                         <td>
                             {% if el.done %}
-                                <span class="correct">{% trans "Done!" %}</span>
+                                <span class="correct">{% trans "Done" %}!</span>
                             {% else %}
                                 <a href="{% url "workshop_answer" slug run.number el.number %}">{% trans "To be done" %}</a>
                             {% endif %}

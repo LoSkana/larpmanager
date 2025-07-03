@@ -19,7 +19,7 @@
         </div>
     {% endif %}
     {% if member.membership.status == 'e' or member.membership.status == 'j' %}
-        <h3>{% trans "You are not yet a Member of the Organization!" %}</h3>
+        <h3>{% trans "You are not yet a Member of the Organization" %}!</h3>
         <p>{% trans "In order to subscribe to the Organization's events you must apply to be admitted as a Member" %}.</p>
         <p>
             {% trans "We have pre-filled the application form based on the data you provided us" %}: <a href="{% url 'membership_request' %}" download>{% trans "download it here" %}</a>.
@@ -46,7 +46,7 @@
     {% elif member.membership.status == 'u' %}
         <h3>{% trans "Confirmation of registration request" %}</h3>
         <p>
-            {% trans "We only ask for a moment of your time to check the documents you have uploaded, it won't take long!" %}
+            {% trans "We only ask for a moment of your time to check the documents you have uploaded, it won't take long" %}!
         </p>
         <form action="{{ request.path }}"
               enctype="multipart/form-data"
@@ -107,7 +107,7 @@
     {% else %}
         <h3>{% trans "Members of the Organization" %}</h3>
         <p>
-            {% trans "You are a regular member of our Organization. You can subscribe to events organized for our members!" %}
+            {% trans "You are a regular member of our Organization. You can subscribe to events organized for our members" %}!
         </p>
         <p>
             {% trans "In the membership book the number of your membership card is" %}:  <b>{{ member.membership.card_number|stringformat:"04d" }}</b>

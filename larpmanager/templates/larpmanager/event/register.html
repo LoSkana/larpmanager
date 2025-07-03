@@ -21,11 +21,11 @@
         {% endif %}
         {% if features.bring_friend %}
             <hr />
-            <h4>{% trans "Bring a friend!" %}</h4>
+            <h4>{% trans "Bring a friend" %}!</h4>
             <p>
                 {% trans "Personal code" %}: <b>{{ run.reg.special_cod }}</b>
             </p>
-            <p>{% trans "Copy this code and share it with friends!" %}</p>
+            <p>{% trans "Copy this code and share it with friends" %}!</p>
             <p>
                 {% trans "Every friend who registers and uses this code will receive the following discount directly on their ticket" %}: {{ bring_friend_discount_to|floatformat:"0" }}{{ currency_symbol_symbol }}.
             </p>
@@ -40,7 +40,7 @@
         {% if event.website %}
             <hr />
             <p>
-                {% trans "View all event information in the" %} <a target="_blank" href="{{ event.website }}">{% trans "website!" %}</a>
+                {% trans "View all event information in the" %} <a target="_blank" href="{{ event.website }}">{% trans "website" %}!</a>
             </p>
         {% endif %}
         {% if not features.laog %}
@@ -117,7 +117,7 @@
                                     <tr>
                                         <td>
                                             {% if membership_fee == 'done' %}
-                                                {% trans "You have already paid your dues for the current year, so you are already covered for this event!" %}
+                                                {% trans "You have already paid your dues for the current year, so you are already covered for this event" %}!
                                             {% elif membership_fee == 'future' %}
                                                 {% trans "To participate in this event, you will have to pay the annual membership fee of" %}: <b>{{ membership_amount }}{{ currency_symbol }}</b>.
                                             {% else %}

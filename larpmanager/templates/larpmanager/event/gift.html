@@ -6,7 +6,7 @@
 {% block content %}
     <p>
         {% trans "On this page you can book tickets for the event; once paid, a special code will be generated" %}.
-        {% trans "A friend of yours will be able to receive the registration as a gift by accessing this special link!" %}
+        {% trans "A friend of yours will be able to receive the registration as a gift by accessing this special link" %}!
     </p>
     <div class="c nav">
         <a href="{% url 'gift_edit' run.event.slug run.number 0 %}">{% trans "Add new" %}</a>

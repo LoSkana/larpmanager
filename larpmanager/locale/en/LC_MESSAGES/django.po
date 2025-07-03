@@ -3388,13 +3388,13 @@ msgstr ""
 msgid "Coming soon"
 msgstr ""
 
-msgid "Discover the coming soon events!"
+msgid "Discover the coming soon events"
 msgstr ""
 
 msgid "Repertoire"
 msgstr ""
 
-msgid "View the complete list of our events!"
+msgid "View the complete list of our events"
 msgstr ""
 
 msgid "Problem"
@@ -3663,10 +3663,10 @@ msgstr ""
 msgid "Supplied"
 msgstr ""
 
-msgid "Attention, the tax code does not match!"
+msgid "Attention, the tax code does not match"
 msgstr ""
 
-msgid "The tax code matches!"
+msgid "The tax code matches"
 msgstr ""
 
 msgid "Warning. The form contains errors to the fields"
@@ -3689,7 +3689,7 @@ msgstr ""
 
 msgid ""
 "Please indicate below the exact method of payment you made. Remember to "
-"submit the form, otherwise your payment will not be processed!"
+"submit the form, otherwise your payment will not be processed"
 msgstr ""
 
 msgid "Follow the steps below"
@@ -3700,7 +3700,7 @@ msgstr ""
 
 msgid ""
 "Please check that you have copied the entire message for payment exactly (in "
-"coloured text), it is important!"
+"coloured text), it is important"
 msgstr ""
 
 msgid ""
@@ -3711,7 +3711,7 @@ msgstr ""
 
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
-"be processed!"
+"be processed"
 msgstr ""
 
 msgid "Currency"
@@ -3782,25 +3782,25 @@ msgstr ""
 msgid "Change"
 msgstr ""
 
-msgid "Edit your character's data!"
+msgid "Edit your character's data"
 msgstr ""
 
-msgid "Buy skills for your character!"
+msgid "Buy skills for your character"
 msgstr ""
 
 msgid "Customize"
 msgstr ""
 
-msgid "Modify some character elements to make it yours!"
+msgid "Modify some character elements to make it yours"
 msgstr ""
 
-msgid "Fill in your character's relationships!"
+msgid "Fill in your character's relationships"
 msgstr ""
 
 msgid "Questions"
 msgstr ""
 
-msgid "Write here questions about your character directly to the authors!"
+msgid "Write here questions about your character directly to the authors"
 msgstr ""
 
 msgid "Download complete sheet"
@@ -3838,7 +3838,7 @@ msgstr ""
 msgid ""
 "This is the information with which your character will begin each act. We "
 "ask that you do NOT read this information before the act to which it "
-"referenced!"
+"referenced"
 msgstr ""
 
 msgid "Total"
@@ -3944,7 +3944,7 @@ msgstr ""
 msgid "history of preferences"
 msgstr ""
 
-msgid "Enter your preferences here!"
+msgid "Enter your preferences here"
 msgstr ""
 
 msgid "global preferences"
@@ -4012,7 +4012,7 @@ msgstr ""
 
 msgid ""
 "Upload a photo of yourself associated with your character specifically for "
-"this event!"
+"this event"
 msgstr ""
 
 msgid "Change photo"
@@ -4054,7 +4054,7 @@ msgstr ""
 msgid "Select which of your characters you want to access"
 msgstr ""
 
-msgid "Discover the web site!"
+msgid "Discover the web site"
 msgstr ""
 
 msgid "Next runs"
@@ -4063,12 +4063,12 @@ msgstr ""
 msgid "There are no new runs scheduled at this time"
 msgstr ""
 
-msgid "Pre-register here!"
+msgid "Pre-register here"
 msgstr ""
 
 msgid ""
 "You will be notified when a new run is organized, and you will have fast-"
-"track on registration!"
+"track on registration"
 msgstr ""
 
 msgid "Past runs"
@@ -4102,7 +4102,7 @@ msgstr ""
 
 msgid ""
 "A friend of yours will be able to receive the registration as a gift by "
-"accessing this special link!"
+"accessing this special link"
 msgstr ""
 
 msgid "Add new"
@@ -4171,7 +4171,7 @@ msgstr ""
 msgid "The registrations to the event"
 msgstr ""
 
-msgid "are not yet open!"
+msgid "are not yet open"
 msgstr ""
 
 msgid "Will open at"
@@ -4197,13 +4197,10 @@ msgstr ""
 msgid "cancel your registrations"
 msgstr ""
 
-msgid "Bring a friend!"
-msgstr ""
-
 msgid "Personal code"
 msgstr ""
 
-msgid "Copy this code and share it with friends!"
+msgid "Copy this code and share it with friends"
 msgstr ""
 
 msgid ""
@@ -4224,7 +4221,7 @@ msgstr ""
 msgid "View all event information in the"
 msgstr ""
 
-msgid "website!"
+msgid "website"
 msgstr ""
 
 msgid "Terms and Conditions of registration"
@@ -4243,7 +4240,7 @@ msgstr ""
 
 msgid ""
 "You have already paid your dues for the current year, so you are already "
-"covered for this event!"
+"covered for this event"
 msgstr ""
 
 msgid ""
@@ -4341,7 +4338,7 @@ msgstr ""
 msgid "Cancel your registration"
 msgstr ""
 
-msgid "We're sorry to see you go!"
+msgid "We're sorry to see you go"
 msgstr ""
 
 msgid "Unfortunately these things happen"
@@ -4356,14 +4353,14 @@ msgstr ""
 msgid "Click below to confirm the cancellation"
 msgstr ""
 
-msgid "Fill out the event prep questions!"
+msgid "Fill out the event prep questions"
 msgstr ""
 
 msgid ""
 "Answer the following questions. Select *all* of the answers that seem correct"
 msgstr ""
 
-msgid "Retry!"
+msgid "Retry"
 msgstr ""
 
 msgid "Oops! You gave one or more incorrect answers"
@@ -4372,13 +4369,13 @@ msgstr ""
 msgid "Please check them below"
 msgstr ""
 
-msgid "You have made a mistake!"
+msgid "You have made a mistake"
 msgstr ""
 
 msgid "Hint: The correct answers to this question are"
 msgstr ""
 
-msgid "Correct!"
+msgid "Correct"
 msgstr ""
 
 msgid "Workshops"
@@ -4387,7 +4384,7 @@ msgstr ""
 msgid "These are the workshops you must complete before you can play"
 msgstr ""
 
-msgid "Done!"
+msgid "Done"
 msgstr ""
 
 msgid "To be done"
@@ -4820,7 +4817,7 @@ msgid ""
 "can accept or reject the application"
 msgstr ""
 
-msgid "Warning: there is already an approved member with the same name!"
+msgid "Warning: there is already an approved member with the same name"
 msgstr ""
 
 msgid "Request for"
@@ -4949,7 +4946,7 @@ msgstr ""
 msgid "You think you should have an achievement?"
 msgstr ""
 
-msgid "Tell us here!"
+msgid "Tell us here"
 msgstr ""
 
 msgid "upcoming events"
@@ -4961,13 +4958,13 @@ msgstr ""
 msgid "Contact us"
 msgstr ""
 
-msgid "Message sent, thanks for writing us!"
+msgid "Message sent, thanks for writing us"
 msgstr ""
 
 msgid "Register to"
 msgstr ""
 
-msgid "May the best win!"
+msgid "May the best win"
 msgstr ""
 
 msgid "First"
@@ -5015,7 +5012,7 @@ msgstr ""
 msgid ""
 "For our part, we will use pre-registrations as a measure of how much an "
 "event is desired. If you want a new run of an event, spread the voice and "
-"invites others to pre-register to it!"
+"invites others to pre-register to it"
 msgstr ""
 
 msgid ""
@@ -5036,12 +5033,12 @@ msgstr ""
 msgid "Need a ride?"
 msgstr ""
 
-msgid "Add a new request!"
+msgid "Add a new request"
 msgstr ""
 
 msgid ""
 "Notes: Try to group as many passengers per request as possible; if you "
-"notice any delays, write us directly, do not enter new requests!"
+"notice any delays, write us directly, do not enter new requests"
 msgstr ""
 
 msgid "Time"
@@ -5079,7 +5076,7 @@ msgstr ""
 msgid "Profiling"
 msgstr ""
 
-msgid "With these tutorials, you can learn how to use the tool in no time!"
+msgid "With these tutorials, you can learn how to use the tool in no time"
 msgstr ""
 
 msgid ""
@@ -5103,7 +5100,7 @@ msgstr ""
 
 msgid ""
 "You can now freely explore the system. You'll find below some suggestions on "
-"what you could do now to set up everything nicely!"
+"what you could do now to set up everything nicely"
 msgstr ""
 
 msgid "If you need help, remember to check out"
@@ -5117,7 +5114,7 @@ msgstr ""
 
 msgid ""
 "Tip: Pin this page to your browser for faster access to your organization "
-"and events!"
+"and events"
 msgstr ""
 
 msgid "Welcome to"
@@ -5145,28 +5142,28 @@ msgid ""
 "follow"
 msgstr ""
 
-msgid "Discover what this event is about!"
+msgid "Discover what this event is about"
 msgstr ""
 
-msgid "View the list of characters and players!"
+msgid "View the list of characters and players"
 msgstr ""
 
-msgid "Filter or search the characters!"
+msgid "Filter or search the characters"
 msgstr ""
 
-msgid "Browse the presentation website!"
+msgid "Browse the presentation website"
 msgstr ""
 
-msgid "Access the list of your characters!"
+msgid "Access the list of your characters"
 msgstr ""
 
-msgid "Find out what quests are available!"
+msgid "Find out what quests are available"
 msgstr ""
 
-msgid "Discover the game factions!"
+msgid "Discover the game factions"
 msgstr ""
 
-msgid "View photos from the event!"
+msgid "View photos from the event"
 msgstr ""
 
 msgid "View limited ticket options"
@@ -5175,26 +5172,25 @@ msgstr ""
 msgid "Give a card to your friend"
 msgstr ""
 
-msgid "Select your preferences on the characters to play!"
+msgid "Select your preferences on the characters to play"
 msgstr ""
 
 msgid "Portraits (PDF)"
 msgstr ""
 
-msgid ""
-"Download the list of characters with their interpreters' profile images!"
+msgid "Download the list of characters with their interpreters' profile images"
 msgstr ""
 
 msgid "Profiles (PDF)"
 msgstr ""
 
-msgid "Update here the registration options!"
+msgid "Update here the registration options"
 msgstr ""
 
 msgid "Your character"
 msgstr ""
 
-msgid "Access your character!"
+msgid "Access your character"
 msgstr ""
 
 msgid "Register to the event"
@@ -5266,7 +5262,7 @@ msgstr ""
 
 msgid ""
 "When you want to close the collection, follow the link below. A special "
-"redemption code will be generated!"
+"redemption code will be generated"
 msgstr ""
 
 msgid "Link to close the collection"
@@ -5292,15 +5288,18 @@ msgstr ""
 
 msgid ""
 "Your friends wanted to give you a special gift: they gave you the chance to "
-"participate in one of our experiences!"
+"participate in one of our experiences"
 msgstr ""
 
 msgid ""
 "By pressing confirm, the collection total will be credited to your account, "
-"and will be used automatically when you register for one of our events!"
+"and will be used automatically when you register for one of our events"
 msgstr ""
 
 msgid "Your accounting"
+msgstr ""
+
+msgid "They will be used automatically when you sign up for a new event"
 msgstr ""
 
 msgid "Do you wish to be reimbursed? Open a new one"
@@ -5365,7 +5364,7 @@ msgstr ""
 
 msgid ""
 "These are the event signup for which you submitted a payment, and it's being "
-"reviewed by the staff. You don't have to do anything at this time!"
+"reviewed by the staff. You don't have to do anything at this time"
 msgstr ""
 
 msgid "Pending payments"
@@ -5397,7 +5396,7 @@ msgstr ""
 msgid "Executive Vote"
 msgstr ""
 
-msgid "Cast your vote for the new Executive!"
+msgid "Cast your vote for the new Executive"
 msgstr ""
 
 msgid "Membership fees in approval"
@@ -5405,13 +5404,13 @@ msgstr ""
 
 msgid ""
 "You have submitted your dues payment, and it is now being approved by the "
-"staff. You don't have to do anything for the time being!"
+"staff. You don't have to do anything for the time being"
 msgstr ""
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are "
 "not aware of your dues payment. Be careful: if you don't complete it, <b>you "
-"won't be able to attend events</b>, nor vote at the Membership Meeting!"
+"won't be able to attend events</b>, nor vote at the Membership Meeting"
 msgstr ""
 
 msgid "Pay the annual fee"
@@ -5432,7 +5431,7 @@ msgid ""
 "and you cannot confirm your event registrations"
 msgstr ""
 
-msgid "Make the request now!"
+msgid "Make the request now"
 msgstr ""
 
 msgid "Membership request submitted"
@@ -5442,7 +5441,7 @@ msgid ""
 "You have submitted your application for membership in the Organization. The "
 "request will be considered at the next meeting of the Board. When it is "
 "approved, you will be able to settle payments for the events you have signed "
-"up for!"
+"up for"
 msgstr ""
 
 msgid "Member revoked"
@@ -5463,7 +5462,7 @@ msgstr ""
 msgid ""
 "Want to help one of your friends play with us? Organize a collection: you "
 "and anyone who wants to contribute will be able to donate part of their "
-"registration fees!"
+"registration fees"
 msgstr ""
 
 msgid "Create a new collection"
@@ -5481,7 +5480,7 @@ msgstr ""
 msgid "Collections delivered"
 msgstr ""
 
-msgid "Manage it here!"
+msgid "Manage it here"
 msgstr ""
 
 msgid "Collection participated"
@@ -5493,7 +5492,7 @@ msgstr ""
 msgid "follow this link"
 msgstr ""
 
-msgid "You will have our eternal thanks for believing in us!"
+msgid "You will have our eternal thanks for believing in us"
 msgstr ""
 
 msgid "Donations done"
@@ -5597,7 +5596,7 @@ msgstr ""
 msgid "user profile"
 msgstr ""
 
-msgid "You are not yet a Member of the Organization!"
+msgid "You are not yet a Member of the Organization"
 msgstr ""
 
 msgid ""
@@ -5639,7 +5638,7 @@ msgstr ""
 
 msgid ""
 "We only ask for a moment of your time to check the documents you have "
-"uploaded, it won't take long!"
+"uploaded, it won't take long"
 msgstr ""
 
 msgid ""
@@ -5686,7 +5685,7 @@ msgstr ""
 
 msgid ""
 "You are a regular member of our Organization. You can subscribe to events "
-"organized for our members!"
+"organized for our members"
 msgstr ""
 
 msgid "In the membership book the number of your membership card is"
@@ -5739,7 +5738,7 @@ msgstr ""
 msgid "Voting for the Executive is open"
 msgstr ""
 
-msgid "submit your vote here!"
+msgid "submit your vote here"
 msgstr ""
 
 msgid ""
@@ -5774,11 +5773,11 @@ msgstr ""
 msgid "Need help?"
 msgstr ""
 
-msgid "Write here!"
+msgid "Write here"
 msgstr ""
 
 msgid ""
-"Fill in the form and click on confirm, it will take you to the next passage!"
+"Fill in the form and click on confirm, it will take you to the next passage"
 msgstr ""
 
 msgid "New member"
@@ -5827,15 +5826,15 @@ msgid ""
 "translation in your language?"
 msgstr ""
 
-msgid "Describe it in the field below and we will fix it as soon as possible!"
+msgid "Describe it in the field below and we will fix it as soon as possible"
 msgstr ""
 
 msgid ""
 "We confirm that your votes are correctly registered in the system! Thank you "
-"for participating in the democratic life of the Organization!"
+"for participating in the democratic life of the Organization"
 msgstr ""
 
-msgid "Vote not yet open!"
+msgid "Vote not yet open"
 msgstr ""
 
 msgid "Event accounting"
@@ -6029,7 +6028,7 @@ msgstr ""
 
 msgid ""
 "Attention: the operation is final, please double-check the assignments "
-"before uploading!"
+"before uploading"
 msgstr ""
 
 msgid "Seniority"
@@ -6207,7 +6206,7 @@ msgstr ""
 
 msgid ""
 "Go ahead and click on this button to perform the extraction. Warning: it is "
-"final!"
+"final"
 msgstr ""
 
 msgid "Perform extraction"
@@ -6483,9 +6482,6 @@ msgstr ""
 msgid "Module"
 msgstr ""
 
-msgid "Correct"
-msgstr ""
-
 msgid "Questions WS"
 msgstr ""
 
@@ -6493,9 +6489,6 @@ msgid "This page shows the workshop questions for the event"
 msgstr ""
 
 msgid "This page shows for each player their completion status of workshops"
-msgstr ""
-
-msgid "Done"
 msgstr ""
 
 msgid "Not completed"
