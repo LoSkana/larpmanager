@@ -22,7 +22,6 @@ import time
 
 from django.contrib import messages
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
@@ -81,10 +80,10 @@ def _get_field_value(el, que):
         return mapping[que.typ]()
 
     if que.typ in {"p", "t", "e"}:
-        try:
-            return WritingAnswer.objects.filter(question=que, element_id=el.id).first().text
-        except ObjectDoesNotExist:
-            return ""
+        answers = WritingAnswer.objects.filter(question=que, element_id=el.id)
+        if answers:
+            return answers.first().text
+        return ""
 
     if que.typ in {"s", "m"}:
         return ", ".join(c.option.display for c in WritingChoice.objects.filter(question=que, element_id=el.id))
