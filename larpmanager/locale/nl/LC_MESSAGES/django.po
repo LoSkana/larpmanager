@@ -3938,6 +3938,9 @@ msgstr "Toeslag op ticket"
 msgid "This page shows the event plots"
 msgstr "Deze pagina toont de gebeurtenisplots"
 
+msgid "This page shows the run signups"
+msgstr "Op deze pagina staat een overzicht van de inschrijvingen voor de run"
+
 msgid "To log back in with the account"
 msgstr "Om weer in te loggen met het account"
 
@@ -4043,9 +4046,6 @@ msgstr "De setting / het genre van het evenement"
 
 msgid "This page shows the event quests"
 msgstr "Deze pagina toont de event quests"
-
-msgid "This page shows the run signups."
-msgstr "Op deze pagina staat een overzicht van de inschrijvingen voor de run."
 
 msgid "Total of recorded money outflows"
 msgstr "Totaal van geregistreerde uitgaande geldstromen"
@@ -4394,6 +4394,9 @@ msgstr "Selecteer de organisatie om verder te gaan"
 msgid "Show all the traits to those present?"
 msgstr "Alle eigenschappen laten zien aan de aanwezigen?"
 
+msgid "This page shows cancelled enrollments"
+msgstr "Deze pagina geeft een overzicht van geannuleerde registraties"
+
 msgid "Total amount refunded to participants"
 msgstr "Totaalbedrag terugbetaald aan deelnemers"
 
@@ -4443,9 +4446,6 @@ msgstr "Nu kun je beginnen met het maken van speed-larps"
 
 msgid "The following registrations were drawn"
 msgstr "De volgende inzendingen zijn getrokken"
-
-msgid "This page shows cancelled enrollments."
-msgstr "Deze pagina geeft een overzicht van geannuleerde registraties."
 
 msgid "We ask you to pay the remaining amount"
 msgstr "We vragen je om het resterende bedrag te betalen"
@@ -4618,6 +4618,9 @@ msgstr "Aanvraag lidmaatschap vereniging"
 msgid "The first line is the names of the fields"
 msgstr "De eerste regel is de naam van de velden"
 
+msgid "This page shows the uploaded photo albums"
+msgstr "Deze pagina geeft een overzicht van de geüploade fotoalbums"
+
 msgid "Who takes it upon themselves to solve it."
 msgstr "Wie neemt de leiding om het op te lossen"
 
@@ -4704,8 +4707,8 @@ msgstr "Deze pagina toont voor een element de historische"
 msgid "This page shows the organization inventory"
 msgstr "Deze pagina toont de inventaris van de organisatie"
 
-msgid "This page shows the uploaded photo albums."
-msgstr "Deze pagina geeft een overzicht van de geüploade fotoalbums."
+msgid "This page shows the prologues of the event"
+msgstr "Deze pagina vat de prologen van het evenement samen"
 
 msgid "This page summarises the system entries of"
 msgstr "Deze pagina geeft een overzicht van de systeemingangen van"
@@ -4754,11 +4757,28 @@ msgstr "Nu kun je de instellingen voor het bewerken van de speler instellen"
 msgid "Review players' safety-related informations"
 msgstr "Controleer veiligheidsgerelateerde informatie over spelers"
 
-msgid "This page shows the prologues of the event."
-msgstr "Deze pagina vat de prologen van het evenement samen."
+msgid "This page allows you to translate the event"
+msgstr "Op deze pagina kun je het evenement vertalen"
+
+msgid "This page shows the characters of the event"
+msgstr ""
+"Deze pagina geeft een samenvatting van de personages van het evenement"
+
+msgid "This page shows the pre-signups for the run"
+msgstr ""
+"Op deze pagina staat een overzicht van de voorinschrijvingen voor de run"
+
+msgid "This page shows the registration surcharges"
+msgstr "Op deze pagina vindt u een overzicht van de toeslagen op registraties"
 
 msgid "This page shows the roles of the characters"
 msgstr "Deze pagina toont de rollen van de personages"
+
+msgid "This page shows the speedlarps of the event"
+msgstr "Deze pagina vat de speedlarps van het evenement samen"
+
+msgid "This page shows the types of event prologue"
+msgstr "Deze pagina geeft een overzicht van de soorten proloog"
 
 msgid "Warning! Other users are editing this item."
 msgstr "Waarschuwing! Andere gebruikers bewerken dit item."
@@ -4821,29 +4841,11 @@ msgstr "Het bedrag werd aan jou uitbetaald als %(credits)s."
 msgid "This page allows you to add or edit an album"
 msgstr "Op deze pagina kunt u een album toevoegen of bewerken"
 
-msgid "This page allows you to translate the event."
-msgstr "Op deze pagina kun je het evenement vertalen."
-
 msgid "This page shows organization inventory items"
 msgstr "Deze pagina toont inventarisitems van organisaties"
 
-msgid "This page shows the characters of the event."
-msgstr ""
-"Deze pagina geeft een samenvatting van de personages van het evenement."
-
-msgid "This page shows the pre-signups for the run."
-msgstr ""
-"Op deze pagina staat een overzicht van de voorinschrijvingen voor de run."
-
-msgid "This page shows the registration surcharges."
-msgstr ""
-"Op deze pagina vindt u een overzicht van de toeslagen op registraties."
-
-msgid "This page shows the speedlarps of the event."
-msgstr "Deze pagina vat de speedlarps van het evenement samen."
-
-msgid "This page shows the types of event prologue."
-msgstr "Deze pagina geeft een overzicht van de soorten proloog."
+msgid "This page shows your personal spending items"
+msgstr "Op deze pagina vindt u een overzicht van uw persoonlijke uitgaven"
 
 msgid "You are now logged in with your main account"
 msgstr "Je bent nu ingelogd met je hoofdaccount"
@@ -4897,8 +4899,10 @@ msgstr "Selecteer het evenement waarvoor je je wilt voorregistreren"
 msgid "There are no new runs scheduled at this time."
 msgstr "Er zijn momenteel geen nieuwe runs gepland."
 
-msgid "This page shows your personal spending items."
-msgstr "Op deze pagina vindt u een overzicht van uw persoonlijke uitgaven."
+msgid "This page shows the settings for PDF printing"
+msgstr ""
+"Op deze pagina vindt u een overzicht van de instellingen voor het afdrukken "
+"van PDF-bestanden"
 
 msgid "You are not yet a Member of the Organization!"
 msgstr "Je bent nog geen lid van de vereniging!"
@@ -4959,11 +4963,6 @@ msgstr "Op deze pagina kun je een personage volledig bekijken"
 
 msgid "This page shows the email lists of subscribers"
 msgstr "Deze pagina toont de e-maillijsten van abonnees"
-
-msgid "This page shows the settings for PDF printing."
-msgstr ""
-"Op deze pagina vindt u een overzicht van de instellingen voor het afdrukken "
-"van PDF-bestanden."
 
 msgid "This page summarizes px delivery to characters"
 msgstr "Deze pagina geeft een overzicht van de px-levering aan tekens"
@@ -5070,8 +5069,22 @@ msgstr "Toont het berekende belastingbedrag op elke betaling."
 msgid "This page allows you to add or edit a competency"
 msgstr "Op deze pagina kun je een competentie toevoegen of bewerken"
 
+msgid "This page allows you to upload a new photo album"
+msgstr "Op deze pagina kunt u een nieuw fotoalbum uploaden"
+
 msgid "This page shows all emails, both queued and sent"
 msgstr "Deze pagina toont alle e-mails, zowel in de wachtrij als verzonden"
+
+msgid "This page shows character assignments to players"
+msgstr "Deze pagina geeft een overzicht van karaktertoewijzingen aan spelers"
+
+msgid "This page shows the templates for event handouts"
+msgstr ""
+"Deze pagina geeft een overzicht van de hand-outsjablonen voor evenementen"
+
+msgid "This page shows the types of quests in the event"
+msgstr ""
+"Deze pagina geeft een overzicht van de soorten quests in het evenement"
 
 msgid "To access this feature, you must first register!"
 msgstr "Om toegang te krijgen tot deze functie, moet je je eerst registreren!"
@@ -5129,19 +5142,8 @@ msgstr "Selecteer een teken om hun referentiecode in te voegen"
 msgid "The user has been enabled for the indicated role."
 msgstr "De gebruiker is ingeschakeld voor de aangegeven rol."
 
-msgid "This page allows you to upload a new photo album."
-msgstr "Op deze pagina kunt u een nieuw fotoalbum uploaden."
-
-msgid "This page shows character assignments to players."
-msgstr "Deze pagina geeft een overzicht van karaktertoewijzingen aan spelers."
-
-msgid "This page shows the templates for event handouts."
-msgstr ""
-"Deze pagina geeft een overzicht van de hand-outsjablonen voor evenementen."
-
-msgid "This page shows the types of quests in the event."
-msgstr ""
-"Deze pagina geeft een overzicht van de soorten quests in het evenement."
+msgid "This page shows all inflows received for this run"
+msgstr "Deze pagina geeft een overzicht van alle inzendingen voor deze run"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolerantie overschreden, doorgaan met annuleren"
@@ -5220,8 +5222,10 @@ msgstr "Op deze pagina kun je de vraag van een speler beantwoorden"
 msgid "This page allows you to edit event-specific texts."
 msgstr "Op deze pagina kun je evenement-specifieke teksten bewerken."
 
-msgid "This page shows all inflows received for this run."
-msgstr "Deze pagina geeft een overzicht van alle inzendingen voor deze run."
+msgid "This page shows all payments received for this run"
+msgstr ""
+"Deze pagina geeft een overzicht van alle betalingen die voor deze run zijn "
+"ontvangen"
 
 msgid "This page shows the questions submitted by players"
 msgstr "Deze pagina toont de vragen die door spelers zijn ingediend"
@@ -5281,11 +5285,6 @@ msgstr "De registratie voor het evenement werd geannuleerd."
 msgid "This page allows you to set up your payment methods"
 msgstr "Op deze pagina kunt u uw betaalmethoden instellen"
 
-msgid "This page shows all payments received for this run."
-msgstr ""
-"Deze pagina geeft een overzicht van alle betalingen die voor deze run zijn "
-"ontvangen."
-
 msgid "This page summarizes the association's custom texts"
 msgstr "Deze pagina vat de gebruikelijke teksten van de vereniging samen"
 
@@ -5319,6 +5318,17 @@ msgstr "De eerste kolom het bedrag, de tweede de ontvangsten"
 
 msgid "This page shows all donations recorded in the system"
 msgstr "Deze pagina toont alle in het systeem geregistreerde donaties"
+
+msgid "This page shows the deadlines to be met for this run"
+msgstr ""
+"Deze pagina geeft een overzicht van de deadlines die voor deze run gehaald "
+"moeten worden"
+
+msgid "This page shows the relationships between characters"
+msgstr "Deze pagina geeft een overzicht van de verbanden tussen de personages"
+
+msgid "This page shows the workshop questions for the event"
+msgstr "Deze pagina vat de workshopvragen van het evenement samen"
 
 msgid "You have already sent a payment pending verification"
 msgstr "Je hebt al een betaling verzonden in afwachting van verificatie"
@@ -5374,18 +5384,6 @@ msgstr "Op deze pagina kunt u algemene gebeurtenisinstellingen wijzigen"
 msgid "This page shows all invoices registered in the system"
 msgstr "Deze pagina toont alle facturen die in het systeem zijn geregistreerd"
 
-msgid "This page shows the deadlines to be met for this run."
-msgstr ""
-"Deze pagina geeft een overzicht van de deadlines die voor deze run gehaald "
-"moeten worden."
-
-msgid "This page shows the relationships between characters."
-msgstr ""
-"Deze pagina geeft een overzicht van de verbanden tussen de personages."
-
-msgid "This page shows the workshop questions for the event."
-msgstr "Deze pagina vat de workshopvragen van het evenement samen."
-
 msgid "This page shows users who can be persuaded to sign up"
 msgstr ""
 "Deze pagina toont gebruikers die kunnen worden overgehaald om zich aan te "
@@ -5427,6 +5425,14 @@ msgstr ""
 
 msgid "Set if you want to reserve tickets in addition to your"
 msgstr "Stel in als u tickets wilt reserveren naast uw"
+
+msgid "This page shows the discounts activated for this event"
+msgstr ""
+"Deze pagina geeft een overzicht van de kortingen die voor dit evenement zijn"
+" geactiveerd"
+
+msgid "This page summarises the customised texts of the event"
+msgstr "Deze pagina vat de aangepaste teksten van het evenement samen"
 
 msgid "This page summarises the list of members as a registry"
 msgstr "Deze pagina vat de ledenlijst samen als een register"
@@ -5487,14 +5493,6 @@ msgstr "Op deze pagina kunt u organisatiespecifieke tekst bewerken"
 
 msgid "This page allows you to keep track of reported problems"
 msgstr "Op deze pagina kunt u gerapporteerde problemen bijhouden"
-
-msgid "This page shows the discounts activated for this event."
-msgstr ""
-"Deze pagina geeft een overzicht van de kortingen die voor dit evenement zijn"
-" geactiveerd."
-
-msgid "This page summarises the customised texts of the event."
-msgstr "Deze pagina vat de aangepaste teksten van het evenement samen."
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Totaal van wat al is betaald op de huidige datum"
@@ -5619,6 +5617,12 @@ msgid "This page allows you to edit the event navigation buttons."
 msgstr ""
 "Op deze pagina kunt u de navigatieknoppen van de gebeurtenis bewerken."
 
+msgid "This page allows you to manually approve payments received"
+msgstr "Op deze pagina kun je ontvangen betalingen handmatig goedkeuren"
+
+msgid "This page allows you to upload a new personal expense item"
+msgstr "Op deze pagina kun je een nieuwe persoonlijke uitgavenpost uploaden"
+
 msgid "This page shows all payment items registered in the system"
 msgstr ""
 "Deze pagina toont alle betalingsitems die in het systeem zijn geregistreerd"
@@ -5677,14 +5681,18 @@ msgstr "Op deze pagina kun je een nieuw inventarisitem toevoegen of bewerken"
 msgid "This page allows you to change a member's membership status"
 msgstr "Op deze pagina kunt u de lidmaatschapsstatus van een lid wijzigen"
 
-msgid "This page allows you to manually approve payments received."
-msgstr "Op deze pagina kun je ontvangen betalingen handmatig goedkeuren."
-
-msgid "This page allows you to upload a new personal expense item."
-msgstr "Op deze pagina kun je een nieuwe persoonlijke uitgavenpost uploaden."
-
 msgid "This page presents the complete list of financial movements"
 msgstr "Op deze pagina staat de volledige lijst met financiële bewegingen"
+
+msgid "This page shows the payment deadline settings for the event"
+msgstr ""
+"Op deze pagina vind je een overzicht van de betalingstermijn voor het "
+"evenement"
+
+msgid "This page shows the sections of the event registration form"
+msgstr ""
+"Op deze pagina worden de onderdelen van het registratieformulier voor "
+"evenementen samengevat"
 
 #, python-format
 msgid "Total of your signup fee: <b>%(amount).2f %(currency)s</b>."
@@ -5727,15 +5735,14 @@ msgstr ""
 "Deze pagina toont in detail de vaardigheden die zijn gemarkeerd door een "
 "medewerker"
 
-msgid "This page shows the payment deadline settings for the event."
+msgid "This page shows the factions (character groups) of the event"
 msgstr ""
-"Op deze pagina vind je een overzicht van de betalingstermijn voor het "
-"evenement."
+"Deze pagina geeft een overzicht van de facties (groepen personages) van het "
+"evenement"
 
-msgid "This page shows the sections of the event registration form."
+msgid "This page shows the relationships of the indicated character"
 msgstr ""
-"Op deze pagina worden de onderdelen van het registratieformulier voor "
-"evenementen samengevat."
+"Deze pagina geeft een overzicht van de links van het aangegeven personage"
 
 #, python-format
 msgid "%(amount)d %(tokens)s were used to participate in this event!"
@@ -5788,20 +5795,16 @@ msgstr ""
 "Stelt in hoe vaak herinneringsmails worden verzonden, in dagen (standaard: "
 "5)"
 
-msgid "This page shows the factions (character groups) of the event."
-msgstr ""
-"Deze pagina geeft een overzicht van de facties (groepen personages) van het "
-"evenement."
-
 msgid "This page shows the general information of registered players"
 msgstr "Deze pagina toont de algemene informatie van geregistreerde spelers"
 
 msgid "This page shows the historical accounting of the organization"
 msgstr "Deze pagina toont de historische boekhouding van de organisatie"
 
-msgid "This page shows the relationships of the indicated character."
+msgid "This page shows the uploaded resources available to the event"
 msgstr ""
-"Deze pagina geeft een overzicht van de links van het aangegeven personage."
+"Deze pagina geeft een overzicht van de geladen middelen die beschikbaar zijn"
+" voor het evenement"
 
 msgid "This page summarizes all revenue items recorded in the system"
 msgstr ""
@@ -5868,11 +5871,6 @@ msgstr "Dit zijn de workshops die je moet voltooien voordat je kunt spelen."
 
 msgid "This page allows you to change the access roles for the event."
 msgstr "Op deze pagina kun je de toegangsrollen voor het evenement wijzigen."
-
-msgid "This page shows the uploaded resources available to the event."
-msgstr ""
-"Deze pagina geeft een overzicht van de geladen middelen die beschikbaar zijn"
-" voor het evenement."
 
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "Om je inschrijving te bevestigen, betaal je het aangegeven bedrag."
@@ -5978,9 +5976,19 @@ msgstr ""
 msgid "This page allows you to change the general settings of this run."
 msgstr "Op deze pagina kun je de algemene instellingen van deze run wijzigen."
 
+msgid "This page allows you to copy the event settings from another one"
+msgstr ""
+"Op deze pagina kunnen instellingen gekopieerd worden van een andere "
+"gebeurtenis"
+
 msgid "This page shows the settings available for the membership voting"
 msgstr ""
 "Deze pagina toont de instellingen die beschikbaar zijn voor de ledenstemming"
+
+msgid "This page shows the traits assigned to the characters in the run"
+msgstr ""
+"Deze pagina geeft een overzicht van de eigenschappen die zijn toegewezen aan"
+" de personages in de serie"
 
 msgid "This page summarises the disbursements recorded in the system of"
 msgstr ""
@@ -6057,15 +6065,10 @@ msgstr ""
 "Ze worden automatisch afgetrokken wanneer je je registreert voor een nieuw "
 "evenement!"
 
-msgid "This page allows you to copy the event settings from another one."
+msgid "This page shows the factions and plots of the indicated character"
 msgstr ""
-"Op deze pagina kunnen instellingen gekopieerd worden van een andere "
-"gebeurtenis."
-
-msgid "This page shows the traits assigned to the characters in the run."
-msgstr ""
-"Deze pagina geeft een overzicht van de eigenschappen die zijn toegewezen aan"
-" de personages in de serie."
+"Deze pagina geeft een overzicht van de facties en complotten van het "
+"aangegeven personage"
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr ""
@@ -6096,10 +6099,10 @@ msgstr "Geeft aan of de optie kan worden opgenomen in de vrije vermeldingen"
 msgid "Manage payments performed by players to cover the registration fee"
 msgstr "Betalingen door spelers beheren om het inschrijfgeld te dekken"
 
-msgid "This page shows the factions and plots of the indicated character."
+msgid "This page summarises the available questions of the character form"
 msgstr ""
-"Deze pagina geeft een overzicht van de facties en complotten van het "
-"aangegeven personage."
+"Deze pagina geeft een overzicht van de beschikbare vragen van het "
+"karakterformulier"
 
 msgid "Upload the scan of your signed application (image or pdf document)"
 msgstr ""
@@ -6162,10 +6165,15 @@ msgstr ""
 "Op deze pagina kun je een badge toevoegen of bewerken, of toewijzen aan "
 "gebruikers"
 
-msgid "This page summarises the available questions of the character form."
+msgid "This page shows the modules for the workshop questions of the event"
 msgstr ""
-"Deze pagina geeft een overzicht van de beschikbare vragen van het "
-"karakterformulier."
+"Deze pagina geeft een overzicht van de modules waarin de vragen van de "
+"workshop zijn onderverdeeld"
+
+msgid "This page summarises the customised navigation buttons of the event"
+msgstr ""
+"Deze pagina geeft een overzicht van de aangepaste navigatieknoppen van het "
+"evenement"
 
 msgid "To confirm your registration, please fill in your personal profile."
 msgstr "Vul je persoonlijke profiel in om je registratie te bevestigen."
@@ -6201,19 +6209,24 @@ msgstr ""
 "Met deze pagina kun je een onkostenpost van een medewerker toevoegen of "
 "bewerken"
 
-msgid "This page shows the modules for the workshop questions of the event."
+msgid "This page shows for each player their completion status of workshops"
 msgstr ""
-"Deze pagina geeft een overzicht van de modules waarin de vragen van de "
-"workshop zijn onderverdeeld."
+"Deze pagina geeft voor elke speler een overzicht van de status van de "
+"voltooiing van de workshop"
+
+msgid "This page shows the quota options available for payment of the event"
+msgstr ""
+"Deze pagina geeft een overzicht van de beschikbare quotaopties voor betaling"
+" van het evenement"
 
 msgid "This page shows the total number of pre-registrations for each event"
 msgstr ""
 "Deze pagina toont het totale aantal voorregistraties voor elk evenement"
 
-msgid "This page summarises the customised navigation buttons of the event."
+msgid "This page summarizes the abilities that players can purchase with px"
 msgstr ""
-"Deze pagina geeft een overzicht van de aangepaste navigatieknoppen van het "
-"evenement."
+"Deze pagina geeft een overzicht van de vaardigheden die spelers met px "
+"kunnen verwerven"
 
 #, python-format
 msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
@@ -6305,20 +6318,18 @@ msgstr ""
 "Op deze pagina kunt u de belangrijkste instellingen van uw Organisatie "
 "wijzigen"
 
-msgid "This page shows for each player their completion status of workshops."
+msgid "This page performs several correctness checks of the character sheets"
 msgstr ""
-"Deze pagina geeft voor elke speler een overzicht van de status van de "
-"voltooiing van de workshop."
+"Deze pagina voert verschillende controles uit op de juistheid van "
+"karakterkaarten"
 
-msgid "This page shows the quota options available for payment of the event."
-msgstr ""
-"Deze pagina geeft een overzicht van de beschikbare quotaopties voor betaling"
-" van het evenement."
+msgid "This page shows the information to perform the drawing of the lottery"
+msgstr "Deze pagina toont de informatie om de lottotrekking uit te voeren"
 
-msgid "This page summarizes the abilities that players can purchase with px."
+msgid "This page summarizes the types of abilities that players can purchase"
 msgstr ""
-"Deze pagina geeft een overzicht van de vaardigheden die spelers met px "
-"kunnen verwerven."
+"Deze pagina geeft een overzicht van de soorten vaardigheden die spelers "
+"kunnen kopen"
 
 msgid "We will send you a confirmation e-mail when the change has been made."
 msgstr ""
@@ -6357,19 +6368,6 @@ msgstr ""
 
 msgid "Set the initial amount of experience points in the configuration panel"
 msgstr "Stel het initiële aantal ervaringspunten in het configuratiescherm in"
-
-msgid "This page performs several correctness checks of the character sheets."
-msgstr ""
-"Deze pagina voert verschillende controles uit op de juistheid van "
-"karakterkaarten."
-
-msgid "This page shows the information to perform the drawing of the lottery."
-msgstr "Deze pagina toont de informatie om de lottotrekking uit te voeren."
-
-msgid "This page summarizes the types of abilities that players can purchase."
-msgstr ""
-"Deze pagina geeft een overzicht van de soorten vaardigheden die spelers "
-"kunnen kopen."
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Je kunt de volgende velden gebruiken, ze worden automatisch ingevuld"
@@ -6678,6 +6676,18 @@ msgstr ""
 "Op deze pagina kun je een formuliervraag voor een schrijfelement toevoegen "
 "of wijzigen"
 
+msgid ""
+"This page shows the handouts (information dissemination tools) of the event"
+msgstr ""
+"Op deze pagina vindt u een samenvatting van de hand-outs (hulpmiddelen voor "
+"informatieverspreiding) van het evenement"
+
+msgid ""
+"This page shows the progress steps that can be assigned to writing elements"
+msgstr ""
+"Deze pagina geeft een overzicht van de voortgangsstappen die gemarkeerd "
+"kunnen worden in de schrijfonderdelen"
+
 #, python-format
 msgid ""
 "(check the available number of discounts <a href='%(url)s'>on this page</a>)"
@@ -6750,18 +6760,6 @@ msgstr ""
 "afzonderlijke run"
 
 msgid ""
-"This page shows the handouts (information dissemination tools) of the event."
-msgstr ""
-"Op deze pagina vindt u een samenvatting van de hand-outs (hulpmiddelen voor "
-"informatieverspreiding) van het evenement."
-
-msgid ""
-"This page shows the progress steps that can be assigned to writing elements."
-msgstr ""
-"Deze pagina geeft een overzicht van de voortgangsstappen die gemarkeerd "
-"kunnen worden in de schrijfonderdelen."
-
-msgid ""
 "To use the feature you requested, you need to activate the following feature"
 msgstr ""
 "Om de functie die je hebt aangevraagd te kunnen gebruiken, moet de volgende "
@@ -6828,6 +6826,13 @@ msgid ""
 msgstr ""
 "Deze pagina laat voor elke gebeurtenis zien welke medewerkers gemarkeerd "
 "zijn met welke expertise"
+
+msgid ""
+"This page shows the available questions of the registration form of the "
+"event"
+msgstr ""
+"Deze pagina geeft een overzicht van de beschikbare vragen in het "
+"registratieformulier voor evenementen"
 
 msgid ""
 "This page summarises the disbursements recorded in the system for this run "
@@ -6933,13 +6938,6 @@ msgid ""
 msgstr ""
 "Deze pagina toont voor elke expertise in detail de gebruikers die deze "
 "hebben aangegeven"
-
-msgid ""
-"This page shows the available questions of the registration form of the "
-"event."
-msgstr ""
-"Deze pagina geeft een overzicht van de beschikbare vragen in het "
-"registratieformulier voor evenementen."
 
 msgid ""
 "This page shows the sensitive information of registered players regarding "
@@ -7240,6 +7238,20 @@ msgstr ""
 "is in het systeem"
 
 msgid ""
+"This page shows the different tickets with which players can register for "
+"the event"
+msgstr ""
+"Deze pagina geeft een overzicht van de verschillende tickets waarmee spelers"
+" zich kunnen registreren voor het evenement"
+
+msgid ""
+"This page shows the response options for questions about the workshops of "
+"the event"
+msgstr ""
+"Deze pagina geeft een overzicht van de opties voor het beantwoorden van "
+"vragen over de evenementworkshops"
+
+msgid ""
 "Enables 'Handouts,' pre-written texts that provide information about a plot "
 "or lore."
 msgstr ""
@@ -7304,20 +7316,6 @@ msgid ""
 msgstr ""
 "Er zijn quests zonder eigenschappen: %(list)s. Maak ze in het "
 "eigenschappenbeheer paneel"
-
-msgid ""
-"This page shows the different tickets with which players can register for "
-"the event."
-msgstr ""
-"Deze pagina geeft een overzicht van de verschillende tickets waarmee spelers"
-" zich kunnen registreren voor het evenement."
-
-msgid ""
-"This page shows the response options for questions about the workshops of "
-"the event."
-msgstr ""
-"Deze pagina geeft een overzicht van de opties voor het beantwoorden van "
-"vragen over de evenementworkshops."
 
 msgid ""
 "Adds a 'progress' status field (e.g. draft, ready, approved) to key writing "
@@ -7414,6 +7412,13 @@ msgstr ""
 "ledenbeheerpaneel"
 
 msgid ""
+"This page shows all expenses incurred directly by the organization "
+"concerning this run"
+msgstr ""
+"Deze pagina geeft een overzicht van alle kosten die direct door de "
+"vereniging zijn gemaakt in verband met deze run"
+
+msgid ""
 "Upload a photo of yourself associated with your character specifically for "
 "this event!"
 msgstr ""
@@ -7487,13 +7492,6 @@ msgid ""
 msgstr ""
 "Op deze pagina kun je de vaste termijnen waarin een speler moet betalen "
 "toevoegen of wijzigen."
-
-msgid ""
-"This page shows all expenses incurred directly by the organization "
-"concerning this run."
-msgstr ""
-"Deze pagina geeft een overzicht van alle kosten die direct door de "
-"vereniging zijn gemaakt in verband met deze run."
 
 msgid ""
 "Value of the discount for the friend who signs up using the code of a "
@@ -7623,6 +7621,20 @@ msgstr ""
 "spelers zich kunnen registreren"
 
 msgid ""
+"This page shows active discounts on the player, allows you to activate or "
+"deactivate them"
+msgstr ""
+"Op deze pagina vind je een overzicht van de actieve kortingen van de speler "
+"en kun je ze activeren of deactiveren"
+
+msgid ""
+"This page shows problems reported by contributors, for direct management "
+"during the event"
+msgstr ""
+"Deze pagina geeft een overzicht van de problemen die zijn gemeld door "
+"inzenders, voor directe afhandeling tijdens het evenement"
+
+msgid ""
 "We inform you that your membership of the Association has not been accepted "
 "by the board."
 msgstr ""
@@ -7681,18 +7693,11 @@ msgstr ""
 "management paneel"
 
 msgid ""
-"This page shows active discounts on the player, allows you to activate or "
-"deactivate them."
+"This page shows the accounting status of the event, divided into the various"
+" expense types"
 msgstr ""
-"Op deze pagina vind je een overzicht van de actieve kortingen van de speler "
-"en kun je ze activeren of deactiveren."
-
-msgid ""
-"This page shows problems reported by contributors, for direct management "
-"during the event."
-msgstr ""
-"Deze pagina geeft een overzicht van de problemen die zijn gemeld door "
-"inzenders, voor directe afhandeling tijdens het evenement."
+"Deze pagina geeft een samenvatting van de boekhoudkundige situatie van het "
+"evenement, onderverdeeld in de verschillende uitgavenposten"
 
 msgid ""
 "for bidirectional relationships, where the other character is also aware of "
@@ -7728,13 +7733,6 @@ msgid ""
 msgstr ""
 "Deze pagina toont globale competenties, vaardigheidsgebieden waarop "
 "medewerkers zichzelf kunnen scoren"
-
-msgid ""
-"This page shows the accounting status of the event, divided into the various"
-" expense types."
-msgstr ""
-"Deze pagina geeft een samenvatting van de boekhoudkundige situatie van het "
-"evenement, onderverdeeld in de verschillende uitgavenposten."
 
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "
@@ -8009,6 +8007,13 @@ msgstr ""
 "organisatie moet staan"
 
 msgid ""
+"This page summarises the roles to be assigned in order to use the functions "
+"concerning the event"
+msgstr ""
+"Deze pagina geeft een overzicht van de rollen die moeten worden toegewezen "
+"om de functies met betrekking tot het evenement te kunnen gebruiken"
+
+msgid ""
 "To set the tickets that users can select during registration, access the "
 "tickets management page"
 msgstr ""
@@ -8091,13 +8096,6 @@ msgid ""
 msgstr ""
 "Deze pagina toont alle runs die in het systeem zijn opgeslagen. Van hieruit "
 "kun je ze bewerken of nieuwe aanmaken."
-
-msgid ""
-"This page summarises the roles to be assigned in order to use the functions "
-"concerning the event."
-msgstr ""
-"Deze pagina geeft een overzicht van de rollen die moeten worden toegewezen "
-"om de functies met betrekking tot het evenement te kunnen gebruiken."
 
 msgid ""
 "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "

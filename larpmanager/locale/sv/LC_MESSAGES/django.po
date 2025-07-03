@@ -3938,6 +3938,9 @@ msgstr "Tilläggsavgift till biljett"
 msgid "This page shows the event plots"
 msgstr "Denna sida visar händelseförloppen"
 
+msgid "This page shows the run signups"
+msgstr "På denna sida finns en sammanfattning av anmälningarna till loppet"
+
 msgid "To log back in with the account"
 msgstr "För att logga in igen med kontot"
 
@@ -4043,9 +4046,6 @@ msgstr "Evenemangets miljö/genre"
 
 msgid "This page shows the event quests"
 msgstr "Den här sidan visar eventuppdragen"
-
-msgid "This page shows the run signups."
-msgstr "På denna sida finns en sammanfattning av anmälningarna till loppet."
 
 msgid "Total of recorded money outflows"
 msgstr "Totalt antal registrerade penningutflöden"
@@ -4394,6 +4394,9 @@ msgstr "Välj den organisation som du vill gå vidare till"
 msgid "Show all the traits to those present?"
 msgstr "Visa alla egenskaper för de närvarande?"
 
+msgid "This page shows cancelled enrollments"
+msgstr "Denna sida sammanfattar annullerade registreringar"
+
 msgid "Total amount refunded to participants"
 msgstr "Totalt belopp som återbetalas till deltagarna"
 
@@ -4443,9 +4446,6 @@ msgstr "Nu kan du börja skapa speed-larps"
 
 msgid "The following registrations were drawn"
 msgstr "Följande bidrag lottades ut"
-
-msgid "This page shows cancelled enrollments."
-msgstr "Denna sida sammanfattar annullerade registreringar."
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Vi ber dig att betala det återstående beloppet"
@@ -4618,6 +4618,9 @@ msgstr "Ansökan om medlemskap i en förening"
 msgid "The first line is the names of the fields"
 msgstr "Den första raden är namnen på fälten"
 
+msgid "This page shows the uploaded photo albums"
+msgstr "Denna sida sammanfattar de uppladdade fotoalbumen"
+
 msgid "Who takes it upon themselves to solve it."
 msgstr "Vem tar ansvar för att lösa problemet?"
 
@@ -4704,8 +4707,8 @@ msgstr "Denna sida visar för ett element den historiska"
 msgid "This page shows the organization inventory"
 msgstr "På den här sidan visas organisationsinventeringen"
 
-msgid "This page shows the uploaded photo albums."
-msgstr "Denna sida sammanfattar de uppladdade fotoalbumen."
+msgid "This page shows the prologues of the event"
+msgstr "Denna sida sammanfattar prologerna för evenemanget"
 
 msgid "This page summarises the system entries of"
 msgstr "Denna sida sammanfattar systemposterna för"
@@ -4754,11 +4757,28 @@ msgstr "Nu kan du ställa in spelarens redigeringsinställningar"
 msgid "Review players' safety-related informations"
 msgstr "Granska spelarnas säkerhetsrelaterade information"
 
-msgid "This page shows the prologues of the event."
-msgstr "Denna sida sammanfattar prologerna för evenemanget."
+msgid "This page allows you to translate the event"
+msgstr "På den här sidan kan du översätta evenemanget"
+
+msgid "This page shows the characters of the event"
+msgstr "På denna sida sammanfattas evenemangets karaktärer"
+
+msgid "This page shows the pre-signups for the run"
+msgstr ""
+"På den här sidan finns en sammanfattning av förhandsanmälningarna till "
+"loppet"
+
+msgid "This page shows the registration surcharges"
+msgstr "På denna sida sammanfattas tilläggsavgifterna för registreringar"
 
 msgid "This page shows the roles of the characters"
 msgstr "Den här sidan visar rollerna för karaktärerna"
+
+msgid "This page shows the speedlarps of the event"
+msgstr "Denna sida sammanfattar speedlarps från evenemanget"
+
+msgid "This page shows the types of event prologue"
+msgstr "Denna sida sammanfattar de olika typerna av händelseprolog"
 
 msgid "Warning! Other users are editing this item."
 msgstr "Varning, varning! Andra användare redigerar detta objekt."
@@ -4821,28 +4841,11 @@ msgstr "Summan betalades ut till dig som %(credits)s."
 msgid "This page allows you to add or edit an album"
 msgstr "På den här sidan kan du lägga till eller redigera ett album"
 
-msgid "This page allows you to translate the event."
-msgstr "På den här sidan kan du översätta evenemanget."
-
 msgid "This page shows organization inventory items"
 msgstr "Denna sida visar organisationens inventarier"
 
-msgid "This page shows the characters of the event."
-msgstr "På denna sida sammanfattas evenemangets karaktärer."
-
-msgid "This page shows the pre-signups for the run."
-msgstr ""
-"På den här sidan finns en sammanfattning av förhandsanmälningarna till "
-"loppet."
-
-msgid "This page shows the registration surcharges."
-msgstr "På denna sida sammanfattas tilläggsavgifterna för registreringar."
-
-msgid "This page shows the speedlarps of the event."
-msgstr "Denna sida sammanfattar speedlarps från evenemanget."
-
-msgid "This page shows the types of event prologue."
-msgstr "Denna sida sammanfattar de olika typerna av händelseprolog."
+msgid "This page shows your personal spending items"
+msgstr "På denna sida sammanfattas dina personliga utgiftsposter"
 
 msgid "You are now logged in with your main account"
 msgstr "Du är nu inloggad med ditt huvudkonto"
@@ -4896,8 +4899,8 @@ msgstr "Välj det evenemang du vill föranmäla dig till"
 msgid "There are no new runs scheduled at this time."
 msgstr "För närvarande finns inga nya körningar planerade."
 
-msgid "This page shows your personal spending items."
-msgstr "På denna sida sammanfattas dina personliga utgiftsposter."
+msgid "This page shows the settings for PDF printing"
+msgstr "Denna sida sammanfattar inställningarna för PDF-utskrift"
 
 msgid "You are not yet a Member of the Organization!"
 msgstr "Du är ännu inte medlem i föreningen!"
@@ -4958,9 +4961,6 @@ msgstr "På den här sidan kan du se en karaktär i sin helhet"
 
 msgid "This page shows the email lists of subscribers"
 msgstr "På den här sidan visas e-postlistorna för prenumeranterna"
-
-msgid "This page shows the settings for PDF printing."
-msgstr "Denna sida sammanfattar inställningarna för PDF-utskrift."
 
 msgid "This page summarizes px delivery to characters"
 msgstr "Denna sida sammanfattar px-leverans till tecken"
@@ -5064,9 +5064,21 @@ msgstr "Visar det beräknade skattebeloppet för varje betalning."
 msgid "This page allows you to add or edit a competency"
 msgstr "På den här sidan kan du lägga till eller redigera en kompetens"
 
+msgid "This page allows you to upload a new photo album"
+msgstr "På den här sidan kan du ladda upp ett nytt fotoalbum"
+
 msgid "This page shows all emails, both queued and sent"
 msgstr ""
 "På den här sidan visas alla e-postmeddelanden, både köade och skickade"
+
+msgid "This page shows character assignments to players"
+msgstr "Denna sida sammanfattar karaktärstilldelningar till spelare"
+
+msgid "This page shows the templates for event handouts"
+msgstr "På den här sidan sammanfattas mallarna för evenemangets handout"
+
+msgid "This page shows the types of quests in the event"
+msgstr "Denna sida sammanfattar de olika typerna av uppdrag i evenemanget"
 
 msgid "To access this feature, you must first register!"
 msgstr ""
@@ -5125,17 +5137,8 @@ msgstr "Välj en karaktär för att infoga dess referenskod"
 msgid "The user has been enabled for the indicated role."
 msgstr "Användaren har aktiverats för den angivna rollen."
 
-msgid "This page allows you to upload a new photo album."
-msgstr "På den här sidan kan du ladda upp ett nytt fotoalbum."
-
-msgid "This page shows character assignments to players."
-msgstr "Denna sida sammanfattar karaktärstilldelningar till spelare."
-
-msgid "This page shows the templates for event handouts."
-msgstr "På den här sidan sammanfattas mallarna för evenemangets handout."
-
-msgid "This page shows the types of quests in the event."
-msgstr "Denna sida sammanfattar de olika typerna av uppdrag i evenemanget."
+msgid "This page shows all inflows received for this run"
+msgstr "Denna sida sammanfattar alla poster för denna körning"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Toleransen överskriden, fortsätt med annulleringen"
@@ -5214,8 +5217,9 @@ msgstr "På den här sidan kan du svara på en spelares fråga"
 msgid "This page allows you to edit event-specific texts."
 msgstr "På den här sidan kan du redigera evenemangsspecifika texter."
 
-msgid "This page shows all inflows received for this run."
-msgstr "Denna sida sammanfattar alla poster för denna körning."
+msgid "This page shows all payments received for this run"
+msgstr ""
+"Denna sida sammanfattar alla betalningar som mottagits för denna körning"
 
 msgid "This page shows the questions submitted by players"
 msgstr "På den här sidan visas de frågor som spelarna har skickat in"
@@ -5274,10 +5278,6 @@ msgstr "Anmälan till evenemanget avbröts."
 msgid "This page allows you to set up your payment methods"
 msgstr "På den här sidan kan du ställa in dina betalningsmetoder"
 
-msgid "This page shows all payments received for this run."
-msgstr ""
-"Denna sida sammanfattar alla betalningar som mottagits för denna körning."
-
 msgid "This page summarizes the association's custom texts"
 msgstr "Denna sida sammanfattar föreningens anpassade texter"
 
@@ -5311,6 +5311,17 @@ msgstr "Den första kolumnen beloppet, den andra kvitton"
 
 msgid "This page shows all donations recorded in the system"
 msgstr "På den här sidan visas alla donationer som registrerats i systemet"
+
+msgid "This page shows the deadlines to be met for this run"
+msgstr ""
+"På denna sida sammanfattas de tidsfrister som måste uppfyllas för denna "
+"körning"
+
+msgid "This page shows the relationships between characters"
+msgstr "Denna sida sammanfattar länkarna mellan rollpersonerna"
+
+msgid "This page shows the workshop questions for the event"
+msgstr "På denna sida sammanfattas workshopfrågorna från evenemanget"
 
 msgid "You have already sent a payment pending verification"
 msgstr "Du har redan skickat en betalning som väntar på verifiering"
@@ -5366,17 +5377,6 @@ msgstr "På den här sidan kan du ändra allmänna inställningar för evenemang
 msgid "This page shows all invoices registered in the system"
 msgstr "Denna sida visar alla fakturor som finns registrerade i systemet"
 
-msgid "This page shows the deadlines to be met for this run."
-msgstr ""
-"På denna sida sammanfattas de tidsfrister som måste uppfyllas för denna "
-"körning."
-
-msgid "This page shows the relationships between characters."
-msgstr "Denna sida sammanfattar länkarna mellan rollpersonerna."
-
-msgid "This page shows the workshop questions for the event."
-msgstr "På denna sida sammanfattas workshopfrågorna från evenemanget."
-
 msgid "This page shows users who can be persuaded to sign up"
 msgstr "Den här sidan visar användare som kan övertalas att registrera sig"
 
@@ -5412,6 +5412,13 @@ msgstr "Välj vilka element som ska kopieras, från vilket annat evenemang."
 
 msgid "Set if you want to reserve tickets in addition to your"
 msgstr "Ställ in om du vill reservera biljetter utöver dina"
+
+msgid "This page shows the discounts activated for this event"
+msgstr ""
+"Denna sida sammanfattar de rabatter som aktiverats för detta evenemang"
+
+msgid "This page summarises the customised texts of the event"
+msgstr "På den här sidan sammanfattas de anpassade texterna för evenemanget"
 
 msgid "This page summarises the list of members as a registry"
 msgstr "Denna sida sammanfattar medlemsförteckningen som ett register"
@@ -5470,13 +5477,6 @@ msgstr "På den här sidan kan du redigera organisationsspecifik text"
 
 msgid "This page allows you to keep track of reported problems"
 msgstr "På den här sidan kan du hålla reda på rapporterade problem"
-
-msgid "This page shows the discounts activated for this event."
-msgstr ""
-"Denna sida sammanfattar de rabatter som aktiverats för detta evenemang."
-
-msgid "This page summarises the customised texts of the event."
-msgstr "På den här sidan sammanfattas de anpassade texterna för evenemanget."
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Summan av vad som redan har betalats vid det aktuella datumet"
@@ -5591,6 +5591,12 @@ msgid "This page allows you to edit the event navigation buttons."
 msgstr ""
 "På den här sidan kan du redigera navigeringsknapparna för evenemanget."
 
+msgid "This page allows you to manually approve payments received"
+msgstr "På den här sidan kan du manuellt godkänna mottagna betalningar"
+
+msgid "This page allows you to upload a new personal expense item"
+msgstr "På denna sida kan du ladda upp en ny personlig utgiftspost"
+
 msgid "This page shows all payment items registered in the system"
 msgstr ""
 "Denna sida visar alla betalningsobjekt som finns registrerade i systemet"
@@ -5646,15 +5652,19 @@ msgstr ""
 msgid "This page allows you to change a member's membership status"
 msgstr "På den här sidan kan du ändra en medlems medlemsstatus"
 
-msgid "This page allows you to manually approve payments received."
-msgstr "På den här sidan kan du manuellt godkänna mottagna betalningar."
-
-msgid "This page allows you to upload a new personal expense item."
-msgstr "På denna sida kan du ladda upp en ny personlig utgiftspost."
-
 msgid "This page presents the complete list of financial movements"
 msgstr ""
 "På denna sida presenteras den fullständiga listan över finansiella rörelser"
+
+msgid "This page shows the payment deadline settings for the event"
+msgstr ""
+"Denna sida sammanfattar inställningarna för betalningsfristen för "
+"evenemanget"
+
+msgid "This page shows the sections of the event registration form"
+msgstr ""
+"På denna sida sammanfattas avsnitten i formuläret för registrering av "
+"evenemang"
 
 #, python-format
 msgid "Total of your signup fee: <b>%(amount).2f %(currency)s</b>."
@@ -5699,15 +5709,12 @@ msgstr ""
 "På den här sidan visas i detalj de färdigheter som markerats av en "
 "bidragsgivare"
 
-msgid "This page shows the payment deadline settings for the event."
+msgid "This page shows the factions (character groups) of the event"
 msgstr ""
-"Denna sida sammanfattar inställningarna för betalningsfristen för "
-"evenemanget."
+"Denna sida sammanfattar fraktionerna (grupper av karaktärer) i evenemanget"
 
-msgid "This page shows the sections of the event registration form."
-msgstr ""
-"På denna sida sammanfattas avsnitten i formuläret för registrering av "
-"evenemang."
+msgid "This page shows the relationships of the indicated character"
+msgstr "Denna sida sammanfattar länkarna för den angivna karaktären"
 
 #, python-format
 msgid "%(amount)d %(tokens)s were used to participate in this event!"
@@ -5754,18 +5761,16 @@ msgid "Sets how often reminder emails are sent, in days (default: 5)"
 msgstr ""
 "Anger hur ofta påminnelsemeddelanden ska skickas, i dagar (standard: 5)"
 
-msgid "This page shows the factions (character groups) of the event."
-msgstr ""
-"Denna sida sammanfattar fraktionerna (grupper av karaktärer) i evenemanget."
-
 msgid "This page shows the general information of registered players"
 msgstr "På denna sida visas allmän information om registrerade spelare"
 
 msgid "This page shows the historical accounting of the organization"
 msgstr "Denna sida visar organisationens historiska redovisning"
 
-msgid "This page shows the relationships of the indicated character."
-msgstr "Denna sida sammanfattar länkarna för den angivna karaktären."
+msgid "This page shows the uploaded resources available to the event"
+msgstr ""
+"Denna sida sammanfattar de uppladdade resurser som finns tillgängliga för "
+"evenemanget"
 
 msgid "This page summarizes all revenue items recorded in the system"
 msgstr ""
@@ -5825,11 +5830,6 @@ msgstr "Detta är de workshops som du måste genomföra innan du kan spela."
 
 msgid "This page allows you to change the access roles for the event."
 msgstr "På den här sidan kan du ändra behörighetsrollerna för evenemanget."
-
-msgid "This page shows the uploaded resources available to the event."
-msgstr ""
-"Denna sida sammanfattar de uppladdade resurser som finns tillgängliga för "
-"evenemanget."
 
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr ""
@@ -5936,10 +5936,17 @@ msgid "This page allows you to change the general settings of this run."
 msgstr ""
 "På den här sidan kan du ändra de allmänna inställningarna för körningen."
 
+msgid "This page allows you to copy the event settings from another one"
+msgstr "På denna sida kan inställningar kopieras från ett annat evenemang"
+
 msgid "This page shows the settings available for the membership voting"
 msgstr ""
 "Denna sida visar de inställningar som är tillgängliga för "
 "medlemsomröstningen"
+
+msgid "This page shows the traits assigned to the characters in the run"
+msgstr ""
+"Denna sida sammanfattar de egenskaper som tilldelats karaktärerna i serien"
 
 msgid "This page summarises the disbursements recorded in the system of"
 msgstr ""
@@ -6004,12 +6011,9 @@ msgstr "Betalningen slutfördes inte. Kontakta oss för att ta reda på varför.
 msgid "They will be used automatically when you sign up for a new event!"
 msgstr "De dras av automatiskt när du anmäler dig till ett nytt evenemang!"
 
-msgid "This page allows you to copy the event settings from another one."
-msgstr "På denna sida kan inställningar kopieras från ett annat evenemang."
-
-msgid "This page shows the traits assigned to the characters in the run."
+msgid "This page shows the factions and plots of the indicated character"
 msgstr ""
-"Denna sida sammanfattar de egenskaper som tilldelats karaktärerna i serien."
+"Denna sida sammanfattar den angivna karaktärens fraktioner och intriger"
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr "om karaktären är medveten om den andra egenskapens identitet"
@@ -6038,9 +6042,10 @@ msgstr ""
 "Hantera betalningar som utförs av spelare för att täcka "
 "registreringsavgiften"
 
-msgid "This page shows the factions and plots of the indicated character."
+msgid "This page summarises the available questions of the character form"
 msgstr ""
-"Denna sida sammanfattar den angivna karaktärens fraktioner och intriger."
+"På den här sidan sammanfattas de frågor som finns tillgängliga i "
+"karaktärsformuläret"
 
 msgid "Upload the scan of your signed application (image or pdf document)"
 msgstr ""
@@ -6095,10 +6100,15 @@ msgstr ""
 "På den här sidan kan du lägga till eller redigera en badge eller tilldela "
 "den till användare"
 
-msgid "This page summarises the available questions of the character form."
+msgid "This page shows the modules for the workshop questions of the event"
 msgstr ""
-"På den här sidan sammanfattas de frågor som finns tillgängliga i "
-"karaktärsformuläret."
+"Denna sida sammanfattar de moduler som frågorna i evenemangets workshop är "
+"indelade i"
+
+msgid "This page summarises the customised navigation buttons of the event"
+msgstr ""
+"På den här sidan sammanfattas de anpassade navigeringsknapparna för "
+"evenemanget"
 
 msgid "To confirm your registration, please fill in your personal profile."
 msgstr ""
@@ -6135,19 +6145,23 @@ msgstr ""
 "På den här sidan kan du lägga till eller redigera en utgiftspost för en "
 "bidragsgivare"
 
-msgid "This page shows the modules for the workshop questions of the event."
+msgid "This page shows for each player their completion status of workshops"
 msgstr ""
-"Denna sida sammanfattar de moduler som frågorna i evenemangets workshop är "
-"indelade i."
+"Denna sida sammanfattar för varje spelare deras status för slutförandet av "
+"workshopen"
+
+msgid "This page shows the quota options available for payment of the event"
+msgstr ""
+"På denna sida sammanfattas de kvotalternativ som finns tillgängliga för "
+"betalning av evenemanget"
 
 msgid "This page shows the total number of pre-registrations for each event"
 msgstr ""
 "Denna sida visar det totala antalet föranmälningar för varje evenemang"
 
-msgid "This page summarises the customised navigation buttons of the event."
+msgid "This page summarizes the abilities that players can purchase with px"
 msgstr ""
-"På den här sidan sammanfattas de anpassade navigeringsknapparna för "
-"evenemanget."
+"Denna sida sammanfattar de färdigheter som spelare kan förvärva med px"
 
 #, python-format
 msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
@@ -6231,19 +6245,15 @@ msgid "This page allows you to change the main settings of your Organization"
 msgstr ""
 "På den här sidan kan du ändra huvudinställningarna för din organisation"
 
-msgid "This page shows for each player their completion status of workshops."
-msgstr ""
-"Denna sida sammanfattar för varje spelare deras status för slutförandet av "
-"workshopen."
+msgid "This page performs several correctness checks of the character sheets"
+msgstr "Denna sida utför olika kontroller av teckenkortens korrekthet"
 
-msgid "This page shows the quota options available for payment of the event."
-msgstr ""
-"På denna sida sammanfattas de kvotalternativ som finns tillgängliga för "
-"betalning av evenemanget."
+msgid "This page shows the information to perform the drawing of the lottery"
+msgstr "Denna sida visar informationen för att utföra lotteridragningen"
 
-msgid "This page summarizes the abilities that players can purchase with px."
+msgid "This page summarizes the types of abilities that players can purchase"
 msgstr ""
-"Denna sida sammanfattar de färdigheter som spelare kan förvärva med px."
+"Denna sida sammanfattar de typer av färdigheter som kan köpas av spelare"
 
 msgid "We will send you a confirmation e-mail when the change has been made."
 msgstr ""
@@ -6277,16 +6287,6 @@ msgstr "Om den är markerad kan spelarna ange sången för sina karaktärer"
 msgid "Set the initial amount of experience points in the configuration panel"
 msgstr ""
 "Ställ in det initiala antalet erfarenhetspoäng i konfigurationspanelen"
-
-msgid "This page performs several correctness checks of the character sheets."
-msgstr "Denna sida utför olika kontroller av teckenkortens korrekthet."
-
-msgid "This page shows the information to perform the drawing of the lottery."
-msgstr "Denna sida visar informationen för att utföra lotteridragningen."
-
-msgid "This page summarizes the types of abilities that players can purchase."
-msgstr ""
-"Denna sida sammanfattar de typer av färdigheter som kan köpas av spelare."
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Du kan använda följande fält, de kommer att fyllas i automatiskt"
@@ -6573,6 +6573,18 @@ msgstr ""
 "På den här sidan kan du lägga till eller ändra en formulärfråga för ett "
 "skrivelement"
 
+msgid ""
+"This page shows the handouts (information dissemination tools) of the event"
+msgstr ""
+"På den här sidan finns en sammanfattning av evenemangets handouts (verktyg "
+"för informationsspridning)"
+
+msgid ""
+"This page shows the progress steps that can be assigned to writing elements"
+msgstr ""
+"Denna sida sammanfattar de steg i utvecklingen som kan markeras i "
+"skrivelementen"
+
 #, python-format
 msgid ""
 "(check the available number of discounts <a href='%(url)s'>on this page</a>)"
@@ -6642,18 +6654,6 @@ msgstr ""
 "individuell körning"
 
 msgid ""
-"This page shows the handouts (information dissemination tools) of the event."
-msgstr ""
-"På den här sidan finns en sammanfattning av evenemangets handouts (verktyg "
-"för informationsspridning)."
-
-msgid ""
-"This page shows the progress steps that can be assigned to writing elements."
-msgstr ""
-"Denna sida sammanfattar de steg i utvecklingen som kan markeras i "
-"skrivelementen."
-
-msgid ""
 "To use the feature you requested, you need to activate the following feature"
 msgstr ""
 "För att kunna använda den funktion du har begärt måste följande funktion "
@@ -6715,6 +6715,13 @@ msgid ""
 msgstr ""
 "På den här sidan visas för varje händelse de medarbetare som är markerade "
 "med vilken expertis"
+
+msgid ""
+"This page shows the available questions of the registration form of the "
+"event"
+msgstr ""
+"På den här sidan sammanfattas de frågor som finns tillgängliga i formuläret "
+"för registrering av evenemang"
 
 msgid ""
 "This page summarises the disbursements recorded in the system for this run "
@@ -6816,13 +6823,6 @@ msgid ""
 msgstr ""
 "På den här sidan visas i detalj, för varje expertis, de användare som har "
 "angett den"
-
-msgid ""
-"This page shows the available questions of the registration form of the "
-"event."
-msgstr ""
-"På den här sidan sammanfattas de frågor som finns tillgängliga i formuläret "
-"för registrering av evenemang."
 
 msgid ""
 "This page shows the sensitive information of registered players regarding "
@@ -7123,6 +7123,20 @@ msgstr ""
 "tillgänglig i systemet"
 
 msgid ""
+"This page shows the different tickets with which players can register for "
+"the event"
+msgstr ""
+"Denna sida sammanfattar de olika biljetterna med vilka spelare kan "
+"registrera sig för evenemanget"
+
+msgid ""
+"This page shows the response options for questions about the workshops of "
+"the event"
+msgstr ""
+"På den här sidan sammanfattas alternativen för att besvara frågor om "
+"evenemangets workshops"
+
+msgid ""
 "Enables 'Handouts,' pre-written texts that provide information about a plot "
 "or lore."
 msgstr ""
@@ -7187,20 +7201,6 @@ msgid ""
 msgstr ""
 "Det finns uppdrag utan egenskaper: %(list)s. Skapa dem i panelen för "
 "egenskapshantering"
-
-msgid ""
-"This page shows the different tickets with which players can register for "
-"the event."
-msgstr ""
-"Denna sida sammanfattar de olika biljetterna med vilka spelare kan "
-"registrera sig för evenemanget."
-
-msgid ""
-"This page shows the response options for questions about the workshops of "
-"the event."
-msgstr ""
-"På den här sidan sammanfattas alternativen för att besvara frågor om "
-"evenemangets workshops."
 
 msgid ""
 "Adds a 'progress' status field (e.g. draft, ready, approved) to key writing "
@@ -7297,6 +7297,13 @@ msgstr ""
 "medlemshantering"
 
 msgid ""
+"This page shows all expenses incurred directly by the organization "
+"concerning this run"
+msgstr ""
+"Denna sida sammanfattar alla kostnader som uppkommit direkt av föreningen i "
+"samband med detta lopp"
+
+msgid ""
 "Upload a photo of yourself associated with your character specifically for "
 "this event!"
 msgstr ""
@@ -7369,13 +7376,6 @@ msgid ""
 msgstr ""
 "På den här sidan kan du lägga till eller ändra de fasta delbetalningar som "
 "en spelare måste betala."
-
-msgid ""
-"This page shows all expenses incurred directly by the organization "
-"concerning this run."
-msgstr ""
-"Denna sida sammanfattar alla kostnader som uppkommit direkt av föreningen i "
-"samband med detta lopp."
 
 msgid ""
 "Value of the discount for the friend who signs up using the code of a "
@@ -7503,6 +7503,20 @@ msgstr ""
 "spelare kan registrera sig med"
 
 msgid ""
+"This page shows active discounts on the player, allows you to activate or "
+"deactivate them"
+msgstr ""
+"Denna sida sammanfattar spelarens aktiva rabatter och låter dig aktivera "
+"eller inaktivera dem"
+
+msgid ""
+"This page shows problems reported by contributors, for direct management "
+"during the event"
+msgstr ""
+"På denna sida sammanfattas de problem som rapporterats av bidragsgivare, för"
+" direkt hantering under evenemanget"
+
+msgid ""
 "We inform you that your membership of the Association has not been accepted "
 "by the board."
 msgstr ""
@@ -7561,18 +7575,11 @@ msgstr ""
 "hantering av uppdrag"
 
 msgid ""
-"This page shows active discounts on the player, allows you to activate or "
-"deactivate them."
+"This page shows the accounting status of the event, divided into the various"
+" expense types"
 msgstr ""
-"Denna sida sammanfattar spelarens aktiva rabatter och låter dig aktivera "
-"eller inaktivera dem."
-
-msgid ""
-"This page shows problems reported by contributors, for direct management "
-"during the event."
-msgstr ""
-"På denna sida sammanfattas de problem som rapporterats av bidragsgivare, för"
-" direkt hantering under evenemanget."
+"På denna sida sammanfattas evenemangets redovisningssituation, uppdelad på "
+"de olika utgiftsposterna"
 
 msgid ""
 "for bidirectional relationships, where the other character is also aware of "
@@ -7608,13 +7615,6 @@ msgid ""
 msgstr ""
 "På den här sidan visas globala kompetenser, kompetensområden där "
 "medarbetarna kan poängsätta sig själva"
-
-msgid ""
-"This page shows the accounting status of the event, divided into the various"
-" expense types."
-msgstr ""
-"På denna sida sammanfattas evenemangets redovisningssituation, uppdelad på "
-"de olika utgiftsposterna."
 
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "
@@ -7889,6 +7889,13 @@ msgstr ""
 "finanskonton"
 
 msgid ""
+"This page summarises the roles to be assigned in order to use the functions "
+"concerning the event"
+msgstr ""
+"På den här sidan sammanfattas de roller som ska tilldelas för att kunna "
+"använda funktionerna för evenemanget"
+
+msgid ""
 "To set the tickets that users can select during registration, access the "
 "tickets management page"
 msgstr ""
@@ -7971,13 +7978,6 @@ msgid ""
 msgstr ""
 "På den här sidan visas alla körningar som sparats i systemet. Härifrån kan "
 "du redigera dem eller skapa nya"
-
-msgid ""
-"This page summarises the roles to be assigned in order to use the functions "
-"concerning the event."
-msgstr ""
-"På den här sidan sammanfattas de roller som ska tilldelas för att kunna "
-"använda funktionerna för evenemanget."
 
 msgid ""
 "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "

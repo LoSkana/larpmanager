@@ -3938,6 +3938,9 @@ msgstr "Supplément appliqué au billet"
 msgid "This page shows the event plots"
 msgstr "Cette page présente les parcelles de l'événement"
 
+msgid "This page shows the run signups"
+msgstr "Cette page résume les inscriptions à la course"
+
 msgid "To log back in with the account"
 msgstr "Pour se reconnecter avec le compte"
 
@@ -4043,9 +4046,6 @@ msgstr "Le cadre / le genre de l'événement"
 
 msgid "This page shows the event quests"
 msgstr "Cette page présente les quêtes de l'événement"
-
-msgid "This page shows the run signups."
-msgstr "Cette page résume les inscriptions à la course."
 
 msgid "Total of recorded money outflows"
 msgstr "Total des sorties d'argent enregistrées"
@@ -4396,6 +4396,9 @@ msgstr "Sélectionnez l'organisation à laquelle vous souhaitez vous adresser"
 msgid "Show all the traits to those present?"
 msgstr "Montrer tous les traits aux personnes présentes ?"
 
+msgid "This page shows cancelled enrollments"
+msgstr "Cette page résume les enregistrements annulés"
+
 msgid "Total amount refunded to participants"
 msgstr "Montant total remboursé aux participants"
 
@@ -4445,9 +4448,6 @@ msgstr "Vous pouvez maintenant commencer à créer des ralentisseurs de vitesse"
 
 msgid "The following registrations were drawn"
 msgstr "Les participations suivantes ont été tirées au sort"
-
-msgid "This page shows cancelled enrollments."
-msgstr "Cette page résume les enregistrements annulés."
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Nous vous demandons de payer le montant restant"
@@ -4619,6 +4619,9 @@ msgstr "Demande d'adhésion à l'association"
 msgid "The first line is the names of the fields"
 msgstr "La première ligne contient les noms des champs "
 
+msgid "This page shows the uploaded photo albums"
+msgstr "Cette page résume les albums photos téléchargés"
+
 msgid "Who takes it upon themselves to solve it."
 msgstr "Qui se charge de le résoudre"
 
@@ -4706,8 +4709,8 @@ msgstr "Cette page présente l'historique d'un élément"
 msgid "This page shows the organization inventory"
 msgstr "Cette page présente l'inventaire de l'organisation"
 
-msgid "This page shows the uploaded photo albums."
-msgstr "Cette page résume les albums photos téléchargés."
+msgid "This page shows the prologues of the event"
+msgstr "Cette page résume les prologues de l'événement"
 
 msgid "This page summarises the system entries of"
 msgstr "Cette page résume les entrées système de"
@@ -4756,11 +4759,26 @@ msgstr "Vous pouvez maintenant définir les paramètres d'édition du lecteur"
 msgid "Review players' safety-related informations"
 msgstr "Examiner les informations relatives à la sécurité des joueurs"
 
-msgid "This page shows the prologues of the event."
-msgstr "Cette page résume les prologues de l'événement."
+msgid "This page allows you to translate the event"
+msgstr "Cette page vous permet de traduire l'événement"
+
+msgid "This page shows the characters of the event"
+msgstr "Cette page résume les caractéristiques de l'événement"
+
+msgid "This page shows the pre-signups for the run"
+msgstr "Cette page résume les pré-inscriptions pour la course"
+
+msgid "This page shows the registration surcharges"
+msgstr "Cette page résume les surtaxes sur les enregistrements"
 
 msgid "This page shows the roles of the characters"
 msgstr "Cette page présente les rôles des personnages"
+
+msgid "This page shows the speedlarps of the event"
+msgstr "Cette page récapitule les vitesses de l'événement"
+
+msgid "This page shows the types of event prologue"
+msgstr "Cette page résume les types de prologues d'événements"
 
 msgid "Warning! Other users are editing this item."
 msgstr ""
@@ -4824,26 +4842,11 @@ msgstr "La somme vous a été versée sous forme de %(credits)s."
 msgid "This page allows you to add or edit an album"
 msgstr "Cette page vous permet d'ajouter ou de modifier un album"
 
-msgid "This page allows you to translate the event."
-msgstr "Cette page vous permet de traduire l'événement."
-
 msgid "This page shows organization inventory items"
 msgstr "Cette page présente les éléments de l'inventaire de l'organisation"
 
-msgid "This page shows the characters of the event."
-msgstr "Cette page résume les caractéristiques de l'événement."
-
-msgid "This page shows the pre-signups for the run."
-msgstr "Cette page résume les pré-inscriptions pour la course."
-
-msgid "This page shows the registration surcharges."
-msgstr "Cette page résume les surtaxes sur les enregistrements."
-
-msgid "This page shows the speedlarps of the event."
-msgstr "Cette page récapitule les vitesses de l'événement."
-
-msgid "This page shows the types of event prologue."
-msgstr "Cette page résume les types de prologues d'événements."
+msgid "This page shows your personal spending items"
+msgstr "Cette page récapitule vos postes de dépenses personnelles"
 
 msgid "You are now logged in with your main account"
 msgstr "Vous êtes maintenant connecté avec votre compte principal "
@@ -4900,8 +4903,8 @@ msgstr "Sélectionnez l'événement pour lequel vous souhaitez vous pré-inscrir
 msgid "There are no new runs scheduled at this time."
 msgstr "Il n'y a actuellement aucune nouvelle course programmée."
 
-msgid "This page shows your personal spending items."
-msgstr "Cette page récapitule vos postes de dépenses personnelles."
+msgid "This page shows the settings for PDF printing"
+msgstr "Cette page résume les paramètres de l'impression PDF"
 
 msgid "You are not yet a Member of the Organization!"
 msgstr "Vous n'êtes pas encore membre de l'Association !"
@@ -4964,9 +4967,6 @@ msgstr "Cette page vous permet de visualiser entièrement un personnage"
 
 msgid "This page shows the email lists of subscribers"
 msgstr "Cette page affiche les listes d'adresses électroniques des abonnés"
-
-msgid "This page shows the settings for PDF printing."
-msgstr "Cette page résume les paramètres de l'impression PDF."
 
 msgid "This page summarizes px delivery to characters"
 msgstr "Cette page résume la livraison de px aux caractères"
@@ -5075,10 +5075,23 @@ msgstr "Affiche le montant de la taxe calculée sur chaque paiement."
 msgid "This page allows you to add or edit a competency"
 msgstr "Cette page vous permet d'ajouter ou de modifier une compétence."
 
+msgid "This page allows you to upload a new photo album"
+msgstr "Cette page vous permet de télécharger un nouvel album photo"
+
 msgid "This page shows all emails, both queued and sent"
 msgstr ""
 "Cette page affiche tous les courriels, qu'ils soient en file d'attente ou "
 "envoyés."
+
+msgid "This page shows character assignments to players"
+msgstr "Cette page résume les attributions de personnages aux joueurs"
+
+msgid "This page shows the templates for event handouts"
+msgstr ""
+"Cette page résume les modèles de documents à distribuer pour les événements"
+
+msgid "This page shows the types of quests in the event"
+msgstr "Cette page résume les types de quêtes de l'événement"
 
 msgid "To access this feature, you must first register!"
 msgstr "Pour accéder à cette fonction, vous devez d'abord vous inscrire !"
@@ -5138,18 +5151,8 @@ msgstr "Sélectionnez un personnage pour insérer son code de référence"
 msgid "The user has been enabled for the indicated role."
 msgstr "L'utilisateur a été autorisé à jouer le rôle indiqué."
 
-msgid "This page allows you to upload a new photo album."
-msgstr "Cette page vous permet de télécharger un nouvel album photo."
-
-msgid "This page shows character assignments to players."
-msgstr "Cette page résume les attributions de personnages aux joueurs."
-
-msgid "This page shows the templates for event handouts."
-msgstr ""
-"Cette page résume les modèles de documents à distribuer pour les événements."
-
-msgid "This page shows the types of quests in the event."
-msgstr "Cette page résume les types de quêtes de l'événement."
+msgid "This page shows all inflows received for this run"
+msgstr "Cette page résume toutes les entrées de cette course"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolérance dépassée, procéder à l'annulation"
@@ -5232,8 +5235,8 @@ msgstr "Cette page vous permet de répondre à la question d'un joueur"
 msgid "This page allows you to edit event-specific texts."
 msgstr "Cette page vous permet d'éditer des textes spécifiques à l'événement."
 
-msgid "This page shows all inflows received for this run."
-msgstr "Cette page résume toutes les entrées de cette course."
+msgid "This page shows all payments received for this run"
+msgstr "Cette page récapitule tous les paiements reçus pour ce cycle"
 
 msgid "This page shows the questions submitted by players"
 msgstr "Cette page présente les questions soumises par les joueurs"
@@ -5299,9 +5302,6 @@ msgstr "L'inscription à l'événement a été annulée."
 msgid "This page allows you to set up your payment methods"
 msgstr "Cette page vous permet de configurer vos méthodes de paiement"
 
-msgid "This page shows all payments received for this run."
-msgstr "Cette page récapitule tous les paiements reçus pour ce cycle."
-
 msgid "This page summarizes the association's custom texts"
 msgstr "Cette page résume les textes de la coutume de l'association"
 
@@ -5335,6 +5335,15 @@ msgstr "La première colonne indique le montant, la seconde les recettes."
 
 msgid "This page shows all donations recorded in the system"
 msgstr "Cette page présente tous les dons enregistrés dans le système"
+
+msgid "This page shows the deadlines to be met for this run"
+msgstr "Cette page résume les délais à respecter pour cette course"
+
+msgid "This page shows the relationships between characters"
+msgstr "Cette page résume les liens entre les personnages"
+
+msgid "This page shows the workshop questions for the event"
+msgstr "Cette page résume les questions posées lors de l'atelier"
 
 msgid "You have already sent a payment pending verification"
 msgstr "Vous avez déjà envoyé un paiement en attente de vérification"
@@ -5394,15 +5403,6 @@ msgstr ""
 msgid "This page shows all invoices registered in the system"
 msgstr "Cette page présente toutes les factures enregistrées dans le système."
 
-msgid "This page shows the deadlines to be met for this run."
-msgstr "Cette page résume les délais à respecter pour cette course."
-
-msgid "This page shows the relationships between characters."
-msgstr "Cette page résume les liens entre les personnages."
-
-msgid "This page shows the workshop questions for the event."
-msgstr "Cette page résume les questions posées lors de l'atelier."
-
 msgid "This page shows users who can be persuaded to sign up"
 msgstr ""
 "Cette page montre les utilisateurs que l'on peut convaincre de s'inscrire."
@@ -5442,6 +5442,12 @@ msgstr "Sélectionnez les éléments à copier, à partir de quel autre événem
 
 msgid "Set if you want to reserve tickets in addition to your"
 msgstr "Définissez si vous souhaitez réserver des billets en plus de vos"
+
+msgid "This page shows the discounts activated for this event"
+msgstr "Cette page résume les réductions activées pour cet événement"
+
+msgid "This page summarises the customised texts of the event"
+msgstr "Cette page résume les textes personnalisés de l'événement"
 
 msgid "This page summarises the list of members as a registry"
 msgstr "Cette page résume la liste des membres sous forme de registre"
@@ -5508,12 +5514,6 @@ msgstr ""
 
 msgid "This page allows you to keep track of reported problems"
 msgstr "Cette page vous permet de suivre les problèmes signalés."
-
-msgid "This page shows the discounts activated for this event."
-msgstr "Cette page résume les réductions activées pour cet événement."
-
-msgid "This page summarises the customised texts of the event."
-msgstr "Cette page résume les textes personnalisés de l'événement."
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Total de ce qui a déjà été payé à la date actuelle"
@@ -5647,6 +5647,14 @@ msgid "This page allows you to edit the event navigation buttons."
 msgstr ""
 "Cette page vous permet de modifier les boutons de navigation de l'événement."
 
+msgid "This page allows you to manually approve payments received"
+msgstr "Cette page vous permet d'approuver manuellement les paiements reçus"
+
+msgid "This page allows you to upload a new personal expense item"
+msgstr ""
+"Cette page vous permet de télécharger un nouveau poste de dépenses "
+"personnelles"
+
 msgid "This page shows all payment items registered in the system"
 msgstr ""
 "Cette page présente tous les postes de paiement enregistrés dans le système."
@@ -5711,16 +5719,15 @@ msgstr ""
 msgid "This page allows you to change a member's membership status"
 msgstr "Cette page vous permet de modifier le statut d'un membre."
 
-msgid "This page allows you to manually approve payments received."
-msgstr "Cette page vous permet d'approuver manuellement les paiements reçus."
-
-msgid "This page allows you to upload a new personal expense item."
-msgstr ""
-"Cette page vous permet de télécharger un nouveau poste de dépenses "
-"personnelles."
-
 msgid "This page presents the complete list of financial movements"
 msgstr "Cette page présente la liste complète des mouvements financiers"
+
+msgid "This page shows the payment deadline settings for the event"
+msgstr "Cette page résume les délais de paiement pour l'événement"
+
+msgid "This page shows the sections of the event registration form"
+msgstr ""
+"Cette page résume les sections du formulaire d'inscription à l'événement"
 
 #, python-format
 msgid "Total of your signup fee: <b>%(amount).2f %(currency)s</b>."
@@ -5768,12 +5775,12 @@ msgid "This page shows in detail the skills marked by a contributor"
 msgstr ""
 "Cette page montre en détail les compétences marquées par un contributeur"
 
-msgid "This page shows the payment deadline settings for the event."
-msgstr "Cette page résume les délais de paiement pour l'événement."
-
-msgid "This page shows the sections of the event registration form."
+msgid "This page shows the factions (character groups) of the event"
 msgstr ""
-"Cette page résume les sections du formulaire d'inscription à l'événement."
+"Cette page résume les factions (groupes de personnages) de l'événement"
+
+msgid "This page shows the relationships of the indicated character"
+msgstr "Cette page résume les liens du personnage indiqué"
 
 #, python-format
 msgid "%(amount)d %(tokens)s were used to participate in this event!"
@@ -5828,18 +5835,15 @@ msgstr ""
 "Définit la fréquence d'envoi des courriels de rappel, en jours (valeur par "
 "défaut : 5)."
 
-msgid "This page shows the factions (character groups) of the event."
-msgstr ""
-"Cette page résume les factions (groupes de personnages) de l'événement."
-
 msgid "This page shows the general information of registered players"
 msgstr "Cette page présente les informations générales des joueurs inscrits"
 
 msgid "This page shows the historical accounting of the organization"
 msgstr "Cette page présente l'historique de la comptabilité de l'organisation"
 
-msgid "This page shows the relationships of the indicated character."
-msgstr "Cette page résume les liens du personnage indiqué."
+msgid "This page shows the uploaded resources available to the event"
+msgstr ""
+"Cette page résume les ressources téléchargées disponibles pour l'événement"
 
 msgid "This page summarizes all revenue items recorded in the system"
 msgstr ""
@@ -5910,10 +5914,6 @@ msgstr "Il s'agit des ateliers que vous devez suivre avant de pouvoir jouer."
 
 msgid "This page allows you to change the access roles for the event."
 msgstr "Cette page vous permet de modifier les rôles d'accès à l'événement."
-
-msgid "This page shows the uploaded resources available to the event."
-msgstr ""
-"Cette page résume les ressources téléchargées disponibles pour l'événement."
 
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "Pour confirmer votre inscription, veuillez payer le montant indiqué."
@@ -6037,9 +6037,15 @@ msgstr ""
 "Cette page vous permet de modifier les paramètres généraux de cette "
 "exécution."
 
+msgid "This page allows you to copy the event settings from another one"
+msgstr "Cette page permet de copier les paramètres d'un autre événement"
+
 msgid "This page shows the settings available for the membership voting"
 msgstr ""
 "Cette page présente les paramètres disponibles pour le vote des membres."
+
+msgid "This page shows the traits assigned to the characters in the run"
+msgstr "Cette page résume les traits attribués aux personnages de la série"
 
 msgid "This page summarises the disbursements recorded in the system of"
 msgstr ""
@@ -6119,11 +6125,8 @@ msgstr ""
 "Ils seront déduits automatiquement lorsque vous vous inscrirez à un nouvel "
 "événement !"
 
-msgid "This page allows you to copy the event settings from another one."
-msgstr "Cette page permet de copier les paramètres d'un autre événement."
-
-msgid "This page shows the traits assigned to the characters in the run."
-msgstr "Cette page résume les traits attribués aux personnages de la série."
+msgid "This page shows the factions and plots of the indicated character"
+msgstr "Cette page résume les factions et les intrigues du personnage indiqué"
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr "si le personnage est conscient de l'identité de l'autre trait"
@@ -6155,9 +6158,9 @@ msgstr ""
 "Gérer les paiements effectués par les joueurs pour couvrir les frais "
 "d'inscription"
 
-msgid "This page shows the factions and plots of the indicated character."
+msgid "This page summarises the available questions of the character form"
 msgstr ""
-"Cette page résume les factions et les intrigues du personnage indiqué."
+"Cette page résume les questions disponibles dans la fiche de renseignements"
 
 msgid "Upload the scan of your signed application (image or pdf document)"
 msgstr ""
@@ -6217,9 +6220,14 @@ msgstr ""
 "Cette page vous permet d'ajouter ou de modifier un badge, ou de l'attribuer "
 "à des utilisateurs."
 
-msgid "This page summarises the available questions of the character form."
+msgid "This page shows the modules for the workshop questions of the event"
 msgstr ""
-"Cette page résume les questions disponibles dans la fiche de renseignements."
+"Cette page résume les modules dans lesquels les questions de l'atelier sont "
+"divisées"
+
+msgid "This page summarises the customised navigation buttons of the event"
+msgstr ""
+"Cette page résume les boutons de navigation personnalisés de l'événement"
 
 msgid "To confirm your registration, please fill in your personal profile."
 msgstr ""
@@ -6263,19 +6271,22 @@ msgstr ""
 "Cette page vous permet d'ajouter ou de modifier un poste de dépenses d'un "
 "contributeur."
 
-msgid "This page shows the modules for the workshop questions of the event."
+msgid "This page shows for each player their completion status of workshops"
+msgstr "Cette page résume pour chaque joueur l'état d'avancement de l'atelier"
+
+msgid "This page shows the quota options available for payment of the event"
 msgstr ""
-"Cette page résume les modules dans lesquels les questions de l'atelier sont "
-"divisées."
+"Cette page résume les options de quotas disponibles pour le paiement de "
+"l'événement"
 
 msgid "This page shows the total number of pre-registrations for each event"
 msgstr ""
 "Cette page indique le nombre total de pré-inscriptions pour chaque "
 "événement."
 
-msgid "This page summarises the customised navigation buttons of the event."
+msgid "This page summarizes the abilities that players can purchase with px"
 msgstr ""
-"Cette page résume les boutons de navigation personnalisés de l'événement."
+"Cette page résume les compétences que les joueurs peuvent acquérir avec px"
 
 #, python-format
 msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
@@ -6367,18 +6378,20 @@ msgstr ""
 "Cette page vous permet de modifier les principaux paramètres de votre "
 "organisation"
 
-msgid "This page shows for each player their completion status of workshops."
+msgid "This page performs several correctness checks of the character sheets"
 msgstr ""
-"Cette page résume pour chaque joueur l'état d'avancement de l'atelier."
+"Cette page effectue divers contrôles sur l'exactitude des fiches de "
+"personnage"
 
-msgid "This page shows the quota options available for payment of the event."
+msgid "This page shows the information to perform the drawing of the lottery"
 msgstr ""
-"Cette page résume les options de quotas disponibles pour le paiement de "
-"l'événement."
+"Cette page présente les informations nécessaires pour effectuer le tirage de"
+" la loterie"
 
-msgid "This page summarizes the abilities that players can purchase with px."
+msgid "This page summarizes the types of abilities that players can purchase"
 msgstr ""
-"Cette page résume les compétences que les joueurs peuvent acquérir avec px."
+"Cette page résume les types de compétences qui peuvent être achetées par les"
+" joueurs"
 
 msgid "We will send you a confirmation e-mail when the change has been made."
 msgstr ""
@@ -6420,21 +6433,6 @@ msgid "Set the initial amount of experience points in the configuration panel"
 msgstr ""
 "Définissez le nombre initial de points d'expérience dans le panneau de "
 "configuration "
-
-msgid "This page performs several correctness checks of the character sheets."
-msgstr ""
-"Cette page effectue divers contrôles sur l'exactitude des fiches de "
-"personnage."
-
-msgid "This page shows the information to perform the drawing of the lottery."
-msgstr ""
-"Cette page présente les informations nécessaires pour effectuer le tirage de"
-" la loterie."
-
-msgid "This page summarizes the types of abilities that players can purchase."
-msgstr ""
-"Cette page résume les types de compétences qui peuvent être achetées par les"
-" joueurs."
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr ""
@@ -6744,6 +6742,18 @@ msgstr ""
 "Cette page permet d'ajouter ou de modifier une question de formulaire pour "
 "un élément d'écriture"
 
+msgid ""
+"This page shows the handouts (information dissemination tools) of the event"
+msgstr ""
+"Cette page résume les documents (outils de diffusion de l'information) de "
+"l'événement"
+
+msgid ""
+"This page shows the progress steps that can be assigned to writing elements"
+msgstr ""
+"Cette page résume les étapes de progression qui peuvent être marquées dans "
+"les éléments d'écriture"
+
 #, python-format
 msgid ""
 "(check the available number of discounts <a href='%(url)s'>on this page</a>)"
@@ -6818,18 +6828,6 @@ msgstr ""
 "par exécution individuelle."
 
 msgid ""
-"This page shows the handouts (information dissemination tools) of the event."
-msgstr ""
-"Cette page résume les documents (outils de diffusion de l'information) de "
-"l'événement."
-
-msgid ""
-"This page shows the progress steps that can be assigned to writing elements."
-msgstr ""
-"Cette page résume les étapes de progression qui peuvent être marquées dans "
-"les éléments d'écriture."
-
-msgid ""
 "To use the feature you requested, you need to activate the following feature"
 msgstr ""
 "Pour utiliser la fonction que vous avez demandée, la fonction suivante doit "
@@ -6897,6 +6895,13 @@ msgid ""
 msgstr ""
 "Cette page indique, pour chaque événement, les collaborateurs marqués d'une "
 "expertise."
+
+msgid ""
+"This page shows the available questions of the registration form of the "
+"event"
+msgstr ""
+"Cette page résume les questions disponibles dans le formulaire d'inscription"
+" à l'événement"
 
 msgid ""
 "This page summarises the disbursements recorded in the system for this run "
@@ -7003,13 +7008,6 @@ msgid ""
 msgstr ""
 "Cette page montre en détail, pour chaque expertise, les utilisateurs qui "
 "l'ont indiquée"
-
-msgid ""
-"This page shows the available questions of the registration form of the "
-"event."
-msgstr ""
-"Cette page résume les questions disponibles dans le formulaire d'inscription"
-" à l'événement."
 
 msgid ""
 "This page shows the sensitive information of registered players regarding "
@@ -7313,6 +7311,20 @@ msgstr ""
 "disponibles dans le système."
 
 msgid ""
+"This page shows the different tickets with which players can register for "
+"the event"
+msgstr ""
+"Cette page résume les différents billets avec lesquels les joueurs peuvent "
+"s'inscrire à l'événement"
+
+msgid ""
+"This page shows the response options for questions about the workshops of "
+"the event"
+msgstr ""
+"Cette page résume les options pour répondre aux questions sur les ateliers "
+"de l'événement"
+
+msgid ""
 "Enables 'Handouts,' pre-written texts that provide information about a plot "
 "or lore."
 msgstr ""
@@ -7377,20 +7389,6 @@ msgid ""
 msgstr ""
 "Il existe des quêtes sans traits : %(list)s. Créez-les dans le panneau de "
 "gestion des traits"
-
-msgid ""
-"This page shows the different tickets with which players can register for "
-"the event."
-msgstr ""
-"Cette page résume les différents billets avec lesquels les joueurs peuvent "
-"s'inscrire à l'événement."
-
-msgid ""
-"This page shows the response options for questions about the workshops of "
-"the event."
-msgstr ""
-"Cette page résume les options pour répondre aux questions sur les ateliers "
-"de l'événement."
 
 msgid ""
 "Adds a 'progress' status field (e.g. draft, ready, approved) to key writing "
@@ -7486,6 +7484,13 @@ msgstr ""
 "des membres "
 
 msgid ""
+"This page shows all expenses incurred directly by the organization "
+"concerning this run"
+msgstr ""
+"Cette page résume toutes les dépenses engagées directement par l'association"
+" pour cette course"
+
+msgid ""
 "Upload a photo of yourself associated with your character specifically for "
 "this event!"
 msgstr ""
@@ -7560,13 +7565,6 @@ msgid ""
 msgstr ""
 "Cette page vous permet d'ajouter ou de modifier les versements fixes qu'un "
 "joueur doit effectuer."
-
-msgid ""
-"This page shows all expenses incurred directly by the organization "
-"concerning this run."
-msgstr ""
-"Cette page résume toutes les dépenses engagées directement par l'association"
-" pour cette course."
 
 msgid ""
 "Value of the discount for the friend who signs up using the code of a "
@@ -7694,6 +7692,20 @@ msgstr ""
 "lesquels les joueurs peuvent s'enregistrer"
 
 msgid ""
+"This page shows active discounts on the player, allows you to activate or "
+"deactivate them"
+msgstr ""
+"Cette page résume les réductions actives du joueur et vous permet de les "
+"activer ou de les désactiver"
+
+msgid ""
+"This page shows problems reported by contributors, for direct management "
+"during the event"
+msgstr ""
+"Cette page résume les problèmes signalés par les contributeurs, en vue d'une"
+" prise en charge directe pendant l'événement"
+
+msgid ""
 "We inform you that your membership of the Association has not been accepted "
 "by the board."
 msgstr ""
@@ -7752,18 +7764,11 @@ msgstr ""
 "panneau de gestion des quêtes"
 
 msgid ""
-"This page shows active discounts on the player, allows you to activate or "
-"deactivate them."
+"This page shows the accounting status of the event, divided into the various"
+" expense types"
 msgstr ""
-"Cette page résume les réductions actives du joueur et vous permet de les "
-"activer ou de les désactiver."
-
-msgid ""
-"This page shows problems reported by contributors, for direct management "
-"during the event."
-msgstr ""
-"Cette page résume les problèmes signalés par les contributeurs, en vue d'une"
-" prise en charge directe pendant l'événement."
+"Cette page résume la situation comptable de l'événement, divisée en "
+"différents postes de dépenses"
 
 msgid ""
 "for bidirectional relationships, where the other character is also aware of "
@@ -7799,13 +7804,6 @@ msgid ""
 msgstr ""
 "Cette page présente les compétences globales, c'est-à-dire les domaines de "
 "compétences dans lesquels les contributeurs peuvent s'évaluer."
-
-msgid ""
-"This page shows the accounting status of the event, divided into the various"
-" expense types."
-msgstr ""
-"Cette page résume la situation comptable de l'événement, divisée en "
-"différents postes de dépenses."
 
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "
@@ -8080,6 +8078,13 @@ msgstr ""
 "et financiers de l'organisation."
 
 msgid ""
+"This page summarises the roles to be assigned in order to use the functions "
+"concerning the event"
+msgstr ""
+"Cette page résume les rôles à attribuer pour utiliser les fonctions "
+"relatives à l'événement"
+
+msgid ""
 "To set the tickets that users can select during registration, access the "
 "tickets management page"
 msgstr ""
@@ -8162,13 +8167,6 @@ msgid ""
 msgstr ""
 "Cette page présente tous les parcours enregistrés dans le système. À partir "
 "de cette page, vous pouvez les modifier ou en créer de nouvelles."
-
-msgid ""
-"This page summarises the roles to be assigned in order to use the functions "
-"concerning the event."
-msgstr ""
-"Cette page résume les rôles à attribuer pour utiliser les fonctions "
-"relatives à l'événement."
 
 msgid ""
 "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "

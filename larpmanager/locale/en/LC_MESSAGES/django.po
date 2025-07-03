@@ -5859,7 +5859,7 @@ msgstr ""
 
 msgid ""
 "This page shows the accounting status of the event, divided into the various "
-"expense types."
+"expense types"
 msgstr ""
 
 msgid "Item"
@@ -5909,7 +5909,7 @@ msgstr ""
 msgid "Cancellations"
 msgstr ""
 
-msgid "This page shows cancelled enrollments."
+msgid "This page shows cancelled enrollments"
 msgstr ""
 
 msgid "Show cancellations"
@@ -5931,7 +5931,7 @@ msgid ""
 "This page summarises the disbursements recorded in the system for this run of"
 msgstr ""
 
-msgid "This page shows the discounts activated for this event."
+msgid "This page shows the discounts activated for this event"
 msgstr ""
 
 msgid "Max uses"
@@ -5945,39 +5945,39 @@ msgid ""
 "system. Once approved, they are disbursed to co-workers as"
 msgstr ""
 
-msgid "This page shows your personal spending items."
+msgid "This page shows your personal spending items"
 msgstr ""
 
 msgid "New refund request"
 msgstr ""
 
-msgid "This page allows you to upload a new personal expense item."
+msgid "This page allows you to upload a new personal expense item"
 msgstr ""
 
-msgid "This page shows all inflows received for this run."
+msgid "This page shows all inflows received for this run"
 msgstr ""
 
-msgid "This page allows you to manually approve payments received."
+msgid "This page allows you to manually approve payments received"
 msgstr ""
 
 msgid ""
 "This page shows all expenses incurred directly by the organization "
-"concerning this run."
+"concerning this run"
 msgstr ""
 
-msgid "This page shows all payments received for this run."
+msgid "This page shows all payments received for this run"
 msgstr ""
 
 msgid "Invoice"
 msgstr ""
 
-msgid "This page shows the uploaded photo albums."
+msgid "This page shows the uploaded photo albums"
 msgstr ""
 
 msgid "Master"
 msgstr ""
 
-msgid "This page allows you to upload a new photo album."
+msgid "This page allows you to upload a new photo album"
 msgstr ""
 
 msgid "Upload of photo and video"
@@ -5991,7 +5991,7 @@ msgstr ""
 msgid "Event navigation"
 msgstr ""
 
-msgid "This page summarises the customised navigation buttons of the event."
+msgid "This page summarises the customised navigation buttons of the event"
 msgstr ""
 
 msgid "Tooltip"
@@ -6069,7 +6069,7 @@ msgstr ""
 msgid "Form questions"
 msgstr ""
 
-msgid "This page summarises the available questions of the character form."
+msgid "This page summarises the available questions of the character form"
 msgstr ""
 
 msgid "Go to the form for"
@@ -6081,7 +6081,7 @@ msgstr ""
 msgid "Pdf"
 msgstr ""
 
-msgid "This page shows the settings for PDF printing."
+msgid "This page shows the settings for PDF printing"
 msgstr ""
 
 msgid "Gallery Pdf"
@@ -6123,7 +6123,7 @@ msgstr ""
 msgid "Regenerate (recreates all pdf: slow)"
 msgstr ""
 
-msgid "This page shows the relationships of the indicated character."
+msgid "This page shows the relationships of the indicated character"
 msgstr ""
 
 msgid "List inverse relationships of"
@@ -6132,7 +6132,7 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-msgid "This page allows you to copy the event settings from another one."
+msgid "This page allows you to copy the event settings from another one"
 msgstr ""
 
 msgid "Select which elements to copy, from which other event."
@@ -6141,12 +6141,12 @@ msgstr ""
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
 
-msgid "This page shows the deadlines to be met for this run."
+msgid "This page shows the deadlines to be met for this run"
 msgstr ""
 
 msgid ""
 "This page shows problems reported by contributors, for direct management "
-"during the event."
+"during the event"
 msgstr ""
 
 msgid "Show closed"
@@ -6155,7 +6155,7 @@ msgstr ""
 msgid "Rensponsable"
 msgstr ""
 
-msgid "This page summarizes the abilities that players can purchase with px."
+msgid "This page summarizes the abilities that players can purchase with px"
 msgstr ""
 
 msgid "Cost"
@@ -6167,7 +6167,7 @@ msgstr ""
 msgid "Ability types"
 msgstr ""
 
-msgid "This page summarizes the types of abilities that players can purchase."
+msgid "This page summarizes the types of abilities that players can purchase"
 msgstr ""
 
 msgid "This page summarizes px delivery to characters"
@@ -6175,7 +6175,7 @@ msgstr ""
 
 msgid ""
 "This page shows active discounts on the player, allows you to activate or "
-"deactivate them."
+"deactivate them"
 msgstr ""
 
 msgid "Discounts active"
@@ -6188,14 +6188,13 @@ msgid "Registration questions"
 msgstr ""
 
 msgid ""
-"This page shows the available questions of the registration form of the "
-"event."
+"This page shows the available questions of the registration form of the event"
 msgstr ""
 
 msgid "Installments"
 msgstr ""
 
-msgid "This page shows the payment deadline settings for the event."
+msgid "This page shows the payment deadline settings for the event"
 msgstr ""
 
 msgid "Installment"
@@ -6207,7 +6206,7 @@ msgstr ""
 msgid "Deadline (date)"
 msgstr ""
 
-msgid "This page shows the information to perform the drawing of the lottery."
+msgid "This page shows the information to perform the drawing of the lottery"
 msgstr ""
 
 msgid "The following registrations were drawn"
@@ -6230,7 +6229,7 @@ msgstr ""
 msgid "Perform extraction"
 msgstr ""
 
-msgid "This page shows the pre-signups for the run."
+msgid "This page shows the pre-signups for the run"
 msgstr ""
 
 msgid "Pre-registration link"
@@ -6248,7 +6247,7 @@ msgstr ""
 msgid "Joined"
 msgstr ""
 
-msgid "This page shows the quota options available for payment of the event."
+msgid "This page shows the quota options available for payment of the event"
 msgstr ""
 
 msgid ""
@@ -6259,7 +6258,7 @@ msgstr ""
 msgid "Available days"
 msgstr ""
 
-msgid "This page shows the run signups."
+msgid "This page shows the run signups"
 msgstr ""
 
 msgid "accounting"
@@ -6359,18 +6358,18 @@ msgstr ""
 msgid "Registration sections"
 msgstr ""
 
-msgid "This page shows the sections of the event registration form."
+msgid "This page shows the sections of the event registration form"
 msgstr ""
 
 msgid "Surcharges"
 msgstr ""
 
-msgid "This page shows the registration surcharges."
+msgid "This page shows the registration surcharges"
 msgstr ""
 
 msgid ""
 "This page shows the different tickets with which players can register for "
-"the event."
+"the event"
 msgstr ""
 
 msgid "Casting priority"
@@ -6381,7 +6380,7 @@ msgstr ""
 
 msgid ""
 "This page summarises the roles to be assigned in order to use the functions "
-"concerning the event."
+"concerning the event"
 msgstr ""
 
 msgid ""
@@ -6399,10 +6398,10 @@ msgstr ""
 msgid "Event texts"
 msgstr ""
 
-msgid "This page summarises the customised texts of the event."
+msgid "This page summarises the customised texts of the event"
 msgstr ""
 
-msgid "This page allows you to translate the event."
+msgid "This page allows you to translate the event"
 msgstr ""
 
 msgid "Loading performed, see logs"
@@ -6483,7 +6482,7 @@ msgstr ""
 msgid "List of newsletter subscribers who have not yet played this event"
 msgstr ""
 
-msgid "This page shows the uploaded resources available to the event."
+msgid "This page shows the uploaded resources available to the event"
 msgstr ""
 
 msgid "Dimension"
@@ -6495,7 +6494,7 @@ msgstr ""
 msgid "Modules WS"
 msgstr ""
 
-msgid "This page shows the modules for the workshop questions of the event."
+msgid "This page shows the modules for the workshop questions of the event"
 msgstr ""
 
 msgid "Answers WS"
@@ -6503,7 +6502,7 @@ msgstr ""
 
 msgid ""
 "This page shows the response options for questions about the workshops of "
-"the event."
+"the event"
 msgstr ""
 
 msgid "Module"
@@ -6515,10 +6514,10 @@ msgstr ""
 msgid "Questions WS"
 msgstr ""
 
-msgid "This page shows the workshop questions for the event."
+msgid "This page shows the workshop questions for the event"
 msgstr ""
 
-msgid "This page shows for each player their completion status of workshops."
+msgid "This page shows for each player their completion status of workshops"
 msgstr ""
 
 msgid "Done"
@@ -6527,10 +6526,10 @@ msgstr ""
 msgid "Not completed"
 msgstr ""
 
-msgid "This page shows character assignments to players."
+msgid "This page shows character assignments to players"
 msgstr ""
 
-msgid "This page shows the characters of the event."
+msgid "This page shows the characters of the event"
 msgstr ""
 
 msgid "player"
@@ -6551,13 +6550,13 @@ msgstr ""
 msgid "Versions"
 msgstr ""
 
-msgid "This page shows the factions and plots of the indicated character."
+msgid "This page shows the factions and plots of the indicated character"
 msgstr ""
 
 msgid "Check"
 msgstr ""
 
-msgid "This page performs several correctness checks of the character sheets."
+msgid "This page performs several correctness checks of the character sheets"
 msgstr ""
 
 msgid "Check inverse relationship"
@@ -6634,7 +6633,7 @@ msgstr ""
 msgid "Check missing speed larp"
 msgstr ""
 
-msgid "This page shows the factions (character groups) of the event."
+msgid "This page shows the factions (character groups) of the event"
 msgstr ""
 
 msgid "Tipo"
@@ -6646,7 +6645,7 @@ msgstr ""
 msgid "Handout template"
 msgstr ""
 
-msgid "This page shows the templates for event handouts."
+msgid "This page shows the templates for event handouts"
 msgstr ""
 
 msgid "CSS"
@@ -6656,7 +6655,7 @@ msgid "Handouts"
 msgstr ""
 
 msgid ""
-"This page shows the handouts (information dissemination tools) of the event."
+"This page shows the handouts (information dissemination tools) of the event"
 msgstr ""
 
 msgid "Print"
@@ -6675,16 +6674,16 @@ msgid "Progress step"
 msgstr ""
 
 msgid ""
-"This page shows the progress steps that can be assigned to writing elements."
+"This page shows the progress steps that can be assigned to writing elements"
 msgstr ""
 
 msgid "Type prologues"
 msgstr ""
 
-msgid "This page shows the types of event prologue."
+msgid "This page shows the types of event prologue"
 msgstr ""
 
-msgid "This page shows the prologues of the event."
+msgid "This page shows the prologues of the event"
 msgstr ""
 
 msgid "Reading"
@@ -6693,7 +6692,7 @@ msgstr ""
 msgid "Quest Type"
 msgstr ""
 
-msgid "This page shows the types of quests in the event."
+msgid "This page shows the types of quests in the event"
 msgstr ""
 
 msgid "This page shows the event quests"
@@ -6705,7 +6704,7 @@ msgstr ""
 msgid "assigned"
 msgstr ""
 
-msgid "This page shows the relationships between characters."
+msgid "This page shows the relationships between characters"
 msgstr ""
 
 msgid "From"
@@ -6720,7 +6719,7 @@ msgstr ""
 msgid "SpeedLarp"
 msgstr ""
 
-msgid "This page shows the speedlarps of the event."
+msgid "This page shows the speedlarps of the event"
 msgstr ""
 
 msgid "Band"
@@ -6729,7 +6728,7 @@ msgstr ""
 msgid "Station"
 msgstr ""
 
-msgid "This page shows the traits assigned to the characters in the run."
+msgid "This page shows the traits assigned to the characters in the run"
 msgstr ""
 
 msgid "title"
