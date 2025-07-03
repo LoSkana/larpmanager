@@ -408,7 +408,8 @@ def orga_check(request, s, n):
         number_map[ch["number"]] = ch["id"]
 
     if "plot" in ctx["features"]:
-        que = PlotCharacterRel.objects.filter(character__number__in=chs_numbers)
+        event = ctx["event"].get_class_parent(Character)
+        que = PlotCharacterRel.objects.filter(character__event=event)
         que = que.exclude(text__isnull=True).exclude(text__exact="")
         for el in que.values_list("character__number", "text"):
             ctx["chars"][el[0]]["text"] += el[1]
