@@ -17,7 +17,9 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import secrets
 
+from django.core.cache import cache
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
@@ -43,7 +45,14 @@ def error_500(request):
 
 
 def after_login(request, subdomain, path=""):
-    return redirect(f"https://{subdomain}.larpmanager.com/{path}")
+    user = request.user
+    if not user.is_authenticated:
+        return redirect("/login/")
+
+    token = secrets.token_urlsafe(32)
+    cache.set(f"session_token:{token}", user.id, timeout=60)
+
+    return redirect(f"https://{subdomain}.larpmanager.com/{path}?token={token}")
 
 
 @require_POST
