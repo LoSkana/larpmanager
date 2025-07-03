@@ -833,14 +833,14 @@ msgstr ""
 
 msgid ""
 "If checked, allows a option to be visible only to players with selected "
-"ticket."
+"ticket"
 msgstr ""
 
 msgid "Prerequisites"
 msgstr ""
 
 msgid ""
-"If checked, allows a option to be visible only if other options are selected."
+"If checked, allows a option to be visible only if other options are selected"
 msgstr ""
 
 msgid "Pre-registration"
@@ -1179,15 +1179,15 @@ msgid "Event Appearance"
 msgstr ""
 
 msgid ""
-"This page allows you to change the appearance and presentation of the event."
+"This page allows you to change the appearance and presentation of the event"
 msgstr ""
 
 msgid ""
 "These CSS commands will be carried over to all pages in your Association "
-"space."
+"space"
 msgstr ""
 
-msgid "This page allows you to edit event-specific texts."
+msgid "This page allows you to edit event-specific texts"
 msgstr ""
 
 msgid "Added to the registration page, before the form"
@@ -1211,19 +1211,19 @@ msgstr ""
 msgid "Content of mail notifying players of their character in review status"
 msgstr ""
 
-msgid "This page allows you to change the access roles for the event."
+msgid "This page allows you to change the access roles for the event"
 msgstr ""
 
 msgid "Navigation"
 msgstr ""
 
-msgid "This page allows you to edit the event navigation buttons."
+msgid "This page allows you to edit the event navigation buttons"
 msgstr ""
 
 msgid "Run Settings"
 msgstr ""
 
-msgid "This page allows you to change the general settings of this run."
+msgid "This page allows you to change the general settings of this run"
 msgstr ""
 
 msgid "Characters"
@@ -1511,7 +1511,7 @@ msgstr ""
 msgid "Form section"
 msgstr ""
 
-msgid "This page allows you to add or edit a question from the sign up form."
+msgid "This page allows you to add or edit a question from the sign up form"
 msgstr ""
 
 msgid "Form element"
@@ -1521,7 +1521,7 @@ msgid "--- Empty"
 msgstr ""
 
 msgid ""
-"This page allows you to add or edit an option in a sign up form question."
+"This page allows you to add or edit an option in a sign up form question"
 msgstr ""
 
 msgid "Form Options"
@@ -1537,13 +1537,13 @@ msgstr ""
 
 msgid ""
 "This page allows you to add or change the fixed instalments in which a "
-"player must pay."
+"player must pay"
 msgstr ""
 
 msgid "Fixed instalments"
 msgstr ""
 
-msgid "This page allows you to add or edit the registration surcharges."
+msgid "This page allows you to add or edit the registration surcharges"
 msgstr ""
 
 msgid "Event"
@@ -2745,7 +2745,7 @@ msgstr ""
 msgid "Applicable"
 msgstr ""
 
-msgid "Select the types of writing elements that this question applies to."
+msgid "Select the types of writing elements that this question applies to"
 msgstr ""
 
 msgid ""
@@ -2829,10 +2829,10 @@ msgstr ""
 msgid "Yes, keep me posted!"
 msgstr ""
 
-msgid "Only really important communications."
+msgid "Only really important communications"
 msgstr ""
 
-msgid "No, I don't want updates."
+msgid "No, I don't want updates"
 msgstr ""
 
 msgid "ID Card"
@@ -2948,7 +2948,7 @@ msgstr ""
 msgid "Accessibility"
 msgstr ""
 
-msgid "Fill in this field if you have accessibility needs."
+msgid "Fill in this field if you have accessibility needs"
 msgstr ""
 
 msgid "Diet"
@@ -3025,7 +3025,7 @@ msgstr ""
 
 msgid ""
 "Unique code for internal use - not visible. Indicate a string without spaces "
-"or strange symbols."
+"or strange symbols"
 msgstr ""
 
 msgid ""
@@ -3081,7 +3081,7 @@ msgstr ""
 msgid "Indicates how many passengers require transportation"
 msgstr ""
 
-msgid "Indicate as precisely as possible where to pick you up."
+msgid "Indicate as precisely as possible where to pick you up"
 msgstr ""
 
 msgid ""
@@ -3126,28 +3126,28 @@ msgid ""
 "are being performed; when putting in CLOSED, indicate showd in the  comments."
 msgstr ""
 
-msgid "Describe exactly at which point it occurs."
+msgid "Describe exactly at which point it occurs"
 msgstr ""
 
 msgid "When"
 msgstr ""
 
-msgid "Describe exactly what condition it is in."
+msgid "Describe exactly what condition it is in"
 msgstr ""
 
 msgid "What"
 msgstr ""
 
-msgid "Describe exactly what risks it poses to the game."
+msgid "Describe exactly what risks it poses to the game"
 msgstr ""
 
 msgid "Who"
 msgstr ""
 
-msgid "Describe exactly which players are involved."
+msgid "Describe exactly which players are involved"
 msgstr ""
 
-msgid "Who takes it upon themselves to solve it."
+msgid "Who takes it upon themselves to solve it"
 msgstr ""
 
 msgid "Waiting"
@@ -4832,9 +4832,6 @@ msgid ""
 msgstr ""
 
 msgid "All comunications"
-msgstr ""
-
-msgid "Only really important communications"
 msgstr ""
 
 msgid "No comunications"

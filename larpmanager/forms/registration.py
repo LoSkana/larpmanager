@@ -716,7 +716,7 @@ class OrgaRegistrationSectionForm(MyForm):
 
 
 class OrgaRegistrationQuestionForm(MyForm):
-    page_info = _("This page allows you to add or edit a question from the sign up form.")
+    page_info = _("This page allows you to add or edit a question from the sign up form")
 
     page_title = _("Form element")
 
@@ -767,7 +767,7 @@ class OrgaRegistrationQuestionForm(MyForm):
 
 
 class OrgaRegistrationOptionForm(MyForm):
-    page_info = _("This page allows you to add or edit an option in a sign up form question.")
+    page_info = _("This page allows you to add or edit an option in a sign up form question")
 
     page_title = _("Form Options")
 
@@ -799,7 +799,7 @@ class OrgaRegistrationQuotaForm(MyForm):
 
 
 class OrgaRegistrationInstallmentForm(MyForm):
-    page_info = _("This page allows you to add or change the fixed instalments in which a player must pay.")
+    page_info = _("This page allows you to add or change the fixed instalments in which a player must pay")
 
     page_title = _("Fixed instalments")
 
@@ -831,7 +831,7 @@ class OrgaRegistrationInstallmentForm(MyForm):
 
 
 class OrgaRegistrationSurchargeForm(MyForm):
-    page_info = _("This page allows you to add or edit the registration surcharges.")
+    page_info = _("This page allows you to add or edit the registration surcharges")
 
     page_title = _("Surcharge")
 

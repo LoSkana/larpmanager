@@ -59,8 +59,8 @@ class Member(BaseModel):
     NO = "n"
     NEWSLETTER_CHOICES = [
         (ALL, _("Yes, keep me posted!")),
-        (ONLY, _("Only really important communications.")),
-        (NO, _("No, I don't want updates.")),
+        (ONLY, _("Only really important communications")),
+        (NO, _("No, I don't want updates")),
     ]
 
     IDENT = "i"
@@ -225,7 +225,7 @@ class Member(BaseModel):
         null=True,
         blank=True,
         verbose_name=_("Accessibility"),
-        help_text=_("Fill in this field if you have accessibility needs."),
+        help_text=_("Fill in this field if you have accessibility needs"),
     )
 
     diet = models.CharField(
@@ -373,8 +373,8 @@ class MembershipStatus(models.TextChoices):
 
 class NewsletterChoices(models.TextChoices):
     ALL = "a", _("Yes, keep me posted!")
-    ONLY = "o", _("Only really important communications.")
-    NO = "n", _("No, I don't want updates.")
+    ONLY = "o", _("Only really important communications")
+    NO = "n", _("No, I don't want updates")
 
 
 class Membership(BaseModel):
@@ -488,7 +488,7 @@ class Badge(BaseModel):
     cod = models.CharField(
         max_length=30,
         verbose_name=_("Code"),
-        help_text=_("Unique code for internal use - not visible. Indicate a string without spaces or strange symbols."),
+        help_text=_("Unique code for internal use - not visible. Indicate a string without spaces or strange symbols"),
     )
 
     img = models.ImageField(upload_to=UploadToPathAndRename("badge/"), blank=False)

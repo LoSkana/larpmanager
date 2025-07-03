@@ -3439,6 +3439,9 @@ msgstr "Nieuwe vereniging aangemaakt"
 msgid "New question by %(user)s"
 msgstr "Nieuwe vraag door %(user)s"
 
+msgid "No, I don't want updates"
+msgstr "Nee, ik wil geen updates"
+
 msgid "Provisional registration"
 msgstr "Voorlopige registratie"
 
@@ -3502,9 +3505,6 @@ msgstr "Vrijwilligersregister beheren"
 #, python-format
 msgid "New message from %(user)s"
 msgstr "Nieuw bericht van %(user)s"
-
-msgid "No, I don't want updates."
-msgstr "Nee, ik wil geen updates"
 
 msgid "Now you can create badges"
 msgstr "Nu kun je badges maken"
@@ -4384,9 +4384,6 @@ msgstr "Nu kun je aanpassingsopties instellen"
 msgid "Now you can set the legal notice text"
 msgstr "Nu kunt u de tekst van de juridische kennisgeving instellen"
 
-msgid "Only really important communications."
-msgstr "Alleen echt belangrijke communicatie"
-
 msgid "Players that DID NOT send preferences"
 msgstr "Spelers die GEEN voorkeuren hebben gestuurd"
 
@@ -4543,6 +4540,9 @@ msgstr "Personages zijn momenteel niet zichtbaar"
 msgid "Copy this code and share it with friends"
 msgstr "Kopieer deze code en deel hem met vrienden"
 
+msgid "Describe exactly what condition it is in"
+msgstr "Beschrijf precies onder welke omstandigheden het optreedt"
+
 msgid "Did you check the required data properly"
 msgstr "Heb je de vereiste gegevens goed gecontroleerd"
 
@@ -4579,6 +4579,9 @@ msgstr "De collectie werd geleverd aan de gebruiker"
 msgid "Well done, you've completed all modules!"
 msgstr "Goed gedaan, je hebt alle modules gehaald!"
 
+msgid "Who takes it upon themselves to solve it"
+msgstr "Wie neemt de leiding om het op te lossen"
+
 msgid "Would you like to pay a different amount"
 msgstr "Wil je een ander bedrag betalen"
 
@@ -4594,8 +4597,8 @@ msgstr "Toegevoegd bovenaan de gebruikersprofielpagina"
 msgid "Choice locked, click to make it available"
 msgstr "Keuze vergrendeld, klik om deze beschikbaar te maken"
 
-msgid "Describe exactly what condition it is in."
-msgstr "Beschrijf precies onder welke omstandigheden het optreedt"
+msgid "Describe exactly at which point it occurs"
+msgstr "Beschrijf precies waar het zich voordoet"
 
 msgid "I do it routinely, I have good experience"
 msgstr "Ik doe het regelmatig, ik heb goede ervaring"
@@ -4617,9 +4620,6 @@ msgstr "De eerste regel is de naam van de velden"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Deze pagina geeft een overzicht van de geüploade fotoalbums"
-
-msgid "Who takes it upon themselves to solve it."
-msgstr "Wie neemt de leiding om het op te lossen"
 
 msgid "You are excluding (none of these filters)"
 msgstr "Je sluit (geen van deze filters) uit"
@@ -4643,9 +4643,6 @@ msgstr "Klik op een naam om deze direct te bekijken"
 #, python-format
 msgid "Confirmation of registration for %(event)s"
 msgstr "Bevestiging van inschrijving voor %(event)s"
-
-msgid "Describe exactly at which point it occurs."
-msgstr "Beschrijf precies waar het zich voordoet"
 
 #, python-format
 msgid "Details: %(details)s (<b>%(amount).2f</b>)"
@@ -4718,6 +4715,9 @@ msgstr "Goedkeuring %(user)s als %(role)s voor %(event)s"
 msgid "Collection participation for: %(recipient)s"
 msgstr "Inzamelingsdeelname voor: %(recipient)s"
 
+msgid "Describe exactly which players are involved"
+msgstr "Beschrijf precies welke spelers erbij betrokken zijn"
+
 msgid "Description to be shown on the special page"
 msgstr "Beschrijving die op de speciale pagina moet worden getoond"
 
@@ -4776,9 +4776,6 @@ msgstr "Waarschuwing! Andere gebruikers bewerken dit item."
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "Je geschonken registratie is verzilverd!"
-
-msgid "Describe exactly which players are involved."
-msgstr "Beschrijf precies welke spelers erbij betrokken zijn"
 
 msgid "Discount not combinable with other benefits."
 msgstr "Korting niet combineerbaar met andere concessies"
@@ -5029,6 +5026,9 @@ msgstr "Een beschrijving van de competentievaardigheden"
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Krijg toegang tot je personage <a href='%(url)s'>hier</a>"
 
+msgid "Describe exactly what risks it poses to the game"
+msgstr "Beschrijf precies welke risico's dit met zich meebrengt voor het spel"
+
 msgid "Discounts only applicable with new registrations"
 msgstr "Code alleen van toepassing op nieuwe registratie"
 
@@ -5110,9 +5110,6 @@ msgstr "Attentie! Het formulier bevat fouten in de velden"
 msgid "Characters are only visible to registered players"
 msgstr "Personages zijn alleen zichtbaar voor geregistreerde spelers"
 
-msgid "Describe exactly what risks it poses to the game."
-msgstr "Beschrijf precies welke risico's dit met zich meebrengt voor het spel"
-
 msgid "Insert the css code to customize the pdf printing"
 msgstr "Voer de css-code in om de afdruk aan te passen"
 
@@ -5138,6 +5135,9 @@ msgstr "Kies je favoriete personages om te spelen"
 msgid "The user has been enabled for the indicated role."
 msgstr "De gebruiker is ingeschakeld voor de aangegeven rol."
 
+msgid "This page allows you to edit event-specific texts"
+msgstr "Op deze pagina kun je evenement-specifieke teksten bewerken"
+
 msgid "This page shows all inflows received for this run"
 msgstr "Deze pagina geeft een overzicht van alle inzendingen voor deze run"
 
@@ -5158,6 +5158,9 @@ msgstr "Hiermee kunnen auteurs relaties aan personages toevoegen."
 
 msgid "Cancellation for missing organization registration"
 msgstr "Annulering wegens ontbrekende organisatieregistratie"
+
+msgid "Fill in this field if you have accessibility needs"
+msgstr "Vul dit veld in als je toegankelijkheid nodig hebt"
 
 msgid "If checked, do not use the parent event's factions"
 msgstr ""
@@ -5218,9 +5221,6 @@ msgstr "Op deze pagina kun je een url-verkorter toevoegen of bewerken"
 msgid "This page allows you to answer a player's question"
 msgstr "Op deze pagina kun je de vraag van een speler beantwoorden"
 
-msgid "This page allows you to edit event-specific texts."
-msgstr "Op deze pagina kun je evenement-specifieke teksten bewerken."
-
 msgid "This page shows all payments received for this run"
 msgstr ""
 "Deze pagina geeft een overzicht van alle betalingen die voor deze run zijn "
@@ -5238,9 +5238,6 @@ msgstr "Totale deelnamekosten verlaagd door kortingen"
 
 msgid "you can still pay the remaining amount if you wish"
 msgstr "je kunt nog steeds het resterende bedrag betalen als je dat wilt"
-
-msgid "Fill in this field if you have accessibility needs."
-msgstr "Vul dit veld in als je toegankelijkheid nodig hebt."
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Ik heb het een paar keer gedaan, ik heb basiservaring"
@@ -5403,6 +5400,9 @@ msgstr "Uitgebreide beschrijving (wordt grijs weergegeven, in kleine letters)"
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Geef een liedje aan dat je aan je personage wilt opdragen"
 
+msgid "Indicate as precisely as possible where to pick you up"
+msgstr "Geef zo nauwkeurig mogelijk aan waar je opgehaald kunt worden"
+
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Geeft aan dat de betaling wordt verzonden 'naar vrienden en familie'."
 
@@ -5468,9 +5468,6 @@ msgid "If checked: shows a link in the calendar to past events"
 msgstr ""
 "Indien aangevinkt: toont een link in de kalender naar evenementen uit het "
 "verleden"
-
-msgid "Indicate as precisely as possible where to pick you up."
-msgstr "Geef zo nauwkeurig mogelijk aan waar je opgehaald kunt worden"
 
 msgid "Indicate how spending is allocated at the budget level."
 msgstr "Geef aan hoe de uitgaven zijn geconfigureerd op budgetniveau"
@@ -5564,6 +5561,9 @@ msgid "The user was enabled in the role for the indicated event."
 msgstr ""
 "De gebruiker was ingeschakeld in de rol voor de aangegeven gebeurtenis."
 
+msgid "This page allows you to edit the event navigation buttons"
+msgstr "Op deze pagina kunt u de navigatieknoppen van de gebeurtenis bewerken"
+
 msgid "This page allows you to edit the roles of the association"
 msgstr "Op deze pagina kunt u de rollen van de associatie bewerken"
 
@@ -5615,10 +5615,6 @@ msgstr "Maximum aantal wachttijden dat moet worden beheerd (0 voor oneindig)"
 msgid "Probability of showing the special page (out of thousands)"
 msgstr ""
 "Waarschijnlijkheid dat de speciale pagina wordt weergegeven (uit duizenden)"
-
-msgid "This page allows you to edit the event navigation buttons."
-msgstr ""
-"Op deze pagina kunt u de navigatieknoppen van de gebeurtenis bewerken."
 
 msgid "This page allows you to manually approve payments received"
 msgstr "Op deze pagina kun je ontvangen betalingen handmatig goedkeuren"
@@ -5798,6 +5794,9 @@ msgstr ""
 msgid "These are the workshops you must complete before you can play"
 msgstr "Dit zijn de workshops die je moet voltooien voordat je kunt spelen"
 
+msgid "This page allows you to change the access roles for the event"
+msgstr "Op deze pagina kun je de toegangsrollen voor het evenement wijzigen"
+
 msgid "This page shows the general information of registered players"
 msgstr "Deze pagina toont de algemene informatie van geregistreerde spelers"
 
@@ -5859,9 +5858,6 @@ msgid "Now you can review the safety information submitted by players"
 msgstr ""
 "Nu kun je de veiligheidsinformatie bekijken die spelers hebben ingediend"
 
-msgid "This page allows you to change the access roles for the event."
-msgstr "Op deze pagina kun je de toegangsrollen voor het evenement wijzigen."
-
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "Om je inschrijving te bevestigen, betaal je het aangegeven bedrag."
 
@@ -5917,6 +5913,13 @@ msgstr ""
 "Op deze pagina kun je een item voor uitbetalingskredieten toevoegen of "
 "bewerken"
 
+msgid "This page allows you to add or edit the registration surcharges"
+msgstr ""
+"Op deze pagina kun je de toeslagen op abonnementen toevoegen of wijzigen"
+
+msgid "This page allows you to change the general settings of this run"
+msgstr "Op deze pagina kun je de algemene instellingen van deze run wijzigen"
+
 msgid "Warning: there is already an approved member with the same name"
 msgstr "Waarschuwing: er is al een goedgekeurd lid met dezelfde naam"
 
@@ -5966,13 +5969,6 @@ msgstr ""
 msgid "This page allows you to add or edit the expense of a contributor"
 msgstr ""
 "Op deze pagina kunt u de onkosten van een bijdrager toevoegen of bewerken"
-
-msgid "This page allows you to add or edit the registration surcharges."
-msgstr ""
-"Op deze pagina kun je de toeslagen op abonnementen toevoegen of wijzigen."
-
-msgid "This page allows you to change the general settings of this run."
-msgstr "Op deze pagina kun je de algemene instellingen van deze run wijzigen."
 
 msgid "This page allows you to copy the event settings from another one"
 msgstr ""
@@ -6098,6 +6094,10 @@ msgstr "Geeft aan of de optie kan worden opgenomen in de vrije vermeldingen"
 msgid "Manage payments performed by players to cover the registration fee"
 msgstr "Betalingen door spelers beheren om het inschrijfgeld te dekken"
 
+msgid "Select the types of writing elements that this question applies to"
+msgstr ""
+"Selecteer de soorten schrijfelementen waarop deze vraag van toepassing is"
+
 msgid "The payment of your membership fee for this year has been received"
 msgstr ""
 "We bevestigen de betaling van je lidmaatschapsgeld voor het lopende jaar"
@@ -6143,10 +6143,6 @@ msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
 "Minimumbedrag van de nettowinst dat moet worden ingehouden voor de "
 "vennootschapsbelasting"
-
-msgid "Select the types of writing elements that this question applies to."
-msgstr ""
-"Selecteer de soorten schrijfelementen waarop deze vraag van toepassing is."
 
 msgid "The searched object does not exist, perhaps it was recently deleted"
 msgstr "Het gezochte object bestaat niet, misschien is het onlangs verwijderd"
@@ -6195,6 +6191,11 @@ msgstr "Aantal dagen beschikbaar om de volgende termijn te betalen"
 
 msgid "The ticket will be divided equally in the number of quotas indicated"
 msgstr "Het ticket wordt gelijk verdeeld in het aangegeven aantal aandelen"
+
+msgid "This page allows you to add or edit a question from the sign up form"
+msgstr ""
+"Op deze pagina kun je een vraag in het registratieformulier toevoegen of "
+"wijzigen"
 
 msgid "This page allows you to add or edit an expense item of a contributor"
 msgstr ""
@@ -6305,11 +6306,6 @@ msgid "Text visible only by the assigned player, when 'show text' is checked"
 msgstr ""
 "Tekst die alleen zichtbaar is voor de toegewezen speler als 'toon tekst' is "
 "aangevinkt"
-
-msgid "This page allows you to add or edit a question from the sign up form."
-msgstr ""
-"Op deze pagina kun je een vraag in het registratieformulier toevoegen of "
-"wijzigen."
 
 msgid "This page allows you to change the main settings of your Organization"
 msgstr ""
@@ -6489,6 +6485,12 @@ msgstr ""
 "ontvanger"
 
 msgid ""
+"This page allows you to add or edit an option in a sign up form question"
+msgstr ""
+"Op deze pagina kunt u een optie in een vraag op een aanvraagformulier "
+"toevoegen of wijzigen"
+
+msgid ""
 "This page allows you to edit the configuration of the activated features"
 msgstr ""
 "Op deze pagina kunt u de configuratie van de geactiveerde functies bewerken"
@@ -6555,12 +6557,6 @@ msgid ""
 msgstr ""
 "Opmerking: De speciale code wordt elke keer dat je de cadeaubon wijzigt "
 "opnieuw gegenereerd."
-
-msgid ""
-"This page allows you to add or edit an option in a sign up form question."
-msgstr ""
-"Op deze pagina kunt u een optie in een vraag op een aanvraagformulier "
-"toevoegen of wijzigen."
 
 msgid ""
 "This page shows in detail a contributor's skills for to which they marked"
@@ -6675,6 +6671,12 @@ msgstr ""
 "of wijzigen"
 
 msgid ""
+"This page allows you to change the appearance and presentation of the event"
+msgstr ""
+"Op deze pagina kun je het uiterlijk en de presentatie van het evenement "
+"wijzigen"
+
+msgid ""
 "This page shows the handouts (information dissemination tools) of the event"
 msgstr ""
 "Op deze pagina vindt u een samenvatting van de hand-outs (hulpmiddelen voor "
@@ -6706,6 +6708,12 @@ msgstr ""
 "gegevens"
 
 msgid ""
+"If checked, allows a option to be visible only if other options are selected"
+msgstr ""
+"Als deze optie is aangevinkt, is deze alleen zichtbaar als andere opties "
+"zijn geselecteerd"
+
+msgid ""
 "If checked, makes factions visible, as the character assignments to factions"
 msgstr ""
 "Als deze optie is aangevinkt, worden facties zichtbaar, net als de "
@@ -6734,12 +6742,6 @@ msgid ""
 msgstr ""
 "Deel van het inschrijfgeld dat alleen is afgeleid van de gekozen extra "
 "opties"
-
-msgid ""
-"This page allows you to change the appearance and presentation of the event."
-msgstr ""
-"Op deze pagina kun je het uiterlijk en de presentatie van het evenement "
-"wijzigen."
 
 msgid ""
 "This page prepares the cash balance already formatted for annual declaration"
@@ -6805,13 +6807,6 @@ msgid ""
 msgstr ""
 "Hallo! We nemen contact met je op in verband met je registratie bij "
 "<b>%(event)s</b>."
-
-msgid ""
-"If checked, allows a option to be visible only if other options are "
-"selected."
-msgstr ""
-"Als deze optie is aangevinkt, is deze alleen zichtbaar als andere opties "
-"zijn geselecteerd."
 
 msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
@@ -6884,6 +6879,13 @@ msgstr ""
 "te gebruiken, om zijn ware aard te verbergen"
 
 msgid ""
+"If checked, allows a option to be visible only to players with selected "
+"ticket"
+msgstr ""
+"Als deze optie is aangevinkt, is deze alleen zichtbaar voor spelers met een "
+"geselecteerd ticket"
+
+msgid ""
 "If checked, enables players to write their own list of character "
 "relationships"
 msgstr ""
@@ -6909,6 +6911,13 @@ msgid ""
 msgstr ""
 "Sorry, deze facilitatiecode is al gebruikt voor het maximaal toegestane "
 "aantal"
+
+msgid ""
+"These CSS commands will be carried over to all pages in your Association "
+"space"
+msgstr ""
+"Deze CSS-commando's worden doorgevoerd op alle pagina's in je Association-"
+"ruimte"
 
 msgid ""
 "These are delegated account registrations for which you have to make a "
@@ -6965,13 +6974,6 @@ msgstr ""
 "organiseren."
 
 msgid ""
-"If checked, allows a option to be visible only to players with selected "
-"ticket."
-msgstr ""
-"Als deze optie is aangevinkt, is deze alleen zichtbaar voor spelers met een "
-"geselecteerd ticket."
-
-msgid ""
 "Terms and conditions of signup, shown in a page linked in the registration "
 "form"
 msgstr ""
@@ -6984,13 +6986,6 @@ msgid ""
 msgstr ""
 "De tekst voor de lidmaatschapsaanvraag ontbreekt, maak deze aan in het "
 "tekstbeheerpaneel"
-
-msgid ""
-"These CSS commands will be carried over to all pages in your Association "
-"space."
-msgstr ""
-"Deze CSS-commando's worden doorgevoerd op alle pagina's in je Association-"
-"ruimte."
 
 msgid ""
 "To participate in this event, you will have to pay the annual membership fee"
@@ -7411,6 +7406,13 @@ msgstr ""
 "ledenbeheerpaneel"
 
 msgid ""
+"This page allows you to add or change the fixed instalments in which a "
+"player must pay"
+msgstr ""
+"Op deze pagina kun je de vaste termijnen waarin een speler moet betalen "
+"toevoegen of wijzigen"
+
+msgid ""
 "This page shows all expenses incurred directly by the organization "
 "concerning this run"
 msgstr ""
@@ -7491,13 +7493,6 @@ msgid ""
 msgstr ""
 "Optioneel - Geeft extra details over de optie aan, wordt onder de vraag "
 "weergegeven"
-
-msgid ""
-"This page allows you to add or change the fixed instalments in which a "
-"player must pay."
-msgstr ""
-"Op deze pagina kun je de vaste termijnen waarin een speler moet betalen "
-"toevoegen of wijzigen."
 
 msgid ""
 "Value of the discount for the friend who signs up using the code of a "
@@ -7956,6 +7951,13 @@ msgstr ""
 "aantal dagen: %(days)s te betalen."
 
 msgid ""
+"Unique code for internal use - not visible. Indicate a string without spaces"
+" or strange symbols"
+msgstr ""
+"Unieke code voor intern gebruik - niet zichtbaar. Geef een tekenreeks aan "
+"zonder spaties of vreemde symbolen"
+
+msgid ""
 "We confirm that your membership has been accepted by the board. We welcome "
 "you to our community"
 msgstr ""
@@ -8032,13 +8034,6 @@ msgid ""
 msgstr ""
 "Om de tickets in te stellen die gebruikers tijdens de registratie kunnen "
 "selecteren, ga je naar de pagina voor ticketbeheer"
-
-msgid ""
-"Unique code for internal use - not visible. Indicate a string without spaces"
-" or strange symbols."
-msgstr ""
-"Unieke code voor intern gebruik - niet zichtbaar. Geef een tekenreeks aan "
-"zonder spaties of vreemde symbolen"
 
 msgid ""
 "What casting priority does it ensure? (Usually: 1 is the subsized, 5 for "
