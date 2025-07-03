@@ -86,6 +86,15 @@ class Command(BaseCommand):
                 entry.flags.remove("fuzzy")
                 self.translate_entry(entry, loc)
 
+            symbols = (".", "?", "!")
+            for entry in po:
+                if (
+                    entry.msgstr
+                    and entry.msgstr.strip().endswith(symbols)
+                    and not entry.msgid.strip().endswith(symbols)
+                ):
+                    entry.msgstr = entry.msgstr.rstrip(".?!").rstrip()
+
             sorted_entries = sorted(po, key=lambda element: (len(element.msgid), element.msgid))
 
             # Crate new ordered po
