@@ -1173,6 +1173,9 @@ msgstr "Povinné"
 msgid "Movements"
 msgstr "Pohyby"
 
+msgid "Need help"
+msgstr "Potřebujete pomoc"
+
 msgid "Next runs"
 msgstr "Další běhy"
 
@@ -1349,9 +1352,6 @@ msgstr "Motivace"
 
 msgid "Navigation"
 msgstr "Navigace"
-
-msgid "Need help?"
-msgstr "Potřebujete pomoc?"
 
 msgid "Net profit"
 msgstr "Čistý zisk"
@@ -1566,6 +1566,9 @@ msgstr "Omezení"
 msgid "Nationality"
 msgstr "Státní příslušnost"
 
+msgid "Need a ride"
+msgstr "Potřebujete odvézt"
+
 msgid "New answer!"
 msgstr "Nová odpověď!"
 
@@ -1748,9 +1751,6 @@ msgstr "NEPŘIDĚLENO"
 
 msgid "Name credits"
 msgstr "Jmenné kredity"
-
-msgid "Need a ride?"
-msgstr "Potřebujete odvézt?"
 
 msgid "Next payment"
 msgstr "Další platba"
@@ -2044,6 +2044,9 @@ msgstr "Zkracovač URL"
 msgid "Visualisation"
 msgstr "Vizualizace"
 
+msgid "Wanna connect"
+msgstr "Chcete se připojit"
+
 msgid "Your messages"
 msgstr "Vaše zprávy"
 
@@ -2212,9 +2215,6 @@ msgstr "Typ prologu"
 
 msgid "URL identifier"
 msgstr "Idenominativní adresa URL"
-
-msgid "Wanna connect?"
-msgstr "Chcete se připojit?"
 
 msgid "Writing option"
 msgstr "Možnost psaní"
@@ -2807,6 +2807,9 @@ msgstr "Aktivace účtu na"
 msgid "Activation complete"
 msgstr "Aktivace dokončena"
 
+msgid "Are you really sure"
+msgstr "Jste si opravdu jistý"
+
 msgid "Ask a new questions"
 msgstr "Položit novou otázku"
 
@@ -2931,14 +2934,14 @@ msgstr "Účetnictví - historické"
 msgid "Advanced text editor"
 msgstr "Pokročilý textový editor"
 
-msgid "Are you really sure?"
-msgstr "Jste si opravdu jistý?"
-
 msgid "Carousel description"
 msgstr "Popis kolotoče"
 
 msgid "Complete sheet (Pdf)"
 msgstr "Kompletní list (Pdf)"
+
+msgid "Confirm your choices"
+msgstr "Potvrzujete své volby"
 
 msgid "Create new character"
 msgstr "Vytvoření nové postavy"
@@ -3080,9 +3083,6 @@ msgstr "Dodané sbírky"
 msgid "Complete sheet (Test)"
 msgstr "Kompletní list (Test)"
 
-msgid "Confirm your choices?"
-msgstr "Potvrzujete své volby?"
-
 msgid "Current profile image"
 msgstr "Aktuální profilový obrázek"
 
@@ -3194,6 +3194,9 @@ msgstr "Přizpůsobený poštovní server"
 
 msgid "Display all users data"
 msgstr "Zobrazení údajů všech uživatelů"
+
+msgid "Do you want to proceed"
+msgstr "Chcete pokračovat"
 
 msgid "Download relationships"
 msgstr "Vztahy ke stažení"
@@ -3316,9 +3319,6 @@ msgstr "Vytvoření nové kolekce"
 msgid "Discount code not valid"
 msgstr "Neplatný kód usnadnění"
 
-msgid "Do you want to proceed?"
-msgstr "Chcete pokračovat?"
-
 msgid "Download complete sheet"
 msgstr "Stáhněte si kompletní list"
 
@@ -3379,6 +3379,9 @@ msgstr "Aktualizujte data v"
 
 msgid "Welcome to LarpManager!"
 msgstr "Vítejte v LarpManageru!"
+
+msgid "What are you doing here"
+msgstr "Co tady ještě děláš"
 
 msgid "You have made a mistake"
 msgstr "Špatně jste to pochopili"
@@ -3453,9 +3456,6 @@ msgstr "Vyzkoušejte generování karet"
 
 msgid "Upload verified payments"
 msgstr "Nahrávání ověřených plateb"
-
-msgid "What are you doing here?"
-msgstr "Co tady ještě děláš?"
 
 msgid "Your registration ticket"
 msgstr "Vaše vstupenka"
@@ -3694,6 +3694,9 @@ msgstr "Zobrazit omezené možnosti vstupenek"
 msgid "Withheld as transaction fee"
 msgstr "Zadržení jako transakční náklady"
 
+msgid "Would you like to change it"
+msgstr "Chcete to změnit"
+
 msgid "options (number of options)"
 msgstr "možnosti (počet možností)"
 
@@ -3731,9 +3734,6 @@ msgstr "Žádost o submisivní členství"
 #, python-format
 msgid "Trait assigned for %(event)s"
 msgstr "Známka přiřazená pro %(event)s"
-
-msgid "Would you like to change it?"
-msgstr "Chcete to změnit?"
 
 msgid "You are regularly signed up!"
 msgstr "Vstup potvrzen!"
@@ -3993,6 +3993,9 @@ msgstr "Zobrazení tajného registračního odkazu"
 msgid "Displays list of emails of users"
 msgstr "Zobrazí seznam e-mailů uživatelů"
 
+msgid "Do you want to tell us something"
+msgstr "Chcete nám něco říct"
+
 msgid "Hide players without a character"
 msgstr "Skrýt hráče bez postavy"
 
@@ -4070,9 +4073,6 @@ msgstr "Potvrzení vstupu do %(event)s"
 
 msgid "Discover what this event is about"
 msgstr "Zjistěte, o čem tato akce je"
-
-msgid "Do you want to tell us something?"
-msgstr "Chcete nám něco říct?"
 
 msgid "Fill out the event prep questions"
 msgstr "Vyplňte přípravné otázky k události"
@@ -4535,6 +4535,9 @@ msgstr "Postavy nejsou v tuto chvíli viditelné"
 msgid "Copy this code and share it with friends"
 msgstr "Zkopírujte tento kód a sdílejte ho s přáteli"
 
+msgid "Did you check the required data properly"
+msgstr "Zkontrolovali jste správně požadované údaje"
+
 msgid "Enables free pre-registration to events."
 msgstr "Umožňuje bezplatnou předběžnou registraci na události."
 
@@ -4574,6 +4577,12 @@ msgstr "Sbírka byla doručena uživateli"
 msgid "Well done, you've completed all modules!"
 msgstr "Výborně, splnili jste všechny moduly!"
 
+msgid "Would you like to pay a different amount"
+msgstr "Chcete zaplatit jinou částku"
+
+msgid "You think you should have an achievement"
+msgstr "Myslíte si, že máte nárok na úspěch"
+
 msgid "if the character belongs to this element"
 msgstr "pokud znak patří k tomuto prvku"
 
@@ -4585,9 +4594,6 @@ msgstr "Volba uzamčena, kliknutím ji zpřístupníte"
 
 msgid "Describe exactly what condition it is in."
 msgstr "Popište přesně, za jakých podmínek k tomu dochází"
-
-msgid "Did you check the required data properly?"
-msgstr "Zkontrolovali jste správně požadované údaje?"
 
 msgid "I do it routinely, I have good experience"
 msgstr "Dělám to pravidelně, mám dobré zkušenosti"
@@ -4613,17 +4619,11 @@ msgstr "Tato stránka shrnuje nahraná fotoalba"
 msgid "Who takes it upon themselves to solve it."
 msgstr "Kdo je zodpovědný za jeho řešení"
 
-msgid "Would you like to pay a different amount?"
-msgstr "Chcete zaplatit jinou částku?"
-
 msgid "You are excluding (none of these filters)"
 msgstr "Vylučujete (žádný z těchto filtrů)"
 
 msgid "You have exceeded the maximum text length"
 msgstr "Překročili jste maximální délku textu"
-
-msgid "You think you should have an achievement?"
-msgstr "Myslíte si, že máte nárok na úspěch?"
 
 #, python-format
 msgid "Your card number is: <b>%(number)03d</b>."
@@ -6040,6 +6040,9 @@ msgstr "Vyberte typy prvků psaní, kterých se tato otázka týká."
 msgid "The payment of your membership fee for this year has been received!"
 msgstr "Potvrzujeme zaplacení členského příspěvku na aktuální rok!"
 
+msgid "The searched object does not exist, perhaps it was recently deleted"
+msgstr "Hledaný objekt neexistuje, možná byl nedávno odstraněn"
+
 msgid "They will not be communicated, shared or processed in any other way"
 msgstr "Nebudou sdělovány, sdíleny ani jinak zpracovávány."
 
@@ -6077,9 +6080,6 @@ msgstr "Má postava veřejnou roli/archetyp? Pokud ne, nechte prázdné."
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Počet dnů, které máte k dispozici na zaplacení další splátky"
-
-msgid "The searched object does not exist, perhaps it was recently deleted?"
-msgstr "Hledaný objekt neexistuje, možná byl nedávno odstraněn?"
 
 msgid "The ticket will be divided equally in the number of quotas indicated"
 msgstr "Vstupenka bude rozdělena rovným dílem na uvedený počet akcií"
@@ -6571,6 +6571,12 @@ msgstr ""
 "funkce"
 
 msgid ""
+"We could not find the event indicated in the url; perhaps it is one of these"
+msgstr ""
+"Událost uvedenou v url adrese jsme nenašli; možná se jedná o jednu z těchto "
+"událostí"
+
+msgid ""
 "Your data will be saved in the system, which is used by several associations"
 msgstr "Vaše údaje budou uloženy v systému, který využívá několik sdružení."
 
@@ -6651,13 +6657,6 @@ msgid ""
 msgstr ""
 "Pro potvrzení vás žádáme, abyste co nejdříve zaplatili tuto částku: "
 "%(amount)s."
-
-msgid ""
-"We could not find the event indicated in the url; perhaps it is one of "
-"these?"
-msgstr ""
-"Událost uvedenou v url adrese jsme nenašli; možná se jedná o jednu z těchto "
-"událostí?"
 
 msgid ""
 "Write your question, request or concern here. We will be happy to answer "
@@ -7805,6 +7804,13 @@ msgstr ""
 " pro organizaci."
 
 msgid ""
+"Did you encounter an error, or did you find a text with an incorrect "
+"translation in your language"
+msgstr ""
+"Narazili jste na chybu nebo jste našli text s nesprávným překladem ve vašem "
+"jazyce"
+
+msgid ""
 "Lets you specify a date (and time) on which registration will open, keeping "
 "it closed until then."
 msgstr ""
@@ -7845,13 +7851,6 @@ msgid ""
 msgstr ""
 "Uživatel s touto e-mailovou adresou byl vytvořen na našich webových "
 "stránkách. Pokud si přejete aktivovat, klikněte na"
-
-msgid ""
-"Did you encounter an error, or did you find a text with an incorrect "
-"translation in your language?"
-msgstr ""
-"Narazili jste na chybu nebo jste našli text s nesprávným překladem ve vašem "
-"jazyce?"
 
 msgid ""
 "Enables managing of entry of revenue for an event that do not originate from"

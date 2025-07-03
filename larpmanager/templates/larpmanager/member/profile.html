@@ -5,7 +5,7 @@
 {% endblock title %}
 {% block content %}
     <p>
-        {% trans "You are logged in with an email address" %}: <i>{{ member.email }}</i>. <a href="{% url 'ticket' 'email' %}">{% trans "Would you like to change it?" %}</a>
+        {% trans "You are logged in with an email address" %}: <i>{{ member.email }}</i>. <a href="{% url 'ticket' 'email' %}">{% trans "Would you like to change it" %}?</a>
     </p>
     <hr />
     {% if vote_open %}

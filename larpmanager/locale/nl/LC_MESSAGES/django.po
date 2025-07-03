@@ -1173,6 +1173,9 @@ msgstr "Verplicht"
 msgid "Movements"
 msgstr "Bewegingen"
 
+msgid "Need help"
+msgstr "Hulp nodig"
+
 msgid "Next runs"
 msgstr "Volgende runs"
 
@@ -1349,9 +1352,6 @@ msgstr "Motivatie"
 
 msgid "Navigation"
 msgstr "Navigatie"
-
-msgid "Need help?"
-msgstr "Hulp nodig?"
 
 msgid "Net profit"
 msgstr "Nettowinst"
@@ -1566,6 +1566,9 @@ msgstr "Beperkingen"
 msgid "Nationality"
 msgstr "Nationaliteit"
 
+msgid "Need a ride"
+msgstr "Lift nodig"
+
 msgid "New answer!"
 msgstr "Nieuw antwoord!"
 
@@ -1748,9 +1751,6 @@ msgstr "NIET TOEGEWEZEN"
 
 msgid "Name credits"
 msgstr "Naam kredieten"
-
-msgid "Need a ride?"
-msgstr "Lift nodig?"
 
 msgid "Next payment"
 msgstr "Volgende betaling"
@@ -2044,6 +2044,9 @@ msgstr "URL-verkorter"
 msgid "Visualisation"
 msgstr "Visualisatie"
 
+msgid "Wanna connect"
+msgstr "Wil je verbinding maken"
+
 msgid "Your messages"
 msgstr "Uw berichten"
 
@@ -2212,9 +2215,6 @@ msgstr "Type proloog"
 
 msgid "URL identifier"
 msgstr "Idenominatieve URL"
-
-msgid "Wanna connect?"
-msgstr "Wil je verbinding maken?"
 
 msgid "Writing option"
 msgstr "Schrijfoptie"
@@ -2807,6 +2807,9 @@ msgstr "Account activeren op"
 msgid "Activation complete"
 msgstr "Activering voltooid"
 
+msgid "Are you really sure"
+msgstr "Weet je het echt zeker"
+
 msgid "Ask a new questions"
 msgstr "Stel een nieuwe vraag"
 
@@ -2931,14 +2934,14 @@ msgstr "Boekhouding - Historisch"
 msgid "Advanced text editor"
 msgstr "Geavanceerde teksteditor"
 
-msgid "Are you really sure?"
-msgstr "Weet je het echt zeker?"
-
 msgid "Carousel description"
 msgstr "Carrousel beschrijving"
 
 msgid "Complete sheet (Pdf)"
 msgstr "Volledig blad (Pdf)"
+
+msgid "Confirm your choices"
+msgstr "Bevestig je je keuzes"
 
 msgid "Create new character"
 msgstr "Nieuw personage maken"
@@ -3080,9 +3083,6 @@ msgstr "Collecties geleverd"
 msgid "Complete sheet (Test)"
 msgstr "Volledig blad (Test)"
 
-msgid "Confirm your choices?"
-msgstr "Bevestig je je keuzes?"
-
 msgid "Current profile image"
 msgstr "Huidige profielafbeelding"
 
@@ -3194,6 +3194,9 @@ msgstr "Aangepaste mailserver"
 
 msgid "Display all users data"
 msgstr "Alle gebruikersgegevens weergeven"
+
+msgid "Do you want to proceed"
+msgstr "Wil je doorgaan"
 
 msgid "Download relationships"
 msgstr "Relaties downloaden"
@@ -3316,9 +3319,6 @@ msgstr "Maak een nieuwe verzameling"
 msgid "Discount code not valid"
 msgstr "Ongeldige facilitatiecode"
 
-msgid "Do you want to proceed?"
-msgstr "Wil je doorgaan?"
-
 msgid "Download complete sheet"
 msgstr "Volledig blad downloaden"
 
@@ -3379,6 +3379,9 @@ msgstr "Werk uw gegevens bij in de"
 
 msgid "Welcome to LarpManager!"
 msgstr "Welkom bij LarpManager!"
+
+msgid "What are you doing here"
+msgstr "Wat doe je hier nog steeds"
 
 msgid "You have made a mistake"
 msgstr "Je hebt het verkeerd"
@@ -3453,9 +3456,6 @@ msgstr "Probeer kaarten te genereren"
 
 msgid "Upload verified payments"
 msgstr "Geverifieerde betalingen uploaden"
-
-msgid "What are you doing here?"
-msgstr "Wat doe je hier nog steeds?"
 
 msgid "Your registration ticket"
 msgstr "Je entreebewijs"
@@ -3694,6 +3694,9 @@ msgstr "Beperkte ticketopties bekijken"
 msgid "Withheld as transaction fee"
 msgstr "Inhouding als transactiekosten"
 
+msgid "Would you like to change it"
+msgstr "Wil je het veranderen"
+
 msgid "options (number of options)"
 msgstr "opties (aantal opties)"
 
@@ -3731,9 +3734,6 @@ msgstr "Verzoek onderdanig lid"
 #, python-format
 msgid "Trait assigned for %(event)s"
 msgstr "Toegewezen kenmerk voor %(event)s"
-
-msgid "Would you like to change it?"
-msgstr "Wil je het veranderen?"
 
 msgid "You are regularly signed up!"
 msgstr "Inschrijving bevestigd!"
@@ -3993,6 +3993,9 @@ msgstr "Geheime registratielink weergeven"
 msgid "Displays list of emails of users"
 msgstr "Lijst met e-mails van gebruikers weergeven"
 
+msgid "Do you want to tell us something"
+msgstr "Wil je ons iets vertellen"
+
 msgid "Hide players without a character"
 msgstr "Verberg spelers zonder personage"
 
@@ -4070,9 +4073,6 @@ msgstr "Toegang tot %(event)s bevestigen"
 
 msgid "Discover what this event is about"
 msgstr "Ontdek waar dit evenement over gaat"
-
-msgid "Do you want to tell us something?"
-msgstr "Wil je ons iets vertellen?"
 
 msgid "Fill out the event prep questions"
 msgstr "Vul de voorbereidende vragen voor het evenement in"
@@ -4537,6 +4537,9 @@ msgstr "Personages zijn momenteel niet zichtbaar"
 msgid "Copy this code and share it with friends"
 msgstr "Kopieer deze code en deel hem met vrienden"
 
+msgid "Did you check the required data properly"
+msgstr "Heb je de vereiste gegevens goed gecontroleerd"
+
 msgid "Enables free pre-registration to events."
 msgstr "Maakt gratis voorregistratie voor evenementen mogelijk."
 
@@ -4576,6 +4579,12 @@ msgstr "De collectie werd geleverd aan de gebruiker"
 msgid "Well done, you've completed all modules!"
 msgstr "Goed gedaan, je hebt alle modules gehaald!"
 
+msgid "Would you like to pay a different amount"
+msgstr "Wil je een ander bedrag betalen"
+
+msgid "You think you should have an achievement"
+msgstr "Vind je dat je recht hebt op een prestatie"
+
 msgid "if the character belongs to this element"
 msgstr "als het teken bij dit element hoort"
 
@@ -4587,9 +4596,6 @@ msgstr "Keuze vergrendeld, klik om deze beschikbaar te maken"
 
 msgid "Describe exactly what condition it is in."
 msgstr "Beschrijf precies onder welke omstandigheden het optreedt"
-
-msgid "Did you check the required data properly?"
-msgstr "Heb je de vereiste gegevens goed gecontroleerd?"
 
 msgid "I do it routinely, I have good experience"
 msgstr "Ik doe het regelmatig, ik heb goede ervaring"
@@ -4615,17 +4621,11 @@ msgstr "Deze pagina geeft een overzicht van de geüploade fotoalbums"
 msgid "Who takes it upon themselves to solve it."
 msgstr "Wie neemt de leiding om het op te lossen"
 
-msgid "Would you like to pay a different amount?"
-msgstr "Wil je een ander bedrag betalen?"
-
 msgid "You are excluding (none of these filters)"
 msgstr "Je sluit (geen van deze filters) uit"
 
 msgid "You have exceeded the maximum text length"
 msgstr "U hebt de maximale tekstlengte overschreden"
-
-msgid "You think you should have an achievement?"
-msgstr "Vind je dat je recht hebt op een prestatie?"
 
 #, python-format
 msgid "Your card number is: <b>%(number)03d</b>."
@@ -6153,6 +6153,9 @@ msgid "The payment of your membership fee for this year has been received!"
 msgstr ""
 "We bevestigen de betaling van je lidmaatschapsgeld voor het lopende jaar!"
 
+msgid "The searched object does not exist, perhaps it was recently deleted"
+msgstr "Het gezochte object bestaat niet, misschien is het onlangs verwijderd"
+
 msgid "They will not be communicated, shared or processed in any other way"
 msgstr ""
 "Ze zullen niet worden gecommuniceerd, gedeeld of op een andere manier worden"
@@ -6194,10 +6197,6 @@ msgstr "Heeft het personage een openbare rol/archetype? Zo niet, laat leeg"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Aantal dagen beschikbaar om de volgende termijn te betalen"
-
-msgid "The searched object does not exist, perhaps it was recently deleted?"
-msgstr ""
-"Het gezochte object bestaat niet, misschien is het onlangs verwijderd?"
 
 msgid "The ticket will be divided equally in the number of quotas indicated"
 msgstr "Het ticket wordt gelijk verdeeld in het aangegeven aantal aandelen"
@@ -6765,6 +6764,12 @@ msgstr ""
 "functie geactiveerd zijn"
 
 msgid ""
+"We could not find the event indicated in the url; perhaps it is one of these"
+msgstr ""
+"We konden het evenement dat wordt aangegeven in de url niet vinden; "
+"misschien is het een van deze"
+
+msgid ""
 "Your data will be saved in the system, which is used by several associations"
 msgstr ""
 "Je gegevens worden opgeslagen in het systeem, dat door verschillende "
@@ -6854,13 +6859,6 @@ msgid ""
 msgstr ""
 "Om dit te bevestigen, vragen we je om dit bedrag zo snel mogelijk te "
 "betalen: %(amount)s."
-
-msgid ""
-"We could not find the event indicated in the url; perhaps it is one of "
-"these?"
-msgstr ""
-"We konden het evenement dat wordt aangegeven in de url niet vinden; "
-"misschien is het een van deze?"
 
 msgid ""
 "Write your question, request or concern here. We will be happy to answer "
@@ -8062,6 +8060,13 @@ msgstr ""
 "dat opzij moet worden gezet voor de organisatie."
 
 msgid ""
+"Did you encounter an error, or did you find a text with an incorrect "
+"translation in your language"
+msgstr ""
+"Ben je een fout tegengekomen of heb je een tekst gevonden met een onjuiste "
+"vertaling in jouw taal"
+
+msgid ""
 "Lets you specify a date (and time) on which registration will open, keeping "
 "it closed until then."
 msgstr ""
@@ -8102,13 +8107,6 @@ msgid ""
 msgstr ""
 "Er is een gebruiker met dit e-mailadres aangemaakt op onze website. Als u "
 "deze wilt activeren, klikt u op"
-
-msgid ""
-"Did you encounter an error, or did you find a text with an incorrect "
-"translation in your language?"
-msgstr ""
-"Ben je een fout tegengekomen of heb je een tekst gevonden met een onjuiste "
-"vertaling in jouw taal?"
 
 msgid ""
 "Enables managing of entry of revenue for an event that do not originate from"

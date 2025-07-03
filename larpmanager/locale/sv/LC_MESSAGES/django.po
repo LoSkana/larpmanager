@@ -1173,6 +1173,9 @@ msgstr "Obligatorisk"
 msgid "Movements"
 msgstr "Rörelser"
 
+msgid "Need help"
+msgstr "Behöver du hjälp"
+
 msgid "Next runs"
 msgstr "Nästa körningar"
 
@@ -1349,9 +1352,6 @@ msgstr "Motivering"
 
 msgid "Navigation"
 msgstr "Navigering"
-
-msgid "Need help?"
-msgstr "Behöver du hjälp?"
 
 msgid "Net profit"
 msgstr "Nettovinst"
@@ -1566,6 +1566,9 @@ msgstr "Begränsningar"
 msgid "Nationality"
 msgstr "Nationalitet"
 
+msgid "Need a ride"
+msgstr "Behöver du ett lyft"
+
 msgid "New answer!"
 msgstr "Nytt svar!"
 
@@ -1748,9 +1751,6 @@ msgstr "INTE TILLDELAD"
 
 msgid "Name credits"
 msgstr "Namn krediter"
-
-msgid "Need a ride?"
-msgstr "Behöver du ett lyft?"
 
 msgid "Next payment"
 msgstr "Nästa betalning"
@@ -2044,6 +2044,9 @@ msgstr "URL-förkortare"
 msgid "Visualisation"
 msgstr "Visualisering"
 
+msgid "Wanna connect"
+msgstr "Vill du ansluta dig"
+
 msgid "Your messages"
 msgstr "Dina meddelanden"
 
@@ -2212,9 +2215,6 @@ msgstr "Typ av prolog"
 
 msgid "URL identifier"
 msgstr "Idenominativ URL"
-
-msgid "Wanna connect?"
-msgstr "Vill du ansluta dig?"
 
 msgid "Writing option"
 msgstr "Alternativ för skrivning"
@@ -2807,6 +2807,9 @@ msgstr "Aktivera kontot på"
 msgid "Activation complete"
 msgstr "Aktiveringen slutförd"
 
+msgid "Are you really sure"
+msgstr "Är du verkligen säker"
+
 msgid "Ask a new questions"
 msgstr "Ställ en ny fråga"
 
@@ -2931,14 +2934,14 @@ msgstr "Redovisning - Historisk"
 msgid "Advanced text editor"
 msgstr "Avancerad textredigerare"
 
-msgid "Are you really sure?"
-msgstr "Är du verkligen säker?"
-
 msgid "Carousel description"
 msgstr "Beskrivning av karusellen"
 
 msgid "Complete sheet (Pdf)"
 msgstr "Komplett blad (Pdf)"
+
+msgid "Confirm your choices"
+msgstr "Bekräftar du dina val"
 
 msgid "Create new character"
 msgstr "Skapa ny karaktär"
@@ -3080,9 +3083,6 @@ msgstr "Levererade kollektioner"
 msgid "Complete sheet (Test)"
 msgstr "Komplett ark (Test)"
 
-msgid "Confirm your choices?"
-msgstr "Bekräftar du dina val?"
-
 msgid "Current profile image"
 msgstr "Aktuell profilbild"
 
@@ -3194,6 +3194,9 @@ msgstr "Skräddarsydd e-postserver"
 
 msgid "Display all users data"
 msgstr "Visa alla användares data"
+
+msgid "Do you want to proceed"
+msgstr "Vill du fortsätta"
 
 msgid "Download relationships"
 msgstr "Ladda ner relationer"
@@ -3316,9 +3319,6 @@ msgstr "Skapa en ny samling"
 msgid "Discount code not valid"
 msgstr "Ogiltig kod för underlättande"
 
-msgid "Do you want to proceed?"
-msgstr "Vill du fortsätta?"
-
 msgid "Download complete sheet"
 msgstr "Ladda ner fullständigt blad"
 
@@ -3379,6 +3379,9 @@ msgstr "Uppdatera dina uppgifter i"
 
 msgid "Welcome to LarpManager!"
 msgstr "Välkommen till LarpManager!"
+
+msgid "What are you doing here"
+msgstr "Vad gör du fortfarande här"
 
 msgid "You have made a mistake"
 msgstr "Du har fått det om bakfoten"
@@ -3453,9 +3456,6 @@ msgstr "Försök med kortgenerering"
 
 msgid "Upload verified payments"
 msgstr "Ladda upp verifierade betalningar"
-
-msgid "What are you doing here?"
-msgstr "Vad gör du fortfarande här?"
 
 msgid "Your registration ticket"
 msgstr "Din entrébiljett"
@@ -3694,6 +3694,9 @@ msgstr "Se begränsade biljettalternativ"
 msgid "Withheld as transaction fee"
 msgstr "Bibehållande som transaktionskostnad"
 
+msgid "Would you like to change it"
+msgstr "Skulle du vilja ändra det"
+
 msgid "options (number of options)"
 msgstr "optioner (antal optioner)"
 
@@ -3731,9 +3734,6 @@ msgstr "Begäran om undergiven medlem"
 #, python-format
 msgid "Trait assigned for %(event)s"
 msgstr "Egenskap tilldelad för %(event)s"
-
-msgid "Would you like to change it?"
-msgstr "Skulle du vilja ändra det?"
 
 msgid "You are regularly signed up!"
 msgstr "Anmälan bekräftad!"
@@ -3993,6 +3993,9 @@ msgstr "Visa hemlig registreringslänk"
 msgid "Displays list of emails of users"
 msgstr "Visar en lista över användarnas e-postmeddelanden"
 
+msgid "Do you want to tell us something"
+msgstr "Är det något du vill berätta för oss"
+
 msgid "Hide players without a character"
 msgstr "Dölj spelare utan karaktär"
 
@@ -4070,9 +4073,6 @@ msgstr "Bekräfta inmatning till %(event)s"
 
 msgid "Discover what this event is about"
 msgstr "Ta reda på vad detta evenemang handlar om"
-
-msgid "Do you want to tell us something?"
-msgstr "Är det något du vill berätta för oss?"
 
 msgid "Fill out the event prep questions"
 msgstr "Fyll i de förberedande frågorna för evenemanget"
@@ -4537,6 +4537,9 @@ msgstr "Tecknen är inte synliga för tillfället"
 msgid "Copy this code and share it with friends"
 msgstr "Kopiera koden och dela den med dina vänner"
 
+msgid "Did you check the required data properly"
+msgstr "Har du kontrollerat de nödvändiga uppgifterna på rätt sätt"
+
 msgid "Enables free pre-registration to events."
 msgstr "Möjliggör kostnadsfri föranmälan till evenemang."
 
@@ -4576,6 +4579,12 @@ msgstr "Kollektionen levererades till användaren"
 msgid "Well done, you've completed all modules!"
 msgstr "Bra jobbat, du har klarat alla moduler!"
 
+msgid "Would you like to pay a different amount"
+msgstr "Skulle du vilja betala ett annat belopp"
+
+msgid "You think you should have an achievement"
+msgstr "Tycker du att du har rätt till en prestation"
+
 msgid "if the character belongs to this element"
 msgstr "om karaktären hör till detta element"
 
@@ -4587,9 +4596,6 @@ msgstr "Valet låst, klicka för att göra det tillgängligt"
 
 msgid "Describe exactly what condition it is in."
 msgstr "Beskriv exakt under vilka förhållanden den förekommer"
-
-msgid "Did you check the required data properly?"
-msgstr "Har du kontrollerat de nödvändiga uppgifterna på rätt sätt?"
 
 msgid "I do it routinely, I have good experience"
 msgstr "Jag gör det regelbundet, jag har god erfarenhet"
@@ -4615,17 +4621,11 @@ msgstr "Denna sida sammanfattar de uppladdade fotoalbumen"
 msgid "Who takes it upon themselves to solve it."
 msgstr "Vem tar ansvar för att lösa problemet?"
 
-msgid "Would you like to pay a different amount?"
-msgstr "Skulle du vilja betala ett annat belopp?"
-
 msgid "You are excluding (none of these filters)"
 msgstr "Du utesluter (inget av dessa filter)"
 
 msgid "You have exceeded the maximum text length"
 msgstr "Du har överskridit den maximala textlängden"
-
-msgid "You think you should have an achievement?"
-msgstr "Tycker du att du har rätt till en prestation?"
 
 #, python-format
 msgid "Your card number is: <b>%(number)03d</b>."
@@ -6091,6 +6091,9 @@ msgstr "Välj de typer av skrivelement som den här frågan gäller."
 msgid "The payment of your membership fee for this year has been received!"
 msgstr "Vi bekräftar betalningen av din medlemsavgift för innevarande år!"
 
+msgid "The searched object does not exist, perhaps it was recently deleted"
+msgstr "Det sökta objektet finns inte, kanske har det nyligen tagits bort"
+
 msgid "They will not be communicated, shared or processed in any other way"
 msgstr ""
 "De kommer inte att kommuniceras, delas eller behandlas på något annat sätt"
@@ -6132,9 +6135,6 @@ msgstr "Har karaktären en offentlig roll/arketyp? Om inte, lämna tomt"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Antal dagar tillgängliga för att betala nästa delbetalning"
-
-msgid "The searched object does not exist, perhaps it was recently deleted?"
-msgstr "Det sökta objektet finns inte, kanske har det nyligen tagits bort?"
 
 msgid "The ticket will be divided equally in the number of quotas indicated"
 msgstr "Biljetten kommer att delas upp lika i det angivna antalet aktier"
@@ -6659,6 +6659,12 @@ msgstr ""
 "vara aktiverad"
 
 msgid ""
+"We could not find the event indicated in the url; perhaps it is one of these"
+msgstr ""
+"Vi kunde inte hitta den händelse som anges i webbadressen; kanske är det en "
+"av dessa"
+
+msgid ""
 "Your data will be saved in the system, which is used by several associations"
 msgstr ""
 "Dina uppgifter kommer att sparas i systemet, som används av flera föreningar"
@@ -6742,13 +6748,6 @@ msgid ""
 msgstr ""
 "För att bekräfta det ber vi dig att betala detta belopp så snart som "
 "möjligt: %(amount)s."
-
-msgid ""
-"We could not find the event indicated in the url; perhaps it is one of "
-"these?"
-msgstr ""
-"Vi kunde inte hitta den händelse som anges i webbadressen; kanske är det en "
-"av dessa?"
 
 msgid ""
 "Write your question, request or concern here. We will be happy to answer "
@@ -7942,6 +7941,13 @@ msgstr ""
 "måste avsättas till organisationen."
 
 msgid ""
+"Did you encounter an error, or did you find a text with an incorrect "
+"translation in your language"
+msgstr ""
+"Har du stött på något fel eller hittat en text med en felaktig översättning "
+"till ditt språk"
+
+msgid ""
 "Lets you specify a date (and time) on which registration will open, keeping "
 "it closed until then."
 msgstr ""
@@ -7982,13 +7988,6 @@ msgid ""
 msgstr ""
 "En användare med den här e-postadressen har skapats på vår webbplats. Om du "
 "vill aktivera den, klicka på"
-
-msgid ""
-"Did you encounter an error, or did you find a text with an incorrect "
-"translation in your language?"
-msgstr ""
-"Har du stött på något fel eller hittat en text med en felaktig översättning "
-"till ditt språk?"
 
 msgid ""
 "Enables managing of entry of revenue for an event that do not originate from"

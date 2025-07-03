@@ -3878,7 +3878,7 @@ msgid ""
 "To use the feature you requested, you need to activate the following feature"
 msgstr ""
 
-msgid "Do you want to proceed?"
+msgid "Do you want to proceed"
 msgstr ""
 
 msgid "Activate"
@@ -3893,7 +3893,7 @@ msgstr ""
 msgid "The run you requested is only visible to players logged into the system"
 msgstr ""
 
-msgid "Wanna connect?"
+msgid "Wanna connect"
 msgstr ""
 
 msgid "Login"
@@ -3916,7 +3916,7 @@ msgstr ""
 msgid "Object does not exist"
 msgstr ""
 
-msgid "The searched object does not exist, perhaps it was recently deleted?"
+msgid "The searched object does not exist, perhaps it was recently deleted"
 msgstr ""
 
 msgid "If you think this is an error, get in touch with us to resolve it"
@@ -3932,7 +3932,7 @@ msgid "Event not found"
 msgstr ""
 
 msgid ""
-"We could not find the event indicated in the url; perhaps it is one of these?"
+"We could not find the event indicated in the url; perhaps it is one of these"
 msgstr ""
 
 msgid "Go to the casting for"
@@ -3959,7 +3959,7 @@ msgstr ""
 msgid "Indicate here each element you wish to avoid in the assignment"
 msgstr ""
 
-msgid "Confirm your choices?"
+msgid "Confirm your choices"
 msgstr ""
 
 msgid "You have not reached the minimum number of preferences"
@@ -4889,7 +4889,7 @@ msgstr ""
 msgid "Remember to put recipients separated by commas"
 msgstr ""
 
-msgid "Are you really sure?"
+msgid "Are you really sure"
 msgstr ""
 
 msgid "Volunteer Registry"
@@ -4943,7 +4943,7 @@ msgstr ""
 msgid "leaderboard"
 msgstr ""
 
-msgid "You think you should have an achievement?"
+msgid "You think you should have an achievement"
 msgstr ""
 
 msgid "Tell us here"
@@ -5024,13 +5024,13 @@ msgstr ""
 msgid "If you wish, you can delete past pre-registrations"
 msgstr ""
 
-msgid "Do you want to tell us something?"
+msgid "Do you want to tell us something"
 msgstr ""
 
 msgid "Shuttle service"
 msgstr ""
 
-msgid "Need a ride?"
+msgid "Need a ride"
 msgstr ""
 
 msgid "Add a new request"
@@ -5341,7 +5341,7 @@ msgstr ""
 msgid "We ask you to pay the remaining amount"
 msgstr ""
 
-msgid "Would you like to pay a different amount?"
+msgid "Would you like to pay a different amount"
 msgstr ""
 
 msgid "Go to the tokens history"
@@ -5447,7 +5447,7 @@ msgstr ""
 msgid "Member revoked"
 msgstr ""
 
-msgid "What are you doing here?"
+msgid "What are you doing here"
 msgstr ""
 
 msgid "Membership fee"
@@ -5696,7 +5696,7 @@ msgid ""
 "the right to participate to the organization events"
 msgstr ""
 
-msgid "Did you check the required data properly?"
+msgid "Did you check the required data properly"
 msgstr ""
 
 msgid ""
@@ -5732,7 +5732,7 @@ msgstr ""
 msgid "You are logged in with an email address"
 msgstr ""
 
-msgid "Would you like to change it?"
+msgid "Would you like to change it"
 msgstr ""
 
 msgid "Voting for the Executive is open"
@@ -5770,7 +5770,7 @@ msgid ""
 "pre-filled; all you have to do is print it out and sign it"
 msgstr ""
 
-msgid "Need help?"
+msgid "Need help"
 msgstr ""
 
 msgid "Write here"
@@ -5823,7 +5823,7 @@ msgstr ""
 
 msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
-"translation in your language?"
+"translation in your language"
 msgstr ""
 
 msgid "Describe it in the field below and we will fix it as soon as possible"
