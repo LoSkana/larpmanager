@@ -398,12 +398,14 @@ def orga_check(request, s, n):
 
     chs_numbers = list(ctx["chars"].keys())
     id_number_map = {}
+    number_map = {}
     for el in ctx["event"].get_elements(Character).values_list("number", "text"):
         if el[0] not in ctx["chars"]:
             continue
         ch = ctx["chars"][el[0]]
         ch["text"] = ch["teaser"] + el[1]
         id_number_map[ch["id"]] = ch["number"]
+        number_map[ch["number"]] = ch["id"]
 
     if "plot" in ctx["features"]:
         que = PlotCharacterRel.objects.filter(character__number__in=chs_numbers)
@@ -411,7 +413,7 @@ def orga_check(request, s, n):
         for el in que.values_list("character__number", "text"):
             ctx["chars"][el[0]]["text"] += el[1]
 
-    check_relations(cache, checks, chs_numbers, ctx)
+    check_relations(cache, checks, chs_numbers, ctx, number_map)
 
     # check extinct, missing, interloper
     check_writings(cache, checks, chs_numbers, ctx, id_number_map)
@@ -424,7 +426,7 @@ def orga_check(request, s, n):
     return render(request, "larpmanager/orga/writing/check.html", ctx)
 
 
-def check_relations(cache, checks, chs_numbers, ctx):
+def check_relations(cache, checks, chs_numbers, ctx, number_map):
     checks["relat_missing"] = []
     checks["relat_extinct"] = []
     for c in ctx["chars"]:
@@ -439,7 +441,9 @@ def check_relations(cache, checks, chs_numbers, ctx):
         for oth in first_rel:
             (second, second_rel) = cache[oth]
             if c not in second_rel:
-                checks["relat_missing"].append({"f_id": c, "f_name": first, "s_id": oth, "s_name": second})
+                checks["relat_missing"].append(
+                    {"f_id": number_map[c], "f_name": first, "s_id": number_map[oth], "s_name": second}
+                )
 
 
 def check_writings(cache, checks, chs_numbers, ctx, id_number_map):
