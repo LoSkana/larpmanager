@@ -18,8 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
+
 from django.contrib.auth import get_user_model, login
 from django.core.cache import cache
+from django.shortcuts import redirect
 
 from larpmanager.views.user.member import get_user_backend
 
@@ -30,11 +33,20 @@ class TokenAuthMiddleware:
 
     def __call__(self, request):
         token = request.GET.get("token")
-        user_id = cache.get(f"session_token:{token}") if token else None
+        if token:
+            user_id = cache.get(f"session_token:{token}")
+            if user_id:
+                user = get_user_model().objects.get(pk=user_id)
+                if user:
+                    login(request, user, backend=get_user_backend())
 
-        if user_id:
-            user = get_user_model().objects.get(pk=user_id)
-            if user:
-                login(request, user, backend=get_user_backend())
+                    # remove token and redirect
+                    parsed = urlparse(request.get_full_path())
+                    query = parse_qs(parsed.query)
+                    query.pop("token", None)
+                    cleaned_query = urlencode(query, doseq=True)
+                    clean_url = urlunparse(parsed._replace(query=cleaned_query))
+
+                    return redirect(clean_url)
 
         return self.get_response(request)
