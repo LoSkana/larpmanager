@@ -92,7 +92,11 @@ class Command(BaseCommand):
             sorted_po = polib.POFile()
             sorted_po.metadata = po.metadata
 
+            cache = set()
             for entry in sorted_entries:
+                if entry.msgid in cache:
+                    continue
+                cache.add(entry.msgid)
                 sorted_po.append(entry)
 
             sorted_po.save(po_path)
