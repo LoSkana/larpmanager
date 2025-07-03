@@ -7,7 +7,9 @@
                 <td>
                     {{ obj.text | safe }}:
                     <a href="{{ obj.href }}" target="_blank">{{ obj.link }}</a>
-                    {% if obj.tutorial %}(<a href="{{ obj.tutorial }}" target="_blank">Tutorial</a>){% endif %}
+                    {% if obj.tutorial %}
+                        (<a href="{% url 'tutorials' %}{{ obj.tutorial }}" target="_blank">Tutorial</a>)
+                    {% endif %}
                 </td>
                 {% if suggestion %}
                     <td>
