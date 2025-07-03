@@ -828,6 +828,9 @@ msgstr "Čekání"
 msgid "Website"
 msgstr "Webové stránky"
 
+msgid "Welcome"
+msgstr "Vítejte na"
+
 msgid "Writing"
 msgstr "Psaní"
 

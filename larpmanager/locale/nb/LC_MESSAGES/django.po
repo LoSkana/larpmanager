@@ -828,6 +828,9 @@ msgstr "Venter"
 msgid "Website"
 msgstr "Nettsted"
 
+msgid "Welcome"
+msgstr "Velkommen"
+
 msgid "Writing"
 msgstr "Skriving"
 
