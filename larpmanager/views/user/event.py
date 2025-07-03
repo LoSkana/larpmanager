@@ -165,7 +165,7 @@ def share(request):
 
     el = get_user_membership(request.user.member, request.assoc["id"])
     if el.status != MembershipStatus.EMPTY:
-        messages.success(request, _("You have already granted data sharing with this organisation!"))
+        messages.success(request, _("You have already granted data sharing with this organisation") + "!")
         return redirect("home")
 
     if request.method == "POST":

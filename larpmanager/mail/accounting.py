@@ -84,10 +84,14 @@ def update_accounting_item_expense_pre(sender, instance, **kwargs):
     subj = hdr(instance) + _("Reimbursement approved")
     if instance.run:
         subj += " " + _("for") + f" {instance.run}"
-    body = _("Your request for reimbursement of %(amount).2f, with reason '%(reason)s', has been approved!") % {
-        "amount": instance.value,
-        "reason": instance.descr,
-    }
+    body = (
+        _("Your request for reimbursement of %(amount).2f, with reason '%(reason)s', has been approved")
+        % {
+            "amount": instance.value,
+            "reason": instance.descr,
+        }
+        + "!"
+    )
 
     token_name, credit_name = get_token_credit_name(instance.assoc)
 
@@ -157,10 +161,14 @@ def get_pay_token_email(instance, run, token_name):
         "tokens": token_name,
         "event": run,
     }
-    body = _("%(amount)d %(tokens)s were used to participate in this event!") % {
-        "amount": int(instance.value),
-        "tokens": token_name,
-    }
+    body = (
+        _("%(amount)d %(tokens)s were used to participate in this event")
+        % {
+            "amount": int(instance.value),
+            "tokens": token_name,
+        }
+        + "!"
+    )
     return body, subj
 
 
@@ -182,10 +190,14 @@ def get_pay_credit_email(credit_name, instance, run):
         "credits": credit_name,
         "event": run,
     }
-    body = _("%(amount)d %(credits)s were used to participate in this event!") % {
-        "amount": int(instance.value),
-        "credits": credit_name,
-    }
+    body = (
+        _("%(amount)d %(credits)s were used to participate in this event")
+        % {
+            "amount": int(instance.value),
+            "credits": credit_name,
+        }
+        + "!"
+    )
     return body, subj
 
 
@@ -204,10 +216,14 @@ def notify_pay_money(curr_sym, instance, member, run):
 
 def get_pay_money_email(curr_sym, instance, run):
     subj = hdr(instance) + _("Payment per %(event)s") % {"event": run}
-    body = _("A payment of %(amount).2f %(currency)s was received for this event!") % {
-        "amount": instance.value,
-        "currency": curr_sym,
-    }
+    body = (
+        _("A payment of %(amount).2f %(currency)s was received for this event")
+        % {
+            "amount": instance.value,
+            "currency": curr_sym,
+        }
+        + "!"
+    )
     return body, subj
 
 
@@ -246,7 +262,8 @@ def notify_credit(credit_name, instance):
     url = get_url("accounting", instance)
     add_body = (
         " <br /><br /><i>"
-        + _("They will be used automatically when you sign up for a new event!")
+        + _("They will be used automatically when you sign up for a new event")
+        + "!"
         + "<br /><br />"
         + _("Alternatively, you can request a reimbursement in <a href='%(url)s'>your accounting</a>.</i>")
         % {"url": url}
@@ -279,7 +296,7 @@ def notify_token(instance, token_name):
     # to user
     activate(instance.member.language)
     subj, body = get_token_email(instance, token_name)
-    add_body = "<br /><br /><i>" + _("They will be used automatically when you sign up for a new event!") + "</i>"
+    add_body = "<br /><br /><i>" + _("They will be used automatically when you sign up for a new event") + "!" + "</i>"
     my_send_mail(subj, body + add_body, instance.member, instance)
     # to orga
     if instance.run:
@@ -350,7 +367,10 @@ def save_collection_gift(sender, instance, **kwargs):
         subj = hdr(instance.collection) + _("Collection participation for: %(recipient)s") % {
             "recipient": instance.collection.display_member()
         }
-        body = _("We thank you for participating in the collection: we are sure they will live a terrific experience!")
+        body = (
+            _("We thank you for participating in the collection: we are sure they will live a terrific experience")
+            + "!"
+        )
         my_send_mail(subj, body, instance.member, instance.collection)
 
         activate(instance.collection.organizer.language)
@@ -358,7 +378,9 @@ def save_collection_gift(sender, instance, **kwargs):
             "recipient": instance.collection.display_member(),
             "user": instance.member.display_member(),
         }
-        body = _("The collection grows: we have no doubt, the fortunate will live soon an unprecedented experience!")
+        body = (
+            _("The collection grows: we have no doubt, the fortunate will live soon an unprecedented experience") + "!"
+        )
         my_send_mail(subj, body, instance.collection.organizer, instance.collection)
         return
 

@@ -1342,7 +1342,7 @@ msgstr ""
 msgid "Minimum age: %(number)d"
 msgstr ""
 
-msgid "Please upload your profile photo!"
+msgid "Please upload your profile photo"
 msgstr ""
 
 msgid "Request signed"
@@ -1571,10 +1571,10 @@ msgstr ""
 msgid "Character Relationship"
 msgstr ""
 
-msgid "You cannot create a relationship towards yourself!"
+msgid "You cannot create a relationship towards yourself"
 msgstr ""
 
-msgid "Already existing relationship!"
+msgid "Already existing relationship"
 msgstr ""
 
 msgid "Plot"
@@ -1638,7 +1638,7 @@ msgstr ""
 #, python-format
 msgid ""
 "Your request for reimbursement of %(amount).2f, with reason '%(reason)s', "
-"has been approved!"
+"has been approved"
 msgstr ""
 
 #, python-format
@@ -1663,7 +1663,7 @@ msgid "Utilisation %(tokens)s per %(event)s"
 msgstr ""
 
 #, python-format
-msgid "%(amount)d %(tokens)s were used to participate in this event!"
+msgid "%(amount)d %(tokens)s were used to participate in this event"
 msgstr ""
 
 #, python-format
@@ -1671,7 +1671,7 @@ msgid "Utilisation %(credits)s per %(event)s"
 msgstr ""
 
 #, python-format
-msgid "%(amount)d %(credits)s were used to participate in this event!"
+msgid "%(amount)d %(credits)s were used to participate in this event"
 msgstr ""
 
 #, python-format
@@ -1679,7 +1679,7 @@ msgid "Payment per %(event)s"
 msgstr ""
 
 #, python-format
-msgid "A payment of %(amount).2f %(currency)s was received for this event!"
+msgid "A payment of %(amount).2f %(currency)s was received for this event"
 msgstr ""
 
 msgid "Reimbursement payout"
@@ -1691,7 +1691,7 @@ msgid ""
 "disbursed."
 msgstr ""
 
-msgid "They will be used automatically when you sign up for a new event!"
+msgid "They will be used automatically when you sign up for a new event"
 msgstr ""
 
 #, python-format
@@ -1741,7 +1741,7 @@ msgstr ""
 
 msgid ""
 "We thank you for participating in the collection: we are sure they will live "
-"a terrific experience!"
+"a terrific experience"
 msgstr ""
 
 #, python-format
@@ -1750,7 +1750,7 @@ msgstr ""
 
 msgid ""
 "The collection grows: we have no doubt, the fortunate will live soon an "
-"unprecedented experience!"
+"unprecedented experience"
 msgstr ""
 
 #, python-format
@@ -1779,7 +1779,7 @@ msgstr ""
 msgid "Payment to check"
 msgstr ""
 
-msgid "Welcome to LarpManager!"
+msgid "Welcome to LarpManager"
 msgstr ""
 
 #, python-format
@@ -1809,7 +1809,7 @@ msgid "The user was enabled in the role for the indicated event."
 msgstr ""
 
 #, python-format
-msgid "Bring a friend to %(event)s!"
+msgid "Bring a friend to %(event)s"
 msgstr ""
 
 #, python-format
@@ -1829,7 +1829,7 @@ msgid ""
 "(check the available number of discounts <a href='%(url)s'>on this page</a>)"
 msgstr ""
 
-msgid "See you soon!"
+msgid "See you soon"
 msgstr ""
 
 #, python-format
@@ -1843,7 +1843,7 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "Access your character <a href='%(url)s'>here</a>!"
+msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr ""
 
 msgid ""
@@ -1887,33 +1887,33 @@ msgid ""
 "%(currency)s) is required to participate in events."
 msgstr ""
 
-msgid "Thank you for choosing to be part of our community!"
+msgid "Thank you for choosing to be part of our community"
 msgstr ""
 
 #, python-format
 msgid "Membership fee payment %(year)s"
 msgstr ""
 
-msgid "The payment of your membership fee for this year has been received!"
+msgid "The payment of your membership fee for this year has been received"
 msgstr ""
 
 #, python-format
 msgid "Achievement assignment: %(badge)s"
 msgstr ""
 
-msgid "You have been awarded an achievement!"
+msgid "You have been awarded an achievement"
 msgstr ""
 
 #, python-format
 msgid "Display your achievements in your <a href= %(url)s'>public profile</a>."
 msgstr ""
 
-msgid "Membership of the Organization accepted!"
+msgid "Membership of the Organization accepted"
 msgstr ""
 
 msgid ""
 "We confirm that your membership has been accepted by the board. We welcome "
-"you to our community!"
+"you to our community"
 msgstr ""
 
 #, python-format
@@ -1935,7 +1935,7 @@ msgid ""
 "this page</a>."
 msgstr ""
 
-msgid "Membership of the Organization refused!"
+msgid "Membership of the Organization refused"
 msgstr ""
 
 msgid ""
@@ -1946,7 +1946,7 @@ msgstr ""
 msgid "Motivation"
 msgstr ""
 
-msgid "For more information, write to us!"
+msgid "For more information, write to us"
 msgstr ""
 
 #, python-format
@@ -1957,7 +1957,7 @@ msgstr ""
 msgid "(<a href='%(url)s'>answer here</a>)"
 msgstr ""
 
-msgid "New answer!"
+msgid "New answer"
 msgstr ""
 
 msgid "Your question has been answered"
@@ -1993,7 +1993,7 @@ msgid "Registration to %(event)s"
 msgstr ""
 
 #, python-format
-msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed!"
+msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed"
 msgstr ""
 
 #, python-format
@@ -2001,28 +2001,28 @@ msgid "Registration updated for %(event)s"
 msgstr ""
 
 #, python-format
-msgid "Hi! Your registration to <b>%(event)s</b> has been updated!"
+msgid "Hi! Your registration to <b>%(event)s</b> has been updated"
 msgstr ""
 
 #, python-format
 msgid "Registration to %(event)s by %(user)s"
 msgstr ""
 
-msgid "The user has confirmed its registration for this event!"
+msgid "The user has confirmed its registration for this event"
 msgstr ""
 
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr ""
 
-msgid "The user has updated their registration for this event!"
+msgid "The user has updated their registration for this event"
 msgstr ""
 
 #, python-format
 msgid "Ticket selected: <b>%(ticket)s</b>."
 msgstr ""
 
-msgid "Thanks for your support!"
+msgid "Thanks for your support"
 msgstr ""
 
 #, python-format
@@ -2066,7 +2066,7 @@ msgstr ""
 
 msgid ""
 "We confirm that your registration for this event has been cancelled. We are "
-"sorry to see you go!"
+"sorry to see you go"
 msgstr ""
 
 #, python-format
@@ -2089,7 +2089,7 @@ msgstr ""
 
 #, python-format
 msgid ""
-"We confirm that you have successfully pre-registered for <b>%(event)s</b>!"
+"We confirm that you have successfully pre-registered for <b>%(event)s</b>"
 msgstr ""
 
 #, python-format
@@ -5299,9 +5299,6 @@ msgstr ""
 msgid "Your accounting"
 msgstr ""
 
-msgid "They will be used automatically when you sign up for a new event"
-msgstr ""
-
 msgid "Do you wish to be reimbursed? Open a new one"
 msgstr ""
 
@@ -7848,7 +7845,7 @@ msgid ""
 "assignments/media-types/media-types.xhtml"
 msgstr ""
 
-msgid "Operation completed!"
+msgid "Operation completed"
 msgstr ""
 
 msgid "Warning! Other users are editing this item."
@@ -7920,13 +7917,13 @@ msgstr ""
 msgid "please fill in your profile."
 msgstr ""
 
-msgid "You are signed up in the waiting list!"
+msgid "You are signed up in the waiting list"
 msgstr ""
 
-msgid "You are signed up as Filler!"
+msgid "You are signed up as Filler"
 msgstr ""
 
-msgid "You are regularly signed up!"
+msgid "You are regularly signed up"
 msgstr ""
 
 msgid "payment pending confirmation"
@@ -7936,8 +7933,7 @@ msgid "to confirm it proceed with payment."
 msgstr ""
 
 msgid ""
-"If you have made a transfer, please upload the receipt for it to be "
-"processed!"
+"If you have made a transfer, please upload the receipt for it to be processed"
 msgstr ""
 
 msgid "Pre-register to the event!"
@@ -7983,7 +7979,7 @@ msgid ""
 "href='%(url)s'>Unsubscribe</a>"
 msgstr ""
 
-msgid "Elements uploaded!"
+msgid "Elements uploaded"
 msgstr ""
 
 msgid "Unknow error on upload"
@@ -7998,10 +7994,10 @@ msgstr ""
 msgid "Request approved"
 msgstr ""
 
-msgid "Element approved!"
+msgid "Element approved"
 msgstr ""
 
-msgid "Verified payments!"
+msgid "Verified payments"
 msgstr ""
 
 msgid "Payment already confirmed"
@@ -8011,19 +8007,19 @@ msgid "Payment confirmed"
 msgstr ""
 
 #, python-format
-msgid "Feature %(name)s activated!"
+msgid "Feature %(name)s activated"
 msgstr ""
 
 #, python-format
-msgid "Feature %(name)s already activated!"
+msgid "Feature %(name)s already activated"
 msgstr ""
 
 #, python-format
-msgid "Feature %(name)s already deactivated!"
+msgid "Feature %(name)s already deactivated"
 msgstr ""
 
 #, python-format
-msgid "Feature %(name)s deactivated!"
+msgid "Feature %(name)s deactivated"
 msgstr ""
 
 msgid "Member approved!"
@@ -8370,13 +8366,13 @@ msgid ""
 "for infinite)"
 msgstr ""
 
-msgid "Photos and videos successfully uploaded!"
+msgid "Photos and videos successfully uploaded"
 msgstr ""
 
-msgid "Updated!"
+msgid "Updated"
 msgstr ""
 
-msgid "Regeneration pdf started!"
+msgid "Regeneration pdf started"
 msgstr ""
 
 msgid "Provisional"
@@ -8397,7 +8393,7 @@ msgstr ""
 msgid "Registration cancelled"
 msgstr ""
 
-msgid "Player customisation updated!"
+msgid "Player customisation updated"
 msgstr ""
 
 msgid "Cache reset!"
@@ -8416,7 +8412,7 @@ msgstr ""
 msgid "Your tax code has a problem that we ask you to correct"
 msgstr ""
 
-msgid "Everything is in order about the payment of this event!"
+msgid "Everything is in order about the payment of this event"
 msgstr ""
 
 msgid "You have already sent a payment pending verification"
@@ -8471,7 +8467,7 @@ msgstr ""
 msgid "Invoice already confirmed"
 msgstr ""
 
-msgid "You must signed up in order to select your preferences!"
+msgid "You must signed up in order to select your preferences"
 msgstr ""
 
 msgid ""
@@ -8491,13 +8487,13 @@ msgstr ""
 msgid "Character not visible"
 msgstr ""
 
-msgid "You don't have a character assigned for this run!"
+msgid "You don't have a character assigned for this run"
 msgstr ""
 
-msgid "Informations saved!"
+msgid "Informations saved"
 msgstr ""
 
-msgid "New character created!"
+msgid "New character created"
 msgstr ""
 
 msgid ""
@@ -8526,19 +8522,19 @@ msgstr ""
 msgid "Ability acquired"
 msgstr ""
 
-msgid "You have already granted data sharing with this organisation!"
+msgid "You have already granted data sharing with this organisation"
 msgstr ""
 
 msgid "You have granted data sharing with this organisation!"
 msgstr ""
 
-msgid "Personal data updated!"
+msgid "Personal data updated"
 msgstr ""
 
 msgid "Last step, please upload your membership application."
 msgstr ""
 
-msgid "Data share removed successfully!"
+msgid "Data share removed successfully"
 msgstr ""
 
 msgid "Your membership application was successfully submitted!"
@@ -8581,7 +8577,7 @@ msgstr ""
 msgid "Modify shuttle request"
 msgstr ""
 
-msgid "Pre-registrations saved!"
+msgid "Pre-registrations saved"
 msgstr ""
 
 msgid "Pre-registration cancelled!"

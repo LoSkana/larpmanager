@@ -116,7 +116,7 @@ def orga_invoices_confirm(request, s, n, num):
         return redirect("orga_invoices", s=ctx["event"].slug, n=ctx["run"].number)
 
     ctx["el"].save()
-    messages.success(request, _("Element approved!"))
+    messages.success(request, _("Element approved") + "!")
     return redirect("orga_invoices", s=ctx["event"].slug, n=ctx["run"].number)
 
 

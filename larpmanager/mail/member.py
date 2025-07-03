@@ -62,7 +62,7 @@ def send_membership_confirm(request, membership):
             "Please also note that payment of the annual membership fee (%(amount)d "
             "%(currency)s) is required to participate in events."
         ) % {"amount": amount, "currency": request.assoc["currency_symbol"]}
-    body += "<br /><br />" + _("Thank you for choosing to be part of our community!")
+    body += "<br /><br />" + _("Thank you for choosing to be part of our community") + "!"
     my_send_mail(subj, body, profile, membership)
 
 
@@ -75,7 +75,7 @@ def save_accounting_item_membership(sender, instance, *args, **kwargs):
     # to user
     activate(instance.member.language)
     subj = hdr(instance) + _("Membership fee payment %(year)s") % {"year": instance.year}
-    body = _("The payment of your membership fee for this year has been received!")
+    body = _("The payment of your membership fee for this year has been received") + "!"
     my_send_mail(subj, body, instance.member, instance)
 
 
@@ -92,7 +92,7 @@ def badges_changed(sender, **kwargs):
         activate(m.language)
         badge = instance.show(m.language)
         subj = hdr(instance) + _("Achievement assignment: %(badge)s") % {"badge": badge["name"]}
-        body = _("You have been awarded an achievement!") + "<br /><br />"
+        body = _("You have been awarded an achievement") + "!" + "<br /><br />"
         body += _("Description") + f": {badge['descr']}<br /><br />"
         url = get_url(f"public/{m.id}/", instance)
         body += _("Display your achievements in your <a href= %(url)s'>public profile</a>.") % {"url": url}
@@ -105,8 +105,8 @@ m2m_changed.connect(badges_changed, sender=Badge.members.through)
 def notify_membership_approved(member, resp):
     # Manda Mail
     activate(member.language)
-    subj = hdr(member.membership) + _("Membership of the Organization accepted!")
-    body = _("We confirm that your membership has been accepted by the board. We welcome you to our community!")
+    subj = hdr(member.membership) + _("Membership of the Organization accepted") + "!"
+    body = _("We confirm that your membership has been accepted by the board. We welcome you to our community") + "!"
     body += "<br /><br />" + _("Your card number is: <b>%(number)03d</b>.") % {"number": member.membership.card_number}
     if resp:
         body += " " + _("More details") + f": {resp}"
@@ -150,11 +150,11 @@ def notify_membership_approved(member, resp):
 def notify_membership_reject(member, resp):
     # Manda Mail
     activate(member.language)
-    subj = hdr(member.membership) + _("Membership of the Organization refused!")
+    subj = hdr(member.membership) + _("Membership of the Organization refused") + "!"
     body = _("We inform you that your membership of the Association has not been accepted by the board.")
     if resp:
         body += " " + _("Motivation") + f": {resp}"
-    body += _("For more information, write to us!")
+    body += _("For more information, write to us") + "!"
     my_send_mail(subj, body, member, member.membership)
 
 
@@ -189,7 +189,7 @@ def notify_help_question(sender, instance, **kwargs):
     else:
         # new answer
         activate(mb.language)
-        subj = hdr(instance) + _("New answer!")
+        subj = hdr(instance) + _("New answer") + "!"
         body = _("Your question has been answered") + f": {instance.text}"
 
         if instance.run:

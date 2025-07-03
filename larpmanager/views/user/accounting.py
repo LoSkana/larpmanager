@@ -225,7 +225,7 @@ def acc_reg(request, reg_id, method=None):
     reg.membership = get_user_membership(reg.member, request.assoc["id"])
 
     if reg.tot_iscr == reg.tot_payed:
-        messages.success(request, _("Everything is in order about the payment of this event!"))
+        messages.success(request, _("Everything is in order about the payment of this event") + "!")
         return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
 
     pending = (

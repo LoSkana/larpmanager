@@ -98,7 +98,7 @@ def profile(request):
             ctx["membership"].save()
             activate(prof.language)
 
-            mes = _("Personal data updated!")
+            mes = _("Personal data updated") + "!"
 
             if "membership" in request.assoc["features"]:
                 if ctx["membership"].status in [MembershipStatus.EMPTY, MembershipStatus.JOINED]:
@@ -211,7 +211,7 @@ def profile_privacy_rewoke(request, slug):
         membership = Membership.objects.get(assoc=assoc, member=request.user.member)
         membership.status = MembershipStatus.EMPTY
         membership.save()
-        messages.success(request, _("Data share removed successfully!"))
+        messages.success(request, _("Data share removed successfully") + "!")
     except Exception as err:
         raise Http404("error in performing request") from err
     return redirect("profile_privacy")

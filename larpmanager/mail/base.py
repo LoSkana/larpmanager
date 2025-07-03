@@ -53,7 +53,7 @@ def check_holiday():
 def join_email(assoc):
     for member in get_assoc_executives(assoc):
         activate(member.language)
-        subj = _("Welcome to LarpManager!")
+        subj = _("Welcome to LarpManager") + "!"
         body = render_to_string("mails/join_assoc.html", {"member": member, "assoc": assoc})
         my_send_mail(subj, body, member, assoc)
 
@@ -153,7 +153,7 @@ m2m_changed.connect(event_roles_changed, sender=EventRole.members.through)
 
 def bring_friend_instructions(reg, ctx):
     activate(reg.member.language)
-    subj = hdr(reg.run.event) + _("Bring a friend to %(event)s!") % {"event": reg.run}
+    subj = hdr(reg.run.event) + _("Bring a friend to %(event)s") % {"event": reg.run} + "!"
     body = _("Personal code: <b>%(cod)s</b>") % {"cod": reg.special_cod}
     body += "<br /><br />" + _(
         "Copy this code and share it with friends! Every friend who signs up  and uses "
@@ -168,7 +168,7 @@ def bring_friend_instructions(reg, ctx):
     body += "<br /><br />" + _("(check the available number of discounts <a href='%(url)s'>on this page</a>)") % {
         "url": f"{reg.run.event.slug}/{reg.run.number}/limitations/"
     }
-    body += "<br /><br />" + _("See you soon!")
+    body += "<br /><br />" + _("See you soon") + "!"
     my_send_mail(subj, body, reg.member, reg.run)
 
 
@@ -196,7 +196,7 @@ def notify_trait_assigned(sender, instance, created, **kwargs):
         f"{instance.run.event.slug}/{instance.run.number}/character/your",
         instance.run.event,
     )
-    body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>!") % {"url": url}
+    body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>") % {"url": url} + "!"
     if instance.run.get_config("show_text", False):
         body += "<br/><br />" + _(
             "Please note that your character sheet may contain  personal secrets, not to be "

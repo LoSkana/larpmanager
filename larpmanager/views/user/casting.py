@@ -108,7 +108,7 @@ def casting(request, s, n, typ=0):
     check_event_feature(request, ctx, "casting")
 
     if ctx["run"].reg is None:
-        messages.success(request, _("You must signed up in order to select your preferences!"))
+        messages.success(request, _("You must signed up in order to select your preferences") + "!")
         return redirect("gallery", s=ctx["event"].slug, n=ctx["run"].number)
 
     if ctx["run"].reg and ctx["run"].reg.ticket and ctx["run"].reg.ticket.tier == TicketTier.WAITING:

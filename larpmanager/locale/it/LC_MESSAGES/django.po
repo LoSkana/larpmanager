@@ -810,6 +810,9 @@ msgstr "Biglietti"
 msgid "Tooltip"
 msgstr "Tooltip"
 
+msgid "Updated"
+msgstr "Aggiornato"
+
 msgid "Use TLD"
 msgstr "Utilizza TLD"
 
@@ -1061,9 +1064,6 @@ msgstr "Tesoreria"
 
 msgid "Tutorial"
 msgstr "Tutorial"
-
-msgid "Updated!"
-msgstr "Aggiornato!"
 
 msgid "Uploaded"
 msgstr "Caricato"
@@ -1356,6 +1356,9 @@ msgstr "Navigazione"
 msgid "Net profit"
 msgstr "Utile netto"
 
+msgid "New answer"
+msgstr "Nuova risposta"
+
 msgid "New member"
 msgstr "Nuovo socio"
 
@@ -1568,9 +1571,6 @@ msgstr "Nazionalità"
 
 msgid "Need a ride"
 msgstr "Hai bisogno di un passaggio"
-
-msgid "New answer!"
-msgstr "Nuova risposta!"
 
 msgid "Next events"
 msgstr "Prossimi eventi"
@@ -1815,6 +1815,9 @@ msgstr "Impostazioni Run"
 msgid "Safe editing"
 msgstr "Editing sicuro"
 
+msgid "See you soon"
+msgstr "Ti aspettiamo"
+
 msgid "Show history"
 msgstr "Mostra storico"
 
@@ -2010,9 +2013,6 @@ msgstr "Richiedi login"
 
 msgid "Requests open"
 msgstr "Richieste aperte"
-
-msgid "See you soon!"
-msgstr "Ti aspettiamo!"
 
 msgid "Show inactive"
 msgstr "Mostra inattive"
@@ -2390,6 +2390,9 @@ msgstr "Agevolazioni attive"
 msgid "Driver's License"
 msgstr "Patente"
 
+msgid "Element approved"
+msgstr "Elemento approvato"
+
 msgid "Event Appearance"
 msgstr "Aspetto Evento"
 
@@ -2579,8 +2582,8 @@ msgstr "Erogazione tokens"
 msgid "Download document"
 msgstr "Scarica documento"
 
-msgid "Element approved!"
-msgstr "Elemento approvato!"
+msgid "Elements uploaded"
+msgstr "Elementi caricati"
 
 msgid "Experience points"
 msgstr "Punti esperienza"
@@ -2675,6 +2678,9 @@ msgstr "Supporto tecnico"
 msgid "Use these formats"
 msgstr "Utilizza questi formati"
 
+msgid "Verified payments"
+msgstr "Pagamenti verificati"
+
 msgid "Vote not yet open"
 msgstr "La votazione non è ancora stata aperta"
 
@@ -2729,14 +2735,14 @@ msgstr "Disabilita assegnazione"
 msgid "Electronic invoice"
 msgstr "Fattura elettronica"
 
-msgid "Elements uploaded!"
-msgstr "Elementi caricati!"
-
 msgid "Go to the form for"
 msgstr "Vai al modulo per"
 
 msgid "Hide not available"
 msgstr "Nascondi non disponibili"
+
+msgid "Informations saved"
+msgstr "Informazioni salvate"
 
 msgid "Member Data Checks"
 msgstr "Controlli dati soci"
@@ -2779,9 +2785,6 @@ msgstr "Totale del pagamento inviato"
 
 msgid "Transaction totals"
 msgstr "Transazione totali"
-
-msgid "Verified payments!"
-msgstr "Pagamenti verificati!"
 
 msgid "Volunteer Registry"
 msgstr "Registro Volontari"
@@ -2853,9 +2856,6 @@ msgstr "Storico preferenze"
 msgid "I am not interested"
 msgstr "Non sono interessato"
 
-msgid "Informations saved!"
-msgstr "Informazioni salvate!"
-
 msgid "List of other users"
 msgstr "Elenco degli altri utenti"
 
@@ -2882,6 +2882,9 @@ msgstr "Codice non cumulabile"
 
 msgid "Number of event run"
 msgstr "Numero della run dell'evento"
+
+msgid "Operation completed"
+msgstr "Operazione completata"
 
 msgid "Password of account"
 msgstr "Password dell'account"
@@ -2998,9 +3001,6 @@ msgstr "Numero di passeggeri"
 msgid "Opening at: %(date)s"
 msgstr "Aprono il: %(date)s"
 
-msgid "Operation completed!"
-msgstr "Operazione completata!"
-
 msgid "Organization inflows"
 msgstr "Entrate associazione"
 
@@ -3110,6 +3110,9 @@ msgstr "Se assente, indicare 0"
 msgid "Manage in-game issues"
 msgstr "Gestisci i problemi di gioco"
 
+msgid "New character created"
+msgstr "Nuovo personaggio creato"
+
 msgid "New pre-registrations"
 msgstr "Nuova pre-iscrizione"
 
@@ -3128,6 +3131,9 @@ msgstr "Hanno partecipato"
 #, python-format
 msgid "Payment per %(event)s"
 msgstr "Versamento per %(event)s"
+
+msgid "Personal data updated"
+msgstr "Dati personali aggiornati"
 
 msgid "Pre-registration link"
 msgstr "Link pre-iscrizioni"
@@ -3237,9 +3243,6 @@ msgstr "Età minima dei soci"
 msgid "Modify shuttle request"
 msgstr "Modifica richiesta shuttle"
 
-msgid "New character created!"
-msgstr "Nuovo personaggio creato!"
-
 msgid "Number of filler spots"
 msgstr "Numero posti filler"
 
@@ -3248,9 +3251,6 @@ msgstr "Numero di partecipazioni"
 
 msgid "Payment membership fee"
 msgstr "Pagamento quota associativa"
-
-msgid "Personal data updated!"
-msgstr "Dati personali aggiornati!"
 
 msgid "Register of volunteers"
 msgstr "Registro dei volontari"
@@ -3282,6 +3282,9 @@ msgstr "Quota di iscrizione totale"
 
 msgid "Unknow error on upload"
 msgstr "Errore sconosciuto durante il caricamento"
+
+msgid "Welcome to LarpManager"
+msgstr "Benvenuto su LarpManager"
 
 msgid "Workshop already done!"
 msgstr "Workshop già superato!"
@@ -3365,6 +3368,9 @@ msgstr "Preiscrizioni totali"
 msgid "Pre-registration active"
 msgstr "Pre-registrazione attiva"
 
+msgid "Pre-registrations saved"
+msgstr "Pre-iscrizioni salvate"
+
 msgid "Registration conditions"
 msgstr "Condizioni iscrizione"
 
@@ -3374,11 +3380,11 @@ msgstr "Le iscrizioni non sono ancora aperte!"
 msgid "Reminder membership fee"
 msgstr "Promemoria quota associativa"
 
+msgid "Thanks for your support"
+msgstr "Grazie per il tuo supporto"
+
 msgid "Update your data in the"
 msgstr "Aggiorna i tuoi dati nel"
-
-msgid "Welcome to LarpManager!"
-msgstr "Benvenuto su LarpManager!"
 
 msgid "What are you doing here"
 msgstr "Che ci fai ancora qua"
@@ -3433,20 +3439,17 @@ msgstr "Nuova associazione creata"
 msgid "New question by %(user)s"
 msgstr "Nuova domanda da %(user)s"
 
-msgid "Pre-registrations saved!"
-msgstr "Pre-iscrizioni salvate!"
-
 msgid "Provisional registration"
 msgstr "Iscrizione provvisoria"
+
+msgid "Regeneration pdf started"
+msgstr "Rigenerazione pdf avviata"
 
 msgid "Reload cached event data"
 msgstr "Ricarica i dati dell'evento nella cache"
 
 msgid "Secret registration link"
 msgstr "Link iscrizione segreto"
-
-msgid "Thanks for your support!"
-msgstr "Grazie per il tuo supporto!"
 
 msgid "The subdomain identifier"
 msgstr "L'identificatore del sottodominio"
@@ -3512,9 +3515,6 @@ msgstr "Opzionale - email reply to"
 msgid "Payment already confirmed"
 msgstr "Pagamento già confermato"
 
-msgid "Regeneration pdf started!"
-msgstr "Rigenerazione pdf avviata!"
-
 msgid "Registration opening date"
 msgstr "Data apertura iscrizioni"
 
@@ -3566,6 +3566,10 @@ msgstr "Scopri i gruppi di gioco"
 
 msgid "Edit your character's data"
 msgstr "Modifica i dati del tuo personaggio"
+
+#, python-format
+msgid "Feature %(name)s activated"
+msgstr "Funzionalità %(name)s attivata"
 
 msgid "Give a card to your friend"
 msgstr "Regala un biglietto ad un tuo amico"
@@ -3636,6 +3640,10 @@ msgstr "(clicca sull'immagine per ingrandirla)"
 msgid "Additional free payment fee"
 msgstr "Quota libera di pagamento aggiuntiva"
 
+#, python-format
+msgid "Bring a friend to %(event)s"
+msgstr "Portate un amico a %(event)s"
+
 msgid "Confirmation of expenditure"
 msgstr "Conferma spesa"
 
@@ -3644,10 +3652,6 @@ msgstr "Descrizione inglese"
 
 msgid "Enter your preferences here"
 msgstr "Indica qui le tue preferenze"
-
-#, python-format
-msgid "Feature %(name)s activated!"
-msgstr "Funzionalità %(name)s attivata!"
 
 msgid "Is it selectable by players"
 msgstr "E' selezionabile dai giocatori"
@@ -3700,12 +3704,14 @@ msgstr "Trattenuta come costo di transazione"
 msgid "Would you like to change it"
 msgstr "Desideri cambiarlo"
 
+msgid "You are regularly signed up"
+msgstr "Iscrizione confermata"
+
+msgid "You are signed up as Filler"
+msgstr "Sei iscritto come Filler"
+
 msgid "options (number of options)"
 msgstr "options (numero di opzioni)"
-
-#, python-format
-msgid "Bring a friend to %(event)s!"
-msgstr "Portate un amico a %(event)s!"
 
 msgid "Contents of the special page"
 msgstr "Contenuto della pagina speciale"
@@ -3715,6 +3721,10 @@ msgstr "Una foto esemplificativa del personaggio"
 
 msgid "Description of free donation"
 msgstr "Descrizione del di donazione libera"
+
+#, python-format
+msgid "Feature %(name)s deactivated"
+msgstr "Funzionalità %(name)s disattivata"
 
 msgid "If checked: members can vote"
 msgstr "Se selezionato: i membri possono votare"
@@ -3731,21 +3741,21 @@ msgstr "Gestisci gli eventi speed-larps"
 msgid "Membership request submitted"
 msgstr "Richiesta Socio sottomessa"
 
+msgid "Player customisation updated"
+msgstr "Personalizzazione giocatore aggiornata"
+
 #, python-format
 msgid "Trait assigned for %(event)s"
 msgstr "Tratto assegnato per %(event)s"
-
-msgid "You are regularly signed up!"
-msgstr "Iscrizione confermata!"
-
-msgid "You are signed up as Filler!"
-msgstr "Sei iscritto come Filler!"
 
 msgid "payment pending confirmation"
 msgstr "pagamento in attesa di conferma"
 
 msgid "please fill in your profile."
 msgstr "per favore compila il tuo profilo."
+
+msgid "Already existing relationship"
+msgstr "Relazione già esistente"
 
 #, python-format
 msgid "Approval %(user)s as %(role)s"
@@ -3756,10 +3766,6 @@ msgstr "Acquista abilità del tuo personaggio"
 
 msgid "Date of issue of the document"
 msgstr "Data di emissione del documento"
-
-#, python-format
-msgid "Feature %(name)s deactivated!"
-msgstr "Funzionalità %(name)s disattivata!"
 
 msgid "Indicate the outflow category"
 msgstr "Indicare la categoria entro cui viene contata l'uscita"
@@ -3785,9 +3791,6 @@ msgstr "Numero di biglietti da estrarre"
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Codice personale: <b>%(cod)s</b>"
-
-msgid "Player customisation updated!"
-msgstr "Personalizzazione giocatore aggiornata!"
 
 #, python-format
 msgid "Pre-registration at %(event)s"
@@ -3823,9 +3826,6 @@ msgstr "Il tuo account ora è attivo!"
 
 msgid "check excessive relationships"
 msgstr "check relazioni in più"
-
-msgid "Already existing relationship!"
-msgstr "Relazione già esistente!"
 
 #, python-format
 msgid "Complete payment for %(event)s"
@@ -3884,6 +3884,9 @@ msgstr "Naviga il sito di presentazione"
 
 msgid "Choice available, click to lock"
 msgstr "Scelta disponibile, clicca per bloccarla"
+
+msgid "Data share removed successfully"
+msgstr "Condivisione dati rimossa con successo"
 
 msgid "Did you check and is it correct"
 msgstr "Hai controllato ed è corretto"
@@ -3984,9 +3987,6 @@ msgstr "Copia elementi da un altro evento"
 msgid "Costumes - make up, cloth, armor"
 msgstr "Costumi - make up, stoffa, armature"
 
-msgid "Data share removed successfully!"
-msgstr "Condivisione dati rimossa con successo!"
-
 msgid "Display secret registration link"
 msgstr "Visualizza il link di registrazione segreto"
 
@@ -4022,6 +4022,9 @@ msgstr "Ora è possibile impostare le opzioni di voto"
 
 msgid "Now you can verify wire payments"
 msgstr "Ora è possibile verificare i pagamenti tramite bonifico"
+
+msgid "Please upload your profile photo"
+msgstr "Per favore carica la tua foto profilo"
 
 msgid "Reimbursement request item added"
 msgstr "Voce di richiesta rimborso aggiunta"
@@ -4077,6 +4080,9 @@ msgstr "Scopri di cosa parla questo evento"
 msgid "Fill out the event prep questions"
 msgstr "Compila le domande preparatorie all'evento"
 
+msgid "For more information, write to us"
+msgstr "Per maggiori informazioni, scrivici"
+
 msgid "Go to the history preferences for"
 msgstr "Vai allo storico preferenze per"
 
@@ -4088,9 +4094,6 @@ msgstr "Sono presenti biglietti lotteria"
 
 msgid "Now you can set the taxes options"
 msgstr "Ora è possibile impostare le opzioni relative alle tasse"
-
-msgid "Please upload your profile photo!"
-msgstr "Per favore carica la tua foto profilo!"
 
 msgid "This page shows the url shortners"
 msgstr "Questa pagina mostra gli url brevi"
@@ -4119,11 +4122,12 @@ msgstr "Ritardo nella registrazione dell'organizzazione"
 msgid "Empty relationship check (no text)"
 msgstr "Check relazione vuota (niente testo)"
 
+#, python-format
+msgid "Feature %(name)s already activated"
+msgstr "Funzionalità %(name)s già attivata"
+
 msgid "Find out what quests are available"
 msgstr "Scopri le quest disponibili"
-
-msgid "For more information, write to us!"
-msgstr "Per maggiori informazioni, scrivici!"
 
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Se selezionata, consente il livello dei biglietti: PNG"
@@ -4186,10 +4190,6 @@ msgstr "Il totale aggiornato della tua iscrizione è"
 msgid "(<a href='%(url)s'>answer here</a>)"
 msgstr "(<a href='%(url)s'>rispondere qui</a>)"
 
-#, python-format
-msgid "Feature %(name)s already activated!"
-msgstr "Funzionalità %(name)s già attivata!"
-
 msgid "Image shown on homepage as promoter"
 msgstr "Immagine mostrata in homepage, come promoter"
 
@@ -4249,6 +4249,10 @@ msgstr "Errore nel processare il pagamento, contattaci"
 
 msgid "Extended description - international"
 msgstr "Descrizione estesa - in inglese"
+
+#, python-format
+msgid "Feature %(name)s already deactivated"
+msgstr "Funzionalità %(name)s già disattivata"
 
 msgid "If checked, allow ticket tier: Staff"
 msgstr "Se selezionata, consente il livello di biglietto: Staff"
@@ -4317,15 +4321,14 @@ msgstr "Visualizza la lista completa dei nostri eventi"
 msgid "You are currently logged in with the"
 msgstr "Al momento sei collegato con l'account"
 
+msgid "You have been awarded an achievement"
+msgstr "Ti è stato assegnato un achievement"
+
 msgid "Added to the bottom of all mails sent"
 msgstr "Aggiunto in fondo a tutte le mail inviate"
 
 msgid "Assign selected characters to players"
 msgstr "Assegna i personaggi selezionati ai giocatori"
-
-#, python-format
-msgid "Feature %(name)s already deactivated!"
-msgstr "Funzionalità %(name)s già disattivata!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Se selezionata, consente il livello del biglietto: Venditore"
@@ -4404,8 +4407,8 @@ msgstr "Importo totale rimborsato ai partecipanti"
 msgid "Utilisation %(credits)s per %(event)s"
 msgstr "Utilizzo %(credits)s per %(event)s"
 
-msgid "You have been awarded an achievement!"
-msgstr "Ti è stato assegnato un achievement!"
+msgid "You are signed up in the waiting list"
+msgstr "Sei iscritto alla lista d'attesa"
 
 msgid "description (application description)"
 msgstr "description (descrizione della domanda)"
@@ -4438,6 +4441,9 @@ msgstr "Compila le relazioni del tuo personaggio"
 msgid "Manage fields that track players’ data"
 msgstr "Gestisci i campi che tracciano i dati dei giocatori"
 
+msgid "Membership of the Organization refused"
+msgstr "Iscrizione all'Associazione rifiutata"
+
 msgid "Now you can host files in the platform"
 msgstr "Ora è possibile ospitare i file nella piattaforma"
 
@@ -4455,9 +4461,6 @@ msgstr "Hai già un personaggio assegnato"
 
 msgid "You are about to perform a donation of"
 msgstr "Stai per effettuare una donazione di"
-
-msgid "You are signed up in the waiting list!"
-msgstr "Sei iscritto alla lista d'attesa!"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available."
@@ -4498,8 +4501,8 @@ msgstr "Gestisci le entrate degli eventi o dell'organizzazione"
 msgid "Membership fee of %(user)s for %(year)s"
 msgstr "Quota sociale di %(user)s per %(year)s"
 
-msgid "Membership of the Organization refused!"
-msgstr "Iscrizione all'Associazione rifiutata!"
+msgid "Membership of the Organization accepted"
+msgstr "Iscrizione all'Associazione accettata"
 
 msgid "Now you can create quests for the event"
 msgstr "Ora è possibile creare missioni per l'evento"
@@ -4509,6 +4512,9 @@ msgstr "Ora è possibile rivedere i problemi dell'evento"
 
 msgid "Now you can se the special page options"
 msgstr "Ora è possibile visualizzare le opzioni della pagina speciale"
+
+msgid "Photos and videos successfully uploaded"
+msgstr "Foto e video caricate con successo"
 
 #, python-format
 msgid "Registration cancellation for %(event)s"
@@ -4553,9 +4559,6 @@ msgstr "Indica la data in cui ha fine la run"
 msgid "Manage badges and assign them to players"
 msgstr "Gestisci i badge e assegnali ai giocatori"
 
-msgid "Membership of the Organization accepted!"
-msgstr "Iscrizione all'Associazione accettata!"
-
 msgid "Name of the ticket into which to convert"
 msgstr "Nome del biglietto in cui convertire"
 
@@ -4567,9 +4570,6 @@ msgstr "Un carattere in più o in meno rispetto a quanto atteso"
 
 msgid "Payment currently in review by the staff"
 msgstr "Il pagamento è attualmente in fase di revisione da parte dello staff"
-
-msgid "Photos and videos successfully uploaded!"
-msgstr "Foto e video caricate con successo!"
 
 msgid "The collection was delivered to the user"
 msgstr "La collezione è stata consegnata all'utente"
@@ -5018,6 +5018,10 @@ msgstr "Ora sei loggato con l'account delegato"
 msgid "A description of the skills / abilities involved"
 msgstr "Una descrizione delle abilità della competenza"
 
+#, python-format
+msgid "Access your character <a href='%(url)s'>here</a>"
+msgstr "Accedi al tuo personaggio <a href='%(url)s'>qui</a>"
+
 msgid "Discounts only applicable with new registrations"
 msgstr "Codice applicabile solo in fase di nuova iscrizione"
 
@@ -5076,6 +5080,9 @@ msgstr "Questa pagina riepiloga i tipi di quest dell'evento"
 msgid "To access this feature, you must first register!"
 msgstr "Per accedere a questa funzionalità devi prima iscriverti!"
 
+msgid "You don't have a character assigned for this run"
+msgstr "Non hai assegnato un personaggio a questa run"
+
 msgid "You have already paid this year's membership fee"
 msgstr "Hai già versato la quota sociale di quest'anno"
 
@@ -5084,10 +5091,6 @@ msgstr "in attesa di approvazione socio per procedere col pagamento"
 
 msgid "to confirm it, send your membership application."
 msgstr "per confermarla invia la tua richiesta di iscrizione come socio."
-
-#, python-format
-msgid "Access your character <a href='%(url)s'>here</a>!"
-msgstr "Accedi al tuo personaggio <a href='%(url)s'>qui</a>!"
 
 msgid "Added at the top of the search page of characters"
 msgstr "Aggiunto all'inizio della pagina di ricerca dei personaggi"
@@ -5139,8 +5142,8 @@ msgstr "Codice unico della iscrizione, usato per i check nei pagamenti"
 msgid "You are including (at least one of these filters)"
 msgstr "Stai includendo (almeno una di questi filtri)"
 
-msgid "You don't have a character assigned for this run!"
-msgstr "Non hai assegnato un personaggio a questa run!"
+msgid "You cannot create a relationship towards yourself"
+msgstr "Non puoi creare una relazione verso te stesso"
 
 msgid "Allows authors to add relationships to characters."
 msgstr "Permette agli autori di aggiungere relazioni ai personaggi."
@@ -5187,6 +5190,9 @@ msgstr "Impostare le opzioni di casting nel pannello di configurazione"
 msgid "Set visual aspect: colors, background, cover image"
 msgstr "Imposta l'aspetto visivo: colori, sfondo, immagine di copertina"
 
+msgid "Thank you for choosing to be part of our community"
+msgstr "Ti ringraziamo per aver scelto di far parte della nostra community"
+
 #, python-format
 msgid "The sum is %(amount).2f, with reason '%(reason)s'."
 msgstr "La somma è di %(amount).2f, con motivazione '%(reason)s'."
@@ -5220,9 +5226,6 @@ msgstr "Questa pagina riassume i volontari dell'organizzazione"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Quote di partecipazione totali ridotte grazie agli sconti"
-
-msgid "You cannot create a relationship towards yourself!"
-msgstr "Non puoi creare una relazione verso te stesso!"
 
 msgid "you can still pay the remaining amount if you wish"
 msgstr "se lo desideri, puoi comunque pagare l'importo rimanente"
@@ -5258,9 +5261,6 @@ msgstr "Esamina le restrizioni dietetiche e le allergie dei giocatori."
 
 msgid "Short guides to help you learn how the system works"
 msgstr "Brevi guide per imparare il funzionamento del sistema"
-
-msgid "Thank you for choosing to be part of our community!"
-msgstr "Ti ringraziamo per aver scelto di far parte della nostra community!"
 
 msgid "The registration for this event has been cancelled."
 msgstr "L'iscrizione all'evento è stata disdetta."
@@ -5383,6 +5383,9 @@ msgstr "Ti è stata regalata una iscrizione a questo evento, da parte di "
 msgid "You have granted data sharing with this organisation!"
 msgstr "Hai concesso la condivisione dei dati con questa organizzazione!"
 
+msgid "Everything is in order about the payment of this event"
+msgstr "Tutto ci risulta in regola per il pagamento di questo evento"
+
 msgid "Extended description (will be shown in gray, in small)"
 msgstr "Descrizione estesa (verrà mostrata in grigio, in piccolo)"
 
@@ -5409,6 +5412,12 @@ msgstr "Imposta se vuoi riservare dei biglietti in più rispetto al tuo"
 msgid "The registration request will be updated automatically"
 msgstr "La richiesta di iscrizione verrà aggiornata automaticamente"
 
+msgid "The user has confirmed its registration for this event"
+msgstr "L'utente ha confermato la sua iscrizione a questo evento"
+
+msgid "The user has updated their registration for this event"
+msgstr "L'utente ha aggiornato la sua iscrizione a questo evento"
+
 msgid "This page shows the discounts activated for this event"
 msgstr "Questa pagina riepiloga gli sconti attivati per questo evento"
 
@@ -5420,6 +5429,9 @@ msgstr "Questa pagina riepiloga la lista dei soci come registro"
 
 msgid "You have not reached the minimum number of preferences"
 msgstr "Non hai raggiunto il numero minimo di preferenze da indicare"
+
+msgid "You must signed up in order to select your preferences"
+msgstr "Devi essere iscritto per poter selezionare le tue preferenze"
 
 msgid "Your tax code has a problem that we ask you to correct"
 msgstr "Il tuo codice fiscale ha un problema che ti chiediamo di correggere"
@@ -5444,9 +5456,6 @@ msgid "Displays statistics on player preferences on characters"
 msgstr ""
 "Visualizza le statistiche sulle preferenze dei giocatori sui personaggi"
 
-msgid "Everything is in order about the payment of this event!"
-msgstr "Tutto ci risulta in regola per il pagamento di questo evento!"
-
 msgid "If checked: shows a link in the calendar to past events"
 msgstr "Se selezionata: mostra un link al calendario degli eventi passati."
 
@@ -5463,12 +5472,6 @@ msgstr "Verifica gli utenti che non hanno rispettato le scadenze dell'evento."
 msgid "The link will be valid for the following number of days"
 msgstr "Il link sarà valido per il seguente numero di giorni"
 
-msgid "The user has confirmed its registration for this event!"
-msgstr "L'utente ha confermato la sua iscrizione a questo evento!"
-
-msgid "The user has updated their registration for this event!"
-msgstr "L'utente ha aggiornato la sua iscrizione a questo evento!"
-
 msgid "This page allows you to edit organization-specific text"
 msgstr ""
 "Questa pagina consente di modificare il testo specifico dell'organizzazione."
@@ -5481,9 +5484,6 @@ msgstr "Totale di quanto è stato già saldato alla data attuale"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Abbiamo riscontrato un problema con il codice fiscale che hai fornito"
-
-msgid "You must signed up in order to select your preferences!"
-msgstr "Devi essere iscritto per poter selezionare le tue preferenze!"
 
 msgid "Your membership application was successfully submitted!"
 msgstr "La tua richiesta di socio è stata inviata con successo!"
@@ -5577,6 +5577,10 @@ msgid "Displays full lists of usual players not already signed up"
 msgstr ""
 "Visualizza gli elenchi completi dei giocatori abituali non ancora iscritti"
 
+#, python-format
+msgid "Hi! Your registration to <b>%(event)s</b> has been updated"
+msgstr "Ciao! La tua iscrizione a <b>%(event)s</b> è stata aggiornata"
+
 msgid "I am not good what to say. I never thought it would happen"
 msgstr "Non sono bene cosa dire. Non pensavo sarebbe mai successo"
 
@@ -5629,10 +5633,6 @@ msgid "Content of mail reminding players to pay the membership fee"
 msgstr ""
 "Contenuto della mail che ricorda ai giocatori di pagare la quota associativa"
 
-#, python-format
-msgid "Hi! Your registration to <b>%(event)s</b> has been updated!"
-msgstr "Ciao! La tua iscrizione a <b>%(event)s</b> è stata aggiornata!"
-
 msgid "If checked, makes pre-registration for this event available"
 msgstr "Se checkato, rende disponibile la pre-iscrizione per questo evento"
 
@@ -5682,6 +5682,11 @@ msgstr "Totale della tua iscrizione: <b>%(amount).2f %(currency)s</b>."
 msgid "You have chosen the same option in more than one preference"
 msgstr "Hai indicato la stessa opzione in più di una preferenza"
 
+#, python-format
+msgid "%(amount)d %(tokens)s were used to participate in this event"
+msgstr ""
+"%(amount)d %(tokens)s sono stati usati per partecipare a questo evento"
+
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
 "ATTENZIONE: questa azione sovrascrive le modifiche effettuate a questo "
@@ -5728,10 +5733,13 @@ msgstr "Questa pagina riepiloga le fazioni (gruppi di personaggi) dell'evento"
 msgid "This page shows the relationships of the indicated character"
 msgstr "Questa pagina riepiloga i legami del personaggio indicato"
 
+msgid "You have already granted data sharing with this organisation"
+msgstr "Hai già concesso la condivisione dei dati con questa organizzazione"
+
 #, python-format
-msgid "%(amount)d %(tokens)s were used to participate in this event!"
+msgid "%(amount)d %(credits)s were used to participate in this event"
 msgstr ""
-"%(amount)d %(tokens)s sono stati usati per partecipare a questo evento!"
+"%(amount)d %(credits)s sono stati usati per partecipare a questo evento"
 
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here!</a>."
@@ -5799,17 +5807,9 @@ msgstr ""
 "In questa pagina vengono riepilogate tutte le voci di ricavo registrate nel "
 "sistema."
 
-msgid "You have already granted data sharing with this organisation!"
-msgstr "Hai già concesso la condivisione dei dati con questa organizzazione!"
-
 msgid "for no relationship, only to display the other character name"
 msgstr ""
 "senza alcuna relazione, solo per visualizzare il nome dell'altro carattere"
-
-#, python-format
-msgid "%(amount)d %(credits)s were used to participate in this event!"
-msgstr ""
-"%(amount)d %(credits)s sono stati usati per partecipare a questo evento!"
 
 msgid "Added to the membership page as the paragraph for statute info"
 msgstr ""
@@ -5878,6 +5878,10 @@ msgstr "La tua richiesta è stata inviata, risponderemo il prima possibile!"
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Descrizione - verrà visualizzato all'inizio della sezione"
 
+#, python-format
+msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed"
+msgstr "Ciao! La tua iscrizione a <b>%(event)s</b> è stata confermata!"
+
 msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Se checkato, non verranno usati token nelle iscrizioni di questo evento"
@@ -5921,10 +5925,6 @@ msgid "Allows players to create and modify their own characters freely."
 msgstr ""
 "Permette ai giocatori di creare e modificare liberamente i propri "
 "personaggi."
-
-#, python-format
-msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed!"
-msgstr "Ciao! La tua iscrizione a <b>%(event)s</b> è stata confermata! "
 
 msgid "In the text refer to the other characters solely by their number"
 msgstr ""
@@ -6057,10 +6057,6 @@ msgstr ""
 "Il versamento non è stato completato. Mettiti in contatto con noi per capire"
 " perchè."
 
-msgid "They will be used automatically when you sign up for a new event!"
-msgstr ""
-"Verranno utilizzati automaticamente quando ci si iscrive a un nuovo evento!"
-
 msgid "This page shows the factions and plots of the indicated character"
 msgstr ""
 "Questa pagina riepiloga le fazioni e le trame del personaggio indicato"
@@ -6070,6 +6066,12 @@ msgstr "Scrivi qui domande sul tuo personaggio direttamente agli autori"
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr "se il personaggio è a conoscenza dell'identità dell'altro tratto"
+
+#, python-format
+msgid "A payment of %(amount).2f %(currency)s was received for this event"
+msgstr ""
+"E' stato ricevuto il versamento di %(amount).2f %(currency)s per questo "
+"evento"
 
 msgid "Content of mail reminding players to fill their membership request"
 msgstr ""
@@ -6099,6 +6101,10 @@ msgstr ""
 "Gestisci i pagamenti effettuati dai giocatori per coprire la quota di "
 "iscrizione"
 
+msgid "The payment of your membership fee for this year has been received"
+msgstr ""
+"Ti confermiamo il versamento della tua quota sociale per l'anno in corso"
+
 msgid "This page summarises the available questions of the character form"
 msgstr "Questa pagina riepiloga le domande disponibili del form personaggio"
 
@@ -6110,12 +6116,6 @@ msgstr ""
 msgid "With these tutorials, you can learn how to use the tool in no time"
 msgstr ""
 "Con questi tutorial, potrai imparare ad usare lo strumento in un attimo"
-
-#, python-format
-msgid "A payment of %(amount).2f %(currency)s was received for this event!"
-msgstr ""
-"E' stato ricevuto il versamento di %(amount).2f %(currency)s per questo "
-"evento!"
 
 msgid "Content of the receipt created for each payment and sent to players"
 msgstr ""
@@ -6145,10 +6145,6 @@ msgstr "Importo minimo dell'utile netto da lasciare come tassa organizzativa"
 msgid "Select the types of writing elements that this question applies to."
 msgstr ""
 "Selezionare i tipi di elementi di scrittura a cui si applica questa domanda."
-
-msgid "The payment of your membership fee for this year has been received!"
-msgstr ""
-"Ti confermiamo il versamento della tua quota sociale per l'anno in corso!"
 
 msgid "The searched object does not exist, perhaps it was recently deleted"
 msgstr "L'oggetto cercato non esiste, forse è stato recentemente cancellato"
@@ -6578,6 +6574,13 @@ msgstr ""
 "Ammontare totale di pagamento da ricevere entro questa data (0 = tutto il "
 "residuo)"
 
+#, python-format
+msgid ""
+"We confirm that you have successfully pre-registered for <b>%(event)s</b>"
+msgstr ""
+"Ti confermiamo che hai effettuato correttamente la preiscrizione a "
+"<b>%(event)s</b>!"
+
 msgid ""
 "We have pre-filled the application form based on the data you provided us"
 msgstr ""
@@ -6612,13 +6615,6 @@ msgid ""
 "To confirm your registration, apply to become a member of the Association."
 msgstr ""
 "Per confermare l'iscrizione, richiedi di diventare socio dell'Associazione."
-
-#, python-format
-msgid ""
-"We confirm that you have successfully pre-registered for <b>%(event)s</b>!"
-msgstr ""
-"Ti confermiamo che hai effettuato correttamente la preiscrizione a "
-"<b>%(event)s</b>! "
 
 msgid ""
 "You can withdraw your consent to data sharing by clicking the related link"
@@ -6817,6 +6813,13 @@ msgstr ""
 "selezionate altre opzioni."
 
 msgid ""
+"If you have made a transfer, please upload the receipt for it to be "
+"processed"
+msgstr ""
+"Se hai fatto un bonifico, per favore carica il giustificativo affinchè venga"
+" processato"
+
+msgid ""
 "Indicate whether the ability is visible to users, and can be freely "
 "purchased"
 msgstr ""
@@ -6884,13 +6887,6 @@ msgid ""
 msgstr ""
 "Se selezionata, consente ai giocatori di scrivere la propria lista di "
 "relazioni tra i personaggi."
-
-msgid ""
-"If you have made a transfer, please upload the receipt for it to be "
-"processed!"
-msgstr ""
-"Se hai fatto un bonifico, per favore carica il giustificativo affinchè venga"
-" processato!"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "
@@ -7736,6 +7732,14 @@ msgstr ""
 
 #, python-format
 msgid ""
+"Your request for reimbursement of %(amount).2f, with reason '%(reason)s', "
+"has been approved"
+msgstr ""
+"La tua richiesta di rimborso di %(amount).2f, con motivazione '%(reason)s', "
+"è stata approvata"
+
+#, python-format
+msgid ""
 "Alternatively, you can request a reimbursement in <a href='%(url)s'>your "
 "accounting</a>.</i>"
 msgstr ""
@@ -7806,14 +7810,6 @@ msgid ""
 msgstr ""
 "Puoi indicare un evento template dal quale verranno copiate funzionalità e "
 "configurazioni"
-
-#, python-format
-msgid ""
-"Your request for reimbursement of %(amount).2f, with reason '%(reason)s', "
-"has been approved!"
-msgstr ""
-"La tua richiesta di rimborso di %(amount).2f, con motivazione '%(reason)s', "
-"è stata approvata!"
 
 msgid ""
 "Disable the system that finds the character number when a special reference "
@@ -7957,6 +7953,20 @@ msgstr ""
 "questo numero di giorni: %(days)s."
 
 msgid ""
+"We confirm that your membership has been accepted by the board. We welcome "
+"you to our community"
+msgstr ""
+"Ti confermiamo che la tua iscrizione all'Associazione è stata accettata dal "
+"Direttivo. Ti diamo il benvenuto nella nostra community"
+
+msgid ""
+"We confirm that your registration for this event has been cancelled. We are "
+"sorry to see you go"
+msgstr ""
+"Ti confermiamo che l'iscrizione a questo evento è stata disdetta. Ci spiace "
+"vederti andar via"
+
+msgid ""
 "You have already paid your dues for the current year, so you are already "
 "covered for this event"
 msgstr ""
@@ -7993,6 +8003,13 @@ msgstr ""
 "questo evento!"
 
 msgid ""
+"The collection grows: we have no doubt, the fortunate will live soon an "
+"unprecedented experience"
+msgstr ""
+"La colletta cresce: non abbiamo dubbi, la persona fortunata vivrà "
+"prestissimo un'esperienza senza precedenti"
+
+msgid ""
 "This is the overall amount that should be held in the organization’s bank "
 "and financial accounts"
 msgstr ""
@@ -8019,20 +8036,6 @@ msgid ""
 msgstr ""
 "Codice univoca ad uso interno - non visibile. Indicare una stringa senza "
 "spazi o simboli strani"
-
-msgid ""
-"We confirm that your membership has been accepted by the board. We welcome "
-"you to our community!"
-msgstr ""
-"Ti confermiamo che la tua iscrizione all'Associazione è stata accettata dal "
-"Direttivo. Ti diamo il benvenuto nella nostra community!"
-
-msgid ""
-"We confirm that your registration for this event has been cancelled. We are "
-"sorry to see you go!"
-msgstr ""
-"Ti confermiamo che l'iscrizione a questo evento è stata disdetta. Ci spiace "
-"vederti andar via!"
 
 msgid ""
 "What casting priority does it ensure? (Usually: 1 is the subsized, 5 for "
@@ -8068,13 +8071,6 @@ msgid ""
 msgstr ""
 "Permette di specificare una data (e un'ora) in cui si aprirà la "
 "registrazione, mantenendola chiusa fino a quel momento."
-
-msgid ""
-"The collection grows: we have no doubt, the fortunate will live soon an "
-"unprecedented experience!"
-msgstr ""
-"La colletta cresce: non abbiamo dubbi, la persona fortunata vivrà "
-"prestissimo un'esperienza senza precedenti!"
 
 msgid ""
 "This field can be edited by the player only when the character is in one of "
@@ -8126,6 +8122,13 @@ msgstr ""
 "hai caricato, ci vorrà pochissimo"
 
 msgid ""
+"We thank you for participating in the collection: we are sure they will live"
+" a terrific experience"
+msgstr ""
+"Ti ringraziamo per aver partecipato alla colletta: hai regalato "
+"un'esperienza senza precedenti"
+
+msgid ""
 "A friend of yours will be able to receive the registration as a gift by "
 "accessing this special link"
 msgstr ""
@@ -8159,13 +8162,6 @@ msgid ""
 msgstr ""
 "Questa pagina riepiloga le diverse versioni disponibili della scheda "
 "personaggio, e delle differenze tra di esse"
-
-msgid ""
-"We thank you for participating in the collection: we are sure they will live"
-" a terrific experience!"
-msgstr ""
-"Ti ringraziamo per aver partecipato alla colletta: hai regalato "
-"un'esperienza senza precedenti!"
 
 msgid ""
 "You are a regular member of our Organization. You can subscribe to events "

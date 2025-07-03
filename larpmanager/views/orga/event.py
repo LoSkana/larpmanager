@@ -120,7 +120,7 @@ def orga_features(request, s, n):
             el.follow_link = _orga_feature_after_link(el, s, n)
         if len(ctx["new_features"]) == 1:
             feature = ctx["new_features"][0]
-            msg = _("Feature %(name)s activated!") % {"name": feature.name} + " " + feature.after_text
+            msg = _("Feature %(name)s activated") % {"name": feature.name} + "! " + feature.after_text
             clear_messages(request)
             messages.success(request, msg)
             return redirect(feature.follow_link)
@@ -136,14 +136,14 @@ def orga_features_go(request, ctx, num, on=True):
     if on:
         if f_id not in feat_id:
             ctx["event"].features.add(f_id)
-            msg = _("Feature %(name)s activated!")
+            msg = _("Feature %(name)s activated") + "!"
         else:
-            msg = _("Feature %(name)s already activated!")
+            msg = _("Feature %(name)s already activated") + "!"
     elif f_id not in feat_id:
-        msg = _("Feature %(name)s already deactivated!")
+        msg = _("Feature %(name)s already deactivated") + "!"
     else:
         ctx["event"].features.remove(f_id)
-        msg = _("Feature %(name)s deactivated!")
+        msg = _("Feature %(name)s deactivated") + "!"
 
     ctx["event"].save()
     # update cached event features, for itself, and the events for which they are parent

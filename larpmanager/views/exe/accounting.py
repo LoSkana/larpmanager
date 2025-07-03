@@ -203,7 +203,7 @@ def exe_invoices_confirm(request, num):
         raise Http404("already done")
 
     ctx["el"].save()
-    messages.success(request, _("Element approved!"))
+    messages.success(request, _("Element approved") + "!")
     return redirect("exe_invoices")
 
 
@@ -249,7 +249,7 @@ def exe_refunds_confirm(request, num):
         raise Http404("already done")
 
     ctx["el"].save()
-    messages.success(request, _("Element approved!"))
+    messages.success(request, _("Element approved") + "!")
     return redirect("exe_refunds")
 
 
@@ -417,7 +417,7 @@ def exe_verification(request):
         form = UploadElementsForm(request.POST, request.FILES)
         if form.is_valid():
             counter = invoice_verify(request, ctx, request.FILES["elem"])
-            messages.success(request, _("Verified payments!") + " " + str(counter))
+            messages.success(request, _("Verified payments") + "!" + " " + str(counter))
             return redirect("exe_verification")
 
     else:

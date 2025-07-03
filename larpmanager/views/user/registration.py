@@ -118,7 +118,7 @@ def pre_register(request, s=""):
                     info=form.cleaned_data["new_info"],
                 ).save()
 
-            messages.success(request, _("Pre-registrations saved!"))
+            messages.success(request, _("Pre-registrations saved") + "!")
             return redirect("pre_register")
     else:
         form = PreRegistrationForm(ctx=ctx)
@@ -673,7 +673,7 @@ def gift_edit(request, s, n, r):
                 messages.success(request, _("Gift card cancelled!"))
             else:
                 save_registration(request, ctx, form, ctx["run"], ctx["event"], reg, gifted=True)
-                messages.success(request, _("Operation completed!"))
+                messages.success(request, _("Operation completed") + "!")
             return redirect("gift", s=s, n=n)
     else:
         form = RegistrationGiftForm(ctx=ctx, instance=reg)

@@ -139,7 +139,7 @@ def user_edit(request, ctx, form_type, nm, eid):
 
         if form.is_valid():
             p = form.save()
-            messages.success(request, _("Operation completed!"))
+            messages.success(request, _("Operation completed") + "!")
 
             dl = "delete" in request.POST and request.POST["delete"] == "1"
             save_log(request.user.member, form_type, p, dl)
@@ -197,7 +197,7 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
 
         if ctx["form"].is_valid():
             p = ctx["form"].save()
-            messages.success(request, _("Operation completed!"))
+            messages.success(request, _("Operation completed") + "!")
 
             dl = "delete" in request.POST and request.POST["delete"] == "1"
             save_log(request.user.member, form_type, p, dl)
@@ -317,7 +317,7 @@ def _writing_save(ctx, form, form_type, nm, redr, request, tp):
     if dl:
         p.delete()
 
-    messages.success(request, _("Operation completed!"))
+    messages.success(request, _("Operation completed") + "!")
 
     if "continue" in request.POST:
         return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, num=0)

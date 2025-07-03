@@ -533,7 +533,7 @@ def orga_registrations_customization(request, s, n, num):
         form = RegistrationCharacterRelForm(request.POST, ctx=ctx, instance=rcr)
         if form.is_valid():
             form.save()
-            messages.success(request, _("Player customisation updated!"))
+            messages.success(request, _("Player customisation updated") + "!")
             return redirect("orga_registrations", s=ctx["event"].slug, n=ctx["run"].number)
     else:
         form = RegistrationCharacterRelForm(instance=rcr, ctx=ctx)

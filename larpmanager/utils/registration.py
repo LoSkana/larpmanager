@@ -154,16 +154,16 @@ def registration_status_signed(run, features, register_url):
         return
 
     if run.reg.ticket and run.reg.ticket.tier == TicketTier.WAITING:
-        mes = _("You are signed up in the waiting list!")
+        mes = _("You are signed up in the waiting list") + "!"
     elif run.reg.ticket and run.reg.ticket.tier == TicketTier.FILLER:
-        mes = _("You are signed up as Filler!")
+        mes = _("You are signed up as Filler") + "!"
     else:
-        mes = _("You are regularly signed up!")
+        mes = _("You are regularly signed up") + "!"
 
     run.status["text"] = f"<a href='{register_url}'>{mes}</a>"
 
     if run.reg.ticket and run.reg.ticket.tier == TicketTier.PATRON:
-        run.status["text"] += " " + _("Thanks for your support!")
+        run.status["text"] += " " + _("Thanks for your support") + "!"
 
 
 def _status_payment(register_text, run):
@@ -189,7 +189,7 @@ def _status_payment(register_text, run):
             pay_url = reverse("acc_reg", args=[run.reg.id])
             mes = _("to confirm it proceed with payment.")
             text_url = f", <a href='{pay_url}'>{mes}</a>"
-            note = _("If you have made a transfer, please upload the receipt for it to be processed!")
+            note = _("If you have made a transfer, please upload the receipt for it to be processed") + "!"
             run.status["text"] = f"{register_text}{text_url} ({note})"
             return True
 
