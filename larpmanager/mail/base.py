@@ -87,7 +87,7 @@ def assoc_roles_changed(sender, **kwargs):
             activate(mb.language)
             subj = hdr(instance.assoc) + _("Role approval %(role)s") % {"role": instance.name}
             url = get_url("manage", instance.assoc)
-            body = _("Access the management panel <a href= %(url)s'>from here!</a>.") % {"url": url}
+            body = _("Access the management panel <a href= %(url)s'>from here!</a>") % {"url": url} + "."
             my_send_mail(subj, body, mb, instance.assoc)
 
             # notify organizers
@@ -99,7 +99,7 @@ def assoc_roles_changed(sender, **kwargs):
                     "user": mb,
                     "role": instance.name,
                 }
-                body = _("The user has been enabled for the indicated role.")
+                body = _("The user has been assigned the specified role") + "."
                 my_send_mail(subj, body, m, instance.assoc)
 
 
@@ -131,7 +131,7 @@ def event_roles_changed(sender, **kwargs):
                 "event": instance.event,
             }
             url = get_url(f"{instance.event.slug}/1/manage/", instance.event.assoc)
-            body = _("Access the management panel <a href= %(url)s'>from here!</a>.") % {"url": url}
+            body = _("Access the management panel <a href= %(url)s'>from here!</a>") % {"url": url} + "."
             my_send_mail(subj, body, mb, instance.event)
 
             # notify organizers
@@ -144,7 +144,7 @@ def event_roles_changed(sender, **kwargs):
                     "role": instance.name,
                     "event": instance.event,
                 }
-                body = _("The user was enabled in the role for the indicated event.")
+                body = _("The user has been assigned the specified role") + "."
                 my_send_mail(subj, body, m, instance.event)
 
 

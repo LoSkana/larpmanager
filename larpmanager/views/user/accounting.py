@@ -169,7 +169,7 @@ def acc_refund(request):
             p.save()
             notify_refund_request(p)
             messages.success(
-                request, _("Request for reimbursement entered! You will receive notice when it is disbursed.")
+                request, _("Request for reimbursement entered! You will receive notice when it is disbursed") + "."
             )
             return redirect("accounting")
     else:
@@ -242,7 +242,7 @@ def acc_reg(request, reg_id, method=None):
         return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
 
     if "membership" in ctx["features"] and not reg.membership.date:
-        mes = _("To be able to pay, your membership application must be approved.")
+        mes = _("To be able to pay, your membership application must be approved") + "."
         messages.warning(request, mes)
         return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
 
@@ -279,7 +279,7 @@ def acc_membership(request, method=None):
     ctx["show_accounting"] = True
     memb = get_user_membership(request.user.member, request.assoc["id"])
     if memb.status != MembershipStatus.ACCEPTED:
-        messages.success(request, _("It is not possible for you to pay dues at this time."))
+        messages.success(request, _("It is not possible for you to pay dues at this time") + ".")
         return redirect("accounting")
 
     year = datetime.now().year
@@ -459,7 +459,7 @@ def acc_wait(request):
 
 @login_required
 def acc_cancelled(request):
-    mes = _("The payment was not completed. Please contact us to find out why.")
+    mes = _("The payment was not completed. Please contact us to find out why") + "."
     messages.warning(request, mes)
     return redirect("accounting")
 
@@ -470,7 +470,7 @@ def acc_profile_check(request, mes, inv):
     mb = get_user_membership(member, request.assoc["id"])
 
     if not mb.compiled:
-        mes += " " + _("As a final step, we ask you to complete your profile.")
+        mes += " " + _("As a final step, we ask you to complete your profile") + "."
         messages.success(request, mes)
         return redirect("profile")
 
@@ -517,7 +517,7 @@ def acc_submit(request, s, p):
 
     if not form.is_valid():
         # print(form.errors)
-        mes = _("Error loading. Invalid file format (we accept only pdf or images).")
+        mes = _("Error loading. Invalid file format (we accept only pdf or images)") + "."
         messages.error(request, mes)
         return redirect("/" + p)
 
@@ -539,7 +539,7 @@ def acc_submit(request, s, p):
 
     notify_invoice_check(inv)
 
-    mes = _("Payment received! As soon as it is approved, your accounts will be updated.")
+    mes = _("Payment received! As soon as it is approved, your accounts will be updated") + "."
     return acc_profile_check(request, mes, inv)
 
 

@@ -95,7 +95,7 @@ def badges_changed(sender, **kwargs):
         body = _("You have been awarded an achievement") + "!" + "<br /><br />"
         body += _("Description") + f": {badge['descr']}<br /><br />"
         url = get_url(f"public/{m.id}/", instance)
-        body += _("Display your achievements in your <a href= %(url)s'>public profile</a>.") % {"url": url}
+        body += _("Display your achievements in your <a href= %(url)s'>public profile</a>") % {"url": url} + "."
         my_send_mail(subj, body, m, instance)
 
 
@@ -107,7 +107,9 @@ def notify_membership_approved(member, resp):
     activate(member.language)
     subj = hdr(member.membership) + _("Membership of the Organization accepted") + "!"
     body = _("We confirm that your membership has been accepted by the board. We welcome you to our community") + "!"
-    body += "<br /><br />" + _("Your card number is: <b>%(number)03d</b>.") % {"number": member.membership.card_number}
+    body += (
+        "<br /><br />" + _("Your card number is: <b>%(number)03d</b>") % {"number": member.membership.card_number} + "."
+    )
     if resp:
         body += " " + _("More details") + f": {resp}"
 
@@ -151,7 +153,7 @@ def notify_membership_reject(member, resp):
     # Manda Mail
     activate(member.language)
     subj = hdr(member.membership) + _("Membership of the Organization refused") + "!"
-    body = _("We inform you that your membership of the Association has not been accepted by the board.")
+    body = _("We inform you that your membership of the Association has not been accepted by the board") + "."
     if resp:
         body += " " + _("Motivation") + f": {resp}"
     body += _("For more information, write to us") + "!"

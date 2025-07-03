@@ -59,7 +59,7 @@ def registration_available(r, features=None, reg_counts=None):
         perc_signed = 0.3
         max_signed = 10
         if remaining_pri < max_signed or remaining_pri * 1.0 / r.event.max_pg < perc_signed:
-            r.status["additional"] = _(" Hurry: only %(num)d tickets available.") % {"num": remaining_pri}
+            r.status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_pri} + "."
         return
 
     # check if we manage filler
@@ -84,7 +84,7 @@ def _available_waiting(r, reg_counts):
     if r.event.max_waiting > 0:
         remaining_waiting = r.event.max_waiting - reg_counts["count_wait"]
         if remaining_waiting > 0:
-            r.status["additional"] = _(" Hurry: only %(num)d tickets available.") % {"num": remaining_waiting}
+            r.status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_waiting} + "."
             r.status["waiting"] = True
             return True
 
@@ -101,7 +101,7 @@ def _available_filler(r, reg_counts):
     if r.event.max_filler > 0:
         remaining_filler = r.event.max_filler - reg_counts["count_fill"]
         if remaining_filler > 0:
-            r.status["additional"] = _(" Hurry: only %(num)d tickets available.") % {"num": remaining_filler}
+            r.status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_filler} + "."
             r.status["filler"] = True
             return True
 
@@ -129,7 +129,7 @@ def registration_status_signed(run, features, register_url):
     if "membership" in features:
         if mb.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
             membership_url = reverse("membership")
-            mes = _("to confirm it, send your membership application.")
+            mes = _("to confirm it, send your membership application") + "."
             text_url = f", <a href='{membership_url}'>{mes}</a>"
             run.status["text"] = register_text + text_url
             return
@@ -144,7 +144,7 @@ def registration_status_signed(run, features, register_url):
 
     if not mb.compiled:
         profile_url = reverse("profile")
-        mes = _("please fill in your profile.")
+        mes = _("please fill in your profile") + "."
         text_url = f", <a href='{profile_url}'>{mes}</a>"
         run.status["text"] = register_text + text_url
         return
@@ -187,14 +187,14 @@ def _status_payment(register_text, run):
         )
         if wire_created.count() > 0:
             pay_url = reverse("acc_reg", args=[run.reg.id])
-            mes = _("to confirm it proceed with payment.")
+            mes = _("to confirm it proceed with payment") + "."
             text_url = f", <a href='{pay_url}'>{mes}</a>"
             note = _("If you have made a transfer, please upload the receipt for it to be processed") + "!"
             run.status["text"] = f"{register_text}{text_url} ({note})"
             return True
 
         pay_url = reverse("acc_reg", args=[run.reg.id])
-        mes = _("to confirm it proceed with payment.")
+        mes = _("to confirm it proceed with payment") + "."
         text_url = f", <a href='{pay_url}'>{mes}</a>"
         if run.reg.deadline < 0:
             text_url += "<i> (" + _("If no payment is received, registration may be cancelled") + ")</i>"
@@ -264,7 +264,7 @@ def registration_status(run, user, my_regs=None, features_map=None, reg_count=No
         status["details"] = status["additional"]
 
     # wrap in a link if we have a message, otherwise show closed
-    status["text"] = f"<a href='{register_url}'>{mes}</a>" if mes else _("Registration closed.")
+    status["text"] = f"<a href='{register_url}'>{mes}</a>" if mes else _("Registration closed") + "."
 
 
 def _get_features_map(features_map, run):

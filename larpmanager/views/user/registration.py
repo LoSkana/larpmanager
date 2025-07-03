@@ -206,20 +206,20 @@ def registration_redirect(request, reg, new_reg, run):
     # check if user needs to compile membership
     if "membership" in request.assoc["features"]:
         if not request.user.member.membership.compiled:
-            mes = _("To confirm your registration, please fill in your personal profile.")
+            mes = _("To confirm your registration, please fill in your personal profile") + "."
             messages.success(request, mes)
             return redirect("profile")
 
         memb_status = request.user.member.membership.status
         if memb_status in [MembershipStatus.EMPTY, MembershipStatus.JOINED] and reg.ticket.tier != TicketTier.WAITING:
-            mes = _("To confirm your registration, apply to become a member of the Association.")
+            mes = _("To confirm your registration, apply to become a member of the Association") + "."
             messages.success(request, mes)
             return redirect("membership")
 
     # check if the user needs to pay
     if "payment" in request.assoc["features"]:
         if reg.alert:
-            mes = _("To confirm your registration, please pay the amount indicated.")
+            mes = _("To confirm your registration, please pay the amount indicated") + "."
             messages.success(request, mes)
             return redirect("acc_reg", reg_id=reg.id)
 
@@ -472,7 +472,7 @@ def register_conditions(request, s=None):
 # ~ pass
 # ~ # check there are no discount stores a friend
 # ~ if AccountingItemDiscount.objects.filter(member=request.user.member, run=ctx['run'], disc__typ=Discount.STANDARD).count() > 0:
-# ~ Return jsonrespone ({'really': 'ko', 'msg': _ ("Discount not combinable with other benefits.")})
+# ~ Return jsonrespone ({'really': 'ko', 'msg': _ ("Discount not combinable with other benefits") + "."})
 # ~ # check the user TO don't already have the discount
 # ~ try:
 # ~ ac = AccountingItemDiscount.objects.get(disc=disc, member=request.user.member, run=ctx['run'])
@@ -549,7 +549,7 @@ def _check_discount(disc, member, run, event):
         return _("Sorry, this facilitation code has already been used the maximum number allowed")
 
     if not _validate_exclusive_logic(disc, member, run, event):
-        return _("Discount not combinable with other benefits.")
+        return _("Discount not combinable with other benefits") + "."
 
     return None
 

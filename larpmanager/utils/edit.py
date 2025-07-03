@@ -385,8 +385,8 @@ def writing_edit_working_ticket(request, tp, eid, res, add_ticket=True):
         if idx != mid and now - tm < ticket_time:
             others.append(name)
         if len(others) > 0:
-            warn = _("Warning! Other users are editing this item.")
-            warn += " " + _("You cannot work on it at the same time: the work of one of you would be lost.")
+            warn = _("Warning! Other users are editing this item") + "."
+            warn += " " + _("You cannot work on it at the same time: the work of one of you would be lost") + "."
             warn += " " + _("List of other users") + ": " + ", ".join(others)
             res["warn"] = warn
 

@@ -359,7 +359,7 @@ def orga_registrations(request, s, n):
             str(_("'player' (player's email)")),
             str(_("'ticket' (ticket name or number)")),
             str(_("'character' (character name or number to be assigned)")),
-            str(_("'pwyw' (donation).")),
+            str(_("'pwyw' (donation)")),
         ]
     )
 

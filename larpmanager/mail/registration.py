@@ -95,9 +95,11 @@ def registration_options(instance):
     body = ""
 
     if instance.ticket:
-        body += "<br /><br />" + _("Ticket selected: <b>%(ticket)s</b>.") % {
-            "ticket": instance.ticket.show(instance.run)["name"]
-        }
+        body += (
+            "<br /><br />"
+            + _("Ticket selected: <b>%(ticket)s</b>") % {"ticket": instance.ticket.show(instance.run)["name"]}
+            + "."
+        )
         if instance.ticket.tier == TicketTier.PATRON:
             body += _("Thanks for your support") + "!"
 
@@ -107,16 +109,26 @@ def registration_options(instance):
     currency = instance.run.event.assoc.get_currency_symbol()
 
     if instance.tot_iscr > 0:
-        body += "<br /><br />" + _("Total of your signup fee: <b>%(amount).2f %(currency)s</b>.") % {
-            "amount": instance.tot_iscr,
-            "currency": currency,
-        }
+        body += (
+            "<br /><br />"
+            + _("Total of your signup fee: <b>%(amount).2f %(currency)s</b>")
+            % {
+                "amount": instance.tot_iscr,
+                "currency": currency,
+            }
+            + "."
+        )
 
     if instance.tot_payed > 0:
-        body += "<br /><br />" + _("Payments already received: <b>%(amount).2f %(currency)s</b>.") % {
-            "amount": instance.tot_payed,
-            "currency": currency,
-        }
+        body += (
+            "<br /><br />"
+            + _("Payments already received: <b>%(amount).2f %(currency)s</b>")
+            % {
+                "amount": instance.tot_payed,
+                "currency": currency,
+            }
+            + "."
+        )
 
     if "payment" in features and instance.quota > 0 and instance.alert:
         body += registration_payments(instance, currency)
@@ -177,7 +189,7 @@ def update_registration_character_rel_post(sender, instance, created, **kwargs):
 
     subj = hdr(instance.reg.run.event) + _("Character assigned for %(event)s") % context
 
-    body = _("In the event <b>%(event)s</b> you were assigned the character: <b>%(character)s</b>.") % context
+    body = _("In the event <b>%(event)s</b> you were assigned the character: <b>%(character)s</b>") % context + "."
 
     char_url = get_url(
         f"{instance.reg.run.event.slug}/{instance.reg.run.number}/character/your",
@@ -218,7 +230,7 @@ def update_registration_cancellation(instance):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration cancelled for %(event)s by %(user)s") % context
-            body = _("The registration for this event has been cancelled.")
+            body = _("The registration for this event has been cancelled") + "."
             my_send_mail(subj, body, orga, instance.run)
 
 
@@ -252,7 +264,7 @@ def delete_registration(sender, instance, *args, **kwargs):
     # to user
     activate(instance.member.language)
     subj = hdr(instance.run.event) + _("Registration cancelled for %(event)s") % context
-    body = _("We confirm that your registration for this event has been cancelled.")
+    body = _("We confirm that your registration for this event has been cancelled") + "."
     my_send_mail(subj, body, instance.member, instance.run)
 
     if instance.run.event.assoc.get_config("mail_signup_del", False):
@@ -260,7 +272,7 @@ def delete_registration(sender, instance, *args, **kwargs):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration cancelled for %(event)s by %(user)s") % context
-            body = _("The registration for this event has been cancelled.")
+            body = _("The registration for this event has been cancelled") + "."
             my_send_mail(subj, body, orga, instance.run)
 
 

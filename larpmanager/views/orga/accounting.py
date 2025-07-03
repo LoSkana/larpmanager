@@ -112,7 +112,7 @@ def orga_invoices_confirm(request, s, n, num):
     if ctx["el"].status == PaymentStatus.CREATED or ctx["el"].status == PaymentStatus.SUBMITTED:
         ctx["el"].status = PaymentStatus.CONFIRMED
     else:
-        messages.warning(request, _("Receipt already confirmed."))
+        messages.warning(request, _("Receipt already confirmed") + ".")
         return redirect("orga_invoices", s=ctx["event"].slug, n=ctx["run"].number)
 
     ctx["el"].save()

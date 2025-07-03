@@ -102,7 +102,7 @@ def profile(request):
 
             if "membership" in request.assoc["features"]:
                 if ctx["membership"].status in [MembershipStatus.EMPTY, MembershipStatus.JOINED]:
-                    mes += " " + _("Last step, please upload your membership application.")
+                    mes += " " + _("Last step, please upload your membership application") + "."
                     messages.success(request, mes)
                     return redirect("membership")
 
