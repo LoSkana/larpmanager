@@ -48,7 +48,7 @@ from larpmanager.models.association import Association
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.base import def_user_ctx, update_payment_details
 from larpmanager.utils.common import generate_number
-from larpmanager.utils.tasks import my_send_mail, my_send_simple_mail
+from larpmanager.utils.tasks import my_send_mail
 
 
 def get_satispay_form(request, ctx, invoice, amount):
@@ -645,6 +645,6 @@ class RedSysClient:
             mes += pformat(merchant_parameters)
             print(mes)
             for _name, email in conf_settings.ADMINS:
-                my_send_simple_mail("redsys signature", mes, email)
+                my_send_mail("redsys signature", mes, email)
 
         return order

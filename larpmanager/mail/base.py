@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import traceback
 from datetime import datetime, timedelta
 from typing import Optional
 
@@ -36,7 +36,7 @@ from larpmanager.models.casting import AssignmentTrait, Casting
 from larpmanager.models.event import EventTextType
 from larpmanager.models.member import Member
 from larpmanager.models.writing import Character, CharacterStatus
-from larpmanager.utils.tasks import my_send_mail, my_send_simple_mail
+from larpmanager.utils.tasks import my_send_mail
 from larpmanager.utils.text import get_event_text
 
 
@@ -249,6 +249,9 @@ def character_update_status(sender, instance, **kwargs):
             my_send_mail(subj, body, instance.player, instance.event)
 
 
-def notify_admins(subj, text):
+def notify_admins(subj, text, exception=None):
+    if exception:
+        tb = "".join(traceback.format_exception(type(exception), exception, exception.__traceback__))
+        text += "\n" + tb
     for _name, email in conf_settings.ADMINS:
-        my_send_simple_mail(subj, text, email)
+        my_send_mail(subj, text, email)

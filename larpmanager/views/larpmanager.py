@@ -60,7 +60,7 @@ from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.auth import check_lm_admin
 from larpmanager.utils.event import get_event_run
 from larpmanager.utils.exceptions import PermissionError
-from larpmanager.utils.tasks import my_send_mail, my_send_simple_mail, send_mail_exec
+from larpmanager.utils.tasks import my_send_mail, send_mail_exec
 from larpmanager.utils.text import get_assoc_text
 
 
@@ -94,7 +94,7 @@ def contact(request):
             for _name, email in conf_settings.ADMINS:
                 subj = "LarpManager contact - " + ct
                 body = form.cleaned_data["content"]
-                my_send_simple_mail(subj, body, email)
+                my_send_mail(subj, body, email)
     else:
         form = LarpManagerContact(request=request)
         ctx["contact_form"] = form
@@ -289,7 +289,7 @@ def ticket(request, s=""):
                 if request.user.is_authenticated:
                     body += f"User: {request.user.member} ({request.user.member.email}) <br /><br />"
                 body += form.cleaned_data["content"]
-                my_send_simple_mail(subj, body, email)
+                my_send_mail(subj, body, email)
             messages.success(request, _("Your request has been sent, we will reply as soon as possible!"))
             return redirect("home")
     else:
