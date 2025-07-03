@@ -522,7 +522,7 @@ def delegated(request):
     ctx = def_user_ctx(request)
 
     user_logged_in.disconnect(update_last_login, dispatch_uid="update_last_login")
-    backend = "allauth.account.auth_backends.AuthenticationBackend"
+    backend = get_user_backend()
 
     # If the user is delegated, show info on login to the main account
     if request.user.member.parent:
@@ -578,6 +578,11 @@ def delegated(request):
         info_accounting(request, del_ctx)
         el.ctx = del_ctx
     return render(request, "larpmanager/member/delegated.html", ctx)
+
+
+def get_user_backend():
+    backend = "allauth.account.auth_backends.AuthenticationBackend"
+    return backend
 
 
 @login_required

@@ -21,6 +21,8 @@
 from django.contrib.auth import get_user_model, login
 from django.core.cache import cache
 
+from larpmanager.views.user.member import get_user_backend
+
 
 class TokenAuthMiddleware:
     def __init__(self, get_response):
@@ -33,6 +35,6 @@ class TokenAuthMiddleware:
         if user_id:
             user = get_user_model().objects.get(pk=user_id)
             if user:
-                login(request, user)
+                login(request, user, backend=get_user_backend())
 
         return self.get_response(request)
