@@ -441,7 +441,7 @@ class ShuttleService(BaseModel):
 
     address = models.TextField(
         verbose_name=_("Address"),
-        help_text=_("Indicate as precisely as possible where to pick you up."),
+        help_text=_("Indicate as precisely as possible where to pick you up"),
     )
 
     info = models.TextField(
@@ -538,25 +538,25 @@ class Problem(BaseModel):
 
     where = models.TextField(
         verbose_name=_("Where"),
-        help_text=_("Describe exactly at which point it occurs."),
+        help_text=_("Describe exactly at which point it occurs"),
     )
 
     when = models.TextField(
         verbose_name=_("When"),
-        help_text=_("Describe exactly what condition it is in."),
+        help_text=_("Describe exactly what condition it is in"),
     )
 
     what = models.TextField(
         verbose_name=_("What"),
-        help_text=_("Describe exactly what risks it poses to the game."),
+        help_text=_("Describe exactly what risks it poses to the game"),
     )
 
     who = models.TextField(
         verbose_name=_("Who"),
-        help_text=_("Describe exactly which players are involved."),
+        help_text=_("Describe exactly which players are involved"),
     )
 
-    assigned = models.CharField(max_length=100, help_text=_("Who takes it upon themselves to solve it."))
+    assigned = models.CharField(max_length=100, help_text=_("Who takes it upon themselves to solve it"))
 
     comments = models.TextField(blank=True)
 

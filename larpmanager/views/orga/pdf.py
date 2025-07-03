@@ -51,7 +51,7 @@ def orga_characters_pdf(request, s, n):
         form = EventCharactersPdfForm(request.POST, request.FILES, instance=ctx["event"])
         if form.is_valid():
             form.save()
-            messages.success(request, _("Updated!"))
+            messages.success(request, _("Updated") + "!")
             return redirect(request.path_info)
     else:
         form = EventCharactersPdfForm(instance=ctx["event"])
@@ -67,7 +67,7 @@ def orga_pdf_regenerate(request, s, n):
     for run in Run.objects.filter(event=ctx["event"], end__gte=datetime.now()):
         for ch in chs:
             print_character_bkg(ctx["event"].assoc.slug, ctx["event"].slug, run.number, ch.number)
-    messages.success(request, _("Regeneration pdf started!"))
+    messages.success(request, _("Regeneration pdf started") + "!")
     return redirect("orga_characters_pdf", s=ctx["event"].slug, n=ctx["run"].number)
 
 

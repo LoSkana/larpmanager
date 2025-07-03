@@ -195,7 +195,7 @@ class WritingQuestion(BaseModel):
         choices=QuestionApplicable.choices,
         default=QuestionApplicable.CHARACTER,
         verbose_name=_("Applicable"),
-        help_text=_("Select the types of writing elements that this question applies to."),
+        help_text=_("Select the types of writing elements that this question applies to"),
     )
 
     def __str__(self):

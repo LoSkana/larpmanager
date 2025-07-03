@@ -38,7 +38,7 @@ var trads = window['trads'];
 
     /*
 $('form').submit(function() {
-    var c = confirm("{% trans "Confermi l'assegnazione?" %}");
+    var c = confirm("{% trans "Confermi l'assegnazione" %}?");
     return c; //you can just return c because it will be true or false
 });   */
 

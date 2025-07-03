@@ -77,7 +77,7 @@ def orga_albums_upload(request, s, n, a):
         form = UploadAlbumsForm(request.POST, request.FILES)
         if form.is_valid():
             upload_albums(ctx["album"], request.FILES["elem"])
-            messages.success(request, _("Photos and videos successfully uploaded!"))
+            messages.success(request, _("Photos and videos successfully uploaded") + "!")
             return redirect(request.path_info)
     else:
         form = UploadAlbumsForm()

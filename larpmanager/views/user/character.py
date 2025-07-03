@@ -144,7 +144,7 @@ def character_your(request, s, n, p=None):
     rcrs = ctx["run"].reg.rcrs.all()
 
     if rcrs.count() == 0:
-        messages.error(request, _("You don't have a character assigned for this run!"))
+        messages.error(request, _("You don't have a character assigned for this run") + "!")
         return redirect("home")
 
     if rcrs.count() == 1:
@@ -170,9 +170,9 @@ def character_form(request, ctx, s, n, instance, form_class):
         form = form_class(request.POST, request.FILES, instance=instance, ctx=ctx)
         if form.is_valid():
             if instance:
-                mes = _("Informations saved!")
+                mes = _("Informations saved") + "!"
             else:
-                mes = _("New character created!")
+                mes = _("New character created") + "!"
 
             element = form.save(commit=False)
             mes = _update_character(ctx, element, form, mes, request)

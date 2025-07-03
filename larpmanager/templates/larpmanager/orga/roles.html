@@ -4,13 +4,13 @@
     {% trans "Roles" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page summarises the roles to be assigned in order to use the functions concerning the event." %}
+    {% trans "This page summarises the roles to be assigned in order to use the functions concerning the event" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
     <p>
         <i>
-            {% trans "To assign a user to a role, they must first be added to the organization." %}
+            {% trans "To assign a user to a role, they must first be added to the organization" %}.
             {% trans "If you don't see an user, ask them to access" %}
             <a href="{% url 'share' %}">{% trans "this link" %}</a>.
         </i>

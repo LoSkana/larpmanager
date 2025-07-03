@@ -4,16 +4,16 @@
     Leaderboard
 {% endblock title %}
 {% block content %}
-    <h2>{% trans "May the best win!" %}</h2>
+    <h2>{% trans "May the best win" %}!</h2>
     <p>
-        {% trans "You think you should have an achievement?" %} <a href="{% url 'help' %}">{% trans "Tell us here!" %}</a>
+        {% trans "You think you should have an achievement" %}? <a href="{% url 'help' %}">{% trans "Tell us here" %}!</a>
     </p>
     <hr />
     <table class="my_pagination">
         <tr>
             <td>
                 {% if number != 1 %}
-                    <a href="{% url 'leaderboard' 1 %}">&laquo; {% trans "First" %}</a>
+                    <a href="{% url 'leaderboard' 1 %}"><i class="fas fa-angle-double-left"></i> {% trans "First" %}</a>
                 {% endif %}
                 {% if previous_page_number > 0 %}
                     <a href="{% url 'leaderboard' previous_page_number %}">{% trans "Prev" %}</a>
@@ -23,7 +23,7 @@
             <td>
                 {% if number != num_pages %}
                     <a href="{% url 'leaderboard' next_page_number %}">{% trans "Next" %}</a>
-                    <a href="{% url 'leaderboard' num_pages %}">{% trans "Last" %} &raquo;</a>
+                    <a href="{% url 'leaderboard' num_pages %}">{% trans "Last" %} <i class="fas fa-angle-double-right"></i></a>
                 {% endif %}
             </td>
         </tr>
@@ -34,9 +34,10 @@
                 <div class="icon">
                     <a href="{% url 'public' mb.id %}">
                         {% if mb.profile %}
-                            <img src="{{ mb.profile }}" />
+                            <img src="{{ mb.profile }}" alt="character profile" />
                         {% else %}
-                            <img src="{% static 'larpmanager/assets/blank-avatar.svg' %}" />
+                            <img src="{% static 'larpmanager/assets/blank-avatar.svg' %}"
+                                 alt="character profile" />
                         {% endif %}
                         <div class="icon-name">
                             <p>{{ mb.name }} - {{ mb.count }}</p>
