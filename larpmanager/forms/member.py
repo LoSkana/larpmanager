@@ -36,6 +36,7 @@ from django.template import loader
 from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
+from django_recaptcha.widgets import ReCaptchaV3
 from django_registration.forms import RegistrationFormUniqueEmail
 
 from larpmanager.cache.feature import get_assoc_features
@@ -114,7 +115,12 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 
         if not conf_settings.DEBUG and not os.getenv("PYTEST_CURRENT_TEST"):
             public, private = get_recaptcha_secrets(self.request)
-            self.fields["captcha"] = ReCaptchaField(label="Captcha", public_key=public, private_key=private)
+            self.fields["captcha"] = ReCaptchaField(
+                widget=ReCaptchaV3,
+                label="Captcha", 
+                public_key=public, 
+                private_key=private
+            )
 
         # place language as first
         new_order = ["lang"] + [key for key in self.fields if key != "lang"]
