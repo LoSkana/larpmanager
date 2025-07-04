@@ -23,13 +23,13 @@ from django.contrib.auth import views as auth_views
 from django.urls import include, path, re_path
 
 from larpmanager.forms.member import (
-    MyAuthForm,
     MyPasswordResetConfirmForm,
     MyPasswordResetForm,
     MyRegistrationFormUniqueEmail,
 )
 from larpmanager.views import auth as views_auth
 from larpmanager.views import base as views_base
+from larpmanager.views.base import MyLoginView
 from larpmanager.views.user import accounting as views_ua
 from larpmanager.views.user import casting as views_uca
 from larpmanager.views.user import character as views_uc
@@ -672,14 +672,7 @@ urlpatterns = [
         ),
         name="registration_register",
     ),
-    path(
-        "login/",
-        auth_views.LoginView.as_view(
-            template_name="registration/login.html",
-            authentication_form=MyAuthForm,
-        ),
-        name="login",
-    ),
+    path("login/", MyLoginView.as_view(), name="login"),
     path(
         "logout/",
         auth_views.LogoutView.as_view(next_page=conf_settings.LOGOUT_REDIRECT_URL),

@@ -2205,9 +2205,6 @@ msgstr ""
 msgid "not visible at this time"
 msgstr ""
 
-msgid "Welcome"
-msgstr ""
-
 msgid "Statement"
 msgstr ""
 
@@ -7840,6 +7837,9 @@ msgstr ""
 msgid ""
 "Allowed type '%(allowed_type)s' is not a valid type.See https://www.iana.org/"
 "assignments/media-types/media-types.xhtml"
+msgstr ""
+
+msgid "Welcome"
 msgstr ""
 
 msgid "Operation completed"

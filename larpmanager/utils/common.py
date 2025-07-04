@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import html
-import json
 import os
 import random
 import re
@@ -34,6 +33,7 @@ import pytz
 from background_task.models import Task
 from diff_match_patch import diff_match_patch
 from django.conf import settings as conf_settings
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max, Subquery
 from django.http import Http404
@@ -686,3 +686,7 @@ def get_recaptcha_secrets(request):
         private = pairs.get(str(skin_id))
 
     return public, private
+
+
+def welcome_user(request, user):
+    messages.success(request, _("Welcome") + ", " + user.get_username())
