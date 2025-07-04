@@ -339,9 +339,9 @@ def hdr(obj):
 def get_url(s, obj=None):
     if obj:
         if isinstance(obj, Association):
-            url = f"https://{obj.slug}.larpmanager.com/{s}"
+            url = f"https://{obj.slug}.{obj.skin.domain}/{s}"
         elif hasattr(obj, "assoc"):
-            url = f"https://{obj.assoc.slug}.larpmanager.com/{s}"
+            url = f"https://{obj.assoc.slug}.{obj.assoc.skin.domain}/{s}"
         else:
             url = f"https://{obj}.larpmanager.com/{s}"
     else:

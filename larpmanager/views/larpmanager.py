@@ -139,7 +139,7 @@ def choose_assoc(request, p, slugs):
 
 
 def go_redirect_run(run, p):
-    n_p = f"https://{run.event.assoc.slug}.larpmanager.com/{run.event.slug}/{run.number}/{p}"
+    n_p = f"https://{run.event.assoc.slug}.{run.event.assoc.skin.domain}/{run.event.slug}/{run.number}/{p}"
     return redirect(n_p)
 
 
@@ -333,7 +333,7 @@ def join(request):
         if request.assoc["skin_id"] == 1:
             join_email(assoc)
         # redirect
-        return go_redirect(request, assoc.slug, "manage")
+        return redirect("after_login", subdomain=assoc.slug, path="manage")
 
     return render(request, "larpmanager/larpmanager/join.html", ctx)
 
