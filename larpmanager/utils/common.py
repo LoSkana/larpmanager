@@ -689,4 +689,4 @@ def get_recaptcha_secrets(request):
 
 
 def welcome_user(request, user):
-    messages.success(request, _("Welcome") + ", " + user.get_username())
+    messages.success(request, _("Welcome") + ", " + user.get_username() + "!")
