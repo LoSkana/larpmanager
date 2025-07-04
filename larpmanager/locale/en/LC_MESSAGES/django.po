@@ -7839,6 +7839,9 @@ msgid ""
 "assignments/media-types/media-types.xhtml"
 msgstr ""
 
+msgid "Welcome"
+msgstr ""
+
 msgid "Operation completed"
 msgstr ""
 

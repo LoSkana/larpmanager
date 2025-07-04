@@ -828,6 +828,9 @@ msgstr "Attente"
 msgid "Website"
 msgstr "Site web"
 
+msgid "Welcome"
+msgstr "Bienvenue"
+
 msgid "Writing"
 msgstr "Rédaction"
 

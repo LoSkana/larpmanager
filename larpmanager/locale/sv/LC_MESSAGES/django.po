@@ -828,6 +828,9 @@ msgstr "Väntar"
 msgid "Website"
 msgstr "Webbplats"
 
+msgid "Welcome"
+msgstr "Välkommen"
+
 msgid "Writing"
 msgstr "Skrivande"
 

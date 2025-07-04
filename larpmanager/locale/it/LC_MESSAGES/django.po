@@ -828,6 +828,9 @@ msgstr "Waiting"
 msgid "Website"
 msgstr "Website"
 
+msgid "Welcome"
+msgstr "Benvenuti"
+
 msgid "Writing"
 msgstr "Scrittura"
 
