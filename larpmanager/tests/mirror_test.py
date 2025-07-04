@@ -17,7 +17,6 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
 import re
 
 import pytest
@@ -79,6 +78,10 @@ async def orga_mirror(live_server, page):
     await expect(page.locator("#one")).to_contain_text("Mirror")
     await expect(page.locator("#one")).to_contain_text("Test Character")
 
+    await casting(live_server, page)
+
+
+async def casting(live_server, page):
     await go_to(page, live_server, "/test/1/manage/config")
     await page.get_by_role("link", name=re.compile(r"^Casting\s.+")).click()
     await page.locator("#id_casting_characters").click()

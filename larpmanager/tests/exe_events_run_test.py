@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from time import sleep
+import asyncio
 
 import pytest
 from playwright.async_api import async_playwright, expect
@@ -52,16 +52,16 @@ async def exe_events_run(live_server, page):
     await page.locator("#slug").fill("prova")
 
     frame = page.frame_locator("iframe.tox-edit-area__iframe")
-    frame.locator("body").fill("sadsadasdsaas")
+    await frame.locator("body").fill("sadsadasdsaas")
     await page.locator("#id_max_pg").click()
     await page.locator("#id_max_pg").fill("10")
     await page.get_by_role("button", name="Confirm", exact=True).click()
     await page.locator("#id_development").select_option("1")
     await page.locator("#id_start").fill("2025-06-11")
-    sleep(2)
+    await asyncio.sleep(2)
     await page.locator("#id_start").click()
     await page.locator("#id_end").fill("2025-06-13")
-    sleep(2)
+    await asyncio.sleep(2)
     await page.locator("#id_end").click()
     await page.get_by_role("button", name="Confirm", exact=True).click()
 
