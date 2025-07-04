@@ -17,7 +17,6 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-import asyncio
 import re
 
 import pytest
@@ -54,7 +53,6 @@ async def orga_mirror(live_server, page):
     await page.get_by_role("button", name="Confirm", exact=True).click()
 
     # check gallery
-    await asyncio.sleep(3)
     await go_to(page, live_server, "/test/1/")
     await expect(page.locator("#one")).to_contain_text("Test Character")
 
