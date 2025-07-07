@@ -297,7 +297,7 @@ def _orga_manage(request, s, n):
 
     _compile(request, ctx)
 
-    if has_event_permission(ctx, request, s, "show_shortcuts_mobile"):
+    if ctx["event"].get_config("show_shortcuts_mobile", False):
         origin_id = request.GET.get("origin", "")
         should_open = False
         if origin_id:
