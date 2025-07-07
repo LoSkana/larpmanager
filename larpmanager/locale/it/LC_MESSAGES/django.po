@@ -2198,6 +2198,9 @@ msgstr "Dati sensibili"
 msgid "Show past runs"
 msgstr "Mostra run passate"
 
+msgid "Show shortcuts"
+msgstr "Mostra le scorciatoie"
+
 msgid "Single payment"
 msgstr "Pagamento unico"
 
@@ -7509,6 +7512,13 @@ msgid ""
 msgstr ""
 "Se checkato: Invia una email di notifica agli organizzatori per disdetta "
 "iscrizione"
+
+msgid ""
+"If checked: when first accessing the manage page, automatically show "
+"shortcuts on mobile"
+msgstr ""
+"Se selezionato: al primo accesso alla pagina di gestione, mostra "
+"automaticamente le scorciatoie su mobile"
 
 msgid ""
 "Indicate the prerequisite abilities, which must be possessed before one can "

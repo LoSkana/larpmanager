@@ -722,6 +722,14 @@ msgstr ""
 msgid "Visualisation"
 msgstr ""
 
+msgid "Show shortcuts"
+msgstr ""
+
+msgid ""
+"If checked: when first accessing the manage page, automatically show "
+"shortcuts on mobile"
+msgstr ""
+
 msgid "Export"
 msgstr ""
 

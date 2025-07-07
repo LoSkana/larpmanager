@@ -216,6 +216,10 @@ class OrgaConfigForm(ConfigForm):
 
         self.set_section("visualisation", _("Visualisation"))
 
+        label = _("Show shortcuts")
+        help_text = _("If checked: when first accessing the manage page, automatically show shortcuts on mobile")
+        self.add_configs("show_shortcuts_mobile", ConfigType.BOOL, label, help_text)
+
         label = _("Export")
         help_text = _("If checked: allow to export characters and registration in a easily readable page")
         self.add_configs("show_export", ConfigType.BOOL, label, help_text)

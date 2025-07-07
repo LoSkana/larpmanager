@@ -2198,6 +2198,9 @@ msgstr "Citlivé údaje"
 msgid "Show past runs"
 msgstr "Zobrazit minulé běhy"
 
+msgid "Show shortcuts"
+msgstr "Zobrazit zkratky"
+
 msgid "Single payment"
 msgstr "Jednorázová platba"
 
@@ -7256,6 +7259,13 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto: Odeslat organizátorům e-mail s oznámením o zrušení "
 "registrace"
+
+msgid ""
+"If checked: when first accessing the manage page, automatically show "
+"shortcuts on mobile"
+msgstr ""
+"Pokud je zaškrtnuto: při prvním přístupu na stránku správy automaticky "
+"zobrazovat zástupce na mobilních zařízeních"
 
 msgid ""
 "Indicate the prerequisite abilities, which must be possessed before one can "

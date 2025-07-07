@@ -2198,6 +2198,9 @@ msgstr "Sensitive data"
 msgid "Show past runs"
 msgstr "Vis tidligere kjøringer"
 
+msgid "Show shortcuts"
+msgstr "Vis snarveier"
+
 msgid "Single payment"
 msgstr "Engangsutbetaling"
 
@@ -7369,6 +7372,13 @@ msgid ""
 msgstr ""
 "Hvis avkrysset: Send en e-post til arrangørene for å varsle om kansellering "
 "av påmeldingen"
+
+msgid ""
+"If checked: when first accessing the manage page, automatically show "
+"shortcuts on mobile"
+msgstr ""
+"Hvis avkrysset: Vis automatisk snarveier på mobilen når du åpner "
+"administrasjonssiden for første gang"
 
 msgid ""
 "Indicate the prerequisite abilities, which must be possessed before one can "

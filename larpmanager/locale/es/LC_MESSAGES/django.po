@@ -2198,6 +2198,9 @@ msgstr "Datos sensibles"
 msgid "Show past runs"
 msgstr "Mostrar pases anteriores"
 
+msgid "Show shortcuts"
+msgstr "Mostrar accesos directos"
+
 msgid "Single payment"
 msgstr "Pago único"
 
@@ -7463,6 +7466,13 @@ msgid ""
 msgstr ""
 "Si está marcada: Envía una notificación a los organizadores por la "
 "cancelación de la inscripción"
+
+msgid ""
+"If checked: when first accessing the manage page, automatically show "
+"shortcuts on mobile"
+msgstr ""
+"Si está marcada: al acceder por primera vez a la página de gestión, mostrar "
+"automáticamente los accesos directos en el móvil"
 
 msgid ""
 "Indicate the prerequisite abilities, which must be possessed before one can "

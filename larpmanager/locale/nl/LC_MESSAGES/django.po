@@ -2198,6 +2198,9 @@ msgstr "Gevoelige gegevens"
 msgid "Show past runs"
 msgstr "Toon eerdere runs"
 
+msgid "Show shortcuts"
+msgstr "Snelkoppelingen weergeven"
+
 msgid "Single payment"
 msgstr "Eenmalige betaling"
 
@@ -7513,6 +7516,13 @@ msgid ""
 msgstr ""
 "Indien aangevinkt: Stuur een notificatiemail naar de organisatoren voor "
 "annulering van de registratie"
+
+msgid ""
+"If checked: when first accessing the manage page, automatically show "
+"shortcuts on mobile"
+msgstr ""
+"Indien aangevinkt: wanneer de beheerpagina voor het eerst wordt geopend, "
+"automatisch snelkoppelingen weergeven op mobiel"
 
 msgid ""
 "Indicate the prerequisite abilities, which must be possessed before one can "
