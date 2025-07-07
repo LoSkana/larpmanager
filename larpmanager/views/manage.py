@@ -299,8 +299,10 @@ def _orga_manage(request, s, n):
 
     if has_event_permission(ctx, request, s, "show_shortcuts_mobile"):
         origin_id = request.GET.get("origin", "")
+        should_open = False
         if origin_id:
-            ctx["open_shortcuts"] = str(ctx["run"].id) != origin_id
+            should_open = str(ctx["run"].id) != origin_id
+        ctx["open_shortcuts"] = should_open
 
     return render(request, "larpmanager/manage/orga.html", ctx)
 
