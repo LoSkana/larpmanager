@@ -1717,3 +1717,9 @@ a label:hover {
 #tutorial_query_go {
     padding: 0.7em 1em;
 }
+
+@media(max-width: 840px) {
+    #tutorial_query {
+        width: 60%;
+    }
+}

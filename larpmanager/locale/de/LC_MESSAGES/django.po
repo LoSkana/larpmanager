@@ -2198,6 +2198,9 @@ msgstr "Sensible Daten"
 msgid "Show past runs"
 msgstr "Vergangene Läufe anzeigen"
 
+msgid "Show shortcuts"
+msgstr "Abkürzungen anzeigen"
+
 msgid "Single payment"
 msgstr "Einmalige Zahlung"
 
@@ -7666,6 +7669,13 @@ msgid ""
 msgstr ""
 "Wenn angekreuzt: Senden Sie eine Benachrichtigung per E-Mail an die "
 "Organisatoren für die Stornierung der Anmeldung"
+
+msgid ""
+"If checked: when first accessing the manage page, automatically show "
+"shortcuts on mobile"
+msgstr ""
+"Wenn aktiviert: beim ersten Zugriff auf die Verwaltungsseite automatisch "
+"Verknüpfungen auf dem Handy anzeigen"
 
 msgid ""
 "Indicate the prerequisite abilities, which must be possessed before one can "

@@ -44,7 +44,15 @@ $(document).ready(function() {
 
     // Sidebar
     $('#sidebar-mobile').on('click', function(event) {
-            $('body').toggleClass('is-sidebar-visible');
+        $('body').toggleClass('is-sidebar-visible');
+    });
+
+    $(document).on('click', function(event) {
+        if (parseFloat($('#sidebar').css('opacity')) > 0) {
+            if (!$(event.target).closest('#sidebar .inner').length) {
+                $('body').removeClass('is-sidebar-visible');
+            }
+        }
     });
 
     $('.sidebar-link').each(function() {

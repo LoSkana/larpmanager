@@ -90,4 +90,15 @@
 {% endblock content %}
 {% block js %}
     {% include "elements/tutorial_query.js" %}
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+        $(document).ready(function() {
+            {% if open_shortcuts %}
+                if ($('#sidebar-mobile').is(':visible')) {
+                    $('body').toggleClass('is-sidebar-visible');
+                }
+            {% endif %}
+        });
+    });
+    </script>
 {% endblock js %}

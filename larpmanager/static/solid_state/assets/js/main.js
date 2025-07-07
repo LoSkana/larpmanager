@@ -74,6 +74,8 @@
 			if ($menu._lock())
 				$body.removeClass('is-menu-visible');
 
+			$body.removeClass('is-sidebar-visible');
+
 		};
 
 		$menu._toggle = function() {

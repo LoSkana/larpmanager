@@ -2198,6 +2198,9 @@ msgstr "Wrażliwe dane"
 msgid "Show past runs"
 msgstr "Pokaż poprzednie przebiegi"
 
+msgid "Show shortcuts"
+msgstr "Pokaż skróty"
+
 msgid "Single payment"
 msgstr "Płatność jednorazowa"
 
@@ -7384,6 +7387,13 @@ msgid ""
 msgstr ""
 "Jeśli zaznaczone: Wyślij wiadomość e-mail z powiadomieniem do organizatorów "
 "o anulowaniu rejestracji"
+
+msgid ""
+"If checked: when first accessing the manage page, automatically show "
+"shortcuts on mobile"
+msgstr ""
+"Jeśli zaznaczone: przy pierwszym wejściu na stronę zarządzania automatycznie"
+" wyświetlaj skróty na urządzeniach mobilnych"
 
 msgid ""
 "Indicate the prerequisite abilities, which must be possessed before one can "

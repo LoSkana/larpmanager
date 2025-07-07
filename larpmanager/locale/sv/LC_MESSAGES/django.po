@@ -2198,6 +2198,9 @@ msgstr "Känsliga uppgifter"
 msgid "Show past runs"
 msgstr "Visa tidigare körningar"
 
+msgid "Show shortcuts"
+msgstr "Visa genvägar"
+
 msgid "Single payment"
 msgstr "Enstaka betalning"
 
@@ -7394,6 +7397,13 @@ msgid ""
 msgstr ""
 "Om markerat: Skicka ett e-postmeddelande till arrangörerna för annullering "
 "av registrering"
+
+msgid ""
+"If checked: when first accessing the manage page, automatically show "
+"shortcuts on mobile"
+msgstr ""
+"Om markerat: Visa automatiskt genvägar på mobilen när du först öppnar "
+"hanteringssidan"
 
 msgid ""
 "Indicate the prerequisite abilities, which must be possessed before one can "

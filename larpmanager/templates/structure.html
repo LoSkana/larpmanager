@@ -213,6 +213,18 @@
                     url: '{% url "toggle_sidebar" %}',
                 });
             });
+
+            // add origin for manage links
+            {% if run %}
+                let origin = '{{ run.id }}';
+            {% else %}
+                let origin = '0';
+            {% endif %}
+            $('.nav.manage a[href]').each(function() {
+                const url = new URL(this.href);
+                url.searchParams.set('origin', origin);
+                this.href = url.toString();
+            });
         });
 
     });
