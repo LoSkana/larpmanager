@@ -28,7 +28,19 @@ If you want an easy and fast deploy, set the environment variables:
 cp .env.example .env
 ```
 
-Give them proper values. Then let's do the docker magic:
+Give them proper values(see below for instructions). Then let's install docker: 
+
+```
+sudo apt install docker-ce docker-compose-plugin # Ubuntu
+sudo yum install docker-ce docker-compose-plugin # RedHat
+
+sudo systemctl enable docker
+sudo systemctl start docker
+
+sudo docker run hello-world # Test if it works
+```
+
+Now time for the docker magic:
 
 ```
 docker compose up --build
@@ -116,6 +128,19 @@ And install playwright for tests:
 ```
 playwright install
 ```
+
+---
+
+## Environment
+
+Set those values: 
+- GUNICORN_WORKERS: Rule of thumb is number of processors * 2 + 1
+- SECRET_KEY: A fresh secret key, you can use an [online tool](https://djecrety.ir/)
+- ADMIN_NAME, ADMIN_EMAIL: Set your own info 
+- DB_NAME, DB_USER, DB_PASS, DB_HOST: The database will be generated based on those values if it does not exists
+- TZ: The base timezone of the server
+- GOOGLE_CLIENTID, GOOGLE_SECRET: (Optional) If you want Google SSO, follow the [django-allauth guide](https://docs.allauth.org/en/dev/socialaccount/providers/google.html)
+- RECAPTCHA_PUBLIC, RECAPTCHA_PRIVATE: If you want recaptcha checks, follow the [django-recaptcha guide](https://cloud.google.com/security/products/recaptcha)
 
 ---
 
