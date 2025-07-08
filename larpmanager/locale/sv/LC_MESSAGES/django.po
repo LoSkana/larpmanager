@@ -2594,6 +2594,9 @@ msgstr "Ladda ner dokument"
 msgid "Elements uploaded"
 msgstr "Elementen är laddade"
 
+msgid "Experience Points"
+msgstr "Erfarenhetspoäng"
+
 msgid "Experience points"
 msgstr "Erfarenhetspoäng"
 

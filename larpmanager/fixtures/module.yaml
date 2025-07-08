@@ -3,56 +3,56 @@
   fields:
     name: Writing
     descr: Writing and storytelling tools
-    order: 5
+    order: 50
     default: false
 - model: larpmanager.featuremodule
   pk: 2
   fields:
     name: Accounting
     descr: Managing money flow and finances
-    order: 4
+    order: 40
     default: false
 - model: larpmanager.featuremodule
   pk: 3
   fields:
     name: Miscellany
     descr: Various additional features
-    order: 10
+    order: 100
     default: false
 - model: larpmanager.featuremodule
   pk: 4
   fields:
     name: Registration
     descr: Player registration process
-    order: 3
+    order: 30
     default: false
 - model: larpmanager.featuremodule
   pk: 5
   fields:
     name: Casting
     descr: Assigning characters to players
-    order: 6
+    order: 60
     default: false
 - model: larpmanager.featuremodule
   pk: 6
   fields:
     name: Appearance
     descr: Event display and visual customization
-    order: 2
+    order: 20
     default: false
 - model: larpmanager.featuremodule
   pk: 7
   fields:
     name: Management
     descr: General event management tools
-    order: 1
+    order: 10
     default: false
 - model: larpmanager.featuremodule
   pk: 8
   fields:
     name: Users
     descr: Manage players' data
-    order: 8
+    order: 80
     default: false
 - model: larpmanager.featuremodule
   pk: 9
@@ -66,5 +66,12 @@
   fields:
     name: Italy
     descr: Italian features
-    order: 11
+    order: 110
+    default: false
+- model: larpmanager.featuremodule
+  pk: 11
+  fields:
+    name: Experience
+    descr: Experience Points
+    order: 45
     default: false

@@ -2594,6 +2594,9 @@ msgstr "Document downloaden"
 msgid "Elements uploaded"
 msgstr "Elementen geladen"
 
+msgid "Experience Points"
+msgstr "Ervaringspunten"
+
 msgid "Experience points"
 msgstr "Ervaringspunten"
 

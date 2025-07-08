@@ -2594,6 +2594,9 @@ msgstr "Stáhnout dokument"
 msgid "Elements uploaded"
 msgstr "Prvky jsou načteny"
 
+msgid "Experience Points"
+msgstr "Zkušenostní body"
+
 msgid "Experience points"
 msgstr "Zkušenostní body"
 
