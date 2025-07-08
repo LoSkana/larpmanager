@@ -30,6 +30,7 @@ from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features
+from larpmanager.mail.accounting import get_exec_language
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.association import get_url, hdr
@@ -182,6 +183,7 @@ def notify_help_question(sender, instance, **kwargs):
 
         elif instance.assoc:
             body, subj = get_help_email(instance, mb)
+            activate(get_exec_language(instance.assoc))
             my_send_mail(subj, body, instance.assoc.main_mail, instance)
         else:
             body, subj = get_help_email(instance, mb)
