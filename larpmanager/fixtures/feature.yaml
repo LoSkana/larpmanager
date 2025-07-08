@@ -789,7 +789,7 @@
       can then be used to purchase skills.
     slug: px
     overall: false
-    module: 7
+    module: 11
     placeholder: false
     order: 50
     after_text: Now you can set the experience points settings
@@ -1184,7 +1184,7 @@
     descr: ''
     slug: orga_reload_cache
     overall: false
-    module: 7
+    module: 10
     placeholder: true
     order: 9999
     after_text: null
