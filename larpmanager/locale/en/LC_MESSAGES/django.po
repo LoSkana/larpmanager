@@ -6790,6 +6790,9 @@ msgstr ""
 msgid "Italian features"
 msgstr ""
 
+msgid "Experience Points"
+msgstr ""
+
 msgid ""
 "Enables \"Prologues\", short introductory paragraphs for each act of the "
 "game, which players receive to guide them."

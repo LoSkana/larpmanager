@@ -2594,6 +2594,9 @@ msgstr "Last ned dokumentet"
 msgid "Elements uploaded"
 msgstr "Elementer lastet"
 
+msgid "Experience Points"
+msgstr "Erfaringspoeng"
+
 msgid "Experience points"
 msgstr "Erfaringspoeng"
 
