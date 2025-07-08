@@ -1,7 +1,7 @@
 #  LarpManager
 
 **LarpManager** is a free and open-source platform to manage **LARP (Live Action Role-Playing)** events.
-It supports organizers in every step: managing registrations, payments, characters and logistics.
+It has everything you need to run your LARP, free & open source!
 
 > Not interested in self-hosting? Start using it right away at [https://larpmanager.com](https://larpmanager.com)
 
@@ -20,27 +20,15 @@ See the LICENSE file for details.
 
 ---
 
-## Docker
+## Quick set up
 
-If you want an easy and fast deploy, set the environment variables:
+If you want an easy and fast deploy, set the environment variables (see below for instructions on their values)[# environment]:
 
 ```
 cp .env.example .env
 ```
 
-Give them proper values(see below for instructions). Then let's install docker: 
-
-```
-sudo apt install docker-ce docker-compose-plugin # Ubuntu
-sudo yum install docker-ce docker-compose-plugin # RedHat
-
-sudo systemctl enable docker
-sudo systemctl start docker
-
-sudo docker run hello-world # Test if it works
-```
-
-Now time for the docker magic:
+Now time for the docker magic (see below for instructions on installing it)[# docker]:
 
 ```
 docker compose up --build
@@ -52,7 +40,7 @@ Now create a super user:
 docker exec -it larpmanager python manage.py createsuperuser
 ```
 
-Go to `http://127.0.0.1:8264/admin/larpmanager/association/`, and create your Association. Put as values only:
+Go to `http://127.0.0.1:8264/admin/larpmanager/association/`, and create your Organization. Put as values only:
 - Name: you should get it;
 - URL identifier: put `def`;
 - Logo: an image;
@@ -60,7 +48,27 @@ Go to `http://127.0.0.1:8264/admin/larpmanager/association/`, and create your As
 
 Leave the other fields empty, and save.
 
-Now expose the port 8264 (we wanted a fancy one) to your reverse proxy of choice for public access.
+Now expose the port 8264 (we wanted a fancy one) to your reverse proxy of choice for public access. Example configuration for nginx, place this code in `/etc/nginx/sites-available/example.com`:
+
+```
+server {
+    listen 80;
+    server_name example.com;
+
+    location / {
+        proxy_pass http://localhost:8264;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+Now create the symlink:
+
+```
+ln -s /etc/nginx/sites-available/example.com /etc/nginx/sites-enabled/
+nginx -t && systemctl reload nginx
+```
 
 Now you're ready for liftoff!
 
@@ -95,6 +103,64 @@ It will perform a graceful restart.
 
 ---
 
+## Cloud
+
+For cloud deploy, we suggest the following configuration:
+- OS: Ubuntu 22.04 LTS
+- A "burstable" instance (instead of memory or compute-optimized), as to allow to better handle bursts of user activity
+
+Some typical options could be:
+- EC2: t3.small / t3.medium
+- GCP: e2-small / e2-medium
+- Azure: B1ms / B2s
+
+---
+
+## Environment
+
+Set those values:
+- GUNICORN_WORKERS: Rule of thumb is number of processors * 2 + 1
+- SECRET_KEY: A fresh secret key, you can use an [online tool](https://djecrety.ir/)
+- ADMIN_NAME, ADMIN_EMAIL: Set your own info
+- DB_NAME, DB_USER, DB_PASS, DB_HOST: The database will be generated based on those values if it does not exists
+- TZ: The base timezone of the server
+- GOOGLE_CLIENTID, GOOGLE_SECRET: (Optional) If you want Google SSO, follow the [django-allauth guide](https://docs.allauth.org/en/dev/socialaccount/providers/google.html)
+- RECAPTCHA_PUBLIC, RECAPTCHA_PRIVATE: If you want recaptcha checks, follow the [django-recaptcha guide](https://cloud.google.com/security/products/recaptcha)
+
+---
+
+## Docker
+
+To install everything needed for the quick setup, install some dependencies:
+
+```
+sudo apt update
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+```
+
+add docker's repo:
+
+```
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+```
+
+finally, install Docker:
+
+```
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+```
+
+run it:
+
+```
+sudo systemctl start docker
+sudo systemctl enable docker
+```
+
+---
+
 ## Install
 
 If you're old school, a typical installation requires:
@@ -123,37 +189,10 @@ cd larpmanager/static
 npm install
 ```
 
-
 And install playwright for tests:
 ```
 playwright install
 ```
-
----
-
-## Environment
-
-Set those values: 
-- GUNICORN_WORKERS: Rule of thumb is number of processors * 2 + 1
-- SECRET_KEY: A fresh secret key, you can use an [online tool](https://djecrety.ir/)
-- ADMIN_NAME, ADMIN_EMAIL: Set your own info 
-- DB_NAME, DB_USER, DB_PASS, DB_HOST: The database will be generated based on those values if it does not exists
-- TZ: The base timezone of the server
-- GOOGLE_CLIENTID, GOOGLE_SECRET: (Optional) If you want Google SSO, follow the [django-allauth guide](https://docs.allauth.org/en/dev/socialaccount/providers/google.html)
-- RECAPTCHA_PUBLIC, RECAPTCHA_PRIVATE: If you want recaptcha checks, follow the [django-recaptcha guide](https://cloud.google.com/security/products/recaptcha)
-
----
-
-## Cloud
-
-For cloud deploy, we suggest the following configuration:
-- OS: Ubuntu 22.04 LTS
-- A "burstable" instance (instead of memory or compute-optimized), as to allow to better handle bursts of user activity
-
-Some typical options could be:
-- EC2: t3.small / t3.medium
-- GCP: e2-small / e2-medium
-- Azure: B1ms / B2s
 
 ---
 
