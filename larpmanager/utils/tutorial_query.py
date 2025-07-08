@@ -59,7 +59,7 @@ def query_index(request):
 
     # translate it
     translator = deepl.Translator(conf_settings.DEEPL_API_KEY)
-    query_string = translator.translate_text(orig_string, target_lang="EN")
+    query_string = translator.translate_text(orig_string, target_lang="EN-US")
 
     # notify admins
     notify_admins(f"query_index: {query_string}", f"{orig_string} - {request.user}")
