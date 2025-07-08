@@ -4,7 +4,7 @@ import deepl
 from bs4 import BeautifulSoup
 from django.conf import settings as conf_settings
 from django.http import JsonResponse
-from whoosh.fields import TEXT, Schema
+from whoosh.fields import ID, TEXT, Schema
 from whoosh.index import create_in, open_dir
 from whoosh.qparser import QueryParser
 
@@ -17,7 +17,11 @@ INDEX_DIR = "data/whoosh_index"
 
 def get_or_create_index(index_dir):
     schema = Schema(
-        slug=TEXT(stored=True), title=TEXT(stored=True), section_title=TEXT(stored=True), content=TEXT(stored=True)
+        tutorial_id=ID(stored=True),
+        slug=TEXT(stored=True),
+        title=TEXT(stored=True),
+        section_title=TEXT(stored=True),
+        content=TEXT(stored=True),
     )
     if not os.path.exists(index_dir):
         os.mkdir(index_dir)
@@ -41,7 +45,11 @@ def index_tutorial(tutorial_id):
                 break
             content.append(sib.get_text())
         writer.add_document(
-            slug=instance.slug, title=instance.name, section_title=section.get_text(), content="\n".join(content)
+            tutorial_id=str(tutorial_id),
+            slug=instance.slug,
+            title=instance.name,
+            section_title=section.get_text(),
+            content="\n".join(content),
         )
     writer.commit()
 
