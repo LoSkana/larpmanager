@@ -1,6 +1,8 @@
 import os
 
+import deepl
 from bs4 import BeautifulSoup
+from django.conf import settings as conf_settings
 from django.http import JsonResponse
 from whoosh.fields import TEXT, Schema
 from whoosh.index import create_in, open_dir
@@ -53,8 +55,16 @@ def delete_index(tutorial_id):
 
 
 def query_index(request):
-    query_string = request.POST.get("q", "")
-    notify_admins(f"query_index: {query_string}", "")
+    orig_string = request.POST.get("q", "")
+
+    # translate it
+    translator = deepl.Translator(conf_settings.DEEPL_API_KEY)
+    query_string = translator.translate_text(orig_string, target_lang="EN")
+
+    # notify admins
+    notify_admins(f"query_index: {query_string}", f"{orig_string} - {request.user}")
+
+    # search for it
     ix = get_or_create_index(INDEX_DIR)
     with ix.searcher() as searcher:
         query = QueryParser("content", ix.schema).parse(query_string)
