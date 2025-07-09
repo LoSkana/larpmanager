@@ -1776,9 +1776,6 @@ msgstr "Foreldre tom"
 msgid "Payment date"
 msgstr "Betalingsdato"
 
-msgid "Payment fees"
-msgstr "Betalingskommisjoner"
-
 msgid "Pre-Register"
 msgstr "Forhåndspåmelding"
 
@@ -2324,9 +2321,6 @@ msgstr "Skytteltrafikk"
 msgid "Start algorithm"
 msgstr "Start-algoritme"
 
-msgid "Transaction fee"
-msgstr "Transaksjonsgebyr"
-
 msgid "Upload Expenses"
 msgstr "Last opp utgifter"
 
@@ -2824,9 +2818,6 @@ msgstr "Tildelt karakter!"
 
 msgid "Change registration"
 msgstr "Rediger oppføring"
-
-msgid "Charging the player"
-msgstr "Lading av spilleren"
 
 msgid "Confirmation delete"
 msgstr "Bekreftelse på sletting"
@@ -4064,6 +4055,9 @@ msgstr "Prestasjonsoppgave: %(badge)s"
 msgid "Ask the organisers to activate it"
 msgstr "Be arrangørene om å aktivere den"
 
+msgid "Charge transaction fees to player"
+msgstr "Krev transaksjonsgebyr av spilleren"
+
 msgid "Complete name of the Organization"
 msgstr "Fullstendig navn på organisasjonen"
 
@@ -5054,9 +5048,6 @@ msgstr "Navn på samarbeidspartnerne som organiserer den"
 msgid "No additional payments are required at this time"
 msgstr "Ingen ytterligere innbetalinger er påkrevd på dette tidspunktet"
 
-msgid "Now you can set the fee for each payment gateway"
-msgstr "Nå kan du angi gebyret for hver betalingsgateway"
-
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Avslutte abonnementet på %(event)s av %(user)s"
@@ -5894,9 +5885,6 @@ msgstr ""
 
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "En del av registreringsavgiften stammer kun fra den valgte billetten"
-
-msgid "Payment fees require payments, activate it in the features panel"
-msgstr "Betalingsgebyrer krever betaling, aktiver det i funksjonspanelet"
 
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
@@ -7464,13 +7452,6 @@ msgstr ""
 "Ønsker du å melde deg av våre kommunikasjonslister? <a href='%(url)s'>Avmeld"
 " deg</a>"
 
-msgid ""
-"If checked: the system will add payment fees to the ticket, making the "
-"player pay for them"
-msgstr ""
-"Hvis avkrysset: systemet legger til betalingsgebyrer på billetten, slik at "
-"spilleren må betale for dem"
-
 #, python-format
 msgid ""
 "There are quest types without quests: %(list)s. Create them in the quests "
@@ -8052,13 +8033,6 @@ msgstr ""
 "og arrangørene"
 
 msgid ""
-"There are no payment gateway set with a transaction fee, configure them in "
-"the payment settings panel"
-msgstr ""
-"Det er ikke angitt noen betalingsgateway med et transaksjonsgebyr, "
-"konfigurer dem i betalingsinnstillingspanelet"
-
-msgid ""
 "This page allows you to add or edit an registration revenue other than the "
 "players' registration fee."
 msgstr ""
@@ -8437,13 +8411,6 @@ msgid ""
 msgstr ""
 "Hvis du velger én (eller flere) billetter, vil alternativet bare være "
 "tilgjengelig for spillere som har valgt den aktuelle billetten"
-
-msgid ""
-"Lets you define a processing-fee percentage per payment method, optionally "
-"adding it to the final ticket price."
-msgstr ""
-"Lar deg definere en prosentandel for behandlingsgebyr per betalingsmåte, og "
-"eventuelt legge den til den endelige billettprisen."
 
 msgid ""
 "The feature 'Diet' requires the diet field to be set in the user profile, "
@@ -9127,6 +9094,14 @@ msgid ""
 msgstr ""
 "Muliggjør \"Filler\"-karakterer: enklere karakterark som tildeles spillere "
 "som er klare til å erstatte frafall av hovedkarakterer i siste øyeblikk."
+
+msgid ""
+"If enabled, the system will automatically add payment gateway fees to the "
+"ticket price, so the player covers them instead of the organization"
+msgstr ""
+"Hvis denne funksjonen er aktivert, vil systemet automatisk legge til gebyrer"
+" for betalingsgateway til billettprisen, slik at spilleren dekker dem i "
+"stedet for organisasjonen"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

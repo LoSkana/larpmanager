@@ -1776,9 +1776,6 @@ msgstr "Parent vuoto"
 msgid "Payment date"
 msgstr "Data pagamento"
 
-msgid "Payment fees"
-msgstr "Commissioni pagamento"
-
 msgid "Pre-Register"
 msgstr "Pre-Iscriviti"
 
@@ -2324,9 +2321,6 @@ msgstr "Shuttle service"
 msgid "Start algorithm"
 msgstr "Avvia algoritmo"
 
-msgid "Transaction fee"
-msgstr "Tassa di transazione"
-
 msgid "Upload Expenses"
 msgstr "Carica Spese"
 
@@ -2824,9 +2818,6 @@ msgstr "Personaggio assegnato!"
 
 msgid "Change registration"
 msgstr "Modifica iscrizione"
-
-msgid "Charging the player"
-msgstr "Addebito al giocatore"
 
 msgid "Confirmation delete"
 msgstr "Conferma cancella"
@@ -4064,6 +4055,9 @@ msgstr "Assegnazione achievement: %(badge)s"
 msgid "Ask the organisers to activate it"
 msgstr "Chiedete agli organizzatori di attivarlo"
 
+msgid "Charge transaction fees to player"
+msgstr "Addebitare al giocatore le spese di transazione"
+
 msgid "Complete name of the Organization"
 msgstr "Nome completo dell'organizzazione"
 
@@ -5052,9 +5046,6 @@ msgstr "Nomi dei collaboratori che lo stanno organizzando"
 msgid "No additional payments are required at this time"
 msgstr "Al momento non sono richiesti pagamenti aggiuntivi"
 
-msgid "Now you can set the fee for each payment gateway"
-msgstr "Ora è possibile impostare la tariffa per ogni gateway di pagamento"
-
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Cancellazione iscrizione a %(event)s di %(user)s"
@@ -5933,11 +5924,6 @@ msgstr ""
 
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "Parte della quota di iscrizione derivata solo dal biglietto scelto"
-
-msgid "Payment fees require payments, activate it in the features panel"
-msgstr ""
-"Le commissioni di pagamento richiedono la feature pagamento, attivarlo nel "
-"pannello delle funzionalità"
 
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
@@ -7604,13 +7590,6 @@ msgstr ""
 "Non desideri più ricevere le nostre comunicazioni? <a href='%(url)s'>Clicca "
 "qui per disiscriverti</a>"
 
-msgid ""
-"If checked: the system will add payment fees to the ticket, making the "
-"player pay for them"
-msgstr ""
-"Se selezionato: il sistema aggiungerà le spese di pagamento al biglietto, "
-"facendole pagare al giocatore"
-
 #, python-format
 msgid ""
 "There are quest types without quests: %(list)s. Create them in the quests "
@@ -8193,13 +8172,6 @@ msgstr ""
 "ed agli organizzatori"
 
 msgid ""
-"There are no payment gateway set with a transaction fee, configure them in "
-"the payment settings panel"
-msgstr ""
-"Non ci sono gateway di pagamento impostati con una commissione di "
-"transazione, configurarli nel pannello delle impostazioni di pagamento"
-
-msgid ""
 "This page allows you to add or edit an registration revenue other than the "
 "players' registration fee."
 msgstr ""
@@ -8580,14 +8552,6 @@ msgid ""
 msgstr ""
 "Se selezioni uno (o più) biglietti, l'opzione sarà disponibile solo ai "
 "giocatori che hanno selezionano tale biglietto"
-
-msgid ""
-"Lets you define a processing-fee percentage per payment method, optionally "
-"adding it to the final ticket price."
-msgstr ""
-"Permette di definire una percentuale di spese di elaborazione per ogni "
-"metodo di pagamento, aggiungendola facoltativamente al prezzo finale del "
-"biglietto."
 
 msgid ""
 "The feature 'Diet' requires the diet field to be set in the user profile, "
@@ -9277,6 +9241,14 @@ msgstr ""
 "Abilita i personaggi \"riempitivi\": schede dei personaggi più semplici, "
 "assegnate ai giocatori pronti a sostituire l'abbandono dell'ultimo minuto "
 "dei personaggi principali."
+
+msgid ""
+"If enabled, the system will automatically add payment gateway fees to the "
+"ticket price, so the player covers them instead of the organization"
+msgstr ""
+"Se abilitato, il sistema aggiungerà automaticamente le commissioni del "
+"gateway di pagamento al prezzo del biglietto, in modo che sia il giocatore a"
+" coprirle al posto dell'organizzazione"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

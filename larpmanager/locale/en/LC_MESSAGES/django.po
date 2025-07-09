@@ -494,6 +494,14 @@ msgid ""
 "If checked: the system will send reminds the days on which holidays fall"
 msgstr ""
 
+msgid "Charge transaction fees to player"
+msgstr ""
+
+msgid ""
+"If enabled, the system will automatically add payment gateway fees to the "
+"ticket price, so the player covers them instead of the organization"
+msgstr ""
+
 msgid "Disable amount change"
 msgstr ""
 
@@ -560,17 +568,6 @@ msgstr ""
 msgid ""
 "Percentage of takings calculated as a fee for association infrastructure (in "
 "whole numbers from 0 to 100)"
-msgstr ""
-
-msgid "Payment fees"
-msgstr ""
-
-msgid "Charging the player"
-msgstr ""
-
-msgid ""
-"If checked: the system will add payment fees to the ticket, making the "
-"player pay for them"
 msgstr ""
 
 msgid "Electronic invoice"
@@ -7249,17 +7246,6 @@ msgstr ""
 msgid "Now players can create refund requests, and you can review them"
 msgstr ""
 
-msgid "Transaction fee"
-msgstr ""
-
-msgid ""
-"Lets you define a processing-fee percentage per payment method, optionally "
-"adding it to the final ticket price."
-msgstr ""
-
-msgid "Now you can set the fee for each payment gateway"
-msgstr ""
-
 msgid "Opening date"
 msgstr ""
 
@@ -8121,14 +8107,6 @@ msgstr ""
 msgid ""
 "There are no payment gateway active, configure them in the payment settings "
 "panel"
-msgstr ""
-
-msgid "Payment fees require payments, activate it in the features panel"
-msgstr ""
-
-msgid ""
-"There are no payment gateway set with a transaction fee, configure them in "
-"the payment settings panel"
 msgstr ""
 
 msgid ""

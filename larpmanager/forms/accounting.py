@@ -516,9 +516,7 @@ class ExePaymentSettingsForm(MyForm):
         res = {}
         # noinspection PyUnresolvedReferences
         for el in self.methods:
-            ls = [el.slug + "_descr"]
-            if "payment_fees" in self.params["features"]:
-                ls.append(el.slug + "_fee")
+            ls = [el.slug + "_descr", el.slug + "_fee"]
             if not el.slug:
                 continue
             fields = el.fields.replace(" ", "")

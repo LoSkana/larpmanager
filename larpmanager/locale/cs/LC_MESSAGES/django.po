@@ -1776,9 +1776,6 @@ msgstr "Rodič prázdný"
 msgid "Payment date"
 msgstr "Datum platby"
 
-msgid "Payment fees"
-msgstr "Platební provize"
-
 msgid "Pre-Register"
 msgstr "Předběžná registrace"
 
@@ -2324,9 +2321,6 @@ msgstr "Kyvadlová doprava"
 msgid "Start algorithm"
 msgstr "Algoritmus spuštění"
 
-msgid "Transaction fee"
-msgstr "Transakční poplatek"
-
 msgid "Upload Expenses"
 msgstr "Nahrávání výdajů"
 
@@ -2824,9 +2818,6 @@ msgstr "Přidělená postava!"
 
 msgid "Change registration"
 msgstr "Upravit položku"
-
-msgid "Charging the player"
-msgstr "Nabíjení přehrávače"
 
 msgid "Confirmation delete"
 msgstr "Odstranění potvrzení"
@@ -4064,6 +4055,9 @@ msgstr "Přiřazení úspěchu: %(badge)s"
 msgid "Ask the organisers to activate it"
 msgstr "Požádejte organizátory o aktivaci"
 
+msgid "Charge transaction fees to player"
+msgstr "Účtování transakčních poplatků hráči"
+
 msgid "Complete name of the Organization"
 msgstr "Úplný název organizace"
 
@@ -5051,9 +5045,6 @@ msgstr "Jména spolupracovníků, kteří ji organizují"
 msgid "No additional payments are required at this time"
 msgstr "V tuto chvíli nejsou vyžadovány žádné další platby"
 
-msgid "Now you can set the fee for each payment gateway"
-msgstr "Nyní můžete nastavit poplatek pro každou platební bránu"
-
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Zrušení odběru %(event)s pomocí %(user)s"
@@ -5860,9 +5851,6 @@ msgstr ""
 
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "Část registračního poplatku odvozená pouze od vybrané vstupenky"
-
-msgid "Payment fees require payments, activate it in the features panel"
-msgstr "Platební poplatky vyžadují platby, aktivujte je na panelu funkcí"
 
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr "Platba nebyla dokončena. Kontaktujte nás a zjistěte, proč"
@@ -7352,13 +7340,6 @@ msgstr ""
 "Chcete se odhlásit z našich komunikačních seznamů? <a "
 "href='%(url)s'>Odhlásit se</a>"
 
-msgid ""
-"If checked: the system will add payment fees to the ticket, making the "
-"player pay for them"
-msgstr ""
-"Pokud je zaškrtnuto: systém přidá k jízdence poplatky za platbu, které hráč "
-"zaplatí"
-
 #, python-format
 msgid ""
 "There are quest types without quests: %(list)s. Create them in the quests "
@@ -7927,13 +7908,6 @@ msgstr ""
 " a organizátory"
 
 msgid ""
-"There are no payment gateway set with a transaction fee, configure them in "
-"the payment settings panel"
-msgstr ""
-"Nejsou nastaveny žádné platební brány s poplatkem za transakci, "
-"nakonfigurujte je na panelu nastavení plateb"
-
-msgid ""
 "This page allows you to add or edit an registration revenue other than the "
 "players' registration fee."
 msgstr ""
@@ -8314,13 +8288,6 @@ msgid ""
 msgstr ""
 "Pokud vyberete jeden (nebo více) tipů, bude tato možnost dostupná pouze "
 "hráčům, kteří si tento tip vybrali"
-
-msgid ""
-"Lets you define a processing-fee percentage per payment method, optionally "
-"adding it to the final ticket price."
-msgstr ""
-"Umožňuje definovat procento poplatku za zpracování pro každý způsob platby a"
-" volitelně jej přidat ke konečné ceně tipu."
 
 msgid ""
 "The feature 'Diet' requires the diet field to be set in the user profile, "
@@ -8988,6 +8955,13 @@ msgid ""
 msgstr ""
 "Umožňuje \"výplňové\" postavy: jednodušší listy postav, přidělené hráčům, "
 "kteří jsou připraveni na poslední chvíli nahradit vypadnutí hlavních postav."
+
+msgid ""
+"If enabled, the system will automatically add payment gateway fees to the "
+"ticket price, so the player covers them instead of the organization"
+msgstr ""
+"Pokud je tato možnost povolena, systém automaticky připočte poplatky "
+"platební brány k ceně vstupenky, takže je hradí hráč místo organizace"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

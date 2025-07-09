@@ -1776,9 +1776,6 @@ msgstr "Raíz vacía"
 msgid "Payment date"
 msgstr "Fecha de pago"
 
-msgid "Payment fees"
-msgstr "Comisiones de pago"
-
 msgid "Pre-Register"
 msgstr "Preinscrípción"
 
@@ -2324,9 +2321,6 @@ msgstr "Servicio de transporte"
 msgid "Start algorithm"
 msgstr "Iniciar algoritmo"
 
-msgid "Transaction fee"
-msgstr "Tasa de transacción"
-
 msgid "Upload Expenses"
 msgstr "Cargar gastos"
 
@@ -2824,9 +2818,6 @@ msgstr "¡Personaje asignado!"
 
 msgid "Change registration"
 msgstr "Editar inscripción"
-
-msgid "Charging the player"
-msgstr "Cargar el jucador"
 
 msgid "Confirmation delete"
 msgstr "Confirmación de eliminación"
@@ -4064,6 +4055,9 @@ msgstr "Asignación de logros: %(badge)s"
 msgid "Ask the organisers to activate it"
 msgstr "Pide a los organizadores que lo activen"
 
+msgid "Charge transaction fees to player"
+msgstr "Cobrar gastos de transacción al jugador"
+
 msgid "Complete name of the Organization"
 msgstr "Nombre completo de la Organización"
 
@@ -5051,9 +5045,6 @@ msgstr "Nombres de los colaboradores que lo organizan"
 msgid "No additional payments are required at this time"
 msgstr "No se requieren pagos adicionales en este momento"
 
-msgid "Now you can set the fee for each payment gateway"
-msgstr "Ahora puede establecer la tarifa para cada pasarela de pago"
-
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Inscripción cancelada para %(event)s por %(user)s"
@@ -5913,10 +5904,6 @@ msgstr ""
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr ""
 "Parte de la cuota de inscripción derivada únicamente de la entrada elegida"
-
-msgid "Payment fees require payments, activate it in the features panel"
-msgstr ""
-"Las tasas de pago requieren pagos, actívelo en el panel de características"
 
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
@@ -7559,13 +7546,6 @@ msgstr ""
 "Quieres darte de baja de nuestras listas de comunicación? <a "
 "href='%(url)s'>Darse de baja</a>"
 
-msgid ""
-"If checked: the system will add payment fees to the ticket, making the "
-"player pay for them"
-msgstr ""
-"Si está marcada: el sistema añadirá tasas de pago al billete, haciendo que "
-"el jugador las pague"
-
 #, python-format
 msgid ""
 "There are quest types without quests: %(list)s. Create them in the quests "
@@ -8148,13 +8128,6 @@ msgstr ""
 " ti y los organizadores"
 
 msgid ""
-"There are no payment gateway set with a transaction fee, configure them in "
-"the payment settings panel"
-msgstr ""
-"No hay ninguna pasarela de pago configurada con una tarifa de transacción, "
-"configúrelas en el panel de configuración de pagos"
-
-msgid ""
 "This page allows you to add or edit an registration revenue other than the "
 "players' registration fee."
 msgstr ""
@@ -8537,13 +8510,6 @@ msgid ""
 msgstr ""
 "Si selecciona una (o más) entradas, la opción sólo estará disponible para "
 "los jugadores que hayan seleccionado esa entrada"
-
-msgid ""
-"Lets you define a processing-fee percentage per payment method, optionally "
-"adding it to the final ticket price."
-msgstr ""
-"Le permite definir un porcentaje de gastos de procesamiento por método de "
-"pago, añadiéndolo opcionalmente al precio final del billete."
 
 msgid ""
 "The feature 'Diet' requires the diet field to be set in the user profile, "
@@ -9234,6 +9200,14 @@ msgstr ""
 "Habilita personajes \"de relleno\": hojas de personaje más sencillas, "
 "asignadas a jugadores dispuestos a sustituir a personajes principales "
 "abandonados en el último momento."
+
+msgid ""
+"If enabled, the system will automatically add payment gateway fees to the "
+"ticket price, so the player covers them instead of the organization"
+msgstr ""
+"Si esta opción está activada, el sistema añadirá automáticamente las "
+"comisiones de la pasarela de pago al precio de la entrada, de modo que las "
+"pague el jugador en lugar de la organización"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

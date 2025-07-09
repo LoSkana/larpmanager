@@ -322,7 +322,7 @@ def _process_fee(features, fee, invoice):
     # trans.value = invoice.mc_fee
     trans.value = (float(invoice.mc_gross) * fee) / 100
     trans.assoc = invoice.assoc
-    if "payment_fees" in features and invoice.assoc.get_config("payment_fees_user", False):
+    if invoice.assoc.get_config("payment_fees_user", False):
         trans.user_burden = True
     trans.save()
     if invoice.typ == PaymentType.REGISTRATION:

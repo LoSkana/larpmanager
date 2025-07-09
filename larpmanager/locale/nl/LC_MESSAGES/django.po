@@ -1776,9 +1776,6 @@ msgstr "Ouder leeg"
 msgid "Payment date"
 msgstr "Betaaldatum"
 
-msgid "Payment fees"
-msgstr "Betaling Commissies"
-
 msgid "Pre-Register"
 msgstr "Voorinschrijven"
 
@@ -2324,9 +2321,6 @@ msgstr "Pendeldienst"
 msgid "Start algorithm"
 msgstr "Algoritme starten"
 
-msgid "Transaction fee"
-msgstr "Transactievergoeding"
-
 msgid "Upload Expenses"
 msgstr "Uitgaven uploaden"
 
@@ -2824,9 +2818,6 @@ msgstr "Karakter toegewezen!"
 
 msgid "Change registration"
 msgstr "Bericht bewerken"
-
-msgid "Charging the player"
-msgstr "De speler opladen"
 
 msgid "Confirmation delete"
 msgstr "Bevestiging verwijderen"
@@ -4064,6 +4055,9 @@ msgstr "Prestatieopdracht: %(badge)s"
 msgid "Ask the organisers to activate it"
 msgstr "Vraag de organisatoren om het te activeren"
 
+msgid "Charge transaction fees to player"
+msgstr "Breng transactiekosten in rekening bij de speler"
+
 msgid "Complete name of the Organization"
 msgstr "Volledige naam van de organisatie"
 
@@ -5059,9 +5053,6 @@ msgstr "Namen van de medewerkers die het organiseren"
 msgid "No additional payments are required at this time"
 msgstr "Op dit moment zijn geen extra betalingen vereist"
 
-msgid "Now you can set the fee for each payment gateway"
-msgstr "Nu kun je de kosten voor elke betalingsgateway instellen"
-
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Uitschrijven op %(event)s door %(user)s"
@@ -5932,10 +5923,6 @@ msgstr "Spelers kunnen nu voorregistraties indienen en jij kunt ze beoordelen"
 
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "Deel van het inschrijvingsgeld alleen afgeleid van het gekozen ticket"
-
-msgid "Payment fees require payments, activate it in the features panel"
-msgstr ""
-"Betalingstoeslagen vereisen betalingen, activeer dit in het paneel Functies"
 
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
@@ -7611,13 +7598,6 @@ msgstr ""
 "Wilt u zich uitschrijven van onze communicatielijsten? <a "
 "href='%(url)s'>Uitschrijven</a>"
 
-msgid ""
-"If checked: the system will add payment fees to the ticket, making the "
-"player pay for them"
-msgstr ""
-"Indien aangevinkt: het systeem voegt betalingskosten toe aan het ticket, "
-"zodat de speler deze moet betalen"
-
 #, python-format
 msgid ""
 "There are quest types without quests: %(list)s. Create them in the quests "
@@ -8199,13 +8179,6 @@ msgstr ""
 "voor jou en de organisatoren"
 
 msgid ""
-"There are no payment gateway set with a transaction fee, configure them in "
-"the payment settings panel"
-msgstr ""
-"Er zijn geen betalingsgateways ingesteld met transactiekosten, configureer "
-"deze in het paneel Betalingsinstellingen"
-
-msgid ""
 "This page allows you to add or edit an registration revenue other than the "
 "players' registration fee."
 msgstr ""
@@ -8586,13 +8559,6 @@ msgid ""
 msgstr ""
 "Als je één (of meer) tickets selecteert, is de optie alleen beschikbaar voor"
 " spelers die dat ticket hebben geselecteerd"
-
-msgid ""
-"Lets you define a processing-fee percentage per payment method, optionally "
-"adding it to the final ticket price."
-msgstr ""
-"Hiermee kun je een percentage verwerkingskosten per betaalmethode instellen,"
-" optioneel toe te voegen aan de uiteindelijke ticketprijs."
 
 msgid ""
 "The feature 'Diet' requires the diet field to be set in the user profile, "
@@ -9287,6 +9253,14 @@ msgstr ""
 "Maakt 'opvul'-personages mogelijk: eenvoudigere personagebladen, toegewezen "
 "aan spelers die klaar zijn om last-minute uitval van hoofdpersonages te "
 "vervangen."
+
+msgid ""
+"If enabled, the system will automatically add payment gateway fees to the "
+"ticket price, so the player covers them instead of the organization"
+msgstr ""
+"Als deze optie is ingeschakeld, voegt het systeem automatisch de kosten van "
+"de betalingsgateway toe aan de ticketprijs, zodat de speler deze betaalt in "
+"plaats van de organisatie"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

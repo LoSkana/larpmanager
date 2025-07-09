@@ -24,7 +24,6 @@ from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.experience import AbilityTypePx, DeliveryPx
 from larpmanager.models.member import Membership, MembershipStatus
 from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota, RegistrationTicket
-from larpmanager.models.utils import get_payment_details
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.base import check_assoc_permission, def_user_ctx, get_index_assoc_permissions
 from larpmanager.utils.common import _get_help_questions, format_datetime
@@ -229,25 +228,6 @@ def _exe_accounting_actions(assoc, ctx, features):
             _add_action(
                 ctx,
                 _("There are no payment gateway active, configure them in the payment settings panel"),
-                "exe_payment_details",
-            )
-
-    if "payment_fees" in features:
-        if "payment" not in features:
-            _add_action(ctx, _("Payment fees require payments, activate it in the features panel"), "exe_features")
-
-        details = get_payment_details(assoc)
-        configured = False
-        for key, value in details.items():
-            if key.endswith("_fee") and value:
-                configured = True
-
-        if not configured:
-            _add_action(
-                ctx,
-                _(
-                    "There are no payment gateway set with a transaction fee, configure them in the payment settings panel"
-                ),
                 "exe_payment_details",
             )
 

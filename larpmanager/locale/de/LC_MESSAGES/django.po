@@ -1776,9 +1776,6 @@ msgstr "Elternteil leer"
 msgid "Payment date"
 msgstr "Datum der Zahlung"
 
-msgid "Payment fees"
-msgstr "Zahlung Kommissionen"
-
 msgid "Pre-Register"
 msgstr "Vorregistrierung"
 
@@ -2324,9 +2321,6 @@ msgstr "Shuttle-Dienst"
 msgid "Start algorithm"
 msgstr "Start-Algorithmus"
 
-msgid "Transaction fee"
-msgstr "Transaktionsgebühr"
-
 msgid "Upload Expenses"
 msgstr "Ausgaben hochladen"
 
@@ -2824,9 +2818,6 @@ msgstr "Zugewiesenes Zeichen!"
 
 msgid "Change registration"
 msgstr "Eintrag bearbeiten"
-
-msgid "Charging the player"
-msgstr "Aufladen des Players"
 
 msgid "Confirmation delete"
 msgstr "Bestätigung löschen"
@@ -4064,6 +4055,9 @@ msgstr "Zuweisung von Leistungen: %(badge)s"
 msgid "Ask the organisers to activate it"
 msgstr "Bitten Sie die Organisatoren, sie zu aktivieren"
 
+msgid "Charge transaction fees to player"
+msgstr "Transaktionsgebühren vom Spieler erheben"
+
 msgid "Complete name of the Organization"
 msgstr "Vollständiger Name der Organisation"
 
@@ -5067,9 +5061,6 @@ msgstr "Namen der Mitarbeiter, die die Veranstaltung organisieren"
 msgid "No additional payments are required at this time"
 msgstr "Zu diesem Zeitpunkt sind keine weiteren Zahlungen erforderlich"
 
-msgid "Now you can set the fee for each payment gateway"
-msgstr "Jetzt können Sie die Gebühren für jedes Zahlungsgateway festlegen"
-
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Abbestellung von %(event)s durch %(user)s"
@@ -6041,11 +6032,6 @@ msgstr ""
 
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "Ein Teil der Anmeldegebühr stammt nur aus dem gewählten Ticket"
-
-msgid "Payment fees require payments, activate it in the features panel"
-msgstr ""
-"Zahlungsgebühren erfordern Zahlungen, aktivieren Sie es in der "
-"Funktionsleiste"
 
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
@@ -7761,13 +7747,6 @@ msgstr ""
 "Möchten Sie sich von unseren Kommunikationslisten abmelden? <a "
 "href='%(url)s'>Abmelden</a>"
 
-msgid ""
-"If checked: the system will add payment fees to the ticket, making the "
-"player pay for them"
-msgstr ""
-"Wenn angekreuzt: Das System fügt dem Ticket Gebühren hinzu, für die der "
-"Spieler aufkommen muss"
-
 #, python-format
 msgid ""
 "There are quest types without quests: %(list)s. Create them in the quests "
@@ -8350,13 +8329,6 @@ msgstr ""
 " die Organisatoren sichtbar sein werden"
 
 msgid ""
-"There are no payment gateway set with a transaction fee, configure them in "
-"the payment settings panel"
-msgstr ""
-"Es sind keine Zahlungsgateways mit einer Transaktionsgebühr eingestellt, "
-"konfigurieren Sie sie in den Zahlungseinstellungen"
-
-msgid ""
 "This page allows you to add or edit an registration revenue other than the "
 "players' registration fee."
 msgstr ""
@@ -8741,14 +8713,6 @@ msgid ""
 msgstr ""
 "Wenn Sie ein (oder mehrere) Tickets auswählen, steht die Option nur Spielern"
 " zur Verfügung, die dieses Ticket ausgewählt haben"
-
-msgid ""
-"Lets you define a processing-fee percentage per payment method, optionally "
-"adding it to the final ticket price."
-msgstr ""
-"Ermöglicht es Ihnen, einen Prozentsatz für die Bearbeitungsgebühr pro "
-"Zahlungsmethode festzulegen und ihn optional zum endgültigen Ticketpreis "
-"hinzuzufügen."
 
 msgid ""
 "The feature 'Diet' requires the diet field to be set in the user profile, "
@@ -9463,6 +9427,14 @@ msgstr ""
 "Ermöglicht 'Filler'-Charaktere: einfachere Charakterbögen, die Spielern "
 "zugewiesen werden, die bereit sind, den Ausfall von Hauptcharakteren in "
 "letzter Minute zu ersetzen."
+
+msgid ""
+"If enabled, the system will automatically add payment gateway fees to the "
+"ticket price, so the player covers them instead of the organization"
+msgstr ""
+"Wenn diese Option aktiviert ist, fügt das System automatisch die Gebühren "
+"für das Zahlungsportal zum Ticketpreis hinzu, so dass der Spieler sie "
+"anstelle der Organisation trägt"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

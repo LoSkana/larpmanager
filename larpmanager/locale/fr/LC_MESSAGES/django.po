@@ -1776,9 +1776,6 @@ msgstr "Parent vide"
 msgid "Payment date"
 msgstr "Date de paiement"
 
-msgid "Payment fees"
-msgstr "Commissions de paiement"
-
 msgid "Pre-Register"
 msgstr "Pré-inscription"
 
@@ -2324,9 +2321,6 @@ msgstr "Service de navette"
 msgid "Start algorithm"
 msgstr "Algorithme de démarrage"
 
-msgid "Transaction fee"
-msgstr "Frais de transaction"
-
 msgid "Upload Expenses"
 msgstr "Télécharger les dépenses"
 
@@ -2824,9 +2818,6 @@ msgstr "Personnage assigné !"
 
 msgid "Change registration"
 msgstr "Modifier l'entrée"
-
-msgid "Charging the player"
-msgstr "Chargement du lecteur"
 
 msgid "Confirmation delete"
 msgstr "Confirmation de la suppression"
@@ -4064,6 +4055,9 @@ msgstr "Attribution des résultats : %(badge)s"
 msgid "Ask the organisers to activate it"
 msgstr "Demander aux organisateurs de l'activer"
 
+msgid "Charge transaction fees to player"
+msgstr "Facturer des frais de transaction au joueur"
+
 msgid "Complete name of the Organization"
 msgstr "Nom complet de l'organisation"
 
@@ -5065,10 +5059,6 @@ msgstr "Noms des collaborateurs qui l'organisent"
 msgid "No additional payments are required at this time"
 msgstr "Aucun paiement supplémentaire n'est requis pour le moment"
 
-msgid "Now you can set the fee for each payment gateway"
-msgstr ""
-"Vous pouvez maintenant définir les frais pour chaque passerelle de paiement"
-
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Désabonnement à %(event)s par %(user)s"
@@ -5987,11 +5977,6 @@ msgstr ""
 
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "Partie des droits d'inscription provenant uniquement du billet choisi"
-
-msgid "Payment fees require payments, activate it in the features panel"
-msgstr ""
-"Les frais de paiement requièrent des paiements, activez-les dans le panneau "
-"des fonctionnalités"
 
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
@@ -7674,13 +7659,6 @@ msgstr ""
 "Souhaitez-vous vous désinscrire de nos listes de communication ? <a "
 "href='%(url)s'>Désinscription</a>"
 
-msgid ""
-"If checked: the system will add payment fees to the ticket, making the "
-"player pay for them"
-msgstr ""
-"Si la case est cochée : le système ajoutera les frais de paiement au billet,"
-" les faisant payer par le joueur"
-
 #, python-format
 msgid ""
 "There are quest types without quests: %(list)s. Create them in the quests "
@@ -8263,13 +8241,6 @@ msgstr ""
 "visibles que par vous et les organisateurs"
 
 msgid ""
-"There are no payment gateway set with a transaction fee, configure them in "
-"the payment settings panel"
-msgstr ""
-"Il n'y a pas de passerelle de paiement avec des frais de transaction, "
-"configurez-les dans le panneau des paramètres de paiement"
-
-msgid ""
 "This page allows you to add or edit an registration revenue other than the "
 "players' registration fee."
 msgstr ""
@@ -8653,13 +8624,6 @@ msgid ""
 msgstr ""
 "Si vous sélectionnez un (ou plusieurs) billet(s), l'option ne sera "
 "disponible que pour les joueurs qui ont sélectionné ce billet"
-
-msgid ""
-"Lets you define a processing-fee percentage per payment method, optionally "
-"adding it to the final ticket price."
-msgstr ""
-"Permet de définir un pourcentage de frais de traitement par méthode de "
-"paiement, en l'ajoutant éventuellement au prix final du billet."
 
 msgid ""
 "The feature 'Diet' requires the diet field to be set in the user profile, "
@@ -9367,6 +9331,14 @@ msgstr ""
 "Permet d'avoir des personnages \"bouche-trous\" : des fiches de personnages "
 "plus simples, attribuées à des joueurs qui sont prêts à remplacer des "
 "personnages principaux qui ont abandonné à la dernière minute."
+
+msgid ""
+"If enabled, the system will automatically add payment gateway fees to the "
+"ticket price, so the player covers them instead of the organization"
+msgstr ""
+"Si cette option est activée, le système ajoutera automatiquement les frais "
+"de la passerelle de paiement au prix du billet, de sorte que le joueur les "
+"paie à la place de l'organisation"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

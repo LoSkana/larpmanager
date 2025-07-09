@@ -450,6 +450,12 @@ class ExeConfigForm(ConfigForm):
         if "payment" in self.params["features"]:
             self.set_section("payment", _("Payments"))
 
+            label = _("Charge transaction fees to player")
+            help_text = _(
+                "If enabled, the system will automatically add payment gateway fees to the ticket price, so the player covers them instead of the organization"
+            )
+            self.add_configs("payment_fees_user", ConfigType.BOOL, label, help_text)
+
             label = _("Disable amount change")
             help_text = _(
                 "If checked: Hides the possibility for the player to change the payment amount for his entries"
@@ -495,13 +501,6 @@ class ExeConfigForm(ConfigForm):
                 "whole numbers from 0 to 100)"
             )
             self.add_configs("organization_tax_perc", ConfigType.INT, label, help_text)
-
-        if "payment_fees" in self.params["features"]:
-            self.set_section("payment_fees", _("Payment fees"))
-
-            label = _("Charging the player")
-            help_text = _("If checked: the system will add payment fees to the ticket, making the player pay for them")
-            self.add_configs("payment_fees_user", ConfigType.BOOL, label, help_text)
 
     def set_config_einvoice(self):
         if "e-invoice" not in self.params["features"]:
@@ -597,7 +596,11 @@ class ExeQuickSetupForm(QuickSetupForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # setup = {
-        #     "payment": _("Do you want to accept payments processed through the system?"),
-        #     "payment_fees": _("Do you want to pass the payment gateway transaction fee on to the users?"),
-        #     "membership": _("Do you want a formal membership approval process?"),
+        #     "payment": (True, _("Do you want to accept payments processed through the system?")),
+        #     "payment_fees": (False, _("Do you want to pass the payment gateway transaction fee on to the users?")),
+        #     "membership": (True, _("Do you want users to join events only after an approval process?")),
+        #     "campaign": (
+        #         True,
+        #         _("Do you want to manage campaigns, a series of events that share the same characters?"),
+        #     ),
         # }
