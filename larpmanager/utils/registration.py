@@ -48,7 +48,10 @@ def registration_available(r, features=None, reg_counts=None):
     if not reg_counts:
         reg_counts = get_reg_counts(r)
 
-    remaining_pri = r.event.max_pg - (reg_counts["count_reg"] - reg_counts["count_staff"])
+    remaining_pri = r.event.max_pg - reg_counts["count_reg"]
+    for tier in ["staff", "npc"]:
+        if f"count_{tier}" in reg_counts:
+            remaining_pri -= reg_counts[f"count_{tier}"]
 
     if not features:
         features = get_event_features(r.event_id)

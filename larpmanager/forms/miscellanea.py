@@ -260,8 +260,7 @@ class OrganizerCastingOptionsForm(forms.Form):
 
         ticks = (
             RegistrationTicket.objects.filter(event=self.params["event"])
-            .exclude(tier=TicketTier.WAITING)
-            .exclude(tier=TicketTier.STAFF)
+            .exclude(tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC])
             .values_list("id", "name")
         )
 

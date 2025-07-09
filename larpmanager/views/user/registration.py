@@ -368,7 +368,7 @@ def _apply_ticket(ctx, tk):
     try:
         tick = RegistrationTicket.objects.get(pk=tk)
         ctx["tier"] = tick.tier
-        if tick.tier == TicketTier.STAFF and "closed" in ctx["run"].status:
+        if tick.tier in [TicketTier.STAFF, TicketTier.NPC] and "closed" in ctx["run"].status:
             del ctx["run"].status["closed"]
 
         ctx["ticket"] = tk

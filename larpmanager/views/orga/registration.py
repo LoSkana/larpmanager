@@ -729,9 +729,7 @@ def lottery_info(request, ctx):
     ).count()
     ctx["num_def"] = (
         Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-        .exclude(ticket__tier=TicketTier.LOTTERY)
-        .exclude(ticket__tier=TicketTier.STAFF)
-        .exclude(ticket__tier=TicketTier.WAITING)
+        .exclude(ticket__tier__in=[TicketTier.LOTTERY, TicketTier.STAFF, TicketTier.NPC, TicketTier.WAITING])
         .count()
     )
 

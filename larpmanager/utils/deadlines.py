@@ -88,7 +88,7 @@ def check_run_deadlines(runs):
         player_ids = []
 
         for reg in all_regs[run.id]:
-            if reg.ticket and reg.ticket.tier != TicketTier.STAFF:
+            if reg.ticket and reg.ticket.tier not in [TicketTier.STAFF, TicketTier.NPC]:
                 player_ids.append(reg.member_id)
 
             if uses_membership:
