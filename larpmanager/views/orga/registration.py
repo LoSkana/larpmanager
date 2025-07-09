@@ -683,12 +683,6 @@ def orga_cancellation_refund(request, s, n, num):
     return render(request, "larpmanager/orga/accounting/cancellation_refund.html", ctx)
 
 
-@login_required
-def orga_registration_secret(request, s, n):
-    ctx = check_event_permission(request, s, n)
-    return render(request, "larpmanager/orga/secret.html", ctx)
-
-
 def get_pre_registration(event):
     dc = {"list": [], "pred": []}
     signed = set(Registration.objects.filter(run__event=event).values_list("member_id", flat=True))

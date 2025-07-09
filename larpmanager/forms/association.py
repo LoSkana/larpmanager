@@ -27,7 +27,7 @@ from django.utils.translation import pgettext
 from larpmanager.cache.feature import reset_assoc_features
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
-from larpmanager.forms.feature import FeatureForm
+from larpmanager.forms.feature import FeatureForm, QuickSetupForm
 from larpmanager.forms.utils import (
     AssocMemberS2WidgetMulti,
     SlugInput,
@@ -450,6 +450,12 @@ class ExeConfigForm(ConfigForm):
         if "payment" in self.params["features"]:
             self.set_section("payment", _("Payments"))
 
+            label = _("Charge transaction fees to player")
+            help_text = _(
+                "If enabled, the system will automatically add payment gateway fees to the ticket price, so the player covers them instead of the organization"
+            )
+            self.add_configs("payment_fees_user", ConfigType.BOOL, label, help_text)
+
             label = _("Disable amount change")
             help_text = _(
                 "If checked: Hides the possibility for the player to change the payment amount for his entries"
@@ -495,13 +501,6 @@ class ExeConfigForm(ConfigForm):
                 "whole numbers from 0 to 100)"
             )
             self.add_configs("organization_tax_perc", ConfigType.INT, label, help_text)
-
-        if "payment_fees" in self.params["features"]:
-            self.set_section("payment_fees", _("Payment fees"))
-
-            label = _("Charging the player")
-            help_text = _("If checked: the system will add payment fees to the ticket, making the player pay for them")
-            self.add_configs("payment_fees_user", ConfigType.BOOL, label, help_text)
 
     def set_config_einvoice(self):
         if "e-invoice" not in self.params["features"]:
@@ -581,3 +580,49 @@ class FirstAssociationForm(MyForm):
             raise ValidationError("Slug already used!")
 
         return data
+
+
+class ExeQuickSetupForm(QuickSetupForm):
+    page_title = _("Quick Setup")
+
+    page_info = _(
+        "This page allows you to perform a quick setup of the most important settings for your new organization"
+    )
+
+    class Meta:
+        model = Association
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.setup = {
+            "payment": (True, _("Payments"), _("Do you want to accept payments processed through the system")),
+            "payment_fees_user": (
+                False,
+                _("Transaction fees"),
+                _(
+                    "Do you want to add payment gateway fees to the ticket price, so that the user pays them instead of the organization"
+                ),
+            ),
+            "membership": (True, _("Membership"), _("Do you want users to join events only after an approval process")),
+            "campaign": (
+                True,
+                _("Campaign"),
+                _("Do you want to manage campaigns, a series of events that share the same characters"),
+            ),
+            "deadlines": (
+                True,
+                _("Deadlines"),
+                _("Do you want a dashboard to track and manage deadlines missed by registered users"),
+            ),
+            "remind": (
+                True,
+                _("Reminders"),
+                _("Do you want to enable an automatic email reminder system for registered users who miss a deadline"),
+            ),
+            "help": (True, _("Help"), _("Do you want to manage user help requests directly through the platform")),
+            "donate": (True, _("Donations"), _("Do you want to allow users to make voluntary donations")),
+        }
+
+        self.init_fields()

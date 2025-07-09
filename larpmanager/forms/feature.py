@@ -3,8 +3,10 @@ from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import save_single_config
+from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.base import MyForm
-from larpmanager.models.base import FeatureModule
+from larpmanager.models.base import Feature, FeatureModule
 
 
 class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
@@ -67,3 +69,49 @@ class FeatureForm(MyForm):
 
         new_features = set(features_id)
         self.added_features = new_features - old_features
+
+
+class QuickSetupForm(MyForm):
+    setup = {}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.prevent_canc = True
+        self.main_class = "checkbox_single"
+
+    def init_fields(self):
+        features = get_assoc_features(self.params["a_id"])
+
+        # for each value in self.setup, init a field
+        for key, element in self.setup.items():
+            (is_feature, label, help_text) = element
+            self.fields[key] = forms.BooleanField(required=False, label=label, help_text=help_text + "?")
+            if is_feature:
+                init = key in features
+            else:
+                init = self.instance.get_config(key, False)
+            self.initial[key] = init
+
+    def save(self, commit=True):
+        instance = super().save(commit=commit)
+
+        features = {}
+        for key, element in self.setup.items():
+            (is_feature, _label, _help_text) = element
+            checked = self.cleaned_data[key]
+            if is_feature:
+                features[key] = checked
+            else:
+                save_single_config(self.instance, key, checked)
+
+        features_ids_map = dict(Feature.objects.filter(slug__in=features.keys()).values_list("slug", "id"))
+        for slug, checked in features.items():
+            feature_id = features_ids_map[slug]
+            if checked:
+                self.instance.features.add(feature_id)
+            else:
+                self.instance.features.remove(feature_id)
+
+        instance.save()
+
+        return instance

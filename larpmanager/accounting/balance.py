@@ -149,18 +149,16 @@ def get_run_accounting(run, ctx):
         )
         s_payments = dc["pay"]["tot"]
 
-    s_fees = 0
-    if "payment_fees" in features:
-        dc["trs"] = get_acc_detail(
-            _("Transactions"),
-            run,
-            _("Total amount withheld for transfer commissions"),
-            AccountingItemTransaction,
-            None,
-            None,
-            reg=True,
-        )
-        s_fees = dc["trs"]["tot"]
+    dc["trs"] = get_acc_detail(
+        _("Transactions"),
+        run,
+        _("Total amount withheld for transfer commissions"),
+        AccountingItemTransaction,
+        None,
+        None,
+        reg=True,
+    )
+    s_fees = dc["trs"]["tot"]
 
     s_refund = 0
     if "refund" in features:

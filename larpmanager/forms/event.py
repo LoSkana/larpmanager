@@ -28,7 +28,7 @@ from larpmanager.cache.character import get_character_fields
 from larpmanager.cache.feature import reset_event_features
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
-from larpmanager.forms.feature import FeatureForm
+from larpmanager.forms.feature import FeatureForm, QuickSetupForm
 from larpmanager.forms.utils import (
     AssocMemberS2WidgetMulti,
     CampaignS2Widget,
@@ -959,3 +959,76 @@ class ExeTemplateRolesForm(OrgaEventRoleForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["members"].required = False
+
+
+class OrgaQuickSetupForm(QuickSetupForm):
+    page_title = _("Quick Setup")
+
+    page_info = _("This page allows you to perform a quick setup of the most important settings for your new event")
+
+    class Meta:
+        model = Event
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.setup = {
+            "registration_open": (
+                True,
+                _("Registration opening date"),
+                _("Do you want to open registrations at a specific date and time instead of immediately"),
+            ),
+            "registration_secret": (
+                True,
+                _("Early registration link"),
+                _("Do you want to enable a secret registration link to allow early sign-ups"),
+            ),
+            "register_link": (
+                True,
+                _("External registration"),
+                _("Do you want to handle the initial registration process using an external tool"),
+            ),
+            "player_cancellation": (
+                True,
+                _("Signup cancellation"),
+                _("Do you want to allow users to cancel their registrations on their own"),
+            ),
+            "reg_installments": (
+                True,
+                _("Payment installments"),
+                _("Do you want to split the registration fee into fixed payment installments"),
+            ),
+            "reg_quotas": (
+                True,
+                _("Payment quotas"),
+                _("Do you want to split the registration fee into dynamic payment quotas"),
+            ),
+            "pay_what_you_want": (
+                True,
+                _("Voluntary donation"),
+                _("Do you want to allow users to add a voluntary donation to their registration fee"),
+            ),
+        }
+        if self.instance.assoc.skin_id == 1:
+            self.setup.update(
+                {
+                    "character": (
+                        True,
+                        _("Characters"),
+                        _("Do you want to manage characters assigned to registered players"),
+                    ),
+                    "casting": (
+                        True,
+                        _("Casting algorithm"),
+                        _("Do you want to assign characters using a casting algorithm"),
+                    ),
+                    "user_character": (
+                        True,
+                        _("Player editor"),
+                        _("Do you want to allow players to create their own characters"),
+                    ),
+                }
+            )
+
+        self.init_fields()

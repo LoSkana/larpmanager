@@ -692,19 +692,6 @@
     after_text: Now players can create refund requests, and you can review them
     after_link: exe_refunds
 - model: larpmanager.feature
-  pk: 113
-  fields:
-    name: Transaction fee
-    descr: Lets you define a processing-fee percentage per payment method, optionally
-      adding it to the final ticket price.
-    slug: payment_fees
-    overall: true
-    module: 2
-    placeholder: false
-    order: 15
-    after_text: Now you can set the fee for each payment gateway
-    after_link: exe_payment_details
-- model: larpmanager.feature
   pk: 114
   fields:
     name: Opening date
