@@ -85,7 +85,6 @@ class OrgaEventForm(MyForm):
         model = Event
         fields = (
             "name",
-            "lang",
             "slug",
             "tagline",
             "where",
