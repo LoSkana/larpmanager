@@ -38,6 +38,17 @@
                     </div>
                 </div>
                 <hr />
+                <section id="review-carousel" class="owl-carousel owl-theme">
+                    {% for el in reviews %}
+                        <div class="item">
+                            <i class="fa-solid fa-quote-left"></i>
+                            <span class="text">{{ el.text }}</span>
+                            <i class="fa-solid fa-quote-right"> </i> &nbsp;
+                            <b class="author">({{ el.author }})</b>
+                        </div>
+                    {% endfor %}
+                </section>
+                <hr />
                 <h3>
                     Stop juggling spreadsheets. Start managing your LARP the easy way. Simplify your event management - so you can focus on the fun!
                 </h3>
@@ -55,16 +66,6 @@
                 </section>
             </header>
         </section>
-        <div id="review-carousel" class="owl-carousel owl-theme">
-            {% for el in reviews %}
-                <div class="item">
-                    <i class="fa-solid fa-quote-left"></i>
-                    <span class="text">{{ el.text }}</span>
-                    <i class="fa-solid fa-quote-right"> </i> &nbsp;
-                    <b class="author">({{ el.author }})</b>
-                </div>
-            {% endfor %}
-        </div>
         <p class="starter">What can LarpManager do for you?</p>
         <section class="box special showcase">
             {% for el in showcase %}

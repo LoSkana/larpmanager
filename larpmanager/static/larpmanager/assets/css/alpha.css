@@ -627,6 +627,7 @@ input[type="checkbox"]:checked {
     margin: 2em auto;
     max-width: 100%;
     width: 100%;
+    font-size: 1.2em;
 }
 
 @media screen and (max-width: 768px) {
