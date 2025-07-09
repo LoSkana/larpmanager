@@ -56,6 +56,10 @@ async def exe_events_run(live_server, page):
     await page.locator("#id_max_pg").click()
     await page.locator("#id_max_pg").fill("10")
     await page.get_by_role("button", name="Confirm", exact=True).click()
+
+    # confirm quick setup
+    await page.get_by_role("button", name="Confirm", exact=True).click()
+
     await page.locator("#id_development").select_option("1")
     await page.locator("#id_start").fill("2025-06-11")
     await asyncio.sleep(2)
