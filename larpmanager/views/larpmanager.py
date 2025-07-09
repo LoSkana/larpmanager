@@ -509,7 +509,7 @@ def get_run_lm_payment(el):
     el.features = len(get_assoc_features(el.event.assoc_id)) + len(get_event_features(el.event_id))
     el.active_registrations = (
         Registration.objects.filter(run__id=el.id, cancellation_date__isnull=True)
-        .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.WAITING])
+        .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.WAITING, TicketTier.NPC])
         .count()
     )
     if el.plan == LarpManagerPlan.FREE:

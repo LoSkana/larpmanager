@@ -321,7 +321,7 @@ def casting_history_characters(ctx):
 
     query = (
         Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-        .exclude(ticket__tier=TicketTier.STAFF)
+        .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.NPC])
         .select_related("member")
     )
 
@@ -365,7 +365,7 @@ def casting_history_traits(ctx):
 
     for reg in (
         Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-        .exclude(ticket__tier=TicketTier.STAFF)
+        .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.NPC])
         .select_related("member")
     ):
         reg.prefs = {}

@@ -330,7 +330,7 @@ def pre_save_registration(sender, instance, *args, **kwargs):
 def get_date_surcharge(reg, event):
     if reg and reg.ticket:
         t = reg.ticket.tier
-        if t in (TicketTier.WAITING, TicketTier.STAFF):
+        if t in (TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC):
             return 0
 
     dt = datetime.now().date()

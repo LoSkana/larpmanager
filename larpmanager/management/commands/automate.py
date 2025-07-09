@@ -137,7 +137,7 @@ class Command(BaseCommand):
         # past events
         for run in Run.objects.filter(end__lt=datetime.today(), event__assoc=assoc):
             que = Registration.objects.filter(run=run, cancellation_date__isnull=True)
-            for reg in que.exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF]):
+            for reg in que.exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC]):
                 self.check_ach_player(reg, cache)
             ev[run.event.id] = run.event
 
