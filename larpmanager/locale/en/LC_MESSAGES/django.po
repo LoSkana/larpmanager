@@ -649,11 +649,6 @@ msgstr ""
 msgid "Do you want users to join events only after an approval process"
 msgstr ""
 
-msgid ""
-"Do you want to manage campaigns, a series of events that share the same "
-"characters"
-msgstr ""
-
 msgid "Deadlines"
 msgstr ""
 
@@ -677,6 +672,11 @@ msgid "Do you want to manage user help requests directly through the platform"
 msgstr ""
 
 msgid "Do you want to allow users to make voluntary donations"
+msgstr ""
+
+msgid ""
+"Do you want to manage campaigns, a series of events that share the same "
+"characters"
 msgstr ""
 
 msgid "You have exceeded the maximum number of selectable options"
@@ -4705,9 +4705,7 @@ msgid ""
 "activities to be monitored, and the list of users to be solicited"
 msgstr ""
 
-msgid ""
-"This page shows all the events saved in the system. From here you can edit "
-"them, or create new ones"
+msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""
 
 msgid "Event link"
@@ -4795,9 +4793,7 @@ msgstr ""
 msgid "this link"
 msgstr ""
 
-msgid ""
-"This page shows all the runs saved in the system. From here you can edit "
-"them, or create new ones"
+msgid "This page shows all runs; you can edit them, or create new ones"
 msgstr ""
 
 msgid "Show past runs"
@@ -4807,8 +4803,7 @@ msgid "Registration link"
 msgstr ""
 
 msgid ""
-"This page summarises all template events in the system. From here you can "
-"edit them, or create new ones"
+"This page shows all event templates; you can edit them, or create new ones"
 msgstr ""
 
 msgid "Add"
