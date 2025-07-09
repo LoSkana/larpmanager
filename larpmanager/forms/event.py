@@ -22,7 +22,6 @@ from django import forms
 from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
 from django.forms import Textarea
-from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_character_fields
@@ -118,14 +117,6 @@ class OrgaEventForm(MyForm):
             self.fields["slug"].required = True
 
         dl = []
-
-        if "multi_lang" not in self.params["features"]:
-            dl.append("lang")
-        else:
-            self.fields["lang"].required = True
-            self.fields["lang"].choices = conf_settings.LANGUAGES
-            if not self.instance.lang:
-                self.initial["lang"] = translation.get_language()
 
         for s in ["visible", "website", "tagline", "where", "authors", "description", "genre", "register_link"]:
             if s not in self.params["features"]:

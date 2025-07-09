@@ -6,7 +6,7 @@ from django.db import migrations
 def clean_features(apps, schema_editor):
     # Delete features
     Feature = apps.get_model("larpmanager", "Feature")
-    Feature.objects.filter(id__in=[145, 95, 56, 88]).delete()
+    Feature.objects.filter(id__in=[145, 95, 56, 88, 34]).delete()
 
 
 class Migration(migrations.Migration):

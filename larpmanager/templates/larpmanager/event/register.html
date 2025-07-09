@@ -56,11 +56,6 @@
                 </p>
             {% endif %}
         {% endif %}
-        {% if event.lang and lang != event.lang %}
-            <hr />
-            <h1>{% trans "Foreign language" %}</h1>
-            <p>{% trans "Warning. This event is in a different language than the one set in your profile" %}.</p>
-        {% endif %}
         {% if custom_text %}
             <hr />
             {{ custom_text | safe }}

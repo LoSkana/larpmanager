@@ -204,18 +204,6 @@
     after_text: Now players can submit preregistrations, and you can review them
     after_link: exe_pre_registrations
 - model: larpmanager.feature
-  pk: 34
-  fields:
-    name: Multi-language
-    descr: Allows you to define a different language for each event.
-    slug: multi_lang
-    overall: true
-    module: 7
-    placeholder: false
-    order: 9999
-    after_text: ''
-    after_link: ''
-- model: larpmanager.feature
   pk: 36
   fields:
     name: Donation

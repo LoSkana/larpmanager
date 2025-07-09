@@ -4245,14 +4245,6 @@ msgstr ""
 msgid "Terms and Conditions of registration"
 msgstr ""
 
-msgid "Foreign language"
-msgstr ""
-
-msgid ""
-"Warning. This event is in a different language than the one set in your "
-"profile"
-msgstr ""
-
 msgid "If you have a discount code, enter it here and press enter"
 msgstr ""
 
@@ -6941,12 +6933,6 @@ msgid "Enables free pre-registration to events."
 msgstr ""
 
 msgid "Now players can submit preregistrations, and you can review them"
-msgstr ""
-
-msgid "Multi-language"
-msgstr ""
-
-msgid "Allows you to define a different language for each event."
 msgstr ""
 
 msgid ""

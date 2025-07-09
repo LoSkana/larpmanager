@@ -706,11 +706,6 @@ urlpatterns = [
         name="orga_progress_steps_order",
     ),
     path(
-        "<slug:s>/<int:n>/manage/translate",
-        views_oms.orga_translate,
-        name="orga_translate",
-    ),
-    path(
         "<slug:s>/<int:n>/manage/px/deliveries/",
         views_ox.orga_px_deliveries,
         name="orga_px_deliveries",

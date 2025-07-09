@@ -45,7 +45,6 @@ from larpmanager.models.utils import (
     my_uuid_short,
     show_thumb,
 )
-from larpmanager.utils.codes import languages
 
 
 class Event(BaseModel):
@@ -60,8 +59,6 @@ class Event(BaseModel):
     )
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="events")
-
-    lang = models.CharField(max_length=2, choices=languages, blank=True, null=True)
 
     name = models.CharField(max_length=100)
 
