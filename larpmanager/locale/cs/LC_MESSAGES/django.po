@@ -5848,6 +5848,11 @@ msgstr "Na této stránce můžete přidat nebo změnit příplatky za předplat
 msgid "This page allows you to change the general settings of this run"
 msgstr "Tato stránka umožňuje změnit obecná nastavení tohoto běhu"
 
+msgid "This page shows all runs; you can edit them, or create new ones"
+msgstr ""
+"Na této stránce jsou zobrazeny všechny běhy; můžete je upravovat nebo "
+"vytvářet nové"
+
 msgid "To be able to pay, your membership application must be approved"
 msgstr "Abyste mohli platit, musí být vaše žádost o členství schválena"
 
@@ -5955,6 +5960,11 @@ msgstr "Nová účast na sbírce pro %(recipient)s od %(user)s"
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Uveďte prosím, při jaké příležitosti si přejete dar poskytnout"
+
+msgid "This page shows all events; you can edit them, or create new ones"
+msgstr ""
+"Na této stránce jsou zobrazeny všechny události; můžete je upravovat nebo "
+"vytvářet nové"
 
 msgid "This page shows the factions and plots of the indicated character"
 msgstr "Tato stránka shrnuje frakce a zápletky uvedené postavy"
@@ -6440,6 +6450,12 @@ msgstr ""
 msgid ""
 "Payment received! As soon as it is approved, your accounts will be updated"
 msgstr "Platba přijata! Jakmile bude schválena, vaše účty budou aktualizovány"
+
+msgid ""
+"This page shows all event templates; you can edit them, or create new ones"
+msgstr ""
+"Na této stránce jsou zobrazeny všechny šablony událostí; můžete je upravovat"
+" nebo vytvářet nové"
 
 msgid ""
 "You can withdraw your consent to data sharing by clicking the related link"
@@ -7839,13 +7855,6 @@ msgstr ""
 "stavů"
 
 msgid ""
-"This page shows all the runs saved in the system. From here you can edit "
-"them, or create new ones"
-msgstr ""
-"Tato stránka zobrazuje všechny běhy uložené v systému. Můžete je zde "
-"upravovat nebo vytvářet nové"
-
-msgid ""
 "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
 "text, 'p' for long text)"
 msgstr ""
@@ -7904,13 +7913,6 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, možnosti, které již nejsou ve formuláři k dispozici, se"
 " skryjí, místo aby se zobrazily zakázané"
-
-msgid ""
-"This page shows all the events saved in the system. From here you can edit "
-"them, or create new ones"
-msgstr ""
-"Tato stránka zobrazuje všechny události uložené v systému. Můžete je zde "
-"upravovat nebo vytvářet nové"
 
 msgid ""
 "This page shows the different versions available of the character, and the "
@@ -8072,13 +8074,6 @@ msgid ""
 msgstr ""
 "Pokud je přítomen, označuje důvod platby, který musí hráč uvést na "
 "provedených platbách."
-
-msgid ""
-"This page summarises all template events in the system. From here you can "
-"edit them, or create new ones"
-msgstr ""
-"Tato stránka shrnuje všechny události šablon v systému. Zde je můžete "
-"upravovat nebo vytvářet nové"
 
 msgid ""
 "This page summarises the roles to be assigned in order to use the functions "

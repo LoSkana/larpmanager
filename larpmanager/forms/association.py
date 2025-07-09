@@ -606,11 +606,6 @@ class ExeQuickSetupForm(QuickSetupForm):
                 ),
             ),
             "membership": (True, _("Membership"), _("Do you want users to join events only after an approval process")),
-            "campaign": (
-                True,
-                _("Campaign"),
-                _("Do you want to manage campaigns, a series of events that share the same characters"),
-            ),
             "deadlines": (
                 True,
                 _("Deadlines"),
@@ -624,5 +619,15 @@ class ExeQuickSetupForm(QuickSetupForm):
             "help": (True, _("Help"), _("Do you want to manage user help requests directly through the platform")),
             "donate": (True, _("Donations"), _("Do you want to allow users to make voluntary donations")),
         }
+        if self.instance.assoc.skin_id == 1:
+            self.setup.update(
+                {
+                    "campaign": (
+                        True,
+                        _("Campaign"),
+                        _("Do you want to manage campaigns, a series of events that share the same characters"),
+                    ),
+                }
+            )
 
         self.init_fields()
