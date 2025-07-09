@@ -619,7 +619,7 @@ class ExeQuickSetupForm(QuickSetupForm):
             "help": (True, _("Help"), _("Do you want to manage user help requests directly through the platform")),
             "donate": (True, _("Donations"), _("Do you want to allow users to make voluntary donations")),
         }
-        if self.instance.assoc.skin_id == 1:
+        if self.instance.skin_id == 1:
             self.setup.update(
                 {
                     "campaign": (
