@@ -359,19 +359,6 @@
     after_text: Now you can create the waiting ticket
     after_link: orga_registration_tickets
 - model: larpmanager.feature
-  pk: 56
-  fields:
-    name: Event T&C
-    descr: Allows custom Terms and Conditions for a specific event, displayed during
-      registration.
-    slug: event_tac
-    overall: false
-    module: 7
-    placeholder: false
-    order: 10
-    after_text: Now you can set the terms and conditions text
-    after_link: orga_texts
-- model: larpmanager.feature
   pk: 57
   fields:
     name: Player cancellation
@@ -602,19 +589,6 @@
     order: 10
     after_text: Now you can review the organization's deadlines
     after_link: exe_deadlines
-- model: larpmanager.feature
-  pk: 95
-  fields:
-    name: Organization T&C
-    descr: Displays the organisation-wide Terms and Conditions during registration
-      for all events.
-    slug: assoc_tac
-    overall: true
-    module: 7
-    placeholder: false
-    order: 10
-    after_text: Now you can set the terms and conditions text
-    after_link: exe_texts
 - model: larpmanager.feature
   pk: 103
   fields:

@@ -1155,9 +1155,6 @@ msgstr "Darowizny"
 msgid "Enrolment"
 msgstr "Zapisy"
 
-msgid "Event T&C"
-msgstr "Regulamin wydarzenia"
-
 msgid "First aid"
 msgstr "Pierwsza pomoc"
 
@@ -2449,9 +2446,6 @@ msgstr "Opłata organizacyjna"
 
 msgid "Organisation tax"
 msgstr "Podatek od organizacji"
-
-msgid "Organization T&C"
-msgstr "Regulamin organizacji"
 
 msgid "Organization fee"
 msgstr "Opłata organizacyjna"
@@ -4876,9 +4870,6 @@ msgstr "Teraz możesz skonfigurować ustawienia bramek płatności"
 msgid "Now you can set the registration opening date"
 msgstr "Teraz możesz ustawić datę otwarcia rejestracji"
 
-msgid "Now you can set the terms and conditions text"
-msgstr "Teraz możesz ustawić tekst warunków"
-
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Miejsce urodzenia nieuwzględnione na liście ISTAT"
 
@@ -4945,6 +4936,9 @@ msgstr "Coś poszło nie tak podczas aktywacji konta"
 
 msgid "Sum of payments received with means of payment"
 msgstr "Suma płatności otrzymanych za pomocą środków płatniczych"
+
+msgid "Text show at the start of all character sheets"
+msgstr "Tekst wyświetlany na początku wszystkich arkuszy postaci"
 
 msgid "This page allows you to add or edit a discount"
 msgstr "Ta strona umożliwia dodanie lub edycję rabatu"
@@ -7315,25 +7309,11 @@ msgstr ""
 "ich preferencji dotyczących biuletynów."
 
 msgid ""
-"Allows custom Terms and Conditions for a specific event, displayed during "
-"registration."
-msgstr ""
-"Umożliwia wyświetlanie niestandardowych warunków dla określonego wydarzenia "
-"podczas rejestracji."
-
-msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr ""
 "Uwaga: operacja jest ostateczna, prosimy o dokładne sprawdzenie zadań przed "
 "ich przesłaniem"
-
-msgid ""
-"Displays the organisation-wide Terms and Conditions during registration for "
-"all events."
-msgstr ""
-"Wyświetla Regulamin dla całej organizacji podczas rejestracji na wszystkie "
-"wydarzenia."
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "

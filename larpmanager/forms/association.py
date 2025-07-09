@@ -88,9 +88,6 @@ class ExeAssocTextForm(MyForm):
         ch = AssocTextType.choices
         delete_choice = [AssocTextType.PRIVACY]
 
-        if "assoc_tac" not in self.params["features"]:
-            delete_choice.append(AssocTextType.TOC)
-
         if "legal_notice" not in self.params["features"]:
             delete_choice.append(AssocTextType.LEGAL)
 

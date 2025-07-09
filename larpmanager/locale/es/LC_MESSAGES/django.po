@@ -1155,9 +1155,6 @@ msgstr "Donaciones"
 msgid "Enrolment"
 msgstr "Inscripción"
 
-msgid "Event T&C"
-msgstr "C&C del evento"
-
 msgid "First aid"
 msgstr "Primeros auxilios"
 
@@ -2449,9 +2446,6 @@ msgstr "Cuota de organización"
 
 msgid "Organisation tax"
 msgstr "Organización fiscal"
-
-msgid "Organization T&C"
-msgstr "Organización T&C"
 
 msgid "Organization fee"
 msgstr "Cuota de afiliación"
@@ -4876,9 +4870,6 @@ msgstr "Ahora puede configurar las pasarelas de pago"
 msgid "Now you can set the registration opening date"
 msgstr "Ahora puede fijar la fecha de apertura de la inscripción"
 
-msgid "Now you can set the terms and conditions text"
-msgstr "Ahora puede establecer el texto de los términos y condiciones"
-
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Lugar de nacimiento no incluido en la lista ISTAT"
 
@@ -4945,6 +4936,9 @@ msgstr "Algo ha ido mal en la activación de la cuenta"
 
 msgid "Sum of payments received with means of payment"
 msgstr "Suma de los pagos recibidos con medios de pago"
+
+msgid "Text show at the start of all character sheets"
+msgstr "Texto que aparece al principio de todas las hojas de personaje"
 
 msgid "This page allows you to add or edit a discount"
 msgstr "Esta página le permite añadir o editar un descuento"
@@ -7393,25 +7387,11 @@ msgstr ""
 " ordenadas según sus preferencias de boletines."
 
 msgid ""
-"Allows custom Terms and Conditions for a specific event, displayed during "
-"registration."
-msgstr ""
-"Permite personalizar los Términos y Condiciones para un evento específico, "
-"mostrados durante el registro."
-
-msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr ""
 "Atención: la operación es definitiva, ¡por favor, vuelva a comprobar las "
 "asignaciones antes de subirlas"
-
-msgid ""
-"Displays the organisation-wide Terms and Conditions during registration for "
-"all events."
-msgstr ""
-"Muestra los Términos y Condiciones de toda la organización durante la "
-"inscripción en todos los eventos."
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "

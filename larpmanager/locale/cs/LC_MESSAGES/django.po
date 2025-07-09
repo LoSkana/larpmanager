@@ -1155,9 +1155,6 @@ msgstr "Dary"
 msgid "Enrolment"
 msgstr "Zápis na"
 
-msgid "Event T&C"
-msgstr "Podmínky a pravidla akce"
-
 msgid "First aid"
 msgstr "První pomoc"
 
@@ -2449,9 +2446,6 @@ msgstr "Organizační poplatek"
 
 msgid "Organisation tax"
 msgstr "Organizační daň"
-
-msgid "Organization T&C"
-msgstr "Podmínky a pravidla organizace"
 
 msgid "Organization fee"
 msgstr "Členský poplatek"
@@ -4876,9 +4870,6 @@ msgstr "Nyní můžete nastavit platební brány"
 msgid "Now you can set the registration opening date"
 msgstr "Nyní můžete nastavit datum zahájení registrace"
 
-msgid "Now you can set the terms and conditions text"
-msgstr "Nyní můžete nastavit text podmínek"
-
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Místo narození neuvedené v seznamu ISTAT"
 
@@ -4945,6 +4936,9 @@ msgstr "Něco se pokazilo při aktivaci účtu"
 
 msgid "Sum of payments received with means of payment"
 msgstr "Součet přijatých plateb s platebními prostředky"
+
+msgid "Text show at the start of all character sheets"
+msgstr "Zobrazení textu na začátku všech listů postav"
 
 msgid "This page allows you to add or edit a discount"
 msgstr "Na této stránce můžete přidat nebo upravit slevu"
@@ -7190,22 +7184,9 @@ msgstr ""
 "preferencí pro zasílání novinek."
 
 msgid ""
-"Allows custom Terms and Conditions for a specific event, displayed during "
-"registration."
-msgstr ""
-"Povoluje vlastní podmínky pro konkrétní událost, které se zobrazují při "
-"registraci."
-
-msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr "Upozornění: operace je konečná, před odesláním zadání překontrolujte"
-
-msgid ""
-"Displays the organisation-wide Terms and Conditions during registration for "
-"all events."
-msgstr ""
-"Při registraci na všechny události zobrazuje podmínky pro celou organizaci."
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "

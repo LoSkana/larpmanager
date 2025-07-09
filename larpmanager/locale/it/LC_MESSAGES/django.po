@@ -1155,9 +1155,6 @@ msgstr "Donazioni"
 msgid "Enrolment"
 msgstr "Tesseramento"
 
-msgid "Event T&C"
-msgstr "T&C dell'evento"
-
 msgid "First aid"
 msgstr "Primo soccorso"
 
@@ -2449,9 +2446,6 @@ msgstr "Tassa organizzativa"
 
 msgid "Organisation tax"
 msgstr "Imposta sull'organizzazione"
-
-msgid "Organization T&C"
-msgstr "T&C dell'organizzazione"
 
 msgid "Organization fee"
 msgstr "Quota associativa"
@@ -4877,9 +4871,6 @@ msgstr "Ora è possibile impostare i gateway di pagamento"
 msgid "Now you can set the registration opening date"
 msgstr "Ora è possibile impostare la data di apertura della registrazione"
 
-msgid "Now you can set the terms and conditions text"
-msgstr "Ora è possibile impostare il testo dei termini e delle condizioni"
-
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Luogo di nascita non presente nell'elenco ISTAT"
 
@@ -4946,6 +4937,9 @@ msgstr "Qualcosa è andato storto nell'attivazione dell'account"
 
 msgid "Sum of payments received with means of payment"
 msgstr "Somma dei pagamenti ricevuti con mezzi di pagamento"
+
+msgid "Text show at the start of all character sheets"
+msgstr "Mostra il testo all'inizio di tutte le schede dei personaggi"
 
 msgid "This page allows you to add or edit a discount"
 msgstr "Questa pagina consente di aggiungere o modificare uno sconto"
@@ -7439,25 +7433,11 @@ msgstr ""
 "alle preferenze dei membri per le newsletter."
 
 msgid ""
-"Allows custom Terms and Conditions for a specific event, displayed during "
-"registration."
-msgstr ""
-"Consente di personalizzare i Termini e condizioni per un evento specifico, "
-"visualizzandoli durante la registrazione."
-
-msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr ""
 "Attenzione: l'operazione è definitiva, ricontrolla le assegnazioni prima di "
 "caricarle"
-
-msgid ""
-"Displays the organisation-wide Terms and Conditions during registration for "
-"all events."
-msgstr ""
-"Visualizza i Termini e condizioni dell'organizzazione durante la "
-"registrazione per tutti gli eventi."
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "

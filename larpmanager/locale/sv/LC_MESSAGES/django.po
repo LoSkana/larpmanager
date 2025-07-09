@@ -1155,9 +1155,6 @@ msgstr "Donationer"
 msgid "Enrolment"
 msgstr "Anmälan"
 
-msgid "Event T&C"
-msgstr "Villkor för evenemang"
-
 msgid "First aid"
 msgstr "Första hjälpen"
 
@@ -2449,9 +2446,6 @@ msgstr "Organisationsavgift"
 
 msgid "Organisation tax"
 msgstr "Organisationsskatt"
-
-msgid "Organization T&C"
-msgstr "Organisationens villkor"
 
 msgid "Organization fee"
 msgstr "Medlemsavgift"
@@ -4880,9 +4874,6 @@ msgstr "Nu kan du ställa in inställningarna för betalningsportaler"
 msgid "Now you can set the registration opening date"
 msgstr "Nu kan du ställa in öppningsdatum för registrering"
 
-msgid "Now you can set the terms and conditions text"
-msgstr "Nu kan du ställa in villkorstexten"
-
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Födelseort som inte finns med i ISTAT:s förteckning"
 
@@ -4949,6 +4940,9 @@ msgstr "Något gick fel vid aktiveringen av kontot"
 
 msgid "Sum of payments received with means of payment"
 msgstr "Summan av mottagna betalningar med betalningsmedel"
+
+msgid "Text show at the start of all character sheets"
+msgstr "Text visas i början av alla karaktärsblad"
 
 msgid "This page allows you to add or edit a discount"
 msgstr "På den här sidan kan du lägga till eller redigera en rabatt"
@@ -7325,25 +7319,11 @@ msgstr ""
 "medlemmarnas preferenser för nyhetsbrev."
 
 msgid ""
-"Allows custom Terms and Conditions for a specific event, displayed during "
-"registration."
-msgstr ""
-"Tillåter anpassade villkor för ett specifikt evenemang, som visas vid "
-"registreringen."
-
-msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr ""
 "Observera: operationen är slutgiltig, vänligen dubbelkolla uppdragen innan "
 "du laddar upp"
-
-msgid ""
-"Displays the organisation-wide Terms and Conditions during registration for "
-"all events."
-msgstr ""
-"Visar de organisationsövergripande villkoren vid anmälan till alla "
-"evenemang."
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "

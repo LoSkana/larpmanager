@@ -1155,9 +1155,6 @@ msgstr "Donasjoner"
 msgid "Enrolment"
 msgstr "Innmelding"
 
-msgid "Event T&C"
-msgstr "Vilkår og betingelser for arrangementer"
-
 msgid "First aid"
 msgstr "Førstehjelp"
 
@@ -2449,9 +2446,6 @@ msgstr "Organisasjonsavgift"
 
 msgid "Organisation tax"
 msgstr "Organisasjonsskatt"
-
-msgid "Organization T&C"
-msgstr "Organisasjonens vilkår og betingelser"
 
 msgid "Organization fee"
 msgstr "Medlemskontingent"
@@ -4879,9 +4873,6 @@ msgstr "Nå kan du angi innstillingene for betalingsportaler"
 msgid "Now you can set the registration opening date"
 msgstr "Nå kan du angi åpningsdato for registrering"
 
-msgid "Now you can set the terms and conditions text"
-msgstr "Nå kan du angi vilkår og betingelser tekst"
-
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Fødested ikke inkludert i ISTAT-listen"
 
@@ -4948,6 +4939,9 @@ msgstr "Noe gikk galt i kontoaktiveringen"
 
 msgid "Sum of payments received with means of payment"
 msgstr "Summen av mottatte betalinger med betalingsmidler"
+
+msgid "Text show at the start of all character sheets"
+msgstr "Tekst vises i starten av alle karakterark"
 
 msgid "This page allows you to add or edit a discount"
 msgstr "På denne siden kan du legge til eller redigere en rabatt"
@@ -7299,25 +7293,11 @@ msgstr ""
 "medlemmenes preferanser for nyhetsbrev."
 
 msgid ""
-"Allows custom Terms and Conditions for a specific event, displayed during "
-"registration."
-msgstr ""
-"Tillater egendefinerte vilkår og betingelser for et bestemt arrangement, som"
-" vises under påmeldingen."
-
-msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr ""
 "OBS: operasjonen er endelig, vennligst dobbeltsjekk oppgavene før du laster "
 "dem opp"
-
-msgid ""
-"Displays the organisation-wide Terms and Conditions during registration for "
-"all events."
-msgstr ""
-"Viser de organisasjonsomfattende vilkårene og betingelsene ved påmelding til"
-" alle arrangementer."
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "

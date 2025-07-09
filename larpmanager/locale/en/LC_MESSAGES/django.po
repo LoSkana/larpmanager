@@ -1198,6 +1198,9 @@ msgstr ""
 msgid "This page allows you to edit event-specific texts"
 msgstr ""
 
+msgid "Text show at the start of all character sheets"
+msgstr ""
+
 msgid "Added to the registration page, before the form"
 msgstr ""
 
@@ -7036,17 +7039,6 @@ msgstr ""
 msgid "Now you can create the waiting ticket"
 msgstr ""
 
-msgid "Event T&C"
-msgstr ""
-
-msgid ""
-"Allows custom Terms and Conditions for a specific event, displayed during "
-"registration."
-msgstr ""
-
-msgid "Now you can set the terms and conditions text"
-msgstr ""
-
 msgid "Player cancellation"
 msgstr ""
 
@@ -7195,14 +7187,6 @@ msgid ""
 msgstr ""
 
 msgid "Now you can review the organization's deadlines"
-msgstr ""
-
-msgid "Organization T&C"
-msgstr ""
-
-msgid ""
-"Displays the organisation-wide Terms and Conditions during registration for "
-"all events."
 msgstr ""
 
 msgid ""

@@ -1155,9 +1155,6 @@ msgstr "Donaties"
 msgid "Enrolment"
 msgstr "Inschrijving"
 
-msgid "Event T&C"
-msgstr "Evenement AV"
-
 msgid "First aid"
 msgstr "Eerste hulp"
 
@@ -2449,9 +2446,6 @@ msgstr "Organisatiekosten"
 
 msgid "Organisation tax"
 msgstr "Organisatiebelasting"
-
-msgid "Organization T&C"
-msgstr "Organisatie AV"
 
 msgid "Organization fee"
 msgstr "Lidmaatschap"
@@ -4880,9 +4874,6 @@ msgstr "Nu kunt u de betalingsgateways instellen"
 msgid "Now you can set the registration opening date"
 msgstr "Nu kun je de openingsdatum van de registratie instellen"
 
-msgid "Now you can set the terms and conditions text"
-msgstr "Nu kun je de voorwaarden en condities instellen"
-
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Geboorteplaats niet opgenomen in de ISTAT-lijst"
 
@@ -4951,6 +4942,9 @@ msgstr "Er is iets misgegaan bij het activeren van de account"
 
 msgid "Sum of payments received with means of payment"
 msgstr "Som van ontvangen betalingen met betaalmiddelen"
+
+msgid "Text show at the start of all character sheets"
+msgstr "Tekst tonen aan het begin van alle karaktersheets"
 
 msgid "This page allows you to add or edit a discount"
 msgstr "Op deze pagina kun je een korting toevoegen of bewerken"
@@ -7443,25 +7437,11 @@ msgstr ""
 "nieuwsbriefvoorkeuren van leden."
 
 msgid ""
-"Allows custom Terms and Conditions for a specific event, displayed during "
-"registration."
-msgstr ""
-"Maakt aangepaste Algemene voorwaarden voor een specifiek evenement mogelijk,"
-" die tijdens de registratie worden weergegeven."
-
-msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr ""
 "Let op: de bewerking is definitief, controleer de opdrachten voordat je ze "
 "uploadt"
-
-msgid ""
-"Displays the organisation-wide Terms and Conditions during registration for "
-"all events."
-msgstr ""
-"Toont de algemene voorwaarden voor de hele organisatie tijdens de "
-"registratie voor alle evenementen."
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "

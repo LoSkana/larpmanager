@@ -1155,9 +1155,6 @@ msgstr "Spenden"
 msgid "Enrolment"
 msgstr "Immatrikulation"
 
-msgid "Event T&C"
-msgstr "Veranstaltung T&C"
-
 msgid "First aid"
 msgstr "Erste Hilfe"
 
@@ -2449,9 +2446,6 @@ msgstr "Organisationsgebühr"
 
 msgid "Organisation tax"
 msgstr "Organisationssteuer"
-
-msgid "Organization T&C"
-msgstr "Organisation T&C"
 
 msgid "Organization fee"
 msgstr "Mitgliedsbeitrag"
@@ -4889,9 +4883,6 @@ msgid "Now you can set the registration opening date"
 msgstr ""
 "Jetzt können Sie das Datum für die Öffnung der Registrierung festlegen"
 
-msgid "Now you can set the terms and conditions text"
-msgstr "Jetzt können Sie den Text der Bedingungen und Konditionen festlegen"
-
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Geburtsort nicht in der ISTAT-Liste enthalten"
 
@@ -4959,6 +4950,9 @@ msgstr "Bei der Kontoaktivierung ist etwas schief gelaufen"
 
 msgid "Sum of payments received with means of payment"
 msgstr "Summe der Zahlungseingänge mit Zahlungsmitteln"
+
+msgid "Text show at the start of all character sheets"
+msgstr "Textanzeige am Anfang aller Charakterbögen"
 
 msgid "This page allows you to add or edit a discount"
 msgstr "Auf dieser Seite können Sie einen Rabatt hinzufügen oder bearbeiten"
@@ -7596,25 +7590,11 @@ msgstr ""
 "sortiert nach den Newsletter-Einstellungen der Mitglieder."
 
 msgid ""
-"Allows custom Terms and Conditions for a specific event, displayed during "
-"registration."
-msgstr ""
-"Ermöglicht benutzerdefinierte Geschäftsbedingungen für eine bestimmte "
-"Veranstaltung, die bei der Anmeldung angezeigt werden."
-
-msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr ""
 "Achtung: der Vorgang ist endgültig, bitte überprüfen Sie die Zuordnungen vor"
 " dem Hochladen"
-
-msgid ""
-"Displays the organisation-wide Terms and Conditions during registration for "
-"all events."
-msgstr ""
-"Zeigt die organisationsweiten Geschäftsbedingungen bei der Anmeldung für "
-"alle Veranstaltungen an."
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "
