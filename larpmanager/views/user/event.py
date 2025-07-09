@@ -88,8 +88,6 @@ def calendar(request, lang):
             ctx["open"].append(run)
         elif "already" not in run.status:
             ctx["future"].append(run)
-        if run.event.lang not in ctx["langs"]:
-            ctx["langs"].append(run.event.lang)
 
     ctx["custom_text"] = get_assoc_text(request.assoc["id"], AssocTextType.HOME)
 

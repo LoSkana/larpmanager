@@ -22,7 +22,6 @@ from django import forms
 from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
 from django.forms import Textarea
-from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_character_fields
@@ -86,7 +85,6 @@ class OrgaEventForm(MyForm):
         model = Event
         fields = (
             "name",
-            "lang",
             "slug",
             "tagline",
             "where",
@@ -118,14 +116,6 @@ class OrgaEventForm(MyForm):
             self.fields["slug"].required = True
 
         dl = []
-
-        if "multi_lang" not in self.params["features"]:
-            dl.append("lang")
-        else:
-            self.fields["lang"].required = True
-            self.fields["lang"].choices = conf_settings.LANGUAGES
-            if not self.instance.lang:
-                self.initial["lang"] = translation.get_language()
 
         for s in ["visible", "website", "tagline", "where", "authors", "description", "genre", "register_link"]:
             if s not in self.params["features"]:
@@ -689,9 +679,6 @@ class OrgaEventTextForm(MyForm):
         if "character" not in self.params["features"]:
             delete_choice.append(EventTextType.INTRO)
 
-        if "event_tac" not in self.params["features"]:
-            delete_choice.append(EventTextType.TOC)
-
         if not self.params["event"].get_config("user_character_approval", False):
             delete_choice.extend(
                 [EventTextType.CHARACTER_PROPOSED, EventTextType.CHARACTER_APPROVED, EventTextType.CHARACTER_REVIEW]
@@ -702,6 +689,7 @@ class OrgaEventTextForm(MyForm):
         self.fields["typ"].choices = ch
 
         help_texts = {
+            EventTextType.INTRO: _("Text show at the start of all character sheets"),
             EventTextType.TOC: _("Terms and conditions of signup, shown in a page linked in the registration form"),
             EventTextType.REGISTER: _("Added to the registration page, before the form"),
             EventTextType.SEARCH: _("Added at the top of the search page of characters"),

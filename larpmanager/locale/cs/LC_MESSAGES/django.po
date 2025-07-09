@@ -1155,9 +1155,6 @@ msgstr "Dary"
 msgid "Enrolment"
 msgstr "Zápis na"
 
-msgid "Event T&C"
-msgstr "Podmínky a pravidla akce"
-
 msgid "First aid"
 msgstr "První pomoc"
 
@@ -1936,8 +1933,8 @@ msgstr "Typ dokumentu"
 msgid "Dynamic rates"
 msgstr "Dynamické sazby"
 
-msgid "Events played"
-msgstr "Odehrané akce"
+msgid "Event history"
+msgstr "Historie událostí"
 
 msgid "External link"
 msgstr "Externí url"
@@ -2141,9 +2138,6 @@ msgstr "Odvolání partnera"
 msgid "Membership fee"
 msgstr "Poplatky"
 
-msgid "Multi-language"
-msgstr "Vícejazyčné stránky"
-
 msgid "Obtain ability"
 msgstr "Získání dovedností"
 
@@ -2272,6 +2266,9 @@ msgstr "Číslo dokumentu"
 
 msgid "Event not found"
 msgstr "Událost nebyla nalezena"
+
+msgid "Events attended"
+msgstr "Zúčastněné akce"
 
 msgid "Filter factions"
 msgstr "Skupiny filtrů"
@@ -2411,9 +2408,6 @@ msgstr "Účtování událostí"
 msgid "Event navigation"
 msgstr "Navigace v událostech"
 
-msgid "Foreign language"
-msgstr "Cizí jazyk"
-
 msgid "Forward discount"
 msgstr "Forwardová sleva"
 
@@ -2452,9 +2446,6 @@ msgstr "Organizační poplatek"
 
 msgid "Organisation tax"
 msgstr "Organizační daň"
-
-msgid "Organization T&C"
-msgstr "Podmínky a pravidla organizace"
 
 msgid "Organization fee"
 msgstr "Členský poplatek"
@@ -2900,9 +2891,6 @@ msgstr "Operace dokončena"
 
 msgid "Password of account"
 msgstr "Heslo účtu"
-
-msgid "Player Larp History"
-msgstr "Historie hráčských larpů"
 
 msgid "Player cancellation"
 msgstr "Zrušení hráče"
@@ -4879,9 +4867,6 @@ msgstr "Nyní můžete nastavit platební brány"
 msgid "Now you can set the registration opening date"
 msgstr "Nyní můžete nastavit datum zahájení registrace"
 
-msgid "Now you can set the terms and conditions text"
-msgstr "Nyní můžete nastavit text podmínek"
-
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Místo narození neuvedené v seznamu ISTAT"
 
@@ -4948,6 +4933,9 @@ msgstr "Něco se pokazilo při aktivaci účtu"
 
 msgid "Sum of payments received with means of payment"
 msgstr "Součet přijatých plateb s platebními prostředky"
+
+msgid "Text show at the start of all character sheets"
+msgstr "Zobrazení textu na začátku všech listů postav"
 
 msgid "This page allows you to add or edit a discount"
 msgstr "Na této stránce můžete přidat nebo upravit slevu"
@@ -5522,9 +5510,6 @@ msgid "This page shows all expense items recorded in the system"
 msgstr ""
 "Tato stránka zobrazuje všechny nákladové položky zaznamenané v systému"
 
-msgid "Allows you to define a different language for each event."
-msgstr "Umožňuje definovat pro každou událost jiný jazyk."
-
 msgid "Content of mail reminding players to pay their signup fee"
 msgstr ""
 "Obsah e-mailu, který hráčům připomíná, aby zaplatili registrační poplatek"
@@ -5672,17 +5657,9 @@ msgstr "Chcete-li místo toho nahrát nový sken své žádosti"
 msgid "In the membership book the number of your membership card is"
 msgstr "V členské knize je vaše členské číslo"
 
-msgid "Lets staff access the diet information submitted by players."
-msgstr ""
-"Umožňuje pracovníkům přístup k informacím o stravě, které jim hráči "
-"poskytli."
-
 msgid "Manages tokens used by players to cover the registration fee"
 msgstr ""
 "spravuje žetony, které hráči používají k úhradě registračního poplatku"
-
-msgid "Now you can review the diet information submitted by players"
-msgstr "Nyní si můžete prohlédnout informace o stravě poskytnuté hráči"
 
 msgid "This page allows you to add or edit an expense item incurred"
 msgstr ""
@@ -5788,11 +5765,6 @@ msgstr "Zde uveďte každý prvek, kterému se chcete v zadání vyhnout"
 msgid "It will be shown to other players together with your character"
 msgstr "Spolu s vaší postavou se zobrazí ostatním hráčům"
 
-msgid "Lets staff access the safety information submitted by players."
-msgstr ""
-"Umožňuje pracovníkům přístup k bezpečnostním informacím, které jim hráči "
-"poskytli."
-
 msgid "Maximum number of primary spots to be managed (0 for infinite)"
 msgstr ""
 "Maximální počet primárních příspěvků, které mají být spravovány (0 pro "
@@ -5800,10 +5772,6 @@ msgstr ""
 
 msgid "Now staff members can upload expenses, and you can review them"
 msgstr "Nyní mohou zaměstnanci nahrávat výdaje a vy je můžete kontrolovat"
-
-msgid "Now you can review the safety information submitted by players"
-msgstr ""
-"Nyní si můžete prohlédnout bezpečnostní informace, které hráči poskytli"
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "Žádáme vás, abyste zaplatili požadovanou částku na další splátku"
@@ -6613,6 +6581,13 @@ msgstr ""
 "Vytváří roční shrnutí fiskální činnosti pro zprávu o italském rozpočtu."
 
 msgid ""
+"If checked: in the public page of an user shows a list of all events "
+"attended"
+msgstr ""
+"Pokud je zaškrtnuto: na veřejné stránce uživatele se zobrazí seznam všech "
+"událostí, kterých se zúčastnil"
+
+msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
 "processed"
 msgstr ""
@@ -6773,13 +6748,6 @@ msgid ""
 msgstr ""
 "Abyste se mohli této akce zúčastnit, musíte zaplatit roční členský poplatek "
 "ve výši"
-
-msgid ""
-"Warning. This event is in a different language than the one set in your "
-"profile"
-msgstr ""
-"Pozor! Tato událost je v jiném jazyce, než který je nastaven ve vašem "
-"profilu"
 
 msgid ""
 "(If you need a hand feel free to let us know, we'll try to help as best we "
@@ -7193,22 +7161,9 @@ msgstr ""
 "preferencí pro zasílání novinek."
 
 msgid ""
-"Allows custom Terms and Conditions for a specific event, displayed during "
-"registration."
-msgstr ""
-"Povoluje vlastní podmínky pro konkrétní událost, které se zobrazují při "
-"registraci."
-
-msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr "Upozornění: operace je konečná, před odesláním zadání překontrolujte"
-
-msgid ""
-"Displays the organisation-wide Terms and Conditions during registration for "
-"all events."
-msgstr ""
-"Při registraci na všechny události zobrazuje podmínky pro celou organizaci."
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "
@@ -7298,13 +7253,6 @@ msgid ""
 msgstr ""
 "Při provádění těchto kroků buďte opatrní - jinak nebude vaše platba "
 "zpracována"
-
-msgid ""
-"Shows a complete list of all events the player has attended on their public "
-"player page."
-msgstr ""
-"Na veřejné stránce hráče se zobrazí kompletní seznam všech událostí, kterých"
-" se hráč zúčastnil."
 
 msgid ""
 "This page allows you to add or modify an option in a form question for a "

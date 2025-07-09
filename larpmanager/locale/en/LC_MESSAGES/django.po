@@ -306,6 +306,16 @@ msgstr ""
 msgid "If checked: shows the tagline for each event"
 msgstr ""
 
+msgid "Users"
+msgstr ""
+
+msgid "Event history"
+msgstr ""
+
+msgid ""
+"If checked: in the public page of an user shows a list of all events attended"
+msgstr ""
+
 msgid "Email notifications"
 msgstr ""
 
@@ -1204,6 +1214,9 @@ msgid ""
 msgstr ""
 
 msgid "This page allows you to edit event-specific texts"
+msgstr ""
+
+msgid "Text show at the start of all character sheets"
 msgstr ""
 
 msgid "Added to the registration page, before the form"
@@ -4240,14 +4253,6 @@ msgstr ""
 msgid "Terms and Conditions of registration"
 msgstr ""
 
-msgid "Foreign language"
-msgstr ""
-
-msgid ""
-"Warning. This event is in a different language than the one set in your "
-"profile"
-msgstr ""
-
 msgid "If you have a discount code, enter it here and press enter"
 msgstr ""
 
@@ -4690,9 +4695,6 @@ msgid "If you don't see an user, ask them to access"
 msgstr ""
 
 msgid "this link"
-msgstr ""
-
-msgid "Users"
 msgstr ""
 
 msgid ""
@@ -5799,7 +5801,7 @@ msgstr ""
 msgid "Private message"
 msgstr ""
 
-msgid "Events played"
+msgid "Events attended"
 msgstr ""
 
 msgid "Show all"
@@ -6899,12 +6901,6 @@ msgstr ""
 msgid "Now you can start creating speed-larps"
 msgstr ""
 
-msgid "Lets staff access the safety information submitted by players."
-msgstr ""
-
-msgid "Now you can review the safety information submitted by players"
-msgstr ""
-
 msgid "Casting algorithm"
 msgstr ""
 
@@ -6939,12 +6935,6 @@ msgid "Enables free pre-registration to events."
 msgstr ""
 
 msgid "Now players can submit preregistrations, and you can review them"
-msgstr ""
-
-msgid "Multi-language"
-msgstr ""
-
-msgid "Allows you to define a different language for each event."
 msgstr ""
 
 msgid ""
@@ -7042,17 +7032,6 @@ msgid ""
 msgstr ""
 
 msgid "Now you can create the waiting ticket"
-msgstr ""
-
-msgid "Event T&C"
-msgstr ""
-
-msgid ""
-"Allows custom Terms and Conditions for a specific event, displayed during "
-"registration."
-msgstr ""
-
-msgid "Now you can set the terms and conditions text"
 msgstr ""
 
 msgid "Player cancellation"
@@ -7175,14 +7154,6 @@ msgstr ""
 msgid "Now you can review the historical accounting informations"
 msgstr ""
 
-msgid "Player Larp History"
-msgstr ""
-
-msgid ""
-"Shows a complete list of all events the player has attended on their public "
-"player page."
-msgstr ""
-
 msgid ""
 "Adds a 'progress' status field (e.g. draft, ready, approved) to key writing "
 "elements."
@@ -7191,26 +7162,12 @@ msgstr ""
 msgid "Now you can create the progress steps"
 msgstr ""
 
-msgid "Lets staff access the diet information submitted by players."
-msgstr ""
-
-msgid "Now you can review the diet information submitted by players"
-msgstr ""
-
 msgid ""
 "Activates a page summarizing overdue players and their deadlines (payments, "
 "memberships, forms, casting, etc.)."
 msgstr ""
 
 msgid "Now you can review the organization's deadlines"
-msgstr ""
-
-msgid "Organization T&C"
-msgstr ""
-
-msgid ""
-"Displays the organisation-wide Terms and Conditions during registration for "
-"all events."
 msgstr ""
 
 msgid ""
