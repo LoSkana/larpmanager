@@ -65,16 +65,11 @@ def get_reg_iscr(instance):
     if instance.additionals:
         tot_iscr += instance.ticket.price * instance.additionals
 
-    features = get_event_features(instance.run.event_id)
-
     if instance.pay_what:
         tot_iscr += instance.pay_what
 
     for c in RegistrationChoice.objects.filter(reg=instance).select_related("option"):
-        if "reg_opt_staff_price" in features and instance.ticket and instance.ticket.tier == TicketTier.STAFF:
-            tot_iscr += c.option.price_staff
-        else:
-            tot_iscr += c.option.price
+        tot_iscr += c.option.price
 
     # no discount for gifted
     if not instance.redeem_code:

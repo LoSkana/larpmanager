@@ -1155,9 +1155,6 @@ msgstr "Donationer"
 msgid "Enrolment"
 msgstr "Anmälan"
 
-msgid "Event T&C"
-msgstr "Villkor för evenemang"
-
 msgid "First aid"
 msgstr "Första hjälpen"
 
@@ -1933,8 +1930,8 @@ msgstr "Typ av dokument"
 msgid "Dynamic rates"
 msgstr "Dynamiska priser"
 
-msgid "Events played"
-msgstr "Händelser som spelas"
+msgid "Event history"
+msgstr "Händelsehistorik"
 
 msgid "External link"
 msgstr "Extern webbadress"
@@ -2138,9 +2135,6 @@ msgstr "Partner återkallad"
 msgid "Membership fee"
 msgstr "Avgifter"
 
-msgid "Multi-language"
-msgstr "Flerspråkig"
-
 msgid "Obtain ability"
 msgstr "Förvärva färdigheter"
 
@@ -2269,6 +2263,9 @@ msgstr "Dokumentnummer"
 
 msgid "Event not found"
 msgstr "Händelsen hittades inte"
+
+msgid "Events attended"
+msgstr "Deltagit i evenemang"
 
 msgid "Filter factions"
 msgstr "Filtrera grupper"
@@ -2408,9 +2405,6 @@ msgstr "Redovisning av evenemang"
 msgid "Event navigation"
 msgstr "Navigation för evenemang"
 
-msgid "Foreign language"
-msgstr "Utländskt språk"
-
 msgid "Forward discount"
 msgstr "Terminsrabatt"
 
@@ -2449,9 +2443,6 @@ msgstr "Organisationsavgift"
 
 msgid "Organisation tax"
 msgstr "Organisationsskatt"
-
-msgid "Organization T&C"
-msgstr "Organisationens villkor"
 
 msgid "Organization fee"
 msgstr "Medlemsavgift"
@@ -2897,9 +2888,6 @@ msgstr "Operation slutförd"
 
 msgid "Password of account"
 msgstr "Lösenord för konto"
-
-msgid "Player Larp History"
-msgstr "Spelare Larp Historia"
 
 msgid "Player cancellation"
 msgstr "Avbokning av spelare"
@@ -4880,9 +4868,6 @@ msgstr "Nu kan du ställa in inställningarna för betalningsportaler"
 msgid "Now you can set the registration opening date"
 msgstr "Nu kan du ställa in öppningsdatum för registrering"
 
-msgid "Now you can set the terms and conditions text"
-msgstr "Nu kan du ställa in villkorstexten"
-
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Födelseort som inte finns med i ISTAT:s förteckning"
 
@@ -4949,6 +4934,9 @@ msgstr "Något gick fel vid aktiveringen av kontot"
 
 msgid "Sum of payments received with means of payment"
 msgstr "Summan av mottagna betalningar med betalningsmedel"
+
+msgid "Text show at the start of all character sheets"
+msgstr "Text visas i början av alla karaktärsblad"
 
 msgid "This page allows you to add or edit a discount"
 msgstr "På den här sidan kan du lägga till eller redigera en rabatt"
@@ -5525,9 +5513,6 @@ msgstr ""
 msgid "This page shows all expense items recorded in the system"
 msgstr "Denna sida visar alla utgiftsposter som registrerats i systemet"
 
-msgid "Allows you to define a different language for each event."
-msgstr "Gör att du kan definiera ett annat språk för varje evenemang."
-
 msgid "Content of mail reminding players to pay their signup fee"
 msgstr "Innehåll i utskick med påminnelse om att betala anmälningsavgift"
 
@@ -5684,17 +5669,10 @@ msgstr "Om du vill ladda upp en ny skanning av din ansökan istället"
 msgid "In the membership book the number of your membership card is"
 msgstr "I medlemsboken är ditt medlemsnummer"
 
-msgid "Lets staff access the diet information submitted by players."
-msgstr ""
-"Ger personalen tillgång till den kostinformation som spelarna har lämnat in."
-
 msgid "Manages tokens used by players to cover the registration fee"
 msgstr ""
 "Hanterar polletter som används av spelare för att täcka "
 "registreringsavgiften"
-
-msgid "Now you can review the diet information submitted by players"
-msgstr "Nu kan du granska den kostinformation som spelarna har lämnat in"
 
 msgid "This page allows you to add or edit an expense item incurred"
 msgstr ""
@@ -5810,19 +5788,11 @@ msgstr "Ange här varje element som du vill undvika i uppgiften"
 msgid "It will be shown to other players together with your character"
 msgstr "Den kommer att visas för andra spelare tillsammans med din karaktär"
 
-msgid "Lets staff access the safety information submitted by players."
-msgstr ""
-"Ger personalen tillgång till den säkerhetsinformation som spelarna har "
-"lämnat."
-
 msgid "Maximum number of primary spots to be managed (0 for infinite)"
 msgstr "Maximalt antal primära inlägg som ska hanteras (0 för oändligt)"
 
 msgid "Now staff members can upload expenses, and you can review them"
 msgstr "Nu kan medarbetarna ladda upp utlägg och du kan granska dem"
-
-msgid "Now you can review the safety information submitted by players"
-msgstr "Nu kan du granska den säkerhetsinformation som spelarna har lämnat"
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "Vi ber dig att betala det belopp som begärs för nästa delbetalning"
@@ -6710,6 +6680,13 @@ msgstr ""
 "italienska budgetrapporten."
 
 msgid ""
+"If checked: in the public page of an user shows a list of all events "
+"attended"
+msgstr ""
+"Om markerad: på den offentliga sidan för en användare visas en lista över "
+"alla evenemang som användaren deltagit i"
+
+msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
 "processed"
 msgstr ""
@@ -6881,12 +6858,6 @@ msgid ""
 msgstr ""
 "För att delta i detta evenemang måste du betala den årliga medlemsavgiften "
 "på"
-
-msgid ""
-"Warning. This event is in a different language than the one set in your "
-"profile"
-msgstr ""
-"Varning! Detta evenemang är på ett annat språk än det som anges i din profil"
 
 msgid ""
 "(If you need a hand feel free to let us know, we'll try to help as best we "
@@ -7325,25 +7296,11 @@ msgstr ""
 "medlemmarnas preferenser för nyhetsbrev."
 
 msgid ""
-"Allows custom Terms and Conditions for a specific event, displayed during "
-"registration."
-msgstr ""
-"Tillåter anpassade villkor för ett specifikt evenemang, som visas vid "
-"registreringen."
-
-msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr ""
 "Observera: operationen är slutgiltig, vänligen dubbelkolla uppdragen innan "
 "du laddar upp"
-
-msgid ""
-"Displays the organisation-wide Terms and Conditions during registration for "
-"all events."
-msgstr ""
-"Visar de organisationsövergripande villkoren vid anmälan till alla "
-"evenemang."
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "
@@ -7433,13 +7390,6 @@ msgid ""
 msgstr ""
 "Var försiktig när du utför dessa steg - annars kommer din betalning inte att"
 " behandlas"
-
-msgid ""
-"Shows a complete list of all events the player has attended on their public "
-"player page."
-msgstr ""
-"Visar en fullständig lista över alla evenemang som spelaren har deltagit i "
-"på sin offentliga spelarsida."
 
 msgid ""
 "This page allows you to add or modify an option in a form question for a "

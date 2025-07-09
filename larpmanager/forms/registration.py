@@ -782,9 +782,6 @@ class OrgaRegistrationOptionForm(MyForm):
         if "question_id" in self.params:
             self.initial["question"] = self.params["question_id"]
 
-        if "reg_opt_staff_price" not in self.params["features"]:
-            self.delete_field("price_staff")
-
 
 class OrgaRegistrationQuotaForm(MyForm):
     page_info = _(

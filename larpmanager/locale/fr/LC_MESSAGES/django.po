@@ -1155,9 +1155,6 @@ msgstr "Dons"
 msgid "Enrolment"
 msgstr "Inscription"
 
-msgid "Event T&C"
-msgstr "Conditions générales d'utilisation"
-
 msgid "First aid"
 msgstr "Premiers secours"
 
@@ -1933,8 +1930,8 @@ msgstr "Type de document"
 msgid "Dynamic rates"
 msgstr "Taux dynamiques"
 
-msgid "Events played"
-msgstr "Événements joués"
+msgid "Event history"
+msgstr "Historique des événements"
 
 msgid "External link"
 msgstr "URL externe"
@@ -2138,9 +2135,6 @@ msgstr "Partenaire révoqué"
 msgid "Membership fee"
 msgstr "Cotisations"
 
-msgid "Multi-language"
-msgstr "Multi-langues"
-
 msgid "Obtain ability"
 msgstr "Acquérir des compétences"
 
@@ -2269,6 +2263,9 @@ msgstr "Numéro du document"
 
 msgid "Event not found"
 msgstr "Événement non trouvé"
+
+msgid "Events attended"
+msgstr "Participation à des événements"
 
 msgid "Filter factions"
 msgstr "Groupes de filtres"
@@ -2408,9 +2405,6 @@ msgstr "Comptabilité des événements"
 msgid "Event navigation"
 msgstr "Navigation pour les événements"
 
-msgid "Foreign language"
-msgstr "Langue étrangère"
-
 msgid "Forward discount"
 msgstr "Escompte à terme"
 
@@ -2449,9 +2443,6 @@ msgstr "Frais d'organisation"
 
 msgid "Organisation tax"
 msgstr "Taxe d'organisation"
-
-msgid "Organization T&C"
-msgstr "Conditions générales de l'organisation"
 
 msgid "Organization fee"
 msgstr "Frais d'adhésion"
@@ -2897,9 +2888,6 @@ msgstr "Opération terminée"
 
 msgid "Password of account"
 msgstr "Mot de passe du compte"
-
-msgid "Player Larp History"
-msgstr "Histoire des joueurs de Larp"
 
 msgid "Player cancellation"
 msgstr "Annulation du joueur"
@@ -4884,9 +4872,6 @@ msgstr ""
 msgid "Now you can set the registration opening date"
 msgstr "Vous pouvez maintenant fixer la date d'ouverture de l'inscription"
 
-msgid "Now you can set the terms and conditions text"
-msgstr "Vous pouvez maintenant définir le texte des conditions générales"
-
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Lieu de naissance ne figurant pas dans la liste ISTAT"
 
@@ -4955,6 +4940,9 @@ msgstr "Un problème s'est produit lors de l'activation du compte"
 
 msgid "Sum of payments received with means of payment"
 msgstr "Somme des paiements reçus avec les moyens de paiement"
+
+msgid "Text show at the start of all character sheets"
+msgstr "Texte affiché au début de toutes les feuilles de personnage"
 
 msgid "This page allows you to add or edit a discount"
 msgstr "Cette page vous permet d'ajouter ou de modifier une réduction"
@@ -5568,9 +5556,6 @@ msgid "This page shows all expense items recorded in the system"
 msgstr ""
 "Cette page présente tous les postes de dépenses enregistrés dans le système"
 
-msgid "Allows you to define a different language for each event."
-msgstr "Permet de définir une langue différente pour chaque événement."
-
 msgid "Content of mail reminding players to pay their signup fee"
 msgstr ""
 "Contenu du courrier rappelant aux joueurs de payer leur droit d'inscription"
@@ -5750,20 +5735,10 @@ msgstr ""
 msgid "In the membership book the number of your membership card is"
 msgstr "Dans le livre des membres, votre numéro de membre est"
 
-msgid "Lets staff access the diet information submitted by players."
-msgstr ""
-"Permet au personnel d'accéder aux informations sur le régime alimentaire "
-"fournies par les joueurs."
-
 msgid "Manages tokens used by players to cover the registration fee"
 msgstr ""
 "Gestion des jetons utilisés par les joueurs pour couvrir les frais "
 "d'inscription"
-
-msgid "Now you can review the diet information submitted by players"
-msgstr ""
-"Vous pouvez désormais consulter les informations sur le régime alimentaire "
-"fournies par les joueurs"
 
 msgid "This page allows you to add or edit an expense item incurred"
 msgstr ""
@@ -5888,11 +5863,6 @@ msgstr "Indiquez ici chaque élément que vous souhaitez éviter dans la mission
 msgid "It will be shown to other players together with your character"
 msgstr "Il sera montré aux autres joueurs en même temps que votre personnage"
 
-msgid "Lets staff access the safety information submitted by players."
-msgstr ""
-"Permet au personnel d'accéder aux informations de sécurité soumises par les "
-"joueurs."
-
 msgid "Maximum number of primary spots to be managed (0 for infinite)"
 msgstr "Nombre maximum de postes primaires à gérer (0 pour infini)"
 
@@ -5900,11 +5870,6 @@ msgid "Now staff members can upload expenses, and you can review them"
 msgstr ""
 "Désormais, les membres du personnel peuvent télécharger leurs dépenses et "
 "vous pouvez les vérifier"
-
-msgid "Now you can review the safety information submitted by players"
-msgstr ""
-"Vous pouvez désormais consulter les informations de sécurité fournies par "
-"les joueurs"
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr ""
@@ -6884,6 +6849,13 @@ msgstr ""
 "italien."
 
 msgid ""
+"If checked: in the public page of an user shows a list of all events "
+"attended"
+msgstr ""
+"Si la case est cochée : la page publique d'un utilisateur affiche la liste "
+"de tous les événements auxquels il a participé"
+
+msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
 "processed"
 msgstr ""
@@ -7064,13 +7036,6 @@ msgid ""
 msgstr ""
 "Pour participer à cet événement, vous devrez vous acquitter de la cotisation"
 " annuelle d'un montant de 1 000 euros "
-
-msgid ""
-"Warning. This event is in a different language than the one set in your "
-"profile"
-msgstr ""
-"Attention ! Cet événement se déroule dans une langue différente de celle "
-"définie dans votre profil"
 
 msgid ""
 "(If you need a hand feel free to let us know, we'll try to help as best we "
@@ -7511,25 +7476,11 @@ msgstr ""
 "les préférences des membres en matière de bulletin d'information."
 
 msgid ""
-"Allows custom Terms and Conditions for a specific event, displayed during "
-"registration."
-msgstr ""
-"Permet de personnaliser les conditions générales d'un événement spécifique, "
-"affichées lors de l'inscription."
-
-msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr ""
 "Attention : l'opération est définitive, veuillez revérifier les affectations"
 " avant de les télécharger"
-
-msgid ""
-"Displays the organisation-wide Terms and Conditions during registration for "
-"all events."
-msgstr ""
-"Affiche les conditions générales de l'organisation lors de l'inscription à "
-"tous les événements."
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "
@@ -7620,13 +7571,6 @@ msgid ""
 "be processed"
 msgstr ""
 "Veillez à respecter ces étapes, sinon votre paiement ne sera pas traité"
-
-msgid ""
-"Shows a complete list of all events the player has attended on their public "
-"player page."
-msgstr ""
-"Affiche une liste complète de tous les événements auxquels le joueur a "
-"participé sur sa page publique."
 
 msgid ""
 "This page allows you to add or modify an option in a form question for a "

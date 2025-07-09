@@ -4,7 +4,7 @@
     {% trans "Your accounting" %}
 {% endblock title %}
 {% block content %}
-    {% if 'assoc_tac' in assoc.features %}
+    {% if assoc_terms_conditions %}
         <p>
             {% trans "You can consult" %} <a href="{% url 'register_conditions' %}">{% trans "here the conditions of registration" %}.</a>
         </p>

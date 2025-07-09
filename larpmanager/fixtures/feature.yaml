@@ -148,7 +148,7 @@
     slug: safety
     overall: false
     module: 8
-    placeholder: false
+    placeholder: true
     order: 20
     after_text: Now you can review the safety information submitted by players
     after_link: orga_safety
@@ -203,18 +203,6 @@
     order: 30
     after_text: Now players can submit preregistrations, and you can review them
     after_link: exe_pre_registrations
-- model: larpmanager.feature
-  pk: 34
-  fields:
-    name: Multi-language
-    descr: Allows you to define a different language for each event.
-    slug: multi_lang
-    overall: true
-    module: 7
-    placeholder: false
-    order: 9999
-    after_text: ''
-    after_link: ''
 - model: larpmanager.feature
   pk: 36
   fields:
@@ -358,19 +346,6 @@
     order: 60
     after_text: Now you can create the waiting ticket
     after_link: orga_registration_tickets
-- model: larpmanager.feature
-  pk: 56
-  fields:
-    name: Event T&C
-    descr: Allows custom Terms and Conditions for a specific event, displayed during
-      registration.
-    slug: event_tac
-    overall: false
-    module: 7
-    placeholder: false
-    order: 10
-    after_text: Now you can set the terms and conditions text
-    after_link: orga_texts
 - model: larpmanager.feature
   pk: 57
   fields:
@@ -552,19 +527,6 @@
     after_text: Now you can review the historical accounting informations
     after_link: exe_accounting_rec
 - model: larpmanager.feature
-  pk: 88
-  fields:
-    name: Player Larp History
-    descr: Shows a complete list of all events the player has attended on their public
-      player page.
-    slug: player_larp_history
-    overall: true
-    module: 8
-    placeholder: false
-    order: 100
-    after_text: ''
-    after_link: ''
-- model: larpmanager.feature
   pk: 91
   fields:
     name: Progress
@@ -585,7 +547,7 @@
     slug: diet
     overall: false
     module: 8
-    placeholder: false
+    placeholder: true
     order: 30
     after_text: Now you can review the diet information submitted by players
     after_link: orga_diet
@@ -602,19 +564,6 @@
     order: 10
     after_text: Now you can review the organization's deadlines
     after_link: exe_deadlines
-- model: larpmanager.feature
-  pk: 95
-  fields:
-    name: Organization T&C
-    descr: Displays the organisation-wide Terms and Conditions during registration
-      for all events.
-    slug: assoc_tac
-    overall: true
-    module: 7
-    placeholder: false
-    order: 10
-    after_text: Now you can set the terms and conditions text
-    after_link: exe_texts
 - model: larpmanager.feature
   pk: 103
   fields:
