@@ -1596,6 +1596,9 @@ msgstr "Postup"
 msgid "Provisional"
 msgstr "Provizorní"
 
+msgid "Quick Setup"
+msgstr "Rychlé nastavení"
+
 msgid "Recalculate"
 msgstr "Přepočet"
 
@@ -8016,6 +8019,13 @@ msgid ""
 msgstr ""
 "Místo interního registračního formuláře přesměruje hráče na externí "
 "registrační odkaz."
+
+msgid ""
+"This page allows you to perform a quick setup of the most important settings"
+" for your new organization"
+msgstr ""
+"Na této stránce můžete provést rychlé nastavení nejdůležitějších parametrů "
+"nové organizace"
 
 msgid ""
 "This page allows you to select the features of a template. Click on a "

@@ -617,6 +617,14 @@ msgstr ""
 msgid "Intermediary channel code"
 msgstr ""
 
+msgid "Quick Setup"
+msgstr ""
+
+msgid ""
+"This page allows you to perform a quick setup of the most important settings "
+"for your new organization"
+msgstr ""
+
 msgid "You have exceeded the maximum number of selectable options"
 msgstr ""
 

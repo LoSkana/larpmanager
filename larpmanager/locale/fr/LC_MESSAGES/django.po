@@ -1596,6 +1596,9 @@ msgstr "Progression"
 msgid "Provisional"
 msgstr "Provisoire"
 
+msgid "Quick Setup"
+msgstr "Installation rapide"
+
 msgid "Recalculate"
 msgstr "Recalculer"
 
@@ -8356,6 +8359,13 @@ msgid ""
 msgstr ""
 "Au lieu d'utiliser un formulaire d'inscription interne, redirige le lecteur "
 "vers un lien d'inscription externe."
+
+msgid ""
+"This page allows you to perform a quick setup of the most important settings"
+" for your new organization"
+msgstr ""
+"Cette page vous permet d'effectuer une configuration rapide des paramètres "
+"les plus importants pour votre nouvelle organisation"
 
 msgid ""
 "This page allows you to select the features of a template. Click on a "

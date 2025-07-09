@@ -1596,6 +1596,9 @@ msgstr "Progression"
 msgid "Provisional"
 msgstr "Provisorisk"
 
+msgid "Quick Setup"
+msgstr "Snabbinställning"
+
 msgid "Recalculate"
 msgstr "Omräkning"
 
@@ -8169,6 +8172,13 @@ msgid ""
 msgstr ""
 "I stället för att använda ett internt registreringsformulär omdirigeras "
 "spelaren till en extern registreringslänk."
+
+msgid ""
+"This page allows you to perform a quick setup of the most important settings"
+" for your new organization"
+msgstr ""
+"På den här sidan kan du göra en snabb konfigurering av de viktigaste "
+"inställningarna för din nya organisation"
 
 msgid ""
 "This page allows you to select the features of a template. Click on a "

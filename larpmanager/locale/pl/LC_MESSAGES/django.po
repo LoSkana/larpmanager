@@ -1596,6 +1596,9 @@ msgstr "Progresja"
 msgid "Provisional"
 msgstr "Tymczasowe"
 
+msgid "Quick Setup"
+msgstr "Szybka konfiguracja"
+
 msgid "Recalculate"
 msgstr "Przelicz"
 
@@ -8159,6 +8162,13 @@ msgid ""
 msgstr ""
 "Zamiast korzystać z wewnętrznego formularza rejestracyjnego, przekierowuje "
 "gracza do zewnętrznego linku rejestracyjnego."
+
+msgid ""
+"This page allows you to perform a quick setup of the most important settings"
+" for your new organization"
+msgstr ""
+"Ta strona umożliwia przeprowadzenie szybkiej konfiguracji najważniejszych "
+"ustawień dla nowej organizacji"
 
 msgid ""
 "This page allows you to select the features of a template. Click on a "

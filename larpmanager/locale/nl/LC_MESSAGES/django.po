@@ -1596,6 +1596,9 @@ msgstr "Progressie"
 msgid "Provisional"
 msgstr "Voorlopig"
 
+msgid "Quick Setup"
+msgstr "Snelle installatie"
+
 msgid "Recalculate"
 msgstr "Herberekenen"
 
@@ -8289,6 +8292,13 @@ msgid ""
 msgstr ""
 "In plaats van een intern registratieformulier te gebruiken, wordt de speler "
 "omgeleid naar een externe registratielink."
+
+msgid ""
+"This page allows you to perform a quick setup of the most important settings"
+" for your new organization"
+msgstr ""
+"Op deze pagina kun je de belangrijkste instellingen voor je nieuwe "
+"organisatie snel instellen"
 
 msgid ""
 "This page allows you to select the features of a template. Click on a "

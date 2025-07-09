@@ -1596,6 +1596,9 @@ msgstr "Progressione"
 msgid "Provisional"
 msgstr "Provvisorie"
 
+msgid "Quick Setup"
+msgstr "Impostazione rapida"
+
 msgid "Recalculate"
 msgstr "Ricalcola"
 
@@ -8285,6 +8288,13 @@ msgid ""
 msgstr ""
 "Invece di utilizzare un modulo di registrazione interno, reindirizza il "
 "giocatore a un link di registrazione esterno."
+
+msgid ""
+"This page allows you to perform a quick setup of the most important settings"
+" for your new organization"
+msgstr ""
+"Questa pagina consente di eseguire una rapida configurazione delle "
+"impostazioni più importanti per la nuova organizzazione"
 
 msgid ""
 "This page allows you to select the features of a template. Click on a "

@@ -39,6 +39,7 @@ from larpmanager.forms.association import (
     ExeAssocTextForm,
     ExeConfigForm,
     ExeFeatureForm,
+    ExeQuickSetupForm,
 )
 from larpmanager.forms.member import (
     ExeProfileForm,
@@ -233,3 +234,7 @@ def feature_description(request):
         """
 
     return JsonResponse({"res": "ok", "txt": txt})
+
+
+def exe_quick(request):
+    return exe_edit(request, ExeQuickSetupForm, None, "exe_features", "manage", add_ctx={"add_another": False})

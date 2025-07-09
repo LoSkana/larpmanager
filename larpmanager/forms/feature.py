@@ -67,3 +67,9 @@ class FeatureForm(MyForm):
 
         new_features = set(features_id)
         self.added_features = new_features - old_features
+
+
+class QuickSetupForm(MyForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.prevent_canc = True

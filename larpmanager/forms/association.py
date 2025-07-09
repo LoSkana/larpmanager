@@ -27,7 +27,7 @@ from django.utils.translation import pgettext
 from larpmanager.cache.feature import reset_assoc_features
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
-from larpmanager.forms.feature import FeatureForm
+from larpmanager.forms.feature import FeatureForm, QuickSetupForm
 from larpmanager.forms.utils import (
     AssocMemberS2WidgetMulti,
     SlugInput,
@@ -577,3 +577,23 @@ class FirstAssociationForm(MyForm):
             raise ValidationError("Slug already used!")
 
         return data
+
+
+class ExeQuickSetupForm(QuickSetupForm):
+    page_title = _("Quick Setup")
+
+    page_info = _(
+        "This page allows you to perform a quick setup of the most important settings for your new organization"
+    )
+
+    class Meta:
+        model = Association
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # setup = {
+        #     "payment": _("Do you want to accept payments processed through the system?"),
+        #     "payment_fees": _("Do you want to pass the payment gateway transaction fee on to the users?"),
+        #     "membership": _("Do you want a formal membership approval process?"),
+        # }
