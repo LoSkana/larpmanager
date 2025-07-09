@@ -539,19 +539,6 @@
     after_text: Now you can review the historical accounting informations
     after_link: exe_accounting_rec
 - model: larpmanager.feature
-  pk: 88
-  fields:
-    name: Player Larp History
-    descr: Shows a complete list of all events the player has attended on their public
-      player page.
-    slug: player_larp_history
-    overall: true
-    module: 8
-    placeholder: false
-    order: 100
-    after_text: ''
-    after_link: ''
-- model: larpmanager.feature
   pk: 91
   fields:
     name: Progress

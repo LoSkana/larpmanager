@@ -1930,8 +1930,8 @@ msgstr "Typ dokumentu"
 msgid "Dynamic rates"
 msgstr "Dynamické sazby"
 
-msgid "Events played"
-msgstr "Odehrané akce"
+msgid "Event history"
+msgstr "Historie událostí"
 
 msgid "External link"
 msgstr "Externí url"
@@ -2266,6 +2266,9 @@ msgstr "Číslo dokumentu"
 
 msgid "Event not found"
 msgstr "Událost nebyla nalezena"
+
+msgid "Events attended"
+msgstr "Zúčastněné akce"
 
 msgid "Filter factions"
 msgstr "Skupiny filtrů"
@@ -2891,9 +2894,6 @@ msgstr "Operace dokončena"
 
 msgid "Password of account"
 msgstr "Heslo účtu"
-
-msgid "Player Larp History"
-msgstr "Historie hráčských larpů"
 
 msgid "Player cancellation"
 msgstr "Zrušení hráče"
@@ -6604,6 +6604,13 @@ msgstr ""
 "Vytváří roční shrnutí fiskální činnosti pro zprávu o italském rozpočtu."
 
 msgid ""
+"If checked: in the public page of an user shows a list of all events "
+"attended"
+msgstr ""
+"Pokud je zaškrtnuto: na veřejné stránce uživatele se zobrazí seznam všech "
+"událostí, kterých se zúčastnil"
+
+msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
 "processed"
 msgstr ""
@@ -7276,13 +7283,6 @@ msgid ""
 msgstr ""
 "Při provádění těchto kroků buďte opatrní - jinak nebude vaše platba "
 "zpracována"
-
-msgid ""
-"Shows a complete list of all events the player has attended on their public "
-"player page."
-msgstr ""
-"Na veřejné stránce hráče se zobrazí kompletní seznam všech událostí, kterých"
-" se hráč zúčastnil."
 
 msgid ""
 "This page allows you to add or modify an option in a form question for a "

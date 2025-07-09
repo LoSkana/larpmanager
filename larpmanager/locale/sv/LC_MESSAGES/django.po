@@ -1930,8 +1930,8 @@ msgstr "Typ av dokument"
 msgid "Dynamic rates"
 msgstr "Dynamiska priser"
 
-msgid "Events played"
-msgstr "Händelser som spelas"
+msgid "Event history"
+msgstr "Händelsehistorik"
 
 msgid "External link"
 msgstr "Extern webbadress"
@@ -2266,6 +2266,9 @@ msgstr "Dokumentnummer"
 
 msgid "Event not found"
 msgstr "Händelsen hittades inte"
+
+msgid "Events attended"
+msgstr "Deltagit i evenemang"
 
 msgid "Filter factions"
 msgstr "Filtrera grupper"
@@ -2891,9 +2894,6 @@ msgstr "Operation slutförd"
 
 msgid "Password of account"
 msgstr "Lösenord för konto"
-
-msgid "Player Larp History"
-msgstr "Spelare Larp Historia"
 
 msgid "Player cancellation"
 msgstr "Avbokning av spelare"
@@ -6704,6 +6704,13 @@ msgstr ""
 "italienska budgetrapporten."
 
 msgid ""
+"If checked: in the public page of an user shows a list of all events "
+"attended"
+msgstr ""
+"Om markerad: på den offentliga sidan för en användare visas en lista över "
+"alla evenemang som användaren deltagit i"
+
+msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
 "processed"
 msgstr ""
@@ -7413,13 +7420,6 @@ msgid ""
 msgstr ""
 "Var försiktig när du utför dessa steg - annars kommer din betalning inte att"
 " behandlas"
-
-msgid ""
-"Shows a complete list of all events the player has attended on their public "
-"player page."
-msgstr ""
-"Visar en fullständig lista över alla evenemang som spelaren har deltagit i "
-"på sin offentliga spelarsida."
 
 msgid ""
 "This page allows you to add or modify an option in a form question for a "

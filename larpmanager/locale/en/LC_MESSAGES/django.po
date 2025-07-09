@@ -306,6 +306,16 @@ msgstr ""
 msgid "If checked: shows the tagline for each event"
 msgstr ""
 
+msgid "Users"
+msgstr ""
+
+msgid "Event history"
+msgstr ""
+
+msgid ""
+"If checked: in the public page of an user shows a list of all events attended"
+msgstr ""
+
 msgid "Email notifications"
 msgstr ""
 
@@ -4687,9 +4697,6 @@ msgstr ""
 msgid "this link"
 msgstr ""
 
-msgid "Users"
-msgstr ""
-
 msgid ""
 "This page shows all the runs saved in the system. From here you can edit "
 "them, or create new ones"
@@ -5794,7 +5801,7 @@ msgstr ""
 msgid "Private message"
 msgstr ""
 
-msgid "Events played"
+msgid "Events attended"
 msgstr ""
 
 msgid "Show all"
@@ -7157,14 +7164,6 @@ msgid ""
 msgstr ""
 
 msgid "Now you can review the historical accounting informations"
-msgstr ""
-
-msgid "Player Larp History"
-msgstr ""
-
-msgid ""
-"Shows a complete list of all events the player has attended on their public "
-"player page."
 msgstr ""
 
 msgid ""

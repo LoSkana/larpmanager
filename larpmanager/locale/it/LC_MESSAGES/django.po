@@ -1930,8 +1930,8 @@ msgstr "Tipo documento"
 msgid "Dynamic rates"
 msgstr "Rate dinamiche"
 
-msgid "Events played"
-msgstr "Eventi giocati"
+msgid "Event history"
+msgstr "Storico eventi"
 
 msgid "External link"
 msgstr "Url esterno"
@@ -2266,6 +2266,9 @@ msgstr "Numero documento"
 
 msgid "Event not found"
 msgstr "Evento non trovato"
+
+msgid "Events attended"
+msgstr "Eventi a cui si è partecipato"
 
 msgid "Filter factions"
 msgstr "Filtra gruppi"
@@ -2891,9 +2894,6 @@ msgstr "Operazione completata"
 
 msgid "Password of account"
 msgstr "Password dell'account"
-
-msgid "Player Larp History"
-msgstr "Giocatore Storia del Larp"
 
 msgid "Player cancellation"
 msgstr "Cancellazione del giocatore"
@@ -6812,6 +6812,13 @@ msgstr ""
 "bilancio italiano."
 
 msgid ""
+"If checked: in the public page of an user shows a list of all events "
+"attended"
+msgstr ""
+"Se selezionato: nella pagina pubblica di un utente viene mostrato un elenco "
+"di tutti gli eventi a cui ha partecipato"
+
+msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
 "processed"
 msgstr ""
@@ -7529,13 +7536,6 @@ msgid ""
 msgstr ""
 "Per favore, fai attenzione ad eseguire questi passaggi - altrimenti il tuo "
 "pagamento non sarà processato"
-
-msgid ""
-"Shows a complete list of all events the player has attended on their public "
-"player page."
-msgstr ""
-"Mostra un elenco completo di tutti gli eventi a cui il giocatore ha "
-"partecipato nella sua pagina pubblica."
 
 msgid ""
 "This page allows you to add or modify an option in a form question for a "

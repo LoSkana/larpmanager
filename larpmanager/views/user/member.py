@@ -305,7 +305,8 @@ def public(request, n):
         for badge in ctx["member"].badges.filter(assoc_id=request.assoc["id"]).order_by("number"):
             ctx["badges"].append(badge.show(request.LANGUAGE_CODE))
 
-    if "player_larp_history" in request.assoc["features"]:
+    assoc = Association.objects.get(pk=ctx["a_id"])
+    if assoc.get_config("player_larp_history", False):
         ctx["regs"] = (
             Registration.objects.filter(
                 cancellation_date__isnull=True,

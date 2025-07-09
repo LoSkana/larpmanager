@@ -264,7 +264,7 @@ class ExeConfigForm(ConfigForm):
         self.prevent_canc = True
 
     def set_configs(self):
-        # ## CALENDAR
+        # CALENDAR
         self.set_section("calendar", _("Calendar"))
 
         label = _("Show event links")
@@ -298,6 +298,13 @@ class ExeConfigForm(ConfigForm):
         label = _("Tagline")
         help_text = _("If checked: shows the tagline for each event")
         self.add_configs("calendar_tagline", ConfigType.BOOL, label, help_text)
+
+        # USERS
+        self.set_section("users", _("Users"))
+
+        label = _("Event history")
+        help_text = _("If checked: in the public page of an user shows a list of all events attended")
+        self.add_configs("player_larp_history", ConfigType.BOOL, label, help_text)
 
         # MAIL
         self.set_section("email", _("Email notifications"))

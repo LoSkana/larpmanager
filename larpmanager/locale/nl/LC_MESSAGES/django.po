@@ -1930,8 +1930,8 @@ msgstr "Type document"
 msgid "Dynamic rates"
 msgstr "Dynamische tarieven"
 
-msgid "Events played"
-msgstr "Gespeelde evenementen"
+msgid "Event history"
+msgstr "Gebeurtenis geschiedenis"
 
 msgid "External link"
 msgstr "Externe url"
@@ -2266,6 +2266,9 @@ msgstr "Documentnummer"
 
 msgid "Event not found"
 msgstr "Evenement niet gevonden"
+
+msgid "Events attended"
+msgstr "Bijgewoonde evenementen"
 
 msgid "Filter factions"
 msgstr "Filtergroepen"
@@ -2891,9 +2894,6 @@ msgstr "Operatie voltooid"
 
 msgid "Password of account"
 msgstr "Wachtwoord account"
-
-msgid "Player Larp History"
-msgstr "Spelergeschiedenis"
 
 msgid "Player cancellation"
 msgstr "Speler annulering"
@@ -6815,6 +6815,13 @@ msgstr ""
 "Italiaanse begrotingsverslag."
 
 msgid ""
+"If checked: in the public page of an user shows a list of all events "
+"attended"
+msgstr ""
+"Indien aangevinkt: op de openbare pagina van een gebruiker wordt een lijst "
+"met alle bezochte evenementen weergegeven"
+
+msgid ""
 "If you have made a transfer, please upload the receipt for it to be "
 "processed"
 msgstr ""
@@ -7534,13 +7541,6 @@ msgid ""
 msgstr ""
 "Wees voorzichtig bij het uitvoeren van deze stappen - anders wordt je "
 "betaling niet verwerkt"
-
-msgid ""
-"Shows a complete list of all events the player has attended on their public "
-"player page."
-msgstr ""
-"Toont een complete lijst van alle evenementen die de speler heeft bijgewoond"
-" op zijn openbare spelerspagina."
 
 msgid ""
 "This page allows you to add or modify an option in a form question for a "
