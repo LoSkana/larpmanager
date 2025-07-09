@@ -383,7 +383,7 @@ def _check_redirect_registration(request, ctx, event, secret_code):
         return None
 
     if "register_link" in ctx["features"] and event.register_link:
-        if "tier" not in ctx or ctx["tier"] != TicketTier.STAFF:
+        if "tier" not in ctx or ctx["tier"] not in [TicketTier.STAFF, TicketTier.NPC]:
             return redirect(event.register_link)
 
     if "registration_open" in ctx["features"]:
