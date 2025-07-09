@@ -7621,15 +7621,6 @@ msgstr ""
 msgid "Now you can start creating speed-larps"
 msgstr "Nyní můžete začít vytvářet speed-larpy"
 
-msgid "Lets staff access the safety information submitted by players."
-msgstr ""
-"Umožňuje pracovníkům přístup k bezpečnostním informacím, které jim hráči "
-"poskytli."
-
-msgid "Now you can review the safety information submitted by players"
-msgstr ""
-"Nyní si můžete prohlédnout bezpečnostní informace, které hráči poskytli"
-
 msgid "Casting algorithm"
 msgstr "Algoritmus obsazování"
 
@@ -7941,13 +7932,6 @@ msgstr ""
 
 msgid "Now you can create the progress steps"
 msgstr "Nyní můžete vytvořit kroky postupu"
-
-msgid "Lets staff access the diet information submitted by players."
-msgstr ""
-"Umožňuje pracovníkům přístup k informacím o stravě, které jim hráči poskytli."
-
-msgid "Now you can review the diet information submitted by players"
-msgstr "Nyní si můžete prohlédnout informace o stravě poskytnuté hráči"
 
 msgid ""
 "Activates a page summarizing overdue players and their deadlines (payments, "

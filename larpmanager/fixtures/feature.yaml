@@ -148,7 +148,7 @@
     slug: safety
     overall: false
     module: 8
-    placeholder: false
+    placeholder: true
     order: 20
     after_text: Now you can review the safety information submitted by players
     after_link: orga_safety
@@ -547,7 +547,7 @@
     slug: diet
     overall: false
     module: 8
-    placeholder: false
+    placeholder: true
     order: 30
     after_text: Now you can review the diet information submitted by players
     after_link: orga_diet

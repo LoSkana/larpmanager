@@ -7742,14 +7742,6 @@ msgstr ""
 msgid "Now you can start creating speed-larps"
 msgstr "Nu kan du börja skapa speed-larps"
 
-msgid "Lets staff access the safety information submitted by players."
-msgstr ""
-"Ger personalen tillgång till den säkerhetsinformation som spelarna har "
-"lämnat."
-
-msgid "Now you can review the safety information submitted by players"
-msgstr "Nu kan du granska den säkerhetsinformation som spelarna har lämnat"
-
 msgid "Casting algorithm"
 msgstr "Algoritm för gjutning"
 
@@ -8070,13 +8062,6 @@ msgstr ""
 
 msgid "Now you can create the progress steps"
 msgstr "Nu kan du skapa framstegsstegen"
-
-msgid "Lets staff access the diet information submitted by players."
-msgstr ""
-"Ger personalen tillgång till den kostinformation som spelarna har lämnat in."
-
-msgid "Now you can review the diet information submitted by players"
-msgstr "Nu kan du granska den kostinformation som spelarna har lämnat in"
 
 msgid ""
 "Activates a page summarizing overdue players and their deadlines (payments, "

@@ -7813,15 +7813,6 @@ msgstr ""
 msgid "Now you can start creating speed-larps"
 msgstr "Ya puedes empezar a crear speed-larps"
 
-msgid "Lets staff access the safety information submitted by players."
-msgstr ""
-"Permite al personal acceder a la información de seguridad enviada por los "
-"jugadores."
-
-msgid "Now you can review the safety information submitted by players"
-msgstr ""
-"Ahora puedes revisar la información de seguridad enviada por los jugadores"
-
 msgid "Casting algorithm"
 msgstr "Algoritmo de fundición"
 
@@ -8146,15 +8137,6 @@ msgstr ""
 
 msgid "Now you can create the progress steps"
 msgstr "Ahora puede crear los pasos de progreso"
-
-msgid "Lets staff access the diet information submitted by players."
-msgstr ""
-"Permite al personal acceder a la información dietética enviada por los "
-"jugadores."
-
-msgid "Now you can review the diet information submitted by players"
-msgstr ""
-"Ahora puedes revisar la información sobre dietas enviada por los jugadores"
 
 msgid ""
 "Activates a page summarizing overdue players and their deadlines (payments, "

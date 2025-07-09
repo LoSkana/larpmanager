@@ -63,6 +63,11 @@ def update_assoc_features(assoc_id):
         ]:
             if assoc.get_config("calendar_" + sl, False):
                 res[sl] = 1
+
+        for slug in ["safety", "diet"]:
+            if slug in assoc.mandatory_fields or slug in assoc.optional_fields:
+                res[slug] = 1
+
     except ObjectDoesNotExist:
         pass
     return res
