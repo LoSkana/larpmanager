@@ -67,7 +67,7 @@ def exe_events_edit(request, num):
                 er.name = "Organizer"
             er.members.add(request.user.member)
             er.save()
-            return redirect("orga_run", s=ctx["saved"].slug, n=1)
+            return redirect("orga_quick", s=ctx["saved"].slug, n=1)
         return redirect("exe_events")
     ctx["add_another"] = False
     return render(request, "larpmanager/exe/edit.html", ctx)

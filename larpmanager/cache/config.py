@@ -77,6 +77,11 @@ def save_all_element_configs(obj, dct):
         obj.configs.model.objects.create(**{fk_field: obj, "name": name, "value": dct[name]})
 
 
+def save_single_config(obj, name, value):
+    fk_field = _get_fkey_config(obj)
+    obj.configs.model.objects.update_or_create(defaults={"value": value}, **{fk_field: obj, "name": name})
+
+
 def _get_fkey_config(obj):
     fk_field_map = {
         "Event": "event",

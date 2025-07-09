@@ -236,5 +236,6 @@ def feature_description(request):
     return JsonResponse({"res": "ok", "txt": txt})
 
 
+@login_required
 def exe_quick(request):
     return exe_edit(request, ExeQuickSetupForm, None, "exe_features", "manage", add_ctx={"add_another": False})

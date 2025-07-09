@@ -595,12 +595,34 @@ class ExeQuickSetupForm(QuickSetupForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # setup = {
-        #     "payment": (True, _("Do you want to accept payments processed through the system?")),
-        #     "payment_fees": (False, _("Do you want to pass the payment gateway transaction fee on to the users?")),
-        #     "membership": (True, _("Do you want users to join events only after an approval process?")),
-        #     "campaign": (
-        #         True,
-        #         _("Do you want to manage campaigns, a series of events that share the same characters?"),
-        #     ),
-        # }
+
+        self.setup = {
+            "payment": (True, _("Payments"), _("Do you want to accept payments processed through the system")),
+            "payment_fees_user": (
+                False,
+                _("Transaction fees"),
+                _(
+                    "Do you want to add payment gateway fees to the ticket price, so that the user pays them instead of the organization"
+                ),
+            ),
+            "membership": (True, _("Membership"), _("Do you want users to join events only after an approval process")),
+            "campaign": (
+                True,
+                _("Campaign"),
+                _("Do you want to manage campaigns, a series of events that share the same characters"),
+            ),
+            "deadlines": (
+                True,
+                _("Deadlines"),
+                _("Do you want a dashboard to track and manage deadlines missed by registered users"),
+            ),
+            "remind": (
+                True,
+                _("Reminders"),
+                _("Do you want to enable an automatic email reminder system for registered users who miss a deadline"),
+            ),
+            "help": (True, _("Help"), _("Do you want to manage user help requests directly through the platform")),
+            "donate": (True, _("Donations"), _("Do you want to allow users to make voluntary donations")),
+        }
+
+        self.init_fields()

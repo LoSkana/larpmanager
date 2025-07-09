@@ -511,14 +511,6 @@
     number: 30
     feature: 202
 - model: larpmanager.eventpermission
-  pk: 72
-  fields:
-    name: Secret registration link
-    descr: Display secret registration link
-    slug: orga_registration_secret
-    number: 100
-    feature: 69
-- model: larpmanager.eventpermission
   pk: 73
   fields:
     name: Cache Reloading

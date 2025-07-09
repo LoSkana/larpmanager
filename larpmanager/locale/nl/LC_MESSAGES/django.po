@@ -1209,6 +1209,9 @@ msgstr "Vragen"
 msgid "Recipient"
 msgstr "Ontvanger"
 
+msgid "Reminders"
+msgstr "Herinneringen"
+
 msgid "Residence"
 msgstr "Residentie"
 
@@ -2150,6 +2153,9 @@ msgstr "PDF-generatie"
 msgid "Password reset"
 msgstr "Wachtwoord vergeten"
 
+msgid "Payment quotas"
+msgstr "Betalingsquota"
+
 msgid "Photo of an ID"
 msgstr "Fotodocument"
 
@@ -2513,6 +2519,9 @@ msgstr "Tokens / Credits"
 msgid "Total collection"
 msgstr "Totale collectie"
 
+msgid "Transaction fees"
+msgstr "Transactiekosten"
+
 msgid "Where it is held"
 msgstr "Waar het wordt gehouden"
 
@@ -2783,6 +2792,9 @@ msgstr "Totaal verzonden betaling"
 msgid "Transaction totals"
 msgstr "Totaal transacties"
 
+msgid "Voluntary donation"
+msgstr "Vrijwillige donatie"
+
 msgid "Volunteer Registry"
 msgstr "Vrijwilligers Register"
 
@@ -2997,6 +3009,9 @@ msgstr "Verenigingsinkomsten"
 
 msgid "Payment confirmation"
 msgstr "Bevestiging van betalingen"
+
+msgid "Payment installments"
+msgstr "Betalingstermijnen"
 
 msgid "Payments in approval"
 msgstr "Betalingen onder goedkeuring"
@@ -3312,6 +3327,9 @@ msgstr "Ongeldige facilitatiecode"
 
 msgid "Download complete sheet"
 msgstr "Volledig blad downloaden"
+
+msgid "Early registration link"
+msgstr "Link voor vroege registratie"
 
 msgid "Indicate only if rate 0"
 msgstr "Alleen aangeven als tarief 0"
@@ -3974,9 +3992,6 @@ msgstr "Elementen van een andere gebeurtenis kopiëren"
 
 msgid "Costumes - make up, cloth, armor"
 msgstr "Kostuums - schmink, stof, harnas"
-
-msgid "Display secret registration link"
-msgstr "Geheime registratielink weergeven"
 
 msgid "Displays list of emails of users"
 msgstr "Lijst met e-mails van gebruikers weergeven"
@@ -5379,6 +5394,9 @@ msgstr ""
 "Je hebt toestemming gegeven voor het delen van gegevens met deze "
 "organisatie!"
 
+msgid "Do you want to allow users to make voluntary donations"
+msgstr "Wil je gebruikers in staat stellen vrijwillig te doneren"
+
 msgid "Everything is in order about the payment of this event"
 msgstr "Alles is in orde om dit evenement te betalen"
 
@@ -5562,6 +5580,9 @@ msgstr ""
 "Toont volledige lijsten van gebruikelijke spelers die nog niet zijn "
 "aangemeld"
 
+msgid "Do you want to assign characters using a casting algorithm"
+msgstr "Wil je tekens toewijzen met een gietalgoritme"
+
 #, python-format
 msgid "Hi! Your registration to <b>%(event)s</b> has been updated"
 msgstr "Je registratie voor <b>%(event)s</b> is bijgewerkt"
@@ -5622,6 +5643,12 @@ msgid "Content of mail reminding players to pay the membership fee"
 msgstr ""
 "Inhoud van e-mail waarin spelers worden herinnerd aan het betalen van "
 "contributie"
+
+msgid "Do you want to accept payments processed through the system"
+msgstr "Wil je via het systeem verwerkte betalingen accepteren"
+
+msgid "Do you want to allow players to create their own characters"
+msgstr "Wil je spelers hun eigen personages laten maken"
 
 msgid "If checked, makes pre-registration for this event available"
 msgstr "Indien aangevinkt, is voorregistratie voor dit evenement beschikbaar"
@@ -5840,6 +5867,15 @@ msgstr "Je verzoek is verzonden, we zullen zo snel mogelijk antwoorden!"
 
 msgid "Description - will be displayed at the beginning of the section"
 msgstr "Beschrijving - wordt aan het begin van de sectie weergegeven"
+
+msgid "Do you want to manage characters assigned to registered players"
+msgstr ""
+"Wil je personages beheren die zijn toegewezen aan geregistreerde spelers"
+
+msgid "Do you want users to join events only after an approval process"
+msgstr ""
+"Wil je dat gebruikers alleen deelnemen aan evenementen na een "
+"goedkeuringsproces"
 
 #, python-format
 msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed"
@@ -6216,6 +6252,12 @@ msgstr ""
 "Beschrijf het in het onderstaande veld en we zullen het zo snel mogelijk "
 "oplossen"
 
+msgid "Do you want to allow users to cancel their registrations on their own"
+msgstr "Wilt u gebruikers toestaan hun registratie zelf te annuleren"
+
+msgid "Do you want to split the registration fee into dynamic payment quotas"
+msgstr "Wil je de registratiekosten opsplitsen in dynamische betalingsquota"
+
 msgid "Enables field 'hide', to be able to hide writing element from players"
 msgstr ""
 "Maakt het veld 'verbergen' mogelijk, om het schrijfelement voor spelers te "
@@ -6304,6 +6346,10 @@ msgid "Displays players overdue for payment or other deadlines for all events"
 msgstr ""
 "Toont spelers met achterstallige betalingen of andere deadlines voor alle "
 "evenementen"
+
+msgid "Do you want to manage user help requests directly through the platform"
+msgstr ""
+"Wil je helpaanvragen van gebruikers rechtstreeks via het platform beheren"
 
 msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
@@ -6403,6 +6449,12 @@ msgstr ""
 "personage"
 
 msgid ""
+"Do you want to enable a secret registration link to allow early sign-ups"
+msgstr ""
+"Wil je een geheime registratielink inschakelen om vroege inschrijvingen "
+"mogelijk te maken"
+
+msgid ""
 "If checked, it allows players to customise the names of their characters"
 msgstr ""
 "Als deze optie is aangevinkt, kunnen spelers de namen van hun personages "
@@ -6476,6 +6528,10 @@ msgid ""
 msgstr ""
 "Hiermee kan de organisatie badges toekennen en een openbaar leaderboard "
 "inschakelen."
+
+msgid ""
+"Do you want to split the registration fee into fixed payment installments"
+msgstr "Wil je de registratiekosten opsplitsen in vaste betalingstermijnen"
 
 msgid ""
 "Enter the order of preference of your pre-registration (1 is the maximum)"
@@ -6765,6 +6821,12 @@ msgstr ""
 "exacte gemeente)"
 
 msgid ""
+"Do you want to handle the initial registration process using an external "
+"tool"
+msgstr ""
+"Wil je het eerste registratieproces afhandelen met een extern hulpprogramma"
+
+msgid ""
 "Enables field 'title', a short (2-3 words) text added to the character's "
 "name"
 msgstr ""
@@ -6970,6 +7032,20 @@ msgstr ""
 " mogelijke manieren te helpen"
 
 msgid ""
+"Do you want a dashboard to track and manage deadlines missed by registered "
+"users"
+msgstr ""
+"Wil je een dashboard om gemiste deadlines van geregistreerde gebruikers bij "
+"te houden en te beheren"
+
+msgid ""
+"Do you want to allow users to add a voluntary donation to their registration"
+" fee"
+msgstr ""
+"Wil je gebruikers toestaan een vrijwillige donatie toe te voegen aan hun "
+"registratiekosten"
+
+msgid ""
 "Indicate the date when registration opens. Leave blank to not open "
 "registrations"
 msgstr ""
@@ -7079,6 +7155,12 @@ msgid ""
 msgstr ""
 "Klik hier als u na het verzenden van het formulier het volgende element wilt"
 " bewerken"
+
+msgid ""
+"Do you want to manage campaigns, a series of events that share the same "
+"characters"
+msgstr ""
+"Wil je campagnes beheren, een reeks evenementen met dezelfde personages"
 
 msgid ""
 "Enables the creation, editing, and assignment of characters to registered "
@@ -7193,6 +7275,13 @@ msgid ""
 msgstr ""
 "Deze pagina geeft een overzicht van de opties voor het beantwoorden van "
 "vragen over de evenementworkshops"
+
+msgid ""
+"Do you want to open registrations at a specific date and time instead of "
+"immediately"
+msgstr ""
+"Wilt u registraties openen op een specifieke datum en tijd in plaats van "
+"onmiddellijk"
 
 msgid ""
 "Enables 'Handouts,' pre-written texts that provide information about a plot "
@@ -7884,6 +7973,13 @@ msgstr ""
 "lidmaatschapsevenement"
 
 msgid ""
+"This page allows you to perform a quick setup of the most important settings"
+" for your new event"
+msgstr ""
+"Op deze pagina kun je de belangrijkste instellingen voor je nieuwe evenement"
+" snel instellen"
+
+msgid ""
 "Unique code for internal use - not visible. Indicate a string without spaces"
 " or strange symbols"
 msgstr ""
@@ -7995,6 +8091,13 @@ msgid ""
 msgstr ""
 "Ben je een fout tegengekomen of heb je een tekst gevonden met een onjuiste "
 "vertaling in jouw taal"
+
+msgid ""
+"Do you want to enable an automatic email reminder system for registered "
+"users who miss a deadline"
+msgstr ""
+"Wil je een automatisch e-mailherinneringssysteem inschakelen voor "
+"geregistreerde gebruikers die een deadline missen"
 
 msgid ""
 "Lets you specify a date (and time) on which registration will open, keeping "
@@ -8156,13 +8259,6 @@ msgid ""
 msgstr ""
 "Maakt een 'campagne'-achtige opzet mogelijk waarbij meerdere evenementen "
 "dezelfde set personages en facties delen."
-
-msgid ""
-"Here is the secret registration code: only users accessing from this address"
-" will be able to register"
-msgstr ""
-"Hier is de geheime registratiecode: alleen gebruikers die vanaf dit adres "
-"toegang hebben, kunnen zich registreren"
 
 msgid ""
 "If checked, the subscribers' gallery will not be displayed to those who are "
@@ -8694,6 +8790,13 @@ msgid ""
 msgstr ""
 "Geef aan of het personage een spiegel is (d.w.z. of dit personage het ware "
 "geheime gezicht van een ander personage laat zien)"
+
+msgid ""
+"Do you want to add payment gateway fees to the ticket price, so that the "
+"user pays them instead of the organization"
+msgstr ""
+"Wil je kosten voor betalingsverkeer toevoegen aan de ticketprijs, zodat de "
+"gebruiker deze betaalt in plaats van de organisatie"
 
 msgid ""
 "If checked, it allows players to enter private information on their "

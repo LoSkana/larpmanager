@@ -252,6 +252,10 @@ def _exe_accounting_actions(assoc, ctx, features):
 
 def _orga_manage(request, s, n):
     ctx = get_event_run(request, s, n)
+    # if run is not set, redirect
+    if not ctx["run"].start or not ctx["run"].end:
+        return redirect("orga_run", s=s, n=n)
+
     get_index_event_permissions(ctx, request, s)
     assoc = Association.objects.get(pk=request.assoc["id"])
     if assoc.get_config("interface_admin_links", False):

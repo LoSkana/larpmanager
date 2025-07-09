@@ -632,6 +632,53 @@ msgid ""
 "for your new organization"
 msgstr ""
 
+msgid "Do you want to accept payments processed through the system"
+msgstr ""
+
+msgid "Transaction fees"
+msgstr ""
+
+msgid ""
+"Do you want to add payment gateway fees to the ticket price, so that the "
+"user pays them instead of the organization"
+msgstr ""
+
+msgid "Membership"
+msgstr ""
+
+msgid "Do you want users to join events only after an approval process"
+msgstr ""
+
+msgid ""
+"Do you want to manage campaigns, a series of events that share the same "
+"characters"
+msgstr ""
+
+msgid "Deadlines"
+msgstr ""
+
+msgid ""
+"Do you want a dashboard to track and manage deadlines missed by registered "
+"users"
+msgstr ""
+
+msgid "Reminders"
+msgstr ""
+
+msgid ""
+"Do you want to enable an automatic email reminder system for registered "
+"users who miss a deadline"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid "Do you want to manage user help requests directly through the platform"
+msgstr ""
+
+msgid "Do you want to allow users to make voluntary donations"
+msgstr ""
+
 msgid "You have exceeded the maximum number of selectable options"
 msgstr ""
 
@@ -1321,6 +1368,69 @@ msgstr ""
 msgid ""
 "This page allows you to select the features of a template. Click on a "
 "feature to show its description."
+msgstr ""
+
+msgid ""
+"This page allows you to perform a quick setup of the most important settings "
+"for your new event"
+msgstr ""
+
+msgid "Registration opening date"
+msgstr ""
+
+msgid ""
+"Do you want to open registrations at a specific date and time instead of "
+"immediately"
+msgstr ""
+
+msgid "Early registration link"
+msgstr ""
+
+msgid ""
+"Do you want to enable a secret registration link to allow early sign-ups"
+msgstr ""
+
+msgid "External registration"
+msgstr ""
+
+msgid ""
+"Do you want to handle the initial registration process using an external tool"
+msgstr ""
+
+msgid "Do you want to allow users to cancel their registrations on their own"
+msgstr ""
+
+msgid "Payment installments"
+msgstr ""
+
+msgid ""
+"Do you want to split the registration fee into fixed payment installments"
+msgstr ""
+
+msgid "Payment quotas"
+msgstr ""
+
+msgid "Do you want to split the registration fee into dynamic payment quotas"
+msgstr ""
+
+msgid "Voluntary donation"
+msgstr ""
+
+msgid ""
+"Do you want to allow users to add a voluntary donation to their registration "
+"fee"
+msgstr ""
+
+msgid "Do you want to manage characters assigned to registered players"
+msgstr ""
+
+msgid "Casting algorithm"
+msgstr ""
+
+msgid "Do you want to assign characters using a casting algorithm"
+msgstr ""
+
+msgid "Do you want to allow players to create their own characters"
 msgstr ""
 
 msgid "Ability"
@@ -2216,9 +2326,6 @@ msgid ""
 "Let us know if you encounter any problems, or if we can help in any way!"
 msgstr ""
 
-msgid "Deadlines"
-msgstr ""
-
 msgid "Review the users that are missing the event's deadlines"
 msgstr ""
 
@@ -2476,9 +2583,6 @@ msgstr ""
 msgid "Registration mail"
 msgstr ""
 
-msgid "Membership"
-msgstr ""
-
 msgid "Statute"
 msgstr ""
 
@@ -2643,9 +2747,6 @@ msgid "End date"
 msgstr ""
 
 msgid "Indicates the date on which the run ends"
-msgstr ""
-
-msgid "Registration opening date"
 msgstr ""
 
 msgid ""
@@ -5208,6 +5309,9 @@ msgstr ""
 msgid "Event status"
 msgstr ""
 
+msgid "Secret registration link"
+msgstr ""
+
 msgid ""
 "Total amount of money received for this event, minus commission fees and "
 "refunds"
@@ -6372,14 +6476,6 @@ msgid ""
 "concerning the event"
 msgstr ""
 
-msgid "Secret registration link"
-msgstr ""
-
-msgid ""
-"Here is the secret registration code: only users accessing from this address "
-"will be able to register"
-msgstr ""
-
 msgid "Event texts"
 msgstr ""
 
@@ -6898,18 +6994,12 @@ msgstr ""
 msgid "Now you can start creating speed-larps"
 msgstr ""
 
-msgid "Casting algorithm"
-msgstr ""
-
 msgid ""
 "Lets players submit character preferences, then finds the optimal overall "
 "match."
 msgstr ""
 
 msgid "Now you can set the casting options"
-msgstr ""
-
-msgid "Help"
 msgstr ""
 
 msgid ""
@@ -7035,9 +7125,6 @@ msgid "Player cancellation"
 msgstr ""
 
 msgid "Allows players to cancel their own registrations at any time."
-msgstr ""
-
-msgid "External registration"
 msgstr ""
 
 msgid ""
@@ -7766,9 +7853,6 @@ msgid "Customize specific texts on the event interface"
 msgstr ""
 
 msgid "Customize buttons in the event navigation bar"
-msgstr ""
-
-msgid "Display secret registration link"
 msgstr ""
 
 msgid "Cache Reloading"
