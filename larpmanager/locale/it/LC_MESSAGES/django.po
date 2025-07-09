@@ -5916,7 +5916,7 @@ msgstr ""
 
 msgid "This page shows all runs; you can edit them, or create new ones"
 msgstr ""
-"Questa pagina mostra tutte le corse; è possibile modificarle o crearne di "
+"Questa pagina mostra tutte le run; è possibile modificarle o crearne di "
 "nuove"
 
 msgid "To be able to pay, your membership application must be approved"
