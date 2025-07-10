@@ -137,6 +137,9 @@ class Event(BaseModel):
         max_length=150,
         blank=True,
         verbose_name=_("External register link"),
+        help_text=_("Insert the link to an external tool where users will be redirected if they are not yet registered")
+        + ". "
+        + _("Registered users will be granted normal access"),
     )
 
     max_pg = models.IntegerField(
@@ -477,29 +480,24 @@ class Run(BaseModel):
 
     number = models.IntegerField(help_text=_("Number of event run"))
 
-    start = models.DateField(
-        blank=True, null=True, verbose_name=_("Start date"), help_text=_("Indicates the date on which the run starts")
-    )
+    start = models.DateField(blank=True, null=True, verbose_name=_("Start date"))
 
-    end = models.DateField(
-        blank=True, null=True, verbose_name=_("End date"), help_text=_("Indicates the date on which the run ends")
-    )
+    end = models.DateField(blank=True, null=True, verbose_name=_("End date"))
 
     registration_open = models.DateTimeField(
         blank=True,
         null=True,
         verbose_name=_("Registration opening date"),
-        help_text=_("Indicate the date when registration opens. Leave blank to not open registrations"),
+        help_text=_("Enter the date and time when registrations open - leave blank to keep registrations closed"),
     )
 
     registration_secret = models.CharField(
         default=my_uuid_short,
         max_length=12,
         unique=True,
-        verbose_name=_("Registration code"),
+        verbose_name=_("Secret code"),
         help_text=_(
-            "This code will be used to generate the secret registration links. You can leave "
-            "it as it is or customise it"
+            "This code is used to generate the secret registration link, you may keep the default or customize it"
         ),
         db_index=True,
     )

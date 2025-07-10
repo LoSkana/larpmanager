@@ -1617,6 +1617,9 @@ msgstr "Linkes Rad"
 msgid "Run balance"
 msgstr "Haushalt ausführen"
 
+msgid "Secret code"
+msgstr "Geheimcode"
+
 msgid "Secret link"
 msgstr "Geheime Verbindung"
 
@@ -2653,9 +2656,6 @@ msgstr "Quests und Eigenschaften"
 
 msgid "Redeem collection"
 msgstr "Sammlung einlösen"
-
-msgid "Registration code"
-msgstr "Zugangscode"
 
 msgid "Registration form"
 msgstr "Anmeldeformular"
@@ -4563,9 +4563,6 @@ msgstr "Wenn Sie nicht mehr teilnehmen möchten, können Sie"
 msgid "If you wish to update your personal data"
 msgstr "Wenn Sie Ihre persönlichen Daten aktualisieren möchten"
 
-msgid "Indicates the date on which the run ends"
-msgstr "Gibt das Datum an, an dem der Lauf endet"
-
 msgid "Manage badges and assign them to players"
 msgstr "Verwalten Sie Abzeichen und weisen Sie sie Spielern zu"
 
@@ -4668,9 +4665,6 @@ msgstr "Für welchen Tag benötigen Sie einen Transport"
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Wenn markiert: zeigt das Genre für jedes Ereignis an"
-
-msgid "Indicates the date on which the run starts"
-msgstr "Gibt das Datum an, an dem der Lauf beginnt"
 
 msgid "Manage collections participated by players"
 msgstr "Verwalten von Sammlungen, an denen Spieler beteiligt sind"
@@ -4947,6 +4941,9 @@ msgstr "Jetzt können Sie den externen Registrierungslink setzen"
 
 msgid "Photo (clear and understandable) of the object"
 msgstr "Foto (klar und verständlich) des Objekts"
+
+msgid "Registered users will be granted normal access"
+msgstr "Registrierte Benutzer erhalten normalen Zugang"
 
 msgid "Remember to put recipients separated by commas"
 msgstr "Denken Sie daran, die Empfänger durch Kommata zu trennen"
@@ -6982,11 +6979,6 @@ msgstr ""
 "überprüfen)"
 
 msgid ""
-"Do you want to handle the initial registration process using an external "
-"tool"
-msgstr "Möchten Sie die Erstregistrierung mit einem externen Tool durchführen"
-
-msgid ""
 "Enables field 'title', a short (2-3 words) text added to the character's "
 "name"
 msgstr ""
@@ -7209,13 +7201,6 @@ msgid ""
 msgstr ""
 "Möchten Sie den Nutzern erlauben, eine freiwillige Spende zu ihrer "
 "Registrierungsgebühr hinzuzufügen"
-
-msgid ""
-"Indicate the date when registration opens. Leave blank to not open "
-"registrations"
-msgstr ""
-"Geben Sie das Datum an, an dem die Anmeldung geöffnet wird. Leer lassen, um "
-"keine Anmeldungen zu öffnen"
 
 msgid ""
 "Lets players submit character preferences, then finds the optimal overall "
@@ -7857,6 +7842,13 @@ msgstr ""
 "Möchten Sie sich von unseren Kommunikationslisten abmelden? <a "
 "href='%(url)s'>Abmelden</a>"
 
+msgid ""
+"Enter the date and time when registrations open - leave blank to keep "
+"registrations closed"
+msgstr ""
+"Geben Sie das Datum und die Uhrzeit ein, zu der Anmeldungen geöffnet werden "
+"- lassen Sie das Feld leer, um Anmeldungen geschlossen zu halten"
+
 #, python-format
 msgid ""
 "There are quest types without quests: %(list)s. Create them in the quests "
@@ -8271,6 +8263,13 @@ msgstr ""
 "Benutzer aktivieren, die einen Termin verpassen"
 
 msgid ""
+"Insert the link to an external tool where users will be redirected if they "
+"are not yet registered"
+msgstr ""
+"Fügen Sie den Link zu einem externen Tool ein, an das die Benutzer "
+"weitergeleitet werden, wenn sie noch nicht registriert sind"
+
+msgid ""
 "Lets you specify a date (and time) on which registration will open, keeping "
 "it closed until then."
 msgstr ""
@@ -8395,6 +8394,14 @@ msgid ""
 msgstr ""
 "Ermöglicht es Ihnen, Abschnitte im Anmeldeformular zu definieren und Fragen "
 "zu gruppieren, um lange Formulare übersichtlicher zu gestalten."
+
+msgid ""
+"This code is used to generate the secret registration link, you may keep the"
+" default or customize it"
+msgstr ""
+"Dieser Code wird verwendet, um den geheimen Registrierungslink zu "
+"generieren. Sie können die Standardeinstellung beibehalten oder den Code "
+"anpassen"
 
 msgid ""
 "This page shows the conversation with a player concerning a need of them. "
@@ -8701,13 +8708,6 @@ msgid ""
 msgstr ""
 "Führt täglich Aufzeichnungen über den Finanzstatus der Organisation und der "
 "Veranstaltungen und zeigt Trenddiagramme im Zeitverlauf an."
-
-msgid ""
-"This code will be used to generate the secret registration links. You can "
-"leave it as it is or customise it"
-msgstr ""
-"Dieser Code wird verwendet, um die geheimen Registrierungslinks zu "
-"generieren. Sie können ihn unverändert lassen oder anpassen"
 
 msgid ""
 "To activate new features and enhance the functionality of the platform, "

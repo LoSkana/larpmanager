@@ -984,11 +984,6 @@ class OrgaQuickSetupForm(QuickSetupForm):
                 _("Early registration link"),
                 _("Do you want to enable a secret registration link to allow early sign-ups"),
             ),
-            "register_link": (
-                True,
-                _("External registration"),
-                _("Do you want to handle the initial registration process using an external tool"),
-            ),
             "player_cancellation": (
                 True,
                 _("Signup cancellation"),

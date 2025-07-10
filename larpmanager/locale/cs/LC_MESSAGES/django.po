@@ -1617,6 +1617,9 @@ msgstr "Levé kolo"
 msgid "Run balance"
 msgstr "Rozpočet na provoz"
 
+msgid "Secret code"
+msgstr "Tajný kód"
+
 msgid "Secret link"
 msgstr "Tajný odkaz"
 
@@ -2653,9 +2656,6 @@ msgstr "Úkoly a vlastnosti"
 
 msgid "Redeem collection"
 msgstr "Sbírka Redeem"
-
-msgid "Registration code"
-msgstr "Vstupní kód"
 
 msgid "Registration form"
 msgstr "Registrační formulář"
@@ -4559,9 +4559,6 @@ msgstr "Pokud si již nepřejete účastnit se, můžete"
 msgid "If you wish to update your personal data"
 msgstr "Pokud si přejete aktualizovat své osobní údaje"
 
-msgid "Indicates the date on which the run ends"
-msgstr "Uvádí datum ukončení běhu"
-
 msgid "Manage badges and assign them to players"
 msgstr "Správa odznaků a jejich přidělování hráčům"
 
@@ -4664,9 +4661,6 @@ msgstr "Na který den budete potřebovat dopravu"
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Pokud je zaškrtnuto: zobrazí žánr pro každou událost"
-
-msgid "Indicates the date on which the run starts"
-msgstr "Uvádí datum zahájení běhu"
 
 msgid "Manage collections participated by players"
 msgstr "Správa sbírek, kterých se účastní hráči"
@@ -4933,6 +4927,9 @@ msgstr "Nyní můžete nastavit externí registrační odkaz"
 
 msgid "Photo (clear and understandable) of the object"
 msgstr "Fotografie (jasná a srozumitelná) objektu"
+
+msgid "Registered users will be granted normal access"
+msgstr "Registrovaní uživatelé budou mít běžný přístup"
 
 msgid "Remember to put recipients separated by commas"
 msgstr "Nezapomeňte příjemce oddělit čárkami"
@@ -6627,12 +6624,6 @@ msgstr ""
 "Nesouhlasí znaky týkající se místa narození (zkontrolujte přesnou obec)"
 
 msgid ""
-"Do you want to handle the initial registration process using an external "
-"tool"
-msgstr ""
-"Chcete zpracovat proces počáteční registrace pomocí externího nástroje"
-
-msgid ""
 "Enables field 'title', a short (2-3 words) text added to the character's "
 "name"
 msgstr "Povoluje pole \"title\", krátký (2-3 slova) text přidaný ke jménu postavy"
@@ -6831,13 +6822,6 @@ msgid ""
 " fee"
 msgstr ""
 "Chcete uživatelům umožnit přidat k registračnímu poplatku dobrovolný dar"
-
-msgid ""
-"Indicate the date when registration opens. Leave blank to not open "
-"registrations"
-msgstr ""
-"Uveďte datum zahájení registrace. Nechte prázdné, aby se registrace "
-"neotevřely"
 
 msgid ""
 "Lets players submit character preferences, then finds the optimal overall "
@@ -7438,6 +7422,13 @@ msgstr ""
 "Chcete se odhlásit z našich komunikačních seznamů? <a "
 "href='%(url)s'>Odhlásit se</a>"
 
+msgid ""
+"Enter the date and time when registrations open - leave blank to keep "
+"registrations closed"
+msgstr ""
+"Zadejte datum a čas otevření registrací - pokud chcete, aby byly registrace "
+"uzavřené, nechte prázdné"
+
 #, python-format
 msgid ""
 "There are quest types without quests: %(list)s. Create them in the quests "
@@ -7841,6 +7832,13 @@ msgstr ""
 " uživatele, kteří zmeškají termín"
 
 msgid ""
+"Insert the link to an external tool where users will be redirected if they "
+"are not yet registered"
+msgstr ""
+"Vložení odkazu na externí nástroj, kam budou uživatelé přesměrováni, pokud "
+"ještě nejsou zaregistrováni"
+
+msgid ""
 "Lets you specify a date (and time) on which registration will open, keeping "
 "it closed until then."
 msgstr ""
@@ -7962,6 +7960,13 @@ msgid ""
 msgstr ""
 "Umožňuje definovat sekce v registračním formuláři a seskupovat otázky, aby "
 "byly dlouhé formuláře přehlednější."
+
+msgid ""
+"This code is used to generate the secret registration link, you may keep the"
+" default or customize it"
+msgstr ""
+"Tento kód slouží k vygenerování tajného registračního odkazu, můžete jej "
+"ponechat ve výchozím nastavení nebo si jej přizpůsobit"
 
 msgid ""
 "This page shows the conversation with a player concerning a need of them. "
@@ -8265,13 +8270,6 @@ msgid ""
 msgstr ""
 "Denně zaznamenává finanční stav organizace a událostí a zobrazuje grafy "
 "vývoje v čase."
-
-msgid ""
-"This code will be used to generate the secret registration links. You can "
-"leave it as it is or customise it"
-msgstr ""
-"Tento kód se použije k vygenerování tajných registračních odkazů. Můžete jej"
-" ponechat tak, jak je, nebo si jej přizpůsobit"
 
 msgid ""
 "To activate new features and enhance the functionality of the platform, "

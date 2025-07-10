@@ -1120,7 +1120,7 @@
     descr: ''
     slug: orga_reload_cache
     overall: false
-    module: 10
+    module: 3
     placeholder: true
     order: 9999
     after_text: null
