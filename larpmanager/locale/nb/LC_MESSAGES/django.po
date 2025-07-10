@@ -1617,6 +1617,9 @@ msgstr "Venstre hjul"
 msgid "Run balance"
 msgstr "Kjør budsjett"
 
+msgid "Secret code"
+msgstr "Hemmelig kode"
+
 msgid "Secret link"
 msgstr "Hemmelig lenke"
 
@@ -2653,9 +2656,6 @@ msgstr "Oppdrag og egenskaper"
 
 msgid "Redeem collection"
 msgstr "Løs inn samlingen"
-
-msgid "Registration code"
-msgstr "Inngangskode"
 
 msgid "Registration form"
 msgstr "Registreringsskjema"
@@ -4561,9 +4561,6 @@ msgstr "Hvis du ikke lenger ønsker å delta, kan du"
 msgid "If you wish to update your personal data"
 msgstr "Hvis du ønsker å oppdatere personopplysningene dine"
 
-msgid "Indicates the date on which the run ends"
-msgstr "Angir datoen da kjøringen avsluttes"
-
 msgid "Manage badges and assign them to players"
 msgstr "Administrer merker og tildel dem til spillere"
 
@@ -4666,9 +4663,6 @@ msgstr "For hvilken dag trenger du transport"
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Hvis avkrysset: viser sjangeren for hvert arrangement"
-
-msgid "Indicates the date on which the run starts"
-msgstr "Angir datoen da kjøringen starter"
 
 msgid "Manage collections participated by players"
 msgstr "Administrere samlinger som spillere har deltatt i"
@@ -4936,6 +4930,9 @@ msgstr "Nå kan du angi den eksterne registreringslenken"
 
 msgid "Photo (clear and understandable) of the object"
 msgstr "Foto (tydelig og forståelig) av objektet"
+
+msgid "Registered users will be granted normal access"
+msgstr "Registrerte brukere vil få normal tilgang"
 
 msgid "Remember to put recipients separated by commas"
 msgstr "Husk å sette mottakere atskilt med komma"
@@ -6715,13 +6712,6 @@ msgstr ""
 "Tegn knyttet til fødested stemmer ikke overens (sjekk nøyaktig kommune)"
 
 msgid ""
-"Do you want to handle the initial registration process using an external "
-"tool"
-msgstr ""
-"Ønsker du å håndtere den innledende registreringsprosessen ved hjelp av et "
-"eksternt verktøy"
-
-msgid ""
 "Enables field 'title', a short (2-3 words) text added to the character's "
 "name"
 msgstr ""
@@ -6932,13 +6922,6 @@ msgid ""
 msgstr ""
 "Ønsker du å tillate brukere å legge til en frivillig donasjon til "
 "registreringsavgiften"
-
-msgid ""
-"Indicate the date when registration opens. Leave blank to not open "
-"registrations"
-msgstr ""
-"Angi dato for når registreringen åpner. La stå tomt for ikke å åpne "
-"registreringer"
 
 msgid ""
 "Lets players submit character preferences, then finds the optimal overall "
@@ -7560,6 +7543,13 @@ msgstr ""
 "Ønsker du å melde deg av våre kommunikasjonslister? <a href='%(url)s'>Avmeld"
 " deg</a>"
 
+msgid ""
+"Enter the date and time when registrations open - leave blank to keep "
+"registrations closed"
+msgstr ""
+"Angi dato og klokkeslett for når registreringene åpnes - la det stå tomt for"
+" å holde registreringene stengt"
+
 #, python-format
 msgid ""
 "There are quest types without quests: %(list)s. Create them in the quests "
@@ -7973,6 +7963,13 @@ msgstr ""
 "brukere som overskrider en tidsfrist"
 
 msgid ""
+"Insert the link to an external tool where users will be redirected if they "
+"are not yet registered"
+msgstr ""
+"Sett inn lenken til et eksternt verktøy der brukerne blir omdirigert hvis de"
+" ennå ikke er registrert"
+
+msgid ""
 "Lets you specify a date (and time) on which registration will open, keeping "
 "it closed until then."
 msgstr ""
@@ -8097,6 +8094,13 @@ msgid ""
 msgstr ""
 "Her kan du definere seksjoner i registreringsskjemaet og gruppere spørsmål "
 "for å gjøre lange skjemaer mer oversiktlige."
+
+msgid ""
+"This code is used to generate the secret registration link, you may keep the"
+" default or customize it"
+msgstr ""
+"Denne koden brukes til å generere den hemmelige registreringslenken, du kan "
+"beholde standardinnstillingen eller tilpasse den"
 
 msgid ""
 "This page shows the conversation with a player concerning a need of them. "
@@ -8400,13 +8404,6 @@ msgid ""
 msgstr ""
 "Fører daglig oversikt over organisasjonens og arrangementenes økonomiske "
 "status, og viser trendgrafer over tid."
-
-msgid ""
-"This code will be used to generate the secret registration links. You can "
-"leave it as it is or customise it"
-msgstr ""
-"Denne koden brukes til å generere de hemmelige registreringslenkene. Du kan "
-"la den være som den er, eller tilpasse den"
 
 msgid ""
 "To activate new features and enhance the functionality of the platform, "

@@ -325,10 +325,6 @@ form ul li input[type="checkbox"] {
     border: none;
 }
 
-.nav .lm_tooltiptext{
-    line-height:150%;
-}
-
 p {
     margin: 0.5em;
 }
@@ -528,50 +524,8 @@ input[type="datetime_p"]:focus {
   display: inline;
 }
 
-.lm_tooltip .lm_tooltiptext {
-  font-size:100%;
-  visibility: hidden;
-  padding: 0.5em;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -100px;
-  width: 200px;
-  height: auto;
-  opacity: 0;
-  transition: opacity 0.3s;
-  line-height: 1;
-}
-
-@media screen and (max-width: 736px) {
-    .lm_tooltip .lm_tooltiptext {
-        display: none;
-    }
-}
-
-.lm_tooltip .lm_tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
-
-.lm_tooltip:hover .lm_tooltiptext {
-  visibility: visible;
-  opacity: 1;
-}
-
-.lm_tooltip a img {
-    height: 1em;
+.lm_tooltiptext {
+    display: none;
 }
 
 /*** show_char ***/
@@ -660,11 +614,6 @@ input[type="datetime_p"]:focus {
     font-size: large;
 }
 
-.writing .lm_tooltiptext {
-  margin-left: -250px;
-  width: 500px;
-}
-
 .writing th, .writing td {
     padding: 1em;
 }
@@ -687,12 +636,6 @@ input[type="datetime_p"]:focus {
     float: left;
     margin-bottom: 2em;
     text-align: center;
-}
-
-.gallery .badge .lm_tooltiptext {
-  margin-left: -75px;
-  width: 150px;
-  bottom: 65%;
 }
 
 .single .el {
@@ -1240,24 +1183,6 @@ body.loaded .fade-in {
         font-size: 120%;
         bottom: auto;
         top: 1em;
-    }
-
-    .gallery .badge .lm_tooltiptext {
-        font-size: 110%;
-        position: absolute;
-        bottom: 1em;
-        z-index: 9;
-        left: 0;
-        right: 0;
-        visibility: visible;
-        opacity: 1;
-        top: auto;
-        padding: 0.3em;
-        background-color: rgba(0, 0, 0, 0.7);
-        border: solid 1px rgba(var(--pri-rgb), 0.125);
-        border-radius: 0.5em;
-        margin: 1em;
-        width: 90%;
     }
 
     .relationships {

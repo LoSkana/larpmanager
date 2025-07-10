@@ -161,6 +161,7 @@ $(document).ready(function() {
         }
     });
 
+    lm_tooltip();
 
     $(':input[type="date_p"]').datetimepicker({
         format:'Y-m-d',
@@ -327,6 +328,32 @@ function reload_has_char(parent='') {
 
 }
 
+function lm_tooltip() {
+
+    $('.lm_tooltip').each(function() {
+
+        $(this).qtip({
+            content: {
+                text: $(this).children('.lm_tooltiptext')
+            }, style: {
+                classes: 'qtip-dark qtip-rounded qtip-shadow'
+            }, hide: {
+                effect: function(offset) {
+                    $(this).fadeOut(500);
+                }
+            }, show: {
+                effect: function(offset) {
+                    $(this).fadeIn(500);
+                }
+            }, position: {
+                my: 'top center',
+                at: 'bottom center',
+            }
+        });
+    });
+
+}
+
 
 function reload_has_tooltip(parent='') {
 
@@ -422,12 +449,8 @@ function resize_fields() {
 
         var textLength = stripHTML($(this).text()).length;
 
-       $(this).find('.lm_tooltiptext').each(function () {
-           textLength -=   stripHTML($(this).text()).length;
-        });
-
        $(this).find('.popup_text').each(function () {
-           textLength -=   stripHTML($(this).text()).length;
+           textLength -= stripHTML($(this).text()).length;
         });
 
         fontSize = Math.max(50, Math.round(100 - textLength / 7));
