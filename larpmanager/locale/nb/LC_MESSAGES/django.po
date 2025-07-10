@@ -2822,9 +2822,6 @@ msgstr "Aktivering fullført"
 msgid "Are you really sure"
 msgstr "Er du virkelig sikker"
 
-msgid "Ask a new questions"
-msgstr "Still et nytt spørsmål"
-
 msgid "Assigned character!"
 msgstr "Tildelt karakter!"
 
@@ -3161,6 +3158,9 @@ msgstr "Registreringen er ikke åpen"
 
 msgid "Registration sections"
 msgstr "Seksjonene for medlemskap"
+
+msgid "Submit a new question"
+msgstr "Send inn et nytt spørsmål"
 
 msgid "Tax code verification"
 msgstr "Verifisering av skattekode"
@@ -4240,6 +4240,9 @@ msgstr "Krav for %(event)s"
 
 msgid "Review historical financial records"
 msgstr "Gjennomgå historiske regnskaper"
+
+msgid "You can't send messages to yourself"
+msgstr "Du kan ikke sende meldinger til deg selv"
 
 msgid "here the conditions of registration"
 msgstr "her vilkårene for registrering av arrangementet"

@@ -354,6 +354,7 @@ def chat(request, n):
     check_assoc_feature(request, "chat")
     mid = request.user.member.id
     if n == mid:
+        messages.success(request, _("You can't send messages to yourself") + "!")
         return redirect("home")
     ctx = get_member(n)
     yid = ctx["member"].id

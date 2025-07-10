@@ -2822,9 +2822,6 @@ msgstr "Activation terminée"
 msgid "Are you really sure"
 msgstr "Êtes-vous vraiment sûr"
 
-msgid "Ask a new questions"
-msgstr "Poser une nouvelle question"
-
 msgid "Assigned character!"
 msgstr "Personnage assigné !"
 
@@ -3161,6 +3158,9 @@ msgstr "L'inscription n'est pas ouverte"
 
 msgid "Registration sections"
 msgstr "Sections des membres"
+
+msgid "Submit a new question"
+msgstr "Soumettre une nouvelle question"
 
 msgid "Tax code verification"
 msgstr "Vérification du code fiscal"
@@ -4241,6 +4241,9 @@ msgstr "Demande d'indemnisation pour %(event)s"
 
 msgid "Review historical financial records"
 msgstr "Examiner les documents financiers historiques"
+
+msgid "You can't send messages to yourself"
+msgstr "Vous ne pouvez pas vous envoyer de messages à vous-même"
 
 msgid "here the conditions of registration"
 msgstr "ici les conditions d'inscription à l'événement"

@@ -2822,9 +2822,6 @@ msgstr "Aktivace dokončena"
 msgid "Are you really sure"
 msgstr "Jste si opravdu jistý"
 
-msgid "Ask a new questions"
-msgstr "Položit novou otázku"
-
 msgid "Assigned character!"
 msgstr "Přidělená postava!"
 
@@ -3161,6 +3158,9 @@ msgstr "Registrace není otevřena"
 
 msgid "Registration sections"
 msgstr "Sekce členství"
+
+msgid "Submit a new question"
+msgstr "Odeslat novou otázku"
 
 msgid "Tax code verification"
 msgstr "Ověření daňového kódu"
@@ -4240,6 +4240,9 @@ msgstr "Nárok na %(event)s"
 
 msgid "Review historical financial records"
 msgstr "Přezkoumání historických finančních záznamů"
+
+msgid "You can't send messages to yourself"
+msgstr "Nemůžete posílat zprávy sami sobě"
 
 msgid "here the conditions of registration"
 msgstr "zde podmínky registrace na akci"
