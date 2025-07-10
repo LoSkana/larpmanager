@@ -1617,6 +1617,9 @@ msgstr "Linker wiel"
 msgid "Run balance"
 msgstr "Budget uitvoeren"
 
+msgid "Secret code"
+msgstr "Geheime code"
+
 msgid "Secret link"
 msgstr "Geheime link"
 
@@ -2653,9 +2656,6 @@ msgstr "Quests en eigenschappen"
 
 msgid "Redeem collection"
 msgstr "Verzameling inwisselen"
-
-msgid "Registration code"
-msgstr "Toegangscode"
 
 msgid "Registration form"
 msgstr "Registratieformulier"
@@ -4564,9 +4564,6 @@ msgstr "Als je niet langer wilt deelnemen, kun je"
 msgid "If you wish to update your personal data"
 msgstr "Als u uw persoonlijke gegevens wilt bijwerken"
 
-msgid "Indicates the date on which the run ends"
-msgstr "Geeft de datum aan waarop de run eindigt"
-
 msgid "Manage badges and assign them to players"
 msgstr "Beheer badges en wijs ze toe aan spelers"
 
@@ -4669,9 +4666,6 @@ msgstr "Voor welke dag heb je vervoer nodig"
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Indien aangevinkt: toont het genre voor elk evenement"
-
-msgid "Indicates the date on which the run starts"
-msgstr "Geeft de datum aan waarop de run begint"
 
 msgid "Manage collections participated by players"
 msgstr "Collecties beheren waaraan spelers deelnemen"
@@ -4942,6 +4936,9 @@ msgstr "Nu kun je de externe registratielink instellen"
 
 msgid "Photo (clear and understandable) of the object"
 msgstr "Foto (duidelijk en begrijpelijk) van het object"
+
+msgid "Registered users will be granted normal access"
+msgstr "Geregistreerde gebruikers krijgen normale toegang"
 
 msgid "Remember to put recipients separated by commas"
 msgstr "Vergeet niet ontvangers gescheiden door komma's te plaatsen"
@@ -6837,12 +6834,6 @@ msgstr ""
 "exacte gemeente)"
 
 msgid ""
-"Do you want to handle the initial registration process using an external "
-"tool"
-msgstr ""
-"Wil je het eerste registratieproces afhandelen met een extern hulpprogramma"
-
-msgid ""
 "Enables field 'title', a short (2-3 words) text added to the character's "
 "name"
 msgstr ""
@@ -7060,13 +7051,6 @@ msgid ""
 msgstr ""
 "Wil je gebruikers toestaan een vrijwillige donatie toe te voegen aan hun "
 "registratiekosten"
-
-msgid ""
-"Indicate the date when registration opens. Leave blank to not open "
-"registrations"
-msgstr ""
-"Geef de datum aan waarop de registratie wordt geopend. Laat leeg om geen "
-"registraties te openen"
 
 msgid ""
 "Lets players submit character preferences, then finds the optimal overall "
@@ -7703,6 +7687,13 @@ msgstr ""
 "Wilt u zich uitschrijven van onze communicatielijsten? <a "
 "href='%(url)s'>Uitschrijven</a>"
 
+msgid ""
+"Enter the date and time when registrations open - leave blank to keep "
+"registrations closed"
+msgstr ""
+"Voer de datum en tijd in waarop registraties worden geopend - laat leeg om "
+"registraties gesloten te houden"
+
 #, python-format
 msgid ""
 "There are quest types without quests: %(list)s. Create them in the quests "
@@ -8116,6 +8107,13 @@ msgstr ""
 "geregistreerde gebruikers die een deadline missen"
 
 msgid ""
+"Insert the link to an external tool where users will be redirected if they "
+"are not yet registered"
+msgstr ""
+"Voeg de link in naar een externe tool waar gebruikers naartoe worden geleid "
+"als ze nog niet zijn geregistreerd"
+
+msgid ""
 "Lets you specify a date (and time) on which registration will open, keeping "
 "it closed until then."
 msgstr ""
@@ -8240,6 +8238,13 @@ msgid ""
 msgstr ""
 "Hiermee kun je secties in het registratieformulier definiëren en vragen "
 "groeperen om lange formulieren overzichtelijker te maken."
+
+msgid ""
+"This code is used to generate the secret registration link, you may keep the"
+" default or customize it"
+msgstr ""
+"Deze code wordt gebruikt om de geheime registratielink te genereren. Je kunt"
+" de standaard behouden of aanpassen"
 
 msgid ""
 "This page shows the conversation with a player concerning a need of them. "
@@ -8543,13 +8548,6 @@ msgid ""
 msgstr ""
 "Houdt dagelijks de financiële status van de organisatie en evenementen bij "
 "en toont trendgrafieken over een bepaalde periode."
-
-msgid ""
-"This code will be used to generate the secret registration links. You can "
-"leave it as it is or customise it"
-msgstr ""
-"Deze code wordt gebruikt om de geheime registratielinks te genereren. Je "
-"kunt het laten zoals het is of het aanpassen"
 
 msgid ""
 "To activate new features and enhance the functionality of the platform, "
