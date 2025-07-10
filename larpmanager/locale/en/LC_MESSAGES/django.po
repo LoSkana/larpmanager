@@ -5675,7 +5675,7 @@ msgid ""
 "relevant button"
 msgstr ""
 
-msgid "Ask a new questions"
+msgid "Submit a new question"
 msgstr ""
 
 msgid "You can contact us at this"
@@ -8563,6 +8563,9 @@ msgid "Data share removed successfully"
 msgstr ""
 
 msgid "Your membership application was successfully submitted!"
+msgstr ""
+
+msgid "You can't send messages to yourself"
 msgstr ""
 
 msgid "Message sent!"

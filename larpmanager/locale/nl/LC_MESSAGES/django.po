@@ -2822,9 +2822,6 @@ msgstr "Activering voltooid"
 msgid "Are you really sure"
 msgstr "Weet je het echt zeker"
 
-msgid "Ask a new questions"
-msgstr "Stel een nieuwe vraag"
-
 msgid "Assigned character!"
 msgstr "Karakter toegewezen!"
 
@@ -3161,6 +3158,9 @@ msgstr "Registratie niet geopend"
 
 msgid "Registration sections"
 msgstr "Lidmaatschap secties"
+
+msgid "Submit a new question"
+msgstr "Een nieuwe vraag indienen"
 
 msgid "Tax code verification"
 msgstr "Verificatie van de belastingcode"
@@ -4240,6 +4240,9 @@ msgstr "Vordering voor %(event)s"
 
 msgid "Review historical financial records"
 msgstr "Historische financiële gegevens bekijken"
+
+msgid "You can't send messages to yourself"
+msgstr "Je kunt geen berichten naar jezelf sturen"
 
 msgid "here the conditions of registration"
 msgstr "hier de voorwaarden voor registratie voor het evenement"

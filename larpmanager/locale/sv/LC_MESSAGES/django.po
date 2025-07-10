@@ -2822,9 +2822,6 @@ msgstr "Aktiveringen slutförd"
 msgid "Are you really sure"
 msgstr "Är du verkligen säker"
 
-msgid "Ask a new questions"
-msgstr "Ställ en ny fråga"
-
 msgid "Assigned character!"
 msgstr "Tilldelad karaktär!"
 
@@ -3161,6 +3158,9 @@ msgstr "Registreringen är inte öppen"
 
 msgid "Registration sections"
 msgstr "Medlemskapets sektioner"
+
+msgid "Submit a new question"
+msgstr "Skicka in en ny fråga"
 
 msgid "Tax code verification"
 msgstr "Verifiering av skattekod"
@@ -4240,6 +4240,9 @@ msgstr "Krav på %(event)s"
 
 msgid "Review historical financial records"
 msgstr "Granska historiska finansiella poster"
+
+msgid "You can't send messages to yourself"
+msgstr "Du kan inte skicka meddelanden till dig själv"
 
 msgid "here the conditions of registration"
 msgstr "här villkoren för registrering av evenemang"
