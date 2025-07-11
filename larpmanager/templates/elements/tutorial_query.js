@@ -38,6 +38,10 @@ function search_tutorial() {
     });
 
     request.done(function(data) {
+        uglipop({class:'popup_query', source:'html', content: data.answer});
+
+        return;
+
         // links text
         link_text = '';
         data.links.forEach(item => {

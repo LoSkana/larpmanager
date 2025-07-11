@@ -8,6 +8,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.http import JsonResponse
 from django.urls import reverse
+from openai import OpenAI
+from slugify import slugify
 from whoosh.fields import ID, TEXT, Schema
 from whoosh.index import create_in, open_dir
 from whoosh.qparser import QueryParser
@@ -79,6 +81,52 @@ def get_sorted_permissions(model, query):
     return sorted(permissions, key=lambda p: similarity(p["name"], query), reverse=True)
 
 
+client = OpenAI(api_key=conf_settings.OPENAI_API_KEY)
+
+
+def query_openai_larpmanager(user_query, links, tutorials):
+    tutorials_url = reverse("tutorials")
+
+    prompt_lines = ["This is a help request on the LarpManager platform:", user_query, "", "Relevant dashboard links:"]
+
+    for link in links:
+        prompt_lines.append(f"- {link['name']} ({link['href']}): {link['descr']}")
+
+    prompt_lines.append("")
+    prompt_lines.append("Relevant tutorial sections:")
+
+    for tutorial in tutorials:
+        href = f"{tutorials_url}{tutorial['slug']}#{slugify(tutorial['section'])}"
+        prompt_lines.append(f"- {tutorial['title']} > {tutorial['section']} ({href}): {tutorial['snippet']}")
+
+    prompt_lines.append("")
+    prompt_lines.append(
+        "Prepare a concise and accurate answer strictly limited to the LarpManager platform. Detect and use the user's language."
+    )
+
+    content = """
+        Respond using only the provided context. Ignore unrelated requests.
+        First show relevant dashboard links, and then relevant tutorials with the link.
+        Prefer bullet points for clarity.
+        Use an HTML unordered list (<ul><li>) for structure.
+        Format links as <a href=\"...\" target="_blank>text</a>.
+    """
+
+    messages = [
+        {"role": "system", "content": content},
+        {"role": "user", "content": "\n".join(prompt_lines)},
+    ]
+
+    response = client.chat.completions.create(
+        model="gpt-4",
+        messages=messages,
+        temperature=0.2,
+        max_tokens=1000,
+    )
+
+    return response.choices[0].message.content
+
+
 def query_index(request):
     orig_string = request.POST.get("q", "")
     run_id = int(request.POST.get("r", "0"))
@@ -121,4 +169,7 @@ def query_index(request):
             {"slug": r["slug"], "title": r["title"], "section": r["section_title"], "snippet": r["content"][:300]}
             for r in results
         ]
-    return JsonResponse({"tutorials": tutorials, "links": links}, safe=False)
+
+    answer = query_openai_larpmanager(orig_string, links, tutorials)
+
+    return JsonResponse({"answer": answer}, safe=False)

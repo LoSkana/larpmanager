@@ -66,6 +66,7 @@ jellyfish
 lxml
 
 olefile
+openai
 pdfkit
 
 phonenumbers
