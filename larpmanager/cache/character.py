@@ -34,6 +34,7 @@ from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
+    QuestionType,
     QuestionVisibility,
     WritingAnswer,
     WritingChoice,
@@ -170,6 +171,14 @@ def get_character_fields(ctx, only_visible=True):
         el[0]: {"display": el[1], "question_id": el[2]}
         for el in que.order_by("order").values_list("id", "display", "question_id")
     }
+
+    tn = (
+        ctx["event"]
+        .get_elements(WritingQuestion)
+        .filter(typ=QuestionType.TEASER, applicable=QuestionApplicable.CHARACTER)
+    )
+    if tn:
+        ctx["teaser_name"] = tn.first().display
 
 
 def get_searcheable_character_fields(ctx):
