@@ -23,6 +23,7 @@ import shutil
 from typing import Optional
 
 from django.core.cache import cache
+from django.db.models import Q
 from django.db.models.signals import m2m_changed, post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
 
@@ -33,6 +34,7 @@ from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
+    QuestionType,
     QuestionVisibility,
     WritingAnswer,
     WritingChoice,
@@ -154,7 +156,9 @@ def get_character_fields(ctx, only_visible=True):
     # get visible question fields
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
     que = que.filter(applicable=QuestionApplicable.CHARACTER)
-    que = que.exclude(status=QuestionStatus.HIDDEN, visibility=QuestionVisibility.HIDDEN)
+    que = que.exclude(Q(status=QuestionStatus.HIDDEN) | Q(visibility=QuestionVisibility.HIDDEN))
+    if "pdf" in ctx:
+        que = que.exclude(printable=False)
     if only_visible:
         que = que.filter(visibility__in=[QuestionVisibility.SEARCHABLE, QuestionVisibility.PUBLIC])
     ctx["questions"] = {
@@ -167,6 +171,14 @@ def get_character_fields(ctx, only_visible=True):
         el[0]: {"display": el[1], "question_id": el[2]}
         for el in que.order_by("order").values_list("id", "display", "question_id")
     }
+
+    tn = (
+        ctx["event"]
+        .get_elements(WritingQuestion)
+        .filter(typ=QuestionType.TEASER, applicable=QuestionApplicable.CHARACTER)
+    )
+    if tn:
+        ctx["teaser_name"] = tn.first().display
 
 
 def get_searcheable_character_fields(ctx):

@@ -17,60 +17,15 @@
     </tr>
 </table>
 <h1 id="char_name">{{ sheet_char.name }}</h1>
-{% if sheet_char.title %}<div id="char_title">{{ sheet_char.title | safe }}</div>{% endif %}
-<table class="mob no_csv">
-    <tr>
-        <td>
-            <b>Player</b>: {{ sheet_char.player }}
-        </td>
-        {% if sheet_char.pronoun %}
-            <td>
-                <b>Pronoun</b>: {{ sheet_char.pronoun }}
-            </td>
-        {% endif %}
-        {% if sheet_char.song %}
-            <td>
-                <b>Song</b>: <a href="{{ sheet_char.song }}">link</a>
-            </td>
-        {% endif %}
-        {% if sheet_char.public %}
-            <td>
-                <b>Public</b>: {{ sheet_char.public }}
-            </td>
-        {% endif %}
-        {% if sheet_char.private %}
-            <td>
-                <b>Private</b>: {{ sheet_char.private }}
-            </td>
-        {% endif %}
-    </tr>
-</table>
+
+
+{% include "elements/sheet/presentation.html" %}
 {% include "elements/sheet/fields.html" with char=sheet_char %}
-{% if sheet_char.teaser and show_teaser %}
-    <div class="teaser">
-        <div class="pre-section"></div>
-        <h2 class="title">Presentation</h2>
-        <div class="text">{% show_char sheet_char.teaser run 0 %}</div>
-        <div class="post-section"></div>
-    </div>
-{% endif %}
-{% if features.private_info %}<div>{{ character.private_info | safe }}</div>{% endif %}
-{% if features.px %}
-    {% include "elements/sheet/px.html" %}
-{% endif %}
-{% for g in sheet_factions %}
-    <div class="faction">
-        <div class="pre-section"></div>
-        <h2 class="title">{{ g.name }}</h2>
-        {% if g.text and show_text %}
-            <div class="plot">{% show_char g run 0 %}</div>
-        {% endif %}
-        <div class="post-section"></div>
-    </div>
-    <hr class="clear" />
-{% endfor %}
-<div class="sheet">
-    <div class="pre-section"></div>
-    {% include "elements/sheet/texts.html" with char=sheet_char %}
-    <div class="post-section"></div>
-</div>
+{% include "elements/sheet/teaser.html" %}
+
+<hr />
+
+{% if intro %}<div class="char_intro">{{ intro | safe }}</div>{% endif %}
+{% include "elements/sheet/px.html" %}
+{% include "elements/sheet/factions.html" %}
+{% include "elements/sheet/texts.html" with char=sheet_char %}

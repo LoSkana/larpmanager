@@ -106,14 +106,6 @@ def character(request, s, n, num):
     else:
         get_character_fields(ctx, only_visible=True)
 
-    tn = (
-        ctx["event"]
-        .get_elements(WritingQuestion)
-        .filter(typ=QuestionType.TEASER, applicable=QuestionApplicable.CHARACTER)
-    )
-    if tn:
-        ctx["teaser_name"] = tn.first().display
-
     casting_details(ctx, 0)
     if ctx["casting_show_pref"] and not ctx["char"]["player_id"]:
         ctx["pref"] = get_casting_preferences(ctx["char"]["id"], ctx, 0)

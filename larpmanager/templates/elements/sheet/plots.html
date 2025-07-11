@@ -2,7 +2,9 @@
 {% if show_text %}
     {% for pl in sheet_plots %}
         <h2 class="c">{{ pl.name }}</h2>
-        <div class="plot">{% show_char pl run 1 %}</div>
-        <hr class="clear" />
+        {% if pl.text %}
+            <div class="plot">{% show_char pl run 1 %}</div>
+            <hr class="clear" />
+        {% endif %}
     {% endfor %}
 {% endif %}
