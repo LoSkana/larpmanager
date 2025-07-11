@@ -82,6 +82,7 @@ def orga_characters_sheet_pdf(request, s, n, num):
 def orga_characters_sheet_test(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_characters_pdf")
     get_char_check(request, ctx, num, True)
+    ctx["pdf"] = True
     get_character_sheet(ctx)
     add_pdf_instructions(ctx)
     return render(request, "pdf/sheets/auxiliary.html", ctx)
