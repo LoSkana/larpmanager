@@ -5,6 +5,7 @@
     "javascript-lp-solver": "0.x",
     "language-icons": "0.x",
     "table2csv": "1.x",
-    "tinymce": "7.x"
+    "tinymce": "7.x",
+    "tinymce-i18n": "25.x"
   }
 }
