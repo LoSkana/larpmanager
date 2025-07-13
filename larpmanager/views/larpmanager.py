@@ -139,7 +139,7 @@ def choose_assoc(request, p, slugs):
 
 
 def go_redirect_run(run, p):
-    n_p = f"https://{run.event.assoc.slug}.larpmanager.com/{run.event.slug}/{run.number}/{p}"
+    n_p = f"https://{run.event.assoc.slug}.{run.event.assoc.skin.domain}/{run.event.slug}/{run.number}/{p}"
     return redirect(n_p)
 
 
@@ -333,7 +333,7 @@ def join(request):
         if request.assoc["skin_id"] == 1:
             join_email(assoc)
         # redirect
-        return go_redirect(request, assoc.slug, "manage")
+        return redirect("after_login", subdomain=assoc.slug, path="manage/quick")
 
     return render(request, "larpmanager/larpmanager/join.html", ctx)
 
@@ -509,7 +509,7 @@ def get_run_lm_payment(el):
     el.features = len(get_assoc_features(el.event.assoc_id)) + len(get_event_features(el.event_id))
     el.active_registrations = (
         Registration.objects.filter(run__id=el.id, cancellation_date__isnull=True)
-        .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.WAITING])
+        .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.WAITING, TicketTier.NPC])
         .count()
     )
     if el.plan == LarpManagerPlan.FREE:

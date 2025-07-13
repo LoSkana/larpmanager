@@ -63,7 +63,7 @@ from larpmanager.models.accounting import (
     PaymentStatus,
     PaymentType,
 )
-from larpmanager.models.association import Association
+from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
     Registration,
@@ -79,6 +79,7 @@ from larpmanager.utils.exceptions import (
     check_assoc_feature,
 )
 from larpmanager.utils.fiscal_code import calculate_fiscal_code
+from larpmanager.utils.text import get_assoc_text
 
 
 @login_required
@@ -96,6 +97,8 @@ def accounting(request):
             info_accounting(request, del_ctx)
             el.ctx = del_ctx
             ctx["delegated_todo"] = ctx["delegated_todo"] or del_ctx["payments_todo"]
+
+    ctx["assoc_terms_conditions"] = get_assoc_text(ctx["a_id"], AssocTextType.TOC)
 
     return render(request, "larpmanager/member/accounting.html", ctx)
 

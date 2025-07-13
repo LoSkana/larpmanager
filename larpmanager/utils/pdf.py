@@ -212,6 +212,7 @@ def get_membership_request(ctx):
 
 def print_character(ctx, force=False):
     fp = ctx["character"].get_sheet_filepath(ctx["run"])
+    ctx["pdf"] = True 
     if force or reprint(fp):
         get_character_sheet(ctx)
         add_pdf_instructions(ctx)
@@ -221,6 +222,7 @@ def print_character(ctx, force=False):
 
 def print_character_friendly(ctx, force=False):
     fp = ctx["character"].get_sheet_friendly_filepath(ctx["run"])
+    ctx["pdf"] = True
     if force or reprint(fp):
         get_character_sheet(ctx)
         pdf_template(ctx, "pdf/sheets/friendly.html", fp, True)

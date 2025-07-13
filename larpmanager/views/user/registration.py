@@ -368,7 +368,7 @@ def _apply_ticket(ctx, tk):
     try:
         tick = RegistrationTicket.objects.get(pk=tk)
         ctx["tier"] = tick.tier
-        if tick.tier == TicketTier.STAFF and "closed" in ctx["run"].status:
+        if tick.tier in [TicketTier.STAFF, TicketTier.NPC] and "closed" in ctx["run"].status:
             del ctx["run"].status["closed"]
 
         ctx["ticket"] = tk
@@ -383,7 +383,7 @@ def _check_redirect_registration(request, ctx, event, secret_code):
         return None
 
     if "register_link" in ctx["features"] and event.register_link:
-        if "tier" not in ctx or ctx["tier"] != TicketTier.STAFF:
+        if "tier" not in ctx or ctx["tier"] not in [TicketTier.STAFF, TicketTier.NPC]:
             return redirect(event.register_link)
 
     if "registration_open" in ctx["features"]:

@@ -1,13 +1,13 @@
 {% load show_tags i18n %}
 {% if char.teaser and show_teaser %}
-    <h2>{{ teaser_name }}</h2>
+    <h2 class="c">{{ teaser_name }}</h2>
     <div class="teaser">{% show_char char.teaser run 1 %}</div>
 {% endif %}
 {% for fnum in char.factions %}
     {% with factions|get:fnum as g %}
         {% if not g.typ == 'g' %}
             {% if show_faction and g.number %}
-                <h2>
+                <h2 class="c">
                     <a href="{% url 'faction' event.slug run.number g.number %}">{{ g.name }}</a>
                 </h2>
             {% else %}

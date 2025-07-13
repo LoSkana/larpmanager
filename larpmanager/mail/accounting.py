@@ -24,7 +24,7 @@ from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_assoc_features, get_event_features
-from larpmanager.models.access import get_event_organizers
+from larpmanager.models.access import get_assoc_executives, get_event_organizers
 from larpmanager.models.accounting import (
     AccountingItemCollection,
     AccountingItemDonation,
@@ -422,6 +422,7 @@ def notify_invoice_check(inv):
     # if nothing else applies, simply send to the main mail
     else:
         body, subj = get_invoice_email(inv)
+        activate(get_exec_language(inv.assoc))
         my_send_mail(subj, body, inv.assoc.main_mail, inv)
 
 
@@ -429,7 +430,24 @@ def notify_refund_request(p):
     subj = hdr(p) + _("Request refund from: %(user)s") % {"user": p.member}
     body = _("Details: %(details)s (<b>%(amount).2f</b>)") % {"details": p.details, "amount": p.value}
     # print(subj)
+    activate(get_exec_language(p.assoc))
     my_send_mail(subj, body, p.assoc.main_mail, p.assoc)
+
+
+def get_exec_language(assoc):
+    # get most common language between organizers
+    langs = {}
+    for orga in get_assoc_executives(assoc):
+        lang = orga.language
+        if lang not in langs:
+            langs[lang] = 1
+        else:
+            langs[lang] += 1
+    if langs:
+        max_lang = max(langs, key=langs.get)
+    else:
+        max_lang = "en"
+    return max_lang
 
 
 def get_invoice_email(inv):

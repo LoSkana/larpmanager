@@ -28,6 +28,11 @@
             - {{ run.get_development_display }}
             - <a href="{% url 'register' run.event.slug run.number %}">{{ registration_status }}</a>
         </p>
+        {% if run.registration_secret %}
+            <p>
+                <a href="{% url 'register_exclusive' run.event.slug run.number run.registration_secret %}">{% trans "Secret registration link" %}</a>
+            </p>
+        {% endif %}
         {% if event.parent %}
             <p>
                 <b>{% trans "Campaign" %}:</b> {{ event.parent }}
@@ -90,4 +95,15 @@
 {% endblock content %}
 {% block js %}
     {% include "elements/tutorial_query.js" %}
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+        $(document).ready(function() {
+            {% if open_shortcuts %}
+                if ($('#sidebar-mobile').is(':visible')) {
+                    $('body').toggleClass('is-sidebar-visible');
+                }
+            {% endif %}
+        });
+    });
+    </script>
 {% endblock js %}

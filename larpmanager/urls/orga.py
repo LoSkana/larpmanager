@@ -41,6 +41,11 @@ urlpatterns = [
         name="manage",
     ),
     path(
+        "<slug:s>/<int:n>/manage/quick/",
+        views_oe.orga_quick,
+        name="orga_quick",
+    ),
+    path(
         "<slug:s>/<int:n>/manage/pre_registrations/",
         views_or.orga_pre_registrations,
         name="orga_pre_registrations",
@@ -234,11 +239,6 @@ urlpatterns = [
         "<slug:s>/<int:n>/manage/cancellations/<int:num>/refund/",
         views_or.orga_cancellation_refund,
         name="orga_cancellation_refund",
-    ),
-    path(
-        "<slug:s>/<int:n>/manage/registration/secret/",
-        views_or.orga_registration_secret,
-        name="orga_registration_secret",
     ),
     path(
         "<slug:s>/<int:n>/manage/registrations/member",
@@ -704,11 +704,6 @@ urlpatterns = [
         "<slug:s>/<int:n>/manage/progress_steps/order/<int:num>/",
         views_ow.orga_progress_steps_order,
         name="orga_progress_steps_order",
-    ),
-    path(
-        "<slug:s>/<int:n>/manage/translate",
-        views_oms.orga_translate,
-        name="orga_translate",
     ),
     path(
         "<slug:s>/<int:n>/manage/px/deliveries/",

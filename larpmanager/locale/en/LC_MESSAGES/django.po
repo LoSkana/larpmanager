@@ -306,6 +306,16 @@ msgstr ""
 msgid "If checked: shows the tagline for each event"
 msgstr ""
 
+msgid "Users"
+msgstr ""
+
+msgid "Event history"
+msgstr ""
+
+msgid ""
+"If checked: in the public page of an user shows a list of all events attended"
+msgstr ""
+
 msgid "Email notifications"
 msgstr ""
 
@@ -484,6 +494,14 @@ msgid ""
 "If checked: the system will send reminds the days on which holidays fall"
 msgstr ""
 
+msgid "Charge transaction fees to player"
+msgstr ""
+
+msgid ""
+"If enabled, the system will automatically add payment gateway fees to the "
+"ticket price, so the player covers them instead of the organization"
+msgstr ""
+
 msgid "Disable amount change"
 msgstr ""
 
@@ -552,17 +570,6 @@ msgid ""
 "whole numbers from 0 to 100)"
 msgstr ""
 
-msgid "Payment fees"
-msgstr ""
-
-msgid "Charging the player"
-msgstr ""
-
-msgid ""
-"If checked: the system will add payment fees to the ticket, making the "
-"player pay for them"
-msgstr ""
-
 msgid "Electronic invoice"
 msgstr ""
 
@@ -615,6 +622,61 @@ msgid "Recipient Code"
 msgstr ""
 
 msgid "Intermediary channel code"
+msgstr ""
+
+msgid "Quick Setup"
+msgstr ""
+
+msgid ""
+"This page allows you to perform a quick setup of the most important settings "
+"for your new organization"
+msgstr ""
+
+msgid "Do you want to accept payments processed through the system"
+msgstr ""
+
+msgid "Transaction fees"
+msgstr ""
+
+msgid ""
+"Do you want to add payment gateway fees to the ticket price, so that the "
+"user pays them instead of the organization"
+msgstr ""
+
+msgid "Membership"
+msgstr ""
+
+msgid "Do you want users to join events only after an approval process"
+msgstr ""
+
+msgid "Deadlines"
+msgstr ""
+
+msgid ""
+"Do you want a dashboard to track and manage deadlines missed by registered "
+"users"
+msgstr ""
+
+msgid "Reminders"
+msgstr ""
+
+msgid ""
+"Do you want to enable an automatic email reminder system for registered "
+"users who miss a deadline"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid "Do you want to manage user help requests directly through the platform"
+msgstr ""
+
+msgid "Do you want to allow users to make voluntary donations"
+msgstr ""
+
+msgid ""
+"Do you want to manage campaigns, a series of events that share the same "
+"characters"
 msgstr ""
 
 msgid "You have exceeded the maximum number of selectable options"
@@ -720,6 +782,14 @@ msgid ""
 msgstr ""
 
 msgid "Visualisation"
+msgstr ""
+
+msgid "Show shortcuts"
+msgstr ""
+
+msgid ""
+"If checked: when first accessing the manage page, automatically show "
+"shortcuts on mobile"
 msgstr ""
 
 msgid "Export"
@@ -1190,6 +1260,9 @@ msgstr ""
 msgid "This page allows you to edit event-specific texts"
 msgstr ""
 
+msgid "Text show at the start of all character sheets"
+msgstr ""
+
 msgid "Added to the registration page, before the form"
 msgstr ""
 
@@ -1295,6 +1368,62 @@ msgstr ""
 msgid ""
 "This page allows you to select the features of a template. Click on a "
 "feature to show its description."
+msgstr ""
+
+msgid ""
+"This page allows you to perform a quick setup of the most important settings "
+"for your new event"
+msgstr ""
+
+msgid "Registration opening date"
+msgstr ""
+
+msgid ""
+"Do you want to open registrations at a specific date and time instead of "
+"immediately"
+msgstr ""
+
+msgid "Early registration link"
+msgstr ""
+
+msgid ""
+"Do you want to enable a secret registration link to allow early sign-ups"
+msgstr ""
+
+msgid "Do you want to allow users to cancel their registrations on their own"
+msgstr ""
+
+msgid "Payment installments"
+msgstr ""
+
+msgid ""
+"Do you want to split the registration fee into fixed payment installments"
+msgstr ""
+
+msgid "Payment quotas"
+msgstr ""
+
+msgid "Do you want to split the registration fee into dynamic payment quotas"
+msgstr ""
+
+msgid "Voluntary donation"
+msgstr ""
+
+msgid ""
+"Do you want to allow users to add a voluntary donation to their registration "
+"fee"
+msgstr ""
+
+msgid "Do you want to manage characters assigned to registered players"
+msgstr ""
+
+msgid "Casting algorithm"
+msgstr ""
+
+msgid "Do you want to assign characters using a casting algorithm"
+msgstr ""
+
+msgid "Do you want to allow players to create their own characters"
 msgstr ""
 
 msgid "Ability"
@@ -2190,9 +2319,6 @@ msgid ""
 "Let us know if you encounter any problems, or if we can help in any way!"
 msgstr ""
 
-msgid "Deadlines"
-msgstr ""
-
 msgid "Review the users that are missing the event's deadlines"
 msgstr ""
 
@@ -2203,9 +2329,6 @@ msgid "This feature is available for non-waiting tickets!"
 msgstr ""
 
 msgid "not visible at this time"
-msgstr ""
-
-msgid "Welcome"
 msgstr ""
 
 msgid "Statement"
@@ -2453,9 +2576,6 @@ msgstr ""
 msgid "Registration mail"
 msgstr ""
 
-msgid "Membership"
-msgstr ""
-
 msgid "Statute"
 msgstr ""
 
@@ -2548,6 +2668,14 @@ msgstr ""
 msgid "External register link"
 msgstr ""
 
+msgid ""
+"Insert the link to an external tool where users will be redirected if they "
+"are not yet registered"
+msgstr ""
+
+msgid "Registered users will be granted normal access"
+msgstr ""
+
 msgid "Number of primary spots"
 msgstr ""
 
@@ -2613,29 +2741,20 @@ msgstr ""
 msgid "Start date"
 msgstr ""
 
-msgid "Indicates the date on which the run starts"
-msgstr ""
-
 msgid "End date"
 msgstr ""
 
-msgid "Indicates the date on which the run ends"
+msgid ""
+"Enter the date and time when registrations open - leave blank to keep "
+"registrations closed"
 msgstr ""
 
-msgid "Registration opening date"
+msgid "Secret code"
 msgstr ""
 
 msgid ""
-"Indicate the date when registration opens. Leave blank to not open "
-"registrations"
-msgstr ""
-
-msgid "Registration code"
-msgstr ""
-
-msgid ""
-"This code will be used to generate the secret registration links. You can "
-"leave it as it is or customise it"
+"This code is used to generate the secret registration link, you may keep the "
+"default or customize it"
 msgstr ""
 
 msgid ""
@@ -4227,14 +4346,6 @@ msgstr ""
 msgid "Terms and Conditions of registration"
 msgstr ""
 
-msgid "Foreign language"
-msgstr ""
-
-msgid ""
-"Warning. This event is in a different language than the one set in your "
-"profile"
-msgstr ""
-
 msgid "If you have a discount code, enter it here and press enter"
 msgstr ""
 
@@ -4589,9 +4700,7 @@ msgid ""
 "activities to be monitored, and the list of users to be solicited"
 msgstr ""
 
-msgid ""
-"This page shows all the events saved in the system. From here you can edit "
-"them, or create new ones"
+msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""
 
 msgid "Event link"
@@ -4679,12 +4788,7 @@ msgstr ""
 msgid "this link"
 msgstr ""
 
-msgid "Users"
-msgstr ""
-
-msgid ""
-"This page shows all the runs saved in the system. From here you can edit "
-"them, or create new ones"
+msgid "This page shows all runs; you can edit them, or create new ones"
 msgstr ""
 
 msgid "Show past runs"
@@ -4694,8 +4798,7 @@ msgid "Registration link"
 msgstr ""
 
 msgid ""
-"This page summarises all template events in the system. From here you can "
-"edit them, or create new ones"
+"This page shows all event templates; you can edit them, or create new ones"
 msgstr ""
 
 msgid "Add"
@@ -5196,6 +5299,9 @@ msgstr ""
 msgid "Event status"
 msgstr ""
 
+msgid "Secret registration link"
+msgstr ""
+
 msgid ""
 "Total amount of money received for this event, minus commission fees and "
 "refunds"
@@ -5569,7 +5675,7 @@ msgid ""
 "relevant button"
 msgstr ""
 
-msgid "Ask a new questions"
+msgid "Submit a new question"
 msgstr ""
 
 msgid "You can contact us at this"
@@ -5786,7 +5892,7 @@ msgstr ""
 msgid "Private message"
 msgstr ""
 
-msgid "Events played"
+msgid "Events attended"
 msgstr ""
 
 msgid "Show all"
@@ -6360,14 +6466,6 @@ msgid ""
 "concerning the event"
 msgstr ""
 
-msgid "Secret registration link"
-msgstr ""
-
-msgid ""
-"Here is the secret registration code: only users accessing from this address "
-"will be able to register"
-msgstr ""
-
 msgid "Event texts"
 msgstr ""
 
@@ -6785,6 +6883,9 @@ msgstr ""
 msgid "Italian features"
 msgstr ""
 
+msgid "Experience Points"
+msgstr ""
+
 msgid ""
 "Enables \"Prologues\", short introductory paragraphs for each act of the "
 "game, which players receive to guide them."
@@ -6814,8 +6915,8 @@ msgid "Pay what you want"
 msgstr ""
 
 msgid ""
-"Allows players to add an optional extra amount to their registration fee (e."
-"g. for donations or to help cover others' fees)."
+"Allows players to add an optional extra amount to their registration fee "
+"(e.g. for donations or to help cover others' fees)."
 msgstr ""
 
 msgid "Now you can set the optional amount field"
@@ -6883,24 +6984,12 @@ msgstr ""
 msgid "Now you can start creating speed-larps"
 msgstr ""
 
-msgid "Lets staff access the safety information submitted by players."
-msgstr ""
-
-msgid "Now you can review the safety information submitted by players"
-msgstr ""
-
-msgid "Casting algorithm"
-msgstr ""
-
 msgid ""
 "Lets players submit character preferences, then finds the optimal overall "
 "match."
 msgstr ""
 
 msgid "Now you can set the casting options"
-msgstr ""
-
-msgid "Help"
 msgstr ""
 
 msgid ""
@@ -6923,12 +7012,6 @@ msgid "Enables free pre-registration to events."
 msgstr ""
 
 msgid "Now players can submit preregistrations, and you can review them"
-msgstr ""
-
-msgid "Multi-language"
-msgstr ""
-
-msgid "Allows you to define a different language for each event."
 msgstr ""
 
 msgid ""
@@ -7026,17 +7109,6 @@ msgid ""
 msgstr ""
 
 msgid "Now you can create the waiting ticket"
-msgstr ""
-
-msgid "Event T&C"
-msgstr ""
-
-msgid ""
-"Allows custom Terms and Conditions for a specific event, displayed during "
-"registration."
-msgstr ""
-
-msgid "Now you can set the terms and conditions text"
 msgstr ""
 
 msgid "Player cancellation"
@@ -7159,14 +7231,6 @@ msgstr ""
 msgid "Now you can review the historical accounting informations"
 msgstr ""
 
-msgid "Player Larp History"
-msgstr ""
-
-msgid ""
-"Shows a complete list of all events the player has attended on their public "
-"player page."
-msgstr ""
-
 msgid ""
 "Adds a 'progress' status field (e.g. draft, ready, approved) to key writing "
 "elements."
@@ -7175,26 +7239,12 @@ msgstr ""
 msgid "Now you can create the progress steps"
 msgstr ""
 
-msgid "Lets staff access the diet information submitted by players."
-msgstr ""
-
-msgid "Now you can review the diet information submitted by players"
-msgstr ""
-
 msgid ""
 "Activates a page summarizing overdue players and their deadlines (payments, "
 "memberships, forms, casting, etc.)."
 msgstr ""
 
 msgid "Now you can review the organization's deadlines"
-msgstr ""
-
-msgid "Organization T&C"
-msgstr ""
-
-msgid ""
-"Displays the organisation-wide Terms and Conditions during registration for "
-"all events."
 msgstr ""
 
 msgid ""
@@ -7274,17 +7324,6 @@ msgid ""
 msgstr ""
 
 msgid "Now players can create refund requests, and you can review them"
-msgstr ""
-
-msgid "Transaction fee"
-msgstr ""
-
-msgid ""
-"Lets you define a processing-fee percentage per payment method, optionally "
-"adding it to the final ticket price."
-msgstr ""
-
-msgid "Now you can set the fee for each payment gateway"
 msgstr ""
 
 msgid "Opening date"
@@ -7809,9 +7848,6 @@ msgstr ""
 msgid "Customize buttons in the event navigation bar"
 msgstr ""
 
-msgid "Display secret registration link"
-msgstr ""
-
 msgid "Cache Reloading"
 msgstr ""
 
@@ -7840,6 +7876,9 @@ msgstr ""
 msgid ""
 "Allowed type '%(allowed_type)s' is not a valid type.See https://www.iana.org/"
 "assignments/media-types/media-types.xhtml"
+msgstr ""
+
+msgid "Welcome"
 msgstr ""
 
 msgid "Operation completed"
@@ -8145,14 +8184,6 @@ msgstr ""
 msgid ""
 "There are no payment gateway active, configure them in the payment settings "
 "panel"
-msgstr ""
-
-msgid "Payment fees require payments, activate it in the features panel"
-msgstr ""
-
-msgid ""
-"There are no payment gateway set with a transaction fee, configure them in "
-"the payment settings panel"
 msgstr ""
 
 msgid ""
@@ -8532,6 +8563,9 @@ msgid "Data share removed successfully"
 msgstr ""
 
 msgid "Your membership application was successfully submitted!"
+msgstr ""
+
+msgid "You can't send messages to yourself"
 msgstr ""
 
 msgid "Message sent!"

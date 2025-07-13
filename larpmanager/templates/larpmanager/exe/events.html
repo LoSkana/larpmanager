@@ -4,7 +4,7 @@
     {% trans "Events" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows all the events saved in the system. From here you can edit them, or create new ones" %}.
+    {% trans "This page shows all events; you can edit them, or create new ones" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
@@ -15,9 +15,6 @@
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Run" %}</th>
                 <th>{% trans "Cover" %}</th>
-                {% if 'multi_lang' in assoc.features %}
-                    <th>{% trans "Language" %}</th>
-                {% endif %}
                 <th>{% trans "Link" %}</th>
             </tr>
         </thead>
@@ -38,7 +35,6 @@
                         <div class="img"
                              style="background-image:url({{ el.get_cover_thumb_url }})"></div>
                     </td>
-                    {% if 'multi_lang' in assoc.features %}<td>{{ el.lang }}</td>{% endif %}
                     <td>
                         <a href="{% url 'event' el.slug 1 %}">{% trans "Event link" %}</a>
                         <br />

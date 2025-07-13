@@ -22,14 +22,13 @@ from django import forms
 from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
 from django.forms import Textarea
-from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_character_fields
 from larpmanager.cache.feature import reset_event_features
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
-from larpmanager.forms.feature import FeatureForm
+from larpmanager.forms.feature import FeatureForm, QuickSetupForm
 from larpmanager.forms.utils import (
     AssocMemberS2WidgetMulti,
     CampaignS2Widget,
@@ -86,7 +85,6 @@ class OrgaEventForm(MyForm):
         model = Event
         fields = (
             "name",
-            "lang",
             "slug",
             "tagline",
             "where",
@@ -118,14 +116,6 @@ class OrgaEventForm(MyForm):
             self.fields["slug"].required = True
 
         dl = []
-
-        if "multi_lang" not in self.params["features"]:
-            dl.append("lang")
-        else:
-            self.fields["lang"].required = True
-            self.fields["lang"].choices = conf_settings.LANGUAGES
-            if not self.instance.lang:
-                self.initial["lang"] = translation.get_language()
 
         for s in ["visible", "website", "tagline", "where", "authors", "description", "genre", "register_link"]:
             if s not in self.params["features"]:
@@ -215,6 +205,10 @@ class OrgaConfigForm(ConfigForm):
         self.add_configs("mail_character", ConfigType.BOOL, label, help_text)
 
         self.set_section("visualisation", _("Visualisation"))
+
+        label = _("Show shortcuts")
+        help_text = _("If checked: when first accessing the manage page, automatically show shortcuts on mobile")
+        self.add_configs("show_shortcuts_mobile", ConfigType.BOOL, label, help_text)
 
         label = _("Export")
         help_text = _("If checked: allow to export characters and registration in a easily readable page")
@@ -685,9 +679,6 @@ class OrgaEventTextForm(MyForm):
         if "character" not in self.params["features"]:
             delete_choice.append(EventTextType.INTRO)
 
-        if "event_tac" not in self.params["features"]:
-            delete_choice.append(EventTextType.TOC)
-
         if not self.params["event"].get_config("user_character_approval", False):
             delete_choice.extend(
                 [EventTextType.CHARACTER_PROPOSED, EventTextType.CHARACTER_APPROVED, EventTextType.CHARACTER_REVIEW]
@@ -698,6 +689,7 @@ class OrgaEventTextForm(MyForm):
         self.fields["typ"].choices = ch
 
         help_texts = {
+            EventTextType.INTRO: _("Text show at the start of all character sheets"),
             EventTextType.TOC: _("Terms and conditions of signup, shown in a page linked in the registration form"),
             EventTextType.REGISTER: _("Added to the registration page, before the form"),
             EventTextType.SEARCH: _("Added at the top of the search page of characters"),
@@ -967,3 +959,71 @@ class ExeTemplateRolesForm(OrgaEventRoleForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["members"].required = False
+
+
+class OrgaQuickSetupForm(QuickSetupForm):
+    page_title = _("Quick Setup")
+
+    page_info = _("This page allows you to perform a quick setup of the most important settings for your new event")
+
+    class Meta:
+        model = Event
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.setup = {
+            "registration_open": (
+                True,
+                _("Registration opening date"),
+                _("Do you want to open registrations at a specific date and time instead of immediately"),
+            ),
+            "registration_secret": (
+                True,
+                _("Early registration link"),
+                _("Do you want to enable a secret registration link to allow early sign-ups"),
+            ),
+            "player_cancellation": (
+                True,
+                _("Signup cancellation"),
+                _("Do you want to allow users to cancel their registrations on their own"),
+            ),
+            "reg_installments": (
+                True,
+                _("Payment installments"),
+                _("Do you want to split the registration fee into fixed payment installments"),
+            ),
+            "reg_quotas": (
+                True,
+                _("Payment quotas"),
+                _("Do you want to split the registration fee into dynamic payment quotas"),
+            ),
+            "pay_what_you_want": (
+                True,
+                _("Voluntary donation"),
+                _("Do you want to allow users to add a voluntary donation to their registration fee"),
+            ),
+        }
+        if self.instance.assoc.skin_id == 1:
+            self.setup.update(
+                {
+                    "character": (
+                        True,
+                        _("Characters"),
+                        _("Do you want to manage characters assigned to registered players"),
+                    ),
+                    "casting": (
+                        True,
+                        _("Casting algorithm"),
+                        _("Do you want to assign characters using a casting algorithm"),
+                    ),
+                    "user_character": (
+                        True,
+                        _("Player editor"),
+                        _("Do you want to allow players to create their own characters"),
+                    ),
+                }
+            )
+
+        self.init_fields()

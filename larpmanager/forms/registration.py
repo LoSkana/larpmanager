@@ -278,9 +278,10 @@ class RegistrationForm(BaseRegistrationForm):
         return False
 
     def get_available_tickets(self, event, reg_counts, run):
-        # If the user is registered as a staff, show those options
-        if self.has_ticket(TicketTier.STAFF):
-            return RegistrationTicket.objects.filter(event=event, tier=TicketTier.STAFF).order_by("order")
+        for tier in [TicketTier.STAFF, TicketTier.NPC]:
+            # If the user is registered as a staff, show those options
+            if self.has_ticket(tier):
+                return RegistrationTicket.objects.filter(event=event, tier=tier).order_by("order")
 
         # Check closed inscriptions
         if not self.instance.pk and "closed" in run.status:
@@ -781,9 +782,6 @@ class OrgaRegistrationOptionForm(MyForm):
 
         if "question_id" in self.params:
             self.initial["question"] = self.params["question_id"]
-
-        if "reg_opt_staff_price" not in self.params["features"]:
-            self.delete_field("price_staff")
 
 
 class OrgaRegistrationQuotaForm(MyForm):

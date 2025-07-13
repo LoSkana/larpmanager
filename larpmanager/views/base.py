@@ -19,14 +19,26 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import secrets
 
+from django.contrib.auth.views import LoginView
 from django.core.cache import cache
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
+from larpmanager.forms.member import MyAuthForm
+from larpmanager.utils.common import welcome_user
 from larpmanager.utils.miscellanea import check_centauri
 from larpmanager.utils.tutorial_query import query_index
 from larpmanager.views.larpmanager import lm_home
 from larpmanager.views.user.event import calendar
+
+
+class MyLoginView(LoginView):
+    template_name = "registration/login.html"
+    authentication_form = MyAuthForm
+
+    def form_valid(self, form):
+        welcome_user(self.request, form.get_user())
+        return super().form_valid(form)
 
 
 def home(request, lang=None):
@@ -52,7 +64,17 @@ def after_login(request, subdomain, path=""):
     token = secrets.token_urlsafe(32)
     cache.set(f"session_token:{token}", user.id, timeout=60)
 
-    return redirect(f"https://{subdomain}.larpmanager.com/{path}?token={token}")
+    base_domain = get_base_domain(request)
+    return redirect(f"https://{subdomain}.{base_domain}/{path}?token={token}")
+
+
+def get_base_domain(request):
+    host = request.get_host()
+    parts = host.split(".")
+    domain_parts = 2
+    if len(parts) >= domain_parts:
+        return ".".join(parts[-2:])
+    return host
 
 
 @require_POST

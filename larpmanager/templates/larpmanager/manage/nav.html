@@ -1,6 +1,6 @@
 {% load i18n %}
 {% if event_role or assoc_role %}
-    <div class="nav">
+    <div class="nav manage">
         {% if run.id in all_runs and run.id not in open_runs %}
             <a href="{% url 'manage' run.event.slug run.number %}" class="select">{{ run }}</a>
         {% endif %}

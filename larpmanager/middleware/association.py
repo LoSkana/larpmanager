@@ -55,7 +55,8 @@ class AssociationIdentifyMiddleware:
             else:
                 request.enviro = "test"
 
-            base_domain = "ludomanager.it"
+            # base_domain = "ludomanager.it"
+            base_domain = "larpmanager.com"
 
         assoc_slug = request.session.get("debug_slug", None) or getattr(conf_settings, "SLUG_ASSOC", None) or domain
 

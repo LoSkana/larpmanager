@@ -505,8 +505,6 @@ class RegistrationOption(BaseModel):
 
     order = models.IntegerField(default=0, help_text=_("Order in which the option is shown with respect to the others"))
 
-    price_staff = models.IntegerField(default=0)
-
     def __str__(self):
         return f"{self.question} {self.display[:30]} ({self.price}€)"
 

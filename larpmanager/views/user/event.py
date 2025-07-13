@@ -82,21 +82,19 @@ def calendar(request, lang):
     ctx.update({"open": [], "future": [], "langs": [], "page": "calendar"})
     if lang:
         ctx["lang"] = lang
-    for run in get_coming_runs(aid, lang):
+    for run in get_coming_runs(aid):
         registration_status(run, request.user, my_regs=my_regs)
         if run.status["open"]:
             ctx["open"].append(run)
         elif "already" not in run.status:
             ctx["future"].append(run)
-        if run.event.lang not in ctx["langs"]:
-            ctx["langs"].append(run.event.lang)
 
     ctx["custom_text"] = get_assoc_text(request.assoc["id"], AssocTextType.HOME)
 
     return render(request, "larpmanager/general/calendar.html", ctx)
 
 
-def get_coming_runs(assoc_id, lang=None, future=True):
+def get_coming_runs(assoc_id, future=True):
     runs = (
         Run.objects.exclude(development=DevelopStatus.START)
         .exclude(development=DevelopStatus.CANC)
@@ -111,8 +109,6 @@ def get_coming_runs(assoc_id, lang=None, future=True):
         runs = runs.filter(end__lte=ref.date()).order_by("-end")
     if assoc_id:
         runs = runs.filter(event__assoc_id=assoc_id)
-    if lang:
-        runs = runs.filter(event__lang=lang)
     return runs
 
 
@@ -122,7 +118,7 @@ def home_json(request, lang="it"):
         request.LANGUAGE_CODE = lang
 
     res = []
-    runs = get_coming_runs(aid, lang)
+    runs = get_coming_runs(aid)
     already = []
     for run in runs:
         if run.event.id not in already:

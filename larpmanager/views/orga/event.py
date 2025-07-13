@@ -34,6 +34,7 @@ from larpmanager.forms.event import (
     OrgaEventRoleForm,
     OrgaEventTextForm,
     OrgaFeatureForm,
+    OrgaQuickSetupForm,
     OrgaRunForm,
 )
 from larpmanager.models.access import EventRole
@@ -184,3 +185,8 @@ def orga_deadlines(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_deadlines")
     ctx["res"] = check_run_deadlines([ctx["run"]])[0]
     return render(request, "larpmanager/orga/deadlines.html", ctx)
+
+
+@login_required
+def orga_quick(request, s, n):
+    return orga_edit(request, s, n, "orga_features", OrgaQuickSetupForm, None, "manage", add_ctx={"add_another": False})
