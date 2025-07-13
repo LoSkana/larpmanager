@@ -26,6 +26,7 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
 from django.http import Http404
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from phonenumber_field.modelfields import PhoneNumberField
@@ -304,7 +305,11 @@ class Member(BaseModel):
 
     def __str__(self):
         if self.nickname:
-            return f"{self.nickname} - {self.display_real()}"
+            name = self.display_real()
+            nick = self.nickname
+            if slugify(nick) != slugify(name):
+                name += f"- {nick}"
+            return name
         elif self.name or self.surname:
             return self.display_real()
         else:
