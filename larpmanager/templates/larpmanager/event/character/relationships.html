@@ -39,7 +39,7 @@
                     -
                     {% if el.player_id > 0 %}
                         <b>{% trans "Player" %}:</b>&nbsp;<a href="{% url 'public' el.player_id %}">
-                            {% if run.id in all_runs or run.reg %}
+                            {% if run.id in all_runs %}
                                 {{ el.player_full }}
                             {% else %}
                                 {{ el.player }}
