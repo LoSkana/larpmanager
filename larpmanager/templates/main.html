@@ -298,9 +298,7 @@
                         <div class="info">
                             {% block info %}
                             {% endblock info %}
-                            {% if tutorial %}
-                                (<a href="{% url 'tutorials' %}{{ tutorial }}">Tutorial</a>)
-                            {% endif %}
+                            {% if tutorial %}(<a href="#" class="feature_tutorial" tut="{{ tutorial }}">Tutorial</a>){% endif %}
                         </div>
                         <div class="page_{{ request_func_name }} {% block special %}{% endblock special %}">
                             {% block content %}

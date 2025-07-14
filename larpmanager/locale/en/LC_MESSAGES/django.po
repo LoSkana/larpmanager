@@ -87,10 +87,10 @@ msgstr ""
 msgid "This page allows you to add or edit the expense of a contributor"
 msgstr ""
 
-msgid "This page allows you to add or edit a disbursement entry of"
+msgid "This page allows you to add or edit an assignment of"
 msgstr ""
 
-msgid "This page allows you to add or edit a disbursement credits item"
+msgid "This page allows you to add or edit a credits assignment"
 msgstr ""
 
 msgid "Payments"
@@ -116,10 +116,7 @@ msgstr ""
 msgid "This page allows you to add or edit an invoice"
 msgstr ""
 
-msgid "Disbursment"
-msgstr ""
-
-msgid "Disbursement"
+msgid "Assignment"
 msgstr ""
 
 msgid "Collections"
@@ -429,7 +426,7 @@ msgstr ""
 msgid "Age"
 msgstr ""
 
-msgid "Minimum age of members"
+msgid "Minimum age of members (leave empty for no limit)"
 msgstr ""
 
 msgid "Annual fee"
@@ -1488,6 +1485,11 @@ msgid ""
 "(image or pdf)"
 msgstr ""
 
+msgid ""
+"Optional text to be included in the email sent to the player to notify them "
+"of the approval decision"
+msgstr ""
+
 msgid "Volounteer data"
 msgstr ""
 
@@ -1771,7 +1773,7 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "The sum was disbursed to you as %(credits)s"
+msgid "The sum was assigned to you as %(credits)s"
 msgstr ""
 
 msgid "This is automatically deducted from the registration of a future event"
@@ -1815,9 +1817,7 @@ msgid "Reimbursement payout"
 msgstr ""
 
 #, python-format
-msgid ""
-"Reimbursement of %(amount).2f %(credits)s with reason '%(reason)s' was "
-"disbursed"
+msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr ""
 
 msgid "They will be used automatically when you sign up for a new event"
@@ -1830,19 +1830,7 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "Disbursement %(credits)s"
-msgstr ""
-
-#, python-format
-msgid "%(amount).2f %(credits)s were disbursed with reason \"%(reason)s\"."
-msgstr ""
-
-#, python-format
-msgid "Delivery %(tokens)s"
-msgstr ""
-
-#, python-format
-msgid "%(amount)d %(tokens)s were disbursed with %(reason)s"
+msgid "Assignment %(elements)s"
 msgstr ""
 
 msgid "Donation given"
@@ -2396,10 +2384,10 @@ msgstr ""
 msgid "Refund"
 msgstr ""
 
-msgid "Credit disbursement"
+msgid "Credit assignment"
 msgstr ""
 
-msgid "Dispensing tokens"
+msgid "Tokens assignment"
 msgstr ""
 
 msgid "Type"
@@ -2656,7 +2644,9 @@ msgstr ""
 msgid "The setting / genre of the event"
 msgstr ""
 
-msgid "Cover in rectangular format - aspect ratio 4:3"
+msgid ""
+"Cover image shown on the organization's homepage — rectangular, ideally 4:3 "
+"ratio"
 msgstr ""
 
 msgid "Carousel image"
@@ -2676,27 +2666,37 @@ msgstr ""
 msgid "Registered users will be granted normal access"
 msgstr ""
 
-msgid "Number of primary spots"
+msgid "Max players"
 msgstr ""
 
-msgid "Maximum number of primary spots to be managed (0 for infinite)"
+msgid "Maximum number of player spots (0 = unlimited)"
 msgstr ""
 
-msgid "Number of filler spots"
+msgid "Max fillers"
 msgstr ""
 
-msgid "Maximum number of fillers to manage (0 for infinite)"
+msgid "Maximum number of filler spots (0 = unlimited)"
 msgstr ""
 
-msgid "Number of waiting spots"
+msgid "Max waitings"
 msgstr ""
 
-msgid "Maximum number of waiting spots to manage (0 for infinite)"
+msgid "Maximum number of waiting spots (0 = unlimited)"
 msgstr ""
 
 msgid ""
-"If the event is part of a campaign, specify the parent event whose "
-"characters will be shared"
+"If you select another event, it will be considered in the same campaign, and "
+"they will share the characters"
+msgstr ""
+
+msgid ""
+"if you leave this empty, this can be the starting event of a new campaign"
+msgstr ""
+
+msgid "Background image used across all event pages"
+msgstr ""
+
+msgid "Font used for title texts across all event pages"
 msgstr ""
 
 msgid "Character sheet intro"
@@ -2873,7 +2873,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Indicates the maximum number of times it can be requested (0 for infinite)"
+"Indicates the maximum number of times it can be requested (0 = unlimited)"
 msgstr ""
 
 msgid "Order in which the option is shown with respect to the others"
@@ -3301,7 +3301,7 @@ msgid ""
 "below the application"
 msgstr ""
 
-msgid "Maximum number of tickets available (0 for infinite)"
+msgid "Maximum number of tickets available (0 = unlimited)"
 msgstr ""
 
 msgid "Is it selectable by players"
@@ -4564,9 +4564,12 @@ msgid ""
 "This page prepares the cash balance already formatted for annual declaration"
 msgstr ""
 
+msgid "This page shows the collections opened by players"
+msgstr ""
+
 msgid ""
-"This page shows the collections opened by players. You can update them "
-"indicating the recipient and disburse the money contributed"
+"You can update them by indicating the recipient and assigning the "
+"contributed money"
 msgstr ""
 
 msgid "Show collections"
@@ -4578,7 +4581,7 @@ msgstr ""
 msgid "Organizer"
 msgstr ""
 
-msgid "This page summarises the disbursements recorded in the system of"
+msgid "This page summarises the assignments of"
 msgstr ""
 
 msgid "This page shows all donations recorded in the system"
@@ -4631,18 +4634,16 @@ msgstr ""
 msgid "This page shows all payment items registered in the system"
 msgstr ""
 
-msgid ""
-"This page shows all reimbursement claims submitted by members. You can edit "
-"and approve them as disbursed"
+msgid "This page lists all reimbursement claims submitted by members"
+msgstr ""
+
+msgid "you can review, edit, and mark them as assigned"
 msgstr ""
 
 msgid "Total required"
 msgstr ""
 
 msgid "residues"
-msgstr ""
-
-msgid "Eroga"
 msgstr ""
 
 msgid "This page summarises the system entries of"
@@ -4926,9 +4927,6 @@ msgstr ""
 msgid "Request for"
 msgstr ""
 
-msgid "Refute"
-msgstr ""
-
 msgid ""
 "This page shows email lists of users, divided by their expressed preferences "
 "regarding newsletter communications"
@@ -5011,6 +5009,9 @@ msgid "Collected votes"
 msgstr ""
 
 msgid "List of voters"
+msgstr ""
+
+msgid "Payment Verification"
 msgstr ""
 
 msgid ""
@@ -5164,9 +5165,6 @@ msgid ""
 "directly"
 msgstr ""
 
-msgid "Tutorial"
-msgstr ""
-
 msgid "Video"
 msgstr ""
 
@@ -5220,6 +5218,9 @@ msgstr ""
 msgid "Welcome to"
 msgstr ""
 
+msgid "Quick Help"
+msgstr ""
+
 msgid "What would you like to do"
 msgstr ""
 
@@ -5229,9 +5230,6 @@ msgid ""
 msgstr ""
 
 msgid "Ongoing events"
-msgstr ""
-
-msgid "Quick Help"
 msgstr ""
 
 msgid "Feature activated"
@@ -6010,8 +6008,7 @@ msgstr ""
 msgid "Cancellation date"
 msgstr ""
 
-msgid ""
-"This page summarises the disbursements recorded in the system for this run of"
+msgid "This page summarises the assignments in this run of"
 msgstr ""
 
 msgid "This page shows the discounts activated for this event"
@@ -6023,9 +6020,10 @@ msgstr ""
 msgid "Run active"
 msgstr ""
 
-msgid ""
-"This page summarises all expenses incurred by employees and uploaded to the "
-"system. Once approved, they are disbursed to co-workers as"
+msgid "This page provides a summary of all expenses submitted by collaborators"
+msgstr ""
+
+msgid "once approved, the corresponding amounts are assigned as "
 msgstr ""
 
 msgid "This page shows your personal spending items"
@@ -7056,7 +7054,7 @@ msgid ""
 "an event."
 msgstr ""
 
-msgid "Now you can review all organizations's members"
+msgid "Now you can set membership options"
 msgstr ""
 
 msgid "Shuttle"
@@ -7528,7 +7526,7 @@ msgstr ""
 msgid "Manage collections participated by players"
 msgstr ""
 
-msgid "Audits"
+msgid "Payments Verification"
 msgstr ""
 
 msgid "Verify manually approved payments"
@@ -7635,6 +7633,9 @@ msgid "Archive"
 msgstr ""
 
 msgid "Display all sent e-mails"
+msgstr ""
+
+msgid "quick"
 msgstr ""
 
 msgid "Manage the event settings: name, description,  and other data"
@@ -8105,9 +8106,12 @@ msgstr ""
 msgid "Waiting list registrations"
 msgstr ""
 
+msgid "To create an event, access the events management page"
+msgstr ""
+
 msgid ""
-"There are no active events, to create a new one access the events management "
-"page"
+"To quickly configure your organization's most important settings, access the "
+"quick setup page"
 msgstr ""
 
 msgid ""
@@ -8193,20 +8197,29 @@ msgstr ""
 msgid "The taxes configuration is missing, set them in the configuration panel"
 msgstr ""
 
+msgid ""
+"Create the first character of the event in the character management panel"
+msgstr ""
+
+msgid ""
+"Some activated features need the 'Character' feature, but it isn't active: "
+"access the feature panel"
+msgstr ""
+
+msgid ""
+"Set up the configuration for the creation or editing of characters by the "
+"players in the configuration panel"
+msgstr ""
+
+msgid ""
+"Some activated features need the 'Token / Credit' feature, but it isn't "
+"active: access the feature panel"
+msgstr ""
+
 #, python-format
 msgid ""
 "There are <b>%(number)s</b> characters in proposed status, approve them in "
 "the character management panel"
-msgstr ""
-
-msgid ""
-"The feature 'Safety' requires the safety field to be set in the user "
-"profile, access the organization profile panel"
-msgstr ""
-
-msgid ""
-"The feature 'Diet' requires the diet field to be set in the user profile, "
-"access the organization profile panel"
 msgstr ""
 
 msgid "Set the casting options in the configuration panel"
@@ -8295,6 +8308,11 @@ msgstr ""
 msgid ""
 "You have activated character customization, but no fields has been set; "
 "access the configuration panel"
+msgstr ""
+
+msgid ""
+"To quickly configure your events's most important settings, access the quick "
+"setup page"
 msgstr ""
 
 msgid ""
@@ -8425,7 +8443,7 @@ msgstr ""
 
 msgid ""
 "Request for reimbursement entered! You will receive notice when it is "
-"disbursed"
+"processed."
 msgstr ""
 
 msgid ""

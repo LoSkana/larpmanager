@@ -230,7 +230,7 @@ def feature_description(request):
     if feature.tutorial:
         tutorial = reverse("tutorials") + feature.tutorial
         txt += f"""
-            <iframe src="{_add_in_iframe_param(tutorial)}" width="100%" height="300"></iframe><br /><br />
+            <iframe src="{_add_in_iframe_param(tutorial)}" width="100%" height="100%"></iframe><br /><br />
         """
 
     return JsonResponse({"res": "ok", "txt": txt})
@@ -238,4 +238,4 @@ def feature_description(request):
 
 @login_required
 def exe_quick(request):
-    return exe_edit(request, ExeQuickSetupForm, None, "exe_features", "manage", add_ctx={"add_another": False})
+    return exe_edit(request, ExeQuickSetupForm, None, "exe_quick", "manage", add_ctx={"add_another": False})

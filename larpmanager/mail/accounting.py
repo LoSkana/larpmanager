@@ -101,7 +101,7 @@ def update_accounting_item_expense_pre(sender, instance, **kwargs):
     token_name, credit_name = get_token_credit_name(instance.assoc)
 
     if instance.run and "token_credit" in get_event_features(instance.run.event_id):
-        body += "<br /><br /><i>" + _("The sum was disbursed to you as %(credits)s") % {"credits": credit_name} + "."
+        body += "<br /><br /><i>" + _("The sum was assigned to you as %(credits)s") % {"credits": credit_name} + "."
         body += " " + _("This is automatically deducted from the registration of a future event") + "."
         body += (
             " "
@@ -253,10 +253,10 @@ def notify_refund(credit_name, instance):
     activate(instance.member.language)
     subj = hdr(instance) + _("Reimbursement payout")
     body = (
-        _("Reimbursement of %(amount).2f %(credits)s with reason '%(reason)s' was disbursed")
+        _("Assigned %(amount).2f %(elements)s for '%(reason)s'")
         % {
             "amount": instance.value,
-            "credits": credit_name,
+            "elements": credit_name,
             "reason": instance.descr,
         }
         + "."
@@ -288,16 +288,20 @@ def notify_credit(credit_name, instance):
 
 
 def get_credit_email(credit_name, instance):
-    subj = hdr(instance) + _("Disbursement %(credits)s") % {
-        "credits": credit_name,
+    subj = hdr(instance) + _("Assignment %(elements)s") % {
+        "elements": credit_name,
     }
     if instance.run:
         subj += " " + _("for") + " " + str(instance.run)
-    body = _('%(amount).2f %(credits)s were disbursed with reason "%(reason)s".') % {
-        "amount": instance.value,
-        "credits": credit_name,
-        "reason": instance.descr,
-    }
+    body = (
+        _("Assigned %(amount).2f %(elements)s for '%(reason)s'")
+        % {
+            "amount": instance.value,
+            "elements": credit_name,
+            "reason": instance.descr,
+        }
+        + "."
+    )
     return subj, body
 
 
@@ -317,16 +321,16 @@ def notify_token(instance, token_name):
 
 
 def get_token_email(instance, token_name):
-    subj = hdr(instance) + _("Delivery %(tokens)s") % {
-        "tokens": token_name,
+    subj = hdr(instance) + _("Assignment %(elements)s") % {
+        "elements": token_name,
     }
     if instance.run:
         subj += " " + _("for") + " " + str(instance.run)
     body = (
-        _("%(amount)d %(tokens)s were disbursed with %(reason)s")
+        _("Assigned %(amount).2f %(elements)s for '%(reason)s'")
         % {
             "amount": int(instance.value),
-            "tokens": token_name,
+            "elements": token_name,
             "reason": instance.descr,
         }
         + "."

@@ -244,7 +244,7 @@ class PlotForm(WritingForm, BaseWritingForm):
         for ch in old - new:
             PlotCharacterRel.objects.filter(character_id=ch, plot_id=instance.pk).delete()
         for ch in new - old:
-            PlotCharacterRel.objects.create(character_id=ch, plot_id=instance.pk)
+            PlotCharacterRel.objects.get_or_create(character_id=ch, plot_id=instance.pk)
 
     def save(self, commit=True):
         instance = super().save()

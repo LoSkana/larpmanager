@@ -23,7 +23,7 @@ from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_save, pre_delete
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from larpmanager.models.access import AssocRole, EventRole
@@ -77,6 +77,8 @@ def cache_event_links(request):
     all_runs = Run.objects.filter(event__assoc_id=assoc_id).select_related("event").order_by("end")
     admin = 1 in ctx["assoc_role"]
     for r in all_runs:
+        if r.event.deleted:
+            continue
         roles = None
         if admin:
             roles = [1]
@@ -126,8 +128,8 @@ def post_save_event_links(sender, instance, **kwargs):
     reset_run_event_links(instance)
 
 
-@receiver(pre_delete, sender=Event)
-def pre_delete_event_links(sender, instance, **kwargs):
+@receiver(post_delete, sender=Event)
+def post_delete_event_links(sender, instance, **kwargs):
     reset_run_event_links(instance)
 
 
@@ -136,8 +138,8 @@ def post_save_run_links(sender, instance, **kwargs):
     reset_run_event_links(instance.event)
 
 
-@receiver(pre_delete, sender=Run)
-def pre_delete_run_links(sender, instance, **kwargs):
+@receiver(post_delete, sender=Run)
+def post_delete_run_links(sender, instance, **kwargs):
     reset_run_event_links(instance.event)
 
 

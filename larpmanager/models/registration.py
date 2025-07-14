@@ -74,7 +74,7 @@ class RegistrationTicket(BaseModel):
 
     max_available = models.IntegerField(
         default=0,
-        help_text=_("Maximum number of tickets available (0 for infinite)"),
+        help_text=_("Maximum number of tickets available (0 = unlimited)"),
     )
 
     visible = models.BooleanField(default=True, help_text=_("Is it selectable by players") + "?")

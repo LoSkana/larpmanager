@@ -4,7 +4,8 @@
     {% trans "Request refund" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows all reimbursement claims submitted by members. You can edit and approve them as disbursed" %}
+    {% trans "This page lists all reimbursement claims submitted by members" %};
+    {% trans "you can review, edit, and mark them as assigned" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
@@ -34,7 +35,7 @@
                     <td>{{ el.get_status_display }}</td>
                     <td>
                         {% if el.status != 'p' %}
-                            <a href="{% url 'exe_refunds_confirm' el.id %}">{% trans "Eroga" %}</a>
+                            <a href="{% url 'exe_refunds_confirm' el.id %}">{% trans "Done" %}</a>
                         {% endif %}
                     </td>
                 </tr>

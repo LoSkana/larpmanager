@@ -496,13 +496,6 @@ ul, ol {
     width: 33%;
 }
 
-#tutorials img {
-    max-width: 100%;
-    width: auto;
-    height: auto;
-    margin: auto;
-}
-
 #tutorials ul li {
     padding: 1em;
 }
@@ -1290,11 +1283,15 @@ th select {
     margin-right: 2em;
 }
 
-.explain-icon {
+.explain-icon, .feature_checkbox a {
     font-size: 0.7em;
     vertical-align: top;
     cursor: pointer;
     position: relative;
+}
+
+.feature_checkbox a {
+    margin-left: 0.5em;
 }
 
 .sidebar-link-wrap {
@@ -1693,7 +1690,7 @@ a label:hover {
 }
 
 .popup_tutorial img, #tutorials img {
-    max-width: 100%;
+    max-width: 70%;
     margin: auto;
     height: auto;
 }

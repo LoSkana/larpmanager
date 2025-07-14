@@ -172,7 +172,7 @@ def acc_refund(request):
             p.save()
             notify_refund_request(p)
             messages.success(
-                request, _("Request for reimbursement entered! You will receive notice when it is disbursed") + "."
+                request, _("Request for reimbursement entered! You will receive notice when it is processed.") + "."
             )
             return redirect("accounting")
     else:

@@ -107,8 +107,6 @@ def update_event_features(ev_id):
             for slug in config_names:
                 if ev.get_config(f"{config_type}_{slug}", False):
                     res[slug] = 1
-        if ev.parent:
-            res.update(get_event_features(ev.parent_id))
         return res
     except ObjectDoesNotExist:
         return {}

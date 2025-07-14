@@ -4,7 +4,8 @@
     {% trans "Expenses" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page summarises all expenses incurred by employees and uploaded to the system. Once approved, they are disbursed to co-workers as" %} {{ credit_name }}.
+    {% trans "This page provides a summary of all expenses submitted by collaborators" %};
+    {% trans "once approved, the corresponding amounts are assigned as " %} {{ credit_name }}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}

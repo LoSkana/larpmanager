@@ -99,9 +99,9 @@ def _exe_manage(request):
 
     # if no event active, suggest to create one
     if not ctx["ongoing_runs"]:
-        _add_suggestion(
+        _add_action(
             ctx,
-            _("There are no active events, to create a new one access the events management page"),
+            _("To create an event, access the events management page"),
             "exe_events",
         )
 
@@ -123,6 +123,7 @@ def _exe_manage(request):
 
 def _exe_suggestions(ctx):
     suggestions = {
+        "exe_quick": _("To quickly configure your organization's most important settings, access the quick setup page"),
         "exe_payment_details": _(
             "To set up the gateway payment available to players, to let them pay the registration fee through the platform, "
             "access the payment settings management page"
@@ -292,6 +293,45 @@ def _orga_manage(request, s, n):
 
 
 def _orga_actions(request, ctx, assoc):
+    # if there are no characters, suggest to do it
+    features = get_event_features(ctx["event"].id)
+
+    if "character" in features:
+        if not Character.objects.filter(event=ctx["event"]).count():
+            _add_action(
+                ctx,
+                _("Create the first character of the event in the character management panel"),
+                "orga_characters",
+            )
+
+    elif set(features) & {"faction", "plot", "casting", "user_character", "px", "custom_character", "questbuilder"}:
+        _add_action(
+            ctx,
+            _("Some activated features need the 'Character' feature, but it isn't active: access the feature panel"),
+            "orga_features",
+        )
+
+    if "user_character" in features:
+        if ctx["event"].get_config("user_character_max", "") == "":
+            _add_action(
+                ctx,
+                _(
+                    "Set up the configuration for the creation or editing of characters by the players in the configuration panel"
+                ),
+                "orga_character",
+                "config/user_character",
+            )
+
+    if "token_credit" not in features:
+        if set(features) & {"expense", "refund", "collection"}:
+            _add_action(
+                ctx,
+                _(
+                    "Some activated features need the 'Token / Credit' feature, but it isn't active: access the feature panel"
+                ),
+                "orga_features",
+            )
+
     char_proposed = ctx["event"].get_elements(Character).filter(status=CharacterStatus.PROPOSED).count()
     if char_proposed:
         _add_action(
@@ -321,8 +361,6 @@ def _orga_actions(request, ctx, assoc):
             "orga_invoices",
         )
 
-    features = get_event_features(ctx["event"].id)
-
     _orga_user_actions(ctx, features, request, assoc)
 
     _orga_reg_acc_actions(ctx, features)
@@ -343,28 +381,6 @@ def _orga_user_actions(ctx, features, request, assoc):
                 _("There are <b>%(number)s</b> questions to answer, access the users questions management panel")
                 % {"number": len(open_q)},
                 "exe_questions",
-            )
-
-    fields = assoc.mandatory_fields + ", " + assoc.optional_fields
-
-    if "safety" in features:
-        if "safety" not in fields:
-            _add_action(
-                ctx,
-                _(
-                    "The feature 'Safety' requires the safety field to be set in the user profile, access the organization profile panel"
-                ),
-                "exe_profile",
-            )
-
-    if "diet" in features:
-        if "diet" not in fields:
-            _add_action(
-                ctx,
-                _(
-                    "The feature 'Diet' requires the diet field to be set in the user profile, access the organization profile panel"
-                ),
-                "exe_profile",
             )
 
 
@@ -559,6 +575,7 @@ def _orga_reg_actions(ctx, features):
 
 def _orga_suggestions(ctx):
     suggestions = {
+        "orga_quick": _("To quickly configure your events's most important settings, access the quick setup page"),
         "orga_registration_tickets": _(
             "To set the tickets that users can select during registration, access the tickets management page"
         ),

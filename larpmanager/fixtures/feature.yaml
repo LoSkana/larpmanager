@@ -265,8 +265,8 @@
     module: 8
     placeholder: false
     order: 40
-    after_text: Now you can review all organizations's members
-    after_link: exe_membership
+    after_text: Now you can set membership options
+    after_link: config/membership
 - model: larpmanager.feature
   pk: 46
   fields:
@@ -1286,6 +1286,18 @@
     name: Orga Event
     descr: ''
     slug: orga_event
+    overall: false
+    module: 9
+    placeholder: true
+    order: 9999
+    after_text: null
+    after_link: null
+- model: larpmanager.feature
+  pk: 216
+  fields:
+    name: Quick Setup
+    descr: ''
+    slug: quick_setup
     overall: false
     module: 9
     placeholder: true

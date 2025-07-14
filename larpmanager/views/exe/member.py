@@ -139,8 +139,8 @@ def exe_membership_evaluation(request, num):
     if request.method == "POST":
         form = MembershipResponseForm(request.POST)
         if form.is_valid():
-            resp = request.POST["response"]
-            if request.POST["approved"] == "1":
+            resp = form.cleaned_data["response"]
+            if form.cleaned_data["is_approved"]:
                 member.membership.status = MembershipStatus.ACCEPTED
                 member.membership.save()
                 notify_membership_approved(member, resp)

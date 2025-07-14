@@ -47,7 +47,10 @@
                             <th>{{ el.name|template_trans }}</th>
                             <td>
                                 {% if el.tutorial %}
-                                    <a href="{% url 'tutorials' %}{{ el.tutorial }}" target="_blank">{% trans "Tutorial" %}</a>
+                                    <a href="#"
+                                       class="feature_tutorial"
+                                       tut="{{ el.tutorial }}"
+                                       target="_blank">Tutorial</a>
                                 {% endif %}
                             </td>
                             <td>

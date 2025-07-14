@@ -107,7 +107,7 @@ class Event(BaseModel):
         max_length=500,
         upload_to="cover/",
         blank=True,
-        help_text=_("Cover in rectangular format - aspect ratio 4:3"),
+        help_text=_("Cover image shown on the organization's homepage — rectangular, ideally 4:3 ratio"),
     )
 
     cover_thumb = ImageSpecField(
@@ -144,20 +144,20 @@ class Event(BaseModel):
 
     max_pg = models.IntegerField(
         default=0,
-        verbose_name=_("Number of primary spots"),
-        help_text=_("Maximum number of primary spots to be managed (0 for infinite)"),
+        verbose_name=_("Max players"),
+        help_text=_("Maximum number of player spots (0 = unlimited)"),
     )
 
     max_filler = models.IntegerField(
         default=0,
-        verbose_name=_("Number of filler spots"),
-        help_text=_("Maximum number of fillers to manage (0 for infinite)"),
+        verbose_name=_("Max fillers"),
+        help_text=_("Maximum number of filler spots (0 = unlimited)"),
     )
 
     max_waiting = models.IntegerField(
         default=0,
-        verbose_name=_("Number of waiting spots"),
-        help_text=_("Maximum number of waiting spots to manage (0 for infinite)"),
+        verbose_name=_("Max waitings"),
+        help_text=_("Maximum number of waiting spots (0 = unlimited)"),
     )
 
     features = models.ManyToManyField(Feature, related_name="events", blank=True)
@@ -168,7 +168,11 @@ class Event(BaseModel):
         null=True,
         blank=True,
         verbose_name=_("Campaign"),
-        help_text=_("If the event is part of a campaign, specify the parent event whose characters will be shared"),
+        help_text=_(
+            "If you select another event, it will be considered in the same campaign, and they will share the characters"
+        )
+        + " - "
+        + _("if you leave this empty, this can be the starting event of a new campaign"),
     )
 
     background = models.ImageField(
@@ -176,7 +180,7 @@ class Event(BaseModel):
         upload_to="event_background/",
         verbose_name=_("Background image"),
         blank=True,
-        help_text=_("Background of web pages"),
+        help_text=_("Background image used across all event pages"),
     )
 
     background_red = ImageSpecField(
@@ -189,7 +193,7 @@ class Event(BaseModel):
     font = models.FileField(
         upload_to=UploadToPathAndRename("event_font/"),
         verbose_name=_("Title font"),
-        help_text=_("Font to be used in page titles"),
+        help_text=_("Font used for title texts across all event pages"),
         blank=True,
         null=True,
     )

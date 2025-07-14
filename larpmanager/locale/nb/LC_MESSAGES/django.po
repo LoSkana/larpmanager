@@ -290,9 +290,6 @@ msgstr "Beskrivelse"
 msgid "Email"
 msgstr "E-post"
 
-msgid "Eroga"
-msgstr "Eroga"
-
 msgid "Error"
 msgstr "Feil"
 
@@ -417,6 +414,9 @@ msgstr "penger"
 msgid "other"
 msgstr "mer"
 
+msgid "quick"
+msgstr "raskt"
+
 msgid "title"
 msgstr "tittel"
 
@@ -434,9 +434,6 @@ msgstr "Sum"
 
 msgid "Answer"
 msgstr "Svar"
-
-msgid "Audits"
-msgstr "Revisjoner"
 
 msgid "Badges"
 msgstr "Merker"
@@ -542,9 +539,6 @@ msgstr "Sitat"
 
 msgid "Refund"
 msgstr "Refusjon"
-
-msgid "Refute"
-msgstr "Avvis"
 
 msgid "Safety"
 msgstr "Sikkerhet"
@@ -1065,9 +1059,6 @@ msgstr "Mal"
 msgid "Treasury"
 msgstr "Finansdepartementet"
 
-msgid "Tutorial"
-msgstr "Veiledning"
-
 msgid "Uploaded"
 msgstr "Lastet opp"
 
@@ -1289,6 +1280,9 @@ msgstr "Gjelder"
 
 msgid "Appointees"
 msgstr "Utnevnte"
+
+msgid "Assignment"
+msgstr "Oppdrag"
 
 msgid "Attachment"
 msgstr "Vedlegg"
@@ -1536,9 +1530,6 @@ msgstr "Beskrivelse"
 msgid "Direct link"
 msgstr "Direkte lenke"
 
-msgid "Disbursment"
-msgstr "Utbetaling"
-
 msgid "Event texts"
 msgstr "Begivenhetstekster"
 
@@ -1568,6 +1559,12 @@ msgstr "Lettvekt"
 
 msgid "Limitations"
 msgstr "Begrensninger"
+
+msgid "Max fillers"
+msgstr "Maks fyllstoffer"
+
+msgid "Max players"
+msgstr "Maks antall spillere"
 
 msgid "Nationality"
 msgstr "Nasjonalitet"
@@ -1701,9 +1698,6 @@ msgstr "Endre bilde"
 msgid "Collaborator"
 msgstr "Bidragsyter"
 
-msgid "Disbursement"
-msgstr "Utbetaling"
-
 msgid "Event status"
 msgstr "Status for hendelsen"
 
@@ -1745,6 +1739,9 @@ msgstr "Juridisk merknad"
 
 msgid "Legal notice"
 msgstr "Juridisk merknad"
+
+msgid "Max waitings"
+msgstr "Maks ventetid"
 
 msgid "Members list"
 msgstr "Medlemsliste"
@@ -2585,8 +2582,8 @@ msgstr "Lukket samling"
 msgid "Conversion ticket"
 msgstr "Konverteringsbillett"
 
-msgid "Dispensing tokens"
-msgstr "Utlevering av poletter"
+msgid "Credit assignment"
+msgstr "Tildeling av kreditt"
 
 msgid "Download document"
 msgstr "Last ned dokumentet"
@@ -2683,6 +2680,9 @@ msgstr "Standardfunksjoner"
 
 msgid "Technical Support"
 msgstr "Teknisk støtte"
+
+msgid "Tokens assignment"
+msgstr "Tildeling av symboler"
 
 msgid "Use these formats"
 msgstr "Bruk disse formatene"
@@ -2831,15 +2831,8 @@ msgstr "Rediger oppføring"
 msgid "Confirmation delete"
 msgstr "Bekreftelse på sletting"
 
-msgid "Credit disbursement"
-msgstr "Utbetaling av kreditt"
-
 msgid "Date of association"
 msgstr "Dato for tilknytning"
-
-#, python-format
-msgid "Delivery %(tokens)s"
-msgstr "Levering %(tokens)s"
 
 msgid "Discounts available"
 msgstr "Tilgjengelige fasiliteter"
@@ -3004,6 +2997,9 @@ msgstr "Åpning kl: %(date)s"
 msgid "Organization inflows"
 msgstr "Foreningens inntekter"
 
+msgid "Payment Verification"
+msgstr "Verifisering av betaling"
+
 msgid "Payment confirmation"
 msgstr "Bekreftelse av betalinger"
 
@@ -3132,6 +3128,9 @@ msgstr "De deltok i"
 msgid "Payment per %(event)s"
 msgstr "Betaling per %(event)s"
 
+msgid "Payments Verification"
+msgstr "Verifisering av betalinger"
+
 msgid "Personal data updated"
 msgstr "Personopplysninger oppdatert"
 
@@ -3240,14 +3239,8 @@ msgstr "Administrere arrangementets tomter"
 msgid "Manages event revenues"
 msgstr "Administrerer inntekter fra arrangementer"
 
-msgid "Minimum age of members"
-msgstr "Minimumsalder for medlemmer"
-
 msgid "Modify shuttle request"
 msgstr "Forespørsel om endring av skyttelbuss"
-
-msgid "Number of filler spots"
-msgstr "Antall fyllplasser"
 
 msgid "Number of partecipants"
 msgstr "Antall deltakelser"
@@ -3300,6 +3293,10 @@ msgstr "preferansehistorikk"
 
 msgid "A short tagline, slogan"
 msgstr "En kort tagline, et slagord"
+
+#, python-format
+msgid "Assignment %(elements)s"
+msgstr "Tildeling %(elements)s"
 
 msgid "Background of web pages"
 msgstr "Bakgrunn på nettsiden"
@@ -3359,12 +3356,6 @@ msgstr "Minimum antall stemmer"
 msgid "Move registration event"
 msgstr "Flytt registreringsarrangement"
 
-msgid "Number of primary spots"
-msgstr "Antall primærplasser"
-
-msgid "Number of waiting spots"
-msgstr "Antall venteplasser"
-
 msgid "Please check them below"
 msgstr "Vennligst sjekk dem nedenfor"
 
@@ -3415,10 +3406,6 @@ msgstr "Kode to store bokstaver"
 
 msgid "Disable character finder"
 msgstr "Deaktiver tegnfinner"
-
-#, python-format
-msgid "Disbursement %(credits)s"
-msgstr "Utbetaling %(credits)s"
 
 msgid "Display all sent e-mails"
 msgstr "Vis alle sendte e-poster"
@@ -4153,6 +4140,9 @@ msgstr "Manuelt bekrefte mottatte betalinger"
 msgid "Now you can create event templates"
 msgstr "Nå kan du opprette hendelsesmaler"
 
+msgid "Now you can set membership options"
+msgstr "Nå kan du angi medlemsalternativer"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Oppdatert oppføring for %(event)s"
@@ -4537,6 +4527,9 @@ msgstr "Antall avdrag som skal betales"
 msgid "This page shows inventory custody items"
 msgstr "Denne siden viser lagerbeholdningsartikler"
 
+msgid "This page summarises the assignments of"
+msgstr "Denne siden oppsummerer oppgavene til"
+
 msgid "View the list of characters and players"
 msgstr "Se listen over karakterer og spillere"
 
@@ -4692,6 +4685,10 @@ msgstr "Påminnelse om profilkompilering for %(event)s"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Velg tilfeldig lodd for å oppgradere"
 
+#, python-format
+msgid "The sum was assigned to you as %(credits)s"
+msgstr "Summen ble tildelt deg som %(credits)s"
+
 msgid "This page performs checks on members' data"
 msgstr "Denne siden utfører kontroller av medlemmenes data"
 
@@ -4757,10 +4754,6 @@ msgstr "Nå kan du angi innstillinger for spillerredigering"
 msgid "Review players' safety-related informations"
 msgstr "Gjennomgå spillernes sikkerhetsrelaterte informasjon"
 
-#, python-format
-msgid "The sum was disbursed to you as %(credits)s"
-msgstr "Beløpet ble utbetalt til deg som %(credits)s"
-
 msgid "This page allows you to translate the event"
 msgstr "På denne siden kan du oversette hendelsen"
 
@@ -4785,6 +4778,9 @@ msgstr "Denne siden oppsummerer de ulike typene arrangementsprologer"
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "Din begavede registrering har blitt innløst!"
+
+msgid "Background image used across all event pages"
+msgstr "Bakgrunnsbilde som brukes på alle arrangementssidene"
 
 msgid "Displays list of emails of signed-up players"
 msgstr "Viser en liste over e-postadressen til påmeldte spillere"
@@ -4904,9 +4900,6 @@ msgstr "Kansellering på grunn av manglende årlig medlemsavgift"
 msgid "Characters are only visible to logged in users"
 msgstr "Tegnene er bare synlige for innloggede brukere"
 
-msgid "Cover in rectangular format - aspect ratio 4:3"
-msgstr "Omslag i rektangulært format - størrelsesforhold 4:3"
-
 msgid "Do you wish to be always updated on our events"
 msgstr "Vil du holde deg oppdatert om arrangementene våre"
 
@@ -4919,8 +4912,11 @@ msgstr "Angi hvilket kjønn du identifiserer deg med"
 msgid "Manage your event expenses and upload receipts"
 msgstr "Administrer utgiftene til arrangementet og last opp kvitteringer"
 
-msgid "Now you can review all organizations's members"
-msgstr "Nå kan du se alle organisasjonens medlemmer"
+msgid "Maximum number of filler spots (0 = unlimited)"
+msgstr "Maksimalt antall utfyllingspunkter (0 = ubegrenset)"
+
+msgid "Maximum number of player spots (0 = unlimited)"
+msgstr "Maksimalt antall spillerplasser (0 = ubegrenset)"
 
 msgid "Now you can select which tickets can be gifted"
 msgstr "Nå kan du velge hvilke billetter som kan gis i gave"
@@ -4999,6 +4995,9 @@ msgstr "Angir om den kan velges av spillere"
 msgid "Manage the traits available in the event quests"
 msgstr "Administrer egenskapene som er tilgjengelige i hendelsesoppdragene"
 
+msgid "Maximum number of waiting spots (0 = unlimited)"
+msgstr "Maksimalt antall venteplasser (0 = ubegrenset)"
+
 msgid "Modify some character elements to make it yours"
 msgstr "Endre noen karakteregenskaper for å gjøre den til din egen"
 
@@ -5026,6 +5025,9 @@ msgstr "Du er nå logget inn med delegatkontoen"
 msgid "to confirm it, send your membership application"
 msgstr "for å bekrefte det, send inn medlemssøknaden din"
 
+msgid "you can review, edit, and mark them as assigned"
+msgstr "du kan gå gjennom, redigere og markere dem som tildelt"
+
 msgid "A description of the skills / abilities involved"
 msgstr "En beskrivelse av kompetanseferdighetene"
 
@@ -5041,6 +5043,9 @@ msgstr "Koden gjelder kun ved nyregistrering"
 
 msgid "Displays lists of players to persuade to sign up"
 msgstr "Viser lister over spillere som skal overtales til å registrere seg"
+
+msgid "Font used for title texts across all event pages"
+msgstr "Skrifttype som brukes for titteltekster på alle arrangementssidene"
 
 msgid "Here are the sign up options with limited number"
 msgstr "Her er det begrensede antallet påmeldingsalternativer"
@@ -5113,6 +5118,9 @@ msgstr "Karakterer er bare synlige for registrerte spillere"
 msgid "Insert the css code to customize the pdf printing"
 msgstr "Skriv inn css-koden for å tilpasse utskriften"
 
+msgid "Minimum age of members (leave empty for no limit)"
+msgstr "Minimumsalder for medlemmer (la stå tomt for ingen grense)"
+
 msgid "Now you can peform the fiscal code validity check"
 msgstr "Nå kan du utføre gyldighetskontrollen av skattekoden"
 
@@ -5141,6 +5149,9 @@ msgstr "På denne siden kan du redigere hendelsesspesifikke tekster"
 
 msgid "This page shows all inflows received for this run"
 msgstr "Denne siden oppsummerer alle oppføringer for dette løpet"
+
+msgid "This page shows the collections opened by players"
+msgstr "Denne siden viser samlingene som er åpnet av spillere"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Toleranse overskredet, fortsett med kanselleringen"
@@ -5236,6 +5247,10 @@ msgstr "Totale deltakeravgifter redusert gjennom rabatter"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "du kan fortsatt betale det resterende beløpet hvis du ønsker det"
 
+#, python-format
+msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
+msgstr "Tildelt %(amount).2f %(elements)s for '%(reason)s'"
+
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jeg har gjort det noen ganger, jeg har grunnleggende erfaring"
 
@@ -5257,6 +5272,9 @@ msgstr "Bli med på Discord for å få hjelp, ideer eller rapportere feil"
 msgid "Manage registrations discounts available to players"
 msgstr "Administrere registreringsrabatter som er tilgjengelige for spillere"
 
+msgid "Maximum number of tickets available (0 = unlimited)"
+msgstr "Maksimalt antall tilgjengelige billetter (0 = ubegrenset)"
+
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Velg et tydelig og lett gjenkjennelig bilde"
 
@@ -5270,15 +5288,14 @@ msgstr ""
 msgid "This page allows you to set up your payment methods"
 msgstr "På denne siden kan du konfigurere betalingsmåtene dine"
 
+msgid "This page summarises the assignments in this run of"
+msgstr "Denne siden oppsummerer oppgavene i denne serien av"
+
 msgid "This page summarizes the association's custom texts"
 msgstr "Denne siden oppsummerer foreningens egne tekster"
 
 msgid " here the conditions of disenrollment for this event"
 msgstr "her er vilkårene for å melde deg av dette arrangementet"
-
-#, python-format
-msgid "%(amount)d %(tokens)s were disbursed with %(reason)s"
-msgstr "%(amount)d %(tokens)s ble utbetalt med %(reason)s"
 
 msgid "As a final step, we ask you to complete your profile"
 msgstr "Til slutt ber vi deg om å fylle ut profilen din"
@@ -5299,17 +5316,14 @@ msgstr "Siste trinn er å laste opp medlemssøknaden din"
 msgid "Manages fixed installment payments for registrations"
 msgstr "Håndterer faste avdragsbetalinger for registreringer"
 
-msgid "Maximum number of fillers to manage (0 for infinite)"
-msgstr "Maksimalt antall fyllstoffer som skal administreres (0 for uendelig)"
-
-msgid "Maximum number of tickets available (0 for infinite)"
-msgstr "Angir maksimalt antall tilgjengelige billetter (0 for uendelig)"
-
 msgid "Perform check on the consistency of character sheets"
 msgstr "Utfør kontroll av konsistensen i karakterarkene"
 
 msgid "The first column the amount, the second the receipts"
 msgstr "Den første kolonnen beløpet, den andre inntektene"
+
+msgid "This page allows you to add or edit an assignment of"
+msgstr "På denne siden kan du legge til eller redigere en tildeling av"
 
 msgid "This page shows all donations recorded in the system"
 msgstr "Denne siden viser alle donasjoner som er registrert i systemet"
@@ -5373,6 +5387,9 @@ msgstr "Denne siden viser alle fakturaer som er registrert i systemet"
 
 msgid "This page shows users who can be persuaded to sign up"
 msgstr "Denne siden viser brukere som kan overtales til å registrere seg"
+
+msgid "To create an event, access the events management page"
+msgstr "For å opprette en hendelse, gå til siden for hendelsesadministrasjon"
 
 msgid "You have been gifted a registration to this event, by"
 msgstr "Du har fått en inngangsbillett til dette arrangementet av"
@@ -5515,6 +5532,9 @@ msgstr "Nå kan spillerne sende inn donasjoner, og du kan gå gjennom dem"
 msgid "Please check the address again, especially its beginning"
 msgstr "Vennligst sjekk adressen igjen, spesielt begynnelsen"
 
+msgid "This page allows you to add or edit a credits assignment"
+msgstr "På denne siden kan du legge til eller redigere en studiepoengoppgave"
+
 msgid "This page allows you to add or edit a signup to this run"
 msgstr ""
 "På denne siden kan du legge til eller redigere en påmelding til denne "
@@ -5551,6 +5571,9 @@ msgstr "Summen av utgifter som er sendt inn av samarbeidspartnere og godkjent"
 msgid "You cannot redeem a membership, you are already a member!"
 msgstr "Du kan ikke løse inn et medlemskap, du er allerede medlem!"
 
+msgid "once approved, the corresponding amounts are assigned as "
+msgstr "Når de er godkjent, blir de tilsvarende beløpene tildelt som"
+
 msgid "(Optional) an image that will be shown inside the question"
 msgstr "(valgfritt) et bilde som skal vises inne i spørsmålet"
 
@@ -5585,9 +5608,6 @@ msgstr ""
 
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr "Administrere og godkjenne utlegg som er lastet opp av ansatte"
-
-msgid "Maximum number of waiting spots to manage (0 for infinite)"
-msgstr "Maksimalt antall ventetider som skal håndteres (0 for uendelig)"
 
 msgid "Probability of showing the special page (out of thousands)"
 msgstr "Sannsynlighet for å vise spesialsiden (av tusen)"
@@ -5647,10 +5667,6 @@ msgstr "Betalinger som allerede er mottatt: <b>%(amount).2f %(currency)s</b>"
 msgid "Percentage of VAT to be calculated on the ticket cost alone"
 msgstr ""
 "Prosentandel av merverdiavgift som skal beregnes på billettprisen alene"
-
-msgid "This page allows you to add or edit a disbursement entry of"
-msgstr ""
-"På denne siden kan du legge til eller redigere en utbetalingsoppføring av"
 
 msgid "This page allows you to add or edit a new item of inventory"
 msgstr "På denne siden kan du legge til eller redigere en ny lagerbeholdning"
@@ -5764,6 +5780,9 @@ msgstr "Dette er verkstedene du må fullføre før du kan spille"
 msgid "This page allows you to change the access roles for the event"
 msgstr "På denne siden kan du endre tilgangsrollene for arrangementet"
 
+msgid "This page lists all reimbursement claims submitted by members"
+msgstr "Denne siden viser alle refusjonskrav som er sendt inn av medlemmer"
+
 msgid "This page shows the general information of registered players"
 msgstr "Denne siden viser generell informasjon om registrerte spillere"
 
@@ -5810,9 +5829,6 @@ msgstr "Angi her hvert element du ønsker å unngå i oppgaven"
 
 msgid "It will be shown to other players together with your character"
 msgstr "Den vil bli vist til andre spillere sammen med karakteren din"
-
-msgid "Maximum number of primary spots to be managed (0 for infinite)"
-msgstr "Maksimalt antall primærposter som skal administreres (0 for uendelig)"
 
 msgid "Now staff members can upload expenses, and you can review them"
 msgstr "Nå kan medarbeiderne laste opp utgifter, og du kan gå gjennom dem"
@@ -5868,10 +5884,6 @@ msgstr ""
 
 msgid "Select from the dropdown the characters to be added to the plot"
 msgstr "Velg tegnene som skal legges til i plottet fra rullegardinmenyen"
-
-msgid "This page allows you to add or edit a disbursement credits item"
-msgstr ""
-"På denne siden kan du legge til eller redigere en utbetalingskredittpost"
 
 msgid "This page allows you to add or edit the registration surcharges"
 msgstr ""
@@ -5950,10 +5962,6 @@ msgid "This page shows the traits assigned to the characters in the run"
 msgstr ""
 "Denne siden oppsummerer egenskapene som er tildelt karakterene i serien"
 
-msgid "This page summarises the disbursements recorded in the system of"
-msgstr ""
-"Denne siden oppsummerer utbetalingene som er registrert i systemet for"
-
 msgid "Use the information below to request the transfer from your bank"
 msgstr "Bruk informasjonen nedenfor for å be om overføring fra banken din"
 
@@ -5962,10 +5970,6 @@ msgstr "Du har angitt flere preferanser for det samme elementet!"
 
 msgid "Your request will be considered at the next meeting of the Board"
 msgstr "Din forespørsel vil bli behandlet på neste styremøte"
-
-#, python-format
-msgid "%(amount).2f %(credits)s were disbursed with reason \"%(reason)s\"."
-msgstr "%(amount).2f %(credits)s ble utbetalt med årsak \"%(reason)s\"."
 
 msgid "Copy and paste exactly all the coloured text below into the notes"
 msgstr "Kopier og lim inn nøyaktig all farget tekst nedenfor i notatene"
@@ -6377,6 +6381,12 @@ msgstr ""
 "Denne karakteren representerer en annen karakters sanne hemmelige identitet"
 
 msgid ""
+"This page provides a summary of all expenses submitted by collaborators"
+msgstr ""
+"På denne siden finner du en oversikt over alle utgifter som er sendt inn av "
+"samarbeidspartnere"
+
+msgid ""
 "Allows players to add an optional extra amount to their registration fee"
 msgstr ""
 "Gjør det mulig for spillere å legge til et valgfritt ekstra beløp i "
@@ -6457,6 +6467,10 @@ msgstr ""
 "ledertavle."
 
 msgid ""
+"Create the first character of the event in the character management panel"
+msgstr "Opprett hendelsens første tegn i tegnbehandlingspanelet"
+
+msgid ""
 "Do you want to split the registration fee into fixed payment installments"
 msgstr "Ønsker du å dele opp registreringsavgiften i faste avdrag"
 
@@ -6479,6 +6493,11 @@ msgid ""
 msgstr ""
 "Hvis dette alternativet er krysset av, erstattes tegnnavn automatisk med en "
 "referanse"
+
+msgid ""
+"Indicates the maximum number of times it can be requested (0 = unlimited)"
+msgstr ""
+"Angir det maksimale antallet ganger det kan forespørres (0 = ubegrenset)"
 
 msgid ""
 "Inside this file must be the photos, named by the number of the character"
@@ -6519,6 +6538,11 @@ msgstr ""
 "Vi har forhåndsutfylt søknaden basert på opplysningene du har gitt oss"
 
 msgid ""
+"if you leave this empty, this can be the starting event of a new campaign"
+msgstr ""
+"hvis du lar denne stå tom, kan dette være starthendelsen for en ny kampanje"
+
+msgid ""
 "I confirm that all my required personal data have been filled in correctly"
 msgstr "Jeg bekrefter at alle nødvendige personopplysninger er korrekt utfylt"
 
@@ -6526,10 +6550,6 @@ msgid ""
 "Indicate the organization nationality to activate nation-specific features"
 msgstr ""
 "Angi organisasjonens nasjonalitet for å aktivere landsspesifikke funksjoner"
-
-msgid ""
-"Indicates the maximum number of times it can be requested (0 for infinite)"
-msgstr "Angir maksimalt antall ganger den kan forespørres (0 for uendelig)"
 
 msgid ""
 "On this page you can filter characters and directly view their information"
@@ -6774,13 +6794,6 @@ msgstr ""
 " for arrangementet"
 
 msgid ""
-"This page summarises the disbursements recorded in the system for this run "
-"of"
-msgstr ""
-"Denne siden oppsummerer utbetalingene som er registrert i systemet for denne"
-" kjøringen av"
-
-msgid ""
 "Write your question, request or concern here. We will be happy to answer "
 "you!"
 msgstr ""
@@ -6886,13 +6899,6 @@ msgstr ""
 "gjennom og organisere dem."
 
 msgid ""
-"Request for reimbursement entered! You will receive notice when it is "
-"disbursed"
-msgstr ""
-"Forespørsel om tilbakebetaling er lagt inn! Du vil bli varslet når den er "
-"utbetalt"
-
-msgid ""
 "Terms and conditions of signup, shown in a page linked in the registration "
 "form"
 msgstr ""
@@ -6946,12 +6952,12 @@ msgstr ""
 "Logobilde (du kan laste opp en fil i hvilken som helst størrelse, størrelsen"
 " endres automatisk)"
 
-#, python-format
 msgid ""
-"Reimbursement of %(amount).2f %(credits)s with reason '%(reason)s' was "
-"disbursed"
+"Request for reimbursement entered! You will receive notice when it is "
+"processed."
 msgstr ""
-"Refusjon på %(amount).2f %(credits)s med årsak '%(reason)s' ble utbetalt"
+"Anmodning om refusjon er lagt inn! Du vil motta en melding når den er "
+"behandlet."
 
 msgid ""
 "This page shows the sensitive information of registered players regarding "
@@ -6975,6 +6981,13 @@ msgstr ""
 "filtrering"
 
 msgid ""
+"Cover image shown on the organization's homepage — rectangular, ideally 4:3 "
+"ratio"
+msgstr ""
+"Forsidebilde som vises på organisasjonens hjemmeside - rektangulært, helst i"
+" forholdet 4:3"
+
+msgid ""
 "Go ahead and click on this button to perform the extraction. Warning: it is "
 "final"
 msgstr "Klikk på denne knappen for å utføre uttrekket. OBS: dette er endelig"
@@ -6991,13 +7004,6 @@ msgid ""
 msgstr ""
 "Angir hvor ofte påminnelses-e-poster skal sendes, i dager (hvis ikke angitt,"
 " sendes ingen e-poster)"
-
-msgid ""
-"There are no active events, to create a new one access the events management"
-" page"
-msgstr ""
-"Det er ingen aktive arrangementer, for å opprette et nytt kan du gå til "
-"siden for arrangementsadministrasjon"
 
 msgid ""
 "There are no payment gateway active, configure them in the payment settings "
@@ -7146,6 +7152,12 @@ msgid ""
 msgstr ""
 "Denne siden oppsummerer alternativene for å svare på spørsmål om "
 "arrangementets workshops"
+
+msgid ""
+"You can update them by indicating the recipient and assigning the "
+"contributed money"
+msgstr ""
+"Du kan oppdatere dem ved å angi mottaker og tildele de innbetalte pengene"
 
 msgid ""
 "Do you want to open registrations at a specific date and time instead of "
@@ -7390,6 +7402,13 @@ msgid ""
 msgstr ""
 "Valgfritt - Angir ytterligere detaljer om alternativet, vises under "
 "spørsmålet"
+
+msgid ""
+"To quickly configure your events's most important settings, access the quick"
+" setup page"
+msgstr ""
+"For å raskt konfigurere de viktigste innstillingene for hendelsene dine, kan"
+" du gå til hurtigoppsett-siden"
 
 msgid ""
 "Value of the discount for the friend who signs up using the code of a "
@@ -7646,13 +7665,6 @@ msgstr ""
 " det er tilordnet en spiller"
 
 msgid ""
-"If the event is part of a campaign, specify the parent event whose "
-"characters will be shared"
-msgstr ""
-"Hvis hendelsen er en del av en kampanje, angir du den overordnede hendelsen "
-"hvis tegn skal deles"
-
-msgid ""
 "In order to subscribe to the Organization's events you must apply to be "
 "admitted as a Member"
 msgstr ""
@@ -7758,6 +7770,13 @@ msgid ""
 msgstr ""
 "Denne siden viser i detalj hvilke fagområder som dekkes av bidragsyterne i "
 "et arrangement"
+
+msgid ""
+"To quickly configure your organization's most important settings, access the"
+" quick setup page"
+msgstr ""
+"For å raskt konfigurere organisasjonens viktigste innstillinger, kan du gå "
+"til siden for hurtigoppsett"
 
 msgid ""
 "Automatically generates a customizable PDF receipt for each payment and "
@@ -8056,6 +8075,13 @@ msgstr ""
 "skjemaet, i stedet for å vises deaktivert"
 
 msgid ""
+"Some activated features need the 'Character' feature, but it isn't active: "
+"access the feature panel"
+msgstr ""
+"Noen aktiverte funksjoner trenger funksjonen \"Tegn\", men den er ikke "
+"aktiv: gå til funksjonspanelet"
+
+msgid ""
 "This page shows the different versions available of the character, and the "
 "differences between them"
 msgstr ""
@@ -8103,6 +8129,13 @@ msgid ""
 msgstr ""
 "Her kan du definere seksjoner i registreringsskjemaet og gruppere spørsmål "
 "for å gjøre lange skjemaer mer oversiktlige."
+
+msgid ""
+"Optional text to be included in the email sent to the player to notify them "
+"of the approval decision"
+msgstr ""
+"Valgfri tekst som skal inkluderes i e-posten som sendes til spilleren for å "
+"varsle dem om godkjenningsbeslutningen"
 
 msgid ""
 "This code is used to generate the secret registration link, you may keep the"
@@ -8273,6 +8306,13 @@ msgstr ""
 "kansellerte (standard 30 dager)"
 
 msgid ""
+"Some activated features need the 'Token / Credit' feature, but it isn't "
+"active: access the feature panel"
+msgstr ""
+"Noen aktiverte funksjoner trenger funksjonen \"Token / Credit\", men den er "
+"ikke aktiv: gå til funksjonspanelet"
+
+msgid ""
 "The discount has been added! It has been reserved for you for 15 minutes, "
 "after which it will be removed"
 msgstr ""
@@ -8337,13 +8377,6 @@ msgstr ""
 "tegnbehandlingspanelet"
 
 msgid ""
-"This page shows all reimbursement claims submitted by members. You can edit "
-"and approve them as disbursed"
-msgstr ""
-"Denne siden viser alle refusjonskrav som er sendt inn av medlemmer. Du kan "
-"redigere og godkjenne dem som utbetalt"
-
-msgid ""
 "When you want to close the collection, follow the link below. A special "
 "redemption code will be generated"
 msgstr ""
@@ -8399,6 +8432,13 @@ msgid ""
 msgstr ""
 "Tilfører støtte for å tildele XP (erfaringspoeng) til figurer, som deretter "
 "kan brukes til å kjøpe ferdigheter."
+
+msgid ""
+"If you select another event, it will be considered in the same campaign, and"
+" they will share the characters"
+msgstr ""
+"Hvis du velger et annet arrangement, vil det bli regnet som en del av samme "
+"kampanje, og de vil dele tegnene"
 
 msgid ""
 "Indicate the type of discount: standard, play again (only available to those"
@@ -8457,6 +8497,13 @@ msgstr ""
 " er viktig"
 
 msgid ""
+"Set up the configuration for the creation or editing of characters by the "
+"players in the configuration panel"
+msgstr ""
+"Konfigurer hvordan spillerne kan opprette eller redigere karakterer i "
+"konfigurasjonspanelet"
+
+msgid ""
 "To set specific values for the interface configuration or features, access "
 "the configuration management page"
 msgstr ""
@@ -8511,13 +8558,6 @@ msgid ""
 msgstr ""
 "Hvis du velger én (eller flere) billetter, vil alternativet bare være "
 "tilgjengelig for spillere som har valgt den aktuelle billetten"
-
-msgid ""
-"The feature 'Diet' requires the diet field to be set in the user profile, "
-"access the organization profile panel"
-msgstr ""
-"Funksjonen \"Kosthold\" krever at kostholdsfeltet er angitt i "
-"brukerprofilen, få tilgang til organisasjonsprofilpanelet"
 
 msgid ""
 "This page displays the application for membership in the organization. You "
@@ -8666,13 +8706,6 @@ msgid ""
 msgstr ""
 "Antall måneder, regnet fra begynnelsen av medlemsåret, hvor "
 "medlemskontingenten kan betales gratis"
-
-msgid ""
-"The feature 'Safety' requires the safety field to be set in the user "
-"profile, access the organization profile panel"
-msgstr ""
-"Funksjonen \"Sikkerhet\" krever at sikkerhetsfeltet er angitt i "
-"brukerprofilen, få tilgang til organisasjonsprofilpanelet"
 
 msgid ""
 "Adds a link to legal notices on every page, and provides a management panel "
@@ -9016,13 +9049,6 @@ msgstr ""
 "gjennomføres, gitt en betalingsfrist. Standard 30."
 
 msgid ""
-"This page shows the collections opened by players. You can update them "
-"indicating the recipient and disburse the money contributed"
-msgstr ""
-"Denne siden viser innsamlinger som er åpnet av spillere. Du kan oppdatere "
-"dem med angivelse av mottaker og utbetale pengene som er bidratt"
-
-msgid ""
 "This page allows you to select the features activated for this event, and "
 "all its runs. Click on a feature to show its description."
 msgstr ""
@@ -9115,14 +9141,6 @@ msgstr ""
 "Merk: Prøv å gruppere så mange passasjerer som mulig per forespørsel; hvis "
 "du merker forsinkelser, skriv til oss direkte, ikke legg inn nye "
 "forespørsler"
-
-msgid ""
-"This page summarises all expenses incurred by employees and uploaded to the "
-"system. Once approved, they are disbursed to co-workers as"
-msgstr ""
-"Denne siden oppsummerer alle utlegg som medarbeiderne har pådratt seg og "
-"lastet opp i systemet. Når de er godkjent, utbetales de til medarbeiderne "
-"som"
 
 #, python-format
 msgid ""

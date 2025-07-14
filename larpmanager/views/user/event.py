@@ -333,7 +333,7 @@ def search(request, s, n):
 
     for slug in ["questions", "options", "searchable"]:
         if slug in ctx:
-            continue
+            ctx[slug] = json.dumps(ctx[slug])
         ctx[slug] = []
 
     return render(request, "larpmanager/event/search.html", ctx)
