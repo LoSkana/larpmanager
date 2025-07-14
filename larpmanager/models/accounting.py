@@ -298,9 +298,9 @@ class AccountingItemOther(AccountingItem):
         indexes = [models.Index(fields=["run", "oth"])]
 
     def __str__(self):
-        s = _("Credit disbursement")
+        s = _("Credit assignment")
         if self.oth == AccountingItemOther.TOKEN:
-            s = _("Dispensing tokens")
+            s = _("Tokens assignment")
         elif self.oth == AccountingItemOther.REFUND:
             s = _("Refund")
         if self.member:

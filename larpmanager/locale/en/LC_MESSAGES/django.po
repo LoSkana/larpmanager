@@ -87,10 +87,10 @@ msgstr ""
 msgid "This page allows you to add or edit the expense of a contributor"
 msgstr ""
 
-msgid "This page allows you to add or edit a disbursement entry of"
+msgid "This page allows you to add or edit an assignment of"
 msgstr ""
 
-msgid "This page allows you to add or edit a disbursement credits item"
+msgid "This page allows you to add or edit a credits assignment"
 msgstr ""
 
 msgid "Payments"
@@ -116,10 +116,7 @@ msgstr ""
 msgid "This page allows you to add or edit an invoice"
 msgstr ""
 
-msgid "Disbursment"
-msgstr ""
-
-msgid "Disbursement"
+msgid "Assignment"
 msgstr ""
 
 msgid "Collections"
@@ -1771,7 +1768,7 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "The sum was disbursed to you as %(credits)s"
+msgid "The sum was assigned to you as %(credits)s"
 msgstr ""
 
 msgid "This is automatically deducted from the registration of a future event"
@@ -1815,9 +1812,7 @@ msgid "Reimbursement payout"
 msgstr ""
 
 #, python-format
-msgid ""
-"Reimbursement of %(amount).2f %(credits)s with reason '%(reason)s' was "
-"disbursed"
+msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr ""
 
 msgid "They will be used automatically when you sign up for a new event"
@@ -1830,19 +1825,7 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "Disbursement %(credits)s"
-msgstr ""
-
-#, python-format
-msgid "%(amount).2f %(credits)s were disbursed with reason \"%(reason)s\"."
-msgstr ""
-
-#, python-format
-msgid "Delivery %(tokens)s"
-msgstr ""
-
-#, python-format
-msgid "%(amount)d %(tokens)s were disbursed with %(reason)s"
+msgid "Assignment %(elements)s"
 msgstr ""
 
 msgid "Donation given"
@@ -2396,10 +2379,10 @@ msgstr ""
 msgid "Refund"
 msgstr ""
 
-msgid "Credit disbursement"
+msgid "Credit assignment"
 msgstr ""
 
-msgid "Dispensing tokens"
+msgid "Tokens assignment"
 msgstr ""
 
 msgid "Type"
@@ -4564,9 +4547,12 @@ msgid ""
 "This page prepares the cash balance already formatted for annual declaration"
 msgstr ""
 
+msgid "This page shows the collections opened by players"
+msgstr ""
+
 msgid ""
-"This page shows the collections opened by players. You can update them "
-"indicating the recipient and disburse the money contributed"
+"You can update them by indicating the recipient and assigning the "
+"contributed money"
 msgstr ""
 
 msgid "Show collections"
@@ -4578,7 +4564,7 @@ msgstr ""
 msgid "Organizer"
 msgstr ""
 
-msgid "This page summarises the disbursements recorded in the system of"
+msgid "This page summarises the assignments of"
 msgstr ""
 
 msgid "This page shows all donations recorded in the system"
@@ -4631,9 +4617,10 @@ msgstr ""
 msgid "This page shows all payment items registered in the system"
 msgstr ""
 
-msgid ""
-"This page shows all reimbursement claims submitted by members. You can edit "
-"and approve them as disbursed"
+msgid "This page lists all reimbursement claims submitted by members"
+msgstr ""
+
+msgid "you can review, edit, and mark them as assigned"
 msgstr ""
 
 msgid "Total required"
@@ -6010,8 +5997,7 @@ msgstr ""
 msgid "Cancellation date"
 msgstr ""
 
-msgid ""
-"This page summarises the disbursements recorded in the system for this run of"
+msgid "This page summarises the assignments in this run of"
 msgstr ""
 
 msgid "This page shows the discounts activated for this event"
@@ -6023,9 +6009,10 @@ msgstr ""
 msgid "Run active"
 msgstr ""
 
-msgid ""
-"This page summarises all expenses incurred by employees and uploaded to the "
-"system. Once approved, they are disbursed to co-workers as"
+msgid "This page provides a summary of all expenses submitted by collaborators"
+msgstr ""
+
+msgid "once approved, the corresponding amounts are assigned as "
 msgstr ""
 
 msgid "This page shows your personal spending items"
@@ -6915,8 +6902,8 @@ msgid "Pay what you want"
 msgstr ""
 
 msgid ""
-"Allows players to add an optional extra amount to their registration fee (e."
-"g. for donations or to help cover others' fees)."
+"Allows players to add an optional extra amount to their registration fee "
+"(e.g. for donations or to help cover others' fees)."
 msgstr ""
 
 msgid "Now you can set the optional amount field"
@@ -8194,20 +8181,24 @@ msgstr ""
 msgid "The taxes configuration is missing, set them in the configuration panel"
 msgstr ""
 
+msgid ""
+"Create the first character of the event in the character management panel"
+msgstr ""
+
+msgid ""
+"Some activated features need the 'Character' feature, it isn't active: "
+"access the feature panel"
+msgstr ""
+
+msgid ""
+"Some activated features need the 'Token / Credit' feature, it isn't active: "
+"access the feature panel"
+msgstr ""
+
 #, python-format
 msgid ""
 "There are <b>%(number)s</b> characters in proposed status, approve them in "
 "the character management panel"
-msgstr ""
-
-msgid ""
-"The feature 'Safety' requires the safety field to be set in the user "
-"profile, access the organization profile panel"
-msgstr ""
-
-msgid ""
-"The feature 'Diet' requires the diet field to be set in the user profile, "
-"access the organization profile panel"
 msgstr ""
 
 msgid "Set the casting options in the configuration panel"
@@ -8426,7 +8417,7 @@ msgstr ""
 
 msgid ""
 "Request for reimbursement entered! You will receive notice when it is "
-"disbursed"
+"processed."
 msgstr ""
 
 msgid ""

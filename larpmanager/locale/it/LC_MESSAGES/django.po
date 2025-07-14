@@ -1290,6 +1290,9 @@ msgstr "Applicabile"
 msgid "Appointees"
 msgstr "Incaricati"
 
+msgid "Assignment"
+msgstr "Assegnazione"
+
 msgid "Attachment"
 msgstr "Allegato"
 
@@ -1536,9 +1539,6 @@ msgstr "Descrizione"
 msgid "Direct link"
 msgstr "Link diretto"
 
-msgid "Disbursment"
-msgstr "Erogazione"
-
 msgid "Event texts"
 msgstr "Testi evento"
 
@@ -1700,9 +1700,6 @@ msgstr "Cambia foto"
 
 msgid "Collaborator"
 msgstr "Collaboratore"
-
-msgid "Disbursement"
-msgstr "Erogazione"
 
 msgid "Event status"
 msgstr "Stato dell'evento"
@@ -2585,8 +2582,8 @@ msgstr "Colletta chiusa"
 msgid "Conversion ticket"
 msgstr "Biglietto conversione"
 
-msgid "Dispensing tokens"
-msgstr "Erogazione tokens"
+msgid "Credit assignment"
+msgstr "Assegnazione dei crediti"
 
 msgid "Download document"
 msgstr "Scarica documento"
@@ -2683,6 +2680,9 @@ msgstr "Funzionalità standard"
 
 msgid "Technical Support"
 msgstr "Supporto tecnico"
+
+msgid "Tokens assignment"
+msgstr "Assegnazione dei gettoni"
 
 msgid "Use these formats"
 msgstr "Utilizza questi formati"
@@ -2831,15 +2831,8 @@ msgstr "Modifica iscrizione"
 msgid "Confirmation delete"
 msgstr "Conferma cancella"
 
-msgid "Credit disbursement"
-msgstr "Erogazione crediti"
-
 msgid "Date of association"
 msgstr "Data associazione"
-
-#, python-format
-msgid "Delivery %(tokens)s"
-msgstr "Erogazione %(tokens)s"
 
 msgid "Discounts available"
 msgstr "Agevolazioni disponibili"
@@ -3301,6 +3294,10 @@ msgstr "storico delle preferenze"
 msgid "A short tagline, slogan"
 msgstr "Una breve tagline, uno slogan"
 
+#, python-format
+msgid "Assignment %(elements)s"
+msgstr "Assegnazione %(elements)s"
+
 msgid "Background of web pages"
 msgstr "Sfondo delle pagine web"
 
@@ -3414,11 +3411,7 @@ msgid "Code two capital letters"
 msgstr "Codice due lettere maiuscole"
 
 msgid "Disable character finder"
-msgstr "Disattivare il cercatore di caratteri"
-
-#, python-format
-msgid "Disbursement %(credits)s"
-msgstr "Erogazione %(credits)s"
+msgstr "Disattivare il cercatore di personaggi"
 
 msgid "Display all sent e-mails"
 msgstr "Visualizza tutte le e-mail inviate"
@@ -4535,6 +4528,9 @@ msgstr "Il numero di quote in cui effettuare il versamento"
 msgid "This page shows inventory custody items"
 msgstr "Questa pagina mostra gli articoli di custodia dell'inventario"
 
+msgid "This page summarises the assignments of"
+msgstr "Questa pagina riassume gli incarichi di"
+
 msgid "View the list of characters and players"
 msgstr "Visualizza l'elenco dei personaggi e dei giocatori"
 
@@ -4690,6 +4686,10 @@ msgstr "Reminder compilazione profilo per %(event)s"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Seleziona in modo casuale i biglietti della lotteria da aggiornare"
 
+#, python-format
+msgid "The sum was assigned to you as %(credits)s"
+msgstr "La somma ti è stata assegnata come %(credits)s"
+
 msgid "This page performs checks on members' data"
 msgstr "Questa pagina esegue controlli sui dati dei membri"
 
@@ -4754,10 +4754,6 @@ msgstr "Ora è possibile impostare le impostazioni di modifica del lettore"
 
 msgid "Review players' safety-related informations"
 msgstr "Esamina le informazioni sulla safety dei giocatori"
-
-#, python-format
-msgid "The sum was disbursed to you as %(credits)s"
-msgstr "La somma ti è stata erogata come %(credits)s"
 
 msgid "This page allows you to translate the event"
 msgstr "Questa pagina permette di tradurre l'evento"
@@ -5024,6 +5020,9 @@ msgstr "Ora sei loggato con l'account delegato"
 msgid "to confirm it, send your membership application"
 msgstr "per confermarla invia la tua richiesta di iscrizione come socio"
 
+msgid "you can review, edit, and mark them as assigned"
+msgstr "è possibile rivederli, modificarli e contrassegnarli come assegnati"
+
 msgid "A description of the skills / abilities involved"
 msgstr "Una descrizione delle abilità della competenza"
 
@@ -5140,6 +5139,9 @@ msgstr "Questa pagina ti permette di modificare i testi specifici dell'evento"
 msgid "This page shows all inflows received for this run"
 msgstr "Questa pagina riepiloga tutte entrate di questa run"
 
+msgid "This page shows the collections opened by players"
+msgstr "Questa pagina mostra le collezioni aperte dai giocatori"
+
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolleranza superata, procedere all'annullamento"
 
@@ -5236,6 +5238,10 @@ msgstr "Quote di partecipazione totali ridotte grazie agli sconti"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "se lo desideri, puoi comunque pagare l'importo rimanente"
 
+#, python-format
+msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
+msgstr "Assegnato %(amount).2f %(elements)s per \"%(reason) s\""
+
 msgid "I've done it a few times, I have a basic experience"
 msgstr "L'ho fatto qualche volta, ho una esperienza di base"
 
@@ -5270,15 +5276,14 @@ msgstr "Brevi guide per imparare il funzionamento del sistema"
 msgid "This page allows you to set up your payment methods"
 msgstr "In questa pagina è possibile impostare i metodi di pagamento"
 
+msgid "This page summarises the assignments in this run of"
+msgstr "Questa pagina riassume gli incarichi di questo ciclo di"
+
 msgid "This page summarizes the association's custom texts"
 msgstr "Questa pagina riassume i testi personalizzati dell'associazione"
 
 msgid " here the conditions of disenrollment for this event"
 msgstr " qui le condizioni di disiscrizione di questo evento"
-
-#, python-format
-msgid "%(amount)d %(tokens)s were disbursed with %(reason)s"
-msgstr "%(amount)d %(tokens)s sono stati erogati con motivazione \"%(reason)s\""
 
 msgid "As a final step, we ask you to complete your profile"
 msgstr "Come ultimo passaggio ti chiediamo di completare il tuo profilo"
@@ -5310,6 +5315,9 @@ msgstr "Esegui un controllo sulla coerenza delle schede dei personaggi"
 
 msgid "The first column the amount, the second the receipts"
 msgstr "La prima colonna indica l'importo, la seconda gli incassi"
+
+msgid "This page allows you to add or edit an assignment of"
+msgstr "Questa pagina permette di aggiungere o modificare un'assegnazione di"
 
 msgid "This page shows all donations recorded in the system"
 msgstr "Questa pagina mostra tutte le donazioni registrate nel sistema"
@@ -5530,6 +5538,10 @@ msgstr "Ora i giocatori possono inviare donazioni e voi potete rivederle"
 msgid "Please check the address again, especially its beginning"
 msgstr "Per favore ricontrolla l'indirizzo, specialmente il suo inizio"
 
+msgid "This page allows you to add or edit a credits assignment"
+msgstr ""
+"Questa pagina consente di aggiungere o modificare un'assegnazione di crediti"
+
 msgid "This page allows you to add or edit a signup to this run"
 msgstr ""
 "Questa pagina consente di aggiungere o modificare un'iscrizione a questa "
@@ -5569,6 +5581,9 @@ msgstr "Totale delle spese presentate dai collaboratori e approvate"
 
 msgid "You cannot redeem a membership, you are already a member!"
 msgstr "Non puoi riscattare una iscrizione, risulti già iscritto!"
+
+msgid "once approved, the corresponding amounts are assigned as "
+msgstr "una volta approvati, gli importi corrispondenti sono assegnati come"
 
 msgid "(Optional) an image that will be shown inside the question"
 msgstr ""
@@ -5664,10 +5679,6 @@ msgstr "Pagamenti già ricevuti: <b>%(amount).2f %(currency)s</b>"
 
 msgid "Percentage of VAT to be calculated on the ticket cost alone"
 msgstr "Percentuale dell'IVA da calcolare sul solo costo del biglietto"
-
-msgid "This page allows you to add or edit a disbursement entry of"
-msgstr ""
-"Questa pagina consente di aggiungere o modificare una voce di esborso di"
 
 msgid "This page allows you to add or edit a new item of inventory"
 msgstr ""
@@ -5790,6 +5801,11 @@ msgstr "Questi sono i workshops che devi completare prima di poter giocare"
 msgid "This page allows you to change the access roles for the event"
 msgstr "Questa pagina ti permette di modificare i ruoli di accesso all'evento"
 
+msgid "This page lists all reimbursement claims submitted by members"
+msgstr ""
+"In questa pagina sono elencate tutte le richieste di rimborso presentate dai"
+" soci"
+
 msgid "This page shows the general information of registered players"
 msgstr ""
 "Questa pagina mostra le informazioni generali dei giocatori registrati"
@@ -5899,11 +5915,6 @@ msgstr ""
 msgid "Select from the dropdown the characters to be added to the plot"
 msgstr "Selezionare dal menu a tendina i personaggi da aggiungere alla trama"
 
-msgid "This page allows you to add or edit a disbursement credits item"
-msgstr ""
-"Questa pagina consente di aggiungere o modificare una voce di credito di "
-"erogazione"
-
 msgid "This page allows you to add or edit the registration surcharges"
 msgstr ""
 "Questa pagina ti permette di aggiungere o modificare i sovrapprezzi sulle "
@@ -5988,9 +5999,6 @@ msgstr ""
 msgid "This page shows the traits assigned to the characters in the run"
 msgstr "Questa pagina riepiloga i tratti assegnati ai personaggi della run"
 
-msgid "This page summarises the disbursements recorded in the system of"
-msgstr "Questa pagina riepiloga le erogazioni registrati a sistema di"
-
 msgid "Use the information below to request the transfer from your bank"
 msgstr ""
 "Utilizzate le informazioni riportate di seguito per richiedere il bonifico "
@@ -6003,11 +6011,6 @@ msgid "Your request will be considered at the next meeting of the Board"
 msgstr ""
 "La richiesta verrà presa in considerazione alla prossima riunione del "
 "Consiglio di amministrazione"
-
-#, python-format
-msgid "%(amount).2f %(credits)s were disbursed with reason \"%(reason)s\"."
-msgstr ""
-"%(amount).2f %(credits)s sono stati erogati con motivazione \"%(reason)s\"."
 
 msgid "Copy and paste exactly all the coloured text below into the notes"
 msgstr ""
@@ -6298,7 +6301,7 @@ msgstr "Presente (nelle relazioni di questo personaggio è presente l'altro)"
 
 msgid "Set the options for the automatic PDF generation of characters sheets"
 msgstr ""
-"Impostare le opzioni per la generazione automatica di fogli di caratteri in "
+"Impostare le opzioni per la generazione automatica delle schede PDF in "
 "formato PDF"
 
 #, python-format
@@ -6457,6 +6460,12 @@ msgstr ""
 "personaggio"
 
 msgid ""
+"This page provides a summary of all expenses submitted by collaborators"
+msgstr ""
+"Questa pagina fornisce un riepilogo di tutte le spese presentate dai "
+"collaboratori"
+
+msgid ""
 "Do you want to enable a secret registration link to allow early sign-ups"
 msgstr ""
 "Vuoi attivare un link di registrazione segreto per consentire le iscrizioni "
@@ -6535,6 +6544,12 @@ msgid ""
 msgstr ""
 "Permette all'organizzazione di assegnare badge e di attivare una classifica "
 "pubblica."
+
+msgid ""
+"Create the first character of the event in the character management panel"
+msgstr ""
+"Crea il primo personaggio dell'evento nel pannello di gestione dei "
+"personaggi"
 
 msgid ""
 "Do you want to split the registration fee into fixed payment installments"
@@ -6889,12 +6904,6 @@ msgstr ""
 "dell'evento"
 
 msgid ""
-"This page summarises the disbursements recorded in the system for this run "
-"of"
-msgstr ""
-"Questa pagina riepiloga le erogazioni registrate a sistema per questa run di"
-
-msgid ""
 "Write your question, request or concern here. We will be happy to answer "
 "you!"
 msgstr ""
@@ -7004,11 +7013,6 @@ msgstr ""
 " organizzarle."
 
 msgid ""
-"Request for reimbursement entered! You will receive notice when it is "
-"disbursed"
-msgstr "Richiesta di rimborso immessa! Riceverai avviso quando sarà erogata"
-
-msgid ""
 "Terms and conditions of signup, shown in a page linked in the registration "
 "form"
 msgstr ""
@@ -7064,13 +7068,12 @@ msgstr ""
 "Immagine logo (puoi caricare un file di qualunque dimensione, verrà "
 "ridimensionato automaticamente"
 
-#, python-format
 msgid ""
-"Reimbursement of %(amount).2f %(credits)s with reason '%(reason)s' was "
-"disbursed"
+"Request for reimbursement entered! You will receive notice when it is "
+"processed."
 msgstr ""
-"È stato erogato il rimborso di %(amount).2f %(credits)s con motivazione "
-"\"%(reason)s\""
+"Richiesta di rimborso inserita! Riceverete una notifica quando verrà "
+"elaborata."
 
 msgid ""
 "This page shows the sensitive information of registered players regarding "
@@ -7277,6 +7280,13 @@ msgstr ""
 "dell'evento"
 
 msgid ""
+"You can update them by indicating the recipient and assigning the "
+"contributed money"
+msgstr ""
+"È possibile aggiornarli indicando il destinatario e assegnando il denaro "
+"conferito"
+
+msgid ""
 "Do you want to open registrations at a specific date and time instead of "
 "immediately"
 msgstr ""
@@ -7309,8 +7319,8 @@ msgid ""
 "In rich text editors, you can reference other characters directly using "
 "their number"
 msgstr ""
-"Negli editor di testo ricco, è possibile fare riferimento ad altri caratteri"
-" direttamente utilizzando il loro numero"
+"Negli editor di testo ricco, è possibile fare riferimento ad altri "
+"personaggi direttamente utilizzando il loro numero"
 
 msgid ""
 "Indicates a type of identification document issued by the nation in which "
@@ -7979,6 +7989,13 @@ msgstr ""
 "eventi associativi"
 
 msgid ""
+"Some activated features need the 'Character' feature, it isn't active: "
+"access the feature panel"
+msgstr ""
+"Alcune funzioni attivate necessitano della funzione 'Carattere', non è "
+"attiva: accedere al pannello delle funzioni"
+
+msgid ""
 "This page allows you to perform a quick setup of the most important settings"
 " for your new event"
 msgstr ""
@@ -8239,6 +8256,13 @@ msgstr ""
 " domande per rendere più chiari i moduli lunghi."
 
 msgid ""
+"Some activated features need the 'Token / Credit' feature, it isn't active: "
+"access the feature panel"
+msgstr ""
+"Alcune funzioni attivate necessitano della funzione 'Token / Credito', non è"
+" attiva: accedere al pannello delle funzioni"
+
+msgid ""
 "This code is used to generate the secret registration link, you may keep the"
 " default or customize it"
 msgstr ""
@@ -8333,7 +8357,7 @@ msgid ""
 "You have activated character customization, but no fields has been set; "
 "access the configuration panel"
 msgstr ""
-"È stata attivata la personalizzazione dei caratteri, ma non è stato "
+"È stata attivata la personalizzazione dei personaggi, ma non è stato "
 "impostato alcun campo; accedi al pannello di configurazione"
 
 msgid ""
@@ -8469,13 +8493,6 @@ msgid ""
 msgstr ""
 "Ci sono <b>%(number)s</b> personaggi in stato di proposta, approvli nel "
 "pannello di gestione dei personaggi"
-
-msgid ""
-"This page shows all reimbursement claims submitted by members. You can edit "
-"and approve them as disbursed"
-msgstr ""
-"Questa pagina mostra tutte le richieste di rimborso presentate dai soci. È "
-"possibile modificarle e approvarle come erogate"
 
 msgid ""
 "When you want to close the collection, follow the link below. A special "
@@ -8649,13 +8666,6 @@ msgstr ""
 "giocatori che hanno selezionano tale biglietto"
 
 msgid ""
-"The feature 'Diet' requires the diet field to be set in the user profile, "
-"access the organization profile panel"
-msgstr ""
-"La funzionalità 'Dieta' richiede che il campo dieta sia impostato nel "
-"profilo dell'utente, accedi al pannello del profilo dell'organizzazione"
-
-msgid ""
 "This page displays the application for membership in the organization. You "
 "can accept or reject the application"
 msgstr ""
@@ -8803,13 +8813,6 @@ msgid ""
 msgstr ""
 "Numero di mesi, a partire dall'inizio dell'anno associativo, per cui rendere"
 " libero il versamento della quota sociale"
-
-msgid ""
-"The feature 'Safety' requires the safety field to be set in the user "
-"profile, access the organization profile panel"
-msgstr ""
-"La funzionalità 'Safety' richiede che il campo safety sia impostato nel "
-"profilo utente, accedi al pannello del profilo dell'organizzazione"
 
 msgid ""
 "Adds a link to legal notices on every page, and provides a management panel "
@@ -9163,13 +9166,6 @@ msgstr ""
 "notifica al giocatore di procedere con il versamento. Default 30."
 
 msgid ""
-"This page shows the collections opened by players. You can update them "
-"indicating the recipient and disburse the money contributed"
-msgstr ""
-"Questa pagina mostra le collette aperte dai giocatori. È possibile "
-"aggiornarle indicando il destinatario ed erogare il denaro versato"
-
-msgid ""
 "This page allows you to select the features activated for this event, and "
 "all its runs. Click on a feature to show its description."
 msgstr ""
@@ -9263,14 +9259,6 @@ msgid ""
 msgstr ""
 "Note: Cerca di raggruppare quanti più passeggeri per richiesta; se noti dei "
 "ritardi, scrivici direttamente, non inserire nuove richieste"
-
-msgid ""
-"This page summarises all expenses incurred by employees and uploaded to the "
-"system. Once approved, they are disbursed to co-workers as"
-msgstr ""
-"Questa pagina riepiloga tutte le spese sostenute dai collaboratori e "
-"caricate a sistema. Una volta approvata vengono erogati ai collaboratori "
-"come"
 
 #, python-format
 msgid ""

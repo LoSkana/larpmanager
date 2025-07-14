@@ -94,16 +94,14 @@ class OrgaTokenForm(MyFormRun):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.page_info = (
-            _("This page allows you to add or edit a disbursement entry of") + f" {self.params['token_name']}"
-        )
+        self.page_info = _("This page allows you to add or edit an assignment of") + f" {self.params['token_name']}"
         self.page_title = self.params["token_name"]
         self.initial["oth"] = AccountingItemOther.TOKEN
         self.fields["member"].widget.set_run(self.params["run"])
 
 
 class OrgaCreditForm(MyFormRun):
-    page_info = _("This page allows you to add or edit a disbursement credits item")
+    page_info = _("This page allows you to add or edit a credits assignment")
 
     class Meta:
         model = AccountingItemOther
@@ -240,7 +238,7 @@ class ExeInvoiceForm(MyForm):
 
 
 class ExeCreditForm(MyForm):
-    page_info = _("This page allows you to add or edit a disbursement credits item")
+    page_info = _("This page allows you to add or edit a credits assignment")
 
     class Meta:
         model = AccountingItemOther
@@ -249,7 +247,7 @@ class ExeCreditForm(MyForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.page_title = _("Disbursment") + f" {self.params['credit_name']}"
+        self.page_title = _("Assignment") + f" {self.params['credit_name']}"
         get_run_choices(self)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
         self.fields["run"].widget.set_assoc(self.params["a_id"])
@@ -265,10 +263,8 @@ class ExeTokenForm(MyForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.page_title = _("Disbursement") + f" {self.params['token_name']}"
-        self.page_info = (
-            _("This page allows you to add or edit a disbursement entry of") + f" {self.params['token_name']}"
-        )
+        self.page_title = _("Assignment") + f" {self.params['token_name']}"
+        self.page_info = _("This page allows you to add or edit an assignment of") + f" {self.params['token_name']}"
         get_run_choices(self)
         self.fields["member"].widget.set_assoc(self.params["a_id"])
         self.fields["run"].widget.set_assoc(self.params["a_id"])
