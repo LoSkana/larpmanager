@@ -134,7 +134,7 @@ async def membership_fees(page, live_server):
 
     await go_to(page, live_server, "/manage/membership/")
     await page.get_by_role("link", name="Request").click()
-    await page.get_by_role("button", name="Approve").click()
+    await page.get_by_role("button", name="Confirm").click()
 
     await go_to(page, live_server, "/manage/config")
     await page.get_by_role("link", name=re.compile(r"Members\s.+")).click()

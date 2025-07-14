@@ -113,7 +113,7 @@ async def membership(live_server, page):
     # approve request signup
     await go_to(page, live_server, "/manage/membership/")
     await page.get_by_role("link", name="Request").click()
-    await page.get_by_role("button", name="Approve").click()
+    await page.get_by_role("button", name="Confirm").click()
     # check register
     await go_to(page, live_server, "/test/1/register")
     await expect(page.locator("#one")).to_contain_text("to confirm it proceed with payment")

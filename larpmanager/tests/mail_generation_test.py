@@ -64,7 +64,7 @@ async def expense(image_path, live_server, page):
     await page.get_by_role("link", name="Request").click()
     await page.get_by_role("textbox", name="Response Response").click()
     await page.get_by_role("textbox", name="Response Response").fill("yeaaaa")
-    await page.get_by_role("button", name="Approve").click()
+    await page.get_by_role("button", name="Confirm").click()
 
     # expenses
     await go_to(page, live_server, "/manage/features/106/on")
