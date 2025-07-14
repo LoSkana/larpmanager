@@ -208,6 +208,9 @@ class PlotForm(WritingForm, BaseWritingForm):
         self.init_orga_fields()
         self.reorder_field("characters")
 
+        self.init_characters = self.instance.get_plot_characters().values_list("character__id", flat=True)
+        self.initial["characters"] = self.init_characters
+
         # PLOT CHARACTERS REL
         self.add_char_finder = []
         self.field_link = {}
@@ -234,12 +237,10 @@ class PlotForm(WritingForm, BaseWritingForm):
                 reverse_args = [self.params["event"].slug, self.params["run"].number, ch[0]]
                 self.field_link[id_field] = reverse("orga_characters_edit", args=reverse_args)
 
-    def get_init_multi_character(self):
-        que = PlotCharacterRel.objects.filter(plot__id=self.instance.pk)
-        return que.values_list("character_id", flat=True)
+    def _save_multi(self, s, instance):
+        new = set(self.cleaned_data["characters"].values_list("pk", flat=True))
+        old = set(self.init_characters)
 
-    @staticmethod
-    def save_multi_characters(instance, old, new):
         for ch in old - new:
             PlotCharacterRel.objects.filter(character_id=ch, plot_id=instance.pk).delete()
         for ch in new - old:
@@ -248,15 +249,15 @@ class PlotForm(WritingForm, BaseWritingForm):
     def save(self, commit=True):
         instance = super().save()
 
-        if instance.pk:
-            for pr in self.instance.get_plot_characters():
-                field = f"ch_{pr.character_id}"
-                if field not in self.cleaned_data:
-                    continue
-                if self.cleaned_data[field] == pr.text:
-                    continue
-                pr.text = self.cleaned_data[field]
-                pr.save()
+        instance.save()
+        for pr in self.instance.get_plot_characters():
+            field = f"ch_{pr.character_id}"
+            if field not in self.cleaned_data:
+                continue
+            if self.cleaned_data[field] == pr.text:
+                continue
+            pr.text = self.cleaned_data[field]
+            pr.save()
 
         return instance
 
