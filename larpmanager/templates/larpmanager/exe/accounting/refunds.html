@@ -35,7 +35,7 @@
                     <td>{{ el.get_status_display }}</td>
                     <td>
                         {% if el.status != 'p' %}
-                            <a href="{% url 'exe_refunds_confirm' el.id %}">{% trans "Eroga" %}</a>
+                            <a href="{% url 'exe_refunds_confirm' el.id %}">{% trans "Done" %}</a>
                         {% endif %}
                     </td>
                 </tr>

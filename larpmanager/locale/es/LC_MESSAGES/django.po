@@ -290,9 +290,6 @@ msgstr "Descr"
 msgid "Email"
 msgstr "Correo electrónico"
 
-msgid "Eroga"
-msgstr "Reembolso"
-
 msgid "Error"
 msgstr "Error"
 
@@ -434,9 +431,6 @@ msgstr "Suma"
 
 msgid "Answer"
 msgstr "Respuesta"
-
-msgid "Audits"
-msgstr "Auditorías"
 
 msgid "Badges"
 msgstr "Insignias"
@@ -2997,6 +2991,9 @@ msgstr "Apertura en: %(date)s"
 msgid "Organization inflows"
 msgstr "Ingresos de la asociación"
 
+msgid "Payment Verification"
+msgstr "Verificación de pagos"
+
 msgid "Payment confirmation"
 msgstr "Confirmación de pago"
 
@@ -3124,6 +3121,9 @@ msgstr "Participantes incluidos"
 #, python-format
 msgid "Payment per %(event)s"
 msgstr "Pago por %(event)s"
+
+msgid "Payments Verification"
+msgstr "Verificación de pagos"
 
 msgid "Personal data updated"
 msgstr "¡Datos personales actualizados"

@@ -290,9 +290,6 @@ msgstr "Descr"
 msgid "Email"
 msgstr "Courriel"
 
-msgid "Eroga"
-msgstr "Eroga"
-
 msgid "Error"
 msgstr "Erreur"
 
@@ -434,9 +431,6 @@ msgstr "Somme"
 
 msgid "Answer"
 msgstr "Réponse"
-
-msgid "Audits"
-msgstr "Audits"
 
 msgid "Badges"
 msgstr "Badges"
@@ -2997,6 +2991,9 @@ msgstr "Ouverture à : %(date)s"
 msgid "Organization inflows"
 msgstr "Recettes de l'association"
 
+msgid "Payment Verification"
+msgstr "Vérification des paiements"
+
 msgid "Payment confirmation"
 msgstr "Confirmation des paiements"
 
@@ -3124,6 +3121,9 @@ msgstr "Ils ont participé"
 #, python-format
 msgid "Payment per %(event)s"
 msgstr "Paiement pour %(event)s"
+
+msgid "Payments Verification"
+msgstr "Vérification des paiements"
 
 msgid "Personal data updated"
 msgstr "Données personnelles mises à jour"
@@ -4692,7 +4692,7 @@ msgstr "Sélectionner aléatoirement des billets de loterie à revaloriser"
 
 #, python-format
 msgid "The sum was assigned to you as %(credits)s"
-msgstr "La somme vous a été attribuée sous forme de %(credits)"
+msgstr "La somme vous a été attribuée sous forme de %(credits)s"
 
 msgid "This page performs checks on members' data"
 msgstr "Cette page effectue des contrôles sur les données des membres"
@@ -6370,7 +6370,9 @@ msgstr ""
 
 #, python-format
 msgid "Staff member %(user)s added a new reimbursement request for %(event)s"
-msgstr "L'employé %(user)s a ajouté une nouvelle créance pour %(event)s"
+msgstr ""
+"Le membre du personnel %(user)s a ajouté une nouvelle demande de "
+"remboursement pour %(event)s"
 
 msgid "Text visible only by the assigned player, when 'show text' is checked"
 msgstr ""

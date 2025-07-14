@@ -290,9 +290,6 @@ msgstr "Opis"
 msgid "Email"
 msgstr "E-mail"
 
-msgid "Eroga"
-msgstr "Eroga"
-
 msgid "Error"
 msgstr "Błąd"
 
@@ -434,9 +431,6 @@ msgstr "Kwota"
 
 msgid "Answer"
 msgstr "Odpowiedź"
-
-msgid "Audits"
-msgstr "Audyty"
 
 msgid "Badges"
 msgstr "Odznaki"
@@ -2997,6 +2991,9 @@ msgstr "Otwarcie o godz: %(date)s"
 msgid "Organization inflows"
 msgstr "Wpływy organizacji"
 
+msgid "Payment Verification"
+msgstr "Weryfikacja płatności"
+
 msgid "Payment confirmation"
 msgstr "Potwierdzenie płatności"
 
@@ -3124,6 +3121,9 @@ msgstr "Wśród uczestników znaleźli się"
 #, python-format
 msgid "Payment per %(event)s"
 msgstr "Płatność za %(event)s"
+
+msgid "Payments Verification"
+msgstr "Weryfikacja płatności"
 
 msgid "Personal data updated"
 msgstr "Dane osobowe zaktualizowane"
@@ -3296,7 +3296,7 @@ msgstr "Krótki tagline, slogan"
 
 #, python-format
 msgid "Assignment %(elements)s"
-msgstr "Przypisanie %(elements)"
+msgstr "Przypisanie %(elements)s"
 
 msgid "Background of web pages"
 msgstr "Tło stron internetowych"

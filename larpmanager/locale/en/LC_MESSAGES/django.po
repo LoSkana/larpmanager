@@ -4629,9 +4629,6 @@ msgstr ""
 msgid "residues"
 msgstr ""
 
-msgid "Eroga"
-msgstr ""
-
 msgid "This page summarises the system entries of"
 msgstr ""
 
@@ -4998,6 +4995,9 @@ msgid "Collected votes"
 msgstr ""
 
 msgid "List of voters"
+msgstr ""
+
+msgid "Payment Verification"
 msgstr ""
 
 msgid ""
@@ -7516,7 +7516,7 @@ msgstr ""
 msgid "Manage collections participated by players"
 msgstr ""
 
-msgid "Audits"
+msgid "Payments Verification"
 msgstr ""
 
 msgid "Verify manually approved payments"

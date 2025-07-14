@@ -290,9 +290,6 @@ msgstr "Descr"
 msgid "Email"
 msgstr "E-mail"
 
-msgid "Eroga"
-msgstr "Eroga"
-
 msgid "Error"
 msgstr "Chyba"
 
@@ -434,9 +431,6 @@ msgstr "Součet"
 
 msgid "Answer"
 msgstr "Odpověď"
-
-msgid "Audits"
-msgstr "Audity"
 
 msgid "Badges"
 msgstr "Odznaky"
@@ -2997,6 +2991,9 @@ msgstr "Otevření v: %(date)s"
 msgid "Organization inflows"
 msgstr "Příjmy sdružení"
 
+msgid "Payment Verification"
+msgstr "Ověřování plateb"
+
 msgid "Payment confirmation"
 msgstr "Potvrzení plateb"
 
@@ -3124,6 +3121,9 @@ msgstr "Zúčastnili se"
 #, python-format
 msgid "Payment per %(event)s"
 msgstr "Platba za %(event)s"
+
+msgid "Payments Verification"
+msgstr "Ověřování plateb"
 
 msgid "Personal data updated"
 msgstr "Aktualizace osobních údajů"

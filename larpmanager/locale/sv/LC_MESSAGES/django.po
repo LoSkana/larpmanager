@@ -290,9 +290,6 @@ msgstr "Descr"
 msgid "Email"
 msgstr "E-post"
 
-msgid "Eroga"
-msgstr "Eroga"
-
 msgid "Error"
 msgstr "Fel"
 
@@ -434,9 +431,6 @@ msgstr "Summa"
 
 msgid "Answer"
 msgstr "Svar"
-
-msgid "Audits"
-msgstr "Revisioner"
 
 msgid "Badges"
 msgstr "Badges"
@@ -2997,6 +2991,9 @@ msgstr "Öppnas kl: %(date)s"
 msgid "Organization inflows"
 msgstr "Föreningens intäkter"
 
+msgid "Payment Verification"
+msgstr "Verifiering av betalning"
+
 msgid "Payment confirmation"
 msgstr "Bekräftelse av betalningar"
 
@@ -3124,6 +3121,9 @@ msgstr "De deltog i"
 #, python-format
 msgid "Payment per %(event)s"
 msgstr "Betalning per %(event)s"
+
+msgid "Payments Verification"
+msgstr "Verifiering av betalningar"
 
 msgid "Personal data updated"
 msgstr "Personuppgifter uppdaterade"

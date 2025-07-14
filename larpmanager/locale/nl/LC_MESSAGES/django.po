@@ -290,9 +290,6 @@ msgstr "Beschrijving"
 msgid "Email"
 msgstr "E-mail"
 
-msgid "Eroga"
-msgstr "Eroga"
-
 msgid "Error"
 msgstr "Fout"
 
@@ -434,9 +431,6 @@ msgstr "Som"
 
 msgid "Answer"
 msgstr "Antwoord"
-
-msgid "Audits"
-msgstr "Audits"
 
 msgid "Badges"
 msgstr "Badges"
@@ -2997,6 +2991,9 @@ msgstr "Opening op: %(date)s"
 msgid "Organization inflows"
 msgstr "Verenigingsinkomsten"
 
+msgid "Payment Verification"
+msgstr "Betalingsverificatie"
+
 msgid "Payment confirmation"
 msgstr "Bevestiging van betalingen"
 
@@ -3124,6 +3121,9 @@ msgstr "Ze namen deel"
 #, python-format
 msgid "Payment per %(event)s"
 msgstr "Betaling per %(event)s"
+
+msgid "Payments Verification"
+msgstr "Verificatie van betalingen"
 
 msgid "Personal data updated"
 msgstr "Persoonlijke gegevens bijgewerkt"
