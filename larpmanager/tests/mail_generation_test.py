@@ -85,9 +85,9 @@ async def resubmit_membership(live_server, page):
     # refute it
     await go_to(page, live_server, "/manage/membership/")
     await page.get_by_role("link", name="Request").click()
-    await page.locator("form").filter(has_text="Response Refute").locator("#id_response").click()
-    await page.locator("form").filter(has_text="Response Refute").locator("#id_response").fill("nope")
-    await page.get_by_role("button", name="Refute").click()
+    await page.locator("form").locator("#id_is_approved").click()
+    await page.locator("form").locator("#id_response").fill("nope")
+    await page.get_by_role("button", name="Submit").click()
     # signup
     await go_to(page, live_server, "/test/1/manage/registrations/tickets/")
     await page.locator("a:has(i.fas.fa-edit)").click()

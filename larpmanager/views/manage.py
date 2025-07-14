@@ -575,7 +575,7 @@ def _orga_reg_actions(ctx, features):
 
 def _orga_suggestions(ctx):
     suggestions = {
-        "exe_quick": _("To quickly configure your events's most important settings, access the quick setup page"),
+        "orga_quick": _("To quickly configure your events's most important settings, access the quick setup page"),
         "orga_registration_tickets": _(
             "To set the tickets that users can select during registration, access the tickets management page"
         ),
