@@ -1566,6 +1566,12 @@ msgstr "Léger"
 msgid "Limitations"
 msgstr "Limites"
 
+msgid "Max fillers"
+msgstr "Remplissage maximal"
+
+msgid "Max players"
+msgstr "Nombre maximal de joueurs"
+
 msgid "Nationality"
 msgstr "Nationalité"
 
@@ -1739,6 +1745,9 @@ msgstr "Avis juridique"
 
 msgid "Legal notice"
 msgstr "Avis juridique"
+
+msgid "Max waitings"
+msgstr "Attentes maximales"
 
 msgid "Members list"
 msgstr "Liste des membres"
@@ -3242,9 +3251,6 @@ msgstr "Âge minimum des membres"
 msgid "Modify shuttle request"
 msgstr "Modification de la demande de navette"
 
-msgid "Number of filler spots"
-msgstr "Nombre d'emplacements de remplissage"
-
 msgid "Number of partecipants"
 msgstr "Nombre de participations"
 
@@ -3358,12 +3364,6 @@ msgstr "Nombre minimum de votes"
 
 msgid "Move registration event"
 msgstr "Déménagement de l'événement d'enregistrement"
-
-msgid "Number of primary spots"
-msgstr "Nombre de places dans les écoles primaires"
-
-msgid "Number of waiting spots"
-msgstr "Nombre de places d'attente"
 
 msgid "Please check them below"
 msgstr "Veuillez les consulter ci-dessous"
@@ -4923,6 +4923,12 @@ msgstr "Indiquez le sexe auquel vous vous identifiez"
 msgid "Manage your event expenses and upload receipts"
 msgstr "Gérez les dépenses liées à votre événement et téléchargez les reçus"
 
+msgid "Maximum number of filler spots (0 = unlimited)"
+msgstr "Nombre maximal de points de remplissage (0 = illimité)"
+
+msgid "Maximum number of player spots (0 = unlimited)"
+msgstr "Nombre maximal de places de joueurs (0 = illimité)"
+
 msgid "Now you can review all organizations's members"
 msgstr ""
 "Vous pouvez désormais consulter les membres de toutes les organisations"
@@ -5006,6 +5012,9 @@ msgstr "Indique s'il peut être sélectionné par les joueurs"
 
 msgid "Manage the traits available in the event quests"
 msgstr "Gérer les traits disponibles dans les quêtes événementielles"
+
+msgid "Maximum number of waiting spots (0 = unlimited)"
+msgstr "Nombre maximal de places en attente (0 = illimité)"
 
 msgid "Modify some character elements to make it yours"
 msgstr ""
@@ -5289,6 +5298,9 @@ msgstr ""
 msgid "Manage registrations discounts available to players"
 msgstr "Gérer les inscriptions et les réductions accordées aux joueurs"
 
+msgid "Maximum number of tickets available (0 = unlimited)"
+msgstr "Nombre maximal de billets disponibles (0 = illimité)"
+
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Choisissez une photo claire et facilement reconnaissable"
 
@@ -5330,12 +5342,6 @@ msgstr "Dernière étape, veuillez télécharger votre demande d'adhésion"
 
 msgid "Manages fixed installment payments for registrations"
 msgstr "Gestion des paiements échelonnés pour les enregistrements"
-
-msgid "Maximum number of fillers to manage (0 for infinite)"
-msgstr "Nombre maximum de fillers à gérer (0 pour infini)"
-
-msgid "Maximum number of tickets available (0 for infinite)"
-msgstr "Indique le nombre maximum de billets disponibles (0 pour infini)"
 
 msgid "Perform check on the consistency of character sheets"
 msgstr "Vérification de la cohérence des feuilles de personnage"
@@ -5411,6 +5417,9 @@ msgstr "Cette page présente toutes les factures enregistrées dans le système"
 msgid "This page shows users who can be persuaded to sign up"
 msgstr ""
 "Cette page montre les utilisateurs que l'on peut convaincre de s'inscrire"
+
+msgid "To create an event, access the events management page"
+msgstr "Pour créer un événement, accédez à la page de gestion des événements"
 
 msgid "You have been gifted a registration to this event, by"
 msgstr "Vous avez reçu une entrée pour cet événement, par"
@@ -5661,9 +5670,6 @@ msgstr ""
 "Gérer les dépenses téléchargées par les membres du personnel et les "
 "approuver"
 
-msgid "Maximum number of waiting spots to manage (0 for infinite)"
-msgstr "Nombre maximal d'attentes à gérer (0 pour infini)"
-
 msgid "Probability of showing the special page (out of thousands)"
 msgstr "Probabilité d'afficher la page spéciale (sur des milliers)"
 
@@ -5901,9 +5907,6 @@ msgstr "Indiquez ici chaque élément que vous souhaitez éviter dans la mission
 
 msgid "It will be shown to other players together with your character"
 msgstr "Il sera montré aux autres joueurs en même temps que votre personnage"
-
-msgid "Maximum number of primary spots to be managed (0 for infinite)"
-msgstr "Nombre maximum de postes primaires à gérer (0 pour infini)"
 
 msgid "Now staff members can upload expenses, and you can review them"
 msgstr ""
@@ -6654,6 +6657,11 @@ msgstr ""
 "remplacés par une référence"
 
 msgid ""
+"Indicates the maximum number of times it can be requested (0 = unlimited)"
+msgstr ""
+"Indique le nombre maximum de fois qu'il peut être demandé (0 = illimité)"
+
+msgid ""
 "Inside this file must be the photos, named by the number of the character"
 msgstr ""
 "Ce fichier doit contenir les photos, nommées par le numéro du caractère"
@@ -6698,6 +6706,12 @@ msgstr ""
 "fournies"
 
 msgid ""
+"if you leave this empty, this can be the starting event of a new campaign"
+msgstr ""
+"si vous laissez ce champ vide, il peut s'agir de l'événement de départ d'une"
+" nouvelle campagne"
+
+msgid ""
 "I confirm that all my required personal data have been filled in correctly"
 msgstr ""
 "Je confirme que toutes les données personnelles requises ont été "
@@ -6708,11 +6722,6 @@ msgid ""
 msgstr ""
 "Indiquer la nationalité de l'organisation pour activer les fonctionnalités "
 "spécifiques à chaque pays"
-
-msgid ""
-"Indicates the maximum number of times it can be requested (0 for infinite)"
-msgstr ""
-"Indique le nombre maximum de fois qu'il peut être demandé (0 pour infini)"
 
 msgid ""
 "On this page you can filter characters and directly view their information"
@@ -7191,13 +7200,6 @@ msgid ""
 msgstr ""
 "Définit la fréquence d'envoi des courriels de rappel, en jours (si cette "
 "valeur n'est pas définie, aucun courriel n'est envoyé)"
-
-msgid ""
-"There are no active events, to create a new one access the events management"
-" page"
-msgstr ""
-"Il n'y a pas d'événement actif, pour en créer un nouveau, accédez à la page "
-"de gestion des événements"
 
 msgid ""
 "There are no payment gateway active, configure them in the payment settings "
@@ -7869,13 +7871,6 @@ msgid ""
 msgstr ""
 "Permet au champ \"couverture\" d'afficher une image spécifique dans la "
 "galerie - jusqu'à ce qu'elle soit attribuée à un joueur"
-
-msgid ""
-"If the event is part of a campaign, specify the parent event whose "
-"characters will be shared"
-msgstr ""
-"Si l'événement fait partie d'une campagne, indiquez l'événement parent dont "
-"les personnages seront partagés"
 
 msgid ""
 "In order to subscribe to the Organization's events you must apply to be "
@@ -8641,6 +8636,14 @@ msgid ""
 msgstr ""
 "Prise en charge de l'attribution de XP (points d'expérience) aux "
 "personnages, qui peuvent ensuite être utilisés pour acheter des compétences."
+
+msgid ""
+"If you select another event, it will be considered in the same campaign, and"
+" they will share the characters"
+msgstr ""
+"Si vous sélectionnez un autre événement, il sera considéré comme faisant "
+"partie de la même campagne et les deux événements partageront les mêmes "
+"personnages"
 
 msgid ""
 "Indicate the type of discount: standard, play again (only available to those"

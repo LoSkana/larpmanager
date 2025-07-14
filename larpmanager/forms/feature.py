@@ -4,7 +4,6 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import save_single_config
-from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.base import MyForm
 from larpmanager.models.base import Feature, FeatureModule
 
@@ -79,9 +78,7 @@ class QuickSetupForm(MyForm):
         self.prevent_canc = True
         self.main_class = "checkbox_single"
 
-    def init_fields(self):
-        features = get_assoc_features(self.params["a_id"])
-
+    def init_fields(self, features):
         # for each value in self.setup, init a field
         for key, element in self.setup.items():
             (is_feature, label, help_text) = element

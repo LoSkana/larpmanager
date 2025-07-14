@@ -2659,27 +2659,31 @@ msgstr ""
 msgid "Registered users will be granted normal access"
 msgstr ""
 
-msgid "Number of primary spots"
+msgid "Max players"
 msgstr ""
 
-msgid "Maximum number of primary spots to be managed (0 for infinite)"
+msgid "Maximum number of player spots (0 = unlimited)"
 msgstr ""
 
-msgid "Number of filler spots"
+msgid "Max fillers"
 msgstr ""
 
-msgid "Maximum number of fillers to manage (0 for infinite)"
+msgid "Maximum number of filler spots (0 = unlimited)"
 msgstr ""
 
-msgid "Number of waiting spots"
+msgid "Max waitings"
 msgstr ""
 
-msgid "Maximum number of waiting spots to manage (0 for infinite)"
+msgid "Maximum number of waiting spots (0 = unlimited)"
 msgstr ""
 
 msgid ""
-"If the event is part of a campaign, specify the parent event whose "
-"characters will be shared"
+"If you select another event, it will be considered in the same campaign, and "
+"they will share the characters"
+msgstr ""
+
+msgid ""
+"if you leave this empty, this can be the starting event of a new campaign"
 msgstr ""
 
 msgid "Character sheet intro"
@@ -2856,7 +2860,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Indicates the maximum number of times it can be requested (0 for infinite)"
+"Indicates the maximum number of times it can be requested (0 = unlimited)"
 msgstr ""
 
 msgid "Order in which the option is shown with respect to the others"
@@ -3284,7 +3288,7 @@ msgid ""
 "below the application"
 msgstr ""
 
-msgid "Maximum number of tickets available (0 for infinite)"
+msgid "Maximum number of tickets available (0 = unlimited)"
 msgstr ""
 
 msgid "Is it selectable by players"
@@ -8096,9 +8100,7 @@ msgstr ""
 msgid "Waiting list registrations"
 msgstr ""
 
-msgid ""
-"There are no active events, to create a new one access the events management "
-"page"
+msgid "To create an event, access the events management page"
 msgstr ""
 
 msgid ""

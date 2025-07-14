@@ -252,13 +252,17 @@ def post_save_event_campaign(sender, instance, **kwargs):
     if instance.parent_id:
         # noinspection PyProtectedMember
         if instance._old_parent_id != instance.parent_id:
-            # copy config, texts, roles
+            # copy config, texts, roles, features
             copy_class(instance.pk, instance.parent_id, EventConfig)
             copy_class(instance.pk, instance.parent_id, EventText)
             copy_class(instance.pk, instance.parent_id, EventRole)
-            # copy features
             for fn in instance.parent.features.all():
                 instance.features.add(fn)
+
+            # Temporarily disconnect signal
+            post_save.disconnect(post_save_event_campaign, sender=Event)
+            instance.save()
+            post_save.connect(post_save_event_campaign, sender=Event)
 
 
 @receiver(post_save, sender=Event)

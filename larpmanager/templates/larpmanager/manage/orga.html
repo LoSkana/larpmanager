@@ -28,7 +28,7 @@
             - {{ run.get_development_display }}
             - <a href="{% url 'register' run.event.slug run.number %}">{{ registration_status }}</a>
         </p>
-        {% if run.registration_secret %}
+        {% if features.registration_secret %}
             <p>
                 <a href="{% url 'register_exclusive' run.event.slug run.number run.registration_secret %}">{% trans "Secret registration link" %}</a>
             </p>

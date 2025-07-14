@@ -244,7 +244,7 @@ class WritingOption(BaseModel):
 
     max_available = models.IntegerField(
         default=0,
-        help_text=_("Indicates the maximum number of times it can be requested (0 for infinite)"),
+        help_text=_("Indicates the maximum number of times it can be requested (0 = unlimited)"),
     )
 
     order = models.IntegerField(default=0, help_text=_("Order in which the option is shown with respect to the others"))
@@ -500,7 +500,7 @@ class RegistrationOption(BaseModel):
     max_available = models.IntegerField(
         default=0,
         verbose_name=_("Maximum number"),
-        help_text=_("Indicates the maximum number of times it can be requested (0 for infinite)"),
+        help_text=_("Indicates the maximum number of times it can be requested (0 = unlimited)"),
     )
 
     order = models.IntegerField(default=0, help_text=_("Order in which the option is shown with respect to the others"))

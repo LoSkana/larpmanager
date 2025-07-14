@@ -25,7 +25,7 @@ from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_character_fields
-from larpmanager.cache.feature import reset_event_features
+from larpmanager.cache.feature import get_event_features, reset_event_features
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
@@ -133,12 +133,13 @@ class OrgaEventForm(MyForm):
             self.delete_field(m)
 
     def init_campaign(self, dl):
-        if "campaign" not in self.params["features"]:
+        self.fields["parent"].widget.set_assoc(self.params["a_id"])
+        if self.instance and self.instance.pk:
+            self.fields["parent"].widget.set_exclude(self.instance.pk)
+
+        if "campaign" not in self.params["features"] or not self.fields["parent"].widget.get_queryset().count():
             dl.append("parent")
-        else:
-            self.fields["parent"].widget.set_assoc(self.params["a_id"])
-            if self.instance and self.instance.pk:
-                self.fields["parent"].widget.set_exclude(self.instance.pk)
+            return
 
     def clean_slug(self):
         data = self.cleaned_data["slug"]
@@ -1026,4 +1027,4 @@ class OrgaQuickSetupForm(QuickSetupForm):
                 }
             )
 
-        self.init_fields()
+        self.init_fields(get_event_features(self.instance.pk))

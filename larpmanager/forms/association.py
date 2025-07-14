@@ -24,7 +24,7 @@ from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext
 
-from larpmanager.cache.feature import reset_assoc_features
+from larpmanager.cache.feature import get_assoc_features, reset_assoc_features
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
@@ -630,4 +630,4 @@ class ExeQuickSetupForm(QuickSetupForm):
                 }
             )
 
-        self.init_fields()
+        self.init_fields(get_assoc_features(self.instance.pk))

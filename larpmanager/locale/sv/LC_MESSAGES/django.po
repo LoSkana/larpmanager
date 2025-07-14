@@ -1566,6 +1566,12 @@ msgstr "Lättvikt"
 msgid "Limitations"
 msgstr "Begränsningar"
 
+msgid "Max fillers"
+msgstr "Max fyllmedel"
+
+msgid "Max players"
+msgstr "Max antal spelare"
+
 msgid "Nationality"
 msgstr "Nationalitet"
 
@@ -1739,6 +1745,9 @@ msgstr "Rättsligt meddelande"
 
 msgid "Legal notice"
 msgstr "Juridiskt meddelande"
+
+msgid "Max waitings"
+msgstr "Max väntetider"
 
 msgid "Members list"
 msgstr "Lista över medlemmar"
@@ -3242,9 +3251,6 @@ msgstr "Minimiålder för medlemmar"
 msgid "Modify shuttle request"
 msgstr "Ändra begäran om skyttel"
 
-msgid "Number of filler spots"
-msgstr "Antal fyllningsplatser"
-
 msgid "Number of partecipants"
 msgstr "Antal andelar"
 
@@ -3358,12 +3364,6 @@ msgstr "Lägsta antal röster"
 
 msgid "Move registration event"
 msgstr "Flytta registreringshändelse"
-
-msgid "Number of primary spots"
-msgstr "Antal platser i primärvården"
-
-msgid "Number of waiting spots"
-msgstr "Antal väntande platser"
 
 msgid "Please check them below"
 msgstr "Vänligen kontrollera dem nedan"
@@ -4919,6 +4919,12 @@ msgstr "Ange vilket kön du identifierar dig med"
 msgid "Manage your event expenses and upload receipts"
 msgstr "Hantera dina evenemangskostnader och ladda upp kvitton"
 
+msgid "Maximum number of filler spots (0 = unlimited)"
+msgstr "Maximalt antal utfyllnadsplatser (0 = obegränsat)"
+
+msgid "Maximum number of player spots (0 = unlimited)"
+msgstr "Maximalt antal spelarplatser (0 = obegränsat)"
+
 msgid "Now you can review all organizations's members"
 msgstr "Nu kan du granska alla organisationers medlemmar"
 
@@ -4998,6 +5004,9 @@ msgstr "Anger om den kan väljas av spelare"
 
 msgid "Manage the traits available in the event quests"
 msgstr "Hantera de egenskaper som är tillgängliga i event-uppdragen"
+
+msgid "Maximum number of waiting spots (0 = unlimited)"
+msgstr "Maximalt antal väntande platser (0 = obegränsat)"
 
 msgid "Modify some character elements to make it yours"
 msgstr "Ändra några karaktärsdrag för att göra den till din egen"
@@ -5269,6 +5278,9 @@ msgstr "Gå med i vår Discord för hjälp, idéer eller för att rapportera bug
 msgid "Manage registrations discounts available to players"
 msgstr "Hantera registreringsrabatter som är tillgängliga för spelare"
 
+msgid "Maximum number of tickets available (0 = unlimited)"
+msgstr "Maximalt antal tillgängliga biljetter (0 = obegränsat)"
+
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Välj ett tydligt och lätt igenkännligt foto"
 
@@ -5308,12 +5320,6 @@ msgstr "Sista steget är att ladda upp din medlemsansökan"
 
 msgid "Manages fixed installment payments for registrations"
 msgstr "Hanterar fasta delbetalningar för registreringar"
-
-msgid "Maximum number of fillers to manage (0 for infinite)"
-msgstr "Maximalt antal fillers som ska hanteras (0 för oändligt)"
-
-msgid "Maximum number of tickets available (0 for infinite)"
-msgstr "Anger det maximala antalet tillgängliga biljetter (0 för oändligt)"
 
 msgid "Perform check on the consistency of character sheets"
 msgstr "Utför kontroll av konsekvensen av karaktärsblad"
@@ -5387,6 +5393,9 @@ msgstr "Denna sida visar alla fakturor som finns registrerade i systemet"
 
 msgid "This page shows users who can be persuaded to sign up"
 msgstr "Den här sidan visar användare som kan övertalas att registrera sig"
+
+msgid "To create an event, access the events management page"
+msgstr "För att skapa ett evenemang, gå till sidan för evenemangshantering"
 
 msgid "You have been gifted a registration to this event, by"
 msgstr "Du har begåvats med ett inträde till detta evenemang, av"
@@ -5603,9 +5612,6 @@ msgstr "Om du har en faciliteringskod anger du den här och trycker på Enter"
 
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr "Hantera utlägg som laddats upp av medarbetare och godkänna dem"
-
-msgid "Maximum number of waiting spots to manage (0 for infinite)"
-msgstr "Maximalt antal väntetider som ska hanteras (0 för oändligt)"
 
 msgid "Probability of showing the special page (out of thousands)"
 msgstr "Sannolikhet att visa den särskilda sidan (av tusentals)"
@@ -5827,9 +5833,6 @@ msgstr "Ange här varje element som du vill undvika i uppgiften"
 
 msgid "It will be shown to other players together with your character"
 msgstr "Den kommer att visas för andra spelare tillsammans med din karaktär"
-
-msgid "Maximum number of primary spots to be managed (0 for infinite)"
-msgstr "Maximalt antal primära inlägg som ska hanteras (0 för oändligt)"
 
 msgid "Now staff members can upload expenses, and you can review them"
 msgstr "Nu kan medarbetarna ladda upp utlägg och du kan granska dem"
@@ -6490,6 +6493,11 @@ msgstr ""
 "Om markerad, kommer teckennamn automatiskt att ersättas av en referens"
 
 msgid ""
+"Indicates the maximum number of times it can be requested (0 = unlimited)"
+msgstr ""
+"Anger det maximala antalet gånger som den kan begäras (0 = obegränsat)"
+
+msgid ""
 "Inside this file must be the photos, named by the number of the character"
 msgstr ""
 "I den här filen måste bilderna finnas, namngivna med numret på tecknet"
@@ -6530,6 +6538,11 @@ msgid ""
 msgstr "Vi har fyllt i ansökan baserat på de uppgifter du har lämnat till oss"
 
 msgid ""
+"if you leave this empty, this can be the starting event of a new campaign"
+msgstr ""
+"om du lämnar detta tomt kan detta vara starthändelsen för en ny kampanj"
+
+msgid ""
 "I confirm that all my required personal data have been filled in correctly"
 msgstr ""
 "Jag bekräftar att alla mina obligatoriska personuppgifter har fyllts i "
@@ -6540,10 +6553,6 @@ msgid ""
 msgstr ""
 "Ange organisationens nationalitet för att aktivera nationsspecifika "
 "funktioner"
-
-msgid ""
-"Indicates the maximum number of times it can be requested (0 for infinite)"
-msgstr "Anger det maximala antalet gånger det kan begäras (0 för oändligt)"
 
 msgid ""
 "On this page you can filter characters and directly view their information"
@@ -7004,13 +7013,6 @@ msgid ""
 msgstr ""
 "Anger hur ofta påminnelsemeddelanden ska skickas, i dagar (om inget anges "
 "skickas inga e-postmeddelanden)"
-
-msgid ""
-"There are no active events, to create a new one access the events management"
-" page"
-msgstr ""
-"Det finns inga aktiva evenemang, om du vill skapa ett nytt går du till sidan"
-" för evenemangshantering"
 
 msgid ""
 "There are no payment gateway active, configure them in the payment settings "
@@ -7678,13 +7680,6 @@ msgid ""
 msgstr ""
 "Aktiverar fältet \"cover\", för att visa en specifik bild i galleriet - "
 "tills den tilldelas en spelare"
-
-msgid ""
-"If the event is part of a campaign, specify the parent event whose "
-"characters will be shared"
-msgstr ""
-"Om evenemanget är en del av en kampanj, ange det överordnade evenemang vars "
-"tecken kommer att delas"
 
 msgid ""
 "In order to subscribe to the Organization's events you must apply to be "
@@ -8445,6 +8440,13 @@ msgid ""
 msgstr ""
 "Lägger till stöd för att tilldela XP (erfarenhetspoäng) till karaktärer, som"
 " sedan kan användas för att köpa färdigheter."
+
+msgid ""
+"If you select another event, it will be considered in the same campaign, and"
+" they will share the characters"
+msgstr ""
+"Om du väljer ett annat evenemang kommer det att betraktas som en del av "
+"samma kampanj och de kommer att dela karaktärer"
 
 msgid ""
 "Indicate the type of discount: standard, play again (only available to those"

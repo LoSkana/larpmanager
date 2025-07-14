@@ -1566,6 +1566,12 @@ msgstr "Lehké"
 msgid "Limitations"
 msgstr "Omezení"
 
+msgid "Max fillers"
+msgstr "Max výplně"
+
+msgid "Max players"
+msgstr "Maximální počet hráčů"
+
 msgid "Nationality"
 msgstr "Státní příslušnost"
 
@@ -1739,6 +1745,9 @@ msgstr "Právní upozornění"
 
 msgid "Legal notice"
 msgstr "Právní upozornění"
+
+msgid "Max waitings"
+msgstr "Maximální počet čekání"
 
 msgid "Members list"
 msgstr "Seznam členů"
@@ -3242,9 +3251,6 @@ msgstr "Minimální věk členů"
 msgid "Modify shuttle request"
 msgstr "Žádost o změnu kyvadlové dopravy"
 
-msgid "Number of filler spots"
-msgstr "Počet výplňových míst"
-
 msgid "Number of partecipants"
 msgstr "Počet účastí"
 
@@ -3358,12 +3364,6 @@ msgstr "Minimální počet hlasů"
 
 msgid "Move registration event"
 msgstr "Přesun registrační události"
-
-msgid "Number of primary spots"
-msgstr "Počet základních míst"
-
-msgid "Number of waiting spots"
-msgstr "Počet čekacích míst"
 
 msgid "Please check them below"
 msgstr "Podívejte se na ně níže"
@@ -4915,6 +4915,12 @@ msgstr "Uveďte, ke kterému pohlaví se hlásíte"
 msgid "Manage your event expenses and upload receipts"
 msgstr "Správa výdajů na události a nahrávání účtenek"
 
+msgid "Maximum number of filler spots (0 = unlimited)"
+msgstr "Maximální počet výplňových míst (0 = neomezeně)"
+
+msgid "Maximum number of player spots (0 = unlimited)"
+msgstr "Maximální počet míst pro hráče (0 = neomezeně)"
+
 msgid "Now you can review all organizations's members"
 msgstr "Nyní si můžete prohlédnout všechny členy organizací"
 
@@ -4994,6 +5000,9 @@ msgstr "Označuje, zda jej mohou vybrat hráči"
 
 msgid "Manage the traits available in the event quests"
 msgstr "Správa vlastností dostupných v úkolech událostí"
+
+msgid "Maximum number of waiting spots (0 = unlimited)"
+msgstr "Maximální počet čekajících míst (0 = neomezeně)"
 
 msgid "Modify some character elements to make it yours"
 msgstr "Upravte si některé vlastnosti postavy podle sebe"
@@ -5265,6 +5274,9 @@ msgstr ""
 msgid "Manage registrations discounts available to players"
 msgstr "Správa slev pro hráče při registraci"
 
+msgid "Maximum number of tickets available (0 = unlimited)"
+msgstr "Maximální počet dostupných vstupenek (0 = neomezeně)"
+
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Vyberte prosím jasnou a snadno rozpoznatelnou fotografii"
 
@@ -5304,12 +5316,6 @@ msgstr "V posledním kroku nahrajte přihlášku ke členství"
 
 msgid "Manages fixed installment payments for registrations"
 msgstr "Správa pevných splátek za registrace"
-
-msgid "Maximum number of fillers to manage (0 for infinite)"
-msgstr "Maximální počet spravovaných výplní (0 pro nekonečno)"
-
-msgid "Maximum number of tickets available (0 for infinite)"
-msgstr "Udává maximální počet dostupných tipů (0 pro nekonečný počet)"
 
 msgid "Perform check on the consistency of character sheets"
 msgstr "Provést kontrolu konzistence listů postav"
@@ -5384,6 +5390,9 @@ msgid "This page shows users who can be persuaded to sign up"
 msgstr ""
 "Tato stránka zobrazuje uživatele, které lze přesvědčit, aby se "
 "zaregistrovali"
+
+msgid "To create an event, access the events management page"
+msgstr "Chcete-li vytvořit událost, přejděte na stránku správy událostí"
 
 msgid "You have been gifted a registration to this event, by"
 msgstr "Vstup na tuto událost vám darovali"
@@ -5596,9 +5605,6 @@ msgstr "Pokud máte kód usnadnění, zadejte jej zde a stiskněte klávesu ente
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr "Správa výdajů nahraných zaměstnanci a jejich schvalování"
 
-msgid "Maximum number of waiting spots to manage (0 for infinite)"
-msgstr "Maximální počet čekání, která mají být spravována (0 pro nekonečno)"
-
 msgid "Probability of showing the special page (out of thousands)"
 msgstr "Pravděpodobnost zobrazení speciální stránky (z tisíce)"
 
@@ -5800,11 +5806,6 @@ msgstr "Zde uveďte každý prvek, kterému se chcete v zadání vyhnout"
 
 msgid "It will be shown to other players together with your character"
 msgstr "Spolu s vaší postavou se zobrazí ostatním hráčům"
-
-msgid "Maximum number of primary spots to be managed (0 for infinite)"
-msgstr ""
-"Maximální počet primárních příspěvků, které mají být spravovány (0 pro "
-"nekonečno)"
 
 msgid "Now staff members can upload expenses, and you can review them"
 msgstr "Nyní mohou zaměstnanci nahrávat výdaje a vy je můžete kontrolovat"
@@ -6406,6 +6407,10 @@ msgid ""
 msgstr "Pokud je zaškrtnuto, názvy znaků budou automaticky nahrazeny odkazem"
 
 msgid ""
+"Indicates the maximum number of times it can be requested (0 = unlimited)"
+msgstr "Udává maximální počet opakování požadavku (0 = neomezeně)"
+
+msgid ""
 "Inside this file must be the photos, named by the number of the character"
 msgstr ""
 "Uvnitř tohoto souboru musí být fotografie pojmenované podle čísla znaku"
@@ -6445,6 +6450,12 @@ msgid ""
 msgstr "Aplikaci jsme předvyplnili na základě údajů, které jste nám poskytli"
 
 msgid ""
+"if you leave this empty, this can be the starting event of a new campaign"
+msgstr ""
+"pokud necháte tuto položku prázdnou, může se jednat o počáteční událost nové"
+" kampaně"
+
+msgid ""
 "I confirm that all my required personal data have been filled in correctly"
 msgstr "Potvrzuji, že všechny požadované osobní údaje byly vyplněny správně"
 
@@ -6453,10 +6464,6 @@ msgid ""
 msgstr ""
 "Uveďte státní příslušnost organizace, abyste aktivovali funkce specifické "
 "pro danou zemi"
-
-msgid ""
-"Indicates the maximum number of times it can be requested (0 for infinite)"
-msgstr "Udává maximální počet opakování požadavku (0 pro nekonečno)"
 
 msgid ""
 "On this page you can filter characters and directly view their information"
@@ -6890,13 +6897,6 @@ msgid ""
 msgstr ""
 "Nastavuje četnost zasílání e-mailů s připomenutím v dnech (pokud není "
 "nastaveno, nejsou zasílány žádné e-maily)"
-
-msgid ""
-"There are no active events, to create a new one access the events management"
-" page"
-msgstr ""
-"Neexistují žádné aktivní události, chcete-li vytvořit novou, přejděte na "
-"stránku správy událostí"
 
 msgid ""
 "There are no payment gateway active, configure them in the payment settings "
@@ -7529,13 +7529,6 @@ msgid ""
 msgstr ""
 "Povoluje pole \"cover\", aby se v galerii zobrazil konkrétní obrázek - dokud"
 " není přiřazen hráči"
-
-msgid ""
-"If the event is part of a campaign, specify the parent event whose "
-"characters will be shared"
-msgstr ""
-"Pokud je událost součástí kampaně, zadejte nadřazenou událost, jejíž znaky "
-"budou sdíleny"
 
 msgid ""
 "In order to subscribe to the Organization's events you must apply to be "
@@ -8290,6 +8283,13 @@ msgid ""
 msgstr ""
 "Přidává podporu pro přidělování XP (zkušenostních bodů) postavám, které lze "
 "následně použít k nákupu dovedností."
+
+msgid ""
+"If you select another event, it will be considered in the same campaign, and"
+" they will share the characters"
+msgstr ""
+"Pokud vyberete jinou událost, bude považována za součást stejné kampaně a "
+"bude mít společné postavy"
 
 msgid ""
 "Indicate the type of discount: standard, play again (only available to those"

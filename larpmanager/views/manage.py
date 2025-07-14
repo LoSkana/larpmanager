@@ -99,9 +99,9 @@ def _exe_manage(request):
 
     # if no event active, suggest to create one
     if not ctx["ongoing_runs"]:
-        _add_suggestion(
+        _add_action(
             ctx,
-            _("There are no active events, to create a new one access the events management page"),
+            _("To create an event, access the events management page"),
             "exe_events",
         )
 

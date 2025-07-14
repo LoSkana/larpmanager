@@ -1566,6 +1566,12 @@ msgstr "Lichtgewicht"
 msgid "Limitations"
 msgstr "Beperkingen"
 
+msgid "Max fillers"
+msgstr "Max vulstoffen"
+
+msgid "Max players"
+msgstr "Maximaal aantal spelers"
+
 msgid "Nationality"
 msgstr "Nationaliteit"
 
@@ -1739,6 +1745,9 @@ msgstr "Wettelijke kennisgeving"
 
 msgid "Legal notice"
 msgstr "Wettelijke kennisgeving"
+
+msgid "Max waitings"
+msgstr "Max wachttijden"
 
 msgid "Members list"
 msgstr "Ledenlijst"
@@ -3242,9 +3251,6 @@ msgstr "Minimumleeftijd van leden"
 msgid "Modify shuttle request"
 msgstr "Shuttleverzoek wijzigen"
 
-msgid "Number of filler spots"
-msgstr "Aantal vulplaatsen"
-
 msgid "Number of partecipants"
 msgstr "Aantal deelnemingen"
 
@@ -3358,12 +3364,6 @@ msgstr "Minimum aantal stemmen"
 
 msgid "Move registration event"
 msgstr "Verhuis registratie evenement"
-
-msgid "Number of primary spots"
-msgstr "Aantal primaire plaatsen"
-
-msgid "Number of waiting spots"
-msgstr "Aantal wachtplaatsen"
 
 msgid "Please check them below"
 msgstr "Bekijk ze hieronder"
@@ -4921,6 +4921,12 @@ msgstr "Geef aan met welk geslacht je je identificeert"
 msgid "Manage your event expenses and upload receipts"
 msgstr "Beheer je evenementuitgaven en upload ontvangstbewijzen"
 
+msgid "Maximum number of filler spots (0 = unlimited)"
+msgstr "Maximum aantal vulplekken (0 = onbeperkt)"
+
+msgid "Maximum number of player spots (0 = unlimited)"
+msgstr "Maximum aantal spelersplekken (0 = onbeperkt)"
+
 msgid "Now you can review all organizations's members"
 msgstr "Nu kun je alle leden van organisaties bekijken"
 
@@ -5002,6 +5008,9 @@ msgstr "Geeft aan of het kan worden geselecteerd door spelers"
 
 msgid "Manage the traits available in the event quests"
 msgstr "Beheer de eigenschappen die beschikbaar zijn in de event quests"
+
+msgid "Maximum number of waiting spots (0 = unlimited)"
+msgstr "Maximum aantal wachtplekken (0 = onbeperkt)"
 
 msgid "Modify some character elements to make it yours"
 msgstr "Pas enkele karakterkenmerken aan om er je eigen karakter van te maken"
@@ -5275,6 +5284,9 @@ msgstr "Word lid van onze Discord voor hulp, ideeën of om bugs te melden"
 msgid "Manage registrations discounts available to players"
 msgstr "Inschrijvingskortingen voor spelers beheren"
 
+msgid "Maximum number of tickets available (0 = unlimited)"
+msgstr "Maximum aantal beschikbare tickets (0 = onbeperkt)"
+
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Kies een duidelijke en gemakkelijk herkenbare foto"
 
@@ -5315,12 +5327,6 @@ msgstr "Upload als laatste stap je lidmaatschapsaanvraag"
 
 msgid "Manages fixed installment payments for registrations"
 msgstr "Beheert vaste termijnbetalingen voor registraties"
-
-msgid "Maximum number of fillers to manage (0 for infinite)"
-msgstr "Maximum aantal vullers dat moet worden beheerd (0 voor oneindig)"
-
-msgid "Maximum number of tickets available (0 for infinite)"
-msgstr "Geeft het maximum aantal beschikbare tickets aan (0 voor oneindig)"
 
 msgid "Perform check on the consistency of character sheets"
 msgstr "Voer een controle uit op de consistentie van karaktersheets"
@@ -5397,6 +5403,10 @@ msgid "This page shows users who can be persuaded to sign up"
 msgstr ""
 "Deze pagina toont gebruikers die kunnen worden overgehaald om zich aan te "
 "melden"
+
+msgid "To create an event, access the events management page"
+msgstr ""
+"Ga naar de pagina voor evenementenbeheer om een evenement aan te maken"
 
 msgid "You have been gifted a registration to this event, by"
 msgstr "Je hebt toegang gekregen tot dit evenement, door"
@@ -5628,9 +5638,6 @@ msgstr ""
 
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr "Beheer uitgaven die door medewerkers zijn geüpload en keur ze goed"
-
-msgid "Maximum number of waiting spots to manage (0 for infinite)"
-msgstr "Maximum aantal wachttijden dat moet worden beheerd (0 voor oneindig)"
 
 msgid "Probability of showing the special page (out of thousands)"
 msgstr ""
@@ -5864,10 +5871,6 @@ msgstr "Geef hier elk element aan dat je wilt vermijden in de opdracht"
 
 msgid "It will be shown to other players together with your character"
 msgstr "Het zal samen met je personage aan andere spelers worden getoond"
-
-msgid "Maximum number of primary spots to be managed (0 for infinite)"
-msgstr ""
-"Maximum aantal primaire berichten dat moet worden beheerd (0 voor oneindig)"
 
 msgid "Now staff members can upload expenses, and you can review them"
 msgstr "Nu kunnen medewerkers uitgaven uploaden en jij kunt ze bekijken"
@@ -6581,6 +6584,12 @@ msgstr ""
 "door een verwijzing"
 
 msgid ""
+"Indicates the maximum number of times it can be requested (0 = unlimited)"
+msgstr ""
+"Geeft het maximum aantal keren aan dat het kan worden aangevraagd (0 = "
+"onbeperkt)"
+
+msgid ""
 "Inside this file must be the photos, named by the number of the character"
 msgstr ""
 "In dit bestand moeten de foto's staan, genoemd naar het nummer van het teken"
@@ -6629,6 +6638,12 @@ msgstr ""
 "hebt verstrekt"
 
 msgid ""
+"if you leave this empty, this can be the starting event of a new campaign"
+msgstr ""
+"als je dit leeg laat, kan dit de startgebeurtenis van een nieuwe campagne "
+"zijn"
+
+msgid ""
 "I confirm that all my required personal data have been filled in correctly"
 msgstr ""
 "Ik bevestig dat al mijn vereiste persoonlijke gegevens correct zijn ingevuld"
@@ -6638,12 +6653,6 @@ msgid ""
 msgstr ""
 "Geef de nationaliteit van de organisatie op om landspecifieke functies te "
 "activeren"
-
-msgid ""
-"Indicates the maximum number of times it can be requested (0 for infinite)"
-msgstr ""
-"Geeft het maximum aantal keren aan dat het kan worden aangevraagd (0 voor "
-"oneindig)"
 
 msgid ""
 "On this page you can filter characters and directly view their information"
@@ -7117,13 +7126,6 @@ msgid ""
 msgstr ""
 "Stelt in hoe vaak herinneringsmails worden verzonden, in dagen (als dit niet"
 " is ingesteld, worden er geen e-mails verzonden)"
-
-msgid ""
-"There are no active events, to create a new one access the events management"
-" page"
-msgstr ""
-"Er zijn geen actieve evenementen. Om een nieuw evenement aan te maken, gaat "
-"u naar de pagina Evenementenbeheer"
 
 msgid ""
 "There are no payment gateway active, configure them in the payment settings "
@@ -7798,13 +7800,6 @@ msgid ""
 msgstr ""
 "Maakt het veld 'cover' mogelijk, om een specifieke afbeelding in de galerij "
 "te tonen - totdat deze is toegewezen aan een speler"
-
-msgid ""
-"If the event is part of a campaign, specify the parent event whose "
-"characters will be shared"
-msgstr ""
-"Als het evenement deel uitmaakt van een campagne, geef dan het bovenliggende"
-" evenement op waarvan de tekens worden gedeeld"
 
 msgid ""
 "In order to subscribe to the Organization's events you must apply to be "
@@ -8566,6 +8561,13 @@ msgid ""
 msgstr ""
 "Voegt ondersteuning toe voor het toekennen van XP (ervaringspunten) aan "
 "personages, die vervolgens kunnen worden gebruikt om vaardigheden te kopen."
+
+msgid ""
+"If you select another event, it will be considered in the same campaign, and"
+" they will share the characters"
+msgstr ""
+"Als je een ander evenement selecteert, wordt dit beschouwd als onderdeel van"
+" dezelfde campagne en delen ze de personages"
 
 msgid ""
 "Indicate the type of discount: standard, play again (only available to those"
