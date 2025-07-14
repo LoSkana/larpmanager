@@ -123,6 +123,7 @@ def _exe_manage(request):
 
 def _exe_suggestions(ctx):
     suggestions = {
+        "exe_quick": _("To quickly configure your organization's most important settings, access the quick setup page"),
         "exe_payment_details": _(
             "To set up the gateway payment available to players, to let them pay the registration fee through the platform, "
             "access the payment settings management page"
@@ -563,6 +564,7 @@ def _orga_reg_actions(ctx, features):
 
 def _orga_suggestions(ctx):
     suggestions = {
+        "exe_quick": _("To quickly configure your events's most important settings, access the quick setup page"),
         "orga_registration_tickets": _(
             "To set the tickets that users can select during registration, access the tickets management page"
         ),

@@ -238,4 +238,4 @@ def feature_description(request):
 
 @login_required
 def exe_quick(request):
-    return exe_edit(request, ExeQuickSetupForm, None, "exe_features", "manage", add_ctx={"add_another": False})
+    return exe_edit(request, ExeQuickSetupForm, None, "exe_quick", "manage", add_ctx={"add_another": False})

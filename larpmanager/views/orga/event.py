@@ -189,4 +189,4 @@ def orga_deadlines(request, s, n):
 
 @login_required
 def orga_quick(request, s, n):
-    return orga_edit(request, s, n, "orga_features", OrgaQuickSetupForm, None, "manage", add_ctx={"add_another": False})
+    return orga_edit(request, s, n, "orga_quick", OrgaQuickSetupForm, None, "manage", add_ctx={"add_another": False})

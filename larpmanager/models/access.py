@@ -38,6 +38,8 @@ class AssocPermission(BaseModel):
 
     descr = models.CharField(max_length=1000)
 
+    hidden = models.BooleanField(default=False)
+
     def module(self):
         # noinspection PyUnresolvedReferences
         return self.feature.module
@@ -98,6 +100,8 @@ class EventPermission(BaseModel):
     feature = models.ForeignKey(Feature, on_delete=models.CASCADE, related_name="event_permissions")
 
     descr = models.CharField(max_length=1000)
+
+    hidden = models.BooleanField(default=False)
 
     def module(self):
         # noinspection PyUnresolvedReferences

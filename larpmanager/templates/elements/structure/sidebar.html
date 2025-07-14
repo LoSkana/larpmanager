@@ -28,11 +28,13 @@
                         <h2>{% trans mod %}</h2>
                         <p>
                             {% for ap in list %}
-                                <span class="sidebar-link-wrap" descr="{% trans ap.descr %}">
-                                    <a class="sidebar-link"
-                                       href="{% url ap.slug run.event.slug run.number %}">{% trans ap.name %}</a>
-                                    <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
-                                </span>
+                                {% if not ap.hidden %}
+                                    <span class="sidebar-link-wrap" descr="{% trans ap.descr %}">
+                                        <a class="sidebar-link"
+                                           href="{% url ap.slug run.event.slug run.number %}">{% trans ap.name %}</a>
+                                        <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
+                                    </span>
+                                {% endif %}
                             {% endfor %}
                         </p>
                     </div>
@@ -50,10 +52,12 @@
                         <h2>{% trans mod %}</h2>
                         <p>
                             {% for ap in list %}
-                                <span class="sidebar-link-wrap" descr="{% trans ap.descr %}">
-                                    <a class="sidebar-link" href="{% url ap.slug %}">{% trans ap.name %}</a>
-                                    <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
-                                </span>
+                                {% if not ap.hidden %}
+                                    <span class="sidebar-link-wrap" descr="{% trans ap.descr %}">
+                                        <a class="sidebar-link" href="{% url ap.slug %}">{% trans ap.name %}</a>
+                                        <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
+                                    </span>
+                                {% endif %}
                             {% endfor %}
                         </p>
                     </div>

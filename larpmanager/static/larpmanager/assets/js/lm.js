@@ -55,44 +55,21 @@ $(document).ready(function() {
         }
     });
 
-    $('.sidebar-link').each(function() {
-        $(this).qtip({
-            content: {
-                text: function() {
-                    return $(this).parent().attr('descr');
-                }
-            }, style: {
-                classes: 'qtip-dark qtip-rounded qtip-shadow'
-            }, hide: {
-                effect: function(offset) {
-                    $(this).fadeOut(500);
-                }
-            }, show: {
-                effect: function(offset) {
-                    $(this).fadeIn(500);
-                }
-            }, position: {
-                my: 'top left',
-                at: 'bottom center',
-                viewport: window,
-                adjust: { method: 'flipinvert shift' }
-            }
-        });
-    });
-
     $('.explain-icon').qtip({
         content: {
             text: function() {
                 return $(this).parent().attr('descr');
             }
-        }, style: {
+        },
+        style: {
             classes: 'qtip-dark qtip-rounded qtip-shadow'
-        }, show: {
-            event: 'click',
+        },
+        show: {
+            event: 'click mouseenter',
             solo: true
         },
         hide: {
-            event: 'unfocus'
+            event: 'mouseleave unfocus'
         },
         position: {
             my: 'top center',
@@ -104,6 +81,7 @@ $(document).ready(function() {
             }
         }
     });
+
 
     setTimeout(() => {
     // set select on sidebar

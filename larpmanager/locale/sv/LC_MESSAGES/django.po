@@ -414,6 +414,9 @@ msgstr "pengar"
 msgid "other"
 msgstr "mer"
 
+msgid "quick"
+msgstr "snabb"
+
 msgid "title"
 msgstr "titel"
 
@@ -7415,6 +7418,13 @@ msgstr ""
 "Valfritt - Anger ytterligare information om alternativet, visas under frågan"
 
 msgid ""
+"To quickly configure your events's most important settings, access the quick"
+" setup page"
+msgstr ""
+"För att snabbt konfigurera de viktigaste inställningarna för dina evenemang,"
+" gå till snabbinställningssidan"
+
+msgid ""
 "Value of the discount for the friend who signs up using the code of a "
 "registered player"
 msgstr ""
@@ -7782,6 +7792,13 @@ msgid ""
 msgstr ""
 "På den här sidan visas i detalj för ett evenemang listan över de "
 "expertområden som omfattas av bidragsgivarna"
+
+msgid ""
+"To quickly configure your organization's most important settings, access the"
+" quick setup page"
+msgstr ""
+"För att snabbt konfigurera organisationens viktigaste inställningar, gå till"
+" sidan för snabbinställningar"
 
 msgid ""
 "Automatically generates a customizable PDF receipt for each payment and "

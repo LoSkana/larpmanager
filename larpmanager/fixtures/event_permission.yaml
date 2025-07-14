@@ -542,3 +542,12 @@
     slug: orga_archive_email
     number: 100
     feature: 199
+- model: larpmanager.eventpermission
+  pk: 77
+  fields:
+    name: Quick Setup
+    descr: quick
+    slug: exe_quick
+    number: 9999
+    feature: 216
+    hidden: true

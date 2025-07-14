@@ -318,3 +318,12 @@
     slug: exe_archive_email
     number: 91
     feature: 187
+- model: larpmanager.assocpermission
+  pk: 45
+  fields:
+    name: Quick Setup
+    descr: quick
+    slug: exe_quick
+    number: 9999
+    feature: 216
+    hidden: true

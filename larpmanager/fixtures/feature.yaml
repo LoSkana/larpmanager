@@ -1293,3 +1293,15 @@
     order: 9999
     after_text: null
     after_link: null
+- model: larpmanager.feature
+  pk: 216
+  fields:
+    name: Quick Setup
+    descr: ''
+    slug: quick_setup
+    overall: false
+    module: 9
+    placeholder: true
+    order: 9999
+    after_text: null
+    after_link: null

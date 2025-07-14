@@ -414,6 +414,9 @@ msgstr "peníze"
 msgid "other"
 msgstr "více"
 
+msgid "quick"
+msgstr "rychlý"
+
 msgid "title"
 msgstr "název"
 
@@ -7273,6 +7276,13 @@ msgstr ""
 "Nepovinné - Označuje další podrobnosti o možnosti, zobrazí se pod otázkou"
 
 msgid ""
+"To quickly configure your events's most important settings, access the quick"
+" setup page"
+msgstr ""
+"Chcete-li rychle nakonfigurovat nejdůležitější nastavení událostí, přejděte "
+"na stránku rychlého nastavení"
+
+msgid ""
 "Value of the discount for the friend who signs up using the code of a "
 "registered player"
 msgstr ""
@@ -7631,6 +7641,13 @@ msgid ""
 msgstr ""
 "Tato stránka zobrazuje v detailu události seznam odborností, které "
 "přispěvatelé pokrývají"
+
+msgid ""
+"To quickly configure your organization's most important settings, access the"
+" quick setup page"
+msgstr ""
+"Chcete-li rychle nakonfigurovat nejdůležitější nastavení organizace, "
+"přejděte na stránku rychlého nastavení"
 
 msgid ""
 "Automatically generates a customizable PDF receipt for each payment and "

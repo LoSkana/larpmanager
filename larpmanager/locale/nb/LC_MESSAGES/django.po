@@ -414,6 +414,9 @@ msgstr "penger"
 msgid "other"
 msgstr "mer"
 
+msgid "quick"
+msgstr "raskt"
+
 msgid "title"
 msgstr "tittel"
 
@@ -7389,6 +7392,13 @@ msgstr ""
 "spørsmålet"
 
 msgid ""
+"To quickly configure your events's most important settings, access the quick"
+" setup page"
+msgstr ""
+"For å raskt konfigurere de viktigste innstillingene for hendelsene dine, kan"
+" du gå til hurtigoppsett-siden"
+
+msgid ""
 "Value of the discount for the friend who signs up using the code of a "
 "registered player"
 msgstr ""
@@ -7755,6 +7765,13 @@ msgid ""
 msgstr ""
 "Denne siden viser i detalj hvilke fagområder som dekkes av bidragsyterne i "
 "et arrangement"
+
+msgid ""
+"To quickly configure your organization's most important settings, access the"
+" quick setup page"
+msgstr ""
+"For å raskt konfigurere organisasjonens viktigste innstillinger, kan du gå "
+"til siden for hurtigoppsett"
 
 msgid ""
 "Automatically generates a customizable PDF receipt for each payment and "

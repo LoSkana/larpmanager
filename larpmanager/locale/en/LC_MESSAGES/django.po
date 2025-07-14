@@ -7625,6 +7625,9 @@ msgstr ""
 msgid "Display all sent e-mails"
 msgstr ""
 
+msgid "quick"
+msgstr ""
+
 msgid "Manage the event settings: name, description,  and other data"
 msgstr ""
 
@@ -8099,6 +8102,11 @@ msgid ""
 msgstr ""
 
 msgid ""
+"To quickly configure your organization's most important settings, access the "
+"quick setup page"
+msgstr ""
+
+msgid ""
 "To set up the gateway payment available to players, to let them pay the "
 "registration fee through the platform, access the payment settings "
 "management page"
@@ -8287,6 +8295,11 @@ msgstr ""
 msgid ""
 "You have activated character customization, but no fields has been set; "
 "access the configuration panel"
+msgstr ""
+
+msgid ""
+"To quickly configure your events's most important settings, access the quick "
+"setup page"
 msgstr ""
 
 msgid ""

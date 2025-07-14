@@ -414,6 +414,9 @@ msgstr "soldi"
 msgid "other"
 msgstr "altro"
 
+msgid "quick"
+msgstr "veloce"
+
 msgid "title"
 msgstr "titolo"
 
@@ -7534,6 +7537,13 @@ msgstr ""
 " alla domanda"
 
 msgid ""
+"To quickly configure your events's most important settings, access the quick"
+" setup page"
+msgstr ""
+"Per configurare rapidamente le impostazioni più importanti dell'evento, "
+"accedi alla pagina di configurazione rapida"
+
+msgid ""
 "Value of the discount for the friend who signs up using the code of a "
 "registered player"
 msgstr ""
@@ -7902,6 +7912,13 @@ msgid ""
 msgstr ""
 "Questa pagina mostra, nel dettaglio di un evento, l'elenco delle competenze "
 "coperte dai collaboratori"
+
+msgid ""
+"To quickly configure your organization's most important settings, access the"
+" quick setup page"
+msgstr ""
+"Per configurare rapidamente le impostazioni più importanti "
+"dell'organizzazione, accedi alla pagina di configurazione rapida"
 
 msgid ""
 "Automatically generates a customizable PDF receipt for each payment and "

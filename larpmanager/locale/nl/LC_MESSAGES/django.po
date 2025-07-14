@@ -414,6 +414,9 @@ msgstr "geld"
 msgid "other"
 msgstr "meer"
 
+msgid "quick"
+msgstr "snel"
+
 msgid "title"
 msgstr "titel"
 
@@ -7533,6 +7536,13 @@ msgstr ""
 "weergegeven"
 
 msgid ""
+"To quickly configure your events's most important settings, access the quick"
+" setup page"
+msgstr ""
+"Om snel de belangrijkste instellingen van je events te configureren, ga je "
+"naar de pagina Snelle instellingen"
+
+msgid ""
 "Value of the discount for the friend who signs up using the code of a "
 "registered player"
 msgstr ""
@@ -7901,6 +7911,13 @@ msgid ""
 msgstr ""
 "Deze pagina toont in detail de lijst met expertises van de deelnemers aan "
 "een evenement"
+
+msgid ""
+"To quickly configure your organization's most important settings, access the"
+" quick setup page"
+msgstr ""
+"Om snel de belangrijkste instellingen van je organisatie te configureren, ga"
+" je naar de pagina Snelle instellingen"
 
 msgid ""
 "Automatically generates a customizable PDF receipt for each payment and "
