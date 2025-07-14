@@ -307,7 +307,7 @@ def _orga_actions(request, ctx, assoc):
     elif set(features) & {"faction", "plot", "casting", "user_character", "px", "custom_character", "questbuilder"}:
         _add_action(
             ctx,
-            _("Some activated features need the 'Character' feature, it isn't active: access the feature panel"),
+            _("Some activated features need the 'Character' feature, but it isn't active: access the feature panel"),
             "orga_features",
         )
 
@@ -327,7 +327,7 @@ def _orga_actions(request, ctx, assoc):
             _add_action(
                 ctx,
                 _(
-                    "Some activated features need the 'Token / Credit' feature, it isn't active: access the feature panel"
+                    "Some activated features need the 'Token / Credit' feature, but it isn't active: access the feature panel"
                 ),
                 "orga_features",
             )

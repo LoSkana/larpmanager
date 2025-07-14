@@ -426,7 +426,7 @@ msgstr ""
 msgid "Age"
 msgstr ""
 
-msgid "Minimum age of members"
+msgid "Minimum age of members (leave empty for no limit)"
 msgstr ""
 
 msgid "Annual fee"
@@ -1483,6 +1483,11 @@ msgstr ""
 msgid ""
 "Upload a photo of the identity document that you listed in the request "
 "(image or pdf)"
+msgstr ""
+
+msgid ""
+"Optional text to be included in the email sent to the player to notify them "
+"of the approval decision"
 msgstr ""
 
 msgid "Volounteer data"
@@ -4922,9 +4927,6 @@ msgstr ""
 msgid "Request for"
 msgstr ""
 
-msgid "Refute"
-msgstr ""
-
 msgid ""
 "This page shows email lists of users, divided by their expressed preferences "
 "regarding newsletter communications"
@@ -7053,7 +7055,7 @@ msgid ""
 "an event."
 msgstr ""
 
-msgid "Now you can review all organizations's members"
+msgid "Now you can set membership options"
 msgstr ""
 
 msgid "Shuttle"
@@ -8201,7 +8203,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Some activated features need the 'Character' feature, it isn't active: "
+"Some activated features need the 'Character' feature, but it isn't active: "
 "access the feature panel"
 msgstr ""
 
@@ -8211,8 +8213,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Some activated features need the 'Token / Credit' feature, it isn't active: "
-"access the feature panel"
+"Some activated features need the 'Token / Credit' feature, but it isn't "
+"active: access the feature panel"
 msgstr ""
 
 #, python-format

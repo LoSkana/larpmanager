@@ -540,9 +540,6 @@ msgstr "Precio"
 msgid "Refund"
 msgstr "Reembolso"
 
-msgid "Refute"
-msgstr "Rechazar"
-
 msgid "Safety"
 msgstr "Seguridad"
 
@@ -3242,9 +3239,6 @@ msgstr "Gestionar las parcelas del evento"
 msgid "Manages event revenues"
 msgstr "Gestiona los ingresos de los eventos"
 
-msgid "Minimum age of members"
-msgstr "Edad mínima de los miembros"
-
 msgid "Modify shuttle request"
 msgstr "Cambiar solicitud de transporte"
 
@@ -4146,6 +4140,9 @@ msgstr "Confirmar manualmente los pagos recibidos"
 msgid "Now you can create event templates"
 msgstr "Ahora puedes crear plantillas de eventos"
 
+msgid "Now you can set membership options"
+msgstr "Ahora puedes configurar las opciones de afiliación"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Inscripción a %(event)s actualizada"
@@ -4918,9 +4915,6 @@ msgstr "Número máximo de puntos de relleno (0 = ilimitado)"
 msgid "Maximum number of player spots (0 = unlimited)"
 msgstr "Número máximo de plazas de jugador (0 = ilimitado)"
 
-msgid "Now you can review all organizations's members"
-msgstr "Ahora puedes revisar los miembros de todas las organizaciones"
-
 msgid "Now you can select which tickets can be gifted"
 msgstr "Ahora puede seleccionar qué entradas pueden regalarse"
 
@@ -5121,6 +5115,9 @@ msgstr "Los personajes sólo son visibles para los jugadores registrados"
 
 msgid "Insert the css code to customize the pdf printing"
 msgstr "Introduzca el código css para personalizar la impresión"
+
+msgid "Minimum age of members (leave empty for no limit)"
+msgstr "Edad mínima de los miembros (dejar vacío para sin límite)"
 
 msgid "Now you can peform the fiscal code validity check"
 msgstr "Ahora puede realizar la comprobación de validez del código fiscal"
@@ -7956,13 +7953,6 @@ msgstr ""
 " evento"
 
 msgid ""
-"Some activated features need the 'Character' feature, it isn't active: "
-"access the feature panel"
-msgstr ""
-"Algunas funciones activadas necesitan la función 'Carácter', no está activa:"
-" accede al panel de funciones"
-
-msgid ""
 "This page allows you to perform a quick setup of the most important settings"
 " for your new event"
 msgstr ""
@@ -8174,6 +8164,13 @@ msgstr ""
 "se ocultan, en lugar de mostrarse desactivadas"
 
 msgid ""
+"Some activated features need the 'Character' feature, but it isn't active: "
+"access the feature panel"
+msgstr ""
+"Algunas funciones activadas necesitan la función \"Carácter\", pero no está "
+"activa: acceda al panel de funciones"
+
+msgid ""
 "This page shows the different versions available of the character, and the "
 "differences between them"
 msgstr ""
@@ -8223,11 +8220,11 @@ msgstr ""
 "preguntas para hacer más claros los formularios largos."
 
 msgid ""
-"Some activated features need the 'Token / Credit' feature, it isn't active: "
-"access the feature panel"
+"Optional text to be included in the email sent to the player to notify them "
+"of the approval decision"
 msgstr ""
-"Algunas funciones activadas necesitan la función 'Token / Crédito', no está "
-"activa: accede al panel de funciones"
+"Texto opcional que se incluirá en el correo electrónico enviado al jugador "
+"para notificarle la decisión de aprobación"
 
 msgid ""
 "This code is used to generate the secret registration link, you may keep the"
@@ -8396,6 +8393,13 @@ msgid ""
 msgstr ""
 "Número de días transcurridos desde la fecha límite a partir de los cuales "
 "las inscripciones se marcan como canceladas (por defecto, 30 días)"
+
+msgid ""
+"Some activated features need the 'Token / Credit' feature, but it isn't "
+"active: access the feature panel"
+msgstr ""
+"Algunas funciones activadas necesitan la función \"Token / Crédito\", pero "
+"no está activa: acceda al panel de funciones"
 
 msgid ""
 "The discount has been added! It has been reserved for you for 15 minutes, "

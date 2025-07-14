@@ -540,9 +540,6 @@ msgstr "Citace"
 msgid "Refund"
 msgstr "Vrácení peněz"
 
-msgid "Refute"
-msgstr "Odmítnout"
-
 msgid "Safety"
 msgstr "Bezpečnost"
 
@@ -3242,9 +3239,6 @@ msgstr "Správa pozemků události"
 msgid "Manages event revenues"
 msgstr "Spravuje příjmy z akcí"
 
-msgid "Minimum age of members"
-msgstr "Minimální věk členů"
-
 msgid "Modify shuttle request"
 msgstr "Žádost o změnu kyvadlové dopravy"
 
@@ -4146,6 +4140,9 @@ msgstr "Ruční potvrzení přijatých plateb"
 msgid "Now you can create event templates"
 msgstr "Nyní můžete vytvářet šablony událostí"
 
+msgid "Now you can set membership options"
+msgstr "Nyní můžete nastavit možnosti členství"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Aktualizovaný záznam pro %(event)s"
@@ -4918,9 +4915,6 @@ msgstr "Maximální počet výplňových míst (0 = neomezeně)"
 msgid "Maximum number of player spots (0 = unlimited)"
 msgstr "Maximální počet míst pro hráče (0 = neomezeně)"
 
-msgid "Now you can review all organizations's members"
-msgstr "Nyní si můžete prohlédnout všechny členy organizací"
-
 msgid "Now you can select which tickets can be gifted"
 msgstr "Nyní můžete vybrat, které vstupenky lze darovat"
 
@@ -5122,6 +5116,9 @@ msgstr "Postavy jsou viditelné pouze registrovaným hráčům"
 
 msgid "Insert the css code to customize the pdf printing"
 msgstr "Zadejte kód css pro přizpůsobení tisku"
+
+msgid "Minimum age of members (leave empty for no limit)"
+msgstr "Minimální věk členů (pro neomezený věk nechte prázdné)"
 
 msgid "Now you can peform the fiscal code validity check"
 msgstr "Nyní můžete provést kontrolu platnosti fiskálního kódu"
@@ -7732,13 +7729,6 @@ msgstr ""
 "Za každou z nich získáte následující slevu na registraci na členskou akci"
 
 msgid ""
-"Some activated features need the 'Character' feature, it isn't active: "
-"access the feature panel"
-msgstr ""
-"Některé aktivované funkce potřebují funkci \"Znak\", není aktivní: přístup k"
-" panelu funkcí"
-
-msgid ""
 "This page allows you to perform a quick setup of the most important settings"
 " for your new event"
 msgstr ""
@@ -7947,6 +7937,13 @@ msgstr ""
 " skryjí, místo aby se zobrazily zakázané"
 
 msgid ""
+"Some activated features need the 'Character' feature, but it isn't active: "
+"access the feature panel"
+msgstr ""
+"Některé aktivované funkce potřebují funkci \"Znak\", ale není aktivní: "
+"vstupte na panel funkcí"
+
+msgid ""
 "This page shows the different versions available of the character, and the "
 "differences between them"
 msgstr ""
@@ -7996,11 +7993,11 @@ msgstr ""
 "byly dlouhé formuláře přehlednější."
 
 msgid ""
-"Some activated features need the 'Token / Credit' feature, it isn't active: "
-"access the feature panel"
+"Optional text to be included in the email sent to the player to notify them "
+"of the approval decision"
 msgstr ""
-"Některé aktivované funkce potřebují funkci \"Token / Kredit\", není aktivní:"
-" přístup na panel funkcí"
+"Nepovinný text, který má být uveden v e-mailu zaslaném hráči a který mu "
+"oznamuje rozhodnutí o schválení"
 
 msgid ""
 "This code is used to generate the secret registration link, you may keep the"
@@ -8169,6 +8166,13 @@ msgid ""
 msgstr ""
 "Počet dní po uplynutí lhůty, po které jsou registrace označeny jako zrušené "
 "(výchozí 30 dní)"
+
+msgid ""
+"Some activated features need the 'Token / Credit' feature, but it isn't "
+"active: access the feature panel"
+msgstr ""
+"Některé aktivované funkce potřebují funkci \"Token / Kredit\", ale není "
+"aktivní: přístup na panel funkcí"
 
 msgid ""
 "The discount has been added! It has been reserved for you for 15 minutes, "

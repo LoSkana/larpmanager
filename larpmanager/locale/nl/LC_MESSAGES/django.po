@@ -540,9 +540,6 @@ msgstr "Citaat"
 msgid "Refund"
 msgstr "Terugbetaling"
 
-msgid "Refute"
-msgstr "Weiger"
-
 msgid "Safety"
 msgstr "Veiligheid"
 
@@ -3242,9 +3239,6 @@ msgstr "De evenementenpercelen beheren"
 msgid "Manages event revenues"
 msgstr "Beheren van inkomsten uit evenementen"
 
-msgid "Minimum age of members"
-msgstr "Minimumleeftijd van leden"
-
 msgid "Modify shuttle request"
 msgstr "Shuttleverzoek wijzigen"
 
@@ -4146,6 +4140,9 @@ msgstr "Handmatig ontvangen betalingen bevestigen"
 msgid "Now you can create event templates"
 msgstr "Nu kun je sjablonen voor evenementen maken"
 
+msgid "Now you can set membership options"
+msgstr "Nu kunt u lidmaatschapsopties instellen"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Bijgewerkte invoer voor %(event)s"
@@ -4924,9 +4921,6 @@ msgstr "Maximum aantal vulplekken (0 = onbeperkt)"
 msgid "Maximum number of player spots (0 = unlimited)"
 msgstr "Maximum aantal spelersplekken (0 = onbeperkt)"
 
-msgid "Now you can review all organizations's members"
-msgstr "Nu kun je alle leden van organisaties bekijken"
-
 msgid "Now you can select which tickets can be gifted"
 msgstr "Nu kun je selecteren welke tickets kunnen worden geschonken"
 
@@ -5129,6 +5123,9 @@ msgstr "Personages zijn alleen zichtbaar voor geregistreerde spelers"
 
 msgid "Insert the css code to customize the pdf printing"
 msgstr "Voer de css-code in om de afdruk aan te passen"
+
+msgid "Minimum age of members (leave empty for no limit)"
+msgstr "Minimumleeftijd van leden (leeg laten voor geen limiet)"
 
 msgid "Now you can peform the fiscal code validity check"
 msgstr "Nu kun je de geldigheidscontrole van de fiscale code uitvoeren"
@@ -8007,13 +8004,6 @@ msgstr ""
 "lidmaatschapsevenement"
 
 msgid ""
-"Some activated features need the 'Character' feature, it isn't active: "
-"access the feature panel"
-msgstr ""
-"Sommige geactiveerde functies hebben de functie 'Karakter' nodig, is deze "
-"niet actief: ga naar het functiepaneel"
-
-msgid ""
 "This page allows you to perform a quick setup of the most important settings"
 " for your new event"
 msgstr ""
@@ -8225,6 +8215,13 @@ msgstr ""
 " in het formulier verborgen in plaats van uitgeschakeld weergegeven"
 
 msgid ""
+"Some activated features need the 'Character' feature, but it isn't active: "
+"access the feature panel"
+msgstr ""
+"Sommige geactiveerde functies hebben de functie 'Karakter' nodig, maar deze "
+"is niet actief: ga naar het functiepaneel"
+
+msgid ""
 "This page shows the different versions available of the character, and the "
 "differences between them"
 msgstr ""
@@ -8274,11 +8271,11 @@ msgstr ""
 "groeperen om lange formulieren overzichtelijker te maken."
 
 msgid ""
-"Some activated features need the 'Token / Credit' feature, it isn't active: "
-"access the feature panel"
+"Optional text to be included in the email sent to the player to notify them "
+"of the approval decision"
 msgstr ""
-"Sommige geactiveerde functies hebben de functie 'Token / Credit' nodig, is "
-"deze niet actief: ga naar het functiepaneel"
+"Optionele tekst voor in de e-mail die naar de speler wordt gestuurd om hem "
+"op de hoogte te stellen van de goedkeuringsbeslissing"
 
 msgid ""
 "This code is used to generate the secret registration link, you may keep the"
@@ -8447,6 +8444,13 @@ msgid ""
 msgstr ""
 "Aantal dagen na de deadline waarna registraties worden gemarkeerd als "
 "geannuleerd (standaard 30 dagen)"
+
+msgid ""
+"Some activated features need the 'Token / Credit' feature, but it isn't "
+"active: access the feature panel"
+msgstr ""
+"Sommige geactiveerde functies hebben de functie 'Token / Credit' nodig, maar"
+" deze is niet actief: ga naar het functiepaneel"
 
 msgid ""
 "The discount has been added! It has been reserved for you for 15 minutes, "

@@ -20,8 +20,7 @@
         <table class="mob no_csv">
             {{ form.as_table }}
         </table>
-        <input type="hidden" id="approved" name="approved" value="1">
-        <input type="submit" value="{% trans "Approve" %}">
+        <input type="submit" value="{% trans "Confirm" %}">
     </form>
     <hr class="c" />
     {% if '.pdf' in doc_path %}
@@ -45,15 +44,4 @@
              src="{{ member.membership.get_request_filepath }}"
              alt="membership request" />
     {% endif %}
-    <hr class="c" />
-    <form action="{{ request.path }}"
-          enctype="multipart/form-data"
-          method="post">
-        {% csrf_token %}
-        <table class="mob no_csv">
-            {{ form.as_table }}
-        </table>
-        <input type="hidden" id="approved" name="approved" value="0">
-        <input type="submit" value="{% trans "Refute" %}">
-    </form>
 {% endblock content %}

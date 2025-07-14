@@ -540,9 +540,6 @@ msgstr "Sitat"
 msgid "Refund"
 msgstr "Refusjon"
 
-msgid "Refute"
-msgstr "Avvis"
-
 msgid "Safety"
 msgstr "Sikkerhet"
 
@@ -3242,9 +3239,6 @@ msgstr "Administrere arrangementets tomter"
 msgid "Manages event revenues"
 msgstr "Administrerer inntekter fra arrangementer"
 
-msgid "Minimum age of members"
-msgstr "Minimumsalder for medlemmer"
-
 msgid "Modify shuttle request"
 msgstr "Forespørsel om endring av skyttelbuss"
 
@@ -4146,6 +4140,9 @@ msgstr "Manuelt bekrefte mottatte betalinger"
 msgid "Now you can create event templates"
 msgstr "Nå kan du opprette hendelsesmaler"
 
+msgid "Now you can set membership options"
+msgstr "Nå kan du angi medlemsalternativer"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Oppdatert oppføring for %(event)s"
@@ -4921,9 +4918,6 @@ msgstr "Maksimalt antall utfyllingspunkter (0 = ubegrenset)"
 msgid "Maximum number of player spots (0 = unlimited)"
 msgstr "Maksimalt antall spillerplasser (0 = ubegrenset)"
 
-msgid "Now you can review all organizations's members"
-msgstr "Nå kan du se alle organisasjonens medlemmer"
-
 msgid "Now you can select which tickets can be gifted"
 msgstr "Nå kan du velge hvilke billetter som kan gis i gave"
 
@@ -5123,6 +5117,9 @@ msgstr "Karakterer er bare synlige for registrerte spillere"
 
 msgid "Insert the css code to customize the pdf printing"
 msgstr "Skriv inn css-koden for å tilpasse utskriften"
+
+msgid "Minimum age of members (leave empty for no limit)"
+msgstr "Minimumsalder for medlemmer (la stå tomt for ingen grense)"
 
 msgid "Now you can peform the fiscal code validity check"
 msgstr "Nå kan du utføre gyldighetskontrollen av skattekoden"
@@ -7861,13 +7858,6 @@ msgstr ""
 "medlemsarrangementet ditt"
 
 msgid ""
-"Some activated features need the 'Character' feature, it isn't active: "
-"access the feature panel"
-msgstr ""
-"Noen aktiverte funksjoner trenger funksjonen \"Tegn\", den er ikke aktiv: gå"
-" til funksjonspanelet"
-
-msgid ""
 "This page allows you to perform a quick setup of the most important settings"
 " for your new event"
 msgstr ""
@@ -8079,6 +8069,13 @@ msgstr ""
 "skjemaet, i stedet for å vises deaktivert"
 
 msgid ""
+"Some activated features need the 'Character' feature, but it isn't active: "
+"access the feature panel"
+msgstr ""
+"Noen aktiverte funksjoner trenger funksjonen \"Tegn\", men den er ikke "
+"aktiv: gå til funksjonspanelet"
+
+msgid ""
 "This page shows the different versions available of the character, and the "
 "differences between them"
 msgstr ""
@@ -8128,11 +8125,11 @@ msgstr ""
 "for å gjøre lange skjemaer mer oversiktlige."
 
 msgid ""
-"Some activated features need the 'Token / Credit' feature, it isn't active: "
-"access the feature panel"
+"Optional text to be included in the email sent to the player to notify them "
+"of the approval decision"
 msgstr ""
-"Noen aktiverte funksjoner trenger \"Token / Credit\"-funksjonen, den er ikke"
-" aktiv: gå til funksjonspanelet"
+"Valgfri tekst som skal inkluderes i e-posten som sendes til spilleren for å "
+"varsle dem om godkjenningsbeslutningen"
 
 msgid ""
 "This code is used to generate the secret registration link, you may keep the"
@@ -8301,6 +8298,13 @@ msgid ""
 msgstr ""
 "Antall dager etter at fristen er utløpt som registreringer markeres som "
 "kansellerte (standard 30 dager)"
+
+msgid ""
+"Some activated features need the 'Token / Credit' feature, but it isn't "
+"active: access the feature panel"
+msgstr ""
+"Noen aktiverte funksjoner trenger funksjonen \"Token / Credit\", men den er "
+"ikke aktiv: gå til funksjonspanelet"
 
 msgid ""
 "The discount has been added! It has been reserved for you for 15 minutes, "

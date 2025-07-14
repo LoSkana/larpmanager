@@ -540,9 +540,6 @@ msgstr "Quote"
 msgid "Refund"
 msgstr "Rimborso"
 
-msgid "Refute"
-msgstr "Rifiuta"
-
 msgid "Safety"
 msgstr "Safety"
 
@@ -3242,9 +3239,6 @@ msgstr "Gestisci le trame dell'evento"
 msgid "Manages event revenues"
 msgstr "Gestisci i ricavi dell'evento"
 
-msgid "Minimum age of members"
-msgstr "Età minima dei soci"
-
 msgid "Modify shuttle request"
 msgstr "Modifica richiesta shuttle"
 
@@ -4146,6 +4140,9 @@ msgstr "Conferma manualmente i pagamenti ricevuti"
 msgid "Now you can create event templates"
 msgstr "Ora è possibile creare modelli di eventi"
 
+msgid "Now you can set membership options"
+msgstr "Ora è possibile impostare le opzioni di iscrizione"
+
 #, python-format
 msgid "Registration updated for %(event)s"
 msgstr "Iscrizione aggiornata per %(event)s"
@@ -4919,9 +4916,6 @@ msgstr "Numero massimo di posti filler (0 = illimitato)"
 msgid "Maximum number of player spots (0 = unlimited)"
 msgstr "Numero massimo di posti giocatore (0 = illimitato)"
 
-msgid "Now you can review all organizations's members"
-msgstr "Ora è possibile esaminare i membri di tutte le organizzazioni"
-
 msgid "Now you can select which tickets can be gifted"
 msgstr "Ora è possibile selezionare quali biglietti possono essere regalati"
 
@@ -5120,6 +5114,9 @@ msgstr "I personaggi sono visibili solo ai giocatori iscritti"
 
 msgid "Insert the css code to customize the pdf printing"
 msgstr "Inserisci il codice css per personalizzare la stampa"
+
+msgid "Minimum age of members (leave empty for no limit)"
+msgstr "Età minima dei membri (lasciare vuoto per non avere limiti)"
 
 msgid "Now you can peform the fiscal code validity check"
 msgstr ""
@@ -7159,8 +7156,7 @@ msgid ""
 "Annual fee required of members, starting from the beginning of the "
 "membership year"
 msgstr ""
-"Quota annuale richiesta ai soci, a partire dall'inizio dell'aanno "
-"associativo"
+"Quota annuale richiesta ai soci, a partire dall'inizio dell'anno associativo"
 
 msgid ""
 "Click here if after submitting the form, you want to move on to edit the "
@@ -7848,7 +7844,7 @@ msgid ""
 "There are <b>%(number)s</b> questions to answer, access the users questions "
 "management panel"
 msgstr ""
-"Ci sono <b>%(number)s</b> domande a cui rispondere, accedere al pannello di "
+"Ci sono <b>%(number)s</b> domande a cui rispondere, accedi al pannello di "
 "gestione delle domande degli utenti"
 
 msgid ""
@@ -8005,13 +8001,6 @@ msgid ""
 msgstr ""
 "Per ognuno di loro, tu riceverai il seguente sconto sull'iscrizione degli "
 "eventi associativi"
-
-msgid ""
-"Some activated features need the 'Character' feature, it isn't active: "
-"access the feature panel"
-msgstr ""
-"Alcune funzioni attivate necessitano della funzione 'Carattere', non è "
-"attiva: accedere al pannello delle funzioni"
 
 msgid ""
 "This page allows you to perform a quick setup of the most important settings"
@@ -8225,6 +8214,13 @@ msgstr ""
 " invece di essere visualizzate disattivate"
 
 msgid ""
+"Some activated features need the 'Character' feature, but it isn't active: "
+"access the feature panel"
+msgstr ""
+"Alcune funzioni attivate necessitano della funzione 'Personaggi', ma questa "
+"non è attiva: accedi al pannello delle funzioni"
+
+msgid ""
 "This page shows the different versions available of the character, and the "
 "differences between them"
 msgstr ""
@@ -8274,11 +8270,11 @@ msgstr ""
 " domande per rendere più chiari i moduli lunghi."
 
 msgid ""
-"Some activated features need the 'Token / Credit' feature, it isn't active: "
-"access the feature panel"
+"Optional text to be included in the email sent to the player to notify them "
+"of the approval decision"
 msgstr ""
-"Alcune funzioni attivate necessitano della funzione 'Token / Credito', non è"
-" attiva: accedere al pannello delle funzioni"
+"Testo opzionale da includere nell'e-mail inviata al giocatore per "
+"notificargli la decisione di approvazione"
 
 msgid ""
 "This code is used to generate the secret registration link, you may keep the"
@@ -8447,6 +8443,13 @@ msgid ""
 msgstr ""
 "Numero di giorni oltre la scadenza oltre i quali le iscrizioni sono indicate"
 " da cancellare (default 30 giorni)"
+
+msgid ""
+"Some activated features need the 'Token / Credit' feature, but it isn't "
+"active: access the feature panel"
+msgstr ""
+"Alcune funzioni attivate necessitano della funzione 'Token / Credito', ma "
+"non è attiva: accedi al pannello delle funzioni"
 
 msgid ""
 "The discount has been added! It has been reserved for you for 15 minutes, "

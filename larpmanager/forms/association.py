@@ -398,7 +398,7 @@ class ExeConfigForm(ConfigForm):
             self.set_section("membership", _("Members"))
 
             label = _("Age")
-            help_text = _("Minimum age of members")
+            help_text = _("Minimum age of members (leave empty for no limit)")
             self.add_configs("membership_age", ConfigType.INT, label, help_text)
 
             label = _("Annual fee")

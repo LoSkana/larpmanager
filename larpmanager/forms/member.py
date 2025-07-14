@@ -116,10 +116,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
         if not conf_settings.DEBUG and not os.getenv("PYTEST_CURRENT_TEST"):
             public, private = get_recaptcha_secrets(self.request)
             self.fields["captcha"] = ReCaptchaField(
-                widget=ReCaptchaV3,
-                label="Captcha", 
-                public_key=public, 
-                private_key=private
+                widget=ReCaptchaV3, label="Captcha", public_key=public, private_key=private
             )
 
         # place language as first
@@ -463,7 +460,14 @@ class MembershipConfirmForm(forms.Form):
 
 
 class MembershipResponseForm(forms.Form):
-    response = forms.CharField(required=False, max_length=1000)
+    is_approved = forms.BooleanField(required=False, initial=True)
+    response = forms.CharField(
+        required=False,
+        max_length=1000,
+        help_text=_(
+            "Optional text to be included in the email sent to the player to notify them of the approval decision"
+        ),
+    )
 
 
 class ExeVolunteerRegistryForm(MyForm):

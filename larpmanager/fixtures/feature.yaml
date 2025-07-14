@@ -266,8 +266,8 @@
     module: 8
     placeholder: false
     order: 40
-    after_text: Now you can review all organizations's members
-    after_link: exe_membership
+    after_text: Now you can set membership options
+    after_link: config/membership
 - model: larpmanager.feature
   pk: 46
   fields:
