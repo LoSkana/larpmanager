@@ -62,8 +62,7 @@ async def expense(image_path, live_server, page):
     # approve it
     await go_to(page, live_server, "/manage/membership/")
     await page.get_by_role("link", name="Request").click()
-    await page.get_by_role("textbox", name="Response Response").click()
-    await page.get_by_role("textbox", name="Response Response").fill("yeaaaa")
+    await page.get_by_role("textbox", name="Response").fill("yeaaaa")
     await page.get_by_role("button", name="Confirm").click()
 
     # expenses
@@ -87,7 +86,7 @@ async def resubmit_membership(live_server, page):
     await page.get_by_role("link", name="Request").click()
     await page.locator("form").locator("#id_is_approved").click()
     await page.locator("form").locator("#id_response").fill("nope")
-    await page.get_by_role("button", name="Submit").click()
+    await page.get_by_role("button", name="Confirm").click()
     # signup
     await go_to(page, live_server, "/test/1/manage/registrations/tickets/")
     await page.locator("a:has(i.fas.fa-edit)").click()
