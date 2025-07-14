@@ -4784,6 +4784,9 @@ msgstr "Cette page résume les types de prologues d'événements"
 msgid "Your gifted registration has been redeemed!"
 msgstr "Votre cadeau d'enregistrement a été échangé !"
 
+msgid "Background image used across all event pages"
+msgstr "Image de fond utilisée sur toutes les pages de l'événement"
+
 msgid "Displays list of emails of signed-up players"
 msgstr "Affiche la liste des courriels des joueurs inscrits"
 
@@ -4904,9 +4907,6 @@ msgstr "Annulation pour absence de cotisation annuelle"
 
 msgid "Characters are only visible to logged in users"
 msgstr "Les caractères ne sont visibles que par les utilisateurs connectés"
-
-msgid "Cover in rectangular format - aspect ratio 4:3"
-msgstr "Couverture en format rectangulaire - rapport d'aspect 4:3"
 
 msgid "Do you wish to be always updated on our events"
 msgstr "Vous souhaitez être tenu au courant de nos événements"
@@ -5059,6 +5059,9 @@ msgstr "Code applicable uniquement lors d'une nouvelle inscription"
 
 msgid "Displays lists of players to persuade to sign up"
 msgstr "Affiche des listes de joueurs à convaincre de s'inscrire"
+
+msgid "Font used for title texts across all event pages"
+msgstr "Police utilisée pour les titres sur toutes les pages de l'événement"
 
 msgid "Here are the sign up options with limited number"
 msgstr "Voici le nombre limité d'options de participation"
@@ -7178,6 +7181,13 @@ msgstr ""
 "effectuer un filtrage supplémentaire"
 
 msgid ""
+"Cover image shown on the organization's homepage — rectangular, ideally 4:3 "
+"ratio"
+msgstr ""
+"Image de couverture figurant sur la page d'accueil de l'organisation - "
+"rectangulaire, idéalement au format 4:3"
+
+msgid ""
 "Go ahead and click on this button to perform the extraction. Warning: it is "
 "final"
 msgstr ""
@@ -8698,6 +8708,13 @@ msgid ""
 msgstr ""
 "Vérifiez que vous avez bien copié l'intégralité du motif de paiement (en "
 "texte coloré), c'est important"
+
+msgid ""
+"Set up the configuration for the creation or editing of characters by the "
+"players in the configuration panel"
+msgstr ""
+"Configurer la création ou l'édition de personnages par les joueurs dans le "
+"panneau de configuration"
 
 msgid ""
 "To set specific values for the interface configuration or features, access "

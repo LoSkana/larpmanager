@@ -4779,6 +4779,9 @@ msgstr "Questa pagina riepiloga i tipi di prologo dell'evento"
 msgid "Your gifted registration has been redeemed!"
 msgstr "La tua registrazione omaggio è stata riscattata!"
 
+msgid "Background image used across all event pages"
+msgstr "Immagine di sfondo utilizzata in tutte le pagine dell'evento"
+
 msgid "Displays list of emails of signed-up players"
 msgstr "Visualizza l'elenco delle email dei giocatori iscritti"
 
@@ -4897,9 +4900,6 @@ msgstr "Cancellazione per mancato pagamento della quota associativa annuale"
 
 msgid "Characters are only visible to logged in users"
 msgstr "I personaggi sono visibili solo agli utenti loggati"
-
-msgid "Cover in rectangular format - aspect ratio 4:3"
-msgstr "Cover in formato rettangolare - aspect ratio 4:3"
 
 msgid "Do you wish to be always updated on our events"
 msgstr "Desideri rimanere aggiornato sui nostri eventi"
@@ -5047,6 +5047,9 @@ msgstr "Codice applicabile solo in fase di nuova iscrizione"
 
 msgid "Displays lists of players to persuade to sign up"
 msgstr "Visualizza gli elenchi dei giocatori da convincere a iscriversi"
+
+msgid "Font used for title texts across all event pages"
+msgstr "Font utilizzato per i testi dei titoli in tutte le pagine dell'evento"
 
 msgid "Here are the sign up options with limited number"
 msgstr "Ecco di seguito le opzioni di iscrizioni a numero limitato"
@@ -7105,6 +7108,13 @@ msgstr ""
 "ulteriore"
 
 msgid ""
+"Cover image shown on the organization's homepage — rectangular, ideally 4:3 "
+"ratio"
+msgstr ""
+"Immagine di copertina visualizzata sulla homepage dell'organizzazione - "
+"rettangolare, idealmente in rapporto 4:3"
+
+msgid ""
 "Go ahead and click on this button to perform the extraction. Warning: it is "
 "final"
 msgstr ""
@@ -7894,7 +7904,7 @@ msgid ""
 "The quick access sidebar is on the left (on mobile, tap “Shortcuts” at the "
 "bottom to open it)"
 msgstr ""
-"La barra laterale di accesso rapido si trova a sinistra (su mobile, toccare "
+"La barra laterale di accesso rapido si trova a sinistra (su mobile, clicca "
 "\"Shortcuts\" in basso per aprirla)"
 
 msgid ""
@@ -8621,6 +8631,13 @@ msgid ""
 msgstr ""
 "Controlla di aver copiato esattamente tutta la causale di versamento (in "
 "testo colorato), è importante"
+
+msgid ""
+"Set up the configuration for the creation or editing of characters by the "
+"players in the configuration panel"
+msgstr ""
+"Imposta la configurazione per la creazione o la modifica dei personaggi da "
+"parte dei giocatori nel pannello di configurazione"
 
 msgid ""
 "To set specific values for the interface configuration or features, access "
@@ -9439,7 +9456,7 @@ msgid ""
 "At the top, you'll find shortcuts to access your organization dashboard "
 "(this page), as well as the active event dashboards, when you'll create them"
 msgstr ""
-"In alto, si trovano le scorciatoie per accedi alla dashboard "
+"In alto, si trovano le scorciatoie per accedere alla dashboard "
 "dell'organizzazione (questa pagina) e le dashboard degli eventi attivi, "
 "quando vengono creati"
 

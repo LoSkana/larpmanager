@@ -311,6 +311,17 @@ def _orga_actions(request, ctx, assoc):
             "orga_features",
         )
 
+    if "user_character" in features:
+        if ctx["event"].get_config("user_character_max", "") == "":
+            _add_action(
+                ctx,
+                _(
+                    "Set up the configuration for the creation or editing of characters by the players in the configuration panel"
+                ),
+                "orga_character",
+                "config/user_character",
+            )
+
     if "token_credit" not in features:
         if set(features) & {"expense", "refund", "collection"}:
             _add_action(

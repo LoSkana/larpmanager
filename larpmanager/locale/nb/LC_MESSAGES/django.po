@@ -4782,6 +4782,9 @@ msgstr "Denne siden oppsummerer de ulike typene arrangementsprologer"
 msgid "Your gifted registration has been redeemed!"
 msgstr "Din begavede registrering har blitt innløst!"
 
+msgid "Background image used across all event pages"
+msgstr "Bakgrunnsbilde som brukes på alle arrangementssidene"
+
 msgid "Displays list of emails of signed-up players"
 msgstr "Viser en liste over e-postadressen til påmeldte spillere"
 
@@ -4899,9 +4902,6 @@ msgstr "Kansellering på grunn av manglende årlig medlemsavgift"
 
 msgid "Characters are only visible to logged in users"
 msgstr "Tegnene er bare synlige for innloggede brukere"
-
-msgid "Cover in rectangular format - aspect ratio 4:3"
-msgstr "Omslag i rektangulært format - størrelsesforhold 4:3"
 
 msgid "Do you wish to be always updated on our events"
 msgstr "Vil du holde deg oppdatert om arrangementene våre"
@@ -5049,6 +5049,9 @@ msgstr "Koden gjelder kun ved nyregistrering"
 
 msgid "Displays lists of players to persuade to sign up"
 msgstr "Viser lister over spillere som skal overtales til å registrere seg"
+
+msgid "Font used for title texts across all event pages"
+msgstr "Skrifttype som brukes for titteltekster på alle arrangementssidene"
 
 msgid "Here are the sign up options with limited number"
 msgstr "Her er det begrensede antallet påmeldingsalternativer"
@@ -6975,6 +6978,13 @@ msgstr ""
 "filtrering"
 
 msgid ""
+"Cover image shown on the organization's homepage — rectangular, ideally 4:3 "
+"ratio"
+msgstr ""
+"Forsidebilde som vises på organisasjonens hjemmeside - rektangulært, helst i"
+" forholdet 4:3"
+
+msgid ""
 "Go ahead and click on this button to perform the extraction. Warning: it is "
 "final"
 msgstr "Klikk på denne knappen for å utføre uttrekket. OBS: dette er endelig"
@@ -8475,6 +8485,13 @@ msgid ""
 msgstr ""
 "Sjekk at du har kopiert hele betalingsgrunnen nøyaktig (i farget tekst), det"
 " er viktig"
+
+msgid ""
+"Set up the configuration for the creation or editing of characters by the "
+"players in the configuration panel"
+msgstr ""
+"Konfigurer hvordan spillerne kan opprette eller redigere karakterer i "
+"konfigurasjonspanelet"
 
 msgid ""
 "To set specific values for the interface configuration or features, access "

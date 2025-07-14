@@ -2639,7 +2639,9 @@ msgstr ""
 msgid "The setting / genre of the event"
 msgstr ""
 
-msgid "Cover in rectangular format - aspect ratio 4:3"
+msgid ""
+"Cover image shown on the organization's homepage — rectangular, ideally 4:3 "
+"ratio"
 msgstr ""
 
 msgid "Carousel image"
@@ -2684,6 +2686,12 @@ msgstr ""
 
 msgid ""
 "if you leave this empty, this can be the starting event of a new campaign"
+msgstr ""
+
+msgid "Background image used across all event pages"
+msgstr ""
+
+msgid "Font used for title texts across all event pages"
 msgstr ""
 
 msgid "Character sheet intro"
@@ -5208,6 +5216,9 @@ msgstr ""
 msgid "Welcome to"
 msgstr ""
 
+msgid "Quick Help"
+msgstr ""
+
 msgid "What would you like to do"
 msgstr ""
 
@@ -5217,9 +5228,6 @@ msgid ""
 msgstr ""
 
 msgid "Ongoing events"
-msgstr ""
-
-msgid "Quick Help"
 msgstr ""
 
 msgid "Feature activated"
@@ -8195,6 +8203,11 @@ msgstr ""
 msgid ""
 "Some activated features need the 'Character' feature, it isn't active: "
 "access the feature panel"
+msgstr ""
+
+msgid ""
+"Set up the configuration for the creation or editing of characters by the "
+"players in the configuration panel"
 msgstr ""
 
 msgid ""

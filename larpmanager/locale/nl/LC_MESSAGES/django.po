@@ -4783,6 +4783,9 @@ msgstr "Deze pagina geeft een overzicht van de soorten proloog"
 msgid "Your gifted registration has been redeemed!"
 msgstr "Je geschonken registratie is verzilverd!"
 
+msgid "Background image used across all event pages"
+msgstr "Achtergrondafbeelding gebruikt op alle evenementpagina's"
+
 msgid "Displays list of emails of signed-up players"
 msgstr "Lijst met e-mails van aangemelde spelers weergeven"
 
@@ -4902,9 +4905,6 @@ msgstr "Annulering wegens het niet betalen van de jaarlijkse contributie"
 
 msgid "Characters are only visible to logged in users"
 msgstr "Tekens zijn alleen zichtbaar voor ingelogde gebruikers"
-
-msgid "Cover in rectangular format - aspect ratio 4:3"
-msgstr "Omslag in rechthoekig formaat - beeldverhouding 4:3"
 
 msgid "Do you wish to be always updated on our events"
 msgstr "Wil je op de hoogte blijven van onze evenementen"
@@ -5054,6 +5054,9 @@ msgstr "Code alleen van toepassing op nieuwe registratie"
 
 msgid "Displays lists of players to persuade to sign up"
 msgstr "Toont lijsten met spelers die je moet overhalen om zich aan te melden"
+
+msgid "Font used for title texts across all event pages"
+msgstr "Lettertype gebruikt voor titelteksten op alle evenementpagina's"
 
 msgid "Here are the sign up options with limited number"
 msgstr "Dit zijn de beperkte toegangsmogelijkheden"
@@ -7104,6 +7107,13 @@ msgid ""
 msgstr "Waar je zo'n knop vindt, kun je erop drukken om verder te filteren"
 
 msgid ""
+"Cover image shown on the organization's homepage — rectangular, ideally 4:3 "
+"ratio"
+msgstr ""
+"Coverafbeelding op de homepage van de organisatie - rechthoekig, idealiter "
+"4:3 verhouding"
+
+msgid ""
 "Go ahead and click on this button to perform the extraction. Warning: it is "
 "final"
 msgstr ""
@@ -8621,6 +8631,13 @@ msgid ""
 msgstr ""
 "Controleer of je de hele reden van betaling precies hebt overgenomen (in "
 "gekleurde tekst), dat is belangrijk"
+
+msgid ""
+"Set up the configuration for the creation or editing of characters by the "
+"players in the configuration panel"
+msgstr ""
+"Stel de configuratie in voor het maken of bewerken van personages door de "
+"spelers in het configuratiescherm"
 
 msgid ""
 "To set specific values for the interface configuration or features, access "

@@ -1283,11 +1283,15 @@ th select {
     margin-right: 2em;
 }
 
-.explain-icon {
+.explain-icon, .feature_checkbox a {
     font-size: 0.7em;
     vertical-align: top;
     cursor: pointer;
     position: relative;
+}
+
+.feature_checkbox a {
+    margin-left: 0.5em;
 }
 
 .sidebar-link-wrap {

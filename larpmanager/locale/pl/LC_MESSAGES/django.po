@@ -4779,6 +4779,9 @@ msgstr "Ta strona przedstawia rodzaje prologów wydarzeń"
 msgid "Your gifted registration has been redeemed!"
 msgstr "Twoja podarowana rejestracja została zrealizowana!"
 
+msgid "Background image used across all event pages"
+msgstr "Obraz tła używany na wszystkich stronach wydarzenia"
+
 msgid "Displays list of emails of signed-up players"
 msgstr "Wyświetla listę e-maili zarejestrowanych graczy"
 
@@ -4896,9 +4899,6 @@ msgstr "Anulowanie z powodu braku rocznej opłaty członkowskiej"
 
 msgid "Characters are only visible to logged in users"
 msgstr "Znaki są widoczne tylko dla zalogowanych użytkowników"
-
-msgid "Cover in rectangular format - aspect ratio 4:3"
-msgstr "Okładka w formacie prostokątnym - proporcje 4:3"
 
 msgid "Do you wish to be always updated on our events"
 msgstr "Chcesz być zawsze na bieżąco z naszymi wydarzeniami"
@@ -5046,6 +5046,9 @@ msgstr "Zniżki obowiązują tylko przy nowych rejestracjach"
 
 msgid "Displays lists of players to persuade to sign up"
 msgstr "Wyświetla listy graczy, których należy przekonać do rejestracji"
+
+msgid "Font used for title texts across all event pages"
+msgstr "Czcionka używana w tekstach tytułów na wszystkich stronach wydarzenia"
 
 msgid "Here are the sign up options with limited number"
 msgstr "Oto opcje rejestracji z ograniczoną liczbą"
@@ -6990,6 +6993,13 @@ msgstr ""
 " filtrowanie"
 
 msgid ""
+"Cover image shown on the organization's homepage — rectangular, ideally 4:3 "
+"ratio"
+msgstr ""
+"Obraz okładki wyświetlany na stronie głównej organizacji - prostokątny, "
+"najlepiej w proporcjach 4:3"
+
+msgid ""
 "Go ahead and click on this button to perform the extraction. Warning: it is "
 "final"
 msgstr ""
@@ -8497,6 +8507,13 @@ msgid ""
 msgstr ""
 "Sprawdź, czy dokładnie skopiowałeś całą wiadomość do zapłaty (kolorowym "
 "tekstem), to ważne"
+
+msgid ""
+"Set up the configuration for the creation or editing of characters by the "
+"players in the configuration panel"
+msgstr ""
+"Konfiguracja tworzenia lub edytowania postaci przez graczy w panelu "
+"konfiguracji"
 
 msgid ""
 "To set specific values for the interface configuration or features, access "

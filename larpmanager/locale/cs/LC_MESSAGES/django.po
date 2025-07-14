@@ -4779,6 +4779,9 @@ msgstr "Tato stránka shrnuje typy prologů událostí"
 msgid "Your gifted registration has been redeemed!"
 msgstr "Vaše darovaná registrace byla uplatněna!"
 
+msgid "Background image used across all event pages"
+msgstr "Obrázek na pozadí použitý na všech stránkách události"
+
 msgid "Displays list of emails of signed-up players"
 msgstr "Zobrazí seznam e-mailů přihlášených hráčů"
 
@@ -4896,9 +4899,6 @@ msgstr "Zrušení z důvodu chybějícího ročního členského poplatku"
 
 msgid "Characters are only visible to logged in users"
 msgstr "Znaky jsou viditelné pouze pro přihlášené uživatele"
-
-msgid "Cover in rectangular format - aspect ratio 4:3"
-msgstr "Obálka v obdélníkovém formátu - poměr stran 4:3"
 
 msgid "Do you wish to be always updated on our events"
 msgstr "Chcete být informováni o našich akcích"
@@ -5046,6 +5046,9 @@ msgstr "Kód použitelný pouze při nové registraci"
 
 msgid "Displays lists of players to persuade to sign up"
 msgstr "Zobrazuje seznamy hráčů, které je třeba přesvědčit k registraci"
+
+msgid "Font used for title texts across all event pages"
+msgstr "Písmo použité pro texty nadpisů na všech stránkách události"
 
 msgid "Here are the sign up options with limited number"
 msgstr "Zde je omezený počet možností vstupu"
@@ -6876,6 +6879,13 @@ msgstr ""
 "filtrování"
 
 msgid ""
+"Cover image shown on the organization's homepage — rectangular, ideally 4:3 "
+"ratio"
+msgstr ""
+"Obrázek na titulní straně zobrazený na domovské stránce organizace - "
+"obdélníkový, ideálně v poměru 4:3"
+
+msgid ""
 "Go ahead and click on this button to perform the extraction. Warning: it is "
 "final"
 msgstr ""
@@ -8343,6 +8353,13 @@ msgid ""
 msgstr ""
 "Zkontrolujte, zda jste přesně opsali celý důvod platby (barevným textem), je"
 " to důležité"
+
+msgid ""
+"Set up the configuration for the creation or editing of characters by the "
+"players in the configuration panel"
+msgstr ""
+"Nastavení konfigurace pro vytváření nebo úpravu postav hráči v konfiguračním"
+" panelu"
 
 msgid ""
 "To set specific values for the interface configuration or features, access "

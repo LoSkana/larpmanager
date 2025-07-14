@@ -4791,6 +4791,9 @@ msgstr ""
 msgid "Your gifted registration has been redeemed!"
 msgstr "Ihre geschenkte Registrierung wurde eingelöst!"
 
+msgid "Background image used across all event pages"
+msgstr "Hintergrundbild, das auf allen Veranstaltungsseiten verwendet wird"
+
 msgid "Displays list of emails of signed-up players"
 msgstr "Zeigt die E-Mail-Liste der angemeldeten Spieler an"
 
@@ -4910,9 +4913,6 @@ msgstr "Stornierung bei fehlendem Jahresbeitrag"
 
 msgid "Characters are only visible to logged in users"
 msgstr "Zeichen sind nur für eingeloggte Benutzer sichtbar"
-
-msgid "Cover in rectangular format - aspect ratio 4:3"
-msgstr "Umschlag im rechteckigen Format - Seitenverhältnis 4:3"
 
 msgid "Do you wish to be always updated on our events"
 msgstr "Möchten Sie über unsere Veranstaltungen auf dem Laufenden bleiben"
@@ -5062,6 +5062,9 @@ msgstr "Code gilt nur bei Neuanmeldung"
 msgid "Displays lists of players to persuade to sign up"
 msgstr ""
 "Zeigt Listen von Spielern an, die zur Anmeldung überredet werden sollen"
+
+msgid "Font used for title texts across all event pages"
+msgstr "Schriftart für Titeltexte auf allen Veranstaltungsseiten"
 
 msgid "Here are the sign up options with limited number"
 msgstr "Hier finden Sie die begrenzte Anzahl von Eintragungsmöglichkeiten"
@@ -7260,6 +7263,13 @@ msgstr ""
 " Filterungen vorzunehmen"
 
 msgid ""
+"Cover image shown on the organization's homepage — rectangular, ideally 4:3 "
+"ratio"
+msgstr ""
+"Titelbild auf der Homepage der Organisation - rechteckig, idealerweise im "
+"Verhältnis 4:3"
+
+msgid ""
 "Go ahead and click on this button to perform the extraction. Warning: it is "
 "final"
 msgstr ""
@@ -8784,6 +8794,13 @@ msgid ""
 msgstr ""
 "Vergewissern Sie sich, dass Sie den gesamten Zahlungsgrund genau kopiert "
 "haben (in farbiger Schrift), das ist wichtig"
+
+msgid ""
+"Set up the configuration for the creation or editing of characters by the "
+"players in the configuration panel"
+msgstr ""
+"Richten Sie die Konfiguration für die Erstellung oder Bearbeitung von "
+"Charakteren durch die Spieler im Konfigurationspanel ein"
 
 msgid ""
 "To set specific values for the interface configuration or features, access "

@@ -107,7 +107,7 @@ class Event(BaseModel):
         max_length=500,
         upload_to="cover/",
         blank=True,
-        help_text=_("Cover in rectangular format - aspect ratio 4:3"),
+        help_text=_("Cover image shown on the organization's homepage — rectangular, ideally 4:3 ratio"),
     )
 
     cover_thumb = ImageSpecField(
@@ -180,7 +180,7 @@ class Event(BaseModel):
         upload_to="event_background/",
         verbose_name=_("Background image"),
         blank=True,
-        help_text=_("Background of web pages"),
+        help_text=_("Background image used across all event pages"),
     )
 
     background_red = ImageSpecField(
@@ -193,7 +193,7 @@ class Event(BaseModel):
     font = models.FileField(
         upload_to=UploadToPathAndRename("event_font/"),
         verbose_name=_("Title font"),
-        help_text=_("Font to be used in page titles"),
+        help_text=_("Font used for title texts across all event pages"),
         blank=True,
         null=True,
     )

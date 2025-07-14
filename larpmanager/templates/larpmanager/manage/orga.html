@@ -26,7 +26,7 @@
             <b>{{ run }}</b>
             (<i>{{ run.pretty_dates }}</i>)
             - {{ run.get_development_display }}
-            - <a href="{% url 'register' run.event.slug run.number %}">{{ registration_status }}</a>
+            - Status: <a href="{% url 'register' run.event.slug run.number %}">{{ registration_status }}</a>
         </p>
         {% if features.registration_secret %}
             <p>

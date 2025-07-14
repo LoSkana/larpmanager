@@ -4783,6 +4783,9 @@ msgstr "Denna sida sammanfattar de olika typerna av händelseprolog"
 msgid "Your gifted registration has been redeemed!"
 msgstr "Din förmånliga registrering har lösts in!"
 
+msgid "Background image used across all event pages"
+msgstr "Bakgrundsbild används på alla evenemangssidor"
+
 msgid "Displays list of emails of signed-up players"
 msgstr "Visar en lista med e-postmeddelanden från registrerade spelare"
 
@@ -4900,9 +4903,6 @@ msgstr "Uppsägning på grund av utebliven årlig medlemsavgift"
 
 msgid "Characters are only visible to logged in users"
 msgstr "Tecknen är endast synliga för inloggade användare"
-
-msgid "Cover in rectangular format - aspect ratio 4:3"
-msgstr "Omslag i rektangulärt format - bildförhållande 4:3"
 
 msgid "Do you wish to be always updated on our events"
 msgstr "Vill du hålla dig uppdaterad om våra evenemang"
@@ -5050,6 +5050,9 @@ msgstr "Koden gäller endast vid nyregistrering"
 
 msgid "Displays lists of players to persuade to sign up"
 msgstr "Visar listor över spelare som ska övertalas att registrera sig"
+
+msgid "Font used for title texts across all event pages"
+msgstr "Font som används för titeltexter på alla eventsidor"
 
 msgid "Here are the sign up options with limited number"
 msgstr "Här är det begränsade antalet inmatningsalternativ"
@@ -6991,6 +6994,13 @@ msgstr ""
 "ytterligare filtrering"
 
 msgid ""
+"Cover image shown on the organization's homepage — rectangular, ideally 4:3 "
+"ratio"
+msgstr ""
+"Omslagsbild som visas på organisationens hemsida - rektangulär, helst i "
+"förhållandet 4:3"
+
+msgid ""
 "Go ahead and click on this button to perform the extraction. Warning: it is "
 "final"
 msgstr ""
@@ -8500,6 +8510,13 @@ msgid ""
 msgstr ""
 "Kontrollera att du har kopierat hela betalningsgrunden exakt (i färgad "
 "text), det är viktigt"
+
+msgid ""
+"Set up the configuration for the creation or editing of characters by the "
+"players in the configuration panel"
+msgstr ""
+"Ställ in konfigurationen för skapande eller redigering av karaktärer av "
+"spelarna i konfigurationspanelen"
 
 msgid ""
 "To set specific values for the interface configuration or features, access "
