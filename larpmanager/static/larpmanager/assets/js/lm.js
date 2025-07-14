@@ -82,6 +82,18 @@ $(document).ready(function() {
         }
     });
 
+    $('a.feature_tutorial').click(function(event) {
+        event.preventDefault();
+
+        link = "/tutorials/" + $(this).attr("tut") + '?in_iframe=1';
+
+        console.log(link);
+
+        frame = "<iframe src='{0}' width='100%' height='100%'></iframe>".format(link);
+
+        uglipop({class:'popup', source:'html', content: frame});
+
+    });
 
     setTimeout(() => {
     // set select on sidebar

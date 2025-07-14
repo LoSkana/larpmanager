@@ -1062,9 +1062,6 @@ msgstr "Mall"
 msgid "Treasury"
 msgstr "Finansdepartementet"
 
-msgid "Tutorial"
-msgstr "Handledning"
-
 msgid "Uploaded"
 msgstr "Uppladdad"
 

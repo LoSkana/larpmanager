@@ -1062,9 +1062,6 @@ msgstr "Sjabloon"
 msgid "Treasury"
 msgstr "Schatkist"
 
-msgid "Tutorial"
-msgstr "Les"
-
 msgid "Uploaded"
 msgstr "Geüpload"
 

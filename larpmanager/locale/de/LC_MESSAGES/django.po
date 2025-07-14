@@ -1062,9 +1062,6 @@ msgstr "Vorlage"
 msgid "Treasury"
 msgstr "Schatzamt"
 
-msgid "Tutorial"
-msgstr "Tutorial"
-
 msgid "Uploaded"
 msgstr "Hochgeladen"
 

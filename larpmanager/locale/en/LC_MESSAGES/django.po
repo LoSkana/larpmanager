@@ -5155,9 +5155,6 @@ msgid ""
 "directly"
 msgstr ""
 
-msgid "Tutorial"
-msgstr ""
-
 msgid "Video"
 msgstr ""
 

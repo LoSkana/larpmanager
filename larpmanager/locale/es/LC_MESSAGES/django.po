@@ -1062,9 +1062,6 @@ msgstr "Plantilla"
 msgid "Treasury"
 msgstr "Tesorería"
 
-msgid "Tutorial"
-msgstr "Tutorial"
-
 msgid "Uploaded"
 msgstr "Subido a"
 

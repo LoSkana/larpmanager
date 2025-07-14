@@ -1062,9 +1062,6 @@ msgstr "Šablona"
 msgid "Treasury"
 msgstr "Pokladna"
 
-msgid "Tutorial"
-msgstr "Výukový program"
-
 msgid "Uploaded"
 msgstr "Nahráno"
 

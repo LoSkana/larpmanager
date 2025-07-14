@@ -1062,9 +1062,6 @@ msgstr "Modèle"
 msgid "Treasury"
 msgstr "Trésorerie"
 
-msgid "Tutorial"
-msgstr "Tutoriel"
-
 msgid "Uploaded"
 msgstr "Téléchargé"
 

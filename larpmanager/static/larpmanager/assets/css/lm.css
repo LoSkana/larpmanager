@@ -496,13 +496,6 @@ ul, ol {
     width: 33%;
 }
 
-#tutorials img {
-    max-width: 100%;
-    width: auto;
-    height: auto;
-    margin: auto;
-}
-
 #tutorials ul li {
     padding: 1em;
 }
@@ -1693,7 +1686,7 @@ a label:hover {
 }
 
 .popup_tutorial img, #tutorials img {
-    max-width: 100%;
+    max-width: 70%;
     margin: auto;
     height: auto;
 }

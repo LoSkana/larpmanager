@@ -1062,9 +1062,6 @@ msgstr "Template"
 msgid "Treasury"
 msgstr "Tesoreria"
 
-msgid "Tutorial"
-msgstr "Tutorial"
-
 msgid "Uploaded"
 msgstr "Caricato"
 

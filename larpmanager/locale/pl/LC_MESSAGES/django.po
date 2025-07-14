@@ -1062,9 +1062,6 @@ msgstr "Szablon"
 msgid "Treasury"
 msgstr "Skarb Państwa"
 
-msgid "Tutorial"
-msgstr "Samouczek"
-
 msgid "Uploaded"
 msgstr "Przesłano"
 
