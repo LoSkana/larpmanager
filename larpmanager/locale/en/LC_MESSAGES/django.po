@@ -1829,11 +1829,13 @@ msgstr ""
 msgid "A payment of %(amount).2f %(currency)s was received for this event"
 msgstr ""
 
-msgid "Reimbursement payout"
+msgid "Issued Reimbursement"
 msgstr ""
 
 #, python-format
-msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
+msgid ""
+"A reimbursement for '%(reason)s' has been marked as issued. %(amount).2f "
+"%(elements)s have been marked as used"
 msgstr ""
 
 msgid "They will be used automatically when you sign up for a new event"
@@ -1847,6 +1849,10 @@ msgstr ""
 
 #, python-format
 msgid "Assignment %(elements)s"
+msgstr ""
+
+#, python-format
+msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr ""
 
 msgid "Donation given"
@@ -1946,17 +1952,24 @@ msgstr ""
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr ""
 
-#, python-format
-msgid ""
-"Copy this code and share it with friends! Every friend who signs up  and "
-"uses this code in the 'Discounts' field will receive %(amount_to)s "
-"%(currency)s discount on the ticket. For each of them you will receive "
-"%(amount_from)s %(currency)s off to use on event registration."
+msgid "Copy this code and share it with friends!"
 msgstr ""
 
 #, python-format
 msgid ""
-"(check the available number of discounts <a href='%(url)s'>on this page</a>)"
+"Every friend who signs up and uses this code in the 'Discounts' field will "
+"receive %(amount_to)s %(currency)s off the ticket"
+msgstr ""
+
+#, python-format
+msgid ""
+"For each of them, you will receive %(amount_from)s %(currency)s off your own "
+"event registration"
+msgstr ""
+
+#, python-format
+msgid ""
+"Check the available number of discounts <a href='%(url)s'>on this page</a>"
 msgstr ""
 
 msgid "See you soon"
@@ -2228,21 +2241,27 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Hello! We would like to remind you that in order to confirm your provisional "
-"registration of %(event)s you need to apply for admission as a member of the "
-"association. You are very close, just <a href='%(url)s'>click here</a> and "
-"complete the form."
+"Hello! To confirm your provisional registration for %(event)s, you must "
+"apply for membership in the association"
+msgstr ""
+
+#, python-format
+msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
+msgstr ""
+
+msgid "If you need a hand, feel free to let us know"
+msgstr ""
+
+msgid "We'll try to help as best we can"
 msgstr ""
 
 msgid ""
-"(If you need a hand feel free to let us know, we'll try to help as best we "
-"can!)"
+"If we don't hear from you, we'll assume you're no longer interested in the "
+"event"
 msgstr ""
 
 msgid ""
-"If we don't hear from you, we'll understand that you're no longer interested "
-"at the event and we will cancel your registration, so that other players can "
-"signup to your place."
+"Your registration will be cancelled to allow other players to take your spot"
 msgstr ""
 
 #, python-format
@@ -2255,35 +2274,38 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Hello! We are contacting you regarding your provisional registration at "
+"Hello! We are reaching out regarding your provisional registration for "
 "<b>%(event)s</b>"
 msgstr ""
 
 #, python-format
 msgid ""
-"Hello! We are contacting you regarding your registration at <b>%(event)s</b>"
+"Hello! We are reaching out regarding your registration for <b>%(event)s</b>"
 msgstr ""
 
 #, python-format
 msgid ""
-"To confirm it, we ask you to pay this amount as soon as possible: %(amount)s"
+"To confirm it, please pay the following amount as soon as possible: "
+"%(amount)s"
 msgstr ""
 
 #, python-format
-msgid ""
-"To confirm it, we ask you to pay this amount: %(amount)s, within this number "
-"of days: %(days)s"
+msgid "To confirm it, please pay %(amount)s within %(days)s days"
 msgstr ""
 
-msgid ""
-"Please note that if you have with us a different agreement, you can safely "
-"ignore this email"
+msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
 
 #, python-format
+msgid "You can make the payment <a href='%(url)s'>on this page</a>"
+msgstr ""
+
+msgid "If you encounter any issues, contact us and we will assist you"
+msgstr ""
+
 msgid ""
-"You can make the payment <a href= %(url)s'>on this page</a>. If you "
-"encounter any kind of problem, let us know, we will help you solve it!"
+"If we don't hear from you, we'll assume you're no longer interested in the "
+"event and will cancel your registration to make room for other players"
 msgstr ""
 
 #, python-format
@@ -2292,9 +2314,13 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Hello! You have signed up for %(event)s, but have not yet completed your "
-"profile. It takes 5 minutes, just <a href='%(url)s'>click here</a> and "
-"complete the form!"
+"Hello! You signed up for %(event)s but haven't completed your profile yet"
+msgstr ""
+
+#, python-format
+msgid ""
+"It only takes 5 minutes - just <a href='%(url)s'>click here</a> to fill out "
+"the form"
 msgstr ""
 
 #, python-format
@@ -2304,23 +2330,25 @@ msgstr ""
 #, python-format
 msgid ""
 "Hello! You have registered for %(event)s, but we have not yet received your "
-"annual membership fee payment."
+"annual membership payment"
 msgstr ""
 
 msgid ""
-"It is compulsory to take part in all our live events, as it also includes "
-"the insurance fee."
+"It is required for participation in all our live events, as it also covers "
+"the insurance fee"
 msgstr ""
 
 msgid ""
-"Unfortunately, without the balance of the fee, it is NOT possible for us to "
-"let you participate at the event."
+"Unfortunately, without full payment of the fee, participation in the event "
+"is not permitted"
 msgstr ""
 
 #, python-format
 msgid ""
-"You can make the payment in just a few minutes <a href= %(url)s'>here</a>. "
-"Let us know if you encounter any problems, or if we can help in any way!"
+"You can complete the payment in just a few minutes <a href='%(url)s'>here</a>"
+msgstr ""
+
+msgid "Let us know if you encounter any issues or need assistance"
 msgstr ""
 
 msgid "Review the users that are missing the event's deadlines"
@@ -8158,6 +8186,12 @@ msgid "To activate new features and enhance the functionality of the platform"
 msgstr ""
 
 msgid "To set specific values for the interface configuration or features"
+msgstr ""
+
+#, python-format
+msgid ""
+"There are past runs still open: <b>%(list)s</b>. Once all tasks (accounting, "
+"etc.) are finished, mark them as completed"
 msgstr ""
 
 #, python-format

@@ -1694,6 +1694,7 @@ a label:hover {
     max-width: 70%;
     margin: auto;
     height: auto;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
 
 .redderized {

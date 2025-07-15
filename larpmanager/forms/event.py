@@ -165,8 +165,6 @@ class OrgaFeatureForm(FeatureForm):
         "This page allows you to select the features activated for this event, and all its runs (click on a feature to show its description)"
     )
 
-    load_js = ["feature_checkbox"]
-
     class Meta:
         model = Event
         fields = []
@@ -939,8 +937,6 @@ class ExeTemplateForm(FeatureForm):
     page_info = _(
         "This page allows you to select the features of a template (click on a feature to show its description)"
     )
-
-    load_js = ["feature_checkbox"]
 
     class Meta:
         model = Event

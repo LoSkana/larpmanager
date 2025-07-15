@@ -146,6 +146,19 @@ def _exe_suggestions(ctx):
 
 
 def _exe_actions(ctx):
+    runs_conclude = Run.objects.filter(
+        event__assoc_id=ctx["a_id"], development__in=[DevelopStatus.START, DevelopStatus.SHOW], end__lt=datetime.today()
+    ).values_list("search", flat=True)
+    if runs_conclude:
+        _add_action(
+            ctx,
+            _(
+                "There are past runs still open: <b>%(list)s</b>. Once all tasks (accounting, etc.) are finished, mark them as completed"
+            )
+            % {"list": ", ".join(runs_conclude)},
+            "exe_runs",
+        )
+
     expenses_approve = AccountingItemExpense.objects.filter(run__event__assoc_id=ctx["a_id"], is_approved=False).count()
     if expenses_approve:
         _add_action(

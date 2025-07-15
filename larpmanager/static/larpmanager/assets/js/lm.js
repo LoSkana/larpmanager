@@ -85,14 +85,42 @@ $(document).ready(function() {
     $('a.feature_tutorial').click(function(event) {
         event.preventDefault();
 
-        link = "/tutorials/" + $(this).attr("tut") + '?in_iframe=1';
+        url = url_tutorials + $(this).attr("tut");
 
-        console.log(link);
+        // add iframe get param
+        let [base, hash] = url.split('#');
+        let [path, query] = base.split('?');
+        let params = new URLSearchParams(query || '');
+        params.set('in_iframe', '1');
+        let newUrl = path + '?' + params.toString();
+        if (hash) {
+            newUrl += '#' + hash;
+        }
 
-        frame = "<iframe src='{0}' width='100%' height='100%'></iframe>".format(link);
+        frame = "<iframe src='{0}' width='100%' height='100%'></iframe>".format(newUrl);
 
         uglipop({class:'popup', source:'html', content: frame});
 
+    });
+
+    $('.feature_checkbox a').click(function(event) {
+        event.preventDefault();
+
+        request = $.ajax({
+            url: url_feature_description,
+            method: "POST",
+            data: {'fid': $(this).attr("feat")},
+            datatype: "json",
+        });
+
+        request.done(function(data) {
+            if (data["res"] != 'ok') return;
+
+            uglipop({class:'popup', source:'html', content: data['txt']});
+
+        });
+
+        return false;
     });
 
     setTimeout(() => {

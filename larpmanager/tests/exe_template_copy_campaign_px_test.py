@@ -63,7 +63,7 @@ async def template(live_server, page):
     await page.get_by_role("link", name="New").click()
     await page.get_by_role("row", name="Name").locator("td").click()
     await page.locator("#id_name").fill("template")
-    await page.locator("div.feature_checkbox", has_text="Characters").locator("input[type='checkbox']").check()
+    await page.locator("input[type='checkbox'][value='178']").check()  # mark character
     await page.locator("div.feature_checkbox", has_text="Copy").locator("input[type='checkbox']").check()
     await page.get_by_role("button", name="Confirm", exact=True).click()
     await page.get_by_role("link", name="Add").click()
