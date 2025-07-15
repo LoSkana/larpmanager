@@ -5630,7 +5630,7 @@ msgstr "Op deze pagina kunt u de rollen van de associatie bewerken"
 
 #, python-format
 msgid "To confirm it, please pay %(amount)s within %(days)s days"
-msgstr "Om het te bevestigen, betaal %(amount)s binnen %(dagen)s dagen"
+msgstr "Om het te bevestigen, betaal %(amount)s binnen %(days)s dagen"
 
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Totaal van uitgaven ingediend door medewerkers en goedgekeurd"

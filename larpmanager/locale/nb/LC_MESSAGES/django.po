@@ -5608,7 +5608,7 @@ msgstr "På denne siden kan du redigere rollene til foreningen"
 
 #, python-format
 msgid "To confirm it, please pay %(amount)s within %(days)s days"
-msgstr "For å bekrefte det, vennligst betal %(beløp)s innen %(dager)s dager"
+msgstr "For å bekrefte det, vennligst betal %(amount)s innen %(days)s dager"
 
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Summen av utgifter som er sendt inn av samarbeidspartnere og godkjent"
@@ -7053,7 +7053,7 @@ msgid ""
 "%(amount)s"
 msgstr ""
 "For å bekrefte det, vennligst betal følgende beløp så snart som mulig: "
-"%(beløp)s"
+"%(amount)s"
 
 msgid ""
 "Type a keyword in the search bar to find a reference - please write in "

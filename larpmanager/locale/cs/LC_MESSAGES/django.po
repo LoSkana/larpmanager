@@ -5605,7 +5605,7 @@ msgstr "Na této stránce můžete upravovat role sdružení"
 
 #, python-format
 msgid "To confirm it, please pay %(amount)s within %(days)s days"
-msgstr "Pro potvrzení prosím zaplaťte %(částku)s do %(dnů)s dnů"
+msgstr "Pro potvrzení prosím zaplaťte %(amount)s do %(days)s dnů"
 
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Součet výdajů předložených spolupracovníky a schválených"

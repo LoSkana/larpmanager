@@ -5610,7 +5610,7 @@ msgstr "Ta strona umożliwia edycję ról stowarzyszenia"
 
 #, python-format
 msgid "To confirm it, please pay %(amount)s within %(days)s days"
-msgstr "Aby to potwierdzić, należy wpłacić %(kwota)s w ciągu %(dni)s dni"
+msgstr "Aby to potwierdzić, należy wpłacić %(amount)s w ciągu %(days)s dni"
 
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Suma wydatków przedstawionych przez współpracowników i zatwierdzonych"
@@ -7067,7 +7067,7 @@ msgid ""
 "%(amount)s"
 msgstr ""
 "Aby to potwierdzić, prosimy o jak najszybsze wpłacenie następującej kwoty: "
-"%(kwota)s"
+"%(amount)s"
 
 msgid ""
 "Type a keyword in the search bar to find a reference - please write in "

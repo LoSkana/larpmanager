@@ -5621,7 +5621,7 @@ msgstr "Esta página le permite editar los roles de la asociación"
 
 #, python-format
 msgid "To confirm it, please pay %(amount)s within %(days)s days"
-msgstr "Para confirmarlo, abone %(importe)s en %(días)s días"
+msgstr "Para confirmarlo, abone %(amount)s en %(days)s días"
 
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Total de gastos presentados por los colaboradores y aprobados"
@@ -7144,7 +7144,7 @@ msgid ""
 "%(amount)s"
 msgstr ""
 "Para confirmarlo, le rogamos abone lo antes posible el siguiente importe: "
-"%(importe)s"
+"%(amount)s"
 
 msgid ""
 "Type a keyword in the search bar to find a reference - please write in "
