@@ -708,6 +708,9 @@ msgstr "Massimo"
 msgid "Members"
 msgstr "Medlemmer"
 
+msgid "Methods"
+msgstr "Metoder"
+
 msgid "Modules"
 msgstr "Moduler"
 
@@ -4818,6 +4821,9 @@ msgstr "Nå kan du lage utdelingene for arrangementet"
 msgid "Now you can set the organization tax options"
 msgstr "Nå kan du angi skattealternativene for organisasjonen"
 
+msgid "Now you can set the payment methods settings"
+msgstr "Nå kan du angi innstillingene for betalingsmåter"
+
 msgid "Now you can set the registration secret link"
 msgstr "Nå kan du angi den hemmelige registreringslenken"
 
@@ -4851,9 +4857,6 @@ msgstr "Du er nå logget inn med hovedkontoen din"
 msgid "You can upload data directly from a csv file"
 msgstr "Du kan laste opp data direkte fra en csv-fil"
 
-msgid "Configure gateways to process player payments"
-msgstr "Konfigurere gatewayer for å behandle spillerbetalinger"
-
 msgid "Customize buttons in the event navigation bar"
 msgstr "Tilpass knappene i navigasjonsfeltet for hendelser"
 
@@ -4871,9 +4874,6 @@ msgstr "Nå kan du kopiere elementer fra en annen hendelse"
 
 msgid "Now you can define registration form sections"
 msgstr "Nå kan du definere seksjoner i registreringsskjemaet"
-
-msgid "Now you can set the payment gateways settings"
-msgstr "Nå kan du angi innstillingene for betalingsportaler"
 
 msgid "Now you can set the registration opening date"
 msgstr "Nå kan du angi åpningsdato for registrering"
@@ -4989,6 +4989,9 @@ msgstr "Lagt til på registreringssiden, før skjemaet"
 
 msgid "Check consistency of the members’ personal data"
 msgstr "Kontroller at medlemmenes personopplysninger er konsistente"
+
+msgid "Configure payment methods available for players"
+msgstr "Konfigurer betalingsmetoder som er tilgjengelige for spillere"
 
 msgid "Customize specific texts on the event interface"
 msgstr "Tilpass spesifikke tekster på hendelsesgrensesnittet"

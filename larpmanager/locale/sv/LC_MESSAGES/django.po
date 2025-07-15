@@ -708,6 +708,9 @@ msgstr "Massimo"
 msgid "Members"
 msgstr "Medlemmar"
 
+msgid "Methods"
+msgstr "Metoder"
+
 msgid "Modules"
 msgstr "Moduler"
 
@@ -4819,6 +4822,9 @@ msgstr "Nu kan du skapa handouts för evenemanget"
 msgid "Now you can set the organization tax options"
 msgstr "Nu kan du ställa in organisationens skattealternativ"
 
+msgid "Now you can set the payment methods settings"
+msgstr "Nu kan du ange inställningarna för betalningsmetoder"
+
 msgid "Now you can set the registration secret link"
 msgstr "Nu kan du ställa in den hemliga registreringslänken"
 
@@ -4852,9 +4858,6 @@ msgstr "Du är nu inloggad med ditt huvudkonto"
 msgid "You can upload data directly from a csv file"
 msgstr "Du kan ladda upp data direkt från en csv-fil"
 
-msgid "Configure gateways to process player payments"
-msgstr "Konfigurera gateways för att behandla spelarbetalningar"
-
 msgid "Customize buttons in the event navigation bar"
 msgstr "Anpassa knapparna i navigeringsfältet för evenemang"
 
@@ -4872,9 +4875,6 @@ msgstr "Nu kan du kopiera element från ett annat evenemang"
 
 msgid "Now you can define registration form sections"
 msgstr "Nu kan du definiera sektioner för registreringsformuläret"
-
-msgid "Now you can set the payment gateways settings"
-msgstr "Nu kan du ställa in inställningarna för betalningsportaler"
 
 msgid "Now you can set the registration opening date"
 msgstr "Nu kan du ställa in öppningsdatum för registrering"
@@ -4990,6 +4990,9 @@ msgstr "Tillagd på registreringssidan, före formuläret"
 
 msgid "Check consistency of the members’ personal data"
 msgstr "Kontrollera att medlemmarnas personuppgifter är korrekta"
+
+msgid "Configure payment methods available for players"
+msgstr "Konfigurera betalningsmetoder som är tillgängliga för spelare"
 
 msgid "Customize specific texts on the event interface"
 msgstr "Anpassa specifika texter på eventgränssnittet"

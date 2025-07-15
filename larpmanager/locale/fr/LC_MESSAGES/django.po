@@ -708,6 +708,9 @@ msgstr "Massimo"
 msgid "Members"
 msgstr "Les membres"
 
+msgid "Methods"
+msgstr "Méthodes"
+
 msgid "Modules"
 msgstr "Modules"
 
@@ -4820,6 +4823,9 @@ msgstr "Vous pouvez maintenant créer les documents de l'événement"
 msgid "Now you can set the organization tax options"
 msgstr "Vous pouvez maintenant définir les options fiscales de l'organisation"
 
+msgid "Now you can set the payment methods settings"
+msgstr "Vous pouvez maintenant paramétrer les méthodes de paiement"
+
 msgid "Now you can set the registration secret link"
 msgstr "Vous pouvez maintenant définir le lien secret d'enregistrement"
 
@@ -4854,9 +4860,6 @@ msgid "You can upload data directly from a csv file"
 msgstr ""
 "Vous pouvez télécharger des données directement à partir d'un fichier csv"
 
-msgid "Configure gateways to process player payments"
-msgstr "Configurer les passerelles pour traiter les paiements des joueurs"
-
 msgid "Customize buttons in the event navigation bar"
 msgstr "Personnaliser les boutons de la barre de navigation de l'événement"
 
@@ -4875,10 +4878,6 @@ msgstr "Vous pouvez maintenant copier des éléments d'un autre événement"
 msgid "Now you can define registration form sections"
 msgstr ""
 "Vous pouvez maintenant définir les sections du formulaire d'inscription"
-
-msgid "Now you can set the payment gateways settings"
-msgstr ""
-"Vous pouvez maintenant définir les paramètres des passerelles de paiement"
 
 msgid "Now you can set the registration opening date"
 msgstr "Vous pouvez maintenant fixer la date d'ouverture de l'inscription"
@@ -4995,6 +4994,9 @@ msgstr "Ajouté à la page d'inscription, avant le formulaire"
 
 msgid "Check consistency of the members’ personal data"
 msgstr "Vérifier la cohérence des données personnelles des membres"
+
+msgid "Configure payment methods available for players"
+msgstr "Configurer les méthodes de paiement disponibles pour les joueurs"
 
 msgid "Customize specific texts on the event interface"
 msgstr "Personnaliser des textes spécifiques sur l'interface de l'événement"

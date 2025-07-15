@@ -708,6 +708,9 @@ msgstr "Massimo"
 msgid "Members"
 msgstr "Leden"
 
+msgid "Methods"
+msgstr "Methoden"
+
 msgid "Modules"
 msgstr "Modules"
 
@@ -4819,6 +4822,9 @@ msgstr "Nu kun je de handouts van het evenement maken"
 msgid "Now you can set the organization tax options"
 msgstr "Nu kun je de belastingopties voor de organisatie instellen"
 
+msgid "Now you can set the payment methods settings"
+msgstr "Nu kunt u de betaalmethoden instellen"
+
 msgid "Now you can set the registration secret link"
 msgstr "Nu kun je de geheime link voor registratie instellen"
 
@@ -4852,9 +4858,6 @@ msgstr "Je bent nu ingelogd met je hoofdaccount"
 msgid "You can upload data directly from a csv file"
 msgstr "Je kunt gegevens rechtstreeks uploaden vanuit een csv-bestand"
 
-msgid "Configure gateways to process player payments"
-msgstr "Gateways configureren om betalingen van spelers te verwerken"
-
 msgid "Customize buttons in the event navigation bar"
 msgstr "Knoppen in de evenementnavigatiebalk aanpassen"
 
@@ -4872,9 +4875,6 @@ msgstr "Nu kun je elementen van een andere gebeurtenis kopiëren"
 
 msgid "Now you can define registration form sections"
 msgstr "Nu kun je delen van registratieformulieren definiëren"
-
-msgid "Now you can set the payment gateways settings"
-msgstr "Nu kunt u de betalingsgateways instellen"
 
 msgid "Now you can set the registration opening date"
 msgstr "Nu kun je de openingsdatum van de registratie instellen"
@@ -4992,6 +4992,9 @@ msgstr "Toegevoegd aan de registratiepagina, vóór het formulier"
 
 msgid "Check consistency of the members’ personal data"
 msgstr "Controleer de consistentie van de persoonlijke gegevens van de leden"
+
+msgid "Configure payment methods available for players"
+msgstr "Beschikbare betalingsmethoden configureren voor spelers"
 
 msgid "Customize specific texts on the event interface"
 msgstr "Specifieke teksten op de evenementinterface aanpassen"

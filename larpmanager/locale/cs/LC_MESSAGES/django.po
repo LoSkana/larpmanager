@@ -708,6 +708,9 @@ msgstr "Massimo"
 msgid "Members"
 msgstr "Členové"
 
+msgid "Methods"
+msgstr "Metody"
+
 msgid "Modules"
 msgstr "Moduly"
 
@@ -4815,6 +4818,9 @@ msgstr "Nyní můžete vytvářet materiály k události"
 msgid "Now you can set the organization tax options"
 msgstr "Nyní můžete nastavit možnosti zdanění organizace"
 
+msgid "Now you can set the payment methods settings"
+msgstr "Nyní můžete nastavit platební metody"
+
 msgid "Now you can set the registration secret link"
 msgstr "Nyní můžete nastavit tajný odkaz pro registraci"
 
@@ -4848,9 +4854,6 @@ msgstr "Nyní jste přihlášeni pomocí svého hlavního účtu"
 msgid "You can upload data directly from a csv file"
 msgstr "Data můžete nahrát přímo ze souboru csv"
 
-msgid "Configure gateways to process player payments"
-msgstr "Konfigurace bran pro zpracování plateb hráčů"
-
 msgid "Customize buttons in the event navigation bar"
 msgstr "Přizpůsobení tlačítek na navigačním panelu události"
 
@@ -4868,9 +4871,6 @@ msgstr "Nyní můžete kopírovat prvky z jiné události"
 
 msgid "Now you can define registration form sections"
 msgstr "Nyní můžete definovat sekce registračního formuláře"
-
-msgid "Now you can set the payment gateways settings"
-msgstr "Nyní můžete nastavit platební brány"
 
 msgid "Now you can set the registration opening date"
 msgstr "Nyní můžete nastavit datum zahájení registrace"
@@ -4986,6 +4986,9 @@ msgstr "Přidáno na registrační stránku před formulář"
 
 msgid "Check consistency of the members’ personal data"
 msgstr "Kontrola konzistence osobních údajů členů"
+
+msgid "Configure payment methods available for players"
+msgstr "Konfigurace platebních metod dostupných pro hráče"
 
 msgid "Customize specific texts on the event interface"
 msgstr "Přizpůsobení konkrétních textů v rozhraní události"

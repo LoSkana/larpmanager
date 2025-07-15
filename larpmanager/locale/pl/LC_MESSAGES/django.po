@@ -708,6 +708,9 @@ msgstr "Maksimum"
 msgid "Members"
 msgstr "Członkowie"
 
+msgid "Methods"
+msgstr "Metody"
+
 msgid "Modules"
 msgstr "Moduły"
 
@@ -4815,6 +4818,9 @@ msgstr "Teraz możesz utworzyć materiały informacyjne dotyczące wydarzenia"
 msgid "Now you can set the organization tax options"
 msgstr "Teraz możesz ustawić opcje podatkowe organizacji"
 
+msgid "Now you can set the payment methods settings"
+msgstr "Teraz możesz skonfigurować ustawienia metod płatności"
+
 msgid "Now you can set the registration secret link"
 msgstr "Teraz możesz ustawić tajny link rejestracyjny"
 
@@ -4848,9 +4854,6 @@ msgstr "Jesteś teraz zalogowany na swoje główne konto"
 msgid "You can upload data directly from a csv file"
 msgstr "Dane można przesyłać bezpośrednio z pliku csv"
 
-msgid "Configure gateways to process player payments"
-msgstr "Konfiguracja bramek do przetwarzania płatności graczy"
-
 msgid "Customize buttons in the event navigation bar"
 msgstr "Dostosowywanie przycisków na pasku nawigacji wydarzeń"
 
@@ -4868,9 +4871,6 @@ msgstr "Teraz możesz skopiować elementy z innego zdarzenia"
 
 msgid "Now you can define registration form sections"
 msgstr "Teraz możesz zdefiniować sekcje formularza rejestracyjnego"
-
-msgid "Now you can set the payment gateways settings"
-msgstr "Teraz możesz skonfigurować ustawienia bramek płatności"
 
 msgid "Now you can set the registration opening date"
 msgstr "Teraz możesz ustawić datę otwarcia rejestracji"
@@ -4950,11 +4950,11 @@ msgstr "Tekst wyświetlany na początku wszystkich arkuszy postaci"
 
 #, python-format
 msgid "There are <b>%(number)s</b> members to approve"
-msgstr "Istnieje <b>%(liczba)członków</b> do zatwierdzenia"
+msgstr "Istnieje <b>%(number)sczłonków</b> do zatwierdzenia"
 
 #, python-format
 msgid "There are <b>%(number)s</b> refunds to deliver"
-msgstr "Istnieją <b>%(liczba)</b> zwrotów do dostarczenia"
+msgstr "Istnieją <b>%(number)s</b> zwrotów do dostarczenia"
 
 msgid "This page allows you to add or edit a discount"
 msgstr "Ta strona umożliwia dodanie lub edycję rabatu"
@@ -4986,6 +4986,9 @@ msgstr "Dodano do strony rejestracji, przed formularzem"
 
 msgid "Check consistency of the members’ personal data"
 msgstr "Sprawdzanie spójności danych osobowych członków"
+
+msgid "Configure payment methods available for players"
+msgstr "Konfiguracja metod płatności dostępnych dla graczy"
 
 msgid "Customize specific texts on the event interface"
 msgstr "Dostosowywanie określonych tekstów w interfejsie wydarzenia"
@@ -5023,11 +5026,11 @@ msgstr "Liczba znaków do przypisania (domyślnie 1)"
 
 #, python-format
 msgid "There are <b>%(number)s</b> expenses to approve"
-msgstr "Istnieją <b>%(liczba)s</b> wydatków do zatwierdzenia"
+msgstr "Istnieją <b>%(number)s</b> wydatków do zatwierdzenia"
 
 #, python-format
 msgid "There are <b>%(number)s</b> payments to approve"
-msgstr "Do zatwierdzenia jest <b>%(liczba)s</b> płatności"
+msgstr "Do zatwierdzenia jest <b>%(number)s</b> płatności"
 
 #, python-format
 msgid "There are <b>%(number)s</b> questions to answer"
@@ -6749,7 +6752,7 @@ msgstr ""
 #, python-format
 msgid ""
 "You have some tickets without a final installment (with 0 amount): %(list)s"
-msgstr "Masz kilka biletów bez raty końcowej (z kwotą 0): %(lista)s"
+msgstr "Masz kilka biletów bez raty końcowej (z kwotą 0): %(list)s"
 
 #, python-format
 msgid ""

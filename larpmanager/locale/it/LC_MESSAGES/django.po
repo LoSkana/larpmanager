@@ -708,6 +708,9 @@ msgstr "Massimo"
 msgid "Members"
 msgstr "Soci"
 
+msgid "Methods"
+msgstr "Metodi"
+
 msgid "Modules"
 msgstr "Moduli"
 
@@ -4815,6 +4818,9 @@ msgstr "Ora è possibile creare le dispense dell'evento"
 msgid "Now you can set the organization tax options"
 msgstr "Ora è possibile impostare le opzioni fiscali dell'organizzazione"
 
+msgid "Now you can set the payment methods settings"
+msgstr "Ora è possibile impostare i metodi di pagamento"
+
 msgid "Now you can set the registration secret link"
 msgstr "Ora è possibile impostare il link segreto di registrazione"
 
@@ -4848,9 +4854,6 @@ msgstr "Ora sei loggato con l'account principale"
 msgid "You can upload data directly from a csv file"
 msgstr "È possibile caricare i dati direttamente da un file csv"
 
-msgid "Configure gateways to process player payments"
-msgstr "Configura i gateway per elaborare i pagamenti dei giocatori"
-
 msgid "Customize buttons in the event navigation bar"
 msgstr ""
 "Personalizzazione dei pulsanti nella barra di navigazione degli eventi"
@@ -4869,9 +4872,6 @@ msgstr "Ora è possibile copiare elementi da un altro evento"
 
 msgid "Now you can define registration form sections"
 msgstr "Ora è possibile definire le sezioni del modulo di registrazione"
-
-msgid "Now you can set the payment gateways settings"
-msgstr "Ora è possibile impostare i gateway di pagamento"
 
 msgid "Now you can set the registration opening date"
 msgstr "Ora è possibile impostare la data di apertura della registrazione"
@@ -4987,6 +4987,9 @@ msgstr "Aggiunto alla pagina di registrazione, prima del modulo"
 
 msgid "Check consistency of the members’ personal data"
 msgstr "Verifica la coerenza dei dati personali dei soci"
+
+msgid "Configure payment methods available for players"
+msgstr "Configurare i metodi di pagamento disponibili per i giocatori"
 
 msgid "Customize specific texts on the event interface"
 msgstr "Personalizzazione di testi specifici sull'interfaccia dell'evento"

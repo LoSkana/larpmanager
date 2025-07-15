@@ -708,6 +708,9 @@ msgstr "Máximo"
 msgid "Members"
 msgstr "Miembros"
 
+msgid "Methods"
+msgstr "Métodos"
+
 msgid "Modules"
 msgstr "Módulos"
 
@@ -4815,6 +4818,9 @@ msgstr "Ahora puedes crear los folletos del evento"
 msgid "Now you can set the organization tax options"
 msgstr "Ahora puede configurar las opciones fiscales de la organización"
 
+msgid "Now you can set the payment methods settings"
+msgstr "Ahora puede configurar los métodos de pago"
+
 msgid "Now you can set the registration secret link"
 msgstr "Ahora puede establecer el enlace secreto de registro"
 
@@ -4848,9 +4854,6 @@ msgstr "Ya has iniciado sesión con tu cuenta principal"
 msgid "You can upload data directly from a csv file"
 msgstr "Puede cargar datos directamente desde un archivo csv"
 
-msgid "Configure gateways to process player payments"
-msgstr "Configurar pasarelas para procesar los pagos de los jugadores"
-
 msgid "Customize buttons in the event navigation bar"
 msgstr "Personalizar los botones de la barra de navegación de eventos"
 
@@ -4868,9 +4871,6 @@ msgstr "Ahora puedes copiar elementos de otro evento"
 
 msgid "Now you can define registration form sections"
 msgstr "Ahora puede definir las secciones del formulario de inscripción"
-
-msgid "Now you can set the payment gateways settings"
-msgstr "Ahora puede configurar las pasarelas de pago"
 
 msgid "Now you can set the registration opening date"
 msgstr "Ahora puede fijar la fecha de apertura de la inscripción"
@@ -4950,11 +4950,11 @@ msgstr "Texto que aparece al principio de todas las hojas de personaje"
 
 #, python-format
 msgid "There are <b>%(number)s</b> members to approve"
-msgstr "Hay <b>%(número)s</b> miembros para aprobar"
+msgstr "Hay <b>%(number)s</b> miembros para aprobar"
 
 #, python-format
 msgid "There are <b>%(number)s</b> refunds to deliver"
-msgstr "Hay <b>%(número)s</b> reembolsos por entregar"
+msgstr "Hay <b>%(number)s</b> reembolsos por entregar"
 
 msgid "This page allows you to add or edit a discount"
 msgstr "Esta página le permite añadir o editar un descuento"
@@ -4986,6 +4986,9 @@ msgstr "Añadido a la página de registro, antes del formulario"
 
 msgid "Check consistency of the members’ personal data"
 msgstr "Comprobar la coherencia de los datos personales de los afiliados"
+
+msgid "Configure payment methods available for players"
+msgstr "Configurar los métodos de pago disponibles para los jugadores"
 
 msgid "Customize specific texts on the event interface"
 msgstr "Personalizar textos específicos en la interfaz de eventos"
@@ -5023,15 +5026,15 @@ msgstr "Número de caracteres a asignar (por defecto 1)"
 
 #, python-format
 msgid "There are <b>%(number)s</b> expenses to approve"
-msgstr "Hay <b>%(número)s</b> gastos que aprobar"
+msgstr "Hay <b>%(number)s</b> gastos que aprobar"
 
 #, python-format
 msgid "There are <b>%(number)s</b> payments to approve"
-msgstr "Hay <b>%(número)s</b> pagos por aprobar"
+msgstr "Hay <b>%(number)s</b> pagos por aprobar"
 
 #, python-format
 msgid "There are <b>%(number)s</b> questions to answer"
-msgstr "Hay <b>%(número)s</b> preguntas que responder"
+msgstr "Hay <b>%(number)s</b> preguntas que responder"
 
 msgid "They are regularly paid for the following years"
 msgstr "Se pagan regularmente los años posteriores"
@@ -6819,7 +6822,7 @@ msgstr ""
 #, python-format
 msgid ""
 "You have some tickets without a final installment (with 0 amount): %(list)s"
-msgstr "Tiene algunos tickets sin cuota final (con importe 0): %(lista)s"
+msgstr "Tiene algunos tickets sin cuota final (con importe 0): %(list)s"
 
 #, python-format
 msgid ""
@@ -8978,7 +8981,7 @@ msgid ""
 "values cannot be set at the same time: %(list)s"
 msgstr ""
 "Tiene algunos plazos fijos con fecha y días establecidos, pero esos valores "
-"no pueden establecerse al mismo tiempo: %(lista)s"
+"no pueden establecerse al mismo tiempo: %(list)s"
 
 msgid ""
 "Enables basic inventory management. Users can add items to a warehouse "

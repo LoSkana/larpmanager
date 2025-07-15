@@ -62,7 +62,7 @@ $(document).ready(function() {
             }
         },
         style: {
-            classes: 'qtip-dark qtip-rounded qtip-shadow'
+            classes: 'qtip-dark qtip-rounded qtip-shadow qtip-lm'
         },
         show: {
             event: 'click mouseenter',
@@ -72,7 +72,7 @@ $(document).ready(function() {
             event: 'mouseleave unfocus'
         },
         position: {
-            my: 'top center',
+            my: 'top left',
             at: 'bottom center',
             viewport: window,
             adjust: { method: 'flipinvert shift' },

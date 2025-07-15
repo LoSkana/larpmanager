@@ -257,10 +257,10 @@
 - model: larpmanager.assocpermission
   pk: 34
   fields:
-    name: Payment Methods
-    descr: Configure gateways to process player payments
+    name: Methods
+    descr: Configure payment methods available for players
     slug: exe_payment_details
-    number: 23
+    number: 1
     feature: 111
 - model: larpmanager.assocpermission
   pk: 35

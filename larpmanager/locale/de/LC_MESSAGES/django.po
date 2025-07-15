@@ -708,6 +708,9 @@ msgstr "Massimo"
 msgid "Members"
 msgstr "Mitglieder"
 
+msgid "Methods"
+msgstr "Methoden"
+
 msgid "Modules"
 msgstr "Module"
 
@@ -4827,6 +4830,9 @@ msgstr "Jetzt können Sie die Handouts für die Veranstaltung erstellen"
 msgid "Now you can set the organization tax options"
 msgstr "Jetzt können Sie die Optionen für die Organisationssteuer festlegen"
 
+msgid "Now you can set the payment methods settings"
+msgstr "Jetzt können Sie die Einstellungen für die Zahlungsarten festlegen"
+
 msgid "Now you can set the registration secret link"
 msgstr "Jetzt können Sie den geheimen Link für die Registrierung festlegen"
 
@@ -4860,9 +4866,6 @@ msgstr "Sie sind jetzt mit Ihrem Hauptkonto eingeloggt"
 msgid "You can upload data directly from a csv file"
 msgstr "Sie können Daten direkt aus einer csv-Datei hochladen"
 
-msgid "Configure gateways to process player payments"
-msgstr "Konfigurieren Sie Gateways zur Verarbeitung von Spielerzahlungen"
-
 msgid "Customize buttons in the event navigation bar"
 msgstr "Anpassen von Schaltflächen in der Ereignis-Navigationsleiste"
 
@@ -4880,9 +4883,6 @@ msgstr "Jetzt können Sie Elemente aus einer anderen Veranstaltung kopieren"
 
 msgid "Now you can define registration form sections"
 msgstr "Jetzt können Sie Abschnitte des Registrierungsformulars definieren"
-
-msgid "Now you can set the payment gateways settings"
-msgstr "Jetzt können Sie die Einstellungen für die Zahlungsgateways vornehmen"
 
 msgid "Now you can set the registration opening date"
 msgstr ""
@@ -5000,6 +5000,9 @@ msgstr "Zur Registrierungsseite hinzugefügt, vor dem Formular"
 
 msgid "Check consistency of the members’ personal data"
 msgstr "Überprüfung der Kohärenz der personenbezogenen Daten der Mitglieder"
+
+msgid "Configure payment methods available for players"
+msgstr "Konfigurieren Sie die für Spieler verfügbaren Zahlungsarten"
 
 msgid "Customize specific texts on the event interface"
 msgstr "Anpassen spezifischer Texte auf der Ereignisoberfläche"

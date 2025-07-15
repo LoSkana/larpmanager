@@ -7344,7 +7344,7 @@ msgstr ""
 msgid "Enables payment processing, specifying which payment methods to accept."
 msgstr ""
 
-msgid "Now you can set the payment gateways settings"
+msgid "Now you can set the payment methods settings"
 msgstr ""
 
 msgid ""
@@ -7629,7 +7629,10 @@ msgstr ""
 msgid "Display all users data"
 msgstr ""
 
-msgid "Configure gateways to process player payments"
+msgid "Methods"
+msgstr ""
+
+msgid "Configure payment methods available for players"
 msgstr ""
 
 msgid "Manage invoices of payments and approve them"

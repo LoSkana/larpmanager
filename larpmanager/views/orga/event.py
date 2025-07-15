@@ -43,7 +43,7 @@ from larpmanager.models.event import Event, EventButton, EventText
 from larpmanager.utils.common import clear_messages, get_feature
 from larpmanager.utils.deadlines import check_run_deadlines
 from larpmanager.utils.edit import backend_edit, orga_edit
-from larpmanager.utils.event import check_event_permission
+from larpmanager.utils.event import check_event_permission, get_index_event_permissions
 
 
 @login_required
@@ -125,6 +125,8 @@ def orga_features(request, s, n):
             clear_messages(request)
             messages.success(request, msg)
             return redirect(feature.follow_link)
+
+        get_index_event_permissions(ctx, request, s)
         return render(request, "larpmanager/manage/features.html", ctx)
     return render(request, "larpmanager/orga/edit.html", ctx)
 
