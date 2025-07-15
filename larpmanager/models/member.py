@@ -308,7 +308,7 @@ class Member(BaseModel):
             name = self.display_real()
             nick = self.nickname
             if slugify(nick) != slugify(name):
-                name += f"- {nick}"
+                name += f" - {nick}"
             return name
         elif self.name or self.surname:
             return self.display_real()
