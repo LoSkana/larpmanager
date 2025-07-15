@@ -626,8 +626,8 @@
     module: 2
     placeholder: false
     order: 50
-    after_text: ''
-    after_link: ''
+    after_text: Now set up the token and credits configuration.
+    after_link: config/token_credit
 - model: larpmanager.feature
   pk: 108
   fields:

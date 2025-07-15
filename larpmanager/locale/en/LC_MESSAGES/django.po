@@ -1444,6 +1444,9 @@ msgstr ""
 msgid "Ability type"
 msgstr ""
 
+msgid "click on the icon to open the tutorial"
+msgstr ""
+
 msgid "Authorisation"
 msgstr ""
 
@@ -7306,6 +7309,9 @@ msgid ""
 "for registration fees. Credits can also be redeemed for cash."
 msgstr ""
 
+msgid "Now set up the token and credits configuration."
+msgstr ""
+
 msgid ""
 "Enables management of expenses paid using the organization's financial "
 "instruments."
@@ -8119,67 +8125,52 @@ msgstr ""
 msgid "Waiting list registrations"
 msgstr ""
 
-msgid "To create an event, access the events management page"
+msgid "No events are present, create one"
 msgstr ""
 
-msgid ""
-"To quickly configure your organization's most important settings, access the "
-"quick setup page"
+msgid "To quickly configure your organization's most important settings"
 msgstr ""
 
 msgid ""
 "To set up the gateway payment available to players, to let them pay the "
-"registration fee through the platform, access the payment settings "
-"management page"
+"registration fee through the platform"
 msgstr ""
 
 msgid ""
 "To define which data will be asked in the profile form to the users once "
-"they sign up, access the profile management page"
+"they sign up"
 msgstr ""
 
 msgid ""
 "To grant access to organization management for other users and define roles "
-"with specific permissions, access the roles management page"
+"with specific permissions"
 msgstr ""
 
 msgid ""
 "To customize the appearance of all organizational pages, including colors, "
-"fonts, and images, access the appearance management page"
+"fonts, and images"
 msgstr ""
 
-msgid ""
-"To activate new features and enhance the functionality of the platform, "
-"access the features management page"
+msgid "To activate new features and enhance the functionality of the platform"
 msgstr ""
 
-msgid ""
-"To set specific values for the interface configuration or features, access "
-"the configuration management page"
+msgid "To set specific values for the interface configuration or features"
 msgstr ""
 
 #, python-format
-msgid ""
-"There are <b>%(number)s</b> expenses to approve, access the expenses "
-"management panel"
+msgid "There are <b>%(number)s</b> expenses to approve"
 msgstr ""
 
 #, python-format
-msgid ""
-"There are <b>%(number)s</b> payments to approve, access the invoices "
-"management panel"
+msgid "There are <b>%(number)s</b> payments to approve"
 msgstr ""
 
 #, python-format
-msgid ""
-"There are <b>%(number)s</b> refunds to deliver, access the refunds "
-"management panel"
+msgid "There are <b>%(number)s</b> refunds to deliver"
 msgstr ""
 
 #, python-format
-msgid ""
-"There are <b>%(number)s</b> members to approve, access the membership "
-"management panel"
+msgid "There are <b>%(number)s</b> members to approve"
 msgstr ""
 
 msgid ""
@@ -8192,9 +8183,7 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid ""
-"There are <b>%(number)s</b> questions to answer, access the users questions "
-"management panel"
+msgid "There are <b>%(number)s</b> questions to answer"
 msgstr ""
 
 msgid ""
@@ -8215,8 +8204,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Some activated features need the 'Character' feature, but it isn't active: "
-"access the feature panel"
+"Some activated features need the 'Character' feature, but it isn't active"
 msgstr ""
 
 msgid ""
@@ -8226,7 +8214,7 @@ msgstr ""
 
 msgid ""
 "Some activated features need the 'Token / Credit' feature, but it isn't "
-"active: access the feature panel"
+"active"
 msgstr ""
 
 #, python-format
@@ -8280,82 +8268,61 @@ msgid ""
 "panel"
 msgstr ""
 
-msgid ""
-"You have activated dynamic installments, but none have been yet created; "
-"access the dynamic installments management panel"
+msgid "You have activated dynamic installments, but none have been yet created"
 msgstr ""
 
-msgid ""
-"You have activated fixed installments, but none have been yet created; "
-"access the fixed installments management panel"
+msgid "You have activated fixed installments, but none have been yet created"
 msgstr ""
 
 #, python-format
 msgid ""
 "You have some fixed installments with both date and days set, but those "
-"values cannot be set at the same time: %(list)s; access the fixed "
-"installments management panel"
+"values cannot be set at the same time: %(list)s"
 msgstr ""
 
 #, python-format
 msgid ""
-"You have some tickets without a final installment (with 0 amount): %(list)s; "
-"access the fixed installments management panel"
+"You have some tickets without a final installment (with 0 amount): %(list)s"
+msgstr ""
+
+msgid "You have activated registration opening date, but no value has been set"
+msgstr ""
+
+msgid "You have activated registration secret link, but no value has been set"
 msgstr ""
 
 msgid ""
-"You have activated registration opening date, but no value has been set; "
-"access the run management panel"
+"You have activated registration external link, but no value has been set"
 msgstr ""
 
-msgid ""
-"You have activated registration secret link, but no value has been set; "
-"access the run management panel"
+msgid "You have activated character customization, but no fields has been set"
 msgstr ""
 
-msgid ""
-"You have activated registration external link, but no value has been set; "
-"access the event management panel"
+msgid "To quickly configure your events's most important settings"
 msgstr ""
 
-msgid ""
-"You have activated character customization, but no fields has been set; "
-"access the configuration panel"
-msgstr ""
-
-msgid ""
-"To quickly configure your events's most important settings, access the quick "
-"setup page"
-msgstr ""
-
-msgid ""
-"To set the tickets that users can select during registration, access the "
-"tickets management page"
+msgid "To set the tickets that users can select during registration"
 msgstr ""
 
 msgid ""
 "To define the registration form, and set up any number of registration "
-"questions and their options, access the registration form management page"
+"questions and their options"
 msgstr ""
 
 msgid ""
 "To grant access to event management for other users and define roles with "
-"specific permissions, access the roles management page"
+"specific permissions"
 msgstr ""
 
 msgid ""
 "To customize the appearance of all event pages, including colors, fonts, and "
-"images, access the appearance management page"
+"images"
 msgstr ""
 
-msgid ""
-"To activate new features and enhance the functionality of the event, access "
-"the features management page"
+msgid "To activate new features and enhance the functionality of the event"
 msgstr ""
 
-msgid ""
-"To set specific values for configuration of features of the event, access "
-"the configuration management page"
+msgid "To set specific values for configuration of features of the event"
 msgstr ""
 
 msgid "Suggestions"

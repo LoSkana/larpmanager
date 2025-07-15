@@ -326,7 +326,7 @@ function lm_tooltip() {
             content: {
                 text: $(this).children('.lm_tooltiptext')
             }, style: {
-                classes: 'qtip-dark qtip-rounded qtip-shadow'
+                classes: 'qtip-dark qtip-rounded qtip-shadow qtip-lm'
             }, hide: {
                 effect: function(offset) {
                     $(this).fadeOut(500);

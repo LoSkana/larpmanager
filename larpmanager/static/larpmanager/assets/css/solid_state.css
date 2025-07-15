@@ -528,6 +528,11 @@ input[type="datetime_p"]:focus {
     display: none;
 }
 
+.qtip.qtip-lm .qtip-content {
+    font-size: 1.3em;
+    line-height: 1.1;
+}
+
 /*** show_char ***/
 
 .has_show_char {
