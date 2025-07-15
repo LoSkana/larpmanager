@@ -3,14 +3,17 @@
     <div id="sidebar" {% if not is_sidebar_open %}class="hide"{% endif %}>
         <div class="inner">
             <div class="header">
+                <a href="{% url 'home' %}">Home</a>
                 {% if run %}
-                    <h1>
-                        <span>{{ run }}</span>
-                    </h1>
+                    -> <a href="{% url 'gallery' run.event.slug run.number %}"
+    {% if not orga_page %}class="select"{% endif %}>{{ run }}</a>
+                    -> <a href="{% url 'manage' run.event.slug run.number %}"
+    {% if orga_page %}class="select"{% endif %}>Management</a>
                 {% else %}
-                    <h1>
-                        <span>{{ assoc.name }}</span>
-                    </h1>
+                    -> Organization
+                    {% if exe_page %}
+                        -> <a href="{% url 'manage' %}" {% if exe_page %}class="select"{% endif %}>Management</a>
+                    {% endif %}
                 {% endif %}
                 <hr />
             </div>

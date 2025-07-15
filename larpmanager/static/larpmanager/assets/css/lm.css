@@ -1720,3 +1720,17 @@ a label:hover {
         width: 60%;
     }
 }
+
+.nav.manage {
+    display: none;
+}
+
+@media(max-width: 840px) {
+    .nav.manage {
+    display: initial;
+    }
+}
+
+a.select {
+    color: red;
+}
