@@ -1155,6 +1155,9 @@ msgstr "Första hjälpen"
 msgid "Frequency"
 msgstr "Frekvens"
 
+msgid "Interface"
+msgstr "Gränssnitt"
+
 msgid "Inventory"
 msgstr "Inventering"
 
@@ -1983,6 +1986,9 @@ msgstr "Ej slutfört"
 
 msgid "Number events"
 msgstr "Antal evenemang"
+
+msgid "Old interface"
+msgstr "Gammalt gränssnitt"
 
 msgid "Passages made"
 msgstr "Åtgärder som vidtagits"
@@ -3829,6 +3835,9 @@ msgstr "teckensnitt som ska användas i titlar"
 
 msgid "General event management tools"
 msgstr "Verktyg för hantering av allmänna evenemang"
+
+msgid "If checked: uses old interface"
+msgstr "Om markerat: använder gammalt gränssnitt"
 
 msgid "Manage organization accounting"
 msgstr "Hantera organisationens redovisning"

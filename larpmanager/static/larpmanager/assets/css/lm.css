@@ -1722,3 +1722,11 @@ a label:hover {
         width: 60%;
     }
 }
+
+#sidebar.interface_old p, #sidebar.interface_old h2 {
+    text-align: center;
+}
+
+#sidebar.interface_old .sidebar-link-wrap {
+    display: inline-flex;
+}

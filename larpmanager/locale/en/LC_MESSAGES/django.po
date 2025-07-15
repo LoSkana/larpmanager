@@ -253,6 +253,15 @@ msgid ""
 "This page allows you to edit the configuration of the activated features"
 msgstr ""
 
+msgid "Interface"
+msgstr ""
+
+msgid "Old interface"
+msgstr ""
+
+msgid "If checked: uses old interface"
+msgstr ""
+
 msgid "Calendar"
 msgstr ""
 
@@ -301,16 +310,6 @@ msgid "Tagline"
 msgstr ""
 
 msgid "If checked: shows the tagline for each event"
-msgstr ""
-
-msgid "Users"
-msgstr ""
-
-msgid "Event history"
-msgstr ""
-
-msgid ""
-"If checked: in the public page of an user shows a list of all events attended"
 msgstr ""
 
 msgid "Email notifications"
@@ -399,6 +398,16 @@ msgid "Move registration event"
 msgstr ""
 
 msgid "Allow to switch registration between events"
+msgstr ""
+
+msgid "Users"
+msgstr ""
+
+msgid "Event history"
+msgstr ""
+
+msgid ""
+"If checked: in the public page of an user shows a list of all events attended"
 msgstr ""
 
 msgid "Deadline"

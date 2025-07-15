@@ -1155,6 +1155,9 @@ msgstr "Primeros auxilios"
 msgid "Frequency"
 msgstr "Frecuencia"
 
+msgid "Interface"
+msgstr "Interfaz"
+
 msgid "Inventory"
 msgstr "Inventario"
 
@@ -1983,6 +1986,9 @@ msgstr "No completado"
 
 msgid "Number events"
 msgstr "Número de eventos"
+
+msgid "Old interface"
+msgstr "Interfaz antigua"
 
 msgid "Passages made"
 msgstr "Medidas adoptadas"
@@ -3829,6 +3835,9 @@ msgstr "Fuente que se utilizará en los títulos"
 
 msgid "General event management tools"
 msgstr "Herramientas generales de gestión de eventos"
+
+msgid "If checked: uses old interface"
+msgstr "Si está marcada: utiliza la interfaz antigua"
 
 msgid "Manage organization accounting"
 msgstr "Gestionar la contabilidad de la organización"

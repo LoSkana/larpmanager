@@ -263,6 +263,13 @@ class ExeConfigForm(ConfigForm):
 
     def set_configs(self):
         # CALENDAR
+        self.set_section("interface", _("Interface"))
+
+        label = _("Old interface")
+        help_text = _("If checked: uses old interface")
+        self.add_configs("interface_old", ConfigType.BOOL, label, help_text)
+
+        # CALENDAR
         self.set_section("calendar", _("Calendar"))
 
         label = _("Show event links")
@@ -296,13 +303,6 @@ class ExeConfigForm(ConfigForm):
         label = _("Tagline")
         help_text = _("If checked: shows the tagline for each event")
         self.add_configs("calendar_tagline", ConfigType.BOOL, label, help_text)
-
-        # USERS
-        self.set_section("users", _("Users"))
-
-        label = _("Event history")
-        help_text = _("If checked: in the public page of an user shows a list of all events attended")
-        self.add_configs("player_larp_history", ConfigType.BOOL, label, help_text)
 
         # MAIL
         self.set_section("email", _("Email notifications"))
@@ -379,6 +379,13 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("campaign_switch", ConfigType.BOOL, label, help_text)
 
     def set_config_members(self):
+        # USERS
+        self.set_section("users", _("Users"))
+
+        label = _("Event history")
+        help_text = _("If checked: in the public page of an user shows a list of all events attended")
+        self.add_configs("player_larp_history", ConfigType.BOOL, label, help_text)
+
         if "deadlines" in self.params["features"]:
             self.set_section("deadlines", _("Deadline"))
 

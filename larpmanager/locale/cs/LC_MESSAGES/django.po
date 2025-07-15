@@ -1155,6 +1155,9 @@ msgstr "První pomoc"
 msgid "Frequency"
 msgstr "Frekvence"
 
+msgid "Interface"
+msgstr "Rozhraní"
+
 msgid "Inventory"
 msgstr "Inventura"
 
@@ -1983,6 +1986,9 @@ msgstr "Není dokončeno"
 
 msgid "Number events"
 msgstr "Počet událostí"
+
+msgid "Old interface"
+msgstr "Staré rozhraní"
 
 msgid "Passages made"
 msgstr "Přijaté kroky"
@@ -3829,6 +3835,9 @@ msgstr "písmo, které se má použít v nadpisech"
 
 msgid "General event management tools"
 msgstr "Obecné nástroje pro správu událostí"
+
+msgid "If checked: uses old interface"
+msgstr "Pokud je zaškrtnuto: používá staré rozhraní"
 
 msgid "Manage organization accounting"
 msgstr "Správa účetnictví organizace"

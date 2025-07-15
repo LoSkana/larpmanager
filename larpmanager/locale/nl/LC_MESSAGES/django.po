@@ -1155,6 +1155,9 @@ msgstr "Eerste hulp"
 msgid "Frequency"
 msgstr "Frequentie"
 
+msgid "Interface"
+msgstr "Interface"
+
 msgid "Inventory"
 msgstr "Inventaris"
 
@@ -1983,6 +1986,9 @@ msgstr "Niet voltooid"
 
 msgid "Number events"
 msgstr "Aantal gebeurtenissen"
+
+msgid "Old interface"
+msgstr "Oude interface"
 
 msgid "Passages made"
 msgstr "Ondernomen stappen"
@@ -3829,6 +3835,9 @@ msgstr "Lettertype voor titels"
 
 msgid "General event management tools"
 msgstr "Algemene hulpmiddelen voor evenementenbeheer"
+
+msgid "If checked: uses old interface"
+msgstr "Indien aangevinkt: gebruikt oude interface"
 
 msgid "Manage organization accounting"
 msgstr "De boekhouding van de organisatie beheren"
