@@ -5254,9 +5254,6 @@ msgstr "Tildelt %(amount).2f %(elements)s for '%(reason)s'"
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jeg har gjort det noen ganger, jeg har grunnleggende erfaring"
 
-msgid "If checked, makes characters visible to all players"
-msgstr "Hvis avkrysset, gjør tegnene synlige for alle spillere"
-
 msgid "If you want to download an example file, click here"
 msgstr "Hvis du vil laste ned en eksempelfil, kan du klikke her"
 
@@ -5592,12 +5589,6 @@ msgstr "Hei! Din påmelding til <b>%(event)s</b> har blitt oppdatert"
 msgid "I am not good what to say. I never thought it would happen"
 msgstr "Jeg vet ikke hva jeg skal si. Jeg trodde aldri dette ville skje"
 
-msgid "If checked, makes the field content visible to all players"
-msgstr "Hvis avkrysset, blir feltinnholdet synlig for alle spillere"
-
-msgid "If checked, makes workshops visible for players to fill in"
-msgstr "Hvis avkrysset, synliggjøres verkstedene som spillerne kan fylle ut"
-
 msgid "If instead you wish to upload a new photo of your document"
 msgstr "Hvis du i stedet ønsker å laste opp et nytt bilde av dokumentet ditt"
 
@@ -5701,6 +5692,9 @@ msgstr ""
 msgid "Access the management panel <a href= %(url)s'>from here!</a>"
 msgstr "Få tilgang til administrasjonspanelet <a href= %(url)s'>herfra!</a>"
 
+msgid "If checked, workshops will be visible for players to fill in"
+msgstr "Hvis avkrysset, vil verkstedene være synlige for spillerne å fylle ut"
+
 msgid "If you wish to upload a new scan of your application instead"
 msgstr "Hvis du ønsker å laste opp en ny skanning av søknaden din i stedet"
 
@@ -5750,9 +5744,6 @@ msgstr ""
 
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Hvis avkrysset, kan et alternativ velges maksimalt antall ganger"
-
-msgid "If checked, makes prologues visible to the assigned character"
-msgstr "Hvis avkrysset, gjør prologer synlige for den tildelte karakteren"
 
 msgid "Manage event templates used as starting points for new events"
 msgstr ""
@@ -5866,6 +5857,12 @@ msgstr ""
 "Hvis avkrysset, vil ingen tokens bli brukt i oppføringene av dette "
 "arrangementet"
 
+msgid "If checked, prologues will be visible to the assigned character"
+msgstr "Hvis avkrysset, vil prologer være synlige for den tildelte karakteren"
+
+msgid "If checked, the PDF version of character sheets will be visible"
+msgstr "Hvis avkrysset, vil PDF-versjonen av karakterark være synlig"
+
 msgid "Indicate the exact date in which the payment has been performed"
 msgstr ""
 "Angi hvilken dato bevegelsen i det finansielle instrumentet ble foretatt"
@@ -5977,9 +5974,6 @@ msgstr "Kopier og lim inn nøyaktig all farget tekst nedenfor i notatene"
 msgid "Error loading. Invalid file format (we accept only pdf or images)"
 msgstr "Feil ved innlasting. Ugyldig filformat - vi godtar kun pdf og bilder"
 
-msgid "If checked, makes visible the PDF version of the character sheets"
-msgstr "Hvis avkrysset, synliggjøres PDF-versjoner av kortene"
-
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""
 "Hvis avkrysset, vil ingen studiepoeng bli brukt i påmeldingene for dette "
@@ -6039,10 +6033,6 @@ msgid "Enter your email below to receive instructions on how to change it"
 msgstr ""
 "Skriv inn e-postadressen din nedenfor for å motta instruksjoner om hvordan "
 "du endrer den"
-
-msgid "If checked, makes the field content visible to the assigned player"
-msgstr ""
-"Hvis avkrysset, blir feltinnholdet synlig for den tilordnede spilleren"
 
 msgid "Indicates whether the option can be included in the gifted signups"
 msgstr "Angir om alternativet kan inkluderes i de frie oppføringene"
@@ -6658,12 +6648,6 @@ msgid ""
 msgstr ""
 "Hvis avkrysset, kan et alternativ bare være synlig hvis andre alternativer "
 "er valgt"
-
-msgid ""
-"If checked, makes factions visible, as the character assignments to factions"
-msgstr ""
-"Hvis avkrysset, blir fraksjoner synlige, ettersom karakterenes tilordning "
-"til fraksjoner"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
@@ -9047,6 +9031,13 @@ msgid ""
 msgstr ""
 "Angir antall dager som spilleren skal varsles om at betalingen skal "
 "gjennomføres, gitt en betalingsfrist. Standard 30."
+
+msgid ""
+"Selected fields will be displayed as follows: public fields visible to all "
+"players, private fields visible only to assigned players"
+msgstr ""
+"Valgte felt vises på følgende måte: offentlige felt er synlige for alle "
+"spillere, private felt er kun synlige for tildelte spillere"
 
 msgid ""
 "This page allows you to select the features activated for this event, and "

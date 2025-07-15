@@ -154,9 +154,7 @@ def get_character_fields(ctx, only_visible=True):
         return
 
     # get visible question fields
-    que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-    que = que.filter(applicable=QuestionApplicable.CHARACTER)
-    que = que.exclude(Q(status=QuestionStatus.HIDDEN) | Q(visibility=QuestionVisibility.HIDDEN))
+    que = get_writing_fields(ctx, QuestionApplicable.CHARACTER)
     if "pdf" in ctx:
         que = que.exclude(printable=False)
     if only_visible:
@@ -179,6 +177,13 @@ def get_character_fields(ctx, only_visible=True):
     )
     if tn:
         ctx["teaser_name"] = tn.first().display
+
+
+def get_writing_fields(ctx, applicable):
+    que = ctx["event"].get_elements(WritingQuestion).order_by("order")
+    que = que.filter(applicable=applicable)
+    que = que.exclude(Q(status=QuestionStatus.HIDDEN) | Q(visibility=QuestionVisibility.HIDDEN))
+    return que
 
 
 def get_searcheable_character_fields(ctx):

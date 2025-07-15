@@ -1703,7 +1703,7 @@ a label:hover {
     color: green;
 }
 
-.checkbox_single input[type="checkbox"] {
+input[type="checkbox"].checkbox_single {
     display: block;
 }
 

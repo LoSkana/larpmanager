@@ -5254,9 +5254,6 @@ msgstr "Assegnato %(amount).2f %(elements)s per \"%(reason) s\""
 msgid "I've done it a few times, I have a basic experience"
 msgstr "L'ho fatto qualche volta, ho una esperienza di base"
 
-msgid "If checked, makes characters visible to all players"
-msgstr "Se selezionata, rende i personaggi visibili a tutti i giocatori"
-
 msgid "If you want to download an example file, click here"
 msgstr "Se si desidera scaricare un file di esempio, fare clic qui"
 
@@ -5612,14 +5609,6 @@ msgstr "Ciao! La tua iscrizione a <b>%(event)s</b> è stata aggiornata"
 msgid "I am not good what to say. I never thought it would happen"
 msgstr "Non sono bene cosa dire. Non pensavo sarebbe mai successo"
 
-msgid "If checked, makes the field content visible to all players"
-msgstr ""
-"Se selezionata, rende il contenuto del campo visibile a tutti i giocatori"
-
-msgid "If checked, makes workshops visible for players to fill in"
-msgstr ""
-"Se checkato, rende visibile i workshop che i giocatori possono compilare"
-
 msgid "If instead you wish to upload a new photo of your document"
 msgstr "Se invece desideri caricare una nuova foto del tuo documento"
 
@@ -5722,6 +5711,11 @@ msgstr ""
 msgid "Access the management panel <a href= %(url)s'>from here!</a>"
 msgstr "Accedi al pannello di gestione <a href='%(url)s'>da qui!</a>"
 
+msgid "If checked, workshops will be visible for players to fill in"
+msgstr ""
+"Se è selezionata, i workshop saranno visibili ai giocatori per essere "
+"compilati"
+
 msgid "If you wish to upload a new scan of your application instead"
 msgstr ""
 "Se invece desideri caricare un nuovo scan della tua richiesta di iscrizione"
@@ -5774,9 +5768,6 @@ msgstr ""
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr ""
 "Se selezionata, un'opzione può essere scelta un numero massimo di volte"
-
-msgid "If checked, makes prologues visible to the assigned character"
-msgstr "Se selezionata, rende visibili i prologhi al personaggio assegnato"
 
 msgid "Manage event templates used as starting points for new events"
 msgstr ""
@@ -5897,6 +5888,13 @@ msgstr "Ciao! La tua iscrizione a <b>%(event)s</b> è stata confermata"
 msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Se checkato, non verranno usati token nelle iscrizioni di questo evento"
+
+msgid "If checked, prologues will be visible to the assigned character"
+msgstr "Se selezionata, i prologhi saranno visibili al personaggio assegnato"
+
+msgid "If checked, the PDF version of character sheets will be visible"
+msgstr ""
+"Se è selezionata, la versione PDF delle schede dei personaggi sarà visibile"
 
 msgid "Indicate the exact date in which the payment has been performed"
 msgstr ""
@@ -6025,9 +6023,6 @@ msgstr ""
 "Errore nel caricamento. Formato file non valido - accettiamo solo pdf ed "
 "immagini"
 
-msgid "If checked, makes visible the PDF version of the character sheets"
-msgstr "Se checkato, rende visibile le versioni PDF delle schede"
-
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""
 "Se checkato, non verranno usati crediti nelle iscrizioni di questo evento"
@@ -6090,10 +6085,6 @@ msgid "Enter your email below to receive instructions on how to change it"
 msgstr ""
 "Inserisci il tuo indirizzo e-mail qui sotto per ricevere le istruzioni su "
 "come cambiarlo"
-
-msgid "If checked, makes the field content visible to the assigned player"
-msgstr ""
-"Se selezionata, rende visibile il contenuto del campo al giocatore assegnato"
 
 msgid "Indicates whether the option can be included in the gifted signups"
 msgstr "Indica se l'opzione può venire incluso nelle iscrizioni regalate"
@@ -6773,12 +6764,6 @@ msgid ""
 msgstr ""
 "Se selezionata, consente a un'opzione di essere visibile solo se sono "
 "selezionate altre opzioni"
-
-msgid ""
-"If checked, makes factions visible, as the character assignments to factions"
-msgstr ""
-"Se selezionata, rende visibili le fazioni, come le assegnazioni dei "
-"personaggi alle fazioni"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
@@ -9197,6 +9182,13 @@ msgid ""
 msgstr ""
 "Data una deadline di pagamento, indica il numero di giorni sotto il quale "
 "notifica al giocatore di procedere con il versamento. Default 30."
+
+msgid ""
+"Selected fields will be displayed as follows: public fields visible to all "
+"players, private fields visible only to assigned players"
+msgstr ""
+"I campi selezionati saranno visualizzati come segue: campi pubblici visibili"
+" a tutti i giocatori, campi privati visibili solo ai giocatori assegnati"
 
 msgid ""
 "This page allows you to select the features activated for this event, and "

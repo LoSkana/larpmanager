@@ -1296,23 +1296,18 @@ msgstr ""
 msgid "This page allows you to change the general settings of this run"
 msgstr ""
 
+msgid ""
+"Selected fields will be displayed as follows: public fields visible to all "
+"players, private fields visible only to assigned players"
+msgstr ""
+
 msgid "Characters"
-msgstr ""
-
-msgid "If checked, makes characters visible to all players"
-msgstr ""
-
-msgid "If checked, makes the field content visible to all players"
-msgstr ""
-
-msgid "If checked, makes the field content visible to the assigned player"
 msgstr ""
 
 msgid "Factions"
 msgstr ""
 
-msgid ""
-"If checked, makes factions visible, as the character assignments to factions"
+msgid "Visibility"
 msgstr ""
 
 msgid "Speedlarp"
@@ -1324,7 +1319,7 @@ msgstr ""
 msgid "Prologues"
 msgstr ""
 
-msgid "If checked, makes prologues visible to the assigned character"
+msgid "If checked, prologues will be visible to the assigned character"
 msgstr ""
 
 msgid "Questbuilder"
@@ -1336,16 +1331,13 @@ msgstr ""
 msgid "Workshop"
 msgstr ""
 
-msgid "If checked, makes workshops visible for players to fill in"
+msgid "If checked, workshops will be visible for players to fill in"
 msgstr ""
 
 msgid "PDF"
 msgstr ""
 
-msgid "If checked, makes visible the PDF version of the character sheets"
-msgstr ""
-
-msgid "Visibility"
+msgid "If checked, the PDF version of character sheets will be visible"
 msgstr ""
 
 msgid "Progression"

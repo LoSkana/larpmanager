@@ -5257,9 +5257,6 @@ msgstr "Tilldelad %(amount).2f %(elements)s för '%(reason)s'"
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jag har gjort det några gånger, jag har grundläggande erfarenhet"
 
-msgid "If checked, makes characters visible to all players"
-msgstr "Om markerad, gör karaktärer synliga för alla spelare"
-
 msgid "If you want to download an example file, click here"
 msgstr "Om du vill ladda ner en exempelfil kan du klicka här"
 
@@ -5595,12 +5592,6 @@ msgid "I am not good what to say. I never thought it would happen"
 msgstr ""
 "Jag vet inte vad jag ska säga. Jag trodde aldrig att det här skulle hända"
 
-msgid "If checked, makes the field content visible to all players"
-msgstr "Om markerad, gör fältinnehållet synligt för alla spelare"
-
-msgid "If checked, makes workshops visible for players to fill in"
-msgstr "Om markerat, synliggörs de workshops som spelarna kan fylla i"
-
 msgid "If instead you wish to upload a new photo of your document"
 msgstr "Om du istället vill ladda upp ett nytt foto av ditt dokument"
 
@@ -5702,6 +5693,10 @@ msgstr ""
 msgid "Access the management panel <a href= %(url)s'>from here!</a>"
 msgstr "Öppna hanteringspanelen <a href= %(url)s'>från här!</a>"
 
+msgid "If checked, workshops will be visible for players to fill in"
+msgstr ""
+"Om markerad, kommer workshops att vara synliga för spelare att fylla i"
+
 msgid "If you wish to upload a new scan of your application instead"
 msgstr "Om du vill ladda upp en ny skanning av din ansökan istället"
 
@@ -5751,9 +5746,6 @@ msgstr "Tillåter spelare att när som helst avboka sina egna registreringar."
 
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Om alternativet är markerat kan det väljas ett maximalt antal gånger"
-
-msgid "If checked, makes prologues visible to the assigned character"
-msgstr "Om markerad, gör prologer synliga för den tilldelade karaktären"
 
 msgid "Manage event templates used as starting points for new events"
 msgstr ""
@@ -5867,6 +5859,13 @@ msgstr ""
 "Om markerat, kommer inga polletter att användas i anmälningarna till detta "
 "evenemang"
 
+msgid "If checked, prologues will be visible to the assigned character"
+msgstr ""
+"Om markerat kommer prologer att vara synliga för den tilldelade karaktären"
+
+msgid "If checked, the PDF version of character sheets will be visible"
+msgstr "Om markerat kommer PDF-versionen av karaktärsblad att vara synlig"
+
 msgid "Indicate the exact date in which the payment has been performed"
 msgstr "Ange på vilket datum rörelsen gjordes i det finansiella instrumentet"
 
@@ -5978,9 +5977,6 @@ msgid "Error loading. Invalid file format (we accept only pdf or images)"
 msgstr ""
 "Fel vid inläsning. Ogiltigt filformat - vi accepterar endast pdf och bilder"
 
-msgid "If checked, makes visible the PDF version of the character sheets"
-msgstr "Om markerat, gör PDF-versioner av korten synliga"
-
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""
 "Om markerad, kommer inga krediter att användas i anmälningarna för detta "
@@ -6036,9 +6032,6 @@ msgstr ""
 msgid "Enter your email below to receive instructions on how to change it"
 msgstr ""
 "Ange din e-postadress nedan för att få instruktioner om hur du ändrar den"
-
-msgid "If checked, makes the field content visible to the assigned player"
-msgstr "Om markerad, gör fältinnehållet synligt för den tilldelade spelaren"
 
 msgid "Indicates whether the option can be included in the gifted signups"
 msgstr "Anger om optionen kan inkluderas i de fria posterna"
@@ -6672,12 +6665,6 @@ msgid ""
 msgstr ""
 "Om den är markerad kan ett alternativ endast visas om andra alternativ är "
 "valda"
-
-msgid ""
-"If checked, makes factions visible, as the character assignments to factions"
-msgstr ""
-"Om markerad, gör fraktioner synliga, eftersom karaktären tilldelar "
-"fraktioner"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
@@ -9072,6 +9059,13 @@ msgid ""
 msgstr ""
 "Med en betalningsfrist anges det antal dagar under vilka spelaren meddelas "
 "om att gå vidare med betalningen. Standardvärde 30."
+
+msgid ""
+"Selected fields will be displayed as follows: public fields visible to all "
+"players, private fields visible only to assigned players"
+msgstr ""
+"Valda fält visas på följande sätt: offentliga fält som är synliga för alla "
+"spelare, privata fält som endast är synliga för tilldelade spelare"
 
 msgid ""
 "This page allows you to select the features activated for this event, and "

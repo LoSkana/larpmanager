@@ -5252,9 +5252,6 @@ msgstr "Přiřazeno %(amount).2f %(elements)s pro '%(reason)s'"
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Několikrát jsem to dělal, mám základní zkušenosti"
 
-msgid "If checked, makes characters visible to all players"
-msgstr "Pokud je zaškrtnuto, postavy jsou viditelné pro všechny hráče"
-
 msgid "If you want to download an example file, click here"
 msgstr "Pokud si chcete stáhnout ukázkový soubor, klikněte zde"
 
@@ -5587,12 +5584,6 @@ msgstr "Ahoj! Vaše registrace do <b>%(event)s</b> byla aktualizována"
 msgid "I am not good what to say. I never thought it would happen"
 msgstr "Nevím, co na to říct. Nikdy jsem si nemyslel, že se to stane"
 
-msgid "If checked, makes the field content visible to all players"
-msgstr "Pokud je zaškrtnuto, obsah pole je viditelný pro všechny hráče"
-
-msgid "If checked, makes workshops visible for players to fill in"
-msgstr "Pokud je zaškrtnuto, zviditelní se dílny, které mohou hráči vyplnit"
-
 msgid "If instead you wish to upload a new photo of your document"
 msgstr "Pokud si místo toho přejete nahrát novou fotografii dokumentu"
 
@@ -5686,6 +5677,10 @@ msgstr "UPOZORNĚNÍ: tato akce přepíše změny provedené v této události"
 msgid "Access the management panel <a href= %(url)s'>from here!</a>"
 msgstr "Přístup k panelu správy <a href= %(url)s'>zde!</a>"
 
+msgid "If checked, workshops will be visible for players to fill in"
+msgstr ""
+"Pokud je zaškrtnuto, budou viditelné workshopy, které mohou hráči vyplnit"
+
 msgid "If you wish to upload a new scan of your application instead"
 msgstr "Chcete-li místo toho nahrát nový sken své žádosti"
 
@@ -5729,9 +5724,6 @@ msgstr "Umožňuje hráčům kdykoli zrušit vlastní registraci."
 
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Pokud je možnost zaškrtnuta, lze ji zvolit maximálně několikrát"
-
-msgid "If checked, makes prologues visible to the assigned character"
-msgstr "Pokud je zaškrtnuto, zviditelní prology pro přiřazenou postavu"
 
 msgid "Manage event templates used as starting points for new events"
 msgstr ""
@@ -5836,6 +5828,12 @@ msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Pokud je zaškrtnuto, nebudou při zadávání této události použity žádné žetony"
 
+msgid "If checked, prologues will be visible to the assigned character"
+msgstr "Pokud je zaškrtnuto, budou prology viditelné pro přiřazenou postavu"
+
+msgid "If checked, the PDF version of character sheets will be visible"
+msgstr "Pokud je zaškrtnuto, zobrazí se PDF verze charakterových listů"
+
 msgid "Indicate the exact date in which the payment has been performed"
 msgstr "Uveďte, ke kterému dni byl proveden pohyb ve finančním nástroji"
 
@@ -5937,9 +5935,6 @@ msgid "Error loading. Invalid file format (we accept only pdf or images)"
 msgstr ""
 "Chybné načítání. Nesprávný formát souboru - přijímáme pouze pdf a obrázky"
 
-msgid "If checked, makes visible the PDF version of the character sheets"
-msgstr "Pokud je zaškrtnuto, zviditelní se verze karet ve formátu PDF"
-
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""
 "Pokud je zaškrtnuto, nebudou v položkách pro tuto událost použity žádné "
@@ -5989,9 +5984,6 @@ msgstr "Obsah e-mailu, který hráčům připomíná, aby vyplnili žádost o č
 
 msgid "Enter your email below to receive instructions on how to change it"
 msgstr "Zadejte svůj e-mail níže a obdržíte pokyny, jak jej změnit"
-
-msgid "If checked, makes the field content visible to the assigned player"
-msgstr "Pokud je zaškrtnuto, obsah pole je viditelný pro přiřazeného hráče"
 
 msgid "Indicates whether the option can be included in the gifted signups"
 msgstr "Označuje, zda lze možnost zahrnout do volných položek"
@@ -6569,11 +6561,6 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, je možnost viditelná pouze v případě, že jsou vybrány "
 "jiné možnosti"
-
-msgid ""
-"If checked, makes factions visible, as the character assignments to factions"
-msgstr ""
-"Pokud je zaškrtnuto, zviditelní frakce, protože přiřazení postavy k frakcím"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
@@ -8909,6 +8896,13 @@ msgid ""
 msgstr ""
 "Při zadané lhůtě splatnosti uvede počet dní, do kterých oznámí hráči, aby "
 "platbu provedl. Výchozí hodnota 30."
+
+msgid ""
+"Selected fields will be displayed as follows: public fields visible to all "
+"players, private fields visible only to assigned players"
+msgstr ""
+"Vybraná pole se zobrazí takto: veřejná pole viditelná pro všechny hráče, "
+"soukromá pole viditelná pouze pro přiřazené hráče"
 
 msgid ""
 "This page allows you to select the features activated for this event, and "

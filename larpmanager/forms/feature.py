@@ -76,7 +76,6 @@ class QuickSetupForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
-        self.main_class = "checkbox_single"
 
     def init_fields(self, features):
         # for each value in self.setup, init a field
