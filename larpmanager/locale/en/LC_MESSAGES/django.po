@@ -103,8 +103,8 @@ msgid "This page allows you to add or edit an expense item incurred"
 msgstr ""
 
 msgid ""
-"This page allows you to add or edit an registration revenue other than the "
-"players' registration fee."
+"This page allows you to add or edit an event revenue other than the players' "
+"registration fee"
 msgstr ""
 
 msgid "Donations"
@@ -137,7 +137,7 @@ msgstr ""
 msgid "Request refund"
 msgstr ""
 
-msgid "Payment details"
+msgid "Payment Methods"
 msgstr ""
 
 msgid "This page allows you to set up your payment methods"
@@ -230,7 +230,7 @@ msgstr ""
 
 msgid ""
 "This page allows you to change the appearance settings and presentation of "
-"the management system for your Organization."
+"the management system for your Organization"
 msgstr ""
 
 msgid ""
@@ -243,7 +243,7 @@ msgstr ""
 
 msgid ""
 "This page allows you to select the features activated for the organization, "
-"and all its events. Click on a feature to show its description."
+"and all its events (click on a feature to show its description)"
 msgstr ""
 
 msgid "Configuration"
@@ -764,7 +764,7 @@ msgstr ""
 
 msgid ""
 "This page allows you to select the features activated for this event, and "
-"all its runs. Click on a feature to show its description."
+"all its runs (click on a feature to show its description)"
 msgstr ""
 
 msgid "Event Configuration"
@@ -1296,6 +1296,21 @@ msgstr ""
 msgid "This page allows you to change the general settings of this run"
 msgstr ""
 
+msgid "Select the event of this run "
+msgstr ""
+
+msgid "Not visible to players"
+msgstr ""
+
+msgid "Available to players in the homepage"
+msgstr ""
+
+msgid "Accounting is complete and can be archived"
+msgstr ""
+
+msgid "Not active anymore"
+msgstr ""
+
 msgid "Characters"
 msgstr ""
 
@@ -1363,8 +1378,8 @@ msgid "Event Template"
 msgstr ""
 
 msgid ""
-"This page allows you to select the features of a template. Click on a "
-"feature to show its description."
+"This page allows you to select the features of a template (click on a "
+"feature to show its description)"
 msgstr ""
 
 msgid ""
@@ -1634,9 +1649,7 @@ msgid ""
 "can register"
 msgstr ""
 
-msgid ""
-"This page allows you to add or edit sections in the signup form. You can "
-"indicate which questions to include in the section."
+msgid "This page allows you to add or edit sections in the signup form"
 msgstr ""
 
 msgid "Form section"
@@ -1660,7 +1673,7 @@ msgstr ""
 
 msgid ""
 "This page allows you to add or modify the dynamic instalments with which the "
-"player can split the payment."
+"player can split the payment"
 msgstr ""
 
 msgid "Dynamic rates"
@@ -2504,9 +2517,6 @@ msgid ""
 msgstr ""
 
 msgid "Please indicate an email for the organization"
-msgstr ""
-
-msgid "Payment Methods"
 msgstr ""
 
 msgid "Indicate the payment methods you wish to be available to players"
@@ -6436,6 +6446,9 @@ msgstr ""
 msgid "Load list"
 msgstr ""
 
+msgid "No registrations have been received for this run yet"
+msgstr ""
+
 msgid "Registration sections"
 msgstr ""
 
@@ -6981,6 +6994,12 @@ msgstr ""
 msgid "Now you can start creating speed-larps"
 msgstr ""
 
+msgid "Lets staff access the safety information submitted by players."
+msgstr ""
+
+msgid "Now you can review the safety information submitted by players"
+msgstr ""
+
 msgid ""
 "Lets players submit character preferences, then finds the optimal overall "
 "match."
@@ -7234,6 +7253,12 @@ msgid ""
 msgstr ""
 
 msgid "Now you can create the progress steps"
+msgstr ""
+
+msgid "Lets staff access the diet information submitted by players."
+msgstr ""
+
+msgid "Now you can review the diet information submitted by players"
 msgstr ""
 
 msgid ""
@@ -7526,16 +7551,10 @@ msgstr ""
 msgid "Manage collections participated by players"
 msgstr ""
 
-msgid "Payments Verification"
-msgstr ""
-
 msgid "Verify manually approved payments"
 msgstr ""
 
 msgid "Review the annual budget report"
-msgstr ""
-
-msgid "Historical accounting"
 msgstr ""
 
 msgid "Review historical financial records"
@@ -7592,6 +7611,9 @@ msgstr ""
 msgid "Displays list of emails of users"
 msgstr ""
 
+msgid "Volunteers"
+msgstr ""
+
 msgid "Manage volunteer registry"
 msgstr ""
 
@@ -7601,16 +7623,13 @@ msgstr ""
 msgid "Display all users data"
 msgstr ""
 
-msgid "Payment Settings"
-msgstr ""
-
 msgid "Configure gateways to process player payments"
 msgstr ""
 
 msgid "Manage invoices of payments and approve them"
 msgstr ""
 
-msgid "Membership check"
+msgid "Check data"
 msgstr ""
 
 msgid "Check consistency of the members’ personal data"
@@ -7846,12 +7865,6 @@ msgid "Customize specific texts on the event interface"
 msgstr ""
 
 msgid "Customize buttons in the event navigation bar"
-msgstr ""
-
-msgid "Cache Reloading"
-msgstr ""
-
-msgid "Reload cached event data"
 msgstr ""
 
 msgid "Manage questions and options for characters and writing elements"

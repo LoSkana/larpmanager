@@ -1299,6 +1299,9 @@ msgstr "Kandidaten"
 msgid "Characters"
 msgstr "Personages"
 
+msgid "Check data"
+msgstr "Gegevens controleren"
+
 msgid "Collection"
 msgstr "Verzamel"
 
@@ -1454,6 +1457,9 @@ msgstr "Twee quota"
 
 msgid "Visibility"
 msgstr "Zichtbaarheid"
+
+msgid "Volunteers"
+msgstr "Vrijwilligers"
 
 msgid "Welcome to"
 msgstr "Welkom bij"
@@ -2237,9 +2243,6 @@ msgstr "verzoek om terugbetaling"
 msgid "Ability missing"
 msgstr "Vermogen ontbreekt"
 
-msgid "Cache Reloading"
-msgstr "Cache herladen"
-
 msgid "Change password"
 msgstr "Wachtwoord herstel"
 
@@ -2296,9 +2299,6 @@ msgstr "Kasbudget"
 
 msgid "Payment Methods"
 msgstr "Betaalmethoden"
-
-msgid "Payment details"
-msgstr "Betalingsgegevens"
 
 msgid "Portraits (PDF)"
 msgstr "Portretten (PDF)"
@@ -2429,9 +2429,6 @@ msgstr "Moge de beste winnen"
 msgid "Member approved!"
 msgstr "Lid goedgekeurd!"
 
-msgid "Membership check"
-msgstr "Lidmaatschap controleren"
-
 msgid "No comunications"
 msgstr "Geen communicatie"
 
@@ -2461,9 +2458,6 @@ msgstr "Wachtwoord gewijzigd"
 
 msgid "Patron / Reduced"
 msgstr "Maecenas / Gereduceerd"
-
-msgid "Payment Settings"
-msgstr "Betalingsinstellingen"
 
 msgid "Payment currency"
 msgstr "Betaling Valuta"
@@ -2755,6 +2749,9 @@ msgstr "Gegevens van leden controleren"
 
 msgid "New refund request"
 msgstr "Nieuw verzoek om terugbetaling"
+
+msgid "Not active anymore"
+msgstr "Niet meer actief"
 
 msgid "Patron and Reduced"
 msgstr "Beschermheer en Verminderd"
@@ -3097,9 +3094,6 @@ msgstr "Wachtwoord resetten mislukt"
 msgid "Go to the casting for"
 msgstr "Ga naar casting voor"
 
-msgid "Historical accounting"
-msgstr "Historische boekhouding"
-
 msgid "If absent, indicate 0"
 msgstr "Indien afwezig, geef 0 aan"
 
@@ -3127,9 +3121,6 @@ msgstr "Ze namen deel"
 #, python-format
 msgid "Payment per %(event)s"
 msgstr "Betaling per %(event)s"
-
-msgid "Payments Verification"
-msgstr "Verificatie van betalingen"
 
 msgid "Personal data updated"
 msgstr "Persoonlijke gegevens bijgewerkt"
@@ -3241,6 +3232,9 @@ msgstr "Beheren van inkomsten uit evenementen"
 
 msgid "Modify shuttle request"
 msgstr "Shuttleverzoek wijzigen"
+
+msgid "Not visible to players"
+msgstr "Niet zichtbaar voor spelers"
 
 msgid "Number of partecipants"
 msgstr "Aantal deelnemingen"
@@ -3440,9 +3434,6 @@ msgstr "Voorlopige registratie"
 
 msgid "Regeneration pdf started"
 msgstr "pdf regeneratie gestart"
-
-msgid "Reload cached event data"
-msgstr "Gebeurtenisgegevens uit de cache opnieuw laden"
 
 msgid "Secret registration link"
 msgstr "Geheime registratie link"
@@ -3801,6 +3792,9 @@ msgstr "Registraties openen niet ingesteld"
 #, python-format
 msgid "Request refund from: %(user)s"
 msgstr "Verzoek om terugbetaling van: %(user)s"
+
+msgid "Select the event of this run "
+msgstr "Selecteer het evenement van deze run"
 
 msgid "Select the new ability to get"
 msgstr "Selecteer de nieuwe vaardigheid die je wilt leren"
@@ -4237,6 +4231,9 @@ msgstr "Je kunt geen berichten naar jezelf sturen"
 msgid "here the conditions of registration"
 msgstr "hier de voorwaarden voor registratie voor het evenement"
 
+msgid "Available to players in the homepage"
+msgstr "Beschikbaar voor spelers op de homepage"
+
 msgid "Cast your vote for the new Executive"
 msgstr "Breng je stem uit voor de nieuwe Executive"
 
@@ -4629,6 +4626,9 @@ msgstr "Je sluit (geen van deze filters) uit"
 
 msgid "You have exceeded the maximum text length"
 msgstr "U hebt de maximale tekstlengte overschreden"
+
+msgid "Accounting is complete and can be archived"
+msgstr "De boekhouding is compleet en kan worden gearchiveerd"
 
 msgid "Added at the top of the main calendar page"
 msgstr "Bovenaan de hoofdkalenderpagina toegevoegd"
@@ -5325,6 +5325,9 @@ msgstr "Upload als laatste stap je lidmaatschapsaanvraag"
 msgid "Manages fixed installment payments for registrations"
 msgstr "Beheert vaste termijnbetalingen voor registraties"
 
+msgid "No registrations have been received for this run yet"
+msgstr "Er zijn nog geen inschrijvingen ontvangen voor deze run"
+
 msgid "Perform check on the consistency of character sheets"
 msgstr "Voer een controle uit op de consistentie van karaktersheets"
 
@@ -5736,10 +5739,18 @@ msgstr "Als u in plaats daarvan een nieuwe scan van uw aanvraag wilt uploaden"
 msgid "In the membership book the number of your membership card is"
 msgstr "In het ledenboek is je lidmaatschapsnummer"
 
+msgid "Lets staff access the diet information submitted by players."
+msgstr ""
+"Geeft het personeel toegang tot de dieetinformatie die spelers hebben "
+"ingediend."
+
 msgid "Manages tokens used by players to cover the registration fee"
 msgstr ""
 "Beheert tokens die door spelers worden gebruikt om het inschrijfgeld te "
 "dekken"
+
+msgid "Now you can review the diet information submitted by players"
+msgstr "Je kunt nu de dieetinformatie bekijken die spelers hebben ingediend"
 
 msgid "This page allows you to add or edit an expense item incurred"
 msgstr "Op deze pagina kunt u een onkostenpost toevoegen of bewerken"
@@ -5869,8 +5880,17 @@ msgstr "Geef hier elk element aan dat je wilt vermijden in de opdracht"
 msgid "It will be shown to other players together with your character"
 msgstr "Het zal samen met je personage aan andere spelers worden getoond"
 
+msgid "Lets staff access the safety information submitted by players."
+msgstr ""
+"Geeft het personeel toegang tot de veiligheidsinformatie die spelers hebben "
+"opgegeven."
+
 msgid "Now staff members can upload expenses, and you can review them"
 msgstr "Nu kunnen medewerkers uitgaven uploaden en jij kunt ze bekijken"
+
+msgid "Now you can review the safety information submitted by players"
+msgstr ""
+"Nu kun je de veiligheidsinformatie bekijken die spelers hebben ingediend"
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "We vragen u het gevraagde bedrag voor de volgende termijn te betalen"
@@ -5927,6 +5947,10 @@ msgid "Select from the dropdown the characters to be added to the plot"
 msgstr ""
 "Selecteer in de vervolgkeuzelijst de personages die moeten worden toegevoegd"
 " aan het perceel"
+
+msgid "This page allows you to add or edit sections in the signup form"
+msgstr ""
+"Op deze pagina kunt u secties in het aanmeldformulier toevoegen of bewerken"
 
 msgid "This page allows you to add or edit the registration surcharges"
 msgstr ""
@@ -7910,6 +7934,13 @@ msgstr ""
 " op \"Snelkoppelingen\" onderaan om deze te openen)"
 
 msgid ""
+"This page allows you to add or edit an event revenue other than the players'"
+" registration fee"
+msgstr ""
+"Op deze pagina kun je andere inkomsten van een evenement toevoegen of "
+"bewerken dan het inschrijfgeld van de spelers"
+
+msgid ""
 "This page shows in the detail of an event, the list of expertises covered by"
 " the contributors"
 msgstr ""
@@ -8325,13 +8356,6 @@ msgstr ""
 "voor jou en de organisatoren"
 
 msgid ""
-"This page allows you to add or edit an registration revenue other than the "
-"players' registration fee."
-msgstr ""
-"Op deze pagina kunt u andere gegevens toevoegen of bewerken dan het "
-"lidmaatschapsgeld."
-
-msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
 "available during registration"
 msgstr ""
@@ -8367,11 +8391,11 @@ msgstr ""
 "organisatie snel instellen"
 
 msgid ""
-"This page allows you to select the features of a template. Click on a "
-"feature to show its description."
+"This page allows you to select the features of a template (click on a "
+"feature to show its description)"
 msgstr ""
-"Op deze pagina kun je de kenmerken van een sjabloon selecteren. Klik op een "
-"kenmerk om de beschrijving weer te geven."
+"Op deze pagina kun je de kenmerken van een sjabloon selecteren (klik op een "
+"kenmerk om de beschrijving te zien)"
 
 msgid ""
 "You have activated character customization, but no fields has been set; "
@@ -8522,6 +8546,13 @@ msgstr ""
 "het beheerpaneel voor tekens"
 
 msgid ""
+"This page allows you to add or modify the dynamic instalments with which the"
+" player can split the payment"
+msgstr ""
+"Op deze pagina kun je de dynamische termijnen toevoegen of wijzigen waarmee "
+"de speler de betaling kan splitsen"
+
+msgid ""
 "When you want to close the collection, follow the link below. A special "
 "redemption code will be generated"
 msgstr ""
@@ -8563,13 +8594,6 @@ msgid ""
 msgstr ""
 "Personeelsleden die de antwoorden van spelers mogen zien (laat leeg om "
 "iedereen te laten zien)"
-
-msgid ""
-"This page allows you to add or modify the dynamic instalments with which the"
-" player can split the payment."
-msgstr ""
-"Op deze pagina kun je de dynamische termijnen toevoegen of wijzigen waarmee "
-"de speler de betaling kan verdelen."
 
 msgid ""
 "Adds support for assigning XP (experience points) to characters, which can "
@@ -8923,6 +8947,13 @@ msgstr ""
 "spelers die dat ticket hebben geselecteerd"
 
 msgid ""
+"This page allows you to change the appearance settings and presentation of "
+"the management system for your Organization"
+msgstr ""
+"Op deze pagina kun je het uiterlijk en de presentatie van het beheersysteem "
+"voor je organisatie wijzigen"
+
+msgid ""
 "Are you a doctor, a nurse, or a licensed rescuer? We can ask you to "
 "intervene in case accidents occur during the event?"
 msgstr ""
@@ -8957,13 +8988,6 @@ msgstr ""
 "Zodra u de betaling hebt gedaan, keert u terug naar deze pagina en uploadt u"
 " hieronder de schermafbeelding van de bevestiging die Paypal u heeft "
 "gestuurd"
-
-msgid ""
-"This page allows you to change the appearance settings and presentation of "
-"the management system for your Organization."
-msgstr ""
-"Op deze pagina kun je het uiterlijk en de presentatie-instellingen van het "
-"beheersysteem voor je vereniging wijzigen."
 
 msgid ""
 "Total of all expenses incurred for the event, both personal and "
@@ -9094,13 +9118,6 @@ msgstr ""
 " naam kiezen of de naam aanpassen aan het gekozen genre)"
 
 msgid ""
-"This page allows you to add or edit sections in the signup form. You can "
-"indicate which questions to include in the section."
-msgstr ""
-"Op deze pagina kun je secties in het registratieformulier toevoegen of "
-"bewerken. Je kunt aangeven welke vragen je in de sectie wilt opnemen."
-
-msgid ""
 "Allows players to purchase tickets as gifts. A special code is generated and"
 " provided to the gift recipient for registration."
 msgstr ""
@@ -9204,10 +9221,10 @@ msgstr ""
 
 msgid ""
 "This page allows you to select the features activated for this event, and "
-"all its runs. Click on a feature to show its description."
+"all its runs (click on a feature to show its description)"
 msgstr ""
-"Op deze pagina kun je de functies selecteren die voor dit evenement en alle "
-"runs zijn geactiveerd. Klik op een kenmerk om de beschrijving te zien."
+"Op deze pagina kun je de geactiveerde functies voor dit evenement en alle "
+"runs selecteren (klik op een functie om de beschrijving te zien)"
 
 msgid ""
 "To customize the appearance of all organizational pages, including colors, "
@@ -9356,11 +9373,11 @@ msgstr ""
 
 msgid ""
 "This page allows you to select the features activated for the organization, "
-"and all its events. Click on a feature to show its description."
+"and all its events (click on a feature to show its description)"
 msgstr ""
-"Op deze pagina kun je de functies selecteren die geactiveerd zijn voor de "
-"organisatie en al haar evenementen. Klik op een functie om de beschrijving "
-"weer te geven."
+"Op deze pagina kun je de functies selecteren die zijn geactiveerd voor de "
+"organisatie en alle evenementen (klik op een functie om de beschrijving te "
+"zien)"
 
 msgid ""
 "Enables 'Filler' characters: simpler character sheets, assigned to players "

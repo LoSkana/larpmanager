@@ -91,6 +91,8 @@
         {% with list=suggestions header=suggestions_header suggestion=1 %}
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}
+        <hr />
+        <a href="{% url 'orga_reload_cache' run.event.slug run.number %}">Reload cache</a>
     </div>
 {% endblock content %}
 {% block js %}

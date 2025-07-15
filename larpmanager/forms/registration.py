@@ -704,10 +704,7 @@ class OrgaRegistrationTicketForm(MyForm):
 
 
 class OrgaRegistrationSectionForm(MyForm):
-    page_info = _(
-        "This page allows you to add or edit sections in the signup form. You can "
-        "indicate which questions to include in the section."
-    )
+    page_info = _("This page allows you to add or edit sections in the signup form")
 
     page_title = _("Form section")
 
@@ -786,7 +783,7 @@ class OrgaRegistrationOptionForm(MyForm):
 
 class OrgaRegistrationQuotaForm(MyForm):
     page_info = _(
-        "This page allows you to add or modify the dynamic instalments with which the player can split the payment."
+        "This page allows you to add or modify the dynamic instalments with which the player can split the payment"
     )
 
     page_title = _("Dynamic rates")

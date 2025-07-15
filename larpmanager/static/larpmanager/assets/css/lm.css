@@ -787,7 +787,7 @@ table {
 
 #sidebar {
     display: block;
-    width: 20%;
+    width: 21ch;
     height: 100vh;
     position: fixed;
     top: 0;
@@ -796,7 +796,7 @@ table {
     padding: 0 1em 3em 1em;
     box-sizing: border-box;
     border-right: 2px solid rgba(var(--pri-rgb), 0.085);
-    font-size: 90%;
+    font-size: 100%;
 }
 
 #sidebar:focus {
@@ -808,7 +808,7 @@ table {
     padding: 0.1em;
     font-size: 1.2em;
     width: 100%;
-    height: 4em;
+    height: 2em;
     margin: auto;
     text-align: center;
     display: flex;
@@ -820,8 +820,8 @@ table {
     font-size: 90%;
 }
 
-#sidebar p {
-    text-align: center;
+#sidebar h2, #sidebar p {
+    text-align: left;
 }
 
 #sidebar {
@@ -839,7 +839,7 @@ table {
 }
 
 #page-wrapper.sidebar {
-    margin-left: 20%;
+    margin-left: 21ch;
     min-height: 100vh;
 }
 
@@ -848,8 +848,8 @@ nav#sidebar-nav {
 }
 
 #header.sidebar {
-    margin-left: 20%;
-    width: 80%;
+    margin-left: 21ch;
+    width: calc(100% - 21ch);
 }
 
 @media(max-width: 800px) {
@@ -1295,9 +1295,10 @@ th select {
 }
 
 .sidebar-link-wrap {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 0.3em;
+  margin-left: 0.5ch;
 }
 
 .sidebar-link,

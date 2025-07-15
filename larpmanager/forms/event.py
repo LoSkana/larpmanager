@@ -162,7 +162,7 @@ class OrgaFeatureForm(FeatureForm):
     page_title = _("Event features")
 
     page_info = _(
-        "This page allows you to select the features activated for this event, and all its runs. Click on a feature to show its description."
+        "This page allows you to select the features activated for this event, and all its runs (click on a feature to show its description)"
     )
 
     load_js = ["feature_checkbox"]
@@ -790,6 +790,7 @@ class OrgaRunForm(ConfigForm):
             self.fields["event"] = forms.ChoiceField(
                 required=True,
                 choices=[(el.id, el.name) for el in Event.objects.filter(assoc_id=self.params["a_id"], template=False)],
+                help_text=_("Select the event of this run "),
             )
             self.fields["event"].widget = EventS2Widget()
             self.fields["event"].widget.set_assoc(self.params["a_id"])
@@ -802,6 +803,16 @@ class OrgaRunForm(ConfigForm):
                 for choice in DevelopStatus
                 if choice not in [DevelopStatus.CANC, DevelopStatus.DONE]
             ]
+        status_text = {
+            DevelopStatus.START: _("Not visible to players"),
+            DevelopStatus.SHOW: _("Available to players in the homepage"),
+            DevelopStatus.DONE: _("Accounting is complete and can be archived"),
+            DevelopStatus.CANC: _("Not active anymore"),
+        }
+        self.fields["development"].help_text = ", ".join(
+            f"<b>{label}</b>: {status_text[DevelopStatus(value)]}"
+            for value, label in self.fields["development"].choices
+        )
 
         for s in ["registration_open", "registration_secret"]:
             if not self.instance.pk or not self.instance.event or s not in self.params["features"]:
@@ -926,7 +937,7 @@ class ExeTemplateForm(FeatureForm):
     page_title = _("Event Template")
 
     page_info = _(
-        "This page allows you to select the features of a template. Click on a feature to show its description."
+        "This page allows you to select the features of a template (click on a feature to show its description)"
     )
 
     load_js = ["feature_checkbox"]

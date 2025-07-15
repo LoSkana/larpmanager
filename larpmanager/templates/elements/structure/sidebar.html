@@ -2,18 +2,6 @@
 {% if manage %}
     <div id="sidebar" {% if not is_sidebar_open %}class="hide"{% endif %}>
         <div class="inner">
-            <div class="header">
-                {% if run %}
-                    <h1>
-                        <span>{{ run }}</span>
-                    </h1>
-                {% else %}
-                    <h1>
-                        <span>{{ assoc.name }}</span>
-                    </h1>
-                {% endif %}
-                <hr />
-            </div>
             {% if run %}
                 <p>
                     <span class="sidebar-link-wrap"
@@ -65,8 +53,14 @@
             {% endif %}
             <h2>{{ assoc.platform }}</h2>
             <p>
-                {% if assoc.skin_id == 1 %}<a href="https://discord.gg/C4KuyQbuft">Discord</a>{% endif %}
-                <a href="{% url 'tutorials' %}">Tutorials</a>
+                {% if assoc.skin_id == 1 %}
+                    <span class="sidebar-link-wrap">
+                        <a class="sidebar-link" href="https://discord.gg/C4KuyQbuft">Discord</a>
+                    </span>
+                {% endif %}
+                <span class="sidebar-link-wrap">
+                    <a class="sidebar-link" href="{% url 'tutorials' %}">Tutorials</a>
+                </span>
             </p>
             {% if role_names %}
                 <hr />

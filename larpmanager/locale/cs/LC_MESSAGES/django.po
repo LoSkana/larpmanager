@@ -1299,6 +1299,9 @@ msgstr "Kandidáti"
 msgid "Characters"
 msgstr "Postavy"
 
+msgid "Check data"
+msgstr "Kontrola údajů"
+
 msgid "Collection"
 msgstr "Sbírejte"
 
@@ -1454,6 +1457,9 @@ msgstr "Dvě kvóty"
 
 msgid "Visibility"
 msgstr "Viditelnost"
+
+msgid "Volunteers"
+msgstr "Dobrovolníci"
 
 msgid "Welcome to"
 msgstr "Vítejte v"
@@ -2237,9 +2243,6 @@ msgstr "žádost o proplacení"
 msgid "Ability missing"
 msgstr "Chybějící schopnost"
 
-msgid "Cache Reloading"
-msgstr "Doplňování mezipaměti"
-
 msgid "Change password"
 msgstr "Obnovení hesla"
 
@@ -2296,9 +2299,6 @@ msgstr "Peněžní rozpočet"
 
 msgid "Payment Methods"
 msgstr "Způsoby platby"
-
-msgid "Payment details"
-msgstr "Platební údaje"
 
 msgid "Portraits (PDF)"
 msgstr "Portréty (PDF)"
@@ -2429,9 +2429,6 @@ msgstr "Ať vyhraje ten nejlepší"
 msgid "Member approved!"
 msgstr "Člen schválen!"
 
-msgid "Membership check"
-msgstr "Kontrola členství"
-
 msgid "No comunications"
 msgstr "Žádná komunikace"
 
@@ -2461,9 +2458,6 @@ msgstr "Změna hesla"
 
 msgid "Patron / Reduced"
 msgstr "Maecenas / Snížené"
-
-msgid "Payment Settings"
-msgstr "Nastavení plateb"
 
 msgid "Payment currency"
 msgstr "Platební měna"
@@ -2755,6 +2749,9 @@ msgstr "Kontroly členských údajů"
 
 msgid "New refund request"
 msgstr "Nová žádost o vrácení peněz"
+
+msgid "Not active anymore"
+msgstr "Již není aktivní"
 
 msgid "Patron and Reduced"
 msgstr "Patron a snížené"
@@ -3097,9 +3094,6 @@ msgstr "Obnovení hesla se nezdařilo"
 msgid "Go to the casting for"
 msgstr "Přejděte na casting"
 
-msgid "Historical accounting"
-msgstr "Historické účetnictví"
-
 msgid "If absent, indicate 0"
 msgstr "Pokud chybí, uveďte 0"
 
@@ -3127,9 +3121,6 @@ msgstr "Zúčastnili se"
 #, python-format
 msgid "Payment per %(event)s"
 msgstr "Platba za %(event)s"
-
-msgid "Payments Verification"
-msgstr "Ověřování plateb"
 
 msgid "Personal data updated"
 msgstr "Aktualizace osobních údajů"
@@ -3241,6 +3232,9 @@ msgstr "Spravuje příjmy z akcí"
 
 msgid "Modify shuttle request"
 msgstr "Žádost o změnu kyvadlové dopravy"
+
+msgid "Not visible to players"
+msgstr "Není viditelný pro hráče"
 
 msgid "Number of partecipants"
 msgstr "Počet účastí"
@@ -3440,9 +3434,6 @@ msgstr "Prozatímní registrace"
 
 msgid "Regeneration pdf started"
 msgstr "pdf regenerace zahájena"
-
-msgid "Reload cached event data"
-msgstr "Načtení dat událostí z mezipaměti"
 
 msgid "Secret registration link"
 msgstr "Tajný registrační odkaz"
@@ -3801,6 +3792,9 @@ msgstr "Otevření registrací není nastaveno"
 #, python-format
 msgid "Request refund from: %(user)s"
 msgstr "Žádost o vrácení peněz od: %(user)s"
+
+msgid "Select the event of this run "
+msgstr "Vyberte událost tohoto běhu"
 
 msgid "Select the new ability to get"
 msgstr "Vyberte novou dovednost, kterou chcete získat"
@@ -4237,6 +4231,9 @@ msgstr "Nemůžete posílat zprávy sami sobě"
 msgid "here the conditions of registration"
 msgstr "zde podmínky registrace na akci"
 
+msgid "Available to players in the homepage"
+msgstr "K dispozici pro hráče na domovské stránce"
+
 msgid "Cast your vote for the new Executive"
 msgstr "Hlasujte pro nového výkonného ředitele"
 
@@ -4627,6 +4624,9 @@ msgstr "Vylučujete (žádný z těchto filtrů)"
 
 msgid "You have exceeded the maximum text length"
 msgstr "Překročili jste maximální délku textu"
+
+msgid "Accounting is complete and can be archived"
+msgstr "Účetnictví je kompletní a lze jej archivovat"
 
 msgid "Added at the top of the main calendar page"
 msgstr "Přidáno v horní části hlavní stránky kalendáře"
@@ -5314,6 +5314,9 @@ msgstr "V posledním kroku nahrajte přihlášku ke členství"
 msgid "Manages fixed installment payments for registrations"
 msgstr "Správa pevných splátek za registrace"
 
+msgid "No registrations have been received for this run yet"
+msgstr "Na tento běh zatím nebyly přijaty žádné registrace"
+
 msgid "Perform check on the consistency of character sheets"
 msgstr "Provést kontrolu konzistence listů postav"
 
@@ -5692,9 +5695,17 @@ msgstr "Chcete-li místo toho nahrát nový sken své žádosti"
 msgid "In the membership book the number of your membership card is"
 msgstr "V členské knize je vaše členské číslo"
 
+msgid "Lets staff access the diet information submitted by players."
+msgstr ""
+"Umožňuje pracovníkům přístup k informacím o stravě, které jim hráči "
+"poskytli."
+
 msgid "Manages tokens used by players to cover the registration fee"
 msgstr ""
 "spravuje žetony, které hráči používají k úhradě registračního poplatku"
+
+msgid "Now you can review the diet information submitted by players"
+msgstr "Nyní si můžete prohlédnout informace o stravě poskytnuté hráči"
 
 msgid "This page allows you to add or edit an expense item incurred"
 msgstr ""
@@ -5804,8 +5815,17 @@ msgstr "Zde uveďte každý prvek, kterému se chcete v zadání vyhnout"
 msgid "It will be shown to other players together with your character"
 msgstr "Spolu s vaší postavou se zobrazí ostatním hráčům"
 
+msgid "Lets staff access the safety information submitted by players."
+msgstr ""
+"Umožňuje pracovníkům přístup k bezpečnostním informacím, které jim hráči "
+"poskytli."
+
 msgid "Now staff members can upload expenses, and you can review them"
 msgstr "Nyní mohou zaměstnanci nahrávat výdaje a vy je můžete kontrolovat"
+
+msgid "Now you can review the safety information submitted by players"
+msgstr ""
+"Nyní si můžete prohlédnout bezpečnostní informace, které hráči poskytli"
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "Žádáme vás, abyste zaplatili požadovanou částku na další splátku"
@@ -5853,6 +5873,10 @@ msgstr ""
 msgid "Select from the dropdown the characters to be added to the plot"
 msgstr ""
 "Vyberte z rozevíracího seznamu postavy, které mají být přidány do děje"
+
+msgid "This page allows you to add or edit sections in the signup form"
+msgstr ""
+"Tato stránka umožňuje přidávat nebo upravovat sekce registračního formuláře"
 
 msgid "This page allows you to add or edit the registration surcharges"
 msgstr "Na této stránce můžete přidat nebo změnit příplatky za předplatné"
@@ -7638,6 +7662,13 @@ msgstr ""
 "otevřete klepnutím na položku \"Shortcuts\" dole)"
 
 msgid ""
+"This page allows you to add or edit an event revenue other than the players'"
+" registration fee"
+msgstr ""
+"Tato stránka umožňuje přidat nebo upravit příjmy z události jiné než "
+"registrační poplatek hráčů"
+
+msgid ""
 "This page shows in the detail of an event, the list of expertises covered by"
 " the contributors"
 msgstr ""
@@ -8047,13 +8078,6 @@ msgstr ""
 " a organizátory"
 
 msgid ""
-"This page allows you to add or edit an registration revenue other than the "
-"players' registration fee."
-msgstr ""
-"Na této stránce můžete přidat nebo upravit jinou položku než členský "
-"poplatek."
-
-msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
 "available during registration"
 msgstr ""
@@ -8089,11 +8113,11 @@ msgstr ""
 "nové organizace"
 
 msgid ""
-"This page allows you to select the features of a template. Click on a "
-"feature to show its description."
+"This page allows you to select the features of a template (click on a "
+"feature to show its description)"
 msgstr ""
-"Na této stránce můžete vybrat funkce šablony. Kliknutím na funkci zobrazíte "
-"její popis."
+"Na této stránce můžete vybrat funkce šablony (kliknutím na funkci se zobrazí"
+" její popis)"
 
 msgid ""
 "You have activated character customization, but no fields has been set; "
@@ -8244,6 +8268,13 @@ msgstr ""
 "panelu správy znaků"
 
 msgid ""
+"This page allows you to add or modify the dynamic instalments with which the"
+" player can split the payment"
+msgstr ""
+"Tato stránka umožňuje přidat nebo upravit dynamické splátky, kterými může "
+"hráč rozdělit platbu"
+
+msgid ""
 "When you want to close the collection, follow the link below. A special "
 "redemption code will be generated"
 msgstr ""
@@ -8285,13 +8316,6 @@ msgid ""
 msgstr ""
 "Zaměstnanci, kteří mohou vidět odpovědi hráčů (nechte prázdné, aby je viděli"
 " všichni)"
-
-msgid ""
-"This page allows you to add or modify the dynamic instalments with which the"
-" player can split the payment."
-msgstr ""
-"Na této stránce můžete přidat nebo upravit dynamické splátky, kterými může "
-"hráč rozdělit platbu."
 
 msgid ""
 "Adds support for assigning XP (experience points) to characters, which can "
@@ -8641,6 +8665,13 @@ msgstr ""
 " si vyberou tento tip"
 
 msgid ""
+"This page allows you to change the appearance settings and presentation of "
+"the management system for your Organization"
+msgstr ""
+"Na této stránce můžete změnit nastavení vzhledu a prezentace systému správy "
+"organizace"
+
+msgid ""
 "Are you a doctor, a nurse, or a licensed rescuer? We can ask you to "
 "intervene in case accidents occur during the event?"
 msgstr ""
@@ -8674,13 +8705,6 @@ msgid ""
 msgstr ""
 "Po provedení platby se vraťte na tuto stránku a níže nahrajte snímek "
 "obrazovky potvrzení zaslaného společností Paypal"
-
-msgid ""
-"This page allows you to change the appearance settings and presentation of "
-"the management system for your Organization."
-msgstr ""
-"Na této stránce můžete změnit vzhled a nastavení prezentace systému správy "
-"sdružení."
 
 msgid ""
 "Total of all expenses incurred for the event, both personal and "
@@ -8806,13 +8830,6 @@ msgstr ""
 "jméno nebo přizpůsobit jméno zvolenému žánru)"
 
 msgid ""
-"This page allows you to add or edit sections in the signup form. You can "
-"indicate which questions to include in the section."
-msgstr ""
-"Tato stránka umožňuje přidávat nebo upravovat sekce registračního formuláře."
-" Můžete uvést, které otázky mají být do sekce zahrnuty."
-
-msgid ""
 "Allows players to purchase tickets as gifts. A special code is generated and"
 " provided to the gift recipient for registration."
 msgstr ""
@@ -8912,10 +8929,10 @@ msgstr ""
 
 msgid ""
 "This page allows you to select the features activated for this event, and "
-"all its runs. Click on a feature to show its description."
+"all its runs (click on a feature to show its description)"
 msgstr ""
 "Na této stránce můžete vybrat funkce aktivované pro tuto událost a všechny "
-"její běhy. Kliknutím na funkci zobrazíte její popis."
+"její běhy (kliknutím na funkci se zobrazí její popis)"
 
 msgid ""
 "To customize the appearance of all organizational pages, including colors, "
@@ -9055,10 +9072,10 @@ msgstr ""
 
 msgid ""
 "This page allows you to select the features activated for the organization, "
-"and all its events. Click on a feature to show its description."
+"and all its events (click on a feature to show its description)"
 msgstr ""
 "Tato stránka umožňuje vybrat funkce aktivované pro organizaci a všechny její"
-" události. Kliknutím na funkci zobrazíte její popis."
+" události (kliknutím na funkci se zobrazí její popis)"
 
 msgid ""
 "Enables 'Filler' characters: simpler character sheets, assigned to players "

@@ -189,7 +189,7 @@ class ExeAppearanceForm(MyCssForm):
 
     page_info = _(
         "This page allows you to change the appearance settings and presentation of the "
-        "management system for your Organization."
+        "management system for your Organization"
     )
 
     class Meta:
@@ -224,7 +224,7 @@ class ExeFeatureForm(FeatureForm):
     page_title = _("Features")
 
     page_info = _(
-        "This page allows you to select the features activated for the organization, and all its events. Click on a feature to show its description."
+        "This page allows you to select the features activated for the organization, and all its events (click on a feature to show its description)"
     )
 
     load_js = ["feature_checkbox"]
