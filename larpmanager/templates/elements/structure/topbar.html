@@ -24,7 +24,7 @@
                 {% endfor %}
                 {% if assoc_role %}
                     <a href="{% url 'manage' %}"
-                       {% if manage and manage %}class="select"{% endif %}>{% trans "Organization" %}</a>
+                       {% if manage and exe_page %}class="select"{% endif %}>{% trans "Organization" %}</a>
                 {% endif %}
             </div>
         </div>
