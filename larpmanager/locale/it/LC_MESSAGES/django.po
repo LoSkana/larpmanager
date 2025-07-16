@@ -4147,7 +4147,7 @@ msgid "Manages registration cancellations"
 msgstr "Gestisci le cancellazioni delle iscrizioni"
 
 msgid "Manually approve payments received"
-msgstr "Approvare manualmente i pagamenti ricevuti"
+msgstr "Approva manualmente i pagamenti ricevuti"
 
 msgid "Now you can create event templates"
 msgstr "Ora è possibile creare modelli di eventi"
