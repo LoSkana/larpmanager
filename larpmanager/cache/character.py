@@ -154,9 +154,7 @@ def get_character_fields(ctx, only_visible=True):
         return
 
     # get visible question fields
-    que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-    que = que.filter(applicable=QuestionApplicable.CHARACTER)
-    que = que.exclude(Q(status=QuestionStatus.HIDDEN) | Q(visibility=QuestionVisibility.HIDDEN))
+    que = get_writing_fields(ctx, QuestionApplicable.CHARACTER)
     if "pdf" in ctx:
         que = que.exclude(printable=False)
     if only_visible:
@@ -181,6 +179,13 @@ def get_character_fields(ctx, only_visible=True):
         ctx["teaser_name"] = tn.first().display
 
 
+def get_writing_fields(ctx, applicable):
+    que = ctx["event"].get_elements(WritingQuestion).order_by("order")
+    que = que.filter(applicable=applicable)
+    que = que.exclude(Q(status=QuestionStatus.HIDDEN) | Q(visibility=QuestionVisibility.HIDDEN))
+    return que
+
+
 def get_searcheable_character_fields(ctx):
     if "character" not in ctx["features"]:
         return
@@ -199,7 +204,7 @@ def get_character_cache_fields(ctx, character_id, only_visible=True):
     question_visible = []
     for question_id in ctx["questions"].keys():
         config = f"show_{question_id}"
-        if config not in ctx or not ctx[config]:
+        if config not in ctx["show_character"] and "show_all" not in ctx:
             continue
         question_visible.append(question_id)
 

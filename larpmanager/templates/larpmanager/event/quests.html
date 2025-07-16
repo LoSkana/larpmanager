@@ -20,7 +20,7 @@
                             <a href="{% url 'quest' run.event.slug run.number el.number %}">{{ el.name }}</a>
                         </h3>
                     </td>
-                    {% if show_teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
+                    {% if show_character.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
                     <td>
                         {% for ch in el.traits %}
                             {% include "elements/comma.html" %}

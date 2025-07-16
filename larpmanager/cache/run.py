@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import ast
 
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
@@ -100,8 +101,13 @@ def init_cache_config_run(run):
     if run.event.parent:
         ctx["px_user"] = run.event.parent.get_config("px_user", False)
 
+    for config_name in ["character", "faction"]:
+        if config_name not in ev_features:
+            continue
+        val = run.get_config("show_" + config_name, "[]")
+        ctx["show_" + config_name] = ast.literal_eval(val)
+
     conf_features = [
-        "faction",
         "speedlarp",
         "prologue",
         "questbuilder",
@@ -111,9 +117,6 @@ def init_cache_config_run(run):
     for config_name in conf_features:
         if config_name not in ev_features:
             continue
-        ctx["show_" + config_name] = run.get_config("show_" + config_name, False)
-
-    for config_name in ["char", "teaser", "text"]:
         ctx["show_" + config_name] = run.get_config("show_" + config_name, False)
 
     basics = QuestionType.get_basic_types()
