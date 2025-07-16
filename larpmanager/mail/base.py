@@ -155,20 +155,36 @@ def bring_friend_instructions(reg, ctx):
     activate(reg.member.language)
     subj = hdr(reg.run.event) + _("Bring a friend to %(event)s") % {"event": reg.run} + "!"
     body = _("Personal code: <b>%(cod)s</b>") % {"cod": reg.special_cod}
-    body += "<br /><br />" + _(
-        "Copy this code and share it with friends! Every friend who signs up  and uses "
-        "this code in the 'Discounts' field will receive %(amount_to)s %(currency)s discount on the "
-        "ticket. For each of them you will receive %(amount_from)s %(currency)s off to use on event "
-        "registration."
-    ) % {
-        "amount_to": ctx["bring_friend_discount_to"],
-        "amount_from": ctx["bring_friend_discount_from"],
-        "currency": reg.run.event.assoc.get_currency_symbol(),
-    }
-    body += "<br /><br />" + _("(check the available number of discounts <a href='%(url)s'>on this page</a>)") % {
-        "url": f"{reg.run.event.slug}/{reg.run.number}/limitations/"
-    }
+    body += (
+        "<br /><br />"
+        + _("Copy this code and share it with friends!")
+        + " "
+        + _(
+            "Every friend who signs up and uses this code in the 'Discounts' field will "
+            "receive %(amount_to)s %(currency)s off the ticket"
+        )
+        % {
+            "amount_to": ctx["bring_friend_discount_to"],
+            "currency": reg.run.event.assoc.get_currency_symbol(),
+        }
+        + ". "
+        + _("For each of them, you will receive %(amount_from)s %(currency)s off your own event registration")
+        % {
+            "amount_from": ctx["bring_friend_discount_from"],
+            "currency": reg.run.event.assoc.get_currency_symbol(),
+        }
+        + "."
+    )
+
+    body += (
+        "<br /><br />"
+        + _("Check the available number of discounts <a href='%(url)s'>on this page</a>")
+        % {"url": f"{reg.run.event.slug}/{reg.run.number}/limitations/"}
+        + "."
+    )
+
     body += "<br /><br />" + _("See you soon") + "!"
+
     my_send_mail(subj, body, reg.member, reg.run)
 
 

@@ -189,7 +189,7 @@ class ExeAppearanceForm(MyCssForm):
 
     page_info = _(
         "This page allows you to change the appearance settings and presentation of the "
-        "management system for your Organization."
+        "management system for your Organization"
     )
 
     class Meta:
@@ -224,10 +224,8 @@ class ExeFeatureForm(FeatureForm):
     page_title = _("Features")
 
     page_info = _(
-        "This page allows you to select the features activated for the organization, and all its events. Click on a feature to show its description."
+        "This page allows you to select the features activated for the organization, and all its events (click on a feature to show its description)"
     )
-
-    load_js = ["feature_checkbox"]
 
     class Meta:
         model = Association
@@ -265,6 +263,13 @@ class ExeConfigForm(ConfigForm):
 
     def set_configs(self):
         # CALENDAR
+        self.set_section("interface", _("Interface"))
+
+        label = _("Old interface")
+        help_text = _("If checked: uses old interface")
+        self.add_configs("interface_old", ConfigType.BOOL, label, help_text)
+
+        # CALENDAR
         self.set_section("calendar", _("Calendar"))
 
         label = _("Show event links")
@@ -298,13 +303,6 @@ class ExeConfigForm(ConfigForm):
         label = _("Tagline")
         help_text = _("If checked: shows the tagline for each event")
         self.add_configs("calendar_tagline", ConfigType.BOOL, label, help_text)
-
-        # USERS
-        self.set_section("users", _("Users"))
-
-        label = _("Event history")
-        help_text = _("If checked: in the public page of an user shows a list of all events attended")
-        self.add_configs("player_larp_history", ConfigType.BOOL, label, help_text)
 
         # MAIL
         self.set_section("email", _("Email notifications"))
@@ -381,6 +379,13 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("campaign_switch", ConfigType.BOOL, label, help_text)
 
     def set_config_members(self):
+        # USERS
+        self.set_section("users", _("Users"))
+
+        label = _("Event history")
+        help_text = _("If checked: in the public page of an user shows a list of all events attended")
+        self.add_configs("player_larp_history", ConfigType.BOOL, label, help_text)
+
         if "deadlines" in self.params["features"]:
             self.set_section("deadlines", _("Deadline"))
 

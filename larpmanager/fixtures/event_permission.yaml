@@ -511,14 +511,6 @@
     number: 30
     feature: 202
 - model: larpmanager.eventpermission
-  pk: 73
-  fields:
-    name: Cache Reloading
-    descr: Reload cached event data
-    slug: orga_reload_cache
-    number: 999
-    feature: 201
-- model: larpmanager.eventpermission
   pk: 74
   fields:
     name: Send e-mail

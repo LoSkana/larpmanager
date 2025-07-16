@@ -23,6 +23,7 @@ from datetime import datetime, timedelta
 from django import forms
 from django.forms.widgets import Widget
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 from tinymce.widgets import TinyMCE
@@ -85,6 +86,34 @@ class SlugInput(forms.TextInput):
     template_name = "forms/widgets/slug.html"
 
 
+class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
+    def __init__(self, *args, **kwargs):
+        self.feature_help = kwargs.pop("help_text", {})
+        self.feature_map = kwargs.pop("feature_map", {})
+        super().__init__(*args, **kwargs)
+
+    def render(self, name, value, attrs=None, renderer=None):
+        output = []
+        value = value or []
+
+        know_more = _("click on the icon to open the tutorial")
+
+        for i, (option_value, option_label) in enumerate(self.choices):
+            checkbox_id = f"{attrs.get('id', name)}_{i}"
+            checked = "checked" if str(option_value) in value else ""
+            checkbox_html = f'<input type="checkbox" name="{name}" value="{option_value}" id="{checkbox_id}" {checked}>'
+            link_html = f'{option_label}<a href="#" feat="{self.feature_map.get(option_value, "")}"><i class="fas fa-question-circle"></i></a>'
+            help_text = self.feature_help.get(option_value, "")
+            output.append(f"""
+                <div class="feature_checkbox lm_tooltip">
+                    <span class="hide lm_tooltiptext">{help_text} - {know_more}</span>
+                    {checkbox_html} {link_html}
+                </div>
+            """)
+
+        return mark_safe("\n".join(output))
+
+
 def prepare_permissions_role(form, typ):
     if form.instance and form.instance.number == 1:
         return
@@ -94,16 +123,21 @@ def prepare_permissions_role(form, typ):
         init = list(form.instance.permissions.values_list("pk", flat=True))
     for module in FeatureModule.objects.order_by("order"):
         ch = []
+        help_text = {}
+        feature_map = {}
         for el in typ.objects.filter(feature__module=module).order_by("number"):
             if not el.feature.placeholder and el.feature.slug not in form.params["features"]:
                 continue
             ch.append((el.id, _(el.name)))
+            help_text[el.id] = el.descr
+            feature_map[el.id] = el.feature_id
+
         if not ch:
             continue
         form.fields[module.name] = forms.MultipleChoiceField(
             required=False,
             choices=ch,
-            widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
+            widget=RoleCheckboxWidget(help_text=help_text, feature_map=feature_map),
             label=_(module.name),
         )
         form.modules.append(module.name)

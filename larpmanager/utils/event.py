@@ -221,6 +221,7 @@ def check_event_permission(request, s, n, perm=None):
         if feature != "def" and feature not in ctx["features"]:
             raise FeatureError(path=request.path, feature=feature, run=ctx["run"].id)
     get_index_event_permissions(ctx, request, s)
+    ctx["orga_page"] = 1
     return ctx
 
 

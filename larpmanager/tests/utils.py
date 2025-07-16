@@ -160,9 +160,10 @@ async def _checkboxes(page, check=True):
     count = await checkboxes.count()
     for i in range(count):
         checkbox = checkboxes.nth(i)
-        if check:
-            if not await checkbox.is_checked():
-                await checkbox.check()
-        elif await checkbox.is_checked():
-            await checkbox.uncheck()
+        if await checkbox.is_visible() and await checkbox.is_enabled():
+            if check:
+                if not await checkbox.is_checked():
+                    await checkbox.check()
+            elif await checkbox.is_checked():
+                await checkbox.uncheck()
     await page.get_by_role("button", name="Confirm", exact=True).click()
