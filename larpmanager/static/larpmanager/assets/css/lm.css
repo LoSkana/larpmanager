@@ -1832,7 +1832,6 @@ a label:hover {
 
 #page-wrapper.topbar {
     position: relative;
-    z-index: 1;
 }
 
 @media(max-width: 840px) {
