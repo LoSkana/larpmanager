@@ -1563,9 +1563,6 @@ msgstr "Pago a plazos"
 msgid "Last change"
 msgstr "Última modificación"
 
-msgid "Leaderboard"
-msgstr "Clasificación"
-
 msgid "Lightweight"
 msgstr "Ligero"
 
@@ -1688,9 +1685,6 @@ msgstr "Lista de habilidades"
 
 msgid "Ability type"
 msgstr "Tipo de habilidad"
-
-msgid "Achievements"
-msgstr "Logros"
 
 msgid "Archive mail"
 msgstr "Archivo de correo"

@@ -1563,9 +1563,6 @@ msgstr "Splátky"
 msgid "Last change"
 msgstr "Naposledy upraveno"
 
-msgid "Leaderboard"
-msgstr "Žebříček"
-
 msgid "Lightweight"
 msgstr "Lehké"
 
@@ -1688,9 +1685,6 @@ msgstr "Seznam dovedností"
 
 msgid "Ability type"
 msgstr "Typ dovednosti"
-
-msgid "Achievements"
-msgstr "Úspěchy"
 
 msgid "Archive mail"
 msgstr "Archivovat poštu"

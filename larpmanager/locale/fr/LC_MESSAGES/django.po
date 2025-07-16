@@ -1563,9 +1563,6 @@ msgstr "Paiement échelonné"
 msgid "Last change"
 msgstr "Dernière modification"
 
-msgid "Leaderboard"
-msgstr "Tableau de bord"
-
 msgid "Lightweight"
 msgstr "Léger"
 
@@ -1688,9 +1685,6 @@ msgstr "Liste des compétences"
 
 msgid "Ability type"
 msgstr "Type de compétence"
-
-msgid "Achievements"
-msgstr "Réalisations"
 
 msgid "Archive mail"
 msgstr "Archive mail"

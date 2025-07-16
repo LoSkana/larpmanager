@@ -6862,15 +6862,6 @@ msgstr ""
 msgid "Your achievements"
 msgstr ""
 
-msgid "Carousel"
-msgstr ""
-
-msgid "Achievements"
-msgstr ""
-
-msgid "Leaderboard"
-msgstr ""
-
 msgid "Change password"
 msgstr ""
 
@@ -7469,6 +7460,9 @@ msgid ""
 msgstr ""
 
 msgid "Now you can create inflows"
+msgstr ""
+
+msgid "Carousel"
 msgstr ""
 
 msgid ""

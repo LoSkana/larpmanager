@@ -84,7 +84,12 @@ $(document).ready(function() {
 
     $('.dropdown-button').click(function(event) {
         event.stopPropagation();
-        $(this).siblings('.dropdown-menu').toggleClass('show');
+    });
+
+    $('.dropdown').on('mouseenter', function() {
+        $(this).children('.dropdown-menu').fadeIn(100);
+    }).on('mouseleave', function() {
+        $(this).children('.dropdown-menu').fadeOut(100);
     });
 
     $('a.feature_tutorial').click(function(event) {

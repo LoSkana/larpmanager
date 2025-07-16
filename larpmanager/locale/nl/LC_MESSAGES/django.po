@@ -1563,9 +1563,6 @@ msgstr "Termijn"
 msgid "Last change"
 msgstr "Laatst gewijzigd"
 
-msgid "Leaderboard"
-msgstr "Leaderboard"
-
 msgid "Lightweight"
 msgstr "Lichtgewicht"
 
@@ -1688,9 +1685,6 @@ msgstr "Vaardigheidslijst"
 
 msgid "Ability type"
 msgstr "Type vaardigheid"
-
-msgid "Achievements"
-msgstr "Prestaties"
 
 msgid "Archive mail"
 msgstr "Archief mail"

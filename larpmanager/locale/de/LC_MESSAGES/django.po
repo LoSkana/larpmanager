@@ -1563,9 +1563,6 @@ msgstr "Ratenzahlung"
 msgid "Last change"
 msgstr "Zuletzt geändert"
 
-msgid "Leaderboard"
-msgstr "Bestenliste"
-
 msgid "Lightweight"
 msgstr "Leichtgewicht"
 
@@ -1688,9 +1685,6 @@ msgstr "Liste der Fertigkeiten"
 
 msgid "Ability type"
 msgstr "Art der Fertigkeit"
-
-msgid "Achievements"
-msgstr "Errungenschaften"
 
 msgid "Archive mail"
 msgstr "Archiv-Mail"

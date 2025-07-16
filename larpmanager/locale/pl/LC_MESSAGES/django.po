@@ -1563,9 +1563,6 @@ msgstr "Rata"
 msgid "Last change"
 msgstr "Ostatnia zmiana"
 
-msgid "Leaderboard"
-msgstr "Tabela liderów"
-
 msgid "Lightweight"
 msgstr "Lekki"
 
@@ -1688,9 +1685,6 @@ msgstr "Lista umiejętności"
 
 msgid "Ability type"
 msgstr "Typ umiejętności"
-
-msgid "Achievements"
-msgstr "Osiągnięcia"
 
 msgid "Archive mail"
 msgstr "Poczta archiwalna"

@@ -1563,9 +1563,6 @@ msgstr "Avbetalning"
 msgid "Last change"
 msgstr "Senast ändrad"
 
-msgid "Leaderboard"
-msgstr "Ledartavla"
-
 msgid "Lightweight"
 msgstr "Lättvikt"
 
@@ -1688,9 +1685,6 @@ msgstr "Lista över färdigheter"
 
 msgid "Ability type"
 msgstr "Typ av färdighet"
-
-msgid "Achievements"
-msgstr "Prestationer"
 
 msgid "Archive mail"
 msgstr "Arkivpost"
