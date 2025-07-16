@@ -50,7 +50,6 @@ from larpmanager.forms.writing import (
 from larpmanager.models.event import EventTextType
 from larpmanager.models.form import (
     QuestionApplicable,
-    QuestionType,
     WritingOption,
     WritingQuestion,
 )
@@ -90,7 +89,7 @@ def character(request, s, n, num):
     ctx["screen"] = True
     get_char_check(request, ctx, num)
 
-    if "check" not in ctx and not ctx["show_char"]:
+    if "check" not in ctx and not ctx["show_character"]:
         messages.warning(request, _("Characters are not visible at the moment"))
         return redirect("gallery", s=ctx["event"].slug, n=ctx["run"].number)
 

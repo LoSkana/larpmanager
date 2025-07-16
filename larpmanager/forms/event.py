@@ -835,7 +835,7 @@ class OrgaRunForm(ConfigForm):
         )
 
         shows = [
-            ("char", _("Characters"), QuestionApplicable.CHARACTER),
+            ("character", _("Characters"), QuestionApplicable.CHARACTER),
             ("faction", _("Factions"), QuestionApplicable.FACTION),
         ]
 
@@ -847,7 +847,7 @@ class OrgaRunForm(ConfigForm):
             for field in fields:
                 typ = field.typ
                 if typ in basics:
-                    typ = f"{field.id}"
+                    typ = str(field.id)
 
                 extra.append((typ, field.display))
 

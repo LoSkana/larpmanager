@@ -204,7 +204,7 @@ def get_character_cache_fields(ctx, character_id, only_visible=True):
     question_visible = []
     for question_id in ctx["questions"].keys():
         config = f"show_{question_id}"
-        if config not in ctx or not ctx[config]:
+        if config not in ctx["show_character"] and "show_all" not in ctx:
             continue
         question_visible.append(question_id)
 

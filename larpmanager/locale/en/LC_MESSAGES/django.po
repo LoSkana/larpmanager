@@ -1990,12 +1990,6 @@ msgstr ""
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr ""
 
-msgid ""
-"Please note that your character sheet may contain  personal secrets, not to "
-"be shared before the start of the event. To avoid accidentally spoiling your "
-"experience, do not discuss its content with other participants!"
-msgstr ""
-
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr ""
