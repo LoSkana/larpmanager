@@ -1307,12 +1307,74 @@ th select {
   margin: 0;
 }
 
-#sidebar a {
+#topbar a, #sidebar a {
     transition: color 0.5s;
 }
 
-#sidebar a.select {
-    color: var(--sec-clr);
+#topbar table {
+    margin: auto;
+}
+
+#topbar table tr, #topbar table td {
+    background: none;
+    border: none;
+    padding: 0 !important;
+}
+
+#topbar .left {
+    text-align: left !important;
+}
+
+#topbar .center {
+    text-align: center !important;
+}
+
+#topbar .right {
+    text-align: right !important;
+}
+
+#topbar .left .el {
+    margin-right: 2em;
+    display: inline-block;
+}
+
+#topbar .right .el {
+    margin-left: 2em;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-button {
+    cursor: pointer;
+    display: inline;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  min-width: 120px;
+  box-shadow: 0px 8px 16px rgba(var(--pri-rgb), 0.2);
+  background: #3B3B3B;
+  z-index: 100000;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 8px;
+  margin: 0;
+    z-index: 100000;
+}
+
+.show {
+  display: block;
+}
+
+
+#sidebar a.select, #topbar a.select {
+    color: rgba(var(--sec-rgb), 0.8);
 }
 
 #sidebar .close {
@@ -1753,15 +1815,14 @@ a label:hover {
     right: 0;
     left: 0;
     z-index: 10;
-    padding: 0 1em;
+    padding: 0.5em 1em;
+    vertical-align: middle;
 }
 
-#topbar .left {
-    float: left;
-}
-
-#topbar .right {
-    float: right;
+#topbar img {
+    height: 1.5em;
+    margin-right: 0.5em;
+    vertical-align: middle;
 }
 
 #sidebar.topbar, #page-wrapper.topbar, #page-wrapper.topbar header {

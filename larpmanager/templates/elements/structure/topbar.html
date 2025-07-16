@@ -2,31 +2,77 @@
 {% if not interface_old %}
     {% if event_role or assoc_role %}
         <div id="topbar">
-            <div class="nav manage left">
-                {{ assoc.platform }} -
-                {% if run %}
-                    {{ run }}
-                    <a href="{% url 'manage' run.event.slug run.number %}"
-                       {% if manage %}class="select"{% endif %}>Management</a>
-                    <a href="{% url 'gallery' run.event.slug run.number %}"
-                       {% if not manage %}class="select"{% endif %}>User</a>
-                {% else %}
-                    Organization
-                    <a href="{% url 'manage' %}" {% if manage %}class="select"{% endif %}>Management</a>
-                    <a href="{% url 'home' %}" {% if not manage %}class="select"{% endif %}>User</a>
-                {% endif %}
-            </div>
-            <div class="nav manage right">
-                Switch:
-                {% for rid, v in open_runs.items %}
-                    <a href="{% url 'manage' v.e v.r %}"
-                       {% if manage and run and run.event.slug == v.e and run.number == v.r %}class="select"{% endif %}>{{ v.s }}</a>
-                {% endfor %}
-                {% if assoc_role %}
-                    <a href="{% url 'manage' %}"
-                       {% if manage and exe_page %}class="select"{% endif %}>{% trans "Organization" %}</a>
-                {% endif %}
-            </div>
+            <table>
+                <tr>
+                    <td class="left">
+                        <span class="el">
+                            <a href="{% url 'home' %}">
+                                <img src="{% static 'lm_logo.png' %}" alt="larpmanager logo" />
+                                {{ assoc.platform }}
+                            </a>
+                        </span>
+                        <div class="el dropdown">
+                            {% if run %}
+                                <i class="fa-solid fa-calendar-days"></i> {{ run }}
+                            {% else %}
+                                <i class="fa-solid fa-building"></i> {{ assoc.name }}
+                            {% endif %}
+                            <div class="dropdown-button">
+                                <a href="#" class="switch"><i class="fa-solid fa-rotate"></i></a>
+                            </div>
+                            <div class="dropdown-menu">
+                                {% for rid, v in open_runs.items %}
+                                    {% if manage and run and run.event.slug == v.e and run.number == v.r %}
+                                        <!-- skip -->
+                                    {% else %}
+                                        <a href="{% url 'manage' v.e v.r %}">{{ v.s }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if assoc_role %}
+                                    {% if not exe_page %}
+                                        <a href="{% url 'manage' %}">{{ assoc.name }}</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="el">
+                            {% if manage %}
+                                <i class="fa-solid fa-toolbox"></i> Admin
+                            {% else %}
+                                <i class="fa-solid fa-users"></i> User
+                            {% endif %}
+                            <div class="dropdown-button">
+                                <a href="#" class="switch"><i class="fa-solid fa-rotate"></i></a>
+                            </div>
+                            <div class="dropdown-menu">
+                                {% if run %}
+                                    {% if manage %}
+                                        <a href="{% url 'gallery' run.event.slug run.number %}"
+                                           class="admin-link">
+                                            <i class="fa-solid fa-toolbox"></i> User
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'manage' run.event.slug run.number %}"
+                                           class="admin-link">
+                                            <i class="fa-solid fa-users"></i> Admin
+                                        </a>
+                                    {% endif %}
+                                {% else %}
+                                    {% if manage %}
+                                        <a href="{% url 'home' %}" class="admin-link">
+                                            <i class="fa-solid fa-toolbox"></i> User
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'manage' %}" class="admin-link">
+                                            <i class="fa-solid fa-toolbox"></i> Admin
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
     {% endif %}
 {% endif %}

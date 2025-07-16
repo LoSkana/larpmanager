@@ -82,6 +82,11 @@ $(document).ready(function() {
         }
     });
 
+    $('.dropdown-button').click(function(event) {
+        event.stopPropagation();
+        $(this).siblings('.dropdown-menu').toggleClass('show');
+    });
+
     $('a.feature_tutorial').click(function(event) {
         event.preventDefault();
 
