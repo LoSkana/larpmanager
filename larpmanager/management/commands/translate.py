@@ -79,14 +79,8 @@ class Command(BaseCommand):
 
             po = polib.pofile(po_path)
 
-            for entry in po.untranslated_entries():
-                self.translate_entry(entry, loc)
-
-            for entry in po.fuzzy_entries():
-                entry.flags.remove("fuzzy")
-                self.translate_entry(entry, loc)
-
             symbols = (".", "?", "!")
+            changed = False
             for entry in po:
                 if (
                     entry.msgstr
@@ -94,18 +88,30 @@ class Command(BaseCommand):
                     and not entry.msgid.strip().endswith(symbols)
                 ):
                     entry.msgstr = entry.msgstr.rstrip(".?!").rstrip()
+                    changed = True
 
-            sorted_entries = sorted(po, key=lambda element: (len(element.msgid), element.msgid))
+            if changed:
+                self.save_po(po, po_path)
+                po = polib.pofile(po_path)
 
-            # Crate new ordered po
-            sorted_po = polib.POFile()
-            sorted_po.metadata = po.metadata
+            for entry in po.untranslated_entries():
+                self.translate_entry(entry, loc)
 
-            cache = set()
-            for entry in sorted_entries:
-                if entry.msgid in cache:
-                    continue
-                cache.add(entry.msgid)
-                sorted_po.append(entry)
+            for entry in po.fuzzy_entries():
+                entry.flags.remove("fuzzy")
+                self.translate_entry(entry, loc)
 
-            sorted_po.save(po_path)
+            self.save_po(po, po_path)
+
+    def save_po(self, po, po_path):
+        # Crate new ordered po
+        sorted_po = polib.POFile()
+        sorted_po.metadata = po.metadata
+        sorted_entries = sorted(po, key=lambda element: (len(element.msgid), element.msgid))
+        cache = set()
+        for entry in sorted_entries:
+            if entry.msgid in cache:
+                continue
+            cache.add(entry.msgid)
+            sorted_po.append(entry)
+        sorted_po.save(po_path)

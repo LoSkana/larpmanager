@@ -27,7 +27,7 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
             help_text = self.feature_help.get(option_value, "")
             output.append(f"""
                 <div class="feature_checkbox lm_tooltip">
-                    <span class="hide lm_tooltiptext">{help_text} - {know_more}</span>
+                    <span class="hide lm_tooltiptext">{help_text} ({know_more})</span>
                     {checkbox_html} {link_html}
                 </div>
             """)
