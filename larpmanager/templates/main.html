@@ -85,27 +85,21 @@
     {% else %}
         <!-- Header -->
         <header id="header" class="alt {% if is_sidebar_open %}sidebar{% endif %}">
-            {% block sidebar_logo %}
-                {% if manage %}
-                    <nav id="sidebar-nav">
-                        <a id="sidebar-open" href="#sidebar">
-                            <img alt="menu" src="{% static 'larpmanager/assets/menu.png' %}" />
-                            <span>Sidebar</span>
-                        </a>
-                    </nav>
-                {% endif %}
-            {% endblock sidebar_logo %}
             <h1>
                 <span>
                     {% block title %}
                     {% endblock title %}
                 </span>
             </h1>
-            <nav id="menu-bar">
-                <a id="menu-open" href="#menu"><span>Menu</span>
-                    <img alt="menu" src="{% static 'larpmanager/assets/menu.png' %}" />
-                </a>
-            </nav>
+            {% if not interface_old %}
+                {% if not event_role and not assoc_role %}
+                    <nav id="menu-bar">
+                        <a id="menu-open" href="#menu"><span>Menu</span>
+                            <img alt="menu" src="{% static 'larpmanager/assets/menu.png' %}" />
+                        </a>
+                    </nav>
+                {% endif %}
+            {% endif %}
         </header>
         <!-- Menu -->
         <nav id="menu">
