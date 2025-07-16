@@ -1340,6 +1340,7 @@ th select {
 
 #topbar .right .el {
     margin-left: 2em;
+    display: inline-block;
 }
 
 .dropdown {
@@ -1827,6 +1828,11 @@ a label:hover {
 
 #sidebar.topbar, #page-wrapper.topbar, #page-wrapper.topbar header {
     margin-top: var(--topbar-height);
+}
+
+#page-wrapper.topbar {
+    position: relative;
+    z-index: 1;
 }
 
 @media(max-width: 840px) {

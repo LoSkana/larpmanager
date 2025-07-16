@@ -1,8 +1,7 @@
 {% load static i18n %}
 {% if manage %}
     <div id="sidebar"
-         {% if not is_sidebar_open %}class="hide"{% endif %}
-         {% if interface_old %} class="interface_old" {% else %} class="topbar" {% endif %}>
+         class=" {% if not is_sidebar_open %}hide{% endif %} {% if interface_old %}interface_old{% else %}topbar{% endif %}">
         <div class="inner">
             {% if interface_old %}
                 <div class="header">
