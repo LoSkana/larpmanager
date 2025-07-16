@@ -37,11 +37,6 @@ $(document).ready(function() {
     $('#header h1').textfill({
     });
 
-    $("th label").each(function(index) {
-        var txt = $( this ).text();
-        $( this ).text(txt.replace(":", ""));
-    });
-
     // Sidebar
     $('#sidebar-mobile').on('click', function(event) {
         $('body').toggleClass('is-sidebar-visible');
@@ -257,7 +252,7 @@ $(document).ready(function() {
     $('.tablesorter').tablesorter();
 
     $('.delete').click(function(){
-            return confirm('Are you sure?');
+        return confirm('Are you sure?');
     });
 
     $('.show_popup').on( "click", function() {
