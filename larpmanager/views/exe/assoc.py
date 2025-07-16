@@ -50,7 +50,7 @@ from larpmanager.models.base import Feature
 from larpmanager.models.event import (
     Run,
 )
-from larpmanager.utils.base import check_assoc_permission
+from larpmanager.utils.base import check_assoc_permission, get_index_assoc_permissions
 from larpmanager.utils.common import (
     clear_messages,
     get_feature,
@@ -134,6 +134,8 @@ def exe_features(request):
             clear_messages(request)
             messages.success(request, msg)
             return redirect(feature.follow_link)
+
+        get_index_assoc_permissions(ctx, request, request.assoc["id"])
         return render(request, "larpmanager/manage/features.html", ctx)
     return render(request, "larpmanager/exe/edit.html", ctx)
 

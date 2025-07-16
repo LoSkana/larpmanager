@@ -105,7 +105,7 @@
 - model: larpmanager.assocpermission
   pk: 14
   fields:
-    name: Payments Verification
+    name: Verification
     descr: Verify manually approved payments
     slug: exe_verification
     number: 11
@@ -121,7 +121,7 @@
 - model: larpmanager.assocpermission
   pk: 16
   fields:
-    name: Historical accounting
+    name: Historical
     descr: Review historical financial records
     slug: exe_accounting_rec
     number: 13
@@ -161,7 +161,7 @@
 - model: larpmanager.assocpermission
   pk: 21
   fields:
-    name: Event
+    name: Events
     descr: Manage events
     slug: exe_events
     number: 11
@@ -241,7 +241,7 @@
 - model: larpmanager.assocpermission
   pk: 32
   fields:
-    name: Volunteer Registry
+    name: Volunteers
     descr: Manage volunteer registry
     slug: exe_volunteer_registry
     number: 71
@@ -257,10 +257,10 @@
 - model: larpmanager.assocpermission
   pk: 34
   fields:
-    name: Payment Settings
-    descr: Configure gateways to process player payments
+    name: Methods
+    descr: Configure payment methods available for players
     slug: exe_payment_details
-    number: 23
+    number: 1
     feature: 111
 - model: larpmanager.assocpermission
   pk: 35
@@ -273,7 +273,7 @@
 - model: larpmanager.assocpermission
   pk: 38
   fields:
-    name: Membership check
+    name: Check data
     descr: Check consistency of the members’ personal data
     slug: exe_membership_check
     number: 99

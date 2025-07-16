@@ -1,19 +1,23 @@
 {% load static i18n %}
 {% if manage %}
-    <div id="sidebar" {% if not is_sidebar_open %}class="hide"{% endif %}>
+    <div id="sidebar"
+         {% if not is_sidebar_open %}class="hide"{% endif %}
+         {% if interface_old %}class="interface_old"{% endif %}>
         <div class="inner">
-            <div class="header">
-                {% if run %}
-                    <h1>
-                        <span>{{ run }}</span>
-                    </h1>
-                {% else %}
-                    <h1>
-                        <span>{{ assoc.name }}</span>
-                    </h1>
-                {% endif %}
-                <hr />
-            </div>
+            {% if interface_old %}
+                <div class="header">
+                    {% if run %}
+                        <h1>
+                            <span>{{ run }}</span>
+                        </h1>
+                    {% else %}
+                        <h1>
+                            <span>{{ assoc.name }}</span>
+                        </h1>
+                        <hr />
+                    {% endif %}
+                </div>
+            {% endif %}
             {% if run %}
                 <p>
                     <span class="sidebar-link-wrap"

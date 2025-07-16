@@ -101,7 +101,7 @@ def _exe_manage(request):
     if not ctx["ongoing_runs"]:
         _add_action(
             ctx,
-            _("To create an event, access the events management page"),
+            _("No events are present, create one"),
             "exe_events",
         )
 
@@ -123,31 +123,19 @@ def _exe_manage(request):
 
 def _exe_suggestions(ctx):
     suggestions = {
-        "exe_quick": _("To quickly configure your organization's most important settings, access the quick setup page"),
+        "exe_quick": _("To quickly configure your organization's most important settings"),
         "exe_payment_details": _(
-            "To set up the gateway payment available to players, to let them pay the registration fee through the platform, "
-            "access the payment settings management page"
+            "To set up the gateway payment available to players, to let them pay the registration fee through the platform"
         ),
-        "exe_profile": _(
-            "To define which data will be asked in the profile form to the users once they sign up, "
-            "access the profile management page"
-        ),
+        "exe_profile": _("To define which data will be asked in the profile form to the users once they sign up"),
         "exe_roles": _(
-            "To grant access to organization management for other users and define roles with specific permissions, "
-            "access the roles management page"
+            "To grant access to organization management for other users and define roles with specific permissions"
         ),
         "exe_appearance": _(
-            "To customize the appearance of all organizational pages, including colors, fonts, and images, "
-            "access the appearance management page"
+            "To customize the appearance of all organizational pages, including colors, fonts, and images"
         ),
-        "exe_features": _(
-            "To activate new features and enhance the functionality of the platform, "
-            "access the features management page"
-        ),
-        "exe_config": _(
-            "To set specific values for the interface configuration or features, "
-            "access the configuration management page"
-        ),
+        "exe_features": _("To activate new features and enhance the functionality of the platform"),
+        "exe_config": _("To set specific values for the interface configuration or features"),
     }
 
     assoc = Association.objects.get(pk=ctx["a_id"])
@@ -158,12 +146,24 @@ def _exe_suggestions(ctx):
 
 
 def _exe_actions(ctx):
+    runs_conclude = Run.objects.filter(
+        event__assoc_id=ctx["a_id"], development__in=[DevelopStatus.START, DevelopStatus.SHOW], end__lt=datetime.today()
+    ).values_list("search", flat=True)
+    if runs_conclude:
+        _add_action(
+            ctx,
+            _(
+                "There are past runs still open: <b>%(list)s</b>. Once all tasks (accounting, etc.) are finished, mark them as completed"
+            )
+            % {"list": ", ".join(runs_conclude)},
+            "exe_runs",
+        )
+
     expenses_approve = AccountingItemExpense.objects.filter(run__event__assoc_id=ctx["a_id"], is_approved=False).count()
     if expenses_approve:
         _add_action(
             ctx,
-            _("There are <b>%(number)s</b> expenses to approve, access the expenses management panel")
-            % {"number": expenses_approve},
+            _("There are <b>%(number)s</b> expenses to approve") % {"number": expenses_approve},
             "exe_expenses",
         )
 
@@ -171,8 +171,7 @@ def _exe_actions(ctx):
     if payments_approve:
         _add_action(
             ctx,
-            _("There are <b>%(number)s</b> payments to approve, access the invoices management panel")
-            % {"number": payments_approve},
+            _("There are <b>%(number)s</b> payments to approve") % {"number": payments_approve},
             "exe_invoices",
         )
 
@@ -180,8 +179,7 @@ def _exe_actions(ctx):
     if refund_approve:
         _add_action(
             ctx,
-            _("There are <b>%(number)s</b> refunds to deliver, access the refunds management panel")
-            % {"number": refund_approve},
+            _("There are <b>%(number)s</b> refunds to deliver") % {"number": refund_approve},
             "exe_refunds",
         )
 
@@ -189,8 +187,7 @@ def _exe_actions(ctx):
     if members_approve:
         _add_action(
             ctx,
-            _("There are <b>%(number)s</b> members to approve, access the membership management panel")
-            % {"number": members_approve},
+            _("There are <b>%(number)s</b> members to approve") % {"number": members_approve},
             "exe_membership",
         )
 
@@ -217,8 +214,7 @@ def _exe_users_actions(request, assoc, ctx, features):
         if open_q:
             _add_action(
                 ctx,
-                _("There are <b>%(number)s</b> questions to answer, access the users questions management panel")
-                % {"number": len(open_q)},
+                _("There are <b>%(number)s</b> questions to answer") % {"number": len(open_q)},
                 "exe_questions",
             )
 
@@ -256,6 +252,8 @@ def _orga_manage(request, s, n):
     # if run is not set, redirect
     if not ctx["run"].start or not ctx["run"].end:
         return redirect("orga_run", s=s, n=n)
+
+    ctx["orga_page"] = 1
 
     get_index_event_permissions(ctx, request, s)
     assoc = Association.objects.get(pk=request.assoc["id"])
@@ -307,7 +305,7 @@ def _orga_actions(request, ctx, assoc):
     elif set(features) & {"faction", "plot", "casting", "user_character", "px", "custom_character", "questbuilder"}:
         _add_action(
             ctx,
-            _("Some activated features need the 'Character' feature, but it isn't active: access the feature panel"),
+            _("Some activated features need the 'Character' feature, but it isn't active"),
             "orga_features",
         )
 
@@ -326,9 +324,7 @@ def _orga_actions(request, ctx, assoc):
         if set(features) & {"expense", "refund", "collection"}:
             _add_action(
                 ctx,
-                _(
-                    "Some activated features need the 'Token / Credit' feature, but it isn't active: access the feature panel"
-                ),
+                _("Some activated features need the 'Token / Credit' feature, but it isn't active"),
                 "orga_features",
             )
 
@@ -347,8 +343,7 @@ def _orga_actions(request, ctx, assoc):
     if expenses_approve:
         _add_action(
             ctx,
-            _("There are <b>%(number)s</b> expenses to approve, access the expenses management panel")
-            % {"number": expenses_approve},
+            _("There are <b>%(number)s</b> expenses to approve") % {"number": expenses_approve},
             "orga_expenses",
         )
 
@@ -356,8 +351,7 @@ def _orga_actions(request, ctx, assoc):
     if payments_approve:
         _add_action(
             ctx,
-            _("There are <b>%(number)s</b> payments to approve, access the invoices management panel")
-            % {"number": payments_approve},
+            _("There are <b>%(number)s</b> payments to approve") % {"number": payments_approve},
             "orga_invoices",
         )
 
@@ -378,8 +372,7 @@ def _orga_user_actions(ctx, features, request, assoc):
         if open_q:
             _add_action(
                 ctx,
-                _("There are <b>%(number)s</b> questions to answer, access the users questions management panel")
-                % {"number": len(open_q)},
+                _("There are <b>%(number)s</b> questions to answer") % {"number": len(open_q)},
                 "exe_questions",
             )
 
@@ -477,10 +470,7 @@ def _orga_reg_acc_actions(ctx, features):
     if "reg_quotas" in features and not ctx["event"].get_elements(RegistrationQuota).count():
         _add_action(
             ctx,
-            _(
-                "You have activated dynamic installments, but none have been yet created; "
-                "access the dynamic installments management panel"
-            ),
+            _("You have activated dynamic installments, but none have been yet created"),
             "orga_registration_quotas",
         )
 
@@ -488,10 +478,7 @@ def _orga_reg_acc_actions(ctx, features):
         if not ctx["event"].get_elements(RegistrationInstallment).count():
             _add_action(
                 ctx,
-                _(
-                    "You have activated fixed installments, but none have been yet created; "
-                    "access the fixed installments management panel"
-                ),
+                _("You have activated fixed installments, but none have been yet created"),
                 "orga_registration_installments",
             )
         else:
@@ -504,8 +491,7 @@ def _orga_reg_acc_actions(ctx, features):
                 _add_action(
                     ctx,
                     _(
-                        "You have some fixed installments with both date and days set, but those values cannot be set at the same time: %(list)s; "
-                        "access the fixed installments management panel"
+                        "You have some fixed installments with both date and days set, but those values cannot be set at the same time: %(list)s"
                     )
                     % {"list": ", ".join([obj.name for obj in both_set])},
                     "orga_registration_installments",
@@ -515,10 +501,7 @@ def _orga_reg_acc_actions(ctx, features):
             if missing_final:
                 _add_action(
                     ctx,
-                    _(
-                        "You have some tickets without a final installment (with 0 amount): %(list)s; "
-                        "access the fixed installments management panel"
-                    )
+                    _("You have some tickets without a final installment (with 0 amount): %(list)s")
                     % {"list": ", ".join([obj.name for obj in missing_final])},
                     "orga_registration_installments",
                 )
@@ -528,30 +511,21 @@ def _orga_reg_actions(ctx, features):
     if "registration_open" in features and not ctx["run"].registration_open:
         _add_action(
             ctx,
-            _(
-                "You have activated registration opening date, but no value has been set; "
-                "access the run management panel"
-            ),
+            _("You have activated registration opening date, but no value has been set"),
             "orga_run",
         )
 
     if "registration_secret" in features and not ctx["run"].registration_secret:
         _add_action(
             ctx,
-            _(
-                "You have activated registration secret link, but no value has been set; "
-                "access the run management panel"
-            ),
+            _("You have activated registration secret link, but no value has been set"),
             "orga_run",
         )
 
     if "register_link" in features and not ctx["event"].register_link:
         _add_action(
             ctx,
-            _(
-                "You have activated registration external link, but no value has been set; "
-                "access the event management panel"
-            ),
+            _("You have activated registration external link, but no value has been set"),
             "orga_event",
         )
 
@@ -564,10 +538,7 @@ def _orga_reg_actions(ctx, features):
         if not configured:
             _add_action(
                 ctx,
-                _(
-                    "You have activated character customization, but no fields has been set; "
-                    "access the configuration panel"
-                ),
+                _("You have activated character customization, but no fields has been set"),
                 "orga_characters",
                 "config/custom_character",
             )
@@ -575,29 +546,17 @@ def _orga_reg_actions(ctx, features):
 
 def _orga_suggestions(ctx):
     suggestions = {
-        "orga_quick": _("To quickly configure your events's most important settings, access the quick setup page"),
-        "orga_registration_tickets": _(
-            "To set the tickets that users can select during registration, access the tickets management page"
-        ),
+        "orga_quick": _("To quickly configure your events's most important settings"),
+        "orga_registration_tickets": _("To set the tickets that users can select during registration"),
         "orga_registration_form": _(
-            "To define the registration form, and set up any number of registration questions and their options, "
-            "access the registration form management page"
+            "To define the registration form, and set up any number of registration questions and their options"
         ),
         "orga_roles": _(
-            "To grant access to event management for other users and define roles with specific permissions, "
-            "access the roles management page"
+            "To grant access to event management for other users and define roles with specific permissions"
         ),
-        "orga_appearance": _(
-            "To customize the appearance of all event pages, including colors, fonts, and images, "
-            "access the appearance management page"
-        ),
-        "orga_features": _(
-            "To activate new features and enhance the functionality of the event, access the features management page"
-        ),
-        "orga_config": _(
-            "To set specific values for configuration of features of the event, "
-            "access the configuration management page"
-        ),
+        "orga_appearance": _("To customize the appearance of all event pages, including colors, fonts, and images"),
+        "orga_features": _("To activate new features and enhance the functionality of the event"),
+        "orga_config": _("To set specific values for configuration of features of the event"),
     }
 
     for perm, text in suggestions.items():

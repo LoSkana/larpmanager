@@ -104,10 +104,10 @@ def link_callback(uri, rel):
     elif uri.startswith(s_url):
         path = os.path.join(s_root, uri.replace(s_url, ""))
     else:
-        raise ValueError(f"[link_callback] URI {uri} does not start with {s_url} or {m_url}")
+        return ""
 
     if not os.path.isfile(path):
-        raise FileNotFoundError(f"[link_callback] File not found: {path} (from URI {uri})")
+        return ""
 
     return path
 
@@ -212,7 +212,7 @@ def get_membership_request(ctx):
 
 def print_character(ctx, force=False):
     fp = ctx["character"].get_sheet_filepath(ctx["run"])
-    ctx["pdf"] = True 
+    ctx["pdf"] = True
     if force or reprint(fp):
         get_character_sheet(ctx)
         add_pdf_instructions(ctx)

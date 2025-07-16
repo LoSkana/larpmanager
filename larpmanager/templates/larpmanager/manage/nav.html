@@ -12,9 +12,10 @@
             <a href="{% url 'manage' %}"
                {% if manage and exe_page %}class="select"{% endif %}>{% trans "Organization" %}</a>
         {% endif %}
+        <hr />
     </div>
-    <hr />
 {% endif %}
+{% if not exe_page and not orga_page %}<!-- TODO -->{% endif %}
 {% if run %}
     <div class="nav main_nav">
         <a href="{% url 'home' %}">Home</a>

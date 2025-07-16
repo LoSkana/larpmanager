@@ -129,6 +129,10 @@
             <script defer
                     src="{% static 'larpmanager/assets/js/jquery.textfill.min.js' %}"></script>
         {% endcompress %}
+        <script>
+            let url_feature_description = "{% url 'feature_description' %}";
+            let url_tutorials = "{% url 'tutorials' %}";
+        </script>
         {% if assoc.id == 0 %}
             {% compress js %}
                 <script defer src="{% static 'alpha/assets/js/jquery.dropotron.min.js' %}"></script>

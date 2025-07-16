@@ -103,8 +103,8 @@ msgid "This page allows you to add or edit an expense item incurred"
 msgstr ""
 
 msgid ""
-"This page allows you to add or edit an registration revenue other than the "
-"players' registration fee."
+"This page allows you to add or edit an event revenue other than the players' "
+"registration fee"
 msgstr ""
 
 msgid "Donations"
@@ -137,7 +137,7 @@ msgstr ""
 msgid "Request refund"
 msgstr ""
 
-msgid "Payment details"
+msgid "Payment Methods"
 msgstr ""
 
 msgid "This page allows you to set up your payment methods"
@@ -230,7 +230,7 @@ msgstr ""
 
 msgid ""
 "This page allows you to change the appearance settings and presentation of "
-"the management system for your Organization."
+"the management system for your Organization"
 msgstr ""
 
 msgid ""
@@ -243,7 +243,7 @@ msgstr ""
 
 msgid ""
 "This page allows you to select the features activated for the organization, "
-"and all its events. Click on a feature to show its description."
+"and all its events (click on a feature to show its description)"
 msgstr ""
 
 msgid "Configuration"
@@ -251,6 +251,15 @@ msgstr ""
 
 msgid ""
 "This page allows you to edit the configuration of the activated features"
+msgstr ""
+
+msgid "Interface"
+msgstr ""
+
+msgid "Old interface"
+msgstr ""
+
+msgid "If checked: uses old interface"
 msgstr ""
 
 msgid "Calendar"
@@ -301,16 +310,6 @@ msgid "Tagline"
 msgstr ""
 
 msgid "If checked: shows the tagline for each event"
-msgstr ""
-
-msgid "Users"
-msgstr ""
-
-msgid "Event history"
-msgstr ""
-
-msgid ""
-"If checked: in the public page of an user shows a list of all events attended"
 msgstr ""
 
 msgid "Email notifications"
@@ -399,6 +398,16 @@ msgid "Move registration event"
 msgstr ""
 
 msgid "Allow to switch registration between events"
+msgstr ""
+
+msgid "Users"
+msgstr ""
+
+msgid "Event history"
+msgstr ""
+
+msgid ""
+"If checked: in the public page of an user shows a list of all events attended"
 msgstr ""
 
 msgid "Deadline"
@@ -764,7 +773,7 @@ msgstr ""
 
 msgid ""
 "This page allows you to select the features activated for this event, and "
-"all its runs. Click on a feature to show its description."
+"all its runs (click on a feature to show its description)"
 msgstr ""
 
 msgid "Event Configuration"
@@ -1296,6 +1305,21 @@ msgstr ""
 msgid "This page allows you to change the general settings of this run"
 msgstr ""
 
+msgid "Select the event of this run "
+msgstr ""
+
+msgid "Not visible to players"
+msgstr ""
+
+msgid "Available to players in the homepage"
+msgstr ""
+
+msgid "Accounting is complete and can be archived"
+msgstr ""
+
+msgid "Not active anymore"
+msgstr ""
+
 msgid "Characters"
 msgstr ""
 
@@ -1363,8 +1387,8 @@ msgid "Event Template"
 msgstr ""
 
 msgid ""
-"This page allows you to select the features of a template. Click on a "
-"feature to show its description."
+"This page allows you to select the features of a template (click on a "
+"feature to show its description)"
 msgstr ""
 
 msgid ""
@@ -1427,6 +1451,9 @@ msgid "Ability"
 msgstr ""
 
 msgid "Ability type"
+msgstr ""
+
+msgid "click on the icon to open the tutorial"
 msgstr ""
 
 msgid "Authorisation"
@@ -1634,9 +1661,7 @@ msgid ""
 "can register"
 msgstr ""
 
-msgid ""
-"This page allows you to add or edit sections in the signup form. You can "
-"indicate which questions to include in the section."
+msgid "This page allows you to add or edit sections in the signup form"
 msgstr ""
 
 msgid "Form section"
@@ -1660,7 +1685,7 @@ msgstr ""
 
 msgid ""
 "This page allows you to add or modify the dynamic instalments with which the "
-"player can split the payment."
+"player can split the payment"
 msgstr ""
 
 msgid "Dynamic rates"
@@ -1813,11 +1838,13 @@ msgstr ""
 msgid "A payment of %(amount).2f %(currency)s was received for this event"
 msgstr ""
 
-msgid "Reimbursement payout"
+msgid "Issued Reimbursement"
 msgstr ""
 
 #, python-format
-msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
+msgid ""
+"A reimbursement for '%(reason)s' has been marked as issued. %(amount).2f "
+"%(elements)s have been marked as used"
 msgstr ""
 
 msgid "They will be used automatically when you sign up for a new event"
@@ -1831,6 +1858,10 @@ msgstr ""
 
 #, python-format
 msgid "Assignment %(elements)s"
+msgstr ""
+
+#, python-format
+msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr ""
 
 msgid "Donation given"
@@ -1930,17 +1961,24 @@ msgstr ""
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr ""
 
-#, python-format
-msgid ""
-"Copy this code and share it with friends! Every friend who signs up  and "
-"uses this code in the 'Discounts' field will receive %(amount_to)s "
-"%(currency)s discount on the ticket. For each of them you will receive "
-"%(amount_from)s %(currency)s off to use on event registration."
+msgid "Copy this code and share it with friends!"
 msgstr ""
 
 #, python-format
 msgid ""
-"(check the available number of discounts <a href='%(url)s'>on this page</a>)"
+"Every friend who signs up and uses this code in the 'Discounts' field will "
+"receive %(amount_to)s %(currency)s off the ticket"
+msgstr ""
+
+#, python-format
+msgid ""
+"For each of them, you will receive %(amount_from)s %(currency)s off your own "
+"event registration"
+msgstr ""
+
+#, python-format
+msgid ""
+"Check the available number of discounts <a href='%(url)s'>on this page</a>"
 msgstr ""
 
 msgid "See you soon"
@@ -2212,21 +2250,27 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Hello! We would like to remind you that in order to confirm your provisional "
-"registration of %(event)s you need to apply for admission as a member of the "
-"association. You are very close, just <a href='%(url)s'>click here</a> and "
-"complete the form."
+"Hello! To confirm your provisional registration for %(event)s, you must "
+"apply for membership in the association"
+msgstr ""
+
+#, python-format
+msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
+msgstr ""
+
+msgid "If you need a hand, feel free to let us know"
+msgstr ""
+
+msgid "We'll try to help as best we can"
 msgstr ""
 
 msgid ""
-"(If you need a hand feel free to let us know, we'll try to help as best we "
-"can!)"
+"If we don't hear from you, we'll assume you're no longer interested in the "
+"event"
 msgstr ""
 
 msgid ""
-"If we don't hear from you, we'll understand that you're no longer interested "
-"at the event and we will cancel your registration, so that other players can "
-"signup to your place."
+"Your registration will be cancelled to allow other players to take your spot"
 msgstr ""
 
 #, python-format
@@ -2239,35 +2283,38 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Hello! We are contacting you regarding your provisional registration at "
+"Hello! We are reaching out regarding your provisional registration for "
 "<b>%(event)s</b>"
 msgstr ""
 
 #, python-format
 msgid ""
-"Hello! We are contacting you regarding your registration at <b>%(event)s</b>"
+"Hello! We are reaching out regarding your registration for <b>%(event)s</b>"
 msgstr ""
 
 #, python-format
 msgid ""
-"To confirm it, we ask you to pay this amount as soon as possible: %(amount)s"
+"To confirm it, please pay the following amount as soon as possible: "
+"%(amount)s"
 msgstr ""
 
 #, python-format
-msgid ""
-"To confirm it, we ask you to pay this amount: %(amount)s, within this number "
-"of days: %(days)s"
+msgid "To confirm it, please pay %(amount)s within %(days)s days"
 msgstr ""
 
-msgid ""
-"Please note that if you have with us a different agreement, you can safely "
-"ignore this email"
+msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
 
 #, python-format
+msgid "You can make the payment <a href='%(url)s'>on this page</a>"
+msgstr ""
+
+msgid "If you encounter any issues, contact us and we will assist you"
+msgstr ""
+
 msgid ""
-"You can make the payment <a href= %(url)s'>on this page</a>. If you "
-"encounter any kind of problem, let us know, we will help you solve it!"
+"If we don't hear from you, we'll assume you're no longer interested in the "
+"event and will cancel your registration to make room for other players"
 msgstr ""
 
 #, python-format
@@ -2276,9 +2323,13 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Hello! You have signed up for %(event)s, but have not yet completed your "
-"profile. It takes 5 minutes, just <a href='%(url)s'>click here</a> and "
-"complete the form!"
+"Hello! You signed up for %(event)s but haven't completed your profile yet"
+msgstr ""
+
+#, python-format
+msgid ""
+"It only takes 5 minutes - just <a href='%(url)s'>click here</a> to fill out "
+"the form"
 msgstr ""
 
 #, python-format
@@ -2288,23 +2339,25 @@ msgstr ""
 #, python-format
 msgid ""
 "Hello! You have registered for %(event)s, but we have not yet received your "
-"annual membership fee payment."
+"annual membership payment"
 msgstr ""
 
 msgid ""
-"It is compulsory to take part in all our live events, as it also includes "
-"the insurance fee."
+"It is required for participation in all our live events, as it also covers "
+"the insurance fee"
 msgstr ""
 
 msgid ""
-"Unfortunately, without the balance of the fee, it is NOT possible for us to "
-"let you participate at the event."
+"Unfortunately, without full payment of the fee, participation in the event "
+"is not permitted"
 msgstr ""
 
 #, python-format
 msgid ""
-"You can make the payment in just a few minutes <a href= %(url)s'>here</a>. "
-"Let us know if you encounter any problems, or if we can help in any way!"
+"You can complete the payment in just a few minutes <a href='%(url)s'>here</a>"
+msgstr ""
+
+msgid "Let us know if you encounter any issues or need assistance"
 msgstr ""
 
 msgid "Review the users that are missing the event's deadlines"
@@ -2504,9 +2557,6 @@ msgid ""
 msgstr ""
 
 msgid "Please indicate an email for the organization"
-msgstr ""
-
-msgid "Payment Methods"
 msgstr ""
 
 msgid "Indicate the payment methods you wish to be available to players"
@@ -6436,6 +6486,9 @@ msgstr ""
 msgid "Load list"
 msgstr ""
 
+msgid "No registrations have been received for this run yet"
+msgstr ""
+
 msgid "Registration sections"
 msgstr ""
 
@@ -6981,6 +7034,12 @@ msgstr ""
 msgid "Now you can start creating speed-larps"
 msgstr ""
 
+msgid "Lets staff access the safety information submitted by players."
+msgstr ""
+
+msgid "Now you can review the safety information submitted by players"
+msgstr ""
+
 msgid ""
 "Lets players submit character preferences, then finds the optimal overall "
 "match."
@@ -7236,6 +7295,12 @@ msgstr ""
 msgid "Now you can create the progress steps"
 msgstr ""
 
+msgid "Lets staff access the diet information submitted by players."
+msgstr ""
+
+msgid "Now you can review the diet information submitted by players"
+msgstr ""
+
 msgid ""
 "Activates a page summarizing overdue players and their deadlines (payments, "
 "memberships, forms, casting, etc.)."
@@ -7281,6 +7346,9 @@ msgid ""
 "for registration fees. Credits can also be redeemed for cash."
 msgstr ""
 
+msgid "Now set up the token and credits configuration."
+msgstr ""
+
 msgid ""
 "Enables management of expenses paid using the organization's financial "
 "instruments."
@@ -7313,7 +7381,7 @@ msgstr ""
 msgid "Enables payment processing, specifying which payment methods to accept."
 msgstr ""
 
-msgid "Now you can set the payment gateways settings"
+msgid "Now you can set the payment methods settings"
 msgstr ""
 
 msgid ""
@@ -7526,16 +7594,10 @@ msgstr ""
 msgid "Manage collections participated by players"
 msgstr ""
 
-msgid "Payments Verification"
-msgstr ""
-
 msgid "Verify manually approved payments"
 msgstr ""
 
 msgid "Review the annual budget report"
-msgstr ""
-
-msgid "Historical accounting"
 msgstr ""
 
 msgid "Review historical financial records"
@@ -7592,6 +7654,9 @@ msgstr ""
 msgid "Displays list of emails of users"
 msgstr ""
 
+msgid "Volunteers"
+msgstr ""
+
 msgid "Manage volunteer registry"
 msgstr ""
 
@@ -7601,16 +7666,16 @@ msgstr ""
 msgid "Display all users data"
 msgstr ""
 
-msgid "Payment Settings"
+msgid "Methods"
 msgstr ""
 
-msgid "Configure gateways to process player payments"
+msgid "Configure payment methods available for players"
 msgstr ""
 
 msgid "Manage invoices of payments and approve them"
 msgstr ""
 
-msgid "Membership check"
+msgid "Check data"
 msgstr ""
 
 msgid "Check consistency of the members’ personal data"
@@ -7846,12 +7911,6 @@ msgid "Customize specific texts on the event interface"
 msgstr ""
 
 msgid "Customize buttons in the event navigation bar"
-msgstr ""
-
-msgid "Cache Reloading"
-msgstr ""
-
-msgid "Reload cached event data"
 msgstr ""
 
 msgid "Manage questions and options for characters and writing elements"
@@ -8106,67 +8165,58 @@ msgstr ""
 msgid "Waiting list registrations"
 msgstr ""
 
-msgid "To create an event, access the events management page"
+msgid "No events are present, create one"
 msgstr ""
 
-msgid ""
-"To quickly configure your organization's most important settings, access the "
-"quick setup page"
+msgid "To quickly configure your organization's most important settings"
 msgstr ""
 
 msgid ""
 "To set up the gateway payment available to players, to let them pay the "
-"registration fee through the platform, access the payment settings "
-"management page"
+"registration fee through the platform"
 msgstr ""
 
 msgid ""
 "To define which data will be asked in the profile form to the users once "
-"they sign up, access the profile management page"
+"they sign up"
 msgstr ""
 
 msgid ""
 "To grant access to organization management for other users and define roles "
-"with specific permissions, access the roles management page"
+"with specific permissions"
 msgstr ""
 
 msgid ""
 "To customize the appearance of all organizational pages, including colors, "
-"fonts, and images, access the appearance management page"
+"fonts, and images"
 msgstr ""
 
-msgid ""
-"To activate new features and enhance the functionality of the platform, "
-"access the features management page"
+msgid "To activate new features and enhance the functionality of the platform"
 msgstr ""
 
-msgid ""
-"To set specific values for the interface configuration or features, access "
-"the configuration management page"
+msgid "To set specific values for the interface configuration or features"
 msgstr ""
 
 #, python-format
 msgid ""
-"There are <b>%(number)s</b> expenses to approve, access the expenses "
-"management panel"
+"There are past runs still open: <b>%(list)s</b>. Once all tasks (accounting, "
+"etc.) are finished, mark them as completed"
 msgstr ""
 
 #, python-format
-msgid ""
-"There are <b>%(number)s</b> payments to approve, access the invoices "
-"management panel"
+msgid "There are <b>%(number)s</b> expenses to approve"
 msgstr ""
 
 #, python-format
-msgid ""
-"There are <b>%(number)s</b> refunds to deliver, access the refunds "
-"management panel"
+msgid "There are <b>%(number)s</b> payments to approve"
 msgstr ""
 
 #, python-format
-msgid ""
-"There are <b>%(number)s</b> members to approve, access the membership "
-"management panel"
+msgid "There are <b>%(number)s</b> refunds to deliver"
+msgstr ""
+
+#, python-format
+msgid "There are <b>%(number)s</b> members to approve"
 msgstr ""
 
 msgid ""
@@ -8179,9 +8229,7 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid ""
-"There are <b>%(number)s</b> questions to answer, access the users questions "
-"management panel"
+msgid "There are <b>%(number)s</b> questions to answer"
 msgstr ""
 
 msgid ""
@@ -8202,8 +8250,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Some activated features need the 'Character' feature, but it isn't active: "
-"access the feature panel"
+"Some activated features need the 'Character' feature, but it isn't active"
 msgstr ""
 
 msgid ""
@@ -8213,7 +8260,7 @@ msgstr ""
 
 msgid ""
 "Some activated features need the 'Token / Credit' feature, but it isn't "
-"active: access the feature panel"
+"active"
 msgstr ""
 
 #, python-format
@@ -8267,82 +8314,61 @@ msgid ""
 "panel"
 msgstr ""
 
-msgid ""
-"You have activated dynamic installments, but none have been yet created; "
-"access the dynamic installments management panel"
+msgid "You have activated dynamic installments, but none have been yet created"
 msgstr ""
 
-msgid ""
-"You have activated fixed installments, but none have been yet created; "
-"access the fixed installments management panel"
+msgid "You have activated fixed installments, but none have been yet created"
 msgstr ""
 
 #, python-format
 msgid ""
 "You have some fixed installments with both date and days set, but those "
-"values cannot be set at the same time: %(list)s; access the fixed "
-"installments management panel"
+"values cannot be set at the same time: %(list)s"
 msgstr ""
 
 #, python-format
 msgid ""
-"You have some tickets without a final installment (with 0 amount): %(list)s; "
-"access the fixed installments management panel"
+"You have some tickets without a final installment (with 0 amount): %(list)s"
+msgstr ""
+
+msgid "You have activated registration opening date, but no value has been set"
+msgstr ""
+
+msgid "You have activated registration secret link, but no value has been set"
 msgstr ""
 
 msgid ""
-"You have activated registration opening date, but no value has been set; "
-"access the run management panel"
+"You have activated registration external link, but no value has been set"
 msgstr ""
 
-msgid ""
-"You have activated registration secret link, but no value has been set; "
-"access the run management panel"
+msgid "You have activated character customization, but no fields has been set"
 msgstr ""
 
-msgid ""
-"You have activated registration external link, but no value has been set; "
-"access the event management panel"
+msgid "To quickly configure your events's most important settings"
 msgstr ""
 
-msgid ""
-"You have activated character customization, but no fields has been set; "
-"access the configuration panel"
-msgstr ""
-
-msgid ""
-"To quickly configure your events's most important settings, access the quick "
-"setup page"
-msgstr ""
-
-msgid ""
-"To set the tickets that users can select during registration, access the "
-"tickets management page"
+msgid "To set the tickets that users can select during registration"
 msgstr ""
 
 msgid ""
 "To define the registration form, and set up any number of registration "
-"questions and their options, access the registration form management page"
+"questions and their options"
 msgstr ""
 
 msgid ""
 "To grant access to event management for other users and define roles with "
-"specific permissions, access the roles management page"
+"specific permissions"
 msgstr ""
 
 msgid ""
 "To customize the appearance of all event pages, including colors, fonts, and "
-"images, access the appearance management page"
+"images"
 msgstr ""
 
-msgid ""
-"To activate new features and enhance the functionality of the event, access "
-"the features management page"
+msgid "To activate new features and enhance the functionality of the event"
 msgstr ""
 
-msgid ""
-"To set specific values for configuration of features of the event, access "
-"the configuration management page"
+msgid "To set specific values for configuration of features of the event"
 msgstr ""
 
 msgid "Suggestions"

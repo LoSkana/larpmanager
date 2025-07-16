@@ -251,9 +251,11 @@ def update_accounting_item_other(sender, instance, **kwargs):
 def notify_refund(credit_name, instance):
     # to user
     activate(instance.member.language)
-    subj = hdr(instance) + _("Reimbursement payout")
+    subj = hdr(instance) + _("Issued Reimbursement")
     body = (
-        _("Assigned %(amount).2f %(elements)s for '%(reason)s'")
+        _(
+            "A reimbursement for '%(reason)s' has been marked as issued. %(amount).2f %(elements)s have been marked as used"
+        )
         % {
             "amount": instance.value,
             "elements": credit_name,

@@ -147,7 +147,7 @@
     slug: safety
     overall: false
     module: 8
-    placeholder: true
+    placeholder: false
     order: 20
     after_text: Now you can review the safety information submitted by players
     after_link: orga_safety
@@ -546,7 +546,7 @@
     slug: diet
     overall: false
     module: 8
-    placeholder: true
+    placeholder: false
     order: 30
     after_text: Now you can review the diet information submitted by players
     after_link: orga_diet
@@ -626,8 +626,8 @@
     module: 2
     placeholder: false
     order: 50
-    after_text: ''
-    after_link: ''
+    after_text: Now set up the token and credits configuration.
+    after_link: config/token_credit
 - model: larpmanager.feature
   pk: 108
   fields:
@@ -676,7 +676,7 @@
     module: 2
     placeholder: false
     order: 10
-    after_text: Now you can set the payment gateways settings
+    after_text: Now you can set the payment methods settings
     after_link: exe_payment_details
 - model: larpmanager.feature
   pk: 112

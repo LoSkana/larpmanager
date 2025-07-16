@@ -53,6 +53,9 @@
 {% blocktrans %}Speed Larp{% endblocktrans %}
 {% blocktrans %}Manages pre-larp 'mini-scenes.' You can create any number of scenes and assign players to them, with checks to avoid scheduling conflicts.{% endblocktrans %}
 {% blocktrans %}Now you can start creating speed-larps{% endblocktrans %}
+{% blocktrans %}Safety{% endblocktrans %}
+{% blocktrans %}Lets staff access the safety information submitted by players.{% endblocktrans %}
+{% blocktrans %}Now you can review the safety information submitted by players{% endblocktrans %}
 {% blocktrans %}Casting algorithm{% endblocktrans %}
 {% blocktrans %}Lets players submit character preferences, then finds the optimal overall match.{% endblocktrans %}
 {% blocktrans %}Now you can set the casting options{% endblocktrans %}
@@ -139,6 +142,9 @@
 {% blocktrans %}Progress{% endblocktrans %}
 {% blocktrans %}Adds a 'progress' status field (e.g. draft, ready, approved) to key writing elements.{% endblocktrans %}
 {% blocktrans %}Now you can create the progress steps{% endblocktrans %}
+{% blocktrans %}Diet{% endblocktrans %}
+{% blocktrans %}Lets staff access the diet information submitted by players.{% endblocktrans %}
+{% blocktrans %}Now you can review the diet information submitted by players{% endblocktrans %}
 {% blocktrans %}Deadlines{% endblocktrans %}
 {% blocktrans %}Activates a page summarizing overdue players and their deadlines (payments, memberships, forms, casting, etc.).{% endblocktrans %}
 {% blocktrans %}Now you can review the organization's deadlines{% endblocktrans %}
@@ -156,6 +162,7 @@
 {% blocktrans %}Now staff members can upload expenses, and you can review them{% endblocktrans %}
 {% blocktrans %}Tokens / Credits{% endblocktrans %}
 {% blocktrans %}Allows managing Tokens and Credits, which players can use instead of money for registration fees. Credits can also be redeemed for cash.{% endblocktrans %}
+{% blocktrans %}Now set up the token and credits configuration.{% endblocktrans %}
 {% blocktrans %}Outflows{% endblocktrans %}
 {% blocktrans %}Enables management of expenses paid using the organization's financial instruments.{% endblocktrans %}
 {% blocktrans %}Now you can create outflows{% endblocktrans %}
@@ -167,7 +174,7 @@
 {% blocktrans %}Now you can review the annual balance{% endblocktrans %}
 {% blocktrans %}Payments{% endblocktrans %}
 {% blocktrans %}Enables payment processing, specifying which payment methods to accept.{% endblocktrans %}
-{% blocktrans %}Now you can set the payment gateways settings{% endblocktrans %}
+{% blocktrans %}Now you can set the payment methods settings{% endblocktrans %}
 {% blocktrans %}Refunds{% endblocktrans %}
 {% blocktrans %}Enables members to request a refund (a money transfer from the organization){% endblocktrans %}
 {% blocktrans %}Now players can create refund requests, and you can review them{% endblocktrans %}
@@ -253,11 +260,11 @@
 {% blocktrans %}Manage refund requests{% endblocktrans %}
 {% blocktrans %}Collections{% endblocktrans %}
 {% blocktrans %}Manage collections participated by players{% endblocktrans %}
-{% blocktrans %}Payments Verification{% endblocktrans %}
+{% blocktrans %}Verification{% endblocktrans %}
 {% blocktrans %}Verify manually approved payments{% endblocktrans %}
 {% blocktrans %}Balance{% endblocktrans %}
 {% blocktrans %}Review the annual budget report{% endblocktrans %}
-{% blocktrans %}Historical accounting{% endblocktrans %}
+{% blocktrans %}Historical{% endblocktrans %}
 {% blocktrans %}Review historical financial records{% endblocktrans %}
 {% blocktrans %}Appearance{% endblocktrans %}
 {% blocktrans %}Set visual aspect: colors, background, cover image{% endblocktrans %}
@@ -267,7 +274,7 @@
 {% blocktrans %}Manage url shortner{% endblocktrans %}
 {% blocktrans %}Inventory{% endblocktrans %}
 {% blocktrans %}Manage inventory and items{% endblocktrans %}
-{% blocktrans %}Event{% endblocktrans %}
+{% blocktrans %}Events{% endblocktrans %}
 {% blocktrans %}Manage events{% endblocktrans %}
 {% blocktrans %}Runs{% endblocktrans %}
 {% blocktrans %}Manages the runs of events{% endblocktrans %}
@@ -287,15 +294,15 @@
 {% blocktrans %}Manage player questions and answer them{% endblocktrans %}
 {% blocktrans %}Newsletter{% endblocktrans %}
 {% blocktrans %}Displays list of emails of users{% endblocktrans %}
-{% blocktrans %}Volunteer Registry{% endblocktrans %}
+{% blocktrans %}Volunteers{% endblocktrans %}
 {% blocktrans %}Manage volunteer registry{% endblocktrans %}
 {% blocktrans %}Enrolment{% endblocktrans %}
 {% blocktrans %}Display all users data{% endblocktrans %}
-{% blocktrans %}Payment Settings{% endblocktrans %}
-{% blocktrans %}Configure gateways to process player payments{% endblocktrans %}
+{% blocktrans %}Methods{% endblocktrans %}
+{% blocktrans %}Configure payment methods available for players{% endblocktrans %}
 {% blocktrans %}Invoices{% endblocktrans %}
 {% blocktrans %}Manage invoices of payments and approve them{% endblocktrans %}
-{% blocktrans %}Membership check{% endblocktrans %}
+{% blocktrans %}Check data{% endblocktrans %}
 {% blocktrans %}Check consistency of the members’ personal data{% endblocktrans %}
 {% blocktrans %}Tokens{% endblocktrans %}
 {% blocktrans %}Manages tokens used by players to cover the registration fee for all events{% endblocktrans %}
@@ -437,8 +444,6 @@
 {% blocktrans %}Customize specific texts on the event interface{% endblocktrans %}
 {% blocktrans %}Navigation{% endblocktrans %}
 {% blocktrans %}Customize buttons in the event navigation bar{% endblocktrans %}
-{% blocktrans %}Cache Reloading{% endblocktrans %}
-{% blocktrans %}Reload cached event data{% endblocktrans %}
 {% blocktrans %}Send e-mail{% endblocktrans %}
 {% blocktrans %}Send e-mail{% endblocktrans %}
 {% blocktrans %}Form{% endblocktrans %}
