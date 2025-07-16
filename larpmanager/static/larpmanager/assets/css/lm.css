@@ -1723,10 +1723,6 @@ a label:hover {
     }
 }
 
-a.select {
-    color: red;
-}
-
 #sidebar.interface_old p, #sidebar.interface_old h2 {
     text-align: center;
 }

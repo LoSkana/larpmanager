@@ -72,7 +72,7 @@ async def template(live_server, page):
     await page.locator("#id_name").press("Tab")
     await page.get_by_role("searchbox").fill("user")
     await page.get_by_role("option", name="User Test - user@test.it").click()
-    await page.locator("#id_Appearance div").filter(has_text="Texts").click()
+    await page.locator("#id_Appearance_1").check()
     await page.get_by_role("button", name="Confirm", exact=True).click()
     await page.get_by_role("gridcell", name="Configuration").get_by_role("link").click()
     await page.get_by_role("link", name="Gallery ").click()
@@ -123,8 +123,8 @@ async def setup_test(live_server, page):
     await page.locator("#id_name").press("Tab")
     await page.get_by_role("searchbox").fill("user")
     await page.get_by_role("option", name="User Test - user@test.it").click()
-    await page.locator("#id_Appearance").get_by_text("Navigation").click()
-    await page.locator("#id_Writing").get_by_text("Factions").click()
+    await page.locator("#id_Appearance_2").check()
+    await page.locator("#id_Writing_2").check()
     await page.get_by_role("button", name="Confirm", exact=True).click()
 
 
