@@ -334,13 +334,13 @@ ul, ol {
     border: solid 1px rgba(var(--sec-rgb), 0.35);
 }
 
-#staging2 {
-    background: red;
+#staging {
     padding: 1em;
     width: 100%;
-    font-size: 200%;
-    color: black;
+    font-size: 100%;
+    color: red;
     text-align: center;
+    position: fixed;
 }
 
 .sheet {
