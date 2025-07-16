@@ -23,6 +23,7 @@ from datetime import date, datetime, timedelta
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count, Min, Sum
@@ -55,13 +56,14 @@ from larpmanager.models.larpmanager import (
     LarpManagerProfiler,
     LarpManagerTutorial,
 )
-from larpmanager.models.member import MembershipStatus, get_user_membership
+from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.auth import check_lm_admin
 from larpmanager.utils.event import get_event_run
 from larpmanager.utils.exceptions import PermissionError
 from larpmanager.utils.tasks import my_send_mail, send_mail_exec
 from larpmanager.utils.text import get_assoc_text
+from larpmanager.views.user.member import get_user_backend
 
 
 def lm_home(request):
@@ -575,3 +577,9 @@ def donate(request):
         form = LarpManagerCheck(request=request)
     ctx = {"form": form}
     return render(request, "larpmanager/larpmanager/donate.html", ctx)
+
+
+def debug_user(request, mid):
+    check_lm_admin(request)
+    member = Member.objects.get(pk=mid)
+    login(request, member.user, backend=get_user_backend())

@@ -67,6 +67,11 @@ class MemberFilter(AutocompleteFilter):
     field_name = "member"
 
 
+class TraitFilter(AutocompleteFilter):
+    title = "Trait"
+    field_name = "trait"
+
+
 class RegistrationFilter(AutocompleteFilter):
     title = "Registration"
     field_name = "reg"

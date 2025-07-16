@@ -175,4 +175,9 @@ urlpatterns = [
         views_lm.debug_slug,
         name="debug_slug",
     ),
+    path(
+        "debug/user/<int:s>/",
+        views_lm.debug_user,
+        name="debug_user",
+    ),
 ]

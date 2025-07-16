@@ -20,7 +20,7 @@
 
 from django.contrib import admin
 
-from larpmanager.admin.base import CharacterFilter, DefModelAdmin, EventFilter, MemberFilter, RunFilter
+from larpmanager.admin.base import CharacterFilter, DefModelAdmin, EventFilter, MemberFilter, RunFilter, TraitFilter
 from larpmanager.admin.character import PlotFilter
 from larpmanager.models.casting import AssignmentTrait, Trait
 from larpmanager.models.writing import (
@@ -107,7 +107,7 @@ class PrologueTypeAdmin(DefModelAdmin):
 @admin.register(AssignmentTrait)
 class AssignmentTraitAdmin(DefModelAdmin):
     list_display = ("run", "member", "trait", "typ")
-    list_filter = (RunFilter, MemberFilter)
+    list_filter = (RunFilter, MemberFilter, TraitFilter)
     autocomplete_fields = ("run", "member", "trait")
 
 
