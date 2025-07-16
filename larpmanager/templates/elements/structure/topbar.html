@@ -1,0 +1,32 @@
+{% load static i18n %}
+{% if not interface_old %}
+    {% if event_role or assoc_role %}
+        <div id="topbar">
+            <div class="nav manage left">
+                {{ assoc.platform }} -
+                {% if run %}
+                    {{ run }}
+                    <a href="{% url 'manage' run.event.slug run.number %}"
+                       {% if manage %}class="select"{% endif %}>Management</a>
+                    <a href="{% url 'gallery' run.event.slug run.number %}"
+                       {% if not manage %}class="select"{% endif %}>User</a>
+                {% else %}
+                    Organization
+                    <a href="{% url 'manage' %}" {% if manage %}class="select"{% endif %}>Management</a>
+                    <a href="{% url 'home' %}" {% if not manage %}class="select"{% endif %}>User</a>
+                {% endif %}
+            </div>
+            <div class="nav manage right">
+                Switch:
+                {% for rid, v in open_runs.items %}
+                    <a href="{% url 'manage' v.e v.r %}"
+                       {% if manage and run and run.event.slug == v.e and run.number == v.r %}class="select"{% endif %}>{{ v.s }}</a>
+                {% endfor %}
+                {% if assoc_role %}
+                    <a href="{% url 'manage' %}"
+                       {% if manage and manage %}class="select"{% endif %}>{% trans "Organization" %}</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endif %}

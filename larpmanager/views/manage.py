@@ -85,6 +85,7 @@ def _exe_manage(request):
     ctx = def_user_ctx(request)
     get_index_assoc_permissions(ctx, request, request.assoc["id"])
     ctx["exe_page"] = 1
+    ctx["manage"] = 1
 
     ctx["event_counts"] = Event.objects.filter(assoc_id=ctx["a_id"]).count()
 
@@ -254,6 +255,7 @@ def _orga_manage(request, s, n):
         return redirect("orga_run", s=s, n=n)
 
     ctx["orga_page"] = 1
+    ctx["manage"] = 1
 
     get_index_event_permissions(ctx, request, s)
     assoc = Association.objects.get(pk=request.assoc["id"])

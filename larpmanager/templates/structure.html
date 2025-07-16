@@ -105,9 +105,11 @@
     </head>
     <body class="is-preload" id="{{ assoc.name | slugify }}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
+        {% include "elements/structure/topbar.html" %}
         {% include "elements/structure/sidebar.html" %}
         <!-- Page Wrapper -->
-        <div id="page-wrapper" {% if is_sidebar_open %}class="sidebar"{% endif %}>
+        <div id="page-wrapper"
+             class=" {% if manage and is_sidebar_open %}sidebar{% endif %} {% if not interface_old %} {% if event_role or assoc_role %}topbar{% endif %} {% endif %} ">
             {% block main %}
             {% endblock main %}
         </div>
@@ -210,7 +212,7 @@
                 }
             });
 
-            $('#sidebar-nav').click(function() {
+            $('#sidebar-open').click(function() {
                 toggle_sidebar();
 
                 $.ajax({

@@ -2,7 +2,7 @@
 {% if manage %}
     <div id="sidebar"
          {% if not is_sidebar_open %}class="hide"{% endif %}
-         {% if interface_old %}class="interface_old"{% endif %}>
+         {% if interface_old %} class="interface_old" {% else %} class="topbar" {% endif %}>
         <div class="inner">
             {% if interface_old %}
                 <div class="header">

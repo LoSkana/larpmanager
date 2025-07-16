@@ -82,7 +82,6 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
 
     # check if the user has any role
     if has_event_permission(ctx, request, s):
-        ctx["manage"] = 1
         get_index_event_permissions(ctx, request, s)
         ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
@@ -222,6 +221,7 @@ def check_event_permission(request, s, n, perm=None):
             raise FeatureError(path=request.path, feature=feature, run=ctx["run"].id)
     get_index_event_permissions(ctx, request, s)
     ctx["orga_page"] = 1
+    ctx["manage"] = 1
     return ctx
 
 

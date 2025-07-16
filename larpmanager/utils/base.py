@@ -108,7 +108,6 @@ def get_index_assoc_permissions(ctx, request, assoc_id, check=True):
 
     ctx["role_names"] = names
     features = get_assoc_features(assoc_id)
-    ctx["manage"] = 1
     ctx["assoc_pms"] = get_index_permissions(features, is_admin, user_assoc_permissions, AssocPermission)
     ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
