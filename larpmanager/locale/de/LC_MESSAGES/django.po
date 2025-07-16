@@ -1107,6 +1107,9 @@ msgstr "Fähigkeiten"
 msgid "Additions"
 msgstr "Ergänzungen"
 
+msgid "Approvals"
+msgstr "Zulassungen"
+
 msgid "Available"
 msgstr "Verfügbar"
 
@@ -2383,9 +2386,6 @@ msgstr "Gesamte Sammlung"
 
 msgid "Color background"
 msgstr "Text-Hintergrund"
-
-msgid "Confirm Payments"
-msgstr "Bestätigen Sie Zahlungen"
 
 msgid "Current template"
 msgstr "Aktuelle Vorlage"
@@ -4146,8 +4146,8 @@ msgstr "Verwalten Sie die Art der Ereignisprologe"
 msgid "Manages registration cancellations"
 msgstr "Verwaltet die Stornierungen von Anmeldungen"
 
-msgid "Manually confirm payments received"
-msgstr "Manuelle Bestätigung von Zahlungseingängen"
+msgid "Manually approve payments received"
+msgstr "Eingehende Zahlungen manuell genehmigen"
 
 msgid "Now you can create event templates"
 msgstr "Jetzt können Sie Veranstaltungsvorlagen erstellen"

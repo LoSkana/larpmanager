@@ -4020,10 +4020,10 @@ msgstr ""
 msgid "Access the event dashboard"
 msgstr ""
 
-msgid "Dashboard"
+msgid "Access the organization dashboard"
 msgstr ""
 
-msgid "Access the organization dashboard"
+msgid "Dashboard"
 msgstr ""
 
 msgid "Role"
@@ -7827,10 +7827,10 @@ msgstr ""
 msgid "Manages and assigns tasks to characters"
 msgstr ""
 
-msgid "Confirm Payments"
+msgid "Approvals"
 msgstr ""
 
-msgid "Manually confirm payments received"
+msgid "Manually approve payments received"
 msgstr ""
 
 msgid "Upload Expenses"

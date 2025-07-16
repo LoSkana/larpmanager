@@ -1107,6 +1107,9 @@ msgstr "Förmågor"
 msgid "Additions"
 msgstr "Tillgångar"
 
+msgid "Approvals"
+msgstr "Godkännande"
+
 msgid "Available"
 msgstr "Tillgänglig"
 
@@ -2383,9 +2386,6 @@ msgstr "Total samling"
 
 msgid "Color background"
 msgstr "Text bakgrund"
-
-msgid "Confirm Payments"
-msgstr "Bekräfta betalningar"
 
 msgid "Current template"
 msgstr "Nuvarande mall"
@@ -4146,8 +4146,8 @@ msgstr "Hantera typen av prologer för evenemang"
 msgid "Manages registration cancellations"
 msgstr "Hanterar avbokningar av registreringar"
 
-msgid "Manually confirm payments received"
-msgstr "Manuellt bekräfta mottagna betalningar"
+msgid "Manually approve payments received"
+msgstr "Manuellt godkänna mottagna betalningar"
 
 msgid "Now you can create event templates"
 msgstr "Nu kan du skapa eventmallar"

@@ -1107,6 +1107,9 @@ msgstr "Evner"
 msgid "Additions"
 msgstr "Tillegg"
 
+msgid "Approvals"
+msgstr "Godkjenninger"
+
 msgid "Available"
 msgstr "Tilgjengelig"
 
@@ -2383,9 +2386,6 @@ msgstr "Total innsamling"
 
 msgid "Color background"
 msgstr "Tekstbakgrunn"
-
-msgid "Confirm Payments"
-msgstr "Bekreft betalinger"
 
 msgid "Current template"
 msgstr "Gjeldende mal"
@@ -4146,8 +4146,8 @@ msgstr "Administrer typen hendelsesprologer"
 msgid "Manages registration cancellations"
 msgstr "Håndterer avbestillinger av registreringer"
 
-msgid "Manually confirm payments received"
-msgstr "Manuelt bekrefte mottatte betalinger"
+msgid "Manually approve payments received"
+msgstr "Godkjenn mottatte betalinger manuelt"
 
 msgid "Now you can create event templates"
 msgstr "Nå kan du opprette hendelsesmaler"

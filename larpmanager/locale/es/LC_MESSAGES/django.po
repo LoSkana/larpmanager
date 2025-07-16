@@ -1107,6 +1107,9 @@ msgstr "Habilidades"
 msgid "Additions"
 msgstr "Adiciones"
 
+msgid "Approvals"
+msgstr "Homologaciones"
+
 msgid "Available"
 msgstr "Disponible"
 
@@ -2383,9 +2386,6 @@ msgstr "Total recolectadol"
 
 msgid "Color background"
 msgstr "Color de fondo"
-
-msgid "Confirm Payments"
-msgstr "Confirmar pagos"
 
 msgid "Current template"
 msgstr "Plantilla actual"
@@ -4146,8 +4146,8 @@ msgstr "Gestionar el tipo de eventos prologados"
 msgid "Manages registration cancellations"
 msgstr "Gestiona las anulaciones de inscripciones"
 
-msgid "Manually confirm payments received"
-msgstr "Confirmar manualmente los pagos recibidos"
+msgid "Manually approve payments received"
+msgstr "Aprobar manualmente los pagos recibidos"
 
 msgid "Now you can create event templates"
 msgstr "Ahora puedes crear plantillas de eventos"

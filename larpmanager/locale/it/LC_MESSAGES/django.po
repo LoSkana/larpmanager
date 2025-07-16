@@ -1107,6 +1107,9 @@ msgstr "Abilità"
 msgid "Additions"
 msgstr "Aggiuntivi"
 
+msgid "Approvals"
+msgstr "Approvazioni"
+
 msgid "Available"
 msgstr "Disponibili"
 
@@ -2057,7 +2060,7 @@ msgid "Total revenue"
 msgstr "Ricavi totali"
 
 msgid "URL shortener"
-msgstr "Accorciatore di URL"
+msgstr "Accorciatore URL"
 
 msgid "Visualisation"
 msgstr "Visualizzazione"
@@ -2383,9 +2386,6 @@ msgstr "Raccolta totale"
 
 msgid "Color background"
 msgstr "Sfondo testo"
-
-msgid "Confirm Payments"
-msgstr "Conferma Pagamenti"
 
 msgid "Current template"
 msgstr "Template attuale"
@@ -4146,8 +4146,8 @@ msgstr "Gestisci il tipo di prologo dell'evento"
 msgid "Manages registration cancellations"
 msgstr "Gestisci le cancellazioni delle iscrizioni"
 
-msgid "Manually confirm payments received"
-msgstr "Conferma manualmente i pagamenti ricevuti"
+msgid "Manually approve payments received"
+msgstr "Approvare manualmente i pagamenti ricevuti"
 
 msgid "Now you can create event templates"
 msgstr "Ora è possibile creare modelli di eventi"
@@ -5257,7 +5257,7 @@ msgid "Select which of your characters you want to access"
 msgstr "Seleziona quale dei tuoi personaggi vuoi accedere"
 
 msgid "Set the casting options in the configuration panel"
-msgstr "Impostare le opzioni di casting nel pannello di configurazione"
+msgstr "Imposta le opzioni di casting nel pannello di configurazione"
 
 msgid "Set visual aspect: colors, background, cover image"
 msgstr "Imposta l'aspetto visivo: colori, sfondo, immagine di copertina"
@@ -6416,8 +6416,8 @@ msgstr "Presente (nelle relazioni di questo personaggio è presente l'altro)"
 
 msgid "Set the options for the automatic PDF generation of characters sheets"
 msgstr ""
-"Impostare le opzioni per la generazione automatica delle schede PDF in "
-"formato PDF"
+"Imposta le opzioni per la generazione automatica delle schede PDF in formato"
+" PDF"
 
 #, python-format
 msgid "Staff member %(user)s added a new reimbursement request for %(event)s"
@@ -8775,8 +8775,8 @@ msgid ""
 "To set up the gateway payment available to players, to let them pay the "
 "registration fee through the platform"
 msgstr ""
-"Impostare il gateway di pagamento a disposizione dei giocatori, per "
-"consentire loro di pagare la quota di iscrizione attraverso la piattaforma"
+"Imposta i metodi di pagamento a disposizione dei giocatori, per consentire "
+"loro di pagare la quota di iscrizione attraverso la piattaforma"
 
 #, python-format
 msgid ""

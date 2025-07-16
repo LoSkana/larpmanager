@@ -1107,6 +1107,9 @@ msgstr "Schopnosti"
 msgid "Additions"
 msgstr "Dodatky"
 
+msgid "Approvals"
+msgstr "Schválení"
+
 msgid "Available"
 msgstr "Dostupné na"
 
@@ -2383,9 +2386,6 @@ msgstr "Celková sbírka"
 
 msgid "Color background"
 msgstr "Textové pozadí"
-
-msgid "Confirm Payments"
-msgstr "Potvrzení plateb"
 
 msgid "Current template"
 msgstr "Aktuální šablona"
@@ -4146,8 +4146,8 @@ msgstr "Správa typu prologů událostí"
 msgid "Manages registration cancellations"
 msgstr "spravuje zrušení registrace"
 
-msgid "Manually confirm payments received"
-msgstr "Ruční potvrzení přijatých plateb"
+msgid "Manually approve payments received"
+msgstr "Ruční schvalování přijatých plateb"
 
 msgid "Now you can create event templates"
 msgstr "Nyní můžete vytvářet šablony událostí"
