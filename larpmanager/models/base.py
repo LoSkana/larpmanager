@@ -90,11 +90,9 @@ class FeatureNationality(models.TextChoices):
 class FeatureModule(BaseModel):
     name = models.CharField(max_length=100)
 
-    descr = models.TextField(max_length=500)
+    icon = models.CharField(max_length=100)
 
     order = models.IntegerField()
-
-    default = models.BooleanField(default=False)
 
     nationality = models.CharField(max_length=2, choices=FeatureNationality.choices, blank=True, null=True)
 

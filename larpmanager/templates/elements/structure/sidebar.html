@@ -28,7 +28,10 @@
                 </p>
                 {% for mod, list in event_pms.items %}
                     <div class="h2-p-row">
-                        <h2>{% trans mod %}</h2>
+                        <h2>
+                            {% if not interface_old and mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
+                            {{ mod.0 }}
+                        </h2>
                         <p>
                             {% for ap in list %}
                                 {% if not ap.hidden %}
@@ -52,7 +55,10 @@
                 </p>
                 {% for mod, list in assoc_pms.items %}
                     <div class="h2-p-row">
-                        <h2>{% trans mod %}</h2>
+                        <h2>
+                            {% if not interface_old and mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
+                            {{ mod.0 }}
+                        </h2>
                         <p>
                             {% for ap in list %}
                                 {% if not ap.hidden %}

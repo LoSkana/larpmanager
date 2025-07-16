@@ -86,7 +86,7 @@ class LogAdmin(DefModelAdmin):
 
 @admin.register(FeatureModule)
 class FeatureModuleAdmin(DefModelAdmin):
-    list_display = ("name", "descr", "order")
+    list_display = ("name", "order")
     search_fields = ["name"]
 
 

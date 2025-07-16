@@ -1338,9 +1338,6 @@ msgstr "Hunted"
 msgid "Legal name"
 msgstr "Právní název"
 
-msgid "Management"
-msgstr "Management"
-
 msgid "Membership"
 msgstr "Členství"
 
@@ -2417,9 +2414,6 @@ msgstr "Forwardová sleva"
 msgid "Handout template"
 msgstr "Šablona letáku"
 
-msgid "Italian features"
-msgstr "Italské rysy"
-
 msgid "Loading template"
 msgstr "Načítání šablony"
 
@@ -2588,9 +2582,6 @@ msgstr "Stáhnout dokument"
 msgid "Elements uploaded"
 msgstr "Prvky jsou načteny"
 
-msgid "Experience Points"
-msgstr "Zkušenostní body"
-
 msgid "Experience points"
 msgstr "Zkušenostní body"
 
@@ -2671,9 +2662,6 @@ msgstr "Seleziona abilità"
 
 msgid "Short description"
 msgstr "Krátký popis"
-
-msgid "Standard features"
-msgstr "Standardní funkce"
 
 msgid "Technical Support"
 msgstr "Technická podpora"
@@ -2980,9 +2968,6 @@ msgstr "Mail přidán do fronty!"
 
 msgid "Make the request now"
 msgstr "Přihlaste se nyní"
-
-msgid "Manage players' data"
-msgstr "Správa dat hráčů"
 
 msgid "Name - international"
 msgstr "Anglický název"
@@ -3670,17 +3655,11 @@ msgstr "Název odznaku, který má být udělen"
 msgid "Now you can create outflows"
 msgstr "Nyní můžete vytvářet odtoky"
 
-msgid "Player registration process"
-msgstr "Proces registrace hráče"
-
 msgid "Pre-registration cancelled!"
 msgstr "Předběžná registrace zrušena!"
 
 msgid "Reminder membership request"
 msgstr "Připomínka žádosti o členství"
-
-msgid "Various additional features"
-msgstr "Různé doplňkové funkce"
 
 msgid "View limited ticket options"
 msgstr "Zobrazit omezené možnosti vstupenek"
@@ -3827,9 +3806,6 @@ msgstr "Zpoždění ročního členského poplatku"
 msgid "Font to be used in page titles"
 msgstr "písmo, které se má použít v nadpisech"
 
-msgid "General event management tools"
-msgstr "Obecné nástroje pro správu událostí"
-
 msgid "If checked: uses old interface"
 msgstr "Pokud je zaškrtnuto: používá staré rozhraní"
 
@@ -3857,9 +3833,6 @@ msgstr "Přímé nahrávání a hostování souborů"
 msgid "We are processing your payment"
 msgstr "Zpracováváme vaši platbu"
 
-msgid "Writing and storytelling tools"
-msgstr "Nástroje pro psaní a vyprávění příběhů"
-
 msgid "Your friend code has been used"
 msgstr "Váš kód přítele byl použit"
 
@@ -3868,9 +3841,6 @@ msgstr "Aktivace funkcí pro událost"
 
 msgid "After confirmation, add another"
 msgstr "Po potvrzení přidejte další"
-
-msgid "Assigning characters to players"
-msgstr "Přiřazení postav hráčům"
 
 msgid "Browse the presentation website"
 msgstr "Prohlédněte si prezentační stránky"
@@ -3991,9 +3961,6 @@ msgstr "Skrýt hráče bez postavy"
 
 msgid "Manage the registration sections"
 msgstr "Správa registračních sekcí"
-
-msgid "Managing money flow and finances"
-msgstr "Řízení toku peněz a financí"
 
 msgid "Membership request not submitted"
 msgstr "Nepodaná žádost člena"
@@ -4440,9 +4407,6 @@ msgstr "Stručně popište, co krabice obsahuje"
 
 msgid "Check the validity of the fiscal code."
 msgstr "Zkontrolujte platnost fiskálního kódu."
-
-msgid "Event display and visual customization"
-msgstr "Zobrazení události a vizuální přizpůsobení"
 
 msgid "Fill in your character's relationships"
 msgstr "Vyplňte vztahy své postavy"

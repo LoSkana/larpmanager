@@ -119,7 +119,7 @@ def get_index_permissions(features, has_default, permissions, typ):
             continue
         if not ar.feature.placeholder and ar.feature.slug not in features:
             continue
-        mod_name = _(ar.feature.module.name)
+        mod_name = (_(ar.feature.module.name), ar.feature.module.icon)
         if mod_name not in res:
             res[mod_name] = []
         res[mod_name].append(ar)

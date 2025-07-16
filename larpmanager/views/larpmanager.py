@@ -284,7 +284,7 @@ def ticket(request, s=""):
         form = LarpManagerTicket(request.POST, request=request)
         if form.is_valid():
             for _name, email in conf_settings.ADMINS:
-                subj = "LarpManager ticket"
+                subj = f"LarpManager ticket - {request.assoc['name']}"
                 if s:
                     subj += f" [{s}]"
                 body = f"Email: {form.cleaned_data['email']} <br /><br />"

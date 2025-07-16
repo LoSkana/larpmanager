@@ -1338,9 +1338,6 @@ msgstr "Jaktet"
 msgid "Legal name"
 msgstr "Juridisk navn"
 
-msgid "Management"
-msgstr "Ledelse"
-
 msgid "Membership"
 msgstr "Medlemskap"
 
@@ -2417,9 +2414,6 @@ msgstr "Terminrabatt"
 msgid "Handout template"
 msgstr "Mal for utdeling"
 
-msgid "Italian features"
-msgstr "Italienske trekk"
-
 msgid "Loading template"
 msgstr "Lasting av mal"
 
@@ -2588,9 +2582,6 @@ msgstr "Last ned dokumentet"
 msgid "Elements uploaded"
 msgstr "Elementer lastet"
 
-msgid "Experience Points"
-msgstr "Erfaringspoeng"
-
 msgid "Experience points"
 msgstr "Erfaringspoeng"
 
@@ -2671,9 +2662,6 @@ msgstr "Seleziona abilità"
 
 msgid "Short description"
 msgstr "Kort beskrivelse"
-
-msgid "Standard features"
-msgstr "Standardfunksjoner"
 
 msgid "Technical Support"
 msgstr "Teknisk støtte"
@@ -2980,9 +2968,6 @@ msgstr "Mail lagt til i køen!"
 
 msgid "Make the request now"
 msgstr "Søk nå"
-
-msgid "Manage players' data"
-msgstr "Administrer spillernes data"
 
 msgid "Name - international"
 msgstr "Engelsk navn"
@@ -3670,17 +3655,11 @@ msgstr "Navn på merket som skal deles ut"
 msgid "Now you can create outflows"
 msgstr "Nå kan du opprette utstrømninger"
 
-msgid "Player registration process"
-msgstr "Prosess for spillerregistrering"
-
 msgid "Pre-registration cancelled!"
 msgstr "Forhåndsregistrering avlyst!"
 
 msgid "Reminder membership request"
 msgstr "Påminnelse om medlemskap"
-
-msgid "Various additional features"
-msgstr "Ulike tilleggsfunksjoner"
 
 msgid "View limited ticket options"
 msgstr "Se begrensede billettalternativer"
@@ -3827,9 +3806,6 @@ msgstr "Forsinkelse i årlig medlemsavgift"
 msgid "Font to be used in page titles"
 msgstr "skrifttype som skal brukes i titler"
 
-msgid "General event management tools"
-msgstr "Generelle verktøy for håndtering av arrangementer"
-
 msgid "If checked: uses old interface"
 msgstr "Hvis avkrysset: bruker gammelt grensesnitt"
 
@@ -3857,9 +3833,6 @@ msgstr "Last opp og host filer direkte"
 msgid "We are processing your payment"
 msgstr "Vi behandler betalingen din"
 
-msgid "Writing and storytelling tools"
-msgstr "Verktøy for skriving og historiefortelling"
-
 msgid "Your friend code has been used"
 msgstr "Din vennekode har blitt brukt"
 
@@ -3868,9 +3841,6 @@ msgstr "Aktiver funksjoner for arrangementet"
 
 msgid "After confirmation, add another"
 msgstr "Etter bekreftelse legger du til en ny"
-
-msgid "Assigning characters to players"
-msgstr "Tildeling av karakterer til spillere"
 
 msgid "Browse the presentation website"
 msgstr "Bla gjennom presentasjonssiden"
@@ -3991,9 +3961,6 @@ msgstr "Skjul spillere uten karakter"
 
 msgid "Manage the registration sections"
 msgstr "Administrer registreringsseksjonene"
-
-msgid "Managing money flow and finances"
-msgstr "Styring av pengestrøm og økonomi"
 
 msgid "Membership request not submitted"
 msgstr "Ikke innsendt medlemsforespørsel"
@@ -4442,9 +4409,6 @@ msgstr "Beskriv kort hva esken inneholder"
 
 msgid "Check the validity of the fiscal code."
 msgstr "Kontroller gyldigheten av skattekoden."
-
-msgid "Event display and visual customization"
-msgstr "Visning av hendelser og visuell tilpasning"
 
 msgid "Fill in your character's relationships"
 msgstr "Fyll inn karakterens relasjoner"

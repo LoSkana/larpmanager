@@ -6889,43 +6889,7 @@ msgstr ""
 msgid "Sign In"
 msgstr ""
 
-msgid "Writing and storytelling tools"
-msgstr ""
-
-msgid "Managing money flow and finances"
-msgstr ""
-
 msgid "Miscellany"
-msgstr ""
-
-msgid "Various additional features"
-msgstr ""
-
-msgid "Player registration process"
-msgstr ""
-
-msgid "Assigning characters to players"
-msgstr ""
-
-msgid "Event display and visual customization"
-msgstr ""
-
-msgid "Management"
-msgstr ""
-
-msgid "General event management tools"
-msgstr ""
-
-msgid "Manage players' data"
-msgstr ""
-
-msgid "Standard features"
-msgstr ""
-
-msgid "Italian features"
-msgstr ""
-
-msgid "Experience Points"
 msgstr ""
 
 msgid ""

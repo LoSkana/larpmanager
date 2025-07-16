@@ -1338,9 +1338,6 @@ msgstr "Opgejaagd"
 msgid "Legal name"
 msgstr "Juridische naam"
 
-msgid "Management"
-msgstr "Beheer"
-
 msgid "Membership"
 msgstr "Lidmaatschap"
 
@@ -2417,9 +2414,6 @@ msgstr "Termijnkorting"
 msgid "Handout template"
 msgstr "Sjabloon voor hand-outs"
 
-msgid "Italian features"
-msgstr "Italiaanse kenmerken"
-
 msgid "Loading template"
 msgstr "Sjabloon laden"
 
@@ -2588,9 +2582,6 @@ msgstr "Document downloaden"
 msgid "Elements uploaded"
 msgstr "Elementen geladen"
 
-msgid "Experience Points"
-msgstr "Ervaringspunten"
-
 msgid "Experience points"
 msgstr "Ervaringspunten"
 
@@ -2671,9 +2662,6 @@ msgstr "Seleziona abilità"
 
 msgid "Short description"
 msgstr "Korte beschrijving"
-
-msgid "Standard features"
-msgstr "Standaard functies"
 
 msgid "Technical Support"
 msgstr "Technische ondersteuning"
@@ -2980,9 +2968,6 @@ msgstr "Mail toegevoegd aan wachtrij!"
 
 msgid "Make the request now"
 msgstr "Solliciteer nu"
-
-msgid "Manage players' data"
-msgstr "Gegevens van spelers beheren"
 
 msgid "Name - international"
 msgstr "Engelse naam"
@@ -3670,17 +3655,11 @@ msgstr "Naam van de badge die wordt uitgereikt"
 msgid "Now you can create outflows"
 msgstr "Nu kun je uitstromen maken"
 
-msgid "Player registration process"
-msgstr "Registratieprocedure voor spelers"
-
 msgid "Pre-registration cancelled!"
 msgstr "Voorinschrijving geannuleerd!"
 
 msgid "Reminder membership request"
 msgstr "Herinnering lidmaatschapsverzoek"
-
-msgid "Various additional features"
-msgstr "Diverse extra functies"
 
 msgid "View limited ticket options"
 msgstr "Beperkte ticketopties bekijken"
@@ -3827,9 +3806,6 @@ msgstr "Uitstel van jaarlijkse contributie"
 msgid "Font to be used in page titles"
 msgstr "Lettertype voor titels"
 
-msgid "General event management tools"
-msgstr "Algemene hulpmiddelen voor evenementenbeheer"
-
 msgid "If checked: uses old interface"
 msgstr "Indien aangevinkt: gebruikt oude interface"
 
@@ -3857,9 +3833,6 @@ msgstr "Bestanden rechtstreeks uploaden en hosten"
 msgid "We are processing your payment"
 msgstr "We verwerken je betaling"
 
-msgid "Writing and storytelling tools"
-msgstr "Hulpmiddelen voor schrijven en vertellen"
-
 msgid "Your friend code has been used"
 msgstr "Uw vriendencode is gebruikt"
 
@@ -3868,9 +3841,6 @@ msgstr "Functies voor het evenement activeren"
 
 msgid "After confirmation, add another"
 msgstr "Voeg na bevestiging nog een"
-
-msgid "Assigning characters to players"
-msgstr "Personages aan spelers toewijzen"
 
 msgid "Browse the presentation website"
 msgstr "Blader door de presentatiesite"
@@ -3991,9 +3961,6 @@ msgstr "Verberg spelers zonder personage"
 
 msgid "Manage the registration sections"
 msgstr "Beheer de registratiesecties"
-
-msgid "Managing money flow and finances"
-msgstr "Geldstromen en financiën beheren"
 
 msgid "Membership request not submitted"
 msgstr "Niet-ingediende aanvraag"
@@ -4442,9 +4409,6 @@ msgstr "Beschrijf kort wat de doos bevat"
 
 msgid "Check the validity of the fiscal code."
 msgstr "Controleer de geldigheid van de fiscale code."
-
-msgid "Event display and visual customization"
-msgstr "Gebeurtenisweergave en visuele aanpassing"
 
 msgid "Fill in your character's relationships"
 msgstr "Vul de relaties van je personage in"

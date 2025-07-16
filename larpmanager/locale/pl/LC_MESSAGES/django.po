@@ -1338,9 +1338,6 @@ msgstr "Wyrzucony"
 msgid "Legal name"
 msgstr "Nazwa prawna"
 
-msgid "Management"
-msgstr "Zarządzanie"
-
 msgid "Membership"
 msgstr "Członkostwo"
 
@@ -2417,9 +2414,6 @@ msgstr "Rabat terminowy"
 msgid "Handout template"
 msgstr "Szablon materiałów informacyjnych"
 
-msgid "Italian features"
-msgstr "Włoskie cechy"
-
 msgid "Loading template"
 msgstr "Ładowanie szablonu"
 
@@ -2588,9 +2582,6 @@ msgstr "Pobierz dokument"
 msgid "Elements uploaded"
 msgstr "Elementy przesłane"
 
-msgid "Experience Points"
-msgstr "Punkty doświadczenia"
-
 msgid "Experience points"
 msgstr "Punkty doświadczenia"
 
@@ -2671,9 +2662,6 @@ msgstr "Wybór umiejętności"
 
 msgid "Short description"
 msgstr "Krótki opis"
-
-msgid "Standard features"
-msgstr "Funkcje standardowe"
 
 msgid "Technical Support"
 msgstr "Wsparcie techniczne"
@@ -2980,9 +2968,6 @@ msgstr "Poczta dodana do kolejki!"
 
 msgid "Make the request now"
 msgstr "Złóż wniosek teraz"
-
-msgid "Manage players' data"
-msgstr "Zarządzanie danymi graczy"
 
 msgid "Name - international"
 msgstr "Nazwa - międzynarodowa"
@@ -3670,17 +3655,11 @@ msgstr "Nazwa odznaki, która ma zostać przyznana"
 msgid "Now you can create outflows"
 msgstr "Teraz można tworzyć przepływy"
 
-msgid "Player registration process"
-msgstr "Proces rejestracji gracza"
-
 msgid "Pre-registration cancelled!"
 msgstr "Wstępna rejestracja anulowana!"
 
 msgid "Reminder membership request"
 msgstr "Prośba o przypomnienie o członkostwie"
-
-msgid "Various additional features"
-msgstr "Różne dodatkowe funkcje"
 
 msgid "View limited ticket options"
 msgstr "Zobacz ograniczone opcje biletów"
@@ -3827,9 +3806,6 @@ msgstr "Opóźnienie rocznej opłaty członkowskiej"
 msgid "Font to be used in page titles"
 msgstr "Czcionka używana w tytułach stron"
 
-msgid "General event management tools"
-msgstr "Ogólne narzędzia do zarządzania wydarzeniami"
-
 msgid "If checked: uses old interface"
 msgstr "Jeśli zaznaczone: używa starego interfejsu"
 
@@ -3857,9 +3833,6 @@ msgstr "Bezpośrednie przesyłanie i hostowanie plików"
 msgid "We are processing your payment"
 msgstr "Przetwarzamy Twoją płatność"
 
-msgid "Writing and storytelling tools"
-msgstr "Narzędzia do pisania i opowiadania historii"
-
 msgid "Your friend code has been used"
 msgstr "Twój kod znajomego został użyty"
 
@@ -3868,9 +3841,6 @@ msgstr "Aktywacja funkcji dla wydarzenia"
 
 msgid "After confirmation, add another"
 msgstr "Po potwierdzeniu dodaj kolejny"
-
-msgid "Assigning characters to players"
-msgstr "Przypisywanie postaci do graczy"
 
 msgid "Browse the presentation website"
 msgstr "Przejrzyj stronę prezentacji"
@@ -3991,9 +3961,6 @@ msgstr "Ukryj graczy bez postaci"
 
 msgid "Manage the registration sections"
 msgstr "Zarządzanie sekcjami rejestracji"
-
-msgid "Managing money flow and finances"
-msgstr "Zarządzanie przepływem pieniędzy i finansami"
 
 msgid "Membership request not submitted"
 msgstr "Wniosek o członkostwo nie został złożony"
@@ -4440,9 +4407,6 @@ msgstr "Krótki opis zawartości pudełka"
 
 msgid "Check the validity of the fiscal code."
 msgstr "Sprawdź ważność kodu fiskalnego."
-
-msgid "Event display and visual customization"
-msgstr "Wyświetlanie zdarzeń i dostosowywanie wizualne"
 
 msgid "Fill in your character's relationships"
 msgstr "Uzupełnij relacje swoich postaci"
