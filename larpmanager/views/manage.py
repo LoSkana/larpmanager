@@ -253,6 +253,8 @@ def _orga_manage(request, s, n):
     if not ctx["run"].start or not ctx["run"].end:
         return redirect("orga_run", s=s, n=n)
 
+    ctx["orga_page"] = 1
+
     get_index_event_permissions(ctx, request, s)
     assoc = Association.objects.get(pk=request.assoc["id"])
     if assoc.get_config("interface_admin_links", False):

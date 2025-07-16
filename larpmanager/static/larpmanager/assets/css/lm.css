@@ -1307,11 +1307,11 @@ th select {
   margin: 0;
 }
 
-.sidebar-link {
+#sidebar a {
     transition: color 0.5s;
 }
 
-.sidebar-link.select {
+#sidebar a.select {
     color: var(--sec-clr);
 }
 
@@ -1721,6 +1721,10 @@ a label:hover {
     #tutorial_query {
         width: 60%;
     }
+}
+
+a.select {
+    color: red;
 }
 
 #sidebar.interface_old p, #sidebar.interface_old h2 {
