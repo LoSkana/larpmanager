@@ -22,15 +22,15 @@
                             </div>
                             <div class="dropdown-menu">
                                 {% for rid, v in open_runs.items %}
-                                    {% if manage and run and run.event.slug == v.e and run.number == v.r %}
+                                    {% if run and run.event.slug == v.e and run.number == v.r %}
                                         <!-- skip -->
                                     {% else %}
-                                        <a href="{% url 'manage' v.e v.r %}">{{ v.s }}</a>
+                                        <a href="{% url 'manage' v.e v.r %}"><i class="fa-solid fa-calendar-days"></i> {{ v.s }}</a>
                                     {% endif %}
                                 {% endfor %}
                                 {% if assoc_role %}
-                                    {% if not exe_page %}
-                                        <a href="{% url 'manage' %}">{{ assoc.name }}</a>
+                                    {% if run %}
+                                        <a href="{% url 'manage' %}"><i class="fa-solid fa-building"></i> {{ assoc.name }}</a>
                                     {% endif %}
                                 {% endif %}
                             </div>
