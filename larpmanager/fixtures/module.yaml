@@ -64,3 +64,9 @@
     name: Experience
     order: 45
     icon: bolt
+- model: larpmanager.featuremodule
+  pk: 12
+  fields:
+    name: Events
+    order: 10
+    icon: calendar-days

@@ -494,7 +494,7 @@
       of characters and factions
     slug: campaign
     overall: true
-    module: 7
+    module: 12
     placeholder: false
     order: 30
     after_text: ''
@@ -927,7 +927,7 @@
       be used as a starting point for other events
     slug: template
     overall: true
-    module: 7
+    module: 12
     placeholder: false
     order: 1
     after_text: Now you can create event templates
@@ -987,7 +987,7 @@
     descr: ''
     slug: exe_runs
     overall: true
-    module: 7
+    module: 12
     placeholder: true
     order: 9999
     after_text: null
@@ -999,7 +999,7 @@
     descr: ''
     slug: exe_events
     overall: true
-    module: 7
+    module: 12
     placeholder: true
     order: 9999
     after_text: null
