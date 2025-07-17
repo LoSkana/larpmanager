@@ -36,13 +36,7 @@ async def page_start(p, show=False):
 
     page.on("dialog", lambda dialog: dialog.accept())
 
-    await page.evaluate("""
-        () => {
-            document.querySelectorAll('.qtip').forEach(el => {
-                el.style.display = 'none';
-            });
-        }
-    """)
+    await disable_qtips(page)
 
     async def on_response(response):
         error_code = 500
@@ -52,6 +46,16 @@ async def page_start(p, show=False):
     page.on("response", on_response)
 
     return browser, context, page
+
+
+async def disable_qtips(page):
+    await page.evaluate("""
+        () => {
+            document.querySelectorAll('.qtip').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+    """)
 
 
 async def logout(page, live_server):
@@ -131,6 +135,8 @@ async def ooops_check(page):
     if await banner.count() > 0:
         await expect(banner).not_to_contain_text("Oops!")
         await expect(banner).not_to_contain_text("404")
+
+    await disable_qtips(page)
 
 
 async def check_download(page, link):
