@@ -25,8 +25,7 @@
                 $('#id_visibility_tr').fadeOut(speed);
             }
 
-            var selectedValue = $('#id_status').val();
-            if (["h"].includes(selectedValue)) {
+            if (["name", "teaser", "text"].includes(selectedValue)) {
                 $('#id_visibility_tr').fadeOut(speed);
             } else {
                 $('#id_visibility_tr').fadeIn(speed);
