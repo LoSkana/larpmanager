@@ -52,7 +52,7 @@ async def disable_qtips(page):
     await page.evaluate("""
         () => {
             document.querySelectorAll('.qtip').forEach(el => {
-                el.style.display = 'none';
+                el.style.setProperty('display', 'none', 'important');
             });
         }
     """)
