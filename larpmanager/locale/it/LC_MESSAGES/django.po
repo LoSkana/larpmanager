@@ -1392,9 +1392,6 @@ msgstr "Quest Type"
 msgid "Quest type"
 msgstr "Tipo Quest"
 
-msgid "Quick Help"
-msgstr "Aiuto rapido"
-
 msgid "Refund for"
 msgstr "Rimborso per"
 
@@ -1463,9 +1460,6 @@ msgstr "Visibilità"
 
 msgid "Volunteers"
 msgstr "Volontari"
-
-msgid "Welcome to"
-msgstr "Benvenuti a"
 
 msgid "Write here"
 msgstr "Scrivi qui"
@@ -3700,6 +3694,9 @@ msgstr "Funzionalità %(name)s disattivata"
 
 msgid "If checked: members can vote"
 msgstr "Se selezionato: i membri possono votare"
+
+msgid "Launch guided interface tour"
+msgstr "Avvio del tour guidato dell'interfaccia"
 
 msgid "Link to close the collection"
 msgstr "Link per chiudere la colletta"

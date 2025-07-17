@@ -1392,9 +1392,6 @@ msgstr "Typ úkolu"
 msgid "Quest type"
 msgstr "Typ úkolu"
 
-msgid "Quick Help"
-msgstr "Rychlá nápověda"
-
 msgid "Refund for"
 msgstr "Úhrada za"
 
@@ -1463,9 +1460,6 @@ msgstr "Viditelnost"
 
 msgid "Volunteers"
 msgstr "Dobrovolníci"
-
-msgid "Welcome to"
-msgstr "Vítejte v"
 
 msgid "Write here"
 msgstr "Napište sem"
@@ -3700,6 +3694,9 @@ msgstr "Funkce %(name)s deaktivována"
 
 msgid "If checked: members can vote"
 msgstr "Pokud je zaškrtnuto: členové mohou hlasovat"
+
+msgid "Launch guided interface tour"
+msgstr "Spuštění prohlídky rozhraní s průvodcem"
 
 msgid "Link to close the collection"
 msgstr "Odkaz na uzavření sbírky"

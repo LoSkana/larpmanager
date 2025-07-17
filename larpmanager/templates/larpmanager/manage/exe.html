@@ -5,16 +5,9 @@
 {% endblock title %}
 {% block content %}
     <div id="manage">
-        {% if not event_counts %}
-            <h2>{% trans "Welcome to" %} {{ assoc.platform }}!</h2>
-            {% include "larpmanager/manage/assoc_help.html" %}
-            <hr />
-        {% else %}
-            <h2>
-                <a href="#" class="my_toggle" tog='quick_help'>{% trans "Quick Help" %}</a>
-            </h2>
-            <div class="hide quick_help">{% include "larpmanager/manage/assoc_help.html" %}</div>
-        {% endif %}
+        <p>
+            <a href="#" id="intro_driver">{% trans "Launch guided interface tour" %}</a>
+        </p>
         <input type="text"
                name="tutorial_query"
                id="tutorial_query"

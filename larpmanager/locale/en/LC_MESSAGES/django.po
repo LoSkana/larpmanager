@@ -5268,10 +5268,7 @@ msgid ""
 "and events"
 msgstr ""
 
-msgid "Welcome to"
-msgstr ""
-
-msgid "Quick Help"
+msgid "Launch guided interface tour"
 msgstr ""
 
 msgid "What would you like to do"

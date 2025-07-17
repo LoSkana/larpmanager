@@ -1392,9 +1392,6 @@ msgstr "Typ zadania"
 msgid "Quest type"
 msgstr "Typ zadania"
 
-msgid "Quick Help"
-msgstr "Szybka pomoc"
-
 msgid "Refund for"
 msgstr "Zwrot za"
 
@@ -1463,9 +1460,6 @@ msgstr "Widoczność"
 
 msgid "Volunteers"
 msgstr "Wolontariusze"
-
-msgid "Welcome to"
-msgstr "Witamy w"
 
 msgid "Write here"
 msgstr "Napisz tutaj"
@@ -3700,6 +3694,9 @@ msgstr "Funkcja %(name)s wyłączona"
 
 msgid "If checked: members can vote"
 msgstr "Jeśli zaznaczone: członkowie mogą głosować"
+
+msgid "Launch guided interface tour"
+msgstr "Uruchom wycieczkę po interfejsie z przewodnikiem"
 
 msgid "Link to close the collection"
 msgstr "Link do zamknięcia kolekcji"

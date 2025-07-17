@@ -1392,9 +1392,6 @@ msgstr "Suche Typ"
 msgid "Quest type"
 msgstr "Art der Aufgabe"
 
-msgid "Quick Help"
-msgstr "Schnelle Hilfe"
-
 msgid "Refund for"
 msgstr "Rückerstattung für"
 
@@ -1463,9 +1460,6 @@ msgstr "Sichtbarkeit"
 
 msgid "Volunteers"
 msgstr "Ehrenamtliche Mitarbeiter"
-
-msgid "Welcome to"
-msgstr "Willkommen bei"
 
 msgid "Write here"
 msgstr "Schreiben Sie hier"
@@ -3700,6 +3694,9 @@ msgstr "Merkmal %(name)s deaktiviert"
 
 msgid "If checked: members can vote"
 msgstr "Wenn angekreuzt: Mitglieder können abstimmen"
+
+msgid "Launch guided interface tour"
+msgstr "Geführte Schnittstellentour starten"
 
 msgid "Link to close the collection"
 msgstr "Link zum Schließen der Sammlung"

@@ -1392,9 +1392,6 @@ msgstr "Zoektocht Type"
 msgid "Quest type"
 msgstr "Zoektocht type"
 
-msgid "Quick Help"
-msgstr "Snelle hulp"
-
 msgid "Refund for"
 msgstr "Vergoeding voor"
 
@@ -1463,9 +1460,6 @@ msgstr "Zichtbaarheid"
 
 msgid "Volunteers"
 msgstr "Vrijwilligers"
-
-msgid "Welcome to"
-msgstr "Welkom bij"
 
 msgid "Write here"
 msgstr "Schrijf hier"
@@ -3700,6 +3694,9 @@ msgstr "Functie %(name)s gedeactiveerd"
 
 msgid "If checked: members can vote"
 msgstr "Indien aangevinkt: leden kunnen stemmen"
+
+msgid "Launch guided interface tour"
+msgstr "Start rondleiding door interface"
 
 msgid "Link to close the collection"
 msgstr "Link om de collectie te sluiten"
