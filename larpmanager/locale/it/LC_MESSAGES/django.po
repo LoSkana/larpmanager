@@ -5031,9 +5031,6 @@ msgstr "Attenzione! Il form contiene degli errori ai campi - "
 msgid "You are now logged in with the delegate account"
 msgstr "Ora sei loggato con l'account delegato"
 
-msgid "to confirm it, send your membership application"
-msgstr "per confermarla invia la tua richiesta di iscrizione come socio"
-
 msgid "you can review, edit, and mark them as assigned"
 msgstr "è possibile rivederli, modificarli e contrassegnarli come assegnati"
 
@@ -5353,6 +5350,9 @@ msgstr "Hai già inviato un pagamento in attesa di verifica"
 
 msgid "You will have our eternal thanks for believing in us"
 msgstr "Avrai il nostro eterno ringraziamento per aver creduto  in noi"
+
+msgid "please upload your membership application to proceed"
+msgstr "caricare la domanda di adesione per procedere"
 
 msgid "'character' (character name or number to be assigned)"
 msgstr "'personaggio' (nome del personaggio o numero da assegnare)"

@@ -7961,7 +7961,7 @@ msgstr ""
 msgid "Provisional registration"
 msgstr ""
 
-msgid "to confirm it, send your membership application"
+msgid "please upload your membership application to proceed"
 msgstr ""
 
 msgid "awaiting member approval to proceed with payment"

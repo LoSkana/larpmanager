@@ -5030,9 +5030,6 @@ msgstr "Pozor! Formulář obsahuje chyby v polích"
 msgid "You are now logged in with the delegate account"
 msgstr "Nyní jste přihlášeni pomocí účtu delegáta"
 
-msgid "to confirm it, send your membership application"
-msgstr "pro potvrzení zašlete přihlášku k členství"
-
 msgid "you can review, edit, and mark them as assigned"
 msgstr "si je můžete prohlédnout, upravit a označit jako přiřazené"
 
@@ -5352,6 +5349,9 @@ msgstr "Již jste odeslali platbu, která čeká na ověření"
 
 msgid "You will have our eternal thanks for believing in us"
 msgstr "Za to, že jste nám věřili, vám patří náš věčný dík"
+
+msgid "please upload your membership application to proceed"
+msgstr "pro pokračování nahrajte svou členskou přihlášku"
 
 msgid "'character' (character name or number to be assigned)"
 msgstr "'character' (jméno nebo číslo postavy, které má být přiřazeno)"

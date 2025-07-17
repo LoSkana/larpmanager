@@ -5042,9 +5042,6 @@ msgstr "Attention ! Le formulaire contient des erreurs dans les champs"
 msgid "You are now logged in with the delegate account"
 msgstr "Vous êtes maintenant connecté avec le compte du délégué "
 
-msgid "to confirm it, send your membership application"
-msgstr "pour le confirmer, envoyez votre demande d'adhésion"
-
 msgid "you can review, edit, and mark them as assigned"
 msgstr "vous pouvez les réviser, les éditer et les marquer comme assignés"
 
@@ -5376,6 +5373,9 @@ msgstr "Vous avez déjà envoyé un paiement en attente de vérification"
 
 msgid "You will have our eternal thanks for believing in us"
 msgstr "Vous aurez nos remerciements éternels pour avoir cru en nous"
+
+msgid "please upload your membership application to proceed"
+msgstr "veuillez télécharger votre demande d'adhésion pour continuer"
 
 msgid "'character' (character name or number to be assigned)"
 msgstr "caractère\" (nom ou numéro du caractère à attribuer)"

@@ -5034,9 +5034,6 @@ msgstr "Var uppmärksam! Formuläret innehåller fel i fälten"
 msgid "You are now logged in with the delegate account"
 msgstr "Du är nu inloggad med delegatkontot"
 
-msgid "to confirm it, send your membership application"
-msgstr "för att bekräfta det, skicka din medlemsansökan"
-
 msgid "you can review, edit, and mark them as assigned"
 msgstr "du kan granska, redigera och markera dem som tilldelade"
 
@@ -5357,6 +5354,9 @@ msgstr "Du har redan skickat en betalning som väntar på verifiering"
 
 msgid "You will have our eternal thanks for believing in us"
 msgstr "Du kommer att få vårt eviga tack för att du trodde på oss"
+
+msgid "please upload your membership application to proceed"
+msgstr "vänligen ladda upp din medlemsansökan för att fortsätta"
 
 msgid "'character' (character name or number to be assigned)"
 msgstr "\"character\" (karaktärens namn eller nummer som ska tilldelas)"

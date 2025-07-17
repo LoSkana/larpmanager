@@ -5033,9 +5033,6 @@ msgstr "Vær oppmerksom på dette! Skjemaet inneholder feil i feltene"
 msgid "You are now logged in with the delegate account"
 msgstr "Du er nå logget inn med delegatkontoen"
 
-msgid "to confirm it, send your membership application"
-msgstr "for å bekrefte det, send inn medlemssøknaden din"
-
 msgid "you can review, edit, and mark them as assigned"
 msgstr "du kan gå gjennom, redigere og markere dem som tildelt"
 
@@ -5354,6 +5351,9 @@ msgstr "Du har allerede sendt en betaling i påvente av bekreftelse"
 
 msgid "You will have our eternal thanks for believing in us"
 msgstr "Du skal ha vår evige takk for at du tror på oss"
+
+msgid "please upload your membership application to proceed"
+msgstr "vennligst last opp medlemssøknaden din for å gå videre"
 
 msgid "'character' (character name or number to be assigned)"
 msgstr "\"tegn\" (tegnnavn eller nummer som skal tildeles)"

@@ -103,7 +103,9 @@
                   href="{% static 'larpmanager/assets/css/noscript.css' %}" />
         </noscript>
     </head>
-    <body class="is-preload" id="{{ assoc.name | slugify }}">
+    <body class="is-preload"
+          id="{{ assoc.name | slugify }}"
+          {% if not interface_old %}class="interface_old"{% endif %}>
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         {% include "elements/structure/topbar.html" %}
         {% include "elements/structure/sidebar.html" %}
@@ -226,7 +228,7 @@
             {% else %}
                 let origin = '0';
             {% endif %}
-            $('.nav.manage a[href]').each(function() {
+            $('a[href].origin').each(function() {
                 const url = new URL(this.href);
                 url.searchParams.set('origin', origin);
                 this.href = url.toString();

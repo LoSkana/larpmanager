@@ -5045,9 +5045,6 @@ msgstr "Achtung! Das Formular enthält Fehler in den Feldern"
 msgid "You are now logged in with the delegate account"
 msgstr "Sie sind jetzt mit dem Delegiertenkonto angemeldet"
 
-msgid "to confirm it, send your membership application"
-msgstr "um sie zu bestätigen, senden Sie Ihren Mitgliedsantrag"
-
 msgid "you can review, edit, and mark them as assigned"
 msgstr "Sie können sie überprüfen, bearbeiten und als zugewiesen markieren"
 
@@ -5399,6 +5396,9 @@ msgstr ""
 msgid "You will have our eternal thanks for believing in us"
 msgstr ""
 "Wir werden Ihnen auf ewig dafür danken, dass Sie an uns geglaubt haben"
+
+msgid "please upload your membership application to proceed"
+msgstr "Bitte laden Sie Ihren Mitgliedsantrag hoch, um fortzufahren"
 
 msgid "'character' (character name or number to be assigned)"
 msgstr "Zeichen\" (Name oder Nummer des Zeichens, das zugewiesen werden soll)"

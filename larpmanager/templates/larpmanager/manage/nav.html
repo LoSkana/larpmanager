@@ -6,11 +6,11 @@
         {% endif %}
         {% for rid, v in open_runs.items %}
             <a href="{% url 'manage' v.e v.r %}"
-               {% if manage and run and run.event.slug == v.e and run.number == v.r %}class="select"{% endif %}>{{ v.s }}</a>
+               class="origin {% if manage and run and run.event.slug == v.e and run.number == v.r %}select{% endif %} ">{{ v.s }}</a>
         {% endfor %}
         {% if assoc_role %}
             <a href="{% url 'manage' %}"
-               {% if manage and exe_page %}class="select"{% endif %}>{% trans "Organization" %}</a>
+               class="origin {% if manage and exe_page %}select{% endif %}">{% trans "Organization" %}</a>
         {% endif %}
         <hr />
     </div>

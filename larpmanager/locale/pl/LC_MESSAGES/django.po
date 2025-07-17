@@ -5030,9 +5030,6 @@ msgstr "Ostrzeżenie. Formularz zawiera błędy w polach"
 msgid "You are now logged in with the delegate account"
 msgstr "Jesteś teraz zalogowany na konto delegata"
 
-msgid "to confirm it, send your membership application"
-msgstr "aby to potwierdzić, wyślij swój wniosek o członkostwo"
-
 msgid "you can review, edit, and mark them as assigned"
 msgstr "możesz je przeglądać, edytować i oznaczać jako przypisane"
 
@@ -5356,6 +5353,9 @@ msgstr "Wysłano już płatność oczekującą na weryfikację"
 
 msgid "You will have our eternal thanks for believing in us"
 msgstr "Będziemy ci dozgonnie wdzięczni za to, że w nas uwierzyłeś"
+
+msgid "please upload your membership application to proceed"
+msgstr "Aby kontynuować, prosimy o przesłanie wniosku o członkostwo"
 
 msgid "'character' (character name or number to be assigned)"
 msgstr "\"znak\" (nazwa znaku lub numer do przypisania)"

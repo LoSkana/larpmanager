@@ -7,15 +7,15 @@
                     <td class="left">
                         <span class="el">
                             <a href="{% url 'home' %}">
-                                <img src="{% static 'lm_logo.png' %}" alt="larpmanager logo" />
-                                {{ assoc.platform }}
+                                <i class="fa-solid fa-house"></i>
+                                <span class="no_mobile">Home</span>
                             </a>
                         </span>
                         <div class="el dropdown">
                             {% if run %}
-                                <i class="fa-solid fa-calendar-days"></i> {{ run }}
+                                <i class="fa-solid fa-calendar-days no_mobile"></i> {{ run }}
                             {% else %}
-                                <i class="fa-solid fa-building"></i> {{ assoc.name }}
+                                <i class="fa-solid fa-building no_mobile"></i> {{ assoc.name }}
                             {% endif %}
                             <div class="dropdown-button">
                                 <a href="#" class="switch"><i class="fa-solid fa-circle-chevron-down"></i></a>
@@ -25,21 +25,21 @@
                                     {% if run and run.event.slug == v.e and run.number == v.r %}
                                         <!-- skip -->
                                     {% else %}
-                                        <a href="{% url 'manage' v.e v.r %}"><i class="fa-solid fa-calendar-days"></i> {{ v.s }}</a>
+                                        <a href="{% url 'manage' v.e v.r %}" class="origin"><i class="fa-solid fa-calendar-days no_mobile"></i> {{ v.s }}</a>
                                     {% endif %}
                                 {% endfor %}
                                 {% if assoc_role %}
                                     {% if run %}
-                                        <a href="{% url 'manage' %}"><i class="fa-solid fa-building"></i> {{ assoc.name }}</a>
+                                        <a href="{% url 'manage' %}" class="origin"><i class="fa-solid fa-building no_mobile"></i> {{ assoc.name }}</a>
                                     {% endif %}
                                 {% endif %}
                             </div>
                         </div>
                         <div class="el dropdown">
                             {% if manage %}
-                                <i class="fa-solid fa-toolbox"></i> Admin
+                                <i class="fa-solid fa-toolbox no_mobile"></i> Admin
                             {% else %}
-                                <i class="fa-solid fa-users"></i> User
+                                <i class="fa-solid fa-users no_mobile"></i> User
                             {% endif %}
                             <div class="dropdown-button">
                                 <a href="#" class="switch"><i class="fa-solid fa-circle-chevron-down"></i></a>
@@ -49,22 +49,22 @@
                                     {% if manage %}
                                         <a href="{% url 'gallery' run.event.slug run.number %}"
                                            class="admin-link">
-                                            <i class="fa-solid fa-users"></i> User
+                                            <i class="fa-solid fa-users no_mobile"></i> User
                                         </a>
                                     {% else %}
                                         <a href="{% url 'manage' run.event.slug run.number %}"
                                            class="admin-link">
-                                            <i class="fa-solid fa-toolbox"></i> Admin
+                                            <i class="fa-solid fa-toolbox no_mobile"></i> Admin
                                         </a>
                                     {% endif %}
                                 {% else %}
                                     {% if manage %}
                                         <a href="{% url 'home' %}" class="admin-link">
-                                            <i class="fa-solid fa-users"></i> User
+                                            <i class="fa-solid fa-users no_mobile"></i> User
                                         </a>
                                     {% else %}
                                         <a href="{% url 'manage' %}" class="admin-link">
-                                            <i class="fa-solid fa-toolbox"></i> Admin
+                                            <i class="fa-solid fa-toolbox no_mobile"></i> Admin
                                         </a>
                                     {% endif %}
                                 {% endif %}
@@ -74,11 +74,11 @@
                     <td class="right">
                         {% if manage %}
                             <div class="el">
-                                <a id="sidebar-open" href="#"><i class="fa-solid fa-toggle-on"></i> Sidebar</a>
+                                <a id="sidebar-open" href="#"><i class="fa-solid fa-toggle-on"></i> <span class="no_mobile">Sidebar</span></a>
                             </div>
                         {% endif %}
                         <div class="el">
-                            <a id="menu-open" href="#menu"><i class="fa-solid fa-bars"></i> Menu</a>
+                            <a id="menu-open" href="#menu"><i class="fa-solid fa-bars"></i> <span class="no_mobile">Menu</span></a>
                         </div>
                     </td>
                 </tr>

@@ -5038,9 +5038,6 @@ msgstr "Attentie! Het formulier bevat fouten in de velden"
 msgid "You are now logged in with the delegate account"
 msgstr "Je bent nu ingelogd met de account van de gedelegeerde"
 
-msgid "to confirm it, send your membership application"
-msgstr "om het te bevestigen, stuur je je lidmaatschapsaanvraag"
-
 msgid "you can review, edit, and mark them as assigned"
 msgstr "je kunt ze bekijken, bewerken en markeren als toegewezen"
 
@@ -5364,6 +5361,9 @@ msgstr "Je hebt al een betaling verzonden in afwachting van verificatie"
 
 msgid "You will have our eternal thanks for believing in us"
 msgstr "We zijn je eeuwig dankbaar dat je in ons gelooft"
+
+msgid "please upload your membership application to proceed"
+msgstr "upload uw lidmaatschapsaanvraag om verder te gaan"
 
 msgid "'character' (character name or number to be assigned)"
 msgstr "karakter\" (karakternaam of nummer dat moet worden toegewezen)"

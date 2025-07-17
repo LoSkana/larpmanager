@@ -864,6 +864,7 @@ nav#sidebar-nav {
 
     #page-wrapper.sidebar {
         margin-left: 0%;
+        width: 100%;
    }
 
     #header.sidebar {
@@ -1020,12 +1021,17 @@ table.fixed {
 
 @media screen and (max-width: 736px) {
     #header h1 {
-        height: 3em;
-        padding: 0.8em 0.5em 0 0.5em;
+        height: 2em;
+        padding: 0;
+        margin: 0.2em 0 0 0;
+        width: 100%;
     }
 
     #header {
+        height: 2em;
         padding: 0;
+        margin: 0;
+        width: 100%;
     }
 }
 
@@ -1787,17 +1793,11 @@ a label:hover {
 
 @media(max-width: 840px) {
     #tutorial_query {
-        width: 60%;
+        width: 60% !important;
     }
-}
 
-.middlebar {
-    display: none;
-}
-
-@media(max-width: 840px) {
-    .middlebar {
-        display: initial;
+    #tutorial_query_go {
+        width: auto !important;
     }
 }
 
@@ -1846,12 +1846,45 @@ a label:hover {
     right: 0;
 }
 
+#page-wrapper.topbar #header h1 {
+    padding: 1em;
+}
+
+#page-wrapper.topbar #banner h1  {
+    padding: 0.5em;
+}
+
 @media(max-width: 840px) {
-    #topbar {
-        display: initial;
+    :root {
+      --topbar-height: 2em;
     }
 
-    #page-wrapper.topbar {
-        padding-top: 0;
+    #topbar {
+        margin: 0;
+        padding: 0 0.5em;
     }
+
+    #topbar table .el {
+        font-size: 70%;
+    }
+
+    #topbar .left .el {
+        margin-right: 1em;
+    }
+
+    #topbar .right .el {
+        margin-left: 1em;
+    }
+
+    #topbar .no_mobile {
+        display: none;
+    }
+}
+
+.middlebar {
+    display: none;
+}
+
+.interface_old .middlebar {
+    display: initial;
 }
