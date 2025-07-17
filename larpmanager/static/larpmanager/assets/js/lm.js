@@ -37,6 +37,14 @@ $(document).ready(function() {
     $('#header h1').textfill({
     });
 
+    $("th label").each(function() {
+        $(this).contents().filter(function() {
+            return this.nodeType === 3; // Nodo di testo
+        }).each(function() {
+            this.nodeValue = this.nodeValue.replace(":", "");
+        });
+    });
+
     // Sidebar
     $('#sidebar-mobile').on('click', function(event) {
         $('body').toggleClass('is-sidebar-visible');
