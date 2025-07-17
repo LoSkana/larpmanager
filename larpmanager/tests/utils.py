@@ -166,4 +166,4 @@ async def _checkboxes(page, check=True):
                     await checkbox.check()
             elif await checkbox.is_checked():
                 await checkbox.uncheck()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    await page.locator('input[type="submit"][value="Confirm"]').click(force=True)

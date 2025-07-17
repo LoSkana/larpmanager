@@ -703,4 +703,5 @@ urlpatterns = [
         views_base.tutorial_query,
         name="tutorial_query",
     ),
+    path("upload_image/", views_base.upload_image, name="upload_image"),
 ]

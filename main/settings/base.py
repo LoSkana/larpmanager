@@ -179,17 +179,21 @@ TINYMCE_JS_URL = 'node_modules/tinymce/tinymce.min.js'
 TINYMCE_DEFAULT_CONFIG = {
     'width': '100%',
     'height': '15em',
-    # 'theme': 'advanced',
-    'plugins': 'lists advlist autosave fullscreen table image link  code autoresize wordcount autolink accordion emoticons media searchreplace codesample anchor',
+    'plugins': 'lists advlist autosave fullscreen table image link code autoresize wordcount autolink accordion emoticons media searchreplace codesample anchor',
     'toolbar': 'undo redo | styleselect | bold italic fontsizeselect forecolor backcolor hr | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | restoredraft searchreplace | fullscreen code wordcount | image media emoticons accordion codesample anchor',
     'menubar': 'file edit insert view format table link image tools help',
     'convert_urls': False,
     'content_style': 'p {margin: 0.2em} .marker { color: #006ce7 !important; font-weight: bold; }',
-    # 'paste_as_text': True,
     'contextmenu': False,
     'license_key': 'gpl',
     'promotion': False,
+
+    'images_upload_url': '/upload_image/',
+    'automatic_uploads': True,
+    'file_picker_types': 'image',
+    'paste_data_images': False
 }
+
 
 TINYMCE_COMPRESSOR = False
 
