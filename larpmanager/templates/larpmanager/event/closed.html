@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load tz i18n %}
+{% block title %}
+    {% trans "Registration closed" %} - {{ run.search }}
+{% endblock title %}
+{% block content %}
+    {% trans "The registrations to the event" %} <i>{{ run }}</i> {% trans "are closed" %}!
+{% endblock content %}

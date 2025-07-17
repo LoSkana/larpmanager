@@ -1479,6 +1479,9 @@ msgstr "regnskap"
 msgid "additional"
 msgstr "ytterligere"
 
+msgid "are closed"
+msgstr "er stengt"
+
 msgid "characters"
 msgstr "tegn"
 

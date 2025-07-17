@@ -1479,6 +1479,9 @@ msgstr "Buchhaltung"
 msgid "additional"
 msgstr "zusätzlich"
 
+msgid "are closed"
+msgstr "sind geschlossen"
+
 msgid "characters"
 msgstr "Zeichen"
 

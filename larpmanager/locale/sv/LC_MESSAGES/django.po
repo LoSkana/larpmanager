@@ -1479,6 +1479,9 @@ msgstr "redovisning"
 msgid "additional"
 msgstr "ytterligare"
 
+msgid "are closed"
+msgstr "är stängda"
+
 msgid "characters"
 msgstr "karaktärer"
 
