@@ -1867,19 +1867,7 @@ a label:hover {
 
     #topbar {
         margin: 0;
-        padding: 0 0.5em;
-    }
-
-    #topbar table .el {
-        font-size: 80%;
-    }
-
-    #topbar .left .el {
-        margin-right: 1em;
-    }
-
-    #topbar .right .el {
-        margin-left: 1em;
+        padding: 0.1em 0.5em;
     }
 
     #topbar .no_mobile, #sidebar .no_mobile {
