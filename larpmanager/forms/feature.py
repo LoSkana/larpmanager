@@ -49,7 +49,7 @@ class FeatureForm(MyForm):
         if overall:
             modules = modules.filter(Q(nationality__isnull=True) | Q(nationality=self.instance.nationality))
         for module in modules:
-            features = module.features.filter(overall=overall, placeholder=False).order_by("order")
+            features = module.features.filter(overall=overall, placeholder=False, hidden=False).order_by("order")
             choices = [(str(f.id), _(f.name)) for f in features]
             help_text = {str(f.id): _(f.descr) for f in features}
             if not choices:

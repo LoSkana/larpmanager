@@ -125,6 +125,8 @@ class Feature(BaseModel):
     # If the feature is a placeholder (used to indicate the permissions that does not require a true feature)
     placeholder = models.BooleanField(default=False)
 
+    hidden = models.BooleanField(default=False)
+
     class Meta:
         ordering = ["module", "order"]
 

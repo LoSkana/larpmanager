@@ -46,7 +46,7 @@ class Command(BaseCommand):
                     "default_optional_fields",
                 ),
             ),
-            "module": (FeatureModule, ("id", "name", "descr", "order", "default")),
+            "module": (FeatureModule, ("id", "name", "descr", "order", "default", "icon")),
             "feature": (
                 Feature,
                 (
@@ -60,10 +60,11 @@ class Command(BaseCommand):
                     "order",
                     "after_text",
                     "after_link",
+                    "hidden",
                 ),
             ),
-            "assoc_permission": (AssocPermission, ("id", "name", "descr", "slug", "number", "feature")),
-            "event_permission": (EventPermission, ("id", "name", "descr", "slug", "number", "feature")),
+            "assoc_permission": (AssocPermission, ("id", "name", "descr", "slug", "number", "feature", "hidden")),
+            "event_permission": (EventPermission, ("id", "name", "descr", "slug", "number", "feature", "hidden")),
             "payment_methods": (PaymentMethod, ("id", "name", "slug", "instructions", "fields", "profile")),
         }
 

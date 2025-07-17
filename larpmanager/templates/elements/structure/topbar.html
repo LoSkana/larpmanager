@@ -49,18 +49,18 @@
                                     {% if manage %}
                                         <a href="{% url 'gallery' run.event.slug run.number %}"
                                            class="admin-link">
-                                            <i class="fa-solid fa-toolbox"></i> User
+                                            <i class="fa-solid fa-users"></i> User
                                         </a>
                                     {% else %}
                                         <a href="{% url 'manage' run.event.slug run.number %}"
                                            class="admin-link">
-                                            <i class="fa-solid fa-users"></i> Admin
+                                            <i class="fa-solid fa-toolbox"></i> Admin
                                         </a>
                                     {% endif %}
                                 {% else %}
                                     {% if manage %}
                                         <a href="{% url 'home' %}" class="admin-link">
-                                            <i class="fa-solid fa-toolbox"></i> User
+                                            <i class="fa-solid fa-users"></i> User
                                         </a>
                                     {% else %}
                                         <a href="{% url 'manage' %}" class="admin-link">

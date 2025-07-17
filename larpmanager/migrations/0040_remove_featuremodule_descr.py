@@ -23,4 +23,9 @@ class Migration(migrations.Migration):
             field=models.CharField(default="", max_length=100),
             preserve_default=False,
         ),
+        migrations.AddField(
+            model_name="feature",
+            name="hidden",
+            field=models.BooleanField(default=False),
+        ),
     ]

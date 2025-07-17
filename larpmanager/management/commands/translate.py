@@ -87,6 +87,7 @@ class Command(BaseCommand):
                     and entry.msgstr.strip().endswith(symbols)
                     and not entry.msgid.strip().endswith(symbols)
                 ):
+                    entry.flags.remove("fuzzy")
                     entry.msgstr = entry.msgstr.rstrip(".?!").rstrip()
                     changed = True
 
