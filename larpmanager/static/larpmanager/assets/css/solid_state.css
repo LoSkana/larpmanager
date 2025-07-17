@@ -144,7 +144,7 @@ h4 {
         right: 1em;
     }
 
-    #menu-open img {
+    #menu-open img, #sidebar-open img {
         top: 0.95em;
     }
 }
@@ -354,7 +354,7 @@ label {
     color: black !important;
 }
 
-#menu-open img {
+#menu-open img, #sidebar-open img {
     margin: auto;
     top: 0.3em;
     position: relative;

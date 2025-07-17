@@ -1902,3 +1902,7 @@ a label:hover {
 .interface_old .middlebar {
     display: initial;
 }
+
+#sidebar-open img {
+    margin: 0 0.5em 0 0;
+}
