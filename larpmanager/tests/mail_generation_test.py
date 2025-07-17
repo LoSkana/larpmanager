@@ -93,7 +93,8 @@ async def resubmit_membership(live_server, page):
     await page.locator("#id_price").click()
     await page.locator("#id_price").fill("100")
     await page.get_by_role("button", name="Confirm", exact=True).click()
-    await page.get_by_role("link", name="Register").click()
+
+    await go_to(page, live_server, "/test/1/register/")
     await page.get_by_role("button", name="Continue").click()
     await page.get_by_role("button", name="Confirm", exact=True).click()
     # Set membership fee

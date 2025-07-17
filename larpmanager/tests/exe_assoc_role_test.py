@@ -65,8 +65,6 @@ async def exe_assoc_role(live_server, page):
     await login_user(page, live_server)
 
     await go_to(page, live_server, "/manage/accounting/")
-    await page.get_by_text("Sidebar Accounting -").click()
-    await page.locator("#sidebar-nav").click()
     await expect(page.locator("#banner")).to_contain_text("Accounting - Organization")
 
     await logout(page, live_server)

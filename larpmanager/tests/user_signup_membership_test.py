@@ -93,7 +93,7 @@ async def membership(live_server, page):
     await go_to(page, live_server, "/test/1/register")
     await expect(page.locator("#one")).to_contain_text("Provisional registration")
     await expect(page.locator("#one")).to_contain_text("please upload your membership application to proceed")
-    await page.get_by_role("link", name="to confirm it, send your").click()
+    await page.get_by_role("link", name="please upload your membership").click()
     await page.get_by_role("checkbox", name="Authorisation").check()
     await page.get_by_role("button", name="Submit").click()
     # compile request
