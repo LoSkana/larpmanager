@@ -170,6 +170,8 @@ async def fill_tinymce(page, iframe_id: str, text: str):
 
 
 async def _checkboxes(page, check=True):
+    await disable_qtips(page)
+
     checkboxes = page.locator('input[type="checkbox"]')
     count = await checkboxes.count()
     for i in range(count):
