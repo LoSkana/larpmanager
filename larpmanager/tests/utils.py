@@ -36,14 +36,6 @@ async def page_start(p, show=False):
 
     page.on("dialog", lambda dialog: dialog.accept())
 
-    await page.evaluate("""
-        () => {
-            document.querySelectorAll('.qtip').forEach(el => {
-                el.style.display = 'none';
-            });
-        }
-    """)
-
     async def on_response(response):
         error_code = 500
         if response.status == error_code:
@@ -174,4 +166,4 @@ async def _checkboxes(page, check=True):
                     await checkbox.check()
             elif await checkbox.is_checked():
                 await checkbox.uncheck()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    await page.locator('input[type="submit"][value="Confirm"]').click({"force": True})
