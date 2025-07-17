@@ -54,7 +54,7 @@ from larpmanager.models.form import (
     WritingQuestion,
 )
 from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTutorial
-from larpmanager.models.member import Member, Membership, MembershipStatus
+from larpmanager.models.member import Member, MemberConfig, Membership, MembershipStatus
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Faction, Plot, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.utils.common import copy_class
@@ -493,6 +493,16 @@ def post_save_reset_run_config(sender, instance, **kwargs):
 @receiver(post_delete, sender=RunConfig)
 def post_delete_reset_run_config(sender, instance, **kwargs):
     reset_configs(instance.run)
+
+
+@receiver(post_save, sender=MemberConfig)
+def post_save_reset_member_config(sender, instance, **kwargs):
+    reset_configs(instance.member)
+
+
+@receiver(post_delete, sender=MemberConfig)
+def post_delete_reset_member_config(sender, instance, **kwargs):
+    reset_configs(instance.member)
 
 
 @receiver(pre_save, sender=Association)

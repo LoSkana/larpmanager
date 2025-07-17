@@ -1392,9 +1392,6 @@ msgstr "Type de quête"
 msgid "Quest type"
 msgstr "Type de quête"
 
-msgid "Quick Help"
-msgstr "Aide rapide"
-
 msgid "Refund for"
 msgstr "Remboursement des"
 
@@ -1463,9 +1460,6 @@ msgstr "Visibilité"
 
 msgid "Volunteers"
 msgstr "Volontaires"
-
-msgid "Welcome to"
-msgstr "Bienvenue à"
 
 msgid "Write here"
 msgstr "Écrivez ici"
@@ -3700,6 +3694,9 @@ msgstr "Fonctionnalité %(name)s désactivée"
 
 msgid "If checked: members can vote"
 msgstr "Si coché : les membres peuvent voter"
+
+msgid "Launch guided interface tour"
+msgstr "Lancer une visite guidée de l'interface"
 
 msgid "Link to close the collection"
 msgstr "Lien pour fermer la collection"

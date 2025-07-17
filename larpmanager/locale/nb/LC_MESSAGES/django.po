@@ -1392,9 +1392,6 @@ msgstr "Oppdragstype"
 msgid "Quest type"
 msgstr "Type oppdrag"
 
-msgid "Quick Help"
-msgstr "Rask hjelp"
-
 msgid "Refund for"
 msgstr "Refusjon for"
 
@@ -1463,9 +1460,6 @@ msgstr "Synlighet"
 
 msgid "Volunteers"
 msgstr "Frivillige"
-
-msgid "Welcome to"
-msgstr "Velkommen til"
 
 msgid "Write here"
 msgstr "Skriv her"
@@ -3700,6 +3694,9 @@ msgstr "Funksjon %(name)s deaktivert"
 
 msgid "If checked: members can vote"
 msgstr "Hvis avkrysset: medlemmene kan stemme"
+
+msgid "Launch guided interface tour"
+msgstr "Start guidet omvisning i grensesnittet"
 
 msgid "Link to close the collection"
 msgstr "Lenke for å lukke samlingen"

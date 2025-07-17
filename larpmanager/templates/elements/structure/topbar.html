@@ -11,7 +11,7 @@
                                 <span class="no_mobile">Home</span>
                             </a>
                         </span>
-                        <div class="el dropdown">
+                        <div id="select_workspace" class="el dropdown">
                             {% if run %}
                                 <span class="no_mobile"><i class="fa-solid fa-calendar-days"></i> {{ run }}</span>
                             {% else %}
@@ -35,14 +35,14 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <div class="el dropdown">
+                        <div id="select_side" class="el dropdown">
                             {% if manage %}
                                 <span class="no_mobile"><i class="fa-solid fa-toolbox"></i> Admin</span>
                             {% else %}
                                 <span class="no_mobile"><i class="fa-solid fa-users"></i> User</span>
                             {% endif %}
                             <div class="dropdown-button">
-                                <a href="#" class="switch"><i class="fa-solid fa-circle-chevron-down"></i></a>
+                                <a href="#" class="switch"><i class="fa-solid fa-square-caret-down"></i></a>
                             </div>
                             <div class="dropdown-menu">
                                 {% if run %}

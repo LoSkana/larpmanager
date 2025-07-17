@@ -1392,9 +1392,6 @@ msgstr "Tipo de misión"
 msgid "Quest type"
 msgstr "Tipo de misión"
 
-msgid "Quick Help"
-msgstr "Ayuda rápida"
-
 msgid "Refund for"
 msgstr "Reembolso de"
 
@@ -1463,9 +1460,6 @@ msgstr "Visibilidad"
 
 msgid "Volunteers"
 msgstr "Voluntarios"
-
-msgid "Welcome to"
-msgstr "Bienvenido a"
 
 msgid "Write here"
 msgstr "Escriba aquí"
@@ -3700,6 +3694,9 @@ msgstr "¡Característica %(name)s desactivada"
 
 msgid "If checked: members can vote"
 msgstr "Si está marcada: los miembros pueden votar"
+
+msgid "Launch guided interface tour"
+msgstr "Iniciar la visita guiada a la interfaz"
 
 msgid "Link to close the collection"
 msgstr "Enlace para cerrar la colección"
