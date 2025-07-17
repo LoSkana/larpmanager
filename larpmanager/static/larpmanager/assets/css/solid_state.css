@@ -140,11 +140,11 @@ h4 {
 @media screen and (max-width: 736px) {
 
   #header nav {
-        top: 0.25em;
+        top: -0.25em;
         right: 1em;
     }
 
-    #menu-open img, #sidebar-open img {
+    #menu-open img {
         top: 0.95em;
     }
 }
@@ -354,7 +354,7 @@ label {
     color: black !important;
 }
 
-#menu-open img, #sidebar-open img {
+#menu-open img {
     margin: auto;
     top: 0.3em;
     position: relative;

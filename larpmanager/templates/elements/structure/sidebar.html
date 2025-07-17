@@ -1,7 +1,7 @@
 {% load static i18n %}
 {% if manage %}
     <div id="sidebar"
-         class=" {% if not is_sidebar_open %}hide{% endif %} {% if interface_old %}interface_old{% else %}topbar{% endif %}">
+         class=" {% if not is_sidebar_open %}hide{% endif %} {% if not interface_old %}topbar{% endif %}">
         <div class="inner">
             {% if interface_old %}
                 <div class="header">
@@ -27,23 +27,25 @@
                     </span>
                 </p>
                 {% for mod, list in event_pms.items %}
-                    <div class="h2-p-row">
-                        <h2>
-                            {% if not interface_old and mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
-                            {{ mod.0 }}
-                        </h2>
-                        <p>
-                            {% for ap in list %}
-                                {% if not ap.hidden %}
-                                    <span class="sidebar-link-wrap" descr="{% trans ap.descr %}">
-                                        <a class="sidebar-link"
-                                           href="{% url ap.slug run.event.slug run.number %}">{% trans ap.name %}</a>
-                                        <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
-                                    </span>
-                                {% endif %}
-                            {% endfor %}
-                        </p>
-                    </div>
+                    {% if list %}
+                        <div class="h2-p-row">
+                            <h2>
+                                {% if not interface_old and mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
+                                <span class="no_mobile">{{ mod.0 }}</span>
+                            </h2>
+                            <p>
+                                {% for ap in list %}
+                                    {% if not ap.hidden %}
+                                        <span class="sidebar-link-wrap" descr="{% trans ap.descr %}">
+                                            <a class="sidebar-link"
+                                               href="{% url ap.slug run.event.slug run.number %}">{% trans ap.name %}</a>
+                                            <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
+                                        </span>
+                                    {% endif %}
+                                {% endfor %}
+                            </p>
+                        </div>
+                    {% endif %}
                 {% endfor %}
             {% else %}
                 <p>
@@ -54,25 +56,27 @@
                     </span>
                 </p>
                 {% for mod, list in assoc_pms.items %}
-                    <div class="h2-p-row">
-                        <h2>
-                            {% if not interface_old and mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
-                            {{ mod.0 }}
-                        </h2>
-                        <p>
-                            {% for ap in list %}
-                                {% if not ap.hidden %}
-                                    <span class="sidebar-link-wrap" descr="{% trans ap.descr %}">
-                                        <a class="sidebar-link" href="{% url ap.slug %}">{% trans ap.name %}</a>
-                                        <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
-                                    </span>
-                                {% endif %}
-                            {% endfor %}
-                        </p>
-                    </div>
+                    {% if list %}
+                        <div class="h2-p-row">
+                            <h2>
+                                {% if not interface_old and mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
+                                <span class="no_mobile">{{ mod.0 }}</span>
+                            </h2>
+                            <p>
+                                {% for ap in list %}
+                                    {% if not ap.hidden %}
+                                        <span class="sidebar-link-wrap" descr="{% trans ap.descr %}">
+                                            <a class="sidebar-link" href="{% url ap.slug %}">{% trans ap.name %}</a>
+                                            <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
+                                        </span>
+                                    {% endif %}
+                                {% endfor %}
+                            </p>
+                        </div>
+                    {% endif %}
                 {% endfor %}
             {% endif %}
-            <h2>{{ assoc.platform }}</h2>
+            <h2 class="no_mobile">{{ assoc.platform }}</h2>
             <p>
                 {% if assoc.skin_id == 1 %}
                     <span class="sidebar-link-wrap">

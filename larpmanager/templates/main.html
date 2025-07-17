@@ -91,14 +91,12 @@
                     {% endblock title %}
                 </span>
             </h1>
-            {% if not interface_old %}
-                {% if not event_role and not assoc_role %}
-                    <nav id="menu-bar">
-                        <a id="menu-open" href="#menu"><span>Menu</span>
-                            <img alt="menu" src="{% static 'larpmanager/assets/menu.png' %}" />
-                        </a>
-                    </nav>
-                {% endif %}
+            {% if interface_old or not topbar %}
+                <nav id="menu-bar">
+                    <a id="menu-open" href="#menu"><span>Menu</span>
+                        <img alt="menu" src="{% static 'larpmanager/assets/menu.png' %}" />
+                    </a>
+                </nav>
             {% endif %}
         </header>
         <!-- Menu -->
@@ -157,7 +155,7 @@
                                 </ul>
                             </li>
                         {% endif %}
-                        {% if event_role or assoc_role %}
+                        {% if topbar %}
                             <li>
                                 <span class="opener">{% trans "Manage" %}
                                     <img class="chevron"

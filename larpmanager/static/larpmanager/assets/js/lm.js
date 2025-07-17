@@ -29,19 +29,16 @@ $.ajaxSetup({
 $(document).ready(function() {
 
     $('#banner h1').textfill({
-        'widthOnly': true
     });
 
     $('#sidebar h1').textfill({
-        'widthOnly': true
     });
 
     $('#header h1').textfill({
-        'widthOnly': true
     });
 
     // Sidebar
-    $('#sidebar-open').on('click', function(event) {
+    $('#sidebar-mobile').on('click', function(event) {
         $('body').toggleClass('is-sidebar-visible');
     });
 

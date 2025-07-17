@@ -1,6 +1,6 @@
 {% load static i18n %}
 {% if not interface_old %}
-    {% if event_role or assoc_role %}
+    {% if topbar %}
         <div id="topbar">
             <table>
                 <tr>
@@ -74,7 +74,8 @@
                     <td class="right">
                         {% if manage %}
                             <div class="el">
-                                <a id="sidebar-open" href="#"><i class="fa-solid fa-toggle-on"></i> <span class="no_mobile">Sidebar</span></a>
+                                <a id="sidebar-open" href="#" class="no_mobile"><i class="fa-solid fa-toggle-on"></i> <span class="no_mobile">Sidebar</span></a>
+                                <a id="sidebar-mobile" href="#" class="only_mobile"><i class="fa-solid fa-toggle-on"></i></a>
                             </div>
                         {% endif %}
                         <div class="el">

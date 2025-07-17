@@ -115,6 +115,8 @@ def get_index_assoc_permissions(ctx, request, assoc_id, check=True):
 def get_index_permissions(features, has_default, permissions, typ):
     res = {}
     for ar in typ.objects.select_related("feature", "feature__module").order_by("feature__module__order", "number"):
+        if ar.hidden:
+            continue
         if not has_default and ar.slug not in permissions:
             continue
         if not ar.feature.placeholder and ar.feature.slug not in features:

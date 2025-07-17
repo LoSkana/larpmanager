@@ -834,10 +834,6 @@ table {
   display: none;
 }
 
-#sidebar-open img {
-    margin: 0 0.5em 0 0;
-}
-
 #page-wrapper {
  width: 100%;
 }
@@ -1440,6 +1436,8 @@ th select {
         display: flex;
         align-items: center;
         justify-content: center;
+        z-index: 100;
+        font-size: 90%;
 	}
 
 	#sidebar h2, #sidebar p {
@@ -1448,6 +1446,10 @@ th select {
 
 	#sidebar .h2-p-row {
 	    margin: 0.5em;
+	}
+
+	#sidebar .sidebar-link-wrap {
+	    display: inline;
 	}
 
 	#sidebar .header {
@@ -1854,6 +1856,10 @@ a label:hover {
     padding: 0.5em;
 }
 
+.only_mobile {
+    display: none;
+}
+
 @media(max-width: 840px) {
     :root {
       --topbar-height: 2em;
@@ -1876,8 +1882,16 @@ a label:hover {
         margin-left: 1em;
     }
 
-    #topbar .no_mobile {
+    #topbar .no_mobile, #sidebar .no_mobile {
         display: none;
+    }
+
+    .only_mobile {
+        display: initial;
+    }
+
+    .interface_old #header h1, .interface_old #banner h1 {
+        padding: 0 2em;
     }
 }
 
