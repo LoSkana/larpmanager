@@ -32,6 +32,7 @@ from imagekit.models import ImageSpecField
 from phonenumber_field.modelfields import PhoneNumberField
 from pilkit.processors import ResizeToFill
 
+from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel
 from larpmanager.models.utils import UploadToPathAndRename, download_d, show_thumb
@@ -365,6 +366,36 @@ class Member(BaseModel):
         # noinspection PyUnresolvedReferences
         aux = self.residence_address.split("|")
         return f"{aux[4]} {aux[5]}, {aux[2]} ({aux[3]}), {aux[1].replace('IT-', '')} ({aux[0]})"
+
+    def get_config(self, name, def_v=None):
+        return get_element_config(self, name, def_v)
+
+
+class MemberConfig(BaseModel):
+    name = models.CharField(max_length=150)
+
+    value = models.CharField(max_length=1000)
+
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="configs")
+
+    def __str__(self):
+        return f"{self.member} {self.name}"
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["member", "name"]),
+        ]
+        constraints = [
+            UniqueConstraint(
+                fields=["member", "name", "deleted"],
+                name="unique_member_config_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["member", "name"],
+                condition=Q(deleted=None),
+                name="unique_member_config_without_optional",
+            ),
+        ]
 
 
 class MembershipStatus(models.TextChoices):

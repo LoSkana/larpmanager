@@ -6,6 +6,7 @@
     <script>
 document.addEventListener('DOMContentLoaded', () => {
 
+function driverIntro() {
 const driver = window.driver.js.driver;
 
 const driverObj = driver({
@@ -25,6 +26,10 @@ const driverObj = driver({
 });
 
   driverObj.drive();
+
+  }
+
+  {% if intro_driver %} driverIntro();{% endif %}
 });
 
     </script>
