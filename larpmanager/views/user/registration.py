@@ -377,6 +377,9 @@ def _apply_ticket(ctx, tk):
 
 
 def _check_redirect_registration(request, ctx, event, secret_code):
+    if "closed" in ctx["run"].status:
+        return render(request, "larpmanager/event/closed.html", ctx)
+
     if "registration_secret" in ctx["features"] and secret_code:
         if ctx["run"].registration_secret != secret_code:
             raise Http404("wrong registration code")

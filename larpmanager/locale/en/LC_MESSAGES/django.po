@@ -4223,6 +4223,12 @@ msgstr ""
 msgid "Select which of your characters you want to access"
 msgstr ""
 
+msgid "The registrations to the event"
+msgstr ""
+
+msgid "are closed"
+msgstr ""
+
 msgid "Discover the web site"
 msgstr ""
 
@@ -4335,9 +4341,6 @@ msgid "Question"
 msgstr ""
 
 msgid "Registration not open"
-msgstr ""
-
-msgid "The registrations to the event"
 msgstr ""
 
 msgid "are not yet open"

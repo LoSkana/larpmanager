@@ -1479,6 +1479,9 @@ msgstr "contabilità"
 msgid "additional"
 msgstr "aggiuntivi"
 
+msgid "are closed"
+msgstr "sono chiuse"
+
 msgid "characters"
 msgstr "personaggi"
 

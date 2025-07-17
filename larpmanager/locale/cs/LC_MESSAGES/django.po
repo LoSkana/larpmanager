@@ -1479,6 +1479,9 @@ msgstr "účetnictví"
 msgid "additional"
 msgstr "další"
 
+msgid "are closed"
+msgstr "jsou uzavřeny"
+
 msgid "characters"
 msgstr "znaky"
 
