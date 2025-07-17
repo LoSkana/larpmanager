@@ -1449,7 +1449,7 @@ th select {
 	}
 
 	#sidebar .sidebar-link-wrap {
-	    display: inline;
+	    display: inline-flex;
 	}
 
 	#sidebar .header {
@@ -1871,7 +1871,7 @@ a label:hover {
     }
 
     #topbar table .el {
-        font-size: 70%;
+        font-size: 80%;
     }
 
     #topbar .left .el {
