@@ -3,7 +3,7 @@
   fields:
     name: Prologues
     descr: Enables "Prologues", short introductory paragraphs for each act of the
-      game, which players receive to guide them.
+      game, which players receive to guide them
     slug: prologue
     overall: false
     module: 1
@@ -16,7 +16,7 @@
   fields:
     name: Quests and Traits
     descr: Introduces 'Quests' as building blocks of the character sheet, each with
-      multiple 'traits'.
+      multiple 'traits'
     slug: questbuilder
     overall: false
     module: 5
@@ -28,7 +28,7 @@
   pk: 10
   fields:
     name: Copy
-    descr: Allows you to copy any element directly from another event.
+    descr: Allows you to copy any element directly from another event
     slug: copy
     overall: false
     module: 3
@@ -53,7 +53,7 @@
   fields:
     name: Discount
     descr: Allows you to generate discount codes that players can use to reduce their
-      ticket price.
+      ticket price
     slug: discount
     overall: false
     module: 2
@@ -66,10 +66,10 @@
   fields:
     name: LAOG
     descr: Treats this event as a digital/online occurrence that does not require
-      in-person registration.
+      in-person registration
     slug: laog
     overall: false
-    module: 7
+    module: 3
     placeholder: false
     order: 70
     after_text: ''
@@ -79,7 +79,7 @@
   fields:
     name: Reminder
     descr: Performs daily checks for upcoming payments deadlines and sends reminder
-      emails automatically.
+      emails automatically
     slug: remind
     overall: true
     module: 4
@@ -92,7 +92,7 @@
   fields:
     name: Bring a friend
     descr: Enables 'bring a friend' discount. A registered player provides their unique
-      code to a new registrant, granting both a discounted price.
+      code to a new registrant, granting both a discounted price
     slug: bring_friend
     overall: false
     module: 2
@@ -105,7 +105,7 @@
   fields:
     name: PDF generation
     descr: Automatically generates and updates PDFs of character sheets, gallery and
-      player profiles.
+      player profiles
     slug: print_pdf
     overall: false
     module: 1
@@ -118,7 +118,7 @@
   fields:
     name: Workshop
     descr: Adds a quiz-style system for workshop questions. Organizers can define
-      forms, questions, and correct answers for players to complete.
+      forms, questions, and correct answers for players to complete
     slug: workshop
     overall: false
     module: 3
@@ -131,10 +131,10 @@
   fields:
     name: Speed Larp
     descr: Manages pre-larp 'mini-scenes.' You can create any number of scenes and
-      assign players to them, with checks to avoid scheduling conflicts.
+      assign players to them, with checks to avoid scheduling conflicts
     slug: speedlarp
     overall: false
-    module: 7
+    module: 3
     placeholder: false
     order: 60
     after_text: Now you can start creating speed-larps
@@ -143,7 +143,7 @@
   pk: 26
   fields:
     name: Safety
-    descr: Lets staff access the safety information submitted by players.
+    descr: Lets staff access the safety information submitted by players
     slug: safety
     overall: false
     module: 8
@@ -151,12 +151,13 @@
     order: 20
     after_text: Now you can review the safety information submitted by players
     after_link: orga_safety
+    hidden: true
 - model: larpmanager.feature
   pk: 27
   fields:
     name: Casting algorithm
     descr: Lets players submit character preferences, then finds the optimal overall
-      match.
+      match
     slug: casting
     overall: false
     module: 5
@@ -169,7 +170,7 @@
   fields:
     name: Help
     descr: Allows players to submit questions, and organizers to review and organize
-      them.
+      them
     slug: help
     overall: true
     module: 8
@@ -182,7 +183,7 @@
   fields:
     name: Collections
     descr: Allows players to create and contribute to collections aimed at assisting
-      another player with event fees.
+      another player with event fees
     slug: collection
     overall: true
     module: 2
@@ -194,7 +195,7 @@
   pk: 32
   fields:
     name: Pre-registration
-    descr: Enables free pre-registration to events.
+    descr: Enables free pre-registration to events
     slug: pre_register
     overall: true
     module: 4
@@ -207,7 +208,7 @@
   fields:
     name: Donation
     descr: Adds a link on personal accounts pages, allowing users to donate money
-      to the association freely.
+      to the association freely
     slug: donate
     overall: true
     module: 2
@@ -220,7 +221,7 @@
   fields:
     name: Newsletter
     descr: Adds a page displaying member mailing lists, sorted by members' newsletter
-      preferences.
+      preferences
     slug: newsletter
     overall: true
     module: 8
@@ -233,7 +234,7 @@
   fields:
     name: Utility
     descr: Lets you upload and host files directly on larpmanager, making them available
-      either to staff or to players via secret external links.
+      either to staff or to players via secret external links
     slug: utils
     overall: false
     module: 3
@@ -246,7 +247,7 @@
   fields:
     name: Character customization
     descr: Enables players to customize specific attributes (name, pronoun, public
-      info, etc.) of the characters they're assigned.
+      info, etc.) of the characters they're assigned
     slug: custom_character
     overall: false
     module: 7
@@ -259,7 +260,7 @@
   fields:
     name: Membership
     descr: Requires Executive Committee approval of membership before participating
-      in an event.
+      in an event
     slug: membership
     overall: true
     module: 8
@@ -272,7 +273,7 @@
   fields:
     name: Shuttle
     descr: Allows players to submit shuttle requests (e.g., pickup logistics), and
-      staff can manage the status of those requests.
+      staff can manage the status of those requests
     slug: shuttle
     overall: true
     module: 3
@@ -285,10 +286,10 @@
   fields:
     name: External mail server
     descr: Allows you to configure a custom external mail server that will be used
-      instead of the standard one.
+      instead of the standard one
     slug: custom_mail
     overall: true
-    module: 7
+    module: 3
     placeholder: false
     order: 40
     after_text: Now you can set the external mail server settings
@@ -298,7 +299,7 @@
   fields:
     name: Lottery
     descr: Enables 'lottery' tickets with unlimited availability and no cost, from
-      which a random subset is converted into normal tickets.
+      which a random subset is converted into normal tickets
     slug: lottery
     overall: false
     module: 4
@@ -324,7 +325,7 @@
   fields:
     name: Chat
     descr: Enables players to send private messages to each other, without revealing
-      personal email addresses.
+      personal email addresses
     slug: chat
     overall: true
     module: 8
@@ -337,7 +338,7 @@
   fields:
     name: Waiting list
     descr: Activates 'waiting list' style tickets, available only when all main tickets
-      are sold out.
+      are sold out
     slug: waiting
     overall: false
     module: 4
@@ -349,7 +350,7 @@
   pk: 57
   fields:
     name: Player cancellation
-    descr: Allows players to cancel their own registrations at any time.
+    descr: Allows players to cancel their own registrations at any time
     slug: player_cancellation
     overall: false
     module: 7
@@ -362,7 +363,7 @@
   fields:
     name: External registration
     descr: Instead of using an internal registration form, redirects the player to
-      an external registration link.
+      an external registration link
     slug: register_link
     overall: false
     module: 4
@@ -375,7 +376,7 @@
   fields:
     name: Problems
     descr: Enables a ticket-like system for in-game 'problems,' where staff can log
-      issues, assign severity/urgency, and track them.
+      issues, assign severity/urgency, and track them
     slug: problems
     overall: false
     module: 3
@@ -402,7 +403,7 @@
   fields:
     name: Vote
     descr: Lets members cast votes for the election of the organisation's Executive
-      Committee.
+      Committee
     slug: vote
     overall: true
     module: 8
@@ -414,7 +415,7 @@
   pk: 65
   fields:
     name: Badge
-    descr: Allows the organisation to award badges and enables a public leaderboard.
+    descr: Allows the organisation to award badges and enables a public leaderboard
     slug: badge
     overall: true
     module: 8
@@ -427,7 +428,7 @@
   fields:
     name: Inventory
     descr: Enables basic inventory management. Users can add items to a warehouse
-      table, track quantities, and note item locations.
+      table, track quantities, and note item locations
     slug: inventory
     overall: true
     module: 3
@@ -440,7 +441,7 @@
   fields:
     name: Secret link
     descr: Generates a special, hidden link that lets certain players register even
-      if general registration is closed (e.g., early access for a specific group).
+      if general registration is closed (e.g., early access for a specific group)
     slug: registration_secret
     overall: false
     module: 4
@@ -453,7 +454,7 @@
   fields:
     name: Fixed instalments
     descr: Enables fixed installment deadlines for registration fees, allowing you
-      to define multiple due dates and amounts.
+      to define multiple due dates and amounts
     slug: reg_installments
     overall: false
     module: 2
@@ -465,7 +466,7 @@
   pk: 75
   fields:
     name: Relationships
-    descr: Allows authors to add relationships to characters.
+    descr: Allows authors to add relationships to characters
     slug: relationships
     overall: false
     module: 1
@@ -478,7 +479,7 @@
   fields:
     name: Sections
     descr: Lets you define sections in the registration form, grouping questions to
-      make lengthy forms clearer.
+      make lengthy forms clearer
     slug: reg_que_sections
     overall: false
     module: 4
@@ -491,10 +492,10 @@
   fields:
     name: Campaign
     descr: Enables a 'campaign' style setup where multiple events share the same set
-      of characters and factions.
+      of characters and factions
     slug: campaign
     overall: true
-    module: 7
+    module: 12
     placeholder: false
     order: 30
     after_text: ''
@@ -504,7 +505,7 @@
   fields:
     name: Patron and Reduced
     descr: Adds 'Patron' and 'Reduced' ticket types. Each Patron ticket purchased
-      makes one Reduced ticket available.
+      makes one Reduced ticket available
     slug: reduced
     overall: false
     module: 4
@@ -517,7 +518,7 @@
   fields:
     name: Accounting tracking
     descr: Keeps a daily record of the organisation's and events' financial status,
-      displaying trend graphs over time.
+      displaying trend graphs over time
     slug: record_acc
     overall: true
     module: 2
@@ -530,7 +531,7 @@
   fields:
     name: Progress
     descr: Adds a 'progress' status field (e.g. draft, ready, approved) to key writing
-      elements.
+      elements
     slug: progress
     overall: false
     module: 1
@@ -542,7 +543,7 @@
   pk: 93
   fields:
     name: Diet
-    descr: Lets staff access the diet information submitted by players.
+    descr: Lets staff access the diet information submitted by players
     slug: diet
     overall: false
     module: 8
@@ -550,12 +551,13 @@
     order: 30
     after_text: Now you can review the diet information submitted by players
     after_link: orga_diet
+    hidden: true
 - model: larpmanager.feature
   pk: 94
   fields:
     name: Deadlines
     descr: Activates a page summarizing overdue players and their deadlines (payments,
-      memberships, forms, casting, etc.).
+      memberships, forms, casting, etc.)
     slug: deadlines
     overall: true
     module: 4
@@ -568,7 +570,7 @@
   fields:
     name: Plots
     descr: Enables Plots, story arcs involving selected characters, adding extra content
-      to their character sheets.
+      to their character sheets
     slug: plot
     overall: false
     module: 1
@@ -581,7 +583,7 @@
   fields:
     name: Factions
     descr: Enables 'Factions' to organize characters into groups, either visible,
-      transversal or secret.
+      transversal or secret
     slug: faction
     overall: false
     module: 1
@@ -594,7 +596,7 @@
   fields:
     name: Handout
     descr: Enables 'Handouts,' pre-written texts that provide information about a
-      plot or lore.
+      plot or lore
     slug: handout
     overall: false
     module: 1
@@ -607,7 +609,7 @@
   fields:
     name: Expenses
     descr: Lets staff upload receipts for event expenses, tracking both the event
-      expenses, and the amount to refund the staff.
+      expenses, and the amount to refund the staff
     slug: expense
     overall: true
     module: 2
@@ -620,20 +622,20 @@
   fields:
     name: Tokens / Credits
     descr: Allows managing Tokens and Credits, which players can use instead of money
-      for registration fees. Credits can also be redeemed for cash.
+      for registration fees. Credits can also be redeemed for cash
     slug: token_credit
     overall: true
     module: 2
     placeholder: false
     order: 50
-    after_text: Now set up the token and credits configuration.
+    after_text: Now set up the token and credits configuration
     after_link: config/token_credit
 - model: larpmanager.feature
   pk: 108
   fields:
     name: Outflows
     descr: Enables management of expenses paid using the organization's financial
-      instruments.
+      instruments
     slug: outflow
     overall: true
     module: 2
@@ -646,7 +648,7 @@
   fields:
     name: Verification payments
     descr: Allows you to upload financial system statements (e.g., bank statements)
-      to match and approve corresponding wire payments.
+      to match and approve corresponding wire payments
     slug: verification
     overall: true
     module: 2
@@ -658,7 +660,7 @@
   pk: 110
   fields:
     name: Fiscal Budget
-    descr: Generates an annual summary of fiscal activity for the Italian budget report.
+    descr: Generates an annual summary of fiscal activity for the Italian budget report
     slug: ita_balance
     overall: true
     module: 10
@@ -670,7 +672,7 @@
   pk: 111
   fields:
     name: Payments
-    descr: Enables payment processing, specifying which payment methods to accept.
+    descr: Enables payment processing, specifying which payment methods to accept
     slug: payment
     overall: true
     module: 2
@@ -695,7 +697,7 @@
   fields:
     name: Opening date
     descr: Lets you specify a date (and time) on which registration will open, keeping
-      it closed until then.
+      it closed until then
     slug: registration_open
     overall: false
     module: 4
@@ -708,7 +710,7 @@
   fields:
     name: Legal Notice
     descr: Adds a link to legal notices on every page, and provides a management panel
-      link to edit the content of that notice.
+      link to edit the content of that notice
     slug: legal_notice
     overall: true
     module: 6
@@ -721,7 +723,7 @@
   fields:
     name: Experience points
     descr: Adds support for assigning XP (experience points) to characters, which
-      can then be used to purchase skills.
+      can then be used to purchase skills
     slug: px
     overall: false
     module: 11
@@ -733,7 +735,7 @@
   pk: 120
   fields:
     name: Player editor
-    descr: Allows players to create and modify their own characters freely.
+    descr: Allows players to create and modify their own characters freely
     slug: user_character
     overall: false
     module: 7
@@ -746,7 +748,7 @@
   fields:
     name: Organisation tax
     descr: Allows you to set a 'tax' percentage on event income that must be set aside
-      for the organisation.
+      for the organisation
     slug: organization_tax
     overall: true
     module: 2
@@ -759,7 +761,7 @@
   fields:
     name: Centaurs
     descr: Occasionally shows a special page to users, based on a defined probability,
-      and optionally assigns a result.
+      and optionally assigns a result
     slug: centauri
     overall: true
     module: 10
@@ -771,7 +773,7 @@
   pk: 138
   fields:
     name: URL shortener
-    descr: Adds a page where you can define shorter URLs for long links.
+    descr: Adds a page where you can define shorter URLs for long links
     slug: urlshortner
     overall: true
     module: 3
@@ -784,7 +786,7 @@
   fields:
     name: Surcharge
     descr: Enables the definition of surcharges that are added to every registration
-      made after a specified date.
+      made after a specified date
     slug: reg_surcharges
     overall: false
     module: 2
@@ -797,7 +799,7 @@
   fields:
     name: Inflows
     descr: Enables managing of entry of revenue for an event that do not originate
-      from player registrations.
+      from player registrations
     slug: inflow
     overall: true
     module: 2
@@ -810,7 +812,7 @@
   fields:
     name: Carousel
     descr: Introduces a new way to display past and upcoming events, inspired by popular
-      streaming-service layouts.
+      streaming-service layouts
     slug: carousel
     overall: true
     module: 6
@@ -823,7 +825,7 @@
   fields:
     name: Treasurer
     descr: Lets you specify a set of users who receive payment confirmation emails
-      for all events, instead of each event's organizers.
+      for all events, instead of each event's organizers
     slug: treasurer
     overall: true
     module: 2
@@ -836,7 +838,7 @@
   fields:
     name: Receipt
     descr: Automatically generates a customizable PDF receipt for each payment and
-      emails it to the user.
+      emails it to the user
     slug: receipts
     overall: true
     module: 2
@@ -848,7 +850,7 @@
   pk: 158
   fields:
     name: Register of volunteers
-    descr: Enables a volunteer register, as required by Italian RUNTS regulations.
+    descr: Enables a volunteer register, as required by Italian RUNTS regulations
     slug: volunteer_registry
     overall: true
     module: 10
@@ -860,7 +862,7 @@
   pk: 173
   fields:
     name: Taxes
-    descr: Shows the calculated tax amount on each payment.
+    descr: Shows the calculated tax amount on each payment
     slug: vat
     overall: true
     module: 2
@@ -873,7 +875,7 @@
   fields:
     name: Delegated accounts
     descr: Allows a user to create 'delegated' accounts they fully manage (e.g., children),
-      avoiding the need for separate login credentials.
+      avoiding the need for separate login credentials
     slug: delegated_members
     overall: true
     module: 8
@@ -886,7 +888,7 @@
   fields:
     name: Gift
     descr: Allows players to purchase tickets as gifts. A special code is generated
-      and provided to the gift recipient for registration.
+      and provided to the gift recipient for registration
     slug: gift
     overall: false
     module: 2
@@ -898,7 +900,7 @@
   pk: 177
   fields:
     name: Additional tickets
-    descr: Allows a user to reserve extra tickets in addition to their own.
+    descr: Allows a user to reserve extra tickets in addition to their own
     slug: additional_tickets
     overall: false
     module: 4
@@ -911,7 +913,7 @@
   fields:
     name: Characters
     descr: Enables the creation, editing, and assignment of characters to registered
-      players.
+      players
     slug: character
     overall: false
     module: 1
@@ -924,10 +926,10 @@
   fields:
     name: Template
     descr: Lets you create 'template' events whose configurations and settings can
-      be used as a starting point for other events.
+      be used as a starting point for other events
     slug: template
     overall: true
-    module: 7
+    module: 12
     placeholder: false
     order: 1
     after_text: Now you can create event templates
@@ -936,7 +938,7 @@
   pk: 185
   fields:
     name: Fiscal code check
-    descr: Check the validity of the fiscal code.
+    descr: Check the validity of the fiscal code
     slug: fiscal_code_check
     overall: true
     module: 10
@@ -987,7 +989,7 @@
     descr: ''
     slug: exe_runs
     overall: true
-    module: 7
+    module: 12
     placeholder: true
     order: 9999
     after_text: null
@@ -999,7 +1001,7 @@
     descr: ''
     slug: exe_events
     overall: true
-    module: 7
+    module: 12
     placeholder: true
     order: 9999
     after_text: null
@@ -1239,7 +1241,7 @@
     descr: ''
     slug: orga_features
     overall: false
-    module: 9
+    module: 7
     placeholder: true
     order: 9999
     after_text: null
@@ -1251,7 +1253,7 @@
     descr: ''
     slug: orga_config
     overall: false
-    module: 9
+    module: 7
     placeholder: true
     order: 9999
     after_text: null
@@ -1263,7 +1265,7 @@
     descr: ''
     slug: orga_roles
     overall: false
-    module: 9
+    module: 7
     placeholder: true
     order: 9999
     after_text: null
@@ -1275,7 +1277,7 @@
     descr: ''
     slug: orga_run
     overall: false
-    module: 9
+    module: 7
     placeholder: true
     order: 9999
     after_text: null
@@ -1287,7 +1289,7 @@
     descr: ''
     slug: orga_event
     overall: false
-    module: 9
+    module: 7
     placeholder: true
     order: 9999
     after_text: null
@@ -1299,7 +1301,7 @@
     descr: ''
     slug: quick_setup
     overall: false
-    module: 9
+    module: 7
     placeholder: true
     order: 9999
     after_text: null

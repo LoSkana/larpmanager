@@ -86,7 +86,7 @@
         <!-- Header -->
         <header id="header" class="alt {% if is_sidebar_open %}sidebar{% endif %}">
             {% block sidebar_logo %}
-                {% if manage %}
+                {% if manage and interface_old %}
                     <nav id="sidebar-nav">
                         <a id="sidebar-open" href="#sidebar">
                             <img alt="menu" src="{% static 'larpmanager/assets/menu.png' %}" />
@@ -101,87 +101,53 @@
                     {% endblock title %}
                 </span>
             </h1>
-            <nav id="menu-bar">
-                <a id="menu-open" href="#menu"><span>Menu</span>
-                    <img alt="menu" src="{% static 'larpmanager/assets/menu.png' %}" />
-                </a>
-            </nav>
+            {% if interface_old or not topbar %}
+                <nav id="menu-bar">
+                    <a id="menu-open" href="#menu"><span>Menu</span>
+                        <img alt="menu" src="{% static 'larpmanager/assets/menu.png' %}" />
+                    </a>
+                </nav>
+            {% endif %}
         </header>
         <!-- Menu -->
         <nav id="menu">
             <div class="inner">
                 <h2>Menu</h2>
+                {% if user.is_authenticated %}
+                    <p>{% trans "Hi" %}, {{ user.member.display_member }}!</p>
+                {% endif %}
                 <ul class="links">
                     <li>
                         <a href="{% url 'home' %}">{% trans "Calendar" %}</a>
                     </li>
                     {% if user.is_authenticated %}
                         <li>
-                            <span class="opener">{% trans "Hi" %}, {{ user.member.display_member }}!
-                                <img class="chevron"
-                                     alt="chevron"
-                                     src="{% static 'larpmanager/assets/chevron.png' %}" />
-                            </span>
-                            <ul>
-                                <li>
-                                    <a href="{% url 'profile' %}">{% trans "Your user" %}</a>
-                                </li>
-                                {% if 'membership' in assoc.features %}
-                                    <li>
-                                        <a href="{% url 'membership' %}">{% trans "Your membership" %}</a>
-                                    </li>
-                                {% endif %}
-                                <li>
-                                    <a href="{% url 'accounting' %}">{% trans "Your accounting" %}</a>
-                                </li>
-                                {% if 'delegated_members' in assoc.features %}
-                                    <li>
-                                        <a href="{% url 'delegated' %}">{% trans "Your delegated users" %}</a>
-                                    </li>
-                                {% endif %}
-                                {% if 'chat' in assoc.features %}
-                                    <li>
-                                        <a href="{% url 'chats' %}">{% trans "Your messages" %}</a>
-                                    </li>
-                                {% endif %}
-                                {% if 'badge' in assoc.features %}
-                                    <li>
-                                        <a href="{% url 'public' user.member.id %}">{% trans "Your achievements" %}</a>
-                                    </li>
-                                {% endif %}
-                            </ul>
+                            <a href="{% url 'profile' %}">{% trans "Your user" %}</a>
                         </li>
-                    {% endif %}
-                    <li>
-                        <span class="opener">{% trans "Organization" %}
-                            <img class="chevron"
-                                 alt="chevron"
-                                 src="{% static 'larpmanager/assets/chevron.png' %}" />
-                        </span>
-                        <ul>
+                        {% if 'membership' in assoc.features %}
                             <li>
-                                <a href="{% url 'home' %}">{% trans "Calendar" %}</a>
+                                <a href="{% url 'membership' %}">{% trans "Your membership" %}</a>
                             </li>
-                            {% if 'past_events' in assoc.features %}
-                                <li>
-                                    <a href="{% url 'calendar_past' %}">{% trans "Past events" %}</a>
-                                </li>
-                            {% endif %}
-                            {% if 'carousel' in assoc.features %}
-                                <li>
-                                    <a href="{% url 'carousel' %}">{% trans "Carousel" %}</a>
-                                </li>
-                            {% endif %}
-                            {% if 'badge' in assoc.features %}
-                                <li>
-                                    <a href="{% url 'badges' %}">{% trans "Achievements" %}</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'leaderboard' %}">{% trans "Leaderboard" %}</a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </li>
+                        {% endif %}
+                        <li>
+                            <a href="{% url 'accounting' %}">{% trans "Your accounting" %}</a>
+                        </li>
+                        {% if 'delegated_members' in assoc.features %}
+                            <li>
+                                <a href="{% url 'delegated' %}">{% trans "Your delegated users" %}</a>
+                            </li>
+                        {% endif %}
+                        {% if 'chat' in assoc.features %}
+                            <li>
+                                <a href="{% url 'chats' %}">{% trans "Your messages" %}</a>
+                            </li>
+                        {% endif %}
+                        {% if 'badge' in assoc.features %}
+                            <li>
+                                <a href="{% url 'public' user.member.id %}">{% trans "Your achievements" %}</a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
                     {% if user.is_authenticated %}
                         {% if reg_menu %}
                             <li>
@@ -199,7 +165,7 @@
                                 </ul>
                             </li>
                         {% endif %}
-                        {% if event_role or assoc_role %}
+                        {% if topbar %}
                             <li>
                                 <span class="opener">{% trans "Manage" %}
                                     <img class="chevron"

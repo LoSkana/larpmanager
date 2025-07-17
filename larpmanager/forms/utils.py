@@ -106,7 +106,7 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
             help_text = self.feature_help.get(option_value, "")
             output.append(f"""
                 <div class="feature_checkbox lm_tooltip">
-                    <span class="hide lm_tooltiptext">{help_text} - {know_more}</span>
+                    <span class="hide lm_tooltiptext">{help_text} ({know_more})</span>
                     {checkbox_html} {link_html}
                 </div>
             """)
@@ -134,11 +134,17 @@ def prepare_permissions_role(form, typ):
 
         if not ch:
             continue
+
+        label = _(module.name)
+        if "interface_old" in form.params and not form.params["interface_old"]:
+            if module.icon:
+                label = f"<i class='fa-solid fa-{module.icon}'></i> {label}"
+
         form.fields[module.name] = forms.MultipleChoiceField(
             required=False,
             choices=ch,
             widget=RoleCheckboxWidget(help_text=help_text, feature_map=feature_map),
-            label=_(module.name),
+            label=label,
         )
         form.modules.append(module.name)
         form.initial[module.name] = init

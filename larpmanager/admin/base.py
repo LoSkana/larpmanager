@@ -67,6 +67,11 @@ class MemberFilter(AutocompleteFilter):
     field_name = "member"
 
 
+class TraitFilter(AutocompleteFilter):
+    title = "Trait"
+    field_name = "trait"
+
+
 class RegistrationFilter(AutocompleteFilter):
     title = "Registration"
     field_name = "reg"
@@ -81,7 +86,7 @@ class LogAdmin(DefModelAdmin):
 
 @admin.register(FeatureModule)
 class FeatureModuleAdmin(DefModelAdmin):
-    list_display = ("name", "descr", "order")
+    list_display = ("name", "order")
     search_fields = ["name"]
 
 

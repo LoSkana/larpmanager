@@ -2,6 +2,15 @@ $(".hide:visible").hide();
 
 window.addEventListener('DOMContentLoaded', function() {
 
+// uniform cookies # TODO remove
+document.cookie.split(";").forEach(c => {
+    const [name, value] = c.trim().split("=");
+    if (name === "csrftoken") {
+        document.cookie = `csrftoken=${value}; path=/; domain=${location.hostname};`;
+        document.cookie = `csrftoken=; path=/; domain=.larpmanager.com; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+    }
+});
+
 $.ajaxSetup({
      beforeSend: function(xhr, settings) {
          function getCookie(name) {
@@ -37,9 +46,12 @@ $(document).ready(function() {
     $('#header h1').textfill({
     });
 
-    $("th label").each(function(index) {
-        var txt = $( this ).text();
-        $( this ).text(txt.replace(":", ""));
+    $("th label").each(function() {
+        $(this).contents().filter(function() {
+            return this.nodeType === 3; // Nodo di testo
+        }).each(function() {
+            this.nodeValue = this.nodeValue.replace(":", "");
+        });
     });
 
     // Sidebar
@@ -80,6 +92,16 @@ $(document).ready(function() {
                 return $(this).prevAll('.sidebar-link').first();
             }
         }
+    });
+
+    $('.dropdown-button').click(function(event) {
+        event.stopPropagation();
+    });
+
+    $('.dropdown').on('mouseenter', function() {
+        $(this).children('.dropdown-menu').fadeIn(100);
+    }).on('mouseleave', function() {
+        $(this).children('.dropdown-menu').fadeOut(100);
     });
 
     $('a.feature_tutorial').click(function(event) {
@@ -247,7 +269,7 @@ $(document).ready(function() {
     $('.tablesorter').tablesorter();
 
     $('.delete').click(function(){
-            return confirm('Are you sure?');
+        return confirm('Are you sure?');
     });
 
     $('.show_popup').on( "click", function() {

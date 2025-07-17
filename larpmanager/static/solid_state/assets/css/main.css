@@ -3088,7 +3088,7 @@ input, select, textarea {
 		position: fixed;
 		top: 0;
 		width: 100%;
-		z-index: 1000;
+		z-index: 1;
 	}
 
 		#header h1 {
@@ -3242,6 +3242,7 @@ input, select, textarea {
 		top: 0;
 		visibility: hidden;
 		width: 100%;
+		z-index: 100;
 	}
 
 		#menu .inner {

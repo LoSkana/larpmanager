@@ -28,19 +28,18 @@
 		});
 
 	// Header.
-		if ($banner.length > 0
-		&&	$header.hasClass('alt')) {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        $header.addClass('alt');
+      } else {
+        $header.removeClass('alt');
+      }
+    }, {
+      root: document.querySelector('#page-wrapper.topbar'),
+      threshold: 0
+    });
 
-			$window.on('resize', function() { $window.trigger('scroll'); });
-
-			$banner.scrollex({
-				bottom:		$header.outerHeight(),
-				terminate:	function() { $header.removeClass('alt'); },
-				enter:		function() { $header.addClass('alt'); },
-				leave:		function() { $header.removeClass('alt'); }
-			});
-
-		}
+    observer.observe(document.querySelector('#banner'));
 
 	// Menu.
 		var $menu = $('#menu');

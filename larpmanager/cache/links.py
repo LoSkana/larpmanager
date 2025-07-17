@@ -95,6 +95,8 @@ def cache_event_links(request):
                 "k": (r.start if r.start else datetime.max.date()),
             }
 
+    ctx["topbar"] = ctx["event_role"] or ctx["assoc_role"]
+
     cache.set(get_cache_event_key(request.user.id, request.assoc["id"]), ctx, 60)
     return ctx
 

@@ -27,7 +27,7 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
             help_text = self.feature_help.get(option_value, "")
             output.append(f"""
                 <div class="feature_checkbox lm_tooltip">
-                    <span class="hide lm_tooltiptext">{help_text} - {know_more}</span>
+                    <span class="hide lm_tooltiptext">{help_text} ({know_more})</span>
                     {checkbox_html} {link_html}
                 </div>
             """)
@@ -49,15 +49,19 @@ class FeatureForm(MyForm):
         if overall:
             modules = modules.filter(Q(nationality__isnull=True) | Q(nationality=self.instance.nationality))
         for module in modules:
-            features = module.features.filter(overall=overall, placeholder=False).order_by("order")
+            features = module.features.filter(overall=overall, placeholder=False, hidden=False).order_by("order")
             choices = [(str(f.id), _(f.name)) for f in features]
             help_text = {str(f.id): _(f.descr) for f in features}
             if not choices:
                 continue
+            label = _(module.name)
+            if "interface_old" in self.params and not self.params["interface_old"]:
+                if module.icon:
+                    label = f"<i class='fa-solid fa-{module.icon}'></i> {label}"
             self.fields[f"mod_{module.id}"] = forms.MultipleChoiceField(
                 choices=choices,
                 widget=FeatureCheckboxWidget(help_text=help_text),
-                label=_(module.name),
+                label=label,
                 required=False,
             )
             if init_features:

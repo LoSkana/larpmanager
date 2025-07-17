@@ -2,76 +2,71 @@
   pk: 1
   fields:
     name: Writing
-    descr: Writing and storytelling tools
     order: 50
-    default: false
+    icon: pen-nib
 - model: larpmanager.featuremodule
   pk: 2
   fields:
     name: Accounting
-    descr: Managing money flow and finances
     order: 40
-    default: false
+    icon: calculator
 - model: larpmanager.featuremodule
   pk: 3
   fields:
     name: Miscellany
-    descr: Various additional features
     order: 100
-    default: false
+    icon: gear
 - model: larpmanager.featuremodule
   pk: 4
   fields:
     name: Registration
-    descr: Player registration process
     order: 30
-    default: false
+    icon: ticket
 - model: larpmanager.featuremodule
   pk: 5
   fields:
     name: Casting
-    descr: Assigning characters to players
     order: 60
-    default: false
+    icon: scroll
 - model: larpmanager.featuremodule
   pk: 6
   fields:
     name: Appearance
-    descr: Event display and visual customization
     order: 20
-    default: false
+    icon: palette
 - model: larpmanager.featuremodule
   pk: 7
   fields:
-    name: Management
-    descr: General event management tools
+    name: Event
     order: 10
-    default: false
+    icon: calendar-days
 - model: larpmanager.featuremodule
   pk: 8
   fields:
     name: Users
-    descr: Manage players' data
     order: 80
-    default: false
+    icon: user
 - model: larpmanager.featuremodule
   pk: 9
   fields:
-    name: Main
-    descr: Standard features
+    name: Organization
     order: 0
-    default: true
+    icon: building
 - model: larpmanager.featuremodule
   pk: 10
   fields:
     name: Italy
-    descr: Italian features
     order: 110
-    default: false
+    icon: pizza-slice
 - model: larpmanager.featuremodule
   pk: 11
   fields:
     name: Experience
-    descr: Experience Points
     order: 45
-    default: false
+    icon: bolt
+- model: larpmanager.featuremodule
+  pk: 12
+  fields:
+    name: Events
+    order: 10
+    icon: calendar-days

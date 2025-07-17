@@ -58,7 +58,7 @@ async def orga_event_role(live_server, page):
     await page.locator("#id_name").press("Tab")
     await page.get_by_role("searchbox").fill("us")
     await page.get_by_role("option", name="User Test -").click()
-    await page.locator("#id_Main_3").check()
+    await page.locator("#id_Event_3").check()
     await page.locator("#id_Accounting_0").check()
     await page.get_by_role("button", name="Confirm", exact=True).click()
     await page.get_by_role("gridcell", name="Accounting , Configuration").click()

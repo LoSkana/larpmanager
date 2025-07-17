@@ -55,7 +55,7 @@ async def exe_assoc_role(live_server, page):
     await page.locator("#id_name").press("Tab")
     await page.get_by_role("searchbox").fill("us")
     await page.get_by_role("option", name="User Test -").click()
-    await page.locator("#id_Main_2").check()
+    await page.locator("#id_Organization_2").check()
     await page.locator("#id_Accounting_0").check()
     await page.get_by_role("button", name="Confirm", exact=True).click()
     await page.get_by_role("gridcell", name="Accounting , Configuration").click()
@@ -65,8 +65,6 @@ async def exe_assoc_role(live_server, page):
     await login_user(page, live_server)
 
     await go_to(page, live_server, "/manage/accounting/")
-    await page.get_by_text("Sidebar Accounting -").click()
-    await page.locator("#sidebar-nav").click()
     await expect(page.locator("#banner")).to_contain_text("Accounting - Organization")
 
     await logout(page, live_server)

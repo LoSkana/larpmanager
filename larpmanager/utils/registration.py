@@ -129,7 +129,7 @@ def registration_status_signed(run, features, register_url):
     if "membership" in features:
         if mb.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
             membership_url = reverse("membership")
-            mes = _("to confirm it, send your membership application") + "."
+            mes = _("please upload your membership application to proceed") + "."
             text_url = f", <a href='{membership_url}'>{mes}</a>"
             run.status["text"] = register_text + text_url
             return
