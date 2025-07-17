@@ -21,7 +21,10 @@ import secrets
 
 from django.contrib.auth.views import LoginView
 from django.core.cache import cache
+from django.core.files.storage import default_storage
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from larpmanager.forms.member import MyAuthForm
@@ -80,3 +83,12 @@ def get_base_domain(request):
 @require_POST
 def tutorial_query(request):
     return query_index(request)
+
+
+@csrf_exempt
+def upload_image(request):
+    if request.method == "POST" and request.FILES.get("file"):
+        file = request.FILES["file"]
+        path = default_storage.save(f"tinymce_uploads/{file.name}", file)
+        return JsonResponse({"location": default_storage.url(path)})
+    return JsonResponse({"error": "Invalid request"}, status=400)
