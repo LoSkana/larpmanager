@@ -11,7 +11,7 @@
                                 <span class="no_mobile">Home</span>
                             </a>
                         </span>
-                        <div class="el dropdown">
+                        <div id="select_workspace" class="el dropdown">
                             {% if run %}
                                 <span class="no_mobile"><i class="fa-solid fa-calendar-days"></i> {{ run }}</span>
                             {% else %}
@@ -35,7 +35,7 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <div class="el dropdown">
+                        <div id="select_side" class="el dropdown">
                             {% if manage %}
                                 <span class="no_mobile"><i class="fa-solid fa-toolbox"></i> Admin</span>
                             {% else %}

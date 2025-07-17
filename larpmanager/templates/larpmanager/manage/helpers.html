@@ -1,7 +1,7 @@
 {% load i18n %}
 {% if list %}
     <h2>{{ header }}</h2>
-    <table>
+    <table {% if suggestion %}id="suggestions"{% else %}id="actions"{% endif %}>
         {% for obj in list %}
             <tr>
                 <td>

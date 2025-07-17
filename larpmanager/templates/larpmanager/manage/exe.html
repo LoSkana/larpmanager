@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n static %}
 {% block title %}
     {% trans "Dashboard" %} - {{ assoc.name }}
 {% endblock title %}
@@ -79,6 +79,37 @@
         {% endwith %}
     </div>
 {% endblock content %}
+{% block css %}
+    <link rel="stylesheet"
+          href="{% static 'node_modules/driver.js/dist/driver.css' %}">
+{% endblock css %}
 {% block js %}
     {% include "elements/tutorial_query.js" %}
+    <script src="{% static 'node_modules/driver.js/dist/driver.js.iife.js' %}"
+            defer></script>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+
+const driver = window.driver.js.driver;
+
+const driverObj = driver({
+  showProgress: true,
+  steps: [
+    { popover: { title: '{% trans "Welcome to" %} {{ assoc.platform }}!', description: 'Here is a step-by-step walkthrough of the interface' } },
+    { element: '#sidebar', popover: { title: 'Sidebar', description: 'This is the sidebar containing all the functions needed to manage your organization (it remains visible on every management page)', side: "right", align: 'start' }},
+    { element: '#select_workspace', popover: { title: 'Workspace selector', description: 'Here you can select the workspace to use: your organization, and your events once created.', side: "bottom", align: 'start' }},
+    { element: '#select_side', popover: { title: 'Side selector', description: 'Here you can switch between administration pages and user-facing pages.', side: "bottom", align: 'start' }},
+    { element: '#sidebar-open', popover: { title: 'Sidebar toggle', description: 'Toggle the sidebar visibility', side: "bottom", align: 'start' }},
+    { element: '#tutorial_query', popover: { title: 'What would you like to do?', description: 'If you need help, type your request here in English using single keywords.', side: "bottom", align: 'start' }},
+    { element: '#actions', popover: { title: 'Actions', description: 'Here is a to-do list of actions for managing your organization.', side: "top", align: 'start' }},
+    { element: '#suggestions', popover: { title: 'Suggestions', description: 'And here is a to-do list of suggestions to help you set everything up properly.', side: "top", align: 'start' }},
+    { element: '.feature_tutorial', popover: { title: 'Tutorials', description: 'Click the tutorial to open it and follow the step-by-step instructions.', side: "top", align: 'start' }},
+    { popover: { title: 'And that is all', description: 'Write to us if you need help in setting things up!' } }
+  ]
+});
+
+  driverObj.drive();
+});
+
+    </script>
 {% endblock js %}
