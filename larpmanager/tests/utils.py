@@ -36,8 +36,6 @@ async def page_start(p, show=False):
 
     page.on("dialog", lambda dialog: dialog.accept())
 
-    await disable_qtips(page)
-
     async def on_response(response):
         error_code = 500
         if response.status == error_code:
@@ -46,16 +44,6 @@ async def page_start(p, show=False):
     page.on("response", on_response)
 
     return browser, context, page
-
-
-async def disable_qtips(page):
-    await page.evaluate("""
-        () => {
-            document.querySelectorAll('.qtip').forEach(el => {
-                el.style.setProperty('display', 'none', 'important');
-            });
-        }
-    """)
 
 
 async def logout(page, live_server):
@@ -136,8 +124,6 @@ async def ooops_check(page):
         await expect(banner).not_to_contain_text("Oops!")
         await expect(banner).not_to_contain_text("404")
 
-    await disable_qtips(page)
-
 
 async def check_download(page, link):
     max_tries = 3
@@ -170,8 +156,6 @@ async def fill_tinymce(page, iframe_id: str, text: str):
 
 
 async def _checkboxes(page, check=True):
-    await disable_qtips(page)
-
     checkboxes = page.locator('input[type="checkbox"]')
     count = await checkboxes.count()
     for i in range(count):
@@ -182,4 +166,4 @@ async def _checkboxes(page, check=True):
                     await checkbox.check()
             elif await checkbox.is_checked():
                 await checkbox.uncheck()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    await page.locator('input[type="submit"][value="Confirm"]').click({"force": True})
