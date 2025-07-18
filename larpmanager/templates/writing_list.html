@@ -8,10 +8,8 @@
 {% endblock meta %}
 {% block content %}
     {% include "elements/header/writing.html" %}
-    <p id="show">
-        <b>{% trans "Show / hide" %}</b>
-    </p>
     <div class="nav fields">
+        <b>{% trans "Fields" %}</b>:
         {% block nav_fields %}
         {% endblock nav_fields %}
     </div>
@@ -36,7 +34,6 @@
     <script defer src="{% static TINYMCE_JS_URL %}"></script>
     {{ TINYMCE_DEFAULT_CONFIG|json_script:"tinymce-config" }}
     {% include "elements/writing/excel-edit.js" %}
-    {% include "elements/writing/que-open.js" %}
     {% include "elements/form/max_length.js" %}
     {% include "elements/form/char_highlight.js" %}
     {% if not disable_char_finder %}
@@ -48,6 +45,8 @@
         var url_load_questions_email = "{% url 'orga_writing_form_email' run.event.slug run.number label_typ %}";
 
         var accounting = false;
+
+        window.trigger_togs = {{ default_fields | safe }};
 
         {% include "elements/questions/load.js" %}
     </script>

@@ -462,6 +462,9 @@ msgstr "Exporteer"
 msgid "Female"
 msgstr "Vrouw"
 
+msgid "Fields"
+msgstr "Velden"
+
 msgid "Filler"
 msgstr "Vulstof"
 
@@ -647,6 +650,9 @@ msgstr "Soldeer"
 
 msgid "Casting"
 msgstr "Gieten"
+
+msgid "Columns"
+msgstr "Kolommen"
 
 msgid "Concept"
 msgstr "Concept"
@@ -1275,6 +1281,9 @@ msgstr "deze link"
 msgid "Accounting"
 msgstr "Boekhouding"
 
+msgid "Additional"
+msgstr "Extra"
+
 msgid "Annual fee"
 msgstr "Jaarlijkse vergoeding"
 
@@ -1310,6 +1319,9 @@ msgstr "Personages"
 
 msgid "Check data"
 msgstr "Gegevens controleren"
+
+msgid "Chronology"
+msgstr "Chronologie"
 
 msgid "Collection"
 msgstr "Verzamel"
@@ -2089,6 +2101,9 @@ msgstr "Naam personage"
 
 msgid "Collection for"
 msgstr "Verzamelen voor"
+
+msgid "Customisations"
+msgstr "Aanpassingen"
 
 msgid "Disable Tokens"
 msgstr "Tokens uitschakelen"
@@ -6624,6 +6639,12 @@ msgid ""
 "Presentation visible to all players, when 'show presentation' is checked"
 msgstr ""
 "Presentatie zichtbaar voor alle spelers als 'toon presentatie' is aangevinkt"
+
+msgid ""
+"Select which fields should open automatically when the list is displayed"
+msgstr ""
+"Selecteer welke velden automatisch moeten worden geopend wanneer de lijst "
+"wordt weergegeven"
 
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient"

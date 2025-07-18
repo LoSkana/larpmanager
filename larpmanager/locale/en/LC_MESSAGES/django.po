@@ -747,6 +747,12 @@ msgstr ""
 msgid "Writing option"
 msgstr ""
 
+msgid "Characters"
+msgstr ""
+
+msgid "Factions"
+msgstr ""
+
 msgid "Insert the css code to customize the pdf printing"
 msgstr ""
 
@@ -1325,12 +1331,6 @@ msgid ""
 "players, private fields visible only to assigned players"
 msgstr ""
 
-msgid "Characters"
-msgstr ""
-
-msgid "Factions"
-msgstr ""
-
 msgid "Visibility"
 msgstr ""
 
@@ -1443,6 +1443,37 @@ msgid "Personal preferences"
 msgstr ""
 
 msgid "This page allows you to set your personal preferences on the interface"
+msgstr ""
+
+msgid ""
+"Select which fields should open automatically when the list is displayed"
+msgstr ""
+
+msgid "Accounting"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Chronology"
+msgstr ""
+
+msgid "Additional"
+msgstr ""
+
+msgid "Gift"
+msgstr ""
+
+msgid "Member"
+msgstr ""
+
+msgid "Customisations"
+msgstr ""
+
+msgid "Surcharge"
+msgstr ""
+
+msgid "Discounts"
 msgstr ""
 
 msgid "Ability"
@@ -1593,9 +1624,6 @@ msgid ""
 msgstr ""
 
 msgid "Code 'Bring a friend'"
-msgstr ""
-
-msgid "Surcharge"
 msgstr ""
 
 msgid "Registration surcharge"
@@ -3570,9 +3598,6 @@ msgstr ""
 msgid "Names"
 msgstr ""
 
-msgid "Email"
-msgstr ""
-
 msgid "Cancellation for missing organization registration"
 msgstr ""
 
@@ -3902,9 +3927,6 @@ msgstr ""
 msgid ""
 "Once you have made the payment, return to this page, and upload below the "
 "screenshot of the confirmation sent by Paypal"
-msgstr ""
-
-msgid "Accounting"
 msgstr ""
 
 msgid "Total registration fee"
@@ -4259,9 +4281,6 @@ msgstr ""
 msgid "Registered"
 msgstr ""
 
-msgid "Gift"
-msgstr ""
-
 msgid ""
 "On this page you can book tickets for the event; once paid, a special code "
 "will be generated"
@@ -4318,9 +4337,6 @@ msgid ""
 msgstr ""
 
 msgid "Here are the sign up options with limited number"
-msgstr ""
-
-msgid "Discounts"
 msgstr ""
 
 msgid "Value"
@@ -4585,9 +4601,6 @@ msgstr ""
 msgid "Refund given"
 msgstr ""
 
-msgid "Member"
-msgstr ""
-
 msgid "Accounting - History"
 msgstr ""
 
@@ -4764,7 +4777,7 @@ msgstr ""
 msgid "This page shows inventory custody items"
 msgstr ""
 
-msgid "Show / hide"
+msgid "Columns"
 msgstr ""
 
 msgid "past"
@@ -6801,6 +6814,9 @@ msgstr ""
 msgid "This page shows the event quests"
 msgstr ""
 
+msgid "Show / hide"
+msgstr ""
+
 msgid "hide"
 msgstr ""
 
@@ -7870,6 +7886,9 @@ msgid "Display sent e-mails"
 msgstr ""
 
 msgid "Set your personal preferences on the interface"
+msgstr ""
+
+msgid "Fields"
 msgstr ""
 
 #, python-format

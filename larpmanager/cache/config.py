@@ -70,8 +70,8 @@ def save_all_element_configs(obj, dct):
             if config.value != new_value:
                 config.value = new_value
                 config.save()
-        else:
-            config.delete()
+        # else:
+        #     config.delete()
 
     # add new configs
     for name in incoming_names - set(existing_configs.keys()):

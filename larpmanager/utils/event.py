@@ -98,6 +98,8 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
         ctx["show_all"] = "1"
 
         for config_name in ["character", "faction"]:
+            if config_name not in config_run:
+                config_run[config_name] = []
             config_run[config_name].extend(["name", "teaser", "text"])
 
     ctx.update(config_run)

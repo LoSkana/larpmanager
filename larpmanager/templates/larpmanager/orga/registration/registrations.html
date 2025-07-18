@@ -38,8 +38,8 @@
             </div>
         </div>
         <div class="staff-list">
-            <b>{% trans "Show / hide" %}</b>
             <div class="nav">
+                <b>{% trans "Columns" %}</b>:
                 <a href="#" id="load_accounting">{% trans "accounting" %}</a>
                 <a href="#" class="my_toggle hide" tog='acc'>hidden</a>
                 <a href="#" class="my_toggle" tog='email'>{% trans "email" %}</a>
@@ -75,8 +75,8 @@
         </div>
         {% if reg_questions %}
             <div class="staff-list">
-                {% trans "Registration questions" %}:
                 <div class="nav">
+                    {% trans "Questions" %}:
                     {% for key, que in reg_questions.items %}
                         {% if que.typ == 'e' %}
                             <a href="#" class="my_toggle no_jump" tog='q_{{ key }}'>{{ que.display | truncatechars:50 }}</a>
@@ -90,11 +90,13 @@
         {% endif %}
         {% if features.questbuilder %}
             <div class="staff-list">
-                Questbuilder:
-                {% for key, qt in quest_types.items %}
-                    {% include "elements/comma.html" %}
-                    <a href="#" class="my_toggle" tog='qt_{{ qt.number }}'>{{ qt.name }}</a>
-                {% endfor %}
+                <div class="nav">
+                    Questbuilder:
+                    {% for key, qt in quest_types.items %}
+                        {% include "elements/comma.html" %}
+                        <a href="#" class="my_toggle" tog='qt_{{ qt.number }}'>{{ qt.name }}</a>
+                    {% endfor %}
+                </div>
             </div>
         {% endif %}
         {% for key, dc in reg_all %}
@@ -566,6 +568,8 @@ var download_text = '{% trans "Download" %}';
 
 var accounting = true;
 
+window.trigger_togs = {{ default_fields | safe }};
+
 {% include "elements/questions/load.js" %}
 
 window.addEventListener('DOMContentLoaded', function() {
@@ -614,6 +618,12 @@ window.addEventListener('DOMContentLoaded', function() {
             load_accounting($(this));
             return false;
         });
+
+        if (Array.isArray(window.trigger_togs)) {
+            if (window.trigger_togs.includes('#load_accounting')) {
+                document.querySelector('#load_accounting').dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            }
+        }
 
         $(document).on('click', '.post_popup_member', function (e) {
 

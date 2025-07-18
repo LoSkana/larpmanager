@@ -462,6 +462,9 @@ msgstr "Export"
 msgid "Female"
 msgstr "Kvinna"
 
+msgid "Fields"
+msgstr "Fält"
+
 msgid "Filler"
 msgstr "Fyllmedel"
 
@@ -647,6 +650,9 @@ msgstr "Lödning"
 
 msgid "Casting"
 msgstr "Gjutning"
+
+msgid "Columns"
+msgstr "Kolumner"
 
 msgid "Concept"
 msgstr "Koncept"
@@ -1275,6 +1281,9 @@ msgstr "denna länk"
 msgid "Accounting"
 msgstr "Redovisning"
 
+msgid "Additional"
+msgstr "Ytterligare"
+
 msgid "Annual fee"
 msgstr "Årlig avgift"
 
@@ -1310,6 +1319,9 @@ msgstr "Karaktärer"
 
 msgid "Check data"
 msgstr "Kontrollera data"
+
+msgid "Chronology"
+msgstr "Kronologi"
 
 msgid "Collection"
 msgstr "Samla"
@@ -2089,6 +2101,9 @@ msgstr "Karaktärens namn"
 
 msgid "Collection for"
 msgstr "Samla för"
+
+msgid "Customisations"
+msgstr "Anpassningar"
 
 msgid "Disable Tokens"
 msgstr "Inaktivera Tokens"
@@ -6537,6 +6552,10 @@ msgid ""
 "Presentation visible to all players, when 'show presentation' is checked"
 msgstr ""
 "Presentation synlig för alla spelare, när \"visa presentation\" är markerat"
+
+msgid ""
+"Select which fields should open automatically when the list is displayed"
+msgstr "Välj vilka fält som ska öppnas automatiskt när listan visas"
 
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient"

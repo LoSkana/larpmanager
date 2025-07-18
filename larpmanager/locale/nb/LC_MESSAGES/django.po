@@ -462,6 +462,9 @@ msgstr "Eksport"
 msgid "Female"
 msgstr "Kvinne"
 
+msgid "Fields"
+msgstr "Felt"
+
 msgid "Filler"
 msgstr "Fyllstoff"
 
@@ -647,6 +650,9 @@ msgstr "Lodding"
 
 msgid "Casting"
 msgstr "Støping"
+
+msgid "Columns"
+msgstr "Spalter"
 
 msgid "Concept"
 msgstr "Konsept"
@@ -1275,6 +1281,9 @@ msgstr "denne lenken"
 msgid "Accounting"
 msgstr "Regnskap"
 
+msgid "Additional"
+msgstr "Ytterligere"
+
 msgid "Annual fee"
 msgstr "Årlig avgift"
 
@@ -1310,6 +1319,9 @@ msgstr "Karakterer"
 
 msgid "Check data"
 msgstr "Sjekk data"
+
+msgid "Chronology"
+msgstr "Kronologi"
 
 msgid "Collection"
 msgstr "Samle"
@@ -2089,6 +2101,9 @@ msgstr "Tegnets navn"
 
 msgid "Collection for"
 msgstr "Samle inn for"
+
+msgid "Customisations"
+msgstr "Tilpasninger"
 
 msgid "Disable Tokens"
 msgstr "Deaktiver tokens"
@@ -6532,6 +6547,10 @@ msgid ""
 msgstr ""
 "Presentasjonen er synlig for alle spillere når \"Vis presentasjon\" er "
 "merket av"
+
+msgid ""
+"Select which fields should open automatically when the list is displayed"
+msgstr "Velg hvilke felt som skal åpnes automatisk når listen vises"
 
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient"

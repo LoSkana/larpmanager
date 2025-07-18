@@ -56,6 +56,15 @@ from larpmanager.models.form import QuestionApplicable, QuestionType
 from larpmanager.models.member import Member
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.common import copy_class
+from larpmanager.views.orga.registration import _get_registration_fields
+
+
+def _get_writing_elements():
+    shows = [
+        ("character", _("Characters"), QuestionApplicable.CHARACTER),
+        ("faction", _("Factions"), QuestionApplicable.FACTION),
+    ]
+    return shows
 
 
 class EventCharactersPdfForm(ConfigForm):
@@ -835,10 +844,7 @@ class OrgaRunForm(ConfigForm):
             "private fields visible only to assigned players"
         )
 
-        shows = [
-            ("character", _("Characters"), QuestionApplicable.CHARACTER),
-            ("faction", _("Factions"), QuestionApplicable.FACTION),
-        ]
+        shows = _get_writing_elements()
 
         basics = QuestionType.get_basic_types()
         self.set_section("visibility", _("Visibility"))
@@ -1050,3 +1056,70 @@ class OrgaPreferencesForm(ConfigForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
+        self.show_sections = True
+
+    def set_configs(self):
+        basics = QuestionType.get_basic_types()
+        event_id = self.params["event"].id
+
+        self.set_section("open", "Default fields")
+
+        help_text = _("Select which fields should open automatically when the list is displayed")
+
+        # Add registration fields
+        extra = []
+        feature_fields = [
+            ("", "#load_accounting", _("Accounting")),
+            ("", "email", _("Email")),
+            ("", "date", _("Chronology")),
+            ("unique_code", "special_cod", _("Unique code")),
+            ("additional_tickets", "additionals", _("Additional")),
+            ("gift", "gift", _("Gift")),
+            ("membership", "membership", _("Member")),
+            ("faction", "factions", _("Factions")),
+            ("custom_character", "custom", _("Customisations")),
+            ("reg_surcharges", "sur", _("Surcharge")),
+            ("discount", "disc", _("Discounts")),
+        ]
+        for field in feature_fields:
+            if field[0] and field[0] not in self.params["features"]:
+                continue
+            extra.append((field[1], field[2]))
+
+        fields = _get_registration_fields(self.params, self.params["request"].user.member)
+        max_length = 20
+        if fields:
+            extra.extend(
+                [
+                    (
+                        f".lq_{field_id}",
+                        field.display
+                        if len(field.display) <= max_length
+                        else field.display[: max_length - 5] + " [...]",
+                    )
+                    for field_id, field in fields.items()
+                ]
+            )
+            self.add_configs(
+                f"open_registration_{event_id}", ConfigType.MULTI_BOOL, _("Registrations"), help_text, extra=extra
+            )
+
+        # Add writings fields
+        shows = _get_writing_elements()
+        for s in shows:
+            if s[0] not in self.params["features"]:
+                continue
+            fields = get_writing_fields(self.params, s[2])
+            extra = []
+            for field in fields:
+                if field.typ == "name":
+                    continue
+
+                if field.typ in basics:
+                    tog = f".lq_{field.id}"
+                else:
+                    tog = f"q_{field.id}"
+
+                extra.append((tog, field.display))
+
+            self.add_configs(f"open_{s[0]}_{event_id}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)

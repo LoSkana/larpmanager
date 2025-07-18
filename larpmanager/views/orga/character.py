@@ -77,6 +77,8 @@ def orga_characters(request, s, n):
     if ctx["event"].get_config("show_export", False):
         ctx["export"] = "character"
 
+    ctx["default_fields"] = request.user.member.get_config(f"open_character_{ctx['event'].id}", "['teaser', 'text']")
+
     return writing_list(request, ctx, Character, "character")
 
 

@@ -462,6 +462,9 @@ msgstr "Export"
 msgid "Female"
 msgstr "Samice"
 
+msgid "Fields"
+msgstr "Pole"
+
 msgid "Filler"
 msgstr "Výplň"
 
@@ -647,6 +650,9 @@ msgstr "Pájka"
 
 msgid "Casting"
 msgstr "Casting"
+
+msgid "Columns"
+msgstr "Sloupce"
 
 msgid "Concept"
 msgstr "Koncept"
@@ -1275,6 +1281,9 @@ msgstr "tento odkaz"
 msgid "Accounting"
 msgstr "Účetnictví"
 
+msgid "Additional"
+msgstr "Další"
+
 msgid "Annual fee"
 msgstr "Roční poplatek"
 
@@ -1310,6 +1319,9 @@ msgstr "Postavy"
 
 msgid "Check data"
 msgstr "Kontrola údajů"
+
+msgid "Chronology"
+msgstr "Chronologie"
 
 msgid "Collection"
 msgstr "Sbírejte"
@@ -2089,6 +2101,9 @@ msgstr "Jméno postavy"
 
 msgid "Collection for"
 msgstr "Sbírejte pro"
+
+msgid "Customisations"
+msgstr "Přizpůsobení"
 
 msgid "Disable Tokens"
 msgstr "Zakázat tokeny"
@@ -6446,6 +6461,10 @@ msgid ""
 msgstr ""
 "Prezentace viditelná pro všechny hráče, pokud je zaškrtnuto políčko "
 "\"zobrazit prezentaci\""
+
+msgid ""
+"Select which fields should open automatically when the list is displayed"
+msgstr "Vyberte, která pole se mají automaticky otevřít při zobrazení seznamu"
 
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient"

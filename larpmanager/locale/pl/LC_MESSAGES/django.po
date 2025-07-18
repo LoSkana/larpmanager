@@ -462,6 +462,9 @@ msgstr "Eksport"
 msgid "Female"
 msgstr "Kobieta"
 
+msgid "Fields"
+msgstr "Pola"
+
 msgid "Filler"
 msgstr "Wypełniacz"
 
@@ -647,6 +650,9 @@ msgstr "Równowaga"
 
 msgid "Casting"
 msgstr "Casting"
+
+msgid "Columns"
+msgstr "Kolumny"
 
 msgid "Concept"
 msgstr "Koncepcja"
@@ -1275,6 +1281,9 @@ msgstr "ten link"
 msgid "Accounting"
 msgstr "Księgowość"
 
+msgid "Additional"
+msgstr "Dodatkowe"
+
 msgid "Annual fee"
 msgstr "Opłata roczna"
 
@@ -1310,6 +1319,9 @@ msgstr "Postacie"
 
 msgid "Check data"
 msgstr "Sprawdź dane"
+
+msgid "Chronology"
+msgstr "Chronologia"
 
 msgid "Collection"
 msgstr "Kolekcja"
@@ -2089,6 +2101,9 @@ msgstr "Nazwa postaci"
 
 msgid "Collection for"
 msgstr "Kolekcja dla"
+
+msgid "Customisations"
+msgstr "Personalizacja"
 
 msgid "Disable Tokens"
 msgstr "Wyłączanie tokenów"
@@ -6521,6 +6536,11 @@ msgid ""
 msgstr ""
 "Prezentacja widoczna dla wszystkich graczy, gdy zaznaczona jest opcja "
 "\"pokaż prezentację\""
+
+msgid ""
+"Select which fields should open automatically when the list is displayed"
+msgstr ""
+"Wybierz, które pola powinny otwierać się automatycznie po wyświetleniu listy"
 
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient"
