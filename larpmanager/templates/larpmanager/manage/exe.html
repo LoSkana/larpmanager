@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
-    {% trans "Dashboard" %} - {{ assoc.name }}
+    Dashboard - {{ assoc.name }}
 {% endblock title %}
 {% block content %}
     <div id="manage">
@@ -78,5 +78,5 @@
 {% endblock css %}
 {% block js %}
     {% include "elements/tutorial_query.js" %}
-    {% include "elements/manage_driver.js" %}
+    {% include "elements/manage_driver.js.html" %}
 {% endblock js %}

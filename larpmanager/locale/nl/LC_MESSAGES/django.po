@@ -1128,9 +1128,6 @@ msgstr "Gevallen"
 msgid "Customize"
 msgstr "aanpassen"
 
-msgid "Dashboard"
-msgstr "Dashboard"
-
 msgid "Deadlines"
 msgstr "Deadlines"
 
@@ -1460,6 +1457,9 @@ msgstr "Zichtbaarheid"
 
 msgid "Volunteers"
 msgstr "Vrijwilligers"
+
+msgid "Welcome to"
+msgstr "Welkom bij"
 
 msgid "Write here"
 msgstr "Schrijf hier"
@@ -2239,6 +2239,9 @@ msgstr "verzoek om terugbetaling"
 
 msgid "Ability missing"
 msgstr "Vermogen ontbreekt"
+
+msgid "And that is all"
+msgstr "En dat is alles"
 
 msgid "Change password"
 msgstr "Wachtwoord herstel"
@@ -3784,6 +3787,9 @@ msgstr "Selecteer de nieuwe vaardigheid die je wilt leren"
 msgid "The total registration fee is"
 msgstr "Het totale inschrijfgeld is"
 
+msgid "Toggle the sidebar visibility"
+msgstr "De zichtbaarheid van de zijbalk inschakelen"
+
 msgid "Transportation - gas, highway"
 msgstr "Vervoer - benzine, snelweg"
 
@@ -5258,12 +5264,18 @@ msgstr ""
 msgid "Total participation fees reduced through discounts"
 msgstr "Totale deelnamekosten verlaagd door kortingen"
 
+msgid "Write to us if you need help in setting things up!"
+msgstr "Schrijf ons als je hulp nodig hebt bij het opzetten!"
+
 msgid "you can still pay the remaining amount if you wish"
 msgstr "je kunt nog steeds het resterende bedrag betalen als je dat wilt"
 
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Toegewezen %(amount).2f %(elements)s voor '%(reason)s'"
+
+msgid "Here is a step-by-step walkthrough of the interface"
+msgstr "Hier volgt een stap-voor-stap uitleg van de interface"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Ik heb het een paar keer gedaan, ik heb basiservaring"
@@ -5374,6 +5386,9 @@ msgstr "Casting-voorkeuren opgeslagen op '%(type)s' voor %(event)s"
 
 msgid "Differing by only one character from the expected one"
 msgstr "Verschilt slechts één teken van het verwachte teken"
+
+msgid "Here is a to-do list of important actions to complete"
+msgstr "Hier is een lijst met belangrijke acties die je moet voltooien"
 
 msgid "Initial value of experience points for all characters"
 msgstr "Beginwaarde van ervaringspunten voor alle personages"
@@ -6427,6 +6442,10 @@ msgstr ""
 "of het personage zich NIET bewust is van de identiteit van de andere "
 "eigenschap"
 
+msgid "Click the tutorial to open it and follow the step-by-step instructions"
+msgstr ""
+"Klik op de zelfstudie om deze te openen en volg de stapsgewijze instructies"
+
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr "Dag van het jaar waarop het verenigingsjaar begint, in DD-MM formaat"
 
@@ -6452,6 +6471,10 @@ msgid "Enables payment processing, specifying which payment methods to accept"
 msgstr ""
 "Schakelt de verwerking van betalingen in en geeft aan welke "
 "betalingsmethoden moeten worden geaccepteerd"
+
+msgid "Here you can switch between administration pages and user-facing pages"
+msgstr ""
+"Hier kun je schakelen tussen beheerpagina's en pagina's voor gebruikers"
 
 msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
@@ -6703,6 +6726,12 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, worden karakternamen automatisch vervangen "
 "door een verwijzing"
+
+msgid ""
+"If you need help, type your request here in English using single keywords"
+msgstr ""
+"Als je hulp nodig hebt, typ dan hier je verzoek in het Engels met enkele "
+"trefwoorden"
 
 msgid ""
 "Indicates the maximum number of times it can be requested (0 = unlimited)"
@@ -7068,6 +7097,12 @@ msgid ""
 msgstr ""
 "Spelers kunnen vragen insturen en organisatoren kunnen ze bekijken en "
 "organiseren"
+
+msgid ""
+"And here is a to-do list of suggestions to help you set everything up "
+"properly"
+msgstr ""
+"En hier is een lijst met suggesties om je te helpen alles goed op te zetten"
 
 msgid ""
 "Enables to set a character as a 'mirror' for another, to hide it's true "
@@ -7789,6 +7824,13 @@ msgstr ""
 "spelersprofielen"
 
 msgid ""
+"Here you can select the workspace to use: your organization, and your events"
+" once created"
+msgstr ""
+"Hier kun je de werkruimte selecteren die je wilt gebruiken: je organisatie "
+"en je gemaakte evenementen"
+
+msgid ""
 "If checked: Adds a unique code to each payment, which helps in being able to"
 " recognize it"
 msgstr ""
@@ -8093,6 +8135,13 @@ msgid ""
 msgstr ""
 "Optioneel - Vermeld extra details op het ticket, deze worden onder de "
 "aanvraag weergegeven"
+
+msgid ""
+"This is the sidebar containing all the functions (it remains visible on "
+"every management page)"
+msgstr ""
+"Dit is de zijbalk met alle functies (deze blijft zichtbaar op elke "
+"beheerpagina)"
 
 msgid ""
 "To grant access to event management for other users and define roles with "

@@ -1128,9 +1128,6 @@ msgstr "Fall"
 msgid "Customize"
 msgstr "Anpassa"
 
-msgid "Dashboard"
-msgstr "Instrumentpanel"
-
 msgid "Deadlines"
 msgstr "Tidsfrister"
 
@@ -1460,6 +1457,9 @@ msgstr "Synlighet"
 
 msgid "Volunteers"
 msgstr "Volontärer"
+
+msgid "Welcome to"
+msgstr "Välkommen till"
 
 msgid "Write here"
 msgstr "Skriv här"
@@ -2239,6 +2239,9 @@ msgstr "begäran om återbetalning"
 
 msgid "Ability missing"
 msgstr "Förmåga saknas"
+
+msgid "And that is all"
+msgstr "Och det är allt"
 
 msgid "Change password"
 msgstr "Återställning av lösenord"
@@ -3784,6 +3787,9 @@ msgstr "Välj den nya färdighet som ska förvärvas"
 msgid "The total registration fee is"
 msgstr "Den totala anmälningsavgiften är"
 
+msgid "Toggle the sidebar visibility"
+msgstr "Växla sidofältets synlighet"
+
 msgid "Transportation - gas, highway"
 msgstr "Transport - bensin, motorväg"
 
@@ -5252,12 +5258,18 @@ msgstr "Denna sida sammanfattar organisationens volontärer"
 msgid "Total participation fees reduced through discounts"
 msgstr "Totala deltagaravgifter reducerade genom rabatter"
 
+msgid "Write to us if you need help in setting things up!"
+msgstr "Hör av dig till oss om du behöver hjälp med att sätta upp saker!"
+
 msgid "you can still pay the remaining amount if you wish"
 msgstr "du kan fortfarande betala det återstående beloppet om du vill"
 
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Tilldelad %(amount).2f %(elements)s för '%(reason)s'"
+
+msgid "Here is a step-by-step walkthrough of the interface"
+msgstr "Här följer en steg-för-steg-genomgång av gränssnittet"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jag har gjort det några gånger, jag har grundläggande erfarenhet"
@@ -5367,6 +5379,9 @@ msgstr "Castingpreferenser sparade på \"%(type)s\" för %(event)s"
 
 msgid "Differing by only one character from the expected one"
 msgstr "Avviker med endast en karaktär från den förväntade"
+
+msgid "Here is a to-do list of important actions to complete"
+msgstr "Här är en att-göra-lista över viktiga åtgärder som ska slutföras"
 
 msgid "Initial value of experience points for all characters"
 msgstr "Initialt värde av erfarenhetspoäng för alla karaktärer"
@@ -6347,6 +6362,11 @@ msgstr "Du har nått det maximala antalet tecken som kan skapas"
 msgid "whether the character is NOT aware of the identity of the other trait"
 msgstr "om karaktären INTE är medveten om den andra egenskapens identitet"
 
+msgid "Click the tutorial to open it and follow the step-by-step instructions"
+msgstr ""
+"Klicka på handledningen för att öppna den och följ steg-för-steg-"
+"instruktionerna"
+
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr "Dag på det år från vilket föreningsåret börjar, i formatet DD-MM"
 
@@ -6370,6 +6390,11 @@ msgid "Enables payment processing, specifying which payment methods to accept"
 msgstr ""
 "Aktiverar betalningshantering och anger vilka betalningsmetoder som ska "
 "accepteras"
+
+msgid "Here you can switch between administration pages and user-facing pages"
+msgstr ""
+"Här kan du växla mellan administrationssidor och sidor som vänder sig till "
+"användarna"
 
 msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
@@ -6604,6 +6629,12 @@ msgid ""
 "If checked, character names will be automatically replaced by a reference"
 msgstr ""
 "Om markerad, kommer teckennamn automatiskt att ersättas av en referens"
+
+msgid ""
+"If you need help, type your request here in English using single keywords"
+msgstr ""
+"Om du behöver hjälp kan du skriva din förfrågan här på engelska med hjälp av"
+" enstaka nyckelord"
 
 msgid ""
 "Indicates the maximum number of times it can be requested (0 = unlimited)"
@@ -6944,6 +6975,13 @@ msgid ""
 msgstr ""
 "Gör det möjligt för spelare att skicka in frågor och för arrangörer att "
 "granska och organisera dem"
+
+msgid ""
+"And here is a to-do list of suggestions to help you set everything up "
+"properly"
+msgstr ""
+"Och här är en lista med förslag på saker att göra för att hjälpa dig att "
+"ställa in allt på rätt sätt"
 
 msgid ""
 "Enables to set a character as a 'mirror' for another, to hide it's true "
@@ -7657,6 +7695,13 @@ msgstr ""
 "spelarprofiler"
 
 msgid ""
+"Here you can select the workspace to use: your organization, and your events"
+" once created"
+msgstr ""
+"Här kan du välja vilken arbetsyta du vill använda: din organisation och dina"
+" evenemang när de har skapats"
+
+msgid ""
 "If checked: Adds a unique code to each payment, which helps in being able to"
 " recognize it"
 msgstr ""
@@ -7961,6 +8006,13 @@ msgid ""
 msgstr ""
 "Valfritt - Ange ytterligare detaljer på biljetten, de kommer att visas under"
 " ansökan"
+
+msgid ""
+"This is the sidebar containing all the functions (it remains visible on "
+"every management page)"
+msgstr ""
+"Detta är sidofältet som innehåller alla funktioner (det förblir synligt på "
+"varje hanteringssida)"
 
 msgid ""
 "To grant access to event management for other users and define roles with "

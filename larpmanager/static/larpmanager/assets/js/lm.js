@@ -314,6 +314,13 @@ $(document).ready(function() {
         $('.info').hide();
     }
 
+    $('.dropdown-menu').each(function() {
+        if ($.trim($(this).html()) === '') {
+            $(this).siblings('.dropdown-button').remove();
+            $(this).remove();
+        }
+    });
+
     $(document).on('click', '.post_popup', function (e) {
 
         start_spinner();
