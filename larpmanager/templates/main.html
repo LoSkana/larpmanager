@@ -117,7 +117,7 @@
                     <p>{% trans "Hi" %}, {{ user.member.display_member }}!</p>
                 {% endif %}
                 <ul class="links">
-                    <li>
+                    <li class="middlebar">
                         <a href="{% url 'home' %}">{% trans "Calendar" %}</a>
                     </li>
                     {% if user.is_authenticated %}

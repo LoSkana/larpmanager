@@ -1318,38 +1318,6 @@ th select {
     transition: color 0.5s;
 }
 
-#topbar table {
-    margin: auto;
-}
-
-#topbar table tr, #topbar table td {
-    background: none;
-    border: none;
-    padding: 0 !important;
-}
-
-#topbar .left {
-    text-align: left !important;
-}
-
-#topbar .center {
-    text-align: center !important;
-}
-
-#topbar .right {
-    text-align: right !important;
-}
-
-#topbar .left .el {
-    margin-right: 2em;
-    display: inline-block;
-}
-
-#topbar .right .el {
-    margin-left: 2em;
-    display: inline-block;
-}
-
 .dropdown {
     position: relative;
     display: inline-block;
@@ -1825,12 +1793,23 @@ a label:hover {
     padding: 0.5em 1em;
     vertical-align: middle;
     z-index: 10;
+    width: 100%;
 }
 
 #topbar img {
     height: 1.5em;
     margin-right: 0.5em;
     vertical-align: middle;
+}
+
+#topbar .left {
+    float: left;
+    margin-right: 2em;
+}
+
+#topbar .right {
+    float: right;
+    margin-left: 2em;
 }
 
 #sidebar.topbar, #page-wrapper.topbar, #page-wrapper.topbar header {
@@ -1868,10 +1847,16 @@ a label:hover {
     #topbar {
         margin: 0;
         padding: 0.1em 0.5em;
+        display: flex;
+        flex-wrap: nowrap;
+    }
+
+    #topbar .el {
+        margin: auto;
     }
 
     #topbar .no_mobile, #sidebar .no_mobile {
-        display: none;
+        display: none !important;
     }
 
     .only_mobile {
