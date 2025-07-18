@@ -113,25 +113,16 @@
         <nav id="menu">
             <div class="inner">
                 <h2>Menu</h2>
-                {% if user.is_authenticated %}
-                    <p>{% trans "Hi" %}, {{ user.member.display_member }}!</p>
-                {% endif %}
                 <ul class="links">
                     <li class="middlebar">
                         <a href="{% url 'home' %}">{% trans "Calendar" %}</a>
                     </li>
                     {% if user.is_authenticated %}
-                        <li>
-                            <a href="{% url 'profile' %}">{% trans "Your user" %}</a>
-                        </li>
                         {% if 'membership' in assoc.features %}
                             <li>
                                 <a href="{% url 'membership' %}">{% trans "Your membership" %}</a>
                             </li>
                         {% endif %}
-                        <li>
-                            <a href="{% url 'accounting' %}">{% trans "Your accounting" %}</a>
-                        </li>
                         {% if 'delegated_members' in assoc.features %}
                             <li>
                                 <a href="{% url 'delegated' %}">{% trans "Your delegated users" %}</a>
@@ -162,27 +153,6 @@
                                             <a href="{% url 'gallery' s n %}">{{ name }}</a>
                                         </li>
                                     {% endfor %}
-                                </ul>
-                            </li>
-                        {% endif %}
-                        {% if topbar %}
-                            <li>
-                                <span class="opener">{% trans "Manage" %}
-                                    <img class="chevron"
-                                         alt="chevron"
-                                         src="{% static 'larpmanager/assets/chevron.png' %}" />
-                                </span>
-                                <ul>
-                                    {% for rid, v in open_runs.items %}
-                                        <li>
-                                            <a href="{% url 'manage' v.e v.r %}">{{ v.s }}</a>
-                                        </li>
-                                    {% endfor %}
-                                    {% if assoc_role %}
-                                        <li>
-                                            <a href="{% url 'manage' %}">{% trans "Organization" %}</a>
-                                        </li>
-                                    {% endif %}
                                 </ul>
                             </li>
                         {% endif %}

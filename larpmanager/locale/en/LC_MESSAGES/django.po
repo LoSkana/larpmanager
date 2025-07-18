@@ -4037,6 +4037,9 @@ msgstr ""
 msgid "Role"
 msgstr ""
 
+msgid "Hi"
+msgstr ""
+
 msgid "No organization found"
 msgstr ""
 
@@ -6854,9 +6857,6 @@ msgid ""
 msgstr ""
 
 msgid "This page allows you to fully view a character"
-msgstr ""
-
-msgid "Hi"
 msgstr ""
 
 msgid "Your membership"

@@ -1,0 +1,19 @@
+{% load static i18n %}
+<div id="topbar">
+    <div class="el left">
+        <a href="{% url 'home' %}">
+            <i class="fa-solid fa-house"></i>
+            <span class="no_mobile">Home</span>
+        </a>
+    </div>
+    <div class="el right">
+    <a id="menu-open" href="#menu"><i class="fa-solid fa-bars"></i>
+    <span class="no_mobile">{% trans "Hi" %}, {{ user.member.display_member }}!</span></a>
+</div>
+<div class="el right">
+    <a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i> <span class="no_mobile">Profile</span></a>
+</div>
+<div class="el right">
+    <a href="{% url 'accounting' %}"><i class="fa-solid fa-money-bill"></i> <span class="no_mobile">Accounting</span></a>
+</div>
+</div>

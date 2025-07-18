@@ -106,7 +106,17 @@
     <body class="is-preload {% if interface_old %}interface_old{% endif %}"
           id="{{ assoc.name | slugify }}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
-        {% include "elements/structure/topbar.html" %}
+        {% if not interface_old %}
+            {% if user.is_authenticated %}
+                {% if topbar %}
+                    {% include "elements/structure/topbar-admin.html" %}
+                {% else %}
+                    {% include "elements/structure/topbar-user.html" %}
+                {% endif %}
+            {% else %}
+                {% include "elements/structure/topbar.html" %}
+            {% endif %}
+        {% endif %}
         {% include "elements/structure/sidebar.html" %}
         <!-- Page Wrapper -->
         <div id="page-wrapper"
