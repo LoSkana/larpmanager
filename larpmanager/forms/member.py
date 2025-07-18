@@ -43,6 +43,7 @@ from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.base import BaseAccForm, MyForm
 from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput
 from larpmanager.models.association import Association, MemberFieldType
+from larpmanager.models.base import FeatureNationality
 from larpmanager.models.member import Badge, Member, Membership, VolunteerRegistry, get_user_membership
 from larpmanager.utils.common import FileTypeValidator, get_recaptcha_secrets
 from larpmanager.utils.tasks import my_send_mail
@@ -592,6 +593,9 @@ class ExeProfileForm(MyForm):
             )
 
             self.initial[slug] = init
+
+        if self.instance.nationality != FeatureNationality.ITALY:
+            self.delete_field("fiscal_code")
 
     @staticmethod
     def get_members_fields():

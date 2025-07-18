@@ -1812,9 +1812,6 @@ msgstr "Begärd tid"
 msgid "Rotate right"
 msgstr "Höger hjul"
 
-msgid "Run Settings"
-msgstr "Inställningar för körning"
-
 msgid "Safe editing"
 msgstr "Säker redigering"
 
@@ -2095,9 +2092,6 @@ msgstr "Donation betald"
 
 msgid "Donations done"
 msgstr "Donationer som gjorts"
-
-msgid "Event Settings"
-msgstr "Inställningar för evenemang"
 
 msgid "Event Template"
 msgstr "Mall för evenemang"
@@ -2491,9 +2485,6 @@ msgstr "Valda alternativ"
 
 msgid "Show collections"
 msgstr "Visa samlingar"
-
-msgid "Show event links"
-msgstr "Visa länkar till evenemang"
 
 msgid "Show explanation"
 msgstr "Visa förklaring"
@@ -3732,6 +3723,9 @@ msgstr "Godkännande av %(user)s som %(role)s"
 
 msgid "Buy skills for your character"
 msgstr "Köp färdigheter till din karaktär"
+
+msgid "Create and manage events here"
+msgstr "Skapa och hantera evenemang här"
 
 msgid "Date of issue of the document"
 msgstr "Datum för utfärdande av dokumentet"
@@ -5678,9 +5672,6 @@ msgstr "Vill du tillåta spelare att skapa sina egna karaktärer"
 
 msgid "If checked, makes pre-registration for this event available"
 msgstr "Om markerad, gör förregistrering för detta evenemang tillgängligt"
-
-msgid "If checked: shows a link to the event in the navigation bar"
-msgstr "Om markerad: visar en länk till evenemanget i navigeringsfältet"
 
 msgid "Lets staff access the diet information submitted by players"
 msgstr ""

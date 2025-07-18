@@ -19,13 +19,11 @@
     {% if run %}
         <div class="nav main_nav">
             <a href="{% url 'home' %}">Home</a>
-            {% if features.show_event %}
-                <div class="lm_tooltip">
-                    <a href="{% url 'event' run.event.slug run.number %}"
-                       {% if request_func_name == "event" %}class="select"{% endif %}>{% trans "Event" %}</a>
-                    <div class="lm_tooltiptext">{% trans "Discover what this event is about" %}!</div>
-                </div>
-            {% endif %}
+            <div class="lm_tooltip">
+                <a href="{% url 'event' run.event.slug run.number %}"
+                   {% if request_func_name == "event" %}class="select"{% endif %}>{% trans "Event" %}</a>
+                <div class="lm_tooltiptext">{% trans "Discover what this event is about" %}!</div>
+            </div>
             <div class="lm_tooltip">
                 <a href="{% url 'gallery' run.event.slug run.number %}"
                    {% if request_func_name == "gallery" %}class="select"{% endif %}>{% trans "Gallery" %}</a>
@@ -83,7 +81,7 @@
                     <div class="lm_tooltiptext">{% trans "View photos from the event" %}!</div>
                 </div>
             {% endif %}
-            {% if show_limitations %}
+            {% if limitations %}
                 <div class="lm_tooltip">
                     <a href="{% url 'limitations' run.event.slug run.number %}"
                        {% if request_func_name == "limitations" %}class="select"{% endif %}>{% trans "Limitations" %}</a>

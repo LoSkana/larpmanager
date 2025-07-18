@@ -1812,9 +1812,6 @@ msgstr "Heure demandée"
 msgid "Rotate right"
 msgstr "Roue droite"
 
-msgid "Run Settings"
-msgstr "Paramètres d'exécution"
-
 msgid "Safe editing"
 msgstr "Une édition sûre"
 
@@ -2095,9 +2092,6 @@ msgstr "Donation versée"
 
 msgid "Donations done"
 msgstr "Dons effectués"
-
-msgid "Event Settings"
-msgstr "Paramètres de l'événement"
 
 msgid "Event Template"
 msgstr "Modèle d'événement"
@@ -2491,9 +2485,6 @@ msgstr "Options sélectionnées"
 
 msgid "Show collections"
 msgstr "Afficher les collections"
-
-msgid "Show event links"
-msgstr "Afficher les liens vers les événements"
 
 msgid "Show explanation"
 msgstr "Montrer l'explication"
@@ -3732,6 +3723,9 @@ msgstr "Approbation des %(user)s en tant que %(role)s"
 
 msgid "Buy skills for your character"
 msgstr "Achetez des compétences pour votre personnage"
+
+msgid "Create and manage events here"
+msgstr "Créer et gérer des événements ici"
 
 msgid "Date of issue of the document"
 msgstr "Date de délivrance du document"
@@ -5741,10 +5735,6 @@ msgstr "Voulez-vous permettre aux joueurs de créer leurs propres personnages"
 
 msgid "If checked, makes pre-registration for this event available"
 msgstr "Si coché, permet de s'inscrire à l'avance à cet événement"
-
-msgid "If checked: shows a link to the event in the navigation bar"
-msgstr ""
-"Si coché : affiche un lien vers l'événement dans la barre de navigation"
 
 msgid "Lets staff access the diet information submitted by players"
 msgstr ""

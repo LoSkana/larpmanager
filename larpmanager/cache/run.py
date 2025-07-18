@@ -91,7 +91,7 @@ def init_cache_config_run(run):
     ev_features = get_event_features(run.event_id)
     ctx = {
         "buttons": get_event_button_cache(run.event_id),
-        "show_limitations": run.event.get_config("show_limitations", False),
+        "limitations": run.event.get_config("show_limitations", False),
         "user_character_max": run.event.get_config("user_character_max", 0),
         "cover_orig": run.event.get_config("cover_orig", False),
         "px_user": run.event.get_config("px_user", False),

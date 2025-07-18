@@ -272,10 +272,6 @@ class ExeConfigForm(ConfigForm):
         # CALENDAR
         self.set_section("calendar", _("Calendar"))
 
-        label = _("Show event links")
-        help_text = _("If checked: shows a link to the event in the navigation bar")
-        self.add_configs("calendar_show_event", ConfigType.BOOL, label, help_text)
-
         label = _("Past events")
         help_text = _("If checked: shows a link in the calendar to past events")
         self.add_configs("calendar_past_events", ConfigType.BOOL, label, help_text)
