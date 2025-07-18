@@ -2994,6 +2994,9 @@ msgstr "Plazos de pago"
 msgid "Payments in approval"
 msgstr "Pagos pendientes"
 
+msgid "Personal preferences"
+msgstr "Preferencias personales"
+
 msgid "Please wait a moment"
 msgstr "Espere un momento"
 
@@ -4918,6 +4921,9 @@ msgstr "Los usuarios registrados tendrán acceso normal"
 msgid "Remember to put recipients separated by commas"
 msgstr "Recuerda poner los destinatarios separados por comas"
 
+msgid "Set your personal preferences on the interface"
+msgstr "Configura tus preferencias personales en la interfaz"
+
 msgid "Something went wrong in the account activation"
 msgstr "Algo ha ido mal en la activación de la cuenta"
 
@@ -6449,6 +6455,10 @@ msgstr ""
 msgid "This is automatically deducted from the registration of a future event"
 msgstr ""
 "Este importe se deduce automáticamente de la inscripción de un evento futuro"
+
+msgid "This page allows you to set your personal preferences on the interface"
+msgstr ""
+"Esta página le permite configurar sus preferencias personales en la interfaz"
 
 msgid "To activate new features and enhance the functionality of the platform"
 msgstr ""

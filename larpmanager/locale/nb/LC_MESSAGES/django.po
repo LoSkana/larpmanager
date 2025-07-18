@@ -2994,6 +2994,9 @@ msgstr "Delbetalinger"
 msgid "Payments in approval"
 msgstr "Betalinger under godkjenning"
 
+msgid "Personal preferences"
+msgstr "Personlige preferanser"
+
 msgid "Please wait a moment"
 msgstr "Vennligst vent et øyeblikk"
 
@@ -4921,6 +4924,9 @@ msgstr "Registrerte brukere vil få normal tilgang"
 msgid "Remember to put recipients separated by commas"
 msgstr "Husk å sette mottakere atskilt med komma"
 
+msgid "Set your personal preferences on the interface"
+msgstr "Angi dine personlige preferanser i grensesnittet"
+
 msgid "Something went wrong in the account activation"
 msgstr "Noe gikk galt i kontoaktiveringen"
 
@@ -6401,6 +6407,10 @@ msgstr "Dette er de arrangementspåmeldingene som du må betale for"
 msgid "This is automatically deducted from the registration of a future event"
 msgstr ""
 "Dette trekkes automatisk fra ved påmelding til et fremtidig arrangement"
+
+msgid "This page allows you to set your personal preferences on the interface"
+msgstr ""
+"På denne siden kan du angi dine personlige preferanser for grensesnittet"
 
 msgid "To activate new features and enhance the functionality of the platform"
 msgstr "Aktivere nye funksjoner og forbedre plattformens funksjonalitet"

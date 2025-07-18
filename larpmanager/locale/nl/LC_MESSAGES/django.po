@@ -2994,6 +2994,9 @@ msgstr "Betalingstermijnen"
 msgid "Payments in approval"
 msgstr "Betalingen onder goedkeuring"
 
+msgid "Personal preferences"
+msgstr "Persoonlijke voorkeuren"
+
 msgid "Please wait a moment"
 msgstr "Een ogenblik geduld alstublieft"
 
@@ -4924,6 +4927,9 @@ msgstr "Geregistreerde gebruikers krijgen normale toegang"
 msgid "Remember to put recipients separated by commas"
 msgstr "Vergeet niet ontvangers gescheiden door komma's te plaatsen"
 
+msgid "Set your personal preferences on the interface"
+msgstr "Stel je persoonlijke voorkeuren in op de interface"
+
 msgid "Something went wrong in the account activation"
 msgstr "Er is iets misgegaan bij het activeren van de account"
 
@@ -6483,6 +6489,10 @@ msgid "This is automatically deducted from the registration of a future event"
 msgstr ""
 "Dit wordt automatisch in mindering gebracht op de registratie van een "
 "toekomstig evenement"
+
+msgid "This page allows you to set your personal preferences on the interface"
+msgstr ""
+"Op deze pagina kun je je persoonlijke voorkeuren voor de interface instellen"
 
 msgid "To activate new features and enhance the functionality of the platform"
 msgstr ""

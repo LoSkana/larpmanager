@@ -53,6 +53,7 @@ from larpmanager.models.event import (
     Run,
 )
 from larpmanager.models.form import QuestionType, QuestionVisibility
+from larpmanager.models.member import Member
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.common import copy_class
 
@@ -1035,3 +1036,17 @@ class OrgaQuickSetupForm(QuickSetupForm):
             )
 
         self.init_fields(get_event_features(self.instance.pk))
+
+
+class OrgaPreferencesForm(ConfigForm):
+    page_title = _("Personal preferences")
+
+    page_info = _("This page allows you to set your personal preferences on the interface")
+
+    class Meta:
+        model = Member
+        fields = ()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.prevent_canc = True

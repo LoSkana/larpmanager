@@ -1447,6 +1447,12 @@ msgstr ""
 msgid "Do you want to allow players to create their own characters"
 msgstr ""
 
+msgid "Personal preferences"
+msgstr ""
+
+msgid "This page allows you to set your personal preferences on the interface"
+msgstr ""
+
 msgid "Ability"
 msgstr ""
 
@@ -7875,6 +7881,9 @@ msgid "Manage questions and options for characters and writing elements"
 msgstr ""
 
 msgid "Display sent e-mails"
+msgstr ""
+
+msgid "Set your personal preferences on the interface"
 msgstr ""
 
 #, python-format

@@ -2994,6 +2994,9 @@ msgstr "Splátky"
 msgid "Payments in approval"
 msgstr "Platby v rámci schvalování"
 
+msgid "Personal preferences"
+msgstr "Osobní preference"
+
 msgid "Please wait a moment"
 msgstr "Chvíli prosím počkejte"
 
@@ -4918,6 +4921,9 @@ msgstr "Registrovaní uživatelé budou mít běžný přístup"
 msgid "Remember to put recipients separated by commas"
 msgstr "Nezapomeňte příjemce oddělit čárkami"
 
+msgid "Set your personal preferences on the interface"
+msgstr "Nastavení osobních preferencí v rozhraní"
+
 msgid "Something went wrong in the account activation"
 msgstr "Něco se pokazilo při aktivaci účtu"
 
@@ -6321,6 +6327,9 @@ msgstr "Jedná se o registrace událostí, za které je třeba zaplatit"
 
 msgid "This is automatically deducted from the registration of a future event"
 msgstr "Tato částka se automaticky odečte z registrace budoucí akce"
+
+msgid "This page allows you to set your personal preferences on the interface"
+msgstr "Na této stránce můžete nastavit osobní preference rozhraní"
 
 msgid "To activate new features and enhance the functionality of the platform"
 msgstr "Aktivace nových funkcí a vylepšení funkčnosti platformy"
