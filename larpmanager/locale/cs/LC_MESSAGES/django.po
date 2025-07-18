@@ -1812,9 +1812,6 @@ msgstr "Požadovaný čas"
 msgid "Rotate right"
 msgstr "Pravé kolo"
 
-msgid "Run Settings"
-msgstr "Nastavení spuštění"
-
 msgid "Safe editing"
 msgstr "Bezpečné úpravy"
 
@@ -2095,9 +2092,6 @@ msgstr "Vyplacený dar"
 
 msgid "Donations done"
 msgstr "Poskytnuté dary"
-
-msgid "Event Settings"
-msgstr "Nastavení události"
 
 msgid "Event Template"
 msgstr "Šablona události"
@@ -2491,9 +2485,6 @@ msgstr "Vybrané možnosti"
 
 msgid "Show collections"
 msgstr "Zobrazit sbírky"
-
-msgid "Show event links"
-msgstr "Zobrazit odkazy na události"
 
 msgid "Show explanation"
 msgstr "Zobrazit vysvětlení"
@@ -3732,6 +3723,9 @@ msgstr "Schválení %(user)s jako %(role)s"
 
 msgid "Buy skills for your character"
 msgstr "Kupte si dovednosti pro svou postavu"
+
+msgid "Create and manage events here"
+msgstr "Zde můžete vytvářet a spravovat události"
 
 msgid "Date of issue of the document"
 msgstr "Datum vydání dokumentu"
@@ -5671,9 +5665,6 @@ msgstr "Chcete umožnit hráčům vytvářet vlastní postavy"
 
 msgid "If checked, makes pre-registration for this event available"
 msgstr "Pokud je zaškrtnuto, zpřístupní předběžnou registraci na tuto událost"
-
-msgid "If checked: shows a link to the event in the navigation bar"
-msgstr "Pokud je zaškrtnuto: zobrazí odkaz na událost na navigačním panelu"
 
 msgid "Lets staff access the diet information submitted by players"
 msgstr ""

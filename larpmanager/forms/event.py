@@ -75,7 +75,7 @@ class EventCharactersPdfForm(ConfigForm):
 
 
 class OrgaEventForm(MyForm):
-    page_title = _("Event Settings")
+    page_title = _("Event")
 
     page_info = _("This page allows you to change general event settings")
 
@@ -762,7 +762,7 @@ class OrgaEventButtonForm(MyForm):
 
 
 class OrgaRunForm(ConfigForm):
-    page_title = _("Run Settings")
+    page_title = _("Run")
 
     page_info = _("This page allows you to change the general settings of this run")
 

@@ -1812,9 +1812,6 @@ msgstr "Gevraagde tijd"
 msgid "Rotate right"
 msgstr "Rechter wiel"
 
-msgid "Run Settings"
-msgstr "Instellingen uitvoeren"
-
 msgid "Safe editing"
 msgstr "Veilig bewerken"
 
@@ -2095,9 +2092,6 @@ msgstr "Betaalde donatie"
 
 msgid "Donations done"
 msgstr "Donaties"
-
-msgid "Event Settings"
-msgstr "Evenement Instellingen"
 
 msgid "Event Template"
 msgstr "Evenement Sjabloon"
@@ -2491,9 +2485,6 @@ msgstr "Geselecteerde opties"
 
 msgid "Show collections"
 msgstr "Toon collecties"
-
-msgid "Show event links"
-msgstr "Links naar evenementen weergeven"
 
 msgid "Show explanation"
 msgstr "Uitleg tonen"
@@ -3732,6 +3723,9 @@ msgstr "Goedkeuring %(user)s als %(role)s"
 
 msgid "Buy skills for your character"
 msgstr "Koop vaardigheden voor je personage"
+
+msgid "Create and manage events here"
+msgstr "Hier evenementen maken en beheren"
 
 msgid "Date of issue of the document"
 msgstr "Datum van uitgifte van het document"
@@ -5706,10 +5700,6 @@ msgstr "Wil je spelers hun eigen personages laten maken"
 
 msgid "If checked, makes pre-registration for this event available"
 msgstr "Indien aangevinkt, is voorregistratie voor dit evenement beschikbaar"
-
-msgid "If checked: shows a link to the event in the navigation bar"
-msgstr ""
-"Indien aangevinkt: toont een link naar het evenement in de navigatiebalk"
 
 msgid "Lets staff access the diet information submitted by players"
 msgstr ""

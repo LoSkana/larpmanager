@@ -265,12 +265,6 @@ msgstr ""
 msgid "Calendar"
 msgstr ""
 
-msgid "Show event links"
-msgstr ""
-
-msgid "If checked: shows a link to the event in the navigation bar"
-msgstr ""
-
 msgid "Past events"
 msgstr ""
 
@@ -762,7 +756,7 @@ msgstr ""
 msgid "Insert the html code for the footer"
 msgstr ""
 
-msgid "Event Settings"
+msgid "Event"
 msgstr ""
 
 msgid "This page allows you to change general event settings"
@@ -1299,7 +1293,7 @@ msgstr ""
 msgid "This page allows you to edit the event navigation buttons"
 msgstr ""
 
-msgid "Run Settings"
+msgid "Run"
 msgstr ""
 
 msgid "This page allows you to change the general settings of this run"
@@ -1702,9 +1696,6 @@ msgstr ""
 msgid "This page allows you to add or edit the registration surcharges"
 msgstr ""
 
-msgid "Event"
-msgstr ""
-
 msgid "Select the event you wish to pre-register for"
 msgstr ""
 
@@ -1719,9 +1710,6 @@ msgid "Informations"
 msgstr ""
 
 msgid "Is there anything else you would like to tell us"
-msgstr ""
-
-msgid "Run"
 msgstr ""
 
 msgid "Character Relationship"
@@ -3832,6 +3820,9 @@ msgstr ""
 msgid ""
 "This is the sidebar containing all the functions (it remains visible on "
 "every management page)"
+msgstr ""
+
+msgid "Create and manage events here"
 msgstr ""
 
 msgid ""
