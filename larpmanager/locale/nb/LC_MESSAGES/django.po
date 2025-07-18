@@ -1128,9 +1128,6 @@ msgstr "Tilfeller"
 msgid "Customize"
 msgstr "Tilpass"
 
-msgid "Dashboard"
-msgstr "Dashbord"
-
 msgid "Deadlines"
 msgstr "Tidsfrister"
 
@@ -1460,6 +1457,9 @@ msgstr "Synlighet"
 
 msgid "Volunteers"
 msgstr "Frivillige"
+
+msgid "Welcome to"
+msgstr "Velkommen til"
 
 msgid "Write here"
 msgstr "Skriv her"
@@ -2239,6 +2239,9 @@ msgstr "anmodning om refusjon"
 
 msgid "Ability missing"
 msgstr "Evne mangler"
+
+msgid "And that is all"
+msgstr "Og det er alt"
 
 msgid "Change password"
 msgstr "Gjenoppretting av passord"
@@ -3784,6 +3787,9 @@ msgstr "Velg den nye ferdigheten som skal tilegnes"
 msgid "The total registration fee is"
 msgstr "Den totale deltakeravgiften er"
 
+msgid "Toggle the sidebar visibility"
+msgstr "Veksle synligheten til sidefeltet"
+
 msgid "Transportation - gas, highway"
 msgstr "Transport - bensin, motorvei"
 
@@ -5249,12 +5255,18 @@ msgstr "Denne siden oppsummerer organisasjonens frivillige"
 msgid "Total participation fees reduced through discounts"
 msgstr "Totale deltakeravgifter redusert gjennom rabatter"
 
+msgid "Write to us if you need help in setting things up!"
+msgstr "Skriv til oss hvis du trenger hjelp til å sette opp ting!"
+
 msgid "you can still pay the remaining amount if you wish"
 msgstr "du kan fortsatt betale det resterende beløpet hvis du ønsker det"
 
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Tildelt %(amount).2f %(elements)s for '%(reason)s'"
+
+msgid "Here is a step-by-step walkthrough of the interface"
+msgstr "Her er en trinnvis gjennomgang av grensesnittet"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jeg har gjort det noen ganger, jeg har grunnleggende erfaring"
@@ -5364,6 +5376,9 @@ msgstr "Casting-preferanser lagret på '%(type)s' for %(event)s"
 
 msgid "Differing by only one character from the expected one"
 msgstr "Avviker med bare ett tegn fra det forventede"
+
+msgid "Here is a to-do list of important actions to complete"
+msgstr "Her er en huskeliste over viktige tiltak som må gjennomføres"
 
 msgid "Initial value of experience points for all characters"
 msgstr "Opprinnelig verdi av erfaringspoeng for alle figurer"
@@ -6347,6 +6362,10 @@ msgstr "Du har nådd det maksimale antallet tegn som kan opprettes"
 msgid "whether the character is NOT aware of the identity of the other trait"
 msgstr "om karakteren IKKE er klar over identiteten til den andre egenskapen"
 
+msgid "Click the tutorial to open it and follow the step-by-step instructions"
+msgstr ""
+"Klikk på veiledningen for å åpne den, og følg de trinnvise instruksjonene"
+
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr "Dag i året som foreningsåret begynner fra, i formatet DD-MM"
 
@@ -6373,6 +6392,9 @@ msgid "Enables payment processing, specifying which payment methods to accept"
 msgstr ""
 "Aktiverer betalingsbehandling og angir hvilke betalingsmetoder som skal "
 "aksepteres"
+
+msgid "Here you can switch between administration pages and user-facing pages"
+msgstr "Her kan du veksle mellom administrasjonssider og brukerrettede sider"
 
 msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
@@ -6603,6 +6625,12 @@ msgid ""
 msgstr ""
 "Hvis dette alternativet er krysset av, erstattes tegnnavn automatisk med en "
 "referanse"
+
+msgid ""
+"If you need help, type your request here in English using single keywords"
+msgstr ""
+"Hvis du trenger hjelp, kan du skrive inn forespørselen din her på engelsk "
+"ved hjelp av enkeltord"
 
 msgid ""
 "Indicates the maximum number of times it can be requested (0 = unlimited)"
@@ -6932,6 +6960,13 @@ msgid ""
 msgstr ""
 "Gjør det mulig for spillerne å sende inn spørsmål, og for arrangørene å gå "
 "gjennom og organisere dem"
+
+msgid ""
+"And here is a to-do list of suggestions to help you set everything up "
+"properly"
+msgstr ""
+"Og her er en huskeliste med forslag som kan hjelpe deg med å sette opp alt "
+"på riktig måte"
 
 msgid ""
 "Enables to set a character as a 'mirror' for another, to hide it's true "
@@ -7634,6 +7669,13 @@ msgstr ""
 "spillerprofiler"
 
 msgid ""
+"Here you can select the workspace to use: your organization, and your events"
+" once created"
+msgstr ""
+"Her kan du velge hvilket arbeidsområde du vil bruke: organisasjonen din, og "
+"hendelsene dine når de er opprettet"
+
+msgid ""
 "If checked: Adds a unique code to each payment, which helps in being able to"
 " recognize it"
 msgstr ""
@@ -7936,6 +7978,13 @@ msgid ""
 msgstr ""
 "Valgfritt - Angi ytterligere detaljer på billetten, de vil vises under "
 "søknaden"
+
+msgid ""
+"This is the sidebar containing all the functions (it remains visible on "
+"every management page)"
+msgstr ""
+"Dette er sidefeltet som inneholder alle funksjonene (det forblir synlig på "
+"alle administrasjonssider)"
 
 msgid ""
 "To grant access to event management for other users and define roles with "

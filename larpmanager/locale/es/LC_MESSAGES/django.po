@@ -1128,9 +1128,6 @@ msgstr "Custodios"
 msgid "Customize"
 msgstr "Personalización"
 
-msgid "Dashboard"
-msgstr "Cuadro de mandos"
-
 msgid "Deadlines"
 msgstr "Plazos"
 
@@ -1460,6 +1457,9 @@ msgstr "Visibilidad"
 
 msgid "Volunteers"
 msgstr "Voluntarios"
+
+msgid "Welcome to"
+msgstr "Bienvenido a"
 
 msgid "Write here"
 msgstr "Escriba aquí"
@@ -2239,6 +2239,9 @@ msgstr "solicitud de reembolso"
 
 msgid "Ability missing"
 msgstr "Falta habilidad"
+
+msgid "And that is all"
+msgstr "Y eso es todo"
 
 msgid "Change password"
 msgstr "Recuperación de contraseñas"
@@ -3784,6 +3787,9 @@ msgstr "Selecciona la nueva habilidad"
 msgid "The total registration fee is"
 msgstr "La cuota total de inscripción es de"
 
+msgid "Toggle the sidebar visibility"
+msgstr "Alternar la visibilidad de la barra lateral"
+
 msgid "Transportation - gas, highway"
 msgstr "Transporte - gasolina, autopista"
 
@@ -5247,12 +5253,18 @@ msgstr "Esta página resume los voluntarios de la organización"
 msgid "Total participation fees reduced through discounts"
 msgstr "Cuotas de participación totales reducidas mediante descuentos"
 
+msgid "Write to us if you need help in setting things up!"
+msgstr "Escríbanos si necesita ayuda para organizarlo todo."
+
 msgid "you can still pay the remaining amount if you wish"
 msgstr "aún puede pagar el importe restante si lo desea"
 
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Asignado %(amount).2f %(elements)s para '%(reason)s'"
+
+msgid "Here is a step-by-step walkthrough of the interface"
+msgstr "Aquí tienes un recorrido paso a paso por la interfaz"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Lo he hecho unas cuantas veces, tengo cierta experiencia"
@@ -5364,6 +5376,9 @@ msgstr "Preferencias de reparto guardadas en '%(type)s' para %(event)s"
 
 msgid "Differing by only one character from the expected one"
 msgstr "Sólo difiere en un carácter del esperado"
+
+msgid "Here is a to-do list of important actions to complete"
+msgstr "He aquí una lista de acciones importantes que hay que llevar a cabo"
 
 msgid "Initial value of experience points for all characters"
 msgstr "Valor inicial de los puntos de experiencia para todos los personajes"
@@ -6391,6 +6406,10 @@ msgstr "Ha alcanzado el número máximo de caracteres que se pueden crear"
 msgid "whether the character is NOT aware of the identity of the other trait"
 msgstr "si el personaje NO conoce la identidad del otro rasgo"
 
+msgid "Click the tutorial to open it and follow the step-by-step instructions"
+msgstr ""
+"Haz clic en el tutorial para abrirlo y sigue las instrucciones paso a paso"
+
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr ""
 "Día del año a partir del cual comienza el año de afiliación, en formato DD-"
@@ -6418,6 +6437,11 @@ msgstr ""
 msgid "Enables payment processing, specifying which payment methods to accept"
 msgstr ""
 "Activa el procesamiento de pagos, especificando qué métodos de pago aceptar"
+
+msgid "Here you can switch between administration pages and user-facing pages"
+msgstr ""
+"Aquí puede alternar entre las páginas de administración y las páginas "
+"orientadas al usuario"
 
 msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
@@ -6670,6 +6694,12 @@ msgid ""
 msgstr ""
 "Si se marca, los nombres de los caracteres se sustituirán automáticamente "
 "por una referencia"
+
+msgid ""
+"If you need help, type your request here in English using single keywords"
+msgstr ""
+"Si necesita ayuda, escriba aquí su solicitud en inglés utilizando palabras "
+"clave sueltas"
 
 msgid ""
 "Indicates the maximum number of times it can be requested (0 = unlimited)"
@@ -7018,6 +7048,13 @@ msgid ""
 msgstr ""
 "Permite a los jugadores enviar preguntas y a los organizadores revisarlas y "
 "organizarlas"
+
+msgid ""
+"And here is a to-do list of suggestions to help you set everything up "
+"properly"
+msgstr ""
+"Y aquí tienes una lista de sugerencias que te ayudarán a configurarlo todo "
+"correctamente"
 
 msgid ""
 "Enables to set a character as a 'mirror' for another, to hide it's true "
@@ -7737,6 +7774,13 @@ msgstr ""
 "perfiles de jugador"
 
 msgid ""
+"Here you can select the workspace to use: your organization, and your events"
+" once created"
+msgstr ""
+"Aquí puede seleccionar el espacio de trabajo que va a utilizar: su "
+"organización, y sus eventos una vez creados"
+
+msgid ""
 "If checked: Adds a unique code to each payment, which helps in being able to"
 " recognize it"
 msgstr ""
@@ -8041,6 +8085,14 @@ msgid ""
 msgstr ""
 "Opcional - Indique detalles adicionales en el ticket, se mostrarán debajo de"
 " la solicitud"
+
+msgid ""
+"This is the sidebar containing all the functions (it remains visible on "
+"every management page)"
+msgstr ""
+"Es la barra lateral que contiene todas las funciones necesarias para "
+"gestionar su organización (permanece visible en todas las páginas de "
+"gestión)"
 
 msgid ""
 "To grant access to event management for other users and define roles with "

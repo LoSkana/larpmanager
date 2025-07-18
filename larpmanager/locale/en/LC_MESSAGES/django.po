@@ -3823,6 +3823,49 @@ msgid ""
 "always of the same macrotype)"
 msgstr ""
 
+msgid "Welcome to"
+msgstr ""
+
+msgid "Here is a step-by-step walkthrough of the interface"
+msgstr ""
+
+msgid ""
+"This is the sidebar containing all the functions (it remains visible on "
+"every management page)"
+msgstr ""
+
+msgid ""
+"Here you can select the workspace to use: your organization, and your events "
+"once created"
+msgstr ""
+
+msgid "Here you can switch between administration pages and user-facing pages"
+msgstr ""
+
+msgid "Toggle the sidebar visibility"
+msgstr ""
+
+msgid ""
+"If you need help, type your request here in English using single keywords"
+msgstr ""
+
+msgid "Here is a to-do list of important actions to complete"
+msgstr ""
+
+msgid ""
+"And here is a to-do list of suggestions to help you set everything up "
+"properly"
+msgstr ""
+
+msgid "Click the tutorial to open it and follow the step-by-step instructions"
+msgstr ""
+
+msgid "And that is all"
+msgstr ""
+
+msgid "Write to us if you need help in setting things up!"
+msgstr ""
+
 msgid "Tax code verification"
 msgstr ""
 
@@ -4026,9 +4069,6 @@ msgid "Other characters"
 msgstr ""
 
 msgid "Access the event dashboard"
-msgstr ""
-
-msgid "Dashboard"
 msgstr ""
 
 msgid "Access the organization dashboard"
