@@ -3725,7 +3725,7 @@ msgid "Buy skills for your character"
 msgstr "Acquista abilità del tuo personaggio"
 
 msgid "Create and manage events here"
-msgstr "Creare e gestire eventi qui"
+msgstr "Crea e gestisci eventi qui"
 
 msgid "Date of issue of the document"
 msgstr "Data di emissione del documento"
