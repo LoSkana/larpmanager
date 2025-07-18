@@ -1107,6 +1107,9 @@ msgstr "Schopnosti"
 msgid "Additions"
 msgstr "Dodatky"
 
+msgid "Approvals"
+msgstr "Schválení"
+
 msgid "Available"
 msgstr "Dostupné na"
 
@@ -2371,9 +2374,6 @@ msgstr "Celková sbírka"
 
 msgid "Color background"
 msgstr "Textové pozadí"
-
-msgid "Confirm Payments"
-msgstr "Potvrzení plateb"
 
 msgid "Current template"
 msgstr "Aktuální šablona"
@@ -4110,8 +4110,8 @@ msgstr "Správa typu prologů událostí"
 msgid "Manages registration cancellations"
 msgstr "spravuje zrušení registrace"
 
-msgid "Manually confirm payments received"
-msgstr "Ruční potvrzení přijatých plateb"
+msgid "Manually approve payments received"
+msgstr "Ruční schvalování přijatých plateb"
 
 msgid "Now you can create event templates"
 msgstr "Nyní můžete vytvářet šablony událostí"
@@ -5263,9 +5263,6 @@ msgstr "Přiřazeno %(amount).2f %(elements)s pro '%(reason)s'"
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Několikrát jsem to dělal, mám základní zkušenosti"
 
-msgid "If checked, makes characters visible to all players"
-msgstr "Pokud je zaškrtnuto, postavy jsou viditelné pro všechny hráče"
-
 msgid "If you want to download an example file, click here"
 msgstr "Pokud si chcete stáhnout ukázkový soubor, klikněte zde"
 
@@ -5608,12 +5605,6 @@ msgstr "Ahoj! Vaše registrace do <b>%(event)s</b> byla aktualizována"
 msgid "I am not good what to say. I never thought it would happen"
 msgstr "Nevím, co na to říct. Nikdy jsem si nemyslel, že se to stane"
 
-msgid "If checked, makes the field content visible to all players"
-msgstr "Pokud je zaškrtnuto, obsah pole je viditelný pro všechny hráče"
-
-msgid "If checked, makes workshops visible for players to fill in"
-msgstr "Pokud je zaškrtnuto, zviditelní se dílny, které mohou hráči vyplnit"
-
 msgid "If instead you wish to upload a new photo of your document"
 msgstr "Pokud si místo toho přejete nahrát novou fotografii dokumentu"
 
@@ -5727,6 +5718,10 @@ msgstr ""
 msgid "Allows players to cancel their own registrations at any time"
 msgstr "Umožňuje hráčům kdykoli zrušit vlastní registraci"
 
+msgid "If checked, workshops will be visible for players to fill in"
+msgstr ""
+"Pokud je zaškrtnuto, budou viditelné workshopy, které mohou hráči vyplnit"
+
 msgid "If you wish to upload a new scan of your application instead"
 msgstr "Chcete-li místo toho nahrát nový sken své žádosti"
 
@@ -5769,9 +5764,6 @@ msgstr "Přidáno na konec všech e-mailů potvrzujících registraci hráčům"
 
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Pokud je možnost zaškrtnuta, lze ji zvolit maximálně několikrát"
-
-msgid "If checked, makes prologues visible to the assigned character"
-msgstr "Pokud je zaškrtnuto, zviditelní prology pro přiřazenou postavu"
 
 msgid "Lets staff access the safety information submitted by players"
 msgstr ""
@@ -5894,6 +5886,12 @@ msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Pokud je zaškrtnuto, nebudou při zadávání této události použity žádné žetony"
 
+msgid "If checked, prologues will be visible to the assigned character"
+msgstr "Pokud je zaškrtnuto, budou prology viditelné pro přiřazenou postavu"
+
+msgid "If checked, the PDF version of character sheets will be visible"
+msgstr "Pokud je zaškrtnuto, zobrazí se PDF verze charakterových listů"
+
 msgid "Indicate the exact date in which the payment has been performed"
 msgstr "Uveďte, ke kterému dni byl proveden pohyb ve finančním nástroji"
 
@@ -6001,9 +5999,6 @@ msgid "Error loading. Invalid file format (we accept only pdf or images)"
 msgstr ""
 "Chybné načítání. Nesprávný formát souboru - přijímáme pouze pdf a obrázky"
 
-msgid "If checked, makes visible the PDF version of the character sheets"
-msgstr "Pokud je zaškrtnuto, zviditelní se verze karet ve formátu PDF"
-
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""
 "Pokud je zaškrtnuto, nebudou v položkách pro tuto událost použity žádné "
@@ -6056,9 +6051,6 @@ msgstr "Obsah e-mailu, který hráčům připomíná, aby vyplnili žádost o č
 
 msgid "Enter your email below to receive instructions on how to change it"
 msgstr "Zadejte svůj e-mail níže a obdržíte pokyny, jak jej změnit"
-
-msgid "If checked, makes the field content visible to the assigned player"
-msgstr "Pokud je zaškrtnuto, obsah pole je viditelný pro přiřazeného hráče"
 
 msgid "Indicates whether the option can be included in the gifted signups"
 msgstr "Označuje, zda lze možnost zahrnout do volných položek"
@@ -6698,11 +6690,6 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, je možnost viditelná pouze v případě, že jsou vybrány "
 "jiné možnosti"
-
-msgid ""
-"If checked, makes factions visible, as the character assignments to factions"
-msgstr ""
-"Pokud je zaškrtnuto, zviditelní frakce, protože přiřazení postavy k frakcím"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
@@ -8959,6 +8946,13 @@ msgstr ""
 "platbu provedl. Výchozí hodnota 30."
 
 msgid ""
+"Selected fields will be displayed as follows: public fields visible to all "
+"players, private fields visible only to assigned players"
+msgstr ""
+"Vybraná pole se zobrazí takto: veřejná pole viditelná pro všechny hráče, "
+"soukromá pole viditelná pouze pro přiřazené hráče"
+
+msgid ""
 "This page allows you to select the features activated for this event, and "
 "all its runs (click on a feature to show its description)"
 msgstr ""
@@ -9486,15 +9480,6 @@ msgstr ""
 "tento údaj je hlavním pozitivem, provozní marží. Zohledňuje rozpočty na "
 "události, které trvají déle než dva měsíce a které se považují za uzavřené, "
 "a považuje všechny žetony a kredity za uhrazené"
-
-msgid ""
-"Please note that your character sheet may contain  personal secrets, not to "
-"be shared before the start of the event. To avoid accidentally spoiling your"
-" experience, do not discuss its content with other participants!"
-msgstr ""
-"Vezměte prosím na vědomí, že váš list postavy může obsahovat osobní "
-"tajemství, která by neměla být sdělována před začátkem akce. Abyste si "
-"náhodou nepokazili zážitek, neprobírejte jeho obsah s ostatními účastníky!"
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are"

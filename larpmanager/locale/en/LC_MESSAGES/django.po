@@ -1320,23 +1320,18 @@ msgstr ""
 msgid "Not active anymore"
 msgstr ""
 
+msgid ""
+"Selected fields will be displayed as follows: public fields visible to all "
+"players, private fields visible only to assigned players"
+msgstr ""
+
 msgid "Characters"
-msgstr ""
-
-msgid "If checked, makes characters visible to all players"
-msgstr ""
-
-msgid "If checked, makes the field content visible to all players"
-msgstr ""
-
-msgid "If checked, makes the field content visible to the assigned player"
 msgstr ""
 
 msgid "Factions"
 msgstr ""
 
-msgid ""
-"If checked, makes factions visible, as the character assignments to factions"
+msgid "Visibility"
 msgstr ""
 
 msgid "Speedlarp"
@@ -1348,7 +1343,7 @@ msgstr ""
 msgid "Prologues"
 msgstr ""
 
-msgid "If checked, makes prologues visible to the assigned character"
+msgid "If checked, prologues will be visible to the assigned character"
 msgstr ""
 
 msgid "Questbuilder"
@@ -1360,16 +1355,13 @@ msgstr ""
 msgid "Workshop"
 msgstr ""
 
-msgid "If checked, makes workshops visible for players to fill in"
+msgid "If checked, workshops will be visible for players to fill in"
 msgstr ""
 
 msgid "PDF"
 msgstr ""
 
-msgid "If checked, makes visible the PDF version of the character sheets"
-msgstr ""
-
-msgid "Visibility"
+msgid "If checked, the PDF version of character sheets will be visible"
 msgstr ""
 
 msgid "Progression"
@@ -2002,12 +1994,6 @@ msgstr ""
 
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
-msgstr ""
-
-msgid ""
-"Please note that your character sheet may contain  personal secrets, not to "
-"be shared before the start of the event. To avoid accidentally spoiling your "
-"experience, do not discuss its content with other participants!"
 msgstr ""
 
 #, python-format
@@ -4034,10 +4020,10 @@ msgstr ""
 msgid "Access the event dashboard"
 msgstr ""
 
-msgid "Dashboard"
+msgid "Access the organization dashboard"
 msgstr ""
 
-msgid "Access the organization dashboard"
+msgid "Dashboard"
 msgstr ""
 
 msgid "Role"
@@ -7799,10 +7785,10 @@ msgstr ""
 msgid "Manages and assigns tasks to characters"
 msgstr ""
 
-msgid "Confirm Payments"
+msgid "Approvals"
 msgstr ""
 
-msgid "Manually confirm payments received"
+msgid "Manually approve payments received"
 msgstr ""
 
 msgid "Upload Expenses"

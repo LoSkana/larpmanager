@@ -1107,6 +1107,9 @@ msgstr "Habilidades"
 msgid "Additions"
 msgstr "Adiciones"
 
+msgid "Approvals"
+msgstr "Homologaciones"
+
 msgid "Available"
 msgstr "Disponible"
 
@@ -2371,9 +2374,6 @@ msgstr "Total recolectadol"
 
 msgid "Color background"
 msgstr "Color de fondo"
-
-msgid "Confirm Payments"
-msgstr "Confirmar pagos"
 
 msgid "Current template"
 msgstr "Plantilla actual"
@@ -4110,8 +4110,8 @@ msgstr "Gestionar el tipo de eventos prologados"
 msgid "Manages registration cancellations"
 msgstr "Gestiona las anulaciones de inscripciones"
 
-msgid "Manually confirm payments received"
-msgstr "Confirmar manualmente los pagos recibidos"
+msgid "Manually approve payments received"
+msgstr "Aprobar manualmente los pagos recibidos"
 
 msgid "Now you can create event templates"
 msgstr "Ahora puedes crear plantillas de eventos"
@@ -5263,11 +5263,6 @@ msgstr "Asignado %(amount).2f %(elements)s para '%(reason)s'"
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Lo he hecho unas cuantas veces, tengo cierta experiencia"
 
-msgid "If checked, makes characters visible to all players"
-msgstr ""
-"Si está marcada, hace que los personajes sean visibles para todos los "
-"jugadores"
-
 msgid "If you want to download an example file, click here"
 msgstr "Si desea descargar un archivo de ejemplo, haga clic aquí"
 
@@ -5626,16 +5621,6 @@ msgstr "¡Hola! ¡Tu inscripción a <b>%(event)s</b> ha sido actualizada"
 msgid "I am not good what to say. I never thought it would happen"
 msgstr "No sé qué decir. Nunca pensé que esto pasaría"
 
-msgid "If checked, makes the field content visible to all players"
-msgstr ""
-"Si está marcada, hace que el contenido del campo sea visible para todos los "
-"jugadores"
-
-msgid "If checked, makes workshops visible for players to fill in"
-msgstr ""
-"Si está marcada, hace visibles los talleres para que los jugadores se "
-"apunten"
-
 msgid "If instead you wish to upload a new photo of your document"
 msgstr "Si en lugar de ello deseas subir una foto nueva de tu documento"
 
@@ -5759,6 +5744,11 @@ msgstr ""
 "Permite a los jugadores cancelar sus propias inscripciones en cualquier "
 "momento"
 
+msgid "If checked, workshops will be visible for players to fill in"
+msgstr ""
+"Si está marcada, los talleres estarán visibles para que los jugadores los "
+"rellenen"
+
 msgid "If you wish to upload a new scan of your application instead"
 msgstr "Si deseas subir un nuevo escaneado de tu solicitud en su lugar"
 
@@ -5807,11 +5797,6 @@ msgstr ""
 
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Si está marcada, una opción puede elegirse un número máximo de veces"
-
-msgid "If checked, makes prologues visible to the assigned character"
-msgstr ""
-"Si está marcada, hace que los prólogos sean visibles para el personaje "
-"asignado"
 
 msgid "Lets staff access the safety information submitted by players"
 msgstr ""
@@ -5949,6 +5934,14 @@ msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Si está marcada, no se utilizarán tokens en las entradas de este evento"
 
+msgid "If checked, prologues will be visible to the assigned character"
+msgstr ""
+"Si está marcada, los prólogos serán visibles para el personaje asignado"
+
+msgid "If checked, the PDF version of character sheets will be visible"
+msgstr ""
+"Si está marcada, la versión PDF de las hojas de personaje será visible"
+
 msgid "Indicate the exact date in which the payment has been performed"
 msgstr "Indica en qué fecha se realizó el pago"
 
@@ -6070,9 +6063,6 @@ msgstr ""
 "Error al cargar. Formato de archivo no válido (sólo aceptamos pdf o "
 "imágenes)"
 
-msgid "If checked, makes visible the PDF version of the character sheets"
-msgstr "Si está marcada, hace visibles los PDF de las fichas de personaje"
-
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""
 "Si está marcada, no se utilizarán créditos en las inscripciones para este "
@@ -6134,11 +6124,6 @@ msgid "Enter your email below to receive instructions on how to change it"
 msgstr ""
 "Introduce tu correo electrónico a continuación para recibir instrucciones "
 "sobre cómo cambiarlo"
-
-msgid "If checked, makes the field content visible to the assigned player"
-msgstr ""
-"Si está marcada, hace que el contenido del campo sea visible para el "
-"reproductor asignado"
 
 msgid "Indicates whether the option can be included in the gifted signups"
 msgstr "Indica si la opción puede incluirse en las entradas libres"
@@ -6876,12 +6861,6 @@ msgid ""
 msgstr ""
 "Si está marcada, permite que una opción sea visible sólo si otras opciones "
 "están seleccionadas"
-
-msgid ""
-"If checked, makes factions visible, as the character assignments to factions"
-msgstr ""
-"Si está marcada, hace visibles las facciones, ya que las asignaciones de "
-"personajes a facciones"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
@@ -9220,6 +9199,14 @@ msgstr ""
 " al jugador que proceda con el pago. Por defecto 30."
 
 msgid ""
+"Selected fields will be displayed as follows: public fields visible to all "
+"players, private fields visible only to assigned players"
+msgstr ""
+"Los campos seleccionados se mostrarán de la siguiente manera: campos "
+"públicos visibles para todos los jugadores, campos privados visibles sólo "
+"para los jugadores asignados"
+
+msgid ""
 "This page allows you to select the features activated for this event, and "
 "all its runs (click on a feature to show its description)"
 msgstr ""
@@ -9774,15 +9761,6 @@ msgstr ""
 "esta cifra es el principal positivo, el margen de explotación. Tiene en "
 "cuenta los presupuestos de los eventos que llevan más de dos meses, que se "
 "consideran cerrados, y trata todas las fichas y créditos como reembolsados"
-
-msgid ""
-"Please note that your character sheet may contain  personal secrets, not to "
-"be shared before the start of the event. To avoid accidentally spoiling your"
-" experience, do not discuss its content with other participants!"
-msgstr ""
-"Ten en cuenta que tu hoja de personaje puede contener secretos personales, "
-"que no deben compartirse antes de que comience el evento. Para no estropear "
-"tu experiencia, no comentes su contenido con otros participantes."
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are"

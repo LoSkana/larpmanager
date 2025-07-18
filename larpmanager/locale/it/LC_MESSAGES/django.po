@@ -1107,6 +1107,9 @@ msgstr "Abilità"
 msgid "Additions"
 msgstr "Aggiuntivi"
 
+msgid "Approvals"
+msgstr "Approvazioni"
+
 msgid "Available"
 msgstr "Disponibili"
 
@@ -2045,7 +2048,7 @@ msgid "Total revenue"
 msgstr "Ricavi totali"
 
 msgid "URL shortener"
-msgstr "Accorciatore di URL"
+msgstr "Accorcia URL"
 
 msgid "Visualisation"
 msgstr "Visualizzazione"
@@ -2371,9 +2374,6 @@ msgstr "Raccolta totale"
 
 msgid "Color background"
 msgstr "Sfondo testo"
-
-msgid "Confirm Payments"
-msgstr "Conferma Pagamenti"
 
 msgid "Current template"
 msgstr "Template attuale"
@@ -4110,8 +4110,8 @@ msgstr "Gestisci il tipo di prologo dell'evento"
 msgid "Manages registration cancellations"
 msgstr "Gestisci le cancellazioni delle iscrizioni"
 
-msgid "Manually confirm payments received"
-msgstr "Conferma manualmente i pagamenti ricevuti"
+msgid "Manually approve payments received"
+msgstr "Approva manualmente i pagamenti ricevuti"
 
 msgid "Now you can create event templates"
 msgstr "Ora è possibile creare modelli di eventi"
@@ -5218,7 +5218,7 @@ msgid "Select which of your characters you want to access"
 msgstr "Seleziona quale dei tuoi personaggi vuoi accedere"
 
 msgid "Set the casting options in the configuration panel"
-msgstr "Impostare le opzioni di casting nel pannello di configurazione"
+msgstr "Imposta le opzioni di casting nel pannello di configurazione"
 
 msgid "Set visual aspect: colors, background, cover image"
 msgstr "Imposta l'aspetto visivo: colori, sfondo, immagine di copertina"
@@ -5264,9 +5264,6 @@ msgstr "Assegnato %(amount).2f %(elements)s per \"%(reason) s\""
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "L'ho fatto qualche volta, ho una esperienza di base"
-
-msgid "If checked, makes characters visible to all players"
-msgstr "Se selezionata, rende i personaggi visibili a tutti i giocatori"
 
 msgid "If you want to download an example file, click here"
 msgstr "Se si desidera scaricare un file di esempio, fare clic qui"
@@ -5633,14 +5630,6 @@ msgstr "Ciao! La tua iscrizione a <b>%(event)s</b> è stata aggiornata"
 msgid "I am not good what to say. I never thought it would happen"
 msgstr "Non sono bene cosa dire. Non pensavo sarebbe mai successo"
 
-msgid "If checked, makes the field content visible to all players"
-msgstr ""
-"Se selezionata, rende il contenuto del campo visibile a tutti i giocatori"
-
-msgid "If checked, makes workshops visible for players to fill in"
-msgstr ""
-"Se checkato, rende visibile i workshop che i giocatori possono compilare"
-
 msgid "If instead you wish to upload a new photo of your document"
 msgstr "Se invece desideri caricare una nuova foto del tuo documento"
 
@@ -5766,6 +5755,11 @@ msgstr ""
 "Permette ai giocatori di cancellare le proprie iscrizioni in qualsiasi "
 "momento"
 
+msgid "If checked, workshops will be visible for players to fill in"
+msgstr ""
+"Se è selezionata, i workshop saranno visibili ai giocatori per essere "
+"compilati"
+
 msgid "If you wish to upload a new scan of your application instead"
 msgstr ""
 "Se invece desideri caricare un nuovo scan della tua richiesta di iscrizione"
@@ -5817,9 +5811,6 @@ msgstr "Aggiunto in fondo a tutte le mail di conferma iscrizione ai giocatori"
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr ""
 "Se selezionata, un'opzione può essere scelta un numero massimo di volte"
-
-msgid "If checked, makes prologues visible to the assigned character"
-msgstr "Se selezionata, rende visibili i prologhi al personaggio assegnato"
 
 msgid "Lets staff access the safety information submitted by players"
 msgstr ""
@@ -5961,6 +5952,13 @@ msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Se checkato, non verranno usati token nelle iscrizioni di questo evento"
 
+msgid "If checked, prologues will be visible to the assigned character"
+msgstr "Se selezionata, i prologhi saranno visibili al personaggio assegnato"
+
+msgid "If checked, the PDF version of character sheets will be visible"
+msgstr ""
+"Se è selezionata, la versione PDF delle schede dei personaggi sarà visibile"
+
 msgid "Indicate the exact date in which the payment has been performed"
 msgstr ""
 "Indicare in quale data è stato effettuato il movimento nello strumento "
@@ -6095,9 +6093,6 @@ msgstr ""
 "Errore nel caricamento. Formato file non valido - accettiamo solo pdf ed "
 "immagini"
 
-msgid "If checked, makes visible the PDF version of the character sheets"
-msgstr "Se checkato, rende visibile le versioni PDF delle schede"
-
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""
 "Se checkato, non verranno usati crediti nelle iscrizioni di questo evento"
@@ -6165,10 +6160,6 @@ msgid "Enter your email below to receive instructions on how to change it"
 msgstr ""
 "Inserisci il tuo indirizzo e-mail qui sotto per ricevere le istruzioni su "
 "come cambiarlo"
-
-msgid "If checked, makes the field content visible to the assigned player"
-msgstr ""
-"Se selezionata, rende visibile il contenuto del campo al giocatore assegnato"
 
 msgid "Indicates whether the option can be included in the gifted signups"
 msgstr "Indica se l'opzione può venire incluso nelle iscrizioni regalate"
@@ -6388,8 +6379,8 @@ msgstr "Presente (nelle relazioni di questo personaggio è presente l'altro)"
 
 msgid "Set the options for the automatic PDF generation of characters sheets"
 msgstr ""
-"Impostare le opzioni per la generazione automatica delle schede PDF in "
-"formato PDF"
+"Imposta le opzioni per la generazione automatica delle schede PDF in formato"
+" PDF"
 
 #, python-format
 msgid "Staff member %(user)s added a new reimbursement request for %(event)s"
@@ -6922,12 +6913,6 @@ msgid ""
 msgstr ""
 "Se selezionata, consente a un'opzione di essere visibile solo se sono "
 "selezionate altre opzioni"
-
-msgid ""
-"If checked, makes factions visible, as the character assignments to factions"
-msgstr ""
-"Se selezionata, rende visibili le fazioni, come le assegnazioni dei "
-"personaggi alle fazioni"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
@@ -8755,8 +8740,8 @@ msgid ""
 "To set up the gateway payment available to players, to let them pay the "
 "registration fee through the platform"
 msgstr ""
-"Impostare il gateway di pagamento a disposizione dei giocatori, per "
-"consentire loro di pagare la quota di iscrizione attraverso la piattaforma"
+"Imposta i metodi di pagamento a disposizione dei giocatori, per consentire "
+"loro di pagare la quota di iscrizione attraverso la piattaforma"
 
 #, python-format
 msgid ""
@@ -9266,6 +9251,13 @@ msgid ""
 msgstr ""
 "Data una deadline di pagamento, indica il numero di giorni sotto il quale "
 "notifica al giocatore di procedere con il versamento. Default 30."
+
+msgid ""
+"Selected fields will be displayed as follows: public fields visible to all "
+"players, private fields visible only to assigned players"
+msgstr ""
+"I campi selezionati saranno visualizzati come segue: campi pubblici visibili"
+" a tutti i giocatori, campi privati visibili solo ai giocatori assegnati"
 
 msgid ""
 "This page allows you to select the features activated for this event, and "
@@ -9830,16 +9822,6 @@ msgstr ""
 "Questo dato è il positivo, il margine operativo. Tiene conto dei bilanci "
 "degli eventi che hanno superato i due mesi, che sono considerati chiusi, e "
 "considera tutti i gettoni e i crediti come rimborsati"
-
-msgid ""
-"Please note that your character sheet may contain  personal secrets, not to "
-"be shared before the start of the event. To avoid accidentally spoiling your"
-" experience, do not discuss its content with other participants!"
-msgstr ""
-"Ti ricordiamo che la scheda del tuo personaggio potrebbe contenere dei "
-"segreti personali, da non condividere prima dell'inizio dell'evento. Per "
-"evitare di rovinare accidentalmente la tua esperienza, non parlare del suo "
-"contenuto con gli altri partecipanti!"
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are"

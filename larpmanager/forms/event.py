@@ -24,7 +24,7 @@ from django.core.exceptions import ValidationError
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_character_fields
+from larpmanager.cache.character import get_writing_fields
 from larpmanager.cache.feature import get_event_features, reset_event_features
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
@@ -52,7 +52,7 @@ from larpmanager.models.event import (
     ProgressStep,
     Run,
 )
-from larpmanager.models.form import QuestionType, QuestionVisibility
+from larpmanager.models.form import QuestionApplicable, QuestionType
 from larpmanager.models.member import Member
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.common import copy_class
@@ -780,6 +780,8 @@ class OrgaRunForm(ConfigForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.main_class = ""
+
         if "exe" not in self.params:
             self.prevent_canc = True
 
@@ -828,35 +830,33 @@ class OrgaRunForm(ConfigForm):
         if "character" not in self.params["features"]:
             return ls
 
+        help_text = _(
+            "Selected fields will be displayed as follows: public fields visible to all players, "
+            "private fields visible only to assigned players"
+        )
+
         shows = [
-            (
-                "char",
-                _("Characters"),
-                _("If checked, makes characters visible to all players"),
-            )
+            ("character", _("Characters"), QuestionApplicable.CHARACTER),
+            ("faction", _("Factions"), QuestionApplicable.FACTION),
         ]
 
         basics = QuestionType.get_basic_types()
-        get_character_fields(self.params, False)
-        for que_id, question in self.params["questions"].items():
-            typ = question["typ"]
-            if typ in basics:
-                typ = f"{que_id}"
-            elif typ not in ["teaser", "text"]:
-                continue
+        self.set_section("visibility", _("Visibility"))
+        for s in shows:
+            fields = get_writing_fields(self.params, s[2])
+            extra = []
+            for field in fields:
+                typ = field.typ
+                if typ in basics:
+                    typ = str(field.id)
 
-            help_text = _("If checked, makes the field content visible to all players")
-            if question["visibility"] == QuestionVisibility.PRIVATE:
-                help_text = _("If checked, makes the field content visible to the assigned player")
+                extra.append((typ, field.display))
 
-            shows.append((typ, question["display"], help_text))
+            self.add_configs(f"show_{s[0]}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)
+
+        shows = []
 
         addit_show = [
-            (
-                "faction",
-                _("Factions"),
-                _("If checked, makes factions visible, as the character assignments to factions"),
-            ),
             (
                 "speedlarp",
                 _("Speedlarp"),
@@ -865,18 +865,18 @@ class OrgaRunForm(ConfigForm):
             (
                 "prologue",
                 _("Prologues"),
-                _("If checked, makes prologues visible to the assigned character"),
+                _("If checked, prologues will be visible to the assigned character"),
             ),
             ("questbuilder", _("Questbuilder"), _("If checked, makes quests and traits visible")),
             (
                 "workshop",
                 _("Workshop"),
-                _("If checked, makes workshops visible for players to fill in"),
+                _("If checked, workshops will be visible for players to fill in"),
             ),
             (
                 "print_pdf",
                 _("PDF"),
-                _("If checked, makes visible the PDF version of the character sheets"),
+                _("If checked, the PDF version of character sheets will be visible"),
             ),
         ]
 

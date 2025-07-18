@@ -198,13 +198,6 @@ def update_registration_character_rel_post(sender, instance, created, **kwargs):
 
     body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>") % {"url": char_url} + "!"
 
-    if instance.reg.run.get_config("show_text", False):
-        body += "<br/><br />" + _(
-            "Please note that your character sheet may contain  personal secrets, not to be "
-            "shared before the start of the event. To avoid accidentally spoiling your "
-            "experience, do not discuss its content with other participants!"
-        )
-
     custom_message_ass = get_event_text(instance.reg.run.event_id, EventTextType.ASSIGNMENT)
     if custom_message_ass:
         body += "<br />" + custom_message_ass
