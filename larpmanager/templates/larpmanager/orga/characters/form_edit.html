@@ -19,7 +19,6 @@
     {% include "elements/form/sections.html" %}
     <div id="options" class="hide">
         <h2>{% trans "Options" %}</h2>
-        <hr />
         {% include "elements/header/orga.html" %}
         <table id="character_options" class="tablesorter mob writing no_csv">
             <thead>
@@ -77,6 +76,8 @@
                 {% endfor %}
             </tbody>
         </table>
+        <hr />
+        <br />
     </div>
 {% endblock content %}
 {% block js %}

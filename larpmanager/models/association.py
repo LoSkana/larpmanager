@@ -109,7 +109,11 @@ class Association(BaseModel):
         options={"quality": 90},
     )
 
-    main_mail = models.EmailField(help_text=_("Please indicate an email for the organization"))
+    main_mail = models.EmailField(
+        blank=True,
+        null=True,
+        help_text="(" + _("Optional") + ") " + _("Indicate an organization contact address for sending communications"),
+    )
 
     mandatory_fields = models.CharField(max_length=1000, blank=True)
 
@@ -213,7 +217,10 @@ class Association(BaseModel):
         blank=True,
         null=True,
         verbose_name=_("Nationality"),
-        help_text=_("Indicate the organization nationality to activate nation-specific features"),
+        help_text="("
+        + _("Optional")
+        + ") "
+        + _("Indicate the organization nationality to activate nation-specific features"),
     )
 
     class Meta:

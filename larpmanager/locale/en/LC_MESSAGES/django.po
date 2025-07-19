@@ -2544,7 +2544,7 @@ msgid ""
 "automatically resized"
 msgstr ""
 
-msgid "Please indicate an email for the organization"
+msgid "Indicate an organization contact address for sending communications"
 msgstr ""
 
 msgid "Indicate the payment methods you wish to be available to players"

@@ -4857,9 +4857,6 @@ msgstr "Nå kan du angi åpningsdato for registrering"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Fødested ikke inkludert i ISTAT-listen"
 
-msgid "Please indicate an email for the organization"
-msgstr "Angir en offisiell post fra foreningen"
-
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Oppdatert oppføring av %(event)s etter %(user)s"
@@ -6160,6 +6157,10 @@ msgid "If checked: Sends the main mail a copy of all mails sent to players"
 msgstr ""
 "Hvis avkrysset: Sender hovedmailen en kopi av alle e-poster som er sendt til"
 " spillerne"
+
+msgid "Indicate an organization contact address for sending communications"
+msgstr ""
+"Oppgi en kontaktadresse for organisasjonen for sending av kommunikasjon"
 
 msgid "List of users who have not registered for a future run of the event"
 msgstr ""

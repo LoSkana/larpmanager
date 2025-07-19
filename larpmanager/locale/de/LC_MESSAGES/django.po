@@ -4867,9 +4867,6 @@ msgstr ""
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Geburtsort nicht in der ISTAT-Liste enthalten"
 
-msgid "Please indicate an email for the organization"
-msgstr "Kennzeichnet eine offizielle Mail der Vereinigung"
-
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Aktualisierte Eingabe von %(event)s durch %(user)s"
@@ -6350,6 +6347,11 @@ msgid "If checked: Sends the main mail a copy of all mails sent to players"
 msgstr ""
 "Wenn markiert: Sendet der Hauptmail eine Kopie aller an Spieler gesendeten "
 "Mails"
+
+msgid "Indicate an organization contact address for sending communications"
+msgstr ""
+"Geben Sie eine Kontaktadresse der Organisation für den Versand von "
+"Mitteilungen an"
 
 msgid "List of users who have not registered for a future run of the event"
 msgstr ""

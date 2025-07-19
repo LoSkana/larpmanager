@@ -658,6 +658,9 @@ def orga_close_suggestion(request, s, n, perm):
 
 
 def _check_intro_driver(request, ctx):
+    if "interface_old" in ctx:
+        return
+
     member = request.user.member
     config_name = "intro_driver"
     if member.get_config(config_name, False):

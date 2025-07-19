@@ -303,9 +303,10 @@ class ExeConfigForm(ConfigForm):
         # MAIL
         self.set_section("email", _("Email notifications"))
 
-        label = _("Carbon copy")
-        help_text = _("If checked: Sends the main mail a copy of all mails sent to players")
-        self.add_configs("mail_cc", ConfigType.BOOL, label, help_text)
+        if self.instance.main_mail:
+            label = _("Carbon copy")
+            help_text = _("If checked: Sends the main mail a copy of all mails sent to players")
+            self.add_configs("mail_cc", ConfigType.BOOL, label, help_text)
 
         label = _("New signup")
         help_text = _("If checked: Send an email notification to the organisers for new signups")
@@ -565,7 +566,7 @@ class ExeConfigForm(ConfigForm):
 class FirstAssociationForm(MyForm):
     class Meta:
         model = Association
-        fields = ("name", "profile", "slug", "main_mail")
+        fields = ("name", "profile", "slug")
         widgets = {
             "slug": SlugInput,
         }

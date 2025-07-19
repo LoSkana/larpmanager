@@ -4858,9 +4858,6 @@ msgstr "Nu kun je de openingsdatum van de registratie instellen"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Geboorteplaats niet opgenomen in de ISTAT-lijst"
 
-msgid "Please indicate an email for the organization"
-msgstr "Geeft een officiële post van de vereniging aan"
-
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Bijgewerkte invoer van %(event)s door %(user)s"
@@ -6217,6 +6214,11 @@ msgid "If checked: Sends the main mail a copy of all mails sent to players"
 msgstr ""
 "Indien aangevinkt: Stuurt de hoofdmail een kopie van alle mails die naar "
 "spelers zijn gestuurd"
+
+msgid "Indicate an organization contact address for sending communications"
+msgstr ""
+"Geef een contactadres van de organisatie op voor het verzenden van "
+"communicatie"
 
 msgid "List of users who have not registered for a future run of the event"
 msgstr ""
