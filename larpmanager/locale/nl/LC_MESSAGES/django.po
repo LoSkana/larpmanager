@@ -4013,6 +4013,9 @@ msgstr "De stemming voor de Raad van Bestuur is geopend"
 msgid "We'll try to help as best we can"
 msgstr "We proberen zo goed mogelijk te helpen"
 
+msgid "You need to define the end date!"
+msgstr "Je moet de einddatum definiëren!"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Er is een vraag gesteld door: %(user)s"
@@ -4155,6 +4158,9 @@ msgstr "Geselecteerd ticket: <b>%(ticket)s</b>"
 
 msgid "You are about to make a payment of"
 msgstr "Je staat op het punt een betaling te doen van"
+
+msgid "You need to define the start date!"
+msgstr "Je moet de begindatum bepalen!"
 
 msgid "Your updated registration total is"
 msgstr "Je bijgewerkte totaal is"
@@ -4307,6 +4313,9 @@ msgstr "Wijs geselecteerde personages toe aan spelers"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Controleer de geldigheid van de fiscale code"
+
+msgid "End date cannot be before start date!"
+msgstr "Einddatum kan niet voor startdatum liggen!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Indien aangevinkt, ticketniveau toestaan: Verkoper"

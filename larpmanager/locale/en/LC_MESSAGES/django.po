@@ -1366,6 +1366,15 @@ msgstr ""
 msgid "Visibility"
 msgstr ""
 
+msgid "You need to define the end date!"
+msgstr ""
+
+msgid "You need to define the start date!"
+msgstr ""
+
+msgid "End date cannot be before start date!"
+msgstr ""
+
 msgid "Progression"
 msgstr ""
 

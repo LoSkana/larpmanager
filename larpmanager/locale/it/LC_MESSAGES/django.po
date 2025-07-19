@@ -4013,6 +4013,9 @@ msgstr "Le votazioni del Direttivo sono aperte"
 msgid "We'll try to help as best we can"
 msgstr "Cercheremo di aiutarti nel modo migliore possibile"
 
+msgid "You need to define the end date!"
+msgstr "È necessario definire la data di fine!"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Una domanda è stata posta da: %(user)s"
@@ -4155,6 +4158,9 @@ msgstr "Biglietto selezionato: <b>%(ticket)s</b>"
 
 msgid "You are about to make a payment of"
 msgstr "Stai per effettuare una versamento di"
+
+msgid "You need to define the start date!"
+msgstr "È necessario definire la data di inizio!"
 
 msgid "Your updated registration total is"
 msgstr "Il totale aggiornato della tua iscrizione è"
@@ -4307,6 +4313,9 @@ msgstr "Assegna i personaggi selezionati ai giocatori"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Verificare la validità del codice fiscale"
+
+msgid "End date cannot be before start date!"
+msgstr "La data di fine non può essere precedente alla data di inizio!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Se selezionata, consente il livello del biglietto: Venditore"

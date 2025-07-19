@@ -4013,6 +4013,9 @@ msgstr "Röstningen till direktionen är öppen"
 msgid "We'll try to help as best we can"
 msgstr "Vi ska försöka hjälpa till så gott vi kan"
 
+msgid "You need to define the end date!"
+msgstr "Du måste definiera slutdatumet!"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "En fråga ställdes av: %(user)s"
@@ -4155,6 +4158,9 @@ msgstr "Vald biljett: <b>%(ticket)s</b>"
 
 msgid "You are about to make a payment of"
 msgstr "Du är på väg att göra en betalning på"
+
+msgid "You need to define the start date!"
+msgstr "Du måste definiera startdatumet!"
 
 msgid "Your updated registration total is"
 msgstr "Ditt uppdaterade antal poster är"
@@ -4307,6 +4313,9 @@ msgstr "Tilldela valda karaktärer till spelare"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Kontrollera att skattekoden är giltig"
+
+msgid "End date cannot be before start date!"
+msgstr "Slutdatum kan inte vara före startdatum!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Om markerat, tillåt biljettnivå: Säljare"
