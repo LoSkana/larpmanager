@@ -1872,13 +1872,11 @@ a label:hover {
 
     #topbar {
         margin: 0;
-        padding: 0.1em 0.5em;
-        display: flex;
-        flex-wrap: nowrap;
+        padding: 0.1em 0;
     }
 
-    #topbar .el {
-        margin: auto;
+    #topbar .right, #topbar .left {
+        text-align: left !important;
     }
 
     #topbar .no_mobile, #sidebar .no_mobile {
