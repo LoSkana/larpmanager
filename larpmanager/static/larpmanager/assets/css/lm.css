@@ -1802,14 +1802,40 @@ a label:hover {
     vertical-align: middle;
 }
 
+#topbar a, #sidebar a {
+    transition: color 0.5s;
+}
+
+#topbar table {
+    margin: auto;
+}
+
+#topbar table tr, #topbar table td {
+    background: none;
+    border: none;
+    padding: 0 !important;
+}
+
 #topbar .left {
-    float: left;
-    margin-right: 2em;
+    text-align: left !important;
+}
+
+#topbar .center {
+    text-align: center !important;
 }
 
 #topbar .right {
-    float: right;
+    text-align: right !important;
+}
+
+#topbar .left .el {
+    margin-right: 2em;
+    display: inline-block;
+}
+
+#topbar .right .el {
     margin-left: 2em;
+    display: inline-block;
 }
 
 #sidebar.topbar, #page-wrapper.topbar, #page-wrapper.topbar header {

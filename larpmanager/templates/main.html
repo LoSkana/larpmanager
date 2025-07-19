@@ -4,7 +4,8 @@
     {% if assoc.id == 0 %}
         {% block header %}
             <!-- Header -->
-            <header id="header" {% if is_sidebar_open %}class="sidebar"{% endif %}>
+            <header id="header"
+                    {% if manage and is_sidebar_open %}class="sidebar"{% endif %}>
                 <!--
             <a href="{% url 'home' %}" class="main" aria-label="LarpManager">
                 <span class="logo"><img src="{% static 'lm_logo.png' %}" alt="Logo" /></span>
@@ -50,7 +51,8 @@
         {% block alpha %}
         {% endblock alpha %}
         <!-- Footer -->
-        <footer id="footer" {% if is_sidebar_open %}class="sidebar"{% endif %}>
+        <footer id="footer"
+                {% if manage and is_sidebar_open %}class="sidebar"{% endif %}>
             {% if contact_form %}
                 <h3>Contact us</h3>
                 <form class="contact"
@@ -84,7 +86,8 @@
         </footer>
     {% else %}
         <!-- Header -->
-        <header id="header" class="alt {% if is_sidebar_open %}sidebar{% endif %}">
+        <header id="header"
+                class="alt {% if manage and is_sidebar_open %}sidebar{% endif %}">
             {% block sidebar_logo %}
                 {% if manage and interface_old %}
                     <nav id="sidebar-nav">
@@ -101,7 +104,7 @@
                     {% endblock title %}
                 </span>
             </h1>
-            {% if interface_old or not topbar %}
+            {% if interface_old %}
                 <nav id="menu-bar">
                     <a id="menu-open" href="#menu"><span>Menu</span>
                         <img alt="menu" src="{% static 'larpmanager/assets/menu.png' %}" />
@@ -243,7 +246,8 @@
                     </div>
                 </div>
             </div>
-            <div id="footer" {% if is_sidebar_open %}class="sidebar"{% endif %}>
+            <div id="footer"
+                 {% if manage and is_sidebar_open %}class="sidebar"{% endif %}>
                 <div class="inner">
                     {% if assoc.footer %}
                         <div class="footer-text">

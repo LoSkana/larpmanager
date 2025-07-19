@@ -1,12 +1,20 @@
 {% load static i18n %}
 <div id="topbar">
-    <div class="el left">
-        <a href="{% url 'home' %}">
-            <i class="fa-solid fa-house"></i>
-            Home
-        </a>
-    </div>
-    <div class="el right">
-        <a href="{% url 'login' %}"> <i class="fa-solid fa-right-to-bracket"></i>Login</a>
-    </div>
+    <table>
+        <tr>
+            <td class="left">
+                <span class="el">
+                    <a href="{% url 'home' %}">
+                        <i class="fa-solid fa-house"></i>
+                        Home
+                    </a>
+                </span>
+            </td>
+            <td class="right">
+                <div class="el right">
+                    <a href="{% url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+                </div>
+            </td>
+        </tr>
+    </table>
 </div>
