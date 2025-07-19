@@ -4855,9 +4855,6 @@ msgstr "Ora è possibile impostare la data di apertura della registrazione"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Luogo di nascita non presente nell'elenco ISTAT"
 
-msgid "Please indicate an email for the organization"
-msgstr "Indica una mail ufficiale dell'Associazione"
-
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Iscrizione aggiornata a %(event)s di %(user)s"
@@ -6219,6 +6216,11 @@ msgid "If checked: Sends the main mail a copy of all mails sent to players"
 msgstr ""
 "Se checkato: Invia alla mail principale una copia di tutte le mail inviate "
 "ai giocatori"
+
+msgid "Indicate an organization contact address for sending communications"
+msgstr ""
+"Indica un indirizzo di contatto dell'organizzazione per l'invio di "
+"comunicazioni"
 
 msgid "List of users who have not registered for a future run of the event"
 msgstr "Elenco utenti che non si sono iscritti ad una futura run dell'evento"

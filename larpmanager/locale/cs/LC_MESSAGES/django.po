@@ -4854,9 +4854,6 @@ msgstr "Nyní můžete nastavit datum zahájení registrace"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Místo narození neuvedené v seznamu ISTAT"
 
-msgid "Please indicate an email for the organization"
-msgstr "Označuje oficiální poštu sdružení"
-
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Aktualizované zadání %(event)s podle %(user)s"
@@ -6098,6 +6095,9 @@ msgid "If checked: Sends the main mail a copy of all mails sent to players"
 msgstr ""
 "Pokud je zaškrtnuto: odešle hlavní poště kopii všech e-mailů odeslaných "
 "hráčům"
+
+msgid "Indicate an organization contact address for sending communications"
+msgstr "Uveďte kontaktní adresu organizace pro zasílání sdělení"
 
 msgid "List of users who have not registered for a future run of the event"
 msgstr "Seznam uživatelů, kteří se nezaregistrovali do budoucího běhu akce"

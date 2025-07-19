@@ -69,7 +69,6 @@ async def exe_join(live_server, page):
     image_path = Path(__file__).parent / "image.jpg"
     await page.locator("#id_profile").set_input_files(str(image_path))
     await page.locator("#slug").fill("prova")
-    await page.locator("#id_main_mail").fill("prova@prova.it")
     await submit(page)
 
     await page.wait_for_timeout(1000)

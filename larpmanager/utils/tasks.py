@@ -151,7 +151,7 @@ def my_send_simple_mail(subj, body, m_email, assoc_id=None, run_id=None, reply_t
         # Assoc confs: to apply
         if assoc_id:
             assoc = Association.objects.get(pk=assoc_id)
-            if assoc.get_config("mail_cc", False):
+            if assoc.get_config("mail_cc", False) and assoc.main_mail:
                 bcc.append(assoc.main_mail)
 
             # See if we have to apply custom mail settings

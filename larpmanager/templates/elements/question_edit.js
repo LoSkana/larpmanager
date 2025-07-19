@@ -33,6 +33,9 @@
         }
 
         $(document).ready(function() {
+            // move options
+            $('#options').insertBefore('#form_submit');
+
             setTimeout(toggleOptions, 10);
 
             $('#id_typ').on('change', function() {
