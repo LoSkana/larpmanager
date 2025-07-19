@@ -141,7 +141,7 @@ urlpatterns = [
         name="orga_registration_tickets_edit",
     ),
     path(
-        "<slug:s>/<int:n>/manage/registrations/tickets/order/<int:num>/",
+        "<slug:s>/<int:n>/manage/registrations/tickets/order/<int:num>/<int:order>/",
         views_of.orga_registration_tickets_order,
         name="orga_registration_tickets_order",
     ),
@@ -156,7 +156,7 @@ urlpatterns = [
         name="orga_registration_sections_edit",
     ),
     path(
-        "<slug:s>/<int:n>/manage/registrations/sections/order/<int:num>/",
+        "<slug:s>/<int:n>/manage/registrations/sections/order/<int:num>/<int:order>/",
         views_of.orga_registration_sections_order,
         name="orga_registration_sections_order",
     ),
@@ -171,7 +171,7 @@ urlpatterns = [
         name="orga_registration_form_edit",
     ),
     path(
-        "<slug:s>/<int:n>/manage/registrations/form/order/<int:num>/",
+        "<slug:s>/<int:n>/manage/registrations/form/order/<int:num>/<int:order>/",
         views_of.orga_registration_form_order,
         name="orga_registration_form_order",
     ),
@@ -196,7 +196,7 @@ urlpatterns = [
         name="orga_registration_options_new",
     ),
     path(
-        "<slug:s>/<int:n>/manage/registrations/options/order/<int:num>/",
+        "<slug:s>/<int:n>/manage/registrations/options/order/<int:num>/<int:order>/",
         views_of.orga_registration_options_order,
         name="orga_registration_options_order",
     ),
@@ -376,7 +376,7 @@ urlpatterns = [
         name="orga_writing_form_edit",
     ),
     path(
-        "<slug:s>/<int:n>/manage/writing/form/<slug:typ>/order/<int:num>/",
+        "<slug:s>/<int:n>/manage/writing/form/<slug:typ>/order/<int:num>/<int:order>/",
         views_oc.orga_writing_form_order,
         name="orga_writing_form_order",
     ),
@@ -401,7 +401,7 @@ urlpatterns = [
         name="orga_writing_options_new",
     ),
     path(
-        "<slug:s>/<int:n>/manage/writing/options/<slug:typ>/order/<int:num>/",
+        "<slug:s>/<int:n>/manage/writing/options/<slug:typ>/order/<int:num>/<int:order>/",
         views_oc.orga_writing_options_order,
         name="orga_writing_options_order",
     ),
@@ -466,7 +466,7 @@ urlpatterns = [
         name="orga_factions_edit",
     ),
     path(
-        "<slug:s>/<int:n>/manage/factions/order/<int:num>/",
+        "<slug:s>/<int:n>/manage/factions/order/<int:num>/<int:order>/",
         views_ow.orga_factions_order,
         name="orga_factions_order",
     ),
@@ -701,7 +701,7 @@ urlpatterns = [
         name="orga_progress_steps_edit",
     ),
     path(
-        "<slug:s>/<int:n>/manage/progress_steps/order/<int:num>/",
+        "<slug:s>/<int:n>/manage/progress_steps/order/<int:num>/<int:order>/",
         views_ow.orga_progress_steps_order,
         name="orga_progress_steps_order",
     ),

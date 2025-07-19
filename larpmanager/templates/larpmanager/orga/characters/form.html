@@ -39,6 +39,7 @@
                 {% endif %}
                 <th>{% trans "Options" %}</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -63,8 +64,15 @@
                     </td>
                     <td>
                         {% if not forloop.first %}
-                            <a href="{% url 'orga_writing_form_order' run.event.slug run.number typ el.id %}">
+                            <a href="{% url 'orga_writing_form_order' run.event.slug run.number typ el.id 0 %}">
                                 <i class="fa-solid fa-arrow-up"></i>
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not forloop.last %}
+                            <a href="{% url 'orga_writing_form_order' run.event.slug run.number el.id 1 %}">
+                                <i class="fa-solid fa-arrow-down"></i>
                             </a>
                         {% endif %}
                     </td>

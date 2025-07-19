@@ -343,10 +343,10 @@ def orga_writing_form_edit(request, s, n, typ, num):
 
 
 @login_required
-def orga_writing_form_order(request, s, n, typ, num):
+def orga_writing_form_order(request, s, n, typ, num, order):
     ctx = check_event_permission(request, s, n, "orga_character_form")
     check_writing_form_type(ctx, typ)
-    exchange_order(ctx, WritingQuestion, num)
+    exchange_order(ctx, WritingQuestion, num, order)
     return redirect("orga_writing_form", s=ctx["event"].slug, typ=typ, n=ctx["run"].number)
 
 
@@ -377,10 +377,10 @@ def writing_option_edit(ctx, num, request, typ):
 
 
 @login_required
-def orga_writing_options_order(request, s, n, typ, num):
+def orga_writing_options_order(request, s, n, typ, num, order):
     ctx = check_event_permission(request, s, n, "orga_character_form")
     check_writing_form_type(ctx, typ)
-    exchange_order(ctx, WritingOption, num)
+    exchange_order(ctx, WritingOption, num, order)
     return redirect(
         "orga_writing_form_edit", s=ctx["event"].slug, n=ctx["run"].number, typ=typ, num=ctx["current"].question_id
     )
