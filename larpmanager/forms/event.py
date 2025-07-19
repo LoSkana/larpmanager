@@ -889,6 +889,19 @@ class OrgaRunForm(ConfigForm):
 
         return ls
 
+    def clean(self):
+        cleaned_data = super().clean()
+        if "end" not in cleaned_data or not cleaned_data["end"]:
+            raise ValidationError({"end": _("You need to define the end date!")})
+
+        if "start" not in cleaned_data or not cleaned_data["start"]:
+            raise ValidationError({"start": _("You need to define the start date!")})
+
+        if cleaned_data["end"] < cleaned_data["start"]:
+            raise ValidationError({"end": _("End date cannot be before start date!")})
+
+        return cleaned_data
+
 
 class OrgaProgressStepForm(MyForm):
     page_title = _("Progression")

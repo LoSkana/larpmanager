@@ -2372,6 +2372,9 @@ msgstr "Text-Hintergrund"
 msgid "Confirm Payments"
 msgstr "Bestätigen Sie Zahlungen"
 
+msgid "Confirm payments"
+msgstr "Bestätigen Sie Zahlungen"
+
 msgid "Current template"
 msgstr "Aktuelle Vorlage"
 
@@ -4013,6 +4016,9 @@ msgstr "Die Wahlen zum Exekutivausschuss sind offen"
 msgid "We'll try to help as best we can"
 msgstr "Wir versuchen zu helfen, so gut wir können"
 
+msgid "You need to define the end date!"
+msgstr "Sie müssen das Enddatum festlegen!"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Eine Frage wurde gestellt von: %(user)s"
@@ -4155,6 +4161,9 @@ msgstr "Ticket ausgewählt: <b>%(ticket)s</b>"
 
 msgid "You are about to make a payment of"
 msgstr "Sie sind im Begriff, eine Zahlung zu leisten in Höhe von"
+
+msgid "You need to define the start date!"
+msgstr "Sie müssen das Startdatum festlegen!"
 
 msgid "Your updated registration total is"
 msgstr "Ihr aktualisierter Gesamteintrag lautet"
@@ -4308,6 +4317,9 @@ msgstr "Weisen Sie den Spielern ausgewählte Charaktere zu"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Prüfen Sie die Gültigkeit des Steuerkennzeichens"
+
+msgid "End date cannot be before start date!"
+msgstr "Das Enddatum kann nicht vor dem Startdatum liegen!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Wenn angekreuzt, Ticketstufe zulassen: Verkäufer"

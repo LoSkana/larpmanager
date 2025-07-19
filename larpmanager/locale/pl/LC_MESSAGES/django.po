@@ -2372,6 +2372,9 @@ msgstr "Kolor tła"
 msgid "Confirm Payments"
 msgstr "Potwierdzanie płatności"
 
+msgid "Confirm payments"
+msgstr "Potwierdzanie płatności"
+
 msgid "Current template"
 msgstr "Aktualny szablon"
 
@@ -4013,6 +4016,9 @@ msgstr "Głosowanie na Zarząd jest otwarte"
 msgid "We'll try to help as best we can"
 msgstr "Postaramy się pomóc najlepiej jak potrafimy"
 
+msgid "You need to define the end date!"
+msgstr "Musisz określić datę końcową!"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Pytanie zostało zadane przez: %(user)s"
@@ -4155,6 +4161,9 @@ msgstr "Wybrano bilet: <b>%(ticket)s</b>"
 
 msgid "You are about to make a payment of"
 msgstr "Masz zamiar dokonać płatności w wysokości"
+
+msgid "You need to define the start date!"
+msgstr "Musisz określić datę rozpoczęcia!"
 
 msgid "Your updated registration total is"
 msgstr "Zaktualizowana suma rejestracji wynosi"
@@ -4307,6 +4316,9 @@ msgstr "Przypisz wybrane postacie do graczy"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Sprawdź ważność kodu fiskalnego"
+
+msgid "End date cannot be before start date!"
+msgstr "Data końcowa nie może być wcześniejsza niż data początkowa!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Jeśli zaznaczone, zezwól na poziom biletu: Sprzedawca"

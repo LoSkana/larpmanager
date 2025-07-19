@@ -2372,6 +2372,9 @@ msgstr "Textové pozadí"
 msgid "Confirm Payments"
 msgstr "Potvrzení plateb"
 
+msgid "Confirm payments"
+msgstr "Potvrzení plateb"
+
 msgid "Current template"
 msgstr "Aktuální šablona"
 
@@ -4013,6 +4016,9 @@ msgstr "Hlasování do výkonné rady je otevřené"
 msgid "We'll try to help as best we can"
 msgstr "Pokusíme se vám pomoci, jak nejlépe to půjde"
 
+msgid "You need to define the end date!"
+msgstr "Je třeba určit datum ukončení!"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Otázku položil: %(user)s"
@@ -4155,6 +4161,9 @@ msgstr "Vybraný tip: <b>%(ticket)s</b>"
 
 msgid "You are about to make a payment of"
 msgstr "Chystáte se provést platbu ve výši"
+
+msgid "You need to define the start date!"
+msgstr "Je třeba určit datum zahájení!"
 
 msgid "Your updated registration total is"
 msgstr "Váš aktualizovaný celkový počet vstupů je"
@@ -4307,6 +4316,9 @@ msgstr "Přiřaďte vybrané postavy hráčům"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Zkontrolujte platnost fiskálního kódu"
+
+msgid "End date cannot be before start date!"
+msgstr "Datum ukončení nesmí být před datem zahájení!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: Prodejce"
