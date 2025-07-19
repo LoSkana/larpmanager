@@ -71,7 +71,7 @@
                     </td>
                     <td>
                         {% if not forloop.last %}
-                            <a href="{% url 'orga_writing_form_order' run.event.slug run.number el.id 1 %}">
+                            <a href="{% url 'orga_writing_form_order' run.event.slug run.number typ el.id 1 %}">
                                 <i class="fa-solid fa-arrow-down"></i>
                             </a>
                         {% endif %}
