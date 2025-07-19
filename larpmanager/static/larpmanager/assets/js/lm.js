@@ -593,8 +593,11 @@ function centerMobileIcons() {
         }
     });
 
-    var totalSpacing = topbarWidth - totalElWidth;
-    var margin = totalSpacing / (elCount + 1);
+    var totalSpacing = topbarWidth * 1 - totalElWidth;
+    var margin = totalSpacing / elCount;
+
+    console.log(totalElWidth);
+    console.log(elCount);
 
     $visibleElements.each(function (index) {
         var ml = margin / 2;
