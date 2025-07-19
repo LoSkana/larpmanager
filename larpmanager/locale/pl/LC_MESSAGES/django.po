@@ -2372,6 +2372,9 @@ msgstr "Kolor tła"
 msgid "Confirm Payments"
 msgstr "Potwierdzanie płatności"
 
+msgid "Confirm payments"
+msgstr "Potwierdzanie płatności"
+
 msgid "Current template"
 msgstr "Aktualny szablon"
 

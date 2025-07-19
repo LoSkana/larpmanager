@@ -2372,6 +2372,9 @@ msgstr "Text bakgrund"
 msgid "Confirm Payments"
 msgstr "Bekräfta betalningar"
 
+msgid "Confirm payments"
+msgstr "Bekräfta betalningar"
+
 msgid "Current template"
 msgstr "Nuvarande mall"
 

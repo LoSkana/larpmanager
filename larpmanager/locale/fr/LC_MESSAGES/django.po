@@ -2372,6 +2372,9 @@ msgstr "Arrière-plan du texte"
 msgid "Confirm Payments"
 msgstr "Confirmer les paiements"
 
+msgid "Confirm payments"
+msgstr "Confirmer les paiements"
+
 msgid "Current template"
 msgstr "Modèle actuel"
 

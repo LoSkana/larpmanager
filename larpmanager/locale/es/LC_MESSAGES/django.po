@@ -2372,6 +2372,9 @@ msgstr "Color de fondo"
 msgid "Confirm Payments"
 msgstr "Confirmar pagos"
 
+msgid "Confirm payments"
+msgstr "Confirmar pagos"
+
 msgid "Current template"
 msgstr "Plantilla actual"
 

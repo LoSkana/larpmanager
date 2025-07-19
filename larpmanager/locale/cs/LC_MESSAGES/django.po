@@ -2372,6 +2372,9 @@ msgstr "Textové pozadí"
 msgid "Confirm Payments"
 msgstr "Potvrzení plateb"
 
+msgid "Confirm payments"
+msgstr "Potvrzení plateb"
+
 msgid "Current template"
 msgstr "Aktuální šablona"
 

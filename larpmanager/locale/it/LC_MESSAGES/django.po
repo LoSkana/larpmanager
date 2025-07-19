@@ -2372,6 +2372,9 @@ msgstr "Sfondo testo"
 msgid "Confirm Payments"
 msgstr "Conferma Pagamenti"
 
+msgid "Confirm payments"
+msgstr "Conferma pagamenti"
+
 msgid "Current template"
 msgstr "Template attuale"
 

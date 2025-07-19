@@ -2372,6 +2372,9 @@ msgstr "Tekst achtergrond"
 msgid "Confirm Payments"
 msgstr "Betalingen bevestigen"
 
+msgid "Confirm payments"
+msgstr "Betalingen bevestigen"
+
 msgid "Current template"
 msgstr "Huidige sjabloon"
 

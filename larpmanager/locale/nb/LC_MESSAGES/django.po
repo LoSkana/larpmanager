@@ -2372,6 +2372,9 @@ msgstr "Tekstbakgrunn"
 msgid "Confirm Payments"
 msgstr "Bekreft betalinger"
 
+msgid "Confirm payments"
+msgstr "Bekreft betalinger"
+
 msgid "Current template"
 msgstr "Gjeldende mal"
 

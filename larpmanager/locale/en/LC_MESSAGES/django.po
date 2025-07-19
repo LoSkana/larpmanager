@@ -4712,6 +4712,9 @@ msgstr ""
 msgid "This page summarizes all revenue items recorded in the system"
 msgstr ""
 
+msgid "Confirm payments"
+msgstr ""
+
 msgid "This page shows all invoices registered in the system"
 msgstr ""
 
