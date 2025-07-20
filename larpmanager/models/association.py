@@ -216,6 +216,7 @@ class Association(BaseModel):
         choices=FeatureNationality.choices,
         blank=True,
         null=True,
+        default="",
         verbose_name=_("Nationality"),
         help_text="("
         + _("Optional")
