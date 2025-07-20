@@ -30,8 +30,8 @@ from django.db.models import Count, Min, Sum
 from django.http import Http404, HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.utils.translation import activate, override
 from django.utils.translation import gettext_lazy as _
+from django.utils.translation import override
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django_ratelimit.decorators import ratelimit
@@ -237,15 +237,6 @@ def activate_feature_event(request, s, n, cod, p=None):
         return redirect("/" + p)
     view_name = feature.event_permissions.first().slug
     return redirect(reverse(view_name, kwargs={"s": s, "n": n}))
-
-
-def change_language(request):
-    lang_code = request.POST.get("language", "en")
-    activate(lang_code)
-    request.session["django_language"] = lang_code
-    response = JsonResponse({"status": "Language changed", "language": lang_code})
-    response.set_cookie("django_language", lang_code)
-    return response
 
 
 def toggle_sidebar(request):

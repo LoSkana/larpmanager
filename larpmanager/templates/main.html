@@ -113,114 +113,7 @@
             {% endif %}
         </header>
         <!-- Menu -->
-        <nav id="menu">
-            <div class="inner">
-                <h2>Menu</h2>
-                <ul class="links">
-                    <li class="middlebar">
-                        <a href="{% url 'home' %}">{% trans "Calendar" %}</a>
-                    </li>
-                    {% if user.is_authenticated %}
-                        {% if 'membership' in assoc.features %}
-                            <li>
-                                <a href="{% url 'membership' %}">{% trans "Your membership" %}</a>
-                            </li>
-                        {% endif %}
-                        {% if 'delegated_members' in assoc.features %}
-                            <li>
-                                <a href="{% url 'delegated' %}">{% trans "Your delegated users" %}</a>
-                            </li>
-                        {% endif %}
-                        {% if 'chat' in assoc.features %}
-                            <li>
-                                <a href="{% url 'chats' %}">{% trans "Your messages" %}</a>
-                            </li>
-                        {% endif %}
-                        {% if 'badge' in assoc.features %}
-                            <li>
-                                <a href="{% url 'public' user.member.id %}">{% trans "Your achievements" %}</a>
-                            </li>
-                        {% endif %}
-                    {% endif %}
-                    {% if user.is_authenticated %}
-                        {% if reg_menu %}
-                            <li>
-                                <span class="opener">{% trans "Registrations" %}
-                                    <img class="chevron"
-                                         alt="chevron"
-                                         src="{% static 'larpmanager/assets/chevron.png' %}" />
-                                </span>
-                                <ul>
-                                    {% for s, n, name in reg_menu %}
-                                        <li class="sub">
-                                            <a href="{% url 'gallery' s n %}">{{ name }}</a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                        {% endif %}
-                        {% if user.is_superuser %}
-                            <li>
-                                <span class="opener">LarpManager
-                                    <img class="chevron"
-                                         alt="chevron"
-                                         src="{% static 'larpmanager/assets/chevron.png' %}" />
-                                </span>
-                                <ul>
-                                    <li>
-                                        <a href="{% url 'lm_list' %}">{% trans "List" %}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{% url 'lm_payments' %}">{% trans "Payments" %}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{% url 'lm_send' %}">{% trans "Mail" %}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{% url 'lm_profile' %}">{% trans "Profiling" %}</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        {% endif %}
-                        <li>
-                            <a id="logout" href="{% url 'logout' %}">Logout</a>
-                        </li>
-                        <form method="post" action="{% url 'logout' %}">
-                            {% csrf_token %}
-                            <button type="submit" id="real_logout">logout</button>
-                        </form>
-                    {% else %}
-                        <li>
-                            <span class="opener">{% trans "Language" %}
-                                <img class="chevron"
-                                     alt="chevron"
-                                     src="{% static 'larpmanager/assets/chevron.png' %}" />
-                            </span>
-                            <ul>
-                                <li>
-                                    <select name="lang" id="id_lang">
-                                        {% for el in languages %}<option value="{{ el.0 }}">{{ el.1 }}</option>{% endfor %}
-                                    </select>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="{% url 'login' %}">Log In</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'password_reset' %}">{% trans "Change password" %}</a>
-                        </li>
-                    {% endif %}
-                    <li>
-                        <a href="{% url 'help' %}">Help</a>
-                    </li>
-                </ul>
-                <a href="#" class="close">Close</a>
-            </div>
-        </nav>
+        {% include "elements/structure/menu.html" %}
         {% block wrapper %}
             <!-- Main -->
             <div id="banner">
@@ -393,24 +286,6 @@
     {% get_current_language as LANGUAGE_CODE %}
     const currentLanguage = "{{ LANGUAGE_CODE }}";
 
-    function setLanguage(lang) {
-        $.ajax({
-          url: '/change_language/',
-          type: 'POST',
-          data: {
-            language: lang
-          },
-          success: function (response) {
-            if (response.status === 'Language changed') {
-              // console.log(`Language switched to ${response.language}`);
-              location.reload();
-            }
-          },
-          error: function (xhr, status, error) {
-            console.error('Error changing language:', error);
-          },
-        });
-    }
 
     window.addEventListener('DOMContentLoaded', function() {
         $(function() {
@@ -426,11 +301,6 @@
                 $('#real_logout').click();
                 return false;
             });
-
-              $("#id_lang").on('change', function () {
-                const selectedLanguage = this.value;
-                setLanguage(selectedLanguage);
-              });
 
         });
 

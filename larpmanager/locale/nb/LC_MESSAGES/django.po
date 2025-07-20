@@ -957,6 +957,9 @@ msgstr "Beliggenhet"
 msgid "Max uses"
 msgstr "Maksimal bruk"
 
+msgid "Messages"
+msgstr "Melding sendt"
+
 msgid "New gift"
 msgstr "Ny gave"
 
@@ -1254,9 +1257,6 @@ msgstr "Kasserer"
 msgid "Workshops"
 msgstr "Verksteder"
 
-msgid "Your user"
-msgstr "Din bruker"
-
 msgid "negatives"
 msgstr "negativer"
 
@@ -1362,9 +1362,6 @@ msgstr "Nettoresultat"
 msgid "New answer"
 msgstr "Nytt svar"
 
-msgid "New member"
-msgstr "Nytt medlem"
-
 msgid "New signup"
 msgstr "Nye oppføringer"
 
@@ -1431,9 +1428,6 @@ msgstr "Startdato"
 msgid "Statistics"
 msgstr "Statistikk"
 
-msgid "Step 3 / 4"
-msgstr "Trinn 3 / 4"
-
 msgid "Surcharges"
 msgstr "Tilleggsavgifter"
 
@@ -1466,9 +1460,6 @@ msgstr "Frivillige"
 
 msgid "Welcome to"
 msgstr "Velkommen til"
-
-msgid "Write here"
-msgstr "Skriv her"
 
 msgid "accounting"
 msgstr "regnskap"
@@ -1685,6 +1676,9 @@ msgstr "Liste over ferdigheter"
 
 msgid "Ability type"
 msgstr "Ferdighetstype"
+
+msgid "Achievements"
+msgstr "Prestasjoner"
 
 msgid "Archive mail"
 msgstr "Arkivpost"
@@ -2267,6 +2261,9 @@ msgstr "Frist (dato)"
 msgid "Deadline (days)"
 msgstr "Frist (dager)"
 
+msgid "Delegated users"
+msgstr "Delegerte brukere"
+
 msgid "Disable credits"
 msgstr "Deaktiver kreditter"
 
@@ -2321,6 +2318,9 @@ msgstr "Underdanig spørsmål!"
 msgid "Replacing names"
 msgstr "Erstatning av navn"
 
+msgid "Select Language"
+msgstr "Velg språk"
+
 msgid "Show statistics"
 msgstr "Vis statistikk"
 
@@ -2339,14 +2339,8 @@ msgstr "Frivillige opplysninger"
 msgid "You can consult"
 msgstr "Du kan konsultere"
 
-msgid "Your accounting"
-msgstr "Regnskapet ditt"
-
 msgid "Your characters"
 msgstr "Karakterene dine"
-
-msgid "Your membership"
-msgstr "Ditt medlemskap"
 
 msgid "expected within"
 msgstr "forventet innen"
@@ -2522,9 +2516,6 @@ msgstr "Hvor den avholdes"
 msgid "Writing Question"
 msgstr "Skriving av spørsmål"
 
-msgid "Your competences"
-msgstr "Dine ferdigheter"
-
 msgid "are not yet open"
 msgstr "er ennå ikke åpnet"
 
@@ -2681,9 +2672,6 @@ msgstr "Verifiserte betalinger"
 msgid "Vote not yet open"
 msgstr "Avstemningen er ennå ikke åpnet"
 
-msgid "Your achievements"
-msgstr "Dine prestasjoner"
-
 msgid "Your character is"
 msgstr "Karakteren din er"
 
@@ -2788,12 +2776,6 @@ msgstr "Frivillig donasjon"
 
 msgid "Volunteer Registry"
 msgstr "Frivillighetsregisteret"
-
-msgid "Your personal data"
-msgstr "Dine data"
-
-msgid "Your registrations"
-msgstr "Dine bidrag"
 
 msgid "by the deadline of"
 msgstr "innen fristen"
@@ -3036,9 +3018,6 @@ msgstr "Velkommen til %(name)s!"
 
 msgid "Yes, keep me posted!"
 msgstr "Ja, hold meg oppdatert!"
-
-msgid "Your delegated users"
-msgstr "Dine delegerte brukere"
 
 msgid "Access your character"
 msgstr "Få tilgang til karakteren din"
@@ -6697,10 +6676,6 @@ msgstr ""
 "Du kan trekke tilbake ditt samtykke til datadeling ved å klikke på lenken"
 
 msgid ""
-"Fill in the form and click on confirm, it will take you to the next passage"
-msgstr "Fyll ut skjemaet og klikk på bekreft, så kommer du til neste trinn"
-
-msgid ""
 "For what time you will need transportation (time zone of the larp location)"
 msgstr "Når trenger du transport (tidssone for arrangementsstedet)"
 
@@ -9527,15 +9502,6 @@ msgstr ""
 "vennligst angi i hvilken rekkefølge du ønsker å spille dem)"
 
 msgid ""
-"We are almost there, you just need to enter the last necessary data here. "
-"With this data your membership application will be pre-filled;  you will "
-"just have to print it out and sign it"
-msgstr ""
-"Vi er nesten i mål, du trenger bare å legge inn de siste nødvendige "
-"opplysningene her. Med disse opplysningene vil medlemssøknaden din være "
-"ferdig utfylt; du trenger bare å skrive den ut og signere den"
-
-msgid ""
 "As per the statutes, we will review your request at the next board meeting "
 "and send you an update e-mail as soon as possible (you should receive a "
 "reply within a few weeks at the latest)."
@@ -9589,16 +9555,6 @@ msgstr ""
 " til forsikringsselskapet. Den viser bare medlemmer som har fornyet "
 "medlemskapet i løpet av dette kalenderåret, i den rekkefølgen de har fornyet"
 " medlemskapet"
-
-msgid ""
-"There are only two steps left to complete the procedure, enter the last "
-"necessary data. With this information, your membership application will be "
-"pre-filled; all you have to do is print it out and sign it"
-msgstr ""
-"Det er bare to trinn igjen for å fullføre prosedyren; skriv inn de siste "
-"nødvendige opplysningene her. Med disse opplysningene vil medlemssøknaden "
-"din være ferdig utfylt; alt du trenger å gjøre er å skrive den ut og signere"
-" den"
 
 msgid ""
 "This page allows you to check the payment items in the system. The source of"

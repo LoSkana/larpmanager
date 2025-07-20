@@ -957,6 +957,9 @@ msgstr "Umístění"
 msgid "Max uses"
 msgstr "Maximální použití"
 
+msgid "Messages"
+msgstr "Zpráva odeslána"
+
 msgid "New gift"
 msgstr "Nový dárek"
 
@@ -1254,9 +1257,6 @@ msgstr "Pokladník"
 msgid "Workshops"
 msgstr "Workshopy"
 
-msgid "Your user"
-msgstr "Váš uživatel"
-
 msgid "negatives"
 msgstr "negativy"
 
@@ -1362,9 +1362,6 @@ msgstr "Čistý zisk"
 msgid "New answer"
 msgstr "Nová odpověď"
 
-msgid "New member"
-msgstr "Nový člen"
-
 msgid "New signup"
 msgstr "Nové položky"
 
@@ -1431,9 +1428,6 @@ msgstr "Datum zahájení"
 msgid "Statistics"
 msgstr "Statistiky"
 
-msgid "Step 3 / 4"
-msgstr "Krok 3 / 4"
-
 msgid "Surcharges"
 msgstr "Příplatky"
 
@@ -1466,9 +1460,6 @@ msgstr "Dobrovolníci"
 
 msgid "Welcome to"
 msgstr "Vítejte v"
-
-msgid "Write here"
-msgstr "Napište sem"
 
 msgid "accounting"
 msgstr "účetnictví"
@@ -1685,6 +1676,9 @@ msgstr "Seznam dovedností"
 
 msgid "Ability type"
 msgstr "Typ dovednosti"
+
+msgid "Achievements"
+msgstr "Úspěchy"
 
 msgid "Archive mail"
 msgstr "Archivovat poštu"
@@ -2267,6 +2261,9 @@ msgstr "Termín (datum)"
 msgid "Deadline (days)"
 msgstr "Lhůta (dny)"
 
+msgid "Delegated users"
+msgstr "Delegovaní uživatelé"
+
 msgid "Disable credits"
 msgstr "Zakázat kredity"
 
@@ -2321,6 +2318,9 @@ msgstr "Submisivní otázka!"
 msgid "Replacing names"
 msgstr "Nahrazování názvů"
 
+msgid "Select Language"
+msgstr "Zvolte jazyk"
+
 msgid "Show statistics"
 msgstr "Zobrazit statistiky"
 
@@ -2339,14 +2339,8 @@ msgstr "Dobrovolné údaje"
 msgid "You can consult"
 msgstr "Můžete konzultovat"
 
-msgid "Your accounting"
-msgstr "Vaše účetnictví"
-
 msgid "Your characters"
 msgstr "Vaše postavy"
-
-msgid "Your membership"
-msgstr "Vaše členství"
 
 msgid "expected within"
 msgstr "očekává se v rámci"
@@ -2522,9 +2516,6 @@ msgstr "Kde se koná"
 msgid "Writing Question"
 msgstr "Psaní otázky"
 
-msgid "Your competences"
-msgstr "Vaše dovednosti"
-
 msgid "are not yet open"
 msgstr "ještě nejsou otevřeny"
 
@@ -2681,9 +2672,6 @@ msgstr "Ověřené platby"
 msgid "Vote not yet open"
 msgstr "Hlasování ještě není otevřeno"
 
-msgid "Your achievements"
-msgstr "Vaše úspěchy"
-
 msgid "Your character is"
 msgstr "Vaše postava je"
 
@@ -2788,12 +2776,6 @@ msgstr "Dobrovolné dárcovství"
 
 msgid "Volunteer Registry"
 msgstr "Registr dobrovolníků"
-
-msgid "Your personal data"
-msgstr "Vaše údaje"
-
-msgid "Your registrations"
-msgstr "Vaše příspěvky"
 
 msgid "by the deadline of"
 msgstr "do termínu"
@@ -3036,9 +3018,6 @@ msgstr "Vítejte v %(name)s!"
 
 msgid "Yes, keep me posted!"
 msgstr "Ano, informujte mě!"
-
-msgid "Your delegated users"
-msgstr "Vaši delegovaní uživatelé"
 
 msgid "Access your character"
 msgstr "Získejte přístup ke své postavě"
@@ -6606,12 +6585,6 @@ msgid ""
 msgstr "Souhlas se sdílením údajů můžete odvolat kliknutím na příslušný odkaz"
 
 msgid ""
-"Fill in the form and click on confirm, it will take you to the next passage"
-msgstr ""
-"Vyplňte formulář a klikněte na tlačítko potvrdit, čímž se dostanete k "
-"dalšímu kroku"
-
-msgid ""
 "For what time you will need transportation (time zone of the larp location)"
 msgstr ""
 "Na jakou dobu budete potřebovat dopravu (časové pásmo místa konání akce)"
@@ -9366,14 +9339,6 @@ msgstr ""
 "chcete hrát, uveďte prosím, v jakém pořadí byste je chtěli hrát)"
 
 msgid ""
-"We are almost there, you just need to enter the last necessary data here. "
-"With this data your membership application will be pre-filled;  you will "
-"just have to print it out and sign it"
-msgstr ""
-"Jsme téměř u cíle, stačí zde zadat poslední potřebné údaje. S těmito údaji "
-"bude vaše členská přihláška předvyplněna; stačí ji vytisknout a podepsat"
-
-msgid ""
 "As per the statutes, we will review your request at the next board meeting "
 "and send you an update e-mail as soon as possible (you should receive a "
 "reply within a few weeks at the latest)."
@@ -9423,15 +9388,6 @@ msgstr ""
 "Tato stránka shrnuje seznam členů, který je připraven k odeslání pojišťovně."
 " Zobrazuje pouze členy, kteří obnovili své členství v tomto kalendářním "
 "roce, a to v pořadí, v jakém bylo členství obnoveno"
-
-msgid ""
-"There are only two steps left to complete the procedure, enter the last "
-"necessary data. With this information, your membership application will be "
-"pre-filled; all you have to do is print it out and sign it"
-msgstr ""
-"K dokončení postupu zbývají už jen dva kroky; zde zadejte poslední potřebné "
-"údaje. S těmito údaji bude vaše členská přihláška předvyplněna; stačí ji "
-"vytisknout a podepsat"
 
 msgid ""
 "This page allows you to check the payment items in the system. The source of"

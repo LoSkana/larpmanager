@@ -957,6 +957,9 @@ msgstr "Locatie"
 msgid "Max uses"
 msgstr "Maximaal gebruik"
 
+msgid "Messages"
+msgstr "Bericht verzonden"
+
 msgid "New gift"
 msgstr "Nieuw cadeau"
 
@@ -1254,9 +1257,6 @@ msgstr "Penningmeester"
 msgid "Workshops"
 msgstr "Workshops"
 
-msgid "Your user"
-msgstr "Uw gebruiker"
-
 msgid "negatives"
 msgstr "negatieven"
 
@@ -1362,9 +1362,6 @@ msgstr "Nettowinst"
 msgid "New answer"
 msgstr "Nieuw antwoord"
 
-msgid "New member"
-msgstr "Nieuw lid"
-
 msgid "New signup"
 msgstr "Nieuwe inzendingen"
 
@@ -1431,9 +1428,6 @@ msgstr "Startdatum"
 msgid "Statistics"
 msgstr "Statistieken"
 
-msgid "Step 3 / 4"
-msgstr "Stap 3 / 4"
-
 msgid "Surcharges"
 msgstr "Toeslagen"
 
@@ -1466,9 +1460,6 @@ msgstr "Vrijwilligers"
 
 msgid "Welcome to"
 msgstr "Welkom bij"
-
-msgid "Write here"
-msgstr "Schrijf hier"
 
 msgid "accounting"
 msgstr "boekhouding"
@@ -1685,6 +1676,9 @@ msgstr "Vaardigheidslijst"
 
 msgid "Ability type"
 msgstr "Type vaardigheid"
+
+msgid "Achievements"
+msgstr "Prestaties"
 
 msgid "Archive mail"
 msgstr "Archief mail"
@@ -2267,6 +2261,9 @@ msgstr "Uiterste datum"
 msgid "Deadline (days)"
 msgstr "Termijn (dagen)"
 
+msgid "Delegated users"
+msgstr "Gedelegeerde gebruikers"
+
 msgid "Disable credits"
 msgstr "Credits uitschakelen"
 
@@ -2321,6 +2318,9 @@ msgstr "Onderdanige vraag!"
 msgid "Replacing names"
 msgstr "Namen vervangen"
 
+msgid "Select Language"
+msgstr "Selecteer taal"
+
 msgid "Show statistics"
 msgstr "Statistieken tonen"
 
@@ -2339,14 +2339,8 @@ msgstr "Vrijwillige gegevens"
 msgid "You can consult"
 msgstr "U kunt"
 
-msgid "Your accounting"
-msgstr "Uw boekhouding"
-
 msgid "Your characters"
 msgstr "Uw personages"
-
-msgid "Your membership"
-msgstr "Uw lidmaatschap"
 
 msgid "expected within"
 msgstr "verwacht binnen"
@@ -2522,9 +2516,6 @@ msgstr "Waar het wordt gehouden"
 msgid "Writing Question"
 msgstr "Schrijfvraag"
 
-msgid "Your competences"
-msgstr "Jouw vaardigheden"
-
 msgid "are not yet open"
 msgstr "zijn nog niet open"
 
@@ -2681,9 +2672,6 @@ msgstr "Geverifieerde betalingen"
 msgid "Vote not yet open"
 msgstr "Er kan nog niet gestemd worden"
 
-msgid "Your achievements"
-msgstr "Uw prestaties"
-
 msgid "Your character is"
 msgstr "Je personage is"
 
@@ -2788,12 +2776,6 @@ msgstr "Vrijwillige donatie"
 
 msgid "Volunteer Registry"
 msgstr "Vrijwilligers Register"
-
-msgid "Your personal data"
-msgstr "Uw gegevens"
-
-msgid "Your registrations"
-msgstr "Uw inzendingen"
 
 msgid "by the deadline of"
 msgstr "voor de deadline van"
@@ -3036,9 +3018,6 @@ msgstr "Welkom bij %(name)s!"
 
 msgid "Yes, keep me posted!"
 msgstr "Ja, hou me op de hoogte!"
-
-msgid "Your delegated users"
-msgstr "Je gedelegeerde gebruikers"
 
 msgid "Access your character"
 msgstr "Toegang tot je personage"
@@ -6816,11 +6795,6 @@ msgstr ""
 "betreffende link te klikken"
 
 msgid ""
-"Fill in the form and click on confirm, it will take you to the next passage"
-msgstr ""
-"Vul het formulier in en klik op bevestigen, dan ga je naar de volgende stap"
-
-msgid ""
 "For what time you will need transportation (time zone of the larp location)"
 msgstr ""
 "Voor hoe laat je vervoer nodig hebt (tijdzone van de evenementenlocatie)"
@@ -9710,15 +9684,6 @@ msgstr ""
 "aan in welke volgorde je ze wilt spelen)"
 
 msgid ""
-"We are almost there, you just need to enter the last necessary data here. "
-"With this data your membership application will be pre-filled;  you will "
-"just have to print it out and sign it"
-msgstr ""
-"We zijn er bijna, je moet hier alleen nog de laatste noodzakelijke gegevens "
-"invoeren. Met deze gegevens is je lidmaatschapsaanvraag al ingevuld; je "
-"hoeft hem alleen nog maar uit te printen en te ondertekenen"
-
-msgid ""
 "As per the statutes, we will review your request at the next board meeting "
 "and send you an update e-mail as soon as possible (you should receive a "
 "reply within a few weeks at the latest)."
@@ -9771,16 +9736,6 @@ msgstr ""
 "Deze pagina geeft een overzicht van de ledenlijst, opgemaakt om naar de "
 "verzekeringsmaatschappij te sturen. Er worden alleen leden getoond die hun "
 "lidmaatschap in dit kalenderjaar hebben verlengd, in volgorde van verlenging"
-
-msgid ""
-"There are only two steps left to complete the procedure, enter the last "
-"necessary data. With this information, your membership application will be "
-"pre-filled; all you have to do is print it out and sign it"
-msgstr ""
-"Er zijn nog maar twee stappen om de procedure af te ronden; voer hier de "
-"laatste noodzakelijke gegevens in. Met deze gegevens is je "
-"lidmaatschapsaanvraag al ingevuld; je hoeft hem alleen nog maar uit te "
-"printen en te ondertekenen"
 
 msgid ""
 "This page allows you to check the payment items in the system. The source of"

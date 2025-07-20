@@ -131,11 +131,6 @@ urlpatterns = [
         name="activate_feature_event",
     ),
     path(
-        "change_language/",
-        views_lm.change_language,
-        name="change_language",
-    ),
-    path(
         "toggle_sidebar/",
         views_lm.toggle_sidebar,
         name="toggle_sidebar",
