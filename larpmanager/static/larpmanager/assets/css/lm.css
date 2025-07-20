@@ -1877,6 +1877,7 @@ a label:hover {
 
     #topbar .right, #topbar .left {
         text-align: left !important;
+        white-space: nowrap;
     }
 
     #topbar .no_mobile, #sidebar .no_mobile {
