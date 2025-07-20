@@ -22,6 +22,7 @@
     <th class="hide characters">{% trans "Characters" %}</th>
     <th class="hide characters">(N)</th>
     <th></th>
+    <th></th>
 {% endblock thead %}
 {% block tbody %}
     {% for el in list %}
@@ -48,8 +49,15 @@
             <td class="hide characters">{{ el.characters.all | length }}</td>
             <td>
                 {% if not forloop.first %}
-                    <a href="{% url 'orga_factions_order' run.event.slug run.number el.id %}">
+                    <a href="{% url 'orga_factions_order' run.event.slug run.number el.id 0 %}">
                         <i class="fa-solid fa-arrow-up"></i>
+                    </a>
+                {% endif %}
+            </td>
+            <td>
+                {% if not forloop.last %}
+                    <a href="{% url 'orga_factions_order' run.event.slug run.number el.id 1 %}">
+                        <i class="fa-solid fa-arrow-down"></i>
                     </a>
                 {% endif %}
             </td>

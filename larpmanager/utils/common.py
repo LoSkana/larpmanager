@@ -534,31 +534,43 @@ def round_to_two_significant_digits(number):
     return float(rounded)
 
 
-def exchange_order(ctx, cls, num):
+def exchange_order(ctx, cls, num, order):
     elements = ctx["event"].get_elements(cls)
     # get elements
     current = elements.get(pk=num)
-    order = current.order
-    prev = elements.filter(order__lt=order).order_by("-order")
-    if hasattr(current, "question"):
-        prev = prev.filter(question=current.question)
-    if hasattr(current, "section"):
-        prev = prev.filter(section=current.section)
-    if hasattr(current, "applicable"):
-        prev = prev.filter(applicable=current.applicable)
 
-    if len(prev) == 0:
-        current.order -= 1
+    # order indicates if we have to increase, or reduce, the current_order
+    if order:
+        other = elements.filter(order__gt=current.order).order_by("order")
+    else:
+        other = elements.filter(order__lt=current.order).order_by("-order")
+
+    if hasattr(current, "question"):
+        other = other.filter(question=current.question)
+    if hasattr(current, "section"):
+        other = other.filter(section=current.section)
+    if hasattr(current, "applicable"):
+        other = other.filter(applicable=current.applicable)
+
+    # if not element is found, simply increase / reduce the order
+    if len(other) == 0:
+        if order:
+            current.order += 1
+        else:
+            current.order -= 1
         current.save()
     else:
-        prev = prev.first()
+        other = other.first()
         # exchange ordering
-        current.order = prev.order
-        prev.order = order
-        if current.order == prev.order:
-            prev.order += 1
+        current.order = other.order
+        other.order = current.order
+        if current.order == other.order:
+            if order:
+                other.order -= 1
+            else:
+                other.order += 1
         current.save()
-        prev.save()
+        other.save()
     ctx["current"] = current
 
 
