@@ -1339,7 +1339,7 @@ msgid "Legal name"
 msgstr "Nome legale"
 
 msgid "Membership"
-msgstr "Soci"
+msgstr "Socio"
 
 msgid "Miscellany"
 msgstr "Miscellanea"

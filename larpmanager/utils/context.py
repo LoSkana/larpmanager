@@ -20,6 +20,8 @@
 
 from django.conf import settings as conf_settings
 
+from larpmanager.models.association import Association
+
 
 def cache_association(request):
     ctx = {}
@@ -29,4 +31,9 @@ def cache_association(request):
         ctx["staging"] = 1
     if not hasattr(request, "user") or not hasattr(request.user, "member"):
         ctx["languages"] = conf_settings.LANGUAGES
+
+    # TODO remove
+    assoc = Association.objects.get(pk=request.assoc["id"])
+    ctx["interface_old"] = assoc.get_config("interface_old", False)
+
     return ctx
