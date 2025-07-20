@@ -2372,6 +2372,9 @@ msgstr "Tekstbakgrunn"
 msgid "Confirm Payments"
 msgstr "Bekreft betalinger"
 
+msgid "Confirm payments"
+msgstr "Bekreft betalinger"
+
 msgid "Current template"
 msgstr "Gjeldende mal"
 
@@ -4013,6 +4016,9 @@ msgstr "Stemmegivningen til hovedstyret er åpen"
 msgid "We'll try to help as best we can"
 msgstr "Vi skal prøve å hjelpe så godt vi kan"
 
+msgid "You need to define the end date!"
+msgstr "Du må definere sluttdatoen!"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Et spørsmål ble stilt av: %(user)s"
@@ -4155,6 +4161,9 @@ msgstr "Billett valgt: <b>%(ticket)s</b>"
 
 msgid "You are about to make a payment of"
 msgstr "Du er i ferd med å foreta en betaling på"
+
+msgid "You need to define the start date!"
+msgstr "Du må definere startdatoen!"
 
 msgid "Your updated registration total is"
 msgstr "Den oppdaterte totalsummen din er"
@@ -4307,6 +4316,9 @@ msgstr "Tildel utvalgte figurer til spillerne"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Kontroller gyldigheten av skattekoden"
+
+msgid "End date cannot be before start date!"
+msgstr "Sluttdato kan ikke være før startdato!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Hvis avkrysset, tillat billettnivå: Selger"
