@@ -4670,6 +4670,9 @@ msgstr "Orden de visualización con respecto a todas las secciones"
 msgid "For which day you will need transportation"
 msgstr "¿Para qué día necesitas transporte"
 
+msgid "Here is a list of critical problems to fix"
+msgstr "He aquí una lista de problemas críticos que hay que solucionar"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Si está marcada: muestra el género de cada evento"

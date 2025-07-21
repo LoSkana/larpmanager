@@ -535,12 +535,13 @@ def orga_writing_excel_edit(request, s, n, typ):
         tinymce = True
 
     counter = ""
-    if ctx["question"].max_length:
-        if ctx["question"].typ == "m":
-            name = _("options")
-        else:
-            name = "text length"
-        counter = f'<div class="helptext">{name}: <span class="count"></span> / {ctx["question"].max_length}</div>'
+    if ctx["question"].typ in ["m", "t", "p", "e", "name", "teaser", "text", "title"]:
+        if ctx["question"].max_length:
+            if ctx["question"].typ == "m":
+                name = _("options")
+            else:
+                name = "text length"
+            counter = f'<div class="helptext">{name}: <span class="count"></span> / {ctx["question"].max_length}</div>'
 
     confirm = _("Confirm")
     field = ctx["form"][ctx["field_key"]]
@@ -631,6 +632,10 @@ def _get_question_update(ctx):
         question_slug = ctx["question"].typ
 
     value = ctx["form"].cleaned_data[question_key]
+    if value:
+        value = str(value)
+    else:
+        value = ""
     if ctx["question"].typ in [QuestionType.TEASER, QuestionType.SHEET, QuestionType.EDITOR]:
         value = strip_tags(value)
 

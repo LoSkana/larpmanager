@@ -4674,6 +4674,9 @@ msgstr "Reihenfolge der Anzeige in Bezug auf alle Abschnitte"
 msgid "For which day you will need transportation"
 msgstr "Für welchen Tag benötigen Sie einen Transport"
 
+msgid "Here is a list of critical problems to fix"
+msgstr "Hier ist eine Liste kritischer Probleme, die behoben werden müssen"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Wenn markiert: zeigt das Genre für jedes Ereignis an"

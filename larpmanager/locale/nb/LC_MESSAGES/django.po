@@ -4672,6 +4672,9 @@ msgstr "Vis rekkefølge med hensyn til alle seksjoner"
 msgid "For which day you will need transportation"
 msgstr "For hvilken dag trenger du transport"
 
+msgid "Here is a list of critical problems to fix"
+msgstr "Her er en liste over kritiske problemer som må løses"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Hvis avkrysset: viser sjangeren for hvert arrangement"
