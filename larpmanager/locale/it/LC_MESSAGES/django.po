@@ -1638,9 +1638,6 @@ msgstr "Mostra chiusi"
 msgid "Simple list"
 msgstr "Lista semplice"
 
-msgid "Suggestions"
-msgstr "Suggerimenti"
-
 msgid "Ticket list"
 msgstr "Elenco dei biglietti"
 

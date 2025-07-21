@@ -1638,9 +1638,6 @@ msgstr "Ver cerrados"
 msgid "Simple list"
 msgstr "Lista simple"
 
-msgid "Suggestions"
-msgstr "Sugerencias"
-
 msgid "Ticket list"
 msgstr "Lista de entradas"
 
@@ -5202,7 +5199,7 @@ msgstr "La suma es %(amount).2f, con motivo '%(reason)s'"
 
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
-msgstr "Hay <b>%(número)s</b> caracteres para aprobar"
+msgstr "Hay <b>%(number)s</b> caracteres para aprobar"
 
 msgid "This page allows you to edit event-specific texts"
 msgstr "Esta página te permite editar los textos específicos del evento"

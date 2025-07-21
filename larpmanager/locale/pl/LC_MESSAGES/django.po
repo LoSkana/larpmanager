@@ -1638,9 +1638,6 @@ msgstr "Pokaz zamknięty"
 msgid "Simple list"
 msgstr "Prosta lista"
 
-msgid "Suggestions"
-msgstr "Sugestie"
-
 msgid "Ticket list"
 msgstr "Lista biletów"
 
@@ -4630,7 +4627,7 @@ msgstr "Pierwszy wiersz to nazwy pól"
 
 #, python-format
 msgid "There are quests without traits: %(list)s"
-msgstr "Istnieją zadania bez cech: %(lista)s"
+msgstr "Istnieją zadania bez cech: %(list)s"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Na tej stronie wyświetlane są przesłane albumy ze zdjęciami"
