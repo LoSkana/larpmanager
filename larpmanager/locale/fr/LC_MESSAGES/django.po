@@ -3971,6 +3971,9 @@ msgstr "Demande d'adhésion non soumise"
 msgid "Miscellaneous operating expenses"
 msgstr "Dépenses de fonctionnement diverses"
 
+msgid "Name already used for this event"
+msgstr "Nom déjà utilisé pour cet événement"
+
 msgid "Name to be displayed for credits"
 msgstr "Nom à afficher pour les crédits"
 

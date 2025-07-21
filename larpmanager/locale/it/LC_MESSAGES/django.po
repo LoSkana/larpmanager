@@ -3971,6 +3971,9 @@ msgstr "Richiesta Socio non sottomessa"
 msgid "Miscellaneous operating expenses"
 msgstr "Uscite diverse di gestione"
 
+msgid "Name already used for this event"
+msgstr "Nome già utilizzato per questo evento"
+
 msgid "Name to be displayed for credits"
 msgstr "Nome da visualizzare per i crediti"
 

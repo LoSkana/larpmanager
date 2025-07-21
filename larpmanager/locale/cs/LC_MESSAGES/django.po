@@ -3971,6 +3971,9 @@ msgstr "Nepodaná žádost člena"
 msgid "Miscellaneous operating expenses"
 msgstr "Různé provozní výdaje"
 
+msgid "Name already used for this event"
+msgstr "Název již použitý pro tuto událost"
+
 msgid "Name to be displayed for credits"
 msgstr "Název, který se má zobrazit u kreditů"
 

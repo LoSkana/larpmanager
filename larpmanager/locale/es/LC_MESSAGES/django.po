@@ -3971,6 +3971,9 @@ msgstr "Solicitud de afiliación no presentada"
 msgid "Miscellaneous operating expenses"
 msgstr "Gastos diversos de funcionamiento"
 
+msgid "Name already used for this event"
+msgstr "Nombre ya utilizado para este evento"
+
 msgid "Name to be displayed for credits"
 msgstr "Nombre que aparecerá en los créditos"
 
