@@ -1,6 +1,14 @@
 {% load i18n %}
 {% if list %}
-    <h2 {% if suggestion %}id="suggestions"{% else %}id="actions"{% endif %}>{{ header }}</h2>
+    <h2 id="{{ typ }}">
+        {% if typ == "priorities" %}
+            <i class="fa-solid fa-triangle-exclamation"></i> {% trans "Priorities" %}
+        {% elif typ == "actions" %}
+            <i class="fa-solid fa-square-check"></i> {% trans "Actions" %}
+        {% elif typ == "suggestions" %}
+            <i class="fa-solid fa-circle-info"></i> {% trans "Suggestions" %}
+        {% endif %}
+    </h2>
     <table>
         {% for obj in list %}
             <tr>

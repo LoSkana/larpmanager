@@ -19,11 +19,16 @@
             </i>
         </div>
         <hr />
-        {% with list=actions header=actions_header %}
+        {% with list=priorities typ="priorities" %}
+            {% include "larpmanager/manage/helpers.html" %}
+        {% endwith %}
+        {% with list=actions typ="actions" %}
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}
         {% if ongoing_runs %}
-            <h2>{% trans "Ongoing events" %}</h2>
+            <h2>
+                <i class="fa-solid fa-calendar-days"></i> {% trans "Events" %}
+            </h2>
             <table class="mob">
                 {% for run in ongoing_runs %}
                     <tr>
@@ -48,7 +53,7 @@
         {% endif %}
         {% if global_sum or bank_sum %}
             <h2>
-                <a href="{% url 'exe_accounting' %}">{% trans "Accounting" %}</a>
+                <a href="{% url 'exe_accounting' %}"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>
             </h2>
             <table>
                 <tr>
@@ -67,7 +72,7 @@
                 </tr>
             </table>
         {% endif %}
-        {% with list=suggestions header=suggestions_header suggestion=1 %}
+        {% with list=suggestions typ="suggestions" %}
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}
     </div>
