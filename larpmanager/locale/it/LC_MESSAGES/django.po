@@ -5202,7 +5202,7 @@ msgstr "La somma è di %(amount).2f, con motivazione '%(reason)s'"
 
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
-msgstr "Ci sono <b>%(numero)s</b> caratteri da approvare"
+msgstr "Ci sono <b>%(number)s</b> caratteri da approvare"
 
 msgid "This page allows you to edit event-specific texts"
 msgstr "Questa pagina ti permette di modificare i testi specifici dell'evento"

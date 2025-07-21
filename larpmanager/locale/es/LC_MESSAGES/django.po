@@ -4630,7 +4630,7 @@ msgstr "La primera línea son los nombres de los campos"
 
 #, python-format
 msgid "There are quests without traits: %(list)s"
-msgstr "Hay misiones sin rasgos: %(lista)s"
+msgstr "Hay misiones sin rasgos: %(list)s"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Esta página muestra los álbumes de fotos cargados"
