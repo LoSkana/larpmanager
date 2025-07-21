@@ -19,11 +19,14 @@
             </i>
         </div>
         <hr />
-        {% with list=actions header=actions_header %}
+        {% with list=priorities typ="priorities" %}
+            {% include "larpmanager/manage/helpers.html" %}
+        {% endwith %}
+        {% with list=actions typ="actions" %}
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}
         <h2>
-            <a href="{% url 'orga_run' run.event.slug run.number %}">{% trans "Event status" %}</a>
+            <a href="{% url 'orga_run' run.event.slug run.number %}"><i class="fa-solid fa-calendar-days"></i> {% trans "Event status" %}</a>
         </h2>
         <p>
             <b>{{ run }}</b>
@@ -42,8 +45,9 @@
             </p>
         {% endif %}
         {% if counts %}
+            <hr />
             <h2>
-                <a href="{% url 'orga_registrations' run.event.slug run.number %}">{% trans "Registrations" %}</a>: {{ counts.count_reg }}
+                <a href="{% url 'orga_registrations' run.event.slug run.number %}"><i class="fa-solid fa-clipboard-list"></i> {% trans "Registrations" %}</a>: {{ counts.count_reg }}
             </h2>
             <table>
                 <tr>
@@ -60,7 +64,7 @@
         {% endif %}
         {% if run.revenue %}
             <h2>
-                <a href="{% url 'orga_accounting' run.event.slug run.number %}">{% trans "Accounting" %}</a>
+                <a href="{% url 'orga_accounting' run.event.slug run.number %}"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>
             </h2>
             <table>
                 <tr>
@@ -91,7 +95,7 @@
                 </tr>
             </table>
         {% endif %}
-        {% with list=suggestions header=suggestions_header suggestion=1 %}
+        {% with list=suggestions typ="suggestions" %}
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}
         <hr />

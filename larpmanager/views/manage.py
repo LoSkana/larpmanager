@@ -101,22 +101,15 @@ def _exe_manage(request):
 
     # if no event active, suggest to create one
     if not ctx["ongoing_runs"]:
-        _add_action(
+        _add_priority(
             ctx,
             _("No events are present, create one"),
             "exe_events",
         )
 
+    _exe_actions(request, ctx)
+
     _exe_suggestions(ctx)
-
-    features = get_assoc_features(ctx["a_id"])
-    assoc = Association.objects.get(pk=ctx["a_id"])
-
-    _exe_actions(ctx)
-
-    _exe_accounting_actions(assoc, ctx, features)
-
-    _exe_users_actions(request, assoc, ctx, features)
 
     _compile(request, ctx)
 
@@ -127,19 +120,17 @@ def _exe_manage(request):
 
 def _exe_suggestions(ctx):
     suggestions = {
-        "exe_quick": _("To quickly configure your organization's most important settings"),
-        "exe_payment_details": _(
-            "To set up the gateway payment available to players, to let them pay the registration fee through the platform"
-        ),
-        "exe_profile": _("To define which data will be asked in the profile form to the users once they sign up"),
+        "exe_quick": _("Quickly configure your organization's most important settings"),
+        "exe_payment_details": _("Set up the payment methods available to players"),
+        "exe_profile": _("Define which data will be asked in the profile form to the users once they sign up"),
         "exe_roles": _(
-            "To grant access to organization management for other users and define roles with specific permissions"
+            "Grant access to organization management for other users and define roles with specific permissions"
         ),
         "exe_appearance": _(
-            "To customize the appearance of all organizational pages, including colors, fonts, and images"
+            "Customize the appearance of all organizational pages, including colors, fonts, and images"
         ),
-        "exe_features": _("To activate new features and enhance the functionality of the platform"),
-        "exe_config": _("To set specific values for the interface configuration or features"),
+        "exe_features": _("Activate new features and enhance the functionality of the platform"),
+        "exe_config": _("Set up specific values for the interface configuration or features"),
     }
 
     assoc = Association.objects.get(pk=ctx["a_id"])
@@ -149,7 +140,10 @@ def _exe_suggestions(ctx):
         _add_suggestion(ctx, text, perm)
 
 
-def _exe_actions(ctx):
+def _exe_actions(request, ctx):
+    features = get_assoc_features(ctx["a_id"])
+    assoc = Association.objects.get(pk=ctx["a_id"])
+
     runs_conclude = Run.objects.filter(
         event__assoc_id=ctx["a_id"], development__in=[DevelopStatus.START, DevelopStatus.SHOW], end__lt=datetime.today()
     ).values_list("search", flat=True)
@@ -195,21 +189,32 @@ def _exe_actions(ctx):
             "exe_membership",
         )
 
+    _exe_accounting_actions(assoc, ctx, features)
+
+    _exe_users_actions(request, assoc, ctx, features)
+
 
 def _exe_users_actions(request, assoc, ctx, features):
     if "membership" in features:
         if not get_assoc_text(ctx["a_id"], AssocTextType.MEMBERSHIP):
-            _add_action(
+            _add_priority(
                 ctx,
-                _("The membership request text is missing, create it in the texts management panel"),
+                _("Set up the membership request text"),
+                "exe_membership",
+            )
+
+        if len(assoc.get_config("membership_fee", "")) == 0:
+            _add_priority(
+                ctx,
+                _("Set up the membership configuration"),
                 "exe_membership",
             )
 
     if "vote" in features:
         if not assoc.get_config("vote_candidates", ""):
-            _add_action(
+            _add_priority(
                 ctx,
-                _("There are no candidates for the voting, set them in the configuration panel"),
+                _("Set up the voting configuration"),
                 "exe_config",
             )
 
@@ -226,26 +231,26 @@ def _exe_users_actions(request, assoc, ctx, features):
 def _exe_accounting_actions(assoc, ctx, features):
     if "payment" in features:
         if not assoc.payment_methods.count():
-            _add_action(
+            _add_priority(
                 ctx,
-                _("There are no payment gateway active, configure them in the payment settings panel"),
+                _("Set up payment methods"),
                 "exe_payment_details",
             )
 
     if "organization_tax" in features:
         if not assoc.get_config("organization_tax_perc", ""):
-            _add_action(
+            _add_priority(
                 ctx,
-                _("The organization tax configuration is missing, set them in the configuration panel"),
+                _("Set up the organization tax configuration"),
                 "exe_accounting",
                 "config/organization_tax",
             )
 
     if "vat" in features:
         if not assoc.get_config("vat_ticket", "") or not assoc.get_config("vat_options", ""):
-            _add_action(
+            _add_priority(
                 ctx,
-                _("The taxes configuration is missing, set them in the configuration panel"),
+                _("Set up the taxes configuration"),
                 "exe_accounting",
                 "config/vat",
             )
@@ -279,7 +284,12 @@ def _orga_manage(request, s, n):
     if has_event_permission(ctx, request, s, "orga_accounting"):
         ctx["dc"] = get_run_accounting(ctx["run"], ctx)
 
-    _orga_actions(request, ctx, assoc)
+    _exe_actions(request, ctx)
+    # keep only priorities
+    if "actions_list" in ctx:
+        del ctx["actions_list"]
+
+    _orga_actions_priorities(request, ctx, assoc)
 
     _orga_suggestions(ctx)
 
@@ -297,20 +307,20 @@ def _orga_manage(request, s, n):
     return render(request, "larpmanager/manage/orga.html", ctx)
 
 
-def _orga_actions(request, ctx, assoc):
+def _orga_actions_priorities(request, ctx, assoc):
     # if there are no characters, suggest to do it
     features = get_event_features(ctx["event"].id)
 
     if "character" in features:
         if not Character.objects.filter(event=ctx["event"]).count():
-            _add_action(
+            _add_priority(
                 ctx,
-                _("Create the first character of the event in the character management panel"),
+                _("Create the first character of the event"),
                 "orga_characters",
             )
 
     elif set(features) & {"faction", "plot", "casting", "user_character", "px", "custom_character", "questbuilder"}:
-        _add_action(
+        _add_priority(
             ctx,
             _("Some activated features need the 'Character' feature, but it isn't active"),
             "orga_features",
@@ -318,18 +328,16 @@ def _orga_actions(request, ctx, assoc):
 
     if "user_character" in features:
         if ctx["event"].get_config("user_character_max", "") == "":
-            _add_action(
+            _add_priority(
                 ctx,
-                _(
-                    "Set up the configuration for the creation or editing of characters by the players in the configuration panel"
-                ),
+                _("Set up the configuration for the creation or editing of characters by the players"),
                 "orga_character",
                 "config/user_character",
             )
 
     if "token_credit" not in features:
         if set(features) & {"expense", "refund", "collection"}:
-            _add_action(
+            _add_priority(
                 ctx,
                 _("Some activated features need the 'Token / Credit' feature, but it isn't active"),
                 "orga_features",
@@ -339,10 +347,7 @@ def _orga_actions(request, ctx, assoc):
     if char_proposed:
         _add_action(
             ctx,
-            _(
-                "There are <b>%(number)s</b> characters in proposed status, approve them in the character management panel"
-            )
-            % {"number": char_proposed},
+            _("There are <b>%(number)s</b> characters to approve") % {"number": char_proposed},
             "orga_characters",
         )
 
@@ -387,7 +392,7 @@ def _orga_user_actions(ctx, features, request, assoc):
 def _orga_casting_actions(ctx, features):
     if "casting" in features:
         if not ctx["event"].get_config("casting_min", 0):
-            _add_action(
+            _add_priority(
                 ctx,
                 _("Set the casting options in the configuration panel"),
                 "orga_casting",
@@ -396,9 +401,9 @@ def _orga_casting_actions(ctx, features):
 
     if "questbuilder" in features:
         if not ctx["event"].get_elements(QuestType).count():
-            _add_action(
+            _add_priority(
                 ctx,
-                _("No quest types have been created; use the quest type management panel to define them"),
+                _("Set up quest types"),
                 "orga_quest_types",
             )
 
@@ -406,18 +411,18 @@ def _orga_casting_actions(ctx, features):
             ctx["event"].get_elements(QuestType).annotate(quest_count=Count("quests")).filter(quest_count=0)
         )
         if unused_quest_types.count():
-            _add_action(
+            _add_priority(
                 ctx,
-                _("There are quest types without quests: %(list)s. Create them in the quests management panel")
+                _("There are quest types without quests: %(list)s")
                 % {"list": ", ".join([obj.name for obj in unused_quest_types])},
                 "orga_quests",
             )
 
         unused_quests = ctx["event"].get_elements(Quest).annotate(trait_count=Count("traits")).filter(trait_count=0)
         if unused_quests.count():
-            _add_action(
+            _add_priority(
                 ctx,
-                _("There are quests without traits: %(list)s. Create them in the trait management panel")
+                _("There are quests without traits: %(list)s")
                 % {"list": ", ".join([obj.name for obj in unused_quests])},
                 "orga_traits",
             )
@@ -428,17 +433,17 @@ def _orga_px_actions(ctx, features):
         return
 
     if not ctx["event"].get_config("px_start", 0):
-        _add_action(
+        _add_priority(
             ctx,
-            _("Set the initial amount of experience points in the configuration panel"),
+            _("Set the experience points configuration"),
             "orga_px_abilities",
             "config/px",
         )
 
     if not ctx["event"].get_elements(AbilityTypePx).count():
-        _add_action(
+        _add_priority(
             ctx,
-            _("No ability types have been created; use the ability type management panel to define them"),
+            _("Set up ability types"),
             "orga_px_ability_types",
         )
 
@@ -446,26 +451,24 @@ def _orga_px_actions(ctx, features):
         ctx["event"].get_elements(AbilityTypePx).annotate(ability_count=Count("abilities")).filter(ability_count=0)
     )
     if unused_ability_types.count():
-        _add_action(
+        _add_priority(
             ctx,
-            _(
-                "There are ability types without abilities: %(list)s. Create abilities for them in the ability management panel"
-            )
+            _("There are ability types without abilities: %(list)s")
             % {"list": ", ".join([ability.name for ability in unused_ability_types])},
             "orga_px_abilities",
         )
 
     if not ctx["event"].get_elements(DeliveryPx).count():
-        _add_action(
+        _add_priority(
             ctx,
-            _("No delivery for experience points have been created; create one in the delivery management panel"),
+            _("Set up delivery for experience points"),
             "orga_px_deliveries",
         )
 
 
 def _orga_reg_acc_actions(ctx, features):
     if "reg_installments" in features and "reg_quotas" in features:
-        _add_action(
+        _add_priority(
             ctx,
             _(
                 "You have activated both fixed and dynamic installments; they are not meant to be used together, "
@@ -475,17 +478,17 @@ def _orga_reg_acc_actions(ctx, features):
         )
 
     if "reg_quotas" in features and not ctx["event"].get_elements(RegistrationQuota).count():
-        _add_action(
+        _add_priority(
             ctx,
-            _("You have activated dynamic installments, but none have been yet created"),
+            _("Set up dynamic installments"),
             "orga_registration_quotas",
         )
 
     if "reg_installments" in features:
         if not ctx["event"].get_elements(RegistrationInstallment).count():
-            _add_action(
+            _add_priority(
                 ctx,
-                _("You have activated fixed installments, but none have been yet created"),
+                _("Set up fixed installments"),
                 "orga_registration_installments",
             )
         else:
@@ -495,7 +498,7 @@ def _orga_reg_acc_actions(ctx, features):
                 .filter(date_deadline__isnull=False, days_deadline__isnull=False)
             )
             if both_set:
-                _add_action(
+                _add_priority(
                     ctx,
                     _(
                         "You have some fixed installments with both date and days set, but those values cannot be set at the same time: %(list)s"
@@ -506,7 +509,7 @@ def _orga_reg_acc_actions(ctx, features):
 
             missing_final = ctx["event"].get_elements(RegistrationTicket).exclude(installments__amount=0)
             if missing_final:
-                _add_action(
+                _add_priority(
                     ctx,
                     _("You have some tickets without a final installment (with 0 amount): %(list)s")
                     % {"list": ", ".join([obj.name for obj in missing_final])},
@@ -516,23 +519,23 @@ def _orga_reg_acc_actions(ctx, features):
 
 def _orga_reg_actions(ctx, features):
     if "registration_open" in features and not ctx["run"].registration_open:
-        _add_action(
+        _add_priority(
             ctx,
-            _("You have activated registration opening date, but no value has been set"),
+            _("Set up a value for registration opening date"),
             "orga_run",
         )
 
     if "registration_secret" in features and not ctx["run"].registration_secret:
-        _add_action(
+        _add_priority(
             ctx,
-            _("You have activated registration secret link, but no value has been set"),
+            _("Set up a value for registration secret link"),
             "orga_run",
         )
 
     if "register_link" in features and not ctx["event"].register_link:
-        _add_action(
+        _add_priority(
             ctx,
-            _("You have activated registration external link, but no value has been set"),
+            _("Set up a value for registration external link"),
             "orga_event",
         )
 
@@ -543,9 +546,9 @@ def _orga_reg_actions(ctx, features):
                 configured = True
 
         if not configured:
-            _add_action(
+            _add_priority(
                 ctx,
-                _("You have activated character customization, but no fields has been set"),
+                _("Set up character customization configuration"),
                 "orga_characters",
                 "config/custom_character",
             )
@@ -553,17 +556,15 @@ def _orga_reg_actions(ctx, features):
 
 def _orga_suggestions(ctx):
     suggestions = {
-        "orga_quick": _("To quickly configure your events's most important settings"),
-        "orga_registration_tickets": _("To set the tickets that users can select during registration"),
+        "orga_quick": _("Quickly configure your events's most important settings"),
+        "orga_registration_tickets": _("Set up the tickets that users can select during registration"),
         "orga_registration_form": _(
-            "To define the registration form, and set up any number of registration questions and their options"
+            "Define the registration form, and set up any number of registration questions and their options"
         ),
-        "orga_roles": _(
-            "To grant access to event management for other users and define roles with specific permissions"
-        ),
-        "orga_appearance": _("To customize the appearance of all event pages, including colors, fonts, and images"),
-        "orga_features": _("To activate new features and enhance the functionality of the event"),
-        "orga_config": _("To set specific values for configuration of features of the event"),
+        "orga_roles": _("Grant access to event management for other users and define roles with specific permissions"),
+        "orga_appearance": _("Customize the appearance of all event pages, including colors, fonts, and images"),
+        "orga_features": _("Activate new features and enhance the functionality of the event"),
+        "orga_config": _("Set specific values for configuration of features of the event"),
     }
 
     for perm, text in suggestions.items():
@@ -577,6 +578,10 @@ def _add_item(ctx, list_name, text, perm, link):
         ctx[list_name] = []
 
     ctx[list_name].append((text, perm, link))
+
+
+def _add_priority(ctx, text, perm, link=None):
+    _add_item(ctx, "priorities_list", text, perm, link)
 
 
 def _add_action(ctx, text, perm, link=None):
@@ -607,9 +612,7 @@ def _get_perm_link(ctx, perm, view):
 
 
 def _compile(request, ctx):
-    ctx["suggestions_header"] = _("Suggestions")
-    ctx["actions_header"] = _("Actions")
-    section_list = ["suggestions", "actions"]
+    section_list = ["suggestions", "actions", "priorities"]
     empty = True
     for section in section_list:
         ctx[section] = []

@@ -5346,15 +5346,21 @@ msgid ""
 "English"
 msgstr ""
 
-msgid "Ongoing events"
-msgstr ""
-
 msgid "Feature activated"
 msgstr ""
 
 msgid ""
 "You have activated the following features, for each here's the links to "
 "follow"
+msgstr ""
+
+msgid "Priorities"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Suggestions"
 msgstr ""
 
 msgid "Discover what this event is about"
@@ -8135,33 +8141,31 @@ msgstr ""
 msgid "No events are present, create one"
 msgstr ""
 
-msgid "To quickly configure your organization's most important settings"
+msgid "Quickly configure your organization's most important settings"
+msgstr ""
+
+msgid "Set up the payment methods available to players"
 msgstr ""
 
 msgid ""
-"To set up the gateway payment available to players, to let them pay the "
-"registration fee through the platform"
+"Define which data will be asked in the profile form to the users once they "
+"sign up"
 msgstr ""
 
 msgid ""
-"To define which data will be asked in the profile form to the users once "
-"they sign up"
-msgstr ""
-
-msgid ""
-"To grant access to organization management for other users and define roles "
+"Grant access to organization management for other users and define roles "
 "with specific permissions"
 msgstr ""
 
 msgid ""
-"To customize the appearance of all organizational pages, including colors, "
+"Customize the appearance of all organizational pages, including colors, "
 "fonts, and images"
 msgstr ""
 
-msgid "To activate new features and enhance the functionality of the platform"
+msgid "Activate new features and enhance the functionality of the platform"
 msgstr ""
 
-msgid "To set specific values for the interface configuration or features"
+msgid "Set up specific values for the interface configuration or features"
 msgstr ""
 
 #, python-format
@@ -8186,34 +8190,29 @@ msgstr ""
 msgid "There are <b>%(number)s</b> members to approve"
 msgstr ""
 
-msgid ""
-"The membership request text is missing, create it in the texts management "
-"panel"
+msgid "Set up the membership request text"
 msgstr ""
 
-msgid ""
-"There are no candidates for the voting, set them in the configuration panel"
+msgid "Set up the membership configuration"
+msgstr ""
+
+msgid "Set up the voting configuration"
 msgstr ""
 
 #, python-format
 msgid "There are <b>%(number)s</b> questions to answer"
 msgstr ""
 
-msgid ""
-"There are no payment gateway active, configure them in the payment settings "
-"panel"
+msgid "Set up payment methods"
 msgstr ""
 
-msgid ""
-"The organization tax configuration is missing, set them in the configuration "
-"panel"
+msgid "Set up the organization tax configuration"
 msgstr ""
 
-msgid "The taxes configuration is missing, set them in the configuration panel"
+msgid "Set up the taxes configuration"
 msgstr ""
 
-msgid ""
-"Create the first character of the event in the character management panel"
+msgid "Create the first character of the event"
 msgstr ""
 
 msgid ""
@@ -8222,7 +8221,7 @@ msgstr ""
 
 msgid ""
 "Set up the configuration for the creation or editing of characters by the "
-"players in the configuration panel"
+"players"
 msgstr ""
 
 msgid ""
@@ -8231,48 +8230,34 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid ""
-"There are <b>%(number)s</b> characters in proposed status, approve them in "
-"the character management panel"
+msgid "There are <b>%(number)s</b> characters to approve"
 msgstr ""
 
 msgid "Set the casting options in the configuration panel"
 msgstr ""
 
-msgid ""
-"No quest types have been created; use the quest type management panel to "
-"define them"
+msgid "Set up quest types"
 msgstr ""
 
 #, python-format
-msgid ""
-"There are quest types without quests: %(list)s. Create them in the quests "
-"management panel"
+msgid "There are quest types without quests: %(list)s"
 msgstr ""
 
 #, python-format
-msgid ""
-"There are quests without traits: %(list)s. Create them in the trait "
-"management panel"
+msgid "There are quests without traits: %(list)s"
 msgstr ""
 
-msgid "Set the initial amount of experience points in the configuration panel"
+msgid "Set the experience points configuration"
 msgstr ""
 
-msgid ""
-"No ability types have been created; use the ability type management panel to "
-"define them"
+msgid "Set up ability types"
 msgstr ""
 
 #, python-format
-msgid ""
-"There are ability types without abilities: %(list)s. Create abilities for "
-"them in the ability management panel"
+msgid "There are ability types without abilities: %(list)s"
 msgstr ""
 
-msgid ""
-"No delivery for experience points have been created; create one in the "
-"delivery management panel"
+msgid "Set up delivery for experience points"
 msgstr ""
 
 msgid ""
@@ -8281,10 +8266,10 @@ msgid ""
 "panel"
 msgstr ""
 
-msgid "You have activated dynamic installments, but none have been yet created"
+msgid "Set up dynamic installments"
 msgstr ""
 
-msgid "You have activated fixed installments, but none have been yet created"
+msgid "Set up fixed installments"
 msgstr ""
 
 #, python-format
@@ -8298,50 +8283,43 @@ msgid ""
 "You have some tickets without a final installment (with 0 amount): %(list)s"
 msgstr ""
 
-msgid "You have activated registration opening date, but no value has been set"
+msgid "Set up a value for registration opening date"
 msgstr ""
 
-msgid "You have activated registration secret link, but no value has been set"
+msgid "Set up a value for registration secret link"
+msgstr ""
+
+msgid "Set up a value for registration external link"
+msgstr ""
+
+msgid "Set up character customization configuration"
+msgstr ""
+
+msgid "Quickly configure your events's most important settings"
+msgstr ""
+
+msgid "Set up the tickets that users can select during registration"
 msgstr ""
 
 msgid ""
-"You have activated registration external link, but no value has been set"
-msgstr ""
-
-msgid "You have activated character customization, but no fields has been set"
-msgstr ""
-
-msgid "To quickly configure your events's most important settings"
-msgstr ""
-
-msgid "To set the tickets that users can select during registration"
-msgstr ""
-
-msgid ""
-"To define the registration form, and set up any number of registration "
+"Define the registration form, and set up any number of registration "
 "questions and their options"
 msgstr ""
 
 msgid ""
-"To grant access to event management for other users and define roles with "
+"Grant access to event management for other users and define roles with "
 "specific permissions"
 msgstr ""
 
 msgid ""
-"To customize the appearance of all event pages, including colors, fonts, and "
+"Customize the appearance of all event pages, including colors, fonts, and "
 "images"
 msgstr ""
 
-msgid "To activate new features and enhance the functionality of the event"
+msgid "Activate new features and enhance the functionality of the event"
 msgstr ""
 
-msgid "To set specific values for configuration of features of the event"
-msgstr ""
-
-msgid "Suggestions"
-msgstr ""
-
-msgid "Actions"
+msgid "Set specific values for configuration of features of the event"
 msgstr ""
 
 msgid "Reimbursement request item added"
