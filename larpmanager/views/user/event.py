@@ -23,6 +23,7 @@ from datetime import datetime, timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -67,6 +68,7 @@ from larpmanager.utils.text import get_assoc_text, get_event_text
 def calendar(request, lang):
     aid = request.assoc["id"]
     my_regs = None
+    my_runs_list = []
     if request.user.is_authenticated:
         ref = datetime.now() - timedelta(days=3)
         my_regs = Registration.objects.filter(
@@ -77,12 +79,13 @@ def calendar(request, lang):
             run__end__gte=ref.date(),
         )
         my_regs = my_regs.select_related("ticket")
+        my_runs_list = [reg.run_id for reg in my_regs]
 
     ctx = def_user_ctx(request)
     ctx.update({"open": [], "future": [], "langs": [], "page": "calendar"})
     if lang:
         ctx["lang"] = lang
-    for run in get_coming_runs(aid):
+    for run in get_coming_runs(aid, my_runs_list=my_runs_list):
         registration_status(run, request.user, my_regs=my_regs)
         if run.status["open"]:
             ctx["open"].append(run)
@@ -94,13 +97,12 @@ def calendar(request, lang):
     return render(request, "larpmanager/general/calendar.html", ctx)
 
 
-def get_coming_runs(assoc_id, future=True):
-    runs = (
-        Run.objects.exclude(development=DevelopStatus.START)
-        .exclude(development=DevelopStatus.CANC)
-        .exclude(event__visible=False)
-        .select_related("event")
-    )
+def get_coming_runs(assoc_id, my_runs_list=None, future=True):
+    runs = Run.objects.exclude(development=DevelopStatus.CANC).exclude(event__visible=False).select_related("event")
+    if my_runs_list:
+        runs = runs.exclude(Q(development=DevelopStatus.START) & ~Q(id__in=my_runs_list))
+    else:
+        runs = runs.exclude(development=DevelopStatus.START)
     if future:
         ref = datetime.now() - timedelta(days=3)
         runs = runs.filter(end__gte=ref.date()).order_by("end")

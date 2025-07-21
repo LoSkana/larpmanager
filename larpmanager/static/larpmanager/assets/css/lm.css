@@ -1893,11 +1893,11 @@ a label:hover {
 }
 
 .middlebar {
-    display: none;
+    display: none !important;
 }
 
 .interface_old .middlebar {
-    display: initial;
+    display: initial !important;
 }
 
 #sidebar-open img {
