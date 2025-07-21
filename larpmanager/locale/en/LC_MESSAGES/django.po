@@ -3823,9 +3823,6 @@ msgid ""
 "always of the same macrotype)"
 msgstr ""
 
-msgid "Welcome to"
-msgstr ""
-
 msgid "Here is a step-by-step walkthrough of the interface"
 msgstr ""
 
@@ -3866,10 +3863,13 @@ msgstr ""
 msgid "Click the tutorial to open it and follow the step-by-step instructions"
 msgstr ""
 
-msgid "And that is all"
+msgid "Write to us if you need help in setting things up!"
 msgstr ""
 
-msgid "Write to us if you need help in setting things up!"
+msgid "Welcome to"
+msgstr ""
+
+msgid "And that is all"
 msgstr ""
 
 msgid "Tax code verification"
