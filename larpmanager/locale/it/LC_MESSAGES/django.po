@@ -2754,7 +2754,7 @@ msgid "Review all members"
 msgstr "Esamina tutti i membri"
 
 msgid "Set up quest types"
-msgstr "Impostare i tipi di missione"
+msgstr "Imposta i tipi di missione"
 
 msgid "Show cancellations"
 msgstr "Mostra disdette"
@@ -2995,7 +2995,7 @@ msgid "Selezione non valida"
 msgstr "Selezione non valida"
 
 msgid "Set up ability types"
-msgstr "Impostare i tipi di abilità"
+msgstr "Imposta i tipi di abilità"
 
 msgid "Sign up as a filler!"
 msgstr "Iscriviti come filler!"
@@ -3235,7 +3235,7 @@ msgid "Select your character!"
 msgstr "Seleziona il tuo personaggio!"
 
 msgid "Set up payment methods"
-msgstr "Impostare i metodi di pagamento"
+msgstr "Imposta i metodi di pagamento"
 
 msgid "Total registration fee"
 msgstr "Quota di iscrizione totale"
@@ -3483,7 +3483,7 @@ msgid "Request sent for approval"
 msgstr "Richiesta inviata per approvazione"
 
 msgid "Set up fixed installments"
-msgstr "Impostazione di rate fisse"
+msgstr "Imposta le rate fisse"
 
 msgid "Show available characters"
 msgstr "Mostra personaggi disponibili"
@@ -3647,7 +3647,7 @@ msgid "Reminder membership request"
 msgstr "Promemoria richiesta di adesione"
 
 msgid "Set up dynamic installments"
-msgstr "Impostazione di rate dinamiche"
+msgstr "Imposta le rate dinamiche"
 
 msgid "View limited ticket options"
 msgstr "Visualizza le opzioni di biglietto limitate"
@@ -3822,7 +3822,7 @@ msgid "Select the new photo to upload"
 msgstr "Seleziona la nuova foto da caricare"
 
 msgid "Set up the taxes configuration"
-msgstr "Configurazione delle imposte"
+msgstr "Configura le imposte"
 
 msgid "The registrations to the event"
 msgstr "Le iscrizioni all'evento"
@@ -3896,7 +3896,7 @@ msgid "Set design - staging, materials"
 msgstr "Scenografia - allestimenti, materiali"
 
 msgid "Set up the voting configuration"
-msgstr "Impostazione della configurazione di voto"
+msgstr "Imposta la configurazione di voto"
 
 msgid "Show questions already answered"
 msgstr "Mostra domande già risposte"
@@ -4141,7 +4141,7 @@ msgid "Select a file with extension 'zip'"
 msgstr "Selezionare un file con estensione \"zip\""
 
 msgid "Set up the membership request text"
-msgstr "Impostare il testo della richiesta di adesione"
+msgstr "Imposta il testo della richiesta di adesione"
 
 msgid "The amount of your contribution is"
 msgstr "L'importo del tuo contributo è"
@@ -4217,7 +4217,7 @@ msgid "Review historical financial records"
 msgstr "Esamina i registri contabili storici"
 
 msgid "Set up the membership configuration"
-msgstr "Impostare la configurazione dei membri"
+msgstr "Imposta la configurazione dei membri"
 
 msgid "You can't send messages to yourself"
 msgstr "Non è possibile inviare messaggi a se stessi"
@@ -4391,7 +4391,7 @@ msgid "Select the organisation to proceed to"
 msgstr "Seleziona l'organizzazione verso cui procedere"
 
 msgid "Set up delivery for experience points"
-msgstr "Impostare la consegna dei punti esperienza"
+msgstr "Imposta la consegna dei punti esperienza"
 
 msgid "This page shows cancelled enrollments"
 msgstr "Questa pagina riepiloga le iscrizioni disdette"
@@ -4520,7 +4520,7 @@ msgid "Registration cancellation for %(event)s"
 msgstr "Disdetta iscrizione a %(event)s"
 
 msgid "Set the experience points configuration"
-msgstr "Impostare la configurazione dei punti esperienza"
+msgstr "Imposta la configurazione dei punti esperienza"
 
 msgid "Sum of the signup fee, total to be paid"
 msgstr "Somma della quota di iscrizione, il totale dal saldare"
@@ -4623,7 +4623,7 @@ msgid "Request of membership to the Organization"
 msgstr "Richiesta iscrizione all'Associazione"
 
 msgid "Set up the organization tax configuration"
-msgstr "Configurazione dell'imposta sull'organizzazione"
+msgstr "Configura la tassa organizzativa"
 
 msgid "The first line is the names of the fields"
 msgstr "La prima riga sono i nomi dei campi"
@@ -4769,7 +4769,7 @@ msgid "Review players' safety-related informations"
 msgstr "Esamina le informazioni sulla safety dei giocatori"
 
 msgid "Set up a value for registration secret link"
-msgstr "Impostare un valore per il link segreto di registrazione"
+msgstr "Imposta un valore per il link segreto di registrazione"
 
 msgid "This page allows you to translate the event"
 msgstr "Questa pagina permette di tradurre l'evento"
@@ -4847,10 +4847,10 @@ msgid "Select a character to add a new relationship"
 msgstr "Selezionare un personaggio per aggiungere una nuova relazione"
 
 msgid "Set up a value for registration opening date"
-msgstr "Impostare un valore per la data di apertura della registrazione"
+msgstr "Imposta un valore per la data di apertura della registrazione"
 
 msgid "Set up character customization configuration"
-msgstr "Configurazione della personalizzazione dei personaggi"
+msgstr "Configura la personalizzazione dei personaggi"
 
 msgid "There are no new runs scheduled at this time"
 msgstr "Al momento non ci sono nuove run in programma"
@@ -4906,7 +4906,7 @@ msgid "Select the event you wish to pre-register for"
 msgstr "Seleziona l'evento per cui ti vuoi pre-iscrivere"
 
 msgid "Set up a value for registration external link"
-msgstr "Impostare un valore per la registrazione del link esterno"
+msgstr "Imposta un valore per la registrazione del link esterno"
 
 msgid "The user has been assigned the specified role"
 msgstr "All'utente è stato assegnato il ruolo specificato"
@@ -5049,7 +5049,7 @@ msgid "Number of characters to be assigned (default 1)"
 msgstr "Numero di personaggi da assegnare (default 1)"
 
 msgid "Set up the payment methods available to players"
-msgstr "Impostare i metodi di pagamento disponibili per i giocatori"
+msgstr "Imposta i metodi di pagamento disponibili per i giocatori"
 
 msgid "Shows the calculated tax amount on each payment"
 msgstr "Mostra l'importo delle imposte calcolato per ogni pagamento"
@@ -5266,7 +5266,7 @@ msgid "Select which of your characters you want to access"
 msgstr "Seleziona quale dei tuoi personaggi vuoi accedere"
 
 msgid "Set the casting options in the configuration panel"
-msgstr "Impostare le opzioni di casting nel pannello di configurazione"
+msgstr "Imposta le opzioni di casting nel pannello di configurazione"
 
 msgid "Set visual aspect: colors, background, cover image"
 msgstr "Imposta l'aspetto visivo: colori, sfondo, immagine di copertina"
@@ -5841,7 +5841,7 @@ msgstr ""
 
 msgid "Set up the tickets that users can select during registration"
 msgstr ""
-"Impostazione dei biglietti che gli utenti possono selezionare durante la "
+"Imposta i biglietti che gli utenti possono selezionare durante la "
 "registrazione"
 
 msgid "This page allows you to add or edit an expense item incurred"
@@ -5985,8 +5985,8 @@ msgstr ""
 
 msgid "Set specific values for configuration of features of the event"
 msgstr ""
-"Impostazione di valori specifici per la configurazione delle caratteristiche"
-" dell'evento"
+"Imposta valori specifici per la configurazione delle caratteristiche "
+"dell'evento"
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "Ti chiediamo di pagare l'importo richiesto per la rata successiva"
@@ -6244,7 +6244,7 @@ msgstr ""
 
 msgid "Set up specific values for the interface configuration or features"
 msgstr ""
-"Impostare valori specifici per la configurazione dell'interfaccia o delle "
+"Imposta valori specifici per la configurazione dell'interfaccia o delle "
 "funzioni"
 
 msgid "The payment of your membership fee for this year has been received"
@@ -6454,8 +6454,8 @@ msgstr "Presente (nelle relazioni di questo personaggio è presente l'altro)"
 
 msgid "Set the options for the automatic PDF generation of characters sheets"
 msgstr ""
-"Impostare le opzioni per la generazione automatica delle schede PDF in "
-"formato PDF"
+"Imposta le opzioni per la generazione automatica delle schede PDF in formato"
+" PDF"
 
 #, python-format
 msgid "Staff member %(user)s added a new reimbursement request for %(event)s"
