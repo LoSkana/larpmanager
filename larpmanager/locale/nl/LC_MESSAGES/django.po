@@ -4629,6 +4629,9 @@ msgstr "Weergavevolgorde met betrekking tot alle secties"
 msgid "For which day you will need transportation"
 msgstr "Voor welke dag heb je vervoer nodig"
 
+msgid "Here is a list of critical problems to fix"
+msgstr "Hier is een lijst met kritieke problemen die moeten worden opgelost"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Indien aangevinkt: toont het genre voor elk evenement"

@@ -33,10 +33,11 @@ def cache_association(request):
         ctx["languages"] = conf_settings.LANGUAGES
 
     # TODO remove
-    if request.assoc["id"] > 1:
-        assoc = Association.objects.get(pk=request.assoc["id"])
-        ctx["interface_old"] = assoc.get_config("interface_old", False)
-    else:
-        ctx["interface_old"] = True
+    if hasattr(request, "assoc"):
+        if request.assoc["id"] > 1:
+            assoc = Association.objects.get(pk=request.assoc["id"])
+            ctx["interface_old"] = assoc.get_config("interface_old", False)
+        else:
+            ctx["interface_old"] = True
 
     return ctx

@@ -4627,6 +4627,9 @@ msgstr "Pořadí zobrazení všech sekcí"
 msgid "For which day you will need transportation"
 msgstr "Na který den budete potřebovat dopravu"
 
+msgid "Here is a list of critical problems to fix"
+msgstr "Zde je seznam kritických problémů, které je třeba odstranit"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Pokud je zaškrtnuto: zobrazí žánr pro každou událost"

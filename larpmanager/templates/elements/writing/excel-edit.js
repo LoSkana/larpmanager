@@ -68,7 +68,7 @@ window.addEventListener('DOMContentLoaded', function() {
             // success
             if (res.k == 1) {
                 closeEdit();
-                $('#' + res.eid + ' [qid=' + res.qid + '] .editable').html(res.update);
+                $('#' + res.eid + ' [qid=' + res.qid + ']').html(res.update);
                 return;
             }
             // form error
@@ -84,8 +84,8 @@ window.addEventListener('DOMContentLoaded', function() {
         $(document).on('dblclick', '.editable', function(event) {
             event.preventDefault();
 
-            eid = $(this).parent().parent().attr("id");
-            qid = $(this).parent().attr("qid");
+            eid = $(this).parent().attr("id");
+            qid = $(this).attr("qid");
 
             request = $.ajax({
                 url: "{% url 'orga_writing_excel_edit' run.event.slug run.number label_typ %}",

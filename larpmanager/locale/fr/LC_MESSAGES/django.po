@@ -4631,6 +4631,9 @@ msgstr "Ordre d'affichage de toutes les sections"
 msgid "For which day you will need transportation"
 msgstr "Pour quel jour avez-vous besoin d'un transport"
 
+msgid "Here is a list of critical problems to fix"
+msgstr "Voici une liste de problèmes critiques à résoudre"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Si coché : affiche le genre pour chaque événement"

@@ -4629,6 +4629,9 @@ msgstr "Visningsordning med avseende på alla sektioner"
 msgid "For which day you will need transportation"
 msgstr "För vilken dag behöver du transport"
 
+msgid "Here is a list of critical problems to fix"
+msgstr "Här är en lista över kritiska problem som måste åtgärdas"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Om markerat: visar genren för varje evenemang"

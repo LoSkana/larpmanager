@@ -3852,6 +3852,9 @@ msgid ""
 "If you need help, type your request here in English using single keywords"
 msgstr ""
 
+msgid "Here is a list of critical problems to fix"
+msgstr ""
+
 msgid "Here is a to-do list of important actions to complete"
 msgstr ""
 
