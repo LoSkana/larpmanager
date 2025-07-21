@@ -7,6 +7,12 @@
                 <a href="{% url 'language' %}"><i class="fa-solid fa-language"></i> {% trans "Language" %}</a>
             </li>
             {% if user.is_authenticated %}
+                <li>
+                    <a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i> Profile</a>
+                </li>
+                <li>
+                    <a href="{% url 'accounting' %}"><i class="fa-solid fa-money-bill"></i> Accounting</a>
+                </li>
                 {% if 'membership' in assoc.features %}
                     <li>
                         <a href="{% url 'membership' %}"><i class="fa-solid fa-id-card"></i> {% trans "Membership" %}</a>
