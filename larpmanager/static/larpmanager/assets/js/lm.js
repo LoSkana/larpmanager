@@ -245,7 +245,7 @@ $(document).ready(function() {
         var k = $(this).attr("tog");
         var el =  $("." + k);
         el.toggle();
-        // console.log(el.is(":visible"));
+
          if (el.is(":visible")) {
              var elements = document.getElementsByClassName(k);
 
@@ -277,8 +277,6 @@ $(document).ready(function() {
         tp = $(this).attr("fie");
 
         el = $('#' + num).find('.popup_text.' + tp).first();
-        // alert(el.html());
-        // console.log(el);
 
         uglipop({class:'popup', //styling class for Modal
             source:'html',
@@ -298,8 +296,6 @@ $(document).ready(function() {
             $(this).children().each( function () {
               tx += " " + $(this).html();
             });
-
-             // console.log(tx.toLowerCase());
 
             if (tx.toLowerCase().includes(key.toLowerCase())) {
                 $(this).show(300);
@@ -579,7 +575,6 @@ if (!String.prototype.format) {
 function centerMobileIcons() {
     const $topbar = $('#topbar');
     const topbarWidth = $topbar.innerWidth();
-    console.log(topbarWidth);
 
     var $visibleElements = $topbar.find('.el');
     var elCount = 0;
