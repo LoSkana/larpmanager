@@ -1638,6 +1638,9 @@ msgstr "Visa stängd"
 msgid "Simple list"
 msgstr "Enkel lista"
 
+msgid "Suggestions"
+msgstr "Förslag"
+
 msgid "Ticket list"
 msgstr "Biljettlista"
 

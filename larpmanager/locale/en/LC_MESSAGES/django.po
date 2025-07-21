@@ -5357,6 +5357,9 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
+msgid "Suggestions"
+msgstr ""
+
 msgid "Discover what this event is about"
 msgstr ""
 

@@ -1638,6 +1638,9 @@ msgstr "Zobrazit uzavřeno"
 msgid "Simple list"
 msgstr "Jednoduchý seznam"
 
+msgid "Suggestions"
+msgstr "Návrhy"
+
 msgid "Ticket list"
 msgstr "Seznam vstupenek"
 

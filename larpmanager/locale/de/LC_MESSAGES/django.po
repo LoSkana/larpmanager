@@ -1638,6 +1638,9 @@ msgstr "Geschlossen anzeigen"
 msgid "Simple list"
 msgstr "Einfache Liste"
 
+msgid "Suggestions"
+msgstr "Vorschläge"
+
 msgid "Ticket list"
 msgstr "Ticket-Liste"
 

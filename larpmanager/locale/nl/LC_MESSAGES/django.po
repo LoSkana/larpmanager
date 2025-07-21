@@ -1638,6 +1638,9 @@ msgstr "Toon gesloten"
 msgid "Simple list"
 msgstr "Eenvoudige lijst"
 
+msgid "Suggestions"
+msgstr "Suggesties"
+
 msgid "Ticket list"
 msgstr "Ticketlijst"
 

@@ -1638,6 +1638,9 @@ msgstr "Pokaz zamknięty"
 msgid "Simple list"
 msgstr "Prosta lista"
 
+msgid "Suggestions"
+msgstr "Sugestie"
+
 msgid "Ticket list"
 msgstr "Lista biletów"
 
