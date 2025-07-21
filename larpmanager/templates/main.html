@@ -4,7 +4,8 @@
     {% if assoc.id == 0 %}
         {% block header %}
             <!-- Header -->
-            <header id="header" {% if is_sidebar_open %}class="sidebar"{% endif %}>
+            <header id="header"
+                    {% if manage and is_sidebar_open %}class="sidebar"{% endif %}>
                 <!--
             <a href="{% url 'home' %}" class="main" aria-label="LarpManager">
                 <span class="logo"><img src="{% static 'lm_logo.png' %}" alt="Logo" /></span>
@@ -50,7 +51,8 @@
         {% block alpha %}
         {% endblock alpha %}
         <!-- Footer -->
-        <footer id="footer" {% if is_sidebar_open %}class="sidebar"{% endif %}>
+        <footer id="footer"
+                {% if manage and is_sidebar_open %}class="sidebar"{% endif %}>
             {% if contact_form %}
                 <h3>Contact us</h3>
                 <form class="contact"
@@ -84,7 +86,8 @@
         </footer>
     {% else %}
         <!-- Header -->
-        <header id="header" class="alt {% if is_sidebar_open %}sidebar{% endif %}">
+        <header id="header"
+                class="alt {% if manage and is_sidebar_open %}sidebar{% endif %}">
             {% block sidebar_logo %}
                 {% if manage and interface_old %}
                     <nav id="sidebar-nav">
@@ -101,7 +104,7 @@
                     {% endblock title %}
                 </span>
             </h1>
-            {% if interface_old or not topbar %}
+            {% if interface_old %}
                 <nav id="menu-bar">
                     <a id="menu-open" href="#menu"><span>Menu</span>
                         <img alt="menu" src="{% static 'larpmanager/assets/menu.png' %}" />
@@ -110,144 +113,7 @@
             {% endif %}
         </header>
         <!-- Menu -->
-        <nav id="menu">
-            <div class="inner">
-                <h2>Menu</h2>
-                {% if user.is_authenticated %}
-                    <p>{% trans "Hi" %}, {{ user.member.display_member }}!</p>
-                {% endif %}
-                <ul class="links">
-                    <li>
-                        <a href="{% url 'home' %}">{% trans "Calendar" %}</a>
-                    </li>
-                    {% if user.is_authenticated %}
-                        <li>
-                            <a href="{% url 'profile' %}">{% trans "Your user" %}</a>
-                        </li>
-                        {% if 'membership' in assoc.features %}
-                            <li>
-                                <a href="{% url 'membership' %}">{% trans "Your membership" %}</a>
-                            </li>
-                        {% endif %}
-                        <li>
-                            <a href="{% url 'accounting' %}">{% trans "Your accounting" %}</a>
-                        </li>
-                        {% if 'delegated_members' in assoc.features %}
-                            <li>
-                                <a href="{% url 'delegated' %}">{% trans "Your delegated users" %}</a>
-                            </li>
-                        {% endif %}
-                        {% if 'chat' in assoc.features %}
-                            <li>
-                                <a href="{% url 'chats' %}">{% trans "Your messages" %}</a>
-                            </li>
-                        {% endif %}
-                        {% if 'badge' in assoc.features %}
-                            <li>
-                                <a href="{% url 'public' user.member.id %}">{% trans "Your achievements" %}</a>
-                            </li>
-                        {% endif %}
-                    {% endif %}
-                    {% if user.is_authenticated %}
-                        {% if reg_menu %}
-                            <li>
-                                <span class="opener">{% trans "Registrations" %}
-                                    <img class="chevron"
-                                         alt="chevron"
-                                         src="{% static 'larpmanager/assets/chevron.png' %}" />
-                                </span>
-                                <ul>
-                                    {% for s, n, name in reg_menu %}
-                                        <li class="sub">
-                                            <a href="{% url 'gallery' s n %}">{{ name }}</a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                        {% endif %}
-                        {% if topbar %}
-                            <li>
-                                <span class="opener">{% trans "Manage" %}
-                                    <img class="chevron"
-                                         alt="chevron"
-                                         src="{% static 'larpmanager/assets/chevron.png' %}" />
-                                </span>
-                                <ul>
-                                    {% for rid, v in open_runs.items %}
-                                        <li>
-                                            <a href="{% url 'manage' v.e v.r %}">{{ v.s }}</a>
-                                        </li>
-                                    {% endfor %}
-                                    {% if assoc_role %}
-                                        <li>
-                                            <a href="{% url 'manage' %}">{% trans "Organization" %}</a>
-                                        </li>
-                                    {% endif %}
-                                </ul>
-                            </li>
-                        {% endif %}
-                        {% if user.is_superuser %}
-                            <li>
-                                <span class="opener">LarpManager
-                                    <img class="chevron"
-                                         alt="chevron"
-                                         src="{% static 'larpmanager/assets/chevron.png' %}" />
-                                </span>
-                                <ul>
-                                    <li>
-                                        <a href="{% url 'lm_list' %}">{% trans "List" %}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{% url 'lm_payments' %}">{% trans "Payments" %}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{% url 'lm_send' %}">{% trans "Mail" %}</a>
-                                    </li>
-                                    <li>
-                                        <a href="{% url 'lm_profile' %}">{% trans "Profiling" %}</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        {% endif %}
-                        <li>
-                            <a id="logout" href="{% url 'logout' %}">Logout</a>
-                        </li>
-                        <form method="post" action="{% url 'logout' %}">
-                            {% csrf_token %}
-                            <button type="submit" id="real_logout">logout</button>
-                        </form>
-                    {% else %}
-                        <li>
-                            <span class="opener">{% trans "Language" %}
-                                <img class="chevron"
-                                     alt="chevron"
-                                     src="{% static 'larpmanager/assets/chevron.png' %}" />
-                            </span>
-                            <ul>
-                                <li>
-                                    <select name="lang" id="id_lang">
-                                        {% for el in languages %}<option value="{{ el.0 }}">{{ el.1 }}</option>{% endfor %}
-                                    </select>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="{% url 'login' %}">Log In</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'password_reset' %}">{% trans "Change password" %}</a>
-                        </li>
-                    {% endif %}
-                    <li>
-                        <a href="{% url 'help' %}">Help</a>
-                    </li>
-                </ul>
-                <a href="#" class="close">Close</a>
-            </div>
-        </nav>
+        {% include "elements/structure/menu.html" %}
         {% block wrapper %}
             <!-- Main -->
             <div id="banner">
@@ -273,7 +139,8 @@
                     </div>
                 </div>
             </div>
-            <div id="footer" {% if is_sidebar_open %}class="sidebar"{% endif %}>
+            <div id="footer"
+                 {% if manage and is_sidebar_open %}class="sidebar"{% endif %}>
                 <div class="inner">
                     {% if assoc.footer %}
                         <div class="footer-text">
@@ -419,24 +286,6 @@
     {% get_current_language as LANGUAGE_CODE %}
     const currentLanguage = "{{ LANGUAGE_CODE }}";
 
-    function setLanguage(lang) {
-        $.ajax({
-          url: '/change_language/',
-          type: 'POST',
-          data: {
-            language: lang
-          },
-          success: function (response) {
-            if (response.status === 'Language changed') {
-              // console.log(`Language switched to ${response.language}`);
-              location.reload();
-            }
-          },
-          error: function (xhr, status, error) {
-            console.error('Error changing language:', error);
-          },
-        });
-    }
 
     window.addEventListener('DOMContentLoaded', function() {
         $(function() {
@@ -452,11 +301,6 @@
                 $('#real_logout').click();
                 return false;
             });
-
-              $("#id_lang").on('change', function () {
-                const selectedLanguage = this.value;
-                setLanguage(selectedLanguage);
-              });
 
         });
 

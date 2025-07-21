@@ -96,6 +96,11 @@ urlpatterns = [
         name="home_json",
     ),
     path(
+        "language/",
+        views_um.language,
+        name="language",
+    ),
+    path(
         "profile/",
         views_um.profile,
         name="profile",

@@ -49,10 +49,6 @@ def def_user_ctx(request):
         res["membership"] = get_user_membership(request.user.member, request.assoc["id"])
         get_index_assoc_permissions(res, request, request.assoc["id"], check=False)
 
-    # TODO remove
-    assoc = Association.objects.get(pk=request.assoc["id"])
-    res["interface_old"] = assoc.get_config("interface_old", False)
-
     res.update(cache_event_links(request))
 
     if "token_credit" in res["features"]:
@@ -66,6 +62,10 @@ def def_user_ctx(request):
 
     if request and request.resolver_match:
         res["request_func_name"] = request.resolver_match.func.__name__
+
+    # TODO remove
+    assoc = Association.objects.get(pk=request.assoc["id"])
+    res["interface_old"] = assoc.get_config("interface_old", False)
 
     return res
 

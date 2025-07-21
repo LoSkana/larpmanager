@@ -34,13 +34,14 @@ from django.core.files.storage import default_storage
 from django.core.validators import URLValidator
 from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
-from django.utils.translation import activate
+from django.utils.translation import activate, get_language
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
 from larpmanager.accounting.member import info_accounting
 from larpmanager.forms.member import (
     AvatarForm,
+    LanguageForm,
     MembershipConfirmForm,
     MembershipRequestForm,
     ProfileForm,
@@ -79,6 +80,39 @@ from larpmanager.utils.pdf import (
 )
 from larpmanager.utils.registration import registration_status
 from larpmanager.utils.text import get_assoc_text
+
+
+def language(request):
+    if request.user.is_authenticated:
+        current_language = request.user.member.language
+    else:
+        current_language = get_language()
+
+    if request.method == "POST":
+        form = LanguageForm(request.POST, current_language=current_language)
+        if form.is_valid():
+            language = form.cleaned_data["language"]
+            activate(language)
+            request.session["django_language"] = language
+            response = HttpResponseRedirect("/")
+            if request.user.is_authenticated:
+                request.user.member.language = language
+                request.user.member.save()
+            else:
+                response.set_cookie(
+                    conf_settings.LANGUAGE_COOKIE_NAME,
+                    language,
+                    max_age=conf_settings.LANGUAGE_COOKIE_AGE,
+                    path=conf_settings.LANGUAGE_COOKIE_PATH,
+                    domain=conf_settings.LANGUAGE_COOKIE_DOMAIN,
+                    secure=conf_settings.SESSION_COOKIE_SECURE or None,
+                    httponly=False,
+                    samesite=conf_settings.SESSION_COOKIE_SAMESITE,
+                )
+            return response
+    else:
+        form = LanguageForm(current_language=current_language)
+    return render(request, "larpmanager/member/language.html", {"form": form})
 
 
 @login_required

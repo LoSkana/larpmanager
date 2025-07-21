@@ -202,6 +202,19 @@ class AvatarForm(forms.Form):
     image = forms.ImageField(label="Select an image")
 
 
+class LanguageForm(forms.Form):
+    language = forms.ChoiceField(
+        choices=conf_settings.LANGUAGES,
+        label=_("Select Language"),
+        widget=forms.Select(attrs={"class": "form-control"}),
+    )
+
+    def __init__(self, *args, **kwargs):
+        current_lang = kwargs.pop("current_language")
+        super().__init__(*args, **kwargs)
+        self.fields["language"].initial = current_lang
+
+
 # noinspection PyUnresolvedReferences
 COUNTRY_CHOICES = sorted([(country.alpha_2, country.name) for country in pycountry.countries], key=lambda x: x[1])
 
@@ -326,7 +339,6 @@ class ProfileForm(BaseProfileForm):
     class Meta:
         model = Member
         fields = (
-            "language",
             "name",
             "surname",
             "legal_name",

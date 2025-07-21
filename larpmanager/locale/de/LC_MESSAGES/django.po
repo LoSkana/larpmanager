@@ -957,6 +957,9 @@ msgstr "Standort"
 msgid "Max uses"
 msgstr "Maximale Verwendungszwecke"
 
+msgid "Messages"
+msgstr "Nachricht gesendet"
+
 msgid "New gift"
 msgstr "Neues Geschenk"
 
@@ -1251,9 +1254,6 @@ msgstr "Schatzmeister"
 msgid "Workshops"
 msgstr "Werkstätten"
 
-msgid "Your user"
-msgstr "Ihr Benutzer"
-
 msgid "negatives"
 msgstr "Negative"
 
@@ -1359,9 +1359,6 @@ msgstr "Reingewinn"
 msgid "New answer"
 msgstr "Neue Antwort"
 
-msgid "New member"
-msgstr "Neues Mitglied"
-
 msgid "New signup"
 msgstr "Neue Einträge"
 
@@ -1425,9 +1422,6 @@ msgstr "Datum des Beginns"
 msgid "Statistics"
 msgstr "Statistik"
 
-msgid "Step 3 / 4"
-msgstr "Schritt 3 / 4"
-
 msgid "Surcharges"
 msgstr "Zuschläge"
 
@@ -1460,9 +1454,6 @@ msgstr "Ehrenamtliche Mitarbeiter"
 
 msgid "Welcome to"
 msgstr "Willkommen bei"
-
-msgid "Write here"
-msgstr "Schreiben Sie hier"
 
 msgid "accounting"
 msgstr "Buchhaltung"
@@ -1679,6 +1670,9 @@ msgstr "Liste der Fertigkeiten"
 
 msgid "Ability type"
 msgstr "Art der Fertigkeit"
+
+msgid "Achievements"
+msgstr "Errungenschaften"
 
 msgid "Archive mail"
 msgstr "Archiv-Mail"
@@ -2258,6 +2252,9 @@ msgstr "Stichtag (Datum)"
 msgid "Deadline (days)"
 msgstr "Frist (Tage)"
 
+msgid "Delegated users"
+msgstr "Delegierte Benutzer"
+
 msgid "Disable credits"
 msgstr "Kredite deaktivieren"
 
@@ -2312,6 +2309,9 @@ msgstr "Unterwürfige Frage!"
 msgid "Replacing names"
 msgstr "Ersetzen von Namen"
 
+msgid "Select Language"
+msgstr "Sprache auswählen"
+
 msgid "Show statistics"
 msgstr "Statistik anzeigen"
 
@@ -2330,14 +2330,8 @@ msgstr "Freiwillige Angaben"
 msgid "You can consult"
 msgstr "Sie können konsultieren"
 
-msgid "Your accounting"
-msgstr "Ihre Buchhaltung"
-
 msgid "Your characters"
 msgstr "Ihre Zeichen"
-
-msgid "Your membership"
-msgstr "Ihre Mitgliedschaft"
 
 msgid "expected within"
 msgstr "erwartet innerhalb"
@@ -2513,9 +2507,6 @@ msgstr "Wo sie abgehalten wird"
 msgid "Writing Question"
 msgstr "Frage schreiben"
 
-msgid "Your competences"
-msgstr "Deine Fähigkeiten"
-
 msgid "are not yet open"
 msgstr "sind noch nicht geöffnet"
 
@@ -2672,9 +2663,6 @@ msgstr "Überprüfte Zahlungen"
 msgid "Vote not yet open"
 msgstr "Die Stimmabgabe ist noch nicht eröffnet"
 
-msgid "Your achievements"
-msgstr "Ihre Leistungen"
-
 msgid "Your character is"
 msgstr "Ihr Charakter ist"
 
@@ -2779,12 +2767,6 @@ msgstr "Freiwillige Spende"
 
 msgid "Volunteer Registry"
 msgstr "Freiwilligen-Register"
-
-msgid "Your personal data"
-msgstr "Ihre Daten"
-
-msgid "Your registrations"
-msgstr "Ihre Einträge"
 
 msgid "by the deadline of"
 msgstr "innerhalb der Frist von"
@@ -3027,9 +3009,6 @@ msgstr "Willkommen bei %(name)s!"
 
 msgid "Yes, keep me posted!"
 msgstr "Ja, halten Sie mich auf dem Laufenden!"
-
-msgid "Your delegated users"
-msgstr "Ihre delegierten Benutzer"
 
 msgid "Access your character"
 msgstr "Greifen Sie auf Ihren Charakter zu"
@@ -7011,12 +6990,6 @@ msgstr ""
 " entsprechenden Link klicken"
 
 msgid ""
-"Fill in the form and click on confirm, it will take you to the next passage"
-msgstr ""
-"Füllen Sie das Formular aus und klicken Sie auf \"Bestätigen\", um zum "
-"nächsten Schritt zu gelangen"
-
-msgid ""
 "For what time you will need transportation (time zone of the larp location)"
 msgstr ""
 "Für welche Zeit Sie den Transport benötigen (Zeitzone des "
@@ -9959,15 +9932,6 @@ msgstr ""
 "geben Sie bitte an, in welcher Reihenfolge Sie es spielen möchten)"
 
 msgid ""
-"We are almost there, you just need to enter the last necessary data here. "
-"With this data your membership application will be pre-filled;  you will "
-"just have to print it out and sign it"
-msgstr ""
-"Wir haben es fast geschafft, Sie müssen hier nur noch die letzten "
-"notwendigen Daten eingeben. Mit diesen Daten ist Ihr Mitgliedsantrag bereits"
-" ausgefüllt; Sie müssen ihn nur noch ausdrucken und unterschreiben"
-
-msgid ""
 "As per the statutes, we will review your request at the next board meeting "
 "and send you an update e-mail as soon as possible (you should receive a "
 "reply within a few weeks at the latest)."
@@ -10024,16 +9988,6 @@ msgstr ""
 " formatiert ist, dass sie an die Versicherungsgesellschaft gesendet werden "
 "kann. Es werden nur Mitglieder angezeigt, die ihre Mitgliedschaft in diesem "
 "Kalenderjahr erneuert haben, und zwar in der Reihenfolge der Erneuerung"
-
-msgid ""
-"There are only two steps left to complete the procedure, enter the last "
-"necessary data. With this information, your membership application will be "
-"pre-filled; all you have to do is print it out and sign it"
-msgstr ""
-"Es sind nur noch zwei Schritte nötig, um das Verfahren abzuschließen; geben "
-"Sie hier die letzten erforderlichen Daten ein. Mit diesen Daten ist Ihr "
-"Mitgliedsantrag bereits ausgefüllt; Sie müssen ihn nur noch ausdrucken und "
-"unterschreiben"
 
 msgid ""
 "This page allows you to check the payment items in the system. The source of"

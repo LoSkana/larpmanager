@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n show_tags %}
 {% block title %}
-    {% trans "Your accounting" %}
+    {% trans "Accounting" %} - {% trans "Tokens" %}
 {% endblock title %}
 {% block content %}
     {% if member.tokens > 0 %}

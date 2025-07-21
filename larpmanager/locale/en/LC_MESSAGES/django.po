@@ -1467,6 +1467,9 @@ msgid ""
 "GDPR and our Privacy Policy"
 msgstr ""
 
+msgid "Select Language"
+msgstr ""
+
 msgid "Absent"
 msgstr ""
 
@@ -4068,6 +4071,24 @@ msgstr ""
 msgid "Other characters"
 msgstr ""
 
+msgid "Delegated users"
+msgstr ""
+
+msgid "Messages"
+msgstr ""
+
+msgid "Achievements"
+msgstr ""
+
+msgid "Mail"
+msgstr ""
+
+msgid "Profiling"
+msgstr ""
+
+msgid "Change password"
+msgstr ""
+
 msgid "Access the event dashboard"
 msgstr ""
 
@@ -4075,6 +4096,9 @@ msgid "Access the organization dashboard"
 msgstr ""
 
 msgid "Role"
+msgstr ""
+
+msgid "Hi"
 msgstr ""
 
 msgid "No organization found"
@@ -5267,9 +5291,6 @@ msgstr ""
 msgid "Show inactive"
 msgstr ""
 
-msgid "Profiling"
-msgstr ""
-
 msgid "With these tutorials, you can learn how to use the tool in no time"
 msgstr ""
 
@@ -5488,9 +5509,6 @@ msgstr ""
 msgid ""
 "By pressing confirm, the collection total will be credited to your account, "
 "and will be used automatically when you register for one of our events"
-msgstr ""
-
-msgid "Your accounting"
 msgstr ""
 
 msgid "Do you wish to be reimbursed? Open a new one"
@@ -5719,9 +5737,6 @@ msgstr ""
 msgid "Unread"
 msgstr ""
 
-msgid "Your competences"
-msgstr ""
-
 msgid ""
 "On this page you can mark your specialties to collaborate on our  events"
 msgstr ""
@@ -5747,9 +5762,6 @@ msgid "Indicate your level of experience"
 msgstr ""
 
 msgid "Indicate precisely your field of experience"
-msgstr ""
-
-msgid "Your delegated users"
 msgstr ""
 
 msgid "You are currently logged in with the"
@@ -5917,9 +5929,6 @@ msgstr ""
 msgid "Remove consent"
 msgstr ""
 
-msgid "Your user"
-msgstr ""
-
 msgid "You are logged in with an email address"
 msgstr ""
 
@@ -5949,37 +5958,6 @@ msgstr ""
 msgid "Please choose a clear and easily recognizable photo"
 msgstr ""
 
-msgid "Your personal data"
-msgstr ""
-
-msgid "Step 3 / 4"
-msgstr ""
-
-msgid ""
-"There are only two steps left to complete the procedure, enter the last "
-"necessary data. With this information, your membership application will be "
-"pre-filled; all you have to do is print it out and sign it"
-msgstr ""
-
-msgid "Need help"
-msgstr ""
-
-msgid "Write here"
-msgstr ""
-
-msgid ""
-"Fill in the form and click on confirm, it will take you to the next passage"
-msgstr ""
-
-msgid "New member"
-msgstr ""
-
-msgid ""
-"We are almost there, you just need to enter the last necessary data here. "
-"With this data your membership application will be pre-filled;  you will "
-"just have to print it out and sign it"
-msgstr ""
-
 msgid "Private message"
 msgstr ""
 
@@ -5987,9 +5965,6 @@ msgid "Events attended"
 msgstr ""
 
 msgid "Show all"
-msgstr ""
-
-msgid "Your registrations"
 msgstr ""
 
 msgid "Sharing"
@@ -6413,9 +6388,6 @@ msgid "Unconverted pre-registrations"
 msgstr ""
 
 msgid "Pre registrations total"
-msgstr ""
-
-msgid "Mail"
 msgstr ""
 
 msgid "Joined"
@@ -6896,16 +6868,7 @@ msgstr ""
 msgid "This page allows you to fully view a character"
 msgstr ""
 
-msgid "Hi"
-msgstr ""
-
-msgid "Your membership"
-msgstr ""
-
-msgid "Your achievements"
-msgstr ""
-
-msgid "Change password"
+msgid "Need help"
 msgstr ""
 
 msgid "Privacy Policy"

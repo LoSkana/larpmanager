@@ -245,7 +245,7 @@ $(document).ready(function() {
         var k = $(this).attr("tog");
         var el =  $("." + k);
         el.toggle();
-        // console.log(el.is(":visible"));
+
          if (el.is(":visible")) {
              var elements = document.getElementsByClassName(k);
 
@@ -277,8 +277,6 @@ $(document).ready(function() {
         tp = $(this).attr("fie");
 
         el = $('#' + num).find('.popup_text.' + tp).first();
-        // alert(el.html());
-        // console.log(el);
 
         uglipop({class:'popup', //styling class for Modal
             source:'html',
@@ -299,8 +297,6 @@ $(document).ready(function() {
               tx += " " + $(this).html();
             });
 
-             // console.log(tx.toLowerCase());
-
             if (tx.toLowerCase().includes(key.toLowerCase())) {
                 $(this).show(300);
             } else {
@@ -312,6 +308,12 @@ $(document).ready(function() {
 
     if ($('.info').is(':empty')) {
         $('.info').hide();
+    }
+
+    if ($('#topbar').innerWidth() < 840) {
+        document.fonts.ready.then(function () {
+            centerMobileIcons();
+        });
     }
 
     $('.dropdown-menu').each(function() {
@@ -575,6 +577,35 @@ if (!String.prototype.format) {
       ;
     });
   };
+}
+
+function centerMobileIcons() {
+    const $topbar = $('#topbar');
+    const topbarWidth = $topbar.innerWidth();
+
+    var $visibleElements = $topbar.find('.el');
+    var elCount = 0;
+    var totalElWidth = 0;
+
+    $visibleElements.each(function () {
+        var width = $(this).innerWidth();
+        if (width > 0) {
+            totalElWidth += width;
+            elCount += 1;
+        }
+    });
+
+    var totalSpacing = topbarWidth * 0.95 - totalElWidth;
+    var margin = totalSpacing / elCount;
+
+    $visibleElements.each(function (index) {
+        var ml = margin / 2;
+
+        $(this).closest('.el').css({
+            'margin-left': `${ml}px`,
+            'margin-right': `${ml}px`
+        });
+    });
 }
 
 });
