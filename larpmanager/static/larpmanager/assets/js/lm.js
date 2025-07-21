@@ -591,9 +591,6 @@ function centerMobileIcons() {
     var totalSpacing = topbarWidth * 0.95 - totalElWidth;
     var margin = totalSpacing / elCount;
 
-    console.log(totalElWidth);
-    console.log(elCount);
-
     $visibleElements.each(function (index) {
         var ml = margin / 2;
 
