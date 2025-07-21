@@ -100,9 +100,9 @@
         <br />
         <div class="no-more-tables">
             <h2>
-                <a onClick="$('#past-runs').toggle(500);return false;">{% trans "Past runs" %}</a>
+                <a class="my_toggle" tog="past-runs" href="#">{% trans "Past runs" %}</a>
             </h2>
-            <table id="past-runs" class="hide">
+            <table class="hide past-runs">
                 <thead>
                     <tr>
                         <th>{% trans "Name" %}</th>

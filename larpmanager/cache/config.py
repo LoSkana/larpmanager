@@ -45,6 +45,7 @@ def update_configs(element):
         "event": ("EventConfig", "event"),
         "association": ("AssociationConfig", "assoc"),
         "run": ("RunConfig", "run"),
+        "member": ("MemberConfig", "member"),
     }
     # noinspection PyProtectedMember
     model = element._meta.model_name.lower()
@@ -88,6 +89,7 @@ def _get_fkey_config(obj):
         "Run": "run",
         "Association": "assoc",
         "Character": "character",
+        "Member": "member",
     }
     model_name = obj.__class__.__name__
     fk_field = fk_field_map.get(model_name)

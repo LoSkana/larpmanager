@@ -265,12 +265,6 @@ msgstr ""
 msgid "Calendar"
 msgstr ""
 
-msgid "Show event links"
-msgstr ""
-
-msgid "If checked: shows a link to the event in the navigation bar"
-msgstr ""
-
 msgid "Past events"
 msgstr ""
 
@@ -762,7 +756,7 @@ msgstr ""
 msgid "Insert the html code for the footer"
 msgstr ""
 
-msgid "Event Settings"
+msgid "Event"
 msgstr ""
 
 msgid "This page allows you to change general event settings"
@@ -1299,7 +1293,7 @@ msgstr ""
 msgid "This page allows you to edit the event navigation buttons"
 msgstr ""
 
-msgid "Run Settings"
+msgid "Run"
 msgstr ""
 
 msgid "This page allows you to change the general settings of this run"
@@ -1370,6 +1364,15 @@ msgid "If checked, makes visible the PDF version of the character sheets"
 msgstr ""
 
 msgid "Visibility"
+msgstr ""
+
+msgid "You need to define the end date!"
+msgstr ""
+
+msgid "You need to define the start date!"
+msgstr ""
+
+msgid "End date cannot be before start date!"
 msgstr ""
 
 msgid "Progression"
@@ -1705,9 +1708,6 @@ msgstr ""
 msgid "This page allows you to add or edit the registration surcharges"
 msgstr ""
 
-msgid "Event"
-msgstr ""
-
 msgid "Select the event you wish to pre-register for"
 msgstr ""
 
@@ -1722,9 +1722,6 @@ msgid "Informations"
 msgstr ""
 
 msgid "Is there anything else you would like to tell us"
-msgstr ""
-
-msgid "Run"
 msgstr ""
 
 msgid "Character Relationship"
@@ -2559,7 +2556,7 @@ msgid ""
 "automatically resized"
 msgstr ""
 
-msgid "Please indicate an email for the organization"
+msgid "Indicate an organization contact address for sending communications"
 msgstr ""
 
 msgid "Indicate the payment methods you wish to be available to players"
@@ -3826,6 +3823,52 @@ msgid ""
 "always of the same macrotype)"
 msgstr ""
 
+msgid "Welcome to"
+msgstr ""
+
+msgid "Here is a step-by-step walkthrough of the interface"
+msgstr ""
+
+msgid ""
+"This is the sidebar containing all the functions (it remains visible on "
+"every management page)"
+msgstr ""
+
+msgid "Create and manage events here"
+msgstr ""
+
+msgid ""
+"Here you can select the workspace to use: your organization, and your events "
+"once created"
+msgstr ""
+
+msgid "Here you can switch between administration pages and user-facing pages"
+msgstr ""
+
+msgid "Toggle the sidebar visibility"
+msgstr ""
+
+msgid ""
+"If you need help, type your request here in English using single keywords"
+msgstr ""
+
+msgid "Here is a to-do list of important actions to complete"
+msgstr ""
+
+msgid ""
+"And here is a to-do list of suggestions to help you set everything up "
+"properly"
+msgstr ""
+
+msgid "Click the tutorial to open it and follow the step-by-step instructions"
+msgstr ""
+
+msgid "And that is all"
+msgstr ""
+
+msgid "Write to us if you need help in setting things up!"
+msgstr ""
+
 msgid "Tax code verification"
 msgstr ""
 
@@ -4047,9 +4090,6 @@ msgid "Change password"
 msgstr ""
 
 msgid "Access the event dashboard"
-msgstr ""
-
-msgid "Dashboard"
 msgstr ""
 
 msgid "Access the organization dashboard"
@@ -4696,6 +4736,9 @@ msgstr ""
 msgid "This page summarizes all revenue items recorded in the system"
 msgstr ""
 
+msgid "Confirm payments"
+msgstr ""
+
 msgid "This page shows all invoices registered in the system"
 msgstr ""
 
@@ -5289,10 +5332,7 @@ msgid ""
 "and events"
 msgstr ""
 
-msgid "Welcome to"
-msgstr ""
-
-msgid "Quick Help"
+msgid "Launch guided interface tour"
 msgstr ""
 
 msgid "What would you like to do"

@@ -1,10 +1,13 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n static %}
 {% block title %}
-    {% trans "Dashboard" %} - {{ run }}
+    Dashboard - {{ run }}
 {% endblock title %}
 {% block content %}
     <div id="manage">
+        <p>
+            <a href="#" id="intro_driver">{% trans "Launch guided interface tour" %}</a>
+        </p>
         <input type="text"
                name="tutorial_query"
                id="tutorial_query"
@@ -95,8 +98,13 @@
         <a href="{% url 'orga_reload_cache' run.event.slug run.number %}">Reload cache</a>
     </div>
 {% endblock content %}
+{% block css %}
+    <link rel="stylesheet"
+          href="{% static 'node_modules/driver.js/dist/driver.css' %}">
+{% endblock css %}
 {% block js %}
     {% include "elements/tutorial_query.js" %}
+    {% include "elements/manage_driver.js.html" %}
     <script>
     window.addEventListener('DOMContentLoaded', function() {
         $(document).ready(function() {

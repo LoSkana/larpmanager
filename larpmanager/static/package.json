@@ -2,6 +2,7 @@
   "dependencies": {
     "@paypal/paypal-js": "8.x",
     "@tholman/intense-images": "1.x",
+    "driver.js": "1.x",
     "javascript-lp-solver": "0.x",
     "language-icons": "0.x",
     "table2csv": "1.x",

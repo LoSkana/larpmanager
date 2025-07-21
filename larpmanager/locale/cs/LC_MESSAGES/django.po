@@ -1131,9 +1131,6 @@ msgstr "Případy"
 msgid "Customize"
 msgstr "Přizpůsobení"
 
-msgid "Dashboard"
-msgstr "Přístrojová deska"
-
 msgid "Deadlines"
 msgstr "Termíny"
 
@@ -1388,9 +1385,6 @@ msgstr "Typ úkolu"
 
 msgid "Quest type"
 msgstr "Typ úkolu"
-
-msgid "Quick Help"
-msgstr "Rychlá nápověda"
 
 msgid "Refund for"
 msgstr "Úhrada za"
@@ -1812,9 +1806,6 @@ msgstr "Požadovaný čas"
 msgid "Rotate right"
 msgstr "Pravé kolo"
 
-msgid "Run Settings"
-msgstr "Nastavení spuštění"
-
 msgid "Safe editing"
 msgstr "Bezpečné úpravy"
 
@@ -2096,9 +2087,6 @@ msgstr "Vyplacený dar"
 msgid "Donations done"
 msgstr "Poskytnuté dary"
 
-msgid "Event Settings"
-msgstr "Nastavení události"
-
 msgid "Event Template"
 msgstr "Šablona události"
 
@@ -2240,6 +2228,9 @@ msgstr "žádost o proplacení"
 msgid "Ability missing"
 msgstr "Chybějící schopnost"
 
+msgid "And that is all"
+msgstr "A to je vše"
+
 msgid "Change password"
 msgstr "Obnovení hesla"
 
@@ -2375,6 +2366,9 @@ msgstr "Textové pozadí"
 msgid "Confirm Payments"
 msgstr "Potvrzení plateb"
 
+msgid "Confirm payments"
+msgstr "Potvrzení plateb"
+
 msgid "Current template"
 msgstr "Aktuální šablona"
 
@@ -2488,9 +2482,6 @@ msgstr "Vybrané možnosti"
 
 msgid "Show collections"
 msgstr "Zobrazit sbírky"
-
-msgid "Show event links"
-msgstr "Zobrazit odkazy na události"
 
 msgid "Show explanation"
 msgstr "Zobrazit vysvětlení"
@@ -3680,6 +3671,9 @@ msgstr "Funkce %(name)s deaktivována"
 msgid "If checked: members can vote"
 msgstr "Pokud je zaškrtnuto: členové mohou hlasovat"
 
+msgid "Launch guided interface tour"
+msgstr "Spuštění prohlídky rozhraní s průvodcem"
+
 msgid "Link to close the collection"
 msgstr "Odkaz na uzavření sbírky"
 
@@ -3711,6 +3705,9 @@ msgstr "Schválení %(user)s jako %(role)s"
 
 msgid "Buy skills for your character"
 msgstr "Kupte si dovednosti pro svou postavu"
+
+msgid "Create and manage events here"
+msgstr "Zde můžete vytvářet a spravovat události"
 
 msgid "Date of issue of the document"
 msgstr "Datum vydání dokumentu"
@@ -3765,6 +3762,9 @@ msgstr "Vyberte novou dovednost, kterou chcete získat"
 
 msgid "The total registration fee is"
 msgstr "Celková výše vstupního poplatku je"
+
+msgid "Toggle the sidebar visibility"
+msgstr "Přepínání viditelnosti postranního panelu"
 
 msgid "Transportation - gas, highway"
 msgstr "Doprava - benzín, dálnice"
@@ -3995,6 +3995,9 @@ msgstr "Hlasování do výkonné rady je otevřené"
 msgid "We'll try to help as best we can"
 msgstr "Pokusíme se vám pomoci, jak nejlépe to půjde"
 
+msgid "You need to define the end date!"
+msgstr "Je třeba určit datum ukončení!"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Otázku položil: %(user)s"
@@ -4137,6 +4140,9 @@ msgstr "Vybraný tip: <b>%(ticket)s</b>"
 
 msgid "You are about to make a payment of"
 msgstr "Chystáte se provést platbu ve výši"
+
+msgid "You need to define the start date!"
+msgstr "Je třeba určit datum zahájení!"
 
 msgid "Your updated registration total is"
 msgstr "Váš aktualizovaný celkový počet vstupů je"
@@ -4289,6 +4295,9 @@ msgstr "Přiřaďte vybrané postavy hráčům"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Zkontrolujte platnost fiskálního kódu"
+
+msgid "End date cannot be before start date!"
+msgstr "Datum ukončení nesmí být před datem zahájení!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: Prodejce"
@@ -4836,9 +4845,6 @@ msgstr "Nyní můžete nastavit datum zahájení registrace"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Místo narození neuvedené v seznamu ISTAT"
 
-msgid "Please indicate an email for the organization"
-msgstr "Označuje oficiální poštu sdružení"
-
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Aktualizované zadání %(event)s podle %(user)s"
@@ -5229,12 +5235,18 @@ msgstr "Tato stránka shrnuje dobrovolníky organizace"
 msgid "Total participation fees reduced through discounts"
 msgstr "Celkové účastnické poplatky snížené díky slevám"
 
+msgid "Write to us if you need help in setting things up!"
+msgstr "Pokud potřebujete pomoc s nastavením, napište nám!"
+
 msgid "you can still pay the remaining amount if you wish"
 msgstr "pokud si přejete, můžete zaplatit zbývající částku"
 
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Přiřazeno %(amount).2f %(elements)s pro '%(reason)s'"
+
+msgid "Here is a step-by-step walkthrough of the interface"
+msgstr "Zde je krok za krokem popsáno rozhraní"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Několikrát jsem to dělal, mám základní zkušenosti"
@@ -5344,6 +5356,9 @@ msgstr "Předvolby obsazení uložené na '%(type)s' pro %(event)s"
 
 msgid "Differing by only one character from the expected one"
 msgstr "lišící se pouze o jeden znak od očekávaného znaku"
+
+msgid "Here is a to-do list of important actions to complete"
+msgstr "Zde je seznam úkolů, které je třeba splnit"
 
 msgid "Initial value of experience points for all characters"
 msgstr "Počáteční hodnota zkušenostních bodů pro všechny postavy"
@@ -5638,9 +5653,6 @@ msgstr "Chcete umožnit hráčům vytvářet vlastní postavy"
 
 msgid "If checked, makes pre-registration for this event available"
 msgstr "Pokud je zaškrtnuto, zpřístupní předběžnou registraci na tuto událost"
-
-msgid "If checked: shows a link to the event in the navigation bar"
-msgstr "Pokud je zaškrtnuto: zobrazí odkaz na událost na navigačním panelu"
 
 msgid "Lets staff access the diet information submitted by players"
 msgstr ""
@@ -6075,6 +6087,9 @@ msgstr ""
 "Pokud je zaškrtnuto: odešle hlavní poště kopii všech e-mailů odeslaných "
 "hráčům"
 
+msgid "Indicate an organization contact address for sending communications"
+msgstr "Uveďte kontaktní adresu organizace pro zasílání sdělení"
+
 msgid "List of users who have not registered for a future run of the event"
 msgstr "Seznam uživatelů, kteří se nezaregistrovali do budoucího běhu akce"
 
@@ -6252,6 +6267,11 @@ msgstr "Dosáhli jste maximálního počtu znaků, které lze vytvořit"
 msgid "whether the character is NOT aware of the identity of the other trait"
 msgstr "zda si postava NENÍ vědoma identity druhého rysu"
 
+msgid "Click the tutorial to open it and follow the step-by-step instructions"
+msgstr ""
+"Kliknutím na výukový program jej otevřete a postupujte podle pokynů krok za "
+"krokem"
+
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr "Den roku, od kterého začíná rok sdružení, ve formátu DD-MM"
 
@@ -6276,6 +6296,10 @@ msgstr ""
 msgid "Enables payment processing, specifying which payment methods to accept"
 msgstr ""
 "Umožňuje zpracování plateb a určuje, které platební metody se mají přijímat"
+
+msgid "Here you can switch between administration pages and user-facing pages"
+msgstr ""
+"Zde můžete přepínat mezi stránkami pro správu a stránkami pro uživatele"
 
 msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
@@ -6495,6 +6519,12 @@ msgstr ""
 msgid ""
 "If checked, character names will be automatically replaced by a reference"
 msgstr "Pokud je zaškrtnuto, názvy znaků budou automaticky nahrazeny odkazem"
+
+msgid ""
+"If you need help, type your request here in English using single keywords"
+msgstr ""
+"Pokud potřebujete pomoc, napište sem svůj požadavek v angličtině a použijte "
+"jednotlivá klíčová slova"
 
 msgid ""
 "Indicates the maximum number of times it can be requested (0 = unlimited)"
@@ -6804,6 +6834,11 @@ msgid ""
 "them"
 msgstr ""
 "Umožňuje hráčům zadávat otázky a organizátorům je kontrolovat a organizovat"
+
+msgid ""
+"And here is a to-do list of suggestions to help you set everything up "
+"properly"
+msgstr "Zde je seznam úkolů, které vám pomohou vše správně nastavit"
 
 msgid ""
 "Enables to set a character as a 'mirror' for another, to hide it's true "
@@ -7479,6 +7514,13 @@ msgstr ""
 "profily hráčů"
 
 msgid ""
+"Here you can select the workspace to use: your organization, and your events"
+" once created"
+msgstr ""
+"Zde můžete vybrat pracovní prostor, který chcete použít: svou organizaci a "
+"své události, jakmile budou vytvořeny"
+
+msgid ""
 "If checked: Adds a unique code to each payment, which helps in being able to"
 " recognize it"
 msgstr ""
@@ -7771,6 +7813,13 @@ msgid ""
 "Optional - Indicate additional details on the ticket, they will be shown "
 "below the application"
 msgstr "Nepovinné - Uvádí další podrobnosti o tipu, zobrazí se pod žádostí"
+
+msgid ""
+"This is the sidebar containing all the functions (it remains visible on "
+"every management page)"
+msgstr ""
+"Toto je postranní panel obsahující všechny funkce potřebné ke správě "
+"organizace (zůstává viditelný na každé stránce správy)"
 
 msgid ""
 "To grant access to event management for other users and define roles with "

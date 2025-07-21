@@ -22,7 +22,7 @@
                     <span class="sidebar-link-wrap"
                           descr="{% trans "Access the event dashboard" %}">
                         <a class="sidebar-link"
-                           href="{% url 'manage' run.event.slug run.number %}">{% trans "Dashboard" %}</a>
+                           href="{% url 'manage' run.event.slug run.number %}">Dashboard</a>
                         <a href="#" class="explain-icon" tog="manage"><i class="fas fa-question-circle"></i></a>
                     </span>
                 </p>
@@ -36,7 +36,9 @@
                             <p>
                                 {% for ap in list %}
                                     {% if not ap.hidden %}
-                                        <span class="sidebar-link-wrap" descr="{% trans ap.descr %}">
+                                        <span class="sidebar-link-wrap"
+                                              descr="{% trans ap.descr %}"
+                                              id="{{ ap.slug }}">
                                             <a class="sidebar-link"
                                                href="{% url ap.slug run.event.slug run.number %}">{% trans ap.name %}</a>
                                             <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
@@ -51,7 +53,7 @@
                 <p>
                     <span class="sidebar-link-wrap"
                           descr="{% trans "Access the organization dashboard" %}">
-                        <a class="sidebar-link" href="{% url 'manage' %}">{% trans "Dashboard" %}</a>
+                        <a class="sidebar-link" href="{% url 'manage' %}">Dashboard</a>
                         <a href="#" class="explain-icon" tog="manage"><i class="fas fa-question-circle"></i></a>
                     </span>
                 </p>
@@ -65,7 +67,9 @@
                             <p>
                                 {% for ap in list %}
                                     {% if not ap.hidden %}
-                                        <span class="sidebar-link-wrap" descr="{% trans ap.descr %}">
+                                        <span class="sidebar-link-wrap"
+                                              descr="{% trans ap.descr %}"
+                                              id="{{ ap.slug }}">
                                             <a class="sidebar-link" href="{% url ap.slug %}">{% trans ap.name %}</a>
                                             <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
                                         </span>

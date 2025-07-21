@@ -271,3 +271,30 @@ def notify_admins(subj, text, exception=None):
         text += "\n" + tb
     for _name, email in conf_settings.ADMINS:
         my_send_mail(subj, text, email)
+
+
+def notify_organization_exe(subj, body, assoc, instance):
+    if assoc.main_mail:
+        activate(get_exec_language(assoc))
+        my_send_mail(subj, body, assoc.main_mail, instance)
+        return
+
+    for orga in get_assoc_executives(assoc):
+        activate(orga.language)
+        my_send_mail(subj, body, orga.email, instance)
+
+
+def get_exec_language(assoc):
+    # get most common language between organizers
+    langs = {}
+    for orga in get_assoc_executives(assoc):
+        lang = orga.language
+        if lang not in langs:
+            langs[lang] = 1
+        else:
+            langs[lang] += 1
+    if langs:
+        max_lang = max(langs, key=langs.get)
+    else:
+        max_lang = "en"
+    return max_lang

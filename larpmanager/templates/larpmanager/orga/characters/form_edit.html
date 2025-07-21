@@ -19,7 +19,6 @@
     {% include "elements/form/sections.html" %}
     <div id="options" class="hide">
         <h2>{% trans "Options" %}</h2>
-        <hr />
         {% include "elements/header/orga.html" %}
         <table id="character_options" class="tablesorter mob writing no_csv">
             <thead>
@@ -36,6 +35,7 @@
                     {% if features.wri_que_dependents %}
                         <th>{% trans "Tickets" %}</th>
                     {% endif %}
+                    <th></th>
                     <th></th>
                 </tr>
             </thead>
@@ -68,8 +68,15 @@
                         {% endif %}
                         <td>
                             {% if not forloop.first %}
-                                <a href="{% url 'orga_writing_options_order' run.event.slug run.number typ el.id %}">
+                                <a href="{% url 'orga_writing_options_order' run.event.slug run.number typ el.id 0 %}">
                                     <i class="fa-solid fa-arrow-up"></i>
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not forloop.last %}
+                                <a href="{% url 'orga_writing_options_order' run.event.slug run.number typ el.id 1 %}">
+                                    <i class="fa-solid fa-arrow-down"></i>
                                 </a>
                             {% endif %}
                         </td>
@@ -77,6 +84,8 @@
                 {% endfor %}
             </tbody>
         </table>
+        <hr />
+        <br />
     </div>
 {% endblock content %}
 {% block js %}

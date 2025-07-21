@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.balance import assoc_accounting, get_run_accounting
+from larpmanager.cache.config import save_single_config
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
@@ -118,6 +119,8 @@ def _exe_manage(request):
     _exe_users_actions(request, assoc, ctx, features)
 
     _compile(request, ctx)
+
+    _check_intro_driver(request, ctx)
 
     return render(request, "larpmanager/manage/exe.html", ctx)
 
@@ -288,6 +291,8 @@ def _orga_manage(request, s, n):
         if origin_id:
             should_open = str(ctx["run"].id) != origin_id
         ctx["open_shortcuts"] = should_open
+
+    _check_intro_driver(request, ctx)
 
     return render(request, "larpmanager/manage/orga.html", ctx)
 
@@ -650,3 +655,16 @@ def orga_close_suggestion(request, s, n, perm):
     ctx = check_event_permission(request, s, n, perm)
     set_suggestion(ctx, perm)
     return redirect("manage", s=s, n=n)
+
+
+def _check_intro_driver(request, ctx):
+    if ctx["interface_old"]:
+        return
+
+    member = request.user.member
+    config_name = "intro_driver"
+    if member.get_config(config_name, False):
+        return
+
+    ctx["intro_driver"] = True
+    save_single_config(member, config_name, True)

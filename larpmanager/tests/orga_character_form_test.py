@@ -325,7 +325,7 @@ async def add_field_restricted(page):
     await page.locator('[id="\\38 "]').get_by_role("link", name="").click()
     await page.locator('[id="\\38 "]').get_by_role("link", name="").click()
     await page.get_by_role("link", name="").click()
-    await page.get_by_role("row", name=" few").get_by_role("link").click()
+    await page.locator('[id="\\37 "]').get_by_role("link", name="").click()
     await page.locator("#id_display").click()
     await page.locator("#id_display").fill("w")
     await page.locator("#id_display").press("Home")

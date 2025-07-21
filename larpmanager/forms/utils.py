@@ -126,6 +126,8 @@ def prepare_permissions_role(form, typ):
         help_text = {}
         feature_map = {}
         for el in typ.objects.filter(feature__module=module).order_by("number"):
+            if el.hidden:
+                continue
             if not el.feature.placeholder and el.feature.slug not in form.params["features"]:
                 continue
             ch.append((el.id, _(el.name)))

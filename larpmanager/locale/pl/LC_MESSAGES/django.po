@@ -1131,9 +1131,6 @@ msgstr "Kustosze"
 msgid "Customize"
 msgstr "Dostosuj"
 
-msgid "Dashboard"
-msgstr "Pulpit nawigacyjny"
-
 msgid "Deadlines"
 msgstr "Terminy"
 
@@ -1388,9 +1385,6 @@ msgstr "Typ zadania"
 
 msgid "Quest type"
 msgstr "Typ zadania"
-
-msgid "Quick Help"
-msgstr "Szybka pomoc"
 
 msgid "Refund for"
 msgstr "Zwrot za"
@@ -1812,9 +1806,6 @@ msgstr "Czas żądania"
 msgid "Rotate right"
 msgstr "Obrót w prawo"
 
-msgid "Run Settings"
-msgstr "Ustawienia działania"
-
 msgid "Safe editing"
 msgstr "Bezpieczna edycja"
 
@@ -2096,9 +2087,6 @@ msgstr "Przekazana darowizna"
 msgid "Donations done"
 msgstr "Dokonane darowizny"
 
-msgid "Event Settings"
-msgstr "Ustawienia zdarzeń"
-
 msgid "Event Template"
 msgstr "Szablon wydarzenia"
 
@@ -2240,6 +2228,9 @@ msgstr "żądanie zwrotu pieniędzy"
 msgid "Ability missing"
 msgstr "Brak umiejętności"
 
+msgid "And that is all"
+msgstr "I to wszystko"
+
 msgid "Change password"
 msgstr "Zmiana hasła"
 
@@ -2375,6 +2366,9 @@ msgstr "Kolor tła"
 msgid "Confirm Payments"
 msgstr "Potwierdzanie płatności"
 
+msgid "Confirm payments"
+msgstr "Potwierdzanie płatności"
+
 msgid "Current template"
 msgstr "Aktualny szablon"
 
@@ -2488,9 +2482,6 @@ msgstr "Wybrane opcje"
 
 msgid "Show collections"
 msgstr "Pokaż kolekcje"
-
-msgid "Show event links"
-msgstr "Pokaż linki do wydarzeń"
 
 msgid "Show explanation"
 msgstr "Pokaż wyjaśnienie"
@@ -3680,6 +3671,9 @@ msgstr "Funkcja %(name)s wyłączona"
 msgid "If checked: members can vote"
 msgstr "Jeśli zaznaczone: członkowie mogą głosować"
 
+msgid "Launch guided interface tour"
+msgstr "Uruchom wycieczkę po interfejsie z przewodnikiem"
+
 msgid "Link to close the collection"
 msgstr "Link do zamknięcia kolekcji"
 
@@ -3711,6 +3705,9 @@ msgstr "Zatwierdzenie %(user)s jako %(role)s"
 
 msgid "Buy skills for your character"
 msgstr "Kup umiejętności dla swojej postaci"
+
+msgid "Create and manage events here"
+msgstr "Tutaj można tworzyć wydarzenia i zarządzać nimi"
 
 msgid "Date of issue of the document"
 msgstr "Data wydania dokumentu"
@@ -3765,6 +3762,9 @@ msgstr "Wybierz nową zdolność, aby uzyskać"
 
 msgid "The total registration fee is"
 msgstr "Całkowita opłata rejestracyjna wynosi"
+
+msgid "Toggle the sidebar visibility"
+msgstr "Przełącz widoczność paska bocznego"
 
 msgid "Transportation - gas, highway"
 msgstr "Transport - gaz, autostrady"
@@ -3995,6 +3995,9 @@ msgstr "Głosowanie na Zarząd jest otwarte"
 msgid "We'll try to help as best we can"
 msgstr "Postaramy się pomóc najlepiej jak potrafimy"
 
+msgid "You need to define the end date!"
+msgstr "Musisz określić datę końcową!"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Pytanie zostało zadane przez: %(user)s"
@@ -4137,6 +4140,9 @@ msgstr "Wybrano bilet: <b>%(ticket)s</b>"
 
 msgid "You are about to make a payment of"
 msgstr "Masz zamiar dokonać płatności w wysokości"
+
+msgid "You need to define the start date!"
+msgstr "Musisz określić datę rozpoczęcia!"
 
 msgid "Your updated registration total is"
 msgstr "Zaktualizowana suma rejestracji wynosi"
@@ -4289,6 +4295,9 @@ msgstr "Przypisz wybrane postacie do graczy"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Sprawdź ważność kodu fiskalnego"
+
+msgid "End date cannot be before start date!"
+msgstr "Data końcowa nie może być wcześniejsza niż data początkowa!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Jeśli zaznaczone, zezwól na poziom biletu: Sprzedawca"
@@ -4836,9 +4845,6 @@ msgstr "Teraz możesz ustawić datę otwarcia rejestracji"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Miejsce urodzenia nieuwzględnione na liście ISTAT"
 
-msgid "Please indicate an email for the organization"
-msgstr "Podaj adres e-mail organizacji"
-
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Rejestracja zaktualizowana do %(event)s przez %(user)s"
@@ -5232,12 +5238,18 @@ msgstr "Ta strona podsumowuje wolontariuszy organizacji"
 msgid "Total participation fees reduced through discounts"
 msgstr "Całkowite opłaty za uczestnictwo obniżone dzięki zniżkom"
 
+msgid "Write to us if you need help in setting things up!"
+msgstr "Napisz do nas, jeśli potrzebujesz pomocy w konfiguracji!"
+
 msgid "you can still pay the remaining amount if you wish"
 msgstr "Jeśli chcesz, nadal możesz zapłacić pozostałą kwotę"
 
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Przydzielono %(amount).2f %(elements)s dla \"%(reason)s"
+
+msgid "Here is a step-by-step walkthrough of the interface"
+msgstr "Oto opis interfejsu krok po kroku"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Robiłem to kilka razy, mam podstawowe doświadczenie"
@@ -5348,6 +5360,9 @@ msgstr "Preferencje rzutowania zapisane w '%(type)s' dla %(event)s"
 
 msgid "Differing by only one character from the expected one"
 msgstr "Różni się tylko jednym znakiem od oczekiwanego znaku"
+
+msgid "Here is a to-do list of important actions to complete"
+msgstr "Oto lista ważnych działań do wykonania"
 
 msgid "Initial value of experience points for all characters"
 msgstr "Początkowa wartość punktów doświadczenia dla wszystkich postaci"
@@ -5652,9 +5667,6 @@ msgid "If checked, makes pre-registration for this event available"
 msgstr ""
 "Zaznaczenie tego pola wyboru powoduje udostępnienie wstępnej rejestracji na "
 "to wydarzenie"
-
-msgid "If checked: shows a link to the event in the navigation bar"
-msgstr "Jeśli zaznaczone: wyświetla link do wydarzenia na pasku nawigacyjnym"
 
 msgid "Lets staff access the diet information submitted by players"
 msgstr ""
@@ -6131,6 +6143,9 @@ msgstr ""
 "Jeśli zaznaczone: Wysyła na główną pocztę kopię wszystkich wiadomości "
 "wysłanych do graczy"
 
+msgid "Indicate an organization contact address for sending communications"
+msgstr "Wskazanie adresu kontaktowego organizacji do wysyłania wiadomości"
+
 msgid "List of users who have not registered for a future run of the event"
 msgstr ""
 "Lista użytkowników, którzy nie zarejestrowali się na przyszłe wydarzenie"
@@ -6321,6 +6336,11 @@ msgstr "Osiągnięto maksymalną liczbę znaków, które można utworzyć"
 msgid "whether the character is NOT aware of the identity of the other trait"
 msgstr "czy postać NIE jest świadoma tożsamości drugiej cechy"
 
+msgid "Click the tutorial to open it and follow the step-by-step instructions"
+msgstr ""
+"Kliknij samouczek, aby go otworzyć i postępuj zgodnie z instrukcjami krok po"
+" kroku"
+
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr ""
 "Dzień roku, od którego rozpoczyna się rok członkostwa, w formacie DD-MM"
@@ -6350,6 +6370,11 @@ msgid "Enables payment processing, specifying which payment methods to accept"
 msgstr ""
 "Włącza przetwarzanie płatności, określając, które metody płatności mają być "
 "akceptowane"
+
+msgid "Here you can switch between administration pages and user-facing pages"
+msgstr ""
+"Tutaj można przełączać się między stronami administracyjnymi i stronami dla "
+"użytkowników"
 
 msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
@@ -6581,6 +6606,12 @@ msgid ""
 msgstr ""
 "Jeśli zaznaczone, nazwy znaków będą automatycznie zastępowane przez "
 "odniesienie"
+
+msgid ""
+"If you need help, type your request here in English using single keywords"
+msgstr ""
+"Jeśli potrzebujesz pomocy, wpisz tutaj swoją prośbę w języku angielskim, "
+"używając pojedynczych słów kluczowych"
 
 msgid ""
 "Indicates the maximum number of times it can be requested (0 = unlimited)"
@@ -6917,6 +6948,13 @@ msgid ""
 msgstr ""
 "Umożliwia graczom przesyłanie pytań, a organizatorom ich przeglądanie i "
 "porządkowanie"
+
+msgid ""
+"And here is a to-do list of suggestions to help you set everything up "
+"properly"
+msgstr ""
+"A oto lista rzeczy do zrobienia z sugestiami, które pomogą ci wszystko "
+"odpowiednio skonfigurować"
 
 msgid ""
 "Enables to set a character as a 'mirror' for another, to hide it's true "
@@ -7628,6 +7666,13 @@ msgstr ""
 "i profilami graczy"
 
 msgid ""
+"Here you can select the workspace to use: your organization, and your events"
+" once created"
+msgstr ""
+"W tym miejscu można wybrać obszar roboczy do użycia: organizację i utworzone"
+" wydarzenia"
+
+msgid ""
 "If checked: Adds a unique code to each payment, which helps in being able to"
 " recognize it"
 msgstr ""
@@ -7932,6 +7977,13 @@ msgid ""
 msgstr ""
 "Opcjonalnie - wskaż dodatkowe szczegóły na bilecie, zostaną one wyświetlone "
 "poniżej aplikacji"
+
+msgid ""
+"This is the sidebar containing all the functions (it remains visible on "
+"every management page)"
+msgstr ""
+"Jest to pasek boczny zawierający wszystkie funkcje potrzebne do zarządzania "
+"organizacją (pozostaje widoczny na każdej stronie zarządzania)"
 
 msgid ""
 "To grant access to event management for other users and define roles with "

@@ -124,9 +124,9 @@ def orga_factions_edit(request, s, n, num):
 
 
 @login_required
-def orga_factions_order(request, s, n, num):
+def orga_factions_order(request, s, n, num, order):
     ctx = check_event_permission(request, s, n, "orga_factions")
-    exchange_order(ctx, Faction, num)
+    exchange_order(ctx, Faction, num, order)
     return redirect("orga_factions", s=ctx["event"].slug, n=ctx["run"].number)
 
 
@@ -367,9 +367,9 @@ def orga_progress_steps_edit(request, s, n, num):
 
 
 @login_required
-def orga_progress_steps_order(request, s, n, num):
+def orga_progress_steps_order(request, s, n, num, order):
     ctx = check_event_permission(request, s, n, "orga_progress_steps")
-    exchange_order(ctx, ProgressStep, num)
+    exchange_order(ctx, ProgressStep, num, order)
     return redirect("orga_progress_steps", s=ctx["event"].slug, n=ctx["run"].number)
 
 

@@ -104,7 +104,7 @@ $(document).ready(function() {
         $(this).children('.dropdown-menu').fadeOut(100);
     });
 
-    $('a.feature_tutorial').click(function(event) {
+    $('a.feature_tutorial').on('mousedown', function(event) {
         event.preventDefault();
 
         url = url_tutorials + $(this).attr("tut");
@@ -315,6 +315,13 @@ $(document).ready(function() {
             centerMobileIcons();
         });
     }
+
+    $('.dropdown-menu').each(function() {
+        if ($.trim($(this).html()) === '') {
+            $(this).siblings('.dropdown-button').remove();
+            $(this).remove();
+        }
+    });
 
     $(document).on('click', '.post_popup', function (e) {
 

@@ -18,7 +18,6 @@
 {% block content %}
     {% include "elements/form/sections.html" %}
     <div id="options" class="hide">
-        <hr />
         <h2>{% trans "Options" %}</h2>
         {% include "elements/header/orga.html" %}
         <table id="registration_options" class="tablesorter mob writing no_csv">
@@ -29,6 +28,7 @@
                     <th>{% trans "Description" %}</th>
                     <th>{% trans "Price" %}</th>
                     <th>{% trans "Maximum" %}</th>
+                    <th></th>
                     <th></th>
                 </tr>
             </thead>
@@ -50,8 +50,15 @@
                         </td>
                         <td>
                             {% if not forloop.first %}
-                                <a href="{% url 'orga_registration_options_order' run.event.slug run.number el.id %}">
+                                <a href="{% url 'orga_registration_options_order' run.event.slug run.number el.id 0 %}">
                                     <i class="fa-solid fa-arrow-up"></i>
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not forloop.last %}
+                                <a href="{% url 'orga_registration_options_order' run.event.slug run.number el.id 1 %}">
+                                    <i class="fa-solid fa-arrow-down"></i>
                                 </a>
                             {% endif %}
                         </td>
@@ -59,6 +66,8 @@
                 {% endfor %}
             </tbody>
         </table>
+        <hr />
+        <br />
     </div>
 {% endblock content %}
 {% block js %}

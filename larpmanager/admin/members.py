@@ -25,7 +25,7 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from larpmanager.admin.base import AssocFilter, DefModelAdmin, MemberFilter, reduced
-from larpmanager.models.member import Badge, Member, Membership, VolunteerRegistry, Vote
+from larpmanager.models.member import Badge, Member, MemberConfig, Membership, VolunteerRegistry, Vote
 
 
 class MyUserAdmin(UserAdmin):
@@ -90,6 +90,14 @@ class MemberAdmin(DefModelAdmin):
     @staticmethod
     def safety_red(instance):
         return reduced(instance.safety)
+
+
+@admin.register(MemberConfig)
+class MemberConfigAdmin(DefModelAdmin):
+    list_display = ("member", "name", "value")
+    search_fields = ("name",)
+    list_filter = (MemberFilter,)
+    autocomplete_fields = ["member"]
 
 
 @admin.register(Membership)

@@ -75,7 +75,7 @@ class EventCharactersPdfForm(ConfigForm):
 
 
 class OrgaEventForm(MyForm):
-    page_title = _("Event Settings")
+    page_title = _("Event")
 
     page_info = _("This page allows you to change general event settings")
 
@@ -762,7 +762,7 @@ class OrgaEventButtonForm(MyForm):
 
 
 class OrgaRunForm(ConfigForm):
-    page_title = _("Run Settings")
+    page_title = _("Run")
 
     page_info = _("This page allows you to change the general settings of this run")
 
@@ -888,6 +888,19 @@ class OrgaRunForm(ConfigForm):
             self.add_configs(f"show_{s[0]}", ConfigType.BOOL, s[1], s[2])
 
         return ls
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if "end" not in cleaned_data or not cleaned_data["end"]:
+            raise ValidationError({"end": _("You need to define the end date!")})
+
+        if "start" not in cleaned_data or not cleaned_data["start"]:
+            raise ValidationError({"start": _("You need to define the start date!")})
+
+        if cleaned_data["end"] < cleaned_data["start"]:
+            raise ValidationError({"end": _("End date cannot be before start date!")})
+
+        return cleaned_data
 
 
 class OrgaProgressStepForm(MyForm):
