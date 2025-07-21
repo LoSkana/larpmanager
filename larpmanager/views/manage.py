@@ -197,18 +197,10 @@ def _exe_actions(request, ctx):
 def _exe_users_actions(request, assoc, ctx, features):
     if "membership" in features:
         if not get_assoc_text(ctx["a_id"], AssocTextType.MEMBERSHIP):
-            _add_priority(
-                ctx,
-                _("Set up the membership request text"),
-                "exe_membership",
-            )
+            _add_priority(ctx, _("Set up the membership request text"), "exe_membership", "texts")
 
         if len(assoc.get_config("membership_fee", "")) == 0:
-            _add_priority(
-                ctx,
-                _("Set up the membership configuration"),
-                "exe_membership",
-            )
+            _add_priority(ctx, _("Set up the membership configuration"), "exe_membership", "config/membership")
 
     if "vote" in features:
         if not assoc.get_config("vote_candidates", ""):
