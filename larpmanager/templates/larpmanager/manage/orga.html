@@ -113,7 +113,7 @@
     window.addEventListener('DOMContentLoaded', function() {
         $(document).ready(function() {
             {% if open_shortcuts %}
-                if ($('#sidebar-mobile').is(':visible')) {
+                if ($('#sidebar-mobile-open').is(':visible')) {
                     $('body').toggleClass('is-sidebar-visible');
                 }
             {% endif %}
