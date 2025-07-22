@@ -380,7 +380,7 @@ class Faction(Writing):
         ),
     )
 
-    order = models.IntegerField(default=0, help_text=_("Display order"))
+    order = models.IntegerField(default=0)
 
     cover = models.ImageField(
         max_length=500,
@@ -590,6 +590,9 @@ def replace_chars_el(el, chars):
 
 
 def replace_chars_all(instance):
+    if not instance.pk:
+        return
+
     if not hasattr(instance, "event"):
         return
 

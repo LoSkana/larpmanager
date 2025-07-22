@@ -125,18 +125,16 @@ class WritingQuestion(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="form_questions")
 
-    display = models.CharField(max_length=100, verbose_name=_("Display"), help_text=_("Question display text"))
+    display = models.CharField(max_length=100, verbose_name=_("Name"), help_text=_("Question name (keep it short)"))
 
     description = models.CharField(
         max_length=1000,
         blank=True,
         verbose_name=_("Description"),
-        help_text=_("Extended description (will be shown in gray, in small)"),
+        help_text=_("Optional - Extended description (displayed in small gray text)"),
     )
 
-    order = models.IntegerField(
-        default=0, verbose_name=_("Order"), help_text=_("Display order with respect to all questions")
-    )
+    order = models.IntegerField(default=0)
 
     status = models.CharField(
         max_length=1,
@@ -232,22 +230,26 @@ class WritingOption(BaseModel):
 
     question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="options")
 
-    display = models.CharField(max_length=50)
+    display = models.CharField(
+        max_length=50,
+        verbose_name=_("Name"),
+        help_text=_("Option name, displayed within the question (keep it short)"),
+    )
 
     details = models.CharField(
         max_length=500,
         blank=True,
         null=True,
         verbose_name=_("Description"),
-        help_text=_("Optional - Indicates additional details on the option, will be shown below the question"),
+        help_text=_("Optional – Additional information about the option, displayed below the question"),
     )
 
     max_available = models.IntegerField(
         default=0,
-        help_text=_("Indicates the maximum number of times it can be requested (0 = unlimited)"),
+        help_text=_("Optional – Maximum number of times it can be selected across all characters (0 = unlimited)"),
     )
 
-    order = models.IntegerField(default=0, help_text=_("Order in which the option is shown with respect to the others"))
+    order = models.IntegerField(default=0)
 
     dependents = models.ManyToManyField(
         "self",
@@ -319,16 +321,16 @@ class RegistrationQuestion(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="questions")
 
-    display = models.CharField(max_length=100, verbose_name=_("Display"), help_text=_("Question display text"))
+    display = models.CharField(max_length=100, verbose_name=_("Name"), help_text=_("Question name (keep it short)"))
 
     description = models.CharField(
         max_length=1000,
         blank=True,
         verbose_name=_("Description"),
-        help_text=_("Extended description (will be shown in gray, in small)"),
+        help_text=_("Optional - Extended description (displayed in small gray text)"),
     )
 
-    order = models.IntegerField(default=0, help_text=_("Display order with respect to all questions"))
+    order = models.IntegerField(default=0)
 
     status = models.CharField(
         max_length=1,
@@ -347,7 +349,7 @@ class RegistrationQuestion(BaseModel):
         default=0,
         verbose_name=_("Maximum length"),
         help_text=_(
-            "For text questions, maximum number of characters; For multiple options, maximum "
+            "Optional - For text questions, maximum number of characters; For multiple options, maximum "
             "number of options (0 = no limit)"
         ),
     )
@@ -358,7 +360,7 @@ class RegistrationQuestion(BaseModel):
         blank=True,
         verbose_name=_("Faction list"),
         help_text=_(
-            "If you select one (or more) factions, the question will only be shown to players "
+            "Optional - If you select one (or more) factions, the question will only be shown to players "
             "with characters in all chosen factions"
         ),
     )
@@ -369,7 +371,7 @@ class RegistrationQuestion(BaseModel):
         blank=True,
         null=True,
         verbose_name=_("Image"),
-        help_text=_("(Optional) an image that will be shown inside the question"),
+        help_text=_("Optional - Image displayed within the question"),
     )
 
     profile_thumb = ImageSpecField(
@@ -485,25 +487,35 @@ class RegistrationOption(BaseModel):
 
     question = models.ForeignKey(RegistrationQuestion, on_delete=models.CASCADE, related_name="options")
 
-    display = models.CharField(max_length=170)
+    display = models.CharField(
+        max_length=170,
+        verbose_name=_("Name"),
+        help_text=_("Option name, displayed within the question (keep it short)"),
+    )
 
     details = models.CharField(
         max_length=500,
         blank=True,
         null=True,
         verbose_name=_("Description"),
-        help_text=_("Optional - Indicates additional details on the option, will be shown below the question"),
+        help_text=_("Optional – Additional information about the option, displayed below the question"),
     )
 
-    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        verbose_name=_("Price"),
+        help_text=_("Optional – Amount added to the registration fee if selected (0 = no extra cost)"),
+    )
 
     max_available = models.IntegerField(
         default=0,
         verbose_name=_("Maximum number"),
-        help_text=_("Indicates the maximum number of times it can be requested (0 = unlimited)"),
+        help_text=_("Optional – Maximum number of times it can be selected across all registrations (0 = unlimited)"),
     )
 
-    order = models.IntegerField(default=0, help_text=_("Order in which the option is shown with respect to the others"))
+    order = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.question} {self.display[:30]} ({self.price}€)"

@@ -127,6 +127,30 @@ class MyForm(forms.ModelForm):
     def clean_assoc(self):
         return Association.objects.get(pk=self.params["a_id"])
 
+    def clean_name(self):
+        return self._validate_unique_event("name")
+
+    def clean_display(self):
+        return self._validate_unique_event("display")
+
+    def _validate_unique_event(self, field_name):
+        value = self.cleaned_data.get(field_name)
+        event = self.params.get("event")
+        if event:
+            typ = self.params["elementTyp"]
+            event_id = event.get_class_parent(typ).id
+
+            model = self._meta.model
+            qs = model.objects.filter(**{field_name: value}, event_id=event_id)
+            question = self.cleaned_data.get("question")
+            if question:
+                qs = qs.filter(question_id=question.id)
+            if self.instance.pk:
+                qs = qs.exclude(pk=self.instance.pk)
+            if qs.exists():
+                raise ValidationError(_(f"{field_name.capitalize()} already used"))
+        return value
+
     def save(self, commit=True):
         instance = super(forms.ModelForm, self).save(commit=commit)
 

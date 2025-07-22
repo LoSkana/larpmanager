@@ -669,9 +669,6 @@ msgstr "Standardinnstilling"
 msgid "Details"
 msgstr "Detaljer"
 
-msgid "Display"
-msgstr "Visning"
-
 msgid "Example"
 msgstr "Eksempel"
 
@@ -1918,9 +1915,6 @@ msgstr "Utbetalingsliste"
 msgid "Discount back"
 msgstr "Rabatt tilbake"
 
-msgid "Display order"
-msgstr "Vis rekkefølge"
-
 msgid "Document type"
 msgstr "Dokumenttype"
 
@@ -3098,9 +3092,6 @@ msgstr "Lenker til forhåndsregistrering"
 msgid "Prop - weapons, props"
 msgstr "Prop - våpen, rekvisitter"
 
-msgid "Question display text"
-msgstr "Spørsmålstekst"
-
 msgid "Register to the event"
 msgstr "Meld deg på arrangementet"
 
@@ -3649,6 +3640,9 @@ msgstr "Påminnelse om medlemskap"
 msgid "Set up dynamic installments"
 msgstr "Sett opp dynamiske avdrag"
 
+msgid "Ticket name (keep it short)"
+msgstr "Billettens navn (hold det kort)"
+
 msgid "View limited ticket options"
 msgstr "Se begrensede billettalternativer"
 
@@ -3761,6 +3755,9 @@ msgstr "Foretrukket navigasjonsspråk"
 
 msgid "Promotion - site, advertising"
 msgstr "Markedsføring - nettsted, reklame"
+
+msgid "Question name (keep it short)"
+msgstr "Navn på spørsmålet (hold det kort)"
 
 msgid "Registrations opening not set"
 msgstr "Registreringsåpning ikke satt"
@@ -4666,9 +4663,6 @@ msgstr "Detaljer: %(details)s (<b>%(amount).2f</b>)"
 msgid "Display all users data as members registry"
 msgstr "Vis alle brukerdata som medlemsregister"
 
-msgid "Display order with respect to all sections"
-msgstr "Vis rekkefølge med hensyn til alle seksjoner"
-
 msgid "For which day you will need transportation"
 msgstr "For hvilken dag trenger du transport"
 
@@ -4745,9 +4739,6 @@ msgstr "Beskrivelse som skal vises på spesialsiden"
 
 msgid "Discount not combinable with other benefits"
 msgstr "Rabatten kan ikke kombineres med andre rabatter"
-
-msgid "Display order with respect to all questions"
-msgstr "Vis rekkefølge med hensyn til alle spørsmål"
 
 msgid "Freely indicate the amount of your donation"
 msgstr "Angi fritt hvor mye du vil donere"
@@ -4957,6 +4948,9 @@ msgstr "Nå kan du angi innstillingene for erfaringspoeng"
 
 msgid "Now you can set the external registration link"
 msgstr "Nå kan du angi den eksterne registreringslenken"
+
+msgid "Optional - Image displayed within the question"
+msgstr "Valgfritt - Bilde som vises i spørsmålet"
 
 msgid "Photo (clear and understandable) of the object"
 msgstr "Foto (tydelig og forståelig) av objektet"
@@ -5340,9 +5334,6 @@ msgstr "Bli med på Discord for å få hjelp, ideer eller rapportere feil"
 msgid "Manage registrations discounts available to players"
 msgstr "Administrere registreringsrabatter som er tilgjengelige for spillere"
 
-msgid "Maximum number of tickets available (0 = unlimited)"
-msgstr "Maksimalt antall tilgjengelige billetter (0 = ubegrenset)"
-
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Velg et tydelig og lett gjenkjennelig bilde"
 
@@ -5480,9 +5471,6 @@ msgstr "Ønsker du å gi brukerne mulighet til å gi frivillige donasjoner"
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Alt er i orden for at vi skal kunne betale for dette arrangementet"
-
-msgid "Extended description (will be shown in gray, in small)"
-msgstr "Utvidet beskrivelse (vises i grått, med liten skrift)"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Angi en sang du ønsker å dedikere til karakteren din"
@@ -5659,9 +5647,6 @@ msgstr "Du kan ikke løse inn et medlemskap, du er allerede medlem!"
 msgid "once approved, the corresponding amounts are assigned as "
 msgstr "Når de er godkjent, blir de tilsvarende beløpene tildelt som"
 
-msgid "(Optional) an image that will be shown inside the question"
-msgstr "(valgfritt) et bilde som skal vises inne i spørsmålet"
-
 msgid "Allows you to copy any element directly from another event"
 msgstr ""
 "Gjør det mulig å kopiere et hvilket som helst element direkte fra en annen "
@@ -5701,6 +5686,9 @@ msgstr "Gi oss beskjed hvis du støter på problemer eller trenger hjelp"
 
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr "Administrere og godkjenne utlegg som er lastet opp av ansatte"
+
+msgid "Option name, displayed within the question (keep it short)"
+msgstr "Alternativets navn, vises i spørsmålet (hold det kort)"
 
 msgid "Probability of showing the special page (out of thousands)"
 msgstr "Sannsynlighet for å vise spesialsiden (av tusen)"
@@ -5873,9 +5861,6 @@ msgstr ""
 "Administrerer kreditter som spillerne bruker for å dekke "
 "registreringsavgiften"
 
-msgid "Order in which the option is shown with respect to the others"
-msgstr "Rekkefølgen alternativene presenteres i i applikasjonen"
-
 msgid "Quickly configure your organization's most important settings"
 msgstr "Konfigurer raskt organisasjonens viktigste innstillinger"
 
@@ -5948,6 +5933,9 @@ msgstr "Nå kan medarbeiderne laste opp utgifter, og du kan gå gjennom dem"
 msgid "Now you can review the safety information submitted by players"
 msgstr ""
 "Nå kan du se gjennom sikkerhetsinformasjonen som spillerne har sendt inn"
+
+msgid "Optional - Extended description (displayed in small gray text)"
+msgstr "Valgfritt - Utvidet beskrivelse (vises med liten grå tekst)"
 
 msgid "Set specific values for configuration of features of the event"
 msgstr "Angi spesifikke verdier for konfigurasjon av funksjoner i hendelsen"
@@ -6050,9 +6038,6 @@ msgstr "Angir fargen som skal brukes som bakgrunn for teksten"
 msgid "Indicate the payment methods you wish to be available to players"
 msgstr ""
 "Angi hvilke betalingsmåter du ønsker skal være tilgjengelige for spillerne"
-
-msgid "Indicates whether the ticket can be selected in the free entries"
-msgstr "Angir om billetten kan velges i de frie oppføringene"
 
 msgid "Manage questions and options for characters and writing elements"
 msgstr ""
@@ -6214,6 +6199,9 @@ msgid "Content of the receipt created for each payment and sent to players"
 msgstr ""
 "Innholdet i kvitteringen som opprettes for hver betaling og sendes til "
 "spillerne"
+
+msgid "How the relationship is described from this character's perspective"
+msgstr "Hvordan forholdet beskrives fra denne karakterens perspektiv"
 
 msgid "I confirm that my face and name are clearly visible in the document"
 msgstr "Jeg bekrefter at mitt ansikt og navn er tydelig synlig i dokumentet"
@@ -6464,6 +6452,9 @@ msgstr ""
 "Hvis du liker eller er interessert i et arrangement, kan du "
 "<b>forhåndspåmelde</b> deg"
 
+msgid "Optional - Indicates whether the ticket can be gifted to other players"
+msgstr "Valgfritt - Angir om billetten kan gis i gave til andre spillere"
+
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Dette er de arrangementspåmeldingene som du må betale for"
 
@@ -6546,6 +6537,10 @@ msgid ""
 msgstr ""
 "Ønsker du å aktivere en hemmelig registreringslenke for å tillate tidlig "
 "påmelding"
+
+msgid ""
+"How the relationship is described from the other character's perspective"
+msgstr "Hvordan forholdet beskrives fra den andre karakterens perspektiv"
 
 msgid ""
 "If checked, it allows players to customise the names of their characters"
@@ -6645,11 +6640,6 @@ msgid ""
 msgstr ""
 "Hvis du trenger hjelp, kan du skrive inn forespørselen din her på engelsk "
 "ved hjelp av enkeltord"
-
-msgid ""
-"Indicates the maximum number of times it can be requested (0 = unlimited)"
-msgstr ""
-"Angir det maksimale antallet ganger det kan forespørres (0 = ubegrenset)"
 
 msgid ""
 "Inside this file must be the photos, named by the number of the character"
@@ -7087,6 +7077,13 @@ msgstr ""
 " matchingen"
 
 msgid ""
+"Optional – Amount added to the registration fee if selected (0 = no extra "
+"cost)"
+msgstr ""
+"Valgfritt - Beløp som legges til registreringsavgiften hvis valgt (0 = ingen"
+" ekstra kostnad)"
+
+msgid ""
 "Terms and conditions of signup, shown in a page linked in the registration "
 "form"
 msgstr ""
@@ -7133,6 +7130,12 @@ msgid ""
 msgstr ""
 "Logobilde (du kan laste opp en fil i hvilken som helst størrelse, størrelsen"
 " endres automatisk)"
+
+msgid ""
+"Optional – Additional information about the option, displayed below the "
+"question"
+msgstr ""
+"Valgfritt - Tilleggsinformasjon om alternativet, vises under spørsmålet"
 
 msgid ""
 "Request for reimbursement entered! You will receive notice when it is "
@@ -7554,13 +7557,6 @@ msgstr ""
 " karakter"
 
 msgid ""
-"Optional - Indicates additional details on the option, will be shown below "
-"the question"
-msgstr ""
-"Valgfritt - Angir ytterligere detaljer om alternativet, vises under "
-"spørsmålet"
-
-msgid ""
 "Value of the discount for the friend who signs up using the code of a "
 "registered player"
 msgstr ""
@@ -7671,6 +7667,20 @@ msgstr ""
 "størrelse, og den vil automatisk endre størrelse"
 
 msgid ""
+"Optional – Casting priority granted by this option (e.g., 1 = low, 5 = "
+"medium, 25 = high)"
+msgstr ""
+"Valgfritt - Casting-prioritet gitt av dette alternativet (f.eks. 1 = lav, 5 "
+"= middels, 25 = høy)"
+
+msgid ""
+"Optional – Maximum number of times it can be requested across all signups (0"
+" = unlimited)"
+msgstr ""
+"Valgfritt - Maksimalt antall ganger det kan forespørres på tvers av alle "
+"påmeldinger (0 = ubegrenset)"
+
+msgid ""
 "This page allows you to add or change the types of ticket with which players"
 " can register"
 msgstr ""
@@ -7761,6 +7771,13 @@ msgid ""
 msgstr ""
 "Angir offentlig informasjon om karakteren din, som vises for alle andre "
 "spillere"
+
+msgid ""
+"Optional – Maximum number of times it can be selected across all characters "
+"(0 = unlimited)"
+msgstr ""
+"Valgfritt - Maksimalt antall ganger det kan velges på tvers av alle tegn (0 "
+"= ubegrenset)"
 
 msgid ""
 "This page shows global competencies, skill areas in which contributors can "
@@ -7940,11 +7957,11 @@ msgstr ""
 "karakteren den speiler"
 
 msgid ""
-"Optional - Indicate additional details on the ticket, they will be shown "
-"below the application"
+"Optional – Maximum number of times it can be selected across all "
+"registrations (0 = unlimited)"
 msgstr ""
-"Valgfritt - Angi ytterligere detaljer på billetten, de vil vises under "
-"søknaden"
+"Valgfritt - Maksimalt antall ganger det kan velges på tvers av alle "
+"registreringer (0 = ubegrenset)"
 
 msgid ""
 "This is the sidebar containing all the functions (it remains visible on "
@@ -8108,13 +8125,6 @@ msgid ""
 msgstr ""
 "Denne siden oppsummerer rollene som må tildeles for å kunne bruke "
 "funksjonene som gjelder arrangementet"
-
-msgid ""
-"What casting priority does it ensure? (Usually: 1 is the subsized, 5 for "
-"default, 25 for patron)"
-msgstr ""
-"Hvilken tildelingsprioritet sikrer du (vanligvis: 1 er standard, 5 for "
-"supportere, 25 for produsenter)"
 
 msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
@@ -8844,13 +8854,6 @@ msgstr ""
 "lagertabell, spore antall og notere hvor varene befinner seg"
 
 msgid ""
-"If you select one (or more) factions, the question will only be shown to "
-"players with characters in all chosen factions"
-msgstr ""
-"Hvis du velger én (eller flere) fraksjoner, vises spørsmålet bare for "
-"spillere med figurer i alle de valgte fraksjonene"
-
-msgid ""
 "If your question is about a specific event, please select it! If  is a "
 "general question instead, please leave it blank."
 msgstr ""
@@ -8963,6 +8966,13 @@ msgstr ""
 "arrangement/løp"
 
 msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options (0 = no limit)"
+msgstr ""
+"Valgfritt - For tekstspørsmål, maksimalt antall tegn; for flere "
+"alternativer, maksimalt antall alternativer (0 = ingen begrensning)"
+
+msgid ""
 "Allows players to purchase tickets as gifts. A special code is generated and"
 " provided to the gift recipient for registration"
 msgstr ""
@@ -9068,6 +9078,13 @@ msgid ""
 msgstr ""
 "Angir antall dager som spilleren skal varsles om at betalingen skal "
 "gjennomføres, gitt en betalingsfrist. Standard 30."
+
+msgid ""
+"Optional - If you select one (or more) factions, the question will only be "
+"shown to players with characters in all chosen factions"
+msgstr ""
+"Valgfritt - Hvis du velger én (eller flere) fraksjoner, vil spørsmålet bare "
+"vises til spillere med karakterer i alle de valgte fraksjonene"
 
 msgid ""
 "This page allows you to select the features activated for this event, and "

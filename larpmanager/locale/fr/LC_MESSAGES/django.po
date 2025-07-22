@@ -669,9 +669,6 @@ msgstr "Défaut"
 msgid "Details"
 msgstr "Détails"
 
-msgid "Display"
-msgstr "Affichage"
-
 msgid "Example"
 msgstr "Exemple"
 
@@ -1918,9 +1915,6 @@ msgstr "Liste des déboursements"
 msgid "Discount back"
 msgstr "Remise"
 
-msgid "Display order"
-msgstr "Ordre d'affichage"
-
 msgid "Document type"
 msgstr "Type de document"
 
@@ -3098,9 +3092,6 @@ msgstr "Liens de pré-inscription"
 msgid "Prop - weapons, props"
 msgstr "Prop - armes, accessoires"
 
-msgid "Question display text"
-msgstr "Texte de la question"
-
 msgid "Register to the event"
 msgstr "Inscrivez-vous à l'événement"
 
@@ -3649,6 +3640,9 @@ msgstr "Rappel demande d'adhésion"
 msgid "Set up dynamic installments"
 msgstr "Mise en place de versements dynamiques"
 
+msgid "Ticket name (keep it short)"
+msgstr "Nom du billet (court)"
+
 msgid "View limited ticket options"
 msgstr "Voir les options de billets limitées"
 
@@ -3761,6 +3755,9 @@ msgstr "Langue de navigation préférée"
 
 msgid "Promotion - site, advertising"
 msgstr "Promotion - site, publicité"
+
+msgid "Question name (keep it short)"
+msgstr "Nom de la question (court)"
 
 msgid "Registrations opening not set"
 msgstr "Ouverture des inscriptions non fixée"
@@ -4668,9 +4665,6 @@ msgid "Display all users data as members registry"
 msgstr ""
 "Afficher les données de tous les utilisateurs dans le registre des membres"
 
-msgid "Display order with respect to all sections"
-msgstr "Ordre d'affichage de toutes les sections"
-
 msgid "For which day you will need transportation"
 msgstr "Pour quel jour avez-vous besoin d'un transport"
 
@@ -4748,9 +4742,6 @@ msgstr "Description à afficher sur la page spéciale"
 
 msgid "Discount not combinable with other benefits"
 msgstr "Remise non cumulable avec d'autres concessions"
-
-msgid "Display order with respect to all questions"
-msgstr "Ordre d'affichage pour toutes les questions"
 
 msgid "Freely indicate the amount of your donation"
 msgstr "Indiquez librement le montant de votre don"
@@ -4963,6 +4954,9 @@ msgstr "Vous pouvez maintenant définir les paramètres des points d'expérience
 
 msgid "Now you can set the external registration link"
 msgstr "Vous pouvez maintenant définir le lien d'enregistrement externe"
+
+msgid "Optional - Image displayed within the question"
+msgstr "Facultatif - Image affichée dans la question"
 
 msgid "Photo (clear and understandable) of the object"
 msgstr "Photo (claire et compréhensible) de l'objet"
@@ -5362,9 +5356,6 @@ msgstr ""
 msgid "Manage registrations discounts available to players"
 msgstr "Gérer les inscriptions et les réductions accordées aux joueurs"
 
-msgid "Maximum number of tickets available (0 = unlimited)"
-msgstr "Nombre maximal de billets disponibles (0 = illimité)"
-
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Choisissez une photo claire et facilement reconnaissable"
 
@@ -5506,9 +5497,6 @@ msgstr "Voulez-vous permettre aux utilisateurs de faire des dons volontaires"
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Tout est en ordre pour que nous puissions payer cet événement"
-
-msgid "Extended description (will be shown in gray, in small)"
-msgstr "Description détaillée (apparaîtra en gris, en petits caractères)"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Indiquez une chanson que vous souhaitez dédier à votre personnage"
@@ -5710,9 +5698,6 @@ msgid "once approved, the corresponding amounts are assigned as "
 msgstr ""
 "une fois approuvés, les montants correspondants sont affectés comme suit"
 
-msgid "(Optional) an image that will be shown inside the question"
-msgstr "(Facultatif) une image qui sera affichée à l'intérieur de la question"
-
 msgid "Allows you to copy any element directly from another event"
 msgstr ""
 "Permet de copier n'importe quel élément directement à partir d'un autre "
@@ -5761,6 +5746,9 @@ msgid "Manage expenses uploaded by staff members and approve them"
 msgstr ""
 "Gérer les dépenses téléchargées par les membres du personnel et les "
 "approuver"
+
+msgid "Option name, displayed within the question (keep it short)"
+msgstr "Nom de l'option, affiché dans la question (soyez bref)"
 
 msgid "Probability of showing the special page (out of thousands)"
 msgstr "Probabilité d'afficher la page spéciale (sur des milliers)"
@@ -5947,9 +5935,6 @@ msgstr ""
 "Gestion des crédits utilisés par les joueurs pour couvrir les frais "
 "d'inscription"
 
-msgid "Order in which the option is shown with respect to the others"
-msgstr "Ordre dans lequel l'option est présentée dans l'application"
-
 msgid "Quickly configure your organization's most important settings"
 msgstr ""
 "Configurez rapidement les paramètres les plus importants de votre "
@@ -6034,6 +6019,9 @@ msgid "Now you can review the safety information submitted by players"
 msgstr ""
 "Vous pouvez désormais consulter les informations de sécurité soumises par "
 "les joueurs"
+
+msgid "Optional - Extended description (displayed in small gray text)"
+msgstr "Facultatif - Description étendue (affichée en petit texte gris)"
 
 msgid "Set specific values for configuration of features of the event"
 msgstr ""
@@ -6155,9 +6143,6 @@ msgid "Indicate the payment methods you wish to be available to players"
 msgstr ""
 "Indiquez les méthodes de paiement que vous souhaitez mettre à la disposition"
 " des joueurs"
-
-msgid "Indicates whether the ticket can be selected in the free entries"
-msgstr "Indique si le billet peut être sélectionné dans les entrées gratuites"
 
 msgid "Manage questions and options for characters and writing elements"
 msgstr ""
@@ -6340,6 +6325,9 @@ msgstr ""
 
 msgid "Content of the receipt created for each payment and sent to players"
 msgstr "Contenu du reçu créé pour chaque paiement et envoyé aux joueurs"
+
+msgid "How the relationship is described from this character's perspective"
+msgstr "Comment la relation est décrite du point de vue de ce personnage"
 
 msgid "I confirm that my face and name are clearly visible in the document"
 msgstr ""
@@ -6628,6 +6616,9 @@ msgstr ""
 "Si vous aimez ou êtes intéressé par un événement, vous pouvez vous <b>pré-"
 "inscrire</b>"
 
+msgid "Optional - Indicates whether the ticket can be gifted to other players"
+msgstr "Facultatif - Indique si le billet peut être offert à d'autres joueurs"
+
 msgid "These are the event registrations for which you have to make a payment"
 msgstr ""
 "Il s'agit des inscriptions à des événements pour lesquels vous devez "
@@ -6717,6 +6708,10 @@ msgid ""
 msgstr ""
 "Souhaitez-vous activer un lien d'inscription secret pour permettre des "
 "inscriptions anticipées"
+
+msgid ""
+"How the relationship is described from the other character's perspective"
+msgstr "Comment la relation est décrite du point de vue de l'autre personnage"
 
 msgid ""
 "If checked, it allows players to customise the names of their characters"
@@ -6827,11 +6822,6 @@ msgid ""
 msgstr ""
 "Si vous avez besoin d'aide, tapez votre demande ici en anglais en utilisant "
 "des mots-clés simples"
-
-msgid ""
-"Indicates the maximum number of times it can be requested (0 = unlimited)"
-msgstr ""
-"Indique le nombre maximum de fois qu'il peut être demandé (0 = illimité)"
 
 msgid ""
 "Inside this file must be the photos, named by the number of the character"
@@ -7304,6 +7294,13 @@ msgstr ""
 " puis de trouver la correspondance globale optimale"
 
 msgid ""
+"Optional – Amount added to the registration fee if selected (0 = no extra "
+"cost)"
+msgstr ""
+"Facultatif - Montant ajouté aux frais d'inscription si sélectionné (0 = "
+"aucun coût supplémentaire)"
+
+msgid ""
 "Terms and conditions of signup, shown in a page linked in the registration "
 "form"
 msgstr ""
@@ -7351,6 +7348,13 @@ msgid ""
 msgstr ""
 "Image du logo (vous pouvez télécharger un fichier de n'importe quelle "
 "taille, il sera redimensionné automatiquement)"
+
+msgid ""
+"Optional – Additional information about the option, displayed below the "
+"question"
+msgstr ""
+"Facultatif - Informations supplémentaires sur l'option, affichées sous la "
+"question"
 
 msgid ""
 "Request for reimbursement entered! You will receive notice when it is "
@@ -7787,13 +7791,6 @@ msgstr ""
 "sont pas affichés dans la galerie"
 
 msgid ""
-"Optional - Indicates additional details on the option, will be shown below "
-"the question"
-msgstr ""
-"Facultatif - Indique des détails supplémentaires sur l'option, qui seront "
-"affichés sous la question"
-
-msgid ""
 "Value of the discount for the friend who signs up using the code of a "
 "registered player"
 msgstr ""
@@ -7904,6 +7901,20 @@ msgstr ""
 "quelle taille, il sera automatiquement redimensionné"
 
 msgid ""
+"Optional – Casting priority granted by this option (e.g., 1 = low, 5 = "
+"medium, 25 = high)"
+msgstr ""
+"Facultatif - Priorité de coulée accordée par cette option (par exemple, 1 = "
+"faible, 5 = moyenne, 25 = élevée)"
+
+msgid ""
+"Optional – Maximum number of times it can be requested across all signups (0"
+" = unlimited)"
+msgstr ""
+"Facultatif - Nombre maximal de fois qu'il peut être demandé pour toutes les "
+"inscriptions (0 = illimité)"
+
+msgid ""
 "This page allows you to add or change the types of ticket with which players"
 " can register"
 msgstr ""
@@ -7994,6 +8005,13 @@ msgid ""
 msgstr ""
 "Indique les informations publiques sur votre personnage, qui seront "
 "affichées à tous les autres joueurs"
+
+msgid ""
+"Optional – Maximum number of times it can be selected across all characters "
+"(0 = unlimited)"
+msgstr ""
+"Facultatif - Nombre maximal de fois qu'il peut être sélectionné sur "
+"l'ensemble des caractères (0 = illimité)"
 
 msgid ""
 "This page shows global competencies, skill areas in which contributors can "
@@ -8174,11 +8192,11 @@ msgstr ""
 "personnage original qu'il reflète"
 
 msgid ""
-"Optional - Indicate additional details on the ticket, they will be shown "
-"below the application"
+"Optional – Maximum number of times it can be selected across all "
+"registrations (0 = unlimited)"
 msgstr ""
-"Facultatif - Indiquer des détails supplémentaires sur le billet, qui "
-"apparaîtront sous la demande"
+"Facultatif - Nombre maximal de fois qu'il peut être sélectionné dans tous "
+"les enregistrements (0 = illimité)"
 
 msgid ""
 "This is the sidebar containing all the functions (it remains visible on "
@@ -8343,13 +8361,6 @@ msgid ""
 msgstr ""
 "Cette page résume les rôles à attribuer pour utiliser les fonctions "
 "relatives à l'événement"
-
-msgid ""
-"What casting priority does it ensure? (Usually: 1 is the subsized, 5 for "
-"default, 25 for patron)"
-msgstr ""
-"Quelle priorité d'attribution garantissez-vous (en général : 1 est la norme,"
-" 5 pour les partisans, 25 pour les producteurs)"
 
 msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
@@ -9090,14 +9101,6 @@ msgstr ""
 "l'emplacement des articles"
 
 msgid ""
-"If you select one (or more) factions, the question will only be shown to "
-"players with characters in all chosen factions"
-msgstr ""
-"Si vous sélectionnez une (ou plusieurs) faction(s), la question ne sera "
-"posée qu'aux joueurs dont les personnages appartiennent à toutes les "
-"factions choisies"
-
-msgid ""
 "If your question is about a specific event, please select it! If  is a "
 "general question instead, please leave it blank."
 msgstr ""
@@ -9214,6 +9217,13 @@ msgstr ""
 "course"
 
 msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options (0 = no limit)"
+msgstr ""
+"Facultatif - Pour les questions textuelles, nombre maximum de caractères ; "
+"Pour les options multiples, nombre maximum d'options (0 = aucune limite)"
+
+msgid ""
 "Allows players to purchase tickets as gifts. A special code is generated and"
 " provided to the gift recipient for registration"
 msgstr ""
@@ -9325,6 +9335,14 @@ msgstr ""
 "Compte tenu d'une date limite de paiement, indique le nombre de jours sous "
 "lequel il notifie au joueur de procéder au paiement. La valeur par défaut "
 "est de 30."
+
+msgid ""
+"Optional - If you select one (or more) factions, the question will only be "
+"shown to players with characters in all chosen factions"
+msgstr ""
+"Facultatif - Si vous sélectionnez une (ou plusieurs) faction(s), la question"
+" ne sera posée qu'aux joueurs dont les personnages appartiennent à toutes "
+"les factions choisies"
 
 msgid ""
 "This page allows you to select the features activated for this event, and "

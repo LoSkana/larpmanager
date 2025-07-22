@@ -669,9 +669,6 @@ msgstr "Výchozí"
 msgid "Details"
 msgstr "Podrobnosti na"
 
-msgid "Display"
-msgstr "Zobrazit"
-
 msgid "Example"
 msgstr "Příklad"
 
@@ -1918,9 +1915,6 @@ msgstr "Seznam výplat"
 msgid "Discount back"
 msgstr "Sleva zpět"
 
-msgid "Display order"
-msgstr "Zobrazení objednávky"
-
 msgid "Document type"
 msgstr "Typ dokumentu"
 
@@ -3098,9 +3092,6 @@ msgstr "Odkazy pro předběžnou registraci"
 msgid "Prop - weapons, props"
 msgstr "Rekvizity - zbraně, rekvizity"
 
-msgid "Question display text"
-msgstr "Text otázky"
-
 msgid "Register to the event"
 msgstr "Přihlaste se na akci"
 
@@ -3649,6 +3640,9 @@ msgstr "Připomínka žádosti o členství"
 msgid "Set up dynamic installments"
 msgstr "Nastavení dynamických splátek"
 
+msgid "Ticket name (keep it short)"
+msgstr "Název tipu (zkrácený)"
+
 msgid "View limited ticket options"
 msgstr "Zobrazit omezené možnosti vstupenek"
 
@@ -3761,6 +3755,9 @@ msgstr "Preferovaný jazyk navigace"
 
 msgid "Promotion - site, advertising"
 msgstr "Propagace - stránky, reklama"
+
+msgid "Question name (keep it short)"
+msgstr "Název otázky (ať je krátký)"
 
 msgid "Registrations opening not set"
 msgstr "Otevření registrací není nastaveno"
@@ -4664,9 +4661,6 @@ msgstr "Podrobnosti: %(details)s (<b>%(amount).2f</b>)"
 msgid "Display all users data as members registry"
 msgstr "Zobrazení údajů všech uživatelů jako registru členů"
 
-msgid "Display order with respect to all sections"
-msgstr "Pořadí zobrazení všech sekcí"
-
 msgid "For which day you will need transportation"
 msgstr "Na který den budete potřebovat dopravu"
 
@@ -4743,9 +4737,6 @@ msgstr "Popis, který se zobrazí na speciální stránce"
 
 msgid "Discount not combinable with other benefits"
 msgstr "Slevu nelze kombinovat s jinými úlevami"
-
-msgid "Display order with respect to all questions"
-msgstr "Zobrazení pořadí u všech otázek"
 
 msgid "Freely indicate the amount of your donation"
 msgstr "Volně uveďte výši svého daru"
@@ -4954,6 +4945,9 @@ msgstr "Nyní můžete nastavit body zkušeností"
 
 msgid "Now you can set the external registration link"
 msgstr "Nyní můžete nastavit externí registrační odkaz"
+
+msgid "Optional - Image displayed within the question"
+msgstr "Nepovinné - Obrázek zobrazený v rámci otázky"
 
 msgid "Photo (clear and understandable) of the object"
 msgstr "Fotografie (jasná a srozumitelná) objektu"
@@ -5339,9 +5333,6 @@ msgstr ""
 msgid "Manage registrations discounts available to players"
 msgstr "Správa slev pro hráče při registraci"
 
-msgid "Maximum number of tickets available (0 = unlimited)"
-msgstr "Maximální počet dostupných vstupenek (0 = neomezeně)"
-
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Vyberte prosím jasnou a snadno rozpoznatelnou fotografii"
 
@@ -5480,9 +5471,6 @@ msgstr "Chcete uživatelům umožnit dobrovolné dary"
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Vše je v pořádku, abychom mohli tuto akci zaplatit"
-
-msgid "Extended description (will be shown in gray, in small)"
-msgstr "Rozšířený popis (bude zobrazen šedě, malým písmem)"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Uveďte píseň, kterou chcete věnovat své postavě"
@@ -5656,9 +5644,6 @@ msgstr "Členství nelze vyměnit, jste již členem!"
 msgid "once approved, the corresponding amounts are assigned as "
 msgstr "po schválení jsou příslušné částky přiděleny jako"
 
-msgid "(Optional) an image that will be shown inside the question"
-msgstr "(nepovinné) obrázek, který se zobrazí uvnitř otázky"
-
 msgid "Allows you to copy any element directly from another event"
 msgstr "Umožňuje zkopírovat libovolný prvek přímo z jiné události"
 
@@ -5694,6 +5679,9 @@ msgstr ""
 
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr "Správa výdajů nahraných zaměstnanci a jejich schvalování"
+
+msgid "Option name, displayed within the question (keep it short)"
+msgstr "Název možnosti, který se zobrazí v otázce (musí být krátký)"
 
 msgid "Probability of showing the special page (out of thousands)"
 msgstr "Pravděpodobnost zobrazení speciální stránky (z tisíce)"
@@ -5850,9 +5838,6 @@ msgid "Manages credits used by players to cover the registration fee"
 msgstr ""
 "spravuje kredity, které hráči využívají k úhradě registračního poplatku"
 
-msgid "Order in which the option is shown with respect to the others"
-msgstr "Pořadí, v jakém je možnost v aplikaci uvedena"
-
 msgid "Quickly configure your organization's most important settings"
 msgstr "Rychlá konfigurace nejdůležitějších nastavení organizace"
 
@@ -5922,6 +5907,9 @@ msgstr "Nyní mohou zaměstnanci nahrávat výdaje a vy je můžete kontrolovat"
 msgid "Now you can review the safety information submitted by players"
 msgstr ""
 "Nyní si můžete prohlédnout bezpečnostní informace, které hráči poskytli"
+
+msgid "Optional - Extended description (displayed in small gray text)"
+msgstr "Nepovinné - rozšířený popis (zobrazuje se malým šedým textem)"
 
 msgid "Set specific values for configuration of features of the event"
 msgstr "Nastavení specifických hodnot pro konfiguraci funkcí události"
@@ -6014,9 +6002,6 @@ msgstr "Určuje barvu, která bude použita pro pozadí textu"
 
 msgid "Indicate the payment methods you wish to be available to players"
 msgstr "Uveďte platební metody, které chcete mít k dispozici pro hráče"
-
-msgid "Indicates whether the ticket can be selected in the free entries"
-msgstr "Označuje, zda lze tip vybrat ve volných položkách"
 
 msgid "Manage questions and options for characters and writing elements"
 msgstr "Správa otázek a možností pro postavy a prvky psaní"
@@ -6157,6 +6142,9 @@ msgstr "Aktivace nových funkcí a vylepšení funkčnosti platformy"
 
 msgid "Content of the receipt created for each payment and sent to players"
 msgstr "Obsah účtenky vytvořené pro každou platbu a zaslané hráčům"
+
+msgid "How the relationship is described from this character's perspective"
+msgstr "Jak je vztah popsán z pohledu této postavy"
 
 msgid "I confirm that my face and name are clearly visible in the document"
 msgstr "Potvrzuji, že moje tvář a jméno jsou v dokumentu zřetelně viditelné"
@@ -6392,6 +6380,9 @@ msgstr ""
 "Pokud se vám nějaká událost líbí nebo vás zajímá, můžete se <b>předběžně "
 "zaregistrovat</b>"
 
+msgid "Optional - Indicates whether the ticket can be gifted to other players"
+msgstr "Nepovinné - označuje, zda lze tip darovat dalším hráčům"
+
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Jedná se o registrace událostí, za které je třeba zaplatit"
 
@@ -6463,6 +6454,10 @@ msgid ""
 "Do you want to enable a secret registration link to allow early sign-ups"
 msgstr ""
 "Chcete povolit tajný registrační odkaz, který umožní včasné přihlášení"
+
+msgid ""
+"How the relationship is described from the other character's perspective"
+msgstr "Jak je vztah popsán z pohledu druhé postavy"
 
 msgid ""
 "If checked, it allows players to customise the names of their characters"
@@ -6561,10 +6556,6 @@ msgid ""
 msgstr ""
 "Pokud potřebujete pomoc, napište sem svůj požadavek v angličtině a použijte "
 "jednotlivá klíčová slova"
-
-msgid ""
-"Indicates the maximum number of times it can be requested (0 = unlimited)"
-msgstr "Udává maximální počet opakování požadavku (0 = neomezeně)"
 
 msgid ""
 "Inside this file must be the photos, named by the number of the character"
@@ -6983,6 +6974,13 @@ msgstr ""
 "shodu"
 
 msgid ""
+"Optional – Amount added to the registration fee if selected (0 = no extra "
+"cost)"
+msgstr ""
+"Nepovinné - částka přidaná k registračnímu poplatku, pokud je vybrána (0 = "
+"žádné dodatečné náklady)"
+
+msgid ""
 "Terms and conditions of signup, shown in a page linked in the registration "
 "form"
 msgstr ""
@@ -7026,6 +7024,11 @@ msgid ""
 msgstr ""
 "Obrázek loga (můžete nahrát soubor libovolné velikosti, jeho velikost se "
 "automaticky změní)"
+
+msgid ""
+"Optional – Additional information about the option, displayed below the "
+"question"
+msgstr "Nepovinné - doplňující informace o možnosti zobrazené pod otázkou"
 
 msgid ""
 "Request for reimbursement entered! You will receive notice when it is "
@@ -7430,12 +7433,6 @@ msgstr ""
 "postavu"
 
 msgid ""
-"Optional - Indicates additional details on the option, will be shown below "
-"the question"
-msgstr ""
-"Nepovinné - Označuje další podrobnosti o možnosti, zobrazí se pod otázkou"
-
-msgid ""
 "Value of the discount for the friend who signs up using the code of a "
 "registered player"
 msgstr ""
@@ -7545,6 +7542,20 @@ msgstr ""
 "velikost se automaticky změní"
 
 msgid ""
+"Optional – Casting priority granted by this option (e.g., 1 = low, 5 = "
+"medium, 25 = high)"
+msgstr ""
+"Nepovinné - priorita obsazení udělená touto volbou (např. 1 = nízká, 5 = "
+"střední, 25 = vysoká)"
+
+msgid ""
+"Optional – Maximum number of times it can be requested across all signups (0"
+" = unlimited)"
+msgstr ""
+"Nepovinné - Maximální počet případů, kdy lze o to požádat při všech "
+"registracích (0 = neomezeně)"
+
+msgid ""
 "This page allows you to add or change the types of ticket with which players"
 " can register"
 msgstr ""
@@ -7631,6 +7642,11 @@ msgid ""
 msgstr ""
 "Označuje veřejné informace o vaší postavě, které se zobrazí všem ostatním "
 "hráčům"
+
+msgid ""
+"Optional – Maximum number of times it can be selected across all characters "
+"(0 = unlimited)"
+msgstr "Nepovinné - maximální počet výběrů ve všech znacích (0 = neomezeně)"
 
 msgid ""
 "This page shows global competencies, skill areas in which contributors can "
@@ -7806,9 +7822,10 @@ msgstr ""
 "kterou zrcadlí"
 
 msgid ""
-"Optional - Indicate additional details on the ticket, they will be shown "
-"below the application"
-msgstr "Nepovinné - Uvádí další podrobnosti o tipu, zobrazí se pod žádostí"
+"Optional – Maximum number of times it can be selected across all "
+"registrations (0 = unlimited)"
+msgstr ""
+"Nepovinné - maximální počet výběrů ve všech registracích (0 = neomezeně)"
 
 msgid ""
 "This is the sidebar containing all the functions (it remains visible on "
@@ -7971,13 +7988,6 @@ msgid ""
 msgstr ""
 "Na této stránce jsou shrnuty role, které je třeba přiřadit, aby bylo možné "
 "používat funkce týkající se události"
-
-msgid ""
-"What casting priority does it ensure? (Usually: 1 is the subsized, 5 for "
-"default, 25 for patron)"
-msgstr ""
-"Jakou prioritu přidělování zajišťujete? (obvykle: 1 je standard, 5 pro "
-"podporovatele, 25 pro výrobce)"
 
 msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
@@ -8704,13 +8714,6 @@ msgstr ""
 " tabulky, sledovat množství a zaznamenávat umístění položek"
 
 msgid ""
-"If you select one (or more) factions, the question will only be shown to "
-"players with characters in all chosen factions"
-msgstr ""
-"Pokud vyberete jednu (nebo více) frakcí, otázka se zobrazí pouze hráčům s "
-"postavami ze všech vybraných frakcí"
-
-msgid ""
 "If your question is about a specific event, please select it! If  is a "
 "general question instead, please leave it blank."
 msgstr ""
@@ -8821,6 +8824,13 @@ msgstr ""
 "celková hotovost a rozpočet jednotlivých akcí/běhů"
 
 msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options (0 = no limit)"
+msgstr ""
+"Nepovinné - u textových otázek maximální počet znaků; u vícenásobných "
+"možností maximální počet možností (0 = bez omezení)"
+
+msgid ""
 "Allows players to purchase tickets as gifts. A special code is generated and"
 " provided to the gift recipient for registration"
 msgstr ""
@@ -8925,6 +8935,13 @@ msgid ""
 msgstr ""
 "Při zadané lhůtě splatnosti uvede počet dní, do kterých oznámí hráči, aby "
 "platbu provedl. Výchozí hodnota 30."
+
+msgid ""
+"Optional - If you select one (or more) factions, the question will only be "
+"shown to players with characters in all chosen factions"
+msgstr ""
+"Nepovinné - pokud vyberete jednu (nebo více) frakcí, otázka se zobrazí pouze"
+" hráčům s postavami ve všech vybraných frakcích"
 
 msgid ""
 "This page allows you to select the features activated for this event, and "

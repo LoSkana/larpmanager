@@ -147,7 +147,7 @@ async def field_text(page, live_server):
     # Add text
     await page.get_by_role("link", name="New").click()
     await page.locator("#id_typ").select_option("t")
-    await page.get_by_role("cell", name="Question display text").click()
+    await page.get_by_role("cell", name="Question name (keep it short)").click()
     await page.locator("#id_display").fill("text")
     await page.locator("#id_max_length").click()
     await page.locator("#id_max_length").fill("10")

@@ -129,7 +129,9 @@ $(document).ready(function() {
 
         frame = "<iframe src='{0}' width='100%' height='100%'></iframe>".format(newUrl);
 
-        uglipop({class:'popup', source:'html', content: frame});
+        console.log("CIAO");
+
+        uglipop({class:'popup_tutorial', source:'html', content: frame});
 
     });
 

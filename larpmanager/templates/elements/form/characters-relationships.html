@@ -24,6 +24,7 @@
                                 {{ item.direct | safe }}
                             </textarea>
                         </div>
+                        <div class="helptext">{% trans "How the relationship is described from this character's perspective" %}</div>
                     </td>
                 </tr>
                 <tr>
@@ -35,6 +36,7 @@
                             </p>
                             <div class="hide hide_later f_{{ key }}_inverse">{{ item.inverse | safe }}</div>
                         {% endif %}
+                        <div class="helptext">{% trans "How the relationship is described from the other character's perspective" %}</div>
                     </td>
                 </tr>
             </table>
