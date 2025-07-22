@@ -116,6 +116,7 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
 
 def prepare_permissions_role(form, typ):
     if form.instance and form.instance.number == 1:
+        form.prevent_canc = True
         return
     form.modules = []
     init = []

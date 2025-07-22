@@ -60,35 +60,39 @@ class RegistrationTicket(BaseModel):
         help_text=_("Type of ticket"),
     )
 
-    name = models.CharField(max_length=50, help_text=_("Name"))
+    name = models.CharField(
+        max_length=50,
+        verbose_name=_("Name"),
+        help_text=_("Ticket name (keep it short)"),
+    )
 
     details = models.CharField(
         max_length=500,
         blank=True,
         null=True,
         verbose_name=_("Description"),
-        help_text=_("Optional - Indicate additional details on the ticket, they will be shown below the application"),
+        help_text=_("Optional - Extended description (displayed in small gray text)"),
     )
 
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     max_available = models.IntegerField(
         default=0,
-        help_text=_("Maximum number of tickets available (0 = unlimited)"),
+        help_text=_("Optional – Maximum number of times it can be requested across all signups (0 = unlimited)"),
     )
 
     visible = models.BooleanField(default=True, help_text=_("Is it selectable by players") + "?")
 
     casting_priority = models.IntegerField(
         default=1,
-        help_text=_("What casting priority does it ensure? (Usually: 1 is the subsized, 5 for default, 25 for patron)"),
+        help_text=_("Optional – Casting priority granted by this option (e.g., 1 = low, 5 = medium, 25 = high)"),
     )
 
     giftable = models.BooleanField(
-        default=False, help_text=_("Indicates whether the ticket can be selected in the free entries")
+        default=False, help_text=_("Optional - Indicates whether the ticket can be gifted to other players")
     )
 
-    order = models.IntegerField(default=0, help_text=_("Display order with respect to all questions"))
+    order = models.IntegerField(default=0)
 
     def __str__(self):
         # noinspection PyUnresolvedReferences
@@ -133,7 +137,7 @@ class RegistrationSection(BaseModel):
         help_text=_("Description - will be displayed at the beginning of the section"),
     )
 
-    order = models.IntegerField(default=0, help_text=_("Display order with respect to all sections"))
+    order = models.IntegerField(default=0)
 
 
 class RegistrationQuota(BaseModel):

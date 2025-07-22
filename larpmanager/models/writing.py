@@ -380,7 +380,7 @@ class Faction(Writing):
         ),
     )
 
-    order = models.IntegerField(default=0, help_text=_("Display order"))
+    order = models.IntegerField(default=0)
 
     cover = models.ImageField(
         max_length=500,
