@@ -590,6 +590,9 @@ def replace_chars_el(el, chars):
 
 
 def replace_chars_all(instance):
+    if not instance.pk:
+        return
+
     if not hasattr(instance, "event"):
         return
 

@@ -48,16 +48,7 @@ window.addEventListener('DOMContentLoaded', function() {
         500);
 
     });
-
-{% if eid %}
-    var eid = {{ eid }};
-    var type = '{{ type }}';
-    {% include "elements/auto-save.js" %}
-{% else %}
-    var eid = -1;
-{% endif %}
-
 });
-
     </script>
+    {% include "elements/auto-save.js" %}
 {% endblock js2 %}
