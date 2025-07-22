@@ -365,12 +365,17 @@ def writing_edit_save_ajax(form, request, ctx):
 
     if "working_ticket" in ctx["features"]:
         tp = request.POST["type"]
-        writing_edit_working_ticket(request, tp, eid, res)
+        writing_edit_working_ticket(request, tp, eid, res, obj=obj)
 
     return JsonResponse(res)
 
 
-def writing_edit_working_ticket(request, tp, eid, res, add_ticket=True):
+def writing_edit_working_ticket(request, tp, eid, res, add_ticket=True, obj=None):
+    # working ticket also for related characters
+    if tp == "plot" and obj:
+        for char_id in obj.characters.values_list("pk", flat=True):
+            writing_edit_working_ticket(request, "character", char_id, res, add_ticket=add_ticket)
+
     now = int(time.time())
     key = writing_edit_cache_key(eid, tp)
     ticket = cache.get(key)
