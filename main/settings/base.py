@@ -191,7 +191,7 @@ TINYMCE_DEFAULT_CONFIG = {
     'images_upload_url': '/upload_image/',
     'automatic_uploads': True,
     'file_picker_types': 'image',
-    'paste_data_images': False
+    'paste_data_images': False,
 }
 
 
