@@ -679,9 +679,6 @@ msgid ""
 "characters"
 msgstr ""
 
-msgid "Name already used for this event"
-msgstr ""
-
 msgid "You have exceeded the maximum number of selectable options"
 msgstr ""
 
@@ -2863,19 +2860,10 @@ msgstr ""
 msgid "Question type"
 msgstr ""
 
-msgid "Display"
+msgid "Question name (keep it short)"
 msgstr ""
 
-msgid "Question display text"
-msgstr ""
-
-msgid "Extended description (will be shown in gray, in small)"
-msgstr ""
-
-msgid "Order"
-msgstr ""
-
-msgid "Display order with respect to all questions"
+msgid "Optional - Extended description (displayed in small gray text)"
 msgstr ""
 
 msgid ""
@@ -2920,16 +2908,17 @@ msgstr ""
 msgid "Select the types of writing elements that this question applies to"
 msgstr ""
 
-msgid ""
-"Optional - Indicates additional details on the option, will be shown below "
-"the question"
+msgid "Option name, displayed within the question (keep it short)"
 msgstr ""
 
 msgid ""
-"Indicates the maximum number of times it can be requested (0 = unlimited)"
+"Optional – Additional information about the option, displayed below the "
+"question"
 msgstr ""
 
-msgid "Order in which the option is shown with respect to the others"
+msgid ""
+"Optional – Maximum number of times it can be selected across all characters "
+"(0 = unlimited)"
 msgstr ""
 
 msgid ""
@@ -2942,18 +2931,23 @@ msgid ""
 "players who have selected that ticket"
 msgstr ""
 
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options (0 = no limit)"
+msgstr ""
+
 msgid "Faction list"
 msgstr ""
 
 msgid ""
-"If you select one (or more) factions, the question will only be shown to "
-"players with characters in all chosen factions"
+"Optional - If you select one (or more) factions, the question will only be "
+"shown to players with characters in all chosen factions"
 msgstr ""
 
 msgid "Image"
 msgstr ""
 
-msgid "(Optional) an image that will be shown inside the question"
+msgid "Optional - Image displayed within the question"
 msgstr ""
 
 msgid "Ticket list"
@@ -2981,6 +2975,19 @@ msgid "Giftable"
 msgstr ""
 
 msgid "Indicates whether the option can be included in the gifted signups"
+msgstr ""
+
+msgid "Price"
+msgstr ""
+
+msgid ""
+"Optional – Amount added to the registration fee if selected (0 = no extra "
+"cost)"
+msgstr ""
+
+msgid ""
+"Optional – Maximum number of times it can be selected across all "
+"registrations (0 = unlimited)"
 msgstr ""
 
 msgid "Free"
@@ -3349,29 +3356,26 @@ msgstr ""
 msgid "Type of ticket"
 msgstr ""
 
-msgid ""
-"Optional - Indicate additional details on the ticket, they will be shown "
-"below the application"
+msgid "Ticket name (keep it short)"
 msgstr ""
 
-msgid "Maximum number of tickets available (0 = unlimited)"
+msgid ""
+"Optional – Maximum number of times it can be requested across all signups (0 "
+"= unlimited)"
 msgstr ""
 
 msgid "Is it selectable by players"
 msgstr ""
 
 msgid ""
-"What casting priority does it ensure? (Usually: 1 is the subsized, 5 for "
-"default, 25 for patron)"
+"Optional – Casting priority granted by this option (e.g., 1 = low, 5 = "
+"medium, 25 = high)"
 msgstr ""
 
-msgid "Indicates whether the ticket can be selected in the free entries"
+msgid "Optional - Indicates whether the ticket can be gifted to other players"
 msgstr ""
 
 msgid "Description - will be displayed at the beginning of the section"
-msgstr ""
-
-msgid "Display order with respect to all sections"
 msgstr ""
 
 msgid "Quotas total number"
@@ -3491,9 +3495,6 @@ msgid ""
 "Primary: main grouping / affiliation for characters. Transversal: secondary "
 "grouping across primary factions. Secret: hidden faction visible only to "
 "assigned characters"
-msgstr ""
-
-msgid "Display order"
 msgstr ""
 
 msgid "Faction cover"
@@ -3632,7 +3633,14 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
+msgid "How the relationship is described from this character's perspective"
+msgstr ""
+
 msgid "Inverse"
+msgstr ""
+
+msgid ""
+"How the relationship is described from the other character's perspective"
 msgstr ""
 
 msgid "Continue"
@@ -4869,9 +4877,6 @@ msgstr ""
 msgid "Setting"
 msgstr ""
 
-msgid "Price"
-msgstr ""
-
 msgid "This page shows the organization inventory"
 msgstr ""
 
@@ -4979,6 +4984,9 @@ msgid "Residence"
 msgstr ""
 
 msgid "Last membership date"
+msgstr ""
+
+msgid "Order"
 msgstr ""
 
 msgid ""

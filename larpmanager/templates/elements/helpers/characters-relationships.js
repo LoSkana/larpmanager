@@ -47,11 +47,7 @@ window.addEventListener('DOMContentLoaded', function() {
                     <div class="hide hide_later f_{0}_direct">
                         <textarea name="rel_{0}_direct"></textarea>
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <th>{% trans "Inverse" %}</th>
-                <td>
+                    <div class="helptext">{% trans "How the relationship is described from this character's perspective" %}</div>
                 </td>
             </tr>
         </table>

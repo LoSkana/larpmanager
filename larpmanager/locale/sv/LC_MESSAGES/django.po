@@ -669,9 +669,6 @@ msgstr "Standard"
 msgid "Details"
 msgstr "Detaljer"
 
-msgid "Display"
-msgstr "Display"
-
 msgid "Example"
 msgstr "Exempel"
 
@@ -1918,9 +1915,6 @@ msgstr "Lista över utbetalningar"
 msgid "Discount back"
 msgstr "Rabatt tillbaka"
 
-msgid "Display order"
-msgstr "Visa order"
-
 msgid "Document type"
 msgstr "Typ av dokument"
 
@@ -3098,9 +3092,6 @@ msgstr "Länkar för förhandsregistrering"
 msgid "Prop - weapons, props"
 msgstr "Prop - vapen, rekvisita"
 
-msgid "Question display text"
-msgstr "Text till fråga"
-
 msgid "Register to the event"
 msgstr "Anmäl dig till evenemanget"
 
@@ -3649,6 +3640,9 @@ msgstr "Påminnelse om medlemsansökan"
 msgid "Set up dynamic installments"
 msgstr "Ställ in dynamiska delbetalningar"
 
+msgid "Ticket name (keep it short)"
+msgstr "Biljettens namn (håll det kort)"
+
 msgid "View limited ticket options"
 msgstr "Se begränsade biljettalternativ"
 
@@ -3761,6 +3755,9 @@ msgstr "Förvalt navigationsspråk"
 
 msgid "Promotion - site, advertising"
 msgstr "Marknadsföring - webbplats, reklam"
+
+msgid "Question name (keep it short)"
+msgstr "Frågans namn (håll det kort)"
 
 msgid "Registrations opening not set"
 msgstr "Registreringsöppning ej fastställd"
@@ -3970,9 +3967,6 @@ msgstr "Ej inlämnad begäran om medlem"
 
 msgid "Miscellaneous operating expenses"
 msgstr "Diverse driftskostnader"
-
-msgid "Name already used for this event"
-msgstr "Namnet används redan för detta evenemang"
 
 msgid "Name to be displayed for credits"
 msgstr "Namn som ska visas för krediteringar"
@@ -4669,9 +4663,6 @@ msgstr "Detaljerad information: %(details)s (<b>%(amount).2f</b>)"
 msgid "Display all users data as members registry"
 msgstr "Visa alla användares data som medlemsregister"
 
-msgid "Display order with respect to all sections"
-msgstr "Visningsordning med avseende på alla sektioner"
-
 msgid "For which day you will need transportation"
 msgstr "För vilken dag behöver du transport"
 
@@ -4748,9 +4739,6 @@ msgstr "Beskrivning som ska visas på den särskilda sidan"
 
 msgid "Discount not combinable with other benefits"
 msgstr "Rabatt som inte kan kombineras med andra förmåner"
-
-msgid "Display order with respect to all questions"
-msgstr "Visa order med avseende på alla frågor"
 
 msgid "Freely indicate the amount of your donation"
 msgstr "Ange fritt beloppet för din donation"
@@ -4961,6 +4949,9 @@ msgstr "Nu kan du ange inställningar för erfarenhetspoäng"
 
 msgid "Now you can set the external registration link"
 msgstr "Nu kan du ange den externa registreringslänken"
+
+msgid "Optional - Image displayed within the question"
+msgstr "Valfritt - Bild som visas i frågan"
 
 msgid "Photo (clear and understandable) of the object"
 msgstr "Foto (tydligt och begripligt) av objektet"
@@ -5346,9 +5337,6 @@ msgstr "Gå med i vår Discord för hjälp, idéer eller för att rapportera bug
 msgid "Manage registrations discounts available to players"
 msgstr "Hantera registreringsrabatter som är tillgängliga för spelare"
 
-msgid "Maximum number of tickets available (0 = unlimited)"
-msgstr "Maximalt antal tillgängliga biljetter (0 = obegränsat)"
-
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Välj ett tydligt och lätt igenkännligt foto"
 
@@ -5486,9 +5474,6 @@ msgstr "Vill du tillåta användare att göra frivilliga donationer"
 
 msgid "Everything is in order about the payment of this event"
 msgstr "Allt är i sin ordning för att vi ska kunna betala för detta evenemang"
-
-msgid "Extended description (will be shown in gray, in small)"
-msgstr "Utökad beskrivning (kommer att visas i grått, med liten stil)"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Ange en sång som du vill tillägna din karaktär"
@@ -5665,9 +5650,6 @@ msgstr "Du kan inte lösa in ett medlemskap, du är redan medlem!"
 msgid "once approved, the corresponding amounts are assigned as "
 msgstr "när de har godkänts, tilldelas motsvarande belopp som"
 
-msgid "(Optional) an image that will be shown inside the question"
-msgstr "(Valfritt) en bild som kommer att visas i frågan"
-
 msgid "Allows you to copy any element directly from another event"
 msgstr "Gör det möjligt att kopiera ett element direkt från en annan händelse"
 
@@ -5703,6 +5685,9 @@ msgstr "Låt oss veta om du stöter på några problem eller behöver hjälp"
 
 msgid "Manage expenses uploaded by staff members and approve them"
 msgstr "Hantera utlägg som laddats upp av medarbetare och godkänna dem"
+
+msgid "Option name, displayed within the question (keep it short)"
+msgstr "Alternativets namn, visas i frågan (håll det kort)"
 
 msgid "Probability of showing the special page (out of thousands)"
 msgstr "Sannolikhet att visa den särskilda sidan (av tusentals)"
@@ -5874,9 +5859,6 @@ msgid "Manages credits used by players to cover the registration fee"
 msgstr ""
 "Hanterar krediter som används av spelare för att täcka registreringsavgiften"
 
-msgid "Order in which the option is shown with respect to the others"
-msgstr "Ordning i vilken alternativet presenteras i ansökan"
-
 msgid "Quickly configure your organization's most important settings"
 msgstr "Konfigurera snabbt din organisations viktigaste inställningar"
 
@@ -5949,6 +5931,9 @@ msgstr "Nu kan medarbetarna ladda upp utlägg och du kan granska dem"
 
 msgid "Now you can review the safety information submitted by players"
 msgstr "Nu kan du granska den säkerhetsinformation som spelarna har lämnat"
+
+msgid "Optional - Extended description (displayed in small gray text)"
+msgstr "Valfritt - Utökad beskrivning (visas i liten grå text)"
 
 msgid "Set specific values for configuration of features of the event"
 msgstr "Ange specifika värden för konfiguration av evenemangets funktioner"
@@ -6052,9 +6037,6 @@ msgstr "Anger den färg som ska användas för textbakgrunden"
 msgid "Indicate the payment methods you wish to be available to players"
 msgstr ""
 "Ange de betalningsmetoder som du vill ska vara tillgängliga för spelare"
-
-msgid "Indicates whether the ticket can be selected in the free entries"
-msgstr "Anger om biljetten kan väljas i de fria posterna"
 
 msgid "Manage questions and options for characters and writing elements"
 msgstr "Hantera frågor och alternativ för karaktärer och skrivelement"
@@ -6214,6 +6196,9 @@ msgid "Content of the receipt created for each payment and sent to players"
 msgstr ""
 "Innehållet i det kvitto som skapas för varje betalning och skickas till "
 "spelarna"
+
+msgid "How the relationship is described from this character's perspective"
+msgstr "Hur relationen beskrivs ur den här karaktärens perspektiv"
 
 msgid "I confirm that my face and name are clearly visible in the document"
 msgstr ""
@@ -6466,6 +6451,9 @@ msgstr ""
 "Om du gillar eller är intresserad av ett evenemang kan du <b>föranmäla "
 "dig</b>"
 
+msgid "Optional - Indicates whether the ticket can be gifted to other players"
+msgstr "Valfritt - Anger om biljetten kan ges som gåva till andra spelare"
+
 msgid "These are the event registrations for which you have to make a payment"
 msgstr ""
 "Detta är de evenemangsregistreringar för vilka du måste göra en betalning"
@@ -6549,6 +6537,10 @@ msgid ""
 msgstr ""
 "Vill du aktivera en hemlig registreringslänk för att möjliggöra tidiga "
 "anmälningar"
+
+msgid ""
+"How the relationship is described from the other character's perspective"
+msgstr "Hur relationen beskrivs ur den andra karaktärens perspektiv"
 
 msgid ""
 "If checked, it allows players to customise the names of their characters"
@@ -6648,11 +6640,6 @@ msgid ""
 msgstr ""
 "Om du behöver hjälp kan du skriva din förfrågan här på engelska med hjälp av"
 " enstaka nyckelord"
-
-msgid ""
-"Indicates the maximum number of times it can be requested (0 = unlimited)"
-msgstr ""
-"Anger det maximala antalet gånger som den kan begäras (0 = obegränsat)"
 
 msgid ""
 "Inside this file must be the photos, named by the number of the character"
@@ -7104,6 +7091,13 @@ msgstr ""
 "övergripande matchningen"
 
 msgid ""
+"Optional – Amount added to the registration fee if selected (0 = no extra "
+"cost)"
+msgstr ""
+"Valfritt - Belopp som läggs till registreringsavgiften om det väljs (0 = "
+"ingen extra kostnad)"
+
+msgid ""
 "Terms and conditions of signup, shown in a page linked in the registration "
 "form"
 msgstr ""
@@ -7151,6 +7145,12 @@ msgid ""
 msgstr ""
 "Logotypbild (du kan ladda upp en fil av valfri storlek, den kommer att "
 "ändras automatiskt"
+
+msgid ""
+"Optional – Additional information about the option, displayed below the "
+"question"
+msgstr ""
+"Valfritt - Ytterligare information om alternativet, visas under frågan"
 
 msgid ""
 "Request for reimbursement entered! You will receive notice when it is "
@@ -7583,12 +7583,6 @@ msgstr ""
 "karaktär"
 
 msgid ""
-"Optional - Indicates additional details on the option, will be shown below "
-"the question"
-msgstr ""
-"Valfritt - Anger ytterligare information om alternativet, visas under frågan"
-
-msgid ""
 "Value of the discount for the friend who signs up using the code of a "
 "registered player"
 msgstr ""
@@ -7699,6 +7693,20 @@ msgstr ""
 "automatiskt att ändras i storlek"
 
 msgid ""
+"Optional – Casting priority granted by this option (e.g., 1 = low, 5 = "
+"medium, 25 = high)"
+msgstr ""
+"Valfritt - Prioritet för gjutning enligt detta alternativ (t.ex. 1 = låg, 5 "
+"= medel, 25 = hög)"
+
+msgid ""
+"Optional – Maximum number of times it can be requested across all signups (0"
+" = unlimited)"
+msgstr ""
+"Valfritt - Maximalt antal gånger det kan begäras för alla registreringar (0 "
+"= obegränsat)"
+
+msgid ""
 "This page allows you to add or change the types of ticket with which players"
 " can register"
 msgstr ""
@@ -7789,6 +7797,13 @@ msgid ""
 msgstr ""
 "Anger offentlig information om din karaktär, som kommer att visas för alla "
 "andra spelare"
+
+msgid ""
+"Optional – Maximum number of times it can be selected across all characters "
+"(0 = unlimited)"
+msgstr ""
+"Valfritt - Maximalt antal gånger det kan väljas för alla tecken (0 = "
+"obegränsat)"
 
 msgid ""
 "This page shows global competencies, skill areas in which contributors can "
@@ -7969,11 +7984,11 @@ msgstr ""
 "karaktären som den speglar"
 
 msgid ""
-"Optional - Indicate additional details on the ticket, they will be shown "
-"below the application"
+"Optional – Maximum number of times it can be selected across all "
+"registrations (0 = unlimited)"
 msgstr ""
-"Valfritt - Ange ytterligare detaljer på biljetten, de kommer att visas under"
-" ansökan"
+"Valfritt - Maximalt antal gånger det kan väljas för alla registreringar (0 ="
+" obegränsat)"
 
 msgid ""
 "This is the sidebar containing all the functions (it remains visible on "
@@ -8137,13 +8152,6 @@ msgid ""
 msgstr ""
 "På den här sidan sammanfattas de roller som ska tilldelas för att kunna "
 "använda funktionerna för evenemanget"
-
-msgid ""
-"What casting priority does it ensure? (Usually: 1 is the subsized, 5 for "
-"default, 25 for patron)"
-msgstr ""
-"Vilken tilldelningsprioritet säkerställer du? (vanligtvis: 1 är standard, 5 "
-"för supportrar, 25 för producenter)"
 
 msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
@@ -8873,13 +8881,6 @@ msgstr ""
 "en lagertabell, spåra kvantiteter och notera artiklarnas placering"
 
 msgid ""
-"If you select one (or more) factions, the question will only be shown to "
-"players with characters in all chosen factions"
-msgstr ""
-"Om du väljer en (eller flera) fraktioner kommer frågan endast att visas för "
-"spelare med karaktärer i alla valda fraktioner"
-
-msgid ""
 "If your question is about a specific event, please select it! If  is a "
 "general question instead, please leave it blank."
 msgstr ""
@@ -8991,6 +8992,13 @@ msgstr ""
 "utgifter, den totala kassan och budgeten för enskilda evenemang/lopp"
 
 msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options (0 = no limit)"
+msgstr ""
+"Valfritt - För textfrågor, maximalt antal tecken; För flervalsalternativ, "
+"maximalt antal alternativ (0 = ingen begränsning)"
+
+msgid ""
 "Allows players to purchase tickets as gifts. A special code is generated and"
 " provided to the gift recipient for registration"
 msgstr ""
@@ -9096,6 +9104,13 @@ msgid ""
 msgstr ""
 "Med en betalningsfrist anges det antal dagar under vilka spelaren meddelas "
 "om att gå vidare med betalningen. Standardvärde 30."
+
+msgid ""
+"Optional - If you select one (or more) factions, the question will only be "
+"shown to players with characters in all chosen factions"
+msgstr ""
+"Valfritt - Om du väljer en (eller flera) fraktioner kommer frågan endast att"
+" visas för spelare med karaktärer i alla valda fraktioner"
 
 msgid ""
 "This page allows you to select the features activated for this event, and "
