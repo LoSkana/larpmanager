@@ -142,10 +142,13 @@ class MyForm(forms.ModelForm):
 
             model = self._meta.model
             qs = model.objects.filter(**{field_name: value}, event_id=event_id)
+            question = self.cleaned_data.get("question")
+            if question:
+                qs = qs.filter(question_id=question.id)
             if self.instance.pk:
                 qs = qs.exclude(pk=self.instance.pk)
             if qs.exists():
-                raise ValidationError(_(f"{field_name.capitalize()} already used for this event"))
+                raise ValidationError(_(f"{field_name.capitalize()} already used"))
         return value
 
     def save(self, commit=True):
