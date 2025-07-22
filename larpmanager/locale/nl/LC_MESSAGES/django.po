@@ -3971,6 +3971,9 @@ msgstr "Niet-ingediende aanvraag"
 msgid "Miscellaneous operating expenses"
 msgstr "Diverse huishoudelijke uitgaven"
 
+msgid "Name already used for this event"
+msgstr "Naam al gebruikt voor dit evenement"
+
 msgid "Name to be displayed for credits"
 msgstr "Naam die moet worden weergegeven voor credits"
 

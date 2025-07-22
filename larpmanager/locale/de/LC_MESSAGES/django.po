@@ -3971,6 +3971,9 @@ msgstr "Nicht eingereichter Mitgliedsantrag"
 msgid "Miscellaneous operating expenses"
 msgstr "Verschiedene Sachausgaben"
 
+msgid "Name already used for this event"
+msgstr "Name bereits für dieses Ereignis verwendet"
+
 msgid "Name to be displayed for credits"
 msgstr "Name, der für den Abspann angezeigt werden soll"
 

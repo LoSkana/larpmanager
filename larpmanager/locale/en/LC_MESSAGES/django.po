@@ -679,6 +679,9 @@ msgid ""
 "characters"
 msgstr ""
 
+msgid "Name already used for this event"
+msgstr ""
+
 msgid "You have exceeded the maximum number of selectable options"
 msgstr ""
 

@@ -127,6 +127,21 @@ class MyForm(forms.ModelForm):
     def clean_assoc(self):
         return Association.objects.get(pk=self.params["a_id"])
 
+    def clean_name(self):
+        name = self.cleaned_data.get("name")
+        event = self.params.get("event")
+        if event:
+            typ = self.params["elementTyp"]
+            event_id = event.get_class_parent(typ).id
+
+            model = self._meta.model
+            qs = model.objects.filter(name=name, event_id=event_id)
+            if self.instance.pk:
+                qs = qs.exclude(pk=self.instance.pk)
+            if qs.exists():
+                raise ValidationError(_("Name already used for this event"))
+        return name
+
     def save(self, commit=True):
         instance = super(forms.ModelForm, self).save(commit=commit)
 

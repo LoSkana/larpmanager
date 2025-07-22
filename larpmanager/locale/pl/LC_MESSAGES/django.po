@@ -3971,6 +3971,9 @@ msgstr "Wniosek o członkostwo nie został złożony"
 msgid "Miscellaneous operating expenses"
 msgstr "Różne koszty operacyjne"
 
+msgid "Name already used for this event"
+msgstr "Nazwa już użyta dla tego wydarzenia"
+
 msgid "Name to be displayed for credits"
 msgstr "Nazwa wyświetlana dla kredytów"
 

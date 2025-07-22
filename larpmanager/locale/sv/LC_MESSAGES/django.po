@@ -3971,6 +3971,9 @@ msgstr "Ej inlämnad begäran om medlem"
 msgid "Miscellaneous operating expenses"
 msgstr "Diverse driftskostnader"
 
+msgid "Name already used for this event"
+msgstr "Namnet används redan för detta evenemang"
+
 msgid "Name to be displayed for credits"
 msgstr "Namn som ska visas för krediteringar"
 
