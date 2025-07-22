@@ -203,14 +203,20 @@
             $('body').removeClass('noscroll');
         }
 
-    window.addEventListener('DOMContentLoaded', function() {
-
-        function toggle_sidebar() {
+        function sidebar() {
             $('#sidebar').toggle();
             $('#header').toggleClass('sidebar');
             $('#page-wrapper').toggleClass('sidebar');
             $('#footer').toggleClass('sidebar');
+
+            $('.sidebar_button').toggle();
+
+            $.ajax({
+                url: '{% url "toggle_sidebar" %}',
+            });
         }
+
+    window.addEventListener('DOMContentLoaded', function() {
 
         $(document).ready(function() {
 
@@ -223,13 +229,15 @@
                 }
             });
 
-            $('#sidebar-open').click(function() {
-                toggle_sidebar();
-
-                $.ajax({
-                    url: '{% url "toggle_sidebar" %}',
-                });
+            $('#sidebar-open, #sidebar-close').click(function() {
+                sidebar();
             });
+
+            {% if manage and is_sidebar_open %}
+                $('#sidebar-close').hide();
+            {% else %}
+                $('#sidebar-open').hide();
+            {% endif %}
 
             // add origin for manage links
             {% if run %}
