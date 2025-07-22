@@ -24,6 +24,7 @@ from functools import wraps
 
 from background_task import background
 from django.conf import settings as conf_settings
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMultiAlternatives, get_connection
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -102,7 +103,11 @@ def send_mail_exec(players, subj, body, assoc_id=None, run_id=None, reply_to=Non
 
 @background_auto(queue="mail")
 def my_send_mail_bkg(email_pk):
-    email = Email.objects.get(pk=email_pk)
+    try:
+        email = Email.objects.get(pk=email_pk)
+    except ObjectDoesNotExist:
+        return
+
     if email.sent:
         print("email already sent!")
         return
