@@ -86,6 +86,7 @@ class EventSitemap(sitemaps.Sitemap):
         s = []
         cache = {}
         que = Run.objects.exclude(development=DevelopStatus.START).exclude(development=DevelopStatus.CANC)
+        que = que.exclude(event__assoc__demo=True)
         que = que.select_related(
             "event",
             "event__assoc",
@@ -124,7 +125,7 @@ class AssociationMap(sitemaps.Sitemap):
                 "priority": "",
                 "alternates": [],
             }
-            for assoc in Association.objects.all()
+            for assoc in Association.objects.exclude(demo=True)
         ]
 
 

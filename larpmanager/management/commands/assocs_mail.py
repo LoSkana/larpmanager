@@ -28,7 +28,7 @@ class Command(BaseCommand):
     help = "List of all assocs mails"
 
     def handle(self, *args, **options):
-        lst = Association.objects.filter(main_mail__isnull=False).exclude(main_mail="")
+        lst = Association.objects.filter(main_mail__isnull=False).exclude(main_mail="").exclude(demo=True)
         for el in lst.order_by("slug").values_list("slug", "main_mail"):
             if el[1]:
                 self.stdout.write(f"{el[0]}@larpmanager.com {el[1]}")
