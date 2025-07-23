@@ -1,14 +1,27 @@
-{% if eid %}
-
 <script>
 
+{% if eid %}
 var eid = {{ eid }};
+{% else %}
+var eid = 0;
+{% endif %}
 var type = '{{ type }}';
 
 var timeout = 10 * 1000;
 var post_url = '{{ request.path }}';
 
 function submitForm(auto) {
+    if (eid == 0) {
+        $.toast({
+            text: 'Not available for new elements',
+            showHideTransition: 'slide',
+            icon: 'warning',
+            position: 'top-center',
+            textAlign: 'center',
+            hideAfter: 1000
+        });
+        return;
+    }
     tinyMCE.triggerSave();
     var formData = $('form').serialize() + "&ajax=1";
     if (typeof eid !== 'undefined' && eid > 0) {
@@ -55,9 +68,11 @@ function setUpAutoSave(key) {
 }
 
 window.addEventListener('DOMContentLoaded', function() {
-    $(function() {
-        submitForm(true);
-    });
+    if (eid != 0) {
+        $(function() {
+            submitForm(true);
+        });
+    }
 
     $(document).keydown(function(event) {
         if (event.ctrlKey && event.key === 's') {
@@ -83,7 +98,3 @@ window.addEventListener('DOMContentLoaded', function() {
     {% endif %}
 });
 </script>
-
-{% else %}
-    var eid = -1;
-{% endif %}
