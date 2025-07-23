@@ -831,9 +831,6 @@ msgstr "Skrivande"
 msgid "XP used"
 msgstr "Px används"
 
-msgid "address"
-msgstr "adress"
-
 msgid "options"
 msgstr "alternativ"
 
@@ -3572,9 +3569,6 @@ msgstr "Registreringar på väntelista"
 
 msgid "Wrong number of characters"
 msgstr "Fel antal tecken"
-
-msgid "You can contact us at this"
-msgstr "Du kan kontakta oss på"
 
 msgid "You can't access this way!"
 msgstr "Du kan inte logga in på detta sätt!"

@@ -831,9 +831,6 @@ msgstr "Schrijven"
 msgid "XP used"
 msgstr "Gebruikte Px"
 
-msgid "address"
-msgstr "adres"
-
 msgid "options"
 msgstr "opties"
 
@@ -3572,9 +3569,6 @@ msgstr "Registraties op wachtlijst"
 
 msgid "Wrong number of characters"
 msgstr "Verkeerd aantal tekens"
-
-msgid "You can contact us at this"
-msgstr "U kunt contact met ons opnemen via"
 
 msgid "You can't access this way!"
 msgstr "Zo kun je niet inloggen!"

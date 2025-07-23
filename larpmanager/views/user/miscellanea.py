@@ -85,16 +85,13 @@ def help_red(request, n):
     return redirect("help", s=ctx["run"].event.slug, n=ctx["run"].number)
 
 
+@login_required
 def help(request, s=None, n=None):
     if s and n:
         ctx = get_event_run(request, s, n, status=True)
     else:
         ctx = def_user_ctx(request)
         ctx["a_id"] = request.assoc["id"]
-
-    if not request.user.is_authenticated:
-        ctx["mail"] = request.assoc["main_mail"].split("@")
-        return render(request, "larpmanager/member/help_na.html", ctx)
 
     if request.method == "POST":
         form = HelpQuestionForm(request.POST, request.FILES, ctx=ctx)

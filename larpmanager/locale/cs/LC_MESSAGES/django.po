@@ -831,9 +831,6 @@ msgstr "Psaní"
 msgid "XP used"
 msgstr "Použité Px"
 
-msgid "address"
-msgstr "adresa"
-
 msgid "options"
 msgstr "možnosti"
 
@@ -3572,9 +3569,6 @@ msgstr "Registrace na čekací listině"
 
 msgid "Wrong number of characters"
 msgstr "Špatný počet znaků"
-
-msgid "You can contact us at this"
-msgstr "Můžete nás kontaktovat na této adrese"
 
 msgid "You can't access this way!"
 msgstr "Takto se přihlásit nelze!"
