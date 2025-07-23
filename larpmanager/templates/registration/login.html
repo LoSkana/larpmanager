@@ -17,6 +17,11 @@
 {% endblock old %}
 {% block content %}
     <div class="login">
+        {% if assoc.id == 0 %}
+            <p>
+                <i>(We ask you to login only to link the new organization to your account, as you will be assigned an administrator role)</i>
+            </p>
+        {% endif %}
         <br />
         {% if request.enviro == "prod" %}
             <div class="allauth_signin">

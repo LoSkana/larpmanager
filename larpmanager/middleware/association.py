@@ -69,6 +69,7 @@ class AssociationIdentifyMiddleware:
                     return redirect(f"https://{slug}.{domain}{request.get_full_path()}")
             return cls.load_assoc(request, assoc)
 
+        base_domain = "ludomanager.it"
         skin = get_cache_skin(base_domain)
         if skin:
             return cls.load_assoc(request, skin)

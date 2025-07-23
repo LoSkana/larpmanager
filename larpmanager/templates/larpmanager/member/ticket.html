@@ -22,6 +22,9 @@
           id="main_form">
         {% csrf_token %}
         {{ form.as_p }}
+        <p>
+            <!-- empty space -->
+        </p>
         <input id="cnt" type="submit" value="{% trans "Confirm" %}" class="fit" />
     </form>
 {% endblock content %}
