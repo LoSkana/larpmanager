@@ -831,9 +831,6 @@ msgstr "Rédaction"
 msgid "XP used"
 msgstr "Px utilisé"
 
-msgid "address"
-msgstr "adresse"
-
 msgid "options"
 msgstr "options"
 
@@ -3572,9 +3569,6 @@ msgstr "Inscriptions sur liste d'attente"
 
 msgid "Wrong number of characters"
 msgstr "Nombre de caractères incorrect"
-
-msgid "You can contact us at this"
-msgstr "Vous pouvez nous contacter à l'adresse suivante"
 
 msgid "You can't access this way!"
 msgstr "Vous ne pouvez pas vous connecter ainsi !"

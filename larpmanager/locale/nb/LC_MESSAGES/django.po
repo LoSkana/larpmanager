@@ -831,9 +831,6 @@ msgstr "Skriving"
 msgid "XP used"
 msgstr "Px brukt"
 
-msgid "address"
-msgstr "adresse"
-
 msgid "options"
 msgstr "alternativer"
 
@@ -3572,9 +3569,6 @@ msgstr "Registreringer på venteliste"
 
 msgid "Wrong number of characters"
 msgstr "Feil antall tegn"
-
-msgid "You can contact us at this"
-msgstr "Du kan kontakte oss på denne"
 
 msgid "You can't access this way!"
 msgstr "Du kan ikke logge inn på denne måten!"
