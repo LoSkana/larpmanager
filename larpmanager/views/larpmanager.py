@@ -25,6 +25,7 @@ from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count, Min, Sum
 from django.http import Http404, HttpResponseForbidden, JsonResponse
@@ -574,3 +575,48 @@ def debug_user(request, mid):
     check_lm_admin(request)
     member = Member.objects.get(pk=mid)
     login(request, member.user, backend=get_user_backend())
+
+
+@ratelimit(key="ip", rate="5/m", block=True)
+def demo(request):
+    user_agent = request.META.get("HTTP_USER_AGENT", "")
+    if is_suspicious_user_agent(user_agent):
+        return HttpResponseForbidden("Bots not allowed.")
+
+    if request.POST:
+        form = LarpManagerCheck(request.POST, request=request)
+        if form.is_valid():
+            return _create_demo(request)
+    else:
+        form = LarpManagerCheck(request=request)
+    ctx = {"form": form}
+    return render(request, "larpmanager/larpmanager/demo.html", ctx)
+
+
+def _create_demo(request):
+    new_pk = Association.objects.order_by("-pk").values_list("pk", flat=True).first()
+    new_pk += 1
+
+    # create assoc
+    assoc = Association.objects.create(
+        slug=f"test{new_pk}", name="Demo Organization", skin_id=request.assoc["skin_id"], demo=True
+    )
+
+    # create test user
+    user = User.objects.create(email=f"test{new_pk}@demo.it")
+    member = user.member
+    member.name = "Demo"
+    member.surname = "Admin"
+    member.save()
+
+    # Add member to admins
+    (ar, created) = AssocRole.objects.get_or_create(assoc=assoc, number=1, name="Admin")
+    ar.members.add(member)
+    ar.save()
+    el = get_user_membership(member, assoc.id)
+    el.status = MembershipStatus.JOINED
+    el.save()
+
+    login(request, user, backend=get_user_backend())
+
+    return redirect("after_login", subdomain=assoc.slug, path="manage/quick")

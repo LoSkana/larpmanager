@@ -16,4 +16,6 @@
 
 #ludomanager .special { font-size: 120%; }
 
-#ludomanager .box { box-shadow: 0; padding: 0; }
+#ludomanager .box { box-shadow: none; padding: 0; }
+
+#ludomanager #page-wrapper { padding: 0 }

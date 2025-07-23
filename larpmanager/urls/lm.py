@@ -51,6 +51,11 @@ urlpatterns = [
         name="usage",
     ),
     path(
+        "demo/",
+        views_lm.demo,
+        name="demo",
+    ),
+    path(
         "about-us/",
         views_lm.about_us,
         name="about_us",

@@ -224,6 +224,8 @@ class Association(BaseModel):
         + _("Indicate the organization nationality to activate nation-specific features"),
     )
 
+    demo = models.BooleanField(default=False)
+
     class Meta:
         constraints = [
             UniqueConstraint(fields=["slug", "deleted"], name="unique_association_with_optional"),
