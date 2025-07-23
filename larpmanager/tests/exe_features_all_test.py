@@ -18,12 +18,19 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from urllib.parse import urlparse
 
 import pytest
 from playwright.async_api import async_playwright
 
-from larpmanager.tests.utils import _checkboxes, go_to, go_to_check, handle_error, login_orga, page_start
+from larpmanager.tests.utils import (
+    _checkboxes,
+    add_links_to_visit,
+    go_to,
+    go_to_check,
+    handle_error,
+    login_orga,
+    page_start,
+)
 
 
 @pytest.mark.django_db
@@ -66,16 +73,4 @@ async def visit_all(page, live_server):
 
         await go_to_check(page, current_link)
 
-        new_links = await page.eval_on_selector_all("a", "elements => elements.map(e => e.href)")
-        for link in new_links:
-            if "logout" in link:
-                continue
-            if link.endswith(("#", "#menu", "#sidebar", "print")):
-                continue
-            if any(s in link for s in ["features", "pdf"]):
-                continue
-            parsed_url = urlparse(link)
-            if parsed_url.hostname not in ("localhost", "127.0.0.1"):
-                continue
-            if link not in visited_links:
-                links_to_visit.add(link)
+        await add_links_to_visit(links_to_visit, page, visited_links)
