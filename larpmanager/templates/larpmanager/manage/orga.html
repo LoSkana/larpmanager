@@ -100,6 +100,8 @@
         {% endwith %}
         <hr />
         <a href="{% url 'orga_reload_cache' run.event.slug run.number %}">Reload cache</a>
+        -
+        <a href="{% url 'orga_backup' run.event.slug run.number %}">Full backup</a>
     </div>
 {% endblock content %}
 {% block css %}
