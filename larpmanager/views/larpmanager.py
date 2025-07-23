@@ -603,7 +603,7 @@ def _create_demo(request):
     )
 
     # create test user
-    user = User.objects.create(email=f"test{new_pk}@demo.it")
+    user = User.objects.create(email=f"test{new_pk}@demo.it", username=f"test{new_pk}", password="pippo")
     member = user.member
     member.name = "Demo"
     member.surname = "Admin"
