@@ -5801,12 +5801,6 @@ msgstr ""
 msgid "Submit a new question"
 msgstr ""
 
-msgid "You can contact us at this"
-msgstr ""
-
-msgid "address"
-msgstr ""
-
 msgid "We encountered a problem with the tax code you provided"
 msgstr ""
 
