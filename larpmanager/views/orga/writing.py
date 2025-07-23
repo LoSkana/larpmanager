@@ -64,7 +64,7 @@ from larpmanager.utils.common import (
     get_speedlarp,
     get_trait,
 )
-from larpmanager.utils.download import _export_data
+from larpmanager.utils.download import export_data
 from larpmanager.utils.edit import orga_edit, writing_edit
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.pdf import (
@@ -405,7 +405,7 @@ def orga_export(request, s, n, nm):
     model = apps.get_model("larpmanager", nm.capitalize())
 
     ctx["nm"] = nm
-    ctx["key"], ctx["vals"] = _export_data(ctx, nm, model, True)
+    ctx["key"], ctx["vals"] = export_data(ctx, model, True)
     return render(request, "larpmanager/orga/export.html", ctx)
 
 

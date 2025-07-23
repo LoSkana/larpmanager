@@ -288,7 +288,7 @@ def orga_writing_form(request, s, n, typ):
 
     if request.method == "POST":
         if request.POST.get("download") == "1":
-            return orga_character_form_download(request, ctx)
+            return orga_character_form_download(ctx)
 
         return upload_elements(request, ctx, WritingQuestion, "character_question", "orga_character_form")
 

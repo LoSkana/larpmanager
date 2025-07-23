@@ -100,7 +100,7 @@ def orga_registration_form(request, s, n):
 
     if request.method == "POST":
         if request.POST.get("download") == "1":
-            return orga_registration_form_download(request, ctx)
+            return orga_registration_form_download(ctx)
 
         return upload_elements(request, ctx, RegistrationQuestion, "registration_question", "orga_registration_form")
 

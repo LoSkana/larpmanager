@@ -38,25 +38,26 @@ from larpmanager.models.form import (
     get_ordered_registration_questions,
 )
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
+from larpmanager.models.writing import PlotCharacterRel, Relationship
 from larpmanager.utils.common import check_field
 from larpmanager.utils.edit import _get_values_mapping
 
 
-def download(ctx, typ, model):
-    response, writer = get_writer(ctx, model)
-
-    key, vals = _export_data(ctx, model, typ)
-
+def write_csv(response, writer, key, vals):
     writer.writerow(key)
     for val in vals:
         writer.writerow(val)
-
     return response
 
 
-def _export_data(ctx, model, typ, member_cover=False):
+def download(ctx, typ, model):
+    return write_csv(*get_writer(ctx, model), *export_data(ctx, typ))
+
+
+def export_data(ctx, typ, member_cover=False):
     query = typ.objects.all()
     get_event_cache_all(ctx)
+    model = typ.__name__.lower()
     query = _download_prepare(ctx, model, query, typ)
 
     answers, applicable, choices, questions = _prepare_export(ctx, model, query)
@@ -146,6 +147,18 @@ def _get_applicable_row(ctx, el, choices, answers, questions, model, member_cove
                 value = ", ".join(choices[que.id][el.id])
         value = value.replace("\t", "").replace("\n", "<br />")
         val.append(value)
+
+    # if plots, add rels
+    if model == "plot":
+        for rel in PlotCharacterRel.objects.filter(plot=el):
+            val.append(str(rel.character))
+            val.append(rel.text)
+
+    # if character, add relationships
+    if model == "character":
+        for rel in Relationship.objects.filter(source=el):
+            val.append(str(rel.target))
+            val.append(rel.text)
 
     return val, key
 
@@ -323,25 +336,31 @@ def get_writer(ctx, nm):
     return response, writer
 
 
-def orga_registration_form_download(request, ctx):
-    response, writer = get_writer(ctx, "Registration form")
-    writer.writerow(["typ", "display", "description", "status", "options"])
+def orga_registration_form_download(ctx):
+    return write_csv(*get_writer(ctx, "Registration form"), *export_registration_form(ctx))
 
+
+def export_registration_form(ctx):
+    key = ["typ", "display", "description", "status", "options"]
+    vals = []
     que = get_ordered_registration_questions(ctx)
     for el in que:
         options = el.options.all()
         row = [el.typ, el.display, el.description, el.status, len(options)]
         for opt in options:
             row.extend([opt.display, opt.details, opt.price, opt.max_available])
-        writer.writerow(row)
+        vals.append(row)
 
-    return response
+    return key, vals
 
 
-def orga_character_form_download(request, ctx):
-    response, writer = get_writer(ctx, "Registration form")
-    writer.writerow(["typ", "display", "description", "status", "visibility", "options"])
+def orga_character_form_download(ctx):
+    return write_csv(*get_writer(ctx, "Character form"), *export_character_form(ctx))
 
+
+def export_character_form(ctx):
+    key = ["typ", "display", "description", "status", "visibility", "options"]
+    vals = []
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
     que = que.filter(applicable=QuestionApplicable.CHARACTER)
     for el in que.prefetch_related("options"):
@@ -351,9 +370,9 @@ def orga_character_form_download(request, ctx):
             dependents = ",".join(opt.dependents.values_list("display", flat=True))
             tickets = ",".join(opt.tickets.values_list("name", flat=True))
             row.extend([opt.display, opt.details, opt.max_available, dependents, tickets])
-        writer.writerow(row)
+        vals.append(row)
 
-    return response
+    return key, vals
 
 
 def _orga_registrations_acc(ctx, regs=None):
