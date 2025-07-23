@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import os
 from datetime import datetime
+from urllib.parse import urlparse
 
 from playwright.async_api import expect
 
@@ -167,3 +168,19 @@ async def _checkboxes(page, check=True):
             elif await checkbox.is_checked():
                 await checkbox.uncheck()
     await page.locator('input[type="submit"][value="Confirm"]').click(force=True)
+
+
+async def add_links_to_visit(links_to_visit, page, visited_links):
+    new_links = await page.eval_on_selector_all("a", "elements => elements.map(e => e.href)")
+    for link in new_links:
+        if "logout" in link:
+            continue
+        if link.endswith(("#", "#menu", "#sidebar", "print")):
+            continue
+        if any(s in link for s in ["features", "pdf", "backup"]):
+            continue
+        parsed_url = urlparse(link)
+        if parsed_url.hostname not in ("localhost", "127.0.0.1"):
+            continue
+        if link not in visited_links:
+            links_to_visit.add(link)
