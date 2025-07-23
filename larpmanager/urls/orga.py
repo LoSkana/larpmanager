@@ -970,4 +970,9 @@ urlpatterns = [
         views_mg.orga_close_suggestion,
         name="orga_close_suggestion",
     ),
+    path(
+        "<slug:s>/<int:n>/manage/<slug:nm>/version/<int:num>/",
+        views_ow.orga_version,
+        name="orga_version",
+    ),
 ]

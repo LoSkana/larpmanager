@@ -32,7 +32,7 @@ from larpmanager.forms.utils import EventCharacterS2Widget
 from larpmanager.models.association import Association
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
 from larpmanager.models.member import Log
-from larpmanager.models.writing import TextVersion
+from larpmanager.models.writing import PlotCharacterRel, Relationship, TextVersion
 from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.common import html_clean
 from larpmanager.utils.event import check_event_permission
@@ -69,6 +69,20 @@ def save_version(el, tp, mb, dl=False):
         tv.text = "\n".join(texts)
     else:
         tv.text = el.text
+
+    if tp == QuestionApplicable.CHARACTER:
+        rels = Relationship.objects.filter(source=el)
+        if rels:
+            tv.text += "\nRelationships\n"
+            for rel in rels:
+                tv.text += f"{rel.target}: {html_clean(rel.text)}\n"
+
+    if tp == QuestionApplicable.PLOT:
+        chars = PlotCharacterRel.objects.filter(plot=el)
+        if chars:
+            tv.text += "\nCharacters\n"
+            for rel in chars:
+                tv.text += f"{rel.character}: {html_clean(rel.text)}\n"
 
     tv.save()
 

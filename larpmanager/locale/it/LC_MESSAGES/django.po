@@ -813,6 +813,9 @@ msgstr "Utilizza TLD"
 msgid "Utility"
 msgstr "Utilità"
 
+msgid "Version"
+msgstr "Versione"
+
 msgid "Visible"
 msgstr "Visibile"
 

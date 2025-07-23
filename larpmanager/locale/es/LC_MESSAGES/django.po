@@ -813,6 +813,9 @@ msgstr "Utilizar un dominio específico"
 msgid "Utility"
 msgstr "Utilidad"
 
+msgid "Version"
+msgstr "Versión"
+
 msgid "Visible"
 msgstr "Visible"
 

@@ -407,3 +407,13 @@ def orga_export(request, s, n, nm):
     ctx["nm"] = nm
     ctx["key"], ctx["vals"] = _export_data(ctx, nm, model, True)
     return render(request, "larpmanager/orga/export.html", ctx)
+
+
+@login_required
+def orga_version(request, s, n, nm, num):
+    perm = f"orga_{nm}s"
+    ctx = check_event_permission(request, s, n, perm)
+    tp = next(code for code, label in TextVersion.TEXT_CHOICES if label.lower() == nm)
+    ctx["version"] = TextVersion.objects.get(tp=tp, pk=num)
+    ctx["text"] = ctx["version"].text.replace("\n", "<br />")
+    return render(request, "larpmanager/orga/version.html", ctx)

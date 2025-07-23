@@ -374,8 +374,6 @@ class OrgaCharacterForm(CharacterForm):
             rel.text = value
             rel.save()
 
-            save_version(rel, TextVersion.RELATIONSHIP, self.params["member"], False)
-
     def _get_rel(self, ch_id, instance, rel_type):
         if rel_type == "direct":
             (rel, cr) = Relationship.objects.get_or_create(source_id=instance.pk, target_id=ch_id)

@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {{ name }} - {% trans "Versions" %}
+    {{ element }} - {% trans "Versions" %}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows the different versions available of the character, and the differences between them" %}
@@ -9,7 +9,10 @@
 {% block content %}
     {% for v in versions reversed %}
         {% if v.diff %}
-            <h3>Versione {{ v.version }} - {{ v.member }} - {{ v.created }}</h3>
+            <h3>
+                <a href="{% url 'orga_version' run.event.slug run.number typ v.id %}">{% trans "Version" %} {{ v.version }}</a>
+                - {{ v.member }} - {{ v.created }}
+            </h3>
             <div class="diff-version plot">{{ v.diff | safe }}</div>
         {% endif %}
     {% endfor %}

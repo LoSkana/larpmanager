@@ -1,6 +1,9 @@
 {% load i18n static %}
 {% if new_rel %}
-    <h2>{% trans "Relationships" %}</h2>
+    <h2>
+        {% trans "Relationships" %}
+        {% if rel_tutorial %}(<a href="#" class="feature_tutorial" tut="{{ rel_tutorial }}">Tutorial</a>){% endif %}
+    </h2>
     <div class="add_new">
         <p>
             <i>{% trans "Select a character to add a new relationship" %}</i>

@@ -83,12 +83,11 @@ def _init_element_cache_text_field(el, res, typ):
     applicable = QuestionApplicable.get_applicable(typ._meta.model_name)
     que = el.event.get_elements(WritingQuestion).filter(applicable=applicable)
     for que_id in que.filter(typ=QuestionType.EDITOR).values_list("pk", flat=True):
-        try:
-            v = WritingAnswer.objects.get(question_id=que_id, element_id=el.id).text
+        els = WritingAnswer.objects.filter(question_id=que_id, element_id=el.id)
+        if els:
+            v = els.first().text
             field = str(que_id)
             res[el.id][field] = get_single_cache_text_field(el.id, field, v)
-        except ObjectDoesNotExist:
-            pass
 
 
 def get_cache_text_field(typ, event):

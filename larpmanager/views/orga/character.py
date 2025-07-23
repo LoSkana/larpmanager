@@ -37,6 +37,7 @@ from larpmanager.forms.character import (
 )
 from larpmanager.forms.utils import EventCharacterS2Widget
 from larpmanager.forms.writing import UploadElementsForm
+from larpmanager.models.base import Feature
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionType,
@@ -96,6 +97,11 @@ def _characters_relationships(ctx):
     ctx["relationships"] = {}
     if "relationships" not in ctx["features"]:
         return
+
+    try:
+        ctx["rel_tutorial"] = Feature.objects.get(slug="relationships").tutorial
+    except ObjectDoesNotExist:
+        pass
 
     ctx["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
     widget = EventCharacterS2Widget(attrs={"id": "new_rel_select"})
