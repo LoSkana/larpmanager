@@ -813,6 +813,9 @@ msgstr "Bruk TLD"
 msgid "Utility"
 msgstr "Verktøy"
 
+msgid "Version"
+msgstr "Versjon"
+
 msgid "Visible"
 msgstr "Synlig"
 

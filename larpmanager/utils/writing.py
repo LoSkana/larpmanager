@@ -326,7 +326,11 @@ def writing_versions(request, ctx, nm, tp):
     for v in ctx["versions"]:
         if last is not None:
             compute_diff(v, last)
+        else:
+            v.diff = v.text.replace("\n", "<br />")
         last = v
+    ctx["element"] = ctx[nm]
+    ctx["typ"] = nm
     return render(request, "larpmanager/orga/writing/versions.html", ctx)
 
 
