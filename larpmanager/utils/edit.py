@@ -306,7 +306,9 @@ def _writing_save(ctx, form, form_type, nm, redr, request, tp):
             return JsonResponse({"res": "ko"})
 
     # Normal save
-    p = form.save()
+    p = form.save(commit=False)
+    p.temp = False
+    p.save()
     dl = "delete" in request.POST and request.POST["delete"] == "1"
     if tp:
         save_version(p, tp, request.user.member, dl)
@@ -339,33 +341,13 @@ def writing_edit_save_ajax(form, request, ctx):
     if eid <= 0:
         return res
 
-    # noinspection PyProtectedMember
-    typ = form._meta.model
-
-    # copy fields and save
-    obj = typ.objects.get(pk=eid)
-    obj.temp = True
-    # noinspection PyProtectedMember
-    for f in typ._meta.get_fields():
-        if f.name not in form.cleaned_data:
-            continue
-        if not f.many_to_one and f.related_model:
-            continue
-
-        if f.get_internal_type() == "BooleanField":
-            continue
-
-            # print(f)
-        v = form.cleaned_data[f.name]
-        if not v:
-            continue
-
-        setattr(obj, f.name, v)
-    obj.save()
+    p = form.save(commit=False)
+    p.temp = True
+    p.save()
 
     if "working_ticket" in ctx["features"]:
         tp = request.POST["type"]
-        writing_edit_working_ticket(request, tp, eid, res, obj=obj)
+        writing_edit_working_ticket(request, tp, eid, res, obj=p)
 
     return JsonResponse(res)
 
