@@ -1866,6 +1866,9 @@ msgstr "Sie öffnen um"
 msgid "You must pay"
 msgstr "Sie müssen zahlen"
 
+msgid "already used"
+msgstr "bereits verwendet"
+
 msgid "invalid form"
 msgstr "ungültige Form"
 

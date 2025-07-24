@@ -1866,6 +1866,9 @@ msgstr "Ze gaan open op"
 msgid "You must pay"
 msgstr "U moet betalen"
 
+msgid "already used"
+msgstr "al gebruikt"
+
 msgid "invalid form"
 msgstr "ongeldige vorm"
 

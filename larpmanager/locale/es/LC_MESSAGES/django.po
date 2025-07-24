@@ -1866,6 +1866,9 @@ msgstr "Se abrirá en"
 msgid "You must pay"
 msgstr "Debe pagar"
 
+msgid "already used"
+msgstr "ya utilizado"
+
 msgid "invalid form"
 msgstr "formulario no válido"
 

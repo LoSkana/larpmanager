@@ -148,7 +148,7 @@ class MyForm(forms.ModelForm):
             if self.instance.pk:
                 qs = qs.exclude(pk=self.instance.pk)
             if qs.exists():
-                raise ValidationError(_(f"{field_name.capitalize()} already used"))
+                raise ValidationError(field_name.capitalize() + " " + _("already used"))
         return value
 
     def save(self, commit=True):

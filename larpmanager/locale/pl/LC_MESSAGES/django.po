@@ -1866,6 +1866,9 @@ msgstr "Otwarcie nastąpi o godz"
 msgid "You must pay"
 msgstr "Musisz zapłacić"
 
+msgid "already used"
+msgstr "już używany"
+
 msgid "invalid form"
 msgstr "nieprawidłowy formularz"
 

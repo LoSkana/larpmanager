@@ -342,6 +342,8 @@ def generate_number(length):
 
 
 def html_clean(tx):
+    if not tx:
+        return ""
     tx = strip_tags(tx)
     tx = html.unescape(tx)
     return tx
