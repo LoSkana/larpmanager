@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import re
+
 import pytest
 from playwright.async_api import async_playwright, expect
 
@@ -125,6 +127,11 @@ async def create_second_char(live_server, page):
 
 
 async def show_chars(page, live_server):
+    await go_to(page, live_server, "/test/1/manage/config")
+    await page.get_by_role("link", name=re.compile(r"^Writing")).click()
+    await page.locator("#id_writing_field_visibility").check()
+    await page.get_by_role("button", name="Confirm", exact=True).click()
+
     await go_to(page, live_server, "/test/1/manage/run")
     await page.locator("#id_show_character_0").check()
     await page.locator("#id_show_character_1").check()
