@@ -24,7 +24,7 @@ from django.core.exceptions import ValidationError
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_character_fields
+from larpmanager.cache.character import get_writing_fields
 from larpmanager.cache.feature import get_event_features, reset_event_features
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
@@ -52,9 +52,19 @@ from larpmanager.models.event import (
     ProgressStep,
     Run,
 )
-from larpmanager.models.form import QuestionType, QuestionVisibility
+from larpmanager.models.form import QuestionApplicable, QuestionType
+from larpmanager.models.member import Member
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.common import copy_class
+from larpmanager.views.orga.registration import _get_registration_fields
+
+
+def _get_writing_elements():
+    shows = [
+        ("character", _("Characters"), QuestionApplicable.CHARACTER),
+        ("faction", _("Factions"), QuestionApplicable.FACTION),
+    ]
+    return shows
 
 
 class EventCharactersPdfForm(ConfigForm):
@@ -779,6 +789,8 @@ class OrgaRunForm(ConfigForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.main_class = ""
+
         if "exe" not in self.params:
             self.prevent_canc = True
 
@@ -827,35 +839,30 @@ class OrgaRunForm(ConfigForm):
         if "character" not in self.params["features"]:
             return ls
 
-        shows = [
-            (
-                "char",
-                _("Characters"),
-                _("If checked, makes characters visible to all players"),
-            )
-        ]
+        help_text = _(
+            "Selected fields will be displayed as follows: public fields visible to all players, "
+            "private fields visible only to assigned players"
+        )
+
+        shows = _get_writing_elements()
 
         basics = QuestionType.get_basic_types()
-        get_character_fields(self.params, False)
-        for que_id, question in self.params["questions"].items():
-            typ = question["typ"]
-            if typ in basics:
-                typ = f"{que_id}"
-            elif typ not in ["teaser", "text"]:
-                continue
+        self.set_section("visibility", _("Visibility"))
+        for s in shows:
+            fields = get_writing_fields(self.params, s[2])
+            extra = []
+            for field in fields:
+                typ = field.typ
+                if typ in basics:
+                    typ = str(field.id)
 
-            help_text = _("If checked, makes the field content visible to all players")
-            if question["visibility"] == QuestionVisibility.PRIVATE:
-                help_text = _("If checked, makes the field content visible to the assigned player")
+                extra.append((typ, field.display))
 
-            shows.append((typ, question["display"], help_text))
+            self.add_configs(f"show_{s[0]}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)
+
+        shows = []
 
         addit_show = [
-            (
-                "faction",
-                _("Factions"),
-                _("If checked, makes factions visible, as the character assignments to factions"),
-            ),
             (
                 "speedlarp",
                 _("Speedlarp"),
@@ -864,18 +871,18 @@ class OrgaRunForm(ConfigForm):
             (
                 "prologue",
                 _("Prologues"),
-                _("If checked, makes prologues visible to the assigned character"),
+                _("If checked, prologues will be visible to the assigned character"),
             ),
             ("questbuilder", _("Questbuilder"), _("If checked, makes quests and traits visible")),
             (
                 "workshop",
                 _("Workshop"),
-                _("If checked, makes workshops visible for players to fill in"),
+                _("If checked, workshops will be visible for players to fill in"),
             ),
             (
                 "print_pdf",
                 _("PDF"),
-                _("If checked, makes visible the PDF version of the character sheets"),
+                _("If checked, the PDF version of character sheets will be visible"),
             ),
         ]
 
@@ -1048,3 +1055,84 @@ class OrgaQuickSetupForm(QuickSetupForm):
             )
 
         self.init_fields(get_event_features(self.instance.pk))
+
+
+class OrgaPreferencesForm(ConfigForm):
+    page_title = _("Personal preferences")
+
+    page_info = _("This page allows you to set your personal preferences on the interface")
+
+    class Meta:
+        model = Member
+        fields = ()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.prevent_canc = True
+        self.show_sections = True
+
+    def set_configs(self):
+        basics = QuestionType.get_basic_types()
+        event_id = self.params["event"].id
+
+        self.set_section("open", "Default fields")
+
+        help_text = _("Select which fields should open automatically when the list is displayed")
+
+        # Add registration fields
+        extra = []
+        feature_fields = [
+            ("", "#load_accounting", _("Accounting")),
+            ("", "email", _("Email")),
+            ("", "date", _("Chronology")),
+            ("unique_code", "special_cod", _("Unique code")),
+            ("additional_tickets", "additionals", _("Additional")),
+            ("gift", "gift", _("Gift")),
+            ("membership", "membership", _("Member")),
+            ("faction", "factions", _("Factions")),
+            ("custom_character", "custom", _("Customisations")),
+            ("reg_surcharges", "sur", _("Surcharge")),
+            ("discount", "disc", _("Discounts")),
+        ]
+        for field in feature_fields:
+            if field[0] and field[0] not in self.params["features"]:
+                continue
+            extra.append((field[1], field[2]))
+
+        fields = _get_registration_fields(self.params, self.params["request"].user.member)
+        max_length = 20
+        if fields:
+            extra.extend(
+                [
+                    (
+                        f".lq_{field_id}",
+                        field.display
+                        if len(field.display) <= max_length
+                        else field.display[: max_length - 5] + " [...]",
+                    )
+                    for field_id, field in fields.items()
+                ]
+            )
+            self.add_configs(
+                f"open_registration_{event_id}", ConfigType.MULTI_BOOL, _("Registrations"), help_text, extra=extra
+            )
+
+        # Add writings fields
+        shows = _get_writing_elements()
+        for s in shows:
+            if s[0] not in self.params["features"]:
+                continue
+            fields = get_writing_fields(self.params, s[2])
+            extra = []
+            for field in fields:
+                if field.typ == "name":
+                    continue
+
+                if field.typ in basics:
+                    tog = f".lq_{field.id}"
+                else:
+                    tog = f"q_{field.id}"
+
+                extra.append((tog, field.display))
+
+            self.add_configs(f"open_{s[0]}_{event_id}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)

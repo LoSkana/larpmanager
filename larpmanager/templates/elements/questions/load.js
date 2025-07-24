@@ -130,6 +130,16 @@ window.addEventListener('DOMContentLoaded', function() {
 
         $('.go_table a').hide();
 
+        if (Array.isArray(window.trigger_togs)) {
+            window.trigger_togs.forEach(function(togValue) {
+                if (togValue.startsWith('.') || togValue.startsWith('#')) {
+                    $(togValue).each(function() {
+                        this.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                    });
+                }
+            });
+        }
+
     });
 
 });

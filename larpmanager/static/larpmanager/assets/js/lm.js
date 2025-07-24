@@ -268,6 +268,15 @@ $(document).ready(function() {
 
     });
 
+    if (Array.isArray(window.trigger_togs)) {
+        window.trigger_togs.forEach(function(togValue) {
+            if (togValue.startsWith('.') || togValue.startsWith('#')) return;
+            $('a.my_toggle[tog="' + togValue + '"]').each(function() {
+                this.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            });
+        });
+    }
+
     table_csv();
 
     resize_fields();

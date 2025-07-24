@@ -256,7 +256,7 @@ def gallery(request, s, n):
     features = get_event_features(ctx["event"].id)
 
     if check_gallery_visibility(request, ctx):
-        if ctx["show_char"]:
+        if ctx["show_character"]:
             get_event_cache_all(ctx)
 
         hide_uncasted_players = ctx["event"].get_config("gallery_hide_uncasted_players", False)
@@ -320,7 +320,7 @@ def event_redirect(request, s):
 def search(request, s, n):
     ctx = get_event_run(request, s, n, status=True)
 
-    if check_gallery_visibility(request, ctx) and ctx["show_char"]:
+    if check_gallery_visibility(request, ctx) and ctx["show_character"]:
         get_event_cache_all(ctx)
         ctx["all"] = json.dumps(ctx["chars"])
         ctx["facs"] = json.dumps(ctx["factions"])

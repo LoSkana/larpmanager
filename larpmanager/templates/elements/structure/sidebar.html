@@ -3,20 +3,18 @@
     <div id="sidebar"
          class=" {% if not is_sidebar_open %}hide{% endif %} {% if not interface_old %}topbar{% endif %}">
         <div class="inner">
-            {% if interface_old %}
-                <div class="header">
-                    {% if run %}
-                        <h1>
-                            <span>{{ run }}</span>
-                        </h1>
-                    {% else %}
-                        <h1>
-                            <span>{{ assoc.name }}</span>
-                        </h1>
-                        <hr />
-                    {% endif %}
-                </div>
-            {% endif %}
+            <div class="header">
+                {% if run %}
+                    <h1>
+                        <span>{{ run }}</span>
+                    </h1>
+                {% else %}
+                    <h1>
+                        <span>{{ assoc.name }}</span>
+                    </h1>
+                {% endif %}
+                <hr />
+            </div>
             {% if run %}
                 <p>
                     <span class="sidebar-link-wrap"

@@ -462,6 +462,9 @@ msgstr "Exportar"
 msgid "Female"
 msgstr "Mujer"
 
+msgid "Fields"
+msgstr "Campos"
+
 msgid "Filler"
 msgstr "Relleno"
 
@@ -647,6 +650,9 @@ msgstr "Soldadura"
 
 msgid "Casting"
 msgstr "Asignación"
+
+msgid "Columns"
+msgstr "Columnas"
 
 msgid "Concept"
 msgstr "Concepto"
@@ -1107,6 +1113,9 @@ msgstr "Habilidades"
 msgid "Additions"
 msgstr "Adiciones"
 
+msgid "Approvals"
+msgstr "Homologaciones"
+
 msgid "Available"
 msgstr "Disponible"
 
@@ -1266,6 +1275,9 @@ msgstr "este enlace"
 msgid "Accounting"
 msgstr "Contabilidad"
 
+msgid "Additional"
+msgstr "Más información en"
+
 msgid "Annual fee"
 msgstr "Cuota anual"
 
@@ -1301,6 +1313,9 @@ msgstr "Personajes"
 
 msgid "Check data"
 msgstr "Comprobar datos"
+
+msgid "Chronology"
+msgstr "Cronología"
 
 msgid "Collection"
 msgstr "Colecta"
@@ -2078,6 +2093,9 @@ msgstr "Nombre del personaje"
 msgid "Collection for"
 msgstr "Colecta para"
 
+msgid "Customisations"
+msgstr "Personalizaciones"
+
 msgid "Disable Tokens"
 msgstr "Desactivar fichas"
 
@@ -2361,9 +2379,6 @@ msgid "Color background"
 msgstr "Color de fondo"
 
 msgid "Confirm Payments"
-msgstr "Confirmar pagos"
-
-msgid "Confirm payments"
 msgstr "Confirmar pagos"
 
 msgid "Current template"
@@ -2972,6 +2987,9 @@ msgstr "Plazos de pago"
 
 msgid "Payments in approval"
 msgstr "Pagos pendientes"
+
+msgid "Personal preferences"
+msgstr "Preferencias personales"
 
 msgid "Please wait a moment"
 msgstr "Espere un momento"
@@ -4110,8 +4128,8 @@ msgstr "Gestionar el tipo de eventos prologados"
 msgid "Manages registration cancellations"
 msgstr "Gestiona las anulaciones de inscripciones"
 
-msgid "Manually confirm payments received"
-msgstr "Confirmar manualmente los pagos recibidos"
+msgid "Manually approve payments received"
+msgstr "Aprobar manualmente los pagos recibidos"
 
 msgid "Now you can create event templates"
 msgstr "Ahora puedes crear plantillas de eventos"
@@ -4958,6 +4976,9 @@ msgstr "Los usuarios registrados tendrán acceso normal"
 msgid "Remember to put recipients separated by commas"
 msgstr "Recuerda poner los destinatarios separados por comas"
 
+msgid "Set your personal preferences on the interface"
+msgstr "Configura tus preferencias personales en la interfaz"
+
 msgid "Something went wrong in the account activation"
 msgstr "Algo ha ido mal en la activación de la cuenta"
 
@@ -5313,11 +5334,6 @@ msgstr "Aquí tienes un recorrido paso a paso por la interfaz"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Lo he hecho unas cuantas veces, tengo cierta experiencia"
-
-msgid "If checked, makes characters visible to all players"
-msgstr ""
-"Si está marcada, hace que los personajes sean visibles para todos los "
-"jugadores"
 
 msgid "If you want to download an example file, click here"
 msgstr "Si desea descargar un archivo de ejemplo, haga clic aquí"
@@ -5678,16 +5694,6 @@ msgstr "¡Hola! ¡Tu inscripción a <b>%(event)s</b> ha sido actualizada"
 msgid "I am not good what to say. I never thought it would happen"
 msgstr "No sé qué decir. Nunca pensé que esto pasaría"
 
-msgid "If checked, makes the field content visible to all players"
-msgstr ""
-"Si está marcada, hace que el contenido del campo sea visible para todos los "
-"jugadores"
-
-msgid "If checked, makes workshops visible for players to fill in"
-msgstr ""
-"Si está marcada, hace visibles los talleres para que los jugadores se "
-"apunten"
-
 msgid "If instead you wish to upload a new photo of your document"
 msgstr "Si en lugar de ello deseas subir una foto nueva de tu documento"
 
@@ -5806,6 +5812,11 @@ msgstr ""
 "Permite a los jugadores cancelar sus propias inscripciones en cualquier "
 "momento"
 
+msgid "If checked, workshops will be visible for players to fill in"
+msgstr ""
+"Si está marcada, los talleres estarán visibles para que los jugadores los "
+"rellenen"
+
 msgid "If you wish to upload a new scan of your application instead"
 msgstr "Si deseas subir un nuevo escaneado de tu solicitud en su lugar"
 
@@ -5854,11 +5865,6 @@ msgstr ""
 
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Si está marcada, una opción puede elegirse un número máximo de veces"
-
-msgid "If checked, makes prologues visible to the assigned character"
-msgstr ""
-"Si está marcada, hace que los prólogos sean visibles para el personaje "
-"asignado"
 
 msgid "Lets staff access the safety information submitted by players"
 msgstr ""
@@ -6005,6 +6011,14 @@ msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Si está marcada, no se utilizarán tokens en las entradas de este evento"
 
+msgid "If checked, prologues will be visible to the assigned character"
+msgstr ""
+"Si está marcada, los prólogos serán visibles para el personaje asignado"
+
+msgid "If checked, the PDF version of character sheets will be visible"
+msgstr ""
+"Si está marcada, la versión PDF de las hojas de personaje será visible"
+
 msgid "Indicate the exact date in which the payment has been performed"
 msgstr "Indica en qué fecha se realizó el pago"
 
@@ -6121,9 +6135,6 @@ msgstr ""
 "Error al cargar. Formato de archivo no válido (sólo aceptamos pdf o "
 "imágenes)"
 
-msgid "If checked, makes visible the PDF version of the character sheets"
-msgstr "Si está marcada, hace visibles los PDF de las fichas de personaje"
-
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""
 "Si está marcada, no se utilizarán créditos en las inscripciones para este "
@@ -6180,11 +6191,6 @@ msgid "Enter your email below to receive instructions on how to change it"
 msgstr ""
 "Introduce tu correo electrónico a continuación para recibir instrucciones "
 "sobre cómo cambiarlo"
-
-msgid "If checked, makes the field content visible to the assigned player"
-msgstr ""
-"Si está marcada, hace que el contenido del campo sea visible para el "
-"reproductor asignado"
 
 msgid "Indicates whether the option can be included in the gifted signups"
 msgstr "Indica si la opción puede incluirse en las entradas libres"
@@ -6514,6 +6520,11 @@ msgid "This is automatically deducted from the registration of a future event"
 msgstr ""
 "Este importe se deduce automáticamente de la inscripción de un evento futuro"
 
+msgid "To activate new features and enhance the functionality of the platform"
+msgstr ""
+"Para activar nuevas características y mejorar la funcionalidad de la "
+"plataforma"
+
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr ""
 "Puedes utilizar los siguientes campos, que se rellenarán automáticamente"
@@ -6631,6 +6642,12 @@ msgid ""
 msgstr ""
 "Presentación visible para todos los jugadores, cuando está marcada la opción"
 " \"mostrar presentación\""
+
+msgid ""
+"Select which fields should open automatically when the list is displayed"
+msgstr ""
+"Seleccione los campos que deben abrirse automáticamente al visualizar la "
+"lista"
 
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient"
@@ -6882,12 +6899,6 @@ msgid ""
 msgstr ""
 "Si está marcada, permite que una opción sea visible sólo si otras opciones "
 "están seleccionadas"
-
-msgid ""
-"If checked, makes factions visible, as the character assignments to factions"
-msgstr ""
-"Si está marcada, hace visibles las facciones, ya que las asignaciones de "
-"personajes a facciones"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
@@ -9189,13 +9200,6 @@ msgstr ""
 " al jugador que proceda con el pago. Por defecto 30."
 
 msgid ""
-"Optional - If you select one (or more) factions, the question will only be "
-"shown to players with characters in all chosen factions"
-msgstr ""
-"Opcional - Si seleccionas una (o más) facciones, la pregunta sólo se "
-"mostrará a los jugadores con personajes en todas las facciones elegidas"
-
-msgid ""
 "This page allows you to select the features activated for this event, and "
 "all its runs (click on a feature to show its description)"
 msgstr ""
@@ -9732,15 +9736,6 @@ msgstr ""
 "esta cifra es el principal positivo, el margen de explotación. Tiene en "
 "cuenta los presupuestos de los eventos que llevan más de dos meses, que se "
 "consideran cerrados, y trata todas las fichas y créditos como reembolsados"
-
-msgid ""
-"Please note that your character sheet may contain  personal secrets, not to "
-"be shared before the start of the event. To avoid accidentally spoiling your"
-" experience, do not discuss its content with other participants!"
-msgstr ""
-"Ten en cuenta que tu hoja de personaje puede contener secretos personales, "
-"que no deben compartirse antes de que comience el evento. Para no estropear "
-"tu experiencia, no comentes su contenido con otros participantes."
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are"
