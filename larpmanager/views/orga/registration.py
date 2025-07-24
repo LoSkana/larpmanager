@@ -256,7 +256,7 @@ def _orga_registrations_prepare(ctx, request):
     for t in RegistrationTicket.objects.filter(event=ctx["event"]).order_by("-price"):
         t.emails = []
         ctx["reg_tickets"][t.id] = t
-    ctx["reg_questions"] = _get_registration_fields(ctx, request)
+    ctx["reg_questions"] = _get_registration_fields(ctx, request.user.member)
 
 
 def _get_registration_fields(ctx, member):
