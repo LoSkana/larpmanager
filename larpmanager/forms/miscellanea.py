@@ -50,7 +50,7 @@ from larpmanager.models.miscellanea import (
 )
 from larpmanager.models.registration import RegistrationTicket, TicketTier
 from larpmanager.models.utils import generate_id
-from larpmanager.models.writing import Faction
+from larpmanager.models.writing import Faction, FactionType
 from larpmanager.utils.common import FileTypeValidator
 
 PAY_CHOICES = (
@@ -274,7 +274,7 @@ class OrganizerCastingOptionsForm(forms.Form):
             factions = (
                 self.params["event"]
                 .get_elements(Faction)
-                .filter(typ=Faction.PRIM)
+                .filter(typ=FactionType.PRIM)
                 .order_by("number")
                 .values_list("id", "name")
             )

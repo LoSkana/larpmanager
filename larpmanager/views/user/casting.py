@@ -31,7 +31,7 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.mail.base import mail_confirm_casting
 from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType, Trait
 from larpmanager.models.registration import Registration, TicketTier
-from larpmanager.models.writing import Character, Faction
+from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.common import get_element
 from larpmanager.utils.event import get_event_filter_characters, get_event_run
 from larpmanager.utils.exceptions import check_event_feature
@@ -56,7 +56,7 @@ def casting_characters(ctx, reg):
     ctx["factions"] = json.dumps(facts)
     ctx["choices"] = json.dumps(choices)
 
-    ctx["faction_filter"] = ctx["event"].get_elements(Faction).filter(typ=Faction.TRASV)
+    ctx["faction_filter"] = ctx["event"].get_elements(Faction).filter(typ=FactionType.TRASV)
 
 
 def casting_quest_traits(ctx, typ):

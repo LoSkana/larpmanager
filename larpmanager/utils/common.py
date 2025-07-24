@@ -247,7 +247,7 @@ def get_speedlarp(ctx, n):
 
     # ~ def get_ord_faction(char):
     # ~ for g in char.factions_list.all():
-    # ~ if g.typ == Faction.PRIM:
+    # ~ if g.typ == FactionType.PRIM:
     # ~ return (g.get_name(), g)
     # ~ return ("UNASSIGNED", None)
 

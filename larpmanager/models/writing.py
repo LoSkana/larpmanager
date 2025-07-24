@@ -228,7 +228,7 @@ class Character(Writing):
         primary = False
         # noinspection PyUnresolvedReferences
         for g in self.factions_list.filter(event=fac_event):
-            if g.typ == Faction.PRIM:
+            if g.typ == FactionType.PRIM:
                 primary = True
                 if g.cover:
                     js["thumb"] = g.thumb.url
@@ -358,20 +358,17 @@ class PlotCharacterRel(BaseModel):
         ]
 
 
-class Faction(Writing):
-    PRIM = "s"
-    TRASV = "t"
-    SECRET = "g"
-    FACTION_CHOICES = [
-        (PRIM, _("Primary")),
-        (TRASV, _("Transversal")),
-        (SECRET, _("Secret")),
-    ]
+class FactionType(models.TextChoices):
+    PRIM = "s", _("Primary")
+    TRASV = "t", _("Transversal")
+    SECRET = "g", _("Secret")
 
+
+class Faction(Writing):
     typ = models.CharField(
         max_length=1,
-        choices=FACTION_CHOICES,
-        default=PRIM,
+        choices=FactionType.choices,
+        default=FactionType.PRIM,
         verbose_name=_("Type"),
         help_text=_(
             "Primary: main grouping / affiliation for characters. "

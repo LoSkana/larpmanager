@@ -41,7 +41,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.member import Member
 from larpmanager.models.registration import RegistrationCharacterRel
-from larpmanager.models.writing import Character, Faction
+from larpmanager.models.writing import Character, Faction, FactionType
 
 
 def delete_all_in_path(path):
@@ -226,11 +226,11 @@ def get_event_cache_factions(ctx, res):
         res["factions"][0] = {
             "name": "",
             "number": 0,
-            "typ": Faction.PRIM,
+            "typ": FactionType.PRIM,
             "teaser": "",
             "characters": list(res["chars"].keys()),
         }
-        res["factions_typ"][Faction.PRIM] = [0]
+        res["factions_typ"][FactionType.PRIM] = [0]
         return
 
     # add characters without a primary to a fake one
@@ -242,11 +242,11 @@ def get_event_cache_factions(ctx, res):
         res["factions"][0] = {
             "name": "",
             "number": 0,
-            "typ": Faction.PRIM,
+            "typ": FactionType.PRIM,
             "teaser": "",
             "characters": void_primary,
         }
-        res["factions_typ"][Faction.PRIM] = [0]
+        res["factions_typ"][FactionType.PRIM] = [0]
     # add real factions
     for f in ctx["event"].get_elements(Faction).order_by("number"):
         el = f.show_red()
