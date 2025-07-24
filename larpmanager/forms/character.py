@@ -33,6 +33,7 @@ from larpmanager.forms.utils import (
     AssocMemberS2Widget,
     EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
+    FactionS2WidgetMulti,
     TicketS2WidgetMulti,
     WritingTinyMCE,
 )
@@ -45,7 +46,15 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
 )
-from larpmanager.models.writing import Character, CharacterStatus, Faction, PlotCharacterRel, Relationship, TextVersion
+from larpmanager.models.writing import (
+    Character,
+    CharacterStatus,
+    Faction,
+    FactionType,
+    PlotCharacterRel,
+    Relationship,
+    TextVersion,
+)
 from larpmanager.utils.edit import save_version
 
 
@@ -180,7 +189,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             # check only one primary
             prim = 0
             for el in self.cleaned_data["factions_list"]:
-                if el.typ == Faction.PRIM:
+                if el.typ == FactionType.PRIM:
                     prim += 1
 
             if prim > 1:
@@ -316,9 +325,10 @@ class OrgaCharacterForm(CharacterForm):
 
         self.fields["factions_list"] = forms.ModelMultipleChoiceField(
             queryset=queryset,
-            widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains"]),
+            widget=FactionS2WidgetMulti(),
             required=False,
         )
+        self.fields["factions_list"].widget.set_event(self.params["event"])
 
         if not self.instance.pk:
             return

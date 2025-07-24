@@ -47,6 +47,7 @@ from larpmanager.models.registration import (
 from larpmanager.models.writing import (
     Character,
     Faction,
+    FactionType,
 )
 
 # defer script loaded by form
@@ -398,6 +399,10 @@ class FactionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
     def get_queryset(self):
         return self.event.get_elements(Faction)
+
+    def label_from_instance(self, instance):
+        code = {FactionType.PRIM: "P", FactionType.TRASV: "T", FactionType.SECRET: "S"}
+        return f"{instance.name} ({code[instance.typ]})"
 
 
 class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):

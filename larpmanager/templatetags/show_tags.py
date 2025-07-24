@@ -34,7 +34,7 @@ from larpmanager.accounting.registration import round_to_nearest_cent
 from larpmanager.models.association import get_url
 from larpmanager.models.casting import Trait
 from larpmanager.models.utils import strip_tags
-from larpmanager.models.writing import Character, Faction
+from larpmanager.models.writing import Character, FactionType
 from larpmanager.utils.common import html_clean
 from larpmanager.utils.pdf import get_trait_character
 
@@ -96,7 +96,7 @@ def tooltip_factions(ch, context, tooltip):
     factions = ""
     for fnum in context["factions"]:
         el = context["factions"][fnum]
-        if el["typ"] == Faction.SECRET:
+        if el["typ"] == FactionType.SECRET:
             continue
         if fnum in ch["factions"]:
             if factions:

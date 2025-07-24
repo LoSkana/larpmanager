@@ -53,6 +53,7 @@ from larpmanager.models.writing import (
     Character,
     CharacterStatus,
     Faction,
+    FactionType,
 )
 from larpmanager.utils.auth import is_lm_admin
 from larpmanager.utils.base import def_user_ctx
@@ -354,8 +355,8 @@ def get_fact(qs):
 
 def get_factions(ctx):
     fcs = ctx["event"].get_elements(Faction)
-    ctx["sec"] = get_fact(fcs.filter(typ=Faction.PRIM).order_by("number"))
-    ctx["trasv"] = get_fact(fcs.filter(typ=Faction.TRASV).order_by("number"))
+    ctx["sec"] = get_fact(fcs.filter(typ=FactionType.PRIM).order_by("number"))
+    ctx["trasv"] = get_fact(fcs.filter(typ=FactionType.TRASV).order_by("number"))
 
 
 def check_visibility(ctx, typ, name):

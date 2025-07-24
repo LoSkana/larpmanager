@@ -31,7 +31,7 @@ from larpmanager.cache.run import get_cache_config_run, get_cache_run
 from larpmanager.models.access import EventPermission
 from larpmanager.models.event import Event, Run
 from larpmanager.models.registration import RegistrationCharacterRel
-from larpmanager.models.writing import Character, Faction
+from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.base import def_user_ctx, get_index_permissions
 from larpmanager.utils.exceptions import FeatureError, PermissionError, UnknowRunError, check_event_feature
 from larpmanager.utils.registration import check_signup, registration_status
@@ -173,7 +173,7 @@ def get_event_filter_characters(ctx, filters):
         chars[c.id] = c
 
     if "faction" in ctx["features"] and ctx["show_faction"]:
-        que = ctx["event"].get_elements(Faction).filter(typ=Faction.PRIM).order_by("order")
+        que = ctx["event"].get_elements(Faction).filter(typ=FactionType.PRIM).order_by("order")
         prefetch = Prefetch(
             "characters",
             queryset=Character.objects.filter(hide=False).order_by("number"),
