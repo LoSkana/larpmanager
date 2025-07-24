@@ -870,9 +870,6 @@ msgstr "Kampanj"
 msgid "Carousel"
 msgstr "Karusell"
 
-msgid "Centaurs"
-msgstr "Centaurer"
-
 msgid "Claimant"
 msgstr "Sökande"
 

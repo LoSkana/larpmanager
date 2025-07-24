@@ -7423,9 +7423,6 @@ msgstr ""
 msgid "Now you can set the organization tax options"
 msgstr ""
 
-msgid "Centaurs"
-msgstr ""
-
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "
 "and optionally assigns a result"

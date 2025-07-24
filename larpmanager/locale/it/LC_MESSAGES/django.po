@@ -870,9 +870,6 @@ msgstr "Campagna"
 msgid "Carousel"
 msgstr "Carousel"
 
-msgid "Centaurs"
-msgstr "Centauri"
-
 msgid "Claimant"
 msgstr "Richiedente"
 
@@ -5626,7 +5623,7 @@ msgstr ""
 "Se non viene ricevuto un pagamento, l'iscrizione potrebbe venire disdetta"
 
 msgid "If you would like to make a donation to the Organization"
-msgstr "Se vuoi eseguire una libera donazione all'Associazione, "
+msgstr "Se vuoi eseguire una libera donazione all'Associazione"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Indicare se il campo viene stampato nelle generazioni PDF"
