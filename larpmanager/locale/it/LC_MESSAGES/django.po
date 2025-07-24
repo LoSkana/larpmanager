@@ -2124,7 +2124,7 @@ msgid "Global balance"
 msgstr "Bilancio globale"
 
 msgid "Handout Models"
-msgstr "Modelli di dispensa"
+msgstr "Tipo di handout"
 
 msgid "List of voters"
 msgstr "Elenco votanti"

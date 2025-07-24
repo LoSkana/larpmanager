@@ -68,7 +68,7 @@
                         <div class="lm_tooltiptext">{% trans "Discover the game factions" %}!</div>
                     </div>
                 {% endif %}
-                {% if features.questbuilder and show_questbuilder %}
+                {% if features.questbuilder and show_addit.questbuilder %}
                     <div class="lm_tooltip">
                         <a href="{% url 'quests' run.event.slug run.number %}"
                            {% if request_func_name == "quests" %}class="select"{% endif %}>{% trans "Quest" %}</a>
@@ -96,7 +96,7 @@
                         <div class="lm_tooltiptext">{% trans "Give a card to your friend" %}</div>
                     </div>
                 {% endif %}
-                {% if features.workshop and show_workshop %}
+                {% if features.workshop and show_addit.workshop %}
                     <div class="lm_tooltip">
                         <a href="{% url 'workshops' run.event.slug run.number %}"
                            {% if request_func_name == "workshops" %}class="select"{% endif %}>{% trans "Workshop" %}</a>

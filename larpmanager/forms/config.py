@@ -86,7 +86,7 @@ class ConfigForm(MyForm):
         k = el["key"]
 
         val = self.cleaned_data[k]
-        if not val:
+        if val is None:
             return
 
         if el["type"] == ConfigType.MEMBERS:

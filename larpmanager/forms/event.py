@@ -383,6 +383,12 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("writing_assigned", ConfigType.BOOL, label, help_text)
 
+            label = _("Field visibility")
+            help_text = _(
+                "Normally all character fields (public or private) are shown; with this configuration you can select which ones to display at any given time"
+            )
+            self.add_configs("writing_field_visibility", ConfigType.BOOL, label, help_text)
+
             label = _("Disable character finder")
             help_text = (
                 _("Disable the system that finds the character number when a special reference symbol is written")
@@ -839,6 +845,9 @@ class OrgaRunForm(ConfigForm):
         if "character" not in self.params["features"]:
             return ls
 
+        if not self.params["event"].get_config("writing_field_visibility", False):
+            return
+
         help_text = _(
             "Selected fields will be displayed as follows: public fields visible to all players, "
             "private fields visible only to assigned players"
@@ -862,33 +871,21 @@ class OrgaRunForm(ConfigForm):
 
         shows = []
 
-        addit_show = [
-            (
-                "speedlarp",
-                _("Speedlarp"),
-                _("If checked, makes visible the speedlarp"),
-            ),
-            (
-                "prologue",
-                _("Prologues"),
-                _("If checked, prologues will be visible to the assigned character"),
-            ),
-            ("questbuilder", _("Questbuilder"), _("If checked, makes quests and traits visible")),
-            (
-                "workshop",
-                _("Workshop"),
-                _("If checked, workshops will be visible for players to fill in"),
-            ),
-            (
-                "print_pdf",
-                _("PDF"),
-                _("If checked, the PDF version of character sheets will be visible"),
-            ),
-        ]
+        addit_show = {
+            "speedlarp": _("Speedlarp"),
+            "prologue": _("Prologues"),
+            "questbuilder": _("Questbuilder"),
+            "workshop": _("Workshop"),
+            "print_pdf": _("PDF"),
+        }
 
-        for f in addit_show:
-            if self.instance.pk and f[0] in self.params["features"]:
-                shows.append(f)
+        extra = []
+        for key, display in addit_show.items():
+            if self.instance.pk and key in self.params["features"]:
+                extra.append((key, display))
+        if extra:
+            help_text = _("Selected elements will be shown to players")
+            self.add_configs("show_addit", ConfigType.MULTI_BOOL, _("Elements"), help_text, extra=extra)
 
         self.set_section("visibility", _("Visibility"))
         for s in shows:

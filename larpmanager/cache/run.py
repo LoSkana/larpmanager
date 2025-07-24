@@ -27,7 +27,6 @@ from django.dispatch import receiver
 from larpmanager.cache.button import get_event_button_cache
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event, Run
-from larpmanager.models.form import QuestionApplicable, QuestionType, WritingQuestion
 
 
 def reset_cache_run(a, s, n):
@@ -104,25 +103,17 @@ def init_cache_config_run(run):
     for config_name in ["character", "faction"]:
         if config_name not in ev_features:
             continue
+        res = {}
         val = run.get_config("show_" + config_name, "[]")
-        ctx["show_" + config_name] = ast.literal_eval(val)
+        for el in ast.literal_eval(val):
+            res[el] = 1
+        ctx["show_" + config_name] = res
 
-    conf_features = [
-        "speedlarp",
-        "prologue",
-        "questbuilder",
-        "workshop",
-        "print_pdf",
-    ]
-    for config_name in conf_features:
-        if config_name not in ev_features:
-            continue
-        ctx["show_" + config_name] = run.get_config("show_" + config_name, False)
-
-    basics = QuestionType.get_basic_types()
-    que = run.event.get_elements(WritingQuestion).order_by("order")
-    for question in que.filter(applicable=QuestionApplicable.CHARACTER, typ__in=basics):
-        ctx[f"show_{question.id}"] = run.get_config(f"show_{question.id}", False)
+    res = {}
+    val = run.get_config("show_addit", "[]")
+    for el in ast.literal_eval(val):
+        res[el] = 1
+    ctx["show_addit"] = res
 
     return ctx
 
