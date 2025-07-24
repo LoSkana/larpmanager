@@ -126,9 +126,9 @@ async def create_second_char(live_server, page):
 
 async def show_chars(page, live_server):
     await go_to(page, live_server, "/test/1/manage/run")
-    await page.locator("#id_show_char").check()
-    await page.locator("#id_show_teaser").check()
-    await page.locator("#id_show_text").check()
+    await page.locator("#id_show_character_0").check()
+    await page.locator("#id_show_character_1").check()
+    await page.locator("#id_show_character_2").check()
     await page.get_by_role("button", name="Confirm", exact=True).click()
 
 
