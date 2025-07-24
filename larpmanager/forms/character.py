@@ -131,8 +131,8 @@ class CharacterForm(WritingForm, BaseWritingForm):
                         "Leave the field blank to save your changes and to be able to continue them in "
                         "the future."
                     ),
+                    widget=forms.CheckboxInput(attrs={"class": "checkbox_single"}),
                 )
-                self.fields["propose"].custom_class = "checkbox_single"
 
     def _init_character(self):
         self._init_factions()

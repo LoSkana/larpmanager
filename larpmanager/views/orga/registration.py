@@ -256,15 +256,20 @@ def _orga_registrations_prepare(ctx, request):
     for t in RegistrationTicket.objects.filter(event=ctx["event"]).order_by("-price"):
         t.emails = []
         ctx["reg_tickets"][t.id] = t
-    ctx["reg_questions"] = {}
+    ctx["reg_questions"] = _get_registration_fields(ctx, request)
+
+
+def _get_registration_fields(ctx, member):
+    reg_questions = {}
     que = RegistrationQuestion.get_instance_questions(ctx["event"], ctx["features"])
     for q in que:
         if "reg_que_allowed" in ctx["features"] and q.allowed_map[0]:
             run_id = ctx["run"].id
             organizer = run_id in ctx["all_runs"] and 1 in ctx["all_runs"][run_id]
-            if not organizer and request.user.member.id not in q.allowed_map:
+            if not organizer and member.id not in q.allowed_map:
                 continue
-        ctx["reg_questions"][q.id] = q
+        reg_questions[q.id] = q
+    return reg_questions
 
 
 def _orga_registrations_discount(ctx):
@@ -366,6 +371,8 @@ def orga_registrations(request, s, n):
     ctx["download"] = 1
     if ctx["event"].get_config("show_export", False):
         ctx["export"] = "registration"
+
+    ctx["default_fields"] = request.user.member.get_config(f"open_registration_{ctx['event'].id}", "[]")
 
     return render(request, "larpmanager/orga/registration/registrations.html", ctx)
 

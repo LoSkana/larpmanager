@@ -353,8 +353,8 @@
 - model: larpmanager.eventpermission
   pk: 50
   fields:
-    name: Confirm Payments
-    descr: Manually confirm payments received
+    name: Approvals
+    descr: Manually approve payments received
     slug: orga_invoices
     number: 81
     feature: 111
@@ -543,3 +543,11 @@
     number: 9999
     feature: 216
     hidden: true
+- model: larpmanager.eventpermission
+  pk: 78
+  fields:
+    name: Preferences
+    descr: Set your personal preferences on the interface
+    slug: orga_preferences
+    number: 999
+    feature: 217

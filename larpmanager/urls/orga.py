@@ -861,6 +861,11 @@ urlpatterns = [
         name="orga_backup",
     ),
     path(
+        "<slug:s>/<int:n>/manage/preferences/",
+        views_oe.orga_preferences,
+        name="orga_preferences",
+    ),
+    path(
         "<slug:s>/<int:n>/manage/texts/",
         views_oe.orga_texts,
         name="orga_texts",

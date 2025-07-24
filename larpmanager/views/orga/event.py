@@ -39,6 +39,7 @@ from larpmanager.forms.event import (
     OrgaEventRoleForm,
     OrgaEventTextForm,
     OrgaFeatureForm,
+    OrgaPreferencesForm,
     OrgaQuickSetupForm,
     OrgaRunForm,
 )
@@ -200,6 +201,13 @@ def orga_deadlines(request, s, n):
 @login_required
 def orga_quick(request, s, n):
     return orga_edit(request, s, n, "orga_quick", OrgaQuickSetupForm, None, "manage", add_ctx={"add_another": False})
+
+
+@login_required
+def orga_preferences(request, s, n):
+    return orga_edit(
+        request, s, n, "orga_preferences", OrgaPreferencesForm, None, "manage", add_ctx={"add_another": False}
+    )
 
 
 def _temp_csv_file(key, vals):

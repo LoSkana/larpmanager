@@ -462,6 +462,9 @@ msgstr "Export"
 msgid "Female"
 msgstr "Kvinna"
 
+msgid "Fields"
+msgstr "Fält"
+
 msgid "Filler"
 msgstr "Fyllmedel"
 
@@ -647,6 +650,9 @@ msgstr "Lödning"
 
 msgid "Casting"
 msgstr "Gjutning"
+
+msgid "Columns"
+msgstr "Kolumner"
 
 msgid "Concept"
 msgstr "Koncept"
@@ -906,6 +912,9 @@ msgstr "Nedladdning"
 msgid "Editable"
 msgstr "Redigerbar"
 
+msgid "Elements"
+msgstr "Element"
+
 msgid "End date"
 msgstr "Slutdatum"
 
@@ -1107,6 +1116,9 @@ msgstr "Förmågor"
 msgid "Additions"
 msgstr "Tillgångar"
 
+msgid "Approvals"
+msgstr "Godkännande"
+
 msgid "Available"
 msgstr "Tillgänglig"
 
@@ -1266,6 +1278,9 @@ msgstr "denna länk"
 msgid "Accounting"
 msgstr "Redovisning"
 
+msgid "Additional"
+msgstr "Ytterligare"
+
 msgid "Annual fee"
 msgstr "Årlig avgift"
 
@@ -1301,6 +1316,9 @@ msgstr "Karaktärer"
 
 msgid "Check data"
 msgstr "Kontrollera data"
+
+msgid "Chronology"
+msgstr "Kronologi"
 
 msgid "Collection"
 msgstr "Samla"
@@ -2078,6 +2096,9 @@ msgstr "Karaktärens namn"
 msgid "Collection for"
 msgstr "Samla för"
 
+msgid "Customisations"
+msgstr "Anpassningar"
+
 msgid "Disable Tokens"
 msgstr "Inaktivera Tokens"
 
@@ -2360,9 +2381,6 @@ msgstr "Total samling"
 msgid "Color background"
 msgstr "Text bakgrund"
 
-msgid "Confirm Payments"
-msgstr "Bekräfta betalningar"
-
 msgid "Confirm payments"
 msgstr "Bekräfta betalningar"
 
@@ -2395,6 +2413,9 @@ msgstr "Redovisning av evenemang"
 
 msgid "Event navigation"
 msgstr "Navigation för evenemang"
+
+msgid "Field visibility"
+msgstr "Synlighet i fält"
 
 msgid "Forward discount"
 msgstr "Terminsrabatt"
@@ -2972,6 +2993,9 @@ msgstr "Betalning av delbetalningar"
 
 msgid "Payments in approval"
 msgstr "Betalningar under godkännande"
+
+msgid "Personal preferences"
+msgstr "Personliga preferenser"
 
 msgid "Please wait a moment"
 msgstr "Vänligen vänta ett ögonblick"
@@ -4110,8 +4134,8 @@ msgstr "Hantera typen av prologer för evenemang"
 msgid "Manages registration cancellations"
 msgstr "Hanterar avbokningar av registreringar"
 
-msgid "Manually confirm payments received"
-msgstr "Manuellt bekräfta mottagna betalningar"
+msgid "Manually approve payments received"
+msgstr "Manuellt godkänna mottagna betalningar"
 
 msgid "Now you can create event templates"
 msgstr "Nu kan du skapa eventmallar"
@@ -4477,9 +4501,6 @@ msgstr "Elektronik - datorer, hitech, lampor"
 msgid "Enables free pre-registration to events"
 msgstr "Möjliggör kostnadsfri föranmälan till evenemang"
 
-msgid "If checked, makes visible the speedlarp"
-msgstr "Om markerad, gör speedlarp synlig"
-
 msgid "If you need help, remember to check out"
 msgstr "Om du behöver hjälp, kom ihåg att kolla in"
 
@@ -4698,6 +4719,9 @@ msgstr "Påminnelse om sammanställning av profiler för %(event)s"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Välj slumpmässigt lotter för att uppgradera"
 
+msgid "Selected elements will be shown to players"
+msgstr "Valda element kommer att visas för spelarna"
+
 #, python-format
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "Beloppet tilldelades dig som %(credits)s"
@@ -4745,9 +4769,6 @@ msgstr "Ange fritt beloppet för din donation"
 
 msgid "If checked, allow ticket tier: Collaborator"
 msgstr "Om markerat, tillåt biljettnivå: Samarbetspartner"
-
-msgid "If checked, makes quests and traits visible"
-msgstr "Om markerat, gör uppdrag och egenskaper synliga"
 
 msgid "If there are wrong data you can update your"
 msgstr "Om det finns felaktiga uppgifter, vänligen uppdatera din"
@@ -4961,6 +4982,9 @@ msgstr "Registrerade användare får normal åtkomst"
 
 msgid "Remember to put recipients separated by commas"
 msgstr "Kom ihåg att ange mottagare separerade med kommatecken"
+
+msgid "Set your personal preferences on the interface"
+msgstr "Ställ in dina personliga preferenser i gränssnittet"
 
 msgid "Something went wrong in the account activation"
 msgstr "Något gick fel vid aktiveringen av kontot"
@@ -5319,9 +5343,6 @@ msgstr "Här följer en steg-för-steg-genomgång av gränssnittet"
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jag har gjort det några gånger, jag har grundläggande erfarenhet"
 
-msgid "If checked, makes characters visible to all players"
-msgstr "Om markerad, gör karaktärer synliga för alla spelare"
-
 msgid "If you want to download an example file, click here"
 msgstr "Om du vill ladda ner en exempelfil kan du klicka här"
 
@@ -5668,12 +5689,6 @@ msgid "I am not good what to say. I never thought it would happen"
 msgstr ""
 "Jag vet inte vad jag ska säga. Jag trodde aldrig att det här skulle hända"
 
-msgid "If checked, makes the field content visible to all players"
-msgstr "Om markerad, gör fältinnehållet synligt för alla spelare"
-
-msgid "If checked, makes workshops visible for players to fill in"
-msgstr "Om markerat, synliggörs de workshops som spelarna kan fylla i"
-
 msgid "If instead you wish to upload a new photo of your document"
 msgstr "Om du istället vill ladda upp ett nytt foto av ditt dokument"
 
@@ -5838,9 +5853,6 @@ msgstr ""
 
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Om alternativet är markerat kan det väljas ett maximalt antal gånger"
-
-msgid "If checked, makes prologues visible to the assigned character"
-msgstr "Om markerad, gör prologer synliga för den tilldelade karaktären"
 
 msgid "Lets staff access the safety information submitted by players"
 msgstr ""
@@ -6091,9 +6103,6 @@ msgid "Error loading. Invalid file format (we accept only pdf or images)"
 msgstr ""
 "Fel vid inläsning. Ogiltigt filformat - vi accepterar endast pdf och bilder"
 
-msgid "If checked, makes visible the PDF version of the character sheets"
-msgstr "Om markerat, gör PDF-versioner av korten synliga"
-
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""
 "Om markerad, kommer inga krediter att användas i anmälningarna för detta "
@@ -6149,9 +6158,6 @@ msgstr ""
 msgid "Enter your email below to receive instructions on how to change it"
 msgstr ""
 "Ange din e-postadress nedan för att få instruktioner om hur du ändrar den"
-
-msgid "If checked, makes the field content visible to the assigned player"
-msgstr "Om markerad, gör fältinnehållet synligt för den tilldelade spelaren"
 
 msgid "Indicates whether the option can be included in the gifted signups"
 msgstr "Anger om optionen kan inkluderas i de fria posterna"
@@ -6462,6 +6468,11 @@ msgid "This is automatically deducted from the registration of a future event"
 msgstr ""
 "Detta dras automatiskt av från registreringen av ett framtida evenemang"
 
+msgid "This page allows you to set your personal preferences on the interface"
+msgstr ""
+"På den här sidan kan du ställa in dina personliga preferenser för "
+"gränssnittet"
+
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Du kan använda följande fält, de kommer att fyllas i automatiskt"
 
@@ -6573,6 +6584,10 @@ msgid ""
 "Presentation visible to all players, when 'show presentation' is checked"
 msgstr ""
 "Presentation synlig för alla spelare, när \"visa presentation\" är markerat"
+
+msgid ""
+"Select which fields should open automatically when the list is displayed"
+msgstr "Välj vilka fält som ska öppnas automatiskt när listan visas"
 
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient"
@@ -6821,12 +6836,6 @@ msgid ""
 msgstr ""
 "Om den är markerad kan ett alternativ endast visas om andra alternativ är "
 "valda"
-
-msgid ""
-"If checked, makes factions visible, as the character assignments to factions"
-msgstr ""
-"Om markerad, gör fraktioner synliga, eftersom karaktären tilldelar "
-"fraktioner"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
@@ -9113,6 +9122,13 @@ msgstr ""
 " visas för spelare med karaktärer i alla valda fraktioner"
 
 msgid ""
+"Selected fields will be displayed as follows: public fields visible to all "
+"players, private fields visible only to assigned players"
+msgstr ""
+"Valda fält visas på följande sätt: offentliga fält som är synliga för alla "
+"spelare, privata fält som endast är synliga för tilldelade spelare"
+
+msgid ""
 "This page allows you to select the features activated for this event, and "
 "all its runs (click on a feature to show its description)"
 msgstr ""
@@ -9237,6 +9253,13 @@ msgid ""
 msgstr ""
 "Vi bekräftar att dina röster är korrekt registrerade i systemet! Tack för "
 "att du deltar i föreningens demokratiska liv"
+
+msgid ""
+"Normally all character fields (public or private) are shown; with this "
+"configuration you can select which ones to display at any given time"
+msgstr ""
+"Normalt visas alla teckenfält (offentliga eller privata); med den här "
+"konfigurationen kan du välja vilka som ska visas vid varje given tidpunkt"
 
 msgid ""
 "This page allows you to select the features activated for the organization, "
@@ -9643,15 +9666,6 @@ msgstr ""
 "denna siffra är den viktigaste positiva, rörelsemarginalen. Den tar hänsyn "
 "till budgetar för evenemang som har varit över två månader, som anses vara "
 "stängda, och behandlar alla tokens och krediter som återbetalda"
-
-msgid ""
-"Please note that your character sheet may contain  personal secrets, not to "
-"be shared before the start of the event. To avoid accidentally spoiling your"
-" experience, do not discuss its content with other participants!"
-msgstr ""
-"Observera att ditt karaktärsblad kan innehålla personliga hemligheter, som "
-"inte bör delas innan evenemanget börjar. För att undvika att oavsiktligt "
-"förstöra din upplevelse, diskutera inte dess innehåll med andra deltagare!"
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are"

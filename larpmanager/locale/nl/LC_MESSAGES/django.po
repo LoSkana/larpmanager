@@ -462,6 +462,9 @@ msgstr "Exporteer"
 msgid "Female"
 msgstr "Vrouw"
 
+msgid "Fields"
+msgstr "Velden"
+
 msgid "Filler"
 msgstr "Vulstof"
 
@@ -647,6 +650,9 @@ msgstr "Soldeer"
 
 msgid "Casting"
 msgstr "Gieten"
+
+msgid "Columns"
+msgstr "Kolommen"
 
 msgid "Concept"
 msgstr "Concept"
@@ -906,6 +912,9 @@ msgstr "Downloaden"
 msgid "Editable"
 msgstr "Bewerkbaar"
 
+msgid "Elements"
+msgstr "Elementen"
+
 msgid "End date"
 msgstr "Einddatum"
 
@@ -1107,6 +1116,9 @@ msgstr "Capaciteiten"
 msgid "Additions"
 msgstr "Toevoegingen"
 
+msgid "Approvals"
+msgstr "Goedkeuringen"
+
 msgid "Available"
 msgstr "Beschikbaar"
 
@@ -1266,6 +1278,9 @@ msgstr "deze link"
 msgid "Accounting"
 msgstr "Boekhouding"
 
+msgid "Additional"
+msgstr "Extra"
+
 msgid "Annual fee"
 msgstr "Jaarlijkse vergoeding"
 
@@ -1301,6 +1316,9 @@ msgstr "Personages"
 
 msgid "Check data"
 msgstr "Gegevens controleren"
+
+msgid "Chronology"
+msgstr "Chronologie"
 
 msgid "Collection"
 msgstr "Verzamel"
@@ -2078,6 +2096,9 @@ msgstr "Naam personage"
 msgid "Collection for"
 msgstr "Verzamelen voor"
 
+msgid "Customisations"
+msgstr "Aanpassingen"
+
 msgid "Disable Tokens"
 msgstr "Tokens uitschakelen"
 
@@ -2360,9 +2381,6 @@ msgstr "Totale collectie"
 msgid "Color background"
 msgstr "Tekst achtergrond"
 
-msgid "Confirm Payments"
-msgstr "Betalingen bevestigen"
-
 msgid "Confirm payments"
 msgstr "Betalingen bevestigen"
 
@@ -2395,6 +2413,9 @@ msgstr "Evenement Boekhouding"
 
 msgid "Event navigation"
 msgstr "Navigatie op evenementen"
+
+msgid "Field visibility"
+msgstr "Zichtbaarheid in het veld"
 
 msgid "Forward discount"
 msgstr "Termijnkorting"
@@ -2972,6 +2993,9 @@ msgstr "Betalingstermijnen"
 
 msgid "Payments in approval"
 msgstr "Betalingen onder goedkeuring"
+
+msgid "Personal preferences"
+msgstr "Persoonlijke voorkeuren"
 
 msgid "Please wait a moment"
 msgstr "Een ogenblik geduld alstublieft"
@@ -4110,8 +4134,8 @@ msgstr "Het type proloog beheren"
 msgid "Manages registration cancellations"
 msgstr "Beheert annuleringen van registraties"
 
-msgid "Manually confirm payments received"
-msgstr "Handmatig ontvangen betalingen bevestigen"
+msgid "Manually approve payments received"
+msgstr "Ontvangen betalingen handmatig goedkeuren"
 
 msgid "Now you can create event templates"
 msgstr "Nu kun je sjablonen voor evenementen maken"
@@ -4477,9 +4501,6 @@ msgstr "Elektronica - computers, hitech, lampen"
 msgid "Enables free pre-registration to events"
 msgstr "Maakt gratis voorregistratie voor evenementen mogelijk"
 
-msgid "If checked, makes visible the speedlarp"
-msgstr "Indien aangevinkt, wordt de snelheidslimiet zichtbaar"
-
 msgid "If you need help, remember to check out"
 msgstr "Als je hulp nodig hebt, ga dan naar"
 
@@ -4698,6 +4719,9 @@ msgstr "Herinnering profielcompilatie voor %(event)s"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Selecteer willekeurig loten om te upgraden"
 
+msgid "Selected elements will be shown to players"
+msgstr "Geselecteerde elementen worden aan spelers getoond"
+
 #, python-format
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "De som werd aan jou toegewezen als %(credits)s"
@@ -4745,9 +4769,6 @@ msgstr "Geef vrij het bedrag van je donatie aan"
 
 msgid "If checked, allow ticket tier: Collaborator"
 msgstr "Indien aangevinkt, ticket tier toestaan: Medewerker"
-
-msgid "If checked, makes quests and traits visible"
-msgstr "Indien aangevinkt, maakt dit quests en eigenschappen zichtbaar"
 
 msgid "If there are wrong data you can update your"
 msgstr "Als er onjuiste gegevens zijn, werk dan uw"
@@ -4963,6 +4984,9 @@ msgstr "Geregistreerde gebruikers krijgen normale toegang"
 
 msgid "Remember to put recipients separated by commas"
 msgstr "Vergeet niet ontvangers gescheiden door komma's te plaatsen"
+
+msgid "Set your personal preferences on the interface"
+msgstr "Stel je persoonlijke voorkeuren in op de interface"
 
 msgid "Something went wrong in the account activation"
 msgstr "Er is iets misgegaan bij het activeren van de account"
@@ -5324,9 +5348,6 @@ msgstr "Hier volgt een stap-voor-stap uitleg van de interface"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Ik heb het een paar keer gedaan, ik heb basiservaring"
-
-msgid "If checked, makes characters visible to all players"
-msgstr "Indien aangevinkt, worden personages zichtbaar voor alle spelers"
 
 msgid "If you want to download an example file, click here"
 msgstr "Als je een voorbeeldbestand wilt downloaden, klik dan hier"
@@ -5690,14 +5711,6 @@ msgstr ""
 "Ik weet niet goed wat ik moet zeggen. Ik had nooit gedacht dat dit zou "
 "gebeuren"
 
-msgid "If checked, makes the field content visible to all players"
-msgstr "Indien aangevinkt, wordt de veldinhoud zichtbaar voor alle spelers"
-
-msgid "If checked, makes workshops visible for players to fill in"
-msgstr ""
-"Als deze optie is aangevinkt, worden de workshops zichtbaar die spelers "
-"kunnen invullen"
-
 msgid "If instead you wish to upload a new photo of your document"
 msgstr ""
 "Als je in plaats daarvan een nieuwe foto van je document wilt uploaden"
@@ -5870,11 +5883,6 @@ msgid "If checked, an option can be chosen a maximum number of times"
 msgstr ""
 "Als deze optie is aangevinkt, kan deze een maximaal aantal keren worden "
 "gekozen"
-
-msgid "If checked, makes prologues visible to the assigned character"
-msgstr ""
-"Als deze optie is aangevinkt, worden prologen zichtbaar voor het toegewezen "
-"personage"
 
 msgid "Lets staff access the safety information submitted by players"
 msgstr ""
@@ -6147,10 +6155,6 @@ msgstr ""
 "Fout bij het laden. Ongeldig bestandsformaat - we accepteren alleen pdf en "
 "afbeeldingen"
 
-msgid "If checked, makes visible the PDF version of the character sheets"
-msgstr ""
-"Als deze optie is aangevinkt, worden PDF-versies van de kaarten zichtbaar"
-
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""
 "Als deze optie is aangevinkt, worden er geen credits gebruikt bij de invoer "
@@ -6212,10 +6216,6 @@ msgid "Enter your email below to receive instructions on how to change it"
 msgstr ""
 "Voer hieronder je e-mailadres in om instructies te ontvangen over hoe je dit"
 " kunt wijzigen"
-
-msgid "If checked, makes the field content visible to the assigned player"
-msgstr ""
-"Indien aangevinkt, wordt de veldinhoud zichtbaar voor de toegewezen speler"
 
 msgid "Indicates whether the option can be included in the gifted signups"
 msgstr "Geeft aan of de optie kan worden opgenomen in de vrije vermeldingen"
@@ -6551,6 +6551,10 @@ msgstr ""
 "Dit wordt automatisch in mindering gebracht op de registratie van een "
 "toekomstig evenement"
 
+msgid "This page allows you to set your personal preferences on the interface"
+msgstr ""
+"Op deze pagina kun je je persoonlijke voorkeuren voor de interface instellen"
+
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Je kunt de volgende velden gebruiken, ze worden automatisch ingevuld"
 
@@ -6665,6 +6669,12 @@ msgid ""
 "Presentation visible to all players, when 'show presentation' is checked"
 msgstr ""
 "Presentatie zichtbaar voor alle spelers als 'toon presentatie' is aangevinkt"
+
+msgid ""
+"Select which fields should open automatically when the list is displayed"
+msgstr ""
+"Selecteer welke velden automatisch moeten worden geopend wanneer de lijst "
+"wordt weergegeven"
 
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient"
@@ -6932,12 +6942,6 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, is deze alleen zichtbaar als andere opties "
 "zijn geselecteerd"
-
-msgid ""
-"If checked, makes factions visible, as the character assignments to factions"
-msgstr ""
-"Als deze optie is aangevinkt, worden facties zichtbaar, net als de "
-"toewijzing van personages aan facties"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
@@ -9249,6 +9253,13 @@ msgstr ""
 "getoond aan spelers met personages in alle gekozen facties"
 
 msgid ""
+"Selected fields will be displayed as follows: public fields visible to all "
+"players, private fields visible only to assigned players"
+msgstr ""
+"Geselecteerde velden worden als volgt weergegeven: openbare velden zichtbaar"
+" voor alle spelers, privévelden alleen zichtbaar voor toegewezen spelers"
+
+msgid ""
 "This page allows you to select the features activated for this event, and "
 "all its runs (click on a feature to show its description)"
 msgstr ""
@@ -9376,6 +9387,14 @@ msgid ""
 msgstr ""
 "Wij bevestigen dat uw stemmen correct zijn geregistreerd in het systeem! "
 "Bedankt voor je deelname aan het democratische leven van de vereniging"
+
+msgid ""
+"Normally all character fields (public or private) are shown; with this "
+"configuration you can select which ones to display at any given time"
+msgstr ""
+"Normaal gesproken worden alle tekenvelden (openbaar of privé) weergegeven; "
+"met deze configuratie kun je kiezen welke velden op een bepaald moment "
+"worden weergegeven"
 
 msgid ""
 "This page allows you to select the features activated for the organization, "
@@ -9795,16 +9814,6 @@ msgstr ""
 "rekening gehouden met budgetten voor evenementen die langer dan twee maanden"
 " duren, die als afgesloten worden beschouwd, en alle tokens en credits "
 "worden als terugbetaald beschouwd"
-
-msgid ""
-"Please note that your character sheet may contain  personal secrets, not to "
-"be shared before the start of the event. To avoid accidentally spoiling your"
-" experience, do not discuss its content with other participants!"
-msgstr ""
-"Houd er rekening mee dat je karakterblad persoonlijke geheimen kan bevatten,"
-" die niet gedeeld mogen worden voor het evenement begint. Om te voorkomen "
-"dat je per ongeluk je ervaring verpest, bespreek de inhoud ervan niet met "
-"andere deelnemers!"
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are"

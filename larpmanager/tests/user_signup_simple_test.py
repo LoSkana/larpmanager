@@ -55,7 +55,7 @@ async def user_signup_simple(live_server, page):
 
 async def signup(live_server, page):
     # sign up
-    await page.get_by_role("link", name="Home").click()
+    await go_to(page, live_server, "/")
     await expect(page.locator("#one")).to_contain_text("Registration is open!")
     await page.get_by_role("link", name="Registration is open!").click()
     await page.get_by_role("button", name="Continue").click()
@@ -137,7 +137,7 @@ async def pre_register(live_server, page):
     await page.locator("#id_pre_register_active").check()
     await page.get_by_role("button", name="Confirm", exact=True).click()
 
-    await page.get_by_role("link", name="Home").click()
+    await go_to(page, live_server, "/")
     await expect(page.locator("#one")).to_contain_text("Registration not yet open!")
     await expect(page.locator("#one")).to_contain_text("Pre-register to the event!")
     await page.get_by_role("link", name="Pre-register to the event!").click()

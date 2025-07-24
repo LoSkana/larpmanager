@@ -744,6 +744,12 @@ msgstr ""
 msgid "Writing option"
 msgstr ""
 
+msgid "Characters"
+msgstr ""
+
+msgid "Factions"
+msgstr ""
+
 msgid "Insert the css code to customize the pdf printing"
 msgstr ""
 
@@ -962,6 +968,14 @@ msgstr ""
 msgid ""
 "Enables field 'assigned', to track which staff member is responsible for "
 "each writing element"
+msgstr ""
+
+msgid "Field visibility"
+msgstr ""
+
+msgid ""
+"Normally all character fields (public or private) are shown; with this "
+"configuration you can select which ones to display at any given time"
 msgstr ""
 
 msgid "Disable character finder"
@@ -1317,56 +1331,33 @@ msgstr ""
 msgid "Not active anymore"
 msgstr ""
 
-msgid "Characters"
-msgstr ""
-
-msgid "If checked, makes characters visible to all players"
-msgstr ""
-
-msgid "If checked, makes the field content visible to all players"
-msgstr ""
-
-msgid "If checked, makes the field content visible to the assigned player"
-msgstr ""
-
-msgid "Factions"
-msgstr ""
-
 msgid ""
-"If checked, makes factions visible, as the character assignments to factions"
+"Selected fields will be displayed as follows: public fields visible to all "
+"players, private fields visible only to assigned players"
+msgstr ""
+
+msgid "Visibility"
 msgstr ""
 
 msgid "Speedlarp"
 msgstr ""
 
-msgid "If checked, makes visible the speedlarp"
-msgstr ""
-
 msgid "Prologues"
-msgstr ""
-
-msgid "If checked, makes prologues visible to the assigned character"
 msgstr ""
 
 msgid "Questbuilder"
 msgstr ""
 
-msgid "If checked, makes quests and traits visible"
-msgstr ""
-
 msgid "Workshop"
-msgstr ""
-
-msgid "If checked, makes workshops visible for players to fill in"
 msgstr ""
 
 msgid "PDF"
 msgstr ""
 
-msgid "If checked, makes visible the PDF version of the character sheets"
+msgid "Selected elements will be shown to players"
 msgstr ""
 
-msgid "Visibility"
+msgid "Elements"
 msgstr ""
 
 msgid "You need to define the end date!"
@@ -1451,6 +1442,43 @@ msgid "Do you want to assign characters using a casting algorithm"
 msgstr ""
 
 msgid "Do you want to allow players to create their own characters"
+msgstr ""
+
+msgid "Personal preferences"
+msgstr ""
+
+msgid "This page allows you to set your personal preferences on the interface"
+msgstr ""
+
+msgid ""
+"Select which fields should open automatically when the list is displayed"
+msgstr ""
+
+msgid "Accounting"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Chronology"
+msgstr ""
+
+msgid "Additional"
+msgstr ""
+
+msgid "Gift"
+msgstr ""
+
+msgid "Member"
+msgstr ""
+
+msgid "Customisations"
+msgstr ""
+
+msgid "Surcharge"
+msgstr ""
+
+msgid "Discounts"
 msgstr ""
 
 msgid "Ability"
@@ -1604,9 +1632,6 @@ msgid ""
 msgstr ""
 
 msgid "Code 'Bring a friend'"
-msgstr ""
-
-msgid "Surcharge"
 msgstr ""
 
 msgid "Registration surcharge"
@@ -1999,12 +2024,6 @@ msgstr ""
 
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
-msgstr ""
-
-msgid ""
-"Please note that your character sheet may contain  personal secrets, not to "
-"be shared before the start of the event. To avoid accidentally spoiling your "
-"experience, do not discuss its content with other participants!"
 msgstr ""
 
 #, python-format
@@ -3585,9 +3604,6 @@ msgstr ""
 msgid "Names"
 msgstr ""
 
-msgid "Email"
-msgstr ""
-
 msgid "Cancellation for missing organization registration"
 msgstr ""
 
@@ -3975,9 +3991,6 @@ msgid ""
 "screenshot of the confirmation sent by Paypal"
 msgstr ""
 
-msgid "Accounting"
-msgstr ""
-
 msgid "Total registration fee"
 msgstr ""
 
@@ -4348,9 +4361,6 @@ msgstr ""
 msgid "Registered"
 msgstr ""
 
-msgid "Gift"
-msgstr ""
-
 msgid ""
 "On this page you can book tickets for the event; once paid, a special code "
 "will be generated"
@@ -4407,9 +4417,6 @@ msgid ""
 msgstr ""
 
 msgid "Here are the sign up options with limited number"
-msgstr ""
-
-msgid "Discounts"
 msgstr ""
 
 msgid "Value"
@@ -4674,9 +4681,6 @@ msgstr ""
 msgid "Refund given"
 msgstr ""
 
-msgid "Member"
-msgstr ""
-
 msgid "Accounting - History"
 msgstr ""
 
@@ -4856,7 +4860,7 @@ msgstr ""
 msgid "This page shows inventory custody items"
 msgstr ""
 
-msgid "Show / hide"
+msgid "Columns"
 msgstr ""
 
 msgid "past"
@@ -6844,6 +6848,9 @@ msgstr ""
 msgid "This page shows the event quests"
 msgstr ""
 
+msgid "Show / hide"
+msgstr ""
+
 msgid "hide"
 msgstr ""
 
@@ -7819,10 +7826,10 @@ msgstr ""
 msgid "Manages and assigns tasks to characters"
 msgstr ""
 
-msgid "Confirm Payments"
+msgid "Approvals"
 msgstr ""
 
-msgid "Manually confirm payments received"
+msgid "Manually approve payments received"
 msgstr ""
 
 msgid "Upload Expenses"
@@ -7901,6 +7908,12 @@ msgid "Manage questions and options for characters and writing elements"
 msgstr ""
 
 msgid "Display sent e-mails"
+msgstr ""
+
+msgid "Set your personal preferences on the interface"
+msgstr ""
+
+msgid "Fields"
 msgstr ""
 
 #, python-format

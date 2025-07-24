@@ -4,7 +4,7 @@
     {{ faction.name }} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    {% if show_teaser %}
+    {% if show_faction.teaser %}
         <p>{% show_char faction.teaser run 1 %}</p>
     {% endif %}
     <h2>{% trans "Characters" %}</h2>
@@ -39,7 +39,7 @@
                                 <b>{% trans "Titolo" %}: </b> {{ el.title | safe }}
                             </div>
                         {% endif %}
-                        {% if el.teaser and show_teaser %}
+                        {% if el.teaser and show_character.teaser %}
                             <div class="go-inline">
                                 <b>Teaser: </b> {% show_char el.teaser run 1 %}
                             </div>

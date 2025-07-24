@@ -462,6 +462,9 @@ msgstr "Exportation"
 msgid "Female"
 msgstr "Femme"
 
+msgid "Fields"
+msgstr "Domaines"
+
 msgid "Filler"
 msgstr "Remplisseur"
 
@@ -647,6 +650,9 @@ msgstr "Soudure"
 
 msgid "Casting"
 msgstr "Casting"
+
+msgid "Columns"
+msgstr "Colonnes"
 
 msgid "Concept"
 msgstr "Concept"
@@ -906,6 +912,9 @@ msgstr "Télécharger"
 msgid "Editable"
 msgstr "Modifiable"
 
+msgid "Elements"
+msgstr "Éléments"
+
 msgid "End date"
 msgstr "Date de fin"
 
@@ -1107,6 +1116,9 @@ msgstr "Capacités"
 msgid "Additions"
 msgstr "Additions"
 
+msgid "Approvals"
+msgstr "Agréments"
+
 msgid "Available"
 msgstr "Disponible"
 
@@ -1266,6 +1278,9 @@ msgstr "ce lien"
 msgid "Accounting"
 msgstr "Comptabilité"
 
+msgid "Additional"
+msgstr "Supplémentaire"
+
 msgid "Annual fee"
 msgstr "Cotisation annuelle"
 
@@ -1301,6 +1316,9 @@ msgstr "Personnages"
 
 msgid "Check data"
 msgstr "Vérifier les données"
+
+msgid "Chronology"
+msgstr "Chronologie"
 
 msgid "Collection"
 msgstr "Collecter"
@@ -2078,6 +2096,9 @@ msgstr "Nom du personnage"
 msgid "Collection for"
 msgstr "Collecter pour"
 
+msgid "Customisations"
+msgstr "Personnalisations"
+
 msgid "Disable Tokens"
 msgstr "Désactiver les jetons"
 
@@ -2360,9 +2381,6 @@ msgstr "Collection totale "
 msgid "Color background"
 msgstr "Arrière-plan du texte"
 
-msgid "Confirm Payments"
-msgstr "Confirmer les paiements"
-
 msgid "Confirm payments"
 msgstr "Confirmer les paiements"
 
@@ -2395,6 +2413,9 @@ msgstr "Comptabilité des événements"
 
 msgid "Event navigation"
 msgstr "Navigation pour les événements"
+
+msgid "Field visibility"
+msgstr "Visibilité sur le terrain"
 
 msgid "Forward discount"
 msgstr "Escompte à terme"
@@ -2972,6 +2993,9 @@ msgstr "Paiements échelonnés"
 
 msgid "Payments in approval"
 msgstr "Paiements en cours d'approbation"
+
+msgid "Personal preferences"
+msgstr "Préférences personnelles"
 
 msgid "Please wait a moment"
 msgstr "Veuillez patienter un instant"
@@ -4111,8 +4135,8 @@ msgstr "Gérer le type de prologues d'événements"
 msgid "Manages registration cancellations"
 msgstr "Gestion des annulations d'inscription"
 
-msgid "Manually confirm payments received"
-msgstr "Confirmer manuellement les paiements reçus"
+msgid "Manually approve payments received"
+msgstr "Approuver manuellement les paiements reçus"
 
 msgid "Now you can create event templates"
 msgstr "Vous pouvez désormais créer des modèles d'événements"
@@ -4478,9 +4502,6 @@ msgstr "Électronique - ordinateurs, hitech, lumières"
 msgid "Enables free pre-registration to events"
 msgstr "Permet de s'inscrire gratuitement à l'avance à des événements"
 
-msgid "If checked, makes visible the speedlarp"
-msgstr "Si coché, rend visible le speedlarp"
-
 msgid "If you need help, remember to check out"
 msgstr "Si vous avez besoin d'aide, n'oubliez pas de consulter"
 
@@ -4700,6 +4721,9 @@ msgstr "Rappel de compilation de profil pour les %(event)s"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Sélectionner aléatoirement des billets de loterie à revaloriser"
 
+msgid "Selected elements will be shown to players"
+msgstr "Les éléments sélectionnés seront affichés aux joueurs"
+
 #, python-format
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "La somme vous a été attribuée sous forme de %(credits)s"
@@ -4748,9 +4772,6 @@ msgstr "Indiquez librement le montant de votre don"
 
 msgid "If checked, allow ticket tier: Collaborator"
 msgstr "Si la case est cochée, autoriser le niveau de ticket : Collaborateur"
-
-msgid "If checked, makes quests and traits visible"
-msgstr "Si cette case est cochée, les quêtes et les traits sont visibles"
 
 msgid "If there are wrong data you can update your"
 msgstr "Si les données sont incorrectes, veuillez mettre à jour votre"
@@ -4966,6 +4987,9 @@ msgstr "Les utilisateurs enregistrés bénéficient d'un accès normal"
 
 msgid "Remember to put recipients separated by commas"
 msgstr "N'oubliez pas de séparer les destinataires par des virgules"
+
+msgid "Set your personal preferences on the interface"
+msgstr "Définissez vos préférences personnelles sur l'interface"
 
 msgid "Something went wrong in the account activation"
 msgstr "Un problème s'est produit lors de l'activation du compte"
@@ -5334,10 +5358,6 @@ msgstr "Voici un aperçu de l'interface, étape par étape"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Je l'ai fait plusieurs fois, j'ai une expérience de base"
-
-msgid "If checked, makes characters visible to all players"
-msgstr ""
-"Si cette case est cochée, les personnages sont visibles par tous les joueurs"
 
 msgid "If you want to download an example file, click here"
 msgstr "Si vous souhaitez télécharger un fichier d'exemple, cliquez ici"
@@ -5720,14 +5740,6 @@ msgid "I am not good what to say. I never thought it would happen"
 msgstr ""
 "Je ne sais pas trop quoi dire. Je n'ai jamais pensé que cela arriverait"
 
-msgid "If checked, makes the field content visible to all players"
-msgstr ""
-"Si cette case est cochée, le contenu du champ est visible par tous les "
-"joueurs"
-
-msgid "If checked, makes workshops visible for players to fill in"
-msgstr "Si coché, rend visible les ateliers que les joueurs peuvent remplir"
-
 msgid "If instead you wish to upload a new photo of your document"
 msgstr ""
 "Si vous souhaitez plutôt télécharger une nouvelle photo de votre document"
@@ -5910,11 +5922,6 @@ msgid "If checked, an option can be chosen a maximum number of times"
 msgstr ""
 "Si cette case est cochée, une option peut être choisie un nombre maximum de "
 "fois"
-
-msgid "If checked, makes prologues visible to the assigned character"
-msgstr ""
-"Si cette case est cochée, les prologues sont visibles pour le personnage "
-"assigné"
 
 msgid "Lets staff access the safety information submitted by players"
 msgstr ""
@@ -6210,9 +6217,6 @@ msgstr ""
 "Erreur de chargement. Format de fichier non valide - nous n'acceptons que "
 "les pdf et les images"
 
-msgid "If checked, makes visible the PDF version of the character sheets"
-msgstr "Si cette case est cochée, les versions PDF des cartes sont visibles"
-
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""
 "Si cette case est cochée, aucun crédit ne sera utilisé pour les inscriptions"
@@ -6273,11 +6277,6 @@ msgid "Enter your email below to receive instructions on how to change it"
 msgstr ""
 "Saisissez votre adresse électronique ci-dessous pour recevoir des "
 "instructions sur la manière de la modifier"
-
-msgid "If checked, makes the field content visible to the assigned player"
-msgstr ""
-"Si cette case est cochée, le contenu de la rubrique est visible pour le "
-"lecteur désigné"
 
 msgid "Indicates whether the option can be included in the gifted signups"
 msgstr "Indique si l'option peut être incluse dans les entrées libres"
@@ -6628,6 +6627,11 @@ msgid "This is automatically deducted from the registration of a future event"
 msgstr ""
 "Ce montant est automatiquement déduit de l'inscription à un événement futur"
 
+msgid "This page allows you to set your personal preferences on the interface"
+msgstr ""
+"Cette page vous permet de définir vos préférences personnelles sur "
+"l'interface"
+
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr ""
 "Vous pouvez utiliser les champs suivants, ils seront remplis automatiquement"
@@ -6748,6 +6752,12 @@ msgid ""
 msgstr ""
 "Présentation visible par tous les joueurs, lorsque l'option \"montrer la "
 "présentation\" est cochée"
+
+msgid ""
+"Select which fields should open automatically when the list is displayed"
+msgstr ""
+"Sélectionner les champs qui doivent s'ouvrir automatiquement lors de "
+"l'affichage de la liste"
 
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient"
@@ -7008,12 +7018,6 @@ msgid ""
 msgstr ""
 "Si cette case est cochée, l'option n'est visible que si d'autres options "
 "sont sélectionnées"
-
-msgid ""
-"If checked, makes factions visible, as the character assignments to factions"
-msgstr ""
-"Si cette case est cochée, les factions sont visibles, tout comme les "
-"affectations des personnages aux factions"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
@@ -9345,6 +9349,14 @@ msgstr ""
 "les factions choisies"
 
 msgid ""
+"Selected fields will be displayed as follows: public fields visible to all "
+"players, private fields visible only to assigned players"
+msgstr ""
+"Les champs sélectionnés seront affichés comme suit : les champs publics sont"
+" visibles par tous les joueurs, les champs privés ne sont visibles que par "
+"les joueurs assignés"
+
+msgid ""
 "This page allows you to select the features activated for this event, and "
 "all its runs (click on a feature to show its description)"
 msgstr ""
@@ -9473,6 +9485,14 @@ msgid ""
 msgstr ""
 "Nous confirmons que vos votes sont correctement enregistrés dans le système "
 "! Merci de participer à la vie démocratique de l'Association"
+
+msgid ""
+"Normally all character fields (public or private) are shown; with this "
+"configuration you can select which ones to display at any given time"
+msgstr ""
+"Normalement, tous les champs de caractères (publics ou privés) sont affichés"
+" ; avec cette configuration, vous pouvez sélectionner ceux qui doivent être "
+"affichés à un moment donné"
 
 msgid ""
 "This page allows you to select the features activated for the organization, "
@@ -9899,16 +9919,6 @@ msgstr ""
 "prend en compte les budgets des événements de plus de deux mois, qui sont "
 "considérés comme clos, et considère tous les jetons et crédits comme "
 "remboursés"
-
-msgid ""
-"Please note that your character sheet may contain  personal secrets, not to "
-"be shared before the start of the event. To avoid accidentally spoiling your"
-" experience, do not discuss its content with other participants!"
-msgstr ""
-"Veuillez noter que votre feuille de personnage peut contenir des secrets "
-"personnels qui ne doivent pas être divulgués avant le début de l'événement. "
-"Pour éviter de gâcher accidentellement votre expérience, ne discutez pas de "
-"son contenu avec les autres participants !"
 
 msgid ""
 "You are registered for an event to be held in this calendar year, but we are"
