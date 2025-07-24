@@ -1132,4 +1132,6 @@ class OrgaPreferencesForm(ConfigForm):
 
                 extra.append((tog, field.display))
 
+            extra.append(("stats", "Stats"))
+
             self.add_configs(f"open_{s[0]}_{event_id}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)
