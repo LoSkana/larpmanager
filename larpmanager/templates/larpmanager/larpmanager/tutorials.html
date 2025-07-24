@@ -7,9 +7,9 @@
 {% block css %}
     {% if iframe %}
         <style>
-            #header, #footer, header, #tutorials .column, #tutorials .navig, .main_nav { display: none }
+            #header, #footer, header, #tutorials .column, #tutorials .navig, .main_nav, #topbar { display: none }
             #main { padding: 0; width: 100%; max-width: 100%; }
-            #page-wrapper { padding: 0; }
+            #page-wrapper { padding: 0; margin: 0; }
         </style>
     {% elif assoc.id != 0 %}
         <style>#tutorials { margin-top: 1em; }</style>
