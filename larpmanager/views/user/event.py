@@ -363,8 +363,12 @@ def check_visibility(ctx, typ, name):
     if typ not in ctx["features"]:
         raise Http404(typ + " not active")
 
-    if "staff" not in ctx and not ctx["show_" + typ]:
-        raise HiddenError(ctx["event"].slug, ctx["run"].number, name)
+    if "staff" not in ctx:
+        # TODO FIX
+        if typ == "faction" and not ctx["show_faction"]:
+            raise HiddenError(ctx["event"].slug, ctx["run"].number, name)
+        if typ == "questbuilder" and "questbuilder" not in ctx["show_addit"]:
+            raise HiddenError(ctx["event"].slug, ctx["run"].number, name)
 
 
 def factions(request, s, n):
