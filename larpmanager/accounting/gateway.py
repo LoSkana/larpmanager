@@ -41,14 +41,13 @@ from paypal.standard.models import ST_PP_COMPLETED
 from satispaython.utils import load_key
 
 from larpmanager.accounting.invoice import invoice_received_money
-from larpmanager.mail.base import notify_admins
 from larpmanager.models.access import get_assoc_executives
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.models.association import Association
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.base import def_user_ctx, update_payment_details
 from larpmanager.utils.common import generate_number
-from larpmanager.utils.tasks import my_send_mail
+from larpmanager.utils.tasks import my_send_mail, notify_admins
 
 
 def get_satispay_form(request, ctx, invoice, amount):

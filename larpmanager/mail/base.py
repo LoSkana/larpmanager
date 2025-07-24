@@ -17,12 +17,10 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-import traceback
 from datetime import datetime, timedelta
 from typing import Optional
 
 import holidays
-from django.conf import settings as conf_settings
 from django.db.models.signals import m2m_changed, post_save, pre_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
@@ -258,14 +256,6 @@ def character_update_status(sender, instance, **kwargs):
             subj = f"{hdr(instance.event)} - {str(instance)} - {instance.get_status_display()}"
 
             my_send_mail(subj, body, instance.player, instance.event)
-
-
-def notify_admins(subj, text, exception=None):
-    if exception:
-        tb = "".join(traceback.format_exception(type(exception), exception, exception.__traceback__))
-        text += "\n" + tb
-    for _name, email in conf_settings.ADMINS:
-        my_send_mail(subj, text, email)
 
 
 def notify_organization_exe(subj, body, assoc, instance):

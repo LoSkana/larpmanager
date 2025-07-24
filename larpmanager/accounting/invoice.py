@@ -24,9 +24,9 @@ from io import StringIO
 
 from django.core.exceptions import ObjectDoesNotExist
 
-from larpmanager.mail.base import notify_admins
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.utils.common import clean, detect_delimiter
+from larpmanager.utils.tasks import notify_admins
 
 
 def invoice_verify(request, ctx, csv_upload):

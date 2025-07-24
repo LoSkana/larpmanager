@@ -89,8 +89,12 @@ def send_mail_exec(players, subj, body, assoc_id=None, run_id=None, reply_to=Non
 
     subj = f"[{obj}] {subj}"
 
+    recipients = players.split(",")
+
+    notify_admins(f"Sending {len(recipients)} - [{obj}]", f"{subj}")
+
     cnt = 0
-    for email in players.split(","):
+    for email in recipients:
         if not email:
             continue
         if email in aux:
@@ -259,3 +263,11 @@ def my_send_mail(subj, body, recipient, obj=None, reply_to=None, schedule=0):
     )
 
     my_send_mail_bkg(email.pk, schedule=schedule)
+
+
+def notify_admins(subj, text, exception=None):
+    if exception:
+        tb = "".join(traceback.format_exception(type(exception), exception, exception.__traceback__))
+        text += "\n" + tb
+    for _name, email in conf_settings.ADMINS:
+        my_send_mail(subj, text, email)
