@@ -1866,6 +1866,9 @@ msgstr "De kommer att öppna kl"
 msgid "You must pay"
 msgstr "Du måste betala"
 
+msgid "already used"
+msgstr "redan använt"
+
 msgid "invalid form"
 msgstr "ogiltigt formulär"
 

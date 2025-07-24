@@ -1866,6 +1866,9 @@ msgstr "Otevírají se v"
 msgid "You must pay"
 msgstr "Musíte zaplatit"
 
+msgid "already used"
+msgstr "již použity"
+
 msgid "invalid form"
 msgstr "neplatný formulář"
 
