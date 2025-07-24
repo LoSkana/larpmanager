@@ -398,7 +398,7 @@ function reload_has_char(parent='') {
             content: {
                 text: $(this).next('span')
             }, style: {
-                classes: 'qtip-dark qtip-rounded qtip-shadow'
+                classes: 'qtip-dark qtip-rounded qtip-shadow qtip-char'
             }, hide: {
                 effect: function(offset) {
                     $(this).fadeOut(500);
