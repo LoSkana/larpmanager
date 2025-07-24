@@ -970,6 +970,14 @@ msgid ""
 "each writing element"
 msgstr ""
 
+msgid "Field visibility"
+msgstr ""
+
+msgid ""
+"Normally all character fields (public or private) are shown; with this "
+"configuration you can select which ones to display at any given time"
+msgstr ""
+
 msgid "Disable character finder"
 msgstr ""
 
@@ -1334,31 +1342,22 @@ msgstr ""
 msgid "Speedlarp"
 msgstr ""
 
-msgid "If checked, makes visible the speedlarp"
-msgstr ""
-
 msgid "Prologues"
-msgstr ""
-
-msgid "If checked, prologues will be visible to the assigned character"
 msgstr ""
 
 msgid "Questbuilder"
 msgstr ""
 
-msgid "If checked, makes quests and traits visible"
-msgstr ""
-
 msgid "Workshop"
-msgstr ""
-
-msgid "If checked, workshops will be visible for players to fill in"
 msgstr ""
 
 msgid "PDF"
 msgstr ""
 
-msgid "If checked, the PDF version of character sheets will be visible"
+msgid "Selected elements will be shown to players"
+msgstr ""
+
+msgid "Elements"
 msgstr ""
 
 msgid "You need to define the end date!"
@@ -4120,13 +4119,10 @@ msgstr ""
 msgid "Change password"
 msgstr ""
 
-msgid "Dashboard"
+msgid "Access the event dashboard"
 msgstr ""
 
 msgid "Access the organization dashboard"
-msgstr ""
-
-msgid "Dashboard"
 msgstr ""
 
 msgid "Role"

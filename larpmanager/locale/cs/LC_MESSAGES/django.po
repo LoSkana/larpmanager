@@ -912,6 +912,9 @@ msgstr "Stáhnout"
 msgid "Editable"
 msgstr "Upravitelné"
 
+msgid "Elements"
+msgstr "Prvky"
+
 msgid "End date"
 msgstr "Datum ukončení"
 
@@ -2378,7 +2381,7 @@ msgstr "Celková sbírka"
 msgid "Color background"
 msgstr "Textové pozadí"
 
-msgid "Confirm Payments"
+msgid "Confirm payments"
 msgstr "Potvrzení plateb"
 
 msgid "Current template"
@@ -2410,6 +2413,9 @@ msgstr "Účtování událostí"
 
 msgid "Event navigation"
 msgstr "Navigace v událostech"
+
+msgid "Field visibility"
+msgstr "Viditelnost v terénu"
 
 msgid "Forward discount"
 msgstr "Forwardová sleva"
@@ -4493,9 +4499,6 @@ msgstr "Elektronika - počítače, hitech, světla"
 msgid "Enables free pre-registration to events"
 msgstr "Umožňuje bezplatnou předběžnou registraci na události"
 
-msgid "If checked, makes visible the speedlarp"
-msgstr "Pokud je zaškrtnuto, zviditelní speedlarp"
-
 msgid "If you need help, remember to check out"
 msgstr "Pokud potřebujete pomoc, nezapomeňte se podívat na"
 
@@ -4714,6 +4717,9 @@ msgstr "Připomenutí sestavení profilu pro %(event)s"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Vyberte náhodně losy pro upgrade"
 
+msgid "Selected elements will be shown to players"
+msgstr "Vybrané prvky se zobrazí hráčům"
+
 #, python-format
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "Částka vám byla přidělena jako %(credits)s"
@@ -4761,9 +4767,6 @@ msgstr "Volně uveďte výši svého daru"
 
 msgid "If checked, allow ticket tier: Collaborator"
 msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: Spolupracovník"
-
-msgid "If checked, makes quests and traits visible"
-msgstr "Pokud je zaškrtnuto, zviditelní úkoly a vlastnosti"
 
 msgid "If there are wrong data you can update your"
 msgstr "Pokud jsou údaje nesprávné, aktualizujte je"
@@ -5788,10 +5791,6 @@ msgstr ""
 msgid "Allows players to cancel their own registrations at any time"
 msgstr "Umožňuje hráčům kdykoli zrušit vlastní registraci"
 
-msgid "If checked, workshops will be visible for players to fill in"
-msgstr ""
-"Pokud je zaškrtnuto, budou viditelné workshopy, které mohou hráči vyplnit"
-
 msgid "If you wish to upload a new scan of your application instead"
 msgstr "Chcete-li místo toho nahrát nový sken své žádosti"
 
@@ -5961,12 +5960,6 @@ msgstr "Dobrý den! Vaše registrace na <b>%(event)s</b> byla potvrzena"
 msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Pokud je zaškrtnuto, nebudou při zadávání této události použity žádné žetony"
-
-msgid "If checked, prologues will be visible to the assigned character"
-msgstr "Pokud je zaškrtnuto, budou prology viditelné pro přiřazenou postavu"
-
-msgid "If checked, the PDF version of character sheets will be visible"
-msgstr "Pokud je zaškrtnuto, zobrazí se PDF verze charakterových listů"
 
 msgid "Indicate the exact date in which the payment has been performed"
 msgstr "Uveďte, ke kterému dni byl proveden pohyb ve finančním nástroji"
@@ -6402,8 +6395,8 @@ msgstr "Jedná se o registrace událostí, za které je třeba zaplatit"
 msgid "This is automatically deducted from the registration of a future event"
 msgstr "Tato částka se automaticky odečte z registrace budoucí akce"
 
-msgid "To activate new features and enhance the functionality of the platform"
-msgstr "Aktivace nových funkcí a vylepšení funkčnosti platformy"
+msgid "This page allows you to set your personal preferences on the interface"
+msgstr "Na této stránce můžete nastavit osobní preference rozhraní"
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Můžete použít následující pole, která se vyplní automaticky"
@@ -8952,6 +8945,20 @@ msgstr ""
 "platbu provedl. Výchozí hodnota 30."
 
 msgid ""
+"Optional - If you select one (or more) factions, the question will only be "
+"shown to players with characters in all chosen factions"
+msgstr ""
+"Nepovinné - pokud vyberete jednu (nebo více) frakcí, otázka se zobrazí pouze"
+" hráčům s postavami ve všech vybraných frakcích"
+
+msgid ""
+"Selected fields will be displayed as follows: public fields visible to all "
+"players, private fields visible only to assigned players"
+msgstr ""
+"Vybraná pole se zobrazí takto: veřejná pole viditelná pro všechny hráče, "
+"soukromá pole viditelná pouze pro přiřazené hráče"
+
+msgid ""
 "This page allows you to select the features activated for this event, and "
 "all its runs (click on a feature to show its description)"
 msgstr ""
@@ -9071,6 +9078,13 @@ msgid ""
 msgstr ""
 "Potvrzujeme, že vaše hlasy jsou v systému správně zapsány! Děkujeme, že se "
 "podílíte na demokratickém životě sdružení"
+
+msgid ""
+"Normally all character fields (public or private) are shown; with this "
+"configuration you can select which ones to display at any given time"
+msgstr ""
+"Obvykle se zobrazují všechna pole znaků (veřejná nebo soukromá); v této "
+"konfiguraci můžete vybrat, která se mají v daném okamžiku zobrazit"
 
 msgid ""
 "This page allows you to select the features activated for the organization, "

@@ -912,6 +912,9 @@ msgstr "Télécharger"
 msgid "Editable"
 msgstr "Modifiable"
 
+msgid "Elements"
+msgstr "Éléments"
+
 msgid "End date"
 msgstr "Date de fin"
 
@@ -2378,7 +2381,7 @@ msgstr "Collection totale "
 msgid "Color background"
 msgstr "Arrière-plan du texte"
 
-msgid "Confirm Payments"
+msgid "Confirm payments"
 msgstr "Confirmer les paiements"
 
 msgid "Current template"
@@ -2410,6 +2413,9 @@ msgstr "Comptabilité des événements"
 
 msgid "Event navigation"
 msgstr "Navigation pour les événements"
+
+msgid "Field visibility"
+msgstr "Visibilité sur le terrain"
 
 msgid "Forward discount"
 msgstr "Escompte à terme"
@@ -4496,9 +4502,6 @@ msgstr "Électronique - ordinateurs, hitech, lumières"
 msgid "Enables free pre-registration to events"
 msgstr "Permet de s'inscrire gratuitement à l'avance à des événements"
 
-msgid "If checked, makes visible the speedlarp"
-msgstr "Si coché, rend visible le speedlarp"
-
 msgid "If you need help, remember to check out"
 msgstr "Si vous avez besoin d'aide, n'oubliez pas de consulter"
 
@@ -4718,6 +4721,9 @@ msgstr "Rappel de compilation de profil pour les %(event)s"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Sélectionner aléatoirement des billets de loterie à revaloriser"
 
+msgid "Selected elements will be shown to players"
+msgstr "Les éléments sélectionnés seront affichés aux joueurs"
+
 #, python-format
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "La somme vous a été attribuée sous forme de %(credits)s"
@@ -4766,9 +4772,6 @@ msgstr "Indiquez librement le montant de votre don"
 
 msgid "If checked, allow ticket tier: Collaborator"
 msgstr "Si la case est cochée, autoriser le niveau de ticket : Collaborateur"
-
-msgid "If checked, makes quests and traits visible"
-msgstr "Si cette case est cochée, les quêtes et les traits sont visibles"
 
 msgid "If there are wrong data you can update your"
 msgstr "Si les données sont incorrectes, veuillez mettre à jour votre"
@@ -5865,11 +5868,6 @@ msgstr ""
 msgid "Allows players to cancel their own registrations at any time"
 msgstr "Permet aux joueurs d'annuler leur inscription à tout moment"
 
-msgid "If checked, workshops will be visible for players to fill in"
-msgstr ""
-"Si cette case est cochée, les ateliers seront visibles pour que les joueurs "
-"puissent les remplir"
-
 msgid "If you wish to upload a new scan of your application instead"
 msgstr ""
 "Si vous souhaitez télécharger un nouveau scan de votre candidature au lieu "
@@ -6084,16 +6082,6 @@ msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Si cette case est cochée, aucun jeton ne sera utilisé pour les inscriptions "
 "à cet événement"
-
-msgid "If checked, prologues will be visible to the assigned character"
-msgstr ""
-"Si cette case est cochée, les prologues seront visibles par le personnage "
-"assigné"
-
-msgid "If checked, the PDF version of character sheets will be visible"
-msgstr ""
-"Si cette case est cochée, la version PDF des feuilles de personnage sera "
-"visible"
 
 msgid "Indicate the exact date in which the payment has been performed"
 msgstr ""
@@ -6639,10 +6627,10 @@ msgid "This is automatically deducted from the registration of a future event"
 msgstr ""
 "Ce montant est automatiquement déduit de l'inscription à un événement futur"
 
-msgid "To activate new features and enhance the functionality of the platform"
+msgid "This page allows you to set your personal preferences on the interface"
 msgstr ""
-"pour activer de nouvelles caractéristiques et améliorer la fonctionnalité de"
-" la plate-forme"
+"Cette page vous permet de définir vos préférences personnelles sur "
+"l'interface"
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr ""
@@ -9353,6 +9341,22 @@ msgstr ""
 "est de 30."
 
 msgid ""
+"Optional - If you select one (or more) factions, the question will only be "
+"shown to players with characters in all chosen factions"
+msgstr ""
+"Facultatif - Si vous sélectionnez une (ou plusieurs) faction(s), la question"
+" ne sera posée qu'aux joueurs dont les personnages appartiennent à toutes "
+"les factions choisies"
+
+msgid ""
+"Selected fields will be displayed as follows: public fields visible to all "
+"players, private fields visible only to assigned players"
+msgstr ""
+"Les champs sélectionnés seront affichés comme suit : les champs publics sont"
+" visibles par tous les joueurs, les champs privés ne sont visibles que par "
+"les joueurs assignés"
+
+msgid ""
 "This page allows you to select the features activated for this event, and "
 "all its runs (click on a feature to show its description)"
 msgstr ""
@@ -9481,6 +9485,14 @@ msgid ""
 msgstr ""
 "Nous confirmons que vos votes sont correctement enregistrés dans le système "
 "! Merci de participer à la vie démocratique de l'Association"
+
+msgid ""
+"Normally all character fields (public or private) are shown; with this "
+"configuration you can select which ones to display at any given time"
+msgstr ""
+"Normalement, tous les champs de caractères (publics ou privés) sont affichés"
+" ; avec cette configuration, vous pouvez sélectionner ceux qui doivent être "
+"affichés à un moment donné"
 
 msgid ""
 "This page allows you to select the features activated for the organization, "
