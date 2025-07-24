@@ -912,6 +912,9 @@ msgstr "Downloaden"
 msgid "Editable"
 msgstr "Bewerkbaar"
 
+msgid "Elements"
+msgstr "Elementen"
+
 msgid "End date"
 msgstr "Einddatum"
 
@@ -2378,7 +2381,7 @@ msgstr "Totale collectie"
 msgid "Color background"
 msgstr "Tekst achtergrond"
 
-msgid "Confirm Payments"
+msgid "Confirm payments"
 msgstr "Betalingen bevestigen"
 
 msgid "Current template"
@@ -2410,6 +2413,9 @@ msgstr "Evenement Boekhouding"
 
 msgid "Event navigation"
 msgstr "Navigatie op evenementen"
+
+msgid "Field visibility"
+msgstr "Zichtbaarheid in het veld"
 
 msgid "Forward discount"
 msgstr "Termijnkorting"
@@ -4495,9 +4501,6 @@ msgstr "Elektronica - computers, hitech, lampen"
 msgid "Enables free pre-registration to events"
 msgstr "Maakt gratis voorregistratie voor evenementen mogelijk"
 
-msgid "If checked, makes visible the speedlarp"
-msgstr "Indien aangevinkt, wordt de snelheidslimiet zichtbaar"
-
 msgid "If you need help, remember to check out"
 msgstr "Als je hulp nodig hebt, ga dan naar"
 
@@ -4716,6 +4719,9 @@ msgstr "Herinnering profielcompilatie voor %(event)s"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Selecteer willekeurig loten om te upgraden"
 
+msgid "Selected elements will be shown to players"
+msgstr "Geselecteerde elementen worden aan spelers getoond"
+
 #, python-format
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "De som werd aan jou toegewezen als %(credits)s"
@@ -4763,9 +4769,6 @@ msgstr "Geef vrij het bedrag van je donatie aan"
 
 msgid "If checked, allow ticket tier: Collaborator"
 msgstr "Indien aangevinkt, ticket tier toestaan: Medewerker"
-
-msgid "If checked, makes quests and traits visible"
-msgstr "Indien aangevinkt, maakt dit quests en eigenschappen zichtbaar"
 
 msgid "If there are wrong data you can update your"
 msgstr "Als er onjuiste gegevens zijn, werk dan uw"
@@ -5827,11 +5830,6 @@ msgstr ""
 msgid "Allows players to cancel their own registrations at any time"
 msgstr "Spelers kunnen hun eigen registratie op elk moment annuleren"
 
-msgid "If checked, workshops will be visible for players to fill in"
-msgstr ""
-"Als deze optie is aangevinkt, zijn de workshops zichtbaar voor spelers om in"
-" te vullen"
-
 msgid "If you wish to upload a new scan of your application instead"
 msgstr "Als u in plaats daarvan een nieuwe scan van uw aanvraag wilt uploaden"
 
@@ -6032,16 +6030,6 @@ msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Als deze optie is aangevinkt, worden er geen tokens gebruikt bij de invoer "
 "van dit evenement"
-
-msgid "If checked, prologues will be visible to the assigned character"
-msgstr ""
-"Als deze optie is aangevinkt, zijn prologen zichtbaar voor het toegewezen "
-"personage"
-
-msgid "If checked, the PDF version of character sheets will be visible"
-msgstr ""
-"Als deze optie is aangevinkt, is de PDF-versie van de karaktersheets "
-"zichtbaar"
 
 msgid "Indicate the exact date in which the payment has been performed"
 msgstr ""
@@ -6563,9 +6551,9 @@ msgstr ""
 "Dit wordt automatisch in mindering gebracht op de registratie van een "
 "toekomstig evenement"
 
-msgid "To activate new features and enhance the functionality of the platform"
+msgid "This page allows you to set your personal preferences on the interface"
 msgstr ""
-"Nieuwe functies activeren en de functionaliteit van het platform verbeteren"
+"Op deze pagina kun je je persoonlijke voorkeuren voor de interface instellen"
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Je kunt de volgende velden gebruiken, ze worden automatisch ingevuld"
@@ -9258,6 +9246,20 @@ msgstr ""
 " verwittigt om door te gaan met de betaling. Standaard 30."
 
 msgid ""
+"Optional - If you select one (or more) factions, the question will only be "
+"shown to players with characters in all chosen factions"
+msgstr ""
+"Optioneel - Als je één (of meer) facties selecteert, wordt de vraag alleen "
+"getoond aan spelers met personages in alle gekozen facties"
+
+msgid ""
+"Selected fields will be displayed as follows: public fields visible to all "
+"players, private fields visible only to assigned players"
+msgstr ""
+"Geselecteerde velden worden als volgt weergegeven: openbare velden zichtbaar"
+" voor alle spelers, privévelden alleen zichtbaar voor toegewezen spelers"
+
+msgid ""
 "This page allows you to select the features activated for this event, and "
 "all its runs (click on a feature to show its description)"
 msgstr ""
@@ -9385,6 +9387,14 @@ msgid ""
 msgstr ""
 "Wij bevestigen dat uw stemmen correct zijn geregistreerd in het systeem! "
 "Bedankt voor je deelname aan het democratische leven van de vereniging"
+
+msgid ""
+"Normally all character fields (public or private) are shown; with this "
+"configuration you can select which ones to display at any given time"
+msgstr ""
+"Normaal gesproken worden alle tekenvelden (openbaar of privé) weergegeven; "
+"met deze configuratie kun je kiezen welke velden op een bepaald moment "
+"worden weergegeven"
 
 msgid ""
 "This page allows you to select the features activated for the organization, "
