@@ -119,12 +119,17 @@ window.addEventListener('DOMContentLoaded', function() {
             var target = $($(this).attr('href'));
             var headerHeight = $('header').outerHeight();
             var offset = 10;
-            
+
             console.log(target);
             console.log(offset);
 
+            {% if interface_old %}
+                var scrollEl = $('html, body');
+            {% else %}
+                var scrollEl = $('#page-wrapper');
+            {% endif %}
             if (target.length) {
-                $('#page-wrapper').animate({
+                scrollEl.animate({
                     scrollTop: target.offset().top - offset
                 }, 0);
             } else {
