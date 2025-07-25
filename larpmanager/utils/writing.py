@@ -263,7 +263,9 @@ def _prepare_writing_list(ctx, request):
         pass
 
     model_name = ctx["label_typ"].lower()
-    ctx["default_fields"] = request.user.member.get_config(f"open_{model_name}_{ctx['event'].id}", "['teaser', 'text']")
+    ctx["default_fields"] = request.user.member.get_config(f"open_{model_name}_{ctx['event'].id}", "[]")
+    if ctx["default_fields"] == "[]":
+        ctx["default_fields"] = "['teaser', 'text']"
 
 
 def writing_list_plot(ctx):
