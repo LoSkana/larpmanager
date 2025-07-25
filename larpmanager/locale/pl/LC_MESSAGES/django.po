@@ -4739,12 +4739,6 @@ msgstr "Ta strona zawiera podsumowanie wpisów systemowych"
 msgid "Warning! Other users are editing this item"
 msgstr "Ostrzeżenie! Inni użytkownicy edytują ten element"
 
-msgid "main grouping / affiliation for characters"
-msgstr "Główna grupa / przynależność postaci"
-
-msgid "secondary grouping across primary factions"
-msgstr "Drugorzędne grupowanie przez główne frakcje"
-
 msgid "Allow to switch registration between events"
 msgstr "Możliwość przełączania rejestracji między wydarzeniami"
 
@@ -5330,9 +5324,6 @@ msgstr "Całkowite opłaty za uczestnictwo obniżone dzięki zniżkom"
 
 msgid "Write to us if you need help in setting things up!"
 msgstr "Napisz do nas, jeśli potrzebujesz pomocy w konfiguracji!"
-
-msgid "hidden faction visible only to assigned characters"
-msgstr "ukryta frakcja widoczna tylko dla przypisanych postaci"
 
 msgid "you can still pay the remaining amount if you wish"
 msgstr "Jeśli chcesz, nadal możesz zapłacić pozostałą kwotę"
@@ -9512,6 +9503,15 @@ msgstr ""
 "Aby potwierdzić rejestrację, należy złożyć wniosek o rejestrację jako "
 "członek Stowarzyszenia. Procedura automatycznie przeprowadzi Cię przez "
 "wymagane kroki"
+
+msgid ""
+"Primary: main grouping / affiliation for characters. Transversal: secondary "
+"grouping across primary factions. Secret: hidden faction visible only to "
+"assigned characters"
+msgstr ""
+"Podstawowa: główna grupa / przynależność postaci. Poprzeczna: drugorzędne "
+"ugrupowanie między głównymi frakcjami. Tajna: ukryta frakcja widoczna tylko "
+"dla przypisanych postaci"
 
 msgid ""
 "By clicking the button below, you confirm that you consent to the sharing of"

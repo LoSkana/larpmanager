@@ -4741,12 +4741,6 @@ msgstr "Denna sida sammanfattar systemposterna för"
 msgid "Warning! Other users are editing this item"
 msgstr "Varning, varning! Andra användare redigerar detta objekt"
 
-msgid "main grouping / affiliation for characters"
-msgstr "huvudgruppering / tillhörighet för karaktärer"
-
-msgid "secondary grouping across primary factions"
-msgstr "sekundär gruppering över primära fraktioner"
-
 msgid "Allow to switch registration between events"
 msgstr "Möjlighet att byta registrering mellan evenemang"
 
@@ -5332,9 +5326,6 @@ msgstr "Totala deltagaravgifter reducerade genom rabatter"
 
 msgid "Write to us if you need help in setting things up!"
 msgstr "Hör av dig till oss om du behöver hjälp med att sätta upp saker!"
-
-msgid "hidden faction visible only to assigned characters"
-msgstr "dold fraktion som endast är synlig för tilldelade karaktärer"
 
 msgid "you can still pay the remaining amount if you wish"
 msgstr "du kan fortfarande betala det återstående beloppet om du vill"
@@ -9506,6 +9497,15 @@ msgstr ""
 "För att kunna bekräfta ditt medlemskap måste du begära att få registrera dig"
 " som medlem i föreningen. Förfarandet kommer automatiskt att ta dig genom de"
 " nödvändiga stegen"
+
+msgid ""
+"Primary: main grouping / affiliation for characters. Transversal: secondary "
+"grouping across primary factions. Secret: hidden faction visible only to "
+"assigned characters"
+msgstr ""
+"Primär: huvudgruppering/tillhörighet för rollpersoner. Transversal: sekundär"
+" gruppering över primära fraktioner. Hemlig: dold fraktion som endast är "
+"synlig för tilldelade karaktärer"
 
 msgid ""
 "By clicking the button below, you confirm that you consent to the sharing of"

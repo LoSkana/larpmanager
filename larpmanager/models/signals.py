@@ -36,7 +36,6 @@ from larpmanager.accounting.vat import compute_vat
 from larpmanager.cache.button import event_button_key
 from larpmanager.cache.config import reset_configs
 from larpmanager.cache.feature import get_assoc_features, get_event_features, reset_event_features
-from larpmanager.cache.fields import reset_event_fields_cache
 from larpmanager.models.access import AssocPermission, EventPermission, EventRole, get_event_organizers
 from larpmanager.models.accounting import (
     AccountingItemCollection,
@@ -329,8 +328,8 @@ def save_event_character_form(features, instance):
     custom_tps = QuestionType.get_basic_types()
 
     _init_character_form_questions(custom_tps, def_tps, features, instance)
-    _init_faction_form_questions(def_tps, instance, features)
     _init_plot_form_questions(def_tps, instance, features)
+    _init_faction_form_questions(def_tps, instance, features)
 
 
 def _init_faction_form_questions(def_tps, instance, features):
@@ -550,13 +549,3 @@ def post_save_index_tutorial(sender, instance, **kwargs):
 @receiver(post_delete, sender=LarpManagerTutorial)
 def delete_tutorial_from_index(sender, instance, **kwargs):
     delete_index(instance.id)
-
-
-@receiver(post_save, sender=WritingQuestion)
-def save_event_field(sender, instance, created, **kwargs):
-    reset_event_fields_cache(instance.event_id)
-
-
-@receiver(pre_delete, sender=WritingQuestion)
-def delete_event_field(sender, instance, **kwargs):
-    reset_event_fields_cache(instance.event_id)

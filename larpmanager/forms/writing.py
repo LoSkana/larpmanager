@@ -285,14 +285,6 @@ class FactionForm(WritingForm, BaseWritingForm):
 
         self._init_special_fields()
 
-        # set typ help text
-        help_texts = {
-            _("Primary"): _("main grouping / affiliation for characters"),
-            _("Transversal"): _("secondary grouping across primary factions"),
-            _("Secret"): _("hidden faction visible only to assigned characters"),
-        }
-        self.fields["typ"].help_text = ", ".join([f"<b>{key}</b>: {value}" for key, value in help_texts.items()])
-
 
 class QuestTypeForm(WritingForm):
     page_title = _("Quest type")

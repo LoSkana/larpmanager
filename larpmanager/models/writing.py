@@ -365,7 +365,17 @@ class FactionType(models.TextChoices):
 
 
 class Faction(Writing):
-    typ = models.CharField(max_length=1, choices=FactionType.choices, default=FactionType.PRIM, verbose_name=_("Type"))
+    typ = models.CharField(
+        max_length=1,
+        choices=FactionType.choices,
+        default=FactionType.PRIM,
+        verbose_name=_("Type"),
+        help_text=_(
+            "Primary: main grouping / affiliation for characters. "
+            "Transversal: secondary grouping across primary factions. "
+            "Secret: hidden faction visible only to assigned characters"
+        ),
+    )
 
     order = models.IntegerField(default=0)
 
