@@ -1564,6 +1564,8 @@ th select {
     transition: opacity 0.2s;
     transition-delay: 0.1s;
     pointer-events: none;
+
+    z-index: 99;
 }
 
 #excel-edit iframe {

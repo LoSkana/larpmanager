@@ -46,15 +46,20 @@ window.addEventListener('DOMContentLoaded', function() {
                 tinymce.triggerSave();
             }
         }
-        formData = $('#form-excel').serialize();
-        formData += '&eid=' + encodeURIComponent(eid) +
-                    '&qid=' + encodeURIComponent(qid) +
-                    '&auto=' + (auto ? 1 : 0);
+
+        const form = document.getElementById('form-excel');
+        const formData = new FormData(form);
+
+        formData.append('eid', eid);
+        formData.append('qid', qid);
+        formData.append('auto', auto ? 1 : 0);
 
         request = $.ajax({
             url: "{% url 'orga_writing_excel_submit' run.event.slug run.number label_typ %}",
             method: "POST",
             data: formData,
+            contentType: false,
+            processData: false,
             datatype: "json",
         });
 

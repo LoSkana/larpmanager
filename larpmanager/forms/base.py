@@ -145,6 +145,8 @@ class MyForm(forms.ModelForm):
             question = self.cleaned_data.get("question")
             if question:
                 qs = qs.filter(question_id=question.id)
+            if hasattr(self, "check_applicable"):
+                qs = qs.filter(applicable=self.check_applicable)
             if self.instance.pk:
                 qs = qs.exclude(pk=self.instance.pk)
             if qs.exists():
