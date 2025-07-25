@@ -60,6 +60,8 @@ window.addEventListener('DOMContentLoaded', function() {
 
         addTinyMCETextarea('.f_{0}_direct textarea'.format(ch_id)).then((editorId) => {
             setUpAutoSave(editorId);
+            setUpCharFinder(editorId);
+            setUpHighlight(editorId);
         });
         already.push(ch_id);
 
@@ -69,6 +71,8 @@ window.addEventListener('DOMContentLoaded', function() {
         {% for key, item in relationships.items %}
             addTinyMCETextarea('.f_{{ key }}_direct textarea').then((editorId) => {
                 setUpAutoSave(editorId);
+                setUpCharFinder(editorId);
+                setUpHighlight(editorId);
             });
             already.push('{{ key }}');
         {% endfor %}
