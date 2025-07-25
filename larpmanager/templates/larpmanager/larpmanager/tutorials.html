@@ -7,9 +7,9 @@
 {% block css %}
     {% if iframe %}
         <style>
-            #header, #footer, header, #tutorials .column, #tutorials .navig, .main_nav { display: none }
+            #header, #footer, header, #tutorials .column, #tutorials .navig, .main_nav, #topbar { display: none }
             #main { padding: 0; width: 100%; max-width: 100%; }
-            #page-wrapper { padding: 0; }
+            #page-wrapper.topbar { padding: 0; margin-top: 0; }
         </style>
     {% elif assoc.id != 0 %}
         <style>#tutorials { margin-top: 1em; }</style>
@@ -118,11 +118,18 @@ window.addEventListener('DOMContentLoaded', function() {
 
             var target = $($(this).attr('href'));
             var headerHeight = $('header').outerHeight();
-            var offset = 20;
+            var offset = 10;
+            
+            console.log(target);
+            console.log(offset);
 
-            $('html, body').animate({
-                scrollTop: target.offset().top - headerHeight - offset
-            }, 500);
+            if (target.length) {
+                $('#page-wrapper').animate({
+                    scrollTop: target.offset().top - offset
+                }, 0);
+            } else {
+                console.error('Elemento non trovato');
+            }
         });
 
         // all link open in new page

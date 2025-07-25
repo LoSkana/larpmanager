@@ -870,9 +870,6 @@ msgstr "Campagne"
 msgid "Carousel"
 msgstr "Carrousel"
 
-msgid "Centaurs"
-msgstr "Centaures"
-
 msgid "Claimant"
 msgstr "Demandeur"
 

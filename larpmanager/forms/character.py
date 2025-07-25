@@ -239,6 +239,8 @@ class OrgaCharacterForm(CharacterForm):
             choices = [(m.id, m.name) for m in que]
             self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---"))] + choices
 
+        self._init_special_fields()
+
     def _init_plots(self):
         if "plot" not in self.params["features"]:
             return
@@ -452,10 +454,10 @@ class OrgaWritingQuestionForm(MyForm):
         if self.instance.pk and self.instance.typ:
             already.remove(self.instance.typ)
 
-            basic_type = self.instance.typ in QuestionType.get_basic_types()
+            # basic_type = self.instance.typ in QuestionType.get_basic_types()
             def_type = self.instance.typ in {QuestionType.NAME, QuestionType.TEASER, QuestionType.TEXT}
-            type_feature = self.instance.typ in self.params["features"]
-            self.prevent_canc = not basic_type and def_type or type_feature
+            # type_feature = self.instance.typ in self.params["features"]
+            self.prevent_canc = def_type
         choices = []
         for choice in QuestionType.choices:
             if len(choice[0]) > 1:

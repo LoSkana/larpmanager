@@ -12,11 +12,10 @@ from whoosh.fields import ID, TEXT, Schema
 from whoosh.index import create_in, open_dir
 from whoosh.qparser import QueryParser
 
-from larpmanager.mail.base import notify_admins
 from larpmanager.models.access import AssocPermission, EventPermission
 from larpmanager.models.event import Run
 from larpmanager.models.larpmanager import LarpManagerTutorial
-from larpmanager.utils.tasks import background_auto
+from larpmanager.utils.tasks import background_auto, notify_admins
 
 INDEX_DIR = "data/whoosh_index"
 

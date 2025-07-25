@@ -759,7 +759,7 @@
 - model: larpmanager.feature
   pk: 124
   fields:
-    name: Centaurs
+    name: Easter egg
     descr: Occasionally shows a special page to users, based on a defined probability,
       and optionally assigns a result
     slug: centauri

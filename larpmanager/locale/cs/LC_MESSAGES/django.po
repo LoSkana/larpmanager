@@ -870,9 +870,6 @@ msgstr "Kampaň"
 msgid "Carousel"
 msgstr "Kolotoč"
 
-msgid "Centaurs"
-msgstr "Kentauři"
-
 msgid "Claimant"
 msgstr "Žadatel"
 

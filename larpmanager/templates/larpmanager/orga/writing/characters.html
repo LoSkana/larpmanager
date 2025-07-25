@@ -45,15 +45,21 @@
     {% include "elements/writing/questions_header.html" %}
     {% if features.plot %}
         <th class="hide plots">{% trans "Plots" %}</th>
-        <th class="hide plots">(N)</th>
+        <th class="hide stats">
+            <i class="fa fa-hashtag"></i> {% trans "Plots" %}
+        </th>
     {% endif %}
     {% if features.relationships %}
         <th class="hide relationships">{% trans "Relationships" %}</th>
-        <th class="hide relationships">(N)</th>
+        <th class="hide stats">
+            <i class="fa fa-hashtag"></i> {% trans "Relationships" %}
+        </th>
     {% endif %}
     {% if features.speedlarp %}
         <th class="hide speedlarp">{% trans "Speedlarp" %}</th>
-        <th class="hide speedlarp">(N)</th>
+        <th class="hide stats">
+            <i class="fa fa-hashtag"></i> {% trans "Speedlarp" %}
+        </th>
     {% endif %}
 {% endblock thead %}
 {% block tbody %}
@@ -81,7 +87,7 @@
                         <a href="{% url 'orga_plots_edit' run.event.slug run.number p.1 %}">{{ p.0 }}</a>
                     {% endfor %}
                 </td>
-                <td class="hide plots">{{ el.plts | length }}</td>
+                <td class="hide stats">{{ el.plts | length }}</td>
             {% endif %}
             {% if features.relationships %}
                 <td class="hide relationships">
@@ -89,7 +95,7 @@
                         <a href="{% url 'orga_characters_edit' run.event.slug run.number rel.target_id %}">{{ rel.target }}</a>
                     {% endfor %}
                 </td>
-                <td class="hide relationships">{{ el.source.count }}</td>
+                <td class="hide stats">{{ el.source.count }}</td>
             {% endif %}
             {% if features.speedlarp %}
                 <td class="hide speedlarp">
@@ -97,7 +103,7 @@
                         <a href="{% url 'orga_speedlarps_edit' run.event.slug run.number p.id %}">{{ p }}</a>
                     {% endfor %}
                 </td>
-                <td class="hide speedlarp">{{ el.speedlarps_list.count }}</td>
+                <td class="hide stats">{{ el.speedlarps_list.count }}</td>
             {% endif %}
         </tr>
     {% endfor %}

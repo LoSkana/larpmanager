@@ -2,6 +2,10 @@
 {% if form_questions %}
     {% for key, que in form_questions.items %}
         <th class="hide q_{{ key }}">{{ que.display }}</th>
-        {% if que.typ == 'e' or que.typ == 'teaser' or que.typ == 'text' %}<th class="hide q_{{ key }}">(L)</th>{% endif %}
+        {% if que.typ == 'e' or que.typ == 'teaser' or que.typ == 'text' %}
+            <th class="hide stats">
+                <i class="fa fa-text-width" aria-hidden="true"></i> {{ que.display }}
+            </th>
+        {% endif %}
     {% endfor %}
 {% endif %}

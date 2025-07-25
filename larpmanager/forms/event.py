@@ -1091,10 +1091,7 @@ class OrgaPreferencesForm(ConfigForm):
             ("reg_surcharges", "sur", _("Surcharge")),
             ("discount", "disc", _("Discounts")),
         ]
-        for field in feature_fields:
-            if field[0] and field[0] not in self.params["features"]:
-                continue
-            extra.append((field[1], field[2]))
+        self.add_feature_extra(extra, feature_fields)
 
         fields = _get_registration_fields(self.params, self.params["request"].user.member)
         max_length = 20
@@ -1132,4 +1129,27 @@ class OrgaPreferencesForm(ConfigForm):
 
                 extra.append((tog, field.display))
 
+            if s[0] == "character":
+                if self.params["event"].get_config("user_character_max", 0):
+                    extra.append(("player", _("Player")))
+                if self.params["event"].get_config("user_character_approval", False):
+                    extra.append(("status", _("Status")))
+                feature_fields = [
+                    ("px", "px", _("XP")),
+                    ("plot", "plots", _("Plots")),
+                    ("relationships", "relationships", _("Relationships")),
+                    ("speedlarp", "speedlarp", _("speedlarp")),
+                ]
+                self.add_feature_extra(extra, feature_fields)
+            elif s[0] == "faction":
+                extra.append(("characters", _("Characters")))
+
+            extra.append(("stats", "Stats"))
+
             self.add_configs(f"open_{s[0]}_{event_id}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)
+
+    def add_feature_extra(self, extra, feature_fields):
+        for field in feature_fields:
+            if field[0] and field[0] not in self.params["features"]:
+                continue
+            extra.append((field[1], field[2]))

@@ -1145,19 +1145,16 @@ body.loaded .fade-in {
 
 @media screen and (max-width: 480px) {
 
-    .sheet .plot {
+    .plot {
         padding: 0.5em;
+        background: none;
+        border: none;
     }
 
     .gallery .text {
         margin: 0 !important;
         padding: 0 !important;
     }
-
-    .plot {
-        padding: 0.5em;
-    }
-
     .calendar .event {
         display: block;
     }
@@ -1302,8 +1299,8 @@ body.loaded .fade-in {
     }
 }
 
-.qtip {
- max-width: 280px !important;
+.qtip-char {
+    width: 250px;
 }
 
 .xdsoft_datepicker {

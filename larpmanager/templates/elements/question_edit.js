@@ -5,9 +5,13 @@
             var speed = 300;
 
             if (["m", "s"].includes(selectedValue)) {
-                $('#options').fadeIn(speed);
+                if (!$('#options').is(':visible')) {
+                    $('#options').fadeIn(speed);
+                }
             } else {
-                $('#options').fadeOut(speed);
+                if ($('#options').is(':visible')) {
+                    $('#options').fadeOut(speed);
+                }
             }
 
             max_lengtheable = ["m", "t", "p", "e", "name", "teaser", "text", "title"]

@@ -8,7 +8,7 @@
                     {{ value | safe }}
                 {% endwith %}
             </td>
-            <td class="hide q_{{ key }}">
+            <td class="hide stats">
                 {% with ed_id=que.typ|concat:'_ln' %}
                     {% lookup el ed_id as value %}
                     {{ value }}
@@ -21,7 +21,7 @@
                     {{ value | safe }}
                 {% endwith %}
             </td>
-            <td class="hide question q_{{ key }}">
+            <td class="hide question stats">
                 {% with ed_id=key|concat:'_ln' %}
                     {% lookup el ed_id as value %}
                     {{ value }}

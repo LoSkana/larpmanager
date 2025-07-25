@@ -29,7 +29,7 @@ from larpmanager.accounting.balance import check_accounting, check_run_accountin
 from larpmanager.accounting.token_credit import get_runs_paying_incomplete
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.mail.accounting import notify_invoice_check
-from larpmanager.mail.base import check_holiday, notify_admins
+from larpmanager.mail.base import check_holiday
 from larpmanager.mail.member import send_password_reset_remainder
 from larpmanager.mail.remind import (
     notify_deadlines,
@@ -52,6 +52,7 @@ from larpmanager.models.member import Badge, Membership, MembershipStatus, get_u
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.common import get_time_diff_today
 from larpmanager.utils.pdf import print_run_bkg
+from larpmanager.utils.tasks import notify_admins
 
 
 class Command(BaseCommand):
