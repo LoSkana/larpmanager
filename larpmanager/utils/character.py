@@ -21,8 +21,9 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
-from larpmanager.cache.character import get_character_cache_fields, get_event_cache_all
+from larpmanager.cache.character import get_character_element_fields, get_event_cache_all, get_writing_element_fields
 from larpmanager.models.casting import Trait
+from larpmanager.models.form import QuestionApplicable
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, PlotCharacterRel, Relationship
@@ -165,14 +166,20 @@ def get_character_sheet_factions(ctx):
         return
 
     fac_event = ctx["event"].get_class_parent("faction")
-    ctx["sheet_factions"] = [g.show_complete() for g in ctx["character"].factions_list.filter(event=fac_event)]
+    ctx["sheet_factions"] = []
+    for g in ctx["character"].factions_list.filter(event=fac_event):
+        data = g.show_complete()
+        data["fields"] = get_writing_element_fields(
+            ctx, "faction", QuestionApplicable.FACTION, g.id, only_visible=False
+        )
+        ctx["sheet_factions"].append(data)
 
 
 def get_character_sheet_fields(ctx):
     if "character" not in ctx["features"]:
         return
 
-    fields = get_character_cache_fields(ctx, ctx["char"]["id"], only_visible=False)
+    fields = get_character_element_fields(ctx, ctx["char"]["id"], only_visible=False)
     ctx["sheet_char"]["fields"] = fields
 
 

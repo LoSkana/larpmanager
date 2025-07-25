@@ -7,6 +7,7 @@
     {% if show_faction.teaser %}
         <p>{% show_char faction.teaser run 1 %}</p>
     {% endif %}
+    {% include "elements/sheet/fields.html" with char=fact %}
     <h2>{% trans "Characters" %}</h2>
     {% for chnum in faction.characters %}
         {% with chars|get:chnum as el %}

@@ -32,7 +32,6 @@ from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     QuestionApplicable,
-    QuestionType,
     QuestionVisibility,
     WritingAnswer,
     WritingChoice,
@@ -151,8 +150,12 @@ def get_character_fields(ctx, only_visible=True):
     if "character" not in ctx["features"]:
         return
 
+    return get_writing_fields(ctx, QuestionApplicable.CHARACTER, only_visible=only_visible)
+
+
+def get_writing_fields(ctx, applicable, only_visible=True):
     # get visible question fields
-    que = get_writing_fields(ctx, QuestionApplicable.CHARACTER)
+    que = get_writing_questions(ctx, applicable)
     if "pdf" in ctx:
         que = que.exclude(printable=False)
     if only_visible:
@@ -168,16 +171,8 @@ def get_character_fields(ctx, only_visible=True):
         for el in que.order_by("order").values_list("id", "display", "question_id")
     }
 
-    tn = (
-        ctx["event"]
-        .get_elements(WritingQuestion)
-        .filter(typ=QuestionType.TEASER, applicable=QuestionApplicable.CHARACTER)
-    )
-    if tn:
-        ctx["teaser_name"] = tn.first().display
 
-
-def get_writing_fields(ctx, applicable):
+def get_writing_questions(ctx, applicable):
     que = ctx["event"].get_elements(WritingQuestion).order_by("order")
     que = que.filter(applicable=applicable)
     que = que.exclude(visibility=QuestionVisibility.HIDDEN)
@@ -194,23 +189,29 @@ def get_searcheable_character_fields(ctx):
     ctx["searchable"] = {el.id: list(el.options.order_by("order").values_list("id", flat=True)) for el in que}
 
 
-def get_character_cache_fields(ctx, character_id, only_visible=True):
-    get_character_fields(ctx, only_visible=only_visible)
+def get_character_element_fields(ctx, character_id, only_visible=True):
+    return get_writing_element_fields(
+        ctx, "character", QuestionApplicable.CHARACTER, character_id, only_visible=only_visible
+    )
+
+
+def get_writing_element_fields(ctx, feature_name, applicable, element_id, only_visible=True):
+    get_writing_fields(ctx, applicable, only_visible=only_visible)
     get_searcheable_character_fields(ctx)
 
     # remove not visible questions
     question_visible = []
     for question_id in ctx["questions"].keys():
         config = str(question_id)
-        if config not in ctx["show_character"] and "show_all" not in ctx:
+        if config not in ctx[f"show_{feature_name}"] and "show_all" not in ctx:
             continue
         question_visible.append(question_id)
 
     fields = {}
-    que = WritingAnswer.objects.filter(element_id=character_id, question_id__in=question_visible)
+    que = WritingAnswer.objects.filter(element_id=element_id, question_id__in=question_visible)
     for el in que.values_list("question_id", "text"):
         fields[el[0]] = el[1]
-    que = WritingChoice.objects.filter(element_id=character_id, question_id__in=question_visible)
+    que = WritingChoice.objects.filter(element_id=element_id, question_id__in=question_visible)
     for el in que.values_list("question_id", "option_id"):
         if el[0] not in fields:
             fields[el[0]] = []
@@ -329,7 +330,7 @@ def update_character_fields(instance, data):
         return
 
     ctx = {"features": features, "event": instance.event}
-    fields = get_character_cache_fields(ctx, instance.pk, only_visible=False)
+    fields = get_character_element_fields(ctx, instance.pk, only_visible=False)
     data["fields"] = fields
 
 
@@ -367,7 +368,11 @@ def update_event_cache_all_character(instance, res, run):
 
 
 def update_event_cache_all_faction(instance, res):
-    res["factions"][instance.number].update(instance.show())
+    data = instance.show()
+    if instance.number in res["factions"]:
+        res["factions"][instance.number].update(data)
+    else:
+        res["factions"][instance.number] = data
 
 
 def has_different_cache_values(instance, prev, lst):

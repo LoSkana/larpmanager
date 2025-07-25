@@ -118,12 +118,11 @@ window.addEventListener('DOMContentLoaded', function() {
 
             var target = $($(this).attr('href'));
             var headerHeight = $('header').outerHeight();
-            var offset = 50;
 
             if (target.length) {
             {% if interface_old %}
                 $('html, body').animate({
-                    scrollTop: target.offset().top - headerHeight 
+                    scrollTop: target.offset().top - headerHeight
                 }, 0);
             {% else %}
                 $('#page-wrapper').animate({

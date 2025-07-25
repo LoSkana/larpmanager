@@ -84,6 +84,8 @@ def orga_list_progress_assign(ctx, typ: type[Model]):
             if key in ctx.get("progress_assigned_map", {}):
                 ctx["progress_assigned_map"][key] += 1
 
+    ctx["typ"] = str(typ._meta).replace("larpmanager.", "")  # type: ignore[attr-defined]
+
 
 def writing_popup_question(ctx, idx, question_idx):
     try:
@@ -265,7 +267,9 @@ def _prepare_writing_list(ctx, request):
     model_name = ctx["label_typ"].lower()
     ctx["default_fields"] = request.user.member.get_config(f"open_{model_name}_{ctx['event'].id}", "[]")
     if ctx["default_fields"] == "[]":
-        ctx["default_fields"] = "['teaser', 'text']"
+        if model_name in ctx["def_fields"]:
+            lst = [f".q_{el['id']}" for el in ctx["def_fields"][model_name]]
+            ctx["default_fields"] = f"[{','.join(lst)}]"
 
 
 def writing_list_plot(ctx):
