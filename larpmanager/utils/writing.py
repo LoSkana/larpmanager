@@ -55,39 +55,34 @@ from larpmanager.utils.upload import upload_elements
 
 
 def orga_list_progress_assign(ctx, typ: type[Model]):
-    if "progress" in ctx["features"]:
-        ctx["progress_steps"] = {}
-        ctx["progress_steps_map"] = {}
-        for el in ProgressStep.objects.filter(event=ctx["event"]).order_by("order"):
-            ctx["progress_steps"][el.id] = str(el)
-            ctx["progress_steps_map"][el.id] = 0
+    features = ctx["features"]
+    event = ctx["event"]
 
-    if "assigned" in ctx["features"]:
-        ctx["assigned"] = {}
-        ctx["assigned_map"] = {}
-        for m in get_event_staffers(ctx["event"]):
-            ctx["assigned"][m.id] = m.show_nick()
-            ctx["assigned_map"][m.id] = 0
+    if "progress" in features:
+        ctx["progress_steps"] = {el.id: str(el) for el in ProgressStep.objects.filter(event=event).order_by("order")}
+        ctx["progress_steps_map"] = {el_id: 0 for el_id in ctx["progress_steps"]}
 
-    if "progress" in ctx["features"] and "assigned" in ctx["features"]:
-        ctx["progress_assigned_map"] = {}
-        for el in ctx["progress_steps"]:
-            for el2 in ctx["assigned"]:
-                ctx["progress_assigned_map"][f"{el}_{el2}"] = 0
+    if "assigned" in features:
+        ctx["assigned"] = {m.id: m.show_nick() for m in get_event_staffers(event)}
+        ctx["assigned_map"] = {m_id: 0 for m_id in ctx["assigned"]}
+
+    if "progress" in features and "assigned" in features:
+        ctx["progress_assigned_map"] = {f"{p}_{a}": 0 for p in ctx["progress_steps"] for a in ctx["assigned"]}
 
     for el in ctx["list"]:
-        # count progress
-        if "progress" in ctx["features"] and el.progress_id:
-            ctx["progress_steps_map"][el.progress_id] += 1
+        pid = el.progress_id
+        aid = el.assigned_id
 
-        if "assigned" in ctx["features"] and el.assigned_id and el.assigned_id in ctx["assigned_map"]:
-            ctx["assigned_map"][el.assigned_id] += 1
+        if "progress" in features and pid in ctx.get("progress_steps_map", {}):
+            ctx["progress_steps_map"][pid] += 1
 
-        if "progress" in ctx["features"] and "assigned" in ctx["features"] and el.progress_id and el.assigned_id:
-            ctx["progress_assigned_map"][f"{el.progress_id}_{el.assigned_id}"] += 1
+        if "assigned" in features and aid in ctx.get("assigned_map", {}):
+            ctx["assigned_map"][aid] += 1
 
-    # noinspection PyProtectedMember
-    ctx["typ"] = str(typ._meta).replace("larpmanager.", "")  # type: ignore[attr-defined]
+        if "progress" in features and "assigned" in features:
+            key = f"{pid}_{aid}"
+            if key in ctx.get("progress_assigned_map", {}):
+                ctx["progress_assigned_map"][key] += 1
 
 
 def writing_popup_question(ctx, idx, question_idx):
