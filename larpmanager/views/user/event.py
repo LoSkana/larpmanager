@@ -332,7 +332,7 @@ def search(request, s, n):
         ctx["all"] = json.dumps(ctx["chars"])
         ctx["facs"] = json.dumps(ctx["factions"])
         ctx["search_text"] = get_event_text(ctx["event"].id, EventTextType.SEARCH)
-        get_character_fields(ctx, only_visible=True)
+        ctx["questions"], ctx["options"] = get_character_fields(ctx, only_visible=True)
         get_searcheable_character_fields(ctx)
 
     for slug in ["all", "facs"]:
@@ -398,11 +398,9 @@ def faction(request, s, n, g):
     if "faction" not in ctx or typ == "secret":
         raise Http404("Faction does not exist")
 
-    ctx["fact"] = {
-        "fields": get_writing_element_fields(
-            ctx, "faction", QuestionApplicable.FACTION, ctx["faction"]["id"], only_visible=True
-        )
-    }
+    ctx["fact"] = get_writing_element_fields(
+        ctx, "faction", QuestionApplicable.FACTION, ctx["faction"]["id"], only_visible=True
+    )
 
     return render(request, "larpmanager/event/faction.html", ctx)
 

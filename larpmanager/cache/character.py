@@ -113,9 +113,9 @@ def get_event_cache_fields(ctx, res, only_visible=True):
         return
 
     # get visible question ids
-    get_character_fields(ctx, only_visible=only_visible)
+    questions, options = get_character_fields(ctx, only_visible=only_visible)
     get_searcheable_character_fields(ctx)
-    question_idxs = ctx["questions"].keys()
+    question_idxs = questions.keys()
 
     # ids to number
     mapping = {}
@@ -160,16 +160,17 @@ def get_writing_fields(ctx, applicable, only_visible=True):
         que = que.exclude(printable=False)
     if only_visible:
         que = que.filter(visibility__in=[QuestionVisibility.SEARCHABLE, QuestionVisibility.PUBLIC])
-    ctx["questions"] = {
+    questions = {
         el[0]: {"display": el[1], "typ": el[2], "printable": el[3], "visibility": el[4]}
         for el in que.values_list("id", "display", "typ", "printable", "visibility")
     }
 
-    que = ctx["event"].get_elements(WritingOption).filter(question_id__in=ctx["questions"].keys())
-    ctx["options"] = {
+    que = ctx["event"].get_elements(WritingOption).filter(question_id__in=questions.keys())
+    options = {
         el[0]: {"display": el[1], "question_id": el[2]}
         for el in que.order_by("order").values_list("id", "display", "question_id")
     }
+    return questions, options
 
 
 def get_writing_questions(ctx, applicable):
@@ -196,12 +197,12 @@ def get_character_element_fields(ctx, character_id, only_visible=True):
 
 
 def get_writing_element_fields(ctx, feature_name, applicable, element_id, only_visible=True):
-    get_writing_fields(ctx, applicable, only_visible=only_visible)
+    questions, options = get_writing_fields(ctx, applicable, only_visible=only_visible)
     get_searcheable_character_fields(ctx)
 
     # remove not visible questions
     question_visible = []
-    for question_id in ctx["questions"].keys():
+    for question_id in questions.keys():
         config = str(question_id)
         if config not in ctx[f"show_{feature_name}"] and "show_all" not in ctx:
             continue
@@ -216,7 +217,8 @@ def get_writing_element_fields(ctx, feature_name, applicable, element_id, only_v
         if el[0] not in fields:
             fields[el[0]] = []
         fields[el[0]].append(el[1])
-    return fields
+
+    return {"questions": questions, "options": options, "fields": fields}
 
 
 def get_event_cache_factions(ctx, res):
@@ -330,8 +332,7 @@ def update_character_fields(instance, data):
         return
 
     ctx = {"features": features, "event": instance.event}
-    fields = get_character_element_fields(ctx, instance.pk, only_visible=False)
-    data["fields"] = fields
+    data.update(get_character_element_fields(ctx, instance.pk, only_visible=False))
 
 
 def update_event_cache_all(run, instance):

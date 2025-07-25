@@ -169,9 +169,7 @@ def get_character_sheet_factions(ctx):
     ctx["sheet_factions"] = []
     for g in ctx["character"].factions_list.filter(event=fac_event):
         data = g.show_complete()
-        data["fields"] = get_writing_element_fields(
-            ctx, "faction", QuestionApplicable.FACTION, g.id, only_visible=False
-        )
+        data.update(get_writing_element_fields(ctx, "faction", QuestionApplicable.FACTION, g.id, only_visible=False))
         ctx["sheet_factions"].append(data)
 
 
@@ -179,8 +177,7 @@ def get_character_sheet_fields(ctx):
     if "character" not in ctx["features"]:
         return
 
-    fields = get_character_element_fields(ctx, ctx["char"]["id"], only_visible=False)
-    ctx["sheet_char"]["fields"] = fields
+    ctx["sheet_char"].update(get_character_element_fields(ctx, ctx["char"]["id"], only_visible=False))
 
 
 def get_char_check(request, ctx, num, restrict=False, bypass=False):
