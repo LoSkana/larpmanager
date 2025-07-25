@@ -256,6 +256,14 @@ def writing_list_text_fields(ctx, text_fields, typ):
             setattr(el, f + "_red", red)
             setattr(el, f + "_ln", ln)
 
+    try:
+        name_que = (
+            ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"], typ=QuestionType.NAME)
+        )
+        ctx["name_que_id"] = name_que.values_list("id", flat=True)[0]
+    except Exception:
+        pass
+
 
 def writing_list_plot(ctx):
     ctx["chars"] = {}

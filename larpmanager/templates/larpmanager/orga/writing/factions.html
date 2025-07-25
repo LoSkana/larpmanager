@@ -32,7 +32,7 @@
             <td>
                 <a href="{% url 'orga_factions_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
             </td>
-            <td>{{ el }}</td>
+            <td class="editable" qid="{{ name_que_id }}">{{ el }}</td>
             <td>
                 <a href="{% url 'orga_factions_versions' run.event.slug run.number el.id %}">{% trans "Versions" %}</a>
             </td>

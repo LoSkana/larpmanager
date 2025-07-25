@@ -586,8 +586,13 @@ def orga_writing_excel_submit(request, s, n, typ):
     ctx["auto"] = int(request.POST.get("auto"))
 
     if ctx["form"].is_valid():
-        ctx["form"].save()
-        response = {"k": 1, "qid": ctx["question"].id, "eid": ctx["element"].id, "update": _get_question_update(ctx)}
+        obj = ctx["form"].save()
+        response = {
+            "k": 1,
+            "qid": ctx["question"].id,
+            "eid": ctx["element"].id,
+            "update": _get_question_update(ctx, obj),
+        }
         if ctx["auto"] and "working_ticket" in ctx["features"]:
             _check_working_ticket(request, ctx, response)
         return JsonResponse(response)
@@ -606,10 +611,12 @@ def _get_excel_form(request, s, n, typ, submit=False):
     ctx["applicable"] = QuestionApplicable.get_applicable_inverse(ctx["writing_typ"])
     element = ctx["event"].get_elements(ctx["applicable"]).get(pk=element_id)
 
+    ctx["elementTyp"] = ctx["applicable"]
+
     # Init form
     # TODO correct type given the one supplied
     if submit:
-        form = OrgaCharacterForm(request.POST, ctx=ctx, instance=element)
+        form = OrgaCharacterForm(request.POST, request.FILES, ctx=ctx, instance=element)
     else:
         form = OrgaCharacterForm(ctx=ctx, instance=element)
 
@@ -632,7 +639,16 @@ def _get_excel_form(request, s, n, typ, submit=False):
     return ctx
 
 
-def _get_question_update(ctx):
+def _get_question_update(ctx, el):
+    if ctx["question"].typ in [QuestionType.COVER]:
+        return f"""
+                <a href="{el.thumb.url}">
+                    <img src="{el.thumb.url}"
+                         class="character-cover"
+                         alt="character cover" />
+                </a>
+            """
+
     question_key = f"q{ctx['question'].id}"
     question_slug = str(ctx["question"].id)
     if ctx["question"].typ not in QuestionType.get_basic_types():

@@ -446,6 +446,8 @@ class OrgaWritingQuestionForm(MyForm):
             updated_help_text = ".".join(help_text.split(".", 1)[1:]).lstrip()
             self.fields["visibility"].help_text = updated_help_text
 
+        self.check_applicable = self.params["writing_typ"]
+
     def _init_type(self):
         # Add type of character question to the available types
         que = self.params["event"].get_elements(WritingQuestion)
