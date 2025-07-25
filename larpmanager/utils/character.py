@@ -21,7 +21,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
-from larpmanager.cache.character import get_character_cache_fields, get_event_cache_all
+from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
 from larpmanager.models.casting import Trait
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.utils import strip_tags
@@ -172,7 +172,7 @@ def get_character_sheet_fields(ctx):
     if "character" not in ctx["features"]:
         return
 
-    fields = get_character_cache_fields(ctx, ctx["char"]["id"], only_visible=False)
+    fields = get_character_element_fields(ctx, ctx["char"]["id"], only_visible=False)
     ctx["sheet_char"]["fields"] = fields
 
 

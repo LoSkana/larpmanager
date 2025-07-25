@@ -184,6 +184,7 @@ def writing_list(request, ctx, typ, nm):
         ctx["writing_typ"] = QuestionApplicable.get_applicable(ctx["label_typ"])
         orga_list_progress_assign(ctx, typ)  # pyright: ignore[reportArgumentType]
         writing_list_text_fields(ctx, text_fields, typ)
+        _prepare_writing_list(ctx, request)
         _setup_char_finder(ctx)
         _get_custom_form(ctx)
 
@@ -256,6 +257,8 @@ def writing_list_text_fields(ctx, text_fields, typ):
             setattr(el, f + "_red", red)
             setattr(el, f + "_ln", ln)
 
+
+def _prepare_writing_list(ctx, request):
     try:
         name_que = (
             ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"], typ=QuestionType.NAME)
@@ -263,6 +266,9 @@ def writing_list_text_fields(ctx, text_fields, typ):
         ctx["name_que_id"] = name_que.values_list("id", flat=True)[0]
     except Exception:
         pass
+
+    model_name = ctx["label_typ"].lower()
+    ctx["default_fields"] = request.user.member.get_config(f"open_{model_name}_{ctx['event'].id}", "['teaser', 'text']")
 
 
 def writing_list_plot(ctx):

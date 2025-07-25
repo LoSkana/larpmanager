@@ -24,7 +24,7 @@ from django.core.exceptions import ValidationError
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_writing_fields
+from larpmanager.cache.character import get_writing_questions
 from larpmanager.cache.feature import get_event_features, reset_event_features
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
@@ -858,7 +858,7 @@ class OrgaRunForm(ConfigForm):
         basics = QuestionType.get_basic_types()
         self.set_section("visibility", _("Visibility"))
         for s in shows:
-            fields = get_writing_fields(self.params, s[2])
+            fields = get_writing_questions(self.params, s[2])
             extra = []
             for field in fields:
                 typ = field.typ
@@ -1116,7 +1116,7 @@ class OrgaPreferencesForm(ConfigForm):
         for s in shows:
             if s[0] not in self.params["features"]:
                 continue
-            fields = get_writing_fields(self.params, s[2])
+            fields = get_writing_questions(self.params, s[2])
             extra = []
             for field in fields:
                 if field.typ == "name":

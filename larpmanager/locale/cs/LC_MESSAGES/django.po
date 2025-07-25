@@ -4739,6 +4739,12 @@ msgstr "Na této stránce jsou shrnuty systémové záznamy o"
 msgid "Warning! Other users are editing this item"
 msgstr "Pozor! Tuto položku upravují další uživatelé"
 
+msgid "main grouping / affiliation for characters"
+msgstr "hlavní seskupení / příslušnost postav"
+
+msgid "secondary grouping across primary factions"
+msgstr "sekundární seskupení napříč primárními frakcemi"
+
 msgid "Allow to switch registration between events"
 msgstr "Umožnit přepínání registrace mezi událostmi"
 
@@ -5321,6 +5327,9 @@ msgstr "Celkové účastnické poplatky snížené díky slevám"
 
 msgid "Write to us if you need help in setting things up!"
 msgstr "Pokud potřebujete pomoc s nastavením, napište nám!"
+
+msgid "hidden faction visible only to assigned characters"
+msgstr "skrytá frakce viditelná pouze pro přiřazené postavy"
 
 msgid "you can still pay the remaining amount if you wish"
 msgstr "pokud si přejete, můžete zaplatit zbývající částku"
@@ -9311,15 +9320,6 @@ msgid ""
 msgstr ""
 "Pro potvrzení členství je nutné požádat o registraci jako člen asociace. "
 "Postup vás automaticky provede požadovanými kroky"
-
-msgid ""
-"Primary: main grouping / affiliation for characters. Transversal: secondary "
-"grouping across primary factions. Secret: hidden faction visible only to "
-"assigned characters"
-msgstr ""
-"Primární: hlavní skupina / příslušnost postav. Průřezové: sekundární "
-"seskupení napříč primárními frakcemi. Tajná: skrytá frakce viditelná pouze "
-"pro přiřazené postavy"
 
 msgid ""
 "By clicking the button below, you confirm that you consent to the sharing of"

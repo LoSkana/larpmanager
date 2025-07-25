@@ -25,6 +25,7 @@ from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features
+from larpmanager.cache.fields import get_event_fields_cache
 from larpmanager.cache.permission import get_event_permission_feature
 from larpmanager.cache.role import get_event_roles, has_event_permission
 from larpmanager.cache.run import get_cache_config_run, get_cache_run
@@ -112,6 +113,8 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
             config_run[config_name][el] = True
 
     ctx.update(config_run)
+
+    ctx["fields_name"] = get_event_fields_cache(ctx["event"].id)
 
     return ctx
 
