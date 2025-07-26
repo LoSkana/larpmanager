@@ -27,7 +27,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
-from larpmanager.forms.utils import WritingTinyMCE, css_delimeter
+from larpmanager.forms.utils import EventCharacterS2WidgetMulti, WritingTinyMCE, css_delimeter
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
@@ -39,6 +39,7 @@ from larpmanager.models.form import (
     RegistrationQuestion,
 )
 from larpmanager.models.utils import generate_id, get_attr, strip_tags
+from larpmanager.models.writing import Character
 from larpmanager.templatetags.show_tags import hex_to_rgb
 
 
@@ -61,7 +62,8 @@ class MyForm(forms.ModelForm):
                 del self.fields[m]
 
         if "characters" in self.fields:
-            self.fields["characters"].widget.set_event(self.params["event"])
+            event_id = self.params["event"].get_class_parent(Character).id
+            self.fields["characters"].widget = EventCharacterS2WidgetMulti(event_id=event_id)
 
         for s in self.get_automatic_field():
             if s in self.fields:

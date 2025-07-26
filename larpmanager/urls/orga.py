@@ -20,6 +20,7 @@
 
 from django.urls import path
 
+from larpmanager.forms import utils as views_ac
 from larpmanager.views import manage as views_mg
 from larpmanager.views.orga import accounting as views_oa
 from larpmanager.views.orga import casting as views_oca
@@ -985,4 +986,5 @@ urlpatterns = [
         views_ow.orga_version,
         name="orga_version",
     ),
+    path("select2/event-character/", views_ac.EventCharacterSelect2View.as_view(), name="event-character-autocomplete"),
 ]

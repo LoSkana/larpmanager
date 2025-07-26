@@ -21,11 +21,13 @@
 from datetime import datetime, timedelta
 
 from django import forms
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms.widgets import Widget
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
+from django_select2.views import AutoResponseView
 from tinymce.widgets import TinyMCE
 
 from larpmanager.models.access import EventRole
@@ -351,7 +353,7 @@ class RunS2Widget(s2forms.ModelSelect2Widget):
         return Run.objects.filter(event__assoc_id=self.aid)
 
 
-class EventCharacterS2:
+class EventCharacterSelect2View(LoginRequiredMixin, AutoResponseView):
     search_fields = [
         "number__icontains",
         "name__icontains",
@@ -359,18 +361,37 @@ class EventCharacterS2:
         "title__icontains",
     ]
 
+    def get_queryset(self):
+        event_id = self.request.GET.get("event_id")
+        return Character.objects.filter(event_id=event_id)
+
+    def get_result_label(self, item):
+        return str(item)
+
+
+class EventCharacterS2:
     def set_event(self, event):
         self.event = event
 
-    def get_queryset(self):
-        return self.event.get_elements(Character)
+    def __init__(self, event_id, *args, **kwargs):
+        self.event_id = event_id
+        kwargs["data_view"] = "event-character-autocomplete"
+        attrs = kwargs.setdefault("attrs", {})
+        if "id" in attrs:
+            attrs["data-field_id"] = attrs["id"]
+
+        super().__init__(*args, **kwargs)
+
+    def get_url(self):
+        url = super().get_url()
+        return f"{url}?event_id={self.event_id}"
 
 
-class EventCharacterS2WidgetMulti(EventCharacterS2, s2forms.ModelSelect2MultipleWidget):
+class EventCharacterS2WidgetMulti(EventCharacterS2, s2forms.HeavySelect2MultipleWidget):
     pass
 
 
-class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
+class EventCharacterS2Widget(EventCharacterS2, s2forms.HeavySelect2Widget):
     pass
 
 

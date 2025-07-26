@@ -31,7 +31,6 @@ from larpmanager.cache.registration import get_reg_counts
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import (
     AssocMemberS2Widget,
-    EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
     FactionS2WidgetMulti,
     TicketS2WidgetMulti,
@@ -84,7 +83,6 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "teaser": WritingTinyMCE(),
             "text": WritingTinyMCE(),
             "player": AssocMemberS2Widget,
-            "characters": EventCharacterS2WidgetMulti,
         }
 
     def __init__(self, *args, **kwargs):

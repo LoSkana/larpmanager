@@ -32,7 +32,7 @@ from larpmanager.forms.utils import EventCharacterS2Widget
 from larpmanager.models.association import Association
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
 from larpmanager.models.member import Log
-from larpmanager.models.writing import PlotCharacterRel, Relationship, TextVersion
+from larpmanager.models.writing import Character, PlotCharacterRel, Relationship, TextVersion
 from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.common import html_clean
 from larpmanager.utils.event import check_event_permission
@@ -305,8 +305,8 @@ def writing_edit(request, ctx, form_type, nm, tp, redr=None):
 def _setup_char_finder(ctx):
     ctx["disable_char_finder"] = ctx["event"].get_config("writing_disable_char_finder", False)
     if not ctx["disable_char_finder"]:
-        widget = EventCharacterS2Widget(attrs={"id": "char_finder"})
-        widget.set_event(ctx["event"])
+        event_id = ctx["event"].get_class_parent(Character).id
+        widget = EventCharacterS2Widget(event_id=event_id, attrs={"id": "char_finder"})
         ctx["char_finder"] = widget.render(name="char_finder", value="")
         ctx["char_finder_media"] = widget.media
 

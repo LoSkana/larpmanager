@@ -28,7 +28,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.base import BaseRegistrationForm, MyForm
-from larpmanager.forms.utils import EventCharacterS2Widget, EventCharacterS2WidgetMulti, WritingTinyMCE
+from larpmanager.forms.utils import EventCharacterS2Widget, WritingTinyMCE
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep, Run
@@ -43,6 +43,7 @@ from larpmanager.models.form import (
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import (
+    Character,
     Faction,
     Handout,
     HandoutTemplate,
@@ -89,14 +90,12 @@ class PlayerRelationshipForm(MyForm):
     class Meta:
         model = PlayerRelationship
         exclude = ["reg"]
-        widgets = {
-            "target": EventCharacterS2Widget,
-        }
         labels = {"target": _("Character")}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["target"].widget.set_event(self.params["run"].event)
+        event_id = self.params["event"].get_class_parent(Character).id
+        self.fields["target"].widget = EventCharacterS2Widget(event_id=event_id)
         self.fields["target"].required = True
 
     def clean(self):
@@ -192,10 +191,6 @@ class PlotForm(WritingForm, BaseWritingForm):
 
         exclude = ("number", "temp", "hide")
 
-        widgets = {
-            "characters": EventCharacterS2WidgetMulti,
-        }
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -267,10 +262,6 @@ class FactionForm(WritingForm, BaseWritingForm):
         model = Faction
 
         exclude = ("number", "temp", "hide", "order")
-
-        widgets = {
-            "characters": EventCharacterS2WidgetMulti,
-        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -435,7 +426,6 @@ class PrologueForm(WritingForm):
         exclude = ("teaser", "temp", "hide")
 
         widgets = {
-            "characters": EventCharacterS2WidgetMulti,
             "text": WritingTinyMCE(),
         }
 
@@ -455,7 +445,6 @@ class SpeedLarpForm(WritingForm):
         exclude = ("teaser", "temp", "hide")
 
         widgets = {
-            "characters": EventCharacterS2WidgetMulti,
             "text": WritingTinyMCE(),
         }
 

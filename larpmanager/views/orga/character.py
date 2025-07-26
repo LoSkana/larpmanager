@@ -106,8 +106,8 @@ def _characters_relationships(ctx):
         pass
 
     ctx["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
-    widget = EventCharacterS2Widget(attrs={"id": "new_rel_select"})
-    widget.set_event(ctx["event"])
+    event_id = ctx["event"].get_class_parent(Character).id
+    widget = EventCharacterS2Widget(event_id=event_id, attrs={"id": "new_rel_select"})
     ctx["new_rel"] = widget.render(name="new_rel_select", value="")
 
     if "character" in ctx:
