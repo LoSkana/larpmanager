@@ -570,6 +570,7 @@ def orga_writing_excel_edit(request, s, n, typ):
         "typ": ctx["question"].typ,
         "max_length": ctx["question"].max_length,
         "key": field.auto_id,
+        "server_token": conf_settings.SERVER_START_TOKEN,
     }
     return JsonResponse(response)
 

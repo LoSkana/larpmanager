@@ -101,6 +101,19 @@ window.addEventListener('DOMContentLoaded', function() {
 
             request.done(function(res) {
                 if (res.k == 0) return;
+
+                if (res.server_token != server_token) {
+                    $.toast({
+                        text: 'Connection issue: please reload the page',
+                        showHideTransition: 'slide',
+                        icon: 'warning',
+                        position: 'top-center',
+                        textAlign: 'center',
+                        hideAfter: 5000
+                    });
+                    return;
+                }
+
                 $('#excel-edit').empty().append(res.v);
 
                 if (res.tinymce) {

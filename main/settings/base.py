@@ -4,6 +4,7 @@ Django settings for main project.
 
 import os
 import re
+import uuid
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -299,3 +300,5 @@ RECAPTCHA_PRIVATE_KEY = '???'
 
 # max size of snippet
 FIELD_SNIPPET_LIMIT = 150
+
+SERVER_START_TOKEN = uuid.uuid4().hex
