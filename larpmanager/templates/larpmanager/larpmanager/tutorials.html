@@ -118,17 +118,18 @@ window.addEventListener('DOMContentLoaded', function() {
 
             var target = $($(this).attr('href'));
             var headerHeight = $('header').outerHeight();
-            var offset = 10;
-            
-            console.log(target);
-            console.log(offset);
+            var offset = 50;
 
             if (target.length) {
-                $('#page-wrapper').animate({
-                    scrollTop: target.offset().top - offset
+            {% if interface_old %}
+                $('html, body').animate({
+                    scrollTop: target.offset().top - headerHeight 
                 }, 0);
-            } else {
-                console.error('Elemento non trovato');
+            {% else %}
+                $('#page-wrapper').animate({
+                    scrollTop: target.offset().top - headerHeight * 2
+                }, 0);
+            {% endif %}
             }
         });
 

@@ -201,7 +201,7 @@ def notify_deadlines(run):
     if not result:
         return
     res = result[0]
-    if not any(res.values()):
+    if all(not v for v in res.values()):
         return
 
     elements = {
