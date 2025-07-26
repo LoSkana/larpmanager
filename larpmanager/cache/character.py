@@ -27,12 +27,12 @@ from django.db.models.signals import m2m_changed, post_delete, post_save, pre_de
 from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_event_features
+from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.registration import search_player
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     QuestionApplicable,
-    QuestionVisibility,
     WritingAnswer,
     WritingChoice,
     WritingOption,
@@ -113,9 +113,8 @@ def get_event_cache_fields(ctx, res, only_visible=True):
         return
 
     # get visible question ids
-    questions, options = get_character_fields(ctx, only_visible=only_visible)
-    get_searcheable_character_fields(ctx)
-    question_idxs = questions.keys()
+    visible_writing_fields(ctx, QuestionApplicable.CHARACTER, only_visible=only_visible)
+    question_idxs = ctx["questions"].keys()
 
     # ids to number
     mapping = {}
@@ -146,50 +145,6 @@ def get_event_cache_fields(ctx, res, only_visible=True):
         res["chars"][ch_num]["fields"][question] = value
 
 
-def get_character_fields(ctx, only_visible=True):
-    if "character" not in ctx["features"]:
-        return
-
-    return get_writing_fields(ctx, QuestionApplicable.CHARACTER, only_visible=only_visible)
-
-
-def get_writing_fields(ctx, applicable, only_visible=True):
-    # get visible question fields
-    que = get_writing_questions(ctx, applicable)
-    if "pdf" in ctx:
-        que = que.exclude(printable=False)
-    if only_visible:
-        que = que.filter(visibility__in=[QuestionVisibility.SEARCHABLE, QuestionVisibility.PUBLIC])
-    questions = {
-        el[0]: {"display": el[1], "typ": el[2], "printable": el[3], "visibility": el[4]}
-        for el in que.values_list("id", "display", "typ", "printable", "visibility")
-    }
-
-    que = ctx["event"].get_elements(WritingOption).filter(question_id__in=questions.keys())
-    options = {
-        el[0]: {"display": el[1], "question_id": el[2]}
-        for el in que.order_by("order").values_list("id", "display", "question_id")
-    }
-    return questions, options
-
-
-def get_writing_questions(ctx, applicable):
-    que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-    que = que.filter(applicable=applicable)
-    que = que.exclude(visibility=QuestionVisibility.HIDDEN)
-    return que
-
-
-def get_searcheable_character_fields(ctx):
-    if "character" not in ctx["features"]:
-        return
-
-    que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-    que = que.filter(applicable=QuestionApplicable.CHARACTER)
-    que = que.filter(visibility=QuestionVisibility.SEARCHABLE).prefetch_related("options")
-    ctx["searchable"] = {el.id: list(el.options.order_by("order").values_list("id", flat=True)) for el in que}
-
-
 def get_character_element_fields(ctx, character_id, only_visible=True):
     return get_writing_element_fields(
         ctx, "character", QuestionApplicable.CHARACTER, character_id, only_visible=only_visible
@@ -197,12 +152,11 @@ def get_character_element_fields(ctx, character_id, only_visible=True):
 
 
 def get_writing_element_fields(ctx, feature_name, applicable, element_id, only_visible=True):
-    questions, options = get_writing_fields(ctx, applicable, only_visible=only_visible)
-    get_searcheable_character_fields(ctx)
+    visible_writing_fields(ctx, applicable, only_visible=only_visible)
 
     # remove not visible questions
     question_visible = []
-    for question_id in questions.keys():
+    for question_id in ctx["questions"].keys():
         config = str(question_id)
         if config not in ctx[f"show_{feature_name}"] and "show_all" not in ctx:
             continue
@@ -218,7 +172,7 @@ def get_writing_element_fields(ctx, feature_name, applicable, element_id, only_v
             fields[el[0]] = []
         fields[el[0]].append(el[1])
 
-    return {"questions": questions, "options": options, "fields": fields}
+    return {"questions": ctx["questions"], "options": ctx["options"], "fields": fields}
 
 
 def get_event_cache_factions(ctx, res):

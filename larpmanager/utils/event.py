@@ -114,7 +114,7 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
 
     ctx.update(config_run)
 
-    ctx["def_fields"] = get_event_fields_cache(ctx["event"].id)
+    ctx["writing_fields"] = get_event_fields_cache(ctx["event"].id)
 
     return ctx
 

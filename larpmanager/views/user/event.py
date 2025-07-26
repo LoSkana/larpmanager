@@ -30,12 +30,11 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.cache.character import (
-    get_character_fields,
     get_event_cache_all,
-    get_searcheable_character_fields,
     get_writing_element_fields,
 )
 from larpmanager.cache.feature import get_event_features
+from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.association import AssocTextType
 from larpmanager.models.casting import Quest, QuestType, Trait
@@ -332,8 +331,8 @@ def search(request, s, n):
         ctx["all"] = json.dumps(ctx["chars"])
         ctx["facs"] = json.dumps(ctx["factions"])
         ctx["search_text"] = get_event_text(ctx["event"].id, EventTextType.SEARCH)
-        ctx["questions"], ctx["options"] = get_character_fields(ctx, only_visible=True)
-        get_searcheable_character_fields(ctx)
+
+        visible_writing_fields(ctx, QuestionApplicable.CHARACTER)
 
     for slug in ["all", "facs"]:
         if slug in ctx:

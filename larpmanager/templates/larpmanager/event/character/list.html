@@ -14,9 +14,9 @@
             <tr>
                 <th class="hide">number</th>
                 {% if features.user_character %}<th></th>{% endif %}
-                <th>{{ def_fields.character.name.name }}</th>
-                {% if features.title %}<th>{{ def_fields.character.title.name }}</th>{% endif %}
-                <th>{{ def_fields.character.teaser.name }}</th>
+                <th>{{ writing_fields.character.names.name }}</th>
+                {% if features.title %}<th>{{ writing_fields.character.names.title }}</th>{% endif %}
+                <th>{{ writing_fields.character.names.teaser }}</th>
                 {% if features.character_form %}
                     {% for idx, _ in searchable.items %}
                         {% with questions|get:idx as que %}<th>{{ que.display }}</th>{% endwith %}

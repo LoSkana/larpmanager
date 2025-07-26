@@ -34,11 +34,8 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 from PIL import Image
 
-from larpmanager.cache.character import (
-    get_character_element_fields,
-    get_character_fields,
-    get_event_cache_all,
-)
+from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
+from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.forms.character import (
     CharacterForm,
 )
@@ -107,7 +104,7 @@ def character(request, s, n, num):
         get_character_relationships(ctx)
         ctx["intro"] = get_event_text(ctx["event"].id, EventTextType.INTRO)
     else:
-        ctx["questions"], ctx["options"] = get_character_fields(ctx, only_visible=True)
+        visible_writing_fields(ctx, QuestionApplicable.CHARACTER)
 
     casting_details(ctx, 0)
     if ctx["casting_show_pref"] and not ctx["char"]["player_id"]:
