@@ -20,6 +20,7 @@
 
 import csv
 import io
+import json
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Model, Prefetch
@@ -268,8 +269,8 @@ def _prepare_writing_list(ctx, request):
     ctx["default_fields"] = request.user.member.get_config(f"open_{model_name}_{ctx['event'].id}", "[]")
     if ctx["default_fields"] == "[]":
         if model_name in ctx["writing_fields"]:
-            lst = [f".q_{el}" for el in ctx["writing_fields"][model_name]["ids"]]
-            ctx["default_fields"] = f"[{','.join(lst)}]"
+            lst = [f"q_{el}" for name, el in ctx["writing_fields"][model_name]["ids"].items()]
+            ctx["default_fields"] = json.dumps(lst)
 
 
 def writing_list_plot(ctx):
