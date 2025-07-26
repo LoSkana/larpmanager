@@ -1,7 +1,32 @@
 {% load show_tags i18n %}
-{% for g in sheet_factions %}
-    {% if g.text and show_faction.text %}
-        <h2 class="c">{{ g.name }}</h2>
-        <div class="plot">{% show_char g run 1 %}</div>
-    {% endif %}
+{% for fact in sheet_factions %}
+    <h2 class="c">{{ fact.name }}</h2>
+    {% for idx, question in fact.questions.items %}
+        {% if question.typ == 'e' %}
+            {% with fact.fields|get:idx as field %}
+                {% if field %}
+                    {% if screen or question.printable %}
+                        <h2 class="c title">{{ question.display }}</h2>
+                        <div class="plot text">{% show_char field run 1 %}</div>
+                    {% endif %}
+                {% endif %}
+            {% endwith %}
+        {% elif question.typ == 'text' %}
+            {% if fact.text and show_faction.text %}
+                <h2 class="c title">{{ question.display }}</h2>
+                <div class="plot text">{% show_char fact.text run 1 %}</div>
+            {% endif %}
+        {% else %}
+            {% with fact.fields|get:idx as field %}
+                {% if field %}
+                    {% if screen or question.printable %}
+                        <div class="go-inline">
+                            <b>{{ question.display }}:&nbsp;</b>{% get_character_field field options %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endwith %}
+        {% endif %}
+    {% endfor %}
+    <hr />
 {% endfor %}

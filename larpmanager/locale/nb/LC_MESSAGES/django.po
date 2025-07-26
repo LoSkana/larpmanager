@@ -3745,9 +3745,6 @@ msgstr "Dato for utstedelse av dokumentet"
 msgid "Indicate the outflow category"
 msgstr "Angi hvilken kategori produksjonen regnes innenfor"
 
-msgid "List inverse relationships of"
-msgstr "Oppgi inverse relasjoner mellom"
-
 msgid "Manages modules for workshops"
 msgstr "Administrerer moduler for workshops"
 
@@ -4741,6 +4738,12 @@ msgstr "Denne siden oppsummerer systemoppføringene til"
 msgid "Warning! Other users are editing this item"
 msgstr "Advarsel! Andre brukere redigerer dette elementet"
 
+msgid "main grouping / affiliation for characters"
+msgstr "hovedgruppering/tilhørighet for karakterer"
+
+msgid "secondary grouping across primary factions"
+msgstr "sekundær gruppering på tvers av primære fraksjoner"
+
 msgid "Allow to switch registration between events"
 msgstr "Tillat å bytte registrering mellom arrangementer"
 
@@ -5324,6 +5327,9 @@ msgstr "Totale deltakeravgifter redusert gjennom rabatter"
 msgid "Write to us if you need help in setting things up!"
 msgstr "Skriv til oss hvis du trenger hjelp til å sette opp ting!"
 
+msgid "hidden faction visible only to assigned characters"
+msgstr "skjult fraksjon som kun er synlig for tildelte karakterer"
+
 msgid "you can still pay the remaining amount if you wish"
 msgstr "du kan fortsatt betale det resterende beløpet hvis du ønsker det"
 
@@ -5834,9 +5840,6 @@ msgstr ""
 msgid "This page shows the factions (character groups) of the event"
 msgstr ""
 "Denne siden oppsummerer fraksjonene (grupper av figurer) i arrangementet"
-
-msgid "This page shows the relationships of the indicated character"
-msgstr "Denne siden oppsummerer koblingene til det angitte tegnet"
 
 msgid "You have already granted data sharing with this organisation"
 msgstr ""
@@ -9466,15 +9469,6 @@ msgid ""
 msgstr ""
 "For å bekrefte medlemskapet ditt må du be om å bli registrert som medlem av "
 "foreningen. Prosedyren vil automatisk ta deg gjennom de nødvendige trinnene"
-
-msgid ""
-"Primary: main grouping / affiliation for characters. Transversal: secondary "
-"grouping across primary factions. Secret: hidden faction visible only to "
-"assigned characters"
-msgstr ""
-"Primær: hovedgruppering/tilhørighet for karakterer. Transversal: sekundær "
-"gruppering på tvers av primære fraksjoner. Hemmelig: skjult fraksjon som "
-"bare er synlig for tildelte rollefigurer"
 
 msgid ""
 "By clicking the button below, you confirm that you consent to the sharing of"

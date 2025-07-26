@@ -3745,9 +3745,6 @@ msgstr "Datum van uitgifte van het document"
 msgid "Indicate the outflow category"
 msgstr "Geef de categorie aan waarbinnen de output wordt geteld"
 
-msgid "List inverse relationships of"
-msgstr "Maak een lijst van inverse relaties van"
-
 msgid "Manages modules for workshops"
 msgstr "Beheert modules voor workshops"
 
@@ -4741,6 +4738,12 @@ msgstr "Deze pagina geeft een overzicht van de systeemingangen van"
 msgid "Warning! Other users are editing this item"
 msgstr "Waarschuwing! Andere gebruikers bewerken dit item"
 
+msgid "main grouping / affiliation for characters"
+msgstr "hoofdgroepering / affiliatie voor personages"
+
+msgid "secondary grouping across primary factions"
+msgstr "secundaire groepering over primaire facties"
+
 msgid "Allow to switch registration between events"
 msgstr "Registratie schakelen tussen evenementen toestaan"
 
@@ -5333,6 +5336,9 @@ msgstr "Totale deelnamekosten verlaagd door kortingen"
 msgid "Write to us if you need help in setting things up!"
 msgstr "Schrijf ons als je hulp nodig hebt bij het opzetten!"
 
+msgid "hidden faction visible only to assigned characters"
+msgstr "verborgen factie alleen zichtbaar voor toegewezen personages"
+
 msgid "you can still pay the remaining amount if you wish"
 msgstr "je kunt nog steeds het resterende bedrag betalen als je dat wilt"
 
@@ -5857,10 +5863,6 @@ msgid "This page shows the factions (character groups) of the event"
 msgstr ""
 "Deze pagina geeft een overzicht van de facties (groepen personages) van het "
 "evenement"
-
-msgid "This page shows the relationships of the indicated character"
-msgstr ""
-"Deze pagina geeft een overzicht van de links van het aangegeven personage"
 
 msgid "You have already granted data sharing with this organisation"
 msgstr ""
@@ -9642,15 +9644,6 @@ msgstr ""
 "Om je lidmaatschap te bevestigen, moet je een verzoek indienen om je te "
 "registreren als lid van de Vereniging. De procedure zal je automatisch door "
 "de vereiste stappen leiden"
-
-msgid ""
-"Primary: main grouping / affiliation for characters. Transversal: secondary "
-"grouping across primary factions. Secret: hidden faction visible only to "
-"assigned characters"
-msgstr ""
-"Primair: belangrijkste groepering / affiliatie voor personages. "
-"Transversaal: secundaire groepering over primaire facties heen. Geheim: "
-"verborgen factie die alleen zichtbaar is voor toegewezen personages"
 
 msgid ""
 "By clicking the button below, you confirm that you consent to the sharing of"

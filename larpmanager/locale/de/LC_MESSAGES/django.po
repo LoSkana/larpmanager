@@ -3745,9 +3745,6 @@ msgstr "Datum der Ausstellung des Dokuments"
 msgid "Indicate the outflow category"
 msgstr "Geben Sie die Kategorie an, zu der die Ausgabe gezählt wird"
 
-msgid "List inverse relationships of"
-msgstr "Liste der umgekehrten Beziehungen von"
-
 msgid "Manages modules for workshops"
 msgstr "Verwaltet Module für Workshops"
 
@@ -4743,6 +4740,12 @@ msgstr "Diese Seite fasst die Systemeinträge von"
 msgid "Warning! Other users are editing this item"
 msgstr "Warnung! Dieser Artikel wird von anderen Benutzern bearbeitet"
 
+msgid "main grouping / affiliation for characters"
+msgstr "Hauptgruppierung/Zugehörigkeit für Zeichen"
+
+msgid "secondary grouping across primary factions"
+msgstr "sekundäre Gruppierung über primäre Fraktionen hinweg"
+
 msgid "Allow to switch registration between events"
 msgstr "Umschalten der Registrierung zwischen den Veranstaltungen ermöglichen"
 
@@ -5359,6 +5362,9 @@ msgstr "Durch Rabatte reduzierte Teilnahmegebühren insgesamt"
 msgid "Write to us if you need help in setting things up!"
 msgstr "Wenden Sie sich an uns, wenn Sie Hilfe beim Einrichten benötigen!"
 
+msgid "hidden faction visible only to assigned characters"
+msgstr "versteckte Fraktion, die nur für zugewiesene Charaktere sichtbar ist"
+
 msgid "you can still pay the remaining amount if you wish"
 msgstr "Sie können den Restbetrag immer noch bezahlen, wenn Sie dies wünschen"
 
@@ -5947,9 +5953,6 @@ msgid "This page shows the factions (character groups) of the event"
 msgstr ""
 "Auf dieser Seite werden die Fraktionen (Gruppen von Charakteren) des "
 "Ereignisses zusammengefasst"
-
-msgid "This page shows the relationships of the indicated character"
-msgstr "Diese Seite fasst die Links des angegebenen Zeichens zusammen"
 
 msgid "You have already granted data sharing with this organisation"
 msgstr ""
@@ -9838,15 +9841,6 @@ msgstr ""
 "Um Ihre Mitgliedschaft zu bestätigen, müssen Sie beantragen, als Mitglied "
 "der Vereinigung registriert zu werden. Das Verfahren wird Sie automatisch "
 "durch die erforderlichen Schritte führen"
-
-msgid ""
-"Primary: main grouping / affiliation for characters. Transversal: secondary "
-"grouping across primary factions. Secret: hidden faction visible only to "
-"assigned characters"
-msgstr ""
-"Primär: Hauptgruppierung / Zugehörigkeit der Charaktere. Transversal: "
-"sekundäre Gruppierung über primäre Fraktionen hinweg. Geheim: versteckte "
-"Fraktion, die nur für zugewiesene Charaktere sichtbar ist"
 
 msgid ""
 "By clicking the button below, you confirm that you consent to the sharing of"

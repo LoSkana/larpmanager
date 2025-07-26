@@ -1,5 +1,5 @@
 {% load show_tags i18n %}
-{% for idx, question in questions.items %}
+{% for idx, question in char.questions.items %}
     {% if question.typ == 'e' %}
         {% with char.fields|get:idx as field %}
             {% if field %}

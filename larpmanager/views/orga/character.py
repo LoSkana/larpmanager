@@ -36,7 +36,7 @@ from larpmanager.forms.character import (
     OrgaWritingQuestionForm,
 )
 from larpmanager.forms.utils import EventCharacterS2Widget
-from larpmanager.forms.writing import UploadElementsForm
+from larpmanager.forms.writing import FactionForm, UploadElementsForm
 from larpmanager.models.base import Feature
 from larpmanager.models.form import (
     QuestionApplicable,
@@ -611,12 +611,14 @@ def _get_excel_form(request, s, n, typ, submit=False):
 
     ctx["elementTyp"] = ctx["applicable"]
 
+    form_mapping = {"character": OrgaCharacterForm, "faction": FactionForm}
+
     # Init form
-    # TODO correct type given the one supplied
+    form_class = form_mapping.get(typ, OrgaCharacterForm)
     if submit:
-        form = OrgaCharacterForm(request.POST, request.FILES, ctx=ctx, instance=element)
+        form = form_class(request.POST, request.FILES, ctx=ctx, instance=element)
     else:
-        form = OrgaCharacterForm(ctx=ctx, instance=element)
+        form = form_class(ctx=ctx, instance=element)
 
     # Remove question other than the one requested
     keep_key = f"q{question_id}"
@@ -654,12 +656,9 @@ def _get_question_update(ctx, el):
         question_slug = ctx["question"].typ
 
     value = ctx["form"].cleaned_data[question_key]
-    if value:
-        value = str(value)
-    else:
-        value = ""
+
     if ctx["question"].typ in [QuestionType.TEASER, QuestionType.SHEET, QuestionType.EDITOR]:
-        value = strip_tags(value)
+        value = strip_tags(str(value))
 
     if ctx["question"].typ in [QuestionType.MULTIPLE, QuestionType.SINGLE]:
         # get option names
@@ -668,6 +667,7 @@ def _get_question_update(ctx, el):
         value = ", ".join([display for display in query.values_list("display", flat=True)])
     else:
         # check if it is over the character limit
+        value = str(value)
         limit = conf_settings.FIELD_SNIPPET_LIMIT
         if len(value) > limit:
             value = value[:limit]

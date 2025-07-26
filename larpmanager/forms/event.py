@@ -24,7 +24,6 @@ from django.core.exceptions import ValidationError
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_writing_fields
 from larpmanager.cache.feature import get_event_features, reset_event_features
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
@@ -858,14 +857,16 @@ class OrgaRunForm(ConfigForm):
         basics = QuestionType.get_basic_types()
         self.set_section("visibility", _("Visibility"))
         for s in shows:
-            fields = get_writing_fields(self.params, s[2])
+            if "writing_fields" not in self.params or s[0] not in self.params["writing_fields"]:
+                continue
+            fields = self.params["writing_fields"][s[0]]["questions"]
             extra = []
-            for field in fields:
-                typ = field.typ
+            for _id, field in fields.items():
+                typ = field["typ"]
                 if typ in basics:
-                    typ = str(field.id)
+                    typ = str(field["id"])
 
-                extra.append((typ, field.display))
+                extra.append((typ, field["display"]))
 
             self.add_configs(f"show_{s[0]}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)
 
@@ -1116,18 +1117,20 @@ class OrgaPreferencesForm(ConfigForm):
         for s in shows:
             if s[0] not in self.params["features"]:
                 continue
-            fields = get_writing_fields(self.params, s[2])
+            if "writing_fields" not in self.params or s[0] not in self.params["writing_fields"]:
+                continue
+            fields = self.params["writing_fields"][s[0]]["questions"]
             extra = []
-            for field in fields:
-                if field.typ == "name":
+            for _id, field in fields.items():
+                if field["typ"] == "name":
                     continue
 
-                if field.typ in basics:
-                    tog = f".lq_{field.id}"
+                if field["typ"] in basics:
+                    tog = f".lq_{field['id']}"
                 else:
-                    tog = f"q_{field.id}"
+                    tog = f"q_{field['id']}"
 
-                extra.append((tog, field.display))
+                extra.append((tog, field["display"]))
 
             if s[0] == "character":
                 if self.params["event"].get_config("user_character_max", 0):
