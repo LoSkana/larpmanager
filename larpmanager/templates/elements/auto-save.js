@@ -43,7 +43,16 @@ function submitForm(auto) {
                     hideAfter: 1000
                 });
             }
-            if (msg.warn) alert(msg.warn);
+            if (msg.warn) {
+                $.toast({
+                    text: msg.warn,
+                    showHideTransition: 'slide',
+                    icon: 'error',
+                    position: 'top-center',
+                    textAlign: 'center',
+                    hideAfter: 5000
+                });
+            }
         }
     });
     setTimeout(()=>submitForm(true), timeout);
