@@ -1520,7 +1520,7 @@ th select {
     padding:3em;
     border-radius:10px;
     min-width:320px;
-    z-index: 10;
+    z-index: 999;
 }
 
 #char-finder-close {

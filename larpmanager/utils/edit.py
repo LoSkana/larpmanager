@@ -20,6 +20,7 @@
 
 import time
 
+from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import Max
@@ -299,6 +300,8 @@ def writing_edit(request, ctx, form_type, nm, tp, redr=None):
 
     _setup_char_finder(ctx)
 
+    ctx["server_token"] = conf_settings.SERVER_START_TOKEN
+
     return render(request, "larpmanager/orga/writing/writing.html", ctx)
 
 
@@ -349,7 +352,7 @@ def writing_edit_cache_key(eid, typ):
 
 
 def writing_edit_save_ajax(form, request, ctx):
-    res = {"res": "ok"}
+    res = {"res": "ok", "server_token": conf_settings.SERVER_START_TOKEN}
 
     eid = int(request.POST["eid"])
     if eid <= 0:

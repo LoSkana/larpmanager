@@ -45,11 +45,11 @@
         var url_load_questions = "{% url 'orga_writing_form_list' run.event.slug run.number label_typ %}";
         var url_load_questions_email = "{% url 'orga_writing_form_email' run.event.slug run.number label_typ %}";
 
+        var server_token = "{{ server_token }}";
+
         var accounting = false;
 
         window.trigger_togs = {{ default_fields | safe }};
-
-        alert(window.trigger_togs);
 
         {% include "elements/questions/load.js" %}
     </script>

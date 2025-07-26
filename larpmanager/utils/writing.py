@@ -21,6 +21,7 @@
 import csv
 import io
 
+from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Model, Prefetch
 from django.db.models.signals import pre_save
@@ -266,6 +267,8 @@ def _prepare_writing_list(ctx, request):
     ctx["default_fields"] = request.user.member.get_config(f"open_{model_name}_{ctx['event'].id}", "[]")
     if ctx["default_fields"] == "[]":
         ctx["default_fields"] = "['teaser', 'text']"
+
+    ctx["server_token"] = conf_settings.SERVER_START_TOKEN
 
 
 def writing_list_plot(ctx):

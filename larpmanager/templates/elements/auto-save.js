@@ -32,6 +32,17 @@ function submitForm(auto) {
         url: post_url,
         data: formData,
         success: function(msg) {
+            if (msg.server_token != server_token) {
+                $.toast({
+                    text: 'Connection issue: please save and reload the page',
+                    showHideTransition: 'slide',
+                    icon: 'warning',
+                    position: 'top-center',
+                    textAlign: 'center',
+                    hideAfter: 5000
+                });
+            }
+
             setTimeout(confirmSubmit, 100);
             if (!auto) {
                 $.toast({
