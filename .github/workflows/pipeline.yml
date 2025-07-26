@@ -68,6 +68,7 @@ jobs:
     - name: Run Django tests
       run: |
         export PYTEST_CURRENT_TEST="true"
+        export HOME=$(mktemp -d)
         # multiple parallel workers with -n
         pytest -rs -n auto -vvv
 
