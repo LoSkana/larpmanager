@@ -50,9 +50,10 @@ function submitForm(auto) {
                     text: msg.warn,
                     showHideTransition: 'slide',
                     icon: 'error',
-                    position: 'top-center',
+                    position: 'mid-center',
                     textAlign: 'center',
-                    hideAfter: 5000
+                    allowToastClose: true,
+                    hideAfter: false
                 });
             }
         }

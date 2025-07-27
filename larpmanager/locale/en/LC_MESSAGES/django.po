@@ -8254,6 +8254,14 @@ msgstr ""
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr ""
 
+#, python-format
+msgid "There are registration questions without options: %(list)s"
+msgstr ""
+
+#, python-format
+msgid "There are writing fields without options: %(list)s"
+msgstr ""
+
 msgid "Set the casting options in the configuration panel"
 msgstr ""
 
@@ -8302,6 +8310,9 @@ msgstr ""
 #, python-format
 msgid ""
 "You have some tickets without a final installment (with 0 amount): %(list)s"
+msgstr ""
+
+msgid "Set up configuration for Patron and Reduced tickets"
 msgstr ""
 
 msgid "Set up a value for registration opening date"

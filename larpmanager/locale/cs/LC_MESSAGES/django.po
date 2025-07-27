@@ -5295,6 +5295,10 @@ msgstr "Děkujeme, že jste se rozhodli být součástí naší komunity"
 msgid "The registration for this event has been cancelled"
 msgstr "Registrace na akci byla zrušena"
 
+#, python-format
+msgid "There are writing fields without options: %(list)s"
+msgstr "Jsou zde pole pro zápis bez možností: %(list)s"
+
 msgid "This feature is available for non-waiting tickets!"
 msgstr "Tato funkce je k dispozici pro nečekané tipy!"
 
@@ -5356,6 +5360,9 @@ msgstr "Vyberte prosím jasnou a snadno rozpoznatelnou fotografii"
 
 msgid "Review players' dietary restrictions and allergies."
 msgstr "Zkontrolujte stravovací omezení a alergie hráčů."
+
+msgid "Set up configuration for Patron and Reduced tickets"
+msgstr "Nastavení konfigurace pro vstupenky Patron a Zvýhodněné vstupenky"
 
 msgid "Short guides to help you learn how the system works"
 msgstr "Krátké průvodce, které vám pomohou naučit se, jak systém funguje"
@@ -5697,6 +5704,10 @@ msgstr "Název možnosti, který se zobrazí v otázce (musí být krátký)"
 
 msgid "Probability of showing the special page (out of thousands)"
 msgstr "Pravděpodobnost zobrazení speciální stránky (z tisíce)"
+
+#, python-format
+msgid "There are registration questions without options: %(list)s"
+msgstr "Existují registrační otázky bez možností: %(list)s"
 
 msgid "This page allows you to manually approve payments received"
 msgstr "Na této stránce můžete ručně schvalovat přijaté platby"
