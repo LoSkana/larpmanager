@@ -76,6 +76,7 @@ async def prepare(page, live_server):
     await page.locator('#id_payment_methods input[type="checkbox"][value="1"]').check()
     await page.locator("#id_wire_descr").click()
     await page.locator("#id_wire_descr").fill("test wire")
+    await page.locator("#id_wire_fee").fill("0")
     await page.locator("#id_wire_descr").press("Tab")
     await page.locator("#id_wire_payee").fill("test beneficiary")
     await page.locator("#id_wire_payee").press("Tab")

@@ -73,9 +73,10 @@ window.addEventListener('DOMContentLoaded', function() {
                         text: res.warn,
                         showHideTransition: 'slide',
                         icon: 'error',
-                        position: 'top-center',
+                        position: 'mid-center',
                         textAlign: 'center',
-                        hideAfter: 5000
+                        allowToastClose: true,
+                        hideAfter: false
                     });
                 }
                 return;

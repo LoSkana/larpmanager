@@ -23,6 +23,7 @@ from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.experience import AbilityTypePx, DeliveryPx
+from larpmanager.models.form import QuestionType, RegistrationQuestion, WritingQuestion
 from larpmanager.models.member import Membership, MembershipStatus
 from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota, RegistrationTicket
 from larpmanager.models.writing import Character, CharacterStatus
@@ -359,6 +360,37 @@ def _orga_actions_priorities(request, ctx, assoc):
             "orga_invoices",
         )
 
+    # form
+    empty_reg_questions = (
+        ctx["event"]
+        .get_elements(RegistrationQuestion)
+        .filter(typ__in=[QuestionType.SINGLE, QuestionType.MULTIPLE])
+        .annotate(quest_count=Count("options"))
+        .filter(quest_count=0)
+    )
+    if empty_reg_questions.count():
+        _add_priority(
+            ctx,
+            _("There are registration questions without options: %(list)s")
+            % {"list": ", ".join([obj.name for obj in empty_reg_questions])},
+            "orga_registration_form",
+        )
+
+    empty_char_questions = (
+        ctx["event"]
+        .get_elements(WritingQuestion)
+        .filter(typ__in=[QuestionType.SINGLE, QuestionType.MULTIPLE])
+        .annotate(quest_count=Count("options"))
+        .filter(quest_count=0)
+    )
+    if empty_char_questions.count():
+        _add_priority(
+            ctx,
+            _("There are writing fields without options: %(list)s")
+            % {"list": ", ".join([obj.name for obj in empty_char_questions])},
+            "orga_character_form",
+        )
+
     _orga_user_actions(ctx, features, request, assoc)
 
     _orga_reg_acc_actions(ctx, features)
@@ -507,6 +539,15 @@ def _orga_reg_acc_actions(ctx, features):
                     % {"list": ", ".join([obj.name for obj in missing_final])},
                     "orga_registration_installments",
                 )
+
+    if "reduced" in features:
+        if not ctx["event"].get_config("reduced_ratio", 0):
+            _add_priority(
+                ctx,
+                _("Set up configuration for Patron and Reduced tickets"),
+                "orga_registration_tickets",
+                "config/reduced",
+            )
 
 
 def _orga_reg_actions(ctx, features):
