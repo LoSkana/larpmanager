@@ -177,7 +177,7 @@ async def px(live_server, page):
     await page.get_by_role("row", name="Abilities Show").get_by_role("link").click()
     await page.get_by_role("searchbox").click()
     await page.get_by_role("searchbox").fill("swo")
-    await asyncio.sleep(1)
+    await asyncio.sleep(5)
     await page.get_by_role("option", name="sword1").click()
     await page.get_by_role("button", name="Confirm", exact=True).click()
     await page.get_by_role("link", name="XP").click()
