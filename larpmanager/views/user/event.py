@@ -328,22 +328,22 @@ def search(request, s, n):
 
     if check_gallery_visibility(request, ctx) and ctx["show_character"]:
         get_event_cache_all(ctx)
-        ctx["all"] = json.dumps(ctx["chars"])
-        ctx["facs"] = json.dumps(ctx["factions"])
         ctx["search_text"] = get_event_text(ctx["event"].id, EventTextType.SEARCH)
-
         visible_writing_fields(ctx, QuestionApplicable.CHARACTER)
+        for _num, char in ctx["chars"].items():
+            fields = char.get("fields")
+            if not fields:
+                continue
+            to_delete = [
+                qid for qid in list(fields) if str(qid) not in ctx.get("show_character", []) and "show_all" not in ctx
+            ]
+            for qid in to_delete:
+                del fields[qid]
 
-    for slug in ["all", "facs"]:
-        if slug in ctx:
-            continue
-        ctx[slug] = {}
-
-    for slug in ["questions", "options", "searchable"]:
-        if slug in ctx:
-            ctx[slug] = json.dumps(ctx[slug])
-            continue
-        ctx[slug] = []
+    for slug in ["chars", "factions", "questions", "options", "searchable"]:
+        if slug not in ctx:
+            ctx[slug] = {}
+        ctx[f"{slug}_json"] = json.dumps(ctx[slug])
 
     return render(request, "larpmanager/event/search.html", ctx)
 

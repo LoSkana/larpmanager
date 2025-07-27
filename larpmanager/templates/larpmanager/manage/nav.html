@@ -30,11 +30,13 @@
                        {% if request_func_name == "gallery" %}class="select"{% endif %}>{% trans "Gallery" %}</a>
                     <div class="lm_tooltiptext">{% trans "View the list of characters and players" %}!</div>
                 </div>
-                <div class="lm_tooltip">
-                    <a href="{% url 'search' run.event.slug run.number %}"
-                       {% if request_func_name == "search" %}class="select"{% endif %}>{% trans "Search" %}</a>
-                    <div class="lm_tooltiptext">{% trans "Filter or search the characters" %}!</div>
-                </div>
+                {% if features.character %}
+                    <div class="lm_tooltip">
+                        <a href="{% url 'search' run.event.slug run.number %}"
+                           {% if request_func_name == "search" %}class="select"{% endif %}>{% trans "Search" %}</a>
+                        <div class="lm_tooltiptext">{% trans "Filter or search the characters" %}!</div>
+                    </div>
+                {% endif %}
                 {% for el in buttons %}
                     <div class="lm_tooltip">
                         <a href="{{ el.2 }}">{{ el.0 }}</a>

@@ -1707,6 +1707,9 @@ msgstr "Changer de photo"
 msgid "Collaborator"
 msgstr "Contributeur"
 
+msgid "Dependencies"
+msgstr "Dépendances"
+
 msgid "Event status"
 msgstr "Statut de l'événement"
 
@@ -1829,9 +1832,6 @@ msgstr "Nous vous attendons"
 
 msgid "Show history"
 msgstr "Exposition historique"
-
-msgid "Subordinates"
-msgstr "Subordonnés"
 
 msgid "Subscription"
 msgstr "Abonnement"
@@ -4476,6 +4476,9 @@ msgstr "Vous faites un don de"
 
 msgid "click on the icon to open the tutorial"
 msgstr "cliquez sur l'icône pour ouvrir le tutoriel"
+
+msgid "Character are not visible at the moment"
+msgstr "Les caractères ne sont pas visibles pour le moment"
 
 msgid "Click below to confirm the cancellation"
 msgstr "Cliquez ci-dessous pour confirmer votre annulation "

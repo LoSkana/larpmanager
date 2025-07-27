@@ -1707,6 +1707,9 @@ msgstr "Změna fotografie"
 msgid "Collaborator"
 msgstr "Přispěvatel"
 
+msgid "Dependencies"
+msgstr "Závislosti"
+
 msgid "Event status"
 msgstr "Stav události"
 
@@ -1829,9 +1832,6 @@ msgstr "Čekáme na vás"
 
 msgid "Show history"
 msgstr "Historická výstava"
-
-msgid "Subordinates"
-msgstr "Podřízení"
 
 msgid "Subscription"
 msgstr "Předplatné"
@@ -4473,6 +4473,9 @@ msgstr "Přispíváte částkou"
 
 msgid "click on the icon to open the tutorial"
 msgstr "kliknutím na ikonu otevřete výukový program"
+
+msgid "Character are not visible at the moment"
+msgstr "Znaky nejsou v tuto chvíli viditelné"
 
 msgid "Click below to confirm the cancellation"
 msgstr "Kliknutím níže potvrdíte zrušení rezervace"

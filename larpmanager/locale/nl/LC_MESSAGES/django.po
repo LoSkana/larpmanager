@@ -1707,6 +1707,9 @@ msgstr "Foto wijzigen"
 msgid "Collaborator"
 msgstr "Deelnemer"
 
+msgid "Dependencies"
+msgstr "Afhankelijkheden"
+
 msgid "Event status"
 msgstr "Gebeurtenisstatus"
 
@@ -1829,9 +1832,6 @@ msgstr "We wachten op je"
 
 msgid "Show history"
 msgstr "Historische tentoonstelling"
-
-msgid "Subordinates"
-msgstr "Ondergeschikten"
 
 msgid "Subscription"
 msgstr "Abonnement"
@@ -4475,6 +4475,9 @@ msgstr "Je doet een donatie van"
 
 msgid "click on the icon to open the tutorial"
 msgstr "klik op het pictogram om de zelfstudie te openen"
+
+msgid "Character are not visible at the moment"
+msgstr "Karakters zijn momenteel niet zichtbaar"
 
 msgid "Click below to confirm the cancellation"
 msgstr "Klik hieronder om uw annulering te bevestigen"

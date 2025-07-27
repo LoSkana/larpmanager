@@ -1707,6 +1707,9 @@ msgstr "Endre bilde"
 msgid "Collaborator"
 msgstr "Bidragsyter"
 
+msgid "Dependencies"
+msgstr "Avhengigheter"
+
 msgid "Event status"
 msgstr "Status for hendelsen"
 
@@ -1829,9 +1832,6 @@ msgstr "Vi venter på deg"
 
 msgid "Show history"
 msgstr "Historisk utstilling"
-
-msgid "Subordinates"
-msgstr "Underordnede"
 
 msgid "Subscription"
 msgstr "Abonnement"
@@ -4475,6 +4475,9 @@ msgstr "Du gir en donasjon på"
 
 msgid "click on the icon to open the tutorial"
 msgstr "klikk på ikonet for å åpne veiledningen"
+
+msgid "Character are not visible at the moment"
+msgstr "Tegnene er ikke synlige for øyeblikket"
 
 msgid "Click below to confirm the cancellation"
 msgstr "Klikk nedenfor for å bekrefte avbestillingen"

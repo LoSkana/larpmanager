@@ -89,7 +89,7 @@ def visible_writing_fields(ctx, applicable, only_visible=True):
     res = ctx["writing_fields"][key]
     ctx["questions"] = {}
     ctx["options"] = {}
-    ctx["searchable"] = []
+    ctx["searchable"] = {}
 
     question_ids = []
     searcheable_ids = []

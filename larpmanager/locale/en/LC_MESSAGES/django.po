@@ -4535,6 +4535,9 @@ msgstr ""
 msgid "Conditions of"
 msgstr ""
 
+msgid "Character are not visible at the moment"
+msgstr ""
+
 msgid "Go to the quests of type"
 msgstr ""
 
@@ -6337,7 +6340,7 @@ msgstr ""
 msgid "Cost"
 msgstr ""
 
-msgid "Subordinates"
+msgid "Dependencies"
 msgstr ""
 
 msgid "Ability types"
