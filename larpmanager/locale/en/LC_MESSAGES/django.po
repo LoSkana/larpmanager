@@ -6814,10 +6814,7 @@ msgstr ""
 msgid "External"
 msgstr ""
 
-msgid "This page shows the event plots"
-msgstr ""
-
-msgid "Concept"
+msgid "This page shows the plots of the event"
 msgstr ""
 
 msgid "Progress step"

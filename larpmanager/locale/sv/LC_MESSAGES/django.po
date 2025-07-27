@@ -654,9 +654,6 @@ msgstr "Gjutning"
 msgid "Columns"
 msgstr "Kolumner"
 
-msgid "Concept"
-msgstr "Koncept"
-
 msgid "Confirm"
 msgstr "Tillämpa"
 
@@ -3925,9 +3922,6 @@ msgstr "Hittills har du betalat totalt"
 msgid "Surcharge applied to the ticket"
 msgstr "Tilläggsavgift till biljett"
 
-msgid "This page shows the event plots"
-msgstr "Denna sida visar händelseförloppen"
-
 msgid "This page shows the run signups"
 msgstr "På denna sida finns en sammanfattning av anmälningarna till loppet"
 
@@ -4466,6 +4460,9 @@ msgstr "Nu kan du börja skapa speed-larps"
 
 msgid "The following registrations were drawn"
 msgstr "Följande bidrag lottades ut"
+
+msgid "This page shows the plots of the event"
+msgstr "På denna sida visas plottarna från evenemanget"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Vi ber dig att betala det återstående beloppet"

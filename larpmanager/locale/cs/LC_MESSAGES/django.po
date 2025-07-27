@@ -654,9 +654,6 @@ msgstr "Casting"
 msgid "Columns"
 msgstr "Sloupce"
 
-msgid "Concept"
-msgstr "Koncept"
-
 msgid "Confirm"
 msgstr "Použít"
 
@@ -3925,9 +3922,6 @@ msgstr "Dosud jste zaplatili celkem"
 msgid "Surcharge applied to the ticket"
 msgstr "Příplatek k jízdence"
 
-msgid "This page shows the event plots"
-msgstr "Tato stránka zobrazuje zákresy událostí"
-
 msgid "This page shows the run signups"
 msgstr "Tato stránka shrnuje přihlášky na běh"
 
@@ -4464,6 +4458,9 @@ msgstr "Nyní můžete začít vytvářet speed-larpy"
 
 msgid "The following registrations were drawn"
 msgstr "Byly vylosovány tyto položky"
+
+msgid "This page shows the plots of the event"
+msgstr "Tato stránka zobrazuje pozemky události"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Žádáme vás, abyste zaplatili zbývající částku"

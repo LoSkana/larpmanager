@@ -654,9 +654,6 @@ msgstr "Gießen"
 msgid "Columns"
 msgstr "Rubriken"
 
-msgid "Concept"
-msgstr "Konzept"
-
 msgid "Confirm"
 msgstr "Bewerbung"
 
@@ -3925,9 +3922,6 @@ msgstr "Bislang haben Sie insgesamt"
 msgid "Surcharge applied to the ticket"
 msgstr "Aufpreis zum Fahrschein"
 
-msgid "This page shows the event plots"
-msgstr "Diese Seite zeigt die Ereignisplots"
-
 msgid "This page shows the run signups"
 msgstr "Auf dieser Seite sind die Anmeldungen für den Lauf zusammengefasst"
 
@@ -4468,6 +4462,9 @@ msgstr "Jetzt können Sie mit der Erstellung von Speed-Larps beginnen"
 
 msgid "The following registrations were drawn"
 msgstr "Die folgenden Beiträge wurden ausgelost"
+
+msgid "This page shows the plots of the event"
+msgstr "Diese Seite zeigt die Plots der Veranstaltung"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Wir bitten Sie, den Restbetrag zu zahlen"

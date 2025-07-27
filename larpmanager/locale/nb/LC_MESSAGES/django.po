@@ -654,9 +654,6 @@ msgstr "Støping"
 msgid "Columns"
 msgstr "Spalter"
 
-msgid "Concept"
-msgstr "Konsept"
-
 msgid "Confirm"
 msgstr "Søke"
 
@@ -3925,9 +3922,6 @@ msgstr "Så langt har du betalt til sammen"
 msgid "Surcharge applied to the ticket"
 msgstr "Tillegg på billetten"
 
-msgid "This page shows the event plots"
-msgstr "Denne siden viser hendelsesplottene"
-
 msgid "This page shows the run signups"
 msgstr "Denne siden oppsummerer påmeldingene til løpet"
 
@@ -4466,6 +4460,9 @@ msgstr "Nå kan du begynne å lage speed-larps"
 
 msgid "The following registrations were drawn"
 msgstr "Følgende bidrag ble trukket ut"
+
+msgid "This page shows the plots of the event"
+msgstr "Denne siden viser plott av arrangementet"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Vi ber deg om å betale det resterende beløpet"

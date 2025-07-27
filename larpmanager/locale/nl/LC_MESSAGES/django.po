@@ -654,9 +654,6 @@ msgstr "Gieten"
 msgid "Columns"
 msgstr "Kolommen"
 
-msgid "Concept"
-msgstr "Concept"
-
 msgid "Confirm"
 msgstr "Toepassen"
 
@@ -3925,9 +3922,6 @@ msgstr "Tot nu toe heb je in totaal"
 msgid "Surcharge applied to the ticket"
 msgstr "Toeslag op ticket"
 
-msgid "This page shows the event plots"
-msgstr "Deze pagina toont de gebeurtenisplots"
-
 msgid "This page shows the run signups"
 msgstr "Op deze pagina staat een overzicht van de inschrijvingen voor de run"
 
@@ -4466,6 +4460,9 @@ msgstr "Nu kun je beginnen met het maken van speed-larps"
 
 msgid "The following registrations were drawn"
 msgstr "De volgende inzendingen zijn getrokken"
+
+msgid "This page shows the plots of the event"
+msgstr "Deze pagina toont de plots van het evenement"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "We vragen je om het resterende bedrag te betalen"

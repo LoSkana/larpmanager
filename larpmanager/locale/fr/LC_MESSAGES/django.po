@@ -654,9 +654,6 @@ msgstr "Casting"
 msgid "Columns"
 msgstr "Colonnes"
 
-msgid "Concept"
-msgstr "Concept"
-
 msgid "Confirm"
 msgstr "Appliquer"
 
@@ -3925,9 +3922,6 @@ msgstr "Jusqu'à présent, vous avez payé un total de"
 msgid "Surcharge applied to the ticket"
 msgstr "Supplément appliqué au billet"
 
-msgid "This page shows the event plots"
-msgstr "Cette page présente les parcelles de l'événement"
-
 msgid "This page shows the run signups"
 msgstr "Cette page résume les inscriptions à la course"
 
@@ -4467,6 +4461,9 @@ msgstr "Vous pouvez maintenant commencer à créer des ralentisseurs de vitesse"
 
 msgid "The following registrations were drawn"
 msgstr "Les participations suivantes ont été tirées au sort"
+
+msgid "This page shows the plots of the event"
+msgstr "Cette page présente les tracés de l'événement"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Nous vous demandons de payer le montant restant"
