@@ -5364,7 +5364,7 @@ msgid "Review players' dietary restrictions and allergies."
 msgstr "Esamina le restrizioni dietetiche e le allergie dei giocatori."
 
 msgid "Set up configuration for Patron and Reduced tickets"
-msgstr "Configurazione per i biglietti Patron e Reduced"
+msgstr "Imposta la configurazione per i biglietti Patron e Reduced"
 
 msgid "Short guides to help you learn how the system works"
 msgstr "Brevi guide per imparare il funzionamento del sistema"
