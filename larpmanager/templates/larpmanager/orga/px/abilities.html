@@ -19,9 +19,7 @@
                 {% if px_user %}
                     <th>{% trans "Visible" %}</th>
                     <th>{% trans "Prerequisites" %}</th>
-                    {% if features.character_form %}
-                        <th>{% trans "Subordinates" %}</th>
-                    {% endif %}
+                    <th>{% trans "Dependencies" %}</th>
                 {% endif %}
             </tr>
         </thead>
@@ -56,14 +54,12 @@
                                 <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number ab.id %}">{{ ab.name }}</a>
                             {% endfor %}
                         </td>
-                        {% if features.character_form %}
-                            <td>
-                                {% for opt in el.dependents.all %}
-                                    {% include "elements/comma.html" %}
-                                    {{ opt.display }}
-                                {% endfor %}
-                            </td>
-                        {% endif %}
+                        <td>
+                            {% for opt in el.dependents.all %}
+                                {% include "elements/comma.html" %}
+                                {{ opt.display }}
+                            {% endfor %}
+                        </td>
                     {% endif %}
                 </tr>
             {% endfor %}

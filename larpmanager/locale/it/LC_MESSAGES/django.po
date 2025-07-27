@@ -676,7 +676,7 @@ msgid "Example"
 msgstr "Esempio"
 
 msgid "Faction"
-msgstr "Gruppo"
+msgstr "Fazione"
 
 msgid "Gallery"
 msgstr "Galleria"
@@ -730,7 +730,7 @@ msgid "Players"
 msgstr "Giocatori"
 
 msgid "Primary"
-msgstr "Primari"
+msgstr "Primaria"
 
 msgid "Privacy"
 msgstr "Privacy"
@@ -1704,6 +1704,9 @@ msgstr "Cambia foto"
 msgid "Collaborator"
 msgstr "Collaboratore"
 
+msgid "Dependencies"
+msgstr "Dipendenze"
+
 msgid "Event status"
 msgstr "Stato dell'evento"
 
@@ -1826,9 +1829,6 @@ msgstr "Ti aspettiamo"
 
 msgid "Show history"
 msgstr "Mostra storico"
-
-msgid "Subordinates"
-msgstr "Subordinate"
 
 msgid "Subscription"
 msgstr "Abbonamento"
@@ -3742,9 +3742,6 @@ msgstr "Data di emissione del documento"
 msgid "Indicate the outflow category"
 msgstr "Indicare la categoria entro cui viene contata l'uscita"
 
-msgid "List inverse relationships of"
-msgstr "Elencare le relazioni inverse di"
-
 msgid "Manages modules for workshops"
 msgstr "Gestisce i moduli per i workshop"
 
@@ -4474,6 +4471,9 @@ msgstr "Stai per effettuare una donazione di"
 msgid "click on the icon to open the tutorial"
 msgstr "fare clic sull'icona per aprire l'esercitazione"
 
+msgid "Character are not visible at the moment"
+msgstr "I personaggi non sono visibili al momento"
+
 msgid "Click below to confirm the cancellation"
 msgstr "Clicca qui sotto per confermare la cancellazione"
 
@@ -4735,6 +4735,12 @@ msgstr "Questa pagina riepiloga le voci registrati a sistema di"
 
 msgid "Warning! Other users are editing this item"
 msgstr "Attenzione! Altri utenti stanno modificando questo elemento"
+
+msgid "main grouping / affiliation for characters"
+msgstr "raggruppamento/appartenenza principale per i personaggi"
+
+msgid "secondary grouping across primary factions"
+msgstr "raggruppamento secondario attraverso le fazioni primarie"
 
 msgid "Allow to switch registration between events"
 msgstr "Permettere di cambiare la registrazione tra gli eventi"
@@ -5325,6 +5331,9 @@ msgstr "Quote di partecipazione totali ridotte grazie agli sconti"
 msgid "Write to us if you need help in setting things up!"
 msgstr "Scrivici se hai bisogno di aiuto per organizzare il tutto!"
 
+msgid "hidden faction visible only to assigned characters"
+msgstr "fazione nascosta visibile solo ai personaggi assegnati"
+
 msgid "you can still pay the remaining amount if you wish"
 msgstr "se lo desideri, puoi comunque pagare l'importo rimanente"
 
@@ -5865,9 +5874,6 @@ msgstr ""
 
 msgid "This page shows the factions (character groups) of the event"
 msgstr "Questa pagina riepiloga le fazioni (gruppi di personaggi) dell'evento"
-
-msgid "This page shows the relationships of the indicated character"
-msgstr "Questa pagina riepiloga i legami del personaggio indicato"
 
 msgid "You have already granted data sharing with this organisation"
 msgstr "Hai già concesso la condivisione dei dati con questa organizzazione"
@@ -9641,15 +9647,6 @@ msgstr ""
 "Per confermare la tua iscrizione, è necessario che tu richieda di iscriverti"
 " come socio all'Associazione. La procedura ti condurrà automaticamente nei "
 "passaggi richiesti"
-
-msgid ""
-"Primary: main grouping / affiliation for characters. Transversal: secondary "
-"grouping across primary factions. Secret: hidden faction visible only to "
-"assigned characters"
-msgstr ""
-"Primaria: raggruppamento/appartenenza principale dei personaggi. "
-"Trasversale: raggruppamento secondario tra le fazioni primarie. Segreta: "
-"fazione nascosta visibile solo ai personaggi assegnati"
 
 msgid ""
 "By clicking the button below, you confirm that you consent to the sharing of"

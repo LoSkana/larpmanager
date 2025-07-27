@@ -122,7 +122,7 @@ async def create_second_char(live_server, page):
     await page.locator("#id_q9").fill("asda")
     await page.get_by_role("button", name="Confirm", exact=True).click()
     await expect(page.locator("#one")).to_contain_text(
-        "Player: User Test Status: Creation Presentation dsfdfsd Text sdfdsfds"
+        "Player: User Test Status: Creation available text: few multiple text: many mandatory: asda Presentation dsfdfsd Text sdfdsfds"
     )
 
 
@@ -133,9 +133,8 @@ async def show_chars(page, live_server):
     await page.get_by_role("button", name="Confirm", exact=True).click()
 
     await go_to(page, live_server, "/test/1/manage/run")
-    await page.locator("#id_show_character_0").check()
-    await page.locator("#id_show_character_1").check()
-    await page.locator("#id_show_character_2").check()
+    for s in range(0, 13):
+        await page.locator(f"#id_show_character_{s}").check()
     await page.get_by_role("button", name="Confirm", exact=True).click()
 
 

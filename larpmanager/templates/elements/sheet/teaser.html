@@ -1,20 +1,20 @@
 {% load show_tags i18n %}
 {% if char.teaser and show_character.teaser %}
-    <h2 class="c">{{ teaser_name }}</h2>
+    <h2 class="c">{{ writing_fields.character.names.teaser }}</h2>
     <div class="teaser">{% show_char char.teaser run 1 %}</div>
 {% endif %}
 {% for fnum in char.factions %}
-    {% with factions|get:fnum as g %}
-        {% if not g.typ == 'g' %}
-            {% if show_faction and g.number %}
+    {% with factions|get:fnum as fact %}
+        {% if not fact.typ == 'fact' %}
+            {% if show_faction and fact.number %}
                 <h2 class="c">
-                    <a href="{% url 'faction' event.slug run.number g.number %}">{{ g.name }}</a>
+                    <a href="{% url 'faction' event.slug run.number fact.number %}">{{ fact.name }}</a>
                 </h2>
             {% else %}
-                <h2>{{ g.name }}</h2>
+                <h2>{{ fact.name }}</h2>
             {% endif %}
-            {% if g.teaser and show_faction.teaser %}
-                {% show_char g.teaser run 1 %}
+            {% if fact.teaser and show_faction.teaser %}
+                {% show_char fact.teaser run 1 %}
             {% endif %}
         {% endif %}
     {% endwith %}

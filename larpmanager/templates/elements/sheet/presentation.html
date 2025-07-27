@@ -1,7 +1,7 @@
 {% load show_tags i18n %}
 {% if char.title %}
     <div class="go-inline">
-        <b>{% trans "Title" %}:&nbsp;</b>{{ char.title }}
+        <b>{{ writing_fields.character.names.title }}:&nbsp;</b>{{ char.title }}
     </div>
 {% endif %}
 {% if character.mirror %}

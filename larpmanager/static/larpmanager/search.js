@@ -229,7 +229,10 @@ function search(key) {
     if (!show_char) return;
 
     var res = [];
+    console.log(all);
     for (const [num, el] of Object.entries(all)) {
+        console.log(num);
+        console.log(el);
         if ("hide" in el && el.hide === true) continue;
         if (found(key, el) && in_faction(el) && in_spec(el) && in_fields(el) && in_custom_fields(el)) res.push(el);
     }
