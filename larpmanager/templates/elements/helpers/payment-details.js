@@ -29,7 +29,13 @@ window.addEventListener('DOMContentLoaded', function() {
                 var sec_visible = $('.sec_' + slug).is(':visible');
                 link.fadeToggle(200);
                 if (sec_visible != this.checked) link.click();
+
+                $('.sec_' + slug + " input").each(function() {
+                  $(this).prop("required", !$(this).prop("required"));
+                });
             });
+
+
         });
 
         setTimeout(() => {

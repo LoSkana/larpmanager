@@ -466,7 +466,6 @@ class ExePaymentSettingsForm(MyForm):
                 if label in repl_dict:
                     label = repl_dict[label]
                 self.fields[el].label = label
-                self.fields[el].required = True
 
         res = get_payment_details(self.instance)
         for el in res:
