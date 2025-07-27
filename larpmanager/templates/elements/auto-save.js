@@ -10,6 +10,17 @@ var type = '{{ type }}';
 var timeout = 10 * 1000;
 var post_url = '{{ request.path }}';
 
+function randomAlphanumeric(length) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+}
+
+var token = randomAlphanumeric(20);
+
 function submitForm(auto) {
     if (eid == 0) {
         $.toast({
@@ -25,7 +36,7 @@ function submitForm(auto) {
     tinyMCE.triggerSave();
     var formData = $('form').serialize() + "&ajax=1";
     if (typeof eid !== 'undefined' && eid > 0) {
-        formData += "&eid=" + eid + "&type=" + type;
+        formData += "&eid=" + eid + "&type=" + type + "&token=" + token;
     }
     $.ajax({
         type: "POST",

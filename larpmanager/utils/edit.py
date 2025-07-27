@@ -361,28 +361,28 @@ def writing_edit_save_ajax(form, request, ctx):
 
     if "working_ticket" in ctx["features"]:
         tp = request.POST["type"]
-        writing_edit_working_ticket(request, tp, eid, res, obj=p)
+        token = request.POST["token"]
+        writing_edit_working_ticket(request, tp, eid, res, token, obj=p)
 
     return JsonResponse(res)
 
 
-def writing_edit_working_ticket(request, tp, eid, res, add_ticket=True, obj=None):
+def writing_edit_working_ticket(request, tp, eid, res, token, add_ticket=True, obj=None):
     # working ticket also for related characters
     if tp == "plot" and obj:
         for char_id in obj.characters.values_list("pk", flat=True):
-            writing_edit_working_ticket(request, "character", char_id, res, add_ticket=add_ticket)
+            writing_edit_working_ticket(request, "character", char_id, res, token, add_ticket=add_ticket)
 
     now = int(time.time())
     key = writing_edit_cache_key(eid, tp)
     ticket = cache.get(key)
-    mid = request.user.member.id
     if not ticket:
         ticket = {}
     others = []
     ticket_time = 15
     for idx, el in ticket.items():
         (name, tm) = el
-        if idx != mid and now - tm < ticket_time:
+        if idx != token and now - tm < ticket_time:
             others.append(name)
         if len(others) > 0:
             warn = _("Warning! Other users are editing this item") + "."
@@ -393,5 +393,5 @@ def writing_edit_working_ticket(request, tp, eid, res, add_ticket=True, obj=None
     if not add_ticket:
         return
 
-    ticket[mid] = (str(request.user.member), now)
+    ticket[token] = (str(request.user.member), now)
     cache.set(key, ticket, ticket_time)

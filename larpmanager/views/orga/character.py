@@ -592,7 +592,7 @@ def orga_writing_excel_submit(request, s, n, typ):
             "update": _get_question_update(ctx, obj),
         }
         if ctx["auto"] and "working_ticket" in ctx["features"]:
-            _check_working_ticket(request, ctx, response)
+            _check_working_ticket(request, ctx, response, request.POST["token"])
         return JsonResponse(response)
     else:
         return JsonResponse({"k": 2, "errors": ctx["form"].errors})
@@ -676,11 +676,11 @@ def _get_question_update(ctx, el):
     return value
 
 
-def _check_working_ticket(request, ctx, response):
+def _check_working_ticket(request, ctx, response, token):
     # perform normal check, if somebody else has opened the character to edit it
-    writing_edit_working_ticket(request, ctx["typ"], ctx["element"].id, response, False)
+    writing_edit_working_ticket(request, ctx["typ"], ctx["element"].id, response, token, False)
     if "warn" in response:
         return
 
     # perform check if somebody has opened the same field to edit it
-    writing_edit_working_ticket(request, ctx["typ"], f"{ctx['element'].id}_{ctx['question'].id}", response)
+    writing_edit_working_ticket(request, ctx["typ"], f"{ctx['element'].id}_{ctx['question'].id}", response, token)
