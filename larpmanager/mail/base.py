@@ -56,7 +56,7 @@ def join_email(assoc):
         my_send_mail(subj, body, member, assoc)
 
         activate(member.language)
-        subj = "LarpManager: Need help?"
+        subj = "We'd love your feedback on LarpManager"
         body = render_to_string("mails/help_assoc.html", {"member": member, "assoc": assoc})
         my_send_mail(subj, body, member, assoc, schedule=3600 * 24 * 2)
 
