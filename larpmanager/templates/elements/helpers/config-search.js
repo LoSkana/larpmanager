@@ -5,7 +5,7 @@
 window.addEventListener('DOMContentLoaded', function() {
 
     function search(key) {
-        $('tr').each(function( index ) {
+        $('#one tr').each(function( index ) {
             chi = $(this).children();
             var tx = chi.eq(0).html() + chi.eq(1).html();
 
@@ -25,11 +25,16 @@ window.addEventListener('DOMContentLoaded', function() {
         $('.section-link').each(function( index ) {
             tog = $(this).attr("tog");
             el = $('.' + tog)
-            if (el.find('.visib').length == 0)
+            console.log(el);
+            console.log(el.find('.visib').length);
+            href = $('a[tog="' + tog + '"]');
+            if (el.find('.visib').length == 0) {
+                href.hide(300);
                 el.hide(300);
-            else
+            } else {
+                href.show(300);
                 el.show(300);
-
+            }
         });
     }
 

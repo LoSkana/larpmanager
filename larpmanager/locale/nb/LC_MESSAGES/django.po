@@ -5302,6 +5302,10 @@ msgstr "Takk for at du velger å være en del av vårt fellesskap"
 msgid "The registration for this event has been cancelled"
 msgstr "Påmeldingen til arrangementet ble avlyst"
 
+#, python-format
+msgid "There are writing fields without options: %(list)s"
+msgstr "Det finnes skrivefelt uten alternativer: %(list)s"
+
 msgid "This feature is available for non-waiting tickets!"
 msgstr "Denne funksjonen er tilgjengelig for billetter som ikke er ventende!"
 
@@ -5366,6 +5370,9 @@ msgstr "Velg et tydelig og lett gjenkjennelig bilde"
 
 msgid "Review players' dietary restrictions and allergies."
 msgstr "Gå gjennom spillernes kostholdsrestriksjoner og allergier."
+
+msgid "Set up configuration for Patron and Reduced tickets"
+msgstr "Konfigurer konfigurasjon for Patron og reduserte billetter"
 
 msgid "Short guides to help you learn how the system works"
 msgstr ""
@@ -5713,6 +5720,10 @@ msgstr "Alternativets navn, vises i spørsmålet (hold det kort)"
 
 msgid "Probability of showing the special page (out of thousands)"
 msgstr "Sannsynlighet for å vise spesialsiden (av tusen)"
+
+#, python-format
+msgid "There are registration questions without options: %(list)s"
+msgstr "Det finnes registreringsspørsmål uten alternativer: %(list)s"
 
 msgid "This page allows you to manually approve payments received"
 msgstr "På denne siden kan du godkjenne mottatte betalinger manuelt"

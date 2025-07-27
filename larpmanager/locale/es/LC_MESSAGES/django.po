@@ -5300,6 +5300,10 @@ msgstr "Gracias por elegir formar parte de nuestra comunidad"
 msgid "The registration for this event has been cancelled"
 msgstr "Se canceló la inscripción en el acto"
 
+#, python-format
+msgid "There are writing fields without options: %(list)s"
+msgstr "Hay campos de escritura sin opciones: %(list)s"
+
 msgid "This feature is available for non-waiting tickets!"
 msgstr ""
 "Esta función está disponible para los billetes que no están en espera."
@@ -5366,6 +5370,9 @@ msgstr "Elija una foto clara y fácilmente reconocible"
 
 msgid "Review players' dietary restrictions and allergies."
 msgstr "Revise las restricciones dietéticas y las alergias de los jugadores."
+
+msgid "Set up configuration for Patron and Reduced tickets"
+msgstr "Establecer la configuración de las entradas reducidas y con descuento"
 
 msgid "Short guides to help you learn how the system works"
 msgstr "Guías breves para ayudarle a aprender cómo funciona el sistema"
@@ -5721,6 +5728,10 @@ msgstr "Nombre de la opción, que aparece en la pregunta (sea breve)"
 
 msgid "Probability of showing the special page (out of thousands)"
 msgstr "Probabilidad de mostrar la página especial (por millar)"
+
+#, python-format
+msgid "There are registration questions without options: %(list)s"
+msgstr "Hay preguntas de registro sin opciones: %(list)s"
 
 msgid "This page allows you to manually approve payments received"
 msgstr "Esta página te permite aprobar manualmente los pagos recibidos"
