@@ -41,6 +41,7 @@ from larpmanager.forms.writing import BaseWritingForm, WritingForm
 from larpmanager.models.experience import AbilityPx, DeliveryPx
 from larpmanager.models.form import (
     QuestionApplicable,
+    QuestionStatus,
     QuestionType,
     QuestionVisibility,
     WritingOption,
@@ -426,6 +427,21 @@ class OrgaWritingQuestionForm(MyForm):
             or self.params["writing_typ"] != QuestionApplicable.CHARACTER
         ):
             self.delete_field("status")
+        else:
+            visible_choices = {v for v, _ in self.fields["status"].choices}
+
+            help_texts = {
+                QuestionStatus.OPTIONAL: "The question is shown, and can be filled by the player",
+                QuestionStatus.MANDATORY: "The question needs to be filled by the player",
+                QuestionStatus.DISABLED: "The question is shown, but cannot be changed by the player",
+                QuestionStatus.HIDDEN: "The question is not shown to the player",
+            }
+
+            self.fields["status"].help_text = ", ".join(
+                f"<b>{choice.label}</b>: {text}"
+                for choice, text in help_texts.items()
+                if choice.value in visible_choices
+            )
 
         if "print_pdf" not in self.params["features"] or self.params["writing_typ"] == QuestionApplicable.PLOT:
             self.delete_field("printable")
@@ -437,14 +453,29 @@ class OrgaWritingQuestionForm(MyForm):
         # remove visibility from plot
         if self.params["writing_typ"] == QuestionApplicable.PLOT:
             self.delete_field("visibility")
-        # set only private and public visibility if different from character
-        elif self.params["writing_typ"] != QuestionApplicable.CHARACTER:
-            self.fields["visibility"].choices = [
-                (choice.value, choice.label) for choice in QuestionVisibility if choice != QuestionVisibility.SEARCHABLE
-            ]
-            help_text = self.fields["visibility"].help_text
-            updated_help_text = ".".join(help_text.split(".", 1)[1:]).lstrip()
-            self.fields["visibility"].help_text = updated_help_text
+        else:
+            # set only private and public visibility if different from character
+            if self.params["writing_typ"] != QuestionApplicable.CHARACTER:
+                self.fields["visibility"].choices = [
+                    (choice.value, choice.label)
+                    for choice in QuestionVisibility
+                    if choice != QuestionVisibility.SEARCHABLE
+                ]
+
+            visible_choices = {v for v, _ in self.fields["visibility"].choices}
+
+            help_texts = {
+                QuestionVisibility.SEARCHABLE: "Characters can be filtered according to this question",
+                QuestionVisibility.PUBLIC: "The answer to this question is publicly visible",
+                QuestionVisibility.PRIVATE: "The answer to this question is only visible to the player",
+                QuestionVisibility.HIDDEN: "The answer is hidden to all players",
+            }
+
+            self.fields["visibility"].help_text = ", ".join(
+                f"<b>{choice.label}</b>: {text}"
+                for choice, text in help_texts.items()
+                if choice.value in visible_choices
+            )
 
         self.check_applicable = self.params["writing_typ"]
 

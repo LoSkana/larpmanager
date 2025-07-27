@@ -750,6 +750,9 @@ msgstr ""
 msgid "Factions"
 msgstr ""
 
+msgid "Plots"
+msgstr ""
+
 msgid "Insert the css code to customize the pdf printing"
 msgstr ""
 
@@ -1488,9 +1491,6 @@ msgid "Status"
 msgstr ""
 
 msgid "XP"
-msgstr ""
-
-msgid "Plots"
 msgstr ""
 
 msgid "speedlarp"
@@ -2916,20 +2916,6 @@ msgid "Question name (keep it short)"
 msgstr ""
 
 msgid "Optional - Extended description (displayed in small gray text)"
-msgstr ""
-
-msgid ""
-"Optional: The question is shown, and can be filled by the player. Mandatory: "
-"The question needs to be filled by the player. Disabled: The question is "
-"shown, but cannot be changed by the player. Hidden: The question is not "
-"shown to the player."
-msgstr ""
-
-msgid ""
-"Searchable: Characters can be filtered according to this question. Public: "
-"The answer to this question is publicly visible. Private: The answer to this "
-"question is only visible to the player. Hidden: The answer is hidden to all "
-"players."
 msgstr ""
 
 msgid "Editable"

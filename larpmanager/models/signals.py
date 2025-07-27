@@ -363,11 +363,12 @@ def _init_plot_form_questions(def_tps, instance, features):
     que = que.filter(applicable=QuestionApplicable.PLOT)
     types = set(que.values_list("typ", flat=True).distinct())
 
-    def_tps[QuestionType.TEASER] = ("Concept", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000)
+    plot_tps = def_tps.copy()
+    plot_tps[QuestionType.TEASER] = ("Concept", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000)
 
     # add default types if none are present
     if not types:
-        for el, add in def_tps.items():
+        for el, add in plot_tps.items():
             WritingQuestion.objects.create(
                 event=instance,
                 typ=el,

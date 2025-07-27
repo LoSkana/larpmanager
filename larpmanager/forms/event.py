@@ -62,6 +62,7 @@ def _get_writing_elements():
     shows = [
         ("character", _("Characters"), QuestionApplicable.CHARACTER),
         ("faction", _("Factions"), QuestionApplicable.FACTION),
+        ("plot", _("Plots"), QuestionApplicable.PLOT),
     ]
     return shows
 
@@ -859,6 +860,8 @@ class OrgaRunForm(ConfigForm):
         for s in shows:
             if "writing_fields" not in self.params or s[0] not in self.params["writing_fields"]:
                 continue
+            if s[0] == "plot":
+                continue
             fields = self.params["writing_fields"][s[0]]["questions"]
             extra = []
             for _id, field in fields.items():
@@ -1144,7 +1147,7 @@ class OrgaPreferencesForm(ConfigForm):
                     ("speedlarp", "speedlarp", _("speedlarp")),
                 ]
                 self.add_feature_extra(extra, feature_fields)
-            elif s[0] == "faction":
+            elif s[0] in ["faction", "plot"]:
                 extra.append(("characters", _("Characters")))
 
             extra.append(("stats", "Stats"))

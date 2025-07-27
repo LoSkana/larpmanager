@@ -205,6 +205,8 @@ class PlotForm(WritingForm, BaseWritingForm):
         self.init_characters = self.instance.get_plot_characters().values_list("character__id", flat=True)
         self.initial["characters"] = self.init_characters
 
+        self._init_special_fields()
+
         # PLOT CHARACTERS REL
         self.add_char_finder = []
         self.field_link = {}
