@@ -32,7 +32,7 @@ from larpmanager.forms.utils import EventCharacterS2Widget
 from larpmanager.models.association import Association
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
 from larpmanager.models.member import Log
-from larpmanager.models.writing import PlotCharacterRel, Relationship, TextVersion
+from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
 from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.common import html_clean
 from larpmanager.utils.event import check_event_permission
@@ -355,43 +355,49 @@ def writing_edit_save_ajax(form, request, ctx):
     if eid <= 0:
         return res
 
+    if "working_ticket" in ctx["features"]:
+        tp = request.POST["type"]
+        token = request.POST["token"]
+        msg = writing_edit_working_ticket(request, tp, eid, token)
+        if msg:
+            res["warn"] = msg
+            return JsonResponse(res)
+
     p = form.save(commit=False)
     p.temp = True
     p.save()
 
-    if "working_ticket" in ctx["features"]:
-        tp = request.POST["type"]
-        writing_edit_working_ticket(request, tp, eid, res, obj=p)
-
     return JsonResponse(res)
 
 
-def writing_edit_working_ticket(request, tp, eid, res, add_ticket=True, obj=None):
+def writing_edit_working_ticket(request, tp, eid, token):
     # working ticket also for related characters
-    if tp == "plot" and obj:
+    if tp == "plot":
+        obj = Plot.objects.get(pk=eid)
         for char_id in obj.characters.values_list("pk", flat=True):
-            writing_edit_working_ticket(request, "character", char_id, res, add_ticket=add_ticket)
+            msg = writing_edit_working_ticket(request, "character", char_id, token)
+            if msg:
+                return msg
 
     now = int(time.time())
     key = writing_edit_cache_key(eid, tp)
     ticket = cache.get(key)
-    mid = request.user.member.id
     if not ticket:
         ticket = {}
     others = []
     ticket_time = 15
     for idx, el in ticket.items():
         (name, tm) = el
-        if idx != mid and now - tm < ticket_time:
+        if idx != token and now - tm < ticket_time:
             others.append(name)
-        if len(others) > 0:
-            warn = _("Warning! Other users are editing this item") + "."
-            warn += " " + _("You cannot work on it at the same time: the work of one of you would be lost") + "."
-            warn += " " + _("List of other users") + ": " + ", ".join(others)
-            res["warn"] = warn
 
-    if not add_ticket:
-        return
+    msg = ""
+    if len(others) > 0:
+        msg = _("Warning! Other users are editing this item") + "."
+        msg += " " + _("You cannot work on it at the same time: the work of one of you would be lost") + "."
+        msg += " " + _("List of other users") + ": " + ", ".join(others)
 
-    ticket[mid] = (str(request.user.member), now)
+    ticket[token] = (str(request.user.member), now)
     cache.set(key, ticket, ticket_time)
+
+    return msg

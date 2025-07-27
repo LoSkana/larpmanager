@@ -1,3 +1,5 @@
+{% include "elements/writing/token.js" %}
+
 <script>
 
 {% if eid %}
@@ -25,7 +27,7 @@ function submitForm(auto) {
     tinyMCE.triggerSave();
     var formData = $('form').serialize() + "&ajax=1";
     if (typeof eid !== 'undefined' && eid > 0) {
-        formData += "&eid=" + eid + "&type=" + type;
+        formData += "&eid=" + eid + "&type=" + type + "&token=" + token;
     }
     $.ajax({
         type: "POST",

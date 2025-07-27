@@ -1,5 +1,7 @@
 {% load i18n %}
 
+{% include "elements/writing/token.js" %}
+
 <script>
 
 const tinymceConfig = JSON.parse(document.getElementById('tinymce-config').textContent);
@@ -53,6 +55,7 @@ window.addEventListener('DOMContentLoaded', function() {
         formData.append('eid', eid);
         formData.append('qid', qid);
         formData.append('auto', auto ? 1 : 0);
+        formData.append('token', token);
 
         request = $.ajax({
             url: "{% url 'orga_writing_excel_submit' run.event.slug run.number label_typ %}",
@@ -65,7 +68,16 @@ window.addEventListener('DOMContentLoaded', function() {
 
         request.done(function(res) {
             if (auto) {
-                if (res.warn) alert(res.warn);
+                if (res.warn) {
+                    $.toast({
+                        text: res.warn,
+                        showHideTransition: 'slide',
+                        icon: 'error',
+                        position: 'top-center',
+                        textAlign: 'center',
+                        hideAfter: 5000
+                    });
+                }
                 return;
             }
             // server error
@@ -95,7 +107,7 @@ window.addEventListener('DOMContentLoaded', function() {
             request = $.ajax({
                 url: "{% url 'orga_writing_excel_edit' run.event.slug run.number label_typ %}",
                 method: "POST",
-                data: { qid: qid, eid: eid },
+                data: { qid: qid, eid: eid},
                 datatype: "json",
             });
 
