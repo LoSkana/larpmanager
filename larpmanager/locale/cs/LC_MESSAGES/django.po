@@ -1113,9 +1113,6 @@ msgstr "Dodatky"
 msgid "Approvals"
 msgstr "Schválení"
 
-msgid "Auto save"
-msgstr "Submisivní otázka"
-
 msgid "Available"
 msgstr "Dostupné na"
 
@@ -2572,6 +2569,9 @@ msgstr "Konverzní lístek"
 
 msgid "Credit assignment"
 msgstr "Přiřazení zápočtu"
+
+msgid "Disable Auto save"
+msgstr "Zakázat automatické ukládání"
 
 msgid "Download document"
 msgstr "Stáhnout dokument"
@@ -7032,6 +7032,13 @@ msgstr ""
 "Chcete uživatelům umožnit přidat k registračnímu poplatku dobrovolný dar"
 
 msgid ""
+"If checked, automatic saving during editing will be disable for writing "
+"elements"
+msgstr ""
+"Pokud je zaškrtnuto, bude automatické ukládání během úprav zakázáno u prvků "
+"pro zápis"
+
+msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "
 "event"
 msgstr ""
@@ -8151,13 +8158,6 @@ msgid ""
 msgstr ""
 "Umožňuje nastavení ve stylu \"kampaně\", kdy více událostí sdílí stejnou "
 "sadu postav a frakcí"
-
-msgid ""
-"If checked, writing elements will be auto-saved during editing (only one "
-"form can be open at a time)"
-msgstr ""
-"Pokud je zaškrtnuto, budou se prvky pro psaní během editace automaticky "
-"ukládat (současně může být otevřen pouze jeden formulář)"
 
 msgid ""
 "Optional text to be included in the email sent to the player to notify them "

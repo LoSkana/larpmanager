@@ -1004,12 +1004,12 @@ msgid ""
 "WYSIWYG editor"
 msgstr ""
 
-msgid "Auto save"
+msgid "Disable Auto save"
 msgstr ""
 
 msgid ""
-"If checked, writing elements will be auto-saved during editing (only one "
-"form can be open at a time)"
+"If checked, automatic saving during editing will be disable for writing "
+"elements"
 msgstr ""
 
 msgid "Independent factions"

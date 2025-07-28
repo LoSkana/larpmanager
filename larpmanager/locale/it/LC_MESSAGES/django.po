@@ -1113,9 +1113,6 @@ msgstr "Aggiuntivi"
 msgid "Approvals"
 msgstr "Approvazioni"
 
-msgid "Auto save"
-msgstr "Auto salvataggio"
-
 msgid "Available"
 msgstr "Disponibili"
 
@@ -2572,6 +2569,9 @@ msgstr "Biglietto conversione"
 
 msgid "Credit assignment"
 msgstr "Assegnazione dei crediti"
+
+msgid "Disable Auto save"
+msgstr "Disattivare il salvataggio automatico"
 
 msgid "Download document"
 msgstr "Scarica documento"
@@ -7268,6 +7268,13 @@ msgstr ""
 " quota di iscrizione"
 
 msgid ""
+"If checked, automatic saving during editing will be disable for writing "
+"elements"
+msgstr ""
+"Se si seleziona, il salvataggio automatico durante la modifica sarà "
+"disabilitato per gli elementi di scrittura"
+
+msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "
 "event"
 msgstr ""
@@ -8437,13 +8444,6 @@ msgid ""
 msgstr ""
 "Consente un'impostazione in stile \"campagna\" in cui più eventi condividono"
 " lo stesso insieme di personaggi e fazioni"
-
-msgid ""
-"If checked, writing elements will be auto-saved during editing (only one "
-"form can be open at a time)"
-msgstr ""
-"Se è selezionata, gli elementi di scrittura saranno salvati automaticamente "
-"durante la modifica (può essere aperto solo un modulo alla volta)"
 
 msgid ""
 "Optional text to be included in the email sent to the player to notify them "
