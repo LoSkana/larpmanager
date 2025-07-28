@@ -13,7 +13,8 @@ def create_default_skin(apps, schema_editor):
     AssociationSkin.objects.create(
         id=1,
         name="LarpManager",
-        domain="larpmanager.com",
+        #domain="larpmanager.com",
+        domain="larpmanager.cpularp.com",
         default_mandatory_fields="",
         default_optional_fields="",
         default_css="",

@@ -2,7 +2,8 @@ import os
 
 from main.settings import BASE_DIR
 
-SLUG_ASSOC = 'def'
+#SLUG_ASSOC = 'def'
+SLUB_ASSOC = 'larpmanager'
 
 DATABASES = {
     'default': {

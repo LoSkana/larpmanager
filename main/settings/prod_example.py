@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = False
 
-SLUG_ASSOC = 'def'
+SLUG_ASSOC = 'larpmanager'
 
 PAYPAL_TEST = False
 
@@ -141,7 +141,7 @@ LOGGING = {
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8264', 'http://127.0.0.1:8264']
+CSRF_TRUSTED_ORIGINS = ['http://larpmanager.cpularp.com', 'http://35.93.208.16', 'http://localhost:8264', 'http://127.0.0.1:8264']
 RATELIMIT_IP_META_KEY = 'HTTP_X_FORWARDED_FOR'
 
 # captcha
