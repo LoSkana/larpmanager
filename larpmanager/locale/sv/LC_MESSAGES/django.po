@@ -107,6 +107,9 @@ msgstr "Diet"
 msgid "Done"
 msgstr "Vändningar"
 
+msgid "Edit"
+msgstr "Redigera"
+
 msgid "Form"
 msgstr "Form"
 
@@ -238,6 +241,9 @@ msgstr "Använd"
 
 msgid "User"
 msgstr "Användare"
+
+msgid "View"
+msgstr "Utsikt"
 
 msgid "Vote"
 msgstr "Omröstning"
@@ -749,9 +755,6 @@ msgstr "Profil"
 
 msgid "Pronoun"
 msgstr "Pronomen"
-
-msgid "Reading"
-msgstr "Läsning"
 
 msgid "Receipt"
 msgstr "Kvitto"
@@ -3352,6 +3355,9 @@ msgstr "Registreringen är ännu inte öppen!"
 
 msgid "Reminder membership fee"
 msgstr "Påminnelse medlemsavgift"
+
+msgid "Show available factions"
+msgstr "Visa tillgängliga fraktioner"
 
 msgid "Thanks for your support"
 msgstr "Tack för ert stöd"

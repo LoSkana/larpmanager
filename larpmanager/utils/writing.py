@@ -30,7 +30,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_event_cache_all
+from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
 from larpmanager.cache.text_fields import get_cache_text_field
 from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.access import get_event_staffers
@@ -333,6 +333,11 @@ def writing_view(request, ctx, nm):
     ctx["el"].data = ctx["el"].show_complete()
     ctx["nm"] = nm
     get_event_cache_all(ctx)
+
+    applicable = QuestionApplicable.get_applicable(nm)
+    if applicable:
+        ctx["element"] = get_writing_element_fields(ctx, "faction", applicable, ctx["el"].id, only_visible=False)
+
     return render(request, "larpmanager/orga/writing/view.html", ctx)
 
 

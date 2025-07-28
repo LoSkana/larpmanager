@@ -29,7 +29,8 @@
                 <tr id="{{ el.id }}"
                     {% if el.status == 'c' %}class="closed hide"{% endif %}>
                     <td>
-                        <a href="{% url 'orga_problems_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'orga_problems_edit' run.event.slug run.number el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.get_severity_display }}</td>
                     <td>{{ el.get_status_display }}</td>

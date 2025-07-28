@@ -47,6 +47,7 @@
 {% endblock content %}
 {% block js %}
     {% include "elements/form/max_length.js" %}
+    {% include "elements/helpers/factions-choices.js" %}
     <script>
     var dependencies = {{ dependencies | safe }};
 

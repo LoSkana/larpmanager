@@ -107,6 +107,9 @@ msgstr "Diät"
 msgid "Done"
 msgstr "Turnarounds"
 
+msgid "Edit"
+msgstr "bearbeiten"
+
 msgid "Form"
 msgstr "Formular"
 
@@ -238,6 +241,9 @@ msgstr "Gebraucht"
 
 msgid "User"
 msgstr "Benutzer"
+
+msgid "View"
+msgstr "Siehe"
 
 msgid "Vote"
 msgstr "Wählen Sie"
@@ -749,9 +755,6 @@ msgstr "Profil"
 
 msgid "Pronoun"
 msgstr "Pronomen"
-
-msgid "Reading"
-msgstr "Lesen"
 
 msgid "Receipt"
 msgstr "Quittung"
@@ -3352,6 +3355,9 @@ msgstr "Die Anmeldung ist noch nicht geöffnet!"
 
 msgid "Reminder membership fee"
 msgstr "Erinnerung an den Mitgliedsbeitrag"
+
+msgid "Show available factions"
+msgstr "Verfügbare Fraktionen anzeigen"
 
 msgid "Thanks for your support"
 msgstr "Vielen Dank für Ihre Unterstützung"

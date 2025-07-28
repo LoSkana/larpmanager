@@ -107,6 +107,9 @@ msgstr "Dieet"
 msgid "Done"
 msgstr "Turnarounds"
 
+msgid "Edit"
+msgstr "Bewerk"
+
 msgid "Form"
 msgstr "Formulier"
 
@@ -238,6 +241,9 @@ msgstr "Gebruikt"
 
 msgid "User"
 msgstr "Gebruiker"
+
+msgid "View"
+msgstr "Bekijk"
 
 msgid "Vote"
 msgstr "Stem"
@@ -749,9 +755,6 @@ msgstr "Profiel"
 
 msgid "Pronoun"
 msgstr "Voornaamwoord"
-
-msgid "Reading"
-msgstr "Lezen"
 
 msgid "Receipt"
 msgstr "Ontvangstbewijs"
@@ -3352,6 +3355,9 @@ msgstr "De inschrijving is nog niet geopend!"
 
 msgid "Reminder membership fee"
 msgstr "Herinnering lidmaatschapsgeld"
+
+msgid "Show available factions"
+msgstr "Beschikbare facties tonen"
 
 msgid "Thanks for your support"
 msgstr "Bedankt voor je steun"

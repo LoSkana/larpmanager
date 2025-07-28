@@ -25,7 +25,7 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'exe_outflows_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'exe_outflows_edit' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.run }}</td>
                     <td>{{ el.get_exp_display }}</td>

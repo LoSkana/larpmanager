@@ -66,7 +66,7 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.download import export_data
 from larpmanager.utils.edit import orga_edit, writing_edit
-from larpmanager.utils.event import check_event_permission
+from larpmanager.utils.event import check_event_permission, get_event_run
 from larpmanager.utils.pdf import (
     print_handout,
     return_pdf,
@@ -394,6 +394,31 @@ def orga_multichoice_available(request, s, n):
 
     ctx["list"] = ctx["event"].get_elements(Character).order_by("number")
     ctx["list"] = ctx["list"].exclude(pk__in=taken_characters)
+    res = [(el.id, str(el)) for el in ctx["list"]]
+    return JsonResponse({"res": res})
+
+
+@login_required
+def orga_factions_available(request, s, n):
+    if not request.method == "POST":
+        return Http404()
+
+    ctx = get_event_run(request, s, n)
+
+    ctx["list"] = ctx["event"].get_elements(Faction).order_by("number")
+
+    orga = int(request.POST.get("orga", "0"))
+    if not orga:
+        ctx["list"] = ctx["list"].filter(selectable=True)
+
+    eid = int(request.POST.get("eid", "0"))
+    if eid:
+        chars = ctx["event"].get_elements(Character).filter(pk=int(eid))
+        if not chars:
+            return JsonResponse({"res": "ko"})
+        taken_factions = chars.first().factions_list.values_list("id", flat=True)
+        ctx["list"] = ctx["list"].exclude(pk__in=taken_factions)
+
     res = [(el.id, str(el)) for el in ctx["list"]]
     return JsonResponse({"res": res})
 

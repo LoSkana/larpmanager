@@ -107,6 +107,9 @@ msgstr "Dieta"
 msgid "Done"
 msgstr "Obraty"
 
+msgid "Edit"
+msgstr "Upravit"
+
 msgid "Form"
 msgstr "Formulář"
 
@@ -238,6 +241,9 @@ msgstr "Použité"
 
 msgid "User"
 msgstr "Uživatel"
+
+msgid "View"
+msgstr "Zobrazit"
 
 msgid "Vote"
 msgstr "Hlasujte na"
@@ -749,9 +755,6 @@ msgstr "Profil"
 
 msgid "Pronoun"
 msgstr "Zájmena"
-
-msgid "Reading"
-msgstr "Čtení"
 
 msgid "Receipt"
 msgstr "Příjem"
@@ -3352,6 +3355,9 @@ msgstr "Registrace ještě není otevřena!"
 
 msgid "Reminder membership fee"
 msgstr "Připomenutí členského poplatku"
+
+msgid "Show available factions"
+msgstr "Zobrazit dostupné frakce"
 
 msgid "Thanks for your support"
 msgstr "Děkujeme vám za podporu"

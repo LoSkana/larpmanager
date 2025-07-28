@@ -25,7 +25,8 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_albums_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'orga_albums_edit' run.event.slug run.number el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
                     <td>{{ el.parent }}</td>
@@ -33,7 +34,7 @@
                         <a href="{% url 'orga_albums_upload' run.event.slug run.number el.cod %}">{% trans "Upload" %}</a> (questo link può essere passato all'esterno per far eseguire il caricamento a collaboratori)
                     </td>
                     <td>
-                        {% if el.thumb %}<img src="{{ el.thumb.url }}" />{% endif %}
+                        {% if el.thumb %}<img src="{{ el.thumb.url }}" alt="object photo" />{% endif %}
                     </td>
                     <td>
                         <a href="{% url 'orga_albums_delete' run.event.slug run.number el.id %}"

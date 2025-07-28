@@ -107,6 +107,9 @@ msgstr "Régime alimentaire"
 msgid "Done"
 msgstr "Retournements"
 
+msgid "Edit"
+msgstr "Editer"
+
 msgid "Form"
 msgstr "Formulaire"
 
@@ -238,6 +241,9 @@ msgstr "Utilisé"
 
 msgid "User"
 msgstr "Utilisateur"
+
+msgid "View"
+msgstr "Voir"
 
 msgid "Vote"
 msgstr "Vote"
@@ -749,9 +755,6 @@ msgstr "Profil"
 
 msgid "Pronoun"
 msgstr "Pronom"
-
-msgid "Reading"
-msgstr "Lecture"
 
 msgid "Receipt"
 msgstr "Accusé de réception"
@@ -3352,6 +3355,9 @@ msgstr "L'inscription n'est pas encore ouverte !"
 
 msgid "Reminder membership fee"
 msgstr "Rappel cotisation"
+
+msgid "Show available factions"
+msgstr "Afficher les factions disponibles"
 
 msgid "Thanks for your support"
 msgstr "Merci pour votre soutien"
