@@ -537,6 +537,9 @@ msgstr "Jugador"
 msgid "Public"
 msgstr "Público"
 
+msgid "Quests"
+msgstr "Misiones"
+
 msgid "Quotas"
 msgstr "Precio"
 
@@ -1764,9 +1767,6 @@ msgstr "Saber más"
 msgid "Municipality"
 msgstr "Municipio"
 
-msgid "NOT ASSIGNED"
-msgstr "NO ASIGNADO"
-
 msgid "Name credits"
 msgstr "Nombre créditos"
 
@@ -1796,9 +1796,6 @@ msgstr "Preinscrípción"
 
 msgid "Presentation"
 msgstr "Presentación"
-
-msgid "Questbuilder"
-msgstr "Questbuilder"
 
 msgid "Questions WS"
 msgstr "Preguntas taller"
@@ -4001,9 +3998,6 @@ msgstr "Solicitud de reembolso añadida"
 msgid "Select a file with extension csv"
 msgstr "Selecciona un archivo con la extensión \"csv\""
 
-msgid "Select the character's key words"
-msgstr "Indica las palabras clave del personaje"
-
 msgid "Sum of payments received through"
 msgstr "Suma de los pagos recibidos a través de"
 
@@ -4295,9 +4289,6 @@ msgstr "¡Inscripción confirmada en %(event)s!"
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Aprobación de roles %(role)s por %(event)s"
 
-msgid "Show all the traits to those present"
-msgstr "¿Mostrar todos los agentes a los presentes"
-
 msgid "Terms and Conditions of registration"
 msgstr "Condiciones de participación"
 
@@ -4337,9 +4328,6 @@ msgstr "La fecha final no puede ser anterior a la fecha de inicio."
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Si está marcada, permite el nivel de entradas: Vendedor"
-
-msgid "Indicates accurate safety information"
-msgstr "Indicanos la información de seguridad precisa"
 
 msgid "Location - rent, gas, overnight stays"
 msgstr "Localización - alquiler, gasolina, alojamientos"
@@ -6306,10 +6294,6 @@ msgid "Assign roles to staff members, and give access to specific functions"
 msgstr ""
 "Asignar funciones a los miembros del personal y dar acceso a funciones "
 "específicas"
-
-msgid "Does the character have a public role/archetype? If not, leave blank"
-msgstr ""
-"¿Tiene el personaje un concepto/arquetipo público? Si no, déjalo en blanco"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Número de días disponibles para pagar el siguiente plazo"

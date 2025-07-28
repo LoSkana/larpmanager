@@ -101,6 +101,8 @@ class QuestionApplicable(models.TextChoices):
     CHARACTER = "c", "character"
     PLOT = "p", "plot"
     FACTION = "f", "faction"
+    QUEST = "q", "quest"
+    TRAIT = "t", "trait"
 
     @classmethod
     def get_applicable(cls, model_name):

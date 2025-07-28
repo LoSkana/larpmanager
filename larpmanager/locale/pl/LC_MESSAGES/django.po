@@ -537,6 +537,9 @@ msgstr "Gracz"
 msgid "Public"
 msgstr "Publiczny"
 
+msgid "Quests"
+msgstr "Zadania"
+
 msgid "Quotas"
 msgstr "Kwoty"
 
@@ -1764,9 +1767,6 @@ msgstr "Więcej szczegółów"
 msgid "Municipality"
 msgstr "Gmina"
 
-msgid "NOT ASSIGNED"
-msgstr "NIEPRZYPISANY"
-
 msgid "Name credits"
 msgstr "Nazwa kredytu"
 
@@ -1796,9 +1796,6 @@ msgstr "Rejestracja wstępna"
 
 msgid "Presentation"
 msgstr "Prezentacja"
-
-msgid "Questbuilder"
-msgstr "Questbuilder"
 
 msgid "Questions WS"
 msgstr "Pytania WS"
@@ -4001,9 +3998,6 @@ msgstr "Dodano pozycję wniosku o zwrot kosztów"
 msgid "Select a file with extension csv"
 msgstr "Wybierz plik z rozszerzeniem csv"
 
-msgid "Select the character's key words"
-msgstr "Wybierz słowa kluczowe postaci"
-
 msgid "Sum of payments received through"
 msgstr "Suma płatności otrzymanych za pośrednictwem"
 
@@ -4295,9 +4289,6 @@ msgstr "Rejestracja potwierdzona na %(event)s!"
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Zatwierdzenie roli %(role)s na %(event)s"
 
-msgid "Show all the traits to those present"
-msgstr "Pokazać wszystkie cechy obecnym"
-
 msgid "Terms and Conditions of registration"
 msgstr "Warunki i zasady rejestracji"
 
@@ -4337,9 +4328,6 @@ msgstr "Data końcowa nie może być wcześniejsza niż data początkowa!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Jeśli zaznaczone, zezwól na poziom biletu: Sprzedawca"
-
-msgid "Indicates accurate safety information"
-msgstr "Wskazuje dokładne informacje dotyczące bezpieczeństwa"
 
 msgid "Location - rent, gas, overnight stays"
 msgstr "Lokalizacja - czynsz, gaz, noclegi"
@@ -6271,10 +6259,6 @@ msgstr ""
 msgid "Assign roles to staff members, and give access to specific functions"
 msgstr ""
 "Przypisywanie ról pracownikom i udzielanie dostępu do określonych funkcji"
-
-msgid "Does the character have a public role/archetype? If not, leave blank"
-msgstr ""
-"Czy postać ma publiczną rolę/typ postaci? Jeśli nie, pozostaw puste pole"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Liczba dni, w ciągu których gracz musi zapłacić kolejną ratę"

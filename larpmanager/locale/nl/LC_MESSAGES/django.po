@@ -537,6 +537,9 @@ msgstr "Speler"
 msgid "Public"
 msgstr "Openbaar"
 
+msgid "Quests"
+msgstr "Zoektochten"
+
 msgid "Quotas"
 msgstr "Citaat"
 
@@ -1764,9 +1767,6 @@ msgstr "Meer informatie"
 msgid "Municipality"
 msgstr "Gemeente"
 
-msgid "NOT ASSIGNED"
-msgstr "NIET TOEGEWEZEN"
-
 msgid "Name credits"
 msgstr "Naam kredieten"
 
@@ -1796,9 +1796,6 @@ msgstr "Voorinschrijven"
 
 msgid "Presentation"
 msgstr "Presentatie"
-
-msgid "Questbuilder"
-msgstr "Questbuilder"
 
 msgid "Questions WS"
 msgstr "WS Vragen"
@@ -4001,9 +3998,6 @@ msgstr "Claim item toegevoegd"
 msgid "Select a file with extension csv"
 msgstr "Selecteer een bestand met de extensie 'csv'"
 
-msgid "Select the character's key words"
-msgstr "Geeft de trefwoorden van het personage aan"
-
 msgid "Sum of payments received through"
 msgstr "Som van betalingen ontvangen via"
 
@@ -4295,9 +4289,6 @@ msgstr "Registratie bevestigd bij %(event)s!"
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Rolgoedkeuring %(role)s per %(event)s"
 
-msgid "Show all the traits to those present"
-msgstr "Alle eigenschappen laten zien aan de aanwezigen"
-
 msgid "Terms and Conditions of registration"
 msgstr "Voorwaarden en bepalingen voor deelname"
 
@@ -4337,9 +4328,6 @@ msgstr "Einddatum kan niet voor startdatum liggen!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Indien aangevinkt, ticketniveau toestaan: Verkoper"
-
-msgid "Indicates accurate safety information"
-msgstr "Geeft nauwkeurige veiligheidsinformatie aan"
 
 msgid "Location - rent, gas, overnight stays"
 msgstr "Locatie - huur, gas, overnachtingen"
@@ -6341,9 +6329,6 @@ msgstr ""
 msgid "Assign roles to staff members, and give access to specific functions"
 msgstr ""
 "Rollen toewijzen aan medewerkers en toegang geven tot specifieke functies"
-
-msgid "Does the character have a public role/archetype? If not, leave blank"
-msgstr "Heeft het personage een openbare rol/archetype? Zo niet, laat leeg"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Aantal dagen beschikbaar om de volgende termijn te betalen"

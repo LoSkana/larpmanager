@@ -330,7 +330,31 @@ def save_event_character_form(features, instance):
 
     _init_character_form_questions(custom_tps, def_tps, features, instance)
     _init_faction_form_questions(def_tps, instance, features)
+    _init_questbuilder_form_questions(def_tps, instance, features)
     _init_plot_form_questions(def_tps, instance, features)
+
+
+def _init_questbuilder_form_questions(def_tps, instance, features):
+    if "questbuilder" not in features:
+        return
+
+    for applicable in [QuestionApplicable.QUEST, QuestionApplicable.TRAIT]:
+        que = instance.get_elements(WritingQuestion)
+        que = que.filter(applicable=applicable)
+        types = set(que.values_list("typ", flat=True).distinct())
+
+        # add default types if none are present
+        if not types:
+            for el, add in def_tps.items():
+                WritingQuestion.objects.create(
+                    event=instance,
+                    typ=el,
+                    display=_(add[0]),
+                    status=add[1],
+                    visibility=add[2],
+                    max_length=add[3],
+                    applicable=applicable,
+                )
 
 
 def _init_faction_form_questions(def_tps, instance, features):

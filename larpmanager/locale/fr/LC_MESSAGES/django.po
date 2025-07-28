@@ -537,6 +537,9 @@ msgstr "Joueur"
 msgid "Public"
 msgstr "Public"
 
+msgid "Quests"
+msgstr "Quêtes"
+
 msgid "Quotas"
 msgstr "Citation"
 
@@ -1764,9 +1767,6 @@ msgstr "Plus de détails"
 msgid "Municipality"
 msgstr "Municipalité"
 
-msgid "NOT ASSIGNED"
-msgstr "NON ASSIGNÉ"
-
 msgid "Name credits"
 msgstr "Nom crédits"
 
@@ -1796,9 +1796,6 @@ msgstr "Pré-inscription"
 
 msgid "Presentation"
 msgstr "Présentation"
-
-msgid "Questbuilder"
-msgstr "Bâtisseur de quêtes"
 
 msgid "Questions WS"
 msgstr "Questions sur le SM"
@@ -4001,9 +3998,6 @@ msgstr "Ajout d'un poste de réclamation"
 msgid "Select a file with extension csv"
 msgstr "Sélectionnez un fichier avec l'extension \"csv\""
 
-msgid "Select the character's key words"
-msgstr "Indique les mots-clés du personnage"
-
 msgid "Sum of payments received through"
 msgstr "Somme des paiements reçus par l'intermédiaire de"
 
@@ -4296,9 +4290,6 @@ msgstr "Inscription confirmée à %(event)s !"
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Approbation des rôles %(role)s par %(event)s"
 
-msgid "Show all the traits to those present"
-msgstr "Montrer tous les traits aux personnes présentes"
-
 msgid "Terms and Conditions of registration"
 msgstr "Conditions de participation"
 
@@ -4338,9 +4329,6 @@ msgstr "La date de fin ne peut pas être antérieure à la date de début !"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Si la case est cochée, autoriser le niveau de ticket : Vendeur"
-
-msgid "Indicates accurate safety information"
-msgstr "Indique des informations précises sur la sécurité"
 
 msgid "Location - rent, gas, overnight stays"
 msgstr "Lieu - loyer, gaz, nuitées"
@@ -6407,11 +6395,6 @@ msgid "Assign roles to staff members, and give access to specific functions"
 msgstr ""
 "Attribuer des rôles aux membres du personnel et leur donner accès à des "
 "fonctions spécifiques"
-
-msgid "Does the character have a public role/archetype? If not, leave blank"
-msgstr ""
-"Le personnage a-t-il un rôle/type d'archétype public ? Si ce n'est pas le "
-"cas, laissez un blanc"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Nombre de jours disponibles pour payer le prochain versement"

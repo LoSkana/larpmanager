@@ -537,6 +537,9 @@ msgstr "Spiller"
 msgid "Public"
 msgstr "Offentlig"
 
+msgid "Quests"
+msgstr "Oppdrag"
+
 msgid "Quotas"
 msgstr "Sitat"
 
@@ -1764,9 +1767,6 @@ msgstr "Flere detaljer"
 msgid "Municipality"
 msgstr "Kommune"
 
-msgid "NOT ASSIGNED"
-msgstr "IKKE TILDELT"
-
 msgid "Name credits"
 msgstr "Navn studiepoeng"
 
@@ -1796,9 +1796,6 @@ msgstr "Forhåndspåmelding"
 
 msgid "Presentation"
 msgstr "Presentasjon"
-
-msgid "Questbuilder"
-msgstr "Questbuilder"
 
 msgid "Questions WS"
 msgstr "WS-spørsmål"
@@ -4001,9 +3998,6 @@ msgstr "Lagt til fordringspost"
 msgid "Select a file with extension csv"
 msgstr "Velg en fil med filtypen \"csv\""
 
-msgid "Select the character's key words"
-msgstr "Angir tegnets nøkkelord"
-
 msgid "Sum of payments received through"
 msgstr "Summen av betalinger mottatt gjennom"
 
@@ -4295,9 +4289,6 @@ msgstr "Påmelding bekreftet på %(event)s!"
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Rollegodkjenning %(role)s per %(event)s"
 
-msgid "Show all the traits to those present"
-msgstr "Vise alle egenskapene til de som er til stede"
-
 msgid "Terms and Conditions of registration"
 msgstr "Vilkår og betingelser for deltakelse"
 
@@ -4337,9 +4328,6 @@ msgstr "Sluttdato kan ikke være før startdato!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Hvis avkrysset, tillat billettnivå: Selger"
-
-msgid "Indicates accurate safety information"
-msgstr "Angir presis sikkerhetsinformasjon"
 
 msgid "Location - rent, gas, overnight stays"
 msgstr "Beliggenhet - husleie, bensin, overnattinger"
@@ -6279,10 +6267,6 @@ msgstr ""
 msgid "Assign roles to staff members, and give access to specific functions"
 msgstr ""
 "Tildel roller til medarbeiderne, og gi dem tilgang til bestemte funksjoner"
-
-msgid "Does the character have a public role/archetype? If not, leave blank"
-msgstr ""
-"Har karakteren en offentlig rolle/arketype? Hvis ikke, la det stå tomt"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Antall dager du har til rådighet for å betale neste avdrag"

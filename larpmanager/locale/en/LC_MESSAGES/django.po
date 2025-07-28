@@ -753,6 +753,12 @@ msgstr ""
 msgid "Plots"
 msgstr ""
 
+msgid "Quests"
+msgstr ""
+
+msgid "Traits"
+msgstr ""
+
 msgid "Insert the css code to customize the pdf printing"
 msgstr ""
 
@@ -1348,9 +1354,6 @@ msgstr ""
 msgid "Prologues"
 msgstr ""
 
-msgid "Questbuilder"
-msgstr ""
-
 msgid "Workshop"
 msgstr ""
 
@@ -1808,9 +1811,6 @@ msgid "Quest type"
 msgstr ""
 
 msgid "Quest"
-msgstr ""
-
-msgid "NOT ASSIGNED"
 msgstr ""
 
 msgid "Trait"
@@ -2714,18 +2714,6 @@ msgstr ""
 msgid ""
 "Logo image (you can upload a file of any size, it will be resized "
 "automatically)"
-msgstr ""
-
-msgid "Show all the traits to those present"
-msgstr ""
-
-msgid "Does the character have a public role/archetype? If not, leave blank"
-msgstr ""
-
-msgid "Indicates accurate safety information"
-msgstr ""
-
-msgid "Select the character's key words"
 msgstr ""
 
 msgid "A short tagline, slogan"
@@ -4433,9 +4421,6 @@ msgid "are not yet open"
 msgstr ""
 
 msgid "Will open at"
-msgstr ""
-
-msgid "Traits"
 msgstr ""
 
 msgid "Keywords"

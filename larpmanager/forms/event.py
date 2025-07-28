@@ -63,6 +63,8 @@ def _get_writing_elements():
         ("character", _("Characters"), QuestionApplicable.CHARACTER),
         ("faction", _("Factions"), QuestionApplicable.FACTION),
         ("plot", _("Plots"), QuestionApplicable.PLOT),
+        ("quest", _("Quests"), QuestionApplicable.QUEST),
+        ("trait", _("Traits"), QuestionApplicable.TRAIT),
     ]
     return shows
 
@@ -878,7 +880,6 @@ class OrgaRunForm(ConfigForm):
         addit_show = {
             "speedlarp": _("Speedlarp"),
             "prologue": _("Prologues"),
-            "questbuilder": _("Questbuilder"),
             "workshop": _("Workshop"),
             "print_pdf": _("PDF"),
         }
@@ -1122,37 +1123,43 @@ class OrgaPreferencesForm(ConfigForm):
                 continue
             if "writing_fields" not in self.params or s[0] not in self.params["writing_fields"]:
                 continue
-            fields = self.params["writing_fields"][s[0]]["questions"]
-            extra = []
-            for _id, field in fields.items():
-                if field["typ"] == "name":
-                    continue
+            self.add_writing_configs(basics, event_id, help_text, s)
 
-                if field["typ"] in basics:
-                    tog = f".lq_{field['id']}"
-                else:
-                    tog = f"q_{field['id']}"
+    def add_writing_configs(self, basics, event_id, help_text, s):
+        fields = self.params["writing_fields"][s[0]]["questions"]
+        extra = []
 
-                extra.append((tog, field["display"]))
+        for _id, field in fields.items():
+            if field["typ"] == "name":
+                continue
 
-            if s[0] == "character":
-                if self.params["event"].get_config("user_character_max", 0):
-                    extra.append(("player", _("Player")))
-                if self.params["event"].get_config("user_character_approval", False):
-                    extra.append(("status", _("Status")))
-                feature_fields = [
-                    ("px", "px", _("XP")),
-                    ("plot", "plots", _("Plots")),
-                    ("relationships", "relationships", _("Relationships")),
-                    ("speedlarp", "speedlarp", _("speedlarp")),
-                ]
-                self.add_feature_extra(extra, feature_fields)
-            elif s[0] in ["faction", "plot"]:
-                extra.append(("characters", _("Characters")))
+            if field["typ"] in basics:
+                tog = f".lq_{field['id']}"
+            else:
+                tog = f"q_{field['id']}"
 
-            extra.append(("stats", "Stats"))
+            extra.append((tog, field["display"]))
 
-            self.add_configs(f"open_{s[0]}_{event_id}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)
+        if s[0] == "character":
+            if self.params["event"].get_config("user_character_max", 0):
+                extra.append(("player", _("Player")))
+            if self.params["event"].get_config("user_character_approval", False):
+                extra.append(("status", _("Status")))
+            feature_fields = [
+                ("px", "px", _("XP")),
+                ("plot", "plots", _("Plots")),
+                ("relationships", "relationships", _("Relationships")),
+                ("speedlarp", "speedlarp", _("speedlarp")),
+            ]
+            self.add_feature_extra(extra, feature_fields)
+        elif s[0] in ["faction", "plot"]:
+            extra.append(("characters", _("Characters")))
+        elif s[0] in ["quest", "trait"]:
+            extra.append(("traits", _("Traits")))
+
+        extra.append(("stats", "Stats"))
+
+        self.add_configs(f"open_{s[0]}_{event_id}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)
 
     def add_feature_extra(self, extra, feature_fields):
         for field in feature_fields:

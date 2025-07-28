@@ -537,6 +537,9 @@ msgstr "Hráč"
 msgid "Public"
 msgstr "Veřejnost"
 
+msgid "Quests"
+msgstr "Úkoly"
+
 msgid "Quotas"
 msgstr "Citace"
 
@@ -1764,9 +1767,6 @@ msgstr "Více informací"
 msgid "Municipality"
 msgstr "Obec"
 
-msgid "NOT ASSIGNED"
-msgstr "NEPŘIDĚLENO"
-
 msgid "Name credits"
 msgstr "Jmenné kredity"
 
@@ -1796,9 +1796,6 @@ msgstr "Předběžná registrace"
 
 msgid "Presentation"
 msgstr "Prezentace"
-
-msgid "Questbuilder"
-msgstr "Questbuilder"
 
 msgid "Questions WS"
 msgstr "Otázky WS"
@@ -4001,9 +3998,6 @@ msgstr "Přidána položka reklamace"
 msgid "Select a file with extension csv"
 msgstr "Vyberte soubor s příponou \"csv\""
 
-msgid "Select the character's key words"
-msgstr "Označuje klíčová slova postavy"
-
 msgid "Sum of payments received through"
 msgstr "Součet plateb přijatých prostřednictvím"
 
@@ -4295,9 +4289,6 @@ msgstr "Registrace potvrzena na %(event)s!"
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Schválení role %(role)s na %(event)s"
 
-msgid "Show all the traits to those present"
-msgstr "Ukázat přítomným všechny vlastnosti"
-
 msgid "Terms and Conditions of registration"
 msgstr "Podmínky vstupu"
 
@@ -4337,9 +4328,6 @@ msgstr "Datum ukončení nesmí být před datem zahájení!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: Prodejce"
-
-msgid "Indicates accurate safety information"
-msgstr "Uvádí přesné bezpečnostní informace"
 
 msgid "Location - rent, gas, overnight stays"
 msgstr "Poloha - nájemné, benzín, noclehy"
@@ -6219,9 +6207,6 @@ msgstr ""
 msgid "Assign roles to staff members, and give access to specific functions"
 msgstr ""
 "Přiřazení rolí zaměstnancům a přidělení přístupu ke konkrétním funkcím"
-
-msgid "Does the character have a public role/archetype? If not, leave blank"
-msgstr "Má postava veřejnou roli/archetyp? Pokud ne, nechte prázdné"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Počet dnů, které máte k dispozici na zaplacení další splátky"

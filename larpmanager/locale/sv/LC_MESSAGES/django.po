@@ -537,6 +537,9 @@ msgstr "Spelare"
 msgid "Public"
 msgstr "Offentlig"
 
+msgid "Quests"
+msgstr "Uppdrag"
+
 msgid "Quotas"
 msgstr "Citat"
 
@@ -1764,9 +1767,6 @@ msgstr "Mer information"
 msgid "Municipality"
 msgstr "kommun"
 
-msgid "NOT ASSIGNED"
-msgstr "INTE TILLDELAD"
-
 msgid "Name credits"
 msgstr "Namn krediter"
 
@@ -1796,9 +1796,6 @@ msgstr "Förhandsanmälan"
 
 msgid "Presentation"
 msgstr "Presentation"
-
-msgid "Questbuilder"
-msgstr "Questbyggare"
 
 msgid "Questions WS"
 msgstr "Frågor om WS"
@@ -4001,9 +3998,6 @@ msgstr "Tillagd fordringspost"
 msgid "Select a file with extension csv"
 msgstr "Välj en fil med filnamnstillägget 'csv'"
 
-msgid "Select the character's key words"
-msgstr "Anger teckenets nyckelord"
-
 msgid "Sum of payments received through"
 msgstr "Summan av betalningar som erhållits genom"
 
@@ -4295,9 +4289,6 @@ msgstr "Registrering bekräftad vid %(event)s!"
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Rollgodkännande %(role)s per %(event)s"
 
-msgid "Show all the traits to those present"
-msgstr "Visa alla egenskaper för de närvarande"
-
 msgid "Terms and Conditions of registration"
 msgstr "Villkor och anvisningar för deltagande"
 
@@ -4337,9 +4328,6 @@ msgstr "Slutdatum kan inte vara före startdatum!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Om markerat, tillåt biljettnivå: Säljare"
-
-msgid "Indicates accurate safety information"
-msgstr "Anger exakt säkerhetsinformation"
 
 msgid "Location - rent, gas, overnight stays"
 msgstr "Plats - hyra, gas, övernattningar"
@@ -6277,9 +6265,6 @@ msgstr ""
 msgid "Assign roles to staff members, and give access to specific functions"
 msgstr ""
 "Tilldela roller till medarbetare och ge tillgång till specifika funktioner"
-
-msgid "Does the character have a public role/archetype? If not, leave blank"
-msgstr "Har karaktären en offentlig roll/arketyp? Om inte, lämna tomt"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Antal dagar tillgängliga för att betala nästa delbetalning"

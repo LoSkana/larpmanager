@@ -44,9 +44,9 @@ class QuestType(Writing):
 
 
 class Quest(Writing):
-    typ = models.ForeignKey(QuestType, on_delete=models.CASCADE, null=True, related_name="quests")
-
-    open_show = models.BooleanField(default=False, help_text=_("Show all the traits to those present") + "?")
+    typ = models.ForeignKey(
+        QuestType, on_delete=models.CASCADE, null=True, related_name="quests", verbose_name=_("Type")
+    )
 
     class Meta:
         indexes = [models.Index(fields=["number", "event"])]
@@ -69,37 +69,13 @@ class Quest(Writing):
             js["typ"] = self.typ.number
         # noinspection PyUnresolvedReferences
         js["traits"] = [t.show() for t in self.traits.filter(hide=False)]
-        js["open"] = self.open_show
         return js
 
 
 class Trait(Writing):
     quest = models.ForeignKey(Quest, on_delete=models.CASCADE, null=True, related_name="traits")
 
-    role = models.CharField(
-        max_length=100,
-        help_text=_("Does the character have a public role/archetype? If not, leave blank"),
-        blank=True,
-        null=True,
-    )
-
-    safety = models.CharField(
-        max_length=500,
-        help_text=_("Indicates accurate safety information"),
-        blank=True,
-        null=True,
-    )
-
-    traits = models.ManyToManyField("self", symmetrical=False)
-
-    keywords = models.CharField(
-        max_length=500,
-        help_text=_("Select the character's key words"),
-        blank=True,
-        null=True,
-    )
-
-    hide = models.BooleanField(default=False)
+    traits = models.ManyToManyField("self", symmetrical=False, blank=True)
 
     class Meta:
         indexes = [models.Index(fields=["number", "event"])]
@@ -122,12 +98,6 @@ class Trait(Writing):
         if self.quest:
             # noinspection PyUnresolvedReferences
             js["quest"] = self.quest.id
-
-            # noinspection PyUnresolvedReferences
-            if self.quest.open_show:
-                js["open"] = True
-                # noinspection PyUnresolvedReferences
-                js["traits"] = [t.show_red() for t in self.quest.traits.filter(hide=False)]
         return js
 
 

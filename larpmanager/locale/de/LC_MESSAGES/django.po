@@ -537,6 +537,9 @@ msgstr "Spieler"
 msgid "Public"
 msgstr "Öffentlich"
 
+msgid "Quests"
+msgstr "Quests"
+
 msgid "Quotas"
 msgstr "Zitat"
 
@@ -1764,9 +1767,6 @@ msgstr "Mehr Details"
 msgid "Municipality"
 msgstr "Kommune"
 
-msgid "NOT ASSIGNED"
-msgstr "NICHT ZUGEORDNET"
-
 msgid "Name credits"
 msgstr "Namenskredite"
 
@@ -1796,9 +1796,6 @@ msgstr "Vorregistrierung"
 
 msgid "Presentation"
 msgstr "Präsentation"
-
-msgid "Questbuilder"
-msgstr "Questbuilder"
 
 msgid "Questions WS"
 msgstr "WS-Fragen"
@@ -4001,9 +3998,6 @@ msgstr "Zusätzlicher Anspruchsposten"
 msgid "Select a file with extension csv"
 msgstr "Wählen Sie eine Datei mit der Erweiterung \"csv\""
 
-msgid "Select the character's key words"
-msgstr "Gibt die Schlüsselwörter des Zeichens an"
-
 msgid "Sum of payments received through"
 msgstr "Summe der erhaltenen Zahlungen durch"
 
@@ -4296,9 +4290,6 @@ msgstr "Anmeldung bei %(event)s bestätigt!"
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Rollengenehmigung %(role)s pro %(event)s"
 
-msgid "Show all the traits to those present"
-msgstr "Den Anwesenden alle Eigenschaften zeigen"
-
 msgid "Terms and Conditions of registration"
 msgstr "Teilnahmebedingungen und -voraussetzungen"
 
@@ -4338,9 +4329,6 @@ msgstr "Das Enddatum kann nicht vor dem Startdatum liegen!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Wenn angekreuzt, Ticketstufe zulassen: Verkäufer"
-
-msgid "Indicates accurate safety information"
-msgstr "Weist auf genaue Sicherheitsinformationen hin"
 
 msgid "Location - rent, gas, overnight stays"
 msgstr "Standort - Miete, Gas, Übernachtungen"
@@ -6478,10 +6466,6 @@ msgid "Assign roles to staff members, and give access to specific functions"
 msgstr ""
 "Zuweisung von Rollen an Mitarbeiter und Erteilung von Zugriff auf bestimmte "
 "Funktionen"
-
-msgid "Does the character have a public role/archetype? If not, leave blank"
-msgstr ""
-"Hat der Charakter eine öffentliche Rolle/Archetyp? Wenn nicht, leer lassen"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr ""

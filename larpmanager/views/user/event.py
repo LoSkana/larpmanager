@@ -395,7 +395,7 @@ def faction(request, s, n, g):
         ctx["faction"] = ctx["factions"][g]
         typ = ctx["faction"]["typ"]
 
-    if "faction" not in ctx or typ == "secret":
+    if "faction" not in ctx or typ == "secret" or "id" not in ctx["faction"]:
         raise Http404("Faction does not exist")
 
     ctx["fact"] = get_writing_element_fields(

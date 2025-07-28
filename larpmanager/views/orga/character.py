@@ -272,7 +272,14 @@ def orga_character_form(request, s, n):
 
 def check_writing_form_type(ctx, typ):
     typ = typ.lower()
-    available = {v: k for k, v in QuestionApplicable.choices if v in ctx["features"]}
+    mapping = {
+        "character": "character",
+        "faction": "faction",
+        "plot": "plot",
+        "quest": "questbuilder",
+        "trait": "questbuilder",
+    }
+    available = {v: k for k, v in QuestionApplicable.choices if mapping[v] in ctx["features"]}
     if typ not in available:
         raise Http404(f"unknown writing form type: {typ}")
     ctx["typ"] = typ
