@@ -233,10 +233,12 @@
                 sidebar();
             });
 
-            {% if manage and is_sidebar_open %}
-                $('#sidebar-close').hide();
-            {% else %}
-                $('#sidebar-open').hide();
+            {% if not interface_old %}
+                {% if manage and is_sidebar_open %}
+                    $('#sidebar-close').hide();
+                {% else %}
+                    $('#sidebar-open').hide();
+                {% endif %}
             {% endif %}
 
             // add origin for manage links
