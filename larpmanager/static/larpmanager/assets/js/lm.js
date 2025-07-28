@@ -365,6 +365,33 @@ $(document).ready(function() {
         }
     });
 
+    sticky_tables();
+
+    post_popup();
+});
+
+function sticky_tables() {
+    $('.table-sticky table').each(function () {
+      const table = $(this);
+
+      table.find('thead tr:first-child th').each(function () {
+        $(this).addClass('sticky-header');
+      });
+
+      table.find('tr').each(function () {
+        $(this).find('th:first-child, td:first-child').addClass('sticky-col');
+      });
+
+      table.find('tr').each(function () {
+        $(this).find('th:nth-child(2), td:nth-child(2)').addClass('sticky-col-2');
+      });
+
+      const corner = table.find('thead tr:first-child th:first-child');
+      corner.addClass('sticky-header sticky-col');
+    });
+}
+
+function post_popup() {
     $(document).on('click', '.post_popup', function (e) {
 
         start_spinner();
@@ -390,8 +417,7 @@ $(document).ready(function() {
 
         return false;
     });
-
-});
+}
 
 function reload_has_char(parent='') {
 
@@ -569,7 +595,7 @@ String.prototype.format = String.prototype.f = function() {
 };
 
 function table_csv() {
-    $(".table_csv table").each(function( index ) {
+    $(".manage table").each(function( index ) {
 
         if ( $(this).hasClass("no_csv") ) return;
 
@@ -584,7 +610,7 @@ function table_csv() {
             $(this).attr('id', eid);
         }
 
-        $(this).after('<p class="go_table"><a href="#" eid="' + eid + '">Download as csv</a></p>');
+        $(this).parent().after('<p class="go_table"><a href="#" eid="' + eid + '">Download as csv</a></p>');
     });
 
     $(".go_table a").on( "click", function() {

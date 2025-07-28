@@ -990,7 +990,6 @@ header.sec h1 {
 
 #one .inner {
     padding-bottom: 2em !important;
-    overflow-x: auto;
 }
 
 .login {
@@ -1505,6 +1504,7 @@ th select {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
+
 .table-responsive table {
   width: 100%;
   border-collapse: collapse;
@@ -1871,4 +1871,65 @@ input[type="checkbox"].checkbox_single {
 
 #sidebar-open img {
     margin: 0 0.5em 0 0;
+}
+
+### STICKY TABLES ###
+
+.table-sticky {
+  overflow: auto;
+  max-height: 400px;
+  max-width: 100%;
+}
+
+.table-sticky table {
+  border-collapse: collapse;
+  width: max-content;
+}
+
+.table-sticky .sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+    background-color: inherit;
+}
+
+.table-sticky .sticky-col {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  width: 2em;
+  background-color: inherit;
+}
+
+.table-sticky .sticky-col-2 {
+  position: sticky;
+  left: 2em;
+  z-index: 2;
+}
+
+.table-sticky .sticky-header.sticky-col-2 {
+  z-index: 4;
+}
+
+.table-sticky .sticky-col.sticky-header {
+  z-index: 4;
+}
+
+.table-sticky::-webkit-scrollbar {
+  height: 32px;
+  width: 32px;
+}
+
+.table-sticky::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+.table-sticky::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Firefox */
+.table-sticky {
+  scrollbar-width: thick;
+  scrollbar-color: #888 #f1f1f1;
 }
