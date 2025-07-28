@@ -1113,9 +1113,6 @@ msgstr "Dodatky"
 msgid "Approvals"
 msgstr "Schválení"
 
-msgid "Auto save"
-msgstr "Submisivní otázka"
-
 msgid "Available"
 msgstr "Dostupné na"
 
@@ -2572,6 +2569,9 @@ msgstr "Konverzní lístek"
 
 msgid "Credit assignment"
 msgstr "Přiřazení zápočtu"
+
+msgid "Disable Auto save"
+msgstr "Zakázat automatické ukládání"
 
 msgid "Download document"
 msgstr "Stáhnout dokument"

@@ -1113,9 +1113,6 @@ msgstr "Ergänzungen"
 msgid "Approvals"
 msgstr "Zulassungen"
 
-msgid "Auto save"
-msgstr "Unterwürfige Frage"
-
 msgid "Available"
 msgstr "Verfügbar"
 
@@ -2572,6 +2569,9 @@ msgstr "Umrechnungsticket"
 
 msgid "Credit assignment"
 msgstr "Kreditvergabe"
+
+msgid "Disable Auto save"
+msgstr "Automatisches Speichern deaktivieren"
 
 msgid "Download document"
 msgstr "Dokument herunterladen"

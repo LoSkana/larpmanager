@@ -404,11 +404,11 @@ class OrgaConfigForm(ConfigForm):
             help_text = _("If checked, automatically removes formatting when pasting text into the WYSIWYG editor")
             self.add_configs("writing_paste_text", ConfigType.BOOL, label, help_text)
 
-            label = _("Auto save")
+            label = _("Disable Auto save")
             help_text = _(
                 "If checked, writing elements will be auto-saved during editing (only one form can be open at a time)"
             )
-            self.add_configs("writing_auto_save", ConfigType.BOOL, label, help_text)
+            self.add_configs("writing_disable_auto", ConfigType.BOOL, label, help_text)
 
     def set_config_character(self):
         if "campaign" in self.params["features"]:

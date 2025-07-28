@@ -1113,9 +1113,6 @@ msgstr "Toevoegingen"
 msgid "Approvals"
 msgstr "Goedkeuringen"
 
-msgid "Auto save"
-msgstr "Onderdanige vraag"
-
 msgid "Available"
 msgstr "Beschikbaar"
 
@@ -2572,6 +2569,9 @@ msgstr "Conversie ticket"
 
 msgid "Credit assignment"
 msgstr "Credit opdracht"
+
+msgid "Disable Auto save"
+msgstr "Automatisch opslaan uitschakelen"
 
 msgid "Download document"
 msgstr "Document downloaden"

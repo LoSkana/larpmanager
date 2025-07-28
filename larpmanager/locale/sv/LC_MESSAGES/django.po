@@ -1113,9 +1113,6 @@ msgstr "Tillgångar"
 msgid "Approvals"
 msgstr "Godkännande"
 
-msgid "Auto save"
-msgstr "Undergiven fråga"
-
 msgid "Available"
 msgstr "Tillgänglig"
 
@@ -2572,6 +2569,9 @@ msgstr "Konvertering biljett"
 
 msgid "Credit assignment"
 msgstr "Kredituppdrag"
+
+msgid "Disable Auto save"
+msgstr "Avaktivera automatisk sparning"
 
 msgid "Download document"
 msgstr "Ladda ner dokument"

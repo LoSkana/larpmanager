@@ -1113,9 +1113,6 @@ msgstr "Adiciones"
 msgid "Approvals"
 msgstr "Homologaciones"
 
-msgid "Auto save"
-msgstr "¡Pregunta guardada"
-
 msgid "Available"
 msgstr "Disponible"
 
@@ -2572,6 +2569,9 @@ msgstr "Billete de conversión"
 
 msgid "Credit assignment"
 msgstr "Asignación de créditos"
+
+msgid "Disable Auto save"
+msgstr "Desactivar guardado automático"
 
 msgid "Download document"
 msgstr "Descargar documento"
