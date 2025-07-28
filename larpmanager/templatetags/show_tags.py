@@ -405,7 +405,6 @@ def remove(value, args):
 def get_character_field(value, options):
     if isinstance(value, str):
         return value
-    print(options)
     result = []
     for idx in value:
         try:
