@@ -654,9 +654,6 @@ msgstr "Gießen"
 msgid "Columns"
 msgstr "Rubriken"
 
-msgid "Concept"
-msgstr "Konzept"
-
 msgid "Confirm"
 msgstr "Bewerbung"
 
@@ -3922,9 +3919,6 @@ msgstr "Bislang haben Sie insgesamt"
 msgid "Surcharge applied to the ticket"
 msgstr "Aufpreis zum Fahrschein"
 
-msgid "This page shows the event plots"
-msgstr "Diese Seite zeigt die Ereignisplots"
-
 msgid "This page shows the run signups"
 msgstr "Auf dieser Seite sind die Anmeldungen für den Lauf zusammengefasst"
 
@@ -4465,6 +4459,9 @@ msgstr "Jetzt können Sie mit der Erstellung von Speed-Larps beginnen"
 
 msgid "The following registrations were drawn"
 msgstr "Die folgenden Beiträge wurden ausgelost"
+
+msgid "This page shows the plots of the event"
+msgstr "Diese Seite zeigt die Plots der Veranstaltung"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Wir bitten Sie, den Restbetrag zu zahlen"
@@ -10046,17 +10043,6 @@ msgstr ""
 "bezahlen"
 
 msgid ""
-"Searchable: Characters can be filtered according to this question. Public: "
-"The answer to this question is publicly visible. Private: The answer to this"
-" question is only visible to the player. Hidden: The answer is hidden to all"
-" players."
-msgstr ""
-"Durchsuchbar: Die Zeichen können nach dieser Frage gefiltert werden. "
-"Öffentlich: Die Antwort auf diese Frage ist öffentlich sichtbar. Privat: Die"
-" Antwort auf diese Frage ist nur für den Spieler sichtbar. Versteckt: Die "
-"Antwort ist für alle Spieler verborgen."
-
-msgid ""
 "If for whatever reason the first and last name shown on your documents is "
 "different from the one you prefer to use, then write it here. It will only "
 "be used for internal bureaucratic purposes, and will NEVER be displayed to "
@@ -10077,17 +10063,6 @@ msgstr ""
 "haben und bereit sind, ihn den Mitarbeitern vorzuschlagen. Achtung: Einige "
 "Felder sind möglicherweise nicht mehr bearbeitbar. Lassen Sie das Feld leer,"
 " um Ihre Änderungen zu speichern und sie in Zukunft fortsetzen zu können."
-
-msgid ""
-"Optional: The question is shown, and can be filled by the player. Mandatory:"
-" The question needs to be filled by the player. Disabled: The question is "
-"shown, but cannot be changed by the player. Hidden: The question is not "
-"shown to the player."
-msgstr ""
-"Optional: Die Frage wird angezeigt und kann vom Spieler ausgefüllt werden. "
-"Obligatorisch: Die Frage muss vom Spieler ausgefüllt werden. Deaktiviert: "
-"Die Frage wird angezeigt, kann aber vom Spieler nicht geändert werden. "
-"Ausgeblendet: Die Frage wird dem Spieler nicht angezeigt."
 
 msgid ""
 "Indicate severity: RED (risks ruining the game for more than half of the "

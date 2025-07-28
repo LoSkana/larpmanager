@@ -654,9 +654,6 @@ msgstr "Casting"
 msgid "Columns"
 msgstr "Sloupce"
 
-msgid "Concept"
-msgstr "Koncept"
-
 msgid "Confirm"
 msgstr "Použít"
 
@@ -3922,9 +3919,6 @@ msgstr "Dosud jste zaplatili celkem"
 msgid "Surcharge applied to the ticket"
 msgstr "Příplatek k jízdence"
 
-msgid "This page shows the event plots"
-msgstr "Tato stránka zobrazuje zákresy událostí"
-
 msgid "This page shows the run signups"
 msgstr "Tato stránka shrnuje přihlášky na běh"
 
@@ -4461,6 +4455,9 @@ msgstr "Nyní můžete začít vytvářet speed-larpy"
 
 msgid "The following registrations were drawn"
 msgstr "Byly vylosovány tyto položky"
+
+msgid "This page shows the plots of the event"
+msgstr "Tato stránka zobrazuje pozemky události"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Žádáme vás, abyste zaplatili zbývající částku"
@@ -9504,16 +9501,6 @@ msgstr ""
 "které jste se přihlásili"
 
 msgid ""
-"Searchable: Characters can be filtered according to this question. Public: "
-"The answer to this question is publicly visible. Private: The answer to this"
-" question is only visible to the player. Hidden: The answer is hidden to all"
-" players."
-msgstr ""
-"Lze vyhledávat: Znaky lze filtrovat podle této otázky. Veřejné: Odpověď na "
-"tuto otázku je veřejně viditelná. Soukromá: Odpověď na tuto otázku je "
-"viditelná pouze pro hráče. Skrytá: Odpověď je skrytá pro všechny hráče."
-
-msgid ""
 "If for whatever reason the first and last name shown on your documents is "
 "different from the one you prefer to use, then write it here. It will only "
 "be used for internal bureaucratic purposes, and will NEVER be displayed to "
@@ -9533,16 +9520,6 @@ msgstr ""
 "navrhnout personálu. Buďte opatrní: některá pole již nemusí být "
 "editovatelná. Ponechte pole prázdné, abyste uložili své změny a mohli v nich"
 " v budoucnu pokračovat."
-
-msgid ""
-"Optional: The question is shown, and can be filled by the player. Mandatory:"
-" The question needs to be filled by the player. Disabled: The question is "
-"shown, but cannot be changed by the player. Hidden: The question is not "
-"shown to the player."
-msgstr ""
-"Volitelně: Otázka se zobrazí a hráč ji může vyplnit. Povinné: Otázka musí "
-"být vyplněna hráčem. Zakázáno: Otázka je zobrazena, ale hráč ji nemůže "
-"změnit. Skrytá: Otázka se hráči nezobrazuje."
 
 msgid ""
 "Indicate severity: RED (risks ruining the game for more than half of the "

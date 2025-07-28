@@ -36,7 +36,7 @@ from larpmanager.forms.character import (
     OrgaWritingQuestionForm,
 )
 from larpmanager.forms.utils import EventCharacterS2Widget
-from larpmanager.forms.writing import FactionForm, UploadElementsForm
+from larpmanager.forms.writing import FactionForm, PlotForm, UploadElementsForm
 from larpmanager.models.base import Feature
 from larpmanager.models.form import (
     QuestionApplicable,
@@ -613,7 +613,7 @@ def _get_excel_form(request, s, n, typ, submit=False):
 
     ctx["elementTyp"] = ctx["applicable"]
 
-    form_mapping = {"character": OrgaCharacterForm, "faction": FactionForm}
+    form_mapping = {"character": OrgaCharacterForm, "faction": FactionForm, "plot": PlotForm}
 
     # Init form
     form_class = form_mapping.get(typ, OrgaCharacterForm)

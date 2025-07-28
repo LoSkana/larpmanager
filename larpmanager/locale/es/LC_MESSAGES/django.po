@@ -654,9 +654,6 @@ msgstr "Asignación"
 msgid "Columns"
 msgstr "Columnas"
 
-msgid "Concept"
-msgstr "Concepto"
-
 msgid "Confirm"
 msgstr "Confirmar"
 
@@ -3922,9 +3919,6 @@ msgstr "Hasta ahora ha pagado un total de"
 msgid "Surcharge applied to the ticket"
 msgstr "Recargo aplicado al billete"
 
-msgid "This page shows the event plots"
-msgstr "Esta página muestra las parcelas del evento"
-
 msgid "This page shows the run signups"
 msgstr "Esta página muestra las inscripciones al pase"
 
@@ -4461,6 +4455,9 @@ msgstr "Ya puedes empezar a crear speed-larps"
 
 msgid "The following registrations were drawn"
 msgstr "Se han elegido las siguientes inscripciones"
+
+msgid "This page shows the plots of the event"
+msgstr "Esta página muestra las parcelas del evento"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Le pedimos que pague el importe restante"
@@ -9776,17 +9773,6 @@ msgstr ""
 " los eventos a los que te hayas inscrito"
 
 msgid ""
-"Searchable: Characters can be filtered according to this question. Public: "
-"The answer to this question is publicly visible. Private: The answer to this"
-" question is only visible to the player. Hidden: The answer is hidden to all"
-" players."
-msgstr ""
-"Se puede buscar: Los caracteres pueden filtrarse en función de esta "
-"pregunta. Pública: La respuesta a esta pregunta es visible públicamente. "
-"Privada: La respuesta a esta pregunta sólo es visible para el jugador. "
-"Oculta: La respuesta está oculta para todos los jugadores."
-
-msgid ""
 "If for whatever reason the first and last name shown on your documents is "
 "different from the one you prefer to use, then write it here. It will only "
 "be used for internal bureaucratic purposes, and will NEVER be displayed to "
@@ -9807,17 +9793,6 @@ msgstr ""
 "para proponerlo al personal. Cuidado: puede que algunos campos ya no sean "
 "editables. Deje el campo en blanco para guardar sus cambios y poder "
 "continuarlos en el futuro."
-
-msgid ""
-"Optional: The question is shown, and can be filled by the player. Mandatory:"
-" The question needs to be filled by the player. Disabled: The question is "
-"shown, but cannot be changed by the player. Hidden: The question is not "
-"shown to the player."
-msgstr ""
-"Opcional: La pregunta se muestra, y puede ser rellenada por el jugador. "
-"Obligatorio: La pregunta debe ser rellenada por el jugador. Desactivada: La "
-"pregunta se muestra, pero no puede ser modificada por el jugador. Oculta: La"
-" pregunta no se muestra al jugador."
 
 msgid ""
 "Indicate severity: RED (risks ruining the game for more than half of the "

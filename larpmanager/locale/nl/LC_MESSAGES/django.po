@@ -654,9 +654,6 @@ msgstr "Gieten"
 msgid "Columns"
 msgstr "Kolommen"
 
-msgid "Concept"
-msgstr "Concept"
-
 msgid "Confirm"
 msgstr "Toepassen"
 
@@ -3922,9 +3919,6 @@ msgstr "Tot nu toe heb je in totaal"
 msgid "Surcharge applied to the ticket"
 msgstr "Toeslag op ticket"
 
-msgid "This page shows the event plots"
-msgstr "Deze pagina toont de gebeurtenisplots"
-
 msgid "This page shows the run signups"
 msgstr "Op deze pagina staat een overzicht van de inschrijvingen voor de run"
 
@@ -4463,6 +4457,9 @@ msgstr "Nu kun je beginnen met het maken van speed-larps"
 
 msgid "The following registrations were drawn"
 msgstr "De volgende inzendingen zijn getrokken"
+
+msgid "This page shows the plots of the event"
+msgstr "Deze pagina toont de plots van het evenement"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "We vragen je om het resterende bedrag te betalen"
@@ -9842,17 +9839,6 @@ msgstr ""
 "ingeschreven"
 
 msgid ""
-"Searchable: Characters can be filtered according to this question. Public: "
-"The answer to this question is publicly visible. Private: The answer to this"
-" question is only visible to the player. Hidden: The answer is hidden to all"
-" players."
-msgstr ""
-"Doorzoekbaar: Tekens kunnen worden gefilterd op basis van deze vraag. "
-"Openbaar: Het antwoord op deze vraag is openbaar zichtbaar. Privé: Het "
-"antwoord op deze vraag is alleen zichtbaar voor de speler. Verborgen: Het "
-"antwoord is verborgen voor alle spelers."
-
-msgid ""
 "If for whatever reason the first and last name shown on your documents is "
 "different from the one you prefer to use, then write it here. It will only "
 "be used for internal bureaucratic purposes, and will NEVER be displayed to "
@@ -9873,17 +9859,6 @@ msgstr ""
 "om het voor te stellen aan het personeel. Let op: sommige velden kunnen niet"
 " meer bewerkt worden. Laat het veld leeg om je wijzigingen op te slaan en er"
 " in de toekomst mee door te kunnen gaan."
-
-msgid ""
-"Optional: The question is shown, and can be filled by the player. Mandatory:"
-" The question needs to be filled by the player. Disabled: The question is "
-"shown, but cannot be changed by the player. Hidden: The question is not "
-"shown to the player."
-msgstr ""
-"Optioneel: De vraag wordt getoond en kan door de speler worden ingevuld. "
-"Verplicht: De vraag moet worden ingevuld door de speler. Uitgeschakeld: De "
-"vraag wordt getoond, maar kan niet worden veranderd door de speler. "
-"Verborgen: De vraag wordt niet getoond aan de speler."
 
 msgid ""
 "Indicate severity: RED (risks ruining the game for more than half of the "

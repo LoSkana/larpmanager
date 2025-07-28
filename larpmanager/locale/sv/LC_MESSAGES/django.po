@@ -654,9 +654,6 @@ msgstr "Gjutning"
 msgid "Columns"
 msgstr "Kolumner"
 
-msgid "Concept"
-msgstr "Koncept"
-
 msgid "Confirm"
 msgstr "Tillämpa"
 
@@ -3922,9 +3919,6 @@ msgstr "Hittills har du betalat totalt"
 msgid "Surcharge applied to the ticket"
 msgstr "Tilläggsavgift till biljett"
 
-msgid "This page shows the event plots"
-msgstr "Denna sida visar händelseförloppen"
-
 msgid "This page shows the run signups"
 msgstr "På denna sida finns en sammanfattning av anmälningarna till loppet"
 
@@ -4463,6 +4457,9 @@ msgstr "Nu kan du börja skapa speed-larps"
 
 msgid "The following registrations were drawn"
 msgstr "Följande bidrag lottades ut"
+
+msgid "This page shows the plots of the event"
+msgstr "På denna sida visas plottarna från evenemanget"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Vi ber dig att betala det återstående beloppet"
@@ -9694,17 +9691,6 @@ msgstr ""
 "betala för de evenemang du har anmält dig till"
 
 msgid ""
-"Searchable: Characters can be filtered according to this question. Public: "
-"The answer to this question is publicly visible. Private: The answer to this"
-" question is only visible to the player. Hidden: The answer is hidden to all"
-" players."
-msgstr ""
-"Sökbar: Tecken kan filtreras enligt denna fråga. Offentlig: Svaret på den "
-"här frågan är synligt för allmänheten. Privat: Svaret på frågan är privat: "
-"Svaret på den här frågan är endast synligt för spelaren. Dold (Hidden): "
-"Svaret är dolt för alla spelare."
-
-msgid ""
 "If for whatever reason the first and last name shown on your documents is "
 "different from the one you prefer to use, then write it here. It will only "
 "be used for internal bureaucratic purposes, and will NEVER be displayed to "
@@ -9725,16 +9711,6 @@ msgstr ""
 "föreslå den för personalen. Var försiktig: vissa fält kanske inte längre är "
 "redigerbara. Lämna fältet tomt för att spara dina ändringar och för att "
 "kunna fortsätta med dem i framtiden."
-
-msgid ""
-"Optional: The question is shown, and can be filled by the player. Mandatory:"
-" The question needs to be filled by the player. Disabled: The question is "
-"shown, but cannot be changed by the player. Hidden: The question is not "
-"shown to the player."
-msgstr ""
-"Valfri fråga: Frågan visas och kan fyllas i av spelaren. Obligatorisk: "
-"Frågan måste fyllas i av spelaren. Inaktiverad: Frågan visas, men kan inte "
-"ändras av spelaren. Dold: Frågan visas inte för spelaren."
 
 msgid ""
 "Indicate severity: RED (risks ruining the game for more than half of the "
