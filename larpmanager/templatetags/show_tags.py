@@ -405,7 +405,14 @@ def remove(value, args):
 def get_character_field(value, options):
     if isinstance(value, str):
         return value
-    return ", ".join([options[idx]["display"] for idx in value])
+    print(options)
+    result = []
+    for idx in value:
+        try:
+            result.append(options[idx]["display"])
+        except (IndexError, KeyError, TypeError):
+            pass
+    return ", ".join(result)
 
 
 @register.filter
