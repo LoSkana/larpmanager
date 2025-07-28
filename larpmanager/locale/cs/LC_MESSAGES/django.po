@@ -1116,6 +1116,9 @@ msgstr "Dodatky"
 msgid "Approvals"
 msgstr "Schválení"
 
+msgid "Auto save"
+msgstr "Submisivní otázka"
+
 msgid "Available"
 msgstr "Dostupné na"
 
@@ -1823,9 +1826,6 @@ msgstr "Požadovaný čas"
 
 msgid "Rotate right"
 msgstr "Pravé kolo"
-
-msgid "Safe editing"
-msgstr "Bezpečné úpravy"
 
 msgid "See you soon"
 msgstr "Čekáme na vás"
@@ -8074,13 +8074,6 @@ msgstr ""
 "konkrétními oprávněními"
 
 msgid ""
-"If checked, prevents multiple users from editing the same item at the same "
-"time to avoid conflicts"
-msgstr ""
-"Pokud je zaškrtnuto, zabrání více uživatelům upravovat stejnou položku "
-"současně, aby nedocházelo ke konfliktům"
-
-msgid ""
 "We only ask for a moment of your time to check the documents you have "
 "uploaded, it won't take long"
 msgstr ""
@@ -8161,6 +8154,13 @@ msgid ""
 msgstr ""
 "Umožňuje nastavení ve stylu \"kampaně\", kdy více událostí sdílí stejnou "
 "sadu postav a frakcí"
+
+msgid ""
+"If checked, writing elements will be auto-saved during editing (only one "
+"form can be open at a time)"
+msgstr ""
+"Pokud je zaškrtnuto, budou se prvky pro psaní během editace automaticky "
+"ukládat (současně může být otevřen pouze jeden formulář)"
 
 msgid ""
 "Optional text to be included in the email sent to the player to notify them "

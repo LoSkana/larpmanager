@@ -1116,6 +1116,9 @@ msgstr "Toevoegingen"
 msgid "Approvals"
 msgstr "Goedkeuringen"
 
+msgid "Auto save"
+msgstr "Onderdanige vraag"
+
 msgid "Available"
 msgstr "Beschikbaar"
 
@@ -1823,9 +1826,6 @@ msgstr "Gevraagde tijd"
 
 msgid "Rotate right"
 msgstr "Rechter wiel"
-
-msgid "Safe editing"
-msgstr "Veilig bewerken"
 
 msgid "See you soon"
 msgstr "We wachten op je"
@@ -8360,13 +8360,6 @@ msgstr ""
 "definiëren met specifieke machtigingen"
 
 msgid ""
-"If checked, prevents multiple users from editing the same item at the same "
-"time to avoid conflicts"
-msgstr ""
-"Als deze optie is aangevinkt, wordt voorkomen dat meerdere gebruikers "
-"hetzelfde item tegelijkertijd bewerken om conflicten te voorkomen"
-
-msgid ""
 "We only ask for a moment of your time to check the documents you have "
 "uploaded, it won't take long"
 msgstr ""
@@ -8449,6 +8442,13 @@ msgid ""
 msgstr ""
 "Maakt een 'campagne'-achtige opzet mogelijk waarbij meerdere evenementen "
 "dezelfde set personages en facties delen"
+
+msgid ""
+"If checked, writing elements will be auto-saved during editing (only one "
+"form can be open at a time)"
+msgstr ""
+"Als deze optie is aangevinkt, worden schrijfelementen automatisch opgeslagen"
+" tijdens het bewerken (er kan maar één formulier tegelijk geopend zijn)"
 
 msgid ""
 "Optional text to be included in the email sent to the player to notify them "
