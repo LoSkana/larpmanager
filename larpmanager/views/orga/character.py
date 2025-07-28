@@ -582,7 +582,7 @@ def orga_writing_excel_submit(request, s, n, typ):
         return JsonResponse({"k": 0})
 
     ctx["auto"] = int(request.POST.get("auto"))
-    if ctx["auto"] and "working_ticket" in ctx["features"]:
+    if ctx["auto"]:
         msg = _check_working_ticket(request, ctx, request.POST["token"])
         if msg:
             return JsonResponse({"warn": msg})

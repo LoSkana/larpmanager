@@ -97,7 +97,7 @@ def update_event_features(ev_id):
         for slug in ev.features.values_list("slug", flat=True):
             res[slug] = 1
         ex_features = {
-            "writing": ["paste_text", "working_ticket", "title", "cover", "hide", "assigned"],
+            "writing": ["paste_text", "title", "cover", "hide", "assigned"],
             "registration": ["reg_que_age", "reg_que_faction", "reg_que_tickets", "unique_code", "reg_que_allowed"],
             "character_form": ["wri_que_max", "wri_que_tickets", "wri_que_dependents"],
             "casting": ["mirror"],

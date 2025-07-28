@@ -1001,12 +1001,12 @@ msgid ""
 "WYSIWYG editor"
 msgstr ""
 
-msgid "Safe editing"
+msgid "Auto save"
 msgstr ""
 
 msgid ""
-"If checked, prevents multiple users from editing the same item at the same "
-"time to avoid conflicts"
+"If checked, writing elements will be auto-saved during editing (only one "
+"form can be open at a time)"
 msgstr ""
 
 msgid "Independent factions"

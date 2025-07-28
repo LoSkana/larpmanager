@@ -267,6 +267,8 @@ def _prepare_writing_list(ctx, request):
     if ctx["default_fields"] == "[]":
         ctx["default_fields"] = "['teaser', 'text']"
 
+    ctx["auto_save"] = ctx["event"].get_config("writing_auto_save")
+
 
 def writing_list_plot(ctx):
     ctx["chars"] = {}

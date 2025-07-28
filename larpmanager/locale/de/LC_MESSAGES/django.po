@@ -1116,6 +1116,9 @@ msgstr "Ergänzungen"
 msgid "Approvals"
 msgstr "Zulassungen"
 
+msgid "Auto save"
+msgstr "Unterwürfige Frage"
+
 msgid "Available"
 msgstr "Verfügbar"
 
@@ -1820,9 +1823,6 @@ msgstr "Gewünschte Zeit"
 
 msgid "Rotate right"
 msgstr "Rechtes Rad"
-
-msgid "Safe editing"
-msgstr "Sichere Bearbeitung"
 
 msgid "See you soon"
 msgstr "Wir warten auf Sie"
@@ -8526,13 +8526,6 @@ msgstr ""
 "und Definition von Rollen mit spezifischen Rechten"
 
 msgid ""
-"If checked, prevents multiple users from editing the same item at the same "
-"time to avoid conflicts"
-msgstr ""
-"Wenn diese Option aktiviert ist, wird verhindert, dass mehrere Benutzer "
-"denselben Artikel gleichzeitig bearbeiten, um Konflikte zu vermeiden"
-
-msgid ""
 "We only ask for a moment of your time to check the documents you have "
 "uploaded, it won't take long"
 msgstr ""
@@ -8615,6 +8608,14 @@ msgid ""
 msgstr ""
 "Ermöglicht eine \"kampagnenartige\" Einrichtung, bei der mehrere Ereignisse "
 "dieselbe Gruppe von Charakteren und Fraktionen nutzen"
+
+msgid ""
+"If checked, writing elements will be auto-saved during editing (only one "
+"form can be open at a time)"
+msgstr ""
+"Wenn diese Option aktiviert ist, werden die Schriftelemente während der "
+"Bearbeitung automatisch gespeichert (es kann nur ein Formular gleichzeitig "
+"geöffnet sein)"
 
 msgid ""
 "Optional text to be included in the email sent to the player to notify them "
