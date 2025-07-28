@@ -107,6 +107,9 @@ msgstr "Dieta"
 msgid "Done"
 msgstr "Obraty"
 
+msgid "Edit"
+msgstr "Upravit"
+
 msgid "Form"
 msgstr "Formulář"
 
@@ -238,6 +241,9 @@ msgstr "Použité"
 
 msgid "User"
 msgstr "Uživatel"
+
+msgid "View"
+msgstr "Zobrazit"
 
 msgid "Vote"
 msgstr "Hlasujte na"
@@ -749,9 +755,6 @@ msgstr "Profil"
 
 msgid "Pronoun"
 msgstr "Zájmena"
-
-msgid "Reading"
-msgstr "Čtení"
 
 msgid "Receipt"
 msgstr "Příjem"
@@ -3353,6 +3356,9 @@ msgstr "Registrace ještě není otevřena!"
 msgid "Reminder membership fee"
 msgstr "Připomenutí členského poplatku"
 
+msgid "Show available factions"
+msgstr "Zobrazit dostupné frakce"
+
 msgid "Thanks for your support"
 msgstr "Děkujeme vám za podporu"
 
@@ -5009,8 +5015,8 @@ msgstr "Na této stránce můžete přidat nebo upravit slevu"
 msgid "This page allows you to add or edit an invoice"
 msgstr "Na této stránce můžete přidat nebo upravit fakturu"
 
-msgid "This page allows you to fully view a character"
-msgstr "Na této stránce si můžete plně prohlédnout postavu"
+msgid "This page allows you to view a writing element"
+msgstr "Tato stránka umožňuje zobrazit prvek psaní"
 
 msgid "This page shows the email lists of subscribers"
 msgstr "Tato stránka zobrazuje seznamy e-mailových odběratelů"

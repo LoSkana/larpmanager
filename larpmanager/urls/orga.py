@@ -971,6 +971,11 @@ urlpatterns = [
         name="orga_multichoice_available",
     ),
     path(
+        "<slug:s>/<int:n>/manage/factions/available",
+        views_ow.orga_factions_available,
+        name="orga_factions_available",
+    ),
+    path(
         "<slug:s>/<int:n>/manage/export/<slug:nm>",
         views_ow.orga_export,
         name="orga_export",

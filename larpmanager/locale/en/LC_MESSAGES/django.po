@@ -710,6 +710,12 @@ msgid ""
 "in the future."
 msgstr ""
 
+msgid "Factions"
+msgstr ""
+
+msgid "Show available factions"
+msgstr ""
+
 msgid "Select only one primary faction"
 msgstr ""
 
@@ -745,9 +751,6 @@ msgid "Writing option"
 msgstr ""
 
 msgid "Characters"
-msgstr ""
-
-msgid "Factions"
 msgstr ""
 
 msgid "Plots"
@@ -4303,6 +4306,9 @@ msgstr ""
 msgid "XP avail"
 msgstr ""
 
+msgid "Edit"
+msgstr ""
+
 msgid "Character relationships"
 msgstr ""
 
@@ -6683,6 +6689,9 @@ msgstr ""
 msgid "status"
 msgstr ""
 
+msgid "View"
+msgstr ""
+
 msgid "Versions"
 msgstr ""
 
@@ -6819,9 +6828,6 @@ msgstr ""
 msgid "This page shows the prologues of the event"
 msgstr ""
 
-msgid "Reading"
-msgstr ""
-
 msgid "Quest Type"
 msgstr ""
 
@@ -6875,7 +6881,7 @@ msgid ""
 "differences between them"
 msgstr ""
 
-msgid "This page allows you to fully view a character"
+msgid "This page allows you to view a writing element"
 msgstr ""
 
 msgid "Need help"

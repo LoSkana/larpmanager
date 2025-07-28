@@ -39,7 +39,7 @@
                         {% if el.working %}{{ el.working.display_member }}{% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'shuttle_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'shuttle_edit' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                 </tr>
             {% endfor %}
@@ -77,7 +77,7 @@
                         {% if el.working %}{{ el.working.display_member }}{% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'shuttle_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'shuttle_edit' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                 </tr>
             {% endfor %}

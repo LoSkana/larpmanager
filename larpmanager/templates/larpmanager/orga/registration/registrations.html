@@ -170,7 +170,8 @@
                     {% for reg in dc.list %}
                         <tr id="{{ reg.id }}">
                             <td>
-                                <a href="{% url 'orga_registrations_edit' run.event.slug run.number reg.id %}"><i class="fas fa-edit"></i></a>
+                                <a href="{% url 'orga_registrations_edit' run.event.slug run.number reg.id %}"
+                                   qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                             </td>
                             <td>
                                 {{ reg.member | title }}

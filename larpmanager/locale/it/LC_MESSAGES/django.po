@@ -107,6 +107,9 @@ msgstr "Diet"
 msgid "Done"
 msgstr "Fatto"
 
+msgid "Edit"
+msgstr "Modifica"
+
 msgid "Form"
 msgstr "Form"
 
@@ -238,6 +241,9 @@ msgstr "Usati"
 
 msgid "User"
 msgstr "Utente"
+
+msgid "View"
+msgstr "Vista"
 
 msgid "Vote"
 msgstr "Voto"
@@ -749,9 +755,6 @@ msgstr "Profilo"
 
 msgid "Pronoun"
 msgstr "Pronome"
-
-msgid "Reading"
-msgstr "Lettura"
 
 msgid "Receipt"
 msgstr "Receipt"
@@ -3353,6 +3356,9 @@ msgstr "Le iscrizioni non sono ancora aperte!"
 msgid "Reminder membership fee"
 msgstr "Promemoria quota associativa"
 
+msgid "Show available factions"
+msgstr "Mostra le fazioni disponibili"
+
 msgid "Thanks for your support"
 msgstr "Grazie per il tuo supporto"
 
@@ -5010,8 +5016,8 @@ msgstr "Questa pagina consente di aggiungere o modificare uno sconto"
 msgid "This page allows you to add or edit an invoice"
 msgstr "Questa pagina consente di aggiungere o modificare una fattura"
 
-msgid "This page allows you to fully view a character"
-msgstr "Questa pagina consente di visualizzare completamente un personaggio"
+msgid "This page allows you to view a writing element"
+msgstr "Questa pagina consente di visualizzare un elemento di scrittura"
 
 msgid "This page shows the email lists of subscribers"
 msgstr "Questa pagina mostra gli elenchi di e-mail degli abbonati"
