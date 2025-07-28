@@ -14,18 +14,16 @@
         {% endblock nav_fields %}
         <a href="#" class="my_toggle" tog='stats'>Stats</a>
     </div>
-    <div class="table-sticky">
-        <table class="tablesorter writing regs">
-            <thead>
-                {% block thead %}
-                {% endblock thead %}
-            </thead>
-            <tbody>
-                {% block tbody %}
-                {% endblock tbody %}
-            </tbody>
-        </table>
-    </div>
+    <table class="tablesorter writing regs">
+        <thead>
+            {% block thead %}
+            {% endblock thead %}
+        </thead>
+        <tbody>
+            {% block tbody %}
+            {% endblock tbody %}
+        </tbody>
+    </table>
     {% block additional %}
     {% endblock additional %}
     <div id="excel-edit"></div>

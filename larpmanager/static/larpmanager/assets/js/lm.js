@@ -371,13 +371,39 @@ $(document).ready(function() {
 });
 
 function sticky_tables() {
-    $('.table-sticky table').each(function () {
+    $('.manage table').each(function () {
       const table = $(this);
 
-      table.find('thead tr:first-child th').each(function () {
-        $(this).addClass('sticky-header');
-      });
+      if (table.hasClass('no_sticky')) return;
 
+      if (!table.parent().hasClass('table-sticky')) {
+        table.wrap('<div class="table-sticky"></div>');
+      }
+
+      const wrapper = table.parent('.table-sticky')[0];
+
+      if (!wrapper.classList.contains('simplebar-initialized')) {
+        new SimpleBar(wrapper, {
+          autoHide: false
+        });
+      }
+
+      const bodyBg = $('body').css('background-color');
+
+      table.find('thead').each(function () {
+            $(this).css('background-color', bodyBg);
+
+            const colCount = $(this).find('tr:first-child th').length;
+
+            const borderRow = $('<tr class="thead-border-row"></tr>');
+            for (let i = 0; i < colCount; i++) {
+            borderRow.append('<th></th>');
+            }
+
+            $(this).append(borderRow);
+        });
+
+        /*
       table.find('tr').each(function () {
         $(this).find('th:first-child, td:first-child').addClass('sticky-col');
       });
@@ -387,7 +413,7 @@ function sticky_tables() {
       });
 
       const corner = table.find('thead tr:first-child th:first-child');
-      corner.addClass('sticky-header sticky-col');
+      corner.addClass('sticky-header sticky-col');  */
     });
 }
 
