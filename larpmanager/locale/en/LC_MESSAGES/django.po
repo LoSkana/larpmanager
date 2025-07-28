@@ -4341,9 +4341,6 @@ msgstr ""
 msgid "Tell me more"
 msgstr ""
 
-msgid "Titolo"
-msgstr ""
-
 msgid "Characters are only visible to logged in users"
 msgstr ""
 
@@ -4427,9 +4424,6 @@ msgid "are not yet open"
 msgstr ""
 
 msgid "Will open at"
-msgstr ""
-
-msgid "Keywords"
 msgstr ""
 
 msgid "Change registration"
@@ -6819,16 +6813,7 @@ msgstr ""
 msgid "This page shows the types of quests in the event"
 msgstr ""
 
-msgid "This page shows the event quests"
-msgstr ""
-
-msgid "Show / hide"
-msgstr ""
-
-msgid "hide"
-msgstr ""
-
-msgid "assigned"
+msgid "This page shows the quests for the event"
 msgstr ""
 
 msgid "This page shows the relationships between characters"
@@ -6855,10 +6840,7 @@ msgstr ""
 msgid "Station"
 msgstr ""
 
-msgid "This page shows the traits assigned to the characters in the run"
-msgstr ""
-
-msgid "title"
+msgid "This page shows the traits of the quests for the event"
 msgstr ""
 
 msgid ""

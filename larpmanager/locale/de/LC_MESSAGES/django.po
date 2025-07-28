@@ -260,9 +260,6 @@ msgstr "Tage"
 msgid "gift"
 msgstr "Geschenk"
 
-msgid "hide"
-msgstr "ausblenden"
-
 msgid "past"
 msgstr "Vergangenheit"
 
@@ -423,9 +420,6 @@ msgstr "mehr"
 msgid "quick"
 msgstr "schnell"
 
-msgid "title"
-msgstr "Titel"
-
 msgid "Absent"
 msgstr "Abwesend"
 
@@ -581,9 +575,6 @@ msgstr "Senden Sie"
 
 msgid "Ticket"
 msgstr "Ticket"
-
-msgid "Titolo"
-msgstr "Titolo"
 
 msgid "Tokens"
 msgstr "Wertmarken"
@@ -951,9 +942,6 @@ msgstr "Einschließlich"
 msgid "Invoices"
 msgstr "Rechnungen"
 
-msgid "Keywords"
-msgstr "Schlüsselwörter"
-
 msgid "Language"
 msgstr "Sprache"
 
@@ -1085,9 +1073,6 @@ msgstr "Workshop"
 
 msgid "XP avail"
 msgstr "Px Vorhanden"
-
-msgid "assigned"
-msgstr "zugewiesen"
 
 msgid "discount"
 msgstr "Rabatt"
@@ -1643,9 +1628,6 @@ msgstr "E-Mail senden"
 
 msgid "Shorten URL"
 msgstr "URL kürzen"
-
-msgid "Show / hide"
-msgstr "Anzeigen / Ausblenden"
 
 msgid "Show closed"
 msgstr "Geschlossen anzeigen"
@@ -4010,9 +3992,6 @@ msgstr "Summe der erhaltenen Zahlungen durch"
 msgid "The setting / genre of the event"
 msgstr "Der Schauplatz / das Genre der Veranstaltung"
 
-msgid "This page shows the event quests"
-msgstr "Diese Seite zeigt die Ereignisquests"
-
 msgid "Total of recorded money outflows"
 msgstr "Summe der verbuchten Geldabflüsse"
 
@@ -4585,6 +4564,9 @@ msgstr "Die Zahlung wird derzeit von den Mitarbeitern geprüft"
 
 msgid "The collection was delivered to the user"
 msgstr "Die Sammlung wurde dem Benutzer zugestellt"
+
+msgid "This page shows the quests for the event"
+msgstr "Diese Seite zeigt die Quests für das Ereignis"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Gut gemacht, Sie haben alle Module abgeschlossen!"
@@ -5591,6 +5573,9 @@ msgstr ""
 "Auf dieser Seite finden Sie eine Zusammenfassung der für diese Veranstaltung"
 " aktivierten Rabatte"
 
+msgid "This page shows the traits of the quests for the event"
+msgstr "Diese Seite zeigt die Eigenschaften der Quests für das Ereignis"
+
 msgid "This page summarises the customised texts of the event"
 msgstr ""
 "Auf dieser Seite sind die individuellen Texte der Veranstaltung "
@@ -6250,11 +6235,6 @@ msgstr ""
 msgid "This page shows the settings available for the membership voting"
 msgstr ""
 "Diese Seite zeigt die verfügbaren Einstellungen für die Mitgliederabstimmung"
-
-msgid "This page shows the traits assigned to the characters in the run"
-msgstr ""
-"Diese Seite fasst die Eigenschaften zusammen, die den Charakteren in der "
-"Serie zugeordnet sind"
 
 #, python-format
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"

@@ -260,9 +260,6 @@ msgstr "jours"
 msgid "gift"
 msgstr "cadeau"
 
-msgid "hide"
-msgstr "cacher"
-
 msgid "past"
 msgstr "passé"
 
@@ -423,9 +420,6 @@ msgstr "plus"
 msgid "quick"
 msgstr "rapide"
 
-msgid "title"
-msgstr "titre"
-
 msgid "Absent"
 msgstr "Absent"
 
@@ -581,9 +575,6 @@ msgstr "Envoyer"
 
 msgid "Ticket"
 msgstr "Billet"
-
-msgid "Titolo"
-msgstr "Titolo"
 
 msgid "Tokens"
 msgstr "Jetons"
@@ -951,9 +942,6 @@ msgstr "Y compris"
 msgid "Invoices"
 msgstr "Factures"
 
-msgid "Keywords"
-msgstr "Mots clés"
-
 msgid "Language"
 msgstr "Langue"
 
@@ -1085,9 +1073,6 @@ msgstr "Atelier"
 
 msgid "XP avail"
 msgstr "Px disponible"
-
-msgid "assigned"
-msgstr "alloué"
 
 msgid "discount"
 msgstr "réduction"
@@ -1643,9 +1628,6 @@ msgstr "Envoyer un courriel"
 
 msgid "Shorten URL"
 msgstr "Raccourcir l'URL"
-
-msgid "Show / hide"
-msgstr "Afficher / cacher"
 
 msgid "Show closed"
 msgstr "Fermeture de l'exposition"
@@ -4010,9 +3992,6 @@ msgstr "Somme des paiements reçus par l'intermédiaire de"
 msgid "The setting / genre of the event"
 msgstr "Le cadre / le genre de l'événement"
 
-msgid "This page shows the event quests"
-msgstr "Cette page présente les quêtes de l'événement"
-
 msgid "Total of recorded money outflows"
 msgstr "Total des sorties d'argent enregistrées"
 
@@ -4584,6 +4563,9 @@ msgstr "Paiement en cours d'examen par les services de la Commission"
 
 msgid "The collection was delivered to the user"
 msgstr "La collection a été livrée à l'utilisateur"
+
+msgid "This page shows the quests for the event"
+msgstr "Cette page présente les quêtes de l'événement"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Bravo, vous avez terminé tous les modules !"
@@ -5562,6 +5544,9 @@ msgstr "L'utilisateur a mis à jour son inscription à cet événement"
 msgid "This page shows the discounts activated for this event"
 msgstr "Cette page résume les réductions activées pour cet événement"
 
+msgid "This page shows the traits of the quests for the event"
+msgstr "Cette page présente les caractéristiques des quêtes de l'événement"
+
 msgid "This page summarises the customised texts of the event"
 msgstr "Cette page résume les textes personnalisés de l'événement"
 
@@ -6190,9 +6175,6 @@ msgstr "Cette page permet de copier les paramètres d'un autre événement"
 msgid "This page shows the settings available for the membership voting"
 msgstr ""
 "Cette page présente les paramètres disponibles pour le vote des membres"
-
-msgid "This page shows the traits assigned to the characters in the run"
-msgstr "Cette page résume les traits attribués aux personnages de la série"
 
 #, python-format
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"

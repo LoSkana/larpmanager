@@ -1116,8 +1116,15 @@ class OrgaPreferencesForm(ConfigForm):
 
         # Add writings fields
         shows = _get_writing_elements()
+        mapping = {
+            "character": "character",
+            "faction": "faction",
+            "plot": "plot",
+            "quest": "questbuilder",
+            "trait": "questbuilder",
+        }
         for s in shows:
-            if s[0] not in self.params["features"]:
+            if mapping[s[0]] not in self.params["features"]:
                 continue
             if "writing_fields" not in self.params or s[0] not in self.params["writing_fields"]:
                 continue

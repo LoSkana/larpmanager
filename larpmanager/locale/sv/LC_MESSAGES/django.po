@@ -260,9 +260,6 @@ msgstr "dagar"
 msgid "gift"
 msgstr "gåva"
 
-msgid "hide"
-msgstr "gömma"
-
 msgid "past"
 msgstr "förflutet"
 
@@ -423,9 +420,6 @@ msgstr "mer"
 msgid "quick"
 msgstr "snabb"
 
-msgid "title"
-msgstr "titel"
-
 msgid "Absent"
 msgstr "Frånvarande"
 
@@ -581,9 +575,6 @@ msgstr "Skicka"
 
 msgid "Ticket"
 msgstr "Biljett"
-
-msgid "Titolo"
-msgstr "Titolo"
 
 msgid "Tokens"
 msgstr "Tokens"
@@ -951,9 +942,6 @@ msgstr "Inklusive"
 msgid "Invoices"
 msgstr "Fakturor"
 
-msgid "Keywords"
-msgstr "Nyckelord"
-
 msgid "Language"
 msgstr "Språk"
 
@@ -1085,9 +1073,6 @@ msgstr "Verkstad"
 
 msgid "XP avail"
 msgstr "Px Tillgänglig"
-
-msgid "assigned"
-msgstr "tilldelad"
 
 msgid "discount"
 msgstr "rabatt"
@@ -1643,9 +1628,6 @@ msgstr "Skicka e-post"
 
 msgid "Shorten URL"
 msgstr "Förkorta URL"
-
-msgid "Show / hide"
-msgstr "Visa / dölj"
 
 msgid "Show closed"
 msgstr "Visa stängd"
@@ -4010,9 +3992,6 @@ msgstr "Summan av betalningar som erhållits genom"
 msgid "The setting / genre of the event"
 msgstr "Evenemangets miljö/genre"
 
-msgid "This page shows the event quests"
-msgstr "Den här sidan visar eventuppdragen"
-
 msgid "Total of recorded money outflows"
 msgstr "Totalt antal registrerade penningutflöden"
 
@@ -4583,6 +4562,9 @@ msgstr "Betalningen granskas för närvarande av personalen"
 
 msgid "The collection was delivered to the user"
 msgstr "Kollektionen levererades till användaren"
+
+msgid "This page shows the quests for the event"
+msgstr "Den här sidan visar uppdrag för evenemanget"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Bra jobbat, du har klarat alla moduler!"
@@ -5537,6 +5519,10 @@ msgid "This page shows the discounts activated for this event"
 msgstr ""
 "Denna sida sammanfattar de rabatter som aktiverats för detta evenemang"
 
+msgid "This page shows the traits of the quests for the event"
+msgstr ""
+"Den här sidan visar egenskaperna hos de uppdrag som ingår i evenemanget"
+
 msgid "This page summarises the customised texts of the event"
 msgstr "På den här sidan sammanfattas de anpassade texterna för evenemanget"
 
@@ -6083,10 +6069,6 @@ msgid "This page shows the settings available for the membership voting"
 msgstr ""
 "Denna sida visar de inställningar som är tillgängliga för "
 "medlemsomröstningen"
-
-msgid "This page shows the traits assigned to the characters in the run"
-msgstr ""
-"Denna sida sammanfattar de egenskaper som tilldelats karaktärerna i serien"
 
 #, python-format
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"

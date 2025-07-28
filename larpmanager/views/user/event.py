@@ -428,6 +428,13 @@ def quest(request, s, n, g):
 
     get_element(ctx, g, "quest", Quest, by_number=True)
     ctx["data"] = ctx["quest"].show()
+    ctx["quest_fields"] = get_writing_element_fields(
+        ctx, "quest", QuestionApplicable.QUEST, ctx["quest"].id, only_visible=True
+    )
+
+    for el in ctx["data"].traits:
+        el.fields = get_writing_element_fields(ctx, "trait", QuestionApplicable.TRAIT, el.id, only_visible=True)
+
     return render(request, "larpmanager/event/quest.html", ctx)
 
 

@@ -260,9 +260,6 @@ msgstr "dny"
 msgid "gift"
 msgstr "dárek"
 
-msgid "hide"
-msgstr "skrýt"
-
 msgid "past"
 msgstr "minulost"
 
@@ -423,9 +420,6 @@ msgstr "více"
 msgid "quick"
 msgstr "rychlý"
 
-msgid "title"
-msgstr "název"
-
 msgid "Absent"
 msgstr "Nepřítomný"
 
@@ -581,9 +575,6 @@ msgstr "Odeslat"
 
 msgid "Ticket"
 msgstr "Vstupenka"
-
-msgid "Titolo"
-msgstr "Titolo"
 
 msgid "Tokens"
 msgstr "Žetony"
@@ -951,9 +942,6 @@ msgstr "Včetně"
 msgid "Invoices"
 msgstr "Faktury"
 
-msgid "Keywords"
-msgstr "Klíčová slova"
-
 msgid "Language"
 msgstr "Jazyk"
 
@@ -1085,9 +1073,6 @@ msgstr "Workshop"
 
 msgid "XP avail"
 msgstr "Px k dispozici"
-
-msgid "assigned"
-msgstr "přidělené"
 
 msgid "discount"
 msgstr "sleva"
@@ -1643,9 +1628,6 @@ msgstr "Odeslat e-mail"
 
 msgid "Shorten URL"
 msgstr "Zkrácení adresy URL"
-
-msgid "Show / hide"
-msgstr "Zobrazit / skrýt"
 
 msgid "Show closed"
 msgstr "Zobrazit uzavřeno"
@@ -4010,9 +3992,6 @@ msgstr "Součet plateb přijatých prostřednictvím"
 msgid "The setting / genre of the event"
 msgstr "Prostředí / žánr akce"
 
-msgid "This page shows the event quests"
-msgstr "Tato stránka zobrazuje úkoly události"
-
 msgid "Total of recorded money outflows"
 msgstr "Součet zaznamenaných odlivů peněz"
 
@@ -4581,6 +4560,9 @@ msgstr "Zaměstnanci v současné době přezkoumávají platbu"
 
 msgid "The collection was delivered to the user"
 msgstr "Sbírka byla doručena uživateli"
+
+msgid "This page shows the quests for the event"
+msgstr "Na této stránce jsou uvedeny úkoly pro tuto událost"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Výborně, splnili jste všechny moduly!"
@@ -5533,6 +5515,9 @@ msgstr "Uživatel aktualizoval svou registraci na tuto událost"
 msgid "This page shows the discounts activated for this event"
 msgstr "Tato stránka shrnuje slevy aktivované pro tuto událost"
 
+msgid "This page shows the traits of the quests for the event"
+msgstr "Na této stránce jsou uvedeny vlastnosti úkolů pro tuto událost"
+
 msgid "This page summarises the customised texts of the event"
 msgstr "Tato stránka shrnuje přizpůsobené texty události"
 
@@ -6045,9 +6030,6 @@ msgstr "Tato stránka umožňuje zkopírovat nastavení z jiné události"
 msgid "This page shows the settings available for the membership voting"
 msgstr ""
 "Na této stránce jsou uvedena nastavení dostupná pro hlasování o členství"
-
-msgid "This page shows the traits assigned to the characters in the run"
-msgstr "Tato stránka shrnuje vlastnosti přiřazené postavám v běhu"
 
 #, python-format
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
