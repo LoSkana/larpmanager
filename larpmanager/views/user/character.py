@@ -34,7 +34,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 from PIL import Image
 
-from larpmanager.cache.character import get_character_cache_fields, get_character_fields, get_event_cache_all
+from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
 from larpmanager.forms.character import (
     CharacterForm,
 )
@@ -103,7 +103,7 @@ def character(request, s, n, num):
         get_character_relationships(ctx)
         ctx["intro"] = get_event_text(ctx["event"].id, EventTextType.INTRO)
     else:
-        get_character_fields(ctx, only_visible=True)
+        ctx["char"].update(get_character_element_fields(ctx, ctx["char"]["id"], only_visible=True))
 
     casting_details(ctx, 0)
     if ctx["casting_show_pref"] and not ctx["char"]["player_id"]:
@@ -297,7 +297,9 @@ def character_list(request, s, n):
     char_add_addit(ctx)
     for el in ctx["list"]:
         if "character" in ctx["features"]:
-            el.fields = get_character_cache_fields(ctx, el.id, only_visible=True)
+            res = get_character_element_fields(ctx, el.id, only_visible=True)
+            el.fields = res["fields"]
+            ctx.update(res)
 
     ctx["char_maximum"] = check_character_maximum(ctx["event"], request.user.member)
     ctx["approval"] = ctx["event"].get_config("user_character_approval", False)

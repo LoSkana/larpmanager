@@ -29,8 +29,12 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_reg_provisional
-from larpmanager.cache.character import get_character_fields, get_event_cache_all, get_searcheable_character_fields
+from larpmanager.cache.character import (
+    get_event_cache_all,
+    get_writing_element_fields,
+)
 from larpmanager.cache.feature import get_event_features
+from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.association import AssocTextType
 from larpmanager.models.casting import Quest, QuestType, Trait
@@ -40,6 +44,7 @@ from larpmanager.models.event import (
     Run,
 )
 from larpmanager.models.form import (
+    QuestionApplicable,
     RegistrationOption,
 )
 from larpmanager.models.member import MembershipStatus, get_user_membership
@@ -323,21 +328,22 @@ def search(request, s, n):
 
     if check_gallery_visibility(request, ctx) and ctx["show_character"]:
         get_event_cache_all(ctx)
-        ctx["all"] = json.dumps(ctx["chars"])
-        ctx["facs"] = json.dumps(ctx["factions"])
         ctx["search_text"] = get_event_text(ctx["event"].id, EventTextType.SEARCH)
-        get_character_fields(ctx, only_visible=True)
-        get_searcheable_character_fields(ctx)
+        visible_writing_fields(ctx, QuestionApplicable.CHARACTER)
+        for _num, char in ctx["chars"].items():
+            fields = char.get("fields")
+            if not fields:
+                continue
+            to_delete = [
+                qid for qid in list(fields) if str(qid) not in ctx.get("show_character", []) and "show_all" not in ctx
+            ]
+            for qid in to_delete:
+                del fields[qid]
 
-    for slug in ["all", "facs"]:
-        if slug in ctx:
-            continue
-        ctx[slug] = {}
-
-    for slug in ["questions", "options", "searchable"]:
-        if slug in ctx:
-            ctx[slug] = json.dumps(ctx[slug])
-        ctx[slug] = []
+    for slug in ["chars", "factions", "questions", "options", "searchable"]:
+        if slug not in ctx:
+            ctx[slug] = {}
+        ctx[f"{slug}_json"] = json.dumps(ctx[slug])
 
     return render(request, "larpmanager/event/search.html", ctx)
 
@@ -374,7 +380,6 @@ def check_visibility(ctx, typ, name):
 def factions(request, s, n):
     ctx = get_event_run(request, s, n, status=True)
     check_visibility(ctx, "faction", _("Factions"))
-
     get_event_cache_all(ctx)
     return render(request, "larpmanager/event/factions.html", ctx)
 
@@ -392,6 +397,10 @@ def faction(request, s, n, g):
 
     if "faction" not in ctx or typ == "secret":
         raise Http404("Faction does not exist")
+
+    ctx["fact"] = get_writing_element_fields(
+        ctx, "faction", QuestionApplicable.FACTION, ctx["faction"]["id"], only_visible=True
+    )
 
     return render(request, "larpmanager/event/faction.html", ctx)
 

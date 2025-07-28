@@ -1,6 +1,8 @@
 done = {};
 down_all = false;
 
+spinner = false;
+
 function load_que(index, first) {
     num = regs[index];
 
@@ -27,6 +29,8 @@ function load_question(el) {
         return;
     }
 
+    $( '.lq_{0}'.format(key) ).addClass('select');
+
     request = $.ajax({
         url: url_load_questions,
         data: { num: key },
@@ -34,7 +38,10 @@ function load_question(el) {
         datatype: "json",
     });
 
-    start_spinner();
+    if (!spinner) {
+        start_spinner();
+        spinner = true;
+    }
 
     request.done(function(result) {
 
@@ -53,11 +60,12 @@ function load_question(el) {
 
         el.next().trigger('click');
 
-        $( '.lq_{0}'.format(key) ).addClass('select');
-
          done[num.toString()] = 1;
 
-         stop_spinner();
+         if (spinner) {
+            stop_spinner();
+            spinner = false;
+        }
     });
 
 }

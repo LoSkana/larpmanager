@@ -66,6 +66,10 @@ class QuestionType(models.TextChoices):
             QuestionType.EDITOR,
         }
 
+    @staticmethod
+    def get_def_types():
+        return {QuestionType.NAME, QuestionType.TEASER, QuestionType.SHEET, QuestionType.TITLE}
+
     @classmethod
     def get_max_length(cls):
         return {

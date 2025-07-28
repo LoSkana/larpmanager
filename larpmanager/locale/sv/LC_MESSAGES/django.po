@@ -1707,6 +1707,9 @@ msgstr "Ändra foto"
 msgid "Collaborator"
 msgstr "Bidragsgivare"
 
+msgid "Dependencies"
+msgstr "Beroenden"
+
 msgid "Event status"
 msgstr "Status för händelse"
 
@@ -1829,9 +1832,6 @@ msgstr "Vi väntar på dig"
 
 msgid "Show history"
 msgstr "Historisk utställning"
-
-msgid "Subordinates"
-msgstr "Underordnade"
 
 msgid "Subscription"
 msgstr "Prenumeration"
@@ -3745,9 +3745,6 @@ msgstr "Datum för utfärdande av dokumentet"
 msgid "Indicate the outflow category"
 msgstr "Ange den kategori inom vilken produktionen räknas"
 
-msgid "List inverse relationships of"
-msgstr "Lista över inversa obligationer"
-
 msgid "Manages modules for workshops"
 msgstr "Hanterar moduler för workshops"
 
@@ -4479,6 +4476,9 @@ msgstr "Du gör en donation på"
 msgid "click on the icon to open the tutorial"
 msgstr "klicka på ikonen för att öppna handledningen"
 
+msgid "Character are not visible at the moment"
+msgstr "Tecknen är inte synliga för tillfället"
+
 msgid "Click below to confirm the cancellation"
 msgstr "Klicka nedan för att bekräfta din avbokning"
 
@@ -4740,6 +4740,12 @@ msgstr "Denna sida sammanfattar systemposterna för"
 
 msgid "Warning! Other users are editing this item"
 msgstr "Varning, varning! Andra användare redigerar detta objekt"
+
+msgid "main grouping / affiliation for characters"
+msgstr "huvudgruppering / tillhörighet för karaktärer"
+
+msgid "secondary grouping across primary factions"
+msgstr "sekundär gruppering över primära fraktioner"
 
 msgid "Allow to switch registration between events"
 msgstr "Möjlighet att byta registrering mellan evenemang"
@@ -5331,6 +5337,9 @@ msgstr "Totala deltagaravgifter reducerade genom rabatter"
 msgid "Write to us if you need help in setting things up!"
 msgstr "Hör av dig till oss om du behöver hjälp med att sätta upp saker!"
 
+msgid "hidden faction visible only to assigned characters"
+msgstr "dold fraktion som endast är synlig för tilldelade karaktärer"
+
 msgid "you can still pay the remaining amount if you wish"
 msgstr "du kan fortfarande betala det återstående beloppet om du vill"
 
@@ -5844,9 +5853,6 @@ msgstr ""
 msgid "This page shows the factions (character groups) of the event"
 msgstr ""
 "Denna sida sammanfattar fraktionerna (grupper av karaktärer) i evenemanget"
-
-msgid "This page shows the relationships of the indicated character"
-msgstr "Denna sida sammanfattar länkarna för den angivna karaktären"
 
 msgid "You have already granted data sharing with this organisation"
 msgstr "Du har redan beviljat datadelning med denna organisation"
@@ -9508,15 +9514,6 @@ msgstr ""
 "För att kunna bekräfta ditt medlemskap måste du begära att få registrera dig"
 " som medlem i föreningen. Förfarandet kommer automatiskt att ta dig genom de"
 " nödvändiga stegen"
-
-msgid ""
-"Primary: main grouping / affiliation for characters. Transversal: secondary "
-"grouping across primary factions. Secret: hidden faction visible only to "
-"assigned characters"
-msgstr ""
-"Primär: huvudgruppering/tillhörighet för rollpersoner. Transversal: sekundär"
-" gruppering över primära fraktioner. Hemlig: dold fraktion som endast är "
-"synlig för tilldelade karaktärer"
 
 msgid ""
 "By clicking the button below, you confirm that you consent to the sharing of"

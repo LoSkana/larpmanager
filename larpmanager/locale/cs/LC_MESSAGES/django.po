@@ -1707,6 +1707,9 @@ msgstr "Změna fotografie"
 msgid "Collaborator"
 msgstr "Přispěvatel"
 
+msgid "Dependencies"
+msgstr "Závislosti"
+
 msgid "Event status"
 msgstr "Stav události"
 
@@ -1829,9 +1832,6 @@ msgstr "Čekáme na vás"
 
 msgid "Show history"
 msgstr "Historická výstava"
-
-msgid "Subordinates"
-msgstr "Podřízení"
 
 msgid "Subscription"
 msgstr "Předplatné"
@@ -3745,9 +3745,6 @@ msgstr "Datum vydání dokumentu"
 msgid "Indicate the outflow category"
 msgstr "Uveďte kategorii, do které se výstup započítává"
 
-msgid "List inverse relationships of"
-msgstr "Vyjmenujte inverzní vztahy"
-
 msgid "Manages modules for workshops"
 msgstr "spravuje moduly pro workshopy"
 
@@ -4477,6 +4474,9 @@ msgstr "Přispíváte částkou"
 msgid "click on the icon to open the tutorial"
 msgstr "kliknutím na ikonu otevřete výukový program"
 
+msgid "Character are not visible at the moment"
+msgstr "Znaky nejsou v tuto chvíli viditelné"
+
 msgid "Click below to confirm the cancellation"
 msgstr "Kliknutím níže potvrdíte zrušení rezervace"
 
@@ -4738,6 +4738,12 @@ msgstr "Na této stránce jsou shrnuty systémové záznamy o"
 
 msgid "Warning! Other users are editing this item"
 msgstr "Pozor! Tuto položku upravují další uživatelé"
+
+msgid "main grouping / affiliation for characters"
+msgstr "hlavní seskupení / příslušnost postav"
+
+msgid "secondary grouping across primary factions"
+msgstr "sekundární seskupení napříč primárními frakcemi"
 
 msgid "Allow to switch registration between events"
 msgstr "Umožnit přepínání registrace mezi událostmi"
@@ -5326,6 +5332,9 @@ msgstr "Celkové účastnické poplatky snížené díky slevám"
 msgid "Write to us if you need help in setting things up!"
 msgstr "Pokud potřebujete pomoc s nastavením, napište nám!"
 
+msgid "hidden faction visible only to assigned characters"
+msgstr "skrytá frakce viditelná pouze pro přiřazené postavy"
+
 msgid "you can still pay the remaining amount if you wish"
 msgstr "pokud si přejete, můžete zaplatit zbývající částku"
 
@@ -5825,9 +5834,6 @@ msgstr ""
 
 msgid "This page shows the factions (character groups) of the event"
 msgstr "Tato stránka shrnuje frakce (skupiny postav) této události"
-
-msgid "This page shows the relationships of the indicated character"
-msgstr "Tato stránka shrnuje odkazy uvedeného charakteru"
 
 msgid "You have already granted data sharing with this organisation"
 msgstr "Sdílení dat s touto organizací jste již povolili"
@@ -9322,15 +9328,6 @@ msgid ""
 msgstr ""
 "Pro potvrzení členství je nutné požádat o registraci jako člen asociace. "
 "Postup vás automaticky provede požadovanými kroky"
-
-msgid ""
-"Primary: main grouping / affiliation for characters. Transversal: secondary "
-"grouping across primary factions. Secret: hidden faction visible only to "
-"assigned characters"
-msgstr ""
-"Primární: hlavní skupina / příslušnost postav. Průřezové: sekundární "
-"seskupení napříč primárními frakcemi. Tajná: skrytá frakce viditelná pouze "
-"pro přiřazené postavy"
 
 msgid ""
 "By clicking the button below, you confirm that you consent to the sharing of"
