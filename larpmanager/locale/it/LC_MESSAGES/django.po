@@ -1117,7 +1117,7 @@ msgid "Approvals"
 msgstr "Approvazioni"
 
 msgid "Auto save"
-msgstr "Domanda sottomessa"
+msgstr "Auto salvataggio"
 
 msgid "Available"
 msgstr "Disponibili"
@@ -2319,7 +2319,7 @@ msgid "Progress status"
 msgstr "Stato di avanzamento"
 
 msgid "Question saved!"
-msgstr "Domanda sottomessa!"
+msgstr "Domanda salvata!"
 
 msgid "Replacing names"
 msgstr "Sostituzione nomi"
