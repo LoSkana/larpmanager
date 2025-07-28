@@ -27,7 +27,8 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
                     <td>{{ el.cost }}</td>

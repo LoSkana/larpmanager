@@ -107,6 +107,9 @@ msgstr "Dieet"
 msgid "Done"
 msgstr "Turnarounds"
 
+msgid "Edit"
+msgstr "Bewerk"
+
 msgid "Form"
 msgstr "Formulier"
 
@@ -238,6 +241,9 @@ msgstr "Gebruikt"
 
 msgid "User"
 msgstr "Gebruiker"
+
+msgid "View"
+msgstr "Bekijk"
 
 msgid "Vote"
 msgstr "Stem"
@@ -753,9 +759,6 @@ msgstr "Profiel"
 msgid "Pronoun"
 msgstr "Voornaamwoord"
 
-msgid "Reading"
-msgstr "Lezen"
-
 msgid "Receipt"
 msgstr "Ontvangstbewijs"
 
@@ -1115,9 +1118,6 @@ msgstr "Toevoegingen"
 
 msgid "Approvals"
 msgstr "Goedkeuringen"
-
-msgid "Auto save"
-msgstr "Onderdanige vraag"
 
 msgid "Available"
 msgstr "Beschikbaar"
@@ -2570,6 +2570,9 @@ msgstr "Conversie ticket"
 msgid "Credit assignment"
 msgstr "Credit opdracht"
 
+msgid "Disable Auto save"
+msgstr "Automatisch opslaan uitschakelen"
+
 msgid "Download document"
 msgstr "Document downloaden"
 
@@ -3349,6 +3352,9 @@ msgstr "De inschrijving is nog niet geopend!"
 
 msgid "Reminder membership fee"
 msgstr "Herinnering lidmaatschapsgeld"
+
+msgid "Show available factions"
+msgstr "Beschikbare facties tonen"
 
 msgid "Thanks for your support"
 msgstr "Bedankt voor je steun"
@@ -5003,8 +5009,8 @@ msgstr "Op deze pagina kun je een korting toevoegen of bewerken"
 msgid "This page allows you to add or edit an invoice"
 msgstr "Op deze pagina kun je een factuur toevoegen of bewerken"
 
-msgid "This page allows you to fully view a character"
-msgstr "Op deze pagina kun je een personage volledig bekijken"
+msgid "This page allows you to view a writing element"
+msgstr "Met deze pagina kun je een schrijfelement bekijken"
 
 msgid "This page shows the email lists of subscribers"
 msgstr "Deze pagina toont de e-maillijsten van abonnees"
@@ -7253,6 +7259,13 @@ msgstr ""
 "registratiekosten"
 
 msgid ""
+"If checked, automatic saving during editing will be disable for writing "
+"elements"
+msgstr ""
+"Als deze optie is ingeschakeld, wordt automatisch opslaan tijdens het "
+"bewerken uitgeschakeld voor schrijfelementen"
+
+msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "
 "event"
 msgstr ""
@@ -8424,13 +8437,6 @@ msgid ""
 msgstr ""
 "Maakt een 'campagne'-achtige opzet mogelijk waarbij meerdere evenementen "
 "dezelfde set personages en facties delen"
-
-msgid ""
-"If checked, writing elements will be auto-saved during editing (only one "
-"form can be open at a time)"
-msgstr ""
-"Als deze optie is aangevinkt, worden schrijfelementen automatisch opgeslagen"
-" tijdens het bewerken (er kan maar één formulier tegelijk geopend zijn)"
 
 msgid ""
 "Optional text to be included in the email sent to the player to notify them "

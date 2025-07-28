@@ -107,6 +107,9 @@ msgstr "Dieta"
 msgid "Done"
 msgstr "Gotowe"
 
+msgid "Edit"
+msgstr "Edytuj"
+
 msgid "Form"
 msgstr "Formularz"
 
@@ -238,6 +241,9 @@ msgstr "Używany"
 
 msgid "User"
 msgstr "Użytkownik"
+
+msgid "View"
+msgstr "Widok"
 
 msgid "Vote"
 msgstr "Głosowanie"
@@ -753,9 +759,6 @@ msgstr "Profil"
 msgid "Pronoun"
 msgstr "Zaimek"
 
-msgid "Reading"
-msgstr "Czytanie"
-
 msgid "Receipt"
 msgstr "Pokwitowanie"
 
@@ -1115,9 +1118,6 @@ msgstr "Dodatki"
 
 msgid "Approvals"
 msgstr "Zatwierdzenia"
-
-msgid "Auto save"
-msgstr "Pytanie zapisane"
 
 msgid "Available"
 msgstr "Dostępne"
@@ -2570,6 +2570,9 @@ msgstr "Bilet konwersji"
 msgid "Credit assignment"
 msgstr "Przypisanie kredytu"
 
+msgid "Disable Auto save"
+msgstr "Wyłącz automatyczne zapisywanie"
+
 msgid "Download document"
 msgstr "Pobierz dokument"
 
@@ -3349,6 +3352,9 @@ msgstr "Rejestracja nie jest otwarta!"
 
 msgid "Reminder membership fee"
 msgstr "Przypomnienie o składce członkowskiej"
+
+msgid "Show available factions"
+msgstr "Pokaż dostępne frakcje"
 
 msgid "Thanks for your support"
 msgstr "Dziękujemy za wsparcie"
@@ -4997,8 +5003,8 @@ msgstr "Ta strona umożliwia dodanie lub edycję rabatu"
 msgid "This page allows you to add or edit an invoice"
 msgstr "Ta strona umożliwia dodanie lub edycję faktury"
 
-msgid "This page allows you to fully view a character"
-msgstr "Ta strona umożliwia pełny podgląd postaci"
+msgid "This page allows you to view a writing element"
+msgstr "Ta strona umożliwia wyświetlenie elementu zapisu"
 
 msgid "This page shows the email lists of subscribers"
 msgstr "Na tej stronie wyświetlane są listy e-mail subskrybentów"
@@ -7136,6 +7142,13 @@ msgstr ""
 "rejestracyjnej"
 
 msgid ""
+"If checked, automatic saving during editing will be disable for writing "
+"elements"
+msgstr ""
+"Jeśli zaznaczone, automatyczne zapisywanie podczas edycji będzie wyłączone "
+"dla elementów zapisu"
+
+msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "
 "event"
 msgstr ""
@@ -8299,13 +8312,6 @@ msgid ""
 msgstr ""
 "Umożliwia konfigurację w stylu \"kampanii\", w której wiele wydarzeń "
 "współdzieli ten sam zestaw postaci i frakcji"
-
-msgid ""
-"If checked, writing elements will be auto-saved during editing (only one "
-"form can be open at a time)"
-msgstr ""
-"Jeśli zaznaczone, elementy zapisu będą automatycznie zapisywane podczas "
-"edycji (tylko jeden formularz może być otwarty w tym samym czasie)"
 
 msgid ""
 "Optional text to be included in the email sent to the player to notify them "

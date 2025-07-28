@@ -29,7 +29,7 @@
                 $('#id_visibility_tr').fadeOut(speed);
             }
 
-            if (["name", "teaser", "text"].includes(selectedValue)) {
+            if (["name", "teaser", "text", "faction"].includes(selectedValue)) {
                 $('#id_visibility_tr').fadeOut(speed);
             } else {
                 $('#id_visibility_tr').fadeIn(speed);

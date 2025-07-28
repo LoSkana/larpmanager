@@ -277,6 +277,31 @@ $(document).ready(function() {
         });
     }
 
+    $('a[qtip]').each(function() {
+        $(this).qtip({
+            content: {
+                text: $(this).attr('qtip')
+            },
+            style: {
+                classes: 'qtip-dark qtip-rounded qtip-shadow'
+            },
+            hide: {
+                effect: function(offset) {
+                    $(this).fadeOut(500);
+                }
+            },
+            show: {
+                effect: function(offset) {
+                    $(this).fadeIn(500);
+                }
+            },
+            position: {
+                my: 'top center',
+                at: 'bottom center'
+            }
+        });
+    });
+
     table_csv();
 
     resize_fields();

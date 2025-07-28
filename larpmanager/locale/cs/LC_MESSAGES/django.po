@@ -107,6 +107,9 @@ msgstr "Dieta"
 msgid "Done"
 msgstr "Obraty"
 
+msgid "Edit"
+msgstr "Upravit"
+
 msgid "Form"
 msgstr "Formulář"
 
@@ -238,6 +241,9 @@ msgstr "Použité"
 
 msgid "User"
 msgstr "Uživatel"
+
+msgid "View"
+msgstr "Zobrazit"
 
 msgid "Vote"
 msgstr "Hlasujte na"
@@ -753,9 +759,6 @@ msgstr "Profil"
 msgid "Pronoun"
 msgstr "Zájmena"
 
-msgid "Reading"
-msgstr "Čtení"
-
 msgid "Receipt"
 msgstr "Příjem"
 
@@ -1115,9 +1118,6 @@ msgstr "Dodatky"
 
 msgid "Approvals"
 msgstr "Schválení"
-
-msgid "Auto save"
-msgstr "Submisivní otázka"
 
 msgid "Available"
 msgstr "Dostupné na"
@@ -2570,6 +2570,9 @@ msgstr "Konverzní lístek"
 msgid "Credit assignment"
 msgstr "Přiřazení zápočtu"
 
+msgid "Disable Auto save"
+msgstr "Zakázat automatické ukládání"
+
 msgid "Download document"
 msgstr "Stáhnout dokument"
 
@@ -3349,6 +3352,9 @@ msgstr "Registrace ještě není otevřena!"
 
 msgid "Reminder membership fee"
 msgstr "Připomenutí členského poplatku"
+
+msgid "Show available factions"
+msgstr "Zobrazit dostupné frakce"
 
 msgid "Thanks for your support"
 msgstr "Děkujeme vám za podporu"
@@ -4997,8 +5003,8 @@ msgstr "Na této stránce můžete přidat nebo upravit slevu"
 msgid "This page allows you to add or edit an invoice"
 msgstr "Na této stránce můžete přidat nebo upravit fakturu"
 
-msgid "This page allows you to fully view a character"
-msgstr "Na této stránce si můžete plně prohlédnout postavu"
+msgid "This page allows you to view a writing element"
+msgstr "Tato stránka umožňuje zobrazit prvek psaní"
 
 msgid "This page shows the email lists of subscribers"
 msgstr "Tato stránka zobrazuje seznamy e-mailových odběratelů"
@@ -7017,6 +7023,13 @@ msgstr ""
 "Chcete uživatelům umožnit přidat k registračnímu poplatku dobrovolný dar"
 
 msgid ""
+"If checked, automatic saving during editing will be disable for writing "
+"elements"
+msgstr ""
+"Pokud je zaškrtnuto, bude automatické ukládání během úprav zakázáno u prvků "
+"pro zápis"
+
+msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "
 "event"
 msgstr ""
@@ -8136,13 +8149,6 @@ msgid ""
 msgstr ""
 "Umožňuje nastavení ve stylu \"kampaně\", kdy více událostí sdílí stejnou "
 "sadu postav a frakcí"
-
-msgid ""
-"If checked, writing elements will be auto-saved during editing (only one "
-"form can be open at a time)"
-msgstr ""
-"Pokud je zaškrtnuto, budou se prvky pro psaní během editace automaticky "
-"ukládat (současně může být otevřen pouze jeden formulář)"
 
 msgid ""
 "Optional text to be included in the email sent to the player to notify them "

@@ -21,7 +21,8 @@
         {% for el in rel %}
             <tr>
                 <td>
-                    <a href="{% url 'character_relationships_edit' run.event.slug run.number char.number el.number %}"><i class="fas fa-edit"></i></a>
+                    <a href="{% url 'character_relationships_edit' run.event.slug run.number char.number el.number %}"
+                       qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                 </td>
                 <td>
                     {% if el.player_id > 0 %}

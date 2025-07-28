@@ -27,7 +27,7 @@
             {% for el in s %}
                 <tr class="member">
                     <td>
-                        <a href="{% url 'exe_member' el.0 %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'exe_member' el.0 %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.1 | title }}</td>
                     <td>{{ el.2 | title }}</td>

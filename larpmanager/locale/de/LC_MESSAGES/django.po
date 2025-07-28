@@ -107,6 +107,9 @@ msgstr "Diät"
 msgid "Done"
 msgstr "Turnarounds"
 
+msgid "Edit"
+msgstr "bearbeiten"
+
 msgid "Form"
 msgstr "Formular"
 
@@ -238,6 +241,9 @@ msgstr "Gebraucht"
 
 msgid "User"
 msgstr "Benutzer"
+
+msgid "View"
+msgstr "Siehe"
 
 msgid "Vote"
 msgstr "Wählen Sie"
@@ -753,9 +759,6 @@ msgstr "Profil"
 msgid "Pronoun"
 msgstr "Pronomen"
 
-msgid "Reading"
-msgstr "Lesen"
-
 msgid "Receipt"
 msgstr "Quittung"
 
@@ -1115,9 +1118,6 @@ msgstr "Ergänzungen"
 
 msgid "Approvals"
 msgstr "Zulassungen"
-
-msgid "Auto save"
-msgstr "Unterwürfige Frage"
 
 msgid "Available"
 msgstr "Verfügbar"
@@ -2570,6 +2570,9 @@ msgstr "Umrechnungsticket"
 msgid "Credit assignment"
 msgstr "Kreditvergabe"
 
+msgid "Disable Auto save"
+msgstr "Automatisches Speichern deaktivieren"
+
 msgid "Download document"
 msgstr "Dokument herunterladen"
 
@@ -3349,6 +3352,9 @@ msgstr "Die Anmeldung ist noch nicht geöffnet!"
 
 msgid "Reminder membership fee"
 msgstr "Erinnerung an den Mitgliedsbeitrag"
+
+msgid "Show available factions"
+msgstr "Verfügbare Fraktionen anzeigen"
 
 msgid "Thanks for your support"
 msgstr "Vielen Dank für Ihre Unterstützung"
@@ -5013,8 +5019,8 @@ msgstr "Auf dieser Seite können Sie einen Rabatt hinzufügen oder bearbeiten"
 msgid "This page allows you to add or edit an invoice"
 msgstr "Auf dieser Seite können Sie eine Rechnung hinzufügen oder bearbeiten"
 
-msgid "This page allows you to fully view a character"
-msgstr "Auf dieser Seite können Sie ein Zeichen vollständig anzeigen"
+msgid "This page allows you to view a writing element"
+msgstr "Auf dieser Seite können Sie ein Schriftelement anzeigen"
 
 msgid "This page shows the email lists of subscribers"
 msgstr "Diese Seite zeigt die E-Mail-Listen der Abonnenten"
@@ -7418,6 +7424,13 @@ msgstr ""
 "Registrierungsgebühr hinzuzufügen"
 
 msgid ""
+"If checked, automatic saving during editing will be disable for writing "
+"elements"
+msgstr ""
+"Wenn diese Option aktiviert ist, wird das automatische Speichern während der"
+" Bearbeitung für schreibende Elemente deaktiviert"
+
+msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "
 "event"
 msgstr ""
@@ -8595,14 +8608,6 @@ msgid ""
 msgstr ""
 "Ermöglicht eine \"kampagnenartige\" Einrichtung, bei der mehrere Ereignisse "
 "dieselbe Gruppe von Charakteren und Fraktionen nutzen"
-
-msgid ""
-"If checked, writing elements will be auto-saved during editing (only one "
-"form can be open at a time)"
-msgstr ""
-"Wenn diese Option aktiviert ist, werden die Schriftelemente während der "
-"Bearbeitung automatisch gespeichert (es kann nur ein Formular gleichzeitig "
-"geöffnet sein)"
 
 msgid ""
 "Optional text to be included in the email sent to the player to notify them "

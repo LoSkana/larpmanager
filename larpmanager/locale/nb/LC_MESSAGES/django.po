@@ -107,6 +107,9 @@ msgstr "Kosthold"
 msgid "Done"
 msgstr "Snuoperasjoner"
 
+msgid "Edit"
+msgstr "Rediger"
+
 msgid "Form"
 msgstr "Skjema"
 
@@ -238,6 +241,9 @@ msgstr "Brukt"
 
 msgid "User"
 msgstr "Bruker"
+
+msgid "View"
+msgstr "Utsikt"
 
 msgid "Vote"
 msgstr "Stemme"
@@ -753,9 +759,6 @@ msgstr "Profil"
 msgid "Pronoun"
 msgstr "Pronomen"
 
-msgid "Reading"
-msgstr "Lesing"
-
 msgid "Receipt"
 msgstr "Kvittering"
 
@@ -1115,9 +1118,6 @@ msgstr "Tillegg"
 
 msgid "Approvals"
 msgstr "Godkjenninger"
-
-msgid "Auto save"
-msgstr "Underdanig spørsmål"
 
 msgid "Available"
 msgstr "Tilgjengelig"
@@ -2570,6 +2570,9 @@ msgstr "Konverteringsbillett"
 msgid "Credit assignment"
 msgstr "Tildeling av kreditt"
 
+msgid "Disable Auto save"
+msgstr "Deaktiver automatisk lagring"
+
 msgid "Download document"
 msgstr "Last ned dokumentet"
 
@@ -3349,6 +3352,9 @@ msgstr "Registreringen er ennå ikke åpnet!"
 
 msgid "Reminder membership fee"
 msgstr "Påminnelse om medlemsavgift"
+
+msgid "Show available factions"
+msgstr "Vis tilgjengelige fraksjoner"
 
 msgid "Thanks for your support"
 msgstr "Takk for støtten"
@@ -5000,8 +5006,8 @@ msgstr "På denne siden kan du legge til eller redigere en rabatt"
 msgid "This page allows you to add or edit an invoice"
 msgstr "På denne siden kan du legge til eller redigere en faktura"
 
-msgid "This page allows you to fully view a character"
-msgstr "På denne siden kan du se en karakter i sin helhet"
+msgid "This page allows you to view a writing element"
+msgstr "På denne siden kan du se et skriveelement"
 
 msgid "This page shows the email lists of subscribers"
 msgstr "Denne siden viser e-postlistene til abonnentene"
@@ -7120,6 +7126,13 @@ msgstr ""
 "registreringsavgiften"
 
 msgid ""
+"If checked, automatic saving during editing will be disable for writing "
+"elements"
+msgstr ""
+"Hvis avkrysset, vil automatisk lagring under redigering deaktiveres for "
+"skriving av elementer"
+
+msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "
 "event"
 msgstr ""
@@ -8274,13 +8287,6 @@ msgid ""
 msgstr ""
 "Muliggjør et \"kampanje\"-oppsett der flere arrangementer deler samme sett "
 "med figurer og fraksjoner"
-
-msgid ""
-"If checked, writing elements will be auto-saved during editing (only one "
-"form can be open at a time)"
-msgstr ""
-"Hvis avkrysset, lagres skriveelementer automatisk under redigering (bare ett"
-" skjema kan være åpent om gangen)"
 
 msgid ""
 "Optional text to be included in the email sent to the player to notify them "

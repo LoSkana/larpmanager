@@ -52,12 +52,15 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_traits_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i> </a>
+                        <a href="{% url 'orga_traits_edit' run.event.slug run.number el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i> </a>
                     </td>
                     <td>{{ el }}</td>
                     <td>
-                        <a href="{% url 'orga_traits_view' run.event.slug run.number el.id %}">{% trans "Reading" %}</a>
-                        <a href="{% url 'orga_traits_versions' run.event.slug run.number el.id %}">{% trans "Versions" %}</a>
+                        <a href="{% url 'orga_traits_view' run.event.slug run.number el.id %}"
+                           qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
+                        <a href="{% url 'orga_traits_versions' run.event.slug run.number el.id %}"
+                           qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
                     </td>
                     {% if features.progress %}
                         <td>{% include "elements/show_progress.html" with el=el %}</td>

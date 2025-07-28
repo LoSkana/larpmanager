@@ -27,7 +27,8 @@
                 <tr id="{{ el.id }}"
                     {% if el.status == 'p' %}class="hide done"{% endif %}>
                     <td>
-                        <a href="{% url 'exe_collections_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'exe_collections_edit' el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.request }}</td>
                     <td>{{ el.member }}</td>

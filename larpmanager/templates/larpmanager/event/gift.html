@@ -21,7 +21,8 @@
         {% for reg in list %}
             <tr>
                 <td>
-                    <a href="{% url 'gift_edit' run.event.slug run.number reg.id %}"><i class="fas fa-edit"></i></a>
+                    <a href="{% url 'gift_edit' run.event.slug run.number reg.id %}"
+                       qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                 </td>
                 <td>
                     {% if reg.ticket %}

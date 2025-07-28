@@ -155,14 +155,14 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         queryset = self.params["run"].event.get_elements(Faction).filter(selectable=True)
 
-        if queryset.count() == 0:
-            return
-
         self.fields["factions_list"] = forms.ModelMultipleChoiceField(
             queryset=queryset,
             widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains"]),
             required=False,
+            label=_("Factions"),
         )
+
+        self.show_available_factions = _("Show available factions")
 
         self.initial["factions_list"] = []
         if not self.instance.pk:
@@ -206,7 +206,7 @@ class OrgaCharacterForm(CharacterForm):
 
     load_templates = ["char"]
 
-    load_js = ["characters-choices", "characters-relationships"]
+    load_js = ["characters-choices", "characters-relationships", "factions-choices"]
 
     load_form = ["characters-relationships"]
 
@@ -327,26 +327,19 @@ class OrgaCharacterForm(CharacterForm):
         queryset = self.params["run"].event.get_elements(Faction)
 
         self.fields["factions_list"] = forms.ModelMultipleChoiceField(
-            queryset=queryset,
-            widget=FactionS2WidgetMulti(),
-            required=False,
+            queryset=queryset, widget=FactionS2WidgetMulti(), required=False, label=_("Factions")
         )
         self.fields["factions_list"].widget.set_event(self.params["event"])
+
+        self.show_available_factions = _("Show available factions")
 
         if not self.instance.pk:
             return
 
-        # FACTIONS SHOW TEXT
-        fact_tx = ""
+        # Initial factions values
         self.initial["factions_list"] = []
         for fc in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
             self.initial["factions_list"].append(fc[0])
-            if fact_tx:
-                fact_tx += '</div><div class="plot">'
-            fact_tx += f"<h4>{fc[2]}</h4>"
-            if fc[3]:
-                fact_tx += "<hr />" + fc[3]
-        self.show_link.append("id_factions_list")
 
     def _save_relationships(self, instance):
         if "relationships" not in self.params["features"]:

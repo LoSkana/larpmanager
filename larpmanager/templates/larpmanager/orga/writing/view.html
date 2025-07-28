@@ -1,26 +1,42 @@
 {% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
-    {{ name }} - {% trans "Show" %}
+    {{ name }} - {% trans "View" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page allows you to fully view a character" %}
+    {% trans "This page allows you to view a writing element" %}
 {% endblock info %}
 {% block content %}
-    <h2 class="c">{{ name }}</h2>
-    {% if nm == 'character' or nm == 'plot' or nm == 'faction' %}
-        <div class="plot">
-            {{ el.teaser | safe }}
-            <hr />
-            {% show_char el.data run 1 %}
-        </div>
-    {% elif nm == 'trait' %}
-        <div class="plot">
-            {{ el.teaser | safe }}
-            <hr />
+    <div class="sheet">
+        <h2 class="c">{{ name }}</h2>
+        {% if nm == "character" %}
+            {% include "elements/sheet/fields.html" with char=sheet_char %}
+            {% include "elements/sheet/teaser.html" %}
+            {% include "elements/sheet/texts.html" with char=sheet_char %}
+            {% include "elements/sheet/plots.html" %}
+            {% include "elements/sheet/quests.html" %}
+            {% include "elements/sheet/relationships.html" %}
+        {% elif nm == "plot" %}
+            {% include "elements/sheet/fields.html" with char=element %}
+            {% include "elements/sheet/teaser.html" %}
+            {% include "elements/sheet/texts.html" with char=element %}
+            {% for pl in sheet_plots %}
+                <h2 class="c">{{ pl.character.name }}</h2>
+                {% if pl.text %}
+                    <div class="plot">{% show_char pl.text run 1 %}</div>
+                    <hr class="clear" />
+                {% endif %}
+            {% endfor %}
+        {% elif nm == "trait" %}
             {% show_trait el.text run 1 %}
-        </div>
-    {% elif nm == 'plot' or nm == 'prologue' %}
-        <div class="plot">{% show_char el.data run 1 %}</div>
-    {% endif %}
+        {% elif element %}
+            {% include "elements/sheet/fields.html" with char=element %}
+            {% include "elements/sheet/texts.html" with char=element %}
+        {% else %}
+            <h2 class="c">{% trans "Presentation" %}</h2>
+            <div class="plot">{{ el.teaser | safe }}</div>
+            <h2 class="c">{% trans "Text" %}</h2>
+            <div class="plot">{% show_char el.data run 1 %}</div>
+        {% endif %}
+    </div>
 {% endblock content %}

@@ -30,7 +30,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_event_cache_all
+from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
 from larpmanager.cache.text_fields import get_cache_text_field
 from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.access import get_event_staffers
@@ -49,6 +49,7 @@ from larpmanager.models.writing import (
     replace_chars_all,
 )
 from larpmanager.templatetags.show_tags import show_char, show_trait
+from larpmanager.utils.character import get_character_sheet
 from larpmanager.utils.common import check_field, compute_diff
 from larpmanager.utils.download import download
 from larpmanager.utils.edit import _setup_char_finder
@@ -272,7 +273,7 @@ def _prepare_writing_list(ctx, request):
             lst = [f"q_{el}" for name, el in ctx["writing_fields"][model_name]["ids"].items()]
             ctx["default_fields"] = json.dumps(lst)
 
-    ctx["auto_save"] = ctx["event"].get_config("writing_auto_save")
+    ctx["auto_save"] = not ctx["event"].get_config("writing_disable_auto", False)
 
 
 def writing_list_plot(ctx):
@@ -335,6 +336,21 @@ def writing_view(request, ctx, nm):
     ctx["el"].data = ctx["el"].show_complete()
     ctx["nm"] = nm
     get_event_cache_all(ctx)
+
+    if nm == "character":
+        ctx["char"] = ctx["chars"][ctx["el"].number]
+        ctx["character"] = ctx["el"]
+        get_character_sheet(ctx)
+    else:
+        applicable = QuestionApplicable.get_applicable(nm)
+        if applicable:
+            ctx["element"] = get_writing_element_fields(ctx, "faction", applicable, ctx["el"].id, only_visible=False)
+
+    if nm == "plot":
+        ctx["sheet_plots"] = (
+            PlotCharacterRel.objects.filter(plot=ctx["el"]).order_by("character__number").select_related("character")
+        )
+
     return render(request, "larpmanager/orga/writing/view.html", ctx)
 
 
