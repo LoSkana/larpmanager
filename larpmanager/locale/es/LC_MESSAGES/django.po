@@ -1116,6 +1116,9 @@ msgstr "Adiciones"
 msgid "Approvals"
 msgstr "Homologaciones"
 
+msgid "Auto save"
+msgstr "¡Pregunta guardada"
+
 msgid "Available"
 msgstr "Disponible"
 
@@ -1823,9 +1826,6 @@ msgstr "Pedir hora"
 
 msgid "Rotate right"
 msgstr "Rotar a la derecha"
-
-msgid "Safe editing"
-msgstr "Edición segura"
 
 msgid "See you soon"
 msgstr "¡Nos vemos pronto"
@@ -8309,13 +8309,6 @@ msgstr ""
 "funciones con permisos específicos"
 
 msgid ""
-"If checked, prevents multiple users from editing the same item at the same "
-"time to avoid conflicts"
-msgstr ""
-"Si está marcada, impide que varios usuarios editen el mismo elemento al "
-"mismo tiempo para evitar conflictos"
-
-msgid ""
 "We only ask for a moment of your time to check the documents you have "
 "uploaded, it won't take long"
 msgstr ""
@@ -8398,6 +8391,13 @@ msgid ""
 msgstr ""
 "Permite una configuración de tipo \"campaña\" en la que varios eventos "
 "comparten el mismo conjunto de personajes y facciones"
+
+msgid ""
+"If checked, writing elements will be auto-saved during editing (only one "
+"form can be open at a time)"
+msgstr ""
+"Si está marcada, los elementos de escritura se guardarán automáticamente "
+"durante la edición (sólo se puede abrir un formulario a la vez)"
 
 msgid ""
 "Optional text to be included in the email sent to the player to notify them "

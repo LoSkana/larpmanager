@@ -296,6 +296,7 @@ def writing_edit(request, ctx, form_type, nm, tp, redr=None):
     ctx["nm"] = nm
     ctx["form"] = form
     ctx["add_another"] = True
+    ctx["auto_save"] = ctx["event"].get_config("writing_auto_save")
 
     _setup_char_finder(ctx)
 
@@ -355,13 +356,12 @@ def writing_edit_save_ajax(form, request, ctx):
     if eid <= 0:
         return res
 
-    if "working_ticket" in ctx["features"]:
-        tp = request.POST["type"]
-        token = request.POST["token"]
-        msg = writing_edit_working_ticket(request, tp, eid, token)
-        if msg:
-            res["warn"] = msg
-            return JsonResponse(res)
+    tp = request.POST["type"]
+    token = request.POST["token"]
+    msg = writing_edit_working_ticket(request, tp, eid, token)
+    if msg:
+        res["warn"] = msg
+        return JsonResponse(res)
 
     p = form.save(commit=False)
     p.temp = True

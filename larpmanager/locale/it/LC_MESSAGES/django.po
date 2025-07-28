@@ -1116,6 +1116,9 @@ msgstr "Aggiuntivi"
 msgid "Approvals"
 msgstr "Approvazioni"
 
+msgid "Auto save"
+msgstr "Auto salvataggio"
+
 msgid "Available"
 msgstr "Disponibili"
 
@@ -1824,9 +1827,6 @@ msgstr "Ora richiesta"
 msgid "Rotate right"
 msgstr "Ruota destra"
 
-msgid "Safe editing"
-msgstr "Editing sicuro"
-
 msgid "See you soon"
 msgstr "Ti aspettiamo"
 
@@ -2319,7 +2319,7 @@ msgid "Progress status"
 msgstr "Stato di avanzamento"
 
 msgid "Question saved!"
-msgstr "Domanda sottomessa!"
+msgstr "Domanda salvata!"
 
 msgid "Replacing names"
 msgstr "Sostituzione nomi"
@@ -8361,13 +8361,6 @@ msgstr ""
 "definisci ruoli con autorizzazioni specifiche"
 
 msgid ""
-"If checked, prevents multiple users from editing the same item at the same "
-"time to avoid conflicts"
-msgstr ""
-"Se selezionata, impedisce a più utenti di modificare lo stesso elemento "
-"contemporaneamente, per evitare conflitti"
-
-msgid ""
 "We only ask for a moment of your time to check the documents you have "
 "uploaded, it won't take long"
 msgstr ""
@@ -8450,6 +8443,13 @@ msgid ""
 msgstr ""
 "Consente un'impostazione in stile \"campagna\" in cui più eventi condividono"
 " lo stesso insieme di personaggi e fazioni"
+
+msgid ""
+"If checked, writing elements will be auto-saved during editing (only one "
+"form can be open at a time)"
+msgstr ""
+"Se è selezionata, gli elementi di scrittura saranno salvati automaticamente "
+"durante la modifica (può essere aperto solo un modulo alla volta)"
 
 msgid ""
 "Optional text to be included in the email sent to the player to notify them "

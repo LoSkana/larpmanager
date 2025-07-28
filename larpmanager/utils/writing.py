@@ -272,6 +272,8 @@ def _prepare_writing_list(ctx, request):
             lst = [f"q_{el}" for name, el in ctx["writing_fields"][model_name]["ids"].items()]
             ctx["default_fields"] = json.dumps(lst)
 
+    ctx["auto_save"] = ctx["event"].get_config("writing_auto_save")
+
 
 def writing_list_plot(ctx):
     ctx["chars"] = {}

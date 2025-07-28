@@ -1116,6 +1116,9 @@ msgstr "Tillgångar"
 msgid "Approvals"
 msgstr "Godkännande"
 
+msgid "Auto save"
+msgstr "Undergiven fråga"
+
 msgid "Available"
 msgstr "Tillgänglig"
 
@@ -1823,9 +1826,6 @@ msgstr "Begärd tid"
 
 msgid "Rotate right"
 msgstr "Höger hjul"
-
-msgid "Safe editing"
-msgstr "Säker redigering"
 
 msgid "See you soon"
 msgstr "Vi väntar på dig"
@@ -8243,13 +8243,6 @@ msgstr ""
 "med specifika behörigheter"
 
 msgid ""
-"If checked, prevents multiple users from editing the same item at the same "
-"time to avoid conflicts"
-msgstr ""
-"Om markerad, förhindrar flera användare från att redigera samma objekt "
-"samtidigt för att undvika konflikter"
-
-msgid ""
 "We only ask for a moment of your time to check the documents you have "
 "uploaded, it won't take long"
 msgstr ""
@@ -8332,6 +8325,13 @@ msgid ""
 msgstr ""
 "Möjliggör ett upplägg i kampanjstil där flera evenemang delar samma "
 "uppsättning karaktärer och fraktioner"
+
+msgid ""
+"If checked, writing elements will be auto-saved during editing (only one "
+"form can be open at a time)"
+msgstr ""
+"Om markerad sparas skrivelementen automatiskt under redigering (endast ett "
+"formulär kan vara öppet åt gången)"
 
 msgid ""
 "Optional text to be included in the email sent to the player to notify them "

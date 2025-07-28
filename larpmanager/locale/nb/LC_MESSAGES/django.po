@@ -1116,6 +1116,9 @@ msgstr "Tillegg"
 msgid "Approvals"
 msgstr "Godkjenninger"
 
+msgid "Auto save"
+msgstr "Underdanig spørsmål"
+
 msgid "Available"
 msgstr "Tilgjengelig"
 
@@ -1823,9 +1826,6 @@ msgstr "Forespurt tid"
 
 msgid "Rotate right"
 msgstr "Høyre hjul"
-
-msgid "Safe editing"
-msgstr "Sikker redigering"
 
 msgid "See you soon"
 msgstr "Vi venter på deg"
@@ -8214,13 +8214,6 @@ msgstr ""
 "med spesifikke tillatelser"
 
 msgid ""
-"If checked, prevents multiple users from editing the same item at the same "
-"time to avoid conflicts"
-msgstr ""
-"Hvis avkrysset, forhindrer det at flere brukere redigerer det samme "
-"elementet samtidig for å unngå konflikter"
-
-msgid ""
 "We only ask for a moment of your time to check the documents you have "
 "uploaded, it won't take long"
 msgstr ""
@@ -8303,6 +8296,13 @@ msgid ""
 msgstr ""
 "Muliggjør et \"kampanje\"-oppsett der flere arrangementer deler samme sett "
 "med figurer og fraksjoner"
+
+msgid ""
+"If checked, writing elements will be auto-saved during editing (only one "
+"form can be open at a time)"
+msgstr ""
+"Hvis avkrysset, lagres skriveelementer automatisk under redigering (bare ett"
+" skjema kan være åpent om gangen)"
 
 msgid ""
 "Optional text to be included in the email sent to the player to notify them "

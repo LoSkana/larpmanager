@@ -96,7 +96,9 @@ window.addEventListener('DOMContentLoaded', function() {
 
     $(function() {
 
-        submitExcelForm(true);
+        {% if auto_save %}
+            submitExcelForm(true);
+        {% endif %}
 
         // On double click on cell editable, start the single field edit
         $(document).on('dblclick', '.editable', function(event) {
