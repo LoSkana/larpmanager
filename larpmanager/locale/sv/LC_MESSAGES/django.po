@@ -5019,8 +5019,8 @@ msgstr "På den här sidan kan du lägga till eller redigera en rabatt"
 msgid "This page allows you to add or edit an invoice"
 msgstr "På den här sidan kan du lägga till eller redigera en faktura"
 
-msgid "This page allows you to fully view a character"
-msgstr "På den här sidan kan du se en karaktär i sin helhet"
+msgid "This page allows you to view a writing element"
+msgstr "På den här sidan kan du visa ett skrivelement"
 
 msgid "This page shows the email lists of subscribers"
 msgstr "På den här sidan visas e-postlistorna för prenumeranterna"

@@ -5015,8 +5015,8 @@ msgstr "Na této stránce můžete přidat nebo upravit slevu"
 msgid "This page allows you to add or edit an invoice"
 msgstr "Na této stránce můžete přidat nebo upravit fakturu"
 
-msgid "This page allows you to fully view a character"
-msgstr "Na této stránce si můžete plně prohlédnout postavu"
+msgid "This page allows you to view a writing element"
+msgstr "Tato stránka umožňuje zobrazit prvek psaní"
 
 msgid "This page shows the email lists of subscribers"
 msgstr "Tato stránka zobrazuje seznamy e-mailových odběratelů"

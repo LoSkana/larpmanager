@@ -5021,8 +5021,8 @@ msgstr "Op deze pagina kun je een korting toevoegen of bewerken"
 msgid "This page allows you to add or edit an invoice"
 msgstr "Op deze pagina kun je een factuur toevoegen of bewerken"
 
-msgid "This page allows you to fully view a character"
-msgstr "Op deze pagina kun je een personage volledig bekijken"
+msgid "This page allows you to view a writing element"
+msgstr "Met deze pagina kun je een schrijfelement bekijken"
 
 msgid "This page shows the email lists of subscribers"
 msgstr "Deze pagina toont de e-maillijsten van abonnees"

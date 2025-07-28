@@ -5018,8 +5018,8 @@ msgstr "På denne siden kan du legge til eller redigere en rabatt"
 msgid "This page allows you to add or edit an invoice"
 msgstr "På denne siden kan du legge til eller redigere en faktura"
 
-msgid "This page allows you to fully view a character"
-msgstr "På denne siden kan du se en karakter i sin helhet"
+msgid "This page allows you to view a writing element"
+msgstr "På denne siden kan du se et skriveelement"
 
 msgid "This page shows the email lists of subscribers"
 msgstr "Denne siden viser e-postlistene til abonnentene"

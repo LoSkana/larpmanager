@@ -5016,8 +5016,8 @@ msgstr "Questa pagina consente di aggiungere o modificare uno sconto"
 msgid "This page allows you to add or edit an invoice"
 msgstr "Questa pagina consente di aggiungere o modificare una fattura"
 
-msgid "This page allows you to fully view a character"
-msgstr "Questa pagina consente di visualizzare completamente un personaggio"
+msgid "This page allows you to view a writing element"
+msgstr "Questa pagina consente di visualizzare un elemento di scrittura"
 
 msgid "This page shows the email lists of subscribers"
 msgstr "Questa pagina mostra gli elenchi di e-mail degli abbonati"

@@ -1,26 +1,24 @@
 {% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
-    {{ name }} - {% trans "Show" %}
+    {{ name }} - {% trans "View" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page allows you to fully view a character" %}
+    {% trans "This page allows you to view a writing element" %}
 {% endblock info %}
 {% block content %}
     <h2 class="c">{{ name }}</h2>
-    {% if nm == 'character' or nm == 'plot' or nm == 'faction' %}
-        <div class="plot">
-            {{ el.teaser | safe }}
-            <hr />
-            {% show_char el.data run 1 %}
-        </div>
-    {% elif nm == 'trait' %}
-        <div class="plot">
-            {{ el.teaser | safe }}
-            <hr />
-            {% show_trait el.text run 1 %}
-        </div>
-    {% elif nm == 'plot' or nm == 'prologue' %}
+    {% if element %}
+        {% include "elements/sheet/fields.html" with char=element %}
+        {% include "elements/sheet/texts.html" with char=element %}
+        {% include "elements/sheet/plots.html" %}
+        {% include "elements/sheet/quests.html" %}
+        {% include "elements/sheet/relationships.html" %}
+        {% show_trait el.text run 1 %}
+    {% else %}
+        <h2 class="c">{% trans "Presentation" %}</h2>
+        <div class="plot">{{ el.teaser | safe }}</div>
+        <h2 class="c">{% trans "Text" %}</h2>
         <div class="plot">{% show_char el.data run 1 %}</div>
     {% endif %}
 {% endblock content %}
