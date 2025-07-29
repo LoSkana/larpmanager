@@ -2226,7 +2226,7 @@ msgid "Ability missing"
 msgstr "Abilità mancante"
 
 msgid "Ability removed"
-msgstr "Capacità rimossa"
+msgstr "Abilità rimossa"
 
 msgid "And that is all"
 msgstr "E questo è tutto"
