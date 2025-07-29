@@ -25,6 +25,7 @@ from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features, reset_event_features
+from larpmanager.cache.role import has_event_permission
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
@@ -1070,6 +1071,19 @@ class OrgaPreferencesForm(ConfigForm):
 
         help_text = _("Select which fields should open automatically when the list is displayed")
 
+        self._add_reg_configs(event_id, help_text)
+
+        # Add writings fields
+        shows = _get_writing_elements()
+        for s in shows:
+            self.add_writing_configs(basics, event_id, help_text, s)
+
+    def _add_reg_configs(self, event_id, help_text):
+        if not has_event_permission(
+            self.params, self.params["request"], self.params["event"].slug, "orga_registrations"
+        ):
+            return
+
         # Add registration fields
         extra = []
         feature_fields = [
@@ -1086,7 +1100,6 @@ class OrgaPreferencesForm(ConfigForm):
             ("discount", "disc", _("Discounts")),
         ]
         self.add_feature_extra(extra, feature_fields)
-
         fields = _get_registration_fields(self.params, self.params["request"].user.member)
         max_length = 20
         if fields:
@@ -1101,21 +1114,21 @@ class OrgaPreferencesForm(ConfigForm):
                     for field_id, field in fields.items()
                 ]
             )
-            self.add_configs(
-                f"open_registration_{event_id}", ConfigType.MULTI_BOOL, _("Registrations"), help_text, extra=extra
-            )
-
-        # Add writings fields
-        shows = _get_writing_elements()
-        mapping = _get_writing_mapping()
-        for s in shows:
-            if mapping[s[0]] not in self.params["features"]:
-                continue
-            if "writing_fields" not in self.params or s[0] not in self.params["writing_fields"]:
-                continue
-            self.add_writing_configs(basics, event_id, help_text, s)
+        self.add_configs(
+            f"open_registration_{event_id}", ConfigType.MULTI_BOOL, _("Registrations"), help_text, extra=extra
+        )
 
     def add_writing_configs(self, basics, event_id, help_text, s):
+        mapping = _get_writing_mapping()
+        if mapping.get(s[0]) not in self.params["features"]:
+            return
+
+        if "writing_fields" not in self.params or s[0] not in self.params["writing_fields"]:
+            return
+
+        if not has_event_permission(self.params, self.params["request"], self.params["event"].slug, f"orga_{s[0]}s"):
+            return
+
         fields = self.params["writing_fields"][s[0]]["questions"]
         extra = []
 
