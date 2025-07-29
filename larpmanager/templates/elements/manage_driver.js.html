@@ -19,22 +19,146 @@ window.addEventListener('DOMContentLoaded', function() {
     function driverIntro() {
         const driver = window.driver.js.driver;
 
+        let steps = [
+          {
+            popover: {
+              title: '{% trans "Welcome to" %} {{ assoc.platform }}!',
+              description: '{{ intro | escapejs }}'
+            }
+          }
+        ];
+
+        console.log($('.sidebar_button').is(':visible'));
+
+        if ($('.sidebar_button').is(':visible')) {
+          steps.push({
+            element: '#sidebar',
+            popover: {
+              title: 'Sidebar',
+              description: '{{ sidebar | escapejs }}',
+              side: 'right',
+              align: 'start'
+            }
+          });
+        }
+
+        {% if not run %}
+        steps.push({
+          element: '#exe_events',
+          popover: {
+            title: 'Events',
+            description: '{{ exe_events | escapejs }}',
+            side: 'right',
+            align: 'start'
+          }
+        });
+        {% endif %}
+
+        steps.push(
+          {
+            element: '#select_workspace',
+            popover: {
+              title: 'Workspace selector',
+              description: '{{ select_workspace | escapejs }}',
+              side: 'bottom',
+              align: 'start'
+            }
+          },
+          {
+            element: '#select_side',
+            popover: {
+              title: 'Side selector',
+              description: '{{ select_side | escapejs }}',
+              side: 'bottom',
+              align: 'start'
+            }
+          }
+        );
+
+        const sidebar_id = $('.sidebar_tutorial:visible').first().attr('id');
+        if (sidebar_id) {
+          steps.push({
+            element: '#' + sidebar_id,
+            popover: {
+              title: 'Sidebar toggle',
+              description: '{{ sidebar_open | escapejs }}',
+              side: 'bottom',
+              align: 'start'
+            }
+          });
+        }
+
+        if ($('#tutorial_query').is(':visible')) {
+          steps.push({
+            element: '#tutorial_query',
+            popover: {
+              title: 'What would you like to do?',
+              description: '{{ tutorial_query | escapejs }}',
+              side: 'bottom',
+              align: 'start'
+            }
+          });
+        }
+
+        if ($('#priorities').is(':visible')) {
+          steps.push({
+            element: '#priorities',
+            popover: {
+              title: 'Priorities',
+              description: '{{ priorities | escapejs }}',
+              side: 'top',
+              align: 'start'
+            }
+          });
+        }
+
+        if ($('#actions').is(':visible')) {
+          steps.push({
+            element: '#actions',
+            popover: {
+              title: 'Actions',
+              description: '{{ actions | escapejs }}',
+              side: 'top',
+              align: 'start'
+            }
+          });
+        }
+
+        if ($('#suggestions').is(':visible')) {
+          steps.push({
+            element: '#suggestions',
+            popover: {
+              title: 'Suggestions',
+              description: '{{ suggestions | escapejs }}',
+              side: 'top',
+              align: 'start'
+            }
+          });
+        }
+
+        if ($('.feature_tutorial').is(':visible')) {
+          steps.push({
+            element: '.feature_tutorial',
+            popover: {
+              title: 'Tutorials',
+              description: '{{ feature_tutorial | escapejs }}',
+              side: 'top',
+              align: 'start'
+            }
+          });
+        }
+
+        steps.push({
+          popover: {
+            title: '{% trans "And that is all" %}',
+            description: '{{ outro | escapejs }}'
+          }
+        });
+
+
         const driverObj = driver({
             showProgress: true,
-            steps: [
-                { popover: { title: '{% trans "Welcome to" %} {{ assoc.platform }}!', description: '{{ intro | escapejs }}' } },
-                { element: '#sidebar', popover: { title: 'Sidebar', description: '{{ sidebar | escapejs }}', side: "right", align: 'start' }},
-                {% if not run %} { element: '#exe_events', popover: { title: 'Events', description: '{{ exe_events | escapejs }}', side: "right", align: 'start' }}, {% endif %}
-                { element: '#select_workspace', popover: { title: 'Workspace selector', description: '{{ select_workspace | escapejs }}', side: "bottom", align: 'start' }},
-                { element: '#select_side', popover: { title: 'Side selector', description: '{{ select_side | escapejs }}', side: "bottom", align: 'start' }},
-                { element: '.sidebar_tutorial', popover: { title: 'Sidebar toggle', description: '{{ sidebar_open | escapejs }}', side: "bottom", align: 'start' }},
-                { element: '#tutorial_query', popover: { title: 'What would you like to do?', description: '{{ tutorial_query | escapejs }}', side: "bottom", align: 'start' }},
-                { element: '#priorities', popover: { title: 'Priorities', description: '{{ priorities | escapejs }}', side: "top", align: 'start' }},
-                { element: '#actions', popover: { title: 'Actions', description: '{{ actions | escapejs }}', side: "top", align: 'start' }},
-                { element: '#suggestions', popover: { title: 'Suggestions', description: '{{ suggestions | escapejs }}', side: "top", align: 'start' }},
-                { element: '.feature_tutorial', popover: { title: 'Tutorials', description: '{{ feature_tutorial | escapejs }}', side: "top", align: 'start' }},
-                { popover: { title: '{% trans "And that is all" %}', description: '{{ outro | escapejs }}' } }
-            ]
+            steps: steps
         });
 
         driverObj.drive();
