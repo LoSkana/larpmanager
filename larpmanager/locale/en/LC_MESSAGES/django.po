@@ -1018,20 +1018,20 @@ msgstr ""
 msgid "Experience points"
 msgstr ""
 
-msgid "Undo period"
-msgstr ""
-
-msgid ""
-"Time window (in hours) during which the user can revoke a chosen skill and "
-"recover spent XP (default is 0)"
-msgstr ""
-
 msgid "Player selection"
 msgstr ""
 
 msgid ""
 "If checked, players may add abilities themselves, by selecting from those "
 "that are visible, and whose pre-requisites they meet."
+msgstr ""
+
+msgid "Undo period"
+msgstr ""
+
+msgid ""
+"Time window (in hours) during which the user can revoke a chosen skill and "
+"recover spent XP (default is 0)"
 msgstr ""
 
 msgid "Initial experience points"

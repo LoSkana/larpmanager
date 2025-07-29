@@ -436,7 +436,7 @@ def _save_character_abilities(ctx, request):
 
 
 def get_undo_abilities(ctx, request, new_ability_id=None):
-    px_undo = ctx["event"].get_config("px_undo", 0)
+    px_undo = int(ctx["event"].get_config("px_undo", 0))
     config_name = "added_px"
     member = request.user.member
     val = member.get_config(config_name, "{}")
@@ -448,9 +448,11 @@ def get_undo_abilities(ctx, request, new_ability_id=None):
             del added_map[key]
     # add newly acquired ability and save it
     if px_undo and new_ability_id:
-        added_map[new_ability_id] = current_time
+        added_map[str(new_ability_id)] = current_time
         save_single_config(member, config_name, json.dumps(added_map))
-    return added_map
+
+    # return map of abilities recently added, with int key
+    return [int(k) for k in added_map.keys()]
 
 
 @login_required

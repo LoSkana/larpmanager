@@ -84,7 +84,7 @@ def get_available_ability_px(char):
 
     # get px available
     add_char_addit(char)
-    px_avail = char.addit["px_avail"]
+    px_avail = char.addit.get("px_avail", 0)
 
     # filter all abilities given we have the requested prerequisites / dependents
     all_abilities = (

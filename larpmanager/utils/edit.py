@@ -296,6 +296,7 @@ def writing_edit(request, ctx, form_type, nm, tp, redr=None):
     ctx["nm"] = nm
     ctx["form"] = form
     ctx["add_another"] = True
+    ctx["continue_add"] = "continue" in request.POST
     ctx["auto_save"] = not ctx["event"].get_config("writing_disable_auto", False)
 
     _setup_char_finder(ctx)
