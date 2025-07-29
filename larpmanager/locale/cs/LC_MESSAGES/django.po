@@ -546,6 +546,9 @@ msgstr "Citace"
 msgid "Refund"
 msgstr "Vrácení peněz"
 
+msgid "Remove"
+msgstr "Odstranění adresy"
+
 msgid "Safety"
 msgstr "Bezpečnost"
 
@@ -1650,6 +1653,9 @@ msgstr "Celkové náklady"
 msgid "Transversal"
 msgstr "Příčná"
 
+msgid "Undo period"
+msgstr "Zrušení období"
+
 msgid "Unique code"
 msgstr "Jedinečný kód"
 
@@ -2218,6 +2224,9 @@ msgstr "žádost o proplacení"
 
 msgid "Ability missing"
 msgstr "Chybějící schopnost"
+
+msgid "Ability removed"
+msgstr "Odstranění schopnosti"
 
 msgid "And that is all"
 msgstr "A to je vše"
@@ -8381,6 +8390,13 @@ msgid ""
 msgstr ""
 "Zaměstnanci, kteří mohou vidět odpovědi hráčů (nechte prázdné, aby je viděli"
 " všichni)"
+
+msgid ""
+"Time window (in hours) during which the user can revoke a chosen skill and "
+"recover spent XP (default is 0)"
+msgstr ""
+"Časové okno (v hodinách), během něhož může uživatel zrušit vybranou "
+"dovednost a získat zpět použité XP (výchozí hodnota je 0)"
 
 msgid ""
 "If you select another event, it will be considered in the same campaign, and"

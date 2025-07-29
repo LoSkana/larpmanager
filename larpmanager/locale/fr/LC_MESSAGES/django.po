@@ -546,6 +546,9 @@ msgstr "Citation"
 msgid "Refund"
 msgstr "Remboursement"
 
+msgid "Remove"
+msgstr "Retirer"
+
 msgid "Safety"
 msgstr "Sécurité"
 
@@ -1650,6 +1653,9 @@ msgstr "Coûts totaux"
 msgid "Transversal"
 msgstr "Transversale"
 
+msgid "Undo period"
+msgstr "Période d'annulation"
+
 msgid "Unique code"
 msgstr "Code unique"
 
@@ -2218,6 +2224,9 @@ msgstr "demande de remboursement"
 
 msgid "Ability missing"
 msgstr "Capacité manquante"
+
+msgid "Ability removed"
+msgstr "Capacité supprimée"
 
 msgid "And that is all"
 msgstr "Et c'est tout"
@@ -8754,6 +8763,14 @@ msgid ""
 msgstr ""
 "Membres du personnel autorisés à voir les réponses des joueurs (laisser vide"
 " pour permettre à tout le monde de voir)"
+
+msgid ""
+"Time window (in hours) during which the user can revoke a chosen skill and "
+"recover spent XP (default is 0)"
+msgstr ""
+"Fenêtre de temps (en heures) pendant laquelle l'utilisateur peut révoquer "
+"une compétence choisie et récupérer les XP dépensés (la valeur par défaut "
+"est 0)"
 
 msgid ""
 "If you select another event, it will be considered in the same campaign, and"

@@ -409,6 +409,13 @@ class OrgaConfigForm(ConfigForm):
 
         if "px" in self.params["features"]:
             self.set_section("px", _("Experience points"))
+
+            label = _("Undo period")
+            help_text = _(
+                "Time window (in hours) during which the user can revoke a chosen skill and recover spent XP (default is 0)"
+            )
+            self.add_configs("px_undo", ConfigType.INT, label, help_text)
+
             label = _("Player selection")
             help_text = _(
                 "If checked, players may add abilities themselves, by selecting from those that "

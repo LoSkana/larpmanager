@@ -1018,6 +1018,14 @@ msgstr ""
 msgid "Experience points"
 msgstr ""
 
+msgid "Undo period"
+msgstr ""
+
+msgid ""
+"Time window (in hours) during which the user can revoke a chosen skill and "
+"recover spent XP (default is 0)"
+msgstr ""
+
 msgid "Player selection"
 msgstr ""
 
@@ -4082,6 +4090,9 @@ msgid "Used"
 msgstr ""
 
 msgid "Ability list"
+msgstr ""
+
+msgid "Remove"
 msgstr ""
 
 msgid "Delivery list"
@@ -8506,6 +8517,9 @@ msgid "You already have an assigned character"
 msgstr ""
 
 msgid "Assigned character!"
+msgstr ""
+
+msgid "Ability removed"
 msgstr ""
 
 msgid "Ability type missing"

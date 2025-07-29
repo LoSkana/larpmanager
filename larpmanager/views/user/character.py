@@ -17,8 +17,10 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import ast
+import json
 import os
+import time
 from uuid import uuid4
 
 from django.conf import settings as conf_settings
@@ -35,6 +37,7 @@ from django.views.decorators.http import require_POST
 from PIL import Image
 
 from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
+from larpmanager.cache.config import save_single_config
 from larpmanager.forms.character import (
     CharacterForm,
 )
@@ -355,16 +358,7 @@ def character_assign(request, s, n, num):
 
 @login_required
 def character_abilities(request, s, n, num):
-    ctx = get_event_run(request, s, n, signup=True, status=True)
-    event = ctx["event"]
-    if event.parent:
-        event = event.parent
-
-    # check the user can select abilities
-    if not event.get_config("px_user", False):
-        raise Http404("ehm.")
-
-    get_char_check(request, ctx, num, True)
+    ctx = check_char_abilities(n, num, request, s)
 
     ctx["available"] = get_available_ability_px(ctx["character"])
 
@@ -382,7 +376,39 @@ def character_abilities(request, s, n, num):
         typ_id: data["name"] for typ_id, data in sorted(ctx["available"].items(), key=lambda x: x[1]["order"])
     }
 
+    ctx["undo_abilities"] = get_undo_abilities(ctx, request)
+
     return render(request, "larpmanager/event/character/abilities.html", ctx)
+
+
+def check_char_abilities(n, num, request, s):
+    ctx = get_event_run(request, s, n, signup=True, status=True)
+
+    event = ctx["event"]
+    if event.parent:
+        event = event.parent
+
+    # check the user can select abilities
+    if not event.get_config("px_user", False):
+        raise Http404("ehm.")
+
+    get_char_check(request, ctx, num, True)
+
+    return ctx
+
+
+@login_required
+def character_abilities_del(request, s, n, num, id_del):
+    ctx = check_char_abilities(n, num, request, s)
+    undo_abilities = get_undo_abilities(ctx, request)
+    if id_del not in undo_abilities:
+        raise Http404("ability out of undo window")
+
+    ctx["character"].px_ability_list.remove(id_del)
+    ctx["character"].save()
+    messages.success(request, _("Ability removed") + "!")
+
+    return redirect("character_abilities", s=ctx["event"].slug, n=ctx["run"].number, num=ctx["character"].number)
 
 
 def _save_character_abilities(ctx, request):
@@ -405,6 +431,26 @@ def _save_character_abilities(ctx, request):
     ctx["character"].px_ability_list.add(selected_id)
     ctx["character"].save()
     messages.success(request, _("Ability acquired") + "!")
+
+    get_undo_abilities(ctx, request, selected_id)
+
+
+def get_undo_abilities(ctx, request, new_ability_id=None):
+    px_undo = ctx["event"].get_config("px_undo", 0)
+    config_name = "added_px"
+    member = request.user.member
+    val = member.get_config(config_name, "{}")
+    added_map = ast.literal_eval(val)
+    current_time = int(time.time())
+    # clean from abilities out of the undo time windows
+    for key in list(added_map.keys()):
+        if added_map[key] < current_time - px_undo * 3600:
+            del added_map[key]
+    # add newly acquired ability and save it
+    if px_undo and new_ability_id:
+        added_map[new_ability_id] = current_time
+        save_single_config(member, config_name, json.dumps(added_map))
+    return added_map
 
 
 @login_required

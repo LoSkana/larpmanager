@@ -546,6 +546,9 @@ msgstr "Sitat"
 msgid "Refund"
 msgstr "Refusjon"
 
+msgid "Remove"
+msgstr "Fjern"
+
 msgid "Safety"
 msgstr "Sikkerhet"
 
@@ -1650,6 +1653,9 @@ msgstr "Totale kostnader"
 msgid "Transversal"
 msgstr "Tverrgående"
 
+msgid "Undo period"
+msgstr "Angre periode"
+
 msgid "Unique code"
 msgstr "Unik kode"
 
@@ -2218,6 +2224,9 @@ msgstr "anmodning om refusjon"
 
 msgid "Ability missing"
 msgstr "Evne mangler"
+
+msgid "Ability removed"
+msgstr "Evne fjernet"
 
 msgid "And that is all"
 msgstr "Og det er alt"
@@ -8518,6 +8527,13 @@ msgid ""
 msgstr ""
 "Ansatte som har lov til å se spillernes svar (la det stå tomt for å la alle "
 "se)"
+
+msgid ""
+"Time window (in hours) during which the user can revoke a chosen skill and "
+"recover spent XP (default is 0)"
+msgstr ""
+"Tidsvindu (i timer) der brukeren kan tilbakekalle en valgt ferdighet og få "
+"tilbake brukte XP (standard er 0)"
 
 msgid ""
 "If you select another event, it will be considered in the same campaign, and"
