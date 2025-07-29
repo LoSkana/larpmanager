@@ -2237,6 +2237,9 @@ msgstr "Lijst van personages"
 msgid "Collected votes"
 msgstr "Ontvangen stemmen"
 
+msgid "Color highlight"
+msgstr "Kleur highlight"
+
 msgid "Deadline (date)"
 msgstr "Uiterste datum"
 
@@ -5568,6 +5571,9 @@ msgid "If checked: shows a link in the calendar to past events"
 msgstr ""
 "Indien aangevinkt: toont een link in de kalender naar evenementen uit het "
 "verleden"
+
+msgid "Indicate the color that will be used to highlight texts"
+msgstr "Geef de kleur aan die wordt gebruikt om teksten te markeren"
 
 msgid "Quickly configure your events's most important settings"
 msgstr "Configureer snel de belangrijkste instellingen van je evenementen"

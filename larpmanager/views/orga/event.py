@@ -206,7 +206,14 @@ def orga_quick(request, s, n):
 @login_required
 def orga_preferences(request, s, n):
     return orga_edit(
-        request, s, n, "orga_preferences", OrgaPreferencesForm, None, "manage", add_ctx={"add_another": False}
+        request,
+        s,
+        n,
+        "orga_preferences",
+        OrgaPreferencesForm,
+        request.user.member.id,
+        "manage",
+        add_ctx={"add_another": False},
     )
 
 

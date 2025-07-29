@@ -187,8 +187,8 @@ class Association(BaseModel):
     )
 
     sec_rgb = ColorField(
-        verbose_name=_("Color background"),
-        help_text=_("Indicate the color that will be used for the background of texts"),
+        verbose_name=_("Color highlight"),
+        help_text=_("Indicate the color that will be used to highlight texts"),
         blank=True,
         null=True,
     )
