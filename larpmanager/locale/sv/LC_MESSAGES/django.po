@@ -546,6 +546,9 @@ msgstr "Citat"
 msgid "Refund"
 msgstr "Återbetalning"
 
+msgid "Remove"
+msgstr "Ta bort"
+
 msgid "Safety"
 msgstr "Säkerhet"
 
@@ -1650,6 +1653,9 @@ msgstr "Totala kostnader"
 msgid "Transversal"
 msgstr "Transversal"
 
+msgid "Undo period"
+msgstr "Ångra period"
+
 msgid "Unique code"
 msgstr "Unik kod"
 
@@ -2218,6 +2224,9 @@ msgstr "begäran om återbetalning"
 
 msgid "Ability missing"
 msgstr "Förmåga saknas"
+
+msgid "Ability removed"
+msgstr "Förmåga borttagen"
 
 msgid "And that is all"
 msgstr "Och det är allt"
@@ -8553,6 +8562,13 @@ msgid ""
 "Staff members who are allowed to be able to see the responses of players "
 "(leave blank to let everyone see)"
 msgstr "Personal som får se spelarnas svar (lämna tomt för att låta alla se)"
+
+msgid ""
+"Time window (in hours) during which the user can revoke a chosen skill and "
+"recover spent XP (default is 0)"
+msgstr ""
+"Tidsfönster (i timmar) under vilket användaren kan återkalla en vald "
+"färdighet och återfå förbrukade XP (standard är 0)"
 
 msgid ""
 "If you select another event, it will be considered in the same campaign, and"

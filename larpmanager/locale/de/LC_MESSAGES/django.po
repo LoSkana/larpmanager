@@ -546,6 +546,9 @@ msgstr "Zitat"
 msgid "Refund"
 msgstr "Erstattung"
 
+msgid "Remove"
+msgstr "entfernen"
+
 msgid "Safety"
 msgstr "Sicherheit"
 
@@ -1650,6 +1653,9 @@ msgstr "Gesamtkosten"
 msgid "Transversal"
 msgstr "Transversal"
 
+msgid "Undo period"
+msgstr "Zeitraum rückgängig machen"
+
 msgid "Unique code"
 msgstr "Eindeutiger Code"
 
@@ -2218,6 +2224,9 @@ msgstr "Antrag auf Erstattung"
 
 msgid "Ability missing"
 msgstr "Fehlende Fähigkeit"
+
+msgid "Ability removed"
+msgstr "Fähigkeit entfernt"
 
 msgid "And that is all"
 msgstr "Und das ist alles"
@@ -8849,6 +8858,13 @@ msgid ""
 msgstr ""
 "Mitarbeiter, die die Antworten der Spieler sehen dürfen (leer lassen, damit "
 "alle sie sehen können)"
+
+msgid ""
+"Time window (in hours) during which the user can revoke a chosen skill and "
+"recover spent XP (default is 0)"
+msgstr ""
+"Zeitfenster (in Stunden), in dem der Benutzer eine gewählte Fertigkeit "
+"widerrufen und verbrauchte EP zurückgewinnen kann (Standardwert ist 0)"
 
 msgid ""
 "If you select another event, it will be considered in the same campaign, and"
