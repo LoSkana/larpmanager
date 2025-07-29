@@ -388,11 +388,7 @@ function sticky_tables() {
         });
       }
 
-      const bodyBg = $('body').css('background-color');
-
       table.find('thead').each(function () {
-            $(this).css('background-color', bodyBg);
-
             const colCount = $(this).find('tr:first-child th').length;
 
             const borderRow = $('<tr class="thead-border-row"></tr>');

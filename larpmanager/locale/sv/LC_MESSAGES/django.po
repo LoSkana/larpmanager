@@ -2237,6 +2237,9 @@ msgstr "Lista över karaktärer"
 msgid "Collected votes"
 msgstr "Erhållna röster"
 
+msgid "Color highlight"
+msgstr "Färgmarkering"
+
 msgid "Deadline (date)"
 msgstr "Tidsfrist (datum)"
 
@@ -5552,6 +5555,9 @@ msgstr "Visar statistik över spelarnas preferenser för karaktärer"
 
 msgid "If checked: shows a link in the calendar to past events"
 msgstr "Om markerad: visar en länk i kalendern till tidigare evenemang"
+
+msgid "Indicate the color that will be used to highlight texts"
+msgstr "Ange den färg som ska användas för att markera texter"
 
 msgid "Quickly configure your events's most important settings"
 msgstr "Snabbt konfigurera de viktigaste inställningarna för dina evenemang"

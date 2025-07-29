@@ -59,7 +59,7 @@ class CharacterConfigAdmin(DefModelAdmin):
 
 @admin.register(WritingQuestion)
 class WritingQuestionAdmin(DefModelAdmin):
-    list_display = ("event", "typ", "display", "description_red", "order", "status", "visibility")
+    list_display = ("event", "typ", "display", "description_red", "order", "status", "visibility", "applicable")
     exclude = ("search",)
     search_fields = ("search", "display")
     autocomplete_fields = ["event"]
