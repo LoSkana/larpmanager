@@ -27,6 +27,7 @@ from django.dispatch import receiver
 from larpmanager.cache.button import get_event_button_cache
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event, Run
+from larpmanager.models.form import _get_writing_mapping
 
 
 def reset_cache_run(a, s, n):
@@ -100,8 +101,9 @@ def init_cache_config_run(run):
     if run.event.parent:
         ctx["px_user"] = run.event.parent.get_config("px_user", False)
 
-    for config_name in ["character", "faction"]:
-        if config_name not in ev_features:
+    mapping = _get_writing_mapping()
+    for config_name in ["character", "faction", "quest", "trait"]:
+        if mapping[config_name] not in ev_features:
             continue
         res = {}
         val = run.get_config("show_" + config_name, "[]")

@@ -45,6 +45,7 @@ from larpmanager.models.form import (
     WritingChoice,
     WritingOption,
     WritingQuestion,
+    _get_writing_mapping,
 )
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
@@ -272,13 +273,7 @@ def orga_character_form(request, s, n):
 
 def check_writing_form_type(ctx, typ):
     typ = typ.lower()
-    mapping = {
-        "character": "character",
-        "faction": "faction",
-        "plot": "plot",
-        "quest": "questbuilder",
-        "trait": "questbuilder",
-    }
+    mapping = _get_writing_mapping()
     available = {v: k for k, v in QuestionApplicable.choices if mapping[v] in ctx["features"]}
     if typ not in available:
         raise Http404(f"unknown writing form type: {typ}")

@@ -35,7 +35,7 @@
                                 </p>
                             </div>
                         {% endif %}
-                        {% if el.title %}
+                        {% if el.title and show_character.title %}
                             <div class="go-inline">
                                 <b>{{ writing_fields.character.names.title }}: </b> {{ el.title | safe }}
                             </div>

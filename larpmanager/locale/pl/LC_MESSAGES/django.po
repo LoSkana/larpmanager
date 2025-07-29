@@ -2429,9 +2429,6 @@ msgstr "Opłata organizacyjna"
 msgid "Organization tax"
 msgstr "Podatek od organizacji"
 
-msgid "Other characters"
-msgstr "Inne postacie"
-
 msgid "Password changed"
 msgstr "Hasło zostało zmienione"
 

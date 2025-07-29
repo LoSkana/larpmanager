@@ -51,22 +51,11 @@ from larpmanager.models.event import (
     ProgressStep,
     Run,
 )
-from larpmanager.models.form import QuestionApplicable, QuestionType
+from larpmanager.models.form import QuestionType, _get_writing_elements, _get_writing_mapping
 from larpmanager.models.member import Member
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.common import copy_class
 from larpmanager.views.orga.registration import _get_registration_fields
-
-
-def _get_writing_elements():
-    shows = [
-        ("character", _("Characters"), QuestionApplicable.CHARACTER),
-        ("faction", _("Factions"), QuestionApplicable.FACTION),
-        ("plot", _("Plots"), QuestionApplicable.PLOT),
-        ("quest", _("Quests"), QuestionApplicable.QUEST),
-        ("trait", _("Traits"), QuestionApplicable.TRAIT),
-    ]
-    return shows
 
 
 class EventCharactersPdfForm(ConfigForm):
@@ -876,6 +865,8 @@ class OrgaRunForm(ConfigForm):
         shows = []
 
         addit_show = {
+            "plot": _("Plots"),
+            "relationships": _("Relationships"),
             "speedlarp": _("Speedlarp"),
             "prologue": _("Prologues"),
             "workshop": _("Workshop"),
@@ -1116,13 +1107,7 @@ class OrgaPreferencesForm(ConfigForm):
 
         # Add writings fields
         shows = _get_writing_elements()
-        mapping = {
-            "character": "character",
-            "faction": "faction",
-            "plot": "plot",
-            "quest": "questbuilder",
-            "trait": "questbuilder",
-        }
+        mapping = _get_writing_mapping()
         for s in shows:
             if mapping[s[0]] not in self.params["features"]:
                 continue

@@ -750,18 +750,6 @@ msgstr ""
 msgid "Writing option"
 msgstr ""
 
-msgid "Characters"
-msgstr ""
-
-msgid "Plots"
-msgstr ""
-
-msgid "Quests"
-msgstr ""
-
-msgid "Traits"
-msgstr ""
-
 msgid "Insert the css code to customize the pdf printing"
 msgstr ""
 
@@ -1351,6 +1339,9 @@ msgstr ""
 msgid "Visibility"
 msgstr ""
 
+msgid "Plots"
+msgstr ""
+
 msgid "Speedlarp"
 msgstr ""
 
@@ -1441,6 +1432,9 @@ msgid ""
 "fee"
 msgstr ""
 
+msgid "Characters"
+msgstr ""
+
 msgid "Do you want to manage characters assigned to registered players"
 msgstr ""
 
@@ -1500,6 +1494,9 @@ msgid "XP"
 msgstr ""
 
 msgid "speedlarp"
+msgstr ""
+
+msgid "Traits"
 msgstr ""
 
 msgid "Ability"
@@ -3019,6 +3016,9 @@ msgid ""
 "registrations (0 = unlimited)"
 msgstr ""
 
+msgid "Quests"
+msgstr ""
+
 msgid "Free"
 msgstr ""
 
@@ -4085,9 +4085,6 @@ msgid "Ability list"
 msgstr ""
 
 msgid "Delivery list"
-msgstr ""
-
-msgid "Other characters"
 msgstr ""
 
 msgid "Delegated users"
@@ -5382,10 +5379,10 @@ msgstr ""
 msgid "Access the list of your characters"
 msgstr ""
 
-msgid "Find out what quests are available"
+msgid "Discover the game factions"
 msgstr ""
 
-msgid "Discover the game factions"
+msgid "Find out what quests are available"
 msgstr ""
 
 msgid "View photos from the event"

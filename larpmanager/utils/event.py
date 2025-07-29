@@ -100,13 +100,13 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
     if "staff" in ctx or not ctx["event"].get_config("writing_field_visibility", False):
         ctx["show_all"] = "1"
 
-        for el in ["character", "faction"]:
+        for el in ["character", "faction", "quest", "trait"]:
             config_name = f"show_{el}"
             if config_name not in config_run:
                 config_run[config_name] = {}
             config_run[config_name].update({"name": 1, "teaser": 1, "text": 1})
 
-        for el in ["speedlarp", "prologue", "questbuilder", "workshop", "print_pdf"]:
+        for el in ["plot", "relationships", "speedlarp", "prologue", "workshop", "print_pdf"]:
             config_name = "show_addit"
             if config_name not in config_run:
                 config_run[config_name] = {}

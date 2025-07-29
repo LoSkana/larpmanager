@@ -2429,9 +2429,6 @@ msgstr "Cuota de afiliación"
 msgid "Organization tax"
 msgstr "Cuota de organización"
 
-msgid "Other characters"
-msgstr "Otros personajes"
-
 msgid "Password changed"
 msgstr "Contraseña modificada"
 

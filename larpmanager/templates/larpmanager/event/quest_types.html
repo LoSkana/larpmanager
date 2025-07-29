@@ -20,9 +20,9 @@
                         </h3>
                     </td>
                     <td>
-                        {% for ch in el.quests %}
+                        {% for ch in el.quests.all %}
                             {% include "elements/comma.html" %}
-                            {{ ch.name }}
+                            <a href="{% url 'quest' run.event.slug run.number ch.number %}">{{ ch.name }}</a>
                         {% endfor %}
                     </td>
                 </tr>
