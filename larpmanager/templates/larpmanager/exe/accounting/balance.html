@@ -10,7 +10,7 @@
     {% include "elements/form/years.html" %}
     <h3>A - Attività di interesse generale - {{ year }}</h3>
     <h4>Uscite</h4>
-    <table class="mob no_csv">
+    <table class="no_csv">
         {% for k, el in expenditure.items %}
             <tr>
                 <td>{{ el.name }}</td>
@@ -19,7 +19,7 @@
         {% endfor %}
     </table>
     <h4>Entrate</h4>
-    <table class="mob no_csv">
+    <table class="no_csv">
         <tr>
             <td>1) Entrate da quote associative e apporti dei fondatori</td>
             <td>{{ memberships | floatformat:2 }}</td>
@@ -38,7 +38,7 @@
         </tr>
     </table>
     <h4>Riepilogo</h4>
-    <table class="mob no_csv">
+    <table class="no_csv">
         <tr>
             <td>Entrate</td>
             <td>{{ in | floatformat:2 }}</td>

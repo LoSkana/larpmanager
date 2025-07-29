@@ -7,7 +7,7 @@
     {% trans "This page shows the roles of the characters" %}
 {% endblock info %}
 {% block content %}
-    <table class="tablesorter mob writing">
+    <table class="tablesorter writing">
         <thead>
             <tr>
                 <th>{% trans "Character" %}</th>
@@ -29,7 +29,7 @@
     </table>
     {% for el in roles_list %}
         <h3>{{ el.0 }}</h3>
-        <table class="mob tablesorter">
+        <table class="tablesorter">
             {% for c in el.1 %}
                 <tr>
                     <td>{{ c.0.name }}</td>

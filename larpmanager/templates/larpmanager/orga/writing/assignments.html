@@ -8,104 +8,107 @@
 {% endblock info %}
 {% block content %}
     <h2>Personaggi</h2>
-    <table class="tablesorter mob writing">
+    <table class="tablesorter writing">
         <thead>
             <tr>
                 <th>{% trans "Character" %}</th>
                 <th>{% trans "Factions" %}</th>
                 <th>{% trans "Player" %}</th>
                 <th>{% trans "Pronoun" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for num, cha in chars.items %}
+                <tr>
+                    <td>{{ cha.name }}</td>
+                    <td>
+                        {% for fnum in cha.factions %}
+                            {% with factions|get:fnum as g %}
+                                {% if not g.typ == 'g' %}
+                                    {% include "elements/comma.html" %}
+                                    {{ g.name }}
+                                {% endif %}
+                            {% endwith %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ cha.player_full | default_if_none:"" }}</td>
+                    <td>
+                        {% if cha.player_prof %}<img src="{{ cha.player_prof }}" height=100 width=100 alt="player profile" />{% endif %}
+                    </td>
+                    <td>{{ cha.pronoun | default_if_none:"" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if features.questbuilder %}
+        <h2>Tratti</h2>
+        <table class="tablesorter writing">
+            <thead>
+                <tr>
+                    <th>{% trans "Trait" %}</th>
+                    <th>{% trans "Quest" %}</th>
+                    <th>{% trans "Character" %}</th>
+                    <th>{% trans "Player" %}</th>
+                    <th></th>
+                    <th>{% trans "Pronoun" %}</th>
+                </tr>
             </thead>
             <tbody>
-                {% for num, cha in chars.items %}
+                {% for tnum, tra in traits.items %}
                     <tr>
-                        <td>{{ cha.name }}</td>
-                        <td>
-                            {% for fnum in cha.factions %}
-                                {% with factions|get:fnum as g %}
-                                    {% if not g.typ == 'g' %}
-                                        {% include "elements/comma.html" %}
-                                        {{ g.name }}
-                                    {% endif %}
-                                {% endwith %}
-                            {% endfor %}
-                        </td>
-                        <td>{{ cha.player_full | default_if_none:"" }}</td>
-                        <td>
-                            {% if cha.player_prof %}<img src="{{ cha.player_prof }}" height=100 width=100 />{% endif %}
-                        </td>
-                        <td>{{ cha.pronoun | default_if_none:"" }}</td>
+                        <td>{{ tra.name }}</td>
+                        <td>{{ tra.quest.name }}</td>
+                        {% if tra.char %}
+                            {% with chars|get:tra.char as char %}
+                                <td>{{ char.name }}</td>
+                                <td>{{ char.player_full }}</td>
+                                <td>
+                                    {% if char.player_prof %}<img src="{{ char.player_prof }}" height=80 width=80 alt="player profile" />{% endif %}
+                                </td>
+                                <td>{{ char.pronoun | default_if_none:"" }}</td>
+                            {% endwith %}
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-        {% if features.questbuilder %}
-            <h2>Tratti</h2>
-            <table class="tablesorter mob writing">
-                <thead>
-                    <tr>
-                        <th>{% trans "Trait" %}</th>
-                        <th>{% trans "Quest" %}</th>
-                        <th>{% trans "Character" %}</th>
-                        <th>{% trans "Player" %}</th>
-                        <th></th>
-                        <th>{% trans "Pronoun" %}</th>
-                    </thead>
-                    <tbody>
-                        {% for tnum, tra in traits.items %}
-                            <tr>
-                                <td>{{ tra.name }}</td>
-                                <td>{{ tra.quest.name }}</td>
-                                {% if tra.char %}
-                                    {% with chars|get:tra.char as char %}
-                                        <td>{{ char.name }}</td>
-                                        <td>{{ char.player_full }}</td>
-                                        <td>
-                                            {% if char.player_prof %}<img src="{{ char.player_prof }}" height=80 width=80 />{% endif %}
-                                        </td>
-                                        <td>{{ char.pronoun | default_if_none:"" }}</td>
-                                    {% endwith %}
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% endif %}
-            {% for fnum, fac in factions.items %}
-                <h2>{{ fac.name }}</h2>
-                <table class="tablesorter mob writing">
-                    <thead>
+    {% endif %}
+    {% for fnum, fac in factions.items %}
+        <h2>{{ fac.name }}</h2>
+        <table class="tablesorter writing">
+            <thead>
+                <tr>
+                    <th>{% trans "Character" %}</th>
+                    <th>{% trans "Factions" %}</th>
+                    <th>{% trans "Player" %}</th>
+                    <th></th>
+                    <th>{% trans "Pronoun" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for chnum in fac.characters %}
+                    {% with chars|get:chnum as cha %}
                         <tr>
-                            <th>{% trans "Character" %}</th>
-                            <th>{% trans "Factions" %}</th>
-                            <th>{% trans "Player" %}</th>
-                            <th></th>
-                            <th>{% trans "Pronoun" %}</th>
-                        </thead>
-                        <tbody>
-                            {% for chnum in fac.characters %}
-                                {% with chars|get:chnum as cha %}
-                                    <tr>
-                                        <td>{{ cha.name }}</td>
-                                        <td>
-                                            {% for fnum in cha.factions %}
-                                                {% with factions|get:fnum as g %}
-                                                    {% if not g.typ == 'g' %}
-                                                        {% include "elements/comma.html" %}
-                                                        {{ g.name }}
-                                                    {% endif %}
-                                                {% endwith %}
-                                            {% endfor %}
-                                        </td>
-                                        <td>{{ cha.player_full | default_if_none:"" }}</td>
-                                        <td>
-                                            {% if cha.player_prof %}<img src="{{ cha.player_prof }}" height=100 width=100 />{% endif %}
-                                        </td>
-                                        <td>{{ cha.pronoun | default_if_none:"" }}</td>
-                                    </tr>
-                                {% endwith %}
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                            <td>{{ cha.name }}</td>
+                            <td>
+                                {% for fnum in cha.factions %}
+                                    {% with factions|get:fnum as g %}
+                                        {% if not g.typ == 'g' %}
+                                            {% include "elements/comma.html" %}
+                                            {{ g.name }}
+                                        {% endif %}
+                                    {% endwith %}
+                                {% endfor %}
+                            </td>
+                            <td>{{ cha.player_full | default_if_none:"" }}</td>
+                            <td>
+                                {% if cha.player_prof %}<img src="{{ cha.player_prof }}" height=100 width=100 alt="player profile" />{% endif %}
+                            </td>
+                            <td>{{ cha.pronoun | default_if_none:"" }}</td>
+                        </tr>
+                    {% endwith %}
                 {% endfor %}
-            {% endblock content %}
+            </tbody>
+        </table>
+    {% endfor %}
+{% endblock content %}

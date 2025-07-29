@@ -23,7 +23,7 @@
               method="post"
               enctype="multipart/form-data">
             {% csrf_token %}
-            <table class="mob no_csv">
+            <table class="mob no_csv no_sticky">
                 {{ form.as_table }}
             </table>
             <input type="submit" value="Submit">
