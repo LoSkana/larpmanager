@@ -120,7 +120,11 @@
     {% if add_another %}
         <br />
         <div class="continue">
-            <input type="checkbox" id="continue" name="continue" class="hide">
+            <input type="checkbox"
+                   id="continue"
+                   name="continue"
+                   class="hide"
+                   {% if continue_add %}checked{% endif %}>
             <label for="continue">{% trans "After confirmation, add another" %}</label>
         </div>
         <br />
