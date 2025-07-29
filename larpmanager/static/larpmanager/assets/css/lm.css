@@ -990,7 +990,6 @@ header.sec h1 {
 
 #one .inner {
     padding-bottom: 2em !important;
-    overflow-x: auto;
 }
 
 .login {
@@ -1505,6 +1504,7 @@ th select {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
+
 .table-responsive table {
   width: 100%;
   border-collapse: collapse;
@@ -1871,4 +1871,91 @@ input[type="checkbox"].checkbox_single {
 
 #sidebar-open img {
     margin: 0 0.5em 0 0;
+}
+
+### STICKY TABLES ###
+
+.table-sticky table {
+  border-collapse: collapse;
+  width: max-content;
+}
+
+.table-sticky thead {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  border: 0;
+}
+
+.table-sticky thead .thead-border-row {
+  background: rgba(var(--pri-rgb), 0.5);
+}
+
+.table-sticky thead .thead-border-row th {
+  position: sticky;
+  top: 100%;
+  height: 2px;
+  padding: 0;
+  margin: 0;
+  background: #999;
+  z-index: 3;
+}
+
+.table-sticky .sticky-col {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  width: 2em;
+  background-color: inherit;
+}
+
+.table-sticky .sticky-col-2 {
+  position: sticky;
+  left: 2em;
+  z-index: 2;
+}
+
+.table-sticky .sticky-header.sticky-col-2 {
+  z-index: 4;
+}
+
+.table-sticky .sticky-col.sticky-header {
+  z-index: 4;
+}
+
+.table-sticky::-webkit-scrollbar {
+  width: 32px !important;
+  height: 32px !important;
+}
+
+.table-sticky::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+.table-sticky::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Firefox */
+.table-sticky {
+  scrollbar-width: thick;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+.table-sticky {
+  overflow: auto;
+  max-height: 400px;
+}
+
+.simplebar-scrollbar {
+  box-shadow: none !important;
+  background: none !important;
+}
+
+.simplebar-scrollbar::before {
+  content: '';
+  display: block;
+  border-radius: 7px;
+  height: 100%;
+  background: rgba(var(--ter-rgb), 0.7) !important;
 }

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n static %}
 {% block special %}
-    table_csv
+    manage
 {% endblock special %}
 {% block meta %}
     <meta name="csrf-token" content="{{ csrf_token }}">
@@ -14,18 +14,16 @@
         {% endblock nav_fields %}
         <a href="#" class="my_toggle" tog='stats'>Stats</a>
     </div>
-    <div class="table-responsive">
-        <table class="tablesorter writing regs">
-            <thead>
-                {% block thead %}
-                {% endblock thead %}
-            </thead>
-            <tbody>
-                {% block tbody %}
-                {% endblock tbody %}
-            </tbody>
-        </table>
-    </div>
+    <table class="tablesorter writing regs">
+        <thead>
+            {% block thead %}
+            {% endblock thead %}
+        </thead>
+        <tbody>
+            {% block tbody %}
+            {% endblock tbody %}
+        </tbody>
+    </table>
     {% block additional %}
     {% endblock additional %}
     <div id="excel-edit"></div>
