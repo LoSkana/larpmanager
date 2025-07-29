@@ -425,6 +425,11 @@ urlpatterns = [
         name="character_abilities",
     ),
     path(
+        "<slug:s>/<int:n>/character/<int:num>/abilities/<int:id_del>/",
+        views_uc.character_abilities_del,
+        name="character_abilities_del",
+    ),
+    path(
         "<slug:s>/<int:n>/character/<int:num>/assign/",
         views_uc.character_assign,
         name="character_assign",

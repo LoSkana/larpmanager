@@ -546,6 +546,9 @@ msgstr "Citaat"
 msgid "Refund"
 msgstr "Terugbetaling"
 
+msgid "Remove"
+msgstr "Verwijder"
+
 msgid "Safety"
 msgstr "Veiligheid"
 
@@ -1650,6 +1653,9 @@ msgstr "Totale kosten"
 msgid "Transversal"
 msgstr "Dwars"
 
+msgid "Undo period"
+msgstr "Periode ongedaan maken"
+
 msgid "Unique code"
 msgstr "Unieke code"
 
@@ -2218,6 +2224,9 @@ msgstr "verzoek om terugbetaling"
 
 msgid "Ability missing"
 msgstr "Vermogen ontbreekt"
+
+msgid "Ability removed"
+msgstr "Vermogen verwijderd"
 
 msgid "And that is all"
 msgstr "En dat is alles"
@@ -8673,6 +8682,13 @@ msgid ""
 msgstr ""
 "Personeelsleden die de antwoorden van spelers mogen zien (laat leeg om "
 "iedereen te laten zien)"
+
+msgid ""
+"Time window (in hours) during which the user can revoke a chosen skill and "
+"recover spent XP (default is 0)"
+msgstr ""
+"Tijdsvenster (in uren) waarin de gebruiker een gekozen vaardigheid kan "
+"herroepen en uitgegeven XP kan terugkrijgen (standaardwaarde is 0)"
 
 msgid ""
 "If you select another event, it will be considered in the same campaign, and"
