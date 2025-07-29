@@ -23,6 +23,7 @@ import io
 import zipfile
 
 from bs4 import BeautifulSoup
+from django.db.models import F
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
@@ -33,9 +34,11 @@ from larpmanager.models.form import (
     QuestionApplicable,
     RegistrationAnswer,
     RegistrationChoice,
+    RegistrationOption,
     RegistrationQuestion,
     WritingAnswer,
     WritingChoice,
+    WritingOption,
     WritingQuestion,
     get_ordered_registration_questions,
 )
@@ -388,18 +391,20 @@ def orga_registration_form_download(ctx):
 
 
 def export_registration_form(ctx):
-    key = ["typ", "display", "description", "status", "options"]
-    vals = []
+    key = ["display", "typ", "description", "status", "max_length"]
     que = get_ordered_registration_questions(ctx)
-    for el in que:
-        options = el.options.all()
-        row = [el.typ, el.display, el.description, el.status, len(options)]
-        for opt in options:
-            row.extend([opt.display, opt.details, opt.price, opt.max_available])
-        vals.append(row)
+    vals = list(que.values_list(*key))
 
-    # TODO fix
-    return [("registration_questions", key, vals)]
+    exports = [("registration_questions", key, vals)]
+
+    key = ["question__display", "display", "details", "price", "max_available"]
+    que = ctx["event"].get_elements(RegistrationOption).select_related("question")
+    que = que.order_by(F("question__order"), "order")
+    vals = list(que.values_list(*key))
+    key[0] = "question"
+
+    exports.append(("registration_options", key, vals))
+    return exports
 
 
 def orga_character_form_download(ctx):
@@ -407,21 +412,20 @@ def orga_character_form_download(ctx):
 
 
 def export_character_form(ctx):
-    key = ["typ", "display", "description", "status", "visibility", "options"]
-    vals = []
-    que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-    que = que.filter(applicable=QuestionApplicable.CHARACTER)
-    for el in que.prefetch_related("options"):
-        options = el.options.order_by("order")
-        row = [el.typ, el.display, el.description, el.status, el.visibility, len(options)]
-        for opt in options:
-            dependents = ",".join(opt.dependents.values_list("display", flat=True))
-            tickets = ",".join(opt.tickets.values_list("name", flat=True))
-            row.extend([opt.display, opt.details, opt.max_available, dependents, tickets])
-        vals.append(row)
+    key = ["display", "typ", "description", "status", "applicable", "visibility", "max_length"]
+    que = ctx["event"].get_elements(WritingQuestion).order_by("applicable", "order")
+    vals = list(que.values_list(*key))
 
-    # TODO fix
-    return [("writing_questions", key, vals)]
+    exports = [("writing_questions", key, vals)]
+
+    key = ["question__display", "display", "details", "max_available"]
+    que = ctx["event"].get_elements(WritingOption).select_related("question")
+    que = que.order_by(F("question__order"), "order")
+    vals = list(que.values_list(*key))
+    key[0] = "question"
+
+    exports.append(("writing_options", key, vals))
+    return exports
 
 
 def _orga_registrations_acc(ctx, regs=None):
