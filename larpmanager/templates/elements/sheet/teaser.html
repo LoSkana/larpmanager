@@ -19,34 +19,3 @@
         {% endif %}
     {% endwith %}
 {% endfor %}
-{% if features.questbuilder %}
-    {% for tnum in char.traits %}
-        {% with traits|get:tnum as f %}
-            {% with quests|get:f.quest as quest %}
-                {% if quest.open or check %}
-                    {% with quest_types|get:f.typ as qt %}<h2>{{ qt.name }}</h2>{% endwith %}
-                    <div class="go-inline">
-                        <b>{% trans "Quest" %}: </b>{{ quest.name }}, <b>{% trans "Trait" %}: </b>{{ f.name }}
-                    </div>
-                    {% if quest.teaser and show_character.teaser %}
-                        {% show_char quest.teaser run 1 %}
-                    {% endif %}
-                    {% if f.teaser and show_character.teaser %}
-                        {% show_char f.teaser run 1 %}
-                    {% endif %}
-                    {% if f.open %}
-                        <div class="go-inline">
-                            <b>{% trans "Other characters" %}: </b>
-                        </div>
-                        {% for el in f.traits %}
-                            {% if el.char and el.char.number != char.number %}
-                                {{ el.name }} ( <a href="{% url 'character' slug run.number el.char.number %}">{{ el.char.name }}</a> )
-                                <br />
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                {% endif %}
-            {% endwith %}
-        {% endwith %}
-    {% endfor %}
-{% endif %}

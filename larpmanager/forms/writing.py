@@ -18,20 +18,18 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import traceback
 
 from django import forms
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Max
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.base import BaseRegistrationForm, MyForm
 from larpmanager.forms.utils import EventCharacterS2Widget, EventCharacterS2WidgetMulti, WritingTinyMCE
 from larpmanager.models.access import get_event_staffers
-from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
-from larpmanager.models.event import ProgressStep, Run
+from larpmanager.models.casting import Quest, QuestType, Trait
+from larpmanager.models.event import ProgressStep
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionType,
@@ -41,7 +39,6 @@ from larpmanager.models.form import (
     WritingQuestion,
 )
 from larpmanager.models.miscellanea import PlayerRelationship
-from larpmanager.models.registration import Registration
 from larpmanager.models.writing import (
     Faction,
     Handout,
@@ -309,93 +306,37 @@ class QuestTypeForm(WritingForm):
         }
 
 
-class QuestForm(WritingForm):
+class QuestForm(WritingForm, BaseWritingForm):
     page_title = _("Quest")
 
     class Meta:
         model = Quest
-        fields = [
-            "progress",
-            "typ",
-            "name",
-            "assigned",
-            "teaser",
-            "text",
-            "hide",
-            "open_show",
-            "event",
-        ]
-
-        widgets = {
-            "teaser": WritingTinyMCE(),
-            "text": WritingTinyMCE(),
-        }
+        exclude = ("number", "temp", "hide", "order")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.init_orga_fields()
+        self._init_special_fields()
+
         que = self.params["run"].event.get_elements(QuestType)
         self.fields["typ"].choices = [(m.id, m.name) for m in que]
 
-        # ~ #if not 'questbuilder_open' in self.params['features']:
-        # ~ del self.fields['open_show']
 
-        self.details = {}
-
-        if not self.instance.pk:
-            return
-
-        # TRAITS CHARACTERS REL
-        if Run.objects.filter(event=self.params["run"].event).aggregate(Max("number"))["number__max"] > 1:
-            # do this only if this the only run of this event
-            return
-
-            # get traits
-        txts = []
-        for trait in self.instance.traits.all():
-            char_name = "<" + _("NOT ASSIGNED") + ">"
-            try:
-                at = AssignmentTrait.objects.get(run=self.params["run"], trait=trait)
-                reg = Registration.objects.get(run=self.params["run"], member=at.member, cancellation_date__isnull=True)
-                chars = []
-                for rcr in reg.rcrs.all():
-                    chars.append(f"#{rcr.character.number}")
-                char_name = ", ".join(chars)
-            except ObjectDoesNotExist:
-                print(traceback.format_exc())
-                pass
-
-            txts.append(f"{trait.name} - {char_name}")
-
-
-class TraitForm(WritingForm):
+class TraitForm(WritingForm, BaseWritingForm):
     page_title = _("Trait")
 
     load_templates = ["trait"]
 
     class Meta:
         model = Trait
-        fields = [
-            "progress",
-            "quest",
-            "name",
-            "assigned",
-            "teaser",
-            "text",
-            "role",
-            "keywords",
-            "safety",
-            "hide",
-            "event",
-        ]
-
-        widgets = {
-            "teaser": WritingTinyMCE(),
-            "text": WritingTinyMCE(),
-        }
+        exclude = ("number", "temp", "hide", "order", "traits")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.init_orga_fields()
+        self._init_special_fields()
 
         que = self.params["run"].event.get_elements(Quest)
         self.fields["quest"].choices = [(m.id, m.name) for m in que]

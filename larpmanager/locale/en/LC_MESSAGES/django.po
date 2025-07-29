@@ -750,12 +750,6 @@ msgstr ""
 msgid "Writing option"
 msgstr ""
 
-msgid "Characters"
-msgstr ""
-
-msgid "Plots"
-msgstr ""
-
 msgid "Insert the css code to customize the pdf printing"
 msgstr ""
 
@@ -1345,13 +1339,13 @@ msgstr ""
 msgid "Visibility"
 msgstr ""
 
+msgid "Plots"
+msgstr ""
+
 msgid "Speedlarp"
 msgstr ""
 
 msgid "Prologues"
-msgstr ""
-
-msgid "Questbuilder"
 msgstr ""
 
 msgid "Workshop"
@@ -1438,6 +1432,9 @@ msgid ""
 "fee"
 msgstr ""
 
+msgid "Characters"
+msgstr ""
+
 msgid "Do you want to manage characters assigned to registered players"
 msgstr ""
 
@@ -1497,6 +1494,9 @@ msgid "XP"
 msgstr ""
 
 msgid "speedlarp"
+msgstr ""
+
+msgid "Traits"
 msgstr ""
 
 msgid "Ability"
@@ -1811,9 +1811,6 @@ msgid "Quest type"
 msgstr ""
 
 msgid "Quest"
-msgstr ""
-
-msgid "NOT ASSIGNED"
 msgstr ""
 
 msgid "Trait"
@@ -2719,18 +2716,6 @@ msgid ""
 "automatically)"
 msgstr ""
 
-msgid "Show all the traits to those present"
-msgstr ""
-
-msgid "Does the character have a public role/archetype? If not, leave blank"
-msgstr ""
-
-msgid "Indicates accurate safety information"
-msgstr ""
-
-msgid "Select the character's key words"
-msgstr ""
-
 msgid "A short tagline, slogan"
 msgstr ""
 
@@ -3029,6 +3014,9 @@ msgstr ""
 msgid ""
 "Optional – Maximum number of times it can be selected across all "
 "registrations (0 = unlimited)"
+msgstr ""
+
+msgid "Quests"
 msgstr ""
 
 msgid "Free"
@@ -4099,9 +4087,6 @@ msgstr ""
 msgid "Delivery list"
 msgstr ""
 
-msgid "Other characters"
-msgstr ""
-
 msgid "Delegated users"
 msgstr ""
 
@@ -4353,9 +4338,6 @@ msgstr ""
 msgid "Tell me more"
 msgstr ""
 
-msgid "Titolo"
-msgstr ""
-
 msgid "Characters are only visible to logged in users"
 msgstr ""
 
@@ -4439,12 +4421,6 @@ msgid "are not yet open"
 msgstr ""
 
 msgid "Will open at"
-msgstr ""
-
-msgid "Traits"
-msgstr ""
-
-msgid "Keywords"
 msgstr ""
 
 msgid "Change registration"
@@ -5403,10 +5379,10 @@ msgstr ""
 msgid "Access the list of your characters"
 msgstr ""
 
-msgid "Find out what quests are available"
+msgid "Discover the game factions"
 msgstr ""
 
-msgid "Discover the game factions"
+msgid "Find out what quests are available"
 msgstr ""
 
 msgid "View photos from the event"
@@ -6834,16 +6810,7 @@ msgstr ""
 msgid "This page shows the types of quests in the event"
 msgstr ""
 
-msgid "This page shows the event quests"
-msgstr ""
-
-msgid "Show / hide"
-msgstr ""
-
-msgid "hide"
-msgstr ""
-
-msgid "assigned"
+msgid "This page shows the quests for the event"
 msgstr ""
 
 msgid "This page shows the relationships between characters"
@@ -6870,10 +6837,7 @@ msgstr ""
 msgid "Station"
 msgstr ""
 
-msgid "This page shows the traits assigned to the characters in the run"
-msgstr ""
-
-msgid "title"
+msgid "This page shows the traits of the quests for the event"
 msgstr ""
 
 msgid ""

@@ -116,9 +116,10 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 
         if not conf_settings.DEBUG and not os.getenv("PYTEST_CURRENT_TEST"):
             public, private = get_recaptcha_secrets(self.request)
-            self.fields["captcha"] = ReCaptchaField(
-                widget=ReCaptchaV3, label="Captcha", public_key=public, private_key=private
-            )
+            if public and private:
+                self.fields["captcha"] = ReCaptchaField(
+                    widget=ReCaptchaV3, label="Captcha", public_key=public, private_key=private
+                )
 
         # place language as first
         new_order = ["lang"] + [key for key in self.fields if key != "lang"]

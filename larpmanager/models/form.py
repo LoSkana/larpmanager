@@ -101,6 +101,8 @@ class QuestionApplicable(models.TextChoices):
     CHARACTER = "c", "character"
     PLOT = "p", "plot"
     FACTION = "f", "faction"
+    QUEST = "q", "quest"
+    TRAIT = "t", "trait"
 
     @classmethod
     def get_applicable(cls, model_name):
@@ -550,3 +552,25 @@ class RegistrationAnswer(BaseModel):
 def get_ordered_registration_questions(ctx):
     que = RegistrationQuestion.objects.filter(event=ctx["event"])
     return que.order_by(F("section__order").asc(nulls_first=True), "order").prefetch_related("options")
+
+
+def _get_writing_elements():
+    shows = [
+        ("character", _("Characters"), QuestionApplicable.CHARACTER),
+        ("faction", _("Factions"), QuestionApplicable.FACTION),
+        ("plot", _("Plots"), QuestionApplicable.PLOT),
+        ("quest", _("Quests"), QuestionApplicable.QUEST),
+        ("trait", _("Traits"), QuestionApplicable.TRAIT),
+    ]
+    return shows
+
+
+def _get_writing_mapping():
+    mapping = {
+        "character": "character",
+        "faction": "faction",
+        "plot": "plot",
+        "quest": "questbuilder",
+        "trait": "questbuilder",
+    }
+    return mapping

@@ -11,7 +11,7 @@
             <thead>
                 <tr>
                     <th>{{ writing_fields.faction.names.name }}</th>
-                    <th>{{ writing_fields.faction.names.teaser }}</th>
+                    {% if show_faction.teaser %}<th>{{ writing_fields.faction.names.teaser }}</th>{% endif %}
                     <th>{% trans "Characters" %}</th>
                 </tr>
             </thead>
@@ -24,7 +24,7 @@
                                     <a href="{% url 'faction' run.event.slug run.number el.number %}">{{ el.name }}</a>
                                 </h3>
                             </td>
-                            {% if show_character.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
+                            {% if show_faction.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
                             <td>
                                 {% for chnum in el.characters %}
                                     {% include "elements/comma.html" %}
@@ -48,7 +48,7 @@
                 <thead>
                     <tr>
                         <th>{{ writing_fields.faction.names.name }}</th>
-                        <th>{{ writing_fields.faction.names.teaser }}</th>
+                        {% if show_faction.teaser %}<th>{{ writing_fields.faction.names.teaser }}</th>{% endif %}
                         <th>{% trans "Characters" %}</th>
                     </tr>
                 </thead>
@@ -60,7 +60,7 @@
                                     <a href="{% url 'faction' run.event.slug run.number el.number %}">{{ el.name }}</a>
                                 </h3>
                             </td>
-                            {% if show_character.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
+                            {% if show_faction.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
                             <td>
                                 {% for chnum in el.characters %}
                                     {% include "elements/comma.html" %}

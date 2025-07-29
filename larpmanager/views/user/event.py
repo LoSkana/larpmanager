@@ -46,6 +46,7 @@ from larpmanager.models.event import (
 from larpmanager.models.form import (
     QuestionApplicable,
     RegistrationOption,
+    _get_writing_mapping,
 )
 from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
@@ -366,15 +367,12 @@ def get_factions(ctx):
 
 
 def check_visibility(ctx, typ, name):
-    if typ not in ctx["features"]:
+    mapping = _get_writing_mapping()
+    if mapping.get(typ) not in ctx["features"]:
         raise Http404(typ + " not active")
 
-    if "staff" not in ctx:
-        # TODO FIX
-        if typ == "faction" and not ctx["show_faction"]:
-            raise HiddenError(ctx["event"].slug, ctx["run"].number, name)
-        if typ == "questbuilder" and "questbuilder" not in ctx["show_addit"]:
-            raise HiddenError(ctx["event"].slug, ctx["run"].number, name)
+    if "staff" not in ctx and not ctx[f"show_{typ}"]:
+        raise HiddenError(ctx["event"].slug, ctx["run"].number, name)
 
 
 def factions(request, s, n):
@@ -395,7 +393,7 @@ def faction(request, s, n, g):
         ctx["faction"] = ctx["factions"][g]
         typ = ctx["faction"]["typ"]
 
-    if "faction" not in ctx or typ == "secret":
+    if "faction" not in ctx or typ == "secret" or "id" not in ctx["faction"]:
         raise Http404("Faction does not exist")
 
     ctx["fact"] = get_writing_element_fields(
@@ -407,27 +405,35 @@ def faction(request, s, n, g):
 
 def quests(request, s, n, g=None):
     ctx = get_event_run(request, s, n, status=True)
-    check_visibility(ctx, "questbuilder", _("Quest"))
+    check_visibility(ctx, "quest", _("Quest"))
 
     if not g:
-        ctx["list"] = []
-        for el in QuestType.objects.filter(event=ctx["event"]).order_by("number"):
-            ctx["list"].append(el.show_complete())
+        ctx["list"] = QuestType.objects.filter(event=ctx["event"]).order_by("number").prefetch_related("quests")
         return render(request, "larpmanager/event/quest_types.html", ctx)
 
     get_element(ctx, g, "quest_type", QuestType, by_number=True)
     ctx["list"] = []
     for el in Quest.objects.filter(event=ctx["event"], hide=False, typ=ctx["quest_type"]).order_by("number"):
         ctx["list"].append(el.show_complete())
-    return render(request, "larpmanager/event/quests.html", ctx)
+        return render(request, "larpmanager/event/quests.html", ctx)
 
 
 def quest(request, s, n, g):
     ctx = get_event_run(request, s, n, status=True)
-    check_visibility(ctx, "questbuilder", _("Quest"))
+    check_visibility(ctx, "quest", _("Quest"))
 
     get_element(ctx, g, "quest", Quest, by_number=True)
-    ctx["data"] = ctx["quest"].show()
+    ctx["quest_fields"] = get_writing_element_fields(
+        ctx, "quest", QuestionApplicable.QUEST, ctx["quest"].id, only_visible=True
+    )
+
+    traits = []
+    for el in ctx["quest"].traits.all():
+        res = get_writing_element_fields(ctx, "trait", QuestionApplicable.TRAIT, el.id, only_visible=True)
+        res.update(el.show())
+        traits.append(res)
+    ctx["traits"] = traits
+
     return render(request, "larpmanager/event/quest.html", ctx)
 
 

@@ -260,9 +260,6 @@ msgstr "Tage"
 msgid "gift"
 msgstr "Geschenk"
 
-msgid "hide"
-msgstr "ausblenden"
-
 msgid "past"
 msgstr "Vergangenheit"
 
@@ -423,9 +420,6 @@ msgstr "mehr"
 msgid "quick"
 msgstr "schnell"
 
-msgid "title"
-msgstr "Titel"
-
 msgid "Absent"
 msgstr "Abwesend"
 
@@ -543,6 +537,9 @@ msgstr "Spieler"
 msgid "Public"
 msgstr "Öffentlich"
 
+msgid "Quests"
+msgstr "Quests"
+
 msgid "Quotas"
 msgstr "Zitat"
 
@@ -578,9 +575,6 @@ msgstr "Senden Sie"
 
 msgid "Ticket"
 msgstr "Ticket"
-
-msgid "Titolo"
-msgstr "Titolo"
 
 msgid "Tokens"
 msgstr "Wertmarken"
@@ -948,9 +942,6 @@ msgstr "Einschließlich"
 msgid "Invoices"
 msgstr "Rechnungen"
 
-msgid "Keywords"
-msgstr "Schlüsselwörter"
-
 msgid "Language"
 msgstr "Sprache"
 
@@ -1082,9 +1073,6 @@ msgstr "Workshop"
 
 msgid "XP avail"
 msgstr "Px Vorhanden"
-
-msgid "assigned"
-msgstr "zugewiesen"
 
 msgid "discount"
 msgstr "Rabatt"
@@ -1641,9 +1629,6 @@ msgstr "E-Mail senden"
 msgid "Shorten URL"
 msgstr "URL kürzen"
 
-msgid "Show / hide"
-msgstr "Anzeigen / Ausblenden"
-
 msgid "Show closed"
 msgstr "Geschlossen anzeigen"
 
@@ -1764,9 +1749,6 @@ msgstr "Mehr Details"
 msgid "Municipality"
 msgstr "Kommune"
 
-msgid "NOT ASSIGNED"
-msgstr "NICHT ZUGEORDNET"
-
 msgid "Name credits"
 msgstr "Namenskredite"
 
@@ -1796,9 +1778,6 @@ msgstr "Vorregistrierung"
 
 msgid "Presentation"
 msgstr "Präsentation"
-
-msgid "Questbuilder"
-msgstr "Questbuilder"
 
 msgid "Questions WS"
 msgstr "WS-Fragen"
@@ -2449,9 +2428,6 @@ msgstr "Mitgliedsbeitrag"
 
 msgid "Organization tax"
 msgstr "Mitgliedsbeitrag"
-
-msgid "Other characters"
-msgstr "Andere Zeichen"
 
 msgid "Password changed"
 msgstr "Passwort geändert"
@@ -4007,17 +3983,11 @@ msgstr "Zusätzlicher Anspruchsposten"
 msgid "Select a file with extension csv"
 msgstr "Wählen Sie eine Datei mit der Erweiterung \"csv\""
 
-msgid "Select the character's key words"
-msgstr "Gibt die Schlüsselwörter des Zeichens an"
-
 msgid "Sum of payments received through"
 msgstr "Summe der erhaltenen Zahlungen durch"
 
 msgid "The setting / genre of the event"
 msgstr "Der Schauplatz / das Genre der Veranstaltung"
-
-msgid "This page shows the event quests"
-msgstr "Diese Seite zeigt die Ereignisquests"
 
 msgid "Total of recorded money outflows"
 msgstr "Summe der verbuchten Geldabflüsse"
@@ -4302,9 +4272,6 @@ msgstr "Anmeldung bei %(event)s bestätigt!"
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Rollengenehmigung %(role)s pro %(event)s"
 
-msgid "Show all the traits to those present"
-msgstr "Den Anwesenden alle Eigenschaften zeigen"
-
 msgid "Terms and Conditions of registration"
 msgstr "Teilnahmebedingungen und -voraussetzungen"
 
@@ -4344,9 +4311,6 @@ msgstr "Das Enddatum kann nicht vor dem Startdatum liegen!"
 
 msgid "If checked, allow ticket tier: Seller"
 msgstr "Wenn angekreuzt, Ticketstufe zulassen: Verkäufer"
-
-msgid "Indicates accurate safety information"
-msgstr "Weist auf genaue Sicherheitsinformationen hin"
 
 msgid "Location - rent, gas, overnight stays"
 msgstr "Standort - Miete, Gas, Übernachtungen"
@@ -4597,6 +4561,9 @@ msgstr "Die Zahlung wird derzeit von den Mitarbeitern geprüft"
 
 msgid "The collection was delivered to the user"
 msgstr "Die Sammlung wurde dem Benutzer zugestellt"
+
+msgid "This page shows the quests for the event"
+msgstr "Diese Seite zeigt die Quests für das Ereignis"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Gut gemacht, Sie haben alle Module abgeschlossen!"
@@ -5603,6 +5570,9 @@ msgstr ""
 "Auf dieser Seite finden Sie eine Zusammenfassung der für diese Veranstaltung"
 " aktivierten Rabatte"
 
+msgid "This page shows the traits of the quests for the event"
+msgstr "Diese Seite zeigt die Eigenschaften der Quests für das Ereignis"
+
 msgid "This page summarises the customised texts of the event"
 msgstr ""
 "Auf dieser Seite sind die individuellen Texte der Veranstaltung "
@@ -6263,11 +6233,6 @@ msgid "This page shows the settings available for the membership voting"
 msgstr ""
 "Diese Seite zeigt die verfügbaren Einstellungen für die Mitgliederabstimmung"
 
-msgid "This page shows the traits assigned to the characters in the run"
-msgstr ""
-"Diese Seite fasst die Eigenschaften zusammen, die den Charakteren in der "
-"Serie zugeordnet sind"
-
 #, python-format
 msgid "To complete the process, simply <a href='%(url)s'>click here</a>"
 msgstr ""
@@ -6484,10 +6449,6 @@ msgid "Assign roles to staff members, and give access to specific functions"
 msgstr ""
 "Zuweisung von Rollen an Mitarbeiter und Erteilung von Zugriff auf bestimmte "
 "Funktionen"
-
-msgid "Does the character have a public role/archetype? If not, leave blank"
-msgstr ""
-"Hat der Charakter eine öffentliche Rolle/Archetyp? Wenn nicht, leer lassen"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr ""

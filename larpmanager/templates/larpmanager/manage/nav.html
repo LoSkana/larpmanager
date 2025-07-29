@@ -56,13 +56,6 @@
                         <div class="lm_tooltiptext">{% trans "Access the list of your characters" %}!</div>
                     </div>
                 {% endif %}
-                {% if features.questbuilder and show_quest %}
-                    <div class="lm_tooltip">
-                        <a href="{% url 'quests' run.event.slug run.number %}"
-                           {% if request_func_name == "quests" %}class="select"{% endif %}>{% trans "Quest" %}</a>
-                        <div class="lm_tooltiptext">{% trans "Find out what quests are available" %}!</div>
-                    </div>
-                {% endif %}
                 {% if features.faction and show_faction %}
                     <div class="lm_tooltip">
                         <a href="{% url 'factions' run.event.slug run.number %}"
@@ -70,7 +63,7 @@
                         <div class="lm_tooltiptext">{% trans "Discover the game factions" %}!</div>
                     </div>
                 {% endif %}
-                {% if features.questbuilder and show_addit.questbuilder %}
+                {% if features.questbuilder and show_quest %}
                     <div class="lm_tooltip">
                         <a href="{% url 'quests' run.event.slug run.number %}"
                            {% if request_func_name == "quests" %}class="select"{% endif %}>{% trans "Quest" %}</a>

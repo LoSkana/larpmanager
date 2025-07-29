@@ -35,14 +35,14 @@
                                 </p>
                             </div>
                         {% endif %}
-                        {% if el.title %}
+                        {% if el.title and show_character.title %}
                             <div class="go-inline">
-                                <b>{% trans "Titolo" %}: </b> {{ el.title | safe }}
+                                <b>{{ writing_fields.character.names.title }}: </b> {{ el.title | safe }}
                             </div>
                         {% endif %}
                         {% if el.teaser and show_character.teaser %}
                             <div class="go-inline">
-                                <b>Teaser: </b> {% show_char el.teaser run 1 %}
+                                <b>{{ writing_fields.character.names.teaser }}: </b> {% show_char el.teaser run 1 %}
                             </div>
                         {% endif %}
                         {% if el.factions %}

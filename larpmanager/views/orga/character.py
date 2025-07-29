@@ -36,7 +36,7 @@ from larpmanager.forms.character import (
     OrgaWritingQuestionForm,
 )
 from larpmanager.forms.utils import EventCharacterS2Widget
-from larpmanager.forms.writing import FactionForm, PlotForm, UploadElementsForm
+from larpmanager.forms.writing import FactionForm, PlotForm, QuestForm, TraitForm, UploadElementsForm
 from larpmanager.models.base import Feature
 from larpmanager.models.form import (
     QuestionApplicable,
@@ -45,6 +45,7 @@ from larpmanager.models.form import (
     WritingChoice,
     WritingOption,
     WritingQuestion,
+    _get_writing_mapping,
 )
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
@@ -272,7 +273,8 @@ def orga_character_form(request, s, n):
 
 def check_writing_form_type(ctx, typ):
     typ = typ.lower()
-    available = {v: k for k, v in QuestionApplicable.choices if v in ctx["features"]}
+    mapping = _get_writing_mapping()
+    available = {v: k for k, v in QuestionApplicable.choices if mapping[v] in ctx["features"]}
     if typ not in available:
         raise Http404(f"unknown writing form type: {typ}")
     ctx["typ"] = typ
@@ -613,7 +615,13 @@ def _get_excel_form(request, s, n, typ, submit=False):
 
     ctx["elementTyp"] = ctx["applicable"]
 
-    form_mapping = {"character": OrgaCharacterForm, "faction": FactionForm, "plot": PlotForm}
+    form_mapping = {
+        "character": OrgaCharacterForm,
+        "faction": FactionForm,
+        "plot": PlotForm,
+        "trait": TraitForm,
+        "quest": QuestForm,
+    }
 
     # Init form
     form_class = form_mapping.get(typ, OrgaCharacterForm)

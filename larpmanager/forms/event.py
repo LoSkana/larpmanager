@@ -25,6 +25,7 @@ from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features, reset_event_features
+from larpmanager.cache.role import has_event_permission
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
@@ -51,20 +52,11 @@ from larpmanager.models.event import (
     ProgressStep,
     Run,
 )
-from larpmanager.models.form import QuestionApplicable, QuestionType
+from larpmanager.models.form import QuestionType, _get_writing_elements, _get_writing_mapping
 from larpmanager.models.member import Member
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.common import copy_class
 from larpmanager.views.orga.registration import _get_registration_fields
-
-
-def _get_writing_elements():
-    shows = [
-        ("character", _("Characters"), QuestionApplicable.CHARACTER),
-        ("faction", _("Factions"), QuestionApplicable.FACTION),
-        ("plot", _("Plots"), QuestionApplicable.PLOT),
-    ]
-    return shows
 
 
 class EventCharactersPdfForm(ConfigForm):
@@ -874,9 +866,10 @@ class OrgaRunForm(ConfigForm):
         shows = []
 
         addit_show = {
+            "plot": _("Plots"),
+            "relationships": _("Relationships"),
             "speedlarp": _("Speedlarp"),
             "prologue": _("Prologues"),
-            "questbuilder": _("Questbuilder"),
             "workshop": _("Workshop"),
             "print_pdf": _("PDF"),
         }
@@ -1078,6 +1071,19 @@ class OrgaPreferencesForm(ConfigForm):
 
         help_text = _("Select which fields should open automatically when the list is displayed")
 
+        self._add_reg_configs(event_id, help_text)
+
+        # Add writings fields
+        shows = _get_writing_elements()
+        for s in shows:
+            self.add_writing_configs(basics, event_id, help_text, s)
+
+    def _add_reg_configs(self, event_id, help_text):
+        if not has_event_permission(
+            self.params, self.params["request"], self.params["event"].slug, "orga_registrations"
+        ):
+            return
+
         # Add registration fields
         extra = []
         feature_fields = [
@@ -1094,7 +1100,6 @@ class OrgaPreferencesForm(ConfigForm):
             ("discount", "disc", _("Discounts")),
         ]
         self.add_feature_extra(extra, feature_fields)
-
         fields = _get_registration_fields(self.params, self.params["request"].user.member)
         max_length = 20
         if fields:
@@ -1109,48 +1114,55 @@ class OrgaPreferencesForm(ConfigForm):
                     for field_id, field in fields.items()
                 ]
             )
-            self.add_configs(
-                f"open_registration_{event_id}", ConfigType.MULTI_BOOL, _("Registrations"), help_text, extra=extra
-            )
+        self.add_configs(
+            f"open_registration_{event_id}", ConfigType.MULTI_BOOL, _("Registrations"), help_text, extra=extra
+        )
 
-        # Add writings fields
-        shows = _get_writing_elements()
-        for s in shows:
-            if s[0] not in self.params["features"]:
+    def add_writing_configs(self, basics, event_id, help_text, s):
+        mapping = _get_writing_mapping()
+        if mapping.get(s[0]) not in self.params["features"]:
+            return
+
+        if "writing_fields" not in self.params or s[0] not in self.params["writing_fields"]:
+            return
+
+        if not has_event_permission(self.params, self.params["request"], self.params["event"].slug, f"orga_{s[0]}s"):
+            return
+
+        fields = self.params["writing_fields"][s[0]]["questions"]
+        extra = []
+
+        for _id, field in fields.items():
+            if field["typ"] == "name":
                 continue
-            if "writing_fields" not in self.params or s[0] not in self.params["writing_fields"]:
-                continue
-            fields = self.params["writing_fields"][s[0]]["questions"]
-            extra = []
-            for _id, field in fields.items():
-                if field["typ"] == "name":
-                    continue
 
-                if field["typ"] in basics:
-                    tog = f".lq_{field['id']}"
-                else:
-                    tog = f"q_{field['id']}"
+            if field["typ"] in basics:
+                tog = f".lq_{field['id']}"
+            else:
+                tog = f"q_{field['id']}"
 
-                extra.append((tog, field["display"]))
+            extra.append((tog, field["display"]))
 
-            if s[0] == "character":
-                if self.params["event"].get_config("user_character_max", 0):
-                    extra.append(("player", _("Player")))
-                if self.params["event"].get_config("user_character_approval", False):
-                    extra.append(("status", _("Status")))
-                feature_fields = [
-                    ("px", "px", _("XP")),
-                    ("plot", "plots", _("Plots")),
-                    ("relationships", "relationships", _("Relationships")),
-                    ("speedlarp", "speedlarp", _("speedlarp")),
-                ]
-                self.add_feature_extra(extra, feature_fields)
-            elif s[0] in ["faction", "plot"]:
-                extra.append(("characters", _("Characters")))
+        if s[0] == "character":
+            if self.params["event"].get_config("user_character_max", 0):
+                extra.append(("player", _("Player")))
+            if self.params["event"].get_config("user_character_approval", False):
+                extra.append(("status", _("Status")))
+            feature_fields = [
+                ("px", "px", _("XP")),
+                ("plot", "plots", _("Plots")),
+                ("relationships", "relationships", _("Relationships")),
+                ("speedlarp", "speedlarp", _("speedlarp")),
+            ]
+            self.add_feature_extra(extra, feature_fields)
+        elif s[0] in ["faction", "plot"]:
+            extra.append(("characters", _("Characters")))
+        elif s[0] in ["quest", "trait"]:
+            extra.append(("traits", _("Traits")))
 
-            extra.append(("stats", "Stats"))
+        extra.append(("stats", "Stats"))
 
-            self.add_configs(f"open_{s[0]}_{event_id}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)
+        self.add_configs(f"open_{s[0]}_{event_id}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)
 
     def add_feature_extra(self, extra, feature_fields):
         for field in feature_fields:
