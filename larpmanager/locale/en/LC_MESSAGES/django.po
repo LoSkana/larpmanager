@@ -2652,10 +2652,10 @@ msgstr ""
 msgid "Indicate the color that will be used for the texts"
 msgstr ""
 
-msgid "Color background"
+msgid "Color highlight"
 msgstr ""
 
-msgid "Indicate the color that will be used for the background of texts"
+msgid "Indicate the color that will be used to highlight texts"
 msgstr ""
 
 msgid "Color links"
@@ -2798,6 +2798,12 @@ msgid "Background image used across all event pages"
 msgstr ""
 
 msgid "Font used for title texts across all event pages"
+msgstr ""
+
+msgid "Color background"
+msgstr ""
+
+msgid "Indicate the color that will be used for the background of texts"
 msgstr ""
 
 msgid "Character sheet intro"

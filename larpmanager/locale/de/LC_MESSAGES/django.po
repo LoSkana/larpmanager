@@ -2246,6 +2246,9 @@ msgstr "Liste der Zeichen"
 msgid "Collected votes"
 msgstr "Erhaltene Stimmen"
 
+msgid "Color highlight"
+msgstr "Farbiges Highlight"
+
 msgid "Deadline (date)"
 msgstr "Stichtag (Datum)"
 
@@ -5625,6 +5628,11 @@ msgstr ""
 msgid "If checked: shows a link in the calendar to past events"
 msgstr ""
 "Wenn aktiviert: zeigt einen Link im Kalender zu vergangenen Ereignissen"
+
+msgid "Indicate the color that will be used to highlight texts"
+msgstr ""
+"Geben Sie die Farbe an, die zur Hervorhebung von Texten verwendet werden "
+"soll"
 
 msgid "Quickly configure your events's most important settings"
 msgstr ""

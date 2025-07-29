@@ -365,6 +365,55 @@ $(document).ready(function() {
         }
     });
 
+    sticky_tables();
+
+    post_popup();
+});
+
+function sticky_tables() {
+    $('.manage table').each(function () {
+      const table = $(this);
+
+      if (table.hasClass('no_sticky')) return;
+
+      if (!table.parent().hasClass('table-sticky')) {
+        table.wrap('<div class="table-sticky"></div>');
+      }
+
+      const wrapper = table.parent('.table-sticky')[0];
+
+      if (!wrapper.classList.contains('simplebar-initialized')) {
+        new SimpleBar(wrapper, {
+          autoHide: false
+        });
+      }
+
+      table.find('thead').each(function () {
+            const colCount = $(this).find('tr:first-child th').length;
+
+            const borderRow = $('<tr class="thead-border-row"></tr>');
+            for (let i = 0; i < colCount; i++) {
+            borderRow.append('<th></th>');
+            }
+
+            $(this).append(borderRow);
+        });
+
+        /*
+      table.find('tr').each(function () {
+        $(this).find('th:first-child, td:first-child').addClass('sticky-col');
+      });
+
+      table.find('tr').each(function () {
+        $(this).find('th:nth-child(2), td:nth-child(2)').addClass('sticky-col-2');
+      });
+
+      const corner = table.find('thead tr:first-child th:first-child');
+      corner.addClass('sticky-header sticky-col');  */
+    });
+}
+
+function post_popup() {
     $(document).on('click', '.post_popup', function (e) {
 
         start_spinner();
@@ -390,8 +439,7 @@ $(document).ready(function() {
 
         return false;
     });
-
-});
+}
 
 function reload_has_char(parent='') {
 
@@ -569,7 +617,7 @@ String.prototype.format = String.prototype.f = function() {
 };
 
 function table_csv() {
-    $(".table_csv table").each(function( index ) {
+    $(".manage table").each(function( index ) {
 
         if ( $(this).hasClass("no_csv") ) return;
 
@@ -584,7 +632,7 @@ function table_csv() {
             $(this).attr('id', eid);
         }
 
-        $(this).after('<p class="go_table"><a href="#" eid="' + eid + '">Download as csv</a></p>');
+        $(this).parent().after('<p class="go_table"><a href="#" eid="' + eid + '">Download as csv</a></p>');
     });
 
     $(".go_table a").on( "click", function() {

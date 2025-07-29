@@ -2246,6 +2246,9 @@ msgstr "Liste over tegn"
 msgid "Collected votes"
 msgstr "Mottatte stemmer"
 
+msgid "Color highlight"
+msgstr "Utheving av farger"
+
 msgid "Deadline (date)"
 msgstr "Frist (dato)"
 
@@ -5559,6 +5562,9 @@ msgstr "Viser statistikk over spillernes preferanser for karakterer"
 msgid "If checked: shows a link in the calendar to past events"
 msgstr ""
 "Hvis avkrysset: viser en lenke i kalenderen til tidligere arrangementer"
+
+msgid "Indicate the color that will be used to highlight texts"
+msgstr "Angi hvilken farge som skal brukes til å utheve tekst"
 
 msgid "Quickly configure your events's most important settings"
 msgstr "Konfigurer raskt de viktigste innstillingene for arrangementene dine"
