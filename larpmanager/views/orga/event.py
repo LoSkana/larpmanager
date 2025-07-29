@@ -218,17 +218,25 @@ def orga_preferences(request, s, n):
 def orga_backup(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_event")
 
+    return _prepare_backup(ctx)
+
+
+def _prepare_backup(ctx):
     exports = []
+
     exports.extend(export_data(ctx, Registration))
     exports.extend(export_registration_form(ctx))
 
     if "character" in ctx["features"]:
         exports.extend(export_data(ctx, Character))
         exports.extend(export_character_form(ctx))
+
     if "faction" in ctx["features"]:
         exports.extend(export_data(ctx, Faction))
+
     if "plot" in ctx["features"]:
         exports.extend(export_data(ctx, Plot))
+
     if "questbuilder" in ctx["features"]:
         exports.extend(export_data(ctx, QuestType))
         exports.extend(export_data(ctx, Quest))
