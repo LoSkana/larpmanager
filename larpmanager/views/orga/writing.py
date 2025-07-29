@@ -430,7 +430,8 @@ def orga_export(request, s, n, nm):
     model = apps.get_model("larpmanager", nm.capitalize())
 
     ctx["nm"] = nm
-    ctx["key"], ctx["vals"] = export_data(ctx, model, True)
+    export = export_data(ctx, model, True)[0]
+    _model, ctx["key"], ctx["vals"] = export
     return render(request, "larpmanager/orga/export.html", ctx)
 
 
