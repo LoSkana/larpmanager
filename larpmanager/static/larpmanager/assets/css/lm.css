@@ -1944,7 +1944,7 @@ input[type="checkbox"].checkbox_single {
 
 .table-sticky {
   overflow: auto;
-  max-height: 400px;
+  max-height: 80vh;
 }
 
 .simplebar-scrollbar {

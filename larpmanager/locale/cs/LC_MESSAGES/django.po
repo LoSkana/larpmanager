@@ -2237,6 +2237,9 @@ msgstr "Seznam postav"
 msgid "Collected votes"
 msgstr "Obdržené hlasy"
 
+msgid "Color highlight"
+msgstr "Zvýraznění barvy"
+
 msgid "Deadline (date)"
 msgstr "Termín (datum)"
 
@@ -5547,6 +5550,9 @@ msgstr "Zobrazuje statistiky preferencí hráčů u postav"
 
 msgid "If checked: shows a link in the calendar to past events"
 msgstr "Pokud je zaškrtnuto: zobrazí v kalendáři odkaz na minulé události"
+
+msgid "Indicate the color that will be used to highlight texts"
+msgstr "Uveďte barvu, která bude použita ke zvýraznění textů"
 
 msgid "Quickly configure your events's most important settings"
 msgstr "Rychlá konfigurace nejdůležitějších nastavení událostí"

@@ -2237,6 +2237,9 @@ msgstr "Lista de personajes"
 msgid "Collected votes"
 msgstr "Votos recibidos"
 
+msgid "Color highlight"
+msgstr "Color destacado"
+
 msgid "Deadline (date)"
 msgstr "Plazo (fecha)"
 
@@ -5553,6 +5556,9 @@ msgstr ""
 
 msgid "If checked: shows a link in the calendar to past events"
 msgstr "Si está marcada: muestra un enlace en el calendario a eventos pasados"
+
+msgid "Indicate the color that will be used to highlight texts"
+msgstr "Indique el color que se utilizará para resaltar los textos"
 
 msgid "Quickly configure your events's most important settings"
 msgstr "Configura rápidamente los ajustes más importantes de tus eventos"
