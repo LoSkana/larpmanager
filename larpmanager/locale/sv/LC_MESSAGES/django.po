@@ -2429,9 +2429,6 @@ msgstr "Medlemsavgift"
 msgid "Organization tax"
 msgstr "Medlemsavgift"
 
-msgid "Other characters"
-msgstr "Övriga karaktärer"
-
 msgid "Password changed"
 msgstr "Lösenordet har ändrats"
 

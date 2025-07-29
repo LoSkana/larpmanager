@@ -2429,9 +2429,6 @@ msgstr "Medlemskontingent"
 msgid "Organization tax"
 msgstr "Medlemskontingent"
 
-msgid "Other characters"
-msgstr "Andre tegn"
-
 msgid "Password changed"
 msgstr "Passordet er endret"
 

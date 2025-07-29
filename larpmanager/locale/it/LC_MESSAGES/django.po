@@ -2429,9 +2429,6 @@ msgstr "Quota associativa"
 msgid "Organization tax"
 msgstr "Tassa associativa"
 
-msgid "Other characters"
-msgstr "Altri personaggi"
-
 msgid "Password changed"
 msgstr "Password cambiata"
 

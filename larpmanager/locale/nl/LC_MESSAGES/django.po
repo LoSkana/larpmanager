@@ -2429,9 +2429,6 @@ msgstr "Lidmaatschap"
 msgid "Organization tax"
 msgstr "Lidmaatschap"
 
-msgid "Other characters"
-msgstr "Andere personages"
-
 msgid "Password changed"
 msgstr "Wachtwoord gewijzigd"
 

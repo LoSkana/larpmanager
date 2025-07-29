@@ -2429,9 +2429,6 @@ msgstr "Mitgliedsbeitrag"
 msgid "Organization tax"
 msgstr "Mitgliedsbeitrag"
 
-msgid "Other characters"
-msgstr "Andere Zeichen"
-
 msgid "Password changed"
 msgstr "Passwort geändert"
 

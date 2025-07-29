@@ -2429,9 +2429,6 @@ msgstr "Členský poplatek"
 msgid "Organization tax"
 msgstr "Členský poplatek"
 
-msgid "Other characters"
-msgstr "Ostatní postavy"
-
 msgid "Password changed"
 msgstr "Změna hesla"
 

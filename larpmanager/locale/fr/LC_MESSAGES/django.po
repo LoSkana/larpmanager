@@ -2429,9 +2429,6 @@ msgstr "Frais d'adhésion"
 msgid "Organization tax"
 msgstr "Frais d'adhésion"
 
-msgid "Other characters"
-msgstr "Autres personnages"
-
 msgid "Password changed"
 msgstr "Mot de passe modifié"
 
