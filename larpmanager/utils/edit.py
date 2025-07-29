@@ -227,6 +227,8 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
         ctx["name"] = str(ctx["el"])
 
     ctx["add_another"] = "add_another" not in ctx or ctx["add_another"]
+    if ctx["add_another"]:
+        ctx["continue_add"] = "continue" in request.POST
 
     return False
 

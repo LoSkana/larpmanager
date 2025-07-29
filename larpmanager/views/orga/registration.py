@@ -476,6 +476,7 @@ def orga_registrations_edit(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_registrations")
     get_event_cache_all(ctx)
     ctx["orga_characters"] = has_event_permission(ctx, request, ctx["event"].slug, "orga_characters")
+    ctx["continue_add"] = "continue" in request.POST
     if num != 0:
         get_registration(ctx, num)
     if request.method == "POST":
@@ -497,6 +498,9 @@ def orga_registrations_edit(request, s, n, num):
             if "questbuilder" in ctx["features"]:
                 _save_questbuilder(ctx, form, reg)
 
+            if ctx["continue_add"]:
+                return redirect("orga_registrations_edit", s=ctx["event"].slug, n=ctx["run"].number, num=0)
+
             return redirect("orga_registrations", s=ctx["event"].slug, n=ctx["run"].number)
     elif num != 0:
         form = OrgaRegistrationForm(instance=ctx["registration"], ctx=ctx)
@@ -504,6 +508,7 @@ def orga_registrations_edit(request, s, n, num):
         form = OrgaRegistrationForm(ctx=ctx)
 
     ctx["form"] = form
+    ctx["add_another"] = 1
 
     return render(request, "larpmanager/orga/edit.html", ctx)
 
