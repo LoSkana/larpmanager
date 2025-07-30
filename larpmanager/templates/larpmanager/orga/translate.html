@@ -9,7 +9,7 @@
 {% block content %}
     <form action="{{ request.path }}"  method="post">
         {% csrf_token %}
-        <table class="mob no_csv">
+        <table class="no_csv">
             {{ form.as_table }}
         </table>
         <input type="submit" value="Submit">

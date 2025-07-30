@@ -371,10 +371,11 @@ $(document).ready(function() {
 });
 
 function sticky_tables() {
-    $('.manage table').each(function () {
+    $('table').each(function () {
       const table = $(this);
 
       if (table.hasClass('no_sticky')) return;
+      if (table.hasClass('mob')) return;
 
       if (!table.parent().hasClass('table-sticky')) {
         table.wrap('<div class="table-sticky"></div>');

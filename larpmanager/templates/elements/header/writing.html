@@ -115,7 +115,7 @@
     {% endif %}
     {% if features.progress %}
         <div class="hide progress-table">
-            <table class="mob no_csv">
+            <table class="no_csv">
                 {% for k, el in progress_steps.items %}
                     <tr>
                         <th>{{ el }}</th>
@@ -128,7 +128,7 @@
     {% endif %}
     {% if features.assigned %}
         <div class="hide assigned-table">
-            <table class="mob no_csv">
+            <table class="no_csv">
                 {% for k, el in assigned.items %}
                     <tr>
                         <th>{{ el }}</th>
