@@ -58,15 +58,12 @@ table { border-collapse: collapse; }
                                 <b>Player:</b> <a href="{% url 'public' el.player_id %}">{{ el.player }}</a>
                             </p>
                         {% endif %}
-                        
-                        {% if el.factions %}
-                        <b>{% trans "Factions" %}:</b>
-                        {% for idf, g in el.factions.items %}
-                            {% if not g.typ == 'g' %}
+                        {% if el.factions_list %}
+                            <b>{% trans "Factions" %}:</b>
+                            {% for fac in el.factions_list %}
                                 {% include "elements/comma.html" %}
-                                {{ g.name }}
-                            {% endif %}
-                        {% endfor %}
+                                {{ fac }}
+                            {% endfor %}
                         {% endif %}
                         <p class="relationship">
                             <b>Relationship:</b>  {{ el.text | safe }}

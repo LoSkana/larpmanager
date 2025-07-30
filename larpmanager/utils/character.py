@@ -27,7 +27,7 @@ from larpmanager.models.event import EventTextType
 from larpmanager.models.form import QuestionApplicable
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.utils import strip_tags
-from larpmanager.models.writing import Character, PlotCharacterRel, Relationship
+from larpmanager.models.writing import Character, FactionType, PlotCharacterRel, Relationship
 from larpmanager.utils.common import add_char_addit, get_char
 from larpmanager.utils.event import has_access_character
 from larpmanager.utils.exceptions import NotFoundError
@@ -46,6 +46,13 @@ def get_character_relationships(ctx, restrict=True):
                 show = ch.show(ctx["run"])
             except ObjectDoesNotExist:
                 continue
+
+        show["factions_list"] = []
+        for fac_num in show["factions"]:
+            fac = ctx["factions"][fac_num]
+            if not fac["name"] or fac["typ"] == FactionType.SECRET:
+                continue
+            show["factions_list"].append(fac["name"])
         data[show["id"]] = show
         cache[show["id"]] = text
 
