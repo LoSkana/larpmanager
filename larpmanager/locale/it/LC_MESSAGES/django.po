@@ -1437,9 +1437,6 @@ msgstr "Lista tabella"
 msgid "Tax regime"
 msgstr "Regime fiscale"
 
-msgid "Ties (Pdf)"
-msgstr "Legami (Pdf)"
-
 msgid "Title font"
 msgstr "Font titoli"
 
@@ -1643,9 +1640,6 @@ msgstr "Suggerimenti"
 
 msgid "Ticket list"
 msgstr "Elenco dei biglietti"
-
-msgid "Ties (Test)"
-msgstr "Legami (Test)"
 
 msgid "Total costs"
 msgstr "Costi totali"
@@ -2870,6 +2864,9 @@ msgstr "Riscatta iscrizione"
 msgid "Registration closed"
 msgstr "Iscrizioni chiuse"
 
+msgid "Relationships (Pdf)"
+msgstr "Relazioni (Pdf)"
+
 msgid "Results not present"
 msgstr "Risultati non presenti"
 
@@ -2990,6 +2987,9 @@ msgstr "Preferenza non valida"
 
 msgid "Registration history"
 msgstr "Storico iscrizioni"
+
+msgid "Relationships (Test)"
+msgstr "Relazioni (Test)"
 
 msgid "Request registration"
 msgstr "Richiedi iscrizione"
@@ -3185,9 +3185,6 @@ msgstr "Segui i seguenti passaggi"
 msgid "Join the waiting list!"
 msgstr "Iscriviti in lista d'attesa!"
 
-msgid "Lightweight card (Pdf)"
-msgstr "Scheda leggera (Pdf)"
-
 msgid "Link to participate in"
 msgstr "Link per partecipare"
 
@@ -3307,6 +3304,9 @@ msgstr "Indicare solo se aliquota 0"
 msgid "Join the collection for"
 msgstr "Partecipa alla colletta per"
 
+msgid "Lightweight sheet (Pdf)"
+msgstr "Scheda leggera (Pdf)"
+
 msgid "List payments to verify"
 msgstr "Lista pagamenti da verificare"
 
@@ -3389,7 +3389,7 @@ msgstr "Vai alle quest di tipo"
 msgid "Go to the tokens history"
 msgstr "Accedi allo storico dei PT"
 
-msgid "Lightweight board (Test)"
+msgid "Lightweight sheet (Test)"
 msgstr "Scheda leggera (Test)"
 
 msgid "Manages event's expenses"

@@ -6250,16 +6250,16 @@ msgstr ""
 msgid "Complete sheet (Test)"
 msgstr ""
 
-msgid "Lightweight card (Pdf)"
+msgid "Lightweight sheet (Pdf)"
 msgstr ""
 
-msgid "Lightweight board (Test)"
+msgid "Lightweight sheet (Test)"
 msgstr ""
 
-msgid "Ties (Pdf)"
+msgid "Relationships (Pdf)"
 msgstr ""
 
-msgid "Ties (Test)"
+msgid "Relationships (Test)"
 msgstr ""
 
 msgid "Current template"

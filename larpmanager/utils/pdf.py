@@ -232,6 +232,7 @@ def print_character_friendly(ctx, force=False):
 def print_character_rel(ctx, force=False):
     fp = ctx["character"].get_relationships_filepath(ctx["run"])
     if force or reprint(fp):
+        get_event_cache_all(ctx)
         get_character_relationships(ctx)
         pdf_template(ctx, "pdf/sheets/relationships.html", fp, True)
     return return_pdf(fp, f"{ctx['character']} - " + _("Relationships"))

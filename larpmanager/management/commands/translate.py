@@ -79,18 +79,16 @@ class Command(BaseCommand):
 
             po = polib.pofile(po_path)
 
-            symbols = (".", "?", "!")
+            symbols = (".", "?", "!", ",")
             changed = False
             for entry in po:
-                if (
-                    entry.msgstr
-                    and entry.msgstr.strip().endswith(symbols)
-                    and not entry.msgid.strip().endswith(symbols)
-                ):
-                    if "fuzzy" in entry.flags:
-                        entry.flags.remove("fuzzy")
-                    entry.msgstr = entry.msgstr.rstrip(".?!").rstrip()
-                    changed = True
+                if entry.msgstr:
+                    if entry.msgstr.endswith(symbols):
+                        if not entry.msgid.endswith(symbols):
+                            if "fuzzy" in entry.flags:
+                                entry.flags.remove("fuzzy")
+                            entry.msgstr = entry.msgstr.rstrip(".?!,")
+                            changed = True
 
             if changed:
                 self.save_po(po, po_path)

@@ -63,7 +63,7 @@ class WritingQuestionAdmin(DefModelAdmin):
     exclude = ("search",)
     search_fields = ("search", "display")
     autocomplete_fields = ["event"]
-    list_filter = (EventFilter,)
+    list_filter = (EventFilter, "applicable")
 
     @staticmethod
     def description_red(instance):

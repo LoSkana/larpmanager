@@ -1437,9 +1437,6 @@ msgstr "Tabulka seznamu"
 msgid "Tax regime"
 msgstr "Daňový režim"
 
-msgid "Ties (Pdf)"
-msgstr "Vazby (Pdf)"
-
 msgid "Title font"
 msgstr "Titulní písma"
 
@@ -1643,9 +1640,6 @@ msgstr "Návrhy"
 
 msgid "Ticket list"
 msgstr "Seznam vstupenek"
-
-msgid "Ties (Test)"
-msgstr "Vazby (test)"
 
 msgid "Total costs"
 msgstr "Celkové náklady"
@@ -2870,6 +2864,9 @@ msgstr "Uplatnit vstup"
 msgid "Registration closed"
 msgstr "Registrace uzavřena"
 
+msgid "Relationships (Pdf)"
+msgstr "Vztahy (Pdf)"
+
 msgid "Results not present"
 msgstr "Výsledky nejsou k dispozici"
 
@@ -2990,6 +2987,9 @@ msgstr "Neplatná předvolba"
 
 msgid "Registration history"
 msgstr "Historie vstupu"
+
+msgid "Relationships (Test)"
+msgstr "Vztahy (test)"
 
 msgid "Request registration"
 msgstr "Žádost o registraci"
@@ -3185,9 +3185,6 @@ msgstr "Postupujte podle následujících kroků"
 msgid "Join the waiting list!"
 msgstr "Připojte se k čekací listině!"
 
-msgid "Lightweight card (Pdf)"
-msgstr "Lehká karta (Pdf)"
-
 msgid "Link to participate in"
 msgstr "Odkazy k účasti"
 
@@ -3307,6 +3304,9 @@ msgstr "Uveďte pouze v případě sazby 0"
 msgid "Join the collection for"
 msgstr "Zúčastněte se sbírky pro"
 
+msgid "Lightweight sheet (Pdf)"
+msgstr "Lehký plech (Pdf)"
+
 msgid "List payments to verify"
 msgstr "Seznam plateb, které mají být ověřeny"
 
@@ -3389,8 +3389,8 @@ msgstr "Přejít na úkoly typu"
 msgid "Go to the tokens history"
 msgstr "Přístup k historii PT"
 
-msgid "Lightweight board (Test)"
-msgstr "Lehká deska (test)"
+msgid "Lightweight sheet (Test)"
+msgstr "Lehký plech (test)"
 
 msgid "Manages event's expenses"
 msgstr "Spravuje výdaje na událost"
@@ -5612,7 +5612,7 @@ msgid "If no payment is received, registration may be cancelled"
 msgstr "V případě, že platbu neobdržíte, může být registrace zrušena"
 
 msgid "If you would like to make a donation to the Organization"
-msgstr "Pokud chcete sdružení bezplatně přispět,"
+msgstr "Pokud chcete sdružení bezplatně přispět"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Uveďte, zda se pole tiskne v generacích PDF"
