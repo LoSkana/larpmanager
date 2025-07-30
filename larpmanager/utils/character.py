@@ -23,6 +23,7 @@ from django.http import Http404
 
 from larpmanager.cache.character import get_character_element_fields, get_event_cache_all, get_writing_element_fields
 from larpmanager.models.casting import Trait
+from larpmanager.models.event import EventTextType
 from larpmanager.models.form import QuestionApplicable
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.utils import strip_tags
@@ -30,6 +31,7 @@ from larpmanager.models.writing import Character, PlotCharacterRel, Relationship
 from larpmanager.utils.common import add_char_addit, get_char
 from larpmanager.utils.event import has_access_character
 from larpmanager.utils.exceptions import NotFoundError
+from larpmanager.utils.text import get_event_text
 
 
 def get_character_relationships(ctx, restrict=True):
@@ -193,6 +195,7 @@ def get_char_check(request, ctx, num, restrict=False, bypass=False):
     if bypass or (request.user.is_authenticated and has_access_character(request, ctx)):
         get_char(ctx, num, True)
         ctx["check"] = 1
+        ctx["intro"] = get_event_text(ctx["event"].id, EventTextType.INTRO)
         return
 
     if restrict:

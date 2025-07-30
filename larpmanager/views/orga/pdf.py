@@ -27,7 +27,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.event import EventCharactersPdfForm
-from larpmanager.models.event import EventTextType, Run
+from larpmanager.models.event import Run
 from larpmanager.models.writing import (
     Character,
 )
@@ -42,7 +42,6 @@ from larpmanager.utils.pdf import (
     print_gallery,
     print_profiles,
 )
-from larpmanager.utils.text import get_event_text
 
 
 @login_required
@@ -86,7 +85,6 @@ def orga_characters_sheet_test(request, s, n, num):
     ctx["pdf"] = True
     get_character_sheet(ctx)
     add_pdf_instructions(ctx)
-    ctx["intro"] = get_event_text(ctx["event"].id, EventTextType.INTRO)
     return render(request, "pdf/sheets/auxiliary.html", ctx)
 
 
@@ -102,7 +100,6 @@ def orga_characters_friendly_test(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_characters_pdf")
     get_char_check(request, ctx, num, True)
     get_character_sheet(ctx)
-    ctx["intro"] = get_event_text(ctx["event"].id, EventTextType.INTRO)
     return render(request, "pdf/sheets/friendly.html", ctx)
 
 

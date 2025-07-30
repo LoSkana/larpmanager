@@ -50,7 +50,6 @@ from larpmanager.forms.registration import (
 from larpmanager.forms.writing import (
     PlayerRelationshipForm,
 )
-from larpmanager.models.event import EventTextType
 from larpmanager.models.form import (
     QuestionApplicable,
     WritingOption,
@@ -80,7 +79,6 @@ from larpmanager.utils.registration import (
     get_player_characters,
     registration_find,
 )
-from larpmanager.utils.text import get_event_text
 from larpmanager.utils.writing import char_add_addit
 from larpmanager.views.user.casting import casting_details, get_casting_preferences
 from larpmanager.views.user.registration import init_form_submitted
@@ -104,7 +102,6 @@ def character(request, s, n, num):
     if show_private:
         get_character_sheet(ctx)
         get_character_relationships(ctx)
-        ctx["intro"] = get_event_text(ctx["event"].id, EventTextType.INTRO)
     else:
         ctx["char"].update(get_character_element_fields(ctx, ctx["char"]["id"], only_visible=True))
 
