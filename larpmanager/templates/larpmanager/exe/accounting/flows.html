@@ -10,7 +10,7 @@
     {% include "elements/form/years.html" %}
     <h3>{% trans "Movements" %} - {{ year }}</h3>
     <h4>{% trans "Inflows" %}</h4>
-    <table class="tablesorter mob">
+    <table class="tablesorter">
         <thead>
             <tr>
                 <th>{% trans "Date" %}</th>
@@ -85,7 +85,7 @@
         {% endfor %}
     </table>
     <h4>{% trans "Outflows" %}</h4>
-    <table class="tablesorter mob">
+    <table class="tablesorter">
         <thead>
             <tr>
                 <th>{% trans "Date" %}</th>
@@ -130,7 +130,7 @@
     </table>
     <h4>{% trans "Transactions" %} - {{ trans }}</h4>
     <h4>{{ credit_name }} {% trans "positive" %} (soci con cui l'associazione ha un debito)</h4>
-    <table class="mob tablesorter">
+    <table class="tablesorter">
         {% for el in pos %}
             <tr>
                 <td>{{ el.member }}</td>
@@ -139,7 +139,7 @@
         {% endfor %}
     </table>
     <h4>{{ credit_name }} {% trans "negatives" %} (soci che sono in debito con l'associazione )</h4>
-    <table class="mob tablesorter">
+    <table class="tablesorter">
         {% for el in neg %}
             <tr>
                 <td>{{ el.member }}</td>

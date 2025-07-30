@@ -119,7 +119,7 @@ def orga_registration_form(request, s, n):
     )
     ctx["download"] = 1
 
-    ctx["list"] = get_ordered_registration_questions(ctx)
+    ctx["list"] = get_ordered_registration_questions(ctx).prefetch_related("options")
     for el in ctx["list"]:
         el.options_list = el.options.order_by("order")
 

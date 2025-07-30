@@ -19,8 +19,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import csv
+import io
+import zipfile
 
 from bs4 import BeautifulSoup
+from django.db.models import F
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
@@ -31,27 +34,45 @@ from larpmanager.models.form import (
     QuestionApplicable,
     RegistrationAnswer,
     RegistrationChoice,
+    RegistrationOption,
     RegistrationQuestion,
     WritingAnswer,
     WritingChoice,
+    WritingOption,
     WritingQuestion,
     get_ordered_registration_questions,
 )
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
-from larpmanager.models.writing import PlotCharacterRel, Relationship
+from larpmanager.models.writing import Character, Plot, PlotCharacterRel, Relationship
 from larpmanager.utils.common import check_field
 from larpmanager.utils.edit import _get_values_mapping
 
 
-def write_csv(response, writer, key, vals):
+def _temp_csv_file(key, vals):
+    buffer = io.StringIO()
+    writer = csv.writer(buffer, delimiter="\t")
     writer.writerow(key)
     for val in vals:
         writer.writerow(val)
+    return buffer.getvalue()
+
+
+def zip_exports(ctx, exports, filename):
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+        for name, key, vals in exports:
+            if not key or not vals:
+                continue
+            zip_file.writestr(f"{name}.csv", _temp_csv_file(key, vals))
+    zip_buffer.seek(0)
+    response = HttpResponse(zip_buffer.read(), content_type="application/zip")
+    response["Content-Disposition"] = f"attachment; filename={str(ctx['run'])} - {filename}.zip"
     return response
 
 
-def download(ctx, typ, model):
-    return write_csv(*get_writer(ctx, model), *export_data(ctx, typ))
+def download(ctx, typ, nm):
+    exports = export_data(ctx, typ)
+    return zip_exports(ctx, exports, nm.capitalize())
 
 
 def export_data(ctx, typ, member_cover=False):
@@ -76,7 +97,42 @@ def export_data(ctx, typ, member_cover=False):
         order_column = 1
     vals = sorted(vals, key=lambda x: x[order_column])
 
-    return key, vals
+    exports = [(model, key, vals)]
+
+    # if plots, add rels
+    if model == "plot":
+        exports.extend(export_plot_rels(ctx))
+
+    # if character, add relationships
+    if model == "character":
+        if "relationships" in ctx["features"]:
+            exports.extend(export_relationships(ctx))
+
+    return exports
+
+
+def export_plot_rels(ctx):
+    keys = ["sourge", "target", "text"]
+    vals = []
+
+    event_id = ctx["event"].get_class_parent(Plot)
+
+    for rel in PlotCharacterRel.objects.filter(plot__event_id=event_id).prefetch_related("plot", "character"):
+        vals.append([str(rel.plot), str(rel.character), rel.text])
+
+    return [("plot_rels", keys, vals)]
+
+
+def export_relationships(ctx):
+    keys = ["sourge", "target", "text"]
+    vals = []
+
+    event_id = ctx["event"].get_class_parent(Character)
+
+    for rel in Relationship.objects.filter(source__event_id=event_id).prefetch_related("source", "target"):
+        vals.append([str(rel.source), str(rel.target), rel.text])
+
+    return [("relationships", keys, vals)]
 
 
 def _prepare_export(ctx, model, query):
@@ -147,18 +203,6 @@ def _get_applicable_row(ctx, el, choices, answers, questions, model, member_cove
                 value = ", ".join(choices[que.id][el.id])
         value = value.replace("\t", "").replace("\n", "<br />")
         val.append(value)
-
-    # if plots, add rels
-    if model == "plot":
-        for rel in PlotCharacterRel.objects.filter(plot=el):
-            val.append(str(rel.character))
-            val.append(rel.text)
-
-    # if character, add relationships
-    if model == "character":
-        for rel in Relationship.objects.filter(source=el):
-            val.append(str(rel.target))
-            val.append(rel.text)
 
     return val, key
 
@@ -297,9 +341,15 @@ def _writing_field(ctx, k, key, v, val):
         aux = [ctx["factions"][int(el)]["name"] for el in v]
         new_val = ", ".join(aux)
 
-    soup = BeautifulSoup(str(new_val), features="lxml")
-    val.append(soup.get_text("\n").replace("\n", " "))
+    clean = _clean(new_val)
+    val.append(clean)
     key.append(k)
+
+
+def _clean(new_val):
+    soup = BeautifulSoup(str(new_val), features="lxml")
+    clean = soup.get_text("\n").replace("\n", " ")
+    return clean
 
 
 def _download_prepare(ctx, nm, query, typ):
@@ -337,42 +387,45 @@ def get_writer(ctx, nm):
 
 
 def orga_registration_form_download(ctx):
-    return write_csv(*get_writer(ctx, "Registration form"), *export_registration_form(ctx))
+    return zip_exports(ctx, export_registration_form(ctx), "Registration form")
 
 
 def export_registration_form(ctx):
-    key = ["typ", "display", "description", "status", "options"]
-    vals = []
+    key = ["display", "typ", "description", "status", "max_length"]
     que = get_ordered_registration_questions(ctx)
-    for el in que:
-        options = el.options.all()
-        row = [el.typ, el.display, el.description, el.status, len(options)]
-        for opt in options:
-            row.extend([opt.display, opt.details, opt.price, opt.max_available])
-        vals.append(row)
+    vals = list(que.values_list(*key))
 
-    return key, vals
+    exports = [("registration_questions", key, vals)]
+
+    key = ["question__display", "display", "details", "price", "max_available"]
+    que = ctx["event"].get_elements(RegistrationOption).select_related("question")
+    que = que.order_by(F("question__order"), "order")
+    vals = list(que.values_list(*key))
+    key[0] = "question"
+
+    exports.append(("registration_options", key, vals))
+    return exports
 
 
 def orga_character_form_download(ctx):
-    return write_csv(*get_writer(ctx, "Character form"), *export_character_form(ctx))
+    return zip_exports(ctx, export_character_form(ctx), "Character form")
 
 
 def export_character_form(ctx):
-    key = ["typ", "display", "description", "status", "visibility", "options"]
-    vals = []
-    que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-    que = que.filter(applicable=QuestionApplicable.CHARACTER)
-    for el in que.prefetch_related("options"):
-        options = el.options.order_by("order")
-        row = [el.typ, el.display, el.description, el.status, el.visibility, len(options)]
-        for opt in options:
-            dependents = ",".join(opt.dependents.values_list("display", flat=True))
-            tickets = ",".join(opt.tickets.values_list("name", flat=True))
-            row.extend([opt.display, opt.details, opt.max_available, dependents, tickets])
-        vals.append(row)
+    key = ["display", "typ", "description", "status", "applicable", "visibility", "max_length"]
+    que = ctx["event"].get_elements(WritingQuestion).order_by("applicable", "order")
+    vals = list(que.values_list(*key))
 
-    return key, vals
+    exports = [("writing_questions", key, vals)]
+
+    key = ["question__display", "display", "details", "max_available"]
+    que = ctx["event"].get_elements(WritingOption).select_related("question")
+    que = que.order_by(F("question__order"), "order")
+    vals = list(que.values_list(*key))
+    key[0] = "question"
+
+    exports.append(("writing_options", key, vals))
+    return exports
 
 
 def _orga_registrations_acc(ctx, regs=None):

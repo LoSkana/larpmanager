@@ -409,12 +409,19 @@ class OrgaConfigForm(ConfigForm):
 
         if "px" in self.params["features"]:
             self.set_section("px", _("Experience points"))
+
             label = _("Player selection")
             help_text = _(
                 "If checked, players may add abilities themselves, by selecting from those that "
                 "are visible, and whose pre-requisites they meet."
             )
             self.add_configs("px_user", ConfigType.BOOL, label, help_text)
+
+            label = _("Undo period")
+            help_text = _(
+                "Time window (in hours) during which the user can revoke a chosen skill and recover spent XP (default is 0)"
+            )
+            self.add_configs("px_undo", ConfigType.INT, label, help_text)
 
             label = _("Initial experience points")
             help_text = _("Initial value of experience points for all characters")

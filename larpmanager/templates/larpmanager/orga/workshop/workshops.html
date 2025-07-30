@@ -8,7 +8,7 @@
 {% endblock info %}
 {% block content %}
     <h2>{{ reg_count }} iscrizioni</h2>
-    <table class="tablesorter mob writing">
+    <table class="tablesorter writing">
         <thead>
             <tr>
                 <th>{% trans "Player" %}</th>
@@ -22,18 +22,19 @@
                         <a href="{% url 'public' el.member.id %}">{{ el.member }}</a>
                     </td>
                     <td>{{ el.num }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h2>{% trans "Not completed" %}</h2>
+    <table>
+        <tr>
+            <td>
+                {% for mb in pinocchio %}
+                    {% include "elements/comma.html" %}
+                    {{ mb.email }}
                 {% endfor %}
-            </tbody>
-        </table>
-        <h2>{% trans "Not completed" %}</h2>
-        <table class="mob">
-            <tr>
-                <td>
-                    {% for mb in pinocchio %}
-                        {% include "elements/comma.html" %}
-                        {{ mb.email }}
-                    {% endfor %}
-                </td>
-            </tr>
-        </table>
-    {% endblock content %}
+            </td>
+        </tr>
+    </table>
+{% endblock content %}

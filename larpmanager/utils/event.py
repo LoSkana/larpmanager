@@ -91,11 +91,17 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
     else:
         ctx["assoc_slug"] = ctx["event"].assoc.slug
 
-    config_run = get_cache_config_run(ctx["run"])
-
     if has_event_permission(ctx, request, s, "orga_characters"):
         ctx["staff"] = "1"
         ctx["skip"] = "1"
+
+    prepare_run(ctx)
+
+    return ctx
+
+
+def prepare_run(ctx):
+    config_run = get_cache_config_run(ctx["run"])
 
     if "staff" in ctx or not ctx["event"].get_config("writing_field_visibility", False):
         ctx["show_all"] = "1"
@@ -115,8 +121,6 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
     ctx.update(config_run)
 
     ctx["writing_fields"] = get_event_fields_cache(ctx["event"].id)
-
-    return ctx
 
 
 def get_run(ctx, s, n):

@@ -21,7 +21,7 @@
             <h2>Quest</h2>
             <p>
                 {% trans "Go to the quests of type" %}:
-                {% for qt in quest_types %}
+                {% for id, qt in quest_types.items %}
                     {% include "elements/comma.html" %}
                     <a href="{% url 'quests' event.slug run.number qt.number %}">{{ qt.name }}</a>
                 {% endfor %}

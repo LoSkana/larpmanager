@@ -35,11 +35,13 @@ $.ajaxSetup({
      }
 });
 
+
 function sidebar_mobile() {
     $('body').toggleClass('is-sidebar-visible');
     $('#sidebar-mobile-open').toggle();
     $('#sidebar-mobile-close').toggle();
 }
+
 
 $(document).ready(function() {
 
@@ -264,6 +266,8 @@ $(document).ready(function() {
         } else {
             $(this).removeClass('select');
         }
+
+        syncColumnWidths();
         return false;
 
     });
@@ -370,38 +374,66 @@ $(document).ready(function() {
     post_popup();
 });
 
+
+function syncColumnWidths() {
+    $('.table-sticky table').each(function () {
+        var $originalTable = $(this);
+        stickyId = $originalTable.attr('sticky-table');
+        console.log(stickyId);
+        var $stickyTable = $('[sticky-header="' + stickyId + '"]');;
+
+        if (!$originalTable.length || !$stickyTable.length) return;
+
+        var $originalThs = $originalTable.find('thead tr:first-child th');
+        var $clonedThs = $stickyTable.find('thead tr:first-child th');
+
+        $stickyTable.width($originalTable.outerWidth());
+
+        $originalThs.each(function (index) {
+            var width = $(this).outerWidth();
+            $clonedThs.eq(index).css({
+                width: width,
+                minWidth: width,
+                maxWidth: width
+            });
+        });
+    });
+}
+
 function sticky_tables() {
-    $('.manage table').each(function () {
+    $('table').each(function () {
       const table = $(this);
 
       if (table.hasClass('no_sticky')) return;
+      if (table.hasClass('mob')) return;
 
       if (!table.parent().hasClass('table-sticky')) {
         table.wrap('<div class="table-sticky"></div>');
       }
 
-      const wrapper = table.parent('.table-sticky')[0];
+    // assign random id
+    var randomId = Math.random().toString(36).substr(2, 9);
+    table.attr('sticky-table', randomId);
 
-      if (!wrapper.classList.contains('simplebar-initialized')) {
+    // copy thead
+    var $originalThead = table.find('thead');
+    var $clonedThead = $originalThead.clone();
+
+    var $stickyTable = $('<table>').attr('sticky-header', randomId).append($clonedThead);
+    var $stickyContainer = $('<div>').addClass('sticky-header').append($stickyTable);
+    table.parent().before($stickyContainer);
+
+    $(window).on('resize load', syncColumnWidths);
+    syncColumnWidths();
+
+    // add simple bar
+    const wrapper = table.parent('.table-sticky')[0];
+    if (!wrapper.classList.contains('simplebar-initialized')) {
         new SimpleBar(wrapper, {
-          autoHide: false
+            autoHide: false
         });
-      }
+    }
 
-      const bodyBg = $('body').css('background-color');
-
-      table.find('thead').each(function () {
-            $(this).css('background-color', bodyBg);
-
-            const colCount = $(this).find('tr:first-child th').length;
-
-            const borderRow = $('<tr class="thead-border-row"></tr>');
-            for (let i = 0; i < colCount; i++) {
-            borderRow.append('<th></th>');
-            }
-
-            $(this).append(borderRow);
-        });
 
         /*
       table.find('tr').each(function () {

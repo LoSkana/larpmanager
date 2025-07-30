@@ -546,6 +546,9 @@ msgstr "Citation"
 msgid "Refund"
 msgstr "Remboursement"
 
+msgid "Remove"
+msgstr "Retirer"
+
 msgid "Safety"
 msgstr "Sécurité"
 
@@ -1650,6 +1653,9 @@ msgstr "Coûts totaux"
 msgid "Transversal"
 msgstr "Transversale"
 
+msgid "Undo period"
+msgstr "Période d'annulation"
+
 msgid "Unique code"
 msgstr "Code unique"
 
@@ -2219,6 +2225,9 @@ msgstr "demande de remboursement"
 msgid "Ability missing"
 msgstr "Capacité manquante"
 
+msgid "Ability removed"
+msgstr "Capacité supprimée"
+
 msgid "And that is all"
 msgstr "Et c'est tout"
 
@@ -2236,6 +2245,9 @@ msgstr "Liste des personnages"
 
 msgid "Collected votes"
 msgstr "Votes reçus"
+
+msgid "Color highlight"
+msgstr "Mise en évidence de la couleur"
 
 msgid "Deadline (date)"
 msgstr "Date limite (date)"
@@ -5582,6 +5594,10 @@ msgid "If checked: shows a link in the calendar to past events"
 msgstr ""
 "Si coché : affiche dans le calendrier un lien vers les événements passés"
 
+msgid "Indicate the color that will be used to highlight texts"
+msgstr ""
+"Indiquer la couleur qui sera utilisée pour mettre en évidence les textes"
+
 msgid "Quickly configure your events's most important settings"
 msgstr ""
 "Configurez rapidement les paramètres les plus importants de vos événements"
@@ -8754,6 +8770,14 @@ msgid ""
 msgstr ""
 "Membres du personnel autorisés à voir les réponses des joueurs (laisser vide"
 " pour permettre à tout le monde de voir)"
+
+msgid ""
+"Time window (in hours) during which the user can revoke a chosen skill and "
+"recover spent XP (default is 0)"
+msgstr ""
+"Fenêtre de temps (en heures) pendant laquelle l'utilisateur peut révoquer "
+"une compétence choisie et récupérer les XP dépensés (la valeur par défaut "
+"est 0)"
 
 msgid ""
 "If you select another event, it will be considered in the same campaign, and"

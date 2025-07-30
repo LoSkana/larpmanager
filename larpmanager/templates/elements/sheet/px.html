@@ -21,6 +21,12 @@
                 {% for el in ls %}
                     {% include "elements/comma.html" %}
                     {{ el.name }} ({{ el.cost }})
+                    {% if undo_abilities and el.id in undo_abilities %}
+                        <a href="{% url 'character_abilities_del' event.slug run.number character.number el.id %}"
+                           qtip="{% trans "Remove" %}">
+                            <i class="fa-solid fa-xmark"></i>
+                        </a>
+                    {% endif %}
                 {% endfor %}
             </p>
         {% endfor %}

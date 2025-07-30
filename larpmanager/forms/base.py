@@ -141,7 +141,10 @@ class MyForm(forms.ModelForm):
             event_id = event.get_class_parent(typ).id
 
             model = self._meta.model
-            qs = model.objects.filter(**{field_name: value}, event_id=event_id)
+            if model == Event:
+                qs = model.objects.filter(**{field_name: value}, assoc_id=event.assoc_id)
+            else:
+                qs = model.objects.filter(**{field_name: value}, event_id=event_id)
             question = self.cleaned_data.get("question")
             if question:
                 qs = qs.filter(question_id=question.id)
