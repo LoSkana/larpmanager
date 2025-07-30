@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     {% load show_tags i18n %}
     <head>
         <meta charset="utf-8">
+        <title>{{ sheet_char.name }}</title>
+        <meta charset="utf-8">
+        <meta name="keywords" content="none">
+        <meta name="description" content="none">
         <style>
 @page {
     size: {{ pagesize|default:"A4" }};
@@ -29,6 +33,7 @@ td, th { text-align: center; }
         <div id="footer_content">{{ footer_content | safe }}</div>
         <!-- HTML Content -->
         <div>
+            {% if intro %}{{ intro | safe }}{% endif %}
             {% include "elements/sheet/main.html" %}
             {% include "elements/sheet/plots.html" %}
             {% include "elements/sheet/quests.html" %}

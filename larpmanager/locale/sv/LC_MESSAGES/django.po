@@ -1437,9 +1437,6 @@ msgstr "Lista över tabeller"
 msgid "Tax regime"
 msgstr "Skattesystem"
 
-msgid "Ties (Pdf)"
-msgstr "Slipsar (Pdf)"
-
 msgid "Title font"
 msgstr "Typsnitt för titlar"
 
@@ -1643,9 +1640,6 @@ msgstr "Förslag"
 
 msgid "Ticket list"
 msgstr "Biljettlista"
-
-msgid "Ties (Test)"
-msgstr "Slipsar (test)"
 
 msgid "Total costs"
 msgstr "Totala kostnader"
@@ -2873,6 +2867,9 @@ msgstr "Lösa in post"
 msgid "Registration closed"
 msgstr "Registreringen stängd"
 
+msgid "Relationships (Pdf)"
+msgstr "Förhållanden (Pdf)"
+
 msgid "Results not present"
 msgstr "Resultat ej presenterade"
 
@@ -2990,6 +2987,9 @@ msgstr "Ogiltig preferens"
 
 msgid "Registration history"
 msgstr "Ingångshistoria"
+
+msgid "Relationships (Test)"
+msgstr "Relationer (test)"
 
 msgid "Request registration"
 msgstr "Begär registrering"
@@ -3185,9 +3185,6 @@ msgstr "Följ stegen nedan"
 msgid "Join the waiting list!"
 msgstr "Skriv upp dig på väntelistan!"
 
-msgid "Lightweight card (Pdf)"
-msgstr "Lättviktskort (Pdf)"
-
 msgid "Link to participate in"
 msgstr "Länkar för att delta"
 
@@ -3301,6 +3298,9 @@ msgstr "Ange endast om hastighet 0"
 msgid "Join the collection for"
 msgstr "Gå med i insamlingen för"
 
+msgid "Lightweight sheet (Pdf)"
+msgstr "Lättviktsblad (Pdf)"
+
 msgid "List payments to verify"
 msgstr "Lista över betalningar som ska verifieras"
 
@@ -3386,8 +3386,8 @@ msgstr "Gå till uppdrag av typen"
 msgid "Go to the tokens history"
 msgstr "Åtkomst till PT-historik"
 
-msgid "Lightweight board (Test)"
-msgstr "Lättviktsskiva (Test)"
+msgid "Lightweight sheet (Test)"
+msgstr "Lättviktsark (Test)"
 
 msgid "Manages event's expenses"
 msgstr "Hanterar evenemangets kostnader"
@@ -5615,7 +5615,7 @@ msgid "If no payment is received, registration may be cancelled"
 msgstr "Om ingen betalning erhålls kan registreringen komma att avbrytas"
 
 msgid "If you would like to make a donation to the Organization"
-msgstr "Om du vill göra en kostnadsfri donation till föreningen,"
+msgstr "Om du vill göra en kostnadsfri donation till föreningen"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Ange om fältet ska skrivas ut i PDF-versioner"

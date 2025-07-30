@@ -1437,9 +1437,6 @@ msgstr "Tableau de liste"
 msgid "Tax regime"
 msgstr "Régime fiscal"
 
-msgid "Ties (Pdf)"
-msgstr "Liens (Pdf)"
-
 msgid "Title font"
 msgstr "Polices de titre"
 
@@ -1643,9 +1640,6 @@ msgstr "Suggestions"
 
 msgid "Ticket list"
 msgstr "Liste des billets"
-
-msgid "Ties (Test)"
-msgstr "Cravates (test)"
 
 msgid "Total costs"
 msgstr "Coûts totaux"
@@ -2873,6 +2867,9 @@ msgstr "Rembourser l'entrée"
 msgid "Registration closed"
 msgstr "Inscription clôturée"
 
+msgid "Relationships (Pdf)"
+msgstr "Relations (Pdf)"
+
 msgid "Results not present"
 msgstr "Résultats non disponibles"
 
@@ -2990,6 +2987,9 @@ msgstr "Préférence non valide"
 
 msgid "Registration history"
 msgstr "Historique de l'entrée"
+
+msgid "Relationships (Test)"
+msgstr "Relations (Test)"
 
 msgid "Request registration"
 msgstr "Demande d'inscription"
@@ -3185,9 +3185,6 @@ msgstr "Suivez les étapes ci-dessous "
 msgid "Join the waiting list!"
 msgstr "Rejoignez la liste d'attente !"
 
-msgid "Lightweight card (Pdf)"
-msgstr "Carte légère (Pdf)"
-
 msgid "Link to participate in"
 msgstr "Liens pour participer"
 
@@ -3301,6 +3298,9 @@ msgstr "N'indiquer que si le taux est de 0"
 msgid "Join the collection for"
 msgstr "Rejoignez la collection pour"
 
+msgid "Lightweight sheet (Pdf)"
+msgstr "Fiche allégée (Pdf)"
+
 msgid "List payments to verify"
 msgstr "Liste des paiements à vérifier"
 
@@ -3386,8 +3386,8 @@ msgstr "Aller aux quêtes de type"
 msgid "Go to the tokens history"
 msgstr "Accéder à l'historique des PT"
 
-msgid "Lightweight board (Test)"
-msgstr "Panneau léger (Test)"
+msgid "Lightweight sheet (Test)"
+msgstr "Feuille légère (Test)"
 
 msgid "Manages event's expenses"
 msgstr "Gestion des dépenses liées à l'événement"
@@ -5653,7 +5653,7 @@ msgid "If no payment is received, registration may be cancelled"
 msgstr "Si aucun paiement n'est reçu, l'inscription peut être annulée"
 
 msgid "If you would like to make a donation to the Organization"
-msgstr "Si vous souhaitez faire un don gratuit à l'association,"
+msgstr "Si vous souhaitez faire un don gratuit à l'association"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Indiquer si le champ est imprimé en générations PDF"

@@ -25,7 +25,6 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.event import EventCharactersPdfForm
 from larpmanager.models.event import Run
 from larpmanager.models.writing import (
@@ -128,7 +127,6 @@ def orga_gallery_pdf(request, s, n):
 @login_required
 def orga_gallery_test(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_characters_pdf")
-    get_event_cache_all(ctx)
     return render(request, "pdf/sheets/gallery.html", ctx)
 
 

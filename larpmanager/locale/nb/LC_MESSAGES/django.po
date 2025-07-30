@@ -1437,9 +1437,6 @@ msgstr "Liste over tabeller"
 msgid "Tax regime"
 msgstr "Skatteregime"
 
-msgid "Ties (Pdf)"
-msgstr "Slips (Pdf)"
-
 msgid "Title font"
 msgstr "Tittel skrifttyper"
 
@@ -1643,9 +1640,6 @@ msgstr "Forslag"
 
 msgid "Ticket list"
 msgstr "Billettliste"
-
-msgid "Ties (Test)"
-msgstr "Slips (test)"
 
 msgid "Total costs"
 msgstr "Totale kostnader"
@@ -2873,6 +2867,9 @@ msgstr "Innløs oppføring"
 msgid "Registration closed"
 msgstr "Registreringen er stengt"
 
+msgid "Relationships (Pdf)"
+msgstr "Relasjoner (Pdf)"
+
 msgid "Results not present"
 msgstr "Resultater ikke til stede"
 
@@ -2990,6 +2987,9 @@ msgstr "Ugyldig preferanse"
 
 msgid "Registration history"
 msgstr "Oppføringshistorikk"
+
+msgid "Relationships (Test)"
+msgstr "Relasjoner (Test)"
 
 msgid "Request registration"
 msgstr "Be om registrering"
@@ -3185,9 +3185,6 @@ msgstr "Følg trinnene nedenfor"
 msgid "Join the waiting list!"
 msgstr "Sett deg på venteliste!"
 
-msgid "Lightweight card (Pdf)"
-msgstr "Lettvektskort (Pdf)"
-
 msgid "Link to participate in"
 msgstr "Lenker for å delta"
 
@@ -3301,6 +3298,9 @@ msgstr "Angi kun hvis sats 0"
 msgid "Join the collection for"
 msgstr "Delta i innsamlingen for"
 
+msgid "Lightweight sheet (Pdf)"
+msgstr "Lettvektsark (Pdf)"
+
 msgid "List payments to verify"
 msgstr "Liste over betalinger som skal verifiseres"
 
@@ -3386,7 +3386,7 @@ msgstr "Gå til oppdrag av typen"
 msgid "Go to the tokens history"
 msgstr "Få tilgang til PT-historikk"
 
-msgid "Lightweight board (Test)"
+msgid "Lightweight sheet (Test)"
 msgstr "Lettvektsplate (Test)"
 
 msgid "Manages event's expenses"
@@ -5612,7 +5612,7 @@ msgid "If no payment is received, registration may be cancelled"
 msgstr "Hvis ingen betaling mottas, kan registreringen bli kansellert"
 
 msgid "If you would like to make a donation to the Organization"
-msgstr "Hvis du ønsker å gi en gratis donasjon til foreningen,"
+msgstr "Hvis du ønsker å gi en gratis donasjon til foreningen"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Angi om feltet skal skrives ut i PDF-generasjoner"

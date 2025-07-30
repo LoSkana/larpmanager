@@ -9,7 +9,7 @@
     {% endif %}
     <div class="character">
         <a href="{% url 'character' event.slug run.number el.number %}">{{ el.name }}</a>
-        {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
+        {% if el.title and show_character.title %}- <b>{{ el.title }}</b>{% endif %}
         {% if el.pronoun %}({{ el.pronoun }}){% endif %}
         <br />
         {% if el.factions %}

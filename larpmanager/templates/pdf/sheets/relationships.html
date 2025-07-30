@@ -17,13 +17,16 @@ table { margin: 0 auto; width: 100% }
 td { width: 50%; }
 body { background: white; }
 a { color: #6495ED; font-weight:bold; text-decoration: none;}
-td { padding: 0.5em; border: 1px solid black; text-align: center; vertical-align:middle; }
+td { padding: 1em; border-bottom: 1px solid black; text-align: center; vertical-align:middle; }
+td.left { border-right: 1px solid black }
 td img { margin: 0.5em; height: 10em; float: left; }
 p { display: inline; line-height: 100%; display: block; margin: 0.3em; }
 .name { font-size: 110%; }
 table, tr, td, th, tbody, thead, tfoot {
     page-break-inside: avoid !important;
 }
+table { border-collapse: collapse; }
+
         </style>
     </head>
     <body>
@@ -37,7 +40,7 @@ table, tr, td, th, tbody, thead, tfoot {
                 <table>
                     <tr>
                     {% endif %}
-                    <td>
+                    <td class="{% if not forloop.counter|divisibleby:2 %}left{% endif %}">
                         {% if el.player_id > 0 %}
                             <img src="https://{{ assoc.main_domain }}/{{ el.player_prof }}"
                                  alt="player profile" />
@@ -55,15 +58,15 @@ table, tr, td, th, tbody, thead, tfoot {
                                 <b>Player:</b> <a href="{% url 'public' el.player_id %}">{{ el.player }}</a>
                             </p>
                         {% endif %}
-                        <b>{% trans "Factions" %}:</b>
-                        {% for g in el.factions %}
-                            {% if not g.typ == 'g' %}
+                        {% if el.factions_list %}
+                            <b>{% trans "Factions" %}:</b>
+                            {% for fac in el.factions_list %}
                                 {% include "elements/comma.html" %}
-                                {{ g.name }}
-                            {% endif %}
-                        {% endfor %}
+                                {{ fac }}
+                            {% endfor %}
+                        {% endif %}
                         <p class="relationship">
-                            <b>Relationship:</b>  {{ el.text }}
+                            <b>Relationship:</b>  {{ el.text | safe }}
                         </p>
                     </td>
                 {% endfor %}

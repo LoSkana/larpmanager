@@ -1437,9 +1437,6 @@ msgstr "Tabelle auflisten"
 msgid "Tax regime"
 msgstr "Steuerregelung"
 
-msgid "Ties (Pdf)"
-msgstr "Krawatten (Pdf)"
-
 msgid "Title font"
 msgstr "Titel Schriftarten"
 
@@ -1643,9 +1640,6 @@ msgstr "Vorschläge"
 
 msgid "Ticket list"
 msgstr "Ticket-Liste"
-
-msgid "Ties (Test)"
-msgstr "Krawatten (Test)"
 
 msgid "Total costs"
 msgstr "Gesamtkosten"
@@ -2873,6 +2867,9 @@ msgstr "Eintrag einlösen"
 msgid "Registration closed"
 msgstr "Registrierung geschlossen"
 
+msgid "Relationships (Pdf)"
+msgstr "Beziehungen (Pdf)"
+
 msgid "Results not present"
 msgstr "Ergebnisse nicht vorhanden"
 
@@ -2990,6 +2987,9 @@ msgstr "Ungültige Präferenz"
 
 msgid "Registration history"
 msgstr "Eintrag Geschichte"
+
+msgid "Relationships (Test)"
+msgstr "Beziehungen (Test)"
 
 msgid "Request registration"
 msgstr "Anmeldung anfordern"
@@ -3185,9 +3185,6 @@ msgstr "Folgen Sie den nachstehenden Schritten"
 msgid "Join the waiting list!"
 msgstr "Kommen Sie auf die Warteliste!"
 
-msgid "Lightweight card (Pdf)"
-msgstr "Leichte Karte (Pdf)"
-
 msgid "Link to participate in"
 msgstr "Links zur Teilnahme"
 
@@ -3301,6 +3298,9 @@ msgstr "Nur angeben, wenn Satz 0"
 msgid "Join the collection for"
 msgstr "Beteiligen Sie sich an der Sammlung für"
 
+msgid "Lightweight sheet (Pdf)"
+msgstr "Leichtgewichtige Platte (Pdf)"
+
 msgid "List payments to verify"
 msgstr "Liste der zu überprüfenden Zahlungen"
 
@@ -3386,8 +3386,8 @@ msgstr "Gehe zu Quests des Typs"
 msgid "Go to the tokens history"
 msgstr "Zugang zum PT-Verlauf"
 
-msgid "Lightweight board (Test)"
-msgstr "Leichtbauplatte (Test)"
+msgid "Lightweight sheet (Test)"
+msgstr "Leichte Platte (Test)"
 
 msgid "Manages event's expenses"
 msgstr "Verwaltet die Ausgaben für die Veranstaltung"
@@ -5688,7 +5688,7 @@ msgstr "Geht keine Zahlung ein, kann die Anmeldung storniert werden"
 
 msgid "If you would like to make a donation to the Organization"
 msgstr ""
-"Wenn Sie der Vereinigung eine kostenlose Spende zukommen lassen möchten,"
+"Wenn Sie der Vereinigung eine kostenlose Spende zukommen lassen möchten"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Geben Sie an, ob das Feld in PDF-Generationen gedruckt wird"

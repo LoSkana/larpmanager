@@ -1437,9 +1437,6 @@ msgstr "Lista de tablas"
 msgid "Tax regime"
 msgstr "Régimen fiscal"
 
-msgid "Ties (Pdf)"
-msgstr "Corbatas (Pdf)"
-
 msgid "Title font"
 msgstr "Fuente del título"
 
@@ -1643,9 +1640,6 @@ msgstr "Sugerencias"
 
 msgid "Ticket list"
 msgstr "Lista de entradas"
-
-msgid "Ties (Test)"
-msgstr "Empates (Prueba)"
 
 msgid "Total costs"
 msgstr "Costes totales"
@@ -2873,6 +2867,9 @@ msgstr "Canjear entrada"
 msgid "Registration closed"
 msgstr "Inscripción cerrada"
 
+msgid "Relationships (Pdf)"
+msgstr "Relaciones (Pdf)"
+
 msgid "Results not present"
 msgstr "Resultados no presentes"
 
@@ -2990,6 +2987,9 @@ msgstr "Preferencia no válida"
 
 msgid "Registration history"
 msgstr "Historial de inscripciones"
+
+msgid "Relationships (Test)"
+msgstr "Relaciones (Test)"
 
 msgid "Request registration"
 msgstr "Solicitar inscripción"
@@ -3185,9 +3185,6 @@ msgstr "Sigue los pasos a continuación"
 msgid "Join the waiting list!"
 msgstr "¡Únete a la lista de espera!"
 
-msgid "Lightweight card (Pdf)"
-msgstr "Tarjeta ligera (Pdf)"
-
 msgid "Link to participate in"
 msgstr "Enlaces para participar en"
 
@@ -3301,6 +3298,9 @@ msgstr "Indicar sólo si tasa 0"
 msgid "Join the collection for"
 msgstr "Únete a la colecta para"
 
+msgid "Lightweight sheet (Pdf)"
+msgstr "Ficha ligera (Pdf)"
+
 msgid "List payments to verify"
 msgstr "Listar pagos a verificar"
 
@@ -3386,8 +3386,8 @@ msgstr "Ir a las misiones de tipo"
 msgid "Go to the tokens history"
 msgstr "Acceder al historial de tokens"
 
-msgid "Lightweight board (Test)"
-msgstr "Tablero ligero (Test)"
+msgid "Lightweight sheet (Test)"
+msgstr "Chapa ligera (Prueba)"
 
 msgid "Manages event's expenses"
 msgstr "Gestiona los gastos del evento"
@@ -4008,7 +4008,7 @@ msgid "Verify that the data are correct"
 msgstr "Comprueba que los datos son correctos"
 
 msgid "Voting for the Executive is open"
-msgstr "La votación para el Comité Ejecutivo está abierta,"
+msgstr "La votación para el Comité Ejecutivo está abierta"
 
 msgid "We'll try to help as best we can"
 msgstr "Intentaremos ayudar lo mejor que podamos"
@@ -5623,7 +5623,7 @@ msgid "If no payment is received, registration may be cancelled"
 msgstr "Si no se recibe el pago, se podrá cancelar la inscripción"
 
 msgid "If you would like to make a donation to the Organization"
-msgstr "Si quieres hacer una donación gratuita a la Asociación,"
+msgstr "Si quieres hacer una donación gratuita a la Asociación"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Indique si el campo se imprime en generaciones PDF"
