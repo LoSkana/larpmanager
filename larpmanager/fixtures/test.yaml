@@ -382,7 +382,7 @@
     event: 1
     tier: b
     name: Standard
-    details: null
+    description: null
     price: '0.00'
     max_available: 0
     visible: true
