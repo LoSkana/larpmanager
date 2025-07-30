@@ -93,7 +93,7 @@ def writing_popup_question(ctx, idx, question_idx):
         char = Character.objects.get(pk=idx, event=ctx["event"].get_class_parent(Character))
         question = WritingQuestion.objects.get(pk=question_idx, event=ctx["event"].get_class_parent(WritingQuestion))
         el = WritingAnswer.objects.get(element_id=char.id, question=question)
-        tx = f"<h2>{char} - {question.display}</h2>" + el.text
+        tx = f"<h2>{char} - {question.name}</h2>" + el.text
         return JsonResponse({"k": 1, "v": tx})
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
@@ -203,7 +203,7 @@ def _get_custom_form(ctx):
     for q in que:
         q.basic_typ = q.typ in QuestionType.get_basic_types()
         if q.typ in ctx["fields_name"].keys():
-            ctx["fields_name"][q.typ] = q.display
+            ctx["fields_name"][q.typ] = q.name
         else:
             ctx["form_questions"][q.id] = q
 

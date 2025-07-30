@@ -278,7 +278,7 @@ class BaseRegistrationForm(MyFormRun):
             # no problem, go ahead
             choices.append((option.id, name))
             if option.description:
-                help_text += f'<p id="hp_{option.id}"><b>{option.display}</b> {option.description}</p>'
+                help_text += f'<p id="hp_{option.id}"><b>{option.name}</b> {option.description}</p>'
 
         return choices, help_text
 
@@ -421,7 +421,7 @@ class BaseRegistrationForm(MyFormRun):
             mapping = {"faction": "factions_list"}
             if key in mapping:
                 key = mapping[key]
-            self.fields[key].label = question.display
+            self.fields[key].label = question.name
             self.fields[key].help_text = question.description
             self.reorder_field(key)
             self.fields[key].required = required
@@ -437,7 +437,7 @@ class BaseRegistrationForm(MyFormRun):
         self.fields[key] = forms.CharField(
             required=required,
             widget=WritingTinyMCE(),
-            label=question.display,
+            label=question.name,
             help_text=question.description,
             validators=validators,
         )
@@ -451,7 +451,7 @@ class BaseRegistrationForm(MyFormRun):
         self.fields[key] = forms.CharField(
             required=required,
             widget=forms.Textarea(attrs={"rows": 4}),
-            label=question.display,
+            label=question.name,
             help_text=question.description,
             validators=validators,
         )
@@ -461,7 +461,7 @@ class BaseRegistrationForm(MyFormRun):
     def init_text(self, key, question, required):
         validators = [max_length_validator(question.max_length)] if question.max_length else []
         self.fields[key] = forms.CharField(
-            required=required, label=question.display, help_text=question.description, validators=validators
+            required=required, label=question.name, help_text=question.description, validators=validators
         )
         if question.id in self.answers:
             self.initial[key] = self.answers[question.id].text
@@ -479,7 +479,7 @@ class BaseRegistrationForm(MyFormRun):
         self.fields[key] = forms.ChoiceField(
             required=required,
             choices=choices,
-            label=question.display,
+            label=question.name,
             help_text=help_text,
         )
         if question.id in self.singles:
@@ -498,7 +498,7 @@ class BaseRegistrationForm(MyFormRun):
             required=required,
             choices=choices,
             widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
-            label=question.display,
+            label=question.name,
             help_text=help_text,
             validators=validators,
         )

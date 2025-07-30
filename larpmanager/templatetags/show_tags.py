@@ -408,7 +408,7 @@ def get_character_field(value, options):
     result = []
     for idx in value:
         try:
-            result.append(options[idx]["display"])
+            result.append(options[idx]["name"])
         except (IndexError, KeyError, TypeError):
             pass
     return ", ".join(result)

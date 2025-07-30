@@ -157,7 +157,7 @@ def elements_load(request, ctx, csv_upload, typ, nm):
     if nm == "character" and "character" in ctx["features"]:
         res = {"chars": {}}
         get_event_cache_fields(ctx, res, only_visible=False)
-        inv = {value["display"].lower(): key for key, value in ctx["questions"].items()}
+        inv = {value["name"].lower(): key for key, value in ctx["questions"].items()}
         ctx["questions_inverted"] = inv
 
     # get all characters name for replacement
@@ -311,7 +311,7 @@ def registration_question_load(request, ctx, row, question):
         cr = True
 
     question.typ = row[0]
-    question.display = row[1]
+    question.name = row[1]
     question.description = row[2]
     question.status = row[3]
     question.save()
@@ -326,7 +326,7 @@ def registration_question_load(request, ctx, row, question):
             option = RegistrationOption(event=ctx["event"], question=question)
 
         ff = 5 + cnt * 4
-        option.display = row[ff]
+        option.name = row[ff]
         option.description = row[ff + 1]
         option.price = float(row[ff + 2])
         option.max_available = int(row[ff + 3])
@@ -381,7 +381,7 @@ def character_question_load(request, ctx, row, question):
         cr = True
 
     question.typ = row[0]
-    question.display = row[1]
+    question.name = row[1]
     question.description = row[2]
     question.status = row[3]
     question.visibility = row[4]
@@ -397,7 +397,7 @@ def character_question_load(request, ctx, row, question):
             option = WritingOption(event=ctx["event"], question=question)
 
         ff = 6 + cnt * 5
-        option.display = row[ff]
+        option.name = row[ff]
         option.description = row[ff + 1]
         option.max_available = int(row[ff + 2])
         if option.pk:
@@ -407,7 +407,7 @@ def character_question_load(request, ctx, row, question):
         if dependent_text:
             display_list = [d.strip().lower() for d in dependent_text.split(",")]
             option.save()
-            dependent_options = WritingOption.objects.annotate(lower_display=Lower("display")).filter(
+            dependent_options = WritingOption.objects.annotate(lower_display=Lower("name")).filter(
                 lower_display__in=display_list, event=ctx["event"]
             )
             option.dependents.set(dependent_options)
@@ -450,7 +450,7 @@ def assign_choice_answer(ctx, character, value, key):
             input_opt = input_opt_orig.lower().strip()
             option_id = None
             for ido, opt in ctx["options"].items():
-                if opt["display"].lower().strip() == input_opt and opt["question_id"] == question_id:
+                if opt["name"].lower().strip() == input_opt and opt["question_id"] == question_id:
                     option_id = ido
             if not option_id:
                 return f" - Problem with question {key}: couldn't find option {input_opt}"

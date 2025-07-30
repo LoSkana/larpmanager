@@ -47,14 +47,14 @@
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>
-                        <td>{{ el.display }}</td>
+                        <td>{{ el.name }}</td>
                         <td>{{ el.description | truncatechars:50 }}</td>
                         {% if features.wri_que_max %}<td>{{ el.max_available }}</td>{% endif %}
                         {% if features.wri_que_tickets %}
                             <td>
                                 {% for opt in el.dependents.all %}
                                     {% include "elements/comma.html" %}
-                                    {{ opt.display }} ({{ opt.question.display | truncatechars:50 }})
+                                    {{ opt.name }} ({{ opt.question.name | truncatechars:50 }})
                                 {% endfor %}
                             </td>
                         {% endif %}

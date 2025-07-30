@@ -49,7 +49,7 @@
                         <a href="{% url 'orga_writing_form_edit' run.event.slug run.number typ el.id %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
-                    <td>{{ el.display }}</td>
+                    <td>{{ el.name }}</td>
                     <td>{{ el.description | truncatechars:50 }}</td>
                     <td>{{ el.get_typ_display }}</td>
                     {% if status %}<td>{{ el.get_status_display }}</td>{% endif %}
@@ -60,7 +60,7 @@
                     <td>
                         {% for ch in el.options_list %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_writing_options_edit' run.event.slug run.number typ ch.id %}">{{ ch.display }}</a>
+                            <a href="{% url 'orga_writing_options_edit' run.event.slug run.number typ ch.id %}">{{ ch.name }}</a>
                         {% endfor %}
                     </td>
                     <td>

@@ -224,7 +224,7 @@ def registrations_popup(request, ctx):
         reg = Registration.objects.get(pk=idx, run=ctx["run"])
         question = RegistrationQuestion.objects.get(pk=tp, event=ctx["event"].get_class_parent(RegistrationQuestion))
         el = RegistrationAnswer.objects.get(reg=reg, question=question)
-        tx = f"<h2>{reg} - {question.display}</h2>" + el.text
+        tx = f"<h2>{reg} - {question.name}</h2>" + el.text
         return JsonResponse({"k": 1, "v": tx})
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
@@ -438,7 +438,7 @@ def orga_registration_form_email(request, s, n):
 
     cho = {}
     for opt in RegistrationOption.objects.filter(question=q):
-        cho[opt.id] = opt.display
+        cho[opt.id] = opt.name
 
     que = RegistrationChoice.objects.filter(question=q, reg__run=ctx["run"], reg__cancellation_date__isnull=True)
     for el in que.select_related("reg", "reg__member"):

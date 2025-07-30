@@ -165,7 +165,7 @@ def _prepare_export(ctx, model, query):
                 choices[choice.question_id] = {}
             if element_id not in choices[choice.question_id]:
                 choices[choice.question_id][element_id] = []
-            choices[choice.question_id][element_id].append(choice.option.display)
+            choices[choice.question_id][element_id].append(choice.option.name)
 
         que_answer = answers_cls.objects.filter(**filter_kwargs)
         for answer in que_answer:
@@ -190,7 +190,7 @@ def _get_applicable_row(ctx, el, choices, answers, questions, model, member_cove
 
     # add question values
     for que in questions:
-        key.append(que.display)
+        key.append(que.name)
         mapping = _get_values_mapping(el)
         value = ""
         if que.typ in mapping:
@@ -391,13 +391,13 @@ def orga_registration_form_download(ctx):
 
 
 def export_registration_form(ctx):
-    key = ["display", "typ", "description", "status", "max_length"]
+    key = ["name", "typ", "description", "status", "max_length"]
     que = get_ordered_registration_questions(ctx)
     vals = list(que.values_list(*key))
 
     exports = [("registration_questions", key, vals)]
 
-    key = ["question__display", "display", "description", "price", "max_available"]
+    key = ["question__name", "name", "description", "price", "max_available"]
     que = ctx["event"].get_elements(RegistrationOption).select_related("question")
     que = que.order_by(F("question__order"), "order")
     vals = list(que.values_list(*key))
@@ -412,13 +412,13 @@ def orga_character_form_download(ctx):
 
 
 def export_character_form(ctx):
-    key = ["display", "typ", "description", "status", "applicable", "visibility", "max_length"]
+    key = ["name", "typ", "description", "status", "applicable", "visibility", "max_length"]
     que = ctx["event"].get_elements(WritingQuestion).order_by("applicable", "order")
     vals = list(que.values_list(*key))
 
     exports = [("writing_questions", key, vals)]
 
-    key = ["question__display", "display", "description", "max_available"]
+    key = ["question__name", "name", "description", "max_available"]
     que = ctx["event"].get_elements(WritingOption).select_related("question")
     que = que.order_by(F("question__order"), "order")
     vals = list(que.values_list(*key))

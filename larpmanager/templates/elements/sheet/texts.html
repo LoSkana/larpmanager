@@ -4,14 +4,14 @@
         {% with char.fields|get:idx as field %}
             {% if field %}
                 {% if screen or question.printable %}
-                    <h2 class="c title">{{ question.display }}</h2>
+                    <h2 class="c title">{{ question.name }}</h2>
                     <div class="plot text">{% show_char field run 1 %}</div>
                 {% endif %}
             {% endif %}
         {% endwith %}
     {% elif question.typ == 'text' %}
         {% if sheet_char.text and show_character.text %}
-            <h2 class="c title">{{ question.display }}</h2>
+            <h2 class="c title">{{ question.name }}</h2>
             <div class="plot text">{% show_char sheet_char.text run 1 %}</div>
         {% endif %}
     {% endif %}

@@ -361,11 +361,11 @@ def get_registration_options(instance):
     if len(rqs) > 0:
         for q in rqs:
             if q.id in choices:
-                txt = ",".join([opt.display for opt in choices[q.id]])
-                res.append((q.display, txt))
+                txt = ",".join([opt.name for opt in choices[q.id]])
+                res.append((q.name, txt))
 
             if q.id in answers:
-                res.append((q.display, answers[q.id]))
+                res.append((q.name, answers[q.id]))
 
     return res
 
@@ -438,8 +438,8 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
 
     # look for similar registration choice
     for choice in RegistrationChoice.objects.filter(reg=instance):
-        question_display = choice.question.display
-        option_display = choice.option.display
+        question_display = choice.question.name
+        option_display = choice.option.name
         try:
             choice.question = instance.run.event.get_elements(RegistrationQuestion).get(
                 display__iexact=question_display
@@ -454,7 +454,7 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
 
     # look for similar registration answer
     for answer in RegistrationAnswer.objects.filter(reg=instance):
-        question_display = answer.question.display
+        question_display = answer.question.name
         try:
             answer.question = instance.run.event.get_elements(RegistrationQuestion).get(
                 display__iexact=question_display

@@ -47,7 +47,7 @@
                         <i class="fas fa-edit"></i>
                     </a>
                 </td>
-                <td>{{ el.display }}</td>
+                <td>{{ el.name }}</td>
                 <td>{{ el.description | truncatechars:50 }}</td>
                 <td>{{ el.get_typ_display }}</td>
                 <td>{{ el.get_status_display }}</td>
@@ -59,7 +59,7 @@
                 <td>
                     {% for ch in el.options_list %}
                         {% include "elements/comma.html" %}
-                        <a href="{% url 'orga_registration_options_edit' run.event.slug run.number ch.id %}">{{ ch.display }}</a>
+                        <a href="{% url 'orga_registration_options_edit' run.event.slug run.number ch.id %}">{{ ch.name }}</a>
                     {% endfor %}
                 </td>
                 {% if features.reg_que_faction %}

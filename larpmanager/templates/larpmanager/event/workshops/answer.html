@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n show_tags %}
 {% block title %}
-    {{ workshop.display }}
+    {{ workshop.name }}
 {% endblock title %}
 {% block nav %}
     {% include "larpmanager/manage/nav.html" %}
@@ -18,7 +18,7 @@
         <form action="{{ request.path }}"  method="post">
             {% csrf_token %}
             {% for el in list %}
-                <h2>{{ el.display }}</h2>
+                <h2>{{ el.name }}</h2>
                 <div class="question num_{{ el.opt | length }}">
                     {% for op in el.opt %}
                         <div class="option">
@@ -26,7 +26,7 @@
                                 <input type="checkbox"
                                        id="{{ el.id }}_{{ op.id }}"
                                        name="{{ el.id }}_{{ op.id }}">
-                                {{ op.display }}
+                                {{ op.name }}
                             </p>
                         </div>
                     {% endfor %}

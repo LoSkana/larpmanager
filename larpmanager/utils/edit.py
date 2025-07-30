@@ -64,7 +64,7 @@ def save_version(el, tp, mb, dl=False):
             if not value:
                 continue
             value = html_clean(value)
-            texts.append(f"{que.display}: {value}")
+            texts.append(f"{que.name}: {value}")
 
         tv.text = "\n".join(texts)
     else:
@@ -100,7 +100,7 @@ def _get_field_value(el, que):
         return ""
 
     if que.typ in {"s", "m"}:
-        return ", ".join(c.option.display for c in WritingChoice.objects.filter(question=que, element_id=el.id))
+        return ", ".join(c.option.name for c in WritingChoice.objects.filter(question=que, element_id=el.id))
 
     return None
 

@@ -40,7 +40,7 @@ from larpmanager.models.registration import (
 
 class RegistrationQuestionInline(admin.TabularInline):
     model = RegistrationQuestion
-    fields = ("display", "description")
+    fields = ("name", "description")
     show_change_link = True
 
 
@@ -86,7 +86,7 @@ class RegistrationSectionAdmin(DefModelAdmin):
 class RegistrationQuestionAdmin(DefModelAdmin):
     exclude = ("search",)
     search_fields = ("search",)
-    list_display = ("typ", "event", "display", "status", "description")
+    list_display = ("typ", "event", "name", "status", "description")
     autocomplete_fields = ["event", "section", "factions", "tickets", "allowed"]
     list_filter = (EventFilter,)
 

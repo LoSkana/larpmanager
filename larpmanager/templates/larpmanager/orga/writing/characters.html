@@ -122,7 +122,7 @@
         <div class="nav fields">
             {% for key, que in form_questions.items %}
                 {% if que.typ == 's' or que.typ == 'm' %}
-                    <a href="#" class="load_email_que" key="{{ key }}">{{ que.display | truncatechars:50 }}</a>
+                    <a href="#" class="load_email_que" key="{{ key }}">{{ que.name | truncatechars:50 }}</a>
                     <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
                 {% endif %}
             {% endfor %}
@@ -131,7 +131,7 @@
             {% if que.typ == 's' or que.typ == 'm' %}
                 <div class="hide email_que_{{ key }}">
                     <br />
-                    <h4>{{ que.display }}</h4>
+                    <h4>{{ que.name }}</h4>
                     <table>
                         <thead>
                             <tr>

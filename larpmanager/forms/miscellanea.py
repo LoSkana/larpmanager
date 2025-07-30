@@ -133,7 +133,7 @@ class WorkshopQuestionForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["module"].choices = [
-            (m.id, m.display) for m in WorkshopModule.objects.filter(event=self.params["event"])
+            (m.id, m.name) for m in WorkshopModule.objects.filter(event=self.params["event"])
         ]
 
 
@@ -145,7 +145,7 @@ class WorkshopOptionForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["question"].choices = [
-            (m.id, m.display) for m in WorkshopQuestion.objects.filter(module__event=self.params["event"])
+            (m.id, m.name) for m in WorkshopQuestion.objects.filter(module__event=self.params["event"])
         ]
 
 
