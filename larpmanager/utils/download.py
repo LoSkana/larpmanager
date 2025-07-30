@@ -397,7 +397,7 @@ def export_registration_form(ctx):
 
     exports = [("registration_questions", key, vals)]
 
-    key = ["question__display", "display", "details", "price", "max_available"]
+    key = ["question__display", "display", "description", "price", "max_available"]
     que = ctx["event"].get_elements(RegistrationOption).select_related("question")
     que = que.order_by(F("question__order"), "order")
     vals = list(que.values_list(*key))
@@ -418,7 +418,7 @@ def export_character_form(ctx):
 
     exports = [("writing_questions", key, vals)]
 
-    key = ["question__display", "display", "details", "max_available"]
+    key = ["question__display", "display", "description", "max_available"]
     que = ctx["event"].get_elements(WritingOption).select_related("question")
     que = que.order_by(F("question__order"), "order")
     vals = list(que.values_list(*key))

@@ -80,7 +80,7 @@ class WritingOptionAdmin(DefModelAdmin):
 
     @staticmethod
     def details_red(instance):
-        return reduced(instance.details)
+        return reduced(instance.description)
 
 
 @admin.register(WritingChoice)

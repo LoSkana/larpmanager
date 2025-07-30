@@ -227,7 +227,7 @@ class WritingOption(BaseModel):
         help_text=_("Option name, displayed within the question (keep it short)"),
     )
 
-    details = models.CharField(
+    description = models.CharField(
         max_length=500,
         blank=True,
         null=True,
@@ -270,7 +270,7 @@ class WritingOption(BaseModel):
 
     def show(self, run=None):
         js = {"max_available": self.max_available}
-        for s in ["display", "details"]:
+        for s in ["display", "description"]:
             self.upd_js_attr(js, s)
         return js
 
@@ -475,7 +475,7 @@ class RegistrationOption(BaseModel):
         help_text=_("Option name, displayed within the question (keep it short)"),
     )
 
-    details = models.CharField(
+    description = models.CharField(
         max_length=500,
         blank=True,
         null=True,
@@ -518,7 +518,7 @@ class RegistrationOption(BaseModel):
 
     def show(self, run=None):
         js = {"max_available": self.max_available}
-        for s in ["display", "price", "details"]:
+        for s in ["display", "price", "description"]:
             self.upd_js_attr(js, s)
         # noinspection PyUnresolvedReferences
         js["question"] = self.question.display

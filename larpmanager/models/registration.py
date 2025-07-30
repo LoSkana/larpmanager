@@ -66,7 +66,7 @@ class RegistrationTicket(BaseModel):
         help_text=_("Ticket name (keep it short)"),
     )
 
-    details = models.CharField(
+    description = models.CharField(
         max_length=500,
         blank=True,
         null=True,
@@ -103,7 +103,7 @@ class RegistrationTicket(BaseModel):
 
     def show(self, run=None):
         js = {"max_available": self.max_available}
-        for s in ["name", "price", "details"]:
+        for s in ["name", "price", "description"]:
             self.upd_js_attr(js, s)
         return js
 

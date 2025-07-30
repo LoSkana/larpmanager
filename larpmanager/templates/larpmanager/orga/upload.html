@@ -68,7 +68,7 @@
             </tr>
             <tr>
                 <th>
-                    <h3>details</h3>
+                    <h3>description</h3>
                 </th>
                 <td>{% trans "Optional - Extended description (displayed in small gray text)" %}</td>
             </tr>
@@ -111,7 +111,7 @@
             </tr>
             <tr>
                 <th>
-                    <h3>details</h3>
+                    <h3>description</h3>
                 </th>
                 <td>{% trans "Optional – Additional information about the option, displayed below the question" %}</td>
             </tr>
@@ -129,6 +129,91 @@
             </tr>
         </table>
     {% elif typ == 'character_form' %}
+        {% trans "The first line of the file must contain the column names, see the descriptions below" %}:
+        <br />
+        <br />
+        <table class="no_csv">
+            <tr>
+                <th>
+                    <h3>display</h3>
+                </th>
+                <td>
+                    {% trans "The question name" %}
+                    <i>({% trans "If already existing, the information will be replaced; if not, will be created" %})</i>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <h3>typ</h3>
+                </th>
+                <td>
+                    {% trans "The type of the question" %}
+                    <i>({% trans "'s' for single choice, 'm' for multiple choice, 't' for short text, 'p' for long text" %})</i>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <h3>description</h3>
+                </th>
+                <td>{% trans "Optional - Extended description (displayed in small gray text)" %}</td>
+            </tr>
+            <tr>
+                <th>
+                    <h3>status</h3>
+                </th>
+                <td>
+                    {% trans "The question status" %}
+                    <i>({% trans "'o' for optional, 'm' for mandatory, 'd' for disabled, 'h' for hidden" %})</i>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <h3>max_length</h3>
+                </th>
+                <td>
+                    {% trans "Optional - For text questions, maximum number of characters; For multiple options, maximum number of options (0 = no limit)" %}
+                </td>
+            </tr>
+        </table>
+        key = ["display", "typ", "description", "status", "applicable", "visibility", "max_length"]
+        {% trans "You can also upload a second file with the registration options" %}:
+        <br />
+        <br />
+        <table class="no_csv">
+            <tr>
+                <th>
+                    <h3>question</h3>
+                </th>
+                <td>
+                    {% trans "The name of the question this option belongs to" %}
+                    <i>({% trans "If not found, the option will be skipped" %})</i>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <h3>display</h3>
+                </th>
+                <td>{% trans "The name of the option" %}</td>
+            </tr>
+            <tr>
+                <th>
+                    <h3>description</h3>
+                </th>
+                <td>{% trans "Optional – Additional information about the option, displayed below the question" %}</td>
+            </tr>
+            <tr>
+                <th>
+                    <h3>price</h3>
+                </th>
+                <td>{% trans "Optional – Amount added to the registration fee if selected (0 = no extra cost)" %}</td>
+            </tr>
+            <tr>
+                <th>
+                    <h3>max_available</h3>
+                </th>
+                <td>{% trans "Optional – Maximum number of times it can be selected across all registrations (0 = unlimited)" %}</td>
+            </tr>
+        </table>
         ctx["upload"] = (
         _(
         "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short text, 'p' for long text, 'e' for editor)"

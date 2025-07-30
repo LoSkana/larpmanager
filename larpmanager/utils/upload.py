@@ -327,7 +327,7 @@ def registration_question_load(request, ctx, row, question):
 
         ff = 5 + cnt * 4
         option.display = row[ff]
-        option.details = row[ff + 1]
+        option.description = row[ff + 1]
         option.price = float(row[ff + 2])
         option.max_available = int(row[ff + 3])
         option.save()
@@ -398,7 +398,7 @@ def character_question_load(request, ctx, row, question):
 
         ff = 6 + cnt * 5
         option.display = row[ff]
-        option.details = row[ff + 1]
+        option.description = row[ff + 1]
         option.max_available = int(row[ff + 2])
         if option.pk:
             option.dependents.clear()

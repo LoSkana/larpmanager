@@ -277,8 +277,8 @@ class BaseRegistrationForm(MyFormRun):
 
             # no problem, go ahead
             choices.append((option.id, name))
-            if option.details:
-                help_text += f'<p id="hp_{option.id}"><b>{option.display}</b> {option.details}</p>'
+            if option.description:
+                help_text += f'<p id="hp_{option.id}"><b>{option.display}</b> {option.description}</p>'
 
         return choices, help_text
 

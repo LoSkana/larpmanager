@@ -241,8 +241,8 @@ class RegistrationForm(BaseRegistrationForm):
         for r in tickets:
             name = r.get_form_text(run, cs=self.params["currency_symbol"])
             ticket_choices.append((r.id, name))
-            if r.details:
-                ticket_help += f"<p><b>{r.name}</b>: {r.details}</p>"
+            if r.description:
+                ticket_help += f"<p><b>{r.name}</b>: {r.description}</p>"
 
         self.fields["ticket"] = forms.ChoiceField(
             required=True, choices=ticket_choices, label=_("Ticket"), help_text=ticket_help
@@ -653,7 +653,7 @@ class OrgaRegistrationTicketForm(MyForm):
         fields = "__all__"
         exclude = ("number", "order")
         widgets = {
-            "details": forms.Textarea(attrs={"rows": 3, "cols": 40}),
+            "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
         }
 
     def __init__(self, *args, **kwargs):
