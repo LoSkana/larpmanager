@@ -550,8 +550,8 @@ class RegistrationAnswer(BaseModel):
 
 
 def get_ordered_registration_questions(ctx):
-    que = RegistrationQuestion.objects.filter(event=ctx["event"])
-    return que.order_by(F("section__order").asc(nulls_first=True), "order").prefetch_related("options")
+    que = ctx["event"].get_elements(RegistrationQuestion)
+    return que.order_by(F("section__order").asc(nulls_first=True), "order")
 
 
 def _get_writing_elements():
