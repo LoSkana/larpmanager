@@ -76,6 +76,11 @@ class Trait(Writing):
     quest = models.ForeignKey(Quest, on_delete=models.CASCADE, null=True, related_name="traits")
 
     traits = models.ManyToManyField("self", symmetrical=False, blank=True)
+    
+    safety = models.TextField(max_length=5000)
+    role = models.TextField(max_length=5000)
+    keywords = models.TextField(max_length=5000)
+
 
     class Meta:
         indexes = [models.Index(fields=["number", "event"])]

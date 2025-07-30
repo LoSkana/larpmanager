@@ -338,7 +338,6 @@ def writing_view(request, ctx, nm):
     get_event_cache_all(ctx)
 
     if nm == "character":
-        ctx["char"] = ctx["chars"][ctx["el"].number]
         ctx["character"] = ctx["el"]
         get_character_sheet(ctx)
     else:

@@ -177,7 +177,7 @@ def get_character_sheet_fields(ctx):
     if "character" not in ctx["features"]:
         return
 
-    ctx["sheet_char"].update(get_character_element_fields(ctx, ctx["char"]["id"], only_visible=False))
+    ctx["sheet_char"].update(get_character_element_fields(ctx, ctx["character"].id, only_visible=False))
 
 
 def get_char_check(request, ctx, num, restrict=False, bypass=False):
