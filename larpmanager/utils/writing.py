@@ -53,7 +53,6 @@ from larpmanager.utils.character import get_character_sheet
 from larpmanager.utils.common import check_field, compute_diff
 from larpmanager.utils.download import download
 from larpmanager.utils.edit import _setup_char_finder
-from larpmanager.utils.upload import upload_elements
 
 
 def orga_list_progress_assign(ctx, typ: type[Model]):
@@ -154,7 +153,7 @@ def writing_post(request, ctx, typ, nm):
     if request.POST.get("popup") == "1":
         return writing_popup(request, ctx, typ)
 
-    return upload_elements(request, ctx, typ, nm, "orga_" + nm + "s")
+    return None
 
 
 def writing_list(request, ctx, typ, nm):
@@ -164,6 +163,7 @@ def writing_list(request, ctx, typ, nm):
     ctx["form"] = UploadElementsForm()
     ev = ctx["event"]
 
+    ctx["upload"] = f"{nm}s"
     ctx["nm"] = nm
 
     text_fields, writing = writing_list_query(ctx, ev, typ)

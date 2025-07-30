@@ -2408,9 +2408,6 @@ msgstr "Terminrabatt"
 msgid "Handout template"
 msgstr "Mal for utdeling"
 
-msgid "Loading template"
-msgstr "Lasting av mal"
-
 msgid "Long description"
 msgstr "Lang beskrivelse"
 
@@ -2515,9 +2512,6 @@ msgstr "last den ned her"
 
 msgid "follow this link"
 msgstr "Følg denne lenken"
-
-msgid "'pwyw' (donation)"
-msgstr "\"pwyw\" (donasjon)"
 
 msgid "Activation failed"
 msgstr "Aktivering mislyktes"
@@ -2653,6 +2647,9 @@ msgstr "Kort beskrivelse"
 
 msgid "Technical Support"
 msgstr "Teknisk støtte"
+
+msgid "The question name"
+msgstr "Underdanig spørsmål"
 
 msgid "Tokens assignment"
 msgstr "Tildeling av symboler"
@@ -2878,6 +2875,9 @@ msgstr "Resultater ikke til stede"
 
 msgid "Signup cancellation"
 msgstr "Oppsigelse av abonnement"
+
+msgid "The question status"
+msgstr "Status for spørsmålet"
 
 msgid "Treasury appointees"
 msgstr "Finansdepartementet"
@@ -3240,6 +3240,12 @@ msgstr "Velg din karakter!"
 msgid "Set up payment methods"
 msgstr "Konfigurer betalingsmetoder"
 
+msgid "The name of the option"
+msgstr "Navnet på alternativet"
+
+msgid "The name of the ticket"
+msgstr "Navnet på billetten"
+
 msgid "Total registration fee"
 msgstr "Total registreringsavgift"
 
@@ -3359,9 +3365,6 @@ msgstr "Hva gjør du fortsatt her"
 msgid "You have made a mistake"
 msgstr "Du tar feil"
 
-msgid "display (question text)"
-msgstr "display (spørsmålstekst)"
-
 msgid "Cancel your registration"
 msgstr "Avslutt abonnementet"
 
@@ -3417,6 +3420,9 @@ msgstr "Hemmelig registreringslenke"
 msgid "The subdomain identifier"
 msgstr "Identifikatoren for underdomenet"
 
+msgid "The type of the question"
+msgstr "Type spørsmål"
+
 msgid "Try the sheet generation"
 msgstr "Prøv kortgenerering"
 
@@ -3431,9 +3437,6 @@ msgstr "sjekk rapporter mindre"
 
 msgid "not visible at this time"
 msgstr "ikke synlig på dette tidspunktet"
-
-msgid "'player' (player's email)"
-msgstr "\"spiller\" (spillerens e-postadresse)"
 
 msgid "Choose the payment method"
 msgstr "Velg betalingsmåte"
@@ -3669,9 +3672,6 @@ msgstr "Deltakelse bekreftet"
 
 msgid "You are signed up as Filler"
 msgstr "Du er registrert som Filler"
-
-msgid "options (number of options)"
-msgstr "opsjoner (antall opsjoner)"
 
 msgid "please fill in your profile"
 msgstr "vennligst fyll ut profilen din"
@@ -3933,9 +3933,6 @@ msgstr "Du har fått svar på spørsmålet ditt"
 
 msgid "check nonexistent relationships"
 msgstr "sjekke ikke-eksisterende relasjoner"
-
-msgid "'ticket' (ticket name or number)"
-msgstr "\"billett\" (billettens navn eller nummer)"
 
 msgid "Added to the bottom of all pages"
 msgstr "Lagt til nederst på alle sider"
@@ -4387,6 +4384,9 @@ msgstr "Sett opp levering for erfaringspoeng"
 msgid "This page shows cancelled enrollments"
 msgstr "Denne siden oppsummerer kansellerte registreringer"
 
+msgid "To download a sample file, click here"
+msgstr "Klikk her for å laste ned en prøvefil"
+
 msgid "Total amount refunded to participants"
 msgstr "Totalt beløp refundert til deltakerne"
 
@@ -4396,9 +4396,6 @@ msgstr "Utnyttelse %(credits)s per %(event)s"
 
 msgid "You are signed up in the waiting list"
 msgstr "Du står på ventelisten"
-
-msgid "description (application description)"
-msgstr "beskrivelse (applikasjonsbeskrivelse)"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available"
@@ -4477,6 +4474,9 @@ msgstr "Elektronikk - datamaskiner, hitech, lys"
 msgid "Enables free pre-registration to events"
 msgstr "Muliggjør gratis forhåndsregistrering til arrangementer"
 
+msgid "If it doesn't exist, it will be created"
+msgstr "Hvis den ikke finnes, vil den bli opprettet"
+
 msgid "If you need help, remember to check out"
 msgstr "Hvis du trenger hjelp, husk å sjekke ut"
 
@@ -4547,6 +4547,9 @@ msgstr "Beskriv nøyaktig under hvilke forhold det skjer"
 
 msgid "Did you check the required data properly"
 msgstr "Har du sjekket de nødvendige dataene på riktig måte"
+
+msgid "If not found, the option will be skipped"
+msgstr "Hvis alternativet ikke blir funnet, hoppes det over"
 
 msgid "If you no longer wish to attend, you can"
 msgstr "Hvis du ikke lenger ønsker å delta, kan du"
@@ -4623,9 +4626,6 @@ msgstr "Søknad om medlemskap i foreningen"
 
 msgid "Set up the organization tax configuration"
 msgstr "Konfigurer organisasjonens skattekonfigurasjon"
-
-msgid "The first line is the names of the fields"
-msgstr "Den første linjen inneholder navnene på feltene"
 
 #, python-format
 msgid "There are quests without traits: %(list)s"
@@ -4722,6 +4722,9 @@ msgstr "Denne siden oppsummerer systemoppføringene til"
 
 msgid "Warning! Other users are editing this item"
 msgstr "Advarsel! Andre brukere redigerer dette elementet"
+
+msgid "You can upload data directly from CSV file"
+msgstr "Du kan laste opp data direkte fra en CSV-fil"
 
 msgid "main grouping / affiliation for characters"
 msgstr "hovedgruppering/tilhørighet for karakterer"
@@ -4873,8 +4876,8 @@ msgstr "Du er ennå ikke medlem av foreningen"
 msgid "You are now logged in with your main account"
 msgstr "Du er nå logget inn med hovedkontoen din"
 
-msgid "You can upload data directly from a csv file"
-msgstr "Du kan laste opp data direkte fra en csv-fil"
+msgid "(Optional) The amount of a voluntary donation"
+msgstr "(Valgfritt) Beløpet for en frivillig donasjon"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Tilpass knappene i navigasjonsfeltet for hendelser"
@@ -5061,6 +5064,9 @@ msgstr "Konfigurer betalingsmetodene som er tilgjengelige for spillerne"
 
 msgid "Shows the calculated tax amount on each payment"
 msgstr "Viser det beregnede skattebeløpet på hver betaling"
+
+msgid "The name of the question this option belongs to"
+msgstr "Navnet på spørsmålet dette alternativet hører til"
 
 #, python-format
 msgid "There are <b>%(number)s</b> expenses to approve"
@@ -5332,9 +5338,6 @@ msgstr "Her er en trinnvis gjennomgang av grensesnittet"
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jeg har gjort det noen ganger, jeg har grunnleggende erfaring"
 
-msgid "If you want to download an example file, click here"
-msgstr "Hvis du vil laste ned en eksempelfil, kan du klikke her"
-
 msgid "Indicates the currency in which to receive payments"
 msgstr "Angir hvilken valuta du vil motta betalinger i"
 
@@ -5429,8 +5432,8 @@ msgstr "Du skal ha vår evige takk for at du tror på oss"
 msgid "please upload your membership application to proceed"
 msgstr "vennligst last opp medlemssøknaden din for å gå videre"
 
-msgid "'character' (character name or number to be assigned)"
-msgstr "\"tegn\" (tegnnavn eller nummer som skal tildeles)"
+msgid "(Optional) The character name to assign to the player"
+msgstr "(Valgfritt) Karakternavnet som skal tildeles spilleren"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -6037,6 +6040,9 @@ msgstr "For å kunne betale må medlemssøknaden din være godkjent"
 msgid "Warning: there is already an approved member with the same name"
 msgstr "Advarsel: Det finnes allerede et godkjent medlem med samme navn"
 
+msgid "You can also upload a second file with the registration options"
+msgstr "Du kan også laste opp en annen fil med registreringsalternativene"
+
 msgid "You will receive confirmation of the outcome of its  evaluation"
 msgstr "Du vil motta en bekreftelse på resultatet av evalueringen"
 
@@ -6270,6 +6276,9 @@ msgstr ""
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Antall dager du har til rådighet for å betale neste avdrag"
 
+msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
+msgstr "Velg filene som skal lastes opp (må være i CSV-format, kodet i UTF-8)"
+
 msgid "The ticket will be divided equally in the number of quotas indicated"
 msgstr "Billetten vil bli delt likt i det angitte antall aksjer"
 
@@ -6317,6 +6326,9 @@ msgid "Your user does not have the required permissions to access this page"
 msgstr ""
 "Brukeren din har ikke de nødvendige tillatelsene for å få tilgang til denne "
 "siden"
+
+msgid "'o' for optional, 'm' for mandatory, 'd' for disabled, 'h' for hidden"
+msgstr "\"o\" for valgfritt, \"m\" for obligatorisk, \"d\" for deaktivert, \"h\" for skjult"
 
 msgid "Added at the bottom of mail notifying players of character assignment"
 msgstr "Lagt til nederst i e-posten som varsler spillere om karaktertildeling"
@@ -6441,6 +6453,10 @@ msgstr ""
 msgid "If checked, it allows players to indicate the song of their characters"
 msgstr ""
 "Hvis det er krysset av, kan spillerne angi sangen til karakterene sine"
+
+msgid "If the player is already registered, their information will be updated"
+msgstr ""
+"Hvis spilleren allerede er registrert, vil informasjonen bli oppdatert"
 
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
@@ -6722,6 +6738,12 @@ msgstr ""
 "Betaling mottatt! Så snart den er godkjent, vil kontoene dine bli oppdatert"
 
 msgid ""
+"The player's email. If not found in the system, a new user will be created"
+msgstr ""
+"Spillerens e-postadresse. Hvis den ikke finnes i systemet, vil en ny bruker "
+"bli opprettet"
+
+msgid ""
 "This page shows all event templates; you can edit them, or create new ones"
 msgstr ""
 "Denne siden viser alle arrangementsmaler; du kan redigere dem eller opprette"
@@ -6969,6 +6991,13 @@ msgid ""
 msgstr ""
 "Gjør det mulig å sette en karakter som et \"speil\" for en annen, for å "
 "skjule dens sanne natur"
+
+msgid ""
+"If already existing, the information will be replaced; if not, will be "
+"created"
+msgstr ""
+"Hvis informasjonen allerede finnes, vil den bli erstattet; hvis ikke, vil "
+"den bli opprettet"
 
 msgid ""
 "If checked, allows a option to be visible only to players with selected "
@@ -7292,13 +7321,6 @@ msgstr ""
 "dataene dine på din"
 
 msgid ""
-"visibility (demand visibility: 's' for Searchable, 'c' for Public, 'e' for "
-"Private"
-msgstr ""
-"synlighet (krever synlighet: 's' for søkbar, 'c' for offentlig, 'e' for "
-"privat"
-
-msgid ""
 "Additional preferences, for random assignment when no solution is found "
 "(default 0)"
 msgstr ""
@@ -7414,11 +7436,23 @@ msgstr ""
 "Krever godkjenning fra eksekutivkomiteen før deltakelse i et arrangement"
 
 msgid ""
+"The first line of the file must contain the column names, see the "
+"descriptions below"
+msgstr ""
+"Den første linjen i filen må inneholde kolonnenavnene, se beskrivelsene "
+"nedenfor"
+
+msgid ""
 "Tip: Pin this page to your browser for faster access to your organization "
 "and events"
 msgstr ""
 "Tips! Fest denne siden til nettleseren din for å få raskere tilgang til "
 "organisasjonen og arrangementene dine"
+
+msgid ""
+"'s' for single choice, 'm' for multiple choice, 't' for short text, 'p' for "
+"long text"
+msgstr "\"s\" for enkeltvalg, \"m\" for flervalg, \"t\" for kort tekst, \"p\" for lang tekst"
 
 msgid ""
 "I confirm that I have uploaded a valid document issued by the state of my "
@@ -7468,13 +7502,6 @@ msgid ""
 msgstr ""
 "Hvis avkrysset, fjernes formateringen automatisk når du limer inn tekst i "
 "WYSIWYG-redigeringsprogrammet"
-
-msgid ""
-"If you already have the file ready, upload it here (pay attention to the "
-"'csv' format)"
-msgstr ""
-"Hvis du allerede har filen klar, kan du laste den opp her (vær oppmerksom på"
-" csv-formatet)"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "
@@ -7715,13 +7742,6 @@ msgid ""
 msgstr ""
 "Du kan opprette nye delegatkontoer, eller logge inn med dem ved å trykke på "
 "den relevante knappen"
-
-msgid ""
-"for each option four columns: name, description, price, available places (0 "
-"for infinite)"
-msgstr ""
-"for hvert alternativ fire kolonner: navn, beskrivelse, pris, tilgjengelige "
-"plasser (0 for uendelig)"
 
 #, python-format
 msgid ""
@@ -7993,13 +8013,6 @@ msgstr ""
 "ved påmelding"
 
 msgid ""
-"status of application: 'o' for optional, 'm' mandatory, 'c' creation, 'd' "
-"disabled, 'h' hidden"
-msgstr ""
-"status for applikasjonen: \"o\" for valgfri, \"m\" obligatorisk, \"c\" "
-"opprettelse, \"d\" deaktivert, \"h\" skjult"
-
-msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
 "them in anonymous form"
 msgstr ""
@@ -8168,13 +8181,6 @@ msgid ""
 msgstr ""
 "Dette feltet kan bare redigeres av spilleren når karakteren befinner seg i "
 "en av de valgte statusene"
-
-msgid ""
-"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
-"text, 'p' for long text)"
-msgstr ""
-"typ (type: 's' for enkeltvalg, 'm' for flervalg, 't' for kort tekst, 'p' for"
-" lang tekst)"
 
 msgid ""
 "An user with this email address has been created on our website. If you wish"
@@ -8726,13 +8732,6 @@ msgstr ""
 " i en av våre opplevelser"
 
 msgid ""
-"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
-"text, 'p' for long text, 'e' for editor)"
-msgstr ""
-"typ (type: 's' for enkeltvalg, 'm' for flervalg, 't' for kort tekst, 'p' for"
-" lang tekst, 'e' for editor)"
-
-msgid ""
 "For your convenience, this page only shows questions from the last 3 months."
 " To view previous questions click here"
 msgstr ""
@@ -8913,13 +8912,6 @@ msgid ""
 msgstr ""
 "Muliggjør et billettlignende system for \"problemer\" i spillet, der de "
 "ansatte kan logge problemer, tildele alvorlighetsgrad/hastegrad og spore dem"
-
-msgid ""
-"for each option five columns: name, description, available seats (0 for "
-"infinite), prerequisite options, ticket required"
-msgstr ""
-"fem kolonner for hvert alternativ: navn, beskrivelse, tilgjengelige plasser "
-"(0 for uendelig), forutsetninger, billettkrav"
 
 msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "

@@ -243,3 +243,10 @@ def _prepare_backup(ctx):
         exports.extend(export_data(ctx, Trait))
 
     return zip_exports(ctx, exports, "backup")
+
+
+@login_required
+def orga_upload(request, s, n, typ):
+    ctx = check_event_permission(request, s, n, f"orga_{typ}")
+    ctx["typ"] = typ
+    return render(request, "larpmanager/orga/upload.html", ctx)

@@ -2408,9 +2408,6 @@ msgstr "Terminrabatt"
 msgid "Handout template"
 msgstr "Handout-Vorlage"
 
-msgid "Loading template"
-msgstr "Vorlage laden"
-
 msgid "Long description"
 msgstr "Lange Beschreibung"
 
@@ -2515,9 +2512,6 @@ msgstr "hier herunterladen"
 
 msgid "follow this link"
 msgstr "Folgen Sie diesem Link"
-
-msgid "'pwyw' (donation)"
-msgstr "pwyw\" (Spende)"
 
 msgid "Activation failed"
 msgstr "Aktivierung fehlgeschlagen"
@@ -2653,6 +2647,9 @@ msgstr "Kurzbeschreibung"
 
 msgid "Technical Support"
 msgstr "Technische Unterstützung"
+
+msgid "The question name"
+msgstr "Unterwürfige Frage"
 
 msgid "Tokens assignment"
 msgstr "Token-Zuweisung"
@@ -2878,6 +2875,9 @@ msgstr "Ergebnisse nicht vorhanden"
 
 msgid "Signup cancellation"
 msgstr "Kündigung des Abonnements"
+
+msgid "The question status"
+msgstr "Die Frage nach dem Status"
 
 msgid "Treasury appointees"
 msgstr "Finanzbeamte"
@@ -3240,6 +3240,12 @@ msgstr "Wählen Sie Ihren Charakter!"
 msgid "Set up payment methods"
 msgstr "Zahlungsarten einrichten"
 
+msgid "The name of the option"
+msgstr "Der Name der Option"
+
+msgid "The name of the ticket"
+msgstr "Der Name des Tickets"
+
 msgid "Total registration fee"
 msgstr "Anmeldegebühr insgesamt"
 
@@ -3359,9 +3365,6 @@ msgstr "Was machen Sie noch hier"
 msgid "You have made a mistake"
 msgstr "Sie haben sich geirrt"
 
-msgid "display (question text)"
-msgstr "Anzeige (Fragetext)"
-
 msgid "Cancel your registration"
 msgstr "Abbestellen"
 
@@ -3417,6 +3420,9 @@ msgstr "Geheimer Registrierungslink"
 msgid "The subdomain identifier"
 msgstr "Die Kennung der Subdomäne"
 
+msgid "The type of the question"
+msgstr "Die Art der Frage"
+
 msgid "Try the sheet generation"
 msgstr "Kartenerstellung ausprobieren"
 
@@ -3431,9 +3437,6 @@ msgstr "Berichte überprüfen weniger"
 
 msgid "not visible at this time"
 msgstr "zur Zeit nicht sichtbar"
-
-msgid "'player' (player's email)"
-msgstr "Spieler\" (E-Mail des Spielers)"
 
 msgid "Choose the payment method"
 msgstr "Wählen Sie das Zahlungsmittel"
@@ -3669,9 +3672,6 @@ msgstr "Eintrag bestätigt"
 
 msgid "You are signed up as Filler"
 msgstr "Sie sind als Ausfüller registriert"
-
-msgid "options (number of options)"
-msgstr "Optionen (Anzahl der Optionen)"
 
 msgid "please fill in your profile"
 msgstr "Bitte füllen Sie Ihr Profil aus"
@@ -3933,9 +3933,6 @@ msgstr "Ihre Frage wurde bereits beantwortet"
 
 msgid "check nonexistent relationships"
 msgstr "Prüfung nicht vorhandener Beziehungen"
-
-msgid "'ticket' (ticket name or number)"
-msgstr "Ticket\" (Name oder Nummer des Tickets)"
 
 msgid "Added to the bottom of all pages"
 msgstr "Am unteren Rand aller Seiten hinzugefügt"
@@ -4389,6 +4386,9 @@ msgid "This page shows cancelled enrollments"
 msgstr ""
 "Auf dieser Seite sind die annullierten Registrierungen zusammengefasst"
 
+msgid "To download a sample file, click here"
+msgstr "Um eine Beispieldatei herunterzuladen, klicken Sie hier"
+
 msgid "Total amount refunded to participants"
 msgstr "Gesamtbetrag der Rückerstattung an die Teilnehmer"
 
@@ -4398,9 +4398,6 @@ msgstr "Auslastung %(credits)s pro %(event)s"
 
 msgid "You are signed up in the waiting list"
 msgstr "Sie stehen auf der Warteliste"
-
-msgid "description (application description)"
-msgstr "Beschreibung (Anwendungsbeschreibung)"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available"
@@ -4479,6 +4476,9 @@ msgstr "Elektronik - Computer, Hightech, Beleuchtung"
 msgid "Enables free pre-registration to events"
 msgstr "Ermöglicht die kostenlose Vorregistrierung für Veranstaltungen"
 
+msgid "If it doesn't exist, it will be created"
+msgstr "Wenn sie nicht vorhanden ist, wird sie erstellt"
+
 msgid "If you need help, remember to check out"
 msgstr "Wenn Sie Hilfe benötigen, besuchen Sie bitte"
 
@@ -4549,6 +4549,9 @@ msgstr "Beschreiben Sie genau, unter welchen Bedingungen sie auftritt"
 
 msgid "Did you check the required data properly"
 msgstr "Haben Sie die erforderlichen Daten ordnungsgemäß überprüft"
+
+msgid "If not found, the option will be skipped"
+msgstr "Wenn nicht gefunden, wird die Option übersprungen"
 
 msgid "If you no longer wish to attend, you can"
 msgstr "Wenn Sie nicht mehr teilnehmen möchten, können Sie"
@@ -4625,9 +4628,6 @@ msgstr "Antrag auf Mitgliedschaft in der Vereinigung"
 
 msgid "Set up the organization tax configuration"
 msgstr "Einrichten der Konfiguration der Organisationssteuer"
-
-msgid "The first line is the names of the fields"
-msgstr "Die erste Zeile enthält die Namen der Felder"
 
 #, python-format
 msgid "There are quests without traits: %(list)s"
@@ -4724,6 +4724,9 @@ msgstr "Diese Seite fasst die Systemeinträge von"
 
 msgid "Warning! Other users are editing this item"
 msgstr "Warnung! Dieser Artikel wird von anderen Benutzern bearbeitet"
+
+msgid "You can upload data directly from CSV file"
+msgstr "Sie können Daten direkt aus einer CSV-Datei hochladen"
 
 msgid "main grouping / affiliation for characters"
 msgstr "Hauptgruppierung/Zugehörigkeit für Zeichen"
@@ -4883,8 +4886,8 @@ msgstr "Sie sind noch nicht Mitglied der Vereinigung"
 msgid "You are now logged in with your main account"
 msgstr "Sie sind jetzt mit Ihrem Hauptkonto eingeloggt"
 
-msgid "You can upload data directly from a csv file"
-msgstr "Sie können Daten direkt aus einer csv-Datei hochladen"
+msgid "(Optional) The amount of a voluntary donation"
+msgstr "(fakultativ) Der Betrag einer freiwilligen Spende"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Anpassen von Schaltflächen in der Ereignis-Navigationsleiste"
@@ -5075,6 +5078,9 @@ msgstr "Einrichten der für Spieler verfügbaren Zahlungsarten"
 
 msgid "Shows the calculated tax amount on each payment"
 msgstr "Zeigt den berechneten Steuerbetrag für jede Zahlung an"
+
+msgid "The name of the question this option belongs to"
+msgstr "Der Name der Frage, zu der diese Option gehört"
 
 #, python-format
 msgid "There are <b>%(number)s</b> expenses to approve"
@@ -5367,9 +5373,6 @@ msgstr "Hier ein schrittweiser Durchgang durch die Schnittstelle"
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Ich habe es ein paar Mal gemacht, ich habe grundlegende Erfahrungen"
 
-msgid "If you want to download an example file, click here"
-msgstr "Wenn Sie eine Beispieldatei herunterladen möchten, klicken Sie hier"
-
 msgid "Indicates the currency in which to receive payments"
 msgstr "Gibt die Währung an, in der Zahlungen empfangen werden sollen"
 
@@ -5474,8 +5477,8 @@ msgstr ""
 msgid "please upload your membership application to proceed"
 msgstr "Bitte laden Sie Ihren Mitgliedsantrag hoch, um fortzufahren"
 
-msgid "'character' (character name or number to be assigned)"
-msgstr "Zeichen\" (Name oder Nummer des Zeichens, das zugewiesen werden soll)"
+msgid "(Optional) The character name to assign to the player"
+msgstr "(Optional) Der Charaktername, der dem Spieler zugewiesen werden soll"
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
@@ -6196,6 +6199,10 @@ msgid "Warning: there is already an approved member with the same name"
 msgstr ""
 "Achtung: Es gibt bereits ein zugelassenes Mitglied mit demselben Namen"
 
+msgid "You can also upload a second file with the registration options"
+msgstr ""
+"Sie können auch eine zweite Datei mit den Registrierungsoptionen hochladen"
+
 msgid "You will receive confirmation of the outcome of its  evaluation"
 msgstr "Sie erhalten eine Bestätigung über das Ergebnis der Bewertung"
 
@@ -6471,6 +6478,11 @@ msgid "Number of days within which the player must pay his next installment"
 msgstr ""
 "Anzahl der Tage, die für die Zahlung der nächsten Rate zur Verfügung stehen"
 
+msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
+msgstr ""
+"Wählen Sie die hochzuladenden Dateien aus (müssen im CSV-Format sein, "
+"kodiert in UTF-8)"
+
 msgid "The ticket will be divided equally in the number of quotas indicated"
 msgstr ""
 "Das Los wird zu gleichen Teilen in die angegebene Anzahl von Anteilen "
@@ -6524,6 +6536,11 @@ msgid "Your user does not have the required permissions to access this page"
 msgstr ""
 "Ihr Benutzer hat nicht die erforderlichen Berechtigungen für den Zugriff auf"
 " diese Seite"
+
+msgid "'o' for optional, 'm' for mandatory, 'd' for disabled, 'h' for hidden"
+msgstr ""
+"o\" für optional, \"m\" für obligatorisch, \"d\" für deaktiviert, \"h\" für "
+"versteckt"
 
 msgid "Added at the bottom of mail notifying players of character assignment"
 msgstr ""
@@ -6676,6 +6693,10 @@ msgid "If checked, it allows players to indicate the song of their characters"
 msgstr ""
 "Wenn diese Option aktiviert ist, können die Spieler das Lied ihrer "
 "Charaktere angeben"
+
+msgid "If the player is already registered, their information will be updated"
+msgstr ""
+"Wenn der Spieler bereits registriert ist, werden seine Daten aktualisiert"
 
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
@@ -6999,6 +7020,12 @@ msgstr ""
 "Zahlung erhalten! Sobald sie genehmigt ist, werden Ihre Konten aktualisiert"
 
 msgid ""
+"The player's email. If not found in the system, a new user will be created"
+msgstr ""
+"Die E-Mail des Spielers. Wenn nicht im System gefunden, wird ein neuer "
+"Benutzer erstellt"
+
+msgid ""
 "This page shows all event templates; you can edit them, or create new ones"
 msgstr ""
 "Auf dieser Seite werden alle Veranstaltungsvorlagen angezeigt; Sie können "
@@ -7261,6 +7288,13 @@ msgid ""
 msgstr ""
 "Ermöglicht es, ein Zeichen als \"Spiegel\" für ein anderes zu setzen, um "
 "seine wahre Natur zu verbergen"
+
+msgid ""
+"If already existing, the information will be replaced; if not, will be "
+"created"
+msgstr ""
+"Falls bereits vorhanden, werden die Informationen ersetzt; falls nicht, "
+"werden sie neu erstellt"
 
 msgid ""
 "If checked, allows a option to be visible only to players with selected "
@@ -7600,13 +7634,6 @@ msgstr ""
 "können, auf Ihrer Website überprüfen und bearbeiten"
 
 msgid ""
-"visibility (demand visibility: 's' for Searchable, 'c' for Public, 'e' for "
-"Private"
-msgstr ""
-"Sichtbarkeit (Nachfrage Sichtbarkeit: 's' für Searchable, 'c' für Public, "
-"'e' für Private"
-
-msgid ""
 "Additional preferences, for random assignment when no solution is found "
 "(default 0)"
 msgstr ""
@@ -7729,11 +7756,25 @@ msgstr ""
 "Teilnahme an einer Veranstaltung"
 
 msgid ""
+"The first line of the file must contain the column names, see the "
+"descriptions below"
+msgstr ""
+"Die erste Zeile der Datei muss die Spaltennamen enthalten, siehe die "
+"folgenden Beschreibungen"
+
+msgid ""
 "Tip: Pin this page to your browser for faster access to your organization "
 "and events"
 msgstr ""
 "Tipp! Heften Sie diese Seite an Ihren Browser, um schneller auf Ihre "
 "Organisation und Veranstaltungen zugreifen zu können"
+
+msgid ""
+"'s' for single choice, 'm' for multiple choice, 't' for short text, 'p' for "
+"long text"
+msgstr ""
+"s\" für Einfachauswahl, \"m\" für Mehrfachauswahl, \"t\" für Kurztext, \"p\""
+" für Langtext"
 
 msgid ""
 "I confirm that I have uploaded a valid document issued by the state of my "
@@ -7783,13 +7824,6 @@ msgid ""
 msgstr ""
 "Wenn diese Option aktiviert ist, wird die Formatierung beim Einfügen von "
 "Text in den WYSIWYG-Editor automatisch entfernt"
-
-msgid ""
-"If you already have the file ready, upload it here (pay attention to the "
-"'csv' format)"
-msgstr ""
-"Wenn Sie die Datei bereits fertig haben, laden Sie sie hier hoch (achten Sie"
-" auf das \"csv\"-Format)"
 
 msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "
@@ -8036,13 +8070,6 @@ msgid ""
 msgstr ""
 "Sie können neue Delegiertenkonten erstellen oder sich mit ihnen anmelden, "
 "indem Sie auf die entsprechende Schaltfläche klicken"
-
-msgid ""
-"for each option four columns: name, description, price, available places (0 "
-"for infinite)"
-msgstr ""
-"für jede Option vier Spalten: Name, Beschreibung, Preis, verfügbare Plätze "
-"(0 für unendlich)"
 
 #, python-format
 msgid ""
@@ -8315,13 +8342,6 @@ msgstr ""
 "das Vorkaufsrecht bei der Anmeldung"
 
 msgid ""
-"status of application: 'o' for optional, 'm' mandatory, 'c' creation, 'd' "
-"disabled, 'h' hidden"
-msgstr ""
-"Status des Antrags: \"o\" für fakultativ, \"m\" obligatorisch, \"c\" "
-"Erstellung, \"d\" deaktiviert, \"h\" verborgen"
-
-msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
 "them in anonymous form"
 msgstr ""
@@ -8490,13 +8510,6 @@ msgid ""
 msgstr ""
 "Dieses Feld kann vom Spieler nur bearbeitet werden, wenn sich der Charakter "
 "in einem der ausgewählten Status befindet"
-
-msgid ""
-"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
-"text, 'p' for long text)"
-msgstr ""
-"typ (Typ: 's' für Einfachauswahl, 'm' für Mehrfachauswahl, 't' für Kurztext,"
-" 'p' für Langtext)"
 
 msgid ""
 "An user with this email address has been created on our website. If you wish"
@@ -9056,13 +9069,6 @@ msgstr ""
 "Chance gegeben, an einem unserer Erlebnisse teilzunehmen"
 
 msgid ""
-"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
-"text, 'p' for long text, 'e' for editor)"
-msgstr ""
-"typ (Typ: 's' für Einfachauswahl, 'm' für Mehrfachauswahl, 't' für Kurztext,"
-" 'p' für Langtext, 'e' für Editor)"
-
-msgid ""
 "For your convenience, this page only shows questions from the last 3 months."
 " To view previous questions click here"
 msgstr ""
@@ -9250,13 +9256,6 @@ msgstr ""
 "Ermöglicht ein Ticket-ähnliches System für \"Probleme\" im Spiel, bei dem "
 "die Mitarbeiter Probleme protokollieren, den Schweregrad/die Dringlichkeit "
 "zuordnen und sie verfolgen können"
-
-msgid ""
-"for each option five columns: name, description, available seats (0 for "
-"infinite), prerequisite options, ticket required"
-msgstr ""
-"für jede Option fünf Spalten: Name, Beschreibung, verfügbare Plätze (0 für "
-"unendlich), vorausgesetzte Optionen, erforderliches Ticket"
 
 msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "

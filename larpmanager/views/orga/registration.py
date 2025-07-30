@@ -50,9 +50,6 @@ from larpmanager.forms.registration import (
     OrgaRegistrationForm,
     RegistrationCharacterRelForm,
 )
-from larpmanager.forms.writing import (
-    UploadElementsForm,
-)
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemOther,
@@ -84,7 +81,6 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.download import _orga_registrations_acc, download
 from larpmanager.utils.event import check_event_permission
-from larpmanager.utils.upload import upload_elements
 from larpmanager.views.orga.member import member_field_correct
 
 
@@ -314,8 +310,6 @@ def orga_registrations(request, s, n):
         if request.POST.get("download") == "1":
             return download(ctx, Registration, "registration")
 
-        return upload_elements(request, ctx, Registration, "registration", "orga_registrations")
-
     cache = {}
 
     get_event_cache_all(ctx)
@@ -356,18 +350,7 @@ def orga_registrations(request, s, n):
 
     _orga_registrations_text_fields(ctx)
 
-    ctx["typ"] = "registration"
-    ctx["form"] = UploadElementsForm()
-
-    ctx["upload"] = ",".join(
-        [
-            str(_("'player' (player's email)")),
-            str(_("'ticket' (ticket name or number)")),
-            str(_("'character' (character name or number to be assigned)")),
-            str(_("'pwyw' (donation)")),
-        ]
-    )
-
+    ctx["upload"] = "registrations"
     ctx["download"] = 1
     if ctx["event"].get_config("show_export", False):
         ctx["export"] = "registration"

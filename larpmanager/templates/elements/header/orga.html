@@ -20,8 +20,8 @@
             </button>
         {% endif %}
         {% if upload %}
-            <button class="my_toggle" tog='load-form'>
-                <a href="#">{% trans "Upload" %}</a>
+            <button>
+                <a href="{% url 'orga_upload' run.event.slug run.number upload %}">{% trans "Upload" %}</a>
             </button>
         {% endif %}
         {% if download %}
@@ -52,30 +52,6 @@
                     {% endif %}
                 </a>
             {% endfor %}
-            <hr />
-        </div>
-    {% endif %}
-    {% if upload %}
-        <div class="hide load-form">
-            {% trans "You can upload data directly from a csv file" %}.
-            <br />
-            <br />
-            {% trans "The first line is the names of the fields" %}: {{ upload }}
-            <br />
-            <br />
-            {% trans "If you already have the file ready, upload it here (pay attention to the 'csv' format)" %}:
-            <br />
-            <br />
-            <form action="{{ request.path }}"
-                  enctype="multipart/form-data"
-                  method="post">
-                {% csrf_token %}
-                {{ form.elem }}
-                <br />
-                <br />
-                <input type="hidden" name="upload" value="signup">
-                <input type="submit" value="Submit">
-            </form>
             <hr />
         </div>
     {% endif %}
