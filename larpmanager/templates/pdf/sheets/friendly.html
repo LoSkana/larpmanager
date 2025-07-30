@@ -41,7 +41,6 @@ td, th { text-align: center; }
             <div class="intro"></div>
             <div class="head">{{ event.assoc }} - {{ event }}</div>
             <br />
-            {% if intro %}{{ intro | safe }}{% endif %}
             {% include "elements/sheet/main.html" %}
             {% include "elements/sheet/plots.html" %}
             {% include "elements/sheet/quests.html" %}

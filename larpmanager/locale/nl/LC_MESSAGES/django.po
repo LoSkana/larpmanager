@@ -1437,9 +1437,6 @@ msgstr "Lijst tabel"
 msgid "Tax regime"
 msgstr "Belastingstelsel"
 
-msgid "Ties (Pdf)"
-msgstr "Stropdassen (Pdf)"
-
 msgid "Title font"
 msgstr "Titel lettertypen"
 
@@ -1643,9 +1640,6 @@ msgstr "Suggesties"
 
 msgid "Ticket list"
 msgstr "Ticketlijst"
-
-msgid "Ties (Test)"
-msgstr "Dassen (Test)"
 
 msgid "Total costs"
 msgstr "Totale kosten"
@@ -2873,6 +2867,9 @@ msgstr "Inwisselen"
 msgid "Registration closed"
 msgstr "Registratie gesloten"
 
+msgid "Relationships (Pdf)"
+msgstr "Relaties (Pdf)"
+
 msgid "Results not present"
 msgstr "Resultaten niet aanwezig"
 
@@ -2990,6 +2987,9 @@ msgstr "Ongeldige voorkeur"
 
 msgid "Registration history"
 msgstr "Geschiedenis"
+
+msgid "Relationships (Test)"
+msgstr "Relaties (Test)"
 
 msgid "Request registration"
 msgstr "Registratie aanvragen"
@@ -3185,9 +3185,6 @@ msgstr "Volg de onderstaande stappen"
 msgid "Join the waiting list!"
 msgstr "Meld je aan voor de wachtlijst!"
 
-msgid "Lightweight card (Pdf)"
-msgstr "Lichtgewicht kaart (Pdf)"
-
 msgid "Link to participate in"
 msgstr "Links om deel te nemen"
 
@@ -3301,6 +3298,9 @@ msgstr "Alleen aangeven als tarief 0"
 msgid "Join the collection for"
 msgstr "Doe mee aan de inzameling voor"
 
+msgid "Lightweight sheet (Pdf)"
+msgstr "Lichtgewicht blad (Pdf)"
+
 msgid "List payments to verify"
 msgstr "Lijst van te verifiëren betalingen"
 
@@ -3386,8 +3386,8 @@ msgstr "Ga naar zoektochten van het type"
 msgid "Go to the tokens history"
 msgstr "Toegang tot PT-geschiedenis"
 
-msgid "Lightweight board (Test)"
-msgstr "Lichtgewicht bord (Test)"
+msgid "Lightweight sheet (Test)"
+msgstr "Lichtgewicht plaat (Test)"
 
 msgid "Manages event's expenses"
 msgstr "Beheert de kosten van het evenement"

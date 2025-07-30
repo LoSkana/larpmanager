@@ -63,7 +63,7 @@ table, tr, td, th, tbody, thead, tfoot {
                             {% endif %}
                         {% endfor %}
                         <p class="relationship">
-                            <b>Relationship:</b>  {{ el.text }}
+                            <b>Relationship:</b>  {{ el.text | safe }}
                         </p>
                     </td>
                 {% endfor %}
