@@ -743,7 +743,7 @@ def orga_lottery(request, s, n):
         regs = list(regs)
         shuffle(regs)
         chosen = regs[0:to_upgrade]
-        ticket = get_object_or_404(RegistrationTicket, event=ctx["run"].event, display=ctx["ticket"])
+        ticket = get_object_or_404(RegistrationTicket, event=ctx["run"].event, name=ctx["ticket"])
         for el in chosen:
             el.ticket = ticket
             el.save()

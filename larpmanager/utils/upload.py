@@ -407,7 +407,7 @@ def character_question_load(request, ctx, row, question):
         if dependent_text:
             display_list = [d.strip().lower() for d in dependent_text.split(",")]
             option.save()
-            dependent_options = WritingOption.objects.annotate(lower_display=Lower("name")).filter(
+            dependent_options = WritingOption.objects.annotate(lower_name=Lower("name")).filter(
                 lower_display__in=display_list, event=ctx["event"]
             )
             option.dependents.set(dependent_options)
