@@ -17,15 +17,10 @@
     </tr>
 </table>
 <h1 id="char_name">{{ sheet_char.name }}</h1>
-
-
 {% include "elements/sheet/presentation.html" %}
 {% include "elements/sheet/fields.html" with char=sheet_char %}
 {% include "elements/sheet/teaser.html" %}
-
 <hr />
-
-{% if intro %}<div class="char_intro">{{ intro | safe }}</div>{% endif %}
 {% include "elements/sheet/px.html" %}
 {% include "elements/sheet/factions.html" %}
 {% include "elements/sheet/texts.html" with char=sheet_char %}
