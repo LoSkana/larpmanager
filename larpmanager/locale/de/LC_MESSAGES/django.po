@@ -5688,7 +5688,7 @@ msgstr "Geht keine Zahlung ein, kann die Anmeldung storniert werden"
 
 msgid "If you would like to make a donation to the Organization"
 msgstr ""
-"Wenn Sie der Vereinigung eine kostenlose Spende zukommen lassen möchten,"
+"Wenn Sie der Vereinigung eine kostenlose Spende zukommen lassen möchten"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Geben Sie an, ob das Feld in PDF-Generationen gedruckt wird"

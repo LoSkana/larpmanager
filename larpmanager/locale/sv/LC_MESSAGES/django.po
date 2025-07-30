@@ -5615,7 +5615,7 @@ msgid "If no payment is received, registration may be cancelled"
 msgstr "Om ingen betalning erhålls kan registreringen komma att avbrytas"
 
 msgid "If you would like to make a donation to the Organization"
-msgstr "Om du vill göra en kostnadsfri donation till föreningen,"
+msgstr "Om du vill göra en kostnadsfri donation till föreningen"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Ange om fältet ska skrivas ut i PDF-versioner"

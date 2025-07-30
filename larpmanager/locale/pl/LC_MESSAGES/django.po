@@ -5614,7 +5614,7 @@ msgid "If no payment is received, registration may be cancelled"
 msgstr "W przypadku braku płatności rejestracja może zostać anulowana"
 
 msgid "If you would like to make a donation to the Organization"
-msgstr "Jeśli chcesz przekazać darowiznę na rzecz organizacji,"
+msgstr "Jeśli chcesz przekazać darowiznę na rzecz organizacji"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Wskazanie, czy pole jest drukowane w generacjach PDF"

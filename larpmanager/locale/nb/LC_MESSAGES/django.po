@@ -5612,7 +5612,7 @@ msgid "If no payment is received, registration may be cancelled"
 msgstr "Hvis ingen betaling mottas, kan registreringen bli kansellert"
 
 msgid "If you would like to make a donation to the Organization"
-msgstr "Hvis du ønsker å gi en gratis donasjon til foreningen,"
+msgstr "Hvis du ønsker å gi en gratis donasjon til foreningen"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Angi om feltet skal skrives ut i PDF-generasjoner"

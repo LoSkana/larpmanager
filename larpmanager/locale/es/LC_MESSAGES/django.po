@@ -4008,7 +4008,7 @@ msgid "Verify that the data are correct"
 msgstr "Comprueba que los datos son correctos"
 
 msgid "Voting for the Executive is open"
-msgstr "La votación para el Comité Ejecutivo está abierta,"
+msgstr "La votación para el Comité Ejecutivo está abierta"
 
 msgid "We'll try to help as best we can"
 msgstr "Intentaremos ayudar lo mejor que podamos"
@@ -5623,7 +5623,7 @@ msgid "If no payment is received, registration may be cancelled"
 msgstr "Si no se recibe el pago, se podrá cancelar la inscripción"
 
 msgid "If you would like to make a donation to the Organization"
-msgstr "Si quieres hacer una donación gratuita a la Asociación,"
+msgstr "Si quieres hacer una donación gratuita a la Asociación"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Indique si el campo se imprime en generaciones PDF"

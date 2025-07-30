@@ -5653,7 +5653,7 @@ msgid "If no payment is received, registration may be cancelled"
 msgstr "Si aucun paiement n'est reçu, l'inscription peut être annulée"
 
 msgid "If you would like to make a donation to the Organization"
-msgstr "Si vous souhaitez faire un don gratuit à l'association,"
+msgstr "Si vous souhaitez faire un don gratuit à l'association"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Indiquer si le champ est imprimé en générations PDF"

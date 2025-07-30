@@ -126,6 +126,9 @@ def get_character_sheet_questbuilder(ctx):
     if "questbuilder" not in ctx["features"]:
         return
 
+    if "char" not in ctx:
+        return
+
     if "player_id" not in ctx["char"] or "traits" not in ctx["char"]:
         return
 

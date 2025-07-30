@@ -5609,7 +5609,7 @@ msgid "If no payment is received, registration may be cancelled"
 msgstr "V případě, že platbu neobdržíte, může být registrace zrušena"
 
 msgid "If you would like to make a donation to the Organization"
-msgstr "Pokud chcete sdružení bezplatně přispět,"
+msgstr "Pokud chcete sdružení bezplatně přispět"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Uveďte, zda se pole tiskne v generacích PDF"

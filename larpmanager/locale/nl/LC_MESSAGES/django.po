@@ -5634,7 +5634,7 @@ msgstr ""
 "Als er geen betaling is ontvangen, kan de registratie worden geannuleerd"
 
 msgid "If you would like to make a donation to the Organization"
-msgstr "Als je een gratis donatie aan de vereniging wilt doen,"
+msgstr "Als je een gratis donatie aan de vereniging wilt doen"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Geef aan of het veld wordt afgedrukt in PDF-generaties"
