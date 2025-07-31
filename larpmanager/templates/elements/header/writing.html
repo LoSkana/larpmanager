@@ -19,9 +19,11 @@
                 <a href="#">{% trans "List" %}</a>
             </button>
         {% endif %}
-        <button>
-            <a href="{% url 'orga_upload' run.event.slug run.number upload %}">{% trans "Upload" %}</a>
-        </button>
+        {% if upload %}
+            <button>
+                <a href="{% url 'orga_upload' run.event.slug run.number upload %}">{% trans "Upload" %}</a>
+            </button>
+        {% endif %}
         <form action="{{ request.path }}" method="post" class="inline">
             {% csrf_token %}
             <input type="hidden" name="download" value="1">
