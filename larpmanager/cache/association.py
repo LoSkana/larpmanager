@@ -25,6 +25,7 @@ from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.models.association import Association
+from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_payment_details
 
 
@@ -84,6 +85,9 @@ def init_cache_assoc(a_slug):
     _init_features(assoc, el)
 
     _init_skin(assoc, el)
+
+    max_demo = 10
+    el["demo"] = Registration.objects.filter(run__event__assoc_id=assoc.id).count() < max_demo
 
     return el
 
