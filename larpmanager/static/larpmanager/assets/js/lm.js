@@ -306,7 +306,7 @@ $(document).ready(function() {
         });
     });
 
-    table_csv();
+    // table_csv();
 
     resize_fields();
 
@@ -564,59 +564,13 @@ function jump_to(el) {
 }
 
 
-function download_csv(csv, filename) {
-    var csvFile;
-    var downloadLink;
 
-    // CSV FILE
-    csvFile = new Blob([csv], {type: "text/csv"});
-
-    // Download link
-    downloadLink = document.createElement("a");
-
-    // File name
-    downloadLink.download = filename;
-
-    // We have to create a link to the file
-    downloadLink.href = window.URL.createObjectURL(csvFile);
-
-    // Make sure that the link is not displayed
-    downloadLink.style.display = "none";
-
-    // Add the link to your DOM
-    document.body.appendChild(downloadLink);
-
-    // Lanzamos
-    downloadLink.click();
-}
 
 
 function selectLanguage(lang) {
     xhttp.open("POST", set_language_url, true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("language=" + lang);
-}
-
-function export_table_to_csv(sel, filename) {
-    var csv = [];
-    var rows = document.querySelectorAll(sel + " tr");
-
-    for (var i = 0; i < rows.length; i++) {
-        var row = [], cols = rows[i].querySelectorAll("td, th");
-
-        for (var j = 0; j < cols.length; j++) {
-            var tx = cols[j].innerText;
-            tx = tx.replace(/\t/g, " ");
-            tx = tx.replace(/\n/g, " ");
-            tx = tx.replace(/\r/g, " ");
-            row.push(tx);
-        }
-
-        csv.push(row.join("\t"));
-    }
-
-    // Download CSV
-    download_csv(csv.join("\n"), filename);
 }
 
 function resize_fields() {
@@ -652,31 +606,6 @@ String.prototype.format = String.prototype.f = function() {
     return s;
 };
 
-function table_csv() {
-    $(".manage table").each(function( index ) {
-
-        if ( $(this).hasClass("no_csv") ) return;
-
-        if ( $(this).find('tbody').length === 0 || $(this).find('tbody tr').length === 0 ) {
-            return;
-        }
-
-        if ( $(this).is("#idSelector") ) {
-            var eid = $(this).attr('id');
-        } else {
-            var eid = "a" + Math.random().toString(36).slice(2);
-            $(this).attr('id', eid);
-        }
-
-        $(this).parent().after('<p class="go_table"><a href="#" eid="' + eid + '">Download as csv</a></p>');
-    });
-
-    $(".go_table a").on( "click", function() {
-        eid = $(this).attr("eid");
-        go_table_csv(eid);
-    });
-}
-
 function slugify(str) {
   return String(str)
     .normalize('NFKD') // split accented characters into their base characters and diacritical marks
@@ -686,11 +615,6 @@ function slugify(str) {
     .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
     .replace(/\s+/g, '-') // replace spaces with hyphens
     .replace(/-+/g, '-'); // remove consecutive hyphens
-}
-
-function go_table_csv(eid) {
-    export_table_to_csv('#' + eid, "table " + document.title + ".csv");
-    return false;
 }
 
 if (!String.prototype.format) {
@@ -735,3 +659,82 @@ function centerMobileIcons() {
 }
 
 });
+
+
+//function download_csv(csv, filename) {
+//    var csvFile;
+//    var downloadLink;
+//
+//    // CSV FILE
+//    csvFile = new Blob([csv], {type: "text/csv"});
+//
+//    // Download link
+//    downloadLink = document.createElement("a");
+//
+//    // File name
+//    downloadLink.download = filename;
+//
+//    // We have to create a link to the file
+//    downloadLink.href = window.URL.createObjectURL(csvFile);
+//
+//    // Make sure that the link is not displayed
+//    downloadLink.style.display = "none";
+//
+//    // Add the link to your DOM
+//    document.body.appendChild(downloadLink);
+//
+//    // Lanzamos
+//    downloadLink.click();
+//}
+
+//function export_table_to_csv(sel, filename) {
+//    var csv = [];
+//    var rows = document.querySelectorAll(sel + " tr");
+//
+//    for (var i = 0; i < rows.length; i++) {
+//        var row = [], cols = rows[i].querySelectorAll("td, th");
+//
+//        for (var j = 0; j < cols.length; j++) {
+//            var tx = cols[j].innerText;
+//            tx = tx.replace(/\t/g, " ");
+//            tx = tx.replace(/\n/g, " ");
+//            tx = tx.replace(/\r/g, " ");
+//            row.push(tx);
+//        }
+//
+//        csv.push(row.join("\t"));
+//    }
+//
+//    // Download CSV
+//    download_csv(csv.join("\n"), filename);
+//}
+
+//function go_table_csv(eid) {
+//    export_table_to_csv('#' + eid, "table " + document.title + ".csv");
+//    return false;
+//}
+
+//function table_csv() {
+//    $(".manage table").each(function( index ) {
+//
+//        if ( $(this).hasClass("no_csv") ) return;
+//
+//        if ( $(this).find('tbody').length === 0 || $(this).find('tbody tr').length === 0 ) {
+//            return;
+//        }
+//
+//        if ( $(this).is("#idSelector") ) {
+//            var eid = $(this).attr('id');
+//        } else {
+//            var eid = "a" + Math.random().toString(36).slice(2);
+//            $(this).attr('id', eid);
+//        }
+//
+//        $(this).parent().after('<p class="go_table"><a href="#" eid="' + eid + '">Download as csv</a></p>');
+//    });
+//
+//    $(".go_table a").on( "click", function() {
+//        eid = $(this).attr("eid");
+//        go_table_csv(eid);
+//    });
+//}
