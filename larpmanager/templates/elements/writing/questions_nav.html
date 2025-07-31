@@ -2,10 +2,10 @@
 {% if form_questions %}
     {% for key, que in form_questions.items %}
         {% if que.basic_typ %}
-            <a href="#" class="load_que lq_{{ key }}"  key="{{ key }}">{{ que.display | truncatechars:50 }}</a>
+            <a href="#" class="load_que lq_{{ key }}"  key="{{ key }}">{{ que.display | truncatechars:25 }}</a>
             <a href="#" class="my_toggle hide no_jump" tog='q_{{ key }}'>hidden</a>
         {% else %}
-            <a href="#" class="my_toggle no_jump" tog='q_{{ key }}'>{{ que.display | truncatechars:50 }}</a>
+            <a href="#" class="my_toggle no_jump" tog='q_{{ key }}'>{{ que.display | truncatechars:25 }}</a>
         {% endif %}
     {% endfor %}
 {% endif %}
