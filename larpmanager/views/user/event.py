@@ -415,7 +415,7 @@ def quests(request, s, n, g=None):
     ctx["list"] = []
     for el in Quest.objects.filter(event=ctx["event"], hide=False, typ=ctx["quest_type"]).order_by("number"):
         ctx["list"].append(el.show_complete())
-        return render(request, "larpmanager/event/quests.html", ctx)
+    return render(request, "larpmanager/event/quests.html", ctx)
 
 
 def quest(request, s, n, g):
