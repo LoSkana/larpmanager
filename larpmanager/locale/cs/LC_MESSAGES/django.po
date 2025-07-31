@@ -2264,6 +2264,9 @@ msgstr "Událost nebyla nalezena"
 msgid "Events attended"
 msgstr "Zúčastněné akce"
 
+msgid "External access"
+msgstr "Externí přístup"
+
 msgid "Filter factions"
 msgstr "Skupiny filtrů"
 
@@ -2920,6 +2923,9 @@ msgstr "Již odehrané události"
 
 msgid "Extended description"
 msgstr "Rozšířený popis"
+
+msgid "External access code"
+msgstr "Externí přístupový kód"
 
 msgid "External mail server"
 msgstr "Externí poštovní server"
@@ -7797,6 +7803,13 @@ msgstr ""
 "odpovědný za jednotlivé prvky zápisu"
 
 msgid ""
+"If checked, generates secret urls to share the full character sheet with a "
+"not signed up user"
+msgstr ""
+"Pokud je zaškrtnuto, vygeneruje tajné URL adresy pro sdílení úplného listu "
+"postavy s nepřihlášeným uživatelem"
+
+msgid ""
 "If checked, it allows players to enter public information on their "
 "characters, visible to all"
 msgstr ""
@@ -8824,6 +8837,13 @@ msgid ""
 msgstr ""
 "Na této stránce jsou uvedeny celkové členské účty, příspěvky, dary, výdaje, "
 "celková hotovost a rozpočet jednotlivých akcí/běhů"
+
+msgid ""
+"Allows external access to this character through a secret URL (change the "
+"code if it has been shared with the wrong people)"
+msgstr ""
+"Umožňuje externí přístup k této postavě prostřednictvím tajné adresy URL "
+"(pokud byl kód sdílen s nesprávnými osobami, změňte jej)"
 
 msgid ""
 "Optional - For text questions, maximum number of characters; For multiple "

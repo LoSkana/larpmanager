@@ -2264,6 +2264,9 @@ msgstr "Evenement niet gevonden"
 msgid "Events attended"
 msgstr "Bijgewoonde evenementen"
 
+msgid "External access"
+msgstr "Externe toegang"
+
 msgid "Filter factions"
 msgstr "Filtergroepen"
 
@@ -2920,6 +2923,9 @@ msgstr "Reeds gespeelde evenementen"
 
 msgid "Extended description"
 msgstr "Uitgebreide beschrijving"
+
+msgid "External access code"
+msgstr "Externe toegangscode"
 
 msgid "External mail server"
 msgstr "Externe mailserver"
@@ -8083,6 +8089,13 @@ msgstr ""
 "verantwoordelijk is voor elk schrijfelement"
 
 msgid ""
+"If checked, generates secret urls to share the full character sheet with a "
+"not signed up user"
+msgstr ""
+"Als deze optie is aangevinkt, worden er geheime url's gegenereerd om de "
+"volledige karaktersheet te delen met een niet-aangemelde gebruiker"
+
+msgid ""
 "If checked, it allows players to enter public information on their "
 "characters, visible to all"
 msgstr ""
@@ -9124,6 +9137,13 @@ msgstr ""
 "Deze pagina toont de totale ledenrekeningen, contributies, donaties, "
 "uitgaven, het algemene geldbudget en het budget voor individuele "
 "evenementen/lopen"
+
+msgid ""
+"Allows external access to this character through a secret URL (change the "
+"code if it has been shared with the wrong people)"
+msgstr ""
+"Geeft externe toegang tot dit personage via een geheime URL (verander de "
+"code als deze is gedeeld met de verkeerde mensen)"
 
 msgid ""
 "Optional - For text questions, maximum number of characters; For multiple "

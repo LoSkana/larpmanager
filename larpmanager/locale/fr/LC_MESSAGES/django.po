@@ -2264,6 +2264,9 @@ msgstr "Événement non trouvé"
 msgid "Events attended"
 msgstr "Participation à des événements"
 
+msgid "External access"
+msgstr "Accès externe"
+
 msgid "Filter factions"
 msgstr "Groupes de filtres"
 
@@ -2920,6 +2923,9 @@ msgstr "Événements déjà joués"
 
 msgid "Extended description"
 msgstr "Description détaillée"
+
+msgid "External access code"
+msgstr "Code d'accès externe"
 
 msgid "External mail server"
 msgstr "Serveur de messagerie externe"
@@ -8168,6 +8174,13 @@ msgstr ""
 "responsable de chaque élément d'écriture"
 
 msgid ""
+"If checked, generates secret urls to share the full character sheet with a "
+"not signed up user"
+msgstr ""
+"Si coché, génère des urls secrètes pour partager la feuille de personnage "
+"complète avec un utilisateur non inscrit"
+
+msgid ""
 "If checked, it allows players to enter public information on their "
 "characters, visible to all"
 msgstr ""
@@ -9220,6 +9233,13 @@ msgstr ""
 "Cette page présente le total des comptes des membres, les cotisations, les "
 "dons, les dépenses, le budget global et le budget de chaque événement ou "
 "course"
+
+msgid ""
+"Allows external access to this character through a secret URL (change the "
+"code if it has been shared with the wrong people)"
+msgstr ""
+"Permet un accès externe à ce personnage par le biais d'une URL secrète "
+"(changez le code s'il a été partagé avec les mauvaises personnes)"
 
 msgid ""
 "Optional - For text questions, maximum number of characters; For multiple "
