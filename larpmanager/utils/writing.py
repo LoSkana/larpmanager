@@ -163,7 +163,6 @@ def writing_list(request, ctx, typ, nm):
     ctx["form"] = UploadElementsForm()
     ev = ctx["event"]
 
-    ctx["upload"] = f"{nm}s"
     ctx["nm"] = nm
 
     text_fields, writing = writing_list_query(ctx, ev, typ)
@@ -181,6 +180,8 @@ def writing_list(request, ctx, typ, nm):
         # noinspection PyProtectedMember, PyUnresolvedReferences
         ctx["label_typ"] = typ._meta.model_name
         ctx["writing_typ"] = QuestionApplicable.get_applicable(ctx["label_typ"])
+        if ctx["writing_typ"]:
+            ctx["upload"] = f"{nm}s"
         orga_list_progress_assign(ctx, typ)  # pyright: ignore[reportArgumentType]
         writing_list_text_fields(ctx, text_fields, typ)
         _prepare_writing_list(ctx, request)
