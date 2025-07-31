@@ -50,6 +50,7 @@ from larpmanager.forms.registration import (
 from larpmanager.forms.writing import (
     PlayerRelationshipForm,
 )
+from larpmanager.models.event import EventTextType
 from larpmanager.models.form import (
     QuestionApplicable,
     WritingOption,
@@ -79,6 +80,7 @@ from larpmanager.utils.registration import (
     get_player_characters,
     registration_find,
 )
+from larpmanager.utils.text import get_event_text
 from larpmanager.utils.writing import char_add_addit
 from larpmanager.views.user.casting import casting_details, get_casting_preferences
 from larpmanager.views.user.registration import init_form_submitted
@@ -86,9 +88,13 @@ from larpmanager.views.user.registration import init_form_submitted
 
 def character(request, s, n, num):
     ctx = get_event_run(request, s, n, status=True)
-
-    ctx["screen"] = True
     get_char_check(request, ctx, num)
+
+    return _character_sheet(request, ctx)
+
+
+def _character_sheet(request, ctx):
+    ctx["screen"] = True
 
     if "check" not in ctx and not ctx["show_character"]:
         messages.warning(request, _("Characters are not visible at the moment"))
@@ -102,6 +108,7 @@ def character(request, s, n, num):
     if show_private:
         get_character_sheet(ctx)
         get_character_relationships(ctx)
+        ctx["intro"] = get_event_text(ctx["event"].id, EventTextType.INTRO)
     else:
         ctx["char"].update(get_character_element_fields(ctx, ctx["char"]["id"], only_visible=True))
 
@@ -112,6 +119,25 @@ def character(request, s, n, num):
     ctx["approval"] = ctx["event"].get_config("user_character_approval", False)
 
     return render(request, "larpmanager/event/character.html", ctx)
+
+
+def character_external(request, s, n, code):
+    ctx = get_event_run(request, s, n)
+
+    if not ctx["event"].get_config("writing_external_access", False):
+        raise Http404("external access not active")
+
+    try:
+        char = ctx["event"].get_elements(Character).get(access_token=code)
+    except ObjectDoesNotExist as err:
+        raise Http404("invalid code") from err
+
+    get_event_cache_all(ctx)
+    ctx["char"] = ctx["chars"][char.number]
+    ctx["character"] = char
+    ctx["check"] = 1
+
+    return _character_sheet(request, ctx)
 
 
 def character_your_link(ctx, char, p=None):

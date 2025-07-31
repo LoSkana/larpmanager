@@ -2264,6 +2264,9 @@ msgstr "Hendelsen ble ikke funnet"
 msgid "Events attended"
 msgstr "Deltakelse på arrangementer"
 
+msgid "External access"
+msgstr "Ekstern tilgang"
+
 msgid "Filter factions"
 msgstr "Filtergrupper"
 
@@ -2920,6 +2923,9 @@ msgstr "Hendelser som allerede er spilt"
 
 msgid "Extended description"
 msgstr "Utvidet beskrivelse"
+
+msgid "External access code"
+msgstr "Ekstern tilgangskode"
 
 msgid "External mail server"
 msgstr "Ekstern e-postserver"
@@ -7909,6 +7915,13 @@ msgstr ""
 "skriveelement i feltet \"tildelt"
 
 msgid ""
+"If checked, generates secret urls to share the full character sheet with a "
+"not signed up user"
+msgstr ""
+"Hvis avkrysset, genereres hemmelige nettadresser for å dele hele "
+"karakterarket med en bruker som ikke er registrert"
+
+msgid ""
 "If checked, it allows players to enter public information on their "
 "characters, visible to all"
 msgstr ""
@@ -8972,6 +8985,13 @@ msgstr ""
 "Denne siden viser det totale medlemskontoen, kontingenter, donasjoner, "
 "utgifter, det totale kontantbudsjettet og budsjettet for det enkelte "
 "arrangement/løp"
+
+msgid ""
+"Allows external access to this character through a secret URL (change the "
+"code if it has been shared with the wrong people)"
+msgstr ""
+"Gir ekstern tilgang til dette tegnet via en hemmelig URL (endre koden hvis "
+"den har blitt delt med feil personer)"
 
 msgid ""
 "Optional - For text questions, maximum number of characters; For multiple "

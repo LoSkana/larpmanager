@@ -2264,6 +2264,9 @@ msgstr "Händelsen hittades inte"
 msgid "Events attended"
 msgstr "Deltagit i evenemang"
 
+msgid "External access"
+msgstr "Extern åtkomst"
+
 msgid "Filter factions"
 msgstr "Filtrera grupper"
 
@@ -2920,6 +2923,9 @@ msgstr "Redan spelade evenemang"
 
 msgid "Extended description"
 msgstr "Utökad beskrivning"
+
+msgid "External access code"
+msgstr "Extern åtkomstkod"
 
 msgid "External mail server"
 msgstr "Extern e-postserver"
@@ -7940,6 +7946,13 @@ msgstr ""
 "för varje skrivelement"
 
 msgid ""
+"If checked, generates secret urls to share the full character sheet with a "
+"not signed up user"
+msgstr ""
+"Om markerat, genererar hemliga webbadresser för att dela hela "
+"karaktärsformuläret med en användare som inte är registrerad"
+
+msgid ""
 "If checked, it allows players to enter public information on their "
 "characters, visible to all"
 msgstr ""
@@ -9002,6 +9015,13 @@ msgid ""
 msgstr ""
 "Denna sida visar de totala medlemskontona, medlemsavgifter, donationer, "
 "utgifter, den totala kassan och budgeten för enskilda evenemang/lopp"
+
+msgid ""
+"Allows external access to this character through a secret URL (change the "
+"code if it has been shared with the wrong people)"
+msgstr ""
+"Tillåter extern åtkomst till den här karaktären via en hemlig URL (ändra "
+"koden om den har delats med fel personer)"
 
 msgid ""
 "Optional - For text questions, maximum number of characters; For multiple "

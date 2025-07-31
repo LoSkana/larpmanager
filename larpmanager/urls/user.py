@@ -390,6 +390,11 @@ urlpatterns = [
         name="character",
     ),
     path(
+        "<slug:s>/<int:n>/character/external/<slug:code>/",
+        views_uc.character_external,
+        name="character_external",
+    ),
+    path(
         "<slug:s>/<int:n>/character/<int:num>/change/",
         views_uc.character_edit,
         name="character_change",
