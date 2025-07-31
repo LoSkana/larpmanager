@@ -611,6 +611,8 @@ def copy_class(target_id, source_id, cls):
 
         # copy m2m relations
         for field_name, values in m2m_data.items():
+            if field_name in ["access_token"]:
+                continue
             getattr(obj, field_name).set(values)
 
 
