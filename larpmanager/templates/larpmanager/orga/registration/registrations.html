@@ -79,9 +79,9 @@
                     {% trans "Questions" %}:
                     {% for key, que in reg_questions.items %}
                         {% if que.typ == 'e' %}
-                            <a href="#" class="my_toggle no_jump" tog='q_{{ key }}'>{{ que.name | truncatechars:50 }}</a>
+                            <a href="#" class="my_toggle no_jump" tog='q_{{ key }}'>{{ que.name | truncatechars:25 }}</a>
                         {% else %}
-                            <a href="#" class="load_que lq_{{ key }}"  key="{{ key }}">{{ que.name | truncatechars:50 }}</a>
+                            <a href="#" class="load_que lq_{{ key }}"  key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
                             <a href="#" class="my_toggle hide no_jump" tog='q_{{ key }}'>hidden</a>
                         {% endif %}
                     {% endfor %}
@@ -526,7 +526,7 @@
             <div class="nav fields">
                 {% for key, que in reg_questions.items %}
                     {% if que.typ == 's' or que.typ == 'm' %}
-                        <a href="#" class="load_email_que" key="{{ key }}">{{ que.name | truncatechars:50 }}</a>
+                        <a href="#" class="load_email_que" key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
                         <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
                     {% endif %}
                 {% endfor %}

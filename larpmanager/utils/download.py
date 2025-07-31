@@ -293,10 +293,10 @@ def _header_regs(ctx, el, key, val):
         key.append(_("Money"))
 
         _expand_val(val, el, "pay_b")
-        key.append(ctx["credit_name"])
+        key.append(ctx.get("credit_name", _("Credits")))
 
         _expand_val(val, el, "pay_c")
-        key.append(ctx["token_name"])
+        key.append(ctx.get("token_name", _("Credits")))
 
 
 def _get_standard_row(ctx, el):

@@ -60,7 +60,7 @@ function load_question(el) {
 
         el.next().trigger('click');
 
-        syncColumnWidths();
+        window.syncColumnWidths();
 
          done[num.toString()] = 1;
 

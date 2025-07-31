@@ -61,7 +61,7 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import (
     Registration,
 )
-from larpmanager.models.utils import strip_tags
+from larpmanager.models.utils import my_uuid_short, strip_tags
 from larpmanager.models.writing import (
     Character,
     CharacterConfig,
@@ -607,6 +607,10 @@ def copy_class(target_id, source_id, cls):
         obj.event_id = target_id
         # noinspection PyProtectedMember
         obj._state.adding = True
+        for field_name, func in {"access_token": my_uuid_short}.items():
+            if not hasattr(obj, field_name):
+                continue
+            setattr(obj, field_name, func())
         obj.save()
 
         # copy m2m relations
