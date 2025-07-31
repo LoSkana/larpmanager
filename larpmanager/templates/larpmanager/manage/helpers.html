@@ -17,7 +17,7 @@
                     <a href="{{ obj.href }}">{{ obj.link }}</a>
                     {% if obj.tutorial %}(<a href="#" class="feature_tutorial" tut="{{ obj.tutorial }}">Tutorial</a>){% endif %}
                 </td>
-                {% if suggestion %}
+                {% if typ == "suggestions" %}
                     <td>
                         <span class="list-close">
                             {% if event %}

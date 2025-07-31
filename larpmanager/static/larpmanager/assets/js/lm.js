@@ -267,7 +267,7 @@ $(document).ready(function() {
             $(this).removeClass('select');
         }
 
-        syncColumnWidths();
+        window.syncColumnWidths();
         return false;
 
     });
@@ -375,7 +375,7 @@ $(document).ready(function() {
 });
 
 
-function syncColumnWidths() {
+window.syncColumnWidths = function () {
     $('.table-sticky table').each(function () {
         var $originalTable = $(this);
         stickyId = $originalTable.attr('sticky-table');
@@ -423,8 +423,8 @@ function sticky_tables() {
     var $stickyContainer = $('<div>').addClass('sticky-header').append($stickyTable);
     table.parent().before($stickyContainer);
 
-    $(window).on('resize load', syncColumnWidths);
-    syncColumnWidths();
+    $(window).on('resize load', window.syncColumnWidths);
+    window.syncColumnWidths();
 
     // add simple bar
     const wrapper = table.parent('.table-sticky')[0];
