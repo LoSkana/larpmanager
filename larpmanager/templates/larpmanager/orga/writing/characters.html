@@ -77,6 +77,10 @@
                    qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a> &nbsp;
                 <a href="{% url 'character' run.event.slug run.number el.number %}"
                    qtip="{% trans "Gallery" %}"><i class="fa-solid fa-eye"></i></a> &nbsp;
+                {% if writing_external_access %}
+                    <a href="{% url 'character_external' run.event.slug run.number el.access_token %}"
+                       qtip="{% trans "External access" %}"><i class="fa-solid fa-key"></i></a>
+                {% endif %}
             </td>
             {% if user_character_max %}<td class="hide player">{{ el.player.show_nick }}</td>{% endif %}
             {% if user_character_approval %}<td class="hide status">{{ el.get_status_display }}</td>{% endif %}

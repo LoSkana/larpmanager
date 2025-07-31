@@ -1009,6 +1009,14 @@ msgid ""
 "elements"
 msgstr ""
 
+msgid "External access"
+msgstr ""
+
+msgid ""
+"If checked, generates secret urls to share the full character sheet with a "
+"not signed up user"
+msgstr ""
+
 msgid "Independent factions"
 msgstr ""
 
@@ -3520,6 +3528,14 @@ msgid ""
 msgstr ""
 
 msgid "Cover photo fo the character"
+msgstr ""
+
+msgid "External access code"
+msgstr ""
+
+msgid ""
+"Allows external access to this character through a secret URL (change the "
+"code if it has been shared with the wrong people)"
 msgstr ""
 
 msgid "Faction cover"

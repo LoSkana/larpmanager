@@ -400,6 +400,12 @@ class OrgaConfigForm(ConfigForm):
             help_text = _("If checked, automatic saving during editing will be disable for writing elements")
             self.add_configs("writing_disable_auto", ConfigType.BOOL, label, help_text)
 
+            label = _("External access")
+            help_text = _(
+                "If checked, generates secret urls to share the full character sheet with a not signed up user"
+            )
+            self.add_configs("writing_external_access", ConfigType.BOOL, label, help_text)
+
     def set_config_character(self):
         if "campaign" in self.params["features"]:
             self.set_section("campaign", _("Campaign"))

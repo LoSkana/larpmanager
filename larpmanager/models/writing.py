@@ -31,7 +31,7 @@ from tinymce.models import HTMLField
 from larpmanager.models.base import BaseModel
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep
 from larpmanager.models.member import Member
-from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, show_thumb
+from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_short, show_thumb
 
 
 class Writing(BaseConceptModel):
@@ -178,6 +178,18 @@ class Character(Writing):
 
     status = models.CharField(
         max_length=1, choices=CharacterStatus.choices, default=CharacterStatus.CREATION, verbose_name=_("Status")
+    )
+
+    access_token = models.CharField(
+        max_length=12,
+        unique=True,
+        default=my_uuid_short,
+        db_index=True,
+        verbose_name=_("External access code"),
+        help_text=_(
+            "Allows external access to this character through a secret URL "
+            "(change the code if it has been shared with the wrong people)"
+        ),
     )
 
     def __str__(self):
