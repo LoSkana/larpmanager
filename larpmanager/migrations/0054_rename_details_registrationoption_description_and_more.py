@@ -5,7 +5,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("larpmanager", "0049_alter_association_sec_rgb"),
+        ("larpmanager", "0053_alter_character_access_token"),
     ]
 
     operations = [

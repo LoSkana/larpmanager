@@ -5,7 +5,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("larpmanager", "0050_rename_details_registrationoption_description_and_more"),
+        ("larpmanager", "0054_rename_details_registrationoption_description_and_more"),
     ]
 
     operations = [
