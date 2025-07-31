@@ -264,9 +264,9 @@ def member_add_accountingitempayment(ctx, request):
     ).select_related("reg")
     for el in ctx["pays"]:
         if el.pay == AccountingItemPayment.TOKEN:
-            el.typ = ctx["token_name"]
+            el.typ = ctx.get("token_name", _("Credits"))
         elif el.pay == AccountingItemPayment.CREDIT:
-            el.typ = ctx["credit_name"]
+            el.typ = ctx.get("credit_name", _("Credits"))
         else:
             el.typ = el.get_pay_display()
 
@@ -277,9 +277,9 @@ def member_add_accountingitemother(ctx, request):
     ).select_related("run")
     for el in ctx["others"]:
         if el.oth == AccountingItemOther.TOKEN:
-            el.typ = ctx["token_name"]
+            el.typ = ctx.get("token_name", _("Credits"))
         elif el.oth == AccountingItemOther.CREDIT:
-            el.typ = ctx["credit_name"]
+            el.typ = ctx.get("credit_name", _("Credits"))
         else:
             el.typ = el.get_oth_display()
 
