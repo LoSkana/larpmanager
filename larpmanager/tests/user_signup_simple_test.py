@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import asyncio
 import re
 from pathlib import Path
 
@@ -68,6 +68,7 @@ async def signup(live_server, page):
     await go_to(page, live_server, "/test/1/manage/registrations")
     await page.locator("a:has(i.fas.fa-edit)").click()
     await page.get_by_role("link", name="Delete").click()
+    await asyncio.sleep(2)
     await page.get_by_role("button", name="Confirmation delete").click()
 
     # sign up, confirm profile
