@@ -6559,22 +6559,6 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The player's email (if not found in the system, a new user will be created)"
-msgstr ""
-
-msgid "The name of the ticket"
-msgstr ""
-
-msgid "if it doesn't exist, it will be created"
-msgstr ""
-
-msgid "(Optional) The character name to assign to the player"
-msgstr ""
-
-msgid "(Optional) The amount of a voluntary donation"
-msgstr ""
-
-msgid ""
 "Then you can add columns, whose name must match with the field configured in "
 "the "
 msgstr ""
@@ -6590,44 +6574,12 @@ msgstr ""
 msgid "Download example template"
 msgstr ""
 
-msgid "The question name"
-msgstr ""
-
-msgid ""
-"If already existing, the information will be replaced; if not, will be "
-"created"
-msgstr ""
-
-msgid "The question type, allowed values are"
-msgstr ""
-
-msgid "The question status, allowed values are"
-msgstr ""
-
 msgid "You can also upload a second file with the registration options"
-msgstr ""
-
-msgid "The name of the question this option belongs to"
-msgstr ""
-
-msgid "If not found, the option will be skipped"
-msgstr ""
-
-msgid "The name of the option"
 msgstr ""
 
 msgid ""
 "Note that existing elements with the same name, will be overwritten with the "
 "uploaded data"
-msgstr ""
-
-msgid "The writing element this question applies to, allowed values are"
-msgstr ""
-
-msgid "The question visibility to players, allowed values are"
-msgstr ""
-
-msgid "Optional – Maximum number of times it can be selected (0 = unlimited)"
 msgstr ""
 
 msgid "The first line of the file are the field names that you want to upload"
@@ -8429,6 +8381,49 @@ msgid "Can't copy from same event"
 msgstr ""
 
 msgid "Copy done"
+msgstr ""
+
+msgid ""
+"The player's email (if not found in the system, a new user will be created)"
+msgstr ""
+
+msgid "The name of the ticket"
+msgstr ""
+
+msgid "if it doesn't exist, it will be created"
+msgstr ""
+
+msgid "(Optional) The character name to assign to the player"
+msgstr ""
+
+msgid "(Optional) The amount of a voluntary donation"
+msgstr ""
+
+msgid "The question name"
+msgstr ""
+
+msgid "The question type, allowed values are"
+msgstr ""
+
+msgid "The question status, allowed values are"
+msgstr ""
+
+msgid "The name of the question this option belongs to"
+msgstr ""
+
+msgid "If not found, the option will be skipped"
+msgstr ""
+
+msgid "The name of the option"
+msgstr ""
+
+msgid "The writing element this question applies to, allowed values are"
+msgstr ""
+
+msgid "The question visibility to players, allowed values are"
+msgstr ""
+
+msgid "Optional – Maximum number of times it can be selected (0 = unlimited)"
 msgstr ""
 
 msgid "Photos and videos successfully uploaded"

@@ -9,33 +9,12 @@
     {% if typ == 'registration' %}
         <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
         <table class="no_csv">
-            <tr>
-                <th>
-                    <h3>player</h3>
-                </th>
-                <td>{% trans "The player's email (if not found in the system, a new user will be created)" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>ticket</h3>
-                </th>
-                <td>
-                    {% trans "The name of the ticket" %}
-                    <i>({% trans "if it doesn't exist, it will be created" %})</i>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>character</h3>
-                </th>
-                <td>{% trans "(Optional) The character name to assign to the player" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>donation</h3>
-                </th>
-                <td>{% trans "(Optional) The amount of a voluntary donation" %}</td>
-            </tr>
+            {% for column, description in columns.0.items %}
+                <tr>
+                    <th>{{ column | safe }}</th>
+                    <td>{{ description | safe }}</td>
+                </tr>
+            {% endfor %}
         </table>
         <p>
             {% trans "Then you can add columns, whose name must match with the field configured in the " %}
@@ -50,43 +29,12 @@
     {% elif typ == 'registration_form' %}
         <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
         <table class="no_csv">
-            <tr>
-                <th>
-                    <h3>display</h3>
-                </th>
-                <td>
-                    {% trans "The question name" %}
-                    <i>({% trans "If already existing, the information will be replaced; if not, will be created" %})</i>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>typ</h3>
-                </th>
-                <td>
-                    {% trans "The question type, allowed values are" %}: 'single-choice', 'multi-choice', 'short-text', 'long-text', 'advanced'
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>description</h3>
-                </th>
-                <td>{% trans "Optional - Extended description (displayed in small gray text)" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>status</h3>
-                </th>
-                <td>{% trans "The question status, allowed values are" %}: 'optional', 'mandatory', 'disabled', 'hidden'</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>max_length</h3>
-                </th>
-                <td>
-                    {% trans "Optional - For text questions, maximum number of characters; For multiple options, maximum number of options (0 = no limit)" %}
-                </td>
-            </tr>
+            {% for column, description in columns.0.items %}
+                <tr>
+                    <th>{{ column | safe }}</th>
+                    <td>{{ description | safe }}</td>
+                </tr>
+            {% endfor %}
         </table>
         <p>
             <a href="{% url 'orga_upload_template' event.slug run.number 'reg_questions' %}">{% trans "Download example template" %}</a>
@@ -95,39 +43,12 @@
         <hr />
         <p>{% trans "You can also upload a second file with the registration options" %}:</p>
         <table class="no_csv">
-            <tr>
-                <th>
-                    <h3>question</h3>
-                </th>
-                <td>
-                    {% trans "The name of the question this option belongs to" %}
-                    <i>({% trans "If not found, the option will be skipped" %})</i>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>name</h3>
-                </th>
-                <td>{% trans "The name of the option" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>description</h3>
-                </th>
-                <td>{% trans "Optional – Additional information about the option, displayed below the question" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>price</h3>
-                </th>
-                <td>{% trans "Optional – Amount added to the registration fee if selected (0 = no extra cost)" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>max_available</h3>
-                </th>
-                <td>{% trans "Optional – Maximum number of times it can be selected across all registrations (0 = unlimited)" %}</td>
-            </tr>
+            {% for column, description in columns.1.items %}
+                <tr>
+                    <th>{{ column | safe }}</th>
+                    <td>{{ description | safe }}</td>
+                </tr>
+            {% endfor %}
         </table>
         <p>
             <a href="{% url 'orga_upload_template' event.slug run.number 'reg_options' %}">{% trans "Download example template" %}</a>
@@ -140,59 +61,12 @@
     {% elif typ == 'character_form' %}
         <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
         <table class="no_csv">
-            <tr>
-                <th>
-                    <h3>name</h3>
-                </th>
-                <td>
-                    {% trans "The question name" %}
-                    <i>({% trans "If already existing, the information will be replaced; if not, will be created" %})</i>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>typ</h3>
-                </th>
-                <td>
-                    {% trans "The question type, allowed values are" %}: 'single-choice', 'multi-choice', 'short-text', 'long-text', 'advanced', 'name', 'teaser', 'text'
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>description</h3>
-                </th>
-                <td>{% trans "Optional - Extended description (displayed in small gray text)" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>status</h3>
-                </th>
-                <td>{% trans "The question status, allowed values are" %}: 'optional', 'mandatory', 'disabled', 'hidden'</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>applicable</h3>
-                </th>
-                <td>
-                    {% trans "The writing element this question applies to, allowed values are" %}: 'character', 'plot', 'faction', 'quest', 'trait'
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>visibility</h3>
-                </th>
-                <td>
-                    {% trans "The question visibility to players, allowed values are" %}: 'searchable', 'public', 'private', 'hidden'
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>max_length</h3>
-                </th>
-                <td>
-                    {% trans "Optional - For text questions, maximum number of characters; For multiple options, maximum number of options (0 = no limit)" %}
-                </td>
-            </tr>
+            {% for column, description in columns.0.items %}
+                <tr>
+                    <th>{{ column | safe }}</th>
+                    <td>{{ description | safe }}</td>
+                </tr>
+            {% endfor %}
         </table>
         <p>
             <a href="{% url 'orga_upload_template' event.slug run.number 'writing_questions' %}">{% trans "Download example template" %}</a>
@@ -201,33 +75,12 @@
         <hr />
         <p>{% trans "You can also upload a second file with the registration options" %}:</p>
         <table class="no_csv">
-            <tr>
-                <th>
-                    <h3>question</h3>
-                </th>
-                <td>
-                    {% trans "The name of the question this option belongs to" %}
-                    <i>({% trans "If not found, the option will be skipped" %})</i>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>name</h3>
-                </th>
-                <td>{% trans "The name of the option" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>description</h3>
-                </th>
-                <td>{% trans "Optional – Additional information about the option, displayed below the question" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>max_available</h3>
-                </th>
-                <td>{% trans "Optional – Maximum number of times it can be selected (0 = unlimited)" %}</td>
-            </tr>
+            {% for column, description in columns.1.items %}
+                <tr>
+                    <th>{{ column | safe }}</th>
+                    <td>{{ description | safe }}</td>
+                </tr>
+            {% endfor %}
         </table>
         <p>
             <a href="{% url 'orga_upload_template' event.slug run.number 'writing_options' %}">{% trans "Download example template" %}</a>

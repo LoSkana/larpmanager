@@ -7154,13 +7154,6 @@ msgstr ""
 "nascondere la sua vera natura"
 
 msgid ""
-"If already existing, the information will be replaced; if not, will be "
-"created"
-msgstr ""
-"Se già esistente, l'informazione verrà sostituita; in caso contrario, verrà "
-"creata"
-
-msgid ""
 "If checked, allows a option to be visible only to players with selected "
 "ticket"
 msgstr ""

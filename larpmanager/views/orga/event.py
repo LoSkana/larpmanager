@@ -252,7 +252,73 @@ def _prepare_backup(ctx):
 def orga_upload(request, s, n, typ):
     ctx = check_event_permission(request, s, n, f"orga_{typ}")
     ctx["typ"] = typ.rstrip("s")
+    _get_column_names(ctx)
     return render(request, "larpmanager/orga/upload.html", ctx)
+
+
+def _get_column_names(ctx):
+    if ctx["typ"] == "registration":
+        ctx["columns"] = [
+            {
+                "player": _("The player's email (if not found in the system, a new user will be created)"),
+                "ticket": _("The name of the ticket") + "<i>" + (_("if it doesn't exist, it will be created")) + "</i>",
+                "character": _("(Optional) The character name to assign to the player"),
+                "donation": _("(Optional) The amount of a voluntary donation"),
+            }
+        ]
+    elif ctx["typ"] == "registration_form":
+        ctx["columns"] = [
+            {
+                "display": _("The question name"),
+                "typ": _("The question type, allowed values are")
+                + ": 'single-choice', 'multi-choice', 'short-text', 'long-text', 'advanced'",
+                "description": _("Optional - Extended description (displayed in small gray text)"),
+                "status": _("The question status, allowed values are")
+                + ": 'optional', 'mandatory', 'disabled', 'hidden'",
+                "max_length": _(
+                    "Optional - For text questions, maximum number of characters; For multiple options, maximum number of options (0 = no limit)"
+                ),
+            },
+            {
+                "question": _("The name of the question this option belongs to")
+                + "<i>"
+                + (_("If not found, the option will be skipped"))
+                + "</i>",
+                "name": _("The name of the option"),
+                "description": _("Optional – Additional information about the option, displayed below the question"),
+                "price": _("Optional – Amount added to the registration fee if selected (0 = no extra cost)"),
+                "max_available": _(
+                    "Optional – Maximum number of times it can be selected across all registrations (0 = unlimited)"
+                ),
+            },
+        ]
+    elif ctx["typ"] == "character_form":
+        ctx["columns"] = [
+            {
+                "name": _("The question name"),
+                "typ": _("The question type, allowed values are")
+                + ": 'single-choice', 'multi-choice', 'short-text', 'long-text', 'advanced', 'name', 'teaser', 'text'",
+                "description": _("Optional - Extended description (displayed in small gray text)"),
+                "status": _("The question status, allowed values are")
+                + ": 'optional', 'mandatory', 'disabled', 'hidden'",
+                "applicable": _("The writing element this question applies to, allowed values are")
+                + ": 'character', 'plot', 'faction', 'quest', 'trait'",
+                "visibility": _("The question visibility to players, allowed values are")
+                + ": 'searchable', 'public', 'private', 'hidden'",
+                "max_length": _(
+                    "Optional - For text questions, maximum number of characters; For multiple options, maximum number of options (0 = no limit)"
+                ),
+            },
+            {
+                "question": _("The name of the question this option belongs to")
+                + "<i>"
+                + (_("If not found, the option will be skipped"))
+                + "</i>",
+                "name": _("The name of the option"),
+                "description": _("Optional – Additional information about the option, displayed below the question"),
+                "max_available": _("Optional – Maximum number of times it can be selected (0 = unlimited)"),
+            },
+        ]
 
 
 @login_required

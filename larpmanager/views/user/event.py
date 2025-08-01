@@ -263,7 +263,7 @@ def gallery(request, s, n):
     features = get_event_features(ctx["event"].id)
 
     if check_gallery_visibility(request, ctx):
-        if not ctx["event"].get_config("writing_field_visibility", False) or ctx["show_character"]:
+        if not ctx["event"].get_config("writing_field_visibility", False) or ctx.get("show_character"):
             get_event_cache_all(ctx)
 
         hide_uncasted_players = ctx["event"].get_config("gallery_hide_uncasted_players", False)
