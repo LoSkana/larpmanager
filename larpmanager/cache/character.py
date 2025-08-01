@@ -114,6 +114,9 @@ def get_event_cache_fields(ctx, res, only_visible=True):
 
     # get visible question ids
     visible_writing_fields(ctx, QuestionApplicable.CHARACTER, only_visible=only_visible)
+    if "questions" not in ctx:
+        return
+
     question_idxs = ctx["questions"].keys()
 
     # ids to number

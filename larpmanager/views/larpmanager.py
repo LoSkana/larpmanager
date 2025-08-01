@@ -327,7 +327,7 @@ def join(request):
         if request.assoc["skin_id"] == 1:
             join_email(assoc)
         # redirect
-        return redirect("after_login", subdomain=assoc.slug, path="manage/quick")
+        return redirect("after_login", subdomain=assoc.slug, path="manage")
 
     return render(request, "larpmanager/larpmanager/join.html", ctx)
 
@@ -619,4 +619,4 @@ def _create_demo(request):
 
     login(request, user, backend=get_user_backend())
 
-    return redirect("after_login", subdomain=assoc.slug, path="manage/quick")
+    return redirect("after_login", subdomain=assoc.slug, path="manage")
