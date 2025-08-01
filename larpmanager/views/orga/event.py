@@ -17,10 +17,12 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import csv
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.staticfiles.finders import find
+from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -43,6 +45,7 @@ from larpmanager.models.access import EventRole
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, EventButton, EventText
+from larpmanager.models.form import QuestionApplicable, QuestionType, WritingQuestion
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, Faction, Plot
 from larpmanager.utils.common import clear_messages, get_feature
@@ -248,5 +251,42 @@ def _prepare_backup(ctx):
 @login_required
 def orga_upload(request, s, n, typ):
     ctx = check_event_permission(request, s, n, f"orga_{typ}")
-    ctx["typ"] = typ
+    ctx["typ"] = typ.rstrip("s")
     return render(request, "larpmanager/orga/upload.html", ctx)
+
+
+@login_required
+def orga_upload_template(request, s, n, typ):
+    ctx = check_event_permission(request, s, n)
+    writing_typ = QuestionApplicable.get_applicable(typ)
+    if writing_typ:
+        # Dynamically create template file
+        fields = (
+            ctx["event"]
+            .get_elements(WritingQuestion)
+            .filter(applicable=writing_typ, typ__in=QuestionType.get_def_types())
+            .order_by("order")
+        )
+        keys = []
+        vals = []
+        for field in fields:
+            keys.append(field.name)
+            if field.typ == QuestionType.NAME:
+                vals.append("Element name")
+            else:
+                vals.append("some text")
+
+    else:
+        # Return static file
+        filename = f"{typ}-template.csv"
+        path = find(filename)
+        if not path:
+            raise Http404(f"Static file '{filename}' not found")
+
+        with open(path, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            keys = reader.fieldnames
+            rows = list(reader)
+            vals = rows[0]
+
+    return zip_exports(ctx, (f"{typ} - template", keys, [vals]), f"{str(ctx['run'])} - template")

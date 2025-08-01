@@ -1866,6 +1866,9 @@ msgstr "neplatný formulář"
 msgid "user profile"
 msgstr "profil uživatele"
 
+msgid "writing form"
+msgstr "forma psaní"
+
 #, python-format
 msgid " for %(user)s"
 msgstr " pro %(user)s"
@@ -2669,6 +2672,9 @@ msgstr "již dodané"
 msgid "download document"
 msgstr "stáhnout dokument"
 
+msgid "registration form"
+msgstr "registrační formulář"
+
 msgid "this is important"
 msgstr "to je důležité"
 
@@ -2875,9 +2881,6 @@ msgstr "Výsledky nejsou k dispozici"
 
 msgid "Signup cancellation"
 msgstr "Zrušení předplatného"
-
-msgid "The question status"
-msgstr "Stav otázky"
 
 msgid "Treasury appointees"
 msgstr "Úředníci ministerstva financí"
@@ -3426,9 +3429,6 @@ msgstr "Tajný registrační odkaz"
 msgid "The subdomain identifier"
 msgstr "Identifikátor subdomény"
 
-msgid "The type of the question"
-msgstr "Typ otázky"
-
 msgid "Try the sheet generation"
 msgstr "Vyzkoušejte generování karet"
 
@@ -3446,6 +3446,9 @@ msgstr "v tuto chvíli není viditelný"
 
 msgid "Choose the payment method"
 msgstr "Zvolte způsob platby"
+
+msgid "Download example template"
+msgstr "Stáhněte si vzorovou šablonu"
 
 msgid "Go to the preferences for"
 msgstr "Přejděte do předvoleb pro"
@@ -4387,11 +4390,11 @@ msgstr "Vyberte organizaci, na kterou chcete přejít"
 msgid "Set up delivery for experience points"
 msgstr "Nastavení doručování zkušenostních bodů"
 
+msgid "The question type, allowed values are"
+msgstr "Typ otázky, povolené hodnoty jsou"
+
 msgid "This page shows cancelled enrollments"
 msgstr "Tato stránka shrnuje zrušené registrace"
-
-msgid "To download a sample file, click here"
-msgstr "Chcete-li si stáhnout ukázkový soubor, klikněte zde"
 
 msgid "Total amount refunded to participants"
 msgstr "Celková částka vrácená účastníkům"
@@ -4478,9 +4481,6 @@ msgstr "Elektronika - počítače, hitech, světla"
 msgid "Enables free pre-registration to events"
 msgstr "Umožňuje bezplatnou předběžnou registraci na události"
 
-msgid "If it doesn't exist, it will be created"
-msgstr "Pokud neexistuje, bude vytvořena"
-
 msgid "If you need help, remember to check out"
 msgstr "Pokud potřebujete pomoc, nezapomeňte se podívat na"
 
@@ -4528,6 +4528,9 @@ msgstr "Účastnický poplatek, celková částka k úhradě"
 msgid "The number of payments to split the fee"
 msgstr "Počet splátek, které mají být zaplaceny"
 
+msgid "The question status, allowed values are"
+msgstr "Stav otázky, povolené hodnoty jsou"
+
 msgid "This page shows inventory custody items"
 msgstr "Na této stránce jsou zobrazeny položky inventární úschovy"
 
@@ -4539,6 +4542,9 @@ msgstr "Prohlédněte si seznam postav a hráčů"
 
 msgid "You are logged in with an email address"
 msgstr "Jste přihlášeni pomocí e-mailové adresy"
+
+msgid "if it doesn't exist, it will be created"
+msgstr "pokud neexistuje, bude vytvořen"
 
 msgid "Characters are not visible at the moment"
 msgstr "Postavy nejsou v tuto chvíli viditelné"
@@ -5521,6 +5527,9 @@ msgstr "Nyní můžete při úpravě postavy přidávat vztahy"
 msgid "Set if you want to reserve tickets in addition to your"
 msgstr "Nastavte, zda si chcete kromě vstupenek rezervovat také"
 
+msgid "The question visibility to players, allowed values are"
+msgstr "Otázka viditelnosti pro hráče, povolené hodnoty jsou"
+
 msgid "The registration request will be updated automatically"
 msgstr "Aplikace se automaticky aktualizuje"
 
@@ -5638,6 +5647,9 @@ msgstr "Tato stránka umožňuje přidat nebo upravit přihlášení k tomuto b�
 msgid "This page shows all expense items recorded in the system"
 msgstr ""
 "Tato stránka zobrazuje všechny nákladové položky zaznamenané v systému"
+
+msgid "Those names must match with the field configured in the "
+msgstr "Tyto názvy se musí shodovat s poli nakonfigurovanými v poli"
 
 msgid "Content of mail reminding players to pay their signup fee"
 msgstr ""
@@ -6042,6 +6054,10 @@ msgstr "Část registračního poplatku odvozená pouze od vybrané vstupenky"
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr "Platba nebyla dokončena. Kontaktujte nás a zjistěte, proč"
 
+msgid "The writing element this question applies to, allowed values are"
+msgstr ""
+"Prvek zápisu, na který se tato otázka vztahuje, má tyto přípustné hodnoty"
+
 msgid "They will be used automatically when you sign up for a new event"
 msgstr "Budou vám automaticky odečteny při registraci do nové události"
 
@@ -6185,6 +6201,9 @@ msgstr ""
 "Minimální částka čistého zisku, která má být ponechána pro účely daně ze "
 "sdružení"
 
+msgid "The only mandatory column is for the *name*, the other are optional"
+msgstr "Jediný povinný sloupec je *jméno*, ostatní jsou nepovinné"
+
 msgid "The searched object does not exist, perhaps it was recently deleted"
 msgstr "Hledaný objekt neexistuje, možná byl nedávno odstraněn"
 
@@ -6269,9 +6288,6 @@ msgstr "Správně jste zrušili registraci na událost %(event)s"
 msgid "Your user does not have the required permissions to access this page"
 msgstr "Váš uživatel nemá potřebná oprávnění pro přístup na tuto stránku"
 
-msgid "'o' for optional, 'm' for mandatory, 'd' for disabled, 'h' for hidden"
-msgstr "\"o\" pro nepovinné, \"m\" pro povinné, \"d\" pro zakázané, \"h\" pro skryté"
-
 msgid "Added at the bottom of mail notifying players of character assignment"
 msgstr "Přidáno v dolní části mailu s oznámením o přidělení postavy"
 
@@ -6315,6 +6331,9 @@ msgstr ""
 msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
 "Pokud potřebujete přiložit soubor, uveďte jej zde, jinak jej nechte prázdný"
+
+msgid "Optional – Maximum number of times it can be selected (0 = unlimited)"
+msgstr "Volitelné - Maximální počet opakování (0 = neomezeně)"
 
 msgid "Present (in the relationships of this character is present the other)"
 msgstr "Přítomnost (ve vztahu této postavy je přítomna druhá postava)"
@@ -6392,9 +6411,6 @@ msgstr ""
 msgid "If checked, it allows players to indicate the song of their characters"
 msgstr "Pokud je zaškrtnuto, umožňuje hráčům uvést píseň jejich postavy"
 
-msgid "If the player is already registered, their information will be updated"
-msgstr "Pokud je hráč již zaregistrován, jeho údaje se aktualizují"
-
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
 "Pokud s námi máte uzavřenou samostatnou smlouvu, můžete tento e-mail "
@@ -6407,6 +6423,9 @@ msgstr ""
 
 msgid "Optional - Indicates whether the ticket can be gifted to other players"
 msgstr "Nepovinné - označuje, zda lze tip darovat dalším hráčům"
+
+msgid "The first line of the file are the field names that you want to upload"
+msgstr "Na prvním řádku souboru jsou názvy polí, které chcete nahrát"
 
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Jedná se o registrace událostí, za které je třeba zaplatit"
@@ -6664,11 +6683,6 @@ msgid ""
 msgstr "Platba přijata! Jakmile bude schválena, vaše účty budou aktualizovány"
 
 msgid ""
-"The player's email. If not found in the system, a new user will be created"
-msgstr ""
-"E-mail hráče. Pokud není v systému nalezen, bude vytvořen nový uživatel"
-
-msgid ""
 "This page shows all event templates; you can edit them, or create new ones"
 msgstr ""
 "Na této stránce jsou zobrazeny všechny šablony událostí; můžete je upravovat"
@@ -6709,6 +6723,11 @@ msgid ""
 msgstr ""
 "spravuje žetony, které hráči používají k úhradě registračních poplatků za "
 "všechny události"
+
+msgid ""
+"The player's email (if not found in the system, a new user will be created)"
+msgstr ""
+"E-mail hráče (pokud není v systému nalezen, bude vytvořen nový uživatel)"
 
 msgid ""
 "This page allows you to add or modify a form question for a writing element"
@@ -7140,6 +7159,13 @@ msgstr ""
 "nastaveno, nejsou zasílány žádné e-maily)"
 
 msgid ""
+"Then you can add columns, whose name must match with the field configured in"
+" the "
+msgstr ""
+"Poté můžete přidat sloupce, jejichž název se musí shodovat s polem "
+"nakonfigurovaným v položce"
+
+msgid ""
 "To register for the event, please fill in the following form and click on "
 "confirm"
 msgstr ""
@@ -7334,13 +7360,6 @@ msgid ""
 msgstr ""
 "Tip: Připněte si tuto stránku do prohlížeče pro rychlejší přístup k "
 "organizaci a událostem"
-
-msgid ""
-"'s' for single choice, 'm' for multiple choice, 't' for short text, 'p' for "
-"long text"
-msgstr ""
-"\"s\" pro jednu možnost, \"m\" pro více možností, \"t\" pro krátký text, "
-"\"p\" pro dlouhý text"
 
 msgid ""
 "I confirm that I have uploaded a valid document issued by the state of my "
@@ -7647,6 +7666,13 @@ msgid ""
 msgstr ""
 "Zavádí \"úkoly\" jako stavební kameny listu postavy, každý s několika "
 "\"vlastnostmi\""
+
+msgid ""
+"Note that existing elements with the same name, will be overwritten with the"
+" uploaded data"
+msgstr ""
+"Všimněte si, že existující prvky se stejným názvem budou přepsány nahranými "
+"daty"
 
 msgid ""
 "This page shows the accounting status of the event, divided into the various"
@@ -8290,6 +8316,13 @@ msgstr ""
 "inspirovaný oblíbenými rozvrženími streamovacích služeb"
 
 msgid ""
+"Note that existing registrations with the same player email, will be "
+"overwritten with the uploaded data"
+msgstr ""
+"Upozorňujeme, že stávající registrace se stejným e-mailem hráče budou "
+"přepsány nahranými údaji"
+
+msgid ""
 "This page summarises the roles to be assigned in order to use the functions "
 "concerning the organisation"
 msgstr ""
@@ -8593,13 +8626,6 @@ msgid ""
 msgstr ""
 "Znak byl navržen zaměstnancům, kteří jej prozkoumají a schválí, případně "
 "požádají o změny."
-
-msgid ""
-"The first line are the field names, such as 'number', 'name', "
-"'presentation', 'text'. (Only 'number' is required)"
-msgstr ""
-"Na prvním řádku jsou názvy polí, například \"number\", \"name\", "
-"\"presentation\", \"text\". (Pouze \"number\" je povinné.)"
 
 msgid ""
 "Your friends wanted to give you a special gift: they gave you the chance to "

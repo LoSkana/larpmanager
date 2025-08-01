@@ -32,6 +32,9 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.models.accounting import AccountingItemPayment
 from larpmanager.models.form import (
     QuestionApplicable,
+    QuestionStatus,
+    QuestionType,
+    QuestionVisibility,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
@@ -391,20 +394,38 @@ def orga_registration_form_download(ctx):
 
 
 def export_registration_form(ctx):
+    mappings = {
+        "typ": QuestionType.get_mapping(),
+        "status": QuestionStatus.get_mapping(),
+    }
     key = ["name", "typ", "description", "status", "max_length"]
     que = get_ordered_registration_questions(ctx)
-    vals = list(que.values_list(*key))
+    vals = _extract_values(key, que, mappings)
 
     exports = [("registration_questions", key, vals)]
 
     key = ["question__name", "name", "description", "price", "max_available"]
     que = ctx["event"].get_elements(RegistrationOption).select_related("question")
     que = que.order_by(F("question__order"), "order")
-    vals = list(que.values_list(*key))
+    vals = _extract_values(key, que, mappings)
     key[0] = "question"
 
     exports.append(("registration_options", key, vals))
     return exports
+
+
+def _extract_values(key, que, mappings):
+    all_vals = []
+    for row in que.values(*key):
+        vals = []
+        for field, value in row.items():
+            if field in mappings and value in mappings[field]:
+                new_value = mappings[field][value]
+            else:
+                new_value = value
+            vals.append(new_value)
+        all_vals.append(vals)
+    return all_vals
 
 
 def orga_character_form_download(ctx):
@@ -412,16 +433,22 @@ def orga_character_form_download(ctx):
 
 
 def export_character_form(ctx):
+    mappings = {
+        "typ": QuestionType.get_mapping(),
+        "status": QuestionStatus.get_mapping(),
+        "applicable": QuestionApplicable.get_mapping(),
+        "visibility": QuestionVisibility.get_mapping(),
+    }
     key = ["name", "typ", "description", "status", "applicable", "visibility", "max_length"]
     que = ctx["event"].get_elements(WritingQuestion).order_by("applicable", "order")
-    vals = list(que.values_list(*key))
+    vals = _extract_values(key, que, mappings)
 
     exports = [("writing_questions", key, vals)]
 
     key = ["question__name", "name", "description", "max_available"]
     que = ctx["event"].get_elements(WritingOption).select_related("question")
     que = que.order_by(F("question__order"), "order")
-    vals = list(que.values_list(*key))
+    vals = _extract_values(key, que, mappings)
     key[0] = "question"
 
     exports.append(("writing_options", key, vals))

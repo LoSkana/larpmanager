@@ -4,22 +4,16 @@
     {% trans "Upload" %} - {{ run }}
 {% endblock title %}
 {% block content %}
-    {% trans "You can upload data directly from CSV file" %}.
     <br />
-    <br />
-    {% if typ == 'registrations' %}
-        {% trans "The first line of the file must contain the column names, see the descriptions below" %}:
-        <br />
-        <br />
+    <p>{% trans "You can upload data directly from CSV file" %}.</p>
+    {% if typ == 'registration' %}
+        <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
         <table class="no_csv">
             <tr>
                 <th>
                     <h3>player</h3>
                 </th>
-                <td>
-                    {% trans "The player's email. If not found in the system, a new user will be created" %}
-                    <i>({% trans "If the player is already registered, their information will be updated" %})</i>
-                </td>
+                <td>{% trans "The player's email (if not found in the system, a new user will be created)" %}</td>
             </tr>
             <tr>
                 <th>
@@ -27,7 +21,7 @@
                 </th>
                 <td>
                     {% trans "The name of the ticket" %}
-                    <i>({% trans "If it doesn't exist, it will be created" %})</i>
+                    <i>({% trans "if it doesn't exist, it will be created" %})</i>
                 </td>
             </tr>
             <tr>
@@ -43,10 +37,18 @@
                 <td>{% trans "(Optional) The amount of a voluntary donation" %}</td>
             </tr>
         </table>
+        <p>
+            {% trans "Then you can add columns, whose name must match with the field configured in the " %}
+            <a href="{% url 'orga_registration_form' event.slug run.number %}">{% trans "registration form" %}</a>.
+        </p>
+        <p>
+            <i>{% trans "Note that existing registrations with the same player email, will be overwritten with the uploaded data" %}.</i>
+        </p>
+        <p>
+            <a href="{% url 'orga_upload_template' event.slug run.number 'registrations' %}">{% trans "Download example template" %}</a>
+        </p>
     {% elif typ == 'registration_form' %}
-        {% trans "The first line of the file must contain the column names, see the descriptions below" %}:
-        <br />
-        <br />
+        <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
         <table class="no_csv">
             <tr>
                 <th>
@@ -62,8 +64,7 @@
                     <h3>typ</h3>
                 </th>
                 <td>
-                    {% trans "The type of the question" %}
-                    <i>({% trans "'s' for single choice, 'm' for multiple choice, 't' for short text, 'p' for long text" %})</i>
+                    {% trans "The question type, allowed values are" %}: 'single-choice', 'multi-choice', 'short-text', 'long-text', 'advanced'
                 </td>
             </tr>
             <tr>
@@ -76,10 +77,7 @@
                 <th>
                     <h3>status</h3>
                 </th>
-                <td>
-                    {% trans "The question status" %}
-                    <i>({% trans "'o' for optional, 'm' for mandatory, 'd' for disabled, 'h' for hidden" %})</i>
-                </td>
+                <td>{% trans "The question status, allowed values are" %}: 'optional', 'mandatory', 'disabled', 'hidden'</td>
             </tr>
             <tr>
                 <th>
@@ -90,9 +88,12 @@
                 </td>
             </tr>
         </table>
-        {% trans "You can also upload a second file with the registration options" %}:
+        <p>
+            <a href="{% url 'orga_upload_template' event.slug run.number 'reg_questions' %}">{% trans "Download example template" %}</a>
+        </p>
         <br />
-        <br />
+        <hr />
+        <p>{% trans "You can also upload a second file with the registration options" %}:</p>
         <table class="no_csv">
             <tr>
                 <th>
@@ -128,10 +129,16 @@
                 <td>{% trans "Optional – Maximum number of times it can be selected across all registrations (0 = unlimited)" %}</td>
             </tr>
         </table>
+        <p>
+            <a href="{% url 'orga_upload_template' event.slug run.number 'reg_options' %}">{% trans "Download example template" %}</a>
+        </p>
+        <br />
+        <hr />
+        <p>
+            <i>{% trans "Note that existing elements with the same name, will be overwritten with the uploaded data" %}.</i>
+        </p>
     {% elif typ == 'character_form' %}
-        {% trans "The first line of the file must contain the column names, see the descriptions below" %}:
-        <br />
-        <br />
+        <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
         <table class="no_csv">
             <tr>
                 <th>
@@ -147,8 +154,7 @@
                     <h3>typ</h3>
                 </th>
                 <td>
-                    {% trans "The type of the question" %}
-                    <i>({% trans "'s' for single choice, 'm' for multiple choice, 't' for short text, 'p' for long text" %})</i>
+                    {% trans "The question type, allowed values are" %}: 'single-choice', 'multi-choice', 'short-text', 'long-text', 'advanced', 'name', 'teaser', 'text'
                 </td>
             </tr>
             <tr>
@@ -161,9 +167,22 @@
                 <th>
                     <h3>status</h3>
                 </th>
+                <td>{% trans "The question status, allowed values are" %}: 'optional', 'mandatory', 'disabled', 'hidden'</td>
+            </tr>
+            <tr>
+                <th>
+                    <h3>applicable</h3>
+                </th>
                 <td>
-                    {% trans "The question status" %}
-                    <i>({% trans "'o' for optional, 'm' for mandatory, 'd' for disabled, 'h' for hidden" %})</i>
+                    {% trans "The writing element this question applies to, allowed values are" %}: 'character', 'plot', 'faction', 'quest', 'trait'
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <h3>visibility</h3>
+                </th>
+                <td>
+                    {% trans "The question visibility to players, allowed values are" %}: 'searchable', 'public', 'private', 'hidden'
                 </td>
             </tr>
             <tr>
@@ -175,10 +194,12 @@
                 </td>
             </tr>
         </table>
-        key = ["name", "typ", "description", "status", "applicable", "visibility", "max_length"]
-        {% trans "You can also upload a second file with the registration options" %}:
+        <p>
+            <a href="{% url 'orga_upload_template' event.slug run.number 'writing_questions' %}">{% trans "Download example template" %}</a>
+        </p>
         <br />
-        <br />
+        <hr />
+        <p>{% trans "You can also upload a second file with the registration options" %}:</p>
         <table class="no_csv">
             <tr>
                 <th>
@@ -203,42 +224,33 @@
             </tr>
             <tr>
                 <th>
-                    <h3>price</h3>
-                </th>
-                <td>{% trans "Optional – Amount added to the registration fee if selected (0 = no extra cost)" %}</td>
-            </tr>
-            <tr>
-                <th>
                     <h3>max_available</h3>
                 </th>
-                <td>{% trans "Optional – Maximum number of times it can be selected across all registrations (0 = unlimited)" %}</td>
+                <td>{% trans "Optional – Maximum number of times it can be selected (0 = unlimited)" %}</td>
             </tr>
         </table>
-        ctx["upload"] = (
-        _(
-        "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short text, 'p' for long text, 'e' for editor)"
-        )
-        + ", "
-        )
-        ctx["upload"] += _("display (question text)") + ", " + _("description (application description)") + ", "
-        ctx["upload"] += (
-        _("status of application: 'o' for optional, 'm' mandatory, 'c' creation, 'd' disabled, 'h' hidden") + ", "
-        )
-        ctx["upload"] += _("visibility (demand visibility: 's' for Searchable, 'c' for Public, 'e' for Private") + ", "
-        ctx["upload"] += (
-        _("options (number of options)")
-        + ", "
-        + _(
-        "for each option five columns: name, description, available seats (0 for "
-        "infinite), prerequisite options, ticket required"
-        )
-        )
-    {% else %}
-        {% trans "The first line are the field names, such as 'number', 'name', 'presentation', 'text'. (Only 'number' is required)" %}
+        <p>
+            <a href="{% url 'orga_upload_template' event.slug run.number 'writing_options' %}">{% trans "Download example template" %}</a>
+        </p>
         <br />
+        <hr />
+        <p>
+            <i>{% trans "Note that existing elements with the same name, will be overwritten with the uploaded data" %}.</i>
+        </p>
+    {% else %}
+        <p>{% trans "The first line of the file are the field names that you want to upload" %}.</p>
+        <p>
+            {% trans "Those names must match with the field configured in the " %}
+            <a href="{% url 'orga_writing_form' event.slug run.number typ %}">{% trans "writing form" %}</a>.
+        </p>
+        <p>{% trans "The only mandatory column is for the *name*, the other are optional" %}.</p>
+        <p>
+            <i>{% trans "Note that existing elements with the same name, will be overwritten with the uploaded data" %}.</i>
+        </p>
+        <p>
+            <a href="{% url 'orga_upload_template' event.slug run.number typ %}">{% trans "Download example template" %}</a>
+        </p>
     {% endif %}
-    {% trans "To download a sample file, click here" %}.
-    # TODO link with typ
     <br />
     <br />
     {% trans "Select the files to upload (must be in CSV format, encoded in UTF-8)" %}:
