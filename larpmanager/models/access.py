@@ -137,7 +137,7 @@ class EventRole(BaseConceptModel):
 
 
 def get_event_organizers(event):
-    orga = EventRole.objects.get(event=event, number=1)
+    (orga, cr) = EventRole.objects.get_or_create(event=event, number=1)
     return orga.members.all()
 
 

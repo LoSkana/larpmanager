@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import asyncio
 
 import pytest
 from playwright.async_api import async_playwright, expect
@@ -76,6 +77,7 @@ async def orga_event_role(live_server, page):
     await go_to(page, live_server, "/test/1/manage/roles")
     await page.get_by_role("row", name=" test role User Test").get_by_role("link").click()
     await page.get_by_role("link", name="Delete").click()
+    await asyncio.sleep(2)
     await page.get_by_role("button", name="Confirmation delete").click()
 
     await logout(page, live_server)
