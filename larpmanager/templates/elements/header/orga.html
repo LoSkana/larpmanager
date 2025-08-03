@@ -11,18 +11,13 @@
             window.location.href = newUrl;
         });
         </script>
-        <button class="my_toggle" tog='search'>
-            <a href="#">{% trans "Search" %}</a>
-        </button>
+        <a class="new button my_toggle" tog='search' href="#">{% trans "Search" %}</a>
         {% if list %}
-            <button class="my_toggle" tog='show_list'>
-                <a href="#">{% trans "List" %}</a>
-            </button>
+            <a class="new button my_toggle" tog='show_list' href="#">{% trans "List" %}</a>
         {% endif %}
         {% if upload %}
-            <button>
-                <a href="{% url 'orga_upload' run.event.slug run.number upload %}">{% trans "Upload" %}</a>
-            </button>
+            <a class="new button"
+               href="{% url 'orga_upload' run.event.slug run.number upload %}">{% trans "Upload" %}</a>
         {% endif %}
         {% if download %}
             <form action="{{ request.path }}" method="post" class="inline">
@@ -32,9 +27,8 @@
             </form>
         {% endif %}
         {% if export %}
-            <button>
-                <a href="{% url 'orga_export' run.event.slug run.number export %}">{% trans "Export" %}</a>
-            </button>
+            <a class="new button"
+               href="{% url 'orga_export' run.event.slug run.number export %}">{% trans "Export" %}</a>
         {% endif %}
     </div>
     <div class="hide search">

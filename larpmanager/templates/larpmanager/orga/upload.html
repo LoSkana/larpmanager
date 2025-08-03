@@ -11,99 +11,138 @@
         <table class="no_csv">
             {% for column, description in columns.0.items %}
                 <tr>
-                    <th>{{ column | safe }}</th>
+                    <th>
+                        <h3>{{ column | safe }}</h3>
+                    </th>
                     <td>{{ description | safe }}</td>
                 </tr>
             {% endfor %}
         </table>
-        <p>
-            {% trans "Then you can add columns, whose name must match with the field configured in the " %}
-            <a href="{% url 'orga_registration_form' event.slug run.number %}">{% trans "registration form" %}</a>.
-        </p>
+        {% if fields %}
+            <p>
+                {% trans "You can optionally add columns for the registration questions, allowed values for the header are" %}:
+                {% for field in fields %}
+                    {% include "elements/comma.html" %}
+                    "{{ field }}"
+                {% endfor %}
+                .
+            </p>
+        {% endif %}
         <p>
             <i>{% trans "Note that existing registrations with the same player email, will be overwritten with the uploaded data" %}.</i>
         </p>
         <p>
-            <a href="{% url 'orga_upload_template' event.slug run.number 'registrations' %}">{% trans "Download example template" %}</a>
+            <b>{% trans "To add a registration to a player, they must have consented to share their data with your organization; otherwise, their entry will be skipped" %}.</b>
         </p>
     {% elif typ == 'registration_form' %}
+        <h2>{% trans "Questions" %}</h2>
         <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
         <table class="no_csv">
             {% for column, description in columns.0.items %}
                 <tr>
-                    <th>{{ column | safe }}</th>
+                    <th>
+                        <h3>{{ column | safe }}</h3>
+                    </th>
                     <td>{{ description | safe }}</td>
                 </tr>
             {% endfor %}
         </table>
-        <p>
-            <a href="{% url 'orga_upload_template' event.slug run.number 'reg_questions' %}">{% trans "Download example template" %}</a>
-        </p>
-        <br />
         <hr />
+        <h2>{% trans "Options" %}</h2>
         <p>{% trans "You can also upload a second file with the registration options" %}:</p>
         <table class="no_csv">
             {% for column, description in columns.1.items %}
                 <tr>
-                    <th>{{ column | safe }}</th>
+                    <th>
+                        <h3>{{ column | safe }}</h3>
+                    </th>
                     <td>{{ description | safe }}</td>
                 </tr>
             {% endfor %}
         </table>
-        <p>
-            <a href="{% url 'orga_upload_template' event.slug run.number 'reg_options' %}">{% trans "Download example template" %}</a>
-        </p>
-        <br />
         <hr />
         <p>
             <i>{% trans "Note that existing elements with the same name, will be overwritten with the uploaded data" %}.</i>
         </p>
     {% elif typ == 'character_form' %}
+        <h2>{% trans "Questions" %}</h2>
         <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
         <table class="no_csv">
             {% for column, description in columns.0.items %}
                 <tr>
-                    <th>{{ column | safe }}</th>
+                    <th>
+                        <h3>{{ column | safe }}</h3>
+                    </th>
                     <td>{{ description | safe }}</td>
                 </tr>
             {% endfor %}
         </table>
-        <p>
-            <a href="{% url 'orga_upload_template' event.slug run.number 'writing_questions' %}">{% trans "Download example template" %}</a>
-        </p>
-        <br />
         <hr />
+        <h2>{% trans "Options" %}</h2>
         <p>{% trans "You can also upload a second file with the registration options" %}:</p>
         <table class="no_csv">
             {% for column, description in columns.1.items %}
                 <tr>
-                    <th>{{ column | safe }}</th>
+                    <th>
+                        <h3>{{ column | safe }}</h3>
+                    </th>
                     <td>{{ description | safe }}</td>
                 </tr>
             {% endfor %}
         </table>
-        <p>
-            <a href="{% url 'orga_upload_template' event.slug run.number 'writing_options' %}">{% trans "Download example template" %}</a>
-        </p>
-        <br />
         <hr />
         <p>
             <i>{% trans "Note that existing elements with the same name, will be overwritten with the uploaded data" %}.</i>
         </p>
     {% else %}
+        <h2>{{ typ | title }}</h2>
         <p>{% trans "The first line of the file are the field names that you want to upload" %}.</p>
         <p>
-            {% trans "Those names must match with the field configured in the " %}
-            <a href="{% url 'orga_writing_form' event.slug run.number typ %}">{% trans "writing form" %}</a>.
+            {% trans "Allowed values are" %}:
+            {% for field in fields %}
+                {% include "elements/comma.html" %}
+                "{{ field }}"
+            {% endfor %}
+            .
         </p>
-        <p>{% trans "The only mandatory column is for the *name*, the other are optional" %}.</p>
+        <p>
+            {% trans "The only mandatory column is" %} "{{ field_name }}".
+            {% trans "The other fields are optional" %}.
+        </p>
         <p>
             <i>{% trans "Note that existing elements with the same name, will be overwritten with the uploaded data" %}.</i>
         </p>
-        <p>
-            <a href="{% url 'orga_upload_template' event.slug run.number typ %}">{% trans "Download example template" %}</a>
-        </p>
+        {% if typ == 'character' and features.relationships %}
+            <h2>{% trans "Relationships" %}</h2>
+            <p>{% trans "To upload relationships, add a second file with the following columns" %}</p>
+            <table>
+                {% for column, description in columns.0.items %}
+                    <tr>
+                        <th>
+                            <h3>{{ column | safe }}</h3>
+                        </th>
+                        <td>{{ description | safe }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% elif typ == 'plot' %}
+            <h2>{% trans "Roles" %}</h2>
+            <p>{% trans "To upload role of the characters in the plots, add a second file with the following columns" %}</p>
+            <table>
+                {% for column, description in columns.0.items %}
+                    <tr>
+                        <th>
+                            <h3>{{ column | safe }}</h3>
+                        </th>
+                        <td>{{ description | safe }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
     {% endif %}
+    <p>
+        <a href="{% url 'orga_upload_template' event.slug run.number typ %}">{% trans "Download example template" %}</a>
+    </p>
     <br />
     <br />
     {% trans "Select the files to upload (must be in CSV format, encoded in UTF-8)" %}:
@@ -111,7 +150,43 @@
           enctype="multipart/form-data"
           method="post">
         {% csrf_token %}
-        {{ form.elem }}
+        {% if typ == 'registration' %}
+            <table>
+                <tr>
+                    <th>{% trans "Registrations" %}</th>
+                    <td>{{ form.first }}</td>
+                </tr>
+            </table>
+        {% elif typ == 'registration_form' or typ == 'character_form' %}
+            <table>
+                <tr>
+                    <th>{% trans "Questions" %}</th>
+                    <td>{{ form.first }}</td>
+                </tr>
+                <tr>
+                    <th>{% trans "Options" %}</th>
+                    <td>{{ form.second }}</td>
+                </tr>
+            </table>
+        {% else %}
+            <table>
+                <tr>
+                    <th>{{ typ | title }}</th>
+                    <td>{{ form.first }}</td>
+                </tr>
+                {% if typ == 'character' and features.relationships %}
+                    <tr>
+                        <th>{% trans "Relationships" %}</th>
+                        <td>{{ form.second }}</td>
+                    </tr>
+                {% elif typ == 'plot' %}
+                    <tr>
+                        <th>{% trans "Roles" %}</th>
+                        <td>{{ form.second }}</td>
+                    </tr>
+                {% endif %}
+            </table>
+        {% endif %}
         <br />
         <input type="hidden" name="upload" value="elements">
         <input type="submit" value="Submit">

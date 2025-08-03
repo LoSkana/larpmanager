@@ -1866,9 +1866,6 @@ msgstr "ongeldige vorm"
 msgid "user profile"
 msgstr "gebruikersprofiel"
 
-msgid "writing form"
-msgstr "schrijfvorm"
-
 #, python-format
 msgid " for %(user)s"
 msgstr " voor %(user)s"
@@ -2417,6 +2414,9 @@ msgstr "Moge de beste winnen"
 msgid "Member approved!"
 msgstr "Lid goedgekeurd!"
 
+msgid "Name of the plot"
+msgstr "Naam van het perceel"
+
 msgid "No comunications"
 msgstr "Geen communicatie"
 
@@ -2672,9 +2672,6 @@ msgstr "reeds geleverd"
 msgid "download document"
 msgstr "download document"
 
-msgid "registration form"
-msgstr "registratieformulier"
-
 msgid "this is important"
 msgstr "dit is belangrijk"
 
@@ -2686,6 +2683,9 @@ msgstr "Account activeren"
 
 msgid "Additional tickets"
 msgstr "Extra tickets"
+
+msgid "Allowed values are"
+msgstr "Toegestane waarden zijn"
 
 msgid "Approved character"
 msgstr "Goedgekeurd karakter"
@@ -2761,6 +2761,9 @@ msgstr "Zoektochttypes instellen"
 
 msgid "Show cancellations"
 msgstr "Show annuleringen"
+
+msgid "The player's email"
+msgstr "E-mailadres van de speler"
 
 msgid "Total payment sent"
 msgstr "Totaal verzonden betaling"
@@ -3081,6 +3084,9 @@ msgstr "Indien afwezig, geef 0 aan"
 
 msgid "Manage in-game issues"
 msgstr "Problemen in de game beheren"
+
+msgid "Name of the character"
+msgstr "Naam van het personage"
 
 msgid "New character created"
 msgstr "Nieuw personage gemaakt"
@@ -3719,6 +3725,9 @@ msgstr "Verzoek onderdanig lid"
 msgid "Player customisation updated"
 msgstr "Spelersaanpassing bijgewerkt"
 
+msgid "The only mandatory column is"
+msgstr "De enige verplichte kolom is"
+
 #, python-format
 msgid "Trait assigned for %(event)s"
 msgstr "Toegewezen kenmerk voor %(event)s"
@@ -3789,6 +3798,9 @@ msgstr "Selecteer het evenement van deze run"
 
 msgid "Select the new ability to get"
 msgstr "Selecteer de nieuwe vaardigheid die je wilt leren"
+
+msgid "The other fields are optional"
+msgstr "De andere velden zijn optioneel"
 
 msgid "The total registration fee is"
 msgstr "Het totale inschrijfgeld is"
@@ -4826,6 +4838,9 @@ msgstr "Wil je een vergoeding? Open een nieuwe"
 msgid "Elements you wish to avoid in the assignment"
 msgstr "Elementen die je wilt vermijden in de opdracht"
 
+msgid "First character in the relationship (origin)"
+msgstr "Eerste personage in de relatie (oorsprong)"
+
 msgid "If checked: shows the tagline for each event"
 msgstr "Indien aangevinkt: toont de tagline voor elk evenement"
 
@@ -5294,6 +5309,9 @@ msgstr "De voortgangsstappen voor de schrijfelementen beheren"
 msgid "Maximum number of characters the player can create"
 msgstr "Maximum aantal personages dat de speler kan maken"
 
+msgid "Second character in the relationship (destination)"
+msgstr "Tweede teken in de relatie (bestemming)"
+
 msgid "Select which of your characters you want to access"
 msgstr "Selecteer welke van je personages je wilt openen"
 
@@ -5407,6 +5425,9 @@ msgstr "Als laatste stap vragen we je om je profiel in te vullen"
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr "Geïnde bijdrage van %(user)s voor %(recipient)s"
 
+msgid "Description of the role of the character in the plot"
+msgstr "Beschrijving van de rol van het personage in het plot"
+
 msgid "If checked: shows the list of authors for each event"
 msgstr "Indien aangevinkt: toont de lijst met auteurs voor elke gebeurtenis"
 
@@ -5460,6 +5481,9 @@ msgstr "(Optioneel) De naam van het personage om toe te wijzen aan de speler"
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Casting-voorkeuren opgeslagen op '%(type)s' voor %(event)s"
+
+msgid "Description of the relationship from source to target"
+msgstr "Beschrijving van de relatie tussen bron en doel"
 
 msgid "Differing by only one character from the expected one"
 msgstr "Verschilt slechts één teken van het verwachte teken"
@@ -5672,10 +5696,6 @@ msgstr ""
 
 msgid "This page shows all expense items recorded in the system"
 msgstr "Deze pagina toont alle uitgaven die in het systeem zijn geregistreerd"
-
-msgid "Those names must match with the field configured in the "
-msgstr ""
-"Deze namen moeten overeenkomen met het veld dat is geconfigureerd in de"
 
 msgid "Content of mail reminding players to pay their signup fee"
 msgstr ""
@@ -6319,9 +6339,6 @@ msgstr ""
 "Minimumbedrag van de nettowinst dat moet worden ingehouden voor de "
 "vennootschapsbelasting"
 
-msgid "The only mandatory column is for the *name*, the other are optional"
-msgstr "De enige verplichte kolom is voor de *naam*, de andere zijn optioneel"
-
 msgid "The searched object does not exist, perhaps it was recently deleted"
 msgstr "Het gezochte object bestaat niet, misschien is het onlangs verwijderd"
 
@@ -6512,6 +6529,10 @@ msgid "This page summarizes the types of abilities that players can purchase"
 msgstr ""
 "Deze pagina geeft een overzicht van de soorten vaardigheden die spelers "
 "kunnen kopen"
+
+msgid "To upload relationships, add a second file with the following columns"
+msgstr ""
+"Voeg een tweede bestand toe met de volgende kolommen om relaties te uploaden"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Je hebt het maximale aantal tekens bereikt dat kan worden aangemaakt"
@@ -6927,12 +6948,6 @@ msgid ""
 msgstr ""
 "Beheert tokens die door spelers worden gebruikt om het inschrijfgeld voor "
 "alle evenementen te dekken"
-
-msgid ""
-"The player's email (if not found in the system, a new user will be created)"
-msgstr ""
-"Het e-mailadres van de speler (als dit niet in het systeem wordt gevonden, "
-"wordt er een nieuwe gebruiker aangemaakt)"
 
 msgid ""
 "This page allows you to add or modify a form question for a writing element"
@@ -7397,13 +7412,6 @@ msgid ""
 msgstr ""
 "Stelt in hoe vaak herinneringsmails worden verzonden, in dagen (als dit niet"
 " is ingesteld, worden er geen e-mails verzonden)"
-
-msgid ""
-"Then you can add columns, whose name must match with the field configured in"
-" the "
-msgstr ""
-"Vervolgens kun je kolommen toevoegen, waarvan de naam moet overeenkomen met "
-"het veld dat is geconfigureerd in de"
 
 msgid ""
 "To register for the event, please fill in the following form and click on "
@@ -8003,6 +8011,13 @@ msgstr ""
 "lidmaatschapsbijdrage van"
 
 msgid ""
+"To upload role of the characters in the plots, add a second file with the "
+"following columns"
+msgstr ""
+"Om de rol van de personages in de plots te uploaden, voeg je een tweede "
+"bestand toe met de volgende kolommen"
+
+msgid ""
 "Unfortunately, without full payment of the fee, participation in the event "
 "is not permitted"
 msgstr ""
@@ -8335,6 +8350,13 @@ msgid ""
 msgstr ""
 "Deze pagina geeft een overzicht van de rollen die moeten worden toegewezen "
 "om de functies met betrekking tot het evenement te kunnen gebruiken"
+
+msgid ""
+"You can optionally add columns for the registration questions, allowed "
+"values for the header are"
+msgstr ""
+"Je kunt optioneel kolommen toevoegen voor de registratievragen, toegestane "
+"waarden voor de koptekst zijn"
 
 msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
@@ -9489,6 +9511,14 @@ msgstr ""
 "Dit zijn de inschrijvingen voor evenementen waarvoor je een betaling hebt "
 "ingediend, en het wordt beoordeeld door het personeel. Je hoeft op dit "
 "moment niets te doen"
+
+msgid ""
+"To add a registration to a player, they must have consented to share their "
+"data with your organization; otherwise, their entry will be skipped"
+msgstr ""
+"Om een registratie aan een speler toe te voegen, moeten ze toestemming "
+"hebben gegeven om hun gegevens met jouw organisatie te delen; anders wordt "
+"hun registratie overgeslagen"
 
 msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "

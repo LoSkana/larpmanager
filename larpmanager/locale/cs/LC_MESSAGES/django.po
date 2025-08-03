@@ -1866,9 +1866,6 @@ msgstr "neplatný formulář"
 msgid "user profile"
 msgstr "profil uživatele"
 
-msgid "writing form"
-msgstr "forma psaní"
-
 #, python-format
 msgid " for %(user)s"
 msgstr " pro %(user)s"
@@ -2417,6 +2414,9 @@ msgstr "Ať vyhraje ten nejlepší"
 msgid "Member approved!"
 msgstr "Člen schválen!"
 
+msgid "Name of the plot"
+msgstr "Název pozemku"
+
 msgid "No comunications"
 msgstr "Žádná komunikace"
 
@@ -2672,9 +2672,6 @@ msgstr "již dodané"
 msgid "download document"
 msgstr "stáhnout dokument"
 
-msgid "registration form"
-msgstr "registrační formulář"
-
 msgid "this is important"
 msgstr "to je důležité"
 
@@ -2686,6 +2683,9 @@ msgstr "Aktivace účtu"
 
 msgid "Additional tickets"
 msgstr "Další vstupenky"
+
+msgid "Allowed values are"
+msgstr "Povolené hodnoty jsou"
 
 msgid "Approved character"
 msgstr "Schválená postava"
@@ -2761,6 +2761,9 @@ msgstr "Nastavení typů úkolů"
 
 msgid "Show cancellations"
 msgstr "Zrušení výstavy"
+
+msgid "The player's email"
+msgstr "E-mail hráče"
 
 msgid "Total payment sent"
 msgstr "Celková odeslaná platba"
@@ -3081,6 +3084,9 @@ msgstr "Pokud chybí, uveďte 0"
 
 msgid "Manage in-game issues"
 msgstr "Správa problémů ve hře"
+
+msgid "Name of the character"
+msgstr "Jméno postavy"
 
 msgid "New character created"
 msgstr "Vytvořena nová postava"
@@ -3719,6 +3725,9 @@ msgstr "Žádost o submisivní členství"
 msgid "Player customisation updated"
 msgstr "Přizpůsobení hráče aktualizováno"
 
+msgid "The only mandatory column is"
+msgstr "Jediný povinný sloupec je"
+
 #, python-format
 msgid "Trait assigned for %(event)s"
 msgstr "Známka přiřazená pro %(event)s"
@@ -3789,6 +3798,9 @@ msgstr "Vyberte událost tohoto běhu"
 
 msgid "Select the new ability to get"
 msgstr "Vyberte novou dovednost, kterou chcete získat"
+
+msgid "The other fields are optional"
+msgstr "Ostatní pole jsou nepovinná"
 
 msgid "The total registration fee is"
 msgstr "Celková výše vstupního poplatku je"
@@ -4822,6 +4834,9 @@ msgstr "Chcete, aby vám byly náklady proplaceny? Otevřete novou"
 msgid "Elements you wish to avoid in the assignment"
 msgstr "Prvky, kterým se chcete v zadání vyhnout"
 
+msgid "First character in the relationship (origin)"
+msgstr "První postava ve vztahu (původ)"
+
 msgid "If checked: shows the tagline for each event"
 msgstr "Pokud je zaškrtnuto: zobrazuje slogan pro každou událost"
 
@@ -5286,6 +5301,9 @@ msgstr "Správa kroků postupu pro prvky psaní"
 msgid "Maximum number of characters the player can create"
 msgstr "Maximální počet postav, které může hráč vytvořit"
 
+msgid "Second character in the relationship (destination)"
+msgstr "Druhý znak ve vztahu (cílová destinace)"
+
 msgid "Select which of your characters you want to access"
 msgstr "Vyberte, ke které z vašich postav chcete získat přístup"
 
@@ -5396,6 +5414,9 @@ msgstr "V posledním kroku vás požádáme o vyplnění vašeho profilu"
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr "Vybraný příspěvek %(user)s pro %(recipient)s"
 
+msgid "Description of the role of the character in the plot"
+msgstr "Popis role postavy v ději"
+
 msgid "If checked: shows the list of authors for each event"
 msgstr "Pokud je zaškrtnuto: zobrazí seznam autorů pro každou událost"
 
@@ -5448,6 +5469,9 @@ msgstr "(Nepovinné) Jméno postavy, které se přiřadí hráči"
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Předvolby obsazení uložené na '%(type)s' pro %(event)s"
+
+msgid "Description of the relationship from source to target"
+msgstr "Popis vztahu mezi zdrojem a cílem"
 
 msgid "Differing by only one character from the expected one"
 msgstr "lišící se pouze o jeden znak od očekávaného znaku"
@@ -5647,9 +5671,6 @@ msgstr "Tato stránka umožňuje přidat nebo upravit přihlášení k tomuto b�
 msgid "This page shows all expense items recorded in the system"
 msgstr ""
 "Tato stránka zobrazuje všechny nákladové položky zaznamenané v systému"
-
-msgid "Those names must match with the field configured in the "
-msgstr "Tyto názvy se musí shodovat s poli nakonfigurovanými v poli"
 
 msgid "Content of mail reminding players to pay their signup fee"
 msgstr ""
@@ -6201,9 +6222,6 @@ msgstr ""
 "Minimální částka čistého zisku, která má být ponechána pro účely daně ze "
 "sdružení"
 
-msgid "The only mandatory column is for the *name*, the other are optional"
-msgstr "Jediný povinný sloupec je *jméno*, ostatní jsou nepovinné"
-
 msgid "The searched object does not exist, perhaps it was recently deleted"
 msgstr "Hledaný objekt neexistuje, možná byl nedávno odstraněn"
 
@@ -6362,6 +6380,10 @@ msgstr "Na této stránce jsou uvedeny informace k provedení losování"
 
 msgid "This page summarizes the types of abilities that players can purchase"
 msgstr "Tato stránka shrnuje typy dovedností, které si hráči mohou zakoupit"
+
+msgid "To upload relationships, add a second file with the following columns"
+msgstr ""
+"Chcete-li nahrát vztahy, přidejte druhý soubor s následujícími sloupci"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Dosáhli jste maximálního počtu znaků, které lze vytvořit"
@@ -6723,11 +6745,6 @@ msgid ""
 msgstr ""
 "spravuje žetony, které hráči používají k úhradě registračních poplatků za "
 "všechny události"
-
-msgid ""
-"The player's email (if not found in the system, a new user will be created)"
-msgstr ""
-"E-mail hráče (pokud není v systému nalezen, bude vytvořen nový uživatel)"
 
 msgid ""
 "This page allows you to add or modify a form question for a writing element"
@@ -7151,13 +7168,6 @@ msgid ""
 msgstr ""
 "Nastavuje četnost zasílání e-mailů s připomenutím v dnech (pokud není "
 "nastaveno, nejsou zasílány žádné e-maily)"
-
-msgid ""
-"Then you can add columns, whose name must match with the field configured in"
-" the "
-msgstr ""
-"Poté můžete přidat sloupce, jejichž název se musí shodovat s polem "
-"nakonfigurovaným v položce"
 
 msgid ""
 "To register for the event, please fill in the following form and click on "
@@ -7719,6 +7729,13 @@ msgstr ""
 "poplatek ve výši"
 
 msgid ""
+"To upload role of the characters in the plots, add a second file with the "
+"following columns"
+msgstr ""
+"Chcete-li nahrát roli postav v pozemcích, přidejte druhý soubor s "
+"následujícími sloupci"
+
+msgid ""
 "Unfortunately, without full payment of the fee, participation in the event "
 "is not permitted"
 msgstr "Bez uhrazení celého poplatku není bohužel účast na akci povolena"
@@ -8044,6 +8061,13 @@ msgid ""
 msgstr ""
 "Na této stránce jsou shrnuty role, které je třeba přiřadit, aby bylo možné "
 "používat funkce týkající se události"
+
+msgid ""
+"You can optionally add columns for the registration questions, allowed "
+"values for the header are"
+msgstr ""
+"Volitelně můžete přidat sloupce pro registrační otázky, povolené hodnoty pro"
+" záhlaví jsou tyto"
 
 msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
@@ -9169,6 +9193,13 @@ msgid ""
 msgstr ""
 "Jedná se o přihlášení k události, za kterou jste odeslali platbu a kterou "
 "právě kontrolují pracovníci. V tuto chvíli nemusíte nic dělat"
+
+msgid ""
+"To add a registration to a player, they must have consented to share their "
+"data with your organization; otherwise, their entry will be skipped"
+msgstr ""
+"Chcete-li přidat registraci hráče, musí souhlasit se sdílením svých údajů s "
+"vaší organizací, jinak bude jeho záznam přeskočen"
 
 msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "

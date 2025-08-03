@@ -32,7 +32,6 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
 from larpmanager.cache.text_fields import get_cache_text_field
-from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, Trait
 from larpmanager.models.event import ProgressStep
@@ -160,7 +159,6 @@ def writing_list(request, ctx, typ, nm):
     if request.method == "POST":
         return writing_post(request, ctx, typ, nm)
 
-    ctx["form"] = UploadElementsForm()
     ev = ctx["event"]
 
     ctx["nm"] = nm

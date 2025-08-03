@@ -1866,9 +1866,6 @@ msgstr "formulario no válido"
 msgid "user profile"
 msgstr "perfil de usuario"
 
-msgid "writing form"
-msgstr "formulario de escritura"
-
 #, python-format
 msgid " for %(user)s"
 msgstr " para %(user)s"
@@ -2417,6 +2414,9 @@ msgstr "¡Que gane el mejor"
 msgid "Member approved!"
 msgstr "¡Miembro aprobado!"
 
+msgid "Name of the plot"
+msgstr "Nombre de la parcela"
+
 msgid "No comunications"
 msgstr "No hay comunicaciones"
 
@@ -2672,9 +2672,6 @@ msgstr "ya entregado"
 msgid "download document"
 msgstr "descargar documento"
 
-msgid "registration form"
-msgstr "formulario de inscripción"
-
 msgid "this is important"
 msgstr "esto es importante"
 
@@ -2686,6 +2683,9 @@ msgstr "Activación de la cuenta"
 
 msgid "Additional tickets"
 msgstr "Entradas adicionales"
+
+msgid "Allowed values are"
+msgstr "Los valores permitidos son"
 
 msgid "Approved character"
 msgstr "Carácter aprobado"
@@ -2761,6 +2761,9 @@ msgstr "Establecer tipos de búsqueda"
 
 msgid "Show cancellations"
 msgstr "Mostrar cancelaciones"
+
+msgid "The player's email"
+msgstr "Correo electrónico del jugador"
 
 msgid "Total payment sent"
 msgstr "Pago total enviado"
@@ -3081,6 +3084,9 @@ msgstr "Si está ausente, indique 0"
 
 msgid "Manage in-game issues"
 msgstr "Gestionar los problemas del juego"
+
+msgid "Name of the character"
+msgstr "Nombre del personaje"
 
 msgid "New character created"
 msgstr "¡Nuevo personaje creado"
@@ -3719,6 +3725,9 @@ msgstr "Solicitud de afiliación enviada"
 msgid "Player customisation updated"
 msgstr "Personalización de los jugadores actualizada"
 
+msgid "The only mandatory column is"
+msgstr "La única columna obligatoria es"
+
 #, python-format
 msgid "Trait assigned for %(event)s"
 msgstr "Rasgo asignado para %(event)s"
@@ -3789,6 +3798,9 @@ msgstr "Seleccione el evento de esta carrera"
 
 msgid "Select the new ability to get"
 msgstr "Selecciona la nueva habilidad"
+
+msgid "The other fields are optional"
+msgstr "Los demás campos son opcionales"
 
 msgid "The total registration fee is"
 msgstr "La cuota total de inscripción es de"
@@ -4822,6 +4834,9 @@ msgstr "¿Quieres que se te reembolse? Abrir una nueva"
 msgid "Elements you wish to avoid in the assignment"
 msgstr "Elementos que desea evitar en la tarea"
 
+msgid "First character in the relationship (origin)"
+msgstr "Primer personaje de la relación (origen)"
+
 msgid "If checked: shows the tagline for each event"
 msgstr "Si está marcada: muestra el eslogan de cada evento"
 
@@ -5285,6 +5300,9 @@ msgstr "Gestionar las etapas de progreso de los elementos de escritura"
 msgid "Maximum number of characters the player can create"
 msgstr "Número máximo de personajes que puede crear el jugador"
 
+msgid "Second character in the relationship (destination)"
+msgstr "Segundo carácter de la relación (destino)"
+
 msgid "Select which of your characters you want to access"
 msgstr "Selecciona a cuál de tus personajes quieres acceder"
 
@@ -5397,6 +5415,9 @@ msgstr "Como último paso, le pedimos que complete su perfil"
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr "Contribución recaudada de %(user)s para %(recipient)s"
 
+msgid "Description of the role of the character in the plot"
+msgstr "Descripción del papel del personaje en la trama"
+
 msgid "If checked: shows the list of authors for each event"
 msgstr "Si está marcada: muestra la lista de autores de cada evento"
 
@@ -5448,6 +5469,9 @@ msgstr "(Opcional) El nombre del personaje a asignar al jugador"
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Preferencias de reparto guardadas en '%(type)s' para %(event)s"
+
+msgid "Description of the relationship from source to target"
+msgstr "Descripción de la relación entre el origen y el destino"
 
 msgid "Differing by only one character from the expected one"
 msgstr "Sólo difiere en un carácter del esperado"
@@ -5662,9 +5686,6 @@ msgstr "Esta página le permite añadir o editar una inscripción a esta carrera
 msgid "This page shows all expense items recorded in the system"
 msgstr ""
 "Esta página muestra todas las partidas de gastos registradas en el sistema"
-
-msgid "Those names must match with the field configured in the "
-msgstr "Estos nombres deben coincidir con el campo configurado en el campo"
 
 msgid "Content of mail reminding players to pay their signup fee"
 msgstr "Contenido del correo recordatorio del pago de la cuota de inscripción"
@@ -6288,10 +6309,6 @@ msgstr ""
 "Importe mínimo del beneficio neto que debe retenerse para el impuesto de "
 "asociación"
 
-msgid "The only mandatory column is for the *name*, the other are optional"
-msgstr ""
-"La única columna obligatoria es la del *nombre*, las demás son opcionales"
-
 msgid "The searched object does not exist, perhaps it was recently deleted"
 msgstr "El objeto buscado no existe, ¿quizás ha sido borrado recientemente"
 
@@ -6475,6 +6492,10 @@ msgid "This page summarizes the types of abilities that players can purchase"
 msgstr ""
 "Esta página muestra los tipos de habilidades que los jugadores pueden "
 "comprar"
+
+msgid "To upload relationships, add a second file with the following columns"
+msgstr ""
+"Para cargar relaciones, añada un segundo archivo con las siguientes columnas"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Ha alcanzado el número máximo de caracteres que se pueden crear"
@@ -6878,12 +6899,6 @@ msgid ""
 msgstr ""
 "Gestiona las fichas utilizadas por los jugadores para cubrir la cuota de "
 "inscripción en todos los eventos"
-
-msgid ""
-"The player's email (if not found in the system, a new user will be created)"
-msgstr ""
-"Correo electrónico del jugador (si no se encuentra en el sistema, se creará "
-"un nuevo usuario)"
 
 msgid ""
 "This page allows you to add or modify a form question for a writing element"
@@ -7346,13 +7361,6 @@ msgid ""
 msgstr ""
 "Establece la frecuencia de envío de los correos electrónicos recordatorios, "
 "en días (si no se establece, no se envía ningún correo electrónico)"
-
-msgid ""
-"Then you can add columns, whose name must match with the field configured in"
-" the "
-msgstr ""
-"A continuación, puede añadir columnas, cuyo nombre debe coincidir con el "
-"campo configurado en el campo"
 
 msgid ""
 "To register for the event, please fill in the following form and click on "
@@ -7949,6 +7957,13 @@ msgstr ""
 "afiliación de"
 
 msgid ""
+"To upload role of the characters in the plots, add a second file with the "
+"following columns"
+msgstr ""
+"Para cargar el papel de los personajes en las tramas, añada un segundo "
+"archivo con las siguientes columnas"
+
+msgid ""
 "Unfortunately, without full payment of the fee, participation in the event "
 "is not permitted"
 msgstr ""
@@ -8282,6 +8297,13 @@ msgid ""
 msgstr ""
 "Esta página muestra los cargos que pueden asignarse para utilizar las "
 "funciones relativas al evento"
+
+msgid ""
+"You can optionally add columns for the registration questions, allowed "
+"values for the header are"
+msgstr ""
+"Puede añadir opcionalmente columnas para las preguntas de registro, los "
+"valores permitidos para la cabecera son"
 
 msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
@@ -9434,6 +9456,14 @@ msgstr ""
 "Estas son las inscripciones a eventos para las que has enviado un pago, y "
 "están siendo revisadas por el personal. No tienes que hacer nada en este "
 "momento"
+
+msgid ""
+"To add a registration to a player, they must have consented to share their "
+"data with your organization; otherwise, their entry will be skipped"
+msgstr ""
+"Para añadir una inscripción a un jugador, éste debe haber dado su "
+"consentimiento para compartir sus datos con su organización; de lo "
+"contrario, se omitirá su inscripción"
 
 msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "

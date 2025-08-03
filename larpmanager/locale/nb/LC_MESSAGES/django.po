@@ -1866,9 +1866,6 @@ msgstr "ugyldig skjema"
 msgid "user profile"
 msgstr "brukerprofil"
 
-msgid "writing form"
-msgstr "skriveform"
-
 #, python-format
 msgid " for %(user)s"
 msgstr " for %(user)s"
@@ -2417,6 +2414,9 @@ msgstr "Måtte den beste vinne"
 msgid "Member approved!"
 msgstr "Medlem godkjent!"
 
+msgid "Name of the plot"
+msgstr "Navn på tomten"
+
 msgid "No comunications"
 msgstr "Ingen kommunikasjon"
 
@@ -2672,9 +2672,6 @@ msgstr "allerede levert"
 msgid "download document"
 msgstr "Last ned dokumentet"
 
-msgid "registration form"
-msgstr "registreringsskjema"
-
 msgid "this is important"
 msgstr "dette er viktig"
 
@@ -2686,6 +2683,9 @@ msgstr "Aktivering av konto"
 
 msgid "Additional tickets"
 msgstr "Ekstra billetter"
+
+msgid "Allowed values are"
+msgstr "Tillatte verdier er"
 
 msgid "Approved character"
 msgstr "Godkjent karakter"
@@ -2761,6 +2761,9 @@ msgstr "Sett opp oppdragstyper"
 
 msgid "Show cancellations"
 msgstr "Avlysninger av forestillinger"
+
+msgid "The player's email"
+msgstr "Spillerens e-postadresse"
 
 msgid "Total payment sent"
 msgstr "Total innbetaling sendt"
@@ -3081,6 +3084,9 @@ msgstr "Hvis fraværende, angi 0"
 
 msgid "Manage in-game issues"
 msgstr "Håndtere problemer i spillet"
+
+msgid "Name of the character"
+msgstr "Navnet på karakteren"
 
 msgid "New character created"
 msgstr "Ny karakter opprettet"
@@ -3719,6 +3725,9 @@ msgstr "Forespørsel om underdanig medlem"
 msgid "Player customisation updated"
 msgstr "Spillertilpasning oppdatert"
 
+msgid "The only mandatory column is"
+msgstr "Den eneste obligatoriske kolonnen er"
+
 #, python-format
 msgid "Trait assigned for %(event)s"
 msgstr "Egenskap tildelt for %(event)s"
@@ -3789,6 +3798,9 @@ msgstr "Velg hendelsen for denne kjøringen"
 
 msgid "Select the new ability to get"
 msgstr "Velg den nye ferdigheten som skal tilegnes"
+
+msgid "The other fields are optional"
+msgstr "De andre feltene er valgfrie"
 
 msgid "The total registration fee is"
 msgstr "Den totale deltakeravgiften er"
@@ -4825,6 +4837,9 @@ msgstr "Ønsker du å bli refundert? Åpne en ny"
 msgid "Elements you wish to avoid in the assignment"
 msgstr "Elementer du ønsker å unngå i oppgaven"
 
+msgid "First character in the relationship (origin)"
+msgstr "Første person i forholdet (opprinnelse)"
+
 msgid "If checked: shows the tagline for each event"
 msgstr "Hvis avkrysset: viser tagline for hvert arrangement"
 
@@ -5287,6 +5302,9 @@ msgstr "Administrer fremdriftstrinnene for skriveelementene"
 msgid "Maximum number of characters the player can create"
 msgstr "Maksimalt antall karakterer spilleren kan skape"
 
+msgid "Second character in the relationship (destination)"
+msgstr "Andre tegn i relasjonen (destinasjon)"
+
 msgid "Select which of your characters you want to access"
 msgstr "Velg hvilke av tegnene dine du vil ha tilgang til"
 
@@ -5398,6 +5416,9 @@ msgstr "Til slutt ber vi deg om å fylle ut profilen din"
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr "Innsamlet bidrag fra %(user)s for %(recipient)s"
 
+msgid "Description of the role of the character in the plot"
+msgstr "Beskrivelse av karakterens rolle i handlingen"
+
 msgid "If checked: shows the list of authors for each event"
 msgstr "Hvis avkrysset: viser listen over forfattere for hvert arrangement"
 
@@ -5450,6 +5471,9 @@ msgstr "(Valgfritt) Karakternavnet som skal tildeles spilleren"
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Casting-preferanser lagret på '%(type)s' for %(event)s"
+
+msgid "Description of the relationship from source to target"
+msgstr "Beskrivelse av forholdet fra kilde til mål"
 
 msgid "Differing by only one character from the expected one"
 msgstr "Avviker med bare ett tegn fra det forventede"
@@ -5651,9 +5675,6 @@ msgstr ""
 
 msgid "This page shows all expense items recorded in the system"
 msgstr "Denne siden viser alle utgiftsposter som er registrert i systemet"
-
-msgid "Those names must match with the field configured in the "
-msgstr "Disse navnene må stemme overens med feltet som er konfigurert i"
 
 msgid "Content of mail reminding players to pay their signup fee"
 msgstr ""
@@ -6258,9 +6279,6 @@ msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
 "Minimumsbeløp av nettoresultatet som skal tilbakeholdes til foreningsskatt"
 
-msgid "The only mandatory column is for the *name*, the other are optional"
-msgstr "Den eneste obligatoriske kolonnen er for *navn*, de andre er valgfrie"
-
 msgid "The searched object does not exist, perhaps it was recently deleted"
 msgstr "Det søkte objektet finnes ikke, kanskje det nylig ble slettet"
 
@@ -6428,6 +6446,10 @@ msgstr "Denne siden viser informasjonen for å utføre loddtrekningen"
 msgid "This page summarizes the types of abilities that players can purchase"
 msgstr ""
 "Denne siden oppsummerer hvilke typer ferdigheter som kan kjøpes av spillere"
+
+msgid "To upload relationships, add a second file with the following columns"
+msgstr ""
+"For å laste opp relasjoner legger du til en ny fil med følgende kolonner"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Du har nådd det maksimale antallet tegn som kan opprettes"
@@ -6802,12 +6824,6 @@ msgid ""
 msgstr ""
 "Administrerer poletter som brukes av spillerne for å dekke "
 "påmeldingsavgiften for alle arrangementer"
-
-msgid ""
-"The player's email (if not found in the system, a new user will be created)"
-msgstr ""
-"Spillerens e-postadresse (hvis den ikke finnes i systemet, opprettes en ny "
-"bruker)"
 
 msgid ""
 "This page allows you to add or modify a form question for a writing element"
@@ -7257,13 +7273,6 @@ msgid ""
 msgstr ""
 "Angir hvor ofte påminnelses-e-poster skal sendes, i dager (hvis ikke angitt,"
 " sendes ingen e-poster)"
-
-msgid ""
-"Then you can add columns, whose name must match with the field configured in"
-" the "
-msgstr ""
-"Deretter kan du legge til kolonner, hvis navn må stemme overens med feltet "
-"som er konfigurert i"
 
 msgid ""
 "To register for the event, please fill in the following form and click on "
@@ -7848,6 +7857,13 @@ msgstr ""
 "medlemsavgiften på"
 
 msgid ""
+"To upload role of the characters in the plots, add a second file with the "
+"following columns"
+msgstr ""
+"For å laste opp rollene til personene i plottene, legger du til en ny fil "
+"med følgende kolonner"
+
+msgid ""
 "Unfortunately, without full payment of the fee, participation in the event "
 "is not permitted"
 msgstr ""
@@ -8179,6 +8195,13 @@ msgid ""
 msgstr ""
 "Denne siden oppsummerer rollene som må tildeles for å kunne bruke "
 "funksjonene som gjelder arrangementet"
+
+msgid ""
+"You can optionally add columns for the registration questions, allowed "
+"values for the header are"
+msgstr ""
+"Du kan eventuelt legge til kolonner for registreringsspørsmålene. Tillatte "
+"verdier for overskriften er"
 
 msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
@@ -9316,6 +9339,14 @@ msgstr ""
 "Dette er påmeldingen til arrangementet du har sendt inn betaling for, og den"
 " blir nå gjennomgått av personalet. Du trenger ikke å gjøre noe på dette "
 "tidspunktet"
+
+msgid ""
+"To add a registration to a player, they must have consented to share their "
+"data with your organization; otherwise, their entry will be skipped"
+msgstr ""
+"For å legge til en registrering for en spiller, må vedkommende ha samtykket "
+"til å dele dataene sine med organisasjonen din, ellers vil registreringen "
+"bli hoppet over"
 
 msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "
