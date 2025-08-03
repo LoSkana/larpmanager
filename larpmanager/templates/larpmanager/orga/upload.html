@@ -4,241 +4,145 @@
     {% trans "Upload" %} - {{ run }}
 {% endblock title %}
 {% block content %}
-    {% trans "You can upload data directly from CSV file" %}.
     <br />
-    <br />
-    {% if typ == 'registrations' %}
-        {% trans "The first line of the file must contain the column names, see the descriptions below" %}:
-        <br />
-        <br />
+    <p>{% trans "You can upload data directly from CSV file" %}.</p>
+    {% if typ == 'registration' %}
+        <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
         <table class="no_csv">
-            <tr>
-                <th>
-                    <h3>player</h3>
-                </th>
-                <td>
-                    {% trans "The player's email. If not found in the system, a new user will be created" %}
-                    <i>({% trans "If the player is already registered, their information will be updated" %})</i>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>ticket</h3>
-                </th>
-                <td>
-                    {% trans "The name of the ticket" %}
-                    <i>({% trans "If it doesn't exist, it will be created" %})</i>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>character</h3>
-                </th>
-                <td>{% trans "(Optional) The character name to assign to the player" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>donation</h3>
-                </th>
-                <td>{% trans "(Optional) The amount of a voluntary donation" %}</td>
-            </tr>
+            {% for column, description in columns.0.items %}
+                <tr>
+                    <th>
+                        <h3>{{ column | safe }}</h3>
+                    </th>
+                    <td>{{ description | safe }}</td>
+                </tr>
+            {% endfor %}
         </table>
+        {% if fields %}
+            <p>
+                {% trans "You can optionally add columns for the registration questions, allowed values for the header are" %}:
+                {% for field in fields %}
+                    {% include "elements/comma.html" %}
+                    "{{ field }}"
+                {% endfor %}
+                .
+            </p>
+        {% endif %}
+        <p>
+            <i>{% trans "Note that existing registrations with the same player email, will be overwritten with the uploaded data" %}.</i>
+        </p>
+        <p>
+            <b>{% trans "To add a registration to a player, they must have consented to share their data with your organization; otherwise, their entry will be skipped" %}.</b>
+        </p>
     {% elif typ == 'registration_form' %}
-        {% trans "The first line of the file must contain the column names, see the descriptions below" %}:
-        <br />
-        <br />
+        <h2>{% trans "Questions" %}</h2>
+        <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
         <table class="no_csv">
-            <tr>
-                <th>
-                    <h3>display</h3>
-                </th>
-                <td>
-                    {% trans "The question name" %}
-                    <i>({% trans "If already existing, the information will be replaced; if not, will be created" %})</i>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>typ</h3>
-                </th>
-                <td>
-                    {% trans "The type of the question" %}
-                    <i>({% trans "'s' for single choice, 'm' for multiple choice, 't' for short text, 'p' for long text" %})</i>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>description</h3>
-                </th>
-                <td>{% trans "Optional - Extended description (displayed in small gray text)" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>status</h3>
-                </th>
-                <td>
-                    {% trans "The question status" %}
-                    <i>({% trans "'o' for optional, 'm' for mandatory, 'd' for disabled, 'h' for hidden" %})</i>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>max_length</h3>
-                </th>
-                <td>
-                    {% trans "Optional - For text questions, maximum number of characters; For multiple options, maximum number of options (0 = no limit)" %}
-                </td>
-            </tr>
+            {% for column, description in columns.0.items %}
+                <tr>
+                    <th>
+                        <h3>{{ column | safe }}</h3>
+                    </th>
+                    <td>{{ description | safe }}</td>
+                </tr>
+            {% endfor %}
         </table>
-        {% trans "You can also upload a second file with the registration options" %}:
-        <br />
-        <br />
+        <hr />
+        <h2>{% trans "Options" %}</h2>
+        <p>{% trans "You can also upload a second file with the registration options" %}:</p>
         <table class="no_csv">
-            <tr>
-                <th>
-                    <h3>question</h3>
-                </th>
-                <td>
-                    {% trans "The name of the question this option belongs to" %}
-                    <i>({% trans "If not found, the option will be skipped" %})</i>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>name</h3>
-                </th>
-                <td>{% trans "The name of the option" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>description</h3>
-                </th>
-                <td>{% trans "Optional – Additional information about the option, displayed below the question" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>price</h3>
-                </th>
-                <td>{% trans "Optional – Amount added to the registration fee if selected (0 = no extra cost)" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>max_available</h3>
-                </th>
-                <td>{% trans "Optional – Maximum number of times it can be selected across all registrations (0 = unlimited)" %}</td>
-            </tr>
+            {% for column, description in columns.1.items %}
+                <tr>
+                    <th>
+                        <h3>{{ column | safe }}</h3>
+                    </th>
+                    <td>{{ description | safe }}</td>
+                </tr>
+            {% endfor %}
         </table>
+        <hr />
+        <p>
+            <i>{% trans "Note that existing elements with the same name, will be overwritten with the uploaded data" %}.</i>
+        </p>
     {% elif typ == 'character_form' %}
-        {% trans "The first line of the file must contain the column names, see the descriptions below" %}:
-        <br />
-        <br />
+        <h2>{% trans "Questions" %}</h2>
+        <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
         <table class="no_csv">
-            <tr>
-                <th>
-                    <h3>name</h3>
-                </th>
-                <td>
-                    {% trans "The question name" %}
-                    <i>({% trans "If already existing, the information will be replaced; if not, will be created" %})</i>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>typ</h3>
-                </th>
-                <td>
-                    {% trans "The type of the question" %}
-                    <i>({% trans "'s' for single choice, 'm' for multiple choice, 't' for short text, 'p' for long text" %})</i>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>description</h3>
-                </th>
-                <td>{% trans "Optional - Extended description (displayed in small gray text)" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>status</h3>
-                </th>
-                <td>
-                    {% trans "The question status" %}
-                    <i>({% trans "'o' for optional, 'm' for mandatory, 'd' for disabled, 'h' for hidden" %})</i>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>max_length</h3>
-                </th>
-                <td>
-                    {% trans "Optional - For text questions, maximum number of characters; For multiple options, maximum number of options (0 = no limit)" %}
-                </td>
-            </tr>
+            {% for column, description in columns.0.items %}
+                <tr>
+                    <th>
+                        <h3>{{ column | safe }}</h3>
+                    </th>
+                    <td>{{ description | safe }}</td>
+                </tr>
+            {% endfor %}
         </table>
-        key = ["name", "typ", "description", "status", "applicable", "visibility", "max_length"]
-        {% trans "You can also upload a second file with the registration options" %}:
-        <br />
-        <br />
+        <hr />
+        <h2>{% trans "Options" %}</h2>
+        <p>{% trans "You can also upload a second file with the registration options" %}:</p>
         <table class="no_csv">
-            <tr>
-                <th>
-                    <h3>question</h3>
-                </th>
-                <td>
-                    {% trans "The name of the question this option belongs to" %}
-                    <i>({% trans "If not found, the option will be skipped" %})</i>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>name</h3>
-                </th>
-                <td>{% trans "The name of the option" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>description</h3>
-                </th>
-                <td>{% trans "Optional – Additional information about the option, displayed below the question" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>price</h3>
-                </th>
-                <td>{% trans "Optional – Amount added to the registration fee if selected (0 = no extra cost)" %}</td>
-            </tr>
-            <tr>
-                <th>
-                    <h3>max_available</h3>
-                </th>
-                <td>{% trans "Optional – Maximum number of times it can be selected across all registrations (0 = unlimited)" %}</td>
-            </tr>
+            {% for column, description in columns.1.items %}
+                <tr>
+                    <th>
+                        <h3>{{ column | safe }}</h3>
+                    </th>
+                    <td>{{ description | safe }}</td>
+                </tr>
+            {% endfor %}
         </table>
-        ctx["upload"] = (
-        _(
-        "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short text, 'p' for long text, 'e' for editor)"
-        )
-        + ", "
-        )
-        ctx["upload"] += _("display (question text)") + ", " + _("description (application description)") + ", "
-        ctx["upload"] += (
-        _("status of application: 'o' for optional, 'm' mandatory, 'c' creation, 'd' disabled, 'h' hidden") + ", "
-        )
-        ctx["upload"] += _("visibility (demand visibility: 's' for Searchable, 'c' for Public, 'e' for Private") + ", "
-        ctx["upload"] += (
-        _("options (number of options)")
-        + ", "
-        + _(
-        "for each option five columns: name, description, available seats (0 for "
-        "infinite), prerequisite options, ticket required"
-        )
-        )
+        <hr />
+        <p>
+            <i>{% trans "Note that existing elements with the same name, will be overwritten with the uploaded data" %}.</i>
+        </p>
     {% else %}
-        {% trans "The first line are the field names, such as 'number', 'name', 'presentation', 'text'. (Only 'number' is required)" %}
-        <br />
+        <h2>{{ typ | title }}</h2>
+        <p>{% trans "The first line of the file are the field names that you want to upload" %}.</p>
+        <p>
+            {% trans "Allowed values are" %}:
+            {% for field in fields %}
+                {% include "elements/comma.html" %}
+                "{{ field }}"
+            {% endfor %}
+            .
+        </p>
+        <p>
+            {% trans "The only mandatory column is" %} "{{ field_name }}".
+            {% trans "The other fields are optional" %}.
+        </p>
+        <p>
+            <i>{% trans "Note that existing elements with the same name, will be overwritten with the uploaded data" %}.</i>
+        </p>
+        {% if typ == 'character' and features.relationships %}
+            <h2>{% trans "Relationships" %}</h2>
+            <p>{% trans "To upload relationships, add a second file with the following columns" %}</p>
+            <table>
+                {% for column, description in columns.0.items %}
+                    <tr>
+                        <th>
+                            <h3>{{ column | safe }}</h3>
+                        </th>
+                        <td>{{ description | safe }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% elif typ == 'plot' %}
+            <h2>{% trans "Roles" %}</h2>
+            <p>{% trans "To upload role of the characters in the plots, add a second file with the following columns" %}</p>
+            <table>
+                {% for column, description in columns.0.items %}
+                    <tr>
+                        <th>
+                            <h3>{{ column | safe }}</h3>
+                        </th>
+                        <td>{{ description | safe }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
     {% endif %}
-    {% trans "To download a sample file, click here" %}.
-    # TODO link with typ
+    <p>
+        <a href="{% url 'orga_upload_template' event.slug run.number typ %}">{% trans "Download example template" %}</a>
+    </p>
     <br />
     <br />
     {% trans "Select the files to upload (must be in CSV format, encoded in UTF-8)" %}:
@@ -246,7 +150,43 @@
           enctype="multipart/form-data"
           method="post">
         {% csrf_token %}
-        {{ form.elem }}
+        {% if typ == 'registration' %}
+            <table>
+                <tr>
+                    <th>{% trans "Registrations" %}</th>
+                    <td>{{ form.first }}</td>
+                </tr>
+            </table>
+        {% elif typ == 'registration_form' or typ == 'character_form' %}
+            <table>
+                <tr>
+                    <th>{% trans "Questions" %}</th>
+                    <td>{{ form.first }}</td>
+                </tr>
+                <tr>
+                    <th>{% trans "Options" %}</th>
+                    <td>{{ form.second }}</td>
+                </tr>
+            </table>
+        {% else %}
+            <table>
+                <tr>
+                    <th>{{ typ | title }}</th>
+                    <td>{{ form.first }}</td>
+                </tr>
+                {% if typ == 'character' and features.relationships %}
+                    <tr>
+                        <th>{% trans "Relationships" %}</th>
+                        <td>{{ form.second }}</td>
+                    </tr>
+                {% elif typ == 'plot' %}
+                    <tr>
+                        <th>{% trans "Roles" %}</th>
+                        <td>{{ form.second }}</td>
+                    </tr>
+                {% endif %}
+            </table>
+        {% endif %}
         <br />
         <input type="hidden" name="upload" value="elements">
         <input type="submit" value="Submit">

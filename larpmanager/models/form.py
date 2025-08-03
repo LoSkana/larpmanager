@@ -82,6 +82,16 @@ class QuestionType(models.TextChoices):
             QuestionType.EDITOR,
         }
 
+    @classmethod
+    def get_mapping(cls):
+        return {
+            QuestionType.SINGLE: "single-choice",
+            QuestionType.MULTIPLE: "multi-choice",
+            QuestionType.TEXT: "short-text",
+            QuestionType.PARAGRAPH: "long-text",
+            QuestionType.EDITOR: "advanced",
+        }
+
 
 class QuestionStatus(models.TextChoices):
     OPTIONAL = "o", _("Optional")
@@ -89,12 +99,30 @@ class QuestionStatus(models.TextChoices):
     DISABLED = "d", _("Disabled")
     HIDDEN = "h", _("Hidden")
 
+    @classmethod
+    def get_mapping(cls):
+        return {
+            QuestionStatus.OPTIONAL: "optional",
+            QuestionStatus.MANDATORY: "mandatory",
+            QuestionStatus.DISABLED: "disabled",
+            QuestionStatus.HIDDEN: "hidden",
+        }
+
 
 class QuestionVisibility(models.TextChoices):
     SEARCHABLE = "s", _("Searchable")
     PUBLIC = "c", _("Public")
     PRIVATE = "e", _("Private")
     HIDDEN = "h", _("Hidden")
+
+    @classmethod
+    def get_mapping(cls):
+        return {
+            QuestionVisibility.SEARCHABLE: "searchable",
+            QuestionVisibility.PUBLIC: "public",
+            QuestionVisibility.PRIVATE: "private",
+            QuestionVisibility.HIDDEN: "hidden",
+        }
 
 
 class QuestionApplicable(models.TextChoices):
@@ -116,6 +144,10 @@ class QuestionApplicable(models.TextChoices):
         # noinspection PyUnresolvedReferences
         model_name = QuestionApplicable(typ).label.lower()
         return apps.get_model("larpmanager", model_name)
+
+    @classmethod
+    def get_mapping(cls):
+        return {value: label for value, label in cls.choices}
 
 
 class WritingQuestion(BaseModel):

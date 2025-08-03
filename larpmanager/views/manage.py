@@ -120,8 +120,18 @@ def _exe_manage(request):
 
 
 def _exe_suggestions(ctx):
-    suggestions = {
+    assoc = Association.objects.get(pk=ctx["a_id"])
+
+    priorities = {
         "exe_quick": _("Quickly configure your organization's most important settings"),
+    }
+
+    for perm, text in priorities.items():
+        if assoc.get_config(f"{perm}_suggestion"):
+            continue
+        _add_priority(ctx, text, perm)
+
+    suggestions = {
         "exe_payment_details": _("Set up the payment methods available to players"),
         "exe_profile": _("Define which data will be asked in the profile form to the users once they sign up"),
         "exe_roles": _(
@@ -588,9 +598,17 @@ def _orga_reg_actions(ctx, features):
 
 
 def _orga_suggestions(ctx):
-    suggestions = {
+    priorities = {
         "orga_quick": _("Quickly configure your events's most important settings"),
         "orga_registration_tickets": _("Set up the tickets that users can select during registration"),
+    }
+
+    for perm, text in priorities.items():
+        if ctx["event"].get_config(f"{perm}_suggestion"):
+            continue
+        _add_priority(ctx, text, perm)
+
+    suggestions = {
         "orga_registration_form": _(
             "Define the registration form, and set up any number of registration questions and their options"
         ),

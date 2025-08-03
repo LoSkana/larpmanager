@@ -70,14 +70,15 @@ window.addEventListener('DOMContentLoaded', function() {
             if (auto) {
                 if (res.warn) {
                     $.toast({
-                        text: res.warn,
-                        showHideTransition: 'slide',
-                        icon: 'error',
-                        position: 'mid-center',
-                        textAlign: 'center',
-                        allowToastClose: true,
-                        hideAfter: false
-                    });
+                            text: res.warn,
+                            showHideTransition: 'slide',
+                            icon: 'error',
+                            position: 'mid-center',
+                            textAlign: 'center',
+                            allowToastClose: true,
+                            hideAfter: false,
+                            stack: 1
+                        });
                 }
                 return;
             }

@@ -2414,6 +2414,9 @@ msgstr "Moge de beste winnen"
 msgid "Member approved!"
 msgstr "Lid goedgekeurd!"
 
+msgid "Name of the plot"
+msgstr "Naam van het perceel"
+
 msgid "No comunications"
 msgstr "Geen communicatie"
 
@@ -2681,6 +2684,9 @@ msgstr "Account activeren"
 msgid "Additional tickets"
 msgstr "Extra tickets"
 
+msgid "Allowed values are"
+msgstr "Toegestane waarden zijn"
+
 msgid "Approved character"
 msgstr "Goedgekeurd karakter"
 
@@ -2755,6 +2761,9 @@ msgstr "Zoektochttypes instellen"
 
 msgid "Show cancellations"
 msgstr "Show annuleringen"
+
+msgid "The player's email"
+msgstr "E-mailadres van de speler"
 
 msgid "Total payment sent"
 msgstr "Totaal verzonden betaling"
@@ -2875,9 +2884,6 @@ msgstr "Resultaten niet aanwezig"
 
 msgid "Signup cancellation"
 msgstr "Abonnement opzeggen"
-
-msgid "The question status"
-msgstr "De vraagstatus"
 
 msgid "Treasury appointees"
 msgstr "Schatkistbeambten"
@@ -3078,6 +3084,9 @@ msgstr "Indien afwezig, geef 0 aan"
 
 msgid "Manage in-game issues"
 msgstr "Problemen in de game beheren"
+
+msgid "Name of the character"
+msgstr "Naam van het personage"
 
 msgid "New character created"
 msgstr "Nieuw personage gemaakt"
@@ -3426,9 +3435,6 @@ msgstr "Geheime registratie link"
 msgid "The subdomain identifier"
 msgstr "De identificatiecode van het subdomein"
 
-msgid "The type of the question"
-msgstr "Het type vraag"
-
 msgid "Try the sheet generation"
 msgstr "Probeer kaarten te genereren"
 
@@ -3446,6 +3452,9 @@ msgstr "momenteel niet zichtbaar"
 
 msgid "Choose the payment method"
 msgstr "Kies het betaalmiddel"
+
+msgid "Download example template"
+msgstr "Voorbeeldsjabloon downloaden"
 
 msgid "Go to the preferences for"
 msgstr "Ga naar voorkeuren voor"
@@ -3716,6 +3725,9 @@ msgstr "Verzoek onderdanig lid"
 msgid "Player customisation updated"
 msgstr "Spelersaanpassing bijgewerkt"
 
+msgid "The only mandatory column is"
+msgstr "De enige verplichte kolom is"
+
 #, python-format
 msgid "Trait assigned for %(event)s"
 msgstr "Toegewezen kenmerk voor %(event)s"
@@ -3786,6 +3798,9 @@ msgstr "Selecteer het evenement van deze run"
 
 msgid "Select the new ability to get"
 msgstr "Selecteer de nieuwe vaardigheid die je wilt leren"
+
+msgid "The other fields are optional"
+msgstr "De andere velden zijn optioneel"
 
 msgid "The total registration fee is"
 msgstr "Het totale inschrijfgeld is"
@@ -4387,11 +4402,11 @@ msgstr "Selecteer de organisatie om verder te gaan"
 msgid "Set up delivery for experience points"
 msgstr "Leveringen voor ervaringspunten instellen"
 
+msgid "The question type, allowed values are"
+msgstr "Het vraagtype, toegestane waarden zijn"
+
 msgid "This page shows cancelled enrollments"
 msgstr "Deze pagina geeft een overzicht van geannuleerde registraties"
-
-msgid "To download a sample file, click here"
-msgstr "Klik hier om een voorbeeldbestand te downloaden"
 
 msgid "Total amount refunded to participants"
 msgstr "Totaalbedrag terugbetaald aan deelnemers"
@@ -4480,9 +4495,6 @@ msgstr "Elektronica - computers, hitech, lampen"
 msgid "Enables free pre-registration to events"
 msgstr "Maakt gratis voorregistratie voor evenementen mogelijk"
 
-msgid "If it doesn't exist, it will be created"
-msgstr "Als het niet bestaat, wordt het aangemaakt"
-
 msgid "If you need help, remember to check out"
 msgstr "Als je hulp nodig hebt, ga dan naar"
 
@@ -4530,6 +4542,9 @@ msgstr "Inschrijfgeld, totaal te betalen"
 msgid "The number of payments to split the fee"
 msgstr "Het aantal termijnen dat moet worden betaald"
 
+msgid "The question status, allowed values are"
+msgstr "De vraagstatus, toegestane waarden zijn"
+
 msgid "This page shows inventory custody items"
 msgstr "Deze pagina toont items voor inventarisbewaring"
 
@@ -4541,6 +4556,9 @@ msgstr "Bekijk de lijst met personages en spelers"
 
 msgid "You are logged in with an email address"
 msgstr "U bent aangemeld met een e-mailadres"
+
+msgid "if it doesn't exist, it will be created"
+msgstr "als het niet bestaat, wordt het aangemaakt"
 
 msgid "Characters are not visible at the moment"
 msgstr "Personages zijn momenteel niet zichtbaar"
@@ -4819,6 +4837,9 @@ msgstr "Wil je een vergoeding? Open een nieuwe"
 
 msgid "Elements you wish to avoid in the assignment"
 msgstr "Elementen die je wilt vermijden in de opdracht"
+
+msgid "First character in the relationship (origin)"
+msgstr "Eerste personage in de relatie (oorsprong)"
 
 msgid "If checked: shows the tagline for each event"
 msgstr "Indien aangevinkt: toont de tagline voor elk evenement"
@@ -5288,6 +5309,9 @@ msgstr "De voortgangsstappen voor de schrijfelementen beheren"
 msgid "Maximum number of characters the player can create"
 msgstr "Maximum aantal personages dat de speler kan maken"
 
+msgid "Second character in the relationship (destination)"
+msgstr "Tweede teken in de relatie (bestemming)"
+
 msgid "Select which of your characters you want to access"
 msgstr "Selecteer welke van je personages je wilt openen"
 
@@ -5401,6 +5425,9 @@ msgstr "Als laatste stap vragen we je om je profiel in te vullen"
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr "Geïnde bijdrage van %(user)s voor %(recipient)s"
 
+msgid "Description of the role of the character in the plot"
+msgstr "Beschrijving van de rol van het personage in het plot"
+
 msgid "If checked: shows the list of authors for each event"
 msgstr "Indien aangevinkt: toont de lijst met auteurs voor elke gebeurtenis"
 
@@ -5454,6 +5481,9 @@ msgstr "(Optioneel) De naam van het personage om toe te wijzen aan de speler"
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Casting-voorkeuren opgeslagen op '%(type)s' voor %(event)s"
+
+msgid "Description of the relationship from source to target"
+msgstr "Beschrijving van de relatie tussen bron en doel"
 
 msgid "Differing by only one character from the expected one"
 msgstr "Verschilt slechts één teken van het verwachte teken"
@@ -5536,6 +5566,9 @@ msgstr "Nu kun je relaties toevoegen wanneer je een personage bewerkt"
 
 msgid "Set if you want to reserve tickets in addition to your"
 msgstr "Stel in als u tickets wilt reserveren naast uw"
+
+msgid "The question visibility to players, allowed values are"
+msgstr "De vraag zichtbaarheid aan spelers, toegestane waarden zijn"
 
 msgid "The registration request will be updated automatically"
 msgstr "De toepassing wordt automatisch bijgewerkt"
@@ -6118,6 +6151,11 @@ msgstr ""
 "De betaling is niet voltooid. Neem contact met ons op om uit te zoeken "
 "waarom"
 
+msgid "The writing element this question applies to, allowed values are"
+msgstr ""
+"Het schrijfelement waarop deze vraag van toepassing is, toegestane waarden "
+"zijn"
+
 msgid "They will be used automatically when you sign up for a new event"
 msgstr ""
 "Ze worden automatisch afgetrokken wanneer je je registreert voor een nieuw "
@@ -6397,11 +6435,6 @@ msgstr ""
 msgid "Your user does not have the required permissions to access this page"
 msgstr "Uw gebruiker heeft niet de vereiste rechten om deze pagina te openen"
 
-msgid "'o' for optional, 'm' for mandatory, 'd' for disabled, 'h' for hidden"
-msgstr ""
-"o' voor optioneel, 'm' voor verplicht, 'd' voor uitgeschakeld, 'h' voor "
-"verborgen"
-
 msgid "Added at the bottom of mail notifying players of character assignment"
 msgstr ""
 "Onderaan de mail toegevoegd om spelers te informeren over de toewijzing van "
@@ -6457,6 +6490,11 @@ msgstr ""
 "Als je een bestand moet bijvoegen, geef dat dan hier aan, laat het anders "
 "leeg"
 
+msgid "Optional – Maximum number of times it can be selected (0 = unlimited)"
+msgstr ""
+"Optioneel - Maximum aantal keren dat het kan worden geselecteerd (0 = "
+"onbeperkt)"
+
 msgid "Present (in the relationships of this character is present the other)"
 msgstr "Aanwezig (in de relaties van dit personage is de ander aanwezig)"
 
@@ -6491,6 +6529,10 @@ msgid "This page summarizes the types of abilities that players can purchase"
 msgstr ""
 "Deze pagina geeft een overzicht van de soorten vaardigheden die spelers "
 "kunnen kopen"
+
+msgid "To upload relationships, add a second file with the following columns"
+msgstr ""
+"Voeg een tweede bestand toe met de volgende kolommen om relaties te uploaden"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Je hebt het maximale aantal tekens bereikt dat kan worden aangemaakt"
@@ -6544,9 +6586,6 @@ msgstr ""
 "Als deze optie is aangevinkt, kunnen spelers het lied van hun personages "
 "aangeven"
 
-msgid "If the player is already registered, their information will be updated"
-msgstr "Als de speler al geregistreerd is, worden zijn gegevens bijgewerkt"
-
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
 "Als u een afzonderlijke overeenkomst met ons hebt, kunt u deze e-mail "
@@ -6560,6 +6599,10 @@ msgstr ""
 msgid "Optional - Indicates whether the ticket can be gifted to other players"
 msgstr ""
 "Optioneel - Geeft aan of het ticket kan worden geschonken aan andere spelers"
+
+msgid "The first line of the file are the field names that you want to upload"
+msgstr ""
+"De eerste regel van het bestand zijn de veldnamen die je wilt uploaden"
 
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Dit zijn de evenementregistraties waarvoor je moet betalen"
@@ -6859,12 +6902,6 @@ msgstr ""
 "bijgewerkt"
 
 msgid ""
-"The player's email. If not found in the system, a new user will be created"
-msgstr ""
-"Het e-mailadres van de speler. Als deze niet in het systeem wordt gevonden, "
-"wordt er een nieuwe gebruiker aangemaakt"
-
-msgid ""
 "This page shows all event templates; you can edit them, or create new ones"
 msgstr ""
 "Deze pagina toont alle sjablonen voor evenementen; je kunt ze bewerken of "
@@ -7128,13 +7165,6 @@ msgid ""
 msgstr ""
 "Maakt het mogelijk om een personage als 'spiegel' voor een ander personage "
 "te gebruiken, om zijn ware aard te verbergen"
-
-msgid ""
-"If already existing, the information will be replaced; if not, will be "
-"created"
-msgstr ""
-"Als de informatie al bestaat, wordt deze vervangen; zo niet, dan wordt deze "
-"aangemaakt"
 
 msgid ""
 "If checked, allows a option to be visible only to players with selected "
@@ -7603,13 +7633,6 @@ msgstr ""
 "organisatie en evenementen"
 
 msgid ""
-"'s' for single choice, 'm' for multiple choice, 't' for short text, 'p' for "
-"long text"
-msgstr ""
-"s' voor enkele keuze, 'm' voor meerkeuze, 't' voor korte tekst, 'p' voor "
-"lange tekst"
-
-msgid ""
 "I confirm that I have uploaded a valid document issued by the state of my "
 "nationality"
 msgstr ""
@@ -7925,6 +7948,13 @@ msgstr ""
 " 'eigenschappen'"
 
 msgid ""
+"Note that existing elements with the same name, will be overwritten with the"
+" uploaded data"
+msgstr ""
+"Merk op dat bestaande elementen met dezelfde naam worden overschreven met de"
+" geüploade gegevens"
+
+msgid ""
 "This page shows the accounting status of the event, divided into the various"
 " expense types"
 msgstr ""
@@ -7979,6 +8009,13 @@ msgid ""
 msgstr ""
 "Om deel te nemen aan dit evenement moet je bovendien de jaarlijkse "
 "lidmaatschapsbijdrage van"
+
+msgid ""
+"To upload role of the characters in the plots, add a second file with the "
+"following columns"
+msgstr ""
+"Om de rol van de personages in de plots te uploaden, voeg je een tweede "
+"bestand toe met de volgende kolommen"
 
 msgid ""
 "Unfortunately, without full payment of the fee, participation in the event "
@@ -8315,6 +8352,13 @@ msgstr ""
 "om de functies met betrekking tot het evenement te kunnen gebruiken"
 
 msgid ""
+"You can optionally add columns for the registration questions, allowed "
+"values for the header are"
+msgstr ""
+"Je kunt optioneel kolommen toevoegen voor de registratievragen, toegestane "
+"waarden voor de koptekst zijn"
+
+msgid ""
 "Did you encounter an error, or did you find a text with an incorrect "
 "translation in your language"
 msgstr ""
@@ -8580,6 +8624,13 @@ msgid ""
 msgstr ""
 "Introduceert een nieuwe manier om afgelopen en komende evenementen weer te "
 "geven, geïnspireerd op populaire lay-outs van streamingdiensten"
+
+msgid ""
+"Note that existing registrations with the same player email, will be "
+"overwritten with the uploaded data"
+msgstr ""
+"Let op: bestaande registraties met hetzelfde e-mailadres worden overschreven"
+" met de geüploade gegevens"
 
 msgid ""
 "This page summarises the roles to be assigned in order to use the functions "
@@ -8886,13 +8937,6 @@ msgid ""
 msgstr ""
 "Het personage is voorgesteld aan het personeel, dat het zal bestuderen en "
 "goedkeuren of indien nodig om wijzigingen zal vragen."
-
-msgid ""
-"The first line are the field names, such as 'number', 'name', "
-"'presentation', 'text'. (Only 'number' is required)"
-msgstr ""
-"De eerste regel zijn de veldnamen, zoals 'nummer', 'naam', 'presentatie', "
-"'tekst'. (Alleen 'nummer' is verplicht)"
 
 msgid ""
 "Your friends wanted to give you a special gift: they gave you the chance to "
@@ -9467,6 +9511,14 @@ msgstr ""
 "Dit zijn de inschrijvingen voor evenementen waarvoor je een betaling hebt "
 "ingediend, en het wordt beoordeeld door het personeel. Je hoeft op dit "
 "moment niets te doen"
+
+msgid ""
+"To add a registration to a player, they must have consented to share their "
+"data with your organization; otherwise, their entry will be skipped"
+msgstr ""
+"Om een registratie aan een speler toe te voegen, moeten ze toestemming "
+"hebben gegeven om hun gegevens met jouw organisatie te delen; anders wordt "
+"hun registratie overgeslagen"
 
 msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "

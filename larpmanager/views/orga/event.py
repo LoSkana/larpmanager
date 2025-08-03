@@ -18,7 +18,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
@@ -39,15 +38,23 @@ from larpmanager.forms.event import (
     OrgaQuickSetupForm,
     OrgaRunForm,
 )
+from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.access import EventRole
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, EventButton, EventText
+from larpmanager.models.form import QuestionApplicable
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, Faction, Plot
 from larpmanager.utils.common import clear_messages, get_feature
 from larpmanager.utils.deadlines import check_run_deadlines
-from larpmanager.utils.download import export_character_form, export_data, export_registration_form, zip_exports
+from larpmanager.utils.download import (
+    _get_column_names,
+    export_character_form,
+    export_data,
+    export_registration_form,
+    zip_exports,
+)
 from larpmanager.utils.edit import backend_edit, orga_edit
 from larpmanager.utils.event import check_event_permission, get_index_event_permissions
 
@@ -248,5 +255,84 @@ def _prepare_backup(ctx):
 @login_required
 def orga_upload(request, s, n, typ):
     ctx = check_event_permission(request, s, n, f"orga_{typ}")
-    ctx["typ"] = typ
+    ctx["typ"] = typ.rstrip("s")
+    _get_column_names(ctx)
+    ctx["form"] = UploadElementsForm()
     return render(request, "larpmanager/orga/upload.html", ctx)
+
+
+@login_required
+def orga_upload_template(request, s, n, typ):
+    ctx = check_event_permission(request, s, n)
+    ctx["typ"] = typ
+    _get_column_names(ctx)
+    if ctx.get("writing_typ"):
+        keys = ctx["fields"]
+        vals = [f"{typ} name" if field == ctx["field_name"] else "some text" for field in ctx["fields"]]
+        exports = [(f"{typ} - template", keys, [vals])]
+
+        if ctx["writing_typ"] == QuestionApplicable.CHARACTER and "relationships" in ctx["features"]:
+            exports.append(
+                (
+                    "relationships - template",
+                    list(ctx["columns"][0].keys()),
+                    [["Test Character", "Another Character", "Super pals"]],
+                )
+            )
+
+        if ctx["writing_typ"] == QuestionApplicable.PLOT:
+            exports.append(
+                (
+                    "roles - template",
+                    list(ctx["columns"][0].keys()),
+                    [["Test Plot", "Test Character", "Gonna be a super star"]],
+                )
+            )
+
+    elif typ == "registration":
+        keys = list(ctx["columns"][0].keys())
+        vals = []
+        defs = {"player": "user@test.it", "ticket": "Standard", "character": "Test Character", "donation": "5"}
+        for field, value in defs.items():
+            if field not in keys:
+                continue
+            vals.append(value)
+        keys.extend(ctx["fields"])
+        for _field in ctx["fields"]:
+            vals.append("some value")
+        exports = [(f"{typ} - template", keys, [vals])]
+    else:
+        exports = []
+        defs = {
+            "name": "Question Name",
+            "typ": "multi-choice",
+            "description": "Question Description",
+            "status": "optional",
+            "applicable": "character",
+            "visibility": "public",
+            "max_length": "1",
+        }
+        keys = list(ctx["columns"][0].keys())
+        vals = []
+        for field, value in defs.items():
+            if field not in keys:
+                continue
+            vals.append(value)
+        exports.append(("questions", keys, [vals]))
+
+        defs = {
+            "question": "Question Name",
+            "name": "Option Name",
+            "description": "Option description",
+            "max_available": "2",
+            "price": "10",
+        }
+        keys = list(ctx["columns"][1].keys())
+        vals = []
+        for field, value in defs.items():
+            if field not in keys:
+                continue
+            vals.append(value)
+        exports.append(("options", keys, [vals]))
+
+    return zip_exports(ctx, exports, "template")

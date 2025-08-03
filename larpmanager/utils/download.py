@@ -32,6 +32,9 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.models.accounting import AccountingItemPayment
 from larpmanager.models.form import (
     QuestionApplicable,
+    QuestionStatus,
+    QuestionType,
+    QuestionVisibility,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
@@ -391,20 +394,42 @@ def orga_registration_form_download(ctx):
 
 
 def export_registration_form(ctx):
-    key = ["name", "typ", "description", "status", "max_length"]
+    mappings = {
+        "typ": QuestionType.get_mapping(),
+        "status": QuestionStatus.get_mapping(),
+    }
+
+    ctx["typ"] = "registration_form"
+    _get_column_names(ctx)
+    key = ctx["columns"][0].keys()
     que = get_ordered_registration_questions(ctx)
-    vals = list(que.values_list(*key))
+    vals = _extract_values(key, que, mappings)
 
     exports = [("registration_questions", key, vals)]
 
-    key = ["question__name", "name", "description", "price", "max_available"]
+    key = list(ctx["columns"][1].keys())
+    new_key = key.copy()
+    new_key[0] = f"{new_key[0]}__name"
     que = ctx["event"].get_elements(RegistrationOption).select_related("question")
     que = que.order_by(F("question__order"), "order")
-    vals = list(que.values_list(*key))
-    key[0] = "question"
+    vals = _extract_values(new_key, que, mappings)
 
     exports.append(("registration_options", key, vals))
     return exports
+
+
+def _extract_values(key, que, mappings):
+    all_vals = []
+    for row in que.values(*key):
+        vals = []
+        for field, value in row.items():
+            if field in mappings and value in mappings[field]:
+                new_value = mappings[field][value]
+            else:
+                new_value = value
+            vals.append(new_value)
+        all_vals.append(vals)
+    return all_vals
 
 
 def orga_character_form_download(ctx):
@@ -412,17 +437,26 @@ def orga_character_form_download(ctx):
 
 
 def export_character_form(ctx):
-    key = ["name", "typ", "description", "status", "applicable", "visibility", "max_length"]
+    mappings = {
+        "typ": QuestionType.get_mapping(),
+        "status": QuestionStatus.get_mapping(),
+        "applicable": QuestionApplicable.get_mapping(),
+        "visibility": QuestionVisibility.get_mapping(),
+    }
+    ctx["typ"] = "character_form"
+    _get_column_names(ctx)
+    key = ctx["columns"][0].keys()
     que = ctx["event"].get_elements(WritingQuestion).order_by("applicable", "order")
-    vals = list(que.values_list(*key))
+    vals = _extract_values(key, que, mappings)
 
     exports = [("writing_questions", key, vals)]
 
-    key = ["question__name", "name", "description", "max_available"]
+    key = list(ctx["columns"][1].keys())
+    new_key = key.copy()
+    new_key[0] = f"{new_key[0]}__name"
     que = ctx["event"].get_elements(WritingOption).select_related("question")
     que = que.order_by(F("question__order"), "order")
-    vals = list(que.values_list(*key))
-    key[0] = "question"
+    vals = _extract_values(new_key, que, mappings)
 
     exports.append(("writing_options", key, vals))
     return exports
@@ -487,3 +521,98 @@ def _orga_registrations_acc_reg(reg, ctx, cache_aip):
         dt["options_price"] = reg.tot_iscr - dt["ticket_price"]
 
     return dt
+
+
+def _get_column_names(ctx):
+    if ctx["typ"] == "registration":
+        ctx["columns"] = [
+            {
+                "player": _("The player's email"),
+                "ticket": _("The name of the ticket")
+                + " <i>("
+                + (_("if it doesn't exist, it will be created"))
+                + ")</i>",
+                "character": _("(Optional) The character name to assign to the player"),
+                "donation": _("(Optional) The amount of a voluntary donation"),
+            }
+        ]
+        ctx["fields"] = get_ordered_registration_questions(ctx).values_list("name", flat=True)
+    elif ctx["typ"] == "registration_form":
+        ctx["columns"] = [
+            {
+                "name": _("The question name"),
+                "typ": _("The question type, allowed values are")
+                + ": 'single-choice', 'multi-choice', 'short-text', 'long-text', 'advanced'",
+                "description": _("Optional - Extended description (displayed in small gray text)"),
+                "status": _("The question status, allowed values are")
+                + ": 'optional', 'mandatory', 'disabled', 'hidden'",
+                "max_length": _(
+                    "Optional - For text questions, maximum number of characters; For multiple options, maximum number of options (0 = no limit)"
+                ),
+            },
+            {
+                "question": _("The name of the question this option belongs to")
+                + " <i>("
+                + (_("If not found, the option will be skipped"))
+                + ")</i>",
+                "name": _("The name of the option"),
+                "description": _("Optional – Additional information about the option, displayed below the question"),
+                "price": _("Optional – Amount added to the registration fee if selected (0 = no extra cost)"),
+                "max_available": _(
+                    "Optional – Maximum number of times it can be selected across all registrations (0 = unlimited)"
+                ),
+            },
+        ]
+    elif ctx["typ"] == "character_form":
+        ctx["columns"] = [
+            {
+                "name": _("The question name"),
+                "typ": _("The question type, allowed values are")
+                + ": 'single-choice', 'multi-choice', 'short-text', 'long-text', 'advanced', 'name', 'teaser', 'text'",
+                "description": _("Optional - Extended description (displayed in small gray text)"),
+                "status": _("The question status, allowed values are")
+                + ": 'optional', 'mandatory', 'disabled', 'hidden'",
+                "applicable": _("The writing element this question applies to, allowed values are")
+                + ": 'character', 'plot', 'faction', 'quest', 'trait'",
+                "visibility": _("The question visibility to players, allowed values are")
+                + ": 'searchable', 'public', 'private', 'hidden'",
+                "max_length": _(
+                    "Optional - For text questions, maximum number of characters; For multiple options, maximum number of options (0 = no limit)"
+                ),
+            },
+            {
+                "question": _("The name of the question this option belongs to")
+                + " <i>("
+                + (_("If not found, the option will be skipped"))
+                + ")</i>",
+                "name": _("The name of the option"),
+                "description": _("Optional – Additional information about the option, displayed below the question"),
+                "max_available": _("Optional – Maximum number of times it can be selected (0 = unlimited)"),
+            },
+        ]
+
+    else:
+        ctx["writing_typ"] = QuestionApplicable.get_applicable(ctx["typ"])
+        ctx["fields"] = []
+        que = ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"])
+        for field in que.order_by("order").values("name", "typ"):
+            ctx["fields"].append(field["name"])
+            if field["typ"] == "name":
+                ctx["field_name"] = field["name"]
+
+        if ctx["writing_typ"] == QuestionApplicable.CHARACTER and "relationships" in ctx["features"]:
+            ctx["columns"] = [
+                {
+                    "source": _("First character in the relationship (origin)"),
+                    "target": _("Second character in the relationship (destination)"),
+                    "text": _("Description of the relationship from source to target"),
+                }
+            ]
+        elif ctx["writing_typ"] == QuestionApplicable.PLOT:
+            ctx["columns"] = [
+                {
+                    "plot": _("Name of the plot"),
+                    "character": _("Name of the character"),
+                    "text": _("Description of the role of the character in the plot"),
+                }
+            ]

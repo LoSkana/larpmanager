@@ -79,6 +79,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "player",
             "event",
             "status",
+            "access_token",
         ]
 
         widgets = {
@@ -125,6 +126,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
             for key in ["player", "status"]:
                 fields_default.add(key)
                 self.reorder_field(key)
+            if event.get_config("writing_external_access", False) and self.instance.pk:
+                fields_default.add("access_token")
+                self.reorder_field("access_token")
 
         all_fields = set(self.fields.keys()) - fields_default
         for lbl in all_fields - fields_custom:

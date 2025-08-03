@@ -123,19 +123,17 @@ class PlayerRelationshipForm(MyForm):
 
 
 class UploadElementsForm(forms.Form):
-    elem = forms.FileField(
-        validators=[
-            FileTypeValidator(
-                allowed_types=[
-                    "application/csv",
-                    "text/csv",
-                    "text/plain",
-                    "application/zip",
-                    "text/html",
-                ]
-            )
-        ]
-    )
+    allowed_types = [
+        "application/csv",
+        "text/csv",
+        "text/plain",
+        "application/zip",
+        "text/html",
+    ]
+    validator = FileTypeValidator(allowed_types=allowed_types)
+
+    first = forms.FileField(validators=[validator], required=False)
+    second = forms.FileField(validators=[validator], required=False)
 
 
 class BaseWritingForm(BaseRegistrationForm):
