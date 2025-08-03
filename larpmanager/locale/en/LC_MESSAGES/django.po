@@ -8146,15 +8146,6 @@ msgid ""
 "href='%(url)s'>Unsubscribe</a>"
 msgstr ""
 
-msgid "Elements uploaded"
-msgstr ""
-
-msgid "Unknow error on upload"
-msgstr ""
-
-msgid "invalid form"
-msgstr ""
-
 msgid "Registration completed successfully!"
 msgstr ""
 
@@ -8451,6 +8442,12 @@ msgid "Can't copy from same event"
 msgstr ""
 
 msgid "Copy done"
+msgstr ""
+
+msgid "Elements uploaded"
+msgstr ""
+
+msgid "Unknow error on upload"
 msgstr ""
 
 msgid "Photos and videos successfully uploaded"

@@ -21,7 +21,7 @@
         {% if fields %}
             <p>
                 {% trans "You can optionally add columns for the registration questions, allowed values for the header are" %}:
-                {% for field in fields %}
+                {% for field in fields.keys %}
                     {% include "elements/comma.html" %}
                     "{{ field }}"
                 {% endfor %}
@@ -99,7 +99,7 @@
         <p>{% trans "The first line of the file are the field names that you want to upload" %}.</p>
         <p>
             {% trans "Allowed values are" %}:
-            {% for field in fields %}
+            {% for field in fields.keys %}
                 {% include "elements/comma.html" %}
                 "{{ field }}"
             {% endfor %}

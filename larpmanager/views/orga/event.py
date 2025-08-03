@@ -17,9 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import traceback
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -43,7 +45,7 @@ from larpmanager.models.access import EventRole
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, EventButton, EventText
-from larpmanager.models.form import QuestionApplicable
+from larpmanager.models.form import QuestionApplicable, QuestionType
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, Faction, Plot
 from larpmanager.utils.common import clear_messages, get_feature
@@ -57,6 +59,7 @@ from larpmanager.utils.download import (
 )
 from larpmanager.utils.edit import backend_edit, orga_edit
 from larpmanager.utils.event import check_event_permission, get_index_event_permissions
+from larpmanager.utils.upload import go_upload
 
 
 @login_required
@@ -257,7 +260,27 @@ def orga_upload(request, s, n, typ):
     ctx = check_event_permission(request, s, n, f"orga_{typ}")
     ctx["typ"] = typ.rstrip("s")
     _get_column_names(ctx)
-    ctx["form"] = UploadElementsForm()
+
+    if request.POST:
+        form = UploadElementsForm(request.POST, request.FILES)
+        redr = reverse(f"orga_{typ}", args=[ctx["event"].slug, ctx["run"].number])
+        if form.is_valid():
+            try:
+                # print(request.FILES)
+                ctx["logs"] = go_upload(request, ctx, request.FILES)
+                ctx["redr"] = redr
+                messages.success(request, _("Elements uploaded") + "!")
+                return render(request, "larpmanager/orga/uploads.html", ctx)
+
+            except Exception as exp:
+                print(traceback.format_exc())
+                messages.error(request, _("Unknow error on upload") + f": {exp}")
+            return HttpResponseRedirect(redr)
+    else:
+        form = UploadElementsForm()
+
+    ctx["form"] = form
+
     return render(request, "larpmanager/orga/upload.html", ctx)
 
 
@@ -266,9 +289,26 @@ def orga_upload_template(request, s, n, typ):
     ctx = check_event_permission(request, s, n)
     ctx["typ"] = typ
     _get_column_names(ctx)
+    value_mapping = {
+        QuestionType.SINGLE: "option name",
+        QuestionType.MULTIPLE: "option names (comma separated)",
+        QuestionType.TEXT: "field text",
+        QuestionType.PARAGRAPH: "field long text",
+        QuestionType.EDITOR: "field html text",
+        QuestionType.NAME: "element name",
+        QuestionType.TEASER: "element presentation",
+        QuestionType.SHEET: "element text",
+        QuestionType.COVER: "element cover (utils path)",
+        QuestionType.FACTIONS: "faction names (comma separated)",
+        QuestionType.TITLE: "title short text",
+        QuestionType.MIRROR: "name of mirror character",
+        QuestionType.HIDE: "hide (true or false)",
+        QuestionType.PROGRESS: "name of progress step",
+        QuestionType.ASSIGNED: "name of assigned staff",
+    }
     if ctx.get("writing_typ"):
         keys = ctx["fields"]
-        vals = [f"{typ} name" if field == ctx["field_name"] else "some text" for field in ctx["fields"]]
+        vals = [value_mapping[field_typ] for _field, field_typ in ctx["fields"].items()]
         exports = [(f"{typ} - template", keys, [vals])]
 
         if ctx["writing_typ"] == QuestionApplicable.CHARACTER and "relationships" in ctx["features"]:
@@ -298,8 +338,8 @@ def orga_upload_template(request, s, n, typ):
                 continue
             vals.append(value)
         keys.extend(ctx["fields"])
-        for _field in ctx["fields"]:
-            vals.append("some value")
+        for _field, field_typ in ctx["fields"].items():
+            vals.append(value_mapping[field_typ])
         exports = [(f"{typ} - template", keys, [vals])]
     else:
         exports = []

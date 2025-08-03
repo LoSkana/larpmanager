@@ -21,24 +21,18 @@
 import csv
 import os
 import shutil
-import traceback
 import zipfile
 from datetime import datetime
 from decimal import Decimal
+import pandas as pd
 
 from django.conf import settings as conf_settings
-from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import ForeignKey
 from django.db.models.functions import Lower
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_fields
-from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.form import (
     QuestionType,
     RegistrationOption,
@@ -61,43 +55,169 @@ from larpmanager.models.writing import (
     Faction,
     replace_char_names,
 )
+from larpmanager.utils.download import _get_column_names
 from larpmanager.utils.edit import save_log
 
 
-def upload_elements(request, ctx, typ, nm, red):
-    form = UploadElementsForm(request.POST, request.FILES)
-    redr = reverse(red, args=[ctx["event"].slug, ctx["run"].number])
-    if form.is_valid():
-        try:
-            # print(request.FILES)
-            ctx["logs"] = element_load(request, ctx, request.FILES["elem"], typ, nm)
-            ctx["redr"] = redr
-            messages.success(request, _("Elements uploaded") + "!")
-            return render(request, "larpmanager/orga/uploads.html", ctx)
-
-        except Exception as exp:
-            print(traceback.format_exc())
-            messages.error(request, _("Unknow error on upload") + f": {exp}")
-    else:
-        messages.error(request, _("invalid form") + f": {form.errors}")
-    return HttpResponseRedirect(redr)
-
-
-def element_load(request, ctx, fil, typ, nm):
+def go_upload(request, ctx, files):
     if request.POST.get("upload") == "cover":
         # check extension
-        if zipfile.is_zipfile(fil):
-            with zipfile.ZipFile(fil) as z_obj:
+        if zipfile.is_zipfile(files[0]):
+            with zipfile.ZipFile(files[0]) as z_obj:
                 cover_load(ctx, z_obj)
             z_obj.close()
             return ""
 
-    if nm == "registration_question":
-        return registration_question_loads(request, ctx, fil)
-    elif nm == "character_question":
-        return character_question_loads(request, ctx, fil)
+    if not request.FILES:
+        return "ERR - No files upload"
+    for f in request.FILES.values():
+        if f.content_type in ['text/csv']:
+            return f"ERR - detected non csv file: {f.name.}"
 
-    return elements_load(request, ctx, fil, typ, nm)
+    if ctx["typ"] == "registration_form":
+        return registration_question_loads(request, ctx, files)
+    elif ctx["typ"] == "character_form":
+        return character_question_loads(request, ctx, files)
+    elif ctx["typ"] == "registration":
+        return registrations_load(request, ctx, files)
+    else:
+        return writing_load(request, ctx, files)
+
+
+def read_uploaded_csv(files):
+    if not files:
+        return None
+
+    encodings = [
+        'utf-8',
+        'utf-8-sig',
+        'latin1',
+        'windows-1252',
+        'utf-16',
+        'utf-32',
+        'ascii',
+        'mac-roman',
+        'cp437',
+        'cp850',
+    ]
+
+    uploaded_file = next(iter(files.values()))
+
+    for enc in encodings:
+        try:
+            uploaded_file.seek(0)
+            return pd.read_csv(uploaded_file, encoding=enc, engine='python')
+        except Exception:
+            continue
+
+    return None
+
+
+def registrations_load(request, ctx, files):
+    _get_column_names(ctx)
+    allowed = list(ctx["columns"][0].keys())
+    allowed.extend(ctx["fields"].keys())
+    allowed = [a.lower() for a in allowed]
+
+    input_df = read_uploaded_csv(files)
+    if not input_df:
+        return "ERR - Could not read input csv"
+
+    for col in input_df.columns:
+        if col.lower() not in allowed:
+            return f"ERR - column not recognized: {col}"
+
+    logs = []
+    for row in input_df.to_dict(orient='records'):
+        logs.append(reg_load(request, ctx, row))
+    return logs
+
+
+def reg_load(request, ctx, row):
+    if "player" not in row:
+        return "ERR - There is no player column"
+
+    try:
+        user = User.objects.get(email=row["player"])
+    except ObjectDoesNotExist:
+        return "ERR - Email not found"
+
+    member = user.member
+
+    try:
+        membership = Membership.objects.get(member=member, assoc_id=ctx["event"].assoc_id)
+    except ObjectDoesNotExist:
+        return "ERR - Sharing data not found"
+
+    if membership.status == MembershipStatus.EMPTY:
+        return "ERR - User has not approved sharing of data"
+
+    (reg, cr) = Registration.objects.get_or_create(run=ctx["run"], member=member, cancellation_date__isnull=True)
+
+    logs = []
+
+    for field, value in row.keys():
+        _reg_field_load(ctx, reg, field, value, logs)
+
+    reg.save()
+    save_log(request.user.member, Registration, reg)
+
+    if logs:
+        return "KO - " + ",".join(logs)
+
+    if cr:
+        return "OK - Created"
+    else:
+        return "OK - Updated"
+
+
+def _reg_field_load(ctx, reg, field, value, logs):
+    if field == "player":
+        return
+
+    if not value:
+        return
+
+    if field == "ticket":
+        assign_elem(ctx, reg, field, value, RegistrationTicket, logs)
+    elif field == "character":
+        _reg_assign_character(ctx, reg, value, logs)
+    elif field == "pwyw":
+        reg.pay_what = Decimal(value)
+    else:
+        # assign writing answer / choice
+        # TODO
+
+def assign_elem(ctx, obj, field, value, typ, logs):
+    try:
+        if value.isdigit():
+            el = typ.objects.get(event=ctx["event"], number=int(value))
+        else:
+            el = typ.objects.get(event=ctx["event"], name__iexact=value)
+    except ObjectDoesNotExist:
+        logs.append(f"ERR - element {k} not found")
+        return
+
+    obj.__setattr__(field, el)
+
+def _reg_assign_character(ctx, reg, value, logs):
+    try:
+        char = Character.objects.get(event=ctx["event"], name__iexact=value)
+    except ObjectDoesNotExist:
+        logs.append("ERR - Character not found")
+        return
+
+    # check if we have a registration with the same character
+    que = RegistrationCharacterRel.objects.filter(
+        reg__run=ctx["run"],
+        reg__cancellation_date__isnull=True,
+        character=char,
+    )
+    if que.exclude(reg_id=reg.id).count() > 0:
+        logs.append("ERR - character already assigned")
+        return
+
+    RegistrationCharacterRel.objects.get_or_create(reg=reg, character=char)
 
 
 def get_csv_upload_tmp(csv_upload, run):
@@ -139,8 +259,7 @@ def cover_load(ctx, z_obj):
         os.rename(covers[num], os.path.join(conf_settings.MEDIA_ROOT, fn))
 
 
-def assign_faction(ch, v, run):
-    logs = ""
+def assign_faction(ch, v, run, log):
     for fac_name in v.split(","):
         try:
             fac = Faction.objects.get(name__iexact=fac_name.strip(), event=run.event)
@@ -148,11 +267,10 @@ def assign_faction(ch, v, run):
             fac.characters.add(ch)
             fac.save()
         except ObjectDoesNotExist:
-            logs += f" - Faction not found: {fac_name}"
-    return logs
+            log.append(f"Faction not found: {fac_name}")
 
 
-def elements_load(request, ctx, csv_upload, typ, nm):
+def elements_load(request, ctx, csv_upload):
     # prepare custom fields for character
     if nm == "character" and "character" in ctx["features"]:
         res = {"chars": {}}
@@ -210,78 +328,8 @@ def elements_load(request, ctx, csv_upload, typ, nm):
     return logs
 
 
-def registration_load(request, ctx, row, fields, event):
-    if "player" not in fields:
-        return "ERR - There is no player in fields"
-
-    if len(row) < fields["player"]:
-        return "ERR - Can't find player column for this row"
-
-    v = row[fields["player"]]
-
-    try:
-        user = User.objects.get(email=v)
-    except ObjectDoesNotExist:
-        return "ERR - Email not found"
-
-    member = user.member
-
-    try:
-        membership = Membership.objects.get(member=member, assoc_id=ctx["event"].assoc_id)
-    except ObjectDoesNotExist:
-        return "ERR - Sharing data not found"
-
-    if membership.status == MembershipStatus.EMPTY:
-        return "ERR - User has not approved sharing of data"
-
-    (el, cr) = Registration.objects.get_or_create(run=ctx["run"], member=member, cancellation_date__isnull=True)
-
-    log = ""
-
-    for k in fields:
-        log += _registration_load_field(ctx, el, event, fields, k, row)
-
-    el.save()
-    save_log(request.user.member, Registration, el)
-
-    if cr:
-        msg = "OK - Created" + log
-    else:
-        msg = "OK - Updated" + log
-    return msg
 
 
-def _registration_load_field(ctx, el, event, fields, k, row):
-    if k == "player":
-        return
-
-    v = row[fields[k]]
-    if not v:
-        return
-
-    log = ""
-
-    if k == "ticket":
-        assign_elem(el, v, k, RegistrationTicket, event)
-    elif k == "character":
-        char = Character.objects.get(event=event, number=v)
-
-        # check if we have a registration with the same character
-        que = RegistrationCharacterRel.objects.filter(
-            reg__run=ctx["run"],
-            reg__cancellation_date__isnull=True,
-            character=char,
-        )
-        if que.exclude(reg_id=el.id).count() > 0:
-            log = "ERR - character already assigned"
-        RegistrationCharacterRel.objects.get_or_create(reg=el, character=char)
-
-    elif k == "pwyw":
-        el.pay_what = Decimal(v)
-    else:
-        el.__setattr__(k, v)
-
-    return log
 
 
 def registration_question_loads(request, ctx, csv_upload):
@@ -443,7 +491,7 @@ def character_question_load(request, ctx, row, question):
         return "OK - Updated"
 
 
-def assign_choice_answer(ctx, character, value, key):
+def assign_choice_answer(ctx, character, value, key, log):
     question_id = ctx["questions_inverted"][key]
 
     # check if answer
@@ -462,10 +510,10 @@ def assign_choice_answer(ctx, character, value, key):
                 if opt["name"].lower().strip() == input_opt and opt["question_id"] == question_id:
                     option_id = ido
             if not option_id:
-                return f" - Problem with question {key}: couldn't find option {input_opt}"
+                log.append(f"Problem with question {key}: couldn't find option {input_opt}")
+                continue
             WritingChoice.objects.create(element_id=character.id, question_id=question_id, option_id=option_id)
 
-    return ""
 
 
 def writing_load(request, ctx, row, fields, typ, rels, event, chars):
@@ -511,67 +559,31 @@ def _writing_load_field(ch, chars, ctx, event, fields, k, rels, row):
     if k == "number":
         return ""
 
-    # meta_field_type = typ._meta.get_field(k).get_internal_type()
-    # print(meta_field_type)
     if len(row) < fields[k]:
         return ""
 
-    v = row[fields[k]]
+    v = row[fields[k]].strip()
     v = "<br />".join(v.strip().split("\n"))
     if not v:
         return ""
 
-    log = ""
+    log = []
 
     if chars and k in ["presentation", "text"]:
         v = replace_char_names(v, chars)
     if k == "mirror":
         get_mirror_instance(v, event)
-    elif k == "player":
-        log = assign_player(ctx, ch, v)
     elif k in rels:
-        assign_elem(ch, v, k, rels[k], event)
+        assign_elem(ch, v, k, rels[k], event, log)
     elif "questions_inverted" in ctx and k in ctx["questions_inverted"]:
-        log = assign_choice_answer(ctx, ch, v, k)
+        assign_choice_answer(ctx, ch, v, k, log)
     elif k == "factions":
-        log = assign_faction(ch, v, ctx["run"])
+        assign_faction(ch, v, ctx["run"], log)
     elif k == "presentation":
         ch.teaser = v
     else:
         ch.__setattr__(k, v)
-    return log
-
-
-def assign_player(ctx, ch, v):
-    if "@" in v:
-        try:
-            user = User.objects.get(email=v)
-        except ObjectDoesNotExist:
-            return f" - Problem with player '{v}': couldn't find"
-        member = user.member
-    else:
-        aux = v.rsplit(" ", 1)
-        try:
-            member = Member.objects.get(name__iexact=aux[0], surname__iexact=aux[1])
-        except ObjectDoesNotExist:
-            return f" - Problem with player '{v}': couldn't find"
-
-    ch.player = member
-
-    regs = Registration.objects.filter(member=member, run=ctx["run"], cancellation_date__isnull=True)
-    if not regs:
-        return " - Registration not found, character not assigned!"
-
-    RegistrationCharacterRel.objects.get_or_create(character=ch, reg=regs.first())
-    return ""
-
-
-def assign_elem(ch, v, k, rel, e):
-    if v.isdigit():
-        el = rel.objects.get(event=e, number=int(v))
-    else:
-        el = rel.objects.get(event=e, name=v)
-    ch.__setattr__(k, el)
+    return ",".join(log)
 
 
 def get_mirror_instance(v, e):

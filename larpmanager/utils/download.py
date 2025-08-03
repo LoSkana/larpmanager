@@ -536,7 +536,11 @@ def _get_column_names(ctx):
                 "donation": _("(Optional) The amount of a voluntary donation"),
             }
         ]
-        ctx["fields"] = get_ordered_registration_questions(ctx).values_list("name", flat=True)
+        que = get_ordered_registration_questions(ctx).values("name", "typ")
+        ctx["fields"] = {el["name"]: el["typ"] for el in que}
+        if "pay_what_you_want" not in ctx["features"]:
+            del ctx["columns"][0]["donation"]
+
     elif ctx["typ"] == "registration_form":
         ctx["columns"] = [
             {
@@ -593,10 +597,10 @@ def _get_column_names(ctx):
 
     else:
         ctx["writing_typ"] = QuestionApplicable.get_applicable(ctx["typ"])
-        ctx["fields"] = []
+        ctx["fields"] = {}
         que = ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"])
         for field in que.order_by("order").values("name", "typ"):
-            ctx["fields"].append(field["name"])
+            ctx["fields"][field["name"]] = field["typ"]
             if field["typ"] == "name":
                 ctx["field_name"] = field["name"]
 
