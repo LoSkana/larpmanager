@@ -49,7 +49,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     get_ordered_registration_questions,
 )
-from larpmanager.models.member import Member
+from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -219,12 +219,20 @@ def registration_load(request, ctx, row, fields, event):
 
     v = row[fields["player"]]
 
-    if "@" in v:
-        (user, cr) = User.objects.get_or_create(email=v, username=v)
-        member = user.member
-    else:
-        aux = v.rsplit(" ", 1)
-        member = Member.objects.get(name__iexact=aux[0], surname__iexact=aux[1])
+    try:
+        user = User.objects.get(email=v)
+    except ObjectDoesNotExist:
+        return "ERR - Email not found"
+
+    member = user.member
+
+    try:
+        membership = Membership.objects.get(member=member, assoc_id=ctx["event"].assoc_id)
+    except ObjectDoesNotExist:
+        return "ERR - Sharing data not found"
+
+    if membership.status == MembershipStatus.EMPTY:
+        return "ERR - User has not approved sharing of data"
 
     (el, cr) = Registration.objects.get_or_create(run=ctx["run"], member=member, cancellation_date__isnull=True)
 
@@ -237,9 +245,10 @@ def registration_load(request, ctx, row, fields, event):
     save_log(request.user.member, Registration, el)
 
     if cr:
-        return "OK - Created" + log
+        msg = "OK - Created" + log
     else:
-        return "OK - Updated" + log
+        msg = "OK - Updated" + log
+    return msg
 
 
 def _registration_load_field(ctx, el, event, fields, k, row):
