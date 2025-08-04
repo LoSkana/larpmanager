@@ -23,7 +23,7 @@ from datetime import date, datetime, timedelta
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
-from django.contrib.auth import login, logout
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
@@ -451,14 +451,6 @@ def about_us(request):
 
 
 def get_lm_contact(request):
-    # logout if logged in with demo user
-    user = request.user
-    if user.is_authenticated and user.email.lower().endswith("demo.it"):
-        logout(request)
-        return redirect(request.path)
-
-    # if check and request.assoc["id"] != 0:
-    # return {"red": "https://larpmanager.com" + request.get_full_path()}
     ctx = {"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"}
     return ctx
 
