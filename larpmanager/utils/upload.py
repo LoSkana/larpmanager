@@ -28,11 +28,12 @@ import pandas as pd
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.functions import Lower
 
 from larpmanager.models.form import (
     QuestionApplicable,
+    QuestionStatus,
     QuestionType,
+    QuestionVisibility,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
@@ -71,9 +72,9 @@ def go_upload(request, ctx, form):
     #         return ""
 
     if ctx["typ"] == "registration_form":
-        return registration_question_loads(request, ctx, form)
+        return form_load(request, ctx, form, is_registration=True)
     elif ctx["typ"] == "character_form":
-        return character_question_loads(request, ctx, form)
+        return form_load(request, ctx, form, is_registration=False)
     elif ctx["typ"] == "registration":
         return registrations_load(request, ctx, form)
     else:
@@ -114,7 +115,7 @@ def _get_file(ctx, file, column_id=None):
     _get_column_names(ctx)
     allowed = []
     if column_id is not None:
-        allowed.extend(list(ctx["columns"][0].keys()))
+        allowed.extend(list(ctx["columns"][column_id].keys()))
     if "fields" in ctx:
         allowed.extend(ctx["fields"].keys())
     allowed = [a.lower() for a in allowed]
@@ -428,6 +429,148 @@ def _get_mirror_instance(ctx, element, value, logs):
         logs.append(f"ERR - mirror not found: {value}")
 
 
+def _assign_faction(ctx, element, value, logs):
+    for fac_name in value.split(","):
+        try:
+            fac = Faction.objects.get(name__iexact=fac_name.strip(), event=ctx["event"])
+            element.save()  # to be sure
+            fac.characters.add(element)
+            fac.save()
+        except ObjectDoesNotExist:
+            logs.append(f"Faction not found: {fac_name}")
+
+
+def form_load(request, ctx, form, is_registration=True):
+    logs = []
+
+    # upload questions
+    uploaded_file = form.cleaned_data.get("first", None)
+    if uploaded_file:
+        (input_df, logs) = _get_file(ctx, uploaded_file, 0)
+        if input_df is not None:
+            for row in input_df.to_dict(orient="records"):
+                logs.append(_questions_load(ctx, row, is_registration))
+
+    # upload options
+    uploaded_file = form.cleaned_data.get("second", None)
+    if uploaded_file:
+        (input_df, new_logs) = _get_file(ctx, uploaded_file, 1)
+        if input_df is not None:
+            question_cls = WritingQuestion
+            if is_registration:
+                question_cls = RegistrationQuestion
+            questions = {
+                el["name"].lower(): el["id"] for el in ctx["event"].get_elements(question_cls).values("id", "name")
+            }
+            for row in input_df.to_dict(orient="records"):
+                new_logs.append(_options_load(ctx, row, questions, is_registration))
+        logs.extend(new_logs)
+
+    return logs
+
+
+def invert_dict(d):
+    return {v: k for k, v in d.items()}
+
+
+def _questions_load(ctx, row, is_registration):
+    name = row.get("name")
+    if not name:
+        return "ERR - name not found"
+
+    mappings = {
+        "typ": invert_dict(QuestionType.get_mapping()),
+        "status": invert_dict(QuestionStatus.get_mapping()),
+        "applicable": invert_dict(QuestionApplicable.get_mapping()),
+        "visibility": invert_dict(QuestionVisibility.get_mapping()),
+    }
+
+    if is_registration:
+        instance, created = RegistrationQuestion.objects.get_or_create(
+            event=ctx["event"],
+            name__iexact=name,
+            defaults={"name": name},
+        )
+    else:
+        if "applicable" not in row:
+            return "ERR - missing applicable column"
+        applicable = row["applicable"]
+        if applicable not in mappings["applicable"]:
+            return "ERR - unknown applicable"
+
+        instance, created = WritingQuestion.objects.get_or_create(
+            event=ctx["event"],
+            name__iexact=name,
+            applicable=mappings["applicable"][applicable],
+            defaults={"name": name},
+        )
+
+    for field, value in row.items():
+        if field in ["applicable", "name"]:
+            continue
+        new_value = value
+        if field in mappings:
+            if value not in mappings[field]:
+                return f"ERR - unknow value {value} for field {field}"
+            new_value = mappings[field][value]
+        if field == "max_length":
+            new_value = int(value)
+        setattr(instance, field, new_value)
+
+    instance.save()
+
+    if created:
+        msg = f"OK - Created {name}"
+    else:
+        msg = f"OK - Updated {name}"
+    return msg
+
+
+def _options_load(ctx, row, questions, is_registration):
+    for field in ["name", "question"]:
+        if field not in row:
+            return f"ERR - column {field} missing"
+
+    name = row["name"]
+    if not name:
+        return "ERR - empty name"
+
+    question = row["question"].lower()
+    if question not in questions:
+        return "ERR - question not found"
+    question_id = questions[question]
+
+    if is_registration:
+        instance, created = RegistrationOption.objects.get_or_create(
+            event=ctx["event"],
+            question_id=question_id,
+            name__iexact=name,
+            defaults={"name": name},
+        )
+    else:
+        instance, created = WritingOption.objects.get_or_create(
+            event=ctx["event"],
+            name__iexact=name,
+            question_id=question_id,
+            defaults={"name": name},
+        )
+
+    for field, value in row.items():
+        new_value = value
+        if field in ["question", "name"]:
+            continue
+        if field in ["max_available", "price"]:
+            new_value = int(value)
+        setattr(instance, field, new_value)
+
+    instance.save()
+
+    if created:
+        return f"OK - Created {name}"
+    else:
+        return f"OK - Updated {name}"
+
+
 def get_csv_upload_tmp(csv_upload, run):
     tmp_file = os.path.join(conf_settings.MEDIA_ROOT, "tmp")
     tmp_file = os.path.join(tmp_file, run.event.slug)
@@ -465,123 +608,3 @@ def cover_load(ctx, z_obj):
         c.cover = fn
         c.save()
         os.rename(covers[num], os.path.join(conf_settings.MEDIA_ROOT, fn))
-
-
-def _assign_faction(ctx, element, value, logs):
-    for fac_name in value.split(","):
-        try:
-            fac = Faction.objects.get(name__iexact=fac_name.strip(), event=ctx["event"])
-            element.save()  # to be sure
-            fac.characters.add(element)
-            fac.save()
-        except ObjectDoesNotExist:
-            logs.append(f"Faction not found: {fac_name}")
-
-
-def registration_question_loads(request, ctx, files):
-    pass
-
-
-def registration_question_load(request, ctx, row, question):
-    cr = False
-    if not question:
-        question = RegistrationQuestion(event=ctx["event"])
-        cr = True
-
-    question.typ = row[0]
-    question.name = row[1]
-    question.description = row[2]
-    question.status = row[3]
-    question.save()
-    save_log(request.user.member, RegistrationQuestion, question)
-
-    num_options = int(row[4])
-    options = question.options.all()
-    for cnt in range(0, num_options):
-        if cnt < len(options):
-            option = options[cnt]
-        else:
-            option = RegistrationOption(event=ctx["event"], question=question)
-
-        ff = 5 + cnt * 4
-        option.name = row[ff]
-        option.description = row[ff + 1]
-        option.price = float(row[ff + 2])
-        option.max_available = int(row[ff + 3])
-        option.save()
-        save_log(request.user.member, RegistrationOption, option)
-
-    if num_options > len(options):
-        for cnt in range(num_options + 1, len(options)):
-            option = options[cnt]
-            option.delete()
-            save_log(request.user.member, WritingOption, option, dl=True)
-
-    if cr:
-        return "OK - Created"
-    else:
-        return "OK - Updated"
-
-
-def character_question_loads(request, ctx, files):
-    pass
-
-
-def character_question_load(request, ctx, row, question):
-    cr = False
-    if not question:
-        question = WritingQuestion(event=ctx["event"])
-        cr = True
-
-    question.typ = row[0]
-    question.name = row[1]
-    question.description = row[2]
-    question.status = row[3]
-    question.visibility = row[4]
-    question.save()
-    save_log(request.user.member, WritingQuestion, question)
-
-    num_options = int(row[5])
-    options = question.options.order_by("order")
-    for cnt in range(0, num_options):
-        if cnt < len(options):
-            option = options[cnt]
-        else:
-            option = WritingOption(event=ctx["event"], question=question)
-
-        ff = 6 + cnt * 5
-        option.name = row[ff]
-        option.description = row[ff + 1]
-        option.max_available = int(row[ff + 2])
-        if option.pk:
-            option.dependents.clear()
-            option.tickets.clear()
-        dependent_text = row[ff + 3].strip()
-        if dependent_text:
-            display_list = [d.strip().lower() for d in dependent_text.split(",")]
-            option.save()
-            dependent_options = WritingOption.objects.annotate(lower_name=Lower("name")).filter(
-                lower_display__in=display_list, event=ctx["event"]
-            )
-            option.dependents.set(dependent_options)
-        tickets_text = row[ff + 4].strip()
-        if tickets_text:
-            name_list = [d.strip().lower() for d in tickets_text.split(",")]
-            option.save()
-            tickets_options = RegistrationTicket.objects.annotate(lower_name=Lower("name")).filter(
-                lower_name__in=name_list, event=ctx["event"]
-            )
-            option.dependents.set(tickets_options)
-        option.save()
-        save_log(request.user.member, WritingOption, option)
-
-    if num_options > len(options):
-        for cnt in range(num_options + 1, len(options)):
-            option = options[cnt]
-            option.delete()
-            save_log(request.user.member, WritingOption, option, dl=True)
-
-    if cr:
-        return "OK - Created"
-    else:
-        return "OK - Updated"
