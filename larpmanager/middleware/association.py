@@ -21,6 +21,7 @@
 import os
 
 from django.conf import settings as conf_settings
+from django.contrib.auth import logout
 from django.shortcuts import redirect, render
 from django.utils.translation import get_language
 
@@ -68,6 +69,16 @@ class AssociationIdentifyMiddleware:
                     domain = assoc["main_domain"]
                     return redirect(f"https://{slug}.{domain}{request.get_full_path()}")
             return cls.load_assoc(request, assoc)
+
+        return cls.get_main_info(request, base_domain)
+
+    @classmethod
+    def get_main_info(cls, request, base_domain):
+        # if logged in with demo user visiting main page, logout
+        user = request.user
+        if user.is_authenticated and user.email.lower().endswith("demo.it"):
+            logout(request)
+            return redirect(request.path)
 
         skin = get_cache_skin(base_domain)
         if skin:
