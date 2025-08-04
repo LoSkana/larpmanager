@@ -76,9 +76,10 @@ class AssociationIdentifyMiddleware:
     def get_main_info(cls, request, base_domain):
         # if logged in with demo user visiting main page, logout
         user = request.user
-        if user.is_authenticated and user.email.lower().endswith("demo.it"):
-            logout(request)
-            return redirect(request.path)
+        if not request.path.startswith("/after_login/"):
+            if user.is_authenticated and user.email.lower().endswith("demo.it"):
+                logout(request)
+                return redirect(request.path)
 
         skin = get_cache_skin(base_domain)
         if skin:
