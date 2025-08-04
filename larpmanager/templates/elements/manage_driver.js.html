@@ -43,6 +43,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
         {% if not run %}
+        if ($('#exe_events').is(':visible')) {
         steps.push({
           element: '#exe_events',
           popover: {
@@ -52,6 +53,7 @@ window.addEventListener('DOMContentLoaded', function() {
             align: 'start'
           }
         });
+        }
         {% endif %}
 
         steps.push(
