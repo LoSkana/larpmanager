@@ -4370,18 +4370,6 @@ msgstr "Laden Sie"
 msgid "Download"
 msgstr "Herunterladen"
 
-msgid "Upload cover"
-msgstr "Cover hochladen"
-
-msgid "Select a file with extension 'zip'"
-msgstr "Wählen Sie eine Datei mit der Erweiterung 'zip'"
-
-msgid ""
-"Inside this file must be the photos, named by the number of the character"
-msgstr ""
-"In dieser Datei müssen sich die Fotos befinden, benannt nach der Nummer des "
-"Zeichens"
-
 msgid "Instructions"
 msgstr "Anweisungen"
 
@@ -9314,8 +9302,8 @@ msgid ""
 "Allowed type '%(allowed_type)s' is not a valid type.See https://www.iana.org/"
 "assignments/media-types/media-types.xhtml"
 msgstr ""
-"Erlaubter Typ '%(allowed_type)s' ist kein gültiger Typ, siehe https://www."
-"iana.org/assignments/media-types/media-types.xhtml"
+"Erlaubter Typ '%(allowed_type)s' ist kein gültiger Typ, siehe https://"
+"www.iana.org/assignments/media-types/media-types.xhtml"
 
 msgid "Welcome"
 msgstr "Willkommen"
@@ -10175,4 +10163,3 @@ msgstr ""
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "Ihre geschenkte Registrierung wurde eingelöst!"
-

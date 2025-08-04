@@ -4235,16 +4235,6 @@ msgstr "Przesyłanie"
 msgid "Download"
 msgstr "Pobierz"
 
-msgid "Upload cover"
-msgstr "Prześlij okładkę"
-
-msgid "Select a file with extension 'zip'"
-msgstr "Wybierz plik z rozszerzeniem \"zip"
-
-msgid ""
-"Inside this file must be the photos, named by the number of the character"
-msgstr "Wewnątrz tego pliku muszą znajdować się zdjęcia, nazwane numerem znaku"
-
 msgid "Instructions"
 msgstr "Instrukcje"
 
@@ -9817,4 +9807,3 @@ msgstr "Nie możesz wykupić członkostwa, jesteś już członkiem!"
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "Twoja podarowana rejestracja została zrealizowana!"
-

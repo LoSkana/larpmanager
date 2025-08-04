@@ -4152,17 +4152,6 @@ msgstr "Nabíjení"
 msgid "Download"
 msgstr "Stáhnout"
 
-msgid "Upload cover"
-msgstr "Nahrát obálku"
-
-msgid "Select a file with extension 'zip'"
-msgstr "Vyberte soubor s příponou 'zip'"
-
-msgid ""
-"Inside this file must be the photos, named by the number of the character"
-msgstr ""
-"Uvnitř tohoto souboru musí být fotografie pojmenované podle čísla znaku"
-
 msgid "Instructions"
 msgstr "Pokyny"
 
@@ -9618,4 +9607,3 @@ msgstr "Členství nelze vyměnit, jste již členem!"
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "Vaše darovaná registrace byla uplatněna!"
-

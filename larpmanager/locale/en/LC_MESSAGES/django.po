@@ -3762,16 +3762,6 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
-msgid "Upload cover"
-msgstr ""
-
-msgid "Select a file with extension 'zip'"
-msgstr ""
-
-msgid ""
-"Inside this file must be the photos, named by the number of the character"
-msgstr ""
-
 msgid "Instructions"
 msgstr ""
 

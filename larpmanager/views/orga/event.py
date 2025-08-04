@@ -267,7 +267,7 @@ def orga_upload(request, s, n, typ):
         if form.is_valid():
             try:
                 # print(request.FILES)
-                ctx["logs"] = go_upload(request, ctx, request.FILES)
+                ctx["logs"] = go_upload(request, ctx, form)
                 ctx["redr"] = redr
                 messages.success(request, _("Elements uploaded") + "!")
                 return render(request, "larpmanager/orga/uploads.html", ctx)

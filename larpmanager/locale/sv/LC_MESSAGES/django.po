@@ -4212,16 +4212,6 @@ msgstr "Avgift"
 msgid "Download"
 msgstr "Nedladdning"
 
-msgid "Upload cover"
-msgstr "Ladda upp omslag"
-
-msgid "Select a file with extension 'zip'"
-msgstr "Välj en fil med tillägget 'zip'"
-
-msgid ""
-"Inside this file must be the photos, named by the number of the character"
-msgstr "I den här filen måste bilderna finnas, namngivna med numret på tecknet"
-
 msgid "Instructions"
 msgstr "Instruktioner"
 
@@ -8328,8 +8318,8 @@ msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "
 "match and approve corresponding wire payments"
 msgstr ""
-"Gör det möjligt att ladda upp kontoutdrag från det finansiella systemet (t."
-"ex. kontoutdrag) för att matcha och godkänna motsvarande banköverföringar"
+"Gör det möjligt att ladda upp kontoutdrag från det finansiella systemet "
+"(t.ex. kontoutdrag) för att matcha och godkänna motsvarande banköverföringar"
 
 msgid "Now you can verify wire payments"
 msgstr "Nu kan du verifiera banköverföringar"
@@ -8972,8 +8962,8 @@ msgid ""
 "Allowed type '%(allowed_type)s' is not a valid type.See https://www.iana.org/"
 "assignments/media-types/media-types.xhtml"
 msgstr ""
-"Tillåten typ '%(allowed_type)s' är inte en giltig typ. Se https://www.iana."
-"org/assignments/media-types/media-types.xhtml"
+"Tillåten typ '%(allowed_type)s' är inte en giltig typ. Se https://"
+"www.iana.org/assignments/media-types/media-types.xhtml"
 
 msgid "Welcome"
 msgstr "Välkommen"
@@ -9798,4 +9788,3 @@ msgstr "Du kan inte lösa in ett medlemskap, du är redan medlem!"
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "Din förmånliga registrering har lösts in!"
-

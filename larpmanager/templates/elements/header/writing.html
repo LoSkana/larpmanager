@@ -28,9 +28,6 @@
             <a class="new button"
                href="{% url 'orga_export' run.event.slug run.number export %}">{% trans "Export" %}</a>
         {% endif %}
-        {% if features.cover and nm == 'character' %}
-            <a class="new button my_toggle" tog='cover-form' href="#">{% trans "Upload cover" %}</a>
-        {% endif %}
         {% if features.progress %}
             <a class="new button my_toggle" tog='progress-table' href="#">{% trans "Progress" %}</a>
         {% endif %}
@@ -57,25 +54,6 @@
         {% endfor %}
         <hr />
     </div>
-    {% if features.cover and nm == 'character' %}
-        <div class="hide cover-form">
-            <form action="{{ request.path }}"
-                  enctype="multipart/form-data"
-                  method="post">
-                {% csrf_token %}
-                {% trans "Select a file with extension 'zip'" %}.
-                {% trans "Inside this file must be the photos, named by the number of the character" %}.
-                <br />
-                <br />
-                <table class="no_csv">
-                    {{ form.as_table }}
-                </table>
-                <input type="hidden" name="upload" value="cover">
-                <input type="submit" value="Submit">
-            </form>
-            <hr />
-        </div>
-    {% endif %}
     {% if features.progress %}
         <div class="hide progress-table">
             <table class="no_csv">

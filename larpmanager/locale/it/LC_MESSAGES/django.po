@@ -4298,18 +4298,6 @@ msgstr "Carica"
 msgid "Download"
 msgstr "Scarica"
 
-msgid "Upload cover"
-msgstr "Carica cover"
-
-msgid "Select a file with extension 'zip'"
-msgstr "Selezionare un file con estensione \"zip\""
-
-msgid ""
-"Inside this file must be the photos, named by the number of the character"
-msgstr ""
-"All'interno di questo file devono essere presenti le foto, denominate con il "
-"numero del personaggio"
-
 msgid "Instructions"
 msgstr "Istruzioni"
 
@@ -9956,4 +9944,3 @@ msgstr "Non puoi riscattare una iscrizione, risulti già iscritto!"
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "La tua registrazione omaggio è stata riscattata!"
-

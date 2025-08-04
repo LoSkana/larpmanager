@@ -135,6 +135,12 @@ class UploadElementsForm(forms.Form):
     first = forms.FileField(validators=[validator], required=False)
     second = forms.FileField(validators=[validator], required=False)
 
+    def __init__(self, *args, **kwargs):
+        only_one = kwargs.pop("only_one", False)
+        super().__init__(*args, **kwargs)
+        if only_one and "second" in self.fields:
+            del self.fields["second"]
+
 
 class BaseWritingForm(BaseRegistrationForm):
     gift = False

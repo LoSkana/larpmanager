@@ -4263,18 +4263,6 @@ msgstr "Carga"
 msgid "Download"
 msgstr "Descargar"
 
-msgid "Upload cover"
-msgstr "Subir portada"
-
-msgid "Select a file with extension 'zip'"
-msgstr "Seleccione un archivo con extensión \"zip"
-
-msgid ""
-"Inside this file must be the photos, named by the number of the character"
-msgstr ""
-"Dentro de este archivo deben estar las fotos, nombradas por el número del "
-"carácter"
-
 msgid "Instructions"
 msgstr "Instrucciones"
 
@@ -9067,8 +9055,8 @@ msgid ""
 "Allowed type '%(allowed_type)s' is not a valid type.See https://www.iana.org/"
 "assignments/media-types/media-types.xhtml"
 msgstr ""
-"El tipo permitido '%(allowed_type)s' no es un tipo válido.Ver https://www."
-"iana.org/assignments/media-types/media-types.xhtml"
+"El tipo permitido '%(allowed_type)s' no es un tipo válido.Ver https://"
+"www.iana.org/assignments/media-types/media-types.xhtml"
 
 msgid "Welcome"
 msgstr "Bienvenido"
@@ -9904,4 +9892,3 @@ msgstr "No puede canjear una afiliación, ¡ya es afiliado!"
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "¡Tu inscripción regalada ha sido canjeada!"
-

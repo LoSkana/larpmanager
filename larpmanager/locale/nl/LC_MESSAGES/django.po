@@ -4295,17 +4295,6 @@ msgstr "Laad"
 msgid "Download"
 msgstr "Downloaden"
 
-msgid "Upload cover"
-msgstr "Upload omslag"
-
-msgid "Select a file with extension 'zip'"
-msgstr "Selecteer een bestand met extensie 'zip"
-
-msgid ""
-"Inside this file must be the photos, named by the number of the character"
-msgstr ""
-"In dit bestand moeten de foto's staan, genoemd naar het nummer van het teken"
-
 msgid "Instructions"
 msgstr "Instructies"
 
@@ -6115,8 +6104,8 @@ msgid ""
 "Type a keyword in the search bar to find a reference - please write in "
 "English"
 msgstr ""
-"Typ een trefwoord in de zoekbalk om een referentie te vinden - schrijf a.u."
-"b. in het Engels"
+"Typ een trefwoord in de zoekbalk om een referentie te vinden - schrijf "
+"a.u.b. in het Engels"
 
 msgid "Feature activated"
 msgstr "Functie geactiveerd"
@@ -9122,8 +9111,8 @@ msgid ""
 "Allowed type '%(allowed_type)s' is not a valid type.See https://www.iana.org/"
 "assignments/media-types/media-types.xhtml"
 msgstr ""
-"Toegestaan type '%(allowed_type)s' is geen geldig type. Zie https://www.iana."
-"org/assignments/media-types/media-types.xhtml"
+"Toegestaan type '%(allowed_type)s' is geen geldig type. Zie https://"
+"www.iana.org/assignments/media-types/media-types.xhtml"
 
 msgid "Welcome"
 msgstr "Welkom"
@@ -9967,4 +9956,3 @@ msgstr "Je kunt geen lidmaatschap inwisselen, je bent al lid!"
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "Je geschonken registratie is verzilverd!"
-

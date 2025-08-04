@@ -244,10 +244,6 @@ def _row_header(ctx, el, key, member_cover, model, val):
 
         _header_regs(ctx, el, key, val)
 
-    else:
-        val.append(el.number)
-        key.append("number")
-
 
 def _expand_val(val, el, field):
     if hasattr(el, field):

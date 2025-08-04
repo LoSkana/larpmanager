@@ -4330,17 +4330,6 @@ msgstr "Charge"
 msgid "Download"
 msgstr "Télécharger"
 
-msgid "Upload cover"
-msgstr "Télécharger la couverture"
-
-msgid "Select a file with extension 'zip'"
-msgstr "Sélectionnez un fichier avec l'extension \"zip"
-
-msgid ""
-"Inside this file must be the photos, named by the number of the character"
-msgstr ""
-"Ce fichier doit contenir les photos, nommées par le numéro du caractère"
-
 msgid "Instructions"
 msgstr "Instructions"
 
@@ -10082,4 +10071,3 @@ msgstr "Vous ne pouvez pas racheter une adhésion, vous êtes déjà membre !"
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "Votre cadeau d'enregistrement a été échangé !"
-
