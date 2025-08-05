@@ -2,15 +2,6 @@ $(".hide:visible").hide();
 
 window.addEventListener('DOMContentLoaded', function() {
 
-// uniform cookies # TODO remove
-document.cookie.split(";").forEach(c => {
-    const [name, value] = c.trim().split("=");
-    if (name === "csrftoken") {
-        document.cookie = `csrftoken=${value}; path=/; domain=${location.hostname};`;
-        document.cookie = `csrftoken=; path=/; domain=.larpmanager.com; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
-    }
-});
-
 $.ajaxSetup({
      beforeSend: function(xhr, settings) {
          function getCookie(name) {
