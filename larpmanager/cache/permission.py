@@ -95,7 +95,9 @@ def index_permission_key(typ):
 
 
 def update_index_permission(typ):
-    que = typ.objects.select_related("feature", "feature__module").order_by("feature__module__order", "number")
+    mapping = {"event": EventPermission, "assoc": AssocPermission}
+    que = mapping[typ].objects.select_related("feature", "feature__module")
+    que = que.order_by("feature__module__order", "number")
     return que.values(
         "name",
         "slug",
