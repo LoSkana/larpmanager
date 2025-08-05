@@ -1942,6 +1942,9 @@ msgstr "Melding sendt!"
 msgid "Minimum votes"
 msgstr "Minimum antall stemmer"
 
+msgid "Name of quest"
+msgstr "Navn på oppdraget"
+
 msgid "New character"
 msgstr "Ny karakter"
 
@@ -2716,6 +2719,9 @@ msgstr "Informasjon lagret"
 
 msgid "Member Data Checks"
 msgstr "Kontroll av medlemsdata"
+
+msgid "Name of quest type"
+msgstr "Navn på oppdragstype"
 
 msgid "New refund request"
 msgstr "Ny forespørsel om refusjon"

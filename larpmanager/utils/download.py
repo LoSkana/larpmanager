@@ -84,13 +84,13 @@ def export_data(ctx, typ, member_cover=False):
     model = typ.__name__.lower()
     query = _download_prepare(ctx, model, query, typ)
 
-    answers, applicable, choices, questions = _prepare_export(ctx, model, query)
+    _prepare_export(ctx, model, query)
 
     key = None
     vals = []
     for el in query:
-        if applicable or model == "registration":
-            val, key = _get_applicable_row(ctx, el, choices, answers, questions, model, member_cover)
+        if ctx["applicable"] or model == "registration":
+            val, key = _get_applicable_row(ctx, el, model, member_cover)
         else:
             val, key = _get_standard_row(ctx, el)
         vals.append(val)
@@ -182,17 +182,30 @@ def _prepare_export(ctx, model, query):
         for rcr in RegistrationCharacterRel.objects.filter(reg__run=ctx["run"]).select_related("reg", "reg__member"):
             ctx["assignments"][rcr.character.id] = rcr.reg.member
 
-    return answers, applicable, choices, questions
+    ctx["applicable"] = applicable
+    ctx["answers"] = answers
+    ctx["choices"] = choices
+    ctx["questions"] = questions
 
 
-def _get_applicable_row(ctx, el, choices, answers, questions, model, member_cover=False):
+def _get_applicable_row(ctx, el, model, member_cover=False):
     val = []
     key = []
 
     _row_header(ctx, el, key, member_cover, model, val)
 
+    if ctx["applicable"] == QuestionApplicable.QUEST:
+        key.append("typ")
+        val.append(el.typ.name)
+    elif ctx["applicable"] == QuestionApplicable.TRAIT:
+        key.append("quest")
+        val.append(el.quest.name)
+
+    answers = ctx["answers"]
+    choices = ctx["choices"]
+
     # add question values
-    for que in questions:
+    for que in ctx["questions"]:
         key.append(que.name)
         mapping = _get_values_mapping(el)
         value = ""
@@ -592,27 +605,43 @@ def _get_column_names(ctx):
         ]
 
     else:
-        ctx["writing_typ"] = QuestionApplicable.get_applicable(ctx["typ"])
-        ctx["fields"] = {}
-        que = ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"])
-        for field in que.order_by("order").values("name", "typ"):
-            ctx["fields"][field["name"]] = field["typ"]
-            if field["typ"] == "name":
-                ctx["field_name"] = field["name"]
+        _get_writing_names(ctx)
 
-        if ctx["writing_typ"] == QuestionApplicable.CHARACTER and "relationships" in ctx["features"]:
-            ctx["columns"] = [
+
+def _get_writing_names(ctx):
+    ctx["writing_typ"] = QuestionApplicable.get_applicable(ctx["typ"])
+    ctx["fields"] = {}
+    que = ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"])
+    for field in que.order_by("order").values("name", "typ"):
+        ctx["fields"][field["name"]] = field["typ"]
+        if field["typ"] == "name":
+            ctx["field_name"] = field["name"]
+
+    ctx["columns"] = [{}]
+    if ctx["writing_typ"] == QuestionApplicable.CHARACTER:
+        if "relationships" in ctx["features"]:
+            ctx["columns"].append(
                 {
                     "source": _("First character in the relationship (origin)"),
                     "target": _("Second character in the relationship (destination)"),
                     "text": _("Description of the relationship from source to target"),
                 }
-            ]
-        elif ctx["writing_typ"] == QuestionApplicable.PLOT:
-            ctx["columns"] = [
-                {
-                    "plot": _("Name of the plot"),
-                    "character": _("Name of the character"),
-                    "text": _("Description of the role of the character in the plot"),
-                }
-            ]
+            )
+
+    elif ctx["writing_typ"] == QuestionApplicable.PLOT:
+        ctx["columns"].append(
+            {
+                "plot": _("Name of the plot"),
+                "character": _("Name of the character"),
+                "text": _("Description of the role of the character in the plot"),
+            }
+        )
+
+    elif ctx["writing_typ"] == QuestionApplicable.QUEST:
+        ctx["columns"][0]["typ"] = _("Name of quest type")
+
+    elif ctx["writing_typ"] == QuestionApplicable.TRAIT:
+        ctx["columns"][0]["quest"] = _("Name of quest")
+
+    ctx["allowed"] = list(ctx["columns"][0].keys())
+    ctx["allowed"].extend(ctx["fields"].keys())

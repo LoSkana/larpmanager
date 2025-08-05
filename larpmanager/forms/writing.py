@@ -302,7 +302,7 @@ class QuestTypeForm(WritingForm):
 
     class Meta:
         model = QuestType
-        fields = ["progress", "name", "assigned", "teaser", "event"]
+        fields = ["name", "teaser", "event"]
 
         widgets = {
             "teaser": WritingTinyMCE(),

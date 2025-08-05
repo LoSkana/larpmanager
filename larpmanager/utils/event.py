@@ -29,7 +29,6 @@ from larpmanager.cache.fields import get_event_fields_cache
 from larpmanager.cache.permission import get_event_permission_feature
 from larpmanager.cache.role import get_event_roles, has_event_permission
 from larpmanager.cache.run import get_cache_config_run, get_cache_run
-from larpmanager.models.access import EventPermission
 from larpmanager.models.event import Event, Run
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, Faction, FactionType
@@ -251,4 +250,4 @@ def get_index_event_permissions(ctx, request, slug, check=True):
         raise PermissionError()
     ctx["role_names"] = names
     features = get_event_features(ctx["event"].id)
-    ctx["event_pms"] = get_index_permissions(features, is_organizer, user_event_permissions, EventPermission)
+    ctx["event_pms"] = get_index_permissions(features, is_organizer, user_event_permissions, "event")

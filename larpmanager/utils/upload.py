@@ -238,7 +238,7 @@ def writing_load(request, ctx, form):
     logs = []
     uploaded_file = form.cleaned_data.get("first", None)
     if uploaded_file:
-        (input_df, logs) = _get_file(ctx, uploaded_file)
+        (input_df, logs) = _get_file(ctx, uploaded_file, 0)
 
         que = (
             ctx["event"].get_elements(WritingQuestion).filter(applicable=ctx["writing_typ"]).prefetch_related("options")
@@ -253,7 +253,7 @@ def writing_load(request, ctx, form):
     if ctx["typ"] == "character":
         uploaded_file = form.cleaned_data.get("second", None)
         if uploaded_file:
-            (input_df, new_logs) = _get_file(ctx, uploaded_file, 0)
+            (input_df, new_logs) = _get_file(ctx, uploaded_file, 1)
             chars = {el["name"].lower(): el["id"] for el in ctx["event"].get_elements(Character).values("id", "name")}
             if input_df is not None:
                 for row in input_df.to_dict(orient="records"):
@@ -264,7 +264,7 @@ def writing_load(request, ctx, form):
     if ctx["typ"] == "plot":
         uploaded_file = form.cleaned_data.get("second", None)
         if uploaded_file:
-            (input_df, new_logs) = _get_file(ctx, uploaded_file, 0)
+            (input_df, new_logs) = _get_file(ctx, uploaded_file, 1)
             chars = {el["name"].lower(): el["id"] for el in ctx["event"].get_elements(Character).values("id", "name")}
             plots = {el["name"].lower(): el["id"] for el in ctx["event"].get_elements(Plot).values("id", "name")}
             if input_df is not None:

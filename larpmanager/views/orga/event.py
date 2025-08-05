@@ -307,72 +307,89 @@ def orga_upload_template(request, s, n, typ):
         QuestionType.ASSIGNED: "name of assigned staff",
     }
     if ctx.get("writing_typ"):
-        keys = ctx["fields"]
-        vals = [value_mapping[field_typ] for _field, field_typ in ctx["fields"].items()]
-        exports = [(f"{typ} - template", keys, [vals])]
-
-        if ctx["writing_typ"] == QuestionApplicable.CHARACTER and "relationships" in ctx["features"]:
-            exports.append(
-                (
-                    "relationships - template",
-                    list(ctx["columns"][0].keys()),
-                    [["Test Character", "Another Character", "Super pals"]],
-                )
-            )
-
-        if ctx["writing_typ"] == QuestionApplicable.PLOT:
-            exports.append(
-                (
-                    "roles - template",
-                    list(ctx["columns"][0].keys()),
-                    [["Test Plot", "Test Character", "Gonna be a super star"]],
-                )
-            )
-
+        exports = _writing_template(ctx, typ, value_mapping)
     elif typ == "registration":
-        keys = list(ctx["columns"][0].keys())
-        vals = []
-        defs = {"player": "user@test.it", "ticket": "Standard", "character": "Test Character", "donation": "5"}
-        for field, value in defs.items():
-            if field not in keys:
-                continue
-            vals.append(value)
-        keys.extend(ctx["fields"])
-        for _field, field_typ in ctx["fields"].items():
-            vals.append(value_mapping[field_typ])
-        exports = [(f"{typ} - template", keys, [vals])]
+        exports = _reg_template(ctx, typ, value_mapping)
     else:
-        exports = []
-        defs = {
-            "name": "Question Name",
-            "typ": "multi-choice",
-            "description": "Question Description",
-            "status": "optional",
-            "applicable": "character",
-            "visibility": "public",
-            "max_length": "1",
-        }
-        keys = list(ctx["columns"][0].keys())
-        vals = []
-        for field, value in defs.items():
-            if field not in keys:
-                continue
-            vals.append(value)
-        exports.append(("questions", keys, [vals]))
-
-        defs = {
-            "question": "Question Name",
-            "name": "Option Name",
-            "description": "Option description",
-            "max_available": "2",
-            "price": "10",
-        }
-        keys = list(ctx["columns"][1].keys())
-        vals = []
-        for field, value in defs.items():
-            if field not in keys:
-                continue
-            vals.append(value)
-        exports.append(("options", keys, [vals]))
+        exports = _form_template(ctx)
 
     return zip_exports(ctx, exports, "template")
+
+
+def _form_template(ctx):
+    exports = []
+    defs = {
+        "name": "Question Name",
+        "typ": "multi-choice",
+        "description": "Question Description",
+        "status": "optional",
+        "applicable": "character",
+        "visibility": "public",
+        "max_length": "1",
+    }
+    keys = list(ctx["columns"][0].keys())
+    vals = []
+    for field, value in defs.items():
+        if field not in keys:
+            continue
+        vals.append(value)
+    exports.append(("questions", keys, [vals]))
+    defs = {
+        "question": "Question Name",
+        "name": "Option Name",
+        "description": "Option description",
+        "max_available": "2",
+        "price": "10",
+    }
+    keys = list(ctx["columns"][1].keys())
+    vals = []
+    for field, value in defs.items():
+        if field not in keys:
+            continue
+        vals.append(value)
+    exports.append(("options", keys, [vals]))
+    return exports
+
+
+def _reg_template(ctx, typ, value_mapping):
+    keys = list(ctx["columns"][0].keys())
+    vals = []
+    defs = {"player": "user@test.it", "ticket": "Standard", "character": "Test Character", "donation": "5"}
+    for field, value in defs.items():
+        if field not in keys:
+            continue
+        vals.append(value)
+    keys.extend(ctx["fields"])
+    for _field, field_typ in ctx["fields"].items():
+        vals.append(value_mapping[field_typ])
+    exports = [(f"{typ} - template", keys, [vals])]
+    return exports
+
+
+def _writing_template(ctx, typ, value_mapping):
+    keys = list(ctx["fields"].keys())
+    vals = [value_mapping[field_typ] for _field, field_typ in ctx["fields"].items()]
+    if ctx["writing_typ"] == QuestionApplicable.QUEST:
+        keys.insert(0, "typ")
+        vals.insert(0, "name of quest type")
+    elif ctx["writing_typ"] == QuestionApplicable.TRAIT:
+        keys.insert(0, "quest")
+        vals.insert(0, "name of quest")
+    exports = [(f"{typ} - template", keys, [vals])]
+    if ctx["writing_typ"] == QuestionApplicable.CHARACTER and "relationships" in ctx["features"]:
+        exports.append(
+            (
+                "relationships - template",
+                list(ctx["columns"][0].keys()),
+                [["Test Character", "Another Character", "Super pals"]],
+            )
+        )
+    if ctx["writing_typ"] == QuestionApplicable.PLOT:
+        exports.append(
+            (
+                "roles - template",
+                list(ctx["columns"][0].keys()),
+                [["Test Plot", "Test Character", "Gonna be a super star"]],
+            )
+        )
+    return exports

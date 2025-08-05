@@ -116,7 +116,7 @@
             <h2>{% trans "Relationships" %}</h2>
             <p>{% trans "To upload relationships, add a second file with the following columns" %}</p>
             <table>
-                {% for column, description in columns.0.items %}
+                {% for column, description in columns.1.items %}
                     <tr>
                         <th>
                             <h3>{{ column | safe }}</h3>
@@ -129,7 +129,7 @@
             <h2>{% trans "Roles" %}</h2>
             <p>{% trans "To upload role of the characters in the plots, add a second file with the following columns" %}</p>
             <table>
-                {% for column, description in columns.0.items %}
+                {% for column, description in columns.1.items %}
                     <tr>
                         <th>
                             <h3>{{ column | safe }}</h3>

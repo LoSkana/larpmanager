@@ -8005,6 +8005,12 @@ msgstr ""
 msgid "Description of the role of the character in the plot"
 msgstr ""
 
+msgid "Name of quest type"
+msgstr ""
+
+msgid "Name of quest"
+msgstr ""
+
 msgid "Operation completed"
 msgstr ""
 

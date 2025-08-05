@@ -23,9 +23,8 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.cache.links import cache_event_links
-from larpmanager.cache.permission import get_assoc_permission_feature
+from larpmanager.cache.permission import get_assoc_permission_feature, get_cache_index_permission
 from larpmanager.cache.role import get_assoc_roles, has_assoc_permission
-from larpmanager.models.access import AssocPermission
 from larpmanager.models.association import Association
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.utils import get_payment_details
@@ -108,20 +107,20 @@ def get_index_assoc_permissions(ctx, request, assoc_id, check=True):
 
     ctx["role_names"] = names
     features = get_assoc_features(assoc_id)
-    ctx["assoc_pms"] = get_index_permissions(features, is_admin, user_assoc_permissions, AssocPermission)
+    ctx["assoc_pms"] = get_index_permissions(features, is_admin, user_assoc_permissions, "assoc")
     ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
 
 def get_index_permissions(features, has_default, permissions, typ):
     res = {}
-    for ar in typ.objects.select_related("feature", "feature__module").order_by("feature__module__order", "number"):
-        if ar.hidden:
+    for ar in get_cache_index_permission(typ):
+        if ar["hidden"]:
             continue
-        if not has_default and ar.slug not in permissions:
+        if not has_default and ar["slug"] not in permissions:
             continue
-        if not ar.feature.placeholder and ar.feature.slug not in features:
+        if not ar["feature__placeholder"] and ar["feature__slug"] not in features:
             continue
-        mod_name = (_(ar.feature.module.name), ar.feature.module.icon)
+        mod_name = (_(ar["feature__module__name"]), ar["feature__module__icon"])
         if mod_name not in res:
             res[mod_name] = []
         res[mod_name].append(ar)
