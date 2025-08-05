@@ -3,7 +3,7 @@
 **LarpManager** is a free and open-source platform to manage **LARP (Live Action Role-Playing)** events.
 It has everything you need to run your LARP, free & open source!
 
-> Not interested in self-hosting? Start using it right away at [https://larpmanager.com](https://larpmanager.com)
+> Not interested in self-hosting? Start using it right away at [https://larpmanager.com](https://larpmanager.com)!
 
 ![License: AGPL or Commercial](https://img.shields.io/badge/license-AGPL%20%2F%20Commercial-blue.svg)
 
@@ -22,13 +22,13 @@ See the LICENSE file for details.
 
 ## Quick set up
 
-If you want an easy and fast deploy, set the environment variables (see below for instructions on their values)[# environment]:
+If you want an easy and fast deploy, set the environment variables see below for [instructions](#environment) on their values:
 
 ```
 cp .env.example .env
 ```
 
-Now time for the docker magic (see below for instructions on installing it)[# docker]:
+Now time for the docker magic (see below for [instructions](#docker) on installing it):
 
 ```
 docker compose up --build
