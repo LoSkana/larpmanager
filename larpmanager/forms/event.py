@@ -755,6 +755,8 @@ class OrgaEventRoleForm(MyForm):
 
     page_info = _("This page allows you to change the access roles for the event")
 
+    load_templates = ["share"]
+
     class Meta:
         model = EventRole
         fields = ("name", "members", "event")

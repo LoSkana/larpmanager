@@ -29,6 +29,7 @@ from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
+from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
@@ -390,6 +391,19 @@ def element_load(request, ctx, row, questions):
 
 
 def _writing_load_field(ctx, element, field, value, questions, logs):
+    if field == "typ":
+        try:
+            element.typ = ctx["event"].get_elements(QuestType).get(name__iexact=value)
+        except ObjectDoesNotExist:
+            logs.append(f"ERR - quest type not found: {value}")
+        return
+    if field == "quest":
+        try:
+            element.quest = ctx["event"].get_elements(Quest).get(name__iexact=value)
+        except ObjectDoesNotExist:
+            logs.append(f"ERR - quest not found: {value}")
+        return
+
     field_type = ctx["fields"][field]
 
     if field_type == QuestionType.NAME:
@@ -399,6 +413,10 @@ def _writing_load_field(ctx, element, field, value, questions, logs):
     if not value:
         return
 
+    _writing_question_load(ctx, element, field, field_type, logs, questions, value)
+
+
+def _writing_question_load(ctx, element, field, field_type, logs, questions, value):
     if field_type == QuestionType.MIRROR:
         _get_mirror_instance(ctx, element, value, logs)
     elif field_type == QuestionType.HIDE:

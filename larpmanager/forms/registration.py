@@ -399,6 +399,8 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
     page_title = _("Registrations")
 
+    load_templates = ["share"]
+
     load_js = ["characters-reg-choices"]
 
     class Meta:
