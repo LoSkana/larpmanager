@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
-    {% if not contact_form.errors %}Thanks!{% endif %}
+    {% if contact_form.errors %}
+        Contact us
+    {% else %}
+        Thanks!
+    {% endif %}
 {% endblock title %}
 {% block content %}
-    {% if not contact_form.errors %}Thank you for getting in touch with us, we'll contact you very soon!{% endif %}
+    {% if not contact_form.errors %}
+        Thank you for getting in touch with us, we'll contact you very soon!
+    {% endif %}
 {% endblock content %}
