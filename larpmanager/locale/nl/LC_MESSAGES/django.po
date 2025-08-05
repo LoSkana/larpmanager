@@ -1942,6 +1942,9 @@ msgstr "Bericht verzonden!"
 msgid "Minimum votes"
 msgstr "Minimum aantal stemmen"
 
+msgid "Name of quest"
+msgstr "Naam van zoektocht"
+
 msgid "New character"
 msgstr "Nieuw personage"
 
@@ -2716,6 +2719,9 @@ msgstr "Informatie opgeslagen"
 
 msgid "Member Data Checks"
 msgstr "Gegevens van leden controleren"
+
+msgid "Name of quest type"
+msgstr "Naam van type zoektocht"
 
 msgid "New refund request"
 msgstr "Nieuw verzoek om terugbetaling"

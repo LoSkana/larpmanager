@@ -1942,6 +1942,9 @@ msgstr "Zpráva odeslána!"
 msgid "Minimum votes"
 msgstr "Minimální počet hlasů"
 
+msgid "Name of quest"
+msgstr "Název úkolu"
+
 msgid "New character"
 msgstr "Nová postava"
 
@@ -2716,6 +2719,9 @@ msgstr "Informace uloženy"
 
 msgid "Member Data Checks"
 msgstr "Kontroly členských údajů"
+
+msgid "Name of quest type"
+msgstr "Název typu úkolu"
 
 msgid "New refund request"
 msgstr "Nová žádost o vrácení peněz"

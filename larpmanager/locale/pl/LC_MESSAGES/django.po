@@ -1942,6 +1942,9 @@ msgstr "Wiadomość wysłana!"
 msgid "Minimum votes"
 msgstr "Minimalna liczba głosów"
 
+msgid "Name of quest"
+msgstr "Nazwa zadania"
+
 msgid "New character"
 msgstr "Nowa postać"
 
@@ -2716,6 +2719,9 @@ msgstr "Informacje zapisane"
 
 msgid "Member Data Checks"
 msgstr "Kontrola danych członkowskich"
+
+msgid "Name of quest type"
+msgstr "Nazwa typu zadania"
 
 msgid "New refund request"
 msgstr "Nowy wniosek o zwrot pieniędzy"

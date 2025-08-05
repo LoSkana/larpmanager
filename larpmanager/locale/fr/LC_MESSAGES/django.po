@@ -1942,6 +1942,9 @@ msgstr "Message envoyé !"
 msgid "Minimum votes"
 msgstr "Nombre de voix minimum"
 
+msgid "Name of quest"
+msgstr "Nom de la quête"
+
 msgid "New character"
 msgstr "Nouveau personnage"
 
@@ -2716,6 +2719,9 @@ msgstr "Information sauvegardée"
 
 msgid "Member Data Checks"
 msgstr "Contrôle des données des membres"
+
+msgid "Name of quest type"
+msgstr "Nom du type de quête"
 
 msgid "New refund request"
 msgstr "Nouvelle demande de remboursement"
