@@ -64,8 +64,7 @@
         {% endblock css-req %}
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"
                 integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-                crossorigin="anonymous"
-                defer></script>
+                crossorigin="anonymous"></script>
         {% block robots %}
         {% endblock robots %}
         {{ form.media }}
@@ -103,25 +102,7 @@
                   href="{% static 'larpmanager/assets/css/noscript.css' %}" />
         </noscript>
         <link rel="stylesheet"
-              href="https://unpkg.com/simplebar@latest/dist/simplebar.css" />
-        <noscript>
-            <style>
-            /**
-            * Reinstate scrolling for non-JS clients
-            */
-            .simplebar-content-wrapper {
-              scrollbar-width: auto;
-              -ms-overflow-style: auto;
-            }
-
-            .simplebar-content-wrapper::-webkit-scrollbar,
-            .simplebar-hide-scrollbar::-webkit-scrollbar {
-              display: initial;
-              width: initial;
-              height: initial;
-            }
-            </style>
-        </noscript>
+              href="//cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css" />
     </head>
     <body class="is-preload {% if interface_old %}interface_old{% endif %}"
           id="{{ assoc.name | slugify }}">
@@ -185,7 +166,7 @@
         {% block js2 %}
         {% endblock js2 %}
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-        <script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script>
+        <script src="//cdn.datatables.net/2.3.2/js/dataTables.min.js"></script>
         <script>
         function setCookie(name,value,days) {
             var expires = "";

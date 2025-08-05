@@ -267,7 +267,6 @@ $(document).ready(function() {
             $(this).removeClass('select');
         }
 
-        window.syncColumnWidths();
         return false;
 
     });
@@ -369,83 +368,31 @@ $(document).ready(function() {
         }
     });
 
-    sticky_tables();
+    data_tables();
 
     post_popup();
 });
 
+function data_tables() {
+    $('table').each(function() {
+        const $table = $(this);
 
-window.syncColumnWidths = function () {
-    $('.table-sticky table').each(function () {
-        var $originalTable = $(this);
-        stickyId = $originalTable.attr('sticky-table');
-        console.log(stickyId);
-        var $stickyTable = $('[sticky-header="' + stickyId + '"]');;
+        // skip per mobile or explicit avoid
+        if ($table.hasClass('no_datatables') || $table.hasClass('mob')) return;
 
-        if (!$originalTable.length || !$stickyTable.length) return;
+        // assign random id
+        if (!$table.attr('id')) {
+          const randomId = 'table-' + Math.random().toString(36).substr(2, 9);
+          $table.attr('id', randomId);
+        }
 
-        var $originalThs = $originalTable.find('thead tr:first-child th');
-        var $clonedThs = $stickyTable.find('thead tr:first-child th');
+        $(this).addClass("stripe");
 
-        $stickyTable.width($originalTable.outerWidth());
-
-        $originalThs.each(function (index) {
-            var width = $(this).outerWidth();
-            $clonedThs.eq(index).css({
-                width: width,
-                minWidth: width,
-                maxWidth: width
-            });
+        // init datatable
+        new DataTable('#' + $table.attr('id'), {
+            scrollX: true,
+            stateSave: true
         });
-    });
-}
-
-function sticky_tables() {
-    $('table').each(function () {
-      const table = $(this);
-
-      if (table.hasClass('no_sticky')) return;
-      if (table.hasClass('mob')) return;
-
-      if (!table.parent().hasClass('table-sticky')) {
-        table.wrap('<div class="table-sticky"></div>');
-      }
-
-    // assign random id
-    var randomId = Math.random().toString(36).substr(2, 9);
-    table.attr('sticky-table', randomId);
-
-    // copy thead
-    var $originalThead = table.find('thead');
-    var $clonedThead = $originalThead.clone();
-
-    var $stickyTable = $('<table>').attr('sticky-header', randomId).append($clonedThead);
-    var $stickyContainer = $('<div>').addClass('sticky-header').append($stickyTable);
-    table.parent().before($stickyContainer);
-
-    $(window).on('resize load', window.syncColumnWidths);
-    window.syncColumnWidths();
-
-    // add simple bar
-    const wrapper = table.parent('.table-sticky')[0];
-    if (!wrapper.classList.contains('simplebar-initialized')) {
-        new SimpleBar(wrapper, {
-            autoHide: false
-        });
-    }
-
-
-        /*
-      table.find('tr').each(function () {
-        $(this).find('th:first-child, td:first-child').addClass('sticky-col');
-      });
-
-      table.find('tr').each(function () {
-        $(this).find('th:nth-child(2), td:nth-child(2)').addClass('sticky-col-2');
-      });
-
-      const corner = table.find('thead tr:first-child th:first-child');
-      corner.addClass('sticky-header sticky-col');  */
     });
 }
 

@@ -11,10 +11,6 @@
             window.location.href = newUrl;
         });
         </script>
-        <a class="new button my_toggle" tog='search' href="#">{% trans "Search" %}</a>
-        {% if list %}
-            <a class="new button my_toggle" tog='show_list' href="#">{% trans "List" %}</a>
-        {% endif %}
         {% if upload %}
             <a class="new button"
                href="{% url 'orga_upload' run.event.slug run.number upload %}">{% trans "Upload" %}</a>
@@ -31,22 +27,4 @@
                href="{% url 'orga_export' run.event.slug run.number export %}">{% trans "Export" %}</a>
         {% endif %}
     </div>
-    <div class="hide search">
-        <input type="text" placeholder="Search..." id="search_tbl" />
-        <hr />
-    </div>
-    {% if list %}
-        <div class="hide show_list">
-            {% for el in list %}
-                <a href="#{{ el.id }}">
-                    {% if el.search %}
-                        {{ el.search }}
-                    {% else %}
-                        {{ el }}
-                    {% endif %}
-                </a>
-            {% endfor %}
-            <hr />
-        </div>
-    {% endif %}
 </div>

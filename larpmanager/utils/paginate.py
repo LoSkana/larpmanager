@@ -50,6 +50,7 @@ def paginate(request, ctx, typ, exe, selrel, show_runs, afield, subtype):
 
     elements = elements.order_by("-created")
 
+    size = 1000
     paginator = Paginator(elements, per_page=size)
     page = min(page, paginator.num_pages)
 

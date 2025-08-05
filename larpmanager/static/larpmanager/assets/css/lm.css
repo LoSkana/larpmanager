@@ -1006,7 +1006,7 @@ table.fixed {
 
 #header h1 {
     padding: 0.5em 6em 0.5em 7.5em;
-    height: 3em;
+    height: 1.5em;
     line-height: 1.2;
     text-align: center;
     display: flex;
@@ -1873,48 +1873,31 @@ input[type="checkbox"].checkbox_single {
     margin: 0 0.5em 0 0;
 }
 
-### STICKY TABLES ###
-
-.table-sticky table {
-  border-collapse: collapse;
-  width: max-content;
+.dt-length select, .dt-length label, .dt-search label {
+    display: inline-block;
+    font-weight: initial;
+    letter-spacing: initial;
+    text-transform: initial;
 }
 
-.table-sticky thead {
-  border: 0;
-  font-size: 0.01px;
-  font-align: center;
+.dt-length label {
+    margin-left: 1em;
 }
 
-.sticky-header table {
-  position: sticky;
-  top: 0;
-  z-index: 3;
-  border-bottom: solid 2px rgba(var(--pri-rgb), 0.5);
-  margin: 0;
-  font-align: center;
-}
-
-/* Firefox */
-.table-sticky {
-  scrollbar-width: thick;
-  scrollbar-color: #888 #f1f1f1;
-}
-
-.table-sticky {
-  overflow: auto;
-  max-height: 80vh;
-}
-
-.simplebar-scrollbar {
-  box-shadow: none !important;
-  background: none !important;
-}
-
-.simplebar-scrollbar::before {
-  content: '';
-  display: block;
-  border-radius: 7px;
-  height: 100%;
-  background: rgba(var(--ter-rgb), 0.7) !important;
+.dt-length select, .dt-search input {
+    border-color: rgba(var(--ter-rgb), 0.35) !important;
+    border-width: 2px !important;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    background: rgba(var(--sec-rgb), 0.5);
+    border-radius: 5px;
+    border: none;
+    border: solid 2px rgba(var(--sec-rgb), 0.25);
+    color: inherit;
+    outline: 0;
+    padding: 0 1em;
+    text-decoration: none;
+    margin: 0 auto;
 }

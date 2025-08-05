@@ -60,8 +60,6 @@ function load_question(el) {
 
         el.next().trigger('click');
 
-        window.syncColumnWidths();
-
          done[num.toString()] = 1;
 
          if (spinner) {

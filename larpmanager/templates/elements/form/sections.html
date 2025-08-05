@@ -22,7 +22,7 @@
       {% if form.main_class %}class="{{ form.main_class }}"{% endif %}>
     {% csrf_token %}
     <div>
-        <table class="mob no_csv no_sticky">
+        <table class="mob no_csv no_datatables">
             {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
             {% define "" as old_section %}
             {% for field in form.visible_fields %}
@@ -44,7 +44,7 @@
                         {% get_field form.section_descriptions section as description %}
                         {{ description | safe }}
                     {% endif %}
-                    <table class="mob no_csv no_sticky">
+                    <table class="mob no_csv no_datatables">
                         {% define section as old_section %}
                     {% endif %}
                 {% endif %}

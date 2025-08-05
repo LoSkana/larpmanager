@@ -123,7 +123,7 @@
         <p id="show">
             <b>{% trans "Load list" %}</b>
         </p>
-        <div class="nav fields">
+        <div class="fields">
             {% for key, que in form_questions.items %}
                 {% if que.typ == 's' or que.typ == 'm' %}
                     <a href="#" class="load_email_que" key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
@@ -136,7 +136,7 @@
                 <div class="hide email_que_{{ key }}">
                     <br />
                     <h4>{{ que.name }}</h4>
-                    <table>
+                    <table class="no_datatables">
                         <thead>
                             <tr>
                                 <th>Option</th>

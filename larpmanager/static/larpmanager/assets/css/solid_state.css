@@ -155,12 +155,12 @@ h4 {
 }
 
 #header {
-    height: 4em;
+    height: 2.5em;
 }
 
 #header h1 {
-    font-size: 1.2em;
-    margin: 0.2em;
+    font-size: 1em;
+    margin: 0.3em;
     text-align: center;
     padding: 0;
 }
