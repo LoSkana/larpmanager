@@ -524,13 +524,14 @@ def _questions_load(ctx, row, is_registration):
         )
 
     for field, value in row.items():
-        if field in ["applicable", "name"]:
+        if not value or pd.isna(value) or field in ["applicable", "name"]:
             continue
         new_value = value
         if field in mappings:
-            if value not in mappings[field]:
+            new_value = new_value.lower().strip()
+            if new_value not in mappings[field]:
                 return f"ERR - unknow value {value} for field {field}"
-            new_value = mappings[field][value]
+            new_value = mappings[field][new_value]
         if field == "max_length":
             new_value = int(value)
         setattr(instance, field, new_value)
@@ -574,11 +575,13 @@ def _options_load(ctx, row, questions, is_registration):
         )
 
     for field, value in row.items():
+        if not value or pd.isna(value):
+            continue
         new_value = value
         if field in ["question", "name"]:
             continue
         if field in ["max_available", "price"]:
-            new_value = int(value)
+            new_value = int(new_value)
         setattr(instance, field, new_value)
 
     instance.save()
