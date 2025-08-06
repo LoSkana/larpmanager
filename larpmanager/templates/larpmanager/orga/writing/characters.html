@@ -8,23 +8,23 @@
 {% endblock info %}
 {% block nav_fields %}
     {% if user_character_max %}
-        <a href="#" class="my_toggle" tog='player'>{% trans "player" %}</a>
+        <a href="#" class="table_toggle" tog='player'>{% trans "player" %}</a>
     {% endif %}
     {% if user_character_approval %}
-        <a href="#" class="my_toggle" tog='status'>{% trans "status" %}</a>
+        <a href="#" class="table_toggle" tog='status'>{% trans "status" %}</a>
     {% endif %}
     {% if features.px %}
-        <a href="#" class="my_toggle" tog='px'>{% trans "XP" %}</a>
+        <a href="#" class="table_toggle" tog='px'>{% trans "XP" %}</a>
     {% endif %}
     {% include "elements/writing/questions_nav.html" %}
     {% if features.plot %}
-        <a href="#" class="my_toggle" tog='plots'>{% trans "Plots" %}</a>
+        <a href="#" class="table_toggle" tog='plots'>{% trans "Plots" %}</a>
     {% endif %}
     {% if features.relationships %}
-        <a href="#" class="my_toggle" tog='relationships'>{% trans "Relationships" %}</a>
+        <a href="#" class="table_toggle" tog='relationships'>{% trans "Relationships" %}</a>
     {% endif %}
     {% if features.speedlarp %}
-        <a href="#" class="my_toggle" tog='speedlarp'>{% trans "speedlarp" %}</a>
+        <a href="#" class="table_toggle" tog='speedlarp'>{% trans "speedlarp" %}</a>
     {% endif %}
 {% endblock nav_fields %}
 {% block thead %}
@@ -127,7 +127,7 @@
             {% for key, que in form_questions.items %}
                 {% if que.typ == 's' or que.typ == 'm' %}
                     <a href="#" class="load_email_que" key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
-                    <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
+                    <a href="#" class="table_toggle hide" tog='email_que_{{ key }}'>hidden</a>
                 {% endif %}
             {% endfor %}
         </div>
@@ -136,7 +136,7 @@
                 <div class="hide email_que_{{ key }}">
                     <br />
                     <h4>{{ que.name }}</h4>
-                    <table class="no_datatables">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Option</th>

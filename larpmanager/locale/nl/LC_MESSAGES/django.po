@@ -4218,6 +4218,9 @@ msgstr "Bericht verzonden, bedankt voor het schrijven"
 msgid "Name of the discount - internal use"
 msgstr "Naam van korting - voor intern gebruik"
 
+msgid "No elements are currently available"
+msgstr "Er zijn momenteel geen elementen beschikbaar"
+
 msgid "Now you can create the receipt text"
 msgstr "Nu kun je de ontvangstbevestiging maken"
 

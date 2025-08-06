@@ -6,7 +6,7 @@
 {% block content %}
     <form action="{{ request.path }}"  method="post">
         {% csrf_token %}
-        <table class="mob no_csv">
+        <table class="mob ">
             <tr>
                 <td>
                     <textarea name="text" maxlength="1000" cols="80" rows="3"></textarea>

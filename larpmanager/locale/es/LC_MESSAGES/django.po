@@ -4218,6 +4218,9 @@ msgstr "Mensaje enviado, ¡gracias por escribirnos"
 msgid "Name of the discount - internal use"
 msgstr "Nombre del descuento - para uso interno"
 
+msgid "No elements are currently available"
+msgstr "Actualmente no hay elementos disponibles"
+
 msgid "Now you can create the receipt text"
 msgstr "Ahora puede crear el texto del recibo"
 

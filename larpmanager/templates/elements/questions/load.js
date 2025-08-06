@@ -121,6 +121,16 @@ function reload_table() {
 
 regs = [];
 
+window.hideColumnsIndexMap = {};
+document.querySelectorAll('.que_load thead th.hide').forEach(function(th) {
+    var realIndex = Array.from(th.parentNode.children).indexOf(th);
+    th.classList.forEach(function(cls) {
+        if (cls !== 'hide') {
+            window.hideColumnsIndexMap[cls] = realIndex;
+        }
+    });
+});
+
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
 
@@ -138,15 +148,23 @@ window.addEventListener('DOMContentLoaded', function() {
 
         $('.go_table a').hide();
 
-        if (Array.isArray(window.trigger_togs)) {
-            window.trigger_togs.forEach(function(togValue) {
-                if (togValue.startsWith('.') || togValue.startsWith('#')) {
-                    $(togValue).each(function() {
-                        this.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-                    });
-                }
+        $('.table_toggle').on('click', function () {
+            var k = $(this).attr("tog");
+            $("." + k).toggle();
+
+            $(this).toggleClass('select');
+
+            var index = window.hideColumnsIndexMap[k];
+            console.log(index);
+            Object.keys(window.datatables).forEach(function(key) {
+                var table = window.datatables[key];
+
+                var column = table.column(index);
+                console.log(column.header());
+                column.visible(!column.visible());
             });
-        }
+
+        });
 
     });
 

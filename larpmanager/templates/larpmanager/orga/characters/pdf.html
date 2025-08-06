@@ -8,7 +8,7 @@
 {% endblock info %}
 {% block content %}
     <div id="sheet_pdf">
-        <table class="no_csv">
+        <table>
             <tr>
                 <td>
                     <a href="{% url 'orga_gallery_pdf' run.event.slug run.number %}"
@@ -25,7 +25,7 @@
             </tr>
         </table>
         <h2>{% trans "Try the sheet generation" %}</h2>
-        <table class="mob no_csv">
+        <table class="mob ">
             <tr>
                 <td>
                     <select id="char">
@@ -74,7 +74,7 @@
             <a href="#" class="my_toggle" tog='info'>{% trans "Template instructions" %}</a>
         </h2>
         <div class="hide info">
-            <table class="mob no_csv">
+            <table class="mob ">
                 <tr>
                     <th>Default settings</th>
                     <td>
@@ -196,7 +196,7 @@
               method="post"
               enctype="multipart/form-data">
             {% csrf_token %}
-            <table class="mob no_csv">
+            <table class="mob ">
                 {{ form.as_table }}
             </table>
             <input type="submit" value="{% trans "Confirm" %}">

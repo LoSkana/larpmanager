@@ -28,7 +28,7 @@
         </p>
     {% endif %}
     <hr />
-    <table class="tablesorter no_csv">
+    <table class="tablesorter ">
         <tr>
             <th>{% trans "Item" %}</th>
             <th>{% trans "Total" %}</th>
@@ -48,7 +48,7 @@
     </table>
     {% for k, v in dc.items %}
         <h2>{{ v.name }}: {{ v.tot }}</h2>
-        <table class="tablesorter no_csv">
+        <table class="tablesorter ">
             {% for y, w in v.detail.items %}
                 <tr>
                     <td>{{ w.name }}</td>

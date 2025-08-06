@@ -262,15 +262,6 @@ $(document).ready(function() {
 
     });
 
-    if (Array.isArray(window.trigger_togs)) {
-        window.trigger_togs.forEach(function(togValue) {
-            if (togValue.startsWith('.') || togValue.startsWith('#')) return;
-            $('a.my_toggle[tog="' + togValue + '"]').each(function() {
-                this.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-            });
-        });
-    }
-
     $('a[qtip]').each(function() {
         $(this).qtip({
             content: {
@@ -352,32 +343,81 @@ $(document).ready(function() {
         });
     }
 
-    {% if not tables_old %}
-        data_tables();
-    {% endif %}
+    data_tables();
 
     post_popup();
 });
 
 function data_tables() {
+    window.datatables = window.datatables || {};
+
     $('table.go_datatable').each(function() {
-        const $table = $(this);;
+        const $table = $(this);
 
         // assign random id
         if (!$table.attr('id')) {
-          const randomId = 'table-' + Math.random().toString(36).substr(2, 9);
-          $table.attr('id', randomId);
+            const randomId = 'table-' + Math.random().toString(36).substr(2, 9);
+            $table.attr('id', randomId);
         }
 
-        $(this).addClass("stripe");
+        const tableId = $table.attr('id');
 
-        // init datatable
-        new DataTable('#' + $table.attr('id'), {
+
+        let disable_sort_columns = [0];
+        if ($table.hasClass('writing_list')) {
+            disable_sort_columns = [0, 2];
+        }
+
+        let hide_columns = [];
+        if (window.hideColumnsIndexMap && typeof window.hideColumnsIndexMap === 'object') {
+            Object.keys(window.hideColumnsIndexMap).forEach(function(key) {
+                var value = window.hideColumnsIndexMap[key];
+                hide_columns.push(value);
+            });
+        }
+
+        console.log(hide_columns);
+
+        const table = new DataTable('#' + tableId, {
             scrollX: true,
-            stateSave: true
+            stateSave: true,
+            layout: {
+                topStart: 'pageLength',
+                topEnd: 'search'
+            },
+            columnDefs: [
+                { orderable: false, targets: disable_sort_columns },
+                { visible: false, targets: hide_columns }
+            ]
         });
+
+        for (const index of hide_columns) {
+            var column = table.column(index);
+            column.visible(false);
+        };
+
+        window.datatables[tableId] = table;
     });
+
+    if (Array.isArray(window.trigger_togs)) {
+        window.trigger_togs.forEach(function(togValue) {
+            if (togValue.startsWith('.') || togValue.startsWith('#')) {
+                $(togValue).each(function() {
+                    this.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                });
+            } else {
+                if (togValue == '#load_accounting') {
+                    document.querySelector('#load_accounting').dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                } else {
+                    $('a.table_toggle[tog="' + togValue + '"]').each(function() {
+                        this.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                    });
+                }
+            }
+        });
+    }
 }
+
 
 function post_popup() {
     $(document).on('click', '.post_popup', function (e) {
@@ -647,7 +687,7 @@ function centerMobileIcons() {
 //function table_csv() {
 //    $(".manage table").each(function( index ) {
 //
-//        if ( $(this).hasClass("no_csv") ) return;
+//        if ( $(this).hasClass("") ) return;
 //
 //        if ( $(this).find('tbody').length === 0 || $(this).find('tbody tr').length === 0 ) {
 //            return;

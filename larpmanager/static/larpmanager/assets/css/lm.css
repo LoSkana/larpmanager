@@ -1900,4 +1900,41 @@ input[type="checkbox"].checkbox_single {
     padding: 0 1em;
     text-decoration: none;
     margin: 0 auto;
+    font-size: 100%;
+}
+
+.dt-search {
+    text-align: right;
+}
+
+div.dt-container .dt-search input {
+    margin-left: 0.5em !important;
+    width: 70%;
+}
+
+div.dt-container .dt-paging .dt-paging-button {
+    background: transparent !important;
+    box-shadow: none;
+    border: 0 !important;
+}
+
+div.dt-container .dt-paging {
+    color: var(--ter-clr);
+}
+
+.dataTables_wrapper ::-webkit-scrollbar {
+    height: 32px;
+}
+
+.dataTables_wrapper ::-webkit-scrollbar-thumb {
+    background-color: #888;
+}
+
+.dataTables_wrapper ::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+.dataTables_wrapper {
+    scrollbar-width: auto;
+    scrollbar-color: #888 #f1f1f1;
 }

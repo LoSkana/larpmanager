@@ -41,36 +41,36 @@
             <div class="nav">
                 <b>{% trans "Columns" %}</b>:
                 <a href="#" id="load_accounting">{% trans "accounting" %}</a>
-                <a href="#" class="my_toggle hide" tog='acc'>hidden</a>
-                <a href="#" class="my_toggle" tog='email'>{% trans "email" %}</a>
+                <a href="#" class="table_toggle hide" tog='acc'>hidden</a>
+                <a href="#" class="table_toggle" tog='email'>{% trans "email" %}</a>
                 {% if features.unique_code %}
-                    <a href="#" class="my_toggle" tog='special_cod'>{% trans "unique code" %}</a>
+                    <a href="#" class="table_toggle" tog='special_cod'>{% trans "unique code" %}</a>
                 {% endif %}
                 {% if registration_reg_que_age %}
-                    <a href="#" class="my_toggle" tog='age'>{% trans "age" %}</a>
+                    <a href="#" class="table_toggle" tog='age'>{% trans "age" %}</a>
                 {% endif %}
                 {% if features.additional_tickets %}
-                    <a href="#" class="my_toggle" tog='additionals'>{% trans "additional" %}</a>
+                    <a href="#" class="table_toggle" tog='additionals'>{% trans "additional" %}</a>
                 {% endif %}
                 {% if features.gift %}
-                    <a href="#" class="my_toggle" tog='gift'>{% trans "gift" %}</a>
+                    <a href="#" class="table_toggle" tog='gift'>{% trans "gift" %}</a>
                 {% endif %}
                 {% if features.membership %}
-                    <a href="#" class="my_toggle" tog='membership'>{% trans "member" %}</a>
+                    <a href="#" class="table_toggle" tog='membership'>{% trans "member" %}</a>
                 {% endif %}
                 {% if features.faction %}
-                    <a href="#" class="my_toggle" tog='factions'>{% trans "factions" %}</a>
+                    <a href="#" class="table_toggle" tog='factions'>{% trans "factions" %}</a>
                 {% endif %}
                 {% if features.custom_character %}
-                    <a href="#" class="my_toggle" tog='custom'>{% trans "customisations" %}</a>
+                    <a href="#" class="table_toggle" tog='custom'>{% trans "customisations" %}</a>
                 {% endif %}
                 {% if features.reg_surcharges %}
-                    <a href="#" class="my_toggle" tog='sur'>{% trans "surcharge" %}</a>
+                    <a href="#" class="table_toggle" tog='sur'>{% trans "surcharge" %}</a>
                 {% endif %}
                 {% if features.discount %}
-                    <a href="#" class="my_toggle" tog='disc'>{% trans "Discounts" %}</a>
+                    <a href="#" class="table_toggle" tog='disc'>{% trans "Discounts" %}</a>
                 {% endif %}
-                <a href="#" class="my_toggle" tog='date'>{% trans "chronology" %}</a>
+                <a href="#" class="table_toggle" tog='date'>{% trans "chronology" %}</a>
             </div>
         </div>
         {% if reg_questions %}
@@ -79,10 +79,10 @@
                     {% trans "Questions" %}:
                     {% for key, que in reg_questions.items %}
                         {% if que.typ == 'e' %}
-                            <a href="#" class="my_toggle no_jump" tog='q_{{ key }}'>{{ que.name | truncatechars:25 }}</a>
+                            <a href="#" class="table_toggle no_jump" tog='q_{{ key }}'>{{ que.name | truncatechars:25 }}</a>
                         {% else %}
                             <a href="#" class="load_que lq_{{ key }}"  key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
-                            <a href="#" class="my_toggle hide no_jump" tog='q_{{ key }}'>hidden</a>
+                            <a href="#" class="table_toggle hide no_jump" tog='q_{{ key }}'>hidden</a>
                         {% endif %}
                     {% endfor %}
                 </div>
@@ -94,14 +94,15 @@
                     Questbuilder:
                     {% for key, qt in quest_types.items %}
                         {% include "elements/comma.html" %}
-                        <a href="#" class="my_toggle" tog='qt_{{ qt.number }}'>{{ qt.name }}</a>
+                        <a href="#" class="table_toggle" tog='qt_{{ qt.number }}'>{{ qt.name }}</a>
                     {% endfor %}
                 </div>
             </div>
         {% endif %}
         {% for key, dc in reg_all %}
             <h2>{{ dc.type }} ({{ dc.count }})</h2>
-            <table id="regs" class="tablesorter writing no_csv regs">
+            <table id="regs_{{ run.id }}_{{ dc.type }}"
+                   {% if not tables_old %}class="go_datatable reg_list que_load"{% endif %}>
                 <thead>
                     <tr>
                         <th></th>
@@ -341,13 +342,13 @@
         <a href="{% url 'orga_registrations_reload' run.event.slug run.number %}">{% trans "Recalculate" %}</a>
         <h2>{% trans "Email list" %}</h2>
         <p>
-            <a href="#" class="my_toggle" tog='email_players'>{% trans "Players" %}</a>,
-            <a href="#" class="my_toggle" tog='email_tickets'>{% trans "Tickets" %}</a>,
+            <a href="#" class="table_toggle" tog='email_players'>{% trans "Players" %}</a>,
+            <a href="#" class="table_toggle" tog='email_tickets'>{% trans "Tickets" %}</a>,
             {% if features.membership %}
-                <a href="#" class="my_toggle" tog='email_memb'>{% trans "Membership" %}</a>,
+                <a href="#" class="table_toggle" tog='email_memb'>{% trans "Membership" %}</a>,
             {% endif %}
             {% if features.discount %}
-                <a href="#" class="my_toggle" tog='email_disc'>{% trans "Discounts" %}</a>,
+                <a href="#" class="table_toggle" tog='email_disc'>{% trans "Discounts" %}</a>,
             {% endif %}
         </p>
         <div class="hide email_players">
@@ -619,12 +620,6 @@ window.addEventListener('DOMContentLoaded', function() {
             load_accounting($(this));
             return false;
         });
-
-        if (Array.isArray(window.trigger_togs)) {
-            if (window.trigger_togs.includes('#load_accounting')) {
-                document.querySelector('#load_accounting').dispatchEvent(new MouseEvent('click', { bubbles: true }));
-            }
-        }
 
         $(document).on('click', '.post_popup_member', function (e) {
 

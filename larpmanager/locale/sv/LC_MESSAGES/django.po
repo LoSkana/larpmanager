@@ -4218,6 +4218,9 @@ msgstr "Meddelande skickat, tack för att du skrev"
 msgid "Name of the discount - internal use"
 msgstr "Namn på rabatt - för internt bruk"
 
+msgid "No elements are currently available"
+msgstr "Inga element är för närvarande tillgängliga"
+
 msgid "Now you can create the receipt text"
 msgstr "Nu kan du skapa kvittotexten"
 

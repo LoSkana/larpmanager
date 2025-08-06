@@ -20,12 +20,12 @@
         <form action="{{ request.path }}"
               method="post"
               enctype="multipart/form-data">
-            <div class="casting no_csv">
+            <div class="casting ">
                 <p>{{ result }}</p>
                 <p id="not_chosen"></p>
                 <p id="didnt_choose"></p>
                 {% csrf_token %}
-                <table class="tablesorter no_csv">
+                <table class="tablesorter ">
                     <tr>
                         <th>{% trans "Tier" %}</th>
                         <th>{% trans "Payment" %}</th>
@@ -71,7 +71,7 @@
                 </i>
             </p>
             <hr />
-            <table id="main_grid" class="tablesorter no_csv">
+            <table id="main_grid" class="tablesorter ">
                 <tbody>
                     <!-- filled later -->
                 </tbody>

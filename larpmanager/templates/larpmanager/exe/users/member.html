@@ -23,7 +23,7 @@
               method="post"
               enctype="multipart/form-data">
             {% csrf_token %}
-            <table class="mob no_csv no_datatables">
+            <table class="mob  ">
                 {{ form.as_table }}
             </table>
             <input type="submit" value="Submit">
@@ -31,7 +31,7 @@
     </div>
     <div class="hide reg">
         <h2>{% trans "Registrations" %}</h2>
-        <table class="writing no_csv">
+        <table class="writing ">
             <thead>
                 <tr>
                     <th>{% trans "Run" %}</th>

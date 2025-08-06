@@ -11,7 +11,7 @@
           enctype="multipart/form-data"
           method="post">
         {% csrf_token %}
-        <table class="mob no_csv">
+        <table class="mob ">
             {{ form.as_table }}
         </table>
         <input type="submit" value="Confirm">

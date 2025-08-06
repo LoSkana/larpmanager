@@ -11,7 +11,7 @@
         <form action="{{ request.path }}"  method="post">
             {% csrf_token %}
             <h2>{% trans "New pre-registrations" %}</h2>
-            <table class="mob no_csv">
+            <table class="mob ">
                 {{ form.as_table }}
             </table>
             <input id="submit" type="submit" value="{% trans "Confirm" %}">
@@ -58,7 +58,7 @@
         <form action="{{ request.path }}"  method="post">
             {% csrf_token %}
             <h2>{% trans "New pre-registrations" %}</h2>
-            <table class="mob no_csv">
+            <table class="mob ">
                 {{ form.as_table }}
             </table>
             <input id="submit" type="submit" value="{% trans "Confirm" %}">

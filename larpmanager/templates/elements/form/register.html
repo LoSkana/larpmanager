@@ -21,13 +21,13 @@
             {{ description | safe }}
             <br />
         {% endif %}
-        <table class="mob section no_csv" section="{{ section | slugify }}">
+        <table class="mob section " section="{{ section | slugify }}">
             {% define section as old_section %}
         {% endif %}
     {% else %}
         {% if old_section != "" %}
         </table>
-        <table class="mob no_csv">
+        <table class="mob ">
             {% define "" as old_section %}
         {% endif %}
     {% endif %}

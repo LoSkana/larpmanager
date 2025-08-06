@@ -156,7 +156,7 @@
                             {{ assoc.footer | safe }}
                         </div>
                     {% endif %}
-                    <table class="mob no_csv">
+                    <table class="mob ">
                         <tr>
                             {% if 'help' in assoc.features %}
                                 <td>
@@ -226,6 +226,8 @@
           integrity="sha512-8D+M+7Y6jVsEa7RD6Kv/Z7EImSpNpQllgaEIQAtqHcI0H6F4iZknRj0Nx1DCdB+TwBaS+702BGWYC0Ze2hpExQ=="
           crossorigin="anonymous"
           referrerpolicy="no-referrer" />
+    <link rel="stylesheet"
+          href="//cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css" />
     {% if assoc.id == 0 %}
         <style>
             @font-face {

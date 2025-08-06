@@ -8,7 +8,7 @@
     <p>{% trans "You can upload data directly from CSV file" %}.</p>
     {% if typ == 'registration' %}
         <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
-        <table class="no_csv">
+        <table>
             {% for column, description in columns.0.items %}
                 <tr>
                     <th>
@@ -37,7 +37,7 @@
     {% elif typ == 'registration_form' %}
         <h2>{% trans "Questions" %}</h2>
         <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
-        <table class="no_csv">
+        <table>
             {% for column, description in columns.0.items %}
                 <tr>
                     <th>
@@ -50,7 +50,7 @@
         <hr />
         <h2>{% trans "Options" %}</h2>
         <p>{% trans "You can also upload a second file with the registration options" %}:</p>
-        <table class="no_csv">
+        <table>
             {% for column, description in columns.1.items %}
                 <tr>
                     <th>
@@ -67,7 +67,7 @@
     {% elif typ == 'character_form' %}
         <h2>{% trans "Questions" %}</h2>
         <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
-        <table class="no_csv">
+        <table>
             {% for column, description in columns.0.items %}
                 <tr>
                     <th>
@@ -80,7 +80,7 @@
         <hr />
         <h2>{% trans "Options" %}</h2>
         <p>{% trans "You can also upload a second file with the registration options" %}:</p>
-        <table class="no_csv">
+        <table>
             {% for column, description in columns.1.items %}
                 <tr>
                     <th>
