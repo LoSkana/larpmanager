@@ -353,13 +353,6 @@ $(document).ready(function() {
         });
     }
 
-    $('.dropdown-menu').each(function() {
-        if ($.trim($(this).html()) === '') {
-            $(this).siblings('.dropdown-button').remove();
-            $(this).remove();
-        }
-    });
-
     sticky_tables();
 
     post_popup();

@@ -90,6 +90,7 @@ def ludomanager(ctx, request):
 @csrf_exempt
 def contact(request):
     ctx = {}
+    done = False
     if request.POST:
         form = LarpManagerContact(request.POST, request=request)
         if form.is_valid():
@@ -98,8 +99,11 @@ def contact(request):
                 subj = "LarpManager contact - " + ct
                 body = form.cleaned_data["content"]
                 my_send_mail(subj, body, email)
+                done = True
     else:
         form = LarpManagerContact(request=request)
+        
+    if not done:
         ctx["contact_form"] = form
     return render(request, "larpmanager/larpmanager/contact.html", ctx)
 
@@ -451,8 +455,6 @@ def about_us(request):
 
 
 def get_lm_contact(request):
-    # if check and request.assoc["id"] != 0:
-    # return {"red": "https://larpmanager.com" + request.get_full_path()}
     ctx = {"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"}
     return ctx
 
