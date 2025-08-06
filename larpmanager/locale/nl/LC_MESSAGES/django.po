@@ -1371,9 +1371,6 @@ msgstr "Nieuwsbrief"
 msgid "Next quota"
 msgstr "Volgende quota"
 
-msgid "Old tables"
-msgstr "Oude tafels"
-
 msgid "Passengers"
 msgstr "Passagiers"
 
@@ -3627,9 +3624,6 @@ msgstr "Engelse beschrijving"
 
 msgid "Enter your preferences here"
 msgstr "Geef hier je voorkeuren aan"
-
-msgid "If checked: uses old tables"
-msgstr "Indien aangevinkt: gebruikt oude tabellen"
 
 msgid "Is it selectable by players"
 msgstr "Is het selecteerbaar door de spelers"

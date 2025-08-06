@@ -1371,9 +1371,6 @@ msgstr "Nyhetsbrev"
 msgid "Next quota"
 msgstr "Nästa kvot"
 
-msgid "Old tables"
-msgstr "Gamla bord"
-
 msgid "Passengers"
 msgstr "Passagerare"
 
@@ -3627,9 +3624,6 @@ msgstr "Beskrivning på engelska"
 
 msgid "Enter your preferences here"
 msgstr "Ange dina preferenser här"
-
-msgid "If checked: uses old tables"
-msgstr "Om markerat: använder gamla tabeller"
 
 msgid "Is it selectable by players"
 msgstr "Kan den väljas av spelarna"

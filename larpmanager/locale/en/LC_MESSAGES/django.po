@@ -262,12 +262,6 @@ msgstr ""
 msgid "If checked: uses old interface"
 msgstr ""
 
-msgid "Old tables"
-msgstr ""
-
-msgid "If checked: uses old tables"
-msgstr ""
-
 msgid "Calendar"
 msgstr ""
 

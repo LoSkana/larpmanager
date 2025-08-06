@@ -1371,9 +1371,6 @@ msgstr "Bulletin d'information"
 msgid "Next quota"
 msgstr "Prochain quota"
 
-msgid "Old tables"
-msgstr "Anciennes tables"
-
 msgid "Passengers"
 msgstr "Passagers"
 
@@ -3627,9 +3624,6 @@ msgstr "Description en anglais"
 
 msgid "Enter your preferences here"
 msgstr "Indiquez vos préférences ici"
-
-msgid "If checked: uses old tables"
-msgstr "Si la case est cochée : utilise les anciennes tables"
 
 msgid "Is it selectable by players"
 msgstr "Est-il sélectionnable par les joueurs"

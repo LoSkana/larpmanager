@@ -102,7 +102,7 @@
         {% for key, dc in reg_all %}
             <h2>{{ dc.type }} ({{ dc.count }})</h2>
             <table id="regs_{{ run.id }}_{{ dc.type }}"
-                   {% if not tables_old %}class="go_datatable reg_list que_load"{% endif %}>
+                   class="go_datatable reg_list que_load">
                 <thead>
                     <tr>
                         <th></th>

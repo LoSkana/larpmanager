@@ -1371,9 +1371,6 @@ msgstr "Newsletter"
 msgid "Next quota"
 msgstr "Następny limit"
 
-msgid "Old tables"
-msgstr "Stare stoły"
-
 msgid "Passengers"
 msgstr "Pasażerowie"
 
@@ -3627,9 +3624,6 @@ msgstr "Opis - międzynarodowy"
 
 msgid "Enter your preferences here"
 msgstr "Wprowadź swoje preferencje tutaj"
-
-msgid "If checked: uses old tables"
-msgstr "Jeśli zaznaczone: używa starych tabel"
 
 msgid "Is it selectable by players"
 msgstr "Czy gracze mogą ją wybrać"

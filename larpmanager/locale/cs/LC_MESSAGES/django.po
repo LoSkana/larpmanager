@@ -1371,9 +1371,6 @@ msgstr "Zpravodaj"
 msgid "Next quota"
 msgstr "Další kvóta"
 
-msgid "Old tables"
-msgstr "Staré stoly"
-
 msgid "Passengers"
 msgstr "Cestující"
 
@@ -3627,9 +3624,6 @@ msgstr "Anglický popis"
 
 msgid "Enter your preferences here"
 msgstr "Zde uveďte své preference"
-
-msgid "If checked: uses old tables"
-msgstr "Pokud je zaškrtnuto: používá staré tabulky"
 
 msgid "Is it selectable by players"
 msgstr "Mohou si ji hráči vybrat"
