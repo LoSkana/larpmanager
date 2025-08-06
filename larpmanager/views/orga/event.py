@@ -369,18 +369,21 @@ def _reg_template(ctx, typ, value_mapping):
 def _writing_template(ctx, typ, value_mapping):
     keys = list(ctx["fields"].keys())
     vals = [value_mapping[field_typ] for _field, field_typ in ctx["fields"].items()]
+
     if ctx["writing_typ"] == QuestionApplicable.QUEST:
         keys.insert(0, "typ")
         vals.insert(0, "name of quest type")
     elif ctx["writing_typ"] == QuestionApplicable.TRAIT:
         keys.insert(0, "quest")
         vals.insert(0, "name of quest")
+
     exports = [(f"{typ} - template", keys, [vals])]
+
     if ctx["writing_typ"] == QuestionApplicable.CHARACTER and "relationships" in ctx["features"]:
         exports.append(
             (
                 "relationships - template",
-                list(ctx["columns"][0].keys()),
+                list(ctx["columns"][1].keys()),
                 [["Test Character", "Another Character", "Super pals"]],
             )
         )
@@ -388,7 +391,7 @@ def _writing_template(ctx, typ, value_mapping):
         exports.append(
             (
                 "roles - template",
-                list(ctx["columns"][0].keys()),
+                list(ctx["columns"][1].keys()),
                 [["Test Plot", "Test Character", "Gonna be a super star"]],
             )
         )

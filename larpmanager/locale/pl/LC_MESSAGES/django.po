@@ -6529,6 +6529,11 @@ msgstr ""
 msgid "This page allows you to set your personal preferences on the interface"
 msgstr "Ta strona umożliwia ustawienie osobistych preferencji interfejsu"
 
+msgid "You can only add users who approved data sharing with the organization"
+msgstr ""
+"Można dodawać tylko użytkowników, którzy zatwierdzili udostępnianie danych "
+"organizacji"
+
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Możesz użyć następujących pól, zostaną one wypełnione automatycznie"
 
@@ -6657,12 +6662,6 @@ msgstr ""
 msgid ""
 "This page allows you to edit the configuration of the activated features"
 msgstr "Ta strona umożliwia edycję konfiguracji aktywowanych funkcji"
-
-msgid ""
-"To assign a user to a role, they must first be added to the organization"
-msgstr ""
-"Aby przypisać użytkownika do roli, musi on najpierw zostać dodany do "
-"organizacji"
 
 msgid ""
 "We value the privacy of your data and will treat it with the utmost care"

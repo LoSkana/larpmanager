@@ -6461,6 +6461,10 @@ msgstr "Tato částka se automaticky odečte z registrace budoucí akce"
 msgid "This page allows you to set your personal preferences on the interface"
 msgstr "Na této stránce můžete nastavit osobní preference rozhraní"
 
+msgid "You can only add users who approved data sharing with the organization"
+msgstr ""
+"Přidávat můžete pouze uživatele, kteří schválili sdílení dat s organizací"
+
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Můžete použít následující pole, která se vyplní automaticky"
 
@@ -6581,11 +6585,6 @@ msgstr ""
 msgid ""
 "This page allows you to edit the configuration of the activated features"
 msgstr "Tato stránka umožňuje upravit konfiguraci aktivovaných funkcí"
-
-msgid ""
-"To assign a user to a role, they must first be added to the organization"
-msgstr ""
-"Chcete-li uživateli přiřadit roli, musí být nejprve přidán do organizace"
 
 msgid ""
 "We value the privacy of your data and will treat it with the utmost care"

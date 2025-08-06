@@ -29,6 +29,7 @@ from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
+from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
@@ -390,6 +391,19 @@ def element_load(request, ctx, row, questions):
 
 
 def _writing_load_field(ctx, element, field, value, questions, logs):
+    if field == "typ":
+        try:
+            element.typ = ctx["event"].get_elements(QuestType).get(name__iexact=value)
+        except ObjectDoesNotExist:
+            logs.append(f"ERR - quest type not found: {value}")
+        return
+    if field == "quest":
+        try:
+            element.quest = ctx["event"].get_elements(Quest).get(name__iexact=value)
+        except ObjectDoesNotExist:
+            logs.append(f"ERR - quest not found: {value}")
+        return
+
     field_type = ctx["fields"][field]
 
     if field_type == QuestionType.NAME:
@@ -399,6 +413,10 @@ def _writing_load_field(ctx, element, field, value, questions, logs):
     if not value:
         return
 
+    _writing_question_load(ctx, element, field, field_type, logs, questions, value)
+
+
+def _writing_question_load(ctx, element, field, field_type, logs, questions, value):
     if field_type == QuestionType.MIRROR:
         _get_mirror_instance(ctx, element, value, logs)
     elif field_type == QuestionType.HIDE:
@@ -506,13 +524,14 @@ def _questions_load(ctx, row, is_registration):
         )
 
     for field, value in row.items():
-        if field in ["applicable", "name"]:
+        if not value or pd.isna(value) or field in ["applicable", "name"]:
             continue
         new_value = value
         if field in mappings:
-            if value not in mappings[field]:
+            new_value = new_value.lower().strip()
+            if new_value not in mappings[field]:
                 return f"ERR - unknow value {value} for field {field}"
-            new_value = mappings[field][value]
+            new_value = mappings[field][new_value]
         if field == "max_length":
             new_value = int(value)
         setattr(instance, field, new_value)
@@ -556,11 +575,13 @@ def _options_load(ctx, row, questions, is_registration):
         )
 
     for field, value in row.items():
+        if not value or pd.isna(value):
+            continue
         new_value = value
         if field in ["question", "name"]:
             continue
         if field in ["max_available", "price"]:
-            new_value = int(value)
+            new_value = int(new_value)
         setattr(instance, field, new_value)
 
     instance.save()

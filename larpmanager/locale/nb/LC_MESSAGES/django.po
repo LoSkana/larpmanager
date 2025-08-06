@@ -6530,6 +6530,10 @@ msgid "This page allows you to set your personal preferences on the interface"
 msgstr ""
 "På denne siden kan du angi dine personlige preferanser for grensesnittet"
 
+msgid "You can only add users who approved data sharing with the organization"
+msgstr ""
+"Du kan bare legge til brukere som har godkjent datadeling med organisasjonen"
+
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Du kan bruke følgende felter, de fylles ut automatisk"
 
@@ -6659,12 +6663,6 @@ msgid ""
 "This page allows you to edit the configuration of the activated features"
 msgstr ""
 "På denne siden kan du redigere konfigurasjonen av de aktiverte funksjonene"
-
-msgid ""
-"To assign a user to a role, they must first be added to the organization"
-msgstr ""
-"For å tilordne en bruker til en rolle, må vedkommende først legges til i "
-"organisasjonen"
 
 msgid ""
 "We value the privacy of your data and will treat it with the utmost care"

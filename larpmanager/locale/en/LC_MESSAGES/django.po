@@ -3832,6 +3832,15 @@ msgid ""
 "additional plot information"
 msgstr ""
 
+msgid "You can only add users who approved data sharing with the organization"
+msgstr ""
+
+msgid "If you don't see an user, ask them to access"
+msgstr ""
+
+msgid "this link"
+msgstr ""
+
 msgid "whether the character is aware of the identity of the other trait"
 msgstr ""
 
@@ -4905,16 +4914,6 @@ msgstr ""
 msgid ""
 "This page summarises the roles to be assigned in order to use the functions "
 "concerning the organisation"
-msgstr ""
-
-msgid ""
-"To assign a user to a role, they must first be added to the organization"
-msgstr ""
-
-msgid "If you don't see an user, ask them to access"
-msgstr ""
-
-msgid "this link"
 msgstr ""
 
 msgid "This page shows all runs; you can edit them, or create new ones"

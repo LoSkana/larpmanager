@@ -1,0 +1,6 @@
+name	typ	description	status	applicable	visibility	max_length
+bibi	multi-choice	baba	optional	character	searchable	1
+baba	Long-text	bebe	mandatory	faction	private	20
+wer	Short-text	fghj	disabled	plot	hidden	5
+asd	advanced	kloi	hidden	quest	public	10
+poi	Single-choice	rweerw	optional	trait	public

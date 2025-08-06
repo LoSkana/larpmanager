@@ -6535,6 +6535,11 @@ msgstr ""
 "På den här sidan kan du ställa in dina personliga preferenser för "
 "gränssnittet"
 
+msgid "You can only add users who approved data sharing with the organization"
+msgstr ""
+"Du kan bara lägga till användare som har godkänt datadelning med "
+"organisationen"
+
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Du kan använda följande fält, de kommer att fyllas i automatiskt"
 
@@ -6666,12 +6671,6 @@ msgid ""
 msgstr ""
 "På den här sidan kan du redigera konfigurationen av de aktiverade "
 "funktionerna"
-
-msgid ""
-"To assign a user to a role, they must first be added to the organization"
-msgstr ""
-"För att tilldela en användare en roll måste denne först läggas till i "
-"organisationen"
 
 msgid ""
 "We value the privacy of your data and will treat it with the utmost care"

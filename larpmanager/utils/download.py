@@ -115,25 +115,25 @@ def export_data(ctx, typ, member_cover=False):
 
 
 def export_plot_rels(ctx):
-    keys = ["sourge", "target", "text"]
+    keys = ["plot", "character", "text"]
     vals = []
 
     event_id = ctx["event"].get_class_parent(Plot)
 
     for rel in PlotCharacterRel.objects.filter(plot__event_id=event_id).prefetch_related("plot", "character"):
-        vals.append([str(rel.plot), str(rel.character), rel.text])
+        vals.append([rel.plot.name, rel.character.name, rel.text])
 
     return [("plot_rels", keys, vals)]
 
 
 def export_relationships(ctx):
-    keys = ["sourge", "target", "text"]
+    keys = ["source", "target", "text"]
     vals = []
 
     event_id = ctx["event"].get_class_parent(Character)
 
     for rel in Relationship.objects.filter(source__event_id=event_id).prefetch_related("source", "target"):
-        vals.append([str(rel.source), str(rel.target), rel.text])
+        vals.append([rel.source.name, rel.target.name, rel.text])
 
     return [("relationships", keys, vals)]
 
