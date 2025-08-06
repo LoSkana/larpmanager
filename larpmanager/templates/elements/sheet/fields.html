@@ -5,7 +5,7 @@
             {% if field %}
                 {% if screen or question.printable %}
                     <div class="go-inline">
-                        <b>{{ question.display }}:&nbsp;</b>{% get_character_field field char.options %}
+                        <b>{{ question.name }}:&nbsp;</b>{% get_character_field field char.options %}
                     </div>
                 {% endif %}
             {% endif %}

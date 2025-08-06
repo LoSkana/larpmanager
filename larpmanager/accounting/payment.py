@@ -133,7 +133,7 @@ def _custom_reason_reg(ctx, invoice, member_real):
                 aux = []
                 que = RegistrationChoice.objects.filter(question=question, reg_id=ctx["reg"].id)
                 for choice in que.select_related("option"):
-                    aux.append(choice.option.display)
+                    aux.append(choice.option.name)
                 value = ",".join(aux)
             else:
                 value = RegistrationAnswer.objects.get(question=question, reg_id=ctx["reg"].id).text

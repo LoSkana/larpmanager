@@ -20,7 +20,8 @@
     <div id="options" class="hide">
         <h2>{% trans "Options" %}</h2>
         {% include "elements/header/orga.html" %}
-        <table id="registration_options" class="tablesorter writing no_csv">
+        <table id="registration_options"
+               class="tablesorter writing no_csv no_sticky">
             <thead>
                 <tr>
                     <th></th>
@@ -40,8 +41,8 @@
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>
-                        <td>{{ el.display }}</td>
-                        <td>{{ el.details | truncatechars:50 }}</td>
+                        <td>{{ el.name }}</td>
+                        <td>{{ el.description | truncatechars:50 }}</td>
                         <td>
                             {% if el.price %}{{ el.price }}{% endif %}
                         </td>

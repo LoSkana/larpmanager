@@ -126,7 +126,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             for key in ["player", "status"]:
                 fields_default.add(key)
                 self.reorder_field(key)
-            if event.get_config("writing_external_access", False):
+            if event.get_config("writing_external_access", False) and self.instance.pk:
                 fields_default.add("access_token")
                 self.reorder_field("access_token")
 

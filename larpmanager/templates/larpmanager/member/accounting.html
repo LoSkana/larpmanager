@@ -261,9 +261,9 @@
                             <td>
                                 {% for k, el in reg.opts.items %}
                                     {% include "elements/comma.html" %}
-                                    <b>{{ el.q.display }}</b> -
+                                    <b>{{ el.q.name }}</b> -
                                     {% for opt in el.l %}
-                                        {{ opt.display }}
+                                        {{ opt.name }}
                                         {% if opt.price %}<i><u>({{ opt.price }}{{ currency_symbol }})</u></i>{% endif %}
                                     {% endfor %}
                                 {% endfor %}

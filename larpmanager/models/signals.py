@@ -349,7 +349,7 @@ def _init_questbuilder_form_questions(def_tps, instance, features):
                 WritingQuestion.objects.create(
                     event=instance,
                     typ=el,
-                    display=_(add[0]),
+                    name=_(add[0]),
                     status=add[1],
                     visibility=add[2],
                     max_length=add[3],
@@ -371,7 +371,7 @@ def _init_faction_form_questions(def_tps, instance, features):
             WritingQuestion.objects.create(
                 event=instance,
                 typ=el,
-                display=_(add[0]),
+                name=_(add[0]),
                 status=add[1],
                 visibility=add[2],
                 max_length=add[3],
@@ -396,7 +396,7 @@ def _init_plot_form_questions(def_tps, instance, features):
             WritingQuestion.objects.create(
                 event=instance,
                 typ=el,
-                display=_(add[0]),
+                name=_(add[0]),
                 status=add[1],
                 visibility=add[2],
                 max_length=add[3],
@@ -419,7 +419,7 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
             WritingQuestion.objects.create(
                 event=instance,
                 typ=el,
-                display=_(add[0]),
+                name=_(add[0]),
                 status=add[1],
                 visibility=add[2],
                 max_length=add[3],
@@ -433,7 +433,7 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
             WritingQuestion.objects.create(
                 event=instance,
                 typ=el,
-                display=_(el.capitalize()),
+                name=_(el.capitalize()),
                 status=QuestionStatus.HIDDEN,
                 visibility=QuestionVisibility.HIDDEN,
                 max_length=1000,

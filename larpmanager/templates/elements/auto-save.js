@@ -53,7 +53,8 @@ function submitForm(auto) {
                     position: 'mid-center',
                     textAlign: 'center',
                     allowToastClose: true,
-                    hideAfter: false
+                    hideAfter: false,
+                    stack: 1
                 });
             }
         }

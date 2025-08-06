@@ -82,7 +82,7 @@ class WorkshopQuestionInline(admin.TabularInline):
 @admin.register(WorkshopModule)
 class WorkshopModuleAdmin(DefModelAdmin):
     search_fields = ("search",)
-    list_display = ("display", "event", "number", "is_generic")
+    list_display = ("name", "event", "number", "is_generic")
     inlines = [
         WorkshopQuestionInline,
     ]
@@ -102,7 +102,7 @@ class WorkshopOptionInline(admin.TabularInline):
 @admin.register(WorkshopQuestion)
 class WorkshopQuestionAdmin(DefModelAdmin):
     search_fields = ("search",)
-    list_display = ("display", "number", "module")
+    list_display = ("name", "number", "module")
     autocomplete_fields = ("module", "event")
     list_filter = (WorkshopModuleFilter,)
     inlines = [
@@ -117,7 +117,7 @@ class WorkshopOptionFilter(AutocompleteFilter):
 
 @admin.register(WorkshopOption)
 class WorkshopOptionAdmin(DefModelAdmin):
-    list_display = ("display", "question", "is_correct")
+    list_display = ("name", "question", "is_correct")
     autocomplete_fields = ("question",)
     list_filter = (WorkshopOptionFilter,)
 

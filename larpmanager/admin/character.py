@@ -59,9 +59,9 @@ class CharacterConfigAdmin(DefModelAdmin):
 
 @admin.register(WritingQuestion)
 class WritingQuestionAdmin(DefModelAdmin):
-    list_display = ("event", "typ", "display", "description_red", "order", "status", "visibility", "applicable")
+    list_display = ("event", "typ", "name", "description_red", "order", "status", "visibility", "applicable")
     exclude = ("search",)
-    search_fields = ("search", "display")
+    search_fields = ("search", "name")
     autocomplete_fields = ["event"]
     list_filter = (EventFilter, "applicable")
 
@@ -72,15 +72,15 @@ class WritingQuestionAdmin(DefModelAdmin):
 
 @admin.register(WritingOption)
 class WritingOptionAdmin(DefModelAdmin):
-    list_display = ("question", "display", "event", "details_red", "max_available", "order")
+    list_display = ("question", "name", "event", "details_red", "max_available", "order")
     exclude = ("search",)
-    search_fields = ("search", "display")
+    search_fields = ("search", "name")
     autocomplete_fields = ["question", "event"]
     list_filter = (WritingQuestionFilter, EventFilter)
 
     @staticmethod
     def details_red(instance):
-        return reduced(instance.details)
+        return reduced(instance.description)
 
 
 @admin.register(WritingChoice)

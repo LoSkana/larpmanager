@@ -36,7 +36,7 @@ from larpmanager.forms.character import (
     OrgaWritingQuestionForm,
 )
 from larpmanager.forms.utils import EventCharacterS2Widget
-from larpmanager.forms.writing import FactionForm, PlotForm, QuestForm, TraitForm, UploadElementsForm
+from larpmanager.forms.writing import FactionForm, PlotForm, QuestForm, TraitForm
 from larpmanager.models.base import Feature
 from larpmanager.models.form import (
     QuestionApplicable,
@@ -67,7 +67,6 @@ from larpmanager.utils.common import (
 from larpmanager.utils.download import orga_character_form_download
 from larpmanager.utils.edit import backend_edit, set_suggestion, writing_edit, writing_edit_working_ticket
 from larpmanager.utils.event import check_event_permission
-from larpmanager.utils.upload import upload_elements
 from larpmanager.utils.writing import writing_list, writing_versions, writing_view
 
 
@@ -204,7 +203,7 @@ def orga_writing_form_list(request, s, n, typ):
     if question.typ in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
         cho = {}
         for opt in event.get_elements(WritingOption).filter(question=question):
-            cho[opt.id] = opt.display
+            cho[opt.id] = opt.name
 
         for el in WritingChoice.objects.filter(question=question, element_id__in=element_ids).order_by("option__order"):
             if el.element_id not in res:
@@ -239,7 +238,7 @@ def orga_writing_form_email(request, s, n, typ):
 
     cho = {}
     for opt in event.get_elements(WritingOption).filter(question=q):
-        cho[opt.id] = opt.display
+        cho[opt.id] = opt.name
 
     get_event_cache_all(ctx)
     mapping = {}
@@ -289,33 +288,10 @@ def orga_writing_form(request, s, n, typ):
     ctx = check_event_permission(request, s, n, "orga_character_form")
     check_writing_form_type(ctx, typ)
 
-    if request.method == "POST":
-        if request.POST.get("download") == "1":
-            return orga_character_form_download(ctx)
+    if request.method == "POST" and request.POST.get("download") == "1":
+        return orga_character_form_download(ctx)
 
-        return upload_elements(request, ctx, WritingQuestion, "character_question", "orga_character_form")
-
-    ctx["form"] = UploadElementsForm()
-    ctx["upload"] = (
-        _(
-            "typ (type: 's' for single choice, 'm' for multiple choice, 't' for short text, 'p' for long text, 'e' for editor)"
-        )
-        + ", "
-    )
-    ctx["upload"] += _("display (question text)") + ", " + _("description (application description)") + ", "
-    ctx["upload"] += (
-        _("status of application: 'o' for optional, 'm' mandatory, 'c' creation, 'd' disabled, 'h' hidden") + ", "
-    )
-    ctx["upload"] += _("visibility (demand visibility: 's' for Searchable, 'c' for Public, 'e' for Private") + ", "
-    ctx["upload"] += (
-        _("options (number of options)")
-        + ", "
-        + _(
-            "for each option five columns: name, description, available seats (0 for "
-            "infinite), prerequisite options, ticket required"
-        )
-    )
-
+    ctx["upload"] = "character_form"
     ctx["download"] = 1
 
     ctx["list"] = ctx["event"].get_elements(WritingQuestion).order_by("order").prefetch_related("options")
@@ -555,7 +531,7 @@ def orga_writing_excel_edit(request, s, n, typ):
     confirm = _("Confirm")
     field = ctx["form"][ctx["field_key"]]
     value = f"""
-        <h2>{ctx["question"].display}: {ctx["element"]}</h2>
+        <h2>{ctx["question"].name}: {ctx["element"]}</h2>
         <form id='form-excel'>
             <div id='{field.auto_id}_tr'>
                 {field.as_widget()}
@@ -675,7 +651,7 @@ def _get_question_update(ctx, el):
         # get option names
         option_ids = [int(val) for val in value]
         query = ctx["event"].get_elements(WritingOption).filter(pk__in=option_ids).order_by("order")
-        value = ", ".join([display for display in query.values_list("display", flat=True)])
+        value = ", ".join([display for display in query.values_list("name", flat=True)])
     else:
         # check if it is over the character limit
         value = str(value)

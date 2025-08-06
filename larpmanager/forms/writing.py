@@ -123,19 +123,23 @@ class PlayerRelationshipForm(MyForm):
 
 
 class UploadElementsForm(forms.Form):
-    elem = forms.FileField(
-        validators=[
-            FileTypeValidator(
-                allowed_types=[
-                    "application/csv",
-                    "text/csv",
-                    "text/plain",
-                    "application/zip",
-                    "text/html",
-                ]
-            )
-        ]
-    )
+    allowed_types = [
+        "application/csv",
+        "text/csv",
+        "text/plain",
+        "application/zip",
+        "text/html",
+    ]
+    validator = FileTypeValidator(allowed_types=allowed_types)
+
+    first = forms.FileField(validators=[validator], required=False)
+    second = forms.FileField(validators=[validator], required=False)
+
+    def __init__(self, *args, **kwargs):
+        only_one = kwargs.pop("only_one", False)
+        super().__init__(*args, **kwargs)
+        if only_one and "second" in self.fields:
+            del self.fields["second"]
 
 
 class BaseWritingForm(BaseRegistrationForm):
@@ -298,7 +302,7 @@ class QuestTypeForm(WritingForm):
 
     class Meta:
         model = QuestType
-        fields = ["progress", "name", "assigned", "teaser", "event"]
+        fields = ["name", "teaser", "event"]
 
         widgets = {
             "teaser": WritingTinyMCE(),

@@ -168,6 +168,8 @@ class ExeAssocRoleForm(MyForm):
 
     page_info = _("This page allows you to edit the roles of the association")
 
+    load_templates = ["share"]
+
     class Meta:
         model = AssocRole
         fields = ("name", "members", "assoc")

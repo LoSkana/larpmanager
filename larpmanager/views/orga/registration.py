@@ -50,9 +50,6 @@ from larpmanager.forms.registration import (
     OrgaRegistrationForm,
     RegistrationCharacterRelForm,
 )
-from larpmanager.forms.writing import (
-    UploadElementsForm,
-)
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemOther,
@@ -84,7 +81,6 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.download import _orga_registrations_acc, download
 from larpmanager.utils.event import check_event_permission
-from larpmanager.utils.upload import upload_elements
 from larpmanager.views.orga.member import member_field_correct
 
 
@@ -228,7 +224,7 @@ def registrations_popup(request, ctx):
         reg = Registration.objects.get(pk=idx, run=ctx["run"])
         question = RegistrationQuestion.objects.get(pk=tp, event=ctx["event"].get_class_parent(RegistrationQuestion))
         el = RegistrationAnswer.objects.get(reg=reg, question=question)
-        tx = f"<h2>{reg} - {question.display}</h2>" + el.text
+        tx = f"<h2>{reg} - {question.name}</h2>" + el.text
         return JsonResponse({"k": 1, "v": tx})
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
@@ -314,8 +310,6 @@ def orga_registrations(request, s, n):
         if request.POST.get("download") == "1":
             return download(ctx, Registration, "registration")
 
-        return upload_elements(request, ctx, Registration, "registration", "orga_registrations")
-
     cache = {}
 
     get_event_cache_all(ctx)
@@ -356,18 +350,7 @@ def orga_registrations(request, s, n):
 
     _orga_registrations_text_fields(ctx)
 
-    ctx["typ"] = "registration"
-    ctx["form"] = UploadElementsForm()
-
-    ctx["upload"] = ",".join(
-        [
-            str(_("'player' (player's email)")),
-            str(_("'ticket' (ticket name or number)")),
-            str(_("'character' (character name or number to be assigned)")),
-            str(_("'pwyw' (donation)")),
-        ]
-    )
-
+    ctx["upload"] = "registrations"
     ctx["download"] = 1
     if ctx["event"].get_config("show_export", False):
         ctx["export"] = "registration"
@@ -455,7 +438,7 @@ def orga_registration_form_email(request, s, n):
 
     cho = {}
     for opt in RegistrationOption.objects.filter(question=q):
-        cho[opt.id] = opt.display
+        cho[opt.id] = opt.name
 
     que = RegistrationChoice.objects.filter(question=q, reg__run=ctx["run"], reg__cancellation_date__isnull=True)
     for el in que.select_related("reg", "reg__member"):
@@ -760,7 +743,7 @@ def orga_lottery(request, s, n):
         regs = list(regs)
         shuffle(regs)
         chosen = regs[0:to_upgrade]
-        ticket = get_object_or_404(RegistrationTicket, event=ctx["run"].event, display=ctx["ticket"])
+        ticket = get_object_or_404(RegistrationTicket, event=ctx["run"].event, name=ctx["ticket"])
         for el in chosen:
             el.ticket = ticket
             el.save()

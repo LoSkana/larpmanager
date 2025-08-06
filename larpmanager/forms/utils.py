@@ -376,8 +376,8 @@ class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
 
 class EventWritingOptionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
     search_fields = [
-        "display__icontains",
-        "details__icontains",
+        "name__icontains",
+        "description__icontains",
     ]
 
     def set_event(self, event):

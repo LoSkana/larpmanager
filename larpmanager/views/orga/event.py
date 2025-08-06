@@ -17,10 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import traceback
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -39,17 +40,26 @@ from larpmanager.forms.event import (
     OrgaQuickSetupForm,
     OrgaRunForm,
 )
+from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.access import EventRole
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, EventButton, EventText
+from larpmanager.models.form import QuestionApplicable, QuestionType
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, Faction, Plot
 from larpmanager.utils.common import clear_messages, get_feature
 from larpmanager.utils.deadlines import check_run_deadlines
-from larpmanager.utils.download import export_character_form, export_data, export_registration_form, zip_exports
+from larpmanager.utils.download import (
+    _get_column_names,
+    export_character_form,
+    export_data,
+    export_registration_form,
+    zip_exports,
+)
 from larpmanager.utils.edit import backend_edit, orga_edit
 from larpmanager.utils.event import check_event_permission, get_index_event_permissions
+from larpmanager.utils.upload import go_upload
 
 
 @login_required
@@ -243,3 +253,146 @@ def _prepare_backup(ctx):
         exports.extend(export_data(ctx, Trait))
 
     return zip_exports(ctx, exports, "backup")
+
+
+@login_required
+def orga_upload(request, s, n, typ):
+    ctx = check_event_permission(request, s, n, f"orga_{typ}")
+    ctx["typ"] = typ.rstrip("s")
+    _get_column_names(ctx)
+
+    if request.POST:
+        form = UploadElementsForm(request.POST, request.FILES)
+        redr = reverse(f"orga_{typ}", args=[ctx["event"].slug, ctx["run"].number])
+        if form.is_valid():
+            try:
+                # print(request.FILES)
+                ctx["logs"] = go_upload(request, ctx, form)
+                ctx["redr"] = redr
+                messages.success(request, _("Elements uploaded") + "!")
+                return render(request, "larpmanager/orga/uploads.html", ctx)
+
+            except Exception as exp:
+                print(traceback.format_exc())
+                messages.error(request, _("Unknow error on upload") + f": {exp}")
+            return HttpResponseRedirect(redr)
+    else:
+        form = UploadElementsForm()
+
+    ctx["form"] = form
+
+    return render(request, "larpmanager/orga/upload.html", ctx)
+
+
+@login_required
+def orga_upload_template(request, s, n, typ):
+    ctx = check_event_permission(request, s, n)
+    ctx["typ"] = typ
+    _get_column_names(ctx)
+    value_mapping = {
+        QuestionType.SINGLE: "option name",
+        QuestionType.MULTIPLE: "option names (comma separated)",
+        QuestionType.TEXT: "field text",
+        QuestionType.PARAGRAPH: "field long text",
+        QuestionType.EDITOR: "field html text",
+        QuestionType.NAME: "element name",
+        QuestionType.TEASER: "element presentation",
+        QuestionType.SHEET: "element text",
+        QuestionType.COVER: "element cover (utils path)",
+        QuestionType.FACTIONS: "faction names (comma separated)",
+        QuestionType.TITLE: "title short text",
+        QuestionType.MIRROR: "name of mirror character",
+        QuestionType.HIDE: "hide (true or false)",
+        QuestionType.PROGRESS: "name of progress step",
+        QuestionType.ASSIGNED: "name of assigned staff",
+    }
+    if ctx.get("writing_typ"):
+        exports = _writing_template(ctx, typ, value_mapping)
+    elif typ == "registration":
+        exports = _reg_template(ctx, typ, value_mapping)
+    else:
+        exports = _form_template(ctx)
+
+    return zip_exports(ctx, exports, "template")
+
+
+def _form_template(ctx):
+    exports = []
+    defs = {
+        "name": "Question Name",
+        "typ": "multi-choice",
+        "description": "Question Description",
+        "status": "optional",
+        "applicable": "character",
+        "visibility": "public",
+        "max_length": "1",
+    }
+    keys = list(ctx["columns"][0].keys())
+    vals = []
+    for field, value in defs.items():
+        if field not in keys:
+            continue
+        vals.append(value)
+    exports.append(("questions", keys, [vals]))
+    defs = {
+        "question": "Question Name",
+        "name": "Option Name",
+        "description": "Option description",
+        "max_available": "2",
+        "price": "10",
+    }
+    keys = list(ctx["columns"][1].keys())
+    vals = []
+    for field, value in defs.items():
+        if field not in keys:
+            continue
+        vals.append(value)
+    exports.append(("options", keys, [vals]))
+    return exports
+
+
+def _reg_template(ctx, typ, value_mapping):
+    keys = list(ctx["columns"][0].keys())
+    vals = []
+    defs = {"player": "user@test.it", "ticket": "Standard", "character": "Test Character", "donation": "5"}
+    for field, value in defs.items():
+        if field not in keys:
+            continue
+        vals.append(value)
+    keys.extend(ctx["fields"])
+    for _field, field_typ in ctx["fields"].items():
+        vals.append(value_mapping[field_typ])
+    exports = [(f"{typ} - template", keys, [vals])]
+    return exports
+
+
+def _writing_template(ctx, typ, value_mapping):
+    keys = list(ctx["fields"].keys())
+    vals = [value_mapping[field_typ] for _field, field_typ in ctx["fields"].items()]
+
+    if ctx["writing_typ"] == QuestionApplicable.QUEST:
+        keys.insert(0, "typ")
+        vals.insert(0, "name of quest type")
+    elif ctx["writing_typ"] == QuestionApplicable.TRAIT:
+        keys.insert(0, "quest")
+        vals.insert(0, "name of quest")
+
+    exports = [(f"{typ} - template", keys, [vals])]
+
+    if ctx["writing_typ"] == QuestionApplicable.CHARACTER and "relationships" in ctx["features"]:
+        exports.append(
+            (
+                "relationships - template",
+                list(ctx["columns"][1].keys()),
+                [["Test Character", "Another Character", "Super pals"]],
+            )
+        )
+    if ctx["writing_typ"] == QuestionApplicable.PLOT:
+        exports.append(
+            (
+                "roles - template",
+                list(ctx["columns"][1].keys()),
+                [["Test Plot", "Test Character", "Gonna be a super star"]],
+            )
+        )
+    return exports

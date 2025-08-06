@@ -279,7 +279,7 @@ class WorkshopModule(BaseModel):
 
     is_generic = models.BooleanField(default=False)
 
-    display = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
 
     number = models.IntegerField(blank=True)
 
@@ -288,12 +288,12 @@ class WorkshopModule(BaseModel):
     members = models.ManyToManyField(Member, related_name="workshops", through="WorkshopMemberRel")
 
     def __str__(self):
-        return self.display
+        return self.name
 
     def show(self):
         # noinspection PyUnresolvedReferences
         js = {"id": self.id, "number": self.number}
-        self.upd_js_attr(js, "display")
+        self.upd_js_attr(js, "name")
         return js
 
 
@@ -309,7 +309,7 @@ class WorkshopMemberRel(BaseModel):
 class WorkshopQuestion(BaseModel):
     search = models.CharField(max_length=200, editable=False)
 
-    display = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
 
     module = models.ForeignKey(WorkshopModule, on_delete=models.CASCADE, related_name="questions")
 
@@ -318,12 +318,12 @@ class WorkshopQuestion(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="workshop_questions")
 
     def __str__(self):
-        return self.display
+        return self.name
 
     def show(self):
         # noinspection PyUnresolvedReferences
         js = {"id": self.id, "opt": [], "number": self.number}
-        self.upd_js_attr(js, "display")
+        self.upd_js_attr(js, "name")
         # noinspection PyUnresolvedReferences
         for op in self.options.all():
             js["opt"].append(op.show())
@@ -339,7 +339,7 @@ class WorkshopOption(BaseModel):
 
     question = models.ForeignKey(WorkshopQuestion, on_delete=models.CASCADE, related_name="options")
 
-    display = models.CharField(max_length=500)
+    name = models.CharField(max_length=500)
 
     is_correct = models.BooleanField(default=False)
 
@@ -348,12 +348,12 @@ class WorkshopOption(BaseModel):
     number = models.IntegerField(blank=True)
 
     def __str__(self):
-        return f"{self.question} {self.display} ({self.is_correct})"
+        return f"{self.question} {self.name} ({self.is_correct})"
 
     def show(self):
         # noinspection PyUnresolvedReferences
         js = {"id": self.id, "is_correct": self.is_correct}
-        self.upd_js_attr(js, "display")
+        self.upd_js_attr(js, "name")
         return js
 
 

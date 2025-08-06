@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n show_tags %}
 {% block title %}
-    {{ workshop.display }} - {% trans "Retry" %}!
+    {{ workshop.name }} - {% trans "Retry" %}!
 {% endblock title %}
 {% block nav %}
     {% include "larpmanager/manage/nav.html" %}
@@ -20,7 +20,7 @@
         </p>
         <hr class="c" />
         {% for el in list %}
-            <h2>{{ el.display }}</h2>
+            <h2>{{ el.name }}</h2>
             <div class="question num_{{ el.answer | length }}">
                 {% if el.failed %}
                     <p class="fail">{% trans "You have made a mistake" %}!</p>
@@ -32,7 +32,7 @@
                 {% for op in el.opt %}
                     {% if op.id in el.answer %}
                         <div class="option">
-                            <p>{{ op.display }}</p>
+                            <p>{{ op.name }}</p>
                         </div>
                     {% endif %}
                 {% endfor %}

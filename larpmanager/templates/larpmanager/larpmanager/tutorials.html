@@ -32,21 +32,6 @@
                     </i>
                 </p>
             {% endif %}
-            <table class="navig">
-                <tr>
-                    <td>
-                        {% if prev %}
-                            {% trans "Prev" %}: <a href="{% url 'tutorials' prev.2 %}">{{ prev.0 | template_trans }}</a>
-                        {% endif %}
-                    </td>
-                    <td></td>
-                    <td>
-                        {% if next %}
-                            {% trans "Next" %}: <a href="{% url 'tutorials' next.2 %}">{{ next.0 | template_trans }}</a>
-                        {% endif %}
-                    </td>
-                </tr>
-            </table>
             <div id="tutorial-nav" class="nav"></div>
             <div id="tutorial-descr">{{ opened.descr | safe }}</div>
             <table class="navig">

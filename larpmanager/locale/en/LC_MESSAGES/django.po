@@ -3762,38 +3762,6 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
-msgid "You can upload data directly from a csv file"
-msgstr ""
-
-msgid "The first line is the names of the fields"
-msgstr ""
-
-msgid ""
-"If you already have the file ready, upload it here (pay attention to the "
-"'csv' format)"
-msgstr ""
-
-msgid "Upload cover"
-msgstr ""
-
-msgid ""
-"The first line are the field names, such as 'number', 'name', "
-"'presentation', 'text'. (Only 'number' is required)"
-msgstr ""
-
-msgid "If you want to download an example file, click here"
-msgstr ""
-
-msgid "Loading template"
-msgstr ""
-
-msgid "Select a file with extension 'zip'"
-msgstr ""
-
-msgid ""
-"Inside this file must be the photos, named by the number of the character"
-msgstr ""
-
 msgid "Instructions"
 msgstr ""
 
@@ -3859,6 +3827,15 @@ msgstr ""
 msgid ""
 "For each character added, a specific field will be available to add "
 "additional plot information"
+msgstr ""
+
+msgid "You can only add users who approved data sharing with the organization"
+msgstr ""
+
+msgid "If you don't see an user, ask them to access"
+msgstr ""
+
+msgid "this link"
 msgstr ""
 
 msgid "whether the character is aware of the identity of the other trait"
@@ -4931,16 +4908,6 @@ msgstr ""
 msgid ""
 "This page summarises the roles to be assigned in order to use the functions "
 "concerning the organisation"
-msgstr ""
-
-msgid ""
-"To assign a user to a role, they must first be added to the organization"
-msgstr ""
-
-msgid "If you don't see an user, ask them to access"
-msgstr ""
-
-msgid "this link"
 msgstr ""
 
 msgid "This page shows all runs; you can edit them, or create new ones"
@@ -6572,6 +6539,63 @@ msgstr ""
 msgid "This page allows you to translate the event"
 msgstr ""
 
+msgid "You can upload data directly from CSV file"
+msgstr ""
+
+msgid ""
+"The first line of the file must contain the column names, see the "
+"descriptions below"
+msgstr ""
+
+msgid ""
+"You can optionally add columns for the registration questions, allowed "
+"values for the header are"
+msgstr ""
+
+msgid ""
+"Note that existing registrations with the same player email, will be "
+"overwritten with the uploaded data"
+msgstr ""
+
+msgid ""
+"To add a registration to a player, they must have consented to share their "
+"data with your organization; otherwise, their entry will be skipped"
+msgstr ""
+
+msgid "You can also upload a second file with the registration options"
+msgstr ""
+
+msgid ""
+"Note that existing elements with the same name, will be overwritten with the "
+"uploaded data"
+msgstr ""
+
+msgid "The first line of the file are the field names that you want to upload"
+msgstr ""
+
+msgid "Allowed values are"
+msgstr ""
+
+msgid "The only mandatory column is"
+msgstr ""
+
+msgid "The other fields are optional"
+msgstr ""
+
+msgid "To upload relationships, add a second file with the following columns"
+msgstr ""
+
+msgid ""
+"To upload role of the characters in the plots, add a second file with the "
+"following columns"
+msgstr ""
+
+msgid "Download example template"
+msgstr ""
+
+msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
+msgstr ""
+
 msgid "Loading performed, see logs"
 msgstr ""
 
@@ -7920,6 +7944,72 @@ msgstr ""
 msgid "Welcome"
 msgstr ""
 
+msgid "The player's email"
+msgstr ""
+
+msgid "The name of the ticket"
+msgstr ""
+
+msgid "if it doesn't exist, it will be created"
+msgstr ""
+
+msgid "(Optional) The character name to assign to the player"
+msgstr ""
+
+msgid "(Optional) The amount of a voluntary donation"
+msgstr ""
+
+msgid "The question name"
+msgstr ""
+
+msgid "The question type, allowed values are"
+msgstr ""
+
+msgid "The question status, allowed values are"
+msgstr ""
+
+msgid "The name of the question this option belongs to"
+msgstr ""
+
+msgid "If not found, the option will be skipped"
+msgstr ""
+
+msgid "The name of the option"
+msgstr ""
+
+msgid "The writing element this question applies to, allowed values are"
+msgstr ""
+
+msgid "The question visibility to players, allowed values are"
+msgstr ""
+
+msgid "Optional – Maximum number of times it can be selected (0 = unlimited)"
+msgstr ""
+
+msgid "First character in the relationship (origin)"
+msgstr ""
+
+msgid "Second character in the relationship (destination)"
+msgstr ""
+
+msgid "Description of the relationship from source to target"
+msgstr ""
+
+msgid "Name of the plot"
+msgstr ""
+
+msgid "Name of the character"
+msgstr ""
+
+msgid "Description of the role of the character in the plot"
+msgstr ""
+
+msgid "Name of quest type"
+msgstr ""
+
+msgid "Name of quest"
+msgstr ""
+
 msgid "Operation completed"
 msgstr ""
 
@@ -8049,15 +8139,6 @@ msgstr ""
 msgid ""
 "Do you want to unsubscribe from our communication lists? <a "
 "href='%(url)s'>Unsubscribe</a>"
-msgstr ""
-
-msgid "Elements uploaded"
-msgstr ""
-
-msgid "Unknow error on upload"
-msgstr ""
-
-msgid "invalid form"
 msgstr ""
 
 msgid "Registration completed successfully!"
@@ -8349,35 +8430,6 @@ msgstr ""
 msgid "Results not present"
 msgstr ""
 
-msgid ""
-"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
-"text, 'p' for long text, 'e' for editor)"
-msgstr ""
-
-msgid "display (question text)"
-msgstr ""
-
-msgid "description (application description)"
-msgstr ""
-
-msgid ""
-"status of application: 'o' for optional, 'm' mandatory, 'c' creation, 'd' "
-"disabled, 'h' hidden"
-msgstr ""
-
-msgid ""
-"visibility (demand visibility: 's' for Searchable, 'c' for Public, 'e' for "
-"Private"
-msgstr ""
-
-msgid "options (number of options)"
-msgstr ""
-
-msgid ""
-"for each option five columns: name, description, available seats (0 for "
-"infinite), prerequisite options, ticket required"
-msgstr ""
-
 msgid "Parent empty"
 msgstr ""
 
@@ -8387,14 +8439,10 @@ msgstr ""
 msgid "Copy done"
 msgstr ""
 
-msgid ""
-"typ (type: 's' for single choice, 'm' for multiple choice, 't' for short "
-"text, 'p' for long text)"
+msgid "Elements uploaded"
 msgstr ""
 
-msgid ""
-"for each option four columns: name, description, price, available places (0 "
-"for infinite)"
+msgid "Unknow error on upload"
 msgstr ""
 
 msgid "Photos and videos successfully uploaded"
@@ -8407,18 +8455,6 @@ msgid "Regeneration pdf started"
 msgstr ""
 
 msgid "Provisional"
-msgstr ""
-
-msgid "'player' (player's email)"
-msgstr ""
-
-msgid "'ticket' (ticket name or number)"
-msgstr ""
-
-msgid "'character' (character name or number to be assigned)"
-msgstr ""
-
-msgid "'pwyw' (donation)"
 msgstr ""
 
 msgid "Registration cancelled"

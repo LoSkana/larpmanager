@@ -414,14 +414,14 @@ def exe_verification(request):
         el.reg_cod = cache.get(aux.get(el.id))
 
     if request.method == "POST":
-        form = UploadElementsForm(request.POST, request.FILES)
+        form = UploadElementsForm(request.POST, request.FILES, only_one=True)
         if form.is_valid():
-            counter = invoice_verify(request, ctx, request.FILES["elem"])
+            counter = invoice_verify(request, ctx, request.FILES["first"])
             messages.success(request, _("Verified payments") + "!" + " " + str(counter))
             return redirect("exe_verification")
 
     else:
-        form = UploadElementsForm()
+        form = UploadElementsForm(only_one=True)
 
     ctx["form"] = form
 

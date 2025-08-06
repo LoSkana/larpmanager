@@ -38,7 +38,7 @@ def update_event_fields(event_id):
 
     # add questions
     que = event.get_elements(WritingQuestion).exclude(visibility=QuestionVisibility.HIDDEN).order_by("order")
-    for el in que.values("id", "display", "typ", "printable", "visibility", "applicable"):
+    for el in que.values("id", "name", "typ", "printable", "visibility", "applicable"):
         first_key = QuestionApplicable(el["applicable"]).label
         if first_key not in res:
             res[first_key] = {}
@@ -48,7 +48,7 @@ def update_event_fields(event_id):
 
     # add options
     que = event.get_elements(WritingOption).order_by("order")
-    for el in que.values("id", "display", "question_id", "question__applicable"):
+    for el in que.values("id", "name", "question_id", "question__applicable"):
         first_key = QuestionApplicable(el["question__applicable"]).label
         if first_key not in res:
             res[first_key] = {}
@@ -58,14 +58,14 @@ def update_event_fields(event_id):
 
     # add default names and ids
     que = event.get_elements(WritingQuestion).filter(typ__in=QuestionType.get_def_types())
-    for el in que.values("id", "typ", "display", "applicable"):
+    for el in que.values("id", "typ", "name", "applicable"):
         first_key = QuestionApplicable(el["applicable"]).label
         second_key = el["typ"]
         if first_key not in res:
             res[first_key] = {}
         if "names" not in res[first_key]:
             res[first_key]["names"] = {}
-        res[first_key]["names"][second_key] = el["display"]
+        res[first_key]["names"][second_key] = el["name"]
         if "ids" not in res[first_key]:
             res[first_key]["ids"] = {}
         res[first_key]["ids"][second_key] = el["id"]

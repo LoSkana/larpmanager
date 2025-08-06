@@ -30,7 +30,7 @@
                     <td>
                         {% for ch in el.questions.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_registration_form_edit' run.event.slug run.number ch.id %}">{{ ch.display }}</a>
+                            <a href="{% url 'orga_registration_form_edit' run.event.slug run.number ch.id %}">{{ ch.name }}</a>
                         {% endfor %}
                     </td>
                     <td>

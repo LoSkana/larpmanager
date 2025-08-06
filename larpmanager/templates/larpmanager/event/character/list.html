@@ -18,7 +18,7 @@
                 {% if features.title %}<th>{{ writing_fields.character.names.title }}</th>{% endif %}
                 <th>{{ writing_fields.character.names.teaser }}</th>
                 {% for idx, _ in searchable.items %}
-                    {% with questions|get:idx as que %}<th>{{ que.display }}</th>{% endwith %}
+                    {% with questions|get:idx as que %}<th>{{ que.name }}</th>{% endwith %}
                 {% endfor %}
                 {% if approval %}
                     <th>{% trans "Status" %}</th>

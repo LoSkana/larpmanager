@@ -37,7 +37,7 @@
             {% endif %}
             {% for idq, options in searchable.items %}
                 {% with questions|get:idq as question %}
-                    <a href="#" class="my_toggle" tog='custom_field_{{ idq }}'>{{ question.display }}</a>
+                    <a href="#" class="my_toggle" tog='custom_field_{{ idq }}'>{{ question.name }}</a>
                 {% endwith %}
             {% endfor %}
             <a href="#" class="my_toggle" tog='link_list'>{% trans "Characters link" %}</a>
@@ -86,7 +86,7 @@
                 <hr />
                 {% for ido in options_id %}
                     {% with options|get:ido as option %}
-                        <a typ="field_{{ idq }}" href="#" tog="{{ ido }}">{{ option.display }}</a>
+                        <a typ="field_{{ idq }}" href="#" tog="{{ ido }}">{{ option.name }}</a>
                     {% endwith %}
                 {% endfor %}
             </div>

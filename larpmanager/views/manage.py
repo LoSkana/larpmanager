@@ -382,7 +382,7 @@ def _orga_actions_priorities(request, ctx, assoc):
         _add_priority(
             ctx,
             _("There are registration questions without options: %(list)s")
-            % {"list": ", ".join([obj.display for obj in empty_reg_questions])},
+            % {"list": ", ".join([obj.name for obj in empty_reg_questions])},
             "orga_registration_form",
         )
 
@@ -397,7 +397,7 @@ def _orga_actions_priorities(request, ctx, assoc):
         _add_priority(
             ctx,
             _("There are writing fields without options: %(list)s")
-            % {"list": ", ".join([obj.display for obj in empty_char_questions])},
+            % {"list": ", ".join([obj.name for obj in empty_char_questions])},
             "orga_character_form",
         )
 

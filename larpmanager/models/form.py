@@ -82,6 +82,16 @@ class QuestionType(models.TextChoices):
             QuestionType.EDITOR,
         }
 
+    @classmethod
+    def get_mapping(cls):
+        return {
+            QuestionType.SINGLE: "single-choice",
+            QuestionType.MULTIPLE: "multi-choice",
+            QuestionType.TEXT: "short-text",
+            QuestionType.PARAGRAPH: "long-text",
+            QuestionType.EDITOR: "advanced",
+        }
+
 
 class QuestionStatus(models.TextChoices):
     OPTIONAL = "o", _("Optional")
@@ -89,12 +99,30 @@ class QuestionStatus(models.TextChoices):
     DISABLED = "d", _("Disabled")
     HIDDEN = "h", _("Hidden")
 
+    @classmethod
+    def get_mapping(cls):
+        return {
+            QuestionStatus.OPTIONAL: "optional",
+            QuestionStatus.MANDATORY: "mandatory",
+            QuestionStatus.DISABLED: "disabled",
+            QuestionStatus.HIDDEN: "hidden",
+        }
+
 
 class QuestionVisibility(models.TextChoices):
     SEARCHABLE = "s", _("Searchable")
     PUBLIC = "c", _("Public")
     PRIVATE = "e", _("Private")
     HIDDEN = "h", _("Hidden")
+
+    @classmethod
+    def get_mapping(cls):
+        return {
+            QuestionVisibility.SEARCHABLE: "searchable",
+            QuestionVisibility.PUBLIC: "public",
+            QuestionVisibility.PRIVATE: "private",
+            QuestionVisibility.HIDDEN: "hidden",
+        }
 
 
 class QuestionApplicable(models.TextChoices):
@@ -117,6 +145,10 @@ class QuestionApplicable(models.TextChoices):
         model_name = QuestionApplicable(typ).label.lower()
         return apps.get_model("larpmanager", model_name)
 
+    @classmethod
+    def get_mapping(cls):
+        return {value: label for value, label in cls.choices}
+
 
 class WritingQuestion(BaseModel):
     typ = models.CharField(
@@ -131,7 +163,7 @@ class WritingQuestion(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="form_questions")
 
-    display = models.CharField(max_length=100, verbose_name=_("Name"), help_text=_("Question name (keep it short)"))
+    name = models.CharField(max_length=100, verbose_name=_("Name"), help_text=_("Question name (keep it short)"))
 
     description = models.CharField(
         max_length=1000,
@@ -188,11 +220,11 @@ class WritingQuestion(BaseModel):
     )
 
     def __str__(self):
-        return f"{self.event} - {self.display[:30]}"
+        return f"{self.event} - {self.name[:30]}"
 
     def show(self):
         js = {}
-        for s in ["description", "display"]:
+        for s in ["description", "name"]:
             self.upd_js_attr(js, s)
         return js
 
@@ -221,13 +253,13 @@ class WritingOption(BaseModel):
 
     question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="options")
 
-    display = models.CharField(
+    name = models.CharField(
         max_length=50,
         verbose_name=_("Name"),
         help_text=_("Option name, displayed within the question (keep it short)"),
     )
 
-    details = models.CharField(
+    description = models.CharField(
         max_length=500,
         blank=True,
         null=True,
@@ -262,15 +294,15 @@ class WritingOption(BaseModel):
     )
 
     def __str__(self):
-        return f"{self.question} {self.display}"
+        return f"{self.question} {self.name}"
 
     def get_form_text(self, run=None, cs=None):
         s = self.show(run)
-        return s["display"]
+        return s["name"]
 
     def show(self, run=None):
         js = {"max_available": self.max_available}
-        for s in ["display", "details"]:
+        for s in ["name", "description"]:
             self.upd_js_attr(js, s)
         return js
 
@@ -284,7 +316,7 @@ class WritingChoice(BaseModel):
 
     def __str__(self):
         # noinspection PyUnresolvedReferences
-        return f"{self.element_id} ({self.question.display}) {self.option.display}"
+        return f"{self.element_id} ({self.question.name}) {self.option.name}"
 
 
 class WritingAnswer(BaseModel):
@@ -296,7 +328,7 @@ class WritingAnswer(BaseModel):
 
     def __str__(self):
         # noinspection PyUnresolvedReferences
-        return f"{self.element_id} ({self.question.display}) {self.text[:100]}"
+        return f"{self.element_id} ({self.question.name}) {self.text[:100]}"
 
 
 class RegistrationQuestion(BaseModel):
@@ -312,7 +344,7 @@ class RegistrationQuestion(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="questions")
 
-    display = models.CharField(max_length=100, verbose_name=_("Name"), help_text=_("Question name (keep it short)"))
+    name = models.CharField(max_length=100, verbose_name=_("Name"), help_text=_("Question name (keep it short)"))
 
     description = models.CharField(
         max_length=1000,
@@ -403,11 +435,11 @@ class RegistrationQuestion(BaseModel):
     )
 
     def __str__(self):
-        return f"{self.event} - {self.display[:30]}"
+        return f"{self.event} - {self.name[:30]}"
 
     def show(self):
         js = {}
-        for s in ["description", "display"]:
+        for s in ["description", "name"]:
             self.upd_js_attr(js, s)
         return js
 
@@ -469,13 +501,13 @@ class RegistrationOption(BaseModel):
 
     question = models.ForeignKey(RegistrationQuestion, on_delete=models.CASCADE, related_name="options")
 
-    display = models.CharField(
+    name = models.CharField(
         max_length=170,
         verbose_name=_("Name"),
         help_text=_("Option name, displayed within the question (keep it short)"),
     )
 
-    details = models.CharField(
+    description = models.CharField(
         max_length=500,
         blank=True,
         null=True,
@@ -500,14 +532,14 @@ class RegistrationOption(BaseModel):
     order = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"{self.question} {self.display[:30]} ({self.price}€)"
+        return f"{self.question} {self.name[:30]} ({self.price}€)"
 
     def get_price(self):
         return self.price
 
     def get_form_text(self, run=None, cs=None):
         s = self.show(run)
-        tx = s["display"]
+        tx = s["name"]
         if s["price"] and int(s["price"]) > 0:
             if not cs:
                 # noinspection PyUnresolvedReferences
@@ -518,10 +550,10 @@ class RegistrationOption(BaseModel):
 
     def show(self, run=None):
         js = {"max_available": self.max_available}
-        for s in ["display", "price", "details"]:
+        for s in ["name", "price", "description"]:
             self.upd_js_attr(js, s)
         # noinspection PyUnresolvedReferences
-        js["question"] = self.question.display
+        js["question"] = self.question.name
         return js
 
 
@@ -534,7 +566,7 @@ class RegistrationChoice(BaseModel):
 
     def __str__(self):
         # noinspection PyUnresolvedReferences
-        return f"{self.reg} ({self.question.display}) {self.option.display}"
+        return f"{self.reg} ({self.question.name}) {self.option.name}"
 
 
 class RegistrationAnswer(BaseModel):
@@ -546,7 +578,7 @@ class RegistrationAnswer(BaseModel):
 
     def __str__(self):
         # noinspection PyUnresolvedReferences
-        return f"{self.reg} ({self.question.display}) {self.text[:100]}"
+        return f"{self.reg} ({self.question.name}) {self.text[:100]}"
 
 
 def get_ordered_registration_questions(ctx):

@@ -32,7 +32,6 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
 from larpmanager.cache.text_fields import get_cache_text_field
-from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, Trait
 from larpmanager.models.event import ProgressStep
@@ -53,7 +52,6 @@ from larpmanager.utils.character import get_character_sheet
 from larpmanager.utils.common import check_field, compute_diff
 from larpmanager.utils.download import download
 from larpmanager.utils.edit import _setup_char_finder
-from larpmanager.utils.upload import upload_elements
 
 
 def orga_list_progress_assign(ctx, typ: type[Model]):
@@ -94,7 +92,7 @@ def writing_popup_question(ctx, idx, question_idx):
         char = Character.objects.get(pk=idx, event=ctx["event"].get_class_parent(Character))
         question = WritingQuestion.objects.get(pk=question_idx, event=ctx["event"].get_class_parent(WritingQuestion))
         el = WritingAnswer.objects.get(element_id=char.id, question=question)
-        tx = f"<h2>{char} - {question.display}</h2>" + el.text
+        tx = f"<h2>{char} - {question.name}</h2>" + el.text
         return JsonResponse({"k": 1, "v": tx})
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
@@ -154,14 +152,13 @@ def writing_post(request, ctx, typ, nm):
     if request.POST.get("popup") == "1":
         return writing_popup(request, ctx, typ)
 
-    return upload_elements(request, ctx, typ, nm, "orga_" + nm + "s")
+    return None
 
 
 def writing_list(request, ctx, typ, nm):
     if request.method == "POST":
         return writing_post(request, ctx, typ, nm)
 
-    ctx["form"] = UploadElementsForm()
     ev = ctx["event"]
 
     ctx["nm"] = nm
@@ -181,6 +178,8 @@ def writing_list(request, ctx, typ, nm):
         # noinspection PyProtectedMember, PyUnresolvedReferences
         ctx["label_typ"] = typ._meta.model_name
         ctx["writing_typ"] = QuestionApplicable.get_applicable(ctx["label_typ"])
+        if ctx["writing_typ"]:
+            ctx["upload"] = f"{nm}s"
         orga_list_progress_assign(ctx, typ)  # pyright: ignore[reportArgumentType]
         writing_list_text_fields(ctx, text_fields, typ)
         _prepare_writing_list(ctx, request)
@@ -203,7 +202,7 @@ def _get_custom_form(ctx):
     for q in que:
         q.basic_typ = q.typ in QuestionType.get_basic_types()
         if q.typ in ctx["fields_name"].keys():
-            ctx["fields_name"][q.typ] = q.display
+            ctx["fields_name"][q.typ] = q.name
         else:
             ctx["form_questions"][q.id] = q
 

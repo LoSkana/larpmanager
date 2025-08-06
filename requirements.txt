@@ -66,6 +66,8 @@ jellyfish
 lxml
 
 olefile
+
+pandas
 pdfkit
 
 phonenumbers

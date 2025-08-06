@@ -8,13 +8,7 @@
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
-    <p>
-        <i>
-            {% trans "To assign a user to a role, they must first be added to the organization" %}.
-            {% trans "If you don't see an user, ask them to access" %}
-            <a href="{% url 'share' %}">{% trans "this link" %}</a>.
-        </i>
-    </p>
+    {% include "elements/info/share.html" %}
     <table id="roles" class="tablesorter">
         <thead>
             <tr>

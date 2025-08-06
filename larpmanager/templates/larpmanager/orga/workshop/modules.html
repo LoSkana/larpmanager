@@ -22,7 +22,7 @@
                         <a href="{% url 'orga_workshop_modules_edit' run.event.slug run.number el.id %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
-                    <td>{{ el.display }}</td>
+                    <td>{{ el.name }}</td>
                 </tr>
             {% endfor %}
         </tbody>

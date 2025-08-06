@@ -58,7 +58,7 @@
                         <td>
                             {% for opt in el.dependents.all %}
                                 {% include "elements/comma.html" %}
-                                {{ opt.display }}
+                                {{ opt.name }}
                             {% endfor %}
                         </td>
                     {% endif %}

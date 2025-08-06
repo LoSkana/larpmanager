@@ -177,7 +177,7 @@ async def add_links_to_visit(links_to_visit, page, visited_links):
             continue
         if link.endswith(("#", "#menu", "#sidebar", "print")):
             continue
-        if any(s in link for s in ["features", "pdf", "backup"]):
+        if any(s in link for s in ["features", "pdf", "backup", "upload/template"]):
             continue
         parsed_url = urlparse(link)
         if parsed_url.hostname not in ("localhost", "127.0.0.1"):

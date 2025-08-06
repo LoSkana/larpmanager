@@ -755,6 +755,8 @@ class OrgaEventRoleForm(MyForm):
 
     page_info = _("This page allows you to change the access roles for the event")
 
+    load_templates = ["share"]
+
     class Meta:
         model = EventRole
         fields = ("name", "members", "event")
@@ -873,7 +875,7 @@ class OrgaRunForm(ConfigForm):
                 if typ in basics:
                     typ = str(field["id"])
 
-                extra.append((typ, field["display"]))
+                extra.append((typ, field["name"]))
 
             self.add_configs(f"show_{s[0]}", ConfigType.MULTI_BOOL, s[1], help_text, extra=extra)
 
@@ -1121,9 +1123,7 @@ class OrgaPreferencesForm(ConfigForm):
                 [
                     (
                         f".lq_{field_id}",
-                        field.display
-                        if len(field.display) <= max_length
-                        else field.display[: max_length - 5] + " [...]",
+                        field.name if len(field.name) <= max_length else field.name[: max_length - 5] + " [...]",
                     )
                     for field_id, field in fields.items()
                 ]
@@ -1155,7 +1155,7 @@ class OrgaPreferencesForm(ConfigForm):
             else:
                 tog = f"q_{field['id']}"
 
-            extra.append((tog, field["display"]))
+            extra.append((tog, field["name"]))
 
         if s[0] == "character":
             if self.params["event"].get_config("user_character_max", 0):

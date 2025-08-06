@@ -30,7 +30,7 @@
         {% elif que.typ == 's' or que.typ == 'm' or que.typ == 't' or que.typ == 'p' %}
             <td class="hide question q_{{ key }} editable" qid="{{ que.id }}">
                 <span class="has_show_tooltip res_{{ key }}"></span>
-                <span class="hide show_tooltip">{{ que.display }}</span>
+                <span class="hide show_tooltip">{{ que.name }}</span>
             </td>
         {% else %}
             <td class="hide q_{{ key }} editable" qid="{{ que.id }}">
