@@ -28,7 +28,9 @@
                 {% endwith %}
             </td>
         {% elif que.typ == 's' or que.typ == 'm' or que.typ == 't' or que.typ == 'p' %}
-            <td class="question q_{{ key }} editable" qid="{{ que.id }}"></td>
+            <td class="question q_{{ key }} editable" qid="{{ que.id }}">
+                <!-- fill later -->
+            </td>
         {% else %}
             <td class="q_{{ key }} editable" qid="{{ que.id }}">
                 {% if que.typ == 'progress' %}

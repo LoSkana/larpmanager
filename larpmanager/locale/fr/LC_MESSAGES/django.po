@@ -3597,9 +3597,6 @@ msgstr "Le nom de la compétence"
 msgid "These fields are mandatory"
 msgstr "Ces champs sont obligatoires"
 
-msgid "Total remaining to be paid"
-msgstr "Total restant à payer"
-
 msgid "View photos from the event"
 msgstr "Voir les photos de l'événement"
 
@@ -3617,9 +3614,6 @@ msgstr "Vous avez utilisé un code d'ami"
 
 msgid "(click on image to enlarge)"
 msgstr "(cliquer sur l'image pour l'agrandir)"
-
-msgid "Additional free payment fee"
-msgstr "Frais supplémentaires de paiement gratuit"
 
 #, python-format
 msgid "Bring a friend to %(event)s"
@@ -4018,9 +4012,6 @@ msgstr "Ajout d'un poste de réclamation"
 
 msgid "Select a file with extension csv"
 msgstr "Sélectionnez un fichier avec l'extension \"csv\""
-
-msgid "Sum of payments received through"
-msgstr "Somme des paiements reçus par l'intermédiaire de"
 
 msgid "The setting / genre of the event"
 msgstr "Le cadre / le genre de l'événement"
@@ -4543,9 +4534,6 @@ msgstr "Désabonnement aux %(event)s"
 msgid "Set the experience points configuration"
 msgstr "Définir la configuration des points d'expérience"
 
-msgid "Sum of the signup fee, total to be paid"
-msgstr "Frais d'inscription, total à payer"
-
 msgid "The number of payments to split the fee"
 msgstr "Le nombre de versements à effectuer"
 
@@ -4957,9 +4945,6 @@ msgstr "L'utilisateur s'est vu attribuer le rôle spécifié"
 msgid "This page shows the settings for PDF printing"
 msgstr "Cette page résume les paramètres de l'impression PDF"
 
-msgid "Amount of the next payment instalment required"
-msgstr "Montant de la prochaine tranche de paiement requise"
-
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Annulation pour absence de cotisation annuelle"
 
@@ -5014,9 +4999,6 @@ msgstr "Définissez vos préférences personnelles sur l'interface"
 
 msgid "Something went wrong in the account activation"
 msgstr "Un problème s'est produit lors de l'activation du compte"
-
-msgid "Sum of payments received with means of payment"
-msgstr "Somme des paiements reçus avec les moyens de paiement"
 
 msgid "Text show at the start of all character sheets"
 msgstr "Texte affiché au début de toutes les feuilles de personnage"
@@ -5276,9 +5258,6 @@ msgstr "Cette page présente les collections ouvertes par les joueurs"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolérance dépassée, procéder à l'annulation"
-
-msgid "Unique registration code, used for payment checks"
-msgstr "Code d'enregistrement unique, utilisé pour les contrôles de paiement"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Vous incluez (au moins l'un de) ces filtres"
@@ -5665,9 +5644,6 @@ msgstr ""
 
 msgid "This page allows you to keep track of reported problems"
 msgstr "Cette page vous permet de suivre les problèmes signalés"
-
-msgid "Total of what has already been paid at the current date"
-msgstr "Total de ce qui a déjà été payé à la date actuelle"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr ""
@@ -6218,9 +6194,6 @@ msgstr ""
 "Les joueurs peuvent désormais soumettre des préinscriptions et vous pouvez "
 "les examiner"
 
-msgid "Part of the registration fee derived only from the ticket chosen"
-msgstr "Partie des droits d'inscription provenant uniquement du billet choisi"
-
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
 "Le paiement n'a pas été effectué. Veuillez nous contacter pour en connaître "
@@ -6455,9 +6428,6 @@ msgid "Assign roles to staff members, and give access to specific functions"
 msgstr ""
 "Attribuer des rôles aux membres du personnel et leur donner accès à des "
 "fonctions spécifiques"
-
-msgid "Number of days within which the player must pay his next installment"
-msgstr "Nombre de jours disponibles pour payer le prochain versement"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -7104,12 +7074,6 @@ msgid ""
 msgstr ""
 "Si vous êtes citoyen italien, indiquez votre code fiscal ; sinon, laissez le"
 " champ libre"
-
-msgid ""
-"Part of the registration fee derived only from the additional options chosen"
-msgstr ""
-"Partie des droits d'inscription provenant uniquement des options "
-"supplémentaires choisies"
 
 msgid ""
 "This page prepares the cash balance already formatted for annual declaration"

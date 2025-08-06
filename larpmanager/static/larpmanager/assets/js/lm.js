@@ -346,6 +346,8 @@ $(document).ready(function() {
     data_tables();
 
     post_popup();
+
+    $('#one .inner').fadeIn(100);
 });
 
 function data_tables() {
@@ -388,10 +390,12 @@ function data_tables() {
             });
         }
 
-        var full_layout = rowCount >= 10
+        var full_layout = rowCount >= 10;
 
         const table = new DataTable('#' + tableId, {
+            rowId: 'id',
             scrollX: true,
+            scrollY: '50vh',
             stateSave: true,
             paging: full_layout,
             layout: full_layout

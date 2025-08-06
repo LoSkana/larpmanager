@@ -1907,6 +1907,27 @@ input[type="checkbox"].checkbox_single {
     text-align: right;
 }
 
+@media(max-width: 840px) {
+   .dt-layout-cell.dt-layout-start, .dt-layout-cell.dt-layout-end {
+      width: 50% !important;
+      font-size: 80% !important;
+      display: inline-block !important;
+   }
+
+   .dt-layout-start {
+    text-align: left;
+   }
+
+    .dt-layout-end {
+       text-align: right;
+    }
+
+    .dt-search input {
+        width: 50% !important;
+    }
+}
+
+
 div.dt-container .dt-search input {
     margin-left: 0.5em !important;
     width: 70%;
@@ -1949,3 +1970,24 @@ table.dataTable td.dt-type-date div.dt-column-header,
 table.dataTable td.dt-type-date div.dt-column-footer {
   flex-direction: row !important;
 }
+
+.dataTable a { margin: 0; }
+
+#page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+#wrapper {
+    flex: 1;
+}
+
+#footer {
+  margin-top: 3em;
+  padding: 0 0 1em 0;
+  background: none;
+  width: 100%;
+}
+
+#one .inner { display: none; }

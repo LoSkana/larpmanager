@@ -49,18 +49,24 @@ function load_question(el) {
         data = result['res'];
         const popup = new Set(result['popup']);
 
+        el.next().trigger('click');
+
         for (let r in data) {
             let vl = data[r];
             if (vl.constructor === Array) vl = vl.join(", ");
-            var vel = $('#{0} .question.q_{1}'.format(r, num));
-            console.log(vl);
-            console.log('#{0} .question.q_{1}'.format(r, num));
-            vel.text(vl);
-            if (popup.has(parseInt(r)))
-                vel.append("... <a href='#' class='post_popup' pop='{0}' fie='{1}'><i class='fas fa-eye'></i></a>".format(r, num));
-        }
 
-        el.next().trigger('click');
+            if (popup.has(parseInt(r)))
+                vl += "... <a href='#' class='post_popup' pop='{0}' fie='{1}'><i class='fas fa-eye'></i></a>".format(r, num);
+
+
+            Object.keys(window.datatables).forEach(function(key) {
+                var table = window.datatables[key];
+                var cell = table.cell('#' + r, '.q_' + num);
+                if (cell && cell.node()) {
+                    cell.data(vl).draw(false);
+                }
+            });
+        }
 
          done[num.toString()] = 1;
 
@@ -158,11 +164,14 @@ window.addEventListener('DOMContentLoaded', function() {
 
             $(this).toggleClass('select');
 
-            var index = window.hideColumnsIndexMap[tog];
+            var index_list = window.hideColumnsIndexMap[tog];
             Object.keys(window.datatables).forEach(function(key) {
                 var table = window.datatables[key];
-                var column = table.column(index);
-                column.visible(!column.visible());
+
+                for (const index of index_list) {
+                    var column = table.column(index);
+                    column.visible(!column.visible());
+                };
             });
 
         });

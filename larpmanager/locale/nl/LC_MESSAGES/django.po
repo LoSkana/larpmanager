@@ -3597,9 +3597,6 @@ msgstr "De naam van competentie"
 msgid "These fields are mandatory"
 msgstr "Deze velden zijn verplicht"
 
-msgid "Total remaining to be paid"
-msgstr "Totaal nog te betalen"
-
 msgid "View photos from the event"
 msgstr "Bekijk foto's van het evenement"
 
@@ -3617,9 +3614,6 @@ msgstr "Je hebt een vriendencode gebruikt"
 
 msgid "(click on image to enlarge)"
 msgstr "(klik op de afbeelding om te vergroten)"
-
-msgid "Additional free payment fee"
-msgstr "Extra gratis betaling"
 
 #, python-format
 msgid "Bring a friend to %(event)s"
@@ -4018,9 +4012,6 @@ msgstr "Claim item toegevoegd"
 
 msgid "Select a file with extension csv"
 msgstr "Selecteer een bestand met de extensie 'csv'"
-
-msgid "Sum of payments received through"
-msgstr "Som van betalingen ontvangen via"
 
 msgid "The setting / genre of the event"
 msgstr "De setting / het genre van het evenement"
@@ -4542,9 +4533,6 @@ msgstr "Uitschrijven op %(event)s"
 msgid "Set the experience points configuration"
 msgstr "Stel de configuratie van de ervaringspunten in"
 
-msgid "Sum of the signup fee, total to be paid"
-msgstr "Inschrijfgeld, totaal te betalen"
-
 msgid "The number of payments to split the fee"
 msgstr "Het aantal termijnen dat moet worden betaald"
 
@@ -4955,9 +4943,6 @@ msgstr ""
 "Op deze pagina vindt u een overzicht van de instellingen voor het afdrukken "
 "van PDF-bestanden"
 
-msgid "Amount of the next payment instalment required"
-msgstr "Bedrag van de volgende betalingstermijn"
-
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Annulering wegens het niet betalen van de jaarlijkse contributie"
 
@@ -5011,9 +4996,6 @@ msgstr "Stel je persoonlijke voorkeuren in op de interface"
 
 msgid "Something went wrong in the account activation"
 msgstr "Er is iets misgegaan bij het activeren van de account"
-
-msgid "Sum of payments received with means of payment"
-msgstr "Som van ontvangen betalingen met betaalmiddelen"
 
 msgid "Text show at the start of all character sheets"
 msgstr "Tekst tonen aan het begin van alle karaktersheets"
@@ -5268,9 +5250,6 @@ msgstr "Deze pagina toont de collecties die door spelers zijn geopend"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolerantie overschreden, doorgaan met annuleren"
-
-msgid "Unique registration code, used for payment checks"
-msgstr "Unieke registratiecode, gebruikt voor betalingscontroles"
 
 msgid "You are including (at least one of these filters)"
 msgstr "U bevat (ten minste een van) deze filters"
@@ -5646,9 +5625,6 @@ msgstr "Op deze pagina kunt u organisatiespecifieke tekst bewerken"
 
 msgid "This page allows you to keep track of reported problems"
 msgstr "Op deze pagina kunt u gerapporteerde problemen bijhouden"
-
-msgid "Total of what has already been paid at the current date"
-msgstr "Totaal van wat al is betaald op de huidige datum"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr ""
@@ -6149,9 +6125,6 @@ msgstr "Vragen en opties voor personages en schrijfelementen beheren"
 msgid "Now players can submit preregistrations, and you can review them"
 msgstr "Spelers kunnen nu voorregistraties indienen en jij kunt ze beoordelen"
 
-msgid "Part of the registration fee derived only from the ticket chosen"
-msgstr "Deel van het inschrijvingsgeld alleen afgeleid van het gekozen ticket"
-
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
 "De betaling is niet voltooid. Neem contact met ons op om uit te zoeken "
@@ -6383,9 +6356,6 @@ msgstr ""
 msgid "Assign roles to staff members, and give access to specific functions"
 msgstr ""
 "Rollen toewijzen aan medewerkers en toegang geven tot specifieke functies"
-
-msgid "Number of days within which the player must pay his next installment"
-msgstr "Aantal dagen beschikbaar om de volgende termijn te betalen"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -7021,12 +6991,6 @@ msgid ""
 msgstr ""
 "Als u een Italiaans staatsburger bent, geef dan uw fiscale code aan; laat "
 "anders niets ingevuld"
-
-msgid ""
-"Part of the registration fee derived only from the additional options chosen"
-msgstr ""
-"Deel van het inschrijfgeld dat alleen is afgeleid van de gekozen extra "
-"opties"
 
 msgid ""
 "This page prepares the cash balance already formatted for annual declaration"
