@@ -394,11 +394,10 @@ function data_tables() {
 
         const table = new DataTable('#' + tableId, {
             scrollX: true,
-            scrollY: '50vh',
             stateSave: true,
             paging: full_layout,
             layout: full_layout
-                ? { topStart: 'pageLength', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' }
+                ? { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' }
                 : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null },
             columnControl: ['order', 'searchDropdown'],
             ordering: {

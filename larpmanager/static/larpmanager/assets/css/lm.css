@@ -1990,6 +1990,31 @@ table.dataTable td.dt-type-date div.dt-column-footer {
     margin: 0.2em;
     height: 2.1em;
     max-width: 80% !important;
+    font-size: 100%;
+}
+
+div.dtcc-dropdown div.dtcc-search > div div.dtcc-search-icon, div.dtcc-dropdown div.dtcc-search > div div.dtcc-search-type-icon {
+    margin-top: -0.5em;
+    margin-right: 0.2em;
+}
+
+div.dtcc-dropdown {
+    background: rgba(var(--sec-rgb), 0.8) !important;
+}
+
+div.dtcc-dropdown div.dtcc-search > div select, div.dtcc-dropdown div.dtcc-search > div input {
+    background: rgba(var(--sec-rgb), 0.3);
+    color: rgba(var(--pri-rgb), 1) !important;
+}
+
+div.dtcc-dropdown, div.dtcc-dropdown div.dtcc-search {
+    padding: 0.2em;
+    margin: 0;
+    font-size: 100%;
+}
+
+div.dtcc-dropdown div.dtcc-search > div div svg, div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
+    color: rgba(var(--pri-rgb), 1) !important;
 }
 
 table.dataTable span.dtcc span.dtcc-button-icon {
