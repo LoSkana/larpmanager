@@ -438,7 +438,6 @@ function data_tables() {
     }
 }
 
-
 function post_popup() {
     $(document).on('click', '.post_popup', function (e) {
 
