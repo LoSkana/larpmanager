@@ -436,6 +436,28 @@ function data_tables() {
             }
         });
     }
+
+    $('table.pagin_datatable').each(function() {
+        const $table = $(this);
+
+        // assign random id
+        if (!$table.attr('id')) {
+            const randomId = 'table-' + Math.random().toString(36).substr(2, 9);
+            $table.attr('id', randomId);
+        }
+        const tableId = $table.attr('id');
+
+        const url = $table.attr('url');
+
+        const table = new DataTable('#' + tableId, {
+            ajax: {
+                url: url,
+                type: 'POST'
+            },
+            processing: true,
+            serverSide: true
+        });
+    });
 }
 
 function post_popup() {

@@ -1,5 +1,6 @@
 from django.core.paginator import Paginator
 from django.db.models import Case, IntegerField, OuterRef, Subquery, Value, When
+from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.accounting import (
@@ -14,7 +15,14 @@ from larpmanager.models.event import Run
 from larpmanager.models.member import Membership
 
 
-def paginate(request, ctx, typ, exe, selrel, show_runs, afield, subtype):
+def paginate(request, ctx, typ, template, exe, selrel, show_runs, afield, subtype):
+    if request.method != "POST":
+        return render(request, template, ctx)
+
+    draw = int(request.POST.get("draw"))
+    start = int(request.POST.get("start"))
+    length = int(request.POST.get("length"))
+
     cls = typ
     if hasattr(typ, "objects"):
         cls = typ.objects
@@ -126,9 +134,9 @@ def _apply_custom_queries(ctx, elements, subtype, typ):
     return elements
 
 
-def exe_paginate(request, ctx, typ, selrel=None, show_runs=True, afield=None, subtype=None):
-    paginate(request, ctx, typ, True, selrel, show_runs, afield, subtype)
+def exe_paginate(request, ctx, typ, template, selrel=None, show_runs=True, afield=None, subtype=None):
+    return paginate(request, ctx, typ, template, True, selrel, show_runs, afield, subtype)
 
 
-def orga_paginate(request, ctx, typ, selrel=None, show_runs=False, afield=None, subtype=None):
-    paginate(request, ctx, typ, False, selrel, show_runs, afield, subtype)
+def orga_paginate(request, ctx, typ, template, selrel=None, show_runs=False, afield=None, subtype=None):
+    return paginate(request, ctx, typ, template, False, selrel, show_runs, afield, subtype)

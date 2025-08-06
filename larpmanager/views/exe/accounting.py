@@ -115,8 +115,14 @@ def exe_donations_edit(request, num):
 @login_required
 def exe_credits(request):
     ctx = check_assoc_permission(request, "exe_credits")
-    exe_paginate(request, ctx, AccountingItemOther, selrel=("run", "run__event"), subtype="credits")
-    return render(request, "larpmanager/exe/accounting/credits.html", ctx)
+    return exe_paginate(
+        request,
+        ctx,
+        AccountingItemOther,
+        "larpmanager/exe/accounting/credits.html",
+        selrel=("run", "run__event"),
+        subtype="credits",
+    )
 
 
 @login_required
