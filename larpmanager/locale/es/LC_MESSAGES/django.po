@@ -1371,6 +1371,9 @@ msgstr "Boletín"
 msgid "Next quota"
 msgstr "Próximo pago"
 
+msgid "Old tables"
+msgstr "Mesas antiguas"
+
 msgid "Passengers"
 msgstr "Pasajeros"
 
@@ -3630,6 +3633,9 @@ msgstr "Descripción - internacional"
 
 msgid "Enter your preferences here"
 msgstr "Indica aquí tus preferencias"
+
+msgid "If checked: uses old tables"
+msgstr "Si está marcada: utiliza tablas antiguas"
 
 msgid "Is it selectable by players"
 msgstr "¿Es seleccionable por los jugadores"

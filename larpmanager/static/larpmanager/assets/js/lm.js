@@ -361,17 +361,16 @@ $(document).ready(function() {
         });
     }
 
-    data_tables();
+    {% if not tables_old %}
+        data_tables();
+    {% endif %}
 
     post_popup();
 });
 
 function data_tables() {
-    $('table').each(function() {
-        const $table = $(this);
-
-        // skip per mobile or explicit avoid
-        if ($table.hasClass('no_datatables') || $table.hasClass('mob')) return;
+    $('table.go_datatable').each(function() {
+        const $table = $(this);;
 
         // assign random id
         if (!$table.attr('id')) {

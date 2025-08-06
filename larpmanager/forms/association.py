@@ -269,6 +269,10 @@ class ExeConfigForm(ConfigForm):
         help_text = _("If checked: uses old interface")
         self.add_configs("interface_old", ConfigType.BOOL, label, help_text)
 
+        label = _("Old tables")
+        help_text = _("If checked: uses old tables")
+        self.add_configs("tables_old", ConfigType.BOOL, label, help_text)
+
         # CALENDAR
         self.set_section("calendar", _("Calendar"))
 

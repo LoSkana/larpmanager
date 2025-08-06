@@ -14,7 +14,7 @@
         {% endblock nav_fields %}
         <a href="#" class="my_toggle" tog='stats'>Stats</a>
     </div>
-    <table class="tablesorter writing regs">
+    <table id="writing_list_{{ run.id }}_{{ typ }}" class="go_datatable">
         <thead>
             {% block thead %}
             {% endblock thead %}

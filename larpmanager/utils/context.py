@@ -37,6 +37,7 @@ def cache_association(request):
         if request.assoc["id"] > 1:
             assoc = Association.objects.get(pk=request.assoc["id"])
             ctx["interface_old"] = assoc.get_config("interface_old", False)
+            ctx["tables_old"] = assoc.get_config("tables_old", False)
         else:
             ctx["interface_old"] = True
 
