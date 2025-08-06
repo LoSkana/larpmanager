@@ -122,7 +122,7 @@ function reload_table() {
 regs = [];
 
 window.hideColumnsIndexMap = {};
-document.querySelectorAll('.que_load thead th.hide').forEach(function(th) {
+document.querySelectorAll('.que_load thead th').forEach(function(th) {
     var realIndex = Array.from(th.parentNode.children).indexOf(th);
     th.classList.forEach(function(cls) {
         if (cls !== 'hide') {
@@ -130,6 +130,8 @@ document.querySelectorAll('.que_load thead th.hide').forEach(function(th) {
         }
     });
 });
+
+console.log(hideColumnsIndexMap);
 
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
@@ -149,12 +151,11 @@ window.addEventListener('DOMContentLoaded', function() {
         $('.go_table a').hide();
 
         $('.table_toggle').on('click', function () {
-            var k = $(this).attr("tog");
-            $("." + k).toggle();
+            var tog = $(this).attr("tog");
 
             $(this).toggleClass('select');
 
-            var index = window.hideColumnsIndexMap[k];
+            var index = window.hideColumnsIndexMap[tog];
             console.log(index);
             Object.keys(window.datatables).forEach(function(key) {
                 var table = window.datatables[key];

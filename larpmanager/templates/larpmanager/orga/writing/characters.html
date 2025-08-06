@@ -32,32 +32,32 @@
     <th>{{ fields_name.name }}</th>
     <th></th>
     {% if user_character_max %}
-        <th class="hide player">{% trans "Player" %}</th>
+        <th class="player">{% trans "Player" %}</th>
     {% endif %}
     {% if user_character_approval %}
-        <th class="hide status">{% trans "Status" %}</th>
+        <th class="status">{% trans "Status" %}</th>
     {% endif %}
     {% if features.px %}
-        <th class="hide px">{% trans "XP tot" %}</th>
-        <th class="hide px">{% trans "XP used" %}</th>
-        <th class="hide px">{% trans "XP avail" %}</th>
+        <th class="px">{% trans "XP tot" %}</th>
+        <th class="px">{% trans "XP used" %}</th>
+        <th class="px">{% trans "XP avail" %}</th>
     {% endif %}
     {% include "elements/writing/questions_header.html" %}
     {% if features.plot %}
-        <th class="hide plots">{% trans "Plots" %}</th>
-        <th class="hide stats">
+        <th class="plots">{% trans "Plots" %}</th>
+        <th class="stats">
             <i class="fa fa-hashtag"></i> {% trans "Plots" %}
         </th>
     {% endif %}
     {% if features.relationships %}
-        <th class="hide relationships">{% trans "Relationships" %}</th>
-        <th class="hide stats">
+        <th class="relationships">{% trans "Relationships" %}</th>
+        <th class="stats">
             <i class="fa fa-hashtag"></i> {% trans "Relationships" %}
         </th>
     {% endif %}
     {% if features.speedlarp %}
-        <th class="hide speedlarp">{% trans "Speedlarp" %}</th>
-        <th class="hide stats">
+        <th class="speedlarp">{% trans "Speedlarp" %}</th>
+        <th class="stats">
             <i class="fa fa-hashtag"></i> {% trans "Speedlarp" %}
         </th>
     {% endif %}
@@ -82,37 +82,37 @@
                        qtip="{% trans "External access" %}"><i class="fa-solid fa-key"></i></a>
                 {% endif %}
             </td>
-            {% if user_character_max %}<td class="hide player">{{ el.player.show_nick }}</td>{% endif %}
-            {% if user_character_approval %}<td class="hide status">{{ el.get_status_display }}</td>{% endif %}
+            {% if user_character_max %}<td class="player">{{ el.player.show_nick }}</td>{% endif %}
+            {% if user_character_approval %}<td class="status">{{ el.get_status_display }}</td>{% endif %}
             {% if features.px %}
-                <td class="hide px">{{ el.addit | get:'px_tot' }}</td>
-                <td class="hide px">{{ el.addit | get:'px_used' }}</td>
-                <td class="hide px">{{ el.addit | get:'px_avail' }}</td>
+                <td class="px">{{ el.addit | get:'px_tot' }}</td>
+                <td class="px">{{ el.addit | get:'px_used' }}</td>
+                <td class="px">{{ el.addit | get:'px_avail' }}</td>
             {% endif %}
             {% include "elements/writing/questions_body.html" %}
             {% if features.plot %}
-                <td class="hide plots">
+                <td class="plots">
                     {% for p in el.plts %}
                         <a href="{% url 'orga_plots_edit' run.event.slug run.number p.1 %}">{{ p.0 }}</a>
                     {% endfor %}
                 </td>
-                <td class="hide stats">{{ el.plts | length }}</td>
+                <td class="stats">{{ el.plts | length }}</td>
             {% endif %}
             {% if features.relationships %}
-                <td class="hide relationships">
+                <td class="relationships">
                     {% for rel in el.source.all %}
                         <a href="{% url 'orga_characters_edit' run.event.slug run.number rel.target_id %}">{{ rel.target }}</a>
                     {% endfor %}
                 </td>
-                <td class="hide stats">{{ el.source.count }}</td>
+                <td class="stats">{{ el.source.count }}</td>
             {% endif %}
             {% if features.speedlarp %}
-                <td class="hide speedlarp">
+                <td class="speedlarp">
                     {% for p in el.speedlarps_list.all %}
                         <a href="{% url 'orga_speedlarps_edit' run.event.slug run.number p.id %}">{{ p }}</a>
                     {% endfor %}
                 </td>
-                <td class="hide stats">{{ el.speedlarps_list.count }}</td>
+                <td class="stats">{{ el.speedlarps_list.count }}</td>
             {% endif %}
         </tr>
     {% endfor %}
@@ -133,7 +133,7 @@
         </div>
         {% for key, que in form_questions.items %}
             {% if que.typ == 's' or que.typ == 'm' %}
-                <div class="hide email_que_{{ key }}">
+                <div class="email_que_{{ key }}">
                     <br />
                     <h4>{{ que.name }}</h4>
                     <table>

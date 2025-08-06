@@ -354,6 +354,15 @@ function data_tables() {
     $('table.go_datatable').each(function() {
         const $table = $(this);
 
+        const $tbody = $table.find('tbody');
+        const rowCount = $tbody.find('tr').length;
+        console.log(rowCount);
+
+        if (rowCount === 0) {
+            $table.hide();
+            return;
+        }
+
         // assign random id
         if (!$table.attr('id')) {
             const randomId = 'table-' + Math.random().toString(36).substr(2, 9);

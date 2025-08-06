@@ -25,7 +25,7 @@
                 <p id="not_chosen"></p>
                 <p id="didnt_choose"></p>
                 {% csrf_token %}
-                <table class="tablesorter ">
+                <table>
                     <tr>
                         <th>{% trans "Tier" %}</th>
                         <th>{% trans "Payment" %}</th>
@@ -71,7 +71,7 @@
                 </i>
             </p>
             <hr />
-            <table id="main_grid" class="tablesorter ">
+            <table id="main_grid" class="tablesorter">
                 <tbody>
                     <!-- filled later -->
                 </tbody>

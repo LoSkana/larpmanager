@@ -8,7 +8,7 @@
 {% endblock info %}
 {% block content %}
     <h2>Personaggi</h2>
-    <table class="tablesorter writing">
+    <table id="assignments" class="go_datatable writing">
         <thead>
             <tr>
                 <th>{% trans "Character" %}</th>
@@ -42,7 +42,7 @@
     </table>
     {% if features.questbuilder %}
         <h2>Tratti</h2>
-        <table class="tablesorter writing">
+        <table id="traits" class="go_datatable writing">
             <thead>
                 <tr>
                     <th>{% trans "Trait" %}</th>
@@ -75,7 +75,7 @@
     {% endif %}
     {% for fnum, fac in factions.items %}
         <h2>{{ fac.name }}</h2>
-        <table class="tablesorter writing">
+        <table id="factions" class="go_datatable writing">
             <thead>
                 <tr>
                     <th>{% trans "Character" %}</th>

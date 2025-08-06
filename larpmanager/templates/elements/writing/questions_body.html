@@ -8,32 +8,32 @@
                     {{ value | safe }}
                 {% endwith %}
             </td>
-            <td class="hide stats">
+            <td class="stats">
                 {% with ed_id=que.typ|concat:'_ln' %}
                     {% lookup el ed_id as value %}
                     {{ value }}
                 {% endwith %}
             </td>
         {% elif que.typ == 'e' %}
-            <td class="hide question q_{{ key }} editable" qid="{{ que.id }}">
+            <td class="question q_{{ key }} editable" qid="{{ que.id }}">
                 {% with ed_id=key|concat:'_red' %}
                     {% lookup el ed_id as value %}
                     {{ value | safe }}
                 {% endwith %}
             </td>
-            <td class="hide question stats">
+            <td class="question stats">
                 {% with ed_id=key|concat:'_ln' %}
                     {% lookup el ed_id as value %}
                     {{ value }}
                 {% endwith %}
             </td>
         {% elif que.typ == 's' or que.typ == 'm' or que.typ == 't' or que.typ == 'p' %}
-            <td class="hide question q_{{ key }} editable" qid="{{ que.id }}">
+            <td class="question q_{{ key }} editable" qid="{{ que.id }}">
                 <span class="has_show_tooltip res_{{ key }}"></span>
-                <span class="hide show_tooltip">{{ que.name }}</span>
+                <span class="show_tooltip">{{ que.name }}</span>
             </td>
         {% else %}
-            <td class="hide q_{{ key }} editable" qid="{{ que.id }}">
+            <td class="q_{{ key }} editable" qid="{{ que.id }}">
                 {% if que.typ == 'progress' %}
                     {% include "elements/show_progress.html" with el=el %}
                 {% elif que.typ == 'title' %}
@@ -48,7 +48,7 @@
                 {% elif que.typ == 'mirror' %}
                     {% if el.mirror %}<i>{{ el.mirror }}</i>{% endif %}
                 {% elif que.typ == 'hide' %}
-                    {% if el.hide %}<i class="fa-solid fa-check"></i>{% endif %}
+                    {% if el. %}<i class="fa-solid fa-check"></i>{% endif %}
                 {% elif que.typ == 'cover' %}
                     {% if el.cover %}
                         <a href="{{ el.thumb.url }}">
