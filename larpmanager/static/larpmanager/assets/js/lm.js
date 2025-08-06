@@ -356,7 +356,6 @@ function data_tables() {
 
         const $tbody = $table.find('tbody');
         const rowCount = $tbody.find('tr').length;
-        console.log(rowCount);
 
         if (rowCount === 0) {
             $table.hide();
@@ -371,29 +370,33 @@ function data_tables() {
 
         const tableId = $table.attr('id');
 
-
         let disable_sort_columns = [0];
         if ($table.hasClass('writing_list')) {
             disable_sort_columns = [0, 2];
+        }
+        if ($table.hasClass('ordering_arrow')) {
+            var thList = $table.find('thead th');
+            var totalColumns = thList.length;
+            disable_sort_columns.push(totalColumns - 2, totalColumns - 1);
         }
 
         let hide_columns = [];
         if (window.hideColumnsIndexMap && typeof window.hideColumnsIndexMap === 'object') {
             Object.keys(window.hideColumnsIndexMap).forEach(function(key) {
                 var value = window.hideColumnsIndexMap[key];
-                hide_columns.push(value);
+                hide_columns.push(...value);
             });
         }
 
-        console.log(hide_columns);
+        var full_layout = rowCount >= 10
 
         const table = new DataTable('#' + tableId, {
             scrollX: true,
             stateSave: true,
-            layout: {
-                topStart: 'pageLength',
-                topEnd: 'search'
-            },
+            paging: full_layout,
+            layout: full_layout
+                ? { topStart: 'pageLength', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' }
+                : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null },
             columnDefs: [
                 { orderable: false, targets: disable_sort_columns },
                 { visible: false, targets: hide_columns }

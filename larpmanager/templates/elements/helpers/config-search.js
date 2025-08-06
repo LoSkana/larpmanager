@@ -25,8 +25,6 @@ window.addEventListener('DOMContentLoaded', function() {
         $('.section-link').each(function( index ) {
             tog = $(this).attr("tog");
             el = $('.' + tog)
-            console.log(el);
-            console.log(el.find('.visib').length);
             href = $('a[tog="' + tog + '"]');
             if (el.find('.visib').length == 0) {
                 href.hide(300);

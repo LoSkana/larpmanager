@@ -17,7 +17,8 @@
                 <a href="{% url 'orga_registration_sections_edit' run.event.slug run.number el.section_id %}">{{ el.section }}</a>
             </h1>
         {% endif %}
-        <table class="tablesorter writing ">
+        <table id="registration_questions_{{ el.section }}"
+               class="go_datatable writing ordering_arrow">
             <thead>
                 <tr>
                     <th></th>

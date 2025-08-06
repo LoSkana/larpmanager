@@ -29,7 +29,7 @@
     </table>
     {% for el in roles_list %}
         <h3>{{ el.0 }}</h3>
-        <table class="tablesorter">
+        <table id="char_roles" class="go_datatable">
             {% for c in el.1 %}
                 <tr>
                     <td>{{ c.0.name }}</td>

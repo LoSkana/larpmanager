@@ -52,7 +52,9 @@ function load_question(el) {
         for (let r in data) {
             let vl = data[r];
             if (vl.constructor === Array) vl = vl.join(", ");
-            var vel = $('#{0} .res_{1}'.format(r, num));
+            var vel = $('#{0} .question.q_{1}'.format(r, num));
+            console.log(vl);
+            console.log('#{0} .question.q_{1}'.format(r, num));
             vel.text(vl);
             if (popup.has(parseInt(r)))
                 vel.append("... <a href='#' class='post_popup' pop='{0}' fie='{1}'><i class='fas fa-eye'></i></a>".format(r, num));
@@ -126,12 +128,13 @@ document.querySelectorAll('.que_load thead th').forEach(function(th) {
     var realIndex = Array.from(th.parentNode.children).indexOf(th);
     th.classList.forEach(function(cls) {
         if (cls !== 'hide') {
-            window.hideColumnsIndexMap[cls] = realIndex;
+            if (!window.hideColumnsIndexMap[cls]) {
+                window.hideColumnsIndexMap[cls] = [];
+            }
+            window.hideColumnsIndexMap[cls].push(realIndex);
         }
     });
 });
-
-console.log(hideColumnsIndexMap);
 
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
@@ -156,12 +159,9 @@ window.addEventListener('DOMContentLoaded', function() {
             $(this).toggleClass('select');
 
             var index = window.hideColumnsIndexMap[tog];
-            console.log(index);
             Object.keys(window.datatables).forEach(function(key) {
                 var table = window.datatables[key];
-
                 var column = table.column(index);
-                console.log(column.header());
                 column.visible(!column.visible());
             });
 
