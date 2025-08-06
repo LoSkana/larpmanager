@@ -1,0 +1,10 @@
+<table id="exe_credits_{{ assoc.id }}"
+       class="pagin_datatable"
+       url="{{ request.path }}">
+    <thead>
+        <tr>
+            <th></th>
+            {% for field in fields %}<th>{{ field.1 }}</th>{% endfor %}
+        </tr>
+    </thead>
+</table>

@@ -1,6 +1,7 @@
-from django.core.paginator import Paginator
 from django.db.models import Case, IntegerField, OuterRef, Subquery, Value, When
+from django.http import JsonResponse
 from django.shortcuts import render
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.accounting import (
@@ -11,23 +12,37 @@ from larpmanager.models.accounting import (
     PaymentStatus,
     RefundRequest,
 )
-from larpmanager.models.event import Run
 from larpmanager.models.member import Membership
 
 
-def paginate(request, ctx, typ, template, exe, selrel, show_runs, afield, subtype):
-    if request.method != "POST":
-        return render(request, template, ctx)
-
-    draw = int(request.POST.get("draw"))
-    start = int(request.POST.get("start"))
-    length = int(request.POST.get("length"))
-
+def paginate(request, ctx, typ, template, view, exe=True):
     cls = typ
     if hasattr(typ, "objects"):
         cls = typ.objects
+        class_name = typ._meta.model_name
     else:
         typ = typ.model
+        class_name = typ._meta.model_name
+
+    if request.method != "POST":
+        if exe:
+            ctx["table_name"] = f"{class_name}_{ctx['a_id']}"
+        else:
+            ctx["table_name"] = f"{class_name}_{ctx['run'].id}"
+
+        return render(request, template, ctx)
+
+    draw = int(request.POST.get("draw", 0))
+    start = int(request.POST.get("start", 0))
+    length = int(request.POST.get("length", 10))
+    search_value = request.POST.get("search[value]", "")
+    order = []
+    for i in range(len(request.POST.getlist("order[0][column]"))):
+        col_idx = request.POST.get(f"order[{i}][column]")
+        dir = request.POST.get(f"order[{i}][dir]")
+        col_name = request.POST.get(f"columns[{col_idx}][data]")
+        prefix = "" if dir == "asc" else "-"
+        order.append(prefix + col_name)
 
     elements = cls.filter(assoc_id=ctx["a_id"])
 
@@ -35,60 +50,72 @@ def paginate(request, ctx, typ, template, exe, selrel, show_runs, afield, subtyp
     if "hide" in [f.name for f in typ._meta.get_fields()]:
         elements = elements.filter(hide=False)
 
-    run = -1
-    page = 1
-    search = ""
-    size = 20
-
-    if request.method == "POST":
-        run = int(request.POST.get("run", "-1"))
-        page = int(request.POST.get("page", 0))
-        search = request.POST.get("search", "")
-        size = int(request.POST.get("size", 20))
-
-    elements, run = _apply_run_queries(afield, ctx, elements, exe, run)
-
-    elements = _apply_custom_queries(ctx, elements, subtype, typ)
-
+    selrel = ctx.get("selrel")
     if selrel:
         for e in selrel:
             elements = elements.select_related(e)
-    if search:
-        elements = elements.filter(search__icontains=search)
+    if search_value:
+        elements = elements.filter(search__icontains=search_value)
+
+    if order:
+        for column in order:
+            column_ix = int(column)
+            if not column_ix:
+                continue
+            # TODO ordering on fields
+            # especially run
+            # elements = elements.order_by(*order)
+
+    run = 0  # TODO fix
+    # elements, run = _apply_run_queries(ctx, elements, exe, run)
+
+    elements = _apply_custom_queries(ctx, elements, typ)
 
     elements = elements.order_by("-created")
+    elements = elements[start : start + length]
 
-    paginator = Paginator(elements, per_page=size)
-    page = min(page, paginator.num_pages)
+    records_total = typ.objects.count()
+    records_filtered = len(elements)
 
-    ctx["exe"] = exe
+    values = [el[0] for el in ctx["fields"]]
 
-    ctx["pagin"] = paginator
-    ctx["page"] = page
-    ctx["size"] = size
-    ctx["size_range"] = [20, 50, 100, 150, 200, 250, 500, 1000, 2000, 5000]
+    # TODO apply changes based on fields
+    data = []
+    edit = _("Edit")
+    for row in elements:
+        url = reverse(view, args=[row.id])
+        res = {"0": f'<a href="{url}" qtip="{edit}"><i class="fas fa-edit"></i></a>'}
+        cnt = 1
+        for field, name in ctx["fields"]:
+            idx = str(cnt)
+            if field == "created":
+                res[idx] = row.created.strftime("%d/%m/%Y")
+            elif field == "member":
+                res[idx] = str(row.member)
+            elif field == "run":
+                res[idx] = str(row.run)
+            elif field == "descr":
+                res[idx] = str(row.descr)
+            elif field == "value":
+                val = row.value
+                res[idx] = int(val) if val == val.to_integral() else str(val)
+            cnt += 1
+        data.append(res)
 
-    if page > 0:
-        ctx["list"] = paginator.page(page)
-    else:
-        ctx["list"] = elements.all()
-
-    ctx["search"] = search
-
-    if exe:
-        ctx["show_runs"] = show_runs
-        ctx["runs"] = [(-1, _("All")), (0, "Assoc")] + [
-            (r.id, str(r))
-            for r in Run.objects.filter(event__assoc_id=ctx["a_id"], end__isnull=False)
-            .select_related("event")
-            .order_by("-end")
-        ]
-        ctx["run_sel"] = run
+    return JsonResponse(
+        {
+            "draw": draw,
+            "recordsTotal": records_total,
+            "recordsFiltered": records_filtered,
+            "data": data,
+        }
+    )
 
 
-def _apply_run_queries(afield, ctx, elements, exe, run):
+def _apply_run_queries(ctx, elements, exe, run):
     if not exe:
         run = ctx["run"].id
+    afield = ctx.get("afield")
     if run >= 0:
         if run == 0:
             if afield:
@@ -104,7 +131,7 @@ def _apply_run_queries(afield, ctx, elements, exe, run):
     return elements, run
 
 
-def _apply_custom_queries(ctx, elements, subtype, typ):
+def _apply_custom_queries(ctx, elements, typ):
     if issubclass(typ, AccountingItem):
         elements = elements.select_related("member")
     if issubclass(typ, AccountingItemExpense):
@@ -126,17 +153,19 @@ def _apply_custom_queries(ctx, elements, subtype, typ):
             :1
         ]
         elements = elements.annotate(credits=Subquery(memberships.values("credit")))
+
+    subtype = ctx.get("subtype")
     if subtype == "credits":
         elements = elements.filter(oth=AccountingItemOther.CREDIT)
-
     elif subtype == "tokens":
         elements = elements.filter(oth=AccountingItemOther.TOKEN)
+
     return elements
 
 
-def exe_paginate(request, ctx, typ, template, selrel=None, show_runs=True, afield=None, subtype=None):
-    return paginate(request, ctx, typ, template, True, selrel, show_runs, afield, subtype)
+def exe_paginate(request, ctx, typ, template, view):
+    return paginate(request, ctx, typ, template, view, True)
 
 
-def orga_paginate(request, ctx, typ, template, selrel=None, show_runs=False, afield=None, subtype=None):
-    return paginate(request, ctx, typ, template, False, selrel, show_runs, afield, subtype)
+def orga_paginate(request, ctx, typ, template, view):
+    return paginate(request, ctx, typ, template, view, False)

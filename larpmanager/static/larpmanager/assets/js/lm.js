@@ -454,8 +454,17 @@ function data_tables() {
                 url: url,
                 type: 'POST'
             },
-            processing: true,
-            serverSide: true
+            serverSide: true,
+            columnControl: ['order', 'searchDropdown'],
+            ordering: {
+                indicators: false,
+                handler: false
+            },
+            columnDefs: [
+                { orderable: false, targets: [0] },
+                { columnControl: [], targets: [0] }
+            ],
+            layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' }
         });
     });
 }

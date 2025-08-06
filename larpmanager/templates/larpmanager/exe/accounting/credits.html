@@ -8,18 +8,5 @@
 {% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
-    <table id="exe_credits_{{ assoc.id }}"
-           class="pagin_datatable"
-           url="{{ request.path }}">
-        <thead>
-            <tr>
-                <th></th>
-                <th>{% trans "Member" %}</th>
-                <th>{% trans "Run" %}</th>
-                <th>{% trans "Description" %}</th>
-                <th>{% trans "Value" %}</th>
-                <th>{% trans "Date" %}</th>
-            </tr>
-        </thead>
-    </table>
+    {% include "elements/paginate.html" %}
 {% endblock content %}
