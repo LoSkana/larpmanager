@@ -1939,8 +1939,13 @@ div.dt-container .dt-paging .dt-paging-button {
     border: 0 !important;
 }
 
-div.dt-container .dt-paging {
-    color: var(--ter-clr);
+div.dt-container .dt-length, div.dt-container .dt-search, div.dt-container .dt-info, div.dt-container .dt-processing, div.dt-container .dt-paging {
+  color: rgba(var(--ter-rgb), 0.8) !important;
+}
+
+.dt-paging-button:active {
+    box-shadow: none !important;
+    border: 0px !important;
 }
 
 .dataTables_wrapper ::-webkit-scrollbar {
@@ -1972,6 +1977,24 @@ table.dataTable td.dt-type-date div.dt-column-footer {
 }
 
 .dataTable a { margin: 0; }
+
+.dtcc-button {
+  border: 0px !important;
+  padding: 0.5em;
+  box-shadow: none;
+}
+
+.dt-layout-row select, .dtcc-dropdown select, .dtcc-dropdown input {
+    background: none;
+    padding: 0 !important;
+    margin: 0.2em;
+    height: 2.1em;
+    max-width: 80% !important;
+}
+
+table.dataTable span.dtcc span.dtcc-button-icon {
+  color: rgba(var(--ter-rgb), 0.8) !important;
+}
 
 #page-wrapper {
     display: flex;

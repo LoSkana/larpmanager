@@ -393,7 +393,6 @@ function data_tables() {
         var full_layout = rowCount >= 10;
 
         const table = new DataTable('#' + tableId, {
-            rowId: 'id',
             scrollX: true,
             scrollY: '50vh',
             stateSave: true,
@@ -401,9 +400,15 @@ function data_tables() {
             layout: full_layout
                 ? { topStart: 'pageLength', topEnd: 'search', bottomStart: 'info', bottomEnd: 'paging' }
                 : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null },
+            columnControl: ['order', 'searchDropdown'],
+            ordering: {
+                indicators: false,
+                handler: false
+            },
             columnDefs: [
                 { orderable: false, targets: disable_sort_columns },
-                { visible: false, targets: hide_columns }
+                { visible: false, targets: hide_columns },
+                { columnControl: [], targets: disable_sort_columns }
             ]
         });
 
