@@ -102,7 +102,7 @@
         {% for key, dc in reg_all %}
             <h2>{{ dc.type }} ({{ dc.count }})</h2>
             <table id="regs_{{ run.id }}_{{ dc.type }}"
-                   class="go_datatable reg_list que_load">
+                   class="que_load{% if not interface_old %} go_datatable reg_list {% endif %}">
                 <thead>
                     <tr>
                         <th></th>
@@ -575,6 +575,11 @@ window.addEventListener('DOMContentLoaded', function() {
                 for (let nm in data[key]) {
                     let vl = data[key][nm];
                     if (parseInt(vl) != 0) {
+
+                        {% if interface_old %}
+                        $('#' + key + ' .' + nm).html(vl);
+                        {% else %}
+
                         Object.keys(window.datatables).forEach(function(dt_key) {
                             var table = window.datatables[dt_key];
                             var cell = table.cell('#' + key, '.' + nm);
@@ -582,6 +587,7 @@ window.addEventListener('DOMContentLoaded', function() {
                                 cell.data(vl).draw(false);
                             }
                         });
+                        {% endif %}
                     }
                 }
             }

@@ -16,7 +16,7 @@
             <a href="#" class="table_toggle" tog='stats'>Stats</a>
         </div>
         <table id="writing_list_{{ run.id }}_{{ typ }}"
-               class="go_datatable que_load writing_list {% block table_classes %}{% endblock table_classes %}">
+               class="que_load{% if not interface_old %} go_datatable writing_list {% block table_classes %}{% endblock table_classes %}{% endif %}">
             <thead>
                 {% block thead %}
                 {% endblock thead %}
