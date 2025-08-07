@@ -10,7 +10,8 @@
     <p>
         {% trans "Show cancellations" %} <a href="#" class="my_toggle" tog='not_payed'>{% trans "no payment" %}</a>
     </p>
-    <table class="tablesorter writing">
+    <table id="cancellations"
+           class="{% if not interface_old %}go_datatable{% endif %} writing">
         <thead>
             <tr>
                 <th>{% trans "Registration fee" %}</th>

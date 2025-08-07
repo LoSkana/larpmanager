@@ -23,7 +23,7 @@
               method="post"
               enctype="multipart/form-data">
             {% csrf_token %}
-            <table class="mob no_csv no_sticky">
+            <table class="mob  ">
                 {{ form.as_table }}
             </table>
             <input type="submit" value="Submit">
@@ -31,7 +31,7 @@
     </div>
     <div class="hide reg">
         <h2>{% trans "Registrations" %}</h2>
-        <table class="writing no_csv">
+        <table class="writing ">
             <thead>
                 <tr>
                     <th>{% trans "Run" %}</th>
@@ -50,7 +50,8 @@
     </div>
     <div class="hide pay">
         <h2>{% trans "Payments" %}</h2>
-        <table class="writing tablesorter">
+        <table id="members_pay"
+               class="writing {% if not interface_old %}go_datatable{% endif %}">
             <thead>
                 <tr>
                     <th>{% trans "Registration" %}</th>
@@ -69,7 +70,8 @@
     </div>
     <div class="hide oth">
         <h2>{% trans "Other" %}</h2>
-        <table class="writing tablesorter">
+        <table id="members_other"
+               class="writing {% if not interface_old %}go_datatable{% endif %}">
             <thead>
                 <tr>
                     <th>{% trans "Run" %}</th>
@@ -90,7 +92,8 @@
     </div>
     <div class="hide dis">
         <h2>{% trans "Discount" %}</h2>
-        <table class="writing tablesorter">
+        <table id="members_discount"
+               class="writing {% if not interface_old %}go_datatable{% endif %}">
             <thead>
                 <tr>
                     <th>{% trans "Run" %}</th>

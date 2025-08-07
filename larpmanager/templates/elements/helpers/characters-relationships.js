@@ -40,7 +40,7 @@ window.addEventListener('DOMContentLoaded', function() {
         <h3>
             <a href="{2}">{1}</a>
         </h3>
-        <table class="no_csv">
+        <table >
             <tr>
                 <th>{% trans "Direct" %}</th>
                 <td>

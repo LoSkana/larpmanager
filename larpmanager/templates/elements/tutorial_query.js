@@ -46,7 +46,7 @@ function search_tutorial() {
         });
 
         if (link_text.trim() !== "") {
-            link_text = '<h2>Links</h2><table class="no_csv">' + link_text + '</table>';
+            link_text = '<h2>Links</h2><table >' + link_text + '</table>';
         }
 
         // tutorials text
@@ -57,7 +57,7 @@ function search_tutorial() {
         });
 
         if (tutorial_text.trim() !== "") {
-            tutorial_text = '<h2>Tutorials</h2><table class="no_csv">' + tutorial_text + '</table>';
+            tutorial_text = '<h2>Tutorials</h2><table >' + tutorial_text + '</table>';
         }
 
         // prepare results

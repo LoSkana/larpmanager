@@ -74,7 +74,7 @@ async def template(live_server, page):
     await page.get_by_role("option", name="User Test - user@test.it").click()
     await page.locator("#id_Appearance_1").check()
     await page.get_by_role("button", name="Confirm", exact=True).click()
-    await page.get_by_role("gridcell", name="Configuration").get_by_role("link").click()
+    await page.locator("#one").get_by_role("link", name="Configuration").click()
     await page.get_by_role("link", name="Gallery ").click()
     await page.locator("#id_gallery_hide_signup").check()
     await page.get_by_role("button", name="Confirm", exact=True).click()

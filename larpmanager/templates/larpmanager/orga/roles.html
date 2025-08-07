@@ -9,7 +9,7 @@
 {% block content %}
     {% include "elements/header/orga.html" %}
     {% include "elements/info/share.html" %}
-    <table id="roles" class="tablesorter">
+    <table id="roles" class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th></th>

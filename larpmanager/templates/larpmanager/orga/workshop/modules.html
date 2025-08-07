@@ -8,7 +8,8 @@
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
-    <table id="workshop_modules" class="tablesorter writing">
+    <table id="workshop_modules"
+           class="{% if not interface_old %}go_datatable{% endif %} writing">
         <thead>
             <tr>
                 <th></th>

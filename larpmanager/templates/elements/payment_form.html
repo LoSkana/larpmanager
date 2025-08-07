@@ -24,7 +24,7 @@
             <br />
         {% endif %}
         <p>{% trans "Choose the payment method" %}:</p>
-        <table id="payment_form" class="no_csv">
+        <table id="payment_form">
             {% for key, el in form.methods.items %}
                 <tr id="row_{{ el.slug }}"
                     onclick="toggle_radio('{{ el.slug }}')"

@@ -3594,9 +3594,6 @@ msgstr "Der Name der Kompetenz"
 msgid "These fields are mandatory"
 msgstr "Diese Felder sind obligatorisch"
 
-msgid "Total remaining to be paid"
-msgstr "Noch zu zahlender Gesamtbetrag"
-
 msgid "View photos from the event"
 msgstr "Sehen Sie sich die Fotos der Veranstaltung an"
 
@@ -3614,9 +3611,6 @@ msgstr "Sie haben einen Freundschaftscode verwendet"
 
 msgid "(click on image to enlarge)"
 msgstr "(zum Vergrößern auf das Bild klicken)"
-
-msgid "Additional free payment fee"
-msgstr "Zusätzliche kostenlose Zahlungsgebühr"
 
 #, python-format
 msgid "Bring a friend to %(event)s"
@@ -4013,9 +4007,6 @@ msgstr "Zusätzlicher Anspruchsposten"
 msgid "Select a file with extension csv"
 msgstr "Wählen Sie eine Datei mit der Erweiterung \"csv\""
 
-msgid "Sum of payments received through"
-msgstr "Summe der erhaltenen Zahlungen durch"
-
 msgid "The setting / genre of the event"
 msgstr "Der Schauplatz / das Genre der Veranstaltung"
 
@@ -4212,6 +4203,9 @@ msgstr "Nachricht gesendet, danke für die Nachricht"
 
 msgid "Name of the discount - internal use"
 msgstr "Name des Rabatts - für den internen Gebrauch"
+
+msgid "No elements are currently available"
+msgstr "Derzeit sind keine Elemente verfügbar"
 
 msgid "Now you can create the receipt text"
 msgstr "Jetzt können Sie den Quittungstext erstellen"
@@ -4534,9 +4528,6 @@ msgstr "Abmeldung von %(event)s"
 
 msgid "Set the experience points configuration"
 msgstr "Konfiguration der Erfahrungspunkte einstellen"
-
-msgid "Sum of the signup fee, total to be paid"
-msgstr "Teilnahmegebühr, zu zahlender Gesamtbetrag"
 
 msgid "The number of payments to split the fee"
 msgstr "Die Anzahl der zu zahlenden Raten"
@@ -4955,9 +4946,6 @@ msgid "This page shows the settings for PDF printing"
 msgstr ""
 "Auf dieser Seite sind die Einstellungen für den PDF-Druck zusammengefasst"
 
-msgid "Amount of the next payment instalment required"
-msgstr "Höhe der nächsten erforderlichen Zahlungsrate"
-
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Stornierung bei fehlendem Jahresbeitrag"
 
@@ -5012,9 +5000,6 @@ msgstr ""
 
 msgid "Something went wrong in the account activation"
 msgstr "Bei der Kontoaktivierung ist etwas schief gelaufen"
-
-msgid "Sum of payments received with means of payment"
-msgstr "Summe der Zahlungseingänge mit Zahlungsmitteln"
 
 msgid "Text show at the start of all character sheets"
 msgstr "Textanzeige am Anfang aller Charakterbögen"
@@ -5279,10 +5264,6 @@ msgstr "Diese Seite zeigt die von Spielern geöffneten Sammlungen"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Toleranz überschritten, mit der Stornierung fortfahren"
-
-msgid "Unique registration code, used for payment checks"
-msgstr ""
-"Eindeutiger Registrierungscode, der für Zahlungskontrollen verwendet wird"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Sie enthalten (mindestens einen) der folgenden Filter"
@@ -5691,9 +5672,6 @@ msgstr "Auf dieser Seite können Sie organisationsspezifischen Text bearbeiten"
 
 msgid "This page allows you to keep track of reported problems"
 msgstr "Auf dieser Seite können Sie die gemeldeten Probleme verfolgen"
-
-msgid "Total of what has already been paid at the current date"
-msgstr "Summe der zum aktuellen Datum bereits gezahlten Beträge"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr ""
@@ -6266,9 +6244,6 @@ msgstr ""
 "Jetzt können Spieler Vorregistrierungen einreichen, und Sie können sie "
 "überprüfen"
 
-msgid "Part of the registration fee derived only from the ticket chosen"
-msgstr "Ein Teil der Anmeldegebühr stammt nur aus dem gewählten Ticket"
-
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
 "Die Zahlung wurde nicht abgeschlossen. Bitte kontaktieren Sie uns, um den "
@@ -6514,10 +6489,6 @@ msgid "Assign roles to staff members, and give access to specific functions"
 msgstr ""
 "Zuweisung von Rollen an Mitarbeiter und Erteilung von Zugriff auf bestimmte "
 "Funktionen"
-
-msgid "Number of days within which the player must pay his next installment"
-msgstr ""
-"Anzahl der Tage, die für die Zahlung der nächsten Rate zur Verfügung stehen"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -7173,11 +7144,6 @@ msgid ""
 msgstr ""
 "Wenn Sie italienischer Staatsbürger sind, geben Sie bitte Ihre Steuernummer "
 "an; andernfalls lassen Sie das Feld frei"
-
-msgid ""
-"Part of the registration fee derived only from the additional options chosen"
-msgstr ""
-"Ein Teil der Anmeldegebühr ergibt sich nur aus den gewählten Zusatzoptionen"
 
 msgid ""
 "This page prepares the cash balance already formatted for annual declaration"

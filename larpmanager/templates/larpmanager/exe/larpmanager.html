@@ -8,7 +8,8 @@
 {% endblock info %}
 {% block content %}
     <h2>{% trans "Balance" %}: {{ remaining | format_decimal }}€</h2>
-    <table class="tablesorter">
+    <table id="lm_balance"
+           class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th>{% trans "Run" %}</th>

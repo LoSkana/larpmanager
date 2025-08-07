@@ -8,7 +8,7 @@
 {% endblock info %}
 {% block content %}
     <h3>{% trans "Collected votes" %}</h3>
-    <table class="tablesorter">
+    <table id="votes" class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th>Nome</th>

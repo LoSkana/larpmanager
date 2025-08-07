@@ -7,7 +7,8 @@
     {% trans "This page shows the roles of the characters" %}
 {% endblock info %}
 {% block content %}
-    <table class="tablesorter writing">
+    <table id="roles"
+           class="{% if not interface_old %}go_datatable{% endif %} writing">
         <thead>
             <tr>
                 <th>{% trans "Character" %}</th>
@@ -29,7 +30,8 @@
     </table>
     {% for el in roles_list %}
         <h3>{{ el.0 }}</h3>
-        <table class="tablesorter">
+        <table id="char_roles"
+               class="{% if not interface_old %}go_datatable{% endif %}">
             {% for c in el.1 %}
                 <tr>
                     <td>{{ c.0.name }}</td>

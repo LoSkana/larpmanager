@@ -19,7 +19,7 @@
         <p>{% trans "You are currently logged in with the" %}: {{ request.user.member }}.</p>
         <p>{% trans "You can create new delegate accounts, or log in with them by pressing the relevant button" %}</p>
         <br />
-        <table class="mob no_csv">
+        <table class="mob ">
             <tr>
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Registrations" %}</th>
@@ -74,7 +74,7 @@
         <div class="add_new {% if not form.errors %}hide{% endif %}">
             <form action="{{ request.path }}" method="post">
                 {% csrf_token %}
-                <table class="no_csv">
+                <table>
                     {{ form.as_table }}
                 </table>
                 <input type="submit" value="{% trans "Confirm" %}" />

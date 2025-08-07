@@ -8,10 +8,10 @@
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
-    <table id="registration_tickets" class="tablesorter writing">
+    <table id="registration_tickets"
+           class="{% if not interface_old %}go_datatable{% endif %} writing ordering_arrow">
         <thead>
             <tr>
-                <th class="hide">number</th>
                 <th></th>
                 <th>{% trans "Name" %}</th>
                 {% if tiers|length > 1 %}

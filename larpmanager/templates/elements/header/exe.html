@@ -10,22 +10,4 @@
             window.location.href = newUrl;
         });
     </script>
-    <a class="new button my_toggle" tog="search" href="#">{% trans "Search" %}</a>
-    <a class="new button my_toggle" tog="show_list" href="#">{% trans "List" %}</a>
-    <div class="hide search">
-        <input type="text" placeholder="Search..." id="search_tbl" />
-        <hr />
-    </div>
-    <div class="hide show_list">
-        {% for el in list %}
-            <a href="#{{ el.id }}">
-                {% if el.search %}
-                    {{ el.search }}
-                {% else %}
-                    {{ el }}
-                {% endif %}
-            </a>
-        {% endfor %}
-        <hr />
-    </div>
 </div>

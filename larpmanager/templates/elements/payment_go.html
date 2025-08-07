@@ -104,7 +104,7 @@
           method="post"
           class="acc_submit">
         {% csrf_token %}
-        <table class="mob no_csv">
+        <table class="mob ">
             {{ any_form.as_table }}
         </table>
         <input type="submit" value="{% trans "Submit" %}">
@@ -135,7 +135,7 @@
         <b><i>{% trans "Please be careful to perform these steps - otherwise your  payment will not be processed" %}!</i></b>
     </p>
     <hr />
-    <table class="mob no_csv">
+    <table class="mob ">
         <tr>
             <th>{% trans "Causal" %}</th>
             <td class="causal">{{ invoice.causal }}</td>

@@ -17,7 +17,7 @@
           enctype="multipart/form-data"
           method="post">
         {% csrf_token %}
-        <table class="no_csv">
+        <table>
             {{ form.as_table }}
         </table>
         <input type="submit" value="{% trans "Confirm" %}">

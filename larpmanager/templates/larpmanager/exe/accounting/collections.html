@@ -11,7 +11,8 @@
     <p>
         {% trans "Show collections" %} <a href="#" class="my_toggle" tog='done'>{% trans "already delivered" %}</a>
     </p>
-    <table id="tb" class="tablesorter">
+    <table id="collections"
+           class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th></th>

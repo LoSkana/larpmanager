@@ -258,19 +258,9 @@ $(document).ready(function() {
             $(this).removeClass('select');
         }
 
-        window.syncColumnWidths();
         return false;
 
     });
-
-    if (Array.isArray(window.trigger_togs)) {
-        window.trigger_togs.forEach(function(togValue) {
-            if (togValue.startsWith('.') || togValue.startsWith('#')) return;
-            $('a.my_toggle[tog="' + togValue + '"]').each(function() {
-                this.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-            });
-        });
-    }
 
     $('a[qtip]').each(function() {
         $(this).qtip({
@@ -353,33 +343,99 @@ $(document).ready(function() {
         });
     }
 
+    data_tables();
+
     post_popup();
+
+    $('#one .inner').fadeIn(100);
 });
 
+function data_tables() {
+    window.datatables = window.datatables || {};
 
-window.syncColumnWidths = function () {
-    $('.table-sticky table').each(function () {
-        var $originalTable = $(this);
-        stickyId = $originalTable.attr('sticky-table');
-        console.log(stickyId);
-        var $stickyTable = $('[sticky-header="' + stickyId + '"]');;
+    $('table.go_datatable').each(function() {
+        const $table = $(this);
 
-        if (!$originalTable.length || !$stickyTable.length) return;
+        const $tbody = $table.find('tbody');
+        const rowCount = $tbody.find('tr').length;
 
-        var $originalThs = $originalTable.find('thead tr:first-child th');
-        var $clonedThs = $stickyTable.find('thead tr:first-child th');
+        if (rowCount === 0) {
+            $table.hide();
+            return;
+        }
 
-        $stickyTable.width($originalTable.outerWidth());
+        // assign random id
+        if (!$table.attr('id')) {
+            const randomId = 'table-' + Math.random().toString(36).substr(2, 9);
+            $table.attr('id', randomId);
+        }
 
-        $originalThs.each(function (index) {
-            var width = $(this).outerWidth();
-            $clonedThs.eq(index).css({
-                width: width,
-                minWidth: width,
-                maxWidth: width
+        const tableId = $table.attr('id');
+
+        let disable_sort_columns = [0];
+        if ($table.hasClass('writing_list')) {
+            disable_sort_columns = [0, 2];
+        }
+        if ($table.hasClass('ordering_arrow')) {
+            var thList = $table.find('thead th');
+            var totalColumns = thList.length;
+            disable_sort_columns.push(totalColumns - 2, totalColumns - 1);
+        }
+
+        let hide_columns = [];
+        if (window.hideColumnsIndexMap && typeof window.hideColumnsIndexMap === 'object') {
+            Object.keys(window.hideColumnsIndexMap).forEach(function(key) {
+                var value = window.hideColumnsIndexMap[key];
+                hide_columns.push(...value);
             });
+        }
+
+        var full_layout = rowCount >= 10;
+
+        const table = new DataTable('#' + tableId, {
+            scrollX: true,
+            stateSave: true,
+            paging: full_layout,
+            layout: full_layout
+                ? { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' }
+                : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null },
+            columnControl: ['order', 'searchDropdown'],
+            ordering: {
+                indicators: false,
+                handler: false
+            },
+            columnDefs: [
+                { orderable: false, targets: disable_sort_columns },
+                { visible: false, targets: hide_columns },
+                { columnControl: [], targets: disable_sort_columns }
+            ]
         });
+
+        for (const index of hide_columns) {
+            var column = table.column(index);
+            column.visible(false);
+        };
+
+        window.datatables[tableId] = table;
     });
+
+    if (Array.isArray(window.trigger_togs)) {
+        window.trigger_togs.forEach(function(togValue) {
+            if (togValue.startsWith('.') || togValue.startsWith('#')) {
+                $(togValue).each(function() {
+                    this.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                });
+            } else {
+                if (togValue == '#load_accounting') {
+                    document.querySelector('#load_accounting').dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                } else {
+                    $('a.table_toggle[tog="' + togValue + '"]').each(function() {
+                        this.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                    });
+                }
+            }
+        });
+    }
 }
 
 function post_popup() {
@@ -650,7 +706,7 @@ function centerMobileIcons() {
 //function table_csv() {
 //    $(".manage table").each(function( index ) {
 //
-//        if ( $(this).hasClass("no_csv") ) return;
+//        if ( $(this).hasClass("") ) return;
 //
 //        if ( $(this).find('tbody').length === 0 || $(this).find('tbody tr').length === 0 ) {
 //            return;

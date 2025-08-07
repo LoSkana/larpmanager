@@ -1,9 +1,9 @@
 {% load static show_tags %}
 {% if form_questions %}
     {% for key, que in form_questions.items %}
-        <th class="hide q_{{ key }}">{{ que.name }}</th>
+        <th class="q_{{ key }}">{{ que.name }}</th>
         {% if que.typ == 'e' or que.typ == 'teaser' or que.typ == 'text' %}
-            <th class="hide stats">
+            <th class="stats">
                 <i class="fa fa-text-width" aria-hidden="true"></i> {{ que.name }}
             </th>
         {% endif %}

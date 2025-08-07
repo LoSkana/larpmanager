@@ -8,7 +8,8 @@
 {% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
-    <table id="tb" class="tablesorter">
+    <table id="url_shortner"
+           class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th></th>

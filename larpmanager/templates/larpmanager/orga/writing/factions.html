@@ -6,9 +6,12 @@
 {% block info %}
     {% trans "This page shows the factions (character groups) of the event" %}
 {% endblock info %}
+{% block table_classes %}
+    ordering_arrow
+{% endblock table_classes %}
 {% block nav_fields %}
     {% include "elements/writing/questions_nav.html" %}
-    <a href="#" class="my_toggle" tog='characters'>{% trans "Characters" %}</a>
+    <a href="#" class="table_toggle" tog='characters'>{% trans "Characters" %}</a>
 {% endblock nav_fields %}
 {% block thead %}
     <th></th>

@@ -1006,7 +1006,7 @@ table.fixed {
 
 #header h1 {
     padding: 0.5em 6em 0.5em 7.5em;
-    height: 3em;
+    height: 1.5em;
     line-height: 1.2;
     text-align: center;
     display: flex;
@@ -1873,48 +1873,169 @@ input[type="checkbox"].checkbox_single {
     margin: 0 0.5em 0 0;
 }
 
-### STICKY TABLES ###
-
-.table-sticky table {
-  border-collapse: collapse;
-  width: max-content;
+.dt-length select, .dt-length label, .dt-search label {
+    display: inline-block;
+    font-weight: initial;
+    letter-spacing: initial;
+    text-transform: initial;
 }
 
-.table-sticky thead {
-  border: 0;
-  font-size: 0.01px;
-  font-align: center;
+.dt-length label {
+    margin-left: 1em;
 }
 
-.sticky-header table {
-  position: sticky;
-  top: 0;
-  z-index: 3;
-  border-bottom: solid 2px rgba(var(--pri-rgb), 0.5);
-  margin: 0;
-  font-align: center;
+.dt-length select, .dt-search input {
+    border-color: rgba(var(--ter-rgb), 0.35) !important;
+    border-width: 2px !important;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    background: rgba(var(--sec-rgb), 0.5);
+    border-radius: 5px;
+    border: none;
+    border: solid 2px rgba(var(--sec-rgb), 0.25);
+    color: inherit;
+    outline: 0;
+    padding: 0 1em;
+    text-decoration: none;
+    margin: 0 auto;
+    font-size: 100%;
 }
 
-/* Firefox */
-.table-sticky {
-  scrollbar-width: thick;
-  scrollbar-color: #888 #f1f1f1;
+.dt-search {
+    text-align: right;
 }
 
-.table-sticky {
-  overflow: auto;
-  max-height: 80vh;
+@media(max-width: 840px) {
+   .dt-layout-cell.dt-layout-start, .dt-layout-cell.dt-layout-end {
+      width: 50% !important;
+      font-size: 80% !important;
+      display: inline-block !important;
+   }
+
+   .dt-layout-start {
+    text-align: left;
+   }
+
+    .dt-layout-end {
+       text-align: right;
+    }
+
+    .dt-search input {
+        width: 50% !important;
+    }
 }
 
-.simplebar-scrollbar {
-  box-shadow: none !important;
-  background: none !important;
+
+div.dt-container .dt-search input {
+    margin-left: 0.5em !important;
+    width: 70%;
 }
 
-.simplebar-scrollbar::before {
-  content: '';
-  display: block;
-  border-radius: 7px;
-  height: 100%;
-  background: rgba(var(--ter-rgb), 0.7) !important;
+div.dt-container .dt-paging .dt-paging-button {
+    background: transparent !important;
+    box-shadow: none;
+    border: 0 !important;
 }
+
+div.dt-container .dt-length, div.dt-container .dt-search, div.dt-container .dt-info, div.dt-container .dt-processing, div.dt-container .dt-paging {
+  color: rgba(var(--ter-rgb), 0.8) !important;
+}
+
+.dt-paging-button:active {
+    box-shadow: none !important;
+    border: 0px !important;
+}
+
+.dataTables_wrapper ::-webkit-scrollbar {
+    height: 32px;
+}
+
+.dataTables_wrapper ::-webkit-scrollbar-thumb {
+    background-color: #888;
+}
+
+.dataTables_wrapper ::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+.dataTables_wrapper {
+    scrollbar-width: auto;
+    scrollbar-color: #888 #f1f1f1;
+}
+
+table.dataTable th.dt-type-numeric div.dt-column-header,
+table.dataTable th.dt-type-numeric div.dt-column-footer,
+table.dataTable th.dt-type-date div.dt-column-header,
+table.dataTable th.dt-type-date div.dt-column-footer,
+table.dataTable td.dt-type-numeric div.dt-column-header,
+table.dataTable td.dt-type-numeric div.dt-column-footer,
+table.dataTable td.dt-type-date div.dt-column-header,
+table.dataTable td.dt-type-date div.dt-column-footer {
+  flex-direction: row !important;
+}
+
+.dataTable a { margin: 0; }
+
+.dtcc-button {
+  border: 0px !important;
+  padding: 0.5em;
+  box-shadow: none;
+}
+
+.dt-layout-row select, .dtcc-dropdown select, .dtcc-dropdown input {
+    background: none;
+    padding: 0 !important;
+    margin: 0.2em;
+    height: 2.1em;
+    max-width: 80% !important;
+    font-size: 100%;
+}
+
+div.dtcc-dropdown div.dtcc-search > div div.dtcc-search-icon, div.dtcc-dropdown div.dtcc-search > div div.dtcc-search-type-icon {
+    margin-top: -0.5em;
+    margin-right: 0.2em;
+}
+
+div.dtcc-dropdown {
+    background: rgba(var(--sec-rgb), 0.8) !important;
+}
+
+div.dtcc-dropdown div.dtcc-search > div select, div.dtcc-dropdown div.dtcc-search > div input {
+    background: rgba(var(--sec-rgb), 0.3);
+    color: rgba(var(--pri-rgb), 1) !important;
+}
+
+div.dtcc-dropdown, div.dtcc-dropdown div.dtcc-search {
+    padding: 0.2em;
+    margin: 0;
+    font-size: 100%;
+}
+
+div.dtcc-dropdown div.dtcc-search > div div svg, div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
+    color: rgba(var(--pri-rgb), 1) !important;
+}
+
+table.dataTable span.dtcc span.dtcc-button-icon {
+  color: rgba(var(--ter-rgb), 0.8) !important;
+}
+
+#page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+#wrapper {
+    flex: 1;
+}
+
+#footer {
+  margin-top: 3em;
+  padding: 0 0 1em 0;
+  background: none;
+  width: 100%;
+}
+
+#one .inner { display: none; }

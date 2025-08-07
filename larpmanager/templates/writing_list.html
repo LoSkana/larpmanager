@@ -8,26 +8,33 @@
 {% endblock meta %}
 {% block content %}
     {% include "elements/header/writing.html" %}
-    <div class="nav fields">
-        <b>{% trans "Fields" %}</b>:
-        {% block nav_fields %}
-        {% endblock nav_fields %}
-        <a href="#" class="my_toggle" tog='stats'>Stats</a>
-    </div>
-    <table class="tablesorter writing regs">
-        <thead>
-            {% block thead %}
-            {% endblock thead %}
-        </thead>
-        <tbody>
-            {% block tbody %}
-            {% endblock tbody %}
-        </tbody>
-    </table>
-    {% block additional %}
-    {% endblock additional %}
-    <div id="excel-edit"></div>
-    {% include "elements/form/char_finder.html" %}
+    {% if list %}
+        <div class="nav fields">
+            <b>{% trans "Fields" %}</b>:
+            {% block nav_fields %}
+            {% endblock nav_fields %}
+            <a href="#" class="table_toggle" tog='stats'>Stats</a>
+        </div>
+        <table id="writing_list_{{ run.id }}_{{ typ }}"
+               class="que_load{% if not interface_old %} go_datatable writing_list {% block table_classes %}{% endblock table_classes %}{% endif %}">
+            <thead>
+                {% block thead %}
+                {% endblock thead %}
+            </thead>
+            <tbody>
+                {% block tbody %}
+                {% endblock tbody %}
+            </tbody>
+        </table>
+        {% block additional %}
+        {% endblock additional %}
+        <div id="excel-edit"></div>
+        {% include "elements/form/char_finder.html" %}
+    {% else %}
+        <p>
+            <i>{% trans "No elements are currently available" %}</i>
+        </p>
+    {% endif %}
 {% endblock content %}
 {% block js %}
     <script defer src="{% static TINYMCE_JS_URL %}"></script>

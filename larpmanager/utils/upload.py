@@ -104,7 +104,7 @@ def _read_uploaded_csv(uploaded_file):
             uploaded_file.seek(0)
             decoded = uploaded_file.read().decode(encoding)
             text_io = io.StringIO(decoded)
-            return pd.read_csv(text_io, encoding=encoding, sep=None, engine="python")
+            return pd.read_csv(text_io, encoding=encoding, sep=None, engine="python", dtype=str)
         except Exception as err:
             print(err)
             continue

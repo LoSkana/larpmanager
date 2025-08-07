@@ -49,18 +49,28 @@ function load_question(el) {
         data = result['res'];
         const popup = new Set(result['popup']);
 
+        el.next().trigger('click');
+
         for (let r in data) {
             let vl = data[r];
             if (vl.constructor === Array) vl = vl.join(", ");
-            var vel = $('#{0} .res_{1}'.format(r, num));
-            vel.text(vl);
+
             if (popup.has(parseInt(r)))
-                vel.append("... <a href='#' class='post_popup' pop='{0}' fie='{1}'><i class='fas fa-eye'></i></a>".format(r, num));
+                vl += "... <a href='#' class='post_popup' pop='{0}' fie='{1}'><i class='fas fa-eye'></i></a>".format(r, num);
+
+            {% if interface_old %}
+            $('#' + r + ' .q_' + num).html(vl);
+            {% else %}
+            Object.keys(window.datatables).forEach(function(key) {
+                var table = window.datatables[key];
+                var cell = table.cell('#' + r, '.q_' + num);
+                if (cell && cell.node()) {
+                    cell.data(vl).draw(false);
+                }
+            });
+            {% endif %}
+
         }
-
-        el.next().trigger('click');
-
-        window.syncColumnWidths();
 
          done[num.toString()] = 1;
 
@@ -123,6 +133,17 @@ function reload_table() {
 
 regs = [];
 
+window.hideColumnsIndexMap = {};
+document.querySelectorAll('.que_load thead th').forEach(function(th) {
+    var realIndex = Array.from(th.parentNode.children).indexOf(th);
+    th.classList.forEach(function(cls) {
+        if (!window.hideColumnsIndexMap[cls]) {
+            window.hideColumnsIndexMap[cls] = [];
+        }
+        window.hideColumnsIndexMap[cls].push(realIndex);
+    });
+});
+
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
 
@@ -140,15 +161,33 @@ window.addEventListener('DOMContentLoaded', function() {
 
         $('.go_table a').hide();
 
-        if (Array.isArray(window.trigger_togs)) {
-            window.trigger_togs.forEach(function(togValue) {
-                if (togValue.startsWith('.') || togValue.startsWith('#')) {
-                    $(togValue).each(function() {
-                        this.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-                    });
-                }
+        $('.table_toggle').on('click', function () {
+            var tog = $(this).attr("tog");
+            $(this).toggleClass('select');
+
+            {% if interface_old %}
+            $('.' + tog).toggle();
+            {% else %}
+
+            var index_list = window.hideColumnsIndexMap[tog];
+            Object.keys(window.datatables).forEach(function(key) {
+                var table = window.datatables[key];
+
+                for (const index of index_list) {
+                    var column = table.column(index);
+                    column.visible(!column.visible());
+                };
             });
-        }
+            {% endif %}
+
+            return false;
+        });
+
+        {% if interface_old %}
+        $.each(window.hideColumnsIndexMap, function(key, _) {
+            $('.' + key).hide();
+        });
+        {% endif %}
 
     });
 

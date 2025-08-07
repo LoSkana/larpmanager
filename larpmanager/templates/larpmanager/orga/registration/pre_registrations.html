@@ -23,7 +23,8 @@
     <h2>
         {% trans "Pre registrations total" %}: <b>{{ dc.list | length }}</b>
     </h2>
-    <table class="tablesorter">
+    <table id="pre_registrations"
+           class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th>{% trans "Member" %}</th>

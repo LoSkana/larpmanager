@@ -5,7 +5,8 @@
 {% endblock title %}
 {% block content %}
     <h3>{% trans "Total" %}: {{ total }}</h3>
-    <table class="tablesorter mob">
+    <table id="lm_payments"
+           class="{% if not interface_old %}go_datatable{% endif %} mob">
         <thead>
             <tr>
                 <th>Nome</th>

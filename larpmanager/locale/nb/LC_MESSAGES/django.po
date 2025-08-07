@@ -3594,9 +3594,6 @@ msgstr "Navnet på kompetansen"
 msgid "These fields are mandatory"
 msgstr "Disse feltene er obligatoriske"
 
-msgid "Total remaining to be paid"
-msgstr "Totalt gjenstår å betale"
-
 msgid "View photos from the event"
 msgstr "Se bilder fra arrangementet"
 
@@ -3614,9 +3611,6 @@ msgstr "Du brukte en vennekode"
 
 msgid "(click on image to enlarge)"
 msgstr "(klikk på bildet for å forstørre)"
-
-msgid "Additional free payment fee"
-msgstr "Ekstra gratis betalingsgebyr"
 
 #, python-format
 msgid "Bring a friend to %(event)s"
@@ -4013,9 +4007,6 @@ msgstr "Lagt til fordringspost"
 msgid "Select a file with extension csv"
 msgstr "Velg en fil med filtypen \"csv\""
 
-msgid "Sum of payments received through"
-msgstr "Summen av betalinger mottatt gjennom"
-
 msgid "The setting / genre of the event"
 msgstr "Arrangementets omgivelser/sjanger"
 
@@ -4211,6 +4202,9 @@ msgstr "Melding sendt, takk for at du skrev"
 
 msgid "Name of the discount - internal use"
 msgstr "Navn på rabatt - til internt bruk"
+
+msgid "No elements are currently available"
+msgstr "Ingen elementer er tilgjengelige for øyeblikket"
 
 msgid "Now you can create the receipt text"
 msgstr "Nå kan du opprette kvitteringsteksten"
@@ -4532,9 +4526,6 @@ msgstr "Avslutte abonnementet på %(event)s"
 
 msgid "Set the experience points configuration"
 msgstr "Angi konfigurasjonen for erfaringspoeng"
-
-msgid "Sum of the signup fee, total to be paid"
-msgstr "Påmeldingsavgift, sum som skal betales"
 
 msgid "The number of payments to split the fee"
 msgstr "Antall avdrag som skal betales"
@@ -4943,9 +4934,6 @@ msgstr "Brukeren har fått tildelt den angitte rollen"
 msgid "This page shows the settings for PDF printing"
 msgstr "Denne siden oppsummerer innstillingene for PDF-utskrift"
 
-msgid "Amount of the next payment instalment required"
-msgstr "Beløp for neste påkrevde betalingstermin"
-
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Kansellering på grunn av manglende årlig medlemsavgift"
 
@@ -4999,9 +4987,6 @@ msgstr "Angi dine personlige preferanser i grensesnittet"
 
 msgid "Something went wrong in the account activation"
 msgstr "Noe gikk galt i kontoaktiveringen"
-
-msgid "Sum of payments received with means of payment"
-msgstr "Summen av mottatte betalinger med betalingsmidler"
 
 msgid "Text show at the start of all character sheets"
 msgstr "Tekst vises i starten av alle karakterark"
@@ -5253,9 +5238,6 @@ msgstr "Denne siden viser samlingene som er åpnet av spillere"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Toleranse overskredet, fortsett med kanselleringen"
-
-msgid "Unique registration code, used for payment checks"
-msgstr "Unik registreringskode, brukes til betalingskontroller"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Du inkluderer (minst ett av) disse filtrene"
@@ -5619,9 +5601,6 @@ msgstr "På denne siden kan du redigere organisasjonsspesifikk tekst"
 
 msgid "This page allows you to keep track of reported problems"
 msgstr "På denne siden kan du holde oversikt over rapporterte problemer"
-
-msgid "Total of what has already been paid at the current date"
-msgstr "Summen av det som allerede er betalt per dags dato"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Vi har støtt på et problem med skattekoden du oppga"
@@ -6103,9 +6082,6 @@ msgid "Now players can submit preregistrations, and you can review them"
 msgstr ""
 "Nå kan spillere sende inn forhåndsregistreringer, og du kan gå gjennom dem"
 
-msgid "Part of the registration fee derived only from the ticket chosen"
-msgstr "En del av registreringsavgiften stammer kun fra den valgte billetten"
-
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
 "Betalingen ble ikke fullført. Vennligst kontakt oss for å finne ut hvorfor"
@@ -6311,9 +6287,6 @@ msgstr ""
 msgid "Assign roles to staff members, and give access to specific functions"
 msgstr ""
 "Tildel roller til medarbeiderne, og gi dem tilgang til bestemte funksjoner"
-
-msgid "Number of days within which the player must pay his next installment"
-msgstr "Antall dager du har til rådighet for å betale neste avdrag"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr "Velg filene som skal lastes opp (må være i CSV-format, kodet i UTF-8)"
@@ -6884,12 +6857,6 @@ msgid ""
 msgstr ""
 "Hvis du er italiensk statsborger, oppgi skattekoden din, ellers la den stå "
 "tom"
-
-msgid ""
-"Part of the registration fee derived only from the additional options chosen"
-msgstr ""
-"En del av registreringsavgiften stammer kun fra de valgte "
-"tilleggsalternativene"
 
 msgid ""
 "This page prepares the cash balance already formatted for annual declaration"

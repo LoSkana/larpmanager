@@ -10,7 +10,8 @@
     <p>
         <a href="#" class="my_toggle" tog='closed'>{% trans "Show questions already answered" %}</a>
     </p>
-    <table id="questions" class="tablesorter">
+    <table id="questions_open"
+           class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th>{% trans "Date" %}</th>
@@ -55,7 +56,8 @@
                 <input type="submit" value="{% trans "Confirm" %}">
             </form>
         </p>
-        <table id="questions" class="tablesorter">
+        <table id="questions_closed"
+               class="{% if not interface_old %}go_datatable{% endif %}">
             <thead>
                 <tr>
                     <th>{% trans "Date" %}</th>
