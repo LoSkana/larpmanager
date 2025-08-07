@@ -5,7 +5,8 @@
 {% endblock title %}
 {% block content %}
     <p>General: {{ tot | format_decimal }}</p>
-    <table id="lm_profile" class="go_datatable mob">
+    <table id="lm_profile"
+           class="{% if not interface_old %}go_datatable{% endif %} mob">
         <tr>
             <th>Domain</th>
             <th>View</th>

@@ -23,7 +23,8 @@
         <hr />
     {% endif %}
     {% include "elements/header/orga.html" %}
-    <table id="character_questions" class="go_datatable writing ordering_arrow">
+    <table id="character_questions"
+           class="{% if not interface_old %}go_datatable{% endif %} writing ordering_arrow">
         <thead>
             <tr>
                 <th></th>

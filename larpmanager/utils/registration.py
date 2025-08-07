@@ -438,14 +438,12 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
 
     # look for similar registration choice
     for choice in RegistrationChoice.objects.filter(reg=instance):
-        question_display = choice.question.name
-        option_display = choice.option.name
+        question_name = choice.question.name
+        option_name = choice.option.name
         try:
-            choice.question = instance.run.event.get_elements(RegistrationQuestion).get(
-                display__iexact=question_display
-            )
+            choice.question = instance.run.event.get_elements(RegistrationQuestion).get(name__iexact=question_name)
             choice.option = instance.run.event.get_elements(RegistrationOption).get(
-                question=choice.question, display__iexact=option_display
+                question=choice.question, name__iexact=option_name
             )
             choice.save()
         except ObjectDoesNotExist:
@@ -454,11 +452,9 @@ def pre_save_registration_switch_event(sender, instance, **kwargs):
 
     # look for similar registration answer
     for answer in RegistrationAnswer.objects.filter(reg=instance):
-        question_display = answer.question.name
+        question_name = answer.question.name
         try:
-            answer.question = instance.run.event.get_elements(RegistrationQuestion).get(
-                display__iexact=question_display
-            )
+            answer.question = instance.run.event.get_elements(RegistrationQuestion).get(name__iexact=question_name)
             answer.save()
         except ObjectDoesNotExist:
             answer.question = None

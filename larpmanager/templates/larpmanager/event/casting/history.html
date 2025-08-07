@@ -24,7 +24,8 @@
         {% endif %}
         <h3>{% trans "Historical" %} {{ gl_name }}</h3>
     {% endif %}
-    <table id="preferences" class="go_datatable mob">
+    <table id="preferences"
+           class="{% if not interface_old %}go_datatable{% endif %} mob">
         <thead>
             <tr>
                 <th>{% trans "Player" %}</th>

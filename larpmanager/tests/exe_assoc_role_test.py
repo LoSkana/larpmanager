@@ -59,7 +59,6 @@ async def exe_assoc_role(live_server, page):
     await page.locator("#id_Organization_2").check()
     await page.locator("#id_Accounting_0").check()
     await page.get_by_role("button", name="Confirm", exact=True).click()
-    await page.get_by_role("gridcell", name="Accounting , Configuration").click()
     await expect(page.locator('[id="\\32 "]')).to_contain_text("Accounting , Configuration")
 
     await logout(page, live_server)

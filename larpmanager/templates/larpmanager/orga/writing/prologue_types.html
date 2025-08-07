@@ -8,7 +8,8 @@
 {% endblock info %}
 {% block content %}
     {% include "elements/header/writing.html" %}
-    <table id="prologue_types" class="go_datatable writing">
+    <table id="prologue_types"
+           class="{% if not interface_old %}go_datatable{% endif %} writing">
         <thead>
             <tr>
                 <th></th>

@@ -8,7 +8,8 @@
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
-    <table id="registration_tickets" class="go_datatable writing ordering_arrow">
+    <table id="registration_tickets"
+           class="{% if not interface_old %}go_datatable{% endif %} writing ordering_arrow">
         <thead>
             <tr>
                 <th></th>

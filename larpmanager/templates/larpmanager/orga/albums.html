@@ -10,7 +10,8 @@
     {% include "elements/header/orga.html" %}
     <br />
     <br />
-    <table id="albums" class="go_datatable writing">
+    <table id="albums"
+           class="{% if not interface_old %}go_datatable{% endif %} writing">
         <thead>
             <tr>
                 <th></th>

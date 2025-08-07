@@ -405,7 +405,6 @@ async def add_field_available(page):
     await page.locator("#id_max_available").fill("2")
     await page.get_by_role("button", name="Confirm", exact=True).click()
     await page.get_by_role("button", name="Confirm", exact=True).click()
-    await page.get_by_text("New Search List Upload").click()
 
 
 async def add_field_text(page):

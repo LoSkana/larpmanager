@@ -225,7 +225,7 @@ async def character(page, live_server):
 
     # approve char
     await go_to(page, live_server, "/test/1/manage/characters")
-    await page.locator('[id="\\33 "]').get_by_role("gridcell", name="").click()
+    await page.locator('[id="\\33 "]').get_by_role("link", name="").click()
     await page.locator("#id_status").select_option("a")
     await page.get_by_role("button", name="Confirm", exact=True).click()
 

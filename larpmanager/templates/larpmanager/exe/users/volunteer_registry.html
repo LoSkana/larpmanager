@@ -14,7 +14,8 @@
     </p>
     <hr />
     {% include "elements/header/exe.html" %}
-    <table id="volunteers" class="go_datatable">
+    <table id="volunteers"
+           class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th></th>

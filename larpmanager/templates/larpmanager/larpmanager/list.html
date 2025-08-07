@@ -7,7 +7,8 @@
     <p>
         <a href="#" class="my_toggle" tog='inactive'>{% trans "Show inactive" %}</a>
     </p>
-    <table id="lm_list" class="go_datatable mob">
+    <table id="lm_list"
+           class="{% if not interface_old %}go_datatable{% endif %} mob">
         <thead>
             <tr>
                 <th>Nome</th>

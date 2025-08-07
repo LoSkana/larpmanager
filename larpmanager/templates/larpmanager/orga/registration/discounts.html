@@ -9,7 +9,8 @@
 {% block content %}
     {% if active %}
         <h2>{% trans "Discounts active" %}</h2>
-        <table id="discounts_active" class="go_datatable">
+        <table id="discounts_active"
+               class="{% if not interface_old %}go_datatable{% endif %}">
             <tr>
                 <th>{% trans "Discount" %}</th>
                 <th>{% trans "Value" %}</th>
@@ -28,7 +29,8 @@
     {% endif %}
     {% if available %}
         <h2>{% trans "Discounts available" %}</h2>
-        <table id="discounts_availble"  class="go_datatable">
+        <table id="discounts_availble"
+               class="{% if not interface_old %}go_datatable{% endif %}">
             <tr>
                 <th>{% trans "Discount" %}</th>
                 <th>{% trans "Value" %}</th>

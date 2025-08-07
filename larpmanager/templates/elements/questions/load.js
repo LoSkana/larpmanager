@@ -58,7 +58,9 @@ function load_question(el) {
             if (popup.has(parseInt(r)))
                 vl += "... <a href='#' class='post_popup' pop='{0}' fie='{1}'><i class='fas fa-eye'></i></a>".format(r, num);
 
-
+            {% if interface_old %}
+            $('#' + r + ' .q_' + num).html(vl);
+            {% else %}
             Object.keys(window.datatables).forEach(function(key) {
                 var table = window.datatables[key];
                 var cell = table.cell('#' + r, '.q_' + num);
@@ -66,6 +68,8 @@ function load_question(el) {
                     cell.data(vl).draw(false);
                 }
             });
+            {% endif %}
+
         }
 
          done[num.toString()] = 1;
@@ -133,12 +137,10 @@ window.hideColumnsIndexMap = {};
 document.querySelectorAll('.que_load thead th').forEach(function(th) {
     var realIndex = Array.from(th.parentNode.children).indexOf(th);
     th.classList.forEach(function(cls) {
-        if (cls !== 'hide') {
-            if (!window.hideColumnsIndexMap[cls]) {
-                window.hideColumnsIndexMap[cls] = [];
-            }
-            window.hideColumnsIndexMap[cls].push(realIndex);
+        if (!window.hideColumnsIndexMap[cls]) {
+            window.hideColumnsIndexMap[cls] = [];
         }
+        window.hideColumnsIndexMap[cls].push(realIndex);
     });
 });
 
@@ -161,8 +163,11 @@ window.addEventListener('DOMContentLoaded', function() {
 
         $('.table_toggle').on('click', function () {
             var tog = $(this).attr("tog");
-
             $(this).toggleClass('select');
+
+            {% if interface_old %}
+            $('.' + tog).toggle();
+            {% else %}
 
             var index_list = window.hideColumnsIndexMap[tog];
             Object.keys(window.datatables).forEach(function(key) {
@@ -173,8 +178,16 @@ window.addEventListener('DOMContentLoaded', function() {
                     column.visible(!column.visible());
                 };
             });
+            {% endif %}
 
+            return false;
         });
+
+        {% if interface_old %}
+        $.each(window.hideColumnsIndexMap, function(key, _) {
+            $('.' + key).hide();
+        });
+        {% endif %}
 
     });
 
