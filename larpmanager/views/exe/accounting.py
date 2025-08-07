@@ -115,8 +115,22 @@ def exe_donations_edit(request, num):
 @login_required
 def exe_credits(request):
     ctx = check_assoc_permission(request, "exe_credits")
-    exe_paginate(request, ctx, AccountingItemOther, selrel=("run", "run__event"), subtype="credits")
-    return render(request, "larpmanager/exe/accounting/credits.html", ctx)
+    ctx.update(
+        {
+            "selrel": ("run", "run__event"),
+            "subtype": "credits",
+            "fields": [
+                ("member", _("Member")),
+                ("run", _("Run")),
+                ("descr", _("Description")),
+                ("value", _("Value")),
+                ("created", _("Date")),
+            ],
+        }
+    )
+    return exe_paginate(
+        request, ctx, AccountingItemOther, "larpmanager/exe/accounting/credits.html", "exe_credits_edit"
+    )
 
 
 @login_required
@@ -127,8 +141,21 @@ def exe_credits_edit(request, num):
 @login_required
 def exe_tokens(request):
     ctx = check_assoc_permission(request, "exe_tokens")
-    exe_paginate(request, ctx, AccountingItemOther, selrel=("run", "run__event"), subtype="tokens")
-    return render(request, "larpmanager/exe/accounting/tokens.html", ctx)
+
+    ctx.update(
+        {
+            "selrel": ("run", "run__event"),
+            "subtype": "tokens",
+            "fields": [
+                ("member", _("Member")),
+                ("run", _("Run")),
+                ("descr", _("Description")),
+                ("value", _("Value")),
+                ("created", _("Date")),
+            ],
+        }
+    )
+    return exe_paginate(request, ctx, AccountingItemOther, "larpmanager/exe/accounting/tokens.html", "exe_tokens_edit")
 
 
 @login_required

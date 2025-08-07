@@ -4726,9 +4726,6 @@ msgid ""
 "system"
 msgstr ""
 
-msgid "Approve"
-msgstr ""
-
 msgid "Movements"
 msgstr ""
 
@@ -6096,6 +6093,9 @@ msgid "This page provides a summary of all expenses submitted by collaborators"
 msgstr ""
 
 msgid "once approved, the corresponding amounts are assigned as "
+msgstr ""
+
+msgid "Approve"
 msgstr ""
 
 msgid "This page shows your personal spending items"
