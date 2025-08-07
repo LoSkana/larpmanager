@@ -144,8 +144,8 @@ class Event(BaseModel):
 
     max_pg = models.IntegerField(
         default=0,
-        verbose_name=_("Max players"),
-        help_text=_("Maximum number of player spots (0 = unlimited)"),
+        verbose_name=_("Max participants"),
+        help_text=_("Maximum number of participants spots (0 = unlimited)"),
     )
 
     max_filler = models.IntegerField(

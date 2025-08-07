@@ -2,18 +2,10 @@
   pk: 1
   fields:
     name: Event
-    descr: 'Manage the event settings: name, description,  and other data'
+    descr: 'Manage the event settings: name, description, dates, and other data'
     slug: orga_event
     number: 11
     feature: 215
-- model: larpmanager.eventpermission
-  pk: 2
-  fields:
-    name: Run
-    descr: 'Manage the run settings: date, registrations, elements visibility'
-    slug: orga_run
-    number: 21
-    feature: 214
 - model: larpmanager.eventpermission
   pk: 3
   fields:
@@ -58,7 +50,7 @@
   pk: 9
   fields:
     name: Casting
-    descr: Assign the characters following the players' preferences
+    descr: Assign the characters following the participants' preferences
     slug: orga_casting
     number: 11
     feature: 27
@@ -74,7 +66,7 @@
   pk: 11
   fields:
     name: Payments
-    descr: Manage payments performed by players to cover the registration fee
+    descr: Manage payments performed by participants to cover the registration fee
     slug: orga_payments
     number: 21
     feature: 111
@@ -90,7 +82,7 @@
   pk: 13
   fields:
     name: Tokens
-    descr: Manages tokens used by players to cover the registration fee
+    descr: Manages tokens used by participants to cover the registration fee
     slug: orga_tokens
     number: 41
     feature: 107
@@ -98,7 +90,7 @@
   pk: 14
   fields:
     name: Credits
-    descr: Manages credits used by players to cover the registration fee
+    descr: Manages credits used by participants to cover the registration fee
     slug: orga_credits
     number: 51
     feature: 107
@@ -122,7 +114,7 @@
   pk: 17
   fields:
     name: Safety
-    descr: Review players' safety-related informations
+    descr: Review participants' safety-related informations
     slug: orga_safety
     number: 11
     feature: 26
@@ -130,7 +122,7 @@
   pk: 18
   fields:
     name: Diet
-    descr: Review players' dietary restrictions and allergies.
+    descr: Review participants' dietary restrictions and allergies.
     slug: orga_diet
     number: 21
     feature: 93
@@ -138,7 +130,7 @@
   pk: 19
   fields:
     name: Sensitive data
-    descr: Review players' sensitive data
+    descr: Review participants' sensitive data
     slug: orga_sensitive
     number: 31
     feature: 208
@@ -146,7 +138,7 @@
   pk: 20
   fields:
     name: Questions
-    descr: Manage questions asked by the players
+    descr: Manage questions asked by the participants
     slug: orga_questions
     number: 41
     feature: 28
@@ -154,7 +146,7 @@
   pk: 21
   fields:
     name: Spam
-    descr: Displays full lists of usual players not already signed up
+    descr: Displays full lists of usual participants not already signed up
     slug: orga_spam
     number: 51
     feature: 40
@@ -162,7 +154,7 @@
   pk: 22
   fields:
     name: Preaching
-    descr: Displays lists of players to persuade to sign up
+    descr: Displays lists of participants to persuade to sign up
     slug: orga_persuade
     number: 61
     feature: 40
@@ -258,7 +250,7 @@
   pk: 36
   fields:
     name: Registrations
-    descr: Manage player registrations
+    descr: Manage participant registrations
     slug: orga_registrations
     number: 11
     feature: 207
@@ -314,7 +306,7 @@
   pk: 44
   fields:
     name: Discounts
-    descr: Manage registrations discounts available to players
+    descr: Manage registrations discounts available to participants
     slug: orga_discounts
     number: 91
     feature: 12
@@ -338,7 +330,7 @@
   pk: 47
   fields:
     name: Newsletter
-    descr: Displays list of emails of signed-up players
+    descr: Displays list of emails of signed-up participants
     slug: orga_newsletter
     number: 71
     feature: 40
@@ -370,7 +362,7 @@
   pk: 52
   fields:
     name: Deadlines
-    descr: Displays players overdue for payment or other deadlines
+    descr: Displays participants overdue for payment or other deadlines
     slug: orga_deadlines
     number: 31
     feature: 94
@@ -426,7 +418,7 @@
   pk: 60
   fields:
     name: Historical
-    descr: Display full history of player preferences on characters
+    descr: Display full history of participant preferences on characters
     slug: orga_casting_history
     number: 61
     feature: 27
@@ -434,7 +426,7 @@
   pk: 61
   fields:
     name: Statistics
-    descr: Displays statistics on player preferences on characters
+    descr: Displays statistics on participant preferences on characters
     slug: orga_casting_preferences
     number: 71
     feature: 27
@@ -450,7 +442,7 @@
   pk: 64
   fields:
     name: Problems
-    descr: Manage in-game issues
+    descr: Manage issues during the event
     slug: orga_problems
     number: 41
     feature: 60

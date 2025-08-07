@@ -166,7 +166,7 @@ class OrgaOutflowForm(ExeOutflowForm):
 class ExeInflowForm(MyForm):
     page_title = _("Inflows")
 
-    page_info = _("This page allows you to add or edit an event revenue other than the players' registration fee")
+    page_info = _("This page allows you to add or edit an event revenue other than the participants' registration fee")
 
     class Meta:
         model = AccountingItemInflow

@@ -136,8 +136,8 @@ class MyForm(forms.ModelForm):
     def _validate_unique_event(self, field_name):
         value = self.cleaned_data.get(field_name)
         event = self.params.get("event")
-        if event:
-            typ = self.params["elementTyp"]
+        typ = self.params.get("elementTyp")
+        if event and typ:
             event_id = event.get_class_parent(typ).id
 
             model = self._meta.model

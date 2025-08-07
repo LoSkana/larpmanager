@@ -124,7 +124,7 @@ class Association(BaseModel):
         related_name="associations_payments",
         blank=True,
         verbose_name=_("Payment Methods"),
-        help_text=_("Indicate the payment methods you wish to be available to players"),
+        help_text=_("Indicate the payment methods you wish to be available to participants"),
     )
 
     payment_currency = models.CharField(

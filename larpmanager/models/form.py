@@ -289,7 +289,7 @@ class WritingOption(BaseModel):
         blank=True,
         help_text=_(
             "If you select one (or more) tickets, the option will only be available to "
-            "players who have selected that ticket"
+            "participants who have selected that ticket"
         ),
     )
 
@@ -374,7 +374,7 @@ class RegistrationQuestion(BaseModel):
         blank=True,
         verbose_name=_("Faction list"),
         help_text=_(
-            "Optional - If you select one (or more) factions, the question will only be shown to players "
+            "Optional - If you select one (or more) factions, the question will only be shown to participants "
             "with characters in all chosen factions"
         ),
     )
@@ -401,7 +401,7 @@ class RegistrationQuestion(BaseModel):
         blank=True,
         verbose_name=_("Ticket list"),
         help_text=_(
-            "If you select one (or more) tickets, the question will only be shown to players "
+            "If you select one (or more) tickets, the question will only be shown to participants "
             "who have selected one of those tickets"
         ),
     )
@@ -424,7 +424,7 @@ class RegistrationQuestion(BaseModel):
         blank=True,
         verbose_name=_("Allowed"),
         help_text=_(
-            "Staff members who are allowed to be able to see the responses of players (leave blank to let everyone see)"
+            "Staff members who are allowed to be able to see the responses of participants (leave blank to let everyone see)"
         ),
     )
 

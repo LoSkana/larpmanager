@@ -4,7 +4,7 @@
     {% trans "Casting" %} {{ gl_name }} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the casting preferences expressed by players, and allows them to be assigned through an optimization algorithm" %}
+    {% trans "This page shows the casting preferences expressed by participants, and allows them to be assigned through an optimization algorithm" %}
 {% endblock info %}
 {% block content %}
     <div id="main_casting">
@@ -52,7 +52,7 @@
                 </table>
             </div>
             <p class="hide">
-                {% trans "Players" %}: <span id="num_pl"></span>, {% trans "Characters" %}: <span id="num_ch"></span>
+                {% trans "Participants" %}: <span id="num_pl"></span>, {% trans "Characters" %}: <span id="num_ch"></span>
             </p>
             <hr />
             <div class="centerized">
@@ -86,7 +86,7 @@
                        onclick="return confirm('Confermi davvero? Non si torna indietro')"
                        value="{% trans "Upload" %}" />
                 <p>
-                    {% trans "Assign selected characters to players" %}.
+                    {% trans "Assign selected characters to participants" %}.
                     <br />
                     <i>({% trans "Attention: the operation is final, please double-check the assignments before uploading" %}!)</i>
                 </p>
@@ -122,7 +122,7 @@ window['trads'] = {
     'p': '{% trans "Priority" %}',
     'e': '{% trans "Avoid" %}',
     'ne': '{% trans "Elements NOT chosen" %}',
-    'ge': '{% trans "Players that DID NOT send preferences" %}',
+    'ge': '{% trans "Participants that DID NOT send preferences" %}',
     'le': '{% trans "Email list" %}'
 }
 

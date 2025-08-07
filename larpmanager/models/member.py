@@ -99,7 +99,7 @@ class Member(BaseModel):
         help_text=_(
             "If you prefer that your real name and surname not be publicly visible, please "
             "indicate an alias that will be displayed instead. Note: If you register for an "
-            "event, your real first and last name will be shown to other players, and to the "
+            "event, your real first and last name will be shown to other participants, and to the "
             "organisers."
         ),
         blank=True,
@@ -114,7 +114,7 @@ class Member(BaseModel):
             "If for whatever reason the first and last name shown on your documents is "
             "different from the one you prefer to use, then write it here. It will only be "
             "used for internal bureaucratic purposes, and will NEVER be displayed to other "
-            "players."
+            "participants."
         ),
     )
 
@@ -156,8 +156,8 @@ class Member(BaseModel):
         max_length=150,
         verbose_name=_("Contact"),
         help_text=_(
-            "Indicates a way for other players to contact you. It can be an email, a social "
-            "profile, whatever you want. It will be made public to others players"
+            "Indicates a way for other participants to contact you. It can be an email, a social "
+            "profile, whatever you want. It will be made public to others participants"
         ),
         blank=True,
         null=True,
@@ -274,10 +274,9 @@ class Member(BaseModel):
         upload_to=UploadToPathAndRename("member/"),
         verbose_name=_("Portrait"),
         help_text=_(
-            "Upload your portrait photo. It will be shown to other players together with the "
-            "your character, so as to help recognize you in the game. Choose a photo that you "
-            "would put in an official document (in which you are alone, centered on your "
-            "face)."
+            "Upload your portrait photo. It will be shown to other participants to help recognize "
+            "you in the event. Choose a photo that you would put in an official document (in which "
+            "you are alone, centered on your face)"
         ),
         blank=True,
         null=True,

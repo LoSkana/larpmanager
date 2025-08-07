@@ -257,8 +257,10 @@ class OrgaConfigForm(ConfigForm):
             help_text = _("If checked, does not show characters in the gallery who have not been assigned a player")
             self.add_configs("gallery_hide_uncasted_characters", ConfigType.BOOL, label, help_text)
 
-            label = _("Hide players without a character")
-            help_text = _("If checked, does not show players in the gallery who have not been assigned a character")
+            label = _("Hide participants without a character")
+            help_text = _(
+                "If checked, does not show participants in the gallery who have not been assigned a character"
+            )
             self.add_configs("gallery_hide_uncasted_players", ConfigType.BOOL, label, help_text)
 
     def set_config_reg_form(self):
@@ -270,7 +272,7 @@ class OrgaConfigForm(ConfigForm):
 
         label = _("Allowed")
         help_text = _(
-            "If checked, enables to set for each registration question the list of staff members allowed to see it's answers from the players"
+            "If checked, enables to set for each registration question the list of staff members allowed to see it's answers from the participants"
         )
         self.add_configs("registration_reg_que_allowed", ConfigType.BOOL, label, help_text)
 
@@ -313,7 +315,7 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("character_form_wri_que_max", ConfigType.BOOL, label, help_text)
 
             label = _("Ticket selection")
-            help_text = _("If checked, allows a option to be visible only to players with selected ticket")
+            help_text = _("If checked, allows a option to be visible only to participants with selected ticket")
             self.add_configs("character_form_wri_que_tickets", ConfigType.BOOL, label, help_text)
 
             label = _("Prerequisites")
@@ -367,7 +369,7 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("writing_cover", ConfigType.BOOL, label, help_text)
 
             label = _("Hide")
-            help_text = _("Enables field 'hide', to be able to hide writing element from players")
+            help_text = _("Enables field 'hide', to be able to hide writing element from participants")
             self.add_configs("writing_hide?", ConfigType.BOOL, label, help_text)
 
             label = _("Assigned")
@@ -419,7 +421,7 @@ class OrgaConfigForm(ConfigForm):
 
             label = _("Player selection")
             help_text = _(
-                "If checked, players may add abilities themselves, by selecting from those that "
+                "If checked, participants may add abilities themselves, by selecting from those that "
                 "are visible, and whose pre-requisites they meet."
             )
             self.add_configs("px_user", ConfigType.BOOL, label, help_text)
@@ -446,7 +448,7 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("user_character_approval", ConfigType.BOOL, label, help_text)
 
             label = _("Relationships")
-            help_text = _("If checked, enables players to write their own list of character relationships")
+            help_text = _("If checked, enables participants to write their own list of character relationships")
             self.add_configs("user_character_player_relationships", ConfigType.BOOL, label, help_text)
 
     def set_config_custom(self):
@@ -454,31 +456,31 @@ class OrgaConfigForm(ConfigForm):
             self.set_section("custom_character", _("Character customisation"))
 
             label = _("Name")
-            help_text = _("If checked, it allows players to customise the names of their characters")
+            help_text = _("If checked, it allows participants to customise the names of their characters")
             self.add_configs("custom_character_name", ConfigType.BOOL, label, help_text)
 
             label = _("Profile")
-            help_text = _("If checked, allows players to customise their characters' profile picture")
+            help_text = _("If checked, allows participants to customise their characters' profile picture")
             self.add_configs("custom_character_profile", ConfigType.BOOL, label, help_text)
 
             label = _("Pronoun")
-            help_text = _("If checked, it allows players to customise their characters' pronouns")
+            help_text = _("If checked, it allows participants to customise their characters' pronouns")
             self.add_configs("custom_character_pronoun", ConfigType.BOOL, label, help_text)
 
             label = _("Song")
-            help_text = _("If checked, it allows players to indicate the song of their characters")
+            help_text = _("If checked, it allows participants to indicate the song of their characters")
             self.add_configs("custom_character_song", ConfigType.BOOL, label, help_text)
 
             label = _("Private")
             help_text = _(
-                "If checked, it allows players to enter private information on their characters, "
-                "visible only to them and the staff."
+                "If checked, it allows participants to enter private information on their characters, "
+                "visible only to them and the staff"
             )
             self.add_configs("custom_character_private", ConfigType.BOOL, label, help_text)
 
             label = _("Public")
             help_text = _(
-                "If checked, it allows players to enter public information on their characters, visible to all"
+                "If checked, it allows participants to enter public information on their characters, visible to all"
             )
             self.add_configs("custom_character_public", ConfigType.BOOL, label, help_text)
 
@@ -514,11 +516,11 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("casting_mirror", ConfigType.BOOL, label, help_text)
 
             label = _("Show statistics")
-            help_text = _("If checked, players will be able to view for each character the preference statistics")
+            help_text = _("If checked, participants will be able to view for each character the preference statistics")
             self.add_configs("casting_show_pref", ConfigType.BOOL, label, help_text)
 
             label = _("Show history")
-            help_text = _("If checked, shows players the histories of preferences entered")
+            help_text = _("If checked, shows participants the histories of preferences entered")
             self.add_configs("casting_history", ConfigType.BOOL, label, help_text)
 
     def set_config_accounting(self):
@@ -608,7 +610,7 @@ class OrgaConfigForm(ConfigForm):
             self.set_section("filler", _("Ticket Filler"))
             label = _("Free registration")
             help_text = _(
-                "If checked, players may sign up as fillers at any time; otherwise, they may only "
+                "If checked, participants may sign up as fillers at any time; otherwise, they may only "
                 "do so if the stipulated number of characters has been reached"
             )
             self.add_configs("filler_always", ConfigType.BOOL, label, help_text)
@@ -712,15 +714,17 @@ class OrgaEventTextForm(MyForm):
             EventTextType.TOC: _("Terms and conditions of signup, shown in a page linked in the registration form"),
             EventTextType.REGISTER: _("Added to the registration page, before the form"),
             EventTextType.SEARCH: _("Added at the top of the search page of characters"),
-            EventTextType.SIGNUP: _("Added at the bottom of mail confirming signup to players"),
-            EventTextType.ASSIGNMENT: _("Added at the bottom of mail notifying players of character assignment"),
+            EventTextType.SIGNUP: _("Added at the bottom of mail confirming signup to participants"),
+            EventTextType.ASSIGNMENT: _("Added at the bottom of mail notifying participants of character assignment"),
             EventTextType.CHARACTER_PROPOSED: _(
-                "Content of mail notifying players of their character in proposed status"
+                "Content of mail notifying participants of their character in proposed status"
             ),
             EventTextType.CHARACTER_APPROVED: _(
-                "Content of mail notifying players of their character in approved status"
+                "Content of mail notifying participants of their character in approved status"
             ),
-            EventTextType.CHARACTER_REVIEW: _("Content of mail notifying players of their character in review status"),
+            EventTextType.CHARACTER_REVIEW: _(
+                "Content of mail notifying participants of their character in review status"
+            ),
         }
         help_text = []
         for choice_typ, text in help_texts.items():
@@ -826,9 +830,9 @@ class OrgaRunForm(ConfigForm):
                 if choice not in [DevelopStatus.CANC, DevelopStatus.DONE]
             ]
         status_text = {
-            DevelopStatus.START: _("Not visible to players"),
-            DevelopStatus.SHOW: _("Available to players in the homepage"),
-            DevelopStatus.DONE: _("Accounting is complete and can be archived"),
+            DevelopStatus.START: _("Not visible to users"),
+            DevelopStatus.SHOW: _("Visible in the homepage"),
+            DevelopStatus.DONE: _("Concluded and archived"),
             DevelopStatus.CANC: _("Not active anymore"),
         }
         self.fields["development"].help_text = ", ".join(
@@ -855,8 +859,8 @@ class OrgaRunForm(ConfigForm):
             return
 
         help_text = _(
-            "Selected fields will be displayed as follows: public fields visible to all players, "
-            "private fields visible only to assigned players"
+            "Selected fields will be displayed as follows: public fields visible to all participants, "
+            "private fields visible only to assigned participants"
         )
 
         shows = _get_writing_elements()
@@ -895,7 +899,7 @@ class OrgaRunForm(ConfigForm):
             if self.instance.pk and key in self.params["features"]:
                 extra.append((key, display))
         if extra:
-            help_text = _("Selected elements will be shown to players")
+            help_text = _("Selected elements will be shown to participants")
             self.add_configs("show_addit", ConfigType.MULTI_BOOL, _("Elements"), help_text, extra=extra)
 
         self.set_section("visibility", _("Visibility"))
@@ -1047,7 +1051,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
                     "character": (
                         True,
                         _("Characters"),
-                        _("Do you want to manage characters assigned to registered players"),
+                        _("Do you want to manage characters assigned to registered participants"),
                     ),
                     "casting": (
                         True,
@@ -1057,7 +1061,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
                     "user_character": (
                         True,
                         _("Player editor"),
-                        _("Do you want to allow players to create their own characters"),
+                        _("Do you want to allow participants to create their own characters"),
                     ),
                 }
             )

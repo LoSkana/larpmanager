@@ -92,7 +92,7 @@ def exe_runs(request):
 
 @login_required
 def exe_runs_edit(request, num):
-    return exe_edit(request, OrgaRunForm, num, "exe_runs", afield="event")
+    return exe_edit(request, OrgaRunForm, num, "exe_events", afield="event")
 
 
 @login_required
