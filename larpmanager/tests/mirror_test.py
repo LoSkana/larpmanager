@@ -119,7 +119,7 @@ async def casting(live_server, page):
 
     # check assignment
     await go_to(page, live_server, "/test/1/manage/registrations")
-    await expect(page.locator("#regs")).to_contain_text("#1 Test Character")
+    await expect(page.locator("#one")).to_contain_text("#1 Test Character")
 
     await go_to(page, live_server, "/test/1")
     await expect(page.locator("#one")).to_contain_text("Test Character")
