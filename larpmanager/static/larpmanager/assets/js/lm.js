@@ -455,7 +455,7 @@ function data_tables() {
                 type: 'POST'
             },
             serverSide: true,
-            columnControl: ['order', 'searchDropdown'],
+            columnControl: ['order', 'search'],
             ordering: {
                 indicators: false,
                 handler: false

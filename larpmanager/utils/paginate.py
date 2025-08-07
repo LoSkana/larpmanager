@@ -16,33 +16,36 @@ from larpmanager.models.member import Membership
 
 
 def paginate(request, ctx, typ, template, view, exe=True):
-    cls = typ
-    if hasattr(typ, "objects"):
-        cls = typ.objects
-        class_name = typ._meta.model_name
-    else:
-        typ = typ.model
-        class_name = typ._meta.model_name
+    cls = typ.objects
+    class_name = typ._meta.model_name
 
     if request.method != "POST":
-        if exe:
-            ctx["table_name"] = f"{class_name}_{ctx['a_id']}"
-        else:
-            ctx["table_name"] = f"{class_name}_{ctx['run'].id}"
+        ctx["table_name"] = f"{class_name}_{ctx['a_id'] if exe else ctx['run'].id}"
 
         return render(request, template, ctx)
 
     draw = int(request.POST.get("draw", 0))
-    start = int(request.POST.get("start", 0))
-    length = int(request.POST.get("length", 10))
-    search_value = request.POST.get("search[value]", "")
-    order = []
-    for i in range(len(request.POST.getlist("order[0][column]"))):
-        col_idx = request.POST.get(f"order[{i}][column]")
-        dir = request.POST.get(f"order[{i}][dir]")
-        col_name = request.POST.get(f"columns[{col_idx}][data]")
-        prefix = "" if dir == "asc" else "-"
-        order.append(prefix + col_name)
+
+    elements = _get_elements_query(cls, ctx, request, typ)
+
+    records_total = typ.objects.count()
+    records_filtered = len(elements)
+
+    edit = _("Edit")
+    data = _prepare_data_json(ctx, elements, view, edit)
+
+    return JsonResponse(
+        {
+            "draw": draw,
+            "recordsTotal": records_total,
+            "recordsFiltered": records_filtered,
+            "data": data,
+        }
+    )
+
+
+def _get_elements_query(cls, ctx, request, typ):
+    start, length, order, filters = _get_query_params(request)
 
     elements = cls.filter(assoc_id=ctx["a_id"])
 
@@ -54,62 +57,110 @@ def paginate(request, ctx, typ, template, view, exe=True):
     if selrel:
         for e in selrel:
             elements = elements.select_related(e)
-    if search_value:
-        elements = elements.filter(search__icontains=search_value)
 
-    if order:
-        for column in order:
-            column_ix = int(column)
-            if not column_ix:
-                continue
-            # TODO ordering on fields
-            # especially run
-            # elements = elements.order_by(*order)
-
-    run = 0  # TODO fix
     # elements, run = _apply_run_queries(ctx, elements, exe, run)
 
     elements = _apply_custom_queries(ctx, elements, typ)
 
-    elements = elements.order_by("-created")
+    elements = _set_filters(ctx, elements, filters)
+
+    ordering = _get_ordering(ctx, order)
+    elements = elements.order_by(*ordering)
+
     elements = elements[start : start + length]
 
-    records_total = typ.objects.count()
-    records_filtered = len(elements)
+    return elements
 
-    values = [el[0] for el in ctx["fields"]]
 
+def _set_filters(ctx, elements, filters):
+    return elements
+
+
+def _get_ordering(ctx, order):
+    ordering = []
+
+    field_map = {"member": ["member__surname", "member__name"], "run": ["run__search"]}
+
+    for column in order:
+        column_ix = int(column)
+        if not column_ix:
+            continue
+
+        asc = True
+        if column_ix < 0:
+            asc = False
+            column_ix = -column_ix
+
+        if column_ix >= len(ctx["fields"]):
+            print(f"this shouldn't happen! _get_ordering {order} {ctx['fields']}")
+        field, name = ctx["fields"][column_ix - 1]
+
+        if field in field_map:
+            field = field_map[field]
+        else:
+            field = [field]
+
+        for el in field:
+            if asc:
+                ordering.append(el)
+            else:
+                ordering.append(f"-{el}")
+
+    ordering.append("-created")
+    return ordering
+
+
+def _get_query_params(request):
+    start = int(request.POST.get("start", 0))
+    length = int(request.POST.get("length", 10))
+
+    order = []
+    for i in range(len(request.POST.getlist("order[0][column]"))):
+        col_idx = request.POST.get(f"order[{i}][column]")
+        dir = request.POST.get(f"order[{i}][dir]")
+        col_name = request.POST.get(f"columns[{col_idx}][data]")
+        prefix = "" if dir == "asc" else "-"
+        order.append(prefix + col_name)
+
+    for key, value in request.POST.items():
+        print(f"{key}: {value}")
+
+    filters = {}
+    i = 0
+    while True:
+        col_name = request.POST.get(f"columns[{i}][data]")
+        if col_name is None:
+            break
+
+        search_value = request.POST.get(f"columns[{i}][search][value]")
+        searchable = request.POST.get(f"columns[{i}][searchable]") == "true"
+        if search_value and searchable:
+            filters[col_name] = search_value
+        i += 1
+
+    return start, length, order, filters
+
+
+def _prepare_data_json(ctx, elements, view, edit):
     # TODO apply changes based on fields
     data = []
-    edit = _("Edit")
+
+    field_map = {
+        "created": lambda row: row.created.strftime("%d/%m/%Y"),
+        "member": lambda row: str(row.member),
+        "run": lambda row: str(row.run) if row.run else "",
+        "descr": lambda row: str(row.descr),
+        "value": lambda row: int(row.value) if row.value == row.value.to_integral() else str(row.value),
+    }
+
     for row in elements:
         url = reverse(view, args=[row.id])
         res = {"0": f'<a href="{url}" qtip="{edit}"><i class="fas fa-edit"></i></a>'}
-        cnt = 1
-        for field, name in ctx["fields"]:
-            idx = str(cnt)
-            if field == "created":
-                res[idx] = row.created.strftime("%d/%m/%Y")
-            elif field == "member":
-                res[idx] = str(row.member)
-            elif field == "run":
-                res[idx] = str(row.run)
-            elif field == "descr":
-                res[idx] = str(row.descr)
-            elif field == "value":
-                val = row.value
-                res[idx] = int(val) if val == val.to_integral() else str(val)
-            cnt += 1
+        for idx, (field, _name) in enumerate(ctx["fields"], start=1):
+            res[str(idx)] = field_map.get(field, lambda r: "")(row)
         data.append(res)
 
-    return JsonResponse(
-        {
-            "draw": draw,
-            "recordsTotal": records_total,
-            "recordsFiltered": records_filtered,
-            "data": data,
-        }
-    )
+    return data
 
 
 def _apply_run_queries(ctx, elements, exe, run):
