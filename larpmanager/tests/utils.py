@@ -108,8 +108,19 @@ async def go_to(page, live_server, path):
 
 
 async def go_to_check(page, path):
+    dialog_triggered = False
+
+    def on_dialog(dialog):
+        nonlocal dialog_triggered
+        dialog_triggered = True
+        dialog.dismiss()
+
+    page.on("dialog", on_dialog)
+
     await page.goto(path)
     await ooops_check(page)
+
+    assert not dialog_triggered, "Unexpected JavaScript dialog was triggered"
 
 
 async def submit(page):

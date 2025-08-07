@@ -20,7 +20,8 @@
     <div id="options" class="hide">
         <h2>{% trans "Options" %}</h2>
         {% include "elements/header/orga.html" %}
-        <table id="registration_options" class="go_datatable writing ordering_arrow">
+        <table id="registration_options"
+               class="{% if not interface_old %}go_datatable{% endif %} writing ordering_arrow">
             <thead>
                 <tr>
                     <th></th>

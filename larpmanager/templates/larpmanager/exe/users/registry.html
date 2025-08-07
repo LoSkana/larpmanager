@@ -7,7 +7,8 @@
     {% trans "This page summarises the list of members as a registry" %}
 {% endblock info %}
 {% block content %}
-    <table id="registry" class="go_datatable">
+    <table id="registry"
+           class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th>{% trans "Card number" %}</th>

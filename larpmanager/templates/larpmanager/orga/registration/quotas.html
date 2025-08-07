@@ -17,7 +17,8 @@
     <p>
         <i>{% trans "Beyond the minimum number of days indicated, the quota will no longer be available during registration" %}.</i>
     </p>
-    <table id="registration_quotas" class="go_datatable writing">
+    <table id="registration_quotas"
+           class="{% if not interface_old %}go_datatable{% endif %} writing">
         <thead>
             <tr>
                 <th></th>

@@ -7,7 +7,8 @@
     {% trans "This page shows the total number of pre-registrations for each event" %}
 {% endblock info %}
 {% block content %}
-    <table id="pre_registrations" class="go_datatable">
+    <table id="pre_registrations"
+           class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <td>{% trans "Name" %}</td>
