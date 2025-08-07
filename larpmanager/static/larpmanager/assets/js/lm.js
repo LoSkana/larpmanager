@@ -393,6 +393,7 @@ function data_tables() {
         var full_layout = rowCount >= 10;
 
         const table = new DataTable('#' + tableId, {
+            lengthMenu: [ [10, 25, 50, 100, 200], [10, 25, 50, 100, 200] ],
             scrollX: true,
             stateSave: true,
             paging: full_layout,
@@ -450,21 +451,50 @@ function data_tables() {
         const url = $table.attr('url');
 
         const table = new DataTable('#' + tableId, {
+            lengthMenu: [ [10, 25, 50, 100, 200], [10, 25, 50, 100, 200] ],
             ajax: {
                 url: url,
                 type: 'POST'
             },
             serverSide: true,
-            columnControl: ['order', 'search'],
+            columnControl: [
+                {
+                    target: 0,
+                    content: ['order', 'searchDropdown']
+                },
+            ],
             ordering: {
                 indicators: false,
                 handler: false
             },
             columnDefs: [
                 { orderable: false, targets: [0] },
+                { searcheable: false, targets: [0] },
                 { columnControl: [], targets: [0] }
             ],
-            layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' }
+            layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' },
+            /*
+            initComplete: function () {
+                this.api()
+                    .columns()
+                    .every(function () {
+                        let column = this;
+                        let title = column.footer().textContent;
+
+                        // Create input element
+                        let input = document.createElement('input');
+                        input.placeholder = title;
+                        column.footer().replaceChildren(input);
+
+                        // Event listener for user input
+                        input.addEventListener('keyup', () => {
+                            if (column.search() !== this.value) {
+                                column.search(input.value).draw();
+                            }
+                        });
+                    });
+            }
+            */
         });
     });
 }

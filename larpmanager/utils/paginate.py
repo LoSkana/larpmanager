@@ -1,4 +1,4 @@
-from django.db.models import Case, IntegerField, OuterRef, Subquery, Value, When
+from django.db.models import Case, IntegerField, OuterRef, Q, Subquery, Value, When
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -62,7 +62,7 @@ def _get_elements_query(cls, ctx, request, typ):
 
     elements = _apply_custom_queries(ctx, elements, typ)
 
-    elements = _set_filters(ctx, elements, filters)
+    elements = _set_filtering(ctx, elements, filters)
 
     ordering = _get_ordering(ctx, order)
     elements = elements.order_by(*ordering)
@@ -72,14 +72,33 @@ def _get_elements_query(cls, ctx, request, typ):
     return elements
 
 
-def _set_filters(ctx, elements, filters):
+def _set_filtering(ctx, elements, filters):
+    field_map = _get_field_map()
+
+    for column, value in filters.items():
+        column_ix = int(column)
+        if column_ix >= len(ctx["fields"]):
+            print(f"this shouldn't happen! _get_ordering {filters} {ctx['fields']}")
+        field, name = ctx["fields"][column_ix - 1]
+
+        if field in field_map:
+            field = field_map[field]
+        else:
+            field = [field]
+
+        q_filter = Q()
+        for el in field:
+            q_filter |= Q(**{f"{el}__icontains": value})
+
+        elements = elements.filter(q_filter)
+
     return elements
 
 
 def _get_ordering(ctx, order):
     ordering = []
 
-    field_map = {"member": ["member__surname", "member__name"], "run": ["run__search"]}
+    field_map = _get_field_map()
 
     for column in order:
         column_ix = int(column)
@@ -110,6 +129,11 @@ def _get_ordering(ctx, order):
     return ordering
 
 
+def _get_field_map():
+    field_map = {"member": ["member__surname", "member__name"], "run": ["run__search"]}
+    return field_map
+
+
 def _get_query_params(request):
     start = int(request.POST.get("start", 0))
     length = int(request.POST.get("length", 10))
@@ -122,9 +146,6 @@ def _get_query_params(request):
         prefix = "" if dir == "asc" else "-"
         order.append(prefix + col_name)
 
-    for key, value in request.POST.items():
-        print(f"{key}: {value}")
-
     filters = {}
     i = 0
     while True:
@@ -132,9 +153,8 @@ def _get_query_params(request):
         if col_name is None:
             break
 
-        search_value = request.POST.get(f"columns[{i}][search][value]")
-        searchable = request.POST.get(f"columns[{i}][searchable]") == "true"
-        if search_value and searchable:
+        search_value = request.POST.get(f"columns[{i}][search][fixed][0][term]")
+        if search_value and not search_value.startswith("function"):
             filters[col_name] = search_value
         i += 1
 

@@ -9,44 +9,4 @@
 {% block content %}
     {% include "elements/header/exe.html" %}
     {% include "elements/paginate.html" %}
-    <table id="expenses" class="tablesorter">
-        <thead>
-            <tr>
-                <th></th>
-                <th>{% trans "Member" %}</th>
-                <th>{% trans "Type" %}</th>
-                <th>{% trans "Run" %}</th>
-                <th>{% trans "Value" %}</th>
-                <th>{% trans "Description" %}</th>
-                <th>{% trans "Date" %}</th>
-                <th>{% trans "Statement" %}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for el in list %}
-                <tr id="{{ el.id }}">
-                    <td>
-                        <a href="{% url 'exe_expenses_edit' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
-                    </td>
-                    <td>{{ el.member }}</td>
-                    <td>{{ el.get_exp_display }}</td>
-                    <td>
-                        {% if el.run %}{{ el.run }}{% endif %}
-                    </td>
-                    <td>{{ el.value }}</td>
-                    <td>{{ el.descr }}</td>
-                    <td>{{ el.created | date:"d/m/Y" }}</td>
-                    <td>
-                        <a href="{{ el.download }}">{% trans "Download" %}</a>
-                    </td>
-                    <td>
-                        {% if not el.is_approved %}
-                            <a href="{% url 'exe_expenses_approve' el.id %}">{% trans "Approve" %}</a>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
 {% endblock content %}
