@@ -20,7 +20,7 @@
             <table class="mob tablesorter">
                 <thead>
                     <tr>
-                        <th>{% trans "Run" %}</th>
+                        <th>{% trans "Event" %}</th>
                         <th>{% trans "Date" %}</th>
                         <th>{% trans "Description" %}</th>
                         <th>{% trans "Amount" %}</th>
@@ -28,7 +28,7 @@
                 </thead>
                 {% for el in given %}
                     <tr>
-                        <td data-title="{% trans "Run" %}">
+                        <td data-title="{% trans "Event" %}">
                             {% if el.run %}{{ el.run }}{% endif %}
                         </td>
                         <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
@@ -45,14 +45,14 @@
             <table class="mob tablesorter">
                 <thead>
                     <tr>
-                        <th>{% trans "Run" %}</th>
+                        <th>{% trans "Event" %}</th>
                         <th>{% trans "Date" %}</th>
                         <th>{% trans "Amount" %}</th>
                     </tr>
                 </thead>
                 {% for el in used %}
                     <tr>
-                        <td data-title="{% trans "Run" %}">{{ el.reg.run }}</td>
+                        <td data-title="{% trans "Event" %}">{{ el.reg.run }}</td>
                         <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
                         <td data-title="{% trans "Amount" %}">{{ el.value }}</td>
                     </tr>

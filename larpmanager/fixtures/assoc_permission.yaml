@@ -43,7 +43,7 @@
   pk: 6
   fields:
     name: Payments
-    descr: Manage payments performed by players on all events
+    descr: Manage payments performed by participants on all events
     slug: exe_payments
     number: 3
     feature: 111
@@ -52,7 +52,7 @@
   pk: 7
   fields:
     name: Donations
-    descr: Manage donations performed by players
+    descr: Manage donations performed by participants
     slug: exe_donations
     number: 4
     feature: 36
@@ -84,7 +84,7 @@
   pk: 11
   fields:
     name: Credits
-    descr: Manages credits used by players to cover the registration fee on all events
+    descr: Manages credits used by participants to cover the registration fee on all events
     slug: exe_credits
     number: 8
     feature: 107
@@ -101,7 +101,7 @@
   pk: 13
   fields:
     name: Collections
-    descr: Manage collections participated by players
+    descr: Manage collections participated by users
     slug: exe_collections
     number: 10
     feature: 31
@@ -171,14 +171,6 @@
     number: 11
     feature: 191
 - model: larpmanager.assocpermission
-  pk: 22
-  fields:
-    name: Runs
-    descr: Manages the runs of events
-    slug: exe_runs
-    number: 21
-    feature: 190
-- model: larpmanager.assocpermission
   pk: 23
   fields:
     name: Pre-Registrations
@@ -190,7 +182,7 @@
   pk: 24
   fields:
     name: Deadlines
-    descr: Displays players overdue for payment or other deadlines for all events
+    descr: Displays participants overdue for payment or other deadlines for all events
     slug: exe_deadlines
     number: 41
     feature: 94
@@ -217,7 +209,7 @@
   pk: 27
   fields:
     name: Vote
-    descr: Manage player votes for the assignment of roles in the organization
+    descr: Manage members votes for the assignment of roles in the organization
     slug: exe_vote
     number: 21
     feature: 63
@@ -226,7 +218,7 @@
   pk: 28
   fields:
     name: Badges
-    descr: Manage badges and assign them to players
+    descr: Manage badges and assign them to participants
     slug: exe_badges
     number: 31
     feature: 65
@@ -234,7 +226,7 @@
   pk: 29
   fields:
     name: Questions
-    descr: Manage player questions and answer them
+    descr: Manage participant questions and answer them
     slug: exe_questions
     number: 41
     feature: 28
@@ -266,7 +258,7 @@
   pk: 34
   fields:
     name: Methods
-    descr: Configure payment methods available for players
+    descr: Configure payment methods available for participants
     slug: exe_payment_details
     number: 1
     feature: 111
@@ -291,7 +283,7 @@
   pk: 39
   fields:
     name: Tokens
-    descr: Manages tokens used by players to cover the registration fee for all events
+    descr: Manages tokens used by participants to cover the registration fee for all events
     slug: exe_tokens
     number: 8
     feature: 107
@@ -308,7 +300,7 @@
   pk: 42
   fields:
     name: Profile
-    descr: Manage fields that track players’ data
+    descr: Manage fields that track participants’ data
     slug: exe_profile
     number: 1
     feature: 188

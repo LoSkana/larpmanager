@@ -81,7 +81,7 @@ class RegistrationTicket(BaseModel):
         help_text=_("Optional – Maximum number of times it can be requested across all signups (0 = unlimited)"),
     )
 
-    visible = models.BooleanField(default=True, help_text=_("Is it selectable by players") + "?")
+    visible = models.BooleanField(default=True, help_text=_("Is it selectable by participants") + "?")
 
     casting_priority = models.IntegerField(
         default=1,
@@ -89,7 +89,7 @@ class RegistrationTicket(BaseModel):
     )
 
     giftable = models.BooleanField(
-        default=False, help_text=_("Optional - Indicates whether the ticket can be gifted to other players")
+        default=False, help_text=_("Optional - Indicates whether the ticket can be gifted to other participants")
     )
 
     order = models.IntegerField(default=0)
@@ -367,7 +367,7 @@ class RegistrationCharacterRel(BaseModel):
         blank=True,
         null=True,
         verbose_name=_("Public"),
-        help_text=_("Indicates public information about your character, which will be shown to all other players"),
+        help_text=_("Indicates public information about your character, which will be shown to all other participants"),
     )
 
     custom_private = models.TextField(

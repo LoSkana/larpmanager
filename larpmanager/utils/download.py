@@ -587,7 +587,7 @@ def _get_column_names(ctx):
                 + ": 'optional', 'mandatory', 'disabled', 'hidden'",
                 "applicable": _("The writing element this question applies to, allowed values are")
                 + ": 'character', 'plot', 'faction', 'quest', 'trait'",
-                "visibility": _("The question visibility to players, allowed values are")
+                "visibility": _("The question visibility to participants, allowed values are")
                 + ": 'searchable', 'public', 'private', 'hidden'",
                 "max_length": _(
                     "Optional - For text questions, maximum number of characters; For multiple options, maximum number of options (0 = no limit)"

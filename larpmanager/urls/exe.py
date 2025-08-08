@@ -329,11 +329,6 @@ urlpatterns = [
         name="exe_vote",
     ),
     path(
-        "manage/runs/",
-        views_ee.exe_runs,
-        name="exe_runs",
-    ),
-    path(
         "manage/runs/edit/<int:num>/",
         views_ee.exe_runs_edit,
         name="exe_runs_edit",

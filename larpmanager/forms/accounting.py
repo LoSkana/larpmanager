@@ -166,7 +166,7 @@ class OrgaOutflowForm(ExeOutflowForm):
 class ExeInflowForm(MyForm):
     page_title = _("Inflows")
 
-    page_info = _("This page allows you to add or edit an event revenue other than the players' registration fee")
+    page_info = _("This page allows you to add or edit an event revenue other than the participants' registration fee")
 
     class Meta:
         model = AccountingItemInflow
@@ -354,7 +354,7 @@ class OrgaDiscountForm(MyForm):
             choices=choices,
             widget=widget,
             required=False,
-            help_text=_("Indicates the runs for which the discount is available"),
+            help_text=_("Indicates the sessions for which the discount is available"),
         )
 
         if self.instance and self.instance.pk:

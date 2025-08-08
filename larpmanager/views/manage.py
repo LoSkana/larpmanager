@@ -165,7 +165,7 @@ def _exe_actions(request, ctx):
                 "There are past runs still open: <b>%(list)s</b>. Once all tasks (accounting, etc.) are finished, mark them as completed"
             )
             % {"list": ", ".join(runs_conclude)},
-            "exe_runs",
+            "exe_events",
         )
 
     expenses_approve = AccountingItemExpense.objects.filter(run__event__assoc_id=ctx["a_id"], is_approved=False).count()
@@ -565,14 +565,14 @@ def _orga_reg_actions(ctx, features):
         _add_priority(
             ctx,
             _("Set up a value for registration opening date"),
-            "orga_run",
+            "orga_event",
         )
 
     if "registration_secret" in features and not ctx["run"].registration_secret:
         _add_priority(
             ctx,
             _("Set up a value for registration secret link"),
-            "orga_run",
+            "orga_event",
         )
 
     if "register_link" in features and not ctx["event"].register_link:

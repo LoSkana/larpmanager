@@ -1,0 +1,84 @@
+{% load i18n tz show_tags static %}
+{% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+{% define "" as old_section %}
+{% for field in form.visible_fields %}
+    {% if field.auto_id in form.sections %}
+        {% get_field form.sections field.auto_id as section %}
+        {% if section != old_section %}
+        </table>
+    </div>
+    <h1>
+        <a href="#"
+           class="my_toggle section-link"
+           tog='sec_{{ section | slugify }}'>
+            {{ section | template_trans }}
+            <i class="fa-solid fa-chevron-down"></i>
+        </a>
+    </h1>
+    <div class="{% if not form.show_sections %}hide{% endif %} sec_{{ section | slugify }}">
+        {% if section in form.section_descriptions %}
+            {% get_field form.section_descriptions section as description %}
+            {{ description | safe }}
+        {% endif %}
+        <table class="mob  ">
+            {% define section as old_section %}
+        {% endif %}
+    {% endif %}
+    <tr id="{{ field.auto_id }}_tr"
+        {% if field.field.custom_class %}class="{{ field.field.custom_class }}"{% endif %}>
+        <th>
+            {% if form.field_link and field.auto_id in form.field_link %}
+                {% get_field form.field_link field.auto_id as link %}
+                <a href="{{ link }}">{% include "elements/form/label.html" %}</a>
+            {% else %}
+                {% include "elements/form/label.html" %}
+            {% endif %}
+            {% if form.translate and field.auto_id in form.translate %}
+                <br />
+                <br />
+                <a onclick="return translate('{{ field.auto_id }}');">{% trans "Translate" %}</a>
+            {% endif %}
+            {{ field.custom_class }}
+        </th>
+        <td>
+            {% if field.errors %}{{ field.errors }}{% endif %}
+            {% if form.translate and field.auto_id in form.translate %}
+                <div class="orig hide">
+                    <p>{% trans "Original" %}</p>
+                    <div class="plot">{% get_field form.translate field.auto_id %}</div>
+                </div>
+            {% endif %}
+            {% if form.details and field.auto_id in form.details %}
+                {% autoescape off %}
+                    <div class="plot">{% get_field_show_char form.details field.auto_id run 1 %}</div>
+                {% endautoescape %}
+            {% endif %}
+            {% if form.show_link and field.auto_id in form.show_link %}
+                <p>
+                    <a href="#" class="my_toggle" tog="f_{{ field.auto_id }}">{% trans "Show" %}</a>
+                </p>
+                <div class="hide hide_later f_{{ field.auto_id }}">{{ field }}</div>
+            {% else %}
+                {{ field }}
+            {% endif %}
+            {% if field.help_text %}
+                <br>
+                <div class="helptext {% if feield.field.widget.input_type == 'checkbox' %}helptext-checkbox{% endif %}">
+                    {{ field.help_text | safe }}
+                </div>
+            {% endif %}
+            {% if field.auto_id in form.max_lengths %}
+                {% get_field form.max_lengths field.auto_id as args %}
+                {% if args.1 == "m" %}
+                    <div class="helptext">
+                        {% trans "options" %}: <span class="count"></span> / {{ args.0 }}
+                    </div>
+                {% else %}
+                    <div class="helptext">
+                        {% trans "text length" %}: <span class="count"></span> / {{ args.0 }}
+                    </div>
+                {% endif %}
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}

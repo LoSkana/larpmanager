@@ -575,7 +575,7 @@ class ExeBadgeForm(MyForm):
 class ExeProfileForm(MyForm):
     page_title = _("Profile")
 
-    page_info = _("This page allows you to set up the fields that players can fill in in their user profile")
+    page_info = _("This page allows you to set up the fields that participants can fill in in their user profile")
 
     class Meta:
         model = Association

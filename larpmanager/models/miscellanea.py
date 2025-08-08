@@ -517,9 +517,9 @@ class Problem(BaseModel):
         default=GREEN,
         verbose_name=_("Severity"),
         help_text=_(
-            "Indicate severity: RED (risks ruining the game for more than half of the "
-            "players), ORANGE (risks ruining the game for more than ten players),  YELLOW "
-            "(risks ruining the game for a few players), GREEN (more than  problems, finesses "
+            "Indicate severity: RED (risks ruining the event for more than half of the "
+            "participants), ORANGE (risks ruining the event for more than ten participants),  YELLOW "
+            "(risks ruining the event for a few participants), GREEN (more than  problems, finesses "
             "to be fixed)"
         ),
     )
@@ -548,12 +548,12 @@ class Problem(BaseModel):
 
     what = models.TextField(
         verbose_name=_("What"),
-        help_text=_("Describe exactly what risks it poses to the game"),
+        help_text=_("Describe exactly what risks it poses to the event"),
     )
 
     who = models.TextField(
         verbose_name=_("Who"),
-        help_text=_("Describe exactly which players are involved"),
+        help_text=_("Describe exactly which participants are involved"),
     )
 
     assigned = models.CharField(max_length=100, help_text=_("Who takes it upon themselves to solve it"))

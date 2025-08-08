@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             name="profile",
             field=models.ImageField(
                 blank=True,
-                help_text="Upload your portrait photo. It will be shown to other players together with the your character, so as to help recognize you in the game. Choose a photo that you would put in an official document (in which you are alone, centered on your face).",
+                help_text="Upload your portrait photo. It will be shown to other players to help recognize you in the event. Choose a photo that you would put in an official document (in which you are alone, centered on your face).",
                 max_length=500,
                 null=True,
                 upload_to=larpmanager.models.utils.UploadToPathAndRename("member/"),

@@ -119,19 +119,23 @@ class ExeAssocTextForm(MyForm):
         help_texts = {
             AssocTextType.PROFILE: _("Added at the top of the user profile page"),
             AssocTextType.HOME: _("Added at the top of the main calendar page"),
-            AssocTextType.SIGNUP: _("Added at the bottom of all mails confirming signup to players"),
+            AssocTextType.SIGNUP: _("Added at the bottom of all mails confirming signup to participants"),
             AssocTextType.MEMBERSHIP: _("Content of the membership request filled with user data"),
             AssocTextType.STATUTE: _("Added to the membership page as the paragraph for statute info"),
             AssocTextType.LEGAL: _("Content of legal notice page linked at the bottom of all pages"),
             AssocTextType.FOOTER: _("Added to the bottom of all pages"),
             AssocTextType.TOC: _("Terms and conditions of signup, shown in a page linked in the registration form"),
-            AssocTextType.RECEIPT: _("Content of the receipt created for each payment and sent to players"),
+            AssocTextType.RECEIPT: _("Content of the receipt created for each payment and sent to participants"),
             AssocTextType.SIGNATURE: _("Added to the bottom of all mails sent"),
             AssocTextType.PRIVACY: _("Content of privacy page linked at the bottom of all pages"),
-            AssocTextType.REMINDER_MEMBERSHIP: _("Content of mail reminding players to fill their membership request"),
-            AssocTextType.REMINDER_MEMBERSHIP_FEE: _("Content of mail reminding players to pay the membership fee"),
-            AssocTextType.REMINDER_PAY: _("Content of mail reminding players to pay their signup fee"),
-            AssocTextType.REMINDER_PROFILE: _("Content of mail reminding players to fill their profile"),
+            AssocTextType.REMINDER_MEMBERSHIP: _(
+                "Content of mail reminding participants to fill their membership request"
+            ),
+            AssocTextType.REMINDER_MEMBERSHIP_FEE: _(
+                "Content of mail reminding participants to pay the membership fee"
+            ),
+            AssocTextType.REMINDER_PAY: _("Content of mail reminding participants to pay their signup fee"),
+            AssocTextType.REMINDER_PROFILE: _("Content of mail reminding participants to fill their profile"),
         }
         help_text = []
         for choice_typ, text in help_texts.items():
@@ -307,7 +311,7 @@ class ExeConfigForm(ConfigForm):
 
         if self.instance.main_mail:
             label = _("Carbon copy")
-            help_text = _("If checked: Sends the main mail a copy of all mails sent to players")
+            help_text = _("If checked: Sends the main mail a copy of all mails sent to participants")
             self.add_configs("mail_cc", ConfigType.BOOL, label, help_text)
 
         label = _("New signup")

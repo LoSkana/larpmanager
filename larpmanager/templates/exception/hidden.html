@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
-    {% trans "Run hidden" %}
+    {% trans "Event hidden" %}
 {% endblock title %}
 {% block nav %}
 {% endblock nav %}
 {% block content %}
-    {% trans "The run you requested is only visible to players logged into the system" %}.
+    {% trans "The event you requested is only visible to participants logged into the system" %}.
     <br />
     <br />
     {% trans "Wanna connect" %}? <a href="{% url 'login' %}">{% trans "Login" %}</a>
