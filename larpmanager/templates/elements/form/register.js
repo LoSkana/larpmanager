@@ -33,11 +33,6 @@ function parseLocalNum(num) {
 
 var submitted = {{ submitted | safe }};
 
-function go_down() {
-window.scrollTo(0,document.body.scrollHeight);
-// alert('coa');
-}
-
  var price_regex = /(\d+(?:\.\d+)?){{ currency_symbol }}/g;
 
  function get_price(s) {
@@ -181,7 +176,7 @@ $(document).ready(function(){
             $('#register_go').click();
         } else {
             $('#riepilogo').show(200);
-            setTimeout(go_down, 500);
+            setTimeout(() => jump_to($('#riepilogo')), 300);
         }
     });
 
@@ -221,12 +216,6 @@ $(document).ready(function(){
 
 });
 
-function jump_to(el) {
-    const yOffset = -160;
-    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-    window.scrollTo({top: y, behavior: 'smooth'});
-}
-
 function slugify(text) {
   return text
     .toString()
@@ -264,7 +253,7 @@ function check_mandatory() {
         if (empty) {
             el.after( "<p><b class='form-error' style='color: var(--ter-clr);'>Please select a value</b></p>" );
             if (k in sections) $(".sec_" + slugify(sections[k])).show();
-            jump_to(document.getElementById(k));
+            window.jump_to($('#' + k));
             return false;
         }
     }
