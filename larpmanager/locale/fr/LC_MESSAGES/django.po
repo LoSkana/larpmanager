@@ -1668,6 +1668,9 @@ msgstr "Réalisations"
 msgid "Archive mail"
 msgstr "Archive mail"
 
+msgid "Are you sure"
+msgstr "Êtes-vous sûr"
+
 msgid "Bank address"
 msgstr "Adresse de la banque"
 
@@ -2168,6 +2171,9 @@ msgstr "Demande signée"
 msgid "Returning type"
 msgstr "Type de retour"
 
+msgid "Select ability"
+msgstr "Sélectionner la capacité"
+
 msgid "Sensitive data"
 msgstr "Données sensibles"
 
@@ -2629,9 +2635,6 @@ msgstr "Demande de soumission"
 
 msgid "Residence address"
 msgstr "Adresse résidentielle"
-
-msgid "Seleziona abilità"
-msgstr "Sélectionner les compétences"
 
 msgid "Short description"
 msgstr "Brève description"

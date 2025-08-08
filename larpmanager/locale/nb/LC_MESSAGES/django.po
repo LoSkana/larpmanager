@@ -1668,6 +1668,9 @@ msgstr "Prestasjoner"
 msgid "Archive mail"
 msgstr "Arkivpost"
 
+msgid "Are you sure"
+msgstr "Er du sikker på at"
+
 msgid "Bank address"
 msgstr "Bankens adresse"
 
@@ -2168,6 +2171,9 @@ msgstr "Signert forespørsel"
 msgid "Returning type"
 msgstr "Avkastningstype"
 
+msgid "Select ability"
+msgstr "Velg evne"
+
 msgid "Sensitive data"
 msgstr "Sensitive data"
 
@@ -2629,9 +2635,6 @@ msgstr "Underdanig forespørsel"
 
 msgid "Residence address"
 msgstr "Bostedsadresse"
-
-msgid "Seleziona abilità"
-msgstr "Seleziona abilità"
 
 msgid "Short description"
 msgstr "Kort beskrivelse"

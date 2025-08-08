@@ -40,6 +40,8 @@ class AssocPermission(BaseModel):
 
     hidden = models.BooleanField(default=False)
 
+    config = models.TextField(max_length=100, blank=True, null=True)
+
     def module(self):
         # noinspection PyUnresolvedReferences
         return self.feature.module
@@ -102,6 +104,8 @@ class EventPermission(BaseModel):
     descr = models.CharField(max_length=1000)
 
     hidden = models.BooleanField(default=False)
+
+    config = models.TextField(max_length=100, blank=True, null=True)
 
     def module(self):
         # noinspection PyUnresolvedReferences

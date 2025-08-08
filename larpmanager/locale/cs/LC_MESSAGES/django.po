@@ -1668,6 +1668,9 @@ msgstr "Úspěchy"
 msgid "Archive mail"
 msgstr "Archivovat poštu"
 
+msgid "Are you sure"
+msgstr "Jste si jistý, že"
+
 msgid "Bank address"
 msgstr "Adresa banky"
 
@@ -2168,6 +2171,9 @@ msgstr "Podepsaná žádost"
 msgid "Returning type"
 msgstr "Typ návratu"
 
+msgid "Select ability"
+msgstr "Vybrat schopnost"
+
 msgid "Sensitive data"
 msgstr "Citlivé údaje"
 
@@ -2629,9 +2635,6 @@ msgstr "Submisivní žádost"
 
 msgid "Residence address"
 msgstr "Adresa bydliště"
-
-msgid "Seleziona abilità"
-msgstr "Seleziona abilità"
 
 msgid "Short description"
 msgstr "Krátký popis"

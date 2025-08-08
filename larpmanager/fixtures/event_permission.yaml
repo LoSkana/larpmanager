@@ -6,6 +6,7 @@
     slug: orga_event
     number: 11
     feature: 215
+    config: gallery
 - model: larpmanager.eventpermission
   pk: 3
   fields:
@@ -38,6 +39,7 @@
     slug: orga_appearance
     number: 11
     feature: 210
+    config: visualisation
 - model: larpmanager.eventpermission
   pk: 8
   fields:
@@ -54,6 +56,7 @@
     slug: orga_casting
     number: 11
     feature: 27
+    config: casting
 - model: larpmanager.eventpermission
   pk: 10
   fields:
@@ -70,6 +73,7 @@
     slug: orga_payments
     number: 21
     feature: 111
+    config: payment
 - model: larpmanager.eventpermission
   pk: 12
   fields:
@@ -86,6 +90,7 @@
     slug: orga_tokens
     number: 41
     feature: 107
+    config: token_credit
 - model: larpmanager.eventpermission
   pk: 14
   fields:
@@ -94,6 +99,7 @@
     slug: orga_credits
     number: 51
     feature: 107
+    config: token_credit
 - model: larpmanager.eventpermission
   pk: 15
   fields:
@@ -166,6 +172,7 @@
     slug: orga_characters
     number: 11
     feature: 178
+    config: writing
 - model: larpmanager.eventpermission
   pk: 26
   fields:
@@ -262,6 +269,7 @@
     slug: orga_registration_tickets
     number: 21
     feature: 206
+    config: tickets
 - model: larpmanager.eventpermission
   pk: 38
   fields:
@@ -278,6 +286,7 @@
     slug: orga_registration_form
     number: 41
     feature: 205
+    config: reg_form
 - model: larpmanager.eventpermission
   pk: 41
   fields:
@@ -318,6 +327,7 @@
     slug: orga_pre_registrations
     number: 101
     feature: 32
+    config: pre_reg
 - model: larpmanager.eventpermission
   pk: 46
   fields:
@@ -398,6 +408,7 @@
     slug: orga_px_ability_types
     number: 41
     feature: 118
+    config: px
 - model: larpmanager.eventpermission
   pk: 58
   fields:
@@ -406,6 +417,7 @@
     slug: orga_px_abilities
     number: 51
     feature: 118
+    config: px
 - model: larpmanager.eventpermission
   pk: 59
   fields:
@@ -414,6 +426,7 @@
     slug: orga_px_deliveries
     number: 61
     feature: 118
+    config: px
 - model: larpmanager.eventpermission
   pk: 60
   fields:
@@ -422,6 +435,7 @@
     slug: orga_casting_history
     number: 61
     feature: 27
+    config: casting
 - model: larpmanager.eventpermission
   pk: 61
   fields:
@@ -430,6 +444,7 @@
     slug: orga_casting_preferences
     number: 71
     feature: 27
+    config: casting
 - model: larpmanager.eventpermission
   pk: 63
   fields:
@@ -454,6 +469,7 @@
     slug: orga_lottery
     number: 121
     feature: 50
+    config: lottery
 - model: larpmanager.eventpermission
   pk: 66
   fields:
@@ -510,6 +526,7 @@
     slug: orga_send_mail
     number: 99
     feature: 200
+    config: email
 - model: larpmanager.eventpermission
   pk: 75
   fields:
@@ -518,6 +535,7 @@
     slug: orga_character_form
     number: 12
     feature: 178
+    config: char_form
 - model: larpmanager.eventpermission
   pk: 76
   fields:
@@ -526,6 +544,7 @@
     slug: orga_archive_email
     number: 100
     feature: 199
+    config: email
 - model: larpmanager.eventpermission
   pk: 77
   fields:

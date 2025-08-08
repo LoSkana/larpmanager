@@ -1668,6 +1668,9 @@ msgstr "Prestationer"
 msgid "Archive mail"
 msgstr "Arkivpost"
 
+msgid "Are you sure"
+msgstr "Är du säker på att"
+
 msgid "Bank address"
 msgstr "Bankens adress"
 
@@ -2168,6 +2171,9 @@ msgstr "Undertecknad begäran"
 msgid "Returning type"
 msgstr "Typ av retur"
 
+msgid "Select ability"
+msgstr "Välj förmåga"
+
 msgid "Sensitive data"
 msgstr "Känsliga uppgifter"
 
@@ -2629,9 +2635,6 @@ msgstr "Undergiven begäran"
 
 msgid "Residence address"
 msgstr "Bostadsadress"
-
-msgid "Seleziona abilità"
-msgstr "Välj förmåga"
 
 msgid "Short description"
 msgstr "Kort beskrivning"
