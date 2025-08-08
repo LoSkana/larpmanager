@@ -18,9 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import traceback
+from collections import defaultdict
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import F, Prefetch
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -41,7 +43,7 @@ from larpmanager.forms.event import (
     OrgaRunForm,
 )
 from larpmanager.forms.writing import UploadElementsForm
-from larpmanager.models.access import EventRole
+from larpmanager.models.access import EventPermission, EventRole
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, EventButton, EventText
@@ -70,9 +72,48 @@ def orga_event(request, s, n):
 @login_required
 def orga_roles(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_roles")
-    ctx["list"] = list(EventRole.objects.filter(event=ctx["event"]).order_by("number"))
-    if not ctx["list"]:
+
+    qs_perm = EventPermission.objects.select_related("feature", "feature__module").order_by(
+        F("feature__module__order").asc(nulls_last=True),
+        F("feature__order").asc(nulls_last=True),
+        "feature__name",
+        "name",
+    )
+
+    roles = (
+        EventRole.objects.filter(event=ctx["event"])
+        .order_by("number")
+        .prefetch_related(Prefetch("permissions", queryset=qs_perm))
+    )
+
+    ctx["list"] = []
+    if not roles:
         ctx["list"].append(EventRole.objects.create(event=ctx["event"], number=1, name="Organizer"))
+    for role in roles:
+        role.members_list = ", ".join([str(mb) for mb in role.members.all()])
+        if role.number == "1":
+            role.perms_list = "All"
+        else:
+            buckets = defaultdict(list)
+            for p in role.permissions.all():
+                buckets[p.feature.module].append(p)
+
+            modules = sorted(
+                buckets.keys(),
+                key=lambda m: (
+                    float("inf") if m is None else (m.order if m.order is not None else float("inf")),
+                    "" if m is None else m.name,
+                ),
+            )
+
+            aux = []
+            for module in modules:
+                perms = ", ".join([str(_(ep.name)) for ep in buckets[module]])
+                aux.append(f"<b>{module}</b> ({perms})")
+            role.perms_list = ", ".join(aux)
+
+        ctx["list"].append(role)
+
     return render(request, "larpmanager/orga/roles.html", ctx)
 
 

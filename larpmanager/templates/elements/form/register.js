@@ -221,12 +221,6 @@ $(document).ready(function(){
 
 });
 
-function jump_to(el) {
-    const yOffset = -160;
-    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-    window.scrollTo({top: y, behavior: 'smooth'});
-}
-
 function slugify(text) {
   return text
     .toString()
@@ -264,7 +258,7 @@ function check_mandatory() {
         if (empty) {
             el.after( "<p><b class='form-error' style='color: var(--ter-clr);'>Please select a value</b></p>" );
             if (k in sections) $(".sec_" + slugify(sections[k])).show();
-            jump_to(document.getElementById(k));
+            window.jump_to($('#' + k));
             return false;
         }
     }

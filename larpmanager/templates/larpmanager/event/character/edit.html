@@ -252,12 +252,6 @@
 
     }
 
-    function jump_to(el) {
-        const yOffset = -160;
-        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({top: y, behavior: 'smooth'});
-    }
-
     function check_mandatory() {
 
         for (var ix = 0; ix < mandatory.length; ix++) {
@@ -282,7 +276,7 @@
             el.next('p').remove();
             if (empty) {
                 el.after( "<p><b class='form-error' style='color: var(--ter-clr);'>Please select a value</b></p>" );
-                jump_to(document.getElementById(k));
+                window.jump_to('#' + k);
                 return false;
             }
         }
