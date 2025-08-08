@@ -33,11 +33,6 @@ function parseLocalNum(num) {
 
 var submitted = {{ submitted | safe }};
 
-function go_down() {
-window.scrollTo(0,document.body.scrollHeight);
-// alert('coa');
-}
-
  var price_regex = /(\d+(?:\.\d+)?){{ currency_symbol }}/g;
 
  function get_price(s) {
@@ -181,7 +176,7 @@ $(document).ready(function(){
             $('#register_go').click();
         } else {
             $('#riepilogo').show(200);
-            setTimeout(go_down, 500);
+            setTimeout(() => jump_to($('#riepilogo')), 300);
         }
     });
 
