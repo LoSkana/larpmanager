@@ -1167,6 +1167,9 @@ msgstr "Ruchy"
 msgid "Need help"
 msgstr "Potrzebujesz pomocy"
 
+msgid "New event"
+msgstr "Nowe wydarzenie"
+
 msgid "Next runs"
 msgstr "Następne biegi"
 
@@ -1311,17 +1314,11 @@ msgstr "Kolekcja"
 msgid "Contact us"
 msgstr "Skontaktuj się z nami"
 
-msgid "Cover link"
-msgstr "Link do okładki"
-
 msgid "Easter egg"
 msgstr "Jajko wielkanocne"
 
 msgid "Email list"
 msgstr "Lista e-mail"
-
-msgid "Event link"
-msgstr "Link do wydarzenia"
 
 msgid "Experience"
 msgstr "Doświadczenie"
@@ -1559,6 +1556,9 @@ msgstr "Narodowość"
 
 msgid "Need a ride"
 msgstr "Potrzebujesz podwózki"
+
+msgid "New session"
+msgstr "Nowa sesja"
 
 msgid "Next events"
 msgstr "Następne wydarzenia"
@@ -2171,9 +2171,6 @@ msgstr "Typ zwrotu"
 msgid "Sensitive data"
 msgstr "Wrażliwe dane"
 
-msgid "Show past runs"
-msgstr "Pokaż poprzednie przebiegi"
-
 msgid "Show shortcuts"
 msgstr "Pokaż skróty"
 
@@ -2624,9 +2621,6 @@ msgstr "Zrealizuj kolekcję"
 msgid "Registration form"
 msgstr "Formularz rejestracyjny"
 
-msgid "Registration link"
-msgstr "Link do rejestracji"
-
 msgid "Registration mail"
 msgstr "Poczta rejestracyjna"
 
@@ -2695,9 +2689,6 @@ msgstr "Wydarzenia związane z kompetencjami"
 
 msgid "Competences member"
 msgstr "Kompetencje członka"
-
-msgid "Cover (thumb) link"
-msgstr "Okładka (kciuk) link"
 
 msgid "Delegated accounts"
 msgstr "Konta delegowane"
@@ -5974,11 +5965,6 @@ msgstr "Ta strona umożliwia dodawanie lub edytowanie dopłat rejestracyjnych"
 
 msgid "This page allows you to change the general settings of this run"
 msgstr "Ta strona umożliwia zmianę ogólnych ustawień tego przebiegu"
-
-msgid "This page shows all runs; you can edit them, or create new ones"
-msgstr ""
-"Na tej stronie wyświetlane są wszystkie przebiegi; można je edytować lub "
-"tworzyć nowe"
 
 msgid "To be able to pay, your membership application must be approved"
 msgstr ""

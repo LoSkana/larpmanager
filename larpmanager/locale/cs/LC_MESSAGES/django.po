@@ -1167,6 +1167,9 @@ msgstr "Pohyby"
 msgid "Need help"
 msgstr "Potřebujete pomoc"
 
+msgid "New event"
+msgstr "Nová událost"
+
 msgid "Next runs"
 msgstr "Další běhy"
 
@@ -1311,17 +1314,11 @@ msgstr "Sbírejte"
 msgid "Contact us"
 msgstr "Kontaktujte nás"
 
-msgid "Cover link"
-msgstr "Obal odkazu"
-
 msgid "Easter egg"
 msgstr "Velikonoční vajíčko"
 
 msgid "Email list"
 msgstr "e-mailový seznam"
-
-msgid "Event link"
-msgstr "Odkaz na událost"
 
 msgid "Experience"
 msgstr "Zkušenosti"
@@ -1559,6 +1556,9 @@ msgstr "Státní příslušnost"
 
 msgid "Need a ride"
 msgstr "Potřebujete odvézt"
+
+msgid "New session"
+msgstr "Nové zasedání"
 
 msgid "Next events"
 msgstr "Nadcházející události"
@@ -2171,9 +2171,6 @@ msgstr "Typ návratu"
 msgid "Sensitive data"
 msgstr "Citlivé údaje"
 
-msgid "Show past runs"
-msgstr "Zobrazit minulé běhy"
-
 msgid "Show shortcuts"
 msgstr "Zobrazit zkratky"
 
@@ -2624,9 +2621,6 @@ msgstr "Sbírka Redeem"
 msgid "Registration form"
 msgstr "Registrační formulář"
 
-msgid "Registration link"
-msgstr "Odkazy pro registraci"
-
 msgid "Registration mail"
 msgstr "Registrační pošta"
 
@@ -2695,9 +2689,6 @@ msgstr "Dovednosti v oblasti událostí"
 
 msgid "Competences member"
 msgstr "Osobní dovednosti"
-
-msgid "Cover (thumb) link"
-msgstr "Kryt odkazu (palec)"
 
 msgid "Delegated accounts"
 msgstr "Delegované účty"
@@ -5950,11 +5941,6 @@ msgstr "Na této stránce můžete přidat nebo změnit příplatky za předplat
 
 msgid "This page allows you to change the general settings of this run"
 msgstr "Tato stránka umožňuje změnit obecná nastavení tohoto běhu"
-
-msgid "This page shows all runs; you can edit them, or create new ones"
-msgstr ""
-"Na této stránce jsou zobrazeny všechny běhy; můžete je upravovat nebo "
-"vytvářet nové"
 
 msgid "To be able to pay, your membership application must be approved"
 msgstr "Abyste mohli platit, musí být vaše žádost o členství schválena"

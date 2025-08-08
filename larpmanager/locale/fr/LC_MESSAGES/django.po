@@ -1167,6 +1167,9 @@ msgstr "Mouvements"
 msgid "Need help"
 msgstr "Besoin d'aide"
 
+msgid "New event"
+msgstr "Nouvel événement"
+
 msgid "Next runs"
 msgstr "Prochaines courses"
 
@@ -1311,17 +1314,11 @@ msgstr "Collecter"
 msgid "Contact us"
 msgstr "Contactez nous"
 
-msgid "Cover link"
-msgstr "Couverture des liens"
-
 msgid "Easter egg"
 msgstr "Oeuf de Pâques"
 
 msgid "Email list"
 msgstr "liste d'adresses électroniques"
-
-msgid "Event link"
-msgstr "Lien vers l'événement"
 
 msgid "Experience"
 msgstr "Expérience"
@@ -1559,6 +1556,9 @@ msgstr "Nationalité"
 
 msgid "Need a ride"
 msgstr "Besoin d'un ascenseur"
+
+msgid "New session"
+msgstr "Nouvelle session"
 
 msgid "Next events"
 msgstr "Événements à venir"
@@ -2171,9 +2171,6 @@ msgstr "Type de retour"
 msgid "Sensitive data"
 msgstr "Données sensibles"
 
-msgid "Show past runs"
-msgstr "Afficher les courses passées"
-
 msgid "Show shortcuts"
 msgstr "Afficher les raccourcis"
 
@@ -2624,9 +2621,6 @@ msgstr "Rachat de la collection"
 msgid "Registration form"
 msgstr "Formulaire d'inscription"
 
-msgid "Registration link"
-msgstr "Liens d'inscription"
-
 msgid "Registration mail"
 msgstr "Courrier d'inscription"
 
@@ -2695,9 +2689,6 @@ msgstr "Compétences en matière d'événements"
 
 msgid "Competences member"
 msgstr "Compétences personnelles"
-
-msgid "Cover (thumb) link"
-msgstr "Cache-lien (pouce)"
 
 msgid "Delegated accounts"
 msgstr "Comptes délégués"
@@ -6073,11 +6064,6 @@ msgid "This page allows you to change the general settings of this run"
 msgstr ""
 "Cette page vous permet de modifier les paramètres généraux de cette "
 "exécution"
-
-msgid "This page shows all runs; you can edit them, or create new ones"
-msgstr ""
-"Cette page affiche tous les parcours ; vous pouvez les modifier ou en créer "
-"de nouveaux"
 
 msgid "To be able to pay, your membership application must be approved"
 msgstr "Pour pouvoir payer, votre demande d'adhésion doit être approuvée"

@@ -4853,13 +4853,16 @@ msgstr ""
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""
 
-msgid "Event link"
+msgid "New event"
 msgstr ""
 
-msgid "Cover link"
+msgid "New session"
 msgstr ""
 
-msgid "Cover (thumb) link"
+msgid "Start"
+msgstr ""
+
+msgid "End"
 msgstr ""
 
 msgid "Custodies"
@@ -4875,12 +4878,6 @@ msgid "past"
 msgstr ""
 
 msgid "Object"
-msgstr ""
-
-msgid "Start"
-msgstr ""
-
-msgid "End"
 msgstr ""
 
 msgid "Inventory objects"
@@ -4923,15 +4920,6 @@ msgstr ""
 msgid ""
 "This page summarises the roles to be assigned in order to use the functions "
 "concerning the organisation"
-msgstr ""
-
-msgid "This page shows all runs; you can edit them, or create new ones"
-msgstr ""
-
-msgid "Show past runs"
-msgstr ""
-
-msgid "Registration link"
 msgstr ""
 
 msgid ""

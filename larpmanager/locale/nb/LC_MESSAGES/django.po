@@ -1167,6 +1167,9 @@ msgstr "Bevegelser"
 msgid "Need help"
 msgstr "Trenger du hjelp"
 
+msgid "New event"
+msgstr "Nytt arrangement"
+
 msgid "Next runs"
 msgstr "Neste løp"
 
@@ -1311,17 +1314,11 @@ msgstr "Samle"
 msgid "Contact us"
 msgstr "Kontakt oss"
 
-msgid "Cover link"
-msgstr "Lenke til omslag"
-
 msgid "Easter egg"
 msgstr "Påskeegg"
 
 msgid "Email list"
 msgstr "e-postliste"
-
-msgid "Event link"
-msgstr "Lenke til arrangementet"
 
 msgid "Experience"
 msgstr "Erfaring"
@@ -1559,6 +1556,9 @@ msgstr "Nasjonalitet"
 
 msgid "Need a ride"
 msgstr "Trenger du skyss"
+
+msgid "New session"
+msgstr "Ny økt"
 
 msgid "Next events"
 msgstr "Kommende arrangementer"
@@ -2171,9 +2171,6 @@ msgstr "Avkastningstype"
 msgid "Sensitive data"
 msgstr "Sensitive data"
 
-msgid "Show past runs"
-msgstr "Vis tidligere kjøringer"
-
 msgid "Show shortcuts"
 msgstr "Vis snarveier"
 
@@ -2624,9 +2621,6 @@ msgstr "Løs inn samlingen"
 msgid "Registration form"
 msgstr "Registreringsskjema"
 
-msgid "Registration link"
-msgstr "Lenker til registrering"
-
 msgid "Registration mail"
 msgstr "Registreringspost"
 
@@ -2695,9 +2689,6 @@ msgstr "Ferdigheter i forbindelse med arrangementer"
 
 msgid "Competences member"
 msgstr "Personlige ferdigheter"
-
-msgid "Cover (thumb) link"
-msgstr "Koblingsdeksel (tommel)"
 
 msgid "Delegated accounts"
 msgstr "Delegerte kontoer"
@@ -5975,10 +5966,6 @@ msgstr ""
 msgid "This page allows you to change the general settings of this run"
 msgstr ""
 "På denne siden kan du endre de generelle innstillingene for denne kjøringen"
-
-msgid "This page shows all runs; you can edit them, or create new ones"
-msgstr ""
-"Denne siden viser alle kjøringer; du kan redigere dem eller opprette nye"
 
 msgid "To be able to pay, your membership application must be approved"
 msgstr "For å kunne betale må medlemssøknaden din være godkjent"

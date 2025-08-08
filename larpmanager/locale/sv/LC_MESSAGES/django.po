@@ -1167,6 +1167,9 @@ msgstr "Rörelser"
 msgid "Need help"
 msgstr "Behöver du hjälp"
 
+msgid "New event"
+msgstr "Nytt evenemang"
+
 msgid "Next runs"
 msgstr "Nästa körningar"
 
@@ -1311,17 +1314,11 @@ msgstr "Samla"
 msgid "Contact us"
 msgstr "Kontakta oss"
 
-msgid "Cover link"
-msgstr "Länkskydd"
-
 msgid "Easter egg"
 msgstr "Påskägg"
 
 msgid "Email list"
 msgstr "e-postlista"
-
-msgid "Event link"
-msgstr "Länk till evenemang"
 
 msgid "Experience"
 msgstr "Erfarenhet"
@@ -1559,6 +1556,9 @@ msgstr "Nationalitet"
 
 msgid "Need a ride"
 msgstr "Behöver du ett lyft"
+
+msgid "New session"
+msgstr "Ny session"
 
 msgid "Next events"
 msgstr "Kommande evenemang"
@@ -2171,9 +2171,6 @@ msgstr "Typ av retur"
 msgid "Sensitive data"
 msgstr "Känsliga uppgifter"
 
-msgid "Show past runs"
-msgstr "Visa tidigare körningar"
-
 msgid "Show shortcuts"
 msgstr "Visa genvägar"
 
@@ -2624,9 +2621,6 @@ msgstr "Lös in kollektion"
 msgid "Registration form"
 msgstr "Registreringsformulär"
 
-msgid "Registration link"
-msgstr "Länkar för registrering"
-
 msgid "Registration mail"
 msgstr "Registreringsbrev"
 
@@ -2695,9 +2689,6 @@ msgstr "Färdigheter för evenemang"
 
 msgid "Competences member"
 msgstr "Personliga färdigheter"
-
-msgid "Cover (thumb) link"
-msgstr "Länkskydd (tumme)"
 
 msgid "Delegated accounts"
 msgstr "Delegerade konton"
@@ -5984,10 +5975,6 @@ msgstr ""
 msgid "This page allows you to change the general settings of this run"
 msgstr ""
 "På den här sidan kan du ändra de allmänna inställningarna för körningen"
-
-msgid "This page shows all runs; you can edit them, or create new ones"
-msgstr ""
-"På den här sidan visas alla körningar; du kan redigera dem eller skapa nya"
 
 msgid "To be able to pay, your membership application must be approved"
 msgstr "För att du ska kunna betala måste din medlemsansökan vara godkänd"

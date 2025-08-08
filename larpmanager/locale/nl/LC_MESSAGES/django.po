@@ -1167,6 +1167,9 @@ msgstr "Bewegingen"
 msgid "Need help"
 msgstr "Hulp nodig"
 
+msgid "New event"
+msgstr "Nieuw evenement"
+
 msgid "Next runs"
 msgstr "Volgende runs"
 
@@ -1311,17 +1314,11 @@ msgstr "Verzamel"
 msgid "Contact us"
 msgstr "Neem contact met ons op"
 
-msgid "Cover link"
-msgstr "Link cover"
-
 msgid "Easter egg"
 msgstr "Paasei"
 
 msgid "Email list"
 msgstr "e-maillijst"
-
-msgid "Event link"
-msgstr "Evenement link"
 
 msgid "Experience"
 msgstr "Ervaring"
@@ -1559,6 +1556,9 @@ msgstr "Nationaliteit"
 
 msgid "Need a ride"
 msgstr "Lift nodig"
+
+msgid "New session"
+msgstr "Nieuwe sessie"
 
 msgid "Next events"
 msgstr "Komende evenementen"
@@ -2171,9 +2171,6 @@ msgstr "Type terugkeer"
 msgid "Sensitive data"
 msgstr "Gevoelige gegevens"
 
-msgid "Show past runs"
-msgstr "Toon eerdere runs"
-
 msgid "Show shortcuts"
 msgstr "Snelkoppelingen weergeven"
 
@@ -2624,9 +2621,6 @@ msgstr "Verzameling inwisselen"
 msgid "Registration form"
 msgstr "Registratieformulier"
 
-msgid "Registration link"
-msgstr "Links voor registratie"
-
 msgid "Registration mail"
 msgstr "Registratie e-mail"
 
@@ -2695,9 +2689,6 @@ msgstr "Evenement vaardigheden"
 
 msgid "Competences member"
 msgstr "Persoonlijke vaardigheden"
-
-msgid "Cover (thumb) link"
-msgstr "Linkafdekking (duim)"
 
 msgid "Delegated accounts"
 msgstr "Gedelegeerde accounts"
@@ -6013,9 +6004,6 @@ msgstr ""
 
 msgid "This page allows you to change the general settings of this run"
 msgstr "Op deze pagina kun je de algemene instellingen van deze run wijzigen"
-
-msgid "This page shows all runs; you can edit them, or create new ones"
-msgstr "Deze pagina toont alle runs; je kunt ze bewerken of nieuwe aanmaken"
 
 msgid "To be able to pay, your membership application must be approved"
 msgstr "Om te kunnen betalen, moet je lidmaatschapsaanvraag goedgekeurd zijn"
