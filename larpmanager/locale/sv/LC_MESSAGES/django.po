@@ -1317,6 +1317,9 @@ msgstr "Kontakta oss"
 msgid "Cover link"
 msgstr "Länkskydd"
 
+msgid "Deliveries"
+msgstr "Leveranser"
+
 msgid "Easter egg"
 msgstr "Påskägg"
 
@@ -1665,9 +1668,6 @@ msgstr "textlängd"
 msgid "unique code"
 msgstr "unik kod"
 
-msgid "Ability list"
-msgstr "Lista över färdigheter"
-
 msgid "Ability type"
 msgstr "Typ av färdighet"
 
@@ -1899,9 +1899,6 @@ msgstr "Konfiguration"
 
 msgid "Deadline date"
 msgstr "Sista inlämningsdag"
-
-msgid "Delivery list"
-msgstr "Lista över utbetalningar"
 
 msgid "Discount back"
 msgstr "Rabatt tillbaka"
@@ -6320,10 +6317,6 @@ msgid "This page shows the total number of pre-registrations for each event"
 msgstr ""
 "Denna sida visar det totala antalet föranmälningar för varje evenemang"
 
-msgid "This page summarizes the abilities that players can purchase with px"
-msgstr ""
-"Denna sida sammanfattar de färdigheter som spelare kan förvärva med px"
-
 #, python-format
 msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
 msgstr "Denna text kommer att läggas till på arket, i plotparagrafen %(name)s"
@@ -7384,6 +7377,13 @@ msgid ""
 msgstr ""
 "På den här sidan sammanfattas alternativen för att besvara frågor om "
 "evenemangets workshops"
+
+msgid ""
+"This page summarizes the abilities that players can purchase with experience"
+" points"
+msgstr ""
+"På den här sidan sammanfattas de förmågor som spelare kan köpa med "
+"erfarenhetspoäng"
 
 msgid ""
 "You can update them by indicating the recipient and assigning the "

@@ -1317,6 +1317,9 @@ msgstr "Skontaktuj się z nami"
 msgid "Cover link"
 msgstr "Link do okładki"
 
+msgid "Deliveries"
+msgstr "Dostawy"
+
 msgid "Easter egg"
 msgstr "Jajko wielkanocne"
 
@@ -1665,9 +1668,6 @@ msgstr "długość tekstu"
 msgid "unique code"
 msgstr "unikalny kod"
 
-msgid "Ability list"
-msgstr "Lista umiejętności"
-
 msgid "Ability type"
 msgstr "Typ umiejętności"
 
@@ -1899,9 +1899,6 @@ msgstr "Konfiguracja"
 
 msgid "Deadline date"
 msgstr "Termin"
-
-msgid "Delivery list"
-msgstr "Lista dostaw"
 
 msgid "Discount back"
 msgstr "Zniżka z powrotem"
@@ -6312,9 +6309,6 @@ msgstr ""
 "Ta strona pokazuje całkowitą liczbę wstępnych rejestracji na każde "
 "wydarzenie"
 
-msgid "This page summarizes the abilities that players can purchase with px"
-msgstr "Ta strona podsumowuje umiejętności, które gracze mogą kupić za px"
-
 #, python-format
 msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
 msgstr "Ten tekst zostanie dodany do arkusza, w akapicie wykresu %(name)s"
@@ -7383,6 +7377,13 @@ msgid ""
 msgstr ""
 "Ta strona przedstawia opcje odpowiedzi na pytania dotyczące warsztatów "
 "wydarzenia"
+
+msgid ""
+"This page summarizes the abilities that players can purchase with experience"
+" points"
+msgstr ""
+"Ta strona podsumowuje umiejętności, które gracze mogą nabyć za punkty "
+"doświadczenia"
 
 msgid ""
 "You can update them by indicating the recipient and assigning the "

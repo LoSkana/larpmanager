@@ -1317,6 +1317,9 @@ msgstr "Neem contact met ons op"
 msgid "Cover link"
 msgstr "Link cover"
 
+msgid "Deliveries"
+msgstr "Leveringen"
+
 msgid "Easter egg"
 msgstr "Paasei"
 
@@ -1665,9 +1668,6 @@ msgstr "tekstlengte"
 msgid "unique code"
 msgstr "unieke code"
 
-msgid "Ability list"
-msgstr "Vaardigheidslijst"
-
 msgid "Ability type"
 msgstr "Type vaardigheid"
 
@@ -1899,9 +1899,6 @@ msgstr "Configuratie"
 
 msgid "Deadline date"
 msgstr "Uiterste datum"
-
-msgid "Delivery list"
-msgstr "Uitbetalingslijst"
 
 msgid "Discount back"
 msgstr "Korting terug"
@@ -6386,11 +6383,6 @@ msgid "This page shows the total number of pre-registrations for each event"
 msgstr ""
 "Deze pagina toont het totale aantal voorregistraties voor elk evenement"
 
-msgid "This page summarizes the abilities that players can purchase with px"
-msgstr ""
-"Deze pagina geeft een overzicht van de vaardigheden die spelers met px "
-"kunnen verwerven"
-
 #, python-format
 msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
 msgstr ""
@@ -7506,6 +7498,13 @@ msgid ""
 msgstr ""
 "Deze pagina geeft een overzicht van de opties voor het beantwoorden van "
 "vragen over de evenementworkshops"
+
+msgid ""
+"This page summarizes the abilities that players can purchase with experience"
+" points"
+msgstr ""
+"Deze pagina geeft een overzicht van de vaardigheden die spelers kunnen kopen"
+" met ervaringspunten"
 
 msgid ""
 "You can update them by indicating the recipient and assigning the "
