@@ -1317,6 +1317,9 @@ msgstr "Kontaktujte nás"
 msgid "Cover link"
 msgstr "Obal odkazu"
 
+msgid "Deliveries"
+msgstr "Dodávky"
+
 msgid "Easter egg"
 msgstr "Velikonoční vajíčko"
 
@@ -1665,9 +1668,6 @@ msgstr "délka textu"
 msgid "unique code"
 msgstr "jedinečný kód"
 
-msgid "Ability list"
-msgstr "Seznam dovedností"
-
 msgid "Ability type"
 msgstr "Typ dovednosti"
 
@@ -1899,9 +1899,6 @@ msgstr "Konfigurace"
 
 msgid "Deadline date"
 msgstr "Datum uzávěrky"
-
-msgid "Delivery list"
-msgstr "Seznam výplat"
 
 msgid "Discount back"
 msgstr "Sleva zpět"
@@ -6262,9 +6259,6 @@ msgstr ""
 "Na této stránce je uveden celkový počet předběžných registrací pro každou "
 "událost"
 
-msgid "This page summarizes the abilities that players can purchase with px"
-msgstr "Tato stránka shrnuje dovednosti, které mohou hráči získat pomocí px"
-
 #, python-format
 msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
 msgstr "Tento text bude přidán do listu do odstavce grafu %(name)s"
@@ -7251,6 +7245,13 @@ msgid ""
 msgstr ""
 "Na této stránce jsou shrnuty možnosti odpovědí na dotazy týkající se "
 "seminářů k události"
+
+msgid ""
+"This page summarizes the abilities that players can purchase with experience"
+" points"
+msgstr ""
+"Tato stránka shrnuje schopnosti, které si hráči mohou zakoupit za "
+"zkušenostní body"
 
 msgid ""
 "You can update them by indicating the recipient and assigning the "
