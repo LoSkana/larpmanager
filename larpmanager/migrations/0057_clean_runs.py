@@ -12,7 +12,7 @@ def clean_runs(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("larpmanager", "0055_rename_display_registrationoption_name_and_more"),
+        ("larpmanager", "0056_assocpermission_config_eventpermission_config"),
     ]
 
     operations = [

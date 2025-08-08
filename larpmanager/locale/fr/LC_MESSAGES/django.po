@@ -765,6 +765,9 @@ msgstr "Demande"
 msgid "Section"
 msgstr "Section"
 
+msgid "Session"
+msgstr "Session"
+
 msgid "Setting"
 msgstr "Paramètres"
 
@@ -1170,17 +1173,11 @@ msgstr "Besoin d'aide"
 msgid "New event"
 msgstr "Nouvel événement"
 
-msgid "Next runs"
-msgstr "Prochaines courses"
-
 msgid "Operation"
 msgstr "Fonctionnement"
 
 msgid "Organizer"
 msgstr "Organisateur"
-
-msgid "Past runs"
-msgstr "Les courses passées"
 
 msgid "Portraits"
 msgstr "Portraits"
@@ -1290,6 +1287,9 @@ msgstr "Affectation"
 msgid "Attachment"
 msgstr "Annexe"
 
+msgid "Attendance"
+msgstr "Présence"
+
 msgid "Birth date"
 msgstr "Date de naissance"
 
@@ -1394,9 +1394,6 @@ msgstr "Inscrit"
 
 msgid "Repertoire"
 msgstr "Répertoire"
-
-msgid "Run active"
-msgstr "Courses actives"
 
 msgid "Searchable"
 msgstr "Recherche possible"
@@ -1598,9 +1595,6 @@ msgstr "Demande de"
 
 msgid "Rotate left"
 msgstr "Roue gauche"
-
-msgid "Run balance"
-msgstr "Exécuter le budget"
 
 msgid "Secret code"
 msgstr "Code secret"
@@ -1909,6 +1903,9 @@ msgstr "Type de document"
 msgid "Dynamic rates"
 msgstr "Taux dynamiques"
 
+msgid "Event balance"
+msgstr "Bilan de l'événement"
+
 msgid "Event history"
 msgstr "Historique des événements"
 
@@ -1948,6 +1945,9 @@ msgstr "Nom de la quête"
 msgid "New character"
 msgstr "Nouveau personnage"
 
+msgid "Next sessions"
+msgstr "Prochaines sessions"
+
 msgid "Not completed"
 msgstr "Pas terminé"
 
@@ -1959,6 +1959,9 @@ msgstr "Ancienne interface"
 
 msgid "Passages made"
 msgstr "Mesures prises"
+
+msgid "Past sessions"
+msgstr "Sessions précédentes"
 
 msgid "Paste as text"
 msgstr "Coller comme texte"
@@ -2177,6 +2180,9 @@ msgstr "Sélectionner la capacité"
 msgid "Sensitive data"
 msgstr "Données sensibles"
 
+msgid "Session active"
+msgstr "Session active"
+
 msgid "Show shortcuts"
 msgstr "Afficher les raccourcis"
 
@@ -2257,9 +2263,6 @@ msgstr "Numéro du document"
 
 msgid "Event not found"
 msgstr "Événement non trouvé"
-
-msgid "Events attended"
-msgstr "Participation à des événements"
 
 msgid "External access"
 msgstr "Accès externe"
@@ -3775,9 +3778,6 @@ msgstr "Ouverture des inscriptions non fixée"
 msgid "Request refund from: %(user)s"
 msgstr "Demande de remboursement auprès de : %(user)s"
 
-msgid "Select the event of this run "
-msgstr "Sélectionnez l'événement de cette course"
-
 msgid "Select the new ability to get"
 msgstr "Sélectionner la nouvelle compétence à acquérir"
 
@@ -4283,6 +4283,9 @@ msgstr "Inscription confirmée à %(event)s !"
 #, python-format
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Approbation des rôles %(role)s par %(event)s"
+
+msgid "Select the event of this new session"
+msgstr "Sélectionnez l'événement de cette nouvelle session"
 
 msgid "Terms and Conditions of registration"
 msgstr "Conditions de participation"
@@ -4857,9 +4860,6 @@ msgstr "Définir une valeur pour la date d'ouverture de l'enregistrement"
 msgid "Set up character customization configuration"
 msgstr "Configuration de la personnalisation des personnages"
 
-msgid "There are no new runs scheduled at this time"
-msgstr "Il n'y a actuellement aucune nouvelle course programmée"
-
 msgid "This page allows you to add or edit an album"
 msgstr "Cette page vous permet d'ajouter ou de modifier un album"
 
@@ -5141,6 +5141,9 @@ msgstr "Désabonnement à %(event)s par %(user)s"
 msgid "Review participants' safety-related informations"
 msgstr "Examiner les informations relatives à la sécurité des participants"
 
+msgid "There are no new sessions scheduled at this time"
+msgstr "Aucune nouvelle session n'est prévue pour le moment"
+
 msgid "This page allows you to add or edit a competency"
 msgstr "Cette page vous permet d'ajouter ou de modifier une compétence"
 
@@ -5421,9 +5424,6 @@ msgstr "Cette page vous permet d'ajouter ou de modifier une affectation de"
 msgid "This page shows all donations recorded in the system"
 msgstr "Cette page présente tous les dons enregistrés dans le système"
 
-msgid "This page shows the deadlines to be met for this run"
-msgstr "Cette page résume les délais à respecter pour cette course"
-
 msgid "This page shows the relationships between characters"
 msgstr "Cette page résume les liens entre les personnages"
 
@@ -5524,9 +5524,6 @@ msgstr "Indiquer comment les dépenses sont configurées au niveau du budget"
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Indique que le paiement est envoyé \"aux amis et à la famille\""
 
-msgid "Indicates the runs for which the discount is available"
-msgstr "Indique les séries pour lesquelles la réduction est disponible"
-
 msgid "Manage XP distributions for character skill purchases."
 msgstr ""
 "Gérer les distributions d'XP pour les achats de compétences des personnages."
@@ -5550,6 +5547,9 @@ msgstr "L'utilisateur a mis à jour son inscription à cet événement"
 
 msgid "This page shows the collections opened by participants"
 msgstr "Cette page présente les collections ouvertes par les participants"
+
+msgid "This page shows the deadlines to be met for this event"
+msgstr "Cette page indique les délais à respecter pour cet événement"
 
 msgid "This page shows the discounts activated for this event"
 msgstr "Cette page résume les réductions activées pour cet événement"
@@ -5727,6 +5727,9 @@ msgid "If you have a discount code, enter it here and press enter"
 msgstr ""
 "Si vous avez un code de facilitation, saisissez-le ici et appuyez sur la "
 "touche \"Entrée\""
+
+msgid "Indicates the sessions for which the discount is available"
+msgstr "Indique les sessions pour lesquelles la réduction est disponible"
 
 msgid "Let us know if you encounter any issues or need assistance"
 msgstr ""
@@ -5989,6 +5992,15 @@ msgstr ""
 "Définir des valeurs spécifiques pour la configuration des caractéristiques "
 "de l'événement"
 
+msgid "This page allows you to add a new session of an existing event"
+msgstr ""
+"Cette page vous permet d'ajouter une nouvelle session d'un événement "
+"existant"
+
+msgid "This page allows you to change the date settings of this event"
+msgstr ""
+"Cette page vous permet de modifier les paramètres de date de cet événement"
+
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr ""
 "Nous vous demandons de payer le montant demandé pour le prochain versement"
@@ -6062,11 +6074,6 @@ msgid "This page allows you to add or edit the registration surcharges"
 msgstr ""
 "Cette page vous permet d'ajouter ou de modifier les suppléments sur les "
 "abonnements"
-
-msgid "This page allows you to change the general settings of this run"
-msgstr ""
-"Cette page vous permet de modifier les paramètres généraux de cette "
-"exécution"
 
 msgid "To be able to pay, your membership application must be approved"
 msgstr "Pour pouvoir payer, votre demande d'adhésion doit être approuvée"
@@ -7041,12 +7048,6 @@ msgstr ""
 "annuelle"
 
 msgid ""
-"This page shows larpmanager usage costs, total and divided by individual run"
-msgstr ""
-"Cette page montre les coûts d'utilisation de larpmanager, totaux et divisés "
-"par exécution individuelle"
-
-msgid ""
 "To use the feature you requested, you need to activate the following feature"
 msgstr ""
 "Pour utiliser la fonction que vous avez demandée, la fonction suivante doit "
@@ -7252,6 +7253,13 @@ msgid ""
 msgstr ""
 "Cette page montre en détail, pour chaque expertise, les utilisateurs qui "
 "l'ont indiquée"
+
+msgid ""
+"This page shows larpmanager usage costs, total and divided by individual "
+"event"
+msgstr ""
+"Cette page présente les coûts d'utilisation du manager de langues, totaux et"
+" divisés par événement individuel"
 
 #, python-format
 msgid ""
@@ -8252,13 +8260,6 @@ msgstr ""
 "ancienne et votre nouvelle adresse"
 
 msgid ""
-"You will be notified when a new run is organized, and you will have fast-"
-"track on registration"
-msgstr ""
-"Vous serez informé(e) de l'organisation d'une nouvelle course et vous aurez "
-"un droit de préemption sur l'inscription"
-
-msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
 "them in anonymous form"
 msgstr ""
@@ -8477,6 +8478,13 @@ msgid ""
 msgstr ""
 "Nous vous remercions d'avoir participé à la collecte : vous avez fait vivre "
 "une expérience inédite"
+
+msgid ""
+"You will be notified when a new session is organized, and you will have "
+"fast-track on registration"
+msgstr ""
+"Vous serez averti lorsqu'une nouvelle session sera organisée, et vous "
+"bénéficierez d'une procédure d'inscription accélérée"
 
 msgid ""
 "A friend of yours will be able to receive the registration as a gift by "
@@ -9103,6 +9111,13 @@ msgstr ""
 "présentation du système de gestion de votre organisation"
 
 msgid ""
+"This page shows the total membership accounts, dues, donations, expenses, "
+"the overall cash and individual event budget"
+msgstr ""
+"Cette page présente le total des comptes des membres, les cotisations, les "
+"dons, les dépenses, le budget global et le budget des événements individuels"
+
+msgid ""
 "Are you a doctor, a nurse, or a licensed rescuer? We can ask you to "
 "intervene in case accidents occur during the event?"
 msgstr ""
@@ -9209,14 +9224,6 @@ msgstr ""
 "L'allocation optimale basée sur les valeurs définies est simulée ; vous "
 "pouvez l'exécuter autant de fois que vous le souhaitez avant le chargement "
 "final"
-
-msgid ""
-"This page shows the total membership accounts, dues, donations, expenses, "
-"the overall cash and individual event/run budget"
-msgstr ""
-"Cette page présente le total des comptes des membres, les cotisations, les "
-"dons, les dépenses, le budget global et le budget de chaque événement ou "
-"course"
 
 msgid ""
 "Allows external access to this character through a secret URL (change the "
@@ -9391,13 +9398,6 @@ msgstr ""
 "faction. Le texte privé de la faction ne sera affiché qu'à eux"
 
 msgid ""
-"This is the associative positive operating margin, taking into account the "
-"budgets of completed runs, minus credits or tokens issued"
-msgstr ""
-"Il s'agit de la marge opérationnelle positive associative, prenant en compte"
-" les budgets des courses réalisées, moins les crédits ou les jetons émis"
-
-msgid ""
 "This page shows the deadlines of upcoming organization events, the "
 "activities to be monitored, and the list of users to be solicited"
 msgstr ""
@@ -9458,6 +9458,13 @@ msgstr ""
 "Note : Essayez de regrouper le plus grand nombre de passagers par demande ; "
 "si vous constatez des retards, écrivez-nous directement, n'introduisez pas "
 "de nouvelles demandes"
+
+msgid ""
+"This is the associative positive operating margin, taking into account the "
+"budgets of completed events, minus credits or tokens issued"
+msgstr ""
+"Il s'agit de la marge opérationnelle positive associative, prenant en compte"
+" les budgets des événements réalisés, moins les crédits ou les jetons émis"
 
 #, python-format
 msgid ""
@@ -9829,16 +9836,6 @@ msgstr ""
 "cœliaque, allergies). Laissez ce champ vide si vous n'avez rien à signaler !"
 
 msgid ""
-"For our part, we will use pre-registrations as a measure of how much an "
-"event is desired. If you want a new run of an event, spread the voice and "
-"invites others to pre-register to it"
-msgstr ""
-"Pour notre part, nous utiliserons les préinscriptions pour mesurer la "
-"popularité d'un événement. Si vous souhaitez une nouvelle édition d'un "
-"événement, faites-le savoir et invitez d'autres personnes à s'inscrire à "
-"l'avance"
-
-msgid ""
 "When you press one of the special reference symbols, a popup will help you "
 "get the reference number of a character; you can also select a reference "
 "number to see the character’s name"
@@ -9857,6 +9854,16 @@ msgstr ""
 "préférence pour vos pré-inscriptions (en supposant que vous deviez choisir "
 "les pièces à jouer, veuillez indiquer l'ordre dans lequel vous aimeriez les "
 "jouer)"
+
+msgid ""
+"For our part, we will use pre-registrations as a measure of how much an "
+"event is desired. If you want a new session of an event, spread the voice "
+"and invites others to pre-register to it"
+msgstr ""
+"Pour notre part, nous utiliserons les préinscriptions comme une mesure de "
+"l'intérêt suscité par un événement. Si vous souhaitez une nouvelle session "
+"d'un événement, faites-le savoir et invitez les autres à s'y inscrire à "
+"l'avance"
 
 msgid ""
 "As per the statutes, we will review your request at the next board meeting "

@@ -64,9 +64,8 @@ def exe_events_edit(request, num):
 
     if num:
         # edit existing event / run
-        ctx["run"] = backend_get(ctx, Run, num, "event")
-        ctx["event"] = ctx["run"].event
-        return full_event_edit(ctx, request, exe=False)
+        backend_get(ctx, Run, num, "event")
+        return full_event_edit(ctx, request, ctx["el"].event, ctx["el"], exe=True)
 
     # create new event
     ctx["exe"] = True

@@ -354,7 +354,7 @@ class OrgaDiscountForm(MyForm):
             choices=choices,
             widget=widget,
             required=False,
-            help_text=_("Indicates the runs for which the discount is available"),
+            help_text=_("Indicates the sessions for which the discount is available"),
         )
 
         if self.instance and self.instance.pk:

@@ -14,7 +14,8 @@
         {% endif %}
     </div>
     <table id="events"
-           class="{% if not interface_old %}go_datatable{% endif %} writing gall">
+           class="{% if not interface_old %}go_datatable{% endif %} writing gall"
+           no_header_cols="[6,7]">
         <thead>
             <tr>
                 <th></th>
@@ -23,7 +24,6 @@
                 <th>{% trans "Start" %}</th>
                 <th>{% trans "End" %}</th>
                 <th>{% trans "Registrations" %}</th>
-                <th>{% trans "Cover" %}</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -34,19 +34,16 @@
                     <td>
                         <a href="{% url 'exe_events_edit' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
+                    <td>{{ el.search }}</td>
                     <td>{{ el.get_development_display }}</td>
                     <td>{{ el.start }}</td>
                     <td>{{ el.end }}</td>
                     <td>{{ el.counts.count_reg }}</td>
                     <td>
-                        <div class="img"
-                             style="background-image:url({{ el.get_cover_thumb_url }})"></div>
+                        <a href="{% url 'register' el.event.slug el.number %}">{{ el.registration_status }}</a>
                     </td>
                     <td>
                         <a href="{% url 'gallery' el.event.slug el.number %}">{% trans "Gallery" %}</a>
-                    </td>
-                    <td>
-                        <a href="{% url 'register' el.event.slug el.number %}">{{ el.registration_status }}</a>
                     </td>
                 </tr>
             {% endfor %}

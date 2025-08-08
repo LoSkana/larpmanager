@@ -65,13 +65,13 @@ from larpmanager.utils.upload import go_upload
 @login_required
 def orga_event(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_event")
-    return full_event_edit(ctx, request, exe=False)
+    return full_event_edit(ctx, request, ctx["event"], ctx["run"], exe=False)
 
 
-def full_event_edit(ctx, request, exe=False):
+def full_event_edit(ctx, request, event, run, exe=False):
     if request.method == "POST":
-        form_event = OrgaEventForm(request.POST, request.FILES, instance=ctx["event"], ctx=ctx, prefix="form1")
-        form_run = OrgaRunForm(request.POST, request.FILES, instance=ctx["run"], ctx=ctx, prefix="form2")
+        form_event = OrgaEventForm(request.POST, request.FILES, instance=event, ctx=ctx, prefix="form1")
+        form_run = OrgaRunForm(request.POST, request.FILES, instance=run, ctx=ctx, prefix="form2")
         if form_event.is_valid() and form_run.is_valid():
             form_event.save()
             form_run.save()
@@ -79,10 +79,10 @@ def full_event_edit(ctx, request, exe=False):
             if exe:
                 return redirect("manage")
             else:
-                return redirect("manage", s=ctx["event"].slug, n=ctx["run"].number)
+                return redirect("manage", s=event.slug, n=run.number)
     else:
-        form_event = OrgaEventForm(instance=ctx["event"], ctx=ctx, prefix="form1")
-        form_run = OrgaRunForm(instance=ctx["run"], ctx=ctx, prefix="form2")
+        form_event = OrgaEventForm(instance=event, ctx=ctx, prefix="form1")
+        form_run = OrgaRunForm(instance=run, ctx=ctx, prefix="form2")
 
     ctx["form1"] = form_event
     ctx["form2"] = form_run

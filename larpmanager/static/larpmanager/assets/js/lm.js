@@ -381,6 +381,12 @@ function data_tables() {
             var totalColumns = thList.length;
             disable_sort_columns.push(totalColumns - 2, totalColumns - 1);
         }
+        let table_no_header_cols = $table.attr('no_header_cols');
+        if (table_no_header_cols) {
+            disable_sort_columns = disable_sort_columns.concat(
+                JSON.parse(table_no_header_cols)
+            );
+        }
 
         let hide_columns = [];
         if (window.hideColumnsIndexMap && typeof window.hideColumnsIndexMap === 'object') {

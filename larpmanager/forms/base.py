@@ -119,8 +119,7 @@ class MyForm(forms.ModelForm):
 
     def clean_event(self):
         if hasattr(self, "choose_event"):
-            event_id = self.cleaned_data["event"]
-            return Event.objects.get(pk=event_id)
+            return self.cleaned_data["event"]
         typ = self.params["elementTyp"]
         return self.params["event"].get_class_parent(typ)
 

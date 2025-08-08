@@ -788,9 +788,7 @@ class OrgaEventButtonForm(MyForm):
 
 
 class OrgaRunForm(ConfigForm):
-    page_title = _("Run")
-
-    page_info = _("This page allows you to change the general settings of this run")
+    page_title = _("Session")
 
     class Meta:
         model = Run
@@ -813,14 +811,18 @@ class OrgaRunForm(ConfigForm):
         dl = []
 
         if not self.instance.pk or not self.instance.event:
-            self.fields["event"] = forms.ChoiceField(
+            event_field = forms.ChoiceField(
                 required=True,
                 choices=[(el.id, el.name) for el in Event.objects.filter(assoc_id=self.params["a_id"], template=False)],
-                help_text=_("Select the event of this run "),
             )
+            self.fields = {"event": event_field} | self.fields
             self.fields["event"].widget = EventS2Widget()
             self.fields["event"].widget.set_assoc(self.params["a_id"])
+            self.fields["event"].help_text = _("Select the event of this new session")
             self.choose_event = True
+            self.page_info = _("This page allows you to add a new session of an existing event")
+        else:
+            self.page_info = _("This page allows you to change the date settings of this event")
 
         # do not show cancelled or done options for development if date are not set
         if not self.instance.pk or not self.instance.start or not self.instance.end:

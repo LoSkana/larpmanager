@@ -4,13 +4,13 @@
     {% trans "Accounting" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the total membership accounts, dues, donations, expenses, the overall cash and individual event/run budget" %}
+    {% trans "This page shows the total membership accounts, dues, donations, expenses, the overall cash and individual event budget" %}
 {% endblock info %}
 {% block content %}
     <p>
         {% trans "Global balance" %}: <b>{{ global_sum }}</b>
         <br />
-        <i>({% trans "This is the associative positive operating margin, taking into account the budgets of completed runs, minus credits or tokens issued" %})</i>
+        <i>({% trans "This is the associative positive operating margin, taking into account the budgets of completed events, minus credits or tokens issued" %})</i>
         <br />
         <br />
     </p>
@@ -48,7 +48,7 @@
             </tr>
         {% endif %}
         <tr>
-            <td>{% trans "Run balance" %}</td>
+            <td>{% trans "Event balance" %}</td>
             <td>
                 <b>{{ balance_sum }}</b>
             </td>
@@ -142,7 +142,7 @@
         {% if features.token_credit %}
             <a href="#" class="my_toggle" tog='tcm'>{{ token_name }} / {{ credit_name }}</a>,
         {% endif %}
-        <a href="#" class="my_toggle" tog='runs'>{% trans "Run balance" %}</a>
+        <a href="#" class="my_toggle" tog='runs'>{% trans "Event balance" %}</a>
     </p>
     {% for year in sum_year %}
         <div class="hide sum_{{ year }}">
@@ -229,12 +229,12 @@
         </table>
     </div>
     <div class="hide runs">
-        <h2>{% trans "Run balance" %}</h2>
+        <h2>{% trans "Event balance" %}</h2>
         <table id="run_balance"
                class="{% if not interface_old %}go_datatable{% endif %}">
             <thead>
                 <tr>
-                    <th>{% trans "Run" %}</th>
+                    <th>{% trans "Event" %}</th>
                     <th>{% trans "Balance" %}</th>
                     <th>{% trans "Close" %}</th>
                     <th>{% trans "Start date" %}</th>

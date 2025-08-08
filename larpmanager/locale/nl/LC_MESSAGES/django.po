@@ -765,6 +765,9 @@ msgstr "Verzoek"
 msgid "Section"
 msgstr "Sectie"
 
+msgid "Session"
+msgstr "Sessie"
+
 msgid "Setting"
 msgstr "Instelling"
 
@@ -1170,17 +1173,11 @@ msgstr "Hulp nodig"
 msgid "New event"
 msgstr "Nieuw evenement"
 
-msgid "Next runs"
-msgstr "Volgende runs"
-
 msgid "Operation"
 msgstr "Operatie"
 
 msgid "Organizer"
 msgstr "Organisator"
-
-msgid "Past runs"
-msgstr "Lopen in het verleden"
 
 msgid "Portraits"
 msgstr "Portretten"
@@ -1290,6 +1287,9 @@ msgstr "Opdracht"
 msgid "Attachment"
 msgstr "Bijlage"
 
+msgid "Attendance"
+msgstr "Aanwezigheid"
+
 msgid "Birth date"
 msgstr "Geboortedatum"
 
@@ -1394,9 +1394,6 @@ msgstr "Met inscriptie"
 
 msgid "Repertoire"
 msgstr "Repertoire"
-
-msgid "Run active"
-msgstr "Actief hardlopen"
 
 msgid "Searchable"
 msgstr "Doorzoekbaar"
@@ -1598,9 +1595,6 @@ msgstr "Verzoek om"
 
 msgid "Rotate left"
 msgstr "Linker wiel"
-
-msgid "Run balance"
-msgstr "Budget uitvoeren"
 
 msgid "Secret code"
 msgstr "Geheime code"
@@ -1909,6 +1903,9 @@ msgstr "Type document"
 msgid "Dynamic rates"
 msgstr "Dynamische tarieven"
 
+msgid "Event balance"
+msgstr "Evenement balans"
+
 msgid "Event history"
 msgstr "Gebeurtenis geschiedenis"
 
@@ -1948,6 +1945,9 @@ msgstr "Naam van zoektocht"
 msgid "New character"
 msgstr "Nieuw personage"
 
+msgid "Next sessions"
+msgstr "Volgende sessies"
+
 msgid "Not completed"
 msgstr "Niet voltooid"
 
@@ -1959,6 +1959,9 @@ msgstr "Oude interface"
 
 msgid "Passages made"
 msgstr "Ondernomen stappen"
+
+msgid "Past sessions"
+msgstr "Voorbije sessies"
 
 msgid "Paste as text"
 msgstr "Plakken als tekst"
@@ -2177,6 +2180,9 @@ msgstr "Selecteer vermogen"
 msgid "Sensitive data"
 msgstr "Gevoelige gegevens"
 
+msgid "Session active"
+msgstr "Sessie actief"
+
 msgid "Show shortcuts"
 msgstr "Snelkoppelingen weergeven"
 
@@ -2257,9 +2263,6 @@ msgstr "Documentnummer"
 
 msgid "Event not found"
 msgstr "Evenement niet gevonden"
-
-msgid "Events attended"
-msgstr "Bijgewoonde evenementen"
 
 msgid "External access"
 msgstr "Externe toegang"
@@ -3775,9 +3778,6 @@ msgstr "Registraties openen niet ingesteld"
 msgid "Request refund from: %(user)s"
 msgstr "Verzoek om terugbetaling van: %(user)s"
 
-msgid "Select the event of this run "
-msgstr "Selecteer het evenement van deze run"
-
 msgid "Select the new ability to get"
 msgstr "Selecteer de nieuwe vaardigheid die je wilt leren"
 
@@ -4282,6 +4282,9 @@ msgstr "Registratie bevestigd bij %(event)s!"
 #, python-format
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Rolgoedkeuring %(role)s per %(event)s"
+
+msgid "Select the event of this new session"
+msgstr "Selecteer de gebeurtenis van deze nieuwe sessie"
 
 msgid "Terms and Conditions of registration"
 msgstr "Voorwaarden en bepalingen voor deelname"
@@ -4853,9 +4856,6 @@ msgstr "Stel een waarde in voor de openingsdatum van de registratie"
 msgid "Set up character customization configuration"
 msgstr "Karakteraanpassingsconfiguratie instellen"
 
-msgid "There are no new runs scheduled at this time"
-msgstr "Er zijn momenteel geen nieuwe runs gepland"
-
 msgid "This page allows you to add or edit an album"
 msgstr "Op deze pagina kunt u een album toevoegen of bewerken"
 
@@ -5135,6 +5135,9 @@ msgstr "Uitschrijven op %(event)s door %(user)s"
 msgid "Review participants' safety-related informations"
 msgstr "Veiligheidsgerelateerde informatie van deelnemers beoordelen"
 
+msgid "There are no new sessions scheduled at this time"
+msgstr "Er zijn op dit moment geen nieuwe sessies gepland"
+
 msgid "This page allows you to add or edit a competency"
 msgstr "Op deze pagina kun je een competentie toevoegen of bewerken"
 
@@ -5407,11 +5410,6 @@ msgstr "Op deze pagina kunt u een toewijzing van"
 msgid "This page shows all donations recorded in the system"
 msgstr "Deze pagina toont alle in het systeem geregistreerde donaties"
 
-msgid "This page shows the deadlines to be met for this run"
-msgstr ""
-"Deze pagina geeft een overzicht van de deadlines die voor deze run gehaald "
-"moeten worden"
-
 msgid "This page shows the relationships between characters"
 msgstr "Deze pagina geeft een overzicht van de verbanden tussen de personages"
 
@@ -5512,9 +5510,6 @@ msgstr "Geef aan hoe de uitgaven zijn geconfigureerd op budgetniveau"
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Geeft aan dat de betaling wordt verzonden 'naar vrienden en familie'"
 
-msgid "Indicates the runs for which the discount is available"
-msgstr "Geeft de runs aan waarvoor de korting beschikbaar is"
-
 msgid "Manage XP distributions for character skill purchases."
 msgstr ""
 "Beheer XP-uitkeringen voor de aankoop van vaardigheden voor personages."
@@ -5536,6 +5531,9 @@ msgstr "De gebruiker heeft zijn registratie voor dit evenement bijgewerkt"
 
 msgid "This page shows the collections opened by participants"
 msgstr "Deze pagina toont de collecties die zijn geopend door deelnemers"
+
+msgid "This page shows the deadlines to be met for this event"
+msgstr "Deze pagina toont de deadlines voor dit evenement"
 
 msgid "This page shows the discounts activated for this event"
 msgstr ""
@@ -5695,6 +5693,9 @@ msgstr ""
 msgid "If you have a discount code, enter it here and press enter"
 msgstr ""
 "Als je een facilitatiecode hebt, voer die dan hier in en druk op enter"
+
+msgid "Indicates the sessions for which the discount is available"
+msgstr "Geeft de sessies aan waarvoor de korting beschikbaar is"
 
 msgid "Let us know if you encounter any issues or need assistance"
 msgstr "Laat het ons weten als je problemen ondervindt of hulp nodig hebt"
@@ -5940,6 +5941,13 @@ msgstr ""
 "Specifieke waarden instellen voor de configuratie van kenmerken van de "
 "gebeurtenis"
 
+msgid "This page allows you to add a new session of an existing event"
+msgstr ""
+"Op deze pagina kun je een nieuwe sessie van een bestaand evenement toevoegen"
+
+msgid "This page allows you to change the date settings of this event"
+msgstr "Op deze pagina kunt u de datuminstellingen van dit evenement wijzigen"
+
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "We vragen u het gevraagde bedrag voor de volgende termijn te betalen"
 
@@ -6004,9 +6012,6 @@ msgstr ""
 msgid "This page allows you to add or edit the registration surcharges"
 msgstr ""
 "Op deze pagina kun je de toeslagen op abonnementen toevoegen of wijzigen"
-
-msgid "This page allows you to change the general settings of this run"
-msgstr "Op deze pagina kun je de algemene instellingen van deze run wijzigen"
 
 msgid "To be able to pay, your membership application must be approved"
 msgstr "Om te kunnen betalen, moet je lidmaatschapsaanvraag goedgekeurd zijn"
@@ -6954,12 +6959,6 @@ msgstr ""
 "Op deze pagina wordt het kassaldo al opgemaakt voor de jaarlijkse aangifte"
 
 msgid ""
-"This page shows larpmanager usage costs, total and divided by individual run"
-msgstr ""
-"Deze pagina toont de gebruikskosten van larpmanager, totaal en verdeeld per "
-"afzonderlijke run"
-
-msgid ""
 "To use the feature you requested, you need to activate the following feature"
 msgstr ""
 "Om de functie die je hebt aangevraagd te kunnen gebruiken, moet de volgende "
@@ -7160,6 +7159,13 @@ msgid ""
 msgstr ""
 "Deze pagina toont voor elke expertise in detail de gebruikers die deze "
 "hebben aangegeven"
+
+msgid ""
+"This page shows larpmanager usage costs, total and divided by individual "
+"event"
+msgstr ""
+"Deze pagina toont de gebruikskosten van larpmanager, totaal en verdeeld per "
+"afzonderlijk evenement"
 
 #, python-format
 msgid ""
@@ -8159,13 +8165,6 @@ msgstr ""
 " je nieuwe adres opgeven"
 
 msgid ""
-"You will be notified when a new run is organized, and you will have fast-"
-"track on registration"
-msgstr ""
-"Je wordt op de hoogte gehouden wanneer er een nieuwe loop wordt "
-"georganiseerd en je hebt voorrang bij inschrijving"
-
-msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
 "them in anonymous form"
 msgstr ""
@@ -8383,6 +8382,13 @@ msgid ""
 msgstr ""
 "We danken je voor je deelname aan de collectie: je gaf een ongekende "
 "ervaring"
+
+msgid ""
+"You will be notified when a new session is organized, and you will have "
+"fast-track on registration"
+msgstr ""
+"Je krijgt bericht wanneer er een nieuwe sessie wordt georganiseerd en je "
+"kunt je snel registreren"
 
 msgid ""
 "A friend of yours will be able to receive the registration as a gift by "
@@ -9002,6 +9008,14 @@ msgstr ""
 "voor je organisatie wijzigen"
 
 msgid ""
+"This page shows the total membership accounts, dues, donations, expenses, "
+"the overall cash and individual event budget"
+msgstr ""
+"Deze pagina toont de totale lidmaatschapsrekeningen, contributies, donaties,"
+" uitgaven, het algemene geldbudget en het budget voor individuele "
+"evenementen"
+
+msgid ""
 "Are you a doctor, a nurse, or a licensed rescuer? We can ask you to "
 "intervene in case accidents occur during the event?"
 msgstr ""
@@ -9107,14 +9121,6 @@ msgstr ""
 "De optimale toewijzing op basis van de ingestelde waarden wordt gesimuleerd;"
 " je kunt het zo vaak uitvoeren als je wilt voordat het definitief wordt "
 "geladen"
-
-msgid ""
-"This page shows the total membership accounts, dues, donations, expenses, "
-"the overall cash and individual event/run budget"
-msgstr ""
-"Deze pagina toont de totale ledenrekeningen, contributies, donaties, "
-"uitgaven, het algemene geldbudget en het budget voor individuele "
-"evenementen/lopen"
 
 msgid ""
 "Allows external access to this character through a secret URL (change the "
@@ -9285,13 +9291,6 @@ msgstr ""
 "getoond"
 
 msgid ""
-"This is the associative positive operating margin, taking into account the "
-"budgets of completed runs, minus credits or tokens issued"
-msgstr ""
-"Dit is de associatieve positieve operationele marge, rekening houdend met de"
-" budgetten van voltooide runs, minus uitgegeven credits of tokens"
-
-msgid ""
 "This page shows the deadlines of upcoming organization events, the "
 "activities to be monitored, and the list of users to be solicited"
 msgstr ""
@@ -9349,6 +9348,13 @@ msgstr ""
 "Opmerking: Probeer zoveel mogelijk passagiers per aanvraag te groeperen; als"
 " je vertragingen opmerkt, schrijf ons dan direct, voer geen nieuwe aanvragen"
 " in"
+
+msgid ""
+"This is the associative positive operating margin, taking into account the "
+"budgets of completed events, minus credits or tokens issued"
+msgstr ""
+"Dit is de associatieve positieve operationele marge, rekening houdend met de"
+" budgetten van voltooide evenementen, minus uitgegeven credits of tokens"
 
 #, python-format
 msgid ""
@@ -9717,15 +9723,6 @@ msgstr ""
 "Laat leeg als je niets te melden hebt!"
 
 msgid ""
-"For our part, we will use pre-registrations as a measure of how much an "
-"event is desired. If you want a new run of an event, spread the voice and "
-"invites others to pre-register to it"
-msgstr ""
-"Van onze kant gebruiken we voorinschrijvingen als maatstaf voor hoe populair"
-" een evenement is. Als je een nieuwe editie van een evenement wilt, vertel "
-"het dan door en nodig anderen uit om zich voor te registreren"
-
-msgid ""
 "When you press one of the special reference symbols, a popup will help you "
 "get the reference number of a character; you can also select a reference "
 "number to see the character’s name"
@@ -9742,6 +9739,16 @@ msgstr ""
 "Het enige wat we vragen is om een <b>voorkeursvolgorde</b> aan te geven voor"
 " je voorinschrijvingen (als je moet kiezen welke je wilt spelen, geef dan "
 "aan in welke volgorde je ze wilt spelen)"
+
+msgid ""
+"For our part, we will use pre-registrations as a measure of how much an "
+"event is desired. If you want a new session of an event, spread the voice "
+"and invites others to pre-register to it"
+msgstr ""
+"Van onze kant zullen we voorregistraties gebruiken als een maatstaf voor hoe"
+" gewenst een evenement is. Als je een nieuwe sessie van een evenement wilt, "
+"verspreid dan de boodschap en nodig anderen uit om zich hiervoor vooraf in "
+"te schrijven"
 
 msgid ""
 "As per the statutes, we will review your request at the next board meeting "

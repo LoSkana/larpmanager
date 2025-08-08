@@ -126,7 +126,7 @@ msgstr ""
 msgid "This page allows you to add or edit a discount"
 msgstr ""
 
-msgid "Indicates the runs for which the discount is available"
+msgid "Indicates the sessions for which the discount is available"
 msgstr ""
 
 msgid "Info"
@@ -1337,13 +1337,16 @@ msgstr ""
 msgid "This page allows you to edit the event navigation buttons"
 msgstr ""
 
-msgid "Run"
+msgid "Session"
 msgstr ""
 
-msgid "This page allows you to change the general settings of this run"
+msgid "Select the event of this new session"
 msgstr ""
 
-msgid "Select the event of this run "
+msgid "This page allows you to add a new session of an existing event"
+msgstr ""
+
+msgid "This page allows you to change the date settings of this event"
 msgstr ""
 
 msgid "Not visible to users"
@@ -1795,6 +1798,9 @@ msgid "Informations"
 msgstr ""
 
 msgid "Is there anything else you would like to tell us"
+msgstr ""
+
+msgid "Run"
 msgstr ""
 
 msgid "Character Relationship"
@@ -4343,21 +4349,21 @@ msgstr ""
 msgid "Discover the web site"
 msgstr ""
 
-msgid "Next runs"
+msgid "Next sessions"
 msgstr ""
 
-msgid "There are no new runs scheduled at this time"
+msgid "There are no new sessions scheduled at this time"
 msgstr ""
 
 msgid "Pre-register here"
 msgstr ""
 
 msgid ""
-"You will be notified when a new run is organized, and you will have fast-"
+"You will be notified when a new session is organized, and you will have fast-"
 "track on registration"
 msgstr ""
 
-msgid "Past runs"
+msgid "Past sessions"
 msgstr ""
 
 msgid "Link"
@@ -4655,12 +4661,12 @@ msgstr ""
 
 msgid ""
 "This page shows the total membership accounts, dues, donations, expenses, "
-"the overall cash and individual event/run budget"
+"the overall cash and individual event budget"
 msgstr ""
 
 msgid ""
 "This is the associative positive operating margin, taking into account the "
-"budgets of completed runs, minus credits or tokens issued"
+"budgets of completed events, minus credits or tokens issued"
 msgstr ""
 
 msgid "Membership fees"
@@ -4669,7 +4675,7 @@ msgstr ""
 msgid "Organization inflows"
 msgstr ""
 
-msgid "Run balance"
+msgid "Event balance"
 msgstr ""
 
 msgid "issued"
@@ -4905,7 +4911,8 @@ msgid "This page shows for an element its history"
 msgstr ""
 
 msgid ""
-"This page shows larpmanager usage costs, total and divided by individual run"
+"This page shows larpmanager usage costs, total and divided by individual "
+"event"
 msgstr ""
 
 msgid "Subscription"
@@ -5242,8 +5249,8 @@ msgstr ""
 
 msgid ""
 "For our part, we will use pre-registrations as a measure of how much an "
-"event is desired. If you want a new run of an event, spread the voice and "
-"invites others to pre-register to it"
+"event is desired. If you want a new session of an event, spread the voice "
+"and invites others to pre-register to it"
 msgstr ""
 
 msgid ""
@@ -5971,7 +5978,7 @@ msgstr ""
 msgid "Private message"
 msgstr ""
 
-msgid "Events attended"
+msgid "Attendance"
 msgstr ""
 
 msgid "Show all"
@@ -6095,7 +6102,7 @@ msgstr ""
 msgid "Max uses"
 msgstr ""
 
-msgid "Run active"
+msgid "Session active"
 msgstr ""
 
 msgid "This page provides a summary of all expenses submitted by collaborators"
@@ -6294,7 +6301,7 @@ msgstr ""
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
 
-msgid "This page shows the deadlines to be met for this run"
+msgid "This page shows the deadlines to be met for this event"
 msgstr ""
 
 msgid ""
