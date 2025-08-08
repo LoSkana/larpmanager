@@ -44,7 +44,7 @@ from larpmanager.forms.association import (
 from larpmanager.forms.member import (
     ExeProfileForm,
 )
-from larpmanager.models.access import AssocRole
+from larpmanager.models.access import AssocPermission, AssocRole
 from larpmanager.models.association import Association, AssocText
 from larpmanager.models.base import Feature
 from larpmanager.models.event import (
@@ -57,6 +57,7 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.edit import backend_edit, exe_edit
 from larpmanager.views.larpmanager import get_run_lm_payment
+from larpmanager.views.orga.event import prepare_roles_list
 
 
 @login_required
@@ -67,9 +68,12 @@ def exe_association(request):
 @login_required
 def exe_roles(request):
     ctx = check_assoc_permission(request, "exe_roles")
-    ctx["list"] = list(AssocRole.objects.filter(assoc_id=request.assoc["id"]).order_by("number"))
-    if not ctx["list"]:
-        ctx["list"].append(AssocRole.objects.create(assoc_id=request.assoc["id"], number=1, name="Admin"))
+
+    def def_callback(ctx):
+        return AssocRole.objects.create(assoc_id=ctx["a_id"], number=1, name="Admin")
+
+    prepare_roles_list(ctx, AssocPermission, AssocRole.objects.filter(assoc_id=request.assoc["id"]), def_callback)
+
     return render(request, "larpmanager/exe/roles.html", ctx)
 
 

@@ -25,22 +25,8 @@
                         <a href="{% url 'exe_roles_edit' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
-                    <td>
-                        {% for mb in el.members.all %}
-                            {% include "elements/comma.html" %}
-                            {{ mb }}
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% if el.number == 1 %}
-                            <i>{% trans "All" %}</i>
-                        {% else %}
-                            {% for pm in el.permissions.all %}
-                                {% include "elements/comma.html" %}
-                                {% trans pm.name %}
-                            {% endfor %}
-                        {% endif %}
-                    </td>
+                    <td>{{ el.members_list }}</td>
+                    <td>{{ el.perms_list | safe }}</td>
                 </tr>
             {% endfor %}
         </tbody>

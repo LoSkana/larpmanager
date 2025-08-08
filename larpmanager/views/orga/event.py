@@ -73,22 +73,25 @@ def orga_event(request, s, n):
 def orga_roles(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_roles")
 
-    qs_perm = EventPermission.objects.select_related("feature", "feature__module").order_by(
+    def def_callback(ctx):
+        return EventRole.objects.create(event=ctx["event"], number=1, name="Organizer")
+
+    prepare_roles_list(ctx, EventPermission, EventRole.objects.filter(event=ctx["event"]), def_callback)
+
+    return render(request, "larpmanager/orga/roles.html", ctx)
+
+
+def prepare_roles_list(ctx, permission_typ, role_query, def_callback):
+    qs_perm = permission_typ.objects.select_related("feature", "feature__module").order_by(
         F("feature__module__order").asc(nulls_last=True),
         F("feature__order").asc(nulls_last=True),
         "feature__name",
         "name",
     )
-
-    roles = (
-        EventRole.objects.filter(event=ctx["event"])
-        .order_by("number")
-        .prefetch_related(Prefetch("permissions", queryset=qs_perm))
-    )
-
+    roles = role_query.order_by("number").prefetch_related(Prefetch("permissions", queryset=qs_perm))
     ctx["list"] = []
     if not roles:
-        ctx["list"].append(EventRole.objects.create(event=ctx["event"], number=1, name="Organizer"))
+        ctx["list"].append(def_callback(ctx))
     for role in roles:
         role.members_list = ", ".join([str(mb) for mb in role.members.all()])
         if role.number == "1":
@@ -108,13 +111,12 @@ def orga_roles(request, s, n):
 
             aux = []
             for module in modules:
-                perms = ", ".join([str(_(ep.name)) for ep in buckets[module]])
+                perms_sorted = sorted(buckets[module], key=lambda p: p.number)
+                perms = ", ".join([str(_(ep.name)) for ep in perms_sorted])
                 aux.append(f"<b>{module}</b> ({perms})")
             role.perms_list = ", ".join(aux)
 
         ctx["list"].append(role)
-
-    return render(request, "larpmanager/orga/roles.html", ctx)
 
 
 @login_required
