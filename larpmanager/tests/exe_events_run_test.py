@@ -45,7 +45,7 @@ async def exe_events_run(live_server, page):
     await login_orga(page, live_server)
 
     await go_to(page, live_server, "/manage/events")
-    await page.get_by_role("link", name="New").click()
+    await page.get_by_role("link", name="New event").click()
     await page.locator("#id_name").click()
     await page.locator("#id_name").fill("Prova Event")
     await page.locator("#id_name").press("Tab")

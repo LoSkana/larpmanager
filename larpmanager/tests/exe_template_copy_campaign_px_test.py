@@ -80,7 +80,7 @@ async def template(live_server, page):
     await page.get_by_role("button", name="Confirm", exact=True).click()
     # create new event from template
     await go_to(page, live_server, "/manage/events")
-    await page.get_by_role("link", name="New").click()
+    await page.get_by_role("link", name="New event").click()
     await page.locator("#id_name").click()
     await page.locator("#id_name").fill("from template")
     await page.locator("#id_name").press("Tab")
