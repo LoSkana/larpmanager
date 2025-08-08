@@ -6,6 +6,7 @@
     slug: exe_association
     number: 2
     feature: 198
+    config: interface
 - model: larpmanager.assocpermission
   pk: 2
   fields:
@@ -46,6 +47,7 @@
     slug: exe_payments
     number: 3
     feature: 111
+    config: payment
 - model: larpmanager.assocpermission
   pk: 7
   fields:
@@ -86,6 +88,7 @@
     slug: exe_credits
     number: 8
     feature: 107
+    config: token_credit
 - model: larpmanager.assocpermission
   pk: 12
   fields:
@@ -134,6 +137,7 @@
     slug: exe_appearance
     number: 11
     feature: 193
+    config: calendar
 - model: larpmanager.assocpermission
   pk: 18
   fields:
@@ -190,6 +194,7 @@
     slug: exe_deadlines
     number: 41
     feature: 94
+    config: deadlines
 - model: larpmanager.assocpermission
   pk: 25
   fields:
@@ -198,6 +203,7 @@
     slug: exe_send_mail
     number: 11
     feature: 189
+    config: email
 - model: larpmanager.assocpermission
   pk: 26
   fields:
@@ -206,6 +212,7 @@
     slug: exe_membership
     number: 15
     feature: 45
+    config: membership
 - model: larpmanager.assocpermission
   pk: 27
   fields:
@@ -214,6 +221,7 @@
     slug: exe_vote
     number: 21
     feature: 63
+    config: vote
 - model: larpmanager.assocpermission
   pk: 28
   fields:
@@ -262,6 +270,7 @@
     slug: exe_payment_details
     number: 1
     feature: 111
+    config: payment
 - model: larpmanager.assocpermission
   pk: 35
   fields:
@@ -286,6 +295,7 @@
     slug: exe_tokens
     number: 8
     feature: 107
+    config: token_credit
 - model: larpmanager.assocpermission
   pk: 40
   fields:
@@ -302,6 +312,7 @@
     slug: exe_profile
     number: 1
     feature: 188
+    config: users
 - model: larpmanager.assocpermission
   pk: 43
   fields:
@@ -318,6 +329,7 @@
     slug: exe_archive_email
     number: 91
     feature: 187
+    config: email
 - model: larpmanager.assocpermission
   pk: 45
   fields:

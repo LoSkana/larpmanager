@@ -22,7 +22,7 @@
                 </td>
                 <td>
                     <select id="ability_select" name="ability_select">
-                        <option value="" disabled selected>--- {% trans "Seleziona abilità" %}</option>
+                        <option value="" disabled selected>--- {% trans "Select ability" %}</option>
                     </select>
                 </td>
             </tr>
@@ -31,5 +31,5 @@
     </form>
 {% endblock content %}
 {% block js2 %}
-    {% include "elements/char_abilities.js" %}
+    {% include "elements/char_abilities.js.html" %}
 {% endblock js2 %}
