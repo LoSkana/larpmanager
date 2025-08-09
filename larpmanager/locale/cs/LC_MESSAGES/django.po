@@ -1314,6 +1314,9 @@ msgstr "Sbírejte"
 msgid "Contact us"
 msgstr "Kontaktujte nás"
 
+msgid "Deliveries"
+msgstr "Dodávky"
+
 msgid "Easter egg"
 msgstr "Velikonoční vajíčko"
 
@@ -1650,9 +1653,6 @@ msgstr "délka textu"
 msgid "unique code"
 msgstr "jedinečný kód"
 
-msgid "Ability list"
-msgstr "Seznam dovedností"
-
 msgid "Ability type"
 msgstr "Typ dovednosti"
 
@@ -1890,9 +1890,6 @@ msgstr "Konfigurace"
 
 msgid "Deadline date"
 msgstr "Datum uzávěrky"
-
-msgid "Delivery list"
-msgstr "Seznam výplat"
 
 msgid "Discount back"
 msgstr "Sleva zpět"
@@ -6555,12 +6552,6 @@ msgstr ""
 "Tato stránka podrobně zobrazuje dovednosti přispěvatele, které označil"
 
 msgid ""
-"This page summarizes the abilities that participants can purchase with px"
-msgstr ""
-"Na této stránce jsou shrnuty schopnosti, které si účastníci mohou zakoupit "
-"pomocí px"
-
-msgid ""
 "To confirm your registration, apply to become a member of the Association"
 msgstr ""
 "Chcete-li potvrdit své členství, podejte žádost o členství ve sdružení"
@@ -7513,6 +7504,13 @@ msgid ""
 msgstr ""
 "Na této stránce jsou uvedeny různé vstupenky, s nimiž se účastníci mohou na "
 "akci registrovat"
+
+msgid ""
+"This page summarizes the abilities that participants can purchase with "
+"experience points"
+msgstr ""
+"Tato stránka shrnuje schopnosti, které si účastníci mohou zakoupit za "
+"zkušenostní body"
 
 msgid ""
 "We inform you that your membership of the Association has not been accepted "

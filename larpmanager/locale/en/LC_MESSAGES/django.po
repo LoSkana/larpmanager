@@ -4110,13 +4110,10 @@ msgstr ""
 msgid "Used"
 msgstr ""
 
-msgid "Ability list"
-msgstr ""
-
 msgid "Remove"
 msgstr ""
 
-msgid "Delivery list"
+msgid "Deliveries"
 msgstr ""
 
 msgid "Delegated users"
@@ -6316,7 +6313,8 @@ msgid "Rensponsable"
 msgstr ""
 
 msgid ""
-"This page summarizes the abilities that participants can purchase with px"
+"This page summarizes the abilities that participants can purchase with "
+"experience points"
 msgstr ""
 
 msgid "Cost"

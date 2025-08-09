@@ -1314,6 +1314,9 @@ msgstr "Samle"
 msgid "Contact us"
 msgstr "Kontakt oss"
 
+msgid "Deliveries"
+msgstr "Leveranser"
+
 msgid "Easter egg"
 msgstr "Påskeegg"
 
@@ -1650,9 +1653,6 @@ msgstr "tekstlengde"
 msgid "unique code"
 msgstr "unik kode"
 
-msgid "Ability list"
-msgstr "Liste over ferdigheter"
-
 msgid "Ability type"
 msgstr "Ferdighetstype"
 
@@ -1890,9 +1890,6 @@ msgstr "Konfigurasjon"
 
 msgid "Deadline date"
 msgstr "Frist"
-
-msgid "Delivery list"
-msgstr "Utbetalingsliste"
 
 msgid "Discount back"
 msgstr "Rabatt tilbake"
@@ -6621,10 +6618,6 @@ msgstr ""
 "for"
 
 msgid ""
-"This page summarizes the abilities that participants can purchase with px"
-msgstr "Denne siden oppsummerer evnene som deltakerne kan kjøpe med px"
-
-msgid ""
 "To confirm your registration, apply to become a member of the Association"
 msgstr "For å bekrefte medlemskapet ditt, søk om å bli medlem av foreningen"
 
@@ -7615,6 +7608,12 @@ msgid ""
 msgstr ""
 "Denne siden viser de ulike billettene som deltakerne kan registrere seg med "
 "til arrangementet"
+
+msgid ""
+"This page summarizes the abilities that participants can purchase with "
+"experience points"
+msgstr ""
+"Denne siden oppsummerer evnene som deltakerne kan kjøpe med erfaringspoeng"
 
 msgid ""
 "We inform you that your membership of the Association has not been accepted "

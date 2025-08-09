@@ -1314,6 +1314,9 @@ msgstr "Colecta"
 msgid "Contact us"
 msgstr "Contactar"
 
+msgid "Deliveries"
+msgstr "Entregas"
+
 msgid "Easter egg"
 msgstr "Huevo de Pascua"
 
@@ -1650,9 +1653,6 @@ msgstr "longitud del texto"
 msgid "unique code"
 msgstr "código único"
 
-msgid "Ability list"
-msgstr "Lista de habilidades"
-
 msgid "Ability type"
 msgstr "Tipo de habilidad"
 
@@ -1890,9 +1890,6 @@ msgstr "Configuración"
 
 msgid "Deadline date"
 msgstr "Fecha límite"
-
-msgid "Delivery list"
-msgstr "Lista de entregas"
 
 msgid "Discount back"
 msgstr "Descuento"
@@ -6693,12 +6690,6 @@ msgstr ""
 "que ha marcado"
 
 msgid ""
-"This page summarizes the abilities that participants can purchase with px"
-msgstr ""
-"En esta página se resumen las capacidades que los participantes pueden "
-"adquirir con px"
-
-msgid ""
 "To confirm your registration, apply to become a member of the Association"
 msgstr "Para confirmar su afiliación, solicite ser miembro de la Asociación"
 
@@ -7732,6 +7723,13 @@ msgid ""
 msgstr ""
 "Esta página muestra las diferentes entradas con las que los participantes "
 "pueden inscribirse en el acto"
+
+msgid ""
+"This page summarizes the abilities that participants can purchase with "
+"experience points"
+msgstr ""
+"En esta página se resumen las habilidades que los participantes pueden "
+"adquirir con puntos de experiencia"
 
 msgid ""
 "We inform you that your membership of the Association has not been accepted "
