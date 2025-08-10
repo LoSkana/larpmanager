@@ -7,8 +7,7 @@
     {% trans "This page shows the roles of the characters" %}
 {% endblock info %}
 {% block content %}
-    <table id="roles"
-           class="{% if not interface_old %}go_datatable{% endif %} writing">
+    <table id="roles" class="go_datatable writing">
         <thead>
             <tr>
                 <th>{% trans "Character" %}</th>
@@ -30,8 +29,7 @@
     </table>
     {% for el in roles_list %}
         <h3>{{ el.0 }}</h3>
-        <table id="char_roles"
-               class="{% if not interface_old %}go_datatable{% endif %}">
+        <table id="char_roles" class="go_datatable">
             {% for c in el.1 %}
                 <tr>
                     <td>{{ c.0.name }}</td>
