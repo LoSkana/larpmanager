@@ -2038,4 +2038,4 @@ table.dataTable span.dtcc span.dtcc-button-icon {
   width: 100%;
 }
 
-#one .inner { display: none; }
+#one .inner, #topbar .inner { display: none; }
