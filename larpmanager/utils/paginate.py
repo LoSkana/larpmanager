@@ -81,7 +81,7 @@ def _set_filtering(ctx, elements, filters):
             print(f"this shouldn't happen! _get_ordering {filters} {ctx['fields']}")
         field, name = ctx["fields"][column_ix - 1]
 
-        if field in ctx.get("callbacks"):
+        if field in ctx.get("callbacks", {}):
             continue
 
         if field in field_map:
@@ -117,7 +117,7 @@ def _get_ordering(ctx, order):
             print(f"this shouldn't happen! _get_ordering {order} {ctx['fields']}")
         field, name = ctx["fields"][column_ix - 1]
 
-        if field in ctx.get("callbacks"):
+        if field in ctx.get("callbacks", {}):
             continue
 
         if field in field_map:
