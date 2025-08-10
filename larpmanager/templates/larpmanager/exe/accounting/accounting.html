@@ -210,8 +210,7 @@
     {% endfor %}
     <div class="hide tcm">
         <h2>{{ token_name }} / {{ credit_name }}</h2>
-        <table id="member_report"
-               class="{% if not interface_old %}go_datatable{% endif %}">
+        <table id="member_report" class="go_datatable">
             <thead>
                 <tr>
                     <th>{% trans "Member" %}</th>
@@ -230,8 +229,7 @@
     </div>
     <div class="hide runs">
         <h2>{% trans "Run balance" %}</h2>
-        <table id="run_balance"
-               class="{% if not interface_old %}go_datatable{% endif %}">
+        <table id="run_balance" class="go_datatable">
             <thead>
                 <tr>
                     <th>{% trans "Run" %}</th>
