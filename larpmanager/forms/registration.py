@@ -395,7 +395,7 @@ class RegistrationGiftForm(RegistrationForm):
 
 
 class OrgaRegistrationForm(BaseRegistrationForm):
-    page_info = _("This page allows you to add or edit a signup to this run")
+    page_info = _("This page allows you to add or edit a signup to this event")
 
     page_title = _("Registrations")
 
@@ -810,7 +810,7 @@ class OrgaRegistrationQuotaForm(MyForm):
 
 
 class OrgaRegistrationInstallmentForm(MyForm):
-    page_info = _("This page allows you to add or change the fixed instalments in which a player must pay")
+    page_info = _("This page allows you to add or change the fixed instalments in which a participant must pay")
 
     page_title = _("Fixed instalments")
 

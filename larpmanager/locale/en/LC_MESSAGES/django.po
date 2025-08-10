@@ -789,8 +789,8 @@ msgid "Disable assignment"
 msgstr ""
 
 msgid ""
-"If checked: Does not send communication to the player when the character is "
-"assigned"
+"If checked: Does not send communication to the participant when the "
+"character is assigned"
 msgstr ""
 
 msgid "Visualisation"
@@ -834,7 +834,7 @@ msgstr ""
 
 msgid ""
 "If checked, the subscribers' gallery will not be displayed to those who are "
-"not subscribed to the run"
+"not registered to the event"
 msgstr ""
 
 msgid "Hide unassigned characters"
@@ -842,7 +842,7 @@ msgstr ""
 
 msgid ""
 "If checked, does not show characters in the gallery who have not been "
-"assigned a player"
+"assigned a participant"
 msgstr ""
 
 msgid "Hide participants without a character"
@@ -880,7 +880,7 @@ msgstr ""
 
 msgid ""
 "If checked, allows a registration form question to be visible only if the "
-"player is assigned to certain factions."
+"participant is assigned to certain factions."
 msgstr ""
 
 msgid "Ticket selection"
@@ -896,7 +896,7 @@ msgstr ""
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "
-"player's age"
+"participant's age"
 msgstr ""
 
 msgid "Character form"
@@ -1184,7 +1184,7 @@ msgstr ""
 
 msgid ""
 "Given a payment deadline, indicates the number of days under which it "
-"notifies the player to proceed with the payment. Default 30."
+"notifies the participant to proceed with the payment. Default 30."
 msgstr ""
 
 msgid "Causal"
@@ -1226,7 +1226,7 @@ msgstr ""
 
 msgid ""
 "Value of the discount for the friend who signs up using the code of a "
-"registered player"
+"registered participant"
 msgstr ""
 
 msgid "Tickets"
@@ -1726,7 +1726,7 @@ msgstr ""
 msgid "Your registration ticket"
 msgstr ""
 
-msgid "This page allows you to add or edit a signup to this run"
+msgid "This page allows you to add or edit a signup to this event"
 msgstr ""
 
 msgid "Registration"
@@ -1775,7 +1775,7 @@ msgstr ""
 
 msgid ""
 "This page allows you to add or change the fixed instalments in which a "
-"player must pay"
+"participant must pay"
 msgstr ""
 
 msgid "Fixed instalments"
@@ -2582,7 +2582,7 @@ msgstr ""
 
 msgid ""
 "Indicate the type of discount: standard, play again (only available to those "
-"who have already played a run)"
+"who have already played this event)"
 msgstr ""
 
 msgid "Indicates whether the discount is visible and usable by participants"
@@ -2863,9 +2863,6 @@ msgid "Cancelled"
 msgstr ""
 
 msgid "Concluded"
-msgstr ""
-
-msgid "Number of event run"
 msgstr ""
 
 msgid "Start date"
@@ -3522,7 +3519,8 @@ msgid ""
 "Presentation visible to all participants, when 'show presentation' is checked"
 msgstr ""
 
-msgid "Text visible only by the assigned player, when 'show text' is checked"
+msgid ""
+"Text visible only by the assigned participant, when 'show text' is checked"
 msgstr ""
 
 msgid "Creation"
@@ -6032,7 +6030,7 @@ msgid "Refund for"
 msgstr ""
 
 msgid ""
-"This page allows you to return part of the quota to a player who has "
+"This page allows you to return part of the quota to a participant who has "
 "cancelled"
 msgstr ""
 
@@ -6090,7 +6088,7 @@ msgstr ""
 msgid "Cancellation date"
 msgstr ""
 
-msgid "This page summarises the assignments in this run of"
+msgid "This page summarises the assignments in this event of"
 msgstr ""
 
 msgid "This page shows the discounts activated for this event"
@@ -6125,7 +6123,7 @@ msgstr ""
 
 msgid ""
 "This page shows all expenses incurred directly by the organization "
-"concerning this run"
+"concerning this event"
 msgstr ""
 
 msgid "This page shows all payments received for this event"
@@ -6392,7 +6390,7 @@ msgstr ""
 msgid "Perform extraction"
 msgstr ""
 
-msgid "This page shows the pre-signups for the run"
+msgid "This page shows the pre-signups for the event"
 msgstr ""
 
 msgid "Pre-registration link"
@@ -6418,7 +6416,7 @@ msgstr ""
 msgid "Available days"
 msgstr ""
 
-msgid "This page shows the run signups"
+msgid "This page shows the signups of the event"
 msgstr ""
 
 msgid "accounting"
@@ -6614,7 +6612,7 @@ msgstr ""
 msgid "This page shows users who can be persuaded to sign up"
 msgstr ""
 
-msgid "List of users who have not registered for a future run of the event"
+msgid "List of users who have not registered for a future session of the event"
 msgstr ""
 
 msgid "Nickname"
@@ -6630,8 +6628,8 @@ msgid "This page shows the questions submitted by participants"
 msgstr ""
 
 msgid ""
-"This page shows the sensitive information of registered players regarding "
-"safety"
+"This page shows the sensitive information of registered participants "
+"regarding safety"
 msgstr ""
 
 msgid "Sensitive data"
@@ -6686,7 +6684,8 @@ msgstr ""
 msgid "This page shows the workshop questions for the event"
 msgstr ""
 
-msgid "This page shows for each player their completion status of workshops"
+msgid ""
+"This page shows for each participant their completion status of workshops"
 msgstr ""
 
 msgid "Not completed"
@@ -7400,7 +7399,7 @@ msgstr ""
 msgid "Now you can set the experience points settings"
 msgstr ""
 
-msgid "Allows players to create and modify their own characters freely"
+msgid "Allows participants to create and modify their own characters freely"
 msgstr ""
 
 msgid "Now you can set the player editing settings"
@@ -8290,7 +8289,7 @@ msgstr ""
 
 msgid ""
 "Set up the configuration for the creation or editing of characters by the "
-"players"
+"participants"
 msgstr ""
 
 msgid ""

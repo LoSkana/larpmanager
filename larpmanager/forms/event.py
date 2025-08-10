@@ -202,7 +202,7 @@ class OrgaConfigForm(ConfigForm):
     def set_configs(self):
         self.set_section("email", _("Email notifications"))
         label = _("Disable assignment")
-        help_text = _("If checked: Does not send communication to the player when the character is assigned")
+        help_text = _("If checked: Does not send communication to the participant when the character is assigned")
         self.add_configs("mail_character", ConfigType.BOOL, label, help_text)
 
         self.set_section("visualisation", _("Visualisation"))
@@ -248,13 +248,15 @@ class OrgaConfigForm(ConfigForm):
 
         label = _("Request registration")
         help_text = _(
-            "If checked, the subscribers' gallery will not be displayed to those who are not subscribed to the run"
+            "If checked, the subscribers' gallery will not be displayed to those who are not registered to the event"
         )
         self.add_configs("gallery_hide_signup", ConfigType.BOOL, label, help_text)
 
         if "character" in self.params["features"]:
             label = _("Hide unassigned characters")
-            help_text = _("If checked, does not show characters in the gallery who have not been assigned a player")
+            help_text = _(
+                "If checked, does not show characters in the gallery who have not been assigned a participant"
+            )
             self.add_configs("gallery_hide_uncasted_characters", ConfigType.BOOL, label, help_text)
 
             label = _("Hide participants without a character")
@@ -285,7 +287,7 @@ class OrgaConfigForm(ConfigForm):
 
         label = _("Faction selection")
         help_text = _(
-            "If checked, allows a registration form question to be visible only if the player is "
+            "If checked, allows a registration form question to be visible only if the participant is "
             "assigned to certain factions."
         )
         self.add_configs("registration_reg_que_faction", ConfigType.BOOL, label, help_text)
@@ -297,7 +299,7 @@ class OrgaConfigForm(ConfigForm):
         self.add_configs("registration_reg_que_tickets", ConfigType.BOOL, label, help_text)
 
         label = _("Age selection")
-        help_text = _("If checked, allows a registration form question to be visible based on the player's age")
+        help_text = _("If checked, allows a registration form question to be visible based on the participant's age")
         self.add_configs("registration_reg_que_age", ConfigType.BOOL, label, help_text)
 
     def set_config_char_form(self):
@@ -530,7 +532,7 @@ class OrgaConfigForm(ConfigForm):
             label = _("Alert")
             help_text = _(
                 "Given a payment deadline, indicates the number of days under which it notifies "
-                "the player to proceed with the payment. Default 30."
+                "the participant to proceed with the payment. Default 30."
             )
             self.add_configs("payment_alert", ConfigType.INT, label, help_text)
 
@@ -565,7 +567,9 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("bring_friend_discount_to", ConfigType.INT, label, help_text)
 
             label = _("Discount back")
-            help_text = _("Value of the discount for the friend who signs up using the code of a registered player")
+            help_text = _(
+                "Value of the discount for the friend who signs up using the code of a registered participant"
+            )
             self.add_configs("bring_friend_discount_from", ConfigType.INT, label, help_text)
 
     def set_config_registration(self):

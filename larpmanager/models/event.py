@@ -482,7 +482,7 @@ class Run(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="runs")
 
-    number = models.IntegerField(help_text=_("Number of event run"))
+    number = models.IntegerField()
 
     start = models.DateField(blank=True, null=True, verbose_name=_("Start date"))
 

@@ -333,7 +333,7 @@ def _orga_actions_priorities(request, ctx, assoc):
         if ctx["event"].get_config("user_character_max", "") == "":
             _add_priority(
                 ctx,
-                _("Set up the configuration for the creation or editing of characters by the players"),
+                _("Set up the configuration for the creation or editing of characters by the participants"),
                 "orga_character",
                 "config/user_character",
             )
