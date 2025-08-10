@@ -269,6 +269,10 @@ def _expand_val(val, el, field):
 
 
 def _header_regs(ctx, el, key, val):
+    if "character" in ctx["features"]:
+        key.append(_("Characters"))
+        val.append([row.character.name for row in el.rcrs.all()])
+
     if "pay_what_you_want" in ctx["features"]:
         val.append(el.pay_what)
         key.append("PWYW")
