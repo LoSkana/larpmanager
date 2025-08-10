@@ -53,7 +53,7 @@
     {% endif %}
     {% if data.website %}
         <p>
-            <a href="{{ data.website }}" class="button primary" target="_blank">{% trans "Discover the web site!" %}</a>
+            <a href="{{ data.website }}" class="button primary" target="_blank">{% trans "Discover the web site" %}!</a>
         </p>
         <hr />
     {% endif %}
@@ -70,15 +70,15 @@
                 </thead>
                 {% for run in coming %}
                     <tr>
-                        <td data-title='{% trans "Name" %}'>
+                        <td data-title="{% trans "Name" %}">
                             <h3>
                                 <a href="{% url 'gallery' event.slug run.number %}">{{ run.search }}</a>
                             </h3>
                         </td>
-                        <td data-title='{% trans "Date" %}'>
+                        <td data-title="{% trans "Date" %}">
                             <i>{{ run.pretty_dates }} </i>
                         </td>
-                        <td data-title='{% trans "Registrations" %}'>{% include "elements/reg_status.html" with run=run %}</td>
+                        <td data-title="{% trans "Registrations" %}">{% include "elements/reg_status.html" with run=run %}</td>
                     </tr>
                 {% endfor %}
             </table>
@@ -87,10 +87,10 @@
         <table class="mob">
             <tr>
                 <th>
-                    {% trans "There are no new runs scheduled at this time." %}
+                    {% trans "There are no new runs scheduled at this time" %}.
                     {% if features.pre_register %}
-                        <a href="{% url 'pre_register' event.slug %}">{% trans "Pre-register here!" %}</a>
-                        {% trans "You will be notified when a new run is organized, and you will have fast-track on registration!" %}
+                        <a href="{% url 'pre_register' event.slug %}">{% trans "Pre-register here" %}!</a>
+                        {% trans "You will be notified when a new run is organized, and you will have fast-track on registration" %}!
                     </th>
                 </tr>
             {% endif %}
@@ -100,9 +100,9 @@
         <br />
         <div class="no-more-tables">
             <h2>
-                <a onClick="$('#past-runs').toggle(500);return false;">{% trans "Past runs" %}</a>
+                <a class="my_toggle" tog="past-runs" href="#">{% trans "Past runs" %}</a>
             </h2>
-            <table id="past-runs" style="display: none">
+            <table class="hide past-runs">
                 <thead>
                     <tr>
                         <th>{% trans "Name" %}</th>
@@ -113,16 +113,16 @@
                 </thead>
                 {% for run in past %}
                     <tr>
-                        <td data-title='{% trans "Name" %}'>
+                        <td data-title="{% trans "Name" %}">
                             <h3>{{ run.search }}</h3>
                         </td>
-                        <td data-title='{% trans "Date" %}'>
+                        <td data-title="{% trans "Date" %}">
                             <i>{{ run.pretty_dates }} </i>
                         </td>
-                        <td data-title='{% trans "Link" %}'>
+                        <td data-title="{% trans "Link" %}">
                             <a href="{% url 'gallery' event.slug run.number %}">{% trans "Gallery" %}</a>
                         </td>
-                        <td data-title='{% trans "Character" %}'>
+                        <td data-title="{% trans "Character" %}">
                             {% if run.reg and run.reg.character %}
                                 <a href="{% url 'character' event.slug run.number run.reg.character.number %}">{{ run.reg.display_character }}</a>
                             {% endif %}

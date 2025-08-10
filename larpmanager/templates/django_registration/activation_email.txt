@@ -3,4 +3,4 @@
 
 http://{{ site.domain }}{% url 'django_registration_activate' activation_key %}
 
-{% trans "The link will be valid for the following number of days: " %}{{ expiration_days }}.
+{% trans "The link will be valid for the following number of days" %}: {{ expiration_days }}.

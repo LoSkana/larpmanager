@@ -34,13 +34,14 @@ from django.core.files.storage import default_storage
 from django.core.validators import URLValidator
 from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
-from django.utils.translation import activate
+from django.utils.translation import activate, get_language
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
 from larpmanager.accounting.member import info_accounting
 from larpmanager.forms.member import (
     AvatarForm,
+    LanguageForm,
     MembershipConfirmForm,
     MembershipRequestForm,
     ProfileForm,
@@ -50,7 +51,15 @@ from larpmanager.models.accounting import (
     AccountingItemMembership,
 )
 from larpmanager.models.association import Association, AssocTextType
-from larpmanager.models.member import Badge, Member, Membership, Vote, get_user_membership
+from larpmanager.models.member import (
+    Badge,
+    Member,
+    Membership,
+    MembershipStatus,
+    NewsletterChoices,
+    Vote,
+    get_user_membership,
+)
 from larpmanager.models.miscellanea import (
     ChatMessage,
     Contact,
@@ -73,6 +82,39 @@ from larpmanager.utils.registration import registration_status
 from larpmanager.utils.text import get_assoc_text
 
 
+def language(request):
+    if request.user.is_authenticated:
+        current_language = request.user.member.language
+    else:
+        current_language = get_language()
+
+    if request.method == "POST":
+        form = LanguageForm(request.POST, current_language=current_language)
+        if form.is_valid():
+            language = form.cleaned_data["language"]
+            activate(language)
+            request.session["django_language"] = language
+            response = HttpResponseRedirect("/")
+            if request.user.is_authenticated:
+                request.user.member.language = language
+                request.user.member.save()
+            else:
+                response.set_cookie(
+                    conf_settings.LANGUAGE_COOKIE_NAME,
+                    language,
+                    max_age=conf_settings.LANGUAGE_COOKIE_AGE,
+                    path=conf_settings.LANGUAGE_COOKIE_PATH,
+                    domain=conf_settings.LANGUAGE_COOKIE_DOMAIN,
+                    secure=conf_settings.SESSION_COOKIE_SECURE or None,
+                    httponly=False,
+                    samesite=conf_settings.SESSION_COOKIE_SAMESITE,
+                )
+            return response
+    else:
+        form = LanguageForm(current_language=current_language)
+    return render(request, "larpmanager/member/language.html", {"form": form})
+
+
 @login_required
 def profile(request):
     if request.assoc["id"] == 0:
@@ -85,16 +127,16 @@ def profile(request):
         if form.is_valid():
             prof = form.save()
             ctx["membership"].compiled = True
-            if ctx["membership"].status == Membership.EMPTY:
-                ctx["membership"].status = Membership.JOINED
+            if ctx["membership"].status == MembershipStatus.EMPTY:
+                ctx["membership"].status = MembershipStatus.JOINED
             ctx["membership"].save()
             activate(prof.language)
 
-            mes = _("Personal data updated!")
+            mes = _("Personal data updated") + "!"
 
             if "membership" in request.assoc["features"]:
-                if ctx["membership"].status in [Membership.EMPTY, Membership.JOINED]:
-                    mes += " " + _("Last step, please upload your membership application.")
+                if ctx["membership"].status in [MembershipStatus.EMPTY, MembershipStatus.JOINED]:
+                    mes += " " + _("Last step, please upload your membership application") + "."
                     messages.success(request, mes)
                     return redirect("membership")
 
@@ -186,8 +228,8 @@ def profile_privacy(request):
     ctx.update(
         {
             "member": request.user.member,
-            "joined": request.user.member.memberships.exclude(status=Membership.EMPTY).exclude(
-                status=Membership.REWOKED
+            "joined": request.user.member.memberships.exclude(status=MembershipStatus.EMPTY).exclude(
+                status=MembershipStatus.REWOKED
             ),
         }
     )
@@ -201,9 +243,9 @@ def profile_privacy_rewoke(request, slug):
     try:
         assoc = Association.objects.get(slug=slug)
         membership = Membership.objects.get(assoc=assoc, member=request.user.member)
-        membership.status = Membership.EMPTY
+        membership.status = MembershipStatus.EMPTY
         membership.save()
-        messages.success(request, _("Data share removed successfully!"))
+        messages.success(request, _("Data share removed successfully") + "!")
     except Exception as err:
         raise Http404("error in performing request") from err
     return redirect("profile_privacy")
@@ -219,14 +261,14 @@ def membership(request):
         return redirect("profile")
 
     if request.method == "POST":
-        if el.status not in [Membership.EMPTY, Membership.JOINED, Membership.UPLOADED]:
+        if el.status not in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
             raise Http404("wrong membership")
 
         # Second pass - if the user already uploaded the files
-        if el.status == Membership.UPLOADED:
+        if el.status == MembershipStatus.UPLOADED:
             form = MembershipConfirmForm(request.POST, request.FILES)
             if form.is_valid():
-                el.status = Membership.SUBMITTED
+                el.status = MembershipStatus.SUBMITTED
                 el.save()
                 send_membership_confirm(request, el)
                 mes = _("Your membership application was successfully submitted!")
@@ -238,7 +280,7 @@ def membership(request):
             form = MembershipRequestForm(request.POST, request.FILES, instance=el)
             if form.is_valid():
                 form.save()
-                el.status = Membership.UPLOADED
+                el.status = MembershipStatus.UPLOADED
                 el.save()
                 form = MembershipConfirmForm()
                 ctx["doc_path"] = el.get_document_filepath().lower()
@@ -246,8 +288,8 @@ def membership(request):
 
     else:
         # Bring back to empty if uploaded
-        if el.status == Membership.UPLOADED:
-            el.status = Membership.JOINED
+        if el.status == MembershipStatus.UPLOADED:
+            el.status = MembershipStatus.JOINED
             el.save()
         form = MembershipRequestForm(instance=el)
 
@@ -262,7 +304,7 @@ def membership(request):
         member_id=request.user.member.id,
     ).exists()
 
-    if el.status == Membership.ACCEPTED:
+    if el.status == MembershipStatus.ACCEPTED:
         ctx["statute"] = get_assoc_text(request.assoc["id"], AssocTextType.STATUTE)
 
     ctx["disable_join"] = True
@@ -297,7 +339,8 @@ def public(request, n):
         for badge in ctx["member"].badges.filter(assoc_id=request.assoc["id"]).order_by("number"):
             ctx["badges"].append(badge.show(request.LANGUAGE_CODE))
 
-    if "player_larp_history" in request.assoc["features"]:
+    assoc = Association.objects.get(pk=ctx["a_id"])
+    if assoc.get_config("player_larp_history", False):
         ctx["regs"] = (
             Registration.objects.filter(
                 cancellation_date__isnull=True,
@@ -345,6 +388,7 @@ def chat(request, n):
     check_assoc_feature(request, "chat")
     mid = request.user.member.id
     if n == mid:
+        messages.success(request, _("You can't send messages to yourself") + "!")
         return redirect("home")
     ctx = get_member(n)
     yid = ctx["member"].id
@@ -443,7 +487,7 @@ def unsubscribe(request):
     ctx = def_user_ctx(request)
     ctx.update({"member": request.user.member, "a_id": request.assoc["id"]})
     mb = get_user_membership(ctx["member"], ctx["a_id"])
-    mb.newsletter = Membership.NO
+    mb.newsletter = NewsletterChoices.NO
     mb.save()
     messages.success(request, _("The request of removal from further communication has been successfull!"))
     return redirect("home")
@@ -514,13 +558,15 @@ def delegated(request):
     ctx = def_user_ctx(request)
 
     user_logged_in.disconnect(update_last_login, dispatch_uid="update_last_login")
-    backend = "allauth.account.auth_backends.AuthenticationBackend"
+    backend = get_user_backend()
 
     # If the user is delegated, show info on login to the main account
     if request.user.member.parent:
         if request.method == "POST":
             login(request, request.user.member.parent.user, backend=backend)
-            messages.success(request, _("You are now logged in with your main account:") + str(request.user.member))
+            messages.success(
+                request, _("You are now logged in with your main account") + ":" + str(request.user.member)
+            )
             return redirect("home")
         return render(request, "larpmanager/member/delegated.html", ctx)
 
@@ -536,7 +582,7 @@ def delegated(request):
                 raise Http404(f"delegated account not found: {account_login}")
             delegated = del_dict[account_login]
             login(request, delegated.user, backend=backend)
-            messages.success(request, _("You are now logged in with the delegate account:") + str(delegated))
+            messages.success(request, _("You are now logged in with the delegate account") + ":" + str(delegated))
             return redirect("home")
 
         form = ProfileForm(request.POST, request=request)
@@ -568,6 +614,11 @@ def delegated(request):
         info_accounting(request, del_ctx)
         el.ctx = del_ctx
     return render(request, "larpmanager/member/delegated.html", ctx)
+
+
+def get_user_backend():
+    backend = "allauth.account.auth_backends.AuthenticationBackend"
+    return backend
 
 
 @login_required

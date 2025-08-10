@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n show_tags %}
 {% block title %}
-    {% trans "Your delegated users" %}
+    {% trans "Delegated users" %}
 {% endblock title %}
 {% block content %}
     {% if request.user.member.parent %}
@@ -19,7 +19,7 @@
         <p>{% trans "You are currently logged in with the" %}: {{ request.user.member }}.</p>
         <p>{% trans "You can create new delegate accounts, or log in with them by pressing the relevant button" %}</p>
         <br />
-        <table class="mob no_csv">
+        <table class="mob ">
             <tr>
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Registrations" %}</th>
@@ -41,9 +41,9 @@
                             {% if reg.opts %}
                                 {% for k, el in reg.opts.items %}
                                     {% include "elements/comma.html" %}
-                                    <b>{{ el.q.display }}</b> -
+                                    <b>{{ el.q.name }}</b> -
                                     {% for opt in el.l %}
-                                        {{ opt.display }}
+                                        {{ opt.name }}
                                         {% if opt.price %}<i><u>({{ opt.price }}{{ currency_symbol }})</u></i>{% endif %}
                                     {% endfor %}
                                 {% endfor %}
@@ -74,7 +74,7 @@
         <div class="add_new {% if not form.errors %}hide{% endif %}">
             <form action="{{ request.path }}" method="post">
                 {% csrf_token %}
-                <table class="no_csv">
+                <table>
                     {{ form.as_table }}
                 </table>
                 <input type="submit" value="{% trans "Confirm" %}" />

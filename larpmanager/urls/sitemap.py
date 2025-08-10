@@ -18,150 +18,86 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.contrib import (
-    sitemaps,
-)
-from django.contrib.sitemaps.views import (
-    sitemap,
-)
-from django.urls import (
-    path,
-)
-from django.utils import (
-    translation,
-)
-from django.utils.translation import (
-    gettext_lazy as _,
-)
+from io import StringIO
 
-from larpmanager.models.association import (
-    Association,
-)
-from larpmanager.models.event import (
-    Run,
-)
-from larpmanager.models.larpmanager import (
-    LarpManagerBlog,
-    LarpManagerTutorial,
-)
+from django.http import HttpResponse
+from django.urls import path
+from django.utils import translation
+from django.utils.xmlutils import SimplerXMLGenerator
+from django.views.decorators.cache import cache_page
+
+from larpmanager.models.association import Association
+from larpmanager.models.event import DevelopStatus, Run
+from larpmanager.models.larpmanager import LarpManagerBlog, LarpManagerTutorial
 
 translation.activate("en")
 
 
-class MainSitemap(sitemaps.Sitemap):
-    def _urls(
-        self,
-        page,
-        protocol,
-        domain,
-    ):
-        s = []
-        for el in [
-            "",
-            "discover",
-            "tutorials",
-            "usage",
-            "about-us",
-        ]:
-            s.append(
-                {
-                    "item": el,
-                    "location": f"https://larpmanager.com/{el}/",
-                    "lastmod": None,
-                    "changefreq": "daily",
-                    "priority": "",
-                    "alternates": [],
-                }
-            )
-        for el in LarpManagerBlog.objects.filter(published=True):
-            s.append(
-                {
-                    "item": el.title,
-                    "location": f"https://larpmanager.com/blog/{el.slug}/",
-                    "lastmod": None,
-                    "changefreq": "daily",
-                    "priority": "",
-                    "alternates": [],
-                }
-            )
-        for el in LarpManagerTutorial.objects.all():
-            s.append(
-                {
-                    "item": "Tutorials - " + _(el.name),
-                    "location": f"https://larpmanager.com/tutorials/{el.slug}/",
-                    "lastmod": None,
-                    "changefreq": "daily",
-                    "priority": "",
-                    "alternates": [],
-                }
-            )
-        return s
+@cache_page(60 * 60)
+def manual_sitemap_view(request):
+    if request.assoc["id"] == 0:
+        urls = larpmanager_sitemap()
+    else:
+        urls = _organization_sitemap(request)
+
+    stream = _render_sitemap(urls)
+
+    return HttpResponse(stream.getvalue(), content_type="application/xml")
 
 
-class EventSitemap(sitemaps.Sitemap):
-    def _urls(
-        self,
-        page,
-        protocol,
-        domain,
-    ):
-        s = []
-        cache = {}
-        que = Run.objects.exclude(development=Run.START).exclude(development=Run.CANC)
-        que = que.select_related(
-            "event",
-            "event__assoc",
-        ).order_by("-end")
-        for el in que:
-            if el.event_id in cache:
-                continue
-            cache[el.event_id] = 1
-            s.append(
-                {
-                    "item": el.event.name,
-                    "location": f"https://{el.event.assoc.slug}.larpmanager.com/{el.event.slug}/{el.number}/event/",
-                    "lastmod": None,
-                    "changefreq": "daily",
-                    "priority": "",
-                    "alternates": [],
-                }
-            )
-        return s
+def _render_sitemap(urls):
+    # XML rendering
+    stream = StringIO()
+    xml = SimplerXMLGenerator(stream, "utf-8")
+    xml.startDocument()
+    xml.startElement("urlset", {"xmlns": "http://www.sitemaps.org/schemas/sitemap/0.9"})
+    for loc in urls:
+        xml.startElement("url", {})
+        xml.startElement("loc", {})
+        xml.characters(loc)
+        xml.endElement("loc")
+        xml.endElement("url")
+    xml.endElement("urlset")
+    xml.endDocument()
+    return stream
 
 
-class AssociationMap(sitemaps.Sitemap):
-    def _urls(
-        self,
-        page,
-        protocol,
-        domain,
-    ):
-        return [
-            {
-                "item": assoc.name,
-                "location": f"https://{assoc.slug}.larpmanager.com/",
-                "lastmod": None,
-                "changefreq": "daily",
-                "priority": "",
-                "alternates": [],
-            }
-            for assoc in Association.objects.all()
-        ]
+def _organization_sitemap(request):
+    assoc = Association.objects.get(pk=request.assoc["id"])
+    domain = assoc.skin.domain if assoc.skin else "larpmanager.com"
+    urls = [f"https://{assoc.slug}.{domain}/"]
+    # Event runs
+    cache_ev = {}
+    runs = (
+        Run.objects.exclude(development__in=[DevelopStatus.START, DevelopStatus.CANC])
+        .filter(event__assoc_id=request.assoc["id"])
+        .select_related("event", "event__assoc")
+        .order_by("-end")
+    )
+    for el in runs:
+        if el.event_id in cache_ev:
+            continue
+        cache_ev[el.event_id] = 1
+        assoc = el.event.assoc
+        domain = assoc.skin.domain if assoc.skin else "larpmanager.com"
+        urls.append(f"https://{assoc.slug}.{domain}/{el.event.slug}/{el.number}/event/")
+    return urls
 
 
-sitemaps = {
-    "sitemaps": {
-        "main": MainSitemap,
-        "larp": EventSitemap,
-        "assoc": AssociationMap,
-    }
-}
+def larpmanager_sitemap():
+    urls = []
+    # Static pages
+    for el in ["", "discover", "tutorials", "usage", "about-us"]:
+        urls.append(f"https://larpmanager.com/{el}/")
+    # Blog posts
+    for el in LarpManagerBlog.objects.filter(published=True):
+        urls.append(f"https://larpmanager.com/blog/{el.slug}/")
+    # Tutorials
+    for el in LarpManagerTutorial.objects.all():
+        urls.append(f"https://larpmanager.com/tutorials/{el.slug}/")
+    return urls
+
 
 urlpatterns = [
-    path(
-        "sitemap.xml",
-        sitemap,
-        sitemaps,
-        name="django.contrib.sitemaps.views.sitemap",
-    )
+    path("sitemap.xml", manual_sitemap_view),
 ]

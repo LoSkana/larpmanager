@@ -20,6 +20,7 @@
 
 import re
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_delete, post_save
@@ -52,7 +53,7 @@ def get_single_cache_text_field(el_id, f, v):
         v = ""
     red = remove_html_tags(v)
     ln = len(red)
-    limit = 150
+    limit = conf_settings.FIELD_SNIPPET_LIMIT
     if ln > limit:
         red = red[:limit]
         red += f"... <a href='#' class='post_popup' pop='{el_id}' fie='{f}'><i class='fas fa-eye'></i></a>"
@@ -82,12 +83,11 @@ def _init_element_cache_text_field(el, res, typ):
     applicable = QuestionApplicable.get_applicable(typ._meta.model_name)
     que = el.event.get_elements(WritingQuestion).filter(applicable=applicable)
     for que_id in que.filter(typ=QuestionType.EDITOR).values_list("pk", flat=True):
-        try:
-            v = WritingAnswer.objects.get(question_id=que_id, element_id=el.id).text
+        els = WritingAnswer.objects.filter(question_id=que_id, element_id=el.id)
+        if els:
+            v = els.first().text
             field = str(que_id)
             res[el.id][field] = get_single_cache_text_field(el.id, field, v)
-        except ObjectDoesNotExist:
-            pass
 
 
 def get_cache_text_field(typ, event):
@@ -118,6 +118,8 @@ def update_cache_text_fields_answer(instance):
     key = cache_text_field_key(typ, event)
     res = get_cache_text_field(typ, event)
     field = str(instance.question_id)
+    if instance.element_id not in res:
+        res[instance.element_id] = {}
     res[instance.element_id][field] = get_single_cache_text_field(instance.element_id, field, instance.text)
     cache.set(key, res)
 

@@ -4,11 +4,11 @@
     {% trans "Inventory objects" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows organization inventory items." %}
+    {% trans "This page shows organization inventory items" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
-    <table id="tb" class="tablesorter mob">
+    <table id="tb" class="tablesorter">
         <thead>
             <tr>
                 <th></th>
@@ -24,12 +24,13 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'exe_inventory_items_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'exe_inventory_items_edit' el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
                     <td>{{ el.description }}</td>
                     <td>
-                        <img src="{{ el.thumb.url }}" style="width:5em" />
+                        <img src="{{ el.thumb.url }}" class="inv_photo" alt="item photo" />
                     </td>
                     <td>{{ el.get_typ_display }}</td>
                     <td>{{ el.get_setting_display }}</td>

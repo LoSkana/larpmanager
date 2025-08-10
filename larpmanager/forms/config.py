@@ -3,6 +3,7 @@ from enum import IntEnum
 
 from django import forms
 from django.forms import Textarea
+from django.utils.safestring import mark_safe
 from tinymce.widgets import TinyMCE
 
 from larpmanager.cache.config import save_all_element_configs
@@ -17,12 +18,30 @@ class ConfigType(IntEnum):
     INT = 4
     TEXTAREA = 5
     MEMBERS = 6
+    MULTI_BOOL = 7
+
+
+class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
+    def render(self, name, value, attrs=None, renderer=None):
+        output = []
+        value = value or []
+
+        for i, (option_value, option_label) in enumerate(self.choices):
+            checkbox_id = f"{attrs.get('id', name)}_{i}"
+            checked = "checked" if str(option_value) in value else ""
+            checkbox_html = f'<input type="checkbox" name="{name}" value="{option_value}" id="{checkbox_id}" {checked}>'
+            link_html = f"{option_label}"
+            output.append(f'<div class="feature_checkbox">{checkbox_html} {link_html}</div>')
+
+        return mark_safe("\n".join(output))
 
 
 class ConfigForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.config_fields = []
+        self._section = None
+        self.jump_section = None
 
         self.set_configs()
 
@@ -34,15 +53,20 @@ class ConfigForm(MyForm):
     def set_configs(self):
         pass
 
-    def add_configs(self, key, config_type, section, label, help_text, element_id=None):
+    def set_section(self, slug, name):
+        self._section = name
+        if self.params.get("jump_section", "") == slug:
+            self.jump_section = name
+
+    def add_configs(self, key, config_type, label, help_text, extra=None):
         self.config_fields.append(
             {
                 "key": key,
                 "type": config_type,
-                "section": section,
+                "section": self._section,
                 "label": label,
                 "help_text": help_text,
-                "element_id": element_id,
+                "extra": extra,
             }
         )
 
@@ -62,7 +86,7 @@ class ConfigForm(MyForm):
         k = el["key"]
 
         val = self.cleaned_data[k]
-        if not val:
+        if val is None:
             return
 
         if el["type"] == ConfigType.MEMBERS:
@@ -81,6 +105,7 @@ class ConfigForm(MyForm):
                 label=label,
                 help_text=help_text,
                 required=False,
+                widget=forms.CheckboxInput(attrs={"class": "checkbox_single"}),
             ),
             ConfigType.HTML: lambda: forms.CharField(
                 label=label, widget=TinyMCE(), help_text=help_text, required=False
@@ -99,6 +124,13 @@ class ConfigForm(MyForm):
                 required=False,
                 help_text=help_text,
             ),
+            ConfigType.MULTI_BOOL: lambda: forms.MultipleChoiceField(
+                label=label,
+                choices=extra,
+                widget=MultiCheckboxWidget,
+                required=False,
+                help_text=help_text,
+            ),
         }
 
         factory = field_map.get(ConfigType(field_type))
@@ -114,11 +146,11 @@ class ConfigForm(MyForm):
 
         field_type = config["type"]
 
-        extra = config["element_id"] if field_type == ConfigType.MEMBERS else None
+        extra = config["extra"] if field_type in [ConfigType.MEMBERS, ConfigType.MULTI_BOOL] else None
         self.fields[key] = self._get_form_field(field_type, config["label"], config["help_text"], extra)
 
         if field_type == ConfigType.MEMBERS:
-            self.fields[key].widget.set_assoc(config["element_id"])
+            self.fields[key].widget.set_assoc(config["extra"])
             if init:
                 init = [s.strip() for s in init.split(",")]
 

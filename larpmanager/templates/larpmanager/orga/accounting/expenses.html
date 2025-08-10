@@ -4,12 +4,13 @@
     {% trans "Expenses" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page summarises all expenses incurred by employees and uploaded to the system. Once approved, they are disbursed to co-workers as" %} {{ credit_name }}.
+    {% trans "This page provides a summary of all expenses submitted by collaborators" %};
+    {% trans "once approved, the corresponding amounts are assigned as " %} {{ credit_name }}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
     {% include "elements/paginate.html" %}
-    <table id="expenses" class="tablesorter mob">
+    <table id="expenses" class="tablesorter">
         <thead>
             <tr>
                 <th></th>
@@ -26,7 +27,8 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_expenses_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'orga_expenses_edit' run.event.slug run.number el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.member }}</td>
                     <td>{{ el.get_exp_display }}</td>

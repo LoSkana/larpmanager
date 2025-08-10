@@ -45,7 +45,6 @@ from larpmanager.models.utils import (
     my_uuid_short,
     show_thumb,
 )
-from larpmanager.utils.codes import languages
 
 
 class Event(BaseModel):
@@ -60,8 +59,6 @@ class Event(BaseModel):
     )
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="events")
-
-    lang = models.CharField(max_length=2, choices=languages, blank=True, null=True)
 
     name = models.CharField(max_length=100)
 
@@ -110,7 +107,7 @@ class Event(BaseModel):
         max_length=500,
         upload_to="cover/",
         blank=True,
-        help_text=_("Cover in rectangular format - aspect ratio 4:3"),
+        help_text=_("Cover image shown on the organization's homepage — rectangular, ideally 4:3 ratio"),
     )
 
     cover_thumb = ImageSpecField(
@@ -140,24 +137,27 @@ class Event(BaseModel):
         max_length=150,
         blank=True,
         verbose_name=_("External register link"),
+        help_text=_("Insert the link to an external tool where users will be redirected if they are not yet registered")
+        + ". "
+        + _("Registered users will be granted normal access"),
     )
 
     max_pg = models.IntegerField(
         default=0,
-        verbose_name=_("Number of primary spots"),
-        help_text=_("Maximum number of primary spots to be managed (0 for infinite)"),
+        verbose_name=_("Max players"),
+        help_text=_("Maximum number of player spots (0 = unlimited)"),
     )
 
     max_filler = models.IntegerField(
         default=0,
-        verbose_name=_("Number of filler spots"),
-        help_text=_("Maximum number of fillers to manage (0 for infinite)"),
+        verbose_name=_("Max fillers"),
+        help_text=_("Maximum number of filler spots (0 = unlimited)"),
     )
 
     max_waiting = models.IntegerField(
         default=0,
-        verbose_name=_("Number of waiting spots"),
-        help_text=_("Maximum number of waiting spots to manage (0 for infinite)"),
+        verbose_name=_("Max waitings"),
+        help_text=_("Maximum number of waiting spots (0 = unlimited)"),
     )
 
     features = models.ManyToManyField(Feature, related_name="events", blank=True)
@@ -168,7 +168,11 @@ class Event(BaseModel):
         null=True,
         blank=True,
         verbose_name=_("Campaign"),
-        help_text=_("If the event is part of a campaign, specify the parent event whose characters will be shared"),
+        help_text=_(
+            "If you select another event, it will be considered in the same campaign, and they will share the characters"
+        )
+        + " - "
+        + _("if you leave this empty, this can be the starting event of a new campaign"),
     )
 
     background = models.ImageField(
@@ -176,7 +180,7 @@ class Event(BaseModel):
         upload_to="event_background/",
         verbose_name=_("Background image"),
         blank=True,
-        help_text=_("Background of web pages"),
+        help_text=_("Background image used across all event pages"),
     )
 
     background_red = ImageSpecField(
@@ -189,7 +193,7 @@ class Event(BaseModel):
     font = models.FileField(
         upload_to=UploadToPathAndRename("event_font/"),
         verbose_name=_("Title font"),
-        help_text=_("Font to be used in page titles"),
+        help_text=_("Font used for title texts across all event pages"),
         blank=True,
         null=True,
     )
@@ -392,6 +396,7 @@ class EventButton(BaseConceptModel):
 
 
 class EventTextType(models.TextChoices):
+    INTRO = "i", _("Character sheet intro")
     TOC = "t", _("Terms and conditions")
     REGISTER = "r", _("Registration form")
     SEARCH = "s", _("Search")
@@ -458,24 +463,20 @@ class ProgressStep(BaseConceptModel):
         return f"{self.order} - {self.name}"
 
 
-class Run(BaseModel):
-    START = "0"
-    SHOW = "1"
-    CANC = "8"
-    DONE = "9"
-    DEVELOP_CHOICES = [
-        (START, _("Hidden")),
-        (SHOW, _("Visible")),
-        (CANC, _("Cancelled")),
-        (DONE, _("Concluded")),
-    ]
+class DevelopStatus(models.TextChoices):
+    START = "0", _("Hidden")
+    SHOW = "1", _("Visible")
+    CANC = "8", _("Cancelled")
+    DONE = "9", _("Concluded")
 
+
+class Run(BaseModel):
     search = models.CharField(max_length=150, editable=False)
 
     development = models.CharField(
         max_length=1,
-        choices=DEVELOP_CHOICES,
-        default=START,
+        choices=DevelopStatus.choices,
+        default=DevelopStatus.START,
         verbose_name=_("Status"),
     )
 
@@ -483,29 +484,24 @@ class Run(BaseModel):
 
     number = models.IntegerField(help_text=_("Number of event run"))
 
-    start = models.DateField(
-        blank=True, null=True, verbose_name=_("Start date"), help_text=_("Indicates the date on which the run starts")
-    )
+    start = models.DateField(blank=True, null=True, verbose_name=_("Start date"))
 
-    end = models.DateField(
-        blank=True, null=True, verbose_name=_("End date"), help_text=_("Indicates the date on which the run ends")
-    )
+    end = models.DateField(blank=True, null=True, verbose_name=_("End date"))
 
     registration_open = models.DateTimeField(
         blank=True,
         null=True,
         verbose_name=_("Registration opening date"),
-        help_text=_("Indicate the date when registration opens. Leave blank to not open registrations"),
+        help_text=_("Enter the date and time when registrations open - leave blank to keep registrations closed"),
     )
 
     registration_secret = models.CharField(
         default=my_uuid_short,
         max_length=12,
         unique=True,
-        verbose_name=_("Registration code"),
+        verbose_name=_("Secret code"),
         help_text=_(
-            "This code will be used to generate the secret registration links. You can leave "
-            "it as it is or customise it"
+            "This code is used to generate the secret registration link, you may keep the default or customize it"
         ),
         db_index=True,
     )

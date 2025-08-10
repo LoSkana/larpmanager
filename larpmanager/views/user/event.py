@@ -23,24 +23,32 @@ from datetime import datetime, timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_reg_provisional
-from larpmanager.cache.character import get_character_fields, get_event_cache_all, get_searcheable_character_fields
+from larpmanager.cache.character import (
+    get_event_cache_all,
+    get_writing_element_fields,
+)
 from larpmanager.cache.feature import get_event_features
+from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.association import AssocTextType
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import (
+    DevelopStatus,
     EventTextType,
     Run,
 )
 from larpmanager.models.form import (
+    QuestionApplicable,
     RegistrationOption,
+    _get_writing_mapping,
 )
-from larpmanager.models.member import Membership, get_user_membership
+from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -51,6 +59,7 @@ from larpmanager.models.writing import (
     Character,
     CharacterStatus,
     Faction,
+    FactionType,
 )
 from larpmanager.utils.auth import is_lm_admin
 from larpmanager.utils.base import def_user_ctx
@@ -66,6 +75,7 @@ from larpmanager.utils.text import get_assoc_text, get_event_text
 def calendar(request, lang):
     aid = request.assoc["id"]
     my_regs = None
+    my_runs_list = []
     if request.user.is_authenticated:
         ref = datetime.now() - timedelta(days=3)
         my_regs = Registration.objects.filter(
@@ -76,32 +86,30 @@ def calendar(request, lang):
             run__end__gte=ref.date(),
         )
         my_regs = my_regs.select_related("ticket")
+        my_runs_list = [reg.run_id for reg in my_regs]
 
     ctx = def_user_ctx(request)
     ctx.update({"open": [], "future": [], "langs": [], "page": "calendar"})
     if lang:
         ctx["lang"] = lang
-    for run in get_coming_runs(aid, lang):
+    for run in get_coming_runs(aid, my_runs_list=my_runs_list):
         registration_status(run, request.user, my_regs=my_regs)
         if run.status["open"]:
             ctx["open"].append(run)
         elif "already" not in run.status:
             ctx["future"].append(run)
-        if run.event.lang not in ctx["langs"]:
-            ctx["langs"].append(run.event.lang)
 
     ctx["custom_text"] = get_assoc_text(request.assoc["id"], AssocTextType.HOME)
 
     return render(request, "larpmanager/general/calendar.html", ctx)
 
 
-def get_coming_runs(assoc_id, lang=None, future=True):
-    runs = (
-        Run.objects.exclude(development=Run.START)
-        .exclude(development=Run.CANC)
-        .exclude(event__visible=False)
-        .select_related("event")
-    )
+def get_coming_runs(assoc_id, my_runs_list=None, future=True):
+    runs = Run.objects.exclude(development=DevelopStatus.CANC).exclude(event__visible=False).select_related("event")
+    if my_runs_list:
+        runs = runs.exclude(Q(development=DevelopStatus.START) & ~Q(id__in=my_runs_list))
+    else:
+        runs = runs.exclude(development=DevelopStatus.START)
     if future:
         ref = datetime.now() - timedelta(days=3)
         runs = runs.filter(end__gte=ref.date()).order_by("end")
@@ -110,8 +118,6 @@ def get_coming_runs(assoc_id, lang=None, future=True):
         runs = runs.filter(end__lte=ref.date()).order_by("-end")
     if assoc_id:
         runs = runs.filter(event__assoc_id=assoc_id)
-    if lang:
-        runs = runs.filter(event__lang=lang)
     return runs
 
 
@@ -121,7 +127,7 @@ def home_json(request, lang="it"):
         request.LANGUAGE_CODE = lang
 
     res = []
-    runs = get_coming_runs(aid, lang)
+    runs = get_coming_runs(aid)
     already = []
     for run in runs:
         if run.event.id not in already:
@@ -139,8 +145,8 @@ def carousel(request):
     # ref = datetime.now() - timedelta(days=3)
     for run in (
         Run.objects.filter(event__assoc_id=request.assoc["id"])
-        .exclude(development=Run.START)
-        .exclude(development=Run.CANC)
+        .exclude(development=DevelopStatus.START)
+        .exclude(development=DevelopStatus.CANC)
         .order_by("-end")
         .select_related("event")
     ):
@@ -163,12 +169,12 @@ def share(request):
     ctx = def_user_ctx(request)
 
     el = get_user_membership(request.user.member, request.assoc["id"])
-    if el.status != Membership.EMPTY:
-        messages.success(request, _("You have already granted data sharing with this organisation!"))
+    if el.status != MembershipStatus.EMPTY:
+        messages.success(request, _("You have already granted data sharing with this organisation") + "!")
         return redirect("home")
 
     if request.method == "POST":
-        el.status = Membership.JOINED
+        el.status = MembershipStatus.JOINED
         el.save()
         messages.success(request, _("You have granted data sharing with this organisation!"))
         return redirect("home")
@@ -191,7 +197,7 @@ def event_register(request, s):
     # check future runs
     runs = (
         Run.objects.filter(event=ctx["event"], end__gte=datetime.now())
-        .exclude(development=Run.START)
+        .exclude(development=DevelopStatus.START)
         .exclude(event__visible=False)
         .order_by("end")
     )
@@ -257,7 +263,7 @@ def gallery(request, s, n):
     features = get_event_features(ctx["event"].id)
 
     if check_gallery_visibility(request, ctx):
-        if ctx["show_char"]:
+        if not ctx["event"].get_config("writing_field_visibility", False) or ctx.get("show_character"):
             get_event_cache_all(ctx)
 
         hide_uncasted_players = ctx["event"].get_config("gallery_hide_uncasted_players", False)
@@ -321,23 +327,24 @@ def event_redirect(request, s):
 def search(request, s, n):
     ctx = get_event_run(request, s, n, status=True)
 
-    if check_gallery_visibility(request, ctx) and ctx["show_char"]:
+    if check_gallery_visibility(request, ctx) and ctx["show_character"]:
         get_event_cache_all(ctx)
-        ctx["all"] = json.dumps(ctx["chars"])
-        ctx["facs"] = json.dumps(ctx["factions"])
         ctx["search_text"] = get_event_text(ctx["event"].id, EventTextType.SEARCH)
-        get_character_fields(ctx, only_visible=True)
-        get_searcheable_character_fields(ctx)
+        visible_writing_fields(ctx, QuestionApplicable.CHARACTER)
+        for _num, char in ctx["chars"].items():
+            fields = char.get("fields")
+            if not fields:
+                continue
+            to_delete = [
+                qid for qid in list(fields) if str(qid) not in ctx.get("show_character", []) and "show_all" not in ctx
+            ]
+            for qid in to_delete:
+                del fields[qid]
 
-    for slug in ["all", "facs"]:
-        if slug in ctx:
-            continue
-        ctx[slug] = {}
-
-    for slug in ["questions", "options", "searchable"]:
-        if slug in ctx:
-            continue
-        ctx[slug] = []
+    for slug in ["chars", "factions", "questions", "options", "searchable"]:
+        if slug not in ctx:
+            ctx[slug] = {}
+        ctx[f"{slug}_json"] = json.dumps(ctx[slug])
 
     return render(request, "larpmanager/event/search.html", ctx)
 
@@ -355,22 +362,22 @@ def get_fact(qs):
 
 def get_factions(ctx):
     fcs = ctx["event"].get_elements(Faction)
-    ctx["sec"] = get_fact(fcs.filter(typ=Faction.PRIM).order_by("number"))
-    ctx["trasv"] = get_fact(fcs.filter(typ=Faction.TRASV).order_by("number"))
+    ctx["sec"] = get_fact(fcs.filter(typ=FactionType.PRIM).order_by("number"))
+    ctx["trasv"] = get_fact(fcs.filter(typ=FactionType.TRASV).order_by("number"))
 
 
 def check_visibility(ctx, typ, name):
-    if typ not in ctx["features"]:
+    mapping = _get_writing_mapping()
+    if mapping.get(typ) not in ctx["features"]:
         raise Http404(typ + " not active")
 
-    if "staff" not in ctx and not ctx["show_" + typ]:
+    if "staff" not in ctx and not ctx[f"show_{typ}"]:
         raise HiddenError(ctx["event"].slug, ctx["run"].number, name)
 
 
 def factions(request, s, n):
     ctx = get_event_run(request, s, n, status=True)
     check_visibility(ctx, "faction", _("Factions"))
-
     get_event_cache_all(ctx)
     return render(request, "larpmanager/event/factions.html", ctx)
 
@@ -386,20 +393,22 @@ def faction(request, s, n, g):
         ctx["faction"] = ctx["factions"][g]
         typ = ctx["faction"]["typ"]
 
-    if "faction" not in ctx or typ == "secret":
+    if "faction" not in ctx or typ == "secret" or "id" not in ctx["faction"]:
         raise Http404("Faction does not exist")
+
+    ctx["fact"] = get_writing_element_fields(
+        ctx, "faction", QuestionApplicable.FACTION, ctx["faction"]["id"], only_visible=True
+    )
 
     return render(request, "larpmanager/event/faction.html", ctx)
 
 
 def quests(request, s, n, g=None):
     ctx = get_event_run(request, s, n, status=True)
-    check_visibility(ctx, "questbuilder", _("Quest"))
+    check_visibility(ctx, "quest", _("Quest"))
 
     if not g:
-        ctx["list"] = []
-        for el in QuestType.objects.filter(event=ctx["event"]).order_by("number"):
-            ctx["list"].append(el.show_complete())
+        ctx["list"] = QuestType.objects.filter(event=ctx["event"]).order_by("number").prefetch_related("quests")
         return render(request, "larpmanager/event/quest_types.html", ctx)
 
     get_element(ctx, g, "quest_type", QuestType, by_number=True)
@@ -411,10 +420,20 @@ def quests(request, s, n, g=None):
 
 def quest(request, s, n, g):
     ctx = get_event_run(request, s, n, status=True)
-    check_visibility(ctx, "questbuilder", _("Quest"))
+    check_visibility(ctx, "quest", _("Quest"))
 
     get_element(ctx, g, "quest", Quest, by_number=True)
-    ctx["data"] = ctx["quest"].show()
+    ctx["quest_fields"] = get_writing_element_fields(
+        ctx, "quest", QuestionApplicable.QUEST, ctx["quest"].id, only_visible=True
+    )
+
+    traits = []
+    for el in ctx["quest"].traits.all():
+        res = get_writing_element_fields(ctx, "trait", QuestionApplicable.TRAIT, el.id, only_visible=True)
+        res.update(el.show())
+        traits.append(res)
+    ctx["traits"] = traits
+
     return render(request, "larpmanager/event/quest.html", ctx)
 
 

@@ -31,7 +31,9 @@ with open(trans_path, "w") as f:
             data = yaml.safe_load(fixture)
 
             for el in data:
-                for s in ["name", "descr"]:
+                if "placeholder" in el["fields"] and el["fields"]["placeholder"]:
+                    continue
+                for s in ["name", "descr", "after_text"]:
                     if s not in el["fields"] or not el["fields"][s]:
                         continue
                     f.writelines("{% blocktrans %}" + el["fields"][s] + "{% endblocktrans %}\n")

@@ -37,14 +37,8 @@ from larpmanager.models.registration import (
     RegistrationCharacterRel,
     TicketTier,
 )
-from larpmanager.models.writing import (
-    Character,
-    Faction,
-)
-from larpmanager.utils.common import (
-    get_element,
-    get_time_diff_today,
-)
+from larpmanager.models.writing import Character, Faction, FactionType
+from larpmanager.utils.common import get_element, get_time_diff_today
 from larpmanager.utils.deadlines import get_membership_fee_year
 from larpmanager.utils.event import check_event_permission
 from larpmanager.views.user.casting import (
@@ -117,7 +111,7 @@ def get_casting_choices_characters(ctx, options):
 
     allowed = []
     if "faction" in ctx["features"]:
-        que = ctx["event"].get_elements(Faction).filter(typ=Faction.PRIM)
+        que = ctx["event"].get_elements(Faction).filter(typ=FactionType.PRIM)
         for el in que.order_by("number"):
             if str(el.id) not in options["factions"]:
                 continue
@@ -223,7 +217,7 @@ def get_casting_data(request, ctx, typ, form):
 
     # loop over registered players
     que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-    que = que.exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF])
+    que = que.exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC])
     que = que.order_by("created").select_related("ticket", "member")
     for reg in que:
         if check_casting_player(ctx, reg, options, typ, cache_membs, cache_aim):

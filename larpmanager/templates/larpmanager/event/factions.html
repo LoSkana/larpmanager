@@ -5,12 +5,13 @@
 {% endblock title %}
 {% block content %}
     <h2>{% trans "Primary" %}</h2>
+    {{ fields_name }}
     <div>
         <table class="mob">
             <thead>
                 <tr>
-                    <th>{% trans "Name" %}</th>
-                    <th>{% trans "Presentation" %}</th>
+                    <th>{{ writing_fields.faction.names.name }}</th>
+                    {% if show_faction.teaser %}<th>{{ writing_fields.faction.names.teaser }}</th>{% endif %}
                     <th>{% trans "Characters" %}</th>
                 </tr>
             </thead>
@@ -23,7 +24,7 @@
                                     <a href="{% url 'faction' run.event.slug run.number el.number %}">{{ el.name }}</a>
                                 </h3>
                             </td>
-                            {% if show_teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
+                            {% if show_faction.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
                             <td>
                                 {% for chnum in el.characters %}
                                     {% include "elements/comma.html" %}
@@ -46,8 +47,8 @@
             <table class="mob">
                 <thead>
                     <tr>
-                        <th>{% trans "Name" %}</th>
-                        <th>{% trans "Presentation" %}</th>
+                        <th>{{ writing_fields.faction.names.name }}</th>
+                        {% if show_faction.teaser %}<th>{{ writing_fields.faction.names.teaser }}</th>{% endif %}
                         <th>{% trans "Characters" %}</th>
                     </tr>
                 </thead>
@@ -59,7 +60,7 @@
                                     <a href="{% url 'faction' run.event.slug run.number el.number %}">{{ el.name }}</a>
                                 </h3>
                             </td>
-                            {% if show_teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
+                            {% if show_faction.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
                             <td>
                                 {% for chnum in el.characters %}
                                     {% include "elements/comma.html" %}

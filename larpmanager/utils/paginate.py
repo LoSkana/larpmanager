@@ -7,6 +7,7 @@ from larpmanager.models.accounting import (
     AccountingItemExpense,
     AccountingItemOther,
     PaymentInvoice,
+    PaymentStatus,
     RefundRequest,
 )
 from larpmanager.models.event import Run
@@ -20,7 +21,7 @@ def paginate(request, ctx, typ, exe, selrel, show_runs, afield, subtype):
     else:
         typ = typ.model
 
-    elements = cls.filter(assoc_id=ctx["a_id"]).order_by("-created")
+    elements = cls.filter(assoc_id=ctx["a_id"])
 
     # noinspection PyProtectedMember
     if "hide" in [f.name for f in typ._meta.get_fields()]:
@@ -46,6 +47,8 @@ def paginate(request, ctx, typ, exe, selrel, show_runs, afield, subtype):
             elements = elements.select_related(e)
     if search:
         elements = elements.filter(search__icontains=search)
+
+    elements = elements.order_by("-created")
 
     paginator = Paginator(elements, per_page=size)
     page = min(page, paginator.num_pages)
@@ -101,7 +104,7 @@ def _apply_custom_queries(ctx, elements, subtype, typ):
     if issubclass(typ, PaymentInvoice):
         elements = elements.annotate(
             is_submitted=Case(
-                When(status=PaymentInvoice.SUBMITTED, then=Value(0)),
+                When(status=PaymentStatus.SUBMITTED, then=Value(0)),
                 default=Value(1),
                 output_field=IntegerField(),
             )

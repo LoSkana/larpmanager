@@ -1,8 +1,10 @@
 {% load i18n tz show_tags static %}
 {% if form.load_templates %}
-    {% with template_name=form.load_templates|stringformat:"s"|add:".html" %}
-        {% include "elements/info/"|add:template_name %}
-    {% endwith %}
+    {% for item in form.load_templates %}
+        {% with template_name=item|stringformat:"s"|add:".html" %}
+            {% include "elements/info/"|add:template_name %}
+        {% endwith %}
+    {% endfor %}
 {% endif %}
 {% include "elements/form/informations.html" %}
 {% if form.errors %}
@@ -16,10 +18,11 @@
 <form action="{{ request.path }}"
       method="post"
       enctype="multipart/form-data"
-      id="main_form">
+      id="main_form"
+      {% if form.main_class %}class="{{ form.main_class }}"{% endif %}>
     {% csrf_token %}
     <div>
-        <table class="mob no_csv">
+        <table class="mob  ">
             {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
             {% define "" as old_section %}
             {% for field in form.visible_fields %}
@@ -41,18 +44,25 @@
                         {% get_field form.section_descriptions section as description %}
                         {{ description | safe }}
                     {% endif %}
-                    <table class="mob no_csv">
+                    <table class="mob  ">
                         {% define section as old_section %}
                     {% endif %}
                 {% endif %}
-                <tr id="{{ field.auto_id }}_tr">
+                <tr id="{{ field.auto_id }}_tr"
+                    {% if field.field.custom_class %}class="{{ field.field.custom_class }}"{% endif %}>
                     <th>
-                        <label id="lbl_{{ field.auto_id }}">{{ field.label }}</label>
+                        {% if form.field_link and field.auto_id in form.field_link %}
+                            {% get_field form.field_link field.auto_id as link %}
+                            <a href="{{ link }}">{% include "elements/form/label.html" %}</a>
+                        {% else %}
+                            {% include "elements/form/label.html" %}
+                        {% endif %}
                         {% if form.translate and field.auto_id in form.translate %}
                             <br />
                             <br />
                             <a onclick="return translate('{{ field.auto_id }}');">{% trans "Translate" %}</a>
                         {% endif %}
+                        {{ field.custom_class }}
                     </th>
                     <td>
                         {% if field.errors %}{{ field.errors }}{% endif %}
@@ -71,13 +81,13 @@
                             <p>
                                 <a href="#" class="my_toggle" tog="f_{{ field.auto_id }}">{% trans "Show" %}</a>
                             </p>
-                            <div style="display: none" class="hide hide_later f_{{ field.auto_id }}">{{ field }}</div>
+                            <div class="hide hide_later f_{{ field.auto_id }}">{{ field }}</div>
                         {% else %}
                             {{ field }}
                         {% endif %}
                         {% if field.help_text %}
                             <br>
-                            <div class="helptext {% if field.field.widget.input_type == 'checkbox' %}helptext-checkbox{% endif %}">
+                            <div class="helptext {% if feield.field.widget.input_type == 'checkbox' %}helptext-checkbox{% endif %}">
                                 {{ field.help_text | safe }}
                             </div>
                         {% endif %}
@@ -98,18 +108,29 @@
             {% endfor %}
         </table>
     </div>
-    <input type="submit" value="{% trans "Confirm" %}">
+    {% if form.load_form %}
+        {% for item in form.load_form %}
+            {% with template_name=item|stringformat:"s"|add:".html" %}
+                {% include "elements/form/"|add:template_name %}
+            {% endwith %}
+        {% endfor %}
+    {% endif %}
+    <input id="form_submit" type="submit" value="{% trans "Confirm" %}">
     <br />
     {% if add_another %}
         <br />
         <div class="continue">
-            <input type="checkbox" id="continue" name="continue" class="hide">
+            <input type="checkbox"
+                   id="continue"
+                   name="continue"
+                   class="hide"
+                   {% if continue_add %}checked{% endif %}>
             <label for="continue">{% trans "After confirmation, add another" %}</label>
         </div>
         <br />
     {% endif %}
     {% if eid %}
-        <p>{% trans "The form is saved every 30 seconds." %}</p>
+        <p>{% trans "The form is saved every 30 seconds" %}.</p>
     {% endif %}
     {% include "elements/form/delete.html" %}
 </form>

@@ -28,7 +28,7 @@ from django.utils.translation import gettext_lazy as _
 from django_registration import signals
 from django_registration.backends.one_step.views import RegistrationView
 
-from larpmanager.models.member import Membership, get_user_membership
+from larpmanager.models.member import Membership, MembershipStatus, get_user_membership
 
 
 class MyRegistrationView(RegistrationView):
@@ -46,7 +46,7 @@ class MyRegistrationView(RegistrationView):
 
         if self.request.assoc["id"] > 1:
             mb = get_user_membership(self.request.user.member, self.request.assoc["id"])
-            mb.status = Membership.JOINED
+            mb.status = MembershipStatus.JOINED
             mb.save()
 
         return new_user
@@ -56,6 +56,11 @@ class MyRegistrationView(RegistrationView):
         if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={self.request.get_host()}):
             return next_url
         return self.success_url or reverse("home")
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["request"] = self.request
+        return kwargs
 
 
 class MyPasswordResetConfirmView(PasswordResetConfirmView):

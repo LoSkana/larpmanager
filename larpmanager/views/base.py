@@ -17,24 +17,33 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import secrets
+import uuid
 from datetime import datetime
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
+from django.core.cache import cache
+from django.core.files.storage import default_storage
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
-from django.utils.translation import gettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
-from larpmanager.accounting.balance import get_run_accounting
-from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.registration import get_reg_counts
-from larpmanager.models.association import Association
-from larpmanager.models.event import Run
-from larpmanager.utils.base import def_user_ctx, get_index_assoc_permissions
-from larpmanager.utils.common import format_datetime
-from larpmanager.utils.event import get_event_run, get_index_event_permissions
+from larpmanager.forms.member import MyAuthForm
+from larpmanager.utils.common import welcome_user
 from larpmanager.utils.miscellanea import check_centauri
-from larpmanager.utils.registration import registration_available
+from larpmanager.utils.tutorial_query import query_index
 from larpmanager.views.larpmanager import lm_home
 from larpmanager.views.user.event import calendar
+
+
+class MyLoginView(LoginView):
+    template_name = "registration/login.html"
+    authentication_form = MyAuthForm
+
+    def form_valid(self, form):
+        welcome_user(self.request, form.get_user())
+        return super().form_valid(form)
 
 
 def home(request, lang=None):
@@ -44,84 +53,7 @@ def home(request, lang=None):
     return check_centauri(request) or calendar(request, lang)
 
 
-@login_required
-def manage(request, s=None, n=None):
-    if request.assoc["id"] == 0:
-        return redirect("home")
-
-    if s:
-        return _orga_manage(request, s, n)
-    else:
-        return _exe_manage(request)
-
-
-def _get_registration_status(run):
-    features = get_event_features(run.event_id)
-    if "register_link" in features and run.event.register_link:
-        return _("Registrations on external link")
-
-    # check pre-register
-    if not run.registration_open and run.event.get_config("pre_register_active", False):
-        return _("Pre-registration active")
-
-    dt = datetime.today()
-    # check registration open
-    if "registration_open" in features:
-        if not run.registration_open:
-            return _("Registrations opening not set")
-
-        elif run.registration_open > dt:
-            return _("Registrations opening at: %(date)s") % {"date": run.registration_open.strftime(format_datetime)}
-
-    run.status = {}
-    registration_available(run, features)
-
-    # signup open, not already signed in
-    status = run.status
-    messages = {
-        "primary": _("Registrations open"),
-        "filler": _("Filler registrations"),
-        "waiting": _("Waiting list registrations"),
-    }
-
-    # pick the first matching message (or None)
-    mes = next((msg for key, msg in messages.items() if key in status), None)
-    if mes:
-        return mes
-    else:
-        return _("Registration closed")
-
-
-def _exe_manage(request):
-    ctx = def_user_ctx(request)
-    get_index_assoc_permissions(ctx, request, request.assoc["id"])
-
-    ctx["runs"] = Run.objects.filter(event__assoc_id=ctx["a_id"], development__in=[Run.START, Run.SHOW])
-    ctx["runs"] = ctx["runs"].select_related("event").order_by("end")
-    for run in ctx["runs"]:
-        run.registration_status = _get_registration_status(run)
-        run.counts = get_reg_counts(run)
-
-    return render(request, "larpmanager/manage/exe.html", ctx)
-
-
-def _orga_manage(request, s, n):
-    ctx = get_event_run(request, s, n, status=True)
-    get_index_event_permissions(ctx, request, s)
-    assoc = Association.objects.get(pk=request.assoc["id"])
-    if assoc.get_config("interface_admin_links", False):
-        get_index_assoc_permissions(ctx, request, request.assoc["id"], check=False)
-
-    ctx["registration_status"] = _get_registration_status(ctx["run"])
-    ctx["counts"] = get_reg_counts(ctx["run"])
-    ctx["dc"] = get_run_accounting(ctx["run"], ctx)
-
-    return render(request, "larpmanager/manage/orga.html", ctx)
-
-
 def error_404(request, exception):
-    # print(vars(request))
-    # Print ("hello")
     return render(request, "404.html", {"exe": exception})
 
 
@@ -130,4 +62,37 @@ def error_500(request):
 
 
 def after_login(request, subdomain, path=""):
-    return redirect(f"https://{subdomain}.larpmanager.com/{path}")
+    user = request.user
+    if not user.is_authenticated:
+        return redirect("/login/")
+
+    token = secrets.token_urlsafe(32)
+    cache.set(f"session_token:{token}", user.id, timeout=60)
+
+    base_domain = get_base_domain(request)
+    return redirect(f"https://{subdomain}.{base_domain}/{path}?token={token}")
+
+
+def get_base_domain(request):
+    host = request.get_host()
+    parts = host.split(".")
+    domain_parts = 2
+    if len(parts) >= domain_parts:
+        return ".".join(parts[-2:])
+    return host
+
+
+@require_POST
+def tutorial_query(request):
+    return query_index(request)
+
+
+@csrf_exempt
+def upload_image(request):
+    if request.method == "POST" and request.FILES.get("file"):
+        file = request.FILES["file"]
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        filename = f"{timestamp}_{uuid.uuid4().hex}{file.name[file.name.rfind('.') :]}"
+        path = default_storage.save(f"tinymce_uploads/{request.assoc['id']}/{filename}", file)
+        return JsonResponse({"location": default_storage.url(path)})
+    return JsonResponse({"error": "Invalid request"}, status=400)

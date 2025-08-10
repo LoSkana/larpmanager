@@ -4,28 +4,18 @@
     Join
 {% endblock title %}
 {% block content %}
-    <p>Compile the info below, and you can start to use your own LarpManager immediately!</p>
+    <p>Compile the info below to get started immediately!</p>
     <form action="{{ request.path }}"
           enctype="multipart/form-data"
           method="post">
         {% csrf_token %}
-        <table class="mob no_csv">
+        <table class="mob ">
             {{ form.as_table }}
         </table>
         <input type="submit" value="{% trans "Submit" %}">
     </form>
 {% endblock content %}
 {% block js %}
-    <script>
-window.addEventListener('DOMContentLoaded', function() {
-
-    $(function() {
-
-        $('#slug').on('input', function() {
-            let sl = $(this).val();
-            $('.slug_pre').text("Preview: https://" + sl + ".larpmanager.com");
-        });
-    });
-});
-    </script>
+    <script> const base_domain = ".{{ assoc.base_domain }}"; </script>
+    {% include "elements/assoc_preview.js" %}
 {% endblock js %}

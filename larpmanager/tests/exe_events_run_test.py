@@ -17,59 +17,61 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import asyncio
 
 import pytest
-from playwright.sync_api import expect, sync_playwright
+from playwright.async_api import async_playwright, expect
 
 from larpmanager.tests.utils import go_to, handle_error, login_orga, page_start
 
 
 @pytest.mark.django_db
-def test_exe_events_run(live_server):
-    with sync_playwright() as p:
-        browser, context, page = page_start(p)
+@pytest.mark.asyncio
+async def test_exe_events_run(live_server):
+    async with async_playwright() as p:
+        browser, context, page = await page_start(p)
         try:
-            exe_events_run(live_server, page)
+            await exe_events_run(live_server, page)
 
         except Exception as e:
-            handle_error(page, e, "exe_events")
+            await handle_error(page, e, "exe_events")
 
         finally:
-            context.close()
-            browser.close()
+            await context.close()
+            await browser.close()
 
 
-def exe_events_run(live_server, page):
-    login_orga(page, live_server)
+async def exe_events_run(live_server, page):
+    await login_orga(page, live_server)
 
-    go_to(page, live_server, "/manage/events")
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Prova Event")
-    page.locator("#id_name").press("Tab")
-    page.locator("#slug").fill("prova")
+    await go_to(page, live_server, "/manage/events")
+    await page.get_by_role("link", name="New").click()
+    await page.locator("#id_name").click()
+    await page.locator("#id_name").fill("Prova Event")
+    await page.locator("#id_name").press("Tab")
+    await page.locator("#slug").fill("prova")
 
     frame = page.frame_locator("iframe.tox-edit-area__iframe")
-    frame.locator("body").fill("sadsadasdsaas")
-    page.locator("#id_max_pg").click()
-    page.locator("#id_max_pg").fill("10")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    await frame.locator("body").fill("sadsadasdsaas")
+    await page.locator("#id_max_pg").click()
+    await page.locator("#id_max_pg").fill("10")
+    await page.get_by_role("button", name="Confirm", exact=True).click()
 
-    page.locator("#id_development").select_option("1")
-    page.locator("#id_development").click()
-    page.locator("#id_start").dblclick()
-    page.locator("i").nth(1).click()
-    page.get_by_text("2050").first.click()
-    page.get_by_role("cell", name="19").locator("div").click()
-    page.locator("#id_end").click()
-    page.locator("i").nth(3).click()
-    page.get_by_text("2050").nth(2).click()
-    page.get_by_role("cell", name="16").locator("div").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    # confirm quick setup
+    await page.get_by_role("button", name="Confirm", exact=True).click()
 
-    expect(page.locator("#one")).to_contain_text("Prova Event")
-    go_to(page, live_server, "/prova/1/manage/")
+    await page.locator("#id_development").select_option("1")
+    await page.locator("#id_start").fill("2025-06-11")
+    await asyncio.sleep(2)
+    await page.locator("#id_start").click()
+    await page.locator("#id_end").fill("2025-06-13")
+    await asyncio.sleep(2)
+    await page.locator("#id_end").click()
+    await page.get_by_role("button", name="Confirm", exact=True).click()
 
-    expect(page.locator("#banner")).to_contain_text("Prova Event")
-    go_to(page, live_server, "")
-    expect(page.locator("#one")).to_contain_text("Prova Event")
+    await expect(page.locator("#one")).to_contain_text("Prova Event")
+    await go_to(page, live_server, "/prova/1/manage/")
+
+    await expect(page.locator("#banner")).to_contain_text("Prova Event")
+    await go_to(page, live_server, "")
+    await expect(page.locator("#one")).to_contain_text("Prova Event")

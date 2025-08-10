@@ -4,11 +4,12 @@
     {% trans "Template" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page summarises all template events in the system. From here you can edit them, or create new ones." %}
+    {% trans "This page shows all event templates; you can edit them, or create new ones" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
-    <table id="events" class="tablesorter mob writing gall no_csv">
+    <table id="events"
+           class="{% if not interface_old %}go_datatable{% endif %} writing gall ">
         <thead>
             <tr>
                 <th></th>
@@ -21,7 +22,7 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'exe_templates_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'exe_templates_edit' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el }}</td>
                     <td>

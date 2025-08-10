@@ -4,10 +4,11 @@
     {% trans "Payment confirmation" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page allows you to manually approve payments received." %}
+    {% trans "This page allows you to manually approve payments received" %}
 {% endblock info %}
 {% block content %}
-    <table id="invoices" class="tablesorter mob">
+    <table id="invoices"
+           class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th>{% trans "Member" %}</th>

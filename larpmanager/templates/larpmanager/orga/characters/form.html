@@ -5,7 +5,7 @@
     {% trans "Form questions" %} - {{ name }} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page summarises the available questions of the character form." %}
+    {% trans "This page summarises the available questions of the character form" %}
 {% endblock info %}
 {% block content %}
     {% if available_typ|length > 1 %}
@@ -23,7 +23,8 @@
         <hr />
     {% endif %}
     {% include "elements/header/orga.html" %}
-    <table id="character_questions" class="tablesorter mob writing">
+    <table id="character_questions"
+           class="{% if not interface_old %}go_datatable{% endif %} writing ordering_arrow">
         <thead>
             <tr>
                 <th></th>
@@ -39,15 +40,17 @@
                 {% endif %}
                 <th>{% trans "Options" %}</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_writing_form_edit' run.event.slug run.number typ el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'orga_writing_form_edit' run.event.slug run.number typ el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
-                    <td>{{ el.display }}</td>
+                    <td>{{ el.name }}</td>
                     <td>{{ el.description | truncatechars:50 }}</td>
                     <td>{{ el.get_typ_display }}</td>
                     {% if status %}<td>{{ el.get_status_display }}</td>{% endif %}
@@ -58,13 +61,20 @@
                     <td>
                         {% for ch in el.options_list %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_writing_options_edit' run.event.slug run.number typ ch.id %}">{{ ch.display }}</a>
+                            <a href="{% url 'orga_writing_options_edit' run.event.slug run.number typ ch.id %}">{{ ch.name }}</a>
                         {% endfor %}
                     </td>
                     <td>
                         {% if not forloop.first %}
-                            <a href="{% url 'orga_writing_form_order' run.event.slug run.number typ el.id %}">
+                            <a href="{% url 'orga_writing_form_order' run.event.slug run.number typ el.id 0 %}">
                                 <i class="fa-solid fa-arrow-up"></i>
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not forloop.last %}
+                            <a href="{% url 'orga_writing_form_order' run.event.slug run.number typ el.id 1 %}">
+                                <i class="fa-solid fa-arrow-down"></i>
                             </a>
                         {% endif %}
                     </td>

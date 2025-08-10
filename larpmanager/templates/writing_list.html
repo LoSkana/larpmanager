@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block special %}
+    manage
+{% endblock special %}
+{% block meta %}
+    <meta name="csrf-token" content="{{ csrf_token }}">
+{% endblock meta %}
+{% block content %}
+    {% include "elements/header/writing.html" %}
+    {% if list %}
+        <div class="nav fields">
+            <b>{% trans "Fields" %}</b>:
+            {% block nav_fields %}
+            {% endblock nav_fields %}
+            <a href="#" class="table_toggle" tog='stats'>Stats</a>
+        </div>
+        <table id="writing_list_{{ run.id }}_{{ typ }}"
+               class="que_load{% if not interface_old %} go_datatable writing_list {% block table_classes %}{% endblock table_classes %}{% endif %}">
+            <thead>
+                {% block thead %}
+                {% endblock thead %}
+            </thead>
+            <tbody>
+                {% block tbody %}
+                {% endblock tbody %}
+            </tbody>
+        </table>
+        {% block additional %}
+        {% endblock additional %}
+        <div id="excel-edit"></div>
+        {% include "elements/form/char_finder.html" %}
+    {% else %}
+        <p>
+            <i>{% trans "No elements are currently available" %}</i>
+        </p>
+    {% endif %}
+{% endblock content %}
+{% block js %}
+    <script defer src="{% static TINYMCE_JS_URL %}"></script>
+    {{ TINYMCE_DEFAULT_CONFIG|json_script:"tinymce-config" }}
+    {% include "elements/writing/excel-edit.js" %}
+    {% include "elements/form/max_length.js" %}
+    {% include "elements/form/char_highlight.js" %}
+    {% if not disable_char_finder %}
+        {{ char_finder_media }}
+        {% include "elements/form/char_finder.js" %}
+    {% endif %}
+    <script>
+        var url_load_questions = "{% url 'orga_writing_form_list' run.event.slug run.number label_typ %}";
+        var url_load_questions_email = "{% url 'orga_writing_form_email' run.event.slug run.number label_typ %}";
+
+        var accounting = false;
+
+        window.trigger_togs = {{ default_fields | safe }};
+
+        {% include "elements/questions/load.js" %}
+    </script>
+{% endblock js %}

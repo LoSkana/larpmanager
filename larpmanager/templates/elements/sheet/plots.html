@@ -1,8 +1,10 @@
 {% load show_tags i18n %}
-{% if show_text %}
+{% if show_addit.plot %}
     {% for pl in sheet_plots %}
         <h2 class="c">{{ pl.name }}</h2>
-        <div class="plot">{% show_char pl run 1 %}</div>
+        {% if pl.text %}
+            <div class="plot">{% show_char pl run 1 %}</div>
+        {% endif %}
         <hr class="clear" />
     {% endfor %}
 {% endif %}

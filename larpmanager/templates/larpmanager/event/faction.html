@@ -4,9 +4,10 @@
     {{ faction.name }} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    {% if show_teaser %}
+    {% if show_faction.teaser %}
         <p>{% show_char faction.teaser run 1 %}</p>
     {% endif %}
+    {% include "elements/sheet/fields.html" with char=fact %}
     <h2>{% trans "Characters" %}</h2>
     {% for chnum in faction.characters %}
         {% with chars|get:chnum as el %}
@@ -24,8 +25,8 @@
                         {% if el.player_id > 0 %}
                             <div class="go-inline">
                                 <p>
-                                    <b>{% trans "Player:" %} </b> <a href="{% url 'public' el.player_id %}">
-                                        {% if run.id in all_runs or run.reg %}
+                                    <b>{% trans "Player" %}: </b> <a href="{% url 'public' el.player_id %}">
+                                        {% if run.id in all_runs %}
                                             {{ el.player_full }}
                                         {% else %}
                                             {{ el.player }}
@@ -34,19 +35,19 @@
                                 </p>
                             </div>
                         {% endif %}
-                        {% if el.title %}
+                        {% if el.title and show_character.title %}
                             <div class="go-inline">
-                                <b>{% trans "Titolo" %}: </b> {{ el.title | safe }}
+                                <b>{{ writing_fields.character.names.title }}: </b> {{ el.title | safe }}
                             </div>
                         {% endif %}
-                        {% if el.teaser and show_teaser %}
+                        {% if el.teaser and show_character.teaser %}
                             <div class="go-inline">
-                                <b>Teaser: </b> {% show_char el.teaser run 1 %}
+                                <b>{{ writing_fields.character.names.teaser }}: </b> {% show_char el.teaser run 1 %}
                             </div>
                         {% endif %}
                         {% if el.factions %}
                             <div class="go-inline">
-                                <b>{% trans "Factions:" %}</b>
+                                <b>{% trans "Factions" %}:</b>
                                 {% for fnum in el.factions %}
                                     {% with factions|get:fnum as g %}
                                         {% if not g.typ == 'g' %}

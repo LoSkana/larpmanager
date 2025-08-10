@@ -1,3 +1,10 @@
+- model: larpmanager.associationskin
+  pk: 1
+  fields:
+    name: LarpManager
+    domain: larpmanager.com
+    created: 2025-03-19 09:06:22.735509
+    updated: 2025-03-19 09:06:22.887608
 - model: auth.user
   pk: 1
   fields:
@@ -227,6 +234,7 @@
     key: bldCZ3JCa0lCOEZIQkc3SnRGX3owMFpqYTZyWko1ZzRZbXMxalRNNWE0Yz0=
     payment_methods: []
     features: []
+    skin: 1
 - model: larpmanager.assocrole
   pk: 1
   fields:
@@ -306,7 +314,6 @@
     updated: 2025-03-19 10:31:27.523681
     slug: test
     assoc: 1
-    lang: null
     name: Test Larp
     tagline: null
     where: null
@@ -375,7 +382,7 @@
     event: 1
     tier: b
     name: Standard
-    details: null
+    description: null
     price: '0.00'
     max_available: 0
     visible: true

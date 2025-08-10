@@ -1,0 +1,27 @@
+{% extends "utils.html" %}
+{% load i18n show_tags %}
+{% block title %}
+    {% trans "Feature activated" %}
+    - {{ run }}
+{% endblock title %}
+{% block content %}
+    <br />
+    {% trans "You have activated the following features, for each here's the links to follow" %}:
+    <br />
+    <br />
+    <table>
+        {% for feature in new_features %}
+            <tr>
+                <td>{{ feature.name }}</td>
+                <td>
+                    <a href="{{ feature.follow_link }}" target="_blank">{% trans feature.after_text %}</a>
+                </td>
+                {% if feature.tutorial %}
+                    <td>
+                        (<a href="#" class="feature_tutorial" tut="{{ feature.tutorial }}">Tutorial</a>)
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock content %}

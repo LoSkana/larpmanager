@@ -4,13 +4,14 @@
     {% trans "Cancellations" %} - {{ event.name }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows cancelled enrollments." %}
+    {% trans "This page shows cancelled enrollments" %}
 {% endblock info %}
 {% block content %}
     <p>
         {% trans "Show cancellations" %} <a href="#" class="my_toggle" tog='not_payed'>{% trans "no payment" %}</a>
     </p>
-    <table class="tablesorter mob writing">
+    <table id="cancellations"
+           class="{% if not interface_old %}go_datatable{% endif %} writing">
         <thead>
             <tr>
                 <th>{% trans "Registration fee" %}</th>

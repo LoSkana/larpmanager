@@ -4,7 +4,7 @@
     {% trans "Questions" %} - {{ member }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the conversation with a player concerning a need of them. You can add a new response." %}
+    {% trans "This page shows the conversation with a player concerning a need of them. You can add a new response" %}
 {% endblock info %}
 {% block content %}
     <h2>{{ member }}</h2>
@@ -14,7 +14,7 @@
           method="post"
           enctype="multipart/form-data">
         {% csrf_token %}
-        <table class="mob no_csv">
+        <table class="mob  ">
             {{ form.as_table }}
         </table>
         <input type="submit" value="{% trans "Confirm" %}">

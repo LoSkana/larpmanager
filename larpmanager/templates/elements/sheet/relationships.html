@@ -1,5 +1,5 @@
 {% load show_tags i18n %}
-{% if rel and show_text %}
+{% if rel and show_addit.relationships %}
     <h2 class="c">{% trans "Relationships" %}</h2>
     {% for el in rel %}
         <div class="gallery single relationships">
@@ -31,9 +31,7 @@
                         {% endwith %}
                     {% endfor %}
                 </div>
-                <div class="go-inline">
-                    <b>{% trans "Relationship" %}:&nbsp;</b>{% show_char el.text run 1 %}
-                </div>
+                {{ el.text | safe }}
             </div>
         </div>
         <hr class="clear" />

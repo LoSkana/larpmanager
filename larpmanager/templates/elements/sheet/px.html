@@ -1,7 +1,7 @@
 {% load show_tags i18n %}
 {% if features.px %}
     <h2>{% trans "Experience points" %}</h2>
-    <table class="mob no_csv">
+    <table class="mob ">
         <tr>
             <th>{% trans "Total" %}</th>
             <th>{% trans "Used" %}</th>
@@ -13,22 +13,40 @@
             <td>{{ character.addit | get:'px_avail' }}</td>
         </tr>
     </table>
-    <h3>{% trans "Ability list" %}</h3>
-    {% for typ, ls in sheet_abilities.items %}
+    {% if sheet_abilities %}
+        <h2>{% trans "Abilities" %}</h2>
+        {% for typ, ls in sheet_abilities.items %}
+            <h3>{{ typ }}</h3>
+            <table>
+                {% for el in ls %}
+                    <tr>
+                        <th>
+                            <h4>
+                                {{ el.name }} ({{ el.cost }})
+                                {% if undo_abilities and el.id in undo_abilities %}
+                                    <a href="{% url 'character_abilities_del' event.slug run.number character.number el.id %}"
+                                       qtip="{% trans "Remove" %}">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </a>
+                                {% endif %}
+                            </h4>
+                        </th>
+                        <td>
+                            {% if el.descr %}{{ el.descr | safe }}{% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+    {% endif %}
+    {% if character.px_delivery_list.count %}
+        <h2>{% trans "Deliveries" %}</h2>
         <p>
-            <b>{{ typ }}:</b>
-            {% for el in ls %}
+            {% for el in character.px_delivery_list.all %}
                 {% include "elements/comma.html" %}
-                {{ el.name }} ({{ el.cost }})
+                {{ el.name }} ({{ el.amount }})
             {% endfor %}
         </p>
-    {% endfor %}
-    <h3>{% trans "Delivery list" %}</h3>
-    <p>
-        {% for el in character.px_delivery_list.all %}
-            {% include "elements/comma.html" %}
-            {{ el.name }} ({{ el.amount }})
-        {% endfor %}
-    </p>
-    <hr class="clear" />
+        <hr class="clear" />
+    {% endif %}
 {% endif %}

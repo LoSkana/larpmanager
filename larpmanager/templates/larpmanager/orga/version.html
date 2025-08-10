@@ -1,0 +1,8 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Version" %} {{ version.version }}
+{% endblock title %}
+{% block content %}
+    <div class="diff-version plot">{{ text | safe }}</div>
+{% endblock content %}

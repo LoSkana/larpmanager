@@ -17,8 +17,10 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import ast
+import json
 import os
+import time
 from uuid import uuid4
 
 from django.conf import settings as conf_settings
@@ -31,13 +33,14 @@ from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.http import require_POST
 from PIL import Image
 
-from larpmanager.cache.character import get_character_cache_fields, get_character_fields, get_event_cache_all
+from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
+from larpmanager.cache.config import save_single_config
 from larpmanager.forms.character import (
     CharacterForm,
 )
-from larpmanager.forms.experience import SelectNewAbility
 from larpmanager.forms.member import (
     AvatarForm,
 )
@@ -47,6 +50,7 @@ from larpmanager.forms.registration import (
 from larpmanager.forms.writing import (
     PlayerRelationshipForm,
 )
+from larpmanager.models.event import EventTextType
 from larpmanager.models.form import (
     QuestionApplicable,
     WritingOption,
@@ -62,6 +66,7 @@ from larpmanager.models.writing import (
     Character,
     CharacterStatus,
 )
+from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
 from larpmanager.utils.common import (
     get_player_relationship,
@@ -75,6 +80,7 @@ from larpmanager.utils.registration import (
     get_player_characters,
     registration_find,
 )
+from larpmanager.utils.text import get_event_text
 from larpmanager.utils.writing import char_add_addit
 from larpmanager.views.user.casting import casting_details, get_casting_preferences
 from larpmanager.views.user.registration import init_form_submitted
@@ -82,11 +88,15 @@ from larpmanager.views.user.registration import init_form_submitted
 
 def character(request, s, n, num):
     ctx = get_event_run(request, s, n, status=True)
-
-    ctx["screen"] = True
     get_char_check(request, ctx, num)
 
-    if "check" not in ctx and not ctx["show_char"]:
+    return _character_sheet(request, ctx)
+
+
+def _character_sheet(request, ctx):
+    ctx["screen"] = True
+
+    if "check" not in ctx and not ctx["show_character"]:
         messages.warning(request, _("Characters are not visible at the moment"))
         return redirect("gallery", s=ctx["event"].slug, n=ctx["run"].number)
 
@@ -98,8 +108,9 @@ def character(request, s, n, num):
     if show_private:
         get_character_sheet(ctx)
         get_character_relationships(ctx)
+        ctx["intro"] = get_event_text(ctx["event"].id, EventTextType.INTRO)
     else:
-        get_character_fields(ctx, only_visible=True)
+        ctx["char"].update(get_character_element_fields(ctx, ctx["char"]["id"], only_visible=True))
 
     casting_details(ctx, 0)
     if ctx["casting_show_pref"] and not ctx["char"]["player_id"]:
@@ -108,6 +119,25 @@ def character(request, s, n, num):
     ctx["approval"] = ctx["event"].get_config("user_character_approval", False)
 
     return render(request, "larpmanager/event/character.html", ctx)
+
+
+def character_external(request, s, n, code):
+    ctx = get_event_run(request, s, n)
+
+    if not ctx["event"].get_config("writing_external_access", False):
+        raise Http404("external access not active")
+
+    try:
+        char = ctx["event"].get_elements(Character).get(access_token=code)
+    except ObjectDoesNotExist as err:
+        raise Http404("invalid code") from err
+
+    get_event_cache_all(ctx)
+    ctx["char"] = ctx["chars"][char.number]
+    ctx["character"] = char
+    ctx["check"] = 1
+
+    return _character_sheet(request, ctx)
 
 
 def character_your_link(ctx, char, p=None):
@@ -131,7 +161,7 @@ def character_your(request, s, n, p=None):
     rcrs = ctx["run"].reg.rcrs.all()
 
     if rcrs.count() == 0:
-        messages.error(request, _("You don't have a character assigned for this run!"))
+        messages.error(request, _("You don't have a character assigned for this run") + "!")
         return redirect("home")
 
     if rcrs.count() == 1:
@@ -157,9 +187,9 @@ def character_form(request, ctx, s, n, instance, form_class):
         form = form_class(request.POST, request.FILES, instance=instance, ctx=ctx)
         if form.is_valid():
             if instance:
-                mes = _("Informations saved!")
+                mes = _("Informations saved") + "!"
             else:
-                mes = _("New character created!")
+                mes = _("New character created") + "!"
 
             element = form.save(commit=False)
             mes = _update_character(ctx, element, form, mes, request)
@@ -293,7 +323,9 @@ def character_list(request, s, n):
     char_add_addit(ctx)
     for el in ctx["list"]:
         if "character" in ctx["features"]:
-            el.fields = get_character_cache_fields(ctx, el.id, only_visible=True)
+            res = get_character_element_fields(ctx, el.id, only_visible=True)
+            el.fields = res["fields"]
+            ctx.update(res)
 
     ctx["char_maximum"] = check_character_maximum(ctx["event"], request.user.member)
     ctx["approval"] = ctx["event"].get_config("user_character_approval", False)
@@ -349,7 +381,32 @@ def character_assign(request, s, n, num):
 
 @login_required
 def character_abilities(request, s, n, num):
+    ctx = check_char_abilities(n, num, request, s)
+
+    ctx["available"] = get_available_ability_px(ctx["character"])
+
+    ctx["sheet_abilities"] = {}
+    for el in ctx["character"].px_ability_list.all():
+        if el.typ.name not in ctx["sheet_abilities"]:
+            ctx["sheet_abilities"][el.typ.name] = []
+        ctx["sheet_abilities"][el.typ.name].append(el)
+
+    if request.method == "POST":
+        _save_character_abilities(ctx, request)
+        return redirect(request.path_info)
+
+    ctx["type_available"] = {
+        typ_id: data["name"] for typ_id, data in sorted(ctx["available"].items(), key=lambda x: x[1]["order"])
+    }
+
+    ctx["undo_abilities"] = get_undo_abilities(ctx, request)
+
+    return render(request, "larpmanager/event/character/abilities.html", ctx)
+
+
+def check_char_abilities(n, num, request, s):
     ctx = get_event_run(request, s, n, signup=True, status=True)
+
     event = ctx["event"]
     if event.parent:
         event = event.parent
@@ -360,27 +417,65 @@ def character_abilities(request, s, n, num):
 
     get_char_check(request, ctx, num, True)
 
-    ctx["list"] = get_available_ability_px(ctx["character"])
+    return ctx
 
-    ctx["sheet_abilities"] = {}
-    for el in ctx["character"].px_ability_list.all():
-        if el.typ.name not in ctx["sheet_abilities"]:
-            ctx["sheet_abilities"][el.typ.name] = []
-        ctx["sheet_abilities"][el.typ.name].append(el)
 
-    if request.method == "POST":
-        form = SelectNewAbility(request.POST, request.FILES, ctx=ctx)
-        if form.is_valid():
-            sel = form.cleaned_data["sel"]
-            ctx["character"].px_ability_list.add(sel)
-            ctx["character"].save()
-            messages.success(request, _("Ability acquired!"))
-            return redirect(request.path_info)
-    else:
-        form = SelectNewAbility(ctx=ctx)
-    ctx["form"] = form
+@login_required
+def character_abilities_del(request, s, n, num, id_del):
+    ctx = check_char_abilities(n, num, request, s)
+    undo_abilities = get_undo_abilities(ctx, request)
+    if id_del not in undo_abilities:
+        raise Http404("ability out of undo window")
 
-    return render(request, "larpmanager/event/character/abilities.html", ctx)
+    ctx["character"].px_ability_list.remove(id_del)
+    ctx["character"].save()
+    messages.success(request, _("Ability removed") + "!")
+
+    return redirect("character_abilities", s=ctx["event"].slug, n=ctx["run"].number, num=ctx["character"].number)
+
+
+def _save_character_abilities(ctx, request):
+    selected_type = request.POST.get("ability_type")
+    if not selected_type:
+        messages.error(request, _("Ability type missing"))
+        return
+
+    selected_type = int(selected_type)
+    selected_id = request.POST.get("ability_select")
+    if not selected_id:
+        messages.error(request, _("Ability missing"))
+        return
+
+    selected_id = int(selected_id)
+    if selected_type not in ctx["available"] or selected_id not in ctx["available"][selected_type]["list"]:
+        messages.error(request, _("Selezione non valida"))
+        return
+
+    ctx["character"].px_ability_list.add(selected_id)
+    ctx["character"].save()
+    messages.success(request, _("Ability acquired") + "!")
+
+    get_undo_abilities(ctx, request, selected_id)
+
+
+def get_undo_abilities(ctx, request, new_ability_id=None):
+    px_undo = int(ctx["event"].get_config("px_undo", 0))
+    config_name = "added_px"
+    member = request.user.member
+    val = member.get_config(config_name, "{}")
+    added_map = ast.literal_eval(val)
+    current_time = int(time.time())
+    # clean from abilities out of the undo time windows
+    for key in list(added_map.keys()):
+        if added_map[key] < current_time - px_undo * 3600:
+            del added_map[key]
+    # add newly acquired ability and save it
+    if px_undo and new_ability_id:
+        added_map[str(new_ability_id)] = current_time
+        save_single_config(member, config_name, json.dumps(added_map))
+
+    # return map of abilities recently added, with int key
+    return [int(k) for k in added_map.keys()]
 
 
 @login_required
@@ -420,3 +515,20 @@ def character_relationships_edit(request, s, n, num, oth):
     if user_edit(request, ctx, PlayerRelationshipForm, "relationship", oth):
         return redirect("character_relationships", s=ctx["event"].slug, n=ctx["run"].number, num=ctx["char"]["number"])
     return render(request, "larpmanager/orga/edit.html", ctx)
+
+
+@require_POST
+def show_char(request, s, n):
+    ctx = get_event_run(request, s, n)
+    get_event_cache_all(ctx)
+    search = request.POST.get("text", "").strip()
+    if not search.startswith(("#", "@", "^")):
+        raise Http404(f"malformed request {search}")
+    search = int(search[1:])
+    if not search:
+        raise Http404(f"not valid search {search}")
+    if search not in ctx["chars"]:
+        raise Http404(f"not present char number {search}")
+    ch = ctx["chars"][search]
+    tooltip = get_tooltip(ctx, ch)
+    return JsonResponse({"content": f"<div class='show_char'>{tooltip}</div>"})

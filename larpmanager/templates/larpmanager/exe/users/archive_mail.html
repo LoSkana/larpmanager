@@ -9,12 +9,11 @@
     {% endif %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows all emails, both queued and sent." %}
+    {% trans "This page shows all emails, both queued and sent" %}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/exe.html" %}
     {% include "elements/paginate.html" %}
-    <table id="inflows" class="tablesorter mob">
+    <table id="emails" class="tablesorter">
         <thead>
             <tr>
                 {% if exe %}

@@ -33,6 +33,7 @@
                     {% if check %}
                         <hr class="clear" />
                         {% include "elements/sheet/pdf.html" %}
+                        {% if intro %}<div class="char_intro">{{ intro | safe }}</div>{% endif %}
                         {% include "elements/sheet/px.html" %}
                         {% include "elements/sheet/factions.html" %}
                         {% include "elements/sheet/texts.html" with char=sheet_char %}

@@ -31,9 +31,10 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.miscellanea import OrgaHelpQuestionForm, SendMailForm
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.event import PreRegistration
-from larpmanager.models.member import Member, Membership
+from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import Email, HelpQuestion
 from larpmanager.models.registration import Registration, TicketTier
+from larpmanager.utils.common import _get_help_questions
 from larpmanager.utils.event import check_event_permission
 from larpmanager.utils.paginate import orga_paginate
 from larpmanager.utils.tasks import send_mail_exec
@@ -117,7 +118,7 @@ def orga_spam(request, s, n):
     already.extend([mb.id for mb in get_event_staffers(ctx["event"])])
 
     members = Membership.objects.filter(assoc_id=ctx["a_id"])
-    members = members.exclude(status=Membership.EMPTY).values_list("member_id", flat=True)
+    members = members.exclude(status=MembershipStatus.EMPTY).values_list("member_id", flat=True)
 
     lst = {}
     que = Member.objects.filter(newsletter=Member.ALL)
@@ -145,7 +146,7 @@ def orga_persuade(request, s, n):
     already.extend([mb.id for mb in get_event_staffers(ctx["event"])])
 
     members = Membership.objects.filter(assoc_id=ctx["a_id"])
-    members = members.exclude(status=Membership.EMPTY).values_list("member_id", flat=True)
+    members = members.exclude(status=MembershipStatus.EMPTY).values_list("member_id", flat=True)
 
     que = Member.objects.filter(id__in=members)
     que = que.exclude(id__in=already)
@@ -176,17 +177,7 @@ def orga_persuade(request, s, n):
 def orga_questions(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_questions")
 
-    last_q = {}
-    for cq in HelpQuestion.objects.filter(assoc_id=ctx["a_id"], run=ctx["run"]).order_by("created"):
-        last_q[cq.member.id] = (cq, cq.is_user, cq.closed)
-    ctx["open"] = []
-    ctx["closed"] = []
-    for question in last_q.values():
-        (cq, is_user, closed) = question
-        if is_user and not closed:
-            ctx["open"].append(cq)
-        else:
-            ctx["closed"].append(cq)
+    ctx["closed"], ctx["open"] = _get_help_questions(ctx, request)
 
     ctx["open"].sort(key=lambda x: x.created)
     ctx["closed"].sort(key=lambda x: x.created, reverse=True)

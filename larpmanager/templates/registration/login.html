@@ -17,6 +17,11 @@
 {% endblock old %}
 {% block content %}
     <div class="login">
+        {% if assoc.id == 0 %}
+            <p>
+                <i>(We ask you to login only to link the new organization to your account, as you will be assigned an administrator role)</i>
+            </p>
+        {% endif %}
         <br />
         {% if request.enviro == "prod" %}
             <div class="allauth_signin">
@@ -33,7 +38,7 @@
 -->
         <form method="post">
             {% csrf_token %}
-            <table class="mob no_csv">
+            <table class="mob ">
                 {{ form.as_table }}
             </table>
             <input type="submit" class="login_go" value="{% trans "Submit" %}" />
@@ -74,14 +79,14 @@ window.addEventListener('DOMContentLoaded', function() {
 
        $('.allauth_signin a').each(function(index) {
             var href = $(this).attr('href');
-            console.log(href);
+            // console.log(href);
 
             const domain = '{{ assoc.slug }}';
-            let url = new URL(href || window.location.pathname, 'https://larpmanager.com');
+            let url = new URL(href || window.location.pathname, 'https://{{ assoc.main_domain }}');
 
             // build the “next” target, appending any existing next-path if present
             const existingNext = url.searchParams.get('next');
-            const nextTarget = `https://larpmanager.com/after_login/${domain}`
+            const nextTarget = `https://{{ assoc.main_domain }}/after_login/${domain}`
                              + (existingNext ? `/${existingNext}` : '');
 
             url.searchParams.set('next', nextTarget);

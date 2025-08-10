@@ -4,7 +4,7 @@
     {% trans "Registration questions" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the available questions of the registration form of the event." %}
+    {% trans "This page shows the available questions of the registration form of the event" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
@@ -17,7 +17,8 @@
                 <a href="{% url 'orga_registration_sections_edit' run.event.slug run.number el.section_id %}">{{ el.section }}</a>
             </h1>
         {% endif %}
-        <table class="tablesorter mob writing no_csv">
+        <table id="registration_questions_{{ el.section }}"
+               class="{% if not interface_old %}go_datatable{% endif %} writing ordering_arrow">
             <thead>
                 <tr>
                     <th></th>
@@ -36,6 +37,7 @@
                         <th>{% trans "Tickets" %}</th>
                     {% endif %}
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -46,7 +48,7 @@
                         <i class="fas fa-edit"></i>
                     </a>
                 </td>
-                <td>{{ el.display }}</td>
+                <td>{{ el.name }}</td>
                 <td>{{ el.description | truncatechars:50 }}</td>
                 <td>{{ el.get_typ_display }}</td>
                 <td>{{ el.get_status_display }}</td>
@@ -58,7 +60,7 @@
                 <td>
                     {% for ch in el.options_list %}
                         {% include "elements/comma.html" %}
-                        <a href="{% url 'orga_registration_options_edit' run.event.slug run.number ch.id %}">{{ ch.display }}</a>
+                        <a href="{% url 'orga_registration_options_edit' run.event.slug run.number ch.id %}">{{ ch.name }}</a>
                     {% endfor %}
                 </td>
                 {% if features.reg_que_faction %}
@@ -81,8 +83,15 @@
                     {% if el.section != old_section %}
                         {% define el.section as old_section %}
                     {% else %}
-                        <a href="{% url 'orga_registration_form_order' run.event.slug run.number el.id %}">
+                        <a href="{% url 'orga_registration_form_order' run.event.slug run.number el.id 0 %}">
                             <i class="fa-solid fa-arrow-up"></i>
+                        </a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if not forloop.last %}
+                        <a href="{% url 'orga_registration_form_order' run.event.slug run.number el.id 1 %}">
+                            <i class="fa-solid fa-arrow-down"></i>
                         </a>
                     {% endif %}
                 </td>

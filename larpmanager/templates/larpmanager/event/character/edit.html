@@ -18,7 +18,7 @@
             <div class="centerized">
                 <h4>{% trans "Character profile" %}:</h4>
                 <div class="helptext char_profile">
-                    {% trans "Upload a photo of yourself associated with your character specifically for this event!" %}
+                    {% trans "Upload a photo of yourself associated with your character specifically for this event" %}!
                 </div>
                 <br />
                 <br />
@@ -47,6 +47,7 @@
 {% endblock content %}
 {% block js %}
     {% include "elements/form/max_length.js" %}
+    {% include "elements/helpers/factions-choices.js" %}
     <script>
     var dependencies = {{ dependencies | safe }};
 
@@ -192,9 +193,6 @@
 
 
     function disable_dependencies() {
-
-        console.log("dependencies");
-
         reset_select = [];
 
         for (const [key, options] of Object.entries(dependencies)) {
@@ -254,12 +252,6 @@
 
     }
 
-    function jump_to(el) {
-        const yOffset = -160;
-        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({top: y, behavior: 'smooth'});
-    }
-
     function check_mandatory() {
 
         for (var ix = 0; ix < mandatory.length; ix++) {
@@ -284,7 +276,7 @@
             el.next('p').remove();
             if (empty) {
                 el.after( "<p><b class='form-error' style='color: var(--ter-clr);'>Please select a value</b></p>" );
-                jump_to(document.getElementById(k));
+                window.jump_to('#' + k);
                 return false;
             }
         }

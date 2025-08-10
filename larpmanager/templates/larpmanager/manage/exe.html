@@ -1,14 +1,36 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n static %}
 {% block title %}
-    {% trans "Management" %} - {{ assoc.name }}
+    Dashboard - {{ assoc.name }}
 {% endblock title %}
 {% block content %}
     <div id="manage">
-        {% if runs %}
-            <h2>{% trans "Ongoing events" %}</h2>
+        <p>
+            <a href="#" id="intro_driver">{% trans "Launch guided interface tour" %}</a>
+        </p>
+        <input type="text"
+               name="tutorial_query"
+               id="tutorial_query"
+               placeholder="{% trans "What would you like to do" %}?" />
+        <input type="button" id="tutorial_query_go" value="{% trans "Search" %}" />
+        <div class="helptext">
+            <i>
+                ({% trans "Type a keyword in the search bar to find a reference - please write in English" %})
+            </i>
+        </div>
+        <hr />
+        {% with list=priorities typ="priorities" %}
+            {% include "larpmanager/manage/helpers.html" %}
+        {% endwith %}
+        {% with list=actions typ="actions" %}
+            {% include "larpmanager/manage/helpers.html" %}
+        {% endwith %}
+        {% if ongoing_runs %}
+            <h2>
+                <i class="fa-solid fa-calendar-days"></i> {% trans "Events" %}
+            </h2>
             <table class="mob">
-                {% for run in runs %}
+                {% for run in ongoing_runs %}
                     <tr>
                         <td>
                             <a href="{% url 'manage' run.event.slug run.number %}">{{ run }}</a>
@@ -28,20 +50,38 @@
                     </tr>
                 {% endfor %}
             </table>
-        {% else %}
-            {% trans "There are no active events" %}: <a href="{% url 'exe_events' %}">{% trans "create one here" %}</a>
         {% endif %}
-        <hr />
-        <h2>{% trans "Accounting" %}</h2>
-        <p>
-            {% trans "Global balance" %}: <b>{{ global_sum }}</b>
-        </p>
-        <p>
-            {% trans "Overall balance" %}: <b>{{ bank_sum }}</b>
-        </p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        {% if global_sum or bank_sum %}
+            <h2>
+                <a href="{% url 'exe_accounting' %}"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>
+            </h2>
+            <table>
+                <tr>
+                    <th descr="{% trans "This is the associative positive operating margin, taking into account the budgets of completed runs, minus credits or tokens issued" %}">
+                        <a href="#" class="sidebar-link">{% trans "Global balance" %}</a>
+                        <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                    </th>
+                    <th descr="{% trans "This is the overall amount that should be held in the organization’s bank and financial accounts" %}">
+                        <a href="#" class="sidebar-link">{% trans "Overall balance" %}</a>
+                        <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                    </th>
+                </tr>
+                <tr>
+                    <td>{{ global_sum }}</td>
+                    <td>{{ bank_sum }}</td>
+                </tr>
+            </table>
+        {% endif %}
+        {% with list=suggestions typ="suggestions" %}
+            {% include "larpmanager/manage/helpers.html" %}
+        {% endwith %}
     </div>
 {% endblock content %}
+{% block css %}
+    <link rel="stylesheet"
+          href="{% static 'node_modules/driver.js/dist/driver.css' %}">
+{% endblock css %}
+{% block js %}
+    {% include "elements/tutorial_query.js" %}
+    {% include "elements/manage_driver.js.html" %}
+{% endblock js %}

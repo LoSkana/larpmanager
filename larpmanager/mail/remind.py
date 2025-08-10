@@ -42,20 +42,33 @@ def remember_membership(reg):
 
 
 def get_remember_membership_body(reg):
-    body = _(
-        "Hello! We would like to remind you that in order to confirm your provisional "
-        "registration of %(event)s you need to apply for admission as a member of the "
-        "association. You are very close, just <a href='%(url)s'>click here</a> and "
-        "complete the form."
-    ) % {"event": reg.run, "url": get_url("membership")}
-
-    body += "<br /><br />" + _("(If you need a hand feel free to let us know, we'll try to help as best we can!)")
-
-    body += "<br /><br />" + _(
-        "If we don't hear from you, we'll understand that you're no longer interested at "
-        "the event and we will cancel your registration, so that other players can signup "
-        "to your place."
+    body = (
+        _(
+            "Hello! To confirm your provisional registration for %(event)s, "
+            "you must apply for membership in the association"
+        )
+        % {"event": reg.run}
+        + ". "
+        + _("To complete the process, simply <a href='%(url)s'>click here</a>") % {"url": get_url("membership")}
+        + ". "
     )
+
+    body += (
+        "<br /><br />("
+        + _("If you need a hand, feel free to let us know")
+        + ". "
+        + _("We'll try to help as best we can")
+        + "!)"
+    )
+
+    body += (
+        "<br /><br />"
+        + _("If we don't hear from you, we'll assume you're no longer interested in the event")
+        + ". "
+        + _("Your registration will be cancelled to allow other players to take your spot")
+        + "."
+    )
+
     return body
 
 
@@ -85,33 +98,36 @@ def get_remember_pay_body(context, provisional, reg):
     payment_url = f"{url}/{reg.run.event.slug}/{reg.id}"
 
     if provisional:
-        body = _("Hello! We are contacting you regarding your provisional registration at <b>%(event)s</b>.") % context
+        intro = _("Hello! We are reaching out regarding your provisional registration for <b>%(event)s</b>")
     else:
-        body = _("Hello! We are contacting you regarding your registration at <b>%(event)s</b>.") % context
+        intro = _("Hello! We are reaching out regarding your registration for <b>%(event)s</b>")
+
+    body = intro % context + "."
 
     if deadline <= 0:
-        body += "<br /><br />" + _("To confirm it, we ask you to pay this amount as soon as possible: %(amount)s.") % {
-            "amount": amount
-        }
-
+        middle = _("To confirm it, please pay the following amount as soon as possible: %(amount)s")
     else:
-        body += "<br /><br />" + _(
-            "To confirm it, we ask you to pay this amount: %(amount)s, within this number of days: %(days)s."
-        ) % {"amount": amount, "days": deadline}
+        middle = _("To confirm it, please pay %(amount)s within %(days)s days")
 
-    body += "<br /><br />" + _(
-        "(Please note that if you have with us a different agreement, you can safely ignore this email!)"
+    body += "<br /><br />" + middle % {"amount": amount, "days": deadline} + "."
+
+    body += "<br /><br />(" + _("If you have a separate agreement with us, you may disregard this email") + ")"
+
+    body += (
+        "<br /><br />"
+        + _("You can make the payment <a href='%(url)s'>on this page</a>") % {"url": payment_url}
+        + ". "
+        + _("If you encounter any issues, contact us and we will assist you")
+        + "!"
     )
 
-    body += "<br /><br />" + _(
-        "You can make the payment <a href= %(url)s'>on this page</a>. If you encounter "
-        "any kind of problem, let us know, we will help you solve it!"
-    ) % {"url": payment_url}
-
-    body += "<br /><br />" + _(
-        "If we don't hear from you, we'll understand that you're no longer interested at "
-        "the event and we will cancel your registration, so that other players can signup "
-        "to your place."
+    body += (
+        "<br /><br />"
+        + _(
+            "If we don't hear from you, we'll assume you're no longer interested in the event and "
+            "will cancel your registration to make room for other players"
+        )
+        + "."
     )
 
     return body
@@ -130,12 +146,10 @@ def remember_profile(reg):
 
 def get_remember_profile_body(context):
     return (
-        _(
-            "Hello! You have signed up for %(event)s, but have not yet completed your "
-            "profile. It takes 5 minutes, just <a href='%(url)s'>click here</a> and complete "
-            "the form!"
-        )
-        % context
+        _("Hello! You signed up for %(event)s but haven't completed your profile yet")
+        + ". "
+        + _("It only takes 5 minutes - just <a href='%(url)s'>click here</a> to fill out the form") % context
+        + "."
     )
 
 
@@ -154,19 +168,31 @@ def remember_membership_fee(reg):
 
 def get_remember_membership_fee_body(context, reg):
     body = (
-        _("Hello! You have registered for %(event)s, but we have not yet received your annual membership fee payment.")
+        _("Hello! You have registered for %(event)s, but we have not yet received your annual membership payment")
         % context
+        + "."
     )
-    body += "<br /><br />" + _(
-        "It is compulsory to take part in all our live events, as it also includes the insurance fee."
+
+    body += (
+        "<br /><br />"
+        + _("It is required for participation in all our live events, as it also covers the insurance fee")
+        + "."
     )
-    body += "<br /><br />" + _(
-        "Unfortunately, without the balance of the fee, it is NOT possible for us to let you participate at the event."
+
+    body += (
+        "<br /><br />"
+        + _("Unfortunately, without full payment of the fee, participation in the event is not permitted")
+        + "."
     )
-    body += "<br /><br />" + _(
-        "You can make the payment in just a few minutes <a href= %(url)s'>here</a>. Let "
-        "us know if you encounter any problems, or if we can help in any way!"
-    ) % {"url": get_url("accounting", reg.run.event)}
+
+    body += (
+        "<br /><br />"
+        + _("You can complete the payment in just a few minutes <a href='%(url)s'>here</a>")
+        % {"url": get_url("accounting", reg.run.event)}
+        + ". "
+        + _("Let us know if you encounter any issues or need assistance")
+        + "!"
+    )
     return body
 
 
@@ -175,7 +201,7 @@ def notify_deadlines(run):
     if not result:
         return
     res = result[0]
-    if not any(res.values()):
+    if all(not v for k, v in res.items() if k != "run"):
         return
 
     elements = {

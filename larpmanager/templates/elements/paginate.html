@@ -4,11 +4,12 @@
       enctype="multipart/form-data"
       method="post">
     {% csrf_token %}
-    <table class="no_csv paginate">
+    <table class=" paginate">
         <tr>
             {% if show_runs %}
                 <th>
-                    Run: <br />
+                    Run:
+                    <br />
                     <select id="run" name="run">
                         {% for el in runs %}
                             <option value="{{ el.0 }}" {% if el.0 == run_sel %}selected{% endif %}>{{ el.1 }}</option>
@@ -17,34 +18,36 @@
                 </th>
             {% endif %}
             <th>
-                Page: <br />
+                Page:
+                <br />
                 <select id="page" name="page">
-                    {% with ''|center:pagin.num_pages as range %}
+                    {% with ""|center:pagin.num_pages as range %}
                         {% for _ in range %}
                             <option value="{{ forloop.counter }}"
                                     {% if forloop.counter == page %}selected{% endif %}>{{ forloop.counter }}</option>
                         {% endfor %}
                     {% endwith %}
                 </select>
-                </th>
-                <th>
-                    Size: <br />
-                    <select id="size" name="size">
-                        {% for num in size_range %}
-                            <option value="{{ num }}" {% if size == num %}selected{% endif %}>{{ num }}</option>
-                        {% endfor %}
-                    </select>
-                    </th>
-                    <th>
-                        <input type="text"
-                               id="search"
-                               name="search"
-                               placeholder="Search... "
-                               value="{{ search }}" />
-                    </th>
-                    <th>
-                        <input type="submit" value="Go">
-                    </th>
-                </tr>
-            </table>
-        </form>
+            </th>
+            <th>
+                Size:
+                <br />
+                <select id="size" name="size">
+                    {% for num in size_range %}
+                        <option value="{{ num }}" {% if size == num %}selected{% endif %}>{{ num }}</option>
+                    {% endfor %}
+                </select>
+            </th>
+            <th>
+                <input type="text"
+                       id="search"
+                       name="search"
+                       placeholder="Search... "
+                       value="{{ search }}" />
+            </th>
+            <th>
+                <input type="submit" value="Go">
+            </th>
+        </tr>
+    </table>
+</form>

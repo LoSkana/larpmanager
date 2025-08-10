@@ -20,7 +20,7 @@
 
 import csv
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -52,7 +52,15 @@ from larpmanager.models.association import Association
 from larpmanager.models.event import (
     Run,
 )
-from larpmanager.models.member import Badge, Member, Membership, VolunteerRegistry, Vote, get_user_membership
+from larpmanager.models.member import (
+    Badge,
+    Member,
+    Membership,
+    MembershipStatus,
+    VolunteerRegistry,
+    Vote,
+    get_user_membership,
+)
 from larpmanager.models.miscellanea import (
     Email,
     HelpQuestion,
@@ -62,6 +70,7 @@ from larpmanager.models.registration import (
 )
 from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.common import (
+    _get_help_questions,
     get_member,
     normalize_string,
 )
@@ -97,7 +106,7 @@ def exe_membership(request):
         next_regs[member_id].append(run_id)
 
     que = Membership.objects.filter(assoc_id=ctx["a_id"]).select_related("member")
-    que = que.exclude(status__in=[Membership.EMPTY, Membership.JOINED]).order_by("member__surname")
+    que = que.exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED]).order_by("member__surname")
     values = ("member__id", "member__surname", "member__name", "member__email", "card_number", "status")
     for member in que.values_list(*values):
         v = member[5]
@@ -130,15 +139,15 @@ def exe_membership_evaluation(request, num):
     if request.method == "POST":
         form = MembershipResponseForm(request.POST)
         if form.is_valid():
-            resp = request.POST["response"]
-            if request.POST["approved"] == "1":
-                member.membership.status = Membership.ACCEPTED
+            resp = form.cleaned_data["response"]
+            if form.cleaned_data["is_approved"]:
+                member.membership.status = MembershipStatus.ACCEPTED
                 member.membership.save()
                 notify_membership_approved(member, resp)
                 update_member_registrations(member)
                 messages.success(request, _("Member approved!"))
             else:
-                member.membership.status = Membership.EMPTY
+                member.membership.status = MembershipStatus.EMPTY
                 member.membership.save()
                 notify_membership_reject(member, resp)
                 messages.success(request, _("Member refused!"))
@@ -160,7 +169,7 @@ def exe_membership_evaluation(request, num):
 
     ctx["member_exists"] = False
     que = Membership.objects.select_related("member").filter(assoc_id=ctx["a_id"])
-    que = que.exclude(status__in=[Membership.EMPTY, Membership.JOINED]).exclude(member_id=member.id)
+    que = que.exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED]).exclude(member_id=member.id)
     for other in que.values_list("member__surname", "member__name"):
         if normalize_string(other[1]) == normalized_name:
             if normalize_string(other[0]) == normalized_surname:
@@ -186,7 +195,7 @@ def exe_membership_check(request):
     member_ids = set(
         Membership.objects.filter(assoc_id=ctx["a_id"])
         .select_related("member")
-        .exclude(status__in=[Membership.EMPTY, Membership.JOINED])
+        .exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED])
         .values_list("member_id", flat=True)
     )
 
@@ -255,9 +264,9 @@ def member_add_accountingitempayment(ctx, request):
     ).select_related("reg")
     for el in ctx["pays"]:
         if el.pay == AccountingItemPayment.TOKEN:
-            el.typ = ctx["token_name"]
+            el.typ = ctx.get("token_name", _("Credits"))
         elif el.pay == AccountingItemPayment.CREDIT:
-            el.typ = ctx["credit_name"]
+            el.typ = ctx.get("credit_name", _("Credits"))
         else:
             el.typ = el.get_pay_display()
 
@@ -268,9 +277,9 @@ def member_add_accountingitemother(ctx, request):
     ).select_related("run")
     for el in ctx["others"]:
         if el.oth == AccountingItemOther.TOKEN:
-            el.typ = ctx["token_name"]
+            el.typ = ctx.get("token_name", _("Credits"))
         elif el.oth == AccountingItemOther.CREDIT:
-            el.typ = ctx["credit_name"]
+            el.typ = ctx.get("credit_name", _("Credits"))
         else:
             el.typ = el.get_oth_display()
 
@@ -459,32 +468,15 @@ def exe_archive_email(request):
 def exe_questions(request):
     ctx = check_assoc_permission(request, "exe_questions")
 
-    que = HelpQuestion.objects.filter(assoc_id=ctx["a_id"])
-    que = que.select_related("member", "run", "run__event")
-
-    if not request.method == "POST":
-        limit = datetime.now() - timedelta(days=3 * 30)
-        que = que.filter(created__gte=limit)
-
-    last_q = {}
-    for cq in que.order_by("created"):
-        last_q[cq.member_id] = (cq, cq.is_user, cq.closed)
-
-    ctx["open"] = []
-    ctx["closed"] = []
-    for _cid, value in last_q.items():
-        (cq, is_user, closed) = value
-        if is_user and not closed:
-            ctx["open"].append(cq)
-        else:
-            ctx["closed"].append(cq)
+    closed_q, open_q = _get_help_questions(ctx, request)
 
     if request.method == "POST":
-        ctx["open"].extend(ctx["closed"])
-        ctx["closed"] = []
+        open_q.extend(closed_q)
+        closed_q = []
 
-    ctx["open"].sort(key=lambda x: x.created)
-    ctx["closed"].sort(key=lambda x: x.created, reverse=True)
+    ctx["open"] = sorted(open_q, key=lambda x: x.created)
+    ctx["closed"] = sorted(closed_q, key=lambda x: x.created, reverse=True)
+
     return render(request, "larpmanager/exe/users/questions.html", ctx)
 
 

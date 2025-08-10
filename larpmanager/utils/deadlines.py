@@ -25,7 +25,7 @@ from django.db.models import Count
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.casting import Casting
-from larpmanager.models.member import Member, Membership
+from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.registration import Registration, TicketTier
 
 
@@ -88,7 +88,7 @@ def check_run_deadlines(runs):
         player_ids = []
 
         for reg in all_regs[run.id]:
-            if reg.ticket and reg.ticket.tier != TicketTier.STAFF:
+            if reg.ticket and reg.ticket.tier not in [TicketTier.STAFF, TicketTier.NPC]:
                 player_ids.append(reg.member_id)
 
             if uses_membership:
@@ -125,13 +125,13 @@ def deadlines_membership(collect, features, fees, memberships, now, reg, run, to
     if not membership:
         return
 
-    if membership.status in [Membership.EMPTY, Membership.JOINED, Membership.UPLOADED]:
+    if membership.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
         elapsed = now.date() - reg.created.date()
         key = "memb_del" if elapsed.days > tolerance else "memb"
         collect[key].append(reg.member_id)
         return
 
-    if membership.status in [Membership.SUBMITTED]:
+    if membership.status in [MembershipStatus.SUBMITTED]:
         return
 
     check_fee = "laog" not in features and run.start.year == now.year

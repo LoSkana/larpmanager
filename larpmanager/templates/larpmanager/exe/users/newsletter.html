@@ -4,7 +4,7 @@
     {% trans "Newsletter" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows email lists of users, divided by their expressed preferences regarding newsletter communications." %}
+    {% trans "This page shows email lists of users, divided by their expressed preferences regarding newsletter communications" %}
 {% endblock info %}
 {% block content %}
     {% for key, value in lst.items %}
@@ -17,7 +17,7 @@
                 {{ el }}
             {% endfor %}
         </p>
-        <h4>{% trans "Only really important communications." %}</h4>
+        <h4>{% trans "Only really important communications" %}</h4>
         <p>
             {% for el in value.o %}
                 {% include "elements/comma.html" %}

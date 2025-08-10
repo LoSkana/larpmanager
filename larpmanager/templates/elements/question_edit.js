@@ -5,9 +5,13 @@
             var speed = 300;
 
             if (["m", "s"].includes(selectedValue)) {
-                $('#options').fadeIn(speed);
+                if (!$('#options').is(':visible')) {
+                    $('#options').fadeIn(speed);
+                }
             } else {
-                $('#options').fadeOut(speed);
+                if ($('#options').is(':visible')) {
+                    $('#options').fadeOut(speed);
+                }
             }
 
             max_lengtheable = ["m", "t", "p", "e", "name", "teaser", "text", "title"]
@@ -25,8 +29,7 @@
                 $('#id_visibility_tr').fadeOut(speed);
             }
 
-            var selectedValue = $('#id_status').val();
-            if (["h"].includes(selectedValue)) {
+            if (["name", "teaser", "text", "faction"].includes(selectedValue)) {
                 $('#id_visibility_tr').fadeOut(speed);
             } else {
                 $('#id_visibility_tr').fadeIn(speed);
@@ -34,6 +37,9 @@
         }
 
         $(document).ready(function() {
+            // move options
+            $('#options').insertBefore('#form_submit');
+
             setTimeout(toggleOptions, 10);
 
             $('#id_typ').on('change', function() {

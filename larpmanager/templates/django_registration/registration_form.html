@@ -9,7 +9,7 @@
           method="post"
           action="{% url 'registration_register' %}">
         {% csrf_token %}
-        <table class="mob no_csv">
+        <table class="mob ">
             {{ form.as_table }}
         </table>
         {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}

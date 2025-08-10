@@ -60,11 +60,14 @@ holidays
 html5lib
 
 humanize
+inflection
 
 jellyfish
 lxml
 
 olefile
+
+pandas
 pdfkit
 
 phonenumbers
@@ -107,4 +110,6 @@ slugify
 stripe
 
 tzdata
+
+whoosh
 xhtml2pdf

@@ -4,13 +4,14 @@
     {% trans "Questions" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the questions submitted by players." %}
+    {% trans "This page shows the questions submitted by players" %}
 {% endblock info %}
 {% block content %}
     <p>
         <a href="#" class="my_toggle" tog='closed'>{% trans "Show questions already answered" %}</a>
     </p>
-    <table id="questions" class="tablesorter mob">
+    <table id="questions_open"
+           class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th>{% trans "Date" %}</th>
@@ -44,7 +45,8 @@
     </table>
     <div class="hide closed">
         <h2>Domande già risposte</h2>
-        <table id="questions" class="tablesorter mob">
+        <table id="questions_closed"
+               class="{% if not interface_old %}go_datatable{% endif %}">
             <thead>
                 <tr>
                     <th>{% trans "Date" %}</th>

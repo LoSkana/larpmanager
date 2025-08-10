@@ -1,12 +1,12 @@
 {% load show_tags i18n %}
-{% if show_questbuilder %}
+{% if show_quest %}
     {% for f in sheet_traits %}
         <h2 class="c">{{ f.quest.name }} - {{ f.name }}</h2>
-        {% if f.quest.text and show_text %}
+        {% if f.quest.text and show_quest.text %}
             <div class="plot">{% show_trait f.quest.text run 1 %}</div>
             <br />
         {% endif %}
-        {% if f.text and show_text %}
+        {% if f.text and show_trait.text %}
             <div class="plot">{% show_trait f.text run 1 %}</div>
         {% endif %}
         <hr class="clear" />

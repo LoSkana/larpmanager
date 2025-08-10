@@ -23,14 +23,16 @@ from datetime import date, datetime, timedelta
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count, Min, Sum
 from django.http import Http404, HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.utils.translation import activate, override
 from django.utils.translation import gettext_lazy as _
+from django.utils.translation import override
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django_ratelimit.decorators import ratelimit
@@ -38,9 +40,7 @@ from django_ratelimit.decorators import ratelimit
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.cache.larpmanager import get_cache_lm_home
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
-from larpmanager.forms.association import (
-    FirstAssociationForm,
-)
+from larpmanager.forms.association import FirstAssociationForm
 from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, LarpManagerTicket
 from larpmanager.forms.miscellanea import SendMailForm
 from larpmanager.forms.utils import RedirectForm
@@ -49,29 +49,31 @@ from larpmanager.mail.remind import remember_membership, remember_membership_fee
 from larpmanager.models.access import AssocRole, EventRole
 from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.base import Feature
-from larpmanager.models.event import (
-    Run,
-)
+from larpmanager.models.event import Run
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
     LarpManagerDiscover,
-    LarpManagerHowto,
     LarpManagerPlan,
     LarpManagerProfiler,
     LarpManagerTutorial,
 )
-from larpmanager.models.member import Membership, get_user_membership
+from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.auth import check_lm_admin
 from larpmanager.utils.event import get_event_run
 from larpmanager.utils.exceptions import PermissionError
-from larpmanager.utils.tasks import my_send_mail, my_send_simple_mail, send_mail_exec
+from larpmanager.utils.tasks import my_send_mail, send_mail_exec
 from larpmanager.utils.text import get_assoc_text
+from larpmanager.views.user.member import get_user_backend
 
 
 def lm_home(request):
-    ctx = get_lm_assocs()
+    ctx = get_lm_contact(request)
     ctx["index"] = True
+
+    if request.assoc["base_domain"] == "ludomanager.it":
+        return ludomanager(ctx, request)
+
     ctx.update(get_cache_lm_home())
     random.shuffle(ctx["promoters"])
     random.shuffle(ctx["reviews"])
@@ -79,31 +81,41 @@ def lm_home(request):
     return render(request, "larpmanager/larpmanager/home.html", ctx)
 
 
+def ludomanager(ctx, request):
+    ctx["assoc_skin"] = "LudoManager"
+    ctx["platform"] = "LudoManager"
+    return render(request, "larpmanager/larpmanager/skin/ludomanager.html", ctx)
+
+
 @csrf_exempt
 def contact(request):
     ctx = {}
+    done = False
     if request.POST:
-        form = LarpManagerContact(request.POST)
+        form = LarpManagerContact(request.POST, request=request)
         if form.is_valid():
             ct = form.cleaned_data["email"]
             for _name, email in conf_settings.ADMINS:
                 subj = "LarpManager contact - " + ct
                 body = form.cleaned_data["content"]
-                my_send_simple_mail(subj, body, email)
+                my_send_mail(subj, body, email)
+                done = True
     else:
-        form = LarpManagerContact()
+        form = LarpManagerContact(request=request)
+        
+    if not done:
         ctx["contact_form"] = form
     return render(request, "larpmanager/larpmanager/contact.html", ctx)
 
 
-def go_redirect(request, slug, p):
+def go_redirect(request, slug, p, base_domain="larpmanager.com"):
     if request.enviro in ["dev", "test"]:
         return redirect("http://127.0.0.1:8000/")
 
     if slug:
-        n_p = f"https://{slug}.larpmanager.com/"
+        n_p = f"https://{slug}.{base_domain}/"
     else:
-        n_p = "https://larpmanager.com/"
+        n_p = f"https://{base_domain}/"
 
     if p:
         n_p += p
@@ -134,7 +146,7 @@ def choose_assoc(request, p, slugs):
 
 
 def go_redirect_run(run, p):
-    n_p = f"https://{run.event.assoc.slug}.larpmanager.com/{run.event.slug}/{run.number}/{p}"
+    n_p = f"https://{run.event.assoc.slug}.{run.event.assoc.skin.domain}/{run.event.slug}/{run.number}/{p}"
     return redirect(n_p)
 
 
@@ -200,7 +212,7 @@ def activate_feature_assoc(request, cod, p=None):
     assoc.features.add(feature)
     assoc.save()
 
-    messages.success(request, _("Feature activated:") + feature.name)
+    messages.success(request, _("Feature activated") + ":" + feature.name)
 
     # redirect either to the requested next, or to the best match for the permission asked
     if p:
@@ -223,22 +235,13 @@ def activate_feature_event(request, s, n, cod, p=None):
     ctx["event"].features.add(feature)
     ctx["event"].save()
 
-    messages.success(request, _("Feature activated:") + feature.name)
+    messages.success(request, _("Feature activated") + ":" + feature.name)
 
     # redirect either to the requested next, or to the best match for the permission asked
     if p:
         return redirect("/" + p)
     view_name = feature.event_permissions.first().slug
     return redirect(reverse(view_name, kwargs={"s": s, "n": n}))
-
-
-def change_language(request):
-    lang_code = request.POST.get("language", "en")
-    activate(lang_code)
-    request.session["django_language"] = lang_code
-    response = JsonResponse({"status": "Language changed", "language": lang_code})
-    response.set_cookie("django_language", lang_code)
-    return response
 
 
 def toggle_sidebar(request):
@@ -274,21 +277,21 @@ def debug_slug(request, s=""):
 def ticket(request, s=""):
     ctx = {"reason": s}
     if request.POST:
-        form = LarpManagerTicket(request.POST)
+        form = LarpManagerTicket(request.POST, request=request)
         if form.is_valid():
             for _name, email in conf_settings.ADMINS:
-                subj = "LarpManager ticket"
+                subj = f"LarpManager ticket - {request.assoc['name']}"
                 if s:
                     subj += f" [{s}]"
                 body = f"Email: {form.cleaned_data['email']} <br /><br />"
                 if request.user.is_authenticated:
                     body += f"User: {request.user.member} ({request.user.member.email}) <br /><br />"
                 body += form.cleaned_data["content"]
-                my_send_simple_mail(subj, body, email)
+                my_send_mail(subj, body, email)
             messages.success(request, _("Your request has been sent, we will reply as soon as possible!"))
             return redirect("home")
     else:
-        form = LarpManagerTicket()
+        form = LarpManagerTicket(request=request)
     ctx["form"] = form
     return render(request, "larpmanager/member/ticket.html", ctx)
 
@@ -305,37 +308,50 @@ def discord(request):
         return HttpResponseForbidden("Bots not allowed.")
 
     if request.POST:
-        form = LarpManagerCheck(request.POST)
+        form = LarpManagerCheck(request.POST, request=request)
         if form.is_valid():
             return redirect("https://discord.gg/C4KuyQbuft")
     else:
-        form = LarpManagerCheck()
+        form = LarpManagerCheck(request=request)
     ctx = {"form": form}
     return render(request, "larpmanager/larpmanager/discord.html", ctx)
 
 
 @login_required
 def join(request):
-    ctx = get_lm_assocs()
+    ctx = get_lm_contact(request)
     if "red" in ctx:
         return redirect(ctx["red"])
 
+    assoc = _join_form(ctx, request)
+    if assoc:
+        # send message
+        messages.success(request, _("Welcome to %(name)s!") % {"name": request.assoc["name"]})
+        # send email
+        if request.assoc["skin_id"] == 1:
+            join_email(assoc)
+        # redirect
+        return redirect("after_login", subdomain=assoc.slug, path="manage")
+
+    return render(request, "larpmanager/larpmanager/join.html", ctx)
+
+
+def _join_form(ctx, request):
     if request.method == "POST":
         form = FirstAssociationForm(request.POST, request.FILES)
         if form.is_valid():
-            assoc = form.save()
+            # set skin
+            assoc = form.save(commit=False)
+            assoc.skin_id = request.assoc["skin_id"]
+            assoc.save()
 
             # Add member to admins
             (ar, created) = AssocRole.objects.get_or_create(assoc=assoc, number=1, name="Admin")
             ar.members.add(request.user.member)
             ar.save()
             el = get_user_membership(request.user.member, assoc.id)
-            el.status = Membership.JOINED
+            el.status = MembershipStatus.JOINED
             el.save()
-            msg = _("Welcome to LarpManager!")
-            messages.success(request, msg)
-
-            join_email(assoc)
 
             for _name, email in conf_settings.ADMINS:
                 subj = _("New organization created")
@@ -348,45 +364,38 @@ def join(request):
                 my_send_mail(subj, body, email)
 
             # return redirect('first', assoc=assoc.slug)
-            return go_redirect(request, assoc.slug, "manage")
+            return assoc
     else:
         form = FirstAssociationForm()
-    ctx["form"] = form
 
-    return render(request, "larpmanager/larpmanager/join.html", ctx)
+    ctx["form"] = form
+    return None
 
 
 @cache_page(60 * 15)
 def discover(request):
-    ctx = get_lm_assocs()
+    ctx = get_lm_contact(request)
     ctx["index"] = True
     ctx["discover"] = LarpManagerDiscover.objects.order_by("order")
     return render(request, "larpmanager/larpmanager/discover.html", ctx)
 
 
-@cache_page(60 * 15)
-def howto(request):
-    ctx = get_lm_assocs()
-    ctx["list"] = LarpManagerHowto.objects.order_by("order")
-    return render(request, "larpmanager/larpmanager/howto.html", ctx)
-
-
 @override("en")
 def tutorials(request, slug=None):
-    ctx = get_lm_assocs()
+    ctx = get_lm_contact(request)
     ctx["index"] = True
 
     try:
         if slug:
-            ctx["tutorial"] = LarpManagerTutorial.objects.get(slug=slug)
+            tutorial = LarpManagerTutorial.objects.get(slug=slug)
         else:
-            ctx["tutorial"] = LarpManagerTutorial.objects.order_by("order").first()
+            tutorial = LarpManagerTutorial.objects.order_by("order").first()
             ctx["intro"] = True
     except ObjectDoesNotExist as err:
         raise Http404("tutorial not found") from err
 
-    if ctx["tutorial"]:
-        order = ctx["tutorial"].order
+    if tutorial:
+        order = tutorial.order
         ctx["seq"] = order
 
         que = LarpManagerTutorial.objects.order_by("order")
@@ -401,13 +410,14 @@ def tutorials(request, slug=None):
                 ctx["next"] = el
 
     ctx["iframe"] = request.GET.get("in_iframe") == "1"
+    ctx["opened"] = tutorial
 
     return render(request, "larpmanager/larpmanager/tutorials.html", ctx)
 
 
 @cache_page(60 * 15)
 def blog(request, slug=""):
-    ctx = get_lm_assocs()
+    ctx = get_lm_contact(request)
     ctx["index"] = True
     if slug:
         try:
@@ -425,29 +435,27 @@ def blog(request, slug=""):
 
 @cache_page(60 * 15)
 def privacy(request):
-    ctx = get_lm_assocs()
+    ctx = get_lm_contact(request)
     ctx.update({"text": get_assoc_text(request.assoc["id"], AssocTextType.PRIVACY)})
     return render(request, "larpmanager/larpmanager/privacy.html", ctx)
 
 
 @cache_page(60 * 15)
 def usage(request):
-    ctx = get_lm_assocs()
+    ctx = get_lm_contact(request)
     ctx["index"] = True
     return render(request, "larpmanager/larpmanager/usage.html", ctx)
 
 
 @cache_page(60 * 15)
 def about_us(request):
-    ctx = get_lm_assocs()
+    ctx = get_lm_contact(request)
     ctx["index"] = True
     return render(request, "larpmanager/larpmanager/about_us.html", ctx)
 
 
-def get_lm_assocs():
-    # if check and request.assoc["id"] != 0:
-    # return {"red": "https://larpmanager.com" + request.get_full_path()}
-    ctx = {"lm": 1, "contact_form": LarpManagerContact()}
+def get_lm_contact(request):
+    ctx = {"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"}
     return ctx
 
 
@@ -497,7 +505,7 @@ def get_run_lm_payment(el):
     el.features = len(get_assoc_features(el.event.assoc_id)) + len(get_event_features(el.event_id))
     el.active_registrations = (
         Registration.objects.filter(run__id=el.id, cancellation_date__isnull=True)
-        .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.WAITING])
+        .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.WAITING, TicketTier.NPC])
         .count()
     )
     if el.plan == LarpManagerPlan.FREE:
@@ -556,10 +564,61 @@ def donate(request):
         return HttpResponseForbidden("Bots not allowed.")
 
     if request.POST:
-        form = LarpManagerCheck(request.POST)
+        form = LarpManagerCheck(request.POST, request=request)
         if form.is_valid():
             return redirect("https://www.paypal.com/paypalme/mscanagatta")
     else:
-        form = LarpManagerCheck()
+        form = LarpManagerCheck(request=request)
     ctx = {"form": form}
     return render(request, "larpmanager/larpmanager/donate.html", ctx)
+
+
+def debug_user(request, mid):
+    check_lm_admin(request)
+    member = Member.objects.get(pk=mid)
+    login(request, member.user, backend=get_user_backend())
+
+
+@ratelimit(key="ip", rate="5/m", block=True)
+def demo(request):
+    user_agent = request.META.get("HTTP_USER_AGENT", "")
+    if is_suspicious_user_agent(user_agent):
+        return HttpResponseForbidden("Bots not allowed.")
+
+    if request.POST:
+        form = LarpManagerCheck(request.POST, request=request)
+        if form.is_valid():
+            return _create_demo(request)
+    else:
+        form = LarpManagerCheck(request=request)
+    ctx = {"form": form}
+    return render(request, "larpmanager/larpmanager/demo.html", ctx)
+
+
+def _create_demo(request):
+    new_pk = Association.objects.order_by("-pk").values_list("pk", flat=True).first()
+    new_pk += 1
+
+    # create assoc
+    assoc = Association.objects.create(
+        slug=f"test{new_pk}", name="Demo Organization", skin_id=request.assoc["skin_id"], demo=True
+    )
+
+    # create test user
+    user = User.objects.create(email=f"test{new_pk}@demo.it", username=f"test{new_pk}", password="pippo")
+    member = user.member
+    member.name = "Demo"
+    member.surname = "Admin"
+    member.save()
+
+    # Add member to admins
+    (ar, created) = AssocRole.objects.get_or_create(assoc=assoc, number=1, name="Admin")
+    ar.members.add(member)
+    ar.save()
+    el = get_user_membership(member, assoc.id)
+    el.status = MembershipStatus.JOINED
+    el.save()
+
+    login(request, user, backend=get_user_backend())
+
+    return redirect("after_login", subdomain=assoc.slug, path="manage")

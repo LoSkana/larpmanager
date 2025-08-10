@@ -4,11 +4,12 @@
     {% trans "Event navigation" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page summarises the customised navigation buttons of the event." %}
+    {% trans "This page summarises the customised navigation buttons of the event" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
-    <table id="payments" class="tablesorter mob">
+    <table id="buttons"
+           class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th></th>
@@ -21,7 +22,8 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_buttons_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'orga_buttons_edit' run.event.slug run.number el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
                     <td>{{ el.tooltip }}</td>

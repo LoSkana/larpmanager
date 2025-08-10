@@ -31,34 +31,26 @@ from larpmanager.models.registration import Registration
 from larpmanager.models.utils import UploadToPathAndRename, download, generate_id, my_uuid_short
 
 
+class PaymentType(models.TextChoices):
+    REGISTRATION = "r", "registration"
+    MEMBERSHIP = "m", "membership"
+    DONATE = "d", "donation"
+    COLLECTION = "g", "collection"
+
+
+class PaymentStatus(models.TextChoices):
+    CREATED = "r", "Created"
+    SUBMITTED = "s", "Submitted"
+    CONFIRMED = "c", "Confirmed"
+    CHECKED = "k", "Checked"
+
+
 class PaymentInvoice(BaseModel):
     search = models.CharField(max_length=500, editable=False)
 
-    REGISTRATION = "r"
-    MEMBERSHIP = "m"
-    DONATE = "d"
-    COLLECTION = "g"
-    TYPE_CHOICES = [
-        (REGISTRATION, "registration"),
-        (MEMBERSHIP, "membership"),
-        (DONATE, "donation"),
-        (COLLECTION, "collection"),
-    ]
-
-    CREATED = "r"
-    SUBMITTED = "s"
-    CONFIRMED = "c"
-    CHECKED = "k"
-    STATUS_CHOICES = [
-        (CREATED, "Created"),
-        (SUBMITTED, "Submitted"),
-        (CONFIRMED, "Confirmed"),
-        (CHECKED, "Checked"),
-    ]
-
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
 
-    typ = models.CharField(max_length=1, choices=TYPE_CHOICES)
+    typ = models.CharField(max_length=1, choices=PaymentType.choices)
 
     invoice = models.FileField(
         upload_to=UploadToPathAndRename("wire/"),
@@ -70,7 +62,7 @@ class PaymentInvoice(BaseModel):
 
     text = models.TextField(null=True, blank=True)
 
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=CREATED, db_index=True)
+    status = models.CharField(max_length=1, choices=PaymentStatus.choices, default=PaymentStatus.CREATED, db_index=True)
 
     method = models.ForeignKey(PaymentMethod, on_delete=models.CASCADE)
 
@@ -306,9 +298,9 @@ class AccountingItemOther(AccountingItem):
         indexes = [models.Index(fields=["run", "oth"])]
 
     def __str__(self):
-        s = _("Credit disbursement")
+        s = _("Credit assignment")
         if self.oth == AccountingItemOther.TOKEN:
-            s = _("Dispensing tokens")
+            s = _("Tokens assignment")
         elif self.oth == AccountingItemOther.REFUND:
             s = _("Refund")
         if self.member:
@@ -354,7 +346,7 @@ class AccountingItemExpense(AccountingItem):
         max_length=1,
         choices=AccountingItem.BALANCE_CHOICES,
         verbose_name=_("Balance"),
-        help_text=_("Indicate how spending is allocated at the budget level."),
+        help_text=_("Indicate how spending is allocated at the budget level"),
         null=True,
         blank=False,
     )
@@ -401,7 +393,7 @@ class AccountingItemOutflow(AccountingItemFlow):
         max_length=1,
         choices=AccountingItem.BALANCE_CHOICES,
         verbose_name=_("Balance"),
-        help_text=_("Indicate how spending is allocated at the budget level."),
+        help_text=_("Indicate how spending is allocated at the budget level"),
         null=True,
         blank=False,
     )
@@ -607,19 +599,17 @@ class AccountingItemCollection(AccountingItem):
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE, related_name="collection_gifts")
 
 
-class RefundRequest(BaseModel):
-    REQUEST = "r"
-    PAYED = "p"
-    STATUS_CHOICES = [
-        (REQUEST, _("Request")),
-        (PAYED, _("Delivered")),
-    ]
+class RefundStatus(models.TextChoices):
+    REQUEST = "r", _("Request")
+    PAYED = "p", _("Delivered")
 
+
+class RefundRequest(BaseModel):
     search = models.CharField(max_length=200, editable=False)
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="refund_requests")
 
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=REQUEST, db_index=True)
+    status = models.CharField(max_length=1, choices=RefundStatus.choices, default=RefundStatus.REQUEST, db_index=True)
 
     details = models.TextField(
         max_length=2000,

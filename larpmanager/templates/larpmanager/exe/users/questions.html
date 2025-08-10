@@ -4,13 +4,14 @@
     {% trans "Questions" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the questions submitted by users, divided by the events they refer to. You can answer the question or close it if requires no further action." %}
+    {% trans "This page shows the questions submitted by users, divided by the events they refer to. You can answer the question or close it if requires no further action" %}
 {% endblock info %}
 {% block content %}
     <p>
         <a href="#" class="my_toggle" tog='closed'>{% trans "Show questions already answered" %}</a>
     </p>
-    <table id="questions" class="tablesorter mob">
+    <table id="questions_open"
+           class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th>{% trans "Date" %}</th>
@@ -49,13 +50,14 @@
     <div class="hide closed">
         <h2>Domande già risposte</h2>
         <p>
-            <i>{% trans "For your convenience, this page only shows questions from the last 3 months. To view previous questions click here:" %}</i>
+            <i>{% trans "For your convenience, this page only shows questions from the last 3 months. To view previous questions click here" %}: </i>
             <form action="{{ request.path }}" method="post">
                 {% csrf_token %}
                 <input type="submit" value="{% trans "Confirm" %}">
             </form>
         </p>
-        <table id="questions" class="tablesorter mob">
+        <table id="questions_closed"
+               class="{% if not interface_old %}go_datatable{% endif %}">
             <thead>
                 <tr>
                     <th>{% trans "Date" %}</th>

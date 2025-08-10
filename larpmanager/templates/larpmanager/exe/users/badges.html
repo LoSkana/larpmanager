@@ -4,11 +4,11 @@
     {% trans "Badge" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows membership badges. You can edit them, assign them, create new ones." %}
+    {% trans "This page shows membership badges. You can edit them, assign them, create new ones" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
-    <table id="tb" class="tablesorter mob">
+    <table id="badges" class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th></th>
@@ -23,11 +23,11 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'exe_badges_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'exe_badges_edit' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
                     <td>
-                        <img src="{{ el.img_thumb.url }}" style="width:5em" />
+                        <img src="{{ el.img_thumb.url }}" class="inv_photo" alt="badge image" />
                     </td>
                     <td>{{ el.descr }}</td>
                     <td>{{ el.cod }}</td>

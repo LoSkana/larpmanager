@@ -79,6 +79,21 @@ class Command(BaseCommand):
 
             po = polib.pofile(po_path)
 
+            symbols = (".", "?", "!", ",")
+            changed = False
+            for entry in po:
+                if entry.msgstr:
+                    if entry.msgstr.endswith(symbols):
+                        if not entry.msgid.endswith(symbols):
+                            if "fuzzy" in entry.flags:
+                                entry.flags.remove("fuzzy")
+                            entry.msgstr = entry.msgstr.rstrip(".?!,")
+                            changed = True
+
+            if changed:
+                self.save_po(po, po_path)
+                po = polib.pofile(po_path)
+
             for entry in po.untranslated_entries():
                 self.translate_entry(entry, loc)
 
@@ -86,13 +101,17 @@ class Command(BaseCommand):
                 entry.flags.remove("fuzzy")
                 self.translate_entry(entry, loc)
 
-            sorted_entries = sorted(po, key=lambda element: (len(element.msgid), element.msgid))
+            self.save_po(po, po_path)
 
-            # Crate new ordered po
-            sorted_po = polib.POFile()
-            sorted_po.metadata = po.metadata
-
-            for entry in sorted_entries:
-                sorted_po.append(entry)
-
-            sorted_po.save(po_path)
+    def save_po(self, po, po_path):
+        # Crate new ordered po
+        sorted_po = polib.POFile()
+        sorted_po.metadata = po.metadata
+        sorted_entries = sorted(po, key=lambda element: (len(element.msgid), element.msgid))
+        cache = set()
+        for entry in sorted_entries:
+            if entry.msgid in cache:
+                continue
+            cache.add(entry.msgid)
+            sorted_po.append(entry)
+        sorted_po.save(po_path)

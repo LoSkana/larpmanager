@@ -4,11 +4,12 @@
     {% trans "Ability" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page summarizes the abilities that players can purchase with px." %}
+    {% trans "This page summarizes the abilities that players can purchase with experience points" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
-    <table id="abilities" class="tablesorter mob writing">
+    <table id="abilities"
+           class="{% if not interface_old %}go_datatable{% endif %} writing">
         <thead>
             <tr>
                 <th></th>
@@ -19,9 +20,7 @@
                 {% if px_user %}
                     <th>{% trans "Visible" %}</th>
                     <th>{% trans "Prerequisites" %}</th>
-                    {% if features.character_form %}
-                        <th>{% trans "Subordinates" %}</th>
-                    {% endif %}
+                    <th>{% trans "Dependencies" %}</th>
                 {% endif %}
             </tr>
         </thead>
@@ -29,7 +28,8 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
                     <td>{{ el.cost }}</td>
@@ -45,7 +45,7 @@
                     <td>
                         {% for ab in el.characters.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_characters_edit' run.event.slug run.number ab.number %}">{{ ab.name }}</a>
+                            <a href="{% url 'orga_characters_edit' run.event.slug run.number ab.id %}">{{ ab.name }}</a>
                         {% endfor %}
                     </td>
                     {% if px_user %}
@@ -53,17 +53,15 @@
                         <td>
                             {% for ab in el.prerequisites.all %}
                                 {% include "elements/comma.html" %}
-                                <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number ab.number %}">{{ ab.name }}</a>
+                                <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number ab.id %}">{{ ab.name }}</a>
                             {% endfor %}
                         </td>
-                        {% if features.character_form %}
-                            <td>
-                                {% for opt in el.dependents.all %}
-                                    {% include "elements/comma.html" %}
-                                    {{ opt.display }}
-                                {% endfor %}
-                            </td>
-                        {% endif %}
+                        <td>
+                            {% for opt in el.dependents.all %}
+                                {% include "elements/comma.html" %}
+                                {{ opt.name }}
+                            {% endfor %}
+                        </td>
                     {% endif %}
                 </tr>
             {% endfor %}

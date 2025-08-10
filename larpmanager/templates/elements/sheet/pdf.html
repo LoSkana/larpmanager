@@ -1,5 +1,5 @@
 {% load show_tags i18n %}
-{% if show_print_pdf %}
+{% if show_addit.print_pdf and not external_access %}
     <p>
         <a href="{% url 'character_pdf_sheet' event.slug run.number char.number %}">{% trans "Download complete sheet" %}</a>
     </p>

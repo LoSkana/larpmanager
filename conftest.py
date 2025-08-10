@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import logging
 import os
 import subprocess
 
@@ -70,3 +70,9 @@ def clean_db(host, env):
         ],
         env,
     )
+
+
+def pytest_configure():
+    logger = logging.getLogger("django.request")
+    for handler in logger.handlers:
+        handler.addFilter(lambda record: "Not Found:" not in record.getMessage())

@@ -37,7 +37,7 @@ from larpmanager.forms.utils import (
     TicketS2WidgetMulti,
 )
 from larpmanager.models.casting import Trait
-from larpmanager.models.form import QuestionType, RegistrationOption, RegistrationQuestion
+from larpmanager.models.form import QuestionStatus, QuestionType, RegistrationOption, RegistrationQuestion
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -220,8 +220,8 @@ class RegistrationForm(BaseRegistrationForm):
         if not quota_chs:
             quota_chs.append((1, _("Default")))
         ht = _("The number of payments to split the fee")
-        ht += " " + _("The ticket will be divided equally in the number of quotas indicated.")
-        ht += " " + _("Payment deadlines will be similarly equally divided, based on the date of registration.")
+        ht += " " + _("The ticket will be divided equally in the number of quotas indicated") + "."
+        ht += " " + _("Payment deadlines will be similarly equally divided, based on the date of registration") + "."
         self.fields["quotas"] = forms.ChoiceField(required=True, choices=quota_chs, label=_("Quotas"), help_text=ht)
         if len(quota_chs) == 1:
             self.fields["quotas"].widget = forms.HiddenInput()
@@ -241,8 +241,8 @@ class RegistrationForm(BaseRegistrationForm):
         for r in tickets:
             name = r.get_form_text(run, cs=self.params["currency_symbol"])
             ticket_choices.append((r.id, name))
-            if r.details:
-                ticket_help += f"<p><b>{r.name}</b>: {r.details}</p>"
+            if r.description:
+                ticket_help += f"<p><b>{r.name}</b>: {r.description}</p>"
 
         self.fields["ticket"] = forms.ChoiceField(
             required=True, choices=ticket_choices, label=_("Ticket"), help_text=ticket_help
@@ -278,9 +278,10 @@ class RegistrationForm(BaseRegistrationForm):
         return False
 
     def get_available_tickets(self, event, reg_counts, run):
-        # If the user is registered as a staff, show those options
-        if self.has_ticket(TicketTier.STAFF):
-            return RegistrationTicket.objects.filter(event=event, tier=TicketTier.STAFF).order_by("order")
+        for tier in [TicketTier.STAFF, TicketTier.NPC]:
+            # If the user is registered as a staff, show those options
+            if self.has_ticket(tier):
+                return RegistrationTicket.objects.filter(event=event, tier=tier).order_by("order")
 
         # Check closed inscriptions
         if not self.instance.pk and "closed" in run.status:
@@ -394,11 +395,13 @@ class RegistrationGiftForm(RegistrationForm):
 
 
 class OrgaRegistrationForm(BaseRegistrationForm):
-    page_info = _("This page allows you to add or edit a signup to this run.")
+    page_info = _("This page allows you to add or edit a signup to this run")
 
     page_title = _("Registrations")
 
-    load_js = "characters-reg-choices"
+    load_templates = ["share"]
+
+    load_js = ["characters-reg-choices"]
 
     class Meta:
         model = Registration
@@ -643,7 +646,7 @@ class RegistrationCharacterRelForm(MyForm):
 
 
 class OrgaRegistrationTicketForm(MyForm):
-    page_info = _("This page allows you to add or change the types of ticket with which players can register.")
+    page_info = _("This page allows you to add or change the types of ticket with which players can register")
 
     page_title = _("Tickets")
 
@@ -652,7 +655,7 @@ class OrgaRegistrationTicketForm(MyForm):
         fields = "__all__"
         exclude = ("number", "order")
         widgets = {
-            "details": forms.Textarea(attrs={"rows": 3, "cols": 40}),
+            "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -703,10 +706,7 @@ class OrgaRegistrationTicketForm(MyForm):
 
 
 class OrgaRegistrationSectionForm(MyForm):
-    page_info = _(
-        "This page allows you to add or edit sections in the signup form. You can "
-        "indicate which questions to include in the section."
-    )
+    page_info = _("This page allows you to add or edit sections in the signup form")
 
     page_title = _("Form section")
 
@@ -716,7 +716,7 @@ class OrgaRegistrationSectionForm(MyForm):
 
 
 class OrgaRegistrationQuestionForm(MyForm):
-    page_info = _("This page allows you to add or edit a question from the sign up form.")
+    page_info = _("This page allows you to add or edit a question from the sign up form")
 
     page_title = _("Form element")
 
@@ -765,9 +765,23 @@ class OrgaRegistrationQuestionForm(MyForm):
         if "gift" not in self.params["features"]:
             self.delete_field("giftable")
 
+        # Set status help
+        visible_choices = {v for v, _ in self.fields["status"].choices}
+
+        help_texts = {
+            QuestionStatus.OPTIONAL: "The question is shown, and can be filled by the player",
+            QuestionStatus.MANDATORY: "The question needs to be filled by the player",
+            QuestionStatus.DISABLED: "The question is shown, but cannot be changed by the player",
+            QuestionStatus.HIDDEN: "The question is not shown to the player",
+        }
+
+        self.fields["status"].help_text = ", ".join(
+            f"<b>{choice.label}</b>: {text}" for choice, text in help_texts.items() if choice.value in visible_choices
+        )
+
 
 class OrgaRegistrationOptionForm(MyForm):
-    page_info = _("This page allows you to add or edit an option in a sign up form question.")
+    page_info = _("This page allows you to add or edit an option in a sign up form question")
 
     page_title = _("Form Options")
 
@@ -782,13 +796,10 @@ class OrgaRegistrationOptionForm(MyForm):
         if "question_id" in self.params:
             self.initial["question"] = self.params["question_id"]
 
-        if "reg_opt_staff_price" not in self.params["features"]:
-            self.delete_field("price_staff")
-
 
 class OrgaRegistrationQuotaForm(MyForm):
     page_info = _(
-        "This page allows you to add or modify the dynamic instalments with which the player can split the payment."
+        "This page allows you to add or modify the dynamic instalments with which the player can split the payment"
     )
 
     page_title = _("Dynamic rates")
@@ -799,7 +810,7 @@ class OrgaRegistrationQuotaForm(MyForm):
 
 
 class OrgaRegistrationInstallmentForm(MyForm):
-    page_info = _("This page allows you to add or change the fixed instalments in which a player must pay.")
+    page_info = _("This page allows you to add or change the fixed instalments in which a player must pay")
 
     page_title = _("Fixed instalments")
 
@@ -831,7 +842,7 @@ class OrgaRegistrationInstallmentForm(MyForm):
 
 
 class OrgaRegistrationSurchargeForm(MyForm):
-    page_info = _("This page allows you to add or edit the registration surcharges.")
+    page_info = _("This page allows you to add or edit the registration surcharges")
 
     page_title = _("Surcharge")
 
@@ -871,5 +882,5 @@ class PreRegistrationForm(forms.Form):
             required=False,
             max_length=255,
             label=_("Informations"),
-            help_text=_("Is there anything else you would like to tell us?"),
+            help_text=_("Is there anything else you would like to tell us") + "?",
         )

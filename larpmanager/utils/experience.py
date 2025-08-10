@@ -84,19 +84,27 @@ def get_available_ability_px(char):
 
     # get px available
     add_char_addit(char)
-    px_avail = char.addit["px_avail"]
+    px_avail = char.addit.get("px_avail", 0)
 
     # filter all abilities given we have the requested prerequisites / dependents
     all_abilities = (
         char.event.get_elements(AbilityPx)
         .filter(visible=True, cost__lte=px_avail)
         .exclude(pk__in=current_char_abilities)
+        .select_related("typ")
         .prefetch_related("prerequisites", "dependents")
         .order_by("name")
     )
-    sels = [
-        (el.id, f"{el.name} - {el.cost}")
-        for el in all_abilities
-        if check_available_ability_px(el, current_char_abilities, current_char_choices)
-    ]
-    return sels
+
+    # results
+    result = {}
+    for el in all_abilities:
+        if not check_available_ability_px(el, current_char_abilities, current_char_choices):
+            continue
+
+        if el.typ_id not in result:
+            result[el.typ_id] = {"name": el.typ.name, "order": el.typ.id, "list": {}}
+
+        result[el.typ_id]["list"][el.id] = f"{el.name} - {el.cost}"
+
+    return result

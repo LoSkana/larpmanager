@@ -281,7 +281,7 @@ def copy_registration(all, e_id, element, p_id):
     if all or element == "question":
         copy_class(e_id, p_id, RegistrationQuestion)
         copy_class(e_id, p_id, RegistrationOption)
-        correct_rels(e_id, p_id, RegistrationQuestion, RegistrationOption, "question", "display")
+        correct_rels(e_id, p_id, RegistrationQuestion, RegistrationOption, "question", "name")
     if all or element == "discount":
         copy_class(e_id, p_id, Discount)
     if all or element == "quota":
@@ -302,7 +302,7 @@ def copy_writing(all, e_id, element, p_id):
         copy_class(e_id, p_id, WritingQuestion)
         copy_class(e_id, p_id, WritingOption)
         copy_character_config(e_id, p_id)
-        correct_rels(e_id, p_id, WritingQuestion, WritingOption, "question", "display")
+        correct_rels(e_id, p_id, WritingQuestion, WritingOption, "question", "name")
     if all or element == "faction":
         copy_class(e_id, p_id, Faction)
     if all or element == "quest":

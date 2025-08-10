@@ -6,8 +6,8 @@
 {% block nav %}
 {% endblock nav %}
 {% block content %}
-    {% trans "The run you requested is only visible to players logged into the system." %}
+    {% trans "The run you requested is only visible to players logged into the system" %}.
     <br />
     <br />
-    {% trans "Wanna connect?" %} <a href="{% url 'login' %}">{% trans "Login" %}</a>
+    {% trans "Wanna connect" %}? <a href="{% url 'login' %}">{% trans "Login" %}</a>
 {% endblock content %}

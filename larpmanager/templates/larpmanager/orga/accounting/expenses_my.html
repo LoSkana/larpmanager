@@ -4,11 +4,12 @@
     {% trans "Expenses" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows your personal spending items." %}
+    {% trans "This page shows your personal spending items" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
-    <table id="expenses" class="tablesorter mob writing">
+    <table id="expenses"
+           class="{% if not interface_old %}go_datatable{% endif %} writing">
         <thead>
             <tr>
                 <th>{% trans "Receipt" %}</th>

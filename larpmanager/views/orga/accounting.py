@@ -44,6 +44,7 @@ from larpmanager.models.accounting import (
     AccountingItemTransaction,
     Discount,
     PaymentInvoice,
+    PaymentStatus,
 )
 from larpmanager.utils.edit import backend_get, orga_edit
 from larpmanager.utils.event import check_event_permission
@@ -95,7 +96,7 @@ def orga_expenses_my_new(request, s, n):
 @login_required
 def orga_invoices(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_invoices")
-    que = PaymentInvoice.objects.filter(reg__run=ctx["run"], status=PaymentInvoice.SUBMITTED)
+    que = PaymentInvoice.objects.filter(reg__run=ctx["run"], status=PaymentStatus.SUBMITTED)
     ctx["list"] = que.select_related("member", "method")
     return render(request, "larpmanager/orga/accounting/invoices.html", ctx)
 
@@ -106,16 +107,16 @@ def orga_invoices_confirm(request, s, n, num):
     backend_get(ctx, PaymentInvoice, num)
 
     if ctx["el"].reg.run != ctx["run"]:
-        raise Http404("i'm soory, what?")
+        raise Http404("i'm sorry, what?")
 
-    if ctx["el"].status == PaymentInvoice.CREATED or ctx["el"].status == PaymentInvoice.SUBMITTED:
-        ctx["el"].status = PaymentInvoice.CONFIRMED
+    if ctx["el"].status == PaymentStatus.CREATED or ctx["el"].status == PaymentStatus.SUBMITTED:
+        ctx["el"].status = PaymentStatus.CONFIRMED
     else:
-        messages.warning(request, _("Receipt already confirmed."))
+        messages.warning(request, _("Receipt already confirmed") + ".")
         return redirect("orga_invoices", s=ctx["event"].slug, n=ctx["run"].number)
 
     ctx["el"].save()
-    messages.success(request, _("Element approved!"))
+    messages.success(request, _("Element approved") + "!")
     return redirect("orga_invoices", s=ctx["event"].slug, n=ctx["run"].number)
 
 

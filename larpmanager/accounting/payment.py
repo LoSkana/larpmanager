@@ -45,7 +45,10 @@ from larpmanager.models.accounting import (
     AccountingItemTransaction,
     Collection,
     PaymentInvoice,
+    PaymentStatus,
+    PaymentType,
     RefundRequest,
+    RefundStatus,
 )
 from larpmanager.models.association import Association
 from larpmanager.models.base import PaymentMethod
@@ -76,7 +79,7 @@ def unique_invoice_cod(length=16):
 
 def set_data_invoice(request, ctx, invoice, form, assoc):
     member_real = request.user.member.display_real()
-    if invoice.typ == PaymentInvoice.REGISTRATION:
+    if invoice.typ == PaymentType.REGISTRATION:
         invoice.causal = _("Registration fee %(number)d of %(user)s per %(event)s") % {
             "user": member_real,
             "event": str(ctx["reg"].run),
@@ -84,18 +87,18 @@ def set_data_invoice(request, ctx, invoice, form, assoc):
         }
         _custom_reason_reg(ctx, invoice, member_real)
 
-    elif invoice.typ == PaymentInvoice.MEMBERSHIP:
+    elif invoice.typ == PaymentType.MEMBERSHIP:
         invoice.causal = _("Membership fee of %(user)s for %(year)s") % {
             "user": member_real,
             "year": ctx["year"],
         }
-    elif invoice.typ == PaymentInvoice.DONATE:
+    elif invoice.typ == PaymentType.DONATE:
         descr = form.cleaned_data["descr"]
         invoice.causal = _("Donation of %(user)s, with reason: '%(reason)s'") % {
             "user": member_real,
             "reason": descr,
         }
-    elif invoice.typ == PaymentInvoice.COLLECTION:
+    elif invoice.typ == PaymentType.COLLECTION:
         invoice.idx = ctx["coll"].id
         invoice.causal = _("Collected contribution of %(user)s for %(recipient)s") % {
             "user": member_real,
@@ -125,12 +128,12 @@ def _custom_reason_reg(ctx, invoice, member_real):
     for key in keys:
         # Look for a registration question with that name
         try:
-            question = RegistrationQuestion.objects.get(event=ctx["reg"].run.event, display__iexact=key)
+            question = RegistrationQuestion.objects.get(event=ctx["reg"].run.event, name__iexact=key)
             if question.typ in [QuestionType.SINGLE, QuestionType.MULTIPLE]:
                 aux = []
                 que = RegistrationChoice.objects.filter(question=question, reg_id=ctx["reg"].id)
                 for choice in que.select_related("option"):
-                    aux.append(choice.option.display)
+                    aux.append(choice.option.name)
                 value = ",".join(aux)
             else:
                 value = RegistrationAnswer.objects.get(question=question, reg_id=ctx["reg"].id).text
@@ -179,7 +182,7 @@ def get_payment_form(request, form, typ, ctx, key=None):
     invoice = None
     if key is not None:
         try:
-            invoice = PaymentInvoice.objects.get(key=key, status=PaymentInvoice.CREATED)
+            invoice = PaymentInvoice.objects.get(key=key, status=PaymentStatus.CREATED)
         except Exception:
             # print(e)
             pass
@@ -236,16 +239,16 @@ def payment_received(invoice):
     if fee > 0 and AccountingItemTransaction.objects.filter(inv=invoice).count() == 0:
         _process_fee(features, fee, invoice)
 
-    if invoice.typ == PaymentInvoice.REGISTRATION:
+    if invoice.typ == PaymentType.REGISTRATION:
         _process_payment(invoice)
 
-    elif invoice.typ == PaymentInvoice.MEMBERSHIP:
+    elif invoice.typ == PaymentType.MEMBERSHIP:
         _process_membership(invoice)
 
-    elif invoice.typ == PaymentInvoice.DONATE:
+    elif invoice.typ == PaymentType.DONATE:
         _process_donate(features, invoice)
 
-    elif invoice.typ == PaymentInvoice.COLLECTION:
+    elif invoice.typ == PaymentType.COLLECTION:
         _process_collection(features, invoice)
 
     return True
@@ -319,10 +322,10 @@ def _process_fee(features, fee, invoice):
     # trans.value = invoice.mc_fee
     trans.value = (float(invoice.mc_gross) * fee) / 100
     trans.assoc = invoice.assoc
-    if "payment_fees" in features and invoice.assoc.get_config("payment_fees_user", False):
+    if invoice.assoc.get_config("payment_fees_user", False):
         trans.user_burden = True
     trans.save()
-    if invoice.typ == PaymentInvoice.REGISTRATION:
+    if invoice.typ == PaymentType.REGISTRATION:
         reg = Registration.objects.get(pk=invoice.idx)
         trans.reg = reg
         trans.save()
@@ -338,10 +341,10 @@ def update_payment_invoice(sender, instance, **kwargs):
     except Exception:
         return
 
-    if prev.status in (PaymentInvoice.CHECKED, PaymentInvoice.CONFIRMED):
+    if prev.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
         return
 
-    if instance.status not in (PaymentInvoice.CHECKED, PaymentInvoice.CONFIRMED):
+    if instance.status not in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
         return
 
     payment_received(instance)
@@ -357,10 +360,10 @@ def update_refund_request(sender, instance, **kwargs):
     except Exception:
         return
 
-    if prev.status == RefundRequest.PAYED:
+    if prev.status == RefundStatus.PAYED:
         return
 
-    if instance.status != RefundRequest.PAYED:
+    if instance.status != RefundStatus.PAYED:
         return
 
     acc = AccountingItemOther()

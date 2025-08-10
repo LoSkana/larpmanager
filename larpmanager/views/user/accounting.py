@@ -60,9 +60,11 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     Collection,
     PaymentInvoice,
+    PaymentStatus,
+    PaymentType,
 )
-from larpmanager.models.association import Association
-from larpmanager.models.member import Member, Membership, get_user_membership
+from larpmanager.models.association import Association, AssocTextType
+from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
     Registration,
 )
@@ -77,6 +79,7 @@ from larpmanager.utils.exceptions import (
     check_assoc_feature,
 )
 from larpmanager.utils.fiscal_code import calculate_fiscal_code
+from larpmanager.utils.text import get_assoc_text
 
 
 @login_required
@@ -94,6 +97,8 @@ def accounting(request):
             info_accounting(request, del_ctx)
             el.ctx = del_ctx
             ctx["delegated_todo"] = ctx["delegated_todo"] or del_ctx["payments_todo"]
+
+    ctx["assoc_terms_conditions"] = get_assoc_text(ctx["a_id"], AssocTextType.TOC)
 
     return render(request, "larpmanager/member/accounting.html", ctx)
 
@@ -167,7 +172,7 @@ def acc_refund(request):
             p.save()
             notify_refund_request(p)
             messages.success(
-                request, _("Request for reimbursement entered! You will receive notice when it is disbursed.")
+                request, _("Request for reimbursement entered! You will receive notice when it is processed.") + "."
             )
             return redirect("accounting")
     else:
@@ -183,7 +188,7 @@ def acc_pay(request, s, n, method=None):
 
     if not ctx["run"].reg:
         messages.warning(
-            request, _("We cannot find your registration for this event. Are you logged in as the correct user?")
+            request, _("We cannot find your registration for this event. Are you logged in as the correct user") + "?"
         )
         return redirect("accounting")
     else:
@@ -222,16 +227,16 @@ def acc_reg(request, reg_id, method=None):
 
     reg.membership = get_user_membership(reg.member, request.assoc["id"])
 
-    if reg.quota <= 0:
-        messages.success(request, _("Everything is in order about the payment of this event!"))
+    if reg.tot_iscr == reg.tot_payed:
+        messages.success(request, _("Everything is in order about the payment of this event") + "!")
         return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
 
     pending = (
         PaymentInvoice.objects.filter(
             idx=reg.id,
             member_id=reg.member_id,
-            status=PaymentInvoice.SUBMITTED,
-            typ=PaymentInvoice.REGISTRATION,
+            status=PaymentStatus.SUBMITTED,
+            typ=PaymentType.REGISTRATION,
         ).count()
         > 0
     )
@@ -240,12 +245,16 @@ def acc_reg(request, reg_id, method=None):
         return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
 
     if "membership" in ctx["features"] and not reg.membership.date:
-        mes = _("To be able to pay, your membership application must be approved.")
+        mes = _("To be able to pay, your membership application must be approved") + "."
         messages.warning(request, mes)
         return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
 
     ctx["reg"] = reg
-    ctx["quota"] = reg.quota
+
+    if reg.quota:
+        ctx["quota"] = reg.quota
+    else:
+        ctx["quota"] = reg.tot_iscr - reg.tot_payed
 
     key = f"{reg.id}_{reg.num_payments}"
 
@@ -258,7 +267,7 @@ def acc_reg(request, reg_id, method=None):
     if request.method == "POST":
         form = PaymentForm(request.POST, reg=reg, ctx=ctx)
         if form.is_valid():
-            get_payment_form(request, form, PaymentInvoice.REGISTRATION, ctx, key)
+            get_payment_form(request, form, PaymentType.REGISTRATION, ctx, key)
     else:
         form = PaymentForm(reg=reg, ctx=ctx)
     ctx["form"] = form
@@ -272,8 +281,8 @@ def acc_membership(request, method=None):
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
     memb = get_user_membership(request.user.member, request.assoc["id"])
-    if memb.status != Membership.ACCEPTED:
-        messages.success(request, _("It is not possible for you to pay dues at this time."))
+    if memb.status != MembershipStatus.ACCEPTED:
+        messages.success(request, _("It is not possible for you to pay dues at this time") + ".")
         return redirect("accounting")
 
     year = datetime.now().year
@@ -294,7 +303,7 @@ def acc_membership(request, method=None):
     if request.method == "POST":
         form = MembershipForm(request.POST, ctx=ctx)
         if form.is_valid():
-            get_payment_form(request, form, PaymentInvoice.MEMBERSHIP, ctx, key)
+            get_payment_form(request, form, PaymentType.MEMBERSHIP, ctx, key)
     else:
         form = MembershipForm(ctx=ctx)
     ctx["form"] = form
@@ -311,7 +320,7 @@ def acc_donate(request):
     if request.method == "POST":
         form = DonateForm(request.POST, ctx=ctx)
         if form.is_valid():
-            get_payment_form(request, form, PaymentInvoice.DONATE, ctx)
+            get_payment_form(request, form, PaymentType.DONATE, ctx)
     else:
         form = DonateForm(ctx=ctx)
     ctx["form"] = form
@@ -366,7 +375,7 @@ def acc_collection_participate(request, s):
     if request.method == "POST":
         form = CollectionForm(request.POST, ctx=ctx)
         if form.is_valid():
-            get_payment_form(request, form, PaymentInvoice.COLLECTION, ctx)
+            get_payment_form(request, form, PaymentType.COLLECTION, ctx)
     else:
         form = CollectionForm(ctx=ctx)
     ctx["form"] = form
@@ -453,7 +462,7 @@ def acc_wait(request):
 
 @login_required
 def acc_cancelled(request):
-    mes = _("The payment was not completed. Please contact us to find out why.")
+    mes = _("The payment was not completed. Please contact us to find out why") + "."
     messages.warning(request, mes)
     return redirect("accounting")
 
@@ -464,7 +473,7 @@ def acc_profile_check(request, mes, inv):
     mb = get_user_membership(member, request.assoc["id"])
 
     if not mb.compiled:
-        mes += " " + _("As a final step, we ask you to complete your profile.")
+        mes += " " + _("As a final step, we ask you to complete your profile") + "."
         messages.success(request, mes)
         return redirect("profile")
 
@@ -474,7 +483,7 @@ def acc_profile_check(request, mes, inv):
 
 
 def acc_redirect(inv):
-    if inv.typ == PaymentInvoice.REGISTRATION:
+    if inv.typ == PaymentType.REGISTRATION:
         reg = Registration.objects.get(id=inv.idx)
         return redirect("gallery", s=reg.run.event.slug, n=reg.run.number)
     return redirect("accounting")
@@ -511,7 +520,7 @@ def acc_submit(request, s, p):
 
     if not form.is_valid():
         # print(form.errors)
-        mes = _("Error loading. Invalid file format (we accept only pdf or images).")
+        mes = _("Error loading. Invalid file format (we accept only pdf or images)") + "."
         messages.error(request, mes)
         return redirect("/" + p)
 
@@ -526,14 +535,14 @@ def acc_submit(request, s, p):
     elif s == "any":
         inv.text = form.cleaned_data["text"]
 
-    inv.status = PaymentInvoice.SUBMITTED
+    inv.status = PaymentStatus.SUBMITTED
 
     inv.txn_id = datetime.now().timestamp()
     inv.save()
 
     notify_invoice_check(inv)
 
-    mes = _("Payment received! As soon as it is approved, your accounts will be updated.")
+    mes = _("Payment received! As soon as it is approved, your accounts will be updated") + "."
     return acc_profile_check(request, mes, inv)
 
 
@@ -545,7 +554,7 @@ def acc_confirm(request, c):
         messages.error(request, _("Invoice not found"))
         return redirect("home")
 
-    if inv.status != PaymentInvoice.SUBMITTED:
+    if inv.status != PaymentStatus.SUBMITTED:
         messages.error(request, _("Invoice already confirmed"))
         return redirect("home")
 
@@ -560,11 +569,11 @@ def acc_confirm(request, c):
                 found = True
 
     if not found:
-        if inv.typ == PaymentInvoice.REGISTRATION:
+        if inv.typ == PaymentType.REGISTRATION:
             reg = Registration.objects.get(pk=inv.idx)
             check_event_permission(request, reg.run.event.slug, reg.run.number)
 
-    inv.status = PaymentInvoice.CONFIRMED
+    inv.status = PaymentStatus.CONFIRMED
     inv.save()
 
     messages.success(request, _("Payment confirmed"))

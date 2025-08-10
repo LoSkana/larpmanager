@@ -4,12 +4,13 @@
     {% trans "Member Data Checks" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page performs checks on members' data." %}
+    {% trans "This page performs checks on members' data" %}
 {% endblock info %}
 {% block content %}
     {% if cf %}
         <h2>{% trans "Tax code check" %}</h2>
-        <table class="tablesorter">
+        <table id="tax_code_check"
+               class="{% if not interface_old %}go_datatable{% endif %}">
             <thead>
                 <tr>
                     <th>{% trans "Member" %}</th>

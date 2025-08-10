@@ -1,76 +1,125 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n static %}
 {% block title %}
-    {% trans "Management" %} - {{ run }}
+    Dashboard - {{ run }}
 {% endblock title %}
 {% block content %}
     <div id="manage">
-        <h2>{% trans "Event status" %}</h2>
-        <b>{{ run }}</b>
-        (<i>{{ run.pretty_dates }}</i>)
-        - {{ run.get_development_display }}
-        - <a href="{% url 'register' run.event.slug run.number %}">{{ registration_status }}</a>
+        <p>
+            <a href="#" id="intro_driver">{% trans "Launch guided interface tour" %}</a>
+        </p>
+        <input type="text"
+               name="tutorial_query"
+               id="tutorial_query"
+               placeholder="{% trans "What would you like to do" %}?" />
+        <input type="button" id="tutorial_query_go" value="{% trans "Search" %}" />
+        <div class="helptext">
+            <i>
+                ({% trans "Type a keyword in the search bar to find a reference - please write in English" %})
+            </i>
+        </div>
         <hr />
-        <a href="{% url 'orga_registrations' run.event.slug run.number %}">{% trans "Registrations" %}</a>: {{ counts.count_reg }}
-        {% if counts.count_provisional %}
-            - {% trans "provisional" %}: {{ counts.count_provisional }}
+        {% with list=priorities typ="priorities" %}
+            {% include "larpmanager/manage/helpers.html" %}
+        {% endwith %}
+        {% with list=actions typ="actions" %}
+            {% include "larpmanager/manage/helpers.html" %}
+        {% endwith %}
+        <h2>
+            <a href="{% url 'orga_run' run.event.slug run.number %}"><i class="fa-solid fa-calendar-days"></i> {% trans "Event status" %}</a>
+        </h2>
+        <p>
+            <b>{{ run }}</b>
+            (<i>{{ run.pretty_dates }}</i>)
+            - {{ run.get_development_display }}
+            - Status: <a href="{% url 'register' run.event.slug run.number %}">{{ registration_status }}</a>
+        </p>
+        {% if features.registration_secret %}
+            <p>
+                <a href="{% url 'register_exclusive' run.event.slug run.number run.registration_secret %}">{% trans "Secret registration link" %}</a>
+            </p>
         {% endif %}
-        {% if counts.count_staff %}
-            - {% trans "staff" %}: {{ counts.count_staff }}
+        {% if event.parent %}
+            <p>
+                <b>{% trans "Campaign" %}:</b> {{ event.parent }}
+            </p>
         {% endif %}
-        {% if counts.count_fill %}
-            - {% trans "filler" %}: {{ counts.count_fill }}
+        {% if counts %}
+            <hr />
+            <h2>
+                <a href="{% url 'orga_registrations' run.event.slug run.number %}"><i class="fa-solid fa-clipboard-list"></i> {% trans "Registrations" %}</a>: {{ counts.count_reg }}
+            </h2>
+            <table>
+                <tr>
+                    {% for key, count in reg_counts.items %}
+                        {% if count %}<th>{{ key }}</th>{% endif %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for key, count in reg_counts.items %}
+                        {% if count %}<td>{{ count }}</td>{% endif %}
+                    {% endfor %}
+                </tr>
+            </table>
         {% endif %}
-        {% if counts.count_wait %}
-            - {% trans "waiting" %}: {{ counts.count_wait }}
+        {% if run.revenue %}
+            <h2>
+                <a href="{% url 'orga_accounting' run.event.slug run.number %}"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>
+            </h2>
+            <table>
+                <tr>
+                    <th descr="{% trans "Total amount of money received for this event, minus commission fees and refunds" %}">
+                        <a href="#" class="sidebar-link">{% trans "Total revenue" %}</a>
+                        <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                    </th>
+                    <th descr="{% trans "Total of all expenses incurred for the event, both personal and organizational, including any tokens and credits issued" %}">
+                        <a href="#" class="sidebar-link">{% trans "Total costs" %}</a>
+                        <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                    </th>
+                    <th descr="{% trans "Net profit of the event, difference between total revenue and total costs" %}">
+                        <a href="#" class="sidebar-link">{% trans "Net profit" %}</a>
+                        <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                    </th>
+                    {% if 'organization_tax' in features %}
+                        <th descr="{% trans "Minimum amount of net profit to be retained for the association tax" %}">
+                            <a href="#" class="sidebar-link">{% trans "Organization tax" %}</a>
+                            <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                        </th>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td>{{ run.revenue }}</td>
+                    <td>{{ run.costs }}</td>
+                    <td>{{ run.balance }}</td>
+                    {% if 'organization_tax' in features %}<td>{{ run.tax }}</td>{% endif %}
+                </tr>
+            </table>
         {% endif %}
-        {% if counts.count_collaborator %}
-            - {% trans "collaborator" %}: {{ counts.count_collaborator }}
-        {% endif %}
-        {% if counts.count_npc %}
-            - {% trans "npc" %}: {{ counts.count_npc }}
-        {% endif %}
-        {% if counts.count_seller %}
-            - {% trans "seller" %}: {{ counts.count_seller }}
-        {% endif %}
+        {% with list=suggestions typ="suggestions" %}
+            {% include "larpmanager/manage/helpers.html" %}
+        {% endwith %}
         <hr />
-        <h2>{% trans "Accounting" %}</h2>
-        <table class="mob">
-            <tr>
-                <th>{% trans "Total revenue" %}</th>
-                <th>{% trans "Total costs" %}</th>
-                <th>{% trans "Net profit" %}</th>
-                {% if 'organization_tax' in features %}
-                    <th>{% trans "Organization tax" %}</th>
-                {% endif %}
-            </tr>
-            <tr>
-                <td>{{ run.revenue }}</td>
-                <td>{{ run.costs }}</td>
-                <td>{{ run.balance }}</td>
-                {% if 'organization_tax' in features %}<td>{{ run.tax }}</td>{% endif %}
-            </tr>
-            <tr class="smaller">
-                <td>
-                    <i>{% trans "Total amount of money received for this event, minus commission fees and refunds" %}</i>
-                </td>
-                <td>
-                    <i>{% trans "Total of all expenses incurred for the event, both personal and organizational, including any tokens and credits issued" %}</i>
-                </td>
-                <td>
-                    <i>{% trans "Net profit of the event, difference between total revenue and total costs" %}</i>
-                </td>
-                {% if 'organization_tax' in features %}
-                    <td>
-                        <i>{% trans "Minimum amount of net profit to be retained for the association tax" %}</i>
-                    </td>
-                {% endif %}
-            </tr>
-        </table>
-        <hr />
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        <a href="{% url 'orga_reload_cache' run.event.slug run.number %}">Reload cache</a>
+        -
+        <a href="{% url 'orga_backup' run.event.slug run.number %}">Full backup</a>
     </div>
 {% endblock content %}
+{% block css %}
+    <link rel="stylesheet"
+          href="{% static 'node_modules/driver.js/dist/driver.css' %}">
+{% endblock css %}
+{% block js %}
+    {% include "elements/tutorial_query.js" %}
+    {% include "elements/manage_driver.js.html" %}
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+        $(document).ready(function() {
+            {% if open_shortcuts %}
+                if ($('#sidebar-mobile-open').is(':visible')) {
+                    $('body').toggleClass('is-sidebar-visible');
+                }
+            {% endif %}
+        });
+    });
+    </script>
+{% endblock js %}

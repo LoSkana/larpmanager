@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% load i18n show_tags %}
 {% block title %}
-    {% trans "Your accounting" %}
+    {% trans "Accounting" %} - {% trans "Credits" %}
 {% endblock title %}
 {% block content %}
     {% if member.credit > 0 %}
         <p>
-            {% trans "Total" %}: <b>{{ member.credit }}{{ currency_symbol }}</b>. <i>{% trans "They will be used automatically when you sign up for a new event!" %}</i>
+            {% trans "Total" %}: <b>{{ member.credit }}{{ currency_symbol }}</b>. <i>{% trans "They will be used automatically when you sign up for a new event" %}!</i>
             <br />
             {% trans "Do you wish to be reimbursed? Open a new one" %} <a href="{% url 'acc_refund' %}">{% trans "refund request" %}</a>.
             {% if refunds %}
@@ -39,10 +39,12 @@
                 </thead>
                 {% for el in given %}
                     <tr>
-                        <td data-title='{% trans "Run" %}'>{% if el.run %}{{ el.run }}{% endif %}</td>
-                        <td data-title='{% trans "Date" %}'>{{ el.created |date:'Y-m-d' }}</td>
-                        <td data-title='{% trans "Description" %}'>{{ el.descr }}</td>
-                        <td data-title='{% trans "Amount" %}'>{{ el.value }}</td>
+                        <td data-title="{% trans "Run" %}">
+                            {% if el.run %}{{ el.run }}{% endif %}
+                        </td>
+                        <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
+                        <td data-title="{% trans "Description" %}">{{ el.descr }}</td>
+                        <td data-title="{% trans "Amount" %}">{{ el.value }}</td>
                     </tr>
                 {% endfor %}
             </table>
@@ -61,9 +63,9 @@
                 </thead>
                 {% for el in used %}
                     <tr>
-                        <td data-title='{% trans "Run" %}'>{{ el.reg.run }}</td>
-                        <td data-title='{% trans "Date" %}'>{{ el.created |date:'Y-m-d' }}</td>
-                        <td data-title='{% trans "Amount" %}'>{{ el.value }}</td>
+                        <td data-title="{% trans "Run" %}">{{ el.reg.run }}</td>
+                        <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
+                        <td data-title="{% trans "Amount" %}">{{ el.value }}</td>
                     </tr>
                 {% endfor %}
             </table>
@@ -84,11 +86,13 @@
                 </thead>
                 {% for el in exp %}
                     <tr>
-                        <td data-title='{% trans "Run" %}'>{% if el.run %}{{ el.run }}{% endif %}</td>
-                        <td data-title='{% trans "Date" %}'>{{ el.created |date:'Y-m-d' }}</td>
-                        <td data-title='{% trans "Description" %}'>{{ el.descr }}</td>
-                        <td data-title='{% trans "Type" %}'>{{ el.get_exp_display }}</td>
-                        <td data-title='{% trans "Amount" %}'>{{ el.value }}</td>
+                        <td data-title="{% trans "Run" %}">
+                            {% if el.run %}{{ el.run }}{% endif %}
+                        </td>
+                        <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
+                        <td data-title="{% trans "Description" %}">{{ el.descr }}</td>
+                        <td data-title="{% trans "Type" %}">{{ el.get_exp_display }}</td>
+                        <td data-title="{% trans "Amount" %}">{{ el.value }}</td>
                     </tr>
                 {% endfor %}
             </table>
@@ -107,9 +111,9 @@
                 </thead>
                 {% for el in ref %}
                     <tr>
-                        <td data-title='{% trans "Date" %}'>{{ el.created |date:'Y-m-d' }}</td>
-                        <td data-title='{% trans "Description" %}'>{{ el.descr }}</td>
-                        <td data-title='{% trans "Amount" %}'>{{ el.value }}</td>
+                        <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
+                        <td data-title="{% trans "Description" %}">{{ el.descr }}</td>
+                        <td data-title="{% trans "Amount" %}">{{ el.value }}</td>
                     </tr>
                 {% endfor %}
             </table>

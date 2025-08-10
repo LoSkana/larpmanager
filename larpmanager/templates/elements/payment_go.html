@@ -44,7 +44,7 @@
 {% endif %}
 {% if method == 'paypal' %}
     <div class="paypal">
-        <p>{% trans "Follow the link below to complete your payment on the Paypal platform." %}</p>
+        <p>{% trans "Follow the link below to complete your payment on the Paypal platform" %}.</p>
         {{ paypal_form.render }}
     </div>
 {% endif %}
@@ -98,28 +98,28 @@
 {% endif %}
 {% if method == 'any' %}
     <p>
-        {% trans "Please indicate below the exact method of payment you made. Remember to submit the form, otherwise your payment will not be processed!" %}
+        {% trans "Please indicate below the exact method of payment you made. Remember to submit the form, otherwise your payment will not be processed" %}!
     </p>
     <form action="{% url 'acc_submit' 'any' request.path %}"
           method="post"
           class="acc_submit">
         {% csrf_token %}
-        <table class="mob no_csv">
+        <table class="mob ">
             {{ any_form.as_table }}
         </table>
         <input type="submit" value="{% trans "Submit" %}">
     </form>
 {% endif %}
 {% if method == 'wire' %}
-    <p>{% trans "Follow the steps below:" %}</p>
+    <p>{% trans "Follow the steps below" %}:</p>
     <p>
-        <b>(1)</b> {% trans "Use the information below to request the transfer from your bank." %}
+        <b>(1)</b> {% trans "Use the information below to request the transfer from your bank" %}.
     </p>
     <p>
-        <b>(2)</b> {% trans "Please check that you have copied the entire message for payment exactly (in coloured text), it is important!" %}
+        <b>(2)</b> {% trans "Please check that you have copied the entire message for payment exactly (in coloured text), it is important" %}!
     </p>
     <p>
-        <b>(3)</b> {% trans "Once the transfer is confirmed, request the slip (the receipt of confirmation) and upload it below. You can upload a file in pdf format, or an image." %}
+        <b>(3)</b> {% trans "Once the transfer is confirmed, request the slip (the receipt of confirmation) and upload it below. You can upload a file in pdf format, or an image" %}.
     </p>
     <hr />
     <form action="{% url 'acc_submit' 'wire' request.path %}"
@@ -132,10 +132,10 @@
     </form>
     <hr />
     <p>
-        <b><i>{% trans "Please be careful to perform these steps - otherwise your  payment will not be processed!" %}</i></b>
+        <b><i>{% trans "Please be careful to perform these steps - otherwise your  payment will not be processed" %}!</i></b>
     </p>
     <hr />
-    <table class="mob no_csv">
+    <table class="mob ">
         <tr>
             <th>{% trans "Causal" %}</th>
             <td class="causal">{{ invoice.causal }}</td>
@@ -171,20 +171,20 @@
     </table>
 {% endif %}
 {% if method == 'paypal_nf' %}
-    <p>{% trans "Follow the steps below:" %}</p>
+    <p>{% trans "Follow the steps below" %}:</p>
     <p>
-        <b>(1)</b> {% trans "Click on the image below (Paypal.me) to open the payment." %}
+        <b>(1)</b> {% trans "Click on the image below (Paypal.me) to open the payment" %}.
     </p>
     <p>
-        <b>(2)</b> {% trans "Copy and paste exactly all the coloured text below into the notes." %}
+        <b>(2)</b> {% trans "Copy and paste exactly all the coloured text below into the notes" %}.
         <b>({% trans "this is important" %}!)</b>
     </p>
     <p class="causal">{{ invoice.causal }}</p>
     <p>
-        <b>(3)</b> {% trans "Indicates that payment is sent 'to friends and family'." %}
+        <b>(3)</b> {% trans "Indicates that payment is sent 'to friends and family'" %}.
     </p>
     <p>
-        <b>(4)</b> {% trans "Once you have made the payment, return to this page, and upload below the screenshot of the confirmation sent by Paypal." %}
+        <b>(4)</b> {% trans "Once you have made the payment, return to this page, and upload below the screenshot of the confirmation sent by Paypal" %}.
     </p>
     <hr />
     <form action="{% url 'acc_submit' 'paypal_nf' request.path %}"
@@ -196,7 +196,7 @@
     </form>
     <hr />
     <p>
-        <b><i>{% trans "Please be careful to perform these steps - otherwise your  payment will not be processed!" %}</i></b>
+        <b><i>{% trans "Please be careful to perform these steps - otherwise your  payment will not be processed" %}!</i></b>
     </p>
     <hr />
     <a href="https://PayPal.Me/{{ paypal_nf_handle }}/{{ invoice.mc_gross | floatformat:2 }}"

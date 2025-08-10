@@ -31,7 +31,7 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.mail.base import mail_confirm_casting
 from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType, Trait
 from larpmanager.models.registration import Registration, TicketTier
-from larpmanager.models.writing import Character, Faction
+from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.common import get_element
 from larpmanager.utils.event import get_event_filter_characters, get_event_run
 from larpmanager.utils.exceptions import check_event_feature
@@ -56,7 +56,7 @@ def casting_characters(ctx, reg):
     ctx["factions"] = json.dumps(facts)
     ctx["choices"] = json.dumps(choices)
 
-    ctx["faction_filter"] = ctx["event"].get_elements(Faction).filter(typ=Faction.TRASV)
+    ctx["faction_filter"] = ctx["event"].get_elements(Faction).filter(typ=FactionType.TRASV)
 
 
 def casting_quest_traits(ctx, typ):
@@ -108,7 +108,7 @@ def casting(request, s, n, typ=0):
     check_event_feature(request, ctx, "casting")
 
     if ctx["run"].reg is None:
-        messages.success(request, _("You must signed up in order to select your preferences!"))
+        messages.success(request, _("You must signed up in order to select your preferences") + "!")
         return redirect("gallery", s=ctx["event"].slug, n=ctx["run"].number)
 
     if ctx["run"].reg and ctx["run"].reg.ticket and ctx["run"].reg.ticket.tier == TicketTier.WAITING:
@@ -321,7 +321,7 @@ def casting_history_characters(ctx):
 
     query = (
         Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-        .exclude(ticket__tier=TicketTier.STAFF)
+        .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.NPC])
         .select_related("member")
     )
 
@@ -365,7 +365,7 @@ def casting_history_traits(ctx):
 
     for reg in (
         Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-        .exclude(ticket__tier=TicketTier.STAFF)
+        .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.NPC])
         .select_related("member")
     ):
         reg.prefs = {}

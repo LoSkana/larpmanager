@@ -1,6 +1,6 @@
 {% load show_tags i18n %}
 <div class="staff-list">
-    <a class='new button' href="#">{% trans "New" %}</a>
+    <a class="new button" href="#">{% trans "New" %}</a>
     <script>
         document.querySelector('a.new').addEventListener('click', function(event) {
             event.preventDefault();
@@ -10,26 +10,4 @@
             window.location.href = newUrl;
         });
     </script>
-    <button class="my_toggle" tog='search'>
-        <a href="#">{% trans "Search" %}</a>
-    </button>
-    <button class="my_toggle" tog='show_list'>
-        <a href="#">{% trans "List" %}</a>
-    </button>
-    <div class="hide search">
-        <input type="text" placeholder="Search..." id="search_tbl" />
-        <hr />
-    </div>
-    <div class="hide show_list">
-        {% for el in list %}
-            <a href="#{{ el.id }}">
-                {% if el.search %}
-                    {{ el.search }}
-                {% else %}
-                    {{ el }}
-                {% endif %}
-            </a>
-        {% endfor %}
-        <hr />
-    </div>
 </div>

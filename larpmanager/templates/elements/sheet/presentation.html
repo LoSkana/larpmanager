@@ -1,21 +1,21 @@
 {% load show_tags i18n %}
 {% if char.title %}
     <div class="go-inline">
-        <b>{% trans "Title" %}:&nbsp;</b>{{ char.title }}
+        <b>{{ writing_fields.character.names.title }}:&nbsp;</b>{{ char.title }}
     </div>
 {% endif %}
 {% if character.mirror %}
     <div class="go-inline">
         <b>{% trans "Mirror" %}:&nbsp;</b>
-        {% trans "This character represents the true secret identity of another character." %}
-        {% trans "You can give a preference to play it, as with other characters." %}
-        {% trans "If it is assigned to you, you will automatically be assigned the original character it mirrors." %}
+        {% trans "This character represents the true secret identity of another character" %}.
+        {% trans "You can give a preference to play it, as with other characters" %}.
+        {% trans "If it is assigned to you, you will automatically be assigned the original character it mirrors" %}.
     </div>
 {% endif %}
 {% if char.player %}
-    <div class="go-inline">
+    <div class="go-inline" id="char_player">
         <b>{% trans "Player" %}:&nbsp;</b><a href="{% url 'public' char.player_id %}">
-            {% if run.id in all_runs or run.reg %}
+            {% if run.id in all_runs %}
                 {{ char.player_full }}
             {% else %}
                 {{ char.player }}

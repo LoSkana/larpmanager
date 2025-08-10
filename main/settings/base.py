@@ -55,8 +55,10 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'larpmanager.middleware.url.CorrectUrlMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'larpmanager.middleware.token.TokenAuthMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'larpmanager.middleware.exception.ExceptionHandlingMiddleware',
     'larpmanager.middleware.broken.BrokenLinkEmailsMiddleware',
     'larpmanager.middleware.locale.LocaleAdvMiddleware',
@@ -64,7 +66,6 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
 ]
@@ -177,18 +178,22 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '../../media')
 TINYMCE_JS_URL = 'node_modules/tinymce/tinymce.min.js'
 TINYMCE_DEFAULT_CONFIG = {
     'width': '100%',
-    'heigth': '15em',
-    # 'theme': 'advanced',
-    'plugins': 'lists advlist autosave fullscreen table image link  code autoresize wordcount autolink accordion emoticons media searchreplace codesample anchor',
+    'height': '15em',
+    'plugins': 'lists advlist autosave fullscreen table image link code autoresize wordcount autolink accordion emoticons media searchreplace codesample anchor',
     'toolbar': 'undo redo | styleselect | bold italic fontsizeselect forecolor backcolor hr | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | restoredraft searchreplace | fullscreen code wordcount | image media emoticons accordion codesample anchor',
     'menubar': 'file edit insert view format table link image tools help',
     'convert_urls': False,
     'content_style': 'p {margin: 0.2em} .marker { color: #006ce7 !important; font-weight: bold; }',
-    # 'paste_as_text': True,
     'contextmenu': False,
     'license_key': 'gpl',
     'promotion': False,
+
+    'images_upload_url': '/upload_image/',
+    'automatic_uploads': True,
+    'file_picker_types': 'image',
+    'paste_data_images': False,
 }
+
 
 TINYMCE_COMPRESSOR = False
 
@@ -289,7 +294,8 @@ IGNORABLE_PROFILER_URLS = [
 # PAYMENT SETTINGS
 PAYMENT_SETTING_FOLDER = 'main/payment_settings/'
 
-FORMS_URLFIELD_ASSUME_HTTPS = True
-
 RECAPTCHA_PUBLIC_KEY = '???'
 RECAPTCHA_PRIVATE_KEY = '???'
+
+# max size of snippet
+FIELD_SNIPPET_LIMIT = 150

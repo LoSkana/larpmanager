@@ -23,6 +23,7 @@ from datetime import datetime
 from decimal import Decimal
 
 from django.contrib.postgres.aggregates import ArrayAgg
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
@@ -38,9 +39,9 @@ from larpmanager.models.accounting import (
     AccountingItemTransaction,
 )
 from larpmanager.models.casting import AssignmentTrait
-from larpmanager.models.event import Run
+from larpmanager.models.event import DevelopStatus
 from larpmanager.models.form import RegistrationChoice, RegistrationOption
-from larpmanager.models.member import Membership, get_user_membership
+from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -64,16 +65,11 @@ def get_reg_iscr(instance):
     if instance.additionals:
         tot_iscr += instance.ticket.price * instance.additionals
 
-    features = get_event_features(instance.run.event_id)
-
     if instance.pay_what:
         tot_iscr += instance.pay_what
 
     for c in RegistrationChoice.objects.filter(reg=instance).select_related("option"):
-        if "reg_opt_staff_price" in features and instance.ticket and instance.ticket.tier == TicketTier.STAFF:
-            tot_iscr += c.option.price_staff
-        else:
-            tot_iscr += c.option.price
+        tot_iscr += c.option.price
 
     # no discount for gifted
     if not instance.redeem_code:
@@ -334,7 +330,7 @@ def pre_save_registration(sender, instance, *args, **kwargs):
 def get_date_surcharge(reg, event):
     if reg and reg.ticket:
         t = reg.ticket.tier
-        if t in (TicketTier.WAITING, TicketTier.STAFF):
+        if t in (TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC):
             return 0
 
     dt = datetime.now().date()
@@ -425,16 +421,17 @@ def check_reg_bkg(reg_ids):
 
 
 def check_reg_bkg_go(reg_id):
+    if not reg_id:
+        return
     try:
         instance = Registration.objects.get(pk=reg_id)
         instance.save()
-    except Exception:
-        print(f"not found registration {str(reg_id)}")
+    except ObjectDoesNotExist:
         return
 
 
 def update_registration_accounting(reg):
-    for s in [Run.CANC, Run.DONE]:
+    for s in [DevelopStatus.CANC, DevelopStatus.DONE]:
         if reg.run.development == s:
             return
 
@@ -467,7 +464,7 @@ def update_registration_accounting(reg):
     if "membership" in features and "laog" not in features:
         if not hasattr(reg, "membership"):
             reg.membership = get_user_membership(reg.member, assoc_id)
-        if reg.membership.status != Membership.ACCEPTED:
+        if reg.membership.status != MembershipStatus.ACCEPTED:
             return
 
     registration_tokens_credits(reg, remaining, features, assoc_id)

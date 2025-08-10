@@ -5,10 +5,10 @@
 {% endblock title %}
 {% block content %}
     <p>
-        {% trans "Your friends wanted to give you a special gift: they gave you the chance to participate in one of our experiences!" %}
+        {% trans "Your friends wanted to give you a special gift: they gave you the chance to participate in one of our experiences" %}!
     </p>
     <p>
-        {% trans "By pressing confirm, the collection total will be credited to your account, and will be used automatically when you register for one of our events!" %}
+        {% trans "By pressing confirm, the collection total will be credited to your account, and will be used automatically when you register for one of our events" %}!
     </p>
     <form action="{{ request.path }}" method="post">
         {% csrf_token %}

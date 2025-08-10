@@ -4,17 +4,17 @@
     {% trans "Accounting" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the total membership accounts, dues, donations, expenses, the overall cash and individual event/run budget." %}
+    {% trans "This page shows the total membership accounts, dues, donations, expenses, the overall cash and individual event/run budget" %}
 {% endblock info %}
 {% block content %}
     <p>
         {% trans "Global balance" %}: <b>{{ global_sum }}</b>
         <br />
-        <i>({% trans "this figure is the associative positive, the operating margin. It takes into account the budgets of the completed runs" %})</i>
+        <i>({% trans "This is the associative positive operating margin, taking into account the budgets of completed runs, minus credits or tokens issued" %})</i>
         <br />
         <br />
     </p>
-    <table class="mob">
+    <table>
         {% if features.membership %}
             <tr>
                 <td>{% trans "Membership fees" %}</td>
@@ -71,11 +71,11 @@
     <p>
         {% trans "Overall balance" %}: <b>{{ bank_sum }}</b>
         <br />
-        <i>({% trans "this figure is the net that should result as the availability of financial instruments" %})</i>
+        <i>({% trans "This is the overall amount that should be held in the organization’s bank and financial accounts" %})</i>
         <br />
         <br />
     </p>
-    <table class="mob">
+    <table>
         {% if features.membership %}
             <tr>
                 <td>{% trans "Membership fees" %}</td>
@@ -147,8 +147,8 @@
     {% for year in sum_year %}
         <div class="hide sum_{{ year }}">
             <h2>{% trans "Summary" %} {{ year }}</h2>
-            <p></p>
-            <table class="mob">
+            <br />
+            <table>
                 {% if features.membership %}
                     <tr>
                         <td>{% trans "Membership fees" %}</td>
@@ -210,7 +210,8 @@
     {% endfor %}
     <div class="hide tcm">
         <h2>{{ token_name }} / {{ credit_name }}</h2>
-        <table class="writing tablesorter">
+        <table id="member_report"
+               class="{% if not interface_old %}go_datatable{% endif %}">
             <thead>
                 <tr>
                     <th>{% trans "Member" %}</th>
@@ -229,7 +230,8 @@
     </div>
     <div class="hide runs">
         <h2>{% trans "Run balance" %}</h2>
-        <table class="writing tablesorter">
+        <table id="run_balance"
+               class="{% if not interface_old %}go_datatable{% endif %}">
             <thead>
                 <tr>
                     <th>{% trans "Run" %}</th>

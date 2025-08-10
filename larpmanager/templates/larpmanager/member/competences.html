@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Your competences" %}
+    {% trans "Competences" %}
 {% endblock title %}
 {% block content %}
-    <p>{% trans "On this page you can mark your specialties to collaborate on our  events." %}</p>
+    <p>{% trans "On this page you can mark your specialties to collaborate on our  events" %}.</p>
     <p>
-        {% trans "Click on the roles you'd like to collaborate on, then enter your degree of experience, and finally indicate precisely your field of experience." %}
+        {% trans "Click on the roles you'd like to collaborate on, then enter your degree of experience, and finally indicate precisely your field of experience" %}.
     </p>
     <form action="{{ request.path }}"  method="post">
         {% csrf_token %}
@@ -14,8 +14,7 @@
             <h2>
                 <a id="{{ el.id }}_go">{{ el.name }}</a>
             </h2>
-            <div id="{{ el.id }}_sec"
-                 {% if not el.cmr %}style="display: none"{% endif %}>
+            <div id="{{ el.id }}_sec" {% if not el.cmr %}class="hide"{% endif %}>
                 <table class="mob">
                     <tr>
                         <th>{% trans "Description" %}</th>

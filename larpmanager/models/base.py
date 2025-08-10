@@ -90,11 +90,9 @@ class FeatureNationality(models.TextChoices):
 class FeatureModule(BaseModel):
     name = models.CharField(max_length=100)
 
-    descr = models.TextField(max_length=500)
+    icon = models.CharField(max_length=100)
 
     order = models.IntegerField()
-
-    default = models.BooleanField(default=False)
 
     nationality = models.CharField(max_length=2, choices=FeatureNationality.choices, blank=True, null=True)
 
@@ -110,8 +108,6 @@ class Feature(BaseModel):
 
     overall = models.BooleanField(default=False)
 
-    link = models.CharField(max_length=500, blank=True)
-
     tutorial = models.CharField(max_length=500, blank=True)
 
     module = models.ForeignKey(
@@ -122,8 +118,14 @@ class Feature(BaseModel):
         related_name="features",
     )
 
+    after_link = models.TextField(max_length=100, blank=True, null=True)
+
+    after_text = models.TextField(max_length=300, blank=True, null=True)
+
     # If the feature is a placeholder (used to indicate the permissions that does not require a true feature)
     placeholder = models.BooleanField(default=False)
+
+    hidden = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["module", "order"]

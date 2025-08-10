@@ -4,20 +4,21 @@
     {% trans "Quotas" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the quota options available for payment of the event." %}
+    {% trans "This page shows the quota options available for payment of the event" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
     <p>
-        <i>{% trans "The ticket will be divided equally in the number of quotas indicated." %}</i>
+        <i>{% trans "The ticket will be divided equally in the number of quotas indicated" %}.</i>
     </p>
     <p>
-        <i>{% trans "Payment deadlines will be similarly equally divided, based on the date of registration." %}</i>
+        <i>{% trans "Payment deadlines will be similarly equally divided, based on the date of registration" %}.</i>
     </p>
     <p>
-        <i>{% trans "Beyond the minimum number of days indicated, the quota will no longer be available during registration." %}</i>
+        <i>{% trans "Beyond the minimum number of days indicated, the quota will no longer be available during registration" %}.</i>
     </p>
-    <table id="registration_quotas" class="tablesorter mob writing">
+    <table id="registration_quotas"
+           class="{% if not interface_old %}go_datatable{% endif %} writing">
         <thead>
             <tr>
                 <th></th>
@@ -30,7 +31,8 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_registration_quotas_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'orga_registration_quotas_edit' run.event.slug run.number el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.quotas }}</td>
                     <td>{{ el.days_available }}</td>

@@ -36,6 +36,12 @@ class AssocPermission(BaseModel):
 
     feature = models.ForeignKey(Feature, on_delete=models.CASCADE, related_name="assoc_permissions")
 
+    descr = models.CharField(max_length=1000)
+
+    hidden = models.BooleanField(default=False)
+
+    config = models.TextField(max_length=100, blank=True, null=True)
+
     def module(self):
         # noinspection PyUnresolvedReferences
         return self.feature.module
@@ -95,6 +101,12 @@ class EventPermission(BaseModel):
 
     feature = models.ForeignKey(Feature, on_delete=models.CASCADE, related_name="event_permissions")
 
+    descr = models.CharField(max_length=1000)
+
+    hidden = models.BooleanField(default=False)
+
+    config = models.TextField(max_length=100, blank=True, null=True)
+
     def module(self):
         # noinspection PyUnresolvedReferences
         return self.feature.module
@@ -129,7 +141,7 @@ class EventRole(BaseConceptModel):
 
 
 def get_event_organizers(event):
-    orga = EventRole.objects.get(event=event, number=1)
+    (orga, cr) = EventRole.objects.get_or_create(event=event, number=1)
     return orga.members.all()
 
 

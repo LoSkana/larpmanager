@@ -4,21 +4,23 @@
     {% trans "Event accounting" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the accounting status of the event, divided into the various expense types." %}
+    {% trans "This page shows the accounting status of the event, divided into the various expense types" %}
 {% endblock info %}
 {% block content %}
     <h2>{% trans "Total revenue" %}: {{ run.revenue }}</h2>
     <p>
         <i>{% trans "Total amount of money received for this event, minus commission fees and refunds" %}</i>
     </p>
-    <h2>{% trans "Total costs" %}: {{ run.costs }}</h2>
-    <p>
-        <i>{% trans "Total of all expenses incurred for the event, both personal and organizational, including any tokens and credits issued" %}</i>
-    </p>
-    <h2>{% trans "Net profit" %}: {{ run.balance }}</h2>
-    <p>
-        <i>{% trans "Net profit of the event, difference between total revenue and total costs" %}</i>
-    </p>
+    {% if run.costs %}
+        <h2>{% trans "Total costs" %}: {{ run.costs }}</h2>
+        <p>
+            <i>{% trans "Total of all expenses incurred for the event, both personal and organizational, including any tokens and credits issued" %}</i>
+        </p>
+        <h2>{% trans "Net profit" %}: {{ run.balance }}</h2>
+        <p>
+            <i>{% trans "Net profit of the event, difference between total revenue and total costs" %}</i>
+        </p>
+    {% endif %}
     {% if 'organization_tax' in features %}
         <h2>{% trans "Organization tax" %}: {{ run.tax }}</h2>
         <p>
@@ -26,12 +28,12 @@
         </p>
     {% endif %}
     <hr />
-    <table class="mob tablesorter no_csv">
+    <table class="tablesorter ">
         <tr>
             <th>{% trans "Item" %}</th>
             <th>{% trans "Total" %}</th>
             <th>{% trans "Number" %}</th>
-            <th></th>
+            <th>{% trans "Description" %}</th>
         </tr>
         {% for k, v in dc.items %}
             <tr>
@@ -46,7 +48,7 @@
     </table>
     {% for k, v in dc.items %}
         <h2>{{ v.name }}: {{ v.tot }}</h2>
-        <table class="mob tablesorter no_csv">
+        <table class="tablesorter ">
             {% for y, w in v.detail.items %}
                 <tr>
                     <td>{{ w.name }}</td>

@@ -20,11 +20,8 @@
 
 from datetime import datetime, timedelta
 
-import deepl
-from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -49,7 +46,6 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import Registration
 from larpmanager.utils.common import (
     get_album_cod,
-    html_clean,
 )
 from larpmanager.utils.edit import orga_edit
 from larpmanager.utils.event import check_event_permission
@@ -77,7 +73,7 @@ def orga_albums_upload(request, s, n, a):
         form = UploadAlbumsForm(request.POST, request.FILES)
         if form.is_valid():
             upload_albums(ctx["album"], request.FILES["elem"])
-            messages.success(request, _("Photos and videos successfully uploaded!"))
+            messages.success(request, _("Photos and videos successfully uploaded") + "!")
             return redirect(request.path_info)
     else:
         form = UploadAlbumsForm()
@@ -169,22 +165,3 @@ def orga_problems(request, s, n):
 @login_required
 def orga_problems_edit(request, s, n, num):
     return orga_edit(request, s, n, "orga_problems", OrgaProblemForm, num)
-
-
-@login_required
-def orga_translate(request, s, n):
-    ctx = check_event_permission(request, s, n)
-    value = request.POST.get("tx")
-    if not value:
-        return ""
-    value = html_clean(value)
-    if len(value) == 0:
-        return ""
-
-    lang = "EN-GB"
-    if ctx["event"].lang != "en":
-        lang = ctx["event"].lang
-
-    translator = deepl.Translator(conf_settings.DEEPL_API)
-    t = translator.translate_text(value, target_lang=lang)
-    return JsonResponse({"res": str(t)})

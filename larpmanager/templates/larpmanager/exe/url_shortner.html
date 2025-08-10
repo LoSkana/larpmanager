@@ -4,11 +4,12 @@
     {% trans "Url Shortner" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the url shortners." %}
+    {% trans "This page shows the url shortners" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
-    <table id="tb" class="tablesorter mob">
+    <table id="url_shortner"
+           class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th></th>
@@ -22,13 +23,14 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'exe_urlshortner_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'exe_urlshortner_edit' el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
                     <td>{{ el.cod }}</td>
                     <td>{{ el.url }}</td>
                     <td>
-                        <a href="https://larpmanager.com/at/{{ el.cod }}">https://larpmanager.com/at/{{ el.cod }}</a>
+                        <a href="https://{{ assoc.main_domain }}/at/{{ el.cod }}">https://{{ assoc.main_domain }}/at/{{ el.cod }}</a>
                     </td>
                 </tr>
             {% endfor %}

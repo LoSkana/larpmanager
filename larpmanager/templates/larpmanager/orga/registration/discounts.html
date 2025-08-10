@@ -4,12 +4,13 @@
     {% trans "Discounts" %} - {{ registration.member }} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows active discounts on the player, allows you to activate or deactivate them." %}
+    {% trans "This page shows active discounts on the player, allows you to activate or deactivate them" %}
 {% endblock info %}
 {% block content %}
     {% if active %}
         <h2>{% trans "Discounts active" %}</h2>
-        <table class="mob tablesorter">
+        <table id="discounts_active"
+               class="{% if not interface_old %}go_datatable{% endif %}">
             <tr>
                 <th>{% trans "Discount" %}</th>
                 <th>{% trans "Value" %}</th>
@@ -28,7 +29,8 @@
     {% endif %}
     {% if available %}
         <h2>{% trans "Discounts available" %}</h2>
-        <table class="mob tablesorter">
+        <table id="discounts_availble"
+               class="{% if not interface_old %}go_datatable{% endif %}">
             <tr>
                 <th>{% trans "Discount" %}</th>
                 <th>{% trans "Value" %}</th>

@@ -4,11 +4,12 @@
     {% trans "Ability types" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page summarizes the types of abilities that players can purchase." %}
+    {% trans "This page summarizes the types of abilities that players can purchase" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
-    <table id="ability_tipes" class="tablesorter mob writing">
+    <table id="ability_tipes"
+           class="{% if not interface_old %}go_datatable{% endif %} writing">
         <thead>
             <tr>
                 <th></th>
@@ -20,13 +21,14 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_px_ability_types_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'orga_px_ability_types_edit' run.event.slug run.number el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
                     <td>
                         {% for ab in el.abilities.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number ab.number %}">{{ ab.name }}</a>
+                            <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number ab.id %}">{{ ab.name }}</a>
                         {% endfor %}
                     </td>
                 </tr>

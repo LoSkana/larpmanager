@@ -1,3 +1,5 @@
+$(".hide:visible").hide();
+
 window.addEventListener('DOMContentLoaded', function() {
 
 $.ajaxSetup({
@@ -24,9 +26,38 @@ $.ajaxSetup({
      }
 });
 
-$(document).ready(function() {
+window.jump_to = function(target) {
 
-    $(".hide:visible").hide();
+    var headerHeight = $('header').outerHeight();
+
+    console.log(target);
+
+    if (!target.length) return;
+
+    console.log(window.interface_old);
+
+    if (window.interface_old) {
+        $('html, body').animate({
+            scrollTop: target.offset().top - headerHeight
+        }, 0);
+        return;
+    }
+
+    console.log(target.offset().top);
+
+    $('#page-wrapper').animate({
+        scrollTop: $('#page-wrapper').scrollTop() + $(target).offset().top - headerHeight * 2
+    }, 0);
+}
+
+function sidebar_mobile() {
+    $('body').toggleClass('is-sidebar-visible');
+    $('#sidebar-mobile-open').toggle();
+    $('#sidebar-mobile-close').toggle();
+}
+
+
+$(document).ready(function() {
 
     $('#banner h1').textfill({
     });
@@ -37,53 +68,47 @@ $(document).ready(function() {
     $('#header h1').textfill({
     });
 
-    $("th label").each(function(index) {
-        var txt = $( this ).text();
-        $( this ).text(txt.replace(":", ""));
+    $("th label").each(function() {
+        $(this).contents().filter(function() {
+            return this.nodeType === 3; // Nodo di testo
+        }).each(function() {
+            this.nodeValue = this.nodeValue.replace(":", "");
+        });
     });
 
     // Sidebar
-    $('#sidebar-mobile').on('click', function(event) {
-            $('body').toggleClass('is-sidebar-visible');
+    $('#sidebar-mobile-open, #sidebar-mobile-close').on('click', function(event) {
+        sidebar_mobile();
     });
 
-    $('.sidebar-link').each(function() {
-        $(this).qtip({
-            content: {
-                text: 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum '
-            }, style: {
-                classes: 'qtip-dark qtip-rounded qtip-shadow'
-            }, hide: {
-                effect: function(offset) {
-                    $(this).fadeOut(500);
-                }
-            }, show: {
-                effect: function(offset) {
-                    $(this).fadeIn(500);
-                }
-            }, position: {
-                my: 'top left',
-                at: 'bottom center',
-                viewport: window,
-                adjust: { method: 'flipinvert shift' }
+    $('#sidebar-mobile-close').hide();
+
+    $(document).on('click', function(event) {
+        if (parseFloat($('#sidebar').css('opacity')) > 0) {
+            if (!$(event.target).closest('#sidebar .inner').length) {
+                $('body').removeClass('is-sidebar-visible');
             }
-        });
+        }
     });
 
     $('.explain-icon').qtip({
         content: {
-            text: 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum '
-        }, style: {
-            classes: 'qtip-dark qtip-rounded qtip-shadow'
-        }, show: {
-            event: 'click',
+            text: function() {
+                return $(this).parent().attr('descr');
+            }
+        },
+        style: {
+            classes: 'qtip-dark qtip-rounded qtip-shadow qtip-lm'
+        },
+        show: {
+            event: 'click mouseenter',
             solo: true
         },
         hide: {
-            event: 'unfocus'
+            event: 'mouseleave unfocus'
         },
         position: {
-            my: 'top center',
+            my: 'top left',
             at: 'bottom center',
             viewport: window,
             adjust: { method: 'flipinvert shift' },
@@ -92,6 +117,69 @@ $(document).ready(function() {
             }
         }
     });
+
+    $('.dropdown-button').click(function(event) {
+        event.stopPropagation();
+    });
+
+    $('.dropdown').on('mouseenter', function() {
+        $(this).children('.dropdown-menu').fadeIn(100);
+    }).on('mouseleave', function() {
+        $(this).children('.dropdown-menu').fadeOut(100);
+    });
+
+    $('a.feature_tutorial').on('mousedown', function(event) {
+        event.preventDefault();
+
+        url = url_tutorials + $(this).attr("tut");
+
+        // add iframe get param
+        let [base, hash] = url.split('#');
+        let [path, query] = base.split('?');
+        let params = new URLSearchParams(query || '');
+        params.set('in_iframe', '1');
+        let newUrl = path + '?' + params.toString();
+        if (hash) {
+            newUrl += '#' + hash;
+        }
+
+        frame = "<iframe src='{0}' width='100%' height='100%'></iframe>".format(newUrl);
+
+        uglipop({class:'popup_tutorial', source:'html', content: frame});
+
+    });
+
+    $('.feature_checkbox a').click(function(event) {
+        event.preventDefault();
+
+        request = $.ajax({
+            url: url_feature_description,
+            method: "POST",
+            data: {'fid': $(this).attr("feat")},
+            datatype: "json",
+        });
+
+        request.done(function(data) {
+            if (data["res"] != 'ok') return;
+
+            uglipop({class:'popup', source:'html', content: data['txt']});
+
+        });
+
+        return false;
+    });
+
+    setTimeout(() => {
+    // set select on sidebar
+    var currentUrl = window.location.pathname.replace(/\/$/, '');
+    $('.sidebar-link').each(function() {
+        var linkHref = $(this).attr('href').replace(/\/$/, '');
+        var regex = new RegExp('^' + linkHref + '(?:\\/(\\d+|edit\\/\\d+))?\\/?$');
+        if (regex.test(currentUrl)) {
+            $(this).addClass('select');
+        }
+    });
+    }, 100);
 
     // Menu.
             $menu_openers = $('#menu .opener');
@@ -137,6 +225,7 @@ $(document).ready(function() {
         }
     });
 
+    lm_tooltip();
 
     $(':input[type="date_p"]').datetimepicker({
         format:'Y-m-d',
@@ -168,7 +257,6 @@ $(document).ready(function() {
             }, 3000);
 
             v = v.replace(sl, '');
-            console.log(v);
             $(this).val(v);
         }
     });
@@ -177,25 +265,52 @@ $(document).ready(function() {
 
     reload_has_tooltip();
 
-    $('.my_toggle').on( "click", function() {
+    $(document).on("click", ".my_toggle", function() {
         var k = $(this).attr("tog");
         var el =  $("." + k);
         el.toggle();
-        // console.log(el.is(":visible"));
+
          if (el.is(":visible")) {
              var elements = document.getElementsByClassName(k);
-             if (elements.length > 0)  {
-                jump_to(elements[0]);
+
+             if (elements.length > 0 && ! $(this).hasClass("no_jump") && !window.disable_jump)  {
+                window.jump_to('.' + k);
             }
             $(this).addClass('select');
         } else {
             $(this).removeClass('select');
         }
+
         return false;
 
     });
 
-    table_csv();
+    $('a[qtip]').each(function() {
+        $(this).qtip({
+            content: {
+                text: $(this).attr('qtip')
+            },
+            style: {
+                classes: 'qtip-dark qtip-rounded qtip-shadow'
+            },
+            hide: {
+                effect: function(offset) {
+                    $(this).fadeOut(500);
+                }
+            },
+            show: {
+                effect: function(offset) {
+                    $(this).fadeIn(500);
+                }
+            },
+            position: {
+                my: 'top center',
+                at: 'bottom center'
+            }
+        });
+    });
+
+    // table_csv();
 
     resize_fields();
 
@@ -204,7 +319,7 @@ $(document).ready(function() {
     $('.tablesorter').tablesorter();
 
     $('.delete').click(function(){
-            return confirm('Are you sure?');
+        return confirm('Are you sure?');
     });
 
     $('.show_popup').on( "click", function() {
@@ -212,8 +327,6 @@ $(document).ready(function() {
         tp = $(this).attr("fie");
 
         el = $('#' + num).find('.popup_text.' + tp).first();
-        // alert(el.html());
-        // console.log(el);
 
         uglipop({class:'popup', //styling class for Modal
             source:'html',
@@ -234,8 +347,6 @@ $(document).ready(function() {
               tx += " " + $(this).html();
             });
 
-             // console.log(tx.toLowerCase());
-
             if (tx.toLowerCase().includes(key.toLowerCase())) {
                 $(this).show(300);
             } else {
@@ -249,6 +360,108 @@ $(document).ready(function() {
         $('.info').hide();
     }
 
+    if ($('#topbar').innerWidth() < 840) {
+        document.fonts.ready.then(function () {
+            centerMobileIcons();
+        });
+    }
+
+    data_tables();
+
+    post_popup();
+
+    $('#one .inner').fadeIn(100);
+});
+
+function data_tables() {
+    window.datatables = window.datatables || {};
+
+    $('table.go_datatable').each(function() {
+        const $table = $(this);
+
+        const $tbody = $table.find('tbody');
+        const rowCount = $tbody.find('tr').length;
+
+        if (rowCount === 0) {
+            $table.hide();
+            return;
+        }
+
+        // assign random id
+        if (!$table.attr('id')) {
+            const randomId = 'table-' + Math.random().toString(36).substr(2, 9);
+            $table.attr('id', randomId);
+        }
+
+        const tableId = $table.attr('id');
+
+        let disable_sort_columns = [0];
+        if ($table.hasClass('writing_list')) {
+            disable_sort_columns = [0, 2];
+        }
+        if ($table.hasClass('ordering_arrow')) {
+            var thList = $table.find('thead th');
+            var totalColumns = thList.length;
+            disable_sort_columns.push(totalColumns - 2, totalColumns - 1);
+        }
+
+        let hide_columns = [];
+        if (window.hideColumnsIndexMap && typeof window.hideColumnsIndexMap === 'object') {
+            Object.keys(window.hideColumnsIndexMap).forEach(function(key) {
+                var value = window.hideColumnsIndexMap[key];
+                hide_columns.push(...value);
+            });
+        }
+
+        var full_layout = rowCount >= 10;
+
+        const table = new DataTable('#' + tableId, {
+            scrollX: true,
+            stateSave: true,
+            paging: full_layout,
+            layout: full_layout
+                ? { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' }
+                : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null },
+            columnControl: ['order', 'searchDropdown'],
+            ordering: {
+                indicators: false,
+                handler: false
+            },
+            columnDefs: [
+                { orderable: false, targets: disable_sort_columns },
+                { visible: false, targets: hide_columns },
+                { columnControl: [], targets: disable_sort_columns }
+            ]
+        });
+
+        for (const index of hide_columns) {
+            var column = table.column(index);
+            column.visible(false);
+        };
+
+        window.datatables[tableId] = table;
+    });
+
+    if (Array.isArray(window.trigger_togs)) {
+        window.trigger_togs.forEach(function(togValue) {
+            if (togValue.startsWith('.') || togValue.startsWith('#')) {
+                $(togValue).each(function() {
+                    this.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                });
+            } else {
+                if (togValue == '#load_accounting') {
+                    document.querySelector('#load_accounting').dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                } else {
+                    $('a.table_toggle[tog="' + togValue + '"]').each(function() {
+                        this.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                    });
+                }
+            }
+        });
+    }
+}
+
+function post_popup() {
     $(document).on('click', '.post_popup', function (e) {
 
         start_spinner();
@@ -274,8 +487,7 @@ $(document).ready(function() {
 
         return false;
     });
-
-});
+}
 
 function reload_has_char(parent='') {
 
@@ -285,7 +497,7 @@ function reload_has_char(parent='') {
             content: {
                 text: $(this).next('span')
             }, style: {
-                classes: 'qtip-dark qtip-rounded qtip-shadow'
+                classes: 'qtip-dark qtip-rounded qtip-shadow qtip-char'
             }, hide: {
                 effect: function(offset) {
                     $(this).fadeOut(500);
@@ -296,6 +508,32 @@ function reload_has_char(parent='') {
                 }
             }, position: {
                 my: 'top left',
+                at: 'bottom center',
+            }
+        });
+    });
+
+}
+
+function lm_tooltip() {
+
+    $('.lm_tooltip').each(function() {
+
+        $(this).qtip({
+            content: {
+                text: $(this).children('.lm_tooltiptext')
+            }, style: {
+                classes: 'qtip-dark qtip-rounded qtip-shadow qtip-lm'
+            }, hide: {
+                effect: function(offset) {
+                    $(this).fadeOut(500);
+                }
+            }, show: {
+                effect: function(offset) {
+                    $(this).fadeIn(500);
+                }
+            }, position: {
+                my: 'top center',
                 at: 'bottom center',
             }
         });
@@ -331,38 +569,7 @@ function reload_has_tooltip(parent='') {
 }
 
 
-function jump_to(el) {
-    const yOffset = -160;
-    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-    window.scrollTo({top: y, behavior: 'smooth'});
-}
 
-
-function download_csv(csv, filename) {
-    var csvFile;
-    var downloadLink;
-
-    // CSV FILE
-    csvFile = new Blob([csv], {type: "text/csv"});
-
-    // Download link
-    downloadLink = document.createElement("a");
-
-    // File name
-    downloadLink.download = filename;
-
-    // We have to create a link to the file
-    downloadLink.href = window.URL.createObjectURL(csvFile);
-
-    // Make sure that the link is not displayed
-    downloadLink.style.display = "none";
-
-    // Add the link to your DOM
-    document.body.appendChild(downloadLink);
-
-    // Lanzamos
-    downloadLink.click();
-}
 
 
 function selectLanguage(lang) {
@@ -371,39 +578,13 @@ function selectLanguage(lang) {
     xhttp.send("language=" + lang);
 }
 
-function export_table_to_csv(sel, filename) {
-    var csv = [];
-    var rows = document.querySelectorAll(sel + " tr");
-
-    for (var i = 0; i < rows.length; i++) {
-        var row = [], cols = rows[i].querySelectorAll("td, th");
-
-        for (var j = 0; j < cols.length; j++) {
-            var tx = cols[j].innerText;
-            tx = tx.replace(/\t/g, " ");
-            tx = tx.replace(/\n/g, " ");
-            tx = tx.replace(/\r/g, " ");
-            row.push(tx);
-        }
-
-        csv.push(row.join("\t"));
-    }
-
-    // Download CSV
-    download_csv(csv.join("\n"), filename);
-}
-
 function resize_fields() {
     $(".writing td").each(function( index ) {
 
         var textLength = stripHTML($(this).text()).length;
 
-       $(this).find('.lm_tooltiptext').each(function () {
-           textLength -=   stripHTML($(this).text()).length;
-        });
-
        $(this).find('.popup_text').each(function () {
-           textLength -=   stripHTML($(this).text()).length;
+           textLength -= stripHTML($(this).text()).length;
         });
 
         fontSize = Math.max(50, Math.round(100 - textLength / 7));
@@ -430,31 +611,6 @@ String.prototype.format = String.prototype.f = function() {
     return s;
 };
 
-function table_csv() {
-    $(".table_csv table").each(function( index ) {
-
-        if ( $(this).hasClass("no_csv") ) return;
-
-        if ( $(this).find('tbody').length === 0 || $(this).find('tbody tr').length === 0 ) {
-            return;
-        }
-
-        if ( $(this).is("#idSelector") ) {
-            var eid = $(this).attr('id');
-        } else {
-            var eid = "a" + Math.random().toString(36).slice(2);
-            $(this).attr('id', eid);
-        }
-
-        $(this).after('<p class="go_table"><a href="#" eid="' + eid + '">Download as csv</a></p>');
-    });
-
-    $(".go_table a").on( "click", function() {
-        eid = $(this).attr("eid");
-        go_table_csv(eid);
-    });
-}
-
 function slugify(str) {
   return String(str)
     .normalize('NFKD') // split accented characters into their base characters and diacritical marks
@@ -464,11 +620,6 @@ function slugify(str) {
     .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
     .replace(/\s+/g, '-') // replace spaces with hyphens
     .replace(/-+/g, '-'); // remove consecutive hyphens
-}
-
-function go_table_csv(eid) {
-    export_table_to_csv('#' + eid, "table " + document.title + ".csv");
-    return false;
 }
 
 if (!String.prototype.format) {
@@ -483,4 +634,112 @@ if (!String.prototype.format) {
   };
 }
 
+function centerMobileIcons() {
+    const $topbar = $('#topbar');
+    const topbarWidth = $topbar.innerWidth();
+
+    var $visibleElements = $topbar.find('.el');
+    var elCount = 0;
+    var totalElWidth = 0;
+
+    $visibleElements.each(function () {
+        var width = $(this).innerWidth();
+        if (width > 0) {
+            totalElWidth += width;
+            elCount += 1;
+        }
+    });
+
+    var totalSpacing = topbarWidth * 0.95 - totalElWidth;
+    var margin = totalSpacing / elCount;
+
+    $visibleElements.each(function (index) {
+        var ml = margin / 2;
+
+        $(this).closest('.el').css({
+            'margin-left': `${ml}px`,
+            'margin-right': `${ml}px`
+        });
+    });
+}
+
 });
+
+
+//function download_csv(csv, filename) {
+//    var csvFile;
+//    var downloadLink;
+//
+//    // CSV FILE
+//    csvFile = new Blob([csv], {type: "text/csv"});
+//
+//    // Download link
+//    downloadLink = document.createElement("a");
+//
+//    // File name
+//    downloadLink.download = filename;
+//
+//    // We have to create a link to the file
+//    downloadLink.href = window.URL.createObjectURL(csvFile);
+//
+//    // Make sure that the link is not displayed
+//    downloadLink.style.display = "none";
+//
+//    // Add the link to your DOM
+//    document.body.appendChild(downloadLink);
+//
+//    // Lanzamos
+//    downloadLink.click();
+//}
+
+//function export_table_to_csv(sel, filename) {
+//    var csv = [];
+//    var rows = document.querySelectorAll(sel + " tr");
+//
+//    for (var i = 0; i < rows.length; i++) {
+//        var row = [], cols = rows[i].querySelectorAll("td, th");
+//
+//        for (var j = 0; j < cols.length; j++) {
+//            var tx = cols[j].innerText;
+//            tx = tx.replace(/\t/g, " ");
+//            tx = tx.replace(/\n/g, " ");
+//            tx = tx.replace(/\r/g, " ");
+//            row.push(tx);
+//        }
+//
+//        csv.push(row.join("\t"));
+//    }
+//
+//    // Download CSV
+//    download_csv(csv.join("\n"), filename);
+//}
+
+//function go_table_csv(eid) {
+//    export_table_to_csv('#' + eid, "table " + document.title + ".csv");
+//    return false;
+//}
+
+//function table_csv() {
+//    $(".manage table").each(function( index ) {
+//
+//        if ( $(this).hasClass("") ) return;
+//
+//        if ( $(this).find('tbody').length === 0 || $(this).find('tbody tr').length === 0 ) {
+//            return;
+//        }
+//
+//        if ( $(this).is("#idSelector") ) {
+//            var eid = $(this).attr('id');
+//        } else {
+//            var eid = "a" + Math.random().toString(36).slice(2);
+//            $(this).attr('id', eid);
+//        }
+//
+//        $(this).parent().after('<p class="go_table"><a href="#" eid="' + eid + '">Download as csv</a></p>');
+//    });
+//
+//    $(".go_table a").on( "click", function() {
+//        eid = $(this).attr("eid");
+//        go_table_csv(eid);
+//    });
+//}

@@ -4,13 +4,15 @@
     {% trans "Collections" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the collections opened by players. You can update them indicating the recipient and disburse the money contributed." %}
+    {% trans "This page shows the collections opened by players" %};
+    {% trans "You can update them by indicating the recipient and assigning the contributed money" %}
 {% endblock info %}
 {% block content %}
     <p>
         {% trans "Show collections" %} <a href="#" class="my_toggle" tog='done'>{% trans "already delivered" %}</a>
     </p>
-    <table id="tb" class="tablesorter mob">
+    <table id="collections"
+           class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th></th>
@@ -26,7 +28,8 @@
                 <tr id="{{ el.id }}"
                     {% if el.status == 'p' %}class="hide done"{% endif %}>
                     <td>
-                        <a href="{% url 'exe_collections_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'exe_collections_edit' el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.request }}</td>
                     <td>{{ el.member }}</td>

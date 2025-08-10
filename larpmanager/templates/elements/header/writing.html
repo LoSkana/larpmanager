@@ -11,111 +11,32 @@
             window.location.href = newUrl;
         });
         </script>
-        <button class="my_toggle" tog='search'>
-            <a href="#">{% trans "Search" %}</a>
-        </button>
-        {% if list %}
-            <button class="my_toggle" tog='show_list'>
-                <a href="#">{% trans "List" %}</a>
-            </button>
+        {% if upload %}
+            <a class="new button"
+               href="{% url 'orga_upload' run.event.slug run.number upload %}">{% trans "Upload" %}</a>
         {% endif %}
-        <button class="my_toggle" tog='load-form'>
-            <a href="#">{% trans "Upload" %}</a>
-        </button>
         <form action="{{ request.path }}" method="post" class="inline">
             {% csrf_token %}
             <input type="hidden" name="download" value="1">
             <button type="submit" name="submit" value="1">{% trans "Download" %}</button>
         </form>
         {% if export %}
-            <button>
-                <a href="{% url 'orga_export' run.event.slug run.number export %}">{% trans "Export" %}</a>
-            </button>
-        {% endif %}
-        {% if features.cover and nm == 'character' %}
-            <button class="my_toggle" tog='cover-form'>
-                <a href="#">{% trans "Upload cover" %}</a>
-            </button>
+            <a class="new button"
+               href="{% url 'orga_export' run.event.slug run.number export %}">{% trans "Export" %}</a>
         {% endif %}
         {% if features.progress %}
-            <button class="my_toggle" tog='progress-table'>
-                <a href="#">{% trans "Progress" %}</a>
-            </button>
+            <a class="new button my_toggle" tog='progress-table' href="#">{% trans "Progress" %}</a>
         {% endif %}
         {% if features.assigned %}
-            <button class="my_toggle" tog='assigned-table'>
-                <a href="#">{% trans "Assignments" %}</a>
-            </button>
+            <a class="new button my_toggle" tog='assigned-table' href="#">{% trans "Assignments" %}</a>
         {% endif %}
         {% if features.progress and features.assigned %}
-            <button class="my_toggle" tog='progress-assigned-table'>
-                <a href="#">{% trans "Progress" %} - {% trans "Assignments" %}</a>
-            </button>
+            <a class="new button my_toggle" tog='progress-assigned-table' href="#">{% trans "Progress" %} - {% trans "Assignments" %}</a>
         {% endif %}
     </div>
-    <div class="hide search">
-        <input type="text" placeholder="Search..." id="search_tbl" />
-        <hr />
-    </div>
-    <div class="hide show_list">
-        {% for el in list %}
-            <a href="#{{ el.id }}">
-                {% if el.search %}
-                    {{ el.search }}
-                {% else %}
-                    {{ el }}
-                {% endif %}
-            </a>
-        {% endfor %}
-        <hr />
-    </div>
-    <div class="hide load-form">
-        {% trans "You can upload data directly from a csv file." %}
-        <br />
-        {% trans "The first line are the field names, such as 'number', 'name', 'presentation', 'text'. (Only 'number' is required)" %}
-        <br />
-        {% trans "If you want to download an example file, click here." %}
-        <form action="{{ request.path }}" method="post" class="inline">
-            {% csrf_token %}
-            <input type="hidden" name="example" value="1">
-            <button type="submit" name="submit" value="1">{% trans "Loading template" %}</button>
-        </form>
-        <br />
-        <br />
-        {% trans "If you already have the file ready, upload it here (pay attention to the 'csv' format): " %}
-        <form action="{{ request.path }}"
-              enctype="multipart/form-data"
-              method="post">
-            {% csrf_token %}
-            {{ form.elem }}
-            <br />
-            <input type="hidden" name="upload" value="elements">
-            <input type="submit" value="Submit">
-        </form>
-        <hr />
-    </div>
-    {% if features.cover and nm == 'character' %}
-        <div class="hide cover-form">
-            <form action="{{ request.path }}"
-                  enctype="multipart/form-data"
-                  method="post">
-                {% csrf_token %}
-                {% trans "Select a file with extension 'zip'." %}
-                {% trans "Inside this file must be the photos, named by the number of the character." %}
-                <br />
-                <br />
-                <table class="no_csv">
-                    {{ form.as_table }}
-                </table>
-                <input type="hidden" name="upload" value="cover">
-                <input type="submit" value="Submit">
-            </form>
-            <hr />
-        </div>
-    {% endif %}
     {% if features.progress %}
         <div class="hide progress-table">
-            <table class="mob no_csv">
+            <table>
                 {% for k, el in progress_steps.items %}
                     <tr>
                         <th>{{ el }}</th>
@@ -128,7 +49,7 @@
     {% endif %}
     {% if features.assigned %}
         <div class="hide assigned-table">
-            <table class="mob no_csv">
+            <table>
                 {% for k, el in assigned.items %}
                     <tr>
                         <th>{{ el }}</th>

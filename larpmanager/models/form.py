@@ -66,6 +66,10 @@ class QuestionType(models.TextChoices):
             QuestionType.EDITOR,
         }
 
+    @staticmethod
+    def get_def_types():
+        return {QuestionType.NAME, QuestionType.TEASER, QuestionType.SHEET, QuestionType.TITLE}
+
     @classmethod
     def get_max_length(cls):
         return {
@@ -78,12 +82,31 @@ class QuestionType(models.TextChoices):
             QuestionType.EDITOR,
         }
 
+    @classmethod
+    def get_mapping(cls):
+        return {
+            QuestionType.SINGLE: "single-choice",
+            QuestionType.MULTIPLE: "multi-choice",
+            QuestionType.TEXT: "short-text",
+            QuestionType.PARAGRAPH: "long-text",
+            QuestionType.EDITOR: "advanced",
+        }
+
 
 class QuestionStatus(models.TextChoices):
     OPTIONAL = "o", _("Optional")
     MANDATORY = "m", _("Mandatory")
     DISABLED = "d", _("Disabled")
     HIDDEN = "h", _("Hidden")
+
+    @classmethod
+    def get_mapping(cls):
+        return {
+            QuestionStatus.OPTIONAL: "optional",
+            QuestionStatus.MANDATORY: "mandatory",
+            QuestionStatus.DISABLED: "disabled",
+            QuestionStatus.HIDDEN: "hidden",
+        }
 
 
 class QuestionVisibility(models.TextChoices):
@@ -92,10 +115,22 @@ class QuestionVisibility(models.TextChoices):
     PRIVATE = "e", _("Private")
     HIDDEN = "h", _("Hidden")
 
+    @classmethod
+    def get_mapping(cls):
+        return {
+            QuestionVisibility.SEARCHABLE: "searchable",
+            QuestionVisibility.PUBLIC: "public",
+            QuestionVisibility.PRIVATE: "private",
+            QuestionVisibility.HIDDEN: "hidden",
+        }
+
 
 class QuestionApplicable(models.TextChoices):
     CHARACTER = "c", "character"
     PLOT = "p", "plot"
+    FACTION = "f", "faction"
+    QUEST = "q", "quest"
+    TRAIT = "t", "trait"
 
     @classmethod
     def get_applicable(cls, model_name):
@@ -109,6 +144,10 @@ class QuestionApplicable(models.TextChoices):
         # noinspection PyUnresolvedReferences
         model_name = QuestionApplicable(typ).label.lower()
         return apps.get_model("larpmanager", model_name)
+
+    @classmethod
+    def get_mapping(cls):
+        return {value: label for value, label in cls.choices}
 
 
 class WritingQuestion(BaseModel):
@@ -124,30 +163,19 @@ class WritingQuestion(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="form_questions")
 
-    display = models.CharField(max_length=100, verbose_name=_("Display"), help_text=_("Question display text"))
+    name = models.CharField(max_length=100, verbose_name=_("Name"), help_text=_("Question name (keep it short)"))
 
     description = models.CharField(
         max_length=1000,
         blank=True,
         verbose_name=_("Description"),
-        help_text=_("Extended description (will be shown in gray, in small)"),
+        help_text=_("Optional - Extended description (displayed in small gray text)"),
     )
 
-    order = models.IntegerField(
-        default=0, verbose_name=_("Order"), help_text=_("Display order with respect to all questions")
-    )
+    order = models.IntegerField(default=0)
 
     status = models.CharField(
-        max_length=1,
-        choices=QuestionStatus.choices,
-        default=QuestionStatus.OPTIONAL,
-        verbose_name=_("Status"),
-        help_text=_(
-            "Optional: The question is shown, and can be filled by the player. "
-            "Mandatory: The question needs to be filled by the player. "
-            "Disabled: The question is shown, but cannot be changed by the player. "
-            "Hidden: The question is not shown to the player."
-        ),
+        max_length=1, choices=QuestionStatus.choices, default=QuestionStatus.OPTIONAL, verbose_name=_("Status")
     )
 
     visibility = models.CharField(
@@ -155,12 +183,6 @@ class WritingQuestion(BaseModel):
         choices=QuestionVisibility.choices,
         default=QuestionVisibility.PRIVATE,
         verbose_name=_("Visibility"),
-        help_text=_(
-            "Searchable: Characters can be filtered according to this question. "
-            "Public: The answer to this question is publicly visible. "
-            "Private: The answer to this question is only visible to the player. "
-            "Hidden: The answer is hidden to all players."
-        ),
     )
 
     editable = models.CharField(
@@ -194,15 +216,15 @@ class WritingQuestion(BaseModel):
         choices=QuestionApplicable.choices,
         default=QuestionApplicable.CHARACTER,
         verbose_name=_("Applicable"),
-        help_text=_("Select the types of writing elements that this question applies to."),
+        help_text=_("Select the types of writing elements that this question applies to"),
     )
 
     def __str__(self):
-        return f"{self.event} - {self.display[:30]}"
+        return f"{self.event} - {self.name[:30]}"
 
     def show(self):
         js = {}
-        for s in ["description", "display"]:
+        for s in ["description", "name"]:
             self.upd_js_attr(js, s)
         return js
 
@@ -231,22 +253,26 @@ class WritingOption(BaseModel):
 
     question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="options")
 
-    display = models.CharField(max_length=50)
+    name = models.CharField(
+        max_length=50,
+        verbose_name=_("Name"),
+        help_text=_("Option name, displayed within the question (keep it short)"),
+    )
 
-    details = models.CharField(
+    description = models.CharField(
         max_length=500,
         blank=True,
         null=True,
         verbose_name=_("Description"),
-        help_text=_("Optional - Indicates additional details on the option, will be shown below the question"),
+        help_text=_("Optional – Additional information about the option, displayed below the question"),
     )
 
     max_available = models.IntegerField(
         default=0,
-        help_text=_("Indicates the maximum number of times it can be requested (0 for infinite)"),
+        help_text=_("Optional – Maximum number of times it can be selected across all characters (0 = unlimited)"),
     )
 
-    order = models.IntegerField(default=0, help_text=_("Order in which the option is shown with respect to the others"))
+    order = models.IntegerField(default=0)
 
     dependents = models.ManyToManyField(
         "self",
@@ -268,15 +294,15 @@ class WritingOption(BaseModel):
     )
 
     def __str__(self):
-        return f"{self.question} {self.display}"
+        return f"{self.question} {self.name}"
 
     def get_form_text(self, run=None, cs=None):
         s = self.show(run)
-        return s["display"]
+        return s["name"]
 
     def show(self, run=None):
         js = {"max_available": self.max_available}
-        for s in ["display", "details"]:
+        for s in ["name", "description"]:
             self.upd_js_attr(js, s)
         return js
 
@@ -290,7 +316,7 @@ class WritingChoice(BaseModel):
 
     def __str__(self):
         # noinspection PyUnresolvedReferences
-        return f"{self.element_id} ({self.question.display}) {self.option.display}"
+        return f"{self.element_id} ({self.question.name}) {self.option.name}"
 
 
 class WritingAnswer(BaseModel):
@@ -302,7 +328,7 @@ class WritingAnswer(BaseModel):
 
     def __str__(self):
         # noinspection PyUnresolvedReferences
-        return f"{self.element_id} ({self.question.display}) {self.text[:100]}"
+        return f"{self.element_id} ({self.question.name}) {self.text[:100]}"
 
 
 class RegistrationQuestion(BaseModel):
@@ -318,35 +344,26 @@ class RegistrationQuestion(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="questions")
 
-    display = models.CharField(max_length=100, verbose_name=_("Display"), help_text=_("Question display text"))
+    name = models.CharField(max_length=100, verbose_name=_("Name"), help_text=_("Question name (keep it short)"))
 
     description = models.CharField(
         max_length=1000,
         blank=True,
         verbose_name=_("Description"),
-        help_text=_("Extended description (will be shown in gray, in small)"),
+        help_text=_("Optional - Extended description (displayed in small gray text)"),
     )
 
-    order = models.IntegerField(default=0, help_text=_("Display order with respect to all questions"))
+    order = models.IntegerField(default=0)
 
     status = models.CharField(
-        max_length=1,
-        choices=QuestionStatus.choices,
-        default=QuestionStatus.OPTIONAL,
-        verbose_name=_("Status"),
-        help_text=_(
-            "Optional: The question is shown, and can be filled by the player. "
-            "Mandatory: The question needs to be filled by the player. "
-            "Disabled: The question is shown, but cannot be changed by the player. "
-            "Hidden: The question is not shown to the player."
-        ),
+        max_length=1, choices=QuestionStatus.choices, default=QuestionStatus.OPTIONAL, verbose_name=_("Status")
     )
 
     max_length = models.IntegerField(
         default=0,
         verbose_name=_("Maximum length"),
         help_text=_(
-            "For text questions, maximum number of characters; For multiple options, maximum "
+            "Optional - For text questions, maximum number of characters; For multiple options, maximum "
             "number of options (0 = no limit)"
         ),
     )
@@ -357,7 +374,7 @@ class RegistrationQuestion(BaseModel):
         blank=True,
         verbose_name=_("Faction list"),
         help_text=_(
-            "If you select one (or more) factions, the question will only be shown to players "
+            "Optional - If you select one (or more) factions, the question will only be shown to players "
             "with characters in all chosen factions"
         ),
     )
@@ -368,7 +385,7 @@ class RegistrationQuestion(BaseModel):
         blank=True,
         null=True,
         verbose_name=_("Image"),
-        help_text=_("(Optional) an image that will be shown inside the question"),
+        help_text=_("Optional - Image displayed within the question"),
     )
 
     profile_thumb = ImageSpecField(
@@ -418,11 +435,11 @@ class RegistrationQuestion(BaseModel):
     )
 
     def __str__(self):
-        return f"{self.event} - {self.display[:30]}"
+        return f"{self.event} - {self.name[:30]}"
 
     def show(self):
         js = {}
-        for s in ["description", "display"]:
+        for s in ["description", "name"]:
             self.upd_js_attr(js, s)
         return js
 
@@ -484,37 +501,45 @@ class RegistrationOption(BaseModel):
 
     question = models.ForeignKey(RegistrationQuestion, on_delete=models.CASCADE, related_name="options")
 
-    display = models.CharField(max_length=170)
+    name = models.CharField(
+        max_length=170,
+        verbose_name=_("Name"),
+        help_text=_("Option name, displayed within the question (keep it short)"),
+    )
 
-    details = models.CharField(
+    description = models.CharField(
         max_length=500,
         blank=True,
         null=True,
         verbose_name=_("Description"),
-        help_text=_("Optional - Indicates additional details on the option, will be shown below the question"),
+        help_text=_("Optional – Additional information about the option, displayed below the question"),
     )
 
-    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        verbose_name=_("Price"),
+        help_text=_("Optional – Amount added to the registration fee if selected (0 = no extra cost)"),
+    )
 
     max_available = models.IntegerField(
         default=0,
         verbose_name=_("Maximum number"),
-        help_text=_("Indicates the maximum number of times it can be requested (0 for infinite)"),
+        help_text=_("Optional – Maximum number of times it can be selected across all registrations (0 = unlimited)"),
     )
 
-    order = models.IntegerField(default=0, help_text=_("Order in which the option is shown with respect to the others"))
-
-    price_staff = models.IntegerField(default=0)
+    order = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"{self.question} {self.display[:30]} ({self.price}€)"
+        return f"{self.question} {self.name[:30]} ({self.price}€)"
 
     def get_price(self):
         return self.price
 
     def get_form_text(self, run=None, cs=None):
         s = self.show(run)
-        tx = s["display"]
+        tx = s["name"]
         if s["price"] and int(s["price"]) > 0:
             if not cs:
                 # noinspection PyUnresolvedReferences
@@ -525,10 +550,10 @@ class RegistrationOption(BaseModel):
 
     def show(self, run=None):
         js = {"max_available": self.max_available}
-        for s in ["display", "price", "details"]:
+        for s in ["name", "price", "description"]:
             self.upd_js_attr(js, s)
         # noinspection PyUnresolvedReferences
-        js["question"] = self.question.display
+        js["question"] = self.question.name
         return js
 
 
@@ -541,7 +566,7 @@ class RegistrationChoice(BaseModel):
 
     def __str__(self):
         # noinspection PyUnresolvedReferences
-        return f"{self.reg} ({self.question.display}) {self.option.display}"
+        return f"{self.reg} ({self.question.name}) {self.option.name}"
 
 
 class RegistrationAnswer(BaseModel):
@@ -553,9 +578,31 @@ class RegistrationAnswer(BaseModel):
 
     def __str__(self):
         # noinspection PyUnresolvedReferences
-        return f"{self.reg} ({self.question.display}) {self.text[:100]}"
+        return f"{self.reg} ({self.question.name}) {self.text[:100]}"
 
 
 def get_ordered_registration_questions(ctx):
-    que = RegistrationQuestion.objects.filter(event=ctx["event"])
-    return que.order_by(F("section__order").asc(nulls_first=True), "order").prefetch_related("options")
+    que = ctx["event"].get_elements(RegistrationQuestion)
+    return que.order_by(F("section__order").asc(nulls_first=True), "order")
+
+
+def _get_writing_elements():
+    shows = [
+        ("character", _("Characters"), QuestionApplicable.CHARACTER),
+        ("faction", _("Factions"), QuestionApplicable.FACTION),
+        ("plot", _("Plots"), QuestionApplicable.PLOT),
+        ("quest", _("Quests"), QuestionApplicable.QUEST),
+        ("trait", _("Traits"), QuestionApplicable.TRAIT),
+    ]
+    return shows
+
+
+def _get_writing_mapping():
+    mapping = {
+        "character": "character",
+        "faction": "faction",
+        "plot": "plot",
+        "quest": "questbuilder",
+        "trait": "questbuilder",
+    }
+    return mapping

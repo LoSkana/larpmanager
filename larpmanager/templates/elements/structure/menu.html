@@ -1,0 +1,101 @@
+{% load static i18n %}
+<nav id="menu">
+    <div class="inner">
+        <h2>Menu</h2>
+        <ul class="links">
+            <li>
+                <a href="{% url 'language' %}"><i class="fa-solid fa-language"></i> {% trans "Language" %}</a>
+            </li>
+            {% if user.is_authenticated %}
+                <li>
+                    <a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i> Profile</a>
+                </li>
+                <li>
+                    <a href="{% url 'accounting' %}"><i class="fa-solid fa-money-bill"></i> Accounting</a>
+                </li>
+                {% if 'membership' in assoc.features %}
+                    <li>
+                        <a href="{% url 'membership' %}"><i class="fa-solid fa-id-card"></i> {% trans "Membership" %}</a>
+                    </li>
+                {% endif %}
+                {% if 'delegated_members' in assoc.features %}
+                    <li>
+                        <a href="{% url 'delegated' %}"><i class="fa-solid fa-user-shield"></i> {% trans "Delegated users" %}</a>
+                    </li>
+                {% endif %}
+                {% if 'chat' in assoc.features %}
+                    <li>
+                        <a href="{% url 'chats' %}"><i class="fa-solid fa-message"></i> {% trans "Messages" %}</a>
+                    </li>
+                {% endif %}
+                {% if 'badge' in assoc.features %}
+                    <li>
+                        <a href="{% url 'public' user.member.id %}"><i class="fa-solid fa-trophy"></i> {% trans "Achievements" %}</a>
+                    </li>
+                {% endif %}
+            {% endif %}
+            {% if user.is_authenticated %}
+                {% if reg_menu %}
+                    <li>
+                        <span class="opener">{% trans "Registrations" %}
+                            <img class="chevron"
+                                 alt="chevron"
+                                 src="{% static 'larpmanager/assets/chevron.png' %}" />
+                        </span>
+                        <ul>
+                            {% for s, n, name in reg_menu %}
+                                <li class="sub">
+                                    <a href="{% url 'gallery' s n %}">{{ name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endif %}
+                {% if user.is_superuser %}
+                    <li>
+                        <span class="opener">LarpManager
+                            <img class="chevron"
+                                 alt="chevron"
+                                 src="{% static 'larpmanager/assets/chevron.png' %}" />
+                        </span>
+                        <ul>
+                            <li>
+                                <a href="{% url 'lm_list' %}">{% trans "List" %}</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'lm_payments' %}">{% trans "Payments" %}</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'lm_send' %}">{% trans "Mail" %}</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'lm_profile' %}">{% trans "Profiling" %}</a>
+                            </li>
+                        </ul>
+                    </li>
+                {% endif %}
+                <li>
+                    <a id="logout" href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                </li>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" id="real_logout">logout</button>
+                </form>
+            {% else %}
+                <li>
+                    <a href="{% url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Log In</a>
+                </li>
+                <li>
+                    <a href="{% url 'registration_register' %}"><i class="fa-solid fa-user-plus"></i> {% trans "Register" %}</a>
+                </li>
+                <li>
+                    <a href="{% url 'password_reset' %}"><i class="fa-solid fa-key"></i> {% trans "Change password" %}</a>
+                </li>
+            {% endif %}
+            <li>
+                <a href="{% url 'help' %}"><i class="fa-solid fa-circle-question"></i> Help</a>
+            </li>
+        </ul>
+        <a href="#" class="close">Close</a>
+    </div>
+</nav>

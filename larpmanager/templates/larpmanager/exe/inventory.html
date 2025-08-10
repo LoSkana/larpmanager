@@ -4,23 +4,23 @@
     {% trans "Inventory" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the organization inventory." %}
+    {% trans "This page shows the organization inventory" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
     <hr />
     <i>{% trans "Filter for every field" %}</i>
-    <table class="no_csv">
+    <table>
         <tr>
             {% for f in inv_fields %}
                 <th>
-                    <input id='{{ f }}' type="text" placeholder="{{ f }}" />
+                    <input id="{{ f }}" type="text" placeholder="{{ f }}" />
                 </th>
             {% endfor %}
         </tr>
     </table>
     <hr />
-    <table id="inv" class="tablesorter mob">
+    <table id="inv" class="tablesorter">
         <thead>
             <tr>
                 <th></th>
@@ -38,12 +38,12 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'exe_inventory_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'exe_inventory_edit' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
-                    <td class='cod'>{{ el.cod }}</td>
-                    <td class='name'>{{ el.name }}</td>
-                    <td class='shelf'>{{ el.shelf }}</td>
-                    <td class='rack'>{{ el.rack }}</td>
+                    <td class="cod">{{ el.cod }}</td>
+                    <td class="name">{{ el.name }}</td>
+                    <td class="shelf">{{ el.shelf }}</td>
+                    <td class="rack">{{ el.rack }}</td>
                     <td>
                         {{ el.description | truncatechars:200 }}
                         {% if el.description|length > 200 %}
@@ -54,9 +54,9 @@
                             </span>
                         {% endif %}
                     </td>
-                    <td class='tag'>{{ el.tag }}</td>
+                    <td class="tag">{{ el.tag }}</td>
                     <td>
-                        {% if el.photo %}<img src="{{ el.thumb.url }}" style="height: 5em" />{% endif %}
+                        {% if el.photo %}<img src="{{ el.thumb.url }}" class="inv_photo" alt="inventory photo" />{% endif %}
                     </td>
                     <td>
                         <a href="{% url 'exe_inventory_history' el.id %}">{% trans "History" %}</a>

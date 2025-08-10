@@ -17,69 +17,66 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
 import os
-import time
 from datetime import datetime
+from urllib.parse import urlparse
 
-from django.utils.translation import activate
-from playwright.sync_api import expect
+from playwright.async_api import expect
 
 password = "banana"
 orga_user = "orga@test.it"
 test_user = "user@test.it"
 
 
-def page_start(p, show=False):
-    browser = p.chromium.launch(headless=not show)
-    context = browser.new_context(record_video_dir="test_videos")
-    page = context.new_page()
+async def page_start(p, show=False):
+    browser = await p.chromium.launch(headless=not show)
+    context = await browser.new_context(record_video_dir="test_videos")
+    page = await context.new_page()
 
     page.set_default_timeout(60000)
 
     page.on("dialog", lambda dialog: dialog.accept())
 
-    def on_response(response):
+    async def on_response(response):
         error_code = 500
         if response.status == error_code:
             raise Exception(f"500 on {response.url}")
 
     page.on("response", on_response)
 
-    activate("en")
     return browser, context, page
 
 
-def logout(page, live_server):
-    page.locator("a#menu-open").click()
-    page.get_by_role("link", name="Logout").click()
+async def logout(page, live_server):
+    await page.locator("a#menu-open").click()
+    await page.get_by_role("link", name="Logout").click()
 
 
-def login_orga(pg, ls):
-    login(pg, ls, orga_user)
+async def login_orga(pg, ls):
+    await login(pg, ls, orga_user)
 
 
-def login_user(pg, lv):
-    login(pg, lv, test_user)
+async def login_user(pg, lv):
+    await login(pg, lv, test_user)
 
 
-def login(pg, live_server, name):
-    go_to(pg, live_server, "/login")
+async def login(pg, live_server, name):
+    await go_to(pg, live_server, "/login")
 
-    pg.locator("#id_username").fill(name)
-    pg.locator("#id_password").fill(password)
-    pg.get_by_role("button", name="Submit").click()
-    expect(pg.locator("#banner")).not_to_contain_text("Login")
+    await pg.locator("#id_username").fill(name)
+    await pg.locator("#id_password").fill(password)
+    await pg.get_by_role("button", name="Submit").click()
+    await expect(pg.locator("#banner")).not_to_contain_text("Login")
 
 
-def handle_error(page, e, test_name):
+async def handle_error(page, e, test_name):
     print(f"Error on {test_name}: {page.url}\n")
     print(e)
 
     uid = datetime.now().strftime("%Y%m%d_%H%M%S")
-    page.screenshot(path=f"test_screenshots/{test_name}_{uid}.png")
+    await page.screenshot(path=f"test_screenshots/{test_name}_{uid}.png")
     try:
-        video_path = page.video.path()
+        video_path = await page.video.path()
         os.rename(video_path, f"test_videos/{test_name}_{uid}.webm")
     except Exception as ve:
         print(f"[!] Errore video: {ve}")
@@ -89,8 +86,8 @@ def handle_error(page, e, test_name):
     raise e
 
 
-def print_text(page):
-    visible_text = page.evaluate("""
+async def print_text(page):
+    visible_text = await page.evaluate("""
         () => {
             function getVisibleText(element) {
                 return [...element.querySelectorAll('*')]
@@ -106,36 +103,49 @@ def print_text(page):
     print(visible_text)
 
 
-def go_to(page, live_server, path):
-    go_to_check(page, f"{live_server.url}/{path}")
+async def go_to(page, live_server, path):
+    await go_to_check(page, f"{live_server.url}/{path}")
 
 
-def go_to_check(page, path):
-    page.goto(path)
-    ooops_check(page)
+async def go_to_check(page, path):
+    dialog_triggered = False
+
+    def on_dialog(dialog):
+        nonlocal dialog_triggered
+        dialog_triggered = True
+        dialog.dismiss()
+
+    page.on("dialog", on_dialog)
+
+    await page.goto(path)
+    await ooops_check(page)
+
+    assert not dialog_triggered, "Unexpected JavaScript dialog was triggered"
 
 
-def submit(page):
-    page.get_by_role("button", name="Submit").click()
-    page.wait_for_load_state("networkidle")
-    ooops_check(page)
+async def submit(page):
+    await page.get_by_role("button", name="Submit").click()
+    await page.wait_for_load_state("networkidle")
+    await page.wait_for_load_state("load")
+    await ooops_check(page)
 
 
-def ooops_check(page):
+async def ooops_check(page):
     banner = page.locator("#banner")
-    if banner.count() > 0:
-        expect(banner).not_to_contain_text("Oops!")
-        expect(banner).not_to_contain_text("404")
+    if await banner.count() > 0:
+        await expect(banner).not_to_contain_text("Oops!")
+        await expect(banner).not_to_contain_text("404")
 
 
-def check_download(page, link):
+async def check_download(page, link):
     max_tries = 3
     current_try = 0
     while current_try < max_tries:
         try:
-            with page.expect_download(timeout=100000) as download_info:
-                page.get_by_role("link", name=link).click()
-            download_path = download_info.value.path()
+            async with page.expect_download(timeout=100000) as download_info:
+                await page.get_by_role("link", name=link).click()
+            download = await download_info.value
+            download_path = await download.path()
             assert download_path is not None, "Download failed"
 
             with open(download_path, "rb") as f:
@@ -150,31 +160,38 @@ def check_download(page, link):
             current_try += 1
 
 
-def fill_tinymce(iframe_locator, value):
-    iframe_locator.wait_for(state="visible")
-
-    frame = iframe_locator.content_frame
-
-    timeout = time.time() + 30
-    while frame is None:
-        if time.time() > timeout:
-            raise TimeoutError("Iframe not available")
-        time.sleep(0.1)
-        frame = iframe_locator.content_frame
-
-    rich_text = frame.locator('[aria-label="Rich Text Area"]')
-    rich_text.wait_for(state="visible")
-    rich_text.fill(value)
+async def fill_tinymce(page, iframe_id: str, text: str):
+    frame_locator = page.frame_locator(f"iframe#{iframe_id}")
+    editor = frame_locator.locator("body#tinymce")
+    await editor.wait_for(state="visible")
+    await editor.fill(text)
 
 
-def _checkboxes(page, check=True):
+async def _checkboxes(page, check=True):
     checkboxes = page.locator('input[type="checkbox"]')
-    count = checkboxes.count()
+    count = await checkboxes.count()
     for i in range(count):
         checkbox = checkboxes.nth(i)
-        if check:
-            if not checkbox.is_checked():
-                checkbox.check()
-        elif checkbox.is_checked():
-            checkbox.uncheck()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+        if await checkbox.is_visible() and await checkbox.is_enabled():
+            if check:
+                if not await checkbox.is_checked():
+                    await checkbox.check()
+            elif await checkbox.is_checked():
+                await checkbox.uncheck()
+    await page.locator('input[type="submit"][value="Confirm"]').click(force=True)
+
+
+async def add_links_to_visit(links_to_visit, page, visited_links):
+    new_links = await page.eval_on_selector_all("a", "elements => elements.map(e => e.href)")
+    for link in new_links:
+        if "logout" in link:
+            continue
+        if link.endswith(("#", "#menu", "#sidebar", "print")):
+            continue
+        if any(s in link for s in ["features", "pdf", "backup", "upload/template"]):
+            continue
+        parsed_url = urlparse(link)
+        if parsed_url.hostname not in ("localhost", "127.0.0.1"):
+            continue
+        if link not in visited_links:
+            links_to_visit.add(link)

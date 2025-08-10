@@ -86,7 +86,21 @@ class MyForm(forms.ModelForm):
 
     def allow_run_choice(self):
         runs = Run.objects.filter(event=self.params["event"])
+
+        # if campaign switch is active, show as runs all of the events sharing the campaign
+        if self.params["event"].assoc.get_config("campaign_switch"):
+            event_ids = {self.params["event"].id}
+            child = Event.objects.filter(parent_id=self.params["event"].id).values_list("pk", flat=True)
+            event_ids.update(child)
+            if self.params["event"].parent_id:
+                event_ids.add(self.params["event"].parent_id)
+                siblings = Event.objects.filter(parent_id=self.params["event"].parent_id).values_list("pk", flat=True)
+                event_ids.update(siblings)
+
+            runs = Run.objects.filter(event_id__in=event_ids)
+
         runs = runs.select_related("event").order_by("end")
+
         self.initial["run"] = self.params["run"].id
         if len(runs) <= 1:
             if self.instance.pk:
@@ -112,6 +126,35 @@ class MyForm(forms.ModelForm):
 
     def clean_assoc(self):
         return Association.objects.get(pk=self.params["a_id"])
+
+    def clean_name(self):
+        return self._validate_unique_event("name")
+
+    def clean_display(self):
+        return self._validate_unique_event("display")
+
+    def _validate_unique_event(self, field_name):
+        value = self.cleaned_data.get(field_name)
+        event = self.params.get("event")
+        if event:
+            typ = self.params["elementTyp"]
+            event_id = event.get_class_parent(typ).id
+
+            model = self._meta.model
+            if model == Event:
+                qs = model.objects.filter(**{field_name: value}, assoc_id=event.assoc_id)
+            else:
+                qs = model.objects.filter(**{field_name: value}, event_id=event_id)
+            question = self.cleaned_data.get("question")
+            if question:
+                qs = qs.filter(question_id=question.id)
+            if hasattr(self, "check_applicable"):
+                qs = qs.filter(applicable=self.check_applicable)
+            if self.instance.pk:
+                qs = qs.exclude(pk=self.instance.pk)
+            if qs.exists():
+                raise ValidationError(field_name.capitalize() + " " + _("already used"))
+        return value
 
     def save(self, commit=True):
         instance = super(forms.ModelForm, self).save(commit=commit)
@@ -234,8 +277,8 @@ class BaseRegistrationForm(MyFormRun):
 
             # no problem, go ahead
             choices.append((option.id, name))
-            if option.details:
-                help_text += f'<p id="hp_{option.id}"><b>{option.display}</b> {option.details}</p>'
+            if option.description:
+                help_text += f'<p id="hp_{option.id}"><b>{option.name}</b> {option.description}</p>'
 
         return choices, help_text
 
@@ -378,7 +421,7 @@ class BaseRegistrationForm(MyFormRun):
             mapping = {"faction": "factions_list"}
             if key in mapping:
                 key = mapping[key]
-            self.fields[key].label = question.display
+            self.fields[key].label = question.name
             self.fields[key].help_text = question.description
             self.reorder_field(key)
             self.fields[key].required = required
@@ -394,7 +437,7 @@ class BaseRegistrationForm(MyFormRun):
         self.fields[key] = forms.CharField(
             required=required,
             widget=WritingTinyMCE(),
-            label=question.display,
+            label=question.name,
             help_text=question.description,
             validators=validators,
         )
@@ -408,7 +451,7 @@ class BaseRegistrationForm(MyFormRun):
         self.fields[key] = forms.CharField(
             required=required,
             widget=forms.Textarea(attrs={"rows": 4}),
-            label=question.display,
+            label=question.name,
             help_text=question.description,
             validators=validators,
         )
@@ -418,7 +461,7 @@ class BaseRegistrationForm(MyFormRun):
     def init_text(self, key, question, required):
         validators = [max_length_validator(question.max_length)] if question.max_length else []
         self.fields[key] = forms.CharField(
-            required=required, label=question.display, help_text=question.description, validators=validators
+            required=required, label=question.name, help_text=question.description, validators=validators
         )
         if question.id in self.answers:
             self.initial[key] = self.answers[question.id].text
@@ -436,7 +479,7 @@ class BaseRegistrationForm(MyFormRun):
         self.fields[key] = forms.ChoiceField(
             required=required,
             choices=choices,
-            label=question.display,
+            label=question.name,
             help_text=help_text,
         )
         if question.id in self.singles:
@@ -455,7 +498,7 @@ class BaseRegistrationForm(MyFormRun):
             required=required,
             choices=choices,
             widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
-            label=question.display,
+            label=question.name,
             help_text=help_text,
             validators=validators,
         )
@@ -581,16 +624,16 @@ class MyCssForm(MyForm):
 
 class BaseAccForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        ctx = kwargs.pop("ctx")
+        self.ctx = kwargs.pop("ctx")
         super().__init__(*args, **kwargs)
-        self.methods = ctx["methods"]
+        self.methods = self.ctx["methods"]
         cho = []
         for s in self.methods:
             cho.append((s, self.methods[s]["name"]))
         self.fields["method"] = forms.ChoiceField(choices=cho)
 
-        if "association" in ctx:
-            self.assoc = ctx["association"]
+        if "association" in self.ctx:
+            self.assoc = self.ctx["association"]
         else:
-            self.assoc = get_object_or_404(Association, pk=ctx["a_id"])
-        ctx["user_fees"] = self.assoc.get_config("payment_fees_user", False)
+            self.assoc = get_object_or_404(Association, pk=self.ctx["a_id"])
+        self.ctx["user_fees"] = self.assoc.get_config("payment_fees_user", False)

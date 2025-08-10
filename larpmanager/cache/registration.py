@@ -64,8 +64,8 @@ def update_reg_counts(r):
     que = Registration.objects.filter(run=r, cancellation_date__isnull=True)
     for reg in que.select_related("ticket"):
         num_tickets = 1 + reg.additionals
-        if is_reg_provisional(reg):
-            add_count(s, "count_provisional", num_tickets)
+        if not reg.ticket:
+            add_count(s, "count_unknown", num_tickets)
         else:
             tier_map = {
                 TicketTier.STAFF: "staff",
@@ -78,6 +78,11 @@ def update_reg_counts(r):
             key = tier_map.get(reg.ticket.tier)
             if key:
                 add_count(s, f"count_{key}", num_tickets)
+            else:
+                add_count(s, "count_player", num_tickets)
+
+            if is_reg_provisional(reg):
+                add_count(s, "count_provisional", num_tickets)
 
         add_count(s, "count_reg", num_tickets)
 

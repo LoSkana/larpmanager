@@ -4,11 +4,12 @@
     {% trans "SpeedLarp" %} - {{ event.name }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the speedlarps of the event." %}
+    {% trans "This page shows the speedlarps of the event" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/writing.html" %}
-    <table id="plots" class="tablesorter mob writing">
+    <table id="speedlarps"
+           class="{% if not interface_old %}go_datatable{% endif %} writing">
         <thead>
             <tr>
                 <th></th>
@@ -23,28 +24,28 @@
                     <th class="hide assign">{% trans "Assigned" %}</th>
                 {% endif %}
                 <th>{% trans "Sheet" %}</th>
-                <th>(L)</th>
+                <th>
+                    <i class="fa fa-text-width"></i>
+                </th>
                 <th>{% trans "Characters" %}</th>
-                <th>(N)</th>
+                <th>
+                    <i class="fa fa-hashtag"></i>
+                </th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_speedlarps_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i> </a>
+                        <a href="{% url 'orga_speedlarps_edit' run.event.slug run.number el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i> </a>
                     </td>
                     <td>{{ el }}</td>
                     <td>
-                        <!--
-            <a href="{% url 'orga_speedlarps_view' run.event.slug run.number el.id %}">{% trans "Reading" %}</a>
--->
-                        <a href="{% url 'orga_speedlarps_versions' run.event.slug run.number el.id %}">{% trans "Versions" %}</a>
-                        <!--
-            {% if translate %}
-            <a href="{% url 'orga_speedlarps_translate' run.event.slug run.number  el.id %}">{% trans "Translate" %}</a>
-            {% endif %}
--->
+                        <a href="{% url 'orga_speedlarps_view' run.event.slug run.number el.id %}"
+                           qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
+                        <a href="{% url 'orga_speedlarps_versions' run.event.slug run.number el.id %}"
+                           qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
                     </td>
                     {% if features.progress %}
                         <td>{% include "elements/show_progress.html" with el=el %}</td>
@@ -60,7 +61,7 @@
                     <td>{{ el.text_ln }}</td>
                     <td>
                         {% for ch in el.characters.all %}
-                            <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.number %}">{{ ch }}</a>
+                            <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.id %}">{{ ch }}</a>
                         {% endfor %}
                     </td>
                     <td>{{ el.characters.all | length }}</td>

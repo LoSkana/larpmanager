@@ -21,11 +21,12 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
-from larpmanager.cache.character import get_character_cache_fields, get_event_cache_all
+from larpmanager.cache.character import get_character_element_fields, get_event_cache_all, get_writing_element_fields
 from larpmanager.models.casting import Trait
+from larpmanager.models.form import QuestionApplicable
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.utils import strip_tags
-from larpmanager.models.writing import Character, PlotCharacterRel, Relationship
+from larpmanager.models.writing import Character, FactionType, PlotCharacterRel, Relationship
 from larpmanager.utils.common import add_char_addit, get_char
 from larpmanager.utils.event import has_access_character
 from larpmanager.utils.exceptions import NotFoundError
@@ -43,6 +44,15 @@ def get_character_relationships(ctx, restrict=True):
                 show = ch.show(ctx["run"])
             except ObjectDoesNotExist:
                 continue
+
+        show["factions_list"] = []
+        for fac_num in show["factions"]:
+            if not fac_num:
+                continue
+            fac = ctx["factions"][fac_num]
+            if not fac["name"] or fac["typ"] == FactionType.SECRET:
+                continue
+            show["factions_list"].append(fac["name"])
         data[show["id"]] = show
         cache[show["id"]] = text
 
@@ -125,6 +135,9 @@ def get_character_sheet_questbuilder(ctx):
     if "questbuilder" not in ctx["features"]:
         return
 
+    if "char" not in ctx:
+        return
+
     if "player_id" not in ctx["char"] or "traits" not in ctx["char"]:
         return
 
@@ -137,6 +150,8 @@ def get_character_sheet_questbuilder(ctx):
 
         data["rels"] = []
         for snum in el["traits"]:
+            if snum not in ctx["traits"]:
+                continue
             num = ctx["traits"][snum]["char"]
             data["rels"].append(ctx["chars"][num])
 
@@ -163,15 +178,18 @@ def get_character_sheet_factions(ctx):
         return
 
     fac_event = ctx["event"].get_class_parent("faction")
-    ctx["sheet_factions"] = [g.show_complete() for g in ctx["character"].factions_list.filter(event=fac_event)]
+    ctx["sheet_factions"] = []
+    for g in ctx["character"].factions_list.filter(event=fac_event):
+        data = g.show_complete()
+        data.update(get_writing_element_fields(ctx, "faction", QuestionApplicable.FACTION, g.id, only_visible=False))
+        ctx["sheet_factions"].append(data)
 
 
 def get_character_sheet_fields(ctx):
     if "character" not in ctx["features"]:
         return
 
-    fields = get_character_cache_fields(ctx, ctx["char"]["id"], only_visible=False)
-    ctx["sheet_char"]["fields"] = fields
+    ctx["sheet_char"].update(get_character_element_fields(ctx, ctx["character"].id, only_visible=False))
 
 
 def get_char_check(request, ctx, num, restrict=False, bypass=False):

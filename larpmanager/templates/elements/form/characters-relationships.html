@@ -1,0 +1,48 @@
+{% load i18n static %}
+{% if new_rel %}
+    <h2>
+        {% trans "Relationships" %}
+        {% if rel_tutorial %}(<a href="#" class="feature_tutorial" tut="{{ rel_tutorial }}">Tutorial</a>){% endif %}
+    </h2>
+    <div class="add_new">
+        <p>
+            <i>{% trans "Select a character to add a new relationship" %}</i>
+        </p>
+        <p>{{ new_rel }}</p>
+    </div>
+    <div id="form_relationships">
+        {% for key, item in relationships.items %}
+            <h3>
+                <a href="{% url 'orga_characters_edit' run.event.slug run.number item.char.id %}">{{ item.char }}</a>
+            </h3>
+            <table>
+                <tr>
+                    <th>{% trans "Direct" %}</th>
+                    <td>
+                        <p>
+                            <a href="#" class="my_toggle" tog="f_{{ key }}_direct">{% trans "Show" %}</a>
+                        </p>
+                        <div class="hide hide_later f_{{ key }}_direct">
+                            <textarea name="rel_{{ key }}_direct">
+                                {{ item.direct | safe }}
+                            </textarea>
+                        </div>
+                        <div class="helptext">{% trans "How the relationship is described from this character's perspective" %}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>{% trans "Inverse" %}</th>
+                    <td>
+                        {% if item.inverse %}
+                            <p>
+                                <a href="#" class="my_toggle" tog="f_{{ key }}_inverse">{% trans "Show" %}</a>
+                            </p>
+                            <div class="hide hide_later f_{{ key }}_inverse">{{ item.inverse | safe }}</div>
+                        {% endif %}
+                        <div class="helptext">{% trans "How the relationship is described from the other character's perspective" %}</div>
+                    </td>
+                </tr>
+            </table>
+        {% endfor %}
+    </div>
+{% endif %}

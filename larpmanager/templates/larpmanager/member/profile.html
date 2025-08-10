@@ -1,25 +1,25 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Your user" %}
+    {% trans "Profile" %}
 {% endblock title %}
 {% block content %}
     <p>
-        {% trans "You are logged in with an email address" %}: <i>{{ member.email }}</i>. <a href="{% url 'ticket' 'email' %}">{% trans "Would you like to change it?" %}</a>
+        {% trans "You are logged in with an email address" %}: <i>{{ member.email }}</i>. <a href="{% url 'ticket' 'email' %}">{% trans "Would you like to change it" %}?</a>
     </p>
     <hr />
     {% if vote_open %}
         <p>
-            {% trans "Voting for the Executive is open, " %} <a href="{% url 'vote' %}">{% trans "submit your vote here!" %}</a>.
+            {% trans "Voting for the Executive is open" %}, <a href="{% url 'vote' %}">{% trans "submit your vote here" %}!</a>.
         </p>
         <hr />
     {% endif %}
     <p>
-        <i>{% trans "Your data will be saved in the LarpManager system, which is used by several associations." %}
-            {% trans "We value the privacy of your data and will treat it with the utmost care." %}
-            {% trans "In particular, they will only be made visible to the organisers of the events you decide to register for." %}
-            {% trans "They will not be communicated, shared or processed in any other way." %}
-        {% trans "You can check and edit the list of organizations that can access your data on your " %}<a href="{% url 'profile_privacy' %}">privacy</a>.</i>
+        <i>{% trans "Your data will be saved in the system, which is used by several associations" %}.
+            {% trans "We value the privacy of your data and will treat it with the utmost care" %}.
+            {% trans "In particular, they will only be made visible to the organisers of the events you decide to register for" %}.
+            {% trans "They will not be communicated, shared or processed in any other way" %}.
+        {% trans "You can check and edit the list of organizations that can access your data on your" %} <a href="{% url 'profile_privacy' %}">privacy</a>.</i>
     </p>
     <hr />
     {% if custom_text %}
@@ -37,7 +37,9 @@
             <div class="centerized">
                 <h4>{% trans "Current profile image" %}:</h4>
                 <div class="helptext avatar_help">
-                    {% trans "Upload your portrait photo. It will be shown to other players together with the your character, so as to help recognize you in the game. Choose a photo that you would put in an official document (in which you are alone, centered on your face). " %}
+                    {% trans "Upload your profile photo" %}.
+                    {% trans "It will be shown to other players together with your character" %}.
+                    {% trans "Please choose a clear and easily recognizable photo" %}!
                 </div>
                 <br />
                 <br />
@@ -66,7 +68,7 @@
           enctype="multipart/form-data"
           method="post">
         {% csrf_token %}
-        <table class="mob no_csv">
+        <table class="mob ">
             {{ form.as_table }}
         </table>
         <input type="submit" value="Submit">

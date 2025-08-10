@@ -4,21 +4,12 @@
     {% trans "Roles" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page summarises the roles to be assigned in order to use the functions concerning the event." %}
+    {% trans "This page summarises the roles to be assigned in order to use the functions concerning the event" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
-    <p>
-        <a href="#" class="my_toggle" tog='missing'>{% trans "Can't find a user?" %}</a>
-    </p>
-    <div class="hide missing">
-        <p>
-            {% trans "According to LarpManager's privacy rules, you can only view users who have granted LarpManager permission to share their data with your organisation." %}
-            {% trans "Ask your co-workers to access this link; after their confirmation, their data will be shared with your organisation, and you will be able to add them to roles." %}
-            {% trans "Links to be accessed:" %} &nbsp; <a href="{% url 'share' %}">https://{{ assoc.slug }}.larpmanager.com{% url 'share' %}</a>
-        </p>
-    </div>
-    <table id="roles" class="tablesorter mob">
+    {% include "elements/info/share.html" %}
+    <table id="roles" class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th></th>
@@ -31,25 +22,12 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_roles_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'orga_roles_edit' run.event.slug run.number el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
-                    <td>
-                        {% for mb in el.members.all %}
-                            {% include "elements/comma.html" %}
-                            {{ mb }}
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% if el.number == 1 %}
-                            <i>{% trans "All" %}</i>
-                        {% else %}
-                            {% for pm in el.permissions.all %}
-                                {% include "elements/comma.html" %}
-                                {% trans pm.name %}
-                            {% endfor %}
-                        {% endif %}
-                    </td>
+                    <td>{{ el.members_list }}</td>
+                    <td>{{ el.perms_list | safe }}</td>
                 </tr>
             {% endfor %}
         </tbody>

@@ -4,11 +4,12 @@
     {% trans "Workshop" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows for each player their completion status of workshops." %}
+    {% trans "This page shows for each player their completion status of workshops" %}
 {% endblock info %}
 {% block content %}
     <h2>{{ reg_count }} iscrizioni</h2>
-    <table class="tablesorter mob writing">
+    <table id="workshops"
+           class="{% if not interface_old %}go_datatable{% endif %} writing">
         <thead>
             <tr>
                 <th>{% trans "Player" %}</th>
@@ -22,18 +23,19 @@
                         <a href="{% url 'public' el.member.id %}">{{ el.member }}</a>
                     </td>
                     <td>{{ el.num }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h2>{% trans "Not completed" %}</h2>
+    <table>
+        <tr>
+            <td>
+                {% for mb in pinocchio %}
+                    {% include "elements/comma.html" %}
+                    {{ mb.email }}
                 {% endfor %}
-            </tbody>
-        </table>
-        <h2>{% trans "Not completed" %}</h2>
-        <table class="mob">
-            <tr>
-                <td>
-                    {% for mb in pinocchio %}
-                        {% include "elements/comma.html" %}
-                        {{ mb.email }}
-                    {% endfor %}
-                </td>
-            </tr>
-        </table>
-    {% endblock content %}
+            </td>
+        </tr>
+    </table>
+{% endblock content %}

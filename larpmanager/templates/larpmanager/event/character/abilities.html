@@ -13,20 +13,23 @@
           method="post"
           enctype="multipart/form-data">
         {% csrf_token %}
-        <table class="mob no_csv">
-            {{ form.sel }}
+        <table class="mob ">
+            <tr>
+                <td>
+                    <select id="ability_type" name="ability_type">
+                        {% for typ_id, name in type_available.items %}<option value="{{ typ_id }}">{{ name }}</option>{% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <select id="ability_select" name="ability_select">
+                        <option value="" disabled selected>--- {% trans "Select ability" %}</option>
+                    </select>
+                </td>
+            </tr>
         </table>
-        <input type="submit" value="{% trans "Submit" %}">
+        <input type="submit" value="{% trans "Submit" %}" disabled>
     </form>
 {% endblock content %}
 {% block js2 %}
-    <script>
-window.addEventListener('DOMContentLoaded', function() {
-    $(function() {
-        $('form').on('submit', function() {
-            return confirm('{% trans "Are you sure?" %}');
-        });
-    });
-});
-    </script>
+    {% include "elements/char_abilities.js.html" %}
 {% endblock js2 %}

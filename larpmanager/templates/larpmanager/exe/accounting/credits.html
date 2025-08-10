@@ -4,12 +4,12 @@
     {{ credit_name }} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page summarises the disbursements recorded in the system of" %} {{ credit_name }}.
+    {% trans "This page summarises the assignments of" %} {{ credit_name }}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
     {% include "elements/paginate.html" %}
-    <table id="credits" class="tablesorter mob">
+    <table id="credits" class="tablesorter">
         <thead>
             <tr>
                 <th></th>
@@ -24,7 +24,7 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'exe_credits_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'exe_credits_edit' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.member }}</td>
                     <td>{{ el.run }}</td>

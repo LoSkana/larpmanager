@@ -23,11 +23,11 @@ from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_save, pre_delete
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from larpmanager.models.access import AssocRole, EventRole
-from larpmanager.models.event import Event, Run
+from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.registration import Registration
 from larpmanager.utils.auth import is_lm_admin
 
@@ -77,6 +77,8 @@ def cache_event_links(request):
     all_runs = Run.objects.filter(event__assoc_id=assoc_id).select_related("event").order_by("end")
     admin = 1 in ctx["assoc_role"]
     for r in all_runs:
+        if r.event.deleted:
+            continue
         roles = None
         if admin:
             roles = [1]
@@ -85,13 +87,15 @@ def cache_event_links(request):
         if not roles:
             continue
         ctx["all_runs"][r.id] = roles
-        if r.development not in (Run.DONE, Run.CANC):
+        if r.development not in (DevelopStatus.DONE, DevelopStatus.CANC):
             ctx["open_runs"][r.id] = {
                 "e": r.event.slug,
                 "r": r.number,
                 "s": str(r),
                 "k": (r.start if r.start else datetime.max.date()),
             }
+
+    ctx["topbar"] = ctx["event_role"] or ctx["assoc_role"]
 
     cache.set(get_cache_event_key(request.user.id, request.assoc["id"]), ctx, 60)
     return ctx
@@ -126,8 +130,8 @@ def post_save_event_links(sender, instance, **kwargs):
     reset_run_event_links(instance)
 
 
-@receiver(pre_delete, sender=Event)
-def pre_delete_event_links(sender, instance, **kwargs):
+@receiver(post_delete, sender=Event)
+def post_delete_event_links(sender, instance, **kwargs):
     reset_run_event_links(instance)
 
 
@@ -136,8 +140,8 @@ def post_save_run_links(sender, instance, **kwargs):
     reset_run_event_links(instance.event)
 
 
-@receiver(pre_delete, sender=Run)
-def pre_delete_run_links(sender, instance, **kwargs):
+@receiver(post_delete, sender=Run)
+def post_delete_run_links(sender, instance, **kwargs):
     reset_run_event_links(instance.event)
 
 

@@ -29,7 +29,7 @@ from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssocTextType, get_url, hdr
-from larpmanager.models.event import EventTextType, PreRegistration, Run
+from larpmanager.models.event import DevelopStatus, EventTextType, PreRegistration
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.utils.registration import get_registration_options
@@ -58,10 +58,10 @@ def update_registration_status(instance):
     activate(instance.member.language)
     if instance.modified == 1:
         subj = hdr(instance.run.event) + _("Registration to %(event)s") % context
-        body = _("Hello! Your registration at <b>%(event)s</b> has been confirmed!") % context
+        body = _("Hello! Your registration at <b>%(event)s</b> has been confirmed") % context + "!"
     else:
         subj = hdr(instance.run.event) + _("Registration updated for %(event)s") % context
-        body = _("Hi! Your registration to <b>%(event)s</b> has been updated!") % context
+        body = _("Hi! Your registration to <b>%(event)s</b> has been updated") % context + "!"
 
     body += registration_options(instance)
 
@@ -79,14 +79,14 @@ def update_registration_status(instance):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration to %(event)s by %(user)s") % context
-            body = _("The user has confirmed its registration for this event!")
+            body = _("The user has confirmed its registration for this event") + "!"
             body += registration_options(instance)
             my_send_mail(subj, body, orga, instance.run)
     elif instance.run.event.assoc.get_config("mail_signup_update", False):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration updated to %(event)s by %(user)s") % context
-            body = _("The user has updated their registration for this event!")
+            body = _("The user has updated their registration for this event") + "!"
             body += registration_options(instance)
             my_send_mail(subj, body, orga, instance.run)
 
@@ -95,11 +95,13 @@ def registration_options(instance):
     body = ""
 
     if instance.ticket:
-        body += "<br /><br />" + _("Ticket selected: <b>%(ticket)s</b>.") % {
-            "ticket": instance.ticket.show(instance.run)["name"]
-        }
+        body += (
+            "<br /><br />"
+            + _("Ticket selected: <b>%(ticket)s</b>") % {"ticket": instance.ticket.show(instance.run)["name"]}
+            + "."
+        )
         if instance.ticket.tier == TicketTier.PATRON:
-            body += _("Thanks for your support!")
+            body += _("Thanks for your support") + "!"
 
     get_user_membership(instance.member, instance.run.event.assoc.id)
     features = get_event_features(instance.run.event_id)
@@ -107,23 +109,33 @@ def registration_options(instance):
     currency = instance.run.event.assoc.get_currency_symbol()
 
     if instance.tot_iscr > 0:
-        body += "<br /><br />" + _("Total of your signup fee: <b>%(amount).2f %(currency)s</b>.") % {
-            "amount": instance.tot_iscr,
-            "currency": currency,
-        }
+        body += (
+            "<br /><br />"
+            + _("Total of your signup fee: <b>%(amount).2f %(currency)s</b>")
+            % {
+                "amount": instance.tot_iscr,
+                "currency": currency,
+            }
+            + "."
+        )
 
     if instance.tot_payed > 0:
-        body += "<br /><br />" + _("Payments already received: <b>%(amount).2f %(currency)s</b>.") % {
-            "amount": instance.tot_payed,
-            "currency": currency,
-        }
+        body += (
+            "<br /><br />"
+            + _("Payments already received: <b>%(amount).2f %(currency)s</b>")
+            % {
+                "amount": instance.tot_payed,
+                "currency": currency,
+            }
+            + "."
+        )
 
     if "payment" in features and instance.quota > 0 and instance.alert:
         body += registration_payments(instance, currency)
 
     res = get_registration_options(instance)
     if res:
-        body += "<br /><br />" + _("Selected options:")
+        body += "<br /><br />" + _("Selected options") + ":"
         for el in res:
             body += f"<br />{el[0]} - {el[1]}"
 
@@ -177,21 +189,14 @@ def update_registration_character_rel_post(sender, instance, created, **kwargs):
 
     subj = hdr(instance.reg.run.event) + _("Character assigned for %(event)s") % context
 
-    body = _("In the event <b>%(event)s</b> you were assigned the character: <b>%(character)s</b>.") % context
+    body = _("In the event <b>%(event)s</b> you were assigned the character: <b>%(character)s</b>") % context + "."
 
     char_url = get_url(
         f"{instance.reg.run.event.slug}/{instance.reg.run.number}/character/your",
         instance.reg.run.event,
     )
 
-    body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>!") % {"url": char_url}
-
-    if instance.reg.run.get_config("show_text", False):
-        body += "<br/><br />" + _(
-            "Please note that your character sheet may contain  personal secrets, not to be "
-            "shared before the start of the event. To avoid accidentally spoiling your "
-            "experience, do not discuss its content with other participants!"
-        )
+    body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>") % {"url": char_url} + "!"
 
     custom_message_ass = get_event_text(instance.reg.run.event_id, EventTextType.ASSIGNMENT)
     if custom_message_ass:
@@ -210,7 +215,7 @@ def update_registration_cancellation(instance):
     context = {"event": instance.run, "user": instance.member}
     activate(instance.member.language)
     subj = hdr(instance.run.event) + _("Registration cancellation for %(event)s") % context
-    body = _("We confirm that your registration for this event has been cancelled. We are sorry to see you go!")
+    body = _("We confirm that your registration for this event has been cancelled. We are sorry to see you go") + "!"
     my_send_mail(subj, body, instance.member, instance.run)
 
     # to orga
@@ -218,13 +223,13 @@ def update_registration_cancellation(instance):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration cancelled for %(event)s by %(user)s") % context
-            body = _("The registration for this event has been cancelled.")
+            body = _("The registration for this event has been cancelled") + "."
             my_send_mail(subj, body, orga, instance.run)
 
 
 @receiver(pre_save, sender=Registration)
 def update_registration(sender, instance, **kwargs):
-    if instance.run and instance.run.development == Run.DONE:
+    if instance.run and instance.run.development == DevelopStatus.DONE:
         return
 
     prev = None
@@ -252,7 +257,7 @@ def delete_registration(sender, instance, *args, **kwargs):
     # to user
     activate(instance.member.language)
     subj = hdr(instance.run.event) + _("Registration cancelled for %(event)s") % context
-    body = _("We confirm that your registration for this event has been cancelled.")
+    body = _("We confirm that your registration for this event has been cancelled") + "."
     my_send_mail(subj, body, instance.member, instance.run)
 
     if instance.run.event.assoc.get_config("mail_signup_del", False):
@@ -260,7 +265,7 @@ def delete_registration(sender, instance, *args, **kwargs):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration cancelled for %(event)s by %(user)s") % context
-            body = _("The registration for this event has been cancelled.")
+            body = _("The registration for this event has been cancelled") + "."
             my_send_mail(subj, body, orga, instance.run)
 
 
@@ -270,5 +275,5 @@ def update_pre_registration(sender, instance, **kwargs):
     context = {"event": instance.event}
     if not instance.pk:
         subj = hdr(instance.event) + _("Pre-registration at %(event)s") % context
-        body = _("We confirm that you have successfully pre-registered for <b>%(event)s</b>!") % context
+        body = _("We confirm that you have successfully pre-registered for <b>%(event)s</b>") % context + "!"
         my_send_mail(subj, body, instance.member, instance.event)

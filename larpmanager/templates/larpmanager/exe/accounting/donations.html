@@ -4,12 +4,12 @@
     {% trans "Donations" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows all donations recorded in the system." %}
+    {% trans "This page shows all donations recorded in the system" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
     {% include "elements/paginate.html" %}
-    <table id="donations" class="tablesorter mob">
+    <table id="donations" class="tablesorter">
         <thead>
             <tr>
                 <th></th>
@@ -23,7 +23,7 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'exe_donations_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'exe_donations_edit' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.member }}</td>
                     <td>{{ el.descr }}</td>

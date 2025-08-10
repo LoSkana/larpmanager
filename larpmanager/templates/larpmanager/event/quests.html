@@ -8,9 +8,11 @@
         <table class="mob">
             <thead>
                 <tr>
-                    <th>{% trans "Name" %}</th>
-                    <th>{% trans "Presentation" %}</th>
-                    <th>{% trans "Traits" %}</th>
+                    <th>{{ writing_fields.quest.names.name }}</th>
+                    {% if show_quest.teaser %}<th>{{ writing_fields.quest.names.teaser }}</th>{% endif %}
+                    {% if show_trait %}
+                        <th>{% trans "Traits" %}</th>
+                    {% endif %}
                 </tr>
             </thead>
             {% for el in list %}
@@ -20,13 +22,15 @@
                             <a href="{% url 'quest' run.event.slug run.number el.number %}">{{ el.name }}</a>
                         </h3>
                     </td>
-                    {% if show_teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
-                    <td>
-                        {% for ch in el.traits %}
-                            {% include "elements/comma.html" %}
-                            {{ ch.name }}
-                        {% endfor %}
-                    </td>
+                    {% if show_quest.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
+                    {% if show_trait %}
+                        <td>
+                            {% for ch in el.traits %}
+                                {% include "elements/comma.html" %}
+                                {{ ch.name }}
+                            {% endfor %}
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </table>

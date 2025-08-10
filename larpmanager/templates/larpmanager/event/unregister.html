@@ -4,20 +4,20 @@
     {% trans "Cancel your registration" %} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    <h3>{% trans "We're sorry to see you go!" %}</h3>
-    <p>{% trans "Unfortunately these things happen." %}</p>
+    <h3>{% trans "We're sorry to see you go" %}!</h3>
+    <p>{% trans "Unfortunately these things happen" %}.</p>
     {% if event_terms_conditions %}
         <hr />
         <p>
-            {% trans "You can consult" %}<a href="{% url 'register_conditions' event.slug %}">{% trans " here the conditions of disenrollment for this event." %}</a>
+            {% trans "You can consult" %}<a href="{% url 'register_conditions' event.slug %}">{% trans " here the conditions of disenrollment for this event" %}.</a>
         </p>
     {% elif assoc_terms_conditions %}
         <hr />
         <p>
-            {% trans "You can consult" %}<a href="{% url 'register_conditions' %}">{% trans " here the conditions of disenrollment for this event." %}</a>
+            {% trans "You can consult" %}<a href="{% url 'register_conditions' %}">{% trans " here the conditions of disenrollment for this event" %}.</a>
         </p>
     {% endif %}
-    <p>{% trans "Click below to confirm the cancellation:" %}</p>
+    <p>{% trans "Click below to confirm the cancellation" %}:</p>
     <form action="{% url 'unregister' event.slug run.number %}" method="post">
         {% csrf_token %}
         <input type="hidden" id="confirmation" value="1" />

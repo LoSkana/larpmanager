@@ -47,6 +47,8 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     Discount,
     PaymentInvoice,
+    PaymentStatus,
+    PaymentType,
 )
 from larpmanager.models.association import AssocTextType
 from larpmanager.models.event import (
@@ -54,7 +56,7 @@ from larpmanager.models.event import (
     EventTextType,
     PreRegistration,
 )
-from larpmanager.models.member import Membership, get_user_membership
+from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
@@ -116,7 +118,7 @@ def pre_register(request, s=""):
                     info=form.cleaned_data["new_info"],
                 ).save()
 
-            messages.success(request, _("Pre-registrations saved!"))
+            messages.success(request, _("Pre-registrations saved") + "!")
             return redirect("pre_register")
     else:
         form = PreRegistrationForm(ctx=ctx)
@@ -204,20 +206,20 @@ def registration_redirect(request, reg, new_reg, run):
     # check if user needs to compile membership
     if "membership" in request.assoc["features"]:
         if not request.user.member.membership.compiled:
-            mes = _("To confirm your registration, please fill in your personal profile.")
+            mes = _("To confirm your registration, please fill in your personal profile") + "."
             messages.success(request, mes)
             return redirect("profile")
 
         memb_status = request.user.member.membership.status
-        if memb_status in [Membership.EMPTY, Membership.JOINED] and reg.ticket.tier != TicketTier.WAITING:
-            mes = _("To confirm your registration, apply to become a member of the Association.")
+        if memb_status in [MembershipStatus.EMPTY, MembershipStatus.JOINED] and reg.ticket.tier != TicketTier.WAITING:
+            mes = _("To confirm your registration, apply to become a member of the Association") + "."
             messages.success(request, mes)
             return redirect("membership")
 
     # check if the user needs to pay
     if "payment" in request.assoc["features"]:
         if reg.alert:
-            mes = _("To confirm your registration, please pay the amount indicated.")
+            mes = _("To confirm your registration, please pay the amount indicated") + "."
             messages.success(request, mes)
             return redirect("acc_reg", reg_id=reg.id)
 
@@ -366,7 +368,7 @@ def _apply_ticket(ctx, tk):
     try:
         tick = RegistrationTicket.objects.get(pk=tk)
         ctx["tier"] = tick.tier
-        if tick.tier == TicketTier.STAFF and "closed" in ctx["run"].status:
+        if tick.tier in [TicketTier.STAFF, TicketTier.NPC] and "closed" in ctx["run"].status:
             del ctx["run"].status["closed"]
 
         ctx["ticket"] = tk
@@ -375,13 +377,16 @@ def _apply_ticket(ctx, tk):
 
 
 def _check_redirect_registration(request, ctx, event, secret_code):
+    if "closed" in ctx["run"].status:
+        return render(request, "larpmanager/event/closed.html", ctx)
+
     if "registration_secret" in ctx["features"] and secret_code:
         if ctx["run"].registration_secret != secret_code:
             raise Http404("wrong registration code")
         return None
 
     if "register_link" in ctx["features"] and event.register_link:
-        if "tier" not in ctx or ctx["tier"] != TicketTier.STAFF:
+        if "tier" not in ctx or ctx["tier"] not in [TicketTier.STAFF, TicketTier.NPC]:
             return redirect(event.register_link)
 
     if "registration_open" in ctx["features"]:
@@ -413,8 +418,8 @@ def _register_prepare(ctx, reg):
             PaymentInvoice.objects.filter(
                 idx=reg.id,
                 member_id=reg.member_id,
-                status=PaymentInvoice.SUBMITTED,
-                typ=PaymentInvoice.REGISTRATION,
+                status=PaymentStatus.SUBMITTED,
+                typ=PaymentType.REGISTRATION,
             ).count()
             > 0
         )
@@ -470,7 +475,7 @@ def register_conditions(request, s=None):
 # ~ pass
 # ~ # check there are no discount stores a friend
 # ~ if AccountingItemDiscount.objects.filter(member=request.user.member, run=ctx['run'], disc__typ=Discount.STANDARD).count() > 0:
-# ~ Return jsonrespone ({'really': 'ko', 'msg': _ ("Discount not combinable with other benefits.")})
+# ~ Return jsonrespone ({'really': 'ko', 'msg': _ ("Discount not combinable with other benefits") + "."})
 # ~ # check the user TO don't already have the discount
 # ~ try:
 # ~ ac = AccountingItemDiscount.objects.get(disc=disc, member=request.user.member, run=ctx['run'])
@@ -547,7 +552,7 @@ def _check_discount(disc, member, run, event):
         return _("Sorry, this facilitation code has already been used the maximum number allowed")
 
     if not _validate_exclusive_logic(disc, member, run, event):
-        return _("Discount not combinable with other benefits.")
+        return _("Discount not combinable with other benefits") + "."
 
     return None
 
@@ -671,7 +676,7 @@ def gift_edit(request, s, n, r):
                 messages.success(request, _("Gift card cancelled!"))
             else:
                 save_registration(request, ctx, form, ctx["run"], ctx["event"], reg, gifted=True)
-                messages.success(request, _("Operation completed!"))
+                messages.success(request, _("Operation completed") + "!")
             return redirect("gift", s=s, n=n)
     else:
         form = RegistrationGiftForm(ctx=ctx, instance=reg)

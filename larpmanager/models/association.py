@@ -40,20 +40,46 @@ class MemberFieldType(models.TextChoices):
     MANDATORY = "m", _("Mandatory")
 
 
-class Association(BaseModel):
-    EUR = "e"
-    USD = "u"
-    GBP = "g"
-    JPY = "j"
-    CAD = "c"
-    CURRENCY_CHOICES = [(EUR, "EUR"), (USD, "USD"), (GBP, "GBP"), (CAD, "CAD"), (JPY, "JPY")]
+class Currency(models.TextChoices):
+    EUR = "e", "EUR"
+    USD = "u", "USD"
+    GBP = "g", "GBP"
+    CAD = "c", "CAD"
+    JPY = "j", "JPY"
 
-    name = models.CharField(max_length=100, help_text=_("Complete name of the LARP Organization"))
+
+class AssociationSkin(BaseModel):
+    name = models.CharField(max_length=100)
+
+    domain = models.CharField(max_length=100)
+
+    default_features = models.ManyToManyField(Feature, related_name="skins", blank=True)
+
+    default_mandatory_fields = models.CharField(max_length=1000, blank=True)
+
+    default_optional_fields = models.CharField(max_length=1000, blank=True)
+
+    default_css = models.CharField(max_length=1000, blank=True)
+
+    default_nation = models.CharField(
+        max_length=2,
+        choices=FeatureNationality.choices,
+        blank=True,
+        null=True,
+    )
+
+
+class Association(BaseModel):
+    skin = models.ForeignKey(AssociationSkin, on_delete=models.CASCADE, default=1)
+
+    name = models.CharField(max_length=100, help_text=_("Complete name of the Organization"))
 
     slug = models.CharField(
         max_length=20,
         verbose_name=_("URL identifier"),
-        help_text=_("Only lowercase characters and numbers are allowed, no spaces or symbols"),
+        help_text=_("The subdomain identifier")
+        + " - "
+        + _("Only lowercase characters and numbers are allowed, no spaces or symbols"),
         validators=[AlphanumericValidator],
         db_index=True,
     )
@@ -83,7 +109,11 @@ class Association(BaseModel):
         options={"quality": 90},
     )
 
-    main_mail = models.EmailField(help_text=_("Please indicate an email for the organization"))
+    main_mail = models.EmailField(
+        blank=True,
+        null=True,
+        help_text="(" + _("Optional") + ") " + _("Indicate an organization contact address for sending communications"),
+    )
 
     mandatory_fields = models.CharField(max_length=1000, blank=True)
 
@@ -99,8 +129,8 @@ class Association(BaseModel):
 
     payment_currency = models.CharField(
         max_length=1,
-        choices=CURRENCY_CHOICES,
-        default=EUR,
+        choices=Currency.choices,
+        default=Currency.EUR,
         blank=True,
         null=True,
         verbose_name=_("Payment currency"),
@@ -157,8 +187,8 @@ class Association(BaseModel):
     )
 
     sec_rgb = ColorField(
-        verbose_name=_("Color background"),
-        help_text=_("Indicate the color that will be used for the background of texts"),
+        verbose_name=_("Color highlight"),
+        help_text=_("Indicate the color that will be used to highlight texts"),
         blank=True,
         null=True,
     )
@@ -186,9 +216,15 @@ class Association(BaseModel):
         choices=FeatureNationality.choices,
         blank=True,
         null=True,
+        default="",
         verbose_name=_("Nationality"),
-        help_text=_("Indicate the organization nationality to activate nation-specific features"),
+        help_text="("
+        + _("Optional")
+        + ") "
+        + _("Indicate the organization nationality to activate nation-specific features"),
     )
+
+    demo = models.BooleanField(default=False)
 
     class Meta:
         constraints = [
@@ -203,21 +239,6 @@ class Association(BaseModel):
     def get_currency_symbol(self):
         # noinspection PyUnresolvedReferences
         return get_currency_symbol(self.get_payment_currency_display())
-
-    def get_payment_details_fields(self, features):
-        res = {}
-        # noinspection PyUnresolvedReferences
-        for el in self.payment_methods.values_list("slug", "fields"):
-            ls = [el[0] + "_descr"]
-            if "payment_fees" in features:
-                ls.append(el[0] + "_fee")
-            if not el[1]:
-                continue
-            fields = el[1].replace(" ", "")
-            for s in fields.split(","):
-                ls.append(el[0] + "_" + s)
-            res[el[0]] = ls
-        return res
 
     def get_config(self, name, def_v=None):
         return get_element_config(self, name, def_v)
@@ -328,9 +349,9 @@ def hdr(obj):
 def get_url(s, obj=None):
     if obj:
         if isinstance(obj, Association):
-            url = f"https://{obj.slug}.larpmanager.com/{s}"
+            url = f"https://{obj.slug}.{obj.skin.domain}/{s}"
         elif hasattr(obj, "assoc"):
-            url = f"https://{obj.assoc.slug}.larpmanager.com/{s}"
+            url = f"https://{obj.assoc.slug}.{obj.assoc.skin.domain}/{s}"
         else:
             url = f"https://{obj}.larpmanager.com/{s}"
     else:

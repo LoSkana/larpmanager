@@ -31,7 +31,7 @@ from tinymce.models import HTMLField
 from larpmanager.models.base import BaseModel
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep
 from larpmanager.models.member import Member
-from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, show_thumb
+from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_short, show_thumb
 
 
 class Writing(BaseConceptModel):
@@ -180,6 +180,18 @@ class Character(Writing):
         max_length=1, choices=CharacterStatus.choices, default=CharacterStatus.CREATION, verbose_name=_("Status")
     )
 
+    access_token = models.CharField(
+        max_length=12,
+        unique=True,
+        default=my_uuid_short,
+        db_index=True,
+        verbose_name=_("External access code"),
+        help_text=_(
+            "Allows external access to this character through a secret URL "
+            "(change the code if it has been shared with the wrong people)"
+        ),
+    )
+
     def __str__(self):
         return f"#{self.number} {self.name}"
 
@@ -228,7 +240,7 @@ class Character(Writing):
         primary = False
         # noinspection PyUnresolvedReferences
         for g in self.factions_list.filter(event=fac_event):
-            if g.typ == Faction.PRIM:
+            if g.typ == FactionType.PRIM:
                 primary = True
                 if g.cover:
                     js["thumb"] = g.thumb.url
@@ -358,29 +370,16 @@ class PlotCharacterRel(BaseModel):
         ]
 
 
+class FactionType(models.TextChoices):
+    PRIM = "s", _("Primary")
+    TRASV = "t", _("Transversal")
+    SECRET = "g", _("Secret")
+
+
 class Faction(Writing):
-    PRIM = "s"
-    TRASV = "t"
-    SECRET = "g"
-    FACTION_CHOICES = [
-        (PRIM, _("Primary")),
-        (TRASV, _("Transversal")),
-        (SECRET, _("Secret")),
-    ]
+    typ = models.CharField(max_length=1, choices=FactionType.choices, default=FactionType.PRIM, verbose_name=_("Type"))
 
-    typ = models.CharField(
-        max_length=1,
-        choices=FACTION_CHOICES,
-        default=PRIM,
-        verbose_name=_("Type"),
-        help_text=_(
-            "Primary: main grouping / affiliation for characters. "
-            "Transversal: secondary grouping across primary factions. "
-            "Secret: hidden faction visible only to assigned characters"
-        ),
-    )
-
-    order = models.IntegerField(default=0, help_text=_("Display order"))
+    order = models.IntegerField(default=0)
 
     cover = models.ImageField(
         max_length=500,
@@ -590,6 +589,9 @@ def replace_chars_el(el, chars):
 
 
 def replace_chars_all(instance):
+    if not instance.pk:
+        return
+
     if not hasattr(instance, "event"):
         return
 

@@ -1,93 +1,75 @@
-{% extends "utils.html" %}
+{% extends "writing_list.html" %}
 {% load show_tags i18n %}
 {% block title %}
     {% trans "Factions" %} - {{ event.name }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the factions (character groups) of the event." %}
+    {% trans "This page shows the factions (character groups) of the event" %}
 {% endblock info %}
-{% block content %}
-    {% include "elements/header/writing.html" %}
-    <table id="factions" class="tablesorter mob writing">
-        <thead>
-            <tr>
-                <th></th>
-                <th>{% trans "Name" %}</th>
-                <th></th>
-                {% if features.progress %}
-                    <th>{% trans "Progress" %}</th>
+{% block table_classes %}
+    ordering_arrow
+{% endblock table_classes %}
+{% block nav_fields %}
+    {% include "elements/writing/questions_nav.html" %}
+    <a href="#" class="table_toggle" tog='characters'>{% trans "Characters" %}</a>
+{% endblock nav_fields %}
+{% block thead %}
+    <th></th>
+    <th>{{ fields_name.name }}</th>
+    <th></th>
+    <th>{% trans "Tipo" %}</th>
+    {% if features.user_character %}
+        <th>{% trans "Selectable" %}</th>
+    {% endif %}
+    {% include "elements/writing/questions_header.html" %}
+    <th class="hide characters">{% trans "Characters" %}</th>
+    <th class="hide stats">
+        <i class="fa fa-hashtag"></i> {% trans "Characters" %}
+    </th>
+    <th></th>
+    <th></th>
+{% endblock thead %}
+{% block tbody %}
+    {% for el in list %}
+        <tr id="{{ el.id }}">
+            <td>
+                <a href="{% url 'orga_factions_edit' run.event.slug run.number el.id %}"
+                   qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+            </td>
+            <td class="editable" qid="{{ name_que_id }}">{{ el }}</td>
+            <td>
+                <a href="{% url 'orga_factions_view' run.event.slug run.number el.id %}"
+                   qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
+                <a href="{% url 'orga_factions_versions' run.event.slug run.number el.id %}"
+                   qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
+            </td>
+            <td>{{ el.get_typ_display }}</td>
+            {% if features.user_character %}
+                <td>
+                    {% if el.selectable %}<i class="fa-solid fa-check"></i>{% endif %}
+                </td>
+            {% endif %}
+            {% include "elements/writing/questions_body.html" %}
+            <td class="hide characters">
+                {% for ch in el.characters.all %}
+                    <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.id %}">{{ ch }}</a>&nbsp;
+                {% endfor %}
+            </td>
+            <td class="hide stats">{{ el.characters.all | length }}</td>
+            <td>
+                {% if not forloop.first %}
+                    <a href="{% url 'orga_factions_order' run.event.slug run.number el.id 0 %}">
+                        <i class="fa-solid fa-arrow-up"></i>
+                    </a>
                 {% endif %}
-                <th>{% trans "Type" %}</th>
-                {% if features.assigned %}
-                    <th>{% trans "Assigned" %}</th>
+            </td>
+            <td>
+                {% if not forloop.last %}
+                    <a href="{% url 'orga_factions_order' run.event.slug run.number el.id 1 %}">
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </a>
                 {% endif %}
-                {% if features.cover %}
-                    <th>{% trans "Cover" %}</th>
-                {% endif %}
-                {% if features.user_character %}
-                    <th>{% trans "Selectable" %}</th>
-                {% endif %}
-                <th>{% trans "Presentation" %}</th>
-                <th>(L)</th>
-                <th>{% trans "Text" %}</th>
-                <th>(L)</th>
-                <th>{% trans "Characters" %}</th>
-                <th>(N)</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for el in list %}
-                <tr id="{{ el.id }}">
-                    <td>
-                        <a href="{% url 'orga_factions_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
-                    </td>
-                    <td>{{ el }}</td>
-                    <td>
-                        <a href="{% url 'orga_factions_versions' run.event.slug run.number el.id %}">{% trans "Versions" %}</a>
-                    </td>
-                    {% if features.progress %}
-                        <td>{% include "elements/show_progress.html" with el=el %}</td>
-                    {% endif %}
-                    <td>{{ el.get_typ_display }}</td>
-                    {% if features.assigned %}
-                        <td class="assign">
-                            {% if el.assigned_id %}{{ assigned|get:el.assigned_id }}{% endif %}
-                        </td>
-                    {% endif %}
-                    {% if features.cover %}
-                        <td>
-                            {% if el.cover %}
-                                <a href="{{ el.thumb.url }}">
-                                    <img src="{{ el.thumb.url }}" class="character-cover" alt="faction thumb" />
-                                </a>
-                            {% endif %}
-                        </td>
-                    {% endif %}
-                    {% if features.user_character %}
-                        <td>
-                            {% if el.selectable %}<i class="fa-solid fa-check"></i>{% endif %}
-                        </td>
-                    {% endif %}
-                    <td>{{ el.teaser_red | safe }}</td>
-                    <td>{{ el.teaser_ln }}</td>
-                    <td>{{ el.text_red | safe }}</td>
-                    <td>{{ el.text_ln }}</td>
-                    <td>
-                        {% for ch in el.characters.all %}
-                            <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.number %}">{{ ch }}</a>&nbsp;
-                        {% endfor %}
-                    </td>
-                    <td>{{ el.characters.all | length }}</td>
-                    <td>
-                        {% if not forloop.first %}
-                            <a href="{% url 'orga_factions_order' run.event.slug run.number el.id %}">
-                                <i class="fa-solid fa-arrow-up"></i>
-                            </a>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% endblock content %}
+            </td>
+        </tr>
+    {% endfor %}
+{% endblock tbody %}

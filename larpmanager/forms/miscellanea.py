@@ -50,7 +50,7 @@ from larpmanager.models.miscellanea import (
 )
 from larpmanager.models.registration import RegistrationTicket, TicketTier
 from larpmanager.models.utils import generate_id
-from larpmanager.models.writing import Faction
+from larpmanager.models.writing import Faction, FactionType
 from larpmanager.utils.common import FileTypeValidator
 
 PAY_CHOICES = (
@@ -106,7 +106,7 @@ class HelpQuestionForm(MyForm):
 
 
 class OrgaHelpQuestionForm(MyForm):
-    page_info = _("This page allows you to answer a player's question.")
+    page_info = _("This page allows you to answer a player's question")
 
     page_title = _("Player Questions")
 
@@ -133,7 +133,7 @@ class WorkshopQuestionForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["module"].choices = [
-            (m.id, m.display) for m in WorkshopModule.objects.filter(event=self.params["event"])
+            (m.id, m.name) for m in WorkshopModule.objects.filter(event=self.params["event"])
         ]
 
 
@@ -145,12 +145,12 @@ class WorkshopOptionForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["question"].choices = [
-            (m.id, m.display) for m in WorkshopQuestion.objects.filter(module__event=self.params["event"])
+            (m.id, m.name) for m in WorkshopQuestion.objects.filter(module__event=self.params["event"])
         ]
 
 
 class OrgaAlbumForm(MyForm):
-    page_info = _("This page allows you to add or edit an album.")
+    page_info = _("This page allows you to add or edit an album")
 
     page_title = _("Album")
 
@@ -167,7 +167,7 @@ class OrgaAlbumForm(MyForm):
 
 
 class OrgaProblemForm(MyForm):
-    page_info = _("This page allows you to keep track of reported problems.")
+    page_info = _("This page allows you to keep track of reported problems")
 
     page_title = _("Problems")
 
@@ -206,7 +206,7 @@ class CompetencesForm(forms.Form):
 
 
 class ExeUrlShortnerForm(MyForm):
-    page_info = _("This page allows you to add or edit a url shortner.")
+    page_info = _("This page allows you to add or edit a url shortner")
 
     page_title = _("Shorten URL")
 
@@ -216,7 +216,7 @@ class ExeUrlShortnerForm(MyForm):
 
 
 class ExeInventoryBoxForm(MyForm):
-    page_info = _("This page allows you to add or edit a new item of inventory.")
+    page_info = _("This page allows you to add or edit a new item of inventory")
 
     page_title = _("Inventory")
 
@@ -228,7 +228,7 @@ class ExeInventoryBoxForm(MyForm):
 
 
 class ExeCompetenceForm(MyForm):
-    page_info = _("This page allows you to add or edit a competency.")
+    page_info = _("This page allows you to add or edit a competency")
 
     class Meta:
         model = Competence
@@ -260,8 +260,7 @@ class OrganizerCastingOptionsForm(forms.Form):
 
         ticks = (
             RegistrationTicket.objects.filter(event=self.params["event"])
-            .exclude(tier=TicketTier.WAITING)
-            .exclude(tier=TicketTier.STAFF)
+            .exclude(tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC])
             .values_list("id", "name")
         )
 
@@ -275,7 +274,7 @@ class OrganizerCastingOptionsForm(forms.Form):
             factions = (
                 self.params["event"]
                 .get_elements(Faction)
-                .filter(typ=Faction.PRIM)
+                .filter(typ=FactionType.PRIM)
                 .order_by("number")
                 .values_list("id", "name")
             )

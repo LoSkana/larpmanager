@@ -18,48 +18,33 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.urls import (
-    path,
-)
+from django.urls import path
 
-from larpmanager.views.orga import (
-    accounting as views_oa,
-)
-from larpmanager.views.orga import (
-    casting as views_oca,
-)
-from larpmanager.views.orga import (
-    character as views_oc,
-)
-from larpmanager.views.orga import (
-    copy as views_oy,
-)
-from larpmanager.views.orga import (
-    event as views_oe,
-)
-from larpmanager.views.orga import (
-    experience as views_ox,
-)
-from larpmanager.views.orga import (
-    form as views_of,
-)
-from larpmanager.views.orga import (
-    member as views_om,
-)
-from larpmanager.views.orga import (
-    miscellanea as views_oms,
-)
-from larpmanager.views.orga import (
-    pdf as views_op,
-)
-from larpmanager.views.orga import (
-    registration as views_or,
-)
-from larpmanager.views.orga import (
-    writing as views_ow,
-)
+from larpmanager.views import manage as views_mg
+from larpmanager.views.orga import accounting as views_oa
+from larpmanager.views.orga import casting as views_oca
+from larpmanager.views.orga import character as views_oc
+from larpmanager.views.orga import copy as views_oy
+from larpmanager.views.orga import event as views_oe
+from larpmanager.views.orga import experience as views_ox
+from larpmanager.views.orga import form as views_of
+from larpmanager.views.orga import member as views_om
+from larpmanager.views.orga import miscellanea as views_oms
+from larpmanager.views.orga import pdf as views_op
+from larpmanager.views.orga import registration as views_or
+from larpmanager.views.orga import writing as views_ow
 
 urlpatterns = [
+    path(
+        "<slug:s>/<int:n>/manage/",
+        views_mg.manage,
+        name="manage",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/quick/",
+        views_oe.orga_quick,
+        name="orga_quick",
+    ),
     path(
         "<slug:s>/<int:n>/manage/pre_registrations/",
         views_or.orga_pre_registrations,
@@ -156,7 +141,7 @@ urlpatterns = [
         name="orga_registration_tickets_edit",
     ),
     path(
-        "<slug:s>/<int:n>/manage/registrations/tickets/order/<int:num>/",
+        "<slug:s>/<int:n>/manage/registrations/tickets/order/<int:num>/<int:order>/",
         views_of.orga_registration_tickets_order,
         name="orga_registration_tickets_order",
     ),
@@ -171,7 +156,7 @@ urlpatterns = [
         name="orga_registration_sections_edit",
     ),
     path(
-        "<slug:s>/<int:n>/manage/registrations/sections/order/<int:num>/",
+        "<slug:s>/<int:n>/manage/registrations/sections/order/<int:num>/<int:order>/",
         views_of.orga_registration_sections_order,
         name="orga_registration_sections_order",
     ),
@@ -186,7 +171,7 @@ urlpatterns = [
         name="orga_registration_form_edit",
     ),
     path(
-        "<slug:s>/<int:n>/manage/registrations/form/order/<int:num>/",
+        "<slug:s>/<int:n>/manage/registrations/form/order/<int:num>/<int:order>/",
         views_of.orga_registration_form_order,
         name="orga_registration_form_order",
     ),
@@ -211,7 +196,7 @@ urlpatterns = [
         name="orga_registration_options_new",
     ),
     path(
-        "<slug:s>/<int:n>/manage/registrations/options/order/<int:num>/",
+        "<slug:s>/<int:n>/manage/registrations/options/order/<int:num>/<int:order>/",
         views_of.orga_registration_options_order,
         name="orga_registration_options_order",
     ),
@@ -254,11 +239,6 @@ urlpatterns = [
         "<slug:s>/<int:n>/manage/cancellations/<int:num>/refund/",
         views_or.orga_cancellation_refund,
         name="orga_cancellation_refund",
-    ),
-    path(
-        "<slug:s>/<int:n>/manage/registration/secret/",
-        views_or.orga_registration_secret,
-        name="orga_registration_secret",
     ),
     path(
         "<slug:s>/<int:n>/manage/registrations/member",
@@ -366,19 +346,14 @@ urlpatterns = [
         name="orga_characters_summary",
     ),
     path(
+        "<slug:s>/<int:n>/manage/characters/get/number/",
+        views_oc.orga_character_get_number,
+        name="orga_character_get_number",
+    ),
+    path(
         "<slug:s>/<int:n>/manage/characters/<int:num>/relationships/",
         views_oc.orga_characters_relationships,
         name="orga_characters_relationships",
-    ),
-    path(
-        "<slug:s>/<int:n>/manage/relationships/edit/<int:num>/",
-        views_oc.orga_relationship_edit,
-        name="orga_relationship_edit",
-    ),
-    path(
-        "<slug:s>/<int:n>/manage/relationships/",
-        views_oc.orga_relationships,
-        name="orga_relationships",
     ),
     path(
         "<slug:s>/<int:n>/manage/check/",
@@ -401,7 +376,7 @@ urlpatterns = [
         name="orga_writing_form_edit",
     ),
     path(
-        "<slug:s>/<int:n>/manage/writing/form/<slug:typ>/order/<int:num>/",
+        "<slug:s>/<int:n>/manage/writing/form/<slug:typ>/order/<int:num>/<int:order>/",
         views_oc.orga_writing_form_order,
         name="orga_writing_form_order",
     ),
@@ -426,9 +401,19 @@ urlpatterns = [
         name="orga_writing_options_new",
     ),
     path(
-        "<slug:s>/<int:n>/manage/writing/options/<slug:typ>/order/<int:num>/",
+        "<slug:s>/<int:n>/manage/writing/options/<slug:typ>/order/<int:num>/<int:order>/",
         views_oc.orga_writing_options_order,
         name="orga_writing_options_order",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/writing/edit/<slug:typ>/",
+        views_oc.orga_writing_excel_edit,
+        name="orga_writing_excel_edit",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/writing/submit/<slug:typ>/",
+        views_oc.orga_writing_excel_submit,
+        name="orga_writing_excel_submit",
     ),
     path(
         "<slug:s>/<int:n>/manage/utils/",
@@ -481,7 +466,7 @@ urlpatterns = [
         name="orga_factions_edit",
     ),
     path(
-        "<slug:s>/<int:n>/manage/factions/order/<int:num>/",
+        "<slug:s>/<int:n>/manage/factions/order/<int:num>/<int:order>/",
         views_ow.orga_factions_order,
         name="orga_factions_order",
     ),
@@ -716,14 +701,9 @@ urlpatterns = [
         name="orga_progress_steps_edit",
     ),
     path(
-        "<slug:s>/<int:n>/manage/progress_steps/order/<int:num>/",
+        "<slug:s>/<int:n>/manage/progress_steps/order/<int:num>/<int:order>/",
         views_ow.orga_progress_steps_order,
         name="orga_progress_steps_order",
-    ),
-    path(
-        "<slug:s>/<int:n>/manage/translate",
-        views_oms.orga_translate,
-        name="orga_translate",
     ),
     path(
         "<slug:s>/<int:n>/manage/px/deliveries/",
@@ -866,9 +846,34 @@ urlpatterns = [
         name="orga_appearance",
     ),
     path(
+        "<slug:s>/<int:n>/manage/config/<slug:section>/",
+        views_oe.orga_config,
+        name="orga_config",
+    ),
+    path(
         "<slug:s>/<int:n>/manage/config/",
         views_oe.orga_config,
         name="orga_config",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/backup/",
+        views_oe.orga_backup,
+        name="orga_backup",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/upload/<slug:typ>/",
+        views_oe.orga_upload,
+        name="orga_upload",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/upload/template/<slug:typ>/",
+        views_oe.orga_upload_template,
+        name="orga_upload_template",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/preferences/",
+        views_oe.orga_preferences,
+        name="orga_preferences",
     ),
     path(
         "<slug:s>/<int:n>/manage/texts/",
@@ -976,8 +981,23 @@ urlpatterns = [
         name="orga_multichoice_available",
     ),
     path(
+        "<slug:s>/<int:n>/manage/factions/available",
+        views_ow.orga_factions_available,
+        name="orga_factions_available",
+    ),
+    path(
         "<slug:s>/<int:n>/manage/export/<slug:nm>",
         views_ow.orga_export,
         name="orga_export",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/suggestions/<slug:perm>/",
+        views_mg.orga_close_suggestion,
+        name="orga_close_suggestion",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/<slug:nm>/version/<int:num>/",
+        views_ow.orga_version,
+        name="orga_version",
     ),
 ]

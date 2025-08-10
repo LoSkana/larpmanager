@@ -12,8 +12,8 @@
             {% endblock maintitle %}
         </title>
         {% block meta %}
-            <meta name="keywords" content="larpmanager">
-            <meta name="description" content="larpmanager">
+            <meta name="keywords" content="{{ assoc.platform }}">
+            <meta name="description" content="{{ assoc.platform }}">
         {% endblock meta %}
         <meta property="og:url" content="{{ request.path }}">
         <meta property="og:type" content="website">
@@ -22,7 +22,7 @@
         {% if assoc.id == 0 %}
             <link rel="icon" type="image/png" href="{% static 'lm_fav_new.png' %}">
             <link rel="apple-touch-icon" href="{% static 'lm_fav_new.png' %}">
-            <meta property="og:site_name" content="LarpManager">
+            <meta property="og:site_name" content="{{ assoc.platform }}">
             {% if og_title %}<meta property="og:title" content="{{ og_title }}">{% endif %}
             {% if og_image %}
                 <meta property="og:image" content="{{ og_image }}">
@@ -47,7 +47,8 @@
             <link rel="icon" type="image/png" href="{{ assoc.favicon }}">
             <link rel="apple-touch-icon" href="{{ assoc.favicon }}">
             <meta name="thumbnail" content="{{ assoc.logo }}">
-            <meta property="og:site_name" content="{{ assoc.name }} - LarpManager">
+            <meta property="og:site_name"
+                  content="{{ assoc.name }} - {{ assoc.platform }}">
             <meta property="og:image" content="{{ assoc.favicon }}">
             <!--
              <PageMap>
@@ -63,8 +64,11 @@
         {% endblock css-req %}
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"
                 integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-                crossorigin="anonymous"
-                defer></script>
+                crossorigin="anonymous"></script>
+        <link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.3.2/b-3.2.4/b-colvis-3.2.4/b-html5-3.2.4/b-print-3.2.4/cr-2.1.1/cc-1.0.7/date-1.5.6/fc-5.0.4/fh-4.0.3/kt-2.12.1/r-3.0.5/sc-2.4.3/sb-1.8.3/sp-2.3.4/sr-1.4.1/datatables.min.css"
+              rel="stylesheet"
+              integrity="sha384-M/9dsiCLRUVi149iSn76/6ZQNoFhHZYIO5YeB8dkc+PSnjgpSozqnhNGkouxafnr"
+              crossorigin="anonymous">
         {% block robots %}
         {% endblock robots %}
         {{ form.media }}
@@ -74,6 +78,8 @@
                 <link rel="stylesheet"
                       href="{% static 'larpmanager/assets/css/alpha.css' %}" />
                 <link rel="stylesheet" href="{% static 'larpmanager/assets/css/lm.css' %}" />
+                <link rel="stylesheet"
+                      href="{% static 'larpmanager/assets/css/skins.css' %}" />
             {% endcompress %}
         {% else %}
             {% compress css %}
@@ -83,6 +89,7 @@
                       href="{% static 'larpmanager/assets/css/solid_state.css' %}" />
                 <link rel="stylesheet" href="{% static 'larpmanager/assets/css/lm.css' %}" />
             {% endcompress %}
+            {% if assoc.skin_css %}<style>{{ assoc.skin_css }}</style>{% endif %}
             {% if assoc.css_code %}
                 <link rel="stylesheet"
                       href="{% get_media_prefix %}/css/{{ assoc.slug }}_{{ assoc.css_code }}.css" />
@@ -99,17 +106,31 @@
                   href="{% static 'larpmanager/assets/css/noscript.css' %}" />
         </noscript>
     </head>
-    <body class="is-preload">
+    <body class="is-preload {% if interface_old %}interface_old{% endif %}"
+          id="{{ assoc.name | slugify }}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
+        {% if not interface_old and not frame %}
+            {% if user.is_authenticated %}
+                {% if topbar %}
+                    {% include "elements/structure/topbar-admin.html" %}
+                {% else %}
+                    {% include "elements/structure/topbar-user.html" %}
+                {% endif %}
+            {% else %}
+                {% include "elements/structure/topbar.html" %}
+            {% endif %}
+        {% endif %}
         {% include "elements/structure/sidebar.html" %}
         <!-- Page Wrapper -->
-        <div id="page-wrapper" {% if is_sidebar_open %}class="sidebar"{% endif %}>
+        <div id="page-wrapper"
+             class=" {% if manage and is_sidebar_open %}sidebar{% endif %} {% if not interface_old %}topbar{% endif %} ">
             {% block main %}
             {% endblock main %}
         </div>
         <script>
     var set_language_url = "{% url 'set_language' %}";
     var set_internaz = {{ set_internaz | default:"null" }};
+    window.interface_old = {{ interface_old|yesno:"true,false" }};
         </script>
         <!-- Scripts -->
         {% block js-req %}
@@ -125,6 +146,10 @@
             <script defer
                     src="{% static 'larpmanager/assets/js/jquery.textfill.min.js' %}"></script>
         {% endcompress %}
+        <script>
+            let url_feature_description = "{% url 'feature_description' %}";
+            let url_tutorials = "{% url 'tutorials' %}";
+        </script>
         {% if assoc.id == 0 %}
             {% compress js %}
                 <script defer src="{% static 'alpha/assets/js/jquery.dropotron.min.js' %}"></script>
@@ -143,6 +168,15 @@
         {% endblock js %}
         {% block js2 %}
         {% endblock js2 %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"
+                integrity="sha384-VFQrHzqBh5qiJIU0uGU5CIW3+OWpdGGJM9LBnGbuIH2mkICcFZ7lPd/AAtI7SNf7"
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"
+                integrity="sha384-/RlQG9uf0M2vcTw3CX7fbqgbj/h8wKxw7C3zu9/GxcBPRKOEcESxaxufwRXqzq6n"
+                crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.3.2/b-3.2.4/b-colvis-3.2.4/b-html5-3.2.4/b-print-3.2.4/cr-2.1.1/cc-1.0.7/date-1.5.6/fc-5.0.4/fh-4.0.3/kt-2.12.1/r-3.0.5/sc-2.4.3/sb-1.8.3/sp-2.3.4/sr-1.4.1/datatables.min.js"
+                integrity="sha384-ao+X/Q4zAQelTI1M49AS9DVSo4NiHV4nmS+9y7vU2vqWYWRVeDSuo9UIq2QvZpHx"
+                crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
         <script>
         function setCookie(name,value,days) {
@@ -182,14 +216,20 @@
             $('body').removeClass('noscroll');
         }
 
-    window.addEventListener('DOMContentLoaded', function() {
-
-        function toggle_sidebar() {
+        function sidebar() {
             $('#sidebar').toggle();
             $('#header').toggleClass('sidebar');
             $('#page-wrapper').toggleClass('sidebar');
             $('#footer').toggleClass('sidebar');
+
+            $('.sidebar_button').toggle();
+
+            $.ajax({
+                url: '{% url "toggle_sidebar" %}',
+            });
         }
+
+    window.addEventListener('DOMContentLoaded', function() {
 
         $(document).ready(function() {
 
@@ -202,12 +242,28 @@
                 }
             });
 
-            $('#sidebar-nav').click(function() {
-                toggle_sidebar();
+            $('#sidebar-open, #sidebar-close').click(function() {
+                sidebar();
+            });
 
-                $.ajax({
-                    url: '{% url "toggle_sidebar" %}',
-                });
+            {% if not interface_old %}
+                {% if manage and is_sidebar_open %}
+                    $('#sidebar-close').hide();
+                {% else %}
+                    $('#sidebar-open').hide();
+                {% endif %}
+            {% endif %}
+
+            // add origin for manage links
+            {% if run %}
+                let origin = '{{ run.id }}';
+            {% else %}
+                let origin = '0';
+            {% endif %}
+            $('a[href].origin').each(function() {
+                const url = new URL(this.href);
+                url.searchParams.set('origin', origin);
+                this.href = url.toString();
             });
         });
 

@@ -12,12 +12,16 @@
         <p>
             <i>{% trans "Characters are only visible to registered players" %}: <a href="{% url 'register' run.event.slug run.number %}">{% trans "Register" %}</a></i>
         </p>
+    {% elif not show_character %}
+        <p>
+            <i>{% trans "Character are not visible at the moment" %}</i>
+        </p>
     {% else %}
         {% if features.questbuilder and show_quest %}
             <h2>Quest</h2>
             <p>
                 {% trans "Go to the quests of type" %}:
-                {% for qt in quest_types %}
+                {% for id, qt in quest_types.items %}
                     {% include "elements/comma.html" %}
                     <a href="{% url 'quests' event.slug run.number qt.number %}">{{ qt.name }}</a>
                 {% endfor %}
@@ -28,39 +32,37 @@
             <a href="#" class="my_toggle" tog='istr'>{% trans "Instructions" %}</a>
             <a href="#" class="my_toggle" tog='text_search'>{% trans "Search" %}</a>
             <a href="#" class="my_toggle" tog='spec'>{% trans "Features" %}</a>
-            {% if factions %}
+            {% if factions and factions|length > 2 %}
                 <a href="#" class="my_toggle" tog='factions'>{% trans "Factions" %}</a>
             {% endif %}
-            {% if features.character_form %}
-                {% for idq in searchable %}
-                    {% with questions|get:idq as question %}
-                        <a href="#" class="my_toggle" tog='custom_field_{{ idq }}'>{{ question.display }}</a>
-                    {% endwith %}
-                {% endfor %}
-            {% endif %}
+            {% for idq, options in searchable.items %}
+                {% with questions|get:idq as question %}
+                    <a href="#" class="my_toggle" tog='custom_field_{{ idq }}'>{{ question.name }}</a>
+                {% endwith %}
+            {% endfor %}
             <a href="#" class="my_toggle" tog='link_list'>{% trans "Characters link" %}</a>
         </div>
         <div class="c nav hide istr">
             <hr />
-            <p>{% trans "On this page you can filter characters and directly view their information." %}</p>
+            <p>{% trans "On this page you can filter characters and directly view their information" %}.</p>
             <p>
-                {% trans "In the text search, you can enter any text; the search will be done on the number, name, teaser, player, groups to which the character belong." %}
+                {% trans "In the text search, you can enter any text; the search will be done on the number, name, teaser, player, groups to which the character belong" %}.
             </p>
             <p>
-                {% trans "Where you find a button like this, you can press it to perform filtering further." %}<a href="#" onclick="false;">{% trans "Example" %}</a>
+                {% trans "Where you find a button like this, you can press it to perform filtering further" %}.<a href="#" onclick="false;">{% trans "Example" %}</a>
             </p>
             <p>
-                {% trans "If you press once, it will be *included* in the search. If a character belongs to at least one inclusion category, it will be shown in the search." %}<a href="#" class="sel" onclick="false;">{% trans "Included" %}</a>
+                {% trans "If you press once, it will be *included* in the search. If a character belongs to at least one inclusion category, it will be shown in the search" %}.<a href="#" class="sel" onclick="false;">{% trans "Included" %}</a>
             </p>
             <p>
-                {% trans "If you press a second time, it will be *excluded* in the search. If a character belongs to even one exclusion category, it will not be shown in the search." %}<a href="#" class="nsel" onclick="false;">{% trans "Excluded" %}</a>
+                {% trans "If you press a second time, it will be *excluded* in the search. If a character belongs to even one exclusion category, it will not be shown in the search" %}.<a href="#" class="nsel" onclick="false;">{% trans "Excluded" %}</a>
             </p>
         </div>
         <div class="hide text_search">
             <hr />
             <input type="text" id="search" placeholder="{% trans "Insert" %}" />
         </div>
-        {% if factions %}
+        {% if factions and factions|length > 2 %}
             <div id="factions" class="c nav hide factions">
                 <hr />
                 {% for fnum in factions_typ.s %}
@@ -79,18 +81,16 @@
                 {% endif %}
             </div>
         {% endif %}
-        {% if features.character_form %}
-            {% for idq, options_id in searchable.items %}
-                <div class="c nav hide custom_field_{{ idq }}">
-                    <hr />
-                    {% for ido in options_id %}
-                        {% with options|get:ido as option %}
-                            <a typ="field_{{ idq }}" href="#" tog="{{ ido }}">{{ option.display }}</a>
-                        {% endwith %}
-                    {% endfor %}
-                </div>
-            {% endfor %}
-        {% endif %}
+        {% for idq, options_id in searchable.items %}
+            <div class="c nav hide custom_field_{{ idq }}">
+                <hr />
+                {% for ido in options_id %}
+                    {% with options|get:ido as option %}
+                        <a typ="field_{{ idq }}" href="#" tog="{{ ido }}">{{ option.name }}</a>
+                    {% endwith %}
+                {% endfor %}
+            </div>
+        {% endfor %}
         <div id="spec" class="c nav hide spec">
             <hr />
             {% trans "Player" %}:
@@ -99,7 +99,7 @@
         <div class="hide link_list">
             <hr />
             <div id="top"></div>
-            <span class="helptext">{% trans "Click on a name to go and view it directly." %}</span>
+            <span class="helptext">{% trans "Click on a name to go and view it directly" %}.</span>
         </div>
         <br />
         <h3>
@@ -131,9 +131,9 @@
 {% endblock content %}
 {% block js %}
     <script>
-window['all'] = {{ all | safe }};
+window['all'] = {{ chars_json | safe }};
 
-window['facs'] = {{ facs | safe }};
+window['facs'] = {{ factions_json | safe }};
 
 window['blank'] = "{% static 'larpmanager/assets/blank-avatar.svg' %}";
 
@@ -147,9 +147,9 @@ window['cover'] = {% if features.cover %} true {% else %} false {% endif %};
 
 window['cover_orig'] = {% if cover_orig %} true {% else %} false {% endif %};
 
-window['show_char'] = {% if show_char %} true {% else %} false {% endif %};
+window['show_char'] = {% if show_character %} true {% else %} false {% endif %};
 
-window['show_teaser'] = {% if show_teaser %} true {% else %} false {% endif %};
+window['show_teaser'] = {% if show_character.teaser %} true {% else %} false {% endif %};
 
 window['texts'] = {
     'abs': '{% trans "Absent" %}',
@@ -163,9 +163,9 @@ window['texts'] = {
 
 window['fields'] = {}
 
-window['questions'] = {{ questions | safe }};
-window['options'] = {{ options | safe }};
-window['searchable'] = {{ searchable | safe }};
+window['questions'] = {{ questions_json | safe }};
+window['options'] = {{ options_json | safe }};
+window['searchable'] = {{ searchable_json | safe }};
 
     </script>
     {% compress js %}

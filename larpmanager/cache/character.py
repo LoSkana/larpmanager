@@ -27,13 +27,12 @@ from django.db.models.signals import m2m_changed, post_delete, post_save, pre_de
 from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_event_features
+from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.registration import search_player
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     QuestionApplicable,
-    QuestionStatus,
-    QuestionVisibility,
     WritingAnswer,
     WritingChoice,
     WritingOption,
@@ -41,7 +40,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.member import Member
 from larpmanager.models.registration import RegistrationCharacterRel
-from larpmanager.models.writing import Character, Faction
+from larpmanager.models.writing import Character, Faction, FactionType
 
 
 def delete_all_in_path(path):
@@ -114,8 +113,10 @@ def get_event_cache_fields(ctx, res, only_visible=True):
         return
 
     # get visible question ids
-    get_character_fields(ctx, only_visible=only_visible)
-    get_searcheable_character_fields(ctx)
+    visible_writing_fields(ctx, QuestionApplicable.CHARACTER, only_visible=only_visible)
+    if "questions" not in ctx:
+        return
+
     question_idxs = ctx["questions"].keys()
 
     # ids to number
@@ -147,60 +148,34 @@ def get_event_cache_fields(ctx, res, only_visible=True):
         res["chars"][ch_num]["fields"][question] = value
 
 
-def get_character_fields(ctx, only_visible=True):
-    if "character" not in ctx["features"]:
-        return
-
-    # get visible question fields
-    que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-    que = que.filter(applicable=QuestionApplicable.CHARACTER)
-    que = que.exclude(status=QuestionStatus.HIDDEN, visibility=QuestionVisibility.HIDDEN)
-    if only_visible:
-        que = que.filter(visibility__in=[QuestionVisibility.SEARCHABLE, QuestionVisibility.PUBLIC])
-    ctx["questions"] = {
-        el[0]: {"display": el[1], "typ": el[2], "printable": el[3], "visibility": el[4]}
-        for el in que.values_list("id", "display", "typ", "printable", "visibility")
-    }
-
-    que = ctx["event"].get_elements(WritingOption).filter(question_id__in=ctx["questions"].keys())
-    ctx["options"] = {
-        el[0]: {"display": el[1], "question_id": el[2]}
-        for el in que.order_by("order").values_list("id", "display", "question_id")
-    }
+def get_character_element_fields(ctx, character_id, only_visible=True):
+    return get_writing_element_fields(
+        ctx, "character", QuestionApplicable.CHARACTER, character_id, only_visible=only_visible
+    )
 
 
-def get_searcheable_character_fields(ctx):
-    if "character" not in ctx["features"]:
-        return
-
-    que = ctx["event"].get_elements(WritingQuestion).order_by("order")
-    que = que.filter(applicable=QuestionApplicable.CHARACTER)
-    que = que.filter(visibility=QuestionVisibility.SEARCHABLE).prefetch_related("options")
-    ctx["searchable"] = {el.id: list(el.options.order_by("order").values_list("id", flat=True)) for el in que}
-
-
-def get_character_cache_fields(ctx, character_id, only_visible=True):
-    get_character_fields(ctx, only_visible=only_visible)
-    get_searcheable_character_fields(ctx)
+def get_writing_element_fields(ctx, feature_name, applicable, element_id, only_visible=True):
+    visible_writing_fields(ctx, applicable, only_visible=only_visible)
 
     # remove not visible questions
     question_visible = []
     for question_id in ctx["questions"].keys():
-        config = f"show_{question_id}"
-        if config not in ctx or not ctx[config]:
+        config = str(question_id)
+        if config not in ctx[f"show_{feature_name}"] and "show_all" not in ctx:
             continue
         question_visible.append(question_id)
 
     fields = {}
-    que = WritingAnswer.objects.filter(element_id=character_id, question_id__in=question_visible)
+    que = WritingAnswer.objects.filter(element_id=element_id, question_id__in=question_visible)
     for el in que.values_list("question_id", "text"):
         fields[el[0]] = el[1]
-    que = WritingChoice.objects.filter(element_id=character_id, question_id__in=question_visible)
+    que = WritingChoice.objects.filter(element_id=element_id, question_id__in=question_visible)
     for el in que.values_list("question_id", "option_id"):
         if el[0] not in fields:
             fields[el[0]] = []
         fields[el[0]].append(el[1])
-    return fields
+
+    return {"questions": ctx["questions"], "options": ctx["options"], "fields": fields}
 
 
 def get_event_cache_factions(ctx, res):
@@ -211,11 +186,11 @@ def get_event_cache_factions(ctx, res):
         res["factions"][0] = {
             "name": "",
             "number": 0,
-            "typ": Faction.PRIM,
+            "typ": FactionType.PRIM,
             "teaser": "",
             "characters": list(res["chars"].keys()),
         }
-        res["factions_typ"][Faction.PRIM] = [0]
+        res["factions_typ"][FactionType.PRIM] = [0]
         return
 
     # add characters without a primary to a fake one
@@ -227,11 +202,11 @@ def get_event_cache_factions(ctx, res):
         res["factions"][0] = {
             "name": "",
             "number": 0,
-            "typ": Faction.PRIM,
+            "typ": FactionType.PRIM,
             "teaser": "",
             "characters": void_primary,
         }
-        res["factions_typ"][Faction.PRIM] = [0]
+        res["factions_typ"][FactionType.PRIM] = [0]
     # add real factions
     for f in ctx["event"].get_elements(Faction).order_by("number"):
         el = f.show_red()
@@ -314,8 +289,7 @@ def update_character_fields(instance, data):
         return
 
     ctx = {"features": features, "event": instance.event}
-    fields = get_character_cache_fields(ctx, instance.pk, only_visible=False)
-    data["fields"] = fields
+    data.update(get_character_element_fields(ctx, instance.pk, only_visible=False))
 
 
 def update_event_cache_all(run, instance):
@@ -352,7 +326,11 @@ def update_event_cache_all_character(instance, res, run):
 
 
 def update_event_cache_all_faction(instance, res):
-    res["factions"][instance.number].update(instance.show())
+    data = instance.show()
+    if instance.number in res["factions"]:
+        res["factions"][instance.number].update(data)
+    else:
+        res["factions"][instance.number] = data
 
 
 def has_different_cache_values(instance, prev, lst):

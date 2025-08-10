@@ -1,0 +1,8 @@
+{% load i18n static %}
+<p>
+    <i>
+        {% trans "You can only add users who approved data sharing with the organization" %}.
+        {% trans "If you don't see an user, ask them to access" %}
+        <a href="{% url 'share' %}">{% trans "this link" %}</a>.
+    </i>
+</p>

@@ -24,6 +24,7 @@ from cryptography.fernet import Fernet
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.db.models import Max, Q
 from django.db.models.signals import post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
@@ -35,6 +36,7 @@ from larpmanager.accounting.vat import compute_vat
 from larpmanager.cache.button import event_button_key
 from larpmanager.cache.config import reset_configs
 from larpmanager.cache.feature import get_assoc_features, get_event_features, reset_event_features
+from larpmanager.cache.fields import reset_event_fields_cache
 from larpmanager.models.access import AssocPermission, EventPermission, EventRole, get_event_organizers
 from larpmanager.models.accounting import (
     AccountingItemCollection,
@@ -53,10 +55,11 @@ from larpmanager.models.form import (
     WritingQuestion,
 )
 from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTutorial
-from larpmanager.models.member import Member, Membership
+from larpmanager.models.member import Member, MemberConfig, Membership, MembershipStatus
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Faction, Plot, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.utils.common import copy_class
+from larpmanager.utils.tutorial_query import delete_index, index_tutorial
 
 
 @receiver(pre_save)
@@ -81,7 +84,7 @@ def pre_save_callback(sender, instance, *args, **kwargs):
 
 
 @receiver(pre_save, sender=Association)
-def pre_save_association(sender, instance, **kwargs):
+def pre_save_association_generate_fernet(sender, instance, **kwargs):
     if not instance.key:
         instance.key = Fernet.generate_key()
 
@@ -207,7 +210,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(pre_save, sender=Membership)
 def pre_save_membership(sender, instance, **kwargs):
-    if instance.status == Membership.ACCEPTED:
+    if instance.status == MembershipStatus.ACCEPTED:
         if not instance.card_number:
             n = Membership.objects.filter(assoc=instance.assoc).aggregate(Max("card_number"))["card_number__max"]
             if not n:
@@ -216,7 +219,7 @@ def pre_save_membership(sender, instance, **kwargs):
         if not instance.date:
             instance.date = date.today()
 
-    if instance.status == Membership.EMPTY:
+    if instance.status == MembershipStatus.EMPTY:
         if instance.card_number:
             instance.card_number = None
         if instance.date:
@@ -250,13 +253,17 @@ def post_save_event_campaign(sender, instance, **kwargs):
     if instance.parent_id:
         # noinspection PyProtectedMember
         if instance._old_parent_id != instance.parent_id:
-            # copy config, texts, roles
+            # copy config, texts, roles, features
             copy_class(instance.pk, instance.parent_id, EventConfig)
             copy_class(instance.pk, instance.parent_id, EventText)
             copy_class(instance.pk, instance.parent_id, EventRole)
-            # copy features
             for fn in instance.parent.features.all():
                 instance.features.add(fn)
+
+            # Temporarily disconnect signal
+            post_save.disconnect(post_save_event_campaign, sender=Event)
+            instance.save()
+            post_save.connect(post_save_event_campaign, sender=Event)
 
 
 @receiver(post_save, sender=Event)
@@ -322,7 +329,54 @@ def save_event_character_form(features, instance):
     custom_tps = QuestionType.get_basic_types()
 
     _init_character_form_questions(custom_tps, def_tps, features, instance)
+    _init_faction_form_questions(def_tps, instance, features)
+    _init_questbuilder_form_questions(def_tps, instance, features)
     _init_plot_form_questions(def_tps, instance, features)
+
+
+def _init_questbuilder_form_questions(def_tps, instance, features):
+    if "questbuilder" not in features:
+        return
+
+    for applicable in [QuestionApplicable.QUEST, QuestionApplicable.TRAIT]:
+        que = instance.get_elements(WritingQuestion)
+        que = que.filter(applicable=applicable)
+        types = set(que.values_list("typ", flat=True).distinct())
+
+        # add default types if none are present
+        if not types:
+            for el, add in def_tps.items():
+                WritingQuestion.objects.create(
+                    event=instance,
+                    typ=el,
+                    name=_(add[0]),
+                    status=add[1],
+                    visibility=add[2],
+                    max_length=add[3],
+                    applicable=applicable,
+                )
+
+
+def _init_faction_form_questions(def_tps, instance, features):
+    if "faction" not in features:
+        return
+
+    que = instance.get_elements(WritingQuestion)
+    que = que.filter(applicable=QuestionApplicable.FACTION)
+    types = set(que.values_list("typ", flat=True).distinct())
+
+    # add default types if none are present
+    if not types:
+        for el, add in def_tps.items():
+            WritingQuestion.objects.create(
+                event=instance,
+                typ=el,
+                name=_(add[0]),
+                status=add[1],
+                visibility=add[2],
+                max_length=add[3],
+                applicable=QuestionApplicable.FACTION,
+            )
 
 
 def _init_plot_form_questions(def_tps, instance, features):
@@ -333,15 +387,16 @@ def _init_plot_form_questions(def_tps, instance, features):
     que = que.filter(applicable=QuestionApplicable.PLOT)
     types = set(que.values_list("typ", flat=True).distinct())
 
-    def_tps[QuestionType.TEASER] = ("Concept", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000)
+    plot_tps = def_tps.copy()
+    plot_tps[QuestionType.TEASER] = ("Concept", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000)
 
     # add default types if none are present
     if not types:
-        for el, add in def_tps.items():
+        for el, add in plot_tps.items():
             WritingQuestion.objects.create(
                 event=instance,
                 typ=el,
-                display=_(add[0]),
+                name=_(add[0]),
                 status=add[1],
                 visibility=add[2],
                 max_length=add[3],
@@ -364,7 +419,7 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
             WritingQuestion.objects.create(
                 event=instance,
                 typ=el,
-                display=_(add[0]),
+                name=_(add[0]),
                 status=add[1],
                 visibility=add[2],
                 max_length=add[3],
@@ -378,7 +433,7 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
             WritingQuestion.objects.create(
                 event=instance,
                 typ=el,
-                display=_(el.capitalize()),
+                name=_(el.capitalize()),
                 status=QuestionStatus.HIDDEN,
                 visibility=QuestionVisibility.HIDDEN,
                 max_length=1000,
@@ -393,6 +448,9 @@ def post_save_registration_campaign(sender, instance, **kwargs):
     if not instance.member:
         return
 
+    if instance.cancellation_date:
+        return
+
     # auto assign last character if campaign
     if "campaign" not in get_event_features(instance.run.event_id):
         return
@@ -400,7 +458,7 @@ def post_save_registration_campaign(sender, instance, **kwargs):
         return
 
     # if already has a character, do not proceed
-    if RegistrationCharacterRel.objects.filter(reg=instance).count() > 0:
+    if RegistrationCharacterRel.objects.filter(reg__run=instance.run).count() > 0:
         return
 
     # get last run of campaign
@@ -461,3 +519,69 @@ def post_save_reset_run_config(sender, instance, **kwargs):
 @receiver(post_delete, sender=RunConfig)
 def post_delete_reset_run_config(sender, instance, **kwargs):
     reset_configs(instance.run)
+
+
+@receiver(post_save, sender=MemberConfig)
+def post_save_reset_member_config(sender, instance, **kwargs):
+    reset_configs(instance.member)
+
+
+@receiver(post_delete, sender=MemberConfig)
+def post_delete_reset_member_config(sender, instance, **kwargs):
+    reset_configs(instance.member)
+
+
+@receiver(pre_save, sender=Association)
+def pre_save_association_set_skin_features(sender, instance, **kwargs):
+    if not instance.skin:
+        return
+
+    # execute if new association, or if changed skin
+    if instance.pk:
+        try:
+            prev = Association.objects.get(pk=instance.pk)
+        except ObjectDoesNotExist:
+            return
+        if instance.skin == prev.skin:
+            return
+
+    instance._update_skin_features = True
+    if not instance.nationality:
+        instance.nationality = instance.skin.default_nation
+
+    if not instance.optional_fields:
+        instance.optional_fields = instance.skin.default_optional_fields
+
+    if not instance.mandatory_fields:
+        instance.mandatory_fields = instance.skin.default_mandatory_fields
+
+
+@receiver(post_save, sender=Association)
+def post_save_association_set_skin_features(sender, instance, created, **kwargs):
+    if not hasattr(instance, "_update_skin_features"):
+        return
+
+    def update_features():
+        instance.features.set(instance.skin.default_features.all())
+
+    transaction.on_commit(update_features)
+
+
+@receiver(post_save, sender=LarpManagerTutorial)
+def post_save_index_tutorial(sender, instance, **kwargs):
+    index_tutorial(instance.id)
+
+
+@receiver(post_delete, sender=LarpManagerTutorial)
+def delete_tutorial_from_index(sender, instance, **kwargs):
+    delete_index(instance.id)
+
+
+@receiver(post_save, sender=WritingQuestion)
+def save_event_field(sender, instance, created, **kwargs):
+    reset_event_fields_cache(instance.event_id)
+
+
+@receiver(pre_delete, sender=WritingQuestion)
+def delete_event_field(sender, instance, **kwargs):
+    reset_event_fields_cache(instance.event_id)

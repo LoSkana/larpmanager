@@ -38,7 +38,6 @@ from larpmanager.accounting.registration import (
     check_reg_bkg,
     get_accounting_refund,
     get_reg_payments,
-    round_to_nearest_cent,
 )
 from larpmanager.cache.character import get_event_cache_all, reset_run
 from larpmanager.cache.feature import reset_event_features
@@ -50,9 +49,6 @@ from larpmanager.cache.text_fields import get_cache_reg_field
 from larpmanager.forms.registration import (
     OrgaRegistrationForm,
     RegistrationCharacterRelForm,
-)
-from larpmanager.forms.writing import (
-    UploadElementsForm,
 )
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
@@ -83,9 +79,8 @@ from larpmanager.utils.common import (
     get_registration,
     get_time_diff,
 )
-from larpmanager.utils.download import download
+from larpmanager.utils.download import _orga_registrations_acc, download
 from larpmanager.utils.event import check_event_permission
-from larpmanager.utils.upload import upload_elements
 from larpmanager.views.orga.member import member_field_correct
 
 
@@ -229,7 +224,7 @@ def registrations_popup(request, ctx):
         reg = Registration.objects.get(pk=idx, run=ctx["run"])
         question = RegistrationQuestion.objects.get(pk=tp, event=ctx["event"].get_class_parent(RegistrationQuestion))
         el = RegistrationAnswer.objects.get(reg=reg, question=question)
-        tx = f"<h2>{reg} - {question.display}</h2>" + el.text
+        tx = f"<h2>{reg} - {question.name}</h2>" + el.text
         return JsonResponse({"k": 1, "v": tx})
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
@@ -257,15 +252,20 @@ def _orga_registrations_prepare(ctx, request):
     for t in RegistrationTicket.objects.filter(event=ctx["event"]).order_by("-price"):
         t.emails = []
         ctx["reg_tickets"][t.id] = t
-    ctx["reg_questions"] = {}
+    ctx["reg_questions"] = _get_registration_fields(ctx, request.user.member)
+
+
+def _get_registration_fields(ctx, member):
+    reg_questions = {}
     que = RegistrationQuestion.get_instance_questions(ctx["event"], ctx["features"])
     for q in que:
         if "reg_que_allowed" in ctx["features"] and q.allowed_map[0]:
             run_id = ctx["run"].id
             organizer = run_id in ctx["all_runs"] and 1 in ctx["all_runs"][run_id]
-            if not organizer and request.user.member.id not in q.allowed_map:
+            if not organizer and member.id not in q.allowed_map:
                 continue
-        ctx["reg_questions"][q.id] = q
+        reg_questions[q.id] = q
+    return reg_questions
 
 
 def _orga_registrations_discount(ctx):
@@ -310,8 +310,6 @@ def orga_registrations(request, s, n):
         if request.POST.get("download") == "1":
             return download(ctx, Registration, "registration")
 
-        return upload_elements(request, ctx, Registration, "registration", "orga_registrations")
-
     cache = {}
 
     get_event_cache_all(ctx)
@@ -352,21 +350,12 @@ def orga_registrations(request, s, n):
 
     _orga_registrations_text_fields(ctx)
 
-    ctx["typ"] = "registration"
-    ctx["form"] = UploadElementsForm()
-
-    ctx["upload"] = ",".join(
-        [
-            str(_("'player' (player's email)")),
-            str(_("'ticket' (ticket name or number)")),
-            str(_("'character' (character name or number to be assigned)")),
-            str(_("'pwyw' (donation).")),
-        ]
-    )
-
+    ctx["upload"] = "registrations"
     ctx["download"] = 1
     if ctx["event"].get_config("show_export", False):
         ctx["export"] = "registration"
+
+    ctx["default_fields"] = request.user.member.get_config(f"open_registration_{ctx['event'].id}", "[]")
 
     return render(request, "larpmanager/orga/registration/registrations.html", ctx)
 
@@ -375,64 +364,9 @@ def orga_registrations(request, s, n):
 def orga_registrations_accounting(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_registrations")
 
-    ctx["reg_tickets"] = {}
-    for t in RegistrationTicket.objects.filter(event=ctx["event"]).order_by("-price"):
-        t.emails = []
-        ctx["reg_tickets"][t.id] = t
-
-    cache_aip = {}
-
-    if "token_credit" in ctx["features"]:
-        que = AccountingItemPayment.objects.filter(reg__run=ctx["run"])
-        que = que.filter(pay__in=[AccountingItemPayment.TOKEN, AccountingItemPayment.CREDIT])
-        for el in que.exclude(hide=True).values_list("member_id", "value", "pay"):
-            if el[0] not in cache_aip:
-                cache_aip[el[0]] = {"total": 0}
-            cache_aip[el[0]]["total"] += el[1]
-            if el[2] not in cache_aip[el[0]]:
-                cache_aip[el[0]][el[2]] = 0
-            cache_aip[el[0]][el[2]] += el[1]
-
-    res = {}
-    que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-    for r in que:
-        dt = orga_registrations_money(r, ctx, cache_aip)
-        res[r.id] = {key: f"{value:g}" for key, value in dt.items()}
+    res = _orga_registrations_acc(ctx)
 
     return JsonResponse(res)
-
-
-def orga_registrations_money(reg, ctx, cache_aip):
-    dt = {}
-
-    max_rounding = 0.05
-
-    for k in ["tot_payed", "tot_iscr", "quota", "deadline", "pay_what", "surcharge"]:
-        dt[k] = round_to_nearest_cent(getattr(reg, k, 0))
-
-    if "token_credit" in ctx["features"]:
-        if reg.member_id in cache_aip:
-            for pay in ["b", "c"]:
-                v = 0
-                if pay in cache_aip[reg.member_id]:
-                    v = cache_aip[reg.member_id][pay]
-                dt["pay_" + pay] = float(v)
-            dt["pay_a"] = dt["tot_payed"] - (dt["pay_b"] + dt["pay_c"])
-        else:
-            dt["pay_a"] = dt["tot_payed"]
-
-    dt["remaining"] = dt["tot_iscr"] - dt["tot_payed"]
-    if abs(dt["remaining"]) < max_rounding:
-        dt["remaining"] = 0
-
-    if reg.ticket_id in ctx["reg_tickets"]:
-        t = ctx["reg_tickets"][reg.ticket_id]
-        dt["ticket_price"] = t.price
-        if reg.pay_what:
-            dt["ticket_price"] += reg.pay_what
-        dt["options_price"] = reg.tot_iscr - dt["ticket_price"]
-
-    return dt
 
 
 @login_required
@@ -504,7 +438,7 @@ def orga_registration_form_email(request, s, n):
 
     cho = {}
     for opt in RegistrationOption.objects.filter(question=q):
-        cho[opt.id] = opt.display
+        cho[opt.id] = opt.name
 
     que = RegistrationChoice.objects.filter(question=q, reg__run=ctx["run"], reg__cancellation_date__isnull=True)
     for el in que.select_related("reg", "reg__member"):
@@ -525,6 +459,7 @@ def orga_registrations_edit(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_registrations")
     get_event_cache_all(ctx)
     ctx["orga_characters"] = has_event_permission(ctx, request, ctx["event"].slug, "orga_characters")
+    ctx["continue_add"] = "continue" in request.POST
     if num != 0:
         get_registration(ctx, num)
     if request.method == "POST":
@@ -546,6 +481,9 @@ def orga_registrations_edit(request, s, n, num):
             if "questbuilder" in ctx["features"]:
                 _save_questbuilder(ctx, form, reg)
 
+            if ctx["continue_add"]:
+                return redirect("orga_registrations_edit", s=ctx["event"].slug, n=ctx["run"].number, num=0)
+
             return redirect("orga_registrations", s=ctx["event"].slug, n=ctx["run"].number)
     elif num != 0:
         form = OrgaRegistrationForm(instance=ctx["registration"], ctx=ctx)
@@ -553,6 +491,7 @@ def orga_registrations_edit(request, s, n, num):
         form = OrgaRegistrationForm(ctx=ctx)
 
     ctx["form"] = form
+    ctx["add_another"] = 1
 
     return render(request, "larpmanager/orga/edit.html", ctx)
 
@@ -581,13 +520,15 @@ def orga_registrations_customization(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_registrations")
     get_event_cache_all(ctx)
     get_char(ctx, num)
-    rcr = RegistrationCharacterRel.objects.get(character_id=ctx["character"].id, reg__run_id=ctx["run"].id)
+    rcr = RegistrationCharacterRel.objects.get(
+        character_id=ctx["character"].id, reg__run_id=ctx["run"].id, reg__cancellation_date__isnull=True
+    )
 
     if request.method == "POST":
         form = RegistrationCharacterRelForm(request.POST, ctx=ctx, instance=rcr)
         if form.is_valid():
             form.save()
-            messages.success(request, _("Player customisation updated!"))
+            messages.success(request, _("Player customisation updated") + "!")
             return redirect("orga_registrations", s=ctx["event"].slug, n=ctx["run"].number)
     else:
         form = RegistrationCharacterRelForm(instance=rcr, ctx=ctx)
@@ -737,12 +678,6 @@ def orga_cancellation_refund(request, s, n, num):
     return render(request, "larpmanager/orga/accounting/cancellation_refund.html", ctx)
 
 
-@login_required
-def orga_registration_secret(request, s, n):
-    ctx = check_event_permission(request, s, n)
-    return render(request, "larpmanager/orga/secret.html", ctx)
-
-
 def get_pre_registration(event):
     dc = {"list": [], "pred": []}
     signed = set(Registration.objects.filter(run__event=event).values_list("member_id", flat=True))
@@ -789,9 +724,7 @@ def lottery_info(request, ctx):
     ).count()
     ctx["num_def"] = (
         Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-        .exclude(ticket__tier=TicketTier.LOTTERY)
-        .exclude(ticket__tier=TicketTier.STAFF)
-        .exclude(ticket__tier=TicketTier.WAITING)
+        .exclude(ticket__tier__in=[TicketTier.LOTTERY, TicketTier.STAFF, TicketTier.NPC, TicketTier.WAITING])
         .count()
     )
 
@@ -810,7 +743,7 @@ def orga_lottery(request, s, n):
         regs = list(regs)
         shuffle(regs)
         chosen = regs[0:to_upgrade]
-        ticket = get_object_or_404(RegistrationTicket, event=ctx["run"].event, display=ctx["ticket"])
+        ticket = get_object_or_404(RegistrationTicket, event=ctx["run"].event, name=ctx["ticket"])
         for el in chosen:
             el.ticket = ticket
             el.save()
@@ -846,6 +779,8 @@ def orga_registration_member(request, s, n):
 
     if member.profile:
         text += f"<img src='{member.profile_thumb.url}' style='width: 15em; margin: 1em; border-radius: 5%;' />"
+
+    text += f"<p><b>Email</b>: {member.email}</p>"
 
     # check if the user can see sensitive data
     exclude = ["profile", "newsletter", "language", "presentation"]

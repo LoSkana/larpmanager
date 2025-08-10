@@ -21,81 +21,82 @@
 from pathlib import Path
 
 import pytest
-from playwright.sync_api import expect, sync_playwright
+from playwright.async_api import async_playwright, expect
 
 from larpmanager.tests.utils import go_to, handle_error, login_orga, page_start, submit
 
 
 @pytest.mark.django_db
-def test_exe_membership(live_server):
-    with sync_playwright() as p:
-        browser, context, page = page_start(p)
+@pytest.mark.asyncio
+async def test_exe_membership(live_server):
+    async with async_playwright() as p:
+        browser, context, page = await page_start(p)
         try:
-            exe_membership(live_server, page)
+            await exe_membership(live_server, page)
 
         except Exception as e:
-            handle_error(page, e, "exe_membership")
+            await handle_error(page, e, "exe_membership")
 
         finally:
-            context.close()
-            browser.close()
+            await context.close()
+            await browser.close()
 
 
-def exe_membership(live_server, page):
-    login_orga(page, live_server)
+async def exe_membership(live_server, page):
+    await login_orga(page, live_server)
 
     # activate members
-    go_to(page, live_server, "/manage/features/45/on")
+    await go_to(page, live_server, "/manage/features/45/on")
 
     # register
-    go_to(page, live_server, "/test/1/register")
-    page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    await go_to(page, live_server, "/test/1/register")
+    await page.get_by_role("button", name="Continue").click()
+    await page.get_by_role("button", name="Confirm", exact=True).click()
 
     # confirm profile
-    page.get_by_role("checkbox", name="Authorisation").check()
-    submit(page)
+    await page.get_by_role("checkbox", name="Authorisation").check()
+    await submit(page)
 
     # compile request
     image_path = Path(__file__).parent / "image.jpg"
-    page.locator("#id_request").set_input_files(str(image_path))
-    page.locator("#id_document").set_input_files(str(image_path))
-    submit(page)
+    await page.locator("#id_request").set_input_files(str(image_path))
+    await page.locator("#id_document").set_input_files(str(image_path))
+    await submit(page)
 
     # confirm request
-    page.locator("#id_confirm_1").check()
-    page.get_by_text("I confirm that I have").click()
-    page.locator("#id_confirm_2").check()
-    page.get_by_text("I confirm that I have").click()
-    page.locator("#id_confirm_3").check()
-    page.locator("#id_confirm_4").check()
-    submit(page)
+    await page.locator("#id_confirm_1").check()
+    await page.get_by_text("I confirm that I have").click()
+    await page.locator("#id_confirm_2").check()
+    await page.get_by_text("I confirm that I have").click()
+    await page.locator("#id_confirm_3").check()
+    await page.locator("#id_confirm_4").check()
+    await submit(page)
 
     # go to memberships
-    go_to(page, live_server, "/manage/membership/")
-    expect(page.locator("#one")).to_contain_text("Request (1)")
-    expect(page.locator("#one")).to_contain_text("Test")
-    expect(page.locator("#one")).to_contain_text("Admin")
-    expect(page.locator("#one")).to_contain_text("orga@test.it")
-    expect(page.locator("#one")).to_contain_text("Test Larp")
+    await go_to(page, live_server, "/manage/membership/")
+    await expect(page.locator("#one")).to_contain_text("Request (1)")
+    await expect(page.locator("#one")).to_contain_text("Test")
+    await expect(page.locator("#one")).to_contain_text("Admin")
+    await expect(page.locator("#one")).to_contain_text("orga@test.it")
+    await expect(page.locator("#one")).to_contain_text("Test Larp")
 
     # open pages
-    page.get_by_role("link", name="Details").click()
-    go_to(page, live_server, "/manage/membership/")
-    expect(page.locator("#banner")).not_to_contain_text("Oops!")
+    await page.get_by_role("link", name="Details").click()
+    await go_to(page, live_server, "/manage/membership/")
+    await expect(page.locator("#banner")).not_to_contain_text("Oops!")
 
-    go_to(page, live_server, "/manage/membership/")
-    page.get_by_role("link", name="Member").click()
-    expect(page.locator("#banner")).not_to_contain_text("Oops!")
+    await go_to(page, live_server, "/manage/membership/")
+    await page.get_by_role("link", name="Member", exact=True).click()
+    await expect(page.locator("#banner")).not_to_contain_text("Oops!")
 
     # approve
-    go_to(page, live_server, "/manage/membership/")
-    page.get_by_role("link", name="Request").click()
-    page.get_by_role("button", name="Approve").click()
+    await go_to(page, live_server, "/manage/membership/")
+    await page.get_by_role("link", name="Request").click()
+    await page.get_by_role("button", name="Confirm").click()
 
     # test
-    expect(page.locator("#one")).to_contain_text("Accepted (1)")
-    expect(page.locator("#one")).to_contain_text("Test")
-    expect(page.locator("#one")).to_contain_text("Admin")
-    expect(page.locator("#one")).to_contain_text("orga@test.it")
-    expect(page.locator("#one")).to_contain_text("Test Larp")
+    await expect(page.locator("#one")).to_contain_text("Accepted (1)")
+    await expect(page.locator("#one")).to_contain_text("Test")
+    await expect(page.locator("#one")).to_contain_text("Admin")
+    await expect(page.locator("#one")).to_contain_text("orga@test.it")
+    await expect(page.locator("#one")).to_contain_text("Test Larp")

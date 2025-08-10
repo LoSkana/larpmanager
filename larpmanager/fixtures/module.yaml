@@ -2,70 +2,71 @@
   pk: 1
   fields:
     name: Writing
-    descr: Writing and storytelling tools
-    order: 5
-    default: false
+    order: 50
+    icon: pen-nib
 - model: larpmanager.featuremodule
   pk: 2
   fields:
     name: Accounting
-    descr: Managing money flow and finances
-    order: 4
-    default: false
+    order: 40
+    icon: calculator
 - model: larpmanager.featuremodule
   pk: 3
   fields:
     name: Miscellany
-    descr: Various additional features
-    order: 10
-    default: false
+    order: 100
+    icon: gear
 - model: larpmanager.featuremodule
   pk: 4
   fields:
     name: Registration
-    descr: Player registration process
-    order: 3
-    default: false
+    order: 30
+    icon: ticket
 - model: larpmanager.featuremodule
   pk: 5
   fields:
     name: Casting
-    descr: Assigning characters to players
-    order: 6
-    default: false
+    order: 60
+    icon: scroll
 - model: larpmanager.featuremodule
   pk: 6
   fields:
     name: Appearance
-    descr: Event display and visual customization
-    order: 2
-    default: false
+    order: 20
+    icon: palette
 - model: larpmanager.featuremodule
   pk: 7
   fields:
-    name: Management
-    descr: General event management tools
-    order: 1
-    default: false
+    name: Event
+    order: 10
+    icon: calendar-days
 - model: larpmanager.featuremodule
   pk: 8
   fields:
     name: Users
-    descr: Manage players' data
-    order: 8
-    default: false
+    order: 80
+    icon: user
 - model: larpmanager.featuremodule
   pk: 9
   fields:
-    name: Main
-    descr: Standard features
+    name: Organization
     order: 0
-    default: true
+    icon: building
 - model: larpmanager.featuremodule
   pk: 10
   fields:
     name: Italy
-    descr: Italian features
-    order: 11
-    default: false
-    nationality: it
+    order: 110
+    icon: pizza-slice
+- model: larpmanager.featuremodule
+  pk: 11
+  fields:
+    name: Experience
+    order: 45
+    icon: bolt
+- model: larpmanager.featuremodule
+  pk: 12
+  fields:
+    name: Events
+    order: 10
+    icon: calendar-days

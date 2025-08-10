@@ -1,23 +1,23 @@
 {% extends "base.html" %}
 {% load tz show_tags static i18n %}
 {% block title %}
-    {{ data.name }} - {{ run.search }}
+    {{ quest.name }} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    {% if show_teaser %}
-        <h2>Teaser</h2>
-        <p>{{ data.teaser | safe }}</p>
+    {% if show_quest.teaser %}
+        <h2>{{ writing_fields.quest.names.teaser }}</h2>
+        <p>{{ quest.teaser | safe }}</p>
     {% endif %}
-    <h2>{% trans "Traits" %}</h2>
-    {% for el in data.traits %}
-        <div class="go-inline">
-            <b>{{ el.name }} </b>
-            {% if show_teaser and el.teaser %}- {{ el.teaser | safe }}{% endif %}
-            {% if el.safety %}(<b>Safety:</b> {{ el.safety | safe }} ){% endif %}
-            {% if el.keywords %}
-                (<b>{% trans "Keywords" %}:</b> {{ el.keywords | safe }} )
-            {% endif %}
-        </div>
-        <hr class="clear" />
-    {% endfor %}
+    {% include "elements/sheet/fields.html" with char=quest_fields %}
+    {% if show_trait %}
+        <h2>{% trans "Traits" %}</h2>
+        {% for el in traits %}
+            <div class="go-inline">
+                <b>{{ el.name }} </b>
+                {% if show_trait.teaser and el.teaser %}- {{ el.teaser | safe }}{% endif %}
+                {% include "elements/sheet/fields.html" with char=el.fields %}
+            </div>
+            <hr class="clear" />
+        {% endfor %}
+    {% endif %}
 {% endblock content %}

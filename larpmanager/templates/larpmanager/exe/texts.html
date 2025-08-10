@@ -4,11 +4,11 @@
     {% trans "Texts" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page summarizes the association's custom texts." %}
+    {% trans "This page summarizes the association's custom texts" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
-    <table id="payments" class="tablesorter mob">
+    <table id="text" class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th></th>
@@ -22,7 +22,7 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'exe_texts_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'exe_texts_edit' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.get_typ_display }}</td>
                     <td>{{ el.language }}</td>

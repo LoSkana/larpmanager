@@ -4,14 +4,15 @@
     {% trans "Run" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows all the runs saved in the system. From here you can edit them, or create new ones." %}
+    {% trans "This page shows all runs; you can edit them, or create new ones" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
     <p>
         <a href="#" class="my_toggle" tog='past'>{% trans "Show past runs" %}</a>
     </p>
-    <table id="runs" class="tablesorter mob writing">
+    <table id="runs"
+           class="{% if not interface_old %}go_datatable{% endif %} writing">
         <thead>
             <tr>
                 <th></th>
@@ -30,7 +31,7 @@
                 <tr id="{{ el.id }}"
                     {% if el.development == '9' %}class="hide past"{% endif %}>
                     <td>
-                        <a href="{% url 'exe_runs_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'exe_runs_edit' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el }}</td>
                     <td>{{ el.get_development_display }}</td>

@@ -18,22 +18,27 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import traceback
 
 from django import forms
 from django.contrib.postgres.aggregates import ArrayAgg
-from django.db.models import Max
-from django.forms import CharField
+from django.core.exceptions import ObjectDoesNotExist
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.base import BaseRegistrationForm, MyForm
 from larpmanager.forms.utils import EventCharacterS2Widget, EventCharacterS2WidgetMulti, WritingTinyMCE
 from larpmanager.models.access import get_event_staffers
-from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
-from larpmanager.models.event import ProgressStep, Run
-from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingOption, WritingQuestion
+from larpmanager.models.casting import Quest, QuestType, Trait
+from larpmanager.models.event import ProgressStep
+from larpmanager.models.form import (
+    QuestionApplicable,
+    QuestionType,
+    WritingAnswer,
+    WritingChoice,
+    WritingOption,
+    WritingQuestion,
+)
 from larpmanager.models.miscellanea import PlayerRelationship
-from larpmanager.models.registration import Registration
 from larpmanager.models.writing import (
     Faction,
     Handout,
@@ -42,7 +47,6 @@ from larpmanager.models.writing import (
     PlotCharacterRel,
     Prologue,
     PrologueType,
-    Relationship,
     SpeedLarp,
 )
 from larpmanager.utils.common import FileTypeValidator
@@ -51,35 +55,29 @@ from larpmanager.utils.common import FileTypeValidator
 class WritingForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.show_link = ["id_teaser", "id_text"]
 
-        for s in ["cover"]:
-            if s in self.fields and s not in self.params["features"]:
-                del self.fields[s]
+    def _init_special_fields(self):
+        types = set()
+        for que in self.questions:
+            types.add(que.typ)
 
-        if "assigned" in self.params["features"]:
+        if QuestionType.COVER not in types:
+            if "cover" in self.fields:
+                del self.fields["cover"]
+
+        if QuestionType.ASSIGNED in types:
             choices = [(m.id, m.show_nick()) for m in get_event_staffers(self.params["run"].event)]
             self.fields["assigned"].choices = [("", _("--- NOT ASSIGNED ---"))] + choices
         else:
             self.delete_field("assigned")
 
-        if "progress" in self.params["features"]:
+        if QuestionType.PROGRESS in types:
             self.fields["progress"].choices = [
                 (el.id, str(el)) for el in ProgressStep.objects.filter(event=self.params["run"].event).order_by("order")
             ]
         else:
             self.delete_field("progress")
-
-        # prepare translate text
-        if "translate" in self.params["features"]:
-            self.translate = {}
-            for k in self.fields:
-                if not isinstance(self.fields[k], CharField):
-                    continue
-                if k not in self.initial or not self.initial[k]:
-                    continue
-                self.translate[f"id_{k}"] = self.initial[k]
-
-        self.show_link = ["id_teaser", "id_text"]
 
 
 class PlayerRelationshipForm(MyForm):
@@ -102,13 +100,13 @@ class PlayerRelationshipForm(MyForm):
         cleaned_data = super().clean()
 
         if self.cleaned_data["target"].id == self.params["char"]["id"]:
-            self.add_error("target", _("You cannot create a relationship towards yourself!"))
+            self.add_error("target", _("You cannot create a relationship towards yourself") + "!")
 
         try:
             rel = PlayerRelationship.objects.get(reg=self.params["run"].reg, target=self.cleaned_data["target"])
             if rel.id != self.instance.id:
-                self.add_error("target", _("Already existing relationship!"))
-        except Exception:
+                self.add_error("target", _("Already existing relationship") + "!")
+        except ObjectDoesNotExist:
             pass
 
         return cleaned_data
@@ -124,53 +122,24 @@ class PlayerRelationshipForm(MyForm):
         return instance
 
 
-class OrgaRelationshipForm(MyForm):
-    page_info = _("This page allows you to add or edit a relationship between characters.")
+class UploadElementsForm(forms.Form):
+    allowed_types = [
+        "application/csv",
+        "text/csv",
+        "text/plain",
+        "application/zip",
+        "text/html",
+    ]
+    validator = FileTypeValidator(allowed_types=allowed_types)
 
-    page_title = _("Character Relationship")
-
-    class Meta:
-        model = Relationship
-        fields = "__all__"
-        widgets = {"source": EventCharacterS2Widget, "target": EventCharacterS2Widget}
+    first = forms.FileField(validators=[validator], required=False)
+    second = forms.FileField(validators=[validator], required=False)
 
     def __init__(self, *args, **kwargs):
+        only_one = kwargs.pop("only_one", False)
         super().__init__(*args, **kwargs)
-        self.fields["source"].widget.set_event(self.params["event"])
-        self.fields["source"].required = True
-        self.fields["target"].widget.set_event(self.params["event"])
-        self.fields["target"].required = True
-
-    def clean(self):
-        cleaned_data = super().clean()
-
-        if self.cleaned_data["source"] == self.cleaned_data["target"]:
-            self.add_error("source", _("You cannot add a relationship from character to self!"))
-
-        try:
-            rel = Relationship.objects.get(source_id=self.cleaned_data["source"], target_id=self.cleaned_data["target"])
-            if rel.id != self.instance.id:
-                self.add_error("source", _("Already existing relationship!"))
-        except Exception:
-            pass
-
-        return cleaned_data
-
-
-class UploadElementsForm(forms.Form):
-    elem = forms.FileField(
-        validators=[
-            FileTypeValidator(
-                allowed_types=[
-                    "application/csv",
-                    "text/csv",
-                    "text/plain",
-                    "application/zip",
-                    "text/html",
-                ]
-            )
-        ]
-    )
+        if only_one and "second" in self.fields:
+            del self.fields["second"]
 
 
 class BaseWritingForm(BaseRegistrationForm):
@@ -181,11 +150,15 @@ class BaseWritingForm(BaseRegistrationForm):
     question_class = WritingQuestion
     instance_key = "element_id"
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # noinspection PyProtectedMember
+        self.applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)
+
     def _init_questions(self, event):
         super()._init_questions(event)
         # noinspection PyProtectedMember
-        applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)
-        self.questions = self.questions.filter(applicable=applicable)
+        self.questions = self.questions.filter(applicable=self.applicable)
 
     def get_options_query(self, event):
         query = super().get_options_query(event)
@@ -195,14 +168,23 @@ class BaseWritingForm(BaseRegistrationForm):
         key = f"option_char_{option.id}"
         return key
 
-    class Meta:
-        abstract = True
+    def save(self, commit=True):
+        instance = super().save()
+
+        instance.save()
+        if hasattr(self, "questions"):
+            orga = True
+            if hasattr(self, "orga"):
+                orga = self.orga
+            self.save_reg_questions(instance, orga=orga)
+
+        return instance
 
 
 class PlotForm(WritingForm, BaseWritingForm):
-    load_templates = "plot"
+    load_templates = ["plot"]
 
-    load_js = "characters-choices"
+    load_js = ["characters-choices"]
 
     page_title = _("Plot")
 
@@ -221,7 +203,14 @@ class PlotForm(WritingForm, BaseWritingForm):
         self.init_orga_fields()
         self.reorder_field("characters")
 
+        self.init_characters = self.instance.get_plot_characters().values_list("character__id", flat=True)
+        self.initial["characters"] = self.init_characters
+
+        self._init_special_fields()
+
         # PLOT CHARACTERS REL
+        self.add_char_finder = []
+        self.field_link = {}
         if self.instance.pk:
             for ch in (
                 self.instance.get_plot_characters()
@@ -230,6 +219,7 @@ class PlotForm(WritingForm, BaseWritingForm):
             ):
                 char = f"#{ch[1]} {ch[2]}"
                 field = f"ch_{ch[0]}"
+                id_field = f"id_{field}"
                 self.fields[field] = forms.CharField(
                     widget=WritingTinyMCE(),
                     label=char,
@@ -239,41 +229,40 @@ class PlotForm(WritingForm, BaseWritingForm):
 
                 self.initial[field] = ch[3]
 
-                self.show_link.append("id_" + field)
+                self.show_link.append(id_field)
+                self.add_char_finder.append(id_field)
+                reverse_args = [self.params["event"].slug, self.params["run"].number, ch[0]]
+                self.field_link[id_field] = reverse("orga_characters_edit", args=reverse_args)
 
-    def get_init_multi_character(self):
-        que = PlotCharacterRel.objects.filter(plot__id=self.instance.pk)
-        return que.values_list("character_id", flat=True)
+    def _save_multi(self, s, instance):
+        new = set(self.cleaned_data["characters"].values_list("pk", flat=True))
+        old = set(self.init_characters)
 
-    @staticmethod
-    def save_multi_characters(instance, old, new):
         for ch in old - new:
             PlotCharacterRel.objects.filter(character_id=ch, plot_id=instance.pk).delete()
         for ch in new - old:
-            PlotCharacterRel.objects.create(character_id=ch, plot_id=instance.pk)
+            PlotCharacterRel.objects.get_or_create(character_id=ch, plot_id=instance.pk)
 
     def save(self, commit=True):
         instance = super().save()
 
-        if hasattr(self, "questions"):
-            self.save_reg_questions(instance)
-
-        if instance.pk:
-            for pr in self.instance.get_plot_characters():
-                field = f"ch_{pr.character_id}"
-                if field not in self.cleaned_data:
-                    continue
-                if self.cleaned_data[field] == pr.text:
-                    continue
-                pr.text = self.cleaned_data[field]
-                pr.save()
+        instance.save()
+        for pr in self.instance.get_plot_characters():
+            field = f"ch_{pr.character_id}"
+            if field not in self.cleaned_data:
+                continue
+            if self.cleaned_data[field] == pr.text:
+                continue
+            pr.text = self.cleaned_data[field]
+            pr.save()
 
         return instance
 
 
-class FactionForm(WritingForm):
-    load_templates = "faction"
-    load_js = "characters-choices"
+class FactionForm(WritingForm, BaseWritingForm):
+    load_templates = ["faction"]
+
+    load_js = ["characters-choices"]
 
     page_title = _("Faction")
 
@@ -284,14 +273,28 @@ class FactionForm(WritingForm):
 
         widgets = {
             "characters": EventCharacterS2WidgetMulti,
-            "teaser": WritingTinyMCE(),
-            "text": WritingTinyMCE(),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.init_orga_fields()
+
+        self.reorder_field("characters")
+
         if "user_character" not in self.params["features"]:
             self.delete_field("selectable")
+        else:
+            self.reorder_field("selectable")
+
+        self._init_special_fields()
+
+        # set typ help text
+        help_texts = {
+            _("Primary"): _("main grouping / affiliation for characters"),
+            _("Transversal"): _("secondary grouping across primary factions"),
+            _("Secret"): _("hidden faction visible only to assigned characters"),
+        }
+        self.fields["typ"].help_text = ", ".join([f"<b>{key}</b>: {value}" for key, value in help_texts.items()])
 
 
 class QuestTypeForm(WritingForm):
@@ -299,7 +302,7 @@ class QuestTypeForm(WritingForm):
 
     class Meta:
         model = QuestType
-        fields = ["progress", "name", "assigned", "teaser", "event"]
+        fields = ["name", "teaser", "event"]
 
         widgets = {
             "teaser": WritingTinyMCE(),
@@ -307,93 +310,37 @@ class QuestTypeForm(WritingForm):
         }
 
 
-class QuestForm(WritingForm):
+class QuestForm(WritingForm, BaseWritingForm):
     page_title = _("Quest")
 
     class Meta:
         model = Quest
-        fields = [
-            "progress",
-            "typ",
-            "name",
-            "assigned",
-            "teaser",
-            "text",
-            "hide",
-            "open_show",
-            "event",
-        ]
-
-        widgets = {
-            "teaser": WritingTinyMCE(),
-            "text": WritingTinyMCE(),
-        }
+        exclude = ("number", "temp", "hide", "order")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.init_orga_fields()
+        self._init_special_fields()
 
         que = self.params["run"].event.get_elements(QuestType)
         self.fields["typ"].choices = [(m.id, m.name) for m in que]
 
-        # ~ #if not 'questbuilder_open' in self.params['features']:
-        # ~ del self.fields['open_show']
 
-        self.details = {}
-
-        if not self.instance.pk:
-            return
-
-        # TRAITS CHARACTERS REL
-        if Run.objects.filter(event=self.params["run"].event).aggregate(Max("number"))["number__max"] > 1:
-            # do this only if this the only run of this event
-            return
-
-            # get traits
-        txts = []
-        for trait in self.instance.traits.all():
-            char_name = "<" + _("NOT ASSIGNED") + ">"
-            try:
-                at = AssignmentTrait.objects.get(run=self.params["run"], trait=trait)
-                reg = Registration.objects.get(run=self.params["run"], member=at.member)
-                chars = []
-                for rcr in reg.rcrs.all():
-                    chars.append(f"#{rcr.character.number}")
-                char_name = ", ".join(chars)
-            except Exception:
-                print(traceback.format_exc())
-                pass
-
-            txts.append(f"{trait.name} - {char_name}")
-
-
-class TraitForm(WritingForm):
+class TraitForm(WritingForm, BaseWritingForm):
     page_title = _("Trait")
 
-    load_templates = "trait"
+    load_templates = ["trait"]
 
     class Meta:
         model = Trait
-        fields = [
-            "progress",
-            "quest",
-            "name",
-            "assigned",
-            "teaser",
-            "text",
-            "role",
-            "keywords",
-            "safety",
-            "hide",
-            "event",
-        ]
-
-        widgets = {
-            "teaser": WritingTinyMCE(),
-            "text": WritingTinyMCE(),
-        }
+        exclude = ("number", "temp", "hide", "order", "traits")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.init_orga_fields()
+        self._init_special_fields()
 
         que = self.params["run"].event.get_elements(Quest)
         self.fields["quest"].choices = [(m.id, m.name) for m in que]
@@ -417,7 +364,7 @@ class HandoutForm(WritingForm):
 
 
 class HandoutTemplateForm(MyForm):
-    load_templates = "handout-template"
+    load_templates = ["handout-template"]
 
     class Meta:
         model = HandoutTemplate
@@ -435,7 +382,7 @@ class PrologueTypeForm(MyForm):
 class PrologueForm(WritingForm):
     page_title = _("Prologue")
 
-    load_js = "characters-choices"
+    load_js = ["characters-choices"]
 
     class Meta:
         model = Prologue
@@ -456,7 +403,7 @@ class PrologueForm(WritingForm):
 class SpeedLarpForm(WritingForm):
     page_title = _("Speed larp")
 
-    load_js = "characters-choices"
+    load_js = ["characters-choices"]
 
     class Meta:
         model = SpeedLarp

@@ -17,12 +17,10 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
 from datetime import datetime, timedelta
 from typing import Optional
 
 import holidays
-from django.conf import settings as conf_settings
 from django.db.models.signals import m2m_changed, post_save, pre_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
@@ -36,7 +34,7 @@ from larpmanager.models.casting import AssignmentTrait, Casting
 from larpmanager.models.event import EventTextType
 from larpmanager.models.member import Member
 from larpmanager.models.writing import Character, CharacterStatus
-from larpmanager.utils.tasks import my_send_mail, my_send_simple_mail
+from larpmanager.utils.tasks import my_send_mail
 from larpmanager.utils.text import get_event_text
 
 
@@ -53,12 +51,12 @@ def check_holiday():
 def join_email(assoc):
     for member in get_assoc_executives(assoc):
         activate(member.language)
-        subj = _("Welcome to LarpManager!")
+        subj = _("Welcome to LarpManager") + "!"
         body = render_to_string("mails/join_assoc.html", {"member": member, "assoc": assoc})
         my_send_mail(subj, body, member, assoc)
 
         activate(member.language)
-        subj = "LarpManager: Need help?"
+        subj = "We'd love your feedback on LarpManager"
         body = render_to_string("mails/help_assoc.html", {"member": member, "assoc": assoc})
         my_send_mail(subj, body, member, assoc, schedule=3600 * 24 * 2)
 
@@ -87,7 +85,7 @@ def assoc_roles_changed(sender, **kwargs):
             activate(mb.language)
             subj = hdr(instance.assoc) + _("Role approval %(role)s") % {"role": instance.name}
             url = get_url("manage", instance.assoc)
-            body = _("Access the management panel <a href= %(url)s'>from here!</a>.") % {"url": url}
+            body = _("Access the management panel <a href= %(url)s'>from here!</a>") % {"url": url} + "."
             my_send_mail(subj, body, mb, instance.assoc)
 
             # notify organizers
@@ -99,7 +97,7 @@ def assoc_roles_changed(sender, **kwargs):
                     "user": mb,
                     "role": instance.name,
                 }
-                body = _("The user has been enabled for the indicated role.")
+                body = _("The user has been assigned the specified role") + "."
                 my_send_mail(subj, body, m, instance.assoc)
 
 
@@ -131,7 +129,7 @@ def event_roles_changed(sender, **kwargs):
                 "event": instance.event,
             }
             url = get_url(f"{instance.event.slug}/1/manage/", instance.event.assoc)
-            body = _("Access the management panel <a href= %(url)s'>from here!</a>.") % {"url": url}
+            body = _("Access the management panel <a href= %(url)s'>from here!</a>") % {"url": url} + "."
             my_send_mail(subj, body, mb, instance.event)
 
             # notify organizers
@@ -144,7 +142,7 @@ def event_roles_changed(sender, **kwargs):
                     "role": instance.name,
                     "event": instance.event,
                 }
-                body = _("The user was enabled in the role for the indicated event.")
+                body = _("The user has been assigned the specified role") + "."
                 my_send_mail(subj, body, m, instance.event)
 
 
@@ -153,22 +151,38 @@ m2m_changed.connect(event_roles_changed, sender=EventRole.members.through)
 
 def bring_friend_instructions(reg, ctx):
     activate(reg.member.language)
-    subj = hdr(reg.run.event) + _("Bring a friend to %(event)s!") % {"event": reg.run}
+    subj = hdr(reg.run.event) + _("Bring a friend to %(event)s") % {"event": reg.run} + "!"
     body = _("Personal code: <b>%(cod)s</b>") % {"cod": reg.special_cod}
-    body += "<br /><br />" + _(
-        "Copy this code and share it with friends! Every friend who signs up  and uses "
-        "this code in the 'Discounts' field will receive %(amount_to)s %(currency)s discount on the "
-        "ticket. For each of them you will receive %(amount_from)s %(currency)s off to use on event "
-        "registration."
-    ) % {
-        "amount_to": ctx["bring_friend_discount_to"],
-        "amount_from": ctx["bring_friend_discount_from"],
-        "currency": reg.run.event.assoc.get_currency_symbol(),
-    }
-    body += "<br /><br />" + _("(check the available number of discounts <a href='%(url)s'>on this page</a>)") % {
-        "url": f"{reg.run.event.slug}/{reg.run.number}/limitations/"
-    }
-    body += "<br /><br />" + _("See you soon!")
+    body += (
+        "<br /><br />"
+        + _("Copy this code and share it with friends!")
+        + " "
+        + _(
+            "Every friend who signs up and uses this code in the 'Discounts' field will "
+            "receive %(amount_to)s %(currency)s off the ticket"
+        )
+        % {
+            "amount_to": ctx["bring_friend_discount_to"],
+            "currency": reg.run.event.assoc.get_currency_symbol(),
+        }
+        + ". "
+        + _("For each of them, you will receive %(amount_from)s %(currency)s off your own event registration")
+        % {
+            "amount_from": ctx["bring_friend_discount_from"],
+            "currency": reg.run.event.assoc.get_currency_symbol(),
+        }
+        + "."
+    )
+
+    body += (
+        "<br /><br />"
+        + _("Check the available number of discounts <a href='%(url)s'>on this page</a>")
+        % {"url": f"{reg.run.event.slug}/{reg.run.number}/limitations/"}
+        + "."
+    )
+
+    body += "<br /><br />" + _("See you soon") + "!"
+
     my_send_mail(subj, body, reg.member, reg.run)
 
 
@@ -196,13 +210,8 @@ def notify_trait_assigned(sender, instance, created, **kwargs):
         f"{instance.run.event.slug}/{instance.run.number}/character/your",
         instance.run.event,
     )
-    body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>!") % {"url": url}
-    if instance.run.get_config("show_text", False):
-        body += "<br/><br />" + _(
-            "Please note that your character sheet may contain  personal secrets, not to be "
-            "shared before the start of the event. To avoid accidentally spoiling your "
-            "experience, do not discuss its content with other participants!"
-        )
+    body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>") % {"url": url} + "!"
+
     custom_message_ass = get_event_text(instance.run.event_id, EventTextType.ASSIGNMENT)
     if custom_message_ass:
         body += "<br />" + custom_message_ass
@@ -215,11 +224,11 @@ def mail_confirm_casting(member, run, gl_name, lst, avoid):
         "type": gl_name,
         "event": run,
     }
-    body = _("Your preferences have been saved in the system (in that order):")
+    body = _("Your preferences have been saved in the system") + ":"
     body += "<br /><br />" + "<br />".join(lst)
     if avoid:
         body += "<br/><br />"
-        body += _("Elements you wish to avoid in the assignment:")
+        body += _("Elements you wish to avoid in the assignment") + ":"
         body += f" {avoid}"
     my_send_mail(subj, body, member, run)
 
@@ -249,6 +258,28 @@ def character_update_status(sender, instance, **kwargs):
             my_send_mail(subj, body, instance.player, instance.event)
 
 
-def notify_admins(subj, text):
-    for _name, email in conf_settings.ADMINS:
-        my_send_simple_mail(subj, text, email)
+def notify_organization_exe(subj, body, assoc, instance):
+    if assoc.main_mail:
+        activate(get_exec_language(assoc))
+        my_send_mail(subj, body, assoc.main_mail, instance)
+        return
+
+    for orga in get_assoc_executives(assoc):
+        activate(orga.language)
+        my_send_mail(subj, body, orga.email, instance)
+
+
+def get_exec_language(assoc):
+    # get most common language between organizers
+    langs = {}
+    for orga in get_assoc_executives(assoc):
+        lang = orga.language
+        if lang not in langs:
+            langs[lang] = 1
+        else:
+            langs[lang] += 1
+    if langs:
+        max_lang = max(langs, key=langs.get)
+    else:
+        max_lang = "en"
+    return max_lang

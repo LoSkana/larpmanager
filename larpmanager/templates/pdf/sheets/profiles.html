@@ -21,7 +21,7 @@ p { margin: 0.5em; }
         </style>
     </head>
     <body>
-        {% if show_char %}
+        {% if show_character %}
             <table>
                 {% for num, el in chars.items %}
                     <tr class="row">
@@ -36,7 +36,7 @@ p { margin: 0.5em; }
                         <td>
                             <p class="name">
                                 <a href="{% url 'character' event.slug run.number el.number %}">{{ el.name }}</a>
-                                {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
+                                {% if el.title and show_character.title %}- <b>{{ el.title }}</b>{% endif %}
                                 {% if el.pronoun %}({{ el.pronoun }}){% endif %}
                                 {% if el.player_id > 0 %}
                                     <p>
@@ -57,7 +57,7 @@ p { margin: 0.5em; }
                                 </p>
                             {% endif %}
                             <p class="teaser">
-                                {% if show_teaser and el.teaser %}
+                                {% if show_character.teaser and el.teaser %}
                                     <span class="teaser">{% replace_chars el.teaser 500 %}</span>
                                 </p>
                             {% endif %}

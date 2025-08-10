@@ -1,0 +1,25 @@
+{% load i18n %}
+<p>
+    {% trans "The quick access sidebar is on the left (on mobile, tap “Shortcuts” at the bottom to open it)" %}.
+    {% trans "Hover on the link, or click on the question icon, to see what the link does" %}.
+</p>
+<p>
+    {% trans "At the top, you'll find shortcuts to access your organization dashboard (this page), as well as the active event dashboards, when you'll create them" %}.
+</p>
+<p>
+    {% trans "You can now freely explore the system. You'll find below some suggestions on what you could do now to set up everything nicely" %}!
+</p>
+<p>{% trans "If you need help, remember to check out" %}:</p>
+<ul>
+    <li>
+        <a href="https://{{ assoc.slug }}.{{ assoc.main_domain }}/tutorials">Tutorials</a>: {% trans "Short guides to help you learn how the system works" %}
+    </li>
+    {% if assoc.skin_id == 1 %}
+        <li>
+            <a href="https://discord.gg/C4KuyQbuft">Discord</a>: {% trans "Join our Discord for help, ideas, or to report bugs" %}
+        </li>
+    {% endif %}
+</ul>
+<p>
+    <i>{% trans "Tip: Pin this page to your browser for faster access to your organization and events" %}!</i>
+</p>

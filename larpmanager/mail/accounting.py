@@ -24,6 +24,7 @@ from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_assoc_features, get_event_features
+from larpmanager.mail.base import notify_organization_exe
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.accounting import (
     AccountingItemCollection,
@@ -32,7 +33,7 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
     Collection,
-    PaymentInvoice,
+    PaymentType,
 )
 from larpmanager.models.association import get_url, hdr
 from larpmanager.models.member import Member
@@ -57,13 +58,18 @@ def get_expense_mail(instance):
         "user": instance.member,
         "event": instance.run,
     }
-    body += "<br /><br />" + _("The sum is %(amount).2f, with reason '%(reason)s'.") % {
-        "amount": instance.value,
-        "reason": instance.descr,
-    }
+    body += (
+        "<br /><br />"
+        + _("The sum is %(amount).2f, with reason '%(reason)s'")
+        % {
+            "amount": instance.value,
+            "reason": instance.descr,
+        }
+        + "."
+    )
     url = get_url(instance.download(), instance)
     body += f"<br /><br /><a href='{url}'>" + _("download document") + "</a>"
-    body += "<br /><br />" + _("Did you check and is it correct?")
+    body += "<br /><br />" + _("Did you check and is it correct") + "?"
     url = f"{instance.run.event.slug}/{instance.run.number}/manage/expenses/approve/{instance.pk}"
     body += f"<a href='{url}'>" + _("Confirmation of expenditure") + "</a>"
     return body, subj
@@ -84,16 +90,20 @@ def update_accounting_item_expense_pre(sender, instance, **kwargs):
     subj = hdr(instance) + _("Reimbursement approved")
     if instance.run:
         subj += " " + _("for") + f" {instance.run}"
-    body = _("Your request for reimbursement of %(amount).2f, with reason '%(reason)s', has been approved!") % {
-        "amount": instance.value,
-        "reason": instance.descr,
-    }
+    body = (
+        _("Your request for reimbursement of %(amount).2f, with reason '%(reason)s', has been approved")
+        % {
+            "amount": instance.value,
+            "reason": instance.descr,
+        }
+        + "!"
+    )
 
     token_name, credit_name = get_token_credit_name(instance.assoc)
 
     if instance.run and "token_credit" in get_event_features(instance.run.event_id):
-        body += "<br /><br /><i>" + _("The sum was disbursed to you as %(credits)s.") % {"credits": credit_name}
-        body += " " + _("This is automatically deducted from the registration of a future event.")
+        body += "<br /><br /><i>" + _("The sum was assigned to you as %(credits)s") % {"credits": credit_name} + "."
+        body += " " + _("This is automatically deducted from the registration of a future event") + "."
         body += (
             " "
             + _(
@@ -157,10 +167,14 @@ def get_pay_token_email(instance, run, token_name):
         "tokens": token_name,
         "event": run,
     }
-    body = _("%(amount)d %(tokens)s were used to participate in this event!") % {
-        "amount": int(instance.value),
-        "tokens": token_name,
-    }
+    body = (
+        _("%(amount)d %(tokens)s were used to participate in this event")
+        % {
+            "amount": int(instance.value),
+            "tokens": token_name,
+        }
+        + "!"
+    )
     return body, subj
 
 
@@ -182,10 +196,14 @@ def get_pay_credit_email(credit_name, instance, run):
         "credits": credit_name,
         "event": run,
     }
-    body = _("%(amount)d %(credits)s were used to participate in this event!") % {
-        "amount": int(instance.value),
-        "credits": credit_name,
-    }
+    body = (
+        _("%(amount)d %(credits)s were used to participate in this event")
+        % {
+            "amount": int(instance.value),
+            "credits": credit_name,
+        }
+        + "!"
+    )
     return body, subj
 
 
@@ -204,10 +222,14 @@ def notify_pay_money(curr_sym, instance, member, run):
 
 def get_pay_money_email(curr_sym, instance, run):
     subj = hdr(instance) + _("Payment per %(event)s") % {"event": run}
-    body = _("A payment of %(amount).2f %(currency)s was received for this event!") % {
-        "amount": instance.value,
-        "currency": curr_sym,
-    }
+    body = (
+        _("A payment of %(amount).2f %(currency)s was received for this event")
+        % {
+            "amount": instance.value,
+            "currency": curr_sym,
+        }
+        + "!"
+    )
     return body, subj
 
 
@@ -230,12 +252,18 @@ def update_accounting_item_other(sender, instance, **kwargs):
 def notify_refund(credit_name, instance):
     # to user
     activate(instance.member.language)
-    subj = hdr(instance) + _("Reimbursement payout")
-    body = _("Reimbursement of %(amount).2f %(credits)s with reason '%(reason)s' was disbursed.") % {
-        "amount": instance.value,
-        "credits": credit_name,
-        "reason": instance.descr,
-    }
+    subj = hdr(instance) + _("Issued Reimbursement")
+    body = (
+        _(
+            "A reimbursement for '%(reason)s' has been marked as issued. %(amount).2f %(elements)s have been marked as used"
+        )
+        % {
+            "amount": instance.value,
+            "elements": credit_name,
+            "reason": instance.descr,
+        }
+        + "."
+    )
     my_send_mail(subj, body, instance.member, instance)
 
 
@@ -246,7 +274,8 @@ def notify_credit(credit_name, instance):
     url = get_url("accounting", instance)
     add_body = (
         " <br /><br /><i>"
-        + _("They will be used automatically when you sign up for a new event!")
+        + _("They will be used automatically when you sign up for a new event")
+        + "!"
         + "<br /><br />"
         + _("Alternatively, you can request a reimbursement in <a href='%(url)s'>your accounting</a>.</i>")
         % {"url": url}
@@ -262,16 +291,20 @@ def notify_credit(credit_name, instance):
 
 
 def get_credit_email(credit_name, instance):
-    subj = hdr(instance) + _("Disbursement %(credits)s") % {
-        "credits": credit_name,
+    subj = hdr(instance) + _("Assignment %(elements)s") % {
+        "elements": credit_name,
     }
     if instance.run:
         subj += " " + _("for") + " " + str(instance.run)
-    body = _('%(amount).2f %(credits)s were disbursed with reason "%(reason)s".') % {
-        "amount": instance.value,
-        "credits": credit_name,
-        "reason": instance.descr,
-    }
+    body = (
+        _("Assigned %(amount).2f %(elements)s for '%(reason)s'")
+        % {
+            "amount": instance.value,
+            "elements": credit_name,
+            "reason": instance.descr,
+        }
+        + "."
+    )
     return subj, body
 
 
@@ -279,7 +312,7 @@ def notify_token(instance, token_name):
     # to user
     activate(instance.member.language)
     subj, body = get_token_email(instance, token_name)
-    add_body = "<br /><br /><i>" + _("They will be used automatically when you sign up for a new event!") + "</i>"
+    add_body = "<br /><br /><i>" + _("They will be used automatically when you sign up for a new event") + "!" + "</i>"
     my_send_mail(subj, body + add_body, instance.member, instance)
     # to orga
     if instance.run:
@@ -291,16 +324,20 @@ def notify_token(instance, token_name):
 
 
 def get_token_email(instance, token_name):
-    subj = hdr(instance) + _("Delivery %(tokens)s") % {
-        "tokens": token_name,
+    subj = hdr(instance) + _("Assignment %(elements)s") % {
+        "elements": token_name,
     }
     if instance.run:
         subj += " " + _("for") + " " + str(instance.run)
-    body = _("%(amount)d %(tokens)s were disbursed with %(reason)s.") % {
-        "amount": int(instance.value),
-        "tokens": token_name,
-        "reason": instance.descr,
-    }
+    body = (
+        _("Assigned %(amount).2f %(elements)s for '%(reason)s'")
+        % {
+            "amount": int(instance.value),
+            "elements": token_name,
+            "reason": instance.descr,
+        }
+        + "."
+    )
     return subj, body
 
 
@@ -350,7 +387,10 @@ def save_collection_gift(sender, instance, **kwargs):
         subj = hdr(instance.collection) + _("Collection participation for: %(recipient)s") % {
             "recipient": instance.collection.display_member()
         }
-        body = _("We thank you for participating in the collection: we are sure they will live a terrific experience!")
+        body = (
+            _("We thank you for participating in the collection: we are sure they will live a terrific experience")
+            + "!"
+        )
         my_send_mail(subj, body, instance.member, instance.collection)
 
         activate(instance.collection.organizer.language)
@@ -358,7 +398,9 @@ def save_collection_gift(sender, instance, **kwargs):
             "recipient": instance.collection.display_member(),
             "user": instance.member.display_member(),
         }
-        body = _("The collection grows: we have no doubt, the fortunate will live soon an unprecedented experience!")
+        body = (
+            _("The collection grows: we have no doubt, the fortunate will live soon an unprecedented experience") + "!"
+        )
         my_send_mail(subj, body, instance.collection.organizer, instance.collection)
         return
 
@@ -378,7 +420,7 @@ def notify_invoice_check(inv):
             my_send_mail(subj, body, orga, inv)
 
     # if it is for a sign up, send the confirmation to the organizers
-    elif inv.typ == PaymentInvoice.REGISTRATION and inv.reg:
+    elif inv.typ == PaymentType.REGISTRATION and inv.reg:
         for orga in get_event_organizers(inv.reg.run.event):
             activate(orga.language)
             body, subj = get_invoice_email(inv)
@@ -387,18 +429,18 @@ def notify_invoice_check(inv):
     # if nothing else applies, simply send to the main mail
     else:
         body, subj = get_invoice_email(inv)
-        my_send_mail(subj, body, inv.assoc.main_mail, inv)
+        notify_organization_exe(subj, body, inv.assoc, inv)
 
 
 def notify_refund_request(p):
     subj = hdr(p) + _("Request refund from: %(user)s") % {"user": p.member}
     body = _("Details: %(details)s (<b>%(amount).2f</b>)") % {"details": p.details, "amount": p.value}
     # print(subj)
-    my_send_mail(subj, body, p.assoc.main_mail, p.assoc)
+    notify_organization_exe(subj, body, p.assoc, p.assoc)
 
 
 def get_invoice_email(inv):
-    body = _("Verify that the data are correct:")
+    body = _("Verify that the data are correct") + ":"
     body += "<br /><br />" + _("Reason for payment") + f": <b>{inv.causal}</b>"
     body += "<br /><br />" + _("Amount") + f": <b>{inv.mc_gross:.2f}</b>"
     if inv.invoice:
@@ -406,7 +448,7 @@ def get_invoice_email(inv):
         body += f"<br /><br /><a href='{url}'>" + _("Download document") + "</a>"
     elif inv.method and inv.method.slug == "any":
         body += f"<br /><br /><i>{inv.text}</i>"
-    body += "<br /><br />" + _("Did you check and is it correct?")
+    body += "<br /><br />" + _("Did you check and is it correct") + "?"
     url = get_url("accounting/confirm", inv)
     body += f" <a href='{url}/{inv.cod}'>" + _("Payment confirmation") + "</a>"
     causal = inv.causal

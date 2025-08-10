@@ -6,7 +6,7 @@
 {% block content %}
     {% if done %}
         <p>
-            <i>{% trans "We confirm that your votes are correctly registered in the system! Thank you for participating in the democratic life of the Organization!" %}</i>
+            <i>{% trans "We confirm that your votes are correctly registered in the system! Thank you for participating in the democratic life of the Organization" %}!</i>
         </p>
     {% else %}
         {% if vote_open %}
@@ -14,13 +14,13 @@
                 <h3>{% trans "Candidates" %}</h3>
                 <p>
                     <i>
-                        {% trans "Minimum number of votes:" %} {{ vote_min }}.
-                        {% trans "Maximum number of votes:" %} {{ vote_max }}.
+                        {% trans "Minimum number of votes" %}: {{ vote_min }}.
+                        {% trans "Maximum number of votes" %}: {{ vote_max }}.
                     </i>
                 </p>
                 <form action="{{ request.path }}"  method="post">
                     {% csrf_token %}
-                    <table class="mob no_csv">
+                    <table class="mob ">
                         {% for el in candidates %}
                             <tr>
                                 <td>
@@ -50,7 +50,7 @@
             </div>
         {% else %}
             <p>
-                <i>{% trans "Vote not yet open!" %}</i>
+                <i>{% trans "Vote not yet open" %}!</i>
             </p>
         {% endif %}
     {% endif %}
@@ -58,10 +58,9 @@
 {% block js %}
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(document).ready(function () {
-    console.log("ciao");
     $( "input.votes" ).change(function() {
         var cnt = $( "input.votes:checked" ).length;
-        console.log(cnt);
+        // console.log(cnt);
         $( "#submit" ).attr("disabled", cnt < {{ vote_min }} || cnt > {{ vote_max }} );
     });
 });

@@ -22,15 +22,17 @@ import time
 
 from django.contrib import messages
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import _get_fkey_config
+from larpmanager.forms.utils import EventCharacterS2Widget
+from larpmanager.models.association import Association
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
 from larpmanager.models.member import Log
-from larpmanager.models.writing import TextVersion
+from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
 from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.common import html_clean
 from larpmanager.utils.event import check_event_permission
@@ -62,11 +64,25 @@ def save_version(el, tp, mb, dl=False):
             if not value:
                 continue
             value = html_clean(value)
-            texts.append(f"{que.display}: {value}")
+            texts.append(f"{que.name}: {value}")
 
         tv.text = "\n".join(texts)
     else:
         tv.text = el.text
+
+    if tp == QuestionApplicable.CHARACTER:
+        rels = Relationship.objects.filter(source=el)
+        if rels:
+            tv.text += "\nRelationships\n"
+            for rel in rels:
+                tv.text += f"{rel.target}: {html_clean(rel.text)}\n"
+
+    if tp == QuestionApplicable.PLOT:
+        chars = PlotCharacterRel.objects.filter(plot=el)
+        if chars:
+            tv.text += "\nCharacters\n"
+            for rel in chars:
+                tv.text += f"{rel.character}: {html_clean(rel.text)}\n"
 
     tv.save()
 
@@ -78,13 +94,13 @@ def _get_field_value(el, que):
         return mapping[que.typ]()
 
     if que.typ in {"p", "t", "e"}:
-        try:
-            return WritingAnswer.objects.get(question=que, element_id=el.id).text
-        except ObjectDoesNotExist:
-            return ""
+        answers = WritingAnswer.objects.filter(question=que, element_id=el.id)
+        if answers:
+            return answers.first().text
+        return ""
 
     if que.typ in {"s", "m"}:
-        return ", ".join(c.option.display for c in WritingChoice.objects.filter(question=que, element_id=el.id))
+        return ", ".join(c.option.name for c in WritingChoice.objects.filter(question=que, element_id=el.id))
 
     return None
 
@@ -107,11 +123,16 @@ def check_run(el, ctx, afield=None):
     if afield:
         el = getattr(el, afield)
 
-    if not hasattr(el, "run"):
-        return
-
-    if el.run != ctx["run"]:
+    if hasattr(el, "run") and el.run != ctx["run"]:
         raise Http404("not your run")
+
+    if hasattr(el, "event"):
+        is_child = ctx["event"].parent_id is not None
+        event_matches = el.event_id == ctx["event"].id
+        parent_matches = el.event_id == ctx["event"].parent_id
+
+        if (not is_child and not event_matches) or (is_child and not event_matches and not parent_matches):
+            raise Http404("not your event")
 
 
 def check_assoc(el, ctx, afield=None):
@@ -131,7 +152,7 @@ def user_edit(request, ctx, form_type, nm, eid):
 
         if form.is_valid():
             p = form.save()
-            messages.success(request, _("Operation completed!"))
+            messages.success(request, _("Operation completed") + "!")
 
             dl = "delete" in request.POST and request.POST["delete"] == "1"
             save_log(request.user.member, form_type, p, dl)
@@ -163,7 +184,7 @@ def backend_get(ctx, typ, eid, afield=None):
     ctx["name"] = str(el)
 
 
-def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False, add_another=True):
+def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
     typ = form_type.Meta.model
     ctx["elementTyp"] = typ
     ctx["request"] = request
@@ -173,6 +194,7 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False, add_ano
         if eid is None:
             eid = request.assoc["id"]
             ctx["nonum"] = True
+
     elif eid is None:
         eid = ctx["event"].id
         ctx["nonum"] = True
@@ -182,12 +204,13 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False, add_ano
     else:
         ctx["el"] = None
 
+    ctx["num"] = eid
     if request.method == "POST":
-        form = form_type(request.POST, request.FILES, instance=ctx["el"], ctx=ctx)
+        ctx["form"] = form_type(request.POST, request.FILES, instance=ctx["el"], ctx=ctx)
 
-        if form.is_valid():
-            p = form.save()
-            messages.success(request, _("Operation completed!"))
+        if ctx["form"].is_valid():
+            p = ctx["form"].save()
+            messages.success(request, _("Operation completed") + "!")
 
             dl = "delete" in request.POST and request.POST["delete"] == "1"
             save_log(request.user.member, form_type, p, dl)
@@ -198,21 +221,24 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False, add_ano
 
             return True
     else:
-        form = form_type(instance=ctx["el"], ctx=ctx)
+        ctx["form"] = form_type(instance=ctx["el"], ctx=ctx)
 
-    ctx["form"] = form
-    ctx["num"] = eid
     if eid != 0:
         ctx["name"] = str(ctx["el"])
 
-    ctx["add_another"] = add_another
+    ctx["add_another"] = "add_another" not in ctx or ctx["add_another"]
+    if ctx["add_another"]:
+        ctx["continue_add"] = "continue" in request.POST
 
     return False
 
 
-def orga_edit(request, s, n, perm, form_type, eid, red=None, add_another=True):
+def orga_edit(request, s, n, perm, form_type, eid, red=None, add_ctx=None):
     ctx = check_event_permission(request, s, n, perm)
-    if backend_edit(request, ctx, form_type, eid, afield=None, assoc=False, add_another=add_another):
+    if add_ctx:
+        ctx.update(add_ctx)
+    if backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
+        set_suggestion(ctx, perm)
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, num=0)
         if not red:
@@ -221,11 +247,12 @@ def orga_edit(request, s, n, perm, form_type, eid, red=None, add_another=True):
     return render(request, "larpmanager/orga/edit.html", ctx)
 
 
-def exe_edit(request, form_type, eid, perm, red=None, afield=None, add_ctx=None, add_another=True):
+def exe_edit(request, form_type, eid, perm, red=None, afield=None, add_ctx=None):
     ctx = check_assoc_permission(request, perm)
     if add_ctx:
         ctx.update(add_ctx)
-    if backend_edit(request, ctx, form_type, eid, afield=afield, assoc=True, add_another=add_another):
+    if backend_edit(request, ctx, form_type, eid, afield=afield, assoc=True):
+        set_suggestion(ctx, perm)
         if "continue" in request.POST:
             return redirect(request.resolver_match.view_name, num=0)
         if not red:
@@ -234,14 +261,32 @@ def exe_edit(request, form_type, eid, perm, red=None, afield=None, add_ctx=None,
     return render(request, "larpmanager/exe/edit.html", ctx)
 
 
+def set_suggestion(ctx, perm):
+    if "event" in ctx:
+        obj = ctx["event"]
+    else:
+        obj = Association.objects.get(pk=ctx["a_id"])
+
+    key = f"{perm}_suggestion"
+    suggestion = obj.get_config(key, False)
+    if suggestion:
+        return
+
+    fk_field = _get_fkey_config(obj)
+    (config, created) = obj.configs.model.objects.get_or_create(**{fk_field: obj, "name": key})
+    config.value = True
+    config.save()
+
+
 def writing_edit(request, ctx, form_type, nm, tp, redr=None):
     ctx["elementTyp"] = form_type.Meta.model
     if nm in ctx:
-        ctx["type"] = tp
         ctx["eid"] = ctx[nm].id
         ctx["name"] = str(ctx[nm])
     else:
         ctx[nm] = None
+
+    ctx["type"] = ctx["elementTyp"].__name__.lower()
 
     if request.method == "POST":
         form = form_type(request.POST, request.FILES, instance=ctx[nm], ctx=ctx)
@@ -253,8 +298,21 @@ def writing_edit(request, ctx, form_type, nm, tp, redr=None):
     ctx["nm"] = nm
     ctx["form"] = form
     ctx["add_another"] = True
+    ctx["continue_add"] = "continue" in request.POST
+    ctx["auto_save"] = not ctx["event"].get_config("writing_disable_auto", False)
+
+    _setup_char_finder(ctx)
 
     return render(request, "larpmanager/orga/writing/writing.html", ctx)
+
+
+def _setup_char_finder(ctx):
+    ctx["disable_char_finder"] = ctx["event"].get_config("writing_disable_char_finder", False)
+    if not ctx["disable_char_finder"]:
+        widget = EventCharacterS2Widget(attrs={"id": "char_finder"})
+        widget.set_event(ctx["event"])
+        ctx["char_finder"] = widget.render(name="char_finder", value="")
+        ctx["char_finder_media"] = widget.media
 
 
 def _writing_save(ctx, form, form_type, nm, redr, request, tp):
@@ -266,7 +324,9 @@ def _writing_save(ctx, form, form_type, nm, redr, request, tp):
             return JsonResponse({"res": "ko"})
 
     # Normal save
-    p = form.save()
+    p = form.save(commit=False)
+    p.temp = False
+    p.save()
     dl = "delete" in request.POST and request.POST["delete"] == "1"
     if tp:
         save_version(p, tp, request.user.member, dl)
@@ -276,7 +336,7 @@ def _writing_save(ctx, form, form_type, nm, redr, request, tp):
     if dl:
         p.delete()
 
-    messages.success(request, _("Operation completed!"))
+    messages.success(request, _("Operation completed") + "!")
 
     if "continue" in request.POST:
         return redirect(request.resolver_match.view_name, s=ctx["event"].slug, n=ctx["run"].number, num=0)
@@ -299,54 +359,48 @@ def writing_edit_save_ajax(form, request, ctx):
     if eid <= 0:
         return res
 
-    # noinspection PyProtectedMember
-    typ = form._meta.model
+    tp = request.POST["type"]
+    token = request.POST["token"]
+    msg = writing_edit_working_ticket(request, tp, eid, token)
+    if msg:
+        res["warn"] = msg
+        return JsonResponse(res)
 
-    # copy fields and save
-    obj = typ.objects.get(pk=eid)
-    obj.temp = True
-    # noinspection PyProtectedMember
-    for f in typ._meta.get_fields():
-        if f.name not in form.cleaned_data:
-            continue
-        if not f.many_to_one and f.related_model:
-            continue
-
-        if f.get_internal_type() == "BooleanField":
-            continue
-
-            # print(f)
-        v = form.cleaned_data[f.name]
-        if not v:
-            continue
-
-        setattr(obj, f.name, v)
-    obj.save()
-
-    if "working_ticket" in ctx["features"]:
-        writing_edit_working_ticket(eid, request, res)
+    p = form.save(commit=False)
+    p.temp = True
+    p.save()
 
     return JsonResponse(res)
 
 
-def writing_edit_working_ticket(eid, request, res):
-    tp = request.POST["type"]
+def writing_edit_working_ticket(request, tp, eid, token):
+    # working ticket also for related characters
+    if tp == "plot":
+        obj = Plot.objects.get(pk=eid)
+        for char_id in obj.characters.values_list("pk", flat=True):
+            msg = writing_edit_working_ticket(request, "character", char_id, token)
+            if msg:
+                return msg
+
     now = int(time.time())
     key = writing_edit_cache_key(eid, tp)
     ticket = cache.get(key)
-    mid = request.user.member.id
     if not ticket:
         ticket = {}
     others = []
-    ticket_time = 60
+    ticket_time = 15
     for idx, el in ticket.items():
         (name, tm) = el
-        if idx != mid and now - tm < ticket_time:
+        if idx != token and now - tm < ticket_time:
             others.append(name)
-        if len(others) > 0:
-            warn = _("Warning! Other users are editing this item.")
-            warn += " " + _("You cannot work on it at the same time: the work of one of you would be lost.")
-            warn += " " + _("List of other users:") + ", ".join(others)
-            res["warn"] = warn
-    ticket[mid] = (str(request.user.member), now)
+
+    msg = ""
+    if len(others) > 0:
+        msg = _("Warning! Other users are editing this item") + "."
+        msg += " " + _("You cannot work on it at the same time: the work of one of you would be lost") + "."
+        msg += " " + _("List of other users") + ": " + ", ".join(others)
+
+    ticket[token] = (str(request.user.member), now)
     cache.set(key, ticket, ticket_time)
+
+    return msg

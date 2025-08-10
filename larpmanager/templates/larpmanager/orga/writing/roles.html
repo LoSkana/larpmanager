@@ -4,46 +4,48 @@
     {% trans "Roles" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the roles of the characters." %}
+    {% trans "This page shows the roles of the characters" %}
 {% endblock info %}
 {% block content %}
-    <table class="tablesorter mob writing">
+    <table id="roles"
+           class="{% if not interface_old %}go_datatable{% endif %} writing">
         <thead>
             <tr>
                 <th>{% trans "Character" %}</th>
                 <th>{% trans "Player" %}</th>
                 {% for rl in all_roles %}<th>{{ rl }}</th>{% endfor %}
-            </thead>
-            <tbody>
-                {% for num, char in chars.items %}
-                    <tr>
-                        <td>{{ char.name }}</td>
-                        <td>{{ char.player_full }}</td>
-                        {% for rl in all_roles %}
-                            <td>
-                                {% get_field char.roles rl %}
-                            </th>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-            </tbody>
+            </tr>
+        </thead>
+        <tbody>
+            {% for num, char in chars.items %}
+                <tr>
+                    <td>{{ char.name }}</td>
+                    <td>{{ char.player_full }}</td>
+                    {% for rl in all_roles %}
+                        <td>{% get_field char.roles rl %}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% for el in roles_list %}
+        <h3>{{ el.0 }}</h3>
+        <table id="char_roles"
+               class="{% if not interface_old %}go_datatable{% endif %}">
+            {% for c in el.1 %}
+                <tr>
+                    <td>{{ c.0.name }}</td>
+                    <td>{{ c.1 }}</td>
+                    <td>{{ c.0.player_full }}</td>
+                    <td>
+                        <img src="{% if c.0.player_prof %}{{ c.0.player_prof }}{% else %}{{ c.0.thumb }}{% endif %}"
+                             height="100"
+                             width="100"
+                             alt="player profile" />
+                    </td>
+                    <td>{{ c.0.pronoun | default_if_none:"" }}</td>
+                </tr>
+            {% endfor %}
         </table>
-        {% for el in roles_list %}
-            <h3>{{ el.0 }}</h3>
-            <table class="mob tablesorter">
-                {% for c in el.1 %}
-                    <tr>
-                        <td>{{ c.0.name }}</td>
-                        <td>{{ c.1 }}</td>
-                        <td>{{ c.0.player_full }}</td>
-                        <td>
-                            <img src="{% if c.0.player_prof %}{{ c.0.player_prof }}{% else %}{{ c.0.thumb }}{% endif %}"
-                                 height="100"
-                                 width="100" />
-                        </td>
-                        <td>{{ c.0.pronoun | default_if_none:"" }}</td>
-                    </tr>
-                {% endfor %}
-            </table>
-        {% endfor %}
-    {% endblock content %}
+    {% endfor %}
+{% endblock content %}

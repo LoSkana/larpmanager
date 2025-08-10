@@ -155,12 +155,12 @@ h4 {
 }
 
 #header {
-    height: 4em;
+    height: 2.5em;
 }
 
 #header h1 {
-    font-size: 1.2em;
-    margin: 0.2em;
+    font-size: 1em;
+    margin: 0.3em;
     text-align: center;
     padding: 0;
 }
@@ -323,10 +323,6 @@ form ul li input[type="checkbox"] {
 .nav2 a {
     background: none;
     border: none;
-}
-
-.nav .lm_tooltiptext{
-    line-height:150%;
 }
 
 p {
@@ -528,50 +524,13 @@ input[type="datetime_p"]:focus {
   display: inline;
 }
 
-.lm_tooltip .lm_tooltiptext {
-  font-size:100%;
-  visibility: hidden;
-  padding: 0.5em;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -100px;
-  width: 200px;
-  height: auto;
-  opacity: 0;
-  transition: opacity 0.3s;
-  line-height: 1;
+.lm_tooltiptext {
+    display: none;
 }
 
-@media screen and (max-width: 736px) {
-    .lm_tooltip .lm_tooltiptext {
-        display: none;
-    }
-}
-
-.lm_tooltip .lm_tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
-
-.lm_tooltip:hover .lm_tooltiptext {
-  visibility: visible;
-  opacity: 1;
-}
-
-.lm_tooltip a img {
-    height: 1em;
+.qtip.qtip-lm .qtip-content {
+    font-size: 1.3em;
+    line-height: 1.1;
 }
 
 /*** show_char ***/
@@ -660,11 +619,6 @@ input[type="datetime_p"]:focus {
     font-size: large;
 }
 
-.writing .lm_tooltiptext {
-  margin-left: -250px;
-  width: 500px;
-}
-
 .writing th, .writing td {
     padding: 1em;
 }
@@ -687,12 +641,6 @@ input[type="datetime_p"]:focus {
     float: left;
     margin-bottom: 2em;
     text-align: center;
-}
-
-.gallery .badge .lm_tooltiptext {
-  margin-left: -75px;
-  width: 150px;
-  bottom: 65%;
 }
 
 .single .el {
@@ -916,11 +864,6 @@ div.ui-lm_tooltip {
 .active a {
     background-color: rgba(var(--pri-rgb), 0.25);
     pointer-events: none;
-}
-
-.presentation h2, .sheet h2 {
-    margin-top: 1em;
-    margin-bottom: 0.3em;
 }
 
 .workshop {
@@ -1202,19 +1145,16 @@ body.loaded .fade-in {
 
 @media screen and (max-width: 480px) {
 
-    .sheet .plot {
+    .plot {
         padding: 0.5em;
+        background: none;
+        border: none;
     }
 
     .gallery .text {
         margin: 0 !important;
         padding: 0 !important;
     }
-
-    .plot {
-        padding: 0.5em;
-    }
-
     .calendar .event {
         display: block;
     }
@@ -1245,24 +1185,6 @@ body.loaded .fade-in {
         font-size: 120%;
         bottom: auto;
         top: 1em;
-    }
-
-    .gallery .badge .lm_tooltiptext {
-        font-size: 110%;
-        position: absolute;
-        bottom: 1em;
-        z-index: 9;
-        left: 0;
-        right: 0;
-        visibility: visible;
-        opacity: 1;
-        top: auto;
-        padding: 0.3em;
-        background-color: rgba(0, 0, 0, 0.7);
-        border: solid 1px rgba(var(--pri-rgb), 0.125);
-        border-radius: 0.5em;
-        margin: 1em;
-        width: 90%;
     }
 
     .relationships {
@@ -1377,8 +1299,8 @@ body.loaded .fade-in {
     }
 }
 
-.qtip {
- max-width: 280px !important;
+.qtip-char {
+    width: 250px;
 }
 
 .xdsoft_datepicker {

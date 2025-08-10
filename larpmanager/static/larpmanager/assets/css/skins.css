@@ -1,0 +1,21 @@
+#ludomanager { background: white; }
+
+#ludomanager #header { display: none; }
+
+#ludomanager #banner { background: none; padding: 1em }
+
+#ludomanager #banner h2 { color: #00916f }
+
+#ludomanager #banner h1 { color: #000 }
+
+#ludomanager .federlogo { text-align: center; }
+
+#ludomanager .federlogo img { width: 100%; max-width: 400px; margin: 1em auto; }
+
+#ludomanager .starter { line-height: normal; padding: 0 1em }
+
+#ludomanager .special { font-size: 120%; }
+
+#ludomanager .box { box-shadow: none; padding: 0; }
+
+#ludomanager #page-wrapper { padding: 0 }

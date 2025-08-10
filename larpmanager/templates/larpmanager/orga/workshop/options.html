@@ -4,11 +4,12 @@
     {% trans "Answers WS" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the response options for questions about the workshops of the event." %}
+    {% trans "This page shows the response options for questions about the workshops of the event" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
-    <table id="workshop_options" class="tablesorter mob writing">
+    <table id="workshop_options"
+           class="{% if not interface_old %}go_datatable{% endif %} writing">
         <thead>
             <tr>
                 <th></th>
@@ -22,11 +23,12 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_workshop_options_edit' run.event.slug run.number el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'orga_workshop_options_edit' run.event.slug run.number el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.question.module }}</td>
                     <td>{{ el.question }}</td>
-                    <td>{{ el.display }}</td>
+                    <td>{{ el.name }}</td>
                     <td>
                         {% if el.is_correct %}Y{% endif %}
                     </td>

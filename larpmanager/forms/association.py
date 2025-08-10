@@ -24,10 +24,10 @@ from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext
 
-from larpmanager.cache.feature import reset_assoc_features
+from larpmanager.cache.feature import get_assoc_features, reset_assoc_features
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
-from larpmanager.forms.feature import FeatureForm
+from larpmanager.forms.feature import FeatureForm, QuickSetupForm
 from larpmanager.forms.utils import (
     AssocMemberS2WidgetMulti,
     SlugInput,
@@ -42,7 +42,7 @@ from larpmanager.models.association import Association, AssocText, AssocTextType
 class ExeAssociationForm(MyForm):
     page_title = _("Settings")
 
-    page_info = _("This page allows you to change the main settings of your Organization.")
+    page_info = _("This page allows you to change the main settings of your Organization")
 
     class Meta:
         model = Association
@@ -61,6 +61,7 @@ class ExeAssociationForm(MyForm):
             "review_done",
             "images_shared",
             "plan",
+            "skin",
         )
 
     def __init__(self, *args, **kwargs):
@@ -75,7 +76,7 @@ class ExeAssociationForm(MyForm):
 class ExeAssocTextForm(MyForm):
     page_title = _("Texts")
 
-    page_info = _("This page allows you to edit organization-specific text.")
+    page_info = _("This page allows you to edit organization-specific text")
 
     class Meta:
         abstract = True
@@ -86,9 +87,6 @@ class ExeAssocTextForm(MyForm):
         super().__init__(*args, **kwargs)
         ch = AssocTextType.choices
         delete_choice = [AssocTextType.PRIVACY]
-
-        if "assoc_tac" not in self.params["features"]:
-            delete_choice.append(AssocTextType.TOC)
 
         if "legal_notice" not in self.params["features"]:
             delete_choice.append(AssocTextType.LEGAL)
@@ -168,7 +166,9 @@ class ExeAssocTextForm(MyForm):
 class ExeAssocRoleForm(MyForm):
     page_title = _("Roles")
 
-    page_info = _("This page allows you to edit the roles of the association.")
+    page_info = _("This page allows you to edit the roles of the association")
+
+    load_templates = ["share"]
 
     class Meta:
         model = AssocRole
@@ -191,7 +191,7 @@ class ExeAppearanceForm(MyCssForm):
 
     page_info = _(
         "This page allows you to change the appearance settings and presentation of the "
-        "management system for your Organization."
+        "management system for your Organization"
     )
 
     class Meta:
@@ -226,10 +226,8 @@ class ExeFeatureForm(FeatureForm):
     page_title = _("Features")
 
     page_info = _(
-        "This page allows you to select the features activated for the organization, and all its events. Click on a feature to show its description."
+        "This page allows you to select the features activated for the organization, and all its events (click on a feature to show its description)"
     )
-
-    load_js = "feature_checkbox"
 
     class Meta:
         model = Association
@@ -249,11 +247,11 @@ class ExeFeatureForm(FeatureForm):
 class ExeConfigForm(ConfigForm):
     page_title = _("Configuration")
 
-    page_info = _("This page allows you to edit the configuration of the activated features.")
+    page_info = _("This page allows you to edit the configuration of the activated features")
 
     section_replace = True
 
-    load_js = "config-search"
+    load_js = ["config-search"]
 
     istr = []
 
@@ -266,70 +264,67 @@ class ExeConfigForm(ConfigForm):
         self.prevent_canc = True
 
     def set_configs(self):
-        # ## CALENDAR
-        section = _("Calendar")
+        # CALENDAR
+        self.set_section("interface", _("Interface"))
 
-        label = _("Show event links")
-        help_text = _("If checked: shows a link to the event in the navigation bar.")
-        self.add_configs("calendar_show_event", ConfigType.BOOL, section, label, help_text)
+        label = _("Old interface")
+        help_text = _("If checked: uses old interface")
+        self.add_configs("interface_old", ConfigType.BOOL, label, help_text)
+
+        # CALENDAR
+        self.set_section("calendar", _("Calendar"))
 
         label = _("Past events")
-        help_text = _("If checked: shows a link in the calendar to past events.")
-        self.add_configs("calendar_past_events", ConfigType.BOOL, section, label, help_text)
+        help_text = _("If checked: shows a link in the calendar to past events")
+        self.add_configs("calendar_past_events", ConfigType.BOOL, label, help_text)
 
         label = _("Website")
         help_text = _("If checked: shows the website for each event")
-        self.add_configs("calendar_website", ConfigType.BOOL, section, label, help_text)
+        self.add_configs("calendar_website", ConfigType.BOOL, label, help_text)
 
         label = _("Description")
         help_text = _("If checked: shows the description for each event")
-        self.add_configs("calendar_description", ConfigType.BOOL, section, label, help_text)
+        self.add_configs("calendar_description", ConfigType.BOOL, label, help_text)
 
         label = _("Where")
         help_text = _("If checked: shows the position for each event")
-        self.add_configs("calendar_where", ConfigType.BOOL, section, label, help_text)
+        self.add_configs("calendar_where", ConfigType.BOOL, label, help_text)
 
         label = _("Authors")
         help_text = _("If checked: shows the list of authors for each event")
-        self.add_configs("calendar_authors", ConfigType.BOOL, section, label, help_text)
+        self.add_configs("calendar_authors", ConfigType.BOOL, label, help_text)
 
         label = pgettext("event", "Genre")
         help_text = pgettext("event", "If checked: shows the genre for each event")
-        self.add_configs("calendar_genre", ConfigType.BOOL, section, label, help_text)
+        self.add_configs("calendar_genre", ConfigType.BOOL, label, help_text)
 
         label = _("Tagline")
         help_text = _("If checked: shows the tagline for each event")
-        self.add_configs("calendar_tagline", ConfigType.BOOL, section, label, help_text)
+        self.add_configs("calendar_tagline", ConfigType.BOOL, label, help_text)
 
-        # ## INTERFACE
+        # MAIL
+        self.set_section("email", _("Email notifications"))
 
-        section = _("Interface")
-        label = _("Quick links organisation")
-        help_text = _("If checked: In the event management panel, it also shows the association management links")
-        self.add_configs("interface_admin_links", ConfigType.BOOL, section, label, help_text)
-
-        # ## MAIL
-        section = _("Email notifications")
-
-        label = _("Carbon copy")
-        help_text = _("If checked: Sends the main mail a copy of all mails sent to players")
-        self.add_configs("mail_cc", ConfigType.BOOL, section, label, help_text)
+        if self.instance.main_mail:
+            label = _("Carbon copy")
+            help_text = _("If checked: Sends the main mail a copy of all mails sent to players")
+            self.add_configs("mail_cc", ConfigType.BOOL, label, help_text)
 
         label = _("New signup")
         help_text = _("If checked: Send an email notification to the organisers for new signups")
-        self.add_configs("mail_signup_new", ConfigType.BOOL, section, label, help_text)
+        self.add_configs("mail_signup_new", ConfigType.BOOL, label, help_text)
 
         label = _("Signup update")
         help_text = _("If checked: Send an email notification to the organisers for updated signups")
-        self.add_configs("mail_signup_update", ConfigType.BOOL, section, label, help_text)
+        self.add_configs("mail_signup_update", ConfigType.BOOL, label, help_text)
 
         label = _("Signup cancellation")
         help_text = _("If checked: Send a notification email to the organisers for cancellation of registration")
-        self.add_configs("mail_signup_del", ConfigType.BOOL, section, label, help_text)
+        self.add_configs("mail_signup_del", ConfigType.BOOL, label, help_text)
 
         label = _("Payments received")
         help_text = _("If checked: Send an email to the organisers for each payment received")
-        self.add_configs("mail_payment", ConfigType.BOOL, section, label, help_text)
+        self.add_configs("mail_payment", ConfigType.BOOL, label, help_text)
 
         self.set_config_members()
         self.set_config_accounting()
@@ -338,229 +333,242 @@ class ExeConfigForm(ConfigForm):
 
     def set_config_others(self):
         if "custom_mail" in self.params["features"]:
-            section = _("Customised mail server")
+            self.set_section("custom_mail_server", _("Customised mail server"))
             help_text = ""
 
             label = _("Use TLD")
-            self.add_configs("mail_server_use_tls", ConfigType.BOOL, section, label, help_text)
+            self.add_configs("mail_server_use_tls", ConfigType.BOOL, label, help_text)
 
             label = _("Host Address")
-            self.add_configs("mail_server_host", ConfigType.CHAR, section, label, help_text)
+            self.add_configs("mail_server_host", ConfigType.CHAR, label, help_text)
 
             label = _("Port")
-            self.add_configs("mail_server_port", ConfigType.INT, section, label, help_text)
+            self.add_configs("mail_server_port", ConfigType.INT, label, help_text)
 
             label = _("Username of account")
-            self.add_configs("mail_server_host_user", ConfigType.CHAR, section, label, help_text)
+            self.add_configs("mail_server_host_user", ConfigType.CHAR, label, help_text)
 
             label = _("Password of account")
-            self.add_configs("mail_server_host_password", ConfigType.CHAR, section, label, help_text)
+            self.add_configs("mail_server_host_password", ConfigType.CHAR, label, help_text)
 
         if "centauri" in self.params["features"]:
-            section = _("Easter egg")
+            self.set_section("centauri", _("Easter egg"))
 
             label = _("Probability")
             help_text = _("Probability of showing the special page (out of thousands)")
-            self.add_configs("centauri_prob", ConfigType.INT, section, label, help_text)
+            self.add_configs("centauri_prob", ConfigType.INT, label, help_text)
 
             label = _("Badge")
             help_text = _("Name of badge to be awarded")
-            self.add_configs("centauri_badge", ConfigType.CHAR, section, label, help_text)
+            self.add_configs("centauri_badge", ConfigType.CHAR, label, help_text)
 
             label = _("Description")
             help_text = _("Description to be shown on the special page")
-            self.add_configs("centauri_descr", ConfigType.CHAR, section, label, help_text)
+            self.add_configs("centauri_descr", ConfigType.CHAR, label, help_text)
 
             label = _("Page")
             help_text = _("Contents of the special page")
-            self.add_configs("centauri_content", ConfigType.HTML, section, label, help_text)
+            self.add_configs("centauri_content", ConfigType.HTML, label, help_text)
+
+        if "campaign" in self.params["features"]:
+            self.set_section("campaign", _("Campaign"))
+
+            label = _("Move registration event")
+            help_text = _("Allow to switch registration between events")
+            self.add_configs("campaign_switch", ConfigType.BOOL, label, help_text)
 
     def set_config_members(self):
+        # USERS
+        self.set_section("users", _("Users"))
+
+        label = _("Event history")
+        help_text = _("If checked: in the public page of an user shows a list of all events attended")
+        self.add_configs("player_larp_history", ConfigType.BOOL, label, help_text)
+
         if "deadlines" in self.params["features"]:
-            section = _("Deadline")
+            self.set_section("deadlines", _("Deadline"))
 
             label = _("Tolerance")
             help_text = _(
                 "Number of days past the deadline beyond which registrations are marked to be cancelled (default 30 days)"
             )
-            self.add_configs("deadline_tolerance", ConfigType.INT, section, label, help_text)
+            self.add_configs("deadline_tolerance", ConfigType.INT, label, help_text)
 
             label = _("Frequency")
             help_text = _("Sets how often reminder emails are sent, in days (if not set, no emails are sent)")
-            self.add_configs("deadline_days", ConfigType.INT, section, label, help_text)
+            self.add_configs("deadline_days", ConfigType.INT, label, help_text)
 
         if "membership" in self.params["features"]:
-            section = _("Members")
+            self.set_section("membership", _("Members"))
 
             label = _("Age")
-            help_text = _("Minimum age of members")
-            self.add_configs("membership_age", ConfigType.INT, section, label, help_text)
+            help_text = _("Minimum age of members (leave empty for no limit)")
+            self.add_configs("membership_age", ConfigType.INT, label, help_text)
 
             label = _("Annual fee")
             help_text = _("Annual fee required of members, starting from the beginning of the membership year")
-            self.add_configs("membership_fee", ConfigType.INT, section, label, help_text)
+            self.add_configs("membership_fee", ConfigType.INT, label, help_text)
 
             label = _("Start day")
             help_text = _("Day of the year from which the membership year begins, in DD-MM format")
-            self.add_configs("membership_day", ConfigType.CHAR, section, label, help_text)
+            self.add_configs("membership_day", ConfigType.CHAR, label, help_text)
 
             label = _("Months free quota")
             help_text = _(
                 "Number of months, starting from the beginning of the membership year, for which "
                 "to make free membership fee payment"
             )
-            self.add_configs("membership_grazing", ConfigType.INT, section, label, help_text)
+            self.add_configs("membership_grazing", ConfigType.INT, label, help_text)
 
         if "vote" in self.params["features"]:
-            section = _("Voting")
+            self.set_section("vote", _("Voting"))
 
             label = _("Active")
-            help_text = _("If checked: members can vote.")
-            self.add_configs("vote_open", ConfigType.BOOL, section, label, help_text)
+            help_text = _("If checked: members can vote")
+            self.add_configs("vote_open", ConfigType.BOOL, label, help_text)
 
             label = _("Candidates")
             help_text = _("Candidates at the polls")
-            self.add_configs("vote_candidates", ConfigType.MEMBERS, section, label, help_text, self.instance.id)
+            self.add_configs("vote_candidates", ConfigType.MEMBERS, label, help_text, self.instance.id)
 
             label = _("Minimum votes")
             help_text = _("Minimum number of votes")
-            self.add_configs("vote_min", ConfigType.INT, section, label, help_text)
+            self.add_configs("vote_min", ConfigType.INT, label, help_text)
 
             label = _("Maximum votes")
             help_text = _("Maximum number of votes")
-            self.add_configs("vote_max", ConfigType.INT, section, label, help_text)
+            self.add_configs("vote_max", ConfigType.INT, label, help_text)
 
         if "remind" in self.params["features"]:
-            section = _("Reminder")
+            self.set_section("remind", _("Reminder"))
 
             label = _("Frequency")
             help_text = _("Sets how often reminder emails are sent, in days (default: 5)")
-            self.add_configs("remind_days", ConfigType.INT, section, label, help_text)
+            self.add_configs("remind_days", ConfigType.INT, label, help_text)
 
             label = _("Holidays")
             help_text = _("If checked: the system will send reminds the days on which holidays fall")
-            self.add_configs("remind_holidays", ConfigType.BOOL, section, label, help_text)
+            self.add_configs("remind_holidays", ConfigType.BOOL, label, help_text)
 
     def set_config_accounting(self):
         if "payment" in self.params["features"]:
-            section = _("Payments")
+            self.set_section("payment", _("Payments"))
+
+            label = _("Charge transaction fees to player")
+            help_text = _(
+                "If enabled, the system will automatically add payment gateway fees to the ticket price, so the player covers them instead of the organization"
+            )
+            self.add_configs("payment_fees_user", ConfigType.BOOL, label, help_text)
 
             label = _("Disable amount change")
             help_text = _(
                 "If checked: Hides the possibility for the player to change the payment amount for his entries"
             )
-            self.add_configs("payment_hide_amount", ConfigType.BOOL, section, label, help_text)
+            self.add_configs("payment_hide_amount", ConfigType.BOOL, label, help_text)
 
             label = _("Unique code")
             help_text = _("If checked: Adds a unique code to each payment, which helps in being able to recognize it")
-            self.add_configs("payment_special_code", ConfigType.BOOL, section, label, help_text)
+            self.add_configs("payment_special_code", ConfigType.BOOL, label, help_text)
 
         if "vat" in self.params["features"]:
-            section = _("VAT")
+            self.set_section("vat", _("VAT"))
 
             label = _("Ticket")
             help_text = _("Percentage of VAT to be calculated on the ticket cost alone")
-            self.add_configs("vat_ticket", ConfigType.INT, section, label, help_text)
+            self.add_configs("vat_ticket", ConfigType.INT, label, help_text)
 
             label = _("Options")
             help_text = _("Percentage of VAT to be calculated on the sum of the costs of the registration options")
-            self.add_configs("vat_options", ConfigType.INT, section, label, help_text)
+            self.add_configs("vat_options", ConfigType.INT, label, help_text)
 
         if "token_credit" in self.params["features"]:
-            section = _("Tokens / Credits")
+            self.set_section("token_credit", _("Tokens / Credits"))
             label = _("Token name")
             help_text = _("Name to be displayed for tokens")
-            self.add_configs("token_credit_token_name", ConfigType.CHAR, section, label, help_text)
+            self.add_configs("token_credit_token_name", ConfigType.CHAR, label, help_text)
 
             label = _("Name credits")
             help_text = _("Name to be displayed for credits")
-            self.add_configs("token_credit_credit_name", ConfigType.CHAR, section, label, help_text)
+            self.add_configs("token_credit_credit_name", ConfigType.CHAR, label, help_text)
 
         if "treasurer" in self.params["features"]:
-            section = _("Treasury")
+            self.set_section("treasurer", _("Treasury"))
             label = _("Appointees")
             help_text = _("Treasury appointees")
-            self.add_configs("treasurer_appointees", ConfigType.MEMBERS, section, label, help_text, self.instance.id)
+            self.add_configs("treasurer_appointees", ConfigType.MEMBERS, label, help_text, self.instance.id)
 
         if "organization_tax" in self.params["features"]:
-            section = _("Organisation fee")
+            self.set_section("organization_tax", _("Organisation fee"))
             label = _("Percentage")
             help_text = _(
                 "Percentage of takings calculated as a fee for association infrastructure (in "
                 "whole numbers from 0 to 100)"
             )
-            self.add_configs("organization_tax_perc", ConfigType.INT, section, label, help_text)
-
-        if "payment_fees" in self.params["features"]:
-            section = _("Payment fees")
-
-            label = _("Charging the player")
-            help_text = _("If checked: the system will add payment fees to the ticket, making the player pay for them.")
-            self.add_configs("payment_fees_user", ConfigType.BOOL, section, label, help_text)
+            self.add_configs("organization_tax_perc", ConfigType.INT, label, help_text)
 
     def set_config_einvoice(self):
         if "e-invoice" not in self.params["features"]:
             return
 
-        section = _("Electronic invoice")
+        self.set_section("einvoice", _("Electronic invoice"))
 
         label = _("Name")
         help_text = ""
-        self.add_configs("einvoice_denominazione", ConfigType.CHAR, section, label, help_text)
+        self.add_configs("einvoice_denominazione", ConfigType.CHAR, label, help_text)
 
         label = _("Fiscal code")
         help_text = ""
-        self.add_configs("einvoice_idcodice", ConfigType.CHAR, section, label, help_text)
+        self.add_configs("einvoice_idcodice", ConfigType.CHAR, label, help_text)
 
-        label = _("VAT No.")
+        label = _("VAT No")
         help_text = ""
-        self.add_configs("einvoice_partitaiva", ConfigType.CHAR, section, label, help_text)
+        self.add_configs("einvoice_partitaiva", ConfigType.CHAR, label, help_text)
 
         label = _("Tax regime")
         help_text = "RF19: forfettario, RF01: ordinario, RF05: agevolato, RF07: commerciale"
-        self.add_configs("einvoice_regimefiscale", ConfigType.CHAR, section, label, help_text)
+        self.add_configs("einvoice_regimefiscale", ConfigType.CHAR, label, help_text)
 
         label = _("VAT rate")
         help_text = _("If absent, indicate 0")
-        self.add_configs("einvoice_aliquotaiva", ConfigType.CHAR, section, label, help_text)
+        self.add_configs("einvoice_aliquotaiva", ConfigType.CHAR, label, help_text)
 
         label = _("Nature")
         help_text = _("Indicate only if rate 0")
-        self.add_configs("einvoice_natura", ConfigType.CHAR, section, label, help_text)
+        self.add_configs("einvoice_natura", ConfigType.CHAR, label, help_text)
 
         label = _("Address")
         help_text = ""
-        self.add_configs("einvoice_indirizzo", ConfigType.CHAR, section, label, help_text)
+        self.add_configs("einvoice_indirizzo", ConfigType.CHAR, label, help_text)
 
         label = _("House number")
         help_text = ""
-        self.add_configs("einvoice_numerocivico", ConfigType.CHAR, section, label, help_text)
+        self.add_configs("einvoice_numerocivico", ConfigType.CHAR, label, help_text)
 
         label = _("Cap")
         help_text = ""
-        self.add_configs("einvoice_cap", ConfigType.CHAR, section, label, help_text)
+        self.add_configs("einvoice_cap", ConfigType.CHAR, label, help_text)
 
         label = _("Municipality")
         help_text = ""
-        self.add_configs("einvoice_comune", ConfigType.CHAR, section, label, help_text)
+        self.add_configs("einvoice_comune", ConfigType.CHAR, label, help_text)
 
         label = _("Province")
         help_text = _("Code two capital letters")
-        self.add_configs("einvoice_provincia", ConfigType.CHAR, section, label, help_text)
+        self.add_configs("einvoice_provincia", ConfigType.CHAR, label, help_text)
 
         label = _("Nation")
         help_text = _("Code two capital letters")
-        self.add_configs("einvoice_nazione", ConfigType.CHAR, section, label, help_text)
+        self.add_configs("einvoice_nazione", ConfigType.CHAR, label, help_text)
 
         label = _("Recipient Code")
         help_text = _("Intermediary channel code")
-        self.add_configs("einvoice_codicedestinatario", ConfigType.CHAR, section, label, help_text)
+        self.add_configs("einvoice_codicedestinatario", ConfigType.CHAR, label, help_text)
 
 
 class FirstAssociationForm(MyForm):
     class Meta:
         model = Association
-        fields = ("name", "profile", "slug", "main_mail")
+        fields = ("name", "profile", "slug")
         widgets = {
             "slug": SlugInput,
         }
@@ -576,3 +584,54 @@ class FirstAssociationForm(MyForm):
             raise ValidationError("Slug already used!")
 
         return data
+
+
+class ExeQuickSetupForm(QuickSetupForm):
+    page_title = _("Quick Setup")
+
+    page_info = _(
+        "This page allows you to perform a quick setup of the most important settings for your new organization"
+    )
+
+    class Meta:
+        model = Association
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.setup = {
+            "payment": (True, _("Payments"), _("Do you want to accept payments processed through the system")),
+            "payment_fees_user": (
+                False,
+                _("Transaction fees"),
+                _(
+                    "Do you want to add payment gateway fees to the ticket price, so that the user pays them instead of the organization"
+                ),
+            ),
+            "membership": (True, _("Membership"), _("Do you want users to join events only after an approval process")),
+            "deadlines": (
+                True,
+                _("Deadlines"),
+                _("Do you want a dashboard to track and manage deadlines missed by registered users"),
+            ),
+            "remind": (
+                True,
+                _("Reminders"),
+                _("Do you want to enable an automatic email reminder system for registered users who miss a deadline"),
+            ),
+            "help": (True, _("Help"), _("Do you want to manage user help requests directly through the platform")),
+            "donate": (True, _("Donations"), _("Do you want to allow users to make voluntary donations")),
+        }
+        if self.instance.skin_id == 1:
+            self.setup.update(
+                {
+                    "campaign": (
+                        True,
+                        _("Campaign"),
+                        _("Do you want to manage campaigns, a series of events that share the same characters"),
+                    ),
+                }
+            )
+
+        self.init_fields(get_assoc_features(self.instance.pk))

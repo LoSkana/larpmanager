@@ -20,8 +20,10 @@
 
 import yaml
 from django.core.management.base import BaseCommand
+from django.db.models import ForeignKey, ImageField
 
 from larpmanager.models.access import AssocPermission, EventPermission
+from larpmanager.models.association import AssociationSkin
 from larpmanager.models.base import Feature, FeatureModule, PaymentMethod
 
 
@@ -30,23 +32,75 @@ class Command(BaseCommand):
 
     # noinspection PyProtectedMember
     def handle(self, *args, **options):
-        models = {
-            "module": (FeatureModule, ("id", "name", "descr", "order", "default")),
-            "feature": (Feature, ("id", "name", "descr", "slug", "overall", "module", "placeholder", "order")),
-            "assoc_permission": (AssocPermission, ("id", "name", "slug", "number", "feature")),
-            "event_permission": (EventPermission, ("id", "name", "slug", "number", "feature")),
+        export_models = {
+            "skin": (
+                AssociationSkin,
+                (
+                    "id",
+                    "name",
+                    "domain",
+                    "default_features",
+                    "default_css",
+                    "default_nation",
+                    "default_mandatory_fields",
+                    "default_optional_fields",
+                ),
+            ),
+            "module": (FeatureModule, ("id", "name", "descr", "order", "default", "icon")),
+            "feature": (
+                Feature,
+                (
+                    "id",
+                    "name",
+                    "descr",
+                    "slug",
+                    "overall",
+                    "module",
+                    "placeholder",
+                    "order",
+                    "after_text",
+                    "after_link",
+                    "hidden",
+                ),
+            ),
+            "assoc_permission": (AssocPermission, ("id", "name", "descr", "slug", "number", "feature", "hidden")),
+            "event_permission": (EventPermission, ("id", "name", "descr", "slug", "number", "feature", "hidden")),
             "payment_methods": (PaymentMethod, ("id", "name", "slug", "instructions", "fields", "profile")),
         }
 
-        for model, value in models.items():
-            (typ, fields) = value
+        for model, value in export_models.items():
+            typ, fields = value
             data = []
-            for el in typ.objects.values(*fields).order_by("pk"):
+
+            m2m_fields = [f.name for f in typ._meta.many_to_many if f.name in fields]
+            fk_fields = [f.name for f in typ._meta.fields if isinstance(f, ForeignKey) and f.name in fields]
+            img_fields = [f.name for f in typ._meta.fields if isinstance(f, ImageField) and f.name in fields]
+            regular_fields = [
+                f for f in fields if f not in m2m_fields and f not in fk_fields and f not in img_fields and f != "id"
+            ]
+
+            for obj in typ.objects.all().order_by("pk"):
+                entry_fields = {}
+
+                for field in regular_fields:
+                    entry_fields[field] = getattr(obj, field)
+
+                for field in fk_fields:
+                    entry_fields[field] = getattr(obj, field + "_id")
+
+                for field in img_fields:
+                    image = getattr(obj, field)
+                    entry_fields[field] = image.name if image else None
+
+                for field in m2m_fields:
+                    entry_fields[field] = list(getattr(obj, field).values_list("pk", flat=True))
+
                 entry = {
                     "model": typ._meta.app_label + "." + typ._meta.model_name,
-                    "pk": el["id"],
-                    "fields": {field: el[field] for field in fields if field != "id"},
+                    "pk": obj.pk,
+                    "fields": entry_fields,
                 }
+
                 data.append(entry)
 
             with open(f"larpmanager/fixtures/{model}.yaml", "w") as f:

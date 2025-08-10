@@ -23,13 +23,15 @@ from datetime import datetime, timedelta
 from django import forms
 from django.forms.widgets import Widget
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 from tinymce.widgets import TinyMCE
 
 from larpmanager.models.access import EventRole
-from larpmanager.models.base import FeatureModule, PaymentMethod
+from larpmanager.models.base import FeatureModule
 from larpmanager.models.event import (
+    DevelopStatus,
     Event,
     Run,
 )
@@ -37,7 +39,7 @@ from larpmanager.models.experience import AbilityPx
 from larpmanager.models.form import (
     WritingOption,
 )
-from larpmanager.models.member import Member, Membership
+from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
@@ -45,6 +47,7 @@ from larpmanager.models.registration import (
 from larpmanager.models.writing import (
     Character,
     Faction,
+    FactionType,
 )
 
 # defer script loaded by form
@@ -84,8 +87,37 @@ class SlugInput(forms.TextInput):
     template_name = "forms/widgets/slug.html"
 
 
+class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
+    def __init__(self, *args, **kwargs):
+        self.feature_help = kwargs.pop("help_text", {})
+        self.feature_map = kwargs.pop("feature_map", {})
+        super().__init__(*args, **kwargs)
+
+    def render(self, name, value, attrs=None, renderer=None):
+        output = []
+        value = value or []
+
+        know_more = _("click on the icon to open the tutorial")
+
+        for i, (option_value, option_label) in enumerate(self.choices):
+            checkbox_id = f"{attrs.get('id', name)}_{i}"
+            checked = "checked" if option_value in value else ""
+            checkbox_html = f'<input type="checkbox" name="{name}" value="{option_value}" id="{checkbox_id}" {checked}>'
+            link_html = f'{option_label}<a href="#" feat="{self.feature_map.get(option_value, "")}"><i class="fas fa-question-circle"></i></a>'
+            help_text = self.feature_help.get(option_value, "")
+            output.append(f"""
+                <div class="feature_checkbox lm_tooltip">
+                    <span class="hide lm_tooltiptext">{help_text} ({know_more})</span>
+                    {checkbox_html} {link_html}
+                </div>
+            """)
+
+        return mark_safe("\n".join(output))
+
+
 def prepare_permissions_role(form, typ):
     if form.instance and form.instance.number == 1:
+        form.prevent_canc = True
         return
     form.modules = []
     init = []
@@ -93,20 +125,36 @@ def prepare_permissions_role(form, typ):
         init = list(form.instance.permissions.values_list("pk", flat=True))
     for module in FeatureModule.objects.order_by("order"):
         ch = []
+        help_text = {}
+        feature_map = {}
         for el in typ.objects.filter(feature__module=module).order_by("number"):
+            if el.hidden:
+                continue
             if not el.feature.placeholder and el.feature.slug not in form.params["features"]:
                 continue
             ch.append((el.id, _(el.name)))
+            help_text[el.id] = el.descr
+            feature_map[el.id] = el.feature_id
+
         if not ch:
             continue
+
+        label = _(module.name)
+        if "interface_old" in form.params and not form.params["interface_old"]:
+            if module.icon:
+                label = f"<i class='fa-solid fa-{module.icon}'></i> {label}"
+
+        valid_ids = {choice[0] for choice in ch}
+        initial_values = [i for i in init if i in valid_ids]
+
         form.fields[module.name] = forms.MultipleChoiceField(
             required=False,
             choices=ch,
-            widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
-            label=_(module.name),
+            widget=RoleCheckboxWidget(help_text=help_text, feature_map=feature_map),
+            label=label,
+            initial=initial_values,
         )
         form.modules.append(module.name)
-        form.initial[module.name] = init
 
 
 def save_permissions_role(instance, form):
@@ -233,7 +281,7 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
 def get_assoc_people(assoc_id):
     ls = []
     que = Membership.objects.select_related("member").filter(assoc_id=assoc_id)
-    que = que.exclude(status=Membership.EMPTY).exclude(status=Membership.REWOKED)
+    que = que.exclude(status=MembershipStatus.EMPTY).exclude(status=MembershipStatus.REWOKED)
     for f in que:
         ls.append((f.member.id, f"{str(f.member)} - {f.member.email}"))
     return ls
@@ -244,7 +292,7 @@ def get_run_choices(self, past=False):
     runs = Run.objects.filter(event__assoc_id=self.params["a_id"]).select_related("event").order_by("-end")
     if past:
         ref = datetime.now() - timedelta(days=30)
-        runs = runs.filter(end__gte=ref.date(), development__in=[Run.SHOW, Run.DONE])
+        runs = runs.filter(end__gte=ref.date(), development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])
     for r in runs:
         cho.append((r.id, str(r)))
 
@@ -331,8 +379,8 @@ class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
 
 class EventWritingOptionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
     search_fields = [
-        "display__icontains",
-        "details__icontains",
+        "name__icontains",
+        "description__icontains",
     ]
 
     def set_event(self, event):
@@ -354,6 +402,10 @@ class FactionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
     def get_queryset(self):
         return self.event.get_elements(Faction)
+
+    def label_from_instance(self, instance):
+        code = {FactionType.PRIM: "P", FactionType.TRASV: "T", FactionType.SECRET: "S"}
+        return f"{instance.name} ({code[instance.typ]})"
 
 
 class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
@@ -397,15 +449,6 @@ class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         return Member.objects.filter(pk__in=self.allowed)
 
 
-class PaymentsS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
-    search_fields = [
-        "name__icontains",
-    ]
-
-    def get_queryset(self):
-        return PaymentMethod.objects.all()
-
-
 class InventoryS2Widget(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
@@ -434,7 +477,7 @@ class RedirectForm(forms.Form):
 
 
 def get_members_queryset(aid):
-    allwd = [Membership.ACCEPTED, Membership.SUBMITTED, Membership.JOINED]
+    allwd = [MembershipStatus.ACCEPTED, MembershipStatus.SUBMITTED, MembershipStatus.JOINED]
     qs = Member.objects.prefetch_related("memberships")
     qs = qs.filter(memberships__assoc_id=aid, memberships__status__in=allwd)
     return qs

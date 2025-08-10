@@ -4,7 +4,7 @@
     {% trans "Volunteer Registry" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page summarises the organization's volunteers." %}
+    {% trans "This page summarises the organization's volunteers" %}
 {% endblock info %}
 {% block content %}
     <p>
@@ -14,7 +14,8 @@
     </p>
     <hr />
     {% include "elements/header/exe.html" %}
-    <table id="expenses" class="tablesorter mob">
+    <table id="volunteers"
+           class="{% if not interface_old %}go_datatable{% endif %}">
         <thead>
             <tr>
                 <th></th>
@@ -27,7 +28,8 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'exe_volunteer_registry_edit' el.id %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'exe_volunteer_registry_edit' el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.member }}</td>
                     <td>{{ el.start }}</td>

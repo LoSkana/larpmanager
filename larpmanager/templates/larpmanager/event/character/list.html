@@ -14,16 +14,12 @@
             <tr>
                 <th class="hide">number</th>
                 {% if features.user_character %}<th></th>{% endif %}
-                <th>{% trans "Name" %}</th>
-                {% if features.title %}
-                    <th>{% trans "Title" %}</th>
-                {% endif %}
-                <th>{% trans "Presentation" %}</th>
-                {% if features.character_form %}
-                    {% for idx, _ in searchable.items %}
-                        {% with questions|get:idx as que %}<th>{{ que.display }}</th>{% endwith %}
-                    {% endfor %}
-                {% endif %}
+                <th>{{ writing_fields.character.names.name }}</th>
+                {% if features.title %}<th>{{ writing_fields.character.names.title }}</th>{% endif %}
+                <th>{{ writing_fields.character.names.teaser }}</th>
+                {% for idx, _ in searchable.items %}
+                    {% with questions|get:idx as que %}<th>{{ que.name }}</th>{% endwith %}
+                {% endfor %}
                 {% if approval %}
                     <th>{% trans "Status" %}</th>
                 {% endif %}
@@ -42,22 +38,21 @@
                     <td class="hide">{{ el.number }}</td>
                     {% if features.user_character %}
                         <td>
-                            <a href="{% url 'character_change' run.event.slug run.number el.number %}"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'character_change' run.event.slug run.number el.number %}"
+                               qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                         </td>
                     {% endif %}
                     <td>{{ el.name }}</td>
                     <td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>
-                    {% if features.character_form %}
-                        {% for idx, _ in searchable.items %}
-                            {% with el.fields|get:idx as field %}
-                                {% if field %}
-                                    <td>{% get_character_field field options %}</td>
-                                {% else %}
-                                    <td></td>
-                                {% endif %}
-                            {% endwith %}
-                        {% endfor %}
-                    {% endif %}
+                    {% for idx, _ in searchable.items %}
+                        {% with el.fields|get:idx as field %}
+                            {% if field %}
+                                <td>{% get_character_field field options %}</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% endwith %}
+                    {% endfor %}
                     {% if approval %}<td>{{ el.get_status_display }}</td>{% endif %}
                     {% if features.px %}
                         <td>{{ el.addit | get:'px_tot' }}</td>

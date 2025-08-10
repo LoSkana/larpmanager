@@ -6,18 +6,17 @@
 {% block nav %}
 {% endblock nav %}
 {% block content %}
-    {% trans "To use the feature you requested, you need to activate the following feature: " %} {{ feature.name }}
+    {% trans "To use the feature you requested, you need to activate the following feature" %}: {{ feature.name }}
     <br />
     <br />
     {% if permission %}
-        {% trans "Do you want to proceed?" %}
+        {% trans "Do you want to proceed" %}?
         {% if run %}
-            <a href="{% url 'activate_feature_event' run.event.slug run.number exe.feature exe.path %}">
-            {% else %}
-                <a href="{% url 'activate_feature_assoc' exe.feature exe.path %}">
-                {% endif %}
-            {% trans "Activate" %}</a>
+            <a href="{% url 'activate_feature_event' run.event.slug run.number exe.feature exe.path %}">{% trans "Activate" %}</a>
         {% else %}
-            {% trans "Ask the organisers to activate it." %}
+            <a href="{% url 'activate_feature_assoc' exe.feature exe.path %}">{% trans "Activate" %}</a>
         {% endif %}
-    {% endblock content %}
+    {% else %}
+        {% trans "Ask the organisers to activate it" %}.
+    {% endif %}
+{% endblock content %}

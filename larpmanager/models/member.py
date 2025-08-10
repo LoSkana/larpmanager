@@ -26,11 +26,13 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
 from django.http import Http404
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from phonenumber_field.modelfields import PhoneNumberField
 from pilkit.processors import ResizeToFill
 
+from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel
 from larpmanager.models.utils import UploadToPathAndRename, download_d, show_thumb
@@ -59,8 +61,8 @@ class Member(BaseModel):
     NO = "n"
     NEWSLETTER_CHOICES = [
         (ALL, _("Yes, keep me posted!")),
-        (ONLY, _("Only really important communications.")),
-        (NO, _("No, I don't want updates.")),
+        (ONLY, _("Only really important communications")),
+        (NO, _("No, I don't want updates")),
     ]
 
     IDENT = "i"
@@ -225,7 +227,7 @@ class Member(BaseModel):
         null=True,
         blank=True,
         verbose_name=_("Accessibility"),
-        help_text=_("Fill in this field if you have accessibility needs."),
+        help_text=_("Fill in this field if you have accessibility needs"),
     )
 
     diet = models.CharField(
@@ -263,7 +265,7 @@ class Member(BaseModel):
         choices=NEWSLETTER_CHOICES,
         default=ALL,
         verbose_name=_("Newsletter"),
-        help_text=_("Do you wish to be always updated on our events?"),
+        help_text=_("Do you wish to be always updated on our events") + "?",
         null=True,
     )
 
@@ -304,7 +306,11 @@ class Member(BaseModel):
 
     def __str__(self):
         if self.nickname:
-            return f"{self.nickname} - {self.display_real()}"
+            name = self.display_real()
+            nick = self.nickname
+            if slugify(nick) != slugify(name):
+                name += f" - {nick}"
+            return name
         elif self.name or self.surname:
             return self.display_real()
         else:
@@ -350,8 +356,8 @@ class Member(BaseModel):
 
     def join(self, assoc):
         mmb = get_user_membership(self, assoc.id)  # type: ignore
-        if mmb.status == Membership.EMPTY:
-            mmb.status = Membership.JOINED
+        if mmb.status == MembershipStatus.EMPTY:
+            mmb.status = MembershipStatus.JOINED
             mmb.save()
 
     def get_residence(self):
@@ -361,32 +367,53 @@ class Member(BaseModel):
         aux = self.residence_address.split("|")
         return f"{aux[4]} {aux[5]}, {aux[2]} ({aux[3]}), {aux[1].replace('IT-', '')} ({aux[0]})"
 
+    def get_config(self, name, def_v=None):
+        return get_element_config(self, name, def_v)
+
+
+class MemberConfig(BaseModel):
+    name = models.CharField(max_length=150)
+
+    value = models.CharField(max_length=1000)
+
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="configs")
+
+    def __str__(self):
+        return f"{self.member} {self.name}"
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["member", "name"]),
+        ]
+        constraints = [
+            UniqueConstraint(
+                fields=["member", "name", "deleted"],
+                name="unique_member_config_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["member", "name"],
+                condition=Q(deleted=None),
+                name="unique_member_config_without_optional",
+            ),
+        ]
+
+
+class MembershipStatus(models.TextChoices):
+    EMPTY = "e", _("Absent")
+    JOINED = "j", _("Shared")
+    UPLOADED = "u", _("Uploaded")
+    SUBMITTED = "s", _("Submitted")
+    ACCEPTED = "a", _("Accepted")
+    REWOKED = "r", _("Kicked out")
+
+
+class NewsletterChoices(models.TextChoices):
+    ALL = "a", _("Yes, keep me posted!")
+    ONLY = "o", _("Only really important communications")
+    NO = "n", _("No, I don't want updates")
+
 
 class Membership(BaseModel):
-    EMPTY = "e"
-    UPLOADED = "u"
-    SUBMITTED = "s"
-    ACCEPTED = "a"
-    REWOKED = "r"
-    JOINED = "j"
-    MEMBERSHIP_STATUS = [
-        (EMPTY, _("Absent")),
-        (JOINED, _("Shared")),
-        (UPLOADED, _("Uploaded")),
-        (SUBMITTED, _("Submitted")),
-        (ACCEPTED, _("Accepted")),
-        (REWOKED, _("Kicked out")),
-    ]
-
-    ALL = "a"
-    ONLY = "o"
-    NO = "n"
-    NEWSLETTER_CHOICES = [
-        (ALL, _("Yes, keep me posted!")),
-        (ONLY, _("Only really important communications.")),
-        (NO, _("No, I don't want updates.")),
-    ]
-
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="memberships")
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="memberships")
@@ -397,7 +424,9 @@ class Membership(BaseModel):
 
     tokens = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
-    status = models.CharField(max_length=1, choices=MEMBERSHIP_STATUS, default=EMPTY, db_index=True)
+    status = models.CharField(
+        max_length=1, choices=MembershipStatus.choices, default=MembershipStatus.EMPTY, db_index=True
+    )
 
     request = models.FileField(upload_to=UploadToPathAndRename("request/"), null=True, blank=True)
 
@@ -411,10 +440,10 @@ class Membership(BaseModel):
 
     newsletter = models.CharField(
         max_length=1,
-        choices=NEWSLETTER_CHOICES,
-        default=ALL,
+        choices=NewsletterChoices.choices,
+        default=NewsletterChoices.ALL,
         verbose_name=_("Newsletter"),
-        help_text=_("Do you wish to be always updated on our events?"),
+        help_text=_("Do you wish to be always updated on our events") + "?",
     )
 
     class Meta:
@@ -495,7 +524,7 @@ class Badge(BaseModel):
     cod = models.CharField(
         max_length=30,
         verbose_name=_("Code"),
-        help_text=_("Unique code for internal use - not visible. Indicate a string without spaces or strange symbols."),
+        help_text=_("Unique code for internal use - not visible. Indicate a string without spaces or strange symbols"),
     )
 
     img = models.ImageField(upload_to=UploadToPathAndRename("badge/"), blank=False)

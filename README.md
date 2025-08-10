@@ -1,9 +1,9 @@
 #  LarpManager
 
 **LarpManager** is a free and open-source platform to manage **LARP (Live Action Role-Playing)** events.
-It supports organizers in every step: managing registrations, payments, characters and logistics.
+It has everything you need to run your LARP, free & open source!
 
-> Not interested in self-hosting? Start using it right away at [https://larpmanager.com](https://larpmanager.com)
+> Not interested in self-hosting? Start using it right away at [https://larpmanager.com](https://larpmanager.com)!
 
 ![License: AGPL or Commercial](https://img.shields.io/badge/license-AGPL%20%2F%20Commercial-blue.svg)
 
@@ -20,15 +20,15 @@ See the LICENSE file for details.
 
 ---
 
-## Docker
+## Quick set up
 
-If you want an easy and fast deploy, set the environment variables:
+If you want an easy and fast deploy, set the environment variables see below for [instructions](#environment) on their values:
 
 ```
 cp .env.example .env
 ```
 
-Give them proper values. Then let's do the docker magic:
+Now time for the docker magic (see below for [instructions](#docker) on installing it):
 
 ```
 docker compose up --build
@@ -40,7 +40,7 @@ Now create a super user:
 docker exec -it larpmanager python manage.py createsuperuser
 ```
 
-Go to `http://127.0.0.1:8264/admin/larpmanager/association/`, and create your Association. Put as values only:
+Go to `http://127.0.0.1:8264/admin/larpmanager/association/`, and create your Organization. Put as values only:
 - Name: you should get it;
 - URL identifier: put `def`;
 - Logo: an image;
@@ -48,7 +48,27 @@ Go to `http://127.0.0.1:8264/admin/larpmanager/association/`, and create your As
 
 Leave the other fields empty, and save.
 
-Now expose the port 8264 (we wanted a fancy one) to your reverse proxy of choice for public access.
+Now expose the port 8264 (we wanted a fancy one) to your reverse proxy of choice for public access. Example configuration for nginx, place this code in `/etc/nginx/sites-available/example.com`:
+
+```
+server {
+    listen 80;
+    server_name example.com;
+
+    location / {
+        proxy_pass http://localhost:8264;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+Now create the symlink:
+
+```
+ln -s /etc/nginx/sites-available/example.com /etc/nginx/sites-enabled/
+nginx -t && systemctl reload nginx
+```
 
 Now you're ready for liftoff!
 
@@ -83,6 +103,64 @@ It will perform a graceful restart.
 
 ---
 
+## Cloud
+
+For cloud deploy, we suggest the following configuration:
+- OS: Ubuntu 22.04 LTS
+- A "burstable" instance (instead of memory or compute-optimized), as to allow to better handle bursts of user activity
+
+Some typical options could be:
+- EC2: t3.small / t3.medium
+- GCP: e2-small / e2-medium
+- Azure: B1ms / B2s
+
+---
+
+## Environment
+
+Set those values:
+- GUNICORN_WORKERS: Rule of thumb is number of processors * 2 + 1
+- SECRET_KEY: A fresh secret key, you can use an [online tool](https://djecrety.ir/)
+- ADMIN_NAME, ADMIN_EMAIL: Set your own info
+- DB_NAME, DB_USER, DB_PASS, DB_HOST: The database will be generated based on those values if it does not exists
+- TZ: The base timezone of the server
+- GOOGLE_CLIENTID, GOOGLE_SECRET: (Optional) If you want Google SSO, follow the [django-allauth guide](https://docs.allauth.org/en/dev/socialaccount/providers/google.html)
+- RECAPTCHA_PUBLIC, RECAPTCHA_PRIVATE: If you want recaptcha checks, follow the [django-recaptcha guide](https://cloud.google.com/security/products/recaptcha)
+
+---
+
+## Docker
+
+To install everything needed for the quick setup, install some dependencies:
+
+```
+sudo apt update
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+```
+
+add docker's repo:
+
+```
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+```
+
+finally, install Docker:
+
+```
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+```
+
+run it:
+
+```
+sudo systemctl start docker
+sudo systemctl enable docker
+```
+
+---
+
 ## Install
 
 If you're old school, a typical installation requires:
@@ -110,7 +188,6 @@ Load npm modules:
 cd larpmanager/static
 npm install
 ```
-
 
 And install playwright for tests:
 ```
@@ -152,9 +229,16 @@ Thanks in advance for contributing! Here's the steps:
    pre-commit install
    ```
 
-2. In the `main/settings/dev.py` settings file, add a `DEEPL_API_KEY` value. You can obtain a API key for the *DeepL API Free* (up to 500k characters monthly) [here](https://www.deepl.com/en/pro).
+2. Install and activate LFS to handle big files (like the test dump):
+   ```bash
+   sudo apt install git-lfs
+   git lfs install
+   git lfs pull
+   ```
 
-3. Create a new branch:
+3. In the `main/settings/dev.py` settings file, add a `DEEPL_API_KEY` value. You can obtain a API key for the *DeepL API Free* (up to 500k characters monthly) [here](https://www.deepl.com/en/pro).
+
+4. Create a new branch:
    ```bash
    git checkout -b prefix/feature-name
    ```
@@ -165,12 +249,12 @@ Thanks in advance for contributing! Here's the steps:
    - *refactor* for code changes not related to functions
    - *locale* for changes in translation codes.
 
-4. When you'are ready with the code changes, to make sure that all entries have been translated (default language is English), run
+5. When you'are ready with the code changes, to make sure that all entries have been translated (default language is English), run
    ```bash
    ./scripts/translate.sh
    ```
    This will updated all your translations, have correct the untranslated / fuzzy ones with Deepl API. In the terminal, take some time to review them before proceeding.
-5. If you're creating a new feature, write a playwright test suite that covers it. Look in the `larpmanager/tests` folder to see how it's done. Run
+6. If you're creating a new feature, write a playwright test suite that covers it. Look in the `larpmanager/tests` folder to see how it's done. Run
    ```bash
    ./scripts/record-test.sh
    ```
@@ -190,6 +274,7 @@ Thanks in advance for contributing! Here's the steps:
    ./scripts/upgrade.sh
    ```
    This will execute some helpful activities like making sure you're updated with main branch, deleting old local branches, and other small things like that.
+
 10. Go and open [a new pull request](https://github.com/loskana/larpmanager/pulls). Make sure to explain clearly in the description what's happening.
 
 ### New features

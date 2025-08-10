@@ -67,7 +67,7 @@ def exe_events_edit(request, num):
                 er.name = "Organizer"
             er.members.add(request.user.member)
             er.save()
-            return redirect("orga_run", s=ctx["saved"].slug, n=1)
+            return redirect("orga_quick", s=ctx["saved"].slug, n=1)
         return redirect("exe_events")
     ctx["add_another"] = False
     return render(request, "larpmanager/exe/edit.html", ctx)
@@ -75,7 +75,7 @@ def exe_events_edit(request, num):
 
 @login_required
 def exe_events_appearance(request, num):
-    return exe_edit(request, OrgaAppearanceForm, num, "exe_events", add_another=False)
+    return exe_edit(request, OrgaAppearanceForm, num, "exe_events", add_ctx={"add_another": False})
 
 
 @login_required
@@ -116,7 +116,8 @@ def exe_templates_config(request, num):
     add_ctx = def_user_ctx(request)
     get_event_template(add_ctx, num)
     add_ctx["features"].update(get_event_features(add_ctx["event"].id))
-    return exe_edit(request, OrgaConfigForm, num, "exe_templates", add_ctx=add_ctx, add_another=False)
+    add_ctx["add_another"] = False
+    return exe_edit(request, OrgaConfigForm, num, "exe_templates", add_ctx=add_ctx)
 
 
 @login_required

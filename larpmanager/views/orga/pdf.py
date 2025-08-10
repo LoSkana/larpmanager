@@ -25,7 +25,6 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.event import EventCharactersPdfForm
 from larpmanager.models.event import Run
 from larpmanager.models.writing import (
@@ -51,7 +50,7 @@ def orga_characters_pdf(request, s, n):
         form = EventCharactersPdfForm(request.POST, request.FILES, instance=ctx["event"])
         if form.is_valid():
             form.save()
-            messages.success(request, _("Updated!"))
+            messages.success(request, _("Updated") + "!")
             return redirect(request.path_info)
     else:
         form = EventCharactersPdfForm(instance=ctx["event"])
@@ -67,7 +66,7 @@ def orga_pdf_regenerate(request, s, n):
     for run in Run.objects.filter(event=ctx["event"], end__gte=datetime.now()):
         for ch in chs:
             print_character_bkg(ctx["event"].assoc.slug, ctx["event"].slug, run.number, ch.number)
-    messages.success(request, _("Regeneration pdf started!"))
+    messages.success(request, _("Regeneration pdf started") + "!")
     return redirect("orga_characters_pdf", s=ctx["event"].slug, n=ctx["run"].number)
 
 
@@ -82,6 +81,7 @@ def orga_characters_sheet_pdf(request, s, n, num):
 def orga_characters_sheet_test(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_characters_pdf")
     get_char_check(request, ctx, num, True)
+    ctx["pdf"] = True
     get_character_sheet(ctx)
     add_pdf_instructions(ctx)
     return render(request, "pdf/sheets/auxiliary.html", ctx)
@@ -127,7 +127,6 @@ def orga_gallery_pdf(request, s, n):
 @login_required
 def orga_gallery_test(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_characters_pdf")
-    get_event_cache_all(ctx)
     return render(request, "pdf/sheets/gallery.html", ctx)
 
 

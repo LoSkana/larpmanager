@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import inflection
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, JsonResponse
@@ -63,9 +64,9 @@ from larpmanager.utils.common import (
     get_speedlarp,
     get_trait,
 )
-from larpmanager.utils.download import _export_data
+from larpmanager.utils.download import export_data
 from larpmanager.utils.edit import orga_edit, writing_edit
-from larpmanager.utils.event import check_event_permission
+from larpmanager.utils.event import check_event_permission, get_event_run
 from larpmanager.utils.pdf import (
     print_handout,
     return_pdf,
@@ -123,9 +124,9 @@ def orga_factions_edit(request, s, n, num):
 
 
 @login_required
-def orga_factions_order(request, s, n, num):
+def orga_factions_order(request, s, n, num, order):
     ctx = check_event_permission(request, s, n, "orga_factions")
-    exchange_order(ctx, Faction, num)
+    exchange_order(ctx, Faction, num, order)
     return redirect("orga_factions", s=ctx["event"].slug, n=ctx["run"].number)
 
 
@@ -366,9 +367,9 @@ def orga_progress_steps_edit(request, s, n, num):
 
 
 @login_required
-def orga_progress_steps_order(request, s, n, num):
+def orga_progress_steps_order(request, s, n, num, order):
     ctx = check_event_permission(request, s, n, "orga_progress_steps")
-    exchange_order(ctx, ProgressStep, num)
+    exchange_order(ctx, ProgressStep, num, order)
     return redirect("orga_progress_steps", s=ctx["event"].slug, n=ctx["run"].number)
 
 
@@ -377,25 +378,47 @@ def orga_multichoice_available(request, s, n):
     if not request.method == "POST":
         return Http404()
 
-    type = request.POST.get("type", "")
-    class_name = None
-    for v, nm in TextVersion.TEXT_CHOICES:
-        if v == type:
-            class_name = nm
-
-    if not class_name:
+    class_name = request.POST.get("type", "")
+    taken_characters = set()
+    if class_name == "registrations":
         ctx = check_event_permission(request, s, n, "orga_registrations")
         taken_characters = RegistrationCharacterRel.objects.filter(reg__run_id=ctx["run"].id).values_list(
             "character_id", flat=True
         )
     else:
-        ctx = check_event_permission(request, s, n, "orga_" + class_name.lower() + "s")
-        main_class = globals()[class_name]
-        eid = int(request.POST.get("eid", ""))
-        taken_characters = main_class.objects.get(pk=eid).characters.values_list("id", flat=True)
+        eid = request.POST.get("eid", "")
+        ctx = check_event_permission(request, s, n, "orga_" + class_name + "s")
+        if eid:
+            model_class = apps.get_model("larpmanager", inflection.camelize(class_name))
+            taken_characters = model_class.objects.get(pk=int(eid)).characters.values_list("id", flat=True)
 
     ctx["list"] = ctx["event"].get_elements(Character).order_by("number")
     ctx["list"] = ctx["list"].exclude(pk__in=taken_characters)
+    res = [(el.id, str(el)) for el in ctx["list"]]
+    return JsonResponse({"res": res})
+
+
+@login_required
+def orga_factions_available(request, s, n):
+    if not request.method == "POST":
+        return Http404()
+
+    ctx = get_event_run(request, s, n)
+
+    ctx["list"] = ctx["event"].get_elements(Faction).order_by("number")
+
+    orga = int(request.POST.get("orga", "0"))
+    if not orga:
+        ctx["list"] = ctx["list"].filter(selectable=True)
+
+    eid = int(request.POST.get("eid", "0"))
+    if eid:
+        chars = ctx["event"].get_elements(Character).filter(pk=int(eid))
+        if not chars:
+            return JsonResponse({"res": "ko"})
+        taken_factions = chars.first().factions_list.values_list("id", flat=True)
+        ctx["list"] = ctx["list"].exclude(pk__in=taken_factions)
+
     res = [(el.id, str(el)) for el in ctx["list"]]
     return JsonResponse({"res": res})
 
@@ -407,5 +430,16 @@ def orga_export(request, s, n, nm):
     model = apps.get_model("larpmanager", nm.capitalize())
 
     ctx["nm"] = nm
-    ctx["key"], ctx["vals"] = _export_data(ctx, nm, model, True)
+    export = export_data(ctx, model, True)[0]
+    _model, ctx["key"], ctx["vals"] = export
     return render(request, "larpmanager/orga/export.html", ctx)
+
+
+@login_required
+def orga_version(request, s, n, nm, num):
+    perm = f"orga_{nm}s"
+    ctx = check_event_permission(request, s, n, perm)
+    tp = next(code for code, label in TextVersion.TEXT_CHOICES if label.lower() == nm)
+    ctx["version"] = TextVersion.objects.get(tp=tp, pk=num)
+    ctx["text"] = ctx["version"].text.replace("\n", "<br />")
+    return render(request, "larpmanager/orga/version.html", ctx)

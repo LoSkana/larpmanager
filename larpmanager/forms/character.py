@@ -18,8 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import re
+
 from django import forms
 from django.core.exceptions import ValidationError
+from django.http import Http404
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
@@ -29,6 +33,7 @@ from larpmanager.forms.utils import (
     AssocMemberS2Widget,
     EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
+    FactionS2WidgetMulti,
     TicketS2WidgetMulti,
     WritingTinyMCE,
 )
@@ -36,12 +41,22 @@ from larpmanager.forms.writing import BaseWritingForm, WritingForm
 from larpmanager.models.experience import AbilityPx, DeliveryPx
 from larpmanager.models.form import (
     QuestionApplicable,
+    QuestionStatus,
     QuestionType,
     QuestionVisibility,
     WritingOption,
     WritingQuestion,
 )
-from larpmanager.models.writing import Character, CharacterStatus, Faction, PlotCharacterRel
+from larpmanager.models.writing import (
+    Character,
+    CharacterStatus,
+    Faction,
+    FactionType,
+    PlotCharacterRel,
+    Relationship,
+    TextVersion,
+)
+from larpmanager.utils.edit import save_version
 
 
 class CharacterForm(WritingForm, BaseWritingForm):
@@ -64,6 +79,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "player",
             "event",
             "status",
+            "access_token",
         ]
 
         widgets = {
@@ -110,6 +126,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
             for key in ["player", "status"]:
                 fields_default.add(key)
                 self.reorder_field(key)
+            if event.get_config("writing_external_access", False) and self.instance.pk:
+                fields_default.add("access_token")
+                self.reorder_field("access_token")
 
         all_fields = set(self.fields.keys()) - fields_default
         for lbl in all_fields - fields_custom:
@@ -126,6 +145,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
                         "Leave the field blank to save your changes and to be able to continue them in "
                         "the future."
                     ),
+                    widget=forms.CheckboxInput(attrs={"class": "checkbox_single"}),
                 )
 
     def _init_character(self):
@@ -139,14 +159,14 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         queryset = self.params["run"].event.get_elements(Faction).filter(selectable=True)
 
-        if queryset.count() == 0:
-            return
-
         self.fields["factions_list"] = forms.ModelMultipleChoiceField(
             queryset=queryset,
             widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains"]),
             required=False,
+            label=_("Factions"),
         )
+
+        self.show_available_factions = _("Show available factions")
 
         self.initial["factions_list"] = []
         if not self.instance.pk:
@@ -174,7 +194,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             # check only one primary
             prim = 0
             for el in self.cleaned_data["factions_list"]:
-                if el.typ == Faction.PRIM:
+                if el.typ == FactionType.PRIM:
                     prim += 1
 
             if prim > 1:
@@ -182,21 +202,17 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         return cleaned_data
 
-    def save(self, commit=True):
-        instance = super().save()
-        if hasattr(self, "questions"):
-            self.save_reg_questions(instance, orga=self.orga)
-        return instance
-
 
 class OrgaCharacterForm(CharacterForm):
-    page_info = _("This page allows you to add or edit a character.")
+    page_info = _("This page allows you to add or edit a character")
 
     page_title = _("Character")
 
-    load_templates = "char"
+    load_templates = ["char"]
 
-    load_js = "characters-choices"
+    load_js = ["characters-choices", "characters-relationships", "factions-choices"]
+
+    load_form = ["characters-relationships"]
 
     orga = True
 
@@ -228,31 +244,45 @@ class OrgaCharacterForm(CharacterForm):
             choices = [(m.id, m.name) for m in que]
             self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---"))] + choices
 
+        self._init_special_fields()
+
     def _init_plots(self):
         if "plot" not in self.params["features"]:
             return
 
-        for el in self.instance.get_plot_characters().order_by('plot__number'):
-            plot = f"T{el.plot.number} {el.plot.name}"
-            field = f"pl_{el.plot.id}"
+        pcr = {}
+        for el in PlotCharacterRel.objects.filter(character=self.instance):
+            pcr[el.plot_id] = el.text
+
+        self.add_char_finder = []
+        self.field_link = {}
+        que = self.instance.plots.order_by("number").values_list("id", "number", "name", "text")
+        for pl in que:
+            plot = f"#{pl[1]} {pl[2]}"
+            field = f"pl_{pl[0]}"
+            id_field = f"id_{field}"
             self.fields[field] = forms.CharField(
                 widget=WritingTinyMCE(),
                 label=plot,
                 help_text=_("This text will be added to the sheet, in the plot paragraph %(name)s") % {"name": plot},
                 required=False,
             )
-            if el.text:
-                self.initial[field] = el.text
+            if pl[0] in pcr:
+                self.initial[field] = pcr[pl[0]]
 
-            if el.plot.text:
-                self.details[f"id_{field}"] = el.plot.text
-            self.show_link.append(f"id_{field}")
+            if pl[3]:
+                self.details[id_field] = pl[3]
+            self.show_link.append(id_field)
+            self.add_char_finder.append(id_field)
 
-    def _save_plot(self):
+            reverse_args = [self.params["event"].slug, self.params["run"].number, pl[0]]
+            self.field_link[id_field] = reverse("orga_plots_edit", args=reverse_args)
+
+    def _save_plot(self, instance):
         if "plot" not in self.params["features"]:
             return
 
-        for pr in self.instance.get_plot_characters():
+        for pr in instance.get_plot_characters():
             field = f"pl_{pr.plot_id}"
             if field not in self.cleaned_data:
                 continue
@@ -301,38 +331,79 @@ class OrgaCharacterForm(CharacterForm):
         queryset = self.params["run"].event.get_elements(Faction)
 
         self.fields["factions_list"] = forms.ModelMultipleChoiceField(
-            queryset=queryset,
-            widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains"]),
-            required=False,
+            queryset=queryset, widget=FactionS2WidgetMulti(), required=False, label=_("Factions")
         )
+        self.fields["factions_list"].widget.set_event(self.params["event"])
+
+        self.show_available_factions = _("Show available factions")
 
         if not self.instance.pk:
             return
 
-        # FACTIONS SHOW TEXT
-        fact_tx = ""
+        # Initial factions values
         self.initial["factions_list"] = []
         for fc in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
             self.initial["factions_list"].append(fc[0])
-            if fact_tx:
-                fact_tx += '</div><div class="plot">'
-            fact_tx += f"<h4>{fc[2]}</h4>"
-            if fc[3]:
-                fact_tx += "<hr />" + fc[3]
-        self.show_link.append("id_factions_list")
+
+    def _save_relationships(self, instance):
+        if "relationships" not in self.params["features"]:
+            return
+
+        chars_ids = [char["id"] for char in self.params["chars"].values()]
+
+        rel_data = {k: v for k, v in self.data.items() if k.startswith("rel")}
+        for key, value in rel_data.items():
+            match = re.match(r"rel_(\d+)_(\w+)", key)
+            if not match:
+                continue
+            ch_id = int(match.group(1))
+            rel_type = match.group(2)
+
+            # check ch_id is in chars of the event
+            if ch_id not in chars_ids:
+                raise Http404(f"char {ch_id} not recognized")
+
+            # if value is empty
+            if not value:
+                # if wasn't present, do nothing
+                if ch_id not in self.params["relationships"] or rel_type not in self.params["relationships"][ch_id]:
+                    continue
+                # else delete
+                else:
+                    rel = self._get_rel(ch_id, instance, rel_type)
+                    save_version(rel, TextVersion.RELATIONSHIP, self.params["member"], True)
+                    rel.delete()
+                    continue
+
+            # if the value is present, and is the same as before, do nothing
+            if ch_id in self.params["relationships"] and rel_type in self.params["relationships"][ch_id]:
+                if value == self.params["relationships"][ch_id][rel_type]:
+                    continue
+
+            rel = self._get_rel(ch_id, instance, rel_type)
+            rel.text = value
+            rel.save()
+
+    def _get_rel(self, ch_id, instance, rel_type):
+        if rel_type == "direct":
+            (rel, cr) = Relationship.objects.get_or_create(source_id=instance.pk, target_id=ch_id)
+        else:
+            (rel, cr) = Relationship.objects.get_or_create(target_id=instance.pk, source_id=ch_id)
+        return rel
 
     def save(self, commit=True):
         instance = super().save()
 
         if instance.pk:
-            self._save_plot()
+            self._save_plot(instance)
             self._save_px(instance)
+            self._save_relationships(instance)
 
         return instance
 
 
 class OrgaWritingQuestionForm(MyForm):
-    page_info = _("This page allows you to add or modify a form question for a writing element.")
+    page_info = _("This page allows you to add or modify a form question for a writing element")
 
     page_title = _("Writing Question")
 
@@ -353,6 +424,21 @@ class OrgaWritingQuestionForm(MyForm):
             or self.params["writing_typ"] != QuestionApplicable.CHARACTER
         ):
             self.delete_field("status")
+        else:
+            visible_choices = {v for v, _ in self.fields["status"].choices}
+
+            help_texts = {
+                QuestionStatus.OPTIONAL: "The question is shown, and can be filled by the player",
+                QuestionStatus.MANDATORY: "The question needs to be filled by the player",
+                QuestionStatus.DISABLED: "The question is shown, but cannot be changed by the player",
+                QuestionStatus.HIDDEN: "The question is not shown to the player",
+            }
+
+            self.fields["status"].help_text = ", ".join(
+                f"<b>{choice.label}</b>: {text}"
+                for choice, text in help_texts.items()
+                if choice.value in visible_choices
+            )
 
         if "print_pdf" not in self.params["features"] or self.params["writing_typ"] == QuestionApplicable.PLOT:
             self.delete_field("printable")
@@ -364,14 +450,31 @@ class OrgaWritingQuestionForm(MyForm):
         # remove visibility from plot
         if self.params["writing_typ"] == QuestionApplicable.PLOT:
             self.delete_field("visibility")
-        # set only private and public visibility if different from character
-        elif self.params["writing_typ"] != QuestionApplicable.CHARACTER:
-            self.fields["visibility"].choices = [
-                (choice.value, choice.label) for choice in QuestionVisibility if choice != QuestionVisibility.SEARCHABLE
-            ]
-            help_text = self.fields["visibility"].help_text
-            updated_help_text = ".".join(help_text.split(".", 1)[1:]).lstrip()
-            self.fields["visibility"].help_text = updated_help_text
+        else:
+            # set only private and public visibility if different from character
+            if self.params["writing_typ"] != QuestionApplicable.CHARACTER:
+                self.fields["visibility"].choices = [
+                    (choice.value, choice.label)
+                    for choice in QuestionVisibility
+                    if choice != QuestionVisibility.SEARCHABLE
+                ]
+
+            visible_choices = {v for v, _ in self.fields["visibility"].choices}
+
+            help_texts = {
+                QuestionVisibility.SEARCHABLE: "Characters can be filtered according to this question",
+                QuestionVisibility.PUBLIC: "The answer to this question is publicly visible",
+                QuestionVisibility.PRIVATE: "The answer to this question is only visible to the player",
+                QuestionVisibility.HIDDEN: "The answer is hidden to all players",
+            }
+
+            self.fields["visibility"].help_text = ", ".join(
+                f"<b>{choice.label}</b>: {text}"
+                for choice, text in help_texts.items()
+                if choice.value in visible_choices
+            )
+
+        self.check_applicable = self.params["writing_typ"]
 
     def _init_type(self):
         # Add type of character question to the available types
@@ -381,10 +484,10 @@ class OrgaWritingQuestionForm(MyForm):
         if self.instance.pk and self.instance.typ:
             already.remove(self.instance.typ)
 
-            basic_type = self.instance.typ in QuestionType.get_basic_types()
+            # basic_type = self.instance.typ in QuestionType.get_basic_types()
             def_type = self.instance.typ in {QuestionType.NAME, QuestionType.TEASER, QuestionType.TEXT}
-            type_feature = self.instance.typ in self.params["features"]
-            self.prevent_canc = not basic_type and def_type or type_feature
+            # type_feature = self.instance.typ in self.params["features"]
+            self.prevent_canc = def_type
         choices = []
         for choice in QuestionType.choices:
             if len(choice[0]) > 1:
@@ -423,7 +526,7 @@ class OrgaWritingQuestionForm(MyForm):
 
 
 class OrgaWritingOptionForm(MyForm):
-    page_info = _("This page allows you to add or modify an option in a form question for a writing element.")
+    page_info = _("This page allows you to add or modify an option in a form question for a writing element")
 
     page_title = _("Writing option")
 

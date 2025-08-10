@@ -36,14 +36,16 @@ from django.template import loader
 from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
+from django_recaptcha.widgets import ReCaptchaV3
 from django_registration.forms import RegistrationFormUniqueEmail
 
 from larpmanager.cache.feature import get_assoc_features
 from larpmanager.forms.base import BaseAccForm, MyForm
 from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput
 from larpmanager.models.association import Association, MemberFieldType
+from larpmanager.models.base import FeatureNationality
 from larpmanager.models.member import Badge, Member, Membership, VolunteerRegistry, get_user_membership
-from larpmanager.utils.common import FileTypeValidator
+from larpmanager.utils.common import FileTypeValidator, get_recaptcha_secrets
 from larpmanager.utils.tasks import my_send_mail
 
 
@@ -67,6 +69,7 @@ class MyAuthForm(AuthenticationForm):
 class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
     # noinspection PyUnresolvedReferences, PyProtectedMember
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request", None)
         super(RegistrationFormUniqueEmail, self).__init__(*args, **kwargs)
         self.fields["username"].widget = forms.HiddenInput()
 
@@ -106,13 +109,17 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             required=True,
             label=_("Authorisation"),
             help_text=_(
-                "In order to participate in the events of this association, you must authorise "
-                "the sharing of your data."
-            ),
+                "Do you consent to the sharing of your personal data in accordance with the GDPR and our Privacy Policy"
+            )
+            + "?",
         )
 
         if not conf_settings.DEBUG and not os.getenv("PYTEST_CURRENT_TEST"):
-            self.fields["captcha"] = ReCaptchaField(label="Captcha")
+            public, private = get_recaptcha_secrets(self.request)
+            if public and private:
+                self.fields["captcha"] = ReCaptchaField(
+                    widget=ReCaptchaV3, label="Captcha", public_key=public, private_key=private
+                )
 
         # place language as first
         new_order = ["lang"] + [key for key in self.fields if key != "lang"]
@@ -196,6 +203,19 @@ class AvatarForm(forms.Form):
     image = forms.ImageField(label="Select an image")
 
 
+class LanguageForm(forms.Form):
+    language = forms.ChoiceField(
+        choices=conf_settings.LANGUAGES,
+        label=_("Select Language"),
+        widget=forms.Select(attrs={"class": "form-control"}),
+    )
+
+    def __init__(self, *args, **kwargs):
+        current_lang = kwargs.pop("current_language")
+        super().__init__(*args, **kwargs)
+        self.fields["language"].initial = current_lang
+
+
 # noinspection PyUnresolvedReferences
 COUNTRY_CHOICES = sorted([(country.alpha_2, country.name) for country in pycountry.countries], key=lambda x: x[1])
 
@@ -248,7 +268,7 @@ class ResidenceWidget(forms.MultiWidget):
 
 def validate_no_pipe(value):
     if "|" in value:
-        raise forms.ValidationError(_("Character not allowed:") + " |")
+        raise forms.ValidationError(_("Character not allowed") + ": |")
 
 
 class ResidenceField(forms.MultiValueField):
@@ -320,7 +340,6 @@ class ProfileForm(BaseProfileForm):
     class Meta:
         model = Member
         fields = (
-            "language",
             "name",
             "surname",
             "legal_name",
@@ -389,9 +408,9 @@ class ProfileForm(BaseProfileForm):
                 required=True,
                 label=_("Authorisation"),
                 help_text=_(
-                    "In order to participate in the events of this association, you must authorise "
-                    "the sharing of your data."
-                ),
+                    "Do you consent to the sharing of your personal data in accordance with the GDPR and our Privacy Policy"
+                )
+                + "?",
             )
 
     def clean_birth_date(self):
@@ -416,7 +435,7 @@ class ProfileForm(BaseProfileForm):
 
         if "profile" in self.allowed and "profile" in self.mandatory:
             if not self.instance.profile:
-                self.add_error(None, _("Please upload your profile photo!"))
+                self.add_error(None, _("Please upload your profile photo") + "!")
 
         return cleaned_data
 
@@ -436,13 +455,13 @@ class MembershipRequestForm(forms.ModelForm):
 
     request = forms.FileField(
         label=_("Request signed"),
-        help_text=_("Upload the scan of your signed application (image or pdf document):"),
+        help_text=_("Upload the scan of your signed application (image or pdf document)"),
         validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
     )
 
     document = forms.FileField(
         label=_("Photo of an ID"),
-        help_text=_("Upload a photo of the identity document that you listed in the request (image or pdf)."),
+        help_text=_("Upload a photo of the identity document that you listed in the request (image or pdf)"),
         validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
     )
 
@@ -455,13 +474,20 @@ class MembershipConfirmForm(forms.Form):
 
 
 class MembershipResponseForm(forms.Form):
-    response = forms.CharField(required=False, max_length=1000)
+    is_approved = forms.BooleanField(required=False, initial=True)
+    response = forms.CharField(
+        required=False,
+        max_length=1000,
+        help_text=_(
+            "Optional text to be included in the email sent to the player to notify them of the approval decision"
+        ),
+    )
 
 
 class ExeVolunteerRegistryForm(MyForm):
     page_title = _("Volounteer data")
 
-    page_info = _("This page allows you to add or edit a volunteer entry.")
+    page_info = _("This page allows you to add or edit a volunteer entry")
 
     class Meta:
         model = VolunteerRegistry
@@ -493,7 +519,7 @@ class MembershipForm(BaseAccForm):
 
 
 class ExeMemberForm(BaseProfileForm):
-    page_info = _("This page allows you to edit a member's profile.")
+    page_info = _("This page allows you to edit a member's profile")
 
     class Meta:
         model = Member
@@ -509,9 +535,9 @@ class ExeMemberForm(BaseProfileForm):
 
 
 class ExeMembershipForm(MyForm):
-    page_info = _("This page allows you to change a member's membership status.")
+    page_info = _("This page allows you to change a member's membership status")
 
-    load_templates = "membership"
+    load_templates = ["membership"]
 
     class Meta:
         model = Membership
@@ -529,7 +555,7 @@ class ExeMembershipForm(MyForm):
 
 
 class ExeBadgeForm(MyForm):
-    page_info = _("This page allows you to add or edit a badge, or assign it  to users.")
+    page_info = _("This page allows you to add or edit a badge, or assign it  to users")
 
     page_title = _("Badge")
 
@@ -549,7 +575,7 @@ class ExeBadgeForm(MyForm):
 class ExeProfileForm(MyForm):
     page_title = _("Profile")
 
-    page_info = _("This page allows you to set up the fields that players can fill in in their user profile.")
+    page_info = _("This page allows you to set up the fields that players can fill in in their user profile")
 
     class Meta:
         model = Association
@@ -580,6 +606,9 @@ class ExeProfileForm(MyForm):
             )
 
             self.initial[slug] = init
+
+        if self.instance.nationality != FeatureNationality.ITALY:
+            self.delete_field("fiscal_code")
 
     @staticmethod
     def get_members_fields():

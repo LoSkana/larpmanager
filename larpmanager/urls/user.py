@@ -18,50 +18,26 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.conf import (
-    settings as conf_settings,
-)
-from django.contrib.auth import (
-    views as auth_views,
-)
-from django.urls import (
-    include,
-    path,
-    re_path,
-)
+from django.conf import settings as conf_settings
+from django.contrib.auth import views as auth_views
+from django.urls import include, path, re_path
 
 from larpmanager.forms.member import (
-    MyAuthForm,
     MyPasswordResetConfirmForm,
     MyPasswordResetForm,
     MyRegistrationFormUniqueEmail,
 )
 from larpmanager.views import auth as views_auth
 from larpmanager.views import base as views_base
-from larpmanager.views.user import (
-    accounting as views_ua,
-)
-from larpmanager.views.user import (
-    casting as views_uca,
-)
-from larpmanager.views.user import (
-    character as views_uc,
-)
-from larpmanager.views.user import (
-    event as views_ue,
-)
-from larpmanager.views.user import (
-    member as views_um,
-)
-from larpmanager.views.user import (
-    miscellanea as views_ums,
-)
-from larpmanager.views.user import (
-    pdf as views_up,
-)
-from larpmanager.views.user import (
-    registration as views_ur,
-)
+from larpmanager.views.base import MyLoginView
+from larpmanager.views.user import accounting as views_ua
+from larpmanager.views.user import casting as views_uca
+from larpmanager.views.user import character as views_uc
+from larpmanager.views.user import event as views_ue
+from larpmanager.views.user import member as views_um
+from larpmanager.views.user import miscellanea as views_ums
+from larpmanager.views.user import pdf as views_up
+from larpmanager.views.user import registration as views_ur
 
 urlpatterns = [
     path(
@@ -118,6 +94,11 @@ urlpatterns = [
         "home/json/<slug:lang>/",
         views_ue.home_json,
         name="home_json",
+    ),
+    path(
+        "language/",
+        views_um.language,
+        name="language",
     ),
     path(
         "profile/",
@@ -394,16 +375,6 @@ urlpatterns = [
         include("paypal.standard.ipn.urls"),
     ),
     path(
-        "manage/",
-        views_base.manage,
-        name="manage",
-    ),
-    path(
-        "<slug:s>/<int:n>/manage/",
-        views_base.manage,
-        name="manage",
-    ),
-    path(
         "<slug:s>/<int:n>/",
         views_ue.gallery,
         name="gallery",
@@ -417,6 +388,11 @@ urlpatterns = [
         "<slug:s>/<int:n>/character/<int:num>/",
         views_uc.character,
         name="character",
+    ),
+    path(
+        "<slug:s>/<int:n>/character/external/<slug:code>/",
+        views_uc.character_external,
+        name="character_external",
     ),
     path(
         "<slug:s>/<int:n>/character/<int:num>/change/",
@@ -452,6 +428,11 @@ urlpatterns = [
         "<slug:s>/<int:n>/character/<int:num>/abilities/",
         views_uc.character_abilities,
         name="character_abilities",
+    ),
+    path(
+        "<slug:s>/<int:n>/character/<int:num>/abilities/<int:id_del>/",
+        views_uc.character_abilities_del,
+        name="character_abilities_del",
     ),
     path(
         "<slug:s>/<int:n>/character/<int:num>/assign/",
@@ -664,6 +645,11 @@ urlpatterns = [
         name="help",
     ),
     path(
+        "<slug:s>/<int:n>/show_char/",
+        views_uc.show_char,
+        name="show_char",
+    ),
+    path(
         "register/conditions/",
         views_ur.register_conditions,
         name="register_conditions",
@@ -701,14 +687,7 @@ urlpatterns = [
         ),
         name="registration_register",
     ),
-    path(
-        "login/",
-        auth_views.LoginView.as_view(
-            template_name="registration/login.html",
-            authentication_form=MyAuthForm,
-        ),
-        name="login",
-    ),
+    path("login/", MyLoginView.as_view(), name="login"),
     path(
         "logout/",
         auth_views.LogoutView.as_view(next_page=conf_settings.LOGOUT_REDIRECT_URL),
@@ -734,4 +713,10 @@ urlpatterns = [
         views_base.after_login,
         name="after_login",
     ),
+    path(
+        "tutorial_query/",
+        views_base.tutorial_query,
+        name="tutorial_query",
+    ),
+    path("upload_image/", views_base.upload_image, name="upload_image"),
 ]

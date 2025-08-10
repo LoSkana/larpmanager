@@ -1,8 +1,8 @@
 {% load show_tags i18n %}
-{% if prologues and show_prologue %}
+{% if prologues and show_addit.prologue %}
     <h1 class="c">{% trans "Prologues" %}</h1>
     <p>
-        {% trans "This is the information with which your character will begin each act. We ask that you do NOT read this information before the act to which it referenced!" %}
+        {% trans "This is the information with which your character will begin each act. We ask that you do NOT read this information before the act to which it referenced" %}!
     </p>
     {% for p in sheet_prologues %}
         <h2 class="c">{{ p.data.name }} ({{ p.typ.name }})</h2>
