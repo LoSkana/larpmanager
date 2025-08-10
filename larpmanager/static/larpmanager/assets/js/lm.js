@@ -371,6 +371,8 @@ $(document).ready(function() {
     post_popup();
 
     $('#one .inner').fadeIn(100);
+
+    $('#topbar .inner').fadeIn(100);
 });
 
 function data_tables() {

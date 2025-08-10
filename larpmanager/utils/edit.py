@@ -354,6 +354,8 @@ def writing_edit_cache_key(eid, typ):
 
 def writing_edit_save_ajax(form, request, ctx):
     res = {"res": "ok"}
+    if request.user.is_superuser:
+        return JsonResponse(res)
 
     eid = int(request.POST["eid"])
     if eid <= 0:
