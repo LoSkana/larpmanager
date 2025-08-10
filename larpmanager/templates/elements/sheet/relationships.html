@@ -32,7 +32,7 @@
                     {% endfor %}
                 </div>
                 <div class="go-inline">
-                    <b>{% trans "Relationship" %}:&nbsp;</b>{{ el.text }}
+                    <b>{% trans "Relationship" %}:&nbsp;</b>{% show_char el.text run 1 %}
                 </div>
             </div>
         </div>

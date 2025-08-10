@@ -63,7 +63,7 @@ table, tr, td, th, tbody, thead, tfoot {
                             {% endif %}
                         {% endfor %}
                         <p class="relationship">
-                            <b>Relationship:</b>  {{ el.text }}
+                            <b>Relationship:</b>{% show_char el.text run 1 %}
                         </p>
                     </td>
                 {% endfor %}
