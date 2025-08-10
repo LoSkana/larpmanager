@@ -31,7 +31,7 @@
                         {% endwith %}
                     {% endfor %}
                 </div>
-                {{ el.text | safe }}
+                {% show_char el.text run 1 %}
             </div>
         </div>
         <hr class="clear" />
