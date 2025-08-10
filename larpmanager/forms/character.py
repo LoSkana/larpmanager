@@ -232,25 +232,20 @@ class OrgaCharacterForm(CharacterForm):
         if "plot" not in self.params["features"]:
             return
 
-        pcr = {}
-        for el in PlotCharacterRel.objects.filter(character=self.instance):
-            pcr[el.plot_id] = el.text
-
-        que = self.instance.plots.order_by("number").values_list("id", "number", "name", "text")
-        for pl in que:
-            plot = f"#{pl[1]} {pl[2]}"
-            field = f"pl_{pl[0]}"
+        for el in self.instance.get_plot_characters().order_by('plot__number'):
+            plot = f"T{el.plot.number} {el.plot.name}"
+            field = f"pl_{el.plot.id}"
             self.fields[field] = forms.CharField(
                 widget=WritingTinyMCE(),
                 label=plot,
                 help_text=_("This text will be added to the sheet, in the plot paragraph %(name)s") % {"name": plot},
                 required=False,
             )
-            if pl[0] in pcr:
-                self.initial[field] = pcr[pl[0]]
+            if el.text:
+                self.initial[field] = el.text
 
-            if pl[3]:
-                self.details[f"id_{field}"] = pl[3]
+            if el.plot.text:
+                self.details[f"id_{field}"] = el.plot.text
             self.show_link.append(f"id_{field}")
 
     def _save_plot(self):
