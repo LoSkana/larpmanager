@@ -287,9 +287,6 @@ msgstr "Chiuso"
 msgid "Cover"
 msgstr "Cover"
 
-msgid "Descr"
-msgstr "Descr"
-
 msgid "Email"
 msgstr "Email"
 
@@ -1644,6 +1641,9 @@ msgstr "Elenco dei biglietti"
 msgid "Total costs"
 msgstr "Costi totali"
 
+msgid "Transaction"
+msgstr "Transazione"
+
 msgid "Transversal"
 msgstr "Trasversale"
 
@@ -2359,9 +2359,6 @@ msgstr "Raccolta totale"
 
 msgid "Color background"
 msgstr "Sfondo testo"
-
-msgid "Confirm payments"
-msgstr "Conferma pagamenti"
 
 msgid "Current template"
 msgstr "Template attuale"

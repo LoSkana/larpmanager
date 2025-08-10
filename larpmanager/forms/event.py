@@ -784,7 +784,7 @@ class OrgaEventButtonForm(MyForm):
 
 
 class OrgaRunForm(ConfigForm):
-    page_title = _("Run")
+    page_title = _("Event")
 
     page_info = _("This page allows you to change the general settings of this run")
 

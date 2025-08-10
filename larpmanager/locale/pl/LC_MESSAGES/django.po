@@ -287,9 +287,6 @@ msgstr "Zamknij"
 msgid "Cover"
 msgstr "Okładka"
 
-msgid "Descr"
-msgstr "Opis"
-
 msgid "Email"
 msgstr "E-mail"
 
@@ -1644,6 +1641,9 @@ msgstr "Lista biletów"
 msgid "Total costs"
 msgstr "Całkowite koszty"
 
+msgid "Transaction"
+msgstr "Transakcja"
+
 msgid "Transversal"
 msgstr "Poprzeczny"
 
@@ -2359,9 +2359,6 @@ msgstr "Łączna kolekcja"
 
 msgid "Color background"
 msgstr "Kolor tła"
-
-msgid "Confirm payments"
-msgstr "Potwierdzanie płatności"
 
 msgid "Current template"
 msgstr "Aktualny szablon"

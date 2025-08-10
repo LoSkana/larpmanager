@@ -1326,9 +1326,6 @@ msgstr ""
 msgid "This page allows you to edit the event navigation buttons"
 msgstr ""
 
-msgid "Run"
-msgstr ""
-
 msgid "This page allows you to change the general settings of this run"
 msgstr ""
 
@@ -4674,6 +4671,9 @@ msgstr ""
 msgid "Refund given"
 msgstr ""
 
+msgid "Run"
+msgstr ""
+
 msgid "Accounting - History"
 msgstr ""
 
@@ -4718,9 +4718,6 @@ msgstr ""
 msgid "This page shows all donations recorded in the system"
 msgstr ""
 
-msgid "Descr"
-msgstr ""
-
 msgid ""
 "This page shows all expenses incurred by collaborators, recorded in the "
 "system"
@@ -4747,22 +4744,19 @@ msgstr ""
 msgid "This page summarizes all revenue items recorded in the system"
 msgstr ""
 
-msgid "Confirm payments"
-msgstr ""
-
 msgid "This page shows all invoices registered in the system"
-msgstr ""
-
-msgid "Method"
-msgstr ""
-
-msgid "Net"
 msgstr ""
 
 msgid "This page shows all expense items recorded in the system"
 msgstr ""
 
 msgid "This page shows all payment items registered in the system"
+msgstr ""
+
+msgid "Method"
+msgstr ""
+
+msgid "Net"
 msgstr ""
 
 msgid "This page lists all reimbursement claims submitted by members"
@@ -8114,6 +8108,9 @@ msgid "Registration completed successfully!"
 msgstr ""
 
 msgid "Request approved"
+msgstr ""
+
+msgid "Transaction"
 msgstr ""
 
 msgid "Element approved"

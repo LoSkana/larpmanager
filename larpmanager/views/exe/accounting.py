@@ -25,6 +25,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.balance import assoc_accounting, assoc_accounting_data, check_accounting, get_run_accounting
@@ -70,6 +71,7 @@ from larpmanager.models.registration import (
     Registration,
 )
 from larpmanager.models.utils import get_sum
+from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.edit import backend_get, exe_edit
 from larpmanager.utils.paginate import exe_paginate
@@ -79,8 +81,26 @@ from larpmanager.views.orga.accounting import assign_payment_fee
 @login_required
 def exe_outflows(request):
     ctx = check_assoc_permission(request, "exe_outflows")
-    exe_paginate(request, ctx, AccountingItemOutflow, selrel=("run", "run__event"))
-    return render(request, "larpmanager/exe/accounting/outflows.html", ctx)
+    ctx.update(
+        {
+            "selrel": ("run", "run__event"),
+            "fields": [
+                ("run", _("Event")),
+                ("type", _("Type")),
+                ("descr", _("Description")),
+                ("value", _("Value")),
+                ("payment_date", _("Date")),
+                ("statement", _("Statement")),
+            ],
+            "callbacks": {
+                "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
+                "type": lambda el: el.get_exp_display(),
+            },
+        }
+    )
+    return exe_paginate(
+        request, ctx, AccountingItemOutflow, "larpmanager/exe/accounting/outflows.html", "exe_outflows_edit"
+    )
 
 
 @login_required
@@ -91,8 +111,24 @@ def exe_outflows_edit(request, num):
 @login_required
 def exe_inflows(request):
     ctx = check_assoc_permission(request, "exe_inflows")
-    exe_paginate(request, ctx, AccountingItemInflow, selrel=("run", "run__event"))
-    return render(request, "larpmanager/exe/accounting/inflows.html", ctx)
+    ctx.update(
+        {
+            "selrel": ("run", "run__event"),
+            "fields": [
+                ("run", _("Event")),
+                ("descr", _("Description")),
+                ("value", _("Value")),
+                ("payment_date", _("Date")),
+                ("statement", _("Statement")),
+            ],
+            "callbacks": {
+                "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
+            },
+        }
+    )
+    return exe_paginate(
+        request, ctx, AccountingItemInflow, "larpmanager/exe/accounting/inflows.html", "exe_inflows_edit"
+    )
 
 
 @login_required
@@ -103,8 +139,19 @@ def exe_inflows_edit(request, num):
 @login_required
 def exe_donations(request):
     ctx = check_assoc_permission(request, "exe_donations")
-    exe_paginate(request, ctx, AccountingItemDonation, show_runs=False)
-    return render(request, "larpmanager/exe/accounting/donations.html", ctx)
+    ctx.update(
+        {
+            "fields": [
+                ("member", _("Member")),
+                ("descr", _("Description")),
+                ("value", _("Value")),
+                ("date", _("Date")),
+            ],
+        }
+    )
+    return exe_paginate(
+        request, ctx, AccountingItemDonation, "larpmanager/exe/accounting/donations.html", "exe_donations_edit"
+    )
 
 
 @login_required
@@ -121,7 +168,7 @@ def exe_credits(request):
             "subtype": "credits",
             "fields": [
                 ("member", _("Member")),
-                ("run", _("Run")),
+                ("run", _("Event")),
                 ("descr", _("Description")),
                 ("value", _("Value")),
                 ("created", _("Date")),
@@ -148,7 +195,7 @@ def exe_tokens(request):
             "subtype": "tokens",
             "fields": [
                 ("member", _("Member")),
-                ("run", _("Run")),
+                ("run", _("Event")),
                 ("descr", _("Description")),
                 ("value", _("Value")),
                 ("created", _("Date")),
@@ -166,8 +213,32 @@ def exe_tokens_edit(request, num):
 @login_required
 def exe_expenses(request):
     ctx = check_assoc_permission(request, "exe_expenses")
-    exe_paginate(request, ctx, AccountingItemExpense, selrel=("run", "run__event"))
-    return render(request, "larpmanager/exe/accounting/expenses.html", ctx)
+    approve = _("Approve")
+    ctx.update(
+        {
+            "selrel": ("run", "run__event"),
+            "fields": [
+                ("member", _("Member")),
+                ("type", _("Type")),
+                ("run", _("Event")),
+                ("descr", _("Description")),
+                ("value", _("Value")),
+                ("created", _("Date")),
+                ("statement", _("Statement")),
+                ("action", _("Action")),
+            ],
+            "callbacks": {
+                "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
+                "action": lambda el: f"<a href='{reverse('exe_expenses_approve', args=[el.id])}'>{approve}</a>"
+                if not el.is_approved
+                else "",
+                "type": lambda el: el.get_exp_display(),
+            },
+        }
+    )
+    return exe_paginate(
+        request, ctx, AccountingItemExpense, "larpmanager/exe/accounting/expenses.html", "exe_expenses_edit"
+    )
 
 
 @login_required
@@ -209,9 +280,37 @@ def exe_payments_edit(request, num):
 @login_required
 def exe_invoices(request):
     ctx = check_assoc_permission(request, "exe_invoices")
-    sr = ("method", "member")
-    exe_paginate(request, ctx, PaymentInvoice, show_runs=False, selrel=sr)
-    return render(request, "larpmanager/exe/accounting/invoices.html", ctx)
+    confirm = _("Confirm")
+    ctx.update(
+        {
+            "selrel": ("method", "member"),
+            "fields": [
+                ("member", _("Member")),
+                ("method", _("Method")),
+                ("type", _("Type")),
+                ("status", _("Status")),
+                ("gross", _("Gross")),
+                ("trans", _("Transaction")),
+                ("causal", _("Causal")),
+                ("details", _("Details")),
+                ("created", _("Date")),
+                ("action", _("Action")),
+            ],
+            "callbacks": {
+                "method": lambda el: str(el.method),
+                "type": lambda el: el.get_typ_display(),
+                "status": lambda el: el.get_status_display(),
+                "gross": lambda el: format_decimal(el.mc_gross),
+                "trans": lambda el: format_decimal(el.mc_fee) if el.mc_fee else "",
+                "causal": lambda el: el.causal,
+                "details": lambda el: el.get_details(),
+                "action": lambda el: f"<a href='{reverse('exe_invoices_confirm', args=[el.id])}'>{confirm}</a>"
+                if el.status == PaymentStatus.SUBMITTED
+                else "",
+            },
+        }
+    )
+    return exe_paginate(request, ctx, PaymentInvoice, "larpmanager/exe/accounting/invoices.html", "exe_invoices_edit")
 
 
 @login_required

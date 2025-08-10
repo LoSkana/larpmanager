@@ -294,7 +294,7 @@ def get_run_choices(self, past=False):
         cho.append((r.id, str(r)))
 
     if "run" not in self.fields:
-        self.fields["run"] = forms.ChoiceField(label=_("Run"))
+        self.fields["run"] = forms.ChoiceField(label=_("Event"))
 
     self.fields["run"].choices = cho
     if "run" in self.params:

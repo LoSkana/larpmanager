@@ -81,6 +81,9 @@ def _set_filtering(ctx, elements, filters):
             print(f"this shouldn't happen! _get_ordering {filters} {ctx['fields']}")
         field, name = ctx["fields"][column_ix - 1]
 
+        if field in ctx["callbacks"]:
+            continue
+
         if field in field_map:
             field = field_map[field]
         else:
@@ -113,6 +116,9 @@ def _get_ordering(ctx, order):
         if column_ix >= len(ctx["fields"]):
             print(f"this shouldn't happen! _get_ordering {order} {ctx['fields']}")
         field, name = ctx["fields"][column_ix - 1]
+
+        if field in ctx["callbacks"]:
+            continue
 
         if field in field_map:
             field = field_map[field]
@@ -167,11 +173,15 @@ def _prepare_data_json(ctx, elements, view, edit):
 
     field_map = {
         "created": lambda row: row.created.strftime("%d/%m/%Y"),
+        "payment_date": lambda row: row.created.strftime("%d/%m/%Y"),
         "member": lambda row: str(row.member),
         "run": lambda row: str(row.run) if row.run else "",
         "descr": lambda row: str(row.descr),
         "value": lambda row: int(row.value) if row.value == row.value.to_integral() else str(row.value),
     }
+
+    if "callbacks" in ctx:
+        field_map.update(ctx["callbacks"])
 
     for row in elements:
         url = reverse(view, args=[row.id])
