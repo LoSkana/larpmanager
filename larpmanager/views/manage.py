@@ -132,7 +132,7 @@ def _exe_suggestions(ctx):
         _add_priority(ctx, text, perm)
 
     suggestions = {
-        "exe_payment_details": _("Set up the payment methods available to players"),
+        "exe_payment_details": _("Set up the payment methods available to participants"),
         "exe_profile": _("Define which data will be asked in the profile form to the users once they sign up"),
         "exe_roles": _(
             "Grant access to organization management for other users and define roles with specific permissions"

@@ -458,15 +458,15 @@ class ExeConfigForm(ConfigForm):
         if "payment" in self.params["features"]:
             self.set_section("payment", _("Payments"))
 
-            label = _("Charge transaction fees to player")
+            label = _("Charge transaction fees to participant")
             help_text = _(
-                "If enabled, the system will automatically add payment gateway fees to the ticket price, so the player covers them instead of the organization"
+                "If enabled, the system will automatically add payment gateway fees to the ticket price, so the participant covers them instead of the organization"
             )
             self.add_configs("payment_fees_user", ConfigType.BOOL, label, help_text)
 
             label = _("Disable amount change")
             help_text = _(
-                "If checked: Hides the possibility for the player to change the payment amount for his entries"
+                "If checked: Hides the possibility for the participant to change the payment amount for his entries"
             )
             self.add_configs("payment_hide_amount", ConfigType.BOOL, label, help_text)
 

@@ -364,7 +364,7 @@ class OrgaConfigForm(ConfigForm):
 
             label = _("Cover")
             help_text = _(
-                "Enables field 'cover', to shown a specific image in the gallery - until assigned to a player"
+                "Enables field 'cover', to shown a specific image in the gallery - until assigned to a participant"
             )
             self.add_configs("writing_cover", ConfigType.BOOL, label, help_text)
 
@@ -502,7 +502,7 @@ class OrgaConfigForm(ConfigForm):
 
             label = _("Field for exclusions")
             help_text = _(
-                "If checked, it adds a field in which the player can indicate which elements they "
+                "If checked, it adds a field in which the participant can indicate which elements they "
                 "wish to avoid altogether"
             )
             self.add_configs("casting_avoid", ConfigType.BOOL, label, help_text)
@@ -536,7 +536,7 @@ class OrgaConfigForm(ConfigForm):
 
             label = _("Causal")
             help_text = _(
-                "If present, it indicates the reason for the payment that the player must put on the payments they make."
+                "If present, it indicates the reason for the payment that the participant must put on the payments they make."
             )
             help_text += (
                 " "
@@ -559,7 +559,9 @@ class OrgaConfigForm(ConfigForm):
         if "bring_friend" in self.params["features"]:
             self.set_section("bring_friend", _("Bring a friend"))
             label = _("Forward discount")
-            help_text = _("Value of the discount for the registered player who gives the code to a friend who signs up")
+            help_text = _(
+                "Value of the discount for the registered participant who gives the code to a friend who signs up"
+            )
             self.add_configs("bring_friend_discount_to", ConfigType.INT, label, help_text)
 
             label = _("Discount back")

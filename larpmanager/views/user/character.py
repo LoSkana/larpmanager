@@ -161,7 +161,7 @@ def character_your(request, s, n, p=None):
     rcrs = ctx["run"].reg.rcrs.all()
 
     if rcrs.count() == 0:
-        messages.error(request, _("You don't have a character assigned for this run") + "!")
+        messages.error(request, _("You don't have a character assigned for this event") + "!")
         return redirect("home")
 
     if rcrs.count() == 1:

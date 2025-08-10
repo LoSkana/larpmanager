@@ -536,7 +536,7 @@ def _get_column_names(ctx):
     if ctx["typ"] == "registration":
         ctx["columns"] = [
             {
-                "player": _("The player's email"),
+                "player": _("The participant's email"),
                 "ticket": _("The name of the ticket")
                 + " <i>("
                 + (_("if it doesn't exist, it will be created"))

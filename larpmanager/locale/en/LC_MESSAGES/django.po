@@ -497,19 +497,19 @@ msgid ""
 "If checked: the system will send reminds the days on which holidays fall"
 msgstr ""
 
-msgid "Charge transaction fees to player"
+msgid "Charge transaction fees to participant"
 msgstr ""
 
 msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "
-"ticket price, so the player covers them instead of the organization"
+"ticket price, so the participant covers them instead of the organization"
 msgstr ""
 
 msgid "Disable amount change"
 msgstr ""
 
 msgid ""
-"If checked: Hides the possibility for the player to change the payment "
+"If checked: Hides the possibility for the participant to change the payment "
 "amount for his entries"
 msgstr ""
 
@@ -956,7 +956,7 @@ msgstr ""
 
 msgid ""
 "Enables field 'cover', to shown a specific image in the gallery - until "
-"assigned to a player"
+"assigned to a participant"
 msgstr ""
 
 msgid "Hide"
@@ -1147,8 +1147,8 @@ msgid "Field for exclusions"
 msgstr ""
 
 msgid ""
-"If checked, it adds a field in which the player can indicate which elements "
-"they wish to avoid altogether"
+"If checked, it adds a field in which the participant can indicate which "
+"elements they wish to avoid altogether"
 msgstr ""
 
 msgid "Assignments"
@@ -1191,8 +1191,8 @@ msgid "Causal"
 msgstr ""
 
 msgid ""
-"If present, it indicates the reason for the payment that the player must put "
-"on the payments they make."
+"If present, it indicates the reason for the payment that the participant "
+"must put on the payments they make."
 msgstr ""
 
 msgid "You can use the following fields, they will be filled in automatically"
@@ -1217,7 +1217,7 @@ msgid "Forward discount"
 msgstr ""
 
 msgid ""
-"Value of the discount for the registered player who gives the code to a "
+"Value of the discount for the registered participant who gives the code to a "
 "friend who signs up"
 msgstr ""
 
@@ -1598,8 +1598,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Optional text to be included in the email sent to the player to notify them "
-"of the approval decision"
+"Optional text to be included in the email sent to the participant to notify "
+"them of the approval decision"
 msgstr ""
 
 msgid "Volounteer data"
@@ -1634,10 +1634,10 @@ msgstr ""
 msgid "Optional - ram html code (substitute the text before)"
 msgstr ""
 
-msgid "This page allows you to answer a player's question"
+msgid "This page allows you to answer a participant's question"
 msgstr ""
 
-msgid "Player Questions"
+msgid "Participant questions"
 msgstr ""
 
 msgid "This page allows you to add or edit an album"
@@ -1675,8 +1675,8 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Enter here the 'bring a friend' code given to you by an already registered "
-"player, and you can receive a discount on your membership of %(amount)d!"
+"Enter the “bring a friend” code provided by a registered participant to "
+"receive a %(amount)d discount on your registration fee"
 msgstr ""
 
 msgid "Code 'Bring a friend'"
@@ -1767,7 +1767,7 @@ msgstr ""
 
 msgid ""
 "This page allows you to add or modify the dynamic instalments with which the "
-"player can split the payment"
+"participant can split the payment"
 msgstr ""
 
 msgid "Dynamic rates"
@@ -2950,8 +2950,8 @@ msgid "Editable"
 msgstr ""
 
 msgid ""
-"This field can be edited by the player only when the character is in one of "
-"the selected statuses"
+"This field can be edited by the participant only when the character is in "
+"one of the selected statuses"
 msgstr ""
 
 msgid "Maximum length"
@@ -5090,8 +5090,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"This page shows the conversation with a player concerning a need of them. "
-"You can add a new response"
+"This page displays the conversation with a participant regarding their "
+"expressed need"
 msgstr ""
 
 msgid "Give a new answer"
@@ -6117,7 +6117,7 @@ msgstr ""
 msgid "This page allows you to upload a new personal expense item"
 msgstr ""
 
-msgid "This page shows all inflows received for this run"
+msgid "This page shows all inflows received for this event"
 msgstr ""
 
 msgid "This page allows you to manually approve payments received"
@@ -6128,7 +6128,7 @@ msgid ""
 "concerning this run"
 msgstr ""
 
-msgid "This page shows all payments received for this run"
+msgid "This page shows all payments received for this event"
 msgstr ""
 
 msgid "Invoice"
@@ -6337,8 +6337,8 @@ msgid "This page summarizes px delivery to characters"
 msgstr ""
 
 msgid ""
-"This page shows active discounts on the player, allows you to activate or "
-"deactivate them"
+"This page shows active discounts on the participant, allows you to activate "
+"or deactivate them"
 msgstr ""
 
 msgid "Discounts active"
@@ -6481,7 +6481,7 @@ msgstr ""
 msgid "Load list"
 msgstr ""
 
-msgid "No registrations have been received for this run yet"
+msgid "No registrations have been received for this event yet"
 msgstr ""
 
 msgid "Registration sections"
@@ -6535,13 +6535,13 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Note that existing registrations with the same player email, will be "
+"Note that existing registrations with the same participant email, will be "
 "overwritten with the uploaded data"
 msgstr ""
 
 msgid ""
-"To add a registration to a player, they must have consented to share their "
-"data with your organization; otherwise, their entry will be skipped"
+"To add a registration to a participant, they must have consented to share "
+"their data with your organization; otherwise, their entry will be skipped"
 msgstr ""
 
 msgid "You can also upload a second file with the registration options"
@@ -7925,7 +7925,7 @@ msgstr ""
 msgid "Welcome"
 msgstr ""
 
-msgid "The player's email"
+msgid "The participant's email"
 msgstr ""
 
 msgid "The name of the ticket"
@@ -8213,7 +8213,7 @@ msgstr ""
 msgid "Quickly configure your organization's most important settings"
 msgstr ""
 
-msgid "Set up the payment methods available to players"
+msgid "Set up the payment methods available to participants"
 msgstr ""
 
 msgid ""
@@ -8535,7 +8535,7 @@ msgstr ""
 msgid "Character not visible"
 msgstr ""
 
-msgid "You don't have a character assigned for this run"
+msgid "You don't have a character assigned for this event"
 msgstr ""
 
 msgid "Informations saved"

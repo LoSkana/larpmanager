@@ -479,7 +479,7 @@ class MembershipResponseForm(forms.Form):
         required=False,
         max_length=1000,
         help_text=_(
-            "Optional text to be included in the email sent to the player to notify them of the approval decision"
+            "Optional text to be included in the email sent to the participant to notify them of the approval decision"
         ),
     )
 

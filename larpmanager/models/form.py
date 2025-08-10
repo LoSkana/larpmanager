@@ -192,7 +192,7 @@ class WritingQuestion(BaseModel):
         blank=True,
         verbose_name=_("Editable"),
         help_text=_(
-            "This field can be edited by the player only when the character is in one of the selected statuses"
+            "This field can be edited by the participant only when the character is in one of the selected statuses"
         ),
     )
 

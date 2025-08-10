@@ -132,8 +132,8 @@ class RegistrationForm(BaseRegistrationForm):
             return
 
         mes = _(
-            "Enter here the 'bring a friend' code given to you by an already registered "
-            "player, and you can receive a discount on your membership of %(amount)d!"
+            "Enter the “bring a friend” code provided by a registered participant "
+            "to receive a %(amount)d discount on your registration fee"
         )
         self.fields["bring_friend"] = forms.CharField(
             required=False,
@@ -584,7 +584,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             redeem_code__isnull=True,
         ):
             if reg.pk != self.instance.pk:
-                raise ValidationError("User already has a registration for this run!")
+                raise ValidationError("User already has a registration for this event!")
 
         return data
 
@@ -618,7 +618,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             if len(qs) > 0:
                 el = qs.first()
                 raise ValidationError(
-                    f"Character '{el.character}' already assigned to the player '{el.reg.member}' for this run!"
+                    f"Character '{el.character}' already assigned to the player '{el.reg.member}' for this event!"
                 )
 
         return data
@@ -799,7 +799,7 @@ class OrgaRegistrationOptionForm(MyForm):
 
 class OrgaRegistrationQuotaForm(MyForm):
     page_info = _(
-        "This page allows you to add or modify the dynamic instalments with which the player can split the payment"
+        "This page allows you to add or modify the dynamic instalments with which the participant can split the payment"
     )
 
     page_title = _("Dynamic rates")
