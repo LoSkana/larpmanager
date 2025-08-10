@@ -1800,9 +1800,6 @@ msgstr ""
 msgid "Is there anything else you would like to tell us"
 msgstr ""
 
-msgid "Run"
-msgstr ""
-
 msgid "Character Relationship"
 msgstr ""
 
@@ -4743,6 +4740,9 @@ msgstr ""
 msgid ""
 "This page shows all expenses incurred by collaborators, recorded in the "
 "system"
+msgstr ""
+
+msgid "Run"
 msgstr ""
 
 msgid "Approve"
