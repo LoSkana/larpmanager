@@ -190,7 +190,7 @@ async def px(live_server, page):
 async def copy(live_server, page):
     # copy event
     await go_to(page, live_server, "/manage/events")
-    await page.get_by_role("link", name="New").click()
+    await page.get_by_role("link", name="New event").click()
     await page.locator("#id_name").click()
     await page.locator("#id_name").fill("copy")
     await page.locator("#id_name").press("Tab")
