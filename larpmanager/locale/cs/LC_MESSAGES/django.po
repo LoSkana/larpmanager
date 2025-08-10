@@ -1563,6 +1563,9 @@ msgstr "Nové zasedání"
 msgid "Next events"
 msgstr "Nadcházející události"
 
+msgid "Participant"
+msgstr "Účastník"
+
 msgid "Past events"
 msgstr "Minulé události"
 

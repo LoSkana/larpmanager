@@ -30,11 +30,7 @@ window.jump_to = function(target) {
 
     var headerHeight = $('header').outerHeight();
 
-    console.log(target);
-
     if (!target.length) return;
-
-    console.log(window.interface_old);
 
     if (window.interface_old) {
         $('html, body').animate({
@@ -42,8 +38,6 @@ window.jump_to = function(target) {
         }, 0);
         return;
     }
-
-    console.log(target.offset().top);
 
     $('#page-wrapper').animate({
         scrollTop: $('#page-wrapper').scrollTop() + $(target).offset().top - headerHeight * 2
@@ -377,6 +371,11 @@ $(document).ready(function() {
 
 function data_tables() {
     window.datatables = window.datatables || {};
+
+    if (window.interface_old) {
+        $('table.go_datatable').tablesorter();
+        return;
+    }
 
     $('table.go_datatable').each(function() {
         const $table = $(this);

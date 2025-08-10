@@ -7924,6 +7924,9 @@ msgstr ""
 msgid "Welcome"
 msgstr ""
 
+msgid "Participant"
+msgstr ""
+
 msgid "The participant's email"
 msgstr ""
 

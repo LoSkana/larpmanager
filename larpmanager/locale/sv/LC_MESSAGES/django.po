@@ -1563,6 +1563,9 @@ msgstr "Ny session"
 msgid "Next events"
 msgstr "Kommande evenemang"
 
+msgid "Participant"
+msgstr "Deltagare"
+
 msgid "Past events"
 msgstr "Tidigare händelser"
 

@@ -22,6 +22,7 @@ import csv
 import io
 import zipfile
 
+import pandas as pd
 from bs4 import BeautifulSoup
 from django.db.models import F
 from django.http import HttpResponse
@@ -51,12 +52,11 @@ from larpmanager.utils.common import check_field
 from larpmanager.utils.edit import _get_values_mapping
 
 
-def _temp_csv_file(key, vals):
+def _temp_csv_file(keys, vals):
+    df = pd.DataFrame(vals, columns=keys)
     buffer = io.StringIO()
-    writer = csv.writer(buffer, delimiter="\t")
-    writer.writerow(key)
-    for val in vals:
-        writer.writerow(val)
+    df.to_csv(buffer, index=False)
+    buffer.seek(0)
     return buffer.getvalue()
 
 
@@ -239,7 +239,7 @@ def _row_header(ctx, el, key, member_cover, model, val):
         val.append(profile)
 
     if model in ["registration", "character"]:
-        key.append(_("Player"))
+        key.append(_("Participant"))
         display = ""
         if member:
             display = member.display_real()
