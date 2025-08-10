@@ -66,7 +66,7 @@ table { border-collapse: collapse; }
                             {% endfor %}
                         {% endif %}
                         <p class="relationship">
-                            <b>Relationship:</b>  {{ el.text | safe }}
+                            <b>Relationship:</b>  {% show_char el.text run 1 %}
                         </p>
                     </td>
                 {% endfor %}
