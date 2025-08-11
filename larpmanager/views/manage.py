@@ -132,7 +132,7 @@ def _exe_suggestions(ctx):
         _add_priority(ctx, text, perm)
 
     suggestions = {
-        "exe_payment_details": _("Set up the payment methods available to players"),
+        "exe_payment_details": _("Set up the payment methods available to participants"),
         "exe_profile": _("Define which data will be asked in the profile form to the users once they sign up"),
         "exe_roles": _(
             "Grant access to organization management for other users and define roles with specific permissions"
@@ -333,7 +333,7 @@ def _orga_actions_priorities(request, ctx, assoc):
         if ctx["event"].get_config("user_character_max", "") == "":
             _add_priority(
                 ctx,
-                _("Set up the configuration for the creation or editing of characters by the players"),
+                _("Set up the configuration for the creation or editing of characters by the participants"),
                 "orga_character",
                 "config/user_character",
             )

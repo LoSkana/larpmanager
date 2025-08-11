@@ -61,7 +61,7 @@ class Writing(BaseConceptModel):
     text = HTMLField(
         max_length=100000,
         blank=True,
-        help_text=_("Text visible only by the assigned player, when 'show text' is checked"),
+        help_text=_("Text visible only by the assigned participant, when 'show text' is checked"),
     )
 
     temp = models.BooleanField(default=False)

@@ -101,7 +101,7 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
 
         for i, (option_value, option_label) in enumerate(self.choices):
             checkbox_id = f"{attrs.get('id', name)}_{i}"
-            checked = "checked" if str(option_value) in value else ""
+            checked = "checked" if option_value in value else ""
             checkbox_html = f'<input type="checkbox" name="{name}" value="{option_value}" id="{checkbox_id}" {checked}>'
             link_html = f'{option_label}<a href="#" feat="{self.feature_map.get(option_value, "")}"><i class="fas fa-question-circle"></i></a>'
             help_text = self.feature_help.get(option_value, "")
@@ -144,14 +144,17 @@ def prepare_permissions_role(form, typ):
             if module.icon:
                 label = f"<i class='fa-solid fa-{module.icon}'></i> {label}"
 
+        valid_ids = {choice[0] for choice in ch}
+        initial_values = [i for i in init if i in valid_ids]
+
         form.fields[module.name] = forms.MultipleChoiceField(
             required=False,
             choices=ch,
             widget=RoleCheckboxWidget(help_text=help_text, feature_map=feature_map),
             label=label,
+            initial=initial_values,
         )
         form.modules.append(module.name)
-        form.initial[module.name] = init
 
 
 def save_permissions_role(instance, form):
@@ -294,7 +297,7 @@ def get_run_choices(self, past=False):
         cho.append((r.id, str(r)))
 
     if "run" not in self.fields:
-        self.fields["run"] = forms.ChoiceField(label=_("Run"))
+        self.fields["run"] = forms.ChoiceField(label=_("Session"))
 
     self.fields["run"].choices = cho
     if "run" in self.params:

@@ -4,12 +4,11 @@
     {% trans "Workshop" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows for each player their completion status of workshops" %}
+    {% trans "This page shows for each participant their completion status of workshops" %}
 {% endblock info %}
 {% block content %}
     <h2>{{ reg_count }} iscrizioni</h2>
-    <table id="workshops"
-           class="{% if not interface_old %}go_datatable{% endif %} writing">
+    <table id="workshops" class="go_datatable writing">
         <thead>
             <tr>
                 <th>{% trans "Player" %}</th>

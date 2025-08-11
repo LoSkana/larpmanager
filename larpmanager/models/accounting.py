@@ -450,7 +450,7 @@ class Discount(BaseModel):
         verbose_name=_("Type"),
         help_text=_(
             "Indicate the type of discount: standard, play again (only available to those who "
-            "have already played a run)"
+            "have already played this event)"
         ),
     )
 

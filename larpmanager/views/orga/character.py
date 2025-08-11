@@ -562,6 +562,8 @@ def orga_writing_excel_submit(request, s, n, typ):
 
     ctx["auto"] = int(request.POST.get("auto"))
     if ctx["auto"]:
+        if request.user.is_superuser:
+            return JsonResponse({"k": 1})
         msg = _check_working_ticket(request, ctx, request.POST["token"])
         if msg:
             return JsonResponse({"warn": msg})

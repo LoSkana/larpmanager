@@ -104,6 +104,7 @@ def update_index_permission(typ):
     que = que.order_by("feature__module__order", "number")
     return que.values(
         "name",
+        "descr",
         "slug",
         "hidden",
         "feature__placeholder",

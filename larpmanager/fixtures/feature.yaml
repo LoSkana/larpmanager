@@ -735,7 +735,7 @@
   pk: 120
   fields:
     name: Player editor
-    descr: Allows players to create and modify their own characters freely
+    descr: Allows participants to create and modify their own characters freely
     slug: user_character
     overall: false
     module: 7

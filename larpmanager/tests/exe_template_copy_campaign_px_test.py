@@ -190,7 +190,7 @@ async def px(live_server, page):
 async def copy(live_server, page):
     # copy event
     await go_to(page, live_server, "/manage/events")
-    await page.get_by_role("link", name="New").click()
+    await page.get_by_role("link", name="New event").click()
     await page.locator("#id_name").click()
     await page.locator("#id_name").fill("copy")
     await page.locator("#id_name").press("Tab")
@@ -206,7 +206,7 @@ async def copy(live_server, page):
 
     await go_to(page, live_server, "/copy/1/manage/roles/")
     await expect(page.locator('[id="\\39 "]')).to_contain_text("User Test")
-    await expect(page.locator('[id="\\39 "]')).to_contain_text("Navigation , Factions")
+    await expect(page.locator('[id="\\39 "]')).to_contain_text("Appearance (Navigation), Writing (Factions) ")
     await go_to(page, live_server, "/copy/1/manage/config/")
 
     await page.get_by_role("link", name="Gallery ").click()

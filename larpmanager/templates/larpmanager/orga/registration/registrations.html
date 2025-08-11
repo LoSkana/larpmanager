@@ -4,7 +4,7 @@
     {% trans "Registrations" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the run signups" %}
+    {% trans "This page shows the signups of the event" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
@@ -102,7 +102,7 @@
         {% for key, dc in reg_all %}
             <h2>{{ dc.type }} ({{ dc.count }})</h2>
             <table id="regs_{{ run.id }}_{{ dc.type }}"
-                   class="que_load{% if not interface_old %} {% if not interface_old %}go_datatable{% endif %} reg_list {% endif %}">
+                   class="que_load go_datatable reg_list">
                 <thead>
                     <tr>
                         <th></th>
@@ -535,7 +535,7 @@
     {% else %}
         <br />
         <p>
-            <i>{% trans "No registrations have been received for this run yet" %}</i>
+            <i>{% trans "No registrations have been received for this event yet" %}</i>
         </p>
     {% endif %}
 {% endblock content %}
