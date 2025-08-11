@@ -6959,13 +6959,6 @@ msgstr ""
 "Se sei un cittadino italiano, indica il tuo codice fiscale; altrimenti "
 "lascia vuoto"
 
-#, python-format
-msgid ""
-"The session name will be the event name followed by “#%(number)s” at the end"
-msgstr ""
-"Il nome della sessione sarà il nome dell'evento seguito da \"#%(number)s\" "
-"alla fine"
-
 msgid ""
 "This page prepares the cash balance already formatted for annual declaration"
 msgstr ""

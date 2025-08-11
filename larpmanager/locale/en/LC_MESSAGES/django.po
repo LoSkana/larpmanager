@@ -774,11 +774,6 @@ msgstr ""
 msgid "This page allows you to change general event settings"
 msgstr ""
 
-#, python-format
-msgid ""
-"The session name will be the event name followed by “#%(number)s” at the end"
-msgstr ""
-
 msgid "Event features"
 msgstr ""
 

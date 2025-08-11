@@ -6839,13 +6839,6 @@ msgstr ""
 "Om du är italiensk medborgare, ange ditt skatteregistreringsnummer; lämna "
 "annars tomt"
 
-#, python-format
-msgid ""
-"The session name will be the event name followed by “#%(number)s” at the end"
-msgstr ""
-"Sessionsnamnet kommer att vara evenemangsnamnet följt av \"#%(number)s\" i "
-"slutet"
-
 msgid ""
 "This page prepares the cash balance already formatted for annual declaration"
 msgstr ""

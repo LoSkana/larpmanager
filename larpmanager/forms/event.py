@@ -117,11 +117,6 @@ class OrgaEventForm(MyForm):
         else:
             self.fields["slug"].required = True
 
-        if self.instance.number:
-            self.fields["number"].help_text = _(
-                "The session name will be the event name followed by “#%(number)s” at the end"
-            )
-
         dl = []
 
         for s in ["visible", "website", "tagline", "where", "authors", "description", "genre", "register_link"]:

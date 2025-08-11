@@ -225,7 +225,7 @@ async def campaign(live_server, page):
     # create campaign
     await go_to(page, live_server, "/manage/features/79/on")
     await go_to(page, live_server, "/manage/events")
-    await page.get_by_role("link", name="New").click()
+    await page.get_by_role("link", name="New event").click()
     await page.locator("#id_name").click()
     await page.locator("#id_name").fill("campaign")
     await page.locator("#id_name").press("Tab")
