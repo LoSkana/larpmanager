@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.conf import settings as conf_settings
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_assoc_features
@@ -85,7 +86,7 @@ def check_assoc_permission(request, slug):
     ctx = def_user_ctx(request)
     if not has_assoc_permission(request, slug):
         raise PermissionError()
-    (feature, tutorial) = get_assoc_permission_feature(slug)
+    (feature, tutorial, config) = get_assoc_permission_feature(slug)
     if feature != "def" and feature not in request.assoc["features"]:
         raise FeatureError(path=request.path, feature=feature, run=0)
     ctx["manage"] = 1
@@ -94,6 +95,8 @@ def check_assoc_permission(request, slug):
     ctx["exe_page"] = 1
     if "tutorial" not in ctx:
         ctx["tutorial"] = tutorial
+    if config and has_assoc_permission(request, "exe_config"):
+        ctx["config"] = reverse("exe_config", args=[config])
     return ctx
 
 

@@ -15,6 +15,7 @@
                 <th>{% trans "Character" %}</th>
                 <th>{% trans "Factions" %}</th>
                 <th>{% trans "Player" %}</th>
+                <th></th>
                 <th>{% trans "Pronoun" %}</th>
             </tr>
         </thead>
@@ -77,7 +78,7 @@
     {% endif %}
     {% for fnum, fac in factions.items %}
         <h2>{{ fac.name }}</h2>
-        <table id="factions"
+        <table id="faction-{{ fnum }}"
                class="{% if not interface_old %}go_datatable{% endif %} writing">
             <thead>
                 <tr>

@@ -3608,6 +3608,12 @@ msgstr ""
 msgid "View the complete list of our events"
 msgstr ""
 
+msgid "Are you sure"
+msgstr ""
+
+msgid "Select ability"
+msgstr ""
+
 msgid "Problem"
 msgstr ""
 
@@ -4252,9 +4258,6 @@ msgid "Obtain ability"
 msgstr ""
 
 msgid "Select the new ability to get"
-msgstr ""
-
-msgid "Seleziona abilità"
 msgstr ""
 
 msgid "Character Edit"

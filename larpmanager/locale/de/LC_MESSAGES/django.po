@@ -1683,6 +1683,9 @@ msgstr "Errungenschaften"
 msgid "Archive mail"
 msgstr "Archiv-Mail"
 
+msgid "Are you sure"
+msgstr "Sind Sie sicher, dass"
+
 msgid "Bank address"
 msgstr "Adresse der Bank"
 
@@ -2177,6 +2180,9 @@ msgstr "Unterzeichneter Antrag"
 msgid "Returning type"
 msgstr "Art der Rückgabe"
 
+msgid "Select ability"
+msgstr "Fähigkeit auswählen"
+
 msgid "Sensitive data"
 msgstr "Sensible Daten"
 
@@ -2638,9 +2644,6 @@ msgstr "Unterwürfige Anfrage"
 
 msgid "Residence address"
 msgstr "Wohnanschrift"
-
-msgid "Seleziona abilità"
-msgstr "Seleziona abilità"
 
 msgid "Short description"
 msgstr "Kurzbeschreibung"

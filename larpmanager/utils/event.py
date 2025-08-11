@@ -22,6 +22,7 @@ from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Prefetch
 from django.http import Http404
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features
@@ -231,9 +232,11 @@ def check_event_permission(request, s, n, perm=None):
     if not has_event_permission(ctx, request, s, perm):
         raise PermissionError()
     if perm:
-        (feature, tutorial) = get_event_permission_feature(perm)
+        (feature, tutorial, config) = get_event_permission_feature(perm)
         if "tutorial" not in ctx:
             ctx["tutorial"] = tutorial
+        if config and has_event_permission(ctx, request, s, "orga_config"):
+            ctx["config"] = reverse("orga_config", args=[ctx["event"].slug, ctx["run"].number, config])
         if feature != "def" and feature not in ctx["features"]:
             raise FeatureError(path=request.path, feature=feature, run=ctx["run"].id)
     get_index_event_permissions(ctx, request, s)
