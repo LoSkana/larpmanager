@@ -99,14 +99,14 @@
                     </div>
                 {% endif %}
                 {% if run.reg %}
-                    {% if features.casting and show_char and run.reg.ticket and run.reg.ticket.tier != 'w' %}
+                    {% if features.casting and show_character and run.reg.ticket and run.reg.ticket.tier != 'w' %}
                         <div class="lm_tooltip">
                             <a href="{% url 'casting' run.event.slug run.number %}"
                                {% if request_func_name == "casting" %}class="select"{% endif %}>{% trans "Casting" %}</a>
                             <div class="lm_tooltiptext">{% trans "Select your preferences on the characters to play" %}!</div>
                         </div>
                     {% endif %}
-                    {% if features.print_pdf and show_char %}
+                    {% if features.print_pdf and show_character %}
                         <div class="lm_tooltip">
                             <a href="{% url 'portraits' run.event.slug run.number %}" download>{% trans "Portraits (PDF)" %}</a>
                             <div class="lm_tooltiptext">

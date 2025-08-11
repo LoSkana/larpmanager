@@ -3095,7 +3095,7 @@ msgid "Participants included"
 msgstr "Wśród uczestników znaleźli się"
 
 #, python-format
-msgid "Payment per %(event)s"
+msgid "Payment for %(event)s"
 msgstr "Płatność za %(event)s"
 
 msgid "Personal data updated"
@@ -5831,6 +5831,9 @@ msgstr "Wyświetlanie pełnej historii preferencji uczestników na postaciach"
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Jeśli opcja jest zaznaczona, można ją wybrać maksymalnie kilka razy"
 
+msgid "Indicate here any element you wish to avoid in the assignment"
+msgstr "Wskaż tutaj elementy, których chcesz uniknąć w zadaniu"
+
 msgid "Manage event templates used as starting points for new events"
 msgstr ""
 "Zarządzanie szablonami wydarzeń używanymi jako punkty początkowe dla nowych "
@@ -5898,9 +5901,6 @@ msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""
 "Jeśli napotkasz jakiekolwiek problemy, skontaktuj się z nami, a my Ci "
 "pomożemy"
-
-msgid "Indicate here each element you wish to avoid in the assignment"
-msgstr "Wskaż tutaj każdy element, którego chcesz uniknąć w zadaniu"
 
 msgid "Now staff members can upload expenses, and you can review them"
 msgstr "Teraz pracownicy mogą przesyłać wydatki, a Ty możesz je przeglądać"

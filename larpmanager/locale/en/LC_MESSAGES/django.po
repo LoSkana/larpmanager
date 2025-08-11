@@ -1928,7 +1928,7 @@ msgid "%(amount)d %(credits)s were used to participate in this event"
 msgstr ""
 
 #, python-format
-msgid "Payment per %(event)s"
+msgid "Payment for %(event)s"
 msgstr ""
 
 #, python-format
@@ -4240,7 +4240,7 @@ msgstr ""
 msgid "Select the faction on which you want to filter characters"
 msgstr ""
 
-msgid "Indicate here each element you wish to avoid in the assignment"
+msgid "Indicate here any element you wish to avoid in the assignment"
 msgstr ""
 
 msgid "Confirm your choices"
