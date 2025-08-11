@@ -3616,6 +3616,9 @@ msgstr "Bevestiging van uitgaven"
 msgid "Description - international"
 msgstr "Engelse beschrijving"
 
+msgid "Enter a valid numeric value"
+msgstr "Voer een geldige numerieke waarde in"
+
 msgid "Enter your preferences here"
 msgstr "Geef hier je voorkeuren aan"
 
@@ -4562,6 +4565,9 @@ msgstr "Deze pagina toont de quests voor het evenement"
 
 msgid "This page shows the signups of the event"
 msgstr "Deze pagina toont de inschrijvingen voor het evenement"
+
+msgid "Value must be greater than or equal to 0"
+msgstr "Waarde moet groter dan of gelijk aan 0 zijn"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Goed gedaan, je hebt alle modules gehaald!"

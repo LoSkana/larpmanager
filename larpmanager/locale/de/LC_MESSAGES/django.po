@@ -3616,6 +3616,9 @@ msgstr "Bestätigung der Ausgaben"
 msgid "Description - international"
 msgstr "Englische Beschreibung"
 
+msgid "Enter a valid numeric value"
+msgstr "Geben Sie einen gültigen numerischen Wert ein"
+
 msgid "Enter your preferences here"
 msgstr "Geben Sie hier Ihre Präferenzen an"
 
@@ -4564,6 +4567,9 @@ msgstr "Diese Seite zeigt die Quests für das Ereignis"
 
 msgid "This page shows the signups of the event"
 msgstr "Diese Seite zeigt die Anmeldungen für die Veranstaltung"
+
+msgid "Value must be greater than or equal to 0"
+msgstr "Wert muss größer als oder gleich 0 sein"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Gut gemacht, Sie haben alle Module abgeschlossen!"

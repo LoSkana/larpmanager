@@ -161,6 +161,12 @@ msgstr ""
 msgid "Beneficiary"
 msgstr ""
 
+msgid "Enter a valid numeric value"
+msgstr ""
+
+msgid "Value must be greater than or equal to 0"
+msgstr ""
+
 msgid "Settings"
 msgstr ""
 
