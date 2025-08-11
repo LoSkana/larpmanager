@@ -6953,6 +6953,13 @@ msgstr ""
 "Als u een Italiaans staatsburger bent, geef dan uw fiscale code aan; laat "
 "anders niets ingevuld"
 
+#, python-format
+msgid ""
+"The session name will be the event name followed by “#%(number)s” at the end"
+msgstr ""
+"De sessienaam is de naam van de gebeurtenis gevolgd door \"#%(number)s\" aan"
+" het einde"
+
 msgid ""
 "This page prepares the cash balance already formatted for annual declaration"
 msgstr ""

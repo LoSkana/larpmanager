@@ -7114,6 +7114,13 @@ msgstr ""
 "Wenn Sie italienischer Staatsbürger sind, geben Sie bitte Ihre Steuernummer "
 "an; andernfalls lassen Sie das Feld frei"
 
+#, python-format
+msgid ""
+"The session name will be the event name followed by “#%(number)s” at the end"
+msgstr ""
+"Der Name der Sitzung ist der Name des Ereignisses, gefolgt von "
+"\"#%(number)s\" am Ende"
+
 msgid ""
 "This page prepares the cash balance already formatted for annual declaration"
 msgstr ""

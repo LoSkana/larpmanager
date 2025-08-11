@@ -6755,6 +6755,13 @@ msgstr ""
 "Jste-li italský občan, uveďte své daňové identifikační číslo, jinak "
 "nevyplňujte"
 
+#, python-format
+msgid ""
+"The session name will be the event name followed by “#%(number)s” at the end"
+msgstr ""
+"Název relace bude název události, za kterým bude na konci následovat "
+"\"#%(number)s\""
+
 msgid ""
 "This page prepares the cash balance already formatted for annual declaration"
 msgstr ""
