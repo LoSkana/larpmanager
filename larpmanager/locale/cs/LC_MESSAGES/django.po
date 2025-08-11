@@ -71,14 +71,8 @@ msgstr "Kdo"
 msgid "age"
 msgstr "věk"
 
-msgid "fee"
-msgstr "poplatek"
-
 msgid "for"
 msgstr "pro"
-
-msgid "net"
-msgstr "net"
 
 msgid "Band"
 msgstr "Fascie"

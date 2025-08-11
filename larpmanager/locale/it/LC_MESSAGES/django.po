@@ -71,14 +71,8 @@ msgstr "Chi"
 msgid "age"
 msgstr "età"
 
-msgid "fee"
-msgstr "tassa"
-
 msgid "for"
 msgstr "per"
-
-msgid "net"
-msgstr "netto"
 
 msgid "Band"
 msgstr "Fascia"

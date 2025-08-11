@@ -71,14 +71,8 @@ msgstr "Wie"
 msgid "age"
 msgstr "leeftijd"
 
-msgid "fee"
-msgstr "vergoeding"
-
 msgid "for"
 msgstr "voor"
-
-msgid "net"
-msgstr "net"
 
 msgid "Band"
 msgstr "Fascia"

@@ -71,14 +71,8 @@ msgstr "Vem"
 msgid "age"
 msgstr "ålder"
 
-msgid "fee"
-msgstr "avgift"
-
 msgid "for"
 msgstr "för"
-
-msgid "net"
-msgstr "netto"
 
 msgid "Band"
 msgstr "Fascia"

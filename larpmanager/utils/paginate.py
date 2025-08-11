@@ -1,5 +1,7 @@
-from django.db.models import Case, F, IntegerField, OuterRef, Q, Subquery, Value, When
-from django.db.models.functions import Coalesce
+from decimal import Decimal
+
+from django.db.models import Case, DecimalField, ExpressionWrapper, F, IntegerField, OuterRef, Q, Subquery, Value, When
+from django.db.models.functions import Cast, Coalesce
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -20,6 +22,7 @@ from larpmanager.models.member import Membership
 
 def paginate(request, ctx, typ, template, view, exe=True):
     cls = typ.objects
+    # noinspection PyProtectedMember
     class_name = typ._meta.model_name
 
     if request.method != "POST":
@@ -84,7 +87,12 @@ def _set_filtering(ctx, elements, filters):
             print(f"this shouldn't happen! _get_ordering {filters} {ctx['fields']}")
         field, name = ctx["fields"][column_ix - 1]
 
-        if field in ctx.get("callbacks", {}):
+        if field == "run":
+            field = "run__search"
+            afield = ctx.get("afield")
+            if afield:
+                field = f"{afield}__{field}"
+        elif field in ctx.get("callbacks", {}):
             continue
 
         if field in field_map:
@@ -139,7 +147,7 @@ def _get_ordering(ctx, order):
 
 
 def _get_field_map():
-    field_map = {"member": ["member__surname", "member__name"], "run": ["run__search"]}
+    field_map = {"member": ["member__surname", "member__name"]}
     return field_map
 
 
@@ -150,9 +158,9 @@ def _get_query_params(request):
     order = []
     for i in range(len(request.POST.getlist("order[0][column]"))):
         col_idx = request.POST.get(f"order[{i}][column]")
-        dir = request.POST.get(f"order[{i}][dir]")
+        col_dir = request.POST.get(f"order[{i}][dir]")
         col_name = request.POST.get(f"columns[{col_idx}][data]")
-        prefix = "" if dir == "asc" else "-"
+        prefix = "" if col_dir == "asc" else "-"
         order.append(prefix + col_name)
 
     filters = {}
@@ -171,16 +179,15 @@ def _get_query_params(request):
 
 
 def _prepare_data_json(ctx, elements, view, edit):
-    # TODO apply changes based on fields
     data = []
 
     field_map = {
-        "created": lambda row: row.created.strftime("%d/%m/%Y"),
-        "payment_date": lambda row: row.created.strftime("%d/%m/%Y"),
-        "member": lambda row: str(row.member),
-        "run": lambda row: str(row.run) if row.run else "",
-        "descr": lambda row: str(row.descr),
-        "value": lambda row: int(row.value) if row.value == row.value.to_integral() else str(row.value),
+        "created": lambda obj: obj.created.strftime("%d/%m/%Y"),
+        "payment_date": lambda obj: obj.created.strftime("%d/%m/%Y"),
+        "member": lambda obj: str(obj.member),
+        "run": lambda obj: str(obj.run) if obj.run else "",
+        "descr": lambda obj: str(obj.descr),
+        "value": lambda obj: int(obj.value) if obj.value == obj.value.to_integral() else str(obj.value),
     }
 
     if "callbacks" in ctx:
@@ -242,15 +249,24 @@ def _apply_custom_queries(ctx, elements, typ):
         elements = elements.annotate(credits=Subquery(memberships.values("credit")))
 
     if issubclass(typ, AccountingItemPayment):
-        subq = (
+        # noinspection PyUnresolvedReferences, PyProtectedMember
+        val_field = AccountingItemPayment._meta.get_field("value")
+        dec = DecimalField(max_digits=val_field.max_digits, decimal_places=val_field.decimal_places)
+
+        zero = Value(Decimal("0"), output_field=dec)
+
+        subq_base = (
             AccountingItemTransaction.objects.filter(inv_id=OuterRef("inv_id"))
             .values("inv_id")
-            .annotate(total=Coalesce(F("value"), Value(0)))
+            .annotate(total=Coalesce(Cast(F("value"), output_field=dec), zero))
             .values("total")[:1]
         )
 
-        ctx["list"] = AccountingItemPayment.objects.annotate(
-            trans=Coalesce(Subquery(subq), Value(0)), net=F("value") - Coalesce(Subquery(subq), Value(0))
+        subq = Subquery(subq_base, output_field=dec)
+
+        elements = elements.annotate(
+            trans=Coalesce(subq, zero),
+            net=ExpressionWrapper(F("value") - Coalesce(subq, zero), output_field=dec),
         )
 
     subtype = ctx.get("subtype")

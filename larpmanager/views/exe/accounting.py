@@ -271,8 +271,8 @@ def exe_payments(request):
         ("type", _("Type")),
         ("status", _("Status")),
         ("run", _("Event")),
-        ("net", _("net")),
-        ("fee", _("fee")),
+        ("net", _("Net")),
+        ("trans", _("Fee")),
         ("created", _("Date")),
     ]
     if "vat" in ctx["features"]:
@@ -284,9 +284,10 @@ def exe_payments(request):
             "afield": "reg",
             "fields": fields,
             "callbacks": {
-                "method": lambda el: str(el.method),
-                "type": lambda el: el.get_typ_display(),
-                "status": lambda el: el.get_status_display(),
+                "run": lambda row: str(row.reg.run) if row.reg and row.reg.run else "",
+                "method": lambda el: str(el.inv.method) if el.inv else "",
+                "type": lambda el: el.get_pay_display(),
+                "status": lambda el: el.inv.get_status_display() if el.inv else "",
                 "net": lambda el: format_decimal(el.net),
                 "trans": lambda el: format_decimal(el.trans) if el.trans else "",
                 "vat": lambda el: format_decimal(el.vat) if el.vat else "",

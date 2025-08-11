@@ -71,14 +71,8 @@ msgstr "Hvem"
 msgid "age"
 msgstr "alder"
 
-msgid "fee"
-msgstr "avgift"
-
 msgid "for"
 msgstr "for"
-
-msgid "net"
-msgstr "nett"
 
 msgid "Band"
 msgstr "Fascia"
