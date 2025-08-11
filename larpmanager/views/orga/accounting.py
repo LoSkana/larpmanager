@@ -41,7 +41,6 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemOutflow,
     AccountingItemPayment,
-    AccountingItemTransaction,
     Discount,
     PaymentInvoice,
     PaymentStatus,
@@ -156,29 +155,7 @@ def orga_payments(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_payments")
     sr = ("reg__member", "reg__run", "inv", "inv__method")
     orga_paginate(request, ctx, AccountingItemPayment, selrel=sr, afield="reg")
-    assign_payment_fee(ctx)
     return render(request, "larpmanager/orga/accounting/payments.html", ctx)
-
-
-def assign_payment_fee(ctx):
-    inv_ids = set()
-    for el in ctx["list"]:
-        if el.inv_id:
-            inv_ids.add(el.inv_id)
-    cache = {}
-    for el in AccountingItemTransaction.objects.filter(inv_id__in=inv_ids):
-        cache[el.inv_id] = el.value
-    for el in ctx["list"]:
-        el.net = el.value
-
-        if el.inv_id not in cache:
-            continue
-
-        if cache[el.inv_id] == 0:
-            continue
-
-        el.trans = cache[el.inv_id]
-        el.net -= el.trans
 
 
 @login_required

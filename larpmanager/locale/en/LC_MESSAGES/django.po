@@ -1326,9 +1326,6 @@ msgstr ""
 msgid "This page allows you to edit the event navigation buttons"
 msgstr ""
 
-msgid "Run"
-msgstr ""
-
 msgid "This page allows you to change the general settings of this run"
 msgstr ""
 
@@ -4674,6 +4671,9 @@ msgstr ""
 msgid "Refund given"
 msgstr ""
 
+msgid "Run"
+msgstr ""
+
 msgid "Accounting - History"
 msgstr ""
 
@@ -4718,15 +4718,9 @@ msgstr ""
 msgid "This page shows all donations recorded in the system"
 msgstr ""
 
-msgid "Descr"
-msgstr ""
-
 msgid ""
 "This page shows all expenses incurred by collaborators, recorded in the "
 "system"
-msgstr ""
-
-msgid "Approve"
 msgstr ""
 
 msgid "Movements"
@@ -4750,16 +4744,7 @@ msgstr ""
 msgid "This page summarizes all revenue items recorded in the system"
 msgstr ""
 
-msgid "Confirm payments"
-msgstr ""
-
 msgid "This page shows all invoices registered in the system"
-msgstr ""
-
-msgid "Method"
-msgstr ""
-
-msgid "Net"
 msgstr ""
 
 msgid "This page shows all expense items recorded in the system"
@@ -6098,6 +6083,9 @@ msgstr ""
 msgid "once approved, the corresponding amounts are assigned as "
 msgstr ""
 
+msgid "Approve"
+msgstr ""
+
 msgid "This page shows your personal spending items"
 msgstr ""
 
@@ -6111,6 +6099,12 @@ msgid "This page shows all inflows received for this run"
 msgstr ""
 
 msgid "This page allows you to manually approve payments received"
+msgstr ""
+
+msgid "Method"
+msgstr ""
+
+msgid "Net"
 msgstr ""
 
 msgid ""
@@ -8116,6 +8110,9 @@ msgid "Registration completed successfully!"
 msgstr ""
 
 msgid "Request approved"
+msgstr ""
+
+msgid "Transaction"
 msgstr ""
 
 msgid "Element approved"
