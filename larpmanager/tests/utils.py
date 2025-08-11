@@ -17,10 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import io
 import os
+import zipfile
 from datetime import datetime
 from urllib.parse import urlparse
 
+import pandas as pd
 from playwright.async_api import expect
 
 password = "banana"
@@ -137,12 +140,13 @@ async def ooops_check(page):
         await expect(banner).not_to_contain_text("404")
 
 
-async def check_download(page, link):
+async def check_download(page, link: str) -> None:
     max_tries = 3
     current_try = 0
+
     while current_try < max_tries:
         try:
-            async with page.expect_download(timeout=100000) as download_info:
+            async with page.expect_download(timeout=100_000) as download_info:
                 await page.get_by_role("link", name=link).click()
             download = await download_info.value
             download_path = await download.path()
@@ -150,14 +154,33 @@ async def check_download(page, link):
 
             with open(download_path, "rb") as f:
                 content = f.read()
-                print(content[:100])
+
+            # raw preview
+            print(content[:100])
 
             file_size = os.path.getsize(download_path)
             assert file_size > 0, "File empty"
 
-            return
+            # handle zip: extract CSVs, read with pandas
+            if zipfile.is_zipfile(io.BytesIO(content)) or zipfile.is_zipfile(download_path):
+                with zipfile.ZipFile(io.BytesIO(content)) as zf:
+                    csv_members = [m for m in zf.namelist() if m.lower().endswith(".csv")]
+                    assert csv_members, "ZIP contains no CSV files"
+                    for member in csv_members:
+                        with zf.open(member) as f:
+                            df = pd.read_csv(f)
+                            assert not df.empty, f"Empty csv {member}"
+
+            # if plain CSV, read with pandas
+            lower_name = os.path.basename(download.suggested_filename or download_path).lower()
+            if lower_name.endswith(".csv"):
+                df = pd.read_csv(io.BytesIO(content))
+                assert not df.empty, f"Empty csv {lower_name}"
+
         except Exception:
             current_try += 1
+            if current_try >= max_tries:
+                raise
 
 
 async def fill_tinymce(page, iframe_id: str, text: str):
