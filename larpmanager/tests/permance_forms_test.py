@@ -22,7 +22,7 @@
 import pytest
 from playwright.async_api import async_playwright, expect
 
-from larpmanager.tests.utils import disable_qtips, go_to, handle_error, login_orga, page_start
+from larpmanager.tests.utils import go_to, handle_error, login_orga, page_start
 
 
 @pytest.mark.django_db
@@ -92,7 +92,6 @@ async def check_orga_preferences(page):
     await expect(page.locator("#id_open_registration_1_2")).to_be_checked()
     await expect(page.locator("#id_open_registration_1_3")).not_to_be_checked()
     await page.get_by_role("link", name="Features").click()
-    await disable_qtips(page)
     await page.locator("#id_mod_1_0").check(force=True)
     await page.get_by_role("button", name="Confirm").click()
     await page.get_by_role("link", name="Preferences").click(force=True)
@@ -108,7 +107,6 @@ async def check_orga_preferences(page):
 
 async def check_orga_features(page):
     await page.get_by_role("link", name="Features").click()
-    await disable_qtips(page)
     await page.locator("#id_mod_7_0").check(force=True)
     await page.locator("#id_mod_7_2").check(force=True)
     await page.locator("#id_mod_4_1").check(force=True)
@@ -194,7 +192,6 @@ async def check_exe_config(page):
 
 async def check_exe_features(page):
     await page.get_by_role("link", name="Features").click()
-    await disable_qtips(page)
     await page.locator("#id_mod_12_0").check(force=True)
     await page.locator("#id_mod_6_1").check(force=True)
     await page.get_by_role("button", name="Confirm").click()
