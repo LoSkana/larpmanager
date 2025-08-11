@@ -165,7 +165,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     }
 
-    {% if intro_driver %} driverIntro();{% endif %}
+    {% if intro_driver and request.enviro == "prod" %} driverIntro();{% endif %}
 
     jQuery(function(){
         $('#intro_driver').on('click', driverIntro);
