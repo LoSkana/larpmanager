@@ -3616,6 +3616,9 @@ msgstr "Bekräftelse av utgifter"
 msgid "Description - international"
 msgstr "Beskrivning på engelska"
 
+msgid "Enter a valid numeric value"
+msgstr "Ange ett giltigt numeriskt värde"
+
 msgid "Enter your preferences here"
 msgstr "Ange dina preferenser här"
 
@@ -4562,6 +4565,9 @@ msgstr "Den här sidan visar uppdrag för evenemanget"
 
 msgid "This page shows the signups of the event"
 msgstr "Denna sida visar anmälningarna till evenemanget"
+
+msgid "Value must be greater than or equal to 0"
+msgstr "Värdet måste vara större än eller lika med 0"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Bra jobbat, du har klarat alla moduler!"
