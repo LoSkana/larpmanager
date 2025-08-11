@@ -5857,6 +5857,9 @@ msgstr ""
 "Als deze optie is aangevinkt, kan deze een maximaal aantal keren worden "
 "gekozen"
 
+msgid "Indicate here any element you wish to avoid in the assignment"
+msgstr "Geef hier aan welk element je wilt vermijden in de opdracht"
+
 msgid "Manage event templates used as starting points for new events"
 msgstr ""
 "Eventsjablonen beheren die worden gebruikt als startpunt voor nieuwe events"
@@ -5926,9 +5929,6 @@ msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""
 "Als u problemen ondervindt, neem dan contact met ons op en wij zullen u "
 "helpen"
-
-msgid "Indicate here each element you wish to avoid in the assignment"
-msgstr "Geef hier elk element aan dat je wilt vermijden in de opdracht"
 
 msgid "Now staff members can upload expenses, and you can review them"
 msgstr "Nu kunnen medewerkers uitgaven uploaden en jij kunt ze bekijken"

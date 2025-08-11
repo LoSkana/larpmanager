@@ -5848,6 +5848,9 @@ msgstr ""
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Si está marcada, una opción puede elegirse un número máximo de veces"
 
+msgid "Indicate here any element you wish to avoid in the assignment"
+msgstr "Indique aquí cualquier elemento que desee evitar en la tarea"
+
 msgid "Manage event templates used as starting points for new events"
 msgstr ""
 "Gestionar plantillas de eventos utilizadas como puntos de partida para "
@@ -5919,9 +5922,6 @@ msgstr ""
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""
 "Si tiene algún problema, póngase en contacto con nosotros y le ayudaremos"
-
-msgid "Indicate here each element you wish to avoid in the assignment"
-msgstr "Indique aquí cada elemento que desee evitar en la tarea"
 
 msgid "Now staff members can upload expenses, and you can review them"
 msgstr "Ahora los empleados pueden cargar gastos y usted puede revisarlos"

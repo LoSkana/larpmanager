@@ -117,17 +117,21 @@ async def go_to_check(page, path):
 
     page.on("dialog", on_dialog)
 
+    await disable_qtips(page)
+
+    await page.goto(path)
+    await ooops_check(page)
+
+    assert not dialog_triggered, "Unexpected JavaScript dialog was triggered"
+
+
+async def disable_qtips(page):
     await page.evaluate("""
         const tooltips = document.querySelectorAll('.qtip');
         tooltips.forEach(tooltip => {
             tooltip.style.display = 'none';
         });
     """)
-
-    await page.goto(path)
-    await ooops_check(page)
-
-    assert not dialog_triggered, "Unexpected JavaScript dialog was triggered"
 
 
 async def submit(page):

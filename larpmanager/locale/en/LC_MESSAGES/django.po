@@ -4240,7 +4240,7 @@ msgstr ""
 msgid "Select the faction on which you want to filter characters"
 msgstr ""
 
-msgid "Indicate here each element you wish to avoid in the assignment"
+msgid "Indicate here any element you wish to avoid in the assignment"
 msgstr ""
 
 msgid "Confirm your choices"

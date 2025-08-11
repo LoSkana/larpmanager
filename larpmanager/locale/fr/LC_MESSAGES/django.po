@@ -5903,6 +5903,9 @@ msgstr ""
 "Si cette case est cochée, une option peut être choisie un nombre maximum de "
 "fois"
 
+msgid "Indicate here any element you wish to avoid in the assignment"
+msgstr "Indiquez ici tout élément que vous souhaitez éviter dans la mission"
+
 msgid "Manage event templates used as starting points for new events"
 msgstr ""
 "Gérer les modèles d'événements utilisés comme points de départ pour de "
@@ -5978,9 +5981,6 @@ msgstr ""
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""
 "Si vous rencontrez des difficultés, contactez-nous et nous vous aiderons"
-
-msgid "Indicate here each element you wish to avoid in the assignment"
-msgstr "Indiquez ici chaque élément que vous souhaitez éviter dans la mission"
 
 msgid "Now staff members can upload expenses, and you can review them"
 msgstr ""

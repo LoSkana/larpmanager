@@ -5819,6 +5819,9 @@ msgstr "Zobrazení úplné historie preferencí účastníků na postavách"
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Pokud je možnost zaškrtnuta, lze ji zvolit maximálně několikrát"
 
+msgid "Indicate here any element you wish to avoid in the assignment"
+msgstr "Zde uveďte všechny prvky, kterým se chcete v zadání vyhnout"
+
 msgid "Manage event templates used as starting points for new events"
 msgstr ""
 "Správa šablon událostí, které slouží jako výchozí body pro nové události"
@@ -5881,9 +5884,6 @@ msgstr "Na této stránce můžete odeslat e-mail na libovolný seznam příjemc
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Pokud narazíte na nějaké problémy, kontaktujte nás a my vám pomůžeme"
-
-msgid "Indicate here each element you wish to avoid in the assignment"
-msgstr "Zde uveďte každý prvek, kterému se chcete v zadání vyhnout"
 
 msgid "Now staff members can upload expenses, and you can review them"
 msgstr "Nyní mohou zaměstnanci nahrávat výdaje a vy je můžete kontrolovat"

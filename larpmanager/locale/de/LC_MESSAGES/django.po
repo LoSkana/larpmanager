@@ -5947,6 +5947,10 @@ msgstr ""
 "Wenn dieses Kästchen markiert ist, kann eine Option maximal mehrmals "
 "ausgewählt werden"
 
+msgid "Indicate here any element you wish to avoid in the assignment"
+msgstr ""
+"Geben Sie hier alle Elemente an, die Sie bei der Zuordnung vermeiden möchten"
+
 msgid "Manage event templates used as starting points for new events"
 msgstr ""
 "Verwalten von Veranstaltungsvorlagen, die als Ausgangspunkt für neue "
@@ -6028,10 +6032,6 @@ msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""
 "Wenn Sie auf Probleme stoßen, kontaktieren Sie uns und wir werden Ihnen "
 "helfen"
-
-msgid "Indicate here each element you wish to avoid in the assignment"
-msgstr ""
-"Geben Sie hier jedes Element an, das Sie bei der Zuordnung vermeiden möchten"
 
 msgid "Now staff members can upload expenses, and you can review them"
 msgstr ""
