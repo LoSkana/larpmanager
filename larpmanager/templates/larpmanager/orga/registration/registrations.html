@@ -4,7 +4,7 @@
     {% trans "Registrations" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the run signups" %}
+    {% trans "This page shows the signups of the event" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
@@ -535,7 +535,7 @@
     {% else %}
         <br />
         <p>
-            <i>{% trans "No registrations have been received for this run yet" %}</i>
+            <i>{% trans "No registrations have been received for this event yet" %}</i>
         </p>
     {% endif %}
 {% endblock content %}

@@ -1,0 +1,47 @@
+{% load i18n tz show_tags static %}
+{% if form.load_templates %}
+    {% for item in form.load_templates %}
+        {% with template_name=item|stringformat:"s"|add:".html" %}
+            {% include "elements/info/"|add:template_name %}
+        {% endwith %}
+    {% endfor %}
+{% endif %}
+{% include "elements/form/informations.html" %}
+{% include "elements/form/errors.html" %}
+<form action="{{ request.path }}"
+      method="post"
+      enctype="multipart/form-data"
+      id="main_form"
+      {% if form.main_class %}class="{{ form.main_class }}"{% endif %}>
+    {% csrf_token %}
+    <div>
+        <table class="mob  ">
+            {% include "elements/form/inner.html" %}
+        </table>
+    </div>
+    {% if form.load_form %}
+        {% for item in form.load_form %}
+            {% with template_name=item|stringformat:"s"|add:".html" %}
+                {% include "elements/form/"|add:template_name %}
+            {% endwith %}
+        {% endfor %}
+    {% endif %}
+    <input id="form_submit" type="submit" value="{% trans "Confirm" %}">
+    <br />
+    {% if add_another %}
+        <br />
+        <div class="continue">
+            <input type="checkbox"
+                   id="continue"
+                   name="continue"
+                   class="hide"
+                   {% if continue_add %}checked{% endif %}>
+            <label for="continue">{% trans "After confirmation, add another" %}</label>
+        </div>
+        <br />
+    {% endif %}
+    {% if eid %}
+        <p>{% trans "The form is saved every 30 seconds" %}.</p>
+    {% endif %}
+    {% include "elements/form/delete.html" %}
+</form>

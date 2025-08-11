@@ -439,7 +439,7 @@ class Discount(BaseModel):
         default=my_uuid_short,
         verbose_name=_("Code"),
         help_text=_(
-            "Indicate the special discount code, to be communicated to the players, which "
+            "Indicate the special discount code, to be communicated to the participants, which "
             "will need to be entered during registration."
         ),
     )
@@ -450,20 +450,20 @@ class Discount(BaseModel):
         verbose_name=_("Type"),
         help_text=_(
             "Indicate the type of discount: standard, play again (only available to those who "
-            "have already played a run)"
+            "have already played this event)"
         ),
     )
 
     visible = models.BooleanField(
         default=False,
-        help_text=_("Indicates whether the discount is visible and usable by players"),
+        help_text=_("Indicates whether the discount is visible and usable by participants"),
     )
 
     only_reg = models.BooleanField(
         default=True,
         help_text=_(
             "Indicate whether the discount can be used only on new enrollment, or whether it "
-            "can be used by already registered players."
+            "can be used by already registered participants."
         ),
     )
 

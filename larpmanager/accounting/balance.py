@@ -211,7 +211,7 @@ def get_run_accounting(run, ctx):
         )
 
     dc["reg"] = get_acc_reg_detail(
-        _("Registrations"), run, _("Theoretical total of income due to participation fees selected by the players")
+        _("Registrations"), run, _("Theoretical total of income due to participation fees selected by the participants")
     )
 
     run.revenue = s_payments + s_inflows - (s_fees + s_refund)

@@ -57,7 +57,7 @@
         </p>
         <hr />
     {% endif %}
-    <h2>{% trans "Next runs" %}</h2>
+    <h2>{% trans "Next sessions" %}</h2>
     {% if coming %}
         <div class="no-more-tables">
             <table class="mob">
@@ -87,10 +87,10 @@
         <table class="mob">
             <tr>
                 <th>
-                    {% trans "There are no new runs scheduled at this time" %}.
+                    {% trans "There are no new sessions scheduled at this time" %}.
                     {% if features.pre_register %}
                         <a href="{% url 'pre_register' event.slug %}">{% trans "Pre-register here" %}!</a>
-                        {% trans "You will be notified when a new run is organized, and you will have fast-track on registration" %}!
+                        {% trans "You will be notified when a new session is organized, and you will have fast-track on registration" %}!
                     </th>
                 </tr>
             {% endif %}
@@ -100,7 +100,7 @@
         <br />
         <div class="no-more-tables">
             <h2>
-                <a class="my_toggle" tog="past-runs" href="#">{% trans "Past runs" %}</a>
+                <a class="my_toggle" tog="past-runs" href="#">{% trans "Past sessions" %}</a>
             </h2>
             <table class="hide past-runs">
                 <thead>

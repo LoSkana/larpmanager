@@ -55,13 +55,13 @@ class Writing(BaseConceptModel):
         max_length=100000,
         blank=True,
         verbose_name=_("Presentation"),
-        help_text=_("Presentation visible to all players, when 'show presentation' is checked"),
+        help_text=_("Presentation visible to all participants, when 'show presentation' is checked"),
     )
 
     text = HTMLField(
         max_length=100000,
         blank=True,
-        help_text=_("Text visible only by the assigned player, when 'show text' is checked"),
+        help_text=_("Text visible only by the assigned participant, when 'show text' is checked"),
     )
 
     temp = models.BooleanField(default=False)
@@ -401,7 +401,7 @@ class Faction(Writing):
 
     selectable = models.BooleanField(
         default=False,
-        help_text=_("Indicates whether it can be selected by players"),
+        help_text=_("Indicates whether it can be selected by participants"),
     )
 
     def show_red(self):

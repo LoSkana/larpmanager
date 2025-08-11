@@ -132,7 +132,7 @@ def _exe_suggestions(ctx):
         _add_priority(ctx, text, perm)
 
     suggestions = {
-        "exe_payment_details": _("Set up the payment methods available to players"),
+        "exe_payment_details": _("Set up the payment methods available to participants"),
         "exe_profile": _("Define which data will be asked in the profile form to the users once they sign up"),
         "exe_roles": _(
             "Grant access to organization management for other users and define roles with specific permissions"
@@ -165,7 +165,7 @@ def _exe_actions(request, ctx):
                 "There are past runs still open: <b>%(list)s</b>. Once all tasks (accounting, etc.) are finished, mark them as completed"
             )
             % {"list": ", ".join(runs_conclude)},
-            "exe_runs",
+            "exe_events",
         )
 
     expenses_approve = AccountingItemExpense.objects.filter(run__event__assoc_id=ctx["a_id"], is_approved=False).count()
@@ -333,7 +333,7 @@ def _orga_actions_priorities(request, ctx, assoc):
         if ctx["event"].get_config("user_character_max", "") == "":
             _add_priority(
                 ctx,
-                _("Set up the configuration for the creation or editing of characters by the players"),
+                _("Set up the configuration for the creation or editing of characters by the participants"),
                 "orga_character",
                 "config/user_character",
             )
@@ -565,14 +565,14 @@ def _orga_reg_actions(ctx, features):
         _add_priority(
             ctx,
             _("Set up a value for registration opening date"),
-            "orga_run",
+            "orga_event",
         )
 
     if "registration_secret" in features and not ctx["run"].registration_secret:
         _add_priority(
             ctx,
             _("Set up a value for registration secret link"),
-            "orga_run",
+            "orga_event",
         )
 
     if "register_link" in features and not ctx["event"].register_link:

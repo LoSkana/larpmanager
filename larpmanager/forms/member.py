@@ -479,7 +479,7 @@ class MembershipResponseForm(forms.Form):
         required=False,
         max_length=1000,
         help_text=_(
-            "Optional text to be included in the email sent to the player to notify them of the approval decision"
+            "Optional text to be included in the email sent to the participant to notify them of the approval decision"
         ),
     )
 
@@ -575,7 +575,7 @@ class ExeBadgeForm(MyForm):
 class ExeProfileForm(MyForm):
     page_title = _("Profile")
 
-    page_info = _("This page allows you to set up the fields that players can fill in in their user profile")
+    page_info = _("This page allows you to set up the fields that participants can fill in in their user profile")
 
     class Meta:
         model = Association

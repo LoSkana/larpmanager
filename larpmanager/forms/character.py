@@ -459,8 +459,8 @@ class OrgaWritingQuestionForm(MyForm):
             help_texts = {
                 QuestionVisibility.SEARCHABLE: "Characters can be filtered according to this question",
                 QuestionVisibility.PUBLIC: "The answer to this question is publicly visible",
-                QuestionVisibility.PRIVATE: "The answer to this question is only visible to the player",
-                QuestionVisibility.HIDDEN: "The answer is hidden to all players",
+                QuestionVisibility.PRIVATE: "The answer to this question is only visible to the participant",
+                QuestionVisibility.HIDDEN: "The answer is hidden to all participants",
             }
 
             self.fields["visibility"].help_text = ", ".join(

@@ -106,9 +106,9 @@ class HelpQuestionForm(MyForm):
 
 
 class OrgaHelpQuestionForm(MyForm):
-    page_info = _("This page allows you to answer a player's question")
+    page_info = _("This page allows you to answer a participant's question")
 
-    page_title = _("Player Questions")
+    page_title = _("Participant questions")
 
     class Meta:
         model = HelpQuestion

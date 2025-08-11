@@ -7,15 +7,25 @@
     {% trans "This page shows all events; you can edit them, or create new ones" %}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/exe.html" %}
-    <table id="events" class="go_datatable writing gall">
+    <div class="staff-list">
+        <a class="new button" href="{% url 'exe_events_edit' 0 %}">{% trans "New event" %}</a>
+        {% if list %}
+            <a class="new button" href="{% url 'exe_runs_edit' 0 %}">{% trans "New session" %}</a>
+        {% endif %}
+    </div>
+    <table id="events"
+           class="{% if not interface_old %}go_datatable{% endif %} writing gall"
+           no_header_cols="[6,7]">
         <thead>
             <tr>
                 <th></th>
                 <th>{% trans "Name" %}</th>
-                <th>{% trans "Run" %}</th>
-                <th>{% trans "Cover" %}</th>
-                <th>{% trans "Link" %}</th>
+                <th>{% trans "Status" %}</th>
+                <th>{% trans "Start" %}</th>
+                <th>{% trans "End" %}</th>
+                <th>{% trans "Registrations" %}</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -24,26 +34,16 @@
                     <td>
                         <a href="{% url 'exe_events_edit' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
-                    <td>{{ el }}</td>
+                    <td>{{ el.search }}</td>
+                    <td>{{ el.get_development_display }}</td>
+                    <td>{{ el.start }}</td>
+                    <td>{{ el.end }}</td>
+                    <td>{{ el.counts.count_reg }}</td>
                     <td>
-                        {% for r in el.runs.all %}
-                            <a href="{% url 'manage' r.event.slug r.number %}">{{ r }}</a>
-                            <br />
-                        {% endfor %}
+                        <a href="{% url 'register' el.event.slug el.number %}">{{ el.registration_status }}</a>
                     </td>
                     <td>
-                        <div class="img"
-                             style="background-image:url({{ el.get_cover_thumb_url }})"></div>
-                    </td>
-                    <td>
-                        <a href="{% url 'event' el.slug 1 %}">{% trans "Event link" %}</a>
-                        <br />
-                        {% if el.cover %}
-                            <a href="{{ el.cover.url }}">{% trans "Cover link" %}</a>
-                            <br />
-                            <a href="{{ el.cover_thumb.url }}">{% trans "Cover (thumb) link" %}</a>
-                            <br />
-                        {% endif %}
+                        <a href="{% url 'gallery' el.event.slug el.number %}">{% trans "Gallery" %}</a>
                     </td>
                 </tr>
             {% endfor %}

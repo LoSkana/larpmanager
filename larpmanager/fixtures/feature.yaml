@@ -3,7 +3,7 @@
   fields:
     name: Prologues
     descr: Enables "Prologues", short introductory paragraphs for each act of the
-      game, which players receive to guide them
+      event, which participants receive to guide them
     slug: prologue
     overall: false
     module: 1
@@ -40,7 +40,7 @@
   pk: 11
   fields:
     name: Pay what you want
-    descr: Allows players to add an optional extra amount to their registration fee
+    descr: Allows participants to add an optional extra amount to their registration fee
     slug: pay_what_you_want
     overall: false
     module: 2
@@ -52,7 +52,7 @@
   pk: 12
   fields:
     name: Discount
-    descr: Allows you to generate discount codes that players can use to reduce their
+    descr: Allows you to generate discount codes that participants can use to reduce their
       ticket price
     slug: discount
     overall: false
@@ -91,7 +91,7 @@
   pk: 20
   fields:
     name: Bring a friend
-    descr: Enables 'bring a friend' discount. A registered player provides their unique
+    descr: Enables 'bring a friend' discount. A participant can provides their unique
       code to a new registrant, granting both a discounted price
     slug: bring_friend
     overall: false
@@ -105,7 +105,7 @@
   fields:
     name: PDF generation
     descr: Automatically generates and updates PDFs of character sheets, gallery and
-      player profiles
+      participant profiles
     slug: print_pdf
     overall: false
     module: 1
@@ -118,7 +118,7 @@
   fields:
     name: Workshop
     descr: Adds a quiz-style system for workshop questions. Organizers can define
-      forms, questions, and correct answers for players to complete
+      forms, questions, and correct answers for participants to complete
     slug: workshop
     overall: false
     module: 3
@@ -131,7 +131,7 @@
   fields:
     name: Speed Larp
     descr: Manages pre-larp 'mini-scenes.' You can create any number of scenes and
-      assign players to them, with checks to avoid scheduling conflicts
+      assign participants to them, with checks to avoid scheduling conflicts
     slug: speedlarp
     overall: false
     module: 3
@@ -143,20 +143,20 @@
   pk: 26
   fields:
     name: Safety
-    descr: Lets staff access the safety information submitted by players
+    descr: Lets staff access the safety information submitted by participants
     slug: safety
     overall: false
     module: 8
     placeholder: false
     order: 20
-    after_text: Now you can review the safety information submitted by players
+    after_text: Now you can review the safety information submitted by participants
     after_link: orga_safety
     hidden: true
 - model: larpmanager.feature
   pk: 27
   fields:
     name: Casting algorithm
-    descr: Lets players submit character preferences, then finds the optimal overall
+    descr: Lets participants submit character preferences, then finds the optimal overall
       match
     slug: casting
     overall: false
@@ -169,27 +169,27 @@
   pk: 28
   fields:
     name: Help
-    descr: Allows players to submit questions, and organizers to review and organize
+    descr: Allows participants to submit questions, and organizers to review and organize
       them
     slug: help
     overall: true
     module: 8
     placeholder: false
     order: 10
-    after_text: Now you can review players' questions
+    after_text: Now you can review participants' questions
     after_link: exe_questions
 - model: larpmanager.feature
   pk: 31
   fields:
     name: Collections
-    descr: Allows players to create and contribute to collections aimed at assisting
-      another player with event fees
+    descr: Allows participants to create and contribute to collections aimed at assisting
+      another participant with event fees
     slug: collection
     overall: true
     module: 2
     placeholder: false
     order: 40
-    after_text: Now players can submit collections, and you can review them
+    after_text: Now participants can submit collections, and you can review them
     after_link: exe_collections
 - model: larpmanager.feature
   pk: 32
@@ -201,7 +201,7 @@
     module: 4
     placeholder: false
     order: 30
-    after_text: Now players can submit preregistrations, and you can review them
+    after_text: Now participants can submit preregistrations, and you can review them
     after_link: exe_pre_registrations
 - model: larpmanager.feature
   pk: 36
@@ -214,7 +214,7 @@
     module: 2
     placeholder: false
     order: 20
-    after_text: Now players can submit donation, and you can review them
+    after_text: Now participants can submit donation, and you can review them
     after_link: exe_donations
 - model: larpmanager.feature
   pk: 40
@@ -233,8 +233,8 @@
   pk: 43
   fields:
     name: Utility
-    descr: Lets you upload and host files directly on larpmanager, making them available
-      either to staff or to players via secret external links
+    descr: Lets you upload and host files directly on the platform, making them available
+      either to staff or to participants via secret external links
     slug: utils
     overall: false
     module: 3
@@ -246,7 +246,7 @@
   pk: 44
   fields:
     name: Character customization
-    descr: Enables players to customize specific attributes (name, pronoun, public
+    descr: Enables participants to customize specific attributes (name, pronoun, public
       info, etc.) of the characters they're assigned
     slug: custom_character
     overall: false
@@ -272,7 +272,7 @@
   pk: 46
   fields:
     name: Shuttle
-    descr: Allows players to submit shuttle requests (e.g., pickup logistics), and
+    descr: Allows participants to submit shuttle requests (e.g., pickup logistics), and
       staff can manage the status of those requests
     slug: shuttle
     overall: true
@@ -311,7 +311,7 @@
   pk: 51
   fields:
     name: Filler
-    descr: 'Enables ''Filler'' characters: simpler character sheets, assigned to players
+    descr: 'Enables ''Filler'' characters: simpler character sheets, assigned to participants
       who are ready to replacing last-minute dropout of main characters.'
     slug: filler
     overall: false
@@ -324,7 +324,7 @@
   pk: 52
   fields:
     name: Chat
-    descr: Enables players to send private messages to each other, without revealing
+    descr: Enables participants to send private messages to each other, without revealing
       personal email addresses
     slug: chat
     overall: true
@@ -349,8 +349,8 @@
 - model: larpmanager.feature
   pk: 57
   fields:
-    name: Player cancellation
-    descr: Allows players to cancel their own registrations at any time
+    name: Participant cancellation
+    descr: Allows participants to cancel their own registrations at any time
     slug: player_cancellation
     overall: false
     module: 7
@@ -362,7 +362,7 @@
   pk: 58
   fields:
     name: External registration
-    descr: Instead of using an internal registration form, redirects the player to
+    descr: Instead of using an internal registration form, redirects the participant to
       an external registration link
     slug: register_link
     overall: false
@@ -375,7 +375,7 @@
   pk: 60
   fields:
     name: Problems
-    descr: Enables a ticket-like system for in-game 'problems,' where staff can log
+    descr: Enables a ticket-like system for issues during the event, where staff can log
       issues, assign severity/urgency, and track them
     slug: problems
     overall: false
@@ -440,7 +440,7 @@
   pk: 69
   fields:
     name: Secret link
-    descr: Generates a special, hidden link that lets certain players register even
+    descr: Generates a special, hidden link that lets certain participants register even
       if general registration is closed (e.g., early access for a specific group)
     slug: registration_secret
     overall: false
@@ -543,20 +543,20 @@
   pk: 93
   fields:
     name: Diet
-    descr: Lets staff access the diet information submitted by players
+    descr: Lets staff access the diet information submitted by participants
     slug: diet
     overall: false
     module: 8
     placeholder: false
     order: 30
-    after_text: Now you can review the diet information submitted by players
+    after_text: Now you can review the diet information submitted by participants
     after_link: orga_diet
     hidden: true
 - model: larpmanager.feature
   pk: 94
   fields:
     name: Deadlines
-    descr: Activates a page summarizing overdue players and their deadlines (payments,
+    descr: Activates a page summarizing overdue participants and their deadlines (payments,
       memberships, forms, casting, etc.)
     slug: deadlines
     overall: true
@@ -621,7 +621,7 @@
   pk: 107
   fields:
     name: Tokens / Credits
-    descr: Allows managing Tokens and Credits, which players can use instead of money
+    descr: Allows managing Tokens and Credits, which participants can use instead of money
       for registration fees. Credits can also be redeemed for cash
     slug: token_credit
     overall: true
@@ -690,7 +690,7 @@
     module: 2
     placeholder: false
     order: 60
-    after_text: Now players can create refund requests, and you can review them
+    after_text: Now participants can create refund requests, and you can review them
     after_link: exe_refunds
 - model: larpmanager.feature
   pk: 114
@@ -735,7 +735,7 @@
   pk: 120
   fields:
     name: Player editor
-    descr: Allows players to create and modify their own characters freely
+    descr: Allows participants to create and modify their own characters freely
     slug: user_character
     overall: false
     module: 7
@@ -799,7 +799,7 @@
   fields:
     name: Inflows
     descr: Enables managing of entry of revenue for an event that do not originate
-      from player registrations
+      from participant registrations
     slug: inflow
     overall: true
     module: 2
@@ -887,7 +887,7 @@
   pk: 175
   fields:
     name: Gift
-    descr: Allows players to purchase tickets as gifts. A special code is generated
+    descr: Allows participants to purchase tickets as gifts. A special code is generated
       and provided to the gift recipient for registration
     slug: gift
     overall: false
@@ -913,7 +913,7 @@
   fields:
     name: Characters
     descr: Enables the creation, editing, and assignment of characters to registered
-      players
+      participants
     slug: character
     overall: false
     module: 1

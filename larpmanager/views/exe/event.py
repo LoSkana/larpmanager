@@ -41,7 +41,9 @@ from larpmanager.utils.common import (
     get_event_template,
 )
 from larpmanager.utils.deadlines import check_run_deadlines
-from larpmanager.utils.edit import backend_edit, exe_edit
+from larpmanager.utils.edit import backend_edit, backend_get, exe_edit
+from larpmanager.views.manage import _get_registration_status
+from larpmanager.views.orga.event import full_event_edit
 from larpmanager.views.orga.registration import get_pre_registration
 from larpmanager.views.user.event import get_coming_runs
 
@@ -49,15 +51,23 @@ from larpmanager.views.user.event import get_coming_runs
 @login_required
 def exe_events(request):
     ctx = check_assoc_permission(request, "exe_events")
-    ctx["list"] = (
-        Event.objects.filter(assoc_id=ctx["a_id"], template=False).prefetch_related("runs").order_by("-updated")
-    )
+    ctx["list"] = Run.objects.filter(event__assoc_id=ctx["a_id"]).select_related("event").order_by("end")
+    for run in ctx["list"]:
+        run.registration_status = _get_registration_status(run)
+        run.counts = get_reg_counts(run)
     return render(request, "larpmanager/exe/events.html", ctx)
 
 
 @login_required
 def exe_events_edit(request, num):
     ctx = check_assoc_permission(request, "exe_events")
+
+    if num:
+        # edit existing event / run
+        backend_get(ctx, Run, num, "event")
+        return full_event_edit(ctx, request, ctx["el"].event, ctx["el"], exe=True)
+
+    # create new event
     ctx["exe"] = True
     if backend_edit(request, ctx, ExeEventForm, num):
         if "saved" in ctx and num == 0:
@@ -74,25 +84,13 @@ def exe_events_edit(request, num):
 
 
 @login_required
+def exe_runs_edit(request, num):
+    return exe_edit(request, OrgaRunForm, num, "exe_events", afield="event")
+
+
+@login_required
 def exe_events_appearance(request, num):
     return exe_edit(request, OrgaAppearanceForm, num, "exe_events", add_ctx={"add_another": False})
-
-
-@login_required
-def exe_runs(request):
-    ctx = check_assoc_permission(request, "exe_events")
-
-    ctx["list"] = Run.objects.filter(event__assoc_id=ctx["a_id"]).select_related("event").order_by("end")
-
-    for r in ctx["list"]:
-        r.c = get_reg_counts(r)
-
-    return render(request, "larpmanager/exe/runs.html", ctx)
-
-
-@login_required
-def exe_runs_edit(request, num):
-    return exe_edit(request, OrgaRunForm, num, "exe_runs", afield="event")
 
 
 @login_required

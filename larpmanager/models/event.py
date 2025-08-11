@@ -144,8 +144,8 @@ class Event(BaseModel):
 
     max_pg = models.IntegerField(
         default=0,
-        verbose_name=_("Max players"),
-        help_text=_("Maximum number of player spots (0 = unlimited)"),
+        verbose_name=_("Max participants"),
+        help_text=_("Maximum number of participants spots (0 = unlimited)"),
     )
 
     max_filler = models.IntegerField(
@@ -482,7 +482,7 @@ class Run(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="runs")
 
-    number = models.IntegerField(help_text=_("Number of event run"))
+    number = models.IntegerField()
 
     start = models.DateField(blank=True, null=True, verbose_name=_("Start date"))
 

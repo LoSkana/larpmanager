@@ -10,7 +10,7 @@
         </p>
     {% elif hide_signup %}
         <p>
-            <i>{% trans "Characters are only visible to registered players" %}: <a href="{% url 'register' run.event.slug run.number %}">{% trans "Register" %}</a></i>
+            <i>{% trans "Characters are only visible to participants" %}: <a href="{% url 'register' run.event.slug run.number %}">{% trans "Register" %}</a></i>
         </p>
     {% else %}
         {% if factions %}

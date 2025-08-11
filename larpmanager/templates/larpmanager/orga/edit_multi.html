@@ -1,0 +1,41 @@
+{% extends "utils.html" %}
+{% load i18n show_tags %}
+{% block title %}
+    {{ form1.page_title }}
+    {% if nonum is None %}
+        {% if num %}
+            - {% trans "Change" %}
+        {% else %}
+            - {% trans "New" %}
+        {% endif %}
+    {% endif %}
+    - {{ run }}
+{% endblock title %}
+{% block info %}
+    {{ form1.page_info }}
+{% endblock info %}
+{% block content %}
+    {% include "elements/form/informations.html" with form=form1 %}
+    {% include "elements/form/errors.html" with form=form1 %}
+    {% include "elements/form/errors.html" with form=form2 %}
+    <form action="{{ request.path }}"
+          method="post"
+          enctype="multipart/form-data"
+          id="main_form">
+        {% csrf_token %}
+        <div>
+            <table class="mob">
+                {% include "elements/form/inner.html" with form=form1 %}
+                {% include "elements/form/inner.html" with form=form2 %}
+            </table>
+        </div>
+        <input id="form_submit" type="submit" value="{% trans "Confirm" %}">
+        <br />
+    </form>
+{% endblock content %}
+{% block js2 %}
+    {{ form1.media }}
+    {{ form2.media }}
+    {% include "elements/form/max_length.js" %}
+    {% include "elements/form/jump_section.js" %}
+{% endblock js2 %}

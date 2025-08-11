@@ -66,7 +66,30 @@ from larpmanager.utils.upload import go_upload
 
 @login_required
 def orga_event(request, s, n):
-    return orga_edit(request, s, n, "orga_event", OrgaEventForm, None, "manage", add_ctx={"add_another": False})
+    ctx = check_event_permission(request, s, n, "orga_event")
+    return full_event_edit(ctx, request, ctx["event"], ctx["run"], exe=False)
+
+
+def full_event_edit(ctx, request, event, run, exe=False):
+    if request.method == "POST":
+        form_event = OrgaEventForm(request.POST, request.FILES, instance=event, ctx=ctx, prefix="form1")
+        form_run = OrgaRunForm(request.POST, request.FILES, instance=run, ctx=ctx, prefix="form2")
+        if form_event.is_valid() and form_run.is_valid():
+            form_event.save()
+            form_run.save()
+            messages.success(request, _("Operation completed") + "!")
+            if exe:
+                return redirect("manage")
+            else:
+                return redirect("manage", s=event.slug, n=run.number)
+    else:
+        form_event = OrgaEventForm(instance=event, ctx=ctx, prefix="form1")
+        form_run = OrgaRunForm(instance=run, ctx=ctx, prefix="form2")
+
+    ctx["form1"] = form_event
+    ctx["form2"] = form_run
+
+    return render(request, "larpmanager/orga/edit_multi.html", ctx)
 
 
 @login_required
@@ -134,7 +157,7 @@ def orga_appearance(request, s, n):
 @login_required
 def orga_run(request, s, n):
     run = get_cache_run(request.assoc["id"], s, n)
-    return orga_edit(request, s, n, "orga_run", OrgaRunForm, run, "manage", add_ctx={"add_another": False})
+    return orga_edit(request, s, n, "orga_event", OrgaRunForm, run, "manage", add_ctx={"add_another": False})
 
 
 @login_required

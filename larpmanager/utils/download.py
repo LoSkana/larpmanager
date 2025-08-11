@@ -239,7 +239,7 @@ def _row_header(ctx, el, key, member_cover, model, val):
         val.append(profile)
 
     if model in ["registration", "character"]:
-        key.append(_("Player"))
+        key.append(_("Participant"))
         display = ""
         if member:
             display = member.display_real()
@@ -540,7 +540,7 @@ def _get_column_names(ctx):
     if ctx["typ"] == "registration":
         ctx["columns"] = [
             {
-                "player": _("The player's email"),
+                "player": _("The participant's email"),
                 "ticket": _("The name of the ticket")
                 + " <i>("
                 + (_("if it doesn't exist, it will be created"))
@@ -591,7 +591,7 @@ def _get_column_names(ctx):
                 + ": 'optional', 'mandatory', 'disabled', 'hidden'",
                 "applicable": _("The writing element this question applies to, allowed values are")
                 + ": 'character', 'plot', 'faction', 'quest', 'trait'",
-                "visibility": _("The question visibility to players, allowed values are")
+                "visibility": _("The question visibility to participants, allowed values are")
                 + ": 'searchable', 'public', 'private', 'hidden'",
                 "max_length": _(
                     "Optional - For text questions, maximum number of characters; For multiple options, maximum number of options (0 = no limit)"
