@@ -24,6 +24,7 @@ import hmac
 import json
 import math
 import re
+from datetime import datetime, timedelta, timezone
 from pprint import pformat
 
 import requests
@@ -38,7 +39,7 @@ from django.urls import reverse
 from paypal.standard.forms import PayPalPaymentsForm
 from paypal.standard.ipn.signals import invalid_ipn_received, valid_ipn_received
 from paypal.standard.models import ST_PP_COMPLETED
-from satispaython.utils import load_key
+from satispaython.utils import format_datetime, load_key
 
 from larpmanager.accounting.invoice import invoice_received_money
 from larpmanager.models.access import get_assoc_executives
@@ -57,15 +58,18 @@ def get_satispay_form(request, ctx, invoice, amount):
     key_id = ctx["satispay_key_id"]
     rsa_key = load_key("main/satispay/private.pem")
 
-    # body_params = {
-    # "expire_date": expiration_date,
-    # "external_code": invoice.causal,
-    # "redirect_url": ctx["redirect"],
-    # "callback_url": ctx["callback"],
-    # None
+    expiration_date = datetime.now(timezone.utc) + timedelta(hours=1)
+    expiration_date = format_datetime(expiration_date)
+
+    body_params = {
+        "expire_date": expiration_date,
+        "external_code": invoice.causal,
+        "redirect_url": ctx["redirect"],
+        "callback_url": ctx["callback"],
+    }
 
     response = satispaython.create_payment(
-        key_id, rsa_key, math.ceil(amount * 100), ctx["payment_currency"], ctx["callback"]
+        key_id, rsa_key, math.ceil(amount * 100), ctx["payment_currency"], body_params
     )
 
     correct_response_code = 200
