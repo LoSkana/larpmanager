@@ -3616,6 +3616,9 @@ msgstr "Bekreftelse av utgifter"
 msgid "Description - international"
 msgstr "Engelsk beskrivelse"
 
+msgid "Enter a valid numeric value"
+msgstr "Skriv inn en gyldig numerisk verdi"
+
 msgid "Enter your preferences here"
 msgstr "Angi dine preferanser her"
 
@@ -4562,6 +4565,9 @@ msgstr "Denne siden viser oppdragene for arrangementet"
 
 msgid "This page shows the signups of the event"
 msgstr "Denne siden viser påmeldingene til arrangementet"
+
+msgid "Value must be greater than or equal to 0"
+msgstr "Verdien må være større enn eller lik 0"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Godt gjort, du har fullført alle modulene!"

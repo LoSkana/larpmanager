@@ -3616,6 +3616,9 @@ msgstr "Potwierdzenie wydatków"
 msgid "Description - international"
 msgstr "Opis - międzynarodowy"
 
+msgid "Enter a valid numeric value"
+msgstr "Wprowadź prawidłową wartość liczbową"
+
 msgid "Enter your preferences here"
 msgstr "Wprowadź swoje preferencje tutaj"
 
@@ -4560,6 +4563,9 @@ msgstr "Ta strona przedstawia zadania związane z wydarzeniem"
 
 msgid "This page shows the signups of the event"
 msgstr "Ta strona pokazuje zapisy na wydarzenie"
+
+msgid "Value must be greater than or equal to 0"
+msgstr "Wartość musi być większa lub równa 0"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Brawo, ukończyłeś wszystkie moduły!"
