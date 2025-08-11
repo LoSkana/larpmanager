@@ -3095,7 +3095,7 @@ msgid "Participants included"
 msgstr "Hanno partecipato"
 
 #, python-format
-msgid "Payment per %(event)s"
+msgid "Payment for %(event)s"
 msgstr "Versamento per %(event)s"
 
 msgid "Personal data updated"

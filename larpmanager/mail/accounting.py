@@ -221,7 +221,7 @@ def notify_pay_money(curr_sym, instance, member, run):
 
 
 def get_pay_money_email(curr_sym, instance, run):
-    subj = hdr(instance) + _("Payment per %(event)s") % {"event": run}
+    subj = hdr(instance) + _("Payment for %(event)s") % {"event": run}
     body = (
         _("A payment of %(amount).2f %(currency)s was received for this event")
         % {

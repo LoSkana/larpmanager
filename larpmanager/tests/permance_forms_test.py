@@ -82,11 +82,11 @@ async def check_orga_visibility(page):
 
 
 async def check_orga_preferences(page):
-    await page.get_by_role("link", name="Preferences").click()
+    await page.get_by_role("link", name="Preferences").click(force=True)
     await page.locator("#id_open_registration_1_0").check()
     await page.locator("#id_open_registration_1_2").check()
     await page.get_by_role("button", name="Confirm").click()
-    await page.get_by_role("link", name="Preferences").click()
+    await page.get_by_role("link", name="Preferences").click(force=True)
     await expect(page.locator("#id_open_registration_1_0")).to_be_checked()
     await expect(page.locator("#id_open_registration_1_1")).not_to_be_checked()
     await expect(page.locator("#id_open_registration_1_2")).to_be_checked()
@@ -95,12 +95,12 @@ async def check_orga_preferences(page):
     await disable_qtips(page)
     await page.locator("#id_mod_1_0").check(force=True)
     await page.get_by_role("button", name="Confirm").click()
-    await page.get_by_role("link", name="Preferences").click()
+    await page.get_by_role("link", name="Preferences").click(force=True)
     await page.locator("#id_open_character_1_0").check()
     await page.get_by_text("Stats").click()
     await page.locator("#id_open_character_1_2").check()
     await page.get_by_role("button", name="Confirm").click()
-    await page.get_by_role("link", name="Preferences").click()
+    await page.get_by_role("link", name="Preferences").click(force=True)
     await expect(page.locator("#id_open_character_1_0")).to_be_checked()
     await expect(page.locator("#id_open_character_1_1")).not_to_be_checked()
     await expect(page.locator("#id_open_character_1_2")).to_be_checked()

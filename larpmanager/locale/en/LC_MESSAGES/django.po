@@ -1928,7 +1928,7 @@ msgid "%(amount)d %(credits)s were used to participate in this event"
 msgstr ""
 
 #, python-format
-msgid "Payment per %(event)s"
+msgid "Payment for %(event)s"
 msgstr ""
 
 #, python-format
