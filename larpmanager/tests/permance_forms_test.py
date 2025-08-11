@@ -45,7 +45,6 @@ async def permanence_form(live_server, page):
     await login_orga(page, live_server)
 
     await go_to(page, live_server, "/manage")
-    await page.get_by_role("button", name="Close").click()
 
     await check_exe_roles(page)
 
