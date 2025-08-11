@@ -52,21 +52,21 @@ async def logout(page, live_server):
     await page.get_by_role("link", name="Logout").click()
 
 
-async def login_orga(pg, ls):
-    await login(pg, ls, orga_user)
+async def login_orga(page, live_server):
+    await login(page, live_server, orga_user)
 
 
-async def login_user(pg, lv):
-    await login(pg, lv, test_user)
+async def login_user(page, live_server):
+    await login(page, live_server, test_user)
 
 
-async def login(pg, live_server, name):
-    await go_to(pg, live_server, "/login")
+async def login(page, live_server, name):
+    await go_to(page, live_server, "/login")
 
-    await pg.locator("#id_username").fill(name)
-    await pg.locator("#id_password").fill(password)
-    await pg.get_by_role("button", name="Submit").click()
-    await expect(pg.locator("#banner")).not_to_contain_text("Login")
+    await page.locator("#id_username").fill(name)
+    await page.locator("#id_password").fill(password)
+    await page.get_by_role("button", name="Submit").click()
+    await expect(page.locator("#banner")).not_to_contain_text("Login")
 
 
 async def handle_error(page, e, test_name):

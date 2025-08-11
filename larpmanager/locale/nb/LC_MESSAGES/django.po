@@ -3095,7 +3095,7 @@ msgid "Participants included"
 msgstr "De deltok i"
 
 #, python-format
-msgid "Payment per %(event)s"
+msgid "Payment for %(event)s"
 msgstr "Betaling per %(event)s"
 
 msgid "Personal data updated"
@@ -5833,6 +5833,9 @@ msgstr "Vis full historikk over deltakernes preferanser på tegn"
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Hvis avkrysset, kan et alternativ velges maksimalt antall ganger"
 
+msgid "Indicate here any element you wish to avoid in the assignment"
+msgstr "Her angir du eventuelle elementer du ønsker å unngå i oppgaven"
+
 msgid "Manage event templates used as starting points for new events"
 msgstr ""
 "Administrere arrangementsmaler som brukes som utgangspunkt for nye "
@@ -5897,9 +5900,6 @@ msgstr ""
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Hvis du støter på problemer, kan du kontakte oss, så hjelper vi deg"
-
-msgid "Indicate here each element you wish to avoid in the assignment"
-msgstr "Angi her hvert element du ønsker å unngå i oppgaven"
 
 msgid "Now staff members can upload expenses, and you can review them"
 msgstr "Nå kan medarbeiderne laste opp utgifter, og du kan gå gjennom dem"

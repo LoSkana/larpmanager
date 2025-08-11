@@ -85,33 +85,6 @@ $(document).ready(function() {
         }
     });
 
-    $('.explain-icon').qtip({
-        content: {
-            text: function() {
-                return $(this).parent().attr('descr');
-            }
-        },
-        style: {
-            classes: 'qtip-dark qtip-rounded qtip-shadow qtip-lm'
-        },
-        show: {
-            event: 'click mouseenter',
-            solo: true
-        },
-        hide: {
-            event: 'mouseleave unfocus'
-        },
-        position: {
-            my: 'top left',
-            at: 'bottom center',
-            viewport: window,
-            adjust: { method: 'flipinvert shift' },
-            target: function() {
-                return $(this).prevAll('.sidebar-link').first();
-            }
-        }
-    });
-
     $('.dropdown-button').click(function(event) {
         event.stopPropagation();
     });
@@ -212,14 +185,8 @@ $(document).ready(function() {
     $('.links td:not(:has(*))').parent().remove();
 
     /* QTIP TOOLTIP */
-
-    $('[data-tooltip!=""]').qtip({
-        content: {
-            attr: 'data-tooltip'
-        }
-    });
-
-    lm_tooltip();
+    if (window.enviro == "prod")
+        lm_tooltip();
 
     $(':input[type="date_p"]').datetimepicker({
         format:'Y-m-d',
@@ -277,31 +244,6 @@ $(document).ready(function() {
 
         return false;
 
-    });
-
-    $('a[qtip]').each(function() {
-        $(this).qtip({
-            content: {
-                text: $(this).attr('qtip')
-            },
-            style: {
-                classes: 'qtip-dark qtip-rounded qtip-shadow'
-            },
-            hide: {
-                effect: function(offset) {
-                    $(this).fadeOut(500);
-                }
-            },
-            show: {
-                effect: function(offset) {
-                    $(this).fadeIn(500);
-                }
-            },
-            position: {
-                my: 'top center',
-                at: 'bottom center'
-            }
-        });
     });
 
     // table_csv();
@@ -546,6 +488,63 @@ function lm_tooltip() {
         });
     });
 
+ $('.explain-icon').qtip({
+        content: {
+            text: function() {
+                return $(this).parent().attr('descr');
+            }
+        },
+        style: {
+            classes: 'qtip-dark qtip-rounded qtip-shadow qtip-lm'
+        },
+        show: {
+            event: 'click mouseenter',
+            solo: true
+        },
+        hide: {
+            event: 'mouseleave unfocus'
+        },
+        position: {
+            my: 'top left',
+            at: 'bottom center',
+            viewport: window,
+            adjust: { method: 'flipinvert shift' },
+            target: function() {
+                return $(this).prevAll('.sidebar-link').first();
+            }
+        }
+    });
+
+    $('[data-tooltip!=""]').qtip({
+        content: {
+            attr: 'data-tooltip'
+        }
+    });
+
+    $('a[qtip]').each(function() {
+        $(this).qtip({
+            content: {
+                text: $(this).attr('qtip')
+            },
+            style: {
+                classes: 'qtip-dark qtip-rounded qtip-shadow'
+            },
+            hide: {
+                effect: function(offset) {
+                    $(this).fadeOut(500);
+                }
+            },
+            show: {
+                effect: function(offset) {
+                    $(this).fadeIn(500);
+                }
+            },
+            position: {
+                my: 'top center',
+                at: 'bottom center'
+            }
+        });
+    });
 }
 
 

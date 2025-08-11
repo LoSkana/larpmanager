@@ -3095,7 +3095,7 @@ msgid "Participants included"
 msgstr "De deltog i"
 
 #, python-format
-msgid "Payment per %(event)s"
+msgid "Payment for %(event)s"
 msgstr "Betalning per %(event)s"
 
 msgid "Personal data updated"
@@ -5835,6 +5835,9 @@ msgstr "Visa fullständig historik över deltagarnas preferenser på tecken"
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Om alternativet är markerat kan det väljas ett maximalt antal gånger"
 
+msgid "Indicate here any element you wish to avoid in the assignment"
+msgstr "Ange här om det finns något som du vill undvika i uppgiften"
+
 msgid "Manage event templates used as starting points for new events"
 msgstr ""
 "Hantera evenemangsmallar som används som utgångspunkter för nya evenemang"
@@ -5899,9 +5902,6 @@ msgstr ""
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Om du stöter på några problem, kontakta oss så hjälper vi dig"
-
-msgid "Indicate here each element you wish to avoid in the assignment"
-msgstr "Ange här varje element som du vill undvika i uppgiften"
 
 msgid "Now staff members can upload expenses, and you can review them"
 msgstr "Nu kan medarbetarna ladda upp utlägg och du kan granska dem"
