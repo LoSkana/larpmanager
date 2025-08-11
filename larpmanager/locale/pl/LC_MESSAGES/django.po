@@ -71,8 +71,14 @@ msgstr "Kto"
 msgid "age"
 msgstr "wiek"
 
+msgid "fee"
+msgstr "opłata"
+
 msgid "for"
 msgstr "dla"
+
+msgid "net"
+msgstr "netto"
 
 msgid "Band"
 msgstr "Zespół"

@@ -75,7 +75,6 @@ from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.edit import backend_get, exe_edit
 from larpmanager.utils.paginate import exe_paginate
-from larpmanager.views.orga.accounting import assign_payment_fee
 
 
 @login_required
@@ -266,10 +265,37 @@ def exe_expenses_approve(request, num):
 @login_required
 def exe_payments(request):
     ctx = check_assoc_permission(request, "exe_payments")
-    sr = ("reg__member", "reg__run", "inv", "inv__method")
-    exe_paginate(request, ctx, AccountingItemPayment, selrel=sr, afield="reg")
-    assign_payment_fee(ctx)
-    return render(request, "larpmanager/exe/accounting/payments.html", ctx)
+    fields = [
+        ("member", _("Member")),
+        ("method", _("Method")),
+        ("type", _("Type")),
+        ("status", _("Status")),
+        ("run", _("Event")),
+        ("net", _("net")),
+        ("fee", _("fee")),
+        ("created", _("Date")),
+    ]
+    if "vat" in ctx["features"]:
+        fields.append(("vat", _("VAT")))
+
+    ctx.update(
+        {
+            "selrel": ("reg__member", "reg__run", "inv", "inv__method"),
+            "afield": "reg",
+            "fields": fields,
+            "callbacks": {
+                "method": lambda el: str(el.method),
+                "type": lambda el: el.get_typ_display(),
+                "status": lambda el: el.get_status_display(),
+                "net": lambda el: format_decimal(el.net),
+                "trans": lambda el: format_decimal(el.trans) if el.trans else "",
+                "vat": lambda el: format_decimal(el.vat) if el.vat else "",
+            },
+        }
+    )
+    return exe_paginate(
+        request, ctx, AccountingItemPayment, "larpmanager/exe/accounting/payments.html", "exe_payments_edit"
+    )
 
 
 @login_required

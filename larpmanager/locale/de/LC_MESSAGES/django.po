@@ -71,8 +71,14 @@ msgstr "Wer"
 msgid "age"
 msgstr "Alter"
 
+msgid "fee"
+msgstr "Gebühr"
+
 msgid "for"
 msgstr "für"
+
+msgid "net"
+msgstr "Netz"
 
 msgid "Band"
 msgstr "Faszien"

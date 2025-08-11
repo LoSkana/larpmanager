@@ -71,8 +71,14 @@ msgstr "Quién"
 msgid "age"
 msgstr "edad"
 
+msgid "fee"
+msgstr "tarifa"
+
 msgid "for"
 msgstr "para"
+
+msgid "net"
+msgstr "red"
 
 msgid "Band"
 msgstr "Banda"

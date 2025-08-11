@@ -4753,12 +4753,6 @@ msgstr ""
 msgid "This page shows all payment items registered in the system"
 msgstr ""
 
-msgid "Method"
-msgstr ""
-
-msgid "Net"
-msgstr ""
-
 msgid "This page lists all reimbursement claims submitted by members"
 msgstr ""
 
@@ -6105,6 +6099,12 @@ msgid "This page shows all inflows received for this run"
 msgstr ""
 
 msgid "This page allows you to manually approve payments received"
+msgstr ""
+
+msgid "Method"
+msgstr ""
+
+msgid "Net"
 msgstr ""
 
 msgid ""
@@ -8108,6 +8108,12 @@ msgid "Registration completed successfully!"
 msgstr ""
 
 msgid "Request approved"
+msgstr ""
+
+msgid "net"
+msgstr ""
+
+msgid "fee"
 msgstr ""
 
 msgid "Transaction"

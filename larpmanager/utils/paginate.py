@@ -1,4 +1,5 @@
-from django.db.models import Case, IntegerField, OuterRef, Q, Subquery, Value, When
+from django.db.models import Case, F, IntegerField, OuterRef, Q, Subquery, Value, When
+from django.db.models.functions import Coalesce
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -8,6 +9,8 @@ from larpmanager.models.accounting import (
     AccountingItem,
     AccountingItemExpense,
     AccountingItemOther,
+    AccountingItemPayment,
+    AccountingItemTransaction,
     PaymentInvoice,
     PaymentStatus,
     RefundRequest,
@@ -215,8 +218,10 @@ def _apply_run_queries(ctx, elements, exe, run):
 def _apply_custom_queries(ctx, elements, typ):
     if issubclass(typ, AccountingItem):
         elements = elements.select_related("member")
+
     if issubclass(typ, AccountingItemExpense):
         elements = elements.select_related("member").order_by("is_approved", "-created")
+
     if issubclass(typ, PaymentInvoice):
         elements = elements.annotate(
             is_submitted=Case(
@@ -226,6 +231,7 @@ def _apply_custom_queries(ctx, elements, typ):
             )
         )
         elements = elements.order_by("is_submitted", "-created")
+
     if issubclass(typ, RefundRequest):
         elements = elements.prefetch_related("member__memberships")
         elements = elements.order_by("-status", "-updated")
@@ -234,6 +240,18 @@ def _apply_custom_queries(ctx, elements, typ):
             :1
         ]
         elements = elements.annotate(credits=Subquery(memberships.values("credit")))
+
+    if issubclass(typ, AccountingItemPayment):
+        subq = (
+            AccountingItemTransaction.objects.filter(inv_id=OuterRef("inv_id"))
+            .values("inv_id")
+            .annotate(total=Coalesce(F("value"), Value(0)))
+            .values("total")[:1]
+        )
+
+        ctx["list"] = AccountingItemPayment.objects.annotate(
+            trans=Coalesce(Subquery(subq), Value(0)), net=F("value") - Coalesce(Subquery(subq), Value(0))
+        )
 
     subtype = ctx.get("subtype")
     if subtype == "credits":
