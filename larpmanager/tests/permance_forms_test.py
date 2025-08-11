@@ -92,7 +92,7 @@ async def check_orga_preferences(page):
     await expect(page.locator("#id_open_registration_1_2")).to_be_checked()
     await expect(page.locator("#id_open_registration_1_3")).not_to_be_checked()
     await page.get_by_role("link", name="Features").click()
-    await page.locator("#id_mod_1_0").check()
+    await page.locator("#id_mod_1_0").check(force=True)
     await page.get_by_role("button", name="Confirm").click()
     await page.get_by_role("link", name="Preferences").click()
     await page.locator("#id_open_character_1_0").check()
@@ -107,10 +107,10 @@ async def check_orga_preferences(page):
 
 async def check_orga_features(page):
     await page.get_by_role("link", name="Features").click()
-    await page.locator("#id_mod_7_0").check()
-    await page.locator("#id_mod_7_2").check()
-    await page.locator("#id_mod_4_1").check()
-    await page.locator("#id_mod_4_3").check()
+    await page.locator("#id_mod_7_0").check(force=True)
+    await page.locator("#id_mod_7_2").check(force=True)
+    await page.locator("#id_mod_4_1").check(force=True)
+    await page.locator("#id_mod_4_3").check(force=True)
     await page.get_by_role("button", name="Confirm").click()
     await expect(page.locator("#one")).to_contain_text("Now you can set customization options")
     await expect(page.locator("#one")).to_contain_text(
@@ -192,8 +192,8 @@ async def check_exe_config(page):
 
 async def check_exe_features(page):
     await page.get_by_role("link", name="Features").click()
-    await page.locator("#id_mod_12_0").check()
-    await page.locator("#id_mod_6_1").check()
+    await page.locator("#id_mod_12_0").check(force=True)
+    await page.locator("#id_mod_6_1").check(force=True)
     await page.get_by_role("button", name="Confirm").click()
     await expect(page.locator("#one")).to_contain_text("Now you can create event templates")
     await page.get_by_role("link", name="Features").click()
