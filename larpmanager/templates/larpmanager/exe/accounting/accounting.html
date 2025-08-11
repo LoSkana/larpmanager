@@ -100,14 +100,12 @@
                 </td>
             </tr>
         {% endif %}
-        {% if features.payment_fees %}
-            <tr>
-                <td>{% trans "Transaction totals" %}</td>
-                <td>
-                    <b>{{ transactions_sum }}</b>
-                </td>
-            </tr>
-        {% endif %}
+        <tr>
+            <td>{% trans "Transaction totals" %}</td>
+            <td>
+                <b>{{ transactions_sum }}</b>
+            </td>
+        </tr>
         {% if features.inflow %}
             <tr>
                 <td>{% trans "Inflows total" %}</td>
@@ -173,14 +171,12 @@
                         </td>
                     </tr>
                 {% endif %}
-                {% if features.payment_fees %}
-                    <tr>
-                        <td>{% trans "Transaction totals" %}</td>
-                        <td>
-                            <b class="transactions_sum"></b>
-                        </td>
-                    </tr>
-                {% endif %}
+                <tr>
+                    <td>{% trans "Transaction totals" %}</td>
+                    <td>
+                        <b class="transactions_sum"></b>
+                    </td>
+                </tr>
                 {% if features.inflow %}
                     <tr>
                         <td>{% trans "Inflows total" %}</td>
