@@ -120,7 +120,7 @@ def exe_membership(request):
     )
     values = ("member__id", "member__surname", "member__name", "member__email", "card_number", "status")
     ctx["list"] = []
-    ctx["sum"] = {MembershipStatus.SUBMITTED, MembershipStatus.ACCEPTED, "p"}
+    ctx["sum"] = {}
     for el in que.values(*values):
         status = el["status"]
         if status == MembershipStatus.ACCEPTED and el["member__id"] in fees:
@@ -128,6 +128,10 @@ def exe_membership(request):
             el["status_display"] = _("Payed")
         else:
             el["status_display"] = MembershipStatus(el["status"]).label
+
+        if el["status"] not in ctx["sum"]:
+            ctx["sum"][el["status"]] = 0
+        ctx["sum"][el["status"]] += 1
 
         if el["member__id"] in next_regs:
             el["run_names"] = ", ".join(
