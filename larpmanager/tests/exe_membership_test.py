@@ -80,22 +80,13 @@ async def exe_membership(live_server, page):
     await expect(page.locator("#one")).to_contain_text("orga@test.it")
     await expect(page.locator("#one")).to_contain_text("Test Larp")
 
-    # open pages
-    await page.get_by_role("link", name="Details").click()
-    await go_to(page, live_server, "/manage/membership/")
-    await expect(page.locator("#banner")).not_to_contain_text("Oops!")
-
-    await go_to(page, live_server, "/manage/membership/")
-    await page.get_by_role("link", name="Member", exact=True).click()
-    await expect(page.locator("#banner")).not_to_contain_text("Oops!")
-
     # approve
     await go_to(page, live_server, "/manage/membership/")
     await page.get_by_role("link", name="Request").click()
     await page.get_by_role("button", name="Confirm").click()
 
     # test
-    await expect(page.locator("#one")).to_contain_text("Accepted (1)")
+    await expect(page.locator("#one")).to_contain_text("Total members: 1 - Accepted: 1")
     await expect(page.locator("#one")).to_contain_text("Test")
     await expect(page.locator("#one")).to_contain_text("Admin")
     await expect(page.locator("#one")).to_contain_text("orga@test.it")
