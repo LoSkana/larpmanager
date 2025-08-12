@@ -10,13 +10,13 @@
     <p>
         {% trans "Total members" %}: {{ list | length }}
         {% if sum.s %}
-            , {% trans "Request" %}: {{ sum.s }}
+            - {% trans "Request" %}: {{ sum.s }}
         {% endif %}
         {% if sum.p %}
-            , {% trans "Paid current year" %}: {{ sum.p }}
+            - {% trans "Paid current year" %}: {{ sum.p }}
         {% endif %}
         {% if sum.a %}
-            , {% trans "Accepted" %}: {{ sum.a }}
+            - {% trans "Accepted" %}: {{ sum.a }}
         {% endif %}
     </p>
     <hr />
