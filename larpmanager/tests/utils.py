@@ -147,7 +147,7 @@ async def check_download(page, link: str) -> None:
     while current_try < max_tries:
         try:
             async with page.expect_download(timeout=100_000) as download_info:
-                await page.get_by_role("link", name=link).click()
+                await page.click(f"text={link}")
             download = await download_info.value
             download_path = await download.path()
             assert download_path is not None, "Download failed"
