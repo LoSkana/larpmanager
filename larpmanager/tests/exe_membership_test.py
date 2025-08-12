@@ -74,7 +74,7 @@ async def exe_membership(live_server, page):
 
     # go to memberships
     await go_to(page, live_server, "/manage/membership/")
-    await expect(page.locator("#one")).to_contain_text("Request (1)")
+    await expect(page.locator("#one")).to_contain_text("Total members: 1 - Request: 1")
     await expect(page.locator("#one")).to_contain_text("Test")
     await expect(page.locator("#one")).to_contain_text("Admin")
     await expect(page.locator("#one")).to_contain_text("orga@test.it")
