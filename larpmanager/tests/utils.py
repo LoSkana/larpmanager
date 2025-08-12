@@ -155,9 +155,6 @@ async def check_download(page, link: str) -> None:
             with open(download_path, "rb") as f:
                 content = f.read()
 
-            # raw preview
-            print(content[:100])
-
             file_size = os.path.getsize(download_path)
             assert file_size > 0, "File empty"
 
@@ -170,14 +167,19 @@ async def check_download(page, link: str) -> None:
                         with zf.open(member) as f:
                             df = pd.read_csv(f)
                             assert not df.empty, f"Empty csv {member}"
+                return
 
             # if plain CSV, read with pandas
-            lower_name = os.path.basename(download.suggested_filename or download_path).lower()
+            lower_name = str(os.path.basename(download.suggested_filename or download_path).lower())
             if lower_name.endswith(".csv"):
                 df = pd.read_csv(io.BytesIO(content))
                 assert not df.empty, f"Empty csv {lower_name}"
+                return
 
-        except Exception:
+            return
+
+        except Exception as err:
+            print(err)
             current_try += 1
             if current_try >= max_tries:
                 raise

@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+from pathlib import Path
 
 import pytest
 from playwright.async_api import async_playwright, expect
@@ -39,6 +39,10 @@ async def test_upload_download(live_server):
         finally:
             await context.close()
             await browser.close()
+
+
+def get_path(file):
+    return Path(__file__).parent / "resources" / "test_upload" / file
 
 
 async def upload_download(live_server, page):
@@ -88,7 +92,7 @@ async def relationships(page):
     await page.get_by_role("link", name="Upload").click()
     await check_download(page, "Download example template")
     await page.locator("#id_second").click()
-    await page.locator("#id_second").set_input_files("relationships.csv")
+    await page.locator("#id_second").set_input_files(get_path("relationships.csv"))
     await page.get_by_role("button", name="Submit").click()
     await expect(page.locator("#one")).to_contain_text("OK - Relationship characcter test character")
     await page.get_by_role("link", name="Proceed").click()
@@ -103,9 +107,9 @@ async def plots(live_server, page):
     await page.get_by_role("link", name="Upload").click()
     await check_download(page, "Download example template")
     await page.locator("#id_first").click()
-    await page.locator("#id_first").set_input_files("plot.csv")
+    await page.locator("#id_first").set_input_files(get_path("plot.csv"))
     await page.locator("#id_second").click()
-    await page.locator("#id_second").set_input_files("roles.csv")
+    await page.locator("#id_second").set_input_files(get_path("roles.csv"))
     await page.get_by_role("button", name="Submit").click()
     await expect(page.locator("#one")).to_contain_text(
         "Loading performed, see logs Proceed Logs OK - Created plottOK - Plot role characcter plott"
@@ -135,7 +139,7 @@ async def quest_trait(page):
     await page.get_by_role("link", name="Upload").click()
     await check_download(page, "Download example template")
     await page.get_by_role("button", name="Choose File").click()
-    await page.get_by_role("button", name="Choose File").set_input_files("quest.csv")
+    await page.get_by_role("button", name="Choose File").set_input_files(get_path("quest.csv"))
     await page.get_by_role("button", name="Submit").click()
     await expect(page.locator("#one")).to_contain_text("Loading performed, see logs Proceed Logs OK - Created questt")
     await page.get_by_role("link", name="Proceed").click()
@@ -145,7 +149,7 @@ async def quest_trait(page):
     await page.get_by_role("link", name="Upload").click()
     await check_download(page, "Download example template")
     await page.get_by_role("button", name="Choose File").click()
-    await page.get_by_role("button", name="Choose File").set_input_files("trait.csv")
+    await page.get_by_role("button", name="Choose File").set_input_files(get_path("trait.csv"))
     await page.get_by_role("button", name="Submit").click()
     await expect(page.locator("#one")).to_contain_text("Loading performed, see logs Proceed Logs OK - Created traitt")
     await page.get_by_role("link", name="Proceed").click()
@@ -158,9 +162,9 @@ async def registrations(page):
     await page.get_by_role("link", name="Upload").click()
     await check_download(page, "Download example template")
     await page.get_by_role("button", name="Choose File").click()
-    await page.get_by_role("button", name="Choose File").set_input_files("relationships.csv")
+    await page.get_by_role("button", name="Choose File").set_input_files(get_path("relationships.csv"))
     await page.get_by_role("button", name="Choose File").click()
-    await page.get_by_role("button", name="Choose File").set_input_files("registration.csv")
+    await page.get_by_role("button", name="Choose File").set_input_files(get_path("registration.csv"))
     await page.get_by_role("button", name="Submit").click()
     await expect(page.locator("#one")).to_contain_text("OK - Created User Test")
     await page.get_by_role("link", name="Proceed").click()
@@ -173,9 +177,9 @@ async def reg_form(page):
     await page.get_by_role("link", name="Upload").click()
     await check_download(page, "Download example template")
     await page.get_by_role("row", name="Questions Choose File").locator("td").click()
-    await page.locator("#id_first").set_input_files("reg-questions.csv")
+    await page.locator("#id_first").set_input_files(get_path("reg-questions.csv"))
     await page.locator("#id_second").click()
-    await page.locator("#id_second").set_input_files("reg-options.csv")
+    await page.locator("#id_second").set_input_files(get_path("reg-options.csv"))
     await page.get_by_role("button", name="Submit").click()
     await expect(page.locator("#one")).to_contain_text(
         "Loading performed, see logs Proceed Logs OK - Created tbmobwOK - Created qmhcufOK - Created holdmfOK - Created lyucezOK - Created bamkzwOK - Created npyrxdOK - Created rdtbggOK - Created qkcyjrOK - Created fjxkum"
@@ -192,7 +196,7 @@ async def characters(page):
     await page.get_by_role("link", name="Upload").click()
     await check_download(page, "Download example template")
     await page.get_by_role("button", name="Choose File").click()
-    await page.get_by_role("button", name="Choose File").set_input_files("character.csv")
+    await page.get_by_role("button", name="Choose File").set_input_files(get_path("character.csv"))
     await page.get_by_role("button", name="Submit").click()
     await expect(page.locator("#one")).to_contain_text("OK - Created characcter")
     await page.get_by_role("link", name="Proceed").click()
@@ -207,7 +211,7 @@ async def factions(page):
     await page.get_by_role("link", name="Upload").click()
     await check_download(page, "Download example template")
     await page.get_by_role("button", name="Choose File").click()
-    await page.get_by_role("button", name="Choose File").set_input_files("faction.csv")
+    await page.get_by_role("button", name="Choose File").set_input_files(get_path("faction.csv"))
     await page.get_by_role("button", name="Submit").click()
     await expect(page.locator("#one")).to_contain_text("OK - Created facction")
     await page.get_by_role("link", name="Proceed").click()
@@ -219,12 +223,13 @@ async def char_form(page):
     await page.locator("#orga_character_form").get_by_role("link", name="Form").click()
     await page.get_by_role("link", name="Upload").click()
     await check_download(page, "Download example template")
-    await page.locator("#id_first").set_input_files("char-questions.csv")
-    await page.locator("#id_second").set_input_files("char-options.csv")
+    await page.locator("#id_first").set_input_files(get_path("char-questions.csv"))
+    await page.locator("#id_second").set_input_files(get_path("char-options.csv"))
     await page.get_by_role("button", name="Submit").click()
     await expect(page.locator("#one")).to_contain_text(
         "Loading performed, see logs Proceed Logs OK - Created bibiOK - Created babaOK - Created werOK - Created asdOK - Created poiOK - Created huhuOK - Created trtrOK - Created rrrrrrOK - Created tttttt"
     )
+    await page.get_by_role("link", name="Proceed").click()
     await expect(page.locator("#one")).to_contain_text(
         "Name Name Presentation Presentation Text Sheet Faction Factions Hidden bibi baba Multiple choice Searchable huhu , trtr"
     )
