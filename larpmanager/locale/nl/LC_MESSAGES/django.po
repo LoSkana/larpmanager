@@ -32,6 +32,9 @@ msgstr "Leeftijd"
 msgid "All"
 msgstr "Alle"
 
+msgid "BIC"
+msgstr "BIC"
+
 msgid "CSS"
 msgstr "CSS"
 
@@ -3667,12 +3670,6 @@ msgstr "Inhouding als transactiekosten"
 msgid "Would you like to change it"
 msgstr "Wil je het veranderen"
 
-msgid "You are regularly signed up"
-msgstr "Inschrijving bevestigd"
-
-msgid "You are signed up as Filler"
-msgstr "Je bent geregistreerd als een Filler"
-
 msgid "please fill in your profile"
 msgstr "vul je profiel in"
 
@@ -4381,9 +4378,6 @@ msgstr "Totaalbedrag terugbetaald aan deelnemers"
 #, python-format
 msgid "Utilisation %(credits)s per %(event)s"
 msgstr "Gebruik %(credits)s per %(event)s"
-
-msgid "You are signed up in the waiting list"
-msgstr "Je staat op de wachtlijst"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available"

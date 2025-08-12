@@ -32,6 +32,9 @@ msgstr "Ålder"
 msgid "All"
 msgstr "Alla"
 
+msgid "BIC"
+msgstr "BIC"
+
 msgid "CSS"
 msgstr "CSS"
 
@@ -3667,12 +3670,6 @@ msgstr "Bibehållande som transaktionskostnad"
 msgid "Would you like to change it"
 msgstr "Skulle du vilja ändra det"
 
-msgid "You are regularly signed up"
-msgstr "Anmälan bekräftad"
-
-msgid "You are signed up as Filler"
-msgstr "Du är registrerad som Filler"
-
 msgid "please fill in your profile"
 msgstr "vänligen fyll i din profil"
 
@@ -4381,9 +4378,6 @@ msgstr "Totalt belopp som återbetalas till deltagarna"
 #, python-format
 msgid "Utilisation %(credits)s per %(event)s"
 msgstr "Utnyttjande %(credits)s per %(event)s"
-
-msgid "You are signed up in the waiting list"
-msgstr "Du står på väntelistan"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available"

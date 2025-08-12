@@ -3987,6 +3987,9 @@ msgstr ""
 msgid "IBAN"
 msgstr ""
 
+msgid "BIC"
+msgstr ""
+
 msgid "Swift"
 msgstr ""
 
@@ -8069,15 +8072,6 @@ msgid "awaiting member approval to proceed with payment"
 msgstr ""
 
 msgid "please fill in your profile"
-msgstr ""
-
-msgid "You are signed up in the waiting list"
-msgstr ""
-
-msgid "You are signed up as Filler"
-msgstr ""
-
-msgid "You are regularly signed up"
 msgstr ""
 
 msgid "payment pending confirmation"

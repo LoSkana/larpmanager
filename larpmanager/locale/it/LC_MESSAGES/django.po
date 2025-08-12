@@ -32,6 +32,9 @@ msgstr "Età"
 msgid "All"
 msgstr "All"
 
+msgid "BIC"
+msgstr "BIC"
+
 msgid "CSS"
 msgstr "CSS"
 
@@ -3667,12 +3670,6 @@ msgstr "Trattenuta come costo di transazione"
 msgid "Would you like to change it"
 msgstr "Desideri cambiarlo"
 
-msgid "You are regularly signed up"
-msgstr "Iscrizione confermata"
-
-msgid "You are signed up as Filler"
-msgstr "Sei iscritto come Filler"
-
 msgid "please fill in your profile"
 msgstr "per favore compila il tuo profilo"
 
@@ -4381,9 +4378,6 @@ msgstr "Importo totale rimborsato ai partecipanti"
 #, python-format
 msgid "Utilisation %(credits)s per %(event)s"
 msgstr "Utilizzo %(credits)s per %(event)s"
-
-msgid "You are signed up in the waiting list"
-msgstr "Sei iscritto alla lista d'attesa"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available"
