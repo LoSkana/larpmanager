@@ -124,6 +124,8 @@ def registration_status_signed(run, features, register_url):
     provisional = is_reg_provisional(run.reg)
     if provisional:
         register_msg = _("Provisional registration")
+    if run.reg.ticket:
+        register_msg += f" ({run.reg.ticket.name})"
     register_text = f"<a href='{register_url}'>{register_msg}</a>"
 
     if "membership" in features:
@@ -153,14 +155,7 @@ def registration_status_signed(run, features, register_url):
         run.status["text"] = register_text
         return
 
-    if run.reg.ticket and run.reg.ticket.tier == TicketTier.WAITING:
-        mes = _("You are signed up in the waiting list") + "!"
-    elif run.reg.ticket and run.reg.ticket.tier == TicketTier.FILLER:
-        mes = _("You are signed up as Filler") + "!"
-    else:
-        mes = _("You are regularly signed up") + "!"
-
-    run.status["text"] = f"<a href='{register_url}'>{mes}</a>"
+    run.status["text"] = register_text
 
     if run.reg.ticket and run.reg.ticket.tier == TicketTier.PATRON:
         run.status["text"] += " " + _("Thanks for your support") + "!"

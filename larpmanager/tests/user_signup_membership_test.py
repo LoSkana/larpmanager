@@ -134,7 +134,7 @@ async def pay(live_server, page):
     await page.get_by_role("link", name="Confirm", exact=True).click()
     # check payment
     await go_to(page, live_server, "/test/1/register")
-    await expect(page.locator("#one")).to_contain_text("You are regularly signed up")
+    await expect(page.locator("#one")).to_contain_text("Registration confirmed (Standard)")
     await page.locator("a#menu-open").click()
     await page.get_by_role("link", name="Logout").click()
     await expect(page.locator("#one")).to_contain_text("Registration is open!")

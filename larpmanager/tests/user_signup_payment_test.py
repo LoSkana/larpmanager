@@ -125,7 +125,7 @@ async def signup(page, live_server):
     # Approve sharing
     await page.get_by_role("checkbox", name="Authorisation").check()
     await page.get_by_role("button", name="Submit").click()
-    await expect(page.locator("#one")).to_contain_text("You are regularly signed up")
+    await expect(page.locator("#one")).to_contain_text("Registration confirmed (Standard)")
 
 
 async def characters(page, live_server):

@@ -32,6 +32,9 @@ msgstr "Věk"
 msgid "All"
 msgstr "Všechny"
 
+msgid "BIC"
+msgstr "BIC"
+
 msgid "CSS"
 msgstr "CSS"
 
@@ -449,6 +452,9 @@ msgstr "Detail"
 
 msgid "Direct"
 msgstr "Přímý"
+
+msgid "Emails"
+msgstr "E-maily"
 
 msgid "Events"
 msgstr "Události"
@@ -3667,12 +3673,6 @@ msgstr "Zadržení jako transakční náklady"
 msgid "Would you like to change it"
 msgstr "Chcete to změnit"
 
-msgid "You are regularly signed up"
-msgstr "Vstup potvrzen"
-
-msgid "You are signed up as Filler"
-msgstr "Jste registrován jako Filler"
-
 msgid "please fill in your profile"
 msgstr "vyplňte prosím svůj profil"
 
@@ -4381,9 +4381,6 @@ msgstr "Celková částka vrácená účastníkům"
 #, python-format
 msgid "Utilisation %(credits)s per %(event)s"
 msgstr "Využití %(credits)s na %(event)s"
-
-msgid "You are signed up in the waiting list"
-msgstr "Jste na čekací listině"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available"

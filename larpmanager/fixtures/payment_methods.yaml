@@ -6,8 +6,8 @@
     instructions: "<p><strong>Beneficiary: </strong>Name of the recipient account\
       \ holder.&nbsp;</p>\r\n<p><strong>IBAN</strong>: <span data-huuid=\"9902777109390532710\"\
       >International Bank Account Number</span> of the recipient account (27-character\
-      \ long)</p>"
-    fields: payee, iban
+      \ long)</p><p><strong>BIC</strong>: Optional</p>"
+    fields: payee, iban, bic
     profile: payment_methods/ac81a0b8942e41a8bbcefa197ccfb3d8.png
 - model: larpmanager.paymentmethod
   pk: 2
