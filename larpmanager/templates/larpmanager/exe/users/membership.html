@@ -8,7 +8,7 @@
 {% endblock info %}
 {% block content %}
     <p>
-        {% trans "Total members" %}: {{ list | size }}
+        {% trans "Total members" %}: {{ list | length }}
         {% if sum.s %}
             , {% trans "Request" %}: {{ sum.s }}
         {% endif %}
@@ -20,7 +20,7 @@
         {% endif %}
     </p>
     <hr />
-    <table id="memberships" class="go_datatable">
+    <table id="memberships" class="go_datatable" no_header_cols="[7]">
         <thead>
             <tr>
                 <th></th>
@@ -31,33 +31,25 @@
                 <th>{% trans "Number" %}</th>
                 <th>{% trans "Registrations" %}</th>
                 <th></th>
-                <th></th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
                 <tr class="member">
                     <td>
-                        <a href="{% url 'exe_member' el.0 %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'exe_member' el.member__id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
-                    <td>{{ el.member_surname | title }}</td>
-                    <td>{{ el.member_name | title }}</td>
-                    <td>{{ el.member_email }}</td>
+                    <td>{{ el.member__surname | title }}</td>
+                    <td>{{ el.member__name | title }}</td>
+                    <td>{{ el.member__email }}</td>
                     <td>{{ el.status_display }}</td>
                     <td>
                         {% if el.status != "s" %}{{ el.card_number }}{% endif %}
                     </td>
                     <td>{{ el.run_names }}</td>
                     <td>
-                        <a href="{% url 'exe_member' el.member_id %}">{% trans "Details" %}</a>
-                    </td>
-                    <td>
-                        <a href="{% url 'exe_membership_status' el.member_id %}">{% trans "Member" %}</a>
-                    </td>
-                    <td>
                         {% if el.status == "s" %}
-                            <a href="{% url 'exe_membership_evaluation' el.member_id %}">{% trans "Request" %}</a>
+                            <a href="{% url 'exe_membership_evaluation' el.member__id %}">{% trans "Request" %}</a>
                         {% endif %}
                     </td>
                 </tr>
@@ -65,52 +57,56 @@
         </tbody>
     </table>
     <hr />
-    <h2>{% trans "Email" %}</h2>
-    <table>
-        <tr>
-            <th>{% trans "Request" %}</th>
-            <td>
-                {% for el in s %}
-                    {% include "elements/comma.html" %}
-                    {{ el.3 }}
-                {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <th>{% trans "Accepted" %}</th>
-            <td>
-                {% for el in a %}
-                    {% include "elements/comma.html" %}
-                    {{ el.3 }}
-                {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <th>{% trans "Paid current year" %}</th>
-            <td>
-                {% for el in p %}
-                    {% include "elements/comma.html" %}
-                    {{ el.3 }}
-                {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <th>{% trans "Kicked out" %}</th>
-            <td>
-                {% for el in r %}
-                    {% include "elements/comma.html" %}
-                    {{ el.3 }}
-                {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <th>{% trans "Absent" %}</th>
-            <td>
-                {% for el in e %}
-                    {% include "elements/comma.html" %}
-                    {{ el.3 }}
-                {% endfor %}
-            </td>
-        </tr>
-    </table>
+    <h2>
+        <a href="#" class="my_toggle" tog="emails">{% trans "Emails" %}</a>
+    </h2>
+    <div class="hide emails">
+        <table>
+            <tr>
+                <th>{% trans "Request" %}</th>
+                <td>
+                    {% for el in s %}
+                        {% include "elements/comma.html" %}
+                        {{ el.3 }}
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>{% trans "Accepted" %}</th>
+                <td>
+                    {% for el in a %}
+                        {% include "elements/comma.html" %}
+                        {{ el.3 }}
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>{% trans "Paid current year" %}</th>
+                <td>
+                    {% for el in p %}
+                        {% include "elements/comma.html" %}
+                        {{ el.3 }}
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>{% trans "Kicked out" %}</th>
+                <td>
+                    {% for el in r %}
+                        {% include "elements/comma.html" %}
+                        {{ el.3 }}
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>{% trans "Absent" %}</th>
+                <td>
+                    {% for el in e %}
+                        {% include "elements/comma.html" %}
+                        {{ el.3 }}
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
+    </div>
 {% endblock content %}

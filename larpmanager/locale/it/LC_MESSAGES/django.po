@@ -453,6 +453,9 @@ msgstr "Dettaglio"
 msgid "Direct"
 msgstr "Diretto"
 
+msgid "Emails"
+msgstr "Email"
+
 msgid "Events"
 msgstr "Eventi"
 

@@ -453,6 +453,9 @@ msgstr "Detail"
 msgid "Direct"
 msgstr "Přímý"
 
+msgid "Emails"
+msgstr "E-maily"
+
 msgid "Events"
 msgstr "Události"
 

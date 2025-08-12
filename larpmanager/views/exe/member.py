@@ -24,7 +24,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Case, Count, IntegerField, Value, When
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -105,24 +105,33 @@ def exe_membership(request):
     for run_id, member_id in next_regs_qs:
         next_regs[member_id].append(run_id)
 
-    que = Membership.objects.filter(assoc_id=ctx["a_id"]).select_related("member")
-    que = que.exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]).order_by(
-        "member__surname"
+    que = (
+        Membership.objects.filter(assoc_id=ctx["a_id"])
+        .select_related("member")
+        .exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED])
+        .annotate(
+            sort_priority=Case(
+                When(status=MembershipStatus.SUBMITTED, then=Value(0)),
+                default=Value(1),
+                output_field=IntegerField(),
+            )
+        )
+        .order_by("sort_priority", "-updated")
     )
     values = ("member__id", "member__surname", "member__name", "member__email", "card_number", "status")
     ctx["list"] = []
     ctx["sum"] = {MembershipStatus.SUBMITTED, MembershipStatus.ACCEPTED, "p"}
     for el in que.values(*values):
         status = el["status"]
-        if status == MembershipStatus.ACCEPTED and el["member_id"] in fees:
+        if status == MembershipStatus.ACCEPTED and el["member__id"] in fees:
             el["status"] = "p"
             el["status_display"] = _("Payed")
         else:
             el["status_display"] = MembershipStatus(el["status"]).label
 
-        if el["member_id"] in next_regs:
+        if el["member__id"] in next_regs:
             el["run_names"] = ", ".join(
-                [next_runs[run_id] for run_id in next_regs[el["member_id"]] if run_id in next_runs]
+                [next_runs[run_id] for run_id in next_regs[el["member__id"]] if run_id in next_runs]
             )
         ctx["list"].append(el)
 
