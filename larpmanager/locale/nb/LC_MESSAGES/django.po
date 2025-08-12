@@ -32,6 +32,9 @@ msgstr "Alder"
 msgid "All"
 msgstr "Alle"
 
+msgid "BIC"
+msgstr "BIC"
+
 msgid "CSS"
 msgstr "CSS"
 
@@ -449,6 +452,9 @@ msgstr "Detaljer"
 
 msgid "Direct"
 msgstr "Direkte"
+
+msgid "Emails"
+msgstr "E-poster"
 
 msgid "Events"
 msgstr "Arrangementer"
@@ -3667,12 +3673,6 @@ msgstr "Tilbakeholdelse som transaksjonskostnad"
 msgid "Would you like to change it"
 msgstr "Ønsker du å endre det"
 
-msgid "You are regularly signed up"
-msgstr "Deltakelse bekreftet"
-
-msgid "You are signed up as Filler"
-msgstr "Du er registrert som Filler"
-
 msgid "please fill in your profile"
 msgstr "vennligst fyll ut profilen din"
 
@@ -4381,9 +4381,6 @@ msgstr "Totalt beløp refundert til deltakerne"
 #, python-format
 msgid "Utilisation %(credits)s per %(event)s"
 msgstr "Utnyttelse %(credits)s per %(event)s"
-
-msgid "You are signed up in the waiting list"
-msgstr "Du står på ventelisten"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available"

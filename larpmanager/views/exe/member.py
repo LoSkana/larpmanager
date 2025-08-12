@@ -24,7 +24,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Case, Count, IntegerField, Value, When
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -105,26 +105,39 @@ def exe_membership(request):
     for run_id, member_id in next_regs_qs:
         next_regs[member_id].append(run_id)
 
-    que = Membership.objects.filter(assoc_id=ctx["a_id"]).select_related("member")
-    que = que.exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED]).order_by("member__surname")
+    que = (
+        Membership.objects.filter(assoc_id=ctx["a_id"])
+        .select_related("member")
+        .exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED])
+        .annotate(
+            sort_priority=Case(
+                When(status=MembershipStatus.SUBMITTED, then=Value(0)),
+                default=Value(1),
+                output_field=IntegerField(),
+            )
+        )
+        .order_by("sort_priority", "-updated")
+    )
     values = ("member__id", "member__surname", "member__name", "member__email", "card_number", "status")
-    for member in que.values_list(*values):
-        v = member[5]
-        if v == "a" and member[0] in fees:
-            v = "p"
-        if v not in ctx:
-            ctx[v] = []
-        run_names = ""
-        if member[0] in next_regs:
-            run_names = ", ".join([next_runs[run_id] for run_id in next_regs[member[0]] if run_id in next_runs])
-        member_val = member + (run_names,)
-        ctx[v].append(member_val)
+    ctx["list"] = []
+    ctx["sum"] = {}
+    for el in que.values(*values):
+        status = el["status"]
+        if status == MembershipStatus.ACCEPTED and el["member__id"] in fees:
+            el["status"] = "p"
+            el["status_display"] = _("Payed")
+        else:
+            el["status_display"] = MembershipStatus(el["status"]).label
 
-    ctx["sum"] = 0
-    if "a" in ctx:
-        ctx["sum"] += len(ctx["a"])
-    if "p" in ctx:
-        ctx["sum"] += len(ctx["p"])
+        if el["status"] not in ctx["sum"]:
+            ctx["sum"][el["status"]] = 0
+        ctx["sum"][el["status"]] += 1
+
+        if el["member__id"] in next_regs:
+            el["run_names"] = ", ".join(
+                [next_runs[run_id] for run_id in next_regs[el["member__id"]] if run_id in next_runs]
+            )
+        ctx["list"].append(el)
 
     return render(request, "larpmanager/exe/users/membership.html", ctx)
 
