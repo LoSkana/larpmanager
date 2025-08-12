@@ -133,7 +133,6 @@ async def quest_trait(page):
     await page.get_by_role("link", name="New").click()
     await page.locator("#id_name").click()
     await page.locator("#id_name").fill("bhbh")
-    await page.once("dialog", lambda dialog: dialog.dismiss())
     await page.get_by_role("button", name="Confirm").click()
     await page.get_by_role("link", name="Quest", exact=True).click()
     await page.get_by_role("link", name="Upload").click()
