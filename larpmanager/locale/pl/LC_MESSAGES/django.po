@@ -203,6 +203,9 @@ msgstr "Port"
 msgid "Prev"
 msgstr "Prev"
 
+msgid "Read"
+msgstr "Czytaj"
+
 msgid "Role"
 msgstr "Rola"
 
@@ -755,6 +758,9 @@ msgstr "Profil"
 
 msgid "Pronoun"
 msgstr "Zaimek"
+
+msgid "Reading"
+msgstr "Czytanie"
 
 msgid "Receipt"
 msgstr "Pokwitowanie"
@@ -2798,6 +2804,9 @@ msgstr "Przydzielona postać!"
 msgid "Change registration"
 msgstr "Zmiana rejestracji"
 
+msgid "Character not found"
+msgstr "Nie znaleziono znaku"
+
 msgid "Confirmation delete"
 msgstr "Usunięcie potwierdzenia"
 
@@ -3495,6 +3504,9 @@ msgstr "Opcjonalnie - wyślij odpowiedź e-mailem na adres"
 
 msgid "Payment already confirmed"
 msgstr "Płatność już potwierdzona"
+
+msgid "Read the writing elements"
+msgstr "Przeczytaj elementy zapisu"
 
 msgid "Receipt already confirmed"
 msgstr "Odbiór już potwierdzony"
@@ -7208,6 +7220,13 @@ msgid ""
 msgstr ""
 "Ustawia częstotliwość wysyłania wiadomości e-mail z przypomnieniem, w dniach"
 " (jeśli nie ustawiono, wiadomości nie są wysyłane)"
+
+msgid ""
+"This page allows you to read any writing element, using the table search "
+"controls"
+msgstr ""
+"Ta strona umożliwia odczytanie dowolnego elementu zapisu za pomocą elementów"
+" sterujących wyszukiwania w tabeli"
 
 msgid ""
 "To register for the event, please fill in the following form and click on "

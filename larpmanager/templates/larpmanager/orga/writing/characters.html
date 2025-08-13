@@ -72,7 +72,7 @@
             <td class="editable" qid="{{ name_que_id }}">{{ el }}</td>
             <td>
                 <a href="{% url 'orga_characters_view' run.event.slug run.number el.id %}"
-                   qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a> &nbsp;
+                   qtip="{% trans "Read" %}"><i class="fa-solid fa-book-open"></i></a> &nbsp;
                 <a href="{% url 'orga_characters_versions' run.event.slug run.number el.id %}"
                    qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a> &nbsp;
                 <a href="{% url 'character' run.event.slug run.number el.number %}"

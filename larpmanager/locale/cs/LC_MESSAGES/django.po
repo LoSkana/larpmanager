@@ -203,6 +203,9 @@ msgstr "Připojovací port"
 msgid "Prev"
 msgstr "Předchozí"
 
+msgid "Read"
+msgstr "Přečtěte si"
+
 msgid "Role"
 msgstr "Role"
 
@@ -755,6 +758,9 @@ msgstr "Profil"
 
 msgid "Pronoun"
 msgstr "Zájmena"
+
+msgid "Reading"
+msgstr "Čtení"
 
 msgid "Receipt"
 msgstr "Příjem"
@@ -2798,6 +2804,9 @@ msgstr "Přidělená postava!"
 msgid "Change registration"
 msgstr "Upravit položku"
 
+msgid "Character not found"
+msgstr "Znak nebyl nalezen"
+
 msgid "Confirmation delete"
 msgstr "Odstranění potvrzení"
 
@@ -3495,6 +3504,9 @@ msgstr "Nepovinné - odpověď e-mailem na adresu"
 
 msgid "Payment already confirmed"
 msgstr "Platba již potvrzena"
+
+msgid "Read the writing elements"
+msgstr "Přečtěte si prvky psaní"
 
 msgid "Receipt already confirmed"
 msgstr "Příjem již potvrzen"
@@ -7087,6 +7099,13 @@ msgid ""
 msgstr ""
 "Nastavuje četnost zasílání e-mailů s připomenutím v dnech (pokud není "
 "nastaveno, nejsou zasílány žádné e-maily)"
+
+msgid ""
+"This page allows you to read any writing element, using the table search "
+"controls"
+msgstr ""
+"Tato stránka umožňuje číst libovolný prvek zápisu pomocí ovládacích prvků "
+"pro vyhledávání v tabulce"
 
 msgid ""
 "To register for the event, please fill in the following form and click on "
