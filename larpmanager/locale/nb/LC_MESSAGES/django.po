@@ -203,6 +203,9 @@ msgstr "Tilkoblingsport"
 msgid "Prev"
 msgstr "Forrige"
 
+msgid "Read"
+msgstr "Les"
+
 msgid "Role"
 msgstr "Rolle"
 
@@ -755,6 +758,9 @@ msgstr "Profil"
 
 msgid "Pronoun"
 msgstr "Pronomen"
+
+msgid "Reading"
+msgstr "Lesing"
 
 msgid "Receipt"
 msgstr "Kvittering"
@@ -2798,6 +2804,9 @@ msgstr "Tildelt karakter!"
 msgid "Change registration"
 msgstr "Rediger oppføring"
 
+msgid "Character not found"
+msgstr "Tegn ikke funnet"
+
 msgid "Confirmation delete"
 msgstr "Bekreftelse på sletting"
 
@@ -3495,6 +3504,9 @@ msgstr "Valgfritt - svar på e-post til"
 
 msgid "Payment already confirmed"
 msgstr "Betaling allerede bekreftet"
+
+msgid "Read the writing elements"
+msgstr "Les skriveelementene"
 
 msgid "Receipt already confirmed"
 msgstr "Kvitteringen er allerede bekreftet"
@@ -7170,6 +7182,13 @@ msgid ""
 msgstr ""
 "Angir hvor ofte påminnelses-e-poster skal sendes, i dager (hvis ikke angitt,"
 " sendes ingen e-poster)"
+
+msgid ""
+"This page allows you to read any writing element, using the table search "
+"controls"
+msgstr ""
+"På denne siden kan du lese et hvilket som helst skriveelement ved hjelp av "
+"tabellens søkekontroller"
 
 msgid ""
 "To register for the event, please fill in the following form and click on "

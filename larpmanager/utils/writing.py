@@ -244,6 +244,10 @@ def writing_list_text_fields(ctx, text_fields, typ):
     for que_id in que.filter(typ=QuestionType.EDITOR).values_list("pk", flat=True):
         text_fields.append(str(que_id))
 
+    retrieve_cache_text_field(ctx, text_fields, typ)
+
+
+def retrieve_cache_text_field(ctx, text_fields, typ):
     gctf = get_cache_text_field(typ, ctx["event"])
     for el in ctx["list"]:
         if el.id not in gctf:
