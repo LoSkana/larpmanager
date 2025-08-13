@@ -27,7 +27,7 @@ from larpmanager.tests.utils import go_to, handle_error, login_orga, page_start
 
 @pytest.mark.django_db
 @pytest.mark.asyncio
-async def test_orga_registration_form(live_server):
+async def test_permanence_form(live_server):
     async with async_playwright() as p:
         browser, context, page = await page_start(p)
         try:
