@@ -282,6 +282,8 @@ def save_event_update(sender, instance, **kwargs):
 
     reset_event_features(instance.id)
 
+    reset_event_fields_cache(instance.id)
+
 
 def save_event_tickets(features, instance):
     # create tickets if not exists

@@ -41,6 +41,7 @@ from larpmanager.accounting.registration import (
 )
 from larpmanager.cache.character import get_event_cache_all, reset_run
 from larpmanager.cache.feature import reset_event_features
+from larpmanager.cache.fields import reset_event_fields_cache
 from larpmanager.cache.links import reset_run_event_links
 from larpmanager.cache.registration import reset_cache_reg_counts
 from larpmanager.cache.role import has_event_permission
@@ -710,6 +711,7 @@ def orga_reload_cache(request, s, n):
     reset_event_features(ctx["event"].id)
     reset_run_event_links(ctx["event"])
     reset_cache_reg_counts(ctx["run"])
+    reset_event_fields_cache(ctx["event"].id)
     messages.success(request, _("Cache reset!"))
     return redirect("manage", s=ctx["event"].slug, n=ctx["run"].number)
 
