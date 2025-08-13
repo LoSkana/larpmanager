@@ -33,7 +33,7 @@ test_user = "user@test.it"
 
 async def page_start(p, show=False):
     browser = await p.chromium.launch(headless=not show)
-    context = await browser.new_context(record_video_dir="test_videos")
+    context = await browser.new_context()
     page = await context.new_page()
 
     page.set_default_timeout(60000)
@@ -78,14 +78,7 @@ async def handle_error(page, e, test_name):
 
     uid = datetime.now().strftime("%Y%m%d_%H%M%S")
     await page.screenshot(path=f"test_screenshots/{test_name}_{uid}.png")
-    try:
-        video_path = await page.video.path()
-        os.rename(video_path, f"test_videos/{test_name}_{uid}.webm")
-    except Exception as ve:
-        print(f"[!] Errore video: {ve}")
 
-    # print("Captured Visible Page Text:\n")
-    # print(print_text(page))
     raise e
 
 
