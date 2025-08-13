@@ -133,6 +133,10 @@ def character_external(request, s, n, code):
         raise Http404("invalid code") from err
 
     get_event_cache_all(ctx)
+    if char.number not in ctx["chars"]:
+        messages.warning(request, _("Character not found"))
+        return redirect("/")
+
     ctx["char"] = ctx["chars"][char.number]
     ctx["character"] = char
     ctx["check"] = 1

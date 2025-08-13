@@ -17,11 +17,14 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 import inflection
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.event import OrgaProgressStepForm
@@ -39,6 +42,7 @@ from larpmanager.forms.writing import (
 )
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
+from larpmanager.models.form import _get_writing_mapping
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
@@ -67,11 +71,8 @@ from larpmanager.utils.common import (
 from larpmanager.utils.download import export_data
 from larpmanager.utils.edit import orga_edit, writing_edit
 from larpmanager.utils.event import check_event_permission, get_event_run
-from larpmanager.utils.pdf import (
-    print_handout,
-    return_pdf,
-)
-from larpmanager.utils.writing import writing_list, writing_versions, writing_view
+from larpmanager.utils.pdf import print_handout, return_pdf
+from larpmanager.utils.writing import retrieve_cache_text_field, writing_list, writing_versions, writing_view
 
 
 @login_required
@@ -443,3 +444,30 @@ def orga_version(request, s, n, nm, num):
     ctx["version"] = TextVersion.objects.get(tp=tp, pk=num)
     ctx["text"] = ctx["version"].text.replace("\n", "<br />")
     return render(request, "larpmanager/orga/version.html", ctx)
+
+
+@login_required
+def orga_reading(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_reading")
+
+    text_fields = ["teaser", "text"]
+
+    ctx["alls"] = []
+
+    mapping = _get_writing_mapping()
+
+    for typ in [Character]:
+        # noinspection PyUnresolvedReferences, PyProtectedMember
+        model_name = typ._meta.model_name
+        if mapping.get(model_name) not in ctx["features"]:
+            continue
+
+        ctx["list"] = ctx["event"].get_elements(typ)
+        retrieve_cache_text_field(ctx, text_fields, typ)
+        for el in ctx["list"]:
+            el.type = _(model_name)
+            el.url = reverse(f"orga_{model_name}s_view", args=[ctx["event"].slug, ctx["run"].number, el.id])
+
+        ctx["alls"].extend(ctx["list"])
+
+    return render(request, "larpmanager/orga/reading.html", ctx)

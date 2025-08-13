@@ -203,6 +203,9 @@ msgstr "Port de connexion"
 msgid "Prev"
 msgstr "Prévenir"
 
+msgid "Read"
+msgstr "Lire"
+
 msgid "Role"
 msgstr "Rôle"
 
@@ -755,6 +758,9 @@ msgstr "Profil"
 
 msgid "Pronoun"
 msgstr "Pronom"
+
+msgid "Reading"
+msgstr "Lecture"
 
 msgid "Receipt"
 msgstr "Accusé de réception"
@@ -2798,6 +2804,9 @@ msgstr "Personnage assigné !"
 msgid "Change registration"
 msgstr "Modifier l'entrée"
 
+msgid "Character not found"
+msgstr "Caractère non trouvé"
+
 msgid "Confirmation delete"
 msgstr "Confirmation de la suppression"
 
@@ -3495,6 +3504,9 @@ msgstr "Facultatif - réponse par courriel à"
 
 msgid "Payment already confirmed"
 msgstr "Paiement déjà confirmé"
+
+msgid "Read the writing elements"
+msgstr "Lire les éléments d'écriture"
 
 msgid "Receipt already confirmed"
 msgstr "Réception déjà confirmée"
@@ -7407,6 +7419,13 @@ msgid ""
 msgstr ""
 "Définit la fréquence d'envoi des courriels de rappel, en jours (si cette "
 "valeur n'est pas définie, aucun courriel n'est envoyé)"
+
+msgid ""
+"This page allows you to read any writing element, using the table search "
+"controls"
+msgstr ""
+"Cette page vous permet de lire n'importe quel élément d'écriture, en "
+"utilisant les commandes de recherche du tableau"
 
 msgid ""
 "To register for the event, please fill in the following form and click on "

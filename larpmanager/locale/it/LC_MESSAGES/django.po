@@ -203,6 +203,9 @@ msgstr "Porta di connessione"
 msgid "Prev"
 msgstr "Prev"
 
+msgid "Read"
+msgstr "Leggi"
+
 msgid "Role"
 msgstr "Ruolo"
 
@@ -756,6 +759,9 @@ msgstr "Profilo"
 msgid "Pronoun"
 msgstr "Pronome"
 
+msgid "Reading"
+msgstr "Lettura"
+
 msgid "Receipt"
 msgstr "Receipt"
 
@@ -835,7 +841,7 @@ msgid "Website"
 msgstr "Website"
 
 msgid "Welcome"
-msgstr "Benvenuti"
+msgstr "Benvenuto"
 
 msgid "Writing"
 msgstr "Scrittura"
@@ -1453,7 +1459,7 @@ msgid "Volunteers"
 msgstr "Volontari"
 
 msgid "Welcome to"
-msgstr "Benvenuti a"
+msgstr "Benvenuto a"
 
 msgid "accounting"
 msgstr "contabilità"
@@ -2798,6 +2804,9 @@ msgstr "Personaggio assegnato!"
 msgid "Change registration"
 msgstr "Modifica iscrizione"
 
+msgid "Character not found"
+msgstr "Carattere non trovato"
+
 msgid "Confirmation delete"
 msgstr "Conferma cancella"
 
@@ -3023,7 +3032,7 @@ msgstr "Il codice fiscale corrisponde"
 
 #, python-format
 msgid "Welcome to %(name)s!"
-msgstr "Benvenuti a %(name)s!"
+msgstr "Benvenuto a %(name)s!"
 
 msgid "Yes, keep me posted!"
 msgstr "Sì, tenetemi aggiornato!"
@@ -3495,6 +3504,9 @@ msgstr "Opzionale - email reply to"
 
 msgid "Payment already confirmed"
 msgstr "Pagamento già confermato"
+
+msgid "Read the writing elements"
+msgstr "Leggere gli elementi di scrittura"
 
 msgid "Receipt already confirmed"
 msgstr "Ricevuta già confermata"
@@ -7325,6 +7337,13 @@ msgid ""
 msgstr ""
 "Imposta la frequenza di invio delle e-mail di promemoria, in giorni (se non "
 "è impostata, non vengono inviate e-mail)"
+
+msgid ""
+"This page allows you to read any writing element, using the table search "
+"controls"
+msgstr ""
+"Questa pagina consente di leggere qualsiasi elemento di scrittura, "
+"utilizzando i controlli di ricerca delle tabelle"
 
 msgid ""
 "To register for the event, please fill in the following form and click on "

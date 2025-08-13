@@ -203,6 +203,9 @@ msgstr "Anslutningsport"
 msgid "Prev"
 msgstr "Före"
 
+msgid "Read"
+msgstr "Läs"
+
 msgid "Role"
 msgstr "Roll"
 
@@ -755,6 +758,9 @@ msgstr "Profil"
 
 msgid "Pronoun"
 msgstr "Pronomen"
+
+msgid "Reading"
+msgstr "Läsning"
 
 msgid "Receipt"
 msgstr "Kvitto"
@@ -2798,6 +2804,9 @@ msgstr "Tilldelad karaktär!"
 msgid "Change registration"
 msgstr "Redigera post"
 
+msgid "Character not found"
+msgstr "Tecknet hittades inte"
+
 msgid "Confirmation delete"
 msgstr "Bekräftelse radera"
 
@@ -3495,6 +3504,9 @@ msgstr "Valfritt - e-posta svaret till"
 
 msgid "Payment already confirmed"
 msgstr "Betalning redan bekräftad"
+
+msgid "Read the writing elements"
+msgstr "Läs de skrivande elementen"
 
 msgid "Receipt already confirmed"
 msgstr "Kvittot är redan bekräftat"
@@ -7193,6 +7205,13 @@ msgid ""
 msgstr ""
 "Anger hur ofta påminnelsemeddelanden ska skickas, i dagar (om inget anges "
 "skickas inga e-postmeddelanden)"
+
+msgid ""
+"This page allows you to read any writing element, using the table search "
+"controls"
+msgstr ""
+"På den här sidan kan du läsa alla skrivelement med hjälp av tabellens "
+"sökkontroller"
 
 msgid ""
 "To register for the event, please fill in the following form and click on "

@@ -6346,6 +6346,17 @@ msgstr ""
 msgid "This page summarizes px delivery to characters"
 msgstr ""
 
+msgid "Reading"
+msgstr ""
+
+msgid ""
+"This page allows you to read any writing element, using the table search "
+"controls"
+msgstr ""
+
+msgid "Read"
+msgstr ""
+
 msgid ""
 "This page shows active discounts on the participant, allows you to activate "
 "or deactivate them"
@@ -6715,9 +6726,6 @@ msgstr ""
 msgid "status"
 msgstr ""
 
-msgid "View"
-msgstr ""
-
 msgid "Versions"
 msgstr ""
 
@@ -6811,6 +6819,9 @@ msgid "Tipo"
 msgstr ""
 
 msgid "Selectable"
+msgstr ""
+
+msgid "View"
 msgstr ""
 
 msgid "Handout template"
@@ -7909,6 +7920,9 @@ msgstr ""
 msgid "Set your personal preferences on the interface"
 msgstr ""
 
+msgid "Read the writing elements"
+msgstr ""
+
 msgid "Fields"
 msgstr ""
 
@@ -8538,6 +8552,9 @@ msgid "Characters are not visible at the moment"
 msgstr ""
 
 msgid "Character not visible"
+msgstr ""
+
+msgid "Character not found"
 msgstr ""
 
 msgid "You don't have a character assigned for this event"

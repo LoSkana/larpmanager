@@ -203,6 +203,9 @@ msgstr "Puerto"
 msgid "Prev"
 msgstr "Anterior"
 
+msgid "Read"
+msgstr "Leer"
+
 msgid "Role"
 msgstr "Cargo"
 
@@ -755,6 +758,9 @@ msgstr "Perfil"
 
 msgid "Pronoun"
 msgstr "Pronombre"
+
+msgid "Reading"
+msgstr "Lectura"
 
 msgid "Receipt"
 msgstr "Recibo"
@@ -2798,6 +2804,9 @@ msgstr "¡Personaje asignado!"
 msgid "Change registration"
 msgstr "Editar inscripción"
 
+msgid "Character not found"
+msgstr "Carácter no encontrado"
+
 msgid "Confirmation delete"
 msgstr "Confirmación de eliminación"
 
@@ -3495,6 +3504,9 @@ msgstr "Opcional - respuesta por correo electrónico a"
 
 msgid "Payment already confirmed"
 msgstr "Pago ya confirmado"
+
+msgid "Read the writing elements"
+msgstr "Leer los elementos de escritura"
 
 msgid "Receipt already confirmed"
 msgstr "Recibo ya confirmado"
@@ -7273,6 +7285,13 @@ msgid ""
 msgstr ""
 "Establece la frecuencia de envío de los correos electrónicos recordatorios, "
 "en días (si no se establece, no se envía ningún correo electrónico)"
+
+msgid ""
+"This page allows you to read any writing element, using the table search "
+"controls"
+msgstr ""
+"Esta página le permite leer cualquier elemento de escritura, utilizando los "
+"controles de búsqueda de la tabla"
 
 msgid ""
 "To register for the event, please fill in the following form and click on "

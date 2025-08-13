@@ -203,6 +203,9 @@ msgstr "Aansluitpoort"
 msgid "Prev"
 msgstr "Prev"
 
+msgid "Read"
+msgstr "Lees"
+
 msgid "Role"
 msgstr "Rol"
 
@@ -755,6 +758,9 @@ msgstr "Profiel"
 
 msgid "Pronoun"
 msgstr "Voornaamwoord"
+
+msgid "Reading"
+msgstr "Lezen"
 
 msgid "Receipt"
 msgstr "Ontvangstbewijs"
@@ -2798,6 +2804,9 @@ msgstr "Karakter toegewezen!"
 msgid "Change registration"
 msgstr "Bericht bewerken"
 
+msgid "Character not found"
+msgstr "Karakter niet gevonden"
+
 msgid "Confirmation delete"
 msgstr "Bevestiging verwijderen"
 
@@ -3495,6 +3504,9 @@ msgstr "Optioneel - antwoord per e-mail naar"
 
 msgid "Payment already confirmed"
 msgstr "Betaling al bevestigd"
+
+msgid "Read the writing elements"
+msgstr "Lees de schrijfelementen"
 
 msgid "Receipt already confirmed"
 msgstr "Ontvangst al bevestigd"
@@ -7305,6 +7317,13 @@ msgid ""
 msgstr ""
 "Stelt in hoe vaak herinneringsmails worden verzonden, in dagen (als dit niet"
 " is ingesteld, worden er geen e-mails verzonden)"
+
+msgid ""
+"This page allows you to read any writing element, using the table search "
+"controls"
+msgstr ""
+"Op deze pagina kun je elk schrijfelement lezen met behulp van de "
+"tabelzoekfuncties"
 
 msgid ""
 "To register for the event, please fill in the following form and click on "
