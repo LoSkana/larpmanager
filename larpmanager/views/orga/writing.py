@@ -443,3 +443,12 @@ def orga_version(request, s, n, nm, num):
     ctx["version"] = TextVersion.objects.get(tp=tp, pk=num)
     ctx["text"] = ctx["version"].text.replace("\n", "<br />")
     return render(request, "larpmanager/orga/version.html", ctx)
+
+@login_required
+def orga_reading(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_reading")
+
+    # TODO AMKE LIST WITH NAME, LINK, PRESENTATION
+    ctx["list"]
+
+    return render(request, "larpmanager/orga/reading.html", ctx)

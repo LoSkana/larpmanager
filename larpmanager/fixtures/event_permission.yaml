@@ -562,3 +562,12 @@
     slug: orga_preferences
     number: 999
     feature: 217
+- model: larpmanager.eventpermission
+  pk: 79
+  fields:
+    name: Reading
+    descr: Read the writing elements
+    slug: orga_reading
+    number: 999
+    feature: 178
+    config: writing

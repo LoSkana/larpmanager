@@ -626,6 +626,11 @@ urlpatterns = [
         name="orga_speedlarps_versions",
     ),
     path(
+        "<slug:s>/<int:n>/manage/reading/",
+        views_ow.orga_reading,
+        name="orga_reading",
+    ),
+    path(
         "<slug:s>/<int:n>/manage/expenses/my/",
         views_oa.orga_expenses_my,
         name="orga_expenses_my",
