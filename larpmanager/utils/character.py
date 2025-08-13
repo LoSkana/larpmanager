@@ -47,7 +47,7 @@ def get_character_relationships(ctx, restrict=True):
 
         show["factions_list"] = []
         for fac_num in show["factions"]:
-            if not fac_num:
+            if not fac_num or fac_num not in ctx["factions"]:
                 continue
             fac = ctx["factions"][fac_num]
             if not fac["name"] or fac["typ"] == FactionType.SECRET:
