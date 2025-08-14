@@ -25,8 +25,8 @@
                     </td>
                     <td>{{ el.name }}</td>
                     <td>{{ el.type }}</td>
-                    <td>{{ el.teaser_red }}</td>
-                    <td>{{ el.text_red }}</td>
+                    <td>{{ el.teaser_red | safe }}</td>
+                    <td>{{ el.text_red | safe }}</td>
                 </tr>
             {% endfor %}
         </tbody>
