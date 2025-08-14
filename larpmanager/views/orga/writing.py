@@ -21,9 +21,6 @@
 import inflection
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
-from django.db import models
-from django.db.models import Case, Value, When
-from django.db.models.functions import Coalesce, Concat, Length, Substr
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -75,7 +72,7 @@ from larpmanager.utils.download import export_data
 from larpmanager.utils.edit import orga_edit, writing_edit
 from larpmanager.utils.event import check_event_permission, get_event_run
 from larpmanager.utils.pdf import print_handout, return_pdf
-from larpmanager.utils.writing import writing_list, writing_versions, writing_view
+from larpmanager.utils.writing import retrieve_cache_text_field, writing_list, writing_versions, writing_view
 
 
 @login_required
@@ -453,6 +450,8 @@ def orga_version(request, s, n, nm, num):
 def orga_reading(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_reading")
 
+    text_fields = ["teaser", "text"]
+
     ctx["alls"] = []
 
     mapping = _get_writing_mapping()
@@ -463,29 +462,11 @@ def orga_reading(request, s, n):
         if mapping.get(model_name) not in ctx["features"]:
             continue
 
-        ctx["list"] = (
-            ctx["event"]
-            .get_elements(typ)
-            .annotate(
-                teaser_l=Length("teaser"),
-                teaser_red=Case(
-                    When(teaser_l__gt=200, then=Concat(Substr("teaser", 1, 200), Value(" [...]"))),
-                    default=Coalesce("teaser", Value("")),
-                    output_field=models.TextField(),
-                ),
-                text_l=Length("text"),
-                text_red=Case(
-                    When(text_l__gt=200, then=Concat(Substr("text", 1, 200), Value(" [...]"))),
-                    default=Coalesce("text", Value("")),
-                    output_field=models.TextField(),
-                ),
-            )
-            .values("id", "name", "teaser_red", "text_red")
-        )
-
+        ctx["list"] = ctx["event"].get_elements(typ)
+        retrieve_cache_text_field(ctx, text_fields, typ)
         for el in ctx["list"]:
-            el["type"] = _(model_name)
-            el["url"] = reverse(f"orga_{model_name}s_view", args=[ctx["event"].slug, ctx["run"].number, el["id"]])
+            el.type = _(model_name)
+            el.url = reverse(f"orga_{model_name}s_view", args=[ctx["event"].slug, ctx["run"].number, el.id])
 
         ctx["alls"].extend(ctx["list"])
 

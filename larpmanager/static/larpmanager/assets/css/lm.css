@@ -2043,3 +2043,7 @@ table.dataTable span.dtcc span.dtcc-button-icon {
 }
 
 #one .inner, #topbar .inner { display: none; }
+
+#reading .post_popup {
+    display: none;
+}
