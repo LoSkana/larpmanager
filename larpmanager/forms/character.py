@@ -22,6 +22,7 @@ import re
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.http import Http404
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
@@ -342,7 +343,7 @@ class OrgaCharacterForm(CharacterForm):
         if "relationships" not in self.params["features"]:
             return
 
-        chars_ids = [char["id"] for char in self.params["chars"].values()]
+        chars_ids = self.params["event"].get_elements(Character).values_list("pk", flat=True)
 
         rel_data = {k: v for k, v in self.data.items() if k.startswith("rel")}
         for key, value in rel_data.items():
@@ -356,8 +357,7 @@ class OrgaCharacterForm(CharacterForm):
 
             # check ch_id is in chars of the event
             if ch_id not in chars_ids:
-                continue
-                # raise Http404(f"char {ch_id} not recognized")
+                raise Http404(f"char {ch_id} not recognized")
 
             # if value is empty
             if not value:
