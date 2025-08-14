@@ -48,7 +48,7 @@ window.addEventListener('DOMContentLoaded', function() {
                         <a href="#" class="my_toggle" tog="f_{0}_direct">{% trans "Show" %}</a>
                     </p>
                     <div class="hide hide_later f_{0}_direct">
-                        <textarea name="rel_{0}_direct"></textarea>
+                        <textarea name="rel_{0}"></textarea>
                     </div>
                     <div class="helptext">{% trans "How the relationship is described from this character's perspective" %}</div>
                 </td>

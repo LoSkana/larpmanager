@@ -116,7 +116,8 @@ def prepare_run(ctx):
             config_name = "show_addit"
             if config_name not in config_run:
                 config_run[config_name] = {}
-            config_run[config_name][el] = True
+            if el in ctx["features"]:
+                config_run[config_name][el] = True
 
     ctx.update(config_run)
 
