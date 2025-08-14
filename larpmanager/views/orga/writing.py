@@ -23,7 +23,7 @@ from django.apps import apps
 from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.db.models import Case, Value, When
-from django.db.models.functions import Coalesce, Concat, Substr
+from django.db.models.functions import Coalesce, Concat, Length, Substr
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -467,13 +467,15 @@ def orga_reading(request, s, n):
             ctx["event"]
             .get_elements(typ)
             .annotate(
+                teaser_l=Length("teaser"),
                 teaser_red=Case(
-                    When(L__gt=200, then=Concat(Substr("teaser", 1, 200), Value(" [...]"))),
+                    When(teaser_l__gt=200, then=Concat(Substr("teaser", 1, 200), Value(" [...]"))),
                     default=Coalesce("teaser", Value("")),
                     output_field=models.TextField(),
                 ),
+                text_l=Length("text"),
                 text_red=Case(
-                    When(L__gt=200, then=Concat(Substr("text", 1, 200), Value(" [...]"))),
+                    When(text_l__gt=200, then=Concat(Substr("text", 1, 200), Value(" [...]"))),
                     default=Coalesce("text", Value("")),
                     output_field=models.TextField(),
                 ),
