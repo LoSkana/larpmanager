@@ -7,7 +7,7 @@
     {% trans "This page allows you to read any writing element, using the table search controls" %}
 {% endblock info %}
 {% block content %}
-    <table class="go_datatable">
+    <table id="reading" class="go_datatable">
         <thead>
             <tr>
                 <th></th>
@@ -25,8 +25,8 @@
                     </td>
                     <td>{{ el.name }}</td>
                     <td>{{ el.type }}</td>
-                    <td>{{ el.teaser_red }}</td>
-                    <td>{{ el.text_red }}</td>
+                    <td>{{ el.teaser_red | safe }}</td>
+                    <td>{{ el.text_red | safe }}</td>
                 </tr>
             {% endfor %}
         </tbody>

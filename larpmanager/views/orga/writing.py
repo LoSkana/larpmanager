@@ -456,7 +456,7 @@ def orga_reading(request, s, n):
 
     mapping = _get_writing_mapping()
 
-    for typ in [Character]:
+    for typ in [Character, Plot, Faction, Quest, Trait]:
         # noinspection PyUnresolvedReferences, PyProtectedMember
         model_name = typ._meta.model_name
         if mapping.get(model_name) not in ctx["features"]:
