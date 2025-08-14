@@ -52,7 +52,6 @@ from larpmanager.models.writing import (
     CharacterStatus,
     Faction,
     FactionType,
-    PlotCharacterRel,
     Relationship,
     TextVersion,
 )
@@ -252,7 +251,7 @@ class OrgaCharacterForm(CharacterForm):
 
         self.add_char_finder = []
         self.field_link = {}
-        for el in self.instance.get_plot_characters().order_by('plot__number'):
+        for el in self.instance.get_plot_characters().order_by("plot__number"):
             plot = f"#{el.plot.number} {el.plot.name}"
             field = f"pl_{el.plot.id}"
             id_field = f"id_{field}"
@@ -344,15 +343,15 @@ class OrgaCharacterForm(CharacterForm):
         if "relationships" not in self.params["features"]:
             return
 
-        chars_ids = [char["id"] for char in self.params["chars"].values()]
+        chars_ids = self.params["event"].get_elements(Character).values_list("pk", flat=True)
 
         rel_data = {k: v for k, v in self.data.items() if k.startswith("rel")}
         for key, value in rel_data.items():
-            match = re.match(r"rel_(\d+)_(\w+)", key)
+            match = re.match(r"rel_(\d+)", key)
             if not match:
                 continue
             ch_id = int(match.group(1))
-            rel_type = match.group(2)
+            rel_type = "direct"
 
             # check ch_id is in chars of the event
             if ch_id not in chars_ids:

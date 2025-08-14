@@ -52,7 +52,7 @@ from larpmanager.utils.tasks import my_send_mail, notify_admins
 
 
 def get_satispay_form(request, ctx, invoice, amount):
-    ctx["redirect"] = request.build_absolute_uri(reverse("acc_payed", args=[invoice.id]))
+    # ctx["redirect"] = request.build_absolute_uri(reverse("acc_payed", args=[invoice.id]))
     ctx["callback"] = request.build_absolute_uri(reverse("acc_webhook_satispay")) + "?payment_id={uuid}"
 
     key_id = ctx["satispay_key_id"]
@@ -61,15 +61,15 @@ def get_satispay_form(request, ctx, invoice, amount):
     expiration_date = datetime.now(timezone.utc) + timedelta(hours=1)
     expiration_date = format_datetime(expiration_date)
 
-    body_params = {
-        "expire_date": expiration_date,
-        "external_code": invoice.causal,
-        "redirect_url": ctx["redirect"],
-        "callback_url": ctx["callback"],
-    }
+    # body_params = {
+    #     "expire_date": expiration_date,
+    #     "external_code": invoice.causal,
+    #     "redirect_url": ctx["redirect"],
+    #     "callback_url": ctx["callback"],
+    # }
 
     response = satispaython.create_payment(
-        key_id, rsa_key, math.ceil(amount * 100), ctx["payment_currency"], body_params
+        key_id, rsa_key, math.ceil(amount * 100), ctx["payment_currency"], ctx["callback"]
     )
 
     correct_response_code = 200

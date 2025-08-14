@@ -133,7 +133,7 @@
         </div>
         {% for key, que in form_questions.items %}
             {% if que.typ == 's' or que.typ == 'm' %}
-                <div class="email_que_{{ key }}">
+                <div class="email_que_{{ key }} hide">
                     <br />
                     <h4>{{ que.name }}</h4>
                     <table>
