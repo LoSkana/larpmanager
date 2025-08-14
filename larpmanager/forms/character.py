@@ -22,7 +22,6 @@ import re
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.http import Http404
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
@@ -52,7 +51,6 @@ from larpmanager.models.writing import (
     CharacterStatus,
     Faction,
     FactionType,
-    PlotCharacterRel,
     Relationship,
     TextVersion,
 )
@@ -252,7 +250,7 @@ class OrgaCharacterForm(CharacterForm):
 
         self.add_char_finder = []
         self.field_link = {}
-        for el in self.instance.get_plot_characters().order_by('plot__number'):
+        for el in self.instance.get_plot_characters().order_by("plot__number"):
             plot = f"#{el.plot.number} {el.plot.name}"
             field = f"pl_{el.plot.id}"
             id_field = f"id_{field}"
@@ -356,7 +354,8 @@ class OrgaCharacterForm(CharacterForm):
 
             # check ch_id is in chars of the event
             if ch_id not in chars_ids:
-                raise Http404(f"char {ch_id} not recognized")
+                continue
+                # raise Http404(f"char {ch_id} not recognized")
 
             # if value is empty
             if not value:
