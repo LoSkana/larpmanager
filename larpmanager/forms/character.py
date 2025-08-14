@@ -346,11 +346,13 @@ class OrgaCharacterForm(CharacterForm):
 
         rel_data = {k: v for k, v in self.data.items() if k.startswith("rel")}
         for key, value in rel_data.items():
-            match = re.match(r"rel_(\d+)_(\w+)", key)
+            match = re.match(r"rel_(\d+)", key)
             if not match:
                 continue
             ch_id = int(match.group(1))
-            rel_type = match.group(2)
+            rel_type = "direct"
+
+            print(ch_id)
 
             # check ch_id is in chars of the event
             if ch_id not in chars_ids:
