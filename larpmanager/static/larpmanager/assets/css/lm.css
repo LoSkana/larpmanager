@@ -1976,7 +1976,11 @@ table.dataTable td.dt-type-date div.dt-column-footer {
   flex-direction: row !important;
 }
 
-.dataTable a { margin: 0; }
+.dataTable a { margin: 0; display: block; }
+
+.dataTable tbody td {
+  white-space: normal !important;
+}
 
 .dtcc-button {
   border: 0px !important;

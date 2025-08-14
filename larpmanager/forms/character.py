@@ -353,8 +353,6 @@ class OrgaCharacterForm(CharacterForm):
             ch_id = int(match.group(1))
             rel_type = "direct"
 
-            print(ch_id)
-
             # check ch_id is in chars of the event
             if ch_id not in chars_ids:
                 raise Http404(f"char {ch_id} not recognized")
