@@ -145,6 +145,7 @@ class RegistrationForm(BaseRegistrationForm):
     def init_questions(self, event, reg_counts):
         self.tickets_map = {}
         if self.waiting_check:
+            self.questions = []
             return
         self._init_reg_question(self.instance, event)
         for q in self.questions:
