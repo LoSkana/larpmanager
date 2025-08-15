@@ -36,8 +36,8 @@
             </td>
             {% include "elements/writing/questions_body.html" %}
             <td class="characters">
-                {% for ch in el.characters.all %}
-                    <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.id %}">{{ ch }}</a>&nbsp;
+                {% for ch in el.chars %}
+                    <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.1 %}">{{ ch.0 }}</a>&nbsp;
                 {% endfor %}
             </td>
             <td class="stats">{{ el.characters.all | length }}</td>

@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+
 from django import forms
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
@@ -205,9 +206,9 @@ class PlotForm(WritingForm, BaseWritingForm):
         self.init_characters = self.instance.get_plot_characters().values_list("character__id", flat=True)
         self.initial["characters"] = self.init_characters
 
-        self._init_special_fields()
-
         self.role_help_text = _("This text will be added to the sheet of")
+
+        self._init_special_fields()
 
         # PLOT CHARACTERS REL
         self.add_char_finder = []
@@ -224,7 +225,7 @@ class PlotForm(WritingForm, BaseWritingForm):
                 self.fields[field] = forms.CharField(
                     widget=WritingTinyMCE(),
                     label=char,
-                    help_text=self.role_help_text + " " + str(char),
+                    help_text=f"{self.role_help_text} {char}",
                     required=False,
                 )
 
@@ -235,49 +236,27 @@ class PlotForm(WritingForm, BaseWritingForm):
                 reverse_args = [self.params["event"].slug, self.params["run"].number, ch[0]]
                 self.field_link[id_field] = reverse("orga_characters_edit", args=reverse_args)
 
-    def save(self, commit=True):
-        instance = super().save(commit)
-
-        self._save_plot_roles(instance)
-
-        return instance
-
     def _save_multi(self, s, instance):
-        new = set(self.cleaned_data["characters"].values_list("pk", flat=True))
-        old = set(self.instance.characters.values_list("pk", flat=True))
+        self.chars_id = set(self.cleaned_data["characters"].values_list("pk", flat=True))
 
-        for ch in old - new:
-            PlotCharacterRel.objects.filter(character_id=ch, plot_id=instance.pk).delete()
-        for ch in new - old:
-            PlotCharacterRel.objects.get_or_create(character_id=ch, plot_id=instance.pk)
+        PlotCharacterRel.objects.filter(plot_id=instance.pk).exclude(character_id__in=self.chars_id).delete()
 
-        self.new_roles = new - old
+    def save(self, commit=True):
+        instance = super().save()
 
-    def _save_plot_roles(self, instance):
         instance.save()
-        received = set()
-
-        for ch_id in self.new_roles:
-            received.add(ch_id)
-            value = self.data.get(f"char_role_{ch_id}")
+        for ch_id in self.chars_id:
+            (pr, created) = PlotCharacterRel.objects.get_or_create(plot_id=instance.pk, character_id=ch_id)
+            field = f"char_role_{pr.character_id}"
+            value = self.cleaned_data.get(field, "")
+            if not value:
+                value = self.data.get(field, "")
             if not value:
                 continue
-
-            pcr = PlotCharacterRel.objects.get_or_create(character_id=ch_id, plot_id=instance.pk)
-            pcr.text = value
-            pcr.save()
-
-        for pr in self.instance.get_plot_characters():
-            field = f"char_role_{pr.character_id}"
-            if field not in self.cleaned_data:
-                continue
-            received.add(pr.character_id)
-            if self.cleaned_data[field] == pr.text:
-                continue
-            pr.text = self.cleaned_data[field]
+            pr.text = value
             pr.save()
 
-        PlotCharacterRel.objects.filter(plot_id=instance.pk).exclude(character_id__in=received).delete()
+        return instance
 
 
 class FactionForm(WritingForm, BaseWritingForm):

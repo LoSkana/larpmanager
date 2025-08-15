@@ -58,7 +58,8 @@ window.addEventListener('DOMContentLoaded', function() {
 
         $('#main_form table tbody').append(html);
 
-        addTinyMCETextarea('.char_role_{0} textarea'.format(ch_id)).then((editorId) => {
+        addTinyMCETextarea('.f_ch_{0} textarea'.format(ch_id)).then((editorId) => {
+            console.log(editorId);
             setUpAutoSave(editorId);
             setUpCharFinder(editorId);
             setUpHighlight(editorId);
