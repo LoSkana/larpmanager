@@ -90,7 +90,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         self.init_surcharge(event, run)
 
-        self.init_questions(event, reg_counts, run)
+        self.init_questions(event, reg_counts)
 
         self.init_bring_friend()
 
@@ -142,11 +142,11 @@ class RegistrationForm(BaseRegistrationForm):
             help_text=mes % {"amount": self.params.get("bring_friend_discount_from", 0)},
         )
 
-    def init_questions(self, event, reg_counts, run):
+    def init_questions(self, event, reg_counts):
+        self.tickets_map = {}
         if self.waiting_check:
             return
         self._init_reg_question(self.instance, event)
-        self.tickets_map = {}
         for q in self.questions:
             self.init_question(q, reg_counts)
         self.tickets_map = json.dumps(self.tickets_map)
