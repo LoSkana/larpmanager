@@ -34,7 +34,7 @@ async def test_upload_download(live_server):
             await upload_download(live_server, page)
 
         except Exception as e:
-            await handle_error(page, e, "user_accounting")
+            await handle_error(page, e, "upload_download")
 
         finally:
             await context.close()

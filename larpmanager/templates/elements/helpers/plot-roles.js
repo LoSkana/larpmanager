@@ -40,7 +40,7 @@ window.addEventListener('DOMContentLoaded', function() {
         charUrl = editUrl.replace(/\/0\/$/, `/${ch_id}/`);;
 
         var html = `
-        <tr>
+        <tr id="id_char_role_{0}_tr">
             <th>
                 <a href="{2}"><label>{1}</label></a>
             </th>
@@ -59,7 +59,6 @@ window.addEventListener('DOMContentLoaded', function() {
         $('#main_form table tbody').append(html);
 
         addTinyMCETextarea('.f_ch_{0} textarea'.format(ch_id)).then((editorId) => {
-            console.log(editorId);
             setUpAutoSave(editorId);
             setUpCharFinder(editorId);
             setUpHighlight(editorId);

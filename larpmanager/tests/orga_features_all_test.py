@@ -42,7 +42,7 @@ async def test_orga_features_all(live_server):
             await orga_features_all(live_server, page)
 
         except Exception as e:
-            await handle_error(page, e, "orga_features")
+            await handle_error(page, e, "orga_features_all")
 
         finally:
             await context.close()

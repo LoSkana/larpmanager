@@ -36,7 +36,7 @@ async def test_signup_accounting(live_server):
             await signup_accounting(live_server, page)
 
         except Exception as e:
-            await handle_error(page, e, "reg_signup_accounting")
+            await handle_error(page, e, "signup_accounting")
 
         finally:
             await context.close()

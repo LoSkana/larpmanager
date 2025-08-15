@@ -34,7 +34,7 @@ async def test_orga_event_role(live_server):
             await orga_event_role(live_server, page)
 
         except Exception as e:
-            await handle_error(page, e, "exe_assoc")
+            await handle_error(page, e, "orga_event_role")
 
         finally:
             await context.close()

@@ -21,15 +21,9 @@
                     </div>
                 {% endif %}
                 <div class="go-inline">
-                    <b>{% trans "Factions" %}:&nbsp;</b>
-                    {% for fnum in el.factions %}
-                        {% with factions|get:fnum as g %}
-                            {% if not g.typ == 'g' %}
-                                {% include "elements/comma.html" %}
-                                {{ g.name }}
-                            {% endif %}
-                        {% endwith %}
-                    {% endfor %}
+                    {% if el.factions_list %}
+                        <b>{% trans "Factions" %}:&nbsp;{{ el.factions_list }}</b>
+                    {% endif %}
                 </div>
                 {% show_char el.text run 1 %}
             </div>
