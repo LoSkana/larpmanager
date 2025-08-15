@@ -115,7 +115,8 @@ def notify_membership_approved(member, resp):
         body += " " + _("More details") + f": {resp}"
 
     # Check if you have payments to make
-    regs = member.registrations.filter(run__start__gte=datetime.now().date())
+    assoc = member.membership.assoc
+    regs = member.registrations.filter(run__event__assoc=assoc, run__start__gte=datetime.now().date())
     membership_fee = False
     reg_list = []
     for registration in regs:
@@ -139,7 +140,6 @@ def notify_membership_approved(member, resp):
             + ", ".join(reg_list)
         )
 
-    assoc = member.membership.assoc
     if membership_fee and assoc.get_config("membership_fee", 0):
         url = get_url("accounting/membership", member.membership)
         body += "<br /><br />" + _(
