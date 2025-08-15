@@ -5417,7 +5417,7 @@ msgid "You will have our eternal thanks for believing in us"
 msgstr "Avrai il nostro eterno ringraziamento per aver creduto  in noi"
 
 msgid "please upload your membership application to proceed"
-msgstr "caricare la domanda di adesione per procedere"
+msgstr "per favore carica la domanda di adesione per procedere"
 
 msgid "(Optional) The character name to assign to the player"
 msgstr "(Facoltativo) Il nome del personaggio da assegnare al giocatore"

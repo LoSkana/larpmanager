@@ -124,7 +124,7 @@ def notify_membership_approved(member, resp):
         if run_start and "laog" not in features:
             membership_fee = True
 
-        if not registration.quota:
+        if not registration.tot_iscr:
             continue
 
         url = get_url("accounting/pay", member.membership)
