@@ -2047,3 +2047,7 @@ table.dataTable span.dtcc span.dtcc-button-icon {
 #reading .post_popup {
     display: none;
 }
+
+.dot_links a {
+    border-bottom: dotted 1px rgba(var(--pri-rgb), 0.35);
+}

@@ -35,9 +35,9 @@
                    qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
             </td>
             {% include "elements/writing/questions_body.html" %}
-            <td class="characters">
+            <td class="characters dot_links">
                 {% for ch in el.chars %}
-                    <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.1 %}">{{ ch.0 }}</a>&nbsp;
+                    <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.1 %}">{{ ch.0 }}</a>
                 {% endfor %}
             </td>
             <td class="stats">{{ el.characters.all | length }}</td>

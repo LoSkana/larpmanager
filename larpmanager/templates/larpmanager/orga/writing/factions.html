@@ -50,9 +50,9 @@
                 </td>
             {% endif %}
             {% include "elements/writing/questions_body.html" %}
-            <td class="characters">
+            <td class="characters dot_links">
                 {% for ch in el.characters.all %}
-                    <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.id %}">{{ ch }}</a>&nbsp;
+                    <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.id %}">{{ ch }}</a>
                 {% endfor %}
             </td>
             <td class="stats">{{ el.characters.all | length }}</td>
