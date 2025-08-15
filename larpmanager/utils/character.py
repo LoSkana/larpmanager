@@ -204,6 +204,9 @@ def get_char_check(request, ctx, num, restrict=False, bypass=False):
         ctx["check"] = 1
         return
 
+    if ctx["char"].get("hide", False):
+        raise NotFoundError()
+
     if restrict:
         raise Http404("Not your character")
 
