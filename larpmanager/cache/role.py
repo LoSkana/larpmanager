@@ -160,9 +160,7 @@ def get_event_roles(request, slug):
 
 
 def has_event_permission(ctx, request, slug, perm=None):
-    if not request:
-        return False
-    if not hasattr(request.user, "member"):
+    if not request or not hasattr(request.user, "member"):
         return False
     if "assoc_role" in ctx and 1 in ctx["assoc_role"]:
         return True
@@ -171,4 +169,6 @@ def has_event_permission(ctx, request, slug, perm=None):
         return True
     if not perm:
         return len(names) > 0
+    if isinstance(perm, list):
+        return any(p in permissions for p in perm)
     return perm in permissions
