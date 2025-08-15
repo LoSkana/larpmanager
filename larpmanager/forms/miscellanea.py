@@ -65,7 +65,7 @@ class SendMailForm(forms.Form):
     players = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}))
     subject = forms.CharField()
     body = forms.CharField(widget=TinyMCE(attrs={"rows": 30}))
-    reply_to = forms.CharField(help_text=_("Optional - email reply to"), required=False)
+    reply_to = forms.EmailField(help_text=_("Optional - email reply to"), required=False)
     raw = forms.CharField(
         widget=forms.Textarea(attrs={"rows": 2}),
         help_text=_("Optional - ram html code (substitute the text before)"),

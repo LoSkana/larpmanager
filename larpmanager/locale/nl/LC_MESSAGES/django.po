@@ -4524,6 +4524,9 @@ msgstr "Deze pagina toont items voor inventarisbewaring"
 msgid "This page summarises the assignments of"
 msgstr "Deze pagina geeft een overzicht van de opdrachten van"
 
+msgid "This text will be added to the sheet of"
+msgstr "Deze tekst wordt toegevoegd aan het blad van"
+
 msgid "You are logged in with an email address"
 msgstr "U bent aangemeld met een e-mailadres"
 
@@ -5013,10 +5016,6 @@ msgstr "Deze pagina toont de e-maillijsten van abonnees"
 
 msgid "This page summarizes px delivery to characters"
 msgstr "Deze pagina geeft een overzicht van de px-levering aan tekens"
-
-#, python-brace-format
-msgid "This text will be added to the sheet of {name}"
-msgstr "Deze tekst wordt toegevoegd aan het blad van {name}"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Totaal ingehouden bedrag voor overschrijvingsprovisies"

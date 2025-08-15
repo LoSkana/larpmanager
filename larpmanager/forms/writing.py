@@ -17,11 +17,12 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import re
 
 from django import forms
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -40,6 +41,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.writing import (
+    Character,
     Faction,
     Handout,
     HandoutTemplate,
@@ -184,7 +186,7 @@ class BaseWritingForm(BaseRegistrationForm):
 class PlotForm(WritingForm, BaseWritingForm):
     load_templates = ["plot"]
 
-    load_js = ["characters-choices"]
+    load_js = ["characters-choices", "plot-roles"]
 
     page_title = _("Plot")
 
@@ -208,6 +210,8 @@ class PlotForm(WritingForm, BaseWritingForm):
 
         self._init_special_fields()
 
+        self.role_help_text = _("This text will be added to the sheet of")
+
         # PLOT CHARACTERS REL
         self.add_char_finder = []
         self.field_link = {}
@@ -218,12 +222,12 @@ class PlotForm(WritingForm, BaseWritingForm):
                 .values_list("character__id", "character__number", "character__name", "text")
             ):
                 char = f"#{ch[1]} {ch[2]}"
-                field = f"ch_{ch[0]}"
+                field = f"char_role_{ch[0]}"
                 id_field = f"id_{field}"
                 self.fields[field] = forms.CharField(
                     widget=WritingTinyMCE(),
                     label=char,
-                    help_text=_("This text will be added to the sheet of {name}".format(name=char)),
+                    help_text=self.role_help_text + " " + str(char),
                     required=False,
                 )
 
@@ -234,29 +238,38 @@ class PlotForm(WritingForm, BaseWritingForm):
                 reverse_args = [self.params["event"].slug, self.params["run"].number, ch[0]]
                 self.field_link[id_field] = reverse("orga_characters_edit", args=reverse_args)
 
-    def _save_multi(self, s, instance):
-        new = set(self.cleaned_data["characters"].values_list("pk", flat=True))
-        old = set(self.init_characters)
-
-        for ch in old - new:
-            PlotCharacterRel.objects.filter(character_id=ch, plot_id=instance.pk).delete()
-        for ch in new - old:
-            PlotCharacterRel.objects.get_or_create(character_id=ch, plot_id=instance.pk)
-
     def save(self, commit=True):
-        instance = super().save()
+        instance = super().save(commit)
 
-        instance.save()
-        for pr in self.instance.get_plot_characters():
-            field = f"ch_{pr.character_id}"
-            if field not in self.cleaned_data:
-                continue
-            if self.cleaned_data[field] == pr.text:
-                continue
-            pr.text = self.cleaned_data[field]
-            pr.save()
+        self._save_plot_roles(instance)
 
         return instance
+
+    def _save_plot_roles(self, instance):
+        chars_ids = self.params["event"].get_elements(Character).values_list("pk", flat=True)
+        role_data = {k: v for k, v in self.data.items() if k.startswith("char_role")}
+        sent = []
+        for key, value in role_data.items():
+            match = re.match(r"char_role_(\d+)", key)
+            if not match:
+                continue
+            ch_id = int(match.group(1))
+
+            # check ch_id is in chars of the event
+            if ch_id not in chars_ids:
+                raise Http404(f"char {ch_id} not recognized")
+
+            sent.append(ch_id)
+
+            if not value:
+                continue
+
+            (pcr, created) = PlotCharacterRel.objects.get_or_create(character_id=ch_id, plot_id=instance.pk)
+
+            pcr.text = value
+            pcr.save()
+
+        PlotCharacterRel.objects.filter(plot_id=instance.pk).exclude(character_id__in=sent).delete()
 
 
 class FactionForm(WritingForm, BaseWritingForm):
