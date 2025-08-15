@@ -94,7 +94,7 @@ def get_event_cache_characters(ctx, res):
         data["fields"] = {}
         search_player(ch, data, ctx)
         if hide_uncasted_characters and data["player_id"] == 0:
-            continue
+            data["hide"] = True
 
         res["chars"][int(data["number"])] = data
 
