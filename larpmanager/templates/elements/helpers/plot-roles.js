@@ -91,13 +91,13 @@ window.addEventListener('DOMContentLoaded', function() {
 
             // handle removed: hide rows
             for (const id of removed) {
-                el = $('#id_ch_' + id + '_tr');
+                el = $('#id_char_role_' + id + '_tr');
                 el.hide(300);
             }
 
             // handle added: show existing or create new
             for (const id of added) {
-                key = '#id_ch_' + id + '_tr';
+                key = '#id_char_role_' + id + '_tr';
                 const $row = $(key);
                 if ($row.length) {
                     $(key).show(300);

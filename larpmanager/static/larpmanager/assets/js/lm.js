@@ -40,7 +40,7 @@ window.jump_to = function(target) {
     }
 
     $('#page-wrapper').animate({
-        scrollTop: $('#page-wrapper').scrollTop() + $(target).offset().top - headerHeight * 2
+        scrollTop: $('#page-wrapper').scrollTop() + $(target).offset().top - headerHeight * 3
     }, 0);
 }
 
