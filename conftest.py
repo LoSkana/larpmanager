@@ -121,7 +121,6 @@ def _truncate_app_tables():
             WHERE n.nspname='public'
               AND c.relkind='r'
               AND c.relname NOT LIKE 'django\_%'
-              AND c.relname NOT LIKE 'auth\_%'
               AND c.relname NOT LIKE 'authtoken\_%'
               AND c.relname NOT LIKE 'sessions\_%'
               AND c.relname NOT LIKE 'admin\_%'
@@ -138,7 +137,7 @@ def _db_teardown_between_tests(django_db_blocker):
         _truncate_app_tables()
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def load_fixtures(django_db_blocker):
     with django_db_blocker.unblock():
         call_command("init_db", verbosity=0)
