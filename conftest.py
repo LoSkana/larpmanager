@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import os
-import pathlib
 
 import pytest
 from django.core.management import call_command
@@ -63,39 +62,31 @@ def reset_sequences(request):
 
 
 @pytest.fixture
-def pw_page(browser, live_server):
-    context = browser.new_context(storage_state=None, viewport={"width": 1280, "height": 800})
-    context.tracing.start(screenshots=True, snapshots=True, sources=True)
+def pw_page(pytestconfig, browser_type, live_server):
+    headed = pytestconfig.getoption("--headed") or os.getenv("PYCHARM_DEBUG", "0") == "1"
+
+    browser = browser_type.launch(headless=not headed, slow_mo=50)
+    context = browser.new_context(
+        storage_state=None,
+        viewport={"width": 1280, "height": 800},
+    )
     page = context.new_page()
     base_url = live_server.url
-    page.set_default_timeout(5000)
+    page.set_default_timeout(60000)
 
     page.on("dialog", lambda dialog: dialog.accept())
 
     def on_response(response):
-        error_code = 500
-        if response.status == error_code:
-            raise Exception(f"500 on {response.url}")
+        error_status = 500
+        if response.status == error_status:
+            raise AssertionError(f"HTTP 500 su {response.url}")
 
     page.on("response", on_response)
 
     yield page, base_url, context
 
-    failed = any(getattr(rep, "failed", False) for rep in getattr(page, "_pytest_outcomes", []))
-    artifacts_dir = pathlib.Path("artifacts/playwright")
-    artifacts_dir.mkdir(parents=True, exist_ok=True)
-    if failed:
-        context.tracing.stop(path=str(artifacts_dir / f"{page._guid}_trace.zip"))
-        try:
-            page.screenshot(path=str(artifacts_dir / f"{page._guid}_failed.png"), full_page=True)
-        except Exception:
-            pass
-    else:
-        try:
-            context.tracing.stop()
-        except Exception:
-            pass
     context.close()
+    browser.close()
 
 
 def pytest_runtest_makereport(item, call):

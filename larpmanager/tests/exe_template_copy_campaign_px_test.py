@@ -167,7 +167,7 @@ def px(live_server, page):
     row.get_by_role("searchbox").click()
     row.get_by_role("searchbox").fill("swo")
     row.get_by_role("searchbox").select_option(label="sword1")
-    # page.get_by_role("option", name="sword1").click()
+    page.locator(".select2-results__option", has_text="Abilities").first.click()
     page.get_by_role("button", name="Confirm", exact=True).click()
     page.get_by_role("link", name="XP").click()
     expect(page.locator('[id="\\31 "]')).to_contain_text("11")

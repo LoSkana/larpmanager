@@ -41,7 +41,7 @@ def test_exe_features_all(pw_page):
 def visit_all(page, live_server):
     # Visit every link
     visited_links = set()
-    links_to_visit = {live_server.url + "/manage/"}
+    links_to_visit = {live_server + "/manage/"}
     while links_to_visit:
         current_link = links_to_visit.pop()
         if current_link in visited_links:
