@@ -18,11 +18,17 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import os
+import subprocess
 
 import pytest
+from django.conf import settings
 from django.core.management import call_command
 from django.db import connection
+
+logging.getLogger("faker.factory").setLevel(logging.ERROR)
+logging.getLogger("faker.providers").setLevel(logging.ERROR)
 
 
 @pytest.fixture(autouse=True, scope="session")
@@ -33,7 +39,8 @@ def _env_for_tests():
 
 @pytest.fixture(autouse=True)
 def _fast_password_hashers(settings):
-    settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
+    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
+        settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 
 
 @pytest.fixture(autouse=True)
@@ -89,16 +96,6 @@ def pw_page(pytestconfig, browser_type, live_server):
     browser.close()
 
 
-def pytest_runtest_makereport(item, call):
-    if call.when == "call":
-        page = item.funcargs.get("pw_page", None)
-        if page:
-            p, _, _ = page
-            outcomes = getattr(p, "_pytest_outcomes", [])
-            outcomes.append(call)
-            p._pytest_outcomes = outcomes
-
-
 def _truncate_app_tables():
     with connection.cursor() as cur:
         cur.execute(r"""
@@ -124,11 +121,45 @@ def _truncate_app_tables():
 @pytest.fixture(autouse=True, scope="function")
 def _db_teardown_between_tests(django_db_blocker):
     yield
-    with django_db_blocker.unblock():
-        _truncate_app_tables()
+    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
+        with django_db_blocker.unblock():
+            _truncate_app_tables()
 
 
 @pytest.fixture(autouse=True)
 def load_fixtures(django_db_blocker):
-    with django_db_blocker.unblock():
-        call_command("init_db", verbosity=0)
+    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
+        with django_db_blocker.unblock():
+            call_command("init_db", verbosity=0)
+
+
+def psql(params, env):
+    subprocess.run(params, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=env, text=True)
+
+
+def pytest_sessionstart(session):
+    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
+        return
+
+    env = os.environ.copy()
+    env["PGPASSWORD"] = settings.DATABASES["default"]["PASSWORD"]
+    name = settings.DATABASES["default"]["NAME"]
+    host = settings.DATABASES["default"].get("HOST") or "localhost"
+    user = settings.DATABASES["default"]["USER"]
+
+    clean_db(host, env, name, user)
+    sql_path = os.path.join(os.path.dirname(__file__), "larpmanager", "tests", "test_db.sql")
+    psql(["psql", "-v", "ON_ERROR_STOP=1", "-U", user, "-h", host, "-d", name, "-f", sql_path], env)
+
+
+def clean_db(host, env, name, user):
+    psql(["psql", "-U", user, "-h", host, "-d", name, "-c", "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"], env)
+
+
+@pytest.fixture(scope="session")
+def django_db_setup():
+    # normal behaviour in CI
+    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
+        return
+    # don't touch the db in local
+    pass

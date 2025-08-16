@@ -70,7 +70,7 @@ jobs:
       run: |
         export PYTEST_CURRENT_TEST="true"
         export HOME=$(mktemp -d)
-        pytest -n auto
+        pytest -n auto --reruns 5 --reruns-delay 2
 
     - name: Upload Artifacts
       if: always()

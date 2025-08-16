@@ -97,6 +97,7 @@ def reading(live_server, page):
     )
 
     # check reading plot
+    page.get_by_role("link", name="Reading").click()
     page.get_by_role("row", name=" testona plot asadsadas wwwww").get_by_role("link").click()
     expect(page.locator("#one")).to_contain_text("testona Text wwwww prova bruuuu")
 
