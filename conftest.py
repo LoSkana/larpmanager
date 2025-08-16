@@ -29,7 +29,7 @@ def django_db_setup(django_db_blocker):
         call_command("migrate", interactive=False, run_syncdb=True, verbosity=0)
 
 
-EXCLUDE_PREFIXES = ("django_", "auth_", "authtoken_", "sessions_", "admin_")
+EXCLUDE_PREFIXES = ("django_", "authtoken_", "sessions_", "admin_")
 
 
 def truncate_app_tables():
