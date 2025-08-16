@@ -180,7 +180,7 @@ async def check_download(page, link: str) -> None:
 
 
 async def fill_tinymce(page, iframe_id: str, text: str):
-    await asyncio.sleep(3)
+    await asyncio.sleep(5)
     frame_locator = page.frame_locator(f"iframe#{iframe_id}")
     editor = frame_locator.locator("body#tinymce")
     await editor.wait_for(state="visible")
