@@ -23,6 +23,7 @@ import pathlib
 
 import pytest
 from django.core.management import call_command
+from django.db import connection
 
 
 @pytest.fixture(autouse=True, scope="session")
@@ -107,17 +108,37 @@ def pytest_runtest_makereport(item, call):
             p._pytest_outcomes = outcomes
 
 
-@pytest.fixture(autouse=True)
-def _baseline_unit(db, django_db_blocker, request):
-    if "live_server" in request.fixturenames:
-        return
+def _truncate_app_tables():
+    with connection.cursor() as cur:
+        cur.execute(r"""
+        DO $$
+        DECLARE r RECORD;
+        BEGIN
+          FOR r IN
+            SELECT format('%I.%I', n.nspname, c.relname) AS fq
+            FROM pg_class c
+            JOIN pg_namespace n ON n.oid=c.relnamespace
+            WHERE n.nspname='public'
+              AND c.relkind='r'
+              AND c.relname NOT LIKE 'django\_%'
+              AND c.relname NOT LIKE 'auth\_%'
+              AND c.relname NOT LIKE 'authtoken\_%'
+              AND c.relname NOT LIKE 'sessions\_%'
+              AND c.relname NOT LIKE 'admin\_%'
+          LOOP
+            EXECUTE 'TRUNCATE TABLE ' || r.fq || ' RESTART IDENTITY CASCADE';
+          END LOOP;
+        END$$;""")
+
+
+@pytest.fixture(autouse=True, scope="function")
+def _db_teardown_between_tests(django_db_blocker):
+    yield
     with django_db_blocker.unblock():
-        call_command("init_db", verbosity=0)
+        _truncate_app_tables()
 
 
-@pytest.fixture(autouse=True)
-def _baseline_e2e(transactional_db, django_db_blocker, request):
-    if "live_server" not in request.fixturenames:
-        return
+@pytest.fixture
+def load_fixtures(django_db_blocker):
     with django_db_blocker.unblock():
         call_command("init_db", verbosity=0)
