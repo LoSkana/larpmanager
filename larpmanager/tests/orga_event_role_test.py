@@ -18,27 +18,16 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import pytest
-from playwright.sync_api import expect, sync_playwright
+from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, handle_error, login_orga, login_user, logout, page_start
+from larpmanager.tests.utils import go_to, login_orga, login_user, logout
 
-
-@pytest.mark.django_db(reset_sequences=True)
-def test_orga_event_role(live_server):
-    with sync_playwright() as p:
-        browser, context, page = page_start(p)
-        try:
-            orga_event_role(live_server, page)
-
-        except Exception as e:
-            handle_error(page, e, "orga_event_role")
-
-        finally:
-            context.close()
-            browser.close()
+pytestmark = pytest.mark.e2e
 
 
-def orga_event_role(live_server, page):
+def test_orga_event_role(pw_page):
+    page, live_server, _ = pw_page
+
     login_user(page, live_server)
 
     go_to(page, live_server, "/test/1/manage/")
@@ -61,13 +50,13 @@ def orga_event_role(live_server, page):
     page.get_by_role("button", name="Confirm", exact=True).click()
     expect(page.locator('[id="\\32 "]')).to_contain_text("Event (Configuration), Accounting (Accounting)")
 
-    logout(page, live_server)
+    logout(page)
     login_user(page, live_server)
 
     go_to(page, live_server, "/test/1/manage/accounting/")
     expect(page.locator("#banner")).to_contain_text("Event accounting - Test Larp")
 
-    logout(page, live_server)
+    logout(page)
     login_orga(page, live_server)
 
     go_to(page, live_server, "/test/1/manage/roles")
@@ -76,7 +65,7 @@ def orga_event_role(live_server, page):
     page.wait_for_timeout(2000)
     page.get_by_role("button", name="Confirmation delete").click()
 
-    logout(page, live_server)
+    logout(page)
     login_user(page, live_server)
 
     go_to(page, live_server, "/test/1/manage/")

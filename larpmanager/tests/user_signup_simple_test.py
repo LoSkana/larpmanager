@@ -22,27 +22,16 @@ import re
 from pathlib import Path
 
 import pytest
-from playwright.sync_api import expect, sync_playwright
+from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, handle_error, login_orga, page_start
+from larpmanager.tests.utils import go_to, login_orga
 
-
-@pytest.mark.django_db(reset_sequences=True)
-def test_user_signup_simple(live_server):
-    with sync_playwright() as p:
-        browser, context, page = page_start(p)
-        try:
-            user_signup_simple(live_server, page)
-
-        except Exception as e:
-            handle_error(page, e, "user_signup_simple")
-
-        finally:
-            context.close()
-            browser.close()
+pytestmark = pytest.mark.e2e
 
 
-def user_signup_simple(live_server, page):
+def test_user_signup_simple(pw_page):
+    page, live_server, _ = pw_page
+
     login_orga(page, live_server)
 
     pre_register(live_server, page)

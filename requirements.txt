@@ -53,6 +53,7 @@ django_registration
 django_request_profiler
 django_safedelete
 django_tinymce
+factory_boy
 gunicorn
 hiredis
 
@@ -81,11 +82,13 @@ pycountry
 pyjwt
 
 pytest
-pytest-dependency
 pytest-django
+pytest-factoryboy
 pytest-playwright
-
+pytest-rerunfailures
+pytest-timeout
 pytest-xdist
+
 python-dateutil
 
 python-magic

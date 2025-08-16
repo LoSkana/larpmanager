@@ -21,27 +21,15 @@ import re
 from pathlib import Path
 
 import pytest
-from playwright.sync_api import sync_playwright
 
-from larpmanager.tests.utils import check_download, fill_tinymce, go_to, handle_error, login_orga, page_start, submit
+from larpmanager.tests.utils import check_download, fill_tinymce, go_to, login_orga, submit
 
-
-@pytest.mark.django_db(reset_sequences=True)
-def test_mail_generation(live_server):
-    with sync_playwright() as p:
-        browser, context, page = page_start(p)
-        try:
-            mail_generation(live_server, page)
-
-        except Exception as e:
-            handle_error(page, e, "mail_generation")
-
-        finally:
-            context.close()
-            browser.close()
+pytestmark = pytest.mark.e2e
 
 
-def mail_generation(live_server, page):
+def test_mail_generation(pw_page):
+    page, live_server, _ = pw_page
+
     login_orga(page, live_server)
 
     chat(live_server, page)

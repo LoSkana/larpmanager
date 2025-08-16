@@ -20,31 +20,16 @@
 from pathlib import Path
 
 import pytest
-from playwright.sync_api import expect, sync_playwright
+from playwright.sync_api import expect
 
-from larpmanager.tests.utils import check_download, go_to, handle_error, login_orga, page_start
+from larpmanager.tests.utils import check_download, go_to, login_orga
 
-
-@pytest.mark.django_db(reset_sequences=True)
-def test_upload_download(live_server):
-    with sync_playwright() as p:
-        browser, context, page = page_start(p)
-        try:
-            upload_download(live_server, page)
-
-        except Exception as e:
-            handle_error(page, e, "upload_download")
-
-        finally:
-            context.close()
-            browser.close()
+pytestmark = pytest.mark.e2e
 
 
-def get_path(file):
-    return Path(__file__).parent / "resources" / "test_upload" / file
+def test_upload_download(pw_page):
+    page, live_server, _ = pw_page
 
-
-def upload_download(live_server, page):
     login_orga(page, live_server)
     go_to(page, live_server, "/manage/")
 
@@ -277,3 +262,7 @@ def check_user_fee(live_server, page):
     expect(page.locator("#wrapper")).to_contain_text(
         "Test Larp Organization Home Indicate the amount of your donation: Please enter the occasion for which you wish to make the donation Choose the payment method: Wire Fee: +2% aaaa Submit"
     )
+
+
+def get_path(file):
+    return Path(__file__).parent / "resources" / "test_upload" / file

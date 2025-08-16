@@ -32,31 +32,7 @@ orga_user = "orga@test.it"
 test_user = "user@test.it"
 
 
-def page_start(p, show=False):
-    browser = p.chromium.launch(headless=not show)
-    context = browser.new_context()
-    page = context.new_page()
-
-    page.set_default_timeout(60000)
-
-    page.on("dialog", lambda dialog: dialog.accept())
-
-    def on_response(response):
-        error_code = 500
-        if response.status == error_code:
-            raise Exception(f"500 on {response.url}")
-
-    page.on("response", on_response)
-
-    def on_dialog(dialog):
-        dialog.dismiss()
-
-    page.on("dialog", on_dialog)
-
-    return browser, context, page
-
-
-def logout(page, live_server):
+def logout(page):
     page.locator("a#menu-open").click()
     page.get_by_role("link", name="Logout").click()
 

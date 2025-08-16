@@ -18,27 +18,15 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import pytest
-from playwright.sync_api import sync_playwright
 
-from larpmanager.tests.utils import check_download, go_to, handle_error, login_orga, page_start
+from larpmanager.tests.utils import check_download, go_to, login_orga
 
-
-@pytest.mark.django_db(reset_sequences=True)
-def test_user_pdf(live_server):
-    with sync_playwright() as p:
-        browser, context, page = page_start(p)
-        try:
-            user_pdf(live_server, page)
-
-        except Exception as e:
-            handle_error(page, e, "user_pdf")
-
-        finally:
-            context.close()
-            browser.close()
+pytestmark = pytest.mark.e2e
 
 
-def user_pdf(live_server, page):
+def test_user_pdf(pw_page):
+    page, live_server, _ = pw_page
+
     login_orga(page, live_server)
 
     # activate characters

@@ -64,21 +64,23 @@ jobs:
         python manage.py compilemessages
         python manage.py collectstatic --noinput
         python manage.py compress
+        python manage.py migrate
 
     - name: Run Django tests
       run: |
         export PYTEST_CURRENT_TEST="true"
         export HOME=$(mktemp -d)
-        # multiple parallel workers with -n
         pytest
 
-    - name: Upload test screenshots
+    - name: Upload Artifacts
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: test-screenshots
-        path: test_screenshots/
-
+        name: playwright-artifacts
+        path: |
+          artifacts/playwright/**/*.zip
+          artifacts/playwright/**/*.png
+        if-no-files-found: ignore
   deploy:
     name: CD
     needs: test
