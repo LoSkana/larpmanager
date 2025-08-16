@@ -71,6 +71,7 @@ jobs:
         python manage.py compress
 
     - name: Precreate test databases
+      shell: bash
       env:
         PGPASSWORD: ${{ env.POSTGRES_PASSWORD }}
       run: |
