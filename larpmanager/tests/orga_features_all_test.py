@@ -19,8 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 
-import pytest
-from playwright.async_api import async_playwright
+from playwright.sync_api import sync_playwright
 
 from larpmanager.tests.utils import (
     _checkboxes,
@@ -33,35 +32,33 @@ from larpmanager.tests.utils import (
 )
 
 
-@pytest.mark.django_db
-@pytest.mark.asyncio
-async def test_orga_features_all(live_server):
-    async with async_playwright() as p:
-        browser, context, page = await page_start(p)
+def test_orga_features_all(live_server):
+    with sync_playwright() as p:
+        browser, context, page = page_start(p)
         try:
-            await orga_features_all(live_server, page)
+            orga_features_all(live_server, page)
 
         except Exception as e:
-            await handle_error(page, e, "orga_features_all")
+            handle_error(page, e, "orga_features_all")
 
         finally:
-            await context.close()
-            await browser.close()
+            context.close()
+            browser.close()
 
 
-async def orga_features_all(live_server, page):
-    await login_orga(page, live_server)
+def orga_features_all(live_server, page):
+    login_orga(page, live_server)
 
-    await go_to(page, live_server, "/test/1/manage/features")
-    await _checkboxes(page, True)
+    go_to(page, live_server, "/test/1/manage/features")
+    _checkboxes(page, True)
 
-    await visit_all(page, live_server)
+    visit_all(page, live_server)
 
-    await go_to(page, live_server, "/test/1/manage/features")
-    await _checkboxes(page, False)
+    go_to(page, live_server, "/test/1/manage/features")
+    _checkboxes(page, False)
 
 
-async def visit_all(page, live_server):
+def visit_all(page, live_server):
     # Visit every link
     visited_links = set()
     links_to_visit = {live_server.url + "/manage/"}
@@ -71,6 +68,6 @@ async def visit_all(page, live_server):
             continue
         visited_links.add(current_link)
 
-        await go_to_check(page, current_link)
+        go_to_check(page, current_link)
 
-        await add_links_to_visit(links_to_visit, page, visited_links)
+        add_links_to_visit(links_to_visit, page, visited_links)
