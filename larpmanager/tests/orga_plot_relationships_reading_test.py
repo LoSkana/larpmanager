@@ -89,7 +89,7 @@ async def test_reading(live_server, page):
     # test reading with factions
     await page.get_by_role("link", name="Features").click()
     await page.locator("#id_mod_1_3").check()
-    await page.locator("#main_form").click()
+    await page.get_by_role("button", name="Confirm").click()
 
     # create faction with test character
     await page.get_by_role("link", name="Factions").click()
@@ -103,13 +103,13 @@ async def test_reading(live_server, page):
 
     # check faction main list
     await page.locator("#one").get_by_role("link", name="Characters").click()
-    await expect(page.locator("#one")).to_contain_text("only for testte Primary #1 Test Character")
+    await expect(page.locator("#one")).to_contain_text("only for testt Primary #1 Test Character")
 
     # check reading for prova
     await page.get_by_role("link", name="Reading").click()
     await page.get_by_role("row", name=" prova character pppresssent").get_by_role("link").click()
     await expect(page.locator("#one")).to_contain_text(
-        "Test Larp Presentation pppresssent Text totxeet testona wwwwwbruuuu Relationships Test Character Factions: only for testte ciaaoooooo"
+        "Test Larp Presentation pppresssent Text totxeet testona wwwwwbruuuu Relationships Test Character Factions: only for testt ciaaoooooo"
     )
 
     # check reading plot

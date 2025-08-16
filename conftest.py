@@ -21,16 +21,16 @@ import logging
 import os
 import subprocess
 
-import pytest_asyncio
-from asgiref.sync import sync_to_async
+import pytest
 from django.core.management import call_command
 
 
-@pytest_asyncio.fixture(autouse=True, scope="function")
-async def load_fixtures(db):
+@pytest.fixture(autouse=True, scope="function")
+def load_fixtures(db, django_db_blocker):
     print("<<<< LOAD FIXTURE >>>>")
     if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
-        await sync_to_async(call_command)("flush", interactive=False)
+        with django_db_blocker.unblock():
+            call_command("flush", interactive=False)
 
 
 def psql(params, env):
