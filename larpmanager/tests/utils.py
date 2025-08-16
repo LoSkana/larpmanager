@@ -188,7 +188,7 @@ async def fill_tinymce(page, iframe_id, text):
     frame_locator = page.frame_locator(f"iframe#{iframe_id}_ifr")
     editor = frame_locator.locator("body#tinymce")
     await editor.wait_for(state="visible")
-    await editor.fill(text, force=True)
+    await editor.fill(text)
     await asyncio.sleep(2)
 
 

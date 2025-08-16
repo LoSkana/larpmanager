@@ -22,8 +22,15 @@ import os
 import subprocess
 
 import pytest
+from django.core.management import call_command
 
-pytestmark = pytest.mark.django_db(transaction=True, reset_sequences=True)
+
+@pytest.fixture(autouse=True, scope="function")
+def load_fixtures(db):
+    print("<<<< LOAD FIXTURE >>>>")
+    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
+        call_command("flush", interactive=False)
+        call_command("init_db")
 
 
 def psql(params, env):
