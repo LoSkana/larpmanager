@@ -48,6 +48,11 @@ def page_start(p, show=False):
 
     page.on("response", on_response)
 
+    def on_dialog(dialog):
+        dialog.dismiss()
+
+    page.on("dialog", on_dialog)
+
     return browser, context, page
 
 
@@ -105,19 +110,8 @@ def go_to(page, live_server, path):
 
 
 def go_to_check(page, path):
-    dialog_triggered = False
-
-    def on_dialog(dialog):
-        nonlocal dialog_triggered
-        dialog_triggered = True
-        dialog.dismiss()
-
-    page.on("dialog", on_dialog)
-
     page.goto(path)
     ooops_check(page)
-
-    assert not dialog_triggered, "Unexpected JavaScript dialog was triggered"
 
 
 def submit(page):

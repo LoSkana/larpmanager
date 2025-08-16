@@ -28,10 +28,11 @@ pytestmark = pytest.mark.django_db(transaction=True, reset_sequences=True)
 
 
 @pytest.fixture(autouse=True, scope="function")
-def base_data(db):
+def base_data(db, django_db_blocker):
     if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
-        call_command("flush", verbosity=0, interactive=False)
-        call_command("init_db")
+        with django_db_blocker.unblock():
+            call_command("flush", verbosity=0, interactive=False)
+            call_command("init_db")
 
 
 def psql(params, env):
