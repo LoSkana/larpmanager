@@ -53,6 +53,7 @@ def get_character_relationships(ctx, restrict=True):
             if not fac["name"] or fac["typ"] == FactionType.SECRET:
                 continue
             show["factions_list"].append(fac["name"])
+        show["factions_list"] = ", ".join(show["factions_list"])
         data[show["id"]] = show
         cache[show["id"]] = text
 

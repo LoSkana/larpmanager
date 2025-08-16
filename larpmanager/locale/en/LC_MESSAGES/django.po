@@ -1818,8 +1818,7 @@ msgstr ""
 msgid "Plot"
 msgstr ""
 
-#, python-brace-format
-msgid "This text will be added to the sheet of {name}"
+msgid "This text will be added to the sheet of"
 msgstr ""
 
 msgid "Faction"

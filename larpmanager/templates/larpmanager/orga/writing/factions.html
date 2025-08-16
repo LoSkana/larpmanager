@@ -22,8 +22,8 @@
         <th>{% trans "Selectable" %}</th>
     {% endif %}
     {% include "elements/writing/questions_header.html" %}
-    <th class="hide characters">{% trans "Characters" %}</th>
-    <th class="hide stats">
+    <th class="characters">{% trans "Characters" %}</th>
+    <th class="stats">
         <i class="fa fa-hashtag"></i> {% trans "Characters" %}
     </th>
     <th></th>
@@ -50,12 +50,12 @@
                 </td>
             {% endif %}
             {% include "elements/writing/questions_body.html" %}
-            <td class="hide characters">
+            <td class="characters dot_links">
                 {% for ch in el.characters.all %}
-                    <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.id %}">{{ ch }}</a>&nbsp;
+                    <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.id %}">{{ ch }}</a>
                 {% endfor %}
             </td>
-            <td class="hide stats">{{ el.characters.all | length }}</td>
+            <td class="stats">{{ el.characters.all | length }}</td>
             <td>
                 {% if not forloop.first %}
                     <a href="{% url 'orga_factions_order' run.event.slug run.number el.id 0 %}">

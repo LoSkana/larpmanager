@@ -33,7 +33,7 @@
                     <td>{{ el.text }}</td>
                     <td>
                         {% if el.attachment %}
-                            &nbsp;&nbsp;&nbsp;<a href="{% url 'help_attachment' el.id %}" target="_blank">{% trans "Attachment" %}</a>
+                            <a href="{% url 'help_attachment' el.id %}" target="_blank">{% trans "Attachment" %}</a>
                         {% endif %}
                     </td>
                     <td>

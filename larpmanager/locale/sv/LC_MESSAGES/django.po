@@ -4524,6 +4524,9 @@ msgstr "På denna sida visas lagerförvaringsprodukter"
 msgid "This page summarises the assignments of"
 msgstr "På denna sida sammanfattas uppdragen för"
 
+msgid "This text will be added to the sheet of"
+msgstr "Denna text kommer att läggas till på arket för"
+
 msgid "You are logged in with an email address"
 msgstr "Du är inloggad med en e-postadress"
 
@@ -5010,10 +5013,6 @@ msgstr "På den här sidan visas e-postlistorna för prenumeranterna"
 
 msgid "This page summarizes px delivery to characters"
 msgstr "Denna sida sammanfattar px-leverans till tecken"
-
-#, python-brace-format
-msgid "This text will be added to the sheet of {name}"
-msgstr "Denna text kommer att läggas till i arket för {name}"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Totalt belopp som innehållits för överföringsprovisioner"

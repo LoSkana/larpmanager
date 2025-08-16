@@ -40,12 +40,11 @@
                     </td>
                     <td>{{ el.teaser_red | safe }}</td>
                     <td>{{ el.teaser_ln }}</td>
-                    <td>
-                        {% for p in el.quests.all %}
-                            {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_quests_edit' run.event.slug run.number p.id %}">{{ p }}</a>
-                        {% endfor %}
-                    </td>
+                    <tdc class="dot_links">
+                    {% for p in el.quests.all %}
+                        <a href="{% url 'orga_quests_edit' run.event.slug run.number p.id %}">{{ p }}</a>
+                    {% endfor %}
+                    </tdc>
                     <td>{{ el.traits.all | length }}</td>
                 </tr>
             {% endfor %}

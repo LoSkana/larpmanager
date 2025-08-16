@@ -4522,6 +4522,9 @@ msgstr "Na této stránce jsou zobrazeny položky inventární úschovy"
 msgid "This page summarises the assignments of"
 msgstr "Tato stránka shrnuje úkoly"
 
+msgid "This text will be added to the sheet of"
+msgstr "Tento text bude přidán na list"
+
 msgid "You are logged in with an email address"
 msgstr "Jste přihlášeni pomocí e-mailové adresy"
 
@@ -5008,10 +5011,6 @@ msgstr "Tato stránka zobrazuje seznamy e-mailových odběratelů"
 
 msgid "This page summarizes px delivery to characters"
 msgstr "Tato stránka shrnuje doručení px znakům"
-
-#, python-brace-format
-msgid "This text will be added to the sheet of {name}"
-msgstr "Tento text bude přidán do listu {name}"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Celková částka sražená na provize za převod"

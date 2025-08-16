@@ -161,7 +161,7 @@ def get_writing_element_fields(ctx, feature_name, applicable, element_id, only_v
     question_visible = []
     for question_id in ctx["questions"].keys():
         config = str(question_id)
-        if config not in ctx[f"show_{feature_name}"] and "show_all" not in ctx:
+        if "show_all" not in ctx and config not in ctx[f"show_{feature_name}"]:
             continue
         question_visible.append(question_id)
 

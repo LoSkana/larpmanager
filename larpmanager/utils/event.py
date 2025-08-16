@@ -233,6 +233,8 @@ def check_event_permission(request, s, n, perm=None):
     if not has_event_permission(ctx, request, s, perm):
         raise PermissionError()
     if perm:
+        if isinstance(perm, list):
+            perm = perm[0]
         (feature, tutorial, config) = get_event_permission_feature(perm)
         if "tutorial" not in ctx:
             ctx["tutorial"] = tutorial

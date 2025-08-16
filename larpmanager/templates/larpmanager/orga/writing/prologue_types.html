@@ -27,9 +27,8 @@
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i> </a>
                     </td>
                     <td>{{ el }}</td>
-                    <td>
+                    <td class="dot_links">
                         {% for p in el.prologues.all %}
-                            {% include "elements/comma.html" %}
                             <a href="{% url 'orga_prologues_edit' run.event.slug run.number p.id %}">{{ p }}</a>
                         {% endfor %}
                     </td>

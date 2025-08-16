@@ -4522,6 +4522,9 @@ msgstr "Questa pagina mostra gli articoli di custodia dell'inventario"
 msgid "This page summarises the assignments of"
 msgstr "Questa pagina riassume gli incarichi di"
 
+msgid "This text will be added to the sheet of"
+msgstr "Questo testo verrà aggiunto alla scheda di"
+
 msgid "You are logged in with an email address"
 msgstr "Sei loggato con indirizzo email"
 
@@ -5009,10 +5012,6 @@ msgstr "Questa pagina mostra gli elenchi di e-mail degli abbonati"
 
 msgid "This page summarizes px delivery to characters"
 msgstr "Questa pagina riassume le consegne di px ai personaggi"
-
-#, python-brace-format
-msgid "This text will be added to the sheet of {name}"
-msgstr "Questo testo verrà aggiunto al foglio di {name}"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Importo totale trattenuto per commissioni di trasferimento"

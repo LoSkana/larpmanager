@@ -41,9 +41,9 @@
                 {% endif %}
             </td>
             {% include "elements/writing/questions_body.html" %}
-            <td class="hide traits">
+            <td class="hide traits dot_links">
                 {% for ch in el.traits.all %}
-                    <a href="{% url 'orga_traits_edit' run.event.slug run.number ch.id %}">{{ ch }}</a>&nbsp;
+                    <a href="{% url 'orga_traits_edit' run.event.slug run.number ch.id %}">{{ ch }}</a>
                 {% endfor %}
             </td>
             <td class="hide stats">{{ el.traits.all | length }}</td>

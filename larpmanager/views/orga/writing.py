@@ -83,7 +83,7 @@ def orga_plots(request, s, n):
 
 @login_required
 def orga_plots_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_plots")
+    ctx = check_event_permission(request, s, n, ["orga_reading", "orga_plots"])
     get_plot(ctx, num)
     return writing_view(request, ctx, "plot")
 
@@ -111,7 +111,7 @@ def orga_factions(request, s, n):
 
 @login_required
 def orga_factions_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_factions")
+    ctx = check_event_permission(request, s, n, ["orga_reading", "orga_factions"])
     get_element(ctx, num, "faction", Faction)
     return writing_view(request, ctx, "faction")
 
@@ -146,7 +146,7 @@ def orga_quest_types(request, s, n):
 
 @login_required
 def orga_quest_types_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_quest_types")
+    ctx = check_event_permission(request, s, n, ["orga_reading", "orga_quest_types"])
     get_quest_type(ctx, num)
     return writing_view(request, ctx, "quest_type")
 
@@ -174,7 +174,7 @@ def orga_quests(request, s, n):
 
 @login_required
 def orga_quests_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_quests")
+    ctx = check_event_permission(request, s, n, ["orga_reading", "orga_quests"])
     get_quest(ctx, num)
     return writing_view(request, ctx, "quest")
 
@@ -202,7 +202,7 @@ def orga_traits(request, s, n):
 
 @login_required
 def orga_traits_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_traits")
+    ctx = check_event_permission(request, s, n, ["orga_reading", "orga_traits"])
     get_trait(ctx, num)
     return writing_view(request, ctx, "trait")
 
@@ -301,7 +301,7 @@ def orga_prologues(request, s, n):
 
 @login_required
 def orga_prologues_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_prologues")
+    ctx = check_event_permission(request, s, n, ["orga_reading", "orga_prologues"])
     get_prologue(ctx, num)
     return writing_view(request, ctx, "prologue")
 
@@ -329,7 +329,7 @@ def orga_speedlarps(request, s, n):
 
 @login_required
 def orga_speedlarps_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_speedlarps")
+    ctx = check_event_permission(request, s, n, ["orga_reading", "orga_speedlarps"])
     get_speedlarp(ctx, num)
     return writing_view(request, ctx, "speedlarp")
 
@@ -456,7 +456,7 @@ def orga_reading(request, s, n):
 
     mapping = _get_writing_mapping()
 
-    for typ in [Character, Plot, Faction, Quest, Trait]:
+    for typ in [Character, Plot, Faction, Quest, Trait, Prologue, SpeedLarp]:
         # noinspection PyUnresolvedReferences, PyProtectedMember
         model_name = typ._meta.model_name
         if mapping.get(model_name) not in ctx["features"]:
