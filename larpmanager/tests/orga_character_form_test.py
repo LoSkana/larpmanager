@@ -99,10 +99,10 @@ async def create_second_char(live_server, page):
     await page.get_by_role("link", name="Access character creation!").click()
     await page.locator("#id_name").click()
     await page.locator("#id_name").fill("olivaaaa")
-    await page.get_by_role("row", name="Presentation (*) Show").get_by_role("link").click()
-    await fill_tinymce(page, "id_teaser_ifr", "dsfdfsd")
-    await page.get_by_role("row", name="Text (*) Show").get_by_role("link").click()
-    await fill_tinymce(page, "id_text_ifr", "sdfdsfds")
+
+    await fill_tinymce(page, "id_teaser", "dsfdfsd")
+
+    await fill_tinymce(page, "id_text", "sdfdsfds")
     await expect(page.locator("#id_q6")).to_match_aria_snapshot(
         '- combobox:\n  - option "-------" [disabled] [selected]\n  - option "all"\n  - option "few - (Available 1)"'
     )
@@ -257,10 +257,9 @@ async def create_first_char(live_server, page):
 
 
 async def fill_presentation_text(page):
-    await page.get_by_role("row", name="Presentation (*) Show").get_by_role("link").click()
-    await fill_tinymce(page, "id_teaser_ifr", "baba")
-    await page.get_by_role("row", name="Text (*) Show").get_by_role("link").click()
-    await fill_tinymce(page, "id_text_ifr", "bebe")
+    await fill_tinymce(page, "id_teaser", "baba")
+
+    await fill_tinymce(page, "id_text", "bebe")
 
 
 async def add_field_special(page):

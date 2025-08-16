@@ -124,7 +124,7 @@ async def submit_membership(live_server, page, image_path):
     await page.wait_for_timeout(2000)
     await page.get_by_role("link", name="New").click()
 
-    await fill_tinymce(page, "id_text_ifr", "Ciao {{ member.name }}!")
+    await fill_tinymce(page, "id_text", "Ciao {{ member.name }}!")
 
     await page.locator("#main_form").click()
     await page.locator("#id_typ").select_option("m")

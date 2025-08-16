@@ -151,7 +151,7 @@ async def px(live_server, page):
     await page.locator("#id_name").fill("sword1")
     await page.locator("#id_cost").click()
     await page.locator("#id_cost").fill("1")
-    await fill_tinymce(page, "id_descr_ifr", "sdsfdsfds")
+    await fill_tinymce(page, "id_descr", "sdsfdsfds")
     await page.get_by_role("button", name="Confirm", exact=True).click()
 
     await go_to(page, live_server, "/test/1/manage/px/deliveries/")

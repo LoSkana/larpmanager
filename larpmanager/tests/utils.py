@@ -179,23 +179,16 @@ async def check_download(page, link: str) -> None:
                 raise
 
 
-async def fill_tinymce(page, iframe_id: str, text: str):
+async def fill_tinymce(page, iframe_id, text):
     await asyncio.sleep(2)
-    frame_locator = page.frame_locator(f"iframe#{iframe_id}")
+    locator = page.locator(f'a.my_toggle[tog="f_{iframe_id}"]')
+    if await locator.count() > 0:
+        await locator.click()
+    await asyncio.sleep(2)
+    frame_locator = page.frame_locator(f"iframe#{iframe_id}_ifr")
     editor = frame_locator.locator("body#tinymce")
     await editor.wait_for(state="visible")
     await editor.fill(text, force=True)
-    await asyncio.sleep(2)
-
-
-async def fill_tinymce_simple(page, name, text):
-    await asyncio.sleep(2)
-    await (
-        page.get_by_role("row", name=name)
-        .locator('iframe[title="Rich Text Area"]')
-        .content_frame.get_by_label("Rich Text Area")
-        .fill(text, force=True)
-    )
     await asyncio.sleep(2)
 
 

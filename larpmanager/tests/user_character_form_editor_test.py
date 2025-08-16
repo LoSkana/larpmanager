@@ -168,11 +168,9 @@ async def field_text(page, live_server):
     await page.locator("#id_name").click()
     await page.locator("#id_name").fill("provaaaa")
 
-    await page.get_by_role("row", name="Presentation (*) Show").get_by_role("link").click()
-    await fill_tinymce(page, "id_teaser_ifr", "adsdsadsa")
+    await fill_tinymce(page, "id_teaser", "adsdsadsa")
 
-    await page.get_by_role("row", name="Text (*) Show").get_by_role("link").click()
-    await fill_tinymce(page, "id_text_ifr", "rrrr")
+    await fill_tinymce(page, "id_text", "rrrr")
 
     await asyncio.sleep(1)
     await page.locator("#id_q4").select_option("3")
@@ -196,11 +194,9 @@ async def character(page, live_server):
     await page.locator("#id_name").click()
     await page.locator("#id_name").fill("my character")
 
-    await page.get_by_role("row", name="Presentation (*) Show").get_by_role("link").click()
-    await fill_tinymce(page, "id_teaser_ifr", "so coool")
+    await fill_tinymce(page, "id_teaser", "so coool")
 
-    await page.get_by_role("row", name="Text (*) Show").get_by_role("link").click()
-    await fill_tinymce(page, "id_text_ifr", "so braaaave")
+    await fill_tinymce(page, "id_text", "so braaaave")
 
     await page.locator("#id_q4").select_option("1")
     await page.locator("#id_q4").select_option("3")

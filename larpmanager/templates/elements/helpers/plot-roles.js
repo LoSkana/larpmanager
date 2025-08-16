@@ -49,7 +49,7 @@ window.addEventListener('DOMContentLoaded', function() {
                     <a href="#" class="my_toggle" tog="f_ch_{0}">{% trans "Show" %}</a>
                 </p>
                 <div class="hide hide_later f_ch_{0}">
-                    <textarea name="char_role_{0}"></textarea>
+                    <textarea name="char_role_{0}" id="ch_{0}"></textarea>
                 </div>
                 <div class="helptext">{{ form.role_help_text }} {1}</div>
             </td>

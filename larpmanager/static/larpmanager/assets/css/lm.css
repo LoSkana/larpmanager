@@ -2055,3 +2055,7 @@ table.dataTable span.dtcc span.dtcc-button-icon {
 .dot_links a {
     border-bottom: dotted 1px rgba(var(--pri-rgb), 0.35);
 }
+
+.nope {
+    display: none !important;
+}

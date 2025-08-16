@@ -307,8 +307,8 @@ $(document).ready(function() {
     post_popup();
 
     $('.dropdown-menu').each(function() {
-      if ($(this).is(':empty')) {
-        $(this).css('display', 'none !important');
+      if ($(this).children().length == 0) {
+        $(this).addClass('nope');
       }
     });
 
