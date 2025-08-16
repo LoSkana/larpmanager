@@ -17,13 +17,14 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import asyncio
 
 import pytest
 from playwright.async_api import async_playwright, expect
 
 from larpmanager.tests.utils import (
     fill_tinymce,
+    fill_tinymce_simple,
     go_to,
     handle_error,
     login_orga,
@@ -129,18 +130,7 @@ async def test_relationships(live_server, page):
     await page.get_by_role("searchbox").fill("tes")
     await page.get_by_role("option", name="#1 Test Character").click()
     await page.get_by_role("row", name="Direct Show How the").get_by_role("link").click()
-    await (
-        page.get_by_role("row", name="Direct Show How the")
-        .locator('iframe[title="Rich Text Area"]')
-        .content_frame.get_by_role("paragraph")
-        .click()
-    )
-    await (
-        page.get_by_role("row", name="Direct Show How the")
-        .locator('iframe[title="Rich Text Area"]')
-        .content_frame.get_by_label("Rich Text Area")
-        .fill("ciaaoooooo")
-    )
+    await fill_tinymce_simple(page, "Direct Show How the", "ciaaoooooo")
     await page.get_by_role("button", name="Confirm").click()
 
     # check in main list
@@ -189,12 +179,8 @@ async def test_plots(live_server, page):
 
     row = page.get_by_role("row", name="#1 Test Character Show")
     await row.get_by_role("link", name="Show", exact=True).click()
-    await (
-        page.get_by_role("row", name="#1 Test Character Show")
-        .locator('iframe[title="Rich Text Area"]')
-        .content_frame.get_by_label("Rich Text Area")
-        .fill("prova")
-    )
+    await asyncio.sleep(1)
+    await fill_tinymce_simple(page, "#1 Test Character Show", "prova")
 
     await page.get_by_role("button", name="Confirm").click()
 
@@ -209,12 +195,7 @@ async def test_plots(live_server, page):
     await expect(page.locator("#one")).to_contain_text("#1 Test Character Show <p>prova</p>")
 
     # change it
-    await (
-        page.get_by_role("row", name="#1 Test Character Show")
-        .locator('iframe[title="Rich Text Area"]')
-        .content_frame.get_by_label("Rich Text Area")
-        .fill("prova222")
-    )
+    await fill_tinymce_simple(page, "#1 Test Character Show", "prova222")
     await page.get_by_role("button", name="Confirm").click()
 
     # check it
@@ -240,12 +221,7 @@ async def test_plots(live_server, page):
     await page.get_by_role("link", name="").click()
     row = page.get_by_role("row", name="#2 prova Show")
     await row.get_by_role("link", name="Show", exact=True).click()
-    await (
-        page.get_by_role("row", name="#2 prova Show")
-        .locator('iframe[title="Rich Text Area"]')
-        .content_frame.get_by_label("Rich Text Area")
-        .fill("bruuuu")
-    )
+    await fill_tinymce_simple(page, "#2 prova Show", "bruuuu")
     await page.get_by_role("button", name="Confirm").click()
 
     # check in user

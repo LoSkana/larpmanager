@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import asyncio
 import io
 import os
 import zipfile
@@ -179,10 +180,21 @@ async def check_download(page, link: str) -> None:
 
 
 async def fill_tinymce(page, iframe_id: str, text: str):
+    await asyncio.sleep(3)
     frame_locator = page.frame_locator(f"iframe#{iframe_id}")
     editor = frame_locator.locator("body#tinymce")
     await editor.wait_for(state="visible")
     await editor.fill(text)
+
+
+async def fill_tinymce_simple(page, name, text):
+    await asyncio.sleep(3)
+    await (
+        page.get_by_role("row", name=name)
+        .locator('iframe[title="Rich Text Area"]')
+        .content_frame.get_by_label("Rich Text Area")
+        .fill(text)
+    )
 
 
 async def _checkboxes(page, check=True):
