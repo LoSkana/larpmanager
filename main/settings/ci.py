@@ -18,6 +18,13 @@ DATABASES = {
    }
 }
 
+name = os.getenv("POSTGRES_DB","larp_test")
+worker = os.getenv("PYTEST_XDIST_WORKER")
+if worker:
+    name = f"{name}_{worker}"
+    DATABASES["default"]["NAME"] = name
+    DATABASES["default"]["TEST"] = {"NAME": name}
+
 STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 
 COMPRESS_ENABLED = True

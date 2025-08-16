@@ -20,6 +20,12 @@ jobs:
 
     env:
       CI: true
+      WORKERS: "4"
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: larpmanager
+      POSTGRES_PASSWORD: larpmanager
+      POSTGRES_DB: larpmanager_test
 
     services:
       postgres:
@@ -27,13 +33,14 @@ jobs:
         env:
           POSTGRES_USER: larpmanager
           POSTGRES_PASSWORD: larpmanager
-          POSTGRES_DB: larpmanager
-          POSTGRES_OPTS: "-c fsync=off -c full_page_writes=off -c synchronous_commit=off"
+          POSTGRES_DB: postgres
         options: >-
-          --health-cmd "pg_isready -U test"
+          --health-cmd "pg_isready -U larpmanager -d postgres"
           --health-interval 10s
           --health-timeout 5s
-          --health-retries 5
+          --health-retries 10
+        ports:
+          - 5432:5432
 
     steps:
 
@@ -64,13 +71,39 @@ jobs:
         python manage.py compilemessages
         python manage.py collectstatic --noinput
         python manage.py compress
-        python manage.py migrate
 
-    - name: Run Django tests
+    - name: Precreate test databases
+      env:
+        PGPASSWORD: ${{ env.POSTGRES_PASSWORD }}
+      run: |
+        set -euo pipefail
+        PGHOST="${POSTGRES_HOST}"
+        PGPORT="${POSTGRES_PORT}"
+        PGUSER="${POSTGRES_USER}"
+        BASE="${POSTGRES_DB}"
+        WORKERS="${WORKERS}"
+        SQL_FILE="test_db.sql"
+
+        # Fail early if SQL seed is missing
+        test -f "$SQL_FILE"
+
+        for i in $(seq 0 $((WORKERS-1))); do
+        DB="${BASE}_gw${i}"
+        echo "Recreating $DB"
+        psql -v ON_ERROR_STOP=1 -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='${DB}' AND pid <> pg_backend_pid();" || true
+        psql -v ON_ERROR_STOP=1 -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d postgres -c "DROP DATABASE IF EXISTS ${DB};"
+        psql -v ON_ERROR_STOP=1 -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d postgres -c "CREATE DATABASE ${DB} OWNER ${PGUSER};"
+        psql -v ON_ERROR_STOP=1 -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "${DB}" -c "SET search_path TO public;"
+        psql -v ON_ERROR_STOP=1 -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "${DB}" -f "$SQL_FILE"
+        done
+        echo "Databases ready."
+
+    - name: Run Django tests (xdist=4, reuse precreated DBs)
+      env:
+        HOME: ${{ runner.temp }}
       run: |
         export PYTEST_CURRENT_TEST="true"
-        export HOME=$(mktemp -d)
-        pytest -n auto --reruns 5 --reruns-delay 2
+        pytest -n "$WORKERS" --reruns 5 --reruns-delay 2 --reuse-db --no-migrations
 
     - name: Upload Artifacts
       if: always()
@@ -81,19 +114,18 @@ jobs:
           artifacts/playwright/**/*.zip
           artifacts/playwright/**/*.png
         if-no-files-found: ignore
+
   deploy:
     name: CD
     needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.base_ref == ''
     steps:
-
-    - uses: actions/checkout@v3
-
-    - name: Deploy via SSH
-      uses: appleboy/ssh-action@v0.1.4
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.SSH_KEY }}
-        script: ${{ secrets.DEPLOY_SCRIPT }}
+      - uses: actions/checkout@v3
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: ${{ secrets.DEPLOY_SCRIPT }}
