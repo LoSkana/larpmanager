@@ -104,7 +104,7 @@ m2m_changed.connect(badges_changed, sender=Badge.members.through)
 
 
 def notify_membership_approved(member, resp):
-    # Manda Mail
+    # send Mail
     activate(member.language)
     subj = hdr(member.membership) + _("Membership of the Organization accepted") + "!"
     body = _("We confirm that your membership has been accepted by the board. We welcome you to our community") + "!"
@@ -114,32 +114,33 @@ def notify_membership_approved(member, resp):
     if resp:
         body += " " + _("More details") + f": {resp}"
 
-        # Check if you have payments to make
-    regs = member.registrations.filter(run__start__gte=datetime.now().date())
-
+    # Check if you have payments to make
+    assoc = member.membership.assoc
+    regs = member.registrations.filter(run__event__assoc=assoc, run__start__gte=datetime.now().date())
     membership_fee = False
-    if regs:
+    reg_list = []
+    for registration in regs:
+        features = get_event_features(registration.run.event_id)
+        run_start = registration.run.start and registration.run.start.year == datetime.today().year
+        if run_start and "laog" not in features:
+            membership_fee = True
+
+        if not registration.tot_iscr:
+            continue
+
+        url = get_url("accounting/pay", member.membership)
+        href = f"{url}/{registration.run.event.slug}/{registration.run.number}"
+        reg_list.append(f" <a href='{href}'><b>{registration.run.search}</b></a>")
+
+    if reg_list:
         body += (
             "<br /><br />"
             + _("To confirm your event registration, please complete your payment within one week. You can do so here")
             + ": "
+            + ", ".join(reg_list)
         )
-        first = True
-        for r in regs:
-            if first:
-                first = False
-            else:
-                body += ","
-            url = get_url("accounting/pay", member.membership)
-            href = f"{url}/{r.run.event.slug}/{r.run.number}"
-            body += f" <a href='{href}'><b>{r.run.search}</b></a>"
 
-            features = get_event_features(r.run.event_id)
-            run_start = r.run.start and r.run.start.year == datetime.today().year
-            if run_start and "laog" not in features:
-                membership_fee = True
-
-    if membership_fee:
+    if membership_fee and assoc.get_config("membership_fee", 0):
         url = get_url("accounting/membership", member.membership)
         body += "<br /><br />" + _(
             "In addition, you must be up to date with the payment of your membership fee in "
