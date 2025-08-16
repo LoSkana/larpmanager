@@ -20,11 +20,13 @@
 
 from pathlib import Path
 
+import pytest
 from playwright.sync_api import expect, sync_playwright
 
 from larpmanager.tests.utils import go_to, handle_error, login_orga, login_user, logout, page_start
 
 
+@pytest.mark.django_db(reset_sequences=True)
 def test_orga_registration_form(live_server):
     with sync_playwright() as p:
         browser, context, page = page_start(p)

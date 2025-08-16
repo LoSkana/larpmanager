@@ -17,64 +17,52 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-import logging
-import os
-import subprocess
 
 import pytest
 from django.core.management import call_command
+from django.db import connection
 
-pytestmark = pytest.mark.django_db(transaction=True, reset_sequences=True)
+
+@pytest.fixture(scope="session")
+def django_db_setup(django_db_blocker):
+    with django_db_blocker.unblock():
+        call_command("migrate", interactive=False, run_syncdb=True, verbosity=0)
+
+
+EXCLUDE_PREFIXES = ("django_", "auth_", "authtoken_", "sessions_", "admin_")
+
+
+def truncate_app_tables():
+    with connection.cursor() as cur:
+        cur.execute("""
+        DO $$
+        DECLARE r RECORD;
+        BEGIN
+          FOR r IN
+            SELECT format('%I.%I', n.nspname, c.relname) AS fq
+            FROM pg_class c
+            JOIN pg_namespace n ON n.oid=c.relnamespace
+            WHERE n.nspname='public'
+              AND c.relkind='r'
+              AND c.relname NOT LIKE 'django\_%'
+              AND c.relname NOT LIKE 'auth\_%'
+              AND c.relname NOT LIKE 'authtoken\_%'
+              AND c.relname NOT LIKE 'sessions\_%'
+              AND c.relname NOT LIKE 'admin\_%'
+          LOOP
+            EXECUTE 'TRUNCATE TABLE ' || r.fq || ' RESTART IDENTITY CASCADE';
+          END LOOP;
+        END$$;""")
 
 
 @pytest.fixture(autouse=True, scope="function")
-def base_data(db, django_db_blocker):
-    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
-        with django_db_blocker.unblock():
-            call_command("flush", verbosity=0, interactive=False)
-            call_command("init_db")
+def ui_db_reset(django_db_blocker):
+    yield
+    with django_db_blocker.unblock():
+        truncate_app_tables()
 
 
-def psql(params, env):
-    subprocess.run(params, check=True, stdout=subprocess.DEVNULL, env=env, text=True)
-
-
-def pytest_sessionstart(session):
-    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
-        return
-
-    env = os.environ.copy()
-    env["PGPASSWORD"] = "larpmanager"
-
-    host = "localhost"
-    clean_db(host, env)
-
-    sql_path = os.path.join(os.path.dirname(__file__), "larpmanager", "tests", "test_db.sql")
-
-    psql(
-        ["psql", "-v", "ON_ERROR_STOP=1", "-U", "larpmanager", "-h", host, "-d", "test_larpmanager", "-f", sql_path],
-        env,
-    )
-
-
-def clean_db(host, env):
-    psql(
-        [
-            "psql",
-            "-U",
-            "larpmanager",
-            "-h",
-            host,
-            "-d",
-            "test_larpmanager",
-            "-c",
-            "DROP SCHEMA public CASCADE; CREATE SCHEMA public;",
-        ],
-        env,
-    )
-
-
-def pytest_configure():
-    logger = logging.getLogger("django.request")
-    for handler in logger.handlers:
-        handler.addFilter(lambda record: "Not Found:" not in record.getMessage())
+@pytest.fixture
+def load_fixtures(django_db_blocker):
+    with django_db_blocker.unblock():
+        call_command("init_db", verbosity=0)

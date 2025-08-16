@@ -17,8 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
-
+import pytest
 from playwright.sync_api import sync_playwright
 
 from larpmanager.tests.utils import (
@@ -32,6 +31,7 @@ from larpmanager.tests.utils import (
 )
 
 
+@pytest.mark.django_db(reset_sequences=True)
 def test_orga_features_all(live_server):
     with sync_playwright() as p:
         browser, context, page = page_start(p)

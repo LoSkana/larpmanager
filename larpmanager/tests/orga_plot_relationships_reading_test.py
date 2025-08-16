@@ -17,8 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
-
+import pytest
 from playwright.sync_api import expect, sync_playwright
 
 from larpmanager.tests.utils import (
@@ -30,6 +29,7 @@ from larpmanager.tests.utils import (
 )
 
 
+@pytest.mark.django_db(reset_sequences=True)
 def test_plot_relationship_reading(live_server):
     with sync_playwright() as p:
         browser, context, page = page_start(p)
@@ -56,14 +56,14 @@ def plot_relationship_reading(live_server, page):
     page.locator("#id_mod_1_6").check()
     page.get_by_role("button", name="Confirm").click()
 
-    test_relationships(live_server, page)
+    relationships(live_server, page)
 
-    test_plots(live_server, page)
+    plots(live_server, page)
 
-    test_reading(live_server, page)
+    reading(live_server, page)
 
 
-def test_reading(live_server, page):
+def reading(live_server, page):
     go_to(page, live_server, "/test/1/manage/")
 
     # set prova presentation and text
@@ -114,7 +114,7 @@ def test_reading(live_server, page):
     expect(page.locator("#one")).to_contain_text("testona Text wwwww prova bruuuu")
 
 
-def test_relationships(live_server, page):
+def relationships(live_server, page):
     # create second character
     page.get_by_role("link", name="Characters", exact=True).click()
     page.get_by_role("link", name="New").click()
@@ -147,7 +147,7 @@ def test_relationships(live_server, page):
     expect(page.locator("#one")).to_contain_text("Relationships Test Character ciaaoooooo")
 
 
-def test_plots(live_server, page):
+def plots(live_server, page):
     # create plot
     go_to(page, live_server, "/test/1/manage/")
     page.get_by_role("link", name="Plots").click()

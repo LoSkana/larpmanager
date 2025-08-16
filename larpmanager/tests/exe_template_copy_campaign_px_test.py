@@ -20,11 +20,13 @@
 
 import re
 
+import pytest
 from playwright.sync_api import expect, sync_playwright
 
 from larpmanager.tests.utils import fill_tinymce, go_to, handle_error, login_orga, page_start
 
 
+@pytest.mark.django_db(reset_sequences=True)
 def test_exe_template_copy(live_server):
     with sync_playwright() as p:
         browser, context, page = page_start(p)
@@ -44,7 +46,7 @@ def exe_template_copy(live_server, page):
 
     template(live_server, page)
 
-    setup_test(live_server, page)
+    setup(live_server, page)
 
     px(live_server, page)
 
@@ -100,7 +102,7 @@ def template(live_server, page):
     go_to(page, live_server, "/fromtemplate/1/manage/copy")
 
 
-def setup_test(live_server, page):
+def setup(live_server, page):
     # activate factions
     go_to(page, live_server, "/test/1/manage/features/104/on")
     # activate xp

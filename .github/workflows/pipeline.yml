@@ -70,22 +70,7 @@ jobs:
         export PYTEST_CURRENT_TEST="true"
         export HOME=$(mktemp -d)
         # multiple parallel workers with -n
-        pytest -ra -n auto --create-db -vvv
-
-    - name: Debug contenuto cartelle test
-      run: |
-        echo "Contenuto test_videos:"
-        ls -l test_videos || echo "Empty folder or not found"
-
-        echo "Contenuto test_screenshots:"
-        ls -l test_screenshots || echo "Empty folder or not found"
-
-    - name: Upload test videos
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-videos
-        path: test_videos/
+        pytest
 
     - name: Upload test screenshots
       if: always()

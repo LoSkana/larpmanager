@@ -20,11 +20,13 @@
 
 from pathlib import Path
 
+import pytest
 from playwright.sync_api import expect, sync_playwright
 
 from larpmanager.tests.utils import go_to, handle_error, page_start, submit
 
 
+@pytest.mark.django_db(reset_sequences=True)
 def test_exe_join(live_server):
     with sync_playwright() as p:
         browser, context, page = page_start(p)
