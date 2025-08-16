@@ -70,7 +70,7 @@ jobs:
         export PYTEST_CURRENT_TEST="true"
         export HOME=$(mktemp -d)
         # multiple parallel workers with -n
-        pytest -rs -n auto -vvv
+        pytest -ra -n auto --create-db -vvv
 
     - name: Debug contenuto cartelle test
       run: |

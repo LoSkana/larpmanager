@@ -29,11 +29,13 @@ pytestmark = pytest.mark.django_db(transaction=True, reset_sequences=True)
 
 @pytest.fixture(autouse=True, scope="function")
 def base_data(db):
-    call_command("init_db")
+    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
+        call_command("flush", verbosity=0, interactive=False)
+        call_command("init_db")
 
 
 def psql(params, env):
-    subprocess.run(params, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=env, text=True)
+    subprocess.run(params, check=True, stdout=subprocess.DEVNULL, env=env, text=True)
 
 
 def pytest_sessionstart(session):
