@@ -112,8 +112,7 @@ def _baseline_unit(db, django_db_blocker, request):
     if "live_server" in request.fixturenames:
         return
     with django_db_blocker.unblock():
-        # Il comando deve essere idempotente
-        call_command("init_db", verbosity=0, interactive=False)
+        call_command("init_db", verbosity=0)
 
 
 @pytest.fixture(autouse=True)
@@ -121,4 +120,4 @@ def _baseline_e2e(transactional_db, django_db_blocker, request):
     if "live_server" not in request.fixturenames:
         return
     with django_db_blocker.unblock():
-        call_command("init_db", verbosity=0, interactive=False)
+        call_command("init_db", verbosity=0)
