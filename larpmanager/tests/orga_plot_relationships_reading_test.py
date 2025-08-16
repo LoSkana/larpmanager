@@ -195,6 +195,8 @@ async def test_plots(live_server, page):
     await expect(page.locator("#one")).to_contain_text("#1 Test Character Show <p>prova</p>")
 
     # change it
+    row = page.get_by_role("row", name="#1 Test Character Show")
+    await row.get_by_role("link", name="Show", exact=True).click()
     await fill_tinymce_simple(page, "#1 Test Character Show", "prova222")
     await page.get_by_role("button", name="Confirm").click()
 
