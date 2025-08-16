@@ -180,21 +180,23 @@ async def check_download(page, link: str) -> None:
 
 
 async def fill_tinymce(page, iframe_id: str, text: str):
-    await asyncio.sleep(5)
+    await asyncio.sleep(2)
     frame_locator = page.frame_locator(f"iframe#{iframe_id}")
     editor = frame_locator.locator("body#tinymce")
     await editor.wait_for(state="visible")
-    await editor.fill(text)
+    await editor.fill(text, force=True)
+    await asyncio.sleep(2)
 
 
 async def fill_tinymce_simple(page, name, text):
-    await asyncio.sleep(3)
+    await asyncio.sleep(2)
     await (
         page.get_by_role("row", name=name)
         .locator('iframe[title="Rich Text Area"]')
         .content_frame.get_by_label("Rich Text Area")
-        .fill(text)
+        .fill(text, force=True)
     )
+    await asyncio.sleep(2)
 
 
 async def _checkboxes(page, check=True):

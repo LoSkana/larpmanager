@@ -60,14 +60,14 @@ async def plot_relationship_reading(live_server, page):
     await page.locator("#id_mod_1_6").check()
     await page.get_by_role("button", name="Confirm").click()
 
-    await test_relationships(live_server, page)
+    await relationships(live_server, page)
 
-    await test_plots(live_server, page)
+    await plots(live_server, page)
 
-    await test_reading(live_server, page)
+    await reading(live_server, page)
 
 
-async def test_reading(live_server, page):
+async def reading(live_server, page):
     await go_to(page, live_server, "/test/1/manage/")
 
     # set prova presentation and text
@@ -120,7 +120,7 @@ async def test_reading(live_server, page):
     expect(page.locator("#one")).to_contain_text("testona Text wwwww prova bruuuu")
 
 
-async def test_relationships(live_server, page):
+async def relationships(live_server, page):
     # create second character
     await page.get_by_role("link", name="Characters", exact=True).click()
     await page.get_by_role("link", name="New").click()
@@ -156,7 +156,7 @@ async def test_relationships(live_server, page):
     await expect(page.locator("#one")).to_contain_text("Relationships Test Character ciaaoooooo")
 
 
-async def test_plots(live_server, page):
+async def plots(live_server, page):
     # create plot
     await go_to(page, live_server, "/test/1/manage/")
     await page.get_by_role("link", name="Plots").click()
@@ -166,11 +166,11 @@ async def test_plots(live_server, page):
 
     # set concept
     await page.get_by_role("row", name="Concept (*) Show").get_by_role("link").click()
-    await fill_tinymce(page, "id_teaser_ifr", "asadsadas")
+    await fill_tinymce_simple(page, "Concept (*) Show", "asadsadas")
 
     # set text
     await page.get_by_role("row", name="Text (*) Show").get_by_role("link").click()
-    await fill_tinymce(page, "id_text_ifr", "wwwww")
+    await fill_tinymce_simple(page, "Text (*) Show", "wwwww")
 
     # set char role
     await page.get_by_role("searchbox").click()
@@ -195,8 +195,6 @@ async def test_plots(live_server, page):
     await expect(page.locator("#one")).to_contain_text("#1 Test Character Show <p>prova</p>")
 
     # change it
-    row = page.get_by_role("row", name="#1 Test Character Show")
-    await row.get_by_role("link", name="Show", exact=True).click()
     await fill_tinymce_simple(page, "#1 Test Character Show", "prova222")
     await page.get_by_role("button", name="Confirm").click()
 

@@ -306,6 +306,12 @@ $(document).ready(function() {
 
     post_popup();
 
+    $('.dropdown-menu').each(function() {
+      if ($(this).is(':empty')) {
+        $(this).css('display', 'none !important');
+      }
+    });
+
     $('#one .inner').fadeIn(100);
 
     $('#topbar .inner').fadeIn(100);

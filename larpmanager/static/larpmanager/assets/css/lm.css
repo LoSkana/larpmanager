@@ -1344,6 +1344,10 @@ th select {
   margin: 0;
 }
 
+.dropdown-menu:empty {
+  display: none !important;
+}
+
 .show {
   display: block;
 }
