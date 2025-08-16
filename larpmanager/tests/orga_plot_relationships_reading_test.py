@@ -92,8 +92,8 @@ async def test_reading(live_server, page):
     await page.locator("#main_form").click()
 
     # create faction with test character
+    await page.get_by_role("link", name="Factions").click()
     await page.get_by_role("link", name="New").click()
-    await page.get_by_text("text length: 0 / 3000").click()
     await page.locator("#id_name").click()
     await page.locator("#id_name").fill("only for testt")
     await page.get_by_role("listitem").click()
