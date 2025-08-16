@@ -22,15 +22,8 @@ import os
 import subprocess
 
 import pytest
-from django.core.management import call_command
 
-
-@pytest.fixture(autouse=True, scope="function")
-def load_fixtures(db, django_db_blocker):
-    print("<<<< LOAD FIXTURE >>>>")
-    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
-        with django_db_blocker.unblock():
-            call_command("flush", interactive=False)
+pytestmark = pytest.mark.django_db(transaction=True, reset_sequences=True)
 
 
 def psql(params, env):
