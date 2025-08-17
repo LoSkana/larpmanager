@@ -1,41 +1,41 @@
 
-asgiref
-Babel
+asgiref~=3.9.0
+Babel~=2.17.0
 
-beautifulsoup4
-brotli
-calmjs.parse
+beautifulsoup4~=4.13.0
+brotli~=1.1.0
+calmjs.parse~=1.3.0
 
-cryptography
-csscompressor
+cryptography~=3.4.0
+csscompressor~=0.9.0
 
-deepl
+deepl~=1.22.0
 
-diff-match-patch
+diff-match-patch==20241021
 
-Django
-django-admin-autocomplete-filter
-django-allauth
+Django~=5.2.0
+django-admin-autocomplete-filter~=0.7.0
+django-allauth~=65.10.0
 
-django-clone
-django-colorfield
+django-clone~=5.5.0
+django-colorfield~=0.14.0
 
 django-db-connection-pool[postgresql]
 
-django-import-export
-django-phonenumber-field
-django-postgrespool2
-django-ratelimit
-django-recaptcha
+django-import-export~=4.3.0
+django-phonenumber-field~=8.1.0
+django-postgrespool2~=2.0.0
+django-ratelimit~=4.1.0
+django-recaptcha~=4.1.0
 
-django-redis
+django-redis~=6.0.0
 
-django-redis-cache
-django-select2
-django-silk
-django-simple-history
-django-tinymce
-django4-background-tasks
+django-redis-cache~=1.8.0
+django-select2~=8.4.0
+django-silk~=5.4.0
+django-simple-history~=3.10.0
+django-tinymce~=4.1.0
+django4-background-tasks~=1.2.0
 
 django_allauth
 
@@ -53,65 +53,65 @@ django_registration
 django_request_profiler
 django_safedelete
 django_tinymce
-factory_boy
-gunicorn
-hiredis
+factory_boy~=3.3.0
+gunicorn~=23.0.0
+hiredis~=3.2.0
 
-holidays
-html5lib
+holidays~=0.78.0
+html5lib~=1.1.0
 
-humanize
-inflection
+humanize~=4.12.0
+inflection~=0.5.0
 
-jellyfish
-lxml
+jellyfish~=1.2.0
+lxml~=6.0.0
 
-olefile
+olefile~=0.47.0
 
-pandas
-pdfkit
+pandas~=2.3.0
+pdfkit~=1.0.0
 
-phonenumbers
-pilkit
-pillow
-playwright
+phonenumbers~=9.0.0
+pilkit~=3.0.0
+pillow~=11.3.0
+playwright~=1.54.0
 
-polib
-psycopg2-binary
-pycountry
-pyjwt
+polib~=1.2.0
+psycopg2-binary~=2.9.0
+pycountry~=24.6.0
+pyjwt~=2.10.0
 
-pytest
-pytest-django
-pytest-factoryboy
-pytest-playwright
-pytest-rerunfailures
-pytest-timeout
-pytest-xdist
+pytest~=8.4.0
+pytest-django~=4.11.0
+pytest-factoryboy~=2.8.0
+pytest-playwright~=0.7.0
+pytest-rerunfailures~=15.1.0
+pytest-timeout~=2.4.0
+pytest-xdist~=3.8.0
 
-python-dateutil
+python-dateutil~=2.9.0
 
-python-magic
-python-redsys
-python-slugify
+python-magic~=0.4.0
+python-redsys~=1.2.0
+python-slugify~=8.0.0
 
-python-telegram-bot
-python3-openid
-python3-saml
-pytz
+python-telegram-bot~=22.3.0
+python3-openid~=3.2.0
+python3-saml~=1.16.0
+pytz~=2025.2.0
 
-pyyaml
-requests
-requests-oauthlib
+pyyaml~=6.0.0
+requests~=2.32.0
+requests-oauthlib~=2.0.0
 
-ruff
+ruff~=0.12.0
 
-satispaython
-setuptools
-slugify
-stripe
+satispaython~=0.2.0
+setuptools~=80.9.0
+slugify~=0.0.0
+stripe~=12.4.0
 
-tzdata
+tzdata~=2025.2.0
 
-whoosh
-xhtml2pdf
+whoosh~=2.7.0
+xhtml2pdf~=0.2.0
