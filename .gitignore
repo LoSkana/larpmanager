@@ -36,6 +36,8 @@ main/payment_settings/*
 
 *node_modules/
 
+.test_venv
+
 ### Django ###
 *.log
 *.pot
