@@ -39,15 +39,15 @@ def test_quest_trait(pw_page):
     casting(page, live_server)
 
     # check result
-    page.get_by_role("link", name=" User").click()
+    go_to(page, live_server, "/test/1")
     page.get_by_role("link", name="Test Character").nth(1).click()
     expect(page.locator("#one")).to_contain_text(
-        "Player: Admin Test Presentation Test Teaser 23 Text Test Text Torta - Nonna saleee aliame con AnotherAnotherPlayer: User Test"
+        "Player: Admin Test Presentation Test Teaser Text Test Text Torta - Nonna saleee aliame con AnotherAnotherPlayer: User Test"
     )
     go_to(page, live_server, "test/1/")
     page.get_by_role("link", name="Another").click()
     expect(page.locator("#one")).to_contain_text(
-        "Torta - Strudel saleee veronese Test CharacterTest CharacterPlayer: Admin TestTest Teaser 23 (...) ciaooo Torta - Strudel Test Character Player: Admin Test"
+        "Torta - Strudel saleee Test CharacterTest CharacterPlayer: Admin TestTest Teaser (...)veronese Torta - Strudel Test Character Player: Admin Test"
     )
     page.get_by_role("heading", name="Torta - Strudel").first.click()
 
@@ -126,6 +126,7 @@ def traits(page, live_server):
     page.locator("#id_name").fill("Capriciossa")
     fill_tinymce(page, "id_teaser", "normale")
     fill_tinymce(page, "id_text", "senza pomodoro")
+    page.get_by_role("button", name="Confirm").click()
 
     page.get_by_role("link", name="New").click()
     page.locator("#id_quest").select_option("2")
@@ -134,18 +135,19 @@ def traits(page, live_server):
     page.get_by_role("button", name="Confirm").click()
 
     # check how they appear on user side
-    page.get_by_role("link", name=" User").click()
+    go_to(page, live_server, "/test/1")
     page.get_by_role("link", name="Quest").click()
     expect(page.locator("#one")).to_contain_text("Name Quest Lore Torta , Pizza")
     page.get_by_role("link", name="Torta").click()
-    expect(page.locator("#one")).to_contain_text("Presentation zucchero Traits Strudel - trentina co Nonna - amelia")
-    page.close()
+    expect(page.locator("#one")).to_contain_text("Presentation zucchero Traits Strudel - trentina Nonna - amelia")
 
 
 def signups(page, live_server):
     # create signup for my char
-    go_to(page, live_server, "test/1/manage/")
+    go_to(page, live_server, "/test/1/manage/")
+    page.get_by_role("link", name="Registrations", exact=True).click()
     page.get_by_role("link", name="New").click()
+    page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").nth(1).fill("org")
     page.get_by_role("option", name="Admin Test - orga@test.it").click()
     page.get_by_role("list").click()
@@ -161,7 +163,7 @@ def signups(page, live_server):
     page.get_by_role("button", name="Confirm").click()
 
     # create signup for another
-    page.get_by_role("link", name="Registrations").click()
+    page.get_by_role("link", name="Registrations", exact=True).click()
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").nth(1).fill("user")
@@ -181,10 +183,10 @@ def casting(page, live_server):
     page.locator("#id_casting_max").fill("3")
     page.locator("#id_casting_min").click()
     page.locator("#id_casting_min").fill("2")
+    page.get_by_role("button", name="Confirm").click()
 
     # perform casting
-    page.get_by_text("Test Larp Organization This").click()
-    page.get_by_role("link", name=" User").click()
+    go_to(page, live_server, "/test/1")
     page.get_by_role("link", name="Casting").click()
     page.get_by_role("link", name="Lore").click()
     page.locator("#faction0").select_option("Torta")
@@ -196,14 +198,14 @@ def casting(page, live_server):
     page.get_by_role("button", name="Submit").click()
 
     # make casting
-    page.get_by_role("link", name=" Admin").click()
+    go_to(page, live_server, "/test/1/manage/")
     page.get_by_role("link", name="Casting").click()
     page.get_by_role("link", name="Lore").click()
     page.get_by_role("button", name="Start algorithm").click()
     page.get_by_role("button", name="Upload").click()
 
     # check signups
-    page.get_by_role("link", name="Registrations").click()
+    page.get_by_role("link", name="Registrations", exact=True).click()
     page.get_by_role("link", name="Lore").click()
     expect(page.locator("#one")).to_contain_text(
         "User Test Standard #2 Another Admin Test Standard #1 Test Character Torta - Nonna"
