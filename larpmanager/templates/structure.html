@@ -179,6 +179,7 @@
                 integrity="sha384-ao+X/Q4zAQelTI1M49AS9DVSo4NiHV4nmS+9y7vU2vqWYWRVeDSuo9UIq2QvZpHx"
                 crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+        {{ TINYMCE_DEFAULT_CONFIG|json_script:"tinymce-config" }}
         <script>
         function setCookie(name,value,days) {
             var expires = "";
