@@ -1520,11 +1520,11 @@ th select {
     top:50%;
     left:50%;
     transform:translate(-50%, -50%);
-    background:rgba(0,0,0,0.85);
+    background:rgba(var(--sec-rgb), 0.95);
     padding:3em;
     border-radius:10px;
     min-width:320px;
-    z-index: 10;
+    z-index: 10000;
 }
 
 #char-finder-close {

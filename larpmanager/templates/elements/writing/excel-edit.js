@@ -4,8 +4,6 @@
 
 <script>
 
-const tinymceConfig = JSON.parse(document.getElementById('tinymce-config').textContent);
-
 window.addEventListener('DOMContentLoaded', function() {
 
     var keyTinyMCE;
@@ -120,25 +118,14 @@ window.addEventListener('DOMContentLoaded', function() {
                 $('#excel-edit').empty().append(res.v);
 
                 if (res.tinymce) {
-                    let config = Object.assign({}, tinymceConfig);
-                    config.selector = '#excel-edit textarea' + ':not(.tinymce-initialized)';
-                    config.setup = function (editor) {
-                        editor.on('init', function () {
-                            editor.getElement().classList.add('tinymce-initialized');
-                            keyTinyMCE = editor.id;
-                        });
-                    };
-                    tinymce.init(config);
+                    window.addTinyMCETextarea('#excel-edit textarea').then((editorId) => {
+                        setUpCharFinder(editorId);
+                        setUpHighlight(editorId);
+                    });
                 }
 
                 setTimeout(() => {
                     if (res.tinymce) {
-                        // set up char highlight
-                        setUpHighlight(keyTinyMCE);
-
-                        // set up char finder
-                        setUpCharFinder(keyTinyMCE);
-
                         // prepare tinymce count
                         prepare_tinymce(res.key, res.max_length);
                     }

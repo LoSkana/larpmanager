@@ -50,6 +50,21 @@ function sidebar_mobile() {
     $('#sidebar-mobile-close').toggle();
 }
 
+const tinymceConfig = JSON.parse(document.getElementById('tinymce-config').textContent);
+
+window.addTinyMCETextarea = function(sel) {
+    return new Promise((resolve) => {
+        let config = Object.assign({}, tinymceConfig);
+        config.selector = sel + ':not(.tinymce-initialized)';
+        config.setup = function (editor) {
+            editor.on('init', function () {
+                editor.getElement().classList.add('tinymce-initialized');
+                resolve(editor.id);
+            });
+        };
+        tinymce.init(config);
+    });
+}
 
 $(document).ready(function() {
 

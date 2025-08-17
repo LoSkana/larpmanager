@@ -38,14 +38,13 @@
 {% endblock content %}
 {% block js %}
     <script defer src="{% static TINYMCE_JS_URL %}"></script>
-    {{ TINYMCE_DEFAULT_CONFIG|json_script:"tinymce-config" }}
-    {% include "elements/writing/excel-edit.js" %}
     {% include "elements/form/max_length.js" %}
-    {% include "elements/form/char_highlight.js" %}
     {% if not disable_char_finder %}
         {{ char_finder_media }}
         {% include "elements/form/char_finder.js" %}
     {% endif %}
+    {% include "elements/writing/excel-edit.js" %}
+    {% include "elements/form/char_highlight.js" %}
     <script>
         var url_load_questions = "{% url 'orga_writing_form_list' run.event.slug run.number label_typ %}";
         var url_load_questions_email = "{% url 'orga_writing_form_email' run.event.slug run.number label_typ %}";

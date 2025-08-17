@@ -1,10 +1,6 @@
 {% load i18n %}
 
-{{ TINYMCE_DEFAULT_CONFIG|json_script:"tinymce-config" }}
-
 <script>
-
-const tinymceConfig = JSON.parse(document.getElementById('tinymce-config').textContent);
 
 const editUrl = "{% url 'orga_characters_edit' run.event.slug run.number 0 %}";
 
@@ -17,20 +13,6 @@ const editUrl = "{% url 'orga_characters_edit' run.event.slug run.number 0 %}";
 window.addEventListener('DOMContentLoaded', function() {
 
     var already = [];
-
-    function addTinyMCETextarea(sel) {
-        return new Promise((resolve) => {
-            let config = Object.assign({}, tinymceConfig);
-            config.selector = sel + ':not(.tinymce-initialized)';
-            config.setup = function (editor) {
-                editor.on('init', function () {
-                    editor.getElement().classList.add('tinymce-initialized');
-                    resolve(editor.id);
-                });
-            };
-            tinymce.init(config);
-        });
-    }
 
     function add_relationship(ch_id, ch_name) {
 
@@ -58,7 +40,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         $('#form_relationships').prepend(html);
 
-        addTinyMCETextarea('.f_rel_{0}_direct textarea'.format(ch_id)).then((editorId) => {
+        window.addTinyMCETextarea('.f_rel_{0}_direct textarea'.format(ch_id)).then((editorId) => {
             setUpAutoSave(editorId);
             setUpCharFinder(editorId);
             setUpHighlight(editorId);
@@ -69,7 +51,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     $(function() {
         {% for key, item in relationships.items %}
-            addTinyMCETextarea('.f_{{ key }}_direct textarea').then((editorId) => {
+            window.addTinyMCETextarea('.f_{{ key }}_direct textarea').then((editorId) => {
                 setUpAutoSave(editorId);
                 setUpCharFinder(editorId);
                 setUpHighlight(editorId);
