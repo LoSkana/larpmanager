@@ -27,7 +27,7 @@ for i in $(seq 0 $((WORKERS-1))); do
   psql -v ON_ERROR_STOP=1 -d postgres -c "DROP DATABASE IF EXISTS ${DB};"
   psql -v ON_ERROR_STOP=1 -d postgres -c "CREATE DATABASE ${DB} OWNER ${POSTGRES_USER};"
   psql -v ON_ERROR_STOP=1 -d "${DB}" -c "SET search_path TO public;"
-  psql ON_ERROR_STOP=1 -d "${DB}" -f "${SQL_FILE}"
+  psql -v ON_ERROR_STOP=1 -d "${DB}" -f "${SQL_FILE}" --quiet
 done
 
 echo "Done."
