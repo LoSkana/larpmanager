@@ -17,67 +17,53 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-import asyncio
-
 import pytest
-from playwright.async_api import async_playwright, expect
+from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, handle_error, login_orga, login_user, logout, page_start
+from larpmanager.tests.utils import go_to, login_orga, login_user, logout
 
-
-@pytest.mark.django_db
-@pytest.mark.asyncio
-async def test_exe_assoc_role(live_server):
-    async with async_playwright() as p:
-        browser, context, page = await page_start(p)
-        try:
-            await exe_assoc_role(live_server, page)
-
-        except Exception as e:
-            await handle_error(page, e, "exe_assoc")
-
-        finally:
-            await context.close()
-            await browser.close()
+pytestmark = pytest.mark.e2e
 
 
-async def exe_assoc_role(live_server, page):
-    await login_user(page, live_server)
+def test_exe_assoc_role(pw_page):
+    page, live_server, _ = pw_page
 
-    await go_to(page, live_server, "/manage/")
-    await expect(page.locator("#header")).to_contain_text("Access denied")
+    login_user(page, live_server)
 
-    await login_orga(page, live_server)
+    go_to(page, live_server, "/manage/")
+    expect(page.locator("#header")).to_contain_text("Access denied")
 
-    await go_to(page, live_server, "/manage/roles")
-    await page.get_by_role("link", name="New").click()
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("test role")
-    await page.locator("#id_name").press("Tab")
-    await page.get_by_role("searchbox").fill("us")
-    await page.get_by_role("option", name="User Test -").click()
-    await page.locator("#id_Organization_2").check()
-    await page.locator("#id_Accounting_0").check()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
-    await expect(page.locator('[id="\\32 "]')).to_contain_text("Organization (Configuration), Accounting (Accounting)")
+    login_orga(page, live_server)
 
-    await logout(page, live_server)
-    await login_user(page, live_server)
+    go_to(page, live_server, "/manage/roles")
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("test role")
+    page.locator("#id_name").press("Tab")
+    page.get_by_role("searchbox").fill("us")
+    page.get_by_role("option", name="User Test -").click()
+    page.locator("#id_Organization_2").check()
+    page.locator("#id_Accounting_0").check()
+    page.get_by_role("button", name="Confirm", exact=True).click()
+    expect(page.locator('[id="\\32 "]')).to_contain_text("Organization (Configuration), Accounting (Accounting)")
 
-    await go_to(page, live_server, "/manage/accounting/")
-    await expect(page.locator("#banner")).to_contain_text("Accounting - Organization")
+    logout(page)
+    login_user(page, live_server)
 
-    await logout(page, live_server)
-    await login_orga(page, live_server)
+    go_to(page, live_server, "/manage/accounting/")
+    expect(page.locator("#banner")).to_contain_text("Accounting - Organization")
 
-    await go_to(page, live_server, "/manage/roles")
-    await page.get_by_role("row", name=" test role User Test").get_by_role("link").click()
-    await page.get_by_role("link", name="Delete").click()
-    await asyncio.sleep(2)
-    await page.get_by_role("button", name="Confirmation delete").click()
+    logout(page)
+    login_orga(page, live_server)
 
-    await logout(page, live_server)
-    await login_user(page, live_server)
+    go_to(page, live_server, "/manage/roles")
+    page.get_by_role("row", name=" test role User Test").get_by_role("link").click()
+    page.get_by_role("link", name="Delete").click()
+    page.wait_for_timeout(2000)
+    page.get_by_role("button", name="Confirmation delete").click()
 
-    await go_to(page, live_server, "/manage/")
-    await expect(page.locator("#header")).to_contain_text("Access denied")
+    logout(page)
+    login_user(page, live_server)
+
+    go_to(page, live_server, "/manage/")
+    expect(page.locator("#header")).to_contain_text("Access denied")

@@ -22,235 +22,223 @@ import re
 from pathlib import Path
 
 import pytest
-from playwright.async_api import async_playwright, expect
+from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, handle_error, login_orga, login_user, page_start, submit
+from larpmanager.tests.utils import go_to, login_orga, login_user, submit
 
-
-@pytest.mark.django_db
-@pytest.mark.asyncio
-async def test_user_registration_form_gift(live_server):
-    async with async_playwright() as p:
-        browser, context, page = await page_start(p)
-        try:
-            await user_registration_form_gift(live_server, page)
-
-        except Exception as e:
-            await handle_error(page, e, "user_registration_form_gift")
-
-        finally:
-            await context.close()
-            await browser.close()
+pytestmark = pytest.mark.e2e
 
 
-async def user_registration_form_gift(live_server, page):
-    await login_orga(page, live_server)
+def test_user_registration_form_gift(pw_page):
+    page, live_server, _ = pw_page
 
-    await prepare(page, live_server)
+    login_orga(page, live_server)
 
-    await field_choice(page, live_server)
+    prepare(page, live_server)
 
-    await field_multiple(page, live_server)
+    field_choice(page, live_server)
 
-    await field_text(page, live_server)
+    field_multiple(page, live_server)
 
-    await gift(page, live_server)
+    field_text(page, live_server)
+
+    gift(page, live_server)
 
 
-async def prepare(page, live_server):
+def prepare(page, live_server):
     # Activate payments
-    await go_to(page, live_server, "/manage/features/111/on")
+    go_to(page, live_server, "/manage/features/111/on")
 
-    await go_to(page, live_server, "/manage/config")
-    await page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
-    await page.locator("#id_mail_cc").check()
-    await page.locator("#id_mail_signup_new").check()
-    await page.locator("#id_mail_signup_update").check()
-    await page.locator("#id_mail_signup_del").check()
-    await page.locator("#id_mail_payment").check()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/manage/config")
+    page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
+    page.locator("#id_mail_cc").check()
+    page.locator("#id_mail_signup_new").check()
+    page.locator("#id_mail_signup_update").check()
+    page.locator("#id_mail_signup_del").check()
+    page.locator("#id_mail_payment").check()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
-    await go_to(page, live_server, "/manage/payments/details")
-    await page.locator('#id_payment_methods input[type="checkbox"][value="1"]').check()
-    await page.locator("#id_wire_descr").click()
-    await page.locator("#id_wire_descr").fill("test wire")
-    await page.locator("#id_wire_fee").fill("0")
-    await page.locator("#id_wire_descr").press("Tab")
-    await page.locator("#id_wire_payee").fill("test beneficiary")
-    await page.locator("#id_wire_payee").press("Tab")
-    await page.locator("#id_wire_iban").fill("test iban")
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/manage/payments/details")
+    page.locator('#id_payment_methods input[type="checkbox"][value="1"]').check()
+    page.locator("#id_wire_descr").click()
+    page.locator("#id_wire_descr").fill("test wire")
+    page.locator("#id_wire_fee").fill("0")
+    page.locator("#id_wire_descr").press("Tab")
+    page.locator("#id_wire_payee").fill("test beneficiary")
+    page.locator("#id_wire_payee").press("Tab")
+    page.locator("#id_wire_iban").fill("test iban")
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # Activate gift
-    await go_to(page, live_server, "/test/1/manage/features/175/on")
+    go_to(page, live_server, "/test/1/manage/features/175/on")
 
-    await go_to(page, live_server, "/test/1/manage/registrations/form/")
+    go_to(page, live_server, "/test/1/manage/registrations/form/")
 
 
-async def field_choice(page, live_server):
+def field_choice(page, live_server):
     # create single choice
-    await page.get_by_role("link", name="New").click()
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("choice")
-    await page.locator("#id_name").press("Tab")
-    await page.locator("#id_description").fill("asd")
-    await page.locator("#id_description").press("Shift+Home")
-    await page.locator("#id_description").fill("")
-    await page.locator("#id_giftable").check()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("choice")
+    page.locator("#id_name").press("Tab")
+    page.locator("#id_description").fill("asd")
+    page.locator("#id_description").press("Shift+Home")
+    page.locator("#id_description").fill("")
+    page.locator("#id_giftable").check()
 
-    await page.get_by_role("link", name="New").click()
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("prima")
-    await page.locator("#id_name").press("Tab")
-    await page.locator("#id_description").fill("f")
-    await page.locator("#id_price").click()
-    await page.locator("#id_price").click()
-    await page.locator("#id_price").fill("10")
-    await page.locator("#id_price").press("Tab")
-    await page.locator("#id_max_available").fill("2")
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("prima")
+    page.locator("#id_name").press("Tab")
+    page.locator("#id_description").fill("f")
+    page.locator("#id_price").click()
+    page.locator("#id_price").click()
+    page.locator("#id_price").fill("10")
+    page.locator("#id_price").press("Tab")
+    page.locator("#id_max_available").fill("2")
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
-    await page.get_by_role("link", name="New").click()
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("secondas")
-    await page.locator("#id_description").click()
-    await page.locator("#id_description").fill("s")
-    await page.get_by_role("button", name="Confirm", exact=True).click()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("secondas")
+    page.locator("#id_description").click()
+    page.locator("#id_description").fill("s")
+    page.get_by_role("button", name="Confirm", exact=True).click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
 
-async def field_multiple(page, live_server):
+def field_multiple(page, live_server):
     # create multiple choice
-    await page.get_by_role("link", name="New").click()
-    await page.locator("#id_typ").select_option("m")
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("wow")
-    await page.locator("#id_name").press("Tab")
-    await page.locator("#id_description").fill("buuuug")
-    await page.locator("#id_status").select_option("m")
-    await page.locator("#id_max_length").click()
-    await page.locator("#id_max_length").fill("1")
-    await page.locator("#id_giftable").check()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_typ").select_option("m")
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("wow")
+    page.locator("#id_name").press("Tab")
+    page.locator("#id_description").fill("buuuug")
+    page.locator("#id_status").select_option("m")
+    page.locator("#id_max_length").click()
+    page.locator("#id_max_length").fill("1")
+    page.locator("#id_giftable").check()
 
-    await page.get_by_role("link", name="New").click()
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("one")
-    await page.locator("#id_name").press("Tab")
-    await page.locator("#id_description").fill("asdas")
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("one")
+    page.locator("#id_name").press("Tab")
+    page.locator("#id_description").fill("asdas")
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
-    await page.get_by_role("link", name="New").click()
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("twp")
-    await page.locator("#id_name").press("Tab")
-    await page.locator("#id_description").fill("asdas")
-    await page.locator("#id_price").click()
-    await page.locator("#id_price").press("Home")
-    await page.locator("#id_price").fill("10")
-    await page.locator("#id_max_available").click()
-    await page.locator("#id_max_available").fill("2")
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("twp")
+    page.locator("#id_name").press("Tab")
+    page.locator("#id_description").fill("asdas")
+    page.locator("#id_price").click()
+    page.locator("#id_price").press("Home")
+    page.locator("#id_price").fill("10")
+    page.locator("#id_max_available").click()
+    page.locator("#id_max_available").fill("2")
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
-    await page.get_by_role("link", name="New").click()
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("hhasd")
-    await page.locator("#id_description").click()
-    await page.locator("#id_description").fill("sarrrr")
-    await page.get_by_role("button", name="Confirm", exact=True).click()
-    await page.locator('[id="\\34 "]').get_by_role("link", name="").click()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
-    await page.get_by_role("link", name="").click()
-    await page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("hhasd")
+    page.locator("#id_description").click()
+    page.locator("#id_description").fill("sarrrr")
+    page.get_by_role("button", name="Confirm", exact=True).click()
+    page.locator('[id="\\34 "]').get_by_role("link", name="").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
+    page.get_by_role("link", name="").click()
+    page.get_by_role("link", name="New").click()
 
 
-async def field_text(page, live_server):
+def field_text(page, live_server):
     # create text
-    await page.locator("#id_typ").select_option("t")
-    await page.locator("#id_description").click()
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("who")
-    await page.locator("#id_name").press("Tab")
-    await page.locator("#id_description").fill("gtqwe")
-    await page.locator("#id_status").select_option("d")
-    await page.locator("#id_status").select_option("o")
-    await page.locator("#id_giftable").check()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    page.locator("#id_typ").select_option("t")
+    page.locator("#id_description").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("who")
+    page.locator("#id_name").press("Tab")
+    page.locator("#id_description").fill("gtqwe")
+    page.locator("#id_status").select_option("d")
+    page.locator("#id_status").select_option("o")
+    page.locator("#id_giftable").check()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # create paragraph
-    await page.get_by_role("link", name="New").click()
-    await page.locator("#id_typ").select_option("p")
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("when")
-    await page.locator("#id_description").click()
-    await page.locator("#id_description").fill("sadsaddd")
-    await page.locator("#id_giftable").check()
-    await page.locator("#id_max_length").click()
-    await page.locator("#id_max_length").fill("100")
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_typ").select_option("p")
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("when")
+    page.locator("#id_description").click()
+    page.locator("#id_description").fill("sadsaddd")
+    page.locator("#id_giftable").check()
+    page.locator("#id_max_length").click()
+    page.locator("#id_max_length").fill("100")
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # sign up
-    await go_to(page, live_server, "/test/1/register/")
-    await page.get_by_text("twp (10€) - (Available 2)").click()
-    await expect(page.locator("#register_form")).to_contain_text("options: 1 / 1")
-    await page.get_by_label("choice").select_option("2")
-    await page.get_by_role("textbox", name="who").click()
-    await page.get_by_role("textbox", name="who").fill("sadsadas")
-    await page.get_by_role("textbox", name="when").click()
-    await page.get_by_role("textbox", name="when").fill("sadsadsadsad")
-    await expect(page.locator("#register_form")).to_contain_text("text length: 12 / 100")
-    await page.get_by_role("button", name="Continue").click()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
-    await page.get_by_role("link", name="Register").click()
-    await expect(page.get_by_label("when")).to_contain_text("sadsadsadsad")
-    await expect(page.get_by_label("choice")).to_contain_text("secondas")
+    go_to(page, live_server, "/test/1/register/")
+    page.get_by_text("twp (10€) - (Available 2)").click()
+    expect(page.locator("#register_form")).to_contain_text("options: 1 / 1")
+    page.get_by_label("choice").select_option("2")
+    page.get_by_role("textbox", name="who").click()
+    page.get_by_role("textbox", name="who").fill("sadsadas")
+    page.get_by_role("textbox", name="when").click()
+    page.get_by_role("textbox", name="when").fill("sadsadsadsad")
+    expect(page.locator("#register_form")).to_contain_text("text length: 12 / 100")
+    page.get_by_role("button", name="Continue").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
+    page.get_by_role("link", name="Register").click()
+    expect(page.get_by_label("when")).to_contain_text("sadsadsadsad")
+    expect(page.get_by_label("choice")).to_contain_text("secondas")
 
 
-async def gift(page, live_server):
+def gift(page, live_server):
     # make ticket giftable
-    await go_to(page, live_server, "/test/1/manage/registrations/tickets/")
-    await page.get_by_role("link", name="").click()
-    await page.get_by_text("Indicates whether the ticket").click()
-    await page.locator("#id_giftable").check()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/test/1/manage/registrations/tickets/")
+    page.get_by_role("link", name="").click()
+    page.get_by_text("Indicates whether the ticket").click()
+    page.locator("#id_giftable").check()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # gift
-    await go_to(page, live_server, "/test/1/gift/")
-    await page.get_by_role("link", name="Add new").click()
-    await page.locator("#id_q2").get_by_text("one").click()
-    await page.get_by_label("choice").select_option("1")
-    await page.get_by_role("textbox", name="who").click()
-    await page.get_by_role("textbox", name="who").fill("wwww")
-    await page.get_by_role("textbox", name="when").click()
-    await page.get_by_role("textbox", name="when").fill("fffdsfs")
-    await page.get_by_role("button", name="Continue").click()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
-    await expect(page.locator("#one")).to_contain_text("( Standard ) choice - prima (10.00€) , wow - one")
-    await expect(page.locator("#one")).to_contain_text("10€ within 8 days")
+    go_to(page, live_server, "/test/1/gift/")
+    page.get_by_role("link", name="Add new").click()
+    page.locator("#id_q2").get_by_text("one").click()
+    page.get_by_label("choice").select_option("1")
+    page.get_by_role("textbox", name="who").click()
+    page.get_by_role("textbox", name="who").fill("wwww")
+    page.get_by_role("textbox", name="when").click()
+    page.get_by_role("textbox", name="when").fill("fffdsfs")
+    page.get_by_role("button", name="Continue").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
+    expect(page.locator("#one")).to_contain_text("( Standard ) choice - prima (10.00€) , wow - one")
+    expect(page.locator("#one")).to_contain_text("10€ within 8 days")
 
     # pay
-    await page.get_by_role("link", name="10€ within 8 days").click()
-    await page.get_by_role("button", name="Submit").click()
+    page.get_by_role("link", name="10€ within 8 days").click()
+    page.get_by_role("button", name="Submit").click()
     image_path = Path(__file__).parent / "image.jpg"
-    await page.locator("#id_invoice").set_input_files(str(image_path))
-    await submit(page)
+    page.locator("#id_invoice").set_input_files(str(image_path))
+    submit(page)
 
-    await page.get_by_role("checkbox", name="Authorisation").check()
-    await page.get_by_role("button", name="Submit").click()
+    page.get_by_role("checkbox", name="Authorisation").check()
+    page.get_by_role("button", name="Submit").click()
 
-    await go_to(page, live_server, "/test/1/gift/")
-    await expect(page.locator("#one")).to_contain_text("Payment currently in review by the staff.")
+    go_to(page, live_server, "/test/1/gift/")
+    expect(page.locator("#one")).to_contain_text("Payment currently in review by the staff.")
 
     # approve payment
-    await go_to(page, live_server, "/test/1/manage/invoices")
-    await page.get_by_role("link", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/test/1/manage/invoices")
+    page.get_by_role("link", name="Confirm", exact=True).click()
 
     # redeem
-    await go_to(page, live_server, "/test/1/gift/")
-    await expect(page.locator("#one")).to_contain_text("Redeem code")
-    href = await page.get_by_role("link", name="Redeem code").get_attribute("href")
+    go_to(page, live_server, "/test/1/gift/")
+    expect(page.locator("#one")).to_contain_text("Redeem code")
+    href = page.get_by_role("link", name="Redeem code").get_attribute("href")
 
-    await login_user(page, live_server)
-    await go_to(page, live_server, href)
-    await expect(page.locator("#header")).to_contain_text("Redeem registration")
-    await page.get_by_role("button", name="Confirm", exact=True).click()
-    await expect(page.locator("#one")).to_contain_text("Registration confirmed")
+    login_user(page, live_server)
+    go_to(page, live_server, href)
+    expect(page.locator("#header")).to_contain_text("Redeem registration")
+    page.get_by_role("button", name="Confirm", exact=True).click()
+    expect(page.locator("#one")).to_contain_text("Registration confirmed")

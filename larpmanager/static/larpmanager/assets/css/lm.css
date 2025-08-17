@@ -1344,6 +1344,10 @@ th select {
   margin: 0;
 }
 
+.dropdown-menu:empty {
+  display: none !important;
+}
+
 .show {
   display: block;
 }
@@ -1976,7 +1980,7 @@ table.dataTable td.dt-type-date div.dt-column-footer {
   flex-direction: row !important;
 }
 
-.dataTable a { margin: 0; display: block; }
+.dataTable a { margin: 0; }
 
 .dataTable tbody td {
   white-space: normal !important;
@@ -2046,4 +2050,12 @@ table.dataTable span.dtcc span.dtcc-button-icon {
 
 #reading .post_popup {
     display: none;
+}
+
+.dot_links a {
+    border-bottom: dotted 1px rgba(var(--pri-rgb), 0.35);
+}
+
+.nope {
+    display: none !important;
 }

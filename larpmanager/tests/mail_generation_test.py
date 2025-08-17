@@ -21,162 +21,149 @@ import re
 from pathlib import Path
 
 import pytest
-from playwright.async_api import async_playwright
 
-from larpmanager.tests.utils import check_download, fill_tinymce, go_to, handle_error, login_orga, page_start, submit
+from larpmanager.tests.utils import check_download, fill_tinymce, go_to, login_orga, submit
 
-
-@pytest.mark.django_db
-@pytest.mark.asyncio
-async def test_mail_generation(live_server):
-    async with async_playwright() as p:
-        browser, context, page = await page_start(p)
-        try:
-            await mail_generation(live_server, page)
-
-        except Exception as e:
-            await handle_error(page, e, "mail_generation")
-
-        finally:
-            await context.close()
-            await browser.close()
+pytestmark = pytest.mark.e2e
 
 
-async def mail_generation(live_server, page):
-    await login_orga(page, live_server)
+def test_mail_generation(pw_page):
+    page, live_server, _ = pw_page
 
-    await chat(live_server, page)
+    login_orga(page, live_server)
+
+    chat(live_server, page)
 
     image_path = Path(__file__).parent / "image.jpg"
 
-    await badge(live_server, page, image_path)
+    badge(live_server, page, image_path)
 
-    await submit_membership(live_server, page, image_path)
+    submit_membership(live_server, page, image_path)
 
-    await resubmit_membership(live_server, page)
+    resubmit_membership(live_server, page)
 
-    await expense(image_path, live_server, page)
+    expense(image_path, live_server, page)
 
 
-async def expense(image_path, live_server, page):
+def expense(image_path, live_server, page):
     # approve it
-    await go_to(page, live_server, "/manage/membership/")
-    await page.get_by_role("link", name="Request").click()
-    await page.get_by_role("textbox", name="Response").fill("yeaaaa")
-    await page.get_by_role("button", name="Confirm").click()
+    go_to(page, live_server, "/manage/membership/")
+    page.get_by_role("link", name="Request").click()
+    page.get_by_role("textbox", name="Response").fill("yeaaaa")
+    page.get_by_role("button", name="Confirm").click()
 
     # expenses
-    await go_to(page, live_server, "/manage/features/106/on")
-    await go_to(page, live_server, "/test/1/manage/expenses/my")
-    await page.get_by_role("link", name="New").click()
-    await page.get_by_role("spinbutton", name="Value").click()
-    await page.get_by_role("spinbutton", name="Value").fill("10")
-    await page.locator("#id_invoice").set_input_files(str(image_path))
-    await page.get_by_label("Type").select_option("g")
-    await page.get_by_role("textbox", name="Descr").click()
-    await page.get_by_role("textbox", name="Descr").fill("dsadas")
-    await page.get_by_role("button", name="Confirm", exact=True).click()
-    await go_to(page, live_server, "/test/1/manage/expenses")
-    await page.get_by_role("link", name="Approve").click()
+    go_to(page, live_server, "/manage/features/106/on")
+    go_to(page, live_server, "/test/1/manage/expenses/my")
+    page.get_by_role("link", name="New").click()
+    page.get_by_role("spinbutton", name="Value").click()
+    page.get_by_role("spinbutton", name="Value").fill("10")
+    page.locator("#id_invoice").set_input_files(str(image_path))
+    page.get_by_label("Type").select_option("g")
+    page.get_by_role("textbox", name="Descr").click()
+    page.get_by_role("textbox", name="Descr").fill("dsadas")
+    page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/test/1/manage/expenses")
+    page.get_by_role("link", name="Approve").click()
 
 
-async def resubmit_membership(live_server, page):
+def resubmit_membership(live_server, page):
     # refute it
-    await go_to(page, live_server, "/manage/membership/")
-    await page.get_by_role("link", name="Request").click()
-    await page.locator("form").locator("#id_is_approved").click()
-    await page.locator("form").locator("#id_response").fill("nope")
-    await page.get_by_role("button", name="Confirm").click()
+    go_to(page, live_server, "/manage/membership/")
+    page.get_by_role("link", name="Request").click()
+    page.locator("form").locator("#id_is_approved").click()
+    page.locator("form").locator("#id_response").fill("nope")
+    page.get_by_role("button", name="Confirm").click()
     # signup
-    await go_to(page, live_server, "/test/1/manage/registrations/tickets/")
-    await page.locator("a:has(i.fas.fa-edit)").click()
-    await page.locator("#id_price").click()
-    await page.locator("#id_price").fill("100")
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/test/1/manage/registrations/tickets/")
+    page.locator("a:has(i.fas.fa-edit)").click()
+    page.locator("#id_price").click()
+    page.locator("#id_price").fill("100")
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
-    await go_to(page, live_server, "/test/1/register/")
-    await page.get_by_role("button", name="Continue").click()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/test/1/register/")
+    page.get_by_role("button", name="Continue").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     # Set membership fee
-    await go_to(page, live_server, "/manage/config/")
-    await page.get_by_role("link", name=re.compile(r"^Members\s.+")).click()
-    await page.locator("#id_membership_fee").click()
-    await page.locator("#id_membership_fee").fill("10")
-    await page.locator("#id_membership_day").click()
-    await page.locator("#id_membership_day").fill("01-01")
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/manage/config/")
+    page.get_by_role("link", name=re.compile(r"^Members\s.+")).click()
+    page.locator("#id_membership_fee").click()
+    page.locator("#id_membership_fee").fill("10")
+    page.locator("#id_membership_day").click()
+    page.locator("#id_membership_day").fill("01-01")
+    page.get_by_role("button", name="Confirm", exact=True).click()
     # update signup, go to membership
-    await go_to(page, live_server, "/test/1/register/")
-    await page.get_by_role("button", name="Continue").click()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
-    await submit(page)
-    await page.locator("#id_confirm_1").check()
-    await page.locator("#id_confirm_2").check()
-    await page.locator("#id_confirm_3").check()
-    await page.locator("#id_confirm_4").check()
-    await submit(page)
+    go_to(page, live_server, "/test/1/register/")
+    page.get_by_role("button", name="Continue").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit(page)
+    page.locator("#id_confirm_1").check()
+    page.locator("#id_confirm_2").check()
+    page.locator("#id_confirm_3").check()
+    page.locator("#id_confirm_4").check()
+    submit(page)
 
 
-async def submit_membership(live_server, page, image_path):
+def submit_membership(live_server, page, image_path):
     # Test membership
-    await go_to(page, live_server, "/manage/features/45/on")
-    await go_to(page, live_server, "/manage/texts")
-    await page.wait_for_timeout(2000)
-    await page.get_by_role("link", name="New").click()
+    go_to(page, live_server, "/manage/features/45/on")
+    go_to(page, live_server, "/manage/texts")
+    page.wait_for_timeout(2000)
+    page.get_by_role("link", name="New").click()
 
-    await fill_tinymce(page, "id_text_ifr", "Ciao {{ member.name }}!")
+    fill_tinymce(page, "id_text", "Ciao {{ member.name }}!")
 
-    await page.locator("#main_form").click()
-    await page.locator("#id_typ").select_option("m")
-    await page.get_by_role("button", name="Confirm", exact=True).click()
-    await go_to(page, live_server, "/membership")
-    await page.get_by_role("checkbox", name="Authorisation").check()
-    await submit(page)
+    page.locator("#main_form").click()
+    page.locator("#id_typ").select_option("m")
+    page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/membership")
+    page.get_by_role("checkbox", name="Authorisation").check()
+    submit(page)
 
-    await check_download(page, "download it here")
+    check_download(page, "download it here")
 
-    await page.locator("#id_request").set_input_files(str(image_path))
-    await page.locator("#id_document").set_input_files(str(image_path))
+    page.locator("#id_request").set_input_files(str(image_path))
+    page.locator("#id_document").set_input_files(str(image_path))
 
-    await submit(page)
-    await page.locator("#id_confirm_1").check()
-    await page.get_by_text("I confirm that I have").click()
-    await page.locator("#id_confirm_2").check()
-    await page.get_by_text("I confirm that I have").click()
-    await page.locator("#id_confirm_3").check()
-    await page.locator("#id_confirm_4").check()
-    await submit(page)
+    submit(page)
+    page.locator("#id_confirm_1").check()
+    page.get_by_text("I confirm that I have").click()
+    page.locator("#id_confirm_2").check()
+    page.get_by_text("I confirm that I have").click()
+    page.locator("#id_confirm_3").check()
+    page.locator("#id_confirm_4").check()
+    submit(page)
 
 
-async def badge(live_server, page, image_path):
+def badge(live_server, page, image_path):
     # Test badge
-    await go_to(page, live_server, "/manage/features/65/on")
-    await go_to(page, live_server, "/manage/badges")
-    await page.get_by_role("link", name="New").click()
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("prova")
-    await page.locator("#id_name").press("Tab")
-    await page.locator("#id_name_eng").fill("prova")
-    await page.locator("#id_name_eng").press("Tab")
-    await page.locator("#id_descr").fill("asdsa")
-    await page.locator("#id_descr").press("Tab")
-    await page.locator("#id_descr_eng").fill("asdsadaasd")
-    await page.locator("#id_cod").click()
-    await page.locator("#id_cod").fill("asd")
-    await page.locator("#id_cod").click()
-    await page.locator("#id_cod").fill("asasdsadd")
-    await page.locator("#id_img").click()
+    go_to(page, live_server, "/manage/features/65/on")
+    go_to(page, live_server, "/manage/badges")
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("prova")
+    page.locator("#id_name").press("Tab")
+    page.locator("#id_name_eng").fill("prova")
+    page.locator("#id_name_eng").press("Tab")
+    page.locator("#id_descr").fill("asdsa")
+    page.locator("#id_descr").press("Tab")
+    page.locator("#id_descr_eng").fill("asdsadaasd")
+    page.locator("#id_cod").click()
+    page.locator("#id_cod").fill("asd")
+    page.locator("#id_cod").click()
+    page.locator("#id_cod").fill("asasdsadd")
+    page.locator("#id_img").click()
 
-    await page.locator("#id_img").set_input_files(str(image_path))
-    await page.get_by_role("searchbox").fill("user")
-    await page.get_by_role("option", name="User Test - user@test.it").click()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    page.locator("#id_img").set_input_files(str(image_path))
+    page.get_by_role("searchbox").fill("user")
+    page.get_by_role("option", name="User Test - user@test.it").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
 
-async def chat(live_server, page):
+def chat(live_server, page):
     # Test chat
-    await go_to(page, live_server, "/manage/features/52/on")
-    await go_to(page, live_server, "/public/3/")
-    await page.get_by_role("link", name="Chat").click()
-    await page.get_by_role("textbox").fill("ciao!")
-    await submit(page)
+    go_to(page, live_server, "/manage/features/52/on")
+    go_to(page, live_server, "/public/3/")
+    page.get_by_role("link", name="Chat").click()
+    page.get_by_role("textbox").fill("ciao!")
+    submit(page)

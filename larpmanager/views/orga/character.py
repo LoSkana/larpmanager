@@ -156,7 +156,7 @@ def orga_characters_relationships(request, s, n, num):
 
 @login_required
 def orga_characters_view(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_characters")
+    ctx = check_event_permission(request, s, n, ["orga_reading", "orga_characters"])
     get_char(ctx, num)
     get_event_cache_all(ctx)
     return writing_view(request, ctx, "character")

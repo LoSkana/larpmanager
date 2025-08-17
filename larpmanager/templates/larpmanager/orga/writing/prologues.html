@@ -56,7 +56,7 @@
                     {% endif %}
                     <td>{{ el.text_red | safe }}</td>
                     <td>{{ el.text_ln }}</td>
-                    <td>
+                    <td class="dot_links">
                         {% for ch in el.characters.all %}
                             <a href="{% url 'orga_characters_edit' run.event.slug run.number ch.id %}">{{ ch }}</a>
                         {% endfor %}

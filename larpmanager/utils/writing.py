@@ -48,7 +48,7 @@ from larpmanager.models.writing import (
     replace_chars_all,
 )
 from larpmanager.templatetags.show_tags import show_char, show_trait
-from larpmanager.utils.character import get_character_sheet
+from larpmanager.utils.character import get_character_relationships, get_character_sheet
 from larpmanager.utils.common import check_field, compute_diff
 from larpmanager.utils.download import download
 from larpmanager.utils.edit import _setup_char_finder
@@ -345,10 +345,12 @@ def writing_view(request, ctx, nm):
             ctx["char"] = ctx["chars"][ctx["el"].number]
         ctx["character"] = ctx["el"]
         get_character_sheet(ctx)
+        get_character_relationships(ctx)
     else:
         applicable = QuestionApplicable.get_applicable(nm)
         if applicable:
-            ctx["element"] = get_writing_element_fields(ctx, "faction", applicable, ctx["el"].id, only_visible=False)
+            ctx["element"] = get_writing_element_fields(ctx, nm, applicable, ctx["el"].id, only_visible=False)
+        ctx["sheet_char"] = ctx["el"].show_complete()
 
     if nm == "plot":
         ctx["sheet_plots"] = (

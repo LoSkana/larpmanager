@@ -17,60 +17,37 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
-
 import pytest
-from playwright.async_api import async_playwright
 
-from larpmanager.tests.utils import (
-    _checkboxes,
-    add_links_to_visit,
-    go_to,
-    go_to_check,
-    handle_error,
-    login_orga,
-    page_start,
-)
+from larpmanager.tests.utils import _checkboxes, add_links_to_visit, go_to, go_to_check, login_orga
+
+pytestmark = pytest.mark.e2e
 
 
-@pytest.mark.django_db
-@pytest.mark.asyncio
-async def test_exe_features_all(live_server):
-    async with async_playwright() as p:
-        browser, context, page = await page_start(p)
-        try:
-            await exe_features_all(live_server, page)
+def test_exe_features_all(pw_page):
+    page, live_server, _ = pw_page
 
-        except Exception as e:
-            await handle_error(page, e, "exe_features")
+    login_orga(page, live_server)
 
-        finally:
-            await context.close()
-            await browser.close()
+    go_to(page, live_server, "/manage/features")
+    _checkboxes(page, True)
+
+    visit_all(page, live_server)
+
+    go_to(page, live_server, "/manage/features")
+    _checkboxes(page, False)
 
 
-async def exe_features_all(live_server, page):
-    await login_orga(page, live_server)
-
-    await go_to(page, live_server, "/manage/features")
-    await _checkboxes(page, True)
-
-    await visit_all(page, live_server)
-
-    await go_to(page, live_server, "/manage/features")
-    await _checkboxes(page, False)
-
-
-async def visit_all(page, live_server):
+def visit_all(page, live_server):
     # Visit every link
     visited_links = set()
-    links_to_visit = {live_server.url + "/manage/"}
+    links_to_visit = {live_server + "/manage/"}
     while links_to_visit:
         current_link = links_to_visit.pop()
         if current_link in visited_links:
             continue
         visited_links.add(current_link)
 
-        await go_to_check(page, current_link)
+        go_to_check(page, current_link)
 
-        await add_links_to_visit(links_to_visit, page, visited_links)
+        add_links_to_visit(links_to_visit, page, visited_links)

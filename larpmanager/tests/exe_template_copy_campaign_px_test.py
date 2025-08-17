@@ -17,226 +17,213 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-import asyncio
+
 import re
 
 import pytest
-from playwright.async_api import async_playwright, expect
+from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, handle_error, login_orga, page_start
+from larpmanager.tests.utils import fill_tinymce, go_to, login_orga
 
-
-@pytest.mark.django_db
-@pytest.mark.asyncio
-async def test_exe_template_copy(live_server):
-    async with async_playwright() as p:
-        browser, context, page = await page_start(p)
-        try:
-            await exe_template_copy(live_server, page)
-
-        except Exception as e:
-            await handle_error(page, e, "exe_template_copy")
-
-        finally:
-            await context.close()
-            await browser.close()
+pytestmark = pytest.mark.e2e
 
 
-async def exe_template_copy(live_server, page):
-    await login_orga(page, live_server)
+def test_exe_template_copy(pw_page):
+    page, live_server, _ = pw_page
 
-    await template(live_server, page)
+    login_orga(page, live_server)
 
-    await setup_test(live_server, page)
+    template(live_server, page)
 
-    await px(live_server, page)
+    setup(live_server, page)
 
-    await copy(live_server, page)
+    px(live_server, page)
 
-    await campaign(live_server, page)
+    copy(live_server, page)
+
+    campaign(live_server, page)
 
 
-async def template(live_server, page):
+def template(live_server, page):
     # Activate template
-    await go_to(page, live_server, "/manage/features/179/on")
-    await go_to(page, live_server, "/manage/template")
-    await page.get_by_role("link", name="New").click()
-    await page.get_by_role("row", name="Name").locator("td").click()
-    await page.locator("#id_name").fill("template")
-    await page.locator("input[type='checkbox'][value='178']").check()  # mark character
-    await page.locator("div.feature_checkbox", has_text="Copy").locator("input[type='checkbox']").check()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
-    await page.get_by_role("link", name="Add").click()
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("base role")
-    await page.locator("#id_name").press("Tab")
-    await page.get_by_role("searchbox").fill("user")
-    await page.get_by_role("option", name="User Test - user@test.it").click()
-    await page.locator("#id_Appearance_1").check()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
-    await page.locator("#one").get_by_role("link", name="Configuration").click()
-    await page.get_by_role("link", name="Gallery ").click()
-    await page.locator("#id_gallery_hide_signup").check()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/manage/features/179/on")
+    go_to(page, live_server, "/manage/template")
+    page.get_by_role("link", name="New").click()
+    page.get_by_role("row", name="Name").locator("td").click()
+    page.locator("#id_name").fill("template")
+    page.locator("input[type='checkbox'][value='178']").check()  # mark character
+    page.locator("div.feature_checkbox", has_text="Copy").locator("input[type='checkbox']").check()
+    page.get_by_role("button", name="Confirm", exact=True).click()
+    page.get_by_role("link", name="Add").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("base role")
+    page.locator("#id_name").press("Tab")
+    page.get_by_role("searchbox").fill("user")
+    page.get_by_role("option", name="User Test - user@test.it").click()
+    page.locator("#id_Appearance_1").check()
+    page.get_by_role("button", name="Confirm", exact=True).click()
+    page.locator("#one").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Gallery ").click()
+    page.locator("#id_gallery_hide_signup").check()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     # create new event from template
-    await go_to(page, live_server, "/manage/events")
-    await page.get_by_role("link", name="New event").click()
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("from template")
-    await page.locator("#id_name").press("Tab")
-    await page.locator("#slug").fill("fromtemplate")
-    await page.get_by_label("", exact=True).click()
-    await page.get_by_role("searchbox").fill("tem")
-    await page.get_by_role("option", name="template").click()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/manage/events")
+    page.get_by_role("link", name="New event").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("from template")
+    page.locator("#id_name").press("Tab")
+    page.locator("#slug").fill("fromtemplate")
+    page.get_by_label("", exact=True).click()
+    page.get_by_role("searchbox").fill("tem")
+    page.get_by_role("option", name="template").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
     # check roles
-    await go_to(page, live_server, "/fromtemplate/1/manage/roles/")
-    await expect(page.locator('[id="\\35 "]')).to_contain_text("User Test")
-    await expect(page.locator('[id="\\35 "]')).to_contain_text("Texts")
+    go_to(page, live_server, "/fromtemplate/1/manage/roles/")
+    expect(page.locator('[id="\\35 "]')).to_contain_text("User Test")
+    expect(page.locator('[id="\\35 "]')).to_contain_text("Texts")
     # check configuration
-    await go_to(page, live_server, "/fromtemplate/1/manage/config/")
-    await page.get_by_role("link", name="Gallery ").click()
-    await expect(page.locator("#id_gallery_hide_signup")).to_be_checked()
+    go_to(page, live_server, "/fromtemplate/1/manage/config/")
+    page.get_by_role("link", name="Gallery ").click()
+    expect(page.locator("#id_gallery_hide_signup")).to_be_checked()
     # check features
-    await go_to(page, live_server, "/fromtemplate/1/manage/characters")
-    await expect(page.locator("#header")).to_contain_text("Characters")
-    await go_to(page, live_server, "/fromtemplate/1/manage/copy")
+    go_to(page, live_server, "/fromtemplate/1/manage/characters")
+    expect(page.locator("#header")).to_contain_text("Characters")
+    go_to(page, live_server, "/fromtemplate/1/manage/copy")
 
 
-async def setup_test(live_server, page):
+def setup(live_server, page):
     # activate factions
-    await go_to(page, live_server, "/test/1/manage/features/104/on")
+    go_to(page, live_server, "/test/1/manage/features/104/on")
     # activate xp
-    await go_to(page, live_server, "/test/1/manage/features/118/on")
+    go_to(page, live_server, "/test/1/manage/features/118/on")
     # activate characters
-    await go_to(page, live_server, "/test/1/manage/features/178/on")
+    go_to(page, live_server, "/test/1/manage/features/178/on")
     # configure test larp
-    await go_to(page, live_server, "/test/1/manage/config/")
-    await page.get_by_role("link", name="Gallery ").click()
-    await page.locator("#id_gallery_hide_login").check()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/test/1/manage/config/")
+    page.get_by_role("link", name="Gallery ").click()
+    page.locator("#id_gallery_hide_login").check()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
-    await go_to(page, live_server, "/test/1/manage/roles/")
-    await page.get_by_role("link", name="New").click()
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("blabla")
-    await page.locator("#id_name").press("Tab")
-    await page.get_by_role("searchbox").fill("user")
-    await page.get_by_role("option", name="User Test - user@test.it").click()
-    await page.locator("#id_Appearance_2").check()
-    await page.locator("#id_Writing_2").check()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/test/1/manage/roles/")
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("blabla")
+    page.locator("#id_name").press("Tab")
+    page.get_by_role("searchbox").fill("user")
+    page.get_by_role("option", name="User Test - user@test.it").click()
+    page.locator("#id_Appearance_2").check()
+    page.locator("#id_Writing_2").check()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
 
-async def px(live_server, page):
+def px(live_server, page):
     # set up xp
-    await go_to(page, live_server, "/test/1/manage/config/")
-    await page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
-    await page.locator("#id_px_start").click()
-    await page.locator("#id_px_start").fill("10")
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/test/1/manage/config/")
+    page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
+    page.locator("#id_px_start").click()
+    page.locator("#id_px_start").fill("10")
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
-    await go_to(page, live_server, "/test/1/manage/px/ability_types/")
-    await page.get_by_role("link", name="New").click()
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("base ability")
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/test/1/manage/px/ability_types/")
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("base ability")
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
-    await go_to(page, live_server, "/test/1/manage/px/abilities/")
-    await page.get_by_role("link", name="New").click()
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("standard")
-    await page.locator("#id_cost").click()
-    await page.locator("#id_name").dblclick()
-    await page.locator("#id_name").fill("sword1")
-    await page.locator("#id_cost").click()
-    await page.locator("#id_cost").fill("1")
-    await fill_tinymce(page, "id_descr_ifr", "sdsfdsfds")
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/test/1/manage/px/abilities/")
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("standard")
+    page.locator("#id_cost").click()
+    page.locator("#id_name").dblclick()
+    page.locator("#id_name").fill("sword1")
+    page.locator("#id_cost").click()
+    page.locator("#id_cost").fill("1")
+    fill_tinymce(page, "id_descr", "sdsfdsfds")
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
-    await go_to(page, live_server, "/test/1/manage/px/deliveries/")
-    await page.get_by_role("link", name="New").click()
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("first live")
-    await page.locator("#id_name").press("Tab")
-    await page.locator("#id_amount").fill("2")
-    await page.get_by_role("searchbox").click()
-    await page.get_by_role("searchbox").fill("te")
-    await page.get_by_role("option", name="#1 Test Character").click()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/test/1/manage/px/deliveries/")
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("first live")
+    page.locator("#id_name").press("Tab")
+    page.locator("#id_amount").fill("2")
+    page.get_by_role("searchbox").click()
+    page.get_by_role("searchbox").fill("te")
+    page.get_by_role("option", name="#1 Test Character").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # check px computation
-    await go_to(page, live_server, "/test/1/manage/characters/")
-    await page.get_by_role("link", name="XP").click()
-    await expect(page.locator('[id="\\31 "]')).to_contain_text("12")
-    await expect(page.locator('[id="\\31 "]')).to_contain_text("12")
-    await expect(page.locator('[id="\\31 "]')).to_contain_text("0")
-    await page.get_by_role("link", name="").click()
-    await page.wait_for_load_state("load")
-    await asyncio.sleep(1)
+    go_to(page, live_server, "/test/1/manage/characters/")
+    page.get_by_role("link", name="XP").click()
+    expect(page.locator('[id="\\31 "]')).to_contain_text("12")
+    expect(page.locator('[id="\\31 "]')).to_contain_text("12")
+    expect(page.locator('[id="\\31 "]')).to_contain_text("0")
+    page.get_by_role("link", name="").click()
+    page.wait_for_load_state("load")
+    page.wait_for_timeout(2000)
     row = page.get_by_role("row", name="Abilities Show")
-    await row.get_by_role("link").click()
-    await row.get_by_role("searchbox").click()
-    await row.get_by_role("searchbox").fill("swo")
-    await asyncio.sleep(5)
-    await page.get_by_role("option", name="sword1").click()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
-    await page.get_by_role("link", name="XP").click()
-    await expect(page.locator('[id="\\31 "]')).to_contain_text("11")
-    await expect(page.locator('[id="\\31 "]')).to_contain_text("12")
-    await expect(page.locator('[id="\\31 "]')).to_contain_text("1")
+    row.get_by_role("link").click()
+    row.get_by_role("searchbox").click()
+    row.get_by_role("searchbox").fill("swo")
+    page.locator(".select2-results__option").first.click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
+    page.get_by_role("link", name="XP").click()
+    expect(page.locator('[id="\\31 "]')).to_contain_text("11")
+    expect(page.locator('[id="\\31 "]')).to_contain_text("12")
+    expect(page.locator('[id="\\31 "]')).to_contain_text("1")
 
 
-async def copy(live_server, page):
+def copy(live_server, page):
     # copy event
-    await go_to(page, live_server, "/manage/events")
-    await page.get_by_role("link", name="New event").click()
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("copy")
-    await page.locator("#id_name").press("Tab")
-    await page.locator("#slug").fill("copy")
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/manage/events")
+    page.get_by_role("link", name="New event").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("copy")
+    page.locator("#id_name").press("Tab")
+    page.locator("#slug").fill("copy")
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
-    await go_to(page, live_server, "/copy/1/manage/features/10/on")
-    await go_to(page, live_server, "/copy/1/manage/copy/")
-    await page.locator("#select2-id_parent-container").click()
-    await page.get_by_role("searchbox").fill("tes")
-    await page.get_by_role("option", name="Test Larp").click()
-    await page.get_by_role("button", name="Submit").click()
+    go_to(page, live_server, "/copy/1/manage/features/10/on")
+    go_to(page, live_server, "/copy/1/manage/copy/")
+    page.locator("#select2-id_parent-container").click()
+    page.get_by_role("searchbox").fill("tes")
+    page.get_by_role("option", name="Test Larp").click()
+    page.get_by_role("button", name="Submit").click()
 
-    await go_to(page, live_server, "/copy/1/manage/roles/")
-    await expect(page.locator('[id="\\39 "]')).to_contain_text("User Test")
-    await expect(page.locator('[id="\\39 "]')).to_contain_text("Appearance (Navigation), Writing (Factions) ")
-    await go_to(page, live_server, "/copy/1/manage/config/")
+    go_to(page, live_server, "/copy/1/manage/roles/")
+    expect(page.locator('[id="\\39 "]')).to_contain_text("User Test")
+    expect(page.locator('[id="\\39 "]')).to_contain_text("Appearance (Navigation), Writing (Factions) ")
+    go_to(page, live_server, "/copy/1/manage/config/")
 
-    await page.get_by_role("link", name="Gallery ").click()
-    await expect(page.locator("#id_gallery_hide_login")).to_be_checked()
-    await page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
-    await expect(page.locator("#id_px_start")).to_have_value("10")
+    page.get_by_role("link", name="Gallery ").click()
+    expect(page.locator("#id_gallery_hide_login")).to_be_checked()
+    page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
+    expect(page.locator("#id_px_start")).to_have_value("10")
 
-    await go_to(page, live_server, "/copy/1/manage/characters/")
-    await page.get_by_role("link", name="XP").click()
-    await expect(page.locator('[id="\\32 "]')).to_contain_text("12")
-    await expect(page.locator('[id="\\32 "]')).to_contain_text("1")
-    await expect(page.locator('[id="\\32 "]')).to_contain_text("11")
+    go_to(page, live_server, "/copy/1/manage/characters/")
+    page.get_by_role("link", name="XP").click()
+    expect(page.locator('[id="\\32 "]')).to_contain_text("12")
+    expect(page.locator('[id="\\32 "]')).to_contain_text("1")
+    expect(page.locator('[id="\\32 "]')).to_contain_text("11")
 
 
-async def campaign(live_server, page):
+def campaign(live_server, page):
     # create campaign
-    await go_to(page, live_server, "/manage/features/79/on")
-    await go_to(page, live_server, "/manage/events")
-    await page.get_by_role("link", name="New event").click()
-    await page.locator("#id_name").click()
-    await page.locator("#id_name").fill("campaign")
-    await page.locator("#id_name").press("Tab")
-    await page.locator("#slug").fill("campaign")
-    await asyncio.sleep(2)
-    await page.locator("#select2-id_parent-container").click()
-    await page.get_by_role("searchbox").fill("tes")
-    await page.get_by_role("option", name="Test Larp", exact=True).click()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
-    await go_to(page, live_server, "/campaign/1/manage/characters/")
-    await page.get_by_role("link", name="XP").click()
-    await expect(page.locator('[id="\\31 "]')).to_contain_text("12")
-    await expect(page.locator('[id="\\31 "]')).to_contain_text("1")
-    await expect(page.locator('[id="\\31 "]')).to_contain_text("11")
+    go_to(page, live_server, "/manage/features/79/on")
+    go_to(page, live_server, "/manage/events")
+    page.get_by_role("link", name="New event").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("campaign")
+    page.locator("#id_name").press("Tab")
+    page.locator("#slug").fill("campaign")
+    page.wait_for_timeout(2000)
+    page.locator("#select2-id_parent-container").click()
+    page.get_by_role("searchbox").fill("tes")
+    page.get_by_role("option", name="Test Larp", exact=True).click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/campaign/1/manage/characters/")
+    page.get_by_role("link", name="XP").click()
+    expect(page.locator('[id="\\31 "]')).to_contain_text("12")
+    expect(page.locator('[id="\\31 "]')).to_contain_text("1")
+    expect(page.locator('[id="\\31 "]')).to_contain_text("11")

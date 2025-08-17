@@ -184,7 +184,7 @@ class BaseWritingForm(BaseRegistrationForm):
 class PlotForm(WritingForm, BaseWritingForm):
     load_templates = ["plot"]
 
-    load_js = ["characters-choices"]
+    load_js = ["characters-choices", "plot-roles"]
 
     page_title = _("Plot")
 
@@ -206,6 +206,8 @@ class PlotForm(WritingForm, BaseWritingForm):
         self.init_characters = self.instance.get_plot_characters().values_list("character__id", flat=True)
         self.initial["characters"] = self.init_characters
 
+        self.role_help_text = _("This text will be added to the sheet of")
+
         self._init_special_fields()
 
         # PLOT CHARACTERS REL
@@ -218,12 +220,12 @@ class PlotForm(WritingForm, BaseWritingForm):
                 .values_list("character__id", "character__number", "character__name", "text")
             ):
                 char = f"#{ch[1]} {ch[2]}"
-                field = f"ch_{ch[0]}"
+                field = f"char_role_{ch[0]}"
                 id_field = f"id_{field}"
                 self.fields[field] = forms.CharField(
                     widget=WritingTinyMCE(),
                     label=char,
-                    help_text=_("This text will be added to the sheet of {name}".format(name=char)),
+                    help_text=f"{self.role_help_text} {char}",
                     required=False,
                 )
 
@@ -235,25 +237,23 @@ class PlotForm(WritingForm, BaseWritingForm):
                 self.field_link[id_field] = reverse("orga_characters_edit", args=reverse_args)
 
     def _save_multi(self, s, instance):
-        new = set(self.cleaned_data["characters"].values_list("pk", flat=True))
-        old = set(self.init_characters)
+        self.chars_id = set(self.cleaned_data["characters"].values_list("pk", flat=True))
 
-        for ch in old - new:
-            PlotCharacterRel.objects.filter(character_id=ch, plot_id=instance.pk).delete()
-        for ch in new - old:
-            PlotCharacterRel.objects.get_or_create(character_id=ch, plot_id=instance.pk)
+        PlotCharacterRel.objects.filter(plot_id=instance.pk).exclude(character_id__in=self.chars_id).delete()
 
     def save(self, commit=True):
         instance = super().save()
 
         instance.save()
-        for pr in self.instance.get_plot_characters():
-            field = f"ch_{pr.character_id}"
-            if field not in self.cleaned_data:
+        for ch_id in self.chars_id:
+            (pr, created) = PlotCharacterRel.objects.get_or_create(plot_id=instance.pk, character_id=ch_id)
+            field = f"char_role_{pr.character_id}"
+            value = self.cleaned_data.get(field, "")
+            if not value:
+                value = self.data.get(field, "")
+            if not value:
                 continue
-            if self.cleaned_data[field] == pr.text:
-                continue
-            pr.text = self.cleaned_data[field]
+            pr.text = value
             pr.save()
 
         return instance

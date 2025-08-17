@@ -17,58 +17,44 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
 import pytest
-from playwright.async_api import async_playwright
 
-from larpmanager.tests.utils import go_to, handle_error, login_orga, page_start, submit
+from larpmanager.tests.utils import go_to, login_orga, submit
 
-
-@pytest.mark.django_db
-@pytest.mark.asyncio
-async def test_exe_profile(live_server):
-    async with async_playwright() as p:
-        browser, context, page = await page_start(p)
-        try:
-            await exe_profile(live_server, page)
-
-        except Exception as e:
-            await handle_error(page, e, "exe_profile")
-
-        finally:
-            await context.close()
-            await browser.close()
+pytestmark = pytest.mark.e2e
 
 
-async def exe_profile(live_server, page):
-    await login_orga(page, live_server)
+def test_exe_profile(pw_page):
+    page, live_server, _ = pw_page
 
-    await go_to(page, live_server, "/manage/profile")
-    await page.locator("#id_gender").select_option("o")
-    await page.locator("#id_birth_place").select_option("m")
-    await page.locator("#id_document_type").select_option("m")
-    await page.locator("#id_diet").select_option("o")
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    login_orga(page, live_server)
 
-    await go_to(page, live_server, "/profile")
-    await page.get_by_role("textbox", name="Name (*)", exact=True).click()
-    await page.get_by_role("textbox", name="Name (*)", exact=True).press("End")
-    await page.get_by_role("textbox", name="Name (*)", exact=True).fill("Orga")
-    await page.get_by_role("textbox", name="Surname (*)").click()
-    await page.get_by_role("textbox", name="Surname (*)").press("End")
-    await page.get_by_role("textbox", name="Surname (*)").fill("Test")
-    await page.get_by_label("Gender").select_option("f")
-    await page.get_by_role("textbox", name="Diet").click()
-    await page.get_by_role("textbox", name="Diet").fill("sadsada")
-    await page.get_by_role("textbox", name="Diet").press("Shift+Home")
-    await page.get_by_role("textbox", name="Diet").fill("s")
-    await page.get_by_role("textbox", name="Diet").press("Shift+Home")
-    await page.get_by_role("textbox", name="Diet").fill("test")
-    await page.get_by_role("textbox", name="Birth place (*)").click()
-    await page.get_by_role("textbox", name="Diet").click()
-    await page.get_by_role("textbox", name="Diet").fill("")
-    await page.get_by_role("textbox", name="Birth place (*)").click()
-    await page.get_by_role("textbox", name="Birth place (*)").fill("test")
-    await page.get_by_label("Document type (*)").select_option("p")
-    await page.get_by_role("checkbox", name="Authorisation").check()
-    await submit(page)
+    go_to(page, live_server, "/manage/profile")
+    page.locator("#id_gender").select_option("o")
+    page.locator("#id_birth_place").select_option("m")
+    page.locator("#id_document_type").select_option("m")
+    page.locator("#id_diet").select_option("o")
+    page.get_by_role("button", name="Confirm", exact=True).click()
+
+    go_to(page, live_server, "/profile")
+    page.get_by_role("textbox", name="Name (*)", exact=True).click()
+    page.get_by_role("textbox", name="Name (*)", exact=True).press("End")
+    page.get_by_role("textbox", name="Name (*)", exact=True).fill("Orga")
+    page.get_by_role("textbox", name="Surname (*)").click()
+    page.get_by_role("textbox", name="Surname (*)").press("End")
+    page.get_by_role("textbox", name="Surname (*)").fill("Test")
+    page.get_by_label("Gender").select_option("f")
+    page.get_by_role("textbox", name="Diet").click()
+    page.get_by_role("textbox", name="Diet").fill("sadsada")
+    page.get_by_role("textbox", name="Diet").press("Shift+Home")
+    page.get_by_role("textbox", name="Diet").fill("s")
+    page.get_by_role("textbox", name="Diet").press("Shift+Home")
+    page.get_by_role("textbox", name="Diet").fill("test")
+    page.get_by_role("textbox", name="Birth place (*)").click()
+    page.get_by_role("textbox", name="Diet").click()
+    page.get_by_role("textbox", name="Diet").fill("")
+    page.get_by_role("textbox", name="Birth place (*)").click()
+    page.get_by_role("textbox", name="Birth place (*)").fill("test")
+    page.get_by_label("Document type (*)").select_option("p")
+    page.get_by_role("checkbox", name="Authorisation").check()
+    submit(page)

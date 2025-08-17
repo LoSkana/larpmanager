@@ -17,63 +17,49 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
 import pytest
-from playwright.async_api import async_playwright
 
-from larpmanager.tests.utils import check_download, go_to, handle_error, login_orga, page_start
+from larpmanager.tests.utils import check_download, go_to, login_orga
 
-
-@pytest.mark.django_db
-@pytest.mark.asyncio
-async def test_user_pdf(live_server):
-    async with async_playwright() as p:
-        browser, context, page = await page_start(p)
-        try:
-            await user_pdf(live_server, page)
-
-        except Exception as e:
-            await handle_error(page, e, "user_pdf")
-
-        finally:
-            await context.close()
-            await browser.close()
+pytestmark = pytest.mark.e2e
 
 
-async def user_pdf(live_server, page):
-    await login_orga(page, live_server)
+def test_user_pdf(pw_page):
+    page, live_server, _ = pw_page
+
+    login_orga(page, live_server)
 
     # activate characters
-    await go_to(page, live_server, "/test/1/manage/features/178/on")
+    go_to(page, live_server, "/test/1/manage/features/178/on")
 
     # activate relationships
-    await go_to(page, live_server, "/test/1/manage/features/75/on")
+    go_to(page, live_server, "/test/1/manage/features/75/on")
 
     # activate pdf
-    await go_to(page, live_server, "/test/1/manage/features/21/on")
+    go_to(page, live_server, "/test/1/manage/features/21/on")
 
     # signup
-    await go_to(page, live_server, "/test/1/register")
-    await page.get_by_role("button", name="Continue").click()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/test/1/register")
+    page.get_by_role("button", name="Continue").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # Assign character
-    await go_to(page, live_server, "/test/1/manage/registrations")
-    await page.locator("a:has(i.fas.fa-edit)").click()
-    await page.get_by_role("searchbox").click()
-    await page.get_by_role("searchbox").fill("te")
-    await page.get_by_role("option", name="#1 Test Character").click()
-    await page.get_by_role("button", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/test/1/manage/registrations")
+    page.locator("a:has(i.fas.fa-edit)").click()
+    page.get_by_role("searchbox").click()
+    page.get_by_role("searchbox").fill("te")
+    page.get_by_role("option", name="#1 Test Character").click()
+    page.get_by_role("button", name="Confirm", exact=True).click()
 
     # Go to character, test download pdf
-    await go_to(page, live_server, "/test/1/character/1")
+    go_to(page, live_server, "/test/1/character/1")
 
-    await check_download(page, "Portraits (PDF)")
+    check_download(page, "Portraits (PDF)")
 
-    await check_download(page, "Profiles (PDF)")
+    check_download(page, "Profiles (PDF)")
 
-    await check_download(page, "Download complete sheet")
+    check_download(page, "Download complete sheet")
 
-    await check_download(page, "Download light sheet")
+    check_download(page, "Download light sheet")
 
-    await check_download(page, "Download relationships")
+    check_download(page, "Download relationships")

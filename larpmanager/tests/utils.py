@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 import io
 import os
 import zipfile
@@ -24,66 +25,47 @@ from datetime import datetime
 from urllib.parse import urlparse
 
 import pandas as pd
-from playwright.async_api import expect
+from playwright.sync_api import expect
 
 password = "banana"
 orga_user = "orga@test.it"
 test_user = "user@test.it"
 
 
-async def page_start(p, show=False):
-    browser = await p.chromium.launch(headless=not show)
-    context = await browser.new_context()
-    page = await context.new_page()
-
-    page.set_default_timeout(60000)
-
-    page.on("dialog", lambda dialog: dialog.accept())
-
-    async def on_response(response):
-        error_code = 500
-        if response.status == error_code:
-            raise Exception(f"500 on {response.url}")
-
-    page.on("response", on_response)
-
-    return browser, context, page
+def logout(page):
+    page.locator("a#menu-open").click()
+    page.get_by_role("link", name="Logout").click()
 
 
-async def logout(page, live_server):
-    await page.locator("a#menu-open").click()
-    await page.get_by_role("link", name="Logout").click()
+def login_orga(page, live_server):
+    login(page, live_server, orga_user)
 
 
-async def login_orga(page, live_server):
-    await login(page, live_server, orga_user)
+def login_user(page, live_server):
+    login(page, live_server, test_user)
 
 
-async def login_user(page, live_server):
-    await login(page, live_server, test_user)
+def login(page, live_server, name):
+    go_to(page, live_server, "/login")
+
+    page.locator("#id_username").fill(name)
+    page.locator("#id_password").fill(password)
+    page.get_by_role("button", name="Submit").click()
+    expect(page.locator("#banner")).not_to_contain_text("Login")
 
 
-async def login(page, live_server, name):
-    await go_to(page, live_server, "/login")
-
-    await page.locator("#id_username").fill(name)
-    await page.locator("#id_password").fill(password)
-    await page.get_by_role("button", name="Submit").click()
-    await expect(page.locator("#banner")).not_to_contain_text("Login")
-
-
-async def handle_error(page, e, test_name):
+def handle_error(page, e, test_name):
     print(f"Error on {test_name}: {page.url}\n")
     print(e)
 
     uid = datetime.now().strftime("%Y%m%d_%H%M%S")
-    await page.screenshot(path=f"test_screenshots/{test_name}_{uid}.png")
+    page.screenshot(path=f"test_screenshots/{test_name}_{uid}.png")
 
     raise e
 
 
-async def print_text(page):
-    visible_text = await page.evaluate("""
+def print_text(page):
+    visible_text = page.evaluate("""
         () => {
             function getVisibleText(element) {
                 return [...element.querySelectorAll('*')]
@@ -99,50 +81,39 @@ async def print_text(page):
     print(visible_text)
 
 
-async def go_to(page, live_server, path):
-    await go_to_check(page, f"{live_server.url}/{path}")
+def go_to(page, live_server, path):
+    go_to_check(page, f"{live_server}/{path}")
 
 
-async def go_to_check(page, path):
-    dialog_triggered = False
-
-    def on_dialog(dialog):
-        nonlocal dialog_triggered
-        dialog_triggered = True
-        dialog.dismiss()
-
-    page.on("dialog", on_dialog)
-
-    await page.goto(path)
-    await ooops_check(page)
-
-    assert not dialog_triggered, "Unexpected JavaScript dialog was triggered"
+def go_to_check(page, path):
+    page.goto(path)
+    ooops_check(page)
 
 
-async def submit(page):
-    await page.get_by_role("button", name="Submit").click()
-    await page.wait_for_load_state("networkidle")
-    await page.wait_for_load_state("load")
-    await ooops_check(page)
+def submit(page):
+    page.get_by_role("button", name="Submit").click()
+    page.wait_for_load_state("networkidle")
+    page.wait_for_load_state("load")
+    ooops_check(page)
 
 
-async def ooops_check(page):
+def ooops_check(page):
     banner = page.locator("#banner")
-    if await banner.count() > 0:
-        await expect(banner).not_to_contain_text("Oops!")
-        await expect(banner).not_to_contain_text("404")
+    if banner.count() > 0:
+        expect(banner).not_to_contain_text("Oops!")
+        expect(banner).not_to_contain_text("404")
 
 
-async def check_download(page, link: str) -> None:
+def check_download(page, link: str) -> None:
     max_tries = 3
     current_try = 0
 
     while current_try < max_tries:
         try:
-            async with page.expect_download(timeout=100_000) as download_info:
-                await page.click(f"text={link}")
-            download = await download_info.value
-            download_path = await download.path()
+            with page.expect_download(timeout=100_000) as download_info:
+                page.click(f"text={link}")
+            download = download_info.value
+            download_path = download.path()
             assert download_path is not None, "Download failed"
 
             with open(download_path, "rb") as f:
@@ -178,29 +149,35 @@ async def check_download(page, link: str) -> None:
                 raise
 
 
-async def fill_tinymce(page, iframe_id: str, text: str):
-    frame_locator = page.frame_locator(f"iframe#{iframe_id}")
+def fill_tinymce(page, iframe_id, text):
+    page.wait_for_timeout(2000)
+    locator = page.locator(f'a.my_toggle[tog="f_{iframe_id}"]')
+    if locator.count() > 0:
+        locator.click()
+    page.wait_for_timeout(2000)
+    frame_locator = page.frame_locator(f"iframe#{iframe_id}_ifr")
     editor = frame_locator.locator("body#tinymce")
-    await editor.wait_for(state="visible")
-    await editor.fill(text)
+    editor.wait_for(state="visible")
+    editor.fill(text)
+    page.wait_for_timeout(2000)
 
 
-async def _checkboxes(page, check=True):
+def _checkboxes(page, check=True):
     checkboxes = page.locator('input[type="checkbox"]')
-    count = await checkboxes.count()
+    count = checkboxes.count()
     for i in range(count):
         checkbox = checkboxes.nth(i)
-        if await checkbox.is_visible() and await checkbox.is_enabled():
+        if checkbox.is_visible() and checkbox.is_enabled():
             if check:
-                if not await checkbox.is_checked():
-                    await checkbox.check()
-            elif await checkbox.is_checked():
-                await checkbox.uncheck()
-    await page.locator('input[type="submit"][value="Confirm"]').click(force=True)
+                if not checkbox.is_checked():
+                    checkbox.check()
+            elif checkbox.is_checked():
+                checkbox.uncheck()
+    page.locator('input[type="submit"][value="Confirm"]').click(force=True)
 
 
-async def add_links_to_visit(links_to_visit, page, visited_links):
-    new_links = await page.eval_on_selector_all("a", "elements => elements.map(e => e.href)")
+def add_links_to_visit(links_to_visit, page, visited_links):
+    new_links = page.eval_on_selector_all("a", "elements => elements.map(e => e.href)")
     for link in new_links:
         if "logout" in link:
             continue

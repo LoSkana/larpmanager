@@ -40,7 +40,7 @@ window.jump_to = function(target) {
     }
 
     $('#page-wrapper').animate({
-        scrollTop: $('#page-wrapper').scrollTop() + $(target).offset().top - headerHeight * 2
+        scrollTop: $('#page-wrapper').scrollTop() + $(target).offset().top - headerHeight * 3
     }, 0);
 }
 
@@ -305,6 +305,12 @@ $(document).ready(function() {
     data_tables();
 
     post_popup();
+
+    $('.dropdown-menu').each(function() {
+      if ($(this).children().length == 0) {
+        $(this).addClass('nope');
+      }
+    });
 
     $('#one .inner').fadeIn(100);
 
