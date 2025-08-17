@@ -43,9 +43,11 @@ class Command(BaseCommand):
             "larpmanager",
             "-h",
             "localhost",
-            "--inserts",
             "-d",
             "larpmanager",
+            "--inserts",
+            "--no-owner",
+            "--no-privileges",
             "-f",
             "larpmanager/tests/test_db.sql",
         ]
