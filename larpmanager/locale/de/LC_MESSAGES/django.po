@@ -5224,9 +5224,6 @@ msgstr "Rohstoffe, Verbrauchsgüter und Waren"
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Erinnerung an die Zahlung der Mitgliedsbeiträge für %(event)s"
 
-msgid "Select a character to insert their reference code"
-msgstr "Wählen Sie ein Zeichen, um dessen Referenzcode einzufügen"
-
 msgid "Select your preferences on the characters to play"
 msgstr "Wähle die Charaktere aus, die du spielen möchtest"
 
@@ -5409,6 +5406,9 @@ msgstr "Gibt an, wie viele Fahrgäste befördert werden müssen"
 
 msgid "Indicates whether it can be selected by participants"
 msgstr "Gibt an, ob er von den Teilnehmern ausgewählt werden kann"
+
+msgid "Input an element name to insert their reference code"
+msgstr "Eingabe eines Elementnamens zum Einfügen des Referenzcodes"
 
 msgid "Last step, please upload your membership application"
 msgstr "Als letzten Schritt laden Sie bitte Ihren Mitgliedsantrag hoch"

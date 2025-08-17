@@ -38,6 +38,7 @@ from larpmanager.forms.character import (
 from larpmanager.forms.utils import EventCharacterS2Widget
 from larpmanager.forms.writing import FactionForm, PlotForm, QuestForm, TraitForm
 from larpmanager.models.base import Feature
+from larpmanager.models.casting import Trait
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionType,
@@ -501,9 +502,13 @@ def check_speedlarp_prepare(el, id_number_map, speeds):
 def orga_character_get_number(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_characters")
     idx = request.POST.get("idx")
+    type = request.POST.get("type")
     try:
-        char = ctx["event"].get_elements(Character).get(pk=idx)
-        return JsonResponse({"res": "ok", "number": char.number})
+        if type.lower() == "trait":
+            el = ctx["event"].get_elements(Trait).get(pk=idx)
+        else:
+            el = ctx["event"].get_elements(Character).get(pk=idx)
+        return JsonResponse({"res": "ok", "number": el.number})
     except ObjectDoesNotExist:
         JsonResponse({"res": "ko"})
 

@@ -28,8 +28,9 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import _get_fkey_config
-from larpmanager.forms.utils import EventCharacterS2Widget
+from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
 from larpmanager.models.association import Association
+from larpmanager.models.casting import Trait
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
 from larpmanager.models.member import Log
 from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
@@ -287,6 +288,7 @@ def writing_edit(request, ctx, form_type, nm, tp, redr=None):
         ctx[nm] = None
 
     ctx["type"] = ctx["elementTyp"].__name__.lower()
+    ctx["label_typ"] = ctx["type"]
 
     if request.method == "POST":
         form = form_type(request.POST, request.FILES, instance=ctx[nm], ctx=ctx)
@@ -301,18 +303,27 @@ def writing_edit(request, ctx, form_type, nm, tp, redr=None):
     ctx["continue_add"] = "continue" in request.POST
     ctx["auto_save"] = not ctx["event"].get_config("writing_disable_auto", False)
 
-    _setup_char_finder(ctx)
+    _setup_char_finder(ctx, ctx["elementTyp"])
 
     return render(request, "larpmanager/orga/writing/writing.html", ctx)
 
 
-def _setup_char_finder(ctx):
-    ctx["disable_char_finder"] = ctx["event"].get_config("writing_disable_char_finder", False)
-    if not ctx["disable_char_finder"]:
-        widget = EventCharacterS2Widget(attrs={"id": "char_finder"})
-        widget.set_event(ctx["event"])
-        ctx["char_finder"] = widget.render(name="char_finder", value="")
-        ctx["char_finder_media"] = widget.media
+def _setup_char_finder(ctx, typ):
+    if ctx["event"].get_config("writing_disable_char_finder", False):
+        return
+
+    if typ == Trait:
+        widget_class = EventTraitS2Widget
+    else:
+        widget_class = EventCharacterS2Widget
+
+    widget = widget_class(attrs={"id": "char_finder"})
+    widget.set_event(ctx["event"])
+
+    ctx["finder_typ"] = typ._meta.model_name
+
+    ctx["char_finder"] = widget.render(name="char_finder", value="")
+    ctx["char_finder_media"] = widget.media
 
 
 def _writing_save(ctx, form, form_type, nm, redr, request, tp):

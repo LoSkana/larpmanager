@@ -1,0 +1,221 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import pytest
+from playwright.sync_api import expect
+
+from larpmanager.tests.utils import fill_tinymce, go_to, login_orga
+
+pytestmark = pytest.mark.e2e
+
+
+def test_quest_trait(pw_page):
+    page, live_server, _ = pw_page
+
+    login_orga(page, live_server)
+
+    quests(page, live_server)
+
+    traits(page, live_server)
+
+    signups(page, live_server)
+
+    casting(page, live_server)
+
+    # check result
+    page.get_by_role("link", name=" User").click()
+    page.get_by_role("link", name="Test Character").nth(1).click()
+    expect(page.locator("#one")).to_contain_text(
+        "Player: Admin Test Presentation Test Teaser 23 Text Test Text Torta - Nonna saleee aliame con AnotherAnotherPlayer: User Test"
+    )
+    go_to(page, live_server, "test/1/")
+    page.get_by_role("link", name="Another").click()
+    expect(page.locator("#one")).to_contain_text(
+        "Torta - Strudel saleee veronese Test CharacterTest CharacterPlayer: Admin TestTest Teaser 23 (...) ciaooo Torta - Strudel Test Character Player: Admin Test"
+    )
+    page.get_by_role("heading", name="Torta - Strudel").first.click()
+
+
+def quests(page, live_server):
+    # Activate features
+    page.get_by_role("link", name="").click()
+    page.get_by_role("link", name=" Test Larp").click()
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.locator("#id_mod_1_0").check()
+    page.locator("#id_mod_5_1").check()
+    page.locator("#id_mod_5_0").check()
+    page.get_by_role("button", name="Confirm").click()
+
+    # create quest type
+    page.get_by_role("link", name="Quest type").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("Lore")
+    page.get_by_role("button", name="Confirm").click()
+
+    # create two quests
+    page.get_by_role("link", name="Quest", exact=True).click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").fill("Torta")
+    fill_tinymce(page, "id_teaser", "zucchero")
+    fill_tinymce(page, "id_text", "saleee")
+    page.get_by_text("After confirmation, add").click()
+    page.get_by_role("button", name="Confirm").click()
+
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("Pizza")
+    fill_tinymce(page, "id_teaser", "mozzarella")
+    fill_tinymce(page, "id_text", "americano")
+    page.get_by_role("button", name="Confirm").click()
+
+    # check
+    expect(page.locator("#one")).to_contain_text("Q1 Torta Lore zucchero saleee Q2 Pizza Lore mozzarella americano")
+
+
+def traits(page, live_server):
+    # create traits
+    page.locator("#orga_traits").get_by_role("link", name="Traits").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("Strudel")
+    fill_tinymce(page, "id_teaser", "trentina")
+    fill_tinymce(page, "id_text", "veronese")
+    page.get_by_role("button", name="Confirm").click()
+
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("Nonna")
+    fill_tinymce(page, "id_teaser", "amelia")
+    fill_tinymce(page, "id_text", "aliame con ")
+    frame_locator = page.frame_locator("iframe#id_text_ifr")
+    editor = frame_locator.locator("body#tinymce")
+    editor.press("#")
+    page.get_by_role("searchbox").fill("stru")
+    page.locator(".select2-results__option").first.click()
+    page.get_by_role("button", name="Confirm").click()
+
+    # excel char finder
+    page.get_by_role("cell", name="veronese").dblclick()
+    frame = page.locator('iframe[title="Rich Text Area"]').content_frame
+    frame.get_by_label("Rich Text Area").press("#")
+    page.get_by_role("searchbox").fill("non")
+    page.locator(".select2-results__option").first.click()
+    page.wait_for_timeout(2000)
+    page.get_by_role("button", name="Confirm").click()
+
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_quest").select_option("2")
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("Capriciossa")
+    fill_tinymce(page, "id_teaser", "normale")
+    fill_tinymce(page, "id_text", "senza pomodoro")
+
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_quest").select_option("2")
+    page.locator("#id_quest").press("Tab")
+    page.locator("#id_name").fill("Mare")
+    page.get_by_role("button", name="Confirm").click()
+
+    # check how they appear on user side
+    page.get_by_role("link", name=" User").click()
+    page.get_by_role("link", name="Quest").click()
+    expect(page.locator("#one")).to_contain_text("Name Quest Lore Torta , Pizza")
+    page.get_by_role("link", name="Torta").click()
+    expect(page.locator("#one")).to_contain_text("Presentation zucchero Traits Strudel - trentina co Nonna - amelia")
+    page.close()
+
+
+def signups(page, live_server):
+    # create signup for my char
+    go_to(page, live_server, "test/1/manage/")
+    page.get_by_role("link", name="New").click()
+    page.get_by_role("searchbox").nth(1).fill("org")
+    page.get_by_role("option", name="Admin Test - orga@test.it").click()
+    page.get_by_role("list").click()
+    page.get_by_role("searchbox").fill("te")
+    page.get_by_role("option", name="#1 Test Character").click()
+    page.get_by_role("button", name="Confirm").click()
+
+    # create another char
+    page.get_by_role("link", name="Characters").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("Another")
+    page.get_by_role("button", name="Confirm").click()
+
+    # create signup for another
+    page.get_by_role("link", name="Registrations").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#select2-id_member-container").click()
+    page.get_by_role("searchbox").nth(1).fill("user")
+    page.get_by_role("option", name="User Test - user@test.it").click()
+    page.get_by_role("searchbox").click()
+    page.get_by_role("searchbox").fill("an")
+    page.get_by_role("option", name="#2 Another").click()
+    page.get_by_role("button", name="Confirm").click()
+
+
+def casting(page, live_server):
+    # config casting
+    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Casting ").click()
+    page.get_by_text("Maximum number of preferences").click()
+    page.locator("#id_casting_max").click()
+    page.locator("#id_casting_max").fill("3")
+    page.locator("#id_casting_min").click()
+    page.locator("#id_casting_min").fill("2")
+
+    # perform casting
+    page.get_by_text("Test Larp Organization This").click()
+    page.get_by_role("link", name=" User").click()
+    page.get_by_role("link", name="Casting").click()
+    page.get_by_role("link", name="Lore").click()
+    page.locator("#faction0").select_option("Torta")
+    page.locator("#choice0").select_option("2")
+    page.locator("#faction1").select_option("Torta")
+    page.locator("#choice1").select_option("1")
+    page.locator("#faction2").select_option("Pizza")
+    page.locator("#choice2").select_option("3")
+    page.get_by_role("button", name="Submit").click()
+
+    # make casting
+    page.get_by_role("link", name=" Admin").click()
+    page.get_by_role("link", name="Casting").click()
+    page.get_by_role("link", name="Lore").click()
+    page.get_by_role("button", name="Start algorithm").click()
+    page.get_by_role("button", name="Upload").click()
+
+    # check signups
+    page.get_by_role("link", name="Registrations").click()
+    page.get_by_role("link", name="Lore").click()
+    expect(page.locator("#one")).to_contain_text(
+        "User Test Standard #2 Another Admin Test Standard #1 Test Character Torta - Nonna"
+    )
+
+    # manual trait assignments
+    page.locator('[id="\\32 "]').get_by_role("link", name="").click()
+    page.locator("#id_qt_1").select_option("1")
+    page.get_by_role("button", name="Confirm").click()
+
+    # check result
+    page.get_by_role("link", name="Lore").click()
+    expect(page.locator("#one")).to_contain_text(
+        "User Test Standard #2 Another Torta - Strudel Admin Test Standard #1 Test Character Torta - Nonna"
+    )

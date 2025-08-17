@@ -30,6 +30,7 @@ from tinymce.widgets import TinyMCE
 
 from larpmanager.models.access import EventRole
 from larpmanager.models.base import FeatureModule
+from larpmanager.models.casting import Trait
 from larpmanager.models.event import (
     DevelopStatus,
     Event,
@@ -374,6 +375,28 @@ class EventCharacterS2WidgetMulti(EventCharacterS2, s2forms.ModelSelect2Multiple
 
 
 class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
+    pass
+
+
+class EventTraitS2:
+    search_fields = [
+        "number__icontains",
+        "name__icontains",
+        "teaser__icontains",
+    ]
+
+    def set_event(self, event):
+        self.event = event
+
+    def get_queryset(self):
+        return self.event.get_elements(Trait)
+
+
+class EventTraitS2WidgetMulti(EventTraitS2, s2forms.ModelSelect2MultipleWidget):
+    pass
+
+
+class EventTraitS2Widget(EventTraitS2, s2forms.ModelSelect2Widget):
     pass
 
 

@@ -5201,9 +5201,6 @@ msgstr "Råvaror, förbrukningsmaterial och varor"
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Påminnelse om betalning av medlemsavgift för %(event)s"
 
-msgid "Select a character to insert their reference code"
-msgstr "Välj en karaktär för att infoga dess referenskod"
-
 msgid "Select your preferences on the characters to play"
 msgstr "Välj vilka karaktärer du vill spela"
 
@@ -5374,6 +5371,9 @@ msgstr "Anger hur många passagerare som behöver transporteras"
 
 msgid "Indicates whether it can be selected by participants"
 msgstr "Anger om det kan väljas av deltagarna"
+
+msgid "Input an element name to insert their reference code"
+msgstr "Ange ett elementnamn för att infoga dess referenskod"
 
 msgid "Last step, please upload your membership application"
 msgstr "Sista steget är att ladda upp din medlemsansökan"

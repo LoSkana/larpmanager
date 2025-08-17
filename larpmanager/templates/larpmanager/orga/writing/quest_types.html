@@ -15,13 +15,7 @@
                 <th>{% trans "Name" %}</th>
                 <th></th>
                 <th>{% trans "Presentation" %}</th>
-                <th>
-                    <i class="fa fa-text-width"></i>
-                </th>
                 <th>{% trans "Quest" %}</th>
-                <th>
-                    <i class="fa fa-hashtag"></i>
-                </th>
             </tr>
         </thead>
         <tbody>
@@ -39,13 +33,11 @@
                            qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
                     </td>
                     <td>{{ el.teaser_red | safe }}</td>
-                    <td>{{ el.teaser_ln }}</td>
-                    <tdc class="dot_links">
-                    {% for p in el.quests.all %}
-                        <a href="{% url 'orga_quests_edit' run.event.slug run.number p.id %}">{{ p }}</a>
-                    {% endfor %}
-                    </tdc>
-                    <td>{{ el.traits.all | length }}</td>
+                    <td class="dot_links">
+                        {% for p in el.quests.all %}
+                            <a href="{% url 'orga_quests_edit' run.event.slug run.number p.id %}">{{ p }}</a>
+                        {% endfor %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
