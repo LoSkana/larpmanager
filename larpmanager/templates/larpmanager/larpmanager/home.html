@@ -58,9 +58,7 @@
                 <section id="promoter-carousel" class="owl-carousel owl-theme">
                     {% for el in promoters %}
                         <div class="item">
-                            <a href="https://{{ el.slug }}.larpmanager.com" title="{{ el.name }}">
-                                <img src="{{ el.promoter_url }}" alt="preview image {{ el.name }}" />
-                            </a>
+                            <img src="{{ el.promoter_url }}" alt="preview image {{ el.name }}" />
                         </div>
                     {% endfor %}
                 </section>
