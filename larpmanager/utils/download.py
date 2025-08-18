@@ -623,6 +623,9 @@ def _get_writing_names(ctx):
 
     ctx["columns"] = [{}]
     if ctx["writing_typ"] == QuestionApplicable.CHARACTER:
+        ctx["fields"]["player"] = "skip"
+        ctx["fields"]["email"] = "skip"
+
         if "relationships" in ctx["features"]:
             ctx["columns"].append(
                 {

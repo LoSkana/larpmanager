@@ -189,7 +189,7 @@ def _reg_field_load(ctx, reg, field, value, questions, logs):
     if field == "player":
         return
 
-    if not value:
+    if not value or pd.isna(value):
         return
 
     if field == "ticket":
@@ -391,6 +391,9 @@ def element_load(request, ctx, row, questions):
 
 
 def _writing_load_field(ctx, element, field, value, questions, logs):
+    if pd.isna(value):
+        return
+
     if field == "typ":
         try:
             element.typ = ctx["event"].get_elements(QuestType).get(name__iexact=value)
@@ -406,7 +409,7 @@ def _writing_load_field(ctx, element, field, value, questions, logs):
 
     field_type = ctx["fields"][field]
 
-    if field_type == QuestionType.NAME:
+    if field_type in [QuestionType.NAME, "skip"]:
         return
 
     value = "<br />".join(str(value).strip().split("\n"))
@@ -496,12 +499,7 @@ def _questions_load(ctx, row, is_registration):
     if not name:
         return "ERR - name not found"
 
-    mappings = {
-        "typ": invert_dict(QuestionType.get_mapping()),
-        "status": invert_dict(QuestionStatus.get_mapping()),
-        "applicable": invert_dict(QuestionApplicable.get_mapping()),
-        "visibility": invert_dict(QuestionVisibility.get_mapping()),
-    }
+    mappings = _get_mappings(is_registration)
 
     if is_registration:
         instance, created = RegistrationQuestion.objects.get_or_create(
@@ -543,6 +541,22 @@ def _questions_load(ctx, row, is_registration):
     else:
         msg = f"OK - Updated {name}"
     return msg
+
+
+def _get_mappings(is_registration):
+    mappings = {
+        "typ": invert_dict(QuestionType.get_mapping()),
+        "status": invert_dict(QuestionStatus.get_mapping()),
+        "applicable": invert_dict(QuestionApplicable.get_mapping()),
+        "visibility": invert_dict(QuestionVisibility.get_mapping()),
+    }
+    if is_registration:
+        # update typ with new types
+        typ_mapping = mappings["typ"]
+        for key, _ in QuestionType.choices:
+            if key not in typ_mapping:
+                typ_mapping[key] = key
+    return mappings
 
 
 def _options_load(ctx, row, questions, is_registration):
