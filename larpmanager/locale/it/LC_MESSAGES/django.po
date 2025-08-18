@@ -5375,7 +5375,7 @@ msgstr "Indica se può essere selezionato dai partecipanti"
 
 msgid "Input an element name to insert their reference code"
 msgstr ""
-"Immettere il nome di un elemento per inserire il suo codice di riferimento"
+"Scrivi il nome di un elemento per inserire il suo codice di riferimento"
 
 msgid "Last step, please upload your membership application"
 msgstr "Ultimo passaggio, per favore carica la tua richiesta di socio"
