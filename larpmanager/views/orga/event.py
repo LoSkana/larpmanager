@@ -434,7 +434,7 @@ def _reg_template(ctx, typ, value_mapping):
 
 def _writing_template(ctx, typ, value_mapping):
     keys = list(ctx["fields"].keys())
-    vals = [value_mapping[field_typ] for _field, field_typ in ctx["fields"].items()]
+    vals = [value_mapping[field_typ] for _field, field_typ in ctx["fields"].items() if field_typ != "skip"]
 
     if ctx["writing_typ"] == QuestionApplicable.QUEST:
         keys.insert(0, "typ")
