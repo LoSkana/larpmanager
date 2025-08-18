@@ -83,6 +83,8 @@ python manage.py compilemessages
 python manage.py collectstatic --noinput
 python manage.py compress
 
+playwright install
+
 # tests
 WORKERS=6
 bash scripts/create_dbs.sh "$WORKERS" larpmanager/tests/test_db.sql

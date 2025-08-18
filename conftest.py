@@ -134,7 +134,7 @@ def load_fixtures(django_db_blocker):
 
 
 def psql(params, env):
-    subprocess.run(params, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=env, text=True)
+    subprocess.run(params, check=True, stdout=subprocess.DEVNULL, env=env, text=True)
 
 
 def pytest_sessionstart(session):
