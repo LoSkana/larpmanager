@@ -76,7 +76,14 @@ export POSTGRES_USER=larpmanager
 export POSTGRES_PASSWORD=larpmanager
 export POSTGRES_DB=larpmanager_test
 
+export CI=true
+export DB_HOST=localhost
+
+python manage.py compilemessages
+python manage.py collectstatic --noinput
+python manage.py compress
+
 # tests
 WORKERS=6
 bash scripts/create_dbs.sh "$WORKERS" larpmanager/tests/test_db.sql
-CI=true pytest -n "$WORKERS" --reruns 5 --reruns-delay 2 --reuse-db --no-migrations
+pytest -n "$WORKERS" --reruns 5 --reruns-delay 2 --reuse-db --no-migrations
