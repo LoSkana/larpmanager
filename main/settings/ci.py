@@ -10,7 +10,7 @@ DATABASES = {
         'NAME': 'larpmanager',
         'USER': 'larpmanager',
         'PASSWORD': 'larpmanager',
-        'HOST': 'postgres',
+        "HOST": os.getenv("DB_HOST", "postgres"),
         'PORT': '5432',
         'TEST': {
             'NAME': 'test_larpmanager',
