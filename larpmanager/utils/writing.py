@@ -183,7 +183,7 @@ def writing_list(request, ctx, typ, nm):
         orga_list_progress_assign(ctx, typ)  # pyright: ignore[reportArgumentType]
         writing_list_text_fields(ctx, text_fields, typ)
         _prepare_writing_list(ctx, request)
-        _setup_char_finder(ctx)
+        _setup_char_finder(ctx, typ)
         _get_custom_form(ctx)
 
     return render(request, "larpmanager/orga/writing/" + nm + "s.html", ctx)

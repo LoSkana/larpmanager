@@ -5198,9 +5198,6 @@ msgstr "Materie prime, sussidiarie, di consumo e di merci"
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Reminder versamento quota sociale per %(event)s"
 
-msgid "Select a character to insert their reference code"
-msgstr "Selezionare un personaggio per inserire il suo codice di riferimento"
-
 msgid "Select your preferences on the characters to play"
 msgstr "Seleziona le tue preferenze sui personaggi da interpretare"
 
@@ -5375,6 +5372,10 @@ msgstr "Indica quanti passeggeri richiedono il trasporto"
 
 msgid "Indicates whether it can be selected by participants"
 msgstr "Indica se può essere selezionato dai partecipanti"
+
+msgid "Input an element name to insert their reference code"
+msgstr ""
+"Scrivi il nome di un elemento per inserire il suo codice di riferimento"
 
 msgid "Last step, please upload your membership application"
 msgstr "Ultimo passaggio, per favore carica la tua richiesta di socio"

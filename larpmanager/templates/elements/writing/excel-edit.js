@@ -119,6 +119,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
                 if (res.tinymce) {
                     window.addTinyMCETextarea('#excel-edit textarea').then((editorId) => {
+                        keyTinyMCE = editorId;
                         setUpCharFinder(editorId);
                         setUpHighlight(editorId);
                     });

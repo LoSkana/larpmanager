@@ -5205,9 +5205,6 @@ msgstr "Grondstoffen, verbruiksgoederen en goederen"
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Herinnering betaling lidmaatschapsgeld voor %(event)s"
 
-msgid "Select a character to insert their reference code"
-msgstr "Selecteer een teken om hun referentiecode in te voegen"
-
 msgid "Select your preferences on the characters to play"
 msgstr "Kies je favoriete personages om te spelen"
 
@@ -5380,6 +5377,9 @@ msgstr "Geeft aan hoeveel passagiers vervoer nodig hebben"
 
 msgid "Indicates whether it can be selected by participants"
 msgstr "Geeft aan of het kan worden geselecteerd door deelnemers"
+
+msgid "Input an element name to insert their reference code"
+msgstr "Voer een elementnaam in om hun referentiecode in te voegen"
 
 msgid "Last step, please upload your membership application"
 msgstr "Upload als laatste stap je lidmaatschapsaanvraag"

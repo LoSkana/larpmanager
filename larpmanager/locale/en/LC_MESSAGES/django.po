@@ -3684,7 +3684,7 @@ msgstr ""
 msgid "Missing casting preferences"
 msgstr ""
 
-msgid "Select a character to insert their reference code"
+msgid "Input an element name to insert their reference code"
 msgstr ""
 
 msgid "Select a character to add a new relationship"

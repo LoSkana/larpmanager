@@ -5199,9 +5199,6 @@ msgstr "Suroviny, spotřební materiál a zboží"
 msgid "Reminder payment of membership fees for %(event)s"
 msgstr "Připomenutí platby členských příspěvků za %(event)s"
 
-msgid "Select a character to insert their reference code"
-msgstr "Vyberte znak a vložte jeho referenční kód"
-
 msgid "Select your preferences on the characters to play"
 msgstr "Vyberte si postavy, které chcete hrát"
 
@@ -5373,6 +5370,9 @@ msgstr "Uvádí, kolik cestujících potřebuje přepravu"
 
 msgid "Indicates whether it can be selected by participants"
 msgstr "Označuje, zda jej mohou vybrat účastníci"
+
+msgid "Input an element name to insert their reference code"
+msgstr "Zadáním názvu prvku vložíte jeho referenční kód"
 
 msgid "Last step, please upload your membership application"
 msgstr "V posledním kroku nahrajte přihlášku ke členství"
