@@ -5,8 +5,10 @@
     descr: Manage the organization main settings
     slug: exe_association
     number: 2
-    feature: 198
     config: interface
+    hidden: false
+    feature: 198
+    module: 9
 - model: larpmanager.assocpermission
   pk: 2
   fields:
@@ -14,7 +16,10 @@
     descr: Assign roles to collaborators and grant access to specific functions
     slug: exe_roles
     number: 3
+    config: null
+    hidden: false
     feature: 197
+    module: 9
 - model: larpmanager.assocpermission
   pk: 3
   fields:
@@ -22,7 +27,10 @@
     descr: Manage the configuration of the activated features
     slug: exe_config
     number: 4
+    config: null
+    hidden: false
     feature: 196
+    module: 9
 - model: larpmanager.assocpermission
   pk: 4
   fields:
@@ -30,7 +38,10 @@
     descr: Activate features for the organization
     slug: exe_features
     number: 5
+    config: null
+    hidden: false
     feature: 195
+    module: 9
 - model: larpmanager.assocpermission
   pk: 5
   fields:
@@ -38,7 +49,10 @@
     descr: Manage organization accounting
     slug: exe_accounting
     number: 2
+    config: null
+    hidden: false
     feature: 194
+    module: 2
 - model: larpmanager.assocpermission
   pk: 6
   fields:
@@ -46,8 +60,10 @@
     descr: Manage payments performed by participants on all events
     slug: exe_payments
     number: 3
-    feature: 111
     config: payment
+    hidden: false
+    feature: 111
+    module: 2
 - model: larpmanager.assocpermission
   pk: 7
   fields:
@@ -55,7 +71,10 @@
     descr: Manage donations performed by participants
     slug: exe_donations
     number: 4
+    config: null
+    hidden: false
     feature: 36
+    module: 2
 - model: larpmanager.assocpermission
   pk: 8
   fields:
@@ -63,7 +82,10 @@
     descr: Manages events or organization expenses
     slug: exe_outflows
     number: 5
+    config: null
+    hidden: false
     feature: 108
+    module: 2
 - model: larpmanager.assocpermission
   pk: 9
   fields:
@@ -71,7 +93,10 @@
     descr: Manages events or organization revenues
     slug: exe_inflows
     number: 6
+    config: null
+    hidden: false
     feature: 144
+    module: 2
 - model: larpmanager.assocpermission
   pk: 10
   fields:
@@ -79,16 +104,22 @@
     descr: Manage staff expenses based on receipts uploaded for all events
     slug: exe_expenses
     number: 7
+    config: null
+    hidden: false
     feature: 106
+    module: 2
 - model: larpmanager.assocpermission
   pk: 11
   fields:
     name: Credits
-    descr: Manages credits used by participants to cover the registration fee on all events
+    descr: Manages credits used by participants to cover the registration fee on all
+      events
     slug: exe_credits
     number: 8
-    feature: 107
     config: token_credit
+    hidden: false
+    feature: 107
+    module: 2
 - model: larpmanager.assocpermission
   pk: 12
   fields:
@@ -96,7 +127,10 @@
     descr: Manage refund requests
     slug: exe_refunds
     number: 9
+    config: null
+    hidden: false
     feature: 112
+    module: 2
 - model: larpmanager.assocpermission
   pk: 13
   fields:
@@ -104,7 +138,10 @@
     descr: Manage collections participated by users
     slug: exe_collections
     number: 10
+    config: null
+    hidden: false
     feature: 31
+    module: 2
 - model: larpmanager.assocpermission
   pk: 14
   fields:
@@ -112,7 +149,10 @@
     descr: Verify manually approved payments
     slug: exe_verification
     number: 11
+    config: null
+    hidden: false
     feature: 109
+    module: 2
 - model: larpmanager.assocpermission
   pk: 15
   fields:
@@ -120,7 +160,10 @@
     descr: Review the annual budget report
     slug: exe_balance
     number: 12
+    config: null
+    hidden: false
     feature: 110
+    module: 10
 - model: larpmanager.assocpermission
   pk: 16
   fields:
@@ -128,7 +171,10 @@
     descr: Review historical financial records
     slug: exe_accounting_rec
     number: 13
+    config: null
+    hidden: false
     feature: 86
+    module: 2
 - model: larpmanager.assocpermission
   pk: 17
   fields:
@@ -136,8 +182,10 @@
     descr: 'Set visual aspect: colors, background, cover image'
     slug: exe_appearance
     number: 11
-    feature: 193
     config: calendar
+    hidden: false
+    feature: 193
+    module: 6
 - model: larpmanager.assocpermission
   pk: 18
   fields:
@@ -145,7 +193,10 @@
     descr: Customize textual elements of the organization interface
     slug: exe_texts
     number: 21
+    config: null
+    hidden: false
     feature: 192
+    module: 6
 - model: larpmanager.assocpermission
   pk: 19
   fields:
@@ -153,7 +204,10 @@
     descr: Manage url shortner
     slug: exe_urlshortner
     number: 11
+    config: null
+    hidden: false
     feature: 138
+    module: 3
 - model: larpmanager.assocpermission
   pk: 20
   fields:
@@ -161,7 +215,10 @@
     descr: Manage inventory and items
     slug: exe_inventory
     number: 21
+    config: null
+    hidden: false
     feature: 66
+    module: 3
 - model: larpmanager.assocpermission
   pk: 21
   fields:
@@ -169,7 +226,10 @@
     descr: Manage events
     slug: exe_events
     number: 11
+    config: null
+    hidden: false
     feature: 191
+    module: 12
 - model: larpmanager.assocpermission
   pk: 23
   fields:
@@ -177,7 +237,10 @@
     descr: Manage the pre-registration of all events
     slug: exe_pre_registrations
     number: 31
+    config: null
+    hidden: false
     feature: 32
+    module: 4
 - model: larpmanager.assocpermission
   pk: 24
   fields:
@@ -185,8 +248,10 @@
     descr: Displays participants overdue for payment or other deadlines for all events
     slug: exe_deadlines
     number: 41
-    feature: 94
     config: deadlines
+    hidden: false
+    feature: 94
+    module: 4
 - model: larpmanager.assocpermission
   pk: 25
   fields:
@@ -194,8 +259,10 @@
     descr: Send e-mail
     slug: exe_send_mail
     number: 11
-    feature: 189
     config: email
+    hidden: false
+    feature: 189
+    module: 8
 - model: larpmanager.assocpermission
   pk: 26
   fields:
@@ -203,8 +270,10 @@
     descr: Review all members
     slug: exe_membership
     number: 15
-    feature: 45
     config: membership
+    hidden: false
+    feature: 45
+    module: 8
 - model: larpmanager.assocpermission
   pk: 27
   fields:
@@ -212,8 +281,10 @@
     descr: Manage members votes for the assignment of roles in the organization
     slug: exe_vote
     number: 21
-    feature: 63
     config: vote
+    hidden: false
+    feature: 63
+    module: 8
 - model: larpmanager.assocpermission
   pk: 28
   fields:
@@ -221,7 +292,10 @@
     descr: Manage badges and assign them to participants
     slug: exe_badges
     number: 31
+    config: null
+    hidden: false
     feature: 65
+    module: 8
 - model: larpmanager.assocpermission
   pk: 29
   fields:
@@ -229,7 +303,10 @@
     descr: Manage participant questions and answer them
     slug: exe_questions
     number: 41
+    config: null
+    hidden: false
     feature: 28
+    module: 8
 - model: larpmanager.assocpermission
   pk: 30
   fields:
@@ -237,7 +314,10 @@
     descr: Displays list of emails of users
     slug: exe_newsletter
     number: 51
+    config: null
+    hidden: false
     feature: 40
+    module: 8
 - model: larpmanager.assocpermission
   pk: 32
   fields:
@@ -245,7 +325,10 @@
     descr: Manage volunteer registry
     slug: exe_volunteer_registry
     number: 71
+    config: null
+    hidden: false
     feature: 158
+    module: 10
 - model: larpmanager.assocpermission
   pk: 33
   fields:
@@ -253,7 +336,10 @@
     descr: Display all users data
     slug: exe_enrolment
     number: 81
+    config: null
+    hidden: false
     feature: 45
+    module: 8
 - model: larpmanager.assocpermission
   pk: 34
   fields:
@@ -261,8 +347,10 @@
     descr: Configure payment methods available for participants
     slug: exe_payment_details
     number: 1
-    feature: 111
     config: payment
+    hidden: false
+    feature: 111
+    module: 2
 - model: larpmanager.assocpermission
   pk: 35
   fields:
@@ -270,7 +358,10 @@
     descr: Manage invoices of payments and approve them
     slug: exe_invoices
     number: 33
+    config: null
+    hidden: false
     feature: 111
+    module: 2
 - model: larpmanager.assocpermission
   pk: 38
   fields:
@@ -278,16 +369,22 @@
     descr: Check consistency of the members’ personal data
     slug: exe_membership_check
     number: 99
+    config: null
+    hidden: false
     feature: 185
+    module: 10
 - model: larpmanager.assocpermission
   pk: 39
   fields:
     name: Tokens
-    descr: Manages tokens used by participants to cover the registration fee for all events
+    descr: Manages tokens used by participants to cover the registration fee for all
+      events
     slug: exe_tokens
     number: 8
-    feature: 107
     config: token_credit
+    hidden: false
+    feature: 107
+    module: 2
 - model: larpmanager.assocpermission
   pk: 40
   fields:
@@ -295,7 +392,10 @@
     descr: Display all users data as members registry
     slug: exe_membership_registry
     number: 99
+    config: null
+    hidden: false
     feature: 45
+    module: 8
 - model: larpmanager.assocpermission
   pk: 42
   fields:
@@ -303,8 +403,10 @@
     descr: Manage fields that track participants’ data
     slug: exe_profile
     number: 1
-    feature: 188
     config: users
+    hidden: false
+    feature: 188
+    module: 8
 - model: larpmanager.assocpermission
   pk: 43
   fields:
@@ -312,7 +414,10 @@
     descr: Manage event templates used as starting points for new events
     slug: exe_templates
     number: 51
+    config: null
+    hidden: false
     feature: 179
+    module: 12
 - model: larpmanager.assocpermission
   pk: 44
   fields:
@@ -320,8 +425,10 @@
     descr: Display all sent e-mails
     slug: exe_archive_email
     number: 91
-    feature: 187
     config: email
+    hidden: false
+    feature: 187
+    module: 8
 - model: larpmanager.assocpermission
   pk: 45
   fields:
@@ -329,5 +436,7 @@
     descr: quick
     slug: exe_quick
     number: 9999
-    feature: 216
+    config: null
     hidden: true
+    feature: 216
+    module: 7
