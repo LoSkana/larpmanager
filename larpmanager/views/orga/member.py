@@ -31,7 +31,7 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.miscellanea import OrgaHelpQuestionForm, SendMailForm
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.event import PreRegistration
-from larpmanager.models.member import Member, Membership, MembershipStatus
+from larpmanager.models.member import FirstAidChoices, Member, Membership, MembershipStatus, NewsletterChoices
 from larpmanager.models.miscellanea import Email, HelpQuestion
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.common import _get_help_questions
@@ -121,7 +121,7 @@ def orga_spam(request, s, n):
     members = members.exclude(status=MembershipStatus.EMPTY).values_list("member_id", flat=True)
 
     lst = {}
-    que = Member.objects.filter(newsletter=Member.ALL)
+    que = Member.objects.filter(newsletter=NewsletterChoices.ALL)
     que = que.filter(id__in=members)
     que = que.exclude(id__in=already)
     for m in que.values_list("language", "email"):
@@ -313,7 +313,7 @@ def member_field_correct(el, member_fields):
     if "residence_address" in member_fields:
         el.residence_address = el.get_residence()
     if "first_aid" in member_fields:
-        if el.first_aid == Member.YES:
+        if el.first_aid == FirstAidChoices.YES:
             el.first_aid = mark_safe('<i class="fa-solid fa-check"></i>')
         else:
             el.first_aid = ""

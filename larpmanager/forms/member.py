@@ -44,7 +44,14 @@ from larpmanager.forms.base import BaseAccForm, MyForm
 from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput
 from larpmanager.models.association import Association, MemberFieldType
 from larpmanager.models.base import FeatureNationality
-from larpmanager.models.member import Badge, Member, Membership, VolunteerRegistry, get_user_membership
+from larpmanager.models.member import (
+    Badge,
+    Member,
+    Membership,
+    NewsletterChoices,
+    VolunteerRegistry,
+    get_user_membership,
+)
 from larpmanager.utils.common import FileTypeValidator, get_recaptcha_secrets
 from larpmanager.utils.tasks import my_send_mail
 
@@ -99,10 +106,10 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 
         self.fields["newsletter"] = forms.ChoiceField(
             required=True,
-            choices=Member.NEWSLETTER_CHOICES,
+            choices=NewsletterChoices.choices,
             label=Member._meta.get_field("newsletter").verbose_name,
             help_text=Member._meta.get_field("newsletter").help_text,
-            initial=Member.ALL,
+            initial=NewsletterChoices.ALL,
         )
 
         self.fields["share"] = forms.BooleanField(
