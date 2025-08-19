@@ -189,43 +189,28 @@ class ElectronicInvoice(BaseModel):
         super().save(*args, **kwargs)
 
 
+class ExpenseChoices(models.TextChoices):
+    SCENOGR = "a", _("Set design - staging, materials")
+    COST = "b", _("Costumes - make up, cloth, armor")
+    PROP = "c", _("Prop - weapons, props")
+    ELECTR = "d", _("Electronics - computers, hitech, lights")
+    PROMOZ = "e", _("Promotion - site, advertising")
+    TRANS = "f", _("Transportation - gas, highway")
+    KITCH = "g", _("Kitchen - food, tableware")
+    LOCAT = "h", _("Location - rent, gas, overnight stays")
+    SEGRET = "i", _("Secretarial - stationery, printing")
+    OTHER = "j", _("Other")
+
+
+class BalanceChoices(models.TextChoices):
+    MATER = "1", _("Raw materials, auxiliaries, consumables and goods")
+    SERV = "2", _("Services")
+    GODIM = "3", _("Use of third party assets")
+    PERSON = "4", _("Personal")
+    DIVER = "5", _("Miscellaneous operating expenses")
+
+
 class AccountingItem(BaseModel):
-    SCENOGR = "a"
-    COST = "b"
-    PROP = "c"
-    ELECTR = "d"
-    PROMOZ = "e"
-    TRANS = "f"
-    KITCH = "g"
-    LOCAT = "h"
-    SEGRET = "i"
-    OTHER = "j"
-    EXPENSE_CHOICES = [
-        (SCENOGR, _("Set design - staging, materials")),
-        (COST, _("Costumes - make up, cloth, armor")),
-        (PROP, _("Prop - weapons, props")),
-        (ELECTR, _("Electronics - computers, hitech, lights")),
-        (PROMOZ, _("Promotion - site, advertising")),
-        (TRANS, _("Transportation - gas, highway")),
-        (KITCH, _("Kitchen - food, tableware")),
-        (LOCAT, _("Location - rent, gas, overnight stays")),
-        (SEGRET, _("Secretarial - stationery, printing")),
-        (OTHER, _("Other")),
-    ]
-
-    MATER = "1"
-    SERV = "2"
-    GODIM = "3"
-    PERSON = "4"
-    DIVER = "5"
-    BALANCE_CHOICES = [
-        (MATER, _("Raw materials, auxiliaries, consumables and goods")),
-        (SERV, _("Services")),
-        (GODIM, _("Use of third party assets")),
-        (PERSON, _("Personal")),
-        (DIVER, _("Miscellaneous operating expenses")),
-    ]
-
     search = models.CharField(max_length=150, editable=False)
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, null=True, blank=True)
@@ -308,13 +293,14 @@ class AccountingItemOther(AccountingItem):
         return s
 
 
-class AccountingItemPayment(AccountingItem):
-    MONEY = "a"
-    CREDIT = "b"
-    TOKEN = "c"
-    PAYMENT_CHOICES = [(MONEY, "Money"), (CREDIT, "Credit"), (TOKEN, "Token")]
+class PaymentChoices(models.TextChoices):
+    MONEY = "a", "Money"
+    CREDIT = "b", "Credit"
+    TOKEN = "c", "Token"
 
-    pay = models.CharField(max_length=1, choices=PAYMENT_CHOICES, default=MONEY)
+
+class AccountingItemPayment(AccountingItem):
+    pay = models.CharField(max_length=1, choices=PaymentChoices.choices, default=PaymentChoices.MONEY)
 
     reg = models.ForeignKey(
         Registration, on_delete=models.CASCADE, related_name="accounting_items_p", null=True, blank=True
@@ -337,14 +323,14 @@ class AccountingItemExpense(AccountingItem):
 
     exp = models.CharField(
         max_length=1,
-        choices=AccountingItem.EXPENSE_CHOICES,
+        choices=ExpenseChoices.choices,
         verbose_name=_("Type"),
         help_text=_("Indicate the outflow category"),
     )
 
     balance = models.CharField(
         max_length=1,
-        choices=AccountingItem.BALANCE_CHOICES,
+        choices=BalanceChoices.choices,
         verbose_name=_("Balance"),
         help_text=_("Indicate how spending is allocated at the budget level"),
         null=True,
@@ -384,14 +370,14 @@ class AccountingItemFlow(AccountingItem):
 class AccountingItemOutflow(AccountingItemFlow):
     exp = models.CharField(
         max_length=1,
-        choices=AccountingItem.EXPENSE_CHOICES,
+        choices=ExpenseChoices.choices,
         verbose_name=_("Type"),
         help_text=_("Indicate the outflow category"),
     )
 
     balance = models.CharField(
         max_length=1,
-        choices=AccountingItem.BALANCE_CHOICES,
+        choices=BalanceChoices.choices,
         verbose_name=_("Balance"),
         help_text=_("Indicate how spending is allocated at the budget level"),
         null=True,

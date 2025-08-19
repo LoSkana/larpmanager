@@ -37,6 +37,7 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
     AccountingItemTransaction,
+    PaymentChoices,
 )
 from larpmanager.models.casting import AssignmentTrait
 from larpmanager.models.event import DevelopStatus
@@ -265,14 +266,10 @@ def cancel_run(instance):
     for r in Registration.objects.filter(cancellation_date__isnull=True, run=instance):
         cancel_reg(r)
     for r in Registration.objects.filter(refunded=False, run=instance):
-        AccountingItemPayment.objects.filter(
-            member=r.member, pay=AccountingItemPayment.TOKEN, reg__run=instance
-        ).delete()
-        AccountingItemPayment.objects.filter(
-            member=r.member, pay=AccountingItemPayment.CREDIT, reg__run=instance
-        ).delete()
+        AccountingItemPayment.objects.filter(member=r.member, pay=PaymentChoices.TOKEN, reg__run=instance).delete()
+        AccountingItemPayment.objects.filter(member=r.member, pay=PaymentChoices.CREDIT, reg__run=instance).delete()
         money = get_sum(
-            AccountingItemPayment.objects.filter(member=r.member, pay=AccountingItemPayment.MONEY, reg__run=instance)
+            AccountingItemPayment.objects.filter(member=r.member, pay=PaymentChoices.MONEY, reg__run=instance)
         )
         if money > 0:
             AccountingItemOther.objects.create(

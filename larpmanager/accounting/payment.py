@@ -44,6 +44,7 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     AccountingItemTransaction,
     Collection,
+    PaymentChoices,
     PaymentInvoice,
     PaymentStatus,
     PaymentType,
@@ -299,7 +300,7 @@ def _process_payment(invoice):
         reg = Registration.objects.get(pk=invoice.idx)
 
         acc = AccountingItemPayment()
-        acc.pay = AccountingItemPayment.MONEY
+        acc.pay = PaymentChoices.MONEY
         acc.member = invoice.member
         acc.reg = reg
         acc.inv = invoice

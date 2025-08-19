@@ -47,6 +47,7 @@ from larpmanager.models.accounting import (
     AccountingItemMembership,
     AccountingItemOther,
     AccountingItemPayment,
+    PaymentChoices,
 )
 from larpmanager.models.association import Association
 from larpmanager.models.event import (
@@ -276,9 +277,9 @@ def member_add_accountingitempayment(ctx, request):
         member=ctx["member"], hide=False, assoc_id=request.assoc["id"]
     ).select_related("reg")
     for el in ctx["pays"]:
-        if el.pay == AccountingItemPayment.TOKEN:
+        if el.pay == PaymentChoices.TOKEN:
             el.typ = ctx.get("token_name", _("Credits"))
-        elif el.pay == AccountingItemPayment.CREDIT:
+        elif el.pay == PaymentChoices.CREDIT:
             el.typ = ctx.get("credit_name", _("Credits"))
         else:
             el.typ = el.get_pay_display()

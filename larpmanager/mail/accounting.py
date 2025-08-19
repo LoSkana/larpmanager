@@ -33,6 +33,7 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
     Collection,
+    PaymentChoices,
     PaymentType,
 )
 from larpmanager.models.association import get_url, hdr
@@ -141,11 +142,11 @@ def update_accounting_item_payment(sender, instance, **kwargs):
 
     curr_sym = run.event.assoc.get_currency_symbol()
     if not instance.pk:
-        if instance.pay == AccountingItemPayment.MONEY:
+        if instance.pay == PaymentChoices.MONEY:
             notify_pay_money(curr_sym, instance, member, run)
-        elif instance.pay == AccountingItemPayment.CREDIT:
+        elif instance.pay == PaymentChoices.CREDIT:
             notify_pay_credit(credit_name, instance, member, run)
-        elif instance.pay == AccountingItemPayment.TOKEN:
+        elif instance.pay == PaymentChoices.TOKEN:
             notify_pay_token(instance, member, run, token_name)
 
 
