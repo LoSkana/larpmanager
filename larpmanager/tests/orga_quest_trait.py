@@ -20,7 +20,7 @@
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import check_feature, fill_tinymce, go_to, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -57,9 +57,9 @@ def quests(page, live_server):
     page.get_by_role("link", name="").click()
     page.get_by_role("link", name=" Test Larp").click()
     page.locator("#orga_features").get_by_role("link", name="Features").click()
-    page.locator("#id_mod_1_0").check()
-    page.locator("#id_mod_5_1").check()
-    page.locator("#id_mod_5_0").check()
+    check_feature(page, "Characters")
+    check_feature(page, "Casting algorithm")
+    check_feature(page, "Quests and Traits")
     submit_confirm(page)
 
     # create quest type

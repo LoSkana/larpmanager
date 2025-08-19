@@ -201,6 +201,5 @@ def add_links_to_visit(links_to_visit, page, visited_links):
 
 
 def check_feature(page, name):
-    checkbox = page.locator(".feature_checkbox", has_text=name).locator('input[type="checkbox"]')
-    checkbox.scroll_into_view_if_needed()
-    checkbox.check()
+    block = page.locator(".feature_checkbox").filter(has=page.get_by_text(name, exact=True))
+    block.get_by_role("checkbox").check()

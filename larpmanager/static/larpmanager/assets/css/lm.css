@@ -2054,3 +2054,11 @@ table.dataTable span.dtcc span.dtcc-button-icon {
 .nope {
     display: none !important;
 }
+
+.feature_checkbox label {
+    display: inline-block;
+    text-transform: initial;
+    font-weight: initial;
+    font-size: revert;
+    letter-spacing: revert;
+}

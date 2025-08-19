@@ -23,12 +23,13 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
             checkbox_id = f"{attrs.get('id', name)}_{i}"
             checked = "checked" if str(option_value) in value else ""
             checkbox_html = f'<input type="checkbox" name="{name}" value="{option_value}" id="{checkbox_id}" {checked}>'
-            link_html = f'{option_label}<a href="#" feat="{option_value}"><i class="fas fa-question-circle"></i></a>'
+            label_html = f'<label for="{checkbox_id}">{option_label}</label>'
+            link_html = f'<a href="#" feat="{option_value}"><i class="fas fa-question-circle"></i></a>'
             help_text = self.feature_help.get(option_value, "")
             output.append(f"""
                 <div class="feature_checkbox lm_tooltip">
                     <span class="hide lm_tooltiptext">{help_text} ({know_more})</span>
-                    {checkbox_html} {link_html}
+                    {checkbox_html} {label_html} {link_html}
                 </div>
             """)
 

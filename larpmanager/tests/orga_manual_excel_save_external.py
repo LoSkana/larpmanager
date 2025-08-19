@@ -21,6 +21,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
+    check_feature,
     fill_tinymce,
     go_to,
     go_to_check,
@@ -41,7 +42,7 @@ def test_manual_excel_save_external(pw_page):
     page.get_by_role("link", name="").click()
     page.get_by_role("link", name=" Test Larp").click()
     page.locator("#orga_features").get_by_role("link", name="Features").click()
-    page.locator("#id_mod_1_0").check()
+    check_feature(page, "Characters")
     submit_confirm(page)
 
     # change name

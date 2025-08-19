@@ -21,6 +21,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
+    check_feature,
     fill_tinymce,
     go_to,
     login_orga,
@@ -39,9 +40,9 @@ def test_plot_relationship_reading(pw_page):
     page.get_by_role("link", name="").click()
     page.get_by_role("link", name=" Test Larp").click()
     page.locator("#orga_features").get_by_role("link", name="Features").click()
-    page.locator("#id_mod_1_0").check()
-    page.locator("#id_mod_1_4").check()
-    page.locator("#id_mod_1_6").check()
+    check_feature(page, "Characters")
+    check_feature(page, "Plots")
+    check_feature(page, "Relationships")
     submit_confirm(page)
 
     relationships(live_server, page)
@@ -73,7 +74,7 @@ def reading(live_server, page):
 
     # test reading with factions
     page.get_by_role("link", name="Features").click()
-    page.locator("#id_mod_1_3").check()
+    check_feature(page, "Factions")
     submit_confirm(page)
 
     # create faction with test character
