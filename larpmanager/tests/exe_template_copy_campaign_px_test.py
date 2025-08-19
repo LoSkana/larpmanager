@@ -110,8 +110,8 @@ def setup(live_server, page):
     page.locator("#id_name").press("Tab")
     page.get_by_role("searchbox").fill("user")
     page.get_by_role("option", name="User Test - user@test.it").click()
-    page.locator("#id_Appearance_2").check()
-    page.locator("#id_Writing_2").check()
+    check_feature(page, "Navigation")
+    check_feature(page, "Plots")
     submit_confirm(page)
 
 
