@@ -104,10 +104,18 @@ $(document).ready(function() {
         event.stopPropagation();
     });
 
-    $('.dropdown').on('mouseenter', function() {
-        $(this).children('.dropdown-menu').fadeIn(100);
-    }).on('mouseleave', function() {
-        $(this).children('.dropdown-menu').fadeOut(100);
+    $('.dropdown').each(function() {
+        let timer;
+
+        $(this).on('mouseenter', function() {
+            const $menu = $(this).children('.dropdown-menu');
+            timer = setTimeout(() => {
+                $menu.stop(true, true).fadeIn(100);
+            }, 100);
+        }).on('mouseleave', function() {
+            clearTimeout(timer);
+            $(this).children('.dropdown-menu').stop(true, true).fadeOut(100);
+        });
     });
 
     $('a.feature_tutorial').on('mousedown', function(event) {
