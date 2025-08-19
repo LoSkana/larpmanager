@@ -213,6 +213,7 @@ def orga_inflows_edit(request, s, n, num):
 @login_required
 def orga_expenses(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_expenses")
+    ctx["disable_approval"] = ctx["event"].assoc.get_config("expense_disable_orga", False)
     orga_paginate(request, ctx, AccountingItemExpense, selrel=("run", "run__event"))
     return render(request, "larpmanager/orga/accounting/expenses.html", ctx)
 
@@ -225,6 +226,9 @@ def orga_expenses_edit(request, s, n, num):
 @login_required
 def orga_expenses_approve(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_expenses")
+    if ctx["event"].assoc.get_config("expense_disable_orga", False):
+        raise Http404("eh no caro mio")
+
     try:
         exp = AccountingItemExpense.objects.get(pk=num)
     except Exception as err:

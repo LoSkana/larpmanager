@@ -86,6 +86,9 @@ class OrgaExpenseForm(MyFormRun):
         if "ita_balance" not in self.params["features"]:
             self.delete_field("balance")
 
+        if self.params["event"].assoc.get_config("expense_disable_orga", False):
+            self.delete_field("is_approved")
+
 
 class OrgaTokenForm(MyFormRun):
     class Meta:

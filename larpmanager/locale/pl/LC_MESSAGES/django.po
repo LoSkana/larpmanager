@@ -3182,6 +3182,9 @@ msgstr "Potwierdź resetowanie hasła"
 msgid "Customised mail server"
 msgstr "Dostosowany serwer pocztowy"
 
+msgid "Disable event approval"
+msgstr "Wyłącz zatwierdzanie zdarzeń"
+
 msgid "Display all users data"
 msgstr "Wyświetlanie danych wszystkich użytkowników"
 
@@ -7282,6 +7285,13 @@ msgid ""
 msgstr ""
 "Umożliwia zarządzanie wydatkami ponoszonymi przy użyciu instrumentów "
 "finansowych organizacji"
+
+msgid ""
+"If checked, approval of expenses can be performed only from the organization"
+" panel"
+msgstr ""
+"Jeśli opcja jest zaznaczona, zatwierdzanie wydatków może odbywać się "
+"wyłącznie z poziomu panelu organizacji"
 
 msgid ""
 "If checked, the gallery will not be displayed to those not logged in to the "
