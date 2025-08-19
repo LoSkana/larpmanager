@@ -70,3 +70,15 @@
     name: Events
     order: 10
     icon: calendar-days
+- model: larpmanager.permissionmodule
+  pk: 13
+  fields:
+    name: Quests
+    order: 55
+    icon: puzzle-piece
+- model: larpmanager.permissionmodule
+  pk: 14
+  fields:
+    name: Communications
+    order: 85
+    icon: inbox

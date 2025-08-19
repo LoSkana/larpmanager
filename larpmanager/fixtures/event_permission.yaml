@@ -195,7 +195,7 @@
     config: null
     hidden: false
     feature: 28
-    module: 8
+    module: 14
 - model: larpmanager.eventpermission
   pk: 21
   fields:
@@ -206,7 +206,7 @@
     config: null
     hidden: false
     feature: 40
-    module: 8
+    module: 14
 - model: larpmanager.eventpermission
   pk: 22
   fields:
@@ -217,7 +217,7 @@
     config: null
     hidden: false
     feature: 40
-    module: 8
+    module: 14
 - model: larpmanager.eventpermission
   pk: 23
   fields:
@@ -261,7 +261,7 @@
     config: null
     hidden: false
     feature: 7
-    module: 5
+    module: 13
 - model: larpmanager.eventpermission
   pk: 29
   fields:
@@ -272,7 +272,7 @@
     config: null
     hidden: false
     feature: 7
-    module: 5
+    module: 13
 - model: larpmanager.eventpermission
   pk: 30
   fields:
@@ -283,7 +283,7 @@
     config: null
     hidden: false
     feature: 7
-    module: 5
+    module: 13
 - model: larpmanager.eventpermission
   pk: 31
   fields:
@@ -459,7 +459,7 @@
     config: null
     hidden: false
     feature: 40
-    module: 8
+    module: 14
 - model: larpmanager.eventpermission
   pk: 49
   fields:
@@ -653,7 +653,7 @@
     name: Questions
     descr: Manage questions for workshops
     slug: orga_workshop_questions
-    number: 71
+    number: 1
     config: null
     hidden: false
     feature: 24
@@ -701,7 +701,7 @@
     config: email
     hidden: false
     feature: 200
-    module: 8
+    module: 14
 - model: larpmanager.eventpermission
   pk: 75
   fields:
@@ -723,7 +723,7 @@
     config: email
     hidden: false
     feature: 199
-    module: 8
+    module: 14
 - model: larpmanager.eventpermission
   pk: 77
   fields:

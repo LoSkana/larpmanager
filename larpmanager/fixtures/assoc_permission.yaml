@@ -262,7 +262,7 @@
     config: email
     hidden: false
     feature: 189
-    module: 8
+    module: 14
 - model: larpmanager.assocpermission
   pk: 26
   fields:
@@ -302,11 +302,11 @@
     name: Questions
     descr: Manage participant questions and answer them
     slug: exe_questions
-    number: 41
+    number: 1
     config: null
     hidden: false
     feature: 28
-    module: 8
+    module: 14
 - model: larpmanager.assocpermission
   pk: 30
   fields:
@@ -317,7 +317,7 @@
     config: null
     hidden: false
     feature: 40
-    module: 8
+    module: 14
 - model: larpmanager.assocpermission
   pk: 32
   fields:
@@ -428,7 +428,7 @@
     config: email
     hidden: false
     feature: 187
-    module: 8
+    module: 14
 - model: larpmanager.assocpermission
   pk: 45
   fields:

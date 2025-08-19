@@ -17,10 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+from collections import defaultdict
 from datetime import datetime, timedelta
 
 from django import forms
+from django.db.models import Q
 from django.forms.widgets import Widget
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
@@ -28,8 +29,7 @@ from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 from tinymce.widgets import TinyMCE
 
-from larpmanager.models.access import EventRole
-from larpmanager.models.base import FeatureModule
+from larpmanager.models.access import EventRole, PermissionModule
 from larpmanager.models.casting import Trait
 from larpmanager.models.event import (
     DevelopStatus,
@@ -116,46 +116,62 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
         return mark_safe("\n".join(output))
 
 
+class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
+    def label_from_instance(self, obj):
+        return _(obj.name)
+
+
 def prepare_permissions_role(form, typ):
     if form.instance and form.instance.number == 1:
         form.prevent_canc = True
         return
     form.modules = []
-    init = []
-    if form.instance.pk:
-        init = list(form.instance.permissions.values_list("pk", flat=True))
-    for module in FeatureModule.objects.order_by("order"):
-        ch = []
-        help_text = {}
-        feature_map = {}
-        for el in typ.objects.filter(feature__module=module).order_by("number"):
-            if el.hidden:
-                continue
-            if not el.feature.placeholder and el.feature.slug not in form.params["features"]:
-                continue
-            ch.append((el.id, _(el.name)))
-            help_text[el.id] = el.descr
-            feature_map[el.id] = el.feature_id
 
-        if not ch:
+    features = set(form.params.get("features", []))
+
+    selected_ids = set()
+    if getattr(form.instance, "pk", None):
+        selected_ids = set(form.instance.permissions.values_list("pk", flat=True))
+
+    base_qs = (
+        typ.objects.filter(hidden=False)
+        .select_related("feature", "module")
+        .filter(Q(feature__placeholder=True) | Q(feature__slug__in=features))
+        .order_by("module__order", "number", "pk")
+    )
+
+    by_module = defaultdict(list)
+    for p in base_qs:
+        by_module[p.module_id].append(p)
+
+    form.modules = getattr(form, "modules", [])
+
+    for module in PermissionModule.objects.order_by("order"):
+        perms = by_module.get(module.id, [])
+        if not perms:
             continue
 
+        field_name = f"perm_{module.pk}"
+
         label = _(module.name)
-        if "interface_old" in form.params and not form.params["interface_old"]:
-            if module.icon:
-                label = f"<i class='fa-solid fa-{module.icon}'></i> {label}"
+        if not form.params.get("interface_old") and getattr(module, "icon", None):
+            label = mark_safe(f"<i class='fa-solid fa-{module.icon}'></i> {label}")
 
-        valid_ids = {choice[0] for choice in ch}
-        initial_values = [i for i in init if i in valid_ids]
+        module_ids = [p.pk for p in perms]
+        initial_vals = [pid for pid in selected_ids if pid in module_ids]
 
-        form.fields[module.name] = forms.MultipleChoiceField(
+        form.fields[field_name] = TranslatedModelMultipleChoiceField(
             required=False,
-            choices=ch,
-            widget=RoleCheckboxWidget(help_text=help_text, feature_map=feature_map),
+            queryset=typ.objects.filter(pk__in=module_ids).order_by("number", "pk"),
+            widget=RoleCheckboxWidget(
+                help_text={p.pk: p.descr for p in perms},
+                feature_map={p.pk: p.feature_id for p in perms},
+            ),
             label=label,
-            initial=initial_values,
+            initial=initial_vals,
         )
-        form.modules.append(module.name)
+
+        form.modules.append(field_name)
 
 
 def save_permissions_role(instance, form):
