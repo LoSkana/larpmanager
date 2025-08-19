@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import pytest
 
-from larpmanager.tests.utils import check_download, go_to, login_orga
+from larpmanager.tests.utils import check_download, go_to, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -41,7 +41,7 @@ def test_user_pdf(pw_page):
     # signup
     go_to(page, live_server, "/test/1/register")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # Assign character
     go_to(page, live_server, "/test/1/manage/registrations")
@@ -49,7 +49,7 @@ def test_user_pdf(pw_page):
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # Go to character, test download pdf
     go_to(page, live_server, "/test/1/character/1")

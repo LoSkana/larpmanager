@@ -20,7 +20,7 @@
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, login_user, logout
+from larpmanager.tests.utils import check_feature, go_to, login_orga, login_user, logout, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -42,9 +42,9 @@ def test_exe_assoc_role(pw_page):
     page.locator("#id_name").press("Tab")
     page.get_by_role("searchbox").fill("us")
     page.get_by_role("option", name="User Test -").click()
-    page.locator("#id_Organization_2").check()
-    page.locator("#id_Accounting_0").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    check_feature(page, "Configuration")
+    check_feature(page, "Accounting")
+    submit_confirm(page)
     expect(page.locator('[id="\\32 "]')).to_contain_text("Organization (Configuration), Accounting (Accounting)")
 
     logout(page)

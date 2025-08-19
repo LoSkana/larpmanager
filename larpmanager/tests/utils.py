@@ -173,7 +173,15 @@ def _checkboxes(page, check=True):
                     checkbox.check()
             elif checkbox.is_checked():
                 checkbox.uncheck()
-    page.locator('input[type="submit"][value="Confirm"]').click(force=True)
+
+    submit_confirm(page)
+
+
+def submit_confirm(page):
+    submit_btn = page.get_by_role("button", name="Confirm", exact=True)
+    submit_btn.scroll_into_view_if_needed()
+    expect(submit_btn).to_be_visible()
+    submit_btn.click()
 
 
 def add_links_to_visit(links_to_visit, page, visited_links):
@@ -190,3 +198,8 @@ def add_links_to_visit(links_to_visit, page, visited_links):
             continue
         if link not in visited_links:
             links_to_visit.add(link)
+
+
+def check_feature(page, name):
+    block = page.locator(".feature_checkbox").filter(has=page.get_by_text(name, exact=True))
+    block.get_by_role("checkbox").check()

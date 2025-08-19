@@ -22,7 +22,7 @@ from pathlib import Path
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import check_download, go_to, login_orga
+from larpmanager.tests.utils import check_download, check_feature, go_to, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -39,11 +39,11 @@ def test_upload_download(pw_page):
     # prepare
     go_to(page, live_server, "/test/1/manage/")
     page.locator("#orga_features").get_by_role("link", name="Features").click()
-    page.locator("#id_mod_1_0").check()
-    page.locator("#id_mod_1_3").check()
-    page.locator("#id_mod_1_4").check()
-    page.locator("#id_mod_5_1").check()
-    page.get_by_role("button", name="Confirm").click()
+    check_feature(page, "Characters")
+    check_feature(page, "Factions")
+    check_feature(page, "Plots")
+    check_feature(page, "Quests and Traits")
+    submit_confirm(page)
 
     char_form(page)
 
@@ -71,8 +71,8 @@ def full(page):
 
 def relationships(page):
     page.get_by_role("link", name="Features").click()
-    page.locator("#id_mod_1_6").check()
-    page.get_by_role("button", name="Confirm").click()
+    check_feature(page, "Relationships")
+    submit_confirm(page)
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     page.locator("#id_second").click()
@@ -116,7 +116,7 @@ def quest_trait(page):
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("bhbh")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Quest", exact=True).click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
@@ -229,8 +229,8 @@ def char_form(page):
 def check_user_fee(live_server, page):
     go_to(page, live_server, "/manage/")
     page.locator("#exe_features").get_by_role("link", name="Features").click()
-    page.locator("#id_mod_2_0").check()
-    page.get_by_role("button", name="Confirm").click()
+    check_feature(page, "Payments")
+    submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("aaaa")
@@ -240,14 +240,14 @@ def check_user_fee(live_server, page):
     page.locator("#id_wire_payee").fill("2asdsadas")
     page.locator("#id_wire_iban").click()
     page.locator("#id_wire_iban").fill("3sadsadsa")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#exe_features").get_by_role("link", name="Features").click()
-    page.locator("#id_mod_2_1").check()
-    page.get_by_role("button", name="Confirm").click()
+    check_feature(page, "Donation")
+    submit_confirm(page)
     page.locator("#exe_config").get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Payments ").click()
     page.locator("#id_payment_fees_user").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name=" Accounting").click()
     page.get_by_role("link", name="follow this link").click()
     expect(page.locator("#wrapper")).to_contain_text(

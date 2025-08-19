@@ -30,7 +30,7 @@ class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
             checkbox_id = f"{attrs.get('id', name)}_{i}"
             checked = "checked" if str(option_value) in value else ""
             checkbox_html = f'<input type="checkbox" name="{name}" value="{option_value}" id="{checkbox_id}" {checked}>'
-            link_html = f"{option_label}"
+            link_html = f'<label for="{checkbox_id}">{option_label}</label>'
             output.append(f'<div class="feature_checkbox">{checkbox_html} {link_html}</div>')
 
         return mark_safe("\n".join(output))

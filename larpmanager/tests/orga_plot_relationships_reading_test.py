@@ -21,9 +21,11 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
+    check_feature,
     fill_tinymce,
     go_to,
     login_orga,
+    submit_confirm,
 )
 
 pytestmark = pytest.mark.e2e
@@ -38,10 +40,10 @@ def test_plot_relationship_reading(pw_page):
     page.get_by_role("link", name="").click()
     page.get_by_role("link", name=" Test Larp").click()
     page.locator("#orga_features").get_by_role("link", name="Features").click()
-    page.locator("#id_mod_1_0").check()
-    page.locator("#id_mod_1_4").check()
-    page.locator("#id_mod_1_6").check()
-    page.get_by_role("button", name="Confirm").click()
+    check_feature(page, "Characters")
+    check_feature(page, "Plots")
+    check_feature(page, "Relationships")
+    submit_confirm(page)
 
     relationships(live_server, page)
 
@@ -61,7 +63,7 @@ def reading(live_server, page):
 
     fill_tinymce(page, "id_text", "totxeet")
 
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # now read it
     page.get_by_role("link", name="Reading").click()
@@ -72,8 +74,8 @@ def reading(live_server, page):
 
     # test reading with factions
     page.get_by_role("link", name="Features").click()
-    page.locator("#id_mod_1_3").check()
-    page.get_by_role("button", name="Confirm").click()
+    check_feature(page, "Factions")
+    submit_confirm(page)
 
     # create faction with test character
     page.get_by_role("link", name="Factions").click()
@@ -83,7 +85,7 @@ def reading(live_server, page):
     page.get_by_role("listitem").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check faction main list
     page.locator("#one").get_by_role("link", name="Characters").click()
@@ -112,7 +114,7 @@ def relationships(live_server, page):
     page.get_by_role("searchbox").fill("tes")
     page.get_by_role("option", name="#1 Test Character").click()
     fill_tinymce(page, "rel_1_direct", "ciaaoooooo")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check in main list
     page.get_by_role("link", name="Relationships").click()
@@ -156,7 +158,7 @@ def plots(live_server, page):
 
     fill_tinymce(page, "ch_1", "prova")
 
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check in plot list
     page.locator("#one").get_by_role("link", name="Characters").click()
@@ -172,7 +174,7 @@ def plots(live_server, page):
 
     # change it
     fill_tinymce(page, "id_char_role_1", "prova222")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check it
     page.locator("#one").get_by_role("link", name="Characters").click()
@@ -188,7 +190,7 @@ def plots(live_server, page):
     # add another char
     page.get_by_role("searchbox").fill("pro")
     page.get_by_role("option", name="#2 prova").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check
     page.locator("#one").get_by_role("link", name="Characters").click()
@@ -197,7 +199,7 @@ def plots(live_server, page):
     # set text
     page.get_by_role("link", name="").click()
     fill_tinymce(page, "id_char_role_2", "bruuuu")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check in user
     go_to(page, live_server, "/test/1/")

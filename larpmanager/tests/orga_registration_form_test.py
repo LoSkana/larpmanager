@@ -23,7 +23,7 @@ from pathlib import Path
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, login_user, logout
+from larpmanager.tests.utils import go_to, login_orga, login_user, logout, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -67,7 +67,7 @@ def add_text(page):
     page.locator("#id_max_length").fill("10")
     image_path = Path(__file__).parent / "image.jpg"
     page.locator("#id_profile").set_input_files(str(image_path))
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("p")
     page.locator("#id_typ").press("Tab")
@@ -77,7 +77,7 @@ def add_text(page):
     page.locator("#id_max_length").click()
     page.locator("#id_max_length").press("ArrowLeft")
     page.locator("#id_max_length").fill("10")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
 
 def add_single(page):
@@ -94,7 +94,7 @@ def add_single(page):
     page.locator("#id_price").click()
     page.locator("#id_price").press("ArrowLeft")
     page.locator("#id_price").fill("10")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("many")
@@ -107,7 +107,7 @@ def add_single(page):
     page.locator("#id_price").fill("20")
     page.locator("#id_max_available").click()
     page.locator("#id_max_available").fill("2")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     add_single_options(page)
 
 
@@ -122,8 +122,8 @@ def add_single_options(page):
     page.locator("#id_price").fill("30")
     page.locator("#id_price").press("Tab")
     page.locator("#id_max_available").fill("1")
-    page.get_by_role("button", name="Confirm", exact=True).click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
+    submit_confirm(page)
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("rescrited")
@@ -134,7 +134,7 @@ def add_single_options(page):
     page.locator("#id_name").fill("all")
     page.locator("#id_description").click()
     page.locator("#id_description").fill("all descr")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("only")
@@ -144,8 +144,8 @@ def add_single_options(page):
     page.locator("#id_price").fill("20")
     page.locator("#id_price").press("Tab")
     page.locator("#id_max_available").fill("1")
-    page.get_by_role("button", name="Confirm", exact=True).click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
+    submit_confirm(page)
 
 
 def add_multiple(page):
@@ -165,7 +165,7 @@ def add_multiple(page):
     page.locator("#id_description").press("Tab")
     page.locator("#id_price").fill("10")
     page.locator("#id_price").press("Tab")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("many")
@@ -175,7 +175,7 @@ def add_multiple(page):
     page.locator("#id_price").fill("20")
     page.locator("#id_price").press("Tab")
     page.locator("#id_max_available").fill("2")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("few")
@@ -185,8 +185,8 @@ def add_multiple(page):
     page.locator("#id_price").fill("30")
     page.locator("#id_price").press("Tab")
     page.locator("#id_max_available").fill("1")
-    page.get_by_role("button", name="Confirm", exact=True).click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
+    submit_confirm(page)
 
 
 def add_special(page):
@@ -197,7 +197,7 @@ def add_special(page):
     page.locator("#id_name").press("Tab")
     page.locator("#id_description").fill("hidden descr")
     page.locator("#id_status").select_option("h")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
     page.locator("#id_typ").press("Tab")
@@ -205,7 +205,7 @@ def add_special(page):
     page.locator("#id_name").press("Tab")
     page.locator("#id_description").fill("disabled text")
     page.locator("#id_status").select_option("d")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
 
 def signup_first(live_server, page):
@@ -227,7 +227,7 @@ def signup_first(live_server, page):
     expect(page.get_by_role("checkbox", name="all (10€)")).to_be_disabled()
     expect(page.get_by_role("textbox", name="disabled")).to_be_empty()
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     # add mandatory
     go_to(page, live_server, "/test/1/manage/registrations/form/")
     page.get_by_role("link", name="New").click()
@@ -239,7 +239,7 @@ def signup_first(live_server, page):
     page.locator("#id_name").press("Tab")
     page.locator("#id_description").fill("mandatory text")
     page.locator("#id_status").select_option("m")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
 
 def signup_check(live_server, page):
@@ -272,7 +272,7 @@ def signup_check(live_server, page):
     page.get_by_role("textbox", name="mandatory (*)").fill("ggggg")
     page.get_by_role("button", name="Continue").click()
     expect(page.locator("#riepilogo")).to_contain_text("Your updated registration total is: 90€.")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
 
 def orga_check(live_server, page):
@@ -294,7 +294,7 @@ def orga_check(live_server, page):
     page.locator("#id_q7").click()
     page.locator("#id_q7").fill("asdsadsa")
     expect(page.locator("#id_q8")).to_have_value("ggggg")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     page.get_by_role("link", name="").click()
     expect(page.locator("#id_q6")).to_have_value("dsadsadsa")
     expect(page.locator("#id_q7")).to_have_value("asdsadsa")
@@ -324,4 +324,4 @@ def user_signup(live_server, page):
     page.get_by_text("rescrited descrall all").click()
     page.get_by_role("button", name="Continue").click()
     expect(page.locator("#riepilogo")).to_contain_text("40€")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)

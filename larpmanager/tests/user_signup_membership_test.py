@@ -24,7 +24,7 @@ from pathlib import Path
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import check_download, go_to, login_orga, submit
+from larpmanager.tests.utils import check_download, go_to, login_orga, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -53,7 +53,7 @@ def signup(live_server, page):
     page.locator("#id_mail_signup_update").check()
     page.locator("#id_mail_signup_del").check()
     page.locator("#id_mail_payment").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     go_to(page, live_server, "/manage/payments/details")
     page.locator('#id_payment_methods input[type="checkbox"][value="1"]').check()
     page.locator("#id_wire_descr").click()
@@ -63,18 +63,18 @@ def signup(live_server, page):
     page.locator("#id_wire_payee").fill("test beneficiary")
     page.locator("#id_wire_payee").press("Tab")
     page.locator("#id_wire_iban").fill("test iban")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     # set ticket price
     go_to(page, live_server, "/test/1/manage/registrations/tickets")
     page.locator("a:has(i.fas.fa-edit)").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100.00")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     # signup
     go_to(page, live_server, "/test/1/register")
     page.get_by_role("button", name="Continue").click()
     expect(page.locator("#riepilogo")).to_contain_text("you must request to register as a member")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
 
 def membership(live_server, page):
@@ -102,7 +102,7 @@ def membership(live_server, page):
     # approve request signup
     go_to(page, live_server, "/manage/membership/")
     page.get_by_role("link", name="Request").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     # check register
     go_to(page, live_server, "/test/1/register")
     expect(page.locator("#one")).to_contain_text("to confirm it proceed with payment")

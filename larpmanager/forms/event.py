@@ -964,10 +964,10 @@ class ExeEventForm(OrgaEventForm):
 
         if "template" in self.params["features"] and not self.instance.pk:
             if "template_event" in self.cleaned_data and self.cleaned_data["template_event"]:
-                event_id = self.cleaned_data["template_event"]
+                event_id = self.cleaned_data["template_event"].id
                 event = Event.objects.get(pk=event_id)
                 instance.save()
-                instance.features.set(event.features.all())
+                instance.features.add(*event.features.all())
                 copy_class(instance.id, event_id, EventConfig)
                 copy_class(instance.id, event_id, EventRole)
 

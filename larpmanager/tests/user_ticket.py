@@ -22,7 +22,7 @@ from pathlib import Path
 
 import pytest
 
-from larpmanager.tests.utils import go_to, login_user
+from larpmanager.tests.utils import go_to, login_user, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -38,9 +38,9 @@ def test_user_ticket(pw_page):
     page.get_by_role("textbox", name="Email").fill("dudi")
     page.get_by_role("textbox", name="Email").press("Tab")
     page.get_by_role("textbox", name="Request").fill("bibu")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("textbox", name="Email").fill("dudi@sad.it")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # no member - screenshot
     page.get_by_role("link", name="Technical Support").click()
@@ -51,7 +51,7 @@ def test_user_ticket(pw_page):
     page.get_by_role("button", name="Screenshot").click()
     image_path = Path(__file__).parent / "image.jpg"
     page.get_by_role("button", name="Screenshot").set_input_files(str(image_path))
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     login_user(page, live_server)
 
@@ -61,7 +61,7 @@ def test_user_ticket(pw_page):
     page.get_by_role("textbox", name="Email").fill("wwww@ewew.itsa")
     page.get_by_role("textbox", name="Request").click()
     page.get_by_role("textbox", name="Request").fill("sadsadsa")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # user - screenshot
     page.get_by_role("link", name="Technical Support").click()
@@ -71,7 +71,7 @@ def test_user_ticket(pw_page):
     page.get_by_role("textbox", name="Request").fill("asdasdas")
     page.get_by_role("button", name="Screenshot").click()
     page.get_by_role("button", name="Screenshot").set_input_files(str(image_path))
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # change email
     page.get_by_role("link", name=" Profile").click()
@@ -80,4 +80,4 @@ def test_user_ticket(pw_page):
     page.get_by_role("textbox", name="Email").fill("asdsa@dasasd.it")
     page.get_by_role("textbox", name="Request").click()
     page.get_by_role("textbox", name="Request").fill("sasadsadsa")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
