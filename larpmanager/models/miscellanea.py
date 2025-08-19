@@ -490,26 +490,22 @@ class ProblemStatus(models.TextChoices):
     CLOSED = "c", "3 - CLOSED"
 
 
-class Problem(BaseModel):
-    RED = "r"
-    ORANGE = "o"
-    YELLOW = "y"
-    GREEN = "g"
-    SEVERITY_CHOICES = [
-        (RED, "1 - RED"),
-        (ORANGE, "2 - ORANGE"),
-        (YELLOW, "3 - YELLOW"),
-        (GREEN, "4 - GREEN"),
-    ]
+class ProblemSeverity(models.TextChoices):
+    RED = "r", "1 - RED"
+    ORANGE = "o", "2 - ORANGE"
+    YELLOW = "y", "3 - YELLOW"
+    GREEN = "g", "4 - GREEN"
 
+
+class Problem(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
     number = models.IntegerField()
 
     severity = models.CharField(
         max_length=1,
-        choices=SEVERITY_CHOICES,
-        default=GREEN,
+        choices=ProblemSeverity.choices,
+        default=ProblemSeverity.GREEN,
         verbose_name=_("Severity"),
         help_text=_(
             "Indicate severity: RED (risks ruining the event for more than half of the "
