@@ -504,35 +504,23 @@ class Handout(Writing):
         return os.path.join(fp, f"H{self.number}.pdf")
 
 
-class TextVersion(BaseModel):
-    PLOT = "p"
-    CHARACTER = "c"
-    FACTION = "h"
-    QUEST = "q"
-    TRAIT = "t"
-    ARTICLE = "a"
-    HANDOUT = "o"
-    PROLOGUE = "g"
-    QUEST_TYPE = "e"
-    SPEEDLARP = "s"
-    RELATIONSHIP = "l"
-    PLOT_CHARACTER = "r"
-    TEXT_CHOICES = [
-        (PLOT, "Plot"),
-        (CHARACTER, "Character"),
-        (FACTION, "Faction"),
-        (QUEST, "Quest"),
-        (TRAIT, "Trait"),
-        (ARTICLE, "Article"),
-        (HANDOUT, "Handout"),
-        (PROLOGUE, "Prologue"),
-        (QUEST_TYPE, "QuestType"),
-        (SPEEDLARP, "SpeedLarp"),
-        (PLOT_CHARACTER, "PlotCharacter"),
-        (RELATIONSHIP, "Relationship"),
-    ]
+class TextVersionChoices(models.TextChoices):
+    PLOT = "p", "Plot"
+    CHARACTER = "c", "Character"
+    FACTION = "h", "Faction"
+    QUEST = "q", "Quest"
+    TRAIT = "t", "Trait"
+    ARTICLE = "a", "Article"
+    HANDOUT = "o", "Handout"
+    PROLOGUE = "g", "Prologue"
+    QUEST_TYPE = "e", "QuestType"
+    SPEEDLARP = "s", "SpeedLarp"
+    PLOT_CHARACTER = "r", "PlotCharacter"
+    RELATIONSHIP = "l", "Relationship"
 
-    tp = models.CharField(max_length=1, choices=TEXT_CHOICES)
+
+class TextVersion(BaseModel):
+    tp = models.CharField(max_length=1, choices=TextVersionChoices.choices)
 
     eid = models.IntegerField()
 

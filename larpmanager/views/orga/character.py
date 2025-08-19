@@ -57,7 +57,7 @@ from larpmanager.models.writing import (
     Prologue,
     Relationship,
     SpeedLarp,
-    TextVersion,
+    TextVersionChoices,
 )
 from larpmanager.utils.character import get_chars_relations
 from larpmanager.utils.common import (
@@ -92,7 +92,7 @@ def orga_characters_edit(request, s, n, num):
 
     _characters_relationships(ctx)
 
-    return writing_edit(request, ctx, OrgaCharacterForm, "character", TextVersion.CHARACTER)
+    return writing_edit(request, ctx, OrgaCharacterForm, "character", TextVersionChoices.CHARACTER)
 
 
 def _characters_relationships(ctx):
@@ -167,7 +167,7 @@ def orga_characters_view(request, s, n, num):
 def orga_characters_versions(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_characters")
     get_char(ctx, num)
-    return writing_versions(request, ctx, "character", TextVersion.CHARACTER)
+    return writing_versions(request, ctx, "character", TextVersionChoices.CHARACTER)
 
 
 @login_required
