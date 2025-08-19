@@ -1,9 +1,6 @@
 import os
 
 from main.settings import BASE_DIR
-from main.settings.prod_example import DEBUG
-
-DEBUG=False
 
 SLUG_ASSOC = 'def'
 
