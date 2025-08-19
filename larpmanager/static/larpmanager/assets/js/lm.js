@@ -34,13 +34,13 @@ window.jump_to = function(target) {
 
     if (window.interface_old) {
         $('html, body').animate({
-            scrollTop: target.offset().top - headerHeight
+            scrollTop: $(target).offset().top - headerHeight * 3
         }, 0);
         return;
     }
 
     $('#page-wrapper').animate({
-        scrollTop: $('#page-wrapper').scrollTop() + $(target).offset().top - headerHeight * 3
+        scrollTop: $('#page-wrapper').scrollTop() + $(target).offset().top - headerHeight * 4
     }, 0);
 }
 
