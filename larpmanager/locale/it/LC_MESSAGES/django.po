@@ -655,7 +655,7 @@ msgid "Average"
 msgstr "Media"
 
 msgid "Balance"
-msgstr "Saldare"
+msgstr "Bilancio"
 
 msgid "Casting"
 msgstr "Casting"
@@ -1409,6 +1409,9 @@ msgstr "Iscritti"
 
 msgid "Repertoire"
 msgstr "Repertorio"
+
+msgid "Screenshot"
+msgstr "Schermata"
 
 msgid "Searchable"
 msgstr "Ricercabile"
@@ -3203,6 +3206,9 @@ msgstr "Filtra per ogni campo"
 msgid "Follow the steps below"
 msgstr "Segui i seguenti passaggi"
 
+msgid "How can we contact you"
+msgstr "Come possiamo contattarti"
+
 msgid "Join the waiting list!"
 msgstr "Iscriviti in lista d'attesa!"
 
@@ -3693,6 +3699,9 @@ msgstr "Contenuto della pagina speciale"
 
 msgid "Cover photo fo the character"
 msgstr "Una foto esemplificativa del personaggio"
+
+msgid "Describe how we can help you"
+msgstr "Descrivi come possiamo aiutarti"
 
 msgid "Description of free donation"
 msgstr "Descrizione del di donazione libera"
@@ -5385,6 +5394,9 @@ msgstr "Gestisci i pagamenti a rate fisse per le iscrizioni"
 
 msgid "Maximum number of participants spots (0 = unlimited)"
 msgstr "Numero massimo di posti per i partecipanti (0 = illimitato)"
+
+msgid "Optional - A screenshot of the error / bug / problem"
+msgstr "Opzionale - Uno screenshot dell'errore / bug / problema"
 
 msgid "Perform check on the consistency of character sheets"
 msgstr "Esegui un controllo sulla coerenza delle schede dei personaggi"

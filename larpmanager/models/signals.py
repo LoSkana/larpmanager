@@ -21,6 +21,7 @@
 from datetime import date
 
 from cryptography.fernet import Fernet
+from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
@@ -54,11 +55,12 @@ from larpmanager.models.form import (
     QuestionVisibility,
     WritingQuestion,
 )
-from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTutorial
+from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTicket, LarpManagerTutorial
 from larpmanager.models.member import Member, MemberConfig, Membership, MembershipStatus
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Faction, Plot, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.utils.common import copy_class
+from larpmanager.utils.tasks import my_send_mail
 from larpmanager.utils.tutorial_query import delete_index, index_tutorial
 
 
@@ -587,3 +589,18 @@ def save_event_field(sender, instance, created, **kwargs):
 @receiver(pre_delete, sender=WritingQuestion)
 def delete_event_field(sender, instance, **kwargs):
     reset_event_fields_cache(instance.event_id)
+
+
+@receiver(post_save, sender=LarpManagerTicket)
+def save_larpmanager_ticket(sender, instance, created, **kwargs):
+    for _name, email in conf_settings.ADMINS:
+        subj = f"LarpManager ticket - {instance.assoc.name}"
+        if instance.reason:
+            subj += f" [{instance.reason}]"
+        body = f"Email: {instance.email} <br /><br />"
+        if instance.member:
+            body += f"User: {instance.member} ({instance.member.email}) <br /><br />"
+        body += instance.content
+        if instance.screenshot:
+            body += f"<br /><br /><img src='{instance.screenshot_reduced.url}' />"
+        my_send_mail(subj, body, email)

@@ -1410,6 +1410,9 @@ msgstr "Inskriven"
 msgid "Repertoire"
 msgstr "Repertoar"
 
+msgid "Screenshot"
+msgstr "Skärmdump"
+
 msgid "Searchable"
 msgstr "Sökbar"
 
@@ -3203,6 +3206,9 @@ msgstr "Filtrera efter område"
 msgid "Follow the steps below"
 msgstr "Följ stegen nedan"
 
+msgid "How can we contact you"
+msgstr "Hur kan vi kontakta dig"
+
 msgid "Join the waiting list!"
 msgstr "Skriv upp dig på väntelistan!"
 
@@ -3693,6 +3699,9 @@ msgstr "Innehåll i den särskilda sidan"
 
 msgid "Cover photo fo the character"
 msgstr "Ett exempel på foto av karaktären"
+
+msgid "Describe how we can help you"
+msgstr "Beskriv hur vi kan hjälpa dig"
 
 msgid "Description of free donation"
 msgstr "Beskrivning av gratis donation"
@@ -5383,6 +5392,9 @@ msgstr "Hanterar fasta delbetalningar för registreringar"
 
 msgid "Maximum number of participants spots (0 = unlimited)"
 msgstr "Maximalt antal platser för deltagare (0 = obegränsat)"
+
+msgid "Optional - A screenshot of the error / bug / problem"
+msgstr "Valfritt - En skärmdump av felet/buggen/problemet"
 
 msgid "Perform check on the consistency of character sheets"
 msgstr "Utför kontroll av konsekvensen av karaktärsblad"

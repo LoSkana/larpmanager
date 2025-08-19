@@ -41,19 +41,18 @@ from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.cache.larpmanager import get_cache_lm_home
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
 from larpmanager.forms.association import FirstAssociationForm
-from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, LarpManagerTicket
+from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, LarpManagerTicketForm
 from larpmanager.forms.miscellanea import SendMailForm
 from larpmanager.forms.utils import RedirectForm
 from larpmanager.mail.base import join_email
 from larpmanager.mail.remind import remember_membership, remember_membership_fee, remember_pay, remember_profile
 from larpmanager.models.access import AssocRole, EventRole
-from larpmanager.models.association import Association, AssocTextType
+from larpmanager.models.association import Association, AssociationPlan, AssocTextType
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
     LarpManagerDiscover,
-    LarpManagerPlan,
     LarpManagerProfiler,
     LarpManagerTutorial,
 )
@@ -102,7 +101,7 @@ def contact(request):
                 done = True
     else:
         form = LarpManagerContact(request=request)
-        
+
     if not done:
         ctx["contact_form"] = form
     return render(request, "larpmanager/larpmanager/contact.html", ctx)
@@ -277,21 +276,19 @@ def debug_slug(request, s=""):
 def ticket(request, s=""):
     ctx = {"reason": s}
     if request.POST:
-        form = LarpManagerTicket(request.POST, request=request)
+        form = LarpManagerTicketForm(request.POST, request.FILES, request=request, ctx=ctx)
         if form.is_valid():
-            for _name, email in conf_settings.ADMINS:
-                subj = f"LarpManager ticket - {request.assoc['name']}"
-                if s:
-                    subj += f" [{s}]"
-                body = f"Email: {form.cleaned_data['email']} <br /><br />"
-                if request.user.is_authenticated:
-                    body += f"User: {request.user.member} ({request.user.member.email}) <br /><br />"
-                body += form.cleaned_data["content"]
-                my_send_mail(subj, body, email)
+            lm_ticket = form.save(commit=False)
+            lm_ticket.assoc_id = request.assoc["id"]
+            if s:
+                lm_ticket.reason = s
+            if request.user.is_authenticated:
+                lm_ticket.member = request.user.member
+            lm_ticket.save()
             messages.success(request, _("Your request has been sent, we will reply as soon as possible!"))
             return redirect("home")
     else:
-        form = LarpManagerTicket(request=request)
+        form = LarpManagerTicketForm(request=request, ctx=ctx)
     ctx["form"] = form
     return render(request, "larpmanager/member/ticket.html", ctx)
 
@@ -508,9 +505,9 @@ def get_run_lm_payment(el):
         .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.WAITING, TicketTier.NPC])
         .count()
     )
-    if el.plan == LarpManagerPlan.FREE:
+    if el.plan == AssociationPlan.FREE:
         el.total = 0
-    elif el.plan == LarpManagerPlan.SUPPORT:
+    elif el.plan == AssociationPlan.SUPPORT:
         el.total = el.active_registrations
 
 

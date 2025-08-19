@@ -30,7 +30,6 @@ from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config
 from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, FeatureNationality, PaymentMethod
-from larpmanager.models.larpmanager import LarpManagerPlan
 from larpmanager.models.utils import UploadToPathAndRename
 
 
@@ -46,6 +45,11 @@ class Currency(models.TextChoices):
     GBP = "g", "GBP"
     CAD = "c", "CAD"
     JPY = "j", "JPY"
+
+
+class AssociationPlan(models.TextChoices):
+    FREE = "f", _("Free")
+    SUPPORT = "p", _("Support")
 
 
 class AssociationSkin(BaseModel):
@@ -200,7 +204,7 @@ class Association(BaseModel):
         null=True,
     )
 
-    plan = models.CharField(max_length=1, choices=LarpManagerPlan.choices, default=LarpManagerPlan.FREE)
+    plan = models.CharField(max_length=1, choices=AssociationPlan.choices, default=AssociationPlan.FREE)
 
     gdpr_contract = models.FileField(upload_to=UploadToPathAndRename("contract/gdpr/"), null=True, blank=True)
 

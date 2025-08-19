@@ -1410,6 +1410,9 @@ msgstr "S nápisem"
 msgid "Repertoire"
 msgstr "Repertoár"
 
+msgid "Screenshot"
+msgstr "Snímek obrazovky"
+
 msgid "Searchable"
 msgstr "Vyhledávání na"
 
@@ -3203,6 +3206,9 @@ msgstr "Filtrování podle pole"
 msgid "Follow the steps below"
 msgstr "Postupujte podle následujících kroků"
 
+msgid "How can we contact you"
+msgstr "Jak vás můžeme kontaktovat"
+
 msgid "Join the waiting list!"
 msgstr "Připojte se k čekací listině!"
 
@@ -3693,6 +3699,9 @@ msgstr "Obsah speciální stránky"
 
 msgid "Cover photo fo the character"
 msgstr "Příklad fotografie postavy"
+
+msgid "Describe how we can help you"
+msgstr "Popište, jak vám můžeme pomoci"
 
 msgid "Description of free donation"
 msgstr "Popis bezplatného daru"
@@ -5382,6 +5391,9 @@ msgstr "Správa pevných splátek za registrace"
 
 msgid "Maximum number of participants spots (0 = unlimited)"
 msgstr "Maximální počet míst pro účastníky (0 = neomezeně)"
+
+msgid "Optional - A screenshot of the error / bug / problem"
+msgstr "Nepovinné - snímek obrazovky s chybou / chybou / problémem"
 
 msgid "Perform check on the consistency of character sheets"
 msgstr "Provést kontrolu konzistence listů postav"

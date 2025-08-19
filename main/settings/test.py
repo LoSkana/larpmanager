@@ -1,6 +1,9 @@
 import os
 
 from main.settings import BASE_DIR
+from main.settings.prod_example import DEBUG
+
+DEBUG=False
 
 SLUG_ASSOC = 'def'
 
@@ -44,3 +47,7 @@ LOGGING = {
 }
 
 FORMS_URLFIELD_ASSUME_HTTPS = True
+
+ADMINS = [
+    ('test', 'test@test.it')
+]

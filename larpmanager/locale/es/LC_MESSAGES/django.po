@@ -1410,6 +1410,9 @@ msgstr "Inscrito"
 msgid "Repertoire"
 msgstr "Repertorio"
 
+msgid "Screenshot"
+msgstr "Captura de pantalla"
+
 msgid "Searchable"
 msgstr "Búsqueda en"
 
@@ -3203,6 +3206,9 @@ msgstr "Filtrar por cada campo"
 msgid "Follow the steps below"
 msgstr "Sigue los pasos a continuación"
 
+msgid "How can we contact you"
+msgstr "Cómo podemos ponernos en contacto con usted"
+
 msgid "Join the waiting list!"
 msgstr "¡Únete a la lista de espera!"
 
@@ -3693,6 +3699,9 @@ msgstr "Contenidos de la página especial"
 
 msgid "Cover photo fo the character"
 msgstr "Foto de presentación del personaje"
+
+msgid "Describe how we can help you"
+msgstr "Describa cómo podemos ayudarle"
 
 msgid "Description of free donation"
 msgstr "Descripción de la donación gratuita"
@@ -5384,6 +5393,9 @@ msgstr "Gestiona los pagos a plazos fijos de las matriculaciones"
 
 msgid "Maximum number of participants spots (0 = unlimited)"
 msgstr "Número máximo de plazas de participantes (0 = ilimitado)"
+
+msgid "Optional - A screenshot of the error / bug / problem"
+msgstr "Opcional - Una captura de pantalla del error / fallo / problema"
 
 msgid "Perform check on the consistency of character sheets"
 msgstr "Comprobación de la coherencia de las hojas de personaje"

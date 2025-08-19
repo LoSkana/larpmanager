@@ -34,9 +34,8 @@ from imagekit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config
-from larpmanager.models.association import Association
+from larpmanager.models.association import Association, AssociationPlan
 from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature
-from larpmanager.models.larpmanager import LarpManagerPlan
 from larpmanager.models.member import Member
 from larpmanager.models.utils import (
     UploadToPathAndRename,
@@ -510,7 +509,7 @@ class Run(BaseModel):
 
     paid = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
-    plan = models.CharField(max_length=1, choices=LarpManagerPlan.choices, blank=True, null=True)
+    plan = models.CharField(max_length=1, choices=AssociationPlan.choices, blank=True, null=True)
 
     class Meta:
         constraints = [

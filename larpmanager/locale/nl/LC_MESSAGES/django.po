@@ -1410,6 +1410,9 @@ msgstr "Met inscriptie"
 msgid "Repertoire"
 msgstr "Repertoire"
 
+msgid "Screenshot"
+msgstr "Schermafbeelding"
+
 msgid "Searchable"
 msgstr "Doorzoekbaar"
 
@@ -3203,6 +3206,9 @@ msgstr "Filter op veld"
 msgid "Follow the steps below"
 msgstr "Volg de onderstaande stappen"
 
+msgid "How can we contact you"
+msgstr "Hoe kunnen we contact met u opnemen"
+
 msgid "Join the waiting list!"
 msgstr "Meld je aan voor de wachtlijst!"
 
@@ -3693,6 +3699,9 @@ msgstr "Inhoud van de speciale pagina"
 
 msgid "Cover photo fo the character"
 msgstr "Een voorbeeldfoto van het personage"
+
+msgid "Describe how we can help you"
+msgstr "Beschrijf hoe we je kunnen helpen"
 
 msgid "Description of free donation"
 msgstr "Beschrijving van gratis donatie"
@@ -5389,6 +5398,9 @@ msgstr "Beheert vaste termijnbetalingen voor registraties"
 
 msgid "Maximum number of participants spots (0 = unlimited)"
 msgstr "Maximum aantal deelnemersplekken (0 = onbeperkt)"
+
+msgid "Optional - A screenshot of the error / bug / problem"
+msgstr "Optioneel - Een screenshot van de fout / bug / het probleem"
 
 msgid "Perform check on the consistency of character sheets"
 msgstr "Voer een controle uit op de consistentie van karaktersheets"
