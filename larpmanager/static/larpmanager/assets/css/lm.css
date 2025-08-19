@@ -2041,7 +2041,7 @@ table.dataTable span.dtcc span.dtcc-button-icon {
   width: 100%;
 }
 
-#one .inner, #topbar .inner { display: none; }
+#one .inner, #topbar .inner, #sidebar .inner { display: none; }
 
 #reading .post_popup {
     display: none;

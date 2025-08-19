@@ -151,18 +151,6 @@ $(document).ready(function() {
         return false;
     });
 
-    setTimeout(() => {
-    // set select on sidebar
-    var currentUrl = window.location.pathname.replace(/\/$/, '');
-    $('.sidebar-link').each(function() {
-        var linkHref = $(this).attr('href').replace(/\/$/, '');
-        var regex = new RegExp('^' + linkHref + '(?:\\/(\\d+|edit\\/\\d+))?\\/?$');
-        if (regex.test(currentUrl)) {
-            $(this).addClass('select');
-        }
-    });
-    }, 100);
-
     // Menu.
             $menu_openers = $('#menu .opener');
 
@@ -330,7 +318,31 @@ $(document).ready(function() {
     $('#one .inner').fadeIn(100);
 
     $('#topbar .inner').fadeIn(100);
+
+    $('#sidebar .inner').fadeIn(100);
+
+    show_sidebar_active();
 });
+
+function show_sidebar_active() {
+    // set select on sidebar
+    var currentUrl = window.location.pathname.replace(/\/$/, '');
+    $('.sidebar-link').each(function() {
+        var linkHref = $(this).attr('href').replace(/\/$/, '');
+        var regex = new RegExp('^' + linkHref + '(?:\\/(\\d+|edit\\/\\d+))?\\/?$');
+        if (regex.test(currentUrl)) {
+            $(this).addClass('select');
+
+            var $sidebar  = $("#sidebar");
+            var $selected = $(this);
+
+            var offset = $selected.position().top + $sidebar.scrollTop()
+                         - ($sidebar.height() / 2) + ($selected.outerHeight() / 2);
+
+            $sidebar.animate({ scrollTop: offset }, 0);
+        }
+    });
+}
 
 function data_tables() {
     window.datatables = window.datatables || {};
