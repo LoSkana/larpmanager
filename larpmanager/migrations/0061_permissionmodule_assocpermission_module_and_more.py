@@ -9,7 +9,7 @@ from django.db import migrations, models
 
 def first_module(apps, schema_editor):
     PermissionModule = apps.get_model("larpmanager", "PermissionModule")
-    PermissionModule.objects.create(pk=1, name="def")
+    PermissionModule.objects.create(pk=1, name="def", order=1)
 
 
 class Migration(migrations.Migration):
