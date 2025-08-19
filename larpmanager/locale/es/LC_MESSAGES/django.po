@@ -3182,6 +3182,9 @@ msgstr "Restablecimiento de contraseña confirmado"
 msgid "Customised mail server"
 msgstr "Servidor de correo personalizado"
 
+msgid "Disable event approval"
+msgstr "Desactivar la aprobación de eventos"
+
 msgid "Display all users data"
 msgstr "Mostrar los datos de todos los usuarios"
 
@@ -7346,6 +7349,13 @@ msgid ""
 msgstr ""
 "Permite gestionar los gastos pagados con los instrumentos financieros de la "
 "organización"
+
+msgid ""
+"If checked, approval of expenses can be performed only from the organization"
+" panel"
+msgstr ""
+"Si está marcada, la aprobación de los gastos sólo puede realizarse desde el "
+"panel de la organización"
 
 msgid ""
 "If checked, the gallery will not be displayed to those not logged in to the "

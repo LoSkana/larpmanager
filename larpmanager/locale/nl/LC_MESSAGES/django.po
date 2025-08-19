@@ -3182,6 +3182,9 @@ msgstr "Wachtwoord opnieuw instellen bevestigd"
 msgid "Customised mail server"
 msgstr "Aangepaste mailserver"
 
+msgid "Disable event approval"
+msgstr "Goedkeuring van gebeurtenissen uitschakelen"
+
 msgid "Display all users data"
 msgstr "Alle gebruikersgegevens weergeven"
 
@@ -7378,6 +7381,13 @@ msgid ""
 msgstr ""
 "Maakt het beheer mogelijk van uitgaven die zijn betaald met de financiële "
 "instrumenten van de organisatie"
+
+msgid ""
+"If checked, approval of expenses can be performed only from the organization"
+" panel"
+msgstr ""
+"Als deze optie is aangevinkt, kunnen uitgaven alleen worden goedgekeurd "
+"vanuit het organisatiepaneel"
 
 msgid ""
 "If checked, the gallery will not be displayed to those not logged in to the "

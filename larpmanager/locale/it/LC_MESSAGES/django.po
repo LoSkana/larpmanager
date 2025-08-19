@@ -3182,6 +3182,9 @@ msgstr "Password reset confermato"
 msgid "Customised mail server"
 msgstr "Server mail personalizzato"
 
+msgid "Disable event approval"
+msgstr "Disattiva l'approvazione lato eventi"
+
 msgid "Display all users data"
 msgstr "Visualizza i dati di tutti gli utenti"
 
@@ -7398,6 +7401,13 @@ msgid ""
 msgstr ""
 "Consente di Gestisci le spese pagate con gli strumenti finanziari "
 "dell'organizzazione"
+
+msgid ""
+"If checked, approval of expenses can be performed only from the organization"
+" panel"
+msgstr ""
+"Se selezionata, l'approvazione delle spese può essere effettuata solo dal "
+"pannello dell'organizzazione"
 
 msgid ""
 "If checked, the gallery will not be displayed to those not logged in to the "

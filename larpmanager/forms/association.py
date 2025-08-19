@@ -510,6 +510,12 @@ class ExeConfigForm(ConfigForm):
             )
             self.add_configs("organization_tax_perc", ConfigType.INT, label, help_text)
 
+        if "expense" in self.params["features"]:
+            self.set_section("expense", _("Expenses"))
+            label = _("Disable event approval")
+            help_text = _("If checked, approval of expenses can be performed only from the organization panel")
+            self.add_configs("expense_disable_orga", ConfigType.BOOL, label, help_text)
+
     def set_config_einvoice(self):
         if "e-invoice" not in self.params["features"]:
             return

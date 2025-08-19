@@ -20,7 +20,7 @@
                 <th>{% trans "Value" %}</th>
                 <th>{% trans "Approved" %}</th>
                 <th>{% trans "Statement" %}</th>
-                <th></th>
+                {% if not disable_approval %}<th></th>{% endif %}
             </tr>
         </thead>
         <tbody>
@@ -38,12 +38,14 @@
                     <td>
                         <a href="{{ el.download }}">{% trans "Download" %}</a>
                     </td>
-                    <td>
-                        {% if not el.is_approved %}
-                            <a href="{% url 'orga_expenses_approve' run.event.slug run.number el.id %}"
-                               class="delete">{% trans "Approve" %}</a>
-                        {% endif %}
-                    </td>
+                    {% if not disable_approval %}
+                        <td>
+                            {% if not el.is_approved %}
+                                <a href="{% url 'orga_expenses_approve' run.event.slug run.number el.id %}"
+                                   class="delete">{% trans "Approve" %}</a>
+                            {% endif %}
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </tbody>
