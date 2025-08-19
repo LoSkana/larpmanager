@@ -44,6 +44,7 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     AccountingItemTransaction,
     Collection,
+    CollectionStatus,
     OtherChoices,
     PaymentChoices,
     PaymentInvoice,
@@ -387,10 +388,10 @@ def update_collection(sender, instance, **kwargs):
     except Exception:
         return
 
-    if prev.status == Collection.PAYED:
+    if prev.status == CollectionStatus.PAYED:
         return
 
-    if instance.status != Collection.PAYED:
+    if instance.status != CollectionStatus.PAYED:
         return
 
     acc = AccountingItemOther()

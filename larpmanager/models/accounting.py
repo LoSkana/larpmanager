@@ -513,19 +513,16 @@ class AccountingItemDiscount(AccountingItem):
         return j
 
 
-class Collection(BaseModel):
-    OPEN = "o"
-    DONE = "d"
-    PAYED = "p"
-    STATUS_CHOICES = [
-        (OPEN, _("Open")),
-        (DONE, _("Close")),
-        (PAYED, _("Delivered")),
-    ]
+class CollectionStatus(models.TextChoices):
+    OPEN = "o", _("Open")
+    DONE = "d", _("Close")
+    PAYED = "p", _("Delivered")
 
+
+class Collection(BaseModel):
     name = models.CharField(max_length=100, null=True)
 
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=OPEN)
+    status = models.CharField(max_length=1, choices=CollectionStatus.choices, default=CollectionStatus.OPEN)
 
     contribute_code = models.CharField(max_length=16, null=True, db_index=True)
 

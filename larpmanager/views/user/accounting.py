@@ -58,7 +58,7 @@ from larpmanager.models.accounting import (
     AccountingItemMembership,
     AccountingItemOther,
     AccountingItemPayment,
-    Collection,
+    CollectionStatus,
     OtherChoices,
     PaymentChoices,
     PaymentInvoice,
@@ -371,7 +371,7 @@ def acc_collection_participate(request, s):
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
     ctx["coll"] = c
-    if c.status != Collection.OPEN:
+    if c.status != CollectionStatus.OPEN:
         raise Http404("Collection not open")
 
     if request.method == "POST":
@@ -389,10 +389,10 @@ def acc_collection_close(request, s):
     c = get_collection_partecipate(request, s)
     if request.user.member != c.organizer:
         raise Http404("Collection not yours")
-    if c.status != Collection.OPEN:
+    if c.status != CollectionStatus.OPEN:
         raise Http404("Collection not open")
 
-    c.status = Collection.DONE
+    c.status = CollectionStatus.DONE
     c.save()
 
     messages.success(request, _("Collection closed"))
@@ -405,12 +405,12 @@ def acc_collection_redeem(request, s):
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
     ctx["coll"] = c
-    if c.status != Collection.DONE:
+    if c.status != CollectionStatus.DONE:
         raise Http404("Collection not found")
 
     if request.method == "POST":
         c.member = request.user.member
-        c.status = Collection.PAYED
+        c.status = CollectionStatus.PAYED
         c.save()
         messages.success(request, _("The collection has been delivered!"))
         return redirect("home")
