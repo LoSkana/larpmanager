@@ -33,6 +33,7 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
     Collection,
+    OtherChoices,
     PaymentChoices,
     PaymentType,
 )
@@ -242,11 +243,11 @@ def update_accounting_item_other(sender, instance, **kwargs):
     token_name, credit_name = get_token_credit_name(instance.assoc)
 
     if not instance.pk:
-        if instance.oth == AccountingItemOther.TOKEN:
+        if instance.oth == OtherChoices.TOKEN:
             notify_token(instance, token_name)
-        elif instance.oth == AccountingItemOther.CREDIT:
+        elif instance.oth == OtherChoices.CREDIT:
             notify_credit(credit_name, instance)
-        elif instance.oth == AccountingItemOther.REFUND:
+        elif instance.oth == OtherChoices.REFUND:
             notify_refund(credit_name, instance)
 
 

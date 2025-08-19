@@ -29,6 +29,7 @@ from larpmanager.models.accounting import (
     AccountingItemMembership,
     AccountingItemOther,
     Collection,
+    OtherChoices,
     PaymentInvoice,
     PaymentStatus,
     PaymentType,
@@ -122,7 +123,7 @@ def _info_token_credit(ctx, member):
     # check if it had any token
     que = AccountingItemOther.objects.filter(
         member=member,
-        oth=AccountingItemOther.TOKEN,
+        oth=OtherChoices.TOKEN,
         assoc_id=ctx["a_id"],
     )
     ctx["acc_tokens"] = que.count()
@@ -131,7 +132,7 @@ def _info_token_credit(ctx, member):
     que_exp = AccountingItemExpense.objects.filter(member=member, is_approved=True, assoc_id=ctx["a_id"])
     que_cre = AccountingItemOther.objects.filter(
         member=member,
-        oth=AccountingItemOther.CREDIT,
+        oth=OtherChoices.CREDIT,
         assoc_id=ctx["a_id"],
     )
     ctx["acc_credits"] = que_exp.count() + que_cre.count()

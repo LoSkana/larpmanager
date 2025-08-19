@@ -37,6 +37,7 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
     AccountingItemTransaction,
+    OtherChoices,
     PaymentChoices,
 )
 from larpmanager.models.casting import AssignmentTrait
@@ -274,7 +275,7 @@ def cancel_run(instance):
         if money > 0:
             AccountingItemOther.objects.create(
                 member=r.member,
-                oth=AccountingItemOther.CREDIT,
+                oth=OtherChoices.CREDIT,
                 descr=f"Refund per {instance}",
                 run=instance,
                 value=money,

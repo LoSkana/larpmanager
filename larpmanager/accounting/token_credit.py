@@ -28,6 +28,7 @@ from larpmanager.models.accounting import (
     AccountingItemExpense,
     AccountingItemOther,
     AccountingItemPayment,
+    OtherChoices,
     PaymentChoices,
 )
 from larpmanager.models.event import DevelopStatus
@@ -97,7 +98,7 @@ def post_save_accounting_item_other_accounting(sender, instance, **kwargs):
     if not instance.member:
         return
 
-    update_token_credit(instance, instance.oth == AccountingItemOther.TOKEN)
+    update_token_credit(instance, instance.oth == OtherChoices.TOKEN)
 
 
 @receiver(post_save, sender=AccountingItemExpense)
@@ -119,9 +120,7 @@ def update_token_credit(instance, token=True):
 
     # token case
     if token:
-        tk_given = AccountingItemOther.objects.filter(
-            member=instance.member, oth=AccountingItemOther.TOKEN, assoc_id=assoc_id
-        )
+        tk_given = AccountingItemOther.objects.filter(member=instance.member, oth=OtherChoices.TOKEN, assoc_id=assoc_id)
         tk_used = AccountingItemPayment.objects.filter(
             member=instance.member, pay=PaymentChoices.TOKEN, assoc_id=assoc_id
         )
@@ -132,13 +131,13 @@ def update_token_credit(instance, token=True):
     else:
         cr_expenses = AccountingItemExpense.objects.filter(member=instance.member, is_approved=True, assoc_id=assoc_id)
         cr_given = AccountingItemOther.objects.filter(
-            member=instance.member, oth=AccountingItemOther.CREDIT, assoc_id=assoc_id
+            member=instance.member, oth=OtherChoices.CREDIT, assoc_id=assoc_id
         )
         cr_used = AccountingItemPayment.objects.filter(
             member=instance.member, pay=PaymentChoices.CREDIT, assoc_id=assoc_id
         )
         cr_refunded = AccountingItemOther.objects.filter(
-            member=instance.member, oth=AccountingItemOther.REFUND, assoc_id=assoc_id
+            member=instance.member, oth=OtherChoices.REFUND, assoc_id=assoc_id
         )
         membership.credit = get_sum(cr_expenses) + get_sum(cr_given) - (get_sum(cr_used) + get_sum(cr_refunded))
         membership.save()

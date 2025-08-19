@@ -55,6 +55,7 @@ from larpmanager.models.accounting import (
     AccountingItemTransaction,
     BalanceChoices,
     Collection,
+    OtherChoices,
     PaymentChoices,
     PaymentInvoice,
     PaymentStatus,
@@ -338,7 +339,7 @@ def exe_balance(request):
             assoc_id=ctx["a_id"],
             created__gte=start,
             created__lt=end,
-            oth=AccountingItemOther.REFUND,
+            oth=OtherChoices.REFUND,
         )
     )
 

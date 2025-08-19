@@ -44,6 +44,7 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     AccountingItemTransaction,
     Collection,
+    OtherChoices,
     PaymentChoices,
     PaymentInvoice,
     PaymentStatus,
@@ -370,7 +371,7 @@ def update_refund_request(sender, instance, **kwargs):
     acc = AccountingItemOther()
     acc.member = instance.member
     acc.value = instance.value
-    acc.oth = AccountingItemOther.REFUND
+    acc.oth = OtherChoices.REFUND
     acc.descr = f"Delivered refund of {instance.value:.2f}"
     acc.assoc = instance.assoc
     acc.save()
@@ -397,6 +398,6 @@ def update_collection(sender, instance, **kwargs):
     acc.member = instance.member
     acc.run = instance.run
     acc.value = instance.total
-    acc.oth = AccountingItemOther.CREDIT
+    acc.oth = OtherChoices.CREDIT
     acc.descr = f"Collection of {instance.organizer}"
     acc.save()

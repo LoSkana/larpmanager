@@ -263,13 +263,14 @@ class AccountingItemDonation(AccountingItem):
     descr = models.CharField(max_length=1000)
 
 
-class AccountingItemOther(AccountingItem):
-    CREDIT = "c"  # credits gained
-    TOKEN = "t"  # token gained
-    REFUND = "r"  # refund given
-    OTHER_CHOICES = [(CREDIT, _("Credits")), (TOKEN, _("Tokens")), (REFUND, _("Refund"))]
+class OtherChoices(models.TextChoices):
+    CREDIT = "c", _("Credits")
+    TOKEN = "t", _("Tokens")
+    REFUND = "r", _("Refund")
 
-    oth = models.CharField(max_length=1, choices=OTHER_CHOICES)
+
+class AccountingItemOther(AccountingItem):
+    oth = models.CharField(max_length=1, choices=OtherChoices.choices)
 
     run = models.ForeignKey(Run, on_delete=models.CASCADE, null=True, blank=True)
 
@@ -284,9 +285,9 @@ class AccountingItemOther(AccountingItem):
 
     def __str__(self):
         s = _("Credit assignment")
-        if self.oth == AccountingItemOther.TOKEN:
+        if self.oth == OtherChoices.TOKEN:
             s = _("Tokens assignment")
-        elif self.oth == AccountingItemOther.REFUND:
+        elif self.oth == OtherChoices.REFUND:
             s = _("Refund")
         if self.member:
             s += f" - {self.member}"

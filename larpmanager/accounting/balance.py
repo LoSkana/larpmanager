@@ -38,6 +38,7 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     AccountingItemTransaction,
     ExpenseChoices,
+    OtherChoices,
     PaymentChoices,
     RecordAccounting,
 )
@@ -168,7 +169,7 @@ def get_run_accounting(run, ctx):
             run,
             _("Total amount refunded to participants"),
             AccountingItemOther,
-            AccountingItemOther.OTHER_CHOICES,
+            OtherChoices.choices,
             "oth",
             filters={"cancellation__exact": True},
         )
@@ -182,9 +183,9 @@ def get_run_accounting(run, ctx):
             run,
             _("Total issued"),
             AccountingItemOther,
-            AccountingItemOther.OTHER_CHOICES,
+            OtherChoices.choices,
             "oth",
-            filters={"cancellation__exact": False, "oth__exact": AccountingItemOther.TOKEN},
+            filters={"cancellation__exact": False, "oth__exact": OtherChoices.TOKEN},
         )
         s_tokens = dc["tok"]["tot"]
         dc["cre"] = get_acc_detail(
@@ -192,11 +193,11 @@ def get_run_accounting(run, ctx):
             run,
             _("Total issued"),
             AccountingItemOther,
-            AccountingItemOther.OTHER_CHOICES,
+            OtherChoices.choices,
             "oth",
             filters={
                 "cancellation__exact": False,
-                "oth__exact": AccountingItemOther.CREDIT,
+                "oth__exact": OtherChoices.CREDIT,
             },
         )
         s_credits = dc["cre"]["tot"]
@@ -283,7 +284,7 @@ def assoc_accounting_data(ctx, year=None):
     )
     ctx["refund_sum"] = get_sum(
         AccountingItemOther.objects.filter(
-            oth=AccountingItemOther.REFUND,
+            oth=OtherChoices.REFUND,
             assoc_id=ctx["a_id"],
             created__gte=s,
             created__lte=e,

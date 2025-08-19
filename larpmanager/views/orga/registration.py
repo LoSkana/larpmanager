@@ -55,6 +55,7 @@ from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemOther,
     AccountingItemPayment,
+    OtherChoices,
 )
 from larpmanager.models.casting import AssignmentTrait, QuestType
 from larpmanager.models.event import (
@@ -650,7 +651,7 @@ def orga_cancellation_refund(request, s, n, num):
 
         if ref_token > 0:
             AccountingItemOther.objects.create(
-                oth=AccountingItemOther.TOKEN,
+                oth=OtherChoices.TOKEN,
                 run=ctx["run"],
                 descr="Refund",
                 member=ctx["registration"].member,
@@ -660,7 +661,7 @@ def orga_cancellation_refund(request, s, n, num):
             )
         if ref_credit > 0:
             AccountingItemOther.objects.create(
-                oth=AccountingItemOther.CREDIT,
+                oth=OtherChoices.CREDIT,
                 run=ctx["run"],
                 descr="Refund",
                 member=ctx["registration"].member,

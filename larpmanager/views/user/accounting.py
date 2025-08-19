@@ -59,6 +59,7 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
     Collection,
+    OtherChoices,
     PaymentChoices,
     PaymentInvoice,
     PaymentStatus,
@@ -112,7 +113,7 @@ def accounting_tokens(request):
             "given": AccountingItemOther.objects.filter(
                 member=ctx["member"],
                 hide=False,
-                oth=AccountingItemOther.TOKEN,
+                oth=OtherChoices.TOKEN,
                 assoc_id=ctx["a_id"],
             ),
             "used": AccountingItemPayment.objects.filter(
@@ -137,7 +138,7 @@ def accounting_credits(request):
             "given": AccountingItemOther.objects.filter(
                 member=ctx["member"],
                 hide=False,
-                oth=AccountingItemOther.CREDIT,
+                oth=OtherChoices.CREDIT,
                 assoc_id=ctx["a_id"],
             ),
             "used": AccountingItemPayment.objects.filter(
@@ -149,7 +150,7 @@ def accounting_credits(request):
             "ref": AccountingItemOther.objects.filter(
                 member=ctx["member"],
                 hide=False,
-                oth=AccountingItemOther.REFUND,
+                oth=OtherChoices.REFUND,
                 assoc_id=ctx["a_id"],
             ),
         }
