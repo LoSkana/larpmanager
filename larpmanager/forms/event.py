@@ -943,20 +943,21 @@ class ExeEventForm(OrgaEventForm):
         super().__init__(*args, **kwargs)
 
         if "template" in self.params["features"] and not self.instance.pk:
-            choices = [(el.id, el.name) for el in Event.objects.filter(assoc_id=self.params["a_id"], template=True)]
-            self.fields["template_event"] = forms.ChoiceField(
+            qs = Event.objects.filter(assoc_id=self.params["a_id"], template=True)
+            self.fields["template_event"] = forms.ModelChoiceField(
                 required=False,
-                choices=choices,
+                queryset=qs,
                 label=_("Template"),
                 help_text=_(
                     "You can indicate a template event from which functionality and configurations will be copied"
                 ),
+                widget=TemplateS2Widget(),
             )
-            self.fields["template_event"].widget = TemplateS2Widget()
+
             self.fields["template_event"].widget.set_assoc(self.params["a_id"])
 
-            if len(choices) == 1:
-                self.initial["template_event"] = choices[0][0]
+            if qs.count() == 1:
+                self.initial["template_event"] = qs.first()
 
     def save(self, commit=True):
         instance = super().save(commit=False)
