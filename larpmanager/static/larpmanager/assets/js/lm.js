@@ -104,18 +104,10 @@ $(document).ready(function() {
         event.stopPropagation();
     });
 
-    $('.dropdown').each(function() {
-        let timer;
-
-        $(this).on('mouseenter', function() {
-            const $menu = $(this).children('.dropdown-menu');
-            timer = setTimeout(() => {
-                $menu.stop(true, true).fadeIn(100);
-            }, 100);
-        }).on('mouseleave', function() {
-            clearTimeout(timer);
-            $(this).children('.dropdown-menu').stop(true, true).fadeOut(100);
-        });
+    $('.dropdown').on('mouseenter', function() {
+        $(this).children('.dropdown-menu').fadeIn(100);
+    }).on('mouseleave', function() {
+        $(this).children('.dropdown-menu').fadeOut(100);
     });
 
     $('a.feature_tutorial').on('mousedown', function(event) {
@@ -343,11 +335,13 @@ function show_sidebar_active() {
       if (regex.test(currentUrl)) {
         $(this).addClass('select');
 
+        if (window.interface_expand_sidebar) {
         var $sidebar  = $("#sidebar");
         var $selected = $(this);
         var offset = $selected.position().top + $sidebar.scrollTop()
                    - ($sidebar.height() / 2) + ($selected.outerHeight() / 2);
         $sidebar.animate({ scrollTop: offset }, 0);
+        }
       }
     });
 
@@ -360,9 +354,14 @@ function show_sidebar_active() {
         $hoverable.children("p").hide();
 
         $hoverable.on("mouseenter", function () {
-          $(this).children("p").stop(true, true).slideDown(200);
+            const $el = $(this).children("p");
+            const t = setTimeout(function () {
+                $el.stop(true, true).slideDown(200);
+            }, 200);
+            $(this).data("hoverTimeout", t);
         }).on("mouseleave", function () {
-          $(this).children("p").stop(true, true).slideUp(200);
+            clearTimeout($(this).data("hoverTimeout"));
+            $(this).children("p").stop(true, true).slideUp(200);
         });
 
      }

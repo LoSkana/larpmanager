@@ -1361,10 +1361,6 @@ th select {
     display: none;
 }
 
-#sidebar .roles {
-    text-align: center;
-}
-
 @media(max-width: 768px) {
     #mobile-bar {
         display: block;

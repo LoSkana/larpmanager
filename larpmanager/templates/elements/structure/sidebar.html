@@ -80,17 +80,6 @@
                     {% endif %}
                 {% endfor %}
             {% endif %}
-            <h2 class="no_mobile">{{ assoc.platform }}</h2>
-            <p>
-                {% if assoc.skin_id == 1 %}
-                    <span class="sidebar-link-wrap">
-                        <a href="https://discord.gg/C4KuyQbuft" class="sidebar-link">Discord</a>
-                    </span>
-                {% endif %}
-                <span class="sidebar-link-wrap">
-                    <a href="{% url 'tutorials' %}" class="sidebar-link">Tutorials</a>
-                </span>
-            </p>
             {% if role_names %}
                 <hr />
                 <div class="roles">
@@ -102,6 +91,18 @@
                     </i>
                 </div>
             {% endif %}
+            {% if assoc.skin_id == 1 %}
+                <div>
+                    <p class="centerized">
+                        <a href="https://discord.gg/C4KuyQbuft" class="sidebar-link">Discord</a>
+                    </p>
+                </div>
+            {% endif %}
+            <div>
+                <p class="centerized">
+                    <a href="{% url 'tutorials' %}" class="sidebar-link">Tutorials</a>
+                </p>
+            </div>
         </div>
     </div>
     {% if interface_old %}
