@@ -181,7 +181,7 @@ def save_permissions_role(instance, form):
 
     sel = []
     for el in form.modules:
-        sel.extend([int(e) for e in form.cleaned_data[el]])
+        sel.extend([e.pk for e in form.cleaned_data[el]])
 
     instance.permissions.clear()
     instance.permissions.add(*sel)

@@ -20,7 +20,7 @@
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga
+from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -56,7 +56,7 @@ def prepare(page, live_server):
     page.get_by_role("link", name="Character form ").click()
     page.locator("#id_character_form_wri_que_max").check()
     page.locator("#id_character_form_wri_que_dependents").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/test/1/manage/characters/form")
     expect(page.locator('[id="\\31 "]')).to_contain_text("Name")
@@ -77,19 +77,19 @@ def field_single(page, live_server):
     page.locator("#id_name").fill("ff")
     page.locator("#id_max_available").click()
     page.locator("#id_max_available").fill("3")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("rrrr")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("wwww")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
 
 def field_multiple(page, live_server):
@@ -105,17 +105,17 @@ def field_multiple(page, live_server):
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("q1")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("q2")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("q3")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -124,9 +124,9 @@ def field_multiple(page, live_server):
     page.locator("#id_max_available").fill("3")
     page.get_by_role("row", name="Prerequisites").get_by_role("searchbox").fill("ww")
     page.get_by_role("option", name="Test Larp - single wwww").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
 
 def field_text(page, live_server):
@@ -137,14 +137,14 @@ def field_text(page, live_server):
     page.locator("#id_name").fill("text")
     page.locator("#id_max_length").click()
     page.locator("#id_max_length").fill("10")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # Add paragraph
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("p")
     page.locator("#id_name").click()
     page.locator("#id_name").fill("rrr")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # Create new character
     go_to(page, live_server, "/test/1/manage/characters")
@@ -166,14 +166,14 @@ def field_text(page, live_server):
     page.locator("#id_q6").fill("sad")
     page.locator("#id_q7").click()
     page.locator("#id_q7").fill("sadsadas")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
 
 def character(page, live_server):
     # signup, create char
     go_to(page, live_server, "/test/1/register")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     expect(page.locator("#one")).to_contain_text("Access character creation!")
     page.get_by_role("link", name="Access character creation!").click()
     page.wait_for_timeout(2000)
@@ -191,7 +191,7 @@ def character(page, live_server):
     page.locator("#id_q6").fill("wow")
     page.locator("#id_q7").click()
     page.locator("#id_q7").fill("asdsadsa")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # confirm char
     expect(page.locator("#one")).to_contain_text("my character (Creation)")
@@ -200,7 +200,7 @@ def character(page, live_server):
     page.get_by_role("cell", name="Click here to confirm that").click()
     page.get_by_text("Click here to confirm that").click()
     page.locator("#id_propose").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # check char
     expect(page.locator("#one")).to_contain_text("my character (Proposed)")
@@ -209,7 +209,7 @@ def character(page, live_server):
     go_to(page, live_server, "/test/1/manage/characters")
     page.locator('[id="\\33 "]').get_by_role("link", name="").click()
     page.locator("#id_status").select_option("a")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/test/1/register")
     page.locator("#one").get_by_role("link", name="Characters").click()

@@ -20,7 +20,7 @@
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga
+from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -60,14 +60,14 @@ def quests(page, live_server):
     page.locator("#id_mod_1_0").check()
     page.locator("#id_mod_5_1").check()
     page.locator("#id_mod_5_0").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # create quest type
     page.get_by_role("link", name="Quest type").click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Lore")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # create two quests
     page.get_by_role("link", name="Quest", exact=True).click()
@@ -76,13 +76,13 @@ def quests(page, live_server):
     fill_tinymce(page, "id_teaser", "zucchero")
     fill_tinymce(page, "id_text", "saleee")
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Pizza")
     fill_tinymce(page, "id_teaser", "mozzarella")
     fill_tinymce(page, "id_text", "americano")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check
     expect(page.locator("#one")).to_contain_text("Q1 Torta Lore zucchero saleee Q2 Pizza Lore mozzarella americano")
@@ -96,7 +96,7 @@ def traits(page, live_server):
     page.locator("#id_name").fill("Strudel")
     fill_tinymce(page, "id_teaser", "trentina")
     fill_tinymce(page, "id_text", "veronese")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -108,7 +108,7 @@ def traits(page, live_server):
     editor.press("#")
     page.get_by_role("searchbox").fill("stru")
     page.locator(".select2-results__option").first.click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # excel char finder
     page.get_by_role("cell", name="veronese").dblclick()
@@ -117,7 +117,7 @@ def traits(page, live_server):
     page.get_by_role("searchbox").fill("non")
     page.locator(".select2-results__option").first.click()
     page.wait_for_timeout(2000)
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -126,13 +126,13 @@ def traits(page, live_server):
     page.locator("#id_name").fill("Capriciossa")
     fill_tinymce(page, "id_teaser", "normale")
     fill_tinymce(page, "id_text", "senza pomodoro")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     page.get_by_role("link", name="New").click()
     page.locator("#id_quest").select_option("2")
     page.locator("#id_quest").press("Tab")
     page.locator("#id_name").fill("Mare")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check how they appear on user side
     go_to(page, live_server, "/test/1")
@@ -153,14 +153,14 @@ def signups(page, live_server):
     page.get_by_role("list").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # create another char
     page.get_by_role("link", name="Characters").click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Another")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # create signup for another
     page.get_by_role("link", name="Registrations", exact=True).click()
@@ -171,7 +171,7 @@ def signups(page, live_server):
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("an")
     page.get_by_role("option", name="#2 Another").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
 
 def casting(page, live_server):
@@ -183,7 +183,7 @@ def casting(page, live_server):
     page.locator("#id_casting_max").fill("3")
     page.locator("#id_casting_min").click()
     page.locator("#id_casting_min").fill("2")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # perform casting
     go_to(page, live_server, "/test/1")
@@ -214,7 +214,7 @@ def casting(page, live_server):
     # manual trait assignments
     page.locator('[id="\\32 "]').get_by_role("link", name="").click()
     page.locator("#id_qt_1").select_option("1")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check result
     page.get_by_role("link", name="Lore").click()

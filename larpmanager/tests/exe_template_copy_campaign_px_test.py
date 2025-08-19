@@ -23,7 +23,7 @@ import re
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga
+from larpmanager.tests.utils import check_feature, fill_tinymce, go_to, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -53,19 +53,19 @@ def template(live_server, page):
     page.locator("#id_name").fill("template")
     page.locator("input[type='checkbox'][value='178']").check()  # mark character
     page.locator("div.feature_checkbox", has_text="Copy").locator("input[type='checkbox']").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     page.get_by_role("link", name="Add").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("base role")
     page.locator("#id_name").press("Tab")
     page.get_by_role("searchbox").fill("user")
     page.get_by_role("option", name="User Test - user@test.it").click()
-    page.locator("#id_Appearance_1").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    check_feature(page, "Texts")
+    submit_confirm(page)
     page.locator("#one").get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Gallery ").click()
     page.locator("#id_gallery_hide_signup").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     # create new event from template
     go_to(page, live_server, "/manage/events")
     page.get_by_role("link", name="New event").click()
@@ -73,10 +73,9 @@ def template(live_server, page):
     page.locator("#id_name").fill("from template")
     page.locator("#id_name").press("Tab")
     page.locator("#slug").fill("fromtemplate")
-    page.get_by_label("", exact=True).click()
-    page.get_by_role("searchbox").fill("tem")
-    page.get_by_role("option", name="template").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    # the template should be auto-selected
+    submit_confirm(page)
+
     # check roles
     go_to(page, live_server, "/fromtemplate/1/manage/roles/")
     expect(page.locator('[id="\\35 "]')).to_contain_text("User Test")
@@ -102,7 +101,7 @@ def setup(live_server, page):
     go_to(page, live_server, "/test/1/manage/config/")
     page.get_by_role("link", name="Gallery ").click()
     page.locator("#id_gallery_hide_login").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/test/1/manage/roles/")
     page.get_by_role("link", name="New").click()
@@ -113,7 +112,7 @@ def setup(live_server, page):
     page.get_by_role("option", name="User Test - user@test.it").click()
     page.locator("#id_Appearance_2").check()
     page.locator("#id_Writing_2").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
 
 def px(live_server, page):
@@ -122,13 +121,13 @@ def px(live_server, page):
     page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
     page.locator("#id_px_start").click()
     page.locator("#id_px_start").fill("10")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/test/1/manage/px/ability_types/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("base ability")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/test/1/manage/px/abilities/")
     page.get_by_role("link", name="New").click()
@@ -140,7 +139,7 @@ def px(live_server, page):
     page.locator("#id_cost").click()
     page.locator("#id_cost").fill("1")
     fill_tinymce(page, "id_descr", "sdsfdsfds")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/test/1/manage/px/deliveries/")
     page.get_by_role("link", name="New").click()
@@ -151,7 +150,7 @@ def px(live_server, page):
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # check px computation
     go_to(page, live_server, "/test/1/manage/characters/")
@@ -167,7 +166,7 @@ def px(live_server, page):
     row.get_by_role("searchbox").click()
     row.get_by_role("searchbox").fill("swo")
     page.locator(".select2-results__option").first.click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     page.get_by_role("link", name="XP").click()
     expect(page.locator('[id="\\31 "]')).to_contain_text("11")
     expect(page.locator('[id="\\31 "]')).to_contain_text("12")
@@ -182,7 +181,7 @@ def copy(live_server, page):
     page.locator("#id_name").fill("copy")
     page.locator("#id_name").press("Tab")
     page.locator("#slug").fill("copy")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/copy/1/manage/features/10/on")
     go_to(page, live_server, "/copy/1/manage/copy/")
@@ -221,7 +220,7 @@ def campaign(live_server, page):
     page.locator("#select2-id_parent-container").click()
     page.get_by_role("searchbox").fill("tes")
     page.get_by_role("option", name="Test Larp", exact=True).click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     go_to(page, live_server, "/campaign/1/manage/characters/")
     page.get_by_role("link", name="XP").click()
     expect(page.locator('[id="\\31 "]')).to_contain_text("12")

@@ -24,7 +24,7 @@ from pathlib import Path
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, login_user, submit
+from larpmanager.tests.utils import go_to, login_orga, login_user, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -56,7 +56,7 @@ def prepare(page, live_server):
     page.locator("#id_mail_signup_update").check()
     page.locator("#id_mail_signup_del").check()
     page.locator("#id_mail_payment").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/manage/payments/details")
     page.locator('#id_payment_methods input[type="checkbox"][value="1"]').check()
@@ -67,7 +67,7 @@ def prepare(page, live_server):
     page.locator("#id_wire_payee").fill("test beneficiary")
     page.locator("#id_wire_payee").press("Tab")
     page.locator("#id_wire_iban").fill("test iban")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # Activate gift
     go_to(page, live_server, "/test/1/manage/features/175/on")
@@ -96,15 +96,15 @@ def field_choice(page, live_server):
     page.locator("#id_price").fill("10")
     page.locator("#id_price").press("Tab")
     page.locator("#id_max_available").fill("2")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("secondas")
     page.locator("#id_description").click()
     page.locator("#id_description").fill("s")
-    page.get_by_role("button", name="Confirm", exact=True).click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
+    submit_confirm(page)
 
 
 def field_multiple(page, live_server):
@@ -125,7 +125,7 @@ def field_multiple(page, live_server):
     page.locator("#id_name").fill("one")
     page.locator("#id_name").press("Tab")
     page.locator("#id_description").fill("asdas")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -137,16 +137,16 @@ def field_multiple(page, live_server):
     page.locator("#id_price").fill("10")
     page.locator("#id_max_available").click()
     page.locator("#id_max_available").fill("2")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("hhasd")
     page.locator("#id_description").click()
     page.locator("#id_description").fill("sarrrr")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     page.locator('[id="\\34 "]').get_by_role("link", name="").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     page.get_by_role("link", name="").click()
     page.get_by_role("link", name="New").click()
 
@@ -162,7 +162,7 @@ def field_text(page, live_server):
     page.locator("#id_status").select_option("d")
     page.locator("#id_status").select_option("o")
     page.locator("#id_giftable").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # create paragraph
     page.get_by_role("link", name="New").click()
@@ -174,7 +174,7 @@ def field_text(page, live_server):
     page.locator("#id_giftable").check()
     page.locator("#id_max_length").click()
     page.locator("#id_max_length").fill("100")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # sign up
     go_to(page, live_server, "/test/1/register/")
@@ -187,7 +187,7 @@ def field_text(page, live_server):
     page.get_by_role("textbox", name="when").fill("sadsadsadsad")
     expect(page.locator("#register_form")).to_contain_text("text length: 12 / 100")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     page.get_by_role("link", name="Register").click()
     expect(page.get_by_label("when")).to_contain_text("sadsadsadsad")
     expect(page.get_by_label("choice")).to_contain_text("secondas")
@@ -199,7 +199,7 @@ def gift(page, live_server):
     page.get_by_role("link", name="").click()
     page.get_by_text("Indicates whether the ticket").click()
     page.locator("#id_giftable").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # gift
     go_to(page, live_server, "/test/1/gift/")
@@ -211,7 +211,7 @@ def gift(page, live_server):
     page.get_by_role("textbox", name="when").click()
     page.get_by_role("textbox", name="when").fill("fffdsfs")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     expect(page.locator("#one")).to_contain_text("( Standard ) choice - prima (10.00€) , wow - one")
     expect(page.locator("#one")).to_contain_text("10€ within 8 days")
 
@@ -240,5 +240,5 @@ def gift(page, live_server):
     login_user(page, live_server)
     go_to(page, live_server, href)
     expect(page.locator("#header")).to_contain_text("Redeem registration")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     expect(page.locator("#one")).to_contain_text("Registration confirmed")

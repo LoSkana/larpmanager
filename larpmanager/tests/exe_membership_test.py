@@ -23,7 +23,7 @@ from pathlib import Path
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, submit
+from larpmanager.tests.utils import go_to, login_orga, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -39,7 +39,7 @@ def test_exe_membership(pw_page):
     # register
     go_to(page, live_server, "/test/1/register")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # confirm profile
     page.get_by_role("checkbox", name="Authorisation").check()
@@ -71,7 +71,7 @@ def test_exe_membership(pw_page):
     # approve
     go_to(page, live_server, "/manage/membership/")
     page.get_by_role("link", name="Request").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # test
     expect(page.locator("#one")).to_contain_text("Total members: 1 - Accepted: 1")

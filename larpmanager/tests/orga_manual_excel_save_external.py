@@ -26,6 +26,7 @@ from larpmanager.tests.utils import (
     go_to_check,
     login_orga,
     logout,
+    submit_confirm,
 )
 
 pytestmark = pytest.mark.e2e
@@ -41,14 +42,14 @@ def test_manual_excel_save_external(pw_page):
     page.get_by_role("link", name=" Test Larp").click()
     page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.locator("#id_mod_1_0").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # change name
     page.get_by_role("cell", name="#1 Test Character").dblclick()
     page.locator("#id_name").click()
     page.locator("#id_name").press("End")
     page.locator("#id_name").fill("Test Character2")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     expect(page.locator("#one")).to_contain_text("Test Character2 Test Teaser Test Text")
 
     # change teaser
@@ -57,14 +58,14 @@ def test_manual_excel_save_external(pw_page):
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_text("Test Teaser").click()
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill("Test Teaser + 2")
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").press("ControlOrMeta+s")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     expect(page.locator("#one")).to_contain_text("Test Character2 Test Teaser + 2 Test Text")
 
     # change text
     page.get_by_role("cell", name="Test Text").dblclick()
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_text("Test Text").click()
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill("Test Text ff")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check by reload
     page.get_by_role("link", name="Characters").click()
@@ -85,7 +86,7 @@ def test_manual_excel_save_external(pw_page):
 
     # check
     page.wait_for_timeout(2000)
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     expect(page.locator("#one")).to_contain_text(
         "#1 Test Character2 Test Teaser + 2 Test Text ff #2 Another good friends with #1"
     )
@@ -106,7 +107,7 @@ def excel(page, live_server):
     page.get_by_role("searchbox").fill("an")
     page.locator(".select2-results__option").first.click()
     page.wait_for_timeout(2000)
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check by reload
     page.get_by_role("link", name="Characters").click()
@@ -139,7 +140,7 @@ def external(page, live_server):
     page.get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Writing ").click()
     page.locator("#id_writing_external_access").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # get url
     page.get_by_role("link", name="Characters").click()

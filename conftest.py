@@ -134,7 +134,7 @@ def load_fixtures(django_db_blocker):
 
 
 def psql(params, env):
-    subprocess.run(params, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=env, text=True)
+    subprocess.run(params, check=True, stdout=subprocess.DEVNULL, env=env, text=True)
 
 
 def pytest_sessionstart(session):
@@ -153,7 +153,23 @@ def pytest_sessionstart(session):
 
 
 def clean_db(host, env, name, user):
-    psql(["psql", "-U", user, "-h", host, "-d", name, "-c", "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"], env)
+    psql(
+        [
+            "psql",
+            "-U",
+            user,
+            "-h",
+            host,
+            "-d",
+            name,
+            "-c",
+            """
+        DROP SCHEMA IF EXISTS public CASCADE;
+        CREATE SCHEMA IF NOT EXISTS public AUTHORIZATION larpmanager;
+    """,
+        ],
+        env,
+    )
 
 
 @pytest.fixture(scope="session")

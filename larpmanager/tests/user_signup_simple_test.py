@@ -24,7 +24,7 @@ from pathlib import Path
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga
+from larpmanager.tests.utils import go_to, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -47,7 +47,7 @@ def signup(live_server, page):
     expect(page.locator("#one")).to_contain_text("Registration is open!")
     page.get_by_role("link", name="Registration is open!").click()
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # test mails
     go_to(page, live_server, "/debug/mail")
@@ -62,7 +62,7 @@ def signup(live_server, page):
     # sign up, confirm profile
     go_to(page, live_server, "/test/1/register")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     expect(page.locator("#one")).to_contain_text("Registration confirmed")
     expect(page.locator("#one")).to_contain_text("please fill in your profile.")
 
@@ -86,7 +86,7 @@ def help_questions(live_server, page):
     image_path = Path(__file__).parent / "image.jpg"
     page.locator("#id_attachment").set_input_files(str(image_path))
     page.get_by_label("Event").select_option("1")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # check questions
     expect(page.locator("#one")).to_contain_text("[Test Larp] - please help me (Attachment)")
@@ -96,16 +96,16 @@ def help_questions(live_server, page):
     page.get_by_role("link", name="Answer", exact=True).click()
     page.get_by_role("textbox", name="Text").click()
     page.get_by_role("textbox", name="Text").fill("aasadsada")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     page.get_by_role("link", name="Need help?").click()
     page.get_by_role("textbox", name="Text").click()
     page.get_by_role("textbox", name="Text").fill("e adessoooo")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/manage/questions")
     page.get_by_role("link", name="Close").click()
     page.get_by_role("link", name="Show questions already").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
 
 def pre_register(live_server, page):
@@ -124,23 +124,23 @@ def pre_register(live_server, page):
     go_to(page, live_server, "/test/1/manage/config")
     page.get_by_role("link", name=re.compile(r"^Pre-registration\s.+")).click()
     page.locator("#id_pre_register_active").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/")
     expect(page.locator("#one")).to_contain_text("Registration not yet open!")
     expect(page.locator("#one")).to_contain_text("Pre-register to the event!")
     page.get_by_role("link", name="Pre-register to the event!").click()
 
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     page.get_by_role("link", name="Delete").click()
     page.get_by_role("textbox", name="Informations").click()
     page.get_by_role("textbox", name="Informations").fill("bauuu")
     page.get_by_label("Event").select_option("1")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     expect(page.locator("#one")).to_contain_text("bauuu")
 
     # disable preregistration, sign up really
     go_to(page, live_server, "/test/1/manage/config")
     page.get_by_role("link", name=re.compile(r"^Pre-registration\s.+")).click()
     page.locator("#id_pre_register_active").uncheck()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
