@@ -66,6 +66,7 @@ def def_user_ctx(request):
     # TODO remove
     assoc = Association.objects.get(pk=request.assoc["id"])
     res["interface_old"] = assoc.get_config("interface_old", False)
+    res["interface_expand_sidebar"] = assoc.get_config("interface_expand_sidebar", False)
 
     return res
 

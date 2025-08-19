@@ -2105,6 +2105,9 @@ msgstr "Merkmale der Veranstaltung"
 msgid "Executive Vote"
 msgstr "Abstimmung der Verwaltung"
 
+msgid "Expand sidebar"
+msgstr "Seitenleiste erweitern"
+
 msgid "Form questions"
 msgstr "Fragen zum Formular"
 
@@ -4909,6 +4912,9 @@ msgstr "(fakultativ) Der Betrag einer freiwilligen Spende"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Anpassen von Schaltflächen in der Ereignis-Navigationsleiste"
+
+msgid "If checked: automatically expand all sidebars"
+msgstr "Wenn markiert: Alle Seitenleisten automatisch erweitern"
 
 msgid "If checked: shows the position for each event"
 msgstr "Wenn markiert: zeigt die Position für jedes Ereignis an"

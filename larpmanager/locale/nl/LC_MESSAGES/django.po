@@ -2105,6 +2105,9 @@ msgstr "Functies van het evenement"
 msgid "Executive Vote"
 msgstr "Stemming management"
 
+msgid "Expand sidebar"
+msgstr "Zijbalk uitvouwen"
+
 msgid "Form questions"
 msgstr "Formulier vragen"
 
@@ -4899,6 +4902,9 @@ msgstr "(Optioneel) Het bedrag van een vrijwillige donatie"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Knoppen in de evenementnavigatiebalk aanpassen"
+
+msgid "If checked: automatically expand all sidebars"
+msgstr "Indien aangevinkt: alle zijbalken automatisch uitvouwen"
 
 msgid "If checked: shows the position for each event"
 msgstr "Indien aangevinkt: toont de positie voor elke gebeurtenis"

@@ -2105,6 +2105,9 @@ msgstr "Funktioner för evenemang"
 msgid "Executive Vote"
 msgstr "Ledningens omröstning"
 
+msgid "Expand sidebar"
+msgstr "Expandera sidofältet"
+
 msgid "Form questions"
 msgstr "Formulärfrågor"
 
@@ -4898,6 +4901,9 @@ msgstr "(Frivillig uppgift) Beloppet för en frivillig donation"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Anpassa knapparna i navigeringsfältet för evenemang"
+
+msgid "If checked: automatically expand all sidebars"
+msgstr "Om markerat: Expandera automatiskt alla sidofält"
 
 msgid "If checked: shows the position for each event"
 msgstr "Om markerat: visar positionen för varje evenemang"

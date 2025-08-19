@@ -270,6 +270,12 @@ msgstr ""
 msgid "If checked: uses old interface"
 msgstr ""
 
+msgid "Expand sidebar"
+msgstr ""
+
+msgid "If checked: automatically expand all sidebars"
+msgstr ""
+
 msgid "Calendar"
 msgstr ""
 

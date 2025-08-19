@@ -275,6 +275,10 @@ class ExeConfigForm(ConfigForm):
         help_text = _("If checked: uses old interface")
         self.add_configs("interface_old", ConfigType.BOOL, label, help_text)
 
+        label = _("Expand sidebar")
+        help_text = _("If checked: automatically expand all sidebars")
+        self.add_configs("interface_expand_sidebar", ConfigType.BOOL, label, help_text)
+
         # CALENDAR
         self.set_section("calendar", _("Calendar"))
 

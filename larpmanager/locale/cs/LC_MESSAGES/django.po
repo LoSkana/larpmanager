@@ -2105,6 +2105,9 @@ msgstr "Funkce události"
 msgid "Executive Vote"
 msgstr "Hlasování vedení"
 
+msgid "Expand sidebar"
+msgstr "Rozbalit postranní panel"
+
 msgid "Form questions"
 msgstr "Formulářové otázky"
 
@@ -4896,6 +4899,9 @@ msgstr "(Nepovinné) Výše dobrovolného příspěvku"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Přizpůsobení tlačítek na navigačním panelu události"
+
+msgid "If checked: automatically expand all sidebars"
+msgstr "Pokud je zaškrtnuto: automaticky rozbalit všechny postranní panely"
 
 msgid "If checked: shows the position for each event"
 msgstr "Pokud je zaškrtnuto: zobrazuje pozici pro každou událost"

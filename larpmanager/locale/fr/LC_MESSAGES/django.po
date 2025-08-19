@@ -2105,6 +2105,9 @@ msgstr "Caractéristiques de l'événement"
 msgid "Executive Vote"
 msgstr "Vote de la direction"
 
+msgid "Expand sidebar"
+msgstr "Agrandir la barre latérale"
+
 msgid "Form questions"
 msgstr "Questions de forme"
 
@@ -4904,6 +4907,9 @@ msgstr "(Facultatif) Le montant d'un don volontaire"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Personnaliser les boutons de la barre de navigation de l'événement"
+
+msgid "If checked: automatically expand all sidebars"
+msgstr "Si coché : développer automatiquement toutes les barres latérales"
 
 msgid "If checked: shows the position for each event"
 msgstr "Si coché : indique la position pour chaque événement"

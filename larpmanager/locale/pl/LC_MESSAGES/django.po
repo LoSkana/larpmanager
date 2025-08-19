@@ -2105,6 +2105,9 @@ msgstr "Cechy wydarzenia"
 msgid "Executive Vote"
 msgstr "Głosowanie wykonawcze"
 
+msgid "Expand sidebar"
+msgstr "Rozwiń pasek boczny"
+
 msgid "Form questions"
 msgstr "Pytania dotyczące formularza"
 
@@ -4896,6 +4899,9 @@ msgstr "(Opcjonalnie) Kwota dobrowolnej darowizny"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Dostosowywanie przycisków na pasku nawigacji wydarzeń"
+
+msgid "If checked: automatically expand all sidebars"
+msgstr "Jeśli zaznaczone: automatycznie rozwija wszystkie paski boczne"
 
 msgid "If checked: shows the position for each event"
 msgstr "Jeśli zaznaczone: pokazuje pozycję dla każdego zdarzenia"

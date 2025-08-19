@@ -28,7 +28,7 @@
                 </p>
                 {% for mod, list in event_pms.items %}
                     {% if list %}
-                        <div class="h2-p-row">
+                        <div class="sidebar-section">
                             <h2>
                                 {% if not interface_old and mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
                                 <span class="no_mobile">{{ mod.0 }}</span>
@@ -59,7 +59,7 @@
                 </p>
                 {% for mod, list in assoc_pms.items %}
                     {% if list %}
-                        <div class="h2-p-row">
+                        <div class="sidebar-section">
                             <h2>
                                 {% if not interface_old and mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
                                 <span class="no_mobile">{{ mod.0 }}</span>

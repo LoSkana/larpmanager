@@ -2105,6 +2105,9 @@ msgstr "Arrangementets funksjoner"
 msgid "Executive Vote"
 msgstr "Avstemning i ledelsen"
 
+msgid "Expand sidebar"
+msgstr "Utvid sidepanelet"
+
 msgid "Form questions"
 msgstr "Skjema for spørsmål"
 
@@ -4899,6 +4902,9 @@ msgstr "(Valgfritt) Beløpet for en frivillig donasjon"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Tilpass knappene i navigasjonsfeltet for hendelser"
+
+msgid "If checked: automatically expand all sidebars"
+msgstr "Hvis avkrysset: Utvid automatisk alle sidefelt"
 
 msgid "If checked: shows the position for each event"
 msgstr "Hvis avkrysset: viser posisjonen for hver hendelse"
