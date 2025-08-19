@@ -111,7 +111,7 @@ def setup(live_server, page):
     page.get_by_role("searchbox").fill("user")
     page.get_by_role("option", name="User Test - user@test.it").click()
     check_feature(page, "Navigation")
-    check_feature(page, "Plots")
+    check_feature(page, "Factions")
     submit_confirm(page)
 
 
@@ -191,8 +191,9 @@ def copy(live_server, page):
     page.get_by_role("button", name="Submit").click()
 
     go_to(page, live_server, "/copy/1/manage/roles/")
-    expect(page.locator('[id="\\39 "]')).to_contain_text("User Test")
-    expect(page.locator('[id="\\39 "]')).to_contain_text("Appearance (Navigation), Writing (Factions) ")
+    row = page.locator('tr[id="10"]')
+    expect(row).to_contain_text("User Test")
+    expect(row).to_contain_text("Appearance (Navigation), Writing (Factions) ")
     go_to(page, live_server, "/copy/1/manage/config/")
 
     page.get_by_role("link", name="Gallery ").click()

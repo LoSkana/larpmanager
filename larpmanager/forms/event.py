@@ -967,7 +967,7 @@ class ExeEventForm(OrgaEventForm):
                 event_id = self.cleaned_data["template_event"].id
                 event = Event.objects.get(pk=event_id)
                 instance.save()
-                instance.features.set(event.features.all())
+                instance.features.add(*event.features.all())
                 copy_class(instance.id, event_id, EventConfig)
                 copy_class(instance.id, event_id, EventRole)
 
