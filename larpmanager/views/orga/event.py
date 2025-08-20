@@ -71,6 +71,7 @@ def orga_event(request, s, n):
 
 
 def full_event_edit(ctx, request, event, run, exe=False):
+    ctx["nonum"] = 1
     if request.method == "POST":
         form_event = OrgaEventForm(request.POST, request.FILES, instance=event, ctx=ctx, prefix="form1")
         form_run = OrgaRunForm(request.POST, request.FILES, instance=run, ctx=ctx, prefix="form2")
