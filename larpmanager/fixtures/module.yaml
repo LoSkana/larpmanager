@@ -23,12 +23,6 @@
     order: 30
     icon: ticket
 - model: larpmanager.featuremodule
-  pk: 5
-  fields:
-    name: Casting
-    order: 60
-    icon: scroll
-- model: larpmanager.featuremodule
   pk: 6
   fields:
     name: Appearance
@@ -58,12 +52,6 @@
     name: Italy
     order: 110
     icon: pizza-slice
-- model: larpmanager.featuremodule
-  pk: 11
-  fields:
-    name: Experience
-    order: 45
-    icon: bolt
 - model: larpmanager.featuremodule
   pk: 12
   fields:

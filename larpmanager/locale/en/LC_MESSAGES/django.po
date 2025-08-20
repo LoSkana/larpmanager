@@ -2635,6 +2635,12 @@ msgstr ""
 msgid "Mandatory"
 msgstr ""
 
+msgid "Free"
+msgstr ""
+
+msgid "Support"
+msgstr ""
+
 msgid "Complete name of the Organization"
 msgstr ""
 
@@ -3066,13 +3072,19 @@ msgstr ""
 msgid "Quests"
 msgstr ""
 
-msgid "Free"
-msgstr ""
-
-msgid "Support"
-msgstr ""
-
 msgid "Photo"
+msgstr ""
+
+msgid "How can we contact you"
+msgstr ""
+
+msgid "Describe how we can help you"
+msgstr ""
+
+msgid "Screenshot"
+msgstr ""
+
+msgid "Optional - A screenshot of the error / bug / problem"
 msgstr ""
 
 msgid "Male"

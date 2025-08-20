@@ -31,7 +31,15 @@ class Command(BaseCommand):
     help = "Reload features from yaml"
 
     def handle(self, *args, **options):
-        for fixture in ["module", "feature", "assoc_permission", "event_permission", "payment_methods", "skin"]:
+        for fixture in [
+            "module",
+            "feature",
+            "permission_module",
+            "assoc_permission",
+            "event_permission",
+            "payment_methods",
+            "skin",
+        ]:
             fixture_path = os.path.join(conf_settings.BASE_DIR, "..", "larpmanager", "fixtures", f"{fixture}.yaml")
             with open(fixture_path, encoding="utf-8") as f:
                 data = yaml.safe_load(f)

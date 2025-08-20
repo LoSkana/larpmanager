@@ -19,9 +19,9 @@
       multiple 'traits'
     slug: questbuilder
     overall: false
-    module: 5
+    module: 1
     placeholder: false
-    order: 20
+    order: 120
     after_text: Now you can create quests for the event
     after_link: orga_quest_types
 - model: larpmanager.feature
@@ -160,7 +160,7 @@
       match
     slug: casting
     overall: false
-    module: 5
+    module: 7
     placeholder: false
     order: 10
     after_text: Now you can set the casting options
@@ -726,7 +726,7 @@
       can then be used to purchase skills
     slug: px
     overall: false
-    module: 11
+    module: 7
     placeholder: false
     order: 50
     after_text: Now you can set the experience points settings

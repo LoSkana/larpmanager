@@ -2041,7 +2041,7 @@ table.dataTable span.dtcc span.dtcc-button-icon {
   width: 100%;
 }
 
-#one .inner, #topbar .inner { display: none; }
+#one .inner, #topbar .inner, #sidebar .inner { display: none; }
 
 #reading .post_popup {
     display: none;
@@ -2053,6 +2053,14 @@ table.dataTable span.dtcc span.dtcc-button-icon {
 
 .nope {
     display: none !important;
+}
+
+.feature_checkbox label {
+    display: inline-block;
+    text-transform: initial;
+    font-weight: initial;
+    font-size: revert;
+    letter-spacing: revert;
 }
 
 .dt-button {

@@ -20,7 +20,7 @@
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga
+from larpmanager.tests.utils import go_to, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -41,10 +41,10 @@ def test_exe_events_run(pw_page):
     frame.locator("body").fill("sadsadasdsaas")
     page.locator("#id_max_pg").click()
     page.locator("#id_max_pg").fill("10")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # confirm quick setup
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     page.locator("#id_development").select_option("1")
     page.locator("#id_start").fill("2025-06-11")
@@ -53,7 +53,7 @@ def test_exe_events_run(pw_page):
     page.locator("#id_end").fill("2025-06-13")
     page.wait_for_timeout(2000)
     page.locator("#id_end").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     expect(page.locator("#one")).to_contain_text("Prova Event")
     go_to(page, live_server, "/prova/1/manage/")

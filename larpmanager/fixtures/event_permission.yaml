@@ -5,8 +5,10 @@
     descr: 'Manage the event settings: name, description, dates, and other data'
     slug: orga_event
     number: 11
-    feature: 215
     config: gallery
+    hidden: false
+    feature: 215
+    module: 7
 - model: larpmanager.eventpermission
   pk: 3
   fields:
@@ -14,7 +16,10 @@
     descr: Assign roles to staff members, and give access to specific functions
     slug: orga_roles
     number: 31
+    config: null
+    hidden: false
     feature: 213
+    module: 7
 - model: larpmanager.eventpermission
   pk: 4
   fields:
@@ -22,7 +27,10 @@
     descr: Manage the configuration of the activated features
     slug: orga_config
     number: 41
+    config: null
+    hidden: false
     feature: 212
+    module: 7
 - model: larpmanager.eventpermission
   pk: 5
   fields:
@@ -30,7 +38,10 @@
     descr: Activate features for the event
     slug: orga_features
     number: 51
+    config: null
+    hidden: false
     feature: 211
+    module: 7
 - model: larpmanager.eventpermission
   pk: 6
   fields:
@@ -38,8 +49,10 @@
     descr: 'Set visual aspect: colors, background, cover image'
     slug: orga_appearance
     number: 11
-    feature: 210
     config: visualisation
+    hidden: false
+    feature: 210
+    module: 6
 - model: larpmanager.eventpermission
   pk: 8
   fields:
@@ -47,7 +60,10 @@
     descr: Copy elements from another event
     slug: orga_copy
     number: 11
+    config: null
+    hidden: false
     feature: 10
+    module: 3
 - model: larpmanager.eventpermission
   pk: 9
   fields:
@@ -55,8 +71,10 @@
     descr: Assign the characters following the participants' preferences
     slug: orga_casting
     number: 11
-    feature: 27
     config: casting
+    hidden: false
+    feature: 27
+    module: 5
 - model: larpmanager.eventpermission
   pk: 10
   fields:
@@ -64,7 +82,10 @@
     descr: Manage event accounting
     slug: orga_accounting
     number: 11
+    config: null
+    hidden: false
     feature: 209
+    module: 2
 - model: larpmanager.eventpermission
   pk: 11
   fields:
@@ -72,8 +93,10 @@
     descr: Manage payments performed by participants to cover the registration fee
     slug: orga_payments
     number: 21
-    feature: 111
     config: payment
+    hidden: false
+    feature: 111
+    module: 2
 - model: larpmanager.eventpermission
   pk: 12
   fields:
@@ -81,7 +104,10 @@
     descr: Manage expenses uploaded by staff members and approve them
     slug: orga_expenses
     number: 31
+    config: null
+    hidden: false
     feature: 106
+    module: 2
 - model: larpmanager.eventpermission
   pk: 13
   fields:
@@ -89,8 +115,10 @@
     descr: Manages tokens used by participants to cover the registration fee
     slug: orga_tokens
     number: 41
-    feature: 107
     config: token_credit
+    hidden: false
+    feature: 107
+    module: 2
 - model: larpmanager.eventpermission
   pk: 14
   fields:
@@ -98,8 +126,10 @@
     descr: Manages credits used by participants to cover the registration fee
     slug: orga_credits
     number: 51
-    feature: 107
     config: token_credit
+    hidden: false
+    feature: 107
+    module: 2
 - model: larpmanager.eventpermission
   pk: 15
   fields:
@@ -107,7 +137,10 @@
     descr: Manages event revenues
     slug: orga_inflows
     number: 61
+    config: null
+    hidden: false
     feature: 144
+    module: 2
 - model: larpmanager.eventpermission
   pk: 16
   fields:
@@ -115,7 +148,10 @@
     descr: Manages event's expenses
     slug: orga_outflows
     number: 71
+    config: null
+    hidden: false
     feature: 108
+    module: 2
 - model: larpmanager.eventpermission
   pk: 17
   fields:
@@ -123,7 +159,10 @@
     descr: Review participants' safety-related informations
     slug: orga_safety
     number: 11
+    config: null
+    hidden: false
     feature: 26
+    module: 8
 - model: larpmanager.eventpermission
   pk: 18
   fields:
@@ -131,7 +170,10 @@
     descr: Review participants' dietary restrictions and allergies.
     slug: orga_diet
     number: 21
+    config: null
+    hidden: false
     feature: 93
+    module: 8
 - model: larpmanager.eventpermission
   pk: 19
   fields:
@@ -139,7 +181,10 @@
     descr: Review participants' sensitive data
     slug: orga_sensitive
     number: 31
+    config: null
+    hidden: false
     feature: 208
+    module: 8
 - model: larpmanager.eventpermission
   pk: 20
   fields:
@@ -147,7 +192,10 @@
     descr: Manage questions asked by the participants
     slug: orga_questions
     number: 41
+    config: null
+    hidden: false
     feature: 28
+    module: 14
 - model: larpmanager.eventpermission
   pk: 21
   fields:
@@ -155,7 +203,10 @@
     descr: Displays full lists of usual participants not already signed up
     slug: orga_spam
     number: 51
+    config: null
+    hidden: false
     feature: 40
+    module: 14
 - model: larpmanager.eventpermission
   pk: 22
   fields:
@@ -163,7 +214,10 @@
     descr: Displays lists of participants to persuade to sign up
     slug: orga_persuade
     number: 61
+    config: null
+    hidden: false
     feature: 40
+    module: 14
 - model: larpmanager.eventpermission
   pk: 23
   fields:
@@ -171,8 +225,10 @@
     descr: Manage the event characters
     slug: orga_characters
     number: 11
-    feature: 178
     config: writing
+    hidden: false
+    feature: 178
+    module: 1
 - model: larpmanager.eventpermission
   pk: 26
   fields:
@@ -180,7 +236,10 @@
     descr: Manage the event plots
     slug: orga_plots
     number: 41
+    config: null
+    hidden: false
     feature: 103
+    module: 1
 - model: larpmanager.eventpermission
   pk: 27
   fields:
@@ -188,7 +247,10 @@
     descr: Manage the event factions
     slug: orga_factions
     number: 51
+    config: null
+    hidden: false
     feature: 104
+    module: 1
 - model: larpmanager.eventpermission
   pk: 28
   fields:
@@ -196,7 +258,10 @@
     descr: Manage the type of event quests
     slug: orga_quest_types
     number: 21
+    config: null
+    hidden: false
     feature: 7
+    module: 13
 - model: larpmanager.eventpermission
   pk: 29
   fields:
@@ -204,7 +269,10 @@
     descr: Manage the event quests
     slug: orga_quests
     number: 31
+    config: null
+    hidden: false
     feature: 7
+    module: 13
 - model: larpmanager.eventpermission
   pk: 30
   fields:
@@ -212,7 +280,10 @@
     descr: Manage the traits available in the event quests
     slug: orga_traits
     number: 41
+    config: null
+    hidden: false
     feature: 7
+    module: 13
 - model: larpmanager.eventpermission
   pk: 31
   fields:
@@ -220,7 +291,10 @@
     descr: Manage the type of event prologues
     slug: orga_prologue_types
     number: 61
+    config: null
+    hidden: false
     feature: 6
+    module: 1
 - model: larpmanager.eventpermission
   pk: 32
   fields:
@@ -228,7 +302,10 @@
     descr: Manage the event prologues
     slug: orga_prologues
     number: 71
+    config: null
+    hidden: false
     feature: 6
+    module: 1
 - model: larpmanager.eventpermission
   pk: 33
   fields:
@@ -236,7 +313,10 @@
     descr: Manage the event speed-larps
     slug: orga_speedlarps
     number: 21
+    config: null
+    hidden: false
     feature: 25
+    module: 3
 - model: larpmanager.eventpermission
   pk: 34
   fields:
@@ -244,7 +324,10 @@
     descr: Perform check on the consistency of character sheets
     slug: orga_check
     number: 81
+    config: null
+    hidden: false
     feature: 178
+    module: 1
 - model: larpmanager.eventpermission
   pk: 35
   fields:
@@ -252,7 +335,10 @@
     descr: Manage the progress steps for the writing elements
     slug: orga_progress_steps
     number: 91
+    config: null
+    hidden: false
     feature: 91
+    module: 1
 - model: larpmanager.eventpermission
   pk: 36
   fields:
@@ -260,7 +346,10 @@
     descr: Manage participant registrations
     slug: orga_registrations
     number: 11
+    config: null
+    hidden: false
     feature: 207
+    module: 4
 - model: larpmanager.eventpermission
   pk: 37
   fields:
@@ -268,8 +357,10 @@
     descr: Manage the registration tickets
     slug: orga_registration_tickets
     number: 21
-    feature: 206
     config: tickets
+    hidden: false
+    feature: 206
+    module: 4
 - model: larpmanager.eventpermission
   pk: 38
   fields:
@@ -277,7 +368,10 @@
     descr: Manage the registration sections
     slug: orga_registration_sections
     number: 31
+    config: null
+    hidden: false
     feature: 77
+    module: 4
 - model: larpmanager.eventpermission
   pk: 39
   fields:
@@ -285,8 +379,10 @@
     descr: Manage the registration questions and options
     slug: orga_registration_form
     number: 41
-    feature: 205
     config: reg_form
+    hidden: false
+    feature: 205
+    module: 4
 - model: larpmanager.eventpermission
   pk: 41
   fields:
@@ -294,7 +390,10 @@
     descr: Manage the registration surcharges
     slug: orga_registration_surcharges
     number: 61
+    config: null
+    hidden: false
     feature: 139
+    module: 2
 - model: larpmanager.eventpermission
   pk: 42
   fields:
@@ -302,7 +401,10 @@
     descr: Manage dynamic installment payments for registrations
     slug: orga_registration_quotas
     number: 71
+    config: null
+    hidden: false
     feature: 62
+    module: 2
 - model: larpmanager.eventpermission
   pk: 43
   fields:
@@ -310,7 +412,10 @@
     descr: Manages fixed installment payments for registrations
     slug: orga_registration_installments
     number: 81
+    config: null
+    hidden: false
     feature: 74
+    module: 2
 - model: larpmanager.eventpermission
   pk: 44
   fields:
@@ -318,7 +423,10 @@
     descr: Manage registrations discounts available to participants
     slug: orga_discounts
     number: 91
+    config: null
+    hidden: false
     feature: 12
+    module: 2
 - model: larpmanager.eventpermission
   pk: 45
   fields:
@@ -326,8 +434,10 @@
     descr: Manage the pre-registrations received
     slug: orga_pre_registrations
     number: 101
-    feature: 32
     config: pre_reg
+    hidden: false
+    feature: 32
+    module: 4
 - model: larpmanager.eventpermission
   pk: 46
   fields:
@@ -335,7 +445,10 @@
     descr: Manages registration cancellations
     slug: orga_cancellations
     number: 111
+    config: null
+    hidden: false
     feature: 204
+    module: 4
 - model: larpmanager.eventpermission
   pk: 47
   fields:
@@ -343,7 +456,10 @@
     descr: Displays list of emails of signed-up participants
     slug: orga_newsletter
     number: 71
+    config: null
+    hidden: false
     feature: 40
+    module: 14
 - model: larpmanager.eventpermission
   pk: 49
   fields:
@@ -351,7 +467,10 @@
     descr: Manages and assigns tasks to characters
     slug: orga_assignments
     number: 51
+    config: null
+    hidden: false
     feature: 7
+    module: 5
 - model: larpmanager.eventpermission
   pk: 50
   fields:
@@ -359,7 +478,10 @@
     descr: Manually approve payments received
     slug: orga_invoices
     number: 81
+    config: null
+    hidden: false
     feature: 111
+    module: 2
 - model: larpmanager.eventpermission
   pk: 51
   fields:
@@ -367,7 +489,10 @@
     descr: Manage your event expenses and upload receipts
     slug: orga_expenses_my
     number: 91
+    config: null
+    hidden: false
     feature: 106
+    module: 2
 - model: larpmanager.eventpermission
   pk: 52
   fields:
@@ -375,7 +500,10 @@
     descr: Displays participants overdue for payment or other deadlines
     slug: orga_deadlines
     number: 31
+    config: null
+    hidden: false
     feature: 94
+    module: 4
 - model: larpmanager.eventpermission
   pk: 53
   fields:
@@ -383,7 +511,10 @@
     descr: Set the options for the automatic PDF generation of characters sheets
     slug: orga_characters_pdf
     number: 111
+    config: null
+    hidden: false
     feature: 21
+    module: 1
 - model: larpmanager.eventpermission
   pk: 54
   fields:
@@ -391,7 +522,10 @@
     descr: Manage the models for event handouts
     slug: orga_handout_templates
     number: 121
+    config: null
+    hidden: false
     feature: 105
+    module: 1
 - model: larpmanager.eventpermission
   pk: 55
   fields:
@@ -399,7 +533,10 @@
     descr: Manage the event handouts
     slug: orga_handouts
     number: 131
+    config: null
+    hidden: false
     feature: 105
+    module: 1
 - model: larpmanager.eventpermission
   pk: 57
   fields:
@@ -407,8 +544,10 @@
     descr: Manage the type of character skills
     slug: orga_px_ability_types
     number: 41
-    feature: 118
     config: px
+    hidden: false
+    feature: 118
+    module: 11
 - model: larpmanager.eventpermission
   pk: 58
   fields:
@@ -416,8 +555,10 @@
     descr: Manage the character skills purchaseable with XP
     slug: orga_px_abilities
     number: 51
-    feature: 118
     config: px
+    hidden: false
+    feature: 118
+    module: 11
 - model: larpmanager.eventpermission
   pk: 59
   fields:
@@ -425,8 +566,10 @@
     descr: Manage XP distributions for character skill purchases.
     slug: orga_px_deliveries
     number: 61
-    feature: 118
     config: px
+    hidden: false
+    feature: 118
+    module: 11
 - model: larpmanager.eventpermission
   pk: 60
   fields:
@@ -434,8 +577,10 @@
     descr: Display full history of participant preferences on characters
     slug: orga_casting_history
     number: 61
-    feature: 27
     config: casting
+    hidden: false
+    feature: 27
+    module: 5
 - model: larpmanager.eventpermission
   pk: 61
   fields:
@@ -443,8 +588,10 @@
     descr: Displays statistics on participant preferences on characters
     slug: orga_casting_preferences
     number: 71
-    feature: 27
     config: casting
+    hidden: false
+    feature: 27
+    module: 5
 - model: larpmanager.eventpermission
   pk: 63
   fields:
@@ -452,7 +599,10 @@
     descr: Upload and host files directly
     slug: orga_utils
     number: 31
+    config: null
+    hidden: false
     feature: 43
+    module: 3
 - model: larpmanager.eventpermission
   pk: 64
   fields:
@@ -460,7 +610,10 @@
     descr: Manage issues during the event
     slug: orga_problems
     number: 41
+    config: null
+    hidden: false
     feature: 60
+    module: 3
 - model: larpmanager.eventpermission
   pk: 65
   fields:
@@ -468,8 +621,10 @@
     descr: Select randomly lottery tickets to upgrade
     slug: orga_lottery
     number: 121
-    feature: 50
     config: lottery
+    hidden: false
+    feature: 50
+    module: 4
 - model: larpmanager.eventpermission
   pk: 66
   fields:
@@ -477,7 +632,10 @@
     descr: Manage quiz-style workshops
     slug: orga_workshops
     number: 51
+    config: null
+    hidden: false
     feature: 24
+    module: 3
 - model: larpmanager.eventpermission
   pk: 67
   fields:
@@ -485,15 +643,21 @@
     descr: Manages modules for workshops
     slug: orga_workshop_modules
     number: 61
+    config: null
+    hidden: false
     feature: 24
+    module: 3
 - model: larpmanager.eventpermission
   pk: 68
   fields:
     name: Questions
     descr: Manage questions for workshops
     slug: orga_workshop_questions
-    number: 71
+    number: 1
+    config: null
+    hidden: false
     feature: 24
+    module: 3
 - model: larpmanager.eventpermission
   pk: 69
   fields:
@@ -501,7 +665,10 @@
     descr: Manage answers for workshop questions
     slug: orga_workshop_options
     number: 81
+    config: null
+    hidden: false
     feature: 24
+    module: 3
 - model: larpmanager.eventpermission
   pk: 70
   fields:
@@ -509,7 +676,10 @@
     descr: Customize specific texts on the event interface
     slug: orga_texts
     number: 20
+    config: null
+    hidden: false
     feature: 203
+    module: 6
 - model: larpmanager.eventpermission
   pk: 71
   fields:
@@ -517,7 +687,10 @@
     descr: Customize buttons in the event navigation bar
     slug: orga_buttons
     number: 30
+    config: null
+    hidden: false
     feature: 202
+    module: 6
 - model: larpmanager.eventpermission
   pk: 74
   fields:
@@ -525,8 +698,10 @@
     descr: Send e-mail
     slug: orga_send_mail
     number: 99
-    feature: 200
     config: email
+    hidden: false
+    feature: 200
+    module: 14
 - model: larpmanager.eventpermission
   pk: 75
   fields:
@@ -534,8 +709,10 @@
     descr: Manage questions and options for characters and writing elements
     slug: orga_character_form
     number: 12
-    feature: 178
     config: char_form
+    hidden: false
+    feature: 178
+    module: 1
 - model: larpmanager.eventpermission
   pk: 76
   fields:
@@ -543,8 +720,10 @@
     descr: Display sent e-mails
     slug: orga_archive_email
     number: 100
-    feature: 199
     config: email
+    hidden: false
+    feature: 199
+    module: 14
 - model: larpmanager.eventpermission
   pk: 77
   fields:
@@ -552,8 +731,10 @@
     descr: quick
     slug: orga_quick
     number: 9999
-    feature: 216
+    config: null
     hidden: true
+    feature: 216
+    module: 7
 - model: larpmanager.eventpermission
   pk: 78
   fields:
@@ -561,7 +742,10 @@
     descr: Set your personal preferences on the interface
     slug: orga_preferences
     number: 999
+    config: null
+    hidden: false
     feature: 217
+    module: 7
 - model: larpmanager.eventpermission
   pk: 79
   fields:
@@ -569,5 +753,7 @@
     descr: Read the writing elements
     slug: orga_reading
     number: 999
-    feature: 178
     config: writing
+    hidden: false
+    feature: 178
+    module: 1

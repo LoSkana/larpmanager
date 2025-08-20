@@ -1410,6 +1410,9 @@ msgstr "Innskrevet"
 msgid "Repertoire"
 msgstr "Repertoar"
 
+msgid "Screenshot"
+msgstr "Skjermbilde"
+
 msgid "Searchable"
 msgstr "Søkbar"
 
@@ -3206,6 +3209,9 @@ msgstr "Filtrer etter felt"
 msgid "Follow the steps below"
 msgstr "Følg trinnene nedenfor"
 
+msgid "How can we contact you"
+msgstr "Hvordan kan vi kontakte deg"
+
 msgid "Join the waiting list!"
 msgstr "Sett deg på venteliste!"
 
@@ -3696,6 +3702,9 @@ msgstr "Innhold på spesialsiden"
 
 msgid "Cover photo fo the character"
 msgstr "Et eksempel på et bilde av karakteren"
+
+msgid "Describe how we can help you"
+msgstr "Beskriv hvordan vi kan hjelpe deg"
 
 msgid "Description of free donation"
 msgstr "Beskrivelse av gratis donasjon"
@@ -5387,6 +5396,9 @@ msgstr "Håndterer faste avdragsbetalinger for registreringer"
 
 msgid "Maximum number of participants spots (0 = unlimited)"
 msgstr "Maksimalt antall deltakerplasser (0 = ubegrenset)"
+
+msgid "Optional - A screenshot of the error / bug / problem"
+msgstr "Valgfritt - Et skjermbilde av feilen/feilen/problemet"
 
 msgid "Perform check on the consistency of character sheets"
 msgstr "Utfør kontroll av konsistensen i karakterarkene"

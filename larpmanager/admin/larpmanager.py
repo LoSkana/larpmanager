@@ -29,6 +29,7 @@ from larpmanager.models.larpmanager import (
     LarpManagerProfiler,
     LarpManagerReview,
     LarpManagerShowcase,
+    LarpManagerTicket,
     LarpManagerTutorial,
 )
 
@@ -94,3 +95,12 @@ class LarpManagerDiscoverAdmin(DefModelAdmin):
 @admin.register(LarpManagerReview)
 class LMReviewAdmin(DefModelAdmin):
     list_display = ("text", "author")
+
+
+@admin.register(LarpManagerTicket)
+class LarpManagerTicketAdmin(DefModelAdmin):
+    list_display = ("reason", "assoc", "email", "member", "content_red", "show_thumb")
+
+    @staticmethod
+    def content_red(instance):
+        return instance.content[:100]

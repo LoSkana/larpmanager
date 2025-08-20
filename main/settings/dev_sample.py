@@ -20,3 +20,7 @@ DEEPL_API_KEY = '???'
 # ALTER USER larpmanager CREATEDB;
 # ALTER DATABASE larpmanager OWNER TO larpmanager;
 # GRANT ALL PRIVILEGES ON DATABASE larpmanager TO larpmanager;
+
+ADMINS = [
+    ('test', 'test@test.it')
+]

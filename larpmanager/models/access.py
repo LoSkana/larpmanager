@@ -27,6 +27,14 @@ from larpmanager.models.event import BaseConceptModel
 from larpmanager.models.member import Member
 
 
+class PermissionModule(BaseModel):
+    name = models.CharField(max_length=100)
+
+    icon = models.CharField(max_length=100)
+
+    order = models.IntegerField()
+
+
 class AssocPermission(BaseModel):
     name = models.CharField(max_length=100)
 
@@ -36,15 +44,13 @@ class AssocPermission(BaseModel):
 
     feature = models.ForeignKey(Feature, on_delete=models.CASCADE, related_name="assoc_permissions")
 
+    module = models.ForeignKey(PermissionModule, on_delete=models.CASCADE, related_name="assoc_permissions")
+
     descr = models.CharField(max_length=1000)
 
     hidden = models.BooleanField(default=False)
 
     config = models.TextField(max_length=100, blank=True, null=True)
-
-    def module(self):
-        # noinspection PyUnresolvedReferences
-        return self.feature.module
 
     def __str__(self):
         return self.name
@@ -101,15 +107,13 @@ class EventPermission(BaseModel):
 
     feature = models.ForeignKey(Feature, on_delete=models.CASCADE, related_name="event_permissions")
 
+    module = models.ForeignKey(PermissionModule, on_delete=models.CASCADE, related_name="event_permissions")
+
     descr = models.CharField(max_length=1000)
 
     hidden = models.BooleanField(default=False)
 
     config = models.TextField(max_length=100, blank=True, null=True)
-
-    def module(self):
-        # noinspection PyUnresolvedReferences
-        return self.feature.module
 
     def __str__(self):
         return self.name

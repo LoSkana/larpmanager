@@ -22,7 +22,7 @@ import re
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, submit
+from larpmanager.tests.utils import go_to, login_orga, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -39,11 +39,11 @@ def test_orga_mirror(pw_page):
     go_to(page, live_server, "/test/1/manage/config")
     page.get_by_role("link", name=re.compile(r"^Writing")).click()
     page.locator("#id_writing_field_visibility").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/test/1/manage/run")
     page.locator("#id_show_character_0").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # check gallery
     go_to(page, live_server, "/test/1/")
@@ -56,7 +56,7 @@ def test_orga_mirror(pw_page):
     go_to(page, live_server, "/test/1/manage/config")
     page.get_by_role("link", name=re.compile(r"^Casting\s.+")).click()
     page.locator("#id_casting_mirror").check()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # create mirror
     go_to(page, live_server, "/test/1/manage/characters/")
@@ -64,7 +64,7 @@ def test_orga_mirror(pw_page):
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Mirror")
     page.locator("#id_mirror").select_option("1")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # check gallery
     go_to(page, live_server, "/test/1/")
@@ -83,12 +83,12 @@ def casting(live_server, page):
     page.locator("#id_casting_min").fill("1")
     page.locator("#id_casting_max").click()
     page.locator("#id_casting_max").fill("1")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     # sign up and fill preferences
     go_to(page, live_server, "/test/1/register")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/test/1/casting")
     page.locator("#faction0").select_option("all")

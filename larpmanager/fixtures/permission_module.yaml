@@ -1,0 +1,84 @@
+- model: larpmanager.permissionmodule
+  pk: 1
+  fields:
+    name: Writing
+    order: 50
+    icon: pen-nib
+- model: larpmanager.permissionmodule
+  pk: 2
+  fields:
+    name: Accounting
+    order: 40
+    icon: calculator
+- model: larpmanager.permissionmodule
+  pk: 3
+  fields:
+    name: Miscellany
+    order: 100
+    icon: gear
+- model: larpmanager.permissionmodule
+  pk: 4
+  fields:
+    name: Registration
+    order: 30
+    icon: ticket
+- model: larpmanager.permissionmodule
+  pk: 5
+  fields:
+    name: Casting
+    order: 60
+    icon: scroll
+- model: larpmanager.permissionmodule
+  pk: 6
+  fields:
+    name: Appearance
+    order: 20
+    icon: palette
+- model: larpmanager.permissionmodule
+  pk: 7
+  fields:
+    name: Event
+    order: 10
+    icon: calendar-days
+- model: larpmanager.permissionmodule
+  pk: 8
+  fields:
+    name: Users
+    order: 80
+    icon: user
+- model: larpmanager.permissionmodule
+  pk: 9
+  fields:
+    name: Organization
+    order: 0
+    icon: building
+- model: larpmanager.permissionmodule
+  pk: 10
+  fields:
+    name: Italy
+    order: 110
+    icon: pizza-slice
+- model: larpmanager.permissionmodule
+  pk: 11
+  fields:
+    name: Experience
+    order: 45
+    icon: bolt
+- model: larpmanager.permissionmodule
+  pk: 12
+  fields:
+    name: Events
+    order: 10
+    icon: calendar-days
+- model: larpmanager.permissionmodule
+  pk: 13
+  fields:
+    name: Quests
+    order: 55
+    icon: puzzle-piece
+- model: larpmanager.permissionmodule
+  pk: 14
+  fields:
+    name: Communications
+    order: 85
+    icon: inbox

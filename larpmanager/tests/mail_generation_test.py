@@ -22,7 +22,7 @@ from pathlib import Path
 
 import pytest
 
-from larpmanager.tests.utils import check_download, fill_tinymce, go_to, login_orga, submit
+from larpmanager.tests.utils import check_download, fill_tinymce, go_to, login_orga, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -50,7 +50,7 @@ def expense(image_path, live_server, page):
     go_to(page, live_server, "/manage/membership/")
     page.get_by_role("link", name="Request").click()
     page.get_by_role("textbox", name="Response").fill("yeaaaa")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # expenses
     go_to(page, live_server, "/manage/features/106/on")
@@ -62,7 +62,7 @@ def expense(image_path, live_server, page):
     page.get_by_label("Type").select_option("g")
     page.get_by_role("textbox", name="Descr").click()
     page.get_by_role("textbox", name="Descr").fill("dsadas")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     go_to(page, live_server, "/test/1/manage/expenses")
     page.get_by_role("link", name="Approve").click()
 
@@ -73,17 +73,18 @@ def resubmit_membership(live_server, page):
     page.get_by_role("link", name="Request").click()
     page.locator("form").locator("#id_is_approved").click()
     page.locator("form").locator("#id_response").fill("nope")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
+
     # signup
     go_to(page, live_server, "/test/1/manage/registrations/tickets/")
     page.locator("a:has(i.fas.fa-edit)").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/test/1/register/")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     # Set membership fee
     go_to(page, live_server, "/manage/config/")
     page.get_by_role("link", name=re.compile(r"^Members\s.+")).click()
@@ -91,11 +92,11 @@ def resubmit_membership(live_server, page):
     page.locator("#id_membership_fee").fill("10")
     page.locator("#id_membership_day").click()
     page.locator("#id_membership_day").fill("01-01")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     # update signup, go to membership
     go_to(page, live_server, "/test/1/register/")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     submit(page)
     page.locator("#id_confirm_1").check()
     page.locator("#id_confirm_2").check()
@@ -115,7 +116,7 @@ def submit_membership(live_server, page, image_path):
 
     page.locator("#main_form").click()
     page.locator("#id_typ").select_option("m")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
     go_to(page, live_server, "/membership")
     page.get_by_role("checkbox", name="Authorisation").check()
     submit(page)
@@ -157,7 +158,7 @@ def badge(live_server, page, image_path):
     page.locator("#id_img").set_input_files(str(image_path))
     page.get_by_role("searchbox").fill("user")
     page.get_by_role("option", name="User Test - user@test.it").click()
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
 
 def chat(live_server, page):

@@ -23,7 +23,19 @@ from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
 from larpmanager.admin.base import DefModelAdmin
-from larpmanager.models.access import AssocPermission, AssocRole, EventPermission, EventRole
+from larpmanager.models.access import AssocPermission, AssocRole, EventPermission, EventRole, PermissionModule
+
+
+class PermissionModuleResource(resources.ModelResource):
+    class Meta:
+        model = PermissionModule
+
+
+@admin.register(PermissionModule)
+class PermissionModuleAdmin(ImportExportModelAdmin):
+    resource_classes = [PermissionModuleResource]
+    list_display = ("name", "icon")
+    search_fields = ("name",)
 
 
 @admin.register(AssocRole)
@@ -43,7 +55,7 @@ class AssocPermissionAdmin(ImportExportModelAdmin):
     resource_classes = [AssocPermissionResource]
     list_display = ("name", "slug", "number", "descr", "module", "feature")
     search_fields = ("name",)
-    autocomplete_fields = ["feature"]
+    autocomplete_fields = ["feature", "module"]
 
 
 @admin.register(EventRole)
@@ -61,6 +73,6 @@ class EventPermissionResource(resources.ModelResource):
 @admin.register(EventPermission)
 class EventPermissionAdmin(ImportExportModelAdmin):
     resource_classes = [EventPermissionResource]
-    autocomplete_fields = ["feature"]
+    autocomplete_fields = ["feature", "module"]
     list_display = ("name", "slug", "number", "descr", "module", "feature")
     search_fields = ("name",)

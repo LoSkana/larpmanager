@@ -56,3 +56,7 @@ LOGGING = {
 # GRANT ALL PRIVILEGES ON DATABASE larpmanager TO larpmanager;
 
 FORMS_URLFIELD_ASSUME_HTTPS = True
+
+ADMINS = [
+    ('test', 'test@test.it')
+]

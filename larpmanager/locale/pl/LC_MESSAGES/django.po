@@ -1410,6 +1410,9 @@ msgstr "Zarejestrowany"
 msgid "Repertoire"
 msgstr "Repertuar"
 
+msgid "Screenshot"
+msgstr "Zrzut ekranu"
+
 msgid "Searchable"
 msgstr "Możliwość wyszukiwania"
 
@@ -3206,6 +3209,9 @@ msgstr "Filtr dla każdego pola"
 msgid "Follow the steps below"
 msgstr "Wykonaj poniższe czynności"
 
+msgid "How can we contact you"
+msgstr "Jak możemy się z Tobą skontaktować"
+
 msgid "Join the waiting list!"
 msgstr "Dołącz do listy oczekujących!"
 
@@ -3696,6 +3702,9 @@ msgstr "Zawartość strony specjalnej"
 
 msgid "Cover photo fo the character"
 msgstr "Zdjęcie postaci na okładce"
+
+msgid "Describe how we can help you"
+msgstr "Opisz, jak możemy Ci pomóc"
 
 msgid "Description of free donation"
 msgstr "Opis bezpłatnej darowizny"
@@ -5385,6 +5394,9 @@ msgstr "Zarządzanie stałymi płatnościami ratalnymi za rejestracje"
 
 msgid "Maximum number of participants spots (0 = unlimited)"
 msgstr "Maksymalna liczba miejsc dla uczestników (0 = nieograniczona)"
+
+msgid "Optional - A screenshot of the error / bug / problem"
+msgstr "Opcjonalnie - zrzut ekranu błędu / usterki / problemu"
 
 msgid "Perform check on the consistency of character sheets"
 msgstr "Sprawdzenie spójności arkuszy postaci"

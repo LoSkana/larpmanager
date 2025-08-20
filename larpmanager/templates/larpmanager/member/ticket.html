@@ -21,10 +21,12 @@
           enctype="multipart/form-data"
           id="main_form">
         {% csrf_token %}
-        {{ form.as_p }}
+        <table>
+            {{ form.as_table }}
+        </table>
         <p>
             <!-- empty space -->
         </p>
-        <input id="cnt" type="submit" value="{% trans "Confirm" %}" class="fit" />
+        <input id="cnt" type="submit" value="{% trans "Confirm" %}" />
     </form>
 {% endblock content %}

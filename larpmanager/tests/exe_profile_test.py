@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import pytest
 
-from larpmanager.tests.utils import go_to, login_orga, submit
+from larpmanager.tests.utils import go_to, login_orga, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -34,7 +34,7 @@ def test_exe_profile(pw_page):
     page.locator("#id_birth_place").select_option("m")
     page.locator("#id_document_type").select_option("m")
     page.locator("#id_diet").select_option("o")
-    page.get_by_role("button", name="Confirm", exact=True).click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/profile")
     page.get_by_role("textbox", name="Name (*)", exact=True).click()

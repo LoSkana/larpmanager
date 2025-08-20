@@ -24,13 +24,10 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill, ResizeToFit
 from tinymce.models import HTMLField
 
+from larpmanager.models.association import Association
 from larpmanager.models.base import AlphanumericValidator, BaseModel
+from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename, show_thumb
-
-
-class LarpManagerPlan(models.TextChoices):
-    FREE = "f", _("Free")
-    SUPPORT = "p", _("Support")
 
 
 class LarpManagerTutorial(BaseModel):
@@ -180,3 +177,40 @@ class LarpManagerDiscover(BaseModel):
     profile_thumb = ImageSpecField(
         source="profile", processors=[ResizeToFill(500, 500)], format="JPEG", options={"quality": 90}
     )
+
+
+class LarpManagerTicket(BaseModel):
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+
+    reason = models.CharField(max_length=100, null=True)
+
+    email = models.EmailField(
+        null=True,
+        help_text=_("How can we contact you"),
+    )
+
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, null=True)
+
+    content = models.CharField(max_length=1000, verbose_name=_("Request"), help_text=_("Describe how we can help you"))
+
+    screenshot = models.ImageField(
+        max_length=500,
+        upload_to=UploadToPathAndRename("tickets/"),
+        verbose_name=_("Screenshot"),
+        help_text=_("Optional - A screenshot of the error / bug / problem"),
+        null=True,
+        blank=True,
+    )
+
+    screenshot_reduced = ImageSpecField(
+        source="screenshot",
+        processors=[ResizeToFit(1000)],
+        format="JPEG",
+        options={"quality": 80},
+    )
+
+    def show_thumb(self):
+        if self.screenshot_reduced:
+            # noinspection PyUnresolvedReferences
+            return show_thumb(100, self.screenshot_reduced.url)
+        return ""

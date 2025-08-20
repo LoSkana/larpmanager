@@ -20,7 +20,7 @@
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga
+from larpmanager.tests.utils import check_feature, go_to, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -56,11 +56,11 @@ def check_orga_visibility(page):
     page.get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Writing ").click()
     page.locator("#id_writing_field_visibility").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Event", exact=True).click()
     page.locator("#id_form2-show_character_0").check()
     page.locator("#id_form2-show_character_2").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Event", exact=True).click()
     expect(page.locator("#id_form2-show_character_0")).to_be_checked()
     expect(page.locator("#id_form2-show_character_2")).to_be_checked()
@@ -71,20 +71,20 @@ def check_orga_preferences(page):
     page.get_by_role("link", name="Preferences").click(force=True)
     page.locator("#id_open_registration_1_0").check()
     page.locator("#id_open_registration_1_2").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Preferences").click(force=True)
     expect(page.locator("#id_open_registration_1_0")).to_be_checked()
     expect(page.locator("#id_open_registration_1_1")).not_to_be_checked()
     expect(page.locator("#id_open_registration_1_2")).to_be_checked()
     expect(page.locator("#id_open_registration_1_3")).not_to_be_checked()
     page.get_by_role("link", name="Features").click()
-    page.locator("#id_mod_1_0").check(force=True)
-    page.get_by_role("button", name="Confirm").click()
+    check_feature(page, "Characters")
+    submit_confirm(page)
     page.get_by_role("link", name="Preferences").click(force=True)
     page.locator("#id_open_character_1_0").check()
     page.get_by_text("Stats").click()
     page.locator("#id_open_character_1_2").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Preferences").click(force=True)
     expect(page.locator("#id_open_character_1_0")).to_be_checked()
     expect(page.locator("#id_open_character_1_1")).not_to_be_checked()
@@ -93,33 +93,27 @@ def check_orga_preferences(page):
 
 def check_orga_features(page):
     page.get_by_role("link", name="Features").click()
-    page.locator("#id_mod_7_0").check(force=True)
-    page.locator("#id_mod_7_2").check(force=True)
-    page.locator("#id_mod_4_1").check(force=True)
-    page.locator("#id_mod_4_3").check(force=True)
-    page.get_by_role("button", name="Confirm").click()
+    checked = ["Participant cancellation", "Character customization", "Secret link", "Sections"]
+    for s in checked:
+        check_feature(page, s)
+
+    submit_confirm(page)
     expect(page.locator("#one")).to_contain_text("Now you can set customization options")
     expect(page.locator("#one")).to_contain_text(
         "You have activated the following features, for each here's the links to follow"
     )
     page.get_by_role("link", name="Features").click()
-    expect(page.locator("#id_mod_7_0")).to_be_checked()
-    expect(page.locator("#id_mod_7_1")).not_to_be_checked()
-    expect(page.locator("#id_mod_7_2")).to_be_checked()
-    expect(page.locator("#id_mod_4_0")).not_to_be_checked()
-    expect(page.locator("#id_mod_4_1")).to_be_checked()
-    expect(page.locator("#id_mod_4_2")).not_to_be_checked()
-    expect(page.locator("#id_mod_4_3")).to_be_checked()
+    _check_checkboxes(checked, page)
 
 
 def check_orga_config(page):
-    page.get_by_role("link", name="Configuration").click()
+    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Visualisation ").click()
     page.locator("#id_show_shortcuts_mobile").check()
     page.get_by_text("If checked: Show summary page").click()
     page.locator("#id_show_limitations").check()
-    page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("link", name="Configuration").click()
+    submit_confirm(page)
+    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
     page.get_by_text("Email notifications Disable").click()
     page.get_by_text("If checked, options no longer").click()
     page.get_by_role("link", name="Registration form ").click()
@@ -137,24 +131,26 @@ def check_orga_roles(page):
     page.locator("#id_name").press("Tab")
     page.get_by_role("searchbox").fill("org")
     page.get_by_role("option", name="Admin Test - orga@test.it").click()
-    page.locator("#id_Event_0").check()
-    page.locator("#id_Event_2").check()
-    page.locator("#id_Event_4").check()
-    page.locator("#id_Appearance_2").check()
-    page.locator("#id_Appearance_1").check()
-    page.get_by_role("button", name="Confirm").click()
+    checked = ["Event", "Configuration", "Preferences", "Texts", "Navigation"]
+    for s in checked:
+        check_feature(page, s)
+    submit_confirm(page)
     expect(page.locator('[id="\\32 "]')).to_contain_text(
         "Event (Event, Configuration, Preferences), Appearance (Texts, Navigation)"
     )
     page.get_by_role("row", name=" testona Admin Test Event (").get_by_role("link").click()
-    expect(page.locator("#id_Event_0")).to_be_checked()
-    expect(page.locator("#id_Event_1")).not_to_be_checked()
-    expect(page.locator("#id_Event_2")).to_be_checked()
-    expect(page.locator("#id_Event_3")).not_to_be_checked()
-    expect(page.locator("#id_Event_4")).to_be_checked()
-    expect(page.locator("#id_Appearance_0")).not_to_be_checked()
-    expect(page.locator("#id_Appearance_1")).to_be_checked()
-    expect(page.locator("#id_Appearance_2")).to_be_checked()
+    _check_checkboxes(checked, page)
+
+
+def _check_checkboxes(checked, page):
+    for s in checked:
+        expect(page.get_by_label(s)).to_be_checked()
+    all_checkboxes = page.locator("input[type=checkbox]")
+    count = all_checkboxes.count()
+    for i in range(count):
+        label = all_checkboxes.nth(i).evaluate("el => el.labels[0]?.innerText.trim()")
+        if label not in checked:
+            expect(all_checkboxes.nth(i)).not_to_be_checked()
 
 
 def check_exe_config(page):
@@ -164,8 +160,8 @@ def check_exe_config(page):
     page.locator("#id_calendar_description").check()
     page.locator("#id_calendar_authors").check()
     page.locator("#id_calendar_tagline").check()
-    page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("link", name="Configuration").click()
+    submit_confirm(page)
+    page.locator("#exe_config").get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Calendar ").click()
     expect(page.locator("#id_calendar_past_events")).to_be_checked()
     expect(page.locator("#id_calendar_website")).not_to_be_checked()
@@ -178,15 +174,15 @@ def check_exe_config(page):
 
 def check_exe_features(page):
     page.get_by_role("link", name="Features").click()
-    page.locator("#id_mod_12_0").check(force=True)
-    page.locator("#id_mod_6_1").check(force=True)
-    page.get_by_role("button", name="Confirm").click()
+
+    checked = ["Template", "Treasurer", "Membership", "Badge"]
+    for s in checked:
+        check_feature(page, s)
+
+    submit_confirm(page)
     expect(page.locator("#one")).to_contain_text("Now you can create event templates")
     page.get_by_role("link", name="Features").click()
-    expect(page.locator("#id_mod_12_0")).to_be_checked()
-    expect(page.locator("#id_mod_12_1")).not_to_be_checked()
-    expect(page.locator("#id_mod_6_0")).not_to_be_checked()
-    expect(page.locator("#id_mod_6_1")).to_be_checked()
+    _check_checkboxes(checked, page)
 
 
 def check_exe_roles(page):
@@ -197,19 +193,12 @@ def check_exe_roles(page):
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("org")
     page.get_by_role("option", name="Admin Test - orga@test.it").click()
-    page.locator("#id_Organization_0").check()
-    page.locator("#id_Organization_2").check()
-    page.locator("#id_Appearance_1").check()
-    page.locator("#id_Events_0").check()
-    page.get_by_role("button", name="Confirm").click()
+    checked = ["Organization", "Configuration", "Events", "Texts"]
+    for s in checked:
+        check_feature(page, s)
+    submit_confirm(page)
     expect(page.locator('[id="\\32 "]')).to_contain_text(
         "Organization (Organization, Configuration), Events (Events), Appearance (Texts)"
     )
     page.locator('[id="\\32 "]').get_by_role("cell", name="").click()
-    expect(page.locator("#id_Organization_0")).to_be_checked()
-    expect(page.locator("#id_Organization_1")).not_to_be_checked()
-    expect(page.locator("#id_Organization_2")).to_be_checked()
-    expect(page.locator("#id_Organization_3")).not_to_be_checked()
-    expect(page.locator("#id_Events_0")).to_be_checked()
-    expect(page.locator("#id_Appearance_0")).not_to_be_checked()
-    expect(page.locator("#id_Appearance_1")).to_be_checked()
+    _check_checkboxes(checked, page)
