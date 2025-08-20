@@ -104,7 +104,7 @@
     descr: Manage staff expenses based on receipts uploaded for all events
     slug: exe_expenses
     number: 7
-    config: null
+    config: expense
     hidden: false
     feature: 106
     module: 2

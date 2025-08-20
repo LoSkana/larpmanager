@@ -3185,6 +3185,9 @@ msgstr "Potvrzení obnovení hesla"
 msgid "Customised mail server"
 msgstr "Přizpůsobený poštovní server"
 
+msgid "Disable event approval"
+msgstr "Zakázat schvalování událostí"
+
 msgid "Display all users data"
 msgstr "Zobrazení údajů všech uživatelů"
 
@@ -7165,6 +7168,13 @@ msgid ""
 "instruments"
 msgstr ""
 "Umožňuje správu výdajů hrazených pomocí finančních nástrojů organizace"
+
+msgid ""
+"If checked, approval of expenses can be performed only from the organization"
+" panel"
+msgstr ""
+"Pokud je zaškrtnuto, schvalování výdajů lze provádět pouze z panelu "
+"organizace"
 
 msgid ""
 "If checked, the gallery will not be displayed to those not logged in to the "
