@@ -28,7 +28,6 @@
             <h1 class="tit"></h1>
         </div>
         <div class="tagline"></div>
-        <div class="description_short"></div>
         <div class="description"></div>
         <div class="buttons">
             <a id="website" href="" class="button primary">{% trans "Tell me more" %}</a>
@@ -156,7 +155,7 @@ function show(index) {
     $('.tagline').text(el['tagline']);
 
     descr = el['carousel_text'];
-    if (descr == null) descr = el['description_short'];
+    if (descr == null) descr = el['description'];
     $('.description').html(el['carousel_text']);
 
     if ('website' in el && el['website'].length > 0) {

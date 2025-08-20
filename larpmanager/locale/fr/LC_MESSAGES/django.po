@@ -1209,6 +1209,9 @@ msgstr "Prologues"
 msgid "Questions"
 msgstr "Questions"
 
+msgid "Read mail"
+msgstr "Lire le courrier"
+
 msgid "Recipient"
 msgstr "Bénéficiaire"
 
@@ -2426,9 +2429,6 @@ msgstr "Escompte à terme"
 msgid "Handout template"
 msgstr "Modèle de document"
 
-msgid "Long description"
-msgstr "Description détaillée"
-
 msgid "Max participants"
 msgstr "Nombre maximum de participants"
 
@@ -2656,9 +2656,6 @@ msgstr "Demande de soumission"
 
 msgid "Residence address"
 msgstr "Adresse résidentielle"
-
-msgid "Short description"
-msgstr "Brève description"
 
 msgid "Technical Support"
 msgstr "Support technique"
@@ -3955,9 +3952,6 @@ msgstr "Pour se reconnecter avec le compte"
 msgid "Total of recorded money inflows"
 msgstr "Total des entrées d'argent enregistrées"
 
-msgid "Will be shown in the event page"
-msgstr "Sera affiché sur la page de l'événement"
-
 msgid "You have completed the payment!"
 msgstr "Vous avez effectué le dépôt !"
 
@@ -4814,6 +4808,9 @@ msgstr "Définir une valeur pour le lien secret d'enregistrement"
 msgid "This page allows you to translate the event"
 msgstr "Cette page vous permet de traduire l'événement"
 
+msgid "This page shows an email sent by the system"
+msgstr "Cette page montre un courriel envoyé par le système"
+
 msgid "This page shows the characters of the event"
 msgstr "Cette page résume les caractéristiques de l'événement"
 
@@ -4916,6 +4913,9 @@ msgstr "(Facultatif) Le montant d'un don volontaire"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Personnaliser les boutons de la barre de navigation de l'événement"
+
+msgid "Event description displayed on the event page"
+msgstr "Description de l'événement affichée sur la page de l'événement"
 
 msgid "If checked: shows the position for each event"
 msgstr "Si coché : indique la position pour chaque événement"
@@ -5143,9 +5143,6 @@ msgstr "Voici le nombre limité d'options de participation"
 
 msgid "I'm interested, but I don't have much experience"
 msgstr "Je suis intéressé, mais je n'ai pas beaucoup d'expérience"
-
-msgid "If checked: shows the description for each event"
-msgstr "Si coché : affiche la description de chaque événement"
 
 msgid "Is there anything else you would like to tell us"
 msgstr "Y a-t-il autre chose que vous aimeriez nous dire"

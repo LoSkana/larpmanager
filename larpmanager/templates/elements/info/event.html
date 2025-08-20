@@ -3,10 +3,8 @@
 window.addEventListener('DOMContentLoaded', function() {
 
     $(function() {
-
-        $('#slug').on('input', function() {
-            let sl = $(this).val();
-            $('.slug_pre').text("Preview: https://{{ assoc.slug }}.{{ assoc.main_domain }}/" + sl);
+        $('#slug').on('slug:changed', function (e, cleanedVal) {
+            $('.slug_pre').text("Preview: https://{{ assoc.slug }}.{{ assoc.main_domain }}/" + cleanedVal);
         });
     });
 });

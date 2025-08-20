@@ -311,10 +311,6 @@ def event(request, s, n):
 
     ctx["data"] = ctx["event"].show()
 
-    # ~ if 'fullscreen' in ctx['features']:
-    # ~ ctx['event'].background = ctx['event'].fullscreen
-    # ~ return render(request, 'larpmanager/general/event_full.html', ctx)
-
     return render(request, "larpmanager/event/event.html", ctx)
 
 

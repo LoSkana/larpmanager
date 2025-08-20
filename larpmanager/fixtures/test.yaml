@@ -318,8 +318,7 @@
     tagline: null
     where: null
     authors: null
-    description_short: <p>testone</p>
-    description: ''
+    description: <p>testone</p>
     genre: ''
     visible: true
     cover: ''

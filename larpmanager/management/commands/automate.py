@@ -271,7 +271,7 @@ class Command(BaseCommand):
             self.remind_reg(reg, assoc, remind_days)
 
     def remind_reg(self, reg, assoc, remind_days):
-        ev_features = get_assoc_features(reg.run.event_id)
+        ev_features = get_event_features(reg.run.event_id)
 
         get_user_membership(reg.member, assoc.id)
 

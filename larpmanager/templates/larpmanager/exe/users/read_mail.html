@@ -1,0 +1,16 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Read mail" %} -
+    {% if exe %}
+        {% trans "Organization" %}
+    {% else %}
+        {{ run }}
+    {% endif %}
+{% endblock title %}
+{% block info %}
+    {% trans "This page shows an email sent by the system" %}
+{% endblock info %}
+{% block content %}
+    {{ email.body | safe }}
+{% endblock content %}

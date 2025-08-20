@@ -287,10 +287,6 @@ class ExeConfigForm(ConfigForm):
         help_text = _("If checked: shows the website for each event")
         self.add_configs("calendar_website", ConfigType.BOOL, label, help_text)
 
-        label = _("Description")
-        help_text = _("If checked: shows the description for each event")
-        self.add_configs("calendar_description", ConfigType.BOOL, label, help_text)
-
         label = _("Where")
         help_text = _("If checked: shows the position for each event")
         self.add_configs("calendar_where", ConfigType.BOOL, label, help_text)

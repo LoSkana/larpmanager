@@ -7,14 +7,11 @@ SLUG_ASSOC = 'def'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'larpmanager',
+        'NAME': 'test_larpmanager',
         'USER': 'larpmanager',
         'PASSWORD': 'larpmanager',
         'HOST': 'localhost',
         'PORT': '5432',
-        'TEST': {
-            'NAME': 'test_larpmanager',
-        },
    }
 }
 

@@ -1505,12 +1505,6 @@ input[type="submit"], input[type="reset"], input[type="button"], button, .button
     text-align: center;
 }
 
-#fullscreen .description_short {
-    text-transform: uppercase;
-    text-align: center;
-    font-weight: bold;
-}
-
 #fullscreen .primary {
     margin-left: 2em;
     border-color: rgba(var(--ter-rgb), 0.35) !important;
