@@ -1209,6 +1209,9 @@ msgstr "Prologer"
 msgid "Questions"
 msgstr "Spørsmål"
 
+msgid "Read mail"
+msgstr "Les post"
+
 msgid "Recipient"
 msgstr "Mottaker"
 
@@ -2426,9 +2429,6 @@ msgstr "Terminrabatt"
 msgid "Handout template"
 msgstr "Mal for utdeling"
 
-msgid "Long description"
-msgstr "Lang beskrivelse"
-
 msgid "Max participants"
 msgstr "Maks antall deltakere"
 
@@ -2656,9 +2656,6 @@ msgstr "Underdanig forespørsel"
 
 msgid "Residence address"
 msgstr "Bostedsadresse"
-
-msgid "Short description"
-msgstr "Kort beskrivelse"
 
 msgid "Technical Support"
 msgstr "Teknisk støtte"
@@ -3955,9 +3952,6 @@ msgstr "Slik logger du inn igjen med kontoen"
 msgid "Total of recorded money inflows"
 msgstr "Summen av registrerte pengestrømmer"
 
-msgid "Will be shown in the event page"
-msgstr "Vil bli vist på arrangementssiden"
-
 msgid "You have completed the payment!"
 msgstr "Du har fullført innbetalingen!"
 
@@ -4809,6 +4803,9 @@ msgstr "Angi en verdi for hemmelig registreringskobling"
 msgid "This page allows you to translate the event"
 msgstr "På denne siden kan du oversette hendelsen"
 
+msgid "This page shows an email sent by the system"
+msgstr "Denne siden viser en e-post som er sendt av systemet"
+
 msgid "This page shows the characters of the event"
 msgstr "Denne siden oppsummerer karakterene i arrangementet"
 
@@ -4911,6 +4908,9 @@ msgstr "(Valgfritt) Beløpet for en frivillig donasjon"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Tilpass knappene i navigasjonsfeltet for hendelser"
+
+msgid "Event description displayed on the event page"
+msgstr "Beskrivelse av hendelsen vises på hendelsessiden"
 
 msgid "If checked: shows the position for each event"
 msgstr "Hvis avkrysset: viser posisjonen for hver hendelse"
@@ -5133,9 +5133,6 @@ msgstr "Her er det begrensede antallet påmeldingsalternativer"
 
 msgid "I'm interested, but I don't have much experience"
 msgstr "Jeg er interessert, men har ikke mye erfaring"
-
-msgid "If checked: shows the description for each event"
-msgstr "Hvis avkrysset: viser beskrivelsen for hver hendelse"
 
 msgid "Is there anything else you would like to tell us"
 msgstr "Er det noe annet du vil fortelle oss"

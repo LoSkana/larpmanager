@@ -1209,6 +1209,9 @@ msgstr "Prólogos"
 msgid "Questions"
 msgstr "Preguntas"
 
+msgid "Read mail"
+msgstr "Leer el correo"
+
 msgid "Recipient"
 msgstr "Destinatario"
 
@@ -2426,9 +2429,6 @@ msgstr "Descuento a plazo"
 msgid "Handout template"
 msgstr "Plantilla de documento"
 
-msgid "Long description"
-msgstr "Descripción larga"
-
 msgid "Max participants"
 msgstr "Número máximo de participantes"
 
@@ -2656,9 +2656,6 @@ msgstr "Petición enviada"
 
 msgid "Residence address"
 msgstr "Dirección"
-
-msgid "Short description"
-msgstr "Descripción breve"
 
 msgid "Technical Support"
 msgstr "Asistencia técnica"
@@ -3955,9 +3952,6 @@ msgstr "Para volver a conectarse con la cuenta"
 msgid "Total of recorded money inflows"
 msgstr "Total de entradas de dinero registradas"
 
-msgid "Will be shown in the event page"
-msgstr "Se mostrará en la página del evento"
-
 msgid "You have completed the payment!"
 msgstr "¡Has completado el pago!"
 
@@ -4807,6 +4801,9 @@ msgstr "Establecer un valor para el enlace secreto de registro"
 msgid "This page allows you to translate the event"
 msgstr "Esta página te permite traducir el evento"
 
+msgid "This page shows an email sent by the system"
+msgstr "Esta página muestra un correo electrónico enviado por el sistema"
+
 msgid "This page shows the characters of the event"
 msgstr "Esta página muestra los personajes del evento"
 
@@ -4908,6 +4905,9 @@ msgstr "(Optativo) Importe de una donación voluntaria"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Personalizar los botones de la barra de navegación de eventos"
+
+msgid "Event description displayed on the event page"
+msgstr "Descripción del evento que aparece en la página del evento"
 
 msgid "If checked: shows the position for each event"
 msgstr "Si está marcada: muestra la posición de cada evento"
@@ -5130,9 +5130,6 @@ msgstr "Estas son las opciones de inscripción con disponibilidad  limitada"
 
 msgid "I'm interested, but I don't have much experience"
 msgstr "Estoy interesado, pero no tengo mucha experiencia"
-
-msgid "If checked: shows the description for each event"
-msgstr "Si está marcada: muestra la descripción de cada evento"
 
 msgid "Is there anything else you would like to tell us"
 msgstr "¿Hay algo más que quieras decirnos"

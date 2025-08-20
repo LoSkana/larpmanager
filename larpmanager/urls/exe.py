@@ -89,6 +89,11 @@ urlpatterns = [
         name="exe_archive_email",
     ),
     path(
+        "manage/mail/read/<int:nm>",
+        views_em.exe_read_mail,
+        name="exe_read_mail",
+    ),
+    path(
         "manage/questions/",
         views_em.exe_questions,
         name="exe_questions",

@@ -36,6 +36,7 @@ from larpmanager.models.miscellanea import Email, HelpQuestion
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.common import _get_help_questions
 from larpmanager.utils.event import check_event_permission
+from larpmanager.utils.member import get_mail
 from larpmanager.utils.paginate import orga_paginate
 from larpmanager.utils.tasks import send_mail_exec
 
@@ -264,6 +265,14 @@ def orga_archive_email(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_archive_email")
     orga_paginate(request, ctx, Email)
     return render(request, "larpmanager/exe/users/archive_mail.html", ctx)
+
+
+# TODO
+@login_required
+def orga_read_mail(request, s, n, nm):
+    ctx = check_event_permission(request, s, n, "orga_archive_email")
+    ctx["email"] = get_mail(request, ctx, nm)
+    return render(request, "larpmanager/exe/users/read_mail.html", ctx)
 
 
 @login_required

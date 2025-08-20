@@ -2,10 +2,8 @@
 window.addEventListener('DOMContentLoaded', function() {
 
     $(function() {
-
-        $('#slug').on('input', function() {
-            let sl = $(this).val();
-            $('.slug_pre').text("Preview: https://" + sl + base_domain);
+        $('#slug').on('slug:changed', function (e, cleanedVal) {
+            $('.slug_pre').text("Preview: https://" + cleanedVal + base_domain);
         });
     });
 });

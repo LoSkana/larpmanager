@@ -134,7 +134,6 @@ def get_run(ctx, s, n):
             "event__tagline",
             "event__where",
             "event__authors",
-            "event__description_short",
             "event__description",
             "event__genre",
             "event__cover",
