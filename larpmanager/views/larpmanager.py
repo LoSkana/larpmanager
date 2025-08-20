@@ -320,9 +320,6 @@ def join(request):
     if "red" in ctx:
         return redirect(ctx["red"])
 
-    if request.assoc["id"] > 0:
-        return redirect("home")
-
     assoc = _join_form(ctx, request)
     if assoc:
         # send message
