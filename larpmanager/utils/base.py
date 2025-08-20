@@ -48,6 +48,7 @@ def def_user_ctx(request):
         res["member"] = request.user.member
         res["membership"] = get_user_membership(request.user.member, request.assoc["id"])
         get_index_assoc_permissions(res, request, request.assoc["id"], check=False)
+        res["interface_collapse_sidebar"] = request.user.member.get_config("interface_collapse_sidebar", False)
 
     res.update(cache_event_links(request))
 
@@ -66,7 +67,6 @@ def def_user_ctx(request):
     # TODO remove
     assoc = Association.objects.get(pk=request.assoc["id"])
     res["interface_old"] = assoc.get_config("interface_old", False)
-    res["interface_collapse_sidebar"] = assoc.get_config("interface_collapse_sidebar", False)
 
     return res
 

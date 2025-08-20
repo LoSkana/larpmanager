@@ -6,7 +6,7 @@ from django.db import migrations
 
 def clean(apps, schema_editor):
     EventPermission = apps.get_model("larpmanager", "EventPermission")
-    EventPermission.objects.filter(pk=78)
+    EventPermission.objects.filter(pk=78).delete()
 
 
 class Migration(migrations.Migration):
