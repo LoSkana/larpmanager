@@ -44,6 +44,8 @@ def update_assoc_permission_feature(slug):
 
 
 def get_assoc_permission_feature(slug):
+    if not slug:
+        return ("def", None, None)
     res = cache.get(assoc_permission_feature_key(slug))
     if not res:
         res = update_assoc_permission_feature(slug)

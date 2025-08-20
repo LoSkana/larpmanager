@@ -332,10 +332,15 @@ function show_sidebar_active() {
       var safeHref = linkHref.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       var regex = new RegExp('^' + safeHref + '(?:$|\\/.*)');
 
-      if (regex.test(currentUrl)) {
+      if (linkHref.endsWith('manage'))
+         var match = currentUrl.endsWith('manage');
+      else
+        var match = regex.test(currentUrl);
+
+      if (match) {
         $(this).addClass('select');
 
-        if (window.interface_expand_sidebar) {
+        if (!window.interface_collapse_sidebar) {
         var $sidebar  = $("#sidebar");
         var $selected = $(this);
         var offset = $selected.position().top + $sidebar.scrollTop()
@@ -346,7 +351,7 @@ function show_sidebar_active() {
     });
 
     // if not disable, and not mobile
-    if (!window.interface_expand_sidebar && $('.no_mobile.sidebar_button:visible').length) {
+    if (window.interface_collapse_sidebar && $('.no_mobile.sidebar_button:visible').length) {
         var $hoverable = $(".sidebar-section").filter(function () {
           return $(this).find(".sidebar-link.select").length === 0;
         });
