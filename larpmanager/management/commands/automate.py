@@ -26,7 +26,7 @@ from django.core.management.base import BaseCommand
 from django.db import connection
 
 from larpmanager.accounting.balance import check_accounting, check_run_accounting
-from larpmanager.accounting.token_credit import get_runs_paying_incomplete
+from larpmanager.accounting.token_credit import get_runs, get_runs_paying_incomplete
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.mail.accounting import notify_invoice_check
 from larpmanager.mail.base import check_holiday
@@ -266,7 +266,7 @@ class Command(BaseCommand):
 
         remind_days = int(assoc.get_config("remind_days", 5))
 
-        reg_que = get_runs_paying_incomplete().filter(alert=True, run__event__assoc=assoc)
+        reg_que = get_runs(assoc)
         for reg in reg_que.select_related("run", "ticket"):
             self.remind_reg(reg, assoc, remind_days)
 
@@ -291,7 +291,8 @@ class Command(BaseCommand):
                 elif "laog" not in ev_features and reg.member.membership.status == MembershipStatus.ACCEPTED:
                     self.check_membership_fee(reg)
 
-        self.check_payment(reg)
+        if reg.alert:
+            self.check_payment(reg)
 
     @staticmethod
     def check_membership_fee(reg):
