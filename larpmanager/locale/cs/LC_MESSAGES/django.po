@@ -2084,6 +2084,9 @@ msgstr "Jméno postavy"
 msgid "Collection for"
 msgstr "Sbírejte pro"
 
+msgid "Communications"
+msgstr "Komunikace"
+
 msgid "Customisations"
 msgstr "Přizpůsobení"
 

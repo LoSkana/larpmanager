@@ -2084,6 +2084,9 @@ msgstr "Karaktärens namn"
 msgid "Collection for"
 msgstr "Samla för"
 
+msgid "Communications"
+msgstr "Kommunikation"
+
 msgid "Customisations"
 msgstr "Anpassningar"
 

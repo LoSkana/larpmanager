@@ -2084,6 +2084,9 @@ msgstr "Naam personage"
 msgid "Collection for"
 msgstr "Verzamelen voor"
 
+msgid "Communications"
+msgstr "Communicatie"
+
 msgid "Customisations"
 msgstr "Aanpassingen"
 

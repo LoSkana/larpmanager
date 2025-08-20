@@ -2084,6 +2084,9 @@ msgstr "Nombre del personaje"
 msgid "Collection for"
 msgstr "Colecta para"
 
+msgid "Communications"
+msgstr "Comunicaciones"
+
 msgid "Customisations"
 msgstr "Personalizaciones"
 

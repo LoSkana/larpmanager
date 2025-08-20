@@ -2084,6 +2084,9 @@ msgstr "Tegnets navn"
 msgid "Collection for"
 msgstr "Samle inn for"
 
+msgid "Communications"
+msgstr "Kommunikasjon"
+
 msgid "Customisations"
 msgstr "Tilpasninger"
 

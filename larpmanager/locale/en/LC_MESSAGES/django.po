@@ -7942,6 +7942,9 @@ msgstr ""
 msgid "Read the writing elements"
 msgstr ""
 
+msgid "Communications"
+msgstr ""
+
 msgid "Fields"
 msgstr ""
 
