@@ -39,6 +39,7 @@ from larpmanager.forms.association import (
     ExeAssocTextForm,
     ExeConfigForm,
     ExeFeatureForm,
+    ExePreferencesForm,
     ExeQuickSetupForm,
 )
 from larpmanager.forms.member import (
@@ -245,3 +246,8 @@ def feature_description(request):
 @login_required
 def exe_quick(request):
     return exe_edit(request, ExeQuickSetupForm, None, "exe_quick", "manage", add_ctx={"add_another": False})
+
+
+@login_required
+def exe_preferences(request):
+    return exe_edit(request, ExePreferencesForm, request.user.member.id, None, "manage", add_ctx={"add_another": False})

@@ -26,6 +26,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features, reset_event_features
 from larpmanager.cache.role import has_event_permission
+from larpmanager.forms.association import ExePreferencesForm
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
@@ -53,7 +54,6 @@ from larpmanager.models.event import (
     Run,
 )
 from larpmanager.models.form import QuestionType, _get_writing_elements, _get_writing_mapping
-from larpmanager.models.member import Member
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.common import copy_class
 from larpmanager.views.orga.registration import _get_registration_fields
@@ -1082,21 +1082,10 @@ class OrgaQuickSetupForm(QuickSetupForm):
         self.init_fields(get_event_features(self.instance.pk))
 
 
-class OrgaPreferencesForm(ConfigForm):
-    page_title = _("Personal preferences")
-
-    page_info = _("This page allows you to set your personal preferences on the interface")
-
-    class Meta:
-        model = Member
-        fields = ()
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.prevent_canc = True
-        self.show_sections = True
-
+class OrgaPreferencesForm(ExePreferencesForm):
     def set_configs(self):
+        super().set_configs()
+
         basics = QuestionType.get_basic_types()
         event_id = self.params["event"].id
 

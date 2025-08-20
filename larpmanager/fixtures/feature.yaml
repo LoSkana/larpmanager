@@ -1306,15 +1306,3 @@
     order: 9999
     after_text: null
     after_link: null
-- model: larpmanager.feature
-  pk: 217
-  fields:
-    name: Orga Preferences
-    descr: ''
-    slug: orga_preferences
-    overall: false
-    module: 7
-    placeholder: true
-    order: 9999
-    after_text: null
-    after_link: null

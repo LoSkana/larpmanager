@@ -69,14 +69,14 @@ def verify(page, live_server):
 
 
 def sign_up_pay(page, live_server):
-    go_to(page, live_server, "/test/1/manage/registrations/tickets/")
+    go_to(page, live_server, "/test/1/manage/tickets/")
     page.get_by_role("link", name="").click()
     page.locator("#id_price").click()
     page.locator("#id_price").press("Home")
     page.locator("#id_price").fill("50.00")
     submit_confirm(page)
 
-    go_to(page, live_server, "test/1/manage/registrations/form/")
+    go_to(page, live_server, "test/1/manage/form/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("pay")

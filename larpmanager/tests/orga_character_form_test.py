@@ -50,7 +50,7 @@ def test_orga_character_form(pw_page):
     submit_confirm(page)
 
     # create character form
-    go_to(page, live_server, "/test/1/manage/characters/form/")
+    go_to(page, live_server, "/test/1/manage/writing/form/")
 
     add_field_text(page)
 

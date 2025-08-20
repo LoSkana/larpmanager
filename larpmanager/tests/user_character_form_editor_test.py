@@ -58,7 +58,7 @@ def prepare(page, live_server):
     page.locator("#id_character_form_wri_que_dependents").check()
     submit_confirm(page)
 
-    go_to(page, live_server, "/test/1/manage/characters/form")
+    go_to(page, live_server, "/test/1/manage/writing/form/")
     expect(page.locator('[id="\\31 "]')).to_contain_text("Name")
     expect(page.locator('[id="\\32 "]')).to_contain_text("Presentation")
     expect(page.locator('[id="\\33 "]')).to_contain_text("Sheet")

@@ -2084,6 +2084,9 @@ msgstr "Nom du personnage"
 msgid "Collection for"
 msgstr "Collecter pour"
 
+msgid "Communications"
+msgstr "Communications"
+
 msgid "Customisations"
 msgstr "Personnalisations"
 
@@ -2368,6 +2371,9 @@ msgstr "Priorité au casting"
 
 msgid "Character review"
 msgstr "Revue des personnages"
+
+msgid "Collapse sidebar"
+msgstr "Réduire la barre latérale"
 
 msgid "Collection links"
 msgstr "Liens de la collection"
@@ -3857,6 +3863,9 @@ msgstr "Sélectionnez la nouvelle photo à télécharger"
 msgid "Set up the taxes configuration"
 msgstr "Configuration des taxes"
 
+msgid "Set your interface preferences"
+msgstr "Définissez vos préférences en matière d'interface"
+
 msgid "The registrations to the event"
 msgstr "Inscription à l'événement"
 
@@ -4998,9 +5007,6 @@ msgstr "Les utilisateurs enregistrés bénéficient d'un accès normal"
 msgid "Remember to put recipients separated by commas"
 msgstr "N'oubliez pas de séparer les destinataires par des virgules"
 
-msgid "Set your personal preferences on the interface"
-msgstr "Définissez vos préférences personnelles sur l'interface"
-
 msgid "Something went wrong in the account activation"
 msgstr "Un problème s'est produit lors de l'activation du compte"
 
@@ -6000,6 +6006,11 @@ msgid "From this page you can send an email to any list of recipients"
 msgstr ""
 "À partir de cette page, vous pouvez envoyer un courrier électronique à "
 "n'importe quelle liste de destinataires"
+
+msgid "If checked: collpase sidebars links, and expand on mouse hover"
+msgstr ""
+"Si la case est cochée : les liens de la barre latérale sont masqués et "
+"développés au survol de la souris"
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""

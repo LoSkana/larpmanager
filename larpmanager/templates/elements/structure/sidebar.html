@@ -25,10 +25,16 @@
                            href="{% url 'manage' run.event.slug run.number %}">Dashboard</a>
                         <a href="#" class="explain-icon" tog="manage"><i class="fas fa-question-circle"></i></a>
                     </span>
+                    <span class="sidebar-link-wrap"
+                          descr="{% trans "Set your interface preferences" %}">
+                        <a class="sidebar-link"
+                           href="{% url 'orga_preferences' run.event.slug run.number %}">{% trans "Preferences" %}</a>
+                        <a href="#" class="explain-icon" tog="orga_preferences"><i class="fas fa-question-circle"></i></a>
+                    </span>
                 </p>
                 {% for mod, list in event_pms.items %}
                     {% if list %}
-                        <div class="h2-p-row">
+                        <div class="sidebar-section">
                             <h2>
                                 {% if not interface_old and mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
                                 <span class="no_mobile">{{ mod.0 }}</span>
@@ -56,10 +62,15 @@
                         <a class="sidebar-link" href="{% url 'manage' %}">Dashboard</a>
                         <a href="#" class="explain-icon" tog="manage"><i class="fas fa-question-circle"></i></a>
                     </span>
+                    <span class="sidebar-link-wrap"
+                          descr="{% trans "Set your interface preferences" %}">
+                        <a class="sidebar-link" href="{% url 'exe_preferences' %}">{% trans "Preferences" %}</a>
+                        <a href="#" class="explain-icon" tog="exe_preferences"><i class="fas fa-question-circle"></i></a>
+                    </span>
                 </p>
                 {% for mod, list in assoc_pms.items %}
                     {% if list %}
-                        <div class="h2-p-row">
+                        <div class="sidebar-section">
                             <h2>
                                 {% if not interface_old and mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
                                 <span class="no_mobile">{{ mod.0 }}</span>
@@ -80,17 +91,6 @@
                     {% endif %}
                 {% endfor %}
             {% endif %}
-            <h2 class="no_mobile">{{ assoc.platform }}</h2>
-            <p>
-                {% if assoc.skin_id == 1 %}
-                    <span class="sidebar-link-wrap">
-                        <a href="https://discord.gg/C4KuyQbuft" class="sidebar-link">Discord</a>
-                    </span>
-                {% endif %}
-                <span class="sidebar-link-wrap">
-                    <a href="{% url 'tutorials' %}" class="sidebar-link">Tutorials</a>
-                </span>
-            </p>
             {% if role_names %}
                 <hr />
                 <div class="roles">
@@ -102,6 +102,18 @@
                     </i>
                 </div>
             {% endif %}
+            {% if assoc.skin_id == 1 %}
+                <div>
+                    <p class="centerized">
+                        <a href="https://discord.gg/C4KuyQbuft" class="sidebar-link">Discord</a>
+                    </p>
+                </div>
+            {% endif %}
+            <div>
+                <p class="centerized">
+                    <a href="{% url 'tutorials' %}" class="sidebar-link">Tutorials</a>
+                </p>
+            </div>
         </div>
     </div>
     {% if interface_old %}

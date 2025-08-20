@@ -37,6 +37,7 @@ from larpmanager.forms.utils import (
 )
 from larpmanager.models.access import AssocPermission, AssocRole
 from larpmanager.models.association import Association, AssocText, AssocTextType
+from larpmanager.models.member import Member
 
 
 class ExeAssociationForm(MyForm):
@@ -645,3 +646,24 @@ class ExeQuickSetupForm(QuickSetupForm):
             )
 
         self.init_fields(get_assoc_features(self.instance.pk))
+
+
+class ExePreferencesForm(ConfigForm):
+    page_title = _("Personal preferences")
+
+    page_info = _("This page allows you to set your personal preferences on the interface")
+
+    class Meta:
+        model = Member
+        fields = ()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.prevent_canc = True
+        self.show_sections = True
+
+    def set_configs(self):
+        self.set_section("interface", _("Interface"))
+        label = _("Collapse sidebar")
+        help_text = _("If checked: collpase sidebars links, and expand on mouse hover")
+        self.add_configs("interface_collapse_sidebar", ConfigType.BOOL, label, help_text)

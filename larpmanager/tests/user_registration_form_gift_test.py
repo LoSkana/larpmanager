@@ -72,7 +72,7 @@ def prepare(page, live_server):
     # Activate gift
     go_to(page, live_server, "/test/1/manage/features/175/on")
 
-    go_to(page, live_server, "/test/1/manage/registrations/form/")
+    go_to(page, live_server, "/test/1/manage/form/")
 
 
 def field_choice(page, live_server):
@@ -195,7 +195,7 @@ def field_text(page, live_server):
 
 def gift(page, live_server):
     # make ticket giftable
-    go_to(page, live_server, "/test/1/manage/registrations/tickets/")
+    go_to(page, live_server, "/test/1/manage/tickets/")
     page.get_by_role("link", name="").click()
     page.get_by_text("Indicates whether the ticket").click()
     page.locator("#id_giftable").check()

@@ -443,4 +443,9 @@ urlpatterns = [
         views_mg.exe_close_suggestion,
         name="exe_close_suggestion",
     ),
+    path(
+        "manage/preferences/",
+        views_eas.exe_preferences,
+        name="exe_preferences",
+    ),
 ]
