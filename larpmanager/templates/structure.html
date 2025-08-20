@@ -130,7 +130,8 @@
         <script>
     var set_language_url = "{% url 'set_language' %}";
     var set_internaz = {{ set_internaz | default:"null" }};
-    window.interface_old = {{ interface_old|yesno:"true,false" }};
+    window.interface_old = {{ interface_old | yesno:"true,false" }};
+    window.interface_collapse_sidebar = {{ interface_collapse_sidebar | yesno:"true,false" }};
     window.enviro = "{{ request.enviro }}";
         </script>
         <!-- Scripts -->

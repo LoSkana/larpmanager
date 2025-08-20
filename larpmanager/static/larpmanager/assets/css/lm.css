@@ -1361,10 +1361,6 @@ th select {
     display: none;
 }
 
-#sidebar .roles {
-    text-align: center;
-}
-
 @media(max-width: 768px) {
     #mobile-bar {
         display: block;
@@ -1415,9 +1411,11 @@ th select {
 	    display: inline;
 	}
 
-	#sidebar .h2-p-row {
+	#sidebar .sidebar-section {
 	    margin: 0.5em;
 	}
+
+	#sidebar .sidebar-section > p { margin: 0; }
 
 	#sidebar .sidebar-link-wrap {
 	    display: inline-flex;

@@ -2372,6 +2372,9 @@ msgstr "Priorytet odlewania"
 msgid "Character review"
 msgstr "Przegląd postaci"
 
+msgid "Collapse sidebar"
+msgstr "Zwiń pasek boczny"
+
 msgid "Collection links"
 msgstr "Linki do kolekcji"
 
@@ -3854,6 +3857,9 @@ msgstr "Wybierz nowe zdjęcie do przesłania"
 msgid "Set up the taxes configuration"
 msgstr "Konfiguracja podatków"
 
+msgid "Set your interface preferences"
+msgstr "Ustaw preferencje interfejsu"
+
 msgid "The registrations to the event"
 msgstr "Rejestracje na wydarzenie"
 
@@ -4985,9 +4991,6 @@ msgstr "Zarejestrowani użytkownicy otrzymają normalny dostęp"
 msgid "Remember to put recipients separated by commas"
 msgstr "Pamiętaj, aby oddzielić odbiorców przecinkami"
 
-msgid "Set your personal preferences on the interface"
-msgstr "Ustaw osobiste preferencje w interfejsie"
-
 msgid "Something went wrong in the account activation"
 msgstr "Coś poszło nie tak podczas aktywacji konta"
 
@@ -5913,6 +5916,10 @@ msgstr "Opis tej metody płatności wyświetlany użytkownikowi"
 msgid "From this page you can send an email to any list of recipients"
 msgstr ""
 "Z tej strony można wysłać wiadomość e-mail do dowolnej listy odbiorców"
+
+msgid "If checked: collpase sidebars links, and expand on mouse hover"
+msgstr ""
+"Jeśli zaznaczone: zwija linki pasków bocznych i rozwija po najechaniu myszą"
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""

@@ -736,17 +736,6 @@
     feature: 216
     module: 7
 - model: larpmanager.eventpermission
-  pk: 78
-  fields:
-    name: Preferences
-    descr: Set your personal preferences on the interface
-    slug: orga_preferences
-    number: 999
-    config: null
-    hidden: false
-    feature: 217
-    module: 7
-- model: larpmanager.eventpermission
   pk: 79
   fields:
     name: Reading

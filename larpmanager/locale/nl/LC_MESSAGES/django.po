@@ -2372,6 +2372,9 @@ msgstr "Voorrang bij het gieten"
 msgid "Character review"
 msgstr "Karakter recensie"
 
+msgid "Collapse sidebar"
+msgstr "Zijbalk samenvouwen"
+
 msgid "Collection links"
 msgstr "Collectie koppelingen"
 
@@ -3854,6 +3857,9 @@ msgstr "Selecteer de nieuwe foto die u wilt uploaden"
 msgid "Set up the taxes configuration"
 msgstr "De belastingconfiguratie instellen"
 
+msgid "Set your interface preferences"
+msgstr "Stel je interfacevoorkeuren in"
+
 msgid "The registrations to the event"
 msgstr "Registratie voor het evenement"
 
@@ -4990,9 +4996,6 @@ msgstr "Geregistreerde gebruikers krijgen normale toegang"
 msgid "Remember to put recipients separated by commas"
 msgstr "Vergeet niet ontvangers gescheiden door komma's te plaatsen"
 
-msgid "Set your personal preferences on the interface"
-msgstr "Stel je persoonlijke voorkeuren in op de interface"
-
 msgid "Something went wrong in the account activation"
 msgstr "Er is iets misgegaan bij het activeren van de account"
 
@@ -5941,6 +5944,10 @@ msgstr ""
 msgid "From this page you can send an email to any list of recipients"
 msgstr ""
 "Vanaf deze pagina kun je een e-mail sturen naar een lijst met ontvangers"
+
+msgid "If checked: collpase sidebars links, and expand on mouse hover"
+msgstr ""
+"Indien aangevinkt: zijkolom links inklappen en uitvouwen bij muisaanwijzer"
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""

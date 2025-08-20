@@ -2372,6 +2372,9 @@ msgstr "Priorität des Gießens"
 msgid "Character review"
 msgstr "Überprüfung des Charakters"
 
+msgid "Collapse sidebar"
+msgstr "Seitenleiste einklappen"
+
 msgid "Collection links"
 msgstr "Links zur Sammlung"
 
@@ -3854,6 +3857,9 @@ msgstr "Wählen Sie das neue Foto zum Hochladen aus"
 msgid "Set up the taxes configuration"
 msgstr "Einrichten der Steuerkonfiguration"
 
+msgid "Set your interface preferences"
+msgstr "Legen Sie Ihre Schnittstelleneinstellungen fest"
+
 msgid "The registrations to the event"
 msgstr "Anmeldung zur Veranstaltung"
 
@@ -5002,10 +5008,6 @@ msgstr "Registrierte Benutzer erhalten normalen Zugang"
 msgid "Remember to put recipients separated by commas"
 msgstr "Denken Sie daran, die Empfänger durch Kommata zu trennen"
 
-msgid "Set your personal preferences on the interface"
-msgstr ""
-"Legen Sie Ihre persönlichen Einstellungen auf der Benutzeroberfläche fest"
-
 msgid "Something went wrong in the account activation"
 msgstr "Bei der Kontoaktivierung ist etwas schief gelaufen"
 
@@ -6046,6 +6048,11 @@ msgid "From this page you can send an email to any list of recipients"
 msgstr ""
 "Von dieser Seite aus können Sie eine E-Mail an eine beliebige Liste von "
 "Empfängern senden"
+
+msgid "If checked: collpase sidebars links, and expand on mouse hover"
+msgstr ""
+"Wenn angekreuzt: Links in der Seitenleiste kollabieren und bei "
+"Mausverschiebung ausklappen"
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""

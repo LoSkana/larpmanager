@@ -34,7 +34,7 @@ def test_orga_registration_form(pw_page):
     login_orga(page, live_server)
 
     # create form
-    go_to(page, live_server, "/test/1/manage/registrations/form/")
+    go_to(page, live_server, "/test/1/manage/form/")
 
     add_text(page)
 
@@ -229,7 +229,7 @@ def signup_first(live_server, page):
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
     # add mandatory
-    go_to(page, live_server, "/test/1/manage/registrations/form/")
+    go_to(page, live_server, "/test/1/manage/form/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
     page.locator("#id_typ").press("Tab")

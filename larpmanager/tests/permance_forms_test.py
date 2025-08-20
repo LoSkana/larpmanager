@@ -131,13 +131,11 @@ def check_orga_roles(page):
     page.locator("#id_name").press("Tab")
     page.get_by_role("searchbox").fill("org")
     page.get_by_role("option", name="Admin Test - orga@test.it").click()
-    checked = ["Event", "Configuration", "Preferences", "Texts", "Navigation"]
+    checked = ["Event", "Configuration", "Texts", "Navigation"]
     for s in checked:
         check_feature(page, s)
     submit_confirm(page)
-    expect(page.locator('[id="\\32 "]')).to_contain_text(
-        "Event (Event, Configuration, Preferences), Appearance (Texts, Navigation)"
-    )
+    expect(page.locator('[id="\\32 "]')).to_contain_text("Event (Event, Configuration), Appearance (Texts, Navigation)")
     page.get_by_role("row", name=" testona Admin Test Event (").get_by_role("link").click()
     _check_checkboxes(checked, page)
 

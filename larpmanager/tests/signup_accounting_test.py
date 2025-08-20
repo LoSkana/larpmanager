@@ -255,7 +255,7 @@ def setup_payment(live_server, page):
     submit_confirm(page)
 
     # set ticket price
-    go_to(page, live_server, "/test/1/manage/registrations/tickets")
+    go_to(page, live_server, "/test/1/manage/tickets")
     page.locator("a:has(i.fas.fa-edit)").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100.00")
