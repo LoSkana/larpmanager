@@ -2105,9 +2105,6 @@ msgstr "Functies van het evenement"
 msgid "Executive Vote"
 msgstr "Stemming management"
 
-msgid "Expand sidebar"
-msgstr "Zijbalk uitvouwen"
-
 msgid "Form questions"
 msgstr "Formulier vragen"
 
@@ -2371,6 +2368,9 @@ msgstr "Voorrang bij het gieten"
 
 msgid "Character review"
 msgstr "Karakter recensie"
+
+msgid "Collapse sidebar"
+msgstr "Zijbalk samenvouwen"
 
 msgid "Collection links"
 msgstr "Collectie koppelingen"
@@ -3857,6 +3857,9 @@ msgstr "Selecteer de nieuwe foto die u wilt uploaden"
 msgid "Set up the taxes configuration"
 msgstr "De belastingconfiguratie instellen"
 
+msgid "Set your interface preferences"
+msgstr "Stel je interfacevoorkeuren in"
+
 msgid "The registrations to the event"
 msgstr "Registratie voor het evenement"
 
@@ -4903,9 +4906,6 @@ msgstr "(Optioneel) Het bedrag van een vrijwillige donatie"
 msgid "Customize buttons in the event navigation bar"
 msgstr "Knoppen in de evenementnavigatiebalk aanpassen"
 
-msgid "If checked: automatically expand all sidebars"
-msgstr "Indien aangevinkt: alle zijbalken automatisch uitvouwen"
-
 msgid "If checked: shows the position for each event"
 msgstr "Indien aangevinkt: toont de positie voor elke gebeurtenis"
 
@@ -4995,9 +4995,6 @@ msgstr "Geregistreerde gebruikers krijgen normale toegang"
 
 msgid "Remember to put recipients separated by commas"
 msgstr "Vergeet niet ontvangers gescheiden door komma's te plaatsen"
-
-msgid "Set your personal preferences on the interface"
-msgstr "Stel je persoonlijke voorkeuren in op de interface"
 
 msgid "Something went wrong in the account activation"
 msgstr "Er is iets misgegaan bij het activeren van de account"
@@ -5950,6 +5947,10 @@ msgstr ""
 msgid "From this page you can send an email to any list of recipients"
 msgstr ""
 "Vanaf deze pagina kun je een e-mail sturen naar een lijst met ontvangers"
+
+msgid "If checked: collpase sidebars links, and expand on mouse hover"
+msgstr ""
+"Indien aangevinkt: zijkolom links inklappen en uitvouwen bij muisaanwijzer"
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""

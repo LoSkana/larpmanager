@@ -2105,9 +2105,6 @@ msgstr "Funkce události"
 msgid "Executive Vote"
 msgstr "Hlasování vedení"
 
-msgid "Expand sidebar"
-msgstr "Rozbalit postranní panel"
-
 msgid "Form questions"
 msgstr "Formulářové otázky"
 
@@ -2371,6 +2368,9 @@ msgstr "Priorita obsazování"
 
 msgid "Character review"
 msgstr "Recenze postavy"
+
+msgid "Collapse sidebar"
+msgstr "Sbalit postranní panel"
 
 msgid "Collection links"
 msgstr "Odkazy na sbírku"
@@ -3857,6 +3857,9 @@ msgstr "Vyberte novou fotografii, kterou chcete nahrát"
 msgid "Set up the taxes configuration"
 msgstr "Nastavení konfigurace daní"
 
+msgid "Set your interface preferences"
+msgstr "Nastavení předvoleb rozhraní"
+
 msgid "The registrations to the event"
 msgstr "Registrace na akci"
 
@@ -4900,9 +4903,6 @@ msgstr "(Nepovinné) Výše dobrovolného příspěvku"
 msgid "Customize buttons in the event navigation bar"
 msgstr "Přizpůsobení tlačítek na navigačním panelu události"
 
-msgid "If checked: automatically expand all sidebars"
-msgstr "Pokud je zaškrtnuto: automaticky rozbalit všechny postranní panely"
-
 msgid "If checked: shows the position for each event"
 msgstr "Pokud je zaškrtnuto: zobrazuje pozici pro každou událost"
 
@@ -4990,9 +4990,6 @@ msgstr "Registrovaní uživatelé budou mít běžný přístup"
 
 msgid "Remember to put recipients separated by commas"
 msgstr "Nezapomeňte příjemce oddělit čárkami"
-
-msgid "Set your personal preferences on the interface"
-msgstr "Nastavení osobních preferencí v rozhraní"
 
 msgid "Something went wrong in the account activation"
 msgstr "Něco se pokazilo při aktivaci účtu"
@@ -5907,6 +5904,11 @@ msgstr "Popis tohoto způsobu platby, který se zobrazí uživateli"
 
 msgid "From this page you can send an email to any list of recipients"
 msgstr "Na této stránce můžete odeslat e-mail na libovolný seznam příjemců"
+
+msgid "If checked: collpase sidebars links, and expand on mouse hover"
+msgstr ""
+"Pokud je zaškrtnuto: rozbalí odkazy na postranních panelech a rozbalí je při"
+" najetí myší"
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Pokud narazíte na nějaké problémy, kontaktujte nás a my vám pomůžeme"

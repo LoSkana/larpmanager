@@ -2105,9 +2105,6 @@ msgstr "Funzionalità dell'evento"
 msgid "Executive Vote"
 msgstr "Votazione Direttivo"
 
-msgid "Expand sidebar"
-msgstr "Espandi la barra laterale"
-
 msgid "Form questions"
 msgstr "Domande sul modulo"
 
@@ -2371,6 +2368,9 @@ msgstr "Priorità casting"
 
 msgid "Character review"
 msgstr "Personaggio revisione"
+
+msgid "Collapse sidebar"
+msgstr "Comprimi barra laterale"
 
 msgid "Collection links"
 msgstr "Link di riscossione"
@@ -3857,6 +3857,9 @@ msgstr "Seleziona la nuova foto da caricare"
 msgid "Set up the taxes configuration"
 msgstr "Configura le imposte"
 
+msgid "Set your interface preferences"
+msgstr "Imposta le tue preferenze sull'interfaccia"
+
 msgid "The registrations to the event"
 msgstr "Le iscrizioni all'evento"
 
@@ -4901,9 +4904,6 @@ msgid "Customize buttons in the event navigation bar"
 msgstr ""
 "Personalizzazione dei pulsanti nella barra di navigazione degli eventi"
 
-msgid "If checked: automatically expand all sidebars"
-msgstr "Se selezionato: espande automaticamente tutte le barre laterali"
-
 msgid "If checked: shows the position for each event"
 msgstr "Se checkato: mostra la posizione per ogni evento"
 
@@ -4991,9 +4991,6 @@ msgstr "Agli utenti registrati sarà concesso il normale accesso"
 
 msgid "Remember to put recipients separated by commas"
 msgstr "Ricorda di mettere i destinatari separati da virgola"
-
-msgid "Set your personal preferences on the interface"
-msgstr "Imposta le tue preferenze personali sull'interfaccia"
 
 msgid "Something went wrong in the account activation"
 msgstr "Qualcosa è andato storto nell'attivazione dell'account"
@@ -5956,6 +5953,11 @@ msgid "From this page you can send an email to any list of recipients"
 msgstr ""
 "Da questa pagina è possibile inviare un'e-mail a qualsiasi elenco di "
 "destinatari"
+
+msgid "If checked: collpase sidebars links, and expand on mouse hover"
+msgstr ""
+"Se selezionato: comprimi i link delle barre laterali ed espandi al passaggio"
+" del mouse"
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "In caso di problemi, contattaci e ti assisteremo"

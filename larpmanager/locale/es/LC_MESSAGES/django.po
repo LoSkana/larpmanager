@@ -2105,9 +2105,6 @@ msgstr "Características del evento"
 msgid "Executive Vote"
 msgstr "Voto ejecutivo"
 
-msgid "Expand sidebar"
-msgstr "Ampliar la barra lateral"
-
 msgid "Form questions"
 msgstr "Preguntas de formulario"
 
@@ -2371,6 +2368,9 @@ msgstr "Prioridad de asignación"
 
 msgid "Character review"
 msgstr "Revisión de personajes"
+
+msgid "Collapse sidebar"
+msgstr "Contraer la barra lateral"
 
 msgid "Collection links"
 msgstr "Enlaces de la colección"
@@ -3857,6 +3857,9 @@ msgstr "Selecciona la nueva foto a subir"
 msgid "Set up the taxes configuration"
 msgstr "Establecer la configuración de impuestos"
 
+msgid "Set your interface preferences"
+msgstr "Configura tus preferencias de interfaz"
+
 msgid "The registrations to the event"
 msgstr "Las inscripciones al evento"
 
@@ -4900,9 +4903,6 @@ msgstr "(Optativo) Importe de una donación voluntaria"
 msgid "Customize buttons in the event navigation bar"
 msgstr "Personalizar los botones de la barra de navegación de eventos"
 
-msgid "If checked: automatically expand all sidebars"
-msgstr "Si está marcada: expandir automáticamente todas las barras laterales"
-
 msgid "If checked: shows the position for each event"
 msgstr "Si está marcada: muestra la posición de cada evento"
 
@@ -4990,9 +4990,6 @@ msgstr "Los usuarios registrados tendrán acceso normal"
 
 msgid "Remember to put recipients separated by commas"
 msgstr "Recuerda poner los destinatarios separados por comas"
-
-msgid "Set your personal preferences on the interface"
-msgstr "Configura tus preferencias personales en la interfaz"
 
 msgid "Something went wrong in the account activation"
 msgstr "Algo ha ido mal en la activación de la cuenta"
@@ -5945,6 +5942,11 @@ msgid "From this page you can send an email to any list of recipients"
 msgstr ""
 "Desde esta página puedes enviar un correo electrónico a cualquier lista de "
 "destinatarios"
+
+msgid "If checked: collpase sidebars links, and expand on mouse hover"
+msgstr ""
+"Si está marcada esta opción, los enlaces de las barras laterales se colapsan"
+" y se expanden al pasar el ratón por encima"
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""

@@ -2105,9 +2105,6 @@ msgstr "Funktioner för evenemang"
 msgid "Executive Vote"
 msgstr "Ledningens omröstning"
 
-msgid "Expand sidebar"
-msgstr "Expandera sidofältet"
-
 msgid "Form questions"
 msgstr "Formulärfrågor"
 
@@ -2371,6 +2368,9 @@ msgstr "Prioritet för gjutning"
 
 msgid "Character review"
 msgstr "Karaktärsbedömning"
+
+msgid "Collapse sidebar"
+msgstr "Dölj sidofältet"
 
 msgid "Collection links"
 msgstr "Länkar till samlingar"
@@ -3857,6 +3857,9 @@ msgstr "Välj det nya foto som ska laddas upp"
 msgid "Set up the taxes configuration"
 msgstr "Ställ in skattekonfigurationen"
 
+msgid "Set your interface preferences"
+msgstr "Ställ in dina gränssnittsinställningar"
+
 msgid "The registrations to the event"
 msgstr "Anmälan till evenemanget"
 
@@ -4902,9 +4905,6 @@ msgstr "(Frivillig uppgift) Beloppet för en frivillig donation"
 msgid "Customize buttons in the event navigation bar"
 msgstr "Anpassa knapparna i navigeringsfältet för evenemang"
 
-msgid "If checked: automatically expand all sidebars"
-msgstr "Om markerat: Expandera automatiskt alla sidofält"
-
 msgid "If checked: shows the position for each event"
 msgstr "Om markerat: visar positionen för varje evenemang"
 
@@ -4992,9 +4992,6 @@ msgstr "Registrerade användare får normal åtkomst"
 
 msgid "Remember to put recipients separated by commas"
 msgstr "Kom ihåg att ange mottagare separerade med kommatecken"
-
-msgid "Set your personal preferences on the interface"
-msgstr "Ställ in dina personliga preferenser i gränssnittet"
 
 msgid "Something went wrong in the account activation"
 msgstr "Något gick fel vid aktiveringen av kontot"
@@ -5925,6 +5922,10 @@ msgid "From this page you can send an email to any list of recipients"
 msgstr ""
 "Från den här sidan kan du skicka ett e-postmeddelande till en valfri lista "
 "med mottagare"
+
+msgid "If checked: collpase sidebars links, and expand on mouse hover"
+msgstr ""
+"Om markerad: kollapsar sidofältets länkar och expanderar vid muspekning"
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Om du stöter på några problem, kontakta oss så hjälper vi dig"

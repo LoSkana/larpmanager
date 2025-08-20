@@ -2105,9 +2105,6 @@ msgstr "Arrangementets funksjoner"
 msgid "Executive Vote"
 msgstr "Avstemning i ledelsen"
 
-msgid "Expand sidebar"
-msgstr "Utvid sidepanelet"
-
 msgid "Form questions"
 msgstr "Skjema for spørsmål"
 
@@ -2371,6 +2368,9 @@ msgstr "Prioritet ved støping"
 
 msgid "Character review"
 msgstr "Karaktergjennomgang"
+
+msgid "Collapse sidebar"
+msgstr "Skjul sidepanelet"
 
 msgid "Collection links"
 msgstr "Lenker til samlingen"
@@ -3857,6 +3857,9 @@ msgstr "Velg det nye bildet som skal lastes opp"
 msgid "Set up the taxes configuration"
 msgstr "Sett opp skattekonfigurasjonen"
 
+msgid "Set your interface preferences"
+msgstr "Angi grensesnittinnstillingene dine"
+
 msgid "The registrations to the event"
 msgstr "Påmelding til arrangementet"
 
@@ -4903,9 +4906,6 @@ msgstr "(Valgfritt) Beløpet for en frivillig donasjon"
 msgid "Customize buttons in the event navigation bar"
 msgstr "Tilpass knappene i navigasjonsfeltet for hendelser"
 
-msgid "If checked: automatically expand all sidebars"
-msgstr "Hvis avkrysset: Utvid automatisk alle sidefelt"
-
 msgid "If checked: shows the position for each event"
 msgstr "Hvis avkrysset: viser posisjonen for hver hendelse"
 
@@ -4993,9 +4993,6 @@ msgstr "Registrerte brukere vil få normal tilgang"
 
 msgid "Remember to put recipients separated by commas"
 msgstr "Husk å sette mottakere atskilt med komma"
-
-msgid "Set your personal preferences on the interface"
-msgstr "Angi dine personlige preferanser i grensesnittet"
 
 msgid "Something went wrong in the account activation"
 msgstr "Noe gikk galt i kontoaktiveringen"
@@ -5923,6 +5920,9 @@ msgid "From this page you can send an email to any list of recipients"
 msgstr ""
 "Fra denne siden kan du sende en e-post til en hvilken som helst liste over "
 "mottakere"
+
+msgid "If checked: collpase sidebars links, and expand on mouse hover"
+msgstr "Hvis avkrysset: Skjul lenker i sidefelt, og utvid ved musepekeren"
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Hvis du støter på problemer, kan du kontakte oss, så hjelper vi deg"

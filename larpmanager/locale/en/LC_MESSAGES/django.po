@@ -270,12 +270,6 @@ msgstr ""
 msgid "If checked: uses old interface"
 msgstr ""
 
-msgid "Expand sidebar"
-msgstr ""
-
-msgid "If checked: automatically expand all sidebars"
-msgstr ""
-
 msgid "Calendar"
 msgstr ""
 
@@ -692,6 +686,18 @@ msgstr ""
 msgid ""
 "Do you want to manage campaigns, a series of events that share the same "
 "characters"
+msgstr ""
+
+msgid "Personal preferences"
+msgstr ""
+
+msgid "This page allows you to set your personal preferences on the interface"
+msgstr ""
+
+msgid "Collapse sidebar"
+msgstr ""
+
+msgid "If checked: collpase sidebars links, and expand on mouse hover"
 msgstr ""
 
 msgid "already used"
@@ -1487,12 +1493,6 @@ msgid "Do you want to assign characters using a casting algorithm"
 msgstr ""
 
 msgid "Do you want to allow participants to create their own characters"
-msgstr ""
-
-msgid "Personal preferences"
-msgstr ""
-
-msgid "This page allows you to set your personal preferences on the interface"
 msgstr ""
 
 msgid ""
@@ -4161,6 +4161,12 @@ msgstr ""
 msgid "Access the event dashboard"
 msgstr ""
 
+msgid "Set your interface preferences"
+msgstr ""
+
+msgid "Preferences"
+msgstr ""
+
 msgid "Access the organization dashboard"
 msgstr ""
 
@@ -4282,9 +4288,6 @@ msgid "characters"
 msgstr ""
 
 msgid "Historical"
-msgstr ""
-
-msgid "Preferences"
 msgstr ""
 
 msgid "Go to the preferences for"
@@ -7932,9 +7935,6 @@ msgid "Manage questions and options for characters and writing elements"
 msgstr ""
 
 msgid "Display sent e-mails"
-msgstr ""
-
-msgid "Set your personal preferences on the interface"
 msgstr ""
 
 msgid "Read the writing elements"
