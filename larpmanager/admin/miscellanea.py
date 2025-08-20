@@ -31,8 +31,8 @@ from larpmanager.models.miscellanea import (
     Contact,
     Email,
     HelpQuestion,
-    InventoryBox,
-    InventoryBoxHistory,
+    InventoryContainer,
+    InventoryItem,
     PlayerRelationship,
     ShuttleService,
     Util,
@@ -133,17 +133,18 @@ class HelpQuestionAdmin(DefModelAdmin):
     autocomplete_fields = ["member", "run", "assoc"]
 
 
-@admin.register(InventoryBox)
-class InventoryBoxAdmin(DefModelAdmin):
-    list_display = ("cod", "name", "rack", "shelf", "description")
+@admin.register(InventoryContainer)
+class InventoryContainerAdmin(DefModelAdmin):
+    list_display = ("name", "position")
     autocomplete_fields = ["assoc"]
     search_fields = ["name"]
 
 
-@admin.register(InventoryBoxHistory)
-class InventoryBoxHistoryAdmin(DefModelAdmin):
-    list_display = ("box", "cod", "name", "rack", "shelf", "description")
-    autocomplete_fields = ["box", "member"]
+@admin.register(InventoryItem)
+class InventoryItemAdmin(DefModelAdmin):
+    list_display = ("name", "quantity", "container", "description")
+    autocomplete_fields = ["assoc", "container"]
+    search_fields = ["name"]
 
 
 @admin.register(ShuttleService)

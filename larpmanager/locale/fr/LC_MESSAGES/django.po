@@ -224,6 +224,9 @@ msgstr "Chanson"
 msgid "Spam"
 msgstr "Spam"
 
+msgid "Tags"
+msgstr "Tags"
+
 msgid "Text"
 msgstr "Texte"
 
@@ -262,9 +265,6 @@ msgstr "jours"
 
 msgid "gift"
 msgstr "cadeau"
-
-msgid "past"
-msgstr "passé"
 
 msgid "Album"
 msgstr "Albums"
@@ -323,6 +323,9 @@ msgstr "Image"
 
 msgid "Italy"
 msgstr "Italie"
+
+msgid "Items"
+msgstr "Articles"
 
 msgid "Login"
 msgstr "Connexion"
@@ -530,9 +533,6 @@ msgstr "Nature"
 
 msgid "Number"
 msgstr "Nombre"
-
-msgid "Object"
-msgstr "Objet"
 
 msgid "Patron"
 msgstr "Patron"
@@ -780,9 +780,6 @@ msgstr "Section"
 msgid "Session"
 msgstr "Session"
 
-msgid "Setting"
-msgstr "Paramètres"
-
 msgid "Sharing"
 msgstr "Partage"
 
@@ -996,6 +993,9 @@ msgstr "Personnel"
 msgid "Portrait"
 msgstr "Portrait photographique"
 
+msgid "Position"
+msgstr "Position"
+
 msgid "Priority"
 msgstr "Priorités"
 
@@ -1019,6 +1019,9 @@ msgstr "Proposé"
 
 msgid "Province"
 msgstr "Province"
+
+msgid "Quantity"
+msgstr "Quantité"
 
 msgid "Question"
 msgstr "Question"
@@ -1131,11 +1134,11 @@ msgstr "Caractère"
 msgid "Concluded"
 msgstr "Conclusion"
 
+msgid "Container"
+msgstr "Conteneur"
+
 msgid "Copy done"
 msgstr "Copie exécutée"
-
-msgid "Custodies"
-msgstr "Cas"
 
 msgid "Customize"
 msgstr "Personnaliser"
@@ -1328,6 +1331,9 @@ msgstr "Collecter"
 
 msgid "Contact us"
 msgstr "Contactez nous"
+
+msgid "Containers"
+msgstr "Conteneurs"
 
 msgid "Deliveries"
 msgstr "Livraisons"
@@ -1748,6 +1754,9 @@ msgstr "Avis juridique"
 
 msgid "Legal notice"
 msgstr "Avis juridique"
+
+msgid "List of tags"
+msgstr "Liste des étiquettes"
 
 msgid "Max waitings"
 msgstr "Attentes maximales"
@@ -2290,6 +2299,9 @@ msgstr "Accès externe"
 
 msgid "Filter factions"
 msgstr "Groupes de filtres"
+
+msgid "Inventory items"
+msgstr "Éléments d'inventaire"
 
 msgid "Mail assignment"
 msgstr "Affectation du courrier"
@@ -2867,6 +2879,9 @@ msgstr "Opération terminée"
 msgid "Password of account"
 msgstr "Mot de passe du compte"
 
+msgid "Photo of the object"
+msgstr "Photo de l'objet"
+
 msgid "Preferences - Total"
 msgstr "Préférences - Total"
 
@@ -2896,6 +2911,9 @@ msgstr "Agents du Trésor"
 
 msgid "Username of account"
 msgstr "Nom d'utilisateur du compte"
+
+msgid "Where it is located"
+msgstr "Où il se trouve"
 
 msgid "Your characters are"
 msgstr "Vos personnages sont"
@@ -2953,6 +2971,9 @@ msgstr "Carte cadeau annulée !"
 
 msgid "Independent factions"
 msgstr "Les factions indépendantes"
+
+msgid "Inventory containers"
+msgstr "Conteneurs d'inventaire"
 
 msgid "Issued Reimbursement"
 msgstr "Délivré Remboursement"
@@ -3206,9 +3227,6 @@ msgstr "Frais de personnel"
 msgid "External register link"
 msgstr "Lien vers le registre externe"
 
-msgid "Filter for every field"
-msgstr "Filtrer par champ"
-
 msgid "Follow the steps below"
 msgstr "Suivez les étapes ci-dessous "
 
@@ -3220,6 +3238,9 @@ msgstr "Rejoignez la liste d'attente !"
 
 msgid "Link to participate in"
 msgstr "Liens pour participer"
+
+msgid "Manage inventory items"
+msgstr "Gérer les articles en stock"
 
 msgid "Manage refund requests"
 msgstr "Gérer les demandes de remboursement"
@@ -3410,6 +3431,9 @@ msgstr "Vérifier les doublons de speed larp"
 msgid "Check missing speed larp"
 msgstr "Check speed larp manquant"
 
+msgid "Code of the box or shelf"
+msgstr "Code de la boîte ou de l'étagère"
+
 msgid "Code two capital letters"
 msgstr "Code deux lettres majuscules"
 
@@ -3588,9 +3612,6 @@ msgstr "Offrez une carte à votre ami(e)"
 msgid "Hide unassigned characters"
 msgstr "Masquer les caractères non attribués"
 
-msgid "Manage inventory and items"
-msgstr "Gérer les stocks et les articles"
-
 msgid "Manage the event prologues"
 msgstr "Gérer les prologues des événements"
 
@@ -3654,6 +3675,9 @@ msgstr "Indiquez vos préférences ici"
 
 msgid "Loading performed, see logs"
 msgstr "Chargement effectué, voir les journaux"
+
+msgid "Manage inventory containers"
+msgstr "Gérer les conteneurs d'inventaire"
 
 msgid "Manage quiz-style workshops"
 msgstr "Gérer des ateliers sous forme de quiz"
@@ -3724,9 +3748,6 @@ msgstr "Lancer une visite guidée de l'interface"
 
 msgid "Link to close the collection"
 msgstr "Lien pour fermer la collection"
-
-msgid "List of content-related tags"
-msgstr "Liste des balises liées au contenu"
 
 msgid "Manage the event speed-larps"
 msgstr "Gérer les ralentissements de l'événement"
@@ -3914,9 +3935,6 @@ msgstr "Nom du champ de don gratuit"
 
 msgid "Name to be displayed for tokens"
 msgstr "Nom à afficher pour les jetons"
-
-msgid "Now you can add inventory items"
-msgstr "Vous pouvez maintenant ajouter des articles d'inventaire"
 
 #, python-format
 msgid "Password reset of user %(user)s"
@@ -4241,6 +4259,9 @@ msgstr "Examiner les données sensibles des participants"
 msgid "Set up the membership configuration"
 msgstr "Configuration de l'adhésion"
 
+msgid "This page shows the inventory items"
+msgstr "Cette page présente les éléments de l'inventaire"
+
 msgid "You can't send messages to yourself"
 msgstr "Vous ne pouvez pas vous envoyer de messages à vous-même"
 
@@ -4429,9 +4450,6 @@ msgstr ""
 msgid "Attention, the tax code does not match"
 msgstr "Attention, le code fiscal ne correspond pas"
 
-msgid "Briefly describe what the box contains"
-msgstr "Décrivez brièvement le contenu de la boîte"
-
 msgid "Charge transaction fees to participant"
 msgstr "Facturer des frais de transaction au participant"
 
@@ -4534,9 +4552,6 @@ msgstr "Le nombre de versements à effectuer"
 msgid "The question status, allowed values are"
 msgstr "L'état de la question, les valeurs autorisées sont"
 
-msgid "This page shows inventory custody items"
-msgstr "Cette page présente les articles de garde de l'inventaire"
-
 msgid "This page summarises the assignments of"
 msgstr "Cette page résume les missions de"
 
@@ -4587,6 +4602,9 @@ msgstr "Paiement en cours d'examen par les services de la Commission"
 
 msgid "The collection was delivered to the user"
 msgstr "La collection a été livrée à l'utilisateur"
+
+msgid "This page shows the inventory containers"
+msgstr "Cette page présente les conteneurs d'inventaire"
 
 msgid "This page shows the quests for the event"
 msgstr "Cette page présente les quêtes de l'événement"
@@ -4733,12 +4751,6 @@ msgstr "La somme vous a été attribuée sous forme de %(credits)s"
 
 msgid "This page performs checks on members' data"
 msgstr "Cette page effectue des contrôles sur les données des membres"
-
-msgid "This page shows for an element its history"
-msgstr "Cette page présente l'historique d'un élément"
-
-msgid "This page shows the organization inventory"
-msgstr "Cette page présente l'inventaire de l'organisation"
 
 msgid "This page shows the prologues of the event"
 msgstr "Cette page résume les prologues de l'événement"
@@ -4893,9 +4905,6 @@ msgstr "Configuration de la personnalisation des personnages"
 msgid "This page allows you to add or edit an album"
 msgstr "Cette page vous permet d'ajouter ou de modifier un album"
 
-msgid "This page shows organization inventory items"
-msgstr "Cette page présente les éléments de l'inventaire de l'organisation"
-
 msgid "This page shows your personal spending items"
 msgstr "Cette page récapitule vos postes de dépenses personnelles"
 
@@ -4985,6 +4994,10 @@ msgstr "Nombre maximal de points de remplissage (0 = illimité)"
 msgid "Now set up the token and credits configuration"
 msgstr "Il faut maintenant configurer les jetons et les crédits"
 
+msgid "Now you can add inventory containers and items"
+msgstr ""
+"Vous pouvez désormais ajouter des conteneurs et des objets d'inventaire"
+
 msgid "Now you can select which tickets can be gifted"
 msgstr ""
 "Vous pouvez maintenant sélectionner les billets qui peuvent être offerts"
@@ -4997,9 +5010,6 @@ msgstr "Vous pouvez maintenant définir le lien d'enregistrement externe"
 
 msgid "Optional - Image displayed within the question"
 msgstr "Facultatif - Image affichée dans la question"
-
-msgid "Photo (clear and understandable) of the object"
-msgstr "Photo (claire et compréhensible) de l'objet"
 
 msgid "Registered users will be granted normal access"
 msgstr "Les utilisateurs enregistrés bénéficient d'un accès normal"
@@ -6167,6 +6177,11 @@ msgstr ""
 "Ils seront déduits automatiquement lorsque vous vous inscrirez à un nouvel "
 "événement"
 
+msgid "This page allows you to add or edit a new container of inventory"
+msgstr ""
+"Cette page vous permet d'ajouter ou de modifier un nouveau conteneur "
+"d'inventaire"
+
 msgid "This page allows you to add or edit the expense of a contributor"
 msgstr ""
 "Cette page vous permet d'ajouter ou de modifier les dépenses d'un "
@@ -6271,6 +6286,10 @@ msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
 "Ajouté au bas de tous les courriers confirmant l'inscription aux "
 "participants"
+
+msgid "Enables inventory management for organization warehouse management"
+msgstr ""
+"Permet la gestion des stocks pour la gestion de l'entrepôt de l'organisation"
 
 msgid "Enter your email below to receive instructions on how to change it"
 msgstr ""
@@ -8711,13 +8730,6 @@ msgstr ""
 "adresse électronique personnelle"
 
 msgid ""
-"Fully describe what the box contains, especially number of items, main "
-"features, state of preservation."
-msgstr ""
-"Décrire complètement ce que la boîte contient, en particulier le nombre "
-"d'objets, les principales caractéristiques, l'état de conservation."
-
-msgid ""
 "If checked, the subscribers' gallery will not be displayed to those who are "
 "not registered to the event"
 msgstr ""
@@ -9177,14 +9189,6 @@ msgid ""
 msgstr ""
 "Êtes-vous médecin, infirmier ou sauveteur agréé ? Pouvons-nous vous demander"
 " d'intervenir en cas d'accident pendant l'événement ?"
-
-msgid ""
-"Enables basic inventory management. Users can add items to a warehouse "
-"table, track quantities, and note item locations"
-msgstr ""
-"Permet une gestion de base des stocks. Les utilisateurs peuvent ajouter des "
-"articles à un tableau d'entrepôt, suivre les quantités et noter "
-"l'emplacement des articles"
 
 msgid ""
 "If checked, it allows participants to enter private information on their "

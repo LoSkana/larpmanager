@@ -1678,7 +1678,13 @@ msgstr ""
 msgid "This page allows you to add or edit a new item of inventory"
 msgstr ""
 
-msgid "Inventory"
+msgid "Inventory items"
+msgstr ""
+
+msgid "This page allows you to add or edit a new container of inventory"
+msgstr ""
+
+msgid "Inventory containers"
 msgstr ""
 
 msgid "This page allows you to add or edit a competency"
@@ -3316,18 +3322,16 @@ msgstr ""
 msgid "A description of the skills / abilities involved"
 msgstr ""
 
-msgid "Briefly describe what the box contains"
+msgid "Code of the box or shelf"
 msgstr ""
 
-msgid ""
-"Fully describe what the box contains, especially number of items, main "
-"features, state of preservation."
+msgid "Where it is located"
 msgstr ""
 
-msgid "List of content-related tags"
+msgid "List of tags"
 msgstr ""
 
-msgid "Photo (clear and understandable) of the object"
+msgid "Photo of the object"
 msgstr ""
 
 msgid "Waiting list"
@@ -4894,40 +4898,25 @@ msgstr ""
 msgid "End"
 msgstr ""
 
-msgid "Custodies"
+msgid "This page shows the inventory containers"
 msgstr ""
 
-msgid "This page shows inventory custody items"
-msgstr ""
-
-msgid "Columns"
-msgstr ""
-
-msgid "past"
-msgstr ""
-
-msgid "Object"
+msgid "Position"
 msgstr ""
 
 msgid "Inventory objects"
 msgstr ""
 
-msgid "This page shows organization inventory items"
+msgid "This page shows the inventory items"
 msgstr ""
 
-msgid "Setting"
+msgid "Quantity"
 msgstr ""
 
-msgid "This page shows the organization inventory"
+msgid "Container"
 msgstr ""
 
-msgid "Filter for every field"
-msgstr ""
-
-msgid "History"
-msgstr ""
-
-msgid "This page shows for an element its history"
+msgid "Tags"
 msgstr ""
 
 msgid ""
@@ -5780,6 +5769,9 @@ msgstr ""
 msgid "Ticket chosen"
 msgstr ""
 
+msgid "History"
+msgstr ""
+
 msgid "To access the history"
 msgstr ""
 
@@ -6465,6 +6457,9 @@ msgid "Available days"
 msgstr ""
 
 msgid "This page shows the signups of the event"
+msgstr ""
+
+msgid "Columns"
 msgstr ""
 
 msgid "accounting"
@@ -7244,12 +7239,13 @@ msgstr ""
 msgid "Now you can create badges"
 msgstr ""
 
-msgid ""
-"Enables basic inventory management. Users can add items to a warehouse "
-"table, track quantities, and note item locations"
+msgid "Inventory"
 msgstr ""
 
-msgid "Now you can add inventory items"
+msgid "Enables inventory management for organization warehouse management"
+msgstr ""
+
+msgid "Now you can add inventory containers and items"
 msgstr ""
 
 msgid "Secret link"
@@ -7642,9 +7638,6 @@ msgstr ""
 msgid "Manage url shortner"
 msgstr ""
 
-msgid "Manage inventory and items"
-msgstr ""
-
 msgid "Manage events"
 msgstr ""
 
@@ -7727,6 +7720,18 @@ msgid "Display all sent e-mails"
 msgstr ""
 
 msgid "quick"
+msgstr ""
+
+msgid "Containers"
+msgstr ""
+
+msgid "Manage inventory containers"
+msgstr ""
+
+msgid "Items"
+msgstr ""
+
+msgid "Manage inventory items"
 msgstr ""
 
 msgid "Manage the event settings: name, description, dates, and other data"

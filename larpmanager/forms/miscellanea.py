@@ -31,6 +31,7 @@ from larpmanager.forms.utils import (
     AssocMemberS2Widget,
     DatePickerInput,
     EventS2Widget,
+    InventoryS2Widget,
     TimePickerInput,
     get_run_choices,
 )
@@ -39,7 +40,8 @@ from larpmanager.models.miscellanea import (
     Album,
     Competence,
     HelpQuestion,
-    InventoryBox,
+    InventoryContainer,
+    InventoryItem,
     Problem,
     ShuttleService,
     UrlShortner,
@@ -215,15 +217,29 @@ class ExeUrlShortnerForm(MyForm):
         exclude = ("number",)
 
 
-class ExeInventoryBoxForm(MyForm):
+class ExeInventoryItemForm(MyForm):
     page_info = _("This page allows you to add or edit a new item of inventory")
 
-    page_title = _("Inventory")
+    page_title = _("Inventory items")
 
     class Meta:
-        model = InventoryBox
-        exclude = ()
+        model = InventoryItem
+        exclude = []
+        widgets = {"description": Textarea(attrs={"rows": 5}), "container": InventoryS2Widget}
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["container"].widget.set_assoc(self.params["a_id"])
+
+
+class ExeContainerItemForm(MyForm):
+    page_info = _("This page allows you to add or edit a new container of inventory")
+
+    page_title = _("Inventory containers")
+
+    class Meta:
+        model = InventoryContainer
+        exclude = []
         widgets = {"description": Textarea(attrs={"rows": 5})}
 
 

@@ -357,28 +357,32 @@ class WorkshopOption(BaseModel):
         return js
 
 
-class Inventory(BaseModel):
-    cod = models.CharField(max_length=5)
+class InventoryContainer(BaseModel):
+    name = models.CharField(max_length=100, help_text=_("Code of the box or shelf"))
 
-    name = models.CharField(max_length=500, help_text=_("Briefly describe what the box contains"))
+    position = models.CharField(max_length=100, help_text=_("Where it is located"))
 
-    shelf = models.CharField(max_length=5)
+    description = models.CharField(max_length=1000)
 
-    rack = models.CharField(max_length=5)
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="containers")
 
-    description = models.TextField(
-        help_text=_(
-            "Fully describe what the box contains, especially number of items, main features, state of preservation."
-        )
-    )
 
-    tag = models.CharField(max_length=100, help_text=_("List of content-related tags"))
+class InventoryItem(BaseModel):
+    name = models.CharField(max_length=100)
+
+    quantity = models.IntegerField()
+
+    description = models.CharField(max_length=1000)
+
+    container = models.ForeignKey(InventoryContainer, on_delete=models.CASCADE, related_name="items")
+
+    tags = models.CharField(max_length=100, help_text=_("List of tags"))
 
     photo = models.ImageField(
         max_length=500,
         upload_to=UploadToPathAndRename("inventory/"),
         verbose_name=_("Photo"),
-        help_text=_("Photo (clear and understandable) of the object"),
+        help_text=_("Photo of the object"),
         null=True,
         blank=True,
     )
@@ -390,36 +394,7 @@ class Inventory(BaseModel):
         options={"quality": 80},
     )
 
-    class Meta:
-        abstract = True
-
-
-class InventoryBox(Inventory):
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="boxes")
-
-
-class InventoryBoxHistory(Inventory):
-    box = models.ForeignKey(InventoryBox, on_delete=models.CASCADE, related_name="histories")
-
-    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="box_histories")
-
-
-class InventoryBoxPhoto(BaseModel):
-    box = models.ForeignKey(InventoryBox, on_delete=models.CASCADE, related_name="photos")
-
-    photo = models.ImageField(
-        max_length=500,
-        upload_to=UploadToPathAndRename("albums/"),
-        verbose_name=_("Photo"),
-        help_text=_("Photo (clear and understandable) of the object"),
-    )
-
-    thumb = ImageSpecField(
-        source="photo",
-        processors=[ResizeToFit(300)],
-        format="JPEG",
-        options={"quality": 80},
-    )
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="items")
 
 
 class ShuttleStatus(models.TextChoices):

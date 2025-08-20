@@ -41,6 +41,7 @@ from larpmanager.models.form import (
     WritingOption,
 )
 from larpmanager.models.member import Member, Membership, MembershipStatus
+from larpmanager.models.miscellanea import InventoryContainer
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
@@ -493,6 +494,12 @@ class InventoryS2Widget(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
     ]
+
+    def set_assoc(self, aid):
+        self.aid = aid
+
+    def get_queryset(self):
+        return InventoryContainer.objects.filter(assoc_id=self.aid)
 
 
 def remove_choice(ch, typ):

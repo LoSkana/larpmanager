@@ -427,15 +427,14 @@
   pk: 66
   fields:
     name: Inventory
-    descr: Enables basic inventory management. Users can add items to a warehouse
-      table, track quantities, and note item locations
+    descr: Enables inventory management for organization warehouse management
     slug: inventory
     overall: true
     module: 3
     placeholder: false
     order: 20
-    after_text: Now you can add inventory items
-    after_link: exe_inventory
+    after_text: Now you can add inventory containers and items
+    after_link: exe_inventory_containers
 - model: larpmanager.feature
   pk: 69
   fields:

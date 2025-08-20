@@ -22,20 +22,17 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from larpmanager.forms.miscellanea import (
-    ExeInventoryBoxForm,
+    ExeContainerItemForm,
+    ExeInventoryItemForm,
     ExeUrlShortnerForm,
 )
 from larpmanager.models.miscellanea import (
-    Inventory,
-    InventoryBox,
-    InventoryBoxHistory,
+    InventoryContainer,
+    InventoryItem,
     UrlShortner,
 )
 from larpmanager.utils.base import check_assoc_permission
-from larpmanager.utils.common import (
-    check_diff,
-)
-from larpmanager.utils.edit import backend_get, exe_edit
+from larpmanager.utils.edit import exe_edit
 
 
 @login_required
@@ -51,48 +48,24 @@ def exe_urlshortner_edit(request, num):
 
 
 @login_required
-def exe_inventory(request):
-    ctx = check_assoc_permission(request, "exe_inventory")
-    ctx["list"] = InventoryBox.objects.filter(assoc_id=request.assoc["id"])
-    ctx["inv_fields"] = get_inventory_fields()
-    return render(request, "larpmanager/exe/inventory.html", ctx)
-
-
-def get_inventory_fields():
-    # noinspection PyUnresolvedReferences, PyProtectedMember
-    aux = [f.name for f in Inventory._meta.get_fields()]
-    aux.remove("deleted")
-    aux.remove("deleted_by_cascade")
-    aux.remove("created")
-    aux.remove("updated")
-    aux.remove("photo")
-    return aux
+def exe_inventory_containers(request):
+    ctx = check_assoc_permission(request, "exe_inventory_containers")
+    ctx["list"] = InventoryContainer.objects.filter(assoc_id=request.assoc["id"])
+    return render(request, "larpmanager/exe/inventory/containers.html", ctx)
 
 
 @login_required
-def exe_inventory_edit(request, num):
-    return exe_edit(request, ExeInventoryBoxForm, num, "exe_inventory")
-    # if "saved" in ctx:
-    # hist = InventoryBoxHistory(box=ctx["saved"], member=request.user.member)
-    # for f in get_inventory_fields():
-    # setattr(hist, f, getattr(ctx["saved"], f))
-    # hist.save()
-    # return res
+def exe_inventory_containers_edit(request, num):
+    return exe_edit(request, ExeContainerItemForm, num, "exe_inventory_containers")
 
 
 @login_required
-def exe_inventory_history(request, num):
-    ctx = check_assoc_permission(request, "exe_inventory")
-    backend_get(ctx, InventoryBox, num)
-    ctx["list"] = InventoryBoxHistory.objects.filter(box=ctx["el"]).order_by("created")
-    last = None
-    for v in ctx["list"]:
-        aux = []
-        for f in get_inventory_fields():
-            aux.append(f"{f}: {getattr(v, f)}")
-        val = ", ".join(aux)
-        if last is not None:
-            check_diff(v, last, val)
-        last = val
+def exe_inventory_items(request):
+    ctx = check_assoc_permission(request, "exe_inventory_items")
+    ctx["list"] = InventoryItem.objects.filter(assoc_id=request.assoc["id"]).select_related("container")
+    return render(request, "larpmanager/exe/inventory/items.html", ctx)
 
-    return render(request, "larpmanager/exe/inventory_history.html", ctx)
+
+@login_required
+def exe_inventory_items_edit(request, num):
+    return exe_edit(request, ExeInventoryItemForm, num, "exe_inventory_items")
