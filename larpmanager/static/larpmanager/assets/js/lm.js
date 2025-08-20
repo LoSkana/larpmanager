@@ -390,7 +390,7 @@ function data_tables() {
             stateSave: true,
             paging: full_layout,
             layout: full_layout
-                ? { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' }
+                ? { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] } }
                 : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null },
             columnControl: ['order', 'searchDropdown'],
             ordering: {
