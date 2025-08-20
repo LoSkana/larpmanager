@@ -2423,9 +2423,6 @@ msgstr "Forwardová sleva"
 msgid "Handout template"
 msgstr "Šablona letáku"
 
-msgid "Long description"
-msgstr "Dlouhý popis"
-
 msgid "Max participants"
 msgstr "Maximální počet účastníků"
 
@@ -2653,9 +2650,6 @@ msgstr "Submisivní žádost"
 
 msgid "Residence address"
 msgstr "Adresa bydliště"
-
-msgid "Short description"
-msgstr "Krátký popis"
 
 msgid "Technical Support"
 msgstr "Technická podpora"
@@ -3949,9 +3943,6 @@ msgstr "Opětovné přihlášení pomocí účtu"
 msgid "Total of recorded money inflows"
 msgstr "Součet zaznamenaných přílivů peněz"
 
-msgid "Will be shown in the event page"
-msgstr "Zobrazí se na stránce události"
-
 msgid "You have completed the payment!"
 msgstr "Vklad jste dokončili!"
 
@@ -4903,6 +4894,9 @@ msgstr "(Nepovinné) Výše dobrovolného příspěvku"
 msgid "Customize buttons in the event navigation bar"
 msgstr "Přizpůsobení tlačítek na navigačním panelu události"
 
+msgid "Event description displayed on the event page"
+msgstr "Popis události zobrazený na stránce události"
+
 msgid "If checked: shows the position for each event"
 msgstr "Pokud je zaškrtnuto: zobrazuje pozici pro každou událost"
 
@@ -5127,9 +5121,6 @@ msgstr "Zde je omezený počet možností vstupu"
 
 msgid "I'm interested, but I don't have much experience"
 msgstr "Mám zájem, ale nemám mnoho zkušeností"
-
-msgid "If checked: shows the description for each event"
-msgstr "Pokud je zaškrtnuto: zobrazí popis každé události"
 
 msgid "Is there anything else you would like to tell us"
 msgstr "Chcete nám ještě něco říct"

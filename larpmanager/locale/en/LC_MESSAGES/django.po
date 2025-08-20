@@ -285,9 +285,6 @@ msgstr ""
 msgid "If checked: shows the website for each event"
 msgstr ""
 
-msgid "If checked: shows the description for each event"
-msgstr ""
-
 msgid "Where"
 msgstr ""
 
@@ -2775,13 +2772,7 @@ msgstr ""
 msgid "Names of the collaborators who are organizing it"
 msgstr ""
 
-msgid "Short description"
-msgstr ""
-
-msgid "Long description"
-msgstr ""
-
-msgid "Will be shown in the event page"
+msgid "Event description displayed on the event page"
 msgstr ""
 
 msgid "The setting / genre of the event"
@@ -4389,9 +4380,6 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
-msgid "Tell me more"
-msgstr ""
-
 msgid "Characters are only visible to logged in users"
 msgstr ""
 
@@ -5217,6 +5205,9 @@ msgid "upcoming events"
 msgstr ""
 
 msgid "Next events"
+msgstr ""
+
+msgid "Tell me more"
 msgstr ""
 
 msgid "Contact us"

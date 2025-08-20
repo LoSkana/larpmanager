@@ -91,7 +91,6 @@ class OrgaEventForm(MyForm):
             "tagline",
             "where",
             "authors",
-            "description_short",
             "description",
             "genre",
             "visible",
@@ -119,7 +118,7 @@ class OrgaEventForm(MyForm):
 
         dl = []
 
-        for s in ["visible", "website", "tagline", "where", "authors", "description", "genre", "register_link"]:
+        for s in ["visible", "website", "tagline", "where", "authors", "genre", "register_link"]:
             if s not in self.params["features"]:
                 dl.append(s)
 

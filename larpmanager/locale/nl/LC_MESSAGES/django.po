@@ -2423,9 +2423,6 @@ msgstr "Termijnkorting"
 msgid "Handout template"
 msgstr "Sjabloon voor hand-outs"
 
-msgid "Long description"
-msgstr "Lange beschrijving"
-
 msgid "Max participants"
 msgstr "Maximaal aantal deelnemers"
 
@@ -2653,9 +2650,6 @@ msgstr "Onderdanig verzoek"
 
 msgid "Residence address"
 msgstr "Woonadres"
-
-msgid "Short description"
-msgstr "Korte beschrijving"
 
 msgid "Technical Support"
 msgstr "Technische ondersteuning"
@@ -3949,9 +3943,6 @@ msgstr "Om weer in te loggen met het account"
 msgid "Total of recorded money inflows"
 msgstr "Totaal van geregistreerde geldinstroom"
 
-msgid "Will be shown in the event page"
-msgstr "Wordt getoond op de evenementpagina"
-
 msgid "You have completed the payment!"
 msgstr "Je hebt de storting voltooid!"
 
@@ -4906,6 +4897,9 @@ msgstr "(Optioneel) Het bedrag van een vrijwillige donatie"
 msgid "Customize buttons in the event navigation bar"
 msgstr "Knoppen in de evenementnavigatiebalk aanpassen"
 
+msgid "Event description displayed on the event page"
+msgstr "Beschrijving van evenement weergegeven op de evenementpagina"
+
 msgid "If checked: shows the position for each event"
 msgstr "Indien aangevinkt: toont de positie voor elke gebeurtenis"
 
@@ -5134,9 +5128,6 @@ msgstr "Dit zijn de beperkte toegangsmogelijkheden"
 
 msgid "I'm interested, but I don't have much experience"
 msgstr "Ik ben geïnteresseerd, maar heb niet veel ervaring"
-
-msgid "If checked: shows the description for each event"
-msgstr "Indien aangevinkt: toont de beschrijving van elke gebeurtenis"
 
 msgid "Is there anything else you would like to tell us"
 msgstr "Is er nog iets dat je ons wilt vertellen"

@@ -79,18 +79,11 @@ class Event(BaseModel):
         help_text=_("Names of the collaborators who are organizing it"),
     )
 
-    description_short = HTMLField(
-        max_length=1000,
-        blank=True,
-        null=True,
-        verbose_name=_("Short description"),
-    )
-
     description = HTMLField(
-        max_length=6000,
+        max_length=10000,
         blank=True,
-        verbose_name=_("Long description"),
-        help_text=_("Will be shown in the event page"),
+        verbose_name=_("Description"),
+        help_text=_("Event description displayed on the event page"),
     )
 
     genre = models.CharField(
@@ -280,7 +273,6 @@ class Event(BaseModel):
             "slug",
             "name",
             "tagline",
-            "description_short",
             "description",
             "website",
             "genre",

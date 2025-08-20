@@ -2423,9 +2423,6 @@ msgstr "Sconto avanti"
 msgid "Handout template"
 msgstr "Handout template"
 
-msgid "Long description"
-msgstr "Descrizione lunga"
-
 msgid "Max participants"
 msgstr "Numero massimo di partecipanti"
 
@@ -2653,9 +2650,6 @@ msgstr "Richiesta sottomessa"
 
 msgid "Residence address"
 msgstr "Indirizzo di residenza"
-
-msgid "Short description"
-msgstr "Breve descrizione"
 
 msgid "Technical Support"
 msgstr "Supporto tecnico"
@@ -3949,9 +3943,6 @@ msgstr "Per tornare ad essere collegato con l'account"
 msgid "Total of recorded money inflows"
 msgstr "Totale degli afflussi di denaro registrati"
 
-msgid "Will be shown in the event page"
-msgstr "Verrà visualizzato nella pagina dell'evento"
-
 msgid "You have completed the payment!"
 msgstr "Hai completato il versamento!"
 
@@ -4904,6 +4895,9 @@ msgid "Customize buttons in the event navigation bar"
 msgstr ""
 "Personalizzazione dei pulsanti nella barra di navigazione degli eventi"
 
+msgid "Event description displayed on the event page"
+msgstr "Descrizione dell'evento visualizzata nella pagina dell'evento"
+
 msgid "If checked: shows the position for each event"
 msgstr "Se checkato: mostra la posizione per ogni evento"
 
@@ -5128,9 +5122,6 @@ msgstr "Ecco di seguito le opzioni di iscrizioni a numero limitato"
 
 msgid "I'm interested, but I don't have much experience"
 msgstr "Sono interessato, ma non ho molta esperienza"
-
-msgid "If checked: shows the description for each event"
-msgstr "Se checkato: mostra la descrizione per ogni evento"
 
 msgid "Is there anything else you would like to tell us"
 msgstr "C'è qualcos'altro che vorresti dirci"

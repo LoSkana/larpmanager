@@ -2423,9 +2423,6 @@ msgstr "Rabat terminowy"
 msgid "Handout template"
 msgstr "Szablon materiałów informacyjnych"
 
-msgid "Long description"
-msgstr "Długi opis"
-
 msgid "Max participants"
 msgstr "Maksymalna liczba uczestników"
 
@@ -2653,9 +2650,6 @@ msgstr "Złożony wniosek"
 
 msgid "Residence address"
 msgstr "Adres zamieszkania"
-
-msgid "Short description"
-msgstr "Krótki opis"
 
 msgid "Technical Support"
 msgstr "Wsparcie techniczne"
@@ -3949,9 +3943,6 @@ msgstr "Aby zalogować się ponownie przy użyciu konta"
 msgid "Total of recorded money inflows"
 msgstr "Suma zarejestrowanych wpływów pieniężnych"
 
-msgid "Will be shown in the event page"
-msgstr "Zostanie wyświetlony na stronie wydarzenia"
-
 msgid "You have completed the payment!"
 msgstr "Płatność została zrealizowana!"
 
@@ -4903,6 +4894,9 @@ msgstr "(Opcjonalnie) Kwota dobrowolnej darowizny"
 msgid "Customize buttons in the event navigation bar"
 msgstr "Dostosowywanie przycisków na pasku nawigacji wydarzeń"
 
+msgid "Event description displayed on the event page"
+msgstr "Opis wydarzenia wyświetlany na stronie wydarzenia"
+
 msgid "If checked: shows the position for each event"
 msgstr "Jeśli zaznaczone: pokazuje pozycję dla każdego zdarzenia"
 
@@ -5127,9 +5121,6 @@ msgstr "Oto opcje rejestracji z ograniczoną liczbą"
 
 msgid "I'm interested, but I don't have much experience"
 msgstr "Jestem zainteresowany, ale nie mam dużego doświadczenia"
-
-msgid "If checked: shows the description for each event"
-msgstr "Jeśli zaznaczone: wyświetla opis każdego wydarzenia"
 
 msgid "Is there anything else you would like to tell us"
 msgstr "Czy jest coś jeszcze, co chciałbyś nam powiedzieć"

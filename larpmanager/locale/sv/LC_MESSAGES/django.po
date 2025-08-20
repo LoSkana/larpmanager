@@ -2423,9 +2423,6 @@ msgstr "Terminsrabatt"
 msgid "Handout template"
 msgstr "Mall för handout"
 
-msgid "Long description"
-msgstr "Lång beskrivning"
-
 msgid "Max participants"
 msgstr "Max antal deltagare"
 
@@ -2653,9 +2650,6 @@ msgstr "Undergiven begäran"
 
 msgid "Residence address"
 msgstr "Bostadsadress"
-
-msgid "Short description"
-msgstr "Kort beskrivning"
 
 msgid "Technical Support"
 msgstr "Teknisk support"
@@ -3949,9 +3943,6 @@ msgstr "För att logga in igen med kontot"
 msgid "Total of recorded money inflows"
 msgstr "Totalt antal registrerade penninginflöden"
 
-msgid "Will be shown in the event page"
-msgstr "Kommer att visas på evenemangssidan"
-
 msgid "You have completed the payment!"
 msgstr "Du har slutfört insättningen!"
 
@@ -4905,6 +4896,9 @@ msgstr "(Frivillig uppgift) Beloppet för en frivillig donation"
 msgid "Customize buttons in the event navigation bar"
 msgstr "Anpassa knapparna i navigeringsfältet för evenemang"
 
+msgid "Event description displayed on the event page"
+msgstr "Beskrivning av händelsen visas på händelsesidan"
+
 msgid "If checked: shows the position for each event"
 msgstr "Om markerat: visar positionen för varje evenemang"
 
@@ -5129,9 +5123,6 @@ msgstr "Här är det begränsade antalet inmatningsalternativ"
 
 msgid "I'm interested, but I don't have much experience"
 msgstr "Jag är intresserad, men har inte så mycket erfarenhet"
-
-msgid "If checked: shows the description for each event"
-msgstr "Om markerat: visar beskrivningen för varje händelse"
 
 msgid "Is there anything else you would like to tell us"
 msgstr "Är det något annat du vill berätta för oss"
