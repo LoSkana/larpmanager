@@ -68,11 +68,11 @@ def check_orga_visibility(page):
 
 
 def check_orga_preferences(page):
-    page.get_by_role("link", name="Preferences").click(force=True)
+    page.locator("#orga_preferences").get_by_role("link", name="Preferences").click()
     page.locator("#id_open_registration_1_0").check()
     page.locator("#id_open_registration_1_2").check()
     submit_confirm(page)
-    page.get_by_role("link", name="Preferences").click(force=True)
+    page.locator("#orga_preferences").get_by_role("link", name="Preferences").click()
     expect(page.locator("#id_open_registration_1_0")).to_be_checked()
     expect(page.locator("#id_open_registration_1_1")).not_to_be_checked()
     expect(page.locator("#id_open_registration_1_2")).to_be_checked()
@@ -80,12 +80,12 @@ def check_orga_preferences(page):
     page.get_by_role("link", name="Features").click()
     check_feature(page, "Characters")
     submit_confirm(page)
-    page.get_by_role("link", name="Preferences").click(force=True)
+    page.locator("#orga_preferences").get_by_role("link", name="Preferences").click()
     page.locator("#id_open_character_1_0").check()
     page.get_by_text("Stats").click()
     page.locator("#id_open_character_1_2").check()
     submit_confirm(page)
-    page.get_by_role("link", name="Preferences").click(force=True)
+    page.locator("#orga_preferences").get_by_role("link", name="Preferences").click()
     expect(page.locator("#id_open_character_1_0")).to_be_checked()
     expect(page.locator("#id_open_character_1_1")).not_to_be_checked()
     expect(page.locator("#id_open_character_1_2")).to_be_checked()
