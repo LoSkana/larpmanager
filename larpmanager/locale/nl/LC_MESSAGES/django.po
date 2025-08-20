@@ -1209,6 +1209,9 @@ msgstr "Prologen"
 msgid "Questions"
 msgstr "Vragen"
 
+msgid "Read mail"
+msgstr "Post lezen"
+
 msgid "Recipient"
 msgstr "Ontvanger"
 
@@ -4799,6 +4802,9 @@ msgstr "Een waarde instellen voor registratie geheime link"
 
 msgid "This page allows you to translate the event"
 msgstr "Op deze pagina kun je het evenement vertalen"
+
+msgid "This page shows an email sent by the system"
+msgstr "Deze pagina toont een e-mail die door het systeem is verzonden"
 
 msgid "This page shows the characters of the event"
 msgstr ""

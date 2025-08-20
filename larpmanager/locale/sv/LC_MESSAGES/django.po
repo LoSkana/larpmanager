@@ -1209,6 +1209,9 @@ msgstr "Prologer"
 msgid "Questions"
 msgstr "Frågor"
 
+msgid "Read mail"
+msgstr "Läs mail"
+
 msgid "Recipient"
 msgstr "Mottagare"
 
@@ -4799,6 +4802,9 @@ msgstr "Ange ett värde för den hemliga länken för registrering"
 
 msgid "This page allows you to translate the event"
 msgstr "På den här sidan kan du översätta evenemanget"
+
+msgid "This page shows an email sent by the system"
+msgstr "Denna sida visar ett e-postmeddelande som skickats av systemet"
 
 msgid "This page shows the characters of the event"
 msgstr "På denna sida sammanfattas evenemangets karaktärer"

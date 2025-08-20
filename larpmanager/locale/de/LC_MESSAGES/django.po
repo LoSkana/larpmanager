@@ -1209,6 +1209,9 @@ msgstr "Prologe"
 msgid "Questions"
 msgstr "Fragen"
 
+msgid "Read mail"
+msgstr "Post lesen"
+
 msgid "Recipient"
 msgstr "Empfänger"
 
@@ -4805,6 +4808,9 @@ msgstr ""
 
 msgid "This page allows you to translate the event"
 msgstr "Auf dieser Seite können Sie das Ereignis übersetzen"
+
+msgid "This page shows an email sent by the system"
+msgstr "Diese Seite zeigt eine vom System gesendete E-Mail"
 
 msgid "This page shows the characters of the event"
 msgstr ""

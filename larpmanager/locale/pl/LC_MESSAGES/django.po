@@ -1209,6 +1209,9 @@ msgstr "Prologi"
 msgid "Questions"
 msgstr "Pytania"
 
+msgid "Read mail"
+msgstr "Czytaj pocztę"
+
 msgid "Recipient"
 msgstr "Odbiorca"
 
@@ -4797,6 +4800,9 @@ msgstr "Ustaw wartość dla tajnego łącza rejestracji"
 
 msgid "This page allows you to translate the event"
 msgstr "Ta strona umożliwia przetłumaczenie wydarzenia"
+
+msgid "This page shows an email sent by the system"
+msgstr "Ta strona pokazuje wiadomość e-mail wysłaną przez system"
 
 msgid "This page shows the characters of the event"
 msgstr "Ta strona przedstawia bohaterów wydarzenia"

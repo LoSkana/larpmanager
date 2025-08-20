@@ -78,6 +78,7 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.edit import exe_edit
 from larpmanager.utils.fiscal_code import calculate_fiscal_code
+from larpmanager.utils.member import get_mail
 from larpmanager.utils.paginate import exe_paginate
 from larpmanager.utils.pdf import (
     get_membership_request,
@@ -477,6 +478,14 @@ def exe_archive_email(request):
     ctx = check_assoc_permission(request, "exe_archive_email")
     exe_paginate(request, ctx, Email)
     return render(request, "larpmanager/exe/users/archive_mail.html", ctx)
+
+
+@login_required
+def exe_read_mail(request, nm):
+    ctx = check_assoc_permission(request, "exe_archive_email")
+    ctx["exe"] = True
+    ctx["email"] = get_mail(request, ctx, nm)
+    return render(request, "larpmanager/exe/users/read_mail.html", ctx)
 
 
 @login_required

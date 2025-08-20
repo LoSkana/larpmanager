@@ -46,6 +46,11 @@ urlpatterns = [
         name="orga_quick",
     ),
     path(
+        "<slug:s>/<int:n>/manage/mail/read/<int:nm>",
+        views_om.orga_read_mail,
+        name="orga_read_mail",
+    ),
+    path(
         "<slug:s>/<int:n>/manage/pre_registrations/",
         views_or.orga_pre_registrations,
         name="orga_pre_registrations",

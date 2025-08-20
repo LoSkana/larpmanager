@@ -4992,6 +4992,9 @@ msgstr ""
 msgid "Sent"
 msgstr ""
 
+msgid "Read"
+msgstr ""
+
 msgid ""
 "This page shows membership badges. You can edit them, assign them, create "
 "new ones"
@@ -5124,6 +5127,12 @@ msgid "Give a new answer"
 msgstr ""
 
 msgid "Comunications"
+msgstr ""
+
+msgid "Read mail"
+msgstr ""
+
+msgid "This page shows an email sent by the system"
 msgstr ""
 
 msgid "Registry"
@@ -6371,9 +6380,6 @@ msgstr ""
 msgid ""
 "This page allows you to read any writing element, using the table search "
 "controls"
-msgstr ""
-
-msgid "Read"
 msgstr ""
 
 msgid ""

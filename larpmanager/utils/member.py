@@ -19,8 +19,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 
 from larpmanager.models.member import Badge, Membership
+from larpmanager.models.miscellanea import Email
 
 
 def count_differences(s1, s2):
@@ -93,3 +96,19 @@ def assign_badge(member, cod):
         b.members.add(member)
     except Exception as e:
         print(e)
+
+
+def get_mail(request, ctx, nm):
+    try:
+        email = Email.objects.get(pk=nm)
+    except ObjectDoesNotExist as err:
+        raise Http404("not found") from err
+
+    if email.assoc_id != request.assoc["id"]:
+        raise Http404("not your assoc")
+
+    run = ctx.get("run")
+    if run and email.run_id != run.id:
+        raise Http404("not your run")
+
+    return email

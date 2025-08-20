@@ -1209,6 +1209,9 @@ msgstr "Prologhi"
 msgid "Questions"
 msgstr "Domande"
 
+msgid "Read mail"
+msgstr "Leggi la mail"
+
 msgid "Recipient"
 msgstr "Destinatario"
 
@@ -4797,6 +4800,9 @@ msgstr "Imposta un valore per il link segreto di registrazione"
 
 msgid "This page allows you to translate the event"
 msgstr "Questa pagina permette di tradurre l'evento"
+
+msgid "This page shows an email sent by the system"
+msgstr "Questa pagina mostra un'e-mail inviata dal sistema"
 
 msgid "This page shows the characters of the event"
 msgstr "Questa pagina riepiloga i personaggi dell'evento"

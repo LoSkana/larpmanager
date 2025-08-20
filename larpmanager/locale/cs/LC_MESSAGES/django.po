@@ -1209,6 +1209,9 @@ msgstr "Prology"
 msgid "Questions"
 msgstr "Otázky"
 
+msgid "Read mail"
+msgstr "Přečtěte si poštu"
+
 msgid "Recipient"
 msgstr "Příjemce"
 
@@ -4797,6 +4800,9 @@ msgstr "Nastavení hodnoty pro tajný odkaz registrace"
 
 msgid "This page allows you to translate the event"
 msgstr "Tato stránka umožňuje přeložit událost"
+
+msgid "This page shows an email sent by the system"
+msgstr "Na této stránce je zobrazen e-mail odeslaný systémem"
 
 msgid "This page shows the characters of the event"
 msgstr "Na této stránce jsou shrnuty znaky této události"
