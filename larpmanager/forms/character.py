@@ -53,7 +53,7 @@ from larpmanager.models.writing import (
     Faction,
     FactionType,
     Relationship,
-    TextVersion,
+    TextVersionChoices,
 )
 from larpmanager.utils.edit import save_version
 
@@ -365,7 +365,7 @@ class OrgaCharacterForm(CharacterForm):
                 # else delete
                 else:
                     rel = self._get_rel(ch_id, instance, rel_type)
-                    save_version(rel, TextVersion.RELATIONSHIP, self.params["member"], True)
+                    save_version(rel, TextVersionChoices.RELATIONSHIP, self.params["member"], True)
                     rel.delete()
                     continue
 

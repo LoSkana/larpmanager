@@ -27,7 +27,6 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.registration import get_display_choice
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import (
-    AccountingItem,
     AccountingItemCollection,
     AccountingItemDiscount,
     AccountingItemDonation,
@@ -38,6 +37,9 @@ from larpmanager.models.accounting import (
     AccountingItemOutflow,
     AccountingItemPayment,
     AccountingItemTransaction,
+    ExpenseChoices,
+    OtherChoices,
+    PaymentChoices,
     RecordAccounting,
 )
 from larpmanager.models.association import Association
@@ -112,7 +114,7 @@ def get_run_accounting(run, ctx):
             run,
             _("Total of expenses submitted by collaborators and approved"),
             AccountingItemExpense,
-            AccountingItem.EXPENSE_CHOICES,
+            ExpenseChoices.choices,
             "exp",
         )
         s_expenses = dc["exp"]["tot"]
@@ -124,7 +126,7 @@ def get_run_accounting(run, ctx):
             run,
             _("Total of recorded money outflows"),
             AccountingItemOutflow,
-            AccountingItem.EXPENSE_CHOICES,
+            ExpenseChoices.choices,
             "exp",
         )
         s_outflows = dc["out"]["tot"]
@@ -143,7 +145,7 @@ def get_run_accounting(run, ctx):
             run,
             _("Total participation fees received"),
             AccountingItemPayment,
-            AccountingItemPayment.PAYMENT_CHOICES,
+            PaymentChoices.choices,
             "pay",
             reg=True,
         )
@@ -167,7 +169,7 @@ def get_run_accounting(run, ctx):
             run,
             _("Total amount refunded to participants"),
             AccountingItemOther,
-            AccountingItemOther.OTHER_CHOICES,
+            OtherChoices.choices,
             "oth",
             filters={"cancellation__exact": True},
         )
@@ -181,9 +183,9 @@ def get_run_accounting(run, ctx):
             run,
             _("Total issued"),
             AccountingItemOther,
-            AccountingItemOther.OTHER_CHOICES,
+            OtherChoices.choices,
             "oth",
-            filters={"cancellation__exact": False, "oth__exact": AccountingItemOther.TOKEN},
+            filters={"cancellation__exact": False, "oth__exact": OtherChoices.TOKEN},
         )
         s_tokens = dc["tok"]["tot"]
         dc["cre"] = get_acc_detail(
@@ -191,11 +193,11 @@ def get_run_accounting(run, ctx):
             run,
             _("Total issued"),
             AccountingItemOther,
-            AccountingItemOther.OTHER_CHOICES,
+            OtherChoices.choices,
             "oth",
             filters={
                 "cancellation__exact": False,
-                "oth__exact": AccountingItemOther.CREDIT,
+                "oth__exact": OtherChoices.CREDIT,
             },
         )
         s_credits = dc["cre"]["tot"]
@@ -271,7 +273,7 @@ def assoc_accounting_data(ctx, year=None):
     )
     ctx["pay_money_sum"] = get_sum(
         AccountingItemPayment.objects.filter(
-            pay=AccountingItemPayment.MONEY,
+            pay=PaymentChoices.MONEY,
             assoc_id=ctx["a_id"],
             created__gte=s,
             created__lte=e,
@@ -282,7 +284,7 @@ def assoc_accounting_data(ctx, year=None):
     )
     ctx["refund_sum"] = get_sum(
         AccountingItemOther.objects.filter(
-            oth=AccountingItemOther.REFUND,
+            oth=OtherChoices.REFUND,
             assoc_id=ctx["a_id"],
             created__gte=s,
             created__lte=e,

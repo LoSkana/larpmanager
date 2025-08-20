@@ -58,7 +58,9 @@ from larpmanager.models.accounting import (
     AccountingItemMembership,
     AccountingItemOther,
     AccountingItemPayment,
-    Collection,
+    CollectionStatus,
+    OtherChoices,
+    PaymentChoices,
     PaymentInvoice,
     PaymentStatus,
     PaymentType,
@@ -111,13 +113,13 @@ def accounting_tokens(request):
             "given": AccountingItemOther.objects.filter(
                 member=ctx["member"],
                 hide=False,
-                oth=AccountingItemOther.TOKEN,
+                oth=OtherChoices.TOKEN,
                 assoc_id=ctx["a_id"],
             ),
             "used": AccountingItemPayment.objects.filter(
                 member=ctx["member"],
                 hide=False,
-                pay=AccountingItemPayment.TOKEN,
+                pay=PaymentChoices.TOKEN,
                 assoc_id=ctx["a_id"],
             ),
         }
@@ -136,19 +138,19 @@ def accounting_credits(request):
             "given": AccountingItemOther.objects.filter(
                 member=ctx["member"],
                 hide=False,
-                oth=AccountingItemOther.CREDIT,
+                oth=OtherChoices.CREDIT,
                 assoc_id=ctx["a_id"],
             ),
             "used": AccountingItemPayment.objects.filter(
                 member=ctx["member"],
                 hide=False,
-                pay=AccountingItemPayment.CREDIT,
+                pay=PaymentChoices.CREDIT,
                 assoc_id=ctx["a_id"],
             ),
             "ref": AccountingItemOther.objects.filter(
                 member=ctx["member"],
                 hide=False,
-                oth=AccountingItemOther.REFUND,
+                oth=OtherChoices.REFUND,
                 assoc_id=ctx["a_id"],
             ),
         }
@@ -369,7 +371,7 @@ def acc_collection_participate(request, s):
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
     ctx["coll"] = c
-    if c.status != Collection.OPEN:
+    if c.status != CollectionStatus.OPEN:
         raise Http404("Collection not open")
 
     if request.method == "POST":
@@ -387,10 +389,10 @@ def acc_collection_close(request, s):
     c = get_collection_partecipate(request, s)
     if request.user.member != c.organizer:
         raise Http404("Collection not yours")
-    if c.status != Collection.OPEN:
+    if c.status != CollectionStatus.OPEN:
         raise Http404("Collection not open")
 
-    c.status = Collection.DONE
+    c.status = CollectionStatus.DONE
     c.save()
 
     messages.success(request, _("Collection closed"))
@@ -403,12 +405,12 @@ def acc_collection_redeem(request, s):
     ctx = def_user_ctx(request)
     ctx["show_accounting"] = True
     ctx["coll"] = c
-    if c.status != Collection.DONE:
+    if c.status != CollectionStatus.DONE:
         raise Http404("Collection not found")
 
     if request.method == "POST":
         c.member = request.user.member
-        c.status = Collection.PAYED
+        c.status = CollectionStatus.PAYED
         c.save()
         messages.success(request, _("The collection has been delivered!"))
         return redirect("home")

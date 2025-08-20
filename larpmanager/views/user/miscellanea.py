@@ -41,6 +41,7 @@ from larpmanager.models.miscellanea import (
     AlbumUpload,
     HelpQuestion,
     ShuttleService,
+    ShuttleStatus,
     UrlShortner,
     Util,
     WorkshopMemberRel,
@@ -253,13 +254,13 @@ def shuttle(request):
     ctx = def_user_ctx(request)
     ctx.update(
         {
-            "list": ShuttleService.objects.exclude(status=ShuttleService.DONE)
+            "list": ShuttleService.objects.exclude(status=ShuttleStatus.DONE)
             .filter(assoc_id=request.assoc["id"])
             .order_by("status", "date", "time"),
             "is_shuttle": is_shuttle(request),
             "past": ShuttleService.objects.filter(
                 created__gt=ref.date(),
-                status=ShuttleService.DONE,
+                status=ShuttleStatus.DONE,
                 assoc_id=request.assoc["id"],
             ).order_by("status", "date", "time"),
         }

@@ -30,7 +30,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.registration import round_to_nearest_cent
 from larpmanager.cache.character import get_event_cache_all
-from larpmanager.models.accounting import AccountingItemPayment
+from larpmanager.models.accounting import AccountingItemPayment, PaymentChoices
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
@@ -484,7 +484,7 @@ def _orga_registrations_acc(ctx, regs=None):
     cache_aip = {}
     if "token_credit" in ctx["features"]:
         que = AccountingItemPayment.objects.filter(reg__run=ctx["run"])
-        que = que.filter(pay__in=[AccountingItemPayment.TOKEN, AccountingItemPayment.CREDIT])
+        que = que.filter(pay__in=[PaymentChoices.TOKEN, PaymentChoices.CREDIT])
         for el in que.exclude(hide=True).values_list("member_id", "value", "pay"):
             if el[0] not in cache_aip:
                 cache_aip[el[0]] = {"total": 0}
