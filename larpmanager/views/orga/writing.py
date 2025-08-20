@@ -54,6 +54,7 @@ from larpmanager.models.writing import (
     PrologueType,
     SpeedLarp,
     TextVersion,
+    TextVersionChoices,
 )
 from larpmanager.utils.common import (
     exchange_order,
@@ -93,14 +94,14 @@ def orga_plots_edit(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_plots")
     if num != 0:
         get_element(ctx, num, "plot", Plot)
-    return writing_edit(request, ctx, PlotForm, "plot", TextVersion.PLOT)
+    return writing_edit(request, ctx, PlotForm, "plot", TextVersionChoices.PLOT)
 
 
 @login_required
 def orga_plots_versions(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_plots")
     get_plot(ctx, num)
-    return writing_versions(request, ctx, "plot", TextVersion.PLOT)
+    return writing_versions(request, ctx, "plot", TextVersionChoices.PLOT)
 
 
 @login_required
@@ -121,7 +122,7 @@ def orga_factions_edit(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_factions")
     if num != 0:
         get_element(ctx, num, "faction", Faction)
-    return writing_edit(request, ctx, FactionForm, "faction", TextVersion.FACTION)
+    return writing_edit(request, ctx, FactionForm, "faction", TextVersionChoices.FACTION)
 
 
 @login_required
@@ -135,7 +136,7 @@ def orga_factions_order(request, s, n, num, order):
 def orga_factions_versions(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_factions")
     get_element(ctx, num, "faction", Faction)
-    return writing_versions(request, ctx, "faction", TextVersion.FACTION)
+    return writing_versions(request, ctx, "faction", TextVersionChoices.FACTION)
 
 
 @login_required
@@ -156,14 +157,14 @@ def orga_quest_types_edit(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_quest_types")
     if num != 0:
         get_quest_type(ctx, num)
-    return writing_edit(request, ctx, QuestTypeForm, "quest_type", TextVersion.QUEST_TYPE)
+    return writing_edit(request, ctx, QuestTypeForm, "quest_type", TextVersionChoices.QUEST_TYPE)
 
 
 @login_required
 def orga_quest_types_versions(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_quest_types")
     get_quest_type(ctx, num)
-    return writing_versions(request, ctx, "quest_type", TextVersion.QUEST_TYPE)
+    return writing_versions(request, ctx, "quest_type", TextVersionChoices.QUEST_TYPE)
 
 
 @login_required
@@ -184,14 +185,14 @@ def orga_quests_edit(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_quests")
     if num != 0:
         get_element(ctx, num, "quest", Quest)
-    return writing_edit(request, ctx, QuestForm, "quest", TextVersion.QUEST)
+    return writing_edit(request, ctx, QuestForm, "quest", TextVersionChoices.QUEST)
 
 
 @login_required
 def orga_quests_versions(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_quests")
     get_quest(ctx, num)
-    return writing_versions(request, ctx, "quest", TextVersion.QUEST)
+    return writing_versions(request, ctx, "quest", TextVersionChoices.QUEST)
 
 
 @login_required
@@ -212,14 +213,14 @@ def orga_traits_edit(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_traits")
     if num != 0:
         get_trait(ctx, num)
-    return writing_edit(request, ctx, TraitForm, "trait", TextVersion.TRAIT)
+    return writing_edit(request, ctx, TraitForm, "trait", TextVersionChoices.TRAIT)
 
 
 @login_required
 def orga_traits_versions(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_traits")
     get_trait(ctx, num)
-    return writing_versions(request, ctx, "trait", TextVersion.TRAIT)
+    return writing_versions(request, ctx, "trait", TextVersionChoices.TRAIT)
 
 
 @login_required
@@ -255,14 +256,14 @@ def orga_handouts_edit(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_handouts")
     if num != 0:
         get_handout(ctx, num)
-    return writing_edit(request, ctx, HandoutForm, "handout", TextVersion.HANDOUT)
+    return writing_edit(request, ctx, HandoutForm, "handout", TextVersionChoices.HANDOUT)
 
 
 @login_required
 def orga_handouts_versions(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_handouts")
     get_handout(ctx, num)
-    return writing_versions(request, ctx, "handout", TextVersion.HANDOUT)
+    return writing_versions(request, ctx, "handout", TextVersionChoices.HANDOUT)
 
 
 @login_required
@@ -311,14 +312,14 @@ def orga_prologues_edit(request, s, n, num):
     ctx = check_event_permission(request, s, n, "prologue")
     if num != 0:
         get_prologue(ctx, num)
-    return writing_edit(request, ctx, PrologueForm, "prologue", TextVersion.PROLOGUE)
+    return writing_edit(request, ctx, PrologueForm, "prologue", TextVersionChoices.PROLOGUE)
 
 
 @login_required
 def orga_prologues_versions(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_prologues")
     get_prologue(ctx, num)
-    return writing_versions(request, ctx, "prologue", TextVersion.PROLOGUE)
+    return writing_versions(request, ctx, "prologue", TextVersionChoices.PROLOGUE)
 
 
 @login_required
@@ -339,14 +340,14 @@ def orga_speedlarps_edit(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_speedlarps")
     if num != 0:
         get_speedlarp(ctx, num)
-    return writing_edit(request, ctx, SpeedLarpForm, "speedlarp", TextVersion.SPEEDLARP)
+    return writing_edit(request, ctx, SpeedLarpForm, "speedlarp", TextVersionChoices.SPEEDLARP)
 
 
 @login_required
 def orga_speedlarps_versions(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_speedlarps")
     get_speedlarp(ctx, num)
-    return writing_versions(request, ctx, "speedlarp", TextVersion.SPEEDLARP)
+    return writing_versions(request, ctx, "speedlarp", TextVersionChoices.SPEEDLARP)
 
 
 @login_required
@@ -440,7 +441,7 @@ def orga_export(request, s, n, nm):
 def orga_version(request, s, n, nm, num):
     perm = f"orga_{nm}s"
     ctx = check_event_permission(request, s, n, perm)
-    tp = next(code for code, label in TextVersion.TEXT_CHOICES if label.lower() == nm)
+    tp = next(code for code, label in TextVersionChoices.choices if label.lower() == nm)
     ctx["version"] = TextVersion.objects.get(tp=tp, pk=num)
     ctx["text"] = ctx["version"].text.replace("\n", "<br />")
     return render(request, "larpmanager/orga/version.html", ctx)

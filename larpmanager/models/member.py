@@ -39,41 +39,30 @@ from larpmanager.models.utils import UploadToPathAndRename, download_d, show_thu
 from larpmanager.utils.codes import countries
 
 
+class GenderChoices(models.TextChoices):
+    MALE = "m", _("Male")
+    FEMALE = "f", _("Female")
+    OTHER = "o", _("Other")
+
+
+class FirstAidChoices(models.TextChoices):
+    YES = "y", "Yes"
+    NO = "n", "No"
+
+
+class NewsletterChoices(models.TextChoices):
+    ALL = "a", _("Yes, keep me posted!")
+    ONLY = "o", _("Only really important communications")
+    NO = "n", _("No, I don't want updates")
+
+
+class DocumentChoices(models.TextChoices):
+    IDENT = "i", _("ID Card")
+    PATEN = "p", _("Driver's License")
+    PASS = "s", _("Passport")
+
+
 class Member(BaseModel):
-    MALE = "m"
-    FEMALE = "f"
-    OTHER = "o"
-    GENDER_CHOICES = [
-        (MALE, _("Male")),
-        (FEMALE, _("Female")),
-        (OTHER, _("Other")),
-    ]
-
-    YES = "y"
-    NO = "n"
-    FIRSTAID_CHOICES = [
-        (NO, "No"),
-        (YES, "Yes"),
-    ]
-
-    ALL = "a"
-    ONLY = "o"
-    NO = "n"
-    NEWSLETTER_CHOICES = [
-        (ALL, _("Yes, keep me posted!")),
-        (ONLY, _("Only really important communications")),
-        (NO, _("No, I don't want updates")),
-    ]
-
-    IDENT = "i"
-    PATEN = "p"
-    PASS = "s"
-    DOCUMENT_CHOICES = [
-        (IDENT, _("ID Card")),
-        (PATEN, _("Driver's License")),
-        (PASS, _("Passport")),
-    ]
-
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="member")
 
     email = models.CharField(max_length=200, editable=False)
@@ -137,8 +126,8 @@ class Member(BaseModel):
 
     gender = models.CharField(
         max_length=1,
-        choices=GENDER_CHOICES,
-        default=OTHER,
+        choices=GenderChoices.choices,
+        default=GenderChoices.OTHER,
         verbose_name=_("Gender"),
         help_text=_("Indicates what gender you identify yourself as"),
         null=True,
@@ -165,8 +154,8 @@ class Member(BaseModel):
 
     first_aid = models.CharField(
         max_length=1,
-        choices=FIRSTAID_CHOICES,
-        default=NO,
+        choices=FirstAidChoices.choices,
+        default=FirstAidChoices.NO,
         verbose_name=_("First aid"),
         help_text=_(
             "Are you a doctor, a nurse, or a licensed rescuer? We can ask you to intervene in "
@@ -189,8 +178,8 @@ class Member(BaseModel):
 
     document_type = models.CharField(
         max_length=1,
-        choices=DOCUMENT_CHOICES,
-        default=IDENT,
+        choices=DocumentChoices.choices,
+        default=DocumentChoices.IDENT,
         verbose_name=_("Document type"),
         null=True,
         help_text=_("Indicates a type of identification document issued by the nation in which you reside"),
@@ -262,8 +251,8 @@ class Member(BaseModel):
 
     newsletter = models.CharField(
         max_length=1,
-        choices=NEWSLETTER_CHOICES,
-        default=ALL,
+        choices=NewsletterChoices.choices,
+        default=NewsletterChoices.ALL,
         verbose_name=_("Newsletter"),
         help_text=_("Do you wish to be always updated on our events") + "?",
         null=True,

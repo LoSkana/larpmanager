@@ -44,6 +44,7 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     Collection,
     Discount,
+    OtherChoices,
     PaymentInvoice,
     RefundRequest,
 )
@@ -100,7 +101,7 @@ class OrgaTokenForm(MyFormRun):
         super().__init__(*args, **kwargs)
         self.page_info = _("This page allows you to add or edit an assignment of") + f" {self.params['token_name']}"
         self.page_title = self.params["token_name"]
-        self.initial["oth"] = AccountingItemOther.TOKEN
+        self.initial["oth"] = OtherChoices.TOKEN
         self.fields["member"].widget.set_run(self.params["run"])
 
 
@@ -115,7 +116,7 @@ class OrgaCreditForm(MyFormRun):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.page_title = self.params["credit_name"]
-        self.initial["oth"] = AccountingItemOther.CREDIT
+        self.initial["oth"] = OtherChoices.CREDIT
         self.fields["member"].widget.set_run(self.params["run"])
 
 
@@ -254,7 +255,7 @@ class ExeCreditForm(MyForm):
         self.fields["member"].widget.set_assoc(self.params["a_id"])
         self.fields["run"].widget.set_assoc(self.params["a_id"])
         self.fields["oth"].widget = forms.HiddenInput()
-        self.initial["oth"] = AccountingItemOther.CREDIT
+        self.initial["oth"] = OtherChoices.CREDIT
 
 
 class ExeTokenForm(MyForm):
@@ -271,7 +272,7 @@ class ExeTokenForm(MyForm):
         self.fields["member"].widget.set_assoc(self.params["a_id"])
         self.fields["run"].widget.set_assoc(self.params["a_id"])
         self.fields["oth"].widget = forms.HiddenInput()
-        self.initial["oth"] = AccountingItemOther.TOKEN
+        self.initial["oth"] = OtherChoices.TOKEN
 
 
 class ExeExpenseForm(MyForm):

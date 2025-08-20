@@ -24,7 +24,13 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_assoc_features
-from larpmanager.models.accounting import AccountingItemExpense, AccountingItemOther, AccountingItemPayment
+from larpmanager.models.accounting import (
+    AccountingItemExpense,
+    AccountingItemOther,
+    AccountingItemPayment,
+    OtherChoices,
+    PaymentChoices,
+)
 from larpmanager.models.event import DevelopStatus
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration
@@ -47,7 +53,7 @@ def registration_tokens_credits(reg, remaining, features, assoc_id):
         membership.tokens -= tk_use
         membership.save()
         AccountingItemPayment.objects.create(
-            pay=AccountingItemPayment.TOKEN,
+            pay=PaymentChoices.TOKEN,
             value=tk_use,
             member=reg.member,
             reg=reg,
@@ -60,7 +66,7 @@ def registration_tokens_credits(reg, remaining, features, assoc_id):
         membership.credit -= cr_use
         membership.save()
         AccountingItemPayment.objects.create(
-            pay=AccountingItemPayment.CREDIT,
+            pay=PaymentChoices.CREDIT,
             value=cr_use,
             member=reg.member,
             reg=reg,
@@ -78,13 +84,13 @@ def get_runs_paying_incomplete():
 @receiver(post_save, sender=AccountingItemPayment)
 def post_save_accounting_item_payment(sender, instance, created, **kwargs):
     if not created and instance.reg:
-        update_token_credit(instance, instance.pay == AccountingItemPayment.TOKEN)
+        update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
 
 
 @receiver(post_delete, sender=AccountingItemPayment)
 def post_delete_accounting_item_payment(sender, instance, **kwargs):
     if instance.reg:
-        update_token_credit(instance, instance.pay == AccountingItemPayment.TOKEN)
+        update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
 
 
 @receiver(post_save, sender=AccountingItemOther)
@@ -92,7 +98,7 @@ def post_save_accounting_item_other_accounting(sender, instance, **kwargs):
     if not instance.member:
         return
 
-    update_token_credit(instance, instance.oth == AccountingItemOther.TOKEN)
+    update_token_credit(instance, instance.oth == OtherChoices.TOKEN)
 
 
 @receiver(post_save, sender=AccountingItemExpense)
@@ -114,11 +120,9 @@ def update_token_credit(instance, token=True):
 
     # token case
     if token:
-        tk_given = AccountingItemOther.objects.filter(
-            member=instance.member, oth=AccountingItemOther.TOKEN, assoc_id=assoc_id
-        )
+        tk_given = AccountingItemOther.objects.filter(member=instance.member, oth=OtherChoices.TOKEN, assoc_id=assoc_id)
         tk_used = AccountingItemPayment.objects.filter(
-            member=instance.member, pay=AccountingItemPayment.TOKEN, assoc_id=assoc_id
+            member=instance.member, pay=PaymentChoices.TOKEN, assoc_id=assoc_id
         )
         membership.tokens = get_sum(tk_given) - get_sum(tk_used)
         membership.save()
@@ -127,13 +131,13 @@ def update_token_credit(instance, token=True):
     else:
         cr_expenses = AccountingItemExpense.objects.filter(member=instance.member, is_approved=True, assoc_id=assoc_id)
         cr_given = AccountingItemOther.objects.filter(
-            member=instance.member, oth=AccountingItemOther.CREDIT, assoc_id=assoc_id
+            member=instance.member, oth=OtherChoices.CREDIT, assoc_id=assoc_id
         )
         cr_used = AccountingItemPayment.objects.filter(
-            member=instance.member, pay=AccountingItemPayment.CREDIT, assoc_id=assoc_id
+            member=instance.member, pay=PaymentChoices.CREDIT, assoc_id=assoc_id
         )
         cr_refunded = AccountingItemOther.objects.filter(
-            member=instance.member, oth=AccountingItemOther.REFUND, assoc_id=assoc_id
+            member=instance.member, oth=OtherChoices.REFUND, assoc_id=assoc_id
         )
         membership.credit = get_sum(cr_expenses) + get_sum(cr_given) - (get_sum(cr_used) + get_sum(cr_refunded))
         membership.save()
