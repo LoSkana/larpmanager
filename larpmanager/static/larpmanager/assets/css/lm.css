@@ -2060,3 +2060,8 @@ table.dataTable span.dtcc span.dtcc-button-icon {
     font-size: revert;
     letter-spacing: revert;
 }
+
+.dt-button {
+    border: 0 !important;
+    background: 0 !important;
+}

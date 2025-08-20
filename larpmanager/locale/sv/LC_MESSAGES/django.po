@@ -2084,6 +2084,9 @@ msgstr "Karaktärens namn"
 msgid "Collection for"
 msgstr "Samla för"
 
+msgid "Communications"
+msgstr "Kommunikation"
+
 msgid "Customisations"
 msgstr "Anpassningar"
 
@@ -3187,6 +3190,9 @@ msgstr "Återställning av lösenord bekräftad"
 
 msgid "Customised mail server"
 msgstr "Skräddarsydd e-postserver"
+
+msgid "Disable event approval"
+msgstr "Avaktivera godkännande av händelse"
 
 msgid "Display all users data"
 msgstr "Visa alla användares data"
@@ -7284,6 +7290,13 @@ msgid ""
 msgstr ""
 "Möjliggör hantering av kostnader som betalats med hjälp av organisationens "
 "finansiella instrument"
+
+msgid ""
+"If checked, approval of expenses can be performed only from the organization"
+" panel"
+msgstr ""
+"Om det är markerat kan godkännande av utgifter endast utföras från "
+"organisationspanelen"
 
 msgid ""
 "If checked, the gallery will not be displayed to those not logged in to the "

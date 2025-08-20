@@ -2084,6 +2084,9 @@ msgstr "Nom du personnage"
 msgid "Collection for"
 msgstr "Collecter pour"
 
+msgid "Communications"
+msgstr "Communications"
+
 msgid "Customisations"
 msgstr "Personnalisations"
 
@@ -3187,6 +3190,9 @@ msgstr "Réinitialisation du mot de passe confirmée"
 
 msgid "Customised mail server"
 msgstr "Serveur de messagerie personnalisé"
+
+msgid "Disable event approval"
+msgstr "Désactiver l'approbation des événements"
 
 msgid "Display all users data"
 msgstr "Afficher les données de tous les utilisateurs"
@@ -7501,6 +7507,13 @@ msgid ""
 msgstr ""
 "Permet de gérer les dépenses payées à l'aide des instruments financiers de "
 "l'organisation"
+
+msgid ""
+"If checked, approval of expenses can be performed only from the organization"
+" panel"
+msgstr ""
+"Si cette case est cochée, l'approbation des dépenses ne peut être effectuée "
+"qu'à partir du panel de l'organisation"
 
 msgid ""
 "If checked, the gallery will not be displayed to those not logged in to the "

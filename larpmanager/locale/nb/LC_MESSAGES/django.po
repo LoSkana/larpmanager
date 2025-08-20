@@ -2084,6 +2084,9 @@ msgstr "Tegnets navn"
 msgid "Collection for"
 msgstr "Samle inn for"
 
+msgid "Communications"
+msgstr "Kommunikasjon"
+
 msgid "Customisations"
 msgstr "Tilpasninger"
 
@@ -3187,6 +3190,9 @@ msgstr "Tilbakestilling av passord bekreftet"
 
 msgid "Customised mail server"
 msgstr "Skreddersydd e-postserver"
+
+msgid "Disable event approval"
+msgstr "Deaktiver godkjenning av hendelser"
 
 msgid "Display all users data"
 msgstr "Vis alle brukerdata"
@@ -7259,6 +7265,13 @@ msgid ""
 msgstr ""
 "Gjør det mulig å administrere utgifter som betales ved hjelp av "
 "organisasjonens finansielle instrumenter"
+
+msgid ""
+"If checked, approval of expenses can be performed only from the organization"
+" panel"
+msgstr ""
+"Hvis dette alternativet er krysset av, kan utgiftene kun godkjennes fra "
+"organisasjonspanelet"
 
 msgid ""
 "If checked, the gallery will not be displayed to those not logged in to the "

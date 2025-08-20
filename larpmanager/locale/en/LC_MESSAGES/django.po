@@ -579,6 +579,14 @@ msgid ""
 "whole numbers from 0 to 100)"
 msgstr ""
 
+msgid "Disable event approval"
+msgstr ""
+
+msgid ""
+"If checked, approval of expenses can be performed only from the organization "
+"panel"
+msgstr ""
+
 msgid "Electronic invoice"
 msgstr ""
 
@@ -7938,6 +7946,9 @@ msgid "Display sent e-mails"
 msgstr ""
 
 msgid "Read the writing elements"
+msgstr ""
+
+msgid "Communications"
 msgstr ""
 
 msgid "Fields"

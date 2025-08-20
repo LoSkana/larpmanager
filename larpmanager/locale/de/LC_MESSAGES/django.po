@@ -2084,6 +2084,9 @@ msgstr "Name des Charakters"
 msgid "Collection for"
 msgstr "Sammeln für"
 
+msgid "Communications"
+msgstr "Kommunikation"
+
 msgid "Customisations"
 msgstr "Anpassungen"
 
@@ -3187,6 +3190,9 @@ msgstr "Passwort zurücksetzen bestätigt"
 
 msgid "Customised mail server"
 msgstr "Kundenspezifischer Mail-Server"
+
+msgid "Disable event approval"
+msgstr "Ereignisgenehmigung deaktivieren"
 
 msgid "Display all users data"
 msgstr "Alle Benutzerdaten anzeigen"
@@ -7569,6 +7575,13 @@ msgid ""
 msgstr ""
 "Ermöglicht die Verwaltung von Ausgaben, die mit den Finanzinstrumenten der "
 "Organisation getätigt wurden"
+
+msgid ""
+"If checked, approval of expenses can be performed only from the organization"
+" panel"
+msgstr ""
+"Wenn diese Option aktiviert ist, kann die Genehmigung von Ausgaben nur über "
+"das Organisationspanel erfolgen"
 
 msgid ""
 "If checked, the gallery will not be displayed to those not logged in to the "
