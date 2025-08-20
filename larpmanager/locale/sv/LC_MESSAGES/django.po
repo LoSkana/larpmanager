@@ -5063,6 +5063,9 @@ msgstr "Donation av %(user)s, med anledning: \"%(reason)s\""
 msgid "Email sent with instructions for password reset"
 msgstr "E-post skickas med instruktioner för återställning av lösenord"
 
+msgid "If checked: Add a field to track items quantity"
+msgstr "Om markerad: Lägg till ett fält för att spåra antal artiklar"
+
 msgid "Indicate the country of which you are a citizen"
 msgstr "Ange det land där du är medborgare"
 

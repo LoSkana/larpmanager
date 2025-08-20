@@ -5074,6 +5074,9 @@ msgstr ""
 "Envoi d'un courriel contenant les instructions de réinitialisation du mot de"
 " passe"
 
+msgid "If checked: Add a field to track items quantity"
+msgstr "Si coché : Ajouter un champ pour suivre la quantité des articles"
+
 msgid "Indicate the country of which you are a citizen"
 msgstr "Indiquez le pays dont vous êtes ressortissant"
 

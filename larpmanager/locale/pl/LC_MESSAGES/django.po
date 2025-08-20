@@ -5061,6 +5061,9 @@ msgstr "Darowizna %(user)s, z powodem: '%(reason)s'"
 msgid "Email sent with instructions for password reset"
 msgstr "Wiadomość e-mail z instrukcjami resetowania hasła"
 
+msgid "If checked: Add a field to track items quantity"
+msgstr "Jeśli zaznaczone: Dodaj pole do śledzenia ilości przedmiotów"
+
 msgid "Indicate the country of which you are a citizen"
 msgstr "Wskaż kraj, którego jesteś obywatelem"
 

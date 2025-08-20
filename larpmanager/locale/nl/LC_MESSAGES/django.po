@@ -5068,6 +5068,10 @@ msgstr ""
 "E-mail verzonden met instructies voor het opnieuw instellen van het "
 "wachtwoord"
 
+msgid "If checked: Add a field to track items quantity"
+msgstr ""
+"Indien aangevinkt: Een veld toevoegen om de hoeveelheid items bij te houden"
+
 msgid "Indicate the country of which you are a citizen"
 msgstr "Vermeld het land waarvan u staatsburger bent"
 

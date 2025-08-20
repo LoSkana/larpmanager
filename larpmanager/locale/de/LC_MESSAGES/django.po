@@ -5078,6 +5078,9 @@ msgstr "Spende von %(user)s, mit Grund: '%(reason)s'"
 msgid "Email sent with instructions for password reset"
 msgstr "E-Mail mit Anweisungen zum Zurücksetzen des Passworts gesendet"
 
+msgid "If checked: Add a field to track items quantity"
+msgstr "Wenn markiert: Ein Feld zur Verfolgung der Artikelmenge hinzufügen"
+
 msgid "Indicate the country of which you are a citizen"
 msgstr "Geben Sie das Land an, dessen Staatsangehörigkeit Sie besitzen"
 

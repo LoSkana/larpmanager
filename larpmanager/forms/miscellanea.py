@@ -35,6 +35,7 @@ from larpmanager.forms.utils import (
     TimePickerInput,
     get_run_choices,
 )
+from larpmanager.models.association import Association
 from larpmanager.models.event import Event
 from larpmanager.models.miscellanea import (
     Album,
@@ -230,6 +231,11 @@ class ExeInventoryItemForm(MyForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["container"].widget.set_assoc(self.params["a_id"])
+
+        assoc = Association.objects.get(pk=self.params["a_id"])
+        for field in InventoryItem.get_optional_fields():
+            if not assoc.get_config(f"inventory_{field}", False):
+                self.delete_field(field)
 
 
 class ExeContainerItemForm(MyForm):

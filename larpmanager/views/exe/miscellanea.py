@@ -26,6 +26,7 @@ from larpmanager.forms.miscellanea import (
     ExeInventoryItemForm,
     ExeUrlShortnerForm,
 )
+from larpmanager.models.association import Association
 from larpmanager.models.miscellanea import (
     InventoryContainer,
     InventoryItem,
@@ -63,6 +64,11 @@ def exe_inventory_containers_edit(request, num):
 def exe_inventory_items(request):
     ctx = check_assoc_permission(request, "exe_inventory_items")
     ctx["list"] = InventoryItem.objects.filter(assoc_id=request.assoc["id"]).select_related("container")
+    assoc = Association.objects.get(pk=ctx["a_id"])
+    optionals = {}
+    for field in InventoryItem.get_optional_fields():
+        optionals[field] = assoc.get_config(f"inventory_{field}")
+    ctx["optionals"] = optionals
     return render(request, "larpmanager/exe/inventory/items.html", ctx)
 
 

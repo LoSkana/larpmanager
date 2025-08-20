@@ -400,6 +400,15 @@ msgstr ""
 msgid "Allow to switch registration between events"
 msgstr ""
 
+msgid "Inventory"
+msgstr ""
+
+msgid "Quantity"
+msgstr ""
+
+msgid "If checked: Add a field to track items quantity"
+msgstr ""
+
 msgid "Users"
 msgstr ""
 
@@ -4910,9 +4919,6 @@ msgstr ""
 msgid "This page shows the inventory items"
 msgstr ""
 
-msgid "Quantity"
-msgstr ""
-
 msgid "Container"
 msgstr ""
 
@@ -7237,9 +7243,6 @@ msgid ""
 msgstr ""
 
 msgid "Now you can create badges"
-msgstr ""
-
-msgid "Inventory"
 msgstr ""
 
 msgid "Enables inventory management for organization warehouse management"

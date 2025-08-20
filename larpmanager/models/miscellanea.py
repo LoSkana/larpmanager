@@ -360,9 +360,9 @@ class WorkshopOption(BaseModel):
 class InventoryContainer(BaseModel):
     name = models.CharField(max_length=100, help_text=_("Code of the box or shelf"))
 
-    position = models.CharField(max_length=100, help_text=_("Where it is located"))
+    position = models.CharField(max_length=100, help_text=_("Where it is located"), blank=True, null=True)
 
-    description = models.CharField(max_length=1000)
+    description = models.CharField(max_length=1000, blank=True, null=True)
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="containers")
 
@@ -370,13 +370,13 @@ class InventoryContainer(BaseModel):
 class InventoryItem(BaseModel):
     name = models.CharField(max_length=100)
 
-    quantity = models.IntegerField()
+    quantity = models.IntegerField(blank=True, null=True)
 
-    description = models.CharField(max_length=1000)
+    description = models.CharField(max_length=1000, blank=True, null=True)
 
     container = models.ForeignKey(InventoryContainer, on_delete=models.CASCADE, related_name="items")
 
-    tags = models.CharField(max_length=100, help_text=_("List of tags"))
+    tags = models.CharField(max_length=100, help_text=_("List of tags"), blank=True, null=True)
 
     photo = models.ImageField(
         max_length=500,
@@ -395,6 +395,10 @@ class InventoryItem(BaseModel):
     )
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="items")
+
+    @classmethod
+    def get_optional_fields(cls):
+        return ["quantity"]
 
 
 class ShuttleStatus(models.TextChoices):

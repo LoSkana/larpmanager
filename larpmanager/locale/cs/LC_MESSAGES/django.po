@@ -5061,6 +5061,9 @@ msgstr "Darování %(user)s, s důvodem: \"%(reason)s"
 msgid "Email sent with instructions for password reset"
 msgstr "Odeslání e-mailu s pokyny pro obnovení hesla"
 
+msgid "If checked: Add a field to track items quantity"
+msgstr "Pokud je zaškrtnuto: Přidat pole pro sledování množství položek"
+
 msgid "Indicate the country of which you are a citizen"
 msgstr "Uveďte zemi, jejímž jste občanem"
 

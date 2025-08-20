@@ -436,7 +436,7 @@
     descr: Manage inventory containers
     slug: exe_inventory_containers
     number: 21
-    config: null
+    config: inventory
     hidden: false
     feature: 66
     module: 15
@@ -447,7 +447,7 @@
     descr: Manage inventory items
     slug: exe_inventory_items
     number: 46
-    config: null
+    config: inventory
     hidden: false
     feature: 66
     module: 15
