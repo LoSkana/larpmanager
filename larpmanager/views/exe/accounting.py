@@ -45,7 +45,6 @@ from larpmanager.forms.writing import (
     UploadElementsForm,
 )
 from larpmanager.models.accounting import (
-    AccountingItem,
     AccountingItemDonation,
     AccountingItemExpense,
     AccountingItemInflow,
@@ -54,7 +53,10 @@ from larpmanager.models.accounting import (
     AccountingItemOutflow,
     AccountingItemPayment,
     AccountingItemTransaction,
+    BalanceChoices,
     Collection,
+    OtherChoices,
+    PaymentChoices,
     PaymentInvoice,
     PaymentStatus,
     PaymentType,
@@ -318,7 +320,7 @@ def exe_balance(request):
     ctx["tickets"] = get_sum(
         AccountingItemPayment.objects.filter(
             assoc_id=ctx["a_id"],
-            pay=AccountingItemPayment.MONEY,
+            pay=PaymentChoices.MONEY,
             created__gte=start,
             created__lt=end,
         )
@@ -337,14 +339,13 @@ def exe_balance(request):
             assoc_id=ctx["a_id"],
             created__gte=start,
             created__lt=end,
-            oth=AccountingItemOther.REFUND,
+            oth=OtherChoices.REFUND,
         )
     )
 
     # add personal expenses
-    for el in AccountingItem.BALANCE_CHOICES:
-        (bl, descr) = el
-        ctx["expenditure"][bl] = {"name": descr, "value": 0}
+    for value, label in BalanceChoices.choices:
+        ctx["expenditure"][value] = {"name": label, "value": 0}
 
     for el in (
         AccountingItemExpense.objects.filter(
@@ -362,8 +363,7 @@ def exe_balance(request):
     ctx["out"] = 0
     if tot:
         # round for actual reimbursed
-        for el in AccountingItem.BALANCE_CHOICES:
-            (bl, descr) = el
+        for bl, _descr in BalanceChoices.choices:
             v = ctx["expenditure"][bl]["value"]
             # resample value on given out credits
             v = (v / tot) * ctx["rimb"]

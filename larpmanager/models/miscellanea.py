@@ -422,16 +422,13 @@ class InventoryBoxPhoto(BaseModel):
     )
 
 
-class ShuttleService(BaseModel):
-    OPEN = "0"
-    COMING = "1"
-    DONE = "2"
-    STATUS_CHOICES = [
-        (OPEN, _("Waiting list")),
-        (COMING, _("We're coming")),
-        (DONE, _("Arrived safe and sound")),
-    ]
+class ShuttleStatus(models.TextChoices):
+    OPEN = "0", _("Waiting list")
+    COMING = "1", _("We're coming")
+    DONE = "2", _("Arrived safe and sound")
 
+
+class ShuttleService(BaseModel):
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="shuttle_services_requests")
 
     passengers = models.IntegerField(
@@ -479,7 +476,7 @@ class ShuttleService(BaseModel):
         null=True,
     )
 
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=OPEN, db_index=True)
+    status = models.CharField(max_length=1, choices=ShuttleStatus.choices, default=ShuttleStatus.OPEN, db_index=True)
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="shuttles")
 
@@ -487,34 +484,28 @@ class ShuttleService(BaseModel):
         return f"{self.member} ({self.date} {self.time}) {self.status}"
 
 
+class ProblemStatus(models.TextChoices):
+    OPEN = "o", "1 - OPEN"
+    WORKING = "w", "2 - WORKING"
+    CLOSED = "c", "3 - CLOSED"
+
+
+class ProblemSeverity(models.TextChoices):
+    RED = "r", "1 - RED"
+    ORANGE = "o", "2 - ORANGE"
+    YELLOW = "y", "3 - YELLOW"
+    GREEN = "g", "4 - GREEN"
+
+
 class Problem(BaseModel):
-    RED = "r"
-    ORANGE = "o"
-    YELLOW = "y"
-    GREEN = "g"
-    SEVERITY_CHOICES = [
-        (RED, "1 - RED"),
-        (ORANGE, "2 - ORANGE"),
-        (YELLOW, "3 - YELLOW"),
-        (GREEN, "4 - GREEN"),
-    ]
-
-    OPEN = "o"
-    WORKING = "w"
-    CLOSED = "c"
-    STATUS_CHOICES = [
-        (OPEN, "1 - OPEN"),
-        (WORKING, "2 - WORKING"),
-        (CLOSED, "3 - CLOSED"),
-    ]
-
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
+
     number = models.IntegerField()
 
     severity = models.CharField(
         max_length=1,
-        choices=SEVERITY_CHOICES,
-        default=GREEN,
+        choices=ProblemSeverity.choices,
+        default=ProblemSeverity.GREEN,
         verbose_name=_("Severity"),
         help_text=_(
             "Indicate severity: RED (risks ruining the event for more than half of the "
@@ -526,8 +517,8 @@ class Problem(BaseModel):
 
     status = models.CharField(
         max_length=1,
-        choices=STATUS_CHOICES,
-        default=OPEN,
+        choices=ProblemStatus.choices,
+        default=ProblemStatus.OPEN,
         verbose_name=_("Status"),
         help_text=_(
             "When putting in WORKING, indicate in the comments the specific actions that  are "
