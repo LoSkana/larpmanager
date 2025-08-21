@@ -1,0 +1,75 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Inventory items" %} - {% trans "Organization" %}
+{% endblock title %}
+{% block info %}
+    {% trans "This page shows the inventory items" %}
+{% endblock info %}
+{% block content %}
+    {% include "elements/header/exe.html" %}
+    <table id="inv_items"
+           class="go_datatable"
+           no_header_cols="{{ no_header_cols }}">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Name" %}</th>
+                {% if optionals.quantity %}
+                    <th>{% trans "Quantity" %}</th>
+                {% endif %}
+                <th>{% trans "Description" %}</th>
+                <th>{% trans "Container" %}</th>
+                <th>{% trans "Tags" %}</th>
+                <th>{% trans "Photo" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'exe_inventory_items_edit' el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.name }}</td>
+                    {% if optionals.quantity %}
+                        <td>
+                            {% if el.quantity %}{{ el.quantity }}{% endif %}
+                        </td>
+                    {% endif %}
+                    <td>{{ el.description | truncatechars:200 }}</td>
+                    <td>
+                        <a href="{% url 'exe_inventory_containers_edit' el.container.id %}">{{ el.container }}</a>
+                    </td>
+                    <td>
+                        {% if el.tags %}{{ el.tags }}{% endif %}
+                    </td>
+                    <td>
+                        {% if el.photo %}
+                            <img src="{{ el.thumb.url }}"
+                                 class="inv_photo"
+                                 alt="item photo"
+                                 style="cursor: pointer"
+                                 onclick="openImage('{{ el.photo.url }}')" />
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div id="imagePopup">
+        <img id="popupImg" src="" alt="popup image" />
+    </div>
+{% endblock content %}
+{% block js %}
+    <script>
+function openImage(url) {
+    document.getElementById('popupImg').src = url;
+    document.getElementById('imagePopup').style.display = 'flex';
+}
+
+document.getElementById('imagePopup').onclick = function() {
+    this.style.display = 'none';
+};
+    </script>
+{% endblock js %}

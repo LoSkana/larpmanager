@@ -82,3 +82,9 @@
     name: Communications
     order: 85
     icon: inbox
+- model: larpmanager.permissionmodule
+  pk: 15
+  fields:
+    name: Inventory
+    order: 95
+    icon: box-open

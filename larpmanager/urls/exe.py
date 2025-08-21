@@ -54,19 +54,34 @@ urlpatterns = [
         name="exe_urlshortner_edit",
     ),
     path(
-        "manage/inventory/",
-        views_ems.exe_inventory,
-        name="exe_inventory",
+        "manage/inventory/containers/",
+        views_ems.exe_inventory_containers,
+        name="exe_inventory_containers",
     ),
     path(
-        "manage/inventory/edit/<int:num>/",
-        views_ems.exe_inventory_edit,
-        name="exe_inventory_edit",
+        "manage/inventory/containers/edit/<int:num>/",
+        views_ems.exe_inventory_containers_edit,
+        name="exe_inventory_containers_edit",
     ),
     path(
-        "manage/inventory/<int:num>/history",
-        views_ems.exe_inventory_history,
-        name="exe_inventory_history",
+        "manage/inventory/items/",
+        views_ems.exe_inventory_items,
+        name="exe_inventory_items",
+    ),
+    path(
+        "manage/inventory/items/edit/<int:num>/",
+        views_ems.exe_inventory_items_edit,
+        name="exe_inventory_items_edit",
+    ),
+    path(
+        "manage/inventory/movements/",
+        views_ems.exe_inventory_movements,
+        name="exe_inventory_movements",
+    ),
+    path(
+        "manage/inventory/movements/edit/<int:num>/",
+        views_ems.exe_inventory_movements_edit,
+        name="exe_inventory_movements_edit",
     ),
     path(
         "manage/badges/",

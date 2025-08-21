@@ -27,6 +27,8 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.miscellanea import (
     OrgaAlbumForm,
+    OrgaInventoryAreaForm,
+    OrgaInventoryAssignmentForm,
     OrgaProblemForm,
     UploadAlbumsForm,
     UtilForm,
@@ -36,6 +38,8 @@ from larpmanager.forms.miscellanea import (
 )
 from larpmanager.models.miscellanea import (
     Album,
+    InventoryArea,
+    InventoryAssignment,
     Problem,
     Util,
     WorkshopMemberRel,
@@ -49,7 +53,7 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.edit import orga_edit
 from larpmanager.utils.event import check_event_permission
-from larpmanager.utils.miscellanea import upload_albums
+from larpmanager.utils.miscellanea import get_inventory_optionals, upload_albums
 from larpmanager.utils.writing import writing_post
 
 
@@ -70,11 +74,11 @@ def orga_albums_upload(request, s, n, a):
     ctx = check_event_permission(request, s, n, "orga_albums")
     get_album_cod(ctx, a)
     if request.method == "POST":
-        form = UploadAlbumsForm(request.POST, request.FILES)
+        form = UploadAlbumsForm(request, s, n.POST, request.FILES)
         if form.is_valid():
             upload_albums(ctx["album"], request.FILES["elem"])
-            messages.success(request, _("Photos and videos successfully uploaded") + "!")
-            return redirect(request.path_info)
+            messages.success(request, s, n, _("Photos and videos successfully uploaded") + "!")
+            return redirect(request, s, n.path_info)
     else:
         form = UploadAlbumsForm()
     ctx["form"] = form
@@ -129,7 +133,7 @@ def orga_workshop_modules_edit(request, s, n, num):
 def orga_workshop_questions(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_workshop_questions")
     if request.method == "POST":
-        return writing_post(request, ctx, WorkshopQuestion, "workshop_question")
+        return writing_post(request, s, n, ctx, WorkshopQuestion, "workshop_question")
     ctx["list"] = WorkshopQuestion.objects.filter(module__event=ctx["event"]).order_by("module__number", "number")
     return render(request, "larpmanager/orga/workshop/questions.html", ctx)
 
@@ -143,7 +147,7 @@ def orga_workshop_questions_edit(request, s, n, num):
 def orga_workshop_options(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_workshop_options")
     if request.method == "POST":
-        return writing_post(request, ctx, WorkshopOption, "workshop_option")
+        return writing_post(request, s, n, ctx, WorkshopOption, "workshop_option")
     ctx["list"] = WorkshopOption.objects.filter(question__module__event=ctx["event"]).order_by(
         "question__module__number", "question__number", "is_correct"
     )
@@ -165,3 +169,36 @@ def orga_problems(request, s, n):
 @login_required
 def orga_problems_edit(request, s, n, num):
     return orga_edit(request, s, n, "orga_problems", OrgaProblemForm, num)
+
+
+@login_required
+def orga_inventory_area(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_inventory_area")
+    ctx["list"] = ctx["event"].get_elements(InventoryArea)
+    return render(request, "larpmanager/orga/inventory/area.html", ctx)
+
+
+@login_required
+def orga_inventory_area_edit(request, s, n, num):
+    return orga_edit(request, s, n, "orga_inventory_area", OrgaInventoryAreaForm, num)
+
+
+@login_required
+def orga_inventory_assignments(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_inventory_assignments")
+    ctx["list"] = ctx["event"].get_elements(InventoryAssignment).select_related("area", "item")
+    get_inventory_optionals(ctx, [4])
+    return render(request, "larpmanager/orga/inventory/assignments.html", ctx)
+
+
+@login_required
+def orga_inventory_assignments_edit(request, s, n, num):
+    return orga_edit(request, s, n, "orga_inventory_assignments", OrgaInventoryAssignmentForm, num)
+
+
+@login_required
+def orga_inventory_manifest(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_inventory_manifest")
+    ctx["list"] = ctx["event"].get_elements(InventoryArea).prefetch_related("assignments", "assignments__item")
+    get_inventory_optionals(ctx, [3, 4])
+    return render(request, "larpmanager/orga/inventory/manifest.html", ctx)

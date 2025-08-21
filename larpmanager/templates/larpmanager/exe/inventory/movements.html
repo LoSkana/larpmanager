@@ -1,0 +1,67 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Inventory assignments" %}  - {{ run }}
+{% endblock title %}
+{% block info %}
+    {% trans "This page shows the assignment of inventory items to event area" %}
+{% endblock info %}
+{% block content %}
+    {% include "elements/header/exe.html" %}
+    <table id="inv_movements" class="go_datatable">
+        <thead>
+            <tr>
+                <th></th>
+                {% if optionals.quantity %}
+                    <th>{% trans "Quantity" %}</th>
+                {% endif %}
+                <th>{% trans "Item" %}</th>
+                <th>{% trans "Notes" %}</th>
+                <th>{% trans "Photo" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'exe_inventory_movements_edit' el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    {% if optionals.quantity %}
+                        <td>
+                            {% if el.quantity %}{{ el.quantity }}{% endif %}
+                        </td>
+                    {% endif %}
+                    <td>
+                        <a href="{% url 'exe_inventory_items_edit' el.item.id %}">{{ el.item }}</a>
+                    </td>
+                    <td>{{ el.notes }}</td>
+                    <td>
+                        {% if el.item.photo %}
+                            <img src="{{ el.item.thumb.url }}"
+                                 class="inv_photo"
+                                 alt="item photo"
+                                 style="cursor: pointer"
+                                 onclick="openImage('{{ el.item.photo.url }}')" />
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div id="imagePopup">
+        <img id="popupImg" src="" alt="popup image" />
+    </div>
+{% endblock content %}
+{% block js %}
+    <script>
+function openImage(url) {
+    document.getElementById('popupImg').src = url;
+    document.getElementById('imagePopup').style.display = 'flex';
+}
+
+document.getElementById('imagePopup').onclick = function() {
+    this.style.display = 'none';
+};
+    </script>
+{% endblock js %}

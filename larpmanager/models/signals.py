@@ -17,20 +17,24 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import os
 from datetime import date
+from io import BytesIO
 
+import PIL.Image as PILImage
 from cryptography.fernet import Fernet
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import transaction
+from django.core.files.base import ContentFile
+from django.db import models, transaction
 from django.db.models import Max, Q
 from django.db.models.signals import post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
+from PIL import ImageOps
 from slugify import slugify
 
 from larpmanager.accounting.vat import compute_vat
@@ -57,6 +61,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTicket, LarpManagerTutorial
 from larpmanager.models.member import Member, MemberConfig, Membership, MembershipStatus
+from larpmanager.models.miscellanea import InventoryItem
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Faction, Plot, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.utils.common import copy_class
@@ -604,3 +609,78 @@ def save_larpmanager_ticket(sender, instance, created, **kwargs):
         if instance.screenshot:
             body += f"<br /><br /><img src='{instance.screenshot_reduced.url}' />"
         my_send_mail(subj, body, email)
+
+
+@receiver(pre_save, sender=InventoryItem, dispatch_uid="inventoryitem_rotate_vertical_photo")
+def rotate_vertical_photo(sender, instance: InventoryItem, **kwargs):
+    try:
+        field = instance._meta.get_field("photo")
+        if not isinstance(field, models.ImageField):
+            return
+    except Exception:
+        return
+
+    f = getattr(instance, "photo", None)
+    if not f:
+        return
+
+    if _check_new(f, instance, sender):
+        return
+
+    fileobj = getattr(f, "file", None) or f
+    try:
+        fileobj.seek(0)
+        img = PILImage.open(fileobj)
+    except Exception:
+        return
+
+    img = ImageOps.exif_transpose(img)
+    w, h = img.size
+    if h <= w:
+        return
+
+    img = img.rotate(90, expand=True)
+
+    fmt = _get_extension(f, img)
+
+    if fmt == "JPEG" and img.mode in ("RGBA", "LA", "P"):
+        img = img.convert("RGB")
+
+    out = BytesIO()
+    save_kwargs = {"optimize": True}
+    if fmt == "JPEG":
+        save_kwargs["quality"] = 88
+    img.save(out, format=fmt, **save_kwargs)
+    out.seek(0)
+
+    basename = os.path.basename(f.name) or f.name
+    instance.photo = ContentFile(out.read(), name=basename)
+
+
+def _get_extension(f, img):
+    ext = os.path.splitext(f.name)[1].lower()
+    fmt = (img.format or "").upper()
+    if not fmt:
+        if ext in (".jpg", ".jpeg"):
+            fmt = "JPEG"
+        elif ext == ".png":
+            fmt = "PNG"
+        elif ext == ".webp":
+            fmt = "WEBP"
+        else:
+            fmt = "JPEG"
+    return fmt
+
+
+def _check_new(f, instance, sender):
+    if instance.pk:
+        try:
+            old = sender.objects.filter(pk=instance.pk).only("photo").first()
+            if old:
+                old_name = old.photo.name if old.photo else ""
+                if f.name == old_name and not getattr(f, "file", None):
+                    return True
+        except Exception:
+            pass
+
+    return False
