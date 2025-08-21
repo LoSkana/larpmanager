@@ -29,6 +29,7 @@ from larpmanager.forms.miscellanea import (
 from larpmanager.models.miscellanea import (
     InventoryContainer,
     InventoryItem,
+    InventoryMovement,
     UrlShortner,
 )
 from larpmanager.utils.base import check_assoc_permission
@@ -71,3 +72,16 @@ def exe_inventory_items(request):
 @login_required
 def exe_inventory_items_edit(request, num):
     return exe_edit(request, ExeInventoryItemForm, num, "exe_inventory_items")
+
+
+@login_required
+def exe_inventory_movements(request):
+    ctx = check_assoc_permission(request, "exe_inventory_movements")
+    ctx["list"] = InventoryMovement.objects.filter(assoc_id=request.assoc["id"]).select_related("item")
+    get_inventory_optionals(ctx, [4])
+    return render(request, "larpmanager/exe/inventory/movements.html", ctx)
+
+
+@login_required
+def exe_inventory_movements_edit(request, num):
+    return exe_edit(request, ExeInventoryMovementForm, num, "exe_inventory_movements")

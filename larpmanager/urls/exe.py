@@ -74,6 +74,16 @@ urlpatterns = [
         name="exe_inventory_items_edit",
     ),
     path(
+        "manage/inventory/movements/",
+        views_ems.exe_inventory_movements,
+        name="exe_inventory_movements",
+    ),
+    path(
+        "manage/inventory/movements/edit/<int:num>/",
+        views_ems.exe_inventory_movements_edit,
+        name="exe_inventory_movements_edit",
+    ),
+    path(
         "manage/badges/",
         views_em.exe_badges,
         name="exe_badges",

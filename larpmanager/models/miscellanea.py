@@ -401,6 +401,23 @@ class InventoryItem(BaseModel):
         return ["quantity"]
 
 
+class InventoryMovement(BaseModel):
+    quantity = models.IntegerField(blank=True, null=True)
+
+    item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE, related_name="movements")
+
+    notes = models.CharField(
+        max_length=1000,
+        blank=True,
+        null=True,
+        help_text=_("Where it has been placed? When it is expected to come back?"),
+    )
+
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="movements")
+
+    completed = models.BooleanField(default=False)
+
+
 class InventoryArea(BaseModel):
     name = models.CharField(max_length=100, help_text=_("Name of event area"))
 
@@ -420,9 +437,9 @@ class InventoryAssignment(BaseModel):
 
     notes = models.CharField(max_length=1000, blank=True, null=True)
 
-    loaded = models.BooleanField()
+    loaded = models.BooleanField(default=False)
 
-    deployed = models.BooleanField()
+    deployed = models.BooleanField(default=False)
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="assignments")
 

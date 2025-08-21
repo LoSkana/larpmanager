@@ -451,3 +451,14 @@
     hidden: false
     feature: 66
     module: 15
+- model: larpmanager.assocpermission
+  pk: 22
+  fields:
+    name: Movements
+    descr: Manage inventory movements
+    slug: exe_inventory_movements
+    number: 66
+    config: inventory
+    hidden: false
+    feature: 66
+    module: 15
