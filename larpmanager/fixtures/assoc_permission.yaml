@@ -441,7 +441,7 @@
     feature: 66
     module: 15
 - model: larpmanager.assocpermission
-  pk: 21
+  pk: 46
   fields:
     name: Items
     descr: Manage inventory items
@@ -452,7 +452,7 @@
     feature: 66
     module: 15
 - model: larpmanager.assocpermission
-  pk: 22
+  pk: 47
   fields:
     name: Movements
     descr: Manage inventory movements
