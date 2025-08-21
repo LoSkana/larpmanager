@@ -2876,6 +2876,9 @@ msgstr "Geschichte der Präferenzen"
 msgid "I am not interested"
 msgstr "Nicht interessiert"
 
+msgid "Inventory movements"
+msgstr "Bewegungen der Bestände"
+
 msgid "List of other users"
 msgstr "Liste der anderen Benutzer"
 
@@ -3644,6 +3647,9 @@ msgstr "Schenken Sie Ihrem Freund eine Karte"
 
 msgid "Hide unassigned characters"
 msgstr "Nicht zugewiesene Zeichen ausblenden"
+
+msgid "Manage inventory movements"
+msgstr "Verwalten von Bestandsbewegungen"
 
 msgid "Manage the event prologues"
 msgstr "Verwalten der Ereignisprologe"
@@ -5938,6 +5944,9 @@ msgstr ""
 "Auf dieser Seite sind die Abschnitte des Anmeldeformulars für die "
 "Veranstaltung zusammengefasst"
 
+msgid "Where it has been placed? When it is expected to come back?"
+msgstr "Wo wurde sie platziert? Wann wird sie voraussichtlich zurückkommen?"
+
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr ""
@@ -7960,6 +7969,13 @@ msgid ""
 msgstr ""
 "Einrichten der Konfiguration für die Erstellung oder Bearbeitung von Zeichen"
 " durch die Teilnehmer"
+
+msgid ""
+"This page allows you to add or edit a new movement of item inventory, loans "
+"or repairs"
+msgstr ""
+"Auf dieser Seite können Sie eine neue Bewegung des Artikelbestands, "
+"Leihgaben oder Reparaturen hinzufügen oder bearbeiten"
 
 msgid ""
 "Upload the scan of both your signed request, and your document (image or pdf"

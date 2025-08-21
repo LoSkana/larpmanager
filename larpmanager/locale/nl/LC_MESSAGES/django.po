@@ -2876,6 +2876,9 @@ msgstr "Voorkeur geschiedenis"
 msgid "I am not interested"
 msgstr "Niet geïnteresseerd"
 
+msgid "Inventory movements"
+msgstr "Voorraadbewegingen"
+
 msgid "List of other users"
 msgstr "Lijst van andere gebruikers"
 
@@ -3644,6 +3647,9 @@ msgstr "Geef een kaart aan je vriend(in)"
 
 msgid "Hide unassigned characters"
 msgstr "Niet-toegewezen tekens verbergen"
+
+msgid "Manage inventory movements"
+msgstr "Voorraadbewegingen beheren"
 
 msgid "Manage the event prologues"
 msgstr "De prologen van evenementen beheren"
@@ -5855,6 +5861,9 @@ msgstr ""
 "Op deze pagina worden de onderdelen van het registratieformulier voor "
 "evenementen samengevat"
 
+msgid "Where it has been placed? When it is expected to come back?"
+msgstr "Waar is het geplaatst? Wanneer wordt het terug verwacht?"
+
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr "Je kunt de betaling doen <a href='%(url)s'>op deze pagina</a>"
@@ -7782,6 +7791,13 @@ msgid ""
 msgstr ""
 "Configuratie instellen voor het maken of bewerken van personages door de "
 "deelnemers"
+
+msgid ""
+"This page allows you to add or edit a new movement of item inventory, loans "
+"or repairs"
+msgstr ""
+"Op deze pagina kun je een nieuwe beweging van iteminventaris, leningen of "
+"reparaties toevoegen of bewerken"
 
 msgid ""
 "Upload the scan of both your signed request, and your document (image or pdf"

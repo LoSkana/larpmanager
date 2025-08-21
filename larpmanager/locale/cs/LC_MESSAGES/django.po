@@ -2876,6 +2876,9 @@ msgstr "Historie předvoleb"
 msgid "I am not interested"
 msgstr "Nemám zájem"
 
+msgid "Inventory movements"
+msgstr "Inventurní pohyby"
+
 msgid "List of other users"
 msgstr "Seznam dalších uživatelů"
 
@@ -3644,6 +3647,9 @@ msgstr "Dejte přání svému příteli"
 
 msgid "Hide unassigned characters"
 msgstr "Skrytí nepřiřazených znaků"
+
+msgid "Manage inventory movements"
+msgstr "Správa pohybu zásob"
 
 msgid "Manage the event prologues"
 msgstr "Správa prologů událostí"
@@ -5829,6 +5835,9 @@ msgstr "Na této stránce je shrnuto nastavení termínu platby pro danou událo
 msgid "This page shows the sections of the event registration form"
 msgstr "Na této stránce jsou shrnuty jednotlivé části registračního formuláře"
 
+msgid "Where it has been placed? When it is expected to come back?"
+msgstr "Kde byl umístěn? Kdy se očekává jeho návrat?"
+
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr "Platbu můžete provést <a href='%(url)s'>na této stránce</a>"
@@ -7529,6 +7538,13 @@ msgid ""
 "Set up the configuration for the creation or editing of characters by the "
 "participants"
 msgstr "Nastavení konfigurace pro vytváření nebo úpravu znaků účastníky"
+
+msgid ""
+"This page allows you to add or edit a new movement of item inventory, loans "
+"or repairs"
+msgstr ""
+"Na této stránce můžete přidat nebo upravit nový pohyb zásob, výpůjček nebo "
+"oprav"
 
 msgid ""
 "Upload the scan of both your signed request, and your document (image or pdf"

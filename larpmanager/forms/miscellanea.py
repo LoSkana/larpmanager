@@ -47,6 +47,7 @@ from larpmanager.models.miscellanea import (
     InventoryAssignment,
     InventoryContainer,
     InventoryItem,
+    InventoryMovement,
     Problem,
     ShuttleService,
     UrlShortner,
@@ -222,6 +223,13 @@ class ExeUrlShortnerForm(MyForm):
         exclude = ("number",)
 
 
+def _delete_optionals_inventory(form):
+    assoc = Association.objects.get(pk=form.params["a_id"])
+    for field in InventoryItem.get_optional_fields():
+        if not assoc.get_config(f"inventory_{field}", False):
+            form.delete_field(field)
+
+
 class ExeInventoryItemForm(MyForm):
     page_info = _("This page allows you to add or edit a new item of inventory")
 
@@ -236,10 +244,7 @@ class ExeInventoryItemForm(MyForm):
         super().__init__(*args, **kwargs)
         self.fields["container"].widget.set_assoc(self.params["a_id"])
 
-        assoc = Association.objects.get(pk=self.params["a_id"])
-        for field in InventoryItem.get_optional_fields():
-            if not assoc.get_config(f"inventory_{field}", False):
-                self.delete_field(field)
+        _delete_optionals_inventory(self)
 
 
 class ExeInventoryContainerForm(MyForm):
@@ -251,6 +256,26 @@ class ExeInventoryContainerForm(MyForm):
         model = InventoryContainer
         exclude = []
         widgets = {"description": Textarea(attrs={"rows": 5})}
+
+
+class ExeInventoryMovementForm(MyForm):
+    page_info = _("This page allows you to add or edit a new movement of item inventory, loans or repairs")
+
+    page_title = _("Inventory movements")
+
+    class Meta:
+        model = InventoryMovement
+        exclude = []
+        widgets = {
+            "notes": Textarea(attrs={"rows": 5}),
+            "item": InventoryItemS2Widget,
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["item"].widget.set_assoc(self.params["a_id"])
+
+        _delete_optionals_inventory(self)
 
 
 class OrgaInventoryAreaForm(MyForm):
@@ -283,10 +308,7 @@ class OrgaInventoryAssignmentForm(MyForm):
         self.fields["area"].widget.set_event(self.params["event"])
         self.fields["item"].widget.set_assoc(self.params["a_id"])
 
-        assoc = Association.objects.get(pk=self.params["a_id"])
-        for field in InventoryItem.get_optional_fields():
-            if not assoc.get_config(f"inventory_{field}", False):
-                self.delete_field(field)
+        _delete_optionals_inventory(self)
 
 
 class ExeCompetenceForm(MyForm):

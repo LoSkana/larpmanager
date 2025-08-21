@@ -24,6 +24,7 @@ from django.shortcuts import render
 from larpmanager.forms.miscellanea import (
     ExeInventoryContainerForm,
     ExeInventoryItemForm,
+    ExeInventoryMovementForm,
     ExeUrlShortnerForm,
 )
 from larpmanager.models.miscellanea import (
@@ -78,7 +79,7 @@ def exe_inventory_items_edit(request, num):
 def exe_inventory_movements(request):
     ctx = check_assoc_permission(request, "exe_inventory_movements")
     ctx["list"] = InventoryMovement.objects.filter(assoc_id=request.assoc["id"]).select_related("item")
-    get_inventory_optionals(ctx, [4])
+    get_inventory_optionals(ctx, [3])
     return render(request, "larpmanager/exe/inventory/movements.html", ctx)
 
 

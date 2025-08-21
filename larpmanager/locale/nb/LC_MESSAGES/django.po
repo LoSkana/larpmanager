@@ -2876,6 +2876,9 @@ msgstr "Historikk over preferanser"
 msgid "I am not interested"
 msgstr "Ikke interessert"
 
+msgid "Inventory movements"
+msgstr "Beholdningsbevegelser"
+
 msgid "List of other users"
 msgstr "Liste over andre brukere"
 
@@ -3644,6 +3647,9 @@ msgstr "Gi et kort til vennen din"
 
 msgid "Hide unassigned characters"
 msgstr "Skjul tegn som ikke er tilordnet"
+
+msgid "Manage inventory movements"
+msgstr "Administrer lagerbevegelser"
 
 msgid "Manage the event prologues"
 msgstr "Administrer prologene til arrangementet"
@@ -5839,6 +5845,9 @@ msgid "This page shows the sections of the event registration form"
 msgstr ""
 "Denne siden oppsummerer delene av registreringsskjemaet for arrangementet"
 
+msgid "Where it has been placed? When it is expected to come back?"
+msgstr "Hvor har den blitt plassert? Når forventes den å komme tilbake?"
+
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr "Du kan foreta betalingen <a href='%(url)s'>på denne siden</a>"
@@ -7625,6 +7634,13 @@ msgid ""
 msgstr ""
 "Konfigurer konfigurasjonen for oppretting eller redigering av tegn av "
 "deltakerne"
+
+msgid ""
+"This page allows you to add or edit a new movement of item inventory, loans "
+"or repairs"
+msgstr ""
+"På denne siden kan du legge til eller redigere en ny bevegelse av varelager,"
+" lån eller reparasjoner"
 
 msgid ""
 "Upload the scan of both your signed request, and your document (image or pdf"

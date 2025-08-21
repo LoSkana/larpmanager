@@ -1696,6 +1696,14 @@ msgstr ""
 msgid "Inventory containers"
 msgstr ""
 
+msgid ""
+"This page allows you to add or edit a new movement of item inventory, loans "
+"or repairs"
+msgstr ""
+
+msgid "Inventory movements"
+msgstr ""
+
 msgid "This page allows you to add or edit a new event area"
 msgstr ""
 
@@ -3357,6 +3365,9 @@ msgstr ""
 msgid "Photo of the object"
 msgstr ""
 
+msgid "Where it has been placed? When it is expected to come back?"
+msgstr ""
+
 msgid "Name of event area"
 msgstr ""
 
@@ -4942,6 +4953,15 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
+msgid "This page shows the assignment of inventory items to event area"
+msgstr ""
+
+msgid "Item"
+msgstr ""
+
+msgid "Notes"
+msgstr ""
+
 msgid ""
 "This page shows larpmanager usage costs, total and divided by individual "
 "event"
@@ -6078,9 +6098,6 @@ msgid ""
 "expense types"
 msgstr ""
 
-msgid "Item"
-msgstr ""
-
 msgid "Refund for"
 msgstr ""
 
@@ -6361,13 +6378,7 @@ msgid ""
 "This page shows the event area where inventory items needs to be deployed"
 msgstr ""
 
-msgid "This page shows the assignment of inventory items to event area"
-msgstr ""
-
 msgid "Area"
-msgstr ""
-
-msgid "Notes"
 msgstr ""
 
 msgid "Cargo manifest"
@@ -7781,6 +7792,9 @@ msgid "Items"
 msgstr ""
 
 msgid "Manage inventory items"
+msgstr ""
+
+msgid "Manage inventory movements"
 msgstr ""
 
 msgid "Manage the event settings: name, description, dates, and other data"
