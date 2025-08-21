@@ -41,7 +41,7 @@ from larpmanager.models.form import (
     WritingOption,
 )
 from larpmanager.models.member import Member, Membership, MembershipStatus
-from larpmanager.models.miscellanea import InventoryContainer
+from larpmanager.models.miscellanea import InventoryArea, InventoryContainer, InventoryItem
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
@@ -490,9 +490,10 @@ class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         return Member.objects.filter(pk__in=self.allowed)
 
 
-class InventoryS2Widget(s2forms.ModelSelect2Widget):
+class InventoryContainerS2Widget(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
+        "description__icontains",
     ]
 
     def set_assoc(self, aid):
@@ -500,6 +501,32 @@ class InventoryS2Widget(s2forms.ModelSelect2Widget):
 
     def get_queryset(self):
         return InventoryContainer.objects.filter(assoc_id=self.aid)
+
+
+class InventoryAreaS2Widget(s2forms.ModelSelect2Widget):
+    search_fields = [
+        "name__icontains",
+        "description__icontains",
+    ]
+
+    def set_event(self, event):
+        self.event = event
+
+    def get_queryset(self):
+        return self.event.get_elements(InventoryArea)
+
+
+class InventoryItemS2Widget(s2forms.ModelSelect2Widget):
+    search_fields = [
+        "name__icontains",
+        "description__icontains",
+    ]
+
+    def set_assoc(self, aid):
+        self.aid = aid
+
+    def get_queryset(self):
+        return InventoryItem.objects.filter(assoc_id=self.aid)
 
 
 def remove_choice(ch, typ):

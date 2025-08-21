@@ -77,6 +77,9 @@ msgstr "věk"
 msgid "for"
 msgstr "pro"
 
+msgid "Area"
+msgstr "Oblast"
+
 msgid "Band"
 msgstr "Fascie"
 
@@ -336,6 +339,9 @@ msgstr "Peníze"
 msgid "Names"
 msgstr "Jména"
 
+msgid "Notes"
+msgstr "Poznámky"
+
 msgid "Order"
 msgstr "Objednávka"
 
@@ -500,6 +506,9 @@ msgstr "Připojil se k"
 
 msgid "Legend"
 msgstr "Legenda"
+
+msgid "Loaded"
+msgstr "Načteno"
 
 msgid "Log in"
 msgstr "Přihlášení"
@@ -900,6 +909,9 @@ msgstr "Termín"
 msgid "Delivery"
 msgstr "Výplaty"
 
+msgid "Deployed"
+msgstr "Nasazení"
+
 msgid "Disabled"
 msgstr "Bezbariérový"
 
@@ -959,6 +971,9 @@ msgstr "Jazyk"
 
 msgid "Location"
 msgstr "Umístění"
+
+msgid "Manifest"
+msgstr "Manifest"
 
 msgid "Max uses"
 msgstr "Maximální použití"
@@ -1344,6 +1359,9 @@ msgstr "Velikonoční vajíčko"
 msgid "Email list"
 msgstr "e-mailový seznam"
 
+msgid "Event area"
+msgstr "Oblast události"
+
 msgid "Experience"
 msgstr "Zkušenosti"
 
@@ -1667,6 +1685,9 @@ msgstr "Zrušení období"
 
 msgid "Unique code"
 msgstr "Jedinečný kód"
+
+msgid "Where it is"
+msgstr "Kde se nachází"
 
 msgid "immediately"
 msgstr "okamžitě"
@@ -2081,6 +2102,9 @@ msgstr "Dostupné dny"
 msgid "Bring a friend"
 msgstr "Přiveďte kamaráda"
 
+msgid "Cargo manifest"
+msgstr "Seznam nákladu"
+
 msgid "Carousel image"
 msgstr "Kolotoč obrázků"
 
@@ -2131,6 +2155,9 @@ msgstr "Globální rozpočet"
 
 msgid "Handout Models"
 msgstr "Modely pro rozdávání"
+
+msgid "Inventory area"
+msgstr "Inventarizační oblast"
 
 msgid "List of voters"
 msgstr "Seznam voličů"
@@ -2618,9 +2645,6 @@ msgstr "Vstup zdarma"
 msgid "Give a new answer"
 msgstr "Odpovězte"
 
-msgid "Inventory objects"
-msgstr "Inventární položky"
-
 msgid "Invoice not found"
 msgstr "Faktura nebyla nalezena"
 
@@ -2743,6 +2767,9 @@ msgstr "Informace uloženy"
 
 msgid "Member Data Checks"
 msgstr "Kontroly členských údajů"
+
+msgid "Name of event area"
+msgstr "Název oblasti události"
 
 msgid "Name of quest type"
 msgstr "Název typu úkolu"
@@ -3112,6 +3139,9 @@ msgstr "Přejděte na casting"
 msgid "If absent, indicate 0"
 msgstr "Pokud chybí, uveďte 0"
 
+msgid "Inventory assignments"
+msgstr "Přiřazení zásob"
+
 msgid "Name of the character"
 msgstr "Jméno postavy"
 
@@ -3451,6 +3481,9 @@ msgstr "Přístup k historii PT"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lehký plech (test)"
+
+msgid "Manage area of the event"
+msgstr "Správa oblasti události"
 
 msgid "Manages event's expenses"
 msgstr "Spravuje výdaje na událost"
@@ -5351,6 +5384,9 @@ msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Připojte se k našemu Discordu a získejte pomoc, nápady nebo nahlaste chyby"
 
+msgid "Manage assignement of inventory items to event area"
+msgstr "Správa přiřazení inventárních položek k oblasti události"
+
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Vyberte prosím jasnou a snadno rozpoznatelnou fotografii"
 
@@ -5421,6 +5457,9 @@ msgstr "Nastavení platebních metod dostupných pro účastníky"
 
 msgid "The first column the amount, the second the receipts"
 msgstr "V prvním sloupci je částka, ve druhém příjem"
+
+msgid "This page allows you to add or edit a new event area"
+msgstr "Na této stránce můžete přidat nebo upravit novou oblast událostí"
 
 msgid "This page allows you to add or edit an assignment of"
 msgstr "Na této stránce můžete přidat nebo upravit přiřazení"
@@ -5592,6 +5631,9 @@ msgstr "Pokud je zaškrtnuto: zobrazí v kalendáři odkaz na minulé události"
 
 msgid "Indicate the color that will be used to highlight texts"
 msgstr "Uveďte barvu, která bude použita ke zvýraznění textů"
+
+msgid "Manage loading and deployment status of inventory items"
+msgstr "Správa stavu nakládky a nasazení skladových položek"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Správa plateb provedených účastníky všech událostí"
@@ -5993,6 +6035,10 @@ msgstr ""
 
 msgid "This page allows you to add or edit the registration surcharges"
 msgstr "Na této stránce můžete přidat nebo změnit příplatky za předplatné"
+
+msgid "This page shows the assignment of inventory items to event area"
+msgstr ""
+"Tato stránka zobrazuje přiřazení inventárních položek k oblasti události"
 
 msgid "To be able to pay, your membership application must be approved"
 msgstr "Abyste mohli platit, musí být vaše žádost o členství schválena"
@@ -6605,6 +6651,12 @@ msgstr ""
 "Tato stránka podrobně zobrazuje dovednosti přispěvatele, které označil"
 
 msgid ""
+"This page shows the event area where inventory items needs to be deployed"
+msgstr ""
+"Tato stránka zobrazuje oblast události, kde je třeba rozmístit položky "
+"inventáře"
+
+msgid ""
 "To confirm your registration, apply to become a member of the Association"
 msgstr ""
 "Chcete-li potvrdit své členství, podejte žádost o členství ve sdružení"
@@ -6685,6 +6737,12 @@ msgid ""
 msgstr ""
 "Na této stránce jsou zobrazeny všechny šablony událostí; můžete je upravovat"
 " nebo vytvářet nové"
+
+msgid ""
+"This page shows the cargo manifest, and the status of each item assignment"
+msgstr ""
+"Na této stránce je zobrazen seznam nákladu a stav přiřazení jednotlivých "
+"položek"
 
 msgid ""
 "This page summarizes the types of abilities that participants can purchase"
@@ -7380,6 +7438,13 @@ msgid ""
 "The first line of the file must contain the column names, see the "
 "descriptions below"
 msgstr "První řádek souboru musí obsahovat názvy sloupců, viz popis níže"
+
+msgid ""
+"This page allows you to add or edit a new assignment of inventory item to "
+"event area"
+msgstr ""
+"Tato stránka umožňuje přidat nebo upravit nové přiřazení položky zásob k "
+"oblasti události"
 
 msgid ""
 "Tip: Pin this page to your browser for faster access to your organization "

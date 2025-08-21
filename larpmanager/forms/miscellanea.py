@@ -31,7 +31,9 @@ from larpmanager.forms.utils import (
     AssocMemberS2Widget,
     DatePickerInput,
     EventS2Widget,
-    InventoryS2Widget,
+    InventoryAreaS2Widget,
+    InventoryContainerS2Widget,
+    InventoryItemS2Widget,
     TimePickerInput,
     get_run_choices,
 )
@@ -41,6 +43,8 @@ from larpmanager.models.miscellanea import (
     Album,
     Competence,
     HelpQuestion,
+    InventoryArea,
+    InventoryAssignment,
     InventoryContainer,
     InventoryItem,
     Problem,
@@ -226,7 +230,7 @@ class ExeInventoryItemForm(MyForm):
     class Meta:
         model = InventoryItem
         exclude = []
-        widgets = {"description": Textarea(attrs={"rows": 5}), "container": InventoryS2Widget}
+        widgets = {"description": Textarea(attrs={"rows": 5}), "container": InventoryContainerS2Widget}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -238,7 +242,7 @@ class ExeInventoryItemForm(MyForm):
                 self.delete_field(field)
 
 
-class ExeContainerItemForm(MyForm):
+class ExeInventoryContainerForm(MyForm):
     page_info = _("This page allows you to add or edit a new container of inventory")
 
     page_title = _("Inventory containers")
@@ -247,6 +251,42 @@ class ExeContainerItemForm(MyForm):
         model = InventoryContainer
         exclude = []
         widgets = {"description": Textarea(attrs={"rows": 5})}
+
+
+class OrgaInventoryAreaForm(MyForm):
+    page_info = _("This page allows you to add or edit a new event area")
+
+    page_title = _("Event area")
+
+    class Meta:
+        model = InventoryArea
+        exclude = []
+        widgets = {"description": Textarea(attrs={"rows": 5})}
+
+
+class OrgaInventoryAssignmentForm(MyForm):
+    page_info = _("This page allows you to add or edit a new assignment of inventory item to event area")
+
+    page_title = _("Inventory assignments")
+
+    class Meta:
+        model = InventoryAssignment
+        exclude = []
+        widgets = {
+            "description": Textarea(attrs={"rows": 5}),
+            "area": InventoryAreaS2Widget,
+            "item": InventoryItemS2Widget,
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["area"].widget.set_event(self.params["event"])
+        self.fields["item"].widget.set_assoc(self.params["a_id"])
+
+        assoc = Association.objects.get(pk=self.params["a_id"])
+        for field in InventoryItem.get_optional_fields():
+            if not assoc.get_config(f"inventory_{field}", False):
+                self.delete_field(field)
 
 
 class ExeCompetenceForm(MyForm):

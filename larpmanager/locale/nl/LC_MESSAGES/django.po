@@ -77,6 +77,9 @@ msgstr "leeftijd"
 msgid "for"
 msgstr "voor"
 
+msgid "Area"
+msgstr "Gebied"
+
 msgid "Band"
 msgstr "Fascia"
 
@@ -336,6 +339,9 @@ msgstr "Geld"
 msgid "Names"
 msgstr "Namen"
 
+msgid "Notes"
+msgstr "Opmerkingen"
+
 msgid "Order"
 msgstr "Bestel"
 
@@ -500,6 +506,9 @@ msgstr "Aangesloten bij"
 
 msgid "Legend"
 msgstr "Legende"
+
+msgid "Loaded"
+msgstr "Geladen"
 
 msgid "Log in"
 msgstr "Inloggen"
@@ -900,6 +909,9 @@ msgstr "Deadline"
 msgid "Delivery"
 msgstr "Uitbetalingen"
 
+msgid "Deployed"
+msgstr "Ingezet"
+
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
@@ -959,6 +971,9 @@ msgstr "Taal"
 
 msgid "Location"
 msgstr "Locatie"
+
+msgid "Manifest"
+msgstr "Manifest"
 
 msgid "Max uses"
 msgstr "Maximaal gebruik"
@@ -1344,6 +1359,9 @@ msgstr "Paasei"
 msgid "Email list"
 msgstr "e-maillijst"
 
+msgid "Event area"
+msgstr "Evenemententerrein"
+
 msgid "Experience"
 msgstr "Ervaring"
 
@@ -1667,6 +1685,9 @@ msgstr "Periode ongedaan maken"
 
 msgid "Unique code"
 msgstr "Unieke code"
+
+msgid "Where it is"
+msgstr "Waar het is"
 
 msgid "immediately"
 msgstr "onmiddellijk"
@@ -2081,6 +2102,9 @@ msgstr "Beschikbare dagen"
 msgid "Bring a friend"
 msgstr "Breng een vriend mee"
 
+msgid "Cargo manifest"
+msgstr "Vrachtmanifest"
+
 msgid "Carousel image"
 msgstr "Afbeeldingencarrousel"
 
@@ -2131,6 +2155,9 @@ msgstr "Globaal budget"
 
 msgid "Handout Models"
 msgstr "Handout Modellen"
+
+msgid "Inventory area"
+msgstr "Inventarisatiegebied"
 
 msgid "List of voters"
 msgstr "Lijst van kiezers"
@@ -2618,9 +2645,6 @@ msgstr "Gratis toegang"
 msgid "Give a new answer"
 msgstr "Geef antwoord"
 
-msgid "Inventory objects"
-msgstr "Inventarisartikelen"
-
 msgid "Invoice not found"
 msgstr "Factuur niet gevonden"
 
@@ -2743,6 +2767,9 @@ msgstr "Informatie opgeslagen"
 
 msgid "Member Data Checks"
 msgstr "Gegevens van leden controleren"
+
+msgid "Name of event area"
+msgstr "Naam evenementgebied"
 
 msgid "Name of quest type"
 msgstr "Naam van type zoektocht"
@@ -3112,6 +3139,9 @@ msgstr "Ga naar casting voor"
 msgid "If absent, indicate 0"
 msgstr "Indien afwezig, geef 0 aan"
 
+msgid "Inventory assignments"
+msgstr "Inventarisopgaven"
+
 msgid "Name of the character"
 msgstr "Naam van het personage"
 
@@ -3451,6 +3481,9 @@ msgstr "Toegang tot PT-geschiedenis"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lichtgewicht plaat (Test)"
+
+msgid "Manage area of the event"
+msgstr "Gebied van het evenement beheren"
 
 msgid "Manages event's expenses"
 msgstr "Beheert de kosten van het evenement"
@@ -5359,6 +5392,9 @@ msgstr "Je kunt je lidmaatschapsgeld op dit moment niet betalen"
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Word lid van onze Discord voor hulp, ideeën of om bugs te melden"
 
+msgid "Manage assignement of inventory items to event area"
+msgstr "Beheer de toewijzing van inventarisitems aan evenementgebieden"
+
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Kies een duidelijke en gemakkelijk herkenbare foto"
 
@@ -5429,6 +5465,9 @@ msgstr "De betalingsmethoden voor deelnemers instellen"
 
 msgid "The first column the amount, the second the receipts"
 msgstr "De eerste kolom het bedrag, de tweede de ontvangsten"
+
+msgid "This page allows you to add or edit a new event area"
+msgstr "Op deze pagina kunt u een nieuw evenementgebied toevoegen of bewerken"
 
 msgid "This page allows you to add or edit an assignment of"
 msgstr "Op deze pagina kunt u een toewijzing van"
@@ -5607,6 +5646,9 @@ msgstr ""
 
 msgid "Indicate the color that will be used to highlight texts"
 msgstr "Geef de kleur aan die wordt gebruikt om teksten te markeren"
+
+msgid "Manage loading and deployment status of inventory items"
+msgstr "De laad- en inzetstatus van inventarisartikelen beheren"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Beheer betalingen door deelnemers aan alle evenementen"
@@ -6053,6 +6095,11 @@ msgstr ""
 msgid "This page allows you to add or edit the registration surcharges"
 msgstr ""
 "Op deze pagina kun je de toeslagen op abonnementen toevoegen of wijzigen"
+
+msgid "This page shows the assignment of inventory items to event area"
+msgstr ""
+"Deze pagina toont de toewijzing van inventarisitems aan het "
+"gebeurtenissengebied"
 
 msgid "To be able to pay, your membership application must be approved"
 msgstr "Om te kunnen betalen, moet je lidmaatschapsaanvraag goedgekeurd zijn"
@@ -6766,6 +6813,12 @@ msgstr ""
 "hij/zij het volgende heeft gemarkeerd"
 
 msgid ""
+"This page shows the event area where inventory items needs to be deployed"
+msgstr ""
+"Deze pagina toont het gebeurtenissengebied waar de inventarisitems moeten "
+"worden ingezet"
+
+msgid ""
 "To confirm your registration, apply to become a member of the Association"
 msgstr ""
 "Om je lidmaatschap te bevestigen, dien je een aanvraag in om lid te worden "
@@ -6861,6 +6914,10 @@ msgid ""
 msgstr ""
 "Deze pagina toont alle sjablonen voor evenementen; je kunt ze bewerken of "
 "nieuwe sjablonen maken"
+
+msgid ""
+"This page shows the cargo manifest, and the status of each item assignment"
+msgstr "Deze pagina toont de vrachtlijst en de status van elke itemtoewijzing"
 
 msgid ""
 "This page summarizes the types of abilities that participants can purchase"
@@ -7627,6 +7684,13 @@ msgid ""
 msgstr ""
 "De eerste regel van het bestand moet de kolomnamen bevatten, zie de "
 "beschrijvingen hieronder"
+
+msgid ""
+"This page allows you to add or edit a new assignment of inventory item to "
+"event area"
+msgstr ""
+"Op deze pagina kun je een nieuwe toewijzing van een inventarisitem aan een "
+"evenementgebied toevoegen of bewerken"
 
 msgid ""
 "Tip: Pin this page to your browser for faster access to your organization "

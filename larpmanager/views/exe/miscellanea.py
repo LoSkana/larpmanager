@@ -22,11 +22,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from larpmanager.forms.miscellanea import (
-    ExeContainerItemForm,
+    ExeInventoryContainerForm,
     ExeInventoryItemForm,
     ExeUrlShortnerForm,
 )
-from larpmanager.models.association import Association
 from larpmanager.models.miscellanea import (
     InventoryContainer,
     InventoryItem,
@@ -34,6 +33,7 @@ from larpmanager.models.miscellanea import (
 )
 from larpmanager.utils.base import check_assoc_permission
 from larpmanager.utils.edit import exe_edit
+from larpmanager.utils.miscellanea import get_inventory_optionals
 
 
 @login_required
@@ -57,18 +57,14 @@ def exe_inventory_containers(request):
 
 @login_required
 def exe_inventory_containers_edit(request, num):
-    return exe_edit(request, ExeContainerItemForm, num, "exe_inventory_containers")
+    return exe_edit(request, ExeInventoryContainerForm, num, "exe_inventory_containers")
 
 
 @login_required
 def exe_inventory_items(request):
     ctx = check_assoc_permission(request, "exe_inventory_items")
     ctx["list"] = InventoryItem.objects.filter(assoc_id=request.assoc["id"]).select_related("container")
-    assoc = Association.objects.get(pk=ctx["a_id"])
-    optionals = {}
-    for field in InventoryItem.get_optional_fields():
-        optionals[field] = assoc.get_config(f"inventory_{field}")
-    ctx["optionals"] = optionals
+    get_inventory_optionals(ctx, [4])
     return render(request, "larpmanager/exe/inventory/items.html", ctx)
 
 

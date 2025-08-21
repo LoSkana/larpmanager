@@ -401,6 +401,32 @@ class InventoryItem(BaseModel):
         return ["quantity"]
 
 
+class InventoryArea(BaseModel):
+    name = models.CharField(max_length=100, help_text=_("Name of event area"))
+
+    position = models.CharField(max_length=100, help_text=_("Where it is"), blank=True, null=True)
+
+    description = models.CharField(max_length=1000, blank=True, null=True)
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="area")
+
+
+class InventoryAssignment(BaseModel):
+    quantity = models.IntegerField(blank=True, null=True)
+
+    area = models.ForeignKey(InventoryArea, on_delete=models.CASCADE, related_name="assignments")
+
+    item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE, related_name="assignments")
+
+    notes = models.CharField(max_length=1000, blank=True, null=True)
+
+    loaded = models.BooleanField()
+
+    deployed = models.BooleanField()
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="assignments")
+
+
 class ShuttleStatus(models.TextChoices):
     OPEN = "0", _("Waiting list")
     COMING = "1", _("We're coming")

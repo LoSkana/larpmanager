@@ -77,6 +77,9 @@ msgstr "età"
 msgid "for"
 msgstr "per"
 
+msgid "Area"
+msgstr "Area"
+
 msgid "Band"
 msgstr "Fascia"
 
@@ -336,6 +339,9 @@ msgstr "Soldi"
 msgid "Names"
 msgstr "Nomi"
 
+msgid "Notes"
+msgstr "Note"
+
 msgid "Order"
 msgstr "Ordine"
 
@@ -500,6 +506,9 @@ msgstr "Iscritto"
 
 msgid "Legend"
 msgstr "Legenda"
+
+msgid "Loaded"
+msgstr "Caricato"
 
 msgid "Log in"
 msgstr "Log in"
@@ -900,6 +909,9 @@ msgstr "Scadenza"
 msgid "Delivery"
 msgstr "Erogazioni"
 
+msgid "Deployed"
+msgstr "Schierato"
+
 msgid "Disabled"
 msgstr "Disabilitata"
 
@@ -959,6 +971,9 @@ msgstr "Lingua"
 
 msgid "Location"
 msgstr "Location"
+
+msgid "Manifest"
+msgstr "Manifesto"
 
 msgid "Max uses"
 msgstr "Usi massimi"
@@ -1344,6 +1359,9 @@ msgstr "Uovo di Pasqua"
 msgid "Email list"
 msgstr "lista email"
 
+msgid "Event area"
+msgstr "Area eventi"
+
 msgid "Experience"
 msgstr "Esperienza"
 
@@ -1667,6 +1685,9 @@ msgstr "Periodo di annullamento"
 
 msgid "Unique code"
 msgstr "Codice univoco"
+
+msgid "Where it is"
+msgstr "Dove si trova"
 
 msgid "immediately"
 msgstr "immediatamente"
@@ -2081,6 +2102,9 @@ msgstr "Giorni disponibili"
 msgid "Bring a friend"
 msgstr "Porta un amico"
 
+msgid "Cargo manifest"
+msgstr "Manifesto di carico"
+
 msgid "Carousel image"
 msgstr "Immagine carousel"
 
@@ -2131,6 +2155,9 @@ msgstr "Bilancio globale"
 
 msgid "Handout Models"
 msgstr "Tipo di handout"
+
+msgid "Inventory area"
+msgstr "Area di inventario"
 
 msgid "List of voters"
 msgstr "Elenco votanti"
@@ -2618,9 +2645,6 @@ msgstr "Iscrizione libera"
 msgid "Give a new answer"
 msgstr "Dai una risposta"
 
-msgid "Inventory objects"
-msgstr "Oggetti inventario"
-
 msgid "Invoice not found"
 msgstr "Invoice non trovato"
 
@@ -2743,6 +2767,9 @@ msgstr "Informazioni salvate"
 
 msgid "Member Data Checks"
 msgstr "Controlli dati soci"
+
+msgid "Name of event area"
+msgstr "Nome dell'area dell'evento"
 
 msgid "Name of quest type"
 msgstr "Nome del tipo di missione"
@@ -3112,6 +3139,9 @@ msgstr "Vai al casting per"
 msgid "If absent, indicate 0"
 msgstr "Se assente, indicare 0"
 
+msgid "Inventory assignments"
+msgstr "Assegnazione dell'inventario"
+
 msgid "Name of the character"
 msgstr "Nome del personaggio"
 
@@ -3240,7 +3270,7 @@ msgid "Link to participate in"
 msgstr "Link per partecipare"
 
 msgid "Manage inventory items"
-msgstr "Gestire gli articoli dell'inventario"
+msgstr "Gestisci gli oggetti dell'inventario"
 
 msgid "Manage refund requests"
 msgstr "Gestisci le richieste di rimborso"
@@ -3451,6 +3481,9 @@ msgstr "Accedi allo storico dei PT"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Scheda leggera (Test)"
+
+msgid "Manage area of the event"
+msgstr "Gestione dell'area dell'evento"
 
 msgid "Manages event's expenses"
 msgstr "Gestisci le spese dell'evento"
@@ -3677,7 +3710,7 @@ msgid "Loading performed, see logs"
 msgstr "Caricamento eseguito, consulta i log"
 
 msgid "Manage inventory containers"
-msgstr "Gestire i contenitori dell'inventario"
+msgstr "Gestisci i contenitori dell'inventario"
 
 msgid "Manage quiz-style workshops"
 msgstr "Gestisci laboratori a quiz"
@@ -3864,7 +3897,7 @@ msgid "If checked: uses old interface"
 msgstr "Se selezionato: utilizza la vecchia interfaccia"
 
 msgid "Manage issues during the event"
-msgstr "Gestire i problemi durante l'evento"
+msgstr "Gestisci i problemi durante l'evento"
 
 msgid "Manage organization accounting"
 msgstr "Gestisci la contabilità dell'organizzazione"
@@ -5354,6 +5387,10 @@ msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Unisciti al nostro Discord per ricevere aiuto, idee o per segnalare bug"
 
+msgid "Manage assignement of inventory items to event area"
+msgstr ""
+"Gestisci l'assegnazione degli oggetti dell'inventario all'area dell'evento"
+
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Scegliere una foto chiara e facilmente riconoscibile"
 
@@ -5425,6 +5462,11 @@ msgstr "Imposta i metodi di pagamento disponibili per i partecipanti"
 
 msgid "The first column the amount, the second the receipts"
 msgstr "La prima colonna indica l'importo, la seconda gli incassi"
+
+msgid "This page allows you to add or edit a new event area"
+msgstr ""
+"Questa pagina consente di aggiungere o modificare un'area per un nuovo "
+"evento"
 
 msgid "This page allows you to add or edit an assignment of"
 msgstr "Questa pagina permette di aggiungere o modificare un'assegnazione di"
@@ -5599,6 +5641,10 @@ msgstr "Se selezionata: mostra un link al calendario degli eventi passati"
 
 msgid "Indicate the color that will be used to highlight texts"
 msgstr "Indicare il colore che verrà utilizzato per evidenziare i testi"
+
+msgid "Manage loading and deployment status of inventory items"
+msgstr ""
+"Gestisci lo stato di carico e di distribuzione degli oggetti in inventario"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Gestisci i pagamenti effettuati dai partecipanti a tutti gli eventi"
@@ -5791,7 +5837,7 @@ msgstr "La domanda di visibilità ai partecipanti, i valori ammessi sono"
 
 msgid "This page allows you to add or edit a new item of inventory"
 msgstr ""
-"Questa pagina consente di aggiungere o modificare un nuovo articolo "
+"Questa pagina consente di aggiungere o modificare un nuovo oggetto "
 "dell'inventario"
 
 msgid "This page allows you to change a member's membership status"
@@ -6060,6 +6106,11 @@ msgstr ""
 "Questa pagina ti permette di aggiungere o modificare i sovrapprezzi sulle "
 "iscrizioni"
 
+msgid "This page shows the assignment of inventory items to event area"
+msgstr ""
+"Questa pagina mostra l'assegnazione degli oggetti dell'inventario all'area "
+"dell'evento"
+
 msgid "To be able to pay, your membership application must be approved"
 msgstr ""
 "Per poter pagare, è necessario che la tua richiesta di iscrizione "
@@ -6313,7 +6364,7 @@ msgstr ""
 
 msgid "Manage the event settings: name, description, dates, and other data"
 msgstr ""
-"Gestire le impostazioni dell'evento: nome, descrizione, date e altri dati"
+"Gestisci le impostazioni dell'evento: nome, descrizione, date e altri dati"
 
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr "Importo minimo dell'utile netto da lasciare come tassa organizzativa"
@@ -6790,6 +6841,12 @@ msgstr ""
 "quali è stato segnato"
 
 msgid ""
+"This page shows the event area where inventory items needs to be deployed"
+msgstr ""
+"Questa pagina mostra l'area dell'evento in cui devono essere distribuiti gli"
+" oggetti dell'inventario"
+
+msgid ""
 "To confirm your registration, apply to become a member of the Association"
 msgstr ""
 "Per confermare l'iscrizione, richiedi di diventare socio dell'Associazione"
@@ -6885,6 +6942,12 @@ msgid ""
 msgstr ""
 "Questa pagina mostra tutti i modelli di evento; è possibile modificarli o "
 "crearne di nuovi"
+
+msgid ""
+"This page shows the cargo manifest, and the status of each item assignment"
+msgstr ""
+"Questa pagina mostra il manifesto di carico e lo stato di assegnazione di "
+"ciascun oggetto"
 
 msgid ""
 "This page summarizes the types of abilities that participants can purchase"
@@ -7650,6 +7713,13 @@ msgid ""
 msgstr ""
 "La prima riga del file deve contenere i nomi delle colonne, vedi le "
 "descrizioni seguenti"
+
+msgid ""
+"This page allows you to add or edit a new assignment of inventory item to "
+"event area"
+msgstr ""
+"Questa pagina consente di aggiungere o modificare una nuova assegnazione di "
+"un oggetto dell'inventario all'area dell'evento"
 
 msgid ""
 "Tip: Pin this page to your browser for faster access to your organization "

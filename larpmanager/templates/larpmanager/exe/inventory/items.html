@@ -1,14 +1,16 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Inventory objects" %}
+    {% trans "Inventory items" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows the inventory items" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
-    <table id="inv_items" class="go_datatable">
+    <table id="inv_items"
+           class="go_datatable"
+           no_header_cols="{{ no_header_cols }}">
         <thead>
             <tr>
                 <th></th>
@@ -37,7 +39,7 @@
                     {% endif %}
                     <td>{{ el.description | truncatechars:200 }}</td>
                     <td>
-                        <a href="{% url 'exe_inventory_containers_edit' el.id %}">{{ el.container }}</a>
+                        <a href="{% url 'exe_inventory_containers_edit' el.container.id %}">{{ el.container }}</a>
                     </td>
                     <td>{{ el.tags }}</td>
                     <td>

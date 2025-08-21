@@ -1,0 +1,34 @@
+{% extends "utils.html" %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Inventory area" %} - {{ run }}
+{% endblock title %}
+{% block info %}
+    {% trans "This page shows the event area where inventory items needs to be deployed" %}
+{% endblock info %}
+{% block content %}
+    {% include "elements/header/orga.html" %}
+    <table id="inv_area" class="go_datatable">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Position" %}</th>
+                <th>{% trans "Description" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'orga_inventory_area_edit' event.slug run.number el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.name }}</td>
+                    <td>{{ el.position }}</td>
+                    <td>{{ el.description | truncatechars:200 }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

@@ -77,6 +77,9 @@ msgstr "alder"
 msgid "for"
 msgstr "for"
 
+msgid "Area"
+msgstr "Område"
+
 msgid "Band"
 msgstr "Fascia"
 
@@ -336,6 +339,9 @@ msgstr "Penger"
 msgid "Names"
 msgstr "Navn"
 
+msgid "Notes"
+msgstr "Merknader"
+
 msgid "Order"
 msgstr "Bestilling"
 
@@ -500,6 +506,9 @@ msgstr "Ble med"
 
 msgid "Legend"
 msgstr "Tegnforklaring"
+
+msgid "Loaded"
+msgstr "Lastet"
 
 msgid "Log in"
 msgstr "Logg inn"
@@ -900,6 +909,9 @@ msgstr "Frist"
 msgid "Delivery"
 msgstr "Utbetalinger"
 
+msgid "Deployed"
+msgstr "Utplassert"
+
 msgid "Disabled"
 msgstr "Deaktivert"
 
@@ -959,6 +971,9 @@ msgstr "Språk"
 
 msgid "Location"
 msgstr "Beliggenhet"
+
+msgid "Manifest"
+msgstr "Manifest"
 
 msgid "Max uses"
 msgstr "Maksimal bruk"
@@ -1344,6 +1359,9 @@ msgstr "Påskeegg"
 msgid "Email list"
 msgstr "e-postliste"
 
+msgid "Event area"
+msgstr "Arrangementsområde"
+
 msgid "Experience"
 msgstr "Erfaring"
 
@@ -1667,6 +1685,9 @@ msgstr "Angre periode"
 
 msgid "Unique code"
 msgstr "Unik kode"
+
+msgid "Where it is"
+msgstr "Hvor det er"
 
 msgid "immediately"
 msgstr "umiddelbart"
@@ -2081,6 +2102,9 @@ msgstr "Tilgjengelige dager"
 msgid "Bring a friend"
 msgstr "Ta med en venn"
 
+msgid "Cargo manifest"
+msgstr "Lastmanifest"
+
 msgid "Carousel image"
 msgstr "Bildekarusell"
 
@@ -2131,6 +2155,9 @@ msgstr "Globalt budsjett"
 
 msgid "Handout Models"
 msgstr "Modeller for utdeling"
+
+msgid "Inventory area"
+msgstr "Område for lagerbeholdning"
 
 msgid "List of voters"
 msgstr "Liste over velgere"
@@ -2618,9 +2645,6 @@ msgstr "Gratis inngang"
 msgid "Give a new answer"
 msgstr "Gi et svar"
 
-msgid "Inventory objects"
-msgstr "Varer på lager"
-
 msgid "Invoice not found"
 msgstr "Faktura ikke funnet"
 
@@ -2743,6 +2767,9 @@ msgstr "Informasjon lagret"
 
 msgid "Member Data Checks"
 msgstr "Kontroll av medlemsdata"
+
+msgid "Name of event area"
+msgstr "Navn på arrangementsområdet"
 
 msgid "Name of quest type"
 msgstr "Navn på oppdragstype"
@@ -3112,6 +3139,9 @@ msgstr "Gå til casting for"
 msgid "If absent, indicate 0"
 msgstr "Hvis fraværende, angi 0"
 
+msgid "Inventory assignments"
+msgstr "Tildeling av lagerbeholdning"
+
 msgid "Name of the character"
 msgstr "Navnet på karakteren"
 
@@ -3451,6 +3481,9 @@ msgstr "Få tilgang til PT-historikk"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lettvektsplate (Test)"
+
+msgid "Manage area of the event"
+msgstr "Administrer området for arrangementet"
 
 msgid "Manages event's expenses"
 msgstr "Administrerer arrangementets utgifter"
@@ -5351,6 +5384,9 @@ msgstr "Du kan ikke betale medlemskontingenten på dette tidspunktet"
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Bli med på Discord for å få hjelp, ideer eller rapportere feil"
 
+msgid "Manage assignement of inventory items to event area"
+msgstr "Administrere tildeling av lagervarer til arrangementsområdet"
+
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Velg et tydelig og lett gjenkjennelig bilde"
 
@@ -5423,6 +5459,10 @@ msgstr "Konfigurer betalingsmåtene som er tilgjengelige for deltakerne"
 
 msgid "The first column the amount, the second the receipts"
 msgstr "Den første kolonnen beløpet, den andre inntektene"
+
+msgid "This page allows you to add or edit a new event area"
+msgstr ""
+"På denne siden kan du legge til eller redigere et nytt arrangementsområde"
 
 msgid "This page allows you to add or edit an assignment of"
 msgstr "På denne siden kan du legge til eller redigere en tildeling av"
@@ -5595,6 +5635,9 @@ msgstr ""
 
 msgid "Indicate the color that will be used to highlight texts"
 msgstr "Angi hvilken farge som skal brukes til å utheve tekst"
+
+msgid "Manage loading and deployment status of inventory items"
+msgstr "Administrere status for lasting og utplassering av lagervarer"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Administrere betalinger utført av deltakere på alle arrangementer"
@@ -6018,6 +6061,9 @@ msgstr ""
 msgid "This page allows you to add or edit the registration surcharges"
 msgstr ""
 "På denne siden kan du legge til eller endre tilleggsavgifter på abonnementer"
+
+msgid "This page shows the assignment of inventory items to event area"
+msgstr "Denne siden viser tilordning av lagervarer til hendelsesområdet"
 
 msgid "To be able to pay, your membership application must be approved"
 msgstr "For å kunne betale må medlemssøknaden din være godkjent"
@@ -6670,6 +6716,11 @@ msgstr ""
 "for"
 
 msgid ""
+"This page shows the event area where inventory items needs to be deployed"
+msgstr ""
+"Denne siden viser hendelsesområdet der lagerbeholdningen må plasseres ut"
+
+msgid ""
 "To confirm your registration, apply to become a member of the Association"
 msgstr "For å bekrefte medlemskapet ditt, søk om å bli medlem av foreningen"
 
@@ -6749,6 +6800,11 @@ msgid ""
 msgstr ""
 "Denne siden viser alle arrangementsmaler; du kan redigere dem eller opprette"
 " nye"
+
+msgid ""
+"This page shows the cargo manifest, and the status of each item assignment"
+msgstr ""
+"Denne siden viser lastmanifestet og statusen for hver enkelt varetildeling"
 
 msgid ""
 "This page summarizes the types of abilities that participants can purchase"
@@ -7474,6 +7530,13 @@ msgid ""
 msgstr ""
 "Den første linjen i filen må inneholde kolonnenavnene, se beskrivelsene "
 "nedenfor"
+
+msgid ""
+"This page allows you to add or edit a new assignment of inventory item to "
+"event area"
+msgstr ""
+"På denne siden kan du legge til eller redigere en ny tildeling av "
+"lagerbeholdning til et arrangementsområde"
 
 msgid ""
 "Tip: Pin this page to your browser for faster access to your organization "

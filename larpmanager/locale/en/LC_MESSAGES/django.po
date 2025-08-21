@@ -1696,6 +1696,20 @@ msgstr ""
 msgid "Inventory containers"
 msgstr ""
 
+msgid "This page allows you to add or edit a new event area"
+msgstr ""
+
+msgid "Event area"
+msgstr ""
+
+msgid ""
+"This page allows you to add or edit a new assignment of inventory item to "
+"event area"
+msgstr ""
+
+msgid "Inventory assignments"
+msgstr ""
+
 msgid "This page allows you to add or edit a competency"
 msgstr ""
 
@@ -3343,6 +3357,12 @@ msgstr ""
 msgid "Photo of the object"
 msgstr ""
 
+msgid "Name of event area"
+msgstr ""
+
+msgid "Where it is"
+msgstr ""
+
 msgid "Waiting list"
 msgstr ""
 
@@ -4913,9 +4933,6 @@ msgstr ""
 msgid "Position"
 msgstr ""
 
-msgid "Inventory objects"
-msgstr ""
-
 msgid "This page shows the inventory items"
 msgstr ""
 
@@ -6335,6 +6352,35 @@ msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
 
 msgid "This page shows the deadlines to be met for this event"
+msgstr ""
+
+msgid "Inventory area"
+msgstr ""
+
+msgid ""
+"This page shows the event area where inventory items needs to be deployed"
+msgstr ""
+
+msgid "This page shows the assignment of inventory items to event area"
+msgstr ""
+
+msgid "Area"
+msgstr ""
+
+msgid "Notes"
+msgstr ""
+
+msgid "Cargo manifest"
+msgstr ""
+
+msgid ""
+"This page shows the cargo manifest, and the status of each item assignment"
+msgstr ""
+
+msgid "Loaded"
+msgstr ""
+
+msgid "Deployed"
 msgstr ""
 
 msgid ""
@@ -7951,6 +7997,18 @@ msgid "Display sent e-mails"
 msgstr ""
 
 msgid "Read the writing elements"
+msgstr ""
+
+msgid "Manage area of the event"
+msgstr ""
+
+msgid "Manage assignement of inventory items to event area"
+msgstr ""
+
+msgid "Manifest"
+msgstr ""
+
+msgid "Manage loading and deployment status of inventory items"
 msgstr ""
 
 msgid "Communications"
