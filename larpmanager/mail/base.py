@@ -53,12 +53,12 @@ def join_email(assoc):
         activate(member.language)
         subj = _("Welcome to LarpManager") + "!"
         body = render_to_string("mails/join_assoc.html", {"member": member, "assoc": assoc})
-        my_send_mail(subj, body, member, assoc)
+        my_send_mail(subj, body, member)
 
         activate(member.language)
         subj = "We'd love your feedback on LarpManager"
         body = render_to_string("mails/help_assoc.html", {"member": member, "assoc": assoc})
-        my_send_mail(subj, body, member, assoc, schedule=3600 * 24 * 2)
+        my_send_mail(subj, body, member, schedule=3600 * 24 * 2)
 
 
 def assoc_roles_changed(sender, **kwargs):
