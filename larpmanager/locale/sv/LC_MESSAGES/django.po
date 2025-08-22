@@ -5242,6 +5242,9 @@ msgstr "Det finns inga nya sessioner inplanerade för närvarande"
 msgid "This page allows you to add or edit a competency"
 msgstr "På den här sidan kan du lägga till eller redigera en kompetens"
 
+msgid "This page allows you to add or edit a px ability"
+msgstr "På den här sidan kan du lägga till eller redigera en px-förmåga"
+
 msgid "This page allows you to upload a new photo album"
 msgstr "På den här sidan kan du ladda upp ett nytt fotoalbum"
 
@@ -5310,6 +5313,9 @@ msgstr "Summan är %(amount).2f, med anledning \"%(reason)s\""
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Det finns <b>%(number)s</b> karaktärer att godkänna"
+
+msgid "This page allows you to add or edit a px delivery"
+msgstr "På den här sidan kan du lägga till eller redigera en px-leverans"
 
 msgid "This page allows you to edit event-specific texts"
 msgstr "På den här sidan kan du redigera evenemangsspecifika texter"
@@ -5567,6 +5573,9 @@ msgstr "Välj vilka element som ska kopieras, från vilket annat evenemang"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Det totala antalet lotter som skall dras har angetts"
 
+msgid "This page allows you to add or edit a px ability type"
+msgstr "På den här sidan kan du lägga till eller redigera en px-förmågetyp"
+
 msgid "This page allows you to add or edit a volunteer entry"
 msgstr "På den här sidan kan du lägga till eller redigera en volontärpost"
 
@@ -5752,6 +5761,9 @@ msgstr "Nu kan du granska den historiska redovisningsinformationen"
 
 msgid "Select the faction on which you want to filter characters"
 msgstr "Välj de grupper som du vill filtrera tecknen på"
+
+msgid "The character field of computed type that will be updated"
+msgstr "Det teckenfält av beräknad typ som kommer att uppdateras"
 
 msgid "This page allows you to edit the event navigation buttons"
 msgstr "På den här sidan kan du redigera navigeringsknapparna för evenemanget"
@@ -5977,6 +5989,11 @@ msgstr ""
 
 msgid "These are the workshops you must complete before you can play"
 msgstr "Detta är de workshops som du måste genomföra innan du kan spela"
+
+msgid "This page allows you to add or edit a rule on computed fields"
+msgstr ""
+"På den här sidan kan du lägga till eller redigera en regel för beräknade "
+"fält"
 
 msgid "This page allows you to change the access roles for the event"
 msgstr "På den här sidan kan du ändra behörighetsrollerna för evenemanget"
@@ -9607,6 +9624,14 @@ msgstr ""
 "Om vi inte hör något från dig antar vi att du inte längre är intresserad av "
 "evenemanget och avregistrerar din anmälan för att ge plats åt andra "
 "deltagare"
+
+msgid ""
+"The rule will be applied, only one time, if the character has any of the "
+"abilities. If no abilities are chosen, the rule is applied to all "
+"characters."
+msgstr ""
+"Regeln kommer att tillämpas, endast en gång, om rollpersonen har någon av "
+"förmågorna. Om inga förmågor väljs tillämpas regeln på alla karaktärer."
 
 msgid ""
 "Freely insert CSS commands, they will be reported in all pages  in the space"

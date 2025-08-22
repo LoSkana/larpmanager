@@ -78,7 +78,7 @@ def orga_px_rules_edit(request, s, n, num):
 
 
 @login_required
-def orga_px_rules_order(request, s, n, typ, num, order):
+def orga_px_rules_order(request, s, n, num, order):
     ctx = check_event_permission(request, s, n, "orga_px_rules")
     exchange_order(ctx, RulePx, num, order)
     return redirect("orga_px_rules", s=ctx["event"].slug, n=ctx["run"].number)

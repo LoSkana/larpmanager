@@ -5260,6 +5260,10 @@ msgstr ""
 "Auf dieser Seite können Sie einen Kompetenzbereich hinzufügen oder "
 "bearbeiten"
 
+msgid "This page allows you to add or edit a px ability"
+msgstr ""
+"Auf dieser Seite können Sie eine px-Fähigkeit hinzufügen oder bearbeiten"
+
 msgid "This page allows you to upload a new photo album"
 msgstr "Auf dieser Seite können Sie ein neues Fotoalbum hochladen"
 
@@ -5334,6 +5338,10 @@ msgstr "Die Summe ist %(amount).2f, mit Grund '%(reason)s'"
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Es sind <b>%(number)s</b> Zeichen zu genehmigen"
+
+msgid "This page allows you to add or edit a px delivery"
+msgstr ""
+"Auf dieser Seite können Sie eine px-Lieferung hinzufügen oder bearbeiten"
 
 msgid "This page allows you to edit event-specific texts"
 msgstr ""
@@ -5614,6 +5622,11 @@ msgstr ""
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Die Gesamtzahl der zu verlosenden Lose ist angegeben"
 
+msgid "This page allows you to add or edit a px ability type"
+msgstr ""
+"Auf dieser Seite können Sie einen px Fähigkeitstyp hinzufügen oder "
+"bearbeiten"
+
 msgid "This page allows you to add or edit a volunteer entry"
 msgstr ""
 "Auf dieser Seite können Sie einen Eintrag für Freiwillige hinzufügen oder "
@@ -5829,6 +5842,9 @@ msgstr "Jetzt können Sie die historischen Buchhaltungsinformationen einsehen"
 msgid "Select the faction on which you want to filter characters"
 msgstr ""
 "Wählen Sie die Gruppen aus, nach denen Sie die Zeichen filtern möchten"
+
+msgid "The character field of computed type that will be updated"
+msgstr "Das Zeichenfeld des berechneten Typs, das aktualisiert werden soll"
 
 msgid "This page allows you to edit the event navigation buttons"
 msgstr ""
@@ -6100,6 +6116,11 @@ msgid "These are the workshops you must complete before you can play"
 msgstr ""
 "Dies sind die Workshops, die Sie absolvieren müssen, bevor Sie spielen "
 "können"
+
+msgid "This page allows you to add or edit a rule on computed fields"
+msgstr ""
+"Auf dieser Seite können Sie eine Regel für berechnete Felder hinzufügen oder"
+" bearbeiten"
 
 msgid "This page allows you to change the access roles for the event"
 msgstr ""
@@ -9951,6 +9972,15 @@ msgstr ""
 "Wenn wir nichts von Ihnen hören, gehen wir davon aus, dass Sie nicht mehr an"
 " der Veranstaltung interessiert sind, und werden Ihre Anmeldung stornieren, "
 "um Platz für andere Teilnehmer zu schaffen"
+
+msgid ""
+"The rule will be applied, only one time, if the character has any of the "
+"abilities. If no abilities are chosen, the rule is applied to all "
+"characters."
+msgstr ""
+"Die Regel wird nur einmal angewendet, wenn der Charakter eine der "
+"Fähigkeiten besitzt. Wird keine Fähigkeit gewählt, wird die Regel auf alle "
+"Charaktere angewendet."
 
 msgid ""
 "Freely insert CSS commands, they will be reported in all pages  in the space"

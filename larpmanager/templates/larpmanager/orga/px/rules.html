@@ -28,7 +28,7 @@
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>
-                        {% for ab in el.prerequisites.all %}
+                        {% for ab in el.abilities.all %}
                             {% include "elements/comma.html" %}
                             <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number ab.id %}">{{ ab.name }}</a>
                         {% endfor %}
@@ -38,14 +38,14 @@
                     <td>{{ el.amount }}</td>
                     <td>
                         {% if not forloop.first %}
-                            <a href="{% url 'orga_px_rule_order' run.event.slug run.number el.id 0 %}">
+                            <a href="{% url 'orga_px_rules_order' run.event.slug run.number el.id 0 %}">
                                 <i class="fa-solid fa-arrow-up"></i>
                             </a>
                         {% endif %}
                     </td>
                     <td>
                         {% if not forloop.last %}
-                            <a href="{% url 'orga_px_rule_order' run.event.slug run.number el.id 1 %}">
+                            <a href="{% url 'orga_px_rules_order' run.event.slug run.number el.id 1 %}">
                                 <i class="fa-solid fa-arrow-down"></i>
                             </a>
                         {% endif %}

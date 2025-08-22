@@ -5248,6 +5248,9 @@ msgstr "Er zijn op dit moment geen nieuwe sessies gepland"
 msgid "This page allows you to add or edit a competency"
 msgstr "Op deze pagina kun je een competentie toevoegen of bewerken"
 
+msgid "This page allows you to add or edit a px ability"
+msgstr "Op deze pagina kunt u een px-vermogen toevoegen of bewerken"
+
 msgid "This page allows you to upload a new photo album"
 msgstr "Op deze pagina kunt u een nieuw fotoalbum uploaden"
 
@@ -5315,6 +5318,9 @@ msgstr "De som is %(amount).2f, met reden '%(reason)s'"
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Er zijn <b>%(number)s</b> tekens om goed te keuren"
+
+msgid "This page allows you to add or edit a px delivery"
+msgstr "Op deze pagina kunt u een px-levering toevoegen of bewerken"
 
 msgid "This page allows you to edit event-specific texts"
 msgstr "Op deze pagina kun je evenement-specifieke teksten bewerken"
@@ -5574,6 +5580,9 @@ msgstr ""
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Het totale aantal te verloten tickets is aangegeven"
 
+msgid "This page allows you to add or edit a px ability type"
+msgstr "Op deze pagina kunt u een px-vaardigheidstype toevoegen of bewerken"
+
 msgid "This page allows you to add or edit a volunteer entry"
 msgstr "Op deze pagina kun je een vrijwilligersaccount toevoegen of bewerken"
 
@@ -5766,6 +5775,9 @@ msgstr "Nu kun je de historische boekhoudgegevens bekijken"
 
 msgid "Select the faction on which you want to filter characters"
 msgstr "Selecteer de groepen waarop je de tekens wilt filteren"
+
+msgid "The character field of computed type that will be updated"
+msgstr "Het karakterveld van het berekende type dat wordt bijgewerkt"
 
 msgid "This page allows you to edit the event navigation buttons"
 msgstr "Op deze pagina kunt u de navigatieknoppen van de gebeurtenis bewerken"
@@ -6000,6 +6012,10 @@ msgstr ""
 
 msgid "These are the workshops you must complete before you can play"
 msgstr "Dit zijn de workshops die je moet voltooien voordat je kunt spelen"
+
+msgid "This page allows you to add or edit a rule on computed fields"
+msgstr ""
+"Op deze pagina kun je een regel voor berekende velden toevoegen of bewerken"
 
 msgid "This page allows you to change the access roles for the event"
 msgstr "Op deze pagina kun je de toegangsrollen voor het evenement wijzigen"
@@ -9752,6 +9768,15 @@ msgstr ""
 "Als we niets van je horen, gaan we ervan uit dat je niet langer "
 "geïnteresseerd bent in het evenement en annuleren we je registratie om "
 "ruimte te maken voor andere deelnemers"
+
+msgid ""
+"The rule will be applied, only one time, if the character has any of the "
+"abilities. If no abilities are chosen, the rule is applied to all "
+"characters."
+msgstr ""
+"De regel wordt slechts één keer toegepast als het personage een van de "
+"vaardigheden heeft. Als er geen vaardigheden worden gekozen, wordt de regel "
+"op alle personages toegepast."
 
 msgid ""
 "Freely insert CSS commands, they will be reported in all pages  in the space"

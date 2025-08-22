@@ -96,7 +96,10 @@ class Migration(migrations.Migration):
                 ("order", models.IntegerField(default=0)),
                 ("abilities", models.ManyToManyField(blank=True, related_name="rules", to="larpmanager.abilitypx")),
                 ("event", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="larpmanager.event")),
-                ("field", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="larpmanager.abilitypx")),
+                (
+                    "field",
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="larpmanager.writingquestion"),
+                ),
             ],
             options={
                 "ordering": ["event", "number"],

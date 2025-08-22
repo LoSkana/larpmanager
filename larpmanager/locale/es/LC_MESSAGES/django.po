@@ -5241,6 +5241,9 @@ msgstr "No hay nuevas sesiones programadas en este momento"
 msgid "This page allows you to add or edit a competency"
 msgstr "Esta página le permite añadir o editar una competencia"
 
+msgid "This page allows you to add or edit a px ability"
+msgstr "Esta página le permite añadir o editar una habilidad px"
+
 msgid "This page allows you to upload a new photo album"
 msgstr "Esta página te permite cargar un nuevo álbum de fotos"
 
@@ -5309,6 +5312,9 @@ msgstr "La suma es %(amount).2f, con motivo '%(reason)s'"
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Hay <b>%(number)s</b> caracteres para aprobar"
+
+msgid "This page allows you to add or edit a px delivery"
+msgstr "Esta página le permite añadir o editar una entrega px"
 
 msgid "This page allows you to edit event-specific texts"
 msgstr "Esta página te permite editar los textos específicos del evento"
@@ -5570,6 +5576,9 @@ msgstr "Seleccione qué elementos copiar y de qué otro evento"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Se ha indicado el número total de entradas que se sortearán"
 
+msgid "This page allows you to add or edit a px ability type"
+msgstr "Esta página le permite añadir o editar un tipo de habilidad px"
+
 msgid "This page allows you to add or edit a volunteer entry"
 msgstr "Esta página le permite añadir o editar una entrada de voluntario"
 
@@ -5768,6 +5777,9 @@ msgstr "Ahora puede revisar la información contable histórica"
 
 msgid "Select the faction on which you want to filter characters"
 msgstr "Selecciona la facción de la que quieres filtrar los personajes"
+
+msgid "The character field of computed type that will be updated"
+msgstr "El campo de caracteres de tipo calculado que se actualizará"
 
 msgid "This page allows you to edit the event navigation buttons"
 msgstr "Esta página te permite editar los botones de navegación del evento"
@@ -5997,6 +6009,10 @@ msgstr ""
 
 msgid "These are the workshops you must complete before you can play"
 msgstr "Estos son los talleres que debes completar antes de poder jugar"
+
+msgid "This page allows you to add or edit a rule on computed fields"
+msgstr ""
+"Esta página le permite añadir o editar una regla sobre campos computados"
 
 msgid "This page allows you to change the access roles for the event"
 msgstr "Esta página te permite cambiar los roles de acceso para el evento"
@@ -9715,6 +9731,15 @@ msgid ""
 msgstr ""
 "Si no recibimos noticias suyas, asumiremos que ya no está interesado en el "
 "evento y cancelaremos su inscripción para dejar sitio a otros participantes"
+
+msgid ""
+"The rule will be applied, only one time, if the character has any of the "
+"abilities. If no abilities are chosen, the rule is applied to all "
+"characters."
+msgstr ""
+"La regla se aplicará, sólo una vez, si el personaje tiene alguna de las "
+"habilidades. Si no se elige ninguna habilidad, la regla se aplicará a todos "
+"los personajes."
 
 msgid ""
 "Freely insert CSS commands, they will be reported in all pages  in the space"
