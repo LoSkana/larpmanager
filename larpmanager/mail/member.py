@@ -173,7 +173,7 @@ def notify_help_question(sender, instance, **kwargs):
         if instance.run:
             for organizer in get_event_organizers(instance.run.event):
                 activate(organizer.language)
-                body, subj = get_help_email(instance, mb)
+                body, subj = get_help_email(instance)
                 subj += " " + _("for %(event)s") % {"event": instance.run}
                 url = get_url(
                     f"{instance.run.event.slug}/{instance.run.number}/manage/questions/",
@@ -183,10 +183,9 @@ def notify_help_question(sender, instance, **kwargs):
                 my_send_mail(subj, body, organizer, instance.run)
 
         elif instance.assoc:
-            body, subj = get_help_email(instance, mb)
-            notify_organization_exe(subj, body, instance.assoc, instance)
+            notify_organization_exe(get_help_email, instance.assoc, instance)
         else:
-            body, subj = get_help_email(instance, mb)
+            body, subj = get_help_email(instance)
             for _name, email in conf_settings.ADMINS:
                 my_send_mail(subj, body, email, instance)
 
@@ -209,9 +208,9 @@ def notify_help_question(sender, instance, **kwargs):
         my_send_mail(subj, body, mb, instance)
 
 
-def get_help_email(instance, mb):
-    subj = hdr(instance) + _("New question by %(user)s") % {"user": mb}
-    body = _("A question was asked by: %(user)s") % {"user": mb}
+def get_help_email(instance):
+    subj = hdr(instance) + _("New question by %(user)s") % {"user": instance.member}
+    body = _("A question was asked by: %(user)s") % {"user": instance.member}
     body += "<br /><br />" + instance.text
     return body, subj
 
@@ -253,6 +252,15 @@ def get_email_context(activation_key, request):
 
 def send_password_reset_remainder(mb):
     assoc = mb.assoc
+    notify_organization_exe(get_password_reminder_email, assoc, mb)
+
+    for _name, email in conf_settings.ADMINS:
+        (subject, body) = get_password_reminder_email(mb)
+        my_send_mail(subject, body, email, assoc)
+
+
+def get_password_reminder_email(mb):
+    assoc = mb.assoc
     memb = mb.member
     aux = mb.password_reset.split("#")
     url = get_url(f"reset/{aux[0]}/{aux[1]}/", assoc)
@@ -260,8 +268,4 @@ def send_password_reset_remainder(mb):
     body = _("The user requested the password reset, but did not complete it. Give them this link: %(url)s") % {
         "url": url
     }
-
-    notify_organization_exe(subject, body, assoc, assoc)
-
-    for _name, email in conf_settings.ADMINS:
-        my_send_mail(subject, body, email, assoc)
+    return body, subject
