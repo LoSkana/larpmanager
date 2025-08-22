@@ -268,7 +268,7 @@ class Command(BaseCommand):
 
         reg_que = get_regs(assoc)
         ref = datetime.now() + timedelta(days=3)
-        reg_que = reg_que.exclude(run__start__lte=ref.date())
+        reg_que = reg_que.exclude(run__start__isnull=True).exclude(run__start__lte=ref.date())
         for reg in reg_que.select_related("run", "ticket"):
             self.remind_reg(reg, assoc, remind_days)
 
@@ -348,7 +348,7 @@ class Command(BaseCommand):
             return
 
         ref = datetime.now() - timedelta(days=7)
-        if run.start < ref.date():
+        if not run.start or run.start < ref.date():
             return
 
         deadline_days = int(run.event.assoc.get_config("deadline_days", 0))
