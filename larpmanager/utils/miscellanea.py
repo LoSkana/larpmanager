@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import json
 import os
 import random
 import shutil
@@ -30,7 +30,7 @@ from PIL import Image
 
 from larpmanager.models.association import Association
 from larpmanager.models.member import Badge
-from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload
+from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, InventoryItem
 
 
 def upload_albums_dir(main, cache_subs, name):
@@ -170,3 +170,12 @@ def _go_centauri(request):
         return False
 
     return True
+
+
+def get_inventory_optionals(ctx, def_cols):
+    assoc = Association.objects.get(pk=ctx["a_id"])
+    optionals = {}
+    for field in InventoryItem.get_optional_fields():
+        optionals[field] = assoc.get_config(f"inventory_{field}")
+    ctx["optionals"] = optionals
+    ctx["no_header_cols"] = json.dumps([el + len(optionals) for el in def_cols])

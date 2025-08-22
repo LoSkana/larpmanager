@@ -77,6 +77,9 @@ msgstr "leeftijd"
 msgid "for"
 msgstr "voor"
 
+msgid "Area"
+msgstr "Gebied"
+
 msgid "Band"
 msgstr "Fascia"
 
@@ -224,6 +227,9 @@ msgstr "Lied"
 msgid "Spam"
 msgstr "Spam"
 
+msgid "Tags"
+msgstr "Tags"
+
 msgid "Text"
 msgstr "Tekst"
 
@@ -262,9 +268,6 @@ msgstr "dagen"
 
 msgid "gift"
 msgstr "cadeau"
-
-msgid "past"
-msgstr "verleden"
 
 msgid "Album"
 msgstr "Albums"
@@ -324,6 +327,9 @@ msgstr "Afbeelding"
 msgid "Italy"
 msgstr "Italië"
 
+msgid "Items"
+msgstr "Items"
+
 msgid "Login"
 msgstr "Inloggen"
 
@@ -332,6 +338,9 @@ msgstr "Geld"
 
 msgid "Names"
 msgstr "Namen"
+
+msgid "Notes"
+msgstr "Opmerkingen"
 
 msgid "Order"
 msgstr "Bestel"
@@ -498,6 +507,9 @@ msgstr "Aangesloten bij"
 msgid "Legend"
 msgstr "Legende"
 
+msgid "Loaded"
+msgstr "Geladen"
+
 msgid "Log in"
 msgstr "Inloggen"
 
@@ -530,9 +542,6 @@ msgstr "Natuur"
 
 msgid "Number"
 msgstr "Aantal"
-
-msgid "Object"
-msgstr "Object"
 
 msgid "Patron"
 msgstr "Beschermheer"
@@ -780,9 +789,6 @@ msgstr "Sectie"
 msgid "Session"
 msgstr "Sessie"
 
-msgid "Setting"
-msgstr "Instelling"
-
 msgid "Sharing"
 msgstr "Delen"
 
@@ -903,6 +909,9 @@ msgstr "Deadline"
 msgid "Delivery"
 msgstr "Uitbetalingen"
 
+msgid "Deployed"
+msgstr "Ingezet"
+
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
@@ -963,6 +972,9 @@ msgstr "Taal"
 msgid "Location"
 msgstr "Locatie"
 
+msgid "Manifest"
+msgstr "Manifest"
+
 msgid "Max uses"
 msgstr "Maximaal gebruik"
 
@@ -996,6 +1008,9 @@ msgstr "Personeel"
 msgid "Portrait"
 msgstr "Fotoportret"
 
+msgid "Position"
+msgstr "Positie"
+
 msgid "Priority"
 msgstr "Prioriteiten"
 
@@ -1019,6 +1034,9 @@ msgstr "Voorgesteld"
 
 msgid "Province"
 msgstr "Provincie"
+
+msgid "Quantity"
+msgstr "Hoeveelheid"
 
 msgid "Question"
 msgstr "Vraag"
@@ -1131,11 +1149,11 @@ msgstr "Karakter"
 msgid "Concluded"
 msgstr "Afgesloten"
 
+msgid "Container"
+msgstr "Container"
+
 msgid "Copy done"
 msgstr "Uitgevoerd exemplaar"
-
-msgid "Custodies"
-msgstr "Gevallen"
 
 msgid "Customize"
 msgstr "aanpassen"
@@ -1329,6 +1347,9 @@ msgstr "Verzamel"
 msgid "Contact us"
 msgstr "Neem contact met ons op"
 
+msgid "Containers"
+msgstr "Containers"
+
 msgid "Deliveries"
 msgstr "Leveringen"
 
@@ -1337,6 +1358,9 @@ msgstr "Paasei"
 
 msgid "Email list"
 msgstr "e-maillijst"
+
+msgid "Event area"
+msgstr "Evenemententerrein"
 
 msgid "Experience"
 msgstr "Ervaring"
@@ -1662,6 +1686,9 @@ msgstr "Periode ongedaan maken"
 msgid "Unique code"
 msgstr "Unieke code"
 
+msgid "Where it is"
+msgstr "Waar het is"
+
 msgid "immediately"
 msgstr "onmiddellijk"
 
@@ -1748,6 +1775,9 @@ msgstr "Wettelijke kennisgeving"
 
 msgid "Legal notice"
 msgstr "Wettelijke kennisgeving"
+
+msgid "List of tags"
+msgstr "Lijst met tags"
 
 msgid "Max waitings"
 msgstr "Max wachttijden"
@@ -2072,6 +2102,9 @@ msgstr "Beschikbare dagen"
 msgid "Bring a friend"
 msgstr "Breng een vriend mee"
 
+msgid "Cargo manifest"
+msgstr "Vrachtmanifest"
+
 msgid "Carousel image"
 msgstr "Afbeeldingencarrousel"
 
@@ -2122,6 +2155,9 @@ msgstr "Globaal budget"
 
 msgid "Handout Models"
 msgstr "Handout Modellen"
+
+msgid "Inventory area"
+msgstr "Inventarisatiegebied"
 
 msgid "List of voters"
 msgstr "Lijst van kiezers"
@@ -2290,6 +2326,9 @@ msgstr "Externe toegang"
 
 msgid "Filter factions"
 msgstr "Filtergroepen"
+
+msgid "Inventory items"
+msgstr "Inventarisartikelen"
 
 msgid "Mail assignment"
 msgstr "Mail toewijzing"
@@ -2606,9 +2645,6 @@ msgstr "Gratis toegang"
 msgid "Give a new answer"
 msgstr "Geef antwoord"
 
-msgid "Inventory objects"
-msgstr "Inventarisartikelen"
-
 msgid "Invoice not found"
 msgstr "Factuur niet gevonden"
 
@@ -2732,6 +2768,9 @@ msgstr "Informatie opgeslagen"
 msgid "Member Data Checks"
 msgstr "Gegevens van leden controleren"
 
+msgid "Name of event area"
+msgstr "Naam evenementgebied"
+
 msgid "Name of quest type"
 msgstr "Naam van type zoektocht"
 
@@ -2837,6 +2876,9 @@ msgstr "Voorkeur geschiedenis"
 msgid "I am not interested"
 msgstr "Niet geïnteresseerd"
 
+msgid "Inventory movements"
+msgstr "Voorraadbewegingen"
+
 msgid "List of other users"
 msgstr "Lijst van andere gebruikers"
 
@@ -2867,6 +2909,9 @@ msgstr "Operatie voltooid"
 msgid "Password of account"
 msgstr "Wachtwoord account"
 
+msgid "Photo of the object"
+msgstr "Foto van het object"
+
 msgid "Preferences - Total"
 msgstr "Voorkeuren - Totaal"
 
@@ -2896,6 +2941,9 @@ msgstr "Schatkistbeambten"
 
 msgid "Username of account"
 msgstr "Gebruikersnaam account"
+
+msgid "Where it is located"
+msgstr "Waar het zich bevindt"
 
 msgid "Your characters are"
 msgstr "Je personages zijn"
@@ -2953,6 +3001,9 @@ msgstr "Cadeaubon geannuleerd!"
 
 msgid "Independent factions"
 msgstr "Onafhankelijke facties"
+
+msgid "Inventory containers"
+msgstr "Inventariscontainers"
 
 msgid "Issued Reimbursement"
 msgstr "Verleend Terugbetaling"
@@ -3091,6 +3142,9 @@ msgstr "Ga naar casting voor"
 msgid "If absent, indicate 0"
 msgstr "Indien afwezig, geef 0 aan"
 
+msgid "Inventory assignments"
+msgstr "Inventarisopgaven"
+
 msgid "Name of the character"
 msgstr "Naam van het personage"
 
@@ -3206,9 +3260,6 @@ msgstr "Personeelskosten"
 msgid "External register link"
 msgstr "Link naar extern register"
 
-msgid "Filter for every field"
-msgstr "Filter op veld"
-
 msgid "Follow the steps below"
 msgstr "Volg de onderstaande stappen"
 
@@ -3220,6 +3271,9 @@ msgstr "Meld je aan voor de wachtlijst!"
 
 msgid "Link to participate in"
 msgstr "Links om deel te nemen"
+
+msgid "Manage inventory items"
+msgstr "Inventarisartikelen beheren"
 
 msgid "Manage refund requests"
 msgstr "Restitutieverzoeken beheren"
@@ -3410,6 +3464,9 @@ msgstr "Controleer snelheid larp duplicaten"
 msgid "Check missing speed larp"
 msgstr "Controle snelheid larp ontbreekt"
 
+msgid "Code of the box or shelf"
+msgstr "Code van de doos of plank"
+
 msgid "Code two capital letters"
 msgstr "Codeer twee hoofdletters"
 
@@ -3427,6 +3484,9 @@ msgstr "Toegang tot PT-geschiedenis"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lichtgewicht plaat (Test)"
+
+msgid "Manage area of the event"
+msgstr "Gebied van het evenement beheren"
 
 msgid "Manages event's expenses"
 msgstr "Beheert de kosten van het evenement"
@@ -3588,8 +3648,8 @@ msgstr "Geef een kaart aan je vriend(in)"
 msgid "Hide unassigned characters"
 msgstr "Niet-toegewezen tekens verbergen"
 
-msgid "Manage inventory and items"
-msgstr "Inventaris en artikelen beheren"
+msgid "Manage inventory movements"
+msgstr "Voorraadbewegingen beheren"
 
 msgid "Manage the event prologues"
 msgstr "De prologen van evenementen beheren"
@@ -3654,6 +3714,9 @@ msgstr "Geef hier je voorkeuren aan"
 
 msgid "Loading performed, see logs"
 msgstr "Laden uitgevoerd, zie logboeken"
+
+msgid "Manage inventory containers"
+msgstr "Voorraadcontainers beheren"
 
 msgid "Manage quiz-style workshops"
 msgstr "Beheer quizachtige workshops"
@@ -3724,9 +3787,6 @@ msgstr "Start rondleiding door interface"
 
 msgid "Link to close the collection"
 msgstr "Link om de collectie te sluiten"
-
-msgid "List of content-related tags"
-msgstr "Lijst van inhoudsgerelateerde tags"
 
 msgid "Manage the event speed-larps"
 msgstr "De snelheidsbeperkingen voor evenementen beheren"
@@ -3914,9 +3974,6 @@ msgstr "Naam van het veld voor gratis donaties"
 
 msgid "Name to be displayed for tokens"
 msgstr "Naam die moet worden weergegeven voor tokens"
-
-msgid "Now you can add inventory items"
-msgstr "Nu kun je inventarisitems toevoegen"
 
 #, python-format
 msgid "Password reset of user %(user)s"
@@ -4240,6 +4297,9 @@ msgstr "Gevoelige gegevens van deelnemers beoordelen"
 msgid "Set up the membership configuration"
 msgstr "De lidmaatschapsconfiguratie instellen"
 
+msgid "This page shows the inventory items"
+msgstr "Deze pagina toont de inventarisitems"
+
 msgid "You can't send messages to yourself"
 msgstr "Je kunt geen berichten naar jezelf sturen"
 
@@ -4428,9 +4488,6 @@ msgstr ""
 msgid "Attention, the tax code does not match"
 msgstr "Let op, de belastingcode komt niet overeen"
 
-msgid "Briefly describe what the box contains"
-msgstr "Beschrijf kort wat de doos bevat"
-
 msgid "Charge transaction fees to participant"
 msgstr "Breng transactiekosten in rekening bij de deelnemer"
 
@@ -4533,9 +4590,6 @@ msgstr "Het aantal termijnen dat moet worden betaald"
 msgid "The question status, allowed values are"
 msgstr "De vraagstatus, toegestane waarden zijn"
 
-msgid "This page shows inventory custody items"
-msgstr "Deze pagina toont items voor inventarisbewaring"
-
 msgid "This page summarises the assignments of"
 msgstr "Deze pagina geeft een overzicht van de opdrachten van"
 
@@ -4586,6 +4640,9 @@ msgstr "De betaling wordt momenteel beoordeeld door het personeel"
 
 msgid "The collection was delivered to the user"
 msgstr "De collectie werd geleverd aan de gebruiker"
+
+msgid "This page shows the inventory containers"
+msgstr "Deze pagina toont de inventariscontainers"
 
 msgid "This page shows the quests for the event"
 msgstr "Deze pagina toont de quests voor het evenement"
@@ -4731,12 +4788,6 @@ msgstr "De som werd aan jou toegewezen als %(credits)s"
 
 msgid "This page performs checks on members' data"
 msgstr "Deze pagina voert controles uit op de gegevens van leden"
-
-msgid "This page shows for an element its history"
-msgstr "Deze pagina toont voor een element de historische"
-
-msgid "This page shows the organization inventory"
-msgstr "Deze pagina toont de inventaris van de organisatie"
 
 msgid "This page shows the prologues of the event"
 msgstr "Deze pagina vat de prologen van het evenement samen"
@@ -4888,9 +4939,6 @@ msgstr "Karakteraanpassingsconfiguratie instellen"
 msgid "This page allows you to add or edit an album"
 msgstr "Op deze pagina kunt u een album toevoegen of bewerken"
 
-msgid "This page shows organization inventory items"
-msgstr "Deze pagina toont inventarisitems van organisaties"
-
 msgid "This page shows your personal spending items"
 msgstr "Op deze pagina vindt u een overzicht van uw persoonlijke uitgaven"
 
@@ -4981,6 +5029,9 @@ msgstr "Maximum aantal vulplekken (0 = onbeperkt)"
 msgid "Now set up the token and credits configuration"
 msgstr "Stel nu de token en credits configuratie in"
 
+msgid "Now you can add inventory containers and items"
+msgstr "Nu kun je inventariscontainers en -items toevoegen"
+
 msgid "Now you can select which tickets can be gifted"
 msgstr "Nu kun je selecteren welke tickets kunnen worden geschonken"
 
@@ -4992,9 +5043,6 @@ msgstr "Nu kun je de externe registratielink instellen"
 
 msgid "Optional - Image displayed within the question"
 msgstr "Optioneel - Afbeelding weergegeven in de vraag"
-
-msgid "Photo (clear and understandable) of the object"
-msgstr "Foto (duidelijk en begrijpelijk) van het object"
 
 msgid "Registered users will be granted normal access"
 msgstr "Geregistreerde gebruikers krijgen normale toegang"
@@ -5058,6 +5106,10 @@ msgid "Email sent with instructions for password reset"
 msgstr ""
 "E-mail verzonden met instructies voor het opnieuw instellen van het "
 "wachtwoord"
+
+msgid "If checked: Add a field to track items quantity"
+msgstr ""
+"Indien aangevinkt: Een veld toevoegen om de hoeveelheid items bij te houden"
 
 msgid "Indicate the country of which you are a citizen"
 msgstr "Vermeld het land waarvan u staatsburger bent"
@@ -5346,6 +5398,9 @@ msgstr "Je kunt je lidmaatschapsgeld op dit moment niet betalen"
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Word lid van onze Discord voor hulp, ideeën of om bugs te melden"
 
+msgid "Manage assignement of inventory items to event area"
+msgstr "Beheer de toewijzing van inventarisitems aan evenementgebieden"
+
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Kies een duidelijke en gemakkelijk herkenbare foto"
 
@@ -5416,6 +5471,9 @@ msgstr "De betalingsmethoden voor deelnemers instellen"
 
 msgid "The first column the amount, the second the receipts"
 msgstr "De eerste kolom het bedrag, de tweede de ontvangsten"
+
+msgid "This page allows you to add or edit a new event area"
+msgstr "Op deze pagina kunt u een nieuw evenementgebied toevoegen of bewerken"
 
 msgid "This page allows you to add or edit an assignment of"
 msgstr "Op deze pagina kunt u een toewijzing van"
@@ -5594,6 +5652,9 @@ msgstr ""
 
 msgid "Indicate the color that will be used to highlight texts"
 msgstr "Geef de kleur aan die wordt gebruikt om teksten te markeren"
+
+msgid "Manage loading and deployment status of inventory items"
+msgstr "De laad- en inzetstatus van inventarisartikelen beheren"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Beheer betalingen door deelnemers aan alle evenementen"
@@ -5799,6 +5860,9 @@ msgid "This page shows the sections of the event registration form"
 msgstr ""
 "Op deze pagina worden de onderdelen van het registratieformulier voor "
 "evenementen samengevat"
+
+msgid "Where it has been placed? When it is expected to come back?"
+msgstr "Waar is het geplaatst? Wanneer wordt het terug verwacht?"
 
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
@@ -6041,6 +6105,11 @@ msgid "This page allows you to add or edit the registration surcharges"
 msgstr ""
 "Op deze pagina kun je de toeslagen op abonnementen toevoegen of wijzigen"
 
+msgid "This page shows the assignment of inventory items to event area"
+msgstr ""
+"Deze pagina toont de toewijzing van inventarisitems aan het "
+"gebeurtenissengebied"
+
 msgid "To be able to pay, your membership application must be approved"
 msgstr "Om te kunnen betalen, moet je lidmaatschapsaanvraag goedgekeurd zijn"
 
@@ -6097,6 +6166,11 @@ msgid "They will be used automatically when you sign up for a new event"
 msgstr ""
 "Ze worden automatisch afgetrokken wanneer je je registreert voor een nieuw "
 "evenement"
+
+msgid "This page allows you to add or edit a new container of inventory"
+msgstr ""
+"Op deze pagina kun je een nieuwe container met inventaris toevoegen of "
+"bewerken"
 
 msgid "This page allows you to add or edit the expense of a contributor"
 msgstr ""
@@ -6200,6 +6274,9 @@ msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
 "Toegevoegd onderaan alle mails ter bevestiging van inschrijving aan "
 "deelnemers"
+
+msgid "Enables inventory management for organization warehouse management"
+msgstr "Maakt voorraadbeheer mogelijk voor magazijnbeheer van organisaties"
 
 msgid "Enter your email below to receive instructions on how to change it"
 msgstr ""
@@ -6745,6 +6822,12 @@ msgstr ""
 "hij/zij het volgende heeft gemarkeerd"
 
 msgid ""
+"This page shows the event area where inventory items needs to be deployed"
+msgstr ""
+"Deze pagina toont het gebeurtenissengebied waar de inventarisitems moeten "
+"worden ingezet"
+
+msgid ""
 "To confirm your registration, apply to become a member of the Association"
 msgstr ""
 "Om je lidmaatschap te bevestigen, dien je een aanvraag in om lid te worden "
@@ -6840,6 +6923,10 @@ msgid ""
 msgstr ""
 "Deze pagina toont alle sjablonen voor evenementen; je kunt ze bewerken of "
 "nieuwe sjablonen maken"
+
+msgid ""
+"This page shows the cargo manifest, and the status of each item assignment"
+msgstr "Deze pagina toont de vrachtlijst en de status van elke itemtoewijzing"
 
 msgid ""
 "This page summarizes the types of abilities that participants can purchase"
@@ -7608,6 +7695,13 @@ msgstr ""
 "beschrijvingen hieronder"
 
 msgid ""
+"This page allows you to add or edit a new assignment of inventory item to "
+"event area"
+msgstr ""
+"Op deze pagina kun je een nieuwe toewijzing van een inventarisitem aan een "
+"evenementgebied toevoegen of bewerken"
+
+msgid ""
 "Tip: Pin this page to your browser for faster access to your organization "
 "and events"
 msgstr ""
@@ -7697,6 +7791,13 @@ msgid ""
 msgstr ""
 "Configuratie instellen voor het maken of bewerken van personages door de "
 "deelnemers"
+
+msgid ""
+"This page allows you to add or edit a new movement of item inventory, loans "
+"or repairs"
+msgstr ""
+"Op deze pagina kun je een nieuwe beweging van iteminventaris, leningen of "
+"reparaties toevoegen of bewerken"
 
 msgid ""
 "Upload the scan of both your signed request, and your document (image or pdf"
@@ -8608,13 +8709,6 @@ msgstr ""
 "persoonlijke e-mailadressen te onthullen"
 
 msgid ""
-"Fully describe what the box contains, especially number of items, main "
-"features, state of preservation."
-msgstr ""
-"Beschrijf volledig wat de doos bevat, in het bijzonder het aantal items, de "
-"belangrijkste kenmerken, de staat van bewaring"
-
-msgid ""
 "If checked, the subscribers' gallery will not be displayed to those who are "
 "not registered to the event"
 msgstr ""
@@ -9070,13 +9164,6 @@ msgid ""
 msgstr ""
 "Bent u een arts, verpleegkundige of gediplomeerd hulpverlener? Kunnen we je "
 "vragen om in te grijpen als er tijdens het evenement ongelukken gebeuren?"
-
-msgid ""
-"Enables basic inventory management. Users can add items to a warehouse "
-"table, track quantities, and note item locations"
-msgstr ""
-"Maakt basisvoorraadbeheer mogelijk. Gebruikers kunnen items toevoegen aan "
-"een magazijntabel, hoeveelheden bijhouden en itemlocaties noteren"
 
 msgid ""
 "If checked, it allows participants to enter private information on their "

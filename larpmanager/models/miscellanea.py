@@ -357,28 +357,32 @@ class WorkshopOption(BaseModel):
         return js
 
 
-class Inventory(BaseModel):
-    cod = models.CharField(max_length=5)
+class InventoryContainer(BaseModel):
+    name = models.CharField(max_length=100, help_text=_("Code of the box or shelf"))
 
-    name = models.CharField(max_length=500, help_text=_("Briefly describe what the box contains"))
+    position = models.CharField(max_length=100, help_text=_("Where it is located"), blank=True, null=True)
 
-    shelf = models.CharField(max_length=5)
+    description = models.CharField(max_length=1000, blank=True, null=True)
 
-    rack = models.CharField(max_length=5)
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="containers")
 
-    description = models.TextField(
-        help_text=_(
-            "Fully describe what the box contains, especially number of items, main features, state of preservation."
-        )
-    )
 
-    tag = models.CharField(max_length=100, help_text=_("List of content-related tags"))
+class InventoryItem(BaseModel):
+    name = models.CharField(max_length=100)
+
+    quantity = models.IntegerField(blank=True, null=True)
+
+    description = models.CharField(max_length=1000, blank=True, null=True)
+
+    container = models.ForeignKey(InventoryContainer, on_delete=models.CASCADE, related_name="items")
+
+    tags = models.CharField(max_length=100, help_text=_("List of tags"), blank=True, null=True)
 
     photo = models.ImageField(
         max_length=500,
         upload_to=UploadToPathAndRename("inventory/"),
         verbose_name=_("Photo"),
-        help_text=_("Photo (clear and understandable) of the object"),
+        help_text=_("Photo of the object"),
         null=True,
         blank=True,
     )
@@ -390,36 +394,54 @@ class Inventory(BaseModel):
         options={"quality": 80},
     )
 
-    class Meta:
-        abstract = True
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="items")
+
+    @classmethod
+    def get_optional_fields(cls):
+        return ["quantity"]
 
 
-class InventoryBox(Inventory):
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="boxes")
+class InventoryMovement(BaseModel):
+    quantity = models.IntegerField(blank=True, null=True)
 
+    item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE, related_name="movements")
 
-class InventoryBoxHistory(Inventory):
-    box = models.ForeignKey(InventoryBox, on_delete=models.CASCADE, related_name="histories")
-
-    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="box_histories")
-
-
-class InventoryBoxPhoto(BaseModel):
-    box = models.ForeignKey(InventoryBox, on_delete=models.CASCADE, related_name="photos")
-
-    photo = models.ImageField(
-        max_length=500,
-        upload_to=UploadToPathAndRename("albums/"),
-        verbose_name=_("Photo"),
-        help_text=_("Photo (clear and understandable) of the object"),
+    notes = models.CharField(
+        max_length=1000,
+        blank=True,
+        null=True,
+        help_text=_("Where it has been placed? When it is expected to come back?"),
     )
 
-    thumb = ImageSpecField(
-        source="photo",
-        processors=[ResizeToFit(300)],
-        format="JPEG",
-        options={"quality": 80},
-    )
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="movements")
+
+    completed = models.BooleanField(default=False)
+
+
+class InventoryArea(BaseModel):
+    name = models.CharField(max_length=100, help_text=_("Name of event area"))
+
+    position = models.CharField(max_length=100, help_text=_("Where it is"), blank=True, null=True)
+
+    description = models.CharField(max_length=1000, blank=True, null=True)
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="area")
+
+
+class InventoryAssignment(BaseModel):
+    quantity = models.IntegerField(blank=True, null=True)
+
+    area = models.ForeignKey(InventoryArea, on_delete=models.CASCADE, related_name="assignments")
+
+    item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE, related_name="assignments")
+
+    notes = models.CharField(max_length=1000, blank=True, null=True)
+
+    loaded = models.BooleanField(default=False)
+
+    deployed = models.BooleanField(default=False)
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="assignments")
 
 
 class ShuttleStatus(models.TextChoices):

@@ -1,0 +1,87 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Cargo manifest" %} - {{ run }}
+{% endblock title %}
+{% block info %}
+    {% trans "This page shows the cargo manifest, and the status of each item assignment" %}
+{% endblock info %}
+{% block content %}
+    {% for area in list %}
+        <h2>{{ area }}</h2>
+        {% if area.position %}
+            <p>
+                <b>{% trans "Position" %}:</b>{{ area.position }}
+            </p>
+        {% endif %}
+        {% if area.description %}
+            <p>
+                <b>{% trans "Description" %}:</b>{{ area.description }}
+            </p>
+        {% endif %}
+        <table id="inv_manifest_{{ area.id }}"
+               class="go_datatable"
+               no_header_cols="{{ no_header_cols }}">
+            <thead>
+                <tr>
+                    <th>{% trans "Loaded" %}</th>
+                    {% if optionals.quantity %}
+                        <th>{% trans "Quantity" %}</th>
+                    {% endif %}
+                    <th>{% trans "Item" %}</th>
+                    <th>{% trans "Container" %}</th>
+                    <th>{% trans "Notes" %}</th>
+                    <th>{% trans "Photo" %}</th>
+                    <th>{% trans "Deployed" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for el in area.assignments.all %}
+                    <tr id="{{ el.id }}">
+                        <td>
+                            <input type="checkbox" />
+                        </td>
+                        {% if optionals.quantity %}
+                            <td>
+                                {% if el.quantity %}{{ el.quantity }}{% endif %}
+                            </td>
+                        {% endif %}
+                        <td>{{ el.item }}</td>
+                        <td>
+                            {{ el.item.container }}
+                            {% if el.item.container.position %}- {{ el.item.container.position | truncatechars:50 }}{% endif %}
+                        </td>
+                        <td>{{ el.notes }}</td>
+                        <td>
+                            {% if el.item.photo %}
+                                <img src="{{ el.item.thumb.url }}"
+                                     class="inv_photo"
+                                     alt="item photo"
+                                     style="cursor: pointer"
+                                     onclick="openImage('{{ el.item.photo.url }}')" />
+                            {% endif %}
+                        </td>
+                        <td>
+                            <input type="checkbox" />
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+    <div id="imagePopup">
+        <img id="popupImg" src="" alt="popup image" />
+    </div>
+{% endblock content %}
+{% block js %}
+    <script>
+function openImage(url) {
+    document.getElementById('popupImg').src = url;
+    document.getElementById('imagePopup').style.display = 'flex';
+}
+
+document.getElementById('imagePopup').onclick = function() {
+    this.style.display = 'none';
+};
+    </script>
+{% endblock js %}

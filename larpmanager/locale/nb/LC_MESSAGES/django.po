@@ -77,6 +77,9 @@ msgstr "alder"
 msgid "for"
 msgstr "for"
 
+msgid "Area"
+msgstr "Område"
+
 msgid "Band"
 msgstr "Fascia"
 
@@ -224,6 +227,9 @@ msgstr "Sang"
 msgid "Spam"
 msgstr "Søppelpost"
 
+msgid "Tags"
+msgstr "Tagger"
+
 msgid "Text"
 msgstr "Tekst"
 
@@ -262,9 +268,6 @@ msgstr "dager"
 
 msgid "gift"
 msgstr "gave"
-
-msgid "past"
-msgstr "fortid"
 
 msgid "Album"
 msgstr "Album"
@@ -324,6 +327,9 @@ msgstr "Bilde"
 msgid "Italy"
 msgstr "Italia"
 
+msgid "Items"
+msgstr "Gjenstander"
+
 msgid "Login"
 msgstr "Logg inn"
 
@@ -332,6 +338,9 @@ msgstr "Penger"
 
 msgid "Names"
 msgstr "Navn"
+
+msgid "Notes"
+msgstr "Merknader"
 
 msgid "Order"
 msgstr "Bestilling"
@@ -498,6 +507,9 @@ msgstr "Ble med"
 msgid "Legend"
 msgstr "Tegnforklaring"
 
+msgid "Loaded"
+msgstr "Lastet"
+
 msgid "Log in"
 msgstr "Logg inn"
 
@@ -530,9 +542,6 @@ msgstr "Natur"
 
 msgid "Number"
 msgstr "Antall"
-
-msgid "Object"
-msgstr "Objekt"
 
 msgid "Patron"
 msgstr "Beskytter"
@@ -780,9 +789,6 @@ msgstr "Seksjon"
 msgid "Session"
 msgstr "Sesjon"
 
-msgid "Setting"
-msgstr "Innstilling"
-
 msgid "Sharing"
 msgstr "Deling"
 
@@ -903,6 +909,9 @@ msgstr "Frist"
 msgid "Delivery"
 msgstr "Utbetalinger"
 
+msgid "Deployed"
+msgstr "Utplassert"
+
 msgid "Disabled"
 msgstr "Deaktivert"
 
@@ -963,6 +972,9 @@ msgstr "Språk"
 msgid "Location"
 msgstr "Beliggenhet"
 
+msgid "Manifest"
+msgstr "Manifest"
+
 msgid "Max uses"
 msgstr "Maksimal bruk"
 
@@ -996,6 +1008,9 @@ msgstr "Ansatte"
 msgid "Portrait"
 msgstr "Portrettfoto"
 
+msgid "Position"
+msgstr "Stilling"
+
 msgid "Priority"
 msgstr "Prioriteringer"
 
@@ -1019,6 +1034,9 @@ msgstr "Foreslått"
 
 msgid "Province"
 msgstr "Provins"
+
+msgid "Quantity"
+msgstr "Antall"
 
 msgid "Question"
 msgstr "Spørsmål"
@@ -1131,11 +1149,11 @@ msgstr "Karakter"
 msgid "Concluded"
 msgstr "Avsluttet"
 
+msgid "Container"
+msgstr "Container"
+
 msgid "Copy done"
 msgstr "Utført kopi"
-
-msgid "Custodies"
-msgstr "Tilfeller"
 
 msgid "Customize"
 msgstr "Tilpass"
@@ -1329,6 +1347,9 @@ msgstr "Samle"
 msgid "Contact us"
 msgstr "Kontakt oss"
 
+msgid "Containers"
+msgstr "Beholdere"
+
 msgid "Deliveries"
 msgstr "Leveranser"
 
@@ -1337,6 +1358,9 @@ msgstr "Påskeegg"
 
 msgid "Email list"
 msgstr "e-postliste"
+
+msgid "Event area"
+msgstr "Arrangementsområde"
 
 msgid "Experience"
 msgstr "Erfaring"
@@ -1662,6 +1686,9 @@ msgstr "Angre periode"
 msgid "Unique code"
 msgstr "Unik kode"
 
+msgid "Where it is"
+msgstr "Hvor det er"
+
 msgid "immediately"
 msgstr "umiddelbart"
 
@@ -1748,6 +1775,9 @@ msgstr "Juridisk merknad"
 
 msgid "Legal notice"
 msgstr "Juridisk merknad"
+
+msgid "List of tags"
+msgstr "Liste over tagger"
 
 msgid "Max waitings"
 msgstr "Maks ventetid"
@@ -2072,6 +2102,9 @@ msgstr "Tilgjengelige dager"
 msgid "Bring a friend"
 msgstr "Ta med en venn"
 
+msgid "Cargo manifest"
+msgstr "Lastmanifest"
+
 msgid "Carousel image"
 msgstr "Bildekarusell"
 
@@ -2122,6 +2155,9 @@ msgstr "Globalt budsjett"
 
 msgid "Handout Models"
 msgstr "Modeller for utdeling"
+
+msgid "Inventory area"
+msgstr "Område for lagerbeholdning"
 
 msgid "List of voters"
 msgstr "Liste over velgere"
@@ -2290,6 +2326,9 @@ msgstr "Ekstern tilgang"
 
 msgid "Filter factions"
 msgstr "Filtergrupper"
+
+msgid "Inventory items"
+msgstr "Varelager"
 
 msgid "Mail assignment"
 msgstr "Tildeling av post"
@@ -2606,9 +2645,6 @@ msgstr "Gratis inngang"
 msgid "Give a new answer"
 msgstr "Gi et svar"
 
-msgid "Inventory objects"
-msgstr "Varer på lager"
-
 msgid "Invoice not found"
 msgstr "Faktura ikke funnet"
 
@@ -2732,6 +2768,9 @@ msgstr "Informasjon lagret"
 msgid "Member Data Checks"
 msgstr "Kontroll av medlemsdata"
 
+msgid "Name of event area"
+msgstr "Navn på arrangementsområdet"
+
 msgid "Name of quest type"
 msgstr "Navn på oppdragstype"
 
@@ -2837,6 +2876,9 @@ msgstr "Historikk over preferanser"
 msgid "I am not interested"
 msgstr "Ikke interessert"
 
+msgid "Inventory movements"
+msgstr "Beholdningsbevegelser"
+
 msgid "List of other users"
 msgstr "Liste over andre brukere"
 
@@ -2867,6 +2909,9 @@ msgstr "Operasjon fullført"
 msgid "Password of account"
 msgstr "Passord for konto"
 
+msgid "Photo of the object"
+msgstr "Foto av objektet"
+
 msgid "Preferences - Total"
 msgstr "Preferanser - Totalt"
 
@@ -2896,6 +2941,9 @@ msgstr "Finansdepartementet"
 
 msgid "Username of account"
 msgstr "Brukernavn for konto"
+
+msgid "Where it is located"
+msgstr "Hvor den befinner seg"
 
 msgid "Your characters are"
 msgstr "Karakterene dine er"
@@ -2953,6 +3001,9 @@ msgstr "Gavekortet er kansellert!"
 
 msgid "Independent factions"
 msgstr "Uavhengige fraksjoner"
+
+msgid "Inventory containers"
+msgstr "Lagerbeholdere"
 
 msgid "Issued Reimbursement"
 msgstr "Utstedt Refusjon"
@@ -3091,6 +3142,9 @@ msgstr "Gå til casting for"
 msgid "If absent, indicate 0"
 msgstr "Hvis fraværende, angi 0"
 
+msgid "Inventory assignments"
+msgstr "Tildeling av lagerbeholdning"
+
 msgid "Name of the character"
 msgstr "Navnet på karakteren"
 
@@ -3206,9 +3260,6 @@ msgstr "Utgifter til ansatte"
 msgid "External register link"
 msgstr "Ekstern registerlenke"
 
-msgid "Filter for every field"
-msgstr "Filtrer etter felt"
-
 msgid "Follow the steps below"
 msgstr "Følg trinnene nedenfor"
 
@@ -3220,6 +3271,9 @@ msgstr "Sett deg på venteliste!"
 
 msgid "Link to participate in"
 msgstr "Lenker for å delta"
+
+msgid "Manage inventory items"
+msgstr "Administrere lagervarer"
 
 msgid "Manage refund requests"
 msgstr "Administrere refusjonsforespørsler"
@@ -3410,6 +3464,9 @@ msgstr "Sjekk speed larp-duplikater"
 msgid "Check missing speed larp"
 msgstr "Sjekk hastighet larp mangler"
 
+msgid "Code of the box or shelf"
+msgstr "Kode for esken eller hyllen"
+
 msgid "Code two capital letters"
 msgstr "Kode to store bokstaver"
 
@@ -3427,6 +3484,9 @@ msgstr "Få tilgang til PT-historikk"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lettvektsplate (Test)"
+
+msgid "Manage area of the event"
+msgstr "Administrer området for arrangementet"
 
 msgid "Manages event's expenses"
 msgstr "Administrerer arrangementets utgifter"
@@ -3588,8 +3648,8 @@ msgstr "Gi et kort til vennen din"
 msgid "Hide unassigned characters"
 msgstr "Skjul tegn som ikke er tilordnet"
 
-msgid "Manage inventory and items"
-msgstr "Administrer lagerbeholdning og varer"
+msgid "Manage inventory movements"
+msgstr "Administrer lagerbevegelser"
 
 msgid "Manage the event prologues"
 msgstr "Administrer prologene til arrangementet"
@@ -3654,6 +3714,9 @@ msgstr "Angi dine preferanser her"
 
 msgid "Loading performed, see logs"
 msgstr "Lasting utført, se logger"
+
+msgid "Manage inventory containers"
+msgstr "Administrer lagerbeholdere"
 
 msgid "Manage quiz-style workshops"
 msgstr "Administrere quiz-lignende workshops"
@@ -3724,9 +3787,6 @@ msgstr "Start guidet omvisning i grensesnittet"
 
 msgid "Link to close the collection"
 msgstr "Lenke for å lukke samlingen"
-
-msgid "List of content-related tags"
-msgstr "Liste over innholdsrelaterte tagger"
 
 msgid "Manage the event speed-larps"
 msgstr "Administrer hendelsens speed-larps"
@@ -3914,9 +3974,6 @@ msgstr "Navn på feltet for gratis donasjon"
 
 msgid "Name to be displayed for tokens"
 msgstr "Navn som skal vises for tokens"
-
-msgid "Now you can add inventory items"
-msgstr "Nå kan du legge til varer i varelageret"
 
 #, python-format
 msgid "Password reset of user %(user)s"
@@ -4240,6 +4297,9 @@ msgstr "Gjennomgå deltakernes sensitive data"
 msgid "Set up the membership configuration"
 msgstr "Konfigurer medlemskapskonfigurasjonen"
 
+msgid "This page shows the inventory items"
+msgstr "Denne siden viser lagerbeholdningen"
+
 msgid "You can't send messages to yourself"
 msgstr "Du kan ikke sende meldinger til deg selv"
 
@@ -4428,9 +4488,6 @@ msgstr ""
 msgid "Attention, the tax code does not match"
 msgstr "OBS, skattekoden stemmer ikke overens"
 
-msgid "Briefly describe what the box contains"
-msgstr "Beskriv kort hva esken inneholder"
-
 msgid "Charge transaction fees to participant"
 msgstr "Kreve transaksjonsgebyrer fra deltakeren"
 
@@ -4533,9 +4590,6 @@ msgstr "Antall avdrag som skal betales"
 msgid "The question status, allowed values are"
 msgstr "Spørsmålsstatus, tillatte verdier er"
 
-msgid "This page shows inventory custody items"
-msgstr "Denne siden viser lagerbeholdningsartikler"
-
 msgid "This page summarises the assignments of"
 msgstr "Denne siden oppsummerer oppgavene til"
 
@@ -4586,6 +4640,9 @@ msgstr "Betalingen er for tiden til vurdering hos de ansatte"
 
 msgid "The collection was delivered to the user"
 msgstr "Samlingen ble levert til brukeren"
+
+msgid "This page shows the inventory containers"
+msgstr "Denne siden viser lagerbeholderne"
 
 msgid "This page shows the quests for the event"
 msgstr "Denne siden viser oppdragene for arrangementet"
@@ -4731,12 +4788,6 @@ msgstr "Summen ble tildelt deg som %(credits)s"
 
 msgid "This page performs checks on members' data"
 msgstr "Denne siden utfører kontroller av medlemmenes data"
-
-msgid "This page shows for an element its history"
-msgstr "Denne siden viser for et element den historiske"
-
-msgid "This page shows the organization inventory"
-msgstr "Denne siden viser organisasjonsbeholdningen"
 
 msgid "This page shows the prologues of the event"
 msgstr "Denne siden oppsummerer arrangementets prologer"
@@ -4888,9 +4939,6 @@ msgstr "Konfigurer konfigurasjon av tegntilpasning"
 msgid "This page allows you to add or edit an album"
 msgstr "På denne siden kan du legge til eller redigere et album"
 
-msgid "This page shows organization inventory items"
-msgstr "Denne siden viser organisasjonens lagerbeholdning"
-
 msgid "This page shows your personal spending items"
 msgstr "Denne siden oppsummerer dine personlige utgiftsposter"
 
@@ -4979,6 +5027,9 @@ msgstr "Maksimalt antall utfyllingspunkter (0 = ubegrenset)"
 msgid "Now set up the token and credits configuration"
 msgstr "Konfigurer nå token- og kredittkonfigurasjonen"
 
+msgid "Now you can add inventory containers and items"
+msgstr "Nå kan du legge til lagerbeholdere og gjenstander"
+
 msgid "Now you can select which tickets can be gifted"
 msgstr "Nå kan du velge hvilke billetter som kan gis i gave"
 
@@ -4990,9 +5041,6 @@ msgstr "Nå kan du angi den eksterne registreringslenken"
 
 msgid "Optional - Image displayed within the question"
 msgstr "Valgfritt - Bilde som vises i spørsmålet"
-
-msgid "Photo (clear and understandable) of the object"
-msgstr "Foto (tydelig og forståelig) av objektet"
 
 msgid "Registered users will be granted normal access"
 msgstr "Registrerte brukere vil få normal tilgang"
@@ -5054,6 +5102,9 @@ msgstr "Donasjon av %(user)s, med årsak: '%(reason)s'"
 
 msgid "Email sent with instructions for password reset"
 msgstr "E-post sendt med instruksjoner for tilbakestilling av passord"
+
+msgid "If checked: Add a field to track items quantity"
+msgstr "Hvis avkrysset: Legg til et felt for å spore antall varer"
 
 msgid "Indicate the country of which you are a citizen"
 msgstr "Oppgi hvilket land du er statsborger i"
@@ -5339,6 +5390,9 @@ msgstr "Du kan ikke betale medlemskontingenten på dette tidspunktet"
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Bli med på Discord for å få hjelp, ideer eller rapportere feil"
 
+msgid "Manage assignement of inventory items to event area"
+msgstr "Administrere tildeling av lagervarer til arrangementsområdet"
+
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Velg et tydelig og lett gjenkjennelig bilde"
 
@@ -5411,6 +5465,10 @@ msgstr "Konfigurer betalingsmåtene som er tilgjengelige for deltakerne"
 
 msgid "The first column the amount, the second the receipts"
 msgstr "Den første kolonnen beløpet, den andre inntektene"
+
+msgid "This page allows you to add or edit a new event area"
+msgstr ""
+"På denne siden kan du legge til eller redigere et nytt arrangementsområde"
 
 msgid "This page allows you to add or edit an assignment of"
 msgstr "På denne siden kan du legge til eller redigere en tildeling av"
@@ -5583,6 +5641,9 @@ msgstr ""
 
 msgid "Indicate the color that will be used to highlight texts"
 msgstr "Angi hvilken farge som skal brukes til å utheve tekst"
+
+msgid "Manage loading and deployment status of inventory items"
+msgstr "Administrere status for lasting og utplassering av lagervarer"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Administrere betalinger utført av deltakere på alle arrangementer"
@@ -5783,6 +5844,9 @@ msgstr "Denne siden oppsummerer betalingsfristene for arrangementet"
 msgid "This page shows the sections of the event registration form"
 msgstr ""
 "Denne siden oppsummerer delene av registreringsskjemaet for arrangementet"
+
+msgid "Where it has been placed? When it is expected to come back?"
+msgstr "Hvor har den blitt plassert? Når forventes den å komme tilbake?"
 
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
@@ -6007,6 +6071,9 @@ msgid "This page allows you to add or edit the registration surcharges"
 msgstr ""
 "På denne siden kan du legge til eller endre tilleggsavgifter på abonnementer"
 
+msgid "This page shows the assignment of inventory items to event area"
+msgstr "Denne siden viser tilordning av lagervarer til hendelsesområdet"
+
 msgid "To be able to pay, your membership application must be approved"
 msgstr "For å kunne betale må medlemssøknaden din være godkjent"
 
@@ -6055,6 +6122,9 @@ msgstr "Skriveelementet dette spørsmålet gjelder for, tillatte verdier er"
 
 msgid "They will be used automatically when you sign up for a new event"
 msgstr "De trekkes automatisk når du melder deg på et nytt arrangement"
+
+msgid "This page allows you to add or edit a new container of inventory"
+msgstr "På denne siden kan du legge til eller redigere en ny lagerbeholder"
 
 msgid "This page allows you to add or edit the expense of a contributor"
 msgstr ""
@@ -6151,6 +6221,9 @@ msgstr ""
 msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
 "Lagt til nederst i alle e-poster som bekrefter påmelding til deltakerne"
+
+msgid "Enables inventory management for organization warehouse management"
+msgstr "Muliggjør lagerstyring for organisasjonens lagerstyring"
 
 msgid "Enter your email below to receive instructions on how to change it"
 msgstr ""
@@ -6652,6 +6725,11 @@ msgstr ""
 "for"
 
 msgid ""
+"This page shows the event area where inventory items needs to be deployed"
+msgstr ""
+"Denne siden viser hendelsesområdet der lagerbeholdningen må plasseres ut"
+
+msgid ""
 "To confirm your registration, apply to become a member of the Association"
 msgstr "For å bekrefte medlemskapet ditt, søk om å bli medlem av foreningen"
 
@@ -6731,6 +6809,11 @@ msgid ""
 msgstr ""
 "Denne siden viser alle arrangementsmaler; du kan redigere dem eller opprette"
 " nye"
+
+msgid ""
+"This page shows the cargo manifest, and the status of each item assignment"
+msgstr ""
+"Denne siden viser lastmanifestet og statusen for hver enkelt varetildeling"
 
 msgid ""
 "This page summarizes the types of abilities that participants can purchase"
@@ -7458,6 +7541,13 @@ msgstr ""
 "nedenfor"
 
 msgid ""
+"This page allows you to add or edit a new assignment of inventory item to "
+"event area"
+msgstr ""
+"På denne siden kan du legge til eller redigere en ny tildeling av "
+"lagerbeholdning til et arrangementsområde"
+
+msgid ""
 "Tip: Pin this page to your browser for faster access to your organization "
 "and events"
 msgstr ""
@@ -7544,6 +7634,13 @@ msgid ""
 msgstr ""
 "Konfigurer konfigurasjonen for oppretting eller redigering av tegn av "
 "deltakerne"
+
+msgid ""
+"This page allows you to add or edit a new movement of item inventory, loans "
+"or repairs"
+msgstr ""
+"På denne siden kan du legge til eller redigere en ny bevegelse av varelager,"
+" lån eller reparasjoner"
 
 msgid ""
 "Upload the scan of both your signed request, and your document (image or pdf"
@@ -8451,13 +8548,6 @@ msgstr ""
 " avsløre personlige e-postadresser"
 
 msgid ""
-"Fully describe what the box contains, especially number of items, main "
-"features, state of preservation."
-msgstr ""
-"Gi en fullstendig beskrivelse av hva esken inneholder, særlig antall "
-"gjenstander, hovedtrekk og bevaringstilstand."
-
-msgid ""
 "If checked, the subscribers' gallery will not be displayed to those who are "
 "not registered to the event"
 msgstr ""
@@ -8910,13 +9000,6 @@ msgid ""
 msgstr ""
 "Er du lege, sykepleier eller autorisert redningsmann? Kan vi be deg om å "
 "gripe inn hvis det skulle skje en ulykke under arrangementet?"
-
-msgid ""
-"Enables basic inventory management. Users can add items to a warehouse "
-"table, track quantities, and note item locations"
-msgstr ""
-"Muliggjør grunnleggende lagerstyring. Brukerne kan legge til varer i en "
-"lagertabell, spore antall og notere hvor varene befinner seg"
 
 msgid ""
 "If checked, it allows participants to enter private information on their "

@@ -209,17 +209,6 @@
     feature: 138
     module: 3
 - model: larpmanager.assocpermission
-  pk: 20
-  fields:
-    name: Inventory
-    descr: Manage inventory and items
-    slug: exe_inventory
-    number: 21
-    config: null
-    hidden: false
-    feature: 66
-    module: 3
-- model: larpmanager.assocpermission
   pk: 21
   fields:
     name: Events
@@ -440,3 +429,36 @@
     hidden: true
     feature: 216
     module: 7
+- model: larpmanager.assocpermission
+  pk: 20
+  fields:
+    name: Containers
+    descr: Manage inventory containers
+    slug: exe_inventory_containers
+    number: 21
+    config: inventory
+    hidden: false
+    feature: 66
+    module: 15
+- model: larpmanager.assocpermission
+  pk: 46
+  fields:
+    name: Items
+    descr: Manage inventory items
+    slug: exe_inventory_items
+    number: 46
+    config: inventory
+    hidden: false
+    feature: 66
+    module: 15
+- model: larpmanager.assocpermission
+  pk: 47
+  fields:
+    name: Movements
+    descr: Manage inventory movements
+    slug: exe_inventory_movements
+    number: 66
+    config: inventory
+    hidden: false
+    feature: 66
+    module: 15

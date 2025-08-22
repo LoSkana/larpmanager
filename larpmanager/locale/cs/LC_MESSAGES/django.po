@@ -77,6 +77,9 @@ msgstr "věk"
 msgid "for"
 msgstr "pro"
 
+msgid "Area"
+msgstr "Oblast"
+
 msgid "Band"
 msgstr "Fascie"
 
@@ -224,6 +227,9 @@ msgstr "Píseň"
 msgid "Spam"
 msgstr "Spam"
 
+msgid "Tags"
+msgstr "Štítky"
+
 msgid "Text"
 msgstr "Text"
 
@@ -262,9 +268,6 @@ msgstr "dny"
 
 msgid "gift"
 msgstr "dárek"
-
-msgid "past"
-msgstr "minulost"
 
 msgid "Album"
 msgstr "Alba"
@@ -324,6 +327,9 @@ msgstr "Obrázek"
 msgid "Italy"
 msgstr "Itálie"
 
+msgid "Items"
+msgstr "Položky"
+
 msgid "Login"
 msgstr "Přihlášení"
 
@@ -332,6 +338,9 @@ msgstr "Peníze"
 
 msgid "Names"
 msgstr "Jména"
+
+msgid "Notes"
+msgstr "Poznámky"
 
 msgid "Order"
 msgstr "Objednávka"
@@ -498,6 +507,9 @@ msgstr "Připojil se k"
 msgid "Legend"
 msgstr "Legenda"
 
+msgid "Loaded"
+msgstr "Načteno"
+
 msgid "Log in"
 msgstr "Přihlášení"
 
@@ -530,9 +542,6 @@ msgstr "Příroda"
 
 msgid "Number"
 msgstr "Číslo"
-
-msgid "Object"
-msgstr "Objekt"
 
 msgid "Patron"
 msgstr "Patron"
@@ -780,9 +789,6 @@ msgstr "Sekce"
 msgid "Session"
 msgstr "Relace"
 
-msgid "Setting"
-msgstr "Nastavení"
-
 msgid "Sharing"
 msgstr "Sdílení"
 
@@ -903,6 +909,9 @@ msgstr "Termín"
 msgid "Delivery"
 msgstr "Výplaty"
 
+msgid "Deployed"
+msgstr "Nasazení"
+
 msgid "Disabled"
 msgstr "Bezbariérový"
 
@@ -963,6 +972,9 @@ msgstr "Jazyk"
 msgid "Location"
 msgstr "Umístění"
 
+msgid "Manifest"
+msgstr "Manifest"
+
 msgid "Max uses"
 msgstr "Maximální použití"
 
@@ -996,6 +1008,9 @@ msgstr "Zaměstnanci"
 msgid "Portrait"
 msgstr "Fotografický portrét"
 
+msgid "Position"
+msgstr "Pozice"
+
 msgid "Priority"
 msgstr "Priority"
 
@@ -1019,6 +1034,9 @@ msgstr "Navrhované stránky"
 
 msgid "Province"
 msgstr "Provincie"
+
+msgid "Quantity"
+msgstr "Množství"
 
 msgid "Question"
 msgstr "Otázka"
@@ -1131,11 +1149,11 @@ msgstr "Postava"
 msgid "Concluded"
 msgstr "Uzavřeno"
 
+msgid "Container"
+msgstr "Kontejner"
+
 msgid "Copy done"
 msgstr "Provedená kopie"
-
-msgid "Custodies"
-msgstr "Případy"
 
 msgid "Customize"
 msgstr "Přizpůsobení"
@@ -1329,6 +1347,9 @@ msgstr "Sbírejte"
 msgid "Contact us"
 msgstr "Kontaktujte nás"
 
+msgid "Containers"
+msgstr "Kontejnery"
+
 msgid "Deliveries"
 msgstr "Dodávky"
 
@@ -1337,6 +1358,9 @@ msgstr "Velikonoční vajíčko"
 
 msgid "Email list"
 msgstr "e-mailový seznam"
+
+msgid "Event area"
+msgstr "Oblast události"
 
 msgid "Experience"
 msgstr "Zkušenosti"
@@ -1662,6 +1686,9 @@ msgstr "Zrušení období"
 msgid "Unique code"
 msgstr "Jedinečný kód"
 
+msgid "Where it is"
+msgstr "Kde se nachází"
+
 msgid "immediately"
 msgstr "okamžitě"
 
@@ -1748,6 +1775,9 @@ msgstr "Právní upozornění"
 
 msgid "Legal notice"
 msgstr "Právní upozornění"
+
+msgid "List of tags"
+msgstr "Seznam značek"
 
 msgid "Max waitings"
 msgstr "Maximální počet čekání"
@@ -2072,6 +2102,9 @@ msgstr "Dostupné dny"
 msgid "Bring a friend"
 msgstr "Přiveďte kamaráda"
 
+msgid "Cargo manifest"
+msgstr "Seznam nákladu"
+
 msgid "Carousel image"
 msgstr "Kolotoč obrázků"
 
@@ -2122,6 +2155,9 @@ msgstr "Globální rozpočet"
 
 msgid "Handout Models"
 msgstr "Modely pro rozdávání"
+
+msgid "Inventory area"
+msgstr "Inventarizační oblast"
 
 msgid "List of voters"
 msgstr "Seznam voličů"
@@ -2290,6 +2326,9 @@ msgstr "Externí přístup"
 
 msgid "Filter factions"
 msgstr "Skupiny filtrů"
+
+msgid "Inventory items"
+msgstr "Inventární položky"
 
 msgid "Mail assignment"
 msgstr "Přiřazení pošty"
@@ -2606,9 +2645,6 @@ msgstr "Vstup zdarma"
 msgid "Give a new answer"
 msgstr "Odpovězte"
 
-msgid "Inventory objects"
-msgstr "Inventární položky"
-
 msgid "Invoice not found"
 msgstr "Faktura nebyla nalezena"
 
@@ -2732,6 +2768,9 @@ msgstr "Informace uloženy"
 msgid "Member Data Checks"
 msgstr "Kontroly členských údajů"
 
+msgid "Name of event area"
+msgstr "Název oblasti události"
+
 msgid "Name of quest type"
 msgstr "Název typu úkolu"
 
@@ -2837,6 +2876,9 @@ msgstr "Historie předvoleb"
 msgid "I am not interested"
 msgstr "Nemám zájem"
 
+msgid "Inventory movements"
+msgstr "Inventurní pohyby"
+
 msgid "List of other users"
 msgstr "Seznam dalších uživatelů"
 
@@ -2867,6 +2909,9 @@ msgstr "Operace dokončena"
 msgid "Password of account"
 msgstr "Heslo účtu"
 
+msgid "Photo of the object"
+msgstr "Fotografie objektu"
+
 msgid "Preferences - Total"
 msgstr "Preference - celkem"
 
@@ -2896,6 +2941,9 @@ msgstr "Úředníci ministerstva financí"
 
 msgid "Username of account"
 msgstr "Uživatelské jméno účtu"
+
+msgid "Where it is located"
+msgstr "Kde se nachází"
 
 msgid "Your characters are"
 msgstr "Vaše postavy jsou"
@@ -2953,6 +3001,9 @@ msgstr "Dárková karta zrušena!"
 
 msgid "Independent factions"
 msgstr "Nezávislé frakce"
+
+msgid "Inventory containers"
+msgstr "Inventární kontejnery"
 
 msgid "Issued Reimbursement"
 msgstr "Vydaná náhrada"
@@ -3091,6 +3142,9 @@ msgstr "Přejděte na casting"
 msgid "If absent, indicate 0"
 msgstr "Pokud chybí, uveďte 0"
 
+msgid "Inventory assignments"
+msgstr "Přiřazení zásob"
+
 msgid "Name of the character"
 msgstr "Jméno postavy"
 
@@ -3206,9 +3260,6 @@ msgstr "Výdaje na zaměstnance"
 msgid "External register link"
 msgstr "Odkaz na externí registr"
 
-msgid "Filter for every field"
-msgstr "Filtrování podle pole"
-
 msgid "Follow the steps below"
 msgstr "Postupujte podle následujících kroků"
 
@@ -3220,6 +3271,9 @@ msgstr "Připojte se k čekací listině!"
 
 msgid "Link to participate in"
 msgstr "Odkazy k účasti"
+
+msgid "Manage inventory items"
+msgstr "Správa skladových položek"
 
 msgid "Manage refund requests"
 msgstr "Správa žádostí o vrácení peněz"
@@ -3410,6 +3464,9 @@ msgstr "Zkontrolujte duplicity rychlostních larpů"
 msgid "Check missing speed larp"
 msgstr "Zkontrolujte chybějící rychlosti larpů"
 
+msgid "Code of the box or shelf"
+msgstr "Kód krabice nebo police"
+
 msgid "Code two capital letters"
 msgstr "Kód dvě velká písmena"
 
@@ -3427,6 +3484,9 @@ msgstr "Přístup k historii PT"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lehký plech (test)"
+
+msgid "Manage area of the event"
+msgstr "Správa oblasti události"
 
 msgid "Manages event's expenses"
 msgstr "Spravuje výdaje na událost"
@@ -3588,8 +3648,8 @@ msgstr "Dejte přání svému příteli"
 msgid "Hide unassigned characters"
 msgstr "Skrytí nepřiřazených znaků"
 
-msgid "Manage inventory and items"
-msgstr "Správa zásob a položek"
+msgid "Manage inventory movements"
+msgstr "Správa pohybu zásob"
 
 msgid "Manage the event prologues"
 msgstr "Správa prologů událostí"
@@ -3654,6 +3714,9 @@ msgstr "Zde uveďte své preference"
 
 msgid "Loading performed, see logs"
 msgstr "Provedeno načítání, viz protokoly"
+
+msgid "Manage inventory containers"
+msgstr "Správa skladových zásobníků"
 
 msgid "Manage quiz-style workshops"
 msgstr "Správa workshopů ve stylu kvízů"
@@ -3724,9 +3787,6 @@ msgstr "Spuštění prohlídky rozhraní s průvodcem"
 
 msgid "Link to close the collection"
 msgstr "Odkaz na uzavření sbírky"
-
-msgid "List of content-related tags"
-msgstr "Seznam značek souvisejících s obsahem"
 
 msgid "Manage the event speed-larps"
 msgstr "Správa rychlostních svorek událostí"
@@ -3914,9 +3974,6 @@ msgstr "Název pole pro bezplatné dary"
 
 msgid "Name to be displayed for tokens"
 msgstr "Název, který se má zobrazit u žetonů"
-
-msgid "Now you can add inventory items"
-msgstr "Nyní můžete přidávat položky inventáře"
 
 #, python-format
 msgid "Password reset of user %(user)s"
@@ -4240,6 +4297,9 @@ msgstr "Přezkoumání citlivých údajů účastníků"
 msgid "Set up the membership configuration"
 msgstr "Nastavení konfigurace členství"
 
+msgid "This page shows the inventory items"
+msgstr "Na této stránce jsou zobrazeny inventární položky"
+
 msgid "You can't send messages to yourself"
 msgstr "Nemůžete posílat zprávy sami sobě"
 
@@ -4426,9 +4486,6 @@ msgstr "Aktivace účtu se nezdařila. Napište nám o tom a informujte nás"
 msgid "Attention, the tax code does not match"
 msgstr "Pozor, daňový kód nesouhlasí"
 
-msgid "Briefly describe what the box contains"
-msgstr "Stručně popište, co krabice obsahuje"
-
 msgid "Charge transaction fees to participant"
 msgstr "Účtování transakčních poplatků účastníkovi"
 
@@ -4531,9 +4588,6 @@ msgstr "Počet splátek, které mají být zaplaceny"
 msgid "The question status, allowed values are"
 msgstr "Stav otázky, povolené hodnoty jsou"
 
-msgid "This page shows inventory custody items"
-msgstr "Na této stránce jsou zobrazeny položky inventární úschovy"
-
 msgid "This page summarises the assignments of"
 msgstr "Tato stránka shrnuje úkoly"
 
@@ -4584,6 +4638,9 @@ msgstr "Zaměstnanci v současné době přezkoumávají platbu"
 
 msgid "The collection was delivered to the user"
 msgstr "Sbírka byla doručena uživateli"
+
+msgid "This page shows the inventory containers"
+msgstr "Na této stránce jsou zobrazeny inventární kontejnery"
 
 msgid "This page shows the quests for the event"
 msgstr "Na této stránce jsou uvedeny úkoly pro tuto událost"
@@ -4729,12 +4786,6 @@ msgstr "Částka vám byla přidělena jako %(credits)s"
 
 msgid "This page performs checks on members' data"
 msgstr "Tato stránka provádí kontroly údajů členů"
-
-msgid "This page shows for an element its history"
-msgstr "Tato stránka zobrazuje pro prvek historické"
-
-msgid "This page shows the organization inventory"
-msgstr "Tato stránka zobrazuje inventář organizace"
 
 msgid "This page shows the prologues of the event"
 msgstr "Tato stránka shrnuje prology této události"
@@ -4885,9 +4936,6 @@ msgstr "Nastavení konfigurace přizpůsobení postavy"
 msgid "This page allows you to add or edit an album"
 msgstr "Na této stránce můžete přidat nebo upravit album"
 
-msgid "This page shows organization inventory items"
-msgstr "Tato stránka zobrazuje položky inventáře organizace"
-
 msgid "This page shows your personal spending items"
 msgstr "Tato stránka shrnuje položky vašich osobních výdajů"
 
@@ -4976,6 +5024,9 @@ msgstr "Maximální počet výplňových míst (0 = neomezeně)"
 msgid "Now set up the token and credits configuration"
 msgstr "Nyní nastavte konfiguraci tokenu a kreditů"
 
+msgid "Now you can add inventory containers and items"
+msgstr "Nyní můžete přidávat kontejnery a položky inventáře"
+
 msgid "Now you can select which tickets can be gifted"
 msgstr "Nyní můžete vybrat, které vstupenky lze darovat"
 
@@ -4987,9 +5038,6 @@ msgstr "Nyní můžete nastavit externí registrační odkaz"
 
 msgid "Optional - Image displayed within the question"
 msgstr "Nepovinné - Obrázek zobrazený v rámci otázky"
-
-msgid "Photo (clear and understandable) of the object"
-msgstr "Fotografie (jasná a srozumitelná) objektu"
 
 msgid "Registered users will be granted normal access"
 msgstr "Registrovaní uživatelé budou mít běžný přístup"
@@ -5051,6 +5099,9 @@ msgstr "Darování %(user)s, s důvodem: \"%(reason)s"
 
 msgid "Email sent with instructions for password reset"
 msgstr "Odeslání e-mailu s pokyny pro obnovení hesla"
+
+msgid "If checked: Add a field to track items quantity"
+msgstr "Pokud je zaškrtnuto: Přidat pole pro sledování množství položek"
 
 msgid "Indicate the country of which you are a citizen"
 msgstr "Uveďte zemi, jejímž jste občanem"
@@ -5339,6 +5390,9 @@ msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Připojte se k našemu Discordu a získejte pomoc, nápady nebo nahlaste chyby"
 
+msgid "Manage assignement of inventory items to event area"
+msgstr "Správa přiřazení inventárních položek k oblasti události"
+
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Vyberte prosím jasnou a snadno rozpoznatelnou fotografii"
 
@@ -5409,6 +5463,9 @@ msgstr "Nastavení platebních metod dostupných pro účastníky"
 
 msgid "The first column the amount, the second the receipts"
 msgstr "V prvním sloupci je částka, ve druhém příjem"
+
+msgid "This page allows you to add or edit a new event area"
+msgstr "Na této stránce můžete přidat nebo upravit novou oblast událostí"
 
 msgid "This page allows you to add or edit an assignment of"
 msgstr "Na této stránce můžete přidat nebo upravit přiřazení"
@@ -5580,6 +5637,9 @@ msgstr "Pokud je zaškrtnuto: zobrazí v kalendáři odkaz na minulé události"
 
 msgid "Indicate the color that will be used to highlight texts"
 msgstr "Uveďte barvu, která bude použita ke zvýraznění textů"
+
+msgid "Manage loading and deployment status of inventory items"
+msgstr "Správa stavu nakládky a nasazení skladových položek"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Správa plateb provedených účastníky všech událostí"
@@ -5774,6 +5834,9 @@ msgstr "Na této stránce je shrnuto nastavení termínu platby pro danou událo
 
 msgid "This page shows the sections of the event registration form"
 msgstr "Na této stránce jsou shrnuty jednotlivé části registračního formuláře"
+
+msgid "Where it has been placed? When it is expected to come back?"
+msgstr "Kde byl umístěn? Kdy se očekává jeho návrat?"
 
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
@@ -5982,6 +6045,10 @@ msgstr ""
 msgid "This page allows you to add or edit the registration surcharges"
 msgstr "Na této stránce můžete přidat nebo změnit příplatky za předplatné"
 
+msgid "This page shows the assignment of inventory items to event area"
+msgstr ""
+"Tato stránka zobrazuje přiřazení inventárních položek k oblasti události"
+
 msgid "To be able to pay, your membership application must be approved"
 msgstr "Abyste mohli platit, musí být vaše žádost o členství schválena"
 
@@ -6029,6 +6096,9 @@ msgstr ""
 
 msgid "They will be used automatically when you sign up for a new event"
 msgstr "Budou vám automaticky odečteny při registraci do nové události"
+
+msgid "This page allows you to add or edit a new container of inventory"
+msgstr "Na této stránce můžete přidat nebo upravit nový kontejner zásob"
 
 msgid "This page allows you to add or edit the expense of a contributor"
 msgstr "Na této stránce můžete přidat nebo upravit výdaje přispěvatele"
@@ -6114,6 +6184,9 @@ msgstr "Za tuto událost byla přijata platba ve výši %(amount).2f %(currency)
 
 msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr "Přidáno na konec všech e-mailů potvrzujících účastníkům přihlášení"
+
+msgid "Enables inventory management for organization warehouse management"
+msgstr "Umožňuje správu zásob pro řízení skladu organizace"
 
 msgid "Enter your email below to receive instructions on how to change it"
 msgstr "Zadejte svůj e-mail níže a obdržíte pokyny, jak jej změnit"
@@ -6587,6 +6660,12 @@ msgstr ""
 "Tato stránka podrobně zobrazuje dovednosti přispěvatele, které označil"
 
 msgid ""
+"This page shows the event area where inventory items needs to be deployed"
+msgstr ""
+"Tato stránka zobrazuje oblast události, kde je třeba rozmístit položky "
+"inventáře"
+
+msgid ""
 "To confirm your registration, apply to become a member of the Association"
 msgstr ""
 "Chcete-li potvrdit své členství, podejte žádost o členství ve sdružení"
@@ -6667,6 +6746,12 @@ msgid ""
 msgstr ""
 "Na této stránce jsou zobrazeny všechny šablony událostí; můžete je upravovat"
 " nebo vytvářet nové"
+
+msgid ""
+"This page shows the cargo manifest, and the status of each item assignment"
+msgstr ""
+"Na této stránce je zobrazen seznam nákladu a stav přiřazení jednotlivých "
+"položek"
 
 msgid ""
 "This page summarizes the types of abilities that participants can purchase"
@@ -7364,6 +7449,13 @@ msgid ""
 msgstr "První řádek souboru musí obsahovat názvy sloupců, viz popis níže"
 
 msgid ""
+"This page allows you to add or edit a new assignment of inventory item to "
+"event area"
+msgstr ""
+"Tato stránka umožňuje přidat nebo upravit nové přiřazení položky zásob k "
+"oblasti události"
+
+msgid ""
 "Tip: Pin this page to your browser for faster access to your organization "
 "and events"
 msgstr ""
@@ -7446,6 +7538,13 @@ msgid ""
 "Set up the configuration for the creation or editing of characters by the "
 "participants"
 msgstr "Nastavení konfigurace pro vytváření nebo úpravu znaků účastníky"
+
+msgid ""
+"This page allows you to add or edit a new movement of item inventory, loans "
+"or repairs"
+msgstr ""
+"Na této stránce můžete přidat nebo upravit nový pohyb zásob, výpůjček nebo "
+"oprav"
 
 msgid ""
 "Upload the scan of both your signed request, and your document (image or pdf"
@@ -8338,13 +8437,6 @@ msgstr ""
 "odhalení osobních e-mailových adres"
 
 msgid ""
-"Fully describe what the box contains, especially number of items, main "
-"features, state of preservation."
-msgstr ""
-"Úplně popište, co krabice obsahuje, zejména počet předmětů, hlavní prvky, "
-"stav zachování."
-
-msgid ""
 "If checked, the subscribers' gallery will not be displayed to those who are "
 "not registered to the event"
 msgstr ""
@@ -8796,13 +8888,6 @@ msgid ""
 msgstr ""
 "Jste lékař, zdravotní sestra nebo licencovaný záchranář? Můžeme vás požádat,"
 " abyste zasáhli v případě, že během akce dojde k nehodě?"
-
-msgid ""
-"Enables basic inventory management. Users can add items to a warehouse "
-"table, track quantities, and note item locations"
-msgstr ""
-"Umožňuje základní správu zásob. Uživatelé mohou přidávat položky do skladové"
-" tabulky, sledovat množství a zaznamenávat umístění položek"
 
 msgid ""
 "If checked, it allows participants to enter private information on their "

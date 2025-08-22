@@ -1010,4 +1010,29 @@ urlpatterns = [
         views_ow.orga_version,
         name="orga_version",
     ),
+    path(
+        "<slug:s>/<int:n>/manage/inventory/area/",
+        views_oms.orga_inventory_area,
+        name="orga_inventory_area",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/inventory/area/edit/<int:num>/",
+        views_oms.orga_inventory_area_edit,
+        name="orga_inventory_area_edit",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/inventory/assignments/",
+        views_oms.orga_inventory_assignments,
+        name="orga_inventory_assignments",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/inventory/assignments/edit/<int:num>/",
+        views_oms.orga_inventory_assignments_edit,
+        name="orga_inventory_assignments_edit",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/inventory/manifest/",
+        views_oms.orga_inventory_manifest,
+        name="orga_inventory_manifest",
+    ),
 ]
