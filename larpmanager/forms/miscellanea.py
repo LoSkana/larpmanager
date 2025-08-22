@@ -287,6 +287,8 @@ class ExeInventoryTagForm(MyForm):
             widget=InventoryItemS2WidgetMulti,
             required=False,
         )
+        if self.instance.pk:
+            self.initial["items"] = self.instance.items.values_list("pk", flat=True)
         self.fields["items"].widget.set_assoc(self.params["a_id"])
 
 
