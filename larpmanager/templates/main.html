@@ -149,7 +149,7 @@
                 </div>
             </div>
             <div id="footer"
-                 {% if manage and is_sidebar_open %}class="sidebar"{% endif %}>
+                 class="lm {% if manage and is_sidebar_open %}sidebar{% endif %}">
                 <div class="inner">
                     {% if assoc.footer %}
                         <div class="footer-text">
