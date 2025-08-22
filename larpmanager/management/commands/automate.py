@@ -268,7 +268,7 @@ class Command(BaseCommand):
 
         reg_que = get_regs(assoc)
         ref = datetime.now() + timedelta(days=3)
-        reg_que = reg_que.exclude(run__start__lte=ref.date()).order_by("end")
+        reg_que = reg_que.exclude(run__start__lte=ref.date())
         for reg in reg_que.select_related("run", "ticket"):
             self.remind_reg(reg, assoc, remind_days)
 
