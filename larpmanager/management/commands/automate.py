@@ -26,7 +26,7 @@ from django.core.management.base import BaseCommand
 from django.db import connection
 
 from larpmanager.accounting.balance import check_accounting, check_run_accounting
-from larpmanager.accounting.token_credit import get_runs, get_runs_paying_incomplete
+from larpmanager.accounting.token_credit import get_regs, get_regs_paying_incomplete
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.mail.accounting import notify_invoice_check
 from larpmanager.mail.base import check_holiday
@@ -68,7 +68,7 @@ class Command(BaseCommand):
         self.clean_db()
 
         # update accounting on all registrations
-        reg_que = get_runs_paying_incomplete()
+        reg_que = get_regs_paying_incomplete()
         for reg in reg_que.select_related("run"):
             reg.save()
 
@@ -266,7 +266,9 @@ class Command(BaseCommand):
 
         remind_days = int(assoc.get_config("remind_days", 5))
 
-        reg_que = get_runs(assoc)
+        reg_que = get_regs(assoc)
+        ref = datetime.now() + timedelta(days=3)
+        reg_que = reg_que.exclude(run__start__lte=ref.date()).order_by("end")
         for reg in reg_que.select_related("run", "ticket"):
             self.remind_reg(reg, assoc, remind_days)
 
@@ -281,15 +283,21 @@ class Command(BaseCommand):
 
         # if the player is not waiting
         if reg.ticket and reg.ticket.tier != TicketTier.WAITING:
-            if not reg.member.membership.compiled:
-                remember_profile(reg)
-            elif "membership" in ev_features:
+            m = reg.member.membership
+            handled = False
+
+            if "membership" in ev_features:
                 # check if player is a member
-                if reg.member.membership.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED]:
+                if m.status in (MembershipStatus.EMPTY, MembershipStatus.JOINED):
                     remember_membership(reg)
+                    handled = True
                 # check if players has not payed yet it's membership fee
-                elif "laog" not in ev_features and reg.member.membership.status == MembershipStatus.ACCEPTED:
+                elif "laog" not in ev_features and m.status == MembershipStatus.ACCEPTED:
                     self.check_membership_fee(reg)
+                    handled = True
+
+            if not handled and not m.compiled:
+                remember_profile(reg)
 
         if reg.alert:
             self.check_payment(reg)
@@ -337,6 +345,10 @@ class Command(BaseCommand):
 
     def check_deadline(self, run):
         if check_holiday():
+            return
+
+        ref = datetime.now() - timedelta(days=7)
+        if run.start < ref:
             return
 
         deadline_days = int(run.event.assoc.get_config("deadline_days", 0))

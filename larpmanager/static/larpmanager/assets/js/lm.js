@@ -327,6 +327,8 @@ $(document).ready(function() {
 
     $('#sidebar .inner').fadeIn(100);
 
+    $('#footer .inner').fadeIn(100);
+
     show_sidebar_active();
 });
 

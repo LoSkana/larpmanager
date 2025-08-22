@@ -74,13 +74,13 @@ def registration_tokens_credits(reg, remaining, features, assoc_id):
         )
 
 
-def get_runs_paying_incomplete(assoc=None):
-    reg_que = get_runs(assoc)
+def get_regs_paying_incomplete(assoc=None):
+    reg_que = get_regs(assoc)
     reg_que = reg_que.annotate(diff=Abs(F("tot_payed") - F("tot_iscr"))).exclude(diff__lt=0.05)
     return reg_que
 
 
-def get_runs(assoc):
+def get_regs(assoc):
     reg_que = Registration.objects.filter(cancellation_date__isnull=True)
     reg_que = reg_que.exclude(run__development__in=[DevelopStatus.CANC, DevelopStatus.DONE])
     if assoc:
@@ -151,7 +151,7 @@ def update_token_credit(instance, token=True):
 
     # trigger accounting update on registrations with missing remaining
     available = membership.credit + membership.tokens
-    for reg in get_runs_paying_incomplete(instance.assoc).filter(member=instance.member):
+    for reg in get_regs_paying_incomplete(instance.assoc).filter(member=instance.member):
         remaining = reg.tot_iscr - reg.tot_payed
         reg.save()
         available -= remaining
