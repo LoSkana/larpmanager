@@ -348,7 +348,7 @@ class Command(BaseCommand):
             return
 
         ref = datetime.now() - timedelta(days=7)
-        if run.start < ref:
+        if run.start < ref.date():
             return
 
         deadline_days = int(run.event.assoc.get_config("deadline_days", 0))
