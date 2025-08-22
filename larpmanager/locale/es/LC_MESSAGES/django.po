@@ -212,6 +212,9 @@ msgstr "Leer"
 msgid "Role"
 msgstr "Cargo"
 
+msgid "Rule"
+msgstr "Regla"
+
 msgid "Sent"
 msgstr "Enviado"
 
@@ -305,6 +308,9 @@ msgstr "Error"
 msgid "Event"
 msgstr "Evento"
 
+msgid "Field"
+msgstr "Campo"
+
 msgid "First"
 msgstr "Primero"
 
@@ -377,6 +383,9 @@ msgstr "¡Inténtalo de nuevo"
 
 msgid "Roles"
 msgstr "Cargos"
+
+msgid "Rules"
+msgstr "Reglas"
 
 msgid "Sheet"
 msgstr "Ficha"
@@ -867,6 +876,9 @@ msgstr "Aceptado"
 msgid "Activate"
 msgstr "Activar"
 
+msgid "Addition"
+msgstr "Adición"
+
 msgid "Approval"
 msgstr "Aprobación"
 
@@ -920,6 +932,9 @@ msgstr "Discapacitados"
 
 msgid "Discount"
 msgstr "Descuento"
+
+msgid "Division"
+msgstr "División"
 
 msgid "Donation"
 msgstr "Donación"
@@ -1671,6 +1686,9 @@ msgstr "Ver cerrados"
 msgid "Simple list"
 msgstr "Lista simple"
 
+msgid "Subtraction"
+msgstr "Resta"
+
 msgid "Suggestions"
 msgstr "Sugerencias"
 
@@ -2183,6 +2201,9 @@ msgstr "Miembro revocado"
 msgid "Membership fee"
 msgstr "Cuotas de afiliación"
 
+msgid "Multiplication"
+msgstr "Multiplicación"
+
 msgid "Obtain ability"
 msgstr "Adquirir habilidad"
 
@@ -2335,6 +2356,9 @@ msgstr "Artículos del inventario"
 
 msgid "Mail assignment"
 msgstr "Correo de asignación"
+
+msgid "Manage XP rules"
+msgstr "Gestionar reglas XP"
 
 msgid "Member refused!"
 msgstr "¡Miembro rechazado!"
@@ -6610,6 +6634,9 @@ msgstr ""
 msgid "This page allows you to set your personal preferences on the interface"
 msgstr ""
 "Esta página le permite configurar sus preferencias personales en la interfaz"
+
+msgid "This page summarizes the rules that are applied to the computed fields"
+msgstr "Esta página resume las reglas que se aplican a los campos calculados"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""

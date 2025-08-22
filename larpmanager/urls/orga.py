@@ -746,6 +746,21 @@ urlpatterns = [
         name="orga_px_ability_types_edit",
     ),
     path(
+        "<slug:s>/<int:n>/manage/px/rules/",
+        views_ox.orga_px_rules,
+        name="orga_px_rules",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/px/rules/edit/<int:num>/",
+        views_ox.orga_px_rules_edit,
+        name="orga_px_rules_edit",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/px/rules/<int:num>/<int:order>/",
+        views_ox.orga_px_rules_order,
+        name="orga_px_rules_order",
+    ),
+    path(
         "<slug:s>/<int:n>/manage/casting/",
         views_oca.orga_casting,
         name="orga_casting",

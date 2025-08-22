@@ -27,7 +27,8 @@ from larpmanager.forms.utils import (
     EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
 )
-from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx
+from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, RulePx
+from larpmanager.models.form import QuestionType, WritingQuestion
 
 
 class PxBaseForm(MyForm):
@@ -92,6 +93,21 @@ class OrgaAbilityTypePxForm(MyForm):
     class Meta:
         model = AbilityTypePx
         exclude = ("number",)
+
+
+class OrgaRulePxForm(MyForm):
+    page_title = _("Rule")
+
+    class Meta:
+        model = RulePx
+        exclude = ("number", "order")
+        widgets = {"abilities": AbilityS2WidgetMulti}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["abilities"].widget.set_event(self.params["event"])
+        qs = WritingQuestion.objects.filter(event=self.params["event"], typ=QuestionType.COMPUTED)
+        self.fields["field"].widget.choices = [(r.id, str(r)) for r in qs]
 
 
 class SelectNewAbility(forms.Form):

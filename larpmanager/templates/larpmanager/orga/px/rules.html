@@ -1,0 +1,57 @@
+{% extends "utils.html" %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Rules" %} - {{ run }}
+{% endblock title %}
+{% block info %}
+    {% trans "This page summarizes the rules that are applied to the computed fields" %}
+{% endblock info %}
+{% block content %}
+    {% include "elements/header/orga.html" %}
+    <table id="rules" class="go_datatable writing">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Abilities" %}</th>
+                <th>{% trans "Field" %}</th>
+                <th>{% trans "Operation" %}</th>
+                <th>{% trans "Amount" %}</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'orga_px_rules_edit' run.event.slug run.number el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>
+                        {% for ab in el.prerequisites.all %}
+                            {% include "elements/comma.html" %}
+                            <a href="{% url 'orga_px_abilities_edit' run.event.slug run.number ab.id %}">{{ ab.name }}</a>
+                        {% endfor %}
+                    </td>
+                    <td>{{ el.field }}</td>
+                    <td>{{ el.get_operation_display }}</td>
+                    <td>{{ el.amount }}</td>
+                    <td>
+                        {% if not forloop.first %}
+                            <a href="{% url 'orga_px_rule_order' run.event.slug run.number el.id 0 %}">
+                                <i class="fa-solid fa-arrow-up"></i>
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not forloop.last %}
+                            <a href="{% url 'orga_px_rule_order' run.event.slug run.number el.id 1 %}">
+                                <i class="fa-solid fa-arrow-down"></i>
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

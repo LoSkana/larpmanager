@@ -212,6 +212,9 @@ msgstr "Les"
 msgid "Role"
 msgstr "Rolle"
 
+msgid "Rule"
+msgstr "Regel"
+
 msgid "Sent"
 msgstr "Sendt"
 
@@ -305,6 +308,9 @@ msgstr "Feil"
 msgid "Event"
 msgstr "Arrangement"
 
+msgid "Field"
+msgstr "Felt"
+
 msgid "First"
 msgstr "Første"
 
@@ -377,6 +383,9 @@ msgstr "Prøv igjen"
 
 msgid "Roles"
 msgstr "Roller"
+
+msgid "Rules"
+msgstr "Regler"
 
 msgid "Sheet"
 msgstr "Fiche"
@@ -867,6 +876,9 @@ msgstr "Akseptert"
 msgid "Activate"
 msgstr "Aktiver"
 
+msgid "Addition"
+msgstr "Tillegg"
+
 msgid "Approval"
 msgstr "Godkjenning"
 
@@ -920,6 +932,9 @@ msgstr "Deaktivert"
 
 msgid "Discount"
 msgstr "Rabatt"
+
+msgid "Division"
+msgstr "Divisjon"
 
 msgid "Donation"
 msgstr "Donasjon"
@@ -1671,6 +1686,9 @@ msgstr "Vis stengt"
 msgid "Simple list"
 msgstr "Enkel liste"
 
+msgid "Subtraction"
+msgstr "Subtraksjon"
+
 msgid "Suggestions"
 msgstr "Forslag"
 
@@ -2183,6 +2201,9 @@ msgstr "Partner tilbakekalt"
 msgid "Membership fee"
 msgstr "Avgifter"
 
+msgid "Multiplication"
+msgstr "Multiplikasjon"
+
 msgid "Obtain ability"
 msgstr "Tilegne seg ferdigheter"
 
@@ -2335,6 +2356,9 @@ msgstr "Varelager"
 
 msgid "Mail assignment"
 msgstr "Tildeling av post"
+
+msgid "Manage XP rules"
+msgstr "Administrer XP-regler"
 
 msgid "Member refused!"
 msgstr "Medlem nektet!"
@@ -6538,6 +6562,9 @@ msgstr ""
 msgid "This page allows you to set your personal preferences on the interface"
 msgstr ""
 "På denne siden kan du angi dine personlige preferanser for grensesnittet"
+
+msgid "This page summarizes the rules that are applied to the computed fields"
+msgstr "Denne siden oppsummerer reglene som gjelder for de beregnede feltene"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""

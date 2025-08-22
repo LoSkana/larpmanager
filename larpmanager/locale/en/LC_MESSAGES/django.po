@@ -1561,6 +1561,9 @@ msgstr ""
 msgid "Ability type"
 msgstr ""
 
+msgid "Rule"
+msgstr ""
+
 msgid "click on the icon to open the tutorial"
 msgstr ""
 
@@ -2961,6 +2964,18 @@ msgstr ""
 msgid ""
 "Indicate the character options, which must be selected to make the skill "
 "available"
+msgstr ""
+
+msgid "Addition"
+msgstr ""
+
+msgid "Subtraction"
+msgstr ""
+
+msgid "Multiplication"
+msgstr ""
+
+msgid "Division"
 msgstr ""
 
 msgid "Single choice"
@@ -6441,6 +6456,15 @@ msgstr ""
 msgid "This page summarizes px delivery to characters"
 msgstr ""
 
+msgid "Rules"
+msgstr ""
+
+msgid "This page summarizes the rules that are applied to the computed fields"
+msgstr ""
+
+msgid "Field"
+msgstr ""
+
 msgid "Reading"
 msgstr ""
 
@@ -7981,6 +8005,9 @@ msgid "Manage the character skills purchaseable with XP"
 msgstr ""
 
 msgid "Manage XP distributions for character skill purchases."
+msgstr ""
+
+msgid "Manage XP rules"
 msgstr ""
 
 msgid "Display full history of participant preferences on characters"

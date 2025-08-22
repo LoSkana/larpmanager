@@ -212,6 +212,9 @@ msgstr "Lesen Sie"
 msgid "Role"
 msgstr "Rolle"
 
+msgid "Rule"
+msgstr "Regel"
+
 msgid "Sent"
 msgstr "Gesendet"
 
@@ -305,6 +308,9 @@ msgstr "Fehler"
 msgid "Event"
 msgstr "Veranstaltung"
 
+msgid "Field"
+msgstr "Feld"
+
 msgid "First"
 msgstr "Erste"
 
@@ -377,6 +383,9 @@ msgstr "Versuchen Sie es noch einmal"
 
 msgid "Roles"
 msgstr "Rollen"
+
+msgid "Rules"
+msgstr "Regeln"
 
 msgid "Sheet"
 msgstr "Fiche"
@@ -867,6 +876,9 @@ msgstr "Angenommen"
 msgid "Activate"
 msgstr "Aktivieren Sie"
 
+msgid "Addition"
+msgstr "Zusatz"
+
 msgid "Approval"
 msgstr "Zulassung"
 
@@ -920,6 +932,9 @@ msgstr "Behinderte"
 
 msgid "Discount"
 msgstr "Rabatt"
+
+msgid "Division"
+msgstr "Abteilung"
 
 msgid "Donation"
 msgstr "Spende"
@@ -1671,6 +1686,9 @@ msgstr "Geschlossen anzeigen"
 msgid "Simple list"
 msgstr "Einfache Liste"
 
+msgid "Subtraction"
+msgstr "Subtraktion"
+
 msgid "Suggestions"
 msgstr "Vorschläge"
 
@@ -2183,6 +2201,9 @@ msgstr "Partner widerrufen"
 msgid "Membership fee"
 msgstr "Beiträge"
 
+msgid "Multiplication"
+msgstr "Multiplikation"
+
 msgid "Obtain ability"
 msgstr "Erwerb von Fähigkeiten"
 
@@ -2335,6 +2356,9 @@ msgstr "Artikel des Inventars"
 
 msgid "Mail assignment"
 msgstr "Zuordnung der Post"
+
+msgid "Manage XP rules"
+msgstr "Verwalten von XP-Regeln"
 
 msgid "Member refused!"
 msgstr "Mitglied abgelehnt!"
@@ -6787,6 +6811,11 @@ msgid "This page allows you to set your personal preferences on the interface"
 msgstr ""
 "Auf dieser Seite können Sie Ihre persönlichen Einstellungen für die "
 "Schnittstelle festlegen"
+
+msgid "This page summarizes the rules that are applied to the computed fields"
+msgstr ""
+"Auf dieser Seite sind die Regeln zusammengefasst, die auf die berechneten "
+"Felder angewendet werden"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""

@@ -212,6 +212,9 @@ msgstr "Leggi"
 msgid "Role"
 msgstr "Ruolo"
 
+msgid "Rule"
+msgstr "Regola"
+
 msgid "Sent"
 msgstr "Inviato"
 
@@ -305,6 +308,9 @@ msgstr "Errore"
 msgid "Event"
 msgstr "Evento"
 
+msgid "Field"
+msgstr "Campo"
+
 msgid "First"
 msgstr "Primo"
 
@@ -377,6 +383,9 @@ msgstr "Ritenta"
 
 msgid "Roles"
 msgstr "Ruoli"
+
+msgid "Rules"
+msgstr "Regole"
 
 msgid "Sheet"
 msgstr "Scheda"
@@ -867,6 +876,9 @@ msgstr "Accettato"
 msgid "Activate"
 msgstr "Attiva"
 
+msgid "Addition"
+msgstr "Aggiunta"
+
 msgid "Approval"
 msgstr "Approvazione"
 
@@ -920,6 +932,9 @@ msgstr "Disabilitata"
 
 msgid "Discount"
 msgstr "Sconto"
+
+msgid "Division"
+msgstr "Divisione"
 
 msgid "Donation"
 msgstr "Donazione"
@@ -1671,6 +1686,9 @@ msgstr "Mostra chiusi"
 msgid "Simple list"
 msgstr "Lista semplice"
 
+msgid "Subtraction"
+msgstr "Sottrazione"
+
 msgid "Suggestions"
 msgstr "Suggerimenti"
 
@@ -2183,6 +2201,9 @@ msgstr "Socio revocato"
 msgid "Membership fee"
 msgstr "Quote sociali"
 
+msgid "Multiplication"
+msgstr "Moltiplicazione"
+
 msgid "Obtain ability"
 msgstr "Acquisisci abilità"
 
@@ -2335,6 +2356,9 @@ msgstr "Oggetti in inventario"
 
 msgid "Mail assignment"
 msgstr "Mail assegnazione"
+
+msgid "Manage XP rules"
+msgstr "Gestisci le regole XP"
 
 msgid "Member refused!"
 msgstr "Membro rifiutato!"
@@ -3149,7 +3173,7 @@ msgid "Inventory assignments"
 msgstr "Assegnazione dell'inventario"
 
 msgid "Manage inventory tags"
-msgstr "Gestire le etichette dell'inventario"
+msgstr "Gestisci le etichette dell'inventario"
 
 msgid "Name of the character"
 msgstr "Nome del personaggio"
@@ -3655,7 +3679,7 @@ msgid "Hide unassigned characters"
 msgstr "Nascondi personaggi non assegnati"
 
 msgid "Manage inventory movements"
-msgstr "Gestire i movimenti di inventario"
+msgstr "Gestisci i movimenti di inventario"
 
 msgid "Manage the event prologues"
 msgstr "Gestisci i prologhi degli eventi"
@@ -6438,7 +6462,7 @@ msgstr ""
 "Assegna ruoli ai membri dello staff e dai accesso a funzioni specifiche"
 
 msgid "Do you want to manage characters assigned to registered participants"
-msgstr "Vuoi gestire i personaggi assegnati ai partecipanti registrati"
+msgstr "Vuoi Gestisci i personaggi assegnati ai partecipanti registrati"
 
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Indica se lo sconto è visibile e utilizzabile dai partecipanti"
@@ -6647,6 +6671,9 @@ msgstr ""
 msgid "This page allows you to set your personal preferences on the interface"
 msgstr ""
 "Questa pagina consente di impostare le preferenze personali dell'interfaccia"
+
+msgid "This page summarizes the rules that are applied to the computed fields"
+msgstr "Questa pagina riepiloga le regole applicate ai campi computati"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""

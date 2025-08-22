@@ -212,6 +212,9 @@ msgstr "Přečtěte si"
 msgid "Role"
 msgstr "Role"
 
+msgid "Rule"
+msgstr "Pravidlo"
+
 msgid "Sent"
 msgstr "Odesláno"
 
@@ -305,6 +308,9 @@ msgstr "Chyba"
 msgid "Event"
 msgstr "Událost"
 
+msgid "Field"
+msgstr "Pole"
+
 msgid "First"
 msgstr "První"
 
@@ -377,6 +383,9 @@ msgstr "Zkuste to znovu"
 
 msgid "Roles"
 msgstr "Role"
+
+msgid "Rules"
+msgstr "Pravidla"
 
 msgid "Sheet"
 msgstr "Fiche"
@@ -867,6 +876,9 @@ msgstr "Přijato"
 msgid "Activate"
 msgstr "Aktivace"
 
+msgid "Addition"
+msgstr "Dodatek"
+
 msgid "Approval"
 msgstr "Schválení"
 
@@ -920,6 +932,9 @@ msgstr "Bezbariérový"
 
 msgid "Discount"
 msgstr "Sleva"
+
+msgid "Division"
+msgstr "Divize"
 
 msgid "Donation"
 msgstr "Dary"
@@ -1671,6 +1686,9 @@ msgstr "Zobrazit uzavřeno"
 msgid "Simple list"
 msgstr "Jednoduchý seznam"
 
+msgid "Subtraction"
+msgstr "Odčítání"
+
 msgid "Suggestions"
 msgstr "Návrhy"
 
@@ -2183,6 +2201,9 @@ msgstr "Odvolání partnera"
 msgid "Membership fee"
 msgstr "Poplatky"
 
+msgid "Multiplication"
+msgstr "Násobení"
+
 msgid "Obtain ability"
 msgstr "Získání dovedností"
 
@@ -2335,6 +2356,9 @@ msgstr "Inventární položky"
 
 msgid "Mail assignment"
 msgstr "Přiřazení pošty"
+
+msgid "Manage XP rules"
+msgstr "Správa pravidel XP"
 
 msgid "Member refused!"
 msgstr "Člen odmítl!"
@@ -6489,6 +6513,10 @@ msgstr "Tato částka se automaticky odečte z registrace budoucí akce"
 
 msgid "This page allows you to set your personal preferences on the interface"
 msgstr "Na této stránce můžete nastavit osobní preference rozhraní"
+
+msgid "This page summarizes the rules that are applied to the computed fields"
+msgstr ""
+"Na této stránce jsou shrnuta pravidla, která se vztahují na vypočtená pole"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""

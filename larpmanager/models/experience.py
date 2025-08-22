@@ -131,3 +131,26 @@ def update_px(char):
     addit["px_avail"] = addit["px_tot"] - addit["px_used"]
 
     save_all_element_configs(char, addit)
+
+
+class Operation(models.TextChoices):
+    ADDITION = "ADD", _("Addition")
+    SUBTRACTION = "SUB", _("Subtraction")
+    MULTIPLICATION = "MUL", _("Multiplication")
+    DIVISION = "DIV", _("Division")
+
+
+class RulePx(BaseConceptModel):
+    abilities = models.ManyToManyField(AbilityPx, related_name="rules", blank=True)
+
+    field = models.ForeignKey(AbilityPx, on_delete=models.CASCADE)
+
+    operation = models.CharField(
+        max_length=3,
+        choices=Operation.choices,
+        default=Operation.ADDITION,
+    )
+
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    order = models.IntegerField(default=0)

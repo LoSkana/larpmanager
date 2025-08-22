@@ -212,6 +212,9 @@ msgstr "Lees"
 msgid "Role"
 msgstr "Rol"
 
+msgid "Rule"
+msgstr "Regel"
+
 msgid "Sent"
 msgstr "Verzonden"
 
@@ -305,6 +308,9 @@ msgstr "Fout"
 msgid "Event"
 msgstr "Evenement"
 
+msgid "Field"
+msgstr "Veld"
+
 msgid "First"
 msgstr "Eerste"
 
@@ -377,6 +383,9 @@ msgstr "Probeer het opnieuw"
 
 msgid "Roles"
 msgstr "Rollen"
+
+msgid "Rules"
+msgstr "Regels"
 
 msgid "Sheet"
 msgstr "Fiche"
@@ -867,6 +876,9 @@ msgstr "Geaccepteerd"
 msgid "Activate"
 msgstr "Activeer"
 
+msgid "Addition"
+msgstr "Toevoeging"
+
 msgid "Approval"
 msgstr "Goedkeuring"
 
@@ -920,6 +932,9 @@ msgstr "Uitgeschakeld"
 
 msgid "Discount"
 msgstr "Korting"
+
+msgid "Division"
+msgstr "Divisie"
 
 msgid "Donation"
 msgstr "Donatie"
@@ -1671,6 +1686,9 @@ msgstr "Toon gesloten"
 msgid "Simple list"
 msgstr "Eenvoudige lijst"
 
+msgid "Subtraction"
+msgstr "Aftrekken"
+
 msgid "Suggestions"
 msgstr "Suggesties"
 
@@ -2183,6 +2201,9 @@ msgstr "Partner herroepen"
 msgid "Membership fee"
 msgstr "Vergoedingen"
 
+msgid "Multiplication"
+msgstr "Vermenigvuldiging"
+
 msgid "Obtain ability"
 msgstr "Vaardigheden verwerven"
 
@@ -2335,6 +2356,9 @@ msgstr "Inventarisartikelen"
 
 msgid "Mail assignment"
 msgstr "Mail toewijzing"
+
+msgid "Manage XP rules"
+msgstr "XP-regels beheren"
 
 msgid "Member refused!"
 msgstr "Lid geweigerd!"
@@ -6623,6 +6647,11 @@ msgstr ""
 msgid "This page allows you to set your personal preferences on the interface"
 msgstr ""
 "Op deze pagina kun je je persoonlijke voorkeuren voor de interface instellen"
+
+msgid "This page summarizes the rules that are applied to the computed fields"
+msgstr ""
+"Deze pagina geeft een overzicht van de regels die worden toegepast op de "
+"berekende velden"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""

@@ -157,6 +157,8 @@ class RegistrationForm(BaseRegistrationForm):
             return
 
         k = self._init_field(q, reg_counts, orga=False)
+        if not k:
+            return
 
         if q.profile:
             self.profiles["id_" + k] = q.profile_thumb.url

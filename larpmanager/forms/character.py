@@ -116,6 +116,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
         reg_counts = get_reg_counts(self.params["run"])
         for question in self.questions:
             key = self._init_field(question, reg_counts=reg_counts, orga=self.orga)
+            if not key:
+                continue
+
             if len(question.typ) == 1:
                 fields_custom.add(key)
             else:
