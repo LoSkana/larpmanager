@@ -257,6 +257,8 @@ def check_gallery_visibility(request, ctx):
 
 def gallery(request, s, n):
     ctx = get_event_run(request, s, n, status=True)
+    if "character" not in ctx["features"]:
+        return redirect("event", s=ctx["event"].slug, n=ctx["run"].number)
 
     ctx["reg_list"] = []
 

@@ -25,12 +25,12 @@
                        {% if request_func_name == "event" %}class="select"{% endif %}>{% trans "Event" %}</a>
                     <div class="lm_tooltiptext">{% trans "Discover what this event is about" %}!</div>
                 </div>
-                <div class="lm_tooltip">
-                    <a href="{% url 'gallery' run.event.slug run.number %}"
-                       {% if request_func_name == "gallery" %}class="select"{% endif %}>{% trans "Gallery" %}</a>
-                    <div class="lm_tooltiptext">{% trans "View the list of characters and participants" %}!</div>
-                </div>
                 {% if features.character %}
+                    <div class="lm_tooltip">
+                        <a href="{% url 'gallery' run.event.slug run.number %}"
+                           {% if request_func_name == "gallery" %}class="select"{% endif %}>{% trans "Gallery" %}</a>
+                        <div class="lm_tooltiptext">{% trans "View the list of characters and participants" %}!</div>
+                    </div>
                     <div class="lm_tooltip">
                         <a href="{% url 'search' run.event.slug run.number %}"
                            {% if request_func_name == "search" %}class="select"{% endif %}>{% trans "Search" %}</a>
