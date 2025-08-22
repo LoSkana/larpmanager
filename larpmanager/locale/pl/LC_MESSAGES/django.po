@@ -891,6 +891,9 @@ msgstr "Powód"
 msgid "Complete"
 msgstr "Kompletny"
 
+msgid "Computed"
+msgstr "Obliczony"
+
 msgid "Consumed"
 msgstr "Zużyty"
 

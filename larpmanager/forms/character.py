@@ -475,23 +475,28 @@ class OrgaWritingQuestionForm(MyForm):
         que = self.params["event"].get_elements(WritingQuestion)
         que = que.filter(applicable=self.params["writing_typ"])
         already = list(que.values_list("typ", flat=True).distinct())
+
         if self.instance.pk and self.instance.typ:
             already.remove(self.instance.typ)
+            # prevent cancellation if one of the default types
+            self.prevent_canc = self.instance.typ in {QuestionType.NAME, QuestionType.TEASER, QuestionType.TEXT}
 
-            # basic_type = self.instance.typ in QuestionType.get_basic_types()
-            def_type = self.instance.typ in {QuestionType.NAME, QuestionType.TEASER, QuestionType.TEXT}
-            # type_feature = self.instance.typ in self.params["features"]
-            self.prevent_canc = def_type
         choices = []
         for choice in QuestionType.choices:
+            # if it is related to a feature
             if len(choice[0]) > 1:
                 # check it is not already present
                 if choice[0] in already:
                     continue
+
                 # check the feature is active
-                if choice[0] not in ["name", "teaser", "text"]:
+                elif choice[0] not in ["name", "teaser", "text"]:
                     if choice[0] not in self.params["features"]:
                         continue
+
+            elif choice[0] == "c" and "px" not in self.params["features"]:
+                continue
+
             choices.append(choice)
         self.fields["typ"].choices = choices
 

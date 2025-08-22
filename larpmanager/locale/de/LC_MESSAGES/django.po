@@ -891,6 +891,9 @@ msgstr "Antragsteller"
 msgid "Complete"
 msgstr "Vollständig"
 
+msgid "Computed"
+msgstr "Berechnet"
+
 msgid "Consumed"
 msgstr "Verbraucht"
 

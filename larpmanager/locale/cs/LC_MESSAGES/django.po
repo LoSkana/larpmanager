@@ -891,6 +891,9 @@ msgstr "Žadatel"
 msgid "Complete"
 msgstr "Kompletní"
 
+msgid "Computed"
+msgstr "Vypočítané"
+
 msgid "Consumed"
 msgstr "Spotřebováno"
 

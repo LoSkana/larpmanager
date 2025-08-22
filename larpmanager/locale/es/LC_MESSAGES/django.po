@@ -891,6 +891,9 @@ msgstr "Solicitante"
 msgid "Complete"
 msgstr "Completo"
 
+msgid "Computed"
+msgstr "Computado"
+
 msgid "Consumed"
 msgstr "Consumido"
 

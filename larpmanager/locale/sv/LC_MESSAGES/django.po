@@ -891,6 +891,9 @@ msgstr "Sökande"
 msgid "Complete"
 msgstr "Komplett"
 
+msgid "Computed"
+msgstr "Beräknad"
+
 msgid "Consumed"
 msgstr "Förbrukad"
 

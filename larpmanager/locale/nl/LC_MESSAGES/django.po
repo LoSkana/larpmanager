@@ -891,6 +891,9 @@ msgstr "Aanvrager"
 msgid "Complete"
 msgstr "Compleet"
 
+msgid "Computed"
+msgstr "Berekend"
+
 msgid "Consumed"
 msgstr "Verbruikt"
 
