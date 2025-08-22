@@ -6883,6 +6883,10 @@ msgstr ""
 "nevyplňujte"
 
 msgid ""
+"In the faction a character has been mentioned, but it does not seem to exist"
+msgstr "Ve frakci byla zmíněna postava, ale zdá se, že neexistuje"
+
+msgid ""
 "This page prepares the cash balance already formatted for annual declaration"
 msgstr ""
 "Na této stránce se připravuje peněžní zůstatek již ve formátu pro roční "
@@ -8382,6 +8386,12 @@ msgid ""
 msgstr ""
 "Uveďte soukromé informace o své postavě, které budou viditelné pouze pro vás"
 " a organizátory"
+
+msgid ""
+"The character has been added to the faction, but in the faction text the "
+"character is never mentioned"
+msgstr ""
+"Postava byla přidána do frakce, ale v textu frakce se o ní nikde nepíše"
 
 msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "

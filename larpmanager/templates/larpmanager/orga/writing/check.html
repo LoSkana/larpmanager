@@ -194,7 +194,7 @@
             {% if checks.faction_extinct %}
                 <span class="redderized">KO {{ checks.faction_extinct | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist" %}.</i>
+                <i>{% trans "In the faction a character has been mentioned, but it does not seem to exist" %}</i>
             </p>
             <table>
                 <tr>
@@ -217,7 +217,7 @@
             {% if checks.faction_missing %}
                 <span class="redderized">KO {{ checks.faction_missing | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text" %}.</i>
+                <i>{% trans "The character has been added to the faction, but in the faction text the character is never mentioned" %}</i>
             </p>
             <table>
                 <tr>

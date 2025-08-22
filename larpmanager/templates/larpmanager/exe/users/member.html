@@ -54,6 +54,7 @@
             <thead>
                 <tr>
                     <th>{% trans "Registration" %}</th>
+                    <th>{% trans "Date" %}</th>
                     <th>{% trans "Value" %}</th>
                     <th>{% trans "Type" %}</th>
                 </tr>
@@ -61,6 +62,7 @@
             {% for el in pays %}
                 <tr>
                     <td>{{ el.reg.run }}</td>
+                    <td>{{ el.created | date:'Y-m-d' }}</td>
                     <td>{{ el.value }}</td>
                     <td>{{ el.typ }}</td>
                 </tr>
@@ -73,6 +75,7 @@
             <thead>
                 <tr>
                     <th>{% trans "Event" %}</th>
+                    <th>{% trans "Date" %}</th>
                     <th>{% trans "Description" %}</th>
                     <th>{% trans "Value" %}</th>
                     <th>{% trans "Type" %}</th>
@@ -81,6 +84,7 @@
             {% for el in others %}
                 <tr>
                     <td>{{ el.run.search }}</td>
+                    <td>{{ el.created | date:'Y-m-d' }}</td>
                     <td>{{ el.descr }}</td>
                     <td>{{ el.value }}</td>
                     <td>{{ el.typ }}</td>
