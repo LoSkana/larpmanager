@@ -9,7 +9,7 @@
 {% block content %}
     {% include "elements/header/exe.html" %}
     <table id="inv_items"
-           class="go_datatable"
+           class="go_datatable dot_links"
            no_header_cols="{{ no_header_cols }}">
         <thead>
             <tr>
@@ -42,7 +42,9 @@
                         <a href="{% url 'exe_inventory_containers_edit' el.container.id %}">{{ el.container }}</a>
                     </td>
                     <td>
-                        {% if el.tags %}{{ el.tags }}{% endif %}
+                        {% for tag in el.tags.all %}
+                            <a href="{% url 'exe_inventory_tags_edit' tag.id %}">{{ tag }}</a>
+                        {% endfor %}
                     </td>
                     <td>
                         {% if el.photo %}

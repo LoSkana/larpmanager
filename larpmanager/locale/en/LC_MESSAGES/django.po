@@ -1696,6 +1696,15 @@ msgstr ""
 msgid "Inventory containers"
 msgstr ""
 
+msgid "This page allows you to add or edit a new tag for inventory items"
+msgstr ""
+
+msgid "Inventory tags"
+msgstr ""
+
+msgid "Items"
+msgstr ""
+
 msgid ""
 "This page allows you to add or edit a new movement of item inventory, loans "
 "or repairs"
@@ -3359,9 +3368,6 @@ msgstr ""
 msgid "Where it is located"
 msgstr ""
 
-msgid "List of tags"
-msgstr ""
-
 msgid "Photo of the object"
 msgstr ""
 
@@ -4960,6 +4966,9 @@ msgid "Item"
 msgstr ""
 
 msgid "Notes"
+msgstr ""
+
+msgid "This page shows the inventory tags"
 msgstr ""
 
 msgid ""
@@ -7788,7 +7797,7 @@ msgstr ""
 msgid "Manage inventory containers"
 msgstr ""
 
-msgid "Items"
+msgid "Manage inventory tags"
 msgstr ""
 
 msgid "Manage inventory items"

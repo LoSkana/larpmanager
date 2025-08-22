@@ -1776,9 +1776,6 @@ msgstr "Právní upozornění"
 msgid "Legal notice"
 msgstr "Právní upozornění"
 
-msgid "List of tags"
-msgstr "Seznam značek"
-
 msgid "Max waitings"
 msgstr "Maximální počet čekání"
 
@@ -2158,6 +2155,9 @@ msgstr "Modely pro rozdávání"
 
 msgid "Inventory area"
 msgstr "Inventarizační oblast"
+
+msgid "Inventory tags"
+msgstr "Inventární značky"
 
 msgid "List of voters"
 msgstr "Seznam voličů"
@@ -3144,6 +3144,9 @@ msgstr "Pokud chybí, uveďte 0"
 
 msgid "Inventory assignments"
 msgstr "Přiřazení zásob"
+
+msgid "Manage inventory tags"
+msgstr "Správa inventárních štítků"
 
 msgid "Name of the character"
 msgstr "Jméno postavy"
@@ -4229,6 +4232,9 @@ msgstr "Formulář se ukládá každých 30 sekund"
 
 msgid "The payment has not been completed"
 msgstr "Platba nebyla dokončena"
+
+msgid "This page shows the inventory tags"
+msgstr "Na této stránce jsou zobrazeny inventární značky"
 
 #, python-format
 msgid "Ticket selected: <b>%(ticket)s</b>"
@@ -6163,6 +6169,10 @@ msgstr "Nyní si můžete prohlédnout informace o stravě poskytnuté účastn�
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Uveďte prosím, při jaké příležitosti si přejete dar poskytnout"
+
+msgid "This page allows you to add or edit a new tag for inventory items"
+msgstr ""
+"Na této stránce můžete přidat nebo upravit novou značku pro položky zásob"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""

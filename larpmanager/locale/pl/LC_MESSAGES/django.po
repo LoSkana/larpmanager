@@ -1776,9 +1776,6 @@ msgstr "Nota prawna"
 msgid "Legal notice"
 msgstr "Nota prawna"
 
-msgid "List of tags"
-msgstr "Lista tagów"
-
 msgid "Max waitings"
 msgstr "Maksymalny czas oczekiwania"
 
@@ -2158,6 +2155,9 @@ msgstr "Modele rozdawane"
 
 msgid "Inventory area"
 msgstr "Obszar inwentaryzacji"
+
+msgid "Inventory tags"
+msgstr "Znaczniki zapasów"
 
 msgid "List of voters"
 msgstr "Lista głosujących"
@@ -3144,6 +3144,9 @@ msgstr "Jeśli nieobecny, wskaż 0"
 
 msgid "Inventory assignments"
 msgstr "Przypisania zapasów"
+
+msgid "Manage inventory tags"
+msgstr "Zarządzanie znacznikami zapasów"
 
 msgid "Name of the character"
 msgstr "Nazwa postaci"
@@ -4229,6 +4232,9 @@ msgstr "Formularz jest zapisywany co 30 sekund"
 
 msgid "The payment has not been completed"
 msgstr "Płatność nie została zrealizowana"
+
+msgid "This page shows the inventory tags"
+msgstr "Na tej stronie wyświetlane są znaczniki zapasów"
 
 #, python-format
 msgid "Ticket selected: <b>%(ticket)s</b>"
@@ -6196,6 +6202,11 @@ msgstr ""
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Wprowadź okazję, na którą chcesz przekazać darowiznę"
+
+msgid "This page allows you to add or edit a new tag for inventory items"
+msgstr ""
+"Ta strona umożliwia dodanie lub edycję nowego tagu dla pozycji spisu "
+"inwentarza"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""

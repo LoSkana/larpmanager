@@ -367,6 +367,14 @@ class InventoryContainer(BaseModel):
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="containers")
 
 
+class InventoryTag(BaseModel):
+    name = models.CharField(max_length=100)
+
+    description = models.CharField(max_length=1000, blank=True, null=True)
+
+    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="tags")
+
+
 class InventoryItem(BaseModel):
     name = models.CharField(max_length=100)
 
@@ -376,7 +384,7 @@ class InventoryItem(BaseModel):
 
     container = models.ForeignKey(InventoryContainer, on_delete=models.CASCADE, related_name="items")
 
-    tags = models.CharField(max_length=100, help_text=_("List of tags"), blank=True, null=True)
+    tags = models.ManyToManyField(InventoryTag, related_name="items", blank=True)
 
     photo = models.ImageField(
         max_length=500,

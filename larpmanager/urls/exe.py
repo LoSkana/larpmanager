@@ -64,6 +64,16 @@ urlpatterns = [
         name="exe_inventory_containers_edit",
     ),
     path(
+        "manage/inventory/tags/",
+        views_ems.exe_inventory_tags,
+        name="exe_inventory_tags",
+    ),
+    path(
+        "manage/inventory/tags/edit/<int:num>/",
+        views_ems.exe_inventory_tags_edit,
+        name="exe_inventory_tags_edit",
+    ),
+    path(
         "manage/inventory/items/",
         views_ems.exe_inventory_items,
         name="exe_inventory_items",

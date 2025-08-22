@@ -1776,9 +1776,6 @@ msgstr "Rechtlicher Hinweis"
 msgid "Legal notice"
 msgstr "Rechtlicher Hinweis"
 
-msgid "List of tags"
-msgstr "Liste der Tags"
-
 msgid "Max waitings"
 msgstr "Maximale Wartezeiten"
 
@@ -2158,6 +2155,9 @@ msgstr "Handout Modelle"
 
 msgid "Inventory area"
 msgstr "Bereich der Bestandsaufnahme"
+
+msgid "Inventory tags"
+msgstr "Inventar-Tags"
 
 msgid "List of voters"
 msgstr "Liste der Wähler"
@@ -3144,6 +3144,9 @@ msgstr "Falls nicht vorhanden, 0 angeben"
 
 msgid "Inventory assignments"
 msgstr "Zuweisung von Inventar"
+
+msgid "Manage inventory tags"
+msgstr "Verwalten von Inventarschildern"
 
 msgid "Name of the character"
 msgstr "Name des Zeichens"
@@ -4229,6 +4232,9 @@ msgstr "Das Formular wird alle 30 Sekunden gespeichert"
 
 msgid "The payment has not been completed"
 msgstr "Die Zahlung wurde nicht abgeschlossen"
+
+msgid "This page shows the inventory tags"
+msgstr "Diese Seite zeigt die Inventar-Tags"
 
 #, python-format
 msgid "Ticket selected: <b>%(ticket)s</b>"
@@ -6376,6 +6382,11 @@ msgstr ""
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Bitte geben Sie den Anlass an, für den Sie die Spende leisten möchten"
+
+msgid "This page allows you to add or edit a new tag for inventory items"
+msgstr ""
+"Auf dieser Seite können Sie eine neue Markierung für Bestandsartikel "
+"hinzufügen oder bearbeiten"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""

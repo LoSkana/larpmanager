@@ -441,6 +441,17 @@
     feature: 66
     module: 15
 - model: larpmanager.assocpermission
+  pk: 48
+  fields:
+    name: Tags
+    descr: Manage inventory tags
+    slug: exe_inventory_tags
+    number: 36
+    config: inventory
+    hidden: false
+    feature: 66
+    module: 15
+- model: larpmanager.assocpermission
   pk: 46
   fields:
     name: Items

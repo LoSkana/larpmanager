@@ -34,6 +34,8 @@ from larpmanager.forms.utils import (
     InventoryAreaS2Widget,
     InventoryContainerS2Widget,
     InventoryItemS2Widget,
+    InventoryItemS2WidgetMulti,
+    InventoryTagS2WidgetMulti,
     TimePickerInput,
     get_run_choices,
 )
@@ -48,6 +50,7 @@ from larpmanager.models.miscellanea import (
     InventoryContainer,
     InventoryItem,
     InventoryMovement,
+    InventoryTag,
     Problem,
     ShuttleService,
     UrlShortner,
@@ -238,11 +241,16 @@ class ExeInventoryItemForm(MyForm):
     class Meta:
         model = InventoryItem
         exclude = []
-        widgets = {"description": Textarea(attrs={"rows": 5}), "container": InventoryContainerS2Widget}
+        widgets = {
+            "description": Textarea(attrs={"rows": 5}),
+            "container": InventoryContainerS2Widget,
+            "tags": InventoryTagS2WidgetMulti,
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["container"].widget.set_assoc(self.params["a_id"])
+        self.fields["tags"].widget.set_assoc(self.params["a_id"])
 
         _delete_optionals_inventory(self)
 
@@ -256,6 +264,30 @@ class ExeInventoryContainerForm(MyForm):
         model = InventoryContainer
         exclude = []
         widgets = {"description": Textarea(attrs={"rows": 5})}
+
+
+class ExeInventoryTagForm(MyForm):
+    page_info = _("This page allows you to add or edit a new tag for inventory items")
+
+    page_title = _("Inventory tags")
+
+    class Meta:
+        model = InventoryTag
+        exclude = []
+        widgets = {
+            "description": Textarea(attrs={"rows": 5}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["items"] = forms.ModelMultipleChoiceField(
+            queryset=InventoryItem.objects.filter(assoc_id=self.params["a_id"]),
+            label=_("Items"),
+            widget=InventoryItemS2WidgetMulti,
+            required=False,
+        )
+        self.fields["items"].widget.set_assoc(self.params["a_id"])
 
 
 class ExeInventoryMovementForm(MyForm):
