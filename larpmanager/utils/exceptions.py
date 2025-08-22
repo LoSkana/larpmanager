@@ -81,3 +81,9 @@ def check_assoc_feature(request, s):
 def check_event_feature(request, ctx, s):
     if s not in ctx["features"]:
         raise FeatureError(s, ctx["run"].id, request.path)
+
+
+class MainPageError(Exception):
+    def __init__(self, path=None):
+        super().__init__()
+        self.path = path

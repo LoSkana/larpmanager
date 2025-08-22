@@ -29,6 +29,7 @@ from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.utils.exceptions import (
     FeatureError,
     HiddenError,
+    MainPageError,
     MembershipError,
     NotFoundError,
     PermissionError,
@@ -91,6 +92,7 @@ class ExceptionHandlingMiddleware:
                 ),
             ),
             (RedirectError, lambda ex: redirect(ex.view)),
+            (MainPageError, lambda ex: redirect("/")),
         ]
 
         for exc_type, handler in handlers:

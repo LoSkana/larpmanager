@@ -60,7 +60,7 @@ from larpmanager.models.member import Member, MembershipStatus, get_user_members
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.auth import check_lm_admin
 from larpmanager.utils.event import get_event_run
-from larpmanager.utils.exceptions import PermissionError
+from larpmanager.utils.exceptions import MainPageError, PermissionError
 from larpmanager.utils.tasks import my_send_mail, send_mail_exec
 from larpmanager.utils.text import get_assoc_text
 from larpmanager.views.user.member import get_user_backend
@@ -379,7 +379,7 @@ def discover(request):
 
 @override("en")
 def tutorials(request, slug=None):
-    ctx = get_lm_contact(request)
+    ctx = get_lm_contact(request, False)
     ctx["index"] = True
 
     try:
@@ -451,7 +451,9 @@ def about_us(request):
     return render(request, "larpmanager/larpmanager/about_us.html", ctx)
 
 
-def get_lm_contact(request):
+def get_lm_contact(request, check=True):
+    if check and request.assoc["id"] > 0:
+        raise MainPageError(request.path)
     ctx = {"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"}
     return ctx
 
