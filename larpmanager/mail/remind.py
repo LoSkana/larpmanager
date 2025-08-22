@@ -146,7 +146,7 @@ def remember_profile(reg):
 
 def get_remember_profile_body(context):
     return (
-        _("Hello! You signed up for %(event)s but haven't completed your profile yet")
+        _("Hello! You signed up for %(event)s but haven't completed your profile yet") % context
         + ". "
         + _("It only takes 5 minutes - just <a href='%(url)s'>click here</a> to fill out the form") % context
         + "."

@@ -314,13 +314,12 @@ def _orga_actions_priorities(request, ctx, assoc):
     # if there are no characters, suggest to do it
     features = get_event_features(ctx["event"].id)
 
-    if "character" in features:
-        if not Character.objects.filter(event=ctx["event"]).count():
-            _add_priority(
-                ctx,
-                _("Create the first character of the event"),
-                "orga_characters",
-            )
+    if "character" in features and not Character.objects.filter(event=ctx["event"]).count():
+        _add_priority(
+            ctx,
+            _("Create the first character of the event"),
+            "orga_characters",
+        )
 
     elif set(features) & {"faction", "plot", "casting", "user_character", "px", "custom_character", "questbuilder"}:
         _add_priority(
@@ -329,22 +328,20 @@ def _orga_actions_priorities(request, ctx, assoc):
             "orga_features",
         )
 
-    if "user_character" in features:
-        if ctx["event"].get_config("user_character_max", "") == "":
-            _add_priority(
-                ctx,
-                _("Set up the configuration for the creation or editing of characters by the participants"),
-                "orga_character",
-                "config/user_character",
-            )
+    if "user_character" in features and ctx["event"].get_config("user_character_max", "") == "":
+        _add_priority(
+            ctx,
+            _("Set up the configuration for the creation or editing of characters by the participants"),
+            "orga_character",
+            "config/user_character",
+        )
 
-    if "token_credit" not in features:
-        if set(features) & {"expense", "refund", "collection"}:
-            _add_priority(
-                ctx,
-                _("Some activated features need the 'Token / Credit' feature, but it isn't active"),
-                "orga_features",
-            )
+    if "token_credit" not in features and set(features) & {"expense", "refund", "collection"}:
+        _add_priority(
+            ctx,
+            _("Some activated features need the 'Token / Credit' feature, but it isn't active"),
+            "orga_features",
+        )
 
     char_proposed = ctx["event"].get_elements(Character).filter(status=CharacterStatus.PROPOSED).count()
     if char_proposed:
@@ -354,13 +351,14 @@ def _orga_actions_priorities(request, ctx, assoc):
             "orga_characters",
         )
 
-    expenses_approve = AccountingItemExpense.objects.filter(run=ctx["run"], is_approved=False).count()
-    if expenses_approve:
-        _add_action(
-            ctx,
-            _("There are <b>%(number)s</b> expenses to approve") % {"number": expenses_approve},
-            "orga_expenses",
-        )
+    if not assoc.get_config("expense_disable_orga", False):
+        expenses_approve = AccountingItemExpense.objects.filter(run=ctx["run"], is_approved=False).count()
+        if expenses_approve:
+            _add_action(
+                ctx,
+                _("There are <b>%(number)s</b> expenses to approve") % {"number": expenses_approve},
+                "orga_expenses",
+            )
 
     payments_approve = PaymentInvoice.objects.filter(reg__run=ctx["run"], status=PaymentStatus.SUBMITTED).count()
     if payments_approve:
