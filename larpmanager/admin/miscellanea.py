@@ -33,6 +33,7 @@ from larpmanager.models.miscellanea import (
     HelpQuestion,
     InventoryContainer,
     InventoryItem,
+    InventoryTag,
     PlayerRelationship,
     ShuttleService,
     Util,
@@ -140,10 +141,16 @@ class InventoryContainerAdmin(DefModelAdmin):
     search_fields = ["name"]
 
 
+@admin.register(InventoryTag)
+class InventoryTagAdmin(DefModelAdmin):
+    list_display = ("name", "description")
+    search_fields = ["name"]
+
+
 @admin.register(InventoryItem)
 class InventoryItemAdmin(DefModelAdmin):
     list_display = ("name", "quantity", "container", "description")
-    autocomplete_fields = ["assoc", "container"]
+    autocomplete_fields = ["assoc", "container", "tags"]
     search_fields = ["name"]
 
 

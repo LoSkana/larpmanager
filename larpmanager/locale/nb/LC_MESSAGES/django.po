@@ -1776,9 +1776,6 @@ msgstr "Juridisk merknad"
 msgid "Legal notice"
 msgstr "Juridisk merknad"
 
-msgid "List of tags"
-msgstr "Liste over tagger"
-
 msgid "Max waitings"
 msgstr "Maks ventetid"
 
@@ -2158,6 +2155,9 @@ msgstr "Modeller for utdeling"
 
 msgid "Inventory area"
 msgstr "Område for lagerbeholdning"
+
+msgid "Inventory tags"
+msgstr "Lageretiketter"
 
 msgid "List of voters"
 msgstr "Liste over velgere"
@@ -3144,6 +3144,9 @@ msgstr "Hvis fraværende, angi 0"
 
 msgid "Inventory assignments"
 msgstr "Tildeling av lagerbeholdning"
+
+msgid "Manage inventory tags"
+msgstr "Administrer lageretiketter"
 
 msgid "Name of the character"
 msgstr "Navnet på karakteren"
@@ -4229,6 +4232,9 @@ msgstr "Skjemaet lagres hvert 30. sekund"
 
 msgid "The payment has not been completed"
 msgstr "Betalingen ble ikke fullført"
+
+msgid "This page shows the inventory tags"
+msgstr "Denne siden viser lagerkodene"
 
 #, python-format
 msgid "Ticket selected: <b>%(ticket)s</b>"
@@ -6197,6 +6203,10 @@ msgstr ""
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Vennligst oppgi anledningen du ønsker å donere til"
+
+msgid "This page allows you to add or edit a new tag for inventory items"
+msgstr ""
+"På denne siden kan du legge til eller redigere en ny tagg for lagervarer"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""

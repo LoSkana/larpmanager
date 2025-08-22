@@ -1776,9 +1776,6 @@ msgstr "Wettelijke kennisgeving"
 msgid "Legal notice"
 msgstr "Wettelijke kennisgeving"
 
-msgid "List of tags"
-msgstr "Lijst met tags"
-
 msgid "Max waitings"
 msgstr "Max wachttijden"
 
@@ -2158,6 +2155,9 @@ msgstr "Handout Modellen"
 
 msgid "Inventory area"
 msgstr "Inventarisatiegebied"
+
+msgid "Inventory tags"
+msgstr "Inventarisatielabels"
 
 msgid "List of voters"
 msgstr "Lijst van kiezers"
@@ -3144,6 +3144,9 @@ msgstr "Indien afwezig, geef 0 aan"
 
 msgid "Inventory assignments"
 msgstr "Inventarisopgaven"
+
+msgid "Manage inventory tags"
+msgstr "Inventarislabels beheren"
 
 msgid "Name of the character"
 msgstr "Naam van het personage"
@@ -4229,6 +4232,9 @@ msgstr "Het formulier wordt elke 30 seconden opgeslagen"
 
 msgid "The payment has not been completed"
 msgstr "De betaling is niet voltooid"
+
+msgid "This page shows the inventory tags"
+msgstr "Deze pagina toont de inventarislabels"
 
 #, python-format
 msgid "Ticket selected: <b>%(ticket)s</b>"
@@ -6247,6 +6253,11 @@ msgstr "Nu kunt u de dieetinformatie bekijken die deelnemers hebben ingediend"
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Vul de gelegenheid in waarvoor je de donatie wilt doen"
+
+msgid "This page allows you to add or edit a new tag for inventory items"
+msgstr ""
+"Op deze pagina kun je een nieuw label voor inventarisitems toevoegen of "
+"bewerken"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""

@@ -1776,9 +1776,6 @@ msgstr "Rättsligt meddelande"
 msgid "Legal notice"
 msgstr "Juridiskt meddelande"
 
-msgid "List of tags"
-msgstr "Lista över taggar"
-
 msgid "Max waitings"
 msgstr "Max väntetider"
 
@@ -2158,6 +2155,9 @@ msgstr "Handout Modeller"
 
 msgid "Inventory area"
 msgstr "Inventeringsområde"
+
+msgid "Inventory tags"
+msgstr "Inventarietiketter"
 
 msgid "List of voters"
 msgstr "Lista över röstberättigade"
@@ -3144,6 +3144,9 @@ msgstr "Om frånvarande, ange 0"
 
 msgid "Inventory assignments"
 msgstr "Tilldelning av inventarier"
+
+msgid "Manage inventory tags"
+msgstr "Hantera inventarietiketter"
 
 msgid "Name of the character"
 msgstr "Namn på karaktären"
@@ -4229,6 +4232,9 @@ msgstr "Formuläret sparas var 30:e sekund"
 
 msgid "The payment has not been completed"
 msgstr "Betalningen slutfördes inte"
+
+msgid "This page shows the inventory tags"
+msgstr "På denna sida visas inventarietiketterna"
 
 #, python-format
 msgid "Ticket selected: <b>%(ticket)s</b>"
@@ -6200,6 +6206,11 @@ msgstr "Nu kan du granska den kostinformation som deltagarna har lämnat in"
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Ange för vilket tillfälle du vill göra en donation"
+
+msgid "This page allows you to add or edit a new tag for inventory items"
+msgstr ""
+"På den här sidan kan du lägga till eller redigera en ny tagg för "
+"lagerartiklar"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""

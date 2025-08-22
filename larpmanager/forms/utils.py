@@ -41,7 +41,7 @@ from larpmanager.models.form import (
     WritingOption,
 )
 from larpmanager.models.member import Member, Membership, MembershipStatus
-from larpmanager.models.miscellanea import InventoryArea, InventoryContainer, InventoryItem
+from larpmanager.models.miscellanea import InventoryArea, InventoryContainer, InventoryItem, InventoryTag
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
@@ -516,7 +516,7 @@ class InventoryAreaS2Widget(s2forms.ModelSelect2Widget):
         return self.event.get_elements(InventoryArea)
 
 
-class InventoryItemS2Widget(s2forms.ModelSelect2Widget):
+class InventoryItemS2(s2forms.ModelSelect2Widget):
     search_fields = [
         "name__icontains",
         "description__icontains",
@@ -527,6 +527,35 @@ class InventoryItemS2Widget(s2forms.ModelSelect2Widget):
 
     def get_queryset(self):
         return InventoryItem.objects.filter(assoc_id=self.aid)
+
+
+class InventoryItemS2WidgetMulti(InventoryItemS2, s2forms.ModelSelect2MultipleWidget):
+    pass
+
+
+class InventoryItemS2Widget(InventoryItemS2, s2forms.ModelSelect2Widget):
+    pass
+
+
+class InventoryTagS2(s2forms.ModelSelect2Widget):
+    search_fields = [
+        "name__icontains",
+        "description__icontains",
+    ]
+
+    def set_assoc(self, aid):
+        self.aid = aid
+
+    def get_queryset(self):
+        return InventoryTag.objects.filter(assoc_id=self.aid)
+
+
+class InventoryTagS2WidgetMulti(InventoryTagS2, s2forms.ModelSelect2MultipleWidget):
+    pass
+
+
+class InventoryTagS2Widget(InventoryTagS2, s2forms.ModelSelect2Widget):
+    pass
 
 
 def remove_choice(ch, typ):

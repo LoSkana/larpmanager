@@ -25,12 +25,14 @@ from larpmanager.forms.miscellanea import (
     ExeInventoryContainerForm,
     ExeInventoryItemForm,
     ExeInventoryMovementForm,
+    ExeInventoryTagForm,
     ExeUrlShortnerForm,
 )
 from larpmanager.models.miscellanea import (
     InventoryContainer,
     InventoryItem,
     InventoryMovement,
+    InventoryTag,
     UrlShortner,
 )
 from larpmanager.utils.base import check_assoc_permission
@@ -63,9 +65,22 @@ def exe_inventory_containers_edit(request, num):
 
 
 @login_required
+def exe_inventory_tags(request):
+    ctx = check_assoc_permission(request, "exe_inventory_tags")
+    ctx["list"] = InventoryTag.objects.filter(assoc_id=request.assoc["id"])
+    return render(request, "larpmanager/exe/inventory/tags.html", ctx)
+
+
+@login_required
+def exe_inventory_tags_edit(request, num):
+    return exe_edit(request, ExeInventoryTagForm, num, "exe_inventory_tags")
+
+
+@login_required
 def exe_inventory_items(request):
     ctx = check_assoc_permission(request, "exe_inventory_items")
-    ctx["list"] = InventoryItem.objects.filter(assoc_id=request.assoc["id"]).select_related("container")
+    ctx["list"] = InventoryItem.objects.filter(assoc_id=request.assoc["id"])
+    ctx["list"] = ctx["list"].select_related("container").prefetch_related("tags")
     get_inventory_optionals(ctx, [4])
     return render(request, "larpmanager/exe/inventory/items.html", ctx)
 
