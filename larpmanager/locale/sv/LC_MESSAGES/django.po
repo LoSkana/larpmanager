@@ -3681,6 +3681,9 @@ msgstr "Kompetensens namn"
 msgid "These fields are mandatory"
 msgstr "Dessa fält är obligatoriska"
 
+msgid "Total remaining to be paid"
+msgstr "Totalt återstående att betala"
+
 msgid "View photos from the event"
 msgstr "Se bilder från evenemanget"
 
@@ -3698,6 +3701,9 @@ msgstr "Du använde en vänkod"
 
 msgid "(click on image to enlarge)"
 msgstr "(klicka på bilden för att förstora den)"
+
+msgid "Additional free payment fee"
+msgstr "Ytterligare avgift för fri betalning"
 
 #, python-format
 msgid "Bring a friend to %(event)s"
@@ -4081,6 +4087,9 @@ msgstr "Tillagd fordringspost"
 
 msgid "Select a file with extension csv"
 msgstr "Välj en fil med filnamnstillägget 'csv'"
+
+msgid "Sum of payments received through"
+msgstr "Summan av betalningar som erhållits genom"
 
 msgid "The setting / genre of the event"
 msgstr "Evenemangets miljö/genre"
@@ -4590,6 +4599,9 @@ msgstr "Avsluta prenumerationen på %(event)s"
 msgid "Set the experience points configuration"
 msgstr "Ställ in konfigurationen för erfarenhetspoäng"
 
+msgid "Sum of the signup fee, total to be paid"
+msgstr "Summan av anmälningsavgiften, totalt att betala"
+
 msgid "The number of payments to split the fee"
 msgstr "Antalet delbetalningar som ska göras"
 
@@ -5008,6 +5020,9 @@ msgstr "Denna sida visar förhandsanmälningarna till evenemanget"
 msgid "This page shows the settings for PDF printing"
 msgstr "Denna sida sammanfattar inställningarna för PDF-utskrift"
 
+msgid "Amount of the next payment instalment required"
+msgstr "Beloppet för nästa betalningsrat som krävs"
+
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Uppsägning på grund av utebliven årlig medlemsavgift"
 
@@ -5055,6 +5070,9 @@ msgstr "Kom ihåg att ange mottagare separerade med kommatecken"
 
 msgid "Something went wrong in the account activation"
 msgstr "Något gick fel vid aktiveringen av kontot"
+
+msgid "Sum of payments received with means of payment"
+msgstr "Summan av mottagna betalningar med betalningsmedel"
 
 msgid "Text show at the start of all character sheets"
 msgstr "Text visas i början av alla karaktärsblad"
@@ -5289,6 +5307,9 @@ msgstr "På den här sidan kan du redigera evenemangsspecifika texter"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Toleransen överskriden, fortsätt med annulleringen"
+
+msgid "Unique registration code, used for payment checks"
+msgstr "Unik registreringskod, används för betalningskontroller"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Du inkluderar (minst ett av) dessa filter"
@@ -5671,6 +5692,9 @@ msgstr "På den här sidan kan du hålla reda på rapporterade problem"
 
 msgid "This page shows the questions submitted by participants"
 msgstr "På denna sida visas de frågor som deltagarna har skickat in"
+
+msgid "Total of what has already been paid at the current date"
+msgstr "Summan av vad som redan har betalats på det aktuella datumet"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Vi stötte på ett problem med den skattekod du angav"
@@ -6126,6 +6150,10 @@ msgstr "Hantera frågor och alternativ för karaktärer och skrivelement"
 msgid "Now participants can submit collections, and you can review them"
 msgstr "Nu kan deltagare skicka in samlingar och du kan granska dem"
 
+msgid "Part of the registration fee derived only from the ticket chosen"
+msgstr ""
+"Del av registreringsavgiften som endast härrör från den valda biljetten"
+
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr "Betalningen slutfördes inte. Kontakta oss för att ta reda på varför"
 
@@ -6370,6 +6398,9 @@ msgstr ""
 
 msgid "Now participants can create refund requests, and you can review them"
 msgstr "Nu kan deltagare skapa återbetalningsbegäran och du kan granska dem"
+
+msgid "Number of days within which the player must pay his next installment"
+msgstr "Antal dagar inom vilka spelaren måste betala sin nästa delbetalning"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -6973,6 +7004,12 @@ msgstr ""
 msgid ""
 "In the faction a character has been mentioned, but it does not seem to exist"
 msgstr "I fraktionen har en karaktär nämnts, men den verkar inte existera"
+
+msgid ""
+"Part of the registration fee derived only from the additional options chosen"
+msgstr ""
+"Del av registreringsavgiften som endast härrör från de ytterligare "
+"alternativ som valts"
 
 msgid ""
 "This page prepares the cash balance already formatted for annual declaration"
