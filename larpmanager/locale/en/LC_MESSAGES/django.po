@@ -6635,6 +6635,40 @@ msgstr ""
 msgid "Manage"
 msgstr ""
 
+msgid "Additional free payment fee"
+msgstr ""
+
+msgid "Amount of the next payment instalment required"
+msgstr ""
+
+msgid "Number of days within which the player must pay his next installment"
+msgstr ""
+
+msgid "Total remaining to be paid"
+msgstr ""
+
+msgid "Total of what has already been paid at the current date"
+msgstr ""
+
+msgid "Sum of the signup fee, total to be paid"
+msgstr ""
+
+msgid "Part of the registration fee derived only from the ticket chosen"
+msgstr ""
+
+msgid ""
+"Part of the registration fee derived only from the additional options chosen"
+msgstr ""
+
+msgid "Sum of payments received with means of payment"
+msgstr ""
+
+msgid "Sum of payments received through"
+msgstr ""
+
+msgid "Unique registration code, used for payment checks"
+msgstr ""
+
 msgid "Recalculate"
 msgstr ""
 

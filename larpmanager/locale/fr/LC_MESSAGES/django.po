@@ -3708,6 +3708,9 @@ msgstr "Le nom de la compétence"
 msgid "These fields are mandatory"
 msgstr "Ces champs sont obligatoires"
 
+msgid "Total remaining to be paid"
+msgstr "Total restant à payer"
+
 msgid "View photos from the event"
 msgstr "Voir les photos de l'événement"
 
@@ -3725,6 +3728,9 @@ msgstr "Vous avez utilisé un code d'ami"
 
 msgid "(click on image to enlarge)"
 msgstr "(cliquer sur l'image pour l'agrandir)"
+
+msgid "Additional free payment fee"
+msgstr "Frais supplémentaires de paiement gratuit"
 
 #, python-format
 msgid "Bring a friend to %(event)s"
@@ -4108,6 +4114,9 @@ msgstr "Ajout d'un poste de réclamation"
 
 msgid "Select a file with extension csv"
 msgstr "Sélectionnez un fichier avec l'extension \"csv\""
+
+msgid "Sum of payments received through"
+msgstr "Somme des paiements reçus par l'intermédiaire de"
 
 msgid "The setting / genre of the event"
 msgstr "Le cadre / le genre de l'événement"
@@ -4618,6 +4627,9 @@ msgstr "Désabonnement aux %(event)s"
 msgid "Set the experience points configuration"
 msgstr "Définir la configuration des points d'expérience"
 
+msgid "Sum of the signup fee, total to be paid"
+msgstr "Somme des frais d'inscription, total à payer"
+
 msgid "The number of payments to split the fee"
 msgstr "Le nombre de versements à effectuer"
 
@@ -5042,6 +5054,9 @@ msgstr "Cette page montre les pré-inscriptions pour l'événement"
 msgid "This page shows the settings for PDF printing"
 msgstr "Cette page résume les paramètres de l'impression PDF"
 
+msgid "Amount of the next payment instalment required"
+msgstr "Montant de la prochaine tranche de paiement requise"
+
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Annulation pour absence de cotisation annuelle"
 
@@ -5091,6 +5106,9 @@ msgstr "N'oubliez pas de séparer les destinataires par des virgules"
 
 msgid "Something went wrong in the account activation"
 msgstr "Un problème s'est produit lors de l'activation du compte"
+
+msgid "Sum of payments received with means of payment"
+msgstr "Somme des paiements reçus avec les moyens de paiement"
 
 msgid "Text show at the start of all character sheets"
 msgstr "Texte affiché au début de toutes les feuilles de personnage"
@@ -5337,6 +5355,9 @@ msgstr "Cette page vous permet d'éditer des textes spécifiques à l'événemen
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolérance dépassée, procéder à l'annulation"
+
+msgid "Unique registration code, used for payment checks"
+msgstr "Code d'enregistrement unique, utilisé pour les contrôles de paiement"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Vous incluez (au moins l'un de) ces filtres"
@@ -5748,6 +5769,9 @@ msgstr "Cette page vous permet de suivre les problèmes signalés"
 
 msgid "This page shows the questions submitted by participants"
 msgstr "Cette page présente les questions soumises par les participants"
+
+msgid "Total of what has already been paid at the current date"
+msgstr "Total de ce qui a déjà été payé à la date actuelle"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr ""
@@ -6274,6 +6298,9 @@ msgstr ""
 "Les participants peuvent désormais soumettre des collections et vous pouvez "
 "les examiner"
 
+msgid "Part of the registration fee derived only from the ticket chosen"
+msgstr "Partie des droits d'inscription provenant uniquement du billet choisi"
+
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
 "Le paiement n'a pas été effectué. Veuillez nous contacter pour en connaître "
@@ -6560,6 +6587,10 @@ msgid "Now participants can create refund requests, and you can review them"
 msgstr ""
 "Les participants peuvent désormais créer des demandes de remboursement et "
 "vous pouvez les examiner"
+
+msgid "Number of days within which the player must pay his next installment"
+msgstr ""
+"Nombre de jours dans lesquels le joueur doit payer son prochain versement"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -7230,6 +7261,12 @@ msgid ""
 msgstr ""
 "Dans la faction, un personnage a été mentionné, mais il ne semble pas "
 "exister"
+
+msgid ""
+"Part of the registration fee derived only from the additional options chosen"
+msgstr ""
+"Partie des droits d'inscription provenant uniquement des options "
+"supplémentaires choisies"
 
 msgid ""
 "This page prepares the cash balance already formatted for annual declaration"
