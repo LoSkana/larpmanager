@@ -27,7 +27,8 @@ from larpmanager.forms.utils import (
     EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
 )
-from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx
+from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, RulePx
+from larpmanager.models.form import QuestionType, WritingQuestion
 
 
 class PxBaseForm(MyForm):
@@ -43,6 +44,8 @@ class OrgaDeliveryPxForm(PxBaseForm):
 
     page_title = _("Delivery")
 
+    page_info = _("This page allows you to add or edit a px delivery")
+
     class Meta:
         model = DeliveryPx
         exclude = ("number",)
@@ -57,6 +60,8 @@ class OrgaAbilityPxForm(PxBaseForm):
     load_js = ["characters-choices"]
 
     page_title = _("Ability")
+
+    page_info = _("This page allows you to add or edit a px ability")
 
     class Meta:
         model = AbilityPx
@@ -89,9 +94,30 @@ class OrgaAbilityPxForm(PxBaseForm):
 class OrgaAbilityTypePxForm(MyForm):
     page_title = _("Ability type")
 
+    page_info = _("This page allows you to add or edit a px ability type")
+
     class Meta:
         model = AbilityTypePx
         exclude = ("number",)
+
+
+class OrgaRulePxForm(MyForm):
+    page_title = _("Rule")
+
+    page_info = _("This page allows you to add or edit a rule on computed fields")
+
+    class Meta:
+        model = RulePx
+        exclude = ("number", "order")
+        widgets = {"abilities": AbilityS2WidgetMulti}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.delete_field("name")
+
+        self.fields["abilities"].widget.set_event(self.params["event"])
+        qs = WritingQuestion.objects.filter(event=self.params["event"], typ=QuestionType.COMPUTED)
+        self.fields["field"].queryset = qs
 
 
 class SelectNewAbility(forms.Form):

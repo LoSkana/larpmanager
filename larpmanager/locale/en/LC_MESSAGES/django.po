@@ -1555,10 +1555,25 @@ msgstr ""
 msgid "Traits"
 msgstr ""
 
+msgid "This page allows you to add or edit a px delivery"
+msgstr ""
+
 msgid "Ability"
 msgstr ""
 
+msgid "This page allows you to add or edit a px ability"
+msgstr ""
+
 msgid "Ability type"
+msgstr ""
+
+msgid "This page allows you to add or edit a px ability type"
+msgstr ""
+
+msgid "Rule"
+msgstr ""
+
+msgid "This page allows you to add or edit a rule on computed fields"
 msgstr ""
 
 msgid "click on the icon to open the tutorial"
@@ -2963,6 +2978,26 @@ msgid ""
 "available"
 msgstr ""
 
+msgid "Addition"
+msgstr ""
+
+msgid "Subtraction"
+msgstr ""
+
+msgid "Multiplication"
+msgstr ""
+
+msgid "Division"
+msgstr ""
+
+msgid ""
+"The rule will be applied, only one time, if the character has any of the "
+"abilities. If no abilities are chosen, the rule is applied to all characters."
+msgstr ""
+
+msgid "The character field of computed type that will be updated"
+msgstr ""
+
 msgid "Single choice"
 msgstr ""
 
@@ -2985,6 +3020,9 @@ msgid "Sheet"
 msgstr ""
 
 msgid "Progress"
+msgstr ""
+
+msgid "Computed"
 msgstr ""
 
 msgid "Disabled"
@@ -6438,6 +6476,15 @@ msgstr ""
 msgid "This page summarizes px delivery to characters"
 msgstr ""
 
+msgid "Rules"
+msgstr ""
+
+msgid "This page summarizes the rules that are applied to the computed fields"
+msgstr ""
+
+msgid "Field"
+msgstr ""
+
 msgid "Reading"
 msgstr ""
 
@@ -7978,6 +8025,9 @@ msgid "Manage the character skills purchaseable with XP"
 msgstr ""
 
 msgid "Manage XP distributions for character skill purchases."
+msgstr ""
+
+msgid "Manage XP rules"
 msgstr ""
 
 msgid "Display full history of participant preferences on characters"

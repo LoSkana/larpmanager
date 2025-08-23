@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from decimal import Decimal
 
 from django.db import models
 from django.db.models import Q, UniqueConstraint
@@ -25,7 +26,7 @@ from tinymce.models import HTMLField
 
 from larpmanager.cache.config import save_all_element_configs
 from larpmanager.models.event import BaseConceptModel
-from larpmanager.models.form import WritingOption
+from larpmanager.models.form import QuestionType, WritingAnswer, WritingOption, WritingQuestion
 from larpmanager.models.writing import Character
 
 
@@ -131,3 +132,63 @@ def update_px(char):
     addit["px_avail"] = addit["px_tot"] - addit["px_used"]
 
     save_all_element_configs(char, addit)
+
+    # save computed field
+    event = char.event
+    computed_ques = event.get_elements(WritingQuestion).filter(typ=QuestionType.COMPUTED)
+    values = {question.id: Decimal(0) for question in computed_ques}
+
+    # apply rules
+    ability_ids = char.px_ability_list.values_list("pk", flat=True)
+    rules = RulePx.objects.filter(Q(abilities__isnull=True) | Q(abilities__in=ability_ids)).distinct().order_by("order")
+
+    ops = {
+        Operation.ADDITION: lambda x, y: x + y,
+        Operation.SUBTRACTION: lambda x, y: x - y,
+        Operation.MULTIPLICATION: lambda x, y: x * y,
+        Operation.DIVISION: lambda x, y: x / y if y != 0 else x,
+    }
+
+    for rule in rules:
+        f_id = rule.field.id
+        values[f_id] = ops.get(rule.operation, lambda x, y: x)(values[f_id], rule.amount)
+
+    for question_id, value in values.items():
+        (qa, created) = WritingAnswer.objects.get_or_create(question_id=question_id, element_id=char.id)
+        qa.text = format(value, "f").rstrip("0").rstrip(".")
+        qa.save()
+
+
+class Operation(models.TextChoices):
+    ADDITION = "ADD", _("Addition")
+    SUBTRACTION = "SUB", _("Subtraction")
+    MULTIPLICATION = "MUL", _("Multiplication")
+    DIVISION = "DIV", _("Division")
+
+
+class RulePx(BaseConceptModel):
+    abilities = models.ManyToManyField(
+        AbilityPx,
+        related_name="rules",
+        blank=True,
+        help_text=_(
+            "The rule will be applied, only one time, if the character has any of the abilities. "
+            "If no abilities are chosen, the rule is applied to all characters."
+        ),
+    )
+
+    field = models.ForeignKey(
+        WritingQuestion,
+        on_delete=models.CASCADE,
+        help_text=_("The character field of computed type that will be updated"),
+    )
+
+    operation = models.CharField(
+        max_length=3,
+        choices=Operation.choices,
+        default=Operation.ADDITION,
+    )
+
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    order = models.IntegerField(default=0)

@@ -55,6 +55,7 @@ class QuestionType(models.TextChoices):
     HIDE = "hide", _("Hide")
     PROGRESS = "progress", _("Progress")
     ASSIGNED = "assigned", _("Assigned")
+    COMPUTED = "c", _("Computed")
 
     @staticmethod
     def get_basic_types():

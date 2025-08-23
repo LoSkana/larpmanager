@@ -212,6 +212,9 @@ msgstr "Les"
 msgid "Role"
 msgstr "Rolle"
 
+msgid "Rule"
+msgstr "Regel"
+
 msgid "Sent"
 msgstr "Sendt"
 
@@ -305,6 +308,9 @@ msgstr "Feil"
 msgid "Event"
 msgstr "Arrangement"
 
+msgid "Field"
+msgstr "Felt"
+
 msgid "First"
 msgstr "Første"
 
@@ -377,6 +383,9 @@ msgstr "Prøv igjen"
 
 msgid "Roles"
 msgstr "Roller"
+
+msgid "Rules"
+msgstr "Regler"
 
 msgid "Sheet"
 msgstr "Fiche"
@@ -867,6 +876,9 @@ msgstr "Akseptert"
 msgid "Activate"
 msgstr "Aktiver"
 
+msgid "Addition"
+msgstr "Tillegg"
+
 msgid "Approval"
 msgstr "Godkjenning"
 
@@ -890,6 +902,9 @@ msgstr "Søker"
 
 msgid "Complete"
 msgstr "Fullstendig"
+
+msgid "Computed"
+msgstr "Beregnet"
 
 msgid "Consumed"
 msgstr "Forbrukt"
@@ -917,6 +932,9 @@ msgstr "Deaktivert"
 
 msgid "Discount"
 msgstr "Rabatt"
+
+msgid "Division"
+msgstr "Divisjon"
 
 msgid "Donation"
 msgstr "Donasjon"
@@ -1668,6 +1686,9 @@ msgstr "Vis stengt"
 msgid "Simple list"
 msgstr "Enkel liste"
 
+msgid "Subtraction"
+msgstr "Subtraksjon"
+
 msgid "Suggestions"
 msgstr "Forslag"
 
@@ -2180,6 +2201,9 @@ msgstr "Partner tilbakekalt"
 msgid "Membership fee"
 msgstr "Avgifter"
 
+msgid "Multiplication"
+msgstr "Multiplikasjon"
+
 msgid "Obtain ability"
 msgstr "Tilegne seg ferdigheter"
 
@@ -2332,6 +2356,9 @@ msgstr "Varelager"
 
 msgid "Mail assignment"
 msgstr "Tildeling av post"
+
+msgid "Manage XP rules"
+msgstr "Administrer XP-regler"
 
 msgid "Member refused!"
 msgstr "Medlem nektet!"
@@ -5216,6 +5243,9 @@ msgstr "Det er ingen nye økter planlagt for øyeblikket"
 msgid "This page allows you to add or edit a competency"
 msgstr "På denne siden kan du legge til eller redigere en kompetanse"
 
+msgid "This page allows you to add or edit a px ability"
+msgstr "På denne siden kan du legge til eller redigere en px-evne"
+
 msgid "This page allows you to upload a new photo album"
 msgstr "På denne siden kan du laste opp et nytt fotoalbum"
 
@@ -5282,6 +5312,9 @@ msgstr "Summen er %(amount).2f, med årsak '%(reason)s'"
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Det er <b>%(number)s</b> tegn som skal godkjennes"
+
+msgid "This page allows you to add or edit a px delivery"
+msgstr "På denne siden kan du legge til eller redigere en px-levering"
 
 msgid "This page allows you to edit event-specific texts"
 msgstr "På denne siden kan du redigere hendelsesspesifikke tekster"
@@ -5542,6 +5575,9 @@ msgstr "Velg hvilke elementer som skal kopieres fra hvilken annen hendelse"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Det totale antallet billetter som skal trekkes ut er angitt"
 
+msgid "This page allows you to add or edit a px ability type"
+msgstr "På denne siden kan du legge til eller redigere en px-evnetype"
+
 msgid "This page allows you to add or edit a volunteer entry"
 msgstr "På denne siden kan du legge til eller redigere en frivillig oppføring"
 
@@ -5725,6 +5761,9 @@ msgstr "Nå kan du gå gjennom den historiske regnskapsinformasjonen"
 
 msgid "Select the faction on which you want to filter characters"
 msgstr "Velg gruppene du vil filtrere tegnene etter"
+
+msgid "The character field of computed type that will be updated"
+msgstr "Tegnfeltet av beregnet type som skal oppdateres"
 
 msgid "This page allows you to edit the event navigation buttons"
 msgstr "På denne siden kan du redigere knappene for hendelsesnavigering"
@@ -5949,6 +5988,10 @@ msgstr ""
 
 msgid "These are the workshops you must complete before you can play"
 msgstr "Dette er verkstedene du må fullføre før du kan spille"
+
+msgid "This page allows you to add or edit a rule on computed fields"
+msgstr ""
+"På denne siden kan du legge til eller redigere en regel for beregnede felt"
 
 msgid "This page allows you to change the access roles for the event"
 msgstr "På denne siden kan du endre tilgangsrollene for arrangementet"
@@ -6535,6 +6578,9 @@ msgstr ""
 msgid "This page allows you to set your personal preferences on the interface"
 msgstr ""
 "På denne siden kan du angi dine personlige preferanser for grensesnittet"
+
+msgid "This page summarizes the rules that are applied to the computed fields"
+msgstr "Denne siden oppsummerer reglene som gjelder for de beregnede feltene"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""
@@ -9540,6 +9586,14 @@ msgstr ""
 "Hvis vi ikke hører fra deg, antar vi at du ikke lenger er interessert i "
 "arrangementet og kansellerer påmeldingen din for å gi plass til andre "
 "deltakere"
+
+msgid ""
+"The rule will be applied, only one time, if the character has any of the "
+"abilities. If no abilities are chosen, the rule is applied to all "
+"characters."
+msgstr ""
+"Regelen brukes bare én gang hvis figuren har noen av evnene. Hvis ingen "
+"evner er valgt, brukes regelen på alle figurene."
 
 msgid ""
 "Freely insert CSS commands, they will be reported in all pages  in the space"

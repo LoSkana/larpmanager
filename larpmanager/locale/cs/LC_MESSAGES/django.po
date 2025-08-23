@@ -212,6 +212,9 @@ msgstr "Přečtěte si"
 msgid "Role"
 msgstr "Role"
 
+msgid "Rule"
+msgstr "Pravidlo"
+
 msgid "Sent"
 msgstr "Odesláno"
 
@@ -305,6 +308,9 @@ msgstr "Chyba"
 msgid "Event"
 msgstr "Událost"
 
+msgid "Field"
+msgstr "Pole"
+
 msgid "First"
 msgstr "První"
 
@@ -377,6 +383,9 @@ msgstr "Zkuste to znovu"
 
 msgid "Roles"
 msgstr "Role"
+
+msgid "Rules"
+msgstr "Pravidla"
 
 msgid "Sheet"
 msgstr "Fiche"
@@ -867,6 +876,9 @@ msgstr "Přijato"
 msgid "Activate"
 msgstr "Aktivace"
 
+msgid "Addition"
+msgstr "Dodatek"
+
 msgid "Approval"
 msgstr "Schválení"
 
@@ -890,6 +902,9 @@ msgstr "Žadatel"
 
 msgid "Complete"
 msgstr "Kompletní"
+
+msgid "Computed"
+msgstr "Vypočítané"
 
 msgid "Consumed"
 msgstr "Spotřebováno"
@@ -917,6 +932,9 @@ msgstr "Bezbariérový"
 
 msgid "Discount"
 msgstr "Sleva"
+
+msgid "Division"
+msgstr "Divize"
 
 msgid "Donation"
 msgstr "Dary"
@@ -1668,6 +1686,9 @@ msgstr "Zobrazit uzavřeno"
 msgid "Simple list"
 msgstr "Jednoduchý seznam"
 
+msgid "Subtraction"
+msgstr "Odčítání"
+
 msgid "Suggestions"
 msgstr "Návrhy"
 
@@ -2180,6 +2201,9 @@ msgstr "Odvolání partnera"
 msgid "Membership fee"
 msgstr "Poplatky"
 
+msgid "Multiplication"
+msgstr "Násobení"
+
 msgid "Obtain ability"
 msgstr "Získání dovedností"
 
@@ -2332,6 +2356,9 @@ msgstr "Inventární položky"
 
 msgid "Mail assignment"
 msgstr "Přiřazení pošty"
+
+msgid "Manage XP rules"
+msgstr "Správa pravidel XP"
 
 msgid "Member refused!"
 msgstr "Člen odmítl!"
@@ -5213,6 +5240,9 @@ msgstr "V tuto chvíli nejsou naplánovány žádné nové schůzky"
 msgid "This page allows you to add or edit a competency"
 msgstr "Na této stránce můžete přidat nebo upravit kompetenci"
 
+msgid "This page allows you to add or edit a px ability"
+msgstr "Tato stránka umožňuje přidat nebo upravit schopnost px"
+
 msgid "This page allows you to upload a new photo album"
 msgstr "Na této stránce můžete nahrát nové fotoalbum"
 
@@ -5281,6 +5311,9 @@ msgstr "Součet je %(amount).2f s důvodem \"%(reason)s\""
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Ke schválení je třeba <b>%(number)s</b> znaků"
+
+msgid "This page allows you to add or edit a px delivery"
+msgstr "Tato stránka umožňuje přidat nebo upravit dodávku px"
 
 msgid "This page allows you to edit event-specific texts"
 msgstr "Na této stránce můžete upravovat texty specifické pro danou událost"
@@ -5539,6 +5572,9 @@ msgstr "Vyberte, které prvky se mají zkopírovat z které jiné události"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Byl uveden celkový počet losů, které budou vylosovány"
 
+msgid "This page allows you to add or edit a px ability type"
+msgstr "Tato stránka umožňuje přidat nebo upravit typ schopnosti px"
+
 msgid "This page allows you to add or edit a volunteer entry"
 msgstr "Na této stránce můžete přidat nebo upravit záznam o dobrovolníkovi"
 
@@ -5723,6 +5759,9 @@ msgstr "Nyní si můžete prohlédnout historické účetní informace"
 
 msgid "Select the faction on which you want to filter characters"
 msgstr "Vyberte skupiny, podle kterých chcete filtrovat znaky"
+
+msgid "The character field of computed type that will be updated"
+msgstr "Pole znaků vypočteného typu, které bude aktualizováno"
 
 msgid "This page allows you to edit the event navigation buttons"
 msgstr "Tato stránka umožňuje upravit navigační tlačítka události"
@@ -5933,6 +5972,9 @@ msgstr ""
 
 msgid "These are the workshops you must complete before you can play"
 msgstr "Tyto semináře musíte dokončit, abyste mohli hrát"
+
+msgid "This page allows you to add or edit a rule on computed fields"
+msgstr "Tato stránka umožňuje přidat nebo upravit pravidlo pro vypočtená pole"
 
 msgid "This page allows you to change the access roles for the event"
 msgstr "Na této stránce můžete změnit přístupové role pro danou událost"
@@ -6486,6 +6528,10 @@ msgstr "Tato částka se automaticky odečte z registrace budoucí akce"
 
 msgid "This page allows you to set your personal preferences on the interface"
 msgstr "Na této stránce můžete nastavit osobní preference rozhraní"
+
+msgid "This page summarizes the rules that are applied to the computed fields"
+msgstr ""
+"Na této stránce jsou shrnuta pravidla, která se vztahují na vypočtená pole"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""
@@ -9411,6 +9457,15 @@ msgid ""
 msgstr ""
 "Pokud se nám neozvete, budeme předpokládat, že o akci již nemáte zájem, a "
 "vaši registraci zrušíme, abychom uvolnili místo dalším účastníkům"
+
+msgid ""
+"The rule will be applied, only one time, if the character has any of the "
+"abilities. If no abilities are chosen, the rule is applied to all "
+"characters."
+msgstr ""
+"Pravidlo se použije pouze jednou, pokud má postava některou z těchto "
+"schopností. Pokud není zvolena žádná schopnost, pravidlo se použije na "
+"všechny postavy."
 
 msgid ""
 "Freely insert CSS commands, they will be reported in all pages  in the space"
