@@ -2087,3 +2087,22 @@ label {
     max-width:90%;
     max-height:90%;
 }
+
+.my-driverjs {
+    max-width: 60vw;
+    font-size: 200%;
+}
+
+.my-driverjs .driver-popover-title {
+  font-size: 22px !important;
+}
+
+.my-driverjs .driver-popover-description {
+  font-size: 18px !important;
+}
+
+@media(max-width: 1000px) {
+    .my-driverjs {
+        max-width: 80vw;
+    }
+}
