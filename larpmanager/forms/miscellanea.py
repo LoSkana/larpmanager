@@ -63,6 +63,7 @@ from larpmanager.models.registration import RegistrationTicket, TicketTier
 from larpmanager.models.utils import generate_id
 from larpmanager.models.writing import Faction, FactionType
 from larpmanager.utils.common import FileTypeValidator
+from larpmanager.utils.miscellanea import get_inventory_optionals
 
 PAY_CHOICES = (
     ("t", _("Over")),
@@ -326,9 +327,49 @@ class OrgaInventoryAreaForm(MyForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.item_list = self.params["event"].get_elements(InventoryItem).prefetch_related("tags")
+
+        ctx = {"a_id": self.params["request"].assoc["id"]}
+        get_inventory_optionals(ctx, [3, 4])
+        self.optionals = ctx["optionals"]
+        self.no_header_cols = ctx["no_header_cols"]
+
+        self.item_list = InventoryItem.objects.filter(assoc_id=self.params["a_id"]).prefetch_related("tags")
+        self.assigned = {}
         if self.instance.pk:
-            self.assigned = self.params["event"].get_elements(InventoryAssignment).filter(area=self.instance)
+            for el in self.params["event"].get_elements(InventoryAssignment).filter(area=self.instance):
+                self.assigned[el.item_id] = {"quantity": el.quantity, "notes": el.notes}
+
+        self.item_list = sorted(self.item_list, key=lambda x: (x.id not in self.assigned, x.id))
+
+        self.separate_handling = []
+        for item in self.item_list:
+            assigned_data = self.assigned.get(item.id, {})
+
+            # selected checkbox
+            sel_field = f"sel_{item.id}"
+            self.fields[sel_field] = forms.BooleanField(
+                required=False,
+                initial=item.id in self.assigned,
+            )
+            self.separate_handling.append("id_" + sel_field)
+
+            # quantity
+            qty_field = f"qty_{item.id}"
+            self.fields[qty_field] = forms.IntegerField(
+                required=False,
+                initial=assigned_data.get("quantity", 0),
+                min_value=0,
+            )
+            self.separate_handling.append("id_" + qty_field)
+
+            # notes
+            notes_field = f"notes_{item.id}"
+            self.fields[notes_field] = forms.CharField(
+                required=False,
+                initial=assigned_data.get("notes", ""),
+                widget=forms.Textarea(attrs={"rows": 2, "cols": 10}),
+            )
+            self.separate_handling.append("id_" + notes_field)
 
 
 class OrgaInventoryAssignmentForm(MyForm):

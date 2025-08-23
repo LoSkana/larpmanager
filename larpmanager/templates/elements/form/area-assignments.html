@@ -1,0 +1,43 @@
+{% load i18n static show_tags %}
+<table id="inv_assignments"
+       class="go_datatable dot_links"
+       no_header_cols="{{ form.no_header_cols }}">
+    <thead>
+        <tr>
+            <th>{% trans "Selected" %}</th>
+            <th>{% trans "Item" %}</th>
+            <th>{% trans "Tags" %}</th>
+            {% if form.optionals.quantity %}
+                <th>{% trans "Quantity" %}</th>
+            {% endif %}
+            <th>{% trans "Notes" %}</th>
+            <th>{% trans "Photo" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for el in form.item_list %}
+            {% with idstr=el.id|stringformat:"s" %}
+                {% with sel="sel_"|add:idstr qty="qty_"|add:idstr notes="notes_"|add:idstr %}
+                    <tr id="{{ el.id }}">
+                        <td>{{ form|get_form_field:sel }}</td>
+                        <td>{{ el }}</td>
+                        <td>
+                            {% for tag in el.tags.all %}{{ tag }}{% endfor %}
+                        </td>
+                        {% if form.optionals.quantity %}<td>{{ form|get_form_field:qty }}</td>{% endif %}
+                        <td>{{ form|get_form_field:notes }}</td>
+                        <td>
+                            {% if el.photo %}
+                                <img src="{{ el.thumb.url }}"
+                                     class="inv_photo"
+                                     alt="item photo"
+                                     style="cursor: pointer"
+                                     onclick="openImage('{{ el.photo.url }}')" />
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endwith %}
+            {% endwith %}
+        {% endfor %}
+    </tbody>
+</table>

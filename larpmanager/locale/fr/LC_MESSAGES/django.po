@@ -1065,6 +1065,9 @@ msgstr "Révision"
 msgid "Sections"
 msgstr "Sections"
 
+msgid "Selected"
+msgstr "Sélectionné"
+
 msgid "Services"
 msgstr "Services"
 

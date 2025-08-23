@@ -1065,6 +1065,9 @@ msgstr "Revize"
 msgid "Sections"
 msgstr "Sekce"
 
+msgid "Selected"
+msgstr "Vybrané stránky"
+
 msgid "Services"
 msgstr "Služby"
 

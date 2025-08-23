@@ -3751,6 +3751,18 @@ msgstr ""
 msgid "Missing casting preferences"
 msgstr ""
 
+msgid "Selected"
+msgstr ""
+
+msgid "Item"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "Notes"
+msgstr ""
+
 msgid "Input an element name to insert their reference code"
 msgstr ""
 
@@ -4956,16 +4968,7 @@ msgstr ""
 msgid "Container"
 msgstr ""
 
-msgid "Tags"
-msgstr ""
-
 msgid "This page shows the assignment of inventory items to event area"
-msgstr ""
-
-msgid "Item"
-msgstr ""
-
-msgid "Notes"
 msgstr ""
 
 msgid "This page shows the inventory tags"

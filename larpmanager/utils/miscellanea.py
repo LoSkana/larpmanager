@@ -175,7 +175,10 @@ def _go_centauri(request):
 def get_inventory_optionals(ctx, def_cols):
     assoc = Association.objects.get(pk=ctx["a_id"])
     optionals = {}
+    active = 0
     for field in InventoryItem.get_optional_fields():
         optionals[field] = assoc.get_config(f"inventory_{field}")
+        if optionals[field]:
+            active = 1
     ctx["optionals"] = optionals
-    ctx["no_header_cols"] = json.dumps([el + len(optionals) for el in def_cols])
+    ctx["no_header_cols"] = json.dumps([el + active for el in def_cols])

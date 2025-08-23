@@ -1065,6 +1065,9 @@ msgstr "Herziening"
 msgid "Sections"
 msgstr "Secties"
 
+msgid "Selected"
+msgstr "Geselecteerd"
+
 msgid "Services"
 msgstr "Diensten"
 

@@ -267,7 +267,7 @@ def get_deep_field(form, key1, key2):
     return ""
 
 
-@register.simple_tag
+@register.filter
 def get_form_field(form, name):
     if name in form.fields:
         return form[name]

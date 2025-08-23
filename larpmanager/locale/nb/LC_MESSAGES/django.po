@@ -1065,6 +1065,9 @@ msgstr "Revisjon"
 msgid "Sections"
 msgstr "Seksjoner"
 
+msgid "Selected"
+msgstr "Utvalgte"
+
 msgid "Services"
 msgstr "Tjenester"
 

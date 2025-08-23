@@ -2087,3 +2087,7 @@ label {
     max-width:90%;
     max-height:90%;
 }
+
+input[type="number"] {
+    width: 8ch !important;
+}
