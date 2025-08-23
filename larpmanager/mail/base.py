@@ -258,14 +258,16 @@ def character_update_status(sender, instance, **kwargs):
             my_send_mail(subj, body, instance.player, instance.event)
 
 
-def notify_organization_exe(subj, body, assoc, instance):
+def notify_organization_exe(func, assoc, instance):
     if assoc.main_mail:
         activate(get_exec_language(assoc))
+        (subj, body) = func(instance)
         my_send_mail(subj, body, assoc.main_mail, instance)
         return
 
     for orga in get_assoc_executives(assoc):
         activate(orga.language)
+        (subj, body) = func(instance)
         my_send_mail(subj, body, orga.email, instance)
 
 

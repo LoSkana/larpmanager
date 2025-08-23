@@ -430,15 +430,17 @@ def notify_invoice_check(inv):
 
     # if nothing else applies, simply send to the main mail
     else:
-        body, subj = get_invoice_email(inv)
-        notify_organization_exe(subj, body, inv.assoc, inv)
+        notify_organization_exe(get_invoice_email, inv.assoc, inv)
 
 
 def notify_refund_request(p):
+    notify_organization_exe(get_notify_refund_email, p.assoc, p)
+
+
+def get_notify_refund_email(p):
     subj = hdr(p) + _("Request refund from: %(user)s") % {"user": p.member}
     body = _("Details: %(details)s (<b>%(amount).2f</b>)") % {"details": p.details, "amount": p.value}
-    # print(subj)
-    notify_organization_exe(subj, body, p.assoc, p.assoc)
+    return body, subj
 
 
 def get_invoice_email(inv):

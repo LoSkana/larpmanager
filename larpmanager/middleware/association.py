@@ -59,7 +59,11 @@ class AssociationIdentifyMiddleware:
             # base_domain = "ludomanager.it"
             base_domain = "larpmanager.com"
 
-        assoc_slug = request.session.get("debug_slug", None) or getattr(conf_settings, "SLUG_ASSOC", None) or domain
+        assoc_slug = (
+            request.session.get("debug_slug")
+            if "debug_slug" in request.session
+            else getattr(conf_settings, "SLUG_ASSOC", None) or domain
+        )
 
         assoc = get_cache_assoc(assoc_slug)
         if assoc:
