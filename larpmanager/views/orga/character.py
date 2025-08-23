@@ -211,7 +211,7 @@ def orga_writing_form_list(request, s, n, typ):
                 res[el.element_id] = []
             res[el.element_id].append(cho[el.option_id])
 
-    elif question.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH]:
+    elif question.typ in [QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.COMPUTED]:
         que = WritingAnswer.objects.filter(question=question, element_id__in=element_ids)
         que = que.annotate(short_text=Substr("text", 1, max_length))
         que = que.values("element_id", "short_text")

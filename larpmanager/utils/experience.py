@@ -24,7 +24,7 @@ from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_event_features
-from larpmanager.models.experience import AbilityPx, DeliveryPx, update_px
+from larpmanager.models.experience import AbilityPx, DeliveryPx, RulePx, update_px
 from larpmanager.models.form import QuestionApplicable, WritingChoice
 from larpmanager.models.writing import Character
 from larpmanager.utils.common import add_char_addit
@@ -108,3 +108,10 @@ def get_available_ability_px(char):
         result[el.typ_id]["list"][el.id] = f"{el.name} - {el.cost}"
 
     return result
+
+
+@receiver(post_save, sender=RulePx)
+def post_save_rule_px(sender, instance, *args, **kwargs):
+    event = instance.event.get_class_parent(RulePx)
+    for char in event.get_elements(Character).all():
+        update_px(char)

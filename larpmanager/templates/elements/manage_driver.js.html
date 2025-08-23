@@ -158,7 +158,9 @@ window.addEventListener('DOMContentLoaded', function() {
 
         const driverObj = driver({
             showProgress: true,
-            steps: steps
+            steps: steps,
+            allowClose: false,
+            popoverClass: 'my-driverjs'
         });
 
         driverObj.drive();

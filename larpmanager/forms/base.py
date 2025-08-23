@@ -345,6 +345,9 @@ class BaseRegistrationForm(MyFormRun):
                 continue
 
             k = self._init_field(question, reg_counts=None, orga=True)
+            if not k:
+                continue
+
             keys.append(k)
 
             sec_name = reg_section
@@ -360,6 +363,10 @@ class BaseRegistrationForm(MyFormRun):
         return True
 
     def _init_field(self, question, reg_counts=None, orga=True):
+        # ignore computed
+        if question.typ == QuestionType.COMPUTED:
+            return None
+
         key = "q" + str(question.id)
 
         active = True

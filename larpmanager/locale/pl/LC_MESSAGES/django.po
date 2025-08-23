@@ -212,6 +212,9 @@ msgstr "Czytaj"
 msgid "Role"
 msgstr "Rola"
 
+msgid "Rule"
+msgstr "Zasada"
+
 msgid "Sent"
 msgstr "Wysłany"
 
@@ -305,6 +308,9 @@ msgstr "Błąd"
 msgid "Event"
 msgstr "Wydarzenie"
 
+msgid "Field"
+msgstr "Pole"
+
 msgid "First"
 msgstr "Pierwszy"
 
@@ -377,6 +383,9 @@ msgstr "Spróbuj ponownie"
 
 msgid "Roles"
 msgstr "Role"
+
+msgid "Rules"
+msgstr "Zasady"
 
 msgid "Sheet"
 msgstr "Arkusz"
@@ -867,6 +876,9 @@ msgstr "Przyjęte"
 msgid "Activate"
 msgstr "Aktywuj"
 
+msgid "Addition"
+msgstr "Dodatek"
+
 msgid "Approval"
 msgstr "Zatwierdzenie"
 
@@ -890,6 +902,9 @@ msgstr "Powód"
 
 msgid "Complete"
 msgstr "Kompletny"
+
+msgid "Computed"
+msgstr "Obliczony"
 
 msgid "Consumed"
 msgstr "Zużyty"
@@ -917,6 +932,9 @@ msgstr "Wyłączony"
 
 msgid "Discount"
 msgstr "Zniżka"
+
+msgid "Division"
+msgstr "Podział"
 
 msgid "Donation"
 msgstr "Darowizna"
@@ -1668,6 +1686,9 @@ msgstr "Pokaz zamknięty"
 msgid "Simple list"
 msgstr "Prosta lista"
 
+msgid "Subtraction"
+msgstr "Odejmowanie"
+
 msgid "Suggestions"
 msgstr "Sugestie"
 
@@ -2180,6 +2201,9 @@ msgstr "Członek odwołany"
 msgid "Membership fee"
 msgstr "Opłata członkowska"
 
+msgid "Multiplication"
+msgstr "Mnożenie"
+
 msgid "Obtain ability"
 msgstr "Uzyskanie zdolności"
 
@@ -2332,6 +2356,9 @@ msgstr "Pozycje zapasów"
 
 msgid "Mail assignment"
 msgstr "Przydział poczty"
+
+msgid "Manage XP rules"
+msgstr "Zarządzanie regułami XP"
 
 msgid "Member refused!"
 msgstr "Członek odmówił!"
@@ -5231,6 +5258,9 @@ msgstr "Obecnie nie ma zaplanowanych żadnych nowych sesji"
 msgid "This page allows you to add or edit a competency"
 msgstr "Ta strona umożliwia dodawanie lub edytowanie kompetencji"
 
+msgid "This page allows you to add or edit a px ability"
+msgstr "Ta strona umożliwia dodawanie lub edytowanie zdolności px"
+
 msgid "This page allows you to upload a new photo album"
 msgstr "Ta strona umożliwia przesłanie nowego albumu ze zdjęciami"
 
@@ -5298,6 +5328,9 @@ msgstr "Suma wynosi %(amount).2f, z powodem \"%(reason)s\""
 #, python-format
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Istnieją <b>%(number)s</b> znaki do zatwierdzenia"
+
+msgid "This page allows you to add or edit a px delivery"
+msgstr "Ta strona umożliwia dodanie lub edycję dostawy px"
 
 msgid "This page allows you to edit event-specific texts"
 msgstr "Ta strona umożliwia edycję tekstów specyficznych dla wydarzenia"
@@ -5559,6 +5592,9 @@ msgstr "Wybierz, które elementy mają zostać skopiowane z innego zdarzenia"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Podano całkowitą liczbę losów do rozlosowania"
 
+msgid "This page allows you to add or edit a px ability type"
+msgstr "Ta strona umożliwia dodawanie lub edytowanie typu zdolności px"
+
 msgid "This page allows you to add or edit a volunteer entry"
 msgstr "Ta strona umożliwia dodanie lub edycję wpisu wolontariusza"
 
@@ -5748,6 +5784,9 @@ msgstr "Teraz możesz przeglądać historyczne informacje księgowe"
 
 msgid "Select the faction on which you want to filter characters"
 msgstr "Wybierz frakcję, według której chcesz filtrować postacie"
+
+msgid "The character field of computed type that will be updated"
+msgstr "Pole znakowe obliczanego typu, które zostanie zaktualizowane"
 
 msgid "This page allows you to edit the event navigation buttons"
 msgstr "Ta strona umożliwia edycję przycisków nawigacji zdarzeń"
@@ -5971,6 +6010,9 @@ msgstr ""
 
 msgid "These are the workshops you must complete before you can play"
 msgstr "Są to warsztaty, które należy ukończyć przed rozpoczęciem gry"
+
+msgid "This page allows you to add or edit a rule on computed fields"
+msgstr "Ta strona umożliwia dodanie lub edycję reguły dla pól wyliczanych"
 
 msgid "This page allows you to change the access roles for the event"
 msgstr "Ta strona umożliwia zmianę ról dostępu do wydarzenia"
@@ -6577,6 +6619,9 @@ msgstr ""
 
 msgid "This page allows you to set your personal preferences on the interface"
 msgstr "Ta strona umożliwia ustawienie osobistych preferencji interfejsu"
+
+msgid "This page summarizes the rules that are applied to the computed fields"
+msgstr "Ta strona podsumowuje reguły stosowane do obliczanych pól"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""
@@ -9627,6 +9672,15 @@ msgstr ""
 "Jeśli się nie odezwiesz, założymy, że nie jesteś już zainteresowany "
 "wydarzeniem i anulujemy Twoją rejestrację, aby zrobić miejsce dla innych "
 "uczestników"
+
+msgid ""
+"The rule will be applied, only one time, if the character has any of the "
+"abilities. If no abilities are chosen, the rule is applied to all "
+"characters."
+msgstr ""
+"Zasada zostanie zastosowana tylko raz, jeśli postać posiada którąkolwiek ze "
+"zdolności. Jeśli nie wybrano żadnej zdolności, reguła zostanie zastosowana "
+"do wszystkich postaci."
 
 msgid ""
 "Freely insert CSS commands, they will be reported in all pages  in the space"
