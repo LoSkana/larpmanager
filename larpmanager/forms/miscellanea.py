@@ -317,10 +317,18 @@ class OrgaInventoryAreaForm(MyForm):
 
     page_title = _("Event area")
 
+    load_form = ["area-assignments"]
+
     class Meta:
         model = InventoryArea
         exclude = []
         widgets = {"description": Textarea(attrs={"rows": 5})}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.item_list = self.params["event"].get_elements(InventoryItem).prefetch_related("tags")
+        if self.instance.pk:
+            self.assigned = self.params["event"].get_elements(InventoryAssignment).filter(area=self.instance)
 
 
 class OrgaInventoryAssignmentForm(MyForm):
