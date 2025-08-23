@@ -266,7 +266,7 @@
                             <td class="date">{{ reg.created | date:"y/m/d H:i" }}</td>
                             <td class="date">{{ reg.updated | date:"y/m/d H:i" }}</td>
                             {% if features.pay_what_you_want %}<td class="acc pay_what"></td>{% endif %}
-                            {% if features.surcharge %}
+                            {% if features.reg_surcharges %}
                                 <td class="sur">
                                     <!-- filled later -->
                                 </td>
