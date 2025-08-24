@@ -1305,3 +1305,15 @@
     order: 9999
     after_text: null
     after_link: null
+- model: larpmanager.feature
+  pk: 217
+  fields:
+    name: New player
+    descr: Enables 'New player' tickets, reserved for users that never participated in an event of the organization
+    slug: new_player
+    overall: false
+    module: 4
+    placeholder: false
+    order: 75
+    after_text: Now you can create the "new player" ticket
+    after_link: orga_registration_tickets

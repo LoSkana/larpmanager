@@ -2088,6 +2088,26 @@ label {
     max-height:90%;
 }
 
+.my-driverjs {
+    max-width: 50vw;
+    font-size: 200%;
+    padding: 1.5em;
+}
+
+.my-driverjs .driver-popover-title {
+  font-size: 26px !important;
+}
+
+.my-driverjs .driver-popover-description {
+  font-size: 22px !important;
+}
+
+@media(max-width: 1000px) {
+    .my-driverjs {
+        max-width: 80vw;
+    }
+}
+
 input[type="number"] {
     width: 8ch !important;
 }

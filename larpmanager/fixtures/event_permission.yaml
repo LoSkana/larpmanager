@@ -571,6 +571,17 @@
     feature: 118
     module: 11
 - model: larpmanager.eventpermission
+  pk: 83
+  fields:
+    name: Rules
+    descr: Manage XP rules
+    slug: orga_px_rules
+    number: 81
+    config: px
+    hidden: false
+    feature: 118
+    module: 11
+- model: larpmanager.eventpermission
   pk: 60
   fields:
     name: Historical

@@ -19,10 +19,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
-from larpmanager.forms.experience import OrgaAbilityPxForm, OrgaAbilityTypePxForm, OrgaDeliveryPxForm
-from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx
+from larpmanager.forms.experience import OrgaAbilityPxForm, OrgaAbilityTypePxForm, OrgaDeliveryPxForm, OrgaRulePxForm
+from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, RulePx
+from larpmanager.utils.common import exchange_order
 from larpmanager.utils.edit import orga_edit
 from larpmanager.utils.event import check_event_permission
 
@@ -62,3 +63,22 @@ def orga_px_ability_types(request, s, n):
 @login_required
 def orga_px_ability_types_edit(request, s, n, num):
     return orga_edit(request, s, n, "orga_px_ability_types", OrgaAbilityTypePxForm, num)
+
+
+@login_required
+def orga_px_rules(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_px_rules")
+    ctx["list"] = ctx["event"].get_elements(RulePx).order_by("order")
+    return render(request, "larpmanager/orga/px/rules.html", ctx)
+
+
+@login_required
+def orga_px_rules_edit(request, s, n, num):
+    return orga_edit(request, s, n, "orga_px_rules", OrgaRulePxForm, num)
+
+
+@login_required
+def orga_px_rules_order(request, s, n, num, order):
+    ctx = check_event_permission(request, s, n, "orga_px_rules")
+    exchange_order(ctx, RulePx, num, order)
+    return redirect("orga_px_rules", s=ctx["event"].slug, n=ctx["run"].number)

@@ -330,6 +330,8 @@ $(document).ready(function() {
     $('#footer .inner').fadeIn(100);
 
     show_sidebar_active();
+
+    $(document).trigger("lm_ready");
 });
 
 function show_sidebar_active() {
@@ -449,7 +451,15 @@ function data_tables() {
                 { orderable: false, targets: disable_sort_columns },
                 { visible: false, targets: hide_columns },
                 { columnControl: [], targets: disable_sort_columns }
-            ]
+            ],
+            rowCallback: function (row, data) {
+              $('td', row).each(function (i) {
+                var tip = $(this).attr('tooltip');
+                if (tip) {
+                  $(this).attr('title', tip);
+                }
+              })
+            }
         });
 
         for (const index of hide_columns) {

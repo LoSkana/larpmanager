@@ -158,16 +158,22 @@ window.addEventListener('DOMContentLoaded', function() {
 
         const driverObj = driver({
             showProgress: true,
-            steps: steps
+            steps: steps,
+            allowClose: false,
+            popoverClass: 'my-driverjs'
         });
 
         driverObj.drive();
 
     }
 
-    {% if intro_driver and request.enviro == "prod" %} driverIntro();{% endif %}
-
     jQuery(function(){
+        {% if intro_driver and request.enviro == "prod" %}
+        $(document).on("lm_ready", function() {
+            driverIntro();
+        });
+        {% endif %}
+
         $('#intro_driver').on('click', driverIntro);
     });
 

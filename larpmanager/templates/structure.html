@@ -72,6 +72,8 @@
         {% block robots %}
         {% endblock robots %}
         {{ form.media }}
+        {% block css %}
+        {% endblock css %}
         {% if assoc.id == 0 %}
             {% compress css %}
                 <link rel="stylesheet" href="{% static 'alpha/assets/css/main.css' %}" />
@@ -99,8 +101,6 @@
                       href="{% get_media_prefix %}/css/{{ assoc.slug }}_{{ event.slug }}_{{ event.css_code }}.css" />
             {% endif %}
         {% endif %}
-        {% block css %}
-        {% endblock css %}
         <noscript>
             <link rel="stylesheet"
                   href="{% static 'larpmanager/assets/css/noscript.css' %}" />

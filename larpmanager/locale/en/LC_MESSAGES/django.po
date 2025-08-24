@@ -1555,10 +1555,25 @@ msgstr ""
 msgid "Traits"
 msgstr ""
 
+msgid "This page allows you to add or edit a px delivery"
+msgstr ""
+
 msgid "Ability"
 msgstr ""
 
+msgid "This page allows you to add or edit a px ability"
+msgstr ""
+
 msgid "Ability type"
+msgstr ""
+
+msgid "This page allows you to add or edit a px ability type"
+msgstr ""
+
+msgid "Rule"
+msgstr ""
+
+msgid "This page allows you to add or edit a rule on computed fields"
 msgstr ""
 
 msgid "click on the icon to open the tutorial"
@@ -2963,6 +2978,26 @@ msgid ""
 "available"
 msgstr ""
 
+msgid "Addition"
+msgstr ""
+
+msgid "Subtraction"
+msgstr ""
+
+msgid "Multiplication"
+msgstr ""
+
+msgid "Division"
+msgstr ""
+
+msgid ""
+"The rule will be applied, only one time, if the character has any of the "
+"abilities. If no abilities are chosen, the rule is applied to all characters."
+msgstr ""
+
+msgid "The character field of computed type that will be updated"
+msgstr ""
+
 msgid "Single choice"
 msgstr ""
 
@@ -2985,6 +3020,9 @@ msgid "Sheet"
 msgstr ""
 
 msgid "Progress"
+msgstr ""
+
+msgid "Computed"
 msgstr ""
 
 msgid "Disabled"
@@ -3462,6 +3500,9 @@ msgid "Describe exactly which participants are involved"
 msgstr ""
 
 msgid "Who takes it upon themselves to solve it"
+msgstr ""
+
+msgid "New player"
 msgstr ""
 
 msgid "Waiting"
@@ -6441,6 +6482,15 @@ msgstr ""
 msgid "This page summarizes px delivery to characters"
 msgstr ""
 
+msgid "Rules"
+msgstr ""
+
+msgid "This page summarizes the rules that are applied to the computed fields"
+msgstr ""
+
+msgid "Field"
+msgstr ""
+
 msgid "Reading"
 msgstr ""
 
@@ -6589,6 +6639,40 @@ msgid "Owing"
 msgstr ""
 
 msgid "Manage"
+msgstr ""
+
+msgid "Additional free payment fee"
+msgstr ""
+
+msgid "Amount of the next payment instalment required"
+msgstr ""
+
+msgid "Number of days within which the player must pay his next installment"
+msgstr ""
+
+msgid "Total remaining to be paid"
+msgstr ""
+
+msgid "Total of what has already been paid at the current date"
+msgstr ""
+
+msgid "Sum of the signup fee, total to be paid"
+msgstr ""
+
+msgid "Part of the registration fee derived only from the ticket chosen"
+msgstr ""
+
+msgid ""
+"Part of the registration fee derived only from the additional options chosen"
+msgstr ""
+
+msgid "Sum of payments received with means of payment"
+msgstr ""
+
+msgid "Sum of payments received through"
+msgstr ""
+
+msgid "Unique registration code, used for payment checks"
 msgstr ""
 
 msgid "Recalculate"
@@ -7660,6 +7744,14 @@ msgstr ""
 msgid "Now you can peform the fiscal code validity check"
 msgstr ""
 
+msgid ""
+"Enables 'New player' tickets, reserved for users that never participated in "
+"an event of the organization"
+msgstr ""
+
+msgid "Now you can create the \"new player\" ticket"
+msgstr ""
+
 msgid "Manage the organization main settings"
 msgstr ""
 
@@ -7981,6 +8073,9 @@ msgid "Manage the character skills purchaseable with XP"
 msgstr ""
 
 msgid "Manage XP distributions for character skill purchases."
+msgstr ""
+
+msgid "Manage XP rules"
 msgstr ""
 
 msgid "Display full history of participant preferences on characters"

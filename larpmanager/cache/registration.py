@@ -72,6 +72,7 @@ def update_reg_counts(r):
                 TicketTier.WAITING: "wait",
                 TicketTier.FILLER: "fill",
                 TicketTier.SELLER: "seller",
+                TicketTier.LOTTERY: "lottery",
                 TicketTier.NPC: "npc",
                 TicketTier.COLLABORATOR: "collaborator",
             }

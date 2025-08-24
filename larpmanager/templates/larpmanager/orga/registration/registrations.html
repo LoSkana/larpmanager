@@ -207,7 +207,7 @@
                                 </td>
                             {% endif %}
                             {% if features.faction %}
-                                <th class="factions">
+                                <td class="factions">
                                     {% for fnum in reg.factions %}
                                         {% with factions|get:fnum as ft %}
                                             {% if ft.id %}
@@ -216,14 +216,16 @@
                                             {% endif %}
                                         {% endwith %}
                                     {% endfor %}
-                                </th>
+                                </td>
                             {% endif %}
                             {% if features.questbuilder %}
-                                {% for key, qt in quest_types.items %}<th class="qt_{{ qt.number }}">{{ reg.traits | get:qt.number }}</th>{% endfor %}
+                                {% for key, qt in quest_types.items %}
+                                    <th class="qt_{{ qt.number }}"  tooltip="{{ qt.name }}">{{ reg.traits | get:qt.number }}</th>
+                                {% endfor %}
                             {% endif %}
                             {% if features.custom_character %}
                                 {% for nm in custom_info %}
-                                    <th class="custom }}">
+                                    <td class="custom" tooltip="{{ nm }}">
                                         {% if reg.custom|get:nm %}
                                             {% if nm != "profile" %}
                                                 {{ reg.custom | get:nm | safe | clean_tags | truncatechars:50 }}
@@ -237,19 +239,19 @@
                                                 {{ reg.custom | get:nm | safe }}</span>
                                             {% endif %}
                                         {% endif %}
-                                    </th>
+                                    </td>
                                 {% endfor %}
                             {% endif %}
                             {% for key, que in reg_questions.items %}
                                 {% if que.typ == 'e' %}
-                                    <td class="question q_{{ key }}">
+                                    <td class="question q_{{ key }}" tooltip="{{ que.name }}">
                                         {% with ed_id=key|concat:'_red' %}
                                             {% lookup reg ed_id as value %}
                                             {{ value | safe }}
                                         {% endwith %}
                                     </td>
                                 {% else %}
-                                    <td class="question q_{{ key }}">
+                                    <td class="question q_{{ key }}" tooltip="{{ que.name }}">
                                         <!-- filled later -->
                                     </td>
                                 {% endif %}
@@ -265,50 +267,64 @@
                             {% endif %}
                             <td class="date">{{ reg.created | date:"y/m/d H:i" }}</td>
                             <td class="date">{{ reg.updated | date:"y/m/d H:i" }}</td>
-                            {% if features.pay_what_you_want %}<td class="acc pay_what"></td>{% endif %}
-                            {% if features.surcharge %}
-                                <td class="sur">
+                            {% if features.pay_what_you_want %}
+                                <td class="acc pay_what"
+                                    tooltip="{% trans "Additional free payment fee" %}">
                                     <!-- filled later -->
                                 </td>
+                            {% endif %}
+                            {% if features.reg_surcharges %}
+                                <td class="sur" tooltip="{% trans "Surcharge applied to the ticket" %}"></td>
                             {% endif %}
                             {% if features.reg_quotas or features.reg_installments %}
-                                <td class="acc quota">
+                                <td class="acc quota"
+                                    tooltip="{% trans "Amount of the next payment instalment required" %}">
                                     <!-- filled later -->
                                 </td>
                             {% endif %}
-                            <td class="acc deadline">
+                            <td class="acc deadline"
+                                tooltip="{% trans "Number of days within which the player must pay his next installment" %}">
                                 <!-- filled later -->
                             </td>
-                            <td class="acc remaining">
+                            <td class="acc remaining"
+                                tooltip="{% trans "Total remaining to be paid" %}">
                                 <!-- filled later -->
                             </td>
-                            <td class="acc tot_payed">
+                            <td class="acc tot_payed"
+                                tooltip="{% trans "Total of what has already been paid at the current date" %}">
                                 <!-- filled later -->
                             </td>
-                            <td class="acc tot_iscr">
+                            <td class="acc tot_iscr"
+                                tooltip="{% trans "Sum of the signup fee, total to be paid" %}">
                                 <!-- filled later -->
                             </td>
                             {% if features.vat %}
-                                <td class="acc ticket_price">
+                                <td class="acc ticket_price"
+                                    tooltip="{% trans "Part of the registration fee derived only from the ticket chosen" %}">
                                     <!-- filled later -->
                                 </td>
-                                <td class="acc options_price">
+                                <td class="acc options_price"
+                                    tooltip="{% trans "Part of the registration fee derived only from the additional options chosen" %}">
                                     <!-- filled later -->
                                 </td>
                             {% endif %}
                             {% if 'token_credit' in assoc.features %}
-                                <td class="acc pay_a">
+                                <td class="acc pay_a"
+                                    tooltip="{% trans "Sum of payments received with means of payment" %}">
                                     <!-- filled later -->
                                 </td>
-                                <td class="acc pay_b">
+                                <td class="acc pay_b"
+                                    tooltip="{% trans "Sum of payments received through" %} {{ credit_name }}">
                                     <!-- filled later -->
                                 </td>
-                                <td class="acc pay_c">
+                                <td class="acc pay_c"
+                                    tooltip="{% trans "Sum of payments received through" %} {{ token_name }}">
                                     <!-- filled later -->
                                 </td>
                             {% endif %}
                             {% if features.unique_code %}
-                                <td class="special_cod">
+                                <td class="special_cod"
+                                    tooltip="{% trans "Unique registration code, used for payment checks" %}">
                                     {% if reg.special_cod %}{{ reg.special_cod }}{% endif %}
                                 </td>
                             {% endif %}

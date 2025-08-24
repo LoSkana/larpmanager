@@ -212,6 +212,9 @@ msgstr "Leer"
 msgid "Role"
 msgstr "Cargo"
 
+msgid "Rule"
+msgstr "Regla"
+
 msgid "Sent"
 msgstr "Enviado"
 
@@ -305,6 +308,9 @@ msgstr "Error"
 msgid "Event"
 msgstr "Evento"
 
+msgid "Field"
+msgstr "Campo"
+
 msgid "First"
 msgstr "Primero"
 
@@ -377,6 +383,9 @@ msgstr "¡Inténtalo de nuevo"
 
 msgid "Roles"
 msgstr "Cargos"
+
+msgid "Rules"
+msgstr "Reglas"
 
 msgid "Sheet"
 msgstr "Ficha"
@@ -867,6 +876,9 @@ msgstr "Aceptado"
 msgid "Activate"
 msgstr "Activar"
 
+msgid "Addition"
+msgstr "Adición"
+
 msgid "Approval"
 msgstr "Aprobación"
 
@@ -890,6 +902,9 @@ msgstr "Solicitante"
 
 msgid "Complete"
 msgstr "Completo"
+
+msgid "Computed"
+msgstr "Computado"
 
 msgid "Consumed"
 msgstr "Consumido"
@@ -917,6 +932,9 @@ msgstr "Discapacitados"
 
 msgid "Discount"
 msgstr "Descuento"
+
+msgid "Division"
+msgstr "División"
 
 msgid "Donation"
 msgstr "Donación"
@@ -1401,6 +1419,9 @@ msgstr "Beneficio neto"
 msgid "New answer"
 msgstr "¡Nueva respuesta"
 
+msgid "New player"
+msgstr "Nuevo jugador"
+
 msgid "New signup"
 msgstr "Nuevas entradas"
 
@@ -1670,6 +1691,9 @@ msgstr "Ver cerrados"
 
 msgid "Simple list"
 msgstr "Lista simple"
+
+msgid "Subtraction"
+msgstr "Resta"
 
 msgid "Suggestions"
 msgstr "Sugerencias"
@@ -2183,6 +2207,9 @@ msgstr "Miembro revocado"
 msgid "Membership fee"
 msgstr "Cuotas de afiliación"
 
+msgid "Multiplication"
+msgstr "Multiplicación"
+
 msgid "Obtain ability"
 msgstr "Adquirir habilidad"
 
@@ -2335,6 +2362,9 @@ msgstr "Artículos del inventario"
 
 msgid "Mail assignment"
 msgstr "Correo de asignación"
+
+msgid "Manage XP rules"
+msgstr "Gestionar reglas XP"
 
 msgid "Member refused!"
 msgstr "¡Miembro rechazado!"
@@ -3684,6 +3714,9 @@ msgstr "El nombre de la competencia"
 msgid "These fields are mandatory"
 msgstr "Estos campos son obligatorios"
 
+msgid "Total remaining to be paid"
+msgstr "Total pendiente de pago"
+
 msgid "View photos from the event"
 msgstr "¡Ver fotos del evento"
 
@@ -3701,6 +3734,9 @@ msgstr "Has utilizado un código de amigo"
 
 msgid "(click on image to enlarge)"
 msgstr "(haz clic en la imagen para ampliarla)"
+
+msgid "Additional free payment fee"
+msgstr "Tasa adicional de pago gratuito"
 
 #, python-format
 msgid "Bring a friend to %(event)s"
@@ -4084,6 +4120,9 @@ msgstr "Solicitud de reembolso añadida"
 
 msgid "Select a file with extension csv"
 msgstr "Selecciona un archivo con la extensión \"csv\""
+
+msgid "Sum of payments received through"
+msgstr "Suma de los pagos recibidos a través de"
 
 msgid "The setting / genre of the event"
 msgstr "El marco / género del acto"
@@ -4591,6 +4630,9 @@ msgstr "Darse de baja de %(event)s"
 msgid "Set the experience points configuration"
 msgstr "Establecer la configuración de los puntos de experiencia"
 
+msgid "Sum of the signup fee, total to be paid"
+msgstr "Suma de la cuota de inscripción, total a pagar"
+
 msgid "The number of payments to split the fee"
 msgstr "El número de plazos para dividir la cuota"
 
@@ -4769,6 +4811,9 @@ msgstr "Ahora puedes crear prólogos para el evento"
 
 msgid "Now you can create registration surcharges"
 msgstr "Ahora puede crear recargos por registro"
+
+msgid "Now you can create the \"new player\" ticket"
+msgstr "Ahora puedes crear el billete de \"nuevo jugador"
 
 msgid "Now you can review participants' questions"
 msgstr "Ahora puedes revisar las preguntas de los participantes"
@@ -5009,6 +5054,9 @@ msgstr "Esta página muestra las preinscripciones para el evento"
 msgid "This page shows the settings for PDF printing"
 msgstr "En esta página muestra los ajustes para la impresión de PDF"
 
+msgid "Amount of the next payment instalment required"
+msgstr "Importe del siguiente plazo de pago exigido"
+
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Cancelación por falta de pago de la cuota anual"
 
@@ -5056,6 +5104,9 @@ msgstr "Recuerda poner los destinatarios separados por comas"
 
 msgid "Something went wrong in the account activation"
 msgstr "Algo ha ido mal en la activación de la cuenta"
+
+msgid "Sum of payments received with means of payment"
+msgstr "Suma de los pagos recibidos con medios de pago"
 
 msgid "Text show at the start of all character sheets"
 msgstr "Texto que aparece al principio de todas las hojas de personaje"
@@ -5217,6 +5268,9 @@ msgstr "No hay nuevas sesiones programadas en este momento"
 msgid "This page allows you to add or edit a competency"
 msgstr "Esta página le permite añadir o editar una competencia"
 
+msgid "This page allows you to add or edit a px ability"
+msgstr "Esta página le permite añadir o editar una habilidad px"
+
 msgid "This page allows you to upload a new photo album"
 msgstr "Esta página te permite cargar un nuevo álbum de fotos"
 
@@ -5286,11 +5340,17 @@ msgstr "La suma es %(amount).2f, con motivo '%(reason)s'"
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Hay <b>%(number)s</b> caracteres para aprobar"
 
+msgid "This page allows you to add or edit a px delivery"
+msgstr "Esta página le permite añadir o editar una entrega px"
+
 msgid "This page allows you to edit event-specific texts"
 msgstr "Esta página te permite editar los textos específicos del evento"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolerancia superada, proceder a la anulación"
+
+msgid "Unique registration code, used for payment checks"
+msgstr "Código de registro único, utilizado para los controles de pago"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Estas incluyendo (al menos uno de) estos filtros"
@@ -5546,6 +5606,9 @@ msgstr "Seleccione qué elementos copiar y de qué otro evento"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Se ha indicado el número total de entradas que se sortearán"
 
+msgid "This page allows you to add or edit a px ability type"
+msgstr "Esta página le permite añadir o editar un tipo de habilidad px"
+
 msgid "This page allows you to add or edit a volunteer entry"
 msgstr "Esta página le permite añadir o editar una entrada de voluntario"
 
@@ -5685,6 +5748,9 @@ msgstr ""
 msgid "This page shows the questions submitted by participants"
 msgstr "Esta página muestra las preguntas enviadas por los participantes"
 
+msgid "Total of what has already been paid at the current date"
+msgstr "Total de lo que ya se ha pagado en la fecha actual"
+
 msgid "We encountered a problem with the tax code you provided"
 msgstr ""
 "Hemos encontrado un problema con el código fiscal que nos ha proporcionado"
@@ -5744,6 +5810,9 @@ msgstr "Ahora puede revisar la información contable histórica"
 
 msgid "Select the faction on which you want to filter characters"
 msgstr "Selecciona la facción de la que quieres filtrar los personajes"
+
+msgid "The character field of computed type that will be updated"
+msgstr "El campo de caracteres de tipo calculado que se actualizará"
 
 msgid "This page allows you to edit the event navigation buttons"
 msgstr "Esta página te permite editar los botones de navegación del evento"
@@ -5974,6 +6043,10 @@ msgstr ""
 msgid "These are the workshops you must complete before you can play"
 msgstr "Estos son los talleres que debes completar antes de poder jugar"
 
+msgid "This page allows you to add or edit a rule on computed fields"
+msgstr ""
+"Esta página le permite añadir o editar una regla sobre campos computados"
+
 msgid "This page allows you to change the access roles for the event"
 msgstr "Esta página te permite cambiar los roles de acceso para el evento"
 
@@ -6151,6 +6224,10 @@ msgstr ""
 msgid "Now participants can submit collections, and you can review them"
 msgstr ""
 "Ahora los participantes pueden enviar colecciones, y usted puede revisarlas"
+
+msgid "Part of the registration fee derived only from the ticket chosen"
+msgstr ""
+"Parte de la cuota de inscripción derivada únicamente del billete elegido"
 
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
@@ -6423,6 +6500,9 @@ msgstr ""
 "Ahora los participantes pueden crear solicitudes de reembolso, y usted puede"
 " revisarlas"
 
+msgid "Number of days within which the player must pay his next installment"
+msgstr "Número de días en los que el jugador debe pagar su siguiente cuota"
+
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
 "Seleccione los archivos que desea cargar (deben estar en formato CSV, "
@@ -6610,6 +6690,9 @@ msgstr ""
 msgid "This page allows you to set your personal preferences on the interface"
 msgstr ""
 "Esta página le permite configurar sus preferencias personales en la interfaz"
+
+msgid "This page summarizes the rules that are applied to the computed fields"
+msgstr "Esta página resume las reglas que se aplican a los campos calculados"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""
@@ -7057,6 +7140,12 @@ msgstr ""
 msgid ""
 "In the faction a character has been mentioned, but it does not seem to exist"
 msgstr "En la facción se ha mencionado un personaje, pero no parece existir"
+
+msgid ""
+"Part of the registration fee derived only from the additional options chosen"
+msgstr ""
+"Parte de la cuota de inscripción derivada únicamente de las opciones "
+"adicionales elegidas"
 
 msgid ""
 "This page prepares the cash balance already formatted for annual declaration"
@@ -8727,6 +8816,13 @@ msgstr ""
 " relativas a la organización"
 
 msgid ""
+"Enables 'New player' tickets, reserved for users that never participated in "
+"an event of the organization"
+msgstr ""
+"Habilita entradas de \"Nuevo jugador\", reservadas a usuarios que nunca han "
+"participado en un evento de la organización"
+
+msgid ""
 "If checked, allows a registration form question to be visible based on the "
 "selected registration ticket."
 msgstr ""
@@ -9688,6 +9784,15 @@ msgid ""
 msgstr ""
 "Si no recibimos noticias suyas, asumiremos que ya no está interesado en el "
 "evento y cancelaremos su inscripción para dejar sitio a otros participantes"
+
+msgid ""
+"The rule will be applied, only one time, if the character has any of the "
+"abilities. If no abilities are chosen, the rule is applied to all "
+"characters."
+msgstr ""
+"La regla se aplicará, sólo una vez, si el personaje tiene alguna de las "
+"habilidades. Si no se elige ninguna habilidad, la regla se aplicará a todos "
+"los personajes."
 
 msgid ""
 "Freely insert CSS commands, they will be reported in all pages  in the space"

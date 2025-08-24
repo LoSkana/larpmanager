@@ -212,6 +212,9 @@ msgstr "Lees"
 msgid "Role"
 msgstr "Rol"
 
+msgid "Rule"
+msgstr "Regel"
+
 msgid "Sent"
 msgstr "Verzonden"
 
@@ -305,6 +308,9 @@ msgstr "Fout"
 msgid "Event"
 msgstr "Evenement"
 
+msgid "Field"
+msgstr "Veld"
+
 msgid "First"
 msgstr "Eerste"
 
@@ -377,6 +383,9 @@ msgstr "Probeer het opnieuw"
 
 msgid "Roles"
 msgstr "Rollen"
+
+msgid "Rules"
+msgstr "Regels"
 
 msgid "Sheet"
 msgstr "Fiche"
@@ -867,6 +876,9 @@ msgstr "Geaccepteerd"
 msgid "Activate"
 msgstr "Activeer"
 
+msgid "Addition"
+msgstr "Toevoeging"
+
 msgid "Approval"
 msgstr "Goedkeuring"
 
@@ -890,6 +902,9 @@ msgstr "Aanvrager"
 
 msgid "Complete"
 msgstr "Compleet"
+
+msgid "Computed"
+msgstr "Berekend"
 
 msgid "Consumed"
 msgstr "Verbruikt"
@@ -917,6 +932,9 @@ msgstr "Uitgeschakeld"
 
 msgid "Discount"
 msgstr "Korting"
+
+msgid "Division"
+msgstr "Divisie"
 
 msgid "Donation"
 msgstr "Donatie"
@@ -1401,6 +1419,9 @@ msgstr "Nettowinst"
 msgid "New answer"
 msgstr "Nieuw antwoord"
 
+msgid "New player"
+msgstr "Nieuwe speler"
+
 msgid "New signup"
 msgstr "Nieuwe inzendingen"
 
@@ -1670,6 +1691,9 @@ msgstr "Toon gesloten"
 
 msgid "Simple list"
 msgstr "Eenvoudige lijst"
+
+msgid "Subtraction"
+msgstr "Aftrekken"
 
 msgid "Suggestions"
 msgstr "Suggesties"
@@ -2183,6 +2207,9 @@ msgstr "Partner herroepen"
 msgid "Membership fee"
 msgstr "Vergoedingen"
 
+msgid "Multiplication"
+msgstr "Vermenigvuldiging"
+
 msgid "Obtain ability"
 msgstr "Vaardigheden verwerven"
 
@@ -2335,6 +2362,9 @@ msgstr "Inventarisartikelen"
 
 msgid "Mail assignment"
 msgstr "Mail toewijzing"
+
+msgid "Manage XP rules"
+msgstr "XP-regels beheren"
 
 msgid "Member refused!"
 msgstr "Lid geweigerd!"
@@ -3684,6 +3714,9 @@ msgstr "De naam van competentie"
 msgid "These fields are mandatory"
 msgstr "Deze velden zijn verplicht"
 
+msgid "Total remaining to be paid"
+msgstr "Totaal nog te betalen"
+
 msgid "View photos from the event"
 msgstr "Bekijk foto's van het evenement"
 
@@ -3701,6 +3734,9 @@ msgstr "Je hebt een vriendencode gebruikt"
 
 msgid "(click on image to enlarge)"
 msgstr "(klik op de afbeelding om te vergroten)"
+
+msgid "Additional free payment fee"
+msgstr "Extra gratis betaling"
 
 #, python-format
 msgid "Bring a friend to %(event)s"
@@ -4084,6 +4120,9 @@ msgstr "Claim item toegevoegd"
 
 msgid "Select a file with extension csv"
 msgstr "Selecteer een bestand met de extensie 'csv'"
+
+msgid "Sum of payments received through"
+msgstr "Som van betalingen ontvangen via"
 
 msgid "The setting / genre of the event"
 msgstr "De setting / het genre van het evenement"
@@ -4593,6 +4632,9 @@ msgstr "Uitschrijven op %(event)s"
 msgid "Set the experience points configuration"
 msgstr "Stel de configuratie van de ervaringspunten in"
 
+msgid "Sum of the signup fee, total to be paid"
+msgstr "Som van de inschrijvingskosten, totaal te betalen"
+
 msgid "The number of payments to split the fee"
 msgstr "Het aantal termijnen dat moet worden betaald"
 
@@ -4771,6 +4813,9 @@ msgstr "Nu kun je prologen voor het evenement maken"
 
 msgid "Now you can create registration surcharges"
 msgstr "Nu kun je registratietoeslagen maken"
+
+msgid "Now you can create the \"new player\" ticket"
+msgstr "Nu kun je het \"nieuwe speler\"-ticket aanmaken"
 
 msgid "Now you can review participants' questions"
 msgstr "Nu kunt u de vragen van de deelnemers bekijken"
@@ -5014,6 +5059,9 @@ msgstr ""
 "Op deze pagina vindt u een overzicht van de instellingen voor het afdrukken "
 "van PDF-bestanden"
 
+msgid "Amount of the next payment instalment required"
+msgstr "Bedrag van de volgende betalingstermijn"
+
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Annulering wegens het niet betalen van de jaarlijkse contributie"
 
@@ -5061,6 +5109,9 @@ msgstr "Vergeet niet ontvangers gescheiden door komma's te plaatsen"
 
 msgid "Something went wrong in the account activation"
 msgstr "Er is iets misgegaan bij het activeren van de account"
+
+msgid "Sum of payments received with means of payment"
+msgstr "Som van ontvangen betalingen met betaalmiddelen"
 
 msgid "Text show at the start of all character sheets"
 msgstr "Tekst tonen aan het begin van alle karaktersheets"
@@ -5224,6 +5275,9 @@ msgstr "Er zijn op dit moment geen nieuwe sessies gepland"
 msgid "This page allows you to add or edit a competency"
 msgstr "Op deze pagina kun je een competentie toevoegen of bewerken"
 
+msgid "This page allows you to add or edit a px ability"
+msgstr "Op deze pagina kunt u een px-vermogen toevoegen of bewerken"
+
 msgid "This page allows you to upload a new photo album"
 msgstr "Op deze pagina kunt u een nieuw fotoalbum uploaden"
 
@@ -5292,11 +5346,17 @@ msgstr "De som is %(amount).2f, met reden '%(reason)s'"
 msgid "There are <b>%(number)s</b> characters to approve"
 msgstr "Er zijn <b>%(number)s</b> tekens om goed te keuren"
 
+msgid "This page allows you to add or edit a px delivery"
+msgstr "Op deze pagina kunt u een px-levering toevoegen of bewerken"
+
 msgid "This page allows you to edit event-specific texts"
 msgstr "Op deze pagina kun je evenement-specifieke teksten bewerken"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolerantie overschreden, doorgaan met annuleren"
+
+msgid "Unique registration code, used for payment checks"
+msgstr "Unieke registratiecode, gebruikt voor betalingscontroles"
 
 msgid "You are including (at least one of these filters)"
 msgstr "U bevat (ten minste een van) deze filters"
@@ -5550,6 +5610,9 @@ msgstr ""
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Het totale aantal te verloten tickets is aangegeven"
 
+msgid "This page allows you to add or edit a px ability type"
+msgstr "Op deze pagina kunt u een px-vaardigheidstype toevoegen of bewerken"
+
 msgid "This page allows you to add or edit a volunteer entry"
 msgstr "Op deze pagina kun je een vrijwilligersaccount toevoegen of bewerken"
 
@@ -5689,6 +5752,9 @@ msgstr "Op deze pagina kunt u gerapporteerde problemen bijhouden"
 msgid "This page shows the questions submitted by participants"
 msgstr "Deze pagina toont de vragen die zijn ingediend door deelnemers"
 
+msgid "Total of what has already been paid at the current date"
+msgstr "Totaal van wat al is betaald op de huidige datum"
+
 msgid "We encountered a problem with the tax code you provided"
 msgstr ""
 "Er is een probleem opgetreden met de belastingcode die u hebt opgegeven"
@@ -5742,6 +5808,9 @@ msgstr "Nu kun je de historische boekhoudgegevens bekijken"
 
 msgid "Select the faction on which you want to filter characters"
 msgstr "Selecteer de groepen waarop je de tekens wilt filteren"
+
+msgid "The character field of computed type that will be updated"
+msgstr "Het karakterveld van het berekende type dat wordt bijgewerkt"
 
 msgid "This page allows you to edit the event navigation buttons"
 msgstr "Op deze pagina kunt u de navigatieknoppen van de gebeurtenis bewerken"
@@ -5977,6 +6046,10 @@ msgstr ""
 msgid "These are the workshops you must complete before you can play"
 msgstr "Dit zijn de workshops die je moet voltooien voordat je kunt spelen"
 
+msgid "This page allows you to add or edit a rule on computed fields"
+msgstr ""
+"Op deze pagina kun je een regel voor berekende velden toevoegen of bewerken"
+
 msgid "This page allows you to change the access roles for the event"
 msgstr "Op deze pagina kun je de toegangsrollen voor het evenement wijzigen"
 
@@ -6160,6 +6233,9 @@ msgstr "Vragen en opties voor personages en schrijfelementen beheren"
 
 msgid "Now participants can submit collections, and you can review them"
 msgstr "Deelnemers kunnen nu collecties indienen en jij kunt ze bekijken"
+
+msgid "Part of the registration fee derived only from the ticket chosen"
+msgstr "Deel van het inschrijvingsgeld alleen afgeleid van het gekozen ticket"
 
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
@@ -6435,6 +6511,9 @@ msgid "Now participants can create refund requests, and you can review them"
 msgstr ""
 "Deelnemers kunnen nu restitutieverzoeken aanmaken en jij kunt ze bekijken"
 
+msgid "Number of days within which the player must pay his next installment"
+msgstr "Aantal dagen waarbinnen de speler zijn volgende termijn moet betalen"
+
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
 "Selecteer de bestanden die u wilt uploaden (moeten in CSV-indeling zijn, "
@@ -6623,6 +6702,11 @@ msgstr ""
 msgid "This page allows you to set your personal preferences on the interface"
 msgstr ""
 "Op deze pagina kun je je persoonlijke voorkeuren voor de interface instellen"
+
+msgid "This page summarizes the rules that are applied to the computed fields"
+msgstr ""
+"Deze pagina geeft een overzicht van de regels die worden toegepast op de "
+"berekende velden"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""
@@ -7085,6 +7169,12 @@ msgid ""
 "In the faction a character has been mentioned, but it does not seem to exist"
 msgstr ""
 "In de factie wordt een personage genoemd, maar het lijkt niet te bestaan"
+
+msgid ""
+"Part of the registration fee derived only from the additional options chosen"
+msgstr ""
+"Deel van het inschrijfgeld dat alleen is afgeleid van de gekozen extra "
+"opties"
 
 msgid ""
 "This page prepares the cash balance already formatted for annual declaration"
@@ -8756,6 +8846,13 @@ msgstr ""
 "om de functies met betrekking tot de organisatie te kunnen gebruiken"
 
 msgid ""
+"Enables 'New player' tickets, reserved for users that never participated in "
+"an event of the organization"
+msgstr ""
+"Maakt 'Nieuwe speler'-tickets mogelijk, gereserveerd voor gebruikers die nog"
+" nooit hebben deelgenomen aan een evenement van de organisatie"
+
+msgid ""
 "If checked, allows a registration form question to be visible based on the "
 "selected registration ticket."
 msgstr ""
@@ -9723,6 +9820,15 @@ msgstr ""
 "Als we niets van je horen, gaan we ervan uit dat je niet langer "
 "geïnteresseerd bent in het evenement en annuleren we je registratie om "
 "ruimte te maken voor andere deelnemers"
+
+msgid ""
+"The rule will be applied, only one time, if the character has any of the "
+"abilities. If no abilities are chosen, the rule is applied to all "
+"characters."
+msgstr ""
+"De regel wordt slechts één keer toegepast als het personage een van de "
+"vaardigheden heeft. Als er geen vaardigheden worden gekozen, wordt de regel "
+"op alle personages toegepast."
 
 msgid ""
 "Freely insert CSS commands, they will be reported in all pages  in the space"

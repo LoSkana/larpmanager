@@ -66,7 +66,7 @@ def signup(live_server, page):
     expect(page.locator("#one")).to_contain_text("Registration confirmed")
     expect(page.locator("#one")).to_contain_text("please fill in your profile.")
 
-    page.get_by_role("link", name="please fill in your profile.").click()
+    page.locator("#one").get_by_role("table").get_by_role("link", name="please fill in your profile.").click()
     page.get_by_role("checkbox", name="Authorisation").check()
     page.get_by_role("button", name="Submit").click()
     expect(page.locator("#one")).to_contain_text("Registration confirmed (Standard)")
