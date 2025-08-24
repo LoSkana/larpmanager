@@ -262,7 +262,6 @@ function search(key) {
             characters += '<div class="text"><h3><a href="{0}">{1}</a></h3>'.format(char_url.replace("/0", "/"+el['number']), name);
             characters += '<div class="go-inline"><b>{1}:</b> {0}</div>'.format(player, window['texts']['pl']);
 
-            console.log(el['fields']);
             for (const [k, value] of Object.entries(questions)) {
                 if (el['fields'][k]) {
                     var field = el['fields'][k];
