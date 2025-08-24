@@ -21,6 +21,7 @@
 from datetime import datetime
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 from tinymce.widgets import TinyMCE
@@ -320,6 +321,8 @@ class OrgaInventoryAreaForm(MyForm):
 
     load_form = ["area-assignments"]
 
+    load_js = ["area-assignments"]
+
     class Meta:
         model = InventoryArea
         exclude = []
@@ -327,50 +330,116 @@ class OrgaInventoryAreaForm(MyForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        ctx = {"a_id": self.params["request"].assoc["id"]}
-        get_inventory_optionals(ctx, [3, 4])
-        self.optionals = ctx["optionals"]
-        self.no_header_cols = ctx["no_header_cols"]
-
-        self.item_list = InventoryItem.objects.filter(assoc_id=self.params["a_id"]).prefetch_related("tags")
+        self.item_all = {}
         self.assigned = {}
-        if self.instance.pk:
-            for el in self.params["event"].get_elements(InventoryAssignment).filter(area=self.instance):
-                self.assigned[el.item_id] = {"quantity": el.quantity, "notes": el.notes}
 
-        self.item_list = sorted(self.item_list, key=lambda x: (x.id not in self.assigned, x.id))
+        self.prepare()
+
+        self.get_all_items()
+
+        self.sort_items()
 
         self.separate_handling = []
-        for item in self.item_list:
-            assigned_data = self.assigned.get(item.id, {})
+        for item in self.item_all.values():
+            self.item_fields(item)
 
-            # selected checkbox
-            sel_field = f"sel_{item.id}"
-            item.selected = item.id in self.assigned
-            self.fields[sel_field] = forms.BooleanField(
-                required=False,
-                initial=item.selected,
-            )
-            self.separate_handling.append("id_" + sel_field)
+    def item_fields(self, item):
+        assigned_data = getattr(item, "assigned", {})
 
-            # quantity
-            qty_field = f"qty_{item.id}"
-            self.fields[qty_field] = forms.IntegerField(
-                required=False,
-                initial=assigned_data.get("quantity", 0),
-                min_value=0,
-            )
-            self.separate_handling.append("id_" + qty_field)
+        # selected checkbox
+        sel_field = f"sel_{item.id}"
+        item.selected = bool(assigned_data)
+        self.fields[sel_field] = forms.BooleanField(
+            required=False,
+            initial=item.selected,
+        )
+        self.separate_handling.append("id_" + sel_field)
 
-            # notes
-            notes_field = f"notes_{item.id}"
-            self.fields[notes_field] = forms.CharField(
-                required=False,
-                initial=assigned_data.get("notes", ""),
-                widget=forms.Textarea(attrs={"rows": 2, "cols": 10}),
+        # quantity
+        qty_field = f"qty_{item.id}"
+        item.quantity_assigned = assigned_data.get("quantity", 0)
+        self.fields[qty_field] = forms.IntegerField(
+            required=False,
+            initial=item.quantity_assigned,
+            min_value=0,
+            max_value=item.available,
+        )
+        self.separate_handling.append("id_" + qty_field)
+
+        # notes
+        notes_field = f"notes_{item.id}"
+        self.fields[notes_field] = forms.CharField(
+            required=False,
+            initial=assigned_data.get("notes", ""),
+            widget=forms.Textarea(attrs={"rows": 2, "cols": 10}),
+        )
+        self.separate_handling.append("id_" + notes_field)
+
+    def prepare(self):
+        ctx = {"a_id": self.params["request"].assoc["id"]}
+        get_inventory_optionals(ctx, [4, 5])
+        self.optionals = ctx["optionals"]
+        self.no_header_cols = [4, 5]
+        if "quantity" in self.optionals:
+            self.no_header_cols = [6, 7]
+
+    def get_all_items(self):
+        for item in InventoryItem.objects.filter(assoc_id=self.params["a_id"]).prefetch_related("tags"):
+            item.available = item.quantity
+            self.item_all[item.id] = item
+
+        for el in self.params["event"].get_elements(InventoryAssignment).filter(event=self.params["event"]):
+            item = self.item_all[el.item_id]
+            if el.area_id == self.instance.pk:
+                item.assigned = {"quantity": el.quantity, "notes": el.notes}
+            else:
+                item.available -= el.quantity
+
+    def sort_items(self):
+        def _assigned_updated(it):
+            if getattr(it, "assigned", None):
+                return it.assigned.get("updated") or getattr(it, "updated", None) or datetime.min
+            return datetime.min
+
+        # items with assigned first; among them, most recently updated first; then by name, then id
+        ordered_items = sorted(
+            self.item_all.values(),
+            key=lambda it: (
+                bool(getattr(it, "assigned", None)),  # True first via reverse
+                _assigned_updated(it),  # recent first via reverse
+                getattr(it, "name", ""),  # alphabetical fallback
+                it.id,  # stable tiebreaker
+            ),
+            reverse=True,
+        )
+
+        # rebuild dict preserving the sorted order
+        self.item_all = {it.id: it for it in ordered_items}
+
+    def save(self, commit=True):
+        instance = super().save(commit=commit)
+        if not instance.pk:
+            instance.save()
+
+        to_del = []
+        for item_id, _item in self.item_all.items():
+            sel = self.cleaned_data.get(f"sel_{item_id}", False)
+
+            if not sel:
+                to_del.append(item_id)
+                continue
+
+            assignment, created = InventoryAssignment.objects.get_or_create(
+                area=instance, item_id=item_id, event=instance.event
             )
-            self.separate_handling.append("id_" + notes_field)
+            assignment.quantity = self.cleaned_data.get(f"qty_{item_id}", 0) or 0
+            assignment.notes = self.cleaned_data.get(f"notes_{item_id}", "").strip()
+
+            assignment.save()
+
+        InventoryAssignment.objects.filter(area=instance, item_id__in=to_del, event=instance.event).delete()
+
+        return instance
 
 
 class OrgaInventoryAssignmentForm(MyForm):
@@ -393,6 +462,25 @@ class OrgaInventoryAssignmentForm(MyForm):
         self.fields["item"].widget.set_assoc(self.params["a_id"])
 
         _delete_optionals_inventory(self)
+
+    def clean(self):
+        cleaned = super().clean()
+        area = cleaned.get("area")
+        item = cleaned.get("item")
+        if not area or not item:
+            return cleaned
+
+        qs = InventoryAssignment.objects.filter(
+            area=area,
+            item=item,
+        )
+        if self.instance and self.instance.pk:
+            qs = qs.exclude(pk=self.instance.pk)
+
+        if qs.exists():
+            raise ValidationError({"area": _("An assignment for this item and area already exists")})
+
+        return cleaned
 
 
 class ExeCompetenceForm(MyForm):

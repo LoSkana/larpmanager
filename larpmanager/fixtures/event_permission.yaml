@@ -771,10 +771,10 @@
 - model: larpmanager.eventpermission
   pk: 81
   fields:
-    name: Assignments
-    descr: Manage assignement of inventory items to event area
-    slug: orga_inventory_assignments
-    number: 21
+    name: Checks
+    descr: Perform checks on inventory assignments
+    slug: orga_inventory_checks
+    number: 41
     config: inventory
     hidden: false
     feature: 66

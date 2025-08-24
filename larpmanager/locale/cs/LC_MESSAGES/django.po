@@ -465,6 +465,9 @@ msgstr "Causale"
 msgid "Change"
 msgstr "Upravit"
 
+msgid "Checks"
+msgstr "Kontroly"
+
 msgid "Delete"
 msgstr "Odstranit"
 
@@ -4620,6 +4623,9 @@ msgstr "Nyní můžete zkontrolovat problémy události"
 msgid "Now you can se the special page options"
 msgstr "Nyní můžete zobrazit speciální možnosti stránky"
 
+msgid "Perform checks on inventory assignments"
+msgstr "Provádění kontrol přiřazení zásob"
+
 msgid "Photos and videos successfully uploaded"
 msgstr "Fotografie a videa byly úspěšně nahrány"
 
@@ -5439,6 +5445,9 @@ msgstr "skrytá frakce viditelná pouze pro přiřazené postavy"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "pokud si přejete, můžete zaplatit zbývající částku"
 
+msgid "An assignment for this item and area already exists"
+msgstr "Pro tuto položku a oblast již existuje přiřazení"
+
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Přiřazeno %(amount).2f %(elements)s pro '%(reason)s'"
@@ -5458,9 +5467,6 @@ msgstr "V tuto chvíli nemůžete zaplatit členský poplatek"
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Připojte se k našemu Discordu a získejte pomoc, nápady nebo nahlaste chyby"
-
-msgid "Manage assignement of inventory items to event area"
-msgstr "Správa přiřazení inventárních položek k oblasti události"
 
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Vyberte prosím jasnou a snadno rozpoznatelnou fotografii"
@@ -7269,6 +7275,13 @@ msgid ""
 "Request for reimbursement entered! You will receive notice when it is "
 "processed."
 msgstr "Žádost o proplacení zadána! Po jejím zpracování obdržíte oznámení."
+
+msgid ""
+"This page displays cases where the same item has been assigned to multiple "
+"areas"
+msgstr ""
+"Tato stránka zobrazuje případy, kdy byla stejná položka přiřazena k více "
+"oblastem"
 
 msgid ""
 "Total amount of money received for this event, minus commission fees and "

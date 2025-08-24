@@ -465,6 +465,9 @@ msgstr "Concepto"
 msgid "Change"
 msgstr "Editar"
 
+msgid "Checks"
+msgstr "Comprobaciones"
+
 msgid "Delete"
 msgstr "Borrar"
 
@@ -4620,6 +4623,9 @@ msgstr "Ahora puedes revisar los problemas del evento"
 msgid "Now you can se the special page options"
 msgstr "Ahora puedes ver las opciones de la página especial"
 
+msgid "Perform checks on inventory assignments"
+msgstr "Realizar comprobaciones de las asignaciones de inventario"
+
 msgid "Photos and videos successfully uploaded"
 msgstr "¡Fotos y vídeos cargados correctamente"
 
@@ -5441,6 +5447,9 @@ msgstr "facción oculta visible sólo para los personajes asignados"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "aún puede pagar el importe restante si lo desea"
 
+msgid "An assignment for this item and area already exists"
+msgstr "Ya existe una asignación para este artículo y área"
+
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Asignado %(amount).2f %(elements)s para '%(reason)s'"
@@ -5460,10 +5469,6 @@ msgstr "No puedes hacer tus pagos pendientes en este momento"
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Únete a nuestro Discord para obtener ayuda, ideas o informar de errores"
-
-msgid "Manage assignement of inventory items to event area"
-msgstr ""
-"Gestionar la asignación de artículos del inventario al área del evento"
 
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Elija una foto clara y fácilmente reconocible"
@@ -7465,6 +7470,13 @@ msgid ""
 "processed."
 msgstr ""
 "¡Solicitud de reembolso introducida! Recibirá un aviso cuando se tramite."
+
+msgid ""
+"This page displays cases where the same item has been assigned to multiple "
+"areas"
+msgstr ""
+"Esta página muestra los casos en los que el mismo artículo se ha asignado a "
+"varias áreas"
 
 msgid ""
 "Total amount of money received for this event, minus commission fees and "

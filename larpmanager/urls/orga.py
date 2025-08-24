@@ -1036,18 +1036,18 @@ urlpatterns = [
         name="orga_inventory_area_edit",
     ),
     path(
-        "<slug:s>/<int:n>/manage/inventory/assignments/",
-        views_oms.orga_inventory_assignments,
-        name="orga_inventory_assignments",
-    ),
-    path(
-        "<slug:s>/<int:n>/manage/inventory/assignments/edit/<int:num>/",
-        views_oms.orga_inventory_assignments_edit,
-        name="orga_inventory_assignments_edit",
+        "<slug:s>/<int:n>/manage/inventory/checks/",
+        views_oms.orga_inventory_checks,
+        name="orga_inventory_checks",
     ),
     path(
         "<slug:s>/<int:n>/manage/inventory/manifest/",
         views_oms.orga_inventory_manifest,
         name="orga_inventory_manifest",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/inventory/manifest/edit/<int:num>/",
+        views_oms.orga_inventory_manifest_edit,
+        name="orga_inventory_manifest_edit",
     ),
 ]

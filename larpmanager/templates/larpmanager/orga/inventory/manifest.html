@@ -7,16 +7,17 @@
     {% trans "This page shows the cargo manifest, and the status of each item assignment" %}
 {% endblock info %}
 {% block content %}
+    {% include "elements/header/orga.html" %}
     {% for area in list %}
         <h2>{{ area }}</h2>
         {% if area.position %}
             <p>
-                <b>{% trans "Position" %}:</b>{{ area.position }}
+                <b>{% trans "Position" %}:</b> {{ area.position }}
             </p>
         {% endif %}
         {% if area.description %}
             <p>
-                <b>{% trans "Description" %}:</b>{{ area.description }}
+                <b>{% trans "Description" %}:</b> {{ area.description }}
             </p>
         {% endif %}
         <table id="inv_manifest_{{ area.id }}"
@@ -24,12 +25,13 @@
                no_header_cols="{{ no_header_cols }}">
             <thead>
                 <tr>
+                    <th></th>
+                    <th>{% trans "Item" %}</th>
+                    <th>{% trans "Container" %}</th>
                     <th>{% trans "Loaded" %}</th>
                     {% if optionals.quantity %}
                         <th>{% trans "Quantity" %}</th>
                     {% endif %}
-                    <th>{% trans "Item" %}</th>
-                    <th>{% trans "Container" %}</th>
                     <th>{% trans "Notes" %}</th>
                     <th>{% trans "Photo" %}</th>
                     <th>{% trans "Deployed" %}</th>
@@ -39,6 +41,15 @@
                 {% for el in area.assignments.all %}
                     <tr id="{{ el.id }}">
                         <td>
+                            <a href="{% url 'orga_inventory_manifest_edit' event.slug run.number el.id %}"
+                               qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                        </td>
+                        <td>{{ el.item }}</td>
+                        <td>
+                            {{ el.item.container }}
+                            {% if el.item.container.position %}- {{ el.item.container.position | truncatechars:50 }}{% endif %}
+                        </td>
+                        <td>
                             <input type="checkbox" />
                         </td>
                         {% if optionals.quantity %}
@@ -46,11 +57,6 @@
                                 {% if el.quantity %}{{ el.quantity }}{% endif %}
                             </td>
                         {% endif %}
-                        <td>{{ el.item }}</td>
-                        <td>
-                            {{ el.item.container }}
-                            {% if el.item.container.position %}- {{ el.item.container.position | truncatechars:50 }}{% endif %}
-                        </td>
                         <td>{{ el.notes }}</td>
                         <td>
                             {% if el.item.photo %}

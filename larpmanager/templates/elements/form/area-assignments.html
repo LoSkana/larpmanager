@@ -4,10 +4,12 @@
        no_header_cols="{{ form.no_header_cols }}">
     <thead>
         <tr>
+            <th></th>
             <th>{% trans "Selected" %}</th>
             <th>{% trans "Item" %}</th>
             <th>{% trans "Tags" %}</th>
             {% if form.optionals.quantity %}
+                <th>{% trans "Available" %}</th>
                 <th>{% trans "Quantity" %}</th>
             {% endif %}
             <th>{% trans "Notes" %}</th>
@@ -15,16 +17,21 @@
         </tr>
     </thead>
     <tbody>
-        {% for el in form.item_list %}
+        {% for el in form.item_all.values %}
             {% with idstr=el.id|stringformat:"s" %}
                 {% with sel="sel_"|add:idstr qty="qty_"|add:idstr notes="notes_"|add:idstr %}
                     <tr id="{{ el.id }}">
-                        <td data-order="{% if item.selected %}1{% else %}0{% endif %}">{{ form|get_form_field:sel }}</td>
+                        <td></td>
+                        <td data-order="{% if item.selected %}1{% else %}0{% endif %}"
+                            class="inp-sel">{{ form|get_form_field:sel }}</td>
                         <td>{{ el }}</td>
                         <td>
                             {% for tag in el.tags.all %}{{ tag }}{% endfor %}
                         </td>
-                        {% if form.optionals.quantity %}<td>{{ form|get_form_field:qty }}</td>{% endif %}
+                        {% if form.optionals.quantity %}
+                            <td>{{ el.available }}</td>
+                            <td data-order="{{ el.quantity_assigned }}" class="inp-quantity">{{ form|get_form_field:qty }}</td>
+                        {% endif %}
                         <td>{{ form|get_form_field:notes }}</td>
                         <td>
                             {% if el.photo %}
@@ -41,3 +48,4 @@
         {% endfor %}
     </tbody>
 </table>
+<hr />

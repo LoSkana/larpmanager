@@ -1742,6 +1742,9 @@ msgstr ""
 msgid "Inventory assignments"
 msgstr ""
 
+msgid "An assignment for this item and area already exists"
+msgstr ""
+
 msgid "This page allows you to add or edit a competency"
 msgstr ""
 
@@ -6431,6 +6434,11 @@ msgid ""
 "This page shows the event area where inventory items needs to be deployed"
 msgstr ""
 
+msgid ""
+"This page displays cases where the same item has been assigned to multiple "
+"areas"
+msgstr ""
+
 msgid "Area"
 msgstr ""
 
@@ -8132,7 +8140,10 @@ msgstr ""
 msgid "Manage area of the event"
 msgstr ""
 
-msgid "Manage assignement of inventory items to event area"
+msgid "Checks"
+msgstr ""
+
+msgid "Perform checks on inventory assignments"
 msgstr ""
 
 msgid "Manifest"
