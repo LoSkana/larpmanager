@@ -82,6 +82,7 @@ class Event(BaseModel):
     description = HTMLField(
         max_length=10000,
         blank=True,
+        default="",
         verbose_name=_("Description"),
         help_text=_("Event description displayed on the event page"),
     )

@@ -266,10 +266,10 @@ function search(key) {
                 if (el['fields'][k]) {
                     var field = el['fields'][k];
                     if (Array.isArray(field)) {
-                        field = field.map(id => options[id]['display']);
+                        field = field.map(id => options[id]['name']);
                         field = field.join(', ');
                     }
-                    characters += '<div class="go-inline"><b>{0}:</b> {1}</div>'.format(value['display'], field);
+                    characters += '<div class="go-inline"><b>{0}:</b> {1}</div>'.format(value['name'], field);
                 }
             }
 
@@ -324,7 +324,7 @@ function get_included_labels() {
 
     for (const [cf, value] of Object.entries(searchable)) {
         el = filters['field_' + cf]['sel_l'];
-        if (el.size > 0) txt.push(questions[cf]['display'] + ': ' + Array.from(el).join(', '));
+        if (el.size > 0) txt.push(questions[cf]['name'] + ': ' + Array.from(el).join(', '));
     }
 
     if (txt.length == 0)
@@ -349,7 +349,7 @@ function get_escluded_labels() {
 
     for (const [cf, value] of Object.entries(searchable)) {
         el = filters['field_' + cf]['nsel_l'];
-        if (el.size > 0) txt.push(questions[cf]['display'] + ': ' + Array.from(el).join(', '));
+        if (el.size > 0) txt.push(questions[cf]['name'] + ': ' + Array.from(el).join(', '));
     }
 
     if (txt.length == 0)

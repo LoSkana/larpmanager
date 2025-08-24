@@ -167,9 +167,13 @@ window.addEventListener('DOMContentLoaded', function() {
 
     }
 
-    {% if intro_driver and request.enviro == "prod" %} driverIntro();{% endif %}
-
     jQuery(function(){
+        {% if intro_driver and request.enviro == "prod" %}
+        $(document).on("lm_ready", function() {
+            driverIntro();
+        });
+        {% endif %}
+
         $('#intro_driver').on('click', driverIntro);
     });
 
