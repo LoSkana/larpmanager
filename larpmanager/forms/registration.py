@@ -345,7 +345,7 @@ class RegistrationForm(BaseRegistrationForm):
         elif ticket.tier == TicketTier.NEW_PLAYER:
             past_regs = Registration.objects.filter(cancellation_date__isnull=True)
             past_regs = past_regs.exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC])
-            past_regs = past_regs.filter(member=self.params["request"].user.member).exclude(run=run)
+            past_regs = past_regs.filter(member=self.params["member"]).exclude(run=run)
             if past_regs.exists():
                 result = True
 
