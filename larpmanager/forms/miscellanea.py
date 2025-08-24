@@ -347,9 +347,10 @@ class OrgaInventoryAreaForm(MyForm):
 
             # selected checkbox
             sel_field = f"sel_{item.id}"
+            item.selected = item.id in self.assigned
             self.fields[sel_field] = forms.BooleanField(
                 required=False,
-                initial=item.id in self.assigned,
+                initial=item.selected,
             )
             self.separate_handling.append("id_" + sel_field)
 
