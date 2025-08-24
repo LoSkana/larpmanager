@@ -115,3 +115,15 @@ def post_save_rule_px(sender, instance, *args, **kwargs):
     event = instance.event.get_class_parent(RulePx)
     for char in event.get_elements(Character).all():
         update_px(char)
+
+
+def rule_abilities_changed(sender, instance, action, pk_set, **kwargs):
+    if action not in {"post_add", "post_remove", "post_clear"}:
+        return
+
+    event = instance.event.get_class_parent(RulePx)
+    for char in event.get_elements(Character).all():
+        update_px(char)
+
+
+m2m_changed.connect(rule_abilities_changed, sender=RulePx.abilities.through)
