@@ -1416,6 +1416,9 @@ msgstr "Čistý zisk"
 msgid "New answer"
 msgstr "Nová odpověď"
 
+msgid "New player"
+msgstr "Nový hráč"
+
 msgid "New signup"
 msgstr "Nové položky"
 
@@ -4805,6 +4808,9 @@ msgstr "Nyní můžete vytvářet prology k události"
 
 msgid "Now you can create registration surcharges"
 msgstr "Nyní můžete vytvářet registrační příplatky"
+
+msgid "Now you can create the \"new player\" ticket"
+msgstr "Nyní můžete vytvořit tip \"nový hráč\""
 
 msgid "Now you can review participants' questions"
 msgstr "Nyní si můžete prohlédnout otázky účastníků"
@@ -8557,6 +8563,13 @@ msgid ""
 msgstr ""
 "Na této stránce jsou shrnuty role, které je třeba přidělit, aby bylo možné "
 "používat funkce týkající se organizace"
+
+msgid ""
+"Enables 'New player' tickets, reserved for users that never participated in "
+"an event of the organization"
+msgstr ""
+"Povoluje vstupenky \"Nový hráč\", které jsou vyhrazeny pro uživatele, kteří "
+"se nikdy nezúčastnili žádné události organizace"
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "

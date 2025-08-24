@@ -1416,6 +1416,9 @@ msgstr "Bénéfice net"
 msgid "New answer"
 msgstr "Nouvelle réponse"
 
+msgid "New player"
+msgstr "Nouveau joueur"
+
 msgid "New signup"
 msgstr "Nouvelles entrées"
 
@@ -4809,6 +4812,9 @@ msgstr "Vous pouvez maintenant créer des prologues pour l'événement"
 
 msgid "Now you can create registration surcharges"
 msgstr "Vous pouvez désormais créer des surtaxes d'enregistrement"
+
+msgid "Now you can create the \"new player\" ticket"
+msgstr "Vous pouvez maintenant créer le ticket \"nouveau joueur\""
 
 msgid "Now you can review participants' questions"
 msgstr "Vous pouvez maintenant passer en revue les questions des participants"
@@ -8946,6 +8952,13 @@ msgid ""
 msgstr ""
 "Cette page résume les rôles à attribuer pour utiliser les fonctions "
 "concernant l'organisation"
+
+msgid ""
+"Enables 'New player' tickets, reserved for users that never participated in "
+"an event of the organization"
+msgstr ""
+"Permet de créer des billets \"nouveau joueur\", réservés aux utilisateurs "
+"qui n'ont jamais participé à un événement de l'organisation"
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "

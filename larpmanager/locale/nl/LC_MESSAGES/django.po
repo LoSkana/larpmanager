@@ -1416,6 +1416,9 @@ msgstr "Nettowinst"
 msgid "New answer"
 msgstr "Nieuw antwoord"
 
+msgid "New player"
+msgstr "Nieuwe speler"
+
 msgid "New signup"
 msgstr "Nieuwe inzendingen"
 
@@ -4807,6 +4810,9 @@ msgstr "Nu kun je prologen voor het evenement maken"
 
 msgid "Now you can create registration surcharges"
 msgstr "Nu kun je registratietoeslagen maken"
+
+msgid "Now you can create the \"new player\" ticket"
+msgstr "Nu kun je het \"nieuwe speler\"-ticket aanmaken"
 
 msgid "Now you can review participants' questions"
 msgstr "Nu kunt u de vragen van de deelnemers bekijken"
@@ -8835,6 +8841,13 @@ msgid ""
 msgstr ""
 "Deze pagina geeft een overzicht van de rollen die moeten worden toegewezen "
 "om de functies met betrekking tot de organisatie te kunnen gebruiken"
+
+msgid ""
+"Enables 'New player' tickets, reserved for users that never participated in "
+"an event of the organization"
+msgstr ""
+"Maakt 'Nieuwe speler'-tickets mogelijk, gereserveerd voor gebruikers die nog"
+" nooit hebben deelgenomen aan een evenement van de organisatie"
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "

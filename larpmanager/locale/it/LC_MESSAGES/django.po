@@ -1416,6 +1416,9 @@ msgstr "Utile netto"
 msgid "New answer"
 msgstr "Nuova risposta"
 
+msgid "New player"
+msgstr "Nuovo giocatore"
+
 msgid "New signup"
 msgstr "Nuove iscrizioni"
 
@@ -4216,7 +4219,7 @@ msgid "Find out what quests are available"
 msgstr "Scopri le quest disponibili"
 
 msgid "If checked, allow ticket tier: NPC"
-msgstr "Se selezionata, consente il livello dei biglietti: PNG"
+msgstr "Se selezionata, abilita il livello dei biglietti: PNG"
 
 msgid "Manage the registration surcharges"
 msgstr "Gestisci i supplementi di registrazione"
@@ -4365,7 +4368,7 @@ msgid "Feature %(name)s already deactivated"
 msgstr "Funzionalità %(name)s già disattivata"
 
 msgid "If checked, allow ticket tier: Staff"
-msgstr "Se selezionata, consente il livello di biglietto: Staff"
+msgstr "Se selezionata, abilita il livello di biglietto: Staff"
 
 msgid "Indicate the amount of your donation"
 msgstr "Indica la cifra della tua donazione"
@@ -4447,7 +4450,7 @@ msgid "Hide participants without a character"
 msgstr "Nascondi i partecipanti senza personaggio"
 
 msgid "If checked, allow ticket tier: Seller"
-msgstr "Se selezionata, consente il livello del biglietto: Venditore"
+msgstr "Se selezionata, abilita il livello del biglietto: Venditore"
 
 msgid "Location - rent, gas, overnight stays"
 msgstr "Location - affitto, gas, pernottamenti"
@@ -4806,6 +4809,9 @@ msgstr "Ora è possibile creare prologhi per l'evento"
 msgid "Now you can create registration surcharges"
 msgstr "Ora è possibile creare supplementi di registrazione"
 
+msgid "Now you can create the \"new player\" ticket"
+msgstr "A questo punto è possibile creare il biglietto \"nuovo giocatore"
+
 msgid "Now you can review participants' questions"
 msgstr "Ora è possibile rivedere le domande dei partecipanti"
 
@@ -4874,7 +4880,7 @@ msgid "Freely indicate the amount of your donation"
 msgstr "Indica liberamente l'ammontare della tua donazione"
 
 msgid "If checked, allow ticket tier: Collaborator"
-msgstr "Se selezionata, consente il ticket tier: Collaboratore"
+msgstr "Se selezionata, abilita il ticket tier: Collaboratore"
 
 msgid "If there are wrong data you can update your"
 msgstr "Se vi sono dati errati aggiorna il tuo"
@@ -7010,8 +7016,8 @@ msgstr ""
 msgid ""
 "If checked, it allows participants to customise their characters' pronouns"
 msgstr ""
-"Se selezionata, consente ai partecipanti di personalizzare i pronomi dei "
-"loro personaggi"
+"Se selezionata, abilita ai partecipanti di personalizzare i pronomi dei loro"
+" personaggi"
 
 msgid ""
 "Indicate the organization nationality to activate nation-specific features"
@@ -8865,6 +8871,13 @@ msgid ""
 msgstr ""
 "Questa pagina riepiloga i ruoli da assegnare per utilizzare le funzioni "
 "relative all'organizzazione"
+
+msgid ""
+"Enables 'New player' tickets, reserved for users that never participated in "
+"an event of the organization"
+msgstr ""
+"Abilita i biglietti \"Nuovo giocatore\", riservati agli utenti che non hanno"
+" mai partecipato a un evento dell'organizzazione"
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "
