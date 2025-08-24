@@ -3708,6 +3708,9 @@ msgstr "Nazwa kompetencji"
 msgid "These fields are mandatory"
 msgstr "Te pola są obowiązkowe"
 
+msgid "Total remaining to be paid"
+msgstr "Całkowita kwota pozostała do zapłaty"
+
 msgid "View photos from the event"
 msgstr "Zobacz zdjęcia z wydarzenia"
 
@@ -3725,6 +3728,9 @@ msgstr "Musisz użyć kodu znajomego"
 
 msgid "(click on image to enlarge)"
 msgstr "(kliknij na obrazek, aby powiększyć)"
+
+msgid "Additional free payment fee"
+msgstr "Dodatkowa bezpłatna opłata za płatność"
 
 #, python-format
 msgid "Bring a friend to %(event)s"
@@ -4108,6 +4114,9 @@ msgstr "Dodano pozycję wniosku o zwrot kosztów"
 
 msgid "Select a file with extension csv"
 msgstr "Wybierz plik z rozszerzeniem csv"
+
+msgid "Sum of payments received through"
+msgstr "Suma płatności otrzymanych za pośrednictwem"
 
 msgid "The setting / genre of the event"
 msgstr "Otoczenie / gatunek wydarzenia"
@@ -4615,6 +4624,9 @@ msgstr "Anulowanie rejestracji na %(event)s"
 msgid "Set the experience points configuration"
 msgstr "Konfiguracja punktów doświadczenia"
 
+msgid "Sum of the signup fee, total to be paid"
+msgstr "Suma opłaty rejestracyjnej, całkowita kwota do zapłaty"
+
 msgid "The number of payments to split the fee"
 msgstr "Liczba płatności do podziału opłaty"
 
@@ -5033,6 +5045,9 @@ msgstr "Ta strona pokazuje wstępne zapisy na wydarzenie"
 msgid "This page shows the settings for PDF printing"
 msgstr "Na tej stronie przedstawiono ustawienia drukowania plików PDF"
 
+msgid "Amount of the next payment instalment required"
+msgstr "Wymagana kwota kolejnej raty płatności"
+
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Anulowanie z powodu braku rocznej opłaty członkowskiej"
 
@@ -5080,6 +5095,9 @@ msgstr "Pamiętaj, aby oddzielić odbiorców przecinkami"
 
 msgid "Something went wrong in the account activation"
 msgstr "Coś poszło nie tak podczas aktywacji konta"
+
+msgid "Sum of payments received with means of payment"
+msgstr "Suma płatności otrzymanych za pomocą środków płatniczych"
 
 msgid "Text show at the start of all character sheets"
 msgstr "Tekst wyświetlany na początku wszystkich arkuszy postaci"
@@ -5319,6 +5337,9 @@ msgstr "Ta strona umożliwia edycję tekstów specyficznych dla wydarzenia"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Przekroczona tolerancja, kontynuuj anulowanie"
+
+msgid "Unique registration code, used for payment checks"
+msgstr "Unikalny kod rejestracyjny, używany do kontroli płatności"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Uwzględniasz (co najmniej jeden z tych filtrów)"
@@ -5707,6 +5728,9 @@ msgstr "Ta strona umożliwia śledzenie zgłoszonych problemów"
 
 msgid "This page shows the questions submitted by participants"
 msgstr "Na tej stronie znajdują się pytania przesłane przez uczestników"
+
+msgid "Total of what has already been paid at the current date"
+msgstr "Suma kwot już zapłaconych na bieżący dzień"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Napotkaliśmy problem z podanym kodem podatkowym"
@@ -6161,6 +6185,9 @@ msgstr ""
 msgid "Now participants can submit collections, and you can review them"
 msgstr "Teraz uczestnicy mogą przesyłać kolekcje, a Ty możesz je przeglądać"
 
+msgid "Part of the registration fee derived only from the ticket chosen"
+msgstr "Część opłaty rejestracyjnej pochodzi wyłącznie z wybranego biletu"
+
 msgid "The payment was not completed. Please contact us to find out why"
 msgstr ""
 "Płatność nie została zrealizowana. Skontaktuj się z nami, aby dowiedzieć się"
@@ -6411,6 +6438,9 @@ msgid "Now participants can create refund requests, and you can review them"
 msgstr ""
 "Teraz uczestnicy mogą tworzyć wnioski o zwrot pieniędzy, a Ty możesz je "
 "przeglądać"
+
+msgid "Number of days within which the player must pay his next installment"
+msgstr "Liczba dni, w ciągu których gracz musi zapłacić kolejną ratę"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -7029,6 +7059,11 @@ msgstr ""
 msgid ""
 "In the faction a character has been mentioned, but it does not seem to exist"
 msgstr "We frakcji wspomniano o postaci, ale wydaje się ona nie istnieć"
+
+msgid ""
+"Part of the registration fee derived only from the additional options chosen"
+msgstr ""
+"Część opłaty rejestracyjnej wynika tylko z wybranych opcji dodatkowych"
 
 msgid ""
 "This page prepares the cash balance already formatted for annual declaration"
