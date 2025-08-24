@@ -330,6 +330,8 @@ $(document).ready(function() {
     $('#footer .inner').fadeIn(100);
 
     show_sidebar_active();
+
+    $(document).trigger("lm_ready");
 });
 
 function show_sidebar_active() {

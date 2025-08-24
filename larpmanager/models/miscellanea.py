@@ -360,9 +360,9 @@ class WorkshopOption(BaseModel):
 class InventoryContainer(BaseModel):
     name = models.CharField(max_length=100, help_text=_("Code of the box or shelf"))
 
-    position = models.CharField(max_length=100, help_text=_("Where it is located"), blank=True, null=True)
+    position = models.CharField(max_length=100, help_text=_("Where it is located"), blank=True, default="")
 
-    description = models.CharField(max_length=1000, blank=True, null=True)
+    description = models.CharField(max_length=1000, blank=True, default="")
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="containers")
 
@@ -370,7 +370,7 @@ class InventoryContainer(BaseModel):
 class InventoryTag(BaseModel):
     name = models.CharField(max_length=100)
 
-    description = models.CharField(max_length=1000, blank=True, null=True)
+    description = models.CharField(max_length=1000, blank=True, default="")
 
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="tags")
 
@@ -380,7 +380,7 @@ class InventoryItem(BaseModel):
 
     quantity = models.IntegerField(blank=True, null=True)
 
-    description = models.CharField(max_length=1000, blank=True, null=True)
+    description = models.CharField(max_length=1000, blank=True, default="")
 
     container = models.ForeignKey(InventoryContainer, on_delete=models.CASCADE, related_name="items")
 
@@ -429,9 +429,9 @@ class InventoryMovement(BaseModel):
 class InventoryArea(BaseModel):
     name = models.CharField(max_length=100, help_text=_("Name of event area"))
 
-    position = models.CharField(max_length=100, help_text=_("Where it is"), blank=True, null=True)
+    position = models.CharField(max_length=100, help_text=_("Where it is"), blank=True, default="")
 
-    description = models.CharField(max_length=1000, blank=True, null=True)
+    description = models.CharField(max_length=1000, blank=True, default="")
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="area")
 
@@ -443,7 +443,7 @@ class InventoryAssignment(BaseModel):
 
     item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE, related_name="assignments")
 
-    notes = models.CharField(max_length=1000, blank=True, null=True)
+    notes = models.CharField(max_length=1000, blank=True, default="")
 
     loaded = models.BooleanField(default=False)
 

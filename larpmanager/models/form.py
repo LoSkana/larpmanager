@@ -169,6 +169,7 @@ class WritingQuestion(BaseModel):
     description = models.CharField(
         max_length=1000,
         blank=True,
+        default="",
         verbose_name=_("Description"),
         help_text=_("Optional - Extended description (displayed in small gray text)"),
     )
@@ -263,7 +264,7 @@ class WritingOption(BaseModel):
     description = models.CharField(
         max_length=500,
         blank=True,
-        null=True,
+        default="",
         verbose_name=_("Description"),
         help_text=_("Optional – Additional information about the option, displayed below the question"),
     )
@@ -350,6 +351,7 @@ class RegistrationQuestion(BaseModel):
     description = models.CharField(
         max_length=1000,
         blank=True,
+        default="",
         verbose_name=_("Description"),
         help_text=_("Optional - Extended description (displayed in small gray text)"),
     )
@@ -511,7 +513,7 @@ class RegistrationOption(BaseModel):
     description = models.CharField(
         max_length=500,
         blank=True,
-        null=True,
+        default="",
         verbose_name=_("Description"),
         help_text=_("Optional – Additional information about the option, displayed below the question"),
     )

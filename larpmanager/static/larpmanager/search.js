@@ -262,14 +262,15 @@ function search(key) {
             characters += '<div class="text"><h3><a href="{0}">{1}</a></h3>'.format(char_url.replace("/0", "/"+el['number']), name);
             characters += '<div class="go-inline"><b>{1}:</b> {0}</div>'.format(player, window['texts']['pl']);
 
+            console.log(el['fields']);
             for (const [k, value] of Object.entries(questions)) {
                 if (el['fields'][k]) {
                     var field = el['fields'][k];
                     if (Array.isArray(field)) {
-                        field = field.map(id => options[id]['display']);
+                        field = field.map(id => options[id]['name']);
                         field = field.join(', ');
                     }
-                    characters += '<div class="go-inline"><b>{0}:</b> {1}</div>'.format(value['display'], field);
+                    characters += '<div class="go-inline"><b>{0}:</b> {1}</div>'.format(value['name'], field);
                 }
             }
 
@@ -324,7 +325,7 @@ function get_included_labels() {
 
     for (const [cf, value] of Object.entries(searchable)) {
         el = filters['field_' + cf]['sel_l'];
-        if (el.size > 0) txt.push(questions[cf]['display'] + ': ' + Array.from(el).join(', '));
+        if (el.size > 0) txt.push(questions[cf]['name'] + ': ' + Array.from(el).join(', '));
     }
 
     if (txt.length == 0)
@@ -349,7 +350,7 @@ function get_escluded_labels() {
 
     for (const [cf, value] of Object.entries(searchable)) {
         el = filters['field_' + cf]['nsel_l'];
-        if (el.size > 0) txt.push(questions[cf]['display'] + ': ' + Array.from(el).join(', '));
+        if (el.size > 0) txt.push(questions[cf]['name'] + ': ' + Array.from(el).join(', '));
     }
 
     if (txt.length == 0)
