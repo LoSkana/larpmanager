@@ -1103,7 +1103,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
     def _add_reg_configs(self, event_id, help_text):
         if not has_event_permission(
-            self.params, self.params["request"], self.params["event"].slug, "orga_registrations"
+            self.params["request"], self.params, self.params["event"].slug, "orga_registrations"
         ):
             return
 
