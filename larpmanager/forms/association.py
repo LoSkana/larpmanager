@@ -234,6 +234,8 @@ class ExeFeatureForm(FeatureForm):
         "This page allows you to select the features activated for the organization, and all its events (click on a feature to show its description)"
     )
 
+    load_js = ["feature-search"]
+
     class Meta:
         model = Association
         fields = []
