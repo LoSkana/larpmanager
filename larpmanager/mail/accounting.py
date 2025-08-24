@@ -418,14 +418,14 @@ def notify_invoice_check(inv):
             idx = int(mb)
             orga = Member.objects.get(pk=idx)
             activate(orga.language)
-            body, subj = get_invoice_email(inv)
+            subj, body = get_invoice_email(inv)
             my_send_mail(subj, body, orga, inv)
 
     # if it is for a sign up, send the confirmation to the organizers
     elif inv.typ == PaymentType.REGISTRATION and inv.reg:
         for orga in get_event_organizers(inv.reg.run.event):
             activate(orga.language)
-            body, subj = get_invoice_email(inv)
+            subj, body = get_invoice_email(inv)
             my_send_mail(subj, body, orga, inv)
 
     # if nothing else applies, simply send to the main mail
@@ -459,4 +459,4 @@ def get_invoice_email(inv):
     if "-" in causal:
         causal = causal.split("-", 1)[1].strip()
     subj = hdr(inv) + _("Payment to check") + ": " + causal
-    return body, subj
+    return subj, body
