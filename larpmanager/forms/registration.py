@@ -335,33 +335,45 @@ class RegistrationForm(BaseRegistrationForm):
         return False
 
     def skip_ticket_type(self, event, run, ticket):
+        result = False
+
+        # skip it ticket already selected
         if "ticket" in self.params:
-            return False
+            result = True
+
+        # do not show new player tickets if already played
+        elif ticket.tier == TicketTier.NEW_PLAYER:
+            past_regs = Registration.objects.filter(cancellation_date__isnull=True)
+            past_regs = past_regs.exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC])
+            past_regs = past_regs.filter(member=self.params["request"].user.member).exclude(run=run)
+            if past_regs.exists():
+                result = True
 
         # Show Waiting tickets only if you are Waiting, or if the player is enrolled in Waiting
-        if ticket.tier == TicketTier.WAITING:
+        elif ticket.tier == TicketTier.WAITING:
             if "waiting" not in run.status and not self.has_ticket(TicketTier.WAITING):
-                return True
+                result = True
 
+        # Show Filler Tickets only if you have been filler or primary, or if the player is signed up for Filler
         elif ticket.tier == TicketTier.FILLER:
             filler_alway = event.get_config("filler_alway", False)
             if filler_alway:
-                # Show Filler Tickets only if you have been filler or primary, or if the player is signed up for Filler
                 if (
                     "filler" not in run.status
                     and "primary" not in run.status
                     and not self.has_ticket(TicketTier.FILLER)
                 ):
-                    return True
-            # Show Filler Tickets only if you have been fillers, or if the player is subscribed Filler
+                    result = True
+
+            # Show Filler Tickets only if you have been fillers, or if the player
             elif "filler" not in run.status and not self.has_ticket(TicketTier.FILLER):
-                return True
+                result = True
 
         # Show Primary Tickets only if he was primary, or if the player is registered
         elif "primary" not in run.status and not self.has_ticket_primary():
-            return True
+            result = True
 
-        return False
+        return result
 
     def clean(self):
         form_data = super().clean()
@@ -684,6 +696,7 @@ class OrgaRegistrationTicketForm(MyForm):
             TicketTier.FILLER: "filler",
             TicketTier.PATRON: "reduced",
             TicketTier.REDUCED: "reduced",
+            TicketTier.NEW_PLAYER: "new_player",
         }
         ticket_configs = {
             TicketTier.STAFF: "staff",

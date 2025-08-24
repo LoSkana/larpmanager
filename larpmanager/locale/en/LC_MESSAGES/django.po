@@ -3502,6 +3502,9 @@ msgstr ""
 msgid "Who takes it upon themselves to solve it"
 msgstr ""
 
+msgid "New player"
+msgstr ""
+
 msgid "Waiting"
 msgstr ""
 
@@ -7736,6 +7739,14 @@ msgid "Check the validity of the fiscal code"
 msgstr ""
 
 msgid "Now you can peform the fiscal code validity check"
+msgstr ""
+
+msgid ""
+"Enables 'New player' tickets, reserved for users that never participated in "
+"an event of the organization"
+msgstr ""
+
+msgid "Now you can create the \"new player\" ticket"
 msgstr ""
 
 msgid "Manage the organization main settings"

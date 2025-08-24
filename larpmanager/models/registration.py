@@ -35,6 +35,7 @@ from larpmanager.models.writing import Character
 
 class TicketTier(models.TextChoices):
     STANDARD = "b", _("Standard")
+    NEW_PLAYER = "y", _("New player")
     LOTTERY = "l", _("Lottery")
     WAITING = "w", _("Waiting")
     FILLER = "f", _("Filler")

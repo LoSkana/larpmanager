@@ -1416,6 +1416,9 @@ msgstr "Nettoresultat"
 msgid "New answer"
 msgstr "Nytt svar"
 
+msgid "New player"
+msgstr "Ny spiller"
+
 msgid "New signup"
 msgstr "Nye oppføringer"
 
@@ -4807,6 +4810,9 @@ msgstr "Nå kan du lage prologer for arrangementet"
 
 msgid "Now you can create registration surcharges"
 msgstr "Nå kan du opprette tilleggsavgifter for registrering"
+
+msgid "Now you can create the \"new player\" ticket"
+msgstr "Nå kan du opprette \"ny spiller\"-billetten"
 
 msgid "Now you can review participants' questions"
 msgstr "Nå kan du gå gjennom deltakernes spørsmål"
@@ -8671,6 +8677,13 @@ msgid ""
 msgstr ""
 "Denne siden oppsummerer rollene som må tildeles for å kunne bruke "
 "funksjonene som gjelder organisasjonen"
+
+msgid ""
+"Enables 'New player' tickets, reserved for users that never participated in "
+"an event of the organization"
+msgstr ""
+"Aktiverer \"Ny spiller\"-billetter, reservert for brukere som aldri har "
+"deltatt på et arrangement i organisasjonen"
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "

@@ -1416,6 +1416,9 @@ msgstr "Zysk netto"
 msgid "New answer"
 msgstr "Nowa odpowiedź"
 
+msgid "New player"
+msgstr "Nowy gracz"
+
 msgid "New signup"
 msgstr "Nowa rejestracja"
 
@@ -4805,6 +4808,9 @@ msgstr "Teraz możesz tworzyć prologi dla wydarzenia"
 
 msgid "Now you can create registration surcharges"
 msgstr "Teraz możesz tworzyć dodatkowe opłaty rejestracyjne"
+
+msgid "Now you can create the \"new player\" ticket"
+msgstr "Teraz możesz utworzyć bilet dla nowego gracza"
 
 msgid "Now you can review participants' questions"
 msgstr "Teraz możesz przejrzeć pytania uczestników"
@@ -8718,6 +8724,13 @@ msgid ""
 msgstr ""
 "Ta strona zawiera podsumowanie ról, które należy przypisać w celu "
 "korzystania z funkcji dotyczących organizacji"
+
+msgid ""
+"Enables 'New player' tickets, reserved for users that never participated in "
+"an event of the organization"
+msgstr ""
+"Włącza bilety \"Nowy gracz\", zarezerwowane dla użytkowników, którzy nigdy "
+"nie uczestniczyli w wydarzeniu organizacji"
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "
