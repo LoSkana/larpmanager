@@ -112,10 +112,10 @@ class ExceptionHandlingMiddleware:
         ctx = {"exe": ex, "feature": feature}
 
         if feature.overall:
-            ctx["permission"] = has_assoc_permission({}, request, "exe_features")
+            ctx["permission"] = has_assoc_permission(request, {}, "exe_features")
         else:
             run = Run.objects.get(pk=ex.run)
             ctx["run"] = run
-            ctx["permission"] = has_event_permission({}, request, run.event.slug, "orga_features")
+            ctx["permission"] = has_event_permission(request, {}, run.event.slug, "orga_features")
 
         return render(request, "exception/feature.html", ctx)
