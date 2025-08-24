@@ -460,7 +460,7 @@ def orga_registration_form_email(request, s, n):
 def orga_registrations_edit(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_registrations")
     get_event_cache_all(ctx)
-    ctx["orga_characters"] = has_event_permission(ctx, request, ctx["event"].slug, "orga_characters")
+    ctx["orga_characters"] = has_event_permission(request, ctx, ctx["event"].slug, "orga_characters")
     ctx["continue_add"] = "continue" in request.POST
     if num != 0:
         get_registration(ctx, num)
@@ -787,7 +787,7 @@ def orga_registration_member(request, s, n):
 
     # check if the user can see sensitive data
     exclude = ["profile", "newsletter", "language", "presentation"]
-    if not has_event_permission(ctx, request, s, "orga_sensitive"):
+    if not has_event_permission(request, ctx, s, "orga_sensitive"):
         exclude.extend(
             [
                 "diet",

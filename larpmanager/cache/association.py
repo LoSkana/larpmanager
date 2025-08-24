@@ -97,6 +97,7 @@ def _init_skin(assoc, el):
     el["main_domain"] = assoc.skin.domain
     el["platform"] = assoc.skin.name
     el["skin_id"] = assoc.skin.id
+    el["skin_managed"] = assoc.skin.managed
 
 
 def _init_features(assoc, el):

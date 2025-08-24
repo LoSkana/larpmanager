@@ -24,7 +24,9 @@ from django.dispatch import receiver
 
 from larpmanager.cache.feature import get_assoc_features, get_event_features
 from larpmanager.cache.links import cache_event_links
+from larpmanager.cache.permission import get_assoc_permission_feature, get_event_permission_feature
 from larpmanager.models.access import AssocRole, EventRole
+from larpmanager.utils.auth import get_allowed_managed
 from larpmanager.utils.exceptions import PermissionError
 
 
@@ -87,8 +89,10 @@ def get_assoc_roles(request):
     return is_admin, pms, names
 
 
-def has_assoc_permission(request, perm):
+def has_assoc_permission(request, ctx, perm):
     if not hasattr(request.user, "member"):
+        return False
+    if check_managed(ctx, perm):
         return False
     (admin, permissions, names) = get_assoc_roles(request)
     if admin:
@@ -159,8 +163,8 @@ def get_event_roles(request, slug):
     return is_organizer, pms, names
 
 
-def has_event_permission(ctx, request, slug, perm=None):
-    if not request or not hasattr(request.user, "member"):
+def has_event_permission(request, ctx, slug, perm=None):
+    if not request or not hasattr(request.user, "member") or check_managed(ctx, perm, assoc=False):
         return False
     if "assoc_role" in ctx and 1 in ctx["assoc_role"]:
         return True
@@ -172,3 +176,22 @@ def has_event_permission(ctx, request, slug, perm=None):
     if isinstance(perm, list):
         return any(p in permissions for p in perm)
     return perm in permissions
+
+
+def check_managed(ctx, perm, assoc=True):
+    # check if the association skin is managed and the user is not staff
+    if not ctx.get("skin_managed", False) or ctx.get("is_staff", False):
+        return False
+
+    if perm in get_allowed_managed():
+        return False
+
+    if assoc:
+        placeholder, _, _ = get_assoc_permission_feature(perm)
+    else:
+        placeholder, _, _ = get_event_permission_feature(perm)
+
+    if placeholder != "def":
+        return False
+
+    return True

@@ -70,3 +70,20 @@ def check_lm_admin(request):
     if not is_lm_admin(request):
         raise Http404("Not lm admin")
     return {"a_id": request.assoc["id"], "lm_admin": 1}
+
+
+def get_allowed_managed():
+    allowed = [
+        "exe_events",
+        "orga_event",
+        "exe_accounting",
+        "orga_cancellations",
+        "orga_registration_form",
+        "orga_registration_tickets",
+        "orga_registrations",
+        "orga_accounting",
+        "orga_sensitive",
+        "orga_preferences",
+        "exe_preferences",
+    ]
+    return allowed

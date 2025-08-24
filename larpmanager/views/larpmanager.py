@@ -203,7 +203,7 @@ def activate_feature_assoc(request, cod, p=None):
         raise Http404("feature not overall")
 
     # check the user has the permission to add features
-    if not has_assoc_permission(request, "exe_features"):
+    if not has_assoc_permission({}, request, "exe_features"):
         raise PermissionError()
 
     # add feature

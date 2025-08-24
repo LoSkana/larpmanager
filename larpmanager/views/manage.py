@@ -97,7 +97,7 @@ def _exe_manage(request):
         run.registration_status = _get_registration_status(run)
         run.counts = get_reg_counts(run)
 
-    if has_assoc_permission(request, "exe_accounting"):
+    if has_assoc_permission(request, ctx, "exe_accounting"):
         assoc_accounting(ctx)
 
     # if no event active, suggest to create one
@@ -275,7 +275,7 @@ def _orga_manage(request, s, n):
 
     ctx["registration_status"] = _get_registration_status(ctx["run"])
 
-    if has_event_permission(ctx, request, s, "orga_registrations"):
+    if has_event_permission(request, ctx, s, "orga_registrations"):
         ctx["counts"] = get_reg_counts(ctx["run"])
         ctx["reg_counts"] = {}
         # TODO simplify
@@ -284,7 +284,7 @@ def _orga_manage(request, s, n):
             if key in ctx["counts"]:
                 ctx["reg_counts"][_(tier.capitalize())] = ctx["counts"][key]
 
-    if has_event_permission(ctx, request, s, "orga_accounting"):
+    if has_event_permission(request, ctx, s, "orga_accounting"):
         ctx["dc"] = get_run_accounting(ctx["run"], ctx)
 
     _exe_actions(request, ctx)
@@ -643,8 +643,8 @@ def _add_suggestion(ctx, text, perm, link=None):
 
 def _has_permission(request, ctx, perm):
     if perm.startswith("exe"):
-        return has_assoc_permission(request, perm)
-    return has_event_permission(ctx, request, ctx["event"].slug, perm)
+        return has_assoc_permission(request, ctx, perm)
+    return has_event_permission(request, ctx, ctx["event"].slug, perm)
 
 
 def _get_href(ctx, perm, name, custom_link):

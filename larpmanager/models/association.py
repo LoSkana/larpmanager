@@ -72,6 +72,8 @@ class AssociationSkin(BaseModel):
         null=True,
     )
 
+    managed = models.BooleanField(default=False)
+
 
 class Association(BaseModel):
     skin = models.ForeignKey(AssociationSkin, on_delete=models.CASCADE, default=1)
