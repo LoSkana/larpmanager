@@ -1103,7 +1103,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
     def _add_reg_configs(self, event_id, help_text):
         if not has_event_permission(
-            self.params, self.params["request"], self.params["event"].slug, "orga_registrations"
+            self.params["request"], self.params, self.params["event"].slug, "orga_registrations"
         ):
             return
 
@@ -1147,7 +1147,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
         if "writing_fields" not in self.params or s[0] not in self.params["writing_fields"]:
             return
 
-        if not has_event_permission(self.params, self.params["request"], self.params["event"].slug, f"orga_{s[0]}s"):
+        if not has_event_permission(self.params["request"], self.params, self.params["event"].slug, f"orga_{s[0]}s"):
             return
 
         fields = self.params["writing_fields"][s[0]]["questions"]

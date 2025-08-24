@@ -203,7 +203,7 @@ def activate_feature_assoc(request, cod, p=None):
         raise Http404("feature not overall")
 
     # check the user has the permission to add features
-    if not has_assoc_permission(request, "exe_features"):
+    if not has_assoc_permission(request, {}, "exe_features"):
         raise PermissionError()
 
     # add feature
@@ -227,7 +227,7 @@ def activate_feature_event(request, s, n, cod, p=None):
 
     # check the user has the permission to add features
     ctx = get_event_run(request, s, n)
-    if not has_event_permission({}, request, ctx["event"].slug, "orga_features"):
+    if not has_event_permission(request, {}, ctx["event"].slug, "orga_features"):
         raise PermissionError()
 
     # add feature

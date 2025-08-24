@@ -29,6 +29,7 @@ from larpmanager.cache.role import get_assoc_roles, has_assoc_permission
 from larpmanager.models.association import Association
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.utils import get_payment_details
+from larpmanager.utils.auth import get_allowed_managed
 from larpmanager.utils.exceptions import FeatureError, MembershipError, PermissionError
 
 
@@ -49,6 +50,7 @@ def def_user_ctx(request):
         res["membership"] = get_user_membership(request.user.member, request.assoc["id"])
         get_index_assoc_permissions(res, request, request.assoc["id"], check=False)
         res["interface_collapse_sidebar"] = request.user.member.get_config("interface_collapse_sidebar", False)
+        res["is_staff"] = request.user.is_staff
 
     res.update(cache_event_links(request))
 
@@ -85,7 +87,7 @@ def update_payment_details(request, ctx):
 
 def check_assoc_permission(request, slug):
     ctx = def_user_ctx(request)
-    if not has_assoc_permission(request, slug):
+    if not has_assoc_permission(request, ctx, slug):
         raise PermissionError()
     (feature, tutorial, config) = get_assoc_permission_feature(slug)
     if feature != "def" and feature not in request.assoc["features"]:
@@ -96,7 +98,7 @@ def check_assoc_permission(request, slug):
     ctx["exe_page"] = 1
     if "tutorial" not in ctx:
         ctx["tutorial"] = tutorial
-    if config and has_assoc_permission(request, "exe_config"):
+    if config and has_assoc_permission(request, ctx, "exe_config"):
         ctx["config"] = reverse("exe_config", args=[config])
     return ctx
 
@@ -111,22 +113,39 @@ def get_index_assoc_permissions(ctx, request, assoc_id, check=True):
 
     ctx["role_names"] = names
     features = get_assoc_features(assoc_id)
-    ctx["assoc_pms"] = get_index_permissions(features, is_admin, user_assoc_permissions, "assoc")
+    ctx["assoc_pms"] = get_index_permissions(ctx, features, is_admin, user_assoc_permissions, "assoc")
     ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
 
-def get_index_permissions(features, has_default, permissions, typ):
+def get_index_permissions(ctx, features, has_default, permissions, typ):
     res = {}
     for ar in get_cache_index_permission(typ):
         if ar["hidden"]:
             continue
+
+        if not is_allowed_managed(ar, ctx):
+            continue
+
         if not has_default and ar["slug"] not in permissions:
             continue
+
         if not ar["feature__placeholder"] and ar["feature__slug"] not in features:
             continue
+
         mod_name = (_(ar["module__name"]), ar["module__icon"])
         if mod_name not in res:
             res[mod_name] = []
         res[mod_name].append(ar)
 
     return res
+
+
+def is_allowed_managed(ar, ctx):
+    # check if the association skin is managed and the user is not staff
+    if ctx.get("skin_managed", False) and not ctx.get("is_staff", False):
+        allowed = get_allowed_managed()
+        # if the feature is a placeholder different than the management of events:
+        if ar["feature__placeholder"] and ar["slug"] not in allowed:
+            return False
+
+    return True

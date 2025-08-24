@@ -82,7 +82,7 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
         registration_status(ctx["run"], request.user)
 
     # check if the user has any role
-    if has_event_permission(ctx, request, s):
+    if has_event_permission(request, ctx, s):
         get_index_event_permissions(ctx, request, s)
         ctx["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
@@ -91,7 +91,7 @@ def get_event_run(request, s, n, signup=False, slug=None, status=False):
     else:
         ctx["assoc_slug"] = ctx["event"].assoc.slug
 
-    if has_event_permission(ctx, request, s, "orga_characters"):
+    if has_event_permission(request, ctx, s, "orga_characters"):
         ctx["staff"] = "1"
         ctx["skip"] = "1"
 
@@ -213,7 +213,7 @@ def get_event_filter_characters(ctx, filters):
 
 
 def has_access_character(request, ctx):
-    if has_event_permission(ctx, request, ctx["event"].slug, "orga_characters"):
+    if has_event_permission(request, ctx, ctx["event"].slug, "orga_characters"):
         return True
 
     member_id = request.user.member.id
@@ -229,7 +229,7 @@ def has_access_character(request, ctx):
 
 def check_event_permission(request, s, n, perm=None):
     ctx = get_event_run(request, s, n)
-    if not has_event_permission(ctx, request, s, perm):
+    if not has_event_permission(request, ctx, s, perm):
         raise PermissionError()
     if perm:
         if isinstance(perm, list):
@@ -237,7 +237,7 @@ def check_event_permission(request, s, n, perm=None):
         (feature, tutorial, config) = get_event_permission_feature(perm)
         if "tutorial" not in ctx:
             ctx["tutorial"] = tutorial
-        if config and has_event_permission(ctx, request, s, "orga_config"):
+        if config and has_event_permission(request, ctx, s, "orga_config"):
             ctx["config"] = reverse("orga_config", args=[ctx["event"].slug, ctx["run"].number, config])
         if feature != "def" and feature not in ctx["features"]:
             raise FeatureError(path=request.path, feature=feature, run=ctx["run"].id)
@@ -253,6 +253,7 @@ def get_index_event_permissions(ctx, request, slug, check=True):
         is_organizer = True
     if check and not names and not is_organizer:
         raise PermissionError()
-    ctx["role_names"] = names
+    if names:
+        ctx["role_names"] = names
     features = get_event_features(ctx["event"].id)
-    ctx["event_pms"] = get_index_permissions(features, is_organizer, user_event_permissions, "event")
+    ctx["event_pms"] = get_index_permissions(ctx, features, is_organizer, user_event_permissions, "event")
