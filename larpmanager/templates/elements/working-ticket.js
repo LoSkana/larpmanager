@@ -5,7 +5,7 @@
 {% if num %}
 
 var eid = {{ num }};
-var type = '{{ elementTyp }}';
+var type = '{{ type }}';
 
 var timeout = 10 * 1000;
 var post_url = "{% url 'working_ticket' %}";

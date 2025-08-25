@@ -207,6 +207,7 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
         ctx["el"] = None
 
     ctx["num"] = eid
+    ctx["type"] = ctx["elementTyp"].__name__.lower()
     if request.method == "POST":
         ctx["form"] = form_type(request.POST, request.FILES, instance=ctx["el"], ctx=ctx)
 
