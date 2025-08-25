@@ -436,7 +436,7 @@ class InventoryArea(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="area")
 
 
-class InventoryAssignment(BaseModel):
+class InventoryItemAssignment(BaseModel):
     quantity = models.IntegerField(blank=True, null=True)
 
     area = models.ForeignKey(InventoryArea, on_delete=models.CASCADE, related_name="assignments")
@@ -455,12 +455,12 @@ class InventoryAssignment(BaseModel):
         constraints = [
             UniqueConstraint(
                 fields=["area", "item", "deleted"],
-                name="unique_inventory_assignment_with_optional",
+                name="unique_inventory_item_assignment_with_optional",
             ),
             UniqueConstraint(
                 fields=["area", "item"],
                 condition=Q(deleted=None),
-                name="unique_inventory_assignment_without_optional",
+                name="unique_inventory_item__assignment_without_optional",
             ),
         ]
 

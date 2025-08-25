@@ -3409,6 +3409,9 @@ msgstr "Koblinger til tegn"
 msgid "Collection participated"
 msgstr "Samlinger som har deltatt"
 
+msgid "Containers in manifest "
+msgstr "Containere i manifest"
+
 msgid "Create a new collection"
 msgstr "Opprett en ny samling"
 
@@ -6599,6 +6602,11 @@ msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
 "Hvis avkrysset, legges det til en unik kode til alle registreringer for å "
 "referere til dem"
+
+msgid "If checked: Allow to add containers in cargo manifest as for the items"
+msgstr ""
+"Hvis avkrysset: Tillat å legge til containere i fraktmanifestet som for "
+"varene"
 
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""

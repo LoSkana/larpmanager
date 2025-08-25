@@ -3409,6 +3409,9 @@ msgstr "Relacje między postaciami"
 msgid "Collection participated"
 msgstr "Kolekcja uczestniczyła"
 
+msgid "Containers in manifest "
+msgstr "Pojemniki w manifeście"
+
 msgid "Create a new collection"
 msgstr "Utwórz nową kolekcję"
 
@@ -6611,6 +6614,11 @@ msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
 "Jeśli zaznaczone, dodaje do wszystkich rejestracji unikalny kod, aby się do "
 "nich odwoływać"
+
+msgid "If checked: Allow to add containers in cargo manifest as for the items"
+msgstr ""
+"Jeśli zaznaczone: Zezwalaj na dodawanie kontenerów w manifeście ładunku jak "
+"dla pozycji"
 
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""

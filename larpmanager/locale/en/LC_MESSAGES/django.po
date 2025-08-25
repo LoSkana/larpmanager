@@ -403,6 +403,12 @@ msgstr ""
 msgid "Inventory"
 msgstr ""
 
+msgid "Containers in manifest "
+msgstr ""
+
+msgid "If checked: Allow to add containers in cargo manifest as for the items"
+msgstr ""
+
 msgid "Quantity"
 msgstr ""
 

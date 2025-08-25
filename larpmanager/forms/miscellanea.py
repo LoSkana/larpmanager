@@ -47,9 +47,9 @@ from larpmanager.models.miscellanea import (
     Competence,
     HelpQuestion,
     InventoryArea,
-    InventoryAssignment,
     InventoryContainer,
     InventoryItem,
+    InventoryItemAssignment,
     InventoryMovement,
     InventoryTag,
     Problem,
@@ -388,7 +388,7 @@ class OrgaInventoryAreaForm(MyForm):
             item.available = item.quantity or 0
             self.item_all[item.id] = item
 
-        for el in self.params["event"].get_elements(InventoryAssignment).filter(event=self.params["event"]):
+        for el in self.params["event"].get_elements(InventoryItemAssignment).filter(event=self.params["event"]):
             item = self.item_all[el.item_id]
             if el.area_id == self.instance.pk:
                 item.assigned = {"quantity": el.quantity, "notes": el.notes}
@@ -429,7 +429,7 @@ class OrgaInventoryAreaForm(MyForm):
                 to_del.append(item_id)
                 continue
 
-            assignment, created = InventoryAssignment.objects.get_or_create(
+            assignment, created = InventoryItemAssignment.objects.get_or_create(
                 area=instance, item_id=item_id, event=instance.event
             )
             assignment.quantity = self.cleaned_data.get(f"qty_{item_id}", 0) or 0
@@ -437,7 +437,7 @@ class OrgaInventoryAreaForm(MyForm):
 
             assignment.save()
 
-        InventoryAssignment.objects.filter(area=instance, item_id__in=to_del, event=instance.event).delete()
+        InventoryItemAssignment.objects.filter(area=instance, item_id__in=to_del, event=instance.event).delete()
 
         return instance
 
@@ -448,7 +448,7 @@ class OrgaInventoryAssignmentForm(MyForm):
     page_title = _("Inventory assignments")
 
     class Meta:
-        model = InventoryAssignment
+        model = InventoryItemAssignment
         exclude = []
         widgets = {
             "description": Textarea(attrs={"rows": 5}),
@@ -470,7 +470,7 @@ class OrgaInventoryAssignmentForm(MyForm):
         if not area or not item:
             return cleaned
 
-        qs = InventoryAssignment.objects.filter(
+        qs = InventoryItemAssignment.objects.filter(
             area=area,
             item=item,
         )

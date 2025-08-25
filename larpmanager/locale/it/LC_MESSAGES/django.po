@@ -3409,6 +3409,9 @@ msgstr "Legami del personaggio"
 msgid "Collection participated"
 msgstr "Collette partecipate"
 
+msgid "Containers in manifest "
+msgstr "Contenitori nel manifesto"
+
 msgid "Create a new collection"
 msgstr "Crea una nuova colletta"
 
@@ -6713,6 +6716,11 @@ msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
 "Se selezionata, aggiunge a tutte le iscrizioni un codice univoco di "
 "riferimento"
+
+msgid "If checked: Allow to add containers in cargo manifest as for the items"
+msgstr ""
+"Se selezionato: Consente di aggiungere contenitori nel manifesto di carico "
+"come per gli articoli"
 
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr "Se hai un accordo separato con noi, puoi anche ignorare questa e-mail"

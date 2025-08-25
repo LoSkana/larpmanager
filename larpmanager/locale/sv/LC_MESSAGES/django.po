@@ -3409,6 +3409,9 @@ msgstr "Länkar till karaktärer"
 msgid "Collection participated"
 msgstr "Deltagande samlingar"
 
+msgid "Containers in manifest "
+msgstr "Containrar i manifest"
+
 msgid "Create a new collection"
 msgstr "Skapa en ny samling"
 
@@ -6611,6 +6614,11 @@ msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
 "Om markerad, lägger till en unik kod till alla registreringar för att "
 "referera till dem"
+
+msgid "If checked: Allow to add containers in cargo manifest as for the items"
+msgstr ""
+"Om markerad: Tillåt att lägga till containrar i lastmanifestet som för "
+"föremålen"
 
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""

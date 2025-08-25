@@ -42,7 +42,7 @@ from larpmanager.forms.miscellanea import (
 from larpmanager.models.miscellanea import (
     Album,
     InventoryArea,
-    InventoryAssignment,
+    InventoryItemAssignment,
     Problem,
     Util,
     WorkshopMemberRel,
@@ -190,7 +190,7 @@ def orga_inventory_area_edit(request, s, n, num):
 def orga_inventory_checks(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_inventory_checks")
     ctx["items"] = {}
-    for el in ctx["event"].get_elements(InventoryAssignment).select_related("area", "item"):
+    for el in ctx["event"].get_elements(InventoryItemAssignment).select_related("area", "item"):
         if el.item_id not in ctx["items"]:
             item = el.item
             item.assignment_list = []
@@ -221,7 +221,7 @@ def orga_manifest_check(request, s, n):
     value = request.POST.get("value").lower() == "true"
 
     try:
-        assign = InventoryAssignment.objects.get(pk=idx)
+        assign = InventoryItemAssignment.objects.get(pk=idx)
     except ObjectDoesNotExist:
         return JsonResponse({"error": "not found"}, status=400)
 
