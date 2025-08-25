@@ -12,7 +12,6 @@ window.addEventListener('DOMContentLoaded', function() {
         $(document).on('change', 'td.inp-sel input[type=checkbox]', function () {
           const td = $(this).closest('td.inp-sel');
           td.attr('data-order', this.checked ? '1' : '0');
-          console.log(td.attr('data-order'));
 
           table.row(td.closest('tr')).invalidate('dom').draw(false);
         });
