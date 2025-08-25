@@ -26,6 +26,7 @@ from django.db.models import Max
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.http import require_POST
 
 from larpmanager.cache.config import _get_fkey_config
 from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
@@ -206,6 +207,7 @@ def backend_edit(request, ctx, form_type, eid, afield=None, assoc=False):
         ctx["el"] = None
 
     ctx["num"] = eid
+    ctx["type"] = ctx["elementTyp"].__name__.lower()
     if request.method == "POST":
         ctx["form"] = form_type(request.POST, request.FILES, instance=ctx["el"], ctx=ctx)
 
@@ -417,3 +419,23 @@ def writing_edit_working_ticket(request, tp, eid, token):
     cache.set(key, ticket, ticket_time)
 
     return msg
+
+
+@require_POST
+def working_ticket(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"warn": "User not logged"})
+
+    res = {"res": "ok"}
+    if request.user.is_superuser:
+        return JsonResponse(res)
+
+    eid = request.POST.get("eid")
+    type = request.POST.get("type")
+    token = request.POST.get("token")
+
+    msg = writing_edit_working_ticket(request, type, eid, token)
+    if msg:
+        res["warn"] = msg
+
+    return JsonResponse(res)

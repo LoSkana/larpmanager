@@ -98,6 +98,8 @@ def test_manual_excel_save_external(pw_page):
 
     working_ticket(page, server, context)
 
+    working_ticket_event(page, server, context)
+
 
 def excel(page, live_server):
     # test char finder on excel edit
@@ -164,6 +166,18 @@ def working_ticket(page, server, context):
     page1 = context.new_page()
     page1.goto(server + "/test/1/manage/characters/edit/1/")
     page.locator('[id="\\31 "]').get_by_role("link", name="").click()
+    page.wait_for_timeout(2000)
+    expect(page.locator("#test-larp")).to_contain_text(
+        "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost."
+    )
+
+
+def working_ticket_event(page, server, context):
+    login_orga(page, server)
+
+    go_to(page, server, "/test/1/manage/config")
+    page1 = context.new_page()
+    page1.goto(server + "/test/1/manage/config")
     page.wait_for_timeout(2000)
     expect(page.locator("#test-larp")).to_contain_text(
         "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost."

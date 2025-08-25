@@ -19,3 +19,6 @@
     {% include "elements/form/jump_section.js" %}
     {% if additional %}{{ additional | safe }}{% endif %}
 {% endblock content %}
+{% block js2 %}
+    {% include "elements/working-ticket.js" %}
+{% endblock js2 %}

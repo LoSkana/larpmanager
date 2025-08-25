@@ -20,6 +20,7 @@
 
 from django.urls import path
 
+from larpmanager.utils import edit as views_ed
 from larpmanager.views import manage as views_mg
 from larpmanager.views.exe import accounting as views_ea
 from larpmanager.views.exe import assoc as views_eas
@@ -477,5 +478,10 @@ urlpatterns = [
         "manage/preferences/",
         views_eas.exe_preferences,
         name="exe_preferences",
+    ),
+    path(
+        "manage/working_ticket/",
+        views_ed.working_ticket,
+        name="working_ticket",
     ),
 ]
