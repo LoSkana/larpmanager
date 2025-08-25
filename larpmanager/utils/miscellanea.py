@@ -177,7 +177,7 @@ def get_inventory_optionals(ctx, def_cols):
     optionals = {}
     active = 0
     for field in InventoryItem.get_optional_fields():
-        optionals[field] = assoc.get_config(f"inventory_{field}")
+        optionals[field] = assoc.get_config(f"inventory_{field}", False)
         if optionals[field]:
             active = 1
     ctx["optionals"] = optionals

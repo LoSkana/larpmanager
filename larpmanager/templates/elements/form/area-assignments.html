@@ -22,7 +22,7 @@
                 {% with sel="sel_"|add:idstr qty="qty_"|add:idstr notes="notes_"|add:idstr %}
                     <tr id="{{ el.id }}">
                         <td></td>
-                        <td data-order="{% if item.selected %}1{% else %}0{% endif %}"
+                        <td data-order="{% if el.selected %}1{% else %}0{% endif %}"
                             class="inp-sel">{{ form|get_form_field:sel }}</td>
                         <td>{{ el }}</td>
                         <td>

@@ -22,8 +22,11 @@ from datetime import datetime, timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.http import require_POST
 
 from larpmanager.forms.miscellanea import (
     OrgaAlbumForm,
@@ -208,3 +211,26 @@ def orga_inventory_manifest(request, s, n):
 @login_required
 def orga_inventory_manifest_edit(request, s, n, num):
     return orga_edit(request, s, n, "orga_inventory_manifest", OrgaInventoryAssignmentForm, num)
+
+
+@require_POST
+def orga_manifest_check(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_inventory_manifest")
+    idx = request.POST.get("idx")
+    type = request.POST.get("type")
+    value = request.POST.get("value").lower() == "true"
+
+    try:
+        assign = InventoryAssignment.objects.get(pk=idx)
+    except ObjectDoesNotExist:
+        return JsonResponse({"error": "not found"}, status=400)
+
+    if assign.event_id != ctx["event"].id:
+        return JsonResponse({"error": "not your event"}, status=400)
+
+    map_field = {"load": "loaded", "depl": "deployed"}
+    field = map_field.get(type, "")
+    setattr(assign, field, value)
+    assign.save()
+
+    return JsonResponse({"ok": True})
