@@ -140,7 +140,12 @@ def update_px(char):
 
     # apply rules
     ability_ids = char.px_ability_list.values_list("pk", flat=True)
-    rules = RulePx.objects.filter(Q(abilities__isnull=True) | Q(abilities__in=ability_ids)).distinct().order_by("order")
+    rules = (
+        event.get_elements(RulePx)
+        .filter(Q(abilities__isnull=True) | Q(abilities__in=ability_ids))
+        .distinct()
+        .order_by("order")
+    )
 
     ops = {
         Operation.ADDITION: lambda x, y: x + y,
