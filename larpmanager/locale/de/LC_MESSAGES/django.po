@@ -465,6 +465,9 @@ msgstr "Causale"
 msgid "Change"
 msgstr "bearbeiten"
 
+msgid "Checks"
+msgstr "Schecks"
+
 msgid "Delete"
 msgstr "Löschen"
 
@@ -1082,6 +1085,9 @@ msgstr "Revision"
 
 msgid "Sections"
 msgstr "Sektionen"
+
+msgid "Selected"
+msgstr "Ausgewählte"
 
 msgid "Services"
 msgstr "Dienstleistungen"
@@ -4621,6 +4627,9 @@ msgstr "Jetzt können Sie die Probleme der Veranstaltung überprüfen"
 msgid "Now you can se the special page options"
 msgstr "Jetzt können Sie die speziellen Seitenoptionen sehen"
 
+msgid "Perform checks on inventory assignments"
+msgstr "Kontrollen der Bestandszuweisungen durchführen"
+
 msgid "Photos and videos successfully uploaded"
 msgstr "Fotos und Videos erfolgreich hochgeladen"
 
@@ -5473,6 +5482,10 @@ msgstr "versteckte Fraktion, die nur für zugewiesene Charaktere sichtbar ist"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "Sie können den Restbetrag immer noch bezahlen, wenn Sie dies wünschen"
 
+msgid "An assignment for this item and area already exists"
+msgstr ""
+"Für diese Position und diesen Bereich existiert bereits eine Zuordnung"
+
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Zugewiesen %(amount).2f %(elements)s für '%(reason)s'"
@@ -5493,10 +5506,6 @@ msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Treten Sie unserem Discord bei, um Hilfe und Ideen zu erhalten oder um "
 "Fehler zu melden"
-
-msgid "Manage assignement of inventory items to event area"
-msgstr ""
-"Verwalten der Zuordnung von Inventarobjekten zum Veranstaltungsbereich"
 
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Bitte wählen Sie ein klares und leicht erkennbares Foto"
@@ -7673,6 +7682,13 @@ msgid ""
 msgstr ""
 "Antrag auf Erstattung eingegeben! Sie erhalten eine Benachrichtigung, wenn "
 "der Antrag bearbeitet wird."
+
+msgid ""
+"This page displays cases where the same item has been assigned to multiple "
+"areas"
+msgstr ""
+"Auf dieser Seite werden Fälle angezeigt, in denen derselbe Artikel mehreren "
+"Bereichen zugeordnet wurde"
 
 msgid ""
 "Total amount of money received for this event, minus commission fees and "

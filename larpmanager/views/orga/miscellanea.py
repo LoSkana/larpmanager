@@ -184,21 +184,27 @@ def orga_inventory_area_edit(request, s, n, num):
 
 
 @login_required
-def orga_inventory_assignments(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_inventory_assignments")
-    ctx["list"] = ctx["event"].get_elements(InventoryAssignment).select_related("area", "item")
-    get_inventory_optionals(ctx, [4])
-    return render(request, "larpmanager/orga/inventory/assignments.html", ctx)
-
-
-@login_required
-def orga_inventory_assignments_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_inventory_assignments", OrgaInventoryAssignmentForm, num)
+def orga_inventory_checks(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_inventory_checks")
+    ctx["items"] = {}
+    for el in ctx["event"].get_elements(InventoryAssignment).select_related("area", "item"):
+        if el.item_id not in ctx["items"]:
+            item = el.item
+            item.assignment_list = []
+            ctx["items"][el.item_id] = item
+        ctx["items"][el.item_id].assignment_list.append(el)
+    get_inventory_optionals(ctx, [])
+    return render(request, "larpmanager/orga/inventory/checks.html", ctx)
 
 
 @login_required
 def orga_inventory_manifest(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_inventory_manifest")
     ctx["list"] = ctx["event"].get_elements(InventoryArea).prefetch_related("assignments", "assignments__item")
-    get_inventory_optionals(ctx, [3, 4])
+    get_inventory_optionals(ctx, [])
     return render(request, "larpmanager/orga/inventory/manifest.html", ctx)
+
+
+@login_required
+def orga_inventory_manifest_edit(request, s, n, num):
+    return orga_edit(request, s, n, "orga_inventory_manifest", OrgaInventoryAssignmentForm, num)

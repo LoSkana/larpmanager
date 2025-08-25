@@ -465,6 +465,9 @@ msgstr "Causale"
 msgid "Change"
 msgstr "Redigera"
 
+msgid "Checks"
+msgstr "Kontroller"
+
 msgid "Delete"
 msgstr "Radera"
 
@@ -1082,6 +1085,9 @@ msgstr "Revision"
 
 msgid "Sections"
 msgstr "Sektioner"
+
+msgid "Selected"
+msgstr "Utvalda"
 
 msgid "Services"
 msgstr "Tjänster"
@@ -4619,6 +4625,9 @@ msgstr "Nu kan du granska evenemangets problem"
 msgid "Now you can se the special page options"
 msgstr "Nu kan du se de speciella sidalternativen"
 
+msgid "Perform checks on inventory assignments"
+msgstr "Utföra kontroller av inventeringsuppdrag"
+
 msgid "Photos and videos successfully uploaded"
 msgstr "Foton och videor har laddats upp framgångsrikt"
 
@@ -5438,6 +5447,9 @@ msgstr "dold fraktion som endast är synlig för tilldelade karaktärer"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "du kan fortfarande betala det återstående beloppet om du vill"
 
+msgid "An assignment for this item and area already exists"
+msgstr "Ett uppdrag för detta objekt och område finns redan"
+
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Tilldelad %(amount).2f %(elements)s för '%(reason)s'"
@@ -5456,9 +5468,6 @@ msgstr "Du kan inte betala din medlemsavgift just nu"
 
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Gå med i vår Discord för hjälp, idéer eller för att rapportera buggar"
-
-msgid "Manage assignement of inventory items to event area"
-msgstr "Hantera tilldelning av inventarier till evenemangsområdet"
 
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Välj ett tydligt och lätt igenkännligt foto"
@@ -7374,6 +7383,12 @@ msgid ""
 msgstr ""
 "Begäran om återbetalning registrerad! Du kommer att få ett meddelande när "
 "den har behandlats."
+
+msgid ""
+"This page displays cases where the same item has been assigned to multiple "
+"areas"
+msgstr ""
+"På den här sidan visas fall där samma artikel har tilldelats flera områden"
 
 msgid ""
 "Total amount of money received for this event, minus commission fees and "

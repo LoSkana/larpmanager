@@ -465,6 +465,9 @@ msgstr "Przyczyna"
 msgid "Change"
 msgstr "Zmiana"
 
+msgid "Checks"
+msgstr "Czeki"
+
 msgid "Delete"
 msgstr "Usuń"
 
@@ -1082,6 +1085,9 @@ msgstr "Rewizja"
 
 msgid "Sections"
 msgstr "Sekcje"
+
+msgid "Selected"
+msgstr "Wybrane"
 
 msgid "Services"
 msgstr "Usługi"
@@ -4617,6 +4623,9 @@ msgstr "Teraz możesz przejrzeć problemy związane z wydarzeniem"
 msgid "Now you can se the special page options"
 msgstr "Teraz możesz korzystać ze specjalnych opcji strony"
 
+msgid "Perform checks on inventory assignments"
+msgstr "Przeprowadzanie kontroli przydzielonych zapasów"
+
 msgid "Photos and videos successfully uploaded"
 msgstr "Zdjęcia i filmy zostały pomyślnie przesłane"
 
@@ -5435,6 +5444,9 @@ msgstr "ukryta frakcja widoczna tylko dla przypisanych postaci"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "Jeśli chcesz, nadal możesz zapłacić pozostałą kwotę"
 
+msgid "An assignment for this item and area already exists"
+msgstr "Przypisanie dla tego elementu i obszaru już istnieje"
+
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Przydzielono %(amount).2f %(elements)s dla \"%(reason)s"
@@ -5454,9 +5466,6 @@ msgstr "W tej chwili nie ma możliwości opłacenia składek"
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Dołącz do naszego Discorda, aby uzyskać pomoc, pomysły lub zgłosić błędy"
-
-msgid "Manage assignement of inventory items to event area"
-msgstr "Zarządzanie przypisywaniem elementów inwentarza do obszaru wydarzenia"
 
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Wybierz wyraźne i łatwo rozpoznawalne zdjęcie"
@@ -7384,6 +7393,13 @@ msgid ""
 msgstr ""
 "Wniosek o zwrot kosztów wprowadzony! Otrzymasz powiadomienie, gdy wniosek "
 "zostanie przetworzony."
+
+msgid ""
+"This page displays cases where the same item has been assigned to multiple "
+"areas"
+msgstr ""
+"Ta strona wyświetla przypadki, w których ten sam element został przypisany "
+"do wielu obszarów"
 
 msgid ""
 "Total amount of money received for this event, minus commission fees and "

@@ -465,6 +465,9 @@ msgstr "Årsak"
 msgid "Change"
 msgstr "Redigere"
 
+msgid "Checks"
+msgstr "Sjekker"
+
 msgid "Delete"
 msgstr "Slett"
 
@@ -1082,6 +1085,9 @@ msgstr "Revisjon"
 
 msgid "Sections"
 msgstr "Seksjoner"
+
+msgid "Selected"
+msgstr "Utvalgte"
 
 msgid "Services"
 msgstr "Tjenester"
@@ -4619,6 +4625,9 @@ msgstr "Nå kan du gå gjennom hendelsens problemer"
 msgid "Now you can se the special page options"
 msgstr "Nå kan du se de spesielle sidealternativene"
 
+msgid "Perform checks on inventory assignments"
+msgstr "Utføre kontroller av lageroppdrag"
+
 msgid "Photos and videos successfully uploaded"
 msgstr "Bilder og videoer er lastet opp"
 
@@ -5437,6 +5446,9 @@ msgstr "skjult fraksjon som kun er synlig for tildelte karakterer"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "du kan fortsatt betale det resterende beløpet hvis du ønsker det"
 
+msgid "An assignment for this item and area already exists"
+msgstr "Det finnes allerede et oppdrag for dette elementet og området"
+
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Tildelt %(amount).2f %(elements)s for '%(reason)s'"
@@ -5455,9 +5467,6 @@ msgstr "Du kan ikke betale medlemskontingenten på dette tidspunktet"
 
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Bli med på Discord for å få hjelp, ideer eller rapportere feil"
-
-msgid "Manage assignement of inventory items to event area"
-msgstr "Administrere tildeling av lagervarer til arrangementsområdet"
 
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Velg et tydelig og lett gjenkjennelig bilde"
@@ -7349,6 +7358,13 @@ msgid ""
 msgstr ""
 "Anmodning om refusjon er lagt inn! Du vil motta en melding når den er "
 "behandlet."
+
+msgid ""
+"This page displays cases where the same item has been assigned to multiple "
+"areas"
+msgstr ""
+"Denne siden viser tilfeller der samme element har blitt tildelt flere "
+"områder"
 
 msgid ""
 "Total amount of money received for this event, minus commission fees and "

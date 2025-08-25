@@ -465,6 +465,9 @@ msgstr "Causale"
 msgid "Change"
 msgstr "Editer"
 
+msgid "Checks"
+msgstr "Chèques"
+
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -1082,6 +1085,9 @@ msgstr "Révision"
 
 msgid "Sections"
 msgstr "Sections"
+
+msgid "Selected"
+msgstr "Sélectionné"
 
 msgid "Services"
 msgstr "Services"
@@ -4620,6 +4626,9 @@ msgstr "Vous pouvez maintenant passer en revue les problèmes de l'événement"
 msgid "Now you can se the special page options"
 msgstr "Vous pouvez maintenant utiliser les options de la page spéciale"
 
+msgid "Perform checks on inventory assignments"
+msgstr "Effectuer des contrôles sur les affectations d'inventaire"
+
 msgid "Photos and videos successfully uploaded"
 msgstr "Photos et vidéos téléchargées avec succès"
 
@@ -5459,6 +5468,9 @@ msgstr "faction cachée visible uniquement par les personnages assignés"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "vous pouvez encore payer le montant restant si vous le souhaitez"
 
+msgid "An assignment for this item and area already exists"
+msgstr "Une affectation pour ce poste et ce domaine existe déjà"
+
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Attribué %(amount).2f %(elements)s pour '%(reason)s'"
@@ -5479,9 +5491,6 @@ msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Rejoignez notre Discord pour obtenir de l'aide, des idées ou pour signaler "
 "des bugs"
-
-msgid "Manage assignement of inventory items to event area"
-msgstr "Gérer l'affectation des articles en stock à la zone de l'événement"
 
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Choisissez une photo claire et facilement reconnaissable"
@@ -7599,6 +7608,13 @@ msgid ""
 msgstr ""
 "Demande de remboursement introduite ! Vous recevrez une notification "
 "lorsqu'elle sera traitée."
+
+msgid ""
+"This page displays cases where the same item has been assigned to multiple "
+"areas"
+msgstr ""
+"Cette page affiche les cas où le même élément a été affecté à plusieurs "
+"domaines"
 
 msgid ""
 "Total amount of money received for this event, minus commission fees and "

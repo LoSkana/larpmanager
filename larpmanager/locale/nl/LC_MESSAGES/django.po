@@ -465,6 +465,9 @@ msgstr "Oorzaak"
 msgid "Change"
 msgstr "Bewerk"
 
+msgid "Checks"
+msgstr "Controles"
+
 msgid "Delete"
 msgstr "Verwijder"
 
@@ -1082,6 +1085,9 @@ msgstr "Herziening"
 
 msgid "Sections"
 msgstr "Secties"
+
+msgid "Selected"
+msgstr "Geselecteerd"
 
 msgid "Services"
 msgstr "Diensten"
@@ -4619,6 +4625,9 @@ msgstr "Nu kunt u de problemen van het evenement bekijken"
 msgid "Now you can se the special page options"
 msgstr "Nu kun je de speciale pagina-opties zien"
 
+msgid "Perform checks on inventory assignments"
+msgstr "Voer controles uit op inventarisatieopdrachten"
+
 msgid "Photos and videos successfully uploaded"
 msgstr "Foto's en video's succesvol geüpload"
 
@@ -5445,6 +5454,9 @@ msgstr "verborgen factie alleen zichtbaar voor toegewezen personages"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "je kunt nog steeds het resterende bedrag betalen als je dat wilt"
 
+msgid "An assignment for this item and area already exists"
+msgstr "Er bestaat al een opdracht voor dit item en gebied"
+
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Toegewezen %(amount).2f %(elements)s voor '%(reason)s'"
@@ -5463,9 +5475,6 @@ msgstr "Je kunt je lidmaatschapsgeld op dit moment niet betalen"
 
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Word lid van onze Discord voor hulp, ideeën of om bugs te melden"
-
-msgid "Manage assignement of inventory items to event area"
-msgstr "Beheer de toewijzing van inventarisitems aan evenementgebieden"
 
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Kies een duidelijke en gemakkelijk herkenbare foto"
@@ -7491,6 +7500,13 @@ msgid ""
 msgstr ""
 "Verzoek tot terugbetaling ingevoerd! Je ontvangt bericht wanneer het is "
 "verwerkt."
+
+msgid ""
+"This page displays cases where the same item has been assigned to multiple "
+"areas"
+msgstr ""
+"Deze pagina toont gevallen waarin hetzelfde item is toegewezen aan meerdere "
+"gebieden"
 
 msgid ""
 "Total amount of money received for this event, minus commission fees and "

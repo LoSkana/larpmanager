@@ -451,6 +451,19 @@ class InventoryAssignment(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="assignments")
 
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["area", "item", "deleted"],
+                name="unique_inventory_assignment_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["area", "item"],
+                condition=Q(deleted=None),
+                name="unique_inventory_assignment_without_optional",
+            ),
+        ]
+
 
 class ShuttleStatus(models.TextChoices):
     OPEN = "0", _("Waiting list")
