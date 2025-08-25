@@ -5755,6 +5755,9 @@ msgstr "Narazili jsme na problém s daňovým kódem, který jste nám poskytli"
 msgid "Your membership application was successfully submitted!"
 msgstr "Vaše žádost o členství byla úspěšně odeslána!"
 
+msgid "An assignment for this container and area already exists"
+msgstr "Pro tento kontejner a oblast již existuje přiřazení"
+
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr "Pro otevření platby klikněte na obrázek níže (Paypal.me)"
 
@@ -7283,6 +7286,13 @@ msgid ""
 "Request for reimbursement entered! You will receive notice when it is "
 "processed."
 msgstr "Žádost o proplacení zadána! Po jejím zpracování obdržíte oznámení."
+
+msgid ""
+"This page allows you to add or edit a new assignment of containers to event "
+"area"
+msgstr ""
+"Tato stránka umožňuje přidat nebo upravit nové přiřazení kontejnerů k "
+"oblasti událostí"
 
 msgid ""
 "This page displays cases where the same item has been assigned to multiple "

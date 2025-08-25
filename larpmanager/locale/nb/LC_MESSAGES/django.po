@@ -5759,6 +5759,9 @@ msgstr "Vi har støtt på et problem med skattekoden du oppga"
 msgid "Your membership application was successfully submitted!"
 msgstr "Medlemskapssøknaden din ble sendt inn!"
 
+msgid "An assignment for this container and area already exists"
+msgstr "Det finnes allerede et oppdrag for denne containeren og dette området"
+
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr "Klikk på bildet nedenfor (Paypal.me) for å åpne betalingen"
 
@@ -7366,6 +7369,13 @@ msgid ""
 msgstr ""
 "Anmodning om refusjon er lagt inn! Du vil motta en melding når den er "
 "behandlet."
+
+msgid ""
+"This page allows you to add or edit a new assignment of containers to event "
+"area"
+msgstr ""
+"På denne siden kan du legge til eller redigere en ny tildeling av containere"
+" til et arrangementsområde"
 
 msgid ""
 "This page displays cases where the same item has been assigned to multiple "

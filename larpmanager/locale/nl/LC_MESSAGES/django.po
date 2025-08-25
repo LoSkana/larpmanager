@@ -5771,6 +5771,9 @@ msgstr ""
 msgid "Your membership application was successfully submitted!"
 msgstr "Je lidmaatschapsaanvraag is succesvol ingediend!"
 
+msgid "An assignment for this container and area already exists"
+msgstr "Er bestaat al een toewijzing voor deze container en dit gebied"
+
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr ""
 "Klik op de onderstaande afbeelding (Paypal.me) om de betaling te openen"
@@ -7508,6 +7511,13 @@ msgid ""
 msgstr ""
 "Verzoek tot terugbetaling ingevoerd! Je ontvangt bericht wanneer het is "
 "verwerkt."
+
+msgid ""
+"This page allows you to add or edit a new assignment of containers to event "
+"area"
+msgstr ""
+"Op deze pagina kunt u een nieuwe toewijzing van containers aan een "
+"gebeurtenisgebied toevoegen of bewerken"
 
 msgid ""
 "This page displays cases where the same item has been assigned to multiple "

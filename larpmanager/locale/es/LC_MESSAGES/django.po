@@ -5766,6 +5766,9 @@ msgstr ""
 msgid "Your membership application was successfully submitted!"
 msgstr "Su solicitud de afiliación se ha enviado correctamente."
 
+msgid "An assignment for this container and area already exists"
+msgstr "Ya existe una asignación para este contenedor y esta zona"
+
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr "Haga clic en la imagen de abajo (Paypal.me) para abrir el pago"
 
@@ -7478,6 +7481,13 @@ msgid ""
 "processed."
 msgstr ""
 "¡Solicitud de reembolso introducida! Recibirá un aviso cuando se tramite."
+
+msgid ""
+"This page allows you to add or edit a new assignment of containers to event "
+"area"
+msgstr ""
+"Esta página le permite añadir o editar una nueva asignación de contenedores "
+"al área de eventos"
 
 msgid ""
 "This page displays cases where the same item has been assigned to multiple "

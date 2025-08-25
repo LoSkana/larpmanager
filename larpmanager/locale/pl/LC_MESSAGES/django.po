@@ -5756,6 +5756,9 @@ msgstr "Napotkaliśmy problem z podanym kodem podatkowym"
 msgid "Your membership application was successfully submitted!"
 msgstr "Twój wniosek o członkostwo został pomyślnie przesłany!"
 
+msgid "An assignment for this container and area already exists"
+msgstr "Przypisanie dla tego kontenera i obszaru już istnieje"
+
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr "Kliknij poniższy obrazek (Paypal.me), aby otworzyć płatność"
 
@@ -7401,6 +7404,13 @@ msgid ""
 msgstr ""
 "Wniosek o zwrot kosztów wprowadzony! Otrzymasz powiadomienie, gdy wniosek "
 "zostanie przetworzony."
+
+msgid ""
+"This page allows you to add or edit a new assignment of containers to event "
+"area"
+msgstr ""
+"Ta strona umożliwia dodanie lub edycję nowego przypisania kontenerów do "
+"obszaru zdarzeń"
 
 msgid ""
 "This page displays cases where the same item has been assigned to multiple "

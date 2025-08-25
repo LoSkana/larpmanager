@@ -28,10 +28,13 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from larpmanager.forms.inventory import (
+    OrgaInventoryAreaForm,
+    OrgaInventoryContainerAssignmentForm,
+    OrgaInventoryItemAssignmentForm,
+)
 from larpmanager.forms.miscellanea import (
     OrgaAlbumForm,
-    OrgaInventoryAreaForm,
-    OrgaInventoryAssignmentForm,
     OrgaProblemForm,
     UploadAlbumsForm,
     UtilForm,
@@ -39,9 +42,11 @@ from larpmanager.forms.miscellanea import (
     WorkshopOptionForm,
     WorkshopQuestionForm,
 )
+from larpmanager.models.association import Association
 from larpmanager.models.miscellanea import (
     Album,
     InventoryArea,
+    InventoryContainerAssignment,
     InventoryItemAssignment,
     Problem,
     Util,
@@ -203,25 +208,51 @@ def orga_inventory_checks(request, s, n):
 @login_required
 def orga_inventory_manifest(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_inventory_manifest")
-    ctx["list"] = ctx["event"].get_elements(InventoryArea).prefetch_related("assignments", "assignments__item")
+    ctx["area_list"] = {}
     get_inventory_optionals(ctx, [])
+
+    for el in ctx["event"].get_elements(InventoryItemAssignment).select_related("area", "item"):
+        if el.area_id not in ctx["area_list"]:
+            ctx["area_list"][el.area_id] = el.area
+        if not hasattr(ctx["area_list"][el.area_id], "items"):
+            ctx["area_list"][el.area_id].items = []
+        ctx["area_list"][el.area_id].items.append(el)
+
+    assoc = Association.objects.get(pk=request.assoc["id"])
+    if assoc.get_config("inventory_container_manifest", False):
+        for el in ctx["event"].get_elements(InventoryContainerAssignment).select_related("area", "container"):
+            if el.area_id not in ctx["area_list"]:
+                ctx["area_list"][el.area_id] = el.area
+            if not hasattr(ctx["area_list"][el.area_id], "containers"):
+                ctx["area_list"][el.area_id].containers = []
+            ctx["area_list"][el.area_id].containers.append(el)
+
     return render(request, "larpmanager/orga/inventory/manifest.html", ctx)
 
 
 @login_required
-def orga_inventory_manifest_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_inventory_manifest", OrgaInventoryAssignmentForm, num)
+def orga_inventory_assignment_item_edit(request, s, n, num):
+    return orga_edit(request, s, n, "orga_inventory_manifest", OrgaInventoryItemAssignmentForm, num)
+
+
+@login_required
+def orga_inventory_assignment_container_edit(request, s, n, num):
+    return orga_edit(request, s, n, "orga_inventory_manifest", OrgaInventoryContainerAssignmentForm, num)
 
 
 @require_POST
 def orga_manifest_check(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_inventory_manifest")
     idx = request.POST.get("idx")
-    type = request.POST.get("type")
+    type = request.POST.get("type").lower()
     value = request.POST.get("value").lower() == "true"
+    assignment = request.POST.get("type").lower()
 
     try:
-        assign = InventoryItemAssignment.objects.get(pk=idx)
+        if assignment == "itm":
+            assign = InventoryItemAssignment.objects.get(pk=idx)
+        else:
+            assign = InventoryContainerAssignment.objects.get(pk=idx)
     except ObjectDoesNotExist:
         return JsonResponse({"error": "not found"}, status=400)
 
