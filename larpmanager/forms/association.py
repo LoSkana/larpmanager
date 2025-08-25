@@ -63,6 +63,7 @@ class ExeAssociationForm(MyForm):
             "images_shared",
             "plan",
             "skin",
+            "demo",
         )
 
     def __init__(self, *args, **kwargs):
