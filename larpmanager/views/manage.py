@@ -535,7 +535,7 @@ def _orga_reg_acc_actions(ctx, features):
                     _(
                         "You have some fixed installments with both date and days set, but those values cannot be set at the same time: %(list)s"
                     )
-                    % {"list": ", ".join([obj.name for obj in both_set])},
+                    % {"list": ", ".join([str(obj) for obj in both_set])},
                     "orga_registration_installments",
                 )
 
