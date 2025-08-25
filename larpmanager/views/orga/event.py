@@ -89,7 +89,7 @@ def full_event_edit(ctx, request, event, run, exe=False):
 
     ctx["form1"] = form_event
     ctx["form2"] = form_run
-    ctx["num"] = ctx["event"].id
+    ctx["num"] = event.id
     ctx["type"] = "event"
 
     return render(request, "larpmanager/orga/edit_multi.html", ctx)
