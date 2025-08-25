@@ -2111,3 +2111,7 @@ label {
 input[type="number"] {
     width: 8ch !important;
 }
+
+.ajax-toggle {
+    cursor: pointer
+}

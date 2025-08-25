@@ -49,8 +49,10 @@
                             {{ el.item.container }}
                             {% if el.item.container.position %}- {{ el.item.container.position | truncatechars:50 }}{% endif %}
                         </td>
-                        <td>
-                            <input type="checkbox" />
+                        <td data-order="{% if el.loaded %}1{% else %}0{% endif %}"
+                            class="ajax-toggle"
+                            tp="load">
+                            <span class="value {% if not el.loaded %}hide{% endif %}"><i class="fa-solid fa-check"></i></span>
                         </td>
                         {% if optionals.quantity %}
                             <td>
@@ -67,8 +69,10 @@
                                      onclick="openImage('{{ el.item.photo.url }}')" />
                             {% endif %}
                         </td>
-                        <td>
-                            <input type="checkbox" />
+                        <td data-order="{% if el.deployed %}1{% else %}0{% endif %}"
+                            class="ajax-toggle"
+                            tp="depl">
+                            <span class="value {% if not el.deployed %}hide{% endif %}"><i class="fa-solid fa-check"></i></span>
                         </td>
                     </tr>
                 {% endfor %}
@@ -81,6 +85,8 @@
 {% endblock content %}
 {% block js %}
     <script>
+// Show photo
+
 function openImage(url) {
     document.getElementById('popupImg').src = url;
     document.getElementById('imagePopup').style.display = 'flex';
@@ -89,5 +95,123 @@ function openImage(url) {
 document.getElementById('imagePopup').onclick = function() {
     this.style.display = 'none';
 };
+
+// Keep scroll on refresh
+
+  const KEY = "page-wrapper.scrollTop";
+
+  function getScroller() {
+    return document.getElementById("page-wrapper");
+  }
+
+  function save() {
+    const el = getScroller();
+    if (!el) return;
+    sessionStorage.setItem(KEY, String(el.scrollTop || 0));
+  }
+
+  function restore() {
+    const el = getScroller();
+    if (!el) return false;
+    const val = sessionStorage.getItem(KEY);
+    if (val == null) return true;
+    const y = parseInt(val, 10) || 0;
+    el.scrollTop = y;
+    // doppio pass per layout tardivo
+    requestAnimationFrame(() => { el.scrollTop = y; });
+    setTimeout(() => { el.scrollTop = y; }, 50);
+    return true;
+  }
+
+  function attach() {
+    const el = getScroller();
+    if (!el) return false;
+    el.addEventListener("scroll", save, { passive: true });
+    window.addEventListener("pagehide", save);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") save();
+    });
+    return true;
+  }
+
+  let reloadTimer = null;
+  function scheduleReload(ms) {
+    clearTimeout(reloadTimer);
+    reloadTimer = setTimeout(function () {
+      save();
+      location.reload();
+    }, ms);
+  }
+
+  function initRefreshScroll() {
+    if (!attach()) {
+      // attacca quando il nodo diventa disponibile
+      const obs = new MutationObserver(() => {
+        if (attach()) obs.disconnect();
+      });
+      obs.observe(document.documentElement, { childList: true, subtree: true });
+    }
+    const tryRestore = () => {
+      if (restore()) return;
+      // ritenta finché #page-wrapper non esiste
+      setTimeout(tryRestore, 30);
+    };
+    tryRestore();
+
+    // standard reload: 10s
+    scheduleReload(10000);
+
+  }
+
+
+
+window.addEventListener('DOMContentLoaded', function() {
+    $( function() {
+
+        initRefreshScroll();
+
+        // Server-side update of loaded and deployed
+
+        $(".ajax-toggle").on("click", function (e) {
+            const box = $(this);
+            const value = box.find(".value:visible").length > 0;
+            const tr = box.closest("tr");
+            const idx = tr.attr("id");
+            const type = $(this).attr("tp");
+
+            const newValue = !value;
+
+            const table = box.closest("table").DataTable();
+
+            // if pressed, add 5s to reload
+            scheduleReload(5000);
+
+            $.ajax({
+                url: "{% url 'orga_manifest_check' run.event.slug run.number %}",
+                method: "POST",
+                data: { idx: idx, type: type, value: newValue },
+                success: function () {
+                    box.children().toggle(newValue);
+                    box.attr('data-order', newValue ? '1' : '0');
+                    table.row(box.closest('tr')).invalidate('dom').draw(false);
+                },
+                error: function (res) {
+                    $.toast({
+                        text: res,
+                        showHideTransition: 'slide',
+                        icon: 'error',
+                        position: 'mid-center',
+                        textAlign: 'center',
+                        allowToastClose: true,
+                        hideAfter: false,
+                        stack: 1
+                    });
+                }
+            });
+        });
+
+    });
+});
+
     </script>
 {% endblock js %}

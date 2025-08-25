@@ -1050,4 +1050,9 @@ urlpatterns = [
         views_oms.orga_inventory_manifest_edit,
         name="orga_inventory_manifest_edit",
     ),
+    path(
+        "<slug:s>/<int:n>/manage/inventory/manifest/check/",
+        views_oms.orga_manifest_check,
+        name="orga_manifest_check",
+    ),
 ]

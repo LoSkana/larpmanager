@@ -361,8 +361,8 @@ class OrgaInventoryAreaForm(MyForm):
         self.fields[qty_field] = forms.IntegerField(
             required=False,
             initial=item.quantity_assigned,
-            min_value=0,
-            max_value=item.available,
+            min_value=min(0, item.available),
+            max_value=max(0, item.available),
         )
         self.separate_handling.append("id_" + qty_field)
 
@@ -380,12 +380,12 @@ class OrgaInventoryAreaForm(MyForm):
         get_inventory_optionals(ctx, [4, 5])
         self.optionals = ctx["optionals"]
         self.no_header_cols = [4, 5]
-        if "quantity" in self.optionals:
+        if self.optionals["quantity"]:
             self.no_header_cols = [6, 7]
 
     def get_all_items(self):
         for item in InventoryItem.objects.filter(assoc_id=self.params["a_id"]).prefetch_related("tags"):
-            item.available = item.quantity
+            item.available = item.quantity or 0
             self.item_all[item.id] = item
 
         for el in self.params["event"].get_elements(InventoryAssignment).filter(event=self.params["event"]):
@@ -393,7 +393,7 @@ class OrgaInventoryAreaForm(MyForm):
             if el.area_id == self.instance.pk:
                 item.assigned = {"quantity": el.quantity, "notes": el.notes}
             else:
-                item.available -= el.quantity
+                item.available -= el.quantity or 0
 
     def sort_items(self):
         def _assigned_updated(it):
