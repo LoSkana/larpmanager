@@ -127,10 +127,6 @@ class OrgaInventoryAreaForm(MyForm):
 
     page_title = _("Event area")
 
-    load_form = ["area-assignments"]
-
-    load_js = ["area-assignments"]
-
     class Meta:
         model = InventoryArea
         exclude = []
