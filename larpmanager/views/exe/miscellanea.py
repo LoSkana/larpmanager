@@ -21,11 +21,13 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from larpmanager.forms.miscellanea import (
+from larpmanager.forms.inventory import (
     ExeInventoryContainerForm,
     ExeInventoryItemForm,
     ExeInventoryMovementForm,
     ExeInventoryTagForm,
+)
+from larpmanager.forms.miscellanea import (
     ExeUrlShortnerForm,
 )
 from larpmanager.models.miscellanea import (

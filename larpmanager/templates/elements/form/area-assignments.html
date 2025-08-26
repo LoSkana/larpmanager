@@ -1,5 +1,35 @@
 {% load i18n static show_tags %}
-<table id="inv_assignments"
+{% if form.inventory_container_manifest %}
+    <table id="inv_assignments"
+           class="go_datatable dot_links"
+           no_header_cols="3">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Selected" %}</th>
+                <th>{% trans "Container" %}</th>
+                <th>{% trans "Notes" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in form.container_all.values %}
+                {% with idstr=el.id|stringformat:"s" %}
+                    {% with sel="sel_cnt_"|add:idstr qty="qty_cnt_"|add:idstr notes="notes_cnt_"|add:idstr %}
+                        <tr id="{{ el.id }}">
+                            <td></td>
+                            <td data-order="{% if el.selected %}1{% else %}0{% endif %}"
+                                class="inp-sel">{{ form|get_form_field:sel }}</td>
+                            <td>{{ el }}</td>
+                            <td>{{ form|get_form_field:notes }}</td>
+                        </tr>
+                    {% endwith %}
+                {% endwith %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <hr />
+{% endif %}
+<table id="inv_assignments_items"
        class="go_datatable dot_links"
        no_header_cols="{{ form.no_header_cols }}">
     <thead>
@@ -19,7 +49,7 @@
     <tbody>
         {% for el in form.item_all.values %}
             {% with idstr=el.id|stringformat:"s" %}
-                {% with sel="sel_"|add:idstr qty="qty_"|add:idstr notes="notes_"|add:idstr %}
+                {% with sel="sel_itm_"|add:idstr qty="qty_itm_"|add:idstr notes="notes_itm_"|add:idstr %}
                     <tr id="{{ el.id }}">
                         <td></td>
                         <td data-order="{% if el.selected %}1{% else %}0{% endif %}"

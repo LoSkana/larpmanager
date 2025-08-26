@@ -8,7 +8,7 @@
 {% endblock info %}
 {% block content %}
     {% include "elements/header/orga.html" %}
-    {% for area in list %}
+    {% for area_id, area in area_list.items %}
         <h2>{{ area }}</h2>
         {% if area.position %}
             <p>
@@ -20,7 +20,46 @@
                 <b>{% trans "Description" %}:</b> {{ area.description }}
             </p>
         {% endif %}
-        <table id="inv_manifest_{{ area.id }}"
+        {% if area.containers %}
+            <table id="inv_manifest_cnt_{{ area.id }}"
+                   class="go_datatable dot_links"
+                   no_header_cols="3">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>{% trans "Container" %}</th>
+                        <th>{% trans "Loaded" %}</th>
+                        <th>{% trans "Notes" %}</th>
+                        <th>{% trans "Deployed" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for el in area.containers %}
+                        <tr id="{{ el.id }}">
+                            <td>
+                                <a href="{% url 'orga_inventory_assignment_container_edit' event.slug run.number el.id %}"
+                                   qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                            </td>
+                            <td>{{ el.container }}</td>
+                            <td data-order="{% if el.loaded %}1{% else %}0{% endif %}"
+                                class="ajax-toggle"
+                                tp="load"
+                                ass="cnt">
+                                <span class="value {% if not el.loaded %}hide{% endif %}"><i class="fa-solid fa-check"></i></span>
+                            </td>
+                            <td>{{ el.notes }}</td>
+                            <td data-order="{% if el.deployed %}1{% else %}0{% endif %}"
+                                class="ajax-toggle"
+                                tp="depl"
+                                ass="cnt">
+                                <span class="value {% if not el.deployed %}hide{% endif %}"><i class="fa-solid fa-check"></i></span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        <table id="inv_manifest_itm_{{ area.id }}"
                class="go_datatable dot_links"
                no_header_cols="{{ no_header_cols }}">
             <thead>
@@ -38,10 +77,10 @@
                 </tr>
             </thead>
             <tbody>
-                {% for el in area.assignments.all %}
+                {% for el in area.items %}
                     <tr id="{{ el.id }}">
                         <td>
-                            <a href="{% url 'orga_inventory_manifest_edit' event.slug run.number el.id %}"
+                            <a href="{% url 'orga_inventory_assignment_item_edit' event.slug run.number el.id %}"
                                qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                         </td>
                         <td>{{ el.item }}</td>
@@ -51,7 +90,8 @@
                         </td>
                         <td data-order="{% if el.loaded %}1{% else %}0{% endif %}"
                             class="ajax-toggle"
-                            tp="load">
+                            tp="load"
+                            ass="itm">
                             <span class="value {% if not el.loaded %}hide{% endif %}"><i class="fa-solid fa-check"></i></span>
                         </td>
                         {% if optionals.quantity %}
@@ -71,7 +111,8 @@
                         </td>
                         <td data-order="{% if el.deployed %}1{% else %}0{% endif %}"
                             class="ajax-toggle"
-                            tp="depl">
+                            tp="depl"
+                            ass="itm">
                             <span class="value {% if not el.deployed %}hide{% endif %}"><i class="fa-solid fa-check"></i></span>
                         </td>
                     </tr>
@@ -178,6 +219,7 @@ window.addEventListener('DOMContentLoaded', function() {
             const tr = box.closest("tr");
             const idx = tr.attr("id");
             const type = $(this).attr("tp");
+            const assignment = $(this).attr("ass");
 
             const newValue = !value;
 
@@ -189,7 +231,7 @@ window.addEventListener('DOMContentLoaded', function() {
             $.ajax({
                 url: "{% url 'orga_manifest_check' run.event.slug run.number %}",
                 method: "POST",
-                data: { idx: idx, type: type, value: newValue },
+                data: { idx: idx, type: type, assignment: assignment, value: newValue },
                 success: function () {
                     box.children().toggle(newValue);
                     box.attr('data-order', newValue ? '1' : '0');
