@@ -145,7 +145,7 @@ def is_allowed_managed(ar, ctx):
     if ctx.get("skin_managed", False) and not ctx.get("is_staff", False):
         allowed = get_allowed_managed()
         # if the feature is a default one different than the management of events:
-        if ar["feature__module"] and ar["slug"] not in allowed:
+        if not ar["feature__module"] and ar["slug"] not in allowed:
             return False
 
     return True

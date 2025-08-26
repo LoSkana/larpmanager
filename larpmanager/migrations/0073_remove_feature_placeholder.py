@@ -7,6 +7,12 @@ def clean(apps, schema_editor):
     Feature = apps.get_model("larpmanager", "Feature")
     Feature.objects.filter(pk=190).delete()
 
+    Association = apps.get_model("larpmanager", "Association")
+    event_feature = Feature.objects.get(pk=191)
+    for assoc in Association.objects.all():
+        assoc.features.add(event_feature.id)
+        assoc.save()
+
 
 class Migration(migrations.Migration):
     dependencies = [

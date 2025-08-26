@@ -3,6 +3,8 @@
   fields:
     name: LarpManager
     domain: larpmanager.com
+    default_features:
+    - 191
 - model: larpmanager.associationskin
   pk: 2
   fields:
@@ -24,3 +26,4 @@
     - 144
     - 108
     - 86
+    - 191

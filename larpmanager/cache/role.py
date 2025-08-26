@@ -37,7 +37,7 @@ def cache_assoc_role_key(ar_id):
 def get_assoc_role(ar):
     ls = []
     features = get_assoc_features(ar.assoc_id)
-    for el in ar.permissions.values_list("slug", "feature__slug", "feature__module__isnull"):
+    for el in ar.permissions.values_list("slug", "feature__slug", "feature__module"):
         if not el[2] and el[1] not in features:
             continue
         ls.append(el[0])
@@ -109,7 +109,7 @@ def cache_event_role_key(ar_id):
 def get_event_role(ar):
     ls = []
     features = get_event_features(ar.event_id)
-    for el in ar.permissions.values_list("slug", "feature__slug", "feature__module__isnull"):
+    for el in ar.permissions.values_list("slug", "feature__slug", "feature__module"):
         if not el[2] and el[1] not in features:
             continue
         ls.append(el[0])
