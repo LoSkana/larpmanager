@@ -7760,6 +7760,9 @@ msgstr ""
 msgid "Now you can create the \"new player\" ticket"
 msgstr ""
 
+msgid "Create and manage events"
+msgstr ""
+
 msgid "Manage the organization main settings"
 msgstr ""
 

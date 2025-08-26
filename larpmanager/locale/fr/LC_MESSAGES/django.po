@@ -3509,6 +3509,9 @@ msgstr "Code de la boîte ou de l'étagère"
 msgid "Code two capital letters"
 msgstr "Code deux lettres majuscules"
 
+msgid "Create and manage events"
+msgstr "Créer et gérer des événements"
+
 msgid "Disable character finder"
 msgstr "Désactiver la recherche de caractères"
 

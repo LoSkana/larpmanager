@@ -56,7 +56,6 @@ class Command(BaseCommand):
                     "slug",
                     "overall",
                     "module",
-                    "placeholder",
                     "order",
                     "after_text",
                     "after_link",

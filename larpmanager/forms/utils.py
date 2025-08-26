@@ -138,7 +138,7 @@ def prepare_permissions_role(form, typ):
     base_qs = (
         typ.objects.filter(hidden=False)
         .select_related("feature", "module")
-        .filter(Q(feature__placeholder=True) | Q(feature__slug__in=features))
+        .filter(Q(feature__module__isnull=True) | Q(feature__slug__in=features))
         .order_by("module__order", "number", "pk")
     )
 

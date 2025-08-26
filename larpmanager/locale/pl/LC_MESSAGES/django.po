@@ -3509,6 +3509,9 @@ msgstr "Kod pudełka lub półki"
 msgid "Code two capital letters"
 msgstr "Zakoduj dwie duże litery"
 
+msgid "Create and manage events"
+msgstr "Tworzenie wydarzeń i zarządzanie nimi"
+
 msgid "Disable character finder"
 msgstr "Wyłączanie wyszukiwarki znaków"
 

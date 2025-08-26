@@ -3509,6 +3509,9 @@ msgstr "Codice della scatola o dello scaffale"
 msgid "Code two capital letters"
 msgstr "Codice due lettere maiuscole"
 
+msgid "Create and manage events"
+msgstr "Crea e gestisci eventi"
+
 msgid "Disable character finder"
 msgstr "Disattivare il cercatore di personaggi"
 

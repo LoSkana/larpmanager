@@ -129,7 +129,7 @@ def get_index_permissions(ctx, features, has_default, permissions, typ):
         if not has_default and ar["slug"] not in permissions:
             continue
 
-        if not ar["feature__placeholder"] and ar["feature__slug"] not in features:
+        if ar["feature__module"] and ar["feature__slug"] not in features:
             continue
 
         mod_name = (_(ar["module__name"]), ar["module__icon"])
@@ -144,8 +144,8 @@ def is_allowed_managed(ar, ctx):
     # check if the association skin is managed and the user is not staff
     if ctx.get("skin_managed", False) and not ctx.get("is_staff", False):
         allowed = get_allowed_managed()
-        # if the feature is a placeholder different than the management of events:
-        if ar["feature__placeholder"] and ar["slug"] not in allowed:
+        # if the feature is a default one different than the management of events:
+        if ar["feature__module"] and ar["slug"] not in allowed:
             return False
 
     return True

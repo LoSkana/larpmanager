@@ -33,7 +33,7 @@ def assoc_permission_feature_key(slug):
 def update_assoc_permission_feature(slug):
     perm = AssocPermission.objects.select_related("feature").get(slug=slug)
     feature = perm.feature
-    if feature.placeholder:
+    if not feature.module:
         slug = "def"
     else:
         slug = feature.slug
@@ -69,7 +69,7 @@ def event_permission_feature_key(slug):
 def update_event_permission_feature(slug):
     perm = EventPermission.objects.select_related("feature").get(slug=slug)
     feature = perm.feature
-    if feature.placeholder:
+    if not feature.module:
         slug = "def"
     else:
         slug = feature.slug
@@ -111,7 +111,7 @@ def update_index_permission(typ):
         "descr",
         "slug",
         "hidden",
-        "feature__placeholder",
+        "feature__module",
         "feature__slug",
         "module__name",
         "module__icon",

@@ -3509,6 +3509,9 @@ msgstr "Kód krabice nebo police"
 msgid "Code two capital letters"
 msgstr "Kód dvě velká písmena"
 
+msgid "Create and manage events"
+msgstr "Vytváření a správa událostí"
+
 msgid "Disable character finder"
 msgstr "Zakázat vyhledávač znaků"
 

@@ -3509,6 +3509,9 @@ msgstr "Kode for esken eller hyllen"
 msgid "Code two capital letters"
 msgstr "Kode to store bokstaver"
 
+msgid "Create and manage events"
+msgstr "Opprett og administrer arrangementer"
+
 msgid "Disable character finder"
 msgstr "Deaktiver tegnfinner"
 

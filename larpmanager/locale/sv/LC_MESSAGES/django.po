@@ -3509,6 +3509,9 @@ msgstr "Kod för lådan eller hyllan"
 msgid "Code two capital letters"
 msgstr "Kod två stora bokstäver"
 
+msgid "Create and manage events"
+msgstr "Skapa och hantera evenemang"
+
 msgid "Disable character finder"
 msgstr "Inaktivera teckensökare"
 

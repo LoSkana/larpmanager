@@ -3509,6 +3509,9 @@ msgstr "Code der Schachtel oder des Regals"
 msgid "Code two capital letters"
 msgstr "Code zwei Großbuchstaben"
 
+msgid "Create and manage events"
+msgstr "Ereignisse erstellen und verwalten"
+
 msgid "Disable character finder"
 msgstr "Zeichenfinder deaktivieren"
 

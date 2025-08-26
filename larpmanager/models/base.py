@@ -122,9 +122,6 @@ class Feature(BaseModel):
 
     after_text = models.TextField(max_length=300, blank=True, null=True)
 
-    # If the feature is a placeholder (used to indicate the permissions that does not require a true feature)
-    placeholder = models.BooleanField(default=False)
-
     hidden = models.BooleanField(default=False)
 
     class Meta:

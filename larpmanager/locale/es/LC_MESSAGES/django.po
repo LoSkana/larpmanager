@@ -3509,6 +3509,9 @@ msgstr "Código de la caja o estantería"
 msgid "Code two capital letters"
 msgstr "Código dos mayúsculas"
 
+msgid "Create and manage events"
+msgstr "Crear y gestionar eventos"
+
 msgid "Disable character finder"
 msgstr "Desactivar el buscador de caracteres"
 

@@ -31,7 +31,7 @@ with open(trans_path, "w") as f:
             data = yaml.safe_load(fixture)
 
             for el in data:
-                if "placeholder" in el["fields"] and el["fields"]["placeholder"]:
+                if "module" in el["fields"] and not el["fields"]["module"]:
                     continue
                 for s in ["name", "descr", "after_text"]:
                     if s not in el["fields"] or not el["fields"][s]:

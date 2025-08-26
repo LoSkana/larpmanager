@@ -7,7 +7,6 @@
     slug: prologue
     overall: false
     module: 1
-    placeholder: false
     order: 240
     after_text: Now you can create prologues for the event
     after_link: orga_prologues
@@ -20,7 +19,6 @@
     slug: questbuilder
     overall: false
     module: 1
-    placeholder: false
     order: 120
     after_text: Now you can create quests for the event
     after_link: orga_quest_types
@@ -32,7 +30,6 @@
     slug: copy
     overall: false
     module: 3
-    placeholder: false
     order: 10
     after_text: Now you can copy elements from an other event
     after_link: orga_copy
@@ -44,7 +41,6 @@
     slug: pay_what_you_want
     overall: false
     module: 2
-    placeholder: false
     order: 50
     after_text: Now you can set the optional amount field
     after_link: config/pay_what_you_want
@@ -57,7 +53,6 @@
     slug: discount
     overall: false
     module: 2
-    placeholder: false
     order: 30
     after_text: Now you can create discounts for the event
     after_link: orga_discounts
@@ -70,7 +65,6 @@
     slug: laog
     overall: false
     module: 3
-    placeholder: false
     order: 70
     after_text: ''
     after_link: ''
@@ -83,7 +77,6 @@
     slug: remind
     overall: true
     module: 4
-    placeholder: false
     order: 20
     after_text: Now you can set the reminder options
     after_link: config/remind
@@ -96,7 +89,6 @@
     slug: bring_friend
     overall: false
     module: 2
-    placeholder: false
     order: 9999
     after_text: Now you can set the discount options
     after_link: config/bring_friend
@@ -109,7 +101,6 @@
     slug: print_pdf
     overall: false
     module: 1
-    placeholder: false
     order: 25
     after_text: Now you can set the PDF generation options
     after_link: orga_characters_pdf
@@ -122,7 +113,6 @@
     slug: workshop
     overall: false
     module: 3
-    placeholder: false
     order: 20
     after_text: Now you can start creating workshops, starting from modules
     after_link: orga_workshop_modules
@@ -135,7 +125,6 @@
     slug: speedlarp
     overall: false
     module: 3
-    placeholder: false
     order: 60
     after_text: Now you can start creating speed-larps
     after_link: orga_speedlarps
@@ -147,7 +136,6 @@
     slug: safety
     overall: false
     module: 8
-    placeholder: false
     order: 20
     after_text: Now you can review the safety information submitted by participants
     after_link: orga_safety
@@ -161,7 +149,6 @@
     slug: casting
     overall: false
     module: 7
-    placeholder: false
     order: 10
     after_text: Now you can set the casting options
     after_link: config/casting
@@ -174,7 +161,6 @@
     slug: help
     overall: true
     module: 8
-    placeholder: false
     order: 10
     after_text: Now you can review participants' questions
     after_link: exe_questions
@@ -187,7 +173,6 @@
     slug: collection
     overall: true
     module: 2
-    placeholder: false
     order: 40
     after_text: Now participants can submit collections, and you can review them
     after_link: exe_collections
@@ -199,7 +184,6 @@
     slug: pre_register
     overall: true
     module: 4
-    placeholder: false
     order: 30
     after_text: Now participants can submit preregistrations, and you can review them
     after_link: exe_pre_registrations
@@ -212,7 +196,6 @@
     slug: donate
     overall: true
     module: 2
-    placeholder: false
     order: 20
     after_text: Now participants can submit donation, and you can review them
     after_link: exe_donations
@@ -225,7 +208,6 @@
     slug: newsletter
     overall: true
     module: 8
-    placeholder: false
     order: 60
     after_text: Now you can review users mailing list
     after_link: exe_newsletter
@@ -238,7 +220,6 @@
     slug: utils
     overall: false
     module: 3
-    placeholder: false
     order: 30
     after_text: Now you can host files in the platform
     after_link: orga_utils
@@ -251,7 +232,6 @@
     slug: custom_character
     overall: false
     module: 7
-    placeholder: false
     order: 40
     after_text: Now you can set customization options
     after_link: config/custom_character
@@ -264,7 +244,6 @@
     slug: membership
     overall: true
     module: 8
-    placeholder: false
     order: 40
     after_text: Now you can set membership options
     after_link: config/membership
@@ -277,7 +256,6 @@
     slug: shuttle
     overall: true
     module: 3
-    placeholder: false
     order: 30
     after_text: ''
     after_link: ''
@@ -290,7 +268,6 @@
     slug: custom_mail
     overall: true
     module: 3
-    placeholder: false
     order: 40
     after_text: Now you can set the external mail server settings
     after_link: config/custom_mail_server
@@ -303,7 +280,6 @@
     slug: lottery
     overall: false
     module: 4
-    placeholder: false
     order: 90
     after_text: Now you can create the lottery ticket
     after_link: orga_registration_tickets
@@ -316,7 +292,6 @@
     slug: filler
     overall: false
     module: 4
-    placeholder: false
     order: 70
     after_text: Now you can create the filler ticket
     after_link: orga_registration_tickets
@@ -329,7 +304,6 @@
     slug: chat
     overall: true
     module: 8
-    placeholder: false
     order: 50
     after_text: ''
     after_link: ''
@@ -342,7 +316,6 @@
     slug: waiting
     overall: false
     module: 4
-    placeholder: false
     order: 60
     after_text: Now you can create the waiting ticket
     after_link: orga_registration_tickets
@@ -354,7 +327,6 @@
     slug: player_cancellation
     overall: false
     module: 7
-    placeholder: false
     order: 20
     after_text: ''
     after_link: ''
@@ -367,7 +339,6 @@
     slug: register_link
     overall: false
     module: 4
-    placeholder: false
     order: 30
     after_text: Now you can set the external registration link
     after_link: orga_event
@@ -380,7 +351,6 @@
     slug: problems
     overall: false
     module: 3
-    placeholder: false
     order: 40
     after_text: Now you can review the event's problems
     after_link: orga_problems
@@ -394,7 +364,6 @@
     slug: reg_quotas
     overall: false
     module: 2
-    placeholder: false
     order: 20
     after_text: Now you can set the dynamic installments
     after_link: orga_registration_quotas
@@ -407,7 +376,6 @@
     slug: vote
     overall: true
     module: 8
-    placeholder: false
     order: 90
     after_text: Now you can set the vote options
     after_link: config/vote
@@ -419,7 +387,6 @@
     slug: badge
     overall: true
     module: 8
-    placeholder: false
     order: 80
     after_text: Now you can create badges
     after_link: exe_badges
@@ -431,7 +398,6 @@
     slug: inventory
     overall: true
     module: 3
-    placeholder: false
     order: 20
     after_text: Now you can add inventory containers and items
     after_link: exe_inventory_containers
@@ -444,7 +410,6 @@
     slug: registration_secret
     overall: false
     module: 4
-    placeholder: false
     order: 20
     after_text: Now you can set the registration secret link
     after_link: orga_run
@@ -457,7 +422,6 @@
     slug: reg_installments
     overall: false
     module: 2
-    placeholder: false
     order: 10
     after_text: Now you can create fixed installments
     after_link: orga_registration_installments
@@ -469,7 +433,6 @@
     slug: relationships
     overall: false
     module: 1
-    placeholder: false
     order: 200
     after_text: Now you can add relationships when editing a character
     after_link: orga_characters
@@ -482,7 +445,6 @@
     slug: reg_que_sections
     overall: false
     module: 4
-    placeholder: false
     order: 40
     after_text: Now you can define registration form sections
     after_link: orga_registration_sections
@@ -495,7 +457,6 @@
     slug: campaign
     overall: true
     module: 12
-    placeholder: false
     order: 30
     after_text: ''
     after_link: ''
@@ -508,7 +469,6 @@
     slug: reduced
     overall: false
     module: 4
-    placeholder: false
     order: 80
     after_text: Now you can create the 'patron' and 'reduced' tickets
     after_link: orga_registration_tickets
@@ -521,7 +481,6 @@
     slug: record_acc
     overall: true
     module: 2
-    placeholder: false
     order: 140
     after_text: Now you can review the historical accounting informations
     after_link: exe_accounting_rec
@@ -534,7 +493,6 @@
     slug: progress
     overall: false
     module: 1
-    placeholder: false
     order: 110
     after_text: Now you can create the progress steps
     after_link: orga_progress_steps
@@ -546,7 +504,6 @@
     slug: diet
     overall: false
     module: 8
-    placeholder: false
     order: 30
     after_text: Now you can review the diet information submitted by participants
     after_link: orga_diet
@@ -560,7 +517,6 @@
     slug: deadlines
     overall: true
     module: 4
-    placeholder: false
     order: 10
     after_text: Now you can review the organization's deadlines
     after_link: exe_deadlines
@@ -573,7 +529,6 @@
     slug: plot
     overall: false
     module: 1
-    placeholder: false
     order: 130
     after_text: Now you can create the plots of the event
     after_link: orga_plots
@@ -586,7 +541,6 @@
     slug: faction
     overall: false
     module: 1
-    placeholder: false
     order: 120
     after_text: Now you can create the factions of the event
     after_link: orga_factions
@@ -599,7 +553,6 @@
     slug: handout
     overall: false
     module: 1
-    placeholder: false
     order: 140
     after_text: Now you can create the handouts of the event
     after_link: orga_handouts
@@ -612,7 +565,6 @@
     slug: expense
     overall: true
     module: 2
-    placeholder: false
     order: 30
     after_text: Now staff members can upload expenses, and you can review them
     after_link: exe_expenses
@@ -625,7 +577,6 @@
     slug: token_credit
     overall: true
     module: 2
-    placeholder: false
     order: 50
     after_text: Now set up the token and credits configuration
     after_link: config/token_credit
@@ -638,7 +589,6 @@
     slug: outflow
     overall: true
     module: 2
-    placeholder: false
     order: 90
     after_text: Now you can create outflows
     after_link: exe_outflows
@@ -651,7 +601,6 @@
     slug: verification
     overall: true
     module: 2
-    placeholder: false
     order: 130
     after_text: Now you can verify wire payments
     after_link: exe_verification
@@ -663,7 +612,6 @@
     slug: ita_balance
     overall: true
     module: 10
-    placeholder: false
     order: 10
     after_text: Now you can review the annual balance
     after_link: exe_balance
@@ -675,7 +623,6 @@
     slug: payment
     overall: true
     module: 2
-    placeholder: false
     order: 10
     after_text: Now you can set the payment methods settings
     after_link: exe_payment_details
@@ -687,7 +634,6 @@
     slug: refund
     overall: true
     module: 2
-    placeholder: false
     order: 60
     after_text: Now participants can create refund requests, and you can review them
     after_link: exe_refunds
@@ -700,7 +646,6 @@
     slug: registration_open
     overall: false
     module: 4
-    placeholder: false
     order: 10
     after_text: Now you can set the registration opening date
     after_link: orga_run
@@ -713,7 +658,6 @@
     slug: legal_notice
     overall: true
     module: 6
-    placeholder: false
     order: 10
     after_text: Now you can set the legal notice text
     after_link: exe_texts
@@ -726,7 +670,6 @@
     slug: px
     overall: false
     module: 7
-    placeholder: false
     order: 50
     after_text: Now you can set the experience points settings
     after_link: config/px
@@ -738,7 +681,6 @@
     slug: user_character
     overall: false
     module: 7
-    placeholder: false
     order: 30
     after_text: Now you can set the player editing settings
     after_link: config/user_character
@@ -751,7 +693,6 @@
     slug: organization_tax
     overall: true
     module: 2
-    placeholder: false
     order: 110
     after_text: Now you can set the organization tax options
     after_link: config/organization_tax
@@ -764,7 +705,6 @@
     slug: centauri
     overall: true
     module: 10
-    placeholder: false
     order: 9999
     after_text: Now you can se the special page options
     after_link: config/centauri
@@ -776,7 +716,6 @@
     slug: urlshortner
     overall: true
     module: 3
-    placeholder: false
     order: 10
     after_text: Now you can create url shortners
     after_link: exe_urlshortner
@@ -789,7 +728,6 @@
     slug: reg_surcharges
     overall: false
     module: 2
-    placeholder: false
     order: 40
     after_text: Now you can create registration surcharges
     after_link: orga_registration_surcharges
@@ -802,7 +740,6 @@
     slug: inflow
     overall: true
     module: 2
-    placeholder: false
     order: 80
     after_text: Now you can create inflows
     after_link: exe_inflows
@@ -815,7 +752,6 @@
     slug: carousel
     overall: true
     module: 6
-    placeholder: false
     order: 20
     after_text: ''
     after_link: ''
@@ -828,7 +764,6 @@
     slug: treasurer
     overall: true
     module: 2
-    placeholder: false
     order: 120
     after_text: ''
     after_link: ''
@@ -841,7 +776,6 @@
     slug: receipts
     overall: true
     module: 2
-    placeholder: false
     order: 9999
     after_text: Now you can create the receipt text
     after_link: exe_texts
@@ -853,7 +787,6 @@
     slug: volunteer_registry
     overall: true
     module: 10
-    placeholder: false
     order: 20
     after_text: Now you can review the volunteers registry
     after_link: exe_volunteer_registry
@@ -865,7 +798,6 @@
     slug: vat
     overall: true
     module: 2
-    placeholder: false
     order: 100
     after_text: Now you can set the taxes options
     after_link: config/vat
@@ -878,7 +810,6 @@
     slug: delegated_members
     overall: true
     module: 8
-    placeholder: false
     order: 70
     after_text: ''
     after_link: ''
@@ -891,7 +822,6 @@
     slug: gift
     overall: false
     module: 2
-    placeholder: false
     order: 60
     after_text: Now you can select which tickets can be gifted
     after_link: orga_registration_tickets
@@ -903,7 +833,6 @@
     slug: additional_tickets
     overall: false
     module: 4
-    placeholder: false
     order: 50
     after_text: ''
     after_link: ''
@@ -916,7 +845,6 @@
     slug: character
     overall: false
     module: 1
-    placeholder: false
     order: 1
     after_text: Now you can create characters
     after_link: orga_characters
@@ -929,7 +857,6 @@
     slug: template
     overall: true
     module: 12
-    placeholder: false
     order: 1
     after_text: Now you can create event templates
     after_link: exe_templates
@@ -941,7 +868,6 @@
     slug: fiscal_code_check
     overall: true
     module: 10
-    placeholder: false
     order: 30
     after_text: Now you can peform the fiscal code validity check
     after_link: exe_membership_check
@@ -952,8 +878,7 @@
     descr: ''
     slug: exe_archive_email
     overall: true
-    module: 8
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -964,8 +889,7 @@
     descr: ''
     slug: exe_profile
     overall: true
-    module: 8
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -976,32 +900,7 @@
     descr: ''
     slug: exe_send_mail
     overall: true
-    module: 8
-    placeholder: true
-    order: 9999
-    after_text: null
-    after_link: null
-- model: larpmanager.feature
-  pk: 190
-  fields:
-    name: Exe Runs
-    descr: ''
-    slug: exe_runs
-    overall: true
-    module: 12
-    placeholder: true
-    order: 9999
-    after_text: null
-    after_link: null
-- model: larpmanager.feature
-  pk: 191
-  fields:
-    name: Exe Event
-    descr: ''
-    slug: exe_events
-    overall: true
-    module: 12
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1012,8 +911,7 @@
     descr: ''
     slug: exe_texts
     overall: true
-    module: 6
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1024,8 +922,7 @@
     descr: ''
     slug: exe_appearance
     overall: true
-    module: 6
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1036,8 +933,7 @@
     descr: ''
     slug: exe_accounting
     overall: true
-    module: 2
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1048,8 +944,7 @@
     descr: ''
     slug: exe_features
     overall: true
-    module: 9
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1060,8 +955,7 @@
     descr: ''
     slug: exe_config
     overall: true
-    module: 9
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1072,8 +966,7 @@
     descr: ''
     slug: exe_roles
     overall: true
-    module: 9
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1084,8 +977,7 @@
     descr: ''
     slug: exe_association
     overall: true
-    module: 9
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1096,8 +988,7 @@
     descr: ''
     slug: orga_archive_email
     overall: false
-    module: 8
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1108,8 +999,7 @@
     descr: ''
     slug: orga_send_mail
     overall: false
-    module: 8
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1120,8 +1010,7 @@
     descr: ''
     slug: orga_reload_cache
     overall: false
-    module: 3
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1132,8 +1021,7 @@
     descr: ''
     slug: orga_buttons
     overall: false
-    module: 6
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1144,8 +1032,7 @@
     descr: ''
     slug: orga_texts
     overall: false
-    module: 6
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1156,8 +1043,7 @@
     descr: ''
     slug: orga_cancellations
     overall: false
-    module: 4
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1168,8 +1054,7 @@
     descr: ''
     slug: orga_registration_form
     overall: false
-    module: 4
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1180,8 +1065,7 @@
     descr: ''
     slug: orga_registration_tickets
     overall: false
-    module: 4
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1192,8 +1076,7 @@
     descr: ''
     slug: orga_registrations
     overall: false
-    module: 4
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1204,8 +1087,7 @@
     descr: ''
     slug: orga_sensitive
     overall: false
-    module: 8
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1216,8 +1098,7 @@
     descr: ''
     slug: orga_accounting
     overall: false
-    module: 2
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1228,8 +1109,7 @@
     descr: ''
     slug: orga_appearance
     overall: false
-    module: 6
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1240,8 +1120,7 @@
     descr: ''
     slug: orga_features
     overall: false
-    module: 7
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1252,8 +1131,7 @@
     descr: ''
     slug: orga_config
     overall: false
-    module: 7
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1264,8 +1142,7 @@
     descr: ''
     slug: orga_roles
     overall: false
-    module: 7
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1276,8 +1153,7 @@
     descr: ''
     slug: orga_run
     overall: false
-    module: 7
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1288,8 +1164,7 @@
     descr: ''
     slug: orga_event
     overall: false
-    module: 7
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1300,8 +1175,7 @@
     descr: ''
     slug: quick_setup
     overall: false
-    module: 7
-    placeholder: true
+    module: null
     order: 9999
     after_text: null
     after_link: null
@@ -1313,7 +1187,18 @@
     slug: new_player
     overall: false
     module: 4
-    placeholder: false
     order: 75
     after_text: Now you can create the "new player" ticket
     after_link: orga_registration_tickets
+- model: larpmanager.feature
+  pk: 191
+  fields:
+    name: Event
+    descr: Create and manage events
+    slug: exe_events
+    overall: true
+    module: 7
+    order: 9999
+    after_text: null
+    after_link: null
+    hidden: true

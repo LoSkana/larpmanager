@@ -3509,6 +3509,9 @@ msgstr "Code van de doos of plank"
 msgid "Code two capital letters"
 msgstr "Codeer twee hoofdletters"
 
+msgid "Create and manage events"
+msgstr "Evenementen maken en beheren"
+
 msgid "Disable character finder"
 msgstr "Tekenzoeker uitschakelen"
 
