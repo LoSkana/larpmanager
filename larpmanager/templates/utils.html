@@ -14,25 +14,5 @@
             {% endwith %}
         {% endfor %}
     {% endif %}
-    <script>
-    // handle bulk operations
-
-window.addEventListener('DOMContentLoaded', function() {
-    $(document).on("lm_ready", function() {
-
-        Object.keys(window.datatables).forEach(function(key) {
-            var table = window.datatables[key];
-            table.on('click', 'tbody tr', function (e) {
-                console.log($("#bulk").is(":visible"));
-                if ($("#main_bulk").is(":visible")) {
-
-                    e.currentTarget.classList.toggle('selected');
-                }
-            });
-
-        });
-
-    });
-});
-    </script>
+    {% include "elements/header/bulk.js" %}
 {% endblock js %}

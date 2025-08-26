@@ -8169,6 +8169,15 @@ msgstr ""
 msgid "No elements are currently available"
 msgstr ""
 
+msgid "Move to container"
+msgstr ""
+
+msgid "Add tag"
+msgstr ""
+
+msgid "Remove tag"
+msgstr ""
+
 #, python-format
 msgid ""
 "File type '%(detected_type)s' is not allowed.Allowed types are: "

@@ -654,6 +654,9 @@ msgstr "Acties"
 msgid "Add new"
 msgstr "Nieuw toevoegen"
 
+msgid "Add tag"
+msgstr "Label toevoegen"
+
 msgid "Address"
 msgstr "Adres"
 
@@ -1463,6 +1466,9 @@ msgstr "Vergoeding voor"
 
 msgid "Registered"
 msgstr "Met inscriptie"
+
+msgid "Remove tag"
+msgstr "Tag verwijderen"
 
 msgid "Repertoire"
 msgstr "Repertoire"
@@ -2698,6 +2704,9 @@ msgstr "Maximaal beschikbaar"
 
 msgid "Months free quota"
 msgstr "Maanden vrij quotum"
+
+msgid "Move to container"
+msgstr "Verplaats naar container"
 
 msgid "Paid current year"
 msgstr "Betaald lopend jaar"

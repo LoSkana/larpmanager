@@ -38,6 +38,7 @@ from larpmanager.models.miscellanea import (
     UrlShortner,
 )
 from larpmanager.utils.base import check_assoc_permission
+from larpmanager.utils.bulk import handle_bulk_items, prepare_bulk_items
 from larpmanager.utils.edit import exe_edit
 from larpmanager.utils.miscellanea import get_inventory_optionals
 
@@ -81,10 +82,15 @@ def exe_inventory_tags_edit(request, num):
 @login_required
 def exe_inventory_items(request):
     ctx = check_assoc_permission(request, "exe_inventory_items")
+
+    if request.POST:
+        return handle_bulk_items(request, ctx)
+
     ctx["list"] = InventoryItem.objects.filter(assoc_id=request.assoc["id"])
     ctx["list"] = ctx["list"].select_related("container").prefetch_related("tags")
     get_inventory_optionals(ctx, [5])
-    ctx["bulk"] = 1
+
+    prepare_bulk_items(request, ctx)
     return render(request, "larpmanager/exe/inventory/items.html", ctx)
 
 

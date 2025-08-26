@@ -654,6 +654,9 @@ msgstr "Akce"
 msgid "Add new"
 msgstr "Přidat nový"
 
+msgid "Add tag"
+msgstr "Přidat značku"
+
 msgid "Address"
 msgstr "Adresa"
 
@@ -1463,6 +1466,9 @@ msgstr "Úhrada za"
 
 msgid "Registered"
 msgstr "S nápisem"
+
+msgid "Remove tag"
+msgstr "Odstranění štítku"
 
 msgid "Repertoire"
 msgstr "Repertoár"
@@ -2698,6 +2704,9 @@ msgstr "Maximální dostupný počet"
 
 msgid "Months free quota"
 msgstr "Měsíční volná kvóta"
+
+msgid "Move to container"
+msgstr "Přesun do kontejneru"
 
 msgid "Paid current year"
 msgstr "Zaplaceno v běžném roce"

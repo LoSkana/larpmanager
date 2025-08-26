@@ -654,6 +654,9 @@ msgstr "Åtgärder"
 msgid "Add new"
 msgstr "Lägg till ny"
 
+msgid "Add tag"
+msgstr "Lägg till tagg"
+
 msgid "Address"
 msgstr "Adress"
 
@@ -1463,6 +1466,9 @@ msgstr "Ersättning för"
 
 msgid "Registered"
 msgstr "Inskriven"
+
+msgid "Remove tag"
+msgstr "Ta bort tagg"
 
 msgid "Repertoire"
 msgstr "Repertoar"
@@ -2698,6 +2704,9 @@ msgstr "Maximalt tillgänglig"
 
 msgid "Months free quota"
 msgstr "Månader fri kvot"
+
+msgid "Move to container"
+msgstr "Flytta till container"
 
 msgid "Paid current year"
 msgstr "Betald innevarande år"

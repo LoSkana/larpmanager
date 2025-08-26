@@ -654,6 +654,9 @@ msgstr "Handlinger"
 msgid "Add new"
 msgstr "Legg til ny"
 
+msgid "Add tag"
+msgstr "Legg til tagg"
+
 msgid "Address"
 msgstr "Adresse"
 
@@ -1463,6 +1466,9 @@ msgstr "Refusjon for"
 
 msgid "Registered"
 msgstr "Innskrevet"
+
+msgid "Remove tag"
+msgstr "Fjern taggen"
 
 msgid "Repertoire"
 msgstr "Repertoar"
@@ -2698,6 +2704,9 @@ msgstr "Maksimalt tilgjengelig"
 
 msgid "Months free quota"
 msgstr "Måneder fri kvote"
+
+msgid "Move to container"
+msgstr "Flytt til container"
 
 msgid "Paid current year"
 msgstr "Betalt inneværende år"

@@ -654,6 +654,9 @@ msgstr "Acciones"
 msgid "Add new"
 msgstr "Añadir nuevo"
 
+msgid "Add tag"
+msgstr "Añadir etiqueta"
+
 msgid "Address"
 msgstr "Dirección"
 
@@ -1463,6 +1466,9 @@ msgstr "Reembolso de"
 
 msgid "Registered"
 msgstr "Inscrito"
+
+msgid "Remove tag"
+msgstr "Eliminar etiqueta"
 
 msgid "Repertoire"
 msgstr "Repertorio"
@@ -2698,6 +2704,9 @@ msgstr "Máximo disponible"
 
 msgid "Months free quota"
 msgstr "Meses de cuota libre"
+
+msgid "Move to container"
+msgstr "Pasar a contenedor"
 
 msgid "Paid current year"
 msgstr "Pagado el año actual"
