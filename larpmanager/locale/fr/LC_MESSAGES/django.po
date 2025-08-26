@@ -2417,6 +2417,9 @@ msgstr "Service de navette"
 msgid "Start algorithm"
 msgstr "Algorithme de démarrage"
 
+msgid "Ticket selected"
+msgstr "Billet sélectionné"
+
 msgid "Upload Expenses"
 msgstr "Télécharger les dépenses"
 
@@ -2503,6 +2506,9 @@ msgstr "Escompte à terme"
 
 msgid "Handout template"
 msgstr "Modèle de document"
+
+msgid "Item assignments"
+msgstr "Affectation des postes"
 
 msgid "Max participants"
 msgstr "Nombre maximum de participants"
@@ -3409,9 +3415,6 @@ msgstr "Liens avec les personnages"
 msgid "Collection participated"
 msgstr "Collections participées"
 
-msgid "Containers in manifest "
-msgstr "Conteneurs dans le manifeste"
-
 msgid "Create a new collection"
 msgstr "Créer une nouvelle collection"
 
@@ -4284,10 +4287,6 @@ msgstr "Le paiement n'a pas été effectué"
 
 msgid "This page shows the inventory tags"
 msgstr "Cette page présente les étiquettes d'inventaire"
-
-#, python-format
-msgid "Ticket selected: <b>%(ticket)s</b>"
-msgstr "Ticket sélectionné : <b>%(ticket)s</b>"
 
 msgid "You are about to make a payment of"
 msgstr "Vous êtes sur le point d'effectuer un paiement de"
@@ -5798,9 +5797,6 @@ msgstr ""
 msgid "Your membership application was successfully submitted!"
 msgstr "Votre demande d'adhésion a été envoyée avec succès !"
 
-msgid "An assignment for this container and area already exists"
-msgstr "Une affectation pour ce conteneur et cette zone existe déjà"
-
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr "Cliquez sur l'image ci-dessous (Paypal.me) pour ouvrir le paiement"
 
@@ -6085,6 +6081,10 @@ msgid "If checked, an option can be chosen a maximum number of times"
 msgstr ""
 "Si cette case est cochée, une option peut être choisie un nombre maximum de "
 "fois"
+
+msgid "In this page you can mark which items to add to the game area"
+msgstr ""
+"Dans cette page, vous pouvez marquer les éléments à ajouter à la zone de jeu"
 
 msgid "Indicate here any element you wish to avoid in the assignment"
 msgstr "Indiquez ici tout élément que vous souhaitez éviter dans la mission"
@@ -6790,11 +6790,6 @@ msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
 "Si cette case est cochée, un code unique est ajouté à tous les "
 "enregistrements pour les référencer"
-
-msgid "If checked: Allow to add containers in cargo manifest as for the items"
-msgstr ""
-"Si coché : Autoriser l'ajout de conteneurs dans le manifeste de fret comme "
-"pour les articles"
 
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
@@ -7619,13 +7614,6 @@ msgid ""
 msgstr ""
 "Demande de remboursement introduite ! Vous recevrez une notification "
 "lorsqu'elle sera traitée."
-
-msgid ""
-"This page allows you to add or edit a new assignment of containers to event "
-"area"
-msgstr ""
-"Cette page vous permet d'ajouter ou de modifier une nouvelle affectation de "
-"conteneurs à une zone d'événement"
 
 msgid ""
 "This page displays cases where the same item has been assigned to multiple "

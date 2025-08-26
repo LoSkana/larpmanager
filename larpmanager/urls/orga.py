@@ -1036,6 +1036,11 @@ urlpatterns = [
         name="orga_inventory_area_edit",
     ),
     path(
+        "<slug:s>/<int:n>/manage/inventory/area/assignments/<int:num>/",
+        views_oms.orga_inventory_area_assignments,
+        name="orga_inventory_area_assignments",
+    ),
+    path(
         "<slug:s>/<int:n>/manage/inventory/checks/",
         views_oms.orga_inventory_checks,
         name="orga_inventory_checks",
@@ -1046,18 +1051,18 @@ urlpatterns = [
         name="orga_inventory_manifest",
     ),
     path(
-        "<slug:s>/<int:n>/manage/inventory/manifest/item/edit/<int:num>/",
+        "<slug:s>/<int:n>/manage/inventory/assignment/manifest/",
+        views_oms.orga_inventory_assignment_manifest,
+        name="orga_inventory_assignment_manifest",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/inventory/assignment/area/<int:num>/",
+        views_oms.orga_inventory_assignment_area,
+        name="orga_inventory_assignment_area",
+    ),
+    path(
+        "<slug:s>/<int:n>/manage/inventory/assignment/edit/<int:num>/",
         views_oms.orga_inventory_assignment_item_edit,
         name="orga_inventory_assignment_item_edit",
-    ),
-    path(
-        "<slug:s>/<int:n>/manage/inventory/manifest/container/edit/<int:num>/",
-        views_oms.orga_inventory_assignment_container_edit,
-        name="orga_inventory_assignment_container_edit",
-    ),
-    path(
-        "<slug:s>/<int:n>/manage/inventory/manifest/check/",
-        views_oms.orga_manifest_check,
-        name="orga_manifest_check",
     ),
 ]

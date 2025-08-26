@@ -1,0 +1,189 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Inventory assignments" %} - {{ area }} - {{ run }}
+{% endblock title %}
+{% block info %}
+    {% trans "In this page you can mark which items to add to the game area" %}
+{% endblock info %}
+{% block content %}
+    <table id="inv_assignments_items"
+           class="go_datatable dot_links"
+           no_header_cols="{{ no_header_cols }}">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Selected" %}</th>
+                <th>{% trans "Item" %}</th>
+                <th>{% trans "Container" %}</th>
+                <th>{% trans "Tags" %}</th>
+                {% if optionals.quantity %}
+                    <th>{% trans "Available" %}</th>
+                    <th>{% trans "Quantity" %}</th>
+                {% endif %}
+                <th>{% trans "Notes" %}</th>
+                <th>{% trans "Photo" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in item_all.values %}
+                <tr id="{{ el.id }}">
+                    <td></td>
+                    <td data-order="{% if el.selected %}1{% else %}0{% endif %}"
+                        class="selected">
+                        <span class="value {% if not el.assigned %}hide{% endif %}"><i class="fa-solid fa-check"></i></span>
+                    </td>
+                    <td>{{ el }}</td>
+                    <td>{{ el.container }}</td>
+                    <td>
+                        {% for tag in el.tags.all %}{{ tag }}{% endfor %}
+                    </td>
+                    {% if optionals.quantity %}
+                        <td>{{ el.available }}</td>
+                        <td data-order="{{ el.quantity_assigned }}" class="quantity">
+                            <input type="number"
+                                   min="0"
+                                   max="{{ el.available }}"
+                                   step="1"
+                                   {% if el.assigned %}value="{{ el.assigned.quantity }}"{% endif %}>
+                        </td>
+                    {% endif %}
+                    <td class="notes">
+                        <textarea rows="2" cols="15">{{ el.assigned.notes }}</textarea>
+                    </td>
+                    <td>
+                        {% if el.photo %}
+                            <img src="{{ el.thumb.url }}"
+                                 class="inv_photo"
+                                 alt="item photo"
+                                 style="cursor: pointer"
+                                 onclick="openImage('{{ el.photo.url }}')" />
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div id="imagePopup">
+        <img id="popupImg" src="" alt="popup image" />
+    </div>
+{% endblock content %}
+{% block js %}
+    <script>
+function openImage(url) {
+    document.getElementById('popupImg').src = url;
+    document.getElementById('imagePopup').style.display = 'flex';
+}
+
+document.getElementById('imagePopup').onclick = function() {
+    this.style.display = 'none';
+};
+
+
+window.addEventListener('DOMContentLoaded', function() {
+
+    $(document).on("lm_ready", function() {
+
+        const table = $('#inv_assignments_items').DataTable();
+
+        function markSelected($row, external) {
+          const $cell = $row.find('td.selected');
+          const $val = $cell.find('.value');
+
+          const nowHidden = $val.hasClass('hide');
+          if (external && !nowHidden) return;
+          $val.toggleClass('hide');
+
+          if ($val.hasClass('hide')) {
+            $cell.attr('data-order', '0');
+          } else {
+            $cell.attr('data-order', '1');
+          }
+
+          // refresh DataTables
+          table.row($row).invalidate('dom').draw(false);
+        }
+
+        function clampQuantity($input) {
+          const max = parseInt($input.attr('max'), 10);
+          let v = parseInt($input.val(), 10);
+          if (isNaN(v) || v < 0) v = 0;
+          if (!isNaN(max) && v > max) v = max;
+          $input.val(v);
+
+          const td = $($input).closest('td');
+          td.attr('data-order', v);
+          table.row(td.closest('tr')).invalidate('dom').draw(false);
+
+          return v;
+        }
+
+        const sendTimers = {};
+        function scheduleSend($row) {
+          const id = $row.attr('id');
+          clearTimeout(sendTimers[id]);
+          sendTimers[id] = setTimeout(() => sendUpdate($row), 350);
+        }
+
+        function sendUpdate($row) {
+          const idx = $row.attr('id');
+          const $qty = $row.find('td.quantity input[type="number"]');
+          const $notes = $row.find('td.notes textarea');
+          const $selected = $row.find('td.selected .value');
+
+          const selected = !$selected.hasClass('hide');
+          const quantity = $qty.length ? clampQuantity($qty) : 0;
+          const notes = $notes.length ? ($notes.val() || '').trim() : '';
+
+          $.ajax({
+                url: '{% url "orga_inventory_assignment_area" run.event.slug run.number area.id %}',
+                method: 'POST',
+                data: {idx, selected: selected, quantity: quantity, notes: notes },
+                success: function () {
+                    // all good!
+                },
+                error: function (res) {
+                    $.toast({
+                        text: res.error,
+                        showHideTransition: 'slide',
+                        icon: 'error',
+                        position: 'mid-center',
+                        textAlign: 'center',
+                        allowToastClose: true,
+                        hideAfter: false,
+                        stack: 1
+                    });
+                }
+          });
+        }
+
+        $(document).on('input', 'td.quantity input[type="number"]', function () {
+          const $row = $(this).closest('tr[id]');
+          clampQuantity($(this));
+          markSelected($row, true);
+          scheduleSend($row);
+        });
+
+        $(document).on('input', 'td.notes textarea', function () {
+          const $row = $(this).closest('tr[id]');
+          markSelected($row, true);
+          scheduleSend($row);
+        });
+
+        // enforce clamp on blur
+        $(document).on('blur', 'td.quantity input[type="number"]', function () {
+          clampQuantity($(this));
+        });
+
+        $(document).on('click', 'td.selected', function () {
+          const $row = $(this).closest('tr[id]');
+          clampQuantity($(this));
+          markSelected($row, false);
+          scheduleSend($row);
+        });
+
+    });
+});
+
+    </script>
+{% endblock js %}

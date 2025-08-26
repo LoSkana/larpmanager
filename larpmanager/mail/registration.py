@@ -31,7 +31,7 @@ from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssocTextType, get_url, hdr
 from larpmanager.models.event import DevelopStatus, EventTextType, PreRegistration
 from larpmanager.models.member import get_user_membership
-from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
+from larpmanager.models.registration import Registration, RegistrationCharacterRel
 from larpmanager.utils.registration import get_registration_options
 from larpmanager.utils.tasks import background_auto, my_send_mail
 from larpmanager.utils.text import get_assoc_text, get_event_text
@@ -95,13 +95,9 @@ def registration_options(instance):
     body = ""
 
     if instance.ticket:
-        body += (
-            "<br /><br />"
-            + _("Ticket selected: <b>%(ticket)s</b>") % {"ticket": instance.ticket.show(instance.run)["name"]}
-            + "."
-        )
-        if instance.ticket.tier == TicketTier.PATRON:
-            body += _("Thanks for your support") + "!"
+        body += "<br /><br />" + _("Ticket selected") + f": <b>{instance.ticket.name}</b>"
+        if instance.ticket.description:
+            body += f" - {instance.ticket.description}"
 
     get_user_membership(instance.member, instance.run.event.assoc.id)
     features = get_event_features(instance.run.event_id)

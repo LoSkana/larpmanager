@@ -2417,6 +2417,9 @@ msgstr "Pendeldienst"
 msgid "Start algorithm"
 msgstr "Algoritme starten"
 
+msgid "Ticket selected"
+msgstr "Geselecteerd ticket"
+
 msgid "Upload Expenses"
 msgstr "Uitgaven uploaden"
 
@@ -2503,6 +2506,9 @@ msgstr "Termijnkorting"
 
 msgid "Handout template"
 msgstr "Sjabloon voor hand-outs"
+
+msgid "Item assignments"
+msgstr "Item toewijzingen"
 
 msgid "Max participants"
 msgstr "Maximaal aantal deelnemers"
@@ -3409,9 +3415,6 @@ msgstr "Karakter links"
 msgid "Collection participated"
 msgstr "Deelgenomen Collecties"
 
-msgid "Containers in manifest "
-msgstr "Containers in manifest"
-
 msgid "Create a new collection"
 msgstr "Maak een nieuwe verzameling"
 
@@ -4283,10 +4286,6 @@ msgstr "De betaling is niet voltooid"
 
 msgid "This page shows the inventory tags"
 msgstr "Deze pagina toont de inventarislabels"
-
-#, python-format
-msgid "Ticket selected: <b>%(ticket)s</b>"
-msgstr "Geselecteerd ticket: <b>%(ticket)s</b>"
 
 msgid "You are about to make a payment of"
 msgstr "Je staat op het punt een betaling te doen van"
@@ -5771,9 +5770,6 @@ msgstr ""
 msgid "Your membership application was successfully submitted!"
 msgstr "Je lidmaatschapsaanvraag is succesvol ingediend!"
 
-msgid "An assignment for this container and area already exists"
-msgstr "Er bestaat al een toewijzing voor deze container en dit gebied"
-
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr ""
 "Klik op de onderstaande afbeelding (Paypal.me) om de betaling te openen"
@@ -6036,6 +6032,11 @@ msgid "If checked, an option can be chosen a maximum number of times"
 msgstr ""
 "Als deze optie is aangevinkt, kan deze een maximaal aantal keren worden "
 "gekozen"
+
+msgid "In this page you can mark which items to add to the game area"
+msgstr ""
+"Op deze pagina kun je aangeven welke items je wilt toevoegen aan het "
+"spelgebied"
 
 msgid "Indicate here any element you wish to avoid in the assignment"
 msgstr "Geef hier aan welk element je wilt vermijden in de opdracht"
@@ -6688,11 +6689,6 @@ msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
 "Als deze optie is ingeschakeld, wordt aan alle registraties een unieke code "
 "toegevoegd om ernaar te verwijzen"
-
-msgid "If checked: Allow to add containers in cargo manifest as for the items"
-msgstr ""
-"Indien aangevinkt: Sta toe om containers toe te voegen in vrachtmanifest "
-"zoals voor de items"
 
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
@@ -7511,13 +7507,6 @@ msgid ""
 msgstr ""
 "Verzoek tot terugbetaling ingevoerd! Je ontvangt bericht wanneer het is "
 "verwerkt."
-
-msgid ""
-"This page allows you to add or edit a new assignment of containers to event "
-"area"
-msgstr ""
-"Op deze pagina kunt u een nieuwe toewijzing van containers aan een "
-"gebeurtenisgebied toevoegen of bewerken"
 
 msgid ""
 "This page displays cases where the same item has been assigned to multiple "

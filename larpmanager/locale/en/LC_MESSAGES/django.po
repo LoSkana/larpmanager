@@ -403,12 +403,6 @@ msgstr ""
 msgid "Inventory"
 msgstr ""
 
-msgid "Containers in manifest "
-msgstr ""
-
-msgid "If checked: Allow to add containers in cargo manifest as for the items"
-msgstr ""
-
 msgid "Quantity"
 msgstr ""
 
@@ -1631,14 +1625,6 @@ msgstr ""
 msgid "An assignment for this item and area already exists"
 msgstr ""
 
-msgid ""
-"This page allows you to add or edit a new assignment of containers to event "
-"area"
-msgstr ""
-
-msgid "An assignment for this container and area already exists"
-msgstr ""
-
 msgid "Authorisation"
 msgstr ""
 
@@ -2349,11 +2335,7 @@ msgstr ""
 msgid "The user has updated their registration for this event"
 msgstr ""
 
-#, python-format
-msgid "Ticket selected: <b>%(ticket)s</b>"
-msgstr ""
-
-msgid "Thanks for your support"
+msgid "Ticket selected"
 msgstr ""
 
 #, python-format
@@ -3809,21 +3791,6 @@ msgstr ""
 msgid "Missing casting preferences"
 msgstr ""
 
-msgid "Selected"
-msgstr ""
-
-msgid "Container"
-msgstr ""
-
-msgid "Notes"
-msgstr ""
-
-msgid "Item"
-msgstr ""
-
-msgid "Tags"
-msgstr ""
-
 msgid "Input an element name to insert their reference code"
 msgstr ""
 
@@ -5026,7 +4993,19 @@ msgstr ""
 msgid "This page shows the inventory items"
 msgstr ""
 
+msgid "Container"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
 msgid "This page shows the assignment of inventory items to event area"
+msgstr ""
+
+msgid "Item"
+msgstr ""
+
+msgid "Notes"
 msgstr ""
 
 msgid "This page shows the inventory tags"
@@ -6448,6 +6427,15 @@ msgid ""
 "This page shows the event area where inventory items needs to be deployed"
 msgstr ""
 
+msgid "Item assignments"
+msgstr ""
+
+msgid "In this page you can mark which items to add to the game area"
+msgstr ""
+
+msgid "Selected"
+msgstr ""
+
 msgid ""
 "This page displays cases where the same item has been assigned to multiple "
 "areas"
@@ -7766,6 +7754,9 @@ msgstr ""
 msgid "Now you can peform the fiscal code validity check"
 msgstr ""
 
+msgid "Manage events"
+msgstr ""
+
 msgid ""
 "Enables 'New player' tickets, reserved for users that never participated in "
 "an event of the organization"
@@ -7831,9 +7822,6 @@ msgid "Customize textual elements of the organization interface"
 msgstr ""
 
 msgid "Manage url shortner"
-msgstr ""
-
-msgid "Manage events"
 msgstr ""
 
 msgid "Pre-Registrations"
@@ -8335,6 +8323,9 @@ msgid "awaiting member approval to proceed with payment"
 msgstr ""
 
 msgid "please fill in your profile"
+msgstr ""
+
+msgid "Thanks for your support"
 msgstr ""
 
 msgid "payment pending confirmation"

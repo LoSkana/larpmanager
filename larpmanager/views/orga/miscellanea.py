@@ -30,7 +30,6 @@ from django.views.decorators.http import require_POST
 
 from larpmanager.forms.inventory import (
     OrgaInventoryAreaForm,
-    OrgaInventoryContainerAssignmentForm,
     OrgaInventoryItemAssignmentForm,
 )
 from larpmanager.forms.miscellanea import (
@@ -42,11 +41,10 @@ from larpmanager.forms.miscellanea import (
     WorkshopOptionForm,
     WorkshopQuestionForm,
 )
-from larpmanager.models.association import Association
 from larpmanager.models.miscellanea import (
     Album,
     InventoryArea,
-    InventoryContainerAssignment,
+    InventoryItem,
     InventoryItemAssignment,
     Problem,
     Util,
@@ -58,6 +56,7 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import Registration
 from larpmanager.utils.common import (
     get_album_cod,
+    get_element,
 )
 from larpmanager.utils.edit import orga_edit
 from larpmanager.utils.event import check_event_permission
@@ -192,6 +191,53 @@ def orga_inventory_area_edit(request, s, n, num):
 
 
 @login_required
+def orga_inventory_area_assignments(request, s, n, num):
+    ctx = check_event_permission(request, s, n, "orga_inventory_area")
+    get_element(ctx, num, "area", InventoryArea)
+
+    get_inventory_optionals(ctx, [4, 5])
+    if ctx["optionals"]["quantity"]:
+        ctx["no_header_cols"] = [6, 7]
+
+    # GET ITEMS
+
+    item_all = {}
+    for item in InventoryItem.objects.filter(assoc_id=ctx["a_id"]).prefetch_related("tags"):
+        item.available = item.quantity or 0
+        item_all[item.id] = item
+
+    for el in ctx["event"].get_elements(InventoryItemAssignment).filter(event=ctx["event"]):
+        item = item_all[el.item_id]
+        if el.area_id == ctx["area"].pk:
+            item.assigned = {"quantity": el.quantity, "notes": el.notes}
+        else:
+            item.available -= el.quantity or 0
+
+    # SORT THEM
+
+    def _assigned_updated(it):
+        if getattr(it, "assigned", None):
+            return it.assigned.get("updated") or getattr(it, "updated", None) or datetime.min
+        return datetime.min
+
+    # items with assigned first; among them, most recently updated first; then by name, then id
+    ordered_items = sorted(
+        item_all.values(),
+        key=lambda it: (
+            bool(getattr(it, "assigned", None)),  # True first via reverse
+            _assigned_updated(it),  # recent first via reverse
+            getattr(it, "name", ""),  # alphabetical fallback
+            it.id,  # stable tiebreaker
+        ),
+        reverse=True,
+    )
+
+    # rebuild dict preserving the sorted order
+    ctx["item_all"] = {it.id: it for it in ordered_items}
+    return render(request, "larpmanager/orga/inventory/assignments.html", ctx)
+
+
+@login_required
 def orga_inventory_checks(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_inventory_checks")
     ctx["items"] = {}
@@ -218,15 +264,6 @@ def orga_inventory_manifest(request, s, n):
             ctx["area_list"][el.area_id].items = []
         ctx["area_list"][el.area_id].items.append(el)
 
-    assoc = Association.objects.get(pk=request.assoc["id"])
-    if assoc.get_config("inventory_container_manifest", False):
-        for el in ctx["event"].get_elements(InventoryContainerAssignment).select_related("area", "container"):
-            if el.area_id not in ctx["area_list"]:
-                ctx["area_list"][el.area_id] = el.area
-            if not hasattr(ctx["area_list"][el.area_id], "containers"):
-                ctx["area_list"][el.area_id].containers = []
-            ctx["area_list"][el.area_id].containers.append(el)
-
     return render(request, "larpmanager/orga/inventory/manifest.html", ctx)
 
 
@@ -235,24 +272,15 @@ def orga_inventory_assignment_item_edit(request, s, n, num):
     return orga_edit(request, s, n, "orga_inventory_manifest", OrgaInventoryItemAssignmentForm, num)
 
 
-@login_required
-def orga_inventory_assignment_container_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_inventory_manifest", OrgaInventoryContainerAssignmentForm, num)
-
-
 @require_POST
-def orga_manifest_check(request, s, n):
+def orga_inventory_assignment_manifest(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_inventory_manifest")
     idx = request.POST.get("idx")
     type = request.POST.get("type").lower()
     value = request.POST.get("value").lower() == "true"
-    assignment = request.POST.get("type").lower()
 
     try:
-        if assignment == "itm":
-            assign = InventoryItemAssignment.objects.get(pk=idx)
-        else:
-            assign = InventoryContainerAssignment.objects.get(pk=idx)
+        assign = InventoryItemAssignment.objects.get(pk=idx)
     except ObjectDoesNotExist:
         return JsonResponse({"error": "not found"}, status=400)
 
@@ -262,6 +290,28 @@ def orga_manifest_check(request, s, n):
     map_field = {"load": "loaded", "depl": "deployed"}
     field = map_field.get(type, "")
     setattr(assign, field, value)
+    assign.save()
+
+    return JsonResponse({"ok": True})
+
+
+@require_POST
+def orga_inventory_assignment_area(request, s, n, num):
+    ctx = check_event_permission(request, s, n, "orga_inventory_manifest")
+    get_element(ctx, num, "area", InventoryArea)
+
+    idx = request.POST.get("idx")
+    notes = request.POST.get("notes")
+    quantity = int(request.POST.get("quantity", "0"))
+    selected = request.POST.get("selected").lower() == "true"
+
+    if not selected:
+        InventoryItemAssignment.objects.filter(item_id=idx, area=ctx["area"]).delete()
+        return JsonResponse({"ok": True})
+
+    (assign, _cr) = InventoryItemAssignment.objects.get_or_create(item_id=idx, area=ctx["area"], event=ctx["event"])
+    assign.quantity = quantity
+    assign.notes = notes
     assign.save()
 
     return JsonResponse({"ok": True})

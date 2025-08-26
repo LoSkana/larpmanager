@@ -33,7 +33,6 @@ from larpmanager.models.miscellanea import (
     HelpQuestion,
     InventoryArea,
     InventoryContainer,
-    InventoryContainerAssignment,
     InventoryItem,
     InventoryItemAssignment,
     InventoryTag,
@@ -167,12 +166,6 @@ class InventoryAreaAdmin(DefModelAdmin):
 class InventoryItemAssignmentAdmin(DefModelAdmin):
     list_display = ("area", "quantity", "item", "notes")
     autocomplete_fields = ["event", "item", "area"]
-
-
-@admin.register(InventoryContainerAssignment)
-class InventoryContainerAssignmentAdmin(DefModelAdmin):
-    list_display = ("area", "container", "notes")
-    autocomplete_fields = ["event", "container", "area"]
 
 
 @admin.register(ShuttleService)

@@ -2417,6 +2417,9 @@ msgstr "Transferservice"
 msgid "Start algorithm"
 msgstr "Starta algoritmen"
 
+msgid "Ticket selected"
+msgstr "Biljett vald"
+
 msgid "Upload Expenses"
 msgstr "Ladda upp kostnader"
 
@@ -2503,6 +2506,9 @@ msgstr "Terminsrabatt"
 
 msgid "Handout template"
 msgstr "Mall för handout"
+
+msgid "Item assignments"
+msgstr "Tilldelning av objekt"
 
 msgid "Max participants"
 msgstr "Max antal deltagare"
@@ -3409,9 +3415,6 @@ msgstr "Länkar till karaktärer"
 msgid "Collection participated"
 msgstr "Deltagande samlingar"
 
-msgid "Containers in manifest "
-msgstr "Containrar i manifest"
-
 msgid "Create a new collection"
 msgstr "Skapa en ny samling"
 
@@ -4283,10 +4286,6 @@ msgstr "Betalningen slutfördes inte"
 
 msgid "This page shows the inventory tags"
 msgstr "På denna sida visas inventarietiketterna"
-
-#, python-format
-msgid "Ticket selected: <b>%(ticket)s</b>"
-msgstr "Vald biljett: <b>%(ticket)s</b>"
 
 msgid "You are about to make a payment of"
 msgstr "Du är på väg att göra en betalning på"
@@ -5756,9 +5755,6 @@ msgstr "Vi stötte på ett problem med den skattekod du angav"
 msgid "Your membership application was successfully submitted!"
 msgstr "Din medlemsansökan har skickats in framgångsrikt!"
 
-msgid "An assignment for this container and area already exists"
-msgstr "Ett uppdrag för denna container och detta område finns redan"
-
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr "Klicka på bilden nedan (Paypal.me) för att öppna betalningen"
 
@@ -6014,6 +6010,11 @@ msgstr "Visa fullständig historik över deltagarnas preferenser på tecken"
 
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Om alternativet är markerat kan det väljas ett maximalt antal gånger"
+
+msgid "In this page you can mark which items to add to the game area"
+msgstr ""
+"På den här sidan kan du markera vilka objekt som ska läggas till i "
+"spelområdet"
 
 msgid "Indicate here any element you wish to avoid in the assignment"
 msgstr "Ange här om det finns något som du vill undvika i uppgiften"
@@ -6617,11 +6618,6 @@ msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
 "Om markerad, lägger till en unik kod till alla registreringar för att "
 "referera till dem"
-
-msgid "If checked: Allow to add containers in cargo manifest as for the items"
-msgstr ""
-"Om markerad: Tillåt att lägga till containrar i lastmanifestet som för "
-"föremålen"
 
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
@@ -7394,13 +7390,6 @@ msgid ""
 msgstr ""
 "Begäran om återbetalning registrerad! Du kommer att få ett meddelande när "
 "den har behandlats."
-
-msgid ""
-"This page allows you to add or edit a new assignment of containers to event "
-"area"
-msgstr ""
-"På den här sidan kan du lägga till eller redigera en ny tilldelning av "
-"containrar till ett evenemangsområde"
 
 msgid ""
 "This page displays cases where the same item has been assigned to multiple "

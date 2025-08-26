@@ -3,6 +3,8 @@
   fields:
     name: LarpManager
     domain: larpmanager.com
+    default_features:
+    - 191
 - model: larpmanager.associationskin
   pk: 2
   fields:
@@ -15,6 +17,7 @@
     default_mandatory_fields: nationality,phone_contact,social_contact,birth_date,birth_place,document_type,document,residence_address,profile
     default_optional_fields: nickname,legal_name,pronoun,gender,first_aid,fiscal_code,diet,safety
     default_features:
+    - 191
     - 110
     - 158
     - 185
