@@ -7761,6 +7761,9 @@ msgstr ""
 msgid "Now you can peform the fiscal code validity check"
 msgstr ""
 
+msgid "Manage events"
+msgstr ""
+
 msgid ""
 "Enables 'New player' tickets, reserved for users that never participated in "
 "an event of the organization"
@@ -7826,9 +7829,6 @@ msgid "Customize textual elements of the organization interface"
 msgstr ""
 
 msgid "Manage url shortner"
-msgstr ""
-
-msgid "Manage events"
 msgstr ""
 
 msgid "Pre-Registrations"

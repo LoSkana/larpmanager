@@ -982,29 +982,18 @@
     after_text: null
     after_link: null
 - model: larpmanager.feature
-  pk: 190
-  fields:
-    name: Exe Runs
-    descr: ''
-    slug: exe_runs
-    overall: true
-    module: 12
-    placeholder: true
-    order: 9999
-    after_text: null
-    after_link: null
-- model: larpmanager.feature
   pk: 191
   fields:
-    name: Exe Event
-    descr: ''
+    name: Event
+    descr: Manage events
     slug: exe_events
     overall: true
     module: 12
-    placeholder: true
+    placeholder: false
     order: 9999
     after_text: null
     after_link: null
+    hidden: true
 - model: larpmanager.feature
   pk: 192
   fields:
