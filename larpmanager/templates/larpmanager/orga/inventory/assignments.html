@@ -113,7 +113,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
           const td = $($input).closest('td');
           td.attr('data-order', v);
-          table.row(td.closest('tr')).invalidate('dom').draw(false);
+          table.row(td.closest('tr')).invalidate('dom');
 
           return v;
         }
@@ -171,8 +171,9 @@ window.addEventListener('DOMContentLoaded', function() {
         });
 
         // enforce clamp on blur
-        $(document).on('blur', 'td.quantity input[type="number"]', function () {
+        $(document).on('change blur', 'td.quantity input[type="number"]', function () {
           clampQuantity($(this));
+          table.draw(false);
         });
 
         $(document).on('click', 'td.selected', function () {
