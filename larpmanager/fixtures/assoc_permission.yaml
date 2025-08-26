@@ -334,7 +334,7 @@
   fields:
     name: Methods
     descr: Configure payment methods available for participants
-    slug: exe_payment_details
+    slug: exe_methods
     number: 1
     config: payment
     hidden: false

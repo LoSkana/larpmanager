@@ -678,7 +678,7 @@
     placeholder: false
     order: 10
     after_text: Now you can set the payment methods settings
-    after_link: exe_payment_details
+    after_link: exe_methods
 - model: larpmanager.feature
   pk: 112
   fields:
