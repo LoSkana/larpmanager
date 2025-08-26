@@ -3409,6 +3409,9 @@ msgstr "Liens avec les personnages"
 msgid "Collection participated"
 msgstr "Collections participées"
 
+msgid "Containers in manifest "
+msgstr "Conteneurs dans le manifeste"
+
 msgid "Create a new collection"
 msgstr "Créer une nouvelle collection"
 
@@ -5798,6 +5801,9 @@ msgstr ""
 msgid "Your membership application was successfully submitted!"
 msgstr "Votre demande d'adhésion a été envoyée avec succès !"
 
+msgid "An assignment for this container and area already exists"
+msgstr "Une affectation pour ce conteneur et cette zone existe déjà"
+
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr "Cliquez sur l'image ci-dessous (Paypal.me) pour ouvrir le paiement"
 
@@ -6788,6 +6794,11 @@ msgstr ""
 "Si cette case est cochée, un code unique est ajouté à tous les "
 "enregistrements pour les référencer"
 
+msgid "If checked: Allow to add containers in cargo manifest as for the items"
+msgstr ""
+"Si coché : Autoriser l'ajout de conteneurs dans le manifeste de fret comme "
+"pour les articles"
+
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
 "Si vous avez conclu un accord séparé avec nous, vous pouvez ignorer cet "
@@ -7611,6 +7622,13 @@ msgid ""
 msgstr ""
 "Demande de remboursement introduite ! Vous recevrez une notification "
 "lorsqu'elle sera traitée."
+
+msgid ""
+"This page allows you to add or edit a new assignment of containers to event "
+"area"
+msgstr ""
+"Cette page vous permet d'ajouter ou de modifier une nouvelle affectation de "
+"conteneurs à une zone d'événement"
 
 msgid ""
 "This page displays cases where the same item has been assigned to multiple "

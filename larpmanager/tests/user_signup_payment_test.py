@@ -54,7 +54,7 @@ def prepare(page, live_server):
     page.locator("#id_mail_payment").check()
     submit_confirm(page)
 
-    go_to(page, live_server, "/manage/payments/details")
+    go_to(page, live_server, "/manage/methods")
     page.locator('#id_payment_methods input[type="checkbox"][value="1"]').check()
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("test wire")

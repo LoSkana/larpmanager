@@ -443,6 +443,7 @@ function data_tables() {
                 ? { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] } }
                 : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null },
             columnControl: ['order', 'searchDropdown'],
+            lengthMenu: [[10, 25, 50, 100, 250, 500, 1000], [10, 25, 50, 100, 250, 500, 1000]],
             ordering: {
                 indicators: false,
                 handler: false

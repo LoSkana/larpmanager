@@ -170,9 +170,9 @@ urlpatterns = [
         name="exe_profile",
     ),
     path(
-        "manage/payments/details/",
-        views_eas.exe_payment_details,
-        name="exe_payment_details",
+        "manage/methods/",
+        views_eas.exe_methods,
+        name="exe_methods",
     ),
     path(
         "manage/texts/",

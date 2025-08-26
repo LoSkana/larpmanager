@@ -403,6 +403,12 @@ msgstr ""
 msgid "Inventory"
 msgstr ""
 
+msgid "Containers in manifest "
+msgstr ""
+
+msgid "If checked: Allow to add containers in cargo manifest as for the items"
+msgstr ""
+
 msgid "Quantity"
 msgstr ""
 
@@ -1579,6 +1585,60 @@ msgstr ""
 msgid "click on the icon to open the tutorial"
 msgstr ""
 
+msgid "This page allows you to add or edit a new item of inventory"
+msgstr ""
+
+msgid "Inventory items"
+msgstr ""
+
+msgid "This page allows you to add or edit a new container of inventory"
+msgstr ""
+
+msgid "Inventory containers"
+msgstr ""
+
+msgid "This page allows you to add or edit a new tag for inventory items"
+msgstr ""
+
+msgid "Inventory tags"
+msgstr ""
+
+msgid "Items"
+msgstr ""
+
+msgid ""
+"This page allows you to add or edit a new movement of item inventory, loans "
+"or repairs"
+msgstr ""
+
+msgid "Inventory movements"
+msgstr ""
+
+msgid "This page allows you to add or edit a new event area"
+msgstr ""
+
+msgid "Event area"
+msgstr ""
+
+msgid ""
+"This page allows you to add or edit a new assignment of inventory item to "
+"event area"
+msgstr ""
+
+msgid "Inventory assignments"
+msgstr ""
+
+msgid "An assignment for this item and area already exists"
+msgstr ""
+
+msgid ""
+"This page allows you to add or edit a new assignment of containers to event "
+"area"
+msgstr ""
+
+msgid "An assignment for this container and area already exists"
+msgstr ""
+
 msgid "Authorisation"
 msgstr ""
 
@@ -1697,52 +1757,6 @@ msgid "This page allows you to add or edit a url shortner"
 msgstr ""
 
 msgid "Shorten URL"
-msgstr ""
-
-msgid "This page allows you to add or edit a new item of inventory"
-msgstr ""
-
-msgid "Inventory items"
-msgstr ""
-
-msgid "This page allows you to add or edit a new container of inventory"
-msgstr ""
-
-msgid "Inventory containers"
-msgstr ""
-
-msgid "This page allows you to add or edit a new tag for inventory items"
-msgstr ""
-
-msgid "Inventory tags"
-msgstr ""
-
-msgid "Items"
-msgstr ""
-
-msgid ""
-"This page allows you to add or edit a new movement of item inventory, loans "
-"or repairs"
-msgstr ""
-
-msgid "Inventory movements"
-msgstr ""
-
-msgid "This page allows you to add or edit a new event area"
-msgstr ""
-
-msgid "Event area"
-msgstr ""
-
-msgid ""
-"This page allows you to add or edit a new assignment of inventory item to "
-"event area"
-msgstr ""
-
-msgid "Inventory assignments"
-msgstr ""
-
-msgid "An assignment for this item and area already exists"
 msgstr ""
 
 msgid "This page allows you to add or edit a competency"
@@ -3798,13 +3812,16 @@ msgstr ""
 msgid "Selected"
 msgstr ""
 
+msgid "Container"
+msgstr ""
+
+msgid "Notes"
+msgstr ""
+
 msgid "Item"
 msgstr ""
 
 msgid "Tags"
-msgstr ""
-
-msgid "Notes"
 msgstr ""
 
 msgid "Input an element name to insert their reference code"
@@ -5007,9 +5024,6 @@ msgid "Position"
 msgstr ""
 
 msgid "This page shows the inventory items"
-msgstr ""
-
-msgid "Container"
 msgstr ""
 
 msgid "This page shows the assignment of inventory items to event area"
