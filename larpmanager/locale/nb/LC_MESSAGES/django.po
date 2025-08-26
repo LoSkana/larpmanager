@@ -3409,6 +3409,9 @@ msgstr "Koblinger til tegn"
 msgid "Collection participated"
 msgstr "Samlinger som har deltatt"
 
+msgid "Containers in manifest "
+msgstr "Containere i manifest"
+
 msgid "Create a new collection"
 msgstr "Opprett en ny samling"
 
@@ -5756,6 +5759,9 @@ msgstr "Vi har støtt på et problem med skattekoden du oppga"
 msgid "Your membership application was successfully submitted!"
 msgstr "Medlemskapssøknaden din ble sendt inn!"
 
+msgid "An assignment for this container and area already exists"
+msgstr "Det finnes allerede et oppdrag for denne containeren og dette området"
+
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr "Klikk på bildet nedenfor (Paypal.me) for å åpne betalingen"
 
@@ -6600,6 +6606,11 @@ msgstr ""
 "Hvis avkrysset, legges det til en unik kode til alle registreringer for å "
 "referere til dem"
 
+msgid "If checked: Allow to add containers in cargo manifest as for the items"
+msgstr ""
+"Hvis avkrysset: Tillat å legge til containere i fraktmanifestet som for "
+"varene"
+
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
 "Hvis du har en separat avtale med oss, kan du se bort fra denne e-posten"
@@ -7358,6 +7369,13 @@ msgid ""
 msgstr ""
 "Anmodning om refusjon er lagt inn! Du vil motta en melding når den er "
 "behandlet."
+
+msgid ""
+"This page allows you to add or edit a new assignment of containers to event "
+"area"
+msgstr ""
+"På denne siden kan du legge til eller redigere en ny tildeling av containere"
+" til et arrangementsområde"
 
 msgid ""
 "This page displays cases where the same item has been assigned to multiple "

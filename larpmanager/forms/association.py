@@ -384,6 +384,10 @@ class ExeConfigForm(ConfigForm):
         if "inventory" in self.params["features"]:
             self.set_section("inventory", _("Inventory"))
 
+            label = _("Containers in manifest ")
+            help_text = _("If checked: Allow to add containers in cargo manifest as for the items")
+            self.add_configs("inventory_container_manifest", ConfigType.BOOL, label, help_text)
+
             label = _("Quantity")
             help_text = _("If checked: Add a field to track items quantity")
             self.add_configs("inventory_quantity", ConfigType.BOOL, label, help_text)

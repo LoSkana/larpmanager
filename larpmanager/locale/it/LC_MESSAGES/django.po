@@ -3409,6 +3409,9 @@ msgstr "Legami del personaggio"
 msgid "Collection participated"
 msgstr "Collette partecipate"
 
+msgid "Containers in manifest "
+msgstr "Contenitori nel manifesto"
+
 msgid "Create a new collection"
 msgstr "Crea una nuova colletta"
 
@@ -5765,6 +5768,9 @@ msgstr "Abbiamo riscontrato un problema con il codice fiscale che hai fornito"
 msgid "Your membership application was successfully submitted!"
 msgstr "La tua richiesta di socio è stata inviata con successo!"
 
+msgid "An assignment for this container and area already exists"
+msgstr "Esiste già un'assegnazione per questo contenitore e area"
+
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr ""
 "Fare clic sull'immagine sottostante (Paypal.me) per aprire il pagamento"
@@ -6714,6 +6720,11 @@ msgstr ""
 "Se selezionata, aggiunge a tutte le iscrizioni un codice univoco di "
 "riferimento"
 
+msgid "If checked: Allow to add containers in cargo manifest as for the items"
+msgstr ""
+"Se selezionato: Consente di aggiungere contenitori nel manifesto di carico "
+"come per gli articoli"
+
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr "Se hai un accordo separato con noi, puoi anche ignorare questa e-mail"
 
@@ -7529,6 +7540,13 @@ msgid ""
 msgstr ""
 "Richiesta di rimborso inserita! Riceverete una notifica quando verrà "
 "elaborata."
+
+msgid ""
+"This page allows you to add or edit a new assignment of containers to event "
+"area"
+msgstr ""
+"Questa pagina consente di aggiungere o modificare una nuova assegnazione di "
+"contenitori all'area dell'evento"
 
 msgid ""
 "This page displays cases where the same item has been assigned to multiple "

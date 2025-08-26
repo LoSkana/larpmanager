@@ -3409,6 +3409,9 @@ msgstr "Odkazy na postavy"
 msgid "Collection participated"
 msgstr "Zúčastněné sbírky"
 
+msgid "Containers in manifest "
+msgstr "Kontejnery v manifestu"
+
 msgid "Create a new collection"
 msgstr "Vytvoření nové kolekce"
 
@@ -5752,6 +5755,9 @@ msgstr "Narazili jsme na problém s daňovým kódem, který jste nám poskytli"
 msgid "Your membership application was successfully submitted!"
 msgstr "Vaše žádost o členství byla úspěšně odeslána!"
 
+msgid "An assignment for this container and area already exists"
+msgstr "Pro tento kontejner a oblast již existuje přiřazení"
+
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr "Pro otevření platby klikněte na obrázek níže (Paypal.me)"
 
@@ -6552,6 +6558,11 @@ msgstr ""
 "Pokud je zaškrtnuto, přidá ke všem registracím jedinečný kód, který na ně "
 "odkazuje"
 
+msgid "If checked: Allow to add containers in cargo manifest as for the items"
+msgstr ""
+"Pokud je zaškrtnuto: Povolit přidání kontejnerů do nákladního listu jako u "
+"položek"
+
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
 "Pokud s námi máte uzavřenou samostatnou smlouvu, můžete tento e-mail "
@@ -7275,6 +7286,13 @@ msgid ""
 "Request for reimbursement entered! You will receive notice when it is "
 "processed."
 msgstr "Žádost o proplacení zadána! Po jejím zpracování obdržíte oznámení."
+
+msgid ""
+"This page allows you to add or edit a new assignment of containers to event "
+"area"
+msgstr ""
+"Tato stránka umožňuje přidat nebo upravit nové přiřazení kontejnerů k "
+"oblasti událostí"
 
 msgid ""
 "This page displays cases where the same item has been assigned to multiple "
