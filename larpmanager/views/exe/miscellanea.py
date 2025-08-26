@@ -84,6 +84,7 @@ def exe_inventory_items(request):
     ctx["list"] = InventoryItem.objects.filter(assoc_id=request.assoc["id"])
     ctx["list"] = ctx["list"].select_related("container").prefetch_related("tags")
     get_inventory_optionals(ctx, [5])
+    ctx["bulk"] = 1
     return render(request, "larpmanager/exe/inventory/items.html", ctx)
 
 

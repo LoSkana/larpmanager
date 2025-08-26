@@ -705,6 +705,9 @@ msgstr "Podrobnosti na"
 msgid "Example"
 msgstr "Příklad"
 
+msgid "Execute"
+msgstr "Provést"
+
 msgid "Faction"
 msgstr "Skupina"
 
@@ -5729,6 +5732,9 @@ msgstr "Rychlá konfigurace nejdůležitějších nastavení událostí"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Přehled uživatelů, kteří nedodržují termíny události"
+
+msgid "Select the table rows and choose the operation to apply"
+msgstr "Vyberte řádky tabulky a zvolte operaci, která se má použít"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Odkaz bude platný po dobu následujících dnů"

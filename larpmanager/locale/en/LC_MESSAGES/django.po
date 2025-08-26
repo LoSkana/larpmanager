@@ -3891,6 +3891,12 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
+msgid "Select the table rows and choose the operation to apply"
+msgstr ""
+
+msgid "Execute"
+msgstr ""
+
 msgid "Instructions"
 msgstr ""
 

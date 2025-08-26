@@ -705,6 +705,9 @@ msgstr "Dettagli"
 msgid "Example"
 msgstr "Esempio"
 
+msgid "Execute"
+msgstr "Esegui"
+
 msgid "Faction"
 msgstr "Fazione"
 
@@ -5741,6 +5744,9 @@ msgstr "Configurare rapidamente le impostazioni più importanti degli eventi"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Verifica gli utenti che non hanno rispettato le scadenze dell'evento"
+
+msgid "Select the table rows and choose the operation to apply"
+msgstr "Seleziona le righe della tabella e scegli l'operazione da applicare"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Il link sarà valido per il seguente numero di giorni"

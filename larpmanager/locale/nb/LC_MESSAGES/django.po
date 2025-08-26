@@ -705,6 +705,9 @@ msgstr "Detaljer"
 msgid "Example"
 msgstr "Eksempel"
 
+msgid "Execute"
+msgstr "Utfør"
+
 msgid "Faction"
 msgstr "Gruppe"
 
@@ -5733,6 +5736,9 @@ msgstr "Konfigurer raskt de viktigste innstillingene for arrangementene dine"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Gå gjennom brukerne som ikke overholder arrangementets tidsfrister"
+
+msgid "Select the table rows and choose the operation to apply"
+msgstr "Velg tabellradene og velg operasjonen som skal brukes"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Koblingen vil være gyldig i følgende antall dager"
