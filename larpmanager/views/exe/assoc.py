@@ -108,10 +108,8 @@ def exe_texts_edit(request, num):
 
 
 @login_required
-def exe_payment_details(request):
-    return exe_edit(
-        request, ExePaymentSettingsForm, None, "exe_payment_details", "manage", add_ctx={"add_another": False}
-    )
+def exe_methods(request):
+    return exe_edit(request, ExePaymentSettingsForm, None, "exe_methods", "manage", add_ctx={"add_another": False})
 
 
 @login_required
