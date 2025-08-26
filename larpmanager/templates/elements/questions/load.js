@@ -140,7 +140,7 @@ document.querySelectorAll('.que_load thead th').forEach(function(th) {
         if (!window.hideColumnsIndexMap[cls]) {
             window.hideColumnsIndexMap[cls] = [];
         }
-        window.hideColumnsIndexMap[cls].push(realIndex);
+            window.hideColumnsIndexMap[cls].push(realIndex);
     });
 });
 

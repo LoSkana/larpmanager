@@ -2504,6 +2504,9 @@ msgstr "Terminsrabatt"
 msgid "Handout template"
 msgstr "Mall för handout"
 
+msgid "Item assignments"
+msgstr "Tilldelning av objekt"
+
 msgid "Max participants"
 msgstr "Max antal deltagare"
 
@@ -5756,9 +5759,6 @@ msgstr "Vi stötte på ett problem med den skattekod du angav"
 msgid "Your membership application was successfully submitted!"
 msgstr "Din medlemsansökan har skickats in framgångsrikt!"
 
-msgid "An assignment for this container and area already exists"
-msgstr "Ett uppdrag för denna container och detta område finns redan"
-
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr "Klicka på bilden nedan (Paypal.me) för att öppna betalningen"
 
@@ -7394,13 +7394,6 @@ msgid ""
 msgstr ""
 "Begäran om återbetalning registrerad! Du kommer att få ett meddelande när "
 "den har behandlats."
-
-msgid ""
-"This page allows you to add or edit a new assignment of containers to event "
-"area"
-msgstr ""
-"På den här sidan kan du lägga till eller redigera en ny tilldelning av "
-"containrar till ett evenemangsområde"
 
 msgid ""
 "This page displays cases where the same item has been assigned to multiple "

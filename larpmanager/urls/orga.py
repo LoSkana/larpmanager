@@ -1041,19 +1041,14 @@ urlpatterns = [
         name="orga_inventory_checks",
     ),
     path(
-        "<slug:s>/<int:n>/manage/inventory/manifest/",
-        views_oms.orga_inventory_manifest,
-        name="orga_inventory_manifest",
-    ),
-    path(
-        "<slug:s>/<int:n>/manage/inventory/manifest/item/edit/<int:num>/",
+        "<slug:s>/<int:n>/manage/inventory/assignment/edit/<int:num>/",
         views_oms.orga_inventory_assignment_item_edit,
         name="orga_inventory_assignment_item_edit",
     ),
     path(
-        "<slug:s>/<int:n>/manage/inventory/manifest/container/edit/<int:num>/",
-        views_oms.orga_inventory_assignment_container_edit,
-        name="orga_inventory_assignment_container_edit",
+        "<slug:s>/<int:n>/manage/inventory/manifest/",
+        views_oms.orga_inventory_manifest,
+        name="orga_inventory_manifest",
     ),
     path(
         "<slug:s>/<int:n>/manage/inventory/manifest/check/",

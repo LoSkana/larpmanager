@@ -2504,6 +2504,9 @@ msgstr "Sconto avanti"
 msgid "Handout template"
 msgstr "Handout template"
 
+msgid "Item assignments"
+msgstr "Assegnazione degli articoli"
+
 msgid "Max participants"
 msgstr "Numero massimo di partecipanti"
 
@@ -5768,9 +5771,6 @@ msgstr "Abbiamo riscontrato un problema con il codice fiscale che hai fornito"
 msgid "Your membership application was successfully submitted!"
 msgstr "La tua richiesta di socio è stata inviata con successo!"
 
-msgid "An assignment for this container and area already exists"
-msgstr "Esiste già un'assegnazione per questo contenitore e area"
-
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr ""
 "Fare clic sull'immagine sottostante (Paypal.me) per aprire il pagamento"
@@ -7540,13 +7540,6 @@ msgid ""
 msgstr ""
 "Richiesta di rimborso inserita! Riceverete una notifica quando verrà "
 "elaborata."
-
-msgid ""
-"This page allows you to add or edit a new assignment of containers to event "
-"area"
-msgstr ""
-"Questa pagina consente di aggiungere o modificare una nuova assegnazione di "
-"contenitori all'area dell'evento"
 
 msgid ""
 "This page displays cases where the same item has been assigned to multiple "

@@ -38,7 +38,6 @@ from larpmanager.models.association import Association
 from larpmanager.models.miscellanea import (
     InventoryArea,
     InventoryContainer,
-    InventoryContainerAssignment,
     InventoryItem,
     InventoryItemAssignment,
     InventoryMovement,
@@ -269,87 +268,6 @@ class OrgaInventoryAreaForm(MyForm):
 
         InventoryItemAssignment.objects.filter(area=instance, item_id__in=to_del, event=instance.event).delete()
 
-    ### CONTAINERS
-
-    def container_fields(self, container):
-        assigned_data = getattr(container, "assigned", {})
-
-        # selected checkbox
-        sel_field = f"sel_cnt_{container.id}"
-        container.selected = bool(assigned_data)
-        self.fields[sel_field] = forms.BooleanField(
-            required=False,
-            initial=container.selected,
-        )
-        self.separate_handling.append("id_" + sel_field)
-
-        # notes
-        notes_field = f"notes_cnt_{container.id}"
-        self.fields[notes_field] = forms.CharField(
-            required=False,
-            initial=assigned_data.get("notes", ""),
-            widget=forms.Textarea(attrs={"rows": 2, "cols": 10}),
-        )
-        self.separate_handling.append("id_" + notes_field)
-
-    def get_all_containers(self):
-        for container in InventoryContainer.objects.filter(assoc_id=self.params["a_id"]):
-            self.container_all[container.id] = container
-
-        for el in self.params["event"].get_elements(InventoryContainerAssignment).filter(event=self.params["event"]):
-            container = self.container_all[el.container_id]
-            if el.area_id == self.instance.pk:
-                container.assigned = {"notes": el.notes}
-
-    def sort_containers(self):
-        def _assigned_updated(it):
-            if getattr(it, "assigned", None):
-                return it.assigned.get("updated") or getattr(it, "updated", None) or datetime.min
-            return datetime.min
-
-        # containers with assigned first; among them, most recently updated first; then by name, then id
-        ordered_containers = sorted(
-            self.container_all.values(),
-            key=lambda it: (
-                bool(getattr(it, "assigned", None)),  # True first via reverse
-                _assigned_updated(it),  # recent first via reverse
-                getattr(it, "name", ""),  # alphabetical fallback
-                it.id,  # stable tiebreaker
-            ),
-            reverse=True,
-        )
-
-        # rebuild dict preserving the sorted order
-        self.container_all = {it.id: it for it in ordered_containers}
-
-    def handle_containers(self):
-        self.get_all_containers()
-
-        self.sort_containers()
-
-        for container in self.container_all.values():
-            self.container_fields(container)
-
-    def save_containers(self, instance):
-        to_del = []
-        for container_id, _container in self.container_all.items():
-            sel = self.cleaned_data.get(f"sel_cnt_{container_id}", False)
-
-            if not sel:
-                to_del.append(container_id)
-                continue
-
-            assignment, created = InventoryContainerAssignment.objects.get_or_create(
-                area=instance, container_id=container_id, event=instance.event
-            )
-            assignment.notes = self.cleaned_data.get(f"notes_cnt_{container_id}", "").strip()
-
-            assignment.save()
-
-        InventoryContainerAssignment.objects.filter(
-            area=instance, container_id__in=to_del, event=instance.event
-        ).delete()
-
 
 class OrgaInventoryItemAssignmentForm(MyForm):
     page_info = _("This page allows you to add or edit a new assignment of inventory item to event area")
@@ -388,44 +306,5 @@ class OrgaInventoryItemAssignmentForm(MyForm):
 
         if qs.exists():
             raise ValidationError({"area": _("An assignment for this item and area already exists")})
-
-        return cleaned
-
-
-class OrgaInventoryContainerAssignmentForm(MyForm):
-    page_info = _("This page allows you to add or edit a new assignment of containers to event area")
-
-    page_title = _("Inventory assignments")
-
-    class Meta:
-        model = InventoryContainerAssignment
-        exclude = []
-        widgets = {
-            "description": Textarea(attrs={"rows": 5}),
-            "area": InventoryAreaS2Widget,
-            "container": InventoryContainerS2Widget,
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["area"].widget.set_event(self.params["event"])
-        self.fields["container"].widget.set_assoc(self.params["a_id"])
-
-    def clean(self):
-        cleaned = super().clean()
-        area = cleaned.get("area")
-        container = cleaned.get("container")
-        if not area or not container:
-            return cleaned
-
-        qs = InventoryContainerAssignment.objects.filter(
-            area=area,
-            container=container,
-        )
-        if self.instance and self.instance.pk:
-            qs = qs.exclude(pk=self.instance.pk)
-
-        if qs.exists():
-            raise ValidationError({"area": _("An assignment for this container and area already exists")})
 
         return cleaned

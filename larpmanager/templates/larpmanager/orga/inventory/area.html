@@ -15,6 +15,7 @@
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Position" %}</th>
                 <th>{% trans "Description" %}</th>
+                <th>{% trans "Item assignments" %}</th>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +28,10 @@
                     <td>{{ el.name }}</td>
                     <td>{{ el.position }}</td>
                     <td>{{ el.description | truncatechars:200 }}</td>
+                    <td>
+                        <a href="{% url 'orga_inventory_area_assignments' event.slug run.number el.id %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

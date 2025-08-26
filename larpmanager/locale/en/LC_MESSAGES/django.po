@@ -1631,14 +1631,6 @@ msgstr ""
 msgid "An assignment for this item and area already exists"
 msgstr ""
 
-msgid ""
-"This page allows you to add or edit a new assignment of containers to event "
-"area"
-msgstr ""
-
-msgid "An assignment for this container and area already exists"
-msgstr ""
-
 msgid "Authorisation"
 msgstr ""
 
@@ -3812,16 +3804,13 @@ msgstr ""
 msgid "Selected"
 msgstr ""
 
-msgid "Container"
-msgstr ""
-
-msgid "Notes"
-msgstr ""
-
 msgid "Item"
 msgstr ""
 
 msgid "Tags"
+msgstr ""
+
+msgid "Notes"
 msgstr ""
 
 msgid "Input an element name to insert their reference code"
@@ -5024,6 +5013,9 @@ msgid "Position"
 msgstr ""
 
 msgid "This page shows the inventory items"
+msgstr ""
+
+msgid "Container"
 msgstr ""
 
 msgid "This page shows the assignment of inventory items to event area"
@@ -6446,6 +6438,9 @@ msgstr ""
 
 msgid ""
 "This page shows the event area where inventory items needs to be deployed"
+msgstr ""
+
+msgid "Item assignments"
 msgstr ""
 
 msgid ""

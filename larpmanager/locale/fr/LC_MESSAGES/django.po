@@ -2504,6 +2504,9 @@ msgstr "Escompte à terme"
 msgid "Handout template"
 msgstr "Modèle de document"
 
+msgid "Item assignments"
+msgstr "Affectation des postes"
+
 msgid "Max participants"
 msgstr "Nombre maximum de participants"
 
@@ -5798,9 +5801,6 @@ msgstr ""
 msgid "Your membership application was successfully submitted!"
 msgstr "Votre demande d'adhésion a été envoyée avec succès !"
 
-msgid "An assignment for this container and area already exists"
-msgstr "Une affectation pour ce conteneur et cette zone existe déjà"
-
 msgid "Click on the image below (Paypal.me) to open the payment"
 msgstr "Cliquez sur l'image ci-dessous (Paypal.me) pour ouvrir le paiement"
 
@@ -7619,13 +7619,6 @@ msgid ""
 msgstr ""
 "Demande de remboursement introduite ! Vous recevrez une notification "
 "lorsqu'elle sera traitée."
-
-msgid ""
-"This page allows you to add or edit a new assignment of containers to event "
-"area"
-msgstr ""
-"Cette page vous permet d'ajouter ou de modifier une nouvelle affectation de "
-"conteneurs à une zone d'événement"
 
 msgid ""
 "This page displays cases where the same item has been assigned to multiple "

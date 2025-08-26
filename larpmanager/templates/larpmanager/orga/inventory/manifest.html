@@ -20,45 +20,6 @@
                 <b>{% trans "Description" %}:</b> {{ area.description }}
             </p>
         {% endif %}
-        {% if area.containers %}
-            <table id="inv_manifest_cnt_{{ area.id }}"
-                   class="go_datatable dot_links"
-                   no_header_cols="3">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>{% trans "Container" %}</th>
-                        <th>{% trans "Loaded" %}</th>
-                        <th>{% trans "Notes" %}</th>
-                        <th>{% trans "Deployed" %}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for el in area.containers %}
-                        <tr id="{{ el.id }}">
-                            <td>
-                                <a href="{% url 'orga_inventory_assignment_container_edit' event.slug run.number el.id %}"
-                                   qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
-                            </td>
-                            <td>{{ el.container }}</td>
-                            <td data-order="{% if el.loaded %}1{% else %}0{% endif %}"
-                                class="ajax-toggle"
-                                tp="load"
-                                ass="cnt">
-                                <span class="value {% if not el.loaded %}hide{% endif %}"><i class="fa-solid fa-check"></i></span>
-                            </td>
-                            <td>{{ el.notes }}</td>
-                            <td data-order="{% if el.deployed %}1{% else %}0{% endif %}"
-                                class="ajax-toggle"
-                                tp="depl"
-                                ass="cnt">
-                                <span class="value {% if not el.deployed %}hide{% endif %}"><i class="fa-solid fa-check"></i></span>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
         <table id="inv_manifest_itm_{{ area.id }}"
                class="go_datatable dot_links"
                no_header_cols="{{ no_header_cols }}">
@@ -90,8 +51,7 @@
                         </td>
                         <td data-order="{% if el.loaded %}1{% else %}0{% endif %}"
                             class="ajax-toggle"
-                            tp="load"
-                            ass="itm">
+                            tp="load">
                             <span class="value {% if not el.loaded %}hide{% endif %}"><i class="fa-solid fa-check"></i></span>
                         </td>
                         {% if optionals.quantity %}
@@ -111,8 +71,7 @@
                         </td>
                         <td data-order="{% if el.deployed %}1{% else %}0{% endif %}"
                             class="ajax-toggle"
-                            tp="depl"
-                            ass="itm">
+                            tp="depl">
                             <span class="value {% if not el.deployed %}hide{% endif %}"><i class="fa-solid fa-check"></i></span>
                         </td>
                     </tr>

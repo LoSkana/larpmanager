@@ -436,9 +436,10 @@ class InventoryArea(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="area")
 
 
-class InventoryAssignment(BaseModel):
-    class Meta:
-        abstract = True
+class InventoryItemAssignment(BaseModel):
+    quantity = models.IntegerField(blank=True, null=True)
+
+    item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE, related_name="assignments")
 
     area = models.ForeignKey(InventoryArea, on_delete=models.CASCADE)
 
@@ -450,12 +451,6 @@ class InventoryAssignment(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
-
-class InventoryItemAssignment(InventoryAssignment):
-    quantity = models.IntegerField(blank=True, null=True)
-
-    item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE, related_name="assignments")
-
     class Meta:
         constraints = [
             UniqueConstraint(
@@ -466,23 +461,6 @@ class InventoryItemAssignment(InventoryAssignment):
                 fields=["area", "item"],
                 condition=Q(deleted=None),
                 name="unique_inventory_item_assignment_without_optional",
-            ),
-        ]
-
-
-class InventoryContainerAssignment(InventoryAssignment):
-    container = models.ForeignKey(InventoryContainer, on_delete=models.CASCADE, related_name="assignments")
-
-    class Meta:
-        constraints = [
-            UniqueConstraint(
-                fields=["area", "container", "deleted"],
-                name="unique_inventory_container_assignment_with_optional",
-            ),
-            UniqueConstraint(
-                fields=["area", "container"],
-                condition=Q(deleted=None),
-                name="unique_inventory_container_assignment_without_optional",
             ),
         ]
 
