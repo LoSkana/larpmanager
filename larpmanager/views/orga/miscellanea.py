@@ -44,6 +44,7 @@ from larpmanager.forms.miscellanea import (
 from larpmanager.models.miscellanea import (
     Album,
     InventoryArea,
+    InventoryItem,
     InventoryItemAssignment,
     Problem,
     Util,
@@ -55,6 +56,7 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import Registration
 from larpmanager.utils.common import (
     get_album_cod,
+    get_element,
 )
 from larpmanager.utils.edit import orga_edit
 from larpmanager.utils.event import check_event_permission
@@ -189,6 +191,53 @@ def orga_inventory_area_edit(request, s, n, num):
 
 
 @login_required
+def orga_inventory_area_assignments(request, s, n, num):
+    ctx = check_event_permission(request, s, n, "orga_inventory_area")
+    get_element(ctx, num, "area", InventoryArea)
+
+    get_inventory_optionals(ctx, [4, 5])
+    if ctx["optionals"]["quantity"]:
+        ctx["no_header_cols"] = [6, 7]
+
+    # GET ITEMS
+
+    item_all = {}
+    for item in InventoryItem.objects.filter(assoc_id=ctx["a_id"]).prefetch_related("tags"):
+        item.available = item.quantity or 0
+        item_all[item.id] = item
+
+    for el in ctx["event"].get_elements(InventoryItemAssignment).filter(event=ctx["event"]):
+        item = item_all[el.item_id]
+        if el.area_id == ctx["area"].pk:
+            item.assigned = {"quantity": el.quantity, "notes": el.notes}
+        else:
+            item.available -= el.quantity or 0
+
+    # SORT THEM
+
+    def _assigned_updated(it):
+        if getattr(it, "assigned", None):
+            return it.assigned.get("updated") or getattr(it, "updated", None) or datetime.min
+        return datetime.min
+
+    # items with assigned first; among them, most recently updated first; then by name, then id
+    ordered_items = sorted(
+        item_all.values(),
+        key=lambda it: (
+            bool(getattr(it, "assigned", None)),  # True first via reverse
+            _assigned_updated(it),  # recent first via reverse
+            getattr(it, "name", ""),  # alphabetical fallback
+            it.id,  # stable tiebreaker
+        ),
+        reverse=True,
+    )
+
+    # rebuild dict preserving the sorted order
+    ctx["item_all"] = {it.id: it for it in ordered_items}
+    return render(request, "larpmanager/orga/inventory/assignments.html", ctx)
+
+
+@login_required
 def orga_inventory_checks(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_inventory_checks")
     ctx["items"] = {}
@@ -224,7 +273,30 @@ def orga_inventory_assignment_item_edit(request, s, n, num):
 
 
 @require_POST
-def orga_manifest_check(request, s, n):
+def orga_inventory_assignment_manifest(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_inventory_manifest")
+    idx = request.POST.get("idx")
+    type = request.POST.get("type").lower()
+    value = request.POST.get("value").lower() == "true"
+
+    try:
+        assign = InventoryItemAssignment.objects.get(pk=idx)
+    except ObjectDoesNotExist:
+        return JsonResponse({"error": "not found"}, status=400)
+
+    if assign.event_id != ctx["event"].id:
+        return JsonResponse({"error": "not your event"}, status=400)
+
+    map_field = {"load": "loaded", "depl": "deployed"}
+    field = map_field.get(type, "")
+    setattr(assign, field, value)
+    assign.save()
+
+    return JsonResponse({"ok": True})
+
+
+@require_POST
+def orga_inventory_assignment_area(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_inventory_manifest")
     idx = request.POST.get("idx")
     type = request.POST.get("type").lower()

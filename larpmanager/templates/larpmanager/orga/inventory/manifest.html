@@ -188,7 +188,7 @@ window.addEventListener('DOMContentLoaded', function() {
             scheduleReload(5000);
 
             $.ajax({
-                url: "{% url 'orga_manifest_check' run.event.slug run.number %}",
+                url: "{% url ' orga_inventory_assignment_manifest' run.event.slug run.number %}",
                 method: "POST",
                 data: { idx: idx, type: type, assignment: assignment, value: newValue },
                 success: function () {
