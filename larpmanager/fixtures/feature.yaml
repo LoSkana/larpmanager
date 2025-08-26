@@ -432,7 +432,7 @@
     overall: true
     module: 3
     placeholder: false
-    order: 20
+    order: 5
     after_text: Now you can add inventory containers and items
     after_link: exe_inventory_containers
 - model: larpmanager.feature

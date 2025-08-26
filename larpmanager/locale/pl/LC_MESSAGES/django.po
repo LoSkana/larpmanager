@@ -2417,6 +2417,9 @@ msgstr "Usługi wahadłowe"
 msgid "Start algorithm"
 msgstr "Algorytm startowy"
 
+msgid "Ticket selected"
+msgstr "Wybrany bilet"
+
 msgid "Upload Expenses"
 msgstr "Prześlij wydatki"
 
@@ -3412,9 +3415,6 @@ msgstr "Relacje między postaciami"
 msgid "Collection participated"
 msgstr "Kolekcja uczestniczyła"
 
-msgid "Containers in manifest "
-msgstr "Pojemniki w manifeście"
-
 msgid "Create a new collection"
 msgstr "Utwórz nową kolekcję"
 
@@ -4286,10 +4286,6 @@ msgstr "Płatność nie została zrealizowana"
 
 msgid "This page shows the inventory tags"
 msgstr "Na tej stronie wyświetlane są znaczniki zapasów"
-
-#, python-format
-msgid "Ticket selected: <b>%(ticket)s</b>"
-msgstr "Wybrano bilet: <b>%(ticket)s</b>"
 
 msgid "You are about to make a payment of"
 msgstr "Masz zamiar dokonać płatności w wysokości"
@@ -6010,6 +6006,11 @@ msgstr "Wyświetlanie pełnej historii preferencji uczestników na postaciach"
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Jeśli opcja jest zaznaczona, można ją wybrać maksymalnie kilka razy"
 
+msgid "In this page you can mark which items to add to the game area"
+msgstr ""
+"Na tej stronie można zaznaczyć elementy, które mają zostać dodane do obszaru"
+" gry"
+
 msgid "Indicate here any element you wish to avoid in the assignment"
 msgstr "Wskaż tutaj elementy, których chcesz uniknąć w zadaniu"
 
@@ -6617,11 +6618,6 @@ msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
 "Jeśli zaznaczone, dodaje do wszystkich rejestracji unikalny kod, aby się do "
 "nich odwoływać"
-
-msgid "If checked: Allow to add containers in cargo manifest as for the items"
-msgstr ""
-"Jeśli zaznaczone: Zezwalaj na dodawanie kontenerów w manifeście ładunku jak "
-"dla pozycji"
 
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""

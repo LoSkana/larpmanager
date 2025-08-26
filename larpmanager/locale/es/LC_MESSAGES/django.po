@@ -2417,6 +2417,9 @@ msgstr "Servicio de transporte"
 msgid "Start algorithm"
 msgstr "Iniciar algoritmo"
 
+msgid "Ticket selected"
+msgstr "Billete seleccionado"
+
 msgid "Upload Expenses"
 msgstr "Cargar gastos"
 
@@ -3412,9 +3415,6 @@ msgstr "Relaciones del personaje"
 msgid "Collection participated"
 msgstr "Colectas participadas"
 
-msgid "Containers in manifest "
-msgstr "Contenedores en manifiesto"
-
 msgid "Create a new collection"
 msgstr "Crear una nueva colecta"
 
@@ -4286,10 +4286,6 @@ msgstr "El pago no se ha completado"
 
 msgid "This page shows the inventory tags"
 msgstr "Esta página muestra las etiquetas de inventario"
-
-#, python-format
-msgid "Ticket selected: <b>%(ticket)s</b>"
-msgstr "Ticket seleccionado: <b>%(ticket)s</b>"
 
 msgid "You are about to make a payment of"
 msgstr "Estás a punto de hacer un pago de"
@@ -6030,6 +6026,9 @@ msgstr ""
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Si está marcada, una opción puede elegirse un número máximo de veces"
 
+msgid "In this page you can mark which items to add to the game area"
+msgstr "En esta página puedes marcar qué elementos añadir al área de juego"
+
 msgid "Indicate here any element you wish to avoid in the assignment"
 msgstr "Indique aquí cualquier elemento que desee evitar en la tarea"
 
@@ -6677,11 +6676,6 @@ msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
 "Si está marcada, añade a todos los registros un código único para "
 "referenciarlos"
-
-msgid "If checked: Allow to add containers in cargo manifest as for the items"
-msgstr ""
-"Si está marcada: Permitir añadir contenedores en manifiesto de carga como "
-"para los artículos"
 
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""

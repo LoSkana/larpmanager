@@ -2417,6 +2417,9 @@ msgstr "Kyvadlová doprava"
 msgid "Start algorithm"
 msgstr "Algoritmus spuštění"
 
+msgid "Ticket selected"
+msgstr "Vybraná vstupenka"
+
 msgid "Upload Expenses"
 msgstr "Nahrávání výdajů"
 
@@ -3412,9 +3415,6 @@ msgstr "Odkazy na postavy"
 msgid "Collection participated"
 msgstr "Zúčastněné sbírky"
 
-msgid "Containers in manifest "
-msgstr "Kontejnery v manifestu"
-
 msgid "Create a new collection"
 msgstr "Vytvoření nové kolekce"
 
@@ -4286,10 +4286,6 @@ msgstr "Platba nebyla dokončena"
 
 msgid "This page shows the inventory tags"
 msgstr "Na této stránce jsou zobrazeny inventární značky"
-
-#, python-format
-msgid "Ticket selected: <b>%(ticket)s</b>"
-msgstr "Vybraný tip: <b>%(ticket)s</b>"
 
 msgid "You are about to make a payment of"
 msgstr "Chystáte se provést platbu ve výši"
@@ -5998,6 +5994,10 @@ msgstr "Zobrazení úplné historie preferencí účastníků na postavách"
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Pokud je možnost zaškrtnuta, lze ji zvolit maximálně několikrát"
 
+msgid "In this page you can mark which items to add to the game area"
+msgstr ""
+"Na této stránce můžete označit položky, které chcete přidat do herní oblasti"
+
 msgid "Indicate here any element you wish to avoid in the assignment"
 msgstr "Zde uveďte všechny prvky, kterým se chcete v zadání vyhnout"
 
@@ -6557,11 +6557,6 @@ msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
 "Pokud je zaškrtnuto, přidá ke všem registracím jedinečný kód, který na ně "
 "odkazuje"
-
-msgid "If checked: Allow to add containers in cargo manifest as for the items"
-msgstr ""
-"Pokud je zaškrtnuto: Povolit přidání kontejnerů do nákladního listu jako u "
-"položek"
 
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""

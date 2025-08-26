@@ -1,10 +1,3 @@
-- model: larpmanager.associationskin
-  pk: 1
-  fields:
-    name: LarpManager
-    domain: larpmanager.com
-    created: 2025-03-19 09:06:22.735509
-    updated: 2025-03-19 09:06:22.887608
 - model: auth.user
   pk: 1
   fields:
@@ -233,7 +226,7 @@
     images_shared: false
     key: bldCZ3JCa0lCOEZIQkc3SnRGX3owMFpqYTZyWko1ZzRZbXMxalRNNWE0Yz0=
     payment_methods: []
-    features: []
+    features: [191]
     skin: 1
 - model: larpmanager.assocrole
   pk: 1

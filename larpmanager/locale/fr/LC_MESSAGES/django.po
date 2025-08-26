@@ -2417,6 +2417,9 @@ msgstr "Service de navette"
 msgid "Start algorithm"
 msgstr "Algorithme de démarrage"
 
+msgid "Ticket selected"
+msgstr "Billet sélectionné"
+
 msgid "Upload Expenses"
 msgstr "Télécharger les dépenses"
 
@@ -3412,9 +3415,6 @@ msgstr "Liens avec les personnages"
 msgid "Collection participated"
 msgstr "Collections participées"
 
-msgid "Containers in manifest "
-msgstr "Conteneurs dans le manifeste"
-
 msgid "Create a new collection"
 msgstr "Créer une nouvelle collection"
 
@@ -4287,10 +4287,6 @@ msgstr "Le paiement n'a pas été effectué"
 
 msgid "This page shows the inventory tags"
 msgstr "Cette page présente les étiquettes d'inventaire"
-
-#, python-format
-msgid "Ticket selected: <b>%(ticket)s</b>"
-msgstr "Ticket sélectionné : <b>%(ticket)s</b>"
 
 msgid "You are about to make a payment of"
 msgstr "Vous êtes sur le point d'effectuer un paiement de"
@@ -6086,6 +6082,10 @@ msgstr ""
 "Si cette case est cochée, une option peut être choisie un nombre maximum de "
 "fois"
 
+msgid "In this page you can mark which items to add to the game area"
+msgstr ""
+"Dans cette page, vous pouvez marquer les éléments à ajouter à la zone de jeu"
+
 msgid "Indicate here any element you wish to avoid in the assignment"
 msgstr "Indiquez ici tout élément que vous souhaitez éviter dans la mission"
 
@@ -6790,11 +6790,6 @@ msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
 "Si cette case est cochée, un code unique est ajouté à tous les "
 "enregistrements pour les référencer"
-
-msgid "If checked: Allow to add containers in cargo manifest as for the items"
-msgstr ""
-"Si coché : Autoriser l'ajout de conteneurs dans le manifeste de fret comme "
-"pour les articles"
 
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""

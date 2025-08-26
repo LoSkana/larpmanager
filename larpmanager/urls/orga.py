@@ -1053,12 +1053,12 @@ urlpatterns = [
     path(
         "<slug:s>/<int:n>/manage/inventory/assignment/manifest/",
         views_oms.orga_inventory_assignment_manifest,
-        name=" orga_inventory_assignment_manifest",
+        name="orga_inventory_assignment_manifest",
     ),
     path(
-        "<slug:s>/<int:n>/manage/inventory/assignment/area/",
+        "<slug:s>/<int:n>/manage/inventory/assignment/area/<int:num>/",
         views_oms.orga_inventory_assignment_area,
-        name=" orga_inventory_assignment_area",
+        name="orga_inventory_assignment_area",
     ),
     path(
         "<slug:s>/<int:n>/manage/inventory/assignment/edit/<int:num>/",

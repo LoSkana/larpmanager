@@ -296,23 +296,22 @@ def orga_inventory_assignment_manifest(request, s, n):
 
 
 @require_POST
-def orga_inventory_assignment_area(request, s, n):
+def orga_inventory_assignment_area(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_inventory_manifest")
+    get_element(ctx, num, "area", InventoryArea)
+
     idx = request.POST.get("idx")
-    type = request.POST.get("type").lower()
-    value = request.POST.get("value").lower() == "true"
+    notes = request.POST.get("notes")
+    quantity = int(request.POST.get("quantity", "0"))
+    selected = request.POST.get("selected").lower() == "true"
 
-    try:
-        assign = InventoryItemAssignment.objects.get(pk=idx)
-    except ObjectDoesNotExist:
-        return JsonResponse({"error": "not found"}, status=400)
+    if not selected:
+        InventoryItemAssignment.objects.filter(item_id=idx, area=ctx["area"]).delete()
+        return JsonResponse({"ok": True})
 
-    if assign.event_id != ctx["event"].id:
-        return JsonResponse({"error": "not your event"}, status=400)
-
-    map_field = {"load": "loaded", "depl": "deployed"}
-    field = map_field.get(type, "")
-    setattr(assign, field, value)
+    (assign, _cr) = InventoryItemAssignment.objects.get_or_create(item_id=idx, area=ctx["area"], event=ctx["event"])
+    assign.quantity = quantity
+    assign.notes = notes
     assign.save()
 
     return JsonResponse({"ok": True})

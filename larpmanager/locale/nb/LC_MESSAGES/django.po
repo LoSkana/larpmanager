@@ -2417,6 +2417,9 @@ msgstr "Skytteltrafikk"
 msgid "Start algorithm"
 msgstr "Start-algoritme"
 
+msgid "Ticket selected"
+msgstr "Billett valgt"
+
 msgid "Upload Expenses"
 msgstr "Last opp utgifter"
 
@@ -3412,9 +3415,6 @@ msgstr "Koblinger til tegn"
 msgid "Collection participated"
 msgstr "Samlinger som har deltatt"
 
-msgid "Containers in manifest "
-msgstr "Containere i manifest"
-
 msgid "Create a new collection"
 msgstr "Opprett en ny samling"
 
@@ -4286,10 +4286,6 @@ msgstr "Betalingen ble ikke fullført"
 
 msgid "This page shows the inventory tags"
 msgstr "Denne siden viser lagerkodene"
-
-#, python-format
-msgid "Ticket selected: <b>%(ticket)s</b>"
-msgstr "Billett valgt: <b>%(ticket)s</b>"
 
 msgid "You are about to make a payment of"
 msgstr "Du er i ferd med å foreta en betaling på"
@@ -6013,6 +6009,11 @@ msgstr "Vis full historikk over deltakernes preferanser på tegn"
 msgid "If checked, an option can be chosen a maximum number of times"
 msgstr "Hvis avkrysset, kan et alternativ velges maksimalt antall ganger"
 
+msgid "In this page you can mark which items to add to the game area"
+msgstr ""
+"På denne siden kan du markere hvilke elementer som skal legges til i "
+"spillområdet"
+
 msgid "Indicate here any element you wish to avoid in the assignment"
 msgstr "Her angir du eventuelle elementer du ønsker å unngå i oppgaven"
 
@@ -6605,11 +6606,6 @@ msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
 "Hvis avkrysset, legges det til en unik kode til alle registreringer for å "
 "referere til dem"
-
-msgid "If checked: Allow to add containers in cargo manifest as for the items"
-msgstr ""
-"Hvis avkrysset: Tillat å legge til containere i fraktmanifestet som for "
-"varene"
 
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
