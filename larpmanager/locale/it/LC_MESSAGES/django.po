@@ -1278,6 +1278,9 @@ msgstr "Restituzione"
 msgid "Seniority"
 msgstr "Anzianità"
 
+msgid "Set quest"
+msgstr "Imposta missione"
+
 msgid "Short url"
 msgstr "Url corto"
 
@@ -1559,6 +1562,9 @@ msgstr "rispondi qui"
 
 msgid "Actual paid"
 msgstr "Effettivo pagato"
+
+msgid "Add to plot"
+msgstr "Aggiungi alla trama"
 
 msgid "Assignments"
 msgstr "Assegnazioni"
@@ -2132,6 +2138,9 @@ msgstr "dati personali"
 msgid "registrations"
 msgstr "iscrizioni"
 
+msgid "Add to faction"
+msgstr "Aggiungi alla fazione"
+
 msgid "Available days"
 msgstr "Giorni disponibili"
 
@@ -2281,6 +2290,9 @@ msgstr "Dati sensibili"
 
 msgid "Session active"
 msgstr "Sessione attiva"
+
+msgid "Set quest type"
+msgstr "Imposta il tipo di missione"
 
 msgid "Show shortcuts"
 msgstr "Mostra le scorciatoie"
@@ -2582,11 +2594,17 @@ msgstr "Promemoria di pagamento"
 msgid "Reminder profile"
 msgstr "Profilo di promemoria"
 
+msgid "Remove from plot"
+msgstr "Rimuovi dalla trama"
+
 msgid "Request approved"
 msgstr "Richiesta approvata"
 
 msgid "Selected options"
 msgstr "Opzioni selezionate"
+
+msgid "Set ability type"
+msgstr "Imposta il tipo di abilità"
 
 msgid "Show collections"
 msgstr "Mostra collette"
@@ -2983,6 +3001,9 @@ msgstr "Iscrizioni chiuse"
 
 msgid "Relationships (Pdf)"
 msgstr "Relazioni (Pdf)"
+
+msgid "Remove from faction"
+msgstr "Rimuovi dalla fazione"
 
 msgid "Results not present"
 msgstr "Risultati non presenti"

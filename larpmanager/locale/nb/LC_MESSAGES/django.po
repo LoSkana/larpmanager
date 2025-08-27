@@ -1278,6 +1278,9 @@ msgstr "Retur"
 msgid "Seniority"
 msgstr "Ansiennitet"
 
+msgid "Set quest"
+msgstr "Sett oppdrag"
+
 msgid "Short url"
 msgstr "Kort nettadresse"
 
@@ -1559,6 +1562,9 @@ msgstr "svar her"
 
 msgid "Actual paid"
 msgstr "Faktisk betalt"
+
+msgid "Add to plot"
+msgstr "Legg til i plottet"
 
 msgid "Assignments"
 msgstr "Oppgaver"
@@ -2132,6 +2138,9 @@ msgstr "personopplysninger"
 msgid "registrations"
 msgstr "påmeldinger"
 
+msgid "Add to faction"
+msgstr "Legg til i fraksjon"
+
 msgid "Available days"
 msgstr "Tilgjengelige dager"
 
@@ -2281,6 +2290,9 @@ msgstr "Sensitive data"
 
 msgid "Session active"
 msgstr "Økt aktiv"
+
+msgid "Set quest type"
+msgstr "Angi oppdragstype"
 
 msgid "Show shortcuts"
 msgstr "Vis snarveier"
@@ -2582,11 +2594,17 @@ msgstr "Påminnelse om betaling"
 msgid "Reminder profile"
 msgstr "Påminnelsesprofil"
 
+msgid "Remove from plot"
+msgstr "Fjern fra tomten"
+
 msgid "Request approved"
 msgstr "Anmodning godkjent"
 
 msgid "Selected options"
 msgstr "Utvalgte alternativer"
+
+msgid "Set ability type"
+msgstr "Angi evnetype"
 
 msgid "Show collections"
 msgstr "Vis samlinger"
@@ -2983,6 +3001,9 @@ msgstr "Registreringen er stengt"
 
 msgid "Relationships (Pdf)"
 msgstr "Relasjoner (Pdf)"
+
+msgid "Remove from faction"
+msgstr "Fjern fra fraksjon"
 
 msgid "Results not present"
 msgstr "Resultater ikke til stede"

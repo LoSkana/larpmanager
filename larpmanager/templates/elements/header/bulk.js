@@ -46,22 +46,27 @@ $("#main_bulk #exec").on("click", function(e) {
     });
   });
 
-  console.log(ids);
-
   var payload = {
     operation: operation,
     target: target,
     ids: ids
   };
 
-  console.log(payload);
-
   $.ajax({
     url: "{{ request.path }}",
     method: "POST",
     data: payload,
     success: function(resp) {
-      window.location.reload();
+        if (resp.error) {
+            $.toast({
+                text: resp.error,
+                showHideTransition: 'slide',
+                icon: 'error',
+                position: 'mid-center',
+                textAlign: 'center',
+            });
+        }
+        window.location.reload();
     },
     error: function(xhr) {
       console.error("Error", xhr.status, xhr.responseText);

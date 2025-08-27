@@ -1278,6 +1278,9 @@ msgstr "Återgång"
 msgid "Seniority"
 msgstr "Senioritet"
 
+msgid "Set quest"
+msgstr "Ställ in uppdrag"
+
 msgid "Short url"
 msgstr "Kort url"
 
@@ -1559,6 +1562,9 @@ msgstr "svara här"
 
 msgid "Actual paid"
 msgstr "Faktiskt utbetalt"
+
+msgid "Add to plot"
+msgstr "Lägg till tomt"
 
 msgid "Assignments"
 msgstr "Uppdrag"
@@ -2132,6 +2138,9 @@ msgstr "Personuppgifter"
 msgid "registrations"
 msgstr "inskrivningar"
 
+msgid "Add to faction"
+msgstr "Lägg till i fraktion"
+
 msgid "Available days"
 msgstr "Tillgängliga dagar"
 
@@ -2281,6 +2290,9 @@ msgstr "Känsliga uppgifter"
 
 msgid "Session active"
 msgstr "Session aktiv"
+
+msgid "Set quest type"
+msgstr "Ange typ av uppdrag"
 
 msgid "Show shortcuts"
 msgstr "Visa genvägar"
@@ -2582,11 +2594,17 @@ msgstr "Påminnelse om betalning"
 msgid "Reminder profile"
 msgstr "Påminnelseprofil"
 
+msgid "Remove from plot"
+msgstr "Ta bort från tomten"
+
 msgid "Request approved"
 msgstr "Begäran godkänd"
 
 msgid "Selected options"
 msgstr "Valda alternativ"
+
+msgid "Set ability type"
+msgstr "Ange typ av förmåga"
 
 msgid "Show collections"
 msgstr "Visa samlingar"
@@ -2983,6 +3001,9 @@ msgstr "Registreringen stängd"
 
 msgid "Relationships (Pdf)"
 msgstr "Förhållanden (Pdf)"
+
+msgid "Remove from faction"
+msgstr "Ta bort från fraktionen"
 
 msgid "Results not present"
 msgstr "Resultat ej presenterade"

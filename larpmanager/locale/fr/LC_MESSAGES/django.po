@@ -1278,6 +1278,9 @@ msgstr "Retour"
 msgid "Seniority"
 msgstr "L'ancienneté"
 
+msgid "Set quest"
+msgstr "Définir la quête"
+
 msgid "Short url"
 msgstr "URL courte"
 
@@ -1559,6 +1562,9 @@ msgstr "répondre ici"
 
 msgid "Actual paid"
 msgstr "Paiement effectif"
+
+msgid "Add to plot"
+msgstr "Ajouter à la parcelle"
 
 msgid "Assignments"
 msgstr "Missions"
@@ -2132,6 +2138,9 @@ msgstr "données personnelles"
 msgid "registrations"
 msgstr "inscriptions"
 
+msgid "Add to faction"
+msgstr "Ajouter à la faction"
+
 msgid "Available days"
 msgstr "Jours disponibles"
 
@@ -2281,6 +2290,9 @@ msgstr "Données sensibles"
 
 msgid "Session active"
 msgstr "Session active"
+
+msgid "Set quest type"
+msgstr "Définir le type de quête"
 
 msgid "Show shortcuts"
 msgstr "Afficher les raccourcis"
@@ -2582,11 +2594,17 @@ msgstr "Rappel de paiement"
 msgid "Reminder profile"
 msgstr "Profil de rappel"
 
+msgid "Remove from plot"
+msgstr "Retirer de la parcelle"
+
 msgid "Request approved"
 msgstr "Demande approuvée"
 
 msgid "Selected options"
 msgstr "Options sélectionnées"
+
+msgid "Set ability type"
+msgstr "Définir le type de capacité"
 
 msgid "Show collections"
 msgstr "Afficher les collections"
@@ -2983,6 +3001,9 @@ msgstr "Inscription clôturée"
 
 msgid "Relationships (Pdf)"
 msgstr "Relations (Pdf)"
+
+msgid "Remove from faction"
+msgstr "Retirer de la faction"
 
 msgid "Results not present"
 msgstr "Résultats non disponibles"

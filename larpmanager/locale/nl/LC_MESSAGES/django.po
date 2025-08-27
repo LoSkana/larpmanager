@@ -1278,6 +1278,9 @@ msgstr "Stuur  terug"
 msgid "Seniority"
 msgstr "Anciënniteit"
 
+msgid "Set quest"
+msgstr "Zoektocht instellen"
+
 msgid "Short url"
 msgstr "Korte url"
 
@@ -1559,6 +1562,9 @@ msgstr "antwoord hier"
 
 msgid "Actual paid"
 msgstr "Werkelijk betaald"
+
+msgid "Add to plot"
+msgstr "Toevoegen aan perceel"
 
 msgid "Assignments"
 msgstr "Opdrachten"
@@ -2132,6 +2138,9 @@ msgstr "persoonlijke gegevens"
 msgid "registrations"
 msgstr "inschrijvingen"
 
+msgid "Add to faction"
+msgstr "Toevoegen aan factie"
+
 msgid "Available days"
 msgstr "Beschikbare dagen"
 
@@ -2281,6 +2290,9 @@ msgstr "Gevoelige gegevens"
 
 msgid "Session active"
 msgstr "Sessie actief"
+
+msgid "Set quest type"
+msgstr "Zoektocht type instellen"
 
 msgid "Show shortcuts"
 msgstr "Snelkoppelingen weergeven"
@@ -2582,11 +2594,17 @@ msgstr "Herinnering betaling"
 msgid "Reminder profile"
 msgstr "Herinnering profiel"
 
+msgid "Remove from plot"
+msgstr "Verwijderen uit perceel"
+
 msgid "Request approved"
 msgstr "Verzoek goedgekeurd"
 
 msgid "Selected options"
 msgstr "Geselecteerde opties"
+
+msgid "Set ability type"
+msgstr "Type vaardigheid instellen"
 
 msgid "Show collections"
 msgstr "Toon collecties"
@@ -2983,6 +3001,9 @@ msgstr "Registratie gesloten"
 
 msgid "Relationships (Pdf)"
 msgstr "Relaties (Pdf)"
+
+msgid "Remove from faction"
+msgstr "Verwijderen uit factie"
 
 msgid "Results not present"
 msgstr "Resultaten niet aanwezig"

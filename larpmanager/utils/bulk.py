@@ -22,13 +22,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.models.casting import Quest, QuestType, Trait
+from larpmanager.models.experience import AbilityPx, AbilityTypePx
 from larpmanager.models.member import Log
 from larpmanager.models.miscellanea import (
     InventoryContainer,
     InventoryItem,
     InventoryTag,
 )
-from larpmanager.models.writing import Faction, Plot, Character
+from larpmanager.models.writing import Character, Faction, Plot
 from larpmanager.utils.exceptions import ReturnJson
 
 
@@ -48,11 +50,7 @@ def _get_bulk_params(request, ctx):
         member=request.user.member,
         cls=f"bulk {operation} {target}",
         eid=eid,
-        dct={
-            'operation': operation,
-            'target': target,
-            'ids': ids
-        }
+        dct={"operation": operation, "target": target, "ids": ids},
     )
 
     return ids, operation, target
@@ -64,12 +62,58 @@ class Operations:
     DEL_ITEM_TAG = 3
     ADD_CHAR_FACT = 4
     DEL_CHAR_FACT = 5
-    ADD_CHAR_PLOT = 5
+    ADD_CHAR_PLOT = 6
     DEL_CHAR_PLOT = 7
+    SET_QUEST_TYPE = 8
+    SET_TRAIT_QUEST = 9
+    SET_ABILITY_TYPE = 10
+
+
+def exec_bulk(request, ctx, mapping):
+    ids, operation, target = _get_bulk_params(request, ctx)
+    if operation not in mapping:
+        return JsonResponse({"error": "unknow operation"}, status=400)
+
+    try:
+        mapping[operation](request, ctx, target, ids)
+    except ObjectDoesNotExist:
+        return JsonResponse({"error": "not found"}, status=400)
+
+    return JsonResponse({"res": "ok"})
+
+
+def _get_inv_items(ids, request):
+    return InventoryItem.objects.filter(assoc_id=request.assoc["id"], pk__in=ids).values_list("pk", flat=True)
+
+
+def exec_add_item_tag(request, ctx, target, ids):
+    tag = InventoryTag.objects.get(assoc_id=request.assoc["id"], pk=target)
+    tag.items.add(*_get_inv_items(ids, request))
+
+
+def exec_del_item_tag(request, ctx, target, ids):
+    tag = InventoryTag.objects.get(assoc_id=request.assoc["id"], pk=target)
+    tag.items.remove(*_get_inv_items(ids, request))
+
+
+def exec_move_item_box(request, ctx, target, ids):
+    container = InventoryContainer.objects.get(assoc_id=request.assoc["id"], pk=target)
+    InventoryItem.objects.filter(assoc_id=request.assoc["id"], pk__in=ids).update(container=container)
+
 
 def handle_bulk_items(request, ctx):
     if request.POST:
-        raise ReturnJson(exec_bulk_items(request, ctx))
+        raise ReturnJson(
+            exec_bulk(
+                request,
+                ctx,
+                {
+                    Operations.ADD_ITEM_TAG: exec_add_item_tag,
+                    Operations.DEL_ITEM_TAG: exec_del_item_tag,
+                    Operations.MOVE_ITEM_BOX: exec_move_item_box,
+                },
+            )
+        )
 
     containers = InventoryContainer.objects.filter(assoc_id=request.assoc["id"]).values("id", "name").order_by("name")
     tags = InventoryTag.objects.filter(assoc_id=request.assoc["id"]).values("id", "name").order_by("name")
@@ -79,76 +123,108 @@ def handle_bulk_items(request, ctx):
         {"idx": Operations.DEL_ITEM_TAG, "label": _("Remove tag"), "objs": tags},
     ]
 
-def exec_bulk_items(request, ctx):
-    ids, operation, target = _get_bulk_params(request, ctx)
 
-    try:
-        if operation == Operations.ADD_ITEM_TAG:
-            tag = InventoryTag.objects.get(assoc_id=request.assoc["id"], pk=target)
-            tag.items.add(
-                *InventoryItem.objects.filter(assoc_id=request.assoc["id"], pk__in=ids).values_list("pk", flat=True)
-            )
+def _get_chars(ctx, ids):
+    return ctx["event"].get_elements(Character).filter(pk__in=ids).values_list("pk", flat=True)
 
-        elif operation == Operations.DEL_ITEM_TAG:
-            tag = InventoryTag.objects.get(assoc_id=request.assoc["id"], pk=target)
-            tag.items.remove(
-                *InventoryItem.objects.filter(assoc_id=request.assoc["id"], pk__in=ids).values_list("pk", flat=True)
-            )
 
-        elif operation == Operations.MOVE_ITEM_BOX:
-            container = InventoryContainer.objects.get(assoc_id=request.assoc["id"], pk=target)
-            InventoryItem.objects.filter(assoc_id=request.assoc["id"], pk__in=ids).update(container=container)
+def exec_add_char_fact(request, ctx, target, ids):
+    fact = ctx["event"].get_elements(Faction).get(pk=target)
+    fact.characters.add(*_get_chars(ctx, ids))
 
-    except ObjectDoesNotExist:
-        return JsonResponse({"error": "not found"}, status=400)
 
-    return JsonResponse({"res": "ok"})
+def exec_del_char_fact(request, ctx, target, ids):
+    fact = ctx["event"].get_elements(Faction).get(pk=target)
+    fact.characters.remove(*_get_chars(ctx, ids))
+
+
+def exec_add_char_plot(request, ctx, target, ids):
+    plot = ctx["event"].get_elements(Plot).get(pk=target)
+    plot.characters.add(*_get_chars(ctx, ids))
+
+
+def exec_del_char_plot(request, ctx, target, ids):
+    plot = ctx["event"].get_elements(Plot).get(pk=target)
+    plot.characters.remove(*_get_chars(ctx, ids))
+
 
 def handle_bulk_characters(request, ctx):
     if request.POST:
-        raise ReturnJson(exec_bulk_characters(request))
+        if request.POST:
+            raise ReturnJson(
+                exec_bulk(
+                    request,
+                    ctx,
+                    {
+                        Operations.ADD_CHAR_FACT: exec_add_char_fact,
+                        Operations.DEL_CHAR_FACT: exec_del_char_fact,
+                        Operations.ADD_CHAR_PLOT: exec_add_char_plot,
+                        Operations.DEL_CHAR_PLOT: exec_del_char_plot,
+                    },
+                )
+            )
 
     ctx["bulk"] = []
 
     if "faction" in ctx["features"]:
         factions = ctx["event"].get_elements(Faction).values("id", "name").order_by("name")
-        ctx["bulk"].extend([
-            {"idx": Operations.ADD_CHAR_FACT, "label": _("Add to faction"), "objs": factions},
-            {"idx": Operations.DEL_CHAR_FACT, "label": _("Remove from faction"), "objs": factions},
-        ])
+        ctx["bulk"].extend(
+            [
+                {"idx": Operations.ADD_CHAR_FACT, "label": _("Add to faction"), "objs": factions},
+                {"idx": Operations.DEL_CHAR_FACT, "label": _("Remove from faction"), "objs": factions},
+            ]
+        )
 
     if "plot" in ctx["features"]:
         plots = ctx["event"].get_elements(Plot).values("id", "name").order_by("name")
-        ctx["bulk"].extend([
-            {"idx": Operations.ADD_CHAR_PLOT, "label": _("Add to plot"), "objs": plots},
-            {"idx": Operations.DEL_CHAR_PLOT, "label": _("Remove from plot"), "objs": plots},
-        ])
+        ctx["bulk"].extend(
+            [
+                {"idx": Operations.ADD_CHAR_PLOT, "label": _("Add to plot"), "objs": plots},
+                {"idx": Operations.DEL_CHAR_PLOT, "label": _("Remove from plot"), "objs": plots},
+            ]
+        )
 
 
-def exec_bulk_characters(request, ctx):
-    ids, operation, target = _get_bulk_params(request, ctx)
-
-    chars = ctx["event"].get_elements(Character).filter(pk__in=ids).values_list("pk", flat=True)
-
-    try:
-        if operation == Operations.ADD_CHAR_FACT:
-            fact = ctx["event"].get_elements(Faction).get(pk=target)
-            fact.items.add(*chars)
-
-        elif operation == Operations.DEL_CHAR_FACT:
-            fact = ctx["event"].get_elements(Faction).get(pk=target)
-            fact.items.remove(*chars)
-
-        if operation == Operations.ADD_CHAR_PLOT:
-            plot = ctx["event"].get_elements(Plot).get(pk=target)
-            plot.items.add(*chars)
-
-        elif operation == Operations.DEL_CHAR_PLOT:
-            plot = ctx["event"].get_elements(Plot).get(pk=target)
-            plot.items.remove(*chars)
+def exec_set_quest_type(request, ctx, target, ids):
+    quest_type = ctx["event"].get_elements(QuestType).get(pk=target)
+    ctx["event"].get_elements(Quest).filter(pk__in=ids).update(typ=quest_type)
 
 
-    except ObjectDoesNotExist:
-        return JsonResponse({"error": "not found"}, status=400)
+def handle_bulk_quest(request, ctx):
+    if request.POST:
+        raise ReturnJson(exec_bulk(request, ctx, {Operations.SET_QUEST_TYPE: exec_set_quest_type}))
 
-    return JsonResponse({"res": "ok"})
+    quest_types = ctx["event"].get_elements(QuestType).values("id", "name").order_by("name")
+    ctx["bulk"] = [
+        {"idx": Operations.SET_QUEST_TYPE, "label": _("Set quest type"), "objs": quest_types},
+    ]
+
+
+def exec_set_quest(request, ctx, target, ids):
+    quest = ctx["event"].get_elements(Quest).get(pk=target)
+    ctx["event"].get_elements(Trait).filter(pk__in=ids).update(quest=quest)
+
+
+def handle_bulk_trait(request, ctx):
+    if request.POST:
+        raise ReturnJson(exec_bulk(request, ctx, {Operations.SET_TRAIT_QUEST: exec_set_quest}))
+
+    quests = ctx["event"].get_elements(Quest).values("id", "name").order_by("name")
+    ctx["bulk"] = [
+        {"idx": Operations.SET_TRAIT_QUEST, "label": _("Set quest"), "objs": quests},
+    ]
+
+
+def exec_set_ability_type(request, ctx, target, ids):
+    typ = ctx["event"].get_elements(AbilityTypePx).get(pk=target)
+    ctx["event"].get_elements(AbilityPx).filter(pk__in=ids).update(typ=typ)
+
+
+def handle_bulk_ability(request, ctx):
+    if request.POST:
+        raise ReturnJson(exec_bulk(request, ctx, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}))
+
+    quests = ctx["event"].get_elements(AbilityTypePx).values("id", "name").order_by("name")
+    ctx["bulk"] = [
+        {"idx": Operations.SET_ABILITY_TYPE, "label": _("Set ability type"), "objs": quests},
+    ]

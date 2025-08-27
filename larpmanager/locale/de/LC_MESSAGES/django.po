@@ -1278,6 +1278,9 @@ msgstr "Rückkehr"
 msgid "Seniority"
 msgstr "Dienstalter"
 
+msgid "Set quest"
+msgstr "Suche einstellen"
+
 msgid "Short url"
 msgstr "Kurze Url"
 
@@ -1559,6 +1562,9 @@ msgstr "hier antworten"
 
 msgid "Actual paid"
 msgstr "Tatsächlich gezahlt"
+
+msgid "Add to plot"
+msgstr "Zum Plot hinzufügen"
 
 msgid "Assignments"
 msgstr "Zuweisungen"
@@ -2132,6 +2138,9 @@ msgstr "persönliche Daten"
 msgid "registrations"
 msgstr "Einschreibungen"
 
+msgid "Add to faction"
+msgstr "Zur Fraktion hinzufügen"
+
 msgid "Available days"
 msgstr "Verfügbare Tage"
 
@@ -2281,6 +2290,9 @@ msgstr "Sensible Daten"
 
 msgid "Session active"
 msgstr "Sitzung aktiv"
+
+msgid "Set quest type"
+msgstr "Questtyp festlegen"
 
 msgid "Show shortcuts"
 msgstr "Abkürzungen anzeigen"
@@ -2582,11 +2594,17 @@ msgstr "Zahlungserinnerung"
 msgid "Reminder profile"
 msgstr "Erinnerungsprofil"
 
+msgid "Remove from plot"
+msgstr "Aus der Handlung entfernen"
+
 msgid "Request approved"
 msgstr "Antrag genehmigt"
 
 msgid "Selected options"
 msgstr "Ausgewählte Optionen"
+
+msgid "Set ability type"
+msgstr "Fähigkeitstyp festlegen"
 
 msgid "Show collections"
 msgstr "Sammlungen anzeigen"
@@ -2983,6 +3001,9 @@ msgstr "Registrierung geschlossen"
 
 msgid "Relationships (Pdf)"
 msgstr "Beziehungen (Pdf)"
+
+msgid "Remove from faction"
+msgstr "Aus der Fraktion entfernen"
 
 msgid "Results not present"
 msgstr "Ergebnisse nicht vorhanden"

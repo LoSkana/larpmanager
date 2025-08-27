@@ -1278,6 +1278,9 @@ msgstr "Návrat na"
 msgid "Seniority"
 msgstr "Seniorita"
 
+msgid "Set quest"
+msgstr "Zadání úkolu"
+
 msgid "Short url"
 msgstr "Krátká url adresa"
 
@@ -1559,6 +1562,9 @@ msgstr "odpovězte zde"
 
 msgid "Actual paid"
 msgstr "Skutečně vyplacené"
+
+msgid "Add to plot"
+msgstr "Přidat do pozemku"
 
 msgid "Assignments"
 msgstr "Zadání"
@@ -2132,6 +2138,9 @@ msgstr "osobní údaje"
 msgid "registrations"
 msgstr "zápisy"
 
+msgid "Add to faction"
+msgstr "Přidat do frakce"
+
 msgid "Available days"
 msgstr "Dostupné dny"
 
@@ -2281,6 +2290,9 @@ msgstr "Citlivé údaje"
 
 msgid "Session active"
 msgstr "Relace aktivní"
+
+msgid "Set quest type"
+msgstr "Nastavení typu úkolu"
 
 msgid "Show shortcuts"
 msgstr "Zobrazit zkratky"
@@ -2582,11 +2594,17 @@ msgstr "Připomínková platba"
 msgid "Reminder profile"
 msgstr "Připomínkový profil"
 
+msgid "Remove from plot"
+msgstr "Odstranění z pozemku"
+
 msgid "Request approved"
 msgstr "Žádost schválena"
 
 msgid "Selected options"
 msgstr "Vybrané možnosti"
+
+msgid "Set ability type"
+msgstr "Nastavení typu schopnosti"
 
 msgid "Show collections"
 msgstr "Zobrazit sbírky"
@@ -2983,6 +3001,9 @@ msgstr "Registrace uzavřena"
 
 msgid "Relationships (Pdf)"
 msgstr "Vztahy (Pdf)"
+
+msgid "Remove from faction"
+msgstr "Odstranění z frakce"
 
 msgid "Results not present"
 msgstr "Výsledky nejsou k dispozici"

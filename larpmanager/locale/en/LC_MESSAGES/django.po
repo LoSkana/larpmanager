@@ -8178,6 +8178,27 @@ msgstr ""
 msgid "Remove tag"
 msgstr ""
 
+msgid "Add to faction"
+msgstr ""
+
+msgid "Remove from faction"
+msgstr ""
+
+msgid "Add to plot"
+msgstr ""
+
+msgid "Remove from plot"
+msgstr ""
+
+msgid "Set quest type"
+msgstr ""
+
+msgid "Set quest"
+msgstr ""
+
+msgid "Set ability type"
+msgstr ""
+
 #, python-format
 msgid ""
 "File type '%(detected_type)s' is not allowed.Allowed types are: "
