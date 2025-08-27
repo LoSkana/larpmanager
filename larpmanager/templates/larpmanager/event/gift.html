@@ -56,7 +56,13 @@
                         {% elif reg.pending %}
                             {% trans "Payment currently in review by the staff" %}.
                         {% else %}
-                            <a href="{% url 'gift_redeem' event.slug run.number reg.redeem_code %}">{% trans "Redeem code" %}</a>
+                            <a href="{% url 'gift_redeem' event.slug run.number reg.redeem_code %}">{% trans "Access link" %}</a>
+                            (<i>
+                    {% trans "copy this link and give it to your friend" %}:
+                </i>
+                            <b>
+                                {{ request.build_absolute_uri|slice:":-1" }}{% url 'gift_redeem' event.slug run.number reg.redeem_code %}
+                            </b>)
                         {% endif %}
                     </td>
                 </tr>

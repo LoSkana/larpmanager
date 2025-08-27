@@ -4069,6 +4069,9 @@ msgstr "Je vraag is beantwoord"
 msgid "check nonexistent relationships"
 msgstr "controleer niet-bestaande relaties"
 
+msgid "copy it and give to your friend"
+msgstr "kopieer het en geef het aan je vriend(in)"
+
 msgid "Added to the bottom of all pages"
 msgstr "Toegevoegd aan de onderkant van alle pagina's"
 

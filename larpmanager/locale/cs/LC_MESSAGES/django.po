@@ -4069,6 +4069,9 @@ msgstr "Vaše otázka byla zodpovězena"
 msgid "check nonexistent relationships"
 msgstr "kontrola neexistujících vztahů"
 
+msgid "copy it and give to your friend"
+msgstr "zkopírujte ji a dejte ji svému příteli"
+
 msgid "Added to the bottom of all pages"
 msgstr "Přidáno do spodní části všech stránek"
 
