@@ -4522,6 +4522,9 @@ msgstr ""
 msgid "Redeem code"
 msgstr ""
 
+msgid "copy it and give to your friend"
+msgstr ""
+
 msgid ""
 "Note: The special code is re-generated each time you change the gift card"
 msgstr ""

@@ -4102,6 +4102,9 @@ msgstr "Du har fått svar på spørsmålet ditt"
 msgid "check nonexistent relationships"
 msgstr "sjekke ikke-eksisterende relasjoner"
 
+msgid "copy it and give to your friend"
+msgstr "kopier den og gi den til en venn"
+
 msgid "Added to the bottom of all pages"
 msgstr "Lagt til nederst på alle sider"
 

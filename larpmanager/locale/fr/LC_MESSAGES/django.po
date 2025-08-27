@@ -4102,6 +4102,9 @@ msgstr "Une réponse a été apportée à votre question "
 msgid "check nonexistent relationships"
 msgstr "vérifier les relations inexistantes"
 
+msgid "copy it and give to your friend"
+msgstr "Copiez-le et donnez-le à votre ami(e)"
+
 msgid "Added to the bottom of all pages"
 msgstr "Ajouté au bas de toutes les pages"
 

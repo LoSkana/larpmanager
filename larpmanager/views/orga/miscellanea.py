@@ -195,9 +195,9 @@ def orga_inventory_area_assignments(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_inventory_area")
     get_element(ctx, num, "area", InventoryArea)
 
-    get_inventory_optionals(ctx, [4, 5])
+    get_inventory_optionals(ctx, [5, 6])
     if ctx["optionals"]["quantity"]:
-        ctx["no_header_cols"] = [6, 7]
+        ctx["no_header_cols"] = [7, 8]
 
     # GET ITEMS
 
