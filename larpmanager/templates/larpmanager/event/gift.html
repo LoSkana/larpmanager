@@ -56,7 +56,8 @@
                         {% elif reg.pending %}
                             {% trans "Payment currently in review by the staff" %}.
                         {% else %}
-                            <a href="{% url 'gift_redeem' event.slug run.number reg.redeem_code %}">{% trans "Redeem code" %}</a>
+                            {% trans "Redeem code" %}: {% url 'gift_redeem' event.slug run.number reg.redeem_code %}
+                            (<i>{% trans "copy it and give to your friend" %}</i>)
                         {% endif %}
                     </td>
                 </tr>
