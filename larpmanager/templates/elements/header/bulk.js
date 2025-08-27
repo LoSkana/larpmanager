@@ -22,7 +22,7 @@ window.addEventListener('DOMContentLoaded', function() {
             $(".objs").addClass('hide');
             var val = $(this).val();
             $("#objs_" + val).removeClass('hide');
-        });
+        }).trigger("change");
 
 $("#main_bulk #exec").on("click", function(e) {
   e.preventDefault();
