@@ -4070,7 +4070,7 @@ msgid "check nonexistent relationships"
 msgstr "check relazioni inesistenti"
 
 msgid "copy it and give to your friend"
-msgstr "copiatelo e datelo al vostro amico"
+msgstr "copialo e dallo al tuo amico"
 
 msgid "Added to the bottom of all pages"
 msgstr "Aggiunto in fondo a tutte le pagine"
