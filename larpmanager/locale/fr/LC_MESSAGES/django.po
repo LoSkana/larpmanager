@@ -1560,6 +1560,9 @@ msgstr "appuyez ici"
 msgid "reply here"
 msgstr "répondre ici"
 
+msgid "Access link"
+msgstr "Lien d'accès"
+
 msgid "Actual paid"
 msgstr "Paiement effectif"
 
@@ -1673,9 +1676,6 @@ msgstr "Installation rapide"
 
 msgid "Recalculate"
 msgstr "Recalculer"
-
-msgid "Redeem code"
-msgstr "Code d'échange"
 
 msgid "Register to"
 msgstr "S'inscrire à"
@@ -4102,9 +4102,6 @@ msgstr "Une réponse a été apportée à votre question "
 msgid "check nonexistent relationships"
 msgstr "vérifier les relations inexistantes"
 
-msgid "copy it and give to your friend"
-msgstr "Copiez-le et donnez-le à votre ami(e)"
-
 msgid "Added to the bottom of all pages"
 msgstr "Ajouté au bas de toutes les pages"
 
@@ -4810,6 +4807,9 @@ msgstr "Vous excluez (aucun de ces filtres)"
 
 msgid "You have exceeded the maximum text length"
 msgstr "Vous avez dépassé la longueur maximale du texte"
+
+msgid "copy this link and give it to your friend"
+msgstr "Copiez ce lien et donnez-le à votre ami(e)"
 
 msgid "Added at the top of the main calendar page"
 msgstr "Ajouté en haut de la page principale du calendrier"
