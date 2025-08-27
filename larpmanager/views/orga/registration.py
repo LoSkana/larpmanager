@@ -171,35 +171,39 @@ def regs_list_add(ctx, list, name, member):
         ctx[list][key]["players"].append(member.display_member())
 
 
-def _orga_registrations_standard(r, ctx, cache):
-    regs_list_add(ctx, "list_all", "all", r.member)
-    if r.member_id in ctx["reg_chars"]:
-        r.factions = []
-        r.chars = ctx["reg_chars"][r.member_id]
-        for char in r.chars:
+def _orga_registrations_standard(reg, ctx):
+    # skip if it is gift
+    if reg.redeem_code:
+        return
+
+    regs_list_add(ctx, "list_all", "all", reg.member)
+    if reg.member_id in ctx["reg_chars"]:
+        reg.factions = []
+        reg.chars = ctx["reg_chars"][reg.member_id]
+        for char in reg.chars:
             if "factions" in char:
-                r.factions.extend(char["factions"])
+                reg.factions.extend(char["factions"])
                 for fnum in char["factions"]:
                     if fnum in ctx["factions"]:
-                        regs_list_add(ctx, "list_factions", ctx["factions"][fnum]["name"], r.member)
+                        regs_list_add(ctx, "list_factions", ctx["factions"][fnum]["name"], reg.member)
 
             if "custom_character" in ctx["features"]:
-                orga_registrations_custom(r, ctx, char)
+                orga_registrations_custom(reg, ctx, char)
 
-        if "custom_character" in ctx["features"] and r.custom:
+        if "custom_character" in ctx["features"] and reg.custom:
             for s in ctx["custom_info"]:
-                if not r.custom[s]:
+                if not reg.custom[s]:
                     continue
-                r.custom[s] = ", ".join(r.custom[s])
+                reg.custom[s] = ", ".join(reg.custom[s])
 
     # membership status
     if "membership" in ctx["features"]:
-        orga_registrations_membership(r, ctx)
+        orga_registrations_membership(reg, ctx)
 
     # age at run
     if ctx["registration_reg_que_age"]:
-        if r.member.birth_date and ctx["run"].start:
-            r.age = calculate_age(r.member.birth_date, ctx["run"].start)
+        if reg.member.birth_date and ctx["run"].start:
+            reg.age = calculate_age(reg.member.birth_date, ctx["run"].start)
 
 
 def orga_registrations_custom(r, ctx, char):
@@ -338,7 +342,7 @@ def orga_registrations(request, s, n):
             ctx["memberships"][el.member_id] = el
 
     for r in ctx["reg_list"]:
-        _orga_registrations_standard(r, ctx, cache)
+        _orga_registrations_standard(r, ctx)
 
         if "discount" in ctx["features"]:
             if r.member_id in ctx["reg_discounts"]:

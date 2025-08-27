@@ -234,8 +234,8 @@ def gift(page, live_server):
 
     # redeem
     go_to(page, live_server, "/test/1/gift/")
-    expect(page.locator("#one")).to_contain_text("Redeem code")
-    href = page.get_by_role("link", name="Redeem code").get_attribute("href")
+    expect(page.locator("#one")).to_contain_text("Access link")
+    href = page.get_by_role("link", name="Access link").get_attribute("href")
 
     login_user(page, live_server)
     go_to(page, live_server, href)
