@@ -4069,6 +4069,9 @@ msgstr "Din fråga har besvarats"
 msgid "check nonexistent relationships"
 msgstr "kontrollera icke-existerande relationer"
 
+msgid "copy it and give to your friend"
+msgstr "kopiera den och ge till din vän"
+
 msgid "Added to the bottom of all pages"
 msgstr "Läggs till längst ner på alla sidor"
 

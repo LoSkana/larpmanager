@@ -4069,6 +4069,9 @@ msgstr "Odpowiedź na twoje pytanie została udzielona"
 msgid "check nonexistent relationships"
 msgstr "sprawdzić nieistniejące relacje"
 
+msgid "copy it and give to your friend"
+msgstr "skopiuj i daj swojemu przyjacielowi"
+
 msgid "Added to the bottom of all pages"
 msgstr "Dodano na dole wszystkich stron"
 
