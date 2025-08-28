@@ -253,8 +253,8 @@ def copy(live_server, page):
     go_to(page, live_server, "/copy/1/manage/characters/")
     page.get_by_role("link", name="XP").click()
     expect(page.locator('[id="\\32 "]')).to_contain_text("12")
-    expect(page.locator('[id="\\32 "]')).to_contain_text("1")
-    expect(page.locator('[id="\\32 "]')).to_contain_text("11")
+    expect(page.locator('[id="\\32 "]')).to_contain_text("0")
+    expect(page.locator('[id="\\32 "]')).to_contain_text("12")
 
 
 def campaign(live_server, page):
