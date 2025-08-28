@@ -7,12 +7,33 @@
 {% block css %}
     {% if iframe %}
         <style>
-            #header, #footer, header, #tutorials .column, #tutorials .navig, .main_nav, #topbar { display: none }
-            #main { padding: 0; width: 100%; max-width: 100%; }
-            #page-wrapper.topbar { padding: 0; margin-top: 0; }
+            #header,
+            #footer,
+            header,
+            #tutorials .column,
+            #tutorials .navig,
+            .main_nav,
+            #topbar {
+                display: none
+            }
+
+            #main {
+                padding: 0;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            #page-wrapper.topbar {
+                padding: 0;
+                margin-top: 0;
+            }
         </style>
     {% elif assoc.id != 0 %}
-        <style>#tutorials { margin-top: 1em; }</style>
+        <style>
+            #tutorials {
+                margin-top: 1em;
+            }
+        </style>
     {% endif %}
 {% endblock css %}
 {% block content %}

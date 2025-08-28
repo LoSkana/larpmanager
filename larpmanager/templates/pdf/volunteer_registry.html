@@ -4,25 +4,52 @@
     <head>
         <meta charset="utf-8">
         <style>
-body { font-size: 10pt }
-table { width: 100%; }
-td, th { text-align: center; padding: 0.2em;  }
-.clear { clear: both; }
+            body {
+                font-size: 10pt
+            }
 
-h1 { text-align:center; font-size:150%;}
+            table {
+                width: 100%;
+            }
 
-#footer {  font-size:120%; }
+            td,
+            th {
+                text-align: center;
+                padding: 0.2em;
+            }
 
-@page {
-    size: "A4";
-    @frame content_frame { margin: 1cm; }
-<!--
-    @frame header_frame { -pdf-frame-content: header_content; top: 1cm; }
--->
-    @frame footer_frame { -pdf-frame-content: footer_content; top: 27.5cm; }
-}
+            .clear {
+                clear: both;
+            }
 
-</style>
+            h1 {
+                text-align: center;
+                font-size: 150%;
+            }
+
+            #footer {
+                font-size: 120%;
+            }
+
+            @page {
+                size: "A4";
+
+                @frame content_frame {
+                    margin: 1cm;
+                }
+
+                < !-- @frame header_frame {
+                    -pdf-frame-content: header_content;
+                    top: 1cm;
+                }
+
+                -->
+                @frame footer_frame {
+                    -pdf-frame-content: footer_content;
+                    top: 27.5cm;
+                }
+            }
+        </style>
 </head>
 <body>
 <!--

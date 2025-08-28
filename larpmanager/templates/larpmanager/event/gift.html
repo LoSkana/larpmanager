@@ -58,17 +58,17 @@
                         {% else %}
                             <a href="{% url 'gift_redeem' event.slug run.number reg.redeem_code %}">{% trans "Access link" %}</a>
                             (<i>
-                    {% trans "copy this link and give it to your friend" %}:
-                </i>
-                            <b>
-                                {{ request.build_absolute_uri|slice:":-1" }}{% url 'gift_redeem' event.slug run.number reg.redeem_code %}
-                            </b>)
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-        <p>
-            <i>{% trans "Note: The special code is re-generated each time you change the gift card" %}</i>
-        </p>
-    {% endblock content %}
+                            {% trans "copy this link and give it to your friend" %}:
+                        </i>
+                        <b>
+                            {{ request.build_absolute_uri|slice:":-1" }}{% url 'gift_redeem' event.slug run.number reg.redeem_code %}
+                        </b>)
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <p>
+        <i>{% trans "Note: The special code is re-generated each time you change the gift card" %}</i>
+    </p>
+{% endblock content %}
