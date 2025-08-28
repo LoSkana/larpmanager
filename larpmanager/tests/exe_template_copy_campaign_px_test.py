@@ -39,6 +39,8 @@ def test_exe_template_copy(pw_page):
 
     px(live_server, page)
 
+    rulepx(live_server, page)
+
     copy(live_server, page)
 
     campaign(live_server, page)
@@ -171,6 +173,53 @@ def px(live_server, page):
     expect(page.locator('[id="\\31 "]')).to_contain_text("11")
     expect(page.locator('[id="\\31 "]')).to_contain_text("12")
     expect(page.locator('[id="\\31 "]')).to_contain_text("1")
+
+
+def rulepx(live_server, page):
+    # create field
+    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_typ").select_option("c")
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("Hit Point")
+    page.locator("#id_description").click()
+    page.locator("#id_description").fill("sasad")
+    page.locator("#id_name").click()
+    page.get_by_role("button", name="Confirm").click()
+
+    # create first rule - for everyone
+    page.get_by_role("link", name="Rules").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_field").select_option("4")
+    page.locator("#id_amount").click()
+    page.locator("#id_amount").fill("2")
+    page.get_by_role("checkbox", name="After confirmation, add").check()
+    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("searchbox").click()
+
+    # create second rule - only for sword
+    page.get_by_role("searchbox").fill("swor")
+    page.locator(".select2-results__option").first.click()
+    page.locator("#id_field").select_option("4")
+    page.locator("#id_operation").select_option("MUL")
+    page.locator("#id_amount").click()
+    page.locator("#id_amount").fill("3")
+    page.get_by_role("button", name="Confirm").click()
+
+    # check value
+    page.get_by_role("link", name="Characters").click()
+    page.get_by_role("link", name="Hit Point").click()
+    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text 6")
+
+    # remove ability
+    page.get_by_role("link", name="").click()
+    page.get_by_role("row", name="Abilities Show").get_by_role("link").click()
+    page.get_by_role("listitem", name="sword1").locator("span").click()
+    page.get_by_role("button", name="Confirm").click()
+
+    # recheck value
+    page.get_by_role("link", name="Hit Point").click()
+    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text 2")
 
 
 def copy(live_server, page):
