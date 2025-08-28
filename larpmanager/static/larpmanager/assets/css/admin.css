@@ -1,17 +1,19 @@
-.select2-results, .select2-search--dropdown  {
-    background: white;
+.select2-results,
+.select2-search--dropdown {
+  background: white;
 }
 
 .select2-container {
-    width: 100% !important;
-    margin: auto;
+  width: 100% !important;
+  margin: auto;
 }
 
-.select2-container--default, .select2-selection--multiple {
-    background: transparent !important;
+.select2-container--default,
+.select2-selection--multiple {
+  background: transparent !important;
 }
 
 .select2-selection__choice {
-    background-color: rgba(var(--sec-rgb), 0.9) !important;
-    color: rgba(var(--pri-rgb), 0.9) !important;
+  background-color: rgba(var(--sec-rgb), 0.9) !important;
+  color: rgba(var(--pri-rgb), 0.9) !important;
 }

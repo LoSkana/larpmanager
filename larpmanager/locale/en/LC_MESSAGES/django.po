@@ -4513,10 +4513,10 @@ msgstr ""
 msgid "Payment currently in review by the staff"
 msgstr ""
 
-msgid "Redeem code"
+msgid "Access link"
 msgstr ""
 
-msgid "copy it and give to your friend"
+msgid "copy this link and give it to your friend"
 msgstr ""
 
 msgid ""
