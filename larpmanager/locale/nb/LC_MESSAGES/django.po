@@ -1548,6 +1548,9 @@ msgstr "trykk her"
 msgid "reply here"
 msgstr "svar her"
 
+msgid "Access link"
+msgstr "Tilgangslenke"
+
 msgid "Actual paid"
 msgstr "Faktisk betalt"
 
@@ -1658,9 +1661,6 @@ msgstr "Hurtigoppsett"
 
 msgid "Recalculate"
 msgstr "Beregning på nytt"
-
-msgid "Redeem code"
-msgstr "Løs inn koden"
 
 msgid "Register to"
 msgstr "Registrer deg for"
@@ -4069,9 +4069,6 @@ msgstr "Du har fått svar på spørsmålet ditt"
 msgid "check nonexistent relationships"
 msgstr "sjekke ikke-eksisterende relasjoner"
 
-msgid "copy it and give to your friend"
-msgstr "kopier den og gi den til en venn"
-
 msgid "Added to the bottom of all pages"
 msgstr "Lagt til nederst på alle sider"
 
@@ -4776,6 +4773,9 @@ msgstr "Du ekskluderer (ingen av disse filtrene)"
 
 msgid "You have exceeded the maximum text length"
 msgstr "Du har overskredet den maksimale tekstlengden"
+
+msgid "copy this link and give it to your friend"
+msgstr "kopier denne lenken og gi den til vennen din"
 
 msgid "Added at the top of the main calendar page"
 msgstr "Lagt til øverst på hovedkalendersiden"

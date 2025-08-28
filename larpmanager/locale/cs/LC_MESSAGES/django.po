@@ -1548,6 +1548,9 @@ msgstr "stiskněte zde"
 msgid "reply here"
 msgstr "odpovězte zde"
 
+msgid "Access link"
+msgstr "Přístupový odkaz"
+
 msgid "Actual paid"
 msgstr "Skutečně vyplacené"
 
@@ -1658,9 +1661,6 @@ msgstr "Rychlé nastavení"
 
 msgid "Recalculate"
 msgstr "Přepočet"
-
-msgid "Redeem code"
-msgstr "Uplatnit kód"
 
 msgid "Register to"
 msgstr "Zaregistrujte se"
@@ -4069,9 +4069,6 @@ msgstr "Vaše otázka byla zodpovězena"
 msgid "check nonexistent relationships"
 msgstr "kontrola neexistujících vztahů"
 
-msgid "copy it and give to your friend"
-msgstr "zkopírujte ji a dejte ji svému příteli"
-
 msgid "Added to the bottom of all pages"
 msgstr "Přidáno do spodní části všech stránek"
 
@@ -4774,6 +4771,9 @@ msgstr "Vylučujete (žádný z těchto filtrů)"
 
 msgid "You have exceeded the maximum text length"
 msgstr "Překročili jste maximální délku textu"
+
+msgid "copy this link and give it to your friend"
+msgstr "zkopírujte tento odkaz a dejte ho svému příteli"
 
 msgid "Added at the top of the main calendar page"
 msgstr "Přidáno v horní části hlavní stránky kalendáře"
