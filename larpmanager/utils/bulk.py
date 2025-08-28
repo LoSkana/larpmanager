@@ -103,17 +103,12 @@ def exec_move_item_box(request, ctx, target, ids):
 
 def handle_bulk_items(request, ctx):
     if request.POST:
-        raise ReturnJson(
-            exec_bulk(
-                request,
-                ctx,
-                {
-                    Operations.ADD_ITEM_TAG: exec_add_item_tag,
-                    Operations.DEL_ITEM_TAG: exec_del_item_tag,
-                    Operations.MOVE_ITEM_BOX: exec_move_item_box,
-                },
-            )
-        )
+        mapping = {
+            Operations.ADD_ITEM_TAG: exec_add_item_tag,
+            Operations.DEL_ITEM_TAG: exec_del_item_tag,
+            Operations.MOVE_ITEM_BOX: exec_move_item_box,
+        }
+        raise ReturnJson(exec_bulk(request, ctx, mapping))
 
     containers = InventoryContainer.objects.filter(assoc_id=request.assoc["id"]).values("id", "name").order_by("name")
     tags = InventoryTag.objects.filter(assoc_id=request.assoc["id"]).values("id", "name").order_by("name")
@@ -150,19 +145,13 @@ def exec_del_char_plot(request, ctx, target, ids):
 
 def handle_bulk_characters(request, ctx):
     if request.POST:
-        if request.POST:
-            raise ReturnJson(
-                exec_bulk(
-                    request,
-                    ctx,
-                    {
-                        Operations.ADD_CHAR_FACT: exec_add_char_fact,
-                        Operations.DEL_CHAR_FACT: exec_del_char_fact,
-                        Operations.ADD_CHAR_PLOT: exec_add_char_plot,
-                        Operations.DEL_CHAR_PLOT: exec_del_char_plot,
-                    },
-                )
-            )
+        mapping = {
+            Operations.ADD_CHAR_FACT: exec_add_char_fact,
+            Operations.DEL_CHAR_FACT: exec_del_char_fact,
+            Operations.ADD_CHAR_PLOT: exec_add_char_plot,
+            Operations.DEL_CHAR_PLOT: exec_del_char_plot,
+        }
+        raise ReturnJson(exec_bulk(request, ctx, mapping))
 
     ctx["bulk"] = []
 

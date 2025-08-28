@@ -76,8 +76,6 @@ from larpmanager.utils.writing import writing_list, writing_versions, writing_vi
 def orga_characters(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_characters")
 
-    handle_bulk_characters(request, ctx)
-
     get_event_cache_all(ctx)
     for config_name in ["user_character_approval", "writing_external_access"]:
         ctx[config_name] = ctx["event"].get_config(config_name, False)

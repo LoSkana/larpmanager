@@ -171,7 +171,6 @@ def orga_quest_types_versions(request, s, n, num):
 @login_required
 def orga_quests(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_quests")
-    handle_bulk_quest(request, ctx)
     return writing_list(request, ctx, Quest, "quest")
 
 
@@ -200,7 +199,6 @@ def orga_quests_versions(request, s, n, num):
 @login_required
 def orga_traits(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_traits")
-    handle_bulk_trait(request, ctx)
     return writing_list(request, ctx, Trait, "trait")
 
 

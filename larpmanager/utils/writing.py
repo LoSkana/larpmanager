@@ -52,6 +52,7 @@ from larpmanager.utils.character import get_character_relationships, get_charact
 from larpmanager.utils.common import check_field, compute_diff
 from larpmanager.utils.download import download
 from larpmanager.utils.edit import _setup_char_finder
+from larpmanager.utils.bulk import handle_bulk_characters, handle_bulk_quest, handle_bulk_trait
 
 
 def orga_list_progress_assign(ctx, typ: type[Model]):
@@ -151,6 +152,16 @@ def writing_post(request, ctx, typ, nm):
 
     if request.POST.get("popup") == "1":
         return writing_popup(request, ctx, typ)
+
+    bulks = {
+        Character: handle_bulk_characters,
+        Quest: handle_bulk_quest,
+        Trait: handle_bulk_trait
+    }
+
+    if typ in bulks:
+        bulks[typ](request, ctx)
+
 
     return None
 
