@@ -221,6 +221,17 @@ def rulepx(live_server, page):
     page.get_by_role("link", name="Hit Point").click()
     expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text 2")
 
+    # readd ability
+    page.get_by_role("link", name="").click()
+    page.wait_for_load_state("load")
+    page.wait_for_timeout(2000)
+    row = page.get_by_role("row", name="Abilities Show")
+    row.get_by_role("link").click()
+    row.get_by_role("searchbox").click()
+    row.get_by_role("searchbox").fill("swo")
+    page.locator(".select2-results__option").first.click()
+    submit_confirm(page)
+
 
 def copy(live_server, page):
     # copy event
@@ -253,8 +264,8 @@ def copy(live_server, page):
     go_to(page, live_server, "/copy/1/manage/characters/")
     page.get_by_role("link", name="XP").click()
     expect(page.locator('[id="\\32 "]')).to_contain_text("12")
-    expect(page.locator('[id="\\32 "]')).to_contain_text("0")
-    expect(page.locator('[id="\\32 "]')).to_contain_text("12")
+    expect(page.locator('[id="\\32 "]')).to_contain_text("1")
+    expect(page.locator('[id="\\32 "]')).to_contain_text("11")
 
 
 def campaign(live_server, page):
