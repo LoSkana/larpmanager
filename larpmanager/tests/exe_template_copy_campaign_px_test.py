@@ -190,7 +190,7 @@ def rulepx(live_server, page):
     # create first rule - for everyone
     page.get_by_role("link", name="Rules").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_field").select_option("4")
+    page.locator("#id_field").select_option("11")
     page.locator("#id_amount").click()
     page.locator("#id_amount").fill("2")
     page.get_by_role("checkbox", name="After confirmation, add").check()
@@ -200,7 +200,7 @@ def rulepx(live_server, page):
     # create second rule - only for sword
     page.get_by_role("searchbox").fill("swor")
     page.locator(".select2-results__option").first.click()
-    page.locator("#id_field").select_option("4")
+    page.locator("#id_field").select_option("11")
     page.locator("#id_operation").select_option("MUL")
     page.locator("#id_amount").click()
     page.locator("#id_amount").fill("3")
