@@ -192,11 +192,11 @@
 {% endblock main %}
 {% block css-req %}
     <style>
-            @font-face {
-                font-family: 'easyreading';
-                src: url('{% static "fonts/easy_reading/EasyReadingPRO.ttf" %}');
-                font-display: swap;
-            }
+        @font-face {
+            font-family: 'easyreading';
+            src: url('{% static "fonts/easy_reading/EasyReadingPRO.ttf" %}');
+            font-display: swap;
+        }
     </style>
     <link rel="preload"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
@@ -232,11 +232,11 @@
     {% if assoc.id == 0 %}
         <style>
             @font-face {
-              font-family: 'future_light';
-              src:  url('{% static "fonts/future_light/Future_Light.otf" %}') ,
-                    url('{% static "fonts/future_light/Future_Light.ttf" %}') ;
+                font-family: 'future_light';
+                src: url('{% static "fonts/future_light/Future_Light.otf" %}'),
+                url('{% static "fonts/future_light/Future_Light.ttf" %}');
 
-             font-display: swap;
+                font-display: swap;
             }
         </style>
         <link rel="preload"

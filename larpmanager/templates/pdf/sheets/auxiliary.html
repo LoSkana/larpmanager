@@ -8,21 +8,36 @@
         <meta name="keywords" content="none">
         <meta name="description" content="none">
         <style>
-@page {
-    size: {{ pagesize|default:"A4" }};
+            @page {
+                size: {{ pagesize|default:"A4" }};
 
-    @frame content_frame {
-        margin: 2cm;
-    }
-}
+                @frame content_frame {
+                    margin: 2cm;
+                }
+            }
 
-table { width: 100%; }
-td, th { text-align: center; }
-.clear { clear: both; }
+            table {
+                width: 100%;
+            }
 
-#char_name, #char_player, .c { text-align: center; }
-.show_char { display: none; }
+            td,
+            th {
+                text-align: center;
+            }
 
+            .clear {
+                clear: both;
+            }
+
+            #char_name,
+            #char_player,
+            .c {
+                text-align: center;
+            }
+
+            .show_char {
+                display: none;
+            }
         </style>
         <style>{{ page_css | safe }}</style>
     </head>

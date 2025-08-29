@@ -4808,6 +4808,7 @@ msgstr "È stata superata la lunghezza massima del testo"
 msgid "copy this link and give it to your friend"
 msgstr "copia questo link e dallo al tuo amico"
 
+
 msgid "Added at the top of the main calendar page"
 msgstr "Aggiunto all'inizio della pagina principale del calendario"
 
