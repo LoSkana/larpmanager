@@ -373,7 +373,7 @@ class OrgaConfigForm(ConfigForm):
 
             label = _("Hide")
             help_text = _("Enables field 'hide', to be able to hide writing element from participants")
-            self.add_configs("writing_hide?", ConfigType.BOOL, label, help_text)
+            self.add_configs("writing_hide", ConfigType.BOOL, label, help_text)
 
             label = _("Assigned")
             help_text = _(
