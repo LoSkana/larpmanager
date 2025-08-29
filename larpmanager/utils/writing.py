@@ -53,6 +53,7 @@ from larpmanager.utils.common import check_field, compute_diff
 from larpmanager.utils.download import download
 from larpmanager.utils.edit import _setup_char_finder
 from larpmanager.utils.bulk import handle_bulk_characters, handle_bulk_quest, handle_bulk_trait
+from larpmanager.utils.exceptions import ReturnNow
 
 
 def orga_list_progress_assign(ctx, typ: type[Model]):
@@ -144,23 +145,23 @@ def writing_example(ctx, typ):
 
 
 def writing_post(request, ctx, typ, nm):
+    if not request.POST:
+        return
+
     if request.POST.get("download") == "1":
-        return download(ctx, typ, nm)
+        raise ReturnNow(download(ctx, typ, nm))
 
     if request.POST.get("example") == "1":
-        return writing_example(ctx, typ)
+        raise ReturnNow(writing_example(ctx, typ))
 
     if request.POST.get("popup") == "1":
-        return writing_popup(request, ctx, typ)
-
-    return None
+        raise ReturnNow(writing_popup(request, ctx, typ))
 
 
 def writing_list(request, ctx, typ, nm):
-    writing_bulk(ctx, request, typ)
+    writing_post(request, ctx, typ, nm)
 
-    if request.method == "POST":
-        return writing_post(request, ctx, typ, nm)
+    writing_bulk(ctx, request, typ)
 
     ev = ctx["event"]
 

@@ -31,7 +31,7 @@ from larpmanager.models.miscellanea import (
     InventoryTag,
 )
 from larpmanager.models.writing import Character, Faction, Plot
-from larpmanager.utils.exceptions import ReturnJson
+from larpmanager.utils.exceptions import ReturnNow
 
 
 def _get_bulk_params(request, ctx):
@@ -40,7 +40,7 @@ def _get_bulk_params(request, ctx):
     ids = [int(x) for x in request.POST.getlist("ids[]", [])]
 
     if not ids:
-        raise ReturnJson(JsonResponse({"error": "no ids"}, status=400))
+        raise ReturnNow(JsonResponse({"error": "no ids"}, status=400))
 
     eid = ctx["a_id"]
     if "run" in ctx:
@@ -108,7 +108,7 @@ def handle_bulk_items(request, ctx):
             Operations.DEL_ITEM_TAG: exec_del_item_tag,
             Operations.MOVE_ITEM_BOX: exec_move_item_box,
         }
-        raise ReturnJson(exec_bulk(request, ctx, mapping))
+        raise ReturnNow(exec_bulk(request, ctx, mapping))
 
     containers = InventoryContainer.objects.filter(assoc_id=request.assoc["id"]).values("id", "name").order_by("name")
     tags = InventoryTag.objects.filter(assoc_id=request.assoc["id"]).values("id", "name").order_by("name")
@@ -151,7 +151,7 @@ def handle_bulk_characters(request, ctx):
             Operations.ADD_CHAR_PLOT: exec_add_char_plot,
             Operations.DEL_CHAR_PLOT: exec_del_char_plot,
         }
-        raise ReturnJson(exec_bulk(request, ctx, mapping))
+        raise ReturnNow(exec_bulk(request, ctx, mapping))
 
     ctx["bulk"] = []
 
@@ -181,7 +181,7 @@ def exec_set_quest_type(request, ctx, target, ids):
 
 def handle_bulk_quest(request, ctx):
     if request.POST:
-        raise ReturnJson(exec_bulk(request, ctx, {Operations.SET_QUEST_TYPE: exec_set_quest_type}))
+        raise ReturnNow(exec_bulk(request, ctx, {Operations.SET_QUEST_TYPE: exec_set_quest_type}))
 
     quest_types = ctx["event"].get_elements(QuestType).values("id", "name").order_by("name")
     ctx["bulk"] = [
@@ -196,7 +196,7 @@ def exec_set_quest(request, ctx, target, ids):
 
 def handle_bulk_trait(request, ctx):
     if request.POST:
-        raise ReturnJson(exec_bulk(request, ctx, {Operations.SET_TRAIT_QUEST: exec_set_quest}))
+        raise ReturnNow(exec_bulk(request, ctx, {Operations.SET_TRAIT_QUEST: exec_set_quest}))
 
     quests = ctx["event"].get_elements(Quest).values("id", "name").order_by("name")
     ctx["bulk"] = [
@@ -211,7 +211,7 @@ def exec_set_ability_type(request, ctx, target, ids):
 
 def handle_bulk_ability(request, ctx):
     if request.POST:
-        raise ReturnJson(exec_bulk(request, ctx, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}))
+        raise ReturnNow(exec_bulk(request, ctx, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}))
 
     quests = ctx["event"].get_elements(AbilityTypePx).values("id", "name").order_by("name")
     ctx["bulk"] = [

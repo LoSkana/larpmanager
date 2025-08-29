@@ -89,7 +89,7 @@ class MainPageError(Exception):
         self.path = path
 
 # For when you want to just return a json value
-class ReturnJson(Exception):
+class ReturnNow(Exception):
     def __init__(self, value=None):
         super().__init__()
         self.value = value
