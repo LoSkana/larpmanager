@@ -233,6 +233,8 @@ def show_trait(context, tx, run, tooltip):
 
 @register.simple_tag
 def key(d, key_name, s_key_name=None):
+    if not key_name:
+        return ""
     if s_key_name:
         key_name = str(key_name) + "_" + str(s_key_name)
     if key_name in d:
