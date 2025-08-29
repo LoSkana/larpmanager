@@ -153,20 +153,12 @@ def writing_post(request, ctx, typ, nm):
     if request.POST.get("popup") == "1":
         return writing_popup(request, ctx, typ)
 
-    bulks = {
-        Character: handle_bulk_characters,
-        Quest: handle_bulk_quest,
-        Trait: handle_bulk_trait
-    }
-
-    if typ in bulks:
-        bulks[typ](request, ctx)
-
-
     return None
 
 
 def writing_list(request, ctx, typ, nm):
+    writing_bulk(ctx, request, typ)
+
     if request.method == "POST":
         return writing_post(request, ctx, typ, nm)
 
@@ -199,6 +191,17 @@ def writing_list(request, ctx, typ, nm):
         _get_custom_form(ctx)
 
     return render(request, "larpmanager/orga/writing/" + nm + "s.html", ctx)
+
+
+def writing_bulk(ctx, request, typ):
+    bulks = {
+        Character: handle_bulk_characters,
+        Quest: handle_bulk_quest,
+        Trait: handle_bulk_trait
+    }
+
+    if typ in bulks:
+        bulks[typ](request, ctx)
 
 
 def _get_custom_form(ctx):

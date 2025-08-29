@@ -39,6 +39,164 @@ def test_user_new_ticket_orga_bulk(pw_page):
 
     bulk_inventory(live_server, page)
 
+    bulk_writing(live_server, page)
+
+    bulk_questbuilder(live_server, page)
+
+    bulk_px(live_server, page)
+
+def bulk_writing(live_server, page):
+    # set feature
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("checkbox", name="Characters").check()
+    page.get_by_role("checkbox", name="Plots").check()
+    page.get_by_role("checkbox", name="Factions").check()
+    page.get_by_role("checkbox", name="Quests and Traits").check()
+    page.get_by_role("checkbox", name="Experience points").check()
+    page.get_by_role("button", name="Confirm").click()
+    
+    # add plot
+    page.get_by_role("link", name="Plots", exact=True).click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").fill("plot")
+    page.get_by_role("button", name="Confirm").click()
+    
+    # add faction
+    page.get_by_role("link", name="Factions").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("faz")
+    page.get_by_role("button", name="Confirm").click()
+    
+    # check base
+    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    page.get_by_role("link", name="Faction", exact=True).click()
+    page.locator("#one").get_by_role("link", name="Plots").click()
+    expect(page.locator("#one")).not_to_contain_text("faz")
+    expect(page.locator("#one")).not_to_contain_text("[T1] plot")
+    
+    # set faction
+    page.get_by_role("link", name="Bulk").click()
+    page.locator("td:nth-child(6)").click()
+    page.get_by_role("cell", name="Test Teaser").click()
+    page.get_by_role("link", name="Execute").click()
+
+    # check result
+    page.get_by_role("link", name="Faction", exact=True).click()
+    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text faz")
+    
+    # remove faction
+    page.get_by_role("link", name="Bulk").click()
+    page.get_by_role("cell", name="Test Teaser").click()
+    page.locator("#operation").select_option("5")
+    page.get_by_role("link", name="Execute").click()
+    
+    # check result
+    page.get_by_role("link", name="Faction", exact=True).click()
+    expect(page.locator("#one")).not_to_contain_text("faz")
+    
+    # add plot
+    page.get_by_role("link", name="Bulk").click()
+    page.get_by_role("cell", name="Test Teaser").click()
+    page.locator("#operation").select_option("6")
+    page.get_by_role("link", name="Execute").click()
+    
+    # check result
+    page.locator("#one").get_by_role("link", name="Plots").click()
+    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text [T1] plot")
+
+    # remove plot
+    page.get_by_role("link", name="Bulk").click()
+    page.get_by_role("cell", name="Test Teaser").click()
+    page.locator("#operation").select_option("7")
+    page.get_by_role("link", name="Execute").click()
+
+    # check
+    page.locator("#one").get_by_role("link", name="Plots").click()
+    expect(page.locator("#one")).not_to_contain_text("[T1] plot")
+
+    # set quest type
+    page.get_by_role("link", name="Quest type").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("typ")
+    page.get_by_role("button", name="Confirm").click()
+
+def bulk_questbuilder(live_server, page):
+    # create quest
+    page.get_by_role("link", name="Quest", exact=True).click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("q1")
+    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("q2")
+    page.get_by_role("button", name="Confirm").click()
+
+    # create second quest type
+    page.get_by_role("link", name="Quest type").click()
+    expect(page.locator("#one")).to_contain_text("typ Q1 q1 Q2 q2")
+    page.locator("#one div").filter(has_text="New").nth(3).click()
+    page.get_by_role("row", name="Name").locator("td").click()
+    page.locator("#id_name").fill("t2")
+    page.get_by_role("button", name="Confirm").click()
+
+    # test bulk set quest
+    page.get_by_role("link", name="Quest", exact=True).click()
+    page.get_by_role("link", name="Bulk").click()
+    page.locator("[id=\"\\31 \"]").get_by_role("cell", name="typ").click()
+    page.get_by_role("link", name="Execute").click()
+    expect(page.locator("#one")).to_contain_text("Q1 q1 t2 Q2 q2 typ")
+
+    # create traits
+    page.locator("#orga_traits").get_by_role("link", name="Traits").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("t1")
+    page.get_by_role("button", name="Confirm").click()
+
+    # test bulk set quest
+    page.get_by_role("link", name="Bulk").click()
+    page.locator("td:nth-child(5)").click()
+    page.locator("#objs_9").select_option("2")
+    page.get_by_role("link", name="Execute").click()
+    expect(page.locator("#one")).to_contain_text("T1 t1 Q2 q2")
+
+def bulk_px(live_server, page):
+    # create ability type
+    page.get_by_role("link", name="Ability type").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("t1")
+    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("2")
+    page.get_by_role("button", name="Confirm").click()
+
+    # create ability
+    page.get_by_role("link", name="Ability", exact=True).click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("swor")
+    page.locator("#id_cost").click()
+    page.locator("#id_cost").fill("1")
+    page.get_by_role("button", name="Confirm").click()
+
+    # test bulk set type
+    page.get_by_role("link", name="Bulk").click()
+    page.locator("td:nth-child(5)").click()
+    page.get_by_role("link", name="Execute").click()
+    expect(page.locator("#one")).to_contain_text("swor 2 1")
+
+    # test bulk change type
+    page.get_by_role("link", name="Bulk").click()
+    page.locator("td:nth-child(5)").click()
+    page.locator("#objs_10").select_option("1")
+    page.get_by_role("link", name="Execute").click()
+    expect(page.locator("#one")).to_contain_text("swor t1 1")
+
 
 def bulk_inventory(live_server, page):
     # activate inventory
