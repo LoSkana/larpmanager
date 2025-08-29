@@ -437,7 +437,8 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
 
     # add types from feature if the feature is active but the field is missing
     not_to_remove = set(def_tps.keys())
-    not_to_remove.add(QuestionType.COMPUTED)
+    if "px" in features:
+        not_to_remove.add(QuestionType.COMPUTED)
     all_types -= not_to_remove
     for el in all_types:
         if el in features and el not in types:
