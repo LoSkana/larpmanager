@@ -120,6 +120,9 @@ def bulk_inventory(live_server, page):
     page.get_by_role("link", name="Execute").click()
     expect(page.locator("#one")).to_contain_text("item3 box2 item2 box item1 box2 tag")
 
+    # check link when bulk not active
+    page.locator("[id=\"\\31 \"]").get_by_role("link", name="box2").click()
+    expect(page.locator("#id_name")).to_have_value("box2");
 
 def new_ticket(live_server, page):
     # add new ticket feature
