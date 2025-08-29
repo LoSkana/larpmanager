@@ -266,6 +266,14 @@ $(document).ready(function() {
 
     });
 
+    // dont' follow links if bulk is active
+    $('.go_datatable').on('click', 'a', function(e) {
+        if ($('#main_bulk').is(':visible')) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    });
+
     // table_csv();
 
     resize_fields();
