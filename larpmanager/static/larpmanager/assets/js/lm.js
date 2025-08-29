@@ -210,26 +210,37 @@ $(document).ready(function() {
         scrollInput : false
     });
 
-    let slugTimeout;
+        let slugTouched = false;
+        let slugTimeout;
 
-    $('#slug').on('input', function (e) {
-        let v = $(this).val();
-        var sl = new RegExp('[^a-z0-9]');
-        if (sl.test(v)) {
-            $('.slug_war').fadeIn(200);
+        $('#slug').on('input', function (e) {
+            slugTouched = true;
 
-            clearTimeout(slugTimeout);
+            let v = $(this).val();
+            var sl = new RegExp('[^a-z0-9]');
+            if (sl.test(v)) {
+                $('.slug_war').fadeIn(200);
 
-            slugTimeout = setTimeout(function() {
-                $('.slug_war').fadeOut(200);
-            }, 3000);
+                clearTimeout(slugTimeout);
+                slugTimeout = setTimeout(function() {
+                    $('.slug_war').fadeOut(200);
+                }, 3000);
 
-            v = v.replace(sl, '');
-            $(this).val(v);
-        }
+                v = v.replace(sl, '');
+                $(this).val(v);
+            }
 
-        $(this).trigger('slug:changed', [v]);
-    });
+            $(this).trigger('slug:changed', [v]);
+        });
+
+        $('#id_name').on('input', function (e) {
+            if (!slugTouched) {
+                let nameVal = $(this).val();
+                let autoSlug = slugify(nameVal);
+                autoSlug = autoSlug.replaceAll('-', '');
+                $('#slug').val(autoSlug).trigger('slug:changed', [autoSlug]);
+            }
+        });
 
     reload_has_char();
 
