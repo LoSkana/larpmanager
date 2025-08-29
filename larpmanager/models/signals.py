@@ -440,7 +440,7 @@ def _init_character_form_questions(custom_tps, def_tps, features, instance):
     if "px" in features:
         not_to_remove.add(QuestionType.COMPUTED)
     all_types -= not_to_remove
-    for el in all_types:
+    for el in sorted(list(all_types)):
         if el in features and el not in types:
             WritingQuestion.objects.create(
                 event=instance,
