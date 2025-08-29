@@ -47,6 +47,7 @@ def test_user_new_ticket_orga_bulk(pw_page):
 
 def bulk_writing(live_server, page):
     # set feature
+    go_to(page, live_server, "test/1/manage/")
     page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Characters").check()
     page.get_by_role("checkbox", name="Plots").check()
@@ -72,12 +73,10 @@ def bulk_writing(live_server, page):
     page.locator("#orga_characters").get_by_role("link", name="Characters").click()
     page.get_by_role("link", name="Faction", exact=True).click()
     page.locator("#one").get_by_role("link", name="Plots").click()
-    expect(page.locator("#one")).not_to_contain_text("faz")
-    expect(page.locator("#one")).not_to_contain_text("[T1] plot")
+    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text Load")
     
     # set faction
     page.get_by_role("link", name="Bulk").click()
-    page.locator("td:nth-child(6)").click()
     page.get_by_role("cell", name="Test Teaser").click()
     page.get_by_role("link", name="Execute").click()
 
@@ -93,7 +92,7 @@ def bulk_writing(live_server, page):
     
     # check result
     page.get_by_role("link", name="Faction", exact=True).click()
-    expect(page.locator("#one")).not_to_contain_text("faz")
+    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text Load")
     
     # add plot
     page.get_by_role("link", name="Bulk").click()
@@ -113,7 +112,7 @@ def bulk_writing(live_server, page):
 
     # check
     page.locator("#one").get_by_role("link", name="Plots").click()
-    expect(page.locator("#one")).not_to_contain_text("[T1] plot")
+    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text Load")
 
     # set quest type
     page.get_by_role("link", name="Quest type").click()
