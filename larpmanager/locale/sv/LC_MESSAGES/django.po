@@ -654,6 +654,9 @@ msgstr "Åtgärder"
 msgid "Add new"
 msgstr "Lägg till ny"
 
+msgid "Add tag"
+msgstr "Lägg till tagg"
+
 msgid "Address"
 msgstr "Adress"
 
@@ -704,6 +707,9 @@ msgstr "Detaljer"
 
 msgid "Example"
 msgstr "Exempel"
+
+msgid "Execute"
+msgstr "Utför"
 
 msgid "Faction"
 msgstr "Grupp"
@@ -1272,6 +1278,9 @@ msgstr "Återgång"
 msgid "Seniority"
 msgstr "Senioritet"
 
+msgid "Set quest"
+msgstr "Ställ in uppdrag"
+
 msgid "Short url"
 msgstr "Kort url"
 
@@ -1461,6 +1470,9 @@ msgstr "Ersättning för"
 msgid "Registered"
 msgstr "Inskriven"
 
+msgid "Remove tag"
+msgstr "Ta bort tagg"
+
 msgid "Repertoire"
 msgstr "Repertoar"
 
@@ -1553,6 +1565,9 @@ msgstr "Länk för åtkomst"
 
 msgid "Actual paid"
 msgstr "Faktiskt utbetalt"
+
+msgid "Add to plot"
+msgstr "Lägg till tomt"
 
 msgid "Assignments"
 msgstr "Uppdrag"
@@ -2123,6 +2138,9 @@ msgstr "Personuppgifter"
 msgid "registrations"
 msgstr "inskrivningar"
 
+msgid "Add to faction"
+msgstr "Lägg till i fraktion"
+
 msgid "Available days"
 msgstr "Tillgängliga dagar"
 
@@ -2272,6 +2290,9 @@ msgstr "Känsliga uppgifter"
 
 msgid "Session active"
 msgstr "Session aktiv"
+
+msgid "Set quest type"
+msgstr "Ange typ av uppdrag"
 
 msgid "Show shortcuts"
 msgstr "Visa genvägar"
@@ -2573,11 +2594,17 @@ msgstr "Påminnelse om betalning"
 msgid "Reminder profile"
 msgstr "Påminnelseprofil"
 
+msgid "Remove from plot"
+msgstr "Ta bort från tomten"
+
 msgid "Request approved"
 msgstr "Begäran godkänd"
 
 msgid "Selected options"
 msgstr "Valda alternativ"
+
+msgid "Set ability type"
+msgstr "Ange typ av förmåga"
 
 msgid "Show collections"
 msgstr "Visa samlingar"
@@ -2695,6 +2722,9 @@ msgstr "Maximalt tillgänglig"
 
 msgid "Months free quota"
 msgstr "Månader fri kvot"
+
+msgid "Move to container"
+msgstr "Flytta till container"
 
 msgid "Paid current year"
 msgstr "Betald innevarande år"
@@ -2971,6 +3001,9 @@ msgstr "Registreringen stängd"
 
 msgid "Relationships (Pdf)"
 msgstr "Förhållanden (Pdf)"
+
+msgid "Remove from faction"
+msgstr "Ta bort från fraktionen"
 
 msgid "Results not present"
 msgstr "Resultat ej presenterade"
@@ -5733,6 +5766,9 @@ msgstr "Snabbt konfigurera de viktigaste inställningarna för dina evenemang"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Granska de användare som inte klarar evenemangets deadlines"
+
+msgid "Select the table rows and choose the operation to apply"
+msgstr "Markera tabellraderna och välj den operation som ska tillämpas"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Länken kommer att vara giltig under följande antal dagar"

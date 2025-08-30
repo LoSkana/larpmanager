@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "utils.html" %}
 {% load i18n static %}
 {% block special %}
     manage
@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token }}">
 {% endblock meta %}
 {% block content %}
-    {% include "elements/header/writing.html" %}
+    {% include "elements/header/edit.html" with writing_header=True %}
     {% if list %}
         <div class="nav fields">
             <b>{% trans "Fields" %}</b>:
@@ -36,7 +36,7 @@
         </p>
     {% endif %}
 {% endblock content %}
-{% block js %}
+{% block js2 %}
     <script defer src="{% static TINYMCE_JS_URL %}"></script>
     {% include "elements/form/max_length.js" %}
     {% if not disable_char_finder %}
@@ -55,4 +55,4 @@
 
         {% include "elements/questions/load.js" %}
     </script>
-{% endblock js %}
+{% endblock js2 %}

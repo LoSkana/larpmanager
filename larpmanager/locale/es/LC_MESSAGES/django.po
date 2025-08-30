@@ -654,6 +654,9 @@ msgstr "Acciones"
 msgid "Add new"
 msgstr "Añadir nuevo"
 
+msgid "Add tag"
+msgstr "Añadir etiqueta"
+
 msgid "Address"
 msgstr "Dirección"
 
@@ -704,6 +707,9 @@ msgstr "Detalles"
 
 msgid "Example"
 msgstr "Ejemplo"
+
+msgid "Execute"
+msgstr "Ejecute"
 
 msgid "Faction"
 msgstr "Facción"
@@ -1272,6 +1278,9 @@ msgstr "Devolución"
 msgid "Seniority"
 msgstr "Antigüedad"
 
+msgid "Set quest"
+msgstr "Establecer búsqueda"
+
 msgid "Short url"
 msgstr "URL corta"
 
@@ -1461,6 +1470,9 @@ msgstr "Reembolso de"
 msgid "Registered"
 msgstr "Inscrito"
 
+msgid "Remove tag"
+msgstr "Eliminar etiqueta"
+
 msgid "Repertoire"
 msgstr "Repertorio"
 
@@ -1553,6 +1565,9 @@ msgstr "Enlace de acceso"
 
 msgid "Actual paid"
 msgstr "Pagado"
+
+msgid "Add to plot"
+msgstr "Añadir a la parcela"
 
 msgid "Assignments"
 msgstr "Asignaciones"
@@ -2123,6 +2138,9 @@ msgstr "datos personales"
 msgid "registrations"
 msgstr "inscripciones"
 
+msgid "Add to faction"
+msgstr "Añadir a la facción"
+
 msgid "Available days"
 msgstr "Días disponibles"
 
@@ -2272,6 +2290,9 @@ msgstr "Datos sensibles"
 
 msgid "Session active"
 msgstr "Sesión activa"
+
+msgid "Set quest type"
+msgstr "Establecer tipo de búsqueda"
 
 msgid "Show shortcuts"
 msgstr "Mostrar accesos directos"
@@ -2573,11 +2594,17 @@ msgstr "Recordatorio de pago"
 msgid "Reminder profile"
 msgstr "Perfil recordatorio"
 
+msgid "Remove from plot"
+msgstr "Eliminar de la parcela"
+
 msgid "Request approved"
 msgstr "Solicitud aprobada"
 
 msgid "Selected options"
 msgstr "Opciones seleccionadas"
+
+msgid "Set ability type"
+msgstr "Establecer tipo de habilidad"
 
 msgid "Show collections"
 msgstr "Mostrar colectas"
@@ -2695,6 +2722,9 @@ msgstr "Máximo disponible"
 
 msgid "Months free quota"
 msgstr "Meses de cuota libre"
+
+msgid "Move to container"
+msgstr "Pasar a contenedor"
 
 msgid "Paid current year"
 msgstr "Pagado el año actual"
@@ -2971,6 +3001,9 @@ msgstr "Inscripción cerrada"
 
 msgid "Relationships (Pdf)"
 msgstr "Relaciones (Pdf)"
+
+msgid "Remove from faction"
+msgstr "Eliminar de la facción"
 
 msgid "Results not present"
 msgstr "Resultados no presentes"
@@ -5741,6 +5774,9 @@ msgstr "Configura rápidamente los ajustes más importantes de tus eventos"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Revisar los usuarios que incumplen los plazos del evento"
+
+msgid "Select the table rows and choose the operation to apply"
+msgstr "Seleccione las filas de la tabla y elija la operación a aplicar"
 
 msgid "The link will be valid for the following number of days"
 msgstr "El enlace será válido durante el siguiente número de días"

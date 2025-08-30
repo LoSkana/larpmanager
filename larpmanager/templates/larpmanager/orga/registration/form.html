@@ -7,7 +7,7 @@
     {% trans "This page shows the available questions of the registration form of the event" %}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/orga.html" %}
+    {% include "elements/header/edit.html" %}
     {% define "-1" as old_section %}
     {% for el in list %}
         {% if el.section != old_section %}

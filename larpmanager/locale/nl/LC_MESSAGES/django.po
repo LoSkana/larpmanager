@@ -654,6 +654,9 @@ msgstr "Acties"
 msgid "Add new"
 msgstr "Nieuw toevoegen"
 
+msgid "Add tag"
+msgstr "Label toevoegen"
+
 msgid "Address"
 msgstr "Adres"
 
@@ -704,6 +707,9 @@ msgstr "Details"
 
 msgid "Example"
 msgstr "Voorbeeld"
+
+msgid "Execute"
+msgstr "Uitvoeren"
 
 msgid "Faction"
 msgstr "Groep"
@@ -1272,6 +1278,9 @@ msgstr "Stuur  terug"
 msgid "Seniority"
 msgstr "Anciënniteit"
 
+msgid "Set quest"
+msgstr "Zoektocht instellen"
+
 msgid "Short url"
 msgstr "Korte url"
 
@@ -1461,6 +1470,9 @@ msgstr "Vergoeding voor"
 msgid "Registered"
 msgstr "Met inscriptie"
 
+msgid "Remove tag"
+msgstr "Tag verwijderen"
+
 msgid "Repertoire"
 msgstr "Repertoire"
 
@@ -1553,6 +1565,9 @@ msgstr "Link openen"
 
 msgid "Actual paid"
 msgstr "Werkelijk betaald"
+
+msgid "Add to plot"
+msgstr "Toevoegen aan perceel"
 
 msgid "Assignments"
 msgstr "Opdrachten"
@@ -2123,6 +2138,9 @@ msgstr "persoonlijke gegevens"
 msgid "registrations"
 msgstr "inschrijvingen"
 
+msgid "Add to faction"
+msgstr "Toevoegen aan factie"
+
 msgid "Available days"
 msgstr "Beschikbare dagen"
 
@@ -2272,6 +2290,9 @@ msgstr "Gevoelige gegevens"
 
 msgid "Session active"
 msgstr "Sessie actief"
+
+msgid "Set quest type"
+msgstr "Zoektocht type instellen"
 
 msgid "Show shortcuts"
 msgstr "Snelkoppelingen weergeven"
@@ -2573,11 +2594,17 @@ msgstr "Herinnering betaling"
 msgid "Reminder profile"
 msgstr "Herinnering profiel"
 
+msgid "Remove from plot"
+msgstr "Verwijderen uit perceel"
+
 msgid "Request approved"
 msgstr "Verzoek goedgekeurd"
 
 msgid "Selected options"
 msgstr "Geselecteerde opties"
+
+msgid "Set ability type"
+msgstr "Type vaardigheid instellen"
 
 msgid "Show collections"
 msgstr "Toon collecties"
@@ -2695,6 +2722,9 @@ msgstr "Maximaal beschikbaar"
 
 msgid "Months free quota"
 msgstr "Maanden vrij quotum"
+
+msgid "Move to container"
+msgstr "Verplaats naar container"
 
 msgid "Paid current year"
 msgstr "Betaald lopend jaar"
@@ -2971,6 +3001,9 @@ msgstr "Registratie gesloten"
 
 msgid "Relationships (Pdf)"
 msgstr "Relaties (Pdf)"
+
+msgid "Remove from faction"
+msgstr "Verwijderen uit factie"
 
 msgid "Results not present"
 msgstr "Resultaten niet aanwezig"
@@ -5747,6 +5780,9 @@ msgstr "Configureer snel de belangrijkste instellingen van je evenementen"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Bekijk de gebruikers die de deadlines van het evenement missen"
+
+msgid "Select the table rows and choose the operation to apply"
+msgstr "Selecteer de tabelrijen en kies de toe te passen bewerking"
 
 msgid "The link will be valid for the following number of days"
 msgstr "De link blijft het volgende aantal dagen geldig"

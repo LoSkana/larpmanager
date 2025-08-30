@@ -56,6 +56,7 @@ from larpmanager.models.writing import (
     TextVersion,
     TextVersionChoices,
 )
+from larpmanager.utils.bulk import handle_bulk_quest, handle_bulk_trait
 from larpmanager.utils.common import (
     exchange_order,
     get_element,

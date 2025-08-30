@@ -23,6 +23,7 @@ from django.shortcuts import redirect, render
 
 from larpmanager.forms.experience import OrgaAbilityPxForm, OrgaAbilityTypePxForm, OrgaDeliveryPxForm, OrgaRulePxForm
 from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, RulePx
+from larpmanager.utils.bulk import handle_bulk_ability
 from larpmanager.utils.common import exchange_order
 from larpmanager.utils.edit import orga_edit
 from larpmanager.utils.event import check_event_permission
@@ -43,8 +44,9 @@ def orga_px_deliveries_edit(request, s, n, num):
 @login_required
 def orga_px_abilities(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_px_abilities")
+    handle_bulk_ability(request, ctx)
     ctx["px_user"] = ctx["event"].get_config("px_user", False)
-    ctx["list"] = ctx["event"].get_elements(AbilityPx).order_by("number")
+    ctx["list"] = ctx["event"].get_elements(AbilityPx).order_by("number").select_related("typ")
     return render(request, "larpmanager/orga/px/abilities.html", ctx)
 
 

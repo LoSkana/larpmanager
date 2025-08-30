@@ -7,7 +7,7 @@
     {% trans "This page shows the cargo manifest, and the status of each item assignment" %}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/orga.html" %}
+    {% include "elements/header/edit.html" %}
     {% for area_id, area in area_list.items %}
         <h2>{{ area }}</h2>
         {% if area.position %}

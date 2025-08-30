@@ -654,6 +654,9 @@ msgstr "Akce"
 msgid "Add new"
 msgstr "Přidat nový"
 
+msgid "Add tag"
+msgstr "Přidat značku"
+
 msgid "Address"
 msgstr "Adresa"
 
@@ -704,6 +707,9 @@ msgstr "Podrobnosti na"
 
 msgid "Example"
 msgstr "Příklad"
+
+msgid "Execute"
+msgstr "Provést"
 
 msgid "Faction"
 msgstr "Skupina"
@@ -1272,6 +1278,9 @@ msgstr "Návrat na"
 msgid "Seniority"
 msgstr "Seniorita"
 
+msgid "Set quest"
+msgstr "Zadání úkolu"
+
 msgid "Short url"
 msgstr "Krátká url adresa"
 
@@ -1461,6 +1470,9 @@ msgstr "Úhrada za"
 msgid "Registered"
 msgstr "S nápisem"
 
+msgid "Remove tag"
+msgstr "Odstranění štítku"
+
 msgid "Repertoire"
 msgstr "Repertoár"
 
@@ -1553,6 +1565,9 @@ msgstr "Přístupový odkaz"
 
 msgid "Actual paid"
 msgstr "Skutečně vyplacené"
+
+msgid "Add to plot"
+msgstr "Přidat do pozemku"
 
 msgid "Assignments"
 msgstr "Zadání"
@@ -2123,6 +2138,9 @@ msgstr "osobní údaje"
 msgid "registrations"
 msgstr "zápisy"
 
+msgid "Add to faction"
+msgstr "Přidat do frakce"
+
 msgid "Available days"
 msgstr "Dostupné dny"
 
@@ -2272,6 +2290,9 @@ msgstr "Citlivé údaje"
 
 msgid "Session active"
 msgstr "Relace aktivní"
+
+msgid "Set quest type"
+msgstr "Nastavení typu úkolu"
 
 msgid "Show shortcuts"
 msgstr "Zobrazit zkratky"
@@ -2573,11 +2594,17 @@ msgstr "Připomínková platba"
 msgid "Reminder profile"
 msgstr "Připomínkový profil"
 
+msgid "Remove from plot"
+msgstr "Odstranění z pozemku"
+
 msgid "Request approved"
 msgstr "Žádost schválena"
 
 msgid "Selected options"
 msgstr "Vybrané možnosti"
+
+msgid "Set ability type"
+msgstr "Nastavení typu schopnosti"
 
 msgid "Show collections"
 msgstr "Zobrazit sbírky"
@@ -2695,6 +2722,9 @@ msgstr "Maximální dostupný počet"
 
 msgid "Months free quota"
 msgstr "Měsíční volná kvóta"
+
+msgid "Move to container"
+msgstr "Přesun do kontejneru"
 
 msgid "Paid current year"
 msgstr "Zaplaceno v běžném roce"
@@ -2971,6 +3001,9 @@ msgstr "Registrace uzavřena"
 
 msgid "Relationships (Pdf)"
 msgstr "Vztahy (Pdf)"
+
+msgid "Remove from faction"
+msgstr "Odstranění z frakce"
 
 msgid "Results not present"
 msgstr "Výsledky nejsou k dispozici"
@@ -5732,6 +5765,9 @@ msgstr "Rychlá konfigurace nejdůležitějších nastavení událostí"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Přehled uživatelů, kteří nedodržují termíny události"
+
+msgid "Select the table rows and choose the operation to apply"
+msgstr "Vyberte řádky tabulky a zvolte operaci, která se má použít"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Odkaz bude platný po dobu následujících dnů"

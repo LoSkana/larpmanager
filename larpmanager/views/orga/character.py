@@ -59,6 +59,7 @@ from larpmanager.models.writing import (
     SpeedLarp,
     TextVersionChoices,
 )
+from larpmanager.utils.bulk import handle_bulk_characters
 from larpmanager.utils.character import get_chars_relations
 from larpmanager.utils.common import (
     exchange_order,
@@ -74,6 +75,7 @@ from larpmanager.utils.writing import writing_list, writing_versions, writing_vi
 @login_required
 def orga_characters(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_characters")
+
     get_event_cache_all(ctx)
     for config_name in ["user_character_approval", "writing_external_access"]:
         ctx[config_name] = ctx["event"].get_config(config_name, False)

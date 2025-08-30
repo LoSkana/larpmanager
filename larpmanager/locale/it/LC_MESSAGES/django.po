@@ -654,6 +654,9 @@ msgstr "Azioni"
 msgid "Add new"
 msgstr "Aggiungi nuovo"
 
+msgid "Add tag"
+msgstr "Aggiungi tag"
+
 msgid "Address"
 msgstr "Indirizzo"
 
@@ -704,6 +707,9 @@ msgstr "Dettagli"
 
 msgid "Example"
 msgstr "Esempio"
+
+msgid "Execute"
+msgstr "Esegui"
 
 msgid "Faction"
 msgstr "Fazione"
@@ -1272,6 +1278,9 @@ msgstr "Restituzione"
 msgid "Seniority"
 msgstr "Anzianità"
 
+msgid "Set quest"
+msgstr "Imposta missione"
+
 msgid "Short url"
 msgstr "Url corto"
 
@@ -1461,6 +1470,9 @@ msgstr "Rimborso per"
 msgid "Registered"
 msgstr "Iscritti"
 
+msgid "Remove tag"
+msgstr "Rimuovi tag"
+
 msgid "Repertoire"
 msgstr "Repertorio"
 
@@ -1553,6 +1565,9 @@ msgstr "Link di accesso"
 
 msgid "Actual paid"
 msgstr "Effettivo pagato"
+
+msgid "Add to plot"
+msgstr "Aggiungi alla trama"
 
 msgid "Assignments"
 msgstr "Assegnazioni"
@@ -2123,6 +2138,9 @@ msgstr "dati personali"
 msgid "registrations"
 msgstr "iscrizioni"
 
+msgid "Add to faction"
+msgstr "Aggiungi alla fazione"
+
 msgid "Available days"
 msgstr "Giorni disponibili"
 
@@ -2272,6 +2290,9 @@ msgstr "Dati sensibili"
 
 msgid "Session active"
 msgstr "Sessione attiva"
+
+msgid "Set quest type"
+msgstr "Imposta il tipo di missione"
 
 msgid "Show shortcuts"
 msgstr "Mostra le scorciatoie"
@@ -2573,11 +2594,17 @@ msgstr "Promemoria di pagamento"
 msgid "Reminder profile"
 msgstr "Profilo di promemoria"
 
+msgid "Remove from plot"
+msgstr "Rimuovi dalla trama"
+
 msgid "Request approved"
 msgstr "Richiesta approvata"
 
 msgid "Selected options"
 msgstr "Opzioni selezionate"
+
+msgid "Set ability type"
+msgstr "Imposta il tipo di abilità"
 
 msgid "Show collections"
 msgstr "Mostra collette"
@@ -2695,6 +2722,9 @@ msgstr "Massimo disponibile"
 
 msgid "Months free quota"
 msgstr "Mesi quota libera"
+
+msgid "Move to container"
+msgstr "Sposta in un contenitore"
 
 msgid "Paid current year"
 msgstr "Pagato anno corrente"
@@ -2971,6 +3001,9 @@ msgstr "Iscrizioni chiuse"
 
 msgid "Relationships (Pdf)"
 msgstr "Relazioni (Pdf)"
+
+msgid "Remove from faction"
+msgstr "Rimuovi dalla fazione"
 
 msgid "Results not present"
 msgstr "Risultati non presenti"
@@ -4773,7 +4806,7 @@ msgid "You have exceeded the maximum text length"
 msgstr "È stata superata la lunghezza massima del testo"
 
 msgid "copy this link and give it to your friend"
-msgstr "copiate questo link e datelo al vostro amico"
+msgstr "copia questo link e dallo al tuo amico"
 
 msgid "Added at the top of the main calendar page"
 msgstr "Aggiunto all'inizio della pagina principale del calendario"
@@ -5744,6 +5777,9 @@ msgstr "Configurare rapidamente le impostazioni più importanti degli eventi"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Verifica gli utenti che non hanno rispettato le scadenze dell'evento"
+
+msgid "Select the table rows and choose the operation to apply"
+msgstr "Seleziona le righe della tabella e scegli l'operazione da applicare"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Il link sarà valido per il seguente numero di giorni"

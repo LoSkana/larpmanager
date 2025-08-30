@@ -654,6 +654,9 @@ msgstr "Handlinger"
 msgid "Add new"
 msgstr "Legg til ny"
 
+msgid "Add tag"
+msgstr "Legg til tagg"
+
 msgid "Address"
 msgstr "Adresse"
 
@@ -704,6 +707,9 @@ msgstr "Detaljer"
 
 msgid "Example"
 msgstr "Eksempel"
+
+msgid "Execute"
+msgstr "Utfør"
 
 msgid "Faction"
 msgstr "Gruppe"
@@ -1272,6 +1278,9 @@ msgstr "Retur"
 msgid "Seniority"
 msgstr "Ansiennitet"
 
+msgid "Set quest"
+msgstr "Sett oppdrag"
+
 msgid "Short url"
 msgstr "Kort nettadresse"
 
@@ -1461,6 +1470,9 @@ msgstr "Refusjon for"
 msgid "Registered"
 msgstr "Innskrevet"
 
+msgid "Remove tag"
+msgstr "Fjern taggen"
+
 msgid "Repertoire"
 msgstr "Repertoar"
 
@@ -1553,6 +1565,9 @@ msgstr "Tilgangslenke"
 
 msgid "Actual paid"
 msgstr "Faktisk betalt"
+
+msgid "Add to plot"
+msgstr "Legg til i plottet"
 
 msgid "Assignments"
 msgstr "Oppgaver"
@@ -2123,6 +2138,9 @@ msgstr "personopplysninger"
 msgid "registrations"
 msgstr "påmeldinger"
 
+msgid "Add to faction"
+msgstr "Legg til i fraksjon"
+
 msgid "Available days"
 msgstr "Tilgjengelige dager"
 
@@ -2272,6 +2290,9 @@ msgstr "Sensitive data"
 
 msgid "Session active"
 msgstr "Økt aktiv"
+
+msgid "Set quest type"
+msgstr "Angi oppdragstype"
 
 msgid "Show shortcuts"
 msgstr "Vis snarveier"
@@ -2573,11 +2594,17 @@ msgstr "Påminnelse om betaling"
 msgid "Reminder profile"
 msgstr "Påminnelsesprofil"
 
+msgid "Remove from plot"
+msgstr "Fjern fra tomten"
+
 msgid "Request approved"
 msgstr "Anmodning godkjent"
 
 msgid "Selected options"
 msgstr "Utvalgte alternativer"
+
+msgid "Set ability type"
+msgstr "Angi evnetype"
 
 msgid "Show collections"
 msgstr "Vis samlinger"
@@ -2695,6 +2722,9 @@ msgstr "Maksimalt tilgjengelig"
 
 msgid "Months free quota"
 msgstr "Måneder fri kvote"
+
+msgid "Move to container"
+msgstr "Flytt til container"
 
 msgid "Paid current year"
 msgstr "Betalt inneværende år"
@@ -2971,6 +3001,9 @@ msgstr "Registreringen er stengt"
 
 msgid "Relationships (Pdf)"
 msgstr "Relasjoner (Pdf)"
+
+msgid "Remove from faction"
+msgstr "Fjern fra fraksjon"
 
 msgid "Results not present"
 msgstr "Resultater ikke til stede"
@@ -5736,6 +5769,9 @@ msgstr "Konfigurer raskt de viktigste innstillingene for arrangementene dine"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Gå gjennom brukerne som ikke overholder arrangementets tidsfrister"
+
+msgid "Select the table rows and choose the operation to apply"
+msgstr "Velg tabellradene og velg operasjonen som skal brukes"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Koblingen vil være gyldig i følgende antall dager"
