@@ -16,7 +16,19 @@ SECRET_KEY = 'changeme'
 DEBUG = True
 
 # ALLOWED_HOSTS = ['.larpmanager.com']
-ALLOWED_HOSTS = ['larpmanager.cpularp.com', '35.93.208.16', '127.0.0.1', 'localhost', '0.0.0.0', 'larpmanager.localhost']
+ALLOWED_HOSTS = [
+    "larpmanager.cpularp.com",
+    "35.93.208.16",
+    "127.0.0.1",
+    "localhost",
+    "larpmanager.localhost"
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:8264",
+    "http://localhost:8264",
+    "http://larpmanager.localhost:8264",
+]
 
 # Application definition
 INSTALLED_APPS = [
