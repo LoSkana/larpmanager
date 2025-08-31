@@ -1835,19 +1835,19 @@ msgstr ""
 msgid "Is there anything else you would like to tell us"
 msgstr ""
 
-msgid "This page allows you to add or edit a new item of inventory"
+msgid "This page allows you to add or edit a new item of warehouse"
 msgstr ""
 
 msgid "Warehouse items"
 msgstr ""
 
-msgid "This page allows you to add or edit a new container of inventory"
+msgid "This page allows you to add or edit a new container of warehouse"
 msgstr ""
 
 msgid "Warehouse containers"
 msgstr ""
 
-msgid "This page allows you to add or edit a new tag for inventory items"
+msgid "This page allows you to add or edit a new tag for warehouse items"
 msgstr ""
 
 msgid "Warehouse tags"
@@ -1857,7 +1857,7 @@ msgid "Items"
 msgstr ""
 
 msgid ""
-"This page allows you to add or edit a new movement of item inventory, loans "
+"This page allows you to add or edit a new movement of item warehouse, loans "
 "or repairs"
 msgstr ""
 
@@ -1871,7 +1871,7 @@ msgid "Event area"
 msgstr ""
 
 msgid ""
-"This page allows you to add or edit a new assignment of inventory item to "
+"This page allows you to add or edit a new assignment of warehouse item to "
 "event area"
 msgstr ""
 
@@ -4394,6 +4394,9 @@ msgstr ""
 msgid "Average value"
 msgstr ""
 
+msgid "The character have missing values in mandatory fields"
+msgstr ""
+
 msgid "Obtain ability"
 msgstr ""
 
@@ -5288,7 +5291,7 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
-msgid "This page shows the assignment of inventory items to event area"
+msgid "This page shows the assignment of warehouse items to event area"
 msgstr ""
 
 msgid "Item"
@@ -6849,7 +6852,7 @@ msgid "Warehouse area"
 msgstr ""
 
 msgid ""
-"This page shows the event area where inventory items needs to be deployed"
+"This page shows the event area where warehouse items needs to be deployed"
 msgstr ""
 
 msgid "Item assignments"

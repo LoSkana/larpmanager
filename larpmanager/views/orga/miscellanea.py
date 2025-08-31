@@ -296,8 +296,8 @@ def orga_warehouse_assignment_manifest(request, s, n):
 
 
 @require_POST
-def orga_inventory_assignment_area(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_inventory_manifest")
+def orga_warehouse_assignment_area(request, s, n, num):
+    ctx = check_event_permission(request, s, n, "orga_warehouse_manifest")
     get_element(ctx, num, "area", WarehouseArea)
 
     idx = request.POST.get("idx")

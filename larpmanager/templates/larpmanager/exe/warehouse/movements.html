@@ -4,7 +4,7 @@
     {% trans "Warehouse assignments" %}  - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the assignment of inventory items to event area" %}
+    {% trans "This page shows the assignment of warehouse items to event area" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
@@ -24,7 +24,7 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'exe_inventory_movements_edit' el.id %}"
+                        <a href="{% url 'exe_warehouse_movements_edit' el.id %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     {% if optionals.quantity %}
@@ -33,7 +33,7 @@
                         </td>
                     {% endif %}
                     <td>
-                        <a href="{% url 'exe_inventory_items_edit' el.item.id %}">{{ el.item }}</a>
+                        <a href="{% url 'exe_warehouse_items_edit' el.item.id %}">{{ el.item }}</a>
                     </td>
                     <td>{{ el.notes }}</td>
                     <td>

@@ -29,10 +29,10 @@
                     {% if features.wri_que_max %}
                         <th>{% trans "Maximum" %}</th>
                     {% endif %}
-                    {% if features.wri_que_tickets %}
+                    {% if features.wri_que_dependents %}
                         <th>{% trans "Prerequisites" %}</th>
                     {% endif %}
-                    {% if features.wri_que_dependents %}
+                    {% if features.wri_que_tickets %}
                         <th>{% trans "Tickets" %}</th>
                     {% endif %}
                     <th></th>
@@ -50,7 +50,7 @@
                         <td>{{ el.name }}</td>
                         <td>{{ el.description | truncatechars:50 }}</td>
                         {% if features.wri_que_max %}<td>{{ el.max_available }}</td>{% endif %}
-                        {% if features.wri_que_tickets %}
+                        {% if features.wri_que_dependents %}
                             <td>
                                 {% for opt in el.dependents.all %}
                                     {% include "elements/comma.html" %}
@@ -58,7 +58,7 @@
                                 {% endfor %}
                             </td>
                         {% endif %}
-                        {% if features.wri_que_dependents %}
+                        {% if features.wri_que_tickets %}
                             <td>
                                 {% for tck in el.tickets.all %}
                                     {% include "elements/comma.html" %}

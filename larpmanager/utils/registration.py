@@ -288,7 +288,7 @@ def check_character_maximum(event, member):
     # check the amount of characters of the character
     current_chars = event.get_elements(Character).filter(player=member).count()
     max_chars = int(event.get_config("user_character_max", 0))
-    return current_chars >= max_chars
+    return current_chars >= max_chars, max_chars
 
 
 def registration_status_characters(run, features):
@@ -315,13 +315,14 @@ def registration_status_characters(run, features):
     reg_waiting = run.reg.ticket and run.reg.ticket.tier == TicketTier.WAITING
 
     if "user_character" in features and not reg_waiting:
-        if not check_character_maximum(run.event, run.reg.member):
+        check, max_chars = check_character_maximum(run.event, run.reg.member)
+        if not check:
             url = reverse("character_create", args=[run.event.slug, run.number])
             if run.status["details"]:
                 run.status["details"] += " - "
             mes = _("Access character creation!")
             run.status["details"] += f"<a href='{url}'>{mes}</a>"
-        elif len(aux) == 0:
+        elif len(aux) == 0 and max_chars:
             url = reverse("character_list", args=[run.event.slug, run.number])
             if run.status["details"]:
                 run.status["details"] += " - "

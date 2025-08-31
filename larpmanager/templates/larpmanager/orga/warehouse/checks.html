@@ -42,7 +42,7 @@
                         <tr id="{{ el.id }}">
                             <td></td>
                             <td>
-                                <a href="{% url 'orga_inventory_area_edit' event.slug run.number el.area.id %}">{{ el.area }}</a>
+                                <a href="{% url 'orga_warehouse_area_edit' event.slug run.number el.area.id %}">{{ el.area }}</a>
                             </td>
                             {% if optionals.quantity %}
                                 <td>

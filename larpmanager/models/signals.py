@@ -57,13 +57,14 @@ from larpmanager.models.form import (
     QuestionStatus,
     QuestionType,
     QuestionVisibility,
+    WritingChoice,
     WritingQuestion,
 )
 from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTicket, LarpManagerTutorial
 from larpmanager.models.member import Member, MemberConfig, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseItem
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
-from larpmanager.models.writing import Faction, Plot, Prologue, SpeedLarp, replace_chars_all
+from larpmanager.models.writing import Character, Faction, Plot, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.utils.common import copy_class
 from larpmanager.utils.tasks import my_send_mail
 from larpmanager.utils.tutorial_query import delete_index, index_tutorial
@@ -687,3 +688,34 @@ def _check_new(f, instance, sender):
             pass
 
     return False
+
+
+def check_character_ticket_options(reg, char):
+    ticket_id = reg.ticket.id
+
+    to_delete = []
+
+    # get options
+    for choice in WritingChoice.objects.filter(element_id=char.id):
+        tickets_map = choice.option.tickets.values_list("pk", flat=True)
+        if tickets_map and ticket_id not in tickets_map:
+            to_delete.append(choice.id)
+
+    WritingChoice.objects.filter(pk__in=to_delete).delete()
+
+
+@receiver(post_save, sender=Registration)
+def post_save_registration_character_form(sender, instance, **kwargs):
+    if not instance.member:
+        return
+
+    if not instance.ticket:
+        return
+
+    event = instance.run.event
+
+    for char in instance.characters.all():
+        check_character_ticket_options(instance, char)
+
+    for char in event.get_elements(Character).filter(player=instance.member):
+        check_character_ticket_options(instance, char)

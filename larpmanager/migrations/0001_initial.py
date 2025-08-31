@@ -1621,7 +1621,7 @@ class Migration(migrations.Migration):
                         help_text="Photo (clear and understandable) of the object",
                         max_length=500,
                         null=True,
-                        upload_to=larpmanager.models.utils.UploadToPathAndRename("inventory/"),
+                        upload_to=larpmanager.models.utils.UploadToPathAndRename("warehouse/"),
                         verbose_name="Photo",
                     ),
                 ),

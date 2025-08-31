@@ -18,12 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import re
-from pathlib import Path
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_user, submit_confirm, login_orga
+from larpmanager.tests.utils import go_to, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -32,18 +31,21 @@ def test_user_new_ticket_orga_bulk(pw_page):
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
-     
+
     go_to(page, live_server, "test/1/manage/")
 
     new_ticket(live_server, page)
 
-    bulk_inventory(live_server, page)
+    bulk_warehouse(live_server, page)
+
+    bulk_warehouse2(live_server, page)
 
     bulk_writing(live_server, page)
 
     bulk_questbuilder(live_server, page)
 
     bulk_px(live_server, page)
+
 
 def bulk_writing(live_server, page):
     # set feature
@@ -55,26 +57,26 @@ def bulk_writing(live_server, page):
     page.get_by_role("checkbox", name="Quests and Traits").check()
     page.get_by_role("checkbox", name="Experience points").check()
     page.get_by_role("button", name="Confirm").click()
-    
+
     # add plot
     page.get_by_role("link", name="Plots", exact=True).click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").fill("plot")
     page.get_by_role("button", name="Confirm").click()
-    
+
     # add faction
     page.get_by_role("link", name="Factions").click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("faz")
     page.get_by_role("button", name="Confirm").click()
-    
+
     # check base
     page.locator("#orga_characters").get_by_role("link", name="Characters").click()
     page.get_by_role("link", name="Faction", exact=True).click()
     page.locator("#one").get_by_role("link", name="Plots").click()
     expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text Load")
-    
+
     # set faction
     page.get_by_role("link", name="Bulk").click()
     page.get_by_role("cell", name="Test Teaser").click()
@@ -83,23 +85,23 @@ def bulk_writing(live_server, page):
     # check result
     page.get_by_role("link", name="Faction", exact=True).click()
     expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text faz")
-    
+
     # remove faction
     page.get_by_role("link", name="Bulk").click()
     page.get_by_role("cell", name="Test Teaser").click()
     page.locator("#operation").select_option("5")
     page.get_by_role("link", name="Execute").click()
-    
+
     # check result
     page.get_by_role("link", name="Faction", exact=True).click()
     expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text Load")
-    
+
     # add plot
     page.get_by_role("link", name="Bulk").click()
     page.get_by_role("cell", name="Test Teaser").click()
     page.locator("#operation").select_option("6")
     page.get_by_role("link", name="Execute").click()
-    
+
     # check result
     page.locator("#one").get_by_role("link", name="Plots").click()
     expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text [T1] plot")
@@ -120,6 +122,7 @@ def bulk_writing(live_server, page):
     page.locator("#id_name").click()
     page.locator("#id_name").fill("typ")
     page.get_by_role("button", name="Confirm").click()
+
 
 def bulk_questbuilder(live_server, page):
     # create quest
@@ -144,7 +147,7 @@ def bulk_questbuilder(live_server, page):
     # test bulk set quest
     page.get_by_role("link", name="Quest", exact=True).click()
     page.get_by_role("link", name="Bulk").click()
-    page.locator("[id=\"\\31 \"]").get_by_role("cell", name="typ").click()
+    page.locator('[id="\\31 "]').get_by_role("cell", name="typ").click()
     page.get_by_role("link", name="Execute").click()
     expect(page.locator("#one")).to_contain_text("Q1 q1 t2 Q2 q2 typ")
 
@@ -161,6 +164,7 @@ def bulk_questbuilder(live_server, page):
     page.locator("#objs_9").select_option("2")
     page.get_by_role("link", name="Execute").click()
     expect(page.locator("#one")).to_contain_text("T1 t1 Q2 q2")
+
 
 def bulk_px(live_server, page):
     # create ability type
@@ -197,11 +201,11 @@ def bulk_px(live_server, page):
     expect(page.locator("#one")).to_contain_text("swor t1 1")
 
 
-def bulk_inventory(live_server, page):
-    # activate inventory
+def bulk_warehouse(live_server, page):
+    # activate warehouse
     go_to(page, live_server, "manage/")
     page.locator("#exe_features").get_by_role("link", name="Features").click()
-    page.get_by_role("checkbox", name="Inventory").check()
+    page.get_by_role("checkbox", name="Warehouse").check()
     page.get_by_role("button", name="Confirm").click()
 
     # add box
@@ -250,42 +254,46 @@ def bulk_inventory(live_server, page):
     page.locator("#id_name").fill("box2")
     page.get_by_role("button", name="Confirm").click()
 
+
+def bulk_warehouse2(live_server, page):
     # bulk move to box
     page.get_by_role("link", name="Items").click()
     expect(page.locator("#one")).to_contain_text("item3 box item2 box item1 box")
     page.get_by_role("link", name="Bulk").click()
-    page.locator("[id=\"\\33 \"]").get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
-    page.locator("[id=\"\\31 \"]").get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
+    page.locator('[id="\\33 "]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
+    page.locator('[id="\\31 "]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator("#objs_1").select_option("2")
     page.get_by_role("link", name="Execute").click()
-    expect(page.get_by_text(
-        "newevent Test Larp Organization This page shows the inventory items - Config")).to_be_visible()
+    expect(
+        page.get_by_text("newevent Test Larp Organization This page shows the warehouse items - Config")
+    ).to_be_visible()
     expect(page.locator("#one")).to_contain_text("item3 box2 item2 box item1 box2")
 
     # bulk add tag
     page.get_by_role("link", name="Bulk").click()
     page.locator("#operation").select_option("2")
-    page.locator("[id=\"\\32 \"]").get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
-    page.locator("[id=\"\\31 \"]").get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
+    page.locator('[id="\\32 "]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
+    page.locator('[id="\\31 "]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.get_by_role("link", name="Execute").click()
     expect(page.locator("#one")).to_contain_text("item3 box2 item2 box tag item1 box2 tag")
 
     # bulk remove tag
     page.get_by_role("link", name="Bulk").click()
-    page.locator("[id=\"\\32 \"]").get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
+    page.locator('[id="\\32 "]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator("#operation").select_option("3")
     page.get_by_role("link", name="Execute").click()
     expect(page.locator("#one")).to_contain_text("item3 box2 item2 box item1 box2 tag")
 
     # check link when bulk active
     page.get_by_role("link", name="Bulk").click()
-    page.locator("[id=\"\\31 \"]").get_by_role("link", name="box2").click()
-    expect(page.locator("#banner")).to_contain_text("Inventory items - Organization")
+    page.locator('[id="\\31 "]').get_by_role("link", name="box2").click()
+    expect(page.locator("#banner")).to_contain_text("Warehouse items - Organization")
 
     # check link when bulk not active
     page.get_by_role("link", name="Bulk").click()
-    page.locator("[id=\"\\31 \"]").get_by_role("link", name="box2").click()
+    page.locator('[id="\\31 "]').get_by_role("link", name="box2").click()
     expect(page.locator("#id_name")).to_have_value("box2")
+
 
 def new_ticket(live_server, page):
     # add new ticket feature
@@ -306,7 +314,8 @@ def new_ticket(live_server, page):
     go_to(page, live_server, "test/1")
     page.get_by_role("link", name="Register").click()
     expect(page.get_by_label("Ticket")).to_match_aria_snapshot(
-        "- combobox \"Ticket\":\n  - option \"-------\" [disabled] [selected]\n  - option \"Standard\"\n  - option \"new\"")
+        '- combobox "Ticket":\n  - option "-------" [disabled] [selected]\n  - option "Standard"\n  - option "new"'
+    )
     page.get_by_label("Ticket").select_option("2")
     page.get_by_role("button", name="Continue").click()
     page.get_by_role("button", name="Confirm").click()
@@ -346,6 +355,4 @@ def new_ticket(live_server, page):
     # check new ticket is not available
     go_to(page, live_server, "newevent/1/")
     page.get_by_role("link", name="Register").click()
-    expect(page.get_by_label("Ticket")).to_match_aria_snapshot(
-        "- combobox \"Ticket\":\n  - option \"Standard\" [selected]")
-
+    expect(page.get_by_label("Ticket")).to_match_aria_snapshot('- combobox "Ticket":\n  - option "Standard" [selected]')

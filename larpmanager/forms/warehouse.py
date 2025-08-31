@@ -44,7 +44,7 @@ from larpmanager.models.miscellanea import (
 
 
 class ExeWarehouseItemForm(MyForm):
-    page_info = _("This page allows you to add or edit a new item of inventory")
+    page_info = _("This page allows you to add or edit a new item of warehouse")
 
     page_title = _("Warehouse items")
 
@@ -66,7 +66,7 @@ class ExeWarehouseItemForm(MyForm):
 
 
 class ExeWarehouseContainerForm(MyForm):
-    page_info = _("This page allows you to add or edit a new container of inventory")
+    page_info = _("This page allows you to add or edit a new container of warehouse")
 
     page_title = _("Warehouse containers")
 
@@ -77,7 +77,7 @@ class ExeWarehouseContainerForm(MyForm):
 
 
 class ExeWarehouseTagForm(MyForm):
-    page_info = _("This page allows you to add or edit a new tag for inventory items")
+    page_info = _("This page allows you to add or edit a new tag for warehouse items")
 
     page_title = _("Warehouse tags")
 
@@ -103,7 +103,7 @@ class ExeWarehouseTagForm(MyForm):
 
 
 class ExeWarehouseMovementForm(MyForm):
-    page_info = _("This page allows you to add or edit a new movement of item inventory, loans or repairs")
+    page_info = _("This page allows you to add or edit a new movement of item warehouse, loans or repairs")
 
     page_title = _("Warehouse movements")
 
@@ -134,7 +134,7 @@ class OrgaWarehouseAreaForm(MyForm):
 
 
 class OrgaWarehouseItemAssignmentForm(MyForm):
-    page_info = _("This page allows you to add or edit a new assignment of inventory item to event area")
+    page_info = _("This page allows you to add or edit a new assignment of warehouse item to event area")
 
     page_title = _("Warehouse assignments")
 
