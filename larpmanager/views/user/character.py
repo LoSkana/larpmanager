@@ -331,7 +331,8 @@ def character_list(request, s, n):
             el.fields = res["fields"]
             ctx.update(res)
 
-    ctx["char_maximum"] = check_character_maximum(ctx["event"], request.user.member)
+    check, _max_chars = check_character_maximum(ctx["event"], request.user.member)
+    ctx["char_maximum"] = check
     ctx["approval"] = ctx["event"].get_config("user_character_approval", False)
     ctx["assigned"] = RegistrationCharacterRel.objects.filter(reg_id=ctx["run"].reg.id).count()
     return render(request, "larpmanager/event/character/list.html", ctx)
@@ -341,7 +342,8 @@ def character_list(request, s, n):
 def character_create(request, s, n):
     ctx = get_event_run(request, s, n, status=True, signup=True, slug="user_character")
 
-    if check_character_maximum(ctx["event"], request.user.member):
+    check, _max_chars = check_character_maximum(ctx["event"], request.user.member)
+    if check:
         messages.success(request, _("You have reached the maximum number of characters that can be created"))
         return redirect("character_list", s=s, n=n)
 
