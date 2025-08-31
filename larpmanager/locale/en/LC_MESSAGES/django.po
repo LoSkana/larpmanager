@@ -4388,6 +4388,9 @@ msgstr ""
 msgid "Average value"
 msgstr ""
 
+msgid "The character have missing values in mandatory fields"
+msgstr ""
+
 msgid "Obtain ability"
 msgstr ""
 

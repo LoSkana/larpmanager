@@ -5611,6 +5611,9 @@ msgstr "Registreringsavgift %(number)d %(user)s per %(event)s"
 msgid "Select which elements to copy, from which other event"
 msgstr "Välj vilka element som ska kopieras, från vilket annat evenemang"
 
+msgid "The character have missing values in mandatory fields"
+msgstr "Tecknet har saknade värden i obligatoriska fält"
+
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Det totala antalet lotter som skall dras har angetts"
 

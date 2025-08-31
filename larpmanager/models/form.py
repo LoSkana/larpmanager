@@ -58,14 +58,16 @@ class QuestionType(models.TextChoices):
     COMPUTED = "c", _("Computed")
 
     @staticmethod
+    def get_answer_types():
+        return {QuestionType.TEXT, QuestionType.PARAGRAPH, QuestionType.EDITOR}
+
+    @staticmethod
+    def get_choice_types():
+        return {QuestionType.SINGLE, QuestionType.MULTIPLE}
+
+    @staticmethod
     def get_basic_types():
-        return {
-            QuestionType.SINGLE,
-            QuestionType.MULTIPLE,
-            QuestionType.TEXT,
-            QuestionType.PARAGRAPH,
-            QuestionType.EDITOR,
-        }
+        return QuestionType.get_answer_types() | QuestionType.get_choice_types()
 
     @staticmethod
     def get_def_types():

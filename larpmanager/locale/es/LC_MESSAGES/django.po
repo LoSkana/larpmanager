@@ -5613,6 +5613,9 @@ msgstr "Cuota de inscripción %(number)d de %(user)s por %(event)s"
 msgid "Select which elements to copy, from which other event"
 msgstr "Seleccione qué elementos copiar y de qué otro evento"
 
+msgid "The character have missing values in mandatory fields"
+msgstr "Faltan valores en los campos obligatorios"
+
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Se ha indicado el número total de entradas que se sortearán"
 

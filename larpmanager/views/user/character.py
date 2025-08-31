@@ -67,7 +67,12 @@ from larpmanager.models.writing import (
     CharacterStatus,
 )
 from larpmanager.templatetags.show_tags import get_tooltip
-from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
+from larpmanager.utils.character import (
+    check_missing_mandatory,
+    get_char_check,
+    get_character_relationships,
+    get_character_sheet,
+)
 from larpmanager.utils.common import (
     get_player_relationship,
 )
@@ -109,6 +114,7 @@ def _character_sheet(request, ctx):
         get_character_sheet(ctx)
         get_character_relationships(ctx)
         ctx["intro"] = get_event_text(ctx["event"].id, EventTextType.INTRO)
+        check_missing_mandatory(ctx)
     else:
         ctx["char"].update(get_character_element_fields(ctx, ctx["char"]["id"], only_visible=True))
 

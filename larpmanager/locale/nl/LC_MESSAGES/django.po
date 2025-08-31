@@ -5618,6 +5618,9 @@ msgid "Select which elements to copy, from which other event"
 msgstr ""
 "Selecteer welke elementen je wilt kopiëren van welke andere gebeurtenis"
 
+msgid "The character have missing values in mandatory fields"
+msgstr "Het teken heeft ontbrekende waarden in verplichte velden"
+
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Het totale aantal te verloten tickets is aangegeven"
 

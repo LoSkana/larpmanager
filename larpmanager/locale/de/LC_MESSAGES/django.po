@@ -5661,6 +5661,9 @@ msgstr ""
 "Wählen Sie aus, welche Elemente aus welcher anderen Veranstaltung kopiert "
 "werden sollen"
 
+msgid "The character have missing values in mandatory fields"
+msgstr "Das Zeichen hat fehlende Werte in Pflichtfeldern"
+
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Die Gesamtzahl der zu verlosenden Lose ist angegeben"
 
