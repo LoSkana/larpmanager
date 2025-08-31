@@ -426,15 +426,15 @@
 - model: larpmanager.feature
   pk: 66
   fields:
-    name: Inventory
-    descr: Enables inventory management for organization warehouse management
-    slug: inventory
+    name: Warehouse
+    descr: Enables warehouse management for organization warehouse management
+    slug: warehouse
     overall: true
     module: 3
     placeholder: false
     order: 5
-    after_text: Now you can add inventory containers and items
-    after_link: exe_inventory_containers
+    after_text: Now you can add warehouse containers and items
+    after_link: exe_warehouse_containers
 - model: larpmanager.feature
   pk: 69
   fields:

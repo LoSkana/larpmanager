@@ -28,10 +28,6 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
-from larpmanager.forms.inventory import (
-    OrgaInventoryAreaForm,
-    OrgaInventoryItemAssignmentForm,
-)
 from larpmanager.forms.miscellanea import (
     OrgaAlbumForm,
     OrgaProblemForm,
@@ -41,13 +37,17 @@ from larpmanager.forms.miscellanea import (
     WorkshopOptionForm,
     WorkshopQuestionForm,
 )
+from larpmanager.forms.warehouse import (
+    OrgaWarehouseAreaForm,
+    OrgaWarehouseItemAssignmentForm,
+)
 from larpmanager.models.miscellanea import (
     Album,
-    InventoryArea,
-    InventoryItem,
-    InventoryItemAssignment,
     Problem,
     Util,
+    WarehouseArea,
+    WarehouseItem,
+    WarehouseItemAssignment,
     WorkshopMemberRel,
     WorkshopModule,
     WorkshopOption,
@@ -60,7 +60,7 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.edit import orga_edit
 from larpmanager.utils.event import check_event_permission
-from larpmanager.utils.miscellanea import get_inventory_optionals, upload_albums
+from larpmanager.utils.miscellanea import get_warehouse_optionals, upload_albums
 from larpmanager.utils.writing import writing_post
 
 
@@ -179,34 +179,34 @@ def orga_problems_edit(request, s, n, num):
 
 
 @login_required
-def orga_inventory_area(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_inventory_area")
-    ctx["list"] = ctx["event"].get_elements(InventoryArea)
-    return render(request, "larpmanager/orga/inventory/area.html", ctx)
+def orga_warehouse_area(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_warehouse_area")
+    ctx["list"] = ctx["event"].get_elements(WarehouseArea)
+    return render(request, "larpmanager/orga/warehouse/area.html", ctx)
 
 
 @login_required
-def orga_inventory_area_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_inventory_area", OrgaInventoryAreaForm, num)
+def orga_warehouse_area_edit(request, s, n, num):
+    return orga_edit(request, s, n, "orga_warehouse_area", OrgaWarehouseAreaForm, num)
 
 
 @login_required
-def orga_inventory_area_assignments(request, s, n, num):
-    ctx = check_event_permission(request, s, n, "orga_inventory_area")
-    get_element(ctx, num, "area", InventoryArea)
+def orga_warehouse_area_assignments(request, s, n, num):
+    ctx = check_event_permission(request, s, n, "orga_warehouse_area")
+    get_element(ctx, num, "area", WarehouseArea)
 
-    get_inventory_optionals(ctx, [5, 6])
+    get_warehouse_optionals(ctx, [5, 6])
     if ctx["optionals"]["quantity"]:
         ctx["no_header_cols"] = [7, 8]
 
     # GET ITEMS
 
     item_all = {}
-    for item in InventoryItem.objects.filter(assoc_id=ctx["a_id"]).prefetch_related("tags"):
+    for item in WarehouseItem.objects.filter(assoc_id=ctx["a_id"]).prefetch_related("tags"):
         item.available = item.quantity or 0
         item_all[item.id] = item
 
-    for el in ctx["event"].get_elements(InventoryItemAssignment).filter(event=ctx["event"]):
+    for el in ctx["event"].get_elements(WarehouseItemAssignment).filter(event=ctx["event"]):
         item = item_all[el.item_id]
         if el.area_id == ctx["area"].pk:
             item.assigned = {"quantity": el.quantity, "notes": el.notes}
@@ -234,53 +234,53 @@ def orga_inventory_area_assignments(request, s, n, num):
 
     # rebuild dict preserving the sorted order
     ctx["item_all"] = {it.id: it for it in ordered_items}
-    return render(request, "larpmanager/orga/inventory/assignments.html", ctx)
+    return render(request, "larpmanager/orga/warehouse/assignments.html", ctx)
 
 
 @login_required
-def orga_inventory_checks(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_inventory_checks")
+def orga_warehouse_checks(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_warehouse_checks")
     ctx["items"] = {}
-    for el in ctx["event"].get_elements(InventoryItemAssignment).select_related("area", "item"):
+    for el in ctx["event"].get_elements(WarehouseItemAssignment).select_related("area", "item"):
         if el.item_id not in ctx["items"]:
             item = el.item
             item.assignment_list = []
             ctx["items"][el.item_id] = item
         ctx["items"][el.item_id].assignment_list.append(el)
-    get_inventory_optionals(ctx, [])
-    return render(request, "larpmanager/orga/inventory/checks.html", ctx)
+    get_warehouse_optionals(ctx, [])
+    return render(request, "larpmanager/orga/warehouse/checks.html", ctx)
 
 
 @login_required
-def orga_inventory_manifest(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_inventory_manifest")
+def orga_warehouse_manifest(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_warehouse_manifest")
     ctx["area_list"] = {}
-    get_inventory_optionals(ctx, [])
+    get_warehouse_optionals(ctx, [])
 
-    for el in ctx["event"].get_elements(InventoryItemAssignment).select_related("area", "item"):
+    for el in ctx["event"].get_elements(WarehouseItemAssignment).select_related("area", "item"):
         if el.area_id not in ctx["area_list"]:
             ctx["area_list"][el.area_id] = el.area
         if not hasattr(ctx["area_list"][el.area_id], "items"):
             ctx["area_list"][el.area_id].items = []
         ctx["area_list"][el.area_id].items.append(el)
 
-    return render(request, "larpmanager/orga/inventory/manifest.html", ctx)
+    return render(request, "larpmanager/orga/warehouse/manifest.html", ctx)
 
 
 @login_required
-def orga_inventory_assignment_item_edit(request, s, n, num):
-    return orga_edit(request, s, n, "orga_inventory_manifest", OrgaInventoryItemAssignmentForm, num)
+def orga_warehouse_assignment_item_edit(request, s, n, num):
+    return orga_edit(request, s, n, "orga_warehouse_manifest", OrgaWarehouseItemAssignmentForm, num)
 
 
 @require_POST
-def orga_inventory_assignment_manifest(request, s, n):
-    ctx = check_event_permission(request, s, n, "orga_inventory_manifest")
+def orga_warehouse_assignment_manifest(request, s, n):
+    ctx = check_event_permission(request, s, n, "orga_warehouse_manifest")
     idx = request.POST.get("idx")
     type = request.POST.get("type").lower()
     value = request.POST.get("value").lower() == "true"
 
     try:
-        assign = InventoryItemAssignment.objects.get(pk=idx)
+        assign = WarehouseItemAssignment.objects.get(pk=idx)
     except ObjectDoesNotExist:
         return JsonResponse({"error": "not found"}, status=400)
 
@@ -298,7 +298,7 @@ def orga_inventory_assignment_manifest(request, s, n):
 @require_POST
 def orga_inventory_assignment_area(request, s, n, num):
     ctx = check_event_permission(request, s, n, "orga_inventory_manifest")
-    get_element(ctx, num, "area", InventoryArea)
+    get_element(ctx, num, "area", WarehouseArea)
 
     idx = request.POST.get("idx")
     notes = request.POST.get("notes")
@@ -306,10 +306,10 @@ def orga_inventory_assignment_area(request, s, n, num):
     selected = request.POST.get("selected").lower() == "true"
 
     if not selected:
-        InventoryItemAssignment.objects.filter(item_id=idx, area=ctx["area"]).delete()
+        WarehouseItemAssignment.objects.filter(item_id=idx, area=ctx["area"]).delete()
         return JsonResponse({"ok": True})
 
-    (assign, _cr) = InventoryItemAssignment.objects.get_or_create(item_id=idx, area=ctx["area"], event=ctx["event"])
+    (assign, _cr) = WarehouseItemAssignment.objects.get_or_create(item_id=idx, area=ctx["area"], event=ctx["event"])
     assign.quantity = quantity
     assign.notes = notes
     assign.save()

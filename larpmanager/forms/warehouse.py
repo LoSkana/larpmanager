@@ -25,36 +25,36 @@ from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.base import MyForm
-from larpmanager.forms.miscellanea import _delete_optionals_inventory
+from larpmanager.forms.miscellanea import _delete_optionals_warehouse
 from larpmanager.forms.utils import (
-    InventoryAreaS2Widget,
-    InventoryContainerS2Widget,
-    InventoryItemS2Widget,
-    InventoryItemS2WidgetMulti,
-    InventoryTagS2WidgetMulti,
+    WarehouseAreaS2Widget,
+    WarehouseContainerS2Widget,
+    WarehouseItemS2Widget,
+    WarehouseItemS2WidgetMulti,
+    WarehouseTagS2WidgetMulti,
 )
 from larpmanager.models.miscellanea import (
-    InventoryArea,
-    InventoryContainer,
-    InventoryItem,
-    InventoryItemAssignment,
-    InventoryMovement,
-    InventoryTag,
+    WarehouseArea,
+    WarehouseContainer,
+    WarehouseItem,
+    WarehouseItemAssignment,
+    WarehouseMovement,
+    WarehouseTag,
 )
 
 
-class ExeInventoryItemForm(MyForm):
+class ExeWarehouseItemForm(MyForm):
     page_info = _("This page allows you to add or edit a new item of inventory")
 
-    page_title = _("Inventory items")
+    page_title = _("Warehouse items")
 
     class Meta:
-        model = InventoryItem
+        model = WarehouseItem
         exclude = []
         widgets = {
             "description": Textarea(attrs={"rows": 5}),
-            "container": InventoryContainerS2Widget,
-            "tags": InventoryTagS2WidgetMulti,
+            "container": WarehouseContainerS2Widget,
+            "tags": WarehouseTagS2WidgetMulti,
         }
 
     def __init__(self, *args, **kwargs):
@@ -62,27 +62,27 @@ class ExeInventoryItemForm(MyForm):
         self.fields["container"].widget.set_assoc(self.params["a_id"])
         self.fields["tags"].widget.set_assoc(self.params["a_id"])
 
-        _delete_optionals_inventory(self)
+        _delete_optionals_warehouse(self)
 
 
-class ExeInventoryContainerForm(MyForm):
+class ExeWarehouseContainerForm(MyForm):
     page_info = _("This page allows you to add or edit a new container of inventory")
 
-    page_title = _("Inventory containers")
+    page_title = _("Warehouse containers")
 
     class Meta:
-        model = InventoryContainer
+        model = WarehouseContainer
         exclude = []
         widgets = {"description": Textarea(attrs={"rows": 5})}
 
 
-class ExeInventoryTagForm(MyForm):
+class ExeWarehouseTagForm(MyForm):
     page_info = _("This page allows you to add or edit a new tag for inventory items")
 
-    page_title = _("Inventory tags")
+    page_title = _("Warehouse tags")
 
     class Meta:
-        model = InventoryTag
+        model = WarehouseTag
         exclude = []
         widgets = {
             "description": Textarea(attrs={"rows": 5}),
@@ -92,9 +92,9 @@ class ExeInventoryTagForm(MyForm):
         super().__init__(*args, **kwargs)
 
         self.fields["items"] = forms.ModelMultipleChoiceField(
-            queryset=InventoryItem.objects.filter(assoc_id=self.params["a_id"]),
+            queryset=WarehouseItem.objects.filter(assoc_id=self.params["a_id"]),
             label=_("Items"),
-            widget=InventoryItemS2WidgetMulti,
+            widget=WarehouseItemS2WidgetMulti,
             required=False,
         )
         if self.instance.pk:
@@ -102,49 +102,49 @@ class ExeInventoryTagForm(MyForm):
         self.fields["items"].widget.set_assoc(self.params["a_id"])
 
 
-class ExeInventoryMovementForm(MyForm):
+class ExeWarehouseMovementForm(MyForm):
     page_info = _("This page allows you to add or edit a new movement of item inventory, loans or repairs")
 
-    page_title = _("Inventory movements")
+    page_title = _("Warehouse movements")
 
     class Meta:
-        model = InventoryMovement
+        model = WarehouseMovement
         exclude = []
         widgets = {
             "notes": Textarea(attrs={"rows": 5}),
-            "item": InventoryItemS2Widget,
+            "item": WarehouseItemS2Widget,
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["item"].widget.set_assoc(self.params["a_id"])
 
-        _delete_optionals_inventory(self)
+        _delete_optionals_warehouse(self)
 
 
-class OrgaInventoryAreaForm(MyForm):
+class OrgaWarehouseAreaForm(MyForm):
     page_info = _("This page allows you to add or edit a new event area")
 
     page_title = _("Event area")
 
     class Meta:
-        model = InventoryArea
+        model = WarehouseArea
         exclude = []
         widgets = {"description": Textarea(attrs={"rows": 5})}
 
 
-class OrgaInventoryItemAssignmentForm(MyForm):
+class OrgaWarehouseItemAssignmentForm(MyForm):
     page_info = _("This page allows you to add or edit a new assignment of inventory item to event area")
 
-    page_title = _("Inventory assignments")
+    page_title = _("Warehouse assignments")
 
     class Meta:
-        model = InventoryItemAssignment
+        model = WarehouseItemAssignment
         exclude = []
         widgets = {
             "description": Textarea(attrs={"rows": 5}),
-            "area": InventoryAreaS2Widget,
-            "item": InventoryItemS2Widget,
+            "area": WarehouseAreaS2Widget,
+            "item": WarehouseItemS2Widget,
         }
 
     def __init__(self, *args, **kwargs):
@@ -152,7 +152,7 @@ class OrgaInventoryItemAssignmentForm(MyForm):
         self.fields["area"].widget.set_event(self.params["event"])
         self.fields["item"].widget.set_assoc(self.params["a_id"])
 
-        _delete_optionals_inventory(self)
+        _delete_optionals_warehouse(self)
 
     def clean(self):
         cleaned = super().clean()
@@ -161,7 +161,7 @@ class OrgaInventoryItemAssignmentForm(MyForm):
         if not area or not item:
             return cleaned
 
-        qs = InventoryItemAssignment.objects.filter(
+        qs = WarehouseItemAssignment.objects.filter(
             area=area,
             item=item,
         )

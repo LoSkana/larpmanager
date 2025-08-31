@@ -357,7 +357,7 @@ class WorkshopOption(BaseModel):
         return js
 
 
-class InventoryContainer(BaseModel):
+class WarehouseContainer(BaseModel):
     name = models.CharField(max_length=100, help_text=_("Code of the box or shelf"))
 
     position = models.CharField(max_length=100, help_text=_("Where it is located"), blank=True, default="")
@@ -367,7 +367,7 @@ class InventoryContainer(BaseModel):
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="containers")
 
 
-class InventoryTag(BaseModel):
+class WarehouseTag(BaseModel):
     name = models.CharField(max_length=100)
 
     description = models.CharField(max_length=1000, blank=True, default="")
@@ -375,20 +375,20 @@ class InventoryTag(BaseModel):
     assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="tags")
 
 
-class InventoryItem(BaseModel):
+class WarehouseItem(BaseModel):
     name = models.CharField(max_length=100)
 
     quantity = models.IntegerField(blank=True, null=True)
 
     description = models.CharField(max_length=1000, blank=True, default="")
 
-    container = models.ForeignKey(InventoryContainer, on_delete=models.CASCADE, related_name="items")
+    container = models.ForeignKey(WarehouseContainer, on_delete=models.CASCADE, related_name="items")
 
-    tags = models.ManyToManyField(InventoryTag, related_name="items", blank=True)
+    tags = models.ManyToManyField(WarehouseTag, related_name="items", blank=True)
 
     photo = models.ImageField(
         max_length=500,
-        upload_to=UploadToPathAndRename("inventory/"),
+        upload_to=UploadToPathAndRename("warehouse/"),
         verbose_name=_("Photo"),
         help_text=_("Photo of the object"),
         null=True,
@@ -409,10 +409,10 @@ class InventoryItem(BaseModel):
         return ["quantity"]
 
 
-class InventoryMovement(BaseModel):
+class WarehouseMovement(BaseModel):
     quantity = models.IntegerField(blank=True, null=True)
 
-    item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE, related_name="movements")
+    item = models.ForeignKey(WarehouseItem, on_delete=models.CASCADE, related_name="movements")
 
     notes = models.CharField(
         max_length=1000,
@@ -426,7 +426,7 @@ class InventoryMovement(BaseModel):
     completed = models.BooleanField(default=False)
 
 
-class InventoryArea(BaseModel):
+class WarehouseArea(BaseModel):
     name = models.CharField(max_length=100, help_text=_("Name of event area"))
 
     position = models.CharField(max_length=100, help_text=_("Where it is"), blank=True, default="")
@@ -436,12 +436,12 @@ class InventoryArea(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="area")
 
 
-class InventoryItemAssignment(BaseModel):
+class WarehouseItemAssignment(BaseModel):
     quantity = models.IntegerField(blank=True, null=True)
 
-    item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE, related_name="assignments")
+    item = models.ForeignKey(WarehouseItem, on_delete=models.CASCADE, related_name="assignments")
 
-    area = models.ForeignKey(InventoryArea, on_delete=models.CASCADE)
+    area = models.ForeignKey(WarehouseArea, on_delete=models.CASCADE)
 
     notes = models.CharField(max_length=1000, blank=True, default="")
 
@@ -455,12 +455,12 @@ class InventoryItemAssignment(BaseModel):
         constraints = [
             UniqueConstraint(
                 fields=["area", "item", "deleted"],
-                name="unique_inventory_item_assignment_with_optional",
+                name="unique_warehouse_item_assignment_with_optional",
             ),
             UniqueConstraint(
                 fields=["area", "item"],
                 condition=Q(deleted=None),
-                name="unique_inventory_item_assignment_without_optional",
+                name="unique_warehouse_item_assignment_without_optional",
             ),
         ]
 

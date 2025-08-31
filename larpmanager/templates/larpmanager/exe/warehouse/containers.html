@@ -1,10 +1,10 @@
 {% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
-    {% trans "Inventory containers" %} - {% trans "Organization" %}
+    {% trans "Warehouse containers" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the inventory containers" %}
+    {% trans "This page shows the warehouse containers" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/exe.html" %}
@@ -21,7 +21,7 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'exe_inventory_containers_edit' el.id %}"
+                        <a href="{% url 'exe_warehouse_containers_edit' el.id %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>

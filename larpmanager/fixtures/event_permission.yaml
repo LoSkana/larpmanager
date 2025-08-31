@@ -762,9 +762,9 @@
   fields:
     name: Area
     descr: Manage area of the event
-    slug: orga_inventory_area
+    slug: orga_warehouse_area
     number: 11
-    config: inventory
+    config: warehouse
     hidden: false
     feature: 66
     module: 15
@@ -772,10 +772,10 @@
   pk: 81
   fields:
     name: Checks
-    descr: Perform checks on inventory assignments
-    slug: orga_inventory_checks
+    descr: Perform checks on warehouse assignments
+    slug: orga_warehouse_checks
     number: 41
-    config: inventory
+    config: warehouse
     hidden: false
     feature: 66
     module: 15
@@ -783,10 +783,10 @@
   pk: 82
   fields:
     name: Manifest
-    descr: Manage loading and deployment status of inventory items
-    slug: orga_inventory_manifest
+    descr: Manage loading and deployment status of warehouse items
+    slug: orga_warehouse_manifest
     number: 31
-    config: inventory
+    config: warehouse
     hidden: false
     feature: 66
     module: 15

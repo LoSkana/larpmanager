@@ -1026,13 +1026,13 @@ urlpatterns = [
         name="orga_version",
     ),
     path(
-        "<slug:s>/<int:n>/manage/inventory/area/",
-        views_oms.orga_inventory_area,
-        name="orga_inventory_area",
+        "<slug:s>/<int:n>/manage/warehouse/area/",
+        views_oms.orga_warehouse_area,
+        name="orga_warehouse_area",
     ),
     path(
-        "<slug:s>/<int:n>/manage/inventory/area/edit/<int:num>/",
-        views_oms.orga_inventory_area_edit,
+        "<slug:s>/<int:n>/manage/warehouse/area/edit/<int:num>/",
+        views_oms.orga_warehouse_area_edit,
         name="orga_inventory_area_edit",
     ),
     path(

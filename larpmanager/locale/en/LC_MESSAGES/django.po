@@ -400,7 +400,7 @@ msgstr ""
 msgid "Allow to switch registration between events"
 msgstr ""
 
-msgid "Inventory"
+msgid "Warehouse"
 msgstr ""
 
 msgid "Quantity"
@@ -1579,52 +1579,6 @@ msgstr ""
 msgid "click on the icon to open the tutorial"
 msgstr ""
 
-msgid "This page allows you to add or edit a new item of inventory"
-msgstr ""
-
-msgid "Inventory items"
-msgstr ""
-
-msgid "This page allows you to add or edit a new container of inventory"
-msgstr ""
-
-msgid "Inventory containers"
-msgstr ""
-
-msgid "This page allows you to add or edit a new tag for inventory items"
-msgstr ""
-
-msgid "Inventory tags"
-msgstr ""
-
-msgid "Items"
-msgstr ""
-
-msgid ""
-"This page allows you to add or edit a new movement of item inventory, loans "
-"or repairs"
-msgstr ""
-
-msgid "Inventory movements"
-msgstr ""
-
-msgid "This page allows you to add or edit a new event area"
-msgstr ""
-
-msgid "Event area"
-msgstr ""
-
-msgid ""
-"This page allows you to add or edit a new assignment of inventory item to "
-"event area"
-msgstr ""
-
-msgid "Inventory assignments"
-msgstr ""
-
-msgid "An assignment for this item and area already exists"
-msgstr ""
-
 msgid "Authorisation"
 msgstr ""
 
@@ -1879,6 +1833,52 @@ msgid "Informations"
 msgstr ""
 
 msgid "Is there anything else you would like to tell us"
+msgstr ""
+
+msgid "This page allows you to add or edit a new item of inventory"
+msgstr ""
+
+msgid "Warehouse items"
+msgstr ""
+
+msgid "This page allows you to add or edit a new container of inventory"
+msgstr ""
+
+msgid "Warehouse containers"
+msgstr ""
+
+msgid "This page allows you to add or edit a new tag for inventory items"
+msgstr ""
+
+msgid "Warehouse tags"
+msgstr ""
+
+msgid "Items"
+msgstr ""
+
+msgid ""
+"This page allows you to add or edit a new movement of item inventory, loans "
+"or repairs"
+msgstr ""
+
+msgid "Warehouse movements"
+msgstr ""
+
+msgid "This page allows you to add or edit a new event area"
+msgstr ""
+
+msgid "Event area"
+msgstr ""
+
+msgid ""
+"This page allows you to add or edit a new assignment of inventory item to "
+"event area"
+msgstr ""
+
+msgid "Warehouse assignments"
+msgstr ""
+
+msgid "An assignment for this item and area already exists"
 msgstr ""
 
 msgid "Character Relationship"
@@ -4987,33 +4987,6 @@ msgstr ""
 msgid "End"
 msgstr ""
 
-msgid "This page shows the inventory containers"
-msgstr ""
-
-msgid "Position"
-msgstr ""
-
-msgid "This page shows the inventory items"
-msgstr ""
-
-msgid "Container"
-msgstr ""
-
-msgid "Tags"
-msgstr ""
-
-msgid "This page shows the assignment of inventory items to event area"
-msgstr ""
-
-msgid "Item"
-msgstr ""
-
-msgid "Notes"
-msgstr ""
-
-msgid "This page shows the inventory tags"
-msgstr ""
-
 msgid ""
 "This page shows larpmanager usage costs, total and divided by individual "
 "event"
@@ -5292,6 +5265,33 @@ msgid "Payment"
 msgstr ""
 
 msgid "Verification"
+msgstr ""
+
+msgid "This page shows the warehouse containers"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "This page shows the warehouse items"
+msgstr ""
+
+msgid "Container"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "This page shows the assignment of inventory items to event area"
+msgstr ""
+
+msgid "Item"
+msgstr ""
+
+msgid "Notes"
+msgstr ""
+
+msgid "This page shows the warehouse tags"
 msgstr ""
 
 msgid "leaderboard"
@@ -6423,43 +6423,6 @@ msgstr ""
 msgid "This page shows the deadlines to be met for this event"
 msgstr ""
 
-msgid "Inventory area"
-msgstr ""
-
-msgid ""
-"This page shows the event area where inventory items needs to be deployed"
-msgstr ""
-
-msgid "Item assignments"
-msgstr ""
-
-msgid "In this page you can mark which items to add to the game area"
-msgstr ""
-
-msgid "Selected"
-msgstr ""
-
-msgid ""
-"This page displays cases where the same item has been assigned to multiple "
-"areas"
-msgstr ""
-
-msgid "Area"
-msgstr ""
-
-msgid "Cargo manifest"
-msgstr ""
-
-msgid ""
-"This page shows the cargo manifest, and the status of each item assignment"
-msgstr ""
-
-msgid "Loaded"
-msgstr ""
-
-msgid "Deployed"
-msgstr ""
-
 msgid ""
 "This page shows problems reported by contributors, for direct management "
 "during the event"
@@ -6874,6 +6837,43 @@ msgid "Internal link"
 msgstr ""
 
 msgid "Version"
+msgstr ""
+
+msgid "Warehouse area"
+msgstr ""
+
+msgid ""
+"This page shows the event area where inventory items needs to be deployed"
+msgstr ""
+
+msgid "Item assignments"
+msgstr ""
+
+msgid "In this page you can mark which items to add to the game area"
+msgstr ""
+
+msgid "Selected"
+msgstr ""
+
+msgid ""
+"This page displays cases where the same item has been assigned to multiple "
+"areas"
+msgstr ""
+
+msgid "Area"
+msgstr ""
+
+msgid "Cargo manifest"
+msgstr ""
+
+msgid ""
+"This page shows the cargo manifest, and the status of each item assignment"
+msgstr ""
+
+msgid "Loaded"
+msgstr ""
+
+msgid "Deployed"
 msgstr ""
 
 msgid "Modules WS"
@@ -7420,10 +7420,10 @@ msgstr ""
 msgid "Now you can create badges"
 msgstr ""
 
-msgid "Enables inventory management for organization warehouse management"
+msgid "Enables warehouse management for organization warehouse management"
 msgstr ""
 
-msgid "Now you can add inventory containers and items"
+msgid "Now you can add warehouse containers and items"
 msgstr ""
 
 msgid "Secret link"
@@ -7911,16 +7911,16 @@ msgstr ""
 msgid "Containers"
 msgstr ""
 
-msgid "Manage inventory containers"
+msgid "Manage warehouse containers"
 msgstr ""
 
-msgid "Manage inventory tags"
+msgid "Manage warehouse tags"
 msgstr ""
 
-msgid "Manage inventory items"
+msgid "Manage warehouse items"
 msgstr ""
 
-msgid "Manage inventory movements"
+msgid "Manage warehouse movements"
 msgstr ""
 
 msgid "Manage the event settings: name, description, dates, and other data"
@@ -8148,13 +8148,13 @@ msgstr ""
 msgid "Checks"
 msgstr ""
 
-msgid "Perform checks on inventory assignments"
+msgid "Perform checks on warehouse assignments"
 msgstr ""
 
 msgid "Manifest"
 msgstr ""
 
-msgid "Manage loading and deployment status of inventory items"
+msgid "Manage loading and deployment status of warehouse items"
 msgstr ""
 
 msgid "Communications"

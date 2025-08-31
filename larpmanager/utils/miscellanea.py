@@ -30,7 +30,7 @@ from PIL import Image
 
 from larpmanager.models.association import Association
 from larpmanager.models.member import Badge
-from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, InventoryItem
+from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, WarehouseItem
 
 
 def upload_albums_dir(main, cache_subs, name):
@@ -176,7 +176,7 @@ def get_inventory_optionals(ctx, def_cols):
     assoc = Association.objects.get(pk=ctx["a_id"])
     optionals = {}
     active = 0
-    for field in InventoryItem.get_optional_fields():
+    for field in WarehouseItem.get_optional_fields():
         optionals[field] = assoc.get_config(f"inventory_{field}", False)
         if optionals[field]:
             active = 1

@@ -31,14 +31,14 @@ from larpmanager.models.miscellanea import (
     Contact,
     Email,
     HelpQuestion,
-    InventoryArea,
-    InventoryContainer,
-    InventoryItem,
-    InventoryItemAssignment,
-    InventoryTag,
     PlayerRelationship,
     ShuttleService,
     Util,
+    WarehouseArea,
+    WarehouseContainer,
+    WarehouseItem,
+    WarehouseItemAssignment,
+    WarehouseTag,
     WorkshopMemberRel,
     WorkshopModule,
     WorkshopOption,
@@ -136,34 +136,34 @@ class HelpQuestionAdmin(DefModelAdmin):
     autocomplete_fields = ["member", "run", "assoc"]
 
 
-@admin.register(InventoryContainer)
-class InventoryContainerAdmin(DefModelAdmin):
+@admin.register(WarehouseContainer)
+class WarehouseContainerAdmin(DefModelAdmin):
     list_display = ("name", "position")
     autocomplete_fields = ["assoc"]
     search_fields = ["name"]
 
 
-@admin.register(InventoryTag)
-class InventoryTagAdmin(DefModelAdmin):
+@admin.register(WarehouseTag)
+class WarehouseTagAdmin(DefModelAdmin):
     list_display = ("name", "description")
     search_fields = ["name"]
 
 
-@admin.register(InventoryItem)
-class InventoryItemAdmin(DefModelAdmin):
+@admin.register(WarehouseItem)
+class WarehouseItemAdmin(DefModelAdmin):
     list_display = ("name", "quantity", "container", "description")
     autocomplete_fields = ["assoc", "container", "tags"]
     search_fields = ["name"]
 
 
-@admin.register(InventoryArea)
-class InventoryAreaAdmin(DefModelAdmin):
+@admin.register(WarehouseArea)
+class WarehouseAreaAdmin(DefModelAdmin):
     list_display = ("name", "position", "description")
     search_fields = ["name"]
 
 
-@admin.register(InventoryItemAssignment)
-class InventoryItemAssignmentAdmin(DefModelAdmin):
+@admin.register(WarehouseItemAssignment)
+class WarehouseItemAssignmentAdmin(DefModelAdmin):
     list_display = ("area", "quantity", "item", "notes")
     autocomplete_fields = ["event", "item", "area"]
 

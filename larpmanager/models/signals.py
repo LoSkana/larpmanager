@@ -61,7 +61,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerTicket, LarpManagerTutorial
 from larpmanager.models.member import Member, MemberConfig, Membership, MembershipStatus
-from larpmanager.models.miscellanea import InventoryItem
+from larpmanager.models.miscellanea import WarehouseItem
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Faction, Plot, Prologue, SpeedLarp, replace_chars_all
 from larpmanager.utils.common import copy_class
@@ -614,8 +614,8 @@ def save_larpmanager_ticket(sender, instance, created, **kwargs):
         my_send_mail(subj, body, email)
 
 
-@receiver(pre_save, sender=InventoryItem, dispatch_uid="inventoryitem_rotate_vertical_photo")
-def rotate_vertical_photo(sender, instance: InventoryItem, **kwargs):
+@receiver(pre_save, sender=WarehouseItem, dispatch_uid="warehouseitem_rotate_vertical_photo")
+def rotate_vertical_photo(sender, instance: WarehouseItem, **kwargs):
     try:
         field = instance._meta.get_field("photo")
         if not isinstance(field, models.ImageField):

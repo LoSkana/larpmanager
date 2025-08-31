@@ -85,6 +85,6 @@
 - model: larpmanager.permissionmodule
   pk: 15
   fields:
-    name: Inventory
+    name: Warehouse
     order: 95
     icon: box-open

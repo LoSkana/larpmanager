@@ -381,12 +381,12 @@ class ExeConfigForm(ConfigForm):
             help_text = _("Allow to switch registration between events")
             self.add_configs("campaign_switch", ConfigType.BOOL, label, help_text)
 
-        if "inventory" in self.params["features"]:
-            self.set_section("inventory", _("Inventory"))
+        if "warehouse" in self.params["features"]:
+            self.set_section("warehouse", _("Warehouse"))
 
             label = _("Quantity")
             help_text = _("If checked: Add a field to track items quantity")
-            self.add_configs("inventory_quantity", ConfigType.BOOL, label, help_text)
+            self.add_configs("warehouse_quantity", ConfigType.BOOL, label, help_text)
 
     def set_config_members(self):
         # USERS
