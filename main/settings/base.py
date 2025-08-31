@@ -16,7 +16,7 @@ SECRET_KEY = 'changeme'
 DEBUG = True
 
 # ALLOWED_HOSTS = ['.larpmanager.com']
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0', 'larpmanager.localhost']
 
 # Application definition
 INSTALLED_APPS = [
