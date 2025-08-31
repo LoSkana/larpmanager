@@ -2070,7 +2070,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Warehouse movements"
-msgstr "Správa pohybu zásob"
+msgstr "Inventurní pohyby"
 
 msgid "This page allows you to add or edit a new event area"
 msgstr "Na této stránce můžete přidat nebo upravit novou oblast událostí"
@@ -4307,6 +4307,12 @@ msgstr "Nabíjení"
 
 msgid "Download"
 msgstr "Stáhnout"
+
+msgid "Select the table rows and choose the operation to apply"
+msgstr "Vyberte řádky tabulky a zvolte operaci, která se má použít"
+
+msgid "Execute"
+msgstr "Provést"
 
 msgid "Instructions"
 msgstr "Pokyny"
@@ -9074,6 +9080,36 @@ msgstr "Pole"
 
 msgid "No elements are currently available"
 msgstr "V současné době nejsou k dispozici žádné prvky"
+
+msgid "Move to container"
+msgstr "Přesun do kontejneru"
+
+msgid "Add tag"
+msgstr "Přidat značku"
+
+msgid "Remove tag"
+msgstr "Odstranění štítku"
+
+msgid "Add to faction"
+msgstr "Přidat do frakce"
+
+msgid "Remove from faction"
+msgstr "Odstranění z frakce"
+
+msgid "Add to plot"
+msgstr "Přidat do pozemku"
+
+msgid "Remove from plot"
+msgstr "Odstranění z pozemku"
+
+msgid "Set quest type"
+msgstr "Nastavení typu úkolu"
+
+msgid "Set quest"
+msgstr "Zadání úkolu"
+
+msgid "Set ability type"
+msgstr "Nastavení typu schopnosti"
 
 #, python-format
 msgid ""

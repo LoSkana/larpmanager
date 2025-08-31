@@ -2175,7 +2175,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Warehouse movements"
-msgstr "Gérer les mouvements de stocks"
+msgstr "Mouvements de stocks"
 
 msgid "This page allows you to add or edit a new event area"
 msgstr ""
@@ -4483,6 +4483,13 @@ msgstr "Charge"
 
 msgid "Download"
 msgstr "Télécharger"
+
+msgid "Select the table rows and choose the operation to apply"
+msgstr ""
+"Sélectionnez les lignes du tableau et choisissez l'opération à appliquer"
+
+msgid "Execute"
+msgstr "Exécuter"
 
 msgid "Instructions"
 msgstr "Instructions"
@@ -9490,6 +9497,36 @@ msgstr "Domaines"
 
 msgid "No elements are currently available"
 msgstr "Aucun élément n'est actuellement disponible"
+
+msgid "Move to container"
+msgstr "Déplacer vers le conteneur"
+
+msgid "Add tag"
+msgstr "Ajouter une étiquette"
+
+msgid "Remove tag"
+msgstr "Supprimer l'étiquette"
+
+msgid "Add to faction"
+msgstr "Ajouter à la faction"
+
+msgid "Remove from faction"
+msgstr "Retirer de la faction"
+
+msgid "Add to plot"
+msgstr "Ajouter à la parcelle"
+
+msgid "Remove from plot"
+msgstr "Retirer de la parcelle"
+
+msgid "Set quest type"
+msgstr "Définir le type de quête"
+
+msgid "Set quest"
+msgstr "Définir la quête"
+
+msgid "Set ability type"
+msgstr "Définir le type de capacité"
 
 #, python-format
 msgid ""

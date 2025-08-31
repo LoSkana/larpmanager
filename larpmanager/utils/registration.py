@@ -204,9 +204,6 @@ def registration_status(run, user, my_regs=None, features_map=None, reg_count=No
 
     registration_find(run, user, my_regs)
 
-    if not run.end:
-        return
-
     features = _get_features_map(features_map, run)
 
     registration_available(run, features, reg_count)
@@ -216,7 +213,7 @@ def registration_status(run, user, my_regs=None, features_map=None, reg_count=No
         registration_status_signed(run, features, register_url)
         return
 
-    if get_time_diff_today(run.end) < 0:
+    if run.end and get_time_diff_today(run.end) < 0:
         return
 
     # check pre-register

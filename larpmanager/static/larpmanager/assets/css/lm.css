@@ -2199,3 +2199,7 @@ input[type="number"] {
 .ajax-toggle {
   cursor: pointer;
 }
+
+.bulk-el {
+    display: inline-block;
+}

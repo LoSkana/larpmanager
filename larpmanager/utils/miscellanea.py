@@ -172,12 +172,12 @@ def _go_centauri(request):
     return True
 
 
-def get_inventory_optionals(ctx, def_cols):
+def get_warehouse_optionals(ctx, def_cols):
     assoc = Association.objects.get(pk=ctx["a_id"])
     optionals = {}
     active = 0
     for field in WarehouseItem.get_optional_fields():
-        optionals[field] = assoc.get_config(f"inventory_{field}", False)
+        optionals[field] = assoc.get_config(f"warehouse_{field}", False)
         if optionals[field]:
             active = 1
     ctx["optionals"] = optionals

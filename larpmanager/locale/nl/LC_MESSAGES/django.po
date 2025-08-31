@@ -2147,7 +2147,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Warehouse movements"
-msgstr "Voorraadbewegingen beheren"
+msgstr "Voorraadbewegingen"
 
 msgid "This page allows you to add or edit a new event area"
 msgstr "Op deze pagina kunt u een nieuw evenementgebied toevoegen of bewerken"
@@ -4450,6 +4450,12 @@ msgstr "Laad"
 
 msgid "Download"
 msgstr "Downloaden"
+
+msgid "Select the table rows and choose the operation to apply"
+msgstr "Selecteer de tabelrijen en kies de toe te passen bewerking"
+
+msgid "Execute"
+msgstr "Uitvoeren"
 
 msgid "Instructions"
 msgstr "Instructies"
@@ -9380,6 +9386,36 @@ msgstr "Velden"
 
 msgid "No elements are currently available"
 msgstr "Er zijn momenteel geen elementen beschikbaar"
+
+msgid "Move to container"
+msgstr "Verplaats naar container"
+
+msgid "Add tag"
+msgstr "Label toevoegen"
+
+msgid "Remove tag"
+msgstr "Tag verwijderen"
+
+msgid "Add to faction"
+msgstr "Toevoegen aan factie"
+
+msgid "Remove from faction"
+msgstr "Verwijderen uit factie"
+
+msgid "Add to plot"
+msgstr "Toevoegen aan perceel"
+
+msgid "Remove from plot"
+msgstr "Verwijderen uit perceel"
+
+msgid "Set quest type"
+msgstr "Zoektocht type instellen"
+
+msgid "Set quest"
+msgstr "Zoektocht instellen"
+
+msgid "Set ability type"
+msgstr "Type vaardigheid instellen"
 
 #, python-format
 msgid ""

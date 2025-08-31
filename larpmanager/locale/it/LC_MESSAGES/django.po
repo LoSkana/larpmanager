@@ -2167,7 +2167,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Warehouse movements"
-msgstr "Gestisci i movimenti di inventario"
+msgstr "Movimenti di magazzino"
 
 msgid "This page allows you to add or edit a new event area"
 msgstr ""
@@ -4462,6 +4462,12 @@ msgstr "Carica"
 msgid "Download"
 msgstr "Scarica"
 
+msgid "Select the table rows and choose the operation to apply"
+msgstr "Seleziona le righe della tabella e scegli l'operazione da applicare"
+
+msgid "Execute"
+msgstr "Esegui"
+
 msgid "Instructions"
 msgstr "Istruzioni"
 
@@ -5166,7 +5172,7 @@ msgid "Access link"
 msgstr "Link di accesso"
 
 msgid "copy this link and give it to your friend"
-msgstr "copiate questo link e datelo al vostro amico"
+msgstr "copia questo link e dallo al tuo amico"
 
 msgid ""
 "Note: The special code is re-generated each time you change the gift card"
@@ -9393,6 +9399,36 @@ msgstr "Campi"
 
 msgid "No elements are currently available"
 msgstr "Non ci sono elementi attualmente disponibili"
+
+msgid "Move to container"
+msgstr "Sposta in un contenitore"
+
+msgid "Add tag"
+msgstr "Aggiungi tag"
+
+msgid "Remove tag"
+msgstr "Rimuovi tag"
+
+msgid "Add to faction"
+msgstr "Aggiungi alla fazione"
+
+msgid "Remove from faction"
+msgstr "Rimuovi dalla fazione"
+
+msgid "Add to plot"
+msgstr "Aggiungi alla trama"
+
+msgid "Remove from plot"
+msgstr "Rimuovi dalla trama"
+
+msgid "Set quest type"
+msgstr "Imposta il tipo di missione"
+
+msgid "Set quest"
+msgstr "Imposta missione"
+
+msgid "Set ability type"
+msgstr "Imposta il tipo di abilità"
 
 #, python-format
 msgid ""

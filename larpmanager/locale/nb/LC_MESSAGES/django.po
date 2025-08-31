@@ -2105,7 +2105,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Warehouse movements"
-msgstr "Administrer lagerbevegelser"
+msgstr "Beholdningsbevegelser"
 
 msgid "This page allows you to add or edit a new event area"
 msgstr ""
@@ -4358,6 +4358,12 @@ msgstr "Ladning"
 
 msgid "Download"
 msgstr "Last ned"
+
+msgid "Select the table rows and choose the operation to apply"
+msgstr "Velg tabellradene og velg operasjonen som skal brukes"
+
+msgid "Execute"
+msgstr "Utfør"
 
 msgid "Instructions"
 msgstr "Instruksjoner"
@@ -9209,6 +9215,36 @@ msgstr "Felt"
 
 msgid "No elements are currently available"
 msgstr "Ingen elementer er tilgjengelige for øyeblikket"
+
+msgid "Move to container"
+msgstr "Flytt til container"
+
+msgid "Add tag"
+msgstr "Legg til tagg"
+
+msgid "Remove tag"
+msgstr "Fjern taggen"
+
+msgid "Add to faction"
+msgstr "Legg til i fraksjon"
+
+msgid "Remove from faction"
+msgstr "Fjern fra fraksjon"
+
+msgid "Add to plot"
+msgstr "Legg til i plottet"
+
+msgid "Remove from plot"
+msgstr "Fjern fra tomten"
+
+msgid "Set quest type"
+msgstr "Angi oppdragstype"
+
+msgid "Set quest"
+msgstr "Sett oppdrag"
+
+msgid "Set ability type"
+msgstr "Angi evnetype"
 
 #, python-format
 msgid ""
