@@ -59,16 +59,18 @@ class AssociationIdentifyMiddleware:
             # base_domain = "ludomanager.it"
             base_domain = "larpmanager.com"
 
+        conf_slug = getattr(conf_settings, "SLUG_ASSOC", None)
+
         assoc_slug = (
             request.session.get("debug_slug")
             if "debug_slug" in request.session
-            else getattr(conf_settings, "SLUG_ASSOC", None) or domain
+            else conf_slug or domain
         )
 
         assoc = get_cache_assoc(assoc_slug)
         if assoc:
             if "main_domain" in assoc and assoc["main_domain"] != base_domain:
-                if request.enviro == "prod":
+                if request.enviro == "prod" and not conf_slug:
                     slug = assoc["slug"]
                     domain = assoc["main_domain"]
                     return redirect(f"https://{slug}.{domain}{request.get_full_path()}")
