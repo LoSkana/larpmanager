@@ -3655,6 +3655,9 @@ msgstr "Nowa wiadomość od %(user)s"
 msgid "Now you can create badges"
 msgstr "Teraz możesz tworzyć odznaki"
 
+msgid "Now you can manage events"
+msgstr "Teraz możesz zarządzać wydarzeniami"
+
 msgid "Optional - email reply to"
 msgstr "Opcjonalnie - wyślij odpowiedź e-mailem na adres"
 

@@ -7774,6 +7774,9 @@ msgstr ""
 msgid "Manage events"
 msgstr ""
 
+msgid "Now you can manage events"
+msgstr ""
+
 msgid ""
 "Enables 'New player' tickets, reserved for users that never participated in "
 "an event of the organization"

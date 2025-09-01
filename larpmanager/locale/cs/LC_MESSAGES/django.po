@@ -3655,6 +3655,9 @@ msgstr "Nová zpráva od %(user)s"
 msgid "Now you can create badges"
 msgstr "Nyní můžete vytvářet odznaky"
 
+msgid "Now you can manage events"
+msgstr "Nyní můžete spravovat události"
+
 msgid "Optional - email reply to"
 msgstr "Nepovinné - odpověď e-mailem na adresu"
 
@@ -7872,7 +7875,7 @@ msgid ""
 "uploaded data"
 msgstr ""
 "Všimněte si, že existující tipy se stejným názvem budou přepsány nahranými "
-"daty."
+"daty"
 
 msgid ""
 "Optional logo image - you can upload a file of any size, it will be "

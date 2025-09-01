@@ -140,12 +140,15 @@ def check_orga_roles(page):
     _check_checkboxes(checked, page)
 
 
-def _check_checkboxes(checked, page):
+def _check_checkboxes(checked, page, skip_first=False):
     for s in checked:
         expect(page.get_by_label(s)).to_be_checked()
     all_checkboxes = page.locator("input[type=checkbox]")
     count = all_checkboxes.count()
-    for i in range(count):
+    start = 0
+    if skip_first:
+        start = 1
+    for i in range(start, count):
         label = all_checkboxes.nth(i).evaluate("el => el.labels[0]?.innerText.trim()")
         if label not in checked:
             expect(all_checkboxes.nth(i)).not_to_be_checked()
@@ -178,7 +181,7 @@ def check_exe_features(page):
     submit_confirm(page)
     expect(page.locator("#one")).to_contain_text("Now you can create event templates")
     page.get_by_role("link", name="Features").click()
-    _check_checkboxes(checked, page)
+    _check_checkboxes(checked, page, True)
 
 
 def check_exe_roles(page):

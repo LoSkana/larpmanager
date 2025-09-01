@@ -3655,6 +3655,9 @@ msgstr "Nieuw bericht van %(user)s"
 msgid "Now you can create badges"
 msgstr "Nu kun je badges maken"
 
+msgid "Now you can manage events"
+msgstr "Nu kun je evenementen beheren"
+
 msgid "Optional - email reply to"
 msgstr "Optioneel - antwoord per e-mail naar"
 
@@ -8136,7 +8139,7 @@ msgid ""
 "uploaded data"
 msgstr ""
 "Merk op dat bestaande tickets met dezelfde naam worden overschreven met de "
-"geüploade gegevens."
+"geüploade gegevens"
 
 msgid ""
 "Optional logo image - you can upload a file of any size, it will be "

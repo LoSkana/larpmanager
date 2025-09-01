@@ -930,7 +930,7 @@
     overall: true
     module: 12
     placeholder: false
-    order: 1
+    order: 11
     after_text: Now you can create event templates
     after_link: exe_templates
 - model: larpmanager.feature
@@ -990,10 +990,9 @@
     overall: true
     module: 12
     placeholder: false
-    order: 9999
-    after_text: null
-    after_link: null
-    hidden: true
+    order: 1
+    after_text: Now you can manage events
+    after_link: exe_events
 - model: larpmanager.feature
   pk: 192
   fields:
