@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.contrib import messages
+from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -109,6 +110,9 @@ class ExceptionHandlingMiddleware:
 
     @staticmethod
     def _handle_feature_error(request, ex):
+        if ex.feature == "exe_events":
+            raise Http404("not allowed")
+
         feature = Feature.objects.get(slug=ex.feature)
         ctx = {"exe": ex, "feature": feature}
 
