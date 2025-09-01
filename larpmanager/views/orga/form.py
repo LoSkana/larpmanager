@@ -45,7 +45,7 @@ from larpmanager.models.registration import (
 from larpmanager.utils.common import (
     exchange_order,
 )
-from larpmanager.utils.download import orga_registration_form_download
+from larpmanager.utils.download import orga_registration_form_download, orga_tickets_download
 from larpmanager.utils.edit import backend_edit, orga_edit, set_suggestion
 from larpmanager.utils.event import check_event_permission
 
@@ -53,8 +53,16 @@ from larpmanager.utils.event import check_event_permission
 @login_required
 def orga_registration_tickets(request, s, n):
     ctx = check_event_permission(request, s, n, "orga_registration_tickets")
+
+    if request.method == "POST" and request.POST.get("download") == "1":
+        return orga_tickets_download(ctx)
+
+    ctx["upload"] = "registration_tickets"
+    ctx["download"] = 1
+
     ctx["list"] = RegistrationTicket.objects.filter(event=ctx["event"]).order_by("order")
     ctx["tiers"] = OrgaRegistrationTicketForm.get_tier_available(ctx["event"])
+
     return render(request, "larpmanager/orga/registration/tickets.html", ctx)
 
 

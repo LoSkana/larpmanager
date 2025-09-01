@@ -46,7 +46,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     get_ordered_registration_questions,
 )
-from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
+from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Plot, PlotCharacterRel, Relationship
 from larpmanager.utils.common import check_field
 from larpmanager.utils.edit import _get_values_mapping
@@ -554,6 +554,17 @@ def _get_column_names(ctx):
         if "pay_what_you_want" not in ctx["features"]:
             del ctx["columns"][0]["donation"]
 
+    elif ctx["typ"] == "registration_ticket":
+        ctx["columns"] = [
+            {
+                "name": _("The ticket's email"),
+                "tier": _("The tier of the ticket"),
+                "description": _("(Optional) The ticket's description"),
+                "price": _("(Optional) The cost of the ticket"),
+                "max_available": _("(Optional) Maximun number of spots available")
+            }
+        ]
+
     elif ctx["typ"] == "registration_form":
         ctx["columns"] = [
             {
@@ -652,3 +663,18 @@ def _get_writing_names(ctx):
 
     ctx["allowed"] = list(ctx["columns"][0].keys())
     ctx["allowed"].extend(ctx["fields"].keys())
+
+
+def orga_tickets_download(ctx):
+    return zip_exports(ctx, export_tickets(ctx), "Tickets")
+
+def export_tickets(ctx):
+    mappings = {
+        "tier": TicketTier.get_mapping(),
+    }
+    keys = ["name", "tier", "description", "price", "max_available"]
+
+    que = ctx["event"].get_elements(RegistrationTicket).order_by("number")
+    vals = _extract_values(keys, que, mappings)
+
+    return [("tickets", keys, vals)]
