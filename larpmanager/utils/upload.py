@@ -48,7 +48,7 @@ from larpmanager.models.member import Membership, MembershipStatus
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
-    RegistrationTicket,
+    RegistrationTicket, TicketTier,
 )
 from larpmanager.models.utils import UploadToPathAndRename
 from larpmanager.models.writing import (
@@ -78,6 +78,8 @@ def go_upload(request, ctx, form):
         return form_load(request, ctx, form, is_registration=False)
     elif ctx["typ"] == "registration":
         return registrations_load(request, ctx, form)
+    elif ctx["typ"] == "registration_ticket":
+        return tickets_load(request, ctx, form)
     else:
         return writing_load(request, ctx, form)
 
@@ -491,7 +493,7 @@ def form_load(request, ctx, form, is_registration=True):
 
 
 def invert_dict(d):
-    return {v: k for k, v in d.items()}
+    return {v.lower().strip(): k for k, v in d.items()}
 
 
 def _questions_load(ctx, row, is_registration):
@@ -643,3 +645,50 @@ def cover_load(ctx, z_obj):
         c.cover = fn
         c.save()
         os.rename(covers[num], os.path.join(conf_settings.MEDIA_ROOT, fn))
+
+
+def tickets_load(request, ctx, form):
+    (input_df, logs) = _get_file(ctx, form.cleaned_data["first"], 0)
+
+    if input_df is not None:
+        for row in input_df.to_dict(orient="records"):
+            logs.append(_ticket_load(request, ctx, row))
+    return logs
+
+
+def _ticket_load(request, ctx, row):
+    if "name" not in row:
+        return "ERR - There is no name column"
+
+    (ticket, cr) = RegistrationTicket.objects.get_or_create(event=ctx["event"], name=row["name"])
+
+    logs = []
+
+    mappings = {
+        "tier": invert_dict(TicketTier.get_mapping()),
+    }
+
+    for field, value in row.items():
+        if not value or pd.isna(value) or field in ["name"]:
+            continue
+        new_value = value
+        if field in mappings:
+            new_value = new_value.lower().strip()
+            if new_value not in mappings[field]:
+                return f"ERR - unknow value {value} for field {field}"
+            new_value = mappings[field][new_value]
+        if field == "max_available":
+            new_value = int(value)
+        if field == "price":
+            new_value = float(value)
+        setattr(ticket, field, new_value)
+
+    ticket.save()
+    save_log(request.user.member, RegistrationTicket, ticket)
+
+    if cr:
+        msg = f"OK - Created {ticket}"
+    else:
+        msg = f"OK - Updated {ticket}"
+
+    return msg

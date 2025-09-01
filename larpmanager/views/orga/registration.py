@@ -316,8 +316,6 @@ def orga_registrations(request, s, n):
         if request.POST.get("download") == "1":
             return download(ctx, Registration, "registration")
 
-    cache = {}
-
     get_event_cache_all(ctx)
 
     _orga_registrations_prepare(ctx, request)

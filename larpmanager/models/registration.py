@@ -46,6 +46,22 @@ class TicketTier(models.TextChoices):
     COLLABORATOR = "c", _("Collaborator")
     SELLER = "s", _("Seller")
 
+    @classmethod
+    def get_mapping(cls):
+        return {
+            TicketTier.STANDARD: "Standard",
+            TicketTier.NEW_PLAYER: "New player",
+            TicketTier.LOTTERY: "Lottery",
+            TicketTier.WAITING: "Waiting",
+            TicketTier.FILLER: "Filler",
+            TicketTier.REDUCED: "Reduced",
+            TicketTier.PATRON: "Patron",
+            TicketTier.STAFF: "Staff",
+            TicketTier.NPC: "NPC",
+            TicketTier.COLLABORATOR: "Collaborator",
+            TicketTier.SELLER: "Seller"
+        }
+
 
 class RegistrationTicket(BaseModel):
     search = models.CharField(max_length=150, editable=False)
