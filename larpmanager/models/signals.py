@@ -1183,6 +1183,15 @@ def post_save_prologue_reset_rels(sender: type, instance: Prologue, **kwargs: An
     # Update cache for all characters in this prologue
     for char in instance.characters.all():
         refresh_character_relationships(char)
+@receiver(post_save, sender=CharacterInventory)
+def create_pools_for_inventory(sender, instance, created, **kwargs):
+    if created:
+        for pool_type in PoolType.objects.filter(event=instance.event):
+            PoolBalance.objects.create(
+                inventory=instance,
+                pool_type=pool_type,
+                amount=0
+            )
 
 
 @receiver(post_delete, sender=Prologue)
