@@ -6729,6 +6729,11 @@ msgid ""
 "their data with your organization; otherwise, their entry will be skipped"
 msgstr ""
 
+msgid ""
+"Note that existing tickets with the same name, will be overwritten with the "
+"uploaded data"
+msgstr ""
+
 msgid "You can also upload a second file with the registration options"
 msgstr ""
 
@@ -8242,6 +8247,21 @@ msgid "(Optional) The character name to assign to the player"
 msgstr ""
 
 msgid "(Optional) The amount of a voluntary donation"
+msgstr ""
+
+msgid "The ticket's email"
+msgstr ""
+
+msgid "The tier of the ticket"
+msgstr ""
+
+msgid "(Optional) The ticket's description"
+msgstr ""
+
+msgid "(Optional) The cost of the ticket"
+msgstr ""
+
+msgid "(Optional) Maximun number of spots available"
 msgstr ""
 
 msgid "The question name"

@@ -2885,6 +2885,9 @@ msgstr "Ange typer av uppdrag"
 msgid "Show cancellations"
 msgstr "Avbokningar av visningar"
 
+msgid "The ticket's email"
+msgstr "Biljettens e-post"
+
 msgid "Total payment sent"
 msgstr "Totalt skickad betalning"
 
@@ -3404,6 +3407,9 @@ msgstr "Namnet på alternativet"
 
 msgid "The name of the ticket"
 msgstr "Biljettens namn"
+
+msgid "The tier of the ticket"
+msgstr "Biljettens nivå"
 
 msgid "Total registration fee"
 msgstr "Total registreringsavgift"
@@ -4184,6 +4190,9 @@ msgstr "Vi ska försöka hjälpa till så gott vi kan"
 msgid "You need to define the end date!"
 msgstr "Du måste definiera slutdatumet!"
 
+msgid "(Optional) The cost of the ticket"
+msgstr "(Valfritt) Kostnaden för biljetten"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "En fråga ställdes av: %(user)s"
@@ -4335,6 +4344,9 @@ msgstr "för att bekräfta det fortsätt med betalningen"
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
 msgstr "(<a href='%(url)s'>svara här</a>)"
+
+msgid "(Optional) The ticket's description"
+msgstr "(Valfritt) Beskrivning av biljetten"
 
 msgid "Image shown on homepage as promoter"
 msgstr "Bild visas på hemsidan som promotor"
@@ -4972,6 +4984,9 @@ msgstr "Denna sida sammanfattar de olika typerna av händelseprolog"
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "Din förmånliga registrering har lösts in!"
+
+msgid "(Optional) Maximun number of spots available"
+msgstr "(Valfritt) Maximalt antal tillgängliga platser"
 
 msgid "Background image used across all event pages"
 msgstr "Bakgrundsbild används på alla evenemangssidor"
@@ -7990,6 +8005,13 @@ msgid ""
 msgstr ""
 "Ange det maximala antalet sådana rabatter som kan åberopas (0 för oändlig "
 "användning)"
+
+msgid ""
+"Note that existing tickets with the same name, will be overwritten with the "
+"uploaded data"
+msgstr ""
+"Observera att befintliga ärenden med samma namn kommer att skrivas över med "
+"de uppladdade uppgifterna"
 
 msgid ""
 "Optional logo image - you can upload a file of any size, it will be "

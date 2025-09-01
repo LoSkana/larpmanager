@@ -2885,6 +2885,9 @@ msgstr "Configurer les types de quêtes"
 msgid "Show cancellations"
 msgstr "Annulation d'un spectacle"
 
+msgid "The ticket's email"
+msgstr "L'email du billet"
+
 msgid "Total payment sent"
 msgstr "Paiement total envoyé"
 
@@ -3404,6 +3407,9 @@ msgstr "Le nom de l'option"
 
 msgid "The name of the ticket"
 msgstr "Le nom du billet"
+
+msgid "The tier of the ticket"
+msgstr "Le niveau du billet"
 
 msgid "Total registration fee"
 msgstr "Frais d'inscription totaux"
@@ -4184,6 +4190,9 @@ msgstr "Nous essaierons de vous aider au mieux"
 msgid "You need to define the end date!"
 msgstr "Vous devez définir la date de fin !"
 
+msgid "(Optional) The cost of the ticket"
+msgstr "(Facultatif) Le coût du billet"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Une question a été posée par : %(user)s"
@@ -4336,6 +4345,9 @@ msgstr "pour le confirmer et procéder au paiement"
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
 msgstr "(<a href='%(url)s'>réponse ici</a>)"
+
+msgid "(Optional) The ticket's description"
+msgstr "(Facultatif) Description du billet"
 
 msgid "Image shown on homepage as promoter"
 msgstr "Image affichée sur la page d'accueil en tant que promoteur"
@@ -4977,6 +4989,9 @@ msgstr "Cette page résume les types de prologues d'événements"
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "Votre cadeau d'enregistrement a été échangé !"
+
+msgid "(Optional) Maximun number of spots available"
+msgstr "(Facultatif) Nombre maximal de places disponibles"
 
 msgid "Background image used across all event pages"
 msgstr "Image de fond utilisée sur toutes les pages de l'événement"
@@ -8223,6 +8238,13 @@ msgid ""
 msgstr ""
 "Indiquer le nombre maximum de remises qui peuvent être demandées (0 pour une"
 " utilisation illimitée)"
+
+msgid ""
+"Note that existing tickets with the same name, will be overwritten with the "
+"uploaded data"
+msgstr ""
+"Notez que les tickets existants portant le même nom seront remplacés par les"
+" données téléchargées."
 
 msgid ""
 "Optional logo image - you can upload a file of any size, it will be "

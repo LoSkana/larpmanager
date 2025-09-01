@@ -2885,6 +2885,9 @@ msgstr "Nastavení typů úkolů"
 msgid "Show cancellations"
 msgstr "Zrušení výstavy"
 
+msgid "The ticket's email"
+msgstr "E-mail tipu"
+
 msgid "Total payment sent"
 msgstr "Celková odeslaná platba"
 
@@ -3404,6 +3407,9 @@ msgstr "Název možnosti"
 
 msgid "The name of the ticket"
 msgstr "Název tipu"
+
+msgid "The tier of the ticket"
+msgstr "Stupeň vstupenky"
 
 msgid "Total registration fee"
 msgstr "Celkový registrační poplatek"
@@ -4184,6 +4190,9 @@ msgstr "Pokusíme se vám pomoci, jak nejlépe to půjde"
 msgid "You need to define the end date!"
 msgstr "Je třeba určit datum ukončení!"
 
+msgid "(Optional) The cost of the ticket"
+msgstr "(Nepovinné) Cena letenky"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Otázku položil: %(user)s"
@@ -4335,6 +4344,9 @@ msgstr "potvrdit a provést platbu"
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
 msgstr "(<a href='%(url)s'>odpověď zde</a>)"
+
+msgid "(Optional) The ticket's description"
+msgstr "(Nepovinné) Popis tipu"
 
 msgid "Image shown on homepage as promoter"
 msgstr "Obrázek zobrazený na domovské stránce jako promotér"
@@ -4970,6 +4982,9 @@ msgstr "Tato stránka shrnuje typy prologů událostí"
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "Vaše darovaná registrace byla uplatněna!"
+
+msgid "(Optional) Maximun number of spots available"
+msgstr "(Nepovinné) Maximální počet volných míst"
 
 msgid "Background image used across all event pages"
 msgstr "Obrázek na pozadí použitý na všech stránkách události"
@@ -7851,6 +7866,13 @@ msgid ""
 msgstr ""
 "Uveďte maximální počet těchto slev, které lze uplatnit (0 pro nekonečné "
 "použití)"
+
+msgid ""
+"Note that existing tickets with the same name, will be overwritten with the "
+"uploaded data"
+msgstr ""
+"Všimněte si, že existující tipy se stejným názvem budou přepsány nahranými "
+"daty."
 
 msgid ""
 "Optional logo image - you can upload a file of any size, it will be "

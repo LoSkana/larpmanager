@@ -2885,6 +2885,9 @@ msgstr "Konfigurowanie typów zadań"
 msgid "Show cancellations"
 msgstr "Anulowanie pokazu"
 
+msgid "The ticket's email"
+msgstr "Adres e-mail biletu"
+
 msgid "Total payment sent"
 msgstr "Całkowita wysłana płatność"
 
@@ -3404,6 +3407,9 @@ msgstr "Nazwa opcji"
 
 msgid "The name of the ticket"
 msgstr "Nazwa biletu"
+
+msgid "The tier of the ticket"
+msgstr "Poziom biletu"
 
 msgid "Total registration fee"
 msgstr "Całkowita opłata rejestracyjna"
@@ -4184,6 +4190,9 @@ msgstr "Postaramy się pomóc najlepiej jak potrafimy"
 msgid "You need to define the end date!"
 msgstr "Musisz określić datę końcową!"
 
+msgid "(Optional) The cost of the ticket"
+msgstr "(Opcjonalnie) Koszt biletu"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Pytanie zostało zadane przez: %(user)s"
@@ -4335,6 +4344,9 @@ msgstr "aby potwierdzić, przejdź do płatności"
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
 msgstr "(<a href='%(url)s'>odpowiedź tutaj</a>)"
+
+msgid "(Optional) The ticket's description"
+msgstr "(Opcjonalnie) Opis biletu"
 
 msgid "Image shown on homepage as promoter"
 msgstr "Obraz wyświetlany na stronie głównej jako promotor"
@@ -4970,6 +4982,9 @@ msgstr "Ta strona przedstawia rodzaje prologów wydarzeń"
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "Twoja podarowana rejestracja została zrealizowana!"
+
+msgid "(Optional) Maximun number of spots available"
+msgstr "(Opcjonalnie) Maksymalna liczba dostępnych miejsc"
 
 msgid "Background image used across all event pages"
 msgstr "Obraz tła używany na wszystkich stronach wydarzenia"
@@ -7998,6 +8013,13 @@ msgid ""
 msgstr ""
 "Wskazać maksymalną liczbę takich rabatów, o które można wnioskować (0 dla "
 "nieskończonej liczby zastosowań)"
+
+msgid ""
+"Note that existing tickets with the same name, will be overwritten with the "
+"uploaded data"
+msgstr ""
+"Należy pamiętać, że istniejące bilety o tej samej nazwie zostaną nadpisane "
+"przesłanymi danymi"
 
 msgid ""
 "Optional logo image - you can upload a file of any size, it will be "

@@ -2885,6 +2885,9 @@ msgstr "Sett opp oppdragstyper"
 msgid "Show cancellations"
 msgstr "Avlysninger av forestillinger"
 
+msgid "The ticket's email"
+msgstr "Billettens e-post"
+
 msgid "Total payment sent"
 msgstr "Total innbetaling sendt"
 
@@ -3404,6 +3407,9 @@ msgstr "Navnet på alternativet"
 
 msgid "The name of the ticket"
 msgstr "Navnet på billetten"
+
+msgid "The tier of the ticket"
+msgstr "Nivået på billetten"
 
 msgid "Total registration fee"
 msgstr "Total registreringsavgift"
@@ -4184,6 +4190,9 @@ msgstr "Vi skal prøve å hjelpe så godt vi kan"
 msgid "You need to define the end date!"
 msgstr "Du må definere sluttdatoen!"
 
+msgid "(Optional) The cost of the ticket"
+msgstr "(Valgfritt) Kostnaden for billetten"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Et spørsmål ble stilt av: %(user)s"
@@ -4335,6 +4344,9 @@ msgstr "for å bekrefte det, fortsett med betalingen"
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
 msgstr "(<a href='%(url)s'>svar her</a>)"
+
+msgid "(Optional) The ticket's description"
+msgstr "(Valgfritt) Billettens beskrivelse"
 
 msgid "Image shown on homepage as promoter"
 msgstr "Bilde vises på hjemmesiden som promoter"
@@ -4973,6 +4985,9 @@ msgstr "Denne siden oppsummerer de ulike typene arrangementsprologer"
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "Din begavede registrering har blitt innløst!"
+
+msgid "(Optional) Maximun number of spots available"
+msgstr "(Valgfritt) Maksimalt antall tilgjengelige plasser"
 
 msgid "Background image used across all event pages"
 msgstr "Bakgrunnsbilde som brukes på alle arrangementssidene"
@@ -7952,6 +7967,13 @@ msgid ""
 "infinite uses)"
 msgstr ""
 "Angi maksimalt antall slike rabatter som kan kreves (0 for uendelig bruk)"
+
+msgid ""
+"Note that existing tickets with the same name, will be overwritten with the "
+"uploaded data"
+msgstr ""
+"Merk at eksisterende billetter med samme navn vil bli overskrevet med de "
+"opplastede dataene"
 
 msgid ""
 "Optional logo image - you can upload a file of any size, it will be "

@@ -2885,6 +2885,9 @@ msgstr "Questtypen einrichten"
 msgid "Show cancellations"
 msgstr "Absagen von Veranstaltungen"
 
+msgid "The ticket's email"
+msgstr "Die E-Mail des Tickets"
+
 msgid "Total payment sent"
 msgstr "Gesamtzahlung gesendet"
 
@@ -3404,6 +3407,9 @@ msgstr "Der Name der Option"
 
 msgid "The name of the ticket"
 msgstr "Der Name des Tickets"
+
+msgid "The tier of the ticket"
+msgstr "Die Stufe der Fahrkarte"
 
 msgid "Total registration fee"
 msgstr "Anmeldegebühr insgesamt"
@@ -4184,6 +4190,9 @@ msgstr "Wir versuchen zu helfen, so gut wir können"
 msgid "You need to define the end date!"
 msgstr "Sie müssen das Enddatum festlegen!"
 
+msgid "(Optional) The cost of the ticket"
+msgstr "(fakultativ) Der Preis der Fahrkarte"
+
 #, python-format
 msgid "A question was asked by: %(user)s"
 msgstr "Eine Frage wurde gestellt von: %(user)s"
@@ -4335,6 +4344,9 @@ msgstr "zu bestätigen, um mit der Zahlung fortzufahren"
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
 msgstr "(<a href='%(url)s'>Antwort hier</a>)"
+
+msgid "(Optional) The ticket's description"
+msgstr "(Optional) Die Beschreibung des Tickets"
 
 msgid "Image shown on homepage as promoter"
 msgstr "Bild auf der Homepage als Promoter angezeigt"
@@ -4983,6 +4995,9 @@ msgstr ""
 
 msgid "Your gifted registration has been redeemed!"
 msgstr "Ihre geschenkte Registrierung wurde eingelöst!"
+
+msgid "(Optional) Maximun number of spots available"
+msgstr "(fakultativ) Maximale Anzahl der verfügbaren Plätze"
 
 msgid "Background image used across all event pages"
 msgstr "Hintergrundbild, das auf allen Veranstaltungsseiten verwendet wird"
@@ -8301,6 +8316,13 @@ msgid ""
 msgstr ""
 "Geben Sie die maximale Anzahl solcher Rabatte an, die in Anspruch genommen "
 "werden können (0 für unendliche Nutzung)"
+
+msgid ""
+"Note that existing tickets with the same name, will be overwritten with the "
+"uploaded data"
+msgstr ""
+"Beachten Sie, dass bestehende Tickets mit demselben Namen mit den "
+"hochgeladenen Daten überschrieben werden."
 
 msgid ""
 "Optional logo image - you can upload a file of any size, it will be "
